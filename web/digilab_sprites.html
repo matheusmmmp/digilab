@@ -105,6 +105,9 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .hp .bar.gt i{background:var(--accent)}
 .fala{font:inherit;text-align:left;width:100%;background:#F4F1E4;color:#1B2130;border:0;border-radius:10px;padding:8px 10px;cursor:pointer;min-height:36px;font-size:14px;line-height:1.35;position:relative}
 .fala::before{content:"";position:absolute;top:-6px;left:22px;border:6px solid transparent;border-top:0;border-bottom-color:#F4F1E4}
+.fala-llm{display:flex;gap:6px;align-items:center;font-size:12px;color:#C9D2F0;padding:0 4px}
+.fala-llm input{accent-color:var(--accent)}
+.fala-fonte{font-family:var(--f-mono);font-size:11px;color:#C9D2F0}
 .fala-det{font-size:12px;color:#C9D2F0;font-family:var(--f-mono);padding:2px 4px}
 .arena-fala{display:grid;gap:4px;font-size:14px;min-height:44px}
 .gambits{display:grid;gap:6px;padding-left:22px;margin:0}
@@ -177,6 +180,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <div class="strip"><span id="relogio">DIA 1 · 08:00</span><span id="estagio"><b>BEBÊ</b></span></div>
         <button class="fala" id="fala" aria-expanded="false" title="Clique para ver o porquê">…</button>
         <div class="fala-det" id="fala-det" hidden></div>
+        <label class="fala-llm"><input type="checkbox" id="fala-llm-on"> fala por LLM <span id="fala-llm-status">(verificando servidor…)</span></label>
       </div>
       <div class="acoes" role="group" aria-label="Ações do dono">
         <button class="btn" id="a-alimentar" data-acao="alimentar">Alimentar<small>fome</small></button>
@@ -1440,6 +1444,53 @@ $("copiar").addEventListener("click", async () => {
 $("novo").addEventListener("click", () => { $("novo-conf").hidden = false; });
 $("novo-conf").addEventListener("click", () => { $("novo-conf").hidden = true; novoPet(); mostrarPane("estado"); });
 
+
+/* ------------------------------------------------ fala por LLM (Parte C; so exibicao)
+   O servidor local (servidor/servidor_local.py) gera a frase e a VALIDA contra o motivo;
+   a pagina mostra o template na hora e troca pela frase da LLM quando ela chega. Nada
+   disso entra no registro nem nas decisoes. Sem servidor/credencial: so template. */
+const FALA_LLM = { on:false, ativo:false, modelo:null, cache:new Map(), pendentes:new Set() };
+try { FALA_LLM.on = localStorage.getItem(CHAVE + "-fala-llm") === "1"; } catch(_){}
+$("fala-llm-on").checked = FALA_LLM.on;
+function rotuloLLM(){
+  $("fala-llm-status").textContent = FALA_LLM.ativo
+    ? `(${FALA_LLM.modelo}; cada fala nova é uma chamada paga)`
+    : "(indisponível: rode servidor/servidor_local.py com ANTHROPIC_API_KEY)";
+  $("fala-llm-on").disabled = !FALA_LLM.ativo;
+}
+async function verificarLLM(){
+  try { const r = await fetch("/api/fala/status", {cache:"no-store"}); if (!r.ok) throw new Error(r.status);
+    const d = await r.json(); FALA_LLM.ativo = !!d.ativo; FALA_LLM.modelo = d.modelo; }
+  catch(_){ FALA_LLM.ativo = false; }
+  rotuloLLM();
+}
+$("fala-llm-on").addEventListener("change", ev => {
+  FALA_LLM.on = ev.target.checked;
+  try { localStorage.setItem(CHAVE + "-fala-llm", FALA_LLM.on ? "1" : "0"); } catch(_){}
+  renderFala();
+});
+function motivoParaApi(mot, refs){
+  return mot.origem === "vida"
+    ? {origem:"vida", acao:mot.acao, fatores:mot.fatores, evento_ref:refs, intensidade:mot.intensidade, exploracao:mot.exploracao, tick:mot.tick}
+    : {origem:"combate", acao:mot.acao, fatores:mot.fatores, evento_ref:mot.refs, exploracao:mot.exploracao, turno:mot.turno};
+}
+/* devolve {texto, fonte, detalhe} se ja houver resposta; senao pede e devolve null */
+function falaLLM(motApi, est, humor, aoChegar){
+  if (!FALA_LLM.on || !FALA_LLM.ativo || !["adolescente","adulto"].includes(est)) return null;
+  const faixa = humor == null ? null : humor >= .66 ? 2 : humor >= .33 ? 1 : 0;
+  const chave = JSON.stringify([motApi, est, faixa]);
+  if (FALA_LLM.cache.has(chave)) return FALA_LLM.cache.get(chave);
+  if (!FALA_LLM.pendentes.has(chave)){
+    FALA_LLM.pendentes.add(chave);
+    fetch("/api/fala", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({motivo:motApi, estagio:est, humor})})
+      .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
+      .then(d => { FALA_LLM.cache.set(chave, d); aoChegar && aoChegar(d); })
+      .catch(err => { FALA_LLM.cache.set(chave, {texto:null, fonte:"template", detalhe:"servidor: " + err.message}); })
+      .finally(() => FALA_LLM.pendentes.delete(chave));
+  }
+  return null;
+}
+
 /* ------------------------------------------------ fala do pet */
 function idxDoOrdinal(m, k){
   let n = 0;
@@ -1460,9 +1511,12 @@ function detalheMotivo(mot, est){
 function renderFala(){
   const mot = motor.motivo, el = $("fala");
   if (!mot){ el.textContent = "…"; $("fala-det").textContent = ""; return; }
-  const est = estagioFala(motor);
-  el.textContent = falaDe(motor, mot);
-  $("fala-det").textContent = detalheMotivo(mot, est);
+  const est = estagioFala(motor), refs = mot.refsOrd.map(k => idxDoOrdinal(motor, k)).filter(x => x !== null);
+  const llm = falaLLM(motivoParaApi(mot, refs), est, mot.humor, () => { if (motor.motivo === mot) renderFala(); });
+  const usarLLM = llm && llm.fonte === "llm";
+  el.textContent = usarLLM ? "✦ " + llm.texto : falaDe(motor, mot);
+  $("fala-det").textContent = detalheMotivo(mot, est) + (FALA_LLM.on && FALA_LLM.ativo && ["adolescente","adulto"].includes(est)
+    ? ` · fonte: ${usarLLM ? "LLM (" + llm.detalhe + ")" : llm ? "template (" + llm.detalhe + ")" : "template (aguardando LLM)"}` : " · fonte: template");
 }
 $("fala").addEventListener("click", () => {
   const d = $("fala-det"); d.hidden = !d.hidden; $("fala").setAttribute("aria-expanded", String(!d.hidden));
@@ -1696,7 +1750,13 @@ function narrar(A, B, tr){
   const extra = [tr.interr[0] && "seu pesado foi interrompido", tr.interr[1] && "o pesado do rival foi interrompido",
     tr.errou[0] && "seu pesado errou", tr.errou[1] && "o pesado do rival errou"].filter(Boolean);
   $("arena-res").textContent = `Turno ${tr.t}: ${NOME_V2[tr.a]} × ${NOME_V2[tr.b]}` + ([dano, dano2, ...extra].filter(Boolean).length ? " · " + [dano, dano2, ...extra].filter(Boolean).join(", ") : " · ninguém se machuca");
-  $("arena-fala").innerHTML = `<div><b>Seu pet</b> <span class="muted">(${NOME_ESTAGIO_FALA[A.estagioFala]})</span>: ${fa}</div><div><b>${B.nome}</b>: ${fb}</div>`;
+  const llm = falaLLM(motivoParaApi(ma), A.estagioFala, null, d => {
+    const el = document.querySelector(`#arena-fala [data-turno="${tr.t}"]`);
+    if (el && d.fonte === "llm") el.textContent = "✦ " + d.texto;
+  });
+  const textoPet = llm && llm.fonte === "llm" ? "✦ " + llm.texto : fa;
+  $("arena-fala").innerHTML = `<div><b>Seu pet</b> <span class="muted">(${NOME_ESTAGIO_FALA[A.estagioFala]})</span>: <span data-turno="${tr.t}"></span></div><div><b>${B.nome}</b>: ${fb}</div>`;
+  document.querySelector(`#arena-fala [data-turno="${tr.t}"]`).textContent = textoPet;
 }
 $("lutar").addEventListener("click", () => {
   if (lutando) return; travar(true);
@@ -1985,4 +2045,5 @@ mostrarPane(paneAtual);
 desenharLCD();
 arenaPreview();
 renderGambits();
+verificarLLM();
 </script>

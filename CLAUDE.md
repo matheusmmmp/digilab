@@ -75,13 +75,15 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/memoria.py` | `MemoriaCurta` (latência do dono por necessidade, broncas e elogios com decaimento) e `PoliticaBanditMemoria` |
 | `experiments/diario.py`, `legibilidade.py` | diário de motivo/expressão (vida ou partida) e métricas de legibilidade → `artifacts_expressao/` |
 | `experiments/configs/memoria.json` | `PROTOCOLO_ARENA_V1_MEMORIA` → `artifacts_v1_memoria/` |
+| `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`, SDK `anthropic`, só aqui). `digilab/` não importa isto (teste AST) |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `TAREFA_MEMORIA_EXPRESSAO.md`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 131 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
+| `tests/` | 145 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 131 testes, ~160 s
+python -m pytest tests/ -q                                                   # 145 testes, ~160 s
+python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
 python experiments/legibilidade.py                                            # legibilidade + diários, ~1 min
 python experiments/diario.py --log artifacts_ablacao/vidas/atencioso-bandit@101.jsonl
@@ -202,6 +204,20 @@ Números abaixo vêm de `artifacts_expressao/legibilidade.json` e `artifacts_v1_
   artifacts_ablacao/). Diferença de ~0,001 bit, sem IC, e a divergência dentro do braço também subiu
   (0,01496 vs 0,01306). Fatores de memória citados em 3,1–6,1% das decisões (mais no aleatório).
 
+## Fala por LLM (Parte C, 2026-09-24)
+
+Especificada em `docs/TAREFA_MEMORIA_EXPRESSAO.md` (Parte C). Só o TEXTO da fala do adolescente e
+do adulto no jogo web; motivo, decisões, registro, replay e artefatos não mudam e continuam só com
+templates. `servidor/servidor_local.py` serve a mesma pasta que o `http.server` servia (mesmos
+endereços) e expõe `POST /api/fala`; a chave fica no ambiente do servidor (`ANTHROPIC_API_KEY`),
+nunca na página. Modelo padrão `claude-opus-5` (`--modelo` troca), esforço `low`, saída estruturada
+`{texto, fatores_citados}` e fallback de recusa do servidor da API ligado. A resposta é validada
+(fatores ⊆ motivo, marcadores de fatores ausentes, "não sei" sem fator, limite de fatores por estágio,
+números ⊆ evento_ref e parâmetros); qualquer falha, erro, recusa ou limite (30/min) cai no template.
+Cache por motivo+estágio+faixa de humor. Chave "fala por LLM" na página, desligada por padrão.
+**Pendente**: a avaliação com juiz da C6 (fração de causas inventadas) não foi rodada — precisa de
+credencial e de aprovação do custo. A varredura de marcadores não pega sinônimos.
+
 ## Versão web (`web/digilab.html`)
 
 Porte em JavaScript com as mesmas regras e parâmetros de `config.py` (motor, instinto, bandit,
@@ -276,6 +292,9 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- Fala por LLM: rodar a avaliação com juiz (Parte C, C6) antes de ligar por padrão; hoje não há
+  credencial da API configurada nesta máquina.
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.
