@@ -256,8 +256,14 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   oráculo incluso). O combate V1 saiu da interface. Estilo do pet PROVISÓRIO: a linha travada escolhe
   o estilo inicial (golpe→agressivo, bloqueio→tartaruga, finta→atirador, agarrão→contragolpe,
   carga→adaptativo; bebê luta ao acaso); condição física neutra.
-- **Editor de gambits** do pet (catálogo fechado, até 8 regras + final), salvo em localStorage por
-  semente e forma do pet (não entra no log). Cenários "100 lutas" também usam o V2.
+- **Gambits híbridos** (substituiu o editor livre, 2026-09-24): o PET aprende a própria lista. A linha
+  evolutiva semeia; após cada luta contra bot, a nota de cada regra que disparou vai em direção ao
+  saldo de dano dos turnos em que ela agiu (+ bônus pelo resultado); a lista se reordena pela nota;
+  uma regra livre com nota < limiar é trocada por uma candidata do repertório (regras de todos os
+  estilos). O DONO só trava (posição fixa) ou veta (pet não usa). Lutas (`l`: rival + semente) e
+  intervenções (`g`) entram no registro; o replay reconstrói o aprendizado e separa pet × dono.
+  Lutas contra pet de cenário e as 100 lutas dos Cenários não ensinam. Parâmetros no objeto `GA`.
+  PROVISÓRIO e só na web: o Python ainda não tem isso (é a arena V2 da pesquisa).
 - **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
   regra de honestidade do Python. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
@@ -268,6 +274,9 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
+  gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.
 
 - Motivo do bandit: com políticas quase iguais ao instinto, o adulto diz "não sei" em >80% das
   decisões. Decidir se isso é aceitável ou se o motivo deve incluir o prior (instinto) como causa.

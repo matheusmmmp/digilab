@@ -113,6 +113,8 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .gambits .g-se{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
 .gambits .g-bts{display:flex;gap:4px}
 .gambits .g-bts .sbtn{padding:4px 8px}
+.gambits .g-regra{flex:1 1 220px;font-size:14px}
+.gambits .g-nota{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 .gambits .g-final{list-style:none;margin-left:-22px;padding-top:4px;border-top:1px dashed var(--line)}
 .decisoes{font-size:13px;display:grid;gap:3px;max-height:260px;overflow:auto}
 .decisoes .t{font-family:var(--f-mono);color:var(--muted)}
@@ -235,7 +237,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-arena" hidden>
-        <p>Combate V2: distância, guts e golpe pesado anunciado um turno antes. Cada lutador decide por uma lista de <b>gambits</b> (condição → ação). O rival é um bot da bateria de testes.</p>
+        <p>Combate V2: distância, guts e golpe pesado anunciado um turno antes. Cada lutador decide por uma lista de <b>gambits</b> (condição → ação). O rival é um bot da bateria de testes. <b>Seu pet aprende os próprios gambits lutando</b>; você só pode travar ou vetar regras.</p>
         <div class="row">
           <label for="rival">Rival</label>
           <select id="rival">
@@ -700,6 +702,32 @@ class Motor {
     this.estagioAtual = estagio(this.e.tick); this.evolucoes = [];
     /* motivo de cada decisao (somente leitura) e ordinal da ultima acao do dono */
     this.motivos = []; this.motivo = null; this.nDono = 0;
+    /* gambits hibridos (so na web): nascem na evolucao, aprendem com lutas do log */
+    this.gp = null;
+  }
+  /* luta contra bot: entra no registro (rival + semente) e ensina os gambits */
+  lutar(rival, semente){
+    if (!BOTS_V2[rival] && rival !== "oraculo") throw new Error("rival desconhecido: " + rival);
+    this.log.push([this.e.tick, "l", {r:rival, s:semente}]);
+    return this._lutar(rival, semente);
+  }
+  _lutar(rival, semente){
+    const A = lutadorPet(this, "Seu pet"), B = lutadorBot(rival), res = jogarV2(A, B, semente);
+    if (this.gp) this.gp.aprender(res, semente);
+    this._hist({t:this.e.tick, quem:"luta", a:`contra ${NOME_BOT[rival]}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}`});
+    return {res, A, B};
+  }
+  /* intervencao do dono nos gambits: travar, destravar, vetar, liberar */
+  intervirGambit(op, k){
+    if (!this.gp) throw new Error("o bebê ainda não tem gambits");
+    this.gp.intervir(op, k);                     /* valida antes de gravar */
+    this.log.push([this.e.tick, "g", {op, k}]);
+    this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
+  }
+  _gambit(op, k){
+    if (!this.gp) throw new Error("registro com intervenção em gambits antes da evolução");
+    this.gp.intervir(op, k);
+    this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
   }
   observar(a){
     if (!ACOES_DONO.includes(a)) throw new Error("acao de dono desconhecida: " + a);
@@ -742,17 +770,20 @@ class Motor {
         const af = afinidades(this.tracos), traco = corDominante(this.tracos);
         this.evolucoes.push({ tick:this.e.tick, estagio:est, traco, afinidade:af[traco] });
         this.estagioAtual = est;
+        if (est !== "bebe"){ if (!this.gp) this.gp = new GambitsPet(); this.gp.semear(LINHA_ESTILO[traco]); }
       }
     }
   }
   _hist(x){ this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
-  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes]); }
+  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.gp ? this.gp.assinatura() : null]); }
   static reproduzir(semente, log){
     const m = new Motor(semente);
     for (const [t, tipo, v] of log){
       if (m.e.tick !== t) throw new Error(`registro fora de ordem no tick ${t}`);
       if (tipo === "t") m._avancar(v);
       else if (tipo === "d") m._aplicar(v);
+      else if (tipo === "l") m._lutar(v.r, v.s);
+      else if (tipo === "g") m._gambit(v.op, v.k);
       else throw new Error("tipo de evento desconhecido no registro: " + tipo);
     }
     m.log = log.map(x => [...x]);
@@ -1354,7 +1385,8 @@ function renderRegistro(){
   $("semente").textContent = motor.semente;
   $("neventos").textContent = motor.log.length;
   $("log").innerHTML = motor.historico.slice(-80).reverse().map(h =>
-    `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
+    `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>`
+      : h.quem === "gambit" ? `<span class="dono">você (gambits): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
 }
 let paneAtual = "estado";
 function renderTudo(){
@@ -1443,22 +1475,107 @@ function renderMemoria(){
     `<div><span class="t">D${diaDe(mot.tick)} ${hhmm(mot.tick)}</span> <b>${NOME_PET[mot.acao]}</b> <span class="muted">[${mot.fatores.join(", ") || "sem fator"}]</span> ${falaDe(motor, mot)}</div>`).join("");
 }
 
-/* ------------------------------------------------ gambits do pet (editaveis) */
-const CHAVE_GAMBITS = CHAVE + "-gambits";
-function gambitsSalvos(m){
-  try {
-    const d = JSON.parse(localStorage.getItem(CHAVE_GAMBITS) || "null");
-    if (d && d.semente === m.semente && d.forma === digimon(m)) return validarLista(d.gambits);
-  } catch(err){ console.error("gambits salvos invalidos, ignorados:", err); }
-  return null;
+/* ------------------------------------------------ gambits do pet: hibrido (PROVISORIO, so na web)
+   O PET propoe e aprende: a linha evolutiva semeia a lista; depois de cada luta
+   contra bot, cada regra que disparou tem a nota puxada para o saldo de dano dos
+   turnos em que agiu (+ bonus pelo resultado); a lista se reordena pela nota; uma
+   regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
+   todos os estilos, catalogo fechado).
+   O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode usar).
+   Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado e a
+   analise separa decisao do pet de intervencao do dono. */
+const GA = { base:.05, alfa:.2, bonusResultado:.1, limiarTroca:-.02 };
+const chaveRegra = r => JSON.stringify([r.se.map(c => [c.n, c.p]), r.entao]);
+const REPERTORIO = (() => {
+  const m = new Map();
+  for (const nome of ["agressivo","tartaruga","atirador","contragolpe","adaptativo"])
+    for (const r of BOTS_V2[nome].regras) if (!m.has(chaveRegra(r))) m.set(chaveRegra(r), r);
+  return m;
+})();
+const rotuloRegra = r => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
+class GambitsPet {
+  constructor(){ this.notas = {}; this.disparos = {}; this.ativas = []; this.final = "defender"; this.linha = null;
+    this.travas = {}; this.vetos = []; this.mudancas = []; this.nLutas = 0; this.versao = 0; }
+  /* evolucao: a linha nova entra com nota-base pela posicao; o que ja foi aprendido fica */
+  semear(linha){
+    const base = BOTS_V2[linha];
+    this.linha = linha; this.final = base.final;
+    const novas = [];
+    base.regras.forEach((r, i) => {
+      const k = chaveRegra(r), nb = GA.base * (1 - i / CV.maxRegras);
+      this.notas[k] = k in this.notas ? Math.max(this.notas[k], nb) : nb;
+      if (!this.vetos.includes(k)) novas.push(k);
+    });
+    for (const k of Object.keys(this.travas)) if (!novas.includes(k)) novas.push(k);
+    this.ativas = novas.slice(0, CV.maxRegras);
+    this.mudancas.push({luta:this.nLutas, texto:`linha ${NOME_BOT[linha]} semeou a lista`});
+    this.ordenar(); this.versao++;
+  }
+  ordenar(){
+    const n = this.ativas.length, fixas = {}, livres = [];
+    for (const k of this.ativas) (k in this.travas ? null : livres.push(k));
+    for (const [k, i] of Object.entries(this.travas).sort((a, b) => a[1] - b[1])){
+      if (!this.ativas.includes(k)) continue;
+      let j = Math.min(i, n - 1);
+      while (j in fixas) j = (j + 1) % n;          /* duas travas na mesma posicao: a segunda vai para a proxima livre */
+      fixas[j] = k;
+    }
+    livres.sort((a, b) => (this.notas[b] - this.notas[a]) || (this.ativas.indexOf(a) - this.ativas.indexOf(b)));
+    const saida = [];
+    for (let i = 0; i < n; i++) saida.push(i in fixas ? fixas[i] : livres.shift());
+    this.ativas = saida.filter(Boolean);
+  }
+  estilo(){ return {nome:"aprendido", gambits:{regras:this.ativas.map(k => REPERTORIO.get(k)), final:this.final}, eps:CV.eps}; }
+  aprender(res, semente){
+    this.nLutas++;
+    const soma = {}, cont = {}, usadas = this.ativas.slice();
+    for (const tr of res.turnos){
+      if (typeof tr.ma !== "number" || tr.ma >= usadas.length) continue;
+      const k = usadas[tr.ma], saldo = (tr.dano[1] - tr.dano[0]) / CV.hp;
+      soma[k] = (soma[k] || 0) + saldo; cont[k] = (cont[k] || 0) + 1;
+    }
+    const bonus = GA.bonusResultado * (res.pontosA - .5);
+    for (const k of Object.keys(cont)){
+      this.notas[k] += GA.alfa * (soma[k] / cont[k] + bonus - this.notas[k]);
+      this.disparos[k] = (this.disparos[k] || 0) + cont[k];
+    }
+    /* o pet propoe: a pior regra livre abaixo do limiar da lugar a uma candidata */
+    const livres = this.ativas.filter(k => !(k in this.travas));
+    const pior = livres.sort((a, b) => this.notas[a] - this.notas[b])[0];
+    const candidatas = [...REPERTORIO.keys()].filter(k => !this.ativas.includes(k) && !this.vetos.includes(k));
+    if (pior && this.notas[pior] < GA.limiarTroca && candidatas.length){
+      const nova = candidatas[criarRng(hashSemente("propor", semente)).int(candidatas.length)];
+      this.ativas[this.ativas.indexOf(pior)] = nova;
+      if (!(nova in this.notas)) this.notas[nova] = 0;
+      this.mudancas.push({luta:this.nLutas, texto:`trocou “${rotuloRegra(REPERTORIO.get(pior))}” (nota ${this.notas[pior].toFixed(3)}) por “${rotuloRegra(REPERTORIO.get(nova))}”`});
+    }
+    this.ordenar(); this.versao++;
+  }
+  intervir(op, k){
+    if (!REPERTORIO.has(k)) throw new Error("regra fora do repertório: " + k);
+    if (op === "travar"){ const i = this.ativas.indexOf(k); if (i < 0) throw new Error("só dá para travar regra ativa"); this.travas[k] = i; }
+    else if (op === "destravar") delete this.travas[k];
+    else if (op === "vetar"){
+      if (!this.vetos.includes(k)) this.vetos.push(k);
+      delete this.travas[k];
+      const i = this.ativas.indexOf(k);
+      if (i >= 0){
+        const cands = [...REPERTORIO.keys()].filter(c => !this.ativas.includes(c) && !this.vetos.includes(c))
+          .sort((a, b) => (this.notas[b] ?? 0) - (this.notas[a] ?? 0));
+        if (cands.length){ this.ativas[i] = cands[0]; if (!(cands[0] in this.notas)) this.notas[cands[0]] = 0; }
+        else this.ativas.splice(i, 1);
+      }
+    }
+    else if (op === "liberar") this.vetos = this.vetos.filter(v => v !== k);
+    else throw new Error("intervenção desconhecida: " + op);
+    this.mudancas.push({luta:this.nLutas, texto:`você: ${op} “${rotuloRegra(REPERTORIO.get(k))}”`, dono:true});
+    this.ordenar(); this.versao++;
+  }
+  assinatura(){ return [this.notas, this.disparos, this.ativas, this.final, this.linha, this.travas, this.vetos, this.nLutas]; }
 }
-function estiloDoPet(m, usarSalvo = true){
-  const base = estiloBaseDoPet(m), salvo = usarSalvo && m === motor ? gambitsSalvos(m) : null;
-  if (salvo) return {nome:"personalizado", gambits:salvo, eps:CV.eps, base};
-  return {...estiloBot(base), base};
-}
-function lutadorPet(m, rotulo, usarSalvo = true){
-  return {nome:rotulo, estilo:estiloDoPet(m, usarSalvo), cond:condNeutra(), sprite:digimon(m),
+function estiloDoPet(m){ return m.gp ? {...m.gp.estilo(), base:m.gp.linha} : {...estiloBot("aleatorio"), base:"aleatorio"}; }
+function lutadorPet(m, rotulo){
+  return {nome:rotulo, estilo:estiloDoPet(m), cond:condNeutra(), sprite:digimon(m),
           grade:estagio(m.e.tick), cor:corForma(m), estagioFala:estagioFala(m)};
 }
 function lutadorBot(nome){
@@ -1481,75 +1598,39 @@ function rotuloCond(c){
   }
   return c.n;
 }
-const TODAS_CONDS = (() => {
-  const out = [];
-  for (const [n, tipos] of Object.entries(CATALOGO_V2)){
-    const combos = tipos.reduce((acc, t) => acc.flatMap(a => DOMINIO_V2[t].map(v => [...a, v])), [[]]);
-    for (const p of combos) out.push(Cd(n, ...p));
-  }
-  return out;
-})();
-const chaveCond = c => JSON.stringify([c.n, c.p]);
-function selCond(atual, vazia){
-  const opts = (vazia ? [`<option value="">—</option>`] : [])
-    .concat(TODAS_CONDS.map(c => `<option value='${chaveCond(c)}'${atual && chaveCond(atual) === chaveCond(c) ? " selected" : ""}>${rotuloCond(c)}</option>`));
-  return `<select class="g-cond">${opts.join("")}</select>`;
-}
-function selAcao(atual, lista){
-  return `<select class="g-acao">${lista.map(a => `<option value="${a}"${a === atual ? " selected" : ""}>${NOME_V2[a]}</option>`).join("")}</select>`;
-}
-/* o editor e de um pet e de uma forma: se o pet trocar (cenario, novo ovo) ou evoluir, redesenha */
+
+/* o painel e de um pet e de uma versao da lista: redesenha quando muda */
 let chaveEditor = null;
-const chaveEditorAtual = () => motor.semente + "|" + digimon(motor);
+const chaveEditorAtual = () => motor.semente + "|" + digimon(motor) + "|" + (motor.gp ? motor.gp.versao : 0);
 function renderGambits(){
   chaveEditor = chaveEditorAtual();
-  const el = $("gambits"), f = formaDe(motor);
-  if (f.est === "bebe"){
-    el.innerHTML = `<p class="muted">O bebê ainda não tem estilo de luta: decide ao acaso. Quando evoluir para criança, a linha evolutiva escolhe o estilo inicial e você poderá editar os gambits.</p>`;
+  const el = $("gambits"), gp = motor.gp;
+  if (!gp){
+    el.innerHTML = `<p class="muted">O bebê ainda não tem estilo de luta: decide ao acaso. Quando evoluir para criança, a linha evolutiva semeia os primeiros gambits e ele começa a aprender com as lutas.</p>`;
     return;
   }
-  const est = estiloDoPet(motor), g = est.gambits;
-  el.innerHTML = `<p>Estilo de partida da linha <b>${NOME_COMB[f.traco]}</b>: <b>${NOME_BOT[est.base]}</b>${est.nome === "personalizado" ? " · <b>editado por você</b>" : ""}.
+  const linhas = gp.ativas.map((k, i) => {
+    const r = REPERTORIO.get(k), trav = k in gp.travas;
+    return `<li data-k='${k.replace(/'/g, "&#39;")}'>
+      <span class="g-regra">${rotuloRegra(r)}</span>
+      <span class="g-nota" title="nota aprendida (saldo de dano por disparo)">${gp.notas[k] >= 0 ? "+" : ""}${gp.notas[k].toFixed(3)} · ${gp.disparos[k] || 0}×</span>
+      <span class="g-bts"><button class="sbtn sec g-op" data-op="${trav ? "destravar" : "travar"}">${trav ? "🔒 destravar" : "travar"}</button><button class="sbtn sec g-op" data-op="vetar">vetar</button></span></li>`;
+  }).join("");
+  const vetos = gp.vetos.map(k => `<li data-k='${k.replace(/'/g, "&#39;")}'><span class="g-regra">${rotuloRegra(REPERTORIO.get(k))}</span>
+      <span class="g-bts"><button class="sbtn sec g-op" data-op="liberar">liberar</button></span></li>`).join("");
+  el.innerHTML = `<p>Lista aprendida pelo pet (${gp.nLutas} luta${gp.nLutas === 1 ? "" : "s"} contra bots). Semente: estilo <b>${NOME_BOT[gp.linha]}</b> da linha evolutiva.
       A primeira regra cujas condições valem e cuja ação é possível dispara; ${Math.round(CV.eps*100)}% das decisões são exploração.</p>
-    <ol class="gambits" id="g-lista">${g.regras.map((r, i) => `<li data-i="${i}">
-      <span class="g-se">se</span> ${selCond(r.se[0], false)} <span class="g-se">e</span> ${selCond(r.se[1], true)}
-      <span class="g-se">→</span> ${selAcao(r.entao, ACOES_V2)}
-      <span class="g-bts"><button class="sbtn sec g-sobe" aria-label="Subir regra">↑</button><button class="sbtn sec g-desce" aria-label="Descer regra">↓</button><button class="sbtn sec g-tira" aria-label="Remover regra">✕</button></span></li>`).join("")}
-      <li class="g-final"><span class="g-se">sempre →</span> ${selAcao(g.final, ["defender","carregar"])}</li></ol>
-    <div class="row"><button class="sbtn sec" id="g-mais"${g.regras.length >= CV.maxRegras ? " disabled" : ""}>+ regra</button>
-      <button class="sbtn sec" id="g-restaurar">Restaurar estilo da linha</button></div>
+    <ol class="gambits">${linhas}<li class="g-final"><span class="g-se">sempre →</span> ${NOME_V2[gp.final]}</li></ol>
+    ${vetos ? `<h2 style="margin-top:10px">Vetadas por você</h2><ol class="gambits">${vetos}</ol>` : ""}
+    <p class="muted">Você só pode <b>travar</b> (a regra fica nessa posição) ou <b>vetar</b> (o pet não pode usá-la). Tudo entra no registro.</p>
+    <details><summary>O que o pet mudou</summary><div class="decisoes" style="margin-top:6px">${gp.mudancas.slice(-15).reverse()
+      .map(x => `<div><span class="t">luta ${x.luta}</span> ${x.dono ? "<b>" + x.texto + "</b>" : "pet " + x.texto}</div>`).join("")}</div></details>
     <p class="muted" id="g-msg"></p>`;
 }
-function lerGambitsDoEditor(){
-  if (chaveEditor !== chaveEditorAtual()) throw new Error("o pet mudou desde que o editor foi aberto; recarreguei os gambits dele");
-  const regras = [...document.querySelectorAll("#g-lista li[data-i]")].map(li => {
-    const cs = [...li.querySelectorAll(".g-cond")].map(s => s.value).filter(Boolean).map(v => { const [n, p] = JSON.parse(v); return Cd(n, ...p); });
-    return {se:cs, entao:li.querySelector(".g-acao").value};
-  });
-  return {regras, final:document.querySelector("#g-lista .g-final .g-acao").value};
-}
-function salvarGambits(g){
-  validarLista(g);
-  try { localStorage.setItem(CHAVE_GAMBITS, JSON.stringify({semente:motor.semente, forma:digimon(motor), gambits:g})); } catch(_){}
-  renderGambits();
-}
-function avisoEditor(err){ if (chaveEditor !== chaveEditorAtual()) renderGambits(); const m = $("g-msg"); if (m) m.innerHTML = `<span style="color:var(--bad)">${err.message}</span>`; }
-$("gambits").addEventListener("change", () => {
-  try { salvarGambits(lerGambitsDoEditor()); } catch(err){ avisoEditor(err); }
-});
 $("gambits").addEventListener("click", ev => {
-  const b = ev.target.closest("button"); if (!b) return;
-  if (b.id === "g-restaurar"){ try { localStorage.removeItem(CHAVE_GAMBITS); } catch(_){} renderGambits(); arenaPreview(); return; }
-  let g;
-  try { g = lerGambitsDoEditor(); } catch(err){ avisoEditor(err); return; }
-  if (b.id === "g-mais"){ g.regras.push(Rg(Cd("sempre"), "defender")); }
-  else {
-    const i = Number(b.closest("li").dataset.i);
-    if (b.classList.contains("g-tira")) g.regras.splice(i, 1);
-    if (b.classList.contains("g-sobe") && i > 0) [g.regras[i-1], g.regras[i]] = [g.regras[i], g.regras[i-1]];
-    if (b.classList.contains("g-desce") && i < g.regras.length - 1) [g.regras[i+1], g.regras[i]] = [g.regras[i], g.regras[i+1]];
-  }
-  try { salvarGambits(g); } catch(err){ avisoEditor(err); }
+  const b = ev.target.closest(".g-op"); if (!b) return;
+  try { motor.intervirGambit(b.dataset.op, b.closest("li").dataset.k); salvar(); renderGambits(); arenaPreview(); }
+  catch(err){ const m = $("g-msg"); if (m) m.innerHTML = `<span style="color:var(--bad)">${err.message}</span>`; }
 });
 
 /* ------------------------------------------------ arena V2 */
@@ -1598,7 +1679,7 @@ function setBarras(E){
   }
 }
 function prepararRival(){
-  if (rivalFixo) return {...lutadorPet(rivalFixo.rival, "Rival do cenário", false)};
+  if (rivalFixo) return lutadorPet(rivalFixo.rival, "Rival do cenário");
   return lutadorBot($("rival").value);
 }
 function arenaPreview(){
@@ -1619,17 +1700,24 @@ function narrar(A, B, tr){
 }
 $("lutar").addEventListener("click", () => {
   if (lutando) return; travar(true);
-  let A, B;
-  try { A = lutadorPet(motor, "Seu pet"); B = prepararRival(); } catch(err){ $("arena-res").textContent = err.message; travar(false); return; }
-  const res = jogarV2(A, B, hashSemente("luta", motor.semente, motor.log.length, Date.now()));
+  let A, B, res;
+  try {
+    if (rivalFixo){   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
+      A = lutadorPet(motor, "Seu pet"); B = prepararRival(); res = jogarV2(A, B, hashSemente("cenario", motor.semente, motor.log.length));
+    } else {
+      ({res, A, B} = motor.lutar($("rival").value, hashSemente("luta", motor.semente, motor.log.length)));
+      salvar();
+    }
+  } catch(err){ $("arena-res").textContent = err.message; travar(false); return; }
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let i = 0;
   desenharArenaV2(A, B, res.E0, null); setBarras(res.E0); $("arena-fala").innerHTML = "";
   const passo = () => {
     if (i >= res.turnos.length){
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
-      $("arena-res").textContent = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`;
-      travar(false); return;
+      $("arena-res").textContent = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
+        + (rivalFixo ? " (Contra pet de cenário o seu não aprende.)" : "");
+      travar(false); renderGambits(); return;
     }
     const tr = res.turnos[i++];
     desenharArenaV2(A, B, tr.depois, tr); setBarras(tr.depois); narrar(A, B, tr);
@@ -1640,15 +1728,20 @@ $("lutar").addEventListener("click", () => {
 $("melhor10").addEventListener("click", () => {
   if (lutando) return; travar(true);
   try {
-    const A = lutadorPet(motor, "Seu pet"), B = prepararRival();
     let v = 0, d = 0, e = 0, lim = 0;
+    const antes = motor.gp ? motor.gp.mudancas.length : 0;
     for (let k = 0; k < 10; k++){
-      const r = jogarV2(A, B, hashSemente("m10", motor.semente, motor.log.length, k));
+      const r = rivalFixo
+        ? jogarV2(lutadorPet(motor, "Seu pet"), prepararRival(), hashSemente("cenario-m10", motor.semente, motor.log.length, k))
+        : motor.lutar($("rival").value, hashSemente("luta", motor.semente, motor.log.length)).res;
       if (r.pontosA === 1) v++; else if (r.pontosA === 0) d++; else e++;
       lim += r.fim === "limite";
     }
-    arenaPreview();
-    $("arena-res").textContent = `10 lutas: ${v} vitórias, ${d} derrotas, ${e} empates (${((v + e/2)*10).toFixed(0)}% dos pontos). ${lim} acabaram no limite de turnos.`;
+    if (!rivalFixo) salvar();
+    arenaPreview(); renderGambits();
+    const trocas = motor.gp ? motor.gp.mudancas.length - antes : 0;
+    $("arena-res").textContent = `10 lutas: ${v} vitórias, ${d} derrotas, ${e} empates (${((v + e/2)*10).toFixed(0)}% dos pontos). ${lim} acabaram no limite de turnos.`
+      + (rivalFixo ? " Contra pet de cenário o seu não aprende." : ` O pet fez ${trocas} troca${trocas === 1 ? "" : "s"} de regra.`);
     $("arena-fala").innerHTML = "";
   } catch(err){ $("arena-res").textContent = err.message; }
   travar(false);
@@ -1824,7 +1917,7 @@ function renderRivalFixo(){
 }
 function rodarLutas(n){
   if (!rivalFixo) throw new Error("monte um cenário antes");
-  const A = lutadorPet(motor, "Pet A"), B = lutadorPet(rivalFixo.rival, "Pet B", false), contA = {}, contB = {};
+  const A = lutadorPet(motor, "Pet A"), B = lutadorPet(rivalFixo.rival, "Pet B"), contA = {}, contB = {};
   for (const c of ACOES_V2_OBS){ contA[c] = 0; contB[c] = 0; }
   let v = 0, d = 0, e = 0, turnos = 0, lim = 0;
   for (let k=0;k<n;k++){
@@ -1835,7 +1928,7 @@ function rodarLutas(n){
   }
   const linha = c => `<tr><td>${NOME_V2[c]}</td><td>${pct(contA[c]/turnos)}</td><td>${pct(contB[c]/turnos)}</td></tr>`;
   $("cen-lutas-res").innerHTML = `<p class="resultado">${n} lutas (combate V2): A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e/2)/n*100).toFixed(0)}% dos pontos. Média de ${(turnos/n).toFixed(1)} turnos; ${lim} no limite.</p>
-    <p class="muted">A luta com ${A.estilo.nome === "personalizado" ? "seus gambits editados" : "o estilo " + NOME_BOT[A.estilo.base]}; B com o estilo ${NOME_BOT[B.estilo.base]} (da linha evolutiva).</p>
+    <p class="muted">A luta com os gambits aprendidos dele (semente: ${NOME_BOT[A.estilo.base]}); B com os dele (semente: ${NOME_BOT[B.estilo.base]}). Estas lutas não ensinam nenhum dos dois.</p>
     <table class="comp"><thead><tr><th>Ação usada</th><th>A</th><th>B</th></tr></thead><tbody>${ACOES_V2_OBS.map(linha).join("")}</tbody></table>`;
 }
 $("lista-cenarios").innerHTML = CENARIOS.map((c, i) => `<button class="cen" data-i="${i}"><b>${c.titulo}</b><span>${c.desc}</span></button>`).join("");
