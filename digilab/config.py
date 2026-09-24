@@ -164,3 +164,82 @@ CONFIG_DONOS = ConfigDonos()
 CONFIG_TRACOS = ConfigTracos()
 CONFIG_ARENA = ConfigArena()
 CONFIG_METRICAS = ConfigMetricas()
+
+
+# =====================================================================
+# Combate V2 (bateria de bots). NAO entra no hash do protocolo arena-v1
+# (configs_congelados lista as dataclasses da v1 explicitamente); a bateria
+# tem hash proprio. Todos os valores sao PROPOSTOS; so mudam pelo
+# procedimento de calibracao (sementes de calibracao, nunca as de validacao).
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigCombateV2:
+    # condicao fisica neutra (usada por todos os bots na bateria)
+    # calibrado 100 -> 70 (sementes de calibracao): mediana de turnos 34 -> 25 (G4)
+    hp_neutro: float = 70.0
+    guts_inicial_neutro: int = 50
+    regen_guts_neutro: int = 8
+    guts_max: int = 100
+    t_max: int = 40
+    # custos de guts
+    custo_golpe_rapido: int = 10
+    custo_preparar_pesado: int = 15
+    # calibrado 15 -> 20 (sementes de calibracao): com 15 o disparo se paga com a
+    # regeneracao e o atirador domina todos os fixos (G1)
+    custo_disparo: int = 20
+    custo_esquivar: int = 20
+    # dano
+    dano_golpe_rapido: float = 8.0
+    dano_pesado: float = 25.0
+    dano_disparo: float = 6.0
+    # multiplicadores de dano recebido
+    mult_defender: float = 0.3
+    mult_defender_contra_pesado: float = 0.6   # pesado quebra guarda
+    mult_carregar: float = 1.5
+    # ganhos de guts
+    guts_extra_defender: int = 5
+    guts_carregar: int = 25
+    # gambits
+    max_regras: int = 8
+    max_condicoes_por_regra: int = 2
+    fracoes_hp: tuple = (0.25, 0.5, 0.75)
+    limiares_guts: tuple = (20, 40, 60)
+    k_repete: tuple = (2, 3)
+    janela_frequente: int = 5
+    limiar_frequente: float = 0.4
+    epsilon_bots: float = 0.05
+    # oraculo (referencia fora da linguagem): valor de 1 passo = diferenca de
+    # fracao de hp + peso_guts * diferenca de guts
+    peso_guts_oraculo: float = 0.002
+    # pesado preparado e ainda nao executado vale este peso x dano_pesado / hp_max
+    # do alvo, se a distancia for perto (sem isso o valor de 1 passo nunca prepara)
+    peso_pesado_pendente_oraculo: float = 0.5
+
+
+@dataclass(frozen=True)
+class ConfigBateriaCombate:
+    """Limiares dos gates G1-G7 da bateria (todos PROPOSTOS)."""
+
+    peso_minimo_suporte: float = 0.05        # estrategia no suporte do equilibrio
+    iteracoes_fictitious_play: int = 20000
+    suporte_minimo: int = 3                  # G1
+    taxa_min_adaptativo_vs_aleatorio: float = 0.70   # G2
+    tolerancia_espelho: float = 0.03         # G3
+    partidas_replay_amostra: int = 200       # G3
+    mediana_turnos_min: float = 8.0          # G4
+    mediana_turnos_max: float = 30.0         # G4
+    fracao_max_limite_turnos: float = 0.20   # G4
+    fracao_min_acao: float = 0.03            # G5
+    variacao_hp: float = 0.10                # G6: hp_max * (1 +- isto)
+    variacao_guts_inicial: int = 10          # G6
+    partidas_g6_por_semente: int = 50        # G6 (por par)
+    permutacoes_g7: int = 5                  # G7
+    semente_permutacoes_g7: int = 7007       # G7
+    partidas_g7_por_semente: int = 100       # G7 (por permutacao)
+    taxa_min_g7: float = 0.60                # G7
+
+
+CONFIG_COMBATE_V2 = ConfigCombateV2()
+CONFIG_BATERIA_COMBATE = ConfigBateriaCombate()
