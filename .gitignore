@@ -6,3 +6,5 @@ venv/
 # saidas de rodadas nao canonicas; artifacts/ (run canonica) e versionado
 artifacts_fumaca/
 artifacts_*/
+
+!artifacts_ablacao/

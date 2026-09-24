@@ -6,6 +6,8 @@
                            condicionadas ao estado, sobre estados de sonda
   finais                   saude e humor ao fim da vida
   bootstrap_ic             intervalo percentil sobre unidades (sementes)
+  efeito_do_treino         ablacao: vantagem do atencioso com bandit menos a
+                           mesma vantagem com instinto, pareada por semente
 """
 
 from __future__ import annotations
@@ -226,3 +228,57 @@ def bootstrap_ic(valores: Sequence[float], reamostragens: int, semente: int, niv
     lo = medias[int(math.floor(alfa * (reamostragens - 1)))]
     hi = medias[int(math.ceil((1.0 - alfa) * (reamostragens - 1)))]
     return {"media": sum(valores) / n, "ic_inferior": lo, "ic_superior": hi, "nivel": nivel, "n": n}
+
+
+# ------------------------------------------------------------ ablacao treino x cuidado
+
+
+def vantagem_em_pontos(pontos_atencioso: float) -> float:
+    """Pontos do atencioso menos pontos do aleatorio no confronto direto.
+
+    Cada partida distribui 1 ponto (empate = 0.5 para cada), entao a
+    vantagem e p - (1 - p) = 2p - 1, em [-1, 1]; 0 = equilibrio.
+    """
+    if not (0.0 <= pontos_atencioso <= 1.0):
+        raise ValueError(f"pontos fora de [0, 1]: {pontos_atencioso}")
+    return 2.0 * pontos_atencioso - 1.0
+
+
+def efeito_do_treino(
+    pontos_bandit: Mapping[str, float],
+    pontos_instinto: Mapping[str, float],
+    reamostragens: int,
+    semente: int,
+    nivel: float,
+) -> dict:
+    """Efeito do treino = vantagem(atencioso x aleatorio | bandit)
+                        - vantagem(atencioso x aleatorio | instinto),
+    pareado por semente de coorte.
+
+    `pontos_*`: semente -> pontos medios do atencioso contra o aleatorio da
+    MESMA semente. Com instinto nao ha aprendizado; a vantagem que sobra vem
+    do cuidado (estado de vida -> tracos -> stats). O que o bandit acrescenta
+    por cima disso e o efeito do treino. IC: bootstrap percentil sobre
+    sementes (bootstrap_ic); as tres estimativas usam a mesma semente de
+    bootstrap, entao reamostram as mesmas sementes.
+    """
+    if set(pontos_bandit) != set(pontos_instinto):
+        raise ValueError(
+            f"sementes diferentes entre politicas: {sorted(pontos_bandit)} x {sorted(pontos_instinto)}"
+        )
+    sementes = sorted(pontos_bandit)
+    vb = [vantagem_em_pontos(pontos_bandit[s]) for s in sementes]
+    vi = [vantagem_em_pontos(pontos_instinto[s]) for s in sementes]
+    ef = [b - i for b, i in zip(vb, vi)]
+    ic = lambda xs: bootstrap_ic(xs, reamostragens, semente, nivel)  # noqa: E731
+    return {
+        "definicao": "(pontos atencioso - pontos aleatorio | bandit) - (mesma diferenca | instinto), "
+        "por semente; pontos = media do confronto direto, empate = 0.5",
+        "por_semente": {
+            s: {"vantagem_bandit": b, "vantagem_instinto": i, "efeito": e}
+            for s, b, i, e in zip(sementes, vb, vi, ef)
+        },
+        "vantagem_bandit": ic(vb),
+        "vantagem_instinto": ic(vi),
+        "efeito": ic(ef),
+    }
