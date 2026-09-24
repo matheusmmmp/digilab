@@ -107,6 +107,23 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .log .dono{color:var(--accent)}
 .log .t{color:var(--muted)}
 .resultado{font-weight:700}
+.cenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.cen{font:inherit;text-align:left;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;display:grid;gap:4px}
+.cen b{font-size:14px}
+.cen span{font-size:12.5px;color:var(--muted)}
+.cen:hover{border-color:var(--accent)}
+.cen:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.form-cen{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px}
+.form-cen fieldset{border:1px solid var(--line);border-radius:10px;padding:8px 12px 12px;display:grid;gap:6px}
+.form-cen legend{font-weight:700;padding:0 4px}
+.form-cen label{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;font-size:13.5px}
+.form-cen input,.form-cen select{font:inherit;min-width:0;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+.comp{width:100%;border-collapse:collapse;font-size:13.5px}
+.comp th,.comp td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.comp th:first-child,.comp td:first-child{text-align:left;color:var(--muted);font-weight:400}
+.comp thead th{font-weight:700;color:var(--ink)}
+.comp tr.sec td{padding-top:12px;font-weight:700;color:var(--ink);border-bottom:0}
+.tabela-rola{overflow-x:auto}
 .nota{font-size:13px;color:var(--muted);max-width:80ch}
 footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 @media (prefers-reduced-motion: reduce){.btn{transition:none}}
@@ -147,6 +164,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <button class="tab" role="tab" id="t-estado" data-pane="estado" aria-selected="true">Estado</button>
         <button class="tab" role="tab" id="t-aprend" data-pane="aprend" aria-selected="false">Aprendizado</button>
         <button class="tab" role="tab" id="t-arena" data-pane="arena" aria-selected="false">Arena</button>
+        <button class="tab" role="tab" id="t-cenarios" data-pane="cenarios" aria-selected="false">Cenários</button>
         <button class="tab" role="tab" id="t-registro" data-pane="registro" aria-selected="false">Registro</button>
       </div>
 
@@ -183,6 +201,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
           <button class="sbtn" id="lutar">Lutar</button>
           <button class="sbtn sec" id="melhor10">Melhor de 10</button>
         </div>
+        <p class="muted" id="rival-fixo" hidden></p>
         <canvas id="arenacv" class="arena-cv" width="96" height="48" aria-label="Arena"></canvas>
         <div class="hp">
           <div><div class="nm">Seu pet <span id="hp-a">100</span></div><div class="bar"><i id="hpb-a" style="width:100%"></i></div></div>
@@ -194,6 +213,38 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
           <p class="muted" style="margin-top:4px">Os dois revelam o golpe ao mesmo tempo. Cada golpe vence dois e perde para dois, então não existe golpe dominante. O golpe sai da mesma política do dia a dia, e os traços aumentam o dano dos golpes que combinam com eles.</p>
         </div>
         <div class="ciclo" id="ciclo"></div>
+      </div>
+
+      <div class="pane" id="p-cenarios" hidden>
+        <p>Monte dois pets com donos simulados e compare o que o algoritmo aprendeu em cada um. O <b>pet A vira o seu pet</b> (você continua cuidando dele) e o <b>pet B vira o rival fixo</b> da arena. Mesma semente, mesmo resultado.</p>
+        <div class="cenarios" id="lista-cenarios"></div>
+        <details>
+          <summary>Montar à mão</summary>
+          <div class="form-cen">
+            <fieldset><legend>Pet A (seu)</legend>
+              <label>Dono <select id="ca-dono"></select></label>
+              <label>Dias de vida <input id="ca-dias" type="number" min="0.5" max="14" step="0.5" value="5"></label>
+              <label>Interações/dia <input id="ca-pd" type="number" min="1" max="200" step="1" value="16"></label>
+            </fieldset>
+            <fieldset><legend>Pet B (rival)</legend>
+              <label>Dono <select id="cb-dono"></select></label>
+              <label>Dias de vida <input id="cb-dias" type="number" min="0.5" max="14" step="0.5" value="5"></label>
+              <label>Interações/dia <input id="cb-pd" type="number" min="1" max="200" step="1" value="16"></label>
+            </fieldset>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label for="c-semente">Semente</label>
+            <input id="c-semente" type="number" min="1" step="1" value="1" style="width:110px;font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)">
+            <button class="sbtn" id="c-montar">Montar</button>
+          </div>
+        </details>
+        <p id="cen-msg" class="resultado" aria-live="polite"></p>
+        <div class="tabela-rola" id="cen-comp"></div>
+        <div class="row">
+          <button class="sbtn" id="cen-lutas" disabled>Rodar 100 lutas A × B</button>
+          <button class="sbtn sec" id="cen-voltar" hidden>Voltar ao pet anterior</button>
+        </div>
+        <div class="tabela-rola" id="cen-lutas-res"></div>
       </div>
 
       <div class="pane" id="p-registro" hidden>
@@ -519,9 +570,13 @@ function criarDono(tipo){
   }
   throw new Error("dono desconhecido: " + tipo);
 }
-function treinarRival(tipo, dias, semente){
+function treinarRival(tipo, dias, semente){ return treinarPet(tipo, dias, CD.porDia, semente); }
+function treinarPet(tipo, dias, porDia, semente){
   const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
-  const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(CD.porDia * dias);
+  const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(porDia * dias);
+  if (passos < 1) throw new Error("dias de vida precisa ser positivo");
+  if (orc < 1) throw new Error("o orçamento precisa ter pelo menos 1 interação");
+  if (orc > passos * CD.maxPasso) throw new Error(`orçamento de ${orc} interações não cabe em ${passos} passos (máximo ${CD.maxPasso} por passo)`);
   let gasto = 0;
   for (let p=0;p<passos;p++){
     m.avancar(CD.passo);
@@ -796,7 +851,7 @@ document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () =>
 function mostrarPane(p){
   paneAtual = p;
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.pane === p)));
-  for (const id of ["estado","aprend","arena","registro"]) $("p-" + id).hidden = id !== p;
+  for (const id of ["estado","aprend","arena","cenarios","registro"]) $("p-" + id).hidden = id !== p;
   try { localStorage.setItem(CHAVE + "-aba", p); } catch(_){}
   renderTudo();
 }
@@ -847,6 +902,7 @@ function setHP(ha, hb){
   $("hpb-a").style.width = (ha/CA.hp*100) + "%"; $("hpb-b").style.width = (hb/CA.hp*100) + "%";
 }
 function prepararRival(){
+  if (rivalFixo) return rivalFixo;
   const dias = Math.max(1, Math.min(14, Math.round((motor.e.tick - TICK_INICIAL) / TPD) || 1));
   const tipo = $("rival").value;
   const semente = hashSemente("rival", motor.semente, tipo, dias);
@@ -896,6 +952,137 @@ $("melhor10").addEventListener("click", () => {
     travar(false);
   }, 30);
 });
+
+/* ------------------------------------------------ cenarios de teste */
+/* Cada cenario treina dois pets com donos simulados (mesmo codigo do rival da arena).
+   A vira o pet do jogador; B vira o rival fixo. Sementes fixas: mesmo cenario, mesmo resultado. */
+let rivalFixo = null, cenarioAtual = null;
+const CENARIOS = [
+  { id:"adulto-bebe", titulo:"Adulto bem cuidado × bebê aleatório",
+    desc:"A: atencioso, 6 dias, 40 interações/dia. B: aleatório, meio dia, 8/dia.",
+    a:{dono:"atencioso", dias:6, porDia:40}, b:{dono:"aleatorio", dias:.5, porDia:8} },
+  { id:"controle", titulo:"Controle da pesquisa",
+    desc:"Atencioso × aleatório, 5 dias, 16/dia nos dois. É a comparação do portão.",
+    a:{dono:"atencioso", dias:5, porDia:16}, b:{dono:"aleatorio", dias:5, porDia:16} },
+  { id:"orcamento", titulo:"Mesmo dono, orçamento diferente",
+    desc:"Atencioso nos dois, 5 dias. A com 40/dia, B com 6/dia.",
+    a:{dono:"atencioso", dias:5, porDia:40}, b:{dono:"atencioso", dias:5, porDia:6} },
+  { id:"negligenciado", titulo:"Adulto negligenciado × criança cuidada",
+    desc:"A: relapso, 6 dias, 4/dia. B: atencioso, 2 dias, 24/dia.",
+    a:{dono:"relapso", dias:6, porDia:4}, b:{dono:"atencioso", dias:2, porDia:24} },
+  { id:"incoerente", titulo:"Incoerente × atencioso",
+    desc:"Mesmo volume (16/dia, 5 dias). Só a coerência do feedback muda.",
+    a:{dono:"incoerente", dias:5, porDia:16}, b:{dono:"atencioso", dias:5, porDia:16} },
+];
+const OBS_ARENA = obsCombate(CA.hp, CA.hp);
+function jsdBits(p, q){
+  let s = 0;
+  for (const a of ACOES_PET){ const m = (p[a] + q[a]) / 2;
+    if (p[a] > 0) s += .5 * p[a] * Math.log2(p[a] / m);
+    if (q[a] > 0) s += .5 * q[a] * Math.log2(q[a] / m); }
+  return s;
+}
+function resumoPet(m, spec){
+  const e = m.e, r = m.pol.rec, af = afinidades(m.tracos), dom = corDominante(m.tracos);
+  const pm = m.pol.media(OBS_ARENA), topo = ACOES_PET.reduce((x, a) => pm[a] > pm[x] ? a : x, ACOES_PET[0]);
+  return {
+    dono: NOME_DONO[spec.dono], idade: `${spec.dias} d · ${NOME_ESTAGIO[estagio(e.tick)].toLowerCase()}`,
+    porDia: spec.porDia, total: m.log.filter(x => x[1] === "d").length,
+    saude: e.saude, fome: e.fome, higiene: e.higiene, humor: e.humor,
+    elogio: r.elogio, repreensao: r.repreensao, atendido: r.atendido, ignorado: r.ignorado,
+    atualizacoes: ACOES_PET.reduce((t, a) => t + m.pol.bracos[a].n, 0),
+    jsdAgora: jsdBits(m.pol.media(observacao(e)), m.pol.prior(observacao(e))),
+    jsdArena: jsdBits(pm, m.pol.prior(OBS_ARENA)),
+    topo: `${NOME_PET[topo]} (${(pm[topo]*100).toFixed(0)}%) → ${NOME_COMB[CA.mapa[topo]]}`,
+    dom: `${NOME_COMB[dom]} ${af[dom] >= 0 ? "+" : ""}${af[dom].toFixed(3)}`,
+  };
+}
+function montarCenario(cen, semente){
+  const sa = hashSemente("cenario", cen.id, semente, "a"), sb = hashSemente("cenario", cen.id, semente, "b");
+  const A = treinarPet(cen.a.dono, cen.a.dias, cen.a.porDia, sa);
+  const B = treinarPet(cen.b.dono, cen.b.dias, cen.b.porDia, sb);
+  /* o pet atual fica guardado para o botao de voltar; so o log e salvo, como sempre */
+  try { if (!localStorage.getItem(CHAVE + "-anterior")) localStorage.setItem(CHAVE + "-anterior", JSON.stringify({semente:motor.semente, log:motor.log})); } catch(_){}
+  motor = A; nascendo = 0; salvar();
+  rivalFixo = { rival:B, dias:cen.b.dias, tipo:cen.b.dono };
+  cenarioAtual = { cen, semente, ra:resumoPet(A, cen.a), rb:resumoPet(B, cen.b) };
+  renderCenario(); renderRivalFixo(); renderTudo();
+  $("cen-voltar").hidden = false; $("cen-lutas").disabled = false; $("cen-lutas-res").innerHTML = "";
+}
+const pct = v => (v*100).toFixed(0) + "%";
+function renderCenario(){
+  if (!cenarioAtual){ $("cen-comp").innerHTML = ""; return; }
+  const { cen, semente, ra, rb } = cenarioAtual;
+  const L = (rot, k, f = x => x) => `<tr><td>${rot}</td><td>${f(ra[k])}</td><td>${f(rb[k])}</td></tr>`;
+  const sec = t => `<tr class="sec"><td colspan="3">${t}</td></tr>`;
+  const bits = x => x.toFixed(4);
+  $("cen-msg").textContent = `${cen.titulo} · semente ${semente}. O pet A agora é o seu.`;
+  $("cen-comp").innerHTML = `<table class="comp"><thead><tr><th></th><th>A (seu)</th><th>B (rival)</th></tr></thead><tbody>
+    ${sec("Perfil")}${L("Dono","dono")}${L("Idade","idade")}${L("Interações/dia","porDia")}${L("Interações no total","total")}
+    ${sec("Estado no fim")}${L("Saúde","saude",pct)}${L("Saciedade","fome",pct)}${L("Higiene","higiene",pct)}${L("Humor","humor",pct)}
+    ${sec("Sinal de aprendizado")}${L("Elogios","elogio")}${L("Repreensões","repreensao")}${L("Pedidos atendidos","atendido")}${L("Pedidos ignorados","ignorado")}${L("Atualizações do bandit","atualizacoes")}
+    ${sec("Quanto o aprendizado afastou a política do prior (JSD, bits)")}${L("No estado atual","jsdAgora",bits)}${L("Na arena (HP cheio)","jsdArena",bits)}
+    ${sec("Na arena")}${L("Ação mais provável","topo")}${L("Traço dominante","dom")}
+  </tbody></table>`;
+}
+function renderRivalFixo(){
+  const el = $("rival-fixo");
+  if (!rivalFixo){ el.hidden = true; return; }
+  el.hidden = false;
+  el.textContent = `Rival do cenário: pet de dono ${NOME_DONO[rivalFixo.tipo]}, ${rivalFixo.dias} dia(s). Troque o dono no seletor para voltar ao rival normal.`;
+}
+function rodarLutas(n){
+  if (!rivalFixo) throw new Error("monte um cenário antes");
+  const B = rivalFixo.rival, contA = {}, contB = {};
+  for (const c of COMBATE){ contA[c] = 0; contB[c] = 0; }
+  let v = 0, d = 0, e = 0, turnos = 0;
+  for (let k=0;k<n;k++){
+    const r = lutar(motor, B, hashSemente("lab", motor.semente, motor.log.length, k));
+    if (r.vencedor === "a") v++; else if (r.vencedor === "b") d++; else e++;
+    turnos += r.turnos.length;
+    for (const t of r.turnos){ contA[t.ca]++; contB[t.cb]++; }
+  }
+  const linha = c => `<tr><td>${NOME_COMB[c]}</td><td>${pct(contA[c]/turnos)}</td><td>${pct(contB[c]/turnos)}</td></tr>`;
+  $("cen-lutas-res").innerHTML = `<p class="resultado">${n} lutas: A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e/2)/n*100).toFixed(0)}% dos pontos. Média de ${(turnos/n).toFixed(1)} turnos.</p>
+    <table class="comp"><thead><tr><th>Golpe usado</th><th>A</th><th>B</th></tr></thead><tbody>${COMBATE.map(linha).join("")}</tbody></table>`;
+}
+$("lista-cenarios").innerHTML = CENARIOS.map((c, i) => `<button class="cen" data-i="${i}"><b>${c.titulo}</b><span>${c.desc}</span></button>`).join("");
+for (const id of ["ca-dono","cb-dono"]) $(id).innerHTML = Object.entries(NOME_DONO).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+$("ca-dono").value = "atencioso"; $("cb-dono").value = "aleatorio";
+function comEspera(fn){
+  $("cen-msg").textContent = "Treinando os dois pets…";
+  setTimeout(() => { try { fn(); } catch(err){ $("cen-msg").innerHTML = `<span style="color:var(--bad)">${err.message}</span>`; } }, 30);
+}
+document.querySelectorAll(".cen").forEach(b => b.addEventListener("click", () => comEspera(() => montarCenario(CENARIOS[Number(b.dataset.i)], 1))));
+function lerNumero(id, rot){
+  const v = Number($(id).value);
+  if (!Number.isFinite(v) || v <= 0) throw new Error(`${rot}: valor inválido`);
+  return v;
+}
+$("c-montar").addEventListener("click", () => comEspera(() => {
+  const semente = lerNumero("c-semente", "Semente");
+  if (!Number.isInteger(semente)) throw new Error("Semente precisa ser inteira");
+  const lado = p => ({ dono:$(p + "-dono").value, dias:lerNumero(p + "-dias", "Dias de vida"), porDia:lerNumero(p + "-pd", "Interações/dia") });
+  const a = lado("ca"), b = lado("cb");
+  montarCenario({ id:"manual", titulo:`${NOME_DONO[a.dono]} × ${NOME_DONO[b.dono]}`, a, b }, semente);
+}));
+$("cen-lutas").addEventListener("click", () => {
+  $("cen-lutas-res").textContent = "Lutando…";
+  setTimeout(() => { try { rodarLutas(100); } catch(err){ $("cen-lutas-res").innerHTML = `<span style="color:var(--bad)">${err.message}</span>`; } }, 30);
+});
+$("cen-voltar").addEventListener("click", () => {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(CHAVE + "-anterior") || "null"); } catch(_){}
+  if (!d) { $("cen-msg").textContent = "Não há pet anterior guardado."; return; }
+  motor = Motor.reproduzir(d.semente, d.log);
+  try { localStorage.removeItem(CHAVE + "-anterior"); } catch(_){}
+  rivalFixo = null; cenarioAtual = null; salvar();
+  renderCenario(); renderRivalFixo(); renderTudo();
+  $("cen-voltar").hidden = true; $("cen-lutas").disabled = true; $("cen-lutas-res").innerHTML = "";
+  $("cen-msg").textContent = "Pet anterior restaurado pelo replay do registro.";
+});
+$("rival").addEventListener("change", () => { rivalFixo = null; renderRivalFixo(); });
+try { if (localStorage.getItem(CHAVE + "-anterior")) $("cen-voltar").hidden = false; } catch(_){}
 
 /* ------------------------------------------------ laco */
 let ultimoSalvo = 0;

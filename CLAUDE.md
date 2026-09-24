@@ -103,6 +103,12 @@ pixels no próprio arquivo. Se mudar um parâmetro em `config.py`, espelhe no ob
 
 Publicado também como artifact privado em claude.ai (link com o usuário).
 
+Aba **Cenários**: monta dois pets com donos simulados (dono, dias de vida, interações/dia,
+semente). O pet A vira o pet do jogador (o anterior fica guardado para "Voltar") e o B vira o
+rival fixo da arena. Mostra lado a lado estado, sinal de aprendizado, JSD da política média ao
+prior do bandit e 100 lutas A × B. É ferramenta de inspeção do porte JS, **não** resultado de
+pesquisa: uma semente, outro RNG, sem IC.
+
 ## Assets — importante
 
 A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do Digimon World
@@ -118,13 +124,13 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   qualquer coisa, trocar por arte original ou licenciada.
 
 Versão com sprites: `web/digilab_sprites.html` (no `.gitignore`), cópia de `digilab.html` que
-lê `D:\Trab\digilab\Assets\digilab_atlas.png`. O atlas e o script que o gera
-(`Assets\gerar_atlas.py`) ficam fora do repo. Precisa de servidor local, porque o caminho é
+lê `D:\Trab\digilab\Assets\digilab_atlas.png`. O atlas e os scripts ficam fora do repo:
+`Assets\gerar_atlas.py` (atlas) e `Assets\gerar_sprites_html.py` (regenera a cópia a partir
+de `digilab.html`; rode depois de qualquer mudança nele). Precisa de servidor local, porque o caminho é
 relativo: `python -m http.server 8765 --directory D:/Trab/digilab` e abrir
 `http://localhost:8765/v1/web/digilab_sprites.html`. A linha evolutiva segue o traço de combate
 dominante (bebê único; criança e adulto, um par por traço). Se o atlas não carregar, a página
-mostra um aviso em vermelho e cai nos placeholders. Se mudar `digilab.html`, a cópia com
-sprites não acompanha sozinha.
+mostra um aviso em vermelho e cai nos placeholders.
 
 ## Pendências conhecidas
 
