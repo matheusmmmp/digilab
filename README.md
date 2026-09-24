@@ -72,8 +72,8 @@ Isso foi encontrado rodando a demo, não lendo o código.
   estatística que valha.
 - **Arena** — v3.
 - **Aprendizado** — v1.
-- **LLM** — no máximo como camada de fala por cima, lendo `estado()`.
-  Nunca no núcleo.
+- **LLM** — era restrita a uma camada de fala por cima de `estado()`; a restrição foi
+  retirada em 2026-09-24 (ver CLAUDE.md).
 
 ## Limitações conhecidas
 

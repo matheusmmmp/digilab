@@ -38,7 +38,6 @@ Não comece a Parte B antes de a Parte A passar em todos os testes.
 - Memória de vida alterando gambits, `CondicaoFisica` ou qualquer coisa do
   combate. **A memória nunca entra em `CondicaoFisica`**: condição é
   cuidado, memória é estilo; misturar reabre o confundidor.
-- LLM. Só templates.
 - Novas ações, novas condições no catálogo de gambits.
 - `web/digilab.html`.
 
@@ -179,6 +178,117 @@ permitir, não crie a ação**: reporte o que seria preciso e onde.
 - Orçamento de interações idêntico entre braços.
 - Todo `evento_ref` aponta para evento existente e do tipo esperado.
 - Nada em `digilab/combate_v2/` importa ou lê `memoria.py` (teste por AST).
+
+---
+
+## Parte C — fala por LLM (acrescentada em 2026-09-24, após as Partes A e B)
+
+A proibição de LLM foi retirada do projeto. Esta parte troca o **texto** da fala do
+adolescente e do adulto por uma frase gerada por LLM, sem mexer em nada do que
+decide: motivo, política, gambits, combate e registro continuam exatamente como nas
+Partes A e B. O princípio continua o mesmo — **a fala nunca inventa causa** — e agora
+ele precisa ser garantido por validação, não só por construção.
+
+### C1 — onde a LLM entra (e onde não entra)
+
+- Entra **só** na camada de expressão, depois que o `Motivo` já existe.
+- Estágios `adolescente` e `adulto` podem usar a LLM. `bebe` e `crianca` continuam só
+  com emote e ícones da tabela (A3): não há texto livre para a LLM produzir ali.
+- **Nunca** entra em `digilab/` (regra de só-stdlib), nas decisões, no registro, no
+  replay, nos artefatos de pesquisa nem nos hashes de protocolo. Runs canônicas,
+  bateria, diário e legibilidade continuam só com templates e bit a bit.
+- A frase gerada é **exibição**: se a LLM falhar, demorar ou for reprovada na
+  validação, mostra-se o template da A3, sem erro para o jogador.
+
+### C2 — arquitetura
+
+- `servidor/servidor_local.py` (fora de `digilab/`): substitui o `python -m http.server`.
+  Serve os arquivos estáticos como hoje e expõe `POST /api/fala`.
+- `servidor/fala_llm.py`: monta o pedido, chama a API do Claude pelo SDK oficial
+  (`anthropic`, dependência só do servidor) e valida a resposta.
+- A **chave da API fica só no servidor** (credencial do ambiente: `ANTHROPIC_API_KEY`
+  ou perfil do `ant`). Nunca no HTML, no navegador ou no git.
+- `web/digilab_sprites.html`: quando o servidor responde, usa a frase da LLM; senão,
+  o template. Um interruptor na interface liga e desliga a fala por LLM.
+- Modelo: parâmetro de configuração do servidor. Padrão `claude-haiku-4-5` (o mais barato
+  e rápido; escolha do pesquisador em 2026-09-24). Com `claude-opus-5` usa esforço baixo e
+  fallback de recusa; o Haiku não aceita `effort` e uma recusa nele cai no template.
+
+### C3 — o que a LLM recebe
+
+Só o que o jogador poderia legitimamente ouvir:
+
+- o `Motivo` (ação, fatores, `evento_ref`, exploração), o estágio e o humor;
+- o texto de cada fator e de cada ação vindo da tabela da A3 (o "significado" permitido);
+- o template correspondente, como exemplo do que pode ser dito.
+
+Nada de estado interno do bandit, pesos, log inteiro ou histórico de conversa. Cada
+fala é um pedido independente.
+
+### C4 — o que a LLM devolve e como é validado
+
+Saída estruturada (`output_config.format`, esquema JSON):
+
+- `texto`: a frase, em português, primeira pessoa, no máximo 1 frase (adolescente:
+  fragmento curto, até 6 palavras);
+- `fatores_citados`: lista dos nomes de fator que a frase menciona.
+
+Validação no servidor (reprovou → template da A3):
+
+1. `fatores_citados` ⊆ `motivo.fatores` (e vazio se exploração ou sem fator);
+2. nenhum marcador de fator **ausente** do motivo aparece no `texto` (mesma varredura
+   de marcadores da A5);
+3. sem fator → o texto tem de dizer que não sabe o porquê (sem causa plausível);
+4. adolescente cita no máximo o primeiro fator; adulto no máximo os dois;
+5. números de evento/turno citados ⊆ `evento_ref`.
+
+Limite honesto: a varredura de marcadores não pega sinônimos. Por isso a C6 exige uma
+avaliação com juiz antes de ligar a LLM por padrão.
+
+### C5 — determinismo e custo
+
+- Cache por `(motivo, estágio, faixa de humor, modelo, versão do prompt)`: o mesmo
+  motivo mostra a mesma frase na mesma sessão. A frase não é reproduzível entre
+  execuções e isso é aceito, porque ela não entra em nada que precise de replay.
+- Limite de chamadas por minuto no servidor e timeout curto; acima disso, template.
+- **Teto de gasto total** (padrão US$ 2, persistido; decisão do pesquisador em 2026-09-24): reserva o
+  custo máximo antes de chamar, acerta pelo uso real, conta o pior caso em erro; no teto, só template.
+- Cada fala é uma chamada paga. O diário e a legibilidade não chamam a LLM.
+
+### C6 — testes e avaliação
+
+- Testes sem rede (cliente falso): validação reprova fator inventado, marcador
+  ausente, causa em motivo sem fator, excesso de fatores e evento fora do
+  `evento_ref`; qualquer falha cai no template; bebê e criança nunca chamam a LLM.
+- Teste de fronteira: nada em `digilab/` importa `servidor/` nem `anthropic` (AST).
+- Todos os testes anteriores continuam passando; runs canônicas intactas.
+- **Avaliação com juiz (antes de ligar por padrão):** amostra de motivos reais dos
+  diários (vida e combate, todos os estágios), gerar falas e medir, com um juiz,
+  a fração que cita causa fora do motivo. Custo estimado e aprovado antes de rodar.
+
+### C6b — provedor local (Ollama), acrescentado em 2026-09-24
+
+- Interface de provedor em `servidor/fala_llm.py`: `disponivel()` e `gerar(sistema, pedido, esquema,
+  semente)`. Validação, cache, limite por minuto e queda para o template ficam acima dela e valem
+  para todos os provedores; o teto de gasto só para provedor com custo.
+- `ProvedorOllama` (padrão; `qwen2.5:3b`, escolhido para a RTX 2060 de 6 GB do pesquisador): chama
+  `POST /api/chat` do Ollama local só com a biblioteca padrão, com o esquema JSON em `format`,
+  temperatura baixa, semente derivada do motivo (mesmo motivo, mesma frase), resposta curta e o
+  modelo mantido carregado; aquecimento ao ligar o servidor. Sem custo por chamada.
+- `ProvedorClaude`: o de antes (Haiku 4.5, teto de gasto).
+- `--provedor auto|ollama|claude|nenhum`. `auto`: Ollama se estiver pronto; senão Claude se houver
+  chave; senão fica com o Ollama, que passa a valer quando for ligado (status consultado ao vivo).
+- Avaliação C6: `experiments/avaliar_fala.py` gera falas para 200 motivos reais (metade com fator),
+  mede a fração barrada pela validação e sorteia 50 aprovadas em `revisao.csv` para revisão humana
+  ("cita causa fora dos fatores?"). Com o Ollama não tem custo; com o Claude exige `--aceito-custo`.
+
+### C7 — critério de pronto
+
+- [ ] servidor local servindo a página e `POST /api/fala`, chave só no servidor
+- [ ] validação C4 com testes sem rede; falha sempre cai no template
+- [ ] interruptor na web; sem servidor/chave a página funciona como hoje
+- [ ] avaliação C6 rodada e reportada (fração de causas inventadas)
+- [ ] `CLAUDE.md` atualizado
 
 ---
 

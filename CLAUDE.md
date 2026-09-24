@@ -16,10 +16,12 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
 
 ## Regras do projeto — não negociáveis
 
-- **Não aumentar escopo.** Nada de combate novo, multiplayer, LLM, interface gráfica ou modelos
+- **Não aumentar escopo.** Nada de combate novo, multiplayer, interface gráfica ou modelos
   novos fora do que a tarefa pede. (Exceção autorizada em 2026-09-24: o combate V2 em
   `digilab/combate_v2/`. Plugar pets, técnicas por linha evolutiva e comandos do dono na luta
   continuam fora.)
+- **LLM liberada** (decisão do Matheus, 2026-09-24): a proibição de LLM foi retirada. Usar LLM
+  continua dependendo de a tarefa pedir, como qualquer outra coisa.
 - **Falhar alto, não em silêncio.** `raise` em vez de `dropna`, valor default ou `except: pass`.
   Evento desconhecido no log levanta erro.
 - **Determinismo é requisito.** Mesma semente + mesmo log = mesmo resultado, até o último float.
@@ -73,13 +75,16 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/memoria.py` | `MemoriaCurta` (latência do dono por necessidade, broncas e elogios com decaimento) e `PoliticaBanditMemoria` |
 | `experiments/diario.py`, `legibilidade.py` | diário de motivo/expressão (vida ou partida) e métricas de legibilidade → `artifacts_expressao/` |
 | `experiments/configs/memoria.json` | `PROTOCOLO_ARENA_V1_MEMORIA` → `artifacts_v1_memoria/` |
+| `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`: provedores Ollama local e Claude; SDK `anthropic` só aqui). `digilab/` não importa isto (teste AST) |
+| `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `TAREFA_MEMORIA_EXPRESSAO.md`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 131 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
+| `tests/` | 157 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 131 testes, ~160 s
+python -m pytest tests/ -q                                                   # 157 testes, ~4 a 7 min
+python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
 python experiments/legibilidade.py                                            # legibilidade + diários, ~1 min
 python experiments/diario.py --log artifacts_ablacao/vidas/atencioso-bandit@101.jsonl
@@ -200,6 +205,33 @@ Números abaixo vêm de `artifacts_expressao/legibilidade.json` e `artifacts_v1_
   artifacts_ablacao/). Diferença de ~0,001 bit, sem IC, e a divergência dentro do braço também subiu
   (0,01496 vs 0,01306). Fatores de memória citados em 3,1–6,1% das decisões (mais no aleatório).
 
+## Fala por LLM (Parte C, 2026-09-24)
+
+**Provedores** (`--provedor`, padrão `auto`): **Ollama local** (`qwen2.5:3b`, sem custo, padrão
+quando está rodando) ou **API do Claude** (abaixo). Para o Ollama: instalar pelo site oficial e rodar
+`ollama pull qwen2.5:3b`. Validação, cache e queda para o template são os mesmos para os dois.
+Avaliação: `python experiments/avaliar_fala.py` → `artifacts_fala/<provedor>_<modelo>/` (fração
+barrada + `revisao.csv` com 50 falas aprovadas para revisão humana).
+
+Especificada em `docs/TAREFA_MEMORIA_EXPRESSAO.md` (Parte C). Só o TEXTO da fala do adolescente e
+do adulto no jogo web; motivo, decisões, registro, replay e artefatos não mudam e continuam só com
+templates. `servidor/servidor_local.py` serve a mesma pasta que o `http.server` servia (mesmos
+endereços) e expõe `POST /api/fala`; a chave fica no ambiente do servidor (`ANTHROPIC_API_KEY`),
+nunca na página. Modelo padrão `claude-haiku-4-5` (mais barato e rápido; `--modelo` troca), saída estruturada
+`{texto, fatores_citados}`; com `claude-opus-5`/`claude-fable-5-1` usa esforço `low` e fallback de
+recusa do servidor da API (o Haiku rejeita `effort`; recusa nele cai no template). A resposta é validada
+(fatores ⊆ motivo, marcadores de fatores ausentes, "não sei" sem fator, limite de fatores por estágio,
+números ⊆ evento_ref e parâmetros); qualquer falha, erro, recusa ou limite (30/min) cai no template.
+Cache por motivo+estágio+faixa de humor. Chave "fala por LLM" na página, desligada por padrão.
+**Teto de gasto TOTAL de US$ 2** (`--limite-usd`): antes de cada chamada reserva o custo máximo
+(resposta limitada a 300 tokens); se passaria do teto, não chama e usa o template. Acerta pelo `usage`
+real; erro sem `usage` conta o pior caso. Acumulado em `servidor/gasto_fala.json` (fora do git): não
+zera ao reiniciar; para liberar mais, aumente `--limite-usd` ou apague o arquivo. Modelo sem preço
+na tabela `PRECOS_USD_POR_MTOK` não liga. Proteção adicional recomendada: limite de gasto do
+workspace no Console da Anthropic.
+**Pendente**: a avaliação com juiz da C6 (fração de causas inventadas) não foi rodada — precisa de
+credencial e de aprovação do custo. A varredura de marcadores não pega sinônimos.
+
 ## Versão web (`web/digilab.html`)
 
 Porte em JavaScript com as mesmas regras e parâmetros de `config.py` (motor, instinto, bandit,
@@ -244,8 +276,11 @@ vermelho e cai nos placeholders.
 
 **Desde 2026-09-24 `digilab_sprites.html` é a versão em que o Matheus quer trabalhar** e é
 editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba **Evolução**:
-- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate
-  dominante naquele instante. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
+- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate em
+  que o pet está MAIS ACIMA de um pet comum (`BASE_TRACOS`, medida em 60 pets simulados por estágio;
+  desde 2026-09-24). Antes era o traço absoluto, e ~90% dos pets viravam Bloqueio (todo pet dorme e
+  fica à toa muito, e isso conta como bloqueio) e lutavam como tartaruga. Intervenção de gambits do
+  registro que não cabe mais na lista é ignorada no replay, com aviso, em vez de perder o pet. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
   entram na assinatura do "Verificar replay");
 - árvore em SVG: ovo → bebê → 5 crianças → 5 adultos (qualquer criança pode ir a qualquer
   adulto), caminho do pet destacado, tracejado = forma se evoluísse agora, histórico;
@@ -265,7 +300,8 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   Lutas contra pet de cenário e as 100 lutas dos Cenários não ensinam. Parâmetros no objeto `GA`.
   PROVISÓRIO e só na web: o Python ainda não tem isso (é a arena V2 da pesquisa).
 - **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
-  regra de honestidade do Python. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
+  regra de honestidade do Python. Na web, a criança sem causa mostra ação + humor (vida) ou reação
+  (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
@@ -274,6 +310,9 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- Fala por LLM: rodar `experiments/avaliar_fala.py` com o Ollama instalado e revisar `revisao.csv`
+  antes de ligar por padrão (Ollama e credencial do Claude ainda não configurados nesta máquina).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.

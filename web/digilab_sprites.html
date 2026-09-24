@@ -105,6 +105,9 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .hp .bar.gt i{background:var(--accent)}
 .fala{font:inherit;text-align:left;width:100%;background:#F4F1E4;color:#1B2130;border:0;border-radius:10px;padding:8px 10px;cursor:pointer;min-height:36px;font-size:14px;line-height:1.35;position:relative}
 .fala::before{content:"";position:absolute;top:-6px;left:22px;border:6px solid transparent;border-top:0;border-bottom-color:#F4F1E4}
+.fala-llm{display:flex;gap:6px;align-items:center;font-size:12px;color:#C9D2F0;padding:0 4px}
+.fala-llm input{accent-color:var(--accent)}
+.fala-fonte{font-family:var(--f-mono);font-size:11px;color:#C9D2F0}
 .fala-det{font-size:12px;color:#C9D2F0;font-family:var(--f-mono);padding:2px 4px}
 .arena-fala{display:grid;gap:4px;font-size:14px;min-height:44px}
 .gambits{display:grid;gap:6px;padding-left:22px;margin:0}
@@ -177,6 +180,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <div class="strip"><span id="relogio">DIA 1 · 08:00</span><span id="estagio"><b>BEBÊ</b></span></div>
         <button class="fala" id="fala" aria-expanded="false" title="Clique para ver o porquê">…</button>
         <div class="fala-det" id="fala-det" hidden></div>
+        <label class="fala-llm"><input type="checkbox" id="fala-llm-on"> fala por LLM <span id="fala-llm-status">(verificando servidor…)</span></label>
       </div>
       <div class="acoes" role="group" aria-label="Ações do dono">
         <button class="btn" id="a-alimentar" data-acao="alimentar">Alimentar<small>fome</small></button>
@@ -211,7 +215,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <div class="linhas" id="necessidades"></div>
         <div>
           <h2>Traços de combate</h2>
-          <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia. O traço mais forte na hora de evoluir decide a forma (aba Evolução).</p>
+          <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia. Na hora de evoluir, a forma sai do traço em que ele está mais acima de um pet comum (aba Evolução).</p>
         </div>
         <div class="linhas" id="tracos"></div>
       </div>
@@ -272,7 +276,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-evolucao" hidden>
-        <p>Ao completar <b>1 dia</b> o bebê vira criança, e ao completar <b>4 dias</b> a criança vira adulto. Em cada evolução, o <b>traço de combate mais forte naquele momento</b> decide a forma, e ela fica travada até a próxima.</p>
+        <p>Ao completar <b>1 dia</b> o bebê vira criança, e ao completar <b>4 dias</b> a criança vira adulto. Em cada evolução, o <b>traço de combate em que ele está mais acima de um pet comum</b> naquele momento decide a forma, e ela fica travada até a próxima. (Todo pet dorme muito, então dormir não decide nada sozinho.)</p>
         <div class="kv" id="evo-resumo"></div>
         <svg class="evo-svg" id="evo-arvore" viewBox="0 0 640 462" role="img" aria-label="Árvore de evolução"></svg>
         <div class="legend"><span style="--c:var(--accent)">caminho do seu pet</span><span style="--c:var(--line)">caminhos possíveis</span></div>
@@ -616,7 +620,11 @@ function expressar(mot, est, refs){
   const [ic, pal, fr] = (mot.origem === "vida" ? ACOES_VIDA_TXT : ACOES_V2_TXT)[mot.acao];
   const fat = mot.exploracao ? [] : mot.fatores;
   if (est === "bebe") return mot.origem === "vida" ? EMOTE_HUMOR[mot.humor >= .66 ? 2 : mot.humor >= .33 ? 1 : 0] : REACAO_BEBE[mot.acao];
-  if (est === "crianca") return [ic, ...(fat.length ? [textoFator(fat[0], est)] : [])].join(" ");
+  if (est === "crianca"){
+    if (fat.length) return `${ic} ${textoFator(fat[0], est)}`;
+    /* sem causa: acao + humor (vida) ou reacao (luta). Humor e estado, nao causa. */
+    return `${ic} ${mot.origem === "vida" ? EMOTE_HUMOR[mot.humor >= .66 ? 2 : mot.humor >= .33 ? 1 : 0] : REACAO_BEBE[mot.acao]}`;
+  }
   if (est === "adolescente") return `${pal}... ` + (fat.length ? textoFator(fat[0], est) : "");
   if (!fat.length) return `${fr}. ${GENERICO_ADULTO}`;
   const causas = fat.slice(0, 2).map(f => textoFator(f, "adulto")).join(" e ");
@@ -725,9 +733,16 @@ class Motor {
     this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
   }
   _gambit(op, k){
-    if (!this.gp) throw new Error("registro com intervenção em gambits antes da evolução");
-    this.gp.intervir(op, k);
-    this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
+    /* no replay, uma intervencao que nao cabe mais (ex.: pet salvo antes da troca da regra de
+       evolucao, lista diferente) e ignorada com aviso em vez de perder o pet inteiro */
+    try {
+      if (!this.gp) throw new Error("intervenção antes da evolução");
+      this.gp.intervir(op, k);
+      this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
+    } catch(err){
+      console.warn("intervencao do registro ignorada no replay:", op, err.message);
+      if (this.gp) this.gp.mudancas.push({luta:this.gp.nLutas, texto:`intervenção antiga ignorada (${op}): ${err.message}`, dono:true});
+    }
   }
   observar(a){
     if (!ACOES_DONO.includes(a)) throw new Error("acao de dono desconhecida: " + a);
@@ -767,8 +782,8 @@ class Motor {
       this.e = avancarTick(this.e, this.rEnv);
       const est = estagio(this.e.tick);
       if (est !== this.estagioAtual){
-        const af = afinidades(this.tracos), traco = corDominante(this.tracos);
-        this.evolucoes.push({ tick:this.e.tick, estagio:est, traco, afinidade:af[traco] });
+        const {traco, afinidade, acima} = linhaDaEvolucao(this.tracos, est);
+        this.evolucoes.push({ tick:this.e.tick, estagio:est, traco, afinidade, acima });
         this.estagioAtual = est;
         if (est !== "bebe"){ if (!this.gp) this.gp = new GambitsPet(); this.gp.semear(LINHA_ESTILO[traco]); }
       }
@@ -1204,6 +1219,21 @@ function desenhar(ctx, grade, x0, y0, pal, opts={}){
     ctx.fillStyle = pal[ch] || "#FF00FF"; ctx.fillRect(px, y0 + y, 1, 1);
   }
 }
+/* Linha de base de um pet comum no momento de cada evolucao (PROVISORIO, so na web):
+   media de afinidades de 60 pets simulados por estagio (4 donos x 15 sementes, 16
+   interacoes/dia, medida em 2026-09-24). Todo pet dorme e fica a toa muito, e essas
+   acoes contam para "bloqueio"; pelo traco absoluto ~90% dos pets viravam Bloqueio.
+   A forma agora sai do traco em que o pet esta MAIS ACIMA de um pet comum. */
+const BASE_TRACOS = {
+  crianca: {golpe:-0.0473, bloqueio:0.1357, agarrao:0.0158, finta:-0.0500, carga:-0.0542},
+  adulto:  {golpe:-0.0433, bloqueio:0.2103, agarrao:-0.0948, finta:-0.0532, carga:-0.0190},
+};
+function linhaDaEvolucao(tracos, est){
+  const af = afinidades(tracos), base = BASE_TRACOS[est];
+  if (!base) throw new Error("sem linha de base para o estágio " + est);
+  const traco = COMBATE.reduce((m, c) => af[c] - base[c] > af[m] - base[m] ? c : m, COMBATE[0]);
+  return { traco, afinidade:af[traco], acima:af[traco] - base[traco] };
+}
 function corDominante(tracos){ const af = afinidades(tracos); return COMBATE.reduce((m,c) => af[c] > af[m] ? c : m, COMBATE[0]); }
 function estagio(tick){ const d = (tick - TICK_INICIAL)/TPD; return d < 1 ? "bebe" : d < 4 ? "crianca" : "adulto"; }
 const NOME_ESTAGIO = { bebe:"BEBÊ", crianca:"CRIANÇA", adulto:"ADULTO" };
@@ -1440,6 +1470,58 @@ $("copiar").addEventListener("click", async () => {
 $("novo").addEventListener("click", () => { $("novo-conf").hidden = false; });
 $("novo-conf").addEventListener("click", () => { $("novo-conf").hidden = true; novoPet(); mostrarPane("estado"); });
 
+
+/* ------------------------------------------------ fala por LLM (Parte C; so exibicao)
+   O servidor local (servidor/servidor_local.py) gera a frase e a VALIDA contra o motivo;
+   a pagina mostra o template na hora e troca pela frase da LLM quando ela chega. Nada
+   disso entra no registro nem nas decisoes. Sem servidor/credencial: so template. */
+const FALA_LLM = { on:false, ativo:false, provedor:null, modelo:null, semCusto:false, motivo:"", gasto:null, cache:new Map(), pendentes:new Set() };
+try { FALA_LLM.on = localStorage.getItem(CHAVE + "-fala-llm") === "1"; } catch(_){}
+$("fala-llm-on").checked = FALA_LLM.on;
+function rotuloLLM(){
+  const g = FALA_LLM.gasto;
+  $("fala-llm-status").textContent = !FALA_LLM.ativo
+    ? `(indisponível: ${FALA_LLM.motivo || "rode python servidor/servidor_local.py"})`
+    : FALA_LLM.semCusto ? `(local: ${FALA_LLM.modelo}, sem custo)`
+    : `(Claude ${FALA_LLM.modelo}; gasto US$ ${g ? g.gasto_usd.toFixed(4) : "?"} de US$ ${g ? g.limite_usd.toFixed(2) : "?"})`;
+  $("fala-llm-on").disabled = !FALA_LLM.ativo;
+}
+async function verificarLLM(){
+  try { const r = await fetch("/api/fala/status", {cache:"no-store"}); if (!r.ok) throw new Error(r.status);
+    const d = await r.json(); FALA_LLM.ativo = !!d.ativo; FALA_LLM.provedor = d.provedor; FALA_LLM.modelo = d.modelo;
+    FALA_LLM.semCusto = !!d.sem_custo; FALA_LLM.motivo = d.motivo || ""; FALA_LLM.gasto = d.gasto; }
+  catch(_){ FALA_LLM.ativo = false; FALA_LLM.motivo = "servidor sem a rota de fala (rode python servidor/servidor_local.py)"; }
+  rotuloLLM();
+}
+/* o Ollama pode ser ligado com a pagina aberta: reconsulta enquanto estiver indisponivel */
+setInterval(() => { if (!FALA_LLM.ativo) verificarLLM(); }, 15000);
+$("fala-llm-on").addEventListener("change", ev => {
+  FALA_LLM.on = ev.target.checked;
+  try { localStorage.setItem(CHAVE + "-fala-llm", FALA_LLM.on ? "1" : "0"); } catch(_){}
+  renderFala();
+});
+function motivoParaApi(mot, refs){
+  return mot.origem === "vida"
+    ? {origem:"vida", acao:mot.acao, fatores:mot.fatores, evento_ref:refs, intensidade:mot.intensidade, exploracao:mot.exploracao, tick:mot.tick}
+    : {origem:"combate", acao:mot.acao, fatores:mot.fatores, evento_ref:mot.refs, exploracao:mot.exploracao, turno:mot.turno};
+}
+/* devolve {texto, fonte, detalhe} se ja houver resposta; senao pede e devolve null */
+function falaLLM(motApi, est, humor, aoChegar){
+  if (!FALA_LLM.on || !FALA_LLM.ativo || !["adolescente","adulto"].includes(est)) return null;
+  const faixa = humor == null ? null : humor >= .66 ? 2 : humor >= .33 ? 1 : 0;
+  const chave = JSON.stringify([motApi, est, faixa]);
+  if (FALA_LLM.cache.has(chave)) return FALA_LLM.cache.get(chave);
+  if (!FALA_LLM.pendentes.has(chave)){
+    FALA_LLM.pendentes.add(chave);
+    fetch("/api/fala", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({motivo:motApi, estagio:est, humor})})
+      .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
+      .then(d => { FALA_LLM.cache.set(chave, d); if (d.gasto){ FALA_LLM.gasto = d.gasto; rotuloLLM(); } aoChegar && aoChegar(d); })
+      .catch(err => { FALA_LLM.cache.set(chave, {texto:null, fonte:"template", detalhe:"servidor: " + err.message}); })
+      .finally(() => FALA_LLM.pendentes.delete(chave));
+  }
+  return null;
+}
+
 /* ------------------------------------------------ fala do pet */
 function idxDoOrdinal(m, k){
   let n = 0;
@@ -1460,9 +1542,12 @@ function detalheMotivo(mot, est){
 function renderFala(){
   const mot = motor.motivo, el = $("fala");
   if (!mot){ el.textContent = "…"; $("fala-det").textContent = ""; return; }
-  const est = estagioFala(motor);
-  el.textContent = falaDe(motor, mot);
-  $("fala-det").textContent = detalheMotivo(mot, est);
+  const est = estagioFala(motor), refs = mot.refsOrd.map(k => idxDoOrdinal(motor, k)).filter(x => x !== null);
+  const llm = falaLLM(motivoParaApi(mot, refs), est, mot.humor, () => { if (motor.motivo === mot) renderFala(); });
+  const usarLLM = llm && llm.fonte === "llm";
+  el.textContent = usarLLM ? "✦ " + llm.texto : falaDe(motor, mot);
+  $("fala-det").textContent = detalheMotivo(mot, est) + (FALA_LLM.on && FALA_LLM.ativo && ["adolescente","adulto"].includes(est)
+    ? ` · fonte: ${usarLLM ? "LLM (" + llm.detalhe + ")" : llm ? "template (" + llm.detalhe + ")" : "template (aguardando LLM)"}` : " · fonte: template");
 }
 $("fala").addEventListener("click", () => {
   const d = $("fala-det"); d.hidden = !d.hidden; $("fala").setAttribute("aria-expanded", String(!d.hidden));
@@ -1696,7 +1781,13 @@ function narrar(A, B, tr){
   const extra = [tr.interr[0] && "seu pesado foi interrompido", tr.interr[1] && "o pesado do rival foi interrompido",
     tr.errou[0] && "seu pesado errou", tr.errou[1] && "o pesado do rival errou"].filter(Boolean);
   $("arena-res").textContent = `Turno ${tr.t}: ${NOME_V2[tr.a]} × ${NOME_V2[tr.b]}` + ([dano, dano2, ...extra].filter(Boolean).length ? " · " + [dano, dano2, ...extra].filter(Boolean).join(", ") : " · ninguém se machuca");
-  $("arena-fala").innerHTML = `<div><b>Seu pet</b> <span class="muted">(${NOME_ESTAGIO_FALA[A.estagioFala]})</span>: ${fa}</div><div><b>${B.nome}</b>: ${fb}</div>`;
+  const llm = falaLLM(motivoParaApi(ma), A.estagioFala, null, d => {
+    const el = document.querySelector(`#arena-fala [data-turno="${tr.t}"]`);
+    if (el && d.fonte === "llm") el.textContent = "✦ " + d.texto;
+  });
+  const textoPet = llm && llm.fonte === "llm" ? "✦ " + llm.texto : fa;
+  $("arena-fala").innerHTML = `<div><b>Seu pet</b> <span class="muted">(${NOME_ESTAGIO_FALA[A.estagioFala]})</span>: <span data-turno="${tr.t}"></span></div><div><b>${B.nome}</b>: ${fb}</div>`;
+  document.querySelector(`#arena-fala [data-turno="${tr.t}"]`).textContent = textoPet;
 }
 $("lutar").addEventListener("click", () => {
   if (lutando) return; travar(true);
@@ -1772,18 +1863,18 @@ function duracao(min){
   return [d ? `${d}d` : "", h ? `${h}h` : "", !d && m ? `${m}min` : ""].filter(Boolean).join(" ") || "agora";
 }
 function renderEvolucao(){
-  const f = formaDe(motor), dom = corDominante(motor.tracos), af = afinidades(motor.tracos);
-  const evs = motor.evolucoes, cri = evs.find(x => x.estagio === "crianca"), adu = evs.find(x => x.estagio === "adulto");
+  const f = formaDe(motor), evs = motor.evolucoes, cri = evs.find(x => x.estagio === "crianca"), adu = evs.find(x => x.estagio === "adulto");
 
   /* resumo (atualiza sempre) */
   const prox = f.est === "adulto" ? null : f.est === "bebe" ? "crianca" : "adulto";
+  const prev = linhaDaEvolucao(motor.tracos, prox || "adulto"), dom = prev.traco;
   $("evo-resumo").innerHTML = [
     [NOME_FORMA(f.est, f.traco), "forma atual"],
     [prox ? duracao(LIMITE_EVO[f.est] - motor.e.tick) : "—", prox ? `até virar ${prox === "crianca" ? "criança" : "adulto"}` : "forma final"],
-    [prox ? NOME_FORMA(prox, dom) : NOME_COMB[dom], prox ? `se evoluísse agora (${NOME_COMB[dom]} ${af[dom] >= 0 ? "+" : ""}${af[dom].toFixed(3)})` : "traço mais forte agora"],
+    [prox ? NOME_FORMA(prox, dom) : NOME_COMB[dom], prox ? `se evoluísse agora (${NOME_COMB[dom]} ${prev.acima >= 0 ? "+" : ""}${prev.acima.toFixed(3)} acima da média)` : "traço mais acima da média agora"],
   ].map(([v, k]) => `<div><b style="font-size:16px">${v}</b><span>${k}</span></div>`).join("");
   $("evo-hist").innerHTML = [`<div><span class="t">D1 ${hhmm(TICK_INICIAL)}</span><span>nasceu (bebê)</span></div>`]
-    .concat(evs.map(x => `<div><span class="t">D${diaDe(x.tick)} ${hhmm(x.tick)}</span><span>virou <b>${NOME_FORMA(x.estagio, x.traco)}</b> (${NOME_COMB[x.traco]} ${x.afinidade >= 0 ? "+" : ""}${x.afinidade.toFixed(3)})</span></div>`)).join("");
+    .concat(evs.map(x => `<div><span class="t">D${diaDe(x.tick)} ${hhmm(x.tick)}</span><span>virou <b>${NOME_FORMA(x.estagio, x.traco)}</b> (${NOME_COMB[x.traco]} ${x.acima >= 0 ? "+" : ""}${x.acima.toFixed(3)} acima da média)</span></div>`)).join("");
 
   /* arvore: so redesenha quando algo visivel muda */
   const chave = [atlasOk, f.est, cri && cri.traco, adu && adu.traco, prox && dom, motor.semente % 4].join("|");
@@ -1985,4 +2076,5 @@ mostrarPane(paneAtual);
 desenharLCD();
 arenaPreview();
 renderGambits();
+verificarLLM();
 </script>
