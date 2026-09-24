@@ -1,0 +1,3 @@
+# LF em tudo: engine.py tem hash congelado e os artefatos tem sha256 em metrics.json
+* text=auto eol=lf
+artifacts/** -text

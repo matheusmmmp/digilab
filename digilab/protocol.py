@@ -1,0 +1,255 @@
+"""Protocolo experimental congelado da arena (Etapa 1).
+
+Tudo que define o experimento mora aqui, em dataclasses frozen, ANTES de
+qualquer execucao. Cada campo carrega um status:
+
+  DECIDIDO  - fixado pelo pesquisador (ou imposto pelo enunciado da tarefa)
+  PROPOSTO  - valor razoavel escolhido por quem implementou, ainda nao
+              referendado. Uma run com qualquer campo PROPOSTO grava aviso
+              no artefato de saida.
+
+O hash do protocolo cobre os campos daqui, todos os dataclasses de
+config.py e o conteudo de engine.py. Mudou qualquer um deles, mudou o
+hash, e o artefato antigo deixa de ser comparavel.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import asdict, dataclass, fields, replace
+from enum import Enum
+from pathlib import Path
+from typing import Any
+
+from . import config as _config
+
+
+class Status(str, Enum):
+    DECIDIDO = "DECIDIDO"
+    PROPOSTO = "PROPOSTO"
+
+
+@dataclass(frozen=True)
+class Campo:
+    valor: Any
+    status: Status
+    justificativa: str
+
+    def para_dict(self) -> dict:
+        return {
+            "valor": _para_json(self.valor),
+            "status": self.status.value,
+            "justificativa": self.justificativa,
+        }
+
+
+def _para_json(v: Any) -> Any:
+    if isinstance(v, tuple):
+        return [_para_json(x) for x in v]
+    if isinstance(v, Enum):
+        return v.value
+    return v
+
+
+# Hash de engine.py na versao v0 recebida. engine.py nao pode mudar: o
+# preflight compara. Calculado com finais de linha normalizados para \n.
+ENGINE_SHA256_V0 = "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630"
+
+BRACOS_VALIDOS = ("atencioso", "relapso", "aleatorio", "incoerente")
+
+
+@dataclass(frozen=True)
+class Protocolo:
+    versao: str
+
+    sementes_coorte: Campo
+    orcamento_interacoes: Campo
+    dias_simulados: Campo
+    bracos: Campo
+    partidas_por_par: Campo
+    semente_torneio: Campo
+    definicao_vitoria: Campo
+    metricas: Campo
+    limiar_divergencia_jsd_bits: Campo
+    estados_sonda: Campo
+    amostras_por_estado: Campo
+    semente_sonda: Campo
+    bootstrap_reamostragens: Campo
+    bootstrap_semente: Campo
+    nivel_confianca: Campo
+
+    # ------------------------------------------------------------ consultas
+
+    def campos(self) -> dict[str, Campo]:
+        return {f.name: getattr(self, f.name) for f in fields(self) if f.name != "versao"}
+
+    def campos_propostos(self) -> list[str]:
+        return [n for n, c in self.campos().items() if c.status is Status.PROPOSTO]
+
+    def v(self, nome: str) -> Any:
+        """Atalho para o valor de um campo. Nome inexistente levanta erro."""
+        if nome not in self.campos():
+            raise KeyError(f"campo de protocolo inexistente: {nome!r}")
+        return self.campos()[nome].valor
+
+    # -------------------------------------------------------------- validacao
+
+    def validar(self) -> None:
+        sementes = self.v("sementes_coorte")
+        if len(sementes) < 5:
+            raise ValueError(f"protocolo exige pelo menos 5 sementes, tem {len(sementes)}")
+        if len(set(sementes)) != len(sementes):
+            raise ValueError(f"sementes repetidas: {sementes}")
+        if not all(isinstance(s, int) for s in sementes):
+            raise TypeError("sementes precisam ser int")
+        orc = self.v("orcamento_interacoes")
+        if not isinstance(orc, int) or orc <= 0:
+            raise ValueError(f"orcamento_interacoes invalido: {orc!r}")
+        dias = self.v("dias_simulados")
+        if not isinstance(dias, int) or dias <= 0:
+            raise ValueError(f"dias_simulados invalido: {dias!r}")
+        passos = dias * _config.TICKS_POR_DIA // _config.CONFIG_DONOS.passo_ticks
+        teto = passos * _config.CONFIG_DONOS.max_interacoes_por_passo
+        if orc > teto:
+            raise ValueError(
+                f"orcamento {orc} inalcancavel: teto fisico e {teto} "
+                f"({passos} passos x {_config.CONFIG_DONOS.max_interacoes_por_passo})"
+            )
+        bracos = self.v("bracos")
+        for b in bracos:
+            if b not in BRACOS_VALIDOS:
+                raise ValueError(f"braco desconhecido: {b!r}")
+        for obrigatorio in ("atencioso", "aleatorio"):
+            if obrigatorio not in bracos:
+                raise ValueError(f"braco obrigatorio ausente: {obrigatorio}")
+        if self.v("partidas_por_par") <= 0:
+            raise ValueError("partidas_por_par precisa ser positivo")
+        lim = self.v("limiar_divergencia_jsd_bits")
+        if not (0.0 < lim < 1.0):
+            raise ValueError(f"limiar de divergencia fora de (0,1) bits: {lim}")
+        nivel = self.v("nivel_confianca")
+        if not (0.5 < nivel < 1.0):
+            raise ValueError(f"nivel_confianca invalido: {nivel}")
+
+    # ------------------------------------------------------------------ hash
+
+    def para_dict(self) -> dict:
+        return {"versao": self.versao, **{n: c.para_dict() for n, c in self.campos().items()}}
+
+    def hash(self) -> str:
+        return hash_protocolo(self)
+
+    # -------------------------------------------------------------- variacao
+
+    def com_substituicoes(self, substituicoes: dict[str, Any]) -> "Protocolo":
+        """Variante nao canonica (ex.: teste de fumaca). Campo trocado vira PROPOSTO."""
+        novos: dict[str, Campo] = {}
+        for nome, valor in substituicoes.items():
+            if nome not in self.campos():
+                raise KeyError(f"substituicao para campo inexistente: {nome!r}")
+            if isinstance(valor, list):
+                valor = tuple(valor)
+            novos[nome] = Campo(valor, Status.PROPOSTO, "substituido via --config (nao canonico)")
+        p = replace(self, versao=self.versao + "+substituido", **novos)
+        p.validar()
+        return p
+
+
+def conteudo_normalizado(caminho: Path) -> bytes:
+    return caminho.read_bytes().replace(b"\r\n", b"\n")
+
+
+def sha256_engine() -> str:
+    return hashlib.sha256(conteudo_normalizado(Path(__file__).with_name("engine.py"))).hexdigest()
+
+
+def configs_congelados() -> dict:
+    return {
+        "Config": asdict(_config.CONFIG_PADRAO),
+        "ConfigBandit": asdict(_config.CONFIG_BANDIT),
+        "ConfigDonos": asdict(_config.CONFIG_DONOS),
+        "ConfigTracos": asdict(_config.CONFIG_TRACOS),
+        "ConfigArena": asdict(_config.CONFIG_ARENA),
+        "ConfigMetricas": asdict(_config.CONFIG_METRICAS),
+        "TICKS_POR_DIA": _config.TICKS_POR_DIA,
+    }
+
+
+def hash_protocolo(p: Protocolo) -> str:
+    carga = {
+        "protocolo": p.para_dict(),
+        "configs": configs_congelados(),
+        "engine_sha256": sha256_engine(),
+    }
+    texto = json.dumps(carga, sort_keys=True, ensure_ascii=True, default=_para_json)
+    return hashlib.sha256(texto.encode("ascii")).hexdigest()
+
+
+def derivar_semente(*rotulos: Any) -> int:
+    """Semente deterministica e independente a partir de rotulos.
+
+    Usa sha256, nao hash() do Python (que e aleatorizado por processo).
+    """
+    texto = "|".join(str(r) for r in rotulos)
+    return int.from_bytes(hashlib.sha256(texto.encode("utf-8")).digest()[:8], "big")
+
+
+# =====================================================================
+# O protocolo canonico. Congelado antes de qualquer run.
+# =====================================================================
+
+_P = Status.PROPOSTO
+_D = Status.DECIDIDO
+
+PROTOCOLO_ARENA_V1 = Protocolo(
+    versao="arena-v1",
+    sementes_coorte=Campo(
+        (101, 202, 303, 404, 505),
+        _D,
+        "criterio de pronto exige incerteza sobre pelo menos 5 sementes; "
+        "o numero 5 e decidido, os valores sao arbitrarios e fixados aqui",
+    ),
+    orcamento_interacoes=Campo(
+        14 * 16,
+        _P,
+        "16 interacoes/dia x 14 dias; na demo v0 o dono atencioso gastou ~13,6/dia. "
+        "Igual entre bracos por construcao (simulador impoe)",
+    ),
+    dias_simulados=Campo(14, _P, "mesma janela da demo v0, que ja separa atencioso de relapso"),
+    bracos=Campo(
+        ("atencioso", "relapso", "aleatorio", "incoerente"),
+        _D,
+        "definidos no enunciado da tarefa; aleatorio e o controle critico",
+    ),
+    partidas_por_par=Campo(20, _P, "por par de pets, cada uma com semente de partida propria"),
+    semente_torneio=Campo(7001, _P, "raiz das sementes de partida"),
+    definicao_vitoria=Campo(
+        "KO (hp do oponente chega a 0) ou, apos max_turnos, maior hp restante; "
+        "hp igual = empate, conta 0.5 para cada lado",
+        _P,
+        "regra simples e simetrica; max_turnos em ConfigArena",
+    ),
+    metricas=Campo(
+        (
+            "taxa_vitoria_round_robin",
+            "rating_bradley_terry_com_erro_padrao",
+            "divergencia_jsd_entre_politicas",
+            "saude_humor_finais",
+        ),
+        _D,
+        "lista do enunciado; implementadas uma unica vez em digilab/metrics.py",
+    ),
+    limiar_divergencia_jsd_bits=Campo(
+        0.02,
+        _P,
+        "JSD media entre politicas de bracos diferentes abaixo disto = politicas "
+        "praticamente iguais; a run e REPROVADA por falta de profundidade do ambiente",
+    ),
+    estados_sonda=Campo(64, _P, "estados sorteados uniformemente para condicionar a divergencia"),
+    amostras_por_estado=Campo(200, _P, "amostras Monte Carlo de acao por estado, com numeros aleatorios comuns"),
+    semente_sonda=Campo(9001, _P, "raiz das sementes da sonda de divergencia"),
+    bootstrap_reamostragens=Campo(10000, _P, "bootstrap percentil sobre sementes"),
+    bootstrap_semente=Campo(4242, _P, "semente do bootstrap"),
+    nivel_confianca=Campo(0.95, _P, "intervalo de 95%"),
+)

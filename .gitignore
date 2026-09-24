@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+# saidas de rodadas nao canonicas; artifacts/ (run canonica) e versionado
+artifacts_fumaca/
+artifacts_*/

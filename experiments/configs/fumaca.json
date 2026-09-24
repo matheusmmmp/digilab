@@ -1,0 +1,12 @@
+{
+  "descricao": "Teste de fumaca rapido. NAO CANONICO: resultado nao responde ao portao.",
+  "saida": "artifacts_fumaca",
+  "protocolo_substituicoes": {
+    "dias_simulados": 2,
+    "orcamento_interacoes": 32,
+    "partidas_por_par": 2,
+    "estados_sonda": 8,
+    "amostras_por_estado": 40,
+    "bootstrap_reamostragens": 500
+  }
+}
