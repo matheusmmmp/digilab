@@ -308,22 +308,38 @@ dominante no momento da evolução. Se o atlas não carregar, a página mostra u
 vermelho e cai nos placeholders.
 
 **Desde 2026-09-24 `digilab_sprites.html` é a versão em que o Matheus quer trabalhar** e é
-editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba **Evolução**:
-- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate em
-  que o pet está MAIS ACIMA de um pet comum (`BASE_TRACOS`, medida em 60 pets simulados por estágio;
-  desde 2026-09-24). Antes era o traço absoluto, e ~90% dos pets viravam Bloqueio (todo pet dorme e
-  fica à toa muito, e isso conta como bloqueio) e lutavam como tartaruga. Intervenção de gambits do
-  registro que não cabe mais na lista é ignorada no replay, com aviso, em vez de perder o pet. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
-  entram na assinatura do "Verificar replay");
-- árvore em SVG: ovo → bebê → 5 crianças → 5 adultos (qualquer criança pode ir a qualquer
-  adulto), caminho do pet destacado, tracejado = forma se evoluísse agora, histórico;
-- a forma é só visual (no combate V1); no combate V2 da web ela escolhe o estilo inicial (abaixo).
+editada direto; `digilab.html` ficou parado. Só a versão com sprites tem as abas **Evolução** e
+**Catálogo**, que desde 2026-09-24 seguem a **árvore do combate V2.1** (substituiu as 5 linhas por
+traço; chave do localStorage `digilab-web-v21-sprites`, pets da árvore antiga ficam para trás):
+- **4 espécies** (brasa, cirro, ferrugem, limo), sorteadas pela semente; ovo por espécie. 15 formas
+  por espécie (1 bebê, 2 crianças, 4 adolescentes, 8 adultos), **cada forma com sprite próprio**:
+  60 Digimon diferentes. Mapa forma → bloco da folha em `Assets\catalogo_sprites.json` (fora do
+  repo); `gerar_atlas.py` gera `{espécie}_{forma}_{quadro}` no atlas; o HTML só tem as coordenadas.
+- Transições com o cronograma de `docs/cronograma_interacoes.json` (durações pela metade): bebê
+  3 h, criança 12 h, adolescente 18 h. **Bebê → criança**: o bebê chama em horário fixo (fome 30 min,
+  higiene 60, carinho 45); atender ≥ 80% em até 15 min dá Sereno, senão Arisco. **Criança →
+  adolescente**: caráter dominante → linha. **Adolescente → adulto**: sinal do eixo complementar +
+  10 lutas de sparring na arena. Contadores zeram a cada evolução.
+- **Caráter PROVISÓRIO, só na web** (a medida certa é da tarefa de personalidade): por eixo, média
+  de (afinidade − linha de base) dos traços do eixo / 0,1, cortada em [−1, 1]; impetuoso = golpe e
+  carga, paciente = bloqueio, atento = finta, resistente = agarrão. `BASE_CARATER` medida em 60 pets
+  simulados (4 donos × 15 sementes, 16/dia) aos 900 e 1980 min. Checagem no console (sem artefato,
+  não citar como resultado): donos diferentes produzem ramos e formas diferentes, e o replay bate.
+- Donos simulados da web atendem os chamados do bebê (atencioso e incoerente sempre, relapso nas
+  visitas, aleatório por acaso) e fazem o sparring do adolescente contra o bot aleatório.
+- Árvore em SVG: ovo → bebê → 2 crianças → 4 adolescentes → 8 adultos, caminho destacado,
+  tracejado = forma se evoluísse agora (com o porquê), requisito no título de cada nó.
+- Aba **Catálogo**: as 15 formas da espécie com sprite, stats (renormalizados), vida/guts/regen,
+  técnica e passiva.
 
 Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz os artefatos Python):
-- **Combate V2** na aba Arena (números calibrados de `ConfigCombateV2`, bots da bateria como rivais,
-  oráculo incluso). O combate V1 saiu da interface. Estilo do pet PROVISÓRIO: a linha travada escolhe
-  o estilo inicial (golpe→agressivo, bloqueio→tartaruga, finta→atirador, agarrão→contragolpe,
-  carga→adaptativo; bebê luta ao acaso); condição física neutra.
+- **Combate V2.1** na aba Arena (espelho de `combate_v2/v21/`: perfil da forma, técnicas, passivas,
+  `turno_execucao`, `oponente_vai_preparar`). Rivais: os bots clássicos da V2 (stats neutros) e os 8
+  bots canônicos da bateria V2.1 (cada forma com uma espécie fixa). O combate V1 saiu da interface.
+  Cada evolução semeia os gambits do pet (crianças: semente de 3 regras só da web; adolescente e
+  adulto: bots canônicos da linha/forma) e a lista cabe na capacidade do estágio (3/5/8), só com as
+  condições do estágio e a técnica da própria linha. Bebê luta ao acaso (multiplicador 0,4; exceção
+  da web).
 - **Gambits híbridos** (substituiu o editor livre, 2026-09-24): o PET aprende a própria lista. A linha
   evolutiva semeia; após cada luta contra bot, a nota de cada regra que disparou vai em direção ao
   saldo de dano dos turnos em que ela agiu (+ bônus pelo resultado); a lista se reordena pela nota;
@@ -334,7 +350,8 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   PROVISÓRIO e só na web: o Python ainda não tem isso (é a arena V2 da pesquisa).
 - **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
   regra de honestidade do Python. Na web, a criança sem causa mostra ação + humor (vida) ou reação
-  (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
+  (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala
+  é o estágio da evolução (bebê, criança, adolescente, adulto).
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
