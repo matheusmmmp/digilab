@@ -210,8 +210,9 @@ Especificada em `docs/TAREFA_MEMORIA_EXPRESSAO.md` (Parte C). Só o TEXTO da fal
 do adulto no jogo web; motivo, decisões, registro, replay e artefatos não mudam e continuam só com
 templates. `servidor/servidor_local.py` serve a mesma pasta que o `http.server` servia (mesmos
 endereços) e expõe `POST /api/fala`; a chave fica no ambiente do servidor (`ANTHROPIC_API_KEY`),
-nunca na página. Modelo padrão `claude-opus-5` (`--modelo` troca), esforço `low`, saída estruturada
-`{texto, fatores_citados}` e fallback de recusa do servidor da API ligado. A resposta é validada
+nunca na página. Modelo padrão `claude-haiku-4-5` (mais barato e rápido; `--modelo` troca), saída estruturada
+`{texto, fatores_citados}`; com `claude-opus-5`/`claude-fable-5-1` usa esforço `low` e fallback de
+recusa do servidor da API (o Haiku rejeita `effort`; recusa nele cai no template). A resposta é validada
 (fatores ⊆ motivo, marcadores de fatores ausentes, "não sei" sem fator, limite de fatores por estágio,
 números ⊆ evento_ref e parâmetros); qualquer falha, erro, recusa ou limite (30/min) cai no template.
 Cache por motivo+estágio+faixa de humor. Chave "fala por LLM" na página, desligada por padrão.

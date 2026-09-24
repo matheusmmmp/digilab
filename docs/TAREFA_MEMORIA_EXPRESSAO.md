@@ -210,8 +210,9 @@ ele precisa ser garantido por validação, não só por construção.
   ou perfil do `ant`). Nunca no HTML, no navegador ou no git.
 - `web/digilab_sprites.html`: quando o servidor responde, usa a frase da LLM; senão,
   o template. Um interruptor na interface liga e desliga a fala por LLM.
-- Modelo: parâmetro de configuração do servidor. Padrão `claude-opus-5`; trocar por
-  outro modelo é decisão do pesquisador (custo e latência).
+- Modelo: parâmetro de configuração do servidor. Padrão `claude-haiku-4-5` (o mais barato
+  e rápido; escolha do pesquisador em 2026-09-24). Com `claude-opus-5` usa esforço baixo e
+  fallback de recusa; o Haiku não aceita `effort` e uma recusa nele cai no template.
 
 ### C3 — o que a LLM recebe
 

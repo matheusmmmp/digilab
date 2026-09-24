@@ -23,6 +23,7 @@ class ClienteFalso:
         self.saida = json.dumps({"texto": texto, "fatores_citados": citados}, ensure_ascii=False)
         self.stop, self.erro = stop, erro
         self.beta = NS(messages=NS(create=self._create))
+        self.messages = NS(create=self._create)
 
     def _create(self, **kw):
         self.chamadas.append(kw)
@@ -92,7 +93,8 @@ def test_pedido_leva_so_o_motivo_e_textos_permitidos():
     assert carga["fatores"] == ["oponente_preparando"] and carga["evento_ref"] == [4]
     assert set(carga["significado_dos_fatores"]) == {"oponente_preparando"}
     assert kw["output_config"]["format"]["type"] == "json_schema"
-    assert kw["model"] == "claude-opus-5"
+    assert kw["model"] == "claude-haiku-4-5"
+    assert "effort" not in kw["output_config"] and "fallbacks" not in kw
 
 
 def test_motivo_de_dict_e_estritos():
@@ -112,3 +114,10 @@ def test_digilab_nao_importa_servidor_nem_anthropic():
             nomes = [a.name for a in no.names] if isinstance(no, ast.Import) else \
                 [no.module or ""] if isinstance(no, ast.ImportFrom) else []
             assert not any(n.split(".")[0] in ("servidor", "anthropic") for n in nomes), arq
+
+
+def test_opus_usa_esforco_baixo_e_fallback_de_recusa():
+    c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
+    GeradorFala(c, modelo="claude-opus-5").gerar(ESQUIVA, "adulto")
+    kw = c.chamadas[0]
+    assert kw["output_config"]["effort"] == "low" and kw["fallbacks"] == "default"

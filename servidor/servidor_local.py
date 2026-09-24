@@ -1,7 +1,7 @@
 """Servidor local do jogo web com fala por LLM (Parte C).
 
     python servidor/servidor_local.py            # porta 8765
-    python servidor/servidor_local.py --porta 8765 --modelo claude-opus-5
+    python servidor/servidor_local.py --porta 8765 --modelo claude-haiku-4-5
 
 Serve a pasta D:\\Trab\\digilab (a pai do repo) como o `python -m http.server`
 fazia, entao os enderecos nao mudam:

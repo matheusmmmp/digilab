@@ -21,7 +21,9 @@ from dataclasses import dataclass
 from digilab.expressao import ACOES_COMBATE, ACOES_VIDA, ESTAGIOS, FATORES, _texto_fator, expressar
 from digilab.motivo import Motivo, nome_base
 
-MODELO_PADRAO = "claude-opus-5"
+# mais barato e rapido (decisao do pesquisador, 2026-09-24); --modelo troca
+MODELO_PADRAO = "claude-haiku-4-5"
+MODELOS_COM_FALLBACK = {"claude-opus-5", "claude-fable-5-1"}
 VERSAO_PROMPT = "fala-v1"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
@@ -190,15 +192,26 @@ class GeradorFala:
         if not self._pode_chamar():
             return self._modelo_de_frase(motivo, estagio, humor, "limite de chamadas por minuto")
         try:
-            resposta = self.cliente.beta.messages.create(
+            pedido = dict(
                 model=self.modelo,
                 max_tokens=1024,
                 system=SISTEMA,
                 messages=[{"role": "user", "content": montar_pedido(motivo, estagio, humor)}],
-                output_config={"effort": "low", "format": {"type": "json_schema", "schema": ESQUEMA}},
-                betas=["server-side-fallback-2026-07-01"],
-                fallbacks="default",
             )
+            if self.modelo in MODELOS_COM_FALLBACK:
+                # Opus 5 / Fable 5.1: esforco baixo e fallback de recusa do servidor da API
+                resposta = self.cliente.beta.messages.create(
+                    **pedido,
+                    output_config={"effort": "low", "format": {"type": "json_schema", "schema": ESQUEMA}},
+                    betas=["server-side-fallback-2026-07-01"],
+                    fallbacks="default",
+                )
+            else:
+                # Haiku 4.5 (padrao): sem `effort` (o modelo rejeita); recusa cai no template
+                resposta = self.cliente.messages.create(
+                    **pedido,
+                    output_config={"format": {"type": "json_schema", "schema": ESQUEMA}},
+                )
         except Exception as err:  # rede, credencial, limite: a fala e so exibicao, cai no template
             self.estatisticas["erros"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"erro na API: {type(err).__name__}")
