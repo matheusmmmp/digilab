@@ -269,8 +269,11 @@ vermelho e cai nos placeholders.
 
 **Desde 2026-09-24 `digilab_sprites.html` é a versão em que o Matheus quer trabalhar** e é
 editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba **Evolução**:
-- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate
-  dominante naquele instante. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
+- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate em
+  que o pet está MAIS ACIMA de um pet comum (`BASE_TRACOS`, medida em 60 pets simulados por estágio;
+  desde 2026-09-24). Antes era o traço absoluto, e ~90% dos pets viravam Bloqueio (todo pet dorme e
+  fica à toa muito, e isso conta como bloqueio) e lutavam como tartaruga. Intervenção de gambits do
+  registro que não cabe mais na lista é ignorada no replay, com aviso, em vez de perder o pet. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
   entram na assinatura do "Verificar replay");
 - árvore em SVG: ovo → bebê → 5 crianças → 5 adultos (qualquer criança pode ir a qualquer
   adulto), caminho do pet destacado, tracejado = forma se evoluísse agora, histórico;
@@ -290,7 +293,8 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   Lutas contra pet de cenário e as 100 lutas dos Cenários não ensinam. Parâmetros no objeto `GA`.
   PROVISÓRIO e só na web: o Python ainda não tem isso (é a arena V2 da pesquisa).
 - **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
-  regra de honestidade do Python. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
+  regra de honestidade do Python. Na web, a criança sem causa mostra ação + humor (vida) ou reação
+  (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
