@@ -1,0 +1,14 @@
+{
+  "descricao": "Registro da calibracao do combate V2. Feita SO com as sementes de calibracao [1101, 1202, 1303, 1404, 1505]; as de validacao nao foram usadas antes de congelar os numeros.",
+  "data": "2026-09-24",
+  "evidencia": "artifacts_combate_v2/calibracao_varredura.jsonl (16 variantes, 3 rodadas, N=40 por par por semente; gerado por experiments/calibrar_combate_v2.py com experiments/configs/calibracao/variantes_combate_v2.json)",
+  "procedimento": "Rodada 1 atacou a dominancia (G1); rodada 2 o ritmo (G4) e a acao morta (G5); rodada 3 o limite de turnos (G4). Parou apos 3 rodadas para nao sobreajustar: nenhuma variante levou a fracao no limite abaixo de 0.20 nem tirou 'esquivar' de acao morta.",
+  "ajustes": [
+    {"campo": "custo_disparo", "de": 15, "para": 20, "motivo": "com 15 o disparo a cada 2 turnos custa menos que a regeneracao (16) e o atirador vence todos os fixos; com 20 surge ciclo agressivo > tartaruga > atirador > agressivo e suporte de 3 bots"},
+    {"campo": "hp_neutro", "de": 100.0, "para": 70.0, "motivo": "mediana de turnos 34 -> 25 (faixa 8..30)"}
+  ],
+  "nao_resolvido_por_numeros": [
+    "fracao de partidas no limite de turnos (melhor variante 0.237 > 0.20): vem de pares de bots passivos (tartaruga x tartaruga, tartaruga x contragolpe, contragolpe x contragolpe) que so atacam quando o oponente tem guts < 20",
+    "'esquivar' abaixo de 3% nas decisoes dos bots do suporte (agressivo, atirador, tartaruga): nenhum deles tem regra que esquive com frequencia"
+  ]
+}
