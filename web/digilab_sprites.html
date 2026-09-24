@@ -1475,22 +1475,26 @@ $("novo-conf").addEventListener("click", () => { $("novo-conf").hidden = true; n
    O servidor local (servidor/servidor_local.py) gera a frase e a VALIDA contra o motivo;
    a pagina mostra o template na hora e troca pela frase da LLM quando ela chega. Nada
    disso entra no registro nem nas decisoes. Sem servidor/credencial: so template. */
-const FALA_LLM = { on:false, ativo:false, modelo:null, gasto:null, cache:new Map(), pendentes:new Set() };
+const FALA_LLM = { on:false, ativo:false, provedor:null, modelo:null, semCusto:false, motivo:"", gasto:null, cache:new Map(), pendentes:new Set() };
 try { FALA_LLM.on = localStorage.getItem(CHAVE + "-fala-llm") === "1"; } catch(_){}
 $("fala-llm-on").checked = FALA_LLM.on;
 function rotuloLLM(){
   const g = FALA_LLM.gasto;
-  $("fala-llm-status").textContent = FALA_LLM.ativo
-    ? `(${FALA_LLM.modelo}; gasto US$ ${g ? g.gasto_usd.toFixed(4) : "?"} de US$ ${g ? g.limite_usd.toFixed(2) : "?"})`
-    : "(indisponível: rode servidor/servidor_local.py com ANTHROPIC_API_KEY)";
+  $("fala-llm-status").textContent = !FALA_LLM.ativo
+    ? `(indisponível: ${FALA_LLM.motivo || "rode python servidor/servidor_local.py"})`
+    : FALA_LLM.semCusto ? `(local: ${FALA_LLM.modelo}, sem custo)`
+    : `(Claude ${FALA_LLM.modelo}; gasto US$ ${g ? g.gasto_usd.toFixed(4) : "?"} de US$ ${g ? g.limite_usd.toFixed(2) : "?"})`;
   $("fala-llm-on").disabled = !FALA_LLM.ativo;
 }
 async function verificarLLM(){
   try { const r = await fetch("/api/fala/status", {cache:"no-store"}); if (!r.ok) throw new Error(r.status);
-    const d = await r.json(); FALA_LLM.ativo = !!d.ativo; FALA_LLM.modelo = d.modelo; FALA_LLM.gasto = d.gasto; }
-  catch(_){ FALA_LLM.ativo = false; }
+    const d = await r.json(); FALA_LLM.ativo = !!d.ativo; FALA_LLM.provedor = d.provedor; FALA_LLM.modelo = d.modelo;
+    FALA_LLM.semCusto = !!d.sem_custo; FALA_LLM.motivo = d.motivo || ""; FALA_LLM.gasto = d.gasto; }
+  catch(_){ FALA_LLM.ativo = false; FALA_LLM.motivo = "servidor sem a rota de fala (rode python servidor/servidor_local.py)"; }
   rotuloLLM();
 }
+/* o Ollama pode ser ligado com a pagina aberta: reconsulta enquanto estiver indisponivel */
+setInterval(() => { if (!FALA_LLM.ativo) verificarLLM(); }, 15000);
 $("fala-llm-on").addEventListener("change", ev => {
   FALA_LLM.on = ev.target.checked;
   try { localStorage.setItem(CHAVE + "-fala-llm", FALA_LLM.on ? "1" : "0"); } catch(_){}

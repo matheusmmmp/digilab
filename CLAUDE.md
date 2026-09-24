@@ -75,14 +75,15 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/memoria.py` | `MemoriaCurta` (latência do dono por necessidade, broncas e elogios com decaimento) e `PoliticaBanditMemoria` |
 | `experiments/diario.py`, `legibilidade.py` | diário de motivo/expressão (vida ou partida) e métricas de legibilidade → `artifacts_expressao/` |
 | `experiments/configs/memoria.json` | `PROTOCOLO_ARENA_V1_MEMORIA` → `artifacts_v1_memoria/` |
-| `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`, SDK `anthropic`, só aqui). `digilab/` não importa isto (teste AST) |
+| `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`: provedores Ollama local e Claude; SDK `anthropic` só aqui). `digilab/` não importa isto (teste AST) |
+| `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `TAREFA_MEMORIA_EXPRESSAO.md`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 145 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
+| `tests/` | 157 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 145 testes, ~160 s
+python -m pytest tests/ -q                                                   # 157 testes, ~4 a 7 min
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
 python experiments/legibilidade.py                                            # legibilidade + diários, ~1 min
@@ -206,6 +207,12 @@ Números abaixo vêm de `artifacts_expressao/legibilidade.json` e `artifacts_v1_
 
 ## Fala por LLM (Parte C, 2026-09-24)
 
+**Provedores** (`--provedor`, padrão `auto`): **Ollama local** (`qwen2.5:3b`, sem custo, padrão
+quando está rodando) ou **API do Claude** (abaixo). Para o Ollama: instalar pelo site oficial e rodar
+`ollama pull qwen2.5:3b`. Validação, cache e queda para o template são os mesmos para os dois.
+Avaliação: `python experiments/avaliar_fala.py` → `artifacts_fala/<provedor>_<modelo>/` (fração
+barrada + `revisao.csv` com 50 falas aprovadas para revisão humana).
+
 Especificada em `docs/TAREFA_MEMORIA_EXPRESSAO.md` (Parte C). Só o TEXTO da fala do adolescente e
 do adulto no jogo web; motivo, decisões, registro, replay e artefatos não mudam e continuam só com
 templates. `servidor/servidor_local.py` serve a mesma pasta que o `http.server` servia (mesmos
@@ -304,8 +311,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Fala por LLM: rodar a avaliação com juiz (Parte C, C6) antes de ligar por padrão; hoje não há
-  credencial da API configurada nesta máquina.
+- Fala por LLM: rodar `experiments/avaliar_fala.py` com o Ollama instalado e revisar `revisao.csv`
+  antes de ligar por padrão (Ollama e credencial do Claude ainda não configurados nesta máquina).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.

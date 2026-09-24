@@ -266,6 +266,22 @@ avaliação com juiz antes de ligar a LLM por padrão.
   diários (vida e combate, todos os estágios), gerar falas e medir, com um juiz,
   a fração que cita causa fora do motivo. Custo estimado e aprovado antes de rodar.
 
+### C6b — provedor local (Ollama), acrescentado em 2026-09-24
+
+- Interface de provedor em `servidor/fala_llm.py`: `disponivel()` e `gerar(sistema, pedido, esquema,
+  semente)`. Validação, cache, limite por minuto e queda para o template ficam acima dela e valem
+  para todos os provedores; o teto de gasto só para provedor com custo.
+- `ProvedorOllama` (padrão; `qwen2.5:3b`, escolhido para a RTX 2060 de 6 GB do pesquisador): chama
+  `POST /api/chat` do Ollama local só com a biblioteca padrão, com o esquema JSON em `format`,
+  temperatura baixa, semente derivada do motivo (mesmo motivo, mesma frase), resposta curta e o
+  modelo mantido carregado; aquecimento ao ligar o servidor. Sem custo por chamada.
+- `ProvedorClaude`: o de antes (Haiku 4.5, teto de gasto).
+- `--provedor auto|ollama|claude|nenhum`. `auto`: Ollama se estiver pronto; senão Claude se houver
+  chave; senão fica com o Ollama, que passa a valer quando for ligado (status consultado ao vivo).
+- Avaliação C6: `experiments/avaliar_fala.py` gera falas para 200 motivos reais (metade com fator),
+  mede a fração barrada pela validação e sorteia 50 aprovadas em `revisao.csv` para revisão humana
+  ("cita causa fora dos fatores?"). Com o Ollama não tem custo; com o Claude exige `--aceito-custo`.
+
 ### C7 — critério de pronto
 
 - [ ] servidor local servindo a página e `POST /api/fala`, chave só no servidor

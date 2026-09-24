@@ -1,7 +1,7 @@
 """Fala por LLM (Parte C de docs/TAREFA_MEMORIA_EXPRESSAO.md).
 
-Troca so o TEXTO da fala do adolescente e do adulto por uma frase gerada pelo
-Claude. Nada aqui entra em digilab/, no registro, no replay ou em artefatos.
+Troca so o TEXTO da fala do adolescente e do adulto por uma frase gerada por um
+provedor de LLM: Ollama local (padrao, sem custo) ou API do Claude (com teto de gasto). Nada aqui entra em digilab/, no registro, no replay ou em artefatos.
 A frase e validada contra o motivo; qualquer falha (sem credencial, rede,
 recusa, validacao) cai no template de digilab/expressao.py.
 
@@ -12,6 +12,7 @@ estruturada; o servidor confere.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import re
@@ -30,6 +31,14 @@ VERSAO_PROMPT = "fala-v1"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
 LIMITE_POR_MINUTO = 30
+# Ollama (modelo local, sem custo): padrao escolhido para a RTX 2060 de 6 GB do pesquisador
+MODELO_OLLAMA_PADRAO = "qwen2.5:3b"
+URL_OLLAMA_PADRAO = "http://localhost:11434"
+TIMEOUT_OLLAMA_S = 10.0
+TIMEOUT_AQUECIMENTO_S = 90.0     # primeira chamada carrega o modelo na GPU
+MANTER_OLLAMA = "30m"            # quanto tempo o modelo fica carregado entre falas
+TEMPERATURA_OLLAMA = 0.3         # baixa: menos invencao
+MAX_TOKENS_OLLAMA = 120
 MAX_TOKENS_SAIDA = 300          # fala curta; limita o pior caso de cada chamada
 LIMITE_USD_PADRAO = 2.00        # teto TOTAL acumulado (decisao do pesquisador, 2026-09-24)
 ARQUIVO_GASTO = Path(__file__).with_name("gasto_fala.json")   # fora do git
@@ -197,6 +206,126 @@ def validar(texto: str, citados: list[str], motivo: Motivo, estagio: str) -> Non
         raise FalaReprovada(f"numeros fora do evento_ref/fatores: {sorted(estranhos)}")
 
 
+# ------------------------------------------------------------ provedores
+# Contrato: disponivel() -> (bool, motivo); gerar(sistema, pedido, esquema, semente) -> RespostaProvedor.
+# Falhas saem como excecao; o GeradorFala transforma qualquer falha em template.
+
+
+@dataclass
+class RespostaProvedor:
+    texto: str                 # o JSON devolvido pelo modelo
+    completa: bool             # False se cortou (limite de tokens) ou recusou
+    motivo_parada: str
+    modelo: str
+    tokens_entrada: int | None = None
+    tokens_saida: int | None = None
+
+
+class ProvedorClaude:
+    """API do Claude (SDK oficial). Tem custo: exige ControleGasto no gerador."""
+
+    nome = "claude"
+    tem_custo = True
+
+    def __init__(self, cliente, modelo: str = MODELO_PADRAO) -> None:
+        if modelo not in PRECOS_USD_POR_MTOK:
+            raise ValueError(f"modelo sem preco conhecido: {modelo!r}; sem preco nao da para garantir o teto de gasto")
+        self.cliente = cliente
+        self.modelo = modelo
+
+    def disponivel(self) -> tuple[bool, str]:
+        return (True, "") if self.cliente is not None else (False, "sem credencial da API (ANTHROPIC_API_KEY)")
+
+    def custo_maximo(self, sistema: str, pedido: str) -> float:
+        # entrada estimada por cima: 1 token a cada 2 caracteres
+        return custo_usd(self.modelo, math.ceil((len(sistema) + len(pedido) + 400) / 2), MAX_TOKENS_SAIDA)
+
+    def custo_real(self, r: RespostaProvedor) -> float | None:
+        if r.tokens_entrada is None or r.tokens_saida is None:
+            return None
+        # o fallback de recusa (Opus) pode cobrar outro modelo; sem preco dele, usa o mais caro da tabela
+        precos = r.modelo if r.modelo in PRECOS_USD_POR_MTOK else \
+            max(PRECOS_USD_POR_MTOK, key=lambda m: PRECOS_USD_POR_MTOK[m][1])
+        return custo_usd(precos, r.tokens_entrada, r.tokens_saida)
+
+    def gerar(self, sistema: str, pedido: str, esquema: dict, semente: int) -> RespostaProvedor:
+        base = dict(model=self.modelo, max_tokens=MAX_TOKENS_SAIDA, system=sistema,
+                    messages=[{"role": "user", "content": pedido}])
+        if self.modelo in MODELOS_COM_FALLBACK:
+            # Opus 5 / Fable 5.1: esforco baixo e fallback de recusa do servidor da API
+            resp = self.cliente.beta.messages.create(
+                **base, output_config={"effort": "low", "format": {"type": "json_schema", "schema": esquema}},
+                betas=["server-side-fallback-2026-07-01"], fallbacks="default")
+        else:
+            # Haiku 4.5: sem `effort` (o modelo rejeita); recusa cai no template
+            resp = self.cliente.messages.create(**base, output_config={"format": {"type": "json_schema", "schema": esquema}})
+        uso = getattr(resp, "usage", None)
+        texto = next((b.text for b in resp.content if b.type == "text"), "")
+        return RespostaProvedor(texto, resp.stop_reason == "end_turn", resp.stop_reason, getattr(resp, "model", self.modelo),
+                                getattr(uso, "input_tokens", None), getattr(uso, "output_tokens", None))
+
+
+class ProvedorOllama:
+    """Modelo local via Ollama (http://localhost:11434). Sem custo por chamada.
+
+    So biblioteca padrao (urllib). `abrir` e injetavel para testes sem Ollama.
+    """
+
+    nome = "ollama"
+    tem_custo = False
+
+    def __init__(self, modelo: str = MODELO_OLLAMA_PADRAO, url: str = URL_OLLAMA_PADRAO,
+                 timeout: float = TIMEOUT_OLLAMA_S, abrir=None) -> None:
+        import urllib.request
+
+        self.modelo = modelo
+        self.url = url.rstrip("/")
+        self.timeout = timeout
+        self._abrir = abrir or urllib.request.urlopen
+        self.aquecido = False
+
+    def _pedir(self, caminho: str, corpo: dict | None, timeout: float) -> dict:
+        import urllib.request
+
+        dados = None if corpo is None else json.dumps(corpo).encode("utf-8")
+        req = urllib.request.Request(self.url + caminho, data=dados, method="GET" if corpo is None else "POST",
+                                     headers={"Content-Type": "application/json"})
+        with self._abrir(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+
+    def disponivel(self) -> tuple[bool, str]:
+        try:
+            tags = self._pedir("/api/tags", None, 2.0)
+        except Exception as err:
+            return False, f"Ollama não está rodando em {self.url} ({type(err).__name__})"
+        nomes = {m.get("name") for m in tags.get("models", [])} | {m.get("model") for m in tags.get("models", [])}
+        if self.modelo not in nomes and f"{self.modelo}:latest" not in nomes:
+            return False, f"modelo {self.modelo} não baixado: rode  ollama pull {self.modelo}"
+        return True, ""
+
+    def aquecer(self) -> None:
+        """Carrega o modelo na GPU (a primeira chamada e lenta). Falha aqui nao e fatal."""
+        self._pedir("/api/chat", {"model": self.modelo, "messages": [{"role": "user", "content": "ok"}],
+                                  "stream": False, "keep_alive": MANTER_OLLAMA, "options": {"num_predict": 1}},
+                    TIMEOUT_AQUECIMENTO_S)
+        self.aquecido = True
+
+    def gerar(self, sistema: str, pedido: str, esquema: dict, semente: int) -> RespostaProvedor:
+        corpo = {
+            "model": self.modelo,
+            "messages": [{"role": "system", "content": sistema}, {"role": "user", "content": pedido}],
+            "format": esquema,
+            "stream": False,
+            "keep_alive": MANTER_OLLAMA,
+            "options": {"temperature": TEMPERATURA_OLLAMA, "seed": semente, "num_predict": MAX_TOKENS_OLLAMA},
+        }
+        d = self._pedir("/api/chat", corpo, self.timeout if self.aquecido else TIMEOUT_AQUECIMENTO_S)
+        self.aquecido = True
+        motivo = d.get("done_reason", "stop" if d.get("done") else "incompleto")
+        return RespostaProvedor(d.get("message", {}).get("content", ""), motivo == "stop", motivo,
+                                d.get("model", self.modelo), d.get("prompt_eval_count"), d.get("eval_count"))
+
+
 # ------------------------------------------------------------ gerador
 
 
@@ -204,26 +333,21 @@ def validar(texto: str, citados: list[str], motivo: Motivo, estagio: str) -> Non
 class Resultado:
     texto: str
     fonte: str            # "llm" | "template"
-    detalhe: str = ""     # modelo ou motivo da queda para o template
+    detalhe: str = ""     # provedor/modelo, ou motivo da queda para o template
 
     def para_dict(self) -> dict:
         return {"texto": self.texto, "fonte": self.fonte, "detalhe": self.detalhe}
 
 
 class GeradorFala:
-    """Gera a fala com cache, limite por minuto e queda para o template.
+    """Gera a fala com cache, limite por minuto, teto de gasto (se o provedor cobra)
+    e queda para o template. Sem provedor, so template."""
 
-    `cliente` e um anthropic.Anthropic (ou um falso nos testes). Sem cliente, so template.
-    """
-
-    def __init__(self, cliente=None, modelo: str = MODELO_PADRAO, limite_por_minuto: int = LIMITE_POR_MINUTO,
+    def __init__(self, provedor=None, limite_por_minuto: int = LIMITE_POR_MINUTO,
                  gasto: ControleGasto | None = None) -> None:
-        if cliente is not None and modelo not in PRECOS_USD_POR_MTOK:
-            raise ValueError(f"modelo sem preco conhecido: {modelo!r}; sem preco nao da para garantir o teto de gasto")
-        if cliente is not None and gasto is None:
-            raise ValueError("LLM ligada exige um ControleGasto")
-        self.cliente = cliente
-        self.modelo = modelo
+        if provedor is not None and provedor.tem_custo and gasto is None:
+            raise ValueError("provedor com custo exige um ControleGasto")
+        self.provedor = provedor
         self.limite = limite_por_minuto
         self.gasto = gasto
         self._cache: dict[str, Resultado] = {}
@@ -231,9 +355,14 @@ class GeradorFala:
         self._trava = threading.Lock()
         self.estatisticas = {"llm": 0, "template": 0, "reprovadas": 0, "erros": 0, "cache": 0}
 
+    @property
+    def modelo(self) -> str | None:
+        return None if self.provedor is None else self.provedor.modelo
+
     def _chave(self, motivo: Motivo, estagio: str, humor: float | None) -> str:
         faixa = None if humor is None else (2 if humor >= .66 else 1 if humor >= .33 else 0)
-        return json.dumps([motivo.para_dict(), estagio, faixa, self.modelo, VERSAO_PROMPT], sort_keys=True)
+        nome = None if self.provedor is None else self.provedor.nome
+        return json.dumps([motivo.para_dict(), estagio, faixa, nome, self.modelo, VERSAO_PROMPT], sort_keys=True)
 
     def _pode_chamar(self) -> bool:
         agora = time.monotonic()
@@ -253,8 +382,8 @@ class GeradorFala:
             raise ValueError(f"estagio desconhecido: {estagio!r}")
         if estagio not in ESTAGIOS_LLM:
             return self._modelo_de_frase(motivo, estagio, humor, f"estagio {estagio} nao usa LLM")
-        if self.cliente is None:
-            return self._modelo_de_frase(motivo, estagio, humor, "servidor sem credencial da API")
+        if self.provedor is None:
+            return self._modelo_de_frase(motivo, estagio, humor, "servidor sem provedor de LLM")
         chave = self._chave(motivo, estagio, humor)
         with self._trava:
             if chave in self._cache:
@@ -262,65 +391,42 @@ class GeradorFala:
                 return self._cache[chave]
         if not self._pode_chamar():
             return self._modelo_de_frase(motivo, estagio, humor, "limite de chamadas por minuto")
-        conteudo = montar_pedido(motivo, estagio, humor)
-        # teto de gasto: reserva o pior caso (entrada estimada por cima: 1 token a cada 2 caracteres)
-        custo_max = custo_usd(self.modelo, math.ceil((len(SISTEMA) + len(conteudo) + 400) / 2), MAX_TOKENS_SAIDA)
-        if not self.gasto.reservar(custo_max):
-            return self._modelo_de_frase(motivo, estagio, humor,
-                                         f"limite de gasto atingido (US$ {self.gasto.gasto:.4f} de US$ {self.gasto.limite:.2f})")
+        pedido = montar_pedido(motivo, estagio, humor)
+        semente = int(hashlib.sha256(chave.encode("utf-8")).hexdigest()[:8], 16)   # mesmo motivo, mesma semente
+        custo_max = 0.0
+        if self.provedor.tem_custo:
+            custo_max = self.provedor.custo_maximo(SISTEMA, pedido)
+            if not self.gasto.reservar(custo_max):
+                return self._modelo_de_frase(motivo, estagio, humor,
+                                             f"limite de gasto atingido (US$ {self.gasto.gasto:.4f} de US$ {self.gasto.limite:.2f})")
         try:
-            pedido = dict(
-                model=self.modelo,
-                max_tokens=MAX_TOKENS_SAIDA,
-                system=SISTEMA,
-                messages=[{"role": "user", "content": conteudo}],
-            )
-            if self.modelo in MODELOS_COM_FALLBACK:
-                # Opus 5 / Fable 5.1: esforco baixo e fallback de recusa do servidor da API
-                resposta = self.cliente.beta.messages.create(
-                    **pedido,
-                    output_config={"effort": "low", "format": {"type": "json_schema", "schema": ESQUEMA}},
-                    betas=["server-side-fallback-2026-07-01"],
-                    fallbacks="default",
-                )
-            else:
-                # Haiku 4.5 (padrao): sem `effort` (o modelo rejeita); recusa cai no template
-                resposta = self.cliente.messages.create(
-                    **pedido,
-                    output_config={"format": {"type": "json_schema", "schema": ESQUEMA}},
-                )
-        except Exception as err:  # rede, credencial, limite: a fala e so exibicao, cai no template
-            self.gasto.acertar(custo_max, custo_max)   # sem usage: conta o pior caso
+            r = self.provedor.gerar(SISTEMA, pedido, ESQUEMA, semente)
+        except Exception as err:  # rede, credencial, timeout, Ollama fora do ar: a fala e so exibicao
+            if self.provedor.tem_custo:
+                self.gasto.acertar(custo_max, custo_max)   # sem uso informado: conta o pior caso
             self.estatisticas["erros"] += 1
-            return self._modelo_de_frase(motivo, estagio, humor, f"erro na API: {type(err).__name__}")
-        uso = getattr(resposta, "usage", None)
-        if uso is None:
-            self.gasto.acertar(custo_max, custo_max)
-        else:
-            # o fallback de recusa (Opus) pode cobrar outro modelo; sem preco dele, usa o mais caro da tabela
-            modelo_cobrado = getattr(resposta, "model", self.modelo)
-            precos = modelo_cobrado if modelo_cobrado in PRECOS_USD_POR_MTOK else \
-                max(PRECOS_USD_POR_MTOK, key=lambda m: PRECOS_USD_POR_MTOK[m][1])
-            self.gasto.acertar(custo_max, custo_usd(precos, uso.input_tokens, uso.output_tokens))
-        if resposta.stop_reason != "end_turn":
+            return self._modelo_de_frase(motivo, estagio, humor, f"erro no provedor {self.provedor.nome}: {type(err).__name__}")
+        if self.provedor.tem_custo:
+            real = self.provedor.custo_real(r)
+            self.gasto.acertar(custo_max, custo_max if real is None else real)
+        if not r.completa:
             self.estatisticas["erros"] += 1
-            return self._modelo_de_frase(motivo, estagio, humor, f"resposta interrompida: {resposta.stop_reason}")
+            return self._modelo_de_frase(motivo, estagio, humor, f"resposta interrompida: {r.motivo_parada}")
         try:
-            texto_json = next(b.text for b in resposta.content if b.type == "text")
-            dados = json.loads(texto_json)
+            dados = json.loads(r.texto)
             validar(dados["texto"], dados["fatores_citados"], motivo, estagio)
-        except (FalaReprovada, KeyError, StopIteration, json.JSONDecodeError) as err:
+        except (FalaReprovada, KeyError, TypeError, json.JSONDecodeError) as err:
             self.estatisticas["reprovadas"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}")
-        r = Resultado(dados["texto"].strip(), "llm", getattr(resposta, "model", self.modelo))
+        res = Resultado(dados["texto"].strip(), "llm", f"{self.provedor.nome}: {r.modelo}")
         self.estatisticas["llm"] += 1
         with self._trava:
-            self._cache[chave] = r
-        return r
+            self._cache[chave] = res
+        return res
 
 
-def criar_cliente():
-    """Cliente do Claude se houver credencial no ambiente; senao None (so template)."""
+def criar_cliente_claude():
+    """Cliente do Claude se houver credencial no ambiente; senao None."""
     import os
 
     if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")
@@ -329,3 +435,27 @@ def criar_cliente():
     import anthropic
 
     return anthropic.Anthropic(timeout=TIMEOUT_S, max_retries=0)
+
+
+def escolher_provedor(nome: str, modelo: str | None = None, url_ollama: str = URL_OLLAMA_PADRAO,
+                      limite_usd: float = LIMITE_USD_PADRAO):
+    """(provedor | None, gasto | None, motivo). `auto`: Ollama se estiver pronto, senao Claude
+    se houver chave, senao nenhum (so template)."""
+    if nome not in ("auto", "ollama", "claude", "nenhum"):
+        raise ValueError(f"provedor desconhecido: {nome!r}")
+    if nome == "nenhum":
+        return None, None, "desligado por --provedor nenhum"
+    ollama = None
+    if nome in ("auto", "ollama"):
+        ollama = ProvedorOllama(modelo or MODELO_OLLAMA_PADRAO, url_ollama)
+        ok, motivo = ollama.disponivel()
+        if ok or nome == "ollama":
+            return ollama, None, motivo   # indisponivel agora: o status mostra o motivo e reconsulta ao vivo
+    cliente = criar_cliente_claude()
+    if cliente is not None:
+        return ProvedorClaude(cliente, modelo if nome == "claude" and modelo else MODELO_PADRAO), \
+            ControleGasto(limite_usd), ""
+    if nome == "claude":
+        return None, None, "sem credencial da API do Claude (ANTHROPIC_API_KEY)"
+    # auto sem Ollama pronto e sem chave: fica com o Ollama, que passa a valer assim que for ligado
+    return ollama, None, ollama.disponivel()[1]
