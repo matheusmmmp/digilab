@@ -7,6 +7,4 @@ venv/
 artifacts_fumaca/
 artifacts_*/
 
-# versao local com sprites do Digimon World: uso pessoal, nao versionar nem publicar (ver CLAUDE.md)
-web/digilab_sprites.html
 !artifacts_ablacao/

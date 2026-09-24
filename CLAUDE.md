@@ -157,18 +157,33 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   protótipo de jogo.
 - **Proibido**: usar no pacote `digilab/`, em `experiments/`, em `artifacts*/`, em figuras ou
   textos de publicação acadêmica, ou em qualquer build distribuído como produto. Não publicar
-  a versão com sprites (artifact, site, repositório público).
+  a versão com sprites (artifact, site, repositório **público**). Revisado em 2026-09-24:
+  `web/digilab_sprites.html` é versionado, mas o repositório GitHub (`matheusmmmp/digilab`)
+  tem que continuar **privado**. Tornar o repo público exige tirar esse arquivo antes, inclusive
+  do histórico. O atlas com os pixels da Bandai continua fora do repo.
 - Manter a versão com placeholders originais funcionando: antes de publicar ou distribuir
   qualquer coisa, trocar por arte original ou licenciada.
 
-Versão com sprites: `web/digilab_sprites.html` (no `.gitignore`), cópia de `digilab.html` que
+Versão com sprites: `web/digilab_sprites.html` (versionado; repo privado), derivada de `digilab.html`, que
 lê `D:\Trab\digilab\Assets\digilab_atlas.png`. O atlas e os scripts ficam fora do repo:
 `Assets\gerar_atlas.py` (atlas) e `Assets\gerar_sprites_html.py` (regenera a cópia a partir
 de `digilab.html`; rode depois de qualquer mudança nele). Precisa de servidor local, porque o caminho é
 relativo: `python -m http.server 8765 --directory D:/Trab/digilab` e abrir
 `http://localhost:8765/v1/web/digilab_sprites.html`. A linha evolutiva segue o traço de combate
-dominante (bebê único; criança e adulto, um par por traço). Se o atlas não carregar, a página
-mostra um aviso em vermelho e cai nos placeholders.
+dominante no momento da evolução. Se o atlas não carregar, a página mostra um aviso em
+vermelho e cai nos placeholders.
+
+**Desde 2026-09-24 `digilab_sprites.html` é a versão em que o Matheus quer trabalhar** e é
+editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba **Evolução**:
+- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate
+  dominante naquele instante. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
+  entram na assinatura do "Verificar replay");
+- árvore em SVG: ovo → bebê → 5 crianças → 5 adultos (qualquer criança pode ir a qualquer
+  adulto), caminho do pet destacado, tracejado = forma se evoluísse agora, histórico;
+- a forma é só visual: a arena continua usando os traços do momento, igual ao Python.
+
+`Assets\gerar_sprites_html.py` agora **recusa** sobrescrever o arquivo se ele tiver a aba
+Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 

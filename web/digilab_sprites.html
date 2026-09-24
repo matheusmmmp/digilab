@@ -1,0 +1,1326 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digilab Pet (sprites locais)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#E9EDF2; --panel:#F7F9FB; --ink:#1B2130; --muted:#5A6477; --line:#CDD4DF;
+  --shell:#2F47A6; --shell-2:#243A8C; --shell-ink:#EEF2FF;
+  --accent:#F0A534; --accent-ink:#2A1A00;
+  --good:#2E9A62; --warn:#C98A12; --bad:#C8443A;
+  --bar-bg:#DCE2EA;
+  --f-pixel:"Silkscreen", ui-monospace, monospace;
+  --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#10141C; --panel:#171C27; --ink:#E5E9F2; --muted:#98A2B6; --line:#2A3242;
+    --shell:#3651BF; --shell-2:#2A41A0; --shell-ink:#EEF2FF;
+    --accent:#F3B24D; --accent-ink:#2A1A00;
+    --good:#4CC486; --warn:#E3A93A; --bad:#EE6B5F; --bar-bg:#252D3C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#10141C; --panel:#171C27; --ink:#E5E9F2; --muted:#98A2B6; --line:#2A3242;
+  --shell:#3651BF; --shell-2:#2A41A0; --shell-ink:#EEF2FF;
+  --accent:#F3B24D; --accent-ink:#2A1A00;
+  --good:#4CC486; --warn:#E3A93A; --bad:#EE6B5F; --bar-bg:#252D3C;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:1080px;margin-inline:auto;display:grid;gap:20px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+header h1{font-family:var(--f-pixel);font-weight:700;font-size:28px;letter-spacing:.02em;margin:0}
+header p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+/* aparelho */
+.device{background:linear-gradient(160deg,var(--shell),var(--shell-2));border-radius:28px 28px 44px 44px;padding:18px;display:grid;gap:14px;color:var(--shell-ink);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),0 10px 30px rgba(20,30,70,.25)}
+.bezel{background:#0E1426;border-radius:14px;padding:10px;display:grid;gap:8px}
+.lcd{width:100%;aspect-ratio:80/56;max-width:100%;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:6px;display:block;background:#BFE3D6}
+.strip{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-pixel);font-size:12px;letter-spacing:.06em;color:#C9D4FF}
+.strip b{color:#fff;font-weight:700}
+.acoes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btn{font:inherit;border:0;cursor:pointer;border-radius:12px;padding:10px 8px;background:#F4F6FF;color:#1B2130;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 3px 0 rgba(0,0,0,.28);transition:transform .06s}
+.btn small{font-weight:400;font-size:11px;color:#5A6477}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.btn:focus-visible,.tab:focus-visible,.chip:focus-visible,.sbtn:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn.fb-pos{background:#E3F6EA}
+.btn.fb-neg{background:#FBE6E3}
+.tempo{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tempo .lbl{font-family:var(--f-pixel);font-size:11px;letter-spacing:.08em;opacity:.8;margin-right:4px}
+.chip{font:inherit;font-size:13px;border:1px solid rgba(255,255,255,.35);background:transparent;color:var(--shell-ink);padding:5px 10px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+
+/* painel */
+.painel{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.tabs{display:flex;gap:2px;padding:6px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{font:inherit;font-weight:700;border:0;background:transparent;color:var(--muted);padding:8px 14px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--ground);color:var(--ink)}
+.pane{padding:18px;display:grid;gap:18px}
+.pane h2{font-family:var(--f-pixel);font-size:14px;letter-spacing:.06em;margin:0;font-weight:700;text-transform:uppercase}
+.pane p{margin:0;max-width:65ch}
+.muted{color:var(--muted)}
+.linhas{display:grid;gap:8px}
+.linha{display:grid;grid-template-columns:92px 1fr 52px;gap:10px;align-items:center}
+.linha .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;font-size:13px}
+.bar{height:10px;background:var(--bar-bg);border-radius:5px;overflow:hidden;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--good)}
+.bar.center i{inset:0 auto 0 50%}
+.bar.center::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--ground);border:1px solid var(--line)}
+.tag.bad{color:var(--bad);border-color:currentColor}
+.tag.warn{color:var(--warn);border-color:currentColor}
+.tag.good{color:var(--good);border-color:currentColor}
+.dupla{display:grid;grid-template-columns:92px 1fr 96px;gap:10px;align-items:center}
+.dupla .bars{display:grid;gap:3px}
+.dupla .bar{height:7px}
+.dupla .bar.prior i{background:var(--muted)}
+.dupla .bar.agora i{background:var(--accent)}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.kv div{background:var(--ground);border-radius:10px;padding:10px 12px}
+.kv b{display:block;font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums}
+.kv span{font-size:12px;color:var(--muted)}
+.sbtn{font:inherit;font-weight:700;border:0;border-radius:10px;padding:9px 14px;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+.sbtn.sec{background:var(--ground);color:var(--ink);border:1px solid var(--line)}
+.sbtn:disabled{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.arena-cv{width:100%;max-width:100%;aspect-ratio:96/48;image-rendering:pixelated;border-radius:10px;background:#1F2A4A;display:block}
+.hp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hp .bar{height:12px}
+.hp .bar i{background:var(--good)}
+.hp .nm{font-size:13px;font-weight:700;display:flex;justify-content:space-between}
+.hp .nm span{font-family:var(--f-mono);font-weight:400}
+.ciclo{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;font-size:13px}
+.ciclo div{background:var(--ground);border-radius:8px;padding:6px 10px}
+.log{font-family:var(--f-mono);font-size:12.5px;max-height:320px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--ground);display:grid;gap:2px}
+.log .dono{color:var(--accent)}
+.log .t{color:var(--muted)}
+.resultado{font-weight:700}
+.cenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.cen{font:inherit;text-align:left;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;display:grid;gap:4px}
+.cen b{font-size:14px}
+.cen span{font-size:12.5px;color:var(--muted)}
+.cen:hover{border-color:var(--accent)}
+.cen:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.form-cen{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px}
+.form-cen fieldset{border:1px solid var(--line);border-radius:10px;padding:8px 12px 12px;display:grid;gap:6px}
+.form-cen legend{font-weight:700;padding:0 4px}
+.form-cen label{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;font-size:13.5px}
+.form-cen input,.form-cen select{font:inherit;min-width:0;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+.comp{width:100%;border-collapse:collapse;font-size:13.5px}
+.comp th,.comp td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.comp th:first-child,.comp td:first-child{text-align:left;color:var(--muted);font-weight:400}
+.comp thead th{font-weight:700;color:var(--ink)}
+.comp tr.sec td{padding-top:12px;font-weight:700;color:var(--ink);border-bottom:0}
+.tabela-rola{overflow-x:auto}
+.evo-svg{width:100%;height:auto;display:block}
+.evo-svg text{font-family:var(--f-mono);fill:var(--muted);font-size:13px}
+.evo-svg text.cab{fill:var(--ink);font-weight:700;font-size:13px}
+.evo-aresta{stroke:var(--line);stroke-width:1.5;fill:none;opacity:.55}
+.evo-aresta.mesma{stroke-width:2.5;opacity:.9}
+.evo-aresta.caminho{stroke:var(--accent);stroke-width:4;opacity:1}
+.evo-aresta.provavel{stroke:var(--accent);stroke-width:3;stroke-dasharray:6 5;opacity:1}
+.evo-aresta.fora{opacity:.18}
+.evo-no rect{fill:var(--ground);stroke:var(--line);stroke-width:2}
+.evo-no.caminho rect{stroke:var(--accent)}
+.evo-no.atual rect{stroke:var(--accent);stroke-width:4;fill:var(--panel)}
+.evo-no.provavel rect{stroke:var(--accent);stroke-dasharray:5 4;stroke-width:3}
+.evo-no.fora{opacity:.35}
+.evo-no image{image-rendering:pixelated}
+.evo-hist{display:grid;gap:4px;font-size:13.5px}
+.evo-hist div{display:flex;gap:10px;flex-wrap:wrap}
+.evo-hist .t{font-family:var(--f-mono);color:var(--muted)}
+.nota{font-size:13px;color:var(--muted);max-width:80ch}
+footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
+@media (prefers-reduced-motion: reduce){.btn{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>DIGILAB</h1>
+    <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
+  </header>
+
+  <p id="aviso-atlas" hidden style="color:var(--bad);font-weight:700"></p>
+  <div class="grid">
+    <section class="device" aria-label="Aparelho do pet">
+      <div class="bezel">
+        <canvas id="lcd" class="lcd" width="80" height="56" aria-label="Tela do pet"></canvas>
+        <div class="strip"><span id="relogio">DIA 1 · 08:00</span><span id="estagio"><b>BEBÊ</b></span></div>
+      </div>
+      <div class="acoes" role="group" aria-label="Ações do dono">
+        <button class="btn" id="a-alimentar" data-acao="alimentar">Alimentar<small>fome</small></button>
+        <button class="btn" id="a-limpar" data-acao="limpar">Limpar<small>higiene</small></button>
+        <button class="btn" id="a-brincar" data-acao="brincar">Brincar<small>humor</small></button>
+        <button class="btn" id="a-acariciar" data-acao="acariciar">Acariciar<small>atende pedido</small></button>
+        <button class="btn fb-pos" id="a-elogiar" data-acao="elogiar">Elogiar<small>reforça a ação</small></button>
+        <button class="btn fb-neg" id="a-repreender" data-acao="repreender">Repreender<small>desencoraja</small></button>
+      </div>
+      <div class="tempo" role="group" aria-label="Velocidade do tempo">
+        <span class="lbl">TEMPO</span>
+        <button class="chip" id="v0" data-vel="0" aria-pressed="false">Pausa</button>
+        <button class="chip" id="v1" data-vel="10" aria-pressed="true">10 min/s</button>
+        <button class="chip" id="v2" data-vel="60" aria-pressed="false">1 h/s</button>
+        <button class="chip" id="v3" data-vel="360" aria-pressed="false">6 h/s</button>
+        <button class="chip" id="pulo" data-pulo="60">+1 h</button>
+      </div>
+    </section>
+
+    <section class="painel">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="t-estado" data-pane="estado" aria-selected="true">Estado</button>
+        <button class="tab" role="tab" id="t-aprend" data-pane="aprend" aria-selected="false">Aprendizado</button>
+        <button class="tab" role="tab" id="t-arena" data-pane="arena" aria-selected="false">Arena</button>
+        <button class="tab" role="tab" id="t-evolucao" data-pane="evolucao" aria-selected="false">Evolução</button>
+        <button class="tab" role="tab" id="t-cenarios" data-pane="cenarios" aria-selected="false">Cenários</button>
+        <button class="tab" role="tab" id="t-registro" data-pane="registro" aria-selected="false">Registro</button>
+      </div>
+
+      <div class="pane" id="p-estado">
+        <div class="tags" id="alertas"></div>
+        <div class="linhas" id="necessidades"></div>
+        <div>
+          <h2>Traços de combate</h2>
+          <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia. O traço mais forte na hora de evoluir decide a forma (aba Evolução).</p>
+        </div>
+        <div class="linhas" id="tracos"></div>
+      </div>
+
+      <div class="pane" id="p-aprend" hidden>
+        <p>O pet decide com um bandit contextual que nasce copiando o instinto. Elogio e repreensão ajustam a ação que ele acabou de fazer. Atender um pedido de atenção rápido também conta como recompensa.</p>
+        <div class="kv" id="recompensas"></div>
+        <div>
+          <h2>No estado de agora</h2>
+          <div class="legend" style="margin-top:6px"><span style="--c:var(--muted)">instinto</span><span style="--c:var(--accent)">política atual</span></div>
+        </div>
+        <div class="linhas" id="politica"></div>
+      </div>
+
+      <div class="pane" id="p-arena" hidden>
+        <p>Seu pet enfrenta um rival da mesma idade, treinado por um dono simulado com o mesmo número de interações por dia (16). O dono não participa da luta.</p>
+        <div class="row">
+          <label for="rival">Rival treinado por</label>
+          <select id="rival">
+            <option value="atencioso">dono atencioso</option>
+            <option value="relapso">dono relapso</option>
+            <option value="aleatorio" selected>dono aleatório</option>
+            <option value="incoerente">dono incoerente</option>
+          </select>
+          <button class="sbtn" id="lutar">Lutar</button>
+          <button class="sbtn sec" id="melhor10">Melhor de 10</button>
+        </div>
+        <p class="muted" id="rival-fixo" hidden></p>
+        <canvas id="arenacv" class="arena-cv" width="96" height="48" aria-label="Arena"></canvas>
+        <div class="hp">
+          <div><div class="nm">Seu pet <span id="hp-a">100</span></div><div class="bar"><i id="hpb-a" style="width:100%"></i></div></div>
+          <div><div class="nm">Rival <span id="hp-b">100</span></div><div class="bar"><i id="hpb-b" style="width:100%"></i></div></div>
+        </div>
+        <p class="resultado" id="arena-res">Escolha um rival e aperte Lutar.</p>
+        <div>
+          <h2>Regras</h2>
+          <p class="muted" style="margin-top:4px">Os dois revelam o golpe ao mesmo tempo. Cada golpe vence dois e perde para dois, então não existe golpe dominante. O golpe sai da mesma política do dia a dia, e os traços aumentam o dano dos golpes que combinam com eles.</p>
+        </div>
+        <div class="ciclo" id="ciclo"></div>
+      </div>
+
+      <div class="pane" id="p-evolucao" hidden>
+        <p>Ao completar <b>1 dia</b> o bebê vira criança, e ao completar <b>4 dias</b> a criança vira adulto. Em cada evolução, o <b>traço de combate mais forte naquele momento</b> decide a forma, e ela fica travada até a próxima.</p>
+        <div class="kv" id="evo-resumo"></div>
+        <svg class="evo-svg" id="evo-arvore" viewBox="0 0 640 462" role="img" aria-label="Árvore de evolução"></svg>
+        <div class="legend"><span style="--c:var(--accent)">caminho do seu pet</span><span style="--c:var(--line)">caminhos possíveis</span></div>
+        <p class="muted">Linha tracejada: para onde ele iria se evoluísse agora. A forma é visual; na arena contam os traços do momento, não a forma.</p>
+        <div>
+          <h2>Histórico</h2>
+          <div class="evo-hist" id="evo-hist" style="margin-top:6px"></div>
+        </div>
+      </div>
+
+      <div class="pane" id="p-cenarios" hidden>
+        <p>Monte dois pets com donos simulados e compare o que o algoritmo aprendeu em cada um. O <b>pet A vira o seu pet</b> (você continua cuidando dele) e o <b>pet B vira o rival fixo</b> da arena. Mesma semente, mesmo resultado.</p>
+        <div class="cenarios" id="lista-cenarios"></div>
+        <details>
+          <summary>Montar à mão</summary>
+          <div class="form-cen">
+            <fieldset><legend>Pet A (seu)</legend>
+              <label>Dono <select id="ca-dono"></select></label>
+              <label>Dias de vida <input id="ca-dias" type="number" min="0.5" max="14" step="0.5" value="5"></label>
+              <label>Interações/dia <input id="ca-pd" type="number" min="1" max="200" step="1" value="16"></label>
+            </fieldset>
+            <fieldset><legend>Pet B (rival)</legend>
+              <label>Dono <select id="cb-dono"></select></label>
+              <label>Dias de vida <input id="cb-dias" type="number" min="0.5" max="14" step="0.5" value="5"></label>
+              <label>Interações/dia <input id="cb-pd" type="number" min="1" max="200" step="1" value="16"></label>
+            </fieldset>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <label for="c-semente">Semente</label>
+            <input id="c-semente" type="number" min="1" step="1" value="1" style="width:110px;font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)">
+            <button class="sbtn" id="c-montar">Montar</button>
+          </div>
+        </details>
+        <p id="cen-msg" class="resultado" aria-live="polite"></p>
+        <div class="tabela-rola" id="cen-comp"></div>
+        <div class="row">
+          <button class="sbtn" id="cen-lutas" disabled>Rodar 100 lutas A × B</button>
+          <button class="sbtn sec" id="cen-voltar" hidden>Voltar ao pet anterior</button>
+        </div>
+        <div class="tabela-rola" id="cen-lutas-res"></div>
+      </div>
+
+      <div class="pane" id="p-registro" hidden>
+        <p>O estado do pet nunca é salvo. Só o registro de ações e passagem de tempo, e a vida é reconstruída do zero a partir dele.</p>
+        <div class="row">
+          <button class="sbtn" id="verificar">Verificar replay</button>
+          <button class="sbtn sec" id="copiar">Copiar registro</button>
+          <button class="sbtn sec" id="novo">Novo ovo</button>
+          <button class="sbtn sec" id="novo-conf" hidden>Confirmar: apagar este pet</button>
+        </div>
+        <p id="reg-msg" class="muted">Semente <span id="semente"></span> · <span id="neventos"></span> eventos no registro.</p>
+        <div class="log" id="log" aria-live="polite"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>Porte em JavaScript do motor Digilab v1: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</span>
+    <span><b>Versão local com sprites do Digimon World (Bandai), só para uso pessoal. Não publicar nem distribuir.</b> Rips: ícones por @placebo_yue, ovos por metaldodomon, emoções por Romsstar.</span>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* =================================================================
+   Parametros — espelho de digilab/config.py
+   ================================================================= */
+const TPD = 1440;
+const C = {
+  decFome:1/1200, decHig:1/1500, decEn:1/900, decHum:1/1200,
+  enSono:1/240, humBrinc:1/120,
+  ganhoAlim:.45, ganhoLimpar:.60, ganhoBrincHum:.25, custoBrincEn:.08, custoBrincFome:.05,
+  ganhoElogiar:.10, custoRepr:.12,
+  probSuj:1/400, probSujRef:.35, sujMax:5, penHigSuj:.12,
+  danoSaude:1/2000, curaSaude:1/3000,
+  iniNoite:22*60, fimNoite:7*60, multNoite:1.8,
+  intervalo:15, janelaAtencao:240,
+};
+const CB = { lambda:1, var:.25, piso:.05, elogio:1, repr:-1, janela:120, ignorado:-.5, escalaTdc:480 };
+const CD = { passo:15, maxPasso:6, limAlim:.5, limLimpar:.5, sujLimpar:2, limHumBrinc:.4, limSono:.4, limPedido:.35, visitasRelapso:3, probElogioInc:.5, porDia:16 };
+const CT = { alfa:1/288 };
+const CA = { hp:100, dano:10, ganhoAf:.5, maxTurnos:40, fome:.7, hig:.7, saude:1, hora:.5,
+  mapa:{ocioso:"bloqueio",dormir:"bloqueio",comer:"agarrao",brincar:"golpe",chamar_atencao:"carga",explorar:"finta",emburrar:"agarrao"} };
+const TICK_INICIAL = 8*60;
+
+const ACOES_PET = ["ocioso","dormir","comer","brincar","chamar_atencao","explorar","emburrar"];
+const ACOES_DONO = ["alimentar","limpar","brincar","acariciar","elogiar","repreender"];
+const COMBATE = ["golpe","bloqueio","agarrao","finta","carga"];
+const NOME_PET = {ocioso:"à toa",dormir:"dormindo",comer:"comendo",brincar:"brincando",chamar_atencao:"chamando você",explorar:"explorando",emburrar:"emburrado"};
+const NOME_DONO = {atencioso:"atencioso",relapso:"relapso",aleatorio:"aleatório",incoerente:"incoerente"};
+const NOME_COMB = {golpe:"Golpe",bloqueio:"Bloqueio",agarrao:"Agarrão",finta:"Finta",carga:"Carga"};
+
+const clamp = x => Math.max(0, Math.min(1, x));
+const eNoite = t => C.iniNoite > C.fimNoite ? (t >= C.iniNoite || t < C.fimNoite) : (t >= C.iniNoite && t < C.fimNoite);
+
+/* ------------------------------------------------ RNG (mulberry32) */
+function criarRng(seed){
+  let a = seed >>> 0;
+  const r = {
+    random(){ a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; },
+    gauss(){ let u = 0; while (u === 0) u = r.random(); const v = r.random(); return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v); },
+    escolher(itens, pesos){ const tot = pesos.reduce((s,w)=>s+w,0); let x = r.random()*tot; for (let i=0;i<itens.length;i++){ x -= pesos[i]; if (x < 0) return itens[i]; } return itens[itens.length-1]; },
+    int(n){ return Math.floor(r.random()*n); },
+  };
+  return r;
+}
+function hashSemente(...partes){ let h = 2166136261 >>> 0; for (const c of partes.join("|")){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h; }
+
+/* =================================================================
+   Camada 1 — estado e necessidades (espelho de state.py)
+   ================================================================= */
+function estadoInicial(){
+  return { tick:TICK_INICIAL, fome:.8, higiene:1, energia:.9, humor:.7, saude:1, sujeira:0, dormindo:false, ultimoCuidado:TICK_INICIAL, totalCuidados:0 };
+}
+function vetor(e){ return [e.fome, e.higiene, e.energia, e.humor, e.saude, e.sujeira/5, e.dormindo?1:0, (e.tick%TPD)/TPD]; }
+function observacao(e){ return { v:vetor(e), tdc:e.tick - e.ultimoCuidado }; }
+
+function avancarTick(e, rng){
+  const mult = eNoite(e.tick % TPD) ? C.multNoite : 1;
+  const n = {...e};
+  n.fome = clamp(e.fome - C.decFome);
+  n.higiene = clamp(e.higiene - C.decHig * (1 + C.penHigSuj * e.sujeira));
+  n.humor = clamp(e.humor - C.decHum);
+  n.energia = clamp(e.dormindo ? e.energia + C.enSono : e.energia - C.decEn * mult);
+  if (!e.dormindo && rng.random() < C.probSuj) n.sujeira = Math.min(C.sujMax, e.sujeira + 1);
+  const priv = Math.min(n.fome, n.higiene, n.energia) < .15;
+  n.saude = clamp(e.saude + (priv ? -C.danoSaude : C.curaSaude));
+  n.tick = e.tick + 1;
+  return n;
+}
+function aplicarAcaoDono(e, a, rng){
+  const n = {...e};
+  if (a === "alimentar"){ n.fome = clamp(n.fome + C.ganhoAlim); if (rng.random() < C.probSujRef) n.sujeira = Math.min(C.sujMax, n.sujeira + 1); }
+  else if (a === "limpar"){ n.higiene = clamp(n.higiene + C.ganhoLimpar); n.sujeira = Math.max(0, n.sujeira - 1); }
+  else if (a === "brincar"){ n.humor = clamp(n.humor + C.ganhoBrincHum); n.energia = clamp(n.energia - C.custoBrincEn); n.fome = clamp(n.fome - C.custoBrincFome); n.dormindo = false; }
+  else if (a === "acariciar"){ n.humor = clamp(n.humor + C.ganhoElogiar * .6); }
+  else if (a === "elogiar"){ n.humor = clamp(n.humor + C.ganhoElogiar); }
+  else if (a === "repreender"){ n.humor = clamp(n.humor - C.custoRepr); }
+  else throw new Error("acao de dono desconhecida: " + a);
+  n.ultimoCuidado = n.tick; n.totalCuidados = n.totalCuidados + 1;
+  return n;
+}
+function efeitoAcaoPet(e, a){
+  if (a === "dormir") return {...e, dormindo:true};
+  const n = {...e, dormindo:false};
+  if (a === "brincar"){ n.humor = clamp(n.humor + C.humBrinc * C.intervalo); n.energia = clamp(n.energia - .02); }
+  else if (a === "explorar"){ n.energia = clamp(n.energia - .015); n.humor = clamp(n.humor + .01); }
+  else if (a === "comer"){ n.fome = clamp(n.fome + .05); }
+  else if (a === "emburrar"){ n.humor = clamp(n.humor - .01); }
+  return n;
+}
+
+/* =================================================================
+   Camada 2 — instinto (distribuicao exata) e bandit
+   ================================================================= */
+function distInstinto(obs){
+  const [fome, higiene, energia, humor, , , dormindo, hora] = obs.v;
+  const d = Object.fromEntries(ACOES_PET.map(a => [a, 0]));
+  const um = a => { d[a] = 1; return d; };
+  if (energia < .25) return um("dormir");
+  if (dormindo > .5 && energia < .85) return um("dormir");
+  if (eNoite(Math.floor(hora*1440)) && energia < .55) return um("dormir");
+  if (fome < .25 || higiene < .25) return um("chamar_atencao");
+  if (obs.tdc > C.janelaAtencao) return um(humor < .35 ? "emburrar" : "chamar_atencao");
+  if (fome < .45){ d.comer = .5; d.chamar_atencao = .5; return d; }
+  const p = { ocioso:3, explorar:2+2*energia, brincar:1+3*humor, chamar_atencao:1 };
+  const tot = Object.values(p).reduce((s,w)=>s+w,0);
+  for (const k in p) d[k] = p[k]/tot;
+  return d;
+}
+
+const NF = 11;
+function features(obs){
+  const [f,h,en,hu,s,su,dm,hora] = obs.v; const ang = 2*Math.PI*hora;
+  return [1,f,h,en,hu,s,su,dm,Math.sin(ang),Math.cos(ang),Math.min(1, obs.tdc/CB.escalaTdc)];
+}
+function matvec(M, v){ return M.map(l => l.reduce((s,x,j)=>s+x*v[j],0)); }
+function cholesky(M){
+  const n = M.length, L = M.map(()=>new Array(n).fill(0));
+  for (let i=0;i<n;i++) for (let j=0;j<=i;j++){
+    let s = M[i][j]; for (let k=0;k<j;k++) s -= L[i][k]*L[j][k];
+    if (i===j){ if (s <= 0) throw new Error("matriz nao positiva definida"); L[i][j] = Math.sqrt(s); } else L[i][j] = s / L[j][j];
+  }
+  return L;
+}
+class Braco {
+  constructor(){ this.Ainv = Array.from({length:NF},(_,i)=>Array.from({length:NF},(_,j)=>i===j?1/CB.lambda:0)); this.b = new Array(NF).fill(0); this.n = 0; this._t = null; this._L = null; }
+  theta(){ return this._t ??= matvec(this.Ainv, this.b); }
+  chol(){ return this._L ??= cholesky(this.Ainv); }
+  atualizar(x, r){
+    const Ax = matvec(this.Ainv, x); const den = 1 + x.reduce((s,xi,i)=>s+xi*Ax[i],0);
+    for (let i=0;i<NF;i++) for (let j=0;j<NF;j++) this.Ainv[i][j] -= Ax[i]*Ax[j]/den;
+    for (let i=0;i<NF;i++) this.b[i] += r*x[i];
+    this.n++; this._t = null; this._L = null;
+  }
+}
+class Bandit {
+  constructor(){ this.bracos = Object.fromEntries(ACOES_PET.map(a => [a, new Braco()])); this.ultima = null; this.pendentes = []; this.rec = {elogio:0, repreensao:0, atendido:0, ignorado:0}; }
+  prior(obs){ const p = distInstinto(obs); const o = {}; for (const a of ACOES_PET) o[a] = (1-CB.piso)*p[a] + CB.piso/ACOES_PET.length; return o; }
+  agir(obs, rng){
+    const x = features(obs), p0 = this.prior(obs), esc = Math.sqrt(CB.var);
+    let melhor = null, ms = -Infinity;
+    for (const a of ACOES_PET){
+      const br = this.bracos[a], th = br.theta(), L = br.chol();
+      const z = Array.from({length:NF}, () => rng.gauss());
+      const Lz = matvec(L, z);
+      let val = 0; for (let i=0;i<NF;i++) val += (th[i] + esc*Lz[i]) * x[i];
+      let u = rng.random(); while (u <= 0) u = rng.random();
+      const s = Math.log(p0[a]) + val - Math.log(-Math.log(u));
+      if (s > ms){ ms = s; melhor = a; }
+    }
+    return melhor;
+  }
+  /* distribuicao da politica media (theta^), para inspecao */
+  media(obs){
+    const x = features(obs), p0 = this.prior(obs); const s = {};
+    for (const a of ACOES_PET){ const th = this.bracos[a].theta(); s[a] = Math.log(p0[a]) + th.reduce((acc,t,i)=>acc+t*x[i],0); }
+    const m = Math.max(...Object.values(s)); let tot = 0; for (const a in s){ s[a] = Math.exp(s[a]-m); tot += s[a]; }
+    for (const a in s) s[a] /= tot; return s;
+  }
+  observar(obs, acao, tick){
+    this.expirar(tick);
+    const x = features(obs); this.ultima = [x, acao];
+    if (acao === "chamar_atencao") this.pendentes.push([tick, x]);
+  }
+  receberAcaoDono(acao, tick){
+    this.expirar(tick);
+    if (acao === "elogiar" || acao === "repreender"){
+      if (!this.ultima) return;
+      const [x, a] = this.ultima;
+      if (acao === "elogiar"){ this.bracos[a].atualizar(x, CB.elogio); this.rec.elogio++; }
+      else { this.bracos[a].atualizar(x, CB.repr); this.rec.repreensao++; }
+    } else {
+      for (const [tp, x] of this.pendentes){ this.bracos.chamar_atencao.atualizar(x, 1 - (tick - tp)/CB.janela); this.rec.atendido++; }
+      this.pendentes = [];
+    }
+  }
+  expirar(tick){
+    const vivos = [];
+    for (const [tp, x] of this.pendentes){
+      if (tick - tp > CB.janela){ this.bracos.chamar_atencao.atualizar(x, CB.ignorado); this.rec.ignorado++; }
+      else vivos.push([tp, x]);
+    }
+    this.pendentes = vivos;
+  }
+  assinatura(){ return JSON.stringify([ACOES_PET.map(a => [this.bracos[a].b, this.bracos[a].n]), this.rec, this.pendentes.length]); }
+}
+
+/* =================================================================
+   Motor com log de eventos (espelho de engine.py + treino.py)
+   ================================================================= */
+class Motor {
+  constructor(semente){
+    this.semente = semente;
+    this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
+    this.e = estadoInicial(); this.pol = new Bandit();
+    this.acao = "ocioso"; this.prox = 0; this.log = [];
+    this.tracos = Object.fromEntries(ACOES_PET.map(a => [a, 1/ACOES_PET.length]));
+    this.nDecisoes = 0; this.historico = [];
+    /* evolucao: derivada do log (replay reconstroi), forma travada no momento em que o estagio muda */
+    this.estagioAtual = estagio(this.e.tick); this.evolucoes = [];
+  }
+  observar(a){
+    if (!ACOES_DONO.includes(a)) throw new Error("acao de dono desconhecida: " + a);
+    this.log.push([this.e.tick, "d", a]);
+    this._aplicar(a);
+  }
+  _aplicar(a){
+    const t = this.e.tick;
+    this.e = aplicarAcaoDono(this.e, a, this.rEnv);
+    this.pol.receberAcaoDono(a, t);
+    this._hist({t, quem:"dono", a});
+  }
+  avancar(n){
+    if (!(n > 0)) throw new Error("avanco precisa ser positivo");
+    const u = this.log[this.log.length-1];
+    if (u && u[1] === "t" && u[0] + u[2] === this.e.tick) u[2] += n; else this.log.push([this.e.tick, "t", n]);
+    this._avancar(n);
+  }
+  _avancar(n){
+    for (let i=0;i<n;i++){
+      if (this.e.tick >= this.prox){
+        const obs = observacao(this.e);
+        const a = this.pol.agir(obs, this.rPol);
+        const t = this.e.tick;
+        this.acao = a;
+        this.e = efeitoAcaoPet(this.e, a, this.e);
+        this.prox = this.e.tick + C.intervalo;
+        this.pol.observar(obs, a, t);
+        for (const k of ACOES_PET) this.tracos[k] = (1-CT.alfa)*this.tracos[k] + (k===a ? CT.alfa : 0);
+        this.nDecisoes++;
+        const ult = this.historico[this.historico.length-1];
+        if (!ult || ult.quem !== "pet" || ult.a !== a) this._hist({t, quem:"pet", a});
+      }
+      this.e = avancarTick(this.e, this.rEnv);
+      const est = estagio(this.e.tick);
+      if (est !== this.estagioAtual){
+        const af = afinidades(this.tracos), traco = corDominante(this.tracos);
+        this.evolucoes.push({ tick:this.e.tick, estagio:est, traco, afinidade:af[traco] });
+        this.estagioAtual = est;
+      }
+    }
+  }
+  _hist(x){ this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
+  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes]); }
+  static reproduzir(semente, log){
+    const m = new Motor(semente);
+    for (const [t, tipo, v] of log){
+      if (m.e.tick !== t) throw new Error(`registro fora de ordem no tick ${t}`);
+      if (tipo === "t") m._avancar(v);
+      else if (tipo === "d") m._aplicar(v);
+      else throw new Error("tipo de evento desconhecido no registro: " + tipo);
+    }
+    m.log = log.map(x => [...x]);
+    return m;
+  }
+}
+
+/* =================================================================
+   Donos sinteticos para treinar rivais (espelho de donos.py)
+   ================================================================= */
+function cuidadosNecessarios(e){
+  const a = [];
+  if (e.fome < CD.limAlim) a.push("alimentar");
+  if (e.higiene < CD.limLimpar || e.sujeira >= CD.sujLimpar) a.push("limpar");
+  if (e.humor < CD.limHumBrinc) a.push("brincar");
+  return a;
+}
+function julgar(e, acao){
+  const cansado = e.energia < CD.limSono, noite = eNoite(e.tick % TPD);
+  const precisa = Math.min(e.fome, e.higiene) < CD.limPedido;
+  switch (acao){
+    case "dormir": return (cansado || noite) ? 1 : -1;
+    case "chamar_atencao": return precisa ? 1 : -1;
+    case "emburrar": return -1;
+    case "brincar": case "explorar": return (cansado || precisa) ? -1 : 1;
+    case "comer": return e.fome < CD.limAlim ? 1 : 0;
+    default: return 0;
+  }
+}
+const fb = s => s > 0 ? "elogiar" : "repreender";
+function criarDono(tipo){
+  const base = (desejo, preencher) => ({ decidir(v, r){ const a = desejo(v, r).slice(0, v.max); while (a.length < v.min) a.push(preencher(v, r)); return a; } });
+  if (tipo === "atencioso") return base(
+    (v) => { const a = cuidadosNecessarios(v.e); if (v.atrasado){ const s = julgar(v.e, v.acao); if (s) a.push(fb(s)); } return a; },
+    (v) => { const s = julgar(v.e, v.acao); return s ? fb(s) : "acariciar"; });
+  if (tipo === "incoerente") return base(
+    (v, r) => { const a = cuidadosNecessarios(v.e); if (v.atrasado) a.push(r.random() < CD.probElogioInc ? "elogiar" : "repreender"); return a; },
+    (v, r) => r.random() < CD.probElogioInc ? "elogiar" : "repreender");
+  if (tipo === "aleatorio"){
+    let plano = null;
+    return base((v, r) => {
+      if (!plano){ plano = new Array(v.passos).fill(0); let c = 0; while (c < v.orc){ const p = r.int(v.passos); if (plano[p] < CD.maxPasso){ plano[p]++; c++; } } }
+      return Array.from({length:plano[v.passo]}, () => ACOES_DONO[r.int(ACOES_DONO.length)]);
+    }, (v, r) => ACOES_DONO[r.int(ACOES_DONO.length)]);
+  }
+  if (tipo === "relapso"){
+    const ppd = TPD / CD.passo; let visitas = new Set(), dia = -1;
+    return base((v, r) => {
+      const d = Math.floor(v.passo / ppd);
+      if (d !== dia){ const ini = d*ppd, fim = Math.min(ini+ppd, v.passos); const pool = []; for (let p=ini;p<fim;p++) pool.push(p);
+        visitas = new Set(); while (visitas.size < Math.min(CD.visitasRelapso, pool.length)) visitas.add(pool[r.int(pool.length)]); dia = d; }
+      if (!visitas.has(v.passo)) return [];
+      const diasTot = Math.ceil(v.passos/ppd), futuros = diasTot - 1 - d;
+      const rest = [...visitas].filter(p => p >= v.passo).length + CD.visitasRelapso*futuros;
+      const cota = Math.ceil((v.orc - v.gasto) / rest);
+      const raj = ["alimentar","limpar","brincar"]; const s = julgar(v.e, v.acao); if (s) raj.push(fb(s));
+      while (raj.length < cota) raj.push("acariciar");
+      return raj.slice(0, cota);
+    }, () => "acariciar");
+  }
+  throw new Error("dono desconhecido: " + tipo);
+}
+function treinarRival(tipo, dias, semente){ return treinarPet(tipo, dias, CD.porDia, semente); }
+function treinarPet(tipo, dias, porDia, semente){
+  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(porDia * dias);
+  if (passos < 1) throw new Error("dias de vida precisa ser positivo");
+  if (orc < 1) throw new Error("o orçamento precisa ter pelo menos 1 interação");
+  if (orc > passos * CD.maxPasso) throw new Error(`orçamento de ${orc} interações não cabe em ${passos} passos (máximo ${CD.maxPasso} por passo)`);
+  let gasto = 0;
+  for (let p=0;p<passos;p++){
+    m.avancar(CD.passo);
+    const rest = orc - gasto, min = Math.max(0, rest - (passos-p-1)*CD.maxPasso), max = Math.min(rest, CD.maxPasso);
+    const v = { e:m.e, acao:m.acao, passo:p, passos, orc, gasto, min, max, atrasado: gasto < orc*(p+1)/passos };
+    const acoes = dono.decidir(v, r);
+    if (acoes.length > max || acoes.length < min) throw new Error(`dono ${tipo} violou o orçamento no passo ${p}`);
+    for (const a of acoes){ m.observar(a); gasto++; }
+  }
+  if (gasto !== orc) throw new Error(`rival terminou com ${gasto}/${orc} interações`);
+  return m;
+}
+
+/* =================================================================
+   Arena (espelho de arena.py)
+   ================================================================= */
+const vence = (a, b) => [1,3].includes(((COMBATE.indexOf(b) - COMBATE.indexOf(a)) % 5 + 5) % 5);
+function afinidades(tracos){
+  const bruto = Object.fromEntries(COMBATE.map(c => [c, 0]));
+  for (const a of ACOES_PET) bruto[CA.mapa[a]] += tracos[a];
+  const med = Object.values(bruto).reduce((s,x)=>s+x,0) / COMBATE.length;
+  for (const c of COMBATE) bruto[c] -= med;
+  return bruto;
+}
+function obsCombate(hp, hpOp){
+  const vant = (hp - hpOp) / CA.hp;
+  return { v:[CA.fome, CA.hig, hp/CA.hp, clamp(.5 + .5*vant), CA.saude, 0, 0, CA.hora], tdc:0 };
+}
+function lutar(A, B, semente){
+  const ra = criarRng(hashSemente("arena", semente, "a")), rb = criarRng(hashSemente("arena", semente, "b"));
+  const afA = afinidades(A.tracos), afB = afinidades(B.tracos);
+  let ha = CA.hp, hb = CA.hp; const turnos = [];
+  for (let t=0;t<CA.maxTurnos;t++){
+    const ca = CA.mapa[A.pol.agir(obsCombate(ha, hb), ra)];
+    const cb = CA.mapa[B.pol.agir(obsCombate(hb, ha), rb)];
+    let dano = 0, quem = null;
+    if (vence(ca, cb)){ dano = CA.dano * (1 + CA.ganhoAf*afA[ca]); hb = Math.max(0, hb - dano); quem = "a"; }
+    else if (vence(cb, ca)){ dano = CA.dano * (1 + CA.ganhoAf*afB[cb]); ha = Math.max(0, ha - dano); quem = "b"; }
+    turnos.push({ca, cb, ha, hb, dano, quem});
+    if (ha <= 0 || hb <= 0) break;
+  }
+  return { turnos, vencedor: ha > hb ? "a" : hb > ha ? "b" : "empate" };
+}
+
+/* =================================================================
+   Arte original em pixel (placeholders)
+   ================================================================= */
+const S = {
+  bebe:[
+    ".....kkkk.....",
+    "...kkbbbbkk...",
+    "..kbbbbbbbbk..",
+    ".kbbllbbbbbbk.",
+    ".kbllbbbbbbbk.",
+    "kbbbkwbbkwbbbk",
+    "kbbbkkbbkkbbbk",
+    "kbpbbbbbbbbpbk",
+    "kbbbbbkkbbbbbk",
+    ".kbbbbbbbbbbk.",
+    "..kkbbbbbbkk..",
+    "....kkkkkk....",
+  ],
+  crianca:[
+    "..kk........kk..",
+    ".kbbk......kbbk.",
+    ".kbbbkkkkkkbbbk.",
+    "..kbbbbbbbbbbk..",
+    ".kbbllbbbbbbbbk.",
+    ".kbllbbbbbbbbbk.",
+    "kbbbkwbbbbkwbbbk",
+    "kbbbkkbbbbkkbbbk",
+    "kbpbbbbbbbbbbpbk",
+    "kbbbbbbkkbbbbbbk",
+    ".kbbbbbbbbbbbbk.",
+    ".kbbddddddddbbk.",
+    "..kbddddddddbk..",
+    "..kbbkkkkkkbbk..",
+    "..kkk......kkk..",
+  ],
+  adulto:[
+    ".......hh........",
+    "......hhhk.......",
+    "..kk..khhk...kk..",
+    ".kbbk.kbbk..kbbk.",
+    ".kbbbkkbbkkkbbbk.",
+    "..kbbbbbbbbbbbk..",
+    ".kbbllbbbbbbbbbk.",
+    ".kbllbbbbbbbbbbk.",
+    "kbbbkwbbbbbkwbbbk",
+    "kbbbkkbbbbbkkbbbk",
+    "kbpbbbbbbbbbbbpbk",
+    "kbbbbbbkkkbbbbbbk",
+    "kbbbbbbbbbbbbbbbk.kk",
+    ".kbbddddddddbbbkkbbk",
+    "..kbddddddddbbbbbbk.",
+    "..kbbkkkkkkkbbkkkk..",
+    "..kkk.......kkk.....",
+  ],
+  ovo:[
+    "....kkkk....",
+    "...kwwwwk...",
+    "..kwwssswk..",
+    ".kwwssssswk.",
+    ".kwwwsswwwk.",
+    "kwwwwwwwwwwk",
+    "kwsswwwwsswk",
+    "kwssswwssswk",
+    "kwwsswwwsswk",
+    "kwwwwwwwwwwk",
+    ".kwwwwwwwwk.",
+    ".kwwwwwwwwk.",
+    "..kkwwwwkk..",
+    "....kkkk....",
+  ],
+  coco:["...k...","..kdk..",".kdddk.",".kdddk.","kdddddk","kkkkkkk"],
+  coracao:[".kk.kk.","krrkrrk","krrrrrk","krrrrrk",".krrrk.","..krk..","...k..."],
+  zz:["kkkk...","...k...","..k....",".k..kkk","kkkk.k.","....k..","....kkk"],
+  exclam:["..kkk..","..kyk..","..kyk..","..kyk..","..kkk..","..kyk..","..kkk.."],
+  pergunta:[".kkkk..","kk..kk.","....kk.","...kk..","..kk...",".......","..kk..."],
+  raiva:["k.k.k..",".krk...","kr.rk..",".krk...","k.k.k.."],
+  nota:["...kkk.","...k.k.","...k...","...k...",".kkk...","kkkk...",".kk...."],
+  carne:["....kk.","...kwwk",".kkkkk.","kddddk.","kddddk.",".kkkk.."],
+  brilho:["...k...","...y...",".k.y.k.","kyyyyyk",".k.y.k.","...y...","...k..."],
+  gota:["...k...","..kck..",".kccck.",".kccck.","..kkk.."],
+};
+/* cor do corpo pelo traco de combate dominante: evolucao perceptivel */
+const CORES = { golpe:["#F07A5A","#FFB59E","#C9533A"], bloqueio:["#6C86C9","#AFC0EC","#4B63A3"], agarrao:["#8FA84A","#C6D98A","#6B8030"], finta:["#3FB5A6","#90E0D3","#2A8C7F"], carga:["#F0B43A","#FFE08A","#C68A16"] };
+function paleta(cor){ const [b,l,d] = CORES[cor]; return { k:"#1D2233", b, l, d, w:"#FFFFFF", p:"#FF8FA3", h:"#F5C542", s:"#7FB8E8", r:"#E8445A", y:"#F5C542", c:"#7FC8F0" }; }
+function desenhar(ctx, grade, x0, y0, pal, opts={}){
+  const larg = Math.max(...grade.map(l => l.length));
+  for (let y=0;y<grade.length;y++) for (let x=0;x<grade[y].length;x++){
+    let ch = grade[y][x]; if (ch === ".") continue;
+    if (opts.olhosFechados && ch === "w") ch = "b";
+    const px = opts.espelho ? x0 + (larg - 1 - x) : x0 + x;
+    ctx.fillStyle = pal[ch] || "#FF00FF"; ctx.fillRect(px, y0 + y, 1, 1);
+  }
+}
+function corDominante(tracos){ const af = afinidades(tracos); return COMBATE.reduce((m,c) => af[c] > af[m] ? c : m, COMBATE[0]); }
+function estagio(tick){ const d = (tick - TICK_INICIAL)/TPD; return d < 1 ? "bebe" : d < 4 ? "crianca" : "adulto"; }
+const NOME_ESTAGIO = { bebe:"BEBÊ", crianca:"CRIANÇA", adulto:"ADULTO" };
+
+/* =================================================================
+   Sprites do Digimon World (Bandai): SO USO PESSOAL E LOCAL.
+   Regra em CLAUDE.md: nao publicar, nao distribuir. O atlas fica fora do
+   repo (D:\Trab\digilab\Assets, gerado por gerar_atlas.py); aqui so as coordenadas.
+   ================================================================= */
+const ATLAS_URL = "../../Assets/digilab_atlas.png";
+const ATLAS = {"bebe_0":[0,0,14,12],"bebe_1":[15,0,14,12],"bebe_2":[30,0,14,12],"bebe_3":[45,0,14,12],"crianca_golpe_0":[60,0,15,15],"crianca_golpe_1":[76,0,15,15],"crianca_golpe_2":[92,0,15,15],"crianca_golpe_3":[108,0,15,15],"adulto_golpe_0":[124,0,15,16],"adulto_golpe_1":[140,0,15,16],"adulto_golpe_2":[156,0,15,16],"adulto_golpe_3":[172,0,15,16],"crianca_bloqueio_0":[188,0,15,16],"crianca_bloqueio_1":[204,0,15,16],"crianca_bloqueio_2":[220,0,15,16],"crianca_bloqueio_3":[236,0,15,16],"adulto_bloqueio_0":[0,17,16,16],"adulto_bloqueio_1":[17,17,16,16],"adulto_bloqueio_2":[34,17,16,16],"adulto_bloqueio_3":[51,17,16,16],"crianca_agarrao_0":[68,17,16,16],"crianca_agarrao_1":[85,17,16,16],"crianca_agarrao_2":[102,17,16,16],"crianca_agarrao_3":[119,17,16,16],"adulto_agarrao_0":[136,17,16,16],"adulto_agarrao_1":[153,17,16,16],"adulto_agarrao_2":[170,17,16,16],"adulto_agarrao_3":[187,17,16,16],"crianca_finta_0":[204,17,16,14],"crianca_finta_1":[221,17,16,14],"crianca_finta_2":[238,17,16,14],"crianca_finta_3":[0,34,16,14],"adulto_finta_0":[17,34,16,16],"adulto_finta_1":[34,34,16,16],"adulto_finta_2":[51,34,16,16],"adulto_finta_3":[68,34,16,16],"crianca_carga_0":[85,34,16,16],"crianca_carga_1":[102,34,16,16],"crianca_carga_2":[119,34,16,16],"crianca_carga_3":[136,34,16,16],"adulto_carga_0":[153,34,16,15],"adulto_carga_1":[170,34,16,15],"adulto_carga_2":[187,34,16,15],"adulto_carga_3":[204,34,16,15],"ovo0":[221,34,26,30],"ovo1":[0,65,26,30],"ovo2":[27,65,26,30],"ovo3":[54,65,26,30],"carne":[81,65,15,15],"coco":[97,65,15,17],"raiva":[113,65,16,15],"gota":[130,65,5,12],"zz":[136,65,25,7],"caveira":[162,65,15,14]};
+const atlasImg = new Image();
+let atlasOk = false;
+atlasImg.onload = () => { atlasOk = true; evoCache.clear(); evoChave = null; if (typeof paneAtual !== "undefined" && paneAtual === "evolucao") renderEvolucao(); };
+atlasImg.onerror = () => {
+  const b = document.getElementById("aviso-atlas");
+  b.hidden = false;
+  b.textContent = "Atlas de sprites não carregou (" + ATLAS_URL + "). Rode python gerar_atlas.py em D:\Trab\digilab\Assets. Mostrando os placeholders.";
+  console.error("falha ao carregar atlas", ATLAS_URL);
+};
+atlasImg.src = ATLAS_URL;
+function sprite(ctx, nome, x, y, espelho){
+  const r = ATLAS[nome];
+  if (!r) throw new Error("sprite desconhecido: " + nome);
+  if (espelho){ ctx.save(); ctx.translate(x + r[2], y); ctx.scale(-1, 1); ctx.drawImage(atlasImg, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3]); ctx.restore(); }
+  else ctx.drawImage(atlasImg, r[0], r[1], r[2], r[3], x, y, r[2], r[3]);
+  return r;
+}
+/* linha evolutiva escolhida pelo traco de combate dominante, como a cor no original */
+/* forma travada: bebe e unico; crianca/adulto vem da ultima evolucao registrada no motor */
+function formaDe(m){
+  const est = estagio(m.e.tick);
+  if (est === "bebe") return { est, traco:null };
+  const ev = m.evolucoes.filter(x => x.estagio === est).pop();
+  if (!ev) throw new Error(`pet em estagio ${est} sem evolucao registrada`);
+  return { est, traco:ev.traco };
+}
+function corForma(m){ return formaDe(m).traco || corDominante(m.tracos); }
+function digimon(m){ const f = formaDe(m); return f.est === "bebe" ? "bebe" : f.est + "_" + f.traco; }
+/* quadros: 0/1 parado, 2 boca aberta, 3 pose alternativa */
+function quadroDe(acao, q){
+  if (acao === "comer" || acao === "emburrar" || acao === "chamar_atencao") return (q % 4 < 2) ? 2 : 0;
+  if (acao === "dormir") return 3;
+  return (q % 4 < 2) ? 0 : 1;
+}
+const EMO = { dormir:"zz", comer:"carne", emburrar:"raiva" };
+const POS_COCO = [0, 65, 9, 56, 18];
+
+/* =================================================================
+   Jogo
+   ================================================================= */
+const CHAVE = "digilab-web-v1-sprites";
+let motor, velocidade = 10, acumulado = 0, flash = null, nascendo = 0;
+function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify({semente:motor.semente, log:motor.log})); } catch(_){} }
+function carregar(){
+  try {
+    const d = JSON.parse(localStorage.getItem(CHAVE) || "null");
+    if (d && Number.isInteger(d.semente) && Array.isArray(d.log)) return Motor.reproduzir(d.semente, d.log);
+  } catch(_){}
+  return null;
+}
+function novoPet(){
+  const s = (Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0;
+  motor = new Motor(s); nascendo = 16; salvar(); renderTudo();
+}
+function exemplo(){
+  /* primeiro acesso: um pet de exemplo com meio dia de vida e alguns cuidados */
+  const m = new Motor(20260924);
+  const roteiro = [[45,"alimentar"],[60,"brincar"],[30,"elogiar"],[120,"limpar"],[90,"acariciar"],[60,"alimentar"],[45,"elogiar"]];
+  for (const [t, a] of roteiro){ m.avancar(t); m.observar(a); }
+  m.avancar(30);
+  return m;
+}
+
+/* ------------------------------------------------ LCD */
+const lcd = document.getElementById("lcd"), cx = lcd.getContext("2d");
+let quadro = 0;
+function desenharLCD(){
+  const e = motor.e, noite = eNoite(e.tick % TPD);
+  const W = 80, H = 56, CHAO = 46;
+  cx.fillStyle = noite ? "#1F2A4A" : "#BFE3D6"; cx.fillRect(0,0,W,H);
+  if (noite){ cx.fillStyle = "#E8ECFF"; for (const [x,y] of [[8,6],[22,12],[40,5],[57,10],[70,4],[14,20],[64,22]]) if ((quadro + x) % 23 !== 0) cx.fillRect(x,y,1,1);
+    cx.fillStyle = "#F5E7A8"; cx.fillRect(66,8,5,5); cx.fillStyle = "#1F2A4A"; cx.fillRect(68,7,4,4); }
+  else { cx.fillStyle = "#FFFFFF"; cx.fillRect(10,9,10,2); cx.fillRect(12,8,6,1); cx.fillRect(52,14,12,2); cx.fillRect(55,13,6,1); }
+  cx.fillStyle = noite ? "#2E3B5E" : "#8FC49A"; cx.fillRect(0,CHAO,W,H-CHAO);
+  cx.fillStyle = noite ? "#26324F" : "#7BB388"; for (let x=(quadro%2);x<W;x+=4) cx.fillRect(x,CHAO+3,2,1);
+
+  const pal = paleta(corForma(motor));
+  if (atlasOk) for (let i=0;i<e.sujeira;i++) sprite(cx, "coco", POS_COCO[i], CHAO-15);
+  else for (let i=0;i<e.sujeira;i++) desenhar(cx, S.coco, 4 + i*8 + (i>2?34:0), CHAO-4, {...pal, d:"#8A5A2B"});
+
+  if (nascendo > 0){
+    const oscil = nascendo % 2 ? 1 : -1;
+    if (atlasOk) sprite(cx, "ovo" + (motor.semente % 4), 27 + oscil, CHAO-30+2);
+    else desenhar(cx, S.ovo, 34 + oscil, CHAO-14+2, pal);
+    nascendo--; quadro++; return;
+  }
+  if (atlasOk){ desenharLCDSprite(e, W, CHAO, noite); return; }
+  const est = estagio(e.tick), g = S[est];
+  const larg = Math.max(...g.map(l => l.length)), alt = g.length;
+  let x = Math.round(W/2 - larg/2), y = CHAO - alt + 2;
+  const a = motor.acao;
+  if (a === "explorar") x += Math.round(Math.sin(quadro/3) * 14);
+  else if (a === "brincar") { x += Math.round(Math.sin(quadro/2) * 6); y -= (quadro % 4 < 2) ? 3 : 0; }
+  else if (a !== "dormir") y -= (quadro % 4 < 2) ? 1 : 0;
+  const esp = a === "explorar" && Math.cos(quadro/3) < 0;
+  desenhar(cx, g, x, y, pal, {olhosFechados: a === "dormir" || (quadro % 17 === 0), espelho: esp});
+
+  let icone = null;
+  if (flash && flash.ate > performance.now()) icone = flash.icone;
+  else icone = { dormir:"zz", chamar_atencao:"exclam", emburrar:"raiva", brincar:"nota", explorar:"pergunta", comer:"carne" }[a] || null;
+  if (icone){ const ic = S[icone]; const bx = Math.min(W - 9, x + larg - 1), by = Math.max(1, y - 9);
+    cx.fillStyle = noite ? "#E8ECFF" : "#FFFFFF"; cx.fillRect(bx-1, by-1, 9, ic.length + 2);
+    desenhar(cx, ic, bx, by, pal); }
+  if (e.saude < .3){ cx.fillStyle = "#C8443A"; cx.fillRect(2,2,3,3); }
+  quadro++;
+}
+
+function desenharLCDSprite(e, W, CHAO, noite){
+  const a = motor.acao, nome = digimon(motor);
+  const r = ATLAS[nome + "_0"];
+  let x = Math.round(W/2 - r[2]/2), y = CHAO - r[3] + 2;
+  if (a === "explorar") x += Math.round(Math.sin(quadro/3) * 14);
+  else if (a === "brincar") { x += Math.round(Math.sin(quadro/2) * 6); y -= (quadro % 4 < 2) ? 3 : 0; }
+  else if (a !== "dormir") y -= (quadro % 4 < 2) ? 1 : 0;
+  const esp = a === "explorar" && Math.cos(quadro/3) < 0;
+  const q = ATLAS[nome + "_" + quadroDe(a, quadro)];
+  sprite(cx, nome + "_" + quadroDe(a, quadro), x, CHAO - q[3] + 2 - (CHAO - r[3] + 2 - y), esp);
+
+  let icone = null, emo = null;
+  if (flash && flash.ate > performance.now()) icone = flash.icone;
+  else if (EMO[a]) emo = EMO[a];
+  else icone = { chamar_atencao:"exclam", brincar:"nota", explorar:"pergunta" }[a] || null;
+  if (icone && ATLAS[icone]) { emo = icone; icone = null; }
+  if (emo){ const er = ATLAS[emo]; sprite(cx, emo, Math.min(W - er[2] - 1, x + r[2] - 2), Math.max(1, y - er[3] - 1)); }
+  else if (icone){ const ic = S[icone]; const bx = Math.min(W - 9, x + r[2] - 1), by = Math.max(1, y - 9);
+    cx.fillStyle = noite ? "#E8ECFF" : "#FFFFFF"; cx.fillRect(bx-1, by-1, 9, ic.length + 2);
+    desenhar(cx, ic, bx, by, paleta(corForma(motor))); }
+  if (e.saude < .3) sprite(cx, "caveira", 1, 1);
+  quadro++;
+}
+
+/* ------------------------------------------------ paineis */
+const $ = id => document.getElementById(id);
+function hhmm(t){ const m = t % TPD; return String(Math.floor(m/60)).padStart(2,"0") + ":" + String(m%60).padStart(2,"0"); }
+function diaDe(t){ return Math.floor((t - TICK_INICIAL) / TPD) + 1; }
+function linha(rot, v, cor){ return `<div class="linha"><span>${rot}</span><div class="bar"><i style="width:${(v*100).toFixed(1)}%;background:${cor}"></i></div><span class="v">${(v*100).toFixed(0)}%</span></div>`; }
+const corNivel = v => v < .25 ? "var(--bad)" : v < .5 ? "var(--warn)" : "var(--good)";
+
+function renderEstado(){
+  const e = motor.e;
+  $("relogio").textContent = `DIA ${diaDe(e.tick)} · ${hhmm(e.tick)}`;
+  $("estagio").innerHTML = `<b>${NOME_ESTAGIO[estagio(e.tick)]}</b> · ${NOME_PET[motor.acao]}`;
+  $("necessidades").innerHTML = [
+    ["Saciedade", e.fome], ["Higiene", e.higiene], ["Energia", e.energia], ["Humor", e.humor], ["Saúde", e.saude],
+  ].map(([r,v]) => linha(r, v, corNivel(v))).join("");
+  const al = [];
+  if (e.saude < .3) al.push(`<span class="tag bad">Saúde crítica</span>`);
+  if (e.fome < .25) al.push(`<span class="tag bad">Com muita fome</span>`); else if (e.fome < .5) al.push(`<span class="tag warn">Com fome</span>`);
+  if (e.higiene < .25 || e.sujeira >= 3) al.push(`<span class="tag warn">Precisa de limpeza</span>`);
+  if (motor.acao === "chamar_atencao") al.push(`<span class="tag warn">Chamando você</span>`);
+  if (e.dormindo) al.push(`<span class="tag">Dormindo</span>`);
+  if (!al.length) al.push(`<span class="tag good">Tudo bem</span>`);
+  $("alertas").innerHTML = al.join("");
+  const af = afinidades(motor.tracos), mx = Math.max(.05, ...COMBATE.map(c => Math.abs(af[c])));
+  $("tracos").innerHTML = COMBATE.map(c => {
+    const v = af[c] / mx, w = Math.abs(v) * 50, left = v >= 0 ? 50 : 50 - w;
+    return `<div class="linha"><span>${NOME_COMB[c]}</span><div class="bar center"><i style="left:${left}%;width:${w}%;background:${CORES[c][0]}"></i></div><span class="v">${af[c] >= 0 ? "+" : ""}${af[c].toFixed(3)}</span></div>`;
+  }).join("");
+}
+function renderAprend(){
+  const r = motor.pol.rec;
+  $("recompensas").innerHTML = [["Elogios", r.elogio], ["Repreensões", r.repreensao], ["Pedidos atendidos", r.atendido], ["Pedidos ignorados", r.ignorado]]
+    .map(([k,v]) => `<div><b>${v}</b><span>${k}</span></div>`).join("");
+  const obs = observacao(motor.e), p0 = distInstinto(obs), pm = motor.pol.media(obs);
+  $("politica").innerHTML = ACOES_PET.map(a => `<div class="dupla"><span>${NOME_PET[a]}</span><div class="bars"><div class="bar prior"><i style="width:${(p0[a]*100).toFixed(1)}%"></i></div><div class="bar agora"><i style="width:${(pm[a]*100).toFixed(1)}%"></i></div></div><span class="v" style="font-family:var(--f-mono);font-size:12.5px;text-align:right">${(p0[a]*100).toFixed(0)}% → ${(pm[a]*100).toFixed(0)}%</span></div>`).join("");
+}
+function renderRegistro(){
+  $("semente").textContent = motor.semente;
+  $("neventos").textContent = motor.log.length;
+  $("log").innerHTML = motor.historico.slice(-80).reverse().map(h =>
+    `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
+}
+let paneAtual = "estado";
+function renderTudo(){
+  renderEstado();
+  if (paneAtual === "aprend") renderAprend();
+  if (paneAtual === "evolucao") renderEvolucao();
+  if (paneAtual === "registro") renderRegistro();
+}
+
+/* ------------------------------------------------ controles */
+const ICONE_DONO = { alimentar:"carne", limpar:"brilho", brincar:"nota", acariciar:"coracao", elogiar:"coracao", repreender:"gota" };
+document.querySelectorAll(".btn[data-acao]").forEach(b => b.addEventListener("click", () => {
+  if (nascendo > 0) return;
+  const a = b.dataset.acao;
+  motor.observar(a);
+  flash = { icone: ICONE_DONO[a], ate: performance.now() + 1400 };
+  salvar(); renderTudo();
+}));
+document.querySelectorAll(".chip[data-vel]").forEach(c => c.addEventListener("click", () => {
+  velocidade = Number(c.dataset.vel);
+  document.querySelectorAll(".chip[data-vel]").forEach(o => o.setAttribute("aria-pressed", String(o === c)));
+}));
+$("pulo").addEventListener("click", () => { motor.avancar(60); salvar(); renderTudo(); });
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => mostrarPane(t.dataset.pane)));
+function mostrarPane(p){
+  paneAtual = p;
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.pane === p)));
+  for (const id of ["estado","aprend","arena","evolucao","cenarios","registro"]) $("p-" + id).hidden = id !== p;
+  try { localStorage.setItem(CHAVE + "-aba", p); } catch(_){}
+  renderTudo();
+}
+
+$("verificar").addEventListener("click", () => {
+  const t0 = performance.now();
+  try {
+    const r = Motor.reproduzir(motor.semente, motor.log);
+    const ok = r.assinatura() === motor.assinatura();
+    $("reg-msg").innerHTML = ok
+      ? `Replay idêntico: ${motor.log.length} eventos reconstruíram o mesmo pet, até o último decimal, em ${(performance.now()-t0).toFixed(0)} ms.`
+      : `<span style="color:var(--bad)">O replay divergiu do pet atual. Isso é um bug do porte; copie o registro e mande para análise.</span>`;
+  } catch (err){ $("reg-msg").innerHTML = `<span style="color:var(--bad)">Replay falhou: ${err.message}</span>`; }
+});
+$("copiar").addEventListener("click", async () => {
+  const txt = JSON.stringify({semente:motor.semente, log:motor.log});
+  try { await navigator.clipboard.writeText(txt); $("reg-msg").textContent = "Registro copiado."; }
+  catch(_){ $("reg-msg").textContent = "Não foi possível copiar automaticamente. O registro está no console do navegador."; console.log(txt); }
+});
+$("novo").addEventListener("click", () => { $("novo-conf").hidden = false; });
+$("novo-conf").addEventListener("click", () => { $("novo-conf").hidden = true; novoPet(); mostrarPane("estado"); });
+
+/* ------------------------------------------------ arena */
+$("ciclo").innerHTML = COMBATE.map(a => `<div><b>${NOME_COMB[a]}</b> vence ${COMBATE.filter(b => vence(a,b)).map(b => NOME_COMB[b]).join(" e ")}</div>`).join("");
+const acv = $("arenacv"), actx = acv.getContext("2d");
+function desenharArena(A, B, turno, fase){
+  if (atlasOk) return desenharArenaSprite(A, B, turno, fase);
+  actx.fillStyle = "#1F2A4A"; actx.fillRect(0,0,96,48);
+  actx.fillStyle = "#2E3B5E"; actx.fillRect(0,38,96,10);
+  actx.fillStyle = "#3A4870"; for (let x=0;x<96;x+=6) actx.fillRect(x,41,3,1);
+  const ga = S[estagio(A.e.tick)], gb = S[estagio(B.e.tick)];
+  const pa = paleta(corForma(A)), pb = paleta(corForma(B));
+  let dxa = 0, dxb = 0;
+  if (turno && fase === 1){ if (turno.quem === "a") dxa = 6; if (turno.quem === "b") dxb = -6; }
+  const la = Math.max(...ga.map(l=>l.length)), lb = Math.max(...gb.map(l=>l.length));
+  const ya = 40 - ga.length, yb = 40 - gb.length;
+  desenhar(actx, ga, 14 + dxa, ya, pa, {olhosFechados: turno && turno.ha <= 0});
+  desenhar(actx, gb, 82 - lb + dxb, yb, pb, {espelho:true, olhosFechados: turno && turno.hb <= 0});
+  if (turno){
+    actx.fillStyle = "#E8ECFF"; actx.font = "6px monospace";
+    actx.textBaseline = "top";
+    actx.fillText(NOME_COMB[turno.ca].slice(0,7), 4, 3);
+    const tb = NOME_COMB[turno.cb].slice(0,7); actx.fillText(tb, 92 - actx.measureText(tb).width, 3);
+    if (fase === 1 && turno.quem){ const alvoX = turno.quem === "a" ? 82 - lb/2 : 14 + la/2; desenhar(actx, S.brilho, Math.round(alvoX) - 3, 18, pa); }
+  }
+}
+function desenharArenaSprite(A, B, turno, fase){
+  actx.fillStyle = "#1F2A4A"; actx.fillRect(0,0,96,48);
+  actx.fillStyle = "#2E3B5E"; actx.fillRect(0,38,96,10);
+  actx.fillStyle = "#3A4870"; for (let x=0;x<96;x+=6) actx.fillRect(x,41,3,1);
+  const na = digimon(A), nb = digimon(B);
+  let dxa = 0, dxb = 0, qa = 0, qb = 0;
+  if (turno && fase === 1){ if (turno.quem === "a"){ dxa = 6; qa = 2; } if (turno.quem === "b"){ dxb = -6; qb = 2; } }
+  if (turno && turno.ha <= 0) qa = 3;
+  if (turno && turno.hb <= 0) qb = 3;
+  const ra = ATLAS[na + "_" + qa], rb = ATLAS[nb + "_" + qb];
+  sprite(actx, na + "_" + qa, 12 + dxa, 40 - ra[3], true);
+  sprite(actx, nb + "_" + qb, 84 - rb[2] + dxb, 40 - rb[3], false);
+  if (turno){
+    actx.fillStyle = "#E8ECFF"; actx.font = "6px monospace";
+    actx.textBaseline = "top";
+    actx.fillText(NOME_COMB[turno.ca].slice(0,7), 4, 3);
+    const tb = NOME_COMB[turno.cb].slice(0,7); actx.fillText(tb, 92 - actx.measureText(tb).width, 3);
+    if (fase === 1 && turno.quem){ const alvoX = turno.quem === "a" ? 84 - rb[2]/2 : 12 + ra[2]/2; desenhar(actx, S.brilho, Math.round(alvoX) - 3, 18, paleta(corForma(A))); }
+  }
+}
+function setHP(ha, hb){
+  $("hp-a").textContent = ha.toFixed(0); $("hp-b").textContent = hb.toFixed(0);
+  $("hpb-a").style.width = (ha/CA.hp*100) + "%"; $("hpb-b").style.width = (hb/CA.hp*100) + "%";
+}
+function prepararRival(){
+  if (rivalFixo) return rivalFixo;
+  const dias = Math.max(1, Math.min(14, Math.round((motor.e.tick - TICK_INICIAL) / TPD) || 1));
+  const tipo = $("rival").value;
+  const semente = hashSemente("rival", motor.semente, tipo, dias);
+  return { rival: treinarRival(tipo, dias, semente), dias, tipo };
+}
+let lutando = false;
+function travar(v){ lutando = v; $("lutar").disabled = v; $("melhor10").disabled = v; }
+$("lutar").addEventListener("click", () => {
+  if (lutando) return; travar(true);
+  $("arena-res").textContent = "Treinando o rival…";
+  setTimeout(() => {
+    let prep; try { prep = prepararRival(); } catch(err){ $("arena-res").textContent = err.message; travar(false); return; }
+    const semente = hashSemente("luta", motor.semente, motor.log.length, Date.now());
+    const res = lutar(motor, prep.rival, semente);
+    const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let i = 0, fase = 0;
+    setHP(CA.hp, CA.hp); desenharArena(motor, prep.rival, null, 0);
+    const passo = () => {
+      if (i >= res.turnos.length){
+        const u = res.turnos[res.turnos.length-1];
+        const txt = res.vencedor === "a" ? "Seu pet venceu" : res.vencedor === "b" ? "O rival venceu" : "Empate";
+        $("arena-res").textContent = `${txt} em ${res.turnos.length} turnos contra o pet de um dono ${NOME_DONO[prep.tipo]} (${prep.dias} dia${prep.dias>1?"s":""} de treino). HP final ${u.ha.toFixed(0)} × ${u.hb.toFixed(0)}.`;
+        travar(false); return;
+      }
+      const t = res.turnos[i];
+      desenharArena(motor, prep.rival, t, fase);
+      if (fase === 1){ setHP(t.ha, t.hb);
+        $("arena-res").textContent = `Turno ${i+1}: ${NOME_COMB[t.ca]} × ${NOME_COMB[t.cb]}` + (t.quem === "a" ? `, seu pet acerta ${t.dano.toFixed(1)}` : t.quem === "b" ? `, o rival acerta ${t.dano.toFixed(1)}` : ", ninguém acerta");
+        i++; fase = 0; } else fase = 1;
+      setTimeout(passo, reduz ? 60 : 260);
+    };
+    passo();
+  }, 30);
+});
+$("melhor10").addEventListener("click", () => {
+  if (lutando) return; travar(true);
+  $("arena-res").textContent = "Treinando o rival…";
+  setTimeout(() => {
+    try {
+      const prep = prepararRival();
+      let pts = 0, v = 0, d = 0, e = 0;
+      for (let k=0;k<10;k++){ const r = lutar(motor, prep.rival, hashSemente("m10", motor.semente, motor.log.length, k));
+        if (r.vencedor === "a"){ pts += 1; v++; } else if (r.vencedor === "b") d++; else { pts += .5; e++; } }
+      desenharArena(motor, prep.rival, null, 0); setHP(CA.hp, CA.hp);
+      $("arena-res").textContent = `Contra o pet de um dono ${NOME_DONO[prep.tipo]}: ${v} vitórias, ${d} derrotas, ${e} empates (${(pts*10).toFixed(0)}% dos pontos).`;
+    } catch(err){ $("arena-res").textContent = err.message; }
+    travar(false);
+  }, 30);
+});
+
+/* ------------------------------------------------ evolucao */
+const evoCache = new Map();
+let evoChave = null;
+const LIMITE_EVO = { bebe:TICK_INICIAL + TPD, crianca:TICK_INICIAL + 4*TPD };
+const NOME_FORMA = (est, t) => est === "ovo" ? "Ovo" : est === "bebe" ? "Bebê" : `${est === "crianca" ? "Criança" : "Adulto"} de ${NOME_COMB[t]}`;
+/* imagem de um no: sprite do atlas se carregou; senao o placeholder em grade */
+function imagemForma(est, traco){
+  const chave = `${atlasOk ? "a" : "p"}|${est}|${traco}|${est === "ovo" ? motor.semente % 4 : ""}`;
+  if (evoCache.has(chave)) return evoCache.get(chave);
+  const c = document.createElement("canvas"), ctx = c.getContext("2d");
+  if (atlasOk){
+    const nome = est === "ovo" ? "ovo" + (motor.semente % 4) : est === "bebe" ? "bebe_0" : `${est}_${traco}_0`;
+    const r = ATLAS[nome]; c.width = r[2]; c.height = r[3]; sprite(ctx, nome, 0, 0);
+  } else {
+    const g = S[est], pal = paleta(traco || "golpe");
+    c.width = Math.max(...g.map(l => l.length)); c.height = g.length; desenhar(ctx, g, 0, 0, pal);
+  }
+  const url = c.toDataURL(); evoCache.set(chave, url); return url;
+}
+function duracao(min){
+  const d = Math.floor(min / TPD), h = Math.floor((min % TPD) / 60), m = min % 60;
+  return [d ? `${d}d` : "", h ? `${h}h` : "", !d && m ? `${m}min` : ""].filter(Boolean).join(" ") || "agora";
+}
+function renderEvolucao(){
+  const f = formaDe(motor), dom = corDominante(motor.tracos), af = afinidades(motor.tracos);
+  const evs = motor.evolucoes, cri = evs.find(x => x.estagio === "crianca"), adu = evs.find(x => x.estagio === "adulto");
+
+  /* resumo (atualiza sempre) */
+  const prox = f.est === "adulto" ? null : f.est === "bebe" ? "crianca" : "adulto";
+  $("evo-resumo").innerHTML = [
+    [NOME_FORMA(f.est, f.traco), "forma atual"],
+    [prox ? duracao(LIMITE_EVO[f.est] - motor.e.tick) : "—", prox ? `até virar ${prox === "crianca" ? "criança" : "adulto"}` : "forma final"],
+    [prox ? NOME_FORMA(prox, dom) : NOME_COMB[dom], prox ? `se evoluísse agora (${NOME_COMB[dom]} ${af[dom] >= 0 ? "+" : ""}${af[dom].toFixed(3)})` : "traço mais forte agora"],
+  ].map(([v, k]) => `<div><b style="font-size:16px">${v}</b><span>${k}</span></div>`).join("");
+  $("evo-hist").innerHTML = [`<div><span class="t">D1 ${hhmm(TICK_INICIAL)}</span><span>nasceu (bebê)</span></div>`]
+    .concat(evs.map(x => `<div><span class="t">D${diaDe(x.tick)} ${hhmm(x.tick)}</span><span>virou <b>${NOME_FORMA(x.estagio, x.traco)}</b> (${NOME_COMB[x.traco]} ${x.afinidade >= 0 ? "+" : ""}${x.afinidade.toFixed(3)})</span></div>`)).join("");
+
+  /* arvore: so redesenha quando algo visivel muda */
+  const chave = [atlasOk, f.est, cri && cri.traco, adu && adu.traco, prox && dom, motor.semente % 4].join("|");
+  if (chave === evoChave) return;
+  evoChave = chave;
+  const X = { ovo:44, bebe:160, crianca:370, adulto:580 }, Y = i => 60 + i*84, YM = Y(2), R = 30;
+  const pos = { ovo:[X.ovo, YM], bebe:[X.bebe, YM] };
+  COMBATE.forEach((t, i) => { pos["crianca_" + t] = [X.crianca, Y(i)]; pos["adulto_" + t] = [X.adulto, Y(i)]; });
+  const caminho = new Set(["ovo", "bebe"]);
+  if (cri) caminho.add("crianca_" + cri.traco);
+  if (adu) caminho.add("adulto_" + adu.traco);
+  const atualId = f.est === "bebe" ? "bebe" : `${f.est}_${f.traco}`;
+  const provId = prox ? `${prox}_${dom}` : null;
+  const fora = id => {
+    const [est] = id.split("_");
+    if (est === "crianca") return !!cri && id !== "crianca_" + cri.traco;
+    if (est === "adulto") return !!adu && id !== "adulto_" + adu.traco;
+    return false;
+  };
+  const arestas = [];
+  const linha = (a, b, cls) => { const [x1, y1] = pos[a], [x2, y2] = pos[b];
+    arestas.push(`<path class="evo-aresta ${cls}" d="M${x1 + R} ${y1} C ${(x1 + x2)/2} ${y1}, ${(x1 + x2)/2} ${y2}, ${x2 - R} ${y2}"/>`); };
+  const cls = (a, b, base = "") => caminho.has(a) && caminho.has(b) ? "caminho"
+    : (a === atualId && b === provId) ? "provavel"
+    : (fora(a) || fora(b)) ? `fora ${base}` : base;
+  linha("ovo", "bebe", "caminho");
+  for (const t of COMBATE) linha("bebe", "crianca_" + t, cls("bebe", "crianca_" + t));
+  /* criancas -> adultos: todas as combinacoes sao possiveis; a do mesmo traco e a mais comum */
+  const pares = [];
+  for (const a of COMBATE) for (const b of COMBATE) pares.push([a, b]);
+  const peso = ([a, b]) => { const c = cls("crianca_" + a, "adulto_" + b, a === b ? "mesma" : ""); return c === "caminho" || c === "provavel" ? 2 : c.includes("fora") ? 0 : 1; };
+  pares.sort((p, q) => peso(p) - peso(q));
+  for (const [a, b] of pares) linha("crianca_" + a, "adulto_" + b, cls("crianca_" + a, "adulto_" + b, a === b ? "mesma" : ""));
+
+  const no = (id, est, traco) => {
+    const [x, y] = pos[id];
+    const c = [caminho.has(id) ? "caminho" : "", id === atualId ? "atual" : "", id === provId ? "provavel" : "", fora(id) ? "fora" : ""].join(" ");
+    const req = est === "crianca" ? `evolui do bebê se ${NOME_COMB[traco]} for o traço mais forte ao completar 1 dia`
+      : est === "adulto" ? `evolui de qualquer criança se ${NOME_COMB[traco]} for o traço mais forte ao completar 4 dias`
+      : est === "bebe" ? "sai do ovo" : "início";
+    const rot = est === "crianca" || est === "adulto" ? NOME_COMB[traco] : NOME_FORMA(est);
+    return `<g class="evo-no ${c}"><title>${NOME_FORMA(est, traco)}: ${req}</title>
+      <rect x="${x - R}" y="${y - R}" width="${2*R}" height="${2*R}" rx="12"/>
+      <image href="${imagemForma(est, traco)}" x="${x - 22}" y="${y - 22}" width="44" height="44" preserveAspectRatio="xMidYMid meet"/>
+      <text x="${x}" y="${y + R + 15}" text-anchor="middle">${rot}</text></g>`;
+  };
+  const nos = [no("ovo", "ovo", null), no("bebe", "bebe", null)];
+  for (const t of COMBATE){ nos.push(no("crianca_" + t, "crianca", t)); nos.push(no("adulto_" + t, "adulto", t)); }
+  const cab = [["Ovo", X.ovo], ["Bebê", X.bebe], ["Criança · dia 2", X.crianca], ["Adulto · dia 5", X.adulto]]
+    .map(([t, x]) => `<text class="cab" x="${x}" y="16" text-anchor="middle">${t}</text>`).join("");
+  $("evo-arvore").innerHTML = cab + arestas.join("") + nos.join("");
+}
+
+/* ------------------------------------------------ cenarios de teste */
+/* Cada cenario treina dois pets com donos simulados (mesmo codigo do rival da arena).
+   A vira o pet do jogador; B vira o rival fixo. Sementes fixas: mesmo cenario, mesmo resultado. */
+let rivalFixo = null, cenarioAtual = null;
+const CENARIOS = [
+  { id:"adulto-bebe", titulo:"Adulto bem cuidado × bebê aleatório",
+    desc:"A: atencioso, 6 dias, 40 interações/dia. B: aleatório, meio dia, 8/dia.",
+    a:{dono:"atencioso", dias:6, porDia:40}, b:{dono:"aleatorio", dias:.5, porDia:8} },
+  { id:"controle", titulo:"Controle da pesquisa",
+    desc:"Atencioso × aleatório, 5 dias, 16/dia nos dois. É a comparação do portão.",
+    a:{dono:"atencioso", dias:5, porDia:16}, b:{dono:"aleatorio", dias:5, porDia:16} },
+  { id:"orcamento", titulo:"Mesmo dono, orçamento diferente",
+    desc:"Atencioso nos dois, 5 dias. A com 40/dia, B com 6/dia.",
+    a:{dono:"atencioso", dias:5, porDia:40}, b:{dono:"atencioso", dias:5, porDia:6} },
+  { id:"negligenciado", titulo:"Adulto negligenciado × criança cuidada",
+    desc:"A: relapso, 6 dias, 4/dia. B: atencioso, 2 dias, 24/dia.",
+    a:{dono:"relapso", dias:6, porDia:4}, b:{dono:"atencioso", dias:2, porDia:24} },
+  { id:"incoerente", titulo:"Incoerente × atencioso",
+    desc:"Mesmo volume (16/dia, 5 dias). Só a coerência do feedback muda.",
+    a:{dono:"incoerente", dias:5, porDia:16}, b:{dono:"atencioso", dias:5, porDia:16} },
+];
+const OBS_ARENA = obsCombate(CA.hp, CA.hp);
+function jsdBits(p, q){
+  let s = 0;
+  for (const a of ACOES_PET){ const m = (p[a] + q[a]) / 2;
+    if (p[a] > 0) s += .5 * p[a] * Math.log2(p[a] / m);
+    if (q[a] > 0) s += .5 * q[a] * Math.log2(q[a] / m); }
+  return s;
+}
+function resumoPet(m, spec){
+  const e = m.e, r = m.pol.rec, af = afinidades(m.tracos), dom = corDominante(m.tracos);
+  const pm = m.pol.media(OBS_ARENA), topo = ACOES_PET.reduce((x, a) => pm[a] > pm[x] ? a : x, ACOES_PET[0]);
+  return {
+    dono: NOME_DONO[spec.dono], idade: `${spec.dias} d · ${NOME_ESTAGIO[estagio(e.tick)].toLowerCase()}`,
+    porDia: spec.porDia, total: m.log.filter(x => x[1] === "d").length,
+    saude: e.saude, fome: e.fome, higiene: e.higiene, humor: e.humor,
+    elogio: r.elogio, repreensao: r.repreensao, atendido: r.atendido, ignorado: r.ignorado,
+    atualizacoes: ACOES_PET.reduce((t, a) => t + m.pol.bracos[a].n, 0),
+    jsdAgora: jsdBits(m.pol.media(observacao(e)), m.pol.prior(observacao(e))),
+    jsdArena: jsdBits(pm, m.pol.prior(OBS_ARENA)),
+    topo: `${NOME_PET[topo]} (${(pm[topo]*100).toFixed(0)}%) → ${NOME_COMB[CA.mapa[topo]]}`,
+    dom: `${NOME_COMB[dom]} ${af[dom] >= 0 ? "+" : ""}${af[dom].toFixed(3)}`,
+  };
+}
+function montarCenario(cen, semente){
+  const sa = hashSemente("cenario", cen.id, semente, "a"), sb = hashSemente("cenario", cen.id, semente, "b");
+  const A = treinarPet(cen.a.dono, cen.a.dias, cen.a.porDia, sa);
+  const B = treinarPet(cen.b.dono, cen.b.dias, cen.b.porDia, sb);
+  /* o pet atual fica guardado para o botao de voltar; so o log e salvo, como sempre */
+  try { if (!localStorage.getItem(CHAVE + "-anterior")) localStorage.setItem(CHAVE + "-anterior", JSON.stringify({semente:motor.semente, log:motor.log})); } catch(_){}
+  motor = A; nascendo = 0; salvar();
+  rivalFixo = { rival:B, dias:cen.b.dias, tipo:cen.b.dono };
+  cenarioAtual = { cen, semente, ra:resumoPet(A, cen.a), rb:resumoPet(B, cen.b) };
+  renderCenario(); renderRivalFixo(); renderTudo();
+  $("cen-voltar").hidden = false; $("cen-lutas").disabled = false; $("cen-lutas-res").innerHTML = "";
+}
+const pct = v => (v*100).toFixed(0) + "%";
+function renderCenario(){
+  if (!cenarioAtual){ $("cen-comp").innerHTML = ""; return; }
+  const { cen, semente, ra, rb } = cenarioAtual;
+  const L = (rot, k, f = x => x) => `<tr><td>${rot}</td><td>${f(ra[k])}</td><td>${f(rb[k])}</td></tr>`;
+  const sec = t => `<tr class="sec"><td colspan="3">${t}</td></tr>`;
+  const bits = x => x.toFixed(4);
+  $("cen-msg").textContent = `${cen.titulo} · semente ${semente}. O pet A agora é o seu.`;
+  $("cen-comp").innerHTML = `<table class="comp"><thead><tr><th></th><th>A (seu)</th><th>B (rival)</th></tr></thead><tbody>
+    ${sec("Perfil")}${L("Dono","dono")}${L("Idade","idade")}${L("Interações/dia","porDia")}${L("Interações no total","total")}
+    ${sec("Estado no fim")}${L("Saúde","saude",pct)}${L("Saciedade","fome",pct)}${L("Higiene","higiene",pct)}${L("Humor","humor",pct)}
+    ${sec("Sinal de aprendizado")}${L("Elogios","elogio")}${L("Repreensões","repreensao")}${L("Pedidos atendidos","atendido")}${L("Pedidos ignorados","ignorado")}${L("Atualizações do bandit","atualizacoes")}
+    ${sec("Quanto o aprendizado afastou a política do prior (JSD, bits)")}${L("No estado atual","jsdAgora",bits)}${L("Na arena (HP cheio)","jsdArena",bits)}
+    ${sec("Na arena")}${L("Ação mais provável","topo")}${L("Traço dominante","dom")}
+  </tbody></table>`;
+}
+function renderRivalFixo(){
+  const el = $("rival-fixo");
+  if (!rivalFixo){ el.hidden = true; return; }
+  el.hidden = false;
+  el.textContent = `Rival do cenário: pet de dono ${NOME_DONO[rivalFixo.tipo]}, ${rivalFixo.dias} dia(s). Troque o dono no seletor para voltar ao rival normal.`;
+}
+function rodarLutas(n){
+  if (!rivalFixo) throw new Error("monte um cenário antes");
+  const B = rivalFixo.rival, contA = {}, contB = {};
+  for (const c of COMBATE){ contA[c] = 0; contB[c] = 0; }
+  let v = 0, d = 0, e = 0, turnos = 0;
+  for (let k=0;k<n;k++){
+    const r = lutar(motor, B, hashSemente("lab", motor.semente, motor.log.length, k));
+    if (r.vencedor === "a") v++; else if (r.vencedor === "b") d++; else e++;
+    turnos += r.turnos.length;
+    for (const t of r.turnos){ contA[t.ca]++; contB[t.cb]++; }
+  }
+  const linha = c => `<tr><td>${NOME_COMB[c]}</td><td>${pct(contA[c]/turnos)}</td><td>${pct(contB[c]/turnos)}</td></tr>`;
+  $("cen-lutas-res").innerHTML = `<p class="resultado">${n} lutas: A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e/2)/n*100).toFixed(0)}% dos pontos. Média de ${(turnos/n).toFixed(1)} turnos.</p>
+    <table class="comp"><thead><tr><th>Golpe usado</th><th>A</th><th>B</th></tr></thead><tbody>${COMBATE.map(linha).join("")}</tbody></table>`;
+}
+$("lista-cenarios").innerHTML = CENARIOS.map((c, i) => `<button class="cen" data-i="${i}"><b>${c.titulo}</b><span>${c.desc}</span></button>`).join("");
+for (const id of ["ca-dono","cb-dono"]) $(id).innerHTML = Object.entries(NOME_DONO).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+$("ca-dono").value = "atencioso"; $("cb-dono").value = "aleatorio";
+function comEspera(fn){
+  $("cen-msg").textContent = "Treinando os dois pets…";
+  setTimeout(() => { try { fn(); } catch(err){ $("cen-msg").innerHTML = `<span style="color:var(--bad)">${err.message}</span>`; } }, 30);
+}
+document.querySelectorAll(".cen").forEach(b => b.addEventListener("click", () => comEspera(() => montarCenario(CENARIOS[Number(b.dataset.i)], 1))));
+function lerNumero(id, rot){
+  const v = Number($(id).value);
+  if (!Number.isFinite(v) || v <= 0) throw new Error(`${rot}: valor inválido`);
+  return v;
+}
+$("c-montar").addEventListener("click", () => comEspera(() => {
+  const semente = lerNumero("c-semente", "Semente");
+  if (!Number.isInteger(semente)) throw new Error("Semente precisa ser inteira");
+  const lado = p => ({ dono:$(p + "-dono").value, dias:lerNumero(p + "-dias", "Dias de vida"), porDia:lerNumero(p + "-pd", "Interações/dia") });
+  const a = lado("ca"), b = lado("cb");
+  montarCenario({ id:"manual", titulo:`${NOME_DONO[a.dono]} × ${NOME_DONO[b.dono]}`, a, b }, semente);
+}));
+$("cen-lutas").addEventListener("click", () => {
+  $("cen-lutas-res").textContent = "Lutando…";
+  setTimeout(() => { try { rodarLutas(100); } catch(err){ $("cen-lutas-res").innerHTML = `<span style="color:var(--bad)">${err.message}</span>`; } }, 30);
+});
+$("cen-voltar").addEventListener("click", () => {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(CHAVE + "-anterior") || "null"); } catch(_){}
+  if (!d) { $("cen-msg").textContent = "Não há pet anterior guardado."; return; }
+  motor = Motor.reproduzir(d.semente, d.log);
+  try { localStorage.removeItem(CHAVE + "-anterior"); } catch(_){}
+  rivalFixo = null; cenarioAtual = null; salvar();
+  renderCenario(); renderRivalFixo(); renderTudo();
+  $("cen-voltar").hidden = true; $("cen-lutas").disabled = true; $("cen-lutas-res").innerHTML = "";
+  $("cen-msg").textContent = "Pet anterior restaurado pelo replay do registro.";
+});
+$("rival").addEventListener("change", () => { rivalFixo = null; renderRivalFixo(); });
+try { if (localStorage.getItem(CHAVE + "-anterior")) $("cen-voltar").hidden = false; } catch(_){}
+
+/* ------------------------------------------------ laco */
+let ultimoSalvo = 0;
+setInterval(() => {
+  if (nascendo > 0 || velocidade === 0) return;
+  acumulado += velocidade / 10;
+  const n = Math.floor(acumulado);
+  if (n > 0){ acumulado -= n; motor.avancar(n); renderTudo();
+    if (performance.now() - ultimoSalvo > 2000){ salvar(); ultimoSalvo = performance.now(); } }
+}, 100);
+setInterval(desenharLCD, 125);
+
+motor = carregar() || exemplo();
+try { const aba = localStorage.getItem(CHAVE + "-aba"); if (aba && document.getElementById("p-" + aba)) paneAtual = aba; } catch(_){}
+mostrarPane(paneAtual);
+desenharLCD();
+setHP(CA.hp, CA.hp);
+{ const r = prepararRivalPreview(); desenharArena(motor, r, null, 0); }
+function prepararRivalPreview(){ const m = new Motor(7); m.avancar(60); return m; }
+</script>
