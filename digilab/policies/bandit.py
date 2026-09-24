@@ -212,8 +212,16 @@ class PoliticaBandit:
         self._ultima: tuple[list[float], AcaoPet] | None = None
         self._pendentes: list[tuple[int, list[float]]] = []
         self._n_recompensas = {"elogio": 0, "repreensao": 0, "latencia": 0, "ignorado": 0}
+        self._ultima_decisao: dict | None = None
 
     # ------------------------------------------------------------- Politica
+
+    @property
+    def ultima_decisao(self) -> dict | None:
+        """O que decidiu a ultima chamada de agir(): features x, pesos amostrados
+        theta~ por acao, log(prior) e Gumbel por acao, acao escolhida. Somente
+        leitura; nao entra em estado_interno() nem muda decisao (digilab.motivo)."""
+        return self._ultima_decisao
 
     def prior(self, obs: Observacao) -> dict[AcaoPet, float]:
         p = distribuicao_instinto(self._instinto, obs, self.cb.iteracoes_bisseccao_prior)
@@ -225,6 +233,7 @@ class PoliticaBandit:
         p0 = self.prior(obs)
         escala = math.sqrt(self.cb.variancia_amostra)
         melhor, melhor_score = None, -math.inf
+        amostras, log_prior, gumbels = {}, {}, {}
         for a in ACOES:
             braco = self._bracos[a]
             theta = braco.theta()
@@ -236,11 +245,16 @@ class PoliticaBandit:
             while u <= 0.0:  # pragma: no cover - random() pode devolver 0.0
                 u = rng.random()
             gumbel = -math.log(-math.log(u))
+            amostras[a] = [t + escala * lz for t, lz in zip(theta, Lz)]
+            log_prior[a] = math.log(p0[a])
+            gumbels[a] = gumbel
             score = math.log(p0[a]) + valor + gumbel
             if score > melhor_score:
                 melhor, melhor_score = a, score
         if melhor is None:
             raise ArithmeticError("nenhuma acao com score finito")
+        self._ultima_decisao = {"x": x, "acao": melhor, "amostras": amostras,
+                                "log_prior": log_prior, "gumbel": gumbels}
         return melhor
 
     def observar(self, transicao: Transicao) -> None:

@@ -243,3 +243,28 @@ class ConfigBateriaCombate:
 
 CONFIG_COMBATE_V2 = ConfigCombateV2()
 CONFIG_BATERIA_COMBATE = ConfigBateriaCombate()
+
+
+# =====================================================================
+# Motivo e expressao (Parte A da TAREFA_MEMORIA_EXPRESSAO). Somente leitura:
+# nao muda decisao nenhuma. NAO entra no hash de arena-v1 (configs_congelados
+# lista a v1 explicitamente) nem no da bateria do combate V2 (que cobre so
+# ConfigCombateV2, ConfigBateriaCombate e os fontes de combate_v2/).
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigExpressao:
+    # PROVISORIO: estagio por idade em dias simulados. Quando a evolucao existir
+    # no motor, o estagio vem dela. Limite superior (exclusivo) de cada estagio.
+    dias_fim_bebe: float = 1.0
+    dias_fim_crianca: float = 3.0
+    dias_fim_adolescente: float = 7.0
+    # vida: fator so e citado se |contribuicao| >= isto (LIMIAR_MOTIVO)
+    limiar_motivo: float = 0.05
+    # bebe: faixas de humor para o emote
+    humor_alegre: float = 0.66
+    humor_neutro: float = 0.33
+
+
+CONFIG_EXPRESSAO = ConfigExpressao()

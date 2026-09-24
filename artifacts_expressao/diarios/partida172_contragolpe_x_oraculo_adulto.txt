@@ -1,0 +1,80 @@
+turno  1 contragolpe adulto      avancar         [distancia_eh(medio) | ref 1]  Avancei porque a distância era medio (turno 1).
+turno  1     oraculo adulto      carregar        [- | ref -]  Carreguei guts. Não sei, só quis.
+turno  2 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  2     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno  3 contragolpe adulto      esquivar        [oponente_preparando | ref 2]  Esquivei porque você ia usar o golpe pesado (turno 2).
+turno  3     oraculo adulto      pesado          [- | ref 2]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno  4 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  4     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno  5 contragolpe adulto      esquivar        [oponente_preparando | ref 4]  Esquivei porque você ia usar o golpe pesado (turno 4).
+turno  5     oraculo adulto      pesado          [- | ref 4]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno  6 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  6     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno  7 contragolpe adulto      esquivar        [oponente_preparando | ref 6]  Esquivei porque você ia usar o golpe pesado (turno 6).
+turno  7     oraculo adulto      pesado          [- | ref 6]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno  8 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno  8     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno  9 contragolpe adulto      esquivar        [oponente_preparando | ref 8]  Esquivei porque você ia usar o golpe pesado (turno 8).
+turno  9     oraculo adulto      pesado          [- | ref 8]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 10 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 10     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 11 contragolpe adulto      esquivar        [oponente_preparando | ref 10]  Esquivei porque você ia usar o golpe pesado (turno 10).
+turno 11     oraculo adulto      pesado          [- | ref 10]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 12 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 12     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 13 contragolpe adulto      esquivar        [oponente_preparando | ref 12]  Esquivei porque você ia usar o golpe pesado (turno 12).
+turno 13     oraculo adulto      pesado          [- | ref 12]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 14 contragolpe adulto      defender        [exploracao | ref -]  Defendi. Não sei, só quis.
+turno 14     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 15 contragolpe adulto      esquivar        [oponente_preparando | ref 14]  Esquivei porque você ia usar o golpe pesado (turno 14).
+turno 15     oraculo adulto      pesado          [- | ref 14]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 16 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 16     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 17 contragolpe adulto      esquivar        [oponente_preparando | ref 16]  Esquivei porque você ia usar o golpe pesado (turno 16).
+turno 17     oraculo adulto      pesado          [- | ref 16]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 18 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 18     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 19 contragolpe adulto      esquivar        [oponente_preparando | ref 18]  Esquivei porque você ia usar o golpe pesado (turno 18).
+turno 19     oraculo adulto      pesado          [- | ref 18]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 20 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 20     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 21 contragolpe adulto      esquivar        [oponente_preparando | ref 20]  Esquivei porque você ia usar o golpe pesado (turno 20).
+turno 21     oraculo adulto      pesado          [- | ref 20]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 22 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 22     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 23 contragolpe adulto      esquivar        [oponente_preparando | ref 22]  Esquivei porque você ia usar o golpe pesado (turno 22).
+turno 23     oraculo adulto      pesado          [- | ref 22]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 24 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 24     oraculo adulto      carregar        [exploracao | ref -]  Carreguei guts. Não sei, só quis.
+turno 25 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 25     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 26 contragolpe adulto      esquivar        [oponente_preparando | ref 25]  Esquivei porque você ia usar o golpe pesado (turno 25).
+turno 26     oraculo adulto      pesado          [- | ref 25]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 27 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 27     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 28 contragolpe adulto      esquivar        [oponente_preparando | ref 27]  Esquivei porque você ia usar o golpe pesado (turno 27).
+turno 28     oraculo adulto      pesado          [- | ref 27]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 29 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 29     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 30 contragolpe adulto      esquivar        [oponente_preparando | ref 29]  Esquivei porque você ia usar o golpe pesado (turno 29).
+turno 30     oraculo adulto      pesado          [- | ref 29]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 31 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 31     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 32 contragolpe adulto      esquivar        [oponente_preparando | ref 31]  Esquivei porque você ia usar o golpe pesado (turno 31).
+turno 32     oraculo adulto      pesado          [- | ref 31]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 33 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 33     oraculo adulto      esquivar        [exploracao | ref -]  Esquivei. Não sei, só quis.
+turno 34 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 34     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 35 contragolpe adulto      esquivar        [oponente_preparando | ref 34]  Esquivei porque você ia usar o golpe pesado (turno 34).
+turno 35     oraculo adulto      pesado          [- | ref 34]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 36 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 36     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 37 contragolpe adulto      esquivar        [oponente_preparando | ref 36]  Esquivei porque você ia usar o golpe pesado (turno 36).
+turno 37     oraculo adulto      pesado          [- | ref 36]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 38 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 38     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.
+turno 39 contragolpe adulto      esquivar        [oponente_preparando | ref 38]  Esquivei porque você ia usar o golpe pesado (turno 38).
+turno 39     oraculo adulto      pesado          [- | ref 38]  Soltei o pesado que eu tinha preparado. Não sei, só quis.
+turno 40 contragolpe adulto      defender        [- | ref -]  Defendi. Não sei, só quis.
+turno 40     oraculo adulto      preparar_pesado [- | ref -]  Preparei o pesado. Não sei, só quis.

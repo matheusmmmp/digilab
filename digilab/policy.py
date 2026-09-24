@@ -78,30 +78,44 @@ class PoliticaInstinto:
         from .config import CONFIG_PADRAO
 
         self.cfg = cfg or CONFIG_PADRAO
+        self._ultima_regra: str | None = None
+
+    @property
+    def ultima_regra(self) -> str | None:
+        """Regra que decidiu a ultima chamada de agir(). Somente leitura; nao
+        entra em estado_interno() nem muda decisao (usada por digilab.motivo)."""
+        return self._ultima_regra
 
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
         fome, higiene, energia, humor, saude, sujeira, dormindo, hora = obs.vetor_estado
 
         # Sono tem precedencia: exaustao ou madrugada.
         if energia < 0.25:
+            self._ultima_regra = "sono_exaustao"
             return AcaoPet.DORMIR
         if dormindo > 0.5 and energia < 0.85:
+            self._ultima_regra = "sono_continuar"
             return AcaoPet.DORMIR
         if self.cfg.e_noite(int(hora * 1440)) and energia < 0.55:
+            self._ultima_regra = "sono_noite"
             return AcaoPet.DORMIR
 
         # Necessidades que o pet nao resolve sozinho: pede ajuda.
         if fome < 0.25 or higiene < 0.25:
+            self._ultima_regra = "pedido_necessidade"
             return AcaoPet.CHAMAR_ATENCAO
 
         # Abandono recente pesa no humor.
         if obs.ticks_desde_cuidado > self.cfg.janela_atencao_ticks:
+            self._ultima_regra = "abandono"
             return AcaoPet.EMBURRAR if humor < 0.35 else AcaoPet.CHAMAR_ATENCAO
 
         if fome < 0.45:
+            self._ultima_regra = "fome_moderada"
             return AcaoPet.COMER if rng.random() < 0.5 else AcaoPet.CHAMAR_ATENCAO
 
         # Tempo livre: mistura ponderada, nunca uniforme.
+        self._ultima_regra = "tempo_livre"
         pesos = {
             AcaoPet.OCIOSO: 3.0,
             AcaoPet.EXPLORAR: 2.0 + 2.0 * energia,
