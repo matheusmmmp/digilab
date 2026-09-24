@@ -253,3 +253,69 @@ PROTOCOLO_ARENA_V1 = Protocolo(
     bootstrap_semente=Campo(4242, _P, "semente do bootstrap"),
     nivel_confianca=Campo(0.95, _P, "intervalo de 95%"),
 )
+
+
+# =====================================================================
+# Ablacao treino x cuidado. PROTOCOLO_ARENA_V1 acima nao muda (nem o hash).
+# =====================================================================
+
+POLITICAS_VALIDAS = ("bandit", "instinto")
+
+
+@dataclass(frozen=True)
+class ProtocoloAblacao(Protocolo):
+    """Protocolo da arena com um eixo a mais: a politica de comportamento.
+
+    Os bracos passam a ser dono x politica. Com `instinto` o pet recebe o
+    mesmo dono e o mesmo orcamento, mas nao aprende nada: o que sobra de
+    diferenca entre donos e efeito do cuidado (estado de vida -> tracos).
+    """
+
+    politicas: Campo
+
+    def validar(self) -> None:
+        super().validar()
+        pols = self.v("politicas")
+        if not isinstance(pols, tuple) or not pols:
+            raise ValueError(f"politicas precisa ser tupla nao vazia: {pols!r}")
+        if len(set(pols)) != len(pols):
+            raise ValueError(f"politicas repetidas: {pols}")
+        for p in pols:
+            if p not in POLITICAS_VALIDAS:
+                raise ValueError(f"politica desconhecida: {p!r}")
+        for obrigatoria in ("bandit", "instinto"):
+            if obrigatoria not in pols:
+                raise ValueError(f"politica obrigatoria ausente na ablacao: {obrigatoria}")
+
+
+def bracos_do_protocolo(p: Protocolo) -> list[tuple[str, str, str]]:
+    """(rotulo do braco, dono, politica) na ordem de execucao.
+
+    Protocolo sem eixo de politica = todo braco com bandit e rotulo igual ao
+    dono, exatamente como a run canonica v1 sempre fez.
+    """
+    donos = list(p.v("bracos"))
+    if not isinstance(p, ProtocoloAblacao):
+        return [(d, d, "bandit") for d in donos]
+    return [(f"{d}-{pol}", d, pol) for d in donos for pol in p.v("politicas")]
+
+
+def _campos_v1() -> dict[str, Campo]:
+    return PROTOCOLO_ARENA_V1.campos()
+
+
+PROTOCOLO_ARENA_V1_ABLACAO = ProtocoloAblacao(
+    versao="arena-v1-ablacao",
+    **_campos_v1(),
+    politicas=Campo(
+        ("bandit", "instinto"),
+        _P,
+        "ablacao treino x cuidado: bandit aprende com o dono; instinto recebe o mesmo "
+        "dono e orcamento sem aprender. Sementes, orcamento, duracao e vitoria herdados de arena-v1",
+    ),
+)
+
+PROTOCOLOS = {
+    PROTOCOLO_ARENA_V1.versao: PROTOCOLO_ARENA_V1,
+    PROTOCOLO_ARENA_V1_ABLACAO.versao: PROTOCOLO_ARENA_V1_ABLACAO,
+}

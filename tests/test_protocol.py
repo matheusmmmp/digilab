@@ -11,7 +11,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from digilab.protocol import (  # noqa: E402
     ENGINE_SHA256_V0,
     PROTOCOLO_ARENA_V1,
+    PROTOCOLO_ARENA_V1_ABLACAO,
+    PROTOCOLOS,
     Status,
+    bracos_do_protocolo,
     derivar_semente,
     sha256_engine,
 )
@@ -62,3 +65,53 @@ def test_orcamento_inalcancavel_falha():
 def test_derivar_semente_deterministica():
     assert derivar_semente(1, "a") == derivar_semente(1, "a")
     assert derivar_semente(1, "a") != derivar_semente(1, "b")
+
+
+# ------------------------------------------------------------ ablacao
+
+HASH_CANONICO_V1 = "adce99fc3fdc"  # prefixo gravado em artifacts/metrics.json
+
+
+def test_hash_v1_nao_mudou_com_a_ablacao():
+    assert PROTOCOLO_ARENA_V1.hash().startswith(HASH_CANONICO_V1)
+    assert "politicas" not in PROTOCOLO_ARENA_V1.campos()
+
+
+def test_ablacao_herda_tudo_de_v1_menos_politicas():
+    PROTOCOLO_ARENA_V1_ABLACAO.validar()
+    v1, ab = PROTOCOLO_ARENA_V1.campos(), PROTOCOLO_ARENA_V1_ABLACAO.campos()
+    assert set(ab) - set(v1) == {"politicas"}
+    for nome in v1:
+        assert ab[nome] == v1[nome], nome
+    pol = ab["politicas"]
+    assert pol.valor == ("bandit", "instinto")
+    assert pol.status is Status.PROPOSTO
+    assert PROTOCOLO_ARENA_V1_ABLACAO.hash() != PROTOCOLO_ARENA_V1.hash()
+
+
+def test_ablacao_tem_oito_bracos_dono_x_politica():
+    bracos = bracos_do_protocolo(PROTOCOLO_ARENA_V1_ABLACAO)
+    assert len(bracos) == 8
+    assert len({r for r, _, _ in bracos}) == 8
+    assert {(d, p) for _, d, p in bracos} == {
+        (d, p) for d in PROTOCOLO_ARENA_V1.v("bracos") for p in ("bandit", "instinto")
+    }
+
+
+def test_v1_continua_com_bracos_so_bandit_e_rotulo_igual_ao_dono():
+    assert bracos_do_protocolo(PROTOCOLO_ARENA_V1) == [(d, d, "bandit") for d in PROTOCOLO_ARENA_V1.v("bracos")]
+
+
+def test_ablacao_sem_instinto_falha():
+    with pytest.raises(ValueError, match="instinto"):
+        PROTOCOLO_ARENA_V1_ABLACAO.com_substituicoes({"politicas": ["bandit"]})
+
+
+def test_ablacao_com_politica_desconhecida_falha():
+    with pytest.raises(ValueError, match="desconhecida"):
+        PROTOCOLO_ARENA_V1_ABLACAO.com_substituicoes({"politicas": ["bandit", "instinto", "q"]})
+
+
+def test_registro_de_protocolos():
+    assert PROTOCOLOS["arena-v1"] is PROTOCOLO_ARENA_V1
+    assert PROTOCOLOS["arena-v1-ablacao"] is PROTOCOLO_ARENA_V1_ABLACAO
