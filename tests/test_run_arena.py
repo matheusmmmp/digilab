@@ -93,6 +93,13 @@ def test_ablacao_roda_oito_bracos_com_politica_do_protocolo(tmp_path):
         assert band["nome"] != "instinto"
     assert set(m["atencioso_vs_aleatorio_por_politica"]) == {"bandit", "instinto"}
     assert m["resultado_central"] == m["atencioso_vs_aleatorio_por_politica"]["bandit"]
+    ef = m["efeito_do_treino"]
+    assert ef["efeito"]["n"] == 5
+    assert ef["veredito"] in {"TREINO_AUMENTA_A_VANTAGEM", "TREINO_REDUZ_A_VANTAGEM", "INDISTINGUIVEL_DE_ZERO"}
+    for s, v in ef["por_semente"].items():
+        pb = m["atencioso_vs_aleatorio_por_politica"]["bandit"]["por_semente"][s]
+        pi = m["atencioso_vs_aleatorio_por_politica"]["instinto"]["por_semente"][s]
+        assert v["efeito"] == pytest.approx((2 * pb - 1) - (2 * pi - 1))
 
 
 def test_ablacao_mesmo_dono_mesma_rng_nas_duas_politicas():

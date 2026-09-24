@@ -65,3 +65,46 @@ def test_bootstrap_ic_contem_media_e_falha_com_uma_unidade():
     assert ic["ic_inferior"] <= ic["media"] <= ic["ic_superior"]
     with pytest.raises(ValueError):
         bootstrap_ic([0.5], 100, 1, 0.95)
+
+
+# ------------------------------------------------------------ efeito do treino (ablacao)
+
+
+def test_vantagem_em_pontos():
+    from digilab.metrics import vantagem_em_pontos
+
+    assert vantagem_em_pontos(0.5) == 0.0
+    assert vantagem_em_pontos(1.0) == 1.0
+    assert vantagem_em_pontos(0.0) == -1.0
+    with pytest.raises(ValueError):
+        vantagem_em_pontos(1.2)
+
+
+def test_efeito_do_treino_pareado_por_semente():
+    from digilab.metrics import efeito_do_treino
+
+    bandit = {"1": 0.8, "2": 0.7, "3": 0.9}
+    instinto = {"1": 0.6, "2": 0.7, "3": 0.5}
+    r = efeito_do_treino(bandit, instinto, 500, 7, 0.95)
+    # (2*0.8-1) - (2*0.6-1) = 0.4 ; 0 ; 0.8
+    ef = {s: v["efeito"] for s, v in r["por_semente"].items()}
+    assert ef == pytest.approx({"1": 0.4, "2": 0.0, "3": 0.8})
+    assert r["efeito"]["media"] == pytest.approx(0.4)
+    assert r["efeito"]["ic_inferior"] <= r["efeito"]["media"] <= r["efeito"]["ic_superior"]
+    assert r["vantagem_bandit"]["media"] - r["vantagem_instinto"]["media"] == pytest.approx(r["efeito"]["media"])
+
+
+def test_efeito_nulo_quando_politicas_empatam():
+    from digilab.metrics import efeito_do_treino
+
+    p = {"1": 0.7, "2": 0.6, "3": 0.8}
+    r = efeito_do_treino(p, dict(p), 500, 7, 0.95)
+    assert r["efeito"]["media"] == 0.0
+    assert r["efeito"]["ic_inferior"] == 0.0 == r["efeito"]["ic_superior"]
+
+
+def test_efeito_com_sementes_diferentes_falha():
+    from digilab.metrics import efeito_do_treino
+
+    with pytest.raises(ValueError, match="sementes diferentes"):
+        efeito_do_treino({"1": 0.5, "2": 0.5}, {"1": 0.5, "3": 0.5}, 100, 1, 0.95)

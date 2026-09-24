@@ -44,6 +44,7 @@ from digilab.metrics import (  # noqa: E402
     bootstrap_ic,
     bradley_terry,
     divergencia_politicas,
+    efeito_do_treino,
     estados_sonda,
     finais,
     taxa_vitoria,
@@ -448,6 +449,27 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     if isinstance(protocolo, ProtocoloAblacao):
         metrics["bracos_dono_politica"] = {r: {"dono": d, "politica": pol} for r, d, pol in bracos_exec}
         metrics["atencioso_vs_aleatorio_por_politica"] = central_por_politica
+        ef = efeito_do_treino(
+            central_por_politica["bandit"]["por_semente"],
+            central_por_politica["instinto"]["por_semente"],
+            protocolo.v("bootstrap_reamostragens"),
+            protocolo.v("bootstrap_semente"),
+            protocolo.v("nivel_confianca"),
+        )
+        e = ef["efeito"]
+        if e["ic_inferior"] > 0.0:
+            ef["veredito"] = "TREINO_AUMENTA_A_VANTAGEM"
+        elif e["ic_superior"] < 0.0:
+            ef["veredito"] = "TREINO_REDUZ_A_VANTAGEM"
+        else:
+            ef["veredito"] = "INDISTINGUIVEL_DE_ZERO"
+        vi = ef["vantagem_instinto"]
+        ef["cuidado_sozinho"] = (
+            "ATENCIOSO_COM_INSTINTO_VENCE" if vi["ic_inferior"] > 0.0
+            else "ATENCIOSO_COM_INSTINTO_PERDE" if vi["ic_superior"] < 0.0
+            else "INCONCLUSIVO"
+        )
+        metrics["efeito_do_treino"] = ef
     arquivos = ["divergence.json", "matches.csv", "partidas.jsonl", "preflight.json"]
     metrics["artefatos_sha256"] = {a: _sha(saida / a) for a in arquivos}
     metrics["artefatos_sha256"].update(
@@ -460,6 +482,10 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         print(f"  [{'ok' if r['ok'] else 'REPROVA'}] {r['regra']}: {r['mensagem']}")
     for a in avisos:
         print(f"  AVISO: {a}")
+    if "efeito_do_treino" in metrics:
+        ef = metrics["efeito_do_treino"]
+        e = ef["efeito"]
+        print(f"  efeito do treino: {ef['veredito']}  media {e['media']:.4f}  IC{int(e['nivel']*100)} [{e['ic_inferior']:.4f}, {e['ic_superior']:.4f}]  n={e['n']}  (cuidado sozinho: {ef['cuidado_sozinho']})")
     for pol, rc in central_por_politica.items():
         rotulo_pol = "central" if len(central_por_politica) == 1 else f"atencioso x aleatorio ({pol})"
         print(f"  {rotulo_pol}: {rc['veredito']}  media {rc['media']:.4f}  IC{int(rc['nivel']*100)} [{rc['ic_inferior']:.4f}, {rc['ic_superior']:.4f}]  n={rc['n']}")
