@@ -86,6 +86,12 @@ class OrcamentoDesigual(RuntimeError):
     pass
 
 
+class DivergenciaInstintoNaoNula(RuntimeError):
+    """Pets com PoliticaInstinto nao aprendem: a sonda (numeros aleatorios
+    comuns) tem que dar JSD exatamente zero entre eles. Qualquer outro valor
+    e bug no orquestrador, na sonda ou na politica."""
+
+
 def _dump(obj) -> str:
     return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True)
 
@@ -288,8 +294,26 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     div, dists = divergencia_politicas(politicas, estados, protocolo.v("amostras_por_estado"), protocolo.v("semente_sonda"))
     grupo = dict(braco_de, instinto="instinto")
     pares_pets = {k: v for k, v in div.pares.items() if "instinto" not in k}
-    jsd_inter = [v for (a, b), v in pares_pets.items() if grupo[a] != grupo[b]]
-    jsd_intra = [v for (a, b), v in pares_pets.items() if grupo[a] == grupo[b]]
+    # O gate mede divergencia so entre pets que APRENDEM (bandit). Em arena-v1
+    # todo pet e bandit, entao isto e exatamente o calculo de sempre.
+    pol_de_pet = {n: politica_de_braco[braco_de[n]] for n in vidas}
+
+    def ambos(a: str, b: str, pol: str) -> bool:
+        return pol_de_pet[a] == pol and pol_de_pet[b] == pol
+
+    jsd_inter = [v for (a, b), v in pares_pets.items() if grupo[a] != grupo[b] and ambos(a, b, "bandit")]
+    jsd_intra = [v for (a, b), v in pares_pets.items() if grupo[a] == grupo[b] and ambos(a, b, "bandit")]
+    jsd_inter_instinto = {
+        f"{a} | {b}": v for (a, b), v in pares_pets.items() if grupo[a] != grupo[b] and ambos(a, b, "instinto")
+    }
+    if "instinto" in politica_de_braco.values():
+        nao_nulos = {k: v for k, v in jsd_inter_instinto.items() if v != 0.0}
+        if not jsd_inter_instinto:
+            raise DivergenciaInstintoNaoNula("nenhum par instinto x instinto de bracos diferentes para conferir")
+        if nao_nulos:
+            raise DivergenciaInstintoNaoNula(
+                f"BUG: {len(nao_nulos)} par(es) de bracos instinto com JSD != 0: {dict(list(nao_nulos.items())[:5])}"
+            )
     jsd_vs_instinto = {n: div.pares[tuple(sorted((n, "instinto")))] for n in vidas}
     piso = [div.piso_ruido[n] for n in vidas]
     media = lambda xs: sum(xs) / len(xs)  # noqa: E731
@@ -376,17 +400,25 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         f"piso de ruido Monte Carlo maximo {piso_max:.6f} bits vs limiar {limiar} bits"
         + ("" if piso_max < limiar else " -- a sonda nao consegue medir diferencas do tamanho do limiar"),
     )
+    quem = "pets bandit de bracos diferentes" if isinstance(protocolo, ProtocoloAblacao) else "pets de bracos diferentes"
     regra(
         "divergencia_entre_politicas",
         jsd_inter_media >= limiar,
         (
-            f"JSD media entre pets de bracos diferentes = {jsd_inter_media:.6f} bits, limiar {limiar} bits"
+            f"JSD media entre {quem} = {jsd_inter_media:.6f} bits, limiar {limiar} bits"
             if jsd_inter_media >= limiar
-            else f"CONVERGENCIA: JSD media entre pets de bracos diferentes = {jsd_inter_media:.6f} bits, "
+            else f"CONVERGENCIA: JSD media entre {quem} = {jsd_inter_media:.6f} bits, "
             f"abaixo do limiar {limiar} bits. O AMBIENTE NAO TEM PROFUNDIDADE SUFICIENTE: donos "
             f"diferentes produzem politicas praticamente iguais, entao o torneio nao mede treino."
         ),
     )
+    if isinstance(protocolo, ProtocoloAblacao):
+        regra(
+            "divergencia_instinto_zero",
+            True,
+            f"{len(jsd_inter_instinto)} pares instinto x instinto de bracos diferentes, todos com JSD exatamente 0.0 "
+            f"(verificado; valor nao nulo levanta DivergenciaInstintoNaoNula)",
+        )
     aprovada = all(r["ok"] for r in gate)
 
     avisos = []
@@ -413,6 +445,14 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         ],
         "distribuicoes": dists,
     }
+    if isinstance(protocolo, ProtocoloAblacao):
+        divergence["gate_usa"] = "pares bandit x bandit de bracos (donos) diferentes"
+        divergence["jsd_entre_bracos_instinto"] = {
+            "media": media(list(jsd_inter_instinto.values())),
+            "maximo": max(jsd_inter_instinto.values()),
+            "n_pares": len(jsd_inter_instinto),
+            "esperado": 0.0,
+        }
     (saida / "divergence.json").write_text(_dump(divergence), encoding="utf-8", newline="\n")
 
     metrics = {
@@ -448,6 +488,8 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     }
     if isinstance(protocolo, ProtocoloAblacao):
         metrics["bracos_dono_politica"] = {r: {"dono": d, "politica": pol} for r, d, pol in bracos_exec}
+        metrics["divergencia_resumo"]["gate_usa"] = divergence["gate_usa"]
+        metrics["divergencia_resumo"]["jsd_entre_bracos_instinto"] = divergence["jsd_entre_bracos_instinto"]
         metrics["atencioso_vs_aleatorio_por_politica"] = central_por_politica
         ef = efeito_do_treino(
             central_por_politica["bandit"]["por_semente"],

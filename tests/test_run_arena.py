@@ -119,3 +119,40 @@ def test_protocolo_desconhecido_no_config_falha(tmp_path):
     caminho.write_text(json.dumps({"saida": "x", "protocolo": "arena-v9"}))
     with pytest.raises(KeyError, match="protocolo desconhecido"):
         run_arena.main(["--config", str(caminho)])
+
+
+# ------------------------------------------------------------ gate da ablacao (etapa 4)
+
+
+def test_ablacao_registra_divergencia_instinto_exatamente_zero(tmp_path):
+    rc, m = _rodar_ablacao(tmp_path)
+    div = json.loads((tmp_path / "ab" / "divergence.json").read_text())
+    inst = div["jsd_entre_bracos_instinto"]
+    assert inst["maximo"] == 0.0 and inst["media"] == 0.0
+    assert inst["n_pares"] == 6 * 5 * 5  # C(4,2) pares de donos x 5 x 5 sementes
+    regra = next(r for r in m["gate"] if r["regra"] == "divergencia_instinto_zero")
+    assert regra["ok"]
+    assert m["divergencia_resumo"]["jsd_entre_bracos_instinto"] == inst
+
+
+def test_ablacao_reprova_se_bandit_converge(tmp_path):
+    rc, m = _rodar_ablacao(tmp_path, limiar_divergencia_jsd_bits=0.99)
+    assert rc == 2 and m["status_run"] == "REPROVADA"
+    regra = next(r for r in m["gate"] if r["regra"] == "divergencia_entre_politicas")
+    assert not regra["ok"]
+    assert "pets bandit de bracos diferentes" in regra["mensagem"]
+    assert "NAO TEM PROFUNDIDADE SUFICIENTE" in regra["mensagem"]
+
+
+def test_ablacao_divergencia_instinto_nao_nula_e_bug(tmp_path, monkeypatch):
+    original = run_arena.divergencia_politicas
+
+    def adulterada(*args, **kwargs):
+        div, dists = original(*args, **kwargs)
+        chave = next(k for k in div.pares if all("instinto@" in n for n in k) and k[0].split("@")[0] != k[1].split("@")[0])
+        div.pares[chave] = 1e-12
+        return div, dists
+
+    monkeypatch.setattr(run_arena, "divergencia_politicas", adulterada)
+    with pytest.raises(run_arena.DivergenciaInstintoNaoNula, match="BUG"):
+        _rodar_ablacao(tmp_path)
