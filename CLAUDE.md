@@ -16,10 +16,12 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
 
 ## Regras do projeto — não negociáveis
 
-- **Não aumentar escopo.** Nada de combate novo, multiplayer, LLM, interface gráfica ou modelos
+- **Não aumentar escopo.** Nada de combate novo, multiplayer, interface gráfica ou modelos
   novos fora do que a tarefa pede. (Exceção autorizada em 2026-09-24: o combate V2 em
   `digilab/combate_v2/`. Plugar pets, técnicas por linha evolutiva e comandos do dono na luta
   continuam fora.)
+- **LLM liberada** (decisão do Matheus, 2026-09-24): a proibição de LLM foi retirada. Usar LLM
+  continua dependendo de a tarefa pedir, como qualquer outra coisa.
 - **Falhar alto, não em silêncio.** `raise` em vez de `dropna`, valor default ou `except: pass`.
   Evento desconhecido no log levanta erro.
 - **Determinismo é requisito.** Mesma semente + mesmo log = mesmo resultado, até o último float.
