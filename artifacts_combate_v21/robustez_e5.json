@@ -1,0 +1,400 @@
+{
+  "custo_contra_golpe+": {
+    "de": 15,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 16,
+    "suporte": [
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela"
+    ]
+  },
+  "custo_contra_golpe-": {
+    "de": 15,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 14,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "custo_investida+": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": true,
+    "para": 22,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso",
+      "muralha",
+      "sentinela"
+    ]
+  },
+  "custo_investida-": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 18,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "custo_marcar+": {
+    "de": 10,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 11,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "custo_marcar-": {
+    "de": 10,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 9,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "custo_pele_dura+": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 22,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "custo_pele_dura-": {
+    "de": 20,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 18,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "dano_extra_duelista+": {
+    "de": 4.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 4.4,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "dano_extra_duelista-": {
+    "de": 4.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 3.6,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "dano_investida+": {
+    "de": 8.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 8.8,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "dano_investida-": {
+    "de": 8.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 7.2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "fracao_contra_golpe+": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.55,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "fracao_contra_golpe-": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.45,
+    "suporte": [
+      "espelho",
+      "furioso"
+    ]
+  },
+  "fracao_espelho_disparo+": {
+    "de": 1.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.1,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "fracao_espelho_disparo-": {
+    "de": 1.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.9,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "guts_extra_muralha+": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 4,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "guts_extra_muralha-": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "limiar_hp_furioso+": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.55,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "limiar_hp_furioso-": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.45,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_emboscador+": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 2.2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_emboscador-": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.8,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_furioso+": {
+    "de": 1.25,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.375,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_furioso-": {
+    "de": 1.25,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.125,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_marcar+": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 2.2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_marcar-": {
+    "de": 2.0,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.8,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_pele_dura+": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.55,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_pele_dura-": {
+    "de": 0.5,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 0.45,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_tita+": {
+    "de": 1.3,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.4300000000000002,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "mult_tita-": {
+    "de": 1.3,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1.1700000000000002,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "recarga_sentinela+": {
+    "de": 4,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 5,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "recarga_sentinela-": {
+    "de": 4,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 3,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "turnos_marcar+": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 4,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "turnos_marcar-": {
+    "de": 3,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 2,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "turnos_pele_dura+": {
+    "de": 2,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 3,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  },
+  "turnos_pele_dura-": {
+    "de": 2,
+    "dominantes": [],
+    "e1_ok": false,
+    "para": 1,
+    "suporte": [
+      "emboscador",
+      "espelho",
+      "furioso"
+    ]
+  }
+}

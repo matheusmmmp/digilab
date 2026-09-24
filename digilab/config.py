@@ -290,3 +290,186 @@ class ConfigMemoria:
 
 
 CONFIG_MEMORIA = ConfigMemoria()
+
+
+# =====================================================================
+# Combate V2.1: arvore de evolucao integrada ao combate (tecnicas por linha,
+# passivas por forma adulta, stats por especie/temperamento/carater/arquetipo).
+# Transcricao de docs/catalogo_pets.json e docs/arvore_evolucao.json (um teste
+# confere que nao divergem). NAO entra no hash de arena-v1 nem no da bateria
+# V2 base: a base continua reproduzivel. Todos os numeros PROPOSTOS.
+# =====================================================================
+
+STATS_V21 = ("vigor", "folego", "recuperacao", "forca", "mira", "guarda")
+ESTAGIOS_V21 = ("bebe", "crianca", "adolescente", "adulto")
+
+
+def _catalogo_especies() -> dict:
+    return {
+        "brasa": {"vigor": 9, "folego": 10, "recuperacao": 7, "forca": 14, "mira": 8, "guarda": 12},
+        "cirro": {"vigor": 7, "folego": 11, "recuperacao": 11, "forca": 7, "mira": 15, "guarda": 9},
+        "ferrugem": {"vigor": 13, "folego": 8, "recuperacao": 8, "forca": 9, "mira": 7, "guarda": 15},
+        "limo": {"vigor": 11, "folego": 12, "recuperacao": 15, "forca": 6, "mira": 7, "guarda": 9},
+        "faisca": {"vigor": 8, "folego": 13, "recuperacao": 9, "forca": 11, "mira": 11, "guarda": 8},
+        "seixo": {"vigor": 15, "folego": 7, "recuperacao": 7, "forca": 12, "mira": 7, "guarda": 12},
+    }
+
+
+def _catalogo_temperamento() -> dict:
+    return {
+        "curiosidade": {"mira": 2, "folego": 1, "guarda": -2, "vigor": -1},
+        "teimosia": {"guarda": 2, "vigor": 1, "recuperacao": -2, "mira": -1},
+        "sensibilidade": {"recuperacao": 2, "folego": 1, "forca": -2, "guarda": -1},
+        "rancor": {"forca": 2, "mira": 1, "recuperacao": -2, "folego": -1},
+    }
+
+
+def _catalogo_carater() -> dict:
+    return {
+        "impetuoso": {"forca": 3, "folego": 1, "guarda": -3, "recuperacao": -1},
+        "paciente": {"guarda": 3, "recuperacao": 1, "forca": -3, "folego": -1},
+        "atento": {"mira": 3, "recuperacao": 1, "vigor": -3, "forca": -1},
+        "resistente": {"vigor": 3, "guarda": 1, "mira": -3, "folego": -1},
+    }
+
+
+def _arquetipos_crianca() -> dict:
+    return {
+        "sereno": {"recuperacao": 2, "guarda": 1, "forca": -2, "mira": -1},
+        "arisco": {"forca": 2, "mira": 1, "recuperacao": -2, "guarda": -1},
+    }
+
+
+def _arquetipos_adolescente() -> dict:
+    # linha -> eixo de carater, tecnica, modificadores
+    return {
+        "brigao": {"eixo": "impetuoso", "tecnica": "investida",
+                   "stats": {"forca": 3, "folego": 1, "guarda": -2, "mira": -2}},
+        "guardiao": {"eixo": "paciente", "tecnica": "contra_golpe",
+                     "stats": {"guarda": 3, "recuperacao": 1, "forca": -2, "folego": -2}},
+        "cacador": {"eixo": "atento", "tecnica": "marcar",
+                    "stats": {"mira": 3, "folego": 1, "vigor": -2, "guarda": -2}},
+        "colosso": {"eixo": "resistente", "tecnica": "pele_dura",
+                    "stats": {"vigor": 3, "guarda": 1, "mira": -2, "recuperacao": -2}},
+    }
+
+
+def _arquetipos_adulto() -> dict:
+    # linha -> eixo complementar e as duas formas (sinal do eixo, modificadores)
+    return {
+        "brigao": {"eixo_complementar": "paciente", "formas": {
+            "duelista": {"sinal": ">=0", "stats": {"mira": 1, "guarda": 1, "vigor": -1, "folego": -1}},
+            "furioso": {"sinal": "<0", "stats": {"forca": 2, "guarda": -2}}}},
+        "guardiao": {"eixo_complementar": "impetuoso", "formas": {
+            "espelho": {"sinal": ">=0", "stats": {"forca": 1, "mira": 1, "vigor": -1, "recuperacao": -1}},
+            "muralha": {"sinal": "<0", "stats": {"vigor": 2, "forca": -2}}}},
+        "cacador": {"eixo_complementar": "resistente", "formas": {
+            "sentinela": {"sinal": ">=0", "stats": {"vigor": 1, "guarda": 1, "mira": -1, "forca": -1}},
+            "emboscador": {"sinal": "<0", "stats": {"mira": 2, "vigor": -2}}}},
+        "colosso": {"eixo_complementar": "atento", "formas": {
+            "vigia": {"sinal": ">=0", "stats": {"mira": 1, "recuperacao": 1, "forca": -1, "folego": -1}},
+            "tita": {"sinal": "<0", "stats": {"forca": 2, "recuperacao": -2}}}},
+    }
+
+
+@dataclass(frozen=True)
+class ConfigCatalogo:
+    stat_neutro: int = 10
+    stat_min: int = 3
+    stat_max: int = 20
+    orcamento_especie: int = 60
+    especies: dict = field(default_factory=_catalogo_especies)
+    # decisao do Matheus (2026-09-24): 4 especies no jogo, cada forma com sprite
+    # proprio (a folha tem ~60 Digimon = 4 x 15 formas). As 6 continuam no
+    # catalogo; so estas entram no jogo e na bateria V2.1.
+    especies_ativas: tuple = ("brasa", "cirro", "ferrugem", "limo")
+    temperamento: dict = field(default_factory=_catalogo_temperamento)
+    carater: dict = field(default_factory=_catalogo_carater)
+    arquetipos_crianca: dict = field(default_factory=_arquetipos_crianca)
+    arquetipos_adolescente: dict = field(default_factory=_arquetipos_adolescente)
+    arquetipos_adulto: dict = field(default_factory=_arquetipos_adulto)
+    mult_estagio: dict = field(default_factory=lambda: {"bebe": 0.4, "crianca": 0.6, "adolescente": 0.8, "adulto": 1.0})
+    condicao_mult_min: float = 0.95
+    condicao_mult_max: float = 1.05
+    # transicoes (arvore_evolucao.json)
+    limiar_cuidado_sereno: float = 0.8
+    sparring_minimo_adulto: int = 10
+
+
+@dataclass(frozen=True)
+class ConfigCombateV21:
+    # conversao stat -> combate (catalogo_pets.json). Com stat neutro 10:
+    # hp 100, guts 50/100, regen 8, multiplicadores 1.0.
+    hp_base: float = 70.0
+    hp_por_vigor: float = 3.0
+    guts_inicial_base: float = 30.0
+    guts_inicial_por_folego: float = 2.0
+    guts_max_base: float = 80.0
+    guts_max_por_folego: float = 2.0
+    regen_base: float = 4.0
+    regen_por_recuperacao: float = 0.4
+    mult_base: float = 0.7              # forca e mira: 0.7 + 0.03 * stat
+    mult_por_ponto: float = 0.03
+    guarda_base: float = 1.3            # defender: mult * (1.3 - 0.03 * guarda)
+    guarda_por_ponto: float = 0.03
+    # tecnicas (adolescente e adulto)
+    custo_investida: int = 20
+    dano_investida: float = 8.0
+    mult_parry_investida: float = 0.0   # defender contra investida (parry)
+    custo_contra_golpe: int = 15
+    fracao_contra_golpe: float = 0.5    # do dano BRUTO corpo a corpo, devolvido
+    custo_marcar: int = 10
+    turnos_marcar: int = 3
+    mult_marcar: float = 2.0
+    custo_pele_dura: int = 20
+    turnos_pele_dura: int = 2           # este turno e o proximo
+    mult_pele_dura: float = 0.5
+    # passivas (adulto)
+    dano_extra_duelista: float = 4.0
+    limiar_hp_furioso: float = 0.5
+    mult_furioso: float = 1.25
+    # calibrado 0.5 -> 1.0 (sementes de calibracao): com 0.5 o espelho perde a
+    # troca contra o disparo marcado e a passiva nao vale nada contra o cacador
+    fracao_espelho_disparo: float = 1.0
+    guts_extra_muralha: int = 3
+    recarga_sentinela: int = 4
+    mult_emboscador: float = 2.0
+    mult_tita: float = 1.3
+    # gambits por estagio
+    max_regras_crianca: int = 3
+    max_regras_adolescente: int = 5
+    max_regras_adulto: int = 8
+    turnos_execucao: tuple = (5, 10, 20)
+    # carater canonico dos bots: eixo da linha e eixo complementar
+    carater_bot_linha: float = 0.5
+    carater_bot_complementar: float = 0.25
+
+
+# numeros de tecnica/passiva perturbados no gate E5 (+-10%)
+CAMPOS_TECNICA_PASSIVA_V21 = (
+    "custo_investida", "dano_investida", "custo_contra_golpe", "fracao_contra_golpe",
+    "custo_marcar", "turnos_marcar", "mult_marcar", "custo_pele_dura", "turnos_pele_dura", "mult_pele_dura",
+    "dano_extra_duelista", "limiar_hp_furioso", "mult_furioso", "fracao_espelho_disparo",
+    "guts_extra_muralha", "recarga_sentinela", "mult_emboscador", "mult_tita",
+)
+
+
+@dataclass(frozen=True)
+class ConfigBateriaV21:
+    """Limiares dos gates E1-E5 (PROPOSTOS, docs/ESPEC_COMBATE_V21.md)."""
+
+    peso_minimo_suporte: float = 0.05
+    iteracoes_fictitious_play: int = 20000
+    suporte_minimo_e1: int = 4
+    fracao_min_tecnica: float = 0.05       # E3
+    taxa_min_e4: float = 0.60
+    taxa_max_e4: float = 0.85
+    perturbacao_e5: float = 0.10
+    partidas_e3_por_semente: int = 40      # por par
+    partidas_e4_por_semente: int = 100     # por par
+    partidas_e5_por_semente: int = 20      # por par, no E1 perturbado
+
+
+CONFIG_CATALOGO = ConfigCatalogo()
+CONFIG_COMBATE_V21 = ConfigCombateV21()
+CONFIG_BATERIA_V21 = ConfigBateriaV21()
