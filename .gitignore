@@ -11,3 +11,6 @@ artifacts_*/
 !artifacts_combate_v2/
 !artifacts_expressao/
 !artifacts_v1_memoria/
+
+# contabilidade local de gasto da fala por LLM (nao versionar)
+servidor/gasto_fala.json

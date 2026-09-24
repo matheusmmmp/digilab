@@ -216,6 +216,12 @@ recusa do servidor da API (o Haiku rejeita `effort`; recusa nele cai no template
 (fatores ⊆ motivo, marcadores de fatores ausentes, "não sei" sem fator, limite de fatores por estágio,
 números ⊆ evento_ref e parâmetros); qualquer falha, erro, recusa ou limite (30/min) cai no template.
 Cache por motivo+estágio+faixa de humor. Chave "fala por LLM" na página, desligada por padrão.
+**Teto de gasto TOTAL de US$ 2** (`--limite-usd`): antes de cada chamada reserva o custo máximo
+(resposta limitada a 300 tokens); se passaria do teto, não chama e usa o template. Acerta pelo `usage`
+real; erro sem `usage` conta o pior caso. Acumulado em `servidor/gasto_fala.json` (fora do git): não
+zera ao reiniciar; para liberar mais, aumente `--limite-usd` ou apague o arquivo. Modelo sem preço
+na tabela `PRECOS_USD_POR_MTOK` não liga. Proteção adicional recomendada: limite de gasto do
+workspace no Console da Anthropic.
 **Pendente**: a avaliação com juiz da C6 (fração de causas inventadas) não foi rodada — precisa de
 credencial e de aprovação do custo. A varredura de marcadores não pega sinônimos.
 

@@ -12,16 +12,30 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
 from digilab.motivo import Motivo  # noqa: E402
-from servidor.fala_llm import FalaReprovada, GeradorFala, motivo_de_dict, montar_pedido, template, validar  # noqa: E402
+from servidor.fala_llm import (  # noqa: E402
+    ControleGasto,
+    FalaReprovada,
+    GeradorFala,
+    custo_usd,
+    motivo_de_dict,
+    montar_pedido,
+    template,
+    validar,
+)
+
+
+def G(cliente, limite=2.0, **kw):
+    """Gerador com teto de gasto em memoria (sem arquivo)."""
+    return GeradorFala(cliente, gasto=ControleGasto(limite, arquivo=None), **kw)
 
 
 class ClienteFalso:
     """Imita client.beta.messages.create devolvendo um JSON fixo; conta as chamadas."""
 
-    def __init__(self, texto, citados, stop="end_turn", erro=None):
+    def __init__(self, texto, citados, stop="end_turn", erro=None, uso=(900, 40)):
         self.chamadas = []
         self.saida = json.dumps({"texto": texto, "fatores_citados": citados}, ensure_ascii=False)
-        self.stop, self.erro = stop, erro
+        self.stop, self.erro, self.uso = stop, erro, uso
         self.beta = NS(messages=NS(create=self._create))
         self.messages = NS(create=self._create)
 
@@ -29,7 +43,8 @@ class ClienteFalso:
         self.chamadas.append(kw)
         if self.erro:
             raise self.erro
-        return NS(stop_reason=self.stop, model=kw["model"], content=[NS(type="text", text=self.saida)])
+        return NS(stop_reason=self.stop, model=kw["model"], content=[NS(type="text", text=self.saida)],
+                  usage=NS(input_tokens=self.uso[0], output_tokens=self.uso[1]))
 
 
 ESQUIVA = Motivo("combate", "esquivar", ("oponente_preparando",), (4,), None, False, turno=5)
@@ -40,7 +55,7 @@ MEMORIA = Motivo("vida", "chamar_atencao", ("latencia_fome",), (12,), 0.8, False
 
 def test_fala_valida_passa_e_vai_para_o_cache():
     c = ClienteFalso("Esquivei porque você ia soltar o pesado no turno 4!", ["oponente_preparando"])
-    g = GeradorFala(c)
+    g = G(c)
     r = g.gerar(ESQUIVA, "adulto")
     assert r.fonte == "llm" and "Esquivei" in r.texto
     assert g.gerar(ESQUIVA, "adulto") is r and len(c.chamadas) == 1
@@ -59,7 +74,7 @@ def test_fala_valida_passa_e_vai_para_o_cache():
 def test_validacao_reprova_e_cai_no_template(motivo, estagio, texto, citados, erro):
     with pytest.raises(FalaReprovada, match=erro):
         validar(texto, citados, motivo, estagio)
-    r = GeradorFala(ClienteFalso(texto, citados)).gerar(motivo, estagio, 0.5)
+    r = G(ClienteFalso(texto, citados)).gerar(motivo, estagio, 0.5)
     assert r.fonte == "template" and r.texto == template(motivo, estagio, 0.5)
 
 
@@ -69,7 +84,7 @@ def test_numeros_dos_parametros_do_fator_sao_permitidos():
 
 def test_bebe_e_crianca_nunca_chamam_a_llm():
     c = ClienteFalso("x", [])
-    g = GeradorFala(c)
+    g = G(c)
     for est in ("bebe", "crianca"):
         assert g.gerar(ESQUIVA, est, 0.5).fonte == "template"
     assert c.chamadas == []
@@ -77,17 +92,17 @@ def test_bebe_e_crianca_nunca_chamam_a_llm():
 
 def test_sem_credencial_erro_recusa_e_limite_caem_no_template():
     assert GeradorFala(None).gerar(ESQUIVA, "adulto").fonte == "template"
-    assert GeradorFala(ClienteFalso("x", [], erro=RuntimeError("rede"))).gerar(ESQUIVA, "adulto").fonte == "template"
-    assert GeradorFala(ClienteFalso("x", [], stop="refusal")).gerar(ESQUIVA, "adulto").fonte == "template"
+    assert G(ClienteFalso("x", [], erro=RuntimeError("rede"))).gerar(ESQUIVA, "adulto").fonte == "template"
+    assert G(ClienteFalso("x", [], stop="refusal")).gerar(ESQUIVA, "adulto").fonte == "template"
     c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
-    g = GeradorFala(c, limite_por_minuto=1)
+    g = G(c, limite_por_minuto=1)
     g.gerar(ESQUIVA, "adulto")
     assert g.gerar(ESQUIVA, "adolescente").detalhe == "limite de chamadas por minuto"
 
 
 def test_pedido_leva_so_o_motivo_e_textos_permitidos():
     c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
-    GeradorFala(c).gerar(ESQUIVA, "adulto")
+    G(c).gerar(ESQUIVA, "adulto")
     kw = c.chamadas[0]
     carga = json.loads(kw["messages"][0]["content"])
     assert carga["fatores"] == ["oponente_preparando"] and carga["evento_ref"] == [4]
@@ -118,6 +133,54 @@ def test_digilab_nao_importa_servidor_nem_anthropic():
 
 def test_opus_usa_esforco_baixo_e_fallback_de_recusa():
     c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
-    GeradorFala(c, modelo="claude-opus-5").gerar(ESQUIVA, "adulto")
+    G(c, modelo="claude-opus-5").gerar(ESQUIVA, "adulto")
     kw = c.chamadas[0]
     assert kw["output_config"]["effort"] == "low" and kw["fallbacks"] == "default"
+
+
+# ------------------------------------------------------------ teto de gasto
+
+
+def test_gasto_e_contado_pelo_uso_real():
+    c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"], uso=(1000, 50))
+    g = G(c)
+    g.gerar(ESQUIVA, "adulto")
+    assert g.gasto.gasto == pytest.approx(custo_usd("claude-haiku-4-5", 1000, 50))
+    assert g.gasto.reservado == pytest.approx(0.0) and g.gasto.chamadas == 1
+
+
+def test_teto_atingido_nao_chama_a_api():
+    c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
+    g = G(c, limite=0.0001)
+    r = g.gerar(ESQUIVA, "adulto")
+    assert r.fonte == "template" and "limite de gasto" in r.detalhe and c.chamadas == []
+
+
+def test_teto_para_de_chamar_quando_acaba_o_credito():
+    c = ClienteFalso("Não sei, só quis.", [], uso=(1000, 100))
+    g = G(c, limite=0.01)
+    motivos = [Motivo("vida", "comer", (), (), 0.0, False, tick=t) for t in range(100)]
+    fontes = [g.gerar(m, "adulto").fonte for m in motivos]
+    assert "llm" in fontes and fontes[-1] == "template"
+    assert g.gasto.gasto <= 0.01
+
+
+def test_erro_sem_uso_conta_o_pior_caso():
+    g = G(ClienteFalso("x", [], erro=RuntimeError("timeout")))
+    g.gerar(ESQUIVA, "adulto")
+    assert g.gasto.gasto > 0 and g.gasto.reservado == pytest.approx(0.0)
+
+
+def test_gasto_persiste_entre_reinicios(tmp_path):
+    arq = tmp_path / "gasto.json"
+    c = ClienteFalso("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
+    GeradorFala(c, gasto=ControleGasto(2.0, arquivo=arq)).gerar(ESQUIVA, "adulto")
+    antes = ControleGasto(2.0, arquivo=arq)
+    assert antes.gasto > 0 and antes.chamadas == 1
+
+
+def test_modelo_sem_preco_ou_sem_teto_nao_liga():
+    with pytest.raises(ValueError, match="preco"):
+        GeradorFala(ClienteFalso("x", []), modelo="modelo-inventado", gasto=ControleGasto(2.0, arquivo=None))
+    with pytest.raises(ValueError, match="ControleGasto"):
+        GeradorFala(ClienteFalso("x", []))

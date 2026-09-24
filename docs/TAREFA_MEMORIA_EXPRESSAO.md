@@ -251,6 +251,8 @@ avaliação com juiz antes de ligar a LLM por padrão.
   motivo mostra a mesma frase na mesma sessão. A frase não é reproduzível entre
   execuções e isso é aceito, porque ela não entra em nada que precise de replay.
 - Limite de chamadas por minuto no servidor e timeout curto; acima disso, template.
+- **Teto de gasto total** (padrão US$ 2, persistido; decisão do pesquisador em 2026-09-24): reserva o
+  custo máximo antes de chamar, acerta pelo uso real, conta o pior caso em erro; no teto, só template.
 - Cada fala é uma chamada paga. O diário e a legibilidade não chamam a LLM.
 
 ### C6 — testes e avaliação

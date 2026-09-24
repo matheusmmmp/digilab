@@ -13,10 +13,12 @@ estruturada; o servidor confere.
 from __future__ import annotations
 
 import json
+import math
 import re
 import threading
 import time
 from dataclasses import dataclass
+from pathlib import Path
 
 from digilab.expressao import ACOES_COMBATE, ACOES_VIDA, ESTAGIOS, FATORES, _texto_fator, expressar
 from digilab.motivo import Motivo, nome_base
@@ -28,6 +30,69 @@ VERSAO_PROMPT = "fala-v1"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
 LIMITE_POR_MINUTO = 30
+MAX_TOKENS_SAIDA = 300          # fala curta; limita o pior caso de cada chamada
+LIMITE_USD_PADRAO = 2.00        # teto TOTAL acumulado (decisao do pesquisador, 2026-09-24)
+ARQUIVO_GASTO = Path(__file__).with_name("gasto_fala.json")   # fora do git
+
+# US$ por 1 milhao de tokens (entrada, saida). Modelo sem preco aqui nao liga a LLM:
+# sem preco nao da para garantir o teto de gasto.
+PRECOS_USD_POR_MTOK = {
+    "claude-haiku-4-5": (1.00, 5.00),
+    "claude-sonnet-5": (2.00, 10.00),
+    "claude-opus-5": (5.00, 25.00),
+    "claude-fable-5-1": (10.00, 50.00),
+}
+
+
+class ControleGasto:
+    """Teto de gasto TOTAL em dolares, persistido em arquivo (reiniciar nao zera).
+
+    Antes de cada chamada reserva o custo maximo possivel; se a reserva passaria do
+    teto, nao chama. Depois acerta pelo `usage` real da resposta. Se a chamada falha
+    sem `usage` (timeout, rede), conta o maximo reservado como gasto: a API pode ter
+    cobrado mesmo assim, e errar para o lado do credito e o objetivo.
+    """
+
+    def __init__(self, limite_usd: float, arquivo: Path | None = ARQUIVO_GASTO) -> None:
+        if limite_usd < 0:
+            raise ValueError("limite de gasto negativo")
+        self.limite = limite_usd
+        self.arquivo = arquivo
+        self._trava = threading.Lock()
+        self.reservado = 0.0
+        self.gasto = 0.0
+        self.chamadas = 0
+        if arquivo is not None and arquivo.exists():
+            d = json.loads(arquivo.read_text(encoding="utf-8"))
+            self.gasto, self.chamadas = float(d["gasto_usd"]), int(d["chamadas"])
+
+    def _salvar(self) -> None:
+        if self.arquivo is not None:
+            self.arquivo.write_text(json.dumps({"gasto_usd": self.gasto, "chamadas": self.chamadas,
+                                                "limite_usd": self.limite}, indent=1), encoding="utf-8")
+
+    def reservar(self, custo_max: float) -> bool:
+        with self._trava:
+            if self.gasto + self.reservado + custo_max > self.limite:
+                return False
+            self.reservado += custo_max
+            return True
+
+    def acertar(self, custo_max: float, custo_real: float) -> None:
+        with self._trava:
+            self.reservado -= custo_max
+            self.gasto += custo_real
+            self.chamadas += 1
+            self._salvar()
+
+    def para_dict(self) -> dict:
+        return {"gasto_usd": round(self.gasto, 6), "limite_usd": self.limite, "chamadas": self.chamadas,
+                "restante_usd": round(max(0.0, self.limite - self.gasto), 6)}
+
+
+def custo_usd(modelo: str, tokens_entrada: int, tokens_saida: int) -> float:
+    pin, pout = PRECOS_USD_POR_MTOK[modelo]
+    return (tokens_entrada * pin + tokens_saida * pout) / 1_000_000
 
 SISTEMA = """Você é a voz de um pet virtual (um pequeno monstro digital) falando com o dono, em português do Brasil, em primeira pessoa.
 
@@ -151,10 +216,16 @@ class GeradorFala:
     `cliente` e um anthropic.Anthropic (ou um falso nos testes). Sem cliente, so template.
     """
 
-    def __init__(self, cliente=None, modelo: str = MODELO_PADRAO, limite_por_minuto: int = LIMITE_POR_MINUTO) -> None:
+    def __init__(self, cliente=None, modelo: str = MODELO_PADRAO, limite_por_minuto: int = LIMITE_POR_MINUTO,
+                 gasto: ControleGasto | None = None) -> None:
+        if cliente is not None and modelo not in PRECOS_USD_POR_MTOK:
+            raise ValueError(f"modelo sem preco conhecido: {modelo!r}; sem preco nao da para garantir o teto de gasto")
+        if cliente is not None and gasto is None:
+            raise ValueError("LLM ligada exige um ControleGasto")
         self.cliente = cliente
         self.modelo = modelo
         self.limite = limite_por_minuto
+        self.gasto = gasto
         self._cache: dict[str, Resultado] = {}
         self._chamadas: list[float] = []
         self._trava = threading.Lock()
@@ -191,12 +262,18 @@ class GeradorFala:
                 return self._cache[chave]
         if not self._pode_chamar():
             return self._modelo_de_frase(motivo, estagio, humor, "limite de chamadas por minuto")
+        conteudo = montar_pedido(motivo, estagio, humor)
+        # teto de gasto: reserva o pior caso (entrada estimada por cima: 1 token a cada 2 caracteres)
+        custo_max = custo_usd(self.modelo, math.ceil((len(SISTEMA) + len(conteudo) + 400) / 2), MAX_TOKENS_SAIDA)
+        if not self.gasto.reservar(custo_max):
+            return self._modelo_de_frase(motivo, estagio, humor,
+                                         f"limite de gasto atingido (US$ {self.gasto.gasto:.4f} de US$ {self.gasto.limite:.2f})")
         try:
             pedido = dict(
                 model=self.modelo,
-                max_tokens=1024,
+                max_tokens=MAX_TOKENS_SAIDA,
                 system=SISTEMA,
-                messages=[{"role": "user", "content": montar_pedido(motivo, estagio, humor)}],
+                messages=[{"role": "user", "content": conteudo}],
             )
             if self.modelo in MODELOS_COM_FALLBACK:
                 # Opus 5 / Fable 5.1: esforco baixo e fallback de recusa do servidor da API
@@ -213,8 +290,18 @@ class GeradorFala:
                     output_config={"format": {"type": "json_schema", "schema": ESQUEMA}},
                 )
         except Exception as err:  # rede, credencial, limite: a fala e so exibicao, cai no template
+            self.gasto.acertar(custo_max, custo_max)   # sem usage: conta o pior caso
             self.estatisticas["erros"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"erro na API: {type(err).__name__}")
+        uso = getattr(resposta, "usage", None)
+        if uso is None:
+            self.gasto.acertar(custo_max, custo_max)
+        else:
+            # o fallback de recusa (Opus) pode cobrar outro modelo; sem preco dele, usa o mais caro da tabela
+            modelo_cobrado = getattr(resposta, "model", self.modelo)
+            precos = modelo_cobrado if modelo_cobrado in PRECOS_USD_POR_MTOK else \
+                max(PRECOS_USD_POR_MTOK, key=lambda m: PRECOS_USD_POR_MTOK[m][1])
+            self.gasto.acertar(custo_max, custo_usd(precos, uso.input_tokens, uso.output_tokens))
         if resposta.stop_reason != "end_turn":
             self.estatisticas["erros"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"resposta interrompida: {resposta.stop_reason}")

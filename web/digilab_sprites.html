@@ -1449,18 +1449,19 @@ $("novo-conf").addEventListener("click", () => { $("novo-conf").hidden = true; n
    O servidor local (servidor/servidor_local.py) gera a frase e a VALIDA contra o motivo;
    a pagina mostra o template na hora e troca pela frase da LLM quando ela chega. Nada
    disso entra no registro nem nas decisoes. Sem servidor/credencial: so template. */
-const FALA_LLM = { on:false, ativo:false, modelo:null, cache:new Map(), pendentes:new Set() };
+const FALA_LLM = { on:false, ativo:false, modelo:null, gasto:null, cache:new Map(), pendentes:new Set() };
 try { FALA_LLM.on = localStorage.getItem(CHAVE + "-fala-llm") === "1"; } catch(_){}
 $("fala-llm-on").checked = FALA_LLM.on;
 function rotuloLLM(){
+  const g = FALA_LLM.gasto;
   $("fala-llm-status").textContent = FALA_LLM.ativo
-    ? `(${FALA_LLM.modelo}; cada fala nova é uma chamada paga)`
+    ? `(${FALA_LLM.modelo}; gasto US$ ${g ? g.gasto_usd.toFixed(4) : "?"} de US$ ${g ? g.limite_usd.toFixed(2) : "?"})`
     : "(indisponível: rode servidor/servidor_local.py com ANTHROPIC_API_KEY)";
   $("fala-llm-on").disabled = !FALA_LLM.ativo;
 }
 async function verificarLLM(){
   try { const r = await fetch("/api/fala/status", {cache:"no-store"}); if (!r.ok) throw new Error(r.status);
-    const d = await r.json(); FALA_LLM.ativo = !!d.ativo; FALA_LLM.modelo = d.modelo; }
+    const d = await r.json(); FALA_LLM.ativo = !!d.ativo; FALA_LLM.modelo = d.modelo; FALA_LLM.gasto = d.gasto; }
   catch(_){ FALA_LLM.ativo = false; }
   rotuloLLM();
 }
@@ -1484,7 +1485,7 @@ function falaLLM(motApi, est, humor, aoChegar){
     FALA_LLM.pendentes.add(chave);
     fetch("/api/fala", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({motivo:motApi, estagio:est, humor})})
       .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
-      .then(d => { FALA_LLM.cache.set(chave, d); aoChegar && aoChegar(d); })
+      .then(d => { FALA_LLM.cache.set(chave, d); if (d.gasto){ FALA_LLM.gasto = d.gasto; rotuloLLM(); } aoChegar && aoChegar(d); })
       .catch(err => { FALA_LLM.cache.set(chave, {texto:null, fonte:"template", detalhe:"servidor: " + err.message}); })
       .finally(() => FALA_LLM.pendentes.delete(chave));
   }
