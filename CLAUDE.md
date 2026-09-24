@@ -17,7 +17,9 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
 ## Regras do projeto — não negociáveis
 
 - **Não aumentar escopo.** Nada de combate novo, multiplayer, LLM, interface gráfica ou modelos
-  novos fora do que a tarefa pede.
+  novos fora do que a tarefa pede. (Exceção autorizada em 2026-09-24: o combate V2 em
+  `digilab/combate_v2/`. Plugar pets, técnicas por linha evolutiva e comandos do dono na luta
+  continuam fora.)
 - **Falhar alto, não em silêncio.** `raise` em vez de `dropna`, valor default ou `except: pass`.
   Evento desconhecido no log levanta erro.
 - **Determinismo é requisito.** Mesma semente + mesmo log = mesmo resultado, até o último float.
@@ -61,13 +63,19 @@ tempo). A vida é reconstruída reprocessando o log.
 | `artifacts/` | saída da run canônica (evidência; não editar à mão) |
 | `artifacts_ablacao/` | saída da ablação (evidência; não editar à mão) |
 | `web/digilab.html` | versão web jogável (porte JS; ver abaixo) |
-| `tests/` | 74 testes; `test_canonico_intacto.py` roda a canônica inteira (~70 s) |
+| `digilab/combate_v2/` | combate V2: `regras.py` (resolução pura, sem rng), `gambits.py` (catálogo fechado de condições, `ListaGambits`, decisão com motivo), `lutador.py` (`CondicaoFisica` × `Estilo`), `partida.py` (laço, log, replay), `bots.py` (5 fixos + adaptativo em gambits; `oraculo` FORA da linguagem) |
+| `experiments/run_bateria_combate.py` | portão do combate V2: round-robin de bots, gates G1–G7 → `artifacts_combate_v2/` |
+| `experiments/calibrar_combate_v2.py` | varredura de calibração (recusa sementes de validação) |
+| `experiments/configs/bateria_*.json` | `bateria_canonico.json` (validação, canônico) e `bateria_calibracao.json`; `calibracao_combate_v2.json` = registro da calibração |
+| `artifacts_combate_v2/` | saída da bateria canônica + `calibracao_varredura.jsonl` (evidência) |
+| `tests/` | 108 testes; `test_canonico_intacto.py` roda a canônica inteira (~70 s) |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 74 testes, ~90 s (70 s são a canônica)
+python -m pytest tests/ -q                                                   # 108 testes, ~95 s (70 s são a canônica)
 python experiments/run_arena.py --config experiments/configs/ablacao.json    # ablação, ~2 min
+python experiments/run_bateria_combate.py --config experiments/configs/bateria_canonico.json   # combate V2, ~50 s; rc 0/2
 python experiments/run_arena.py --config experiments/configs/canonico.json   # portão, ~2 min; rc 0 APROVADA / 2 REPROVADA
 python experiments/run_arena.py --config experiments/configs/fumaca.json     # fumaça, rápido, não canônico
 python run_demo.py                                                            # demo do v0
@@ -131,6 +139,32 @@ origem e, fora dele, exige discretos idênticos e floats com erro relativo ≤ 1
 mesmo ambiente continua bit a bit (é o que o orquestrador confere). Artefatos agora são
 gravados sempre com LF (antes saíam CRLF no Windows).
 
+## Combate V2 (2026-09-24, `artifacts_combate_v2/`, branch `combate-v2`)
+
+Números abaixo vêm de `artifacts_combate_v2/gates.json`, `matriz.json` e `equilibrio.json`
+(sementes de validação 2101…2505, 200 partidas por par por semente, 28.000 partidas; hash das
+regras `c26aa2813e23…`, da config `86a28a8adbd1…`). Tudo PROPOSTO. Não substitui a arena v1.
+
+- Bateria **REPROVADA**: G1, G2, G3, G6, G7 ok; **G4 e G5 falham**.
+  - G4: mediana 25 turnos (ok), mas 31,3% das partidas acabam no limite de turnos (limiar 20%).
+    Vem de pares de bots passivos (tartaruga, contragolpe) que só atacam com o oponente sem guts.
+  - G5: `esquivar` em 0,8% das decisões dos bots do suporte (limiar 3%).
+- Equilíbrio dos fixos: agressivo 0,327, atirador 0,335, tartaruga 0,338 (ciclo agressivo >
+  tartaruga > atirador > agressivo). Aleatório e contragolpe fora do suporte.
+- G2: adaptativo × aleatório 0,999, IC95 [0,997, 1,000]; oráculo 0,946 × adaptativo 0,913 contra os fixos.
+- **Atenção**: o adaptativo vence todos, inclusive o oráculo (0,962 no confronto direto); no
+  equilíbrio com ele incluído (informativo) ele vira estratégia pura. Um único estilo domina.
+- G6: condição (HP ±10%, guts ±10) move a taxa no máximo 0,197 (atirador); estilo move 0,388.
+- G7 passa pela média (0,705), mas uma das 5 permutações (`02416357`) bate o original (0,009 para o
+  original): a ordem importa, e a ordem escrita à mão não é a melhor.
+- Calibração (só sementes de calibração, 3 rodadas, `experiments/configs/calibracao_combate_v2.json`):
+  `custo_disparo` 15 → 20 (G1), `hp_neutro` 100 → 70 (mediana de turnos). Nenhum número resolveu G4
+  (limite) nem G5 (esquiva): são desenho dos bots/regras, não calibração.
+- Limites da linguagem de gambits encontrados: não há "última ação do oponente foi X" (k só 2 ou 3),
+  nem condição sobre a própria ação anterior, nem negação. Catálogo NÃO foi ampliado.
+- G3 mede viés de posição (pontos do lado 0 nos espelhos), porque com lados trocados na metade a
+  média do espelho é 0,5 por construção.
+
 ## Versão web (`web/digilab.html`)
 
 Porte em JavaScript com as mesmas regras e parâmetros de `config.py` (motor, instinto, bandit,
@@ -186,6 +220,9 @@ editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- Combate V2 reprovado em G4/G5: decidir entre mudar bots passivos, regra de esquiva ou limiares
+  (decisão do pesquisador); investigar a dominância do adaptativo antes de plugar pets.
 
 - Referendar (ou alterar) os campos PROPOSTOS de `protocol.py` antes de citar qualquer resultado.
 - Ablação feita (ver acima): inconclusiva. Aumentar `partidas_por_par` e/ou sementes antes de

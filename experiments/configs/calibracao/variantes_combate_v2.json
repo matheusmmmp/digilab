@@ -1,0 +1,18 @@
+{
+ "r1_base": {},
+ "r1_disp20": {"custo_disparo": 20},
+ "r1_disp20_d5": {"custo_disparo": 20, "dano_disparo": 5.0},
+ "r1_disp20_def5": {"custo_disparo": 20, "mult_defender": 0.5},
+ "r1_disp20_d5_def5": {"custo_disparo": 20, "dano_disparo": 5.0, "mult_defender": 0.5},
+ "r1_disp20_d5_def5_g10": {"custo_disparo": 20, "dano_disparo": 5.0, "mult_defender": 0.5, "dano_golpe_rapido": 10.0},
+ "r2_disp20_hp70": {"custo_disparo": 20, "hp_neutro": 70.0},
+ "r2_disp20_hp60": {"custo_disparo": 20, "hp_neutro": 60.0},
+ "r2_disp20_hp70_esq10": {"custo_disparo": 20, "hp_neutro": 70.0, "custo_esquivar": 10},
+ "r2_disp20_hp60_esq10": {"custo_disparo": 20, "hp_neutro": 60.0, "custo_esquivar": 10},
+ "r2_disp20_hp70_def4": {"custo_disparo": 20, "hp_neutro": 70.0, "mult_defender": 0.4},
+ "r3_d20_hp70_r6": {"custo_disparo": 20, "hp_neutro": 70.0, "regen_guts_neutro": 6},
+ "r3_d20_hp70_r5": {"custo_disparo": 20, "hp_neutro": 70.0, "regen_guts_neutro": 5},
+ "r3_d20_hp60_r6": {"custo_disparo": 20, "hp_neutro": 60.0, "regen_guts_neutro": 6},
+ "r3_d20_hp60_r5": {"custo_disparo": 20, "hp_neutro": 60.0, "regen_guts_neutro": 5},
+ "r3_d20_hp60_r5_esq10": {"custo_disparo": 20, "hp_neutro": 60.0, "regen_guts_neutro": 5, "custo_esquivar": 10}
+}

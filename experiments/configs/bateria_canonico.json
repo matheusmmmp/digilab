@@ -1,0 +1,9 @@
+{
+  "descricao": "Bateria canonica do combate V2: sementes de VALIDACAO (nunca usadas na calibracao).",
+  "saida": "artifacts_combate_v2",
+  "conjunto": "validacao",
+  "sementes_calibracao": [1101, 1202, 1303, 1404, 1505],
+  "sementes_validacao": [2101, 2202, 2303, 2404, 2505],
+  "partidas_por_par_por_semente": 200,
+  "registro_calibracao": "experiments/configs/calibracao_combate_v2.json"
+}

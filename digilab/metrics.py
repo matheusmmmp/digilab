@@ -282,3 +282,55 @@ def efeito_do_treino(
         "vantagem_instinto": ic(vi),
         "efeito": ic(ef),
     }
+
+
+# ------------------------------------------------------------ combate V2: matriz e equilibrio
+
+
+def matriz_taxas(confrontos: Iterable[tuple[str, str, float]]) -> dict[str, dict[str, float]]:
+    """(a, b, pontos de a) -> taxa[a][b] = pontos medios de a contra b.
+
+    Guarda os dois sentidos; no espelho (a == b) as duas posicoes contam.
+    """
+    soma: dict[tuple[str, str], float] = {}
+    n: dict[tuple[str, str], int] = {}
+    for a, b, pa in confrontos:
+        for x, y, p in ((a, b, pa), (b, a, 1.0 - pa)):
+            soma[(x, y)] = soma.get((x, y), 0.0) + p
+            n[(x, y)] = n.get((x, y), 0) + 1
+    nomes = sorted({x for x, _ in soma})
+    return {x: {y: soma[(x, y)] / n[(x, y)] for y in nomes if (x, y) in soma} for x in nomes}
+
+
+def equilibrio_simetrico(taxa: Mapping[str, Mapping[str, float]], nomes: Sequence[str], iteracoes: int) -> dict:
+    """Fictitious play deterministico no jogo simetrico de soma zero u(i,j) = taxa[i][j] - 0.5.
+
+    Parte de contagem zero; a cada iteracao soma 1 a melhor resposta contra a
+    frequencia acumulada (empate: menor indice em `nomes`). Retorna a
+    frequencia empirica (aproxima o equilibrio), o valor do melhor desvio
+    contra ela (explorabilidade; 0 = equilibrio exato) e a trajetoria final.
+    """
+    faltando = [(i, j) for i in nomes for j in nomes if j not in taxa.get(i, {})]
+    if faltando:
+        raise ValueError(f"matriz incompleta: faltam {faltando[:5]}")
+    k = len(nomes)
+    u = [[taxa[nomes[i]][nomes[j]] - 0.5 for j in range(k)] for i in range(k)]
+    cont = [0] * k
+    ganho = [0.0] * k  # ganho[i] = soma_j u[i][j] * cont[j]
+    for _ in range(iteracoes):
+        br = max(range(k), key=lambda i: (ganho[i], -i))
+        cont[br] += 1
+        for i in range(k):
+            ganho[i] += u[i][br]
+    freq = [c / iteracoes for c in cont]
+    desvio = max(sum(u[i][j] * freq[j] for j in range(k)) for i in range(k))
+    return {
+        "estrategia": dict(zip(nomes, freq)),
+        "explorabilidade": desvio,
+        "iteracoes": iteracoes,
+        "metodo": "fictitious play deterministico, u = taxa - 0.5, empate pelo menor indice",
+    }
+
+
+def suporte(estrategia: Mapping[str, float], peso_minimo: float) -> list[str]:
+    return sorted(n for n, p in estrategia.items() if p >= peso_minimo)
