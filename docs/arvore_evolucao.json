@@ -1,0 +1,272 @@
+{
+  "_meta": {
+    "versao": "arvore-v0.1-PROPOSTO",
+    "nota": "Arvore por arquetipos: cada especie do catalogo percorre a mesma estrutura. Forma = especie + caminho de arquetipos. Todo modificador de stat soma zero. Nada testado em combate ainda.",
+    "estagios": [
+      "bebe",
+      "crianca",
+      "adolescente",
+      "adulto"
+    ],
+    "contadores_zeram_na_evolucao": true,
+    "tracos_continuos": true
+  },
+  "capacidade_por_estagio": {
+    "_nota": "A evolucao muda a cabeca: mais regras de gambit e mais condicoes disponiveis. Casa com a expressao por estagio.",
+    "bebe": {
+      "luta": false
+    },
+    "crianca": {
+      "luta": true,
+      "max_regras": 3,
+      "condicoes": [
+        "sempre",
+        "distancia_eh",
+        "hp_proprio_abaixo",
+        "guts_proprio_abaixo",
+        "guts_proprio_acima"
+      ]
+    },
+    "adolescente": {
+      "luta": true,
+      "max_regras": 5,
+      "condicoes_extra": [
+        "oponente_preparando",
+        "oponente_hp_abaixo",
+        "oponente_guts_abaixo"
+      ],
+      "tecnica": true
+    },
+    "adulto": {
+      "luta": true,
+      "max_regras": 8,
+      "condicoes_extra": [
+        "oponente_repete",
+        "oponente_frequente",
+        "turno_execucao"
+      ],
+      "tecnica": true,
+      "passiva": true
+    }
+  },
+  "transicoes": {
+    "bebe_para_crianca": {
+      "moeda": "cuidado",
+      "criterio": "fracao de janelas de chamado atendidas no estagio bebe",
+      "limiar": 0.8,
+      "ramos": {
+        "sereno": ">= limiar",
+        "arisco": "< limiar"
+      },
+      "nota": "Como o estagio II dos v-pets: so o cuidado conta aqui, e decide a forma seguinte."
+    },
+    "crianca_para_adolescente": {
+      "moeda": "carater",
+      "criterio": "eixo de carater dominante ao fim do estagio crianca",
+      "ramos": {
+        "brigao": "impetuoso",
+        "guardiao": "paciente",
+        "cacador": "atento",
+        "colosso": "resistente"
+      },
+      "nota": "Carater = desvio da politica aprendida em relacao ao instinto em contextos-sonda fixos."
+    },
+    "adolescente_para_adulto": {
+      "moeda": "carater_complementar + sparring",
+      "criterio": "sinal do eixo complementar da linha; exige sparring minimo contra bots no estagio adolescente",
+      "sparring_minimo": 10,
+      "nota": "Sem o sparring minimo o pet continua adolescente. Sparring nao treina a politica."
+    }
+  },
+  "arquetipos": {
+    "crianca": {
+      "sereno": {
+        "stats": {
+          "recuperacao": 2,
+          "guarda": 1,
+          "forca": -2,
+          "mira": -1
+        },
+        "descricao": "bem atendido; calmo, recupera bem"
+      },
+      "arisco": {
+        "stats": {
+          "forca": 2,
+          "mira": 1,
+          "recuperacao": -2,
+          "guarda": -1
+        },
+        "descricao": "pouco atendido; nervoso, bate primeiro"
+      }
+    },
+    "adolescente": {
+      "brigao": {
+        "eixo": "impetuoso",
+        "stats": {
+          "forca": 3,
+          "folego": 1,
+          "guarda": -2,
+          "mira": -2
+        },
+        "tecnica": {
+          "nome": "investida",
+          "custo": 20,
+          "alcance": [
+            "medio"
+          ],
+          "efeito": "avanca para perto e aplica golpe rapido no mesmo turno; interrompe preparacao",
+          "contra": "defender (parry) e esquivar nao funciona"
+        }
+      },
+      "guardiao": {
+        "eixo": "paciente",
+        "stats": {
+          "guarda": 3,
+          "recuperacao": 1,
+          "forca": -2,
+          "folego": -2
+        },
+        "tecnica": {
+          "nome": "contra_golpe",
+          "custo": 15,
+          "alcance": [
+            "perto"
+          ],
+          "efeito": "postura de defesa que devolve 50% do dano corpo a corpo recebido",
+          "contra": "disparo, carregar e esperar"
+        }
+      },
+      "cacador": {
+        "eixo": "atento",
+        "stats": {
+          "mira": 3,
+          "folego": 1,
+          "vigor": -2,
+          "guarda": -2
+        },
+        "tecnica": {
+          "nome": "marcar",
+          "custo": 10,
+          "alcance": [
+            "medio",
+            "longe"
+          ],
+          "efeito": "o proximo disparo em ate 3 turnos causa dano dobrado e ignora defender",
+          "contra": "avancar e pressionar de perto"
+        }
+      },
+      "colosso": {
+        "eixo": "resistente",
+        "stats": {
+          "vigor": 3,
+          "guarda": 1,
+          "mira": -2,
+          "recuperacao": -2
+        },
+        "tecnica": {
+          "nome": "pele_dura",
+          "custo": 20,
+          "alcance": [
+            "perto",
+            "medio",
+            "longe"
+          ],
+          "efeito": "neste turno e no proximo: dano recebido x0,5 e preparacao do pesado nao pode ser interrompida",
+          "contra": "marcar/disparo apos o efeito; ficar longe"
+        }
+      }
+    },
+    "adulto": {
+      "brigao": {
+        "eixo_complementar": "paciente",
+        "duelista": {
+          "condicao": "paciente >= 0",
+          "stats": {
+            "mira": 1,
+            "guarda": 1,
+            "vigor": -1,
+            "folego": -1
+          },
+          "passiva": "finta nao custa o guts do pesado e tambem causa 4 de dano extra se o oponente esquivou"
+        },
+        "furioso": {
+          "condicao": "paciente < 0",
+          "stats": {
+            "forca": 2,
+            "guarda": -2
+          },
+          "passiva": "abaixo de 50% de HP, dano corpo a corpo +25%; nao pode usar defender"
+        }
+      },
+      "guardiao": {
+        "eixo_complementar": "impetuoso",
+        "espelho": {
+          "condicao": "impetuoso >= 0",
+          "stats": {
+            "forca": 1,
+            "mira": 1,
+            "vigor": -1,
+            "recuperacao": -1
+          },
+          "passiva": "contra_golpe tambem devolve 50% do dano de disparo"
+        },
+        "muralha": {
+          "condicao": "impetuoso < 0",
+          "stats": {
+            "vigor": 2,
+            "forca": -2
+          },
+          "passiva": "sem fadiga de guarda; defender recupera +3 guts extra"
+        }
+      },
+      "cacador": {
+        "eixo_complementar": "resistente",
+        "sentinela": {
+          "condicao": "resistente >= 0",
+          "stats": {
+            "vigor": 1,
+            "guarda": 1,
+            "mira": -1,
+            "forca": -1
+          },
+          "passiva": "recuar funciona mesmo se o oponente avanca, uma vez a cada 4 turnos"
+        },
+        "emboscador": {
+          "condicao": "resistente < 0",
+          "stats": {
+            "mira": 2,
+            "vigor": -2
+          },
+          "passiva": "o primeiro disparo da partida causa dano dobrado"
+        }
+      },
+      "colosso": {
+        "eixo_complementar": "atento",
+        "vigia": {
+          "condicao": "atento >= 0",
+          "stats": {
+            "mira": 1,
+            "recuperacao": 1,
+            "forca": -1,
+            "folego": -1
+          },
+          "passiva": "ve a preparacao do oponente um turno antes (condicao oponente_vai_preparar liberada)"
+        },
+        "tita": {
+          "condicao": "atento < 0",
+          "stats": {
+            "forca": 2,
+            "recuperacao": -2
+          },
+          "passiva": "pesado causa +30% de dano"
+        }
+      }
+    }
+  },
+  "contagem": {
+    "arquetipos_adultos": 8,
+    "caminhos_ate_adulto_por_especie": 16,
+    "formas_adultas_totais": 96,
+    "identidades_de_combate_a_balancear": "8 arquetipos adultos x 6 especies (stats), 4 tecnicas, 8 passivas"
+  }
+}

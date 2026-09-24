@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "versao": "cronograma-v0.2-PROPOSTO (duracoes pela metade)",
+    "base": "Ancorado nos v-pets Digimon (Ver.20th/Color: janela de 10 min, estagios de 6-12h, 24h, 36h; coco a cada 60 min no estagio II e 120 min depois) e no Tamagotchi original (janela de 15 min; bebe com fome a cada ~4 min). Numeros de fas, nao oficiais.",
+    "tempo_de_sono_conta_para_evolucao": true,
+    "contadores_zeram_na_evolucao": true,
+    "eclosao": "08:00",
+    "nota_eclosao": "Horario fixo de eclosao na simulacao: com estagios curtos, o horario de nascimento decide quanto de cada estagio cai no sono."
+  },
+  "janelas": {
+    "chamado_min": 15,
+    "luz_ao_dormir_min": 30,
+    "nota": "15 min fica entre Digimon Color (10) e Digimon 1997 (20); igual ao Tamagotchi."
+  },
+  "estagios": {
+    "bebe": {
+      "duracao_h": 3,
+      "dorme": null,
+      "intervalos_min": {
+        "fome": 30,
+        "higiene": 60,
+        "carinho": 45
+      },
+      "treino": null,
+      "sparring": null,
+      "moeda": "cuidado (fracao de janelas atendidas) -> sereno/arisco",
+      "nota": "Curto e intenso; metade dos 6h do estagio II do Ver.20th."
+    },
+    "crianca": {
+      "duracao_h": 12,
+      "dorme": [
+        "21:00",
+        "08:00"
+      ],
+      "intervalos_min": {
+        "fome": 90,
+        "higiene": 120,
+        "carinho": 90
+      },
+      "treino": {
+        "sessoes_por_dia_alvo": 10,
+        "teto_por_dia": 16
+      },
+      "sparring": null,
+      "moeda": "carater dominante -> linha",
+      "nota": "Metade das 24h do Child dos v-pets; e onde o treino define a linha."
+    },
+    "adolescente": {
+      "duracao_h": 18,
+      "dorme": [
+        "22:00",
+        "08:00"
+      ],
+      "intervalos_min": {
+        "fome": 150,
+        "higiene": 120,
+        "carinho": 120
+      },
+      "treino": {
+        "sessoes_por_dia_alvo": 8,
+        "teto_por_dia": 12
+      },
+      "sparring": {
+        "minimo_no_estagio": 10
+      },
+      "moeda": "carater complementar + sparring -> forma adulta",
+      "nota": "Metade das 36h do Adult dos v-pets."
+    },
+    "adulto": {
+      "duracao_h": null,
+      "dorme": [
+        "23:00",
+        "08:00"
+      ],
+      "intervalos_min": {
+        "fome": 180,
+        "higiene": 120,
+        "carinho": 180
+      },
+      "treino": {
+        "sessoes_por_dia_alvo": 5,
+        "teto_por_dia": 8
+      },
+      "sparring": null,
+      "moeda": "nenhuma (forma final); arena",
+      "nota": "Manutencao: demanda baixa, peso alto (arena)."
+    }
+  },
+  "donos_simulados": {
+    "_nota": "Donos definidos por janela e latencia, nao so por volume. A comparacao controlada da hipotese e atencioso x aleatorio com o MESMO volume.",
+    "atencioso": {
+      "fracao_janelas_atendidas": 0.95,
+      "latencia_media_min": 5,
+      "feedback": "coerente",
+      "volume": "referencia"
+    },
+    "aleatorio": {
+      "fracao_janelas_atendidas": "a que o acaso der",
+      "latencia_media_min": "horario sorteado, sem olhar chamados",
+      "feedback": "sinal aleatorio",
+      "volume": "igual ao atencioso"
+    },
+    "incoerente": {
+      "fracao_janelas_atendidas": 0.95,
+      "latencia_media_min": 5,
+      "feedback": "sinal inconsistente para o mesmo comportamento",
+      "volume": "igual ao atencioso"
+    },
+    "relapso": {
+      "fracao_janelas_atendidas": 0.6,
+      "latencia_media_min": 12,
+      "feedback": "coerente",
+      "volume": "menor (sai do resultado de janelas perdidas)"
+    }
+  },
+  "modo_produto": {
+    "_nota": "So para humanos; a pesquisa usa os valores acima.",
+    "janela_chamado_min": 60,
+    "multiplicador_intervalos": 2.0,
+    "pausa": "congelamento como o Cold Mode do Digital Monster Color: nao envelhece, nao evolui, nao chama",
+    "horario_de_sono": "definido pelo jogador"
+  }
+}

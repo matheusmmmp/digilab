@@ -17,9 +17,10 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
 ## Regras do projeto — não negociáveis
 
 - **Não aumentar escopo.** Nada de combate novo, multiplayer, interface gráfica ou modelos
-  novos fora do que a tarefa pede. (Exceção autorizada em 2026-09-24: o combate V2 em
-  `digilab/combate_v2/`. Plugar pets, técnicas por linha evolutiva e comandos do dono na luta
-  continuam fora.)
+  novos fora do que a tarefa pede. (Exceções autorizadas em 2026-09-24: o combate V2 em
+  `digilab/combate_v2/` e o combate V2.1 — técnicas por linha e passivas por forma — em
+  `digilab/combate_v2/v21/`, `docs/ESPEC_COMBATE_V21.md`. Plugar pets no Python e comandos do
+  dono na luta continuam fora.)
 - **LLM liberada** (decisão do Matheus, 2026-09-24): a proibição de LLM foi retirada. Usar LLM
   continua dependendo de a tarefa pedir, como qualquer outra coisa.
 - **Falhar alto, não em silêncio.** `raise` em vez de `dropna`, valor default ou `except: pass`.
@@ -77,13 +78,17 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/configs/memoria.json` | `PROTOCOLO_ARENA_V1_MEMORIA` → `artifacts_v1_memoria/` |
 | `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`: provedores Ollama local e Claude; SDK `anthropic` só aqui). `digilab/` não importa isto (teste AST) |
 | `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
-| `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `TAREFA_MEMORIA_EXPRESSAO.md`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 157 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
+| `digilab/combate_v2/v21/` | combate V2.1 (subpacote: o hash dos fontes da base não muda): `catalogo.py` (forma = espécie + caminho, stats com renormalização, perfil de combate, transições), `regras.py` (técnicas e passivas, resolução pura), `gambits.py` (capacidade por estágio, `turno_execucao`, `oponente_vai_preparar`), `partida.py` (lutador, laço, replay), `bots.py` (8 adultos, 4 adolescentes, respostas declaradas) |
+| `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
+| `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
+| `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
+| `tests/` | 181 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 157 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 181 testes, ~3 a 7 min
+python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
 python experiments/legibilidade.py                                            # legibilidade + diários, ~1 min
@@ -178,6 +183,34 @@ regras `c26aa2813e23…`, da config `86a28a8adbd1…`). Tudo PROPOSTO. Não subs
   nem condição sobre a própria ação anterior, nem negação. Catálogo NÃO foi ampliado.
 - G3 mede viés de posição (pontos do lado 0 nos espelhos), porque com lados trocados na metade a
   média do espelho é 0,5 por construção.
+
+## Combate V2.1 — árvore de evolução no combate (2026-09-24, `artifacts_combate_v21/`)
+
+**Pré-condições não cumpridas** (base V2 REPROVADA e sem finta/parry/fuga/morte súbita; tarefa de
+personalidade inexistente). O Matheus mandou seguir adaptando; adaptações e interpretações em
+`docs/REGISTRO_DESVIOS.md`. Números abaixo vêm de `artifacts_combate_v21/gates.json`,
+`matriz_arquetipos.json`, `equilibrio.json`, `matriz_especie_arquetipo.json`, `uso_tecnicas.json` e
+`robustez_e5.json` (sementes de validação 4101…4505, 100 partidas por par por semente; E1 = 72.000
+partidas; hash das regras `ced939707380…`, config `b860ec4acaf7…`). Tudo PROPOSTO.
+
+- Bateria **REPROVADA**: E1, E2, E3, E4 e E5 falham. Base V2 intacta (hash dos fontes igual).
+- **E1**: nenhum arquétipo vence todos, mas o suporte do equilíbrio tem 3 (espelho 0,443, furioso
+  0,435, emboscador 0,120), precisa de 4. Ciclo furioso > caçadores > espelho > furioso. Colossos
+  fracos (vigia e titã perdem de quase todos).
+- **E2**: ferrugem vence as outras três (média 0,629; cirro 0,343). 6 dos 8 arquétipos lutam de
+  perto e a soma de stats não gera ciclo entre espécies.
+- **E3**: todas as técnicas acima de 5% (16–43%). Resposta declarada reduz o usuário em investida
+  (0,625 → 0,606), contra_golpe (0,485 → 0,467) e pele_dura (0,259 → 0,003); **marcar não**:
+  "avançar e pressionar" sobe o caçador de 0,625 para 0,953 (quem recua anula quem avança).
+- **E4**: duelista 0,785, emboscador 0,788, espelho 0,629 dentro de [0,6, 0,85]; furioso, muralha,
+  sentinela, titã e vigia esmagam o adolescente (0,95–1,0): a diferença vem dos gambits e da passiva.
+- **E5**: E1 se mantém em 2/36 perturbações (já falha sem perturbar).
+- Calibração (só sementes 3101…3505, 2 rodadas, `experiments/configs/calibracao_v21.json`):
+  `fracao_espelho_disparo` 0,5 → 1,0; regras do parry e do disparo marcado revisadas; bots do colosso,
+  da muralha e as respostas do E3 reescritos. Conversão de stats, custo da pele e multiplicador do
+  adolescente testados e não adotados (trocam a espécie dominante ou derrubam o E1).
+- A seção "Pesquisa" da especificação (arena só com adultos, forma adulta como resultado, ablação sem
+  técnicas) **não foi feita**: depende da arena V2 com pets e do caráter medido pela política.
 
 ## Motivo, expressão e memória (2026-09-24, `docs/TAREFA_MEMORIA_EXPRESSAO.md`)
 
@@ -275,22 +308,38 @@ dominante no momento da evolução. Se o atlas não carregar, a página mostra u
 vermelho e cai nos placeholders.
 
 **Desde 2026-09-24 `digilab_sprites.html` é a versão em que o Matheus quer trabalhar** e é
-editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba **Evolução**:
-- a forma trava quando o estágio muda (dia 1 → criança, dia 4 → adulto), pelo traço de combate em
-  que o pet está MAIS ACIMA de um pet comum (`BASE_TRACOS`, medida em 60 pets simulados por estágio;
-  desde 2026-09-24). Antes era o traço absoluto, e ~90% dos pets viravam Bloqueio (todo pet dorme e
-  fica à toa muito, e isso conta como bloqueio) e lutavam como tartaruga. Intervenção de gambits do
-  registro que não cabe mais na lista é ignorada no replay, com aviso, em vez de perder o pet. O motor registra `evolucoes` (derivadas do log; replay reconstrói;
-  entram na assinatura do "Verificar replay");
-- árvore em SVG: ovo → bebê → 5 crianças → 5 adultos (qualquer criança pode ir a qualquer
-  adulto), caminho do pet destacado, tracejado = forma se evoluísse agora, histórico;
-- a forma é só visual (no combate V1); no combate V2 da web ela escolhe o estilo inicial (abaixo).
+editada direto; `digilab.html` ficou parado. Só a versão com sprites tem as abas **Evolução** e
+**Catálogo**, que desde 2026-09-24 seguem a **árvore do combate V2.1** (substituiu as 5 linhas por
+traço; chave do localStorage `digilab-web-v21-sprites`, pets da árvore antiga ficam para trás):
+- **4 espécies** (brasa, cirro, ferrugem, limo), sorteadas pela semente; ovo por espécie. 15 formas
+  por espécie (1 bebê, 2 crianças, 4 adolescentes, 8 adultos), **cada forma com sprite próprio**:
+  60 Digimon diferentes. Mapa forma → bloco da folha em `Assets\catalogo_sprites.json` (fora do
+  repo); `gerar_atlas.py` gera `{espécie}_{forma}_{quadro}` no atlas; o HTML só tem as coordenadas.
+- Transições com o cronograma de `docs/cronograma_interacoes.json` (durações pela metade): bebê
+  3 h, criança 12 h, adolescente 18 h. **Bebê → criança**: o bebê chama em horário fixo (fome 30 min,
+  higiene 60, carinho 45); atender ≥ 80% em até 15 min dá Sereno, senão Arisco. **Criança →
+  adolescente**: caráter dominante → linha. **Adolescente → adulto**: sinal do eixo complementar +
+  10 lutas de sparring na arena. Contadores zeram a cada evolução.
+- **Caráter PROVISÓRIO, só na web** (a medida certa é da tarefa de personalidade): por eixo, média
+  de (afinidade − linha de base) dos traços do eixo / 0,1, cortada em [−1, 1]; impetuoso = golpe e
+  carga, paciente = bloqueio, atento = finta, resistente = agarrão. `BASE_CARATER` medida em 60 pets
+  simulados (4 donos × 15 sementes, 16/dia) aos 900 e 1980 min. Checagem no console (sem artefato,
+  não citar como resultado): donos diferentes produzem ramos e formas diferentes, e o replay bate.
+- Donos simulados da web atendem os chamados do bebê (atencioso e incoerente sempre, relapso nas
+  visitas, aleatório por acaso) e fazem o sparring do adolescente contra o bot aleatório.
+- Árvore em SVG: ovo → bebê → 2 crianças → 4 adolescentes → 8 adultos, caminho destacado,
+  tracejado = forma se evoluísse agora (com o porquê), requisito no título de cada nó.
+- Aba **Catálogo**: as 15 formas da espécie com sprite, stats (renormalizados), vida/guts/regen,
+  técnica e passiva.
 
 Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz os artefatos Python):
-- **Combate V2** na aba Arena (números calibrados de `ConfigCombateV2`, bots da bateria como rivais,
-  oráculo incluso). O combate V1 saiu da interface. Estilo do pet PROVISÓRIO: a linha travada escolhe
-  o estilo inicial (golpe→agressivo, bloqueio→tartaruga, finta→atirador, agarrão→contragolpe,
-  carga→adaptativo; bebê luta ao acaso); condição física neutra.
+- **Combate V2.1** na aba Arena (espelho de `combate_v2/v21/`: perfil da forma, técnicas, passivas,
+  `turno_execucao`, `oponente_vai_preparar`). Rivais: os bots clássicos da V2 (stats neutros) e os 8
+  bots canônicos da bateria V2.1 (cada forma com uma espécie fixa). O combate V1 saiu da interface.
+  Cada evolução semeia os gambits do pet (crianças: semente de 3 regras só da web; adolescente e
+  adulto: bots canônicos da linha/forma) e a lista cabe na capacidade do estágio (3/5/8), só com as
+  condições do estágio e a técnica da própria linha. Bebê luta ao acaso (multiplicador 0,4; exceção
+  da web).
 - **Gambits híbridos** (substituiu o editor livre, 2026-09-24): o PET aprende a própria lista. A linha
   evolutiva semeia; após cada luta contra bot, a nota de cada regra que disparou vai em direção ao
   saldo de dano dos turnos em que ela agiu (+ bônus pelo resultado); a lista se reordena pela nota;
@@ -301,7 +350,8 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   PROVISÓRIO e só na web: o Python ainda não tem isso (é a arena V2 da pesquisa).
 - **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
   regra de honestidade do Python. Na web, a criança sem causa mostra ação + humor (vida) ou reação
-  (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
+  (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala
+  é o estágio da evolução (bebê, criança, adolescente, adulto).
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
@@ -324,6 +374,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 - Combate V2 reprovado em G4/G5: decidir entre mudar bots passivos, regra de esquiva ou limiares
   (decisão do pesquisador); investigar a dominância do adaptativo antes de plugar pets.
+- Combate V2.1 reprovado em E1–E5: falta a especificação das correções da base (finta, parry, fuga
+  condicionada, morte súbita) e a `TAREFA_PERSONALIDADE_OBEDIENCIA`; espécies precisam de identidade
+  que gere ciclo (E2); a resposta declarada do marcar não funciona com recuar anulando avançar (E3).
 
 - Referendar (ou alterar) os campos PROPOSTOS de `protocol.py` antes de citar qualquer resultado.
 - Ablação feita (ver acima): inconclusiva. Aumentar `partidas_por_par` e/ou sementes antes de

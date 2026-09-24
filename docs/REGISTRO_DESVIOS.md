@@ -23,3 +23,58 @@
 - `hora_sin` e `hora_cos` somam contribuição num único fator `hora`; o intercepto vira o fator
   `habito` (preferência aprendida pela ação, independente do estado).
 - Os docs foram copiados de `D:\Trab\digilab\*.md` para `docs/`, onde a tarefa os referencia.
+
+## 2026-09-24 — combate V2.1 iniciado sem as pré-condições
+
+- Pré-condições de `docs/ESPEC_COMBATE_V21.md`: (1) bateria V2 **base** APROVADA com as
+  correções da simulação (finta, parry, fuga condicionada, morte súbita, gates de robustez e
+  de espelho); (2) `TAREFA_PERSONALIDADE_OBEDIENCIA` concluída (temperamento e caráter).
+- Estado no início: nenhuma das duas existe. A base V2 está REPROVADA (G4, G5; ver acima) e
+  não tem finta, parry, fuga condicionada, morte súbita nem fadiga de guarda; não há
+  especificação nem código de temperamento/caráter.
+- Decisão do pesquisador (Matheus, em conversa): **seguir adaptando e registrando**. A base V2
+  não foi alterada (fontes de `digilab/combate_v2/*.py` com o mesmo hash de
+  `artifacts_combate_v2/gates.json`; o V2.1 vive em `digilab/combate_v2/v21/`).
+- Decisões do pesquisador na mesma conversa: 4 espécies no jogo (brasa, cirro, ferrugem,
+  limo), cada forma com sprite próprio; a evolução do jogo web passa a seguir esta árvore.
+
+### Adaptações por falta de mecânica na base
+
+- **duelista** ("finta não custa o guts do pesado e causa 4 extra se o oponente esquivou"):
+  não há finta. Vira: pesado contra esquiva causa o dano extra e devolve o guts do preparar.
+- **brigão / parry**: não há parry. A resposta declarada "defender (parry)" vira: defender
+  contra investida anula o dano **e o avanço** (calibração, rodada 1: só anular o dano não
+  punia nada).
+- **muralha** ("sem fadiga de guarda"): não há fadiga. Fica só a parte "defender recupera
+  +3 guts extra".
+- **espelho** ("contra_golpe também devolve 50% do disparo"): contra_golpe só é legal perto e
+  disparo só médio/longe, então a passiva nunca valeria. Vira: para o espelho, contra_golpe é
+  legal em qualquer distância. O disparo marcado ignora a redução da postura, mas o
+  contra_golpe do espelho ainda devolve.
+- **investida** ("avança para perto e aplica golpe rápido no mesmo turno"): exceção
+  documentada à regra "ataque de perto só acerta perto": acerta em médio e aproxima no
+  movimento. "Interrompe preparação" nunca ocorre na prática (preparar exige perto).
+- **contra_golpe** ("devolve 50% do dano corpo a corpo recebido"): devolve 50% do dano
+  **bruto** (antes da redução da postura); com o dano já reduzido a devolução seria ~1 ponto.
+
+### Interpretações
+
+- `turno_execucao` (condição de adulto; a especificação só dá o nome): "o turno corrente da
+  partida é >= t", t em {5, 10, 20}.
+- `oponente_vai_preparar` (vigia): verdadeiro se a regra que o oponente dispararia agora (sem
+  exploração, sem rng) é preparar_pesado.
+- Caráter: sem a tarefa de personalidade, é **entrada** das funções de transição
+  (`catalogo.py`). Nos bots da bateria, caráter canônico: eixo da linha +0,5 e eixo
+  complementar ±0,25 com o sinal da forma. Temperamento neutro. Ramo da criança "sereno".
+- Bebê: não luta no motor Python (a especificação). Na web o bebê continua lutando ao acaso
+  (cenário "adulto × bebê" pedido antes), com multiplicador de estágio 0,4.
+- E3: a "resposta declarada" é escrita como regras que o oponente põe no topo da própria lista
+  quando sabe que enfrenta a técnica (a forma é pública).
+- E4: por forma adulta (8 valores), adolescente da mesma linha, espécie e caráter.
+- E5: inteiros perturbados por arredondamento; se não mudar, ±1.
+
+### Fora do escopo desta entrega (depende da tarefa de personalidade e da arena V2)
+
+- Seção "Pesquisa" da especificação: arena só com adultos, ovos pareados, forma adulta como
+  variável de resultado, ablação com técnicas e passivas desligadas. Não existe arena V2 com
+  pets no motor Python; o caráter medido pelo desvio da política também não.

@@ -1,0 +1,18 @@
+{
+  "descricao": "Variantes da calibracao do combate V2.1, com os bots e regras ja revisados (ver calibracao_v21.json). Sementes de CALIBRACAO apenas.",
+  "saida": "artifacts_combate_v21/calibracao_varredura.jsonl",
+  "sementes_calibracao": [3101, 3202, 3303, 3404, 3505],
+  "partidas_por_par_por_semente": 20,
+  "variantes": [
+    {"nome": "catalogo (espelho 0.5)", "v21": {"fracao_espelho_disparo": 0.5}},
+    {"nome": "espelho 1.0", "v21": {"fracao_espelho_disparo": 1.0}},
+    {"nome": "espelho 1.0 + pele 12", "v21": {"fracao_espelho_disparo": 1.0, "custo_pele_dura": 12}},
+    {"nome": "espelho 1.0 + hp 80+2v", "v21": {"fracao_espelho_disparo": 1.0, "hp_base": 80.0, "hp_por_vigor": 2.0}},
+    {"nome": "espelho 1.0 + hp 85+1.5v", "v21": {"fracao_espelho_disparo": 1.0, "hp_base": 85.0, "hp_por_vigor": 1.5}},
+    {"nome": "espelho 1.0 + guarda 0.02", "v21": {"fracao_espelho_disparo": 1.0, "guarda_base": 1.2, "guarda_por_ponto": 0.02}},
+    {"nome": "espelho 1.0 + hp 85+1.5v + mult 0.02", "v21": {"fracao_espelho_disparo": 1.0, "hp_base": 85.0, "hp_por_vigor": 1.5, "mult_base": 0.8, "mult_por_ponto": 0.02}},
+    {"nome": "espelho 1.0 + regen 0.6", "v21": {"fracao_espelho_disparo": 1.0, "regen_base": 2.0, "regen_por_recuperacao": 0.6}},
+    {"nome": "espelho 1.0 + adolescente 0.9", "v21": {"fracao_espelho_disparo": 1.0}, "mult_adolescente": 0.9},
+    {"nome": "espelho 1.0 + adolescente 1.0", "v21": {"fracao_espelho_disparo": 1.0}, "mult_adolescente": 1.0}
+  ]
+}
