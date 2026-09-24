@@ -106,9 +106,25 @@ Publicado também como artifact privado em claude.ai (link com o usuário).
 ## Assets — importante
 
 A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do Digimon World
-(Bandai). **Não integrar, copiar, recortar ou empacotar esse material no projeto**: é arte e
-personagens protegidos, e o projeto mira publicação acadêmica e produto. Usar só arte original
-ou licenciada. Os placeholders atuais estão em `web/digilab.html`.
+(Bandai). É arte e personagens protegidos, **sem licença**. Regra revisada pelo Matheus em
+2026-09-24:
+
+- **Permitido**: usar esses sprites na versão web (`web/`) para uso pessoal e local, como
+  protótipo de jogo.
+- **Proibido**: usar no pacote `digilab/`, em `experiments/`, em `artifacts*/`, em figuras ou
+  textos de publicação acadêmica, ou em qualquer build distribuído como produto. Não publicar
+  a versão com sprites (artifact, site, repositório público).
+- Manter a versão com placeholders originais funcionando: antes de publicar ou distribuir
+  qualquer coisa, trocar por arte original ou licenciada.
+
+Versão com sprites: `web/digilab_sprites.html` (no `.gitignore`), cópia de `digilab.html` que
+lê `D:\Trab\digilab\Assets\digilab_atlas.png`. O atlas e o script que o gera
+(`Assets\gerar_atlas.py`) ficam fora do repo. Precisa de servidor local, porque o caminho é
+relativo: `python -m http.server 8765 --directory D:/Trab/digilab` e abrir
+`http://localhost:8765/v1/web/digilab_sprites.html`. A linha evolutiva segue o traço de combate
+dominante (bebê único; criança e adulto, um par por traço). Se o atlas não carregar, a página
+mostra um aviso em vermelho e cai nos placeholders. Se mudar `digilab.html`, a cópia com
+sprites não acompanha sozinha.
 
 ## Pendências conhecidas
 

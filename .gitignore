@@ -6,3 +6,6 @@ venv/
 # saidas de rodadas nao canonicas; artifacts/ (run canonica) e versionado
 artifacts_fumaca/
 artifacts_*/
+
+# versao local com sprites do Digimon World: uso pessoal, nao versionar nem publicar (ver CLAUDE.md)
+web/digilab_sprites.html
