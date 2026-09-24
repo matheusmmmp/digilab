@@ -249,7 +249,20 @@ editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba
   entram na assinatura do "Verificar replay");
 - árvore em SVG: ovo → bebê → 5 crianças → 5 adultos (qualquer criança pode ir a qualquer
   adulto), caminho do pet destacado, tracejado = forma se evoluísse agora, histórico;
-- a forma é só visual: a arena continua usando os traços do momento, igual ao Python.
+- a forma é só visual (no combate V1); no combate V2 da web ela escolhe o estilo inicial (abaixo).
+
+Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz os artefatos Python):
+- **Combate V2** na aba Arena (números calibrados de `ConfigCombateV2`, bots da bateria como rivais,
+  oráculo incluso). O combate V1 saiu da interface. Estilo do pet PROVISÓRIO: a linha travada escolhe
+  o estilo inicial (golpe→agressivo, bloqueio→tartaruga, finta→atirador, agarrão→contragolpe,
+  carga→adaptativo; bebê luta ao acaso); condição física neutra.
+- **Editor de gambits** do pet (catálogo fechado, até 8 regras + final), salvo em localStorage por
+  semente e forma do pet (não entra no log). Cenários "100 lutas" também usam o V2.
+- **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
+  regra de honestidade do Python. Estágio da fala vem da evolução; "adolescente" = criança com 3+ dias.
+- **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
+  o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
+  replay com a política nova (o registro é o mesmo; o comportamento muda).
 
 `Assets\gerar_sprites_html.py` agora **recusa** sobrescrever o arquivo se ele tiver a aba
 Evolução (`--forcar` para passar por cima e perder as edições).
