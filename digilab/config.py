@@ -243,3 +243,50 @@ class ConfigBateriaCombate:
 
 CONFIG_COMBATE_V2 = ConfigCombateV2()
 CONFIG_BATERIA_COMBATE = ConfigBateriaCombate()
+
+
+# =====================================================================
+# Motivo e expressao (Parte A da TAREFA_MEMORIA_EXPRESSAO). Somente leitura:
+# nao muda decisao nenhuma. NAO entra no hash de arena-v1 (configs_congelados
+# lista a v1 explicitamente) nem no da bateria do combate V2 (que cobre so
+# ConfigCombateV2, ConfigBateriaCombate e os fontes de combate_v2/).
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigExpressao:
+    # PROVISORIO: estagio por idade em dias simulados. Quando a evolucao existir
+    # no motor, o estagio vem dela. Limite superior (exclusivo) de cada estagio.
+    dias_fim_bebe: float = 1.0
+    dias_fim_crianca: float = 3.0
+    dias_fim_adolescente: float = 7.0
+    # vida: fator so e citado se |contribuicao| >= isto (LIMIAR_MOTIVO)
+    limiar_motivo: float = 0.05
+    # bebe: faixas de humor para o emote
+    humor_alegre: float = 0.66
+    humor_neutro: float = 0.33
+
+
+CONFIG_EXPRESSAO = ConfigExpressao()
+
+
+# =====================================================================
+# Memoria de vida (Parte B). Entra no hash de PROTOCOLO_ARENA_V1_MEMORIA
+# (campo `memoria`), nao no de arena-v1. Todos os valores PROPOSTOS.
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigMemoria:
+    # pedido (chamar_atencao) conta para a necessidade mais baixa entre fome e
+    # higiene, se ela estiver abaixo disto; senao e pedido generico (ignorado)
+    limiar_necessidade_pedido: float = 0.5
+    # latencia normalizada = min(1, latencia / janela); pedido nao atendido
+    # dentro da janela vale 1 (sem evento de origem)
+    janela_latencia_ticks: int = 240
+    # repreensoes e elogios recentes: soma de exp(-dt / tau), normalizada por escala
+    tau_feedback_ticks: float = 360.0
+    escala_feedback: float = 3.0
+
+
+CONFIG_MEMORIA = ConfigMemoria()

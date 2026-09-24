@@ -1,0 +1,7 @@
+{
+  "descricao": "Fumaca da memoria. NAO CANONICO.",
+  "protocolo": "arena-v1-memoria",
+  "saida": "artifacts_fumaca_memoria",
+  "protocolo_substituicoes": {"dias_simulados": 2, "orcamento_interacoes": 32, "partidas_por_par": 2,
+    "estados_sonda": 8, "amostras_por_estado": 40, "bootstrap_reamostragens": 500}
+}

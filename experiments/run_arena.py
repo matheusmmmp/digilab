@@ -49,6 +49,7 @@ from digilab.metrics import (  # noqa: E402
     finais,
     taxa_vitoria,
 )
+from digilab.memoria import PoliticaBanditMemoria  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import (  # noqa: E402
@@ -57,6 +58,7 @@ from digilab.protocol import (  # noqa: E402
     PROTOCOLOS,
     Protocolo,
     ProtocoloAblacao,
+    ProtocoloMemoria,
     bracos_do_protocolo,
     configs_congelados,
     derivar_semente,
@@ -71,7 +73,10 @@ CHAVES_CONFIG = {"saida", "protocolo_substituicoes", "descricao", "protocolo"}
 FABRICAS_POLITICA = {
     "bandit": lambda cfg=None: PoliticaBandit(cfg),
     "instinto": lambda cfg=None: PoliticaInstinto(cfg),
+    "bandit_memoria": lambda cfg=None: PoliticaBanditMemoria(cfg),
 }
+# politicas que aprendem: o gate de divergencia so olha pares delas
+APRENDIZES = {"bandit", "bandit_memoria"}
 
 
 class PreflightFalhou(RuntimeError):
@@ -301,8 +306,11 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     def ambos(a: str, b: str, pol: str) -> bool:
         return pol_de_pet[a] == pol and pol_de_pet[b] == pol
 
-    jsd_inter = [v for (a, b), v in pares_pets.items() if grupo[a] != grupo[b] and ambos(a, b, "bandit")]
-    jsd_intra = [v for (a, b), v in pares_pets.items() if grupo[a] == grupo[b] and ambos(a, b, "bandit")]
+    def aprendem(a: str, b: str) -> bool:
+        return pol_de_pet[a] in APRENDIZES and pol_de_pet[b] in APRENDIZES
+
+    jsd_inter = [v for (a, b), v in pares_pets.items() if grupo[a] != grupo[b] and aprendem(a, b)]
+    jsd_intra = [v for (a, b), v in pares_pets.items() if grupo[a] == grupo[b] and aprendem(a, b)]
     jsd_inter_instinto = {
         f"{a} | {b}": v for (a, b), v in pares_pets.items() if grupo[a] != grupo[b] and ambos(a, b, "instinto")
     }
@@ -468,7 +476,7 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         "sementes_coorte": sementes,
         "bracos": bracos,
         "interacoes_por_pet": interacoes,
-        "resultado_central": central_por_politica["bandit"],
+        "resultado_central": central_por_politica["bandit" if "bandit" in central_por_politica else politicas_protocolo[0]],
         "taxa_vitoria_por_pet": tv,
         "taxa_vitoria_por_braco": taxa_braco,
         "bradley_terry_por_pet": bt_pets,
@@ -486,6 +494,21 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         "preflight": pre,
         "ambiente": {"python": platform.python_version(), "plataforma": platform.platform()},
     }
+    if isinstance(protocolo, ProtocoloMemoria):
+        # resultado principal desta run: divergencia com memoria x sem memoria
+        ref = {}
+        for fonte, chave in (("artifacts/metrics.json", "jsd_media_entre_bracos"),
+                             ("artifacts_ablacao/metrics.json", "jsd_media_entre_bracos")):
+            caminho = RAIZ / fonte
+            if not caminho.exists():
+                raise FileNotFoundError(f"referencia sem memoria ausente: {fonte}")
+            ref[fonte] = json.loads(caminho.read_text(encoding="utf-8"))["divergencia_resumo"][chave]
+        metrics["divergencia_com_x_sem_memoria"] = {
+            "com_memoria": jsd_inter_media,
+            "sem_memoria": ref,
+            "nota": "sem memoria = bracos bandit da run canonica (Linux/3.11) e da ablacao (mesmas vidas); "
+                    "mesmas sementes, orcamento, duracao e donos",
+        }
     if isinstance(protocolo, ProtocoloAblacao):
         metrics["bracos_dono_politica"] = {r: {"dono": d, "politica": pol} for r, d, pol in bracos_exec}
         metrics["divergencia_resumo"]["gate_usa"] = divergence["gate_usa"]

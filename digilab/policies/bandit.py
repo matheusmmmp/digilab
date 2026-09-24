@@ -203,8 +203,10 @@ class PoliticaBandit:
         self.cfg = cfg or CONFIG_PADRAO
         self.cb = cfg_bandit or CONFIG_BANDIT
         self._instinto = PoliticaInstinto(self.cfg)
+        self._n_features = self.n_features()
         self._bracos = {
-            a: _Braco(A_inv=_identidade(N_FEATURES, 1.0 / self.cb.lambda_regularizacao), b=[0.0] * N_FEATURES)
+            a: _Braco(A_inv=_identidade(self._n_features, 1.0 / self.cb.lambda_regularizacao),
+                      b=[0.0] * self._n_features)
             for a in ACOES
         }
         self._tick_ultimo_cuidado = 0
@@ -212,8 +214,26 @@ class PoliticaBandit:
         self._ultima: tuple[list[float], AcaoPet] | None = None
         self._pendentes: list[tuple[int, list[float]]] = []
         self._n_recompensas = {"elogio": 0, "repreensao": 0, "latencia": 0, "ignorado": 0}
+        self._ultima_decisao: dict | None = None
+
+    # ------------------------------------------------------------- features
+    # Subclasses (ex.: memoria) acrescentam features sobrescrevendo os dois
+    # metodos abaixo; a base e exatamente o bandit da v1.
+
+    def n_features(self) -> int:
+        return N_FEATURES
+
+    def _features(self, obs: Observacao) -> list[float]:
+        return features(obs, self.cb)
 
     # ------------------------------------------------------------- Politica
+
+    @property
+    def ultima_decisao(self) -> dict | None:
+        """O que decidiu a ultima chamada de agir(): features x, pesos amostrados
+        theta~ por acao, log(prior) e Gumbel por acao, acao escolhida. Somente
+        leitura; nao entra em estado_interno() nem muda decisao (digilab.motivo)."""
+        return self._ultima_decisao
 
     def prior(self, obs: Observacao) -> dict[AcaoPet, float]:
         p = distribuicao_instinto(self._instinto, obs, self.cb.iteracoes_bisseccao_prior)
@@ -221,26 +241,32 @@ class PoliticaBandit:
         return {a: (1.0 - eps) * p[a] + eps / len(ACOES) for a in ACOES}
 
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
-        x = features(obs, self.cb)
+        x = self._features(obs)
         p0 = self.prior(obs)
         escala = math.sqrt(self.cb.variancia_amostra)
         melhor, melhor_score = None, -math.inf
+        amostras, log_prior, gumbels = {}, {}, {}
         for a in ACOES:
             braco = self._bracos[a]
             theta = braco.theta()
             L = braco.chol()
-            z = [rng.gauss(0.0, 1.0) for _ in range(N_FEATURES)]
+            z = [rng.gauss(0.0, 1.0) for _ in range(self._n_features)]
             Lz = _matvec(L, z)
             valor = sum((t + escala * lz) * xi for t, lz, xi in zip(theta, Lz, x))
             u = rng.random()
             while u <= 0.0:  # pragma: no cover - random() pode devolver 0.0
                 u = rng.random()
             gumbel = -math.log(-math.log(u))
+            amostras[a] = [t + escala * lz for t, lz in zip(theta, Lz)]
+            log_prior[a] = math.log(p0[a])
+            gumbels[a] = gumbel
             score = math.log(p0[a]) + valor + gumbel
             if score > melhor_score:
                 melhor, melhor_score = a, score
         if melhor is None:
             raise ArithmeticError("nenhuma acao com score finito")
+        self._ultima_decisao = {"x": x, "acao": melhor, "amostras": amostras,
+                                "log_prior": log_prior, "gumbel": gumbels}
         return melhor
 
     def observar(self, transicao: Transicao) -> None:
@@ -252,7 +278,7 @@ class PoliticaBandit:
             )
         self._tick_ultima_decisao = tick
         self._expirar(tick)
-        x = features(obs, self.cb)
+        x = self._features(obs)
         self._ultima = (x, transicao.acao)
         if transicao.acao is AcaoPet.CHAMAR_ATENCAO:
             self._pendentes.append((tick, x))
@@ -299,7 +325,7 @@ class PoliticaBandit:
         return {
             "nome": self.nome,
             "parametros_aprendidos": sum(len(br.b) for br in self._bracos.values()),
-            "n_features": N_FEATURES,
+            "n_features": self._n_features,
             "atualizacoes_por_acao": {a.value: br.n for a, br in self._bracos.items()},
             "recompensas": dict(self._n_recompensas),
             "theta": {a.value: br.theta() for a, br in self._bracos.items()},

@@ -295,6 +295,8 @@ def bracos_do_protocolo(p: Protocolo) -> list[tuple[str, str, str]]:
     dono, exatamente como a run canonica v1 sempre fez.
     """
     donos = list(p.v("bracos"))
+    if isinstance(p, ProtocoloMemoria):
+        return [(d, d, "bandit_memoria") for d in donos]
     if not isinstance(p, ProtocoloAblacao):
         return [(d, d, "bandit") for d in donos]
     return [(f"{d}-{pol}", d, pol) for d in donos for pol in p.v("politicas")]
@@ -315,7 +317,47 @@ PROTOCOLO_ARENA_V1_ABLACAO = ProtocoloAblacao(
     ),
 )
 
+# =====================================================================
+# Memoria de vida (TAREFA_MEMORIA_EXPRESSAO, Parte B). O nome ARENA_V2 fica
+# reservado para pets no combate V2.
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ProtocoloMemoria(Protocolo):
+    """arena-v1 + features de memoria curta em TODOS os bracos (inclusive o
+    aleatorio). O campo `memoria` carrega os nomes das features e a
+    ConfigMemoria inteira, para o hash cobrir os parametros da memoria."""
+
+    memoria: Campo
+
+    def validar(self) -> None:
+        super().validar()
+        from .memoria import FATORES_MEMORIA
+
+        valor = dict(self.v("memoria"))
+        if tuple(valor.get("features", ())) != FATORES_MEMORIA:
+            raise ValueError(f"features de memoria do protocolo difere do codigo: {valor.get('features')}")
+        esperado = tuple(sorted(asdict(_config.CONFIG_MEMORIA).items()))
+        if tuple(tuple(x) for x in valor.get("config", ())) != esperado:
+            raise ValueError("ConfigMemoria do protocolo difere de config.py")
+
+
+def _campo_memoria() -> Campo:
+    from .memoria import FATORES_MEMORIA
+
+    return Campo(
+        (("features", FATORES_MEMORIA), ("config", tuple(sorted(asdict(_config.CONFIG_MEMORIA).items())))),
+        _P,
+        "features de memoria curta (latencia do dono por necessidade, repreensoes e elogios com decaimento) "
+        "acrescentadas ao contexto do bandit em todos os bracos; parametros de ConfigMemoria",
+    )
+
+
+PROTOCOLO_ARENA_V1_MEMORIA = ProtocoloMemoria(versao="arena-v1-memoria", **_campos_v1(), memoria=_campo_memoria())
+
 PROTOCOLOS = {
     PROTOCOLO_ARENA_V1.versao: PROTOCOLO_ARENA_V1,
     PROTOCOLO_ARENA_V1_ABLACAO.versao: PROTOCOLO_ARENA_V1_ABLACAO,
+    PROTOCOLO_ARENA_V1_MEMORIA.versao: PROTOCOLO_ARENA_V1_MEMORIA,
 }

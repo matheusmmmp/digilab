@@ -1,0 +1,36 @@
+turno  1   agressivo adulto      avancar         [distancia_eh(medio) | ref 1]  Avancei porque a distância era medio (turno 1).
+turno  1  adaptativo adulto      avancar         [guts_proprio_acima(20) | ref 1]  Avancei porque eu tinha folga de guts (20 ou mais) (turno 1).
+turno  2   agressivo adulto      preparar_pesado [guts_proprio_acima(40) | ref 2]  Preparei o pesado porque eu tinha folga de guts (40 ou mais) (turno 2).
+turno  2  adaptativo adulto      golpe_rapido    [distancia_eh(perto),guts_proprio_acima(40) | ref 2]  Dei um golpe rápido porque a distância era perto e porque eu tinha folga de guts (40 ou mais) (turno 2).
+turno  3   agressivo adulto      preparar_pesado [guts_proprio_acima(40) | ref 3]  Preparei o pesado porque eu tinha folga de guts (40 ou mais) (turno 3).
+turno  3  adaptativo adulto      golpe_rapido    [distancia_eh(perto),guts_proprio_acima(40) | ref 3]  Dei um golpe rápido porque a distância era perto e porque eu tinha folga de guts (40 ou mais) (turno 3).
+turno  4   agressivo adulto      preparar_pesado [guts_proprio_acima(40) | ref 4]  Preparei o pesado porque eu tinha folga de guts (40 ou mais) (turno 4).
+turno  4  adaptativo adulto      golpe_rapido    [oponente_frequente(preparar_pesado) | ref 2,3]  Dei um golpe rápido porque você insiste em 'preparar pesado' (turno 2, 3).
+turno  5   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno  5  adaptativo adulto      golpe_rapido    [oponente_frequente(preparar_pesado) | ref 2,3,4]  Dei um golpe rápido porque você insiste em 'preparar pesado' (turno 2, 3, 4).
+turno  6   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno  6  adaptativo adulto      golpe_rapido    [oponente_frequente(preparar_pesado) | ref 2,3,4]  Dei um golpe rápido porque você insiste em 'preparar pesado' (turno 2, 3, 4).
+turno  7   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno  7  adaptativo adulto      golpe_rapido    [oponente_frequente(preparar_pesado) | ref 2,3,4]  Dei um golpe rápido porque você insiste em 'preparar pesado' (turno 2, 3, 4).
+turno  8   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno  8  adaptativo adulto      golpe_rapido    [oponente_frequente(preparar_pesado) | ref 3,4]  Dei um golpe rápido porque você insiste em 'preparar pesado' (turno 3, 4).
+turno  9   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno  9  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 5,6,7,8]  Defendi porque você insiste em 'golpe rapido' (turno 5, 6, 7, 8).
+turno 10   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 10  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 5,6,7,8,9]  Defendi porque você insiste em 'golpe rapido' (turno 5, 6, 7, 8, 9).
+turno 11   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 11  adaptativo adulto      golpe_rapido    [exploracao | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 12   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 12  adaptativo adulto      carregar        [exploracao | ref -]  Carreguei guts. Não sei, só quis.
+turno 13   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 13  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 8,9,10,11,12]  Defendi porque você insiste em 'golpe rapido' (turno 8, 9, 10, 11, 12).
+turno 14   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 14  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 9,10,11,12,13]  Defendi porque você insiste em 'golpe rapido' (turno 9, 10, 11, 12, 13).
+turno 15   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 15  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 10,11,12,13,14]  Defendi porque você insiste em 'golpe rapido' (turno 10, 11, 12, 13, 14).
+turno 16   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 16  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 11,12,13,14,15]  Defendi porque você insiste em 'golpe rapido' (turno 11, 12, 13, 14, 15).
+turno 17   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 17  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 12,13,14,15,16]  Defendi porque você insiste em 'golpe rapido' (turno 12, 13, 14, 15, 16).
+turno 18   agressivo adulto      golpe_rapido    [- | ref -]  Dei um golpe rápido. Não sei, só quis.
+turno 18  adaptativo adulto      defender        [oponente_frequente(golpe_rapido) | ref 13,14,15,16,17]  Defendi porque você insiste em 'golpe rapido' (turno 13, 14, 15, 16, 17).

@@ -1,0 +1,837 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "divergence.json": "f168b07692380cc81b687bd555ece72994720f693ff37cdc51f67cf340a5f62e",
+    "matches.csv": "313cab56dcc4a9ea8c6d6492139ee758a980a8e3b7d5a1a949005ca1de042ac8",
+    "partidas.jsonl": "53a08b6b62d450a3142e4e77f773a912488e0de6d42a0b9e2337f54cd2c1515f",
+    "preflight.json": "3148a4a7c9447019eb30e41fd332de6639304a9f002c65836833b620f232789b",
+    "vidas/aleatorio@101.jsonl": "85a63f5a05927b6ebd0130eec5e32c8719737ca852e4f90a89cdcfd82b1a570a",
+    "vidas/aleatorio@101.politica.json": "939fc997a5b7cc513913740b00b63ed39f19f00c13e0331005d0aab9df6a530d",
+    "vidas/aleatorio@202.jsonl": "e754e40c3c0f50cf01bbd003258c668ae32c921af77927db9298ad4c05bd619b",
+    "vidas/aleatorio@202.politica.json": "95b85768b2f1854e45d366250129a032130c3dbac2eb70a0a1d4b6287bc58ebb",
+    "vidas/aleatorio@303.jsonl": "42e4e3477c913faa055599bc13339728b589f2ad6292923e1e24ba7cda3e6746",
+    "vidas/aleatorio@303.politica.json": "c26be53d5223b17842a4939b3809c0864de7210bb4549f44bcb616d6f07f81f6",
+    "vidas/aleatorio@404.jsonl": "6bbe4848acfc6a982afd0efe31257041ea36938ced4df70597de870478300f6d",
+    "vidas/aleatorio@404.politica.json": "5ba44a6cf87dc2fe72c2c3eaf8e93ab6ec0aa16fd1595627c0222911190186ad",
+    "vidas/aleatorio@505.jsonl": "11e49db8f3b6a609f4eedd530a13528dcb4793867c24c2fea6f3bb2f7ba0402e",
+    "vidas/aleatorio@505.politica.json": "f0bfc443862895c999d713c1eded7f00d82d1586cd2ba1ab6039127125a077e8",
+    "vidas/atencioso@101.jsonl": "fa8a8aef0cb31d510b6a3b34c83d3e52fdd130622365a00d93128d90d9ead8b8",
+    "vidas/atencioso@101.politica.json": "7cded4e35ba454d8bf8152d316fb3e93fd3ff1f6728dbea2879ccd101b324fc5",
+    "vidas/atencioso@202.jsonl": "9f7dd562117a95b7b313d6e135546d0533d0fb2be0a92713820d9e28d96e9d37",
+    "vidas/atencioso@202.politica.json": "2cae7bbc07b9795d924ed7bbf70cad10fdf343c243bf839a7e8d4948541e5fab",
+    "vidas/atencioso@303.jsonl": "5c0673f08593523f7ff269fd98d7612ee9e8185db8f2a94636e96f10e730d731",
+    "vidas/atencioso@303.politica.json": "6f4a356c3c3a97ba769f25ede75ae19ec47ca4a96b5a90b66d4093be25e1690b",
+    "vidas/atencioso@404.jsonl": "0fad3dca96f76ce7e78c9059230546ce170b4f04cf8374547195767a009f2e27",
+    "vidas/atencioso@404.politica.json": "8f60c3707929245c4f920e0958dd2ad0120ac44198ae8dcb63deb784e6c6ecaf",
+    "vidas/atencioso@505.jsonl": "77b40b666cdb8bbcd8262b7179652e28f91f1572563efe39091bfc2a5d8bfd94",
+    "vidas/atencioso@505.politica.json": "80bac39255a44e2d59f60ecf9fb61e8d4c0f6c58574a0c7a1dea04f7c58cf2a9",
+    "vidas/incoerente@101.jsonl": "e771028e3b5cfc49764ea3a83b6bb34c52d5070fc1a0a9745fe908865df9150a",
+    "vidas/incoerente@101.politica.json": "a1184f4638b346f95a681679047589d6cf2ca207523428dfd7232a5dfd84e655",
+    "vidas/incoerente@202.jsonl": "5f452baed370c368716884c0529bf27b7d0afbcea0dbc7b0f3622cb922be8693",
+    "vidas/incoerente@202.politica.json": "ccb4c5920c2a9bb8994d3e49304fe8d806034a773d2a7f0c34b285fe80def7c5",
+    "vidas/incoerente@303.jsonl": "4507fbba96abd1eaf80d08d398e41ed5b18b198409bf4f229bd715827e9d36cc",
+    "vidas/incoerente@303.politica.json": "ff03040df16a5d3a4bd66e247ce5f25fa3560bdf0f3b1e58f52a3d9aa153a344",
+    "vidas/incoerente@404.jsonl": "df8b093f9ee88fe1eb23137efc9da01035321f4d845d1b145408fdb3438c17ca",
+    "vidas/incoerente@404.politica.json": "c2949030beac27fcdd97ce51f6ec91007abb87b476d508457977b95a6b71574c",
+    "vidas/incoerente@505.jsonl": "2c2a26be9372d92dfca6c67f6ed1ac1eb67ebb5a43b0090723246ca5ced49fde",
+    "vidas/incoerente@505.politica.json": "6b814b9cb0f2f0c43d36891dc28fc700470bce2e823302e837f2d5e2ad812ce3",
+    "vidas/relapso@101.jsonl": "36585a21e4f035b9d18ae324a4bd133c8e327fb0e75797fd453a80151ed46142",
+    "vidas/relapso@101.politica.json": "56f5479e5c2770e5e6de980bfb3b29652f94a8315a56e091c7c89876e319240e",
+    "vidas/relapso@202.jsonl": "ea71555853102ef7d55455b50851419607aabd940a30081d01c09a5de7d9f0fc",
+    "vidas/relapso@202.politica.json": "b186ba8c7427d2efe9166ac86c206f1c725f0a40eaa1c985de8bbc69f027da0d",
+    "vidas/relapso@303.jsonl": "11c1ad028bc2446140f86cde988d7774fba2b05c9e5fa3f808163c43603f1fe8",
+    "vidas/relapso@303.politica.json": "e72b015275a416f15b030adfc823f8ce7aacfd205805721281bda9b97ad66667",
+    "vidas/relapso@404.jsonl": "5c86a18d89c6a97a85531c54b62c44c8ece04ec6bef98479dd5354c4281a93c8",
+    "vidas/relapso@404.politica.json": "d40404213b69f9970d8c8d60250bb96a6d96c48684b3085f220e3af13c74d2c2",
+    "vidas/relapso@505.jsonl": "4df6193859f110f197c846040e122cb4959067cd14ee7c3dff0a2ff511a35367",
+    "vidas/relapso@505.politica.json": "cc32ce111e70cce408cdd2256ccdd0bb49d65e8431f8c9337ec76952697cf09e"
+  },
+  "avisos": [
+    "run com 13 parametro(s) PROPOSTO(s), nao referendados: ['orcamento_interacoes', 'dias_simulados', 'partidas_por_par', 'semente_torneio', 'definicao_vitoria', 'limiar_divergencia_jsd_bits', 'estados_sonda', 'amostras_por_estado', 'semente_sonda', 'bootstrap_reamostragens', 'bootstrap_semente', 'nivel_confianca', 'memoria']"
+  ],
+  "bracos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "bradley_terry_por_braco_sem_confronto_interno": {
+    "aleatorio": {
+      "erro_padrao": 0.039110715719654215,
+      "forca_log": -0.2054578140398905
+    },
+    "atencioso": {
+      "erro_padrao": 0.0388645400519712,
+      "forca_log": 0.06440092223695777
+    },
+    "incoerente": {
+      "erro_padrao": 0.03897275916155626,
+      "forca_log": 0.1449621417627632
+    },
+    "relapso": {
+      "erro_padrao": 0.038838233973038476,
+      "forca_log": -0.003905249959830463
+    }
+  },
+  "bradley_terry_por_pet": {
+    "aleatorio@101": {
+      "erro_padrao": 0.10861687856623808,
+      "forca_log": 0.7621988975277579
+    },
+    "aleatorio@202": {
+      "erro_padrao": 0.13412237879288832,
+      "forca_log": -1.6200484219859808
+    },
+    "aleatorio@303": {
+      "erro_padrao": 0.12411752737734984,
+      "forca_log": -1.3353140738424356
+    },
+    "aleatorio@404": {
+      "erro_padrao": 0.1061781988887724,
+      "forca_log": -0.46080964762235277
+    },
+    "aleatorio@505": {
+      "erro_padrao": 0.12182409727736453,
+      "forca_log": 1.339441020023172
+    },
+    "atencioso@101": {
+      "erro_padrao": 0.10445354091402596,
+      "forca_log": 0.3868762495516662
+    },
+    "atencioso@202": {
+      "erro_padrao": 0.10386574504370487,
+      "forca_log": 0.2851192281255745
+    },
+    "atencioso@303": {
+      "erro_padrao": 0.10828145233072516,
+      "forca_log": -0.6281126427069094
+    },
+    "atencioso@404": {
+      "erro_padrao": 0.10367697014091232,
+      "forca_log": 0.24018522415446433
+    },
+    "atencioso@505": {
+      "erro_padrao": 0.10340935197312942,
+      "forca_log": 0.13950094008601283
+    },
+    "incoerente@101": {
+      "erro_padrao": 0.10636048058961106,
+      "forca_log": 0.594624695742077
+    },
+    "incoerente@202": {
+      "erro_padrao": 0.1092022816375155,
+      "forca_log": -0.689487144473023
+    },
+    "incoerente@303": {
+      "erro_padrao": 0.10381445007437677,
+      "forca_log": 0.27387174957369137
+    },
+    "incoerente@404": {
+      "erro_padrao": 0.10335885327155697,
+      "forca_log": 0.09485883110764581
+    },
+    "incoerente@505": {
+      "erro_padrao": 0.10649756167887377,
+      "forca_log": 0.6063897592219364
+    },
+    "relapso@101": {
+      "erro_padrao": 0.1136712490749493,
+      "forca_log": -0.9330016251726302
+    },
+    "relapso@202": {
+      "erro_padrao": 0.10437679988278471,
+      "forca_log": 0.37551587934301295
+    },
+    "relapso@303": {
+      "erro_padrao": 0.10392749729941693,
+      "forca_log": -0.17378103396348343
+    },
+    "relapso@404": {
+      "erro_padrao": 0.10549615676026242,
+      "forca_log": 0.512998938467025
+    },
+    "relapso@505": {
+      "erro_padrao": 0.10363656711316006,
+      "forca_log": 0.22897317684277876
+    }
+  },
+  "configs": {
+    "Config": {
+      "cura_saude_por_tick": 0.0003333333333333333,
+      "custo_brincar_energia": 0.08,
+      "custo_brincar_fome": 0.05,
+      "custo_repreender": 0.12,
+      "dano_saude_por_tick": 0.0005,
+      "decaimento_energia": 0.0011111111111111111,
+      "decaimento_fome": 0.0008333333333333334,
+      "decaimento_higiene": 0.0006666666666666666,
+      "decaimento_humor": 0.0008333333333333334,
+      "energia_por_tick_dormindo": 0.004166666666666667,
+      "fim_noite_tick": 420,
+      "ganho_alimentar": 0.45,
+      "ganho_brincar_humor": 0.25,
+      "ganho_elogiar": 0.1,
+      "ganho_limpar": 0.6,
+      "humor_por_tick_brincando": 0.008333333333333333,
+      "inicio_noite_tick": 1320,
+      "intervalo_decisao_ticks": 15,
+      "janela_atencao_ticks": 240,
+      "limiar_privacao": 0.15,
+      "multiplicador_noturno": 1.8,
+      "penalidade_higiene_por_sujeira": 0.12,
+      "prob_sujeira_por_tick": 0.0025,
+      "prob_sujeira_pos_refeicao": 0.35,
+      "saciedade_maxima": 1.0,
+      "saciedade_minima": 0.0,
+      "sujeira_maxima": 5
+    },
+    "ConfigArena": {
+      "dano_base": 10.0,
+      "fome_arena": 0.7,
+      "ganho_afinidade": 0.5,
+      "higiene_arena": 0.7,
+      "hora_arena": 0.5,
+      "hp_inicial": 100.0,
+      "mapa_pet_combate": [
+        [
+          "ocioso",
+          "bloqueio"
+        ],
+        [
+          "dormir",
+          "bloqueio"
+        ],
+        [
+          "comer",
+          "agarrao"
+        ],
+        [
+          "brincar",
+          "golpe"
+        ],
+        [
+          "chamar_atencao",
+          "carga"
+        ],
+        [
+          "explorar",
+          "finta"
+        ],
+        [
+          "emburrar",
+          "agarrao"
+        ]
+      ],
+      "max_turnos": 40,
+      "saude_arena": 1.0
+    },
+    "ConfigBandit": {
+      "escala_ticks_desde_cuidado": 480.0,
+      "iteracoes_bisseccao_prior": 40,
+      "janela_latencia_ticks": 120,
+      "lambda_regularizacao": 1.0,
+      "piso_prior": 0.05,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "variancia_amostra": 0.25
+    },
+    "ConfigDonos": {
+      "limiar_alimentar": 0.5,
+      "limiar_energia_sono_adequado": 0.4,
+      "limiar_humor_brincar": 0.4,
+      "limiar_limpar": 0.5,
+      "limiar_necessidade_pedido_adequado": 0.35,
+      "max_interacoes_por_passo": 6,
+      "passo_ticks": 15,
+      "prob_elogio_incoerente": 0.5,
+      "sujeira_para_limpar": 2,
+      "visitas_por_dia_relapso": 3
+    },
+    "ConfigMetricas": {
+      "max_iter_bradley_terry": 200,
+      "ridge_bradley_terry": 0.01,
+      "tolerancia_bradley_terry": 1e-10
+    },
+    "ConfigTracos": {
+      "alfa_ema": 0.003472222222222222
+    },
+    "TICKS_POR_DIA": 1440
+  },
+  "divergencia_com_x_sem_memoria": {
+    "com_memoria": 0.02141501917279933,
+    "nota": "sem memoria = bracos bandit da run canonica (Linux/3.11) e da ablacao (mesmas vidas); mesmas sementes, orcamento, duracao e donos",
+    "sem_memoria": {
+      "artifacts/metrics.json": 0.020406270280290576,
+      "artifacts_ablacao/metrics.json": 0.020406270280290587
+    }
+  },
+  "divergencia_resumo": {
+    "jsd_media_dentro_do_braco": 0.014961060975338428,
+    "jsd_media_entre_bracos": 0.02141501917279933,
+    "jsd_por_par_de_bracos": {
+      "aleatorio x atencioso": {
+        "media": 0.02615986122103329,
+        "n_pares": 25
+      },
+      "aleatorio x incoerente": {
+        "media": 0.020507352322321135,
+        "n_pares": 25
+      },
+      "aleatorio x relapso": {
+        "media": 0.024199808719399866,
+        "n_pares": 25
+      },
+      "atencioso x incoerente": {
+        "media": 0.021393846367532342,
+        "n_pares": 25
+      },
+      "atencioso x relapso": {
+        "media": 0.014825668125346383,
+        "n_pares": 25
+      },
+      "incoerente x relapso": {
+        "media": 0.021403578281162974,
+        "n_pares": 25
+      }
+    },
+    "limiar": 0.02,
+    "piso_ruido_maximo": 0.013311969392507733
+  },
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "finais_por_braco": {
+    "aleatorio": {
+      "humor": {
+        "ic_inferior": 0.39949999999998953,
+        "ic_superior": 0.8754999999999958,
+        "media": 0.6374999999999926,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 0.20750000000000432,
+        "ic_superior": 0.7861000000000236,
+        "media": 0.5096000000000152,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "atencioso": {
+      "humor": {
+        "ic_inferior": 0.8564999999999948,
+        "ic_superior": 0.9474999999999987,
+        "media": 0.9054999999999958,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "incoerente": {
+      "humor": {
+        "ic_inferior": 0.827999999999995,
+        "ic_superior": 0.9599999999999987,
+        "media": 0.9094999999999958,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
+        "n": 5,
+        "nivel": 0.95
+      }
+    },
+    "relapso": {
+      "humor": {
+        "ic_inferior": 0.782999999999989,
+        "ic_superior": 0.957499999999999,
+        "media": 0.8754999999999951,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "saude": {
+        "ic_inferior": 0.9874000000000013,
+        "ic_superior": 1.0,
+        "media": 0.9958000000000006,
+        "n": 5,
+        "nivel": 0.95
+      }
+    }
+  },
+  "finais_por_pet": {
+    "aleatorio@101": {
+      "humor": 0.4499999999999781,
+      "saude": 0.6555000000000379
+    },
+    "aleatorio@202": {
+      "humor": 0.9249999999999983,
+      "saude": 0.855000000000016
+    },
+    "aleatorio@303": {
+      "humor": 0.2249999999999999,
+      "saude": 0.0
+    },
+    "aleatorio@404": {
+      "humor": 0.6474999999999916,
+      "saude": 0.782500000000024
+    },
+    "aleatorio@505": {
+      "humor": 0.9399999999999954,
+      "saude": 0.2549999999999977
+    },
+    "atencioso@101": {
+      "humor": 0.9624999999999991,
+      "saude": 1.0
+    },
+    "atencioso@202": {
+      "humor": 0.8624999999999865,
+      "saude": 1.0
+    },
+    "atencioso@303": {
+      "humor": 0.8274999999999962,
+      "saude": 1.0
+    },
+    "atencioso@404": {
+      "humor": 0.9374999999999986,
+      "saude": 1.0
+    },
+    "atencioso@505": {
+      "humor": 0.9374999999999986,
+      "saude": 1.0
+    },
+    "incoerente@101": {
+      "humor": 0.9374999999999986,
+      "saude": 1.0
+    },
+    "incoerente@202": {
+      "humor": 0.9324999999999859,
+      "saude": 1.0
+    },
+    "incoerente@303": {
+      "humor": 0.9499999999999983,
+      "saude": 1.0
+    },
+    "incoerente@404": {
+      "humor": 0.7524999999999968,
+      "saude": 1.0
+    },
+    "incoerente@505": {
+      "humor": 0.9749999999999994,
+      "saude": 1.0
+    },
+    "relapso@101": {
+      "humor": 0.8349999999999868,
+      "saude": 1.0
+    },
+    "relapso@202": {
+      "humor": 0.9624999999999991,
+      "saude": 1.0
+    },
+    "relapso@303": {
+      "humor": 0.9874999999999997,
+      "saude": 1.0
+    },
+    "relapso@404": {
+      "humor": 0.7049999999999925,
+      "saude": 1.0
+    },
+    "relapso@505": {
+      "humor": 0.8874999999999974,
+      "saude": 0.9790000000000023
+    }
+  },
+  "gate": [
+    {
+      "mensagem": "todos os 20 pets com 224 interacoes (verificado)",
+      "ok": true,
+      "regra": "orcamento_igual_entre_bracos"
+    },
+    {
+      "mensagem": "20 vidas reconstruidas do disco sem divergencia",
+      "ok": true,
+      "regra": "replay_vidas_bit_a_bit"
+    },
+    {
+      "mensagem": "3800 partidas rejogadas sem divergencia",
+      "ok": true,
+      "regra": "replay_partidas_bit_a_bit"
+    },
+    {
+      "mensagem": "5 sementes",
+      "ok": true,
+      "regra": "sementes_suficientes"
+    },
+    {
+      "mensagem": "piso de ruido Monte Carlo maximo 0.013312 bits vs limiar 0.02 bits",
+      "ok": true,
+      "regra": "sonda_com_resolucao"
+    },
+    {
+      "mensagem": "JSD media entre pets de bracos diferentes = 0.021415 bits, limiar 0.02 bits",
+      "ok": true,
+      "regra": "divergencia_entre_politicas"
+    }
+  ],
+  "interacoes_por_pet": {
+    "aleatorio@101": 224,
+    "aleatorio@202": 224,
+    "aleatorio@303": 224,
+    "aleatorio@404": 224,
+    "aleatorio@505": 224,
+    "atencioso@101": 224,
+    "atencioso@202": 224,
+    "atencioso@303": 224,
+    "atencioso@404": 224,
+    "atencioso@505": 224,
+    "incoerente@101": 224,
+    "incoerente@202": 224,
+    "incoerente@303": 224,
+    "incoerente@404": 224,
+    "incoerente@505": 224,
+    "relapso@101": 224,
+    "relapso@202": 224,
+    "relapso@303": 224,
+    "relapso@404": 224,
+    "relapso@505": 224
+  },
+  "motivos_reprovacao": [],
+  "n_partidas": 3800,
+  "preflight": {
+    "checagens": [
+      {
+        "checagem": "python>=3.10",
+        "detalhe": "3.13.0",
+        "ok": true
+      },
+      {
+        "checagem": "digilab so usa stdlib",
+        "detalhe": "imports fora da stdlib: []",
+        "ok": true
+      },
+      {
+        "checagem": "engine.py intocado",
+        "detalhe": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+        "ok": true
+      },
+      {
+        "checagem": "protocolo valido",
+        "detalhe": "arena-v1-memoria",
+        "ok": true
+      },
+      {
+        "checagem": "saida gravavel",
+        "detalhe": "D:\\Trab\\digilab\\v1\\artifacts_v1_memoria",
+        "ok": true
+      },
+      {
+        "checagem": "replay v0 bit a bit",
+        "detalhe": "motor v0, 1 dia",
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  "protocolo": {
+    "amostras_por_estado": {
+      "justificativa": "amostras Monte Carlo de acao por estado, com numeros aleatorios comuns",
+      "status": "PROPOSTO",
+      "valor": 200
+    },
+    "bootstrap_reamostragens": {
+      "justificativa": "bootstrap percentil sobre sementes",
+      "status": "PROPOSTO",
+      "valor": 10000
+    },
+    "bootstrap_semente": {
+      "justificativa": "semente do bootstrap",
+      "status": "PROPOSTO",
+      "valor": 4242
+    },
+    "bracos": {
+      "justificativa": "definidos no enunciado da tarefa; aleatorio e o controle critico",
+      "status": "DECIDIDO",
+      "valor": [
+        "atencioso",
+        "relapso",
+        "aleatorio",
+        "incoerente"
+      ]
+    },
+    "definicao_vitoria": {
+      "justificativa": "regra simples e simetrica; max_turnos em ConfigArena",
+      "status": "PROPOSTO",
+      "valor": "KO (hp do oponente chega a 0) ou, apos max_turnos, maior hp restante; hp igual = empate, conta 0.5 para cada lado"
+    },
+    "dias_simulados": {
+      "justificativa": "mesma janela da demo v0, que ja separa atencioso de relapso",
+      "status": "PROPOSTO",
+      "valor": 14
+    },
+    "estados_sonda": {
+      "justificativa": "estados sorteados uniformemente para condicionar a divergencia",
+      "status": "PROPOSTO",
+      "valor": 64
+    },
+    "limiar_divergencia_jsd_bits": {
+      "justificativa": "JSD media entre politicas de bracos diferentes abaixo disto = politicas praticamente iguais; a run e REPROVADA por falta de profundidade do ambiente",
+      "status": "PROPOSTO",
+      "valor": 0.02
+    },
+    "memoria": {
+      "justificativa": "features de memoria curta (latencia do dono por necessidade, repreensoes e elogios com decaimento) acrescentadas ao contexto do bandit em todos os bracos; parametros de ConfigMemoria",
+      "status": "PROPOSTO",
+      "valor": [
+        [
+          "features",
+          [
+            "latencia_fome",
+            "latencia_higiene",
+            "repreensoes",
+            "elogios"
+          ]
+        ],
+        [
+          "config",
+          [
+            [
+              "escala_feedback",
+              3.0
+            ],
+            [
+              "janela_latencia_ticks",
+              240
+            ],
+            [
+              "limiar_necessidade_pedido",
+              0.5
+            ],
+            [
+              "tau_feedback_ticks",
+              360.0
+            ]
+          ]
+        ]
+      ]
+    },
+    "metricas": {
+      "justificativa": "lista do enunciado; implementadas uma unica vez em digilab/metrics.py",
+      "status": "DECIDIDO",
+      "valor": [
+        "taxa_vitoria_round_robin",
+        "rating_bradley_terry_com_erro_padrao",
+        "divergencia_jsd_entre_politicas",
+        "saude_humor_finais"
+      ]
+    },
+    "nivel_confianca": {
+      "justificativa": "intervalo de 95%",
+      "status": "PROPOSTO",
+      "valor": 0.95
+    },
+    "orcamento_interacoes": {
+      "justificativa": "16 interacoes/dia x 14 dias; na demo v0 o dono atencioso gastou ~13,6/dia. Igual entre bracos por construcao (simulador impoe)",
+      "status": "PROPOSTO",
+      "valor": 224
+    },
+    "partidas_por_par": {
+      "justificativa": "por par de pets, cada uma com semente de partida propria",
+      "status": "PROPOSTO",
+      "valor": 20
+    },
+    "semente_sonda": {
+      "justificativa": "raiz das sementes da sonda de divergencia",
+      "status": "PROPOSTO",
+      "valor": 9001
+    },
+    "semente_torneio": {
+      "justificativa": "raiz das sementes de partida",
+      "status": "PROPOSTO",
+      "valor": 7001
+    },
+    "sementes_coorte": {
+      "justificativa": "criterio de pronto exige incerteza sobre pelo menos 5 sementes; o numero 5 e decidido, os valores sao arbitrarios e fixados aqui",
+      "status": "DECIDIDO",
+      "valor": [
+        101,
+        202,
+        303,
+        404,
+        505
+      ]
+    },
+    "versao": "arena-v1-memoria"
+  },
+  "protocolo_canonico_hash": "be9aae5a833c1522e56242fcfb4bd938d8a18781d5bfeb82e113a5df61721e9c",
+  "protocolo_hash": "be9aae5a833c1522e56242fcfb4bd938d8a18781d5bfeb82e113a5df61721e9c",
+  "resultado_central": {
+    "ic_inferior": 0.36,
+    "ic_superior": 0.85,
+    "media": 0.61,
+    "n": 5,
+    "nivel": 0.95,
+    "pergunta": "pet treinado por dono atencioso vence pet treinado por dono aleatorio com o mesmo orcamento?",
+    "por_semente": {
+      "101": 0.2,
+      "202": 1.0,
+      "303": 0.75,
+      "404": 0.75,
+      "505": 0.35
+    },
+    "secundario_todos_confrontos": {
+      "n_partidas": 500,
+      "pontos_medios": 0.58
+    },
+    "unidade": "pontos medios do atencioso no confronto direto, por semente de coorte (empate = 0.5)",
+    "veredito": "INCONCLUSIVO"
+  },
+  "sementes_coorte": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "status_run": "APROVADA",
+  "taxa_vitoria_por_braco": {
+    "aleatorio": {
+      "ic_inferior": 0.23263157894736844,
+      "ic_superior": 0.6599999999999999,
+      "media": 0.44631578947368417,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "atencioso": {
+      "ic_inferior": 0.43263157894736837,
+      "ic_superior": 0.5705263157894737,
+      "media": 0.516842105263158,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "incoerente": {
+      "ic_inferior": 0.4342105263157895,
+      "ic_superior": 0.6205263157894737,
+      "media": 0.5378947368421052,
+      "n": 5,
+      "nivel": 0.95
+    },
+    "relapso": {
+      "ic_inferior": 0.3878947368421053,
+      "ic_superior": 0.5900000000000001,
+      "media": 0.4989473684210527,
+      "n": 5,
+      "nivel": 0.95
+    }
+  },
+  "taxa_vitoria_por_pet": {
+    "aleatorio@101": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.6710526315789473
+    },
+    "aleatorio@202": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.17105263157894737
+    },
+    "aleatorio@303": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.21578947368421053
+    },
+    "aleatorio@404": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.3894736842105263
+    },
+    "aleatorio@505": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.7842105263157895
+    },
+    "atencioso@101": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5868421052631579
+    },
+    "atencioso@202": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5631578947368421
+    },
+    "atencioso@303": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.3526315789473684
+    },
+    "atencioso@404": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5526315789473685
+    },
+    "atencioso@505": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5289473684210526
+    },
+    "incoerente@101": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.6342105263157894
+    },
+    "incoerente@202": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.3394736842105263
+    },
+    "incoerente@303": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5605263157894737
+    },
+    "incoerente@404": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5184210526315789
+    },
+    "incoerente@505": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.6368421052631579
+    },
+    "relapso@101": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.2894736842105263
+    },
+    "relapso@202": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.5842105263157895
+    },
+    "relapso@303": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.45526315789473687
+    },
+    "relapso@404": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.6157894736842106
+    },
+    "relapso@505": {
+      "empates": 0,
+      "jogos": 380,
+      "taxa": 0.55
+    }
+  }
+}
