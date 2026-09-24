@@ -61,3 +61,54 @@ def test_config_com_chave_desconhecida_falha(tmp_path):
     caminho.write_text(json.dumps({"saida": "x", "turbo": True}))
     with pytest.raises(KeyError):
         run_arena.main(["--config", str(caminho)])
+
+
+# ------------------------------------------------------------ ablacao (etapa 2)
+
+
+def _rodar_ablacao(tmp_path, **extra):
+    cfg = {
+        "saida": str(tmp_path / "ab"),
+        "protocolo": "arena-v1-ablacao",
+        "protocolo_substituicoes": {**REDUZIDO, **extra},
+    }
+    caminho = tmp_path / "ab.json"
+    caminho.write_text(json.dumps(cfg))
+    rc = run_arena.main(["--config", str(caminho)])
+    return rc, json.loads((tmp_path / "ab" / "metrics.json").read_text())
+
+
+def test_ablacao_roda_oito_bracos_com_politica_do_protocolo(tmp_path):
+    rc, m = _rodar_ablacao(tmp_path)
+    assert rc in (0, 2)
+    assert len(m["bracos"]) == 8
+    assert m["bracos_dono_politica"]["atencioso-instinto"] == {"dono": "atencioso", "politica": "instinto"}
+    assert set(m["interacoes_por_pet"].values()) == {16}
+    assert len(m["interacoes_por_pet"]) == 8 * 5
+    vidas = tmp_path / "ab" / "vidas"
+    for s in PROTOCOLO_ARENA_V1.v("sementes_coorte"):
+        inst = json.loads((vidas / f"atencioso-instinto@{s}.politica.json").read_text())
+        assert inst == {"nome": "instinto", "parametros_aprendidos": 0}
+        band = json.loads((vidas / f"atencioso-bandit@{s}.politica.json").read_text())
+        assert band["nome"] != "instinto"
+    assert set(m["atencioso_vs_aleatorio_por_politica"]) == {"bandit", "instinto"}
+    assert m["resultado_central"] == m["atencioso_vs_aleatorio_por_politica"]["bandit"]
+
+
+def test_ablacao_mesmo_dono_mesma_rng_nas_duas_politicas():
+    """Com instinto nos dois lados, trocar so o rotulo do braco nao muda a vida."""
+    from digilab.donos import criar_dono
+    from digilab.policy import PoliticaInstinto
+    from digilab.treino import simular_vida
+
+    a = simular_vida("atencioso-bandit", criar_dono("atencioso"), PoliticaInstinto(), 101, 1, 16, rotulo_dono="atencioso")
+    b = simular_vida("atencioso-instinto", criar_dono("atencioso"), PoliticaInstinto(), 101, 1, 16, rotulo_dono="atencioso")
+    assert a.motor.log.para_jsonl() == b.motor.log.para_jsonl()
+    assert a.motor.estado() == b.motor.estado()
+
+
+def test_protocolo_desconhecido_no_config_falha(tmp_path):
+    caminho = tmp_path / "cfg.json"
+    caminho.write_text(json.dumps({"saida": "x", "protocolo": "arena-v9"}))
+    with pytest.raises(KeyError, match="protocolo desconhecido"):
+        run_arena.main(["--config", str(caminho)])

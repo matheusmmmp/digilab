@@ -4,7 +4,7 @@
 
 Fluxo:
   1. preflight   - ambiente, engine intocado, protocolo valido, replay v0
-  2. vidas       - cada braco x cada semente, bandit, orcamento imposto
+  2. vidas       - cada braco x cada semente, politica do braco (protocolo), orcamento imposto
   3. replay      - toda vida e reconstruida DO DISCO e comparada bit a bit
   4. torneio     - round-robin entre todos os pets
   5. replay      - toda partida e rejogada com os pets reconstruidos
@@ -12,6 +12,11 @@ Fluxo:
   7. gate        - pode REPROVAR a run; motivo gravado
 
 Divergencia de replay nao e aviso: levanta erro e para tudo.
+
+O protocolo sai do campo `protocolo` do config (padrao arena-v1). Em arena-v1
+todo braco usa bandit e o rotulo do braco e o nome do dono. Em
+arena-v1-ablacao os bracos sao dono x politica (ex.: atencioso-instinto) e a
+politica de cada braco vem do protocolo, nunca de codigo fixo aqui.
 
 Saida (em `saida` do config): metrics.json, divergence.json, matches.csv,
 partidas.jsonl, vidas/*.jsonl, vidas/*.politica.json, preflight.json.
@@ -48,7 +53,10 @@ from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import (  # noqa: E402
     ENGINE_SHA256_V0,
     PROTOCOLO_ARENA_V1,
+    PROTOCOLOS,
     Protocolo,
+    ProtocoloAblacao,
+    bracos_do_protocolo,
     configs_congelados,
     derivar_semente,
     sha256_engine,
@@ -56,7 +64,13 @@ from digilab.protocol import (  # noqa: E402
 from digilab.tracos import tracos_de_acoes  # noqa: E402
 from digilab.treino import reproduzir_com_feedback, simular_vida  # noqa: E402
 
-CHAVES_CONFIG = {"saida", "protocolo_substituicoes", "descricao"}
+CHAVES_CONFIG = {"saida", "protocolo_substituicoes", "descricao", "protocolo"}
+
+# politica de comportamento por nome de protocolo -> fabrica(cfg)
+FABRICAS_POLITICA = {
+    "bandit": lambda cfg=None: PoliticaBandit(cfg),
+    "instinto": lambda cfg=None: PoliticaInstinto(cfg),
+}
 
 
 class PreflightFalhou(RuntimeError):
@@ -69,10 +83,6 @@ class ReplayDivergiu(RuntimeError):
 
 class OrcamentoDesigual(RuntimeError):
     pass
-
-
-def _fabrica_bandit(cfg):
-    return PoliticaBandit(cfg)
 
 
 def _dump(obj) -> str:
@@ -93,8 +103,12 @@ def carregar_config(caminho: Path) -> tuple[Protocolo, Path, dict]:
         raise KeyError(f"chaves desconhecidas no config: {sorted(desconhecidas)}")
     if "saida" not in bruto:
         raise KeyError("config sem 'saida'")
+    nome = bruto.get("protocolo", PROTOCOLO_ARENA_V1.versao)
+    if nome not in PROTOCOLOS:
+        raise KeyError(f"protocolo desconhecido no config: {nome!r}; validos: {sorted(PROTOCOLOS)}")
+    base = PROTOCOLOS[nome]
     subs = bruto.get("protocolo_substituicoes", {})
-    protocolo = PROTOCOLO_ARENA_V1.com_substituicoes(subs) if subs else PROTOCOLO_ARENA_V1
+    protocolo = base.com_substituicoes(subs) if subs else base
     saida = Path(bruto["saida"])
     if not saida.is_absolute():
         saida = RAIZ / saida
@@ -158,7 +172,7 @@ def preflight(protocolo: Protocolo, saida: Path) -> dict:
 
     resultado = {"ok": all(c["ok"] for c in checagens), "checagens": checagens}
     if saida.exists():
-        (saida / "preflight.json").write_text(_dump(resultado), encoding="utf-8")
+        (saida / "preflight.json").write_text(_dump(resultado), encoding="utf-8", newline="\n")
     if not resultado["ok"]:
         falhas = [c for c in checagens if not c["ok"]]
         raise PreflightFalhou(f"preflight reprovado: {falhas}")
@@ -174,7 +188,13 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     dir_vidas.mkdir(parents=True, exist_ok=True)
 
     sementes = list(protocolo.v("sementes_coorte"))
-    bracos = list(protocolo.v("bracos"))
+    bracos_exec = bracos_do_protocolo(protocolo)
+    bracos = [rotulo for rotulo, _, _ in bracos_exec]
+    dono_de_braco = {rotulo: dono for rotulo, dono, _ in bracos_exec}
+    politica_de_braco = {rotulo: pol for rotulo, _, pol in bracos_exec}
+    for pol in politica_de_braco.values():
+        if pol not in FABRICAS_POLITICA:
+            raise KeyError(f"politica sem fabrica no orquestrador: {pol!r}")
     dias = protocolo.v("dias_simulados")
     orcamento = protocolo.v("orcamento_interacoes")
 
@@ -182,11 +202,13 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     vidas = {}
     for s in sementes:
         for b in bracos:
-            v = simular_vida(b, criar_dono(b), PoliticaBandit(), s, dias, orcamento)
+            dono = dono_de_braco[b]
+            politica = FABRICAS_POLITICA[politica_de_braco[b]]()
+            v = simular_vida(b, criar_dono(dono), politica, s, dias, orcamento, rotulo_dono=dono)
             vidas[v.nome] = v
-            (dir_vidas / f"{v.nome}.jsonl").write_text(v.motor.log.para_jsonl(), encoding="utf-8")
+            (dir_vidas / f"{v.nome}.jsonl").write_text(v.motor.log.para_jsonl(), encoding="utf-8", newline="\n")
             (dir_vidas / f"{v.nome}.politica.json").write_text(
-                json.dumps(v.motor.politica.estado_interno(), sort_keys=True), encoding="utf-8"
+                json.dumps(v.motor.politica.estado_interno(), sort_keys=True), encoding="utf-8", newline="\n"
             )
 
     interacoes = {
@@ -199,7 +221,7 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     reconstruidos = {}
     for nome, v in sorted(vidas.items()):
         log = LogDeEventos.de_jsonl((dir_vidas / f"{nome}.jsonl").read_text(encoding="utf-8"))
-        r = reproduzir_com_feedback(log, _fabrica_bandit, semente=v.semente_coorte)
+        r = reproduzir_com_feedback(log, FABRICAS_POLITICA[politica_de_braco[v.braco]], semente=v.semente_coorte)
         salvo = json.loads((dir_vidas / f"{nome}.politica.json").read_text(encoding="utf-8"))
         if r.estado() != v.motor.estado():
             raise ReplayDivergiu(f"{nome}: estado final diverge no replay")
@@ -224,7 +246,7 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
                 semente = derivar_semente("partida", protocolo.v("semente_torneio"), a, b, k)
                 partidas.append(lutar(lutadores[a], lutadores[b], semente))
 
-    with (saida / "partidas.jsonl").open("w", encoding="utf-8") as f:
+    with (saida / "partidas.jsonl").open("w", encoding="utf-8", newline="\n") as f:
         for p in partidas:
             f.write(json.dumps(p.para_dict(), sort_keys=True) + "\n")
     with (saida / "matches.csv").open("w", encoding="utf-8", newline="") as f:
@@ -279,28 +301,47 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
             chave = " x ".join(sorted((grupo[a], grupo[b])))
             jsd_por_par_braco.setdefault(chave, []).append(v)
 
-    # resultado central: atencioso vs aleatorio, pareado por semente
-    pareado = []
-    for s in sementes:
-        a, b = f"atencioso@{s}", f"aleatorio@{s}"
-        pts = [p.pontos_a if p.nome_a == a else 1.0 - p.pontos_a for p in partidas if {p.nome_a, p.nome_b} == {a, b}]
-        if len(pts) != protocolo.v("partidas_por_par"):
-            raise RuntimeError(f"confronto {a} x {b} com {len(pts)} partidas")
-        pareado.append(sum(pts) / len(pts))
-    ic = bootstrap_ic(pareado, protocolo.v("bootstrap_reamostragens"), protocolo.v("bootstrap_semente"), protocolo.v("nivel_confianca"))
-    if ic["ic_inferior"] > 0.5:
-        veredito = "ATENCIOSO_VENCE"
-    elif ic["ic_superior"] < 0.5:
-        veredito = "ATENCIOSO_PERDE"
-    else:
-        veredito = "INCONCLUSIVO"
+    # resultado central: atencioso vs aleatorio, pareado por semente, para
+    # cada politica do protocolo (arena-v1 so tem bandit, rotulo = dono)
+    def rotulo(dono: str, pol: str) -> str:
+        achados = [r for r, d, p in bracos_exec if d == dono and p == pol]
+        if len(achados) != 1:
+            raise KeyError(f"braco {dono} x {pol} ausente ou duplicado no protocolo")
+        return achados[0]
 
-    # todos os confrontos atencioso x aleatorio, qualquer semente (secundario)
-    todos = [
-        p.pontos_a if braco_de[p.nome_a] == "atencioso" else 1.0 - p.pontos_a
-        for p in partidas
-        if {braco_de[p.nome_a], braco_de[p.nome_b]} == {"atencioso", "aleatorio"}
-    ]
+    def confronto_central(pol: str) -> dict:
+        ra, rb = rotulo("atencioso", pol), rotulo("aleatorio", pol)
+        pareado = []
+        for s in sementes:
+            a, b = f"{ra}@{s}", f"{rb}@{s}"
+            pts = [p.pontos_a if p.nome_a == a else 1.0 - p.pontos_a for p in partidas if {p.nome_a, p.nome_b} == {a, b}]
+            if len(pts) != protocolo.v("partidas_por_par"):
+                raise RuntimeError(f"confronto {a} x {b} com {len(pts)} partidas")
+            pareado.append(sum(pts) / len(pts))
+        ic = bootstrap_ic(pareado, protocolo.v("bootstrap_reamostragens"), protocolo.v("bootstrap_semente"), protocolo.v("nivel_confianca"))
+        if ic["ic_inferior"] > 0.5:
+            veredito = "ATENCIOSO_VENCE"
+        elif ic["ic_superior"] < 0.5:
+            veredito = "ATENCIOSO_PERDE"
+        else:
+            veredito = "INCONCLUSIVO"
+        # todos os confrontos atencioso x aleatorio, qualquer semente (secundario)
+        todos = [
+            p.pontos_a if braco_de[p.nome_a] == ra else 1.0 - p.pontos_a
+            for p in partidas
+            if {braco_de[p.nome_a], braco_de[p.nome_b]} == {ra, rb}
+        ]
+        return {
+            "pergunta": "pet treinado por dono atencioso vence pet treinado por dono aleatorio com o mesmo orcamento?",
+            "unidade": "pontos medios do atencioso no confronto direto, por semente de coorte (empate = 0.5)",
+            "por_semente": dict(zip(map(str, sementes), pareado)),
+            **ic,
+            "veredito": veredito,
+            "secundario_todos_confrontos": {"pontos_medios": media(todos), "n_partidas": len(todos)},
+        }
+
+    politicas_protocolo = list(dict.fromkeys(pol for _, _, pol in bracos_exec))
+    central_por_politica = {pol: confronto_central(pol) for pol in politicas_protocolo}
 
     fin = finais({n: v.motor.estado() for n, v in vidas.items()})
     finais_braco = {}
@@ -351,7 +392,8 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     propostos = protocolo.campos_propostos()
     if propostos:
         avisos.append(f"run com {len(propostos)} parametro(s) PROPOSTO(s), nao referendados: {propostos}")
-    if protocolo.hash() != PROTOCOLO_ARENA_V1.hash():
+    base_canonica = PROTOCOLOS[protocolo.versao.split("+")[0]]
+    if protocolo.hash() != base_canonica.hash():
         avisos.append("protocolo NAO CANONICO (substituicoes via --config): resultado nao e o do portao")
 
     # ---------------------------------------------------------- artefatos
@@ -370,7 +412,7 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         ],
         "distribuicoes": dists,
     }
-    (saida / "divergence.json").write_text(_dump(divergence), encoding="utf-8")
+    (saida / "divergence.json").write_text(_dump(divergence), encoding="utf-8", newline="\n")
 
     metrics = {
         "status_run": "APROVADA" if aprovada else "REPROVADA",
@@ -378,21 +420,14 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         "gate": gate,
         "avisos": avisos,
         "protocolo_hash": protocolo.hash(),
-        "protocolo_canonico_hash": PROTOCOLO_ARENA_V1.hash(),
+        "protocolo_canonico_hash": base_canonica.hash(),
         "protocolo": protocolo.para_dict(),
         "configs": configs_congelados(),
         "engine_sha256": sha256_engine(),
         "sementes_coorte": sementes,
         "bracos": bracos,
         "interacoes_por_pet": interacoes,
-        "resultado_central": {
-            "pergunta": "pet treinado por dono atencioso vence pet treinado por dono aleatorio com o mesmo orcamento?",
-            "unidade": "pontos medios do atencioso no confronto direto, por semente de coorte (empate = 0.5)",
-            "por_semente": dict(zip(map(str, sementes), pareado)),
-            **ic,
-            "veredito": veredito,
-            "secundario_todos_confrontos": {"pontos_medios": media(todos), "n_partidas": len(todos)},
-        },
+        "resultado_central": central_por_politica["bandit"],
         "taxa_vitoria_por_pet": tv,
         "taxa_vitoria_por_braco": taxa_braco,
         "bradley_terry_por_pet": bt_pets,
@@ -410,20 +445,24 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
         "preflight": pre,
         "ambiente": {"python": platform.python_version(), "plataforma": platform.platform()},
     }
+    if isinstance(protocolo, ProtocoloAblacao):
+        metrics["bracos_dono_politica"] = {r: {"dono": d, "politica": pol} for r, d, pol in bracos_exec}
+        metrics["atencioso_vs_aleatorio_por_politica"] = central_por_politica
     arquivos = ["divergence.json", "matches.csv", "partidas.jsonl", "preflight.json"]
     metrics["artefatos_sha256"] = {a: _sha(saida / a) for a in arquivos}
     metrics["artefatos_sha256"].update(
         {f"vidas/{p.name}": _sha(p) for p in sorted(dir_vidas.iterdir())}
     )
-    (saida / "metrics.json").write_text(_dump(metrics), encoding="utf-8")
+    (saida / "metrics.json").write_text(_dump(metrics), encoding="utf-8", newline="\n")
 
     print(f"run {metrics['status_run']}  protocolo {metrics['protocolo_hash'][:12]}  saida {saida}")
     for r in gate:
         print(f"  [{'ok' if r['ok'] else 'REPROVA'}] {r['regra']}: {r['mensagem']}")
     for a in avisos:
         print(f"  AVISO: {a}")
-    rc = metrics["resultado_central"]
-    print(f"  central: {rc['veredito']}  media {rc['media']:.4f}  IC{int(rc['nivel']*100)} [{rc['ic_inferior']:.4f}, {rc['ic_superior']:.4f}]  n={rc['n']}")
+    for pol, rc in central_por_politica.items():
+        rotulo_pol = "central" if len(central_por_politica) == 1 else f"atencioso x aleatorio ({pol})"
+        print(f"  {rotulo_pol}: {rc['veredito']}  media {rc['media']:.4f}  IC{int(rc['nivel']*100)} [{rc['ic_inferior']:.4f}, {rc['ic_superior']:.4f}]  n={rc['n']}")
     return 0 if aprovada else 2
 
 

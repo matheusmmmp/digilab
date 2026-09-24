@@ -133,7 +133,14 @@ def simular_vida(
     orcamento: int,
     cfg: Config | None = None,
     cfg_donos: ConfigDonos | None = None,
+    rotulo_dono: str | None = None,
 ) -> Vida:
+    """`rotulo_dono` fixa a rng do dono independente do rotulo do braco.
+
+    Na ablacao, `atencioso-bandit` e `atencioso-instinto` passam
+    rotulo_dono="atencioso" e recebem o MESMO dono com a mesma rng; so a
+    politica muda. Sem ele, a rng deriva do braco (comportamento da v1).
+    """
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     total_ticks = dias * TICKS_POR_DIA
@@ -144,7 +151,7 @@ def simular_vida(
     # mesma semente de ambiente para todos os bracos da coorte; a rng do
     # dono e derivada a parte e nunca toca as rngs do motor
     motor = MotorComFeedback(politica=politica, cfg=cfg, semente=semente_coorte)
-    rng_dono = random.Random(derivar_semente("dono", semente_coorte, braco))
+    rng_dono = random.Random(derivar_semente("dono", semente_coorte, rotulo_dono or braco))
     canal = CanalDeInteracao(motor, orcamento, cfg_donos.max_interacoes_por_passo)
 
     for passo in range(passos):
