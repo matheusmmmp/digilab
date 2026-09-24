@@ -28,6 +28,7 @@ from typing import Callable, Sequence
 
 from .config import CONFIG_EXPRESSAO, ConfigExpressao
 from .events import AcaoPet, AcaoUsuario, LogDeEventos
+from .memoria import FATORES_MEMORIA
 from .policy import Observacao, Politica, PoliticaInstinto, Transicao
 
 ORIGENS = ("vida", "combate")
@@ -37,7 +38,7 @@ FATOR_DA_FEATURE = (
     "habito", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo",
     "hora", "hora", "tempo_sem_cuidado",
 )
-FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE))
+FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA
 
 # regra do instinto -> fatores (variaveis da condicao que disparou)
 _FATORES_INSTINTO = {
@@ -88,15 +89,23 @@ class Motivo:
 
 
 def motivo_bandit(decisao: dict, tick: int, ref_ultimo_cuidado: int | None,
-                  cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> tuple[Motivo, dict]:
-    """(Motivo, diagnostico). Funcao pura do registro da decisao."""
+                  cfg: ConfigExpressao = CONFIG_EXPRESSAO,
+                  indice_do_ordinal: Callable[[int], int | None] | None = None) -> tuple[Motivo, dict]:
+    """(Motivo, diagnostico). Funcao pura do registro da decisao.
+
+    Com memoria (PoliticaBanditMemoria), as features extras viram fatores de
+    memoria e o evento_ref aponta para a acao do dono que originou o valor.
+    """
     x, escolhida = decisao["x"], decisao["acao"]
     amostras = decisao["amostras"]
+    nomes = FATOR_DA_FEATURE + (FATORES_MEMORIA if len(x) > len(FATOR_DA_FEATURE) else ())
+    if len(nomes) != len(x):
+        raise ValueError(f"{len(x)} features, {len(nomes)} nomes de fator")
     outras = [a for a in amostras if a is not escolhida]
     contrib: dict[str, float] = {}
     for i, xi in enumerate(x):
         media = sum(amostras[a][i] for a in outras) / len(outras)
-        nome = FATOR_DA_FEATURE[i]
+        nome = nomes[i]
         contrib[nome] = contrib.get(nome, 0.0) + xi * (amostras[escolhida][i] - media)
 
     sem_valor = {a: decisao["log_prior"][a] + decisao["gumbel"][a] for a in amostras}
@@ -108,7 +117,15 @@ def motivo_bandit(decisao: dict, tick: int, ref_ultimo_cuidado: int | None,
     fatores = tuple(n for _, n in positivos[:2]) if valor_decidiu else ()
     soma_pos = sum(c for c in contrib.values() if c > 0)
     intensidade = (positivos[0][0] / soma_pos) if fatores and soma_pos > 0 else 0.0
-    refs = (ref_ultimo_cuidado,) if "tempo_sem_cuidado" in fatores and ref_ultimo_cuidado is not None else ()
+    refs_l = []
+    for f in fatores:
+        if f == "tempo_sem_cuidado" and ref_ultimo_cuidado is not None:
+            refs_l.append(ref_ultimo_cuidado)
+        elif f in FATORES_MEMORIA and indice_do_ordinal is not None:
+            ordinal = decisao.get("refs_memoria", {}).get(f)
+            if ordinal is not None:
+                refs_l.append(indice_do_ordinal(ordinal))
+    refs = tuple(sorted(set(r for r in refs_l if r is not None)))
     diag = {
         "valor_decidiu": valor_decidiu,
         # formula literal da tarefa (maior |contribuicao| >= limiar), sem as checagens de honestidade
@@ -160,6 +177,9 @@ class PoliticaComMotivo:
         self.diagnosticos: list[dict] = []
         self.humores: list[float] = []   # humor observado em cada decisao (emote do bebe)
 
+    def _indice_do_ordinal(self, k: int) -> int | None:
+        return None if self._indices_dono is None else self._indices_dono[k - 1]
+
     def _ref_cuidado(self) -> int | None:
         if self._indices_dono is None or self._n_dono == 0:
             return None
@@ -175,7 +195,7 @@ class PoliticaComMotivo:
             dec = self.interna.ultima_decisao
             if dec is None or dec["acao"] is not acao:
                 raise RuntimeError("registro da decisao do bandit nao corresponde a acao devolvida")
-            m, diag = motivo_bandit(dec, tick, self._ref_cuidado(), self.cfg)
+            m, diag = motivo_bandit(dec, tick, self._ref_cuidado(), self.cfg, self._indice_do_ordinal)
         else:
             raise TypeError(f"politica sem registro de decisao: {type(self.interna).__name__}")
         self.motivos.append(m)

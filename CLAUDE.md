@@ -68,12 +68,21 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/calibrar_combate_v2.py` | varredura de calibração (recusa sementes de validação) |
 | `experiments/configs/bateria_*.json` | `bateria_canonico.json` (validação, canônico) e `bateria_calibracao.json`; `calibracao_combate_v2.json` = registro da calibração |
 | `artifacts_combate_v2/` | saída da bateria canônica + `calibracao_varredura.jsonl` (evidência) |
-| `tests/` | 108 testes; `test_canonico_intacto.py` roda a canônica inteira (~70 s) |
+| `digilab/motivo.py` | `Motivo` único vida/combate; `PoliticaComMotivo` (embrulho somente leitura da política de vida); adaptador do motivo do combate V2 |
+| `digilab/expressao.py` | `expressar(motivo, estagio, humor)`; tabela de textos com marcador único por fator e cobertura verificada na carga; estágio PROVISÓRIO por idade |
+| `digilab/memoria.py` | `MemoriaCurta` (latência do dono por necessidade, broncas e elogios com decaimento) e `PoliticaBanditMemoria` |
+| `experiments/diario.py`, `legibilidade.py` | diário de motivo/expressão (vida ou partida) e métricas de legibilidade → `artifacts_expressao/` |
+| `experiments/configs/memoria.json` | `PROTOCOLO_ARENA_V1_MEMORIA` → `artifacts_v1_memoria/` |
+| `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `TAREFA_MEMORIA_EXPRESSAO.md`) e `REGISTRO_DESVIOS.md` |
+| `tests/` | 131 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s) |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 108 testes, ~95 s (70 s são a canônica)
+python -m pytest tests/ -q                                                   # 131 testes, ~160 s
+python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
+python experiments/legibilidade.py                                            # legibilidade + diários, ~1 min
+python experiments/diario.py --log artifacts_ablacao/vidas/atencioso-bandit@101.jsonl
 python experiments/run_arena.py --config experiments/configs/ablacao.json    # ablação, ~2 min
 python experiments/run_bateria_combate.py --config experiments/configs/bateria_canonico.json   # combate V2, ~50 s; rc 0/2
 python experiments/run_arena.py --config experiments/configs/canonico.json   # portão, ~2 min; rc 0 APROVADA / 2 REPROVADA
@@ -165,6 +174,32 @@ regras `c26aa2813e23…`, da config `86a28a8adbd1…`). Tudo PROPOSTO. Não subs
 - G3 mede viés de posição (pontos do lado 0 nos espelhos), porque com lados trocados na metade a
   média do espelho é 0,5 por construção.
 
+## Motivo, expressão e memória (2026-09-24, `docs/TAREFA_MEMORIA_EXPRESSAO.md`)
+
+**Pré-condição dispensada**: a Parte A exigia a bateria do combate V2 APROVADA; ela está
+REPROVADA (G4, G5). O Matheus mandou seguir mesmo assim; registrado em `docs/REGISTRO_DESVIOS.md`.
+Números abaixo vêm de `artifacts_expressao/legibilidade.json` e `artifacts_v1_memoria/metrics.json`.
+
+- Parte A é somente leitura: V1 canônica e bateria V2 reproduzem os artefatos (testes). `ConfigExpressao`
+  não entra em nenhum hash (teste). `PoliticaInstinto.ultima_regra` e `PoliticaBandit.ultima_decisao`
+  são atributos somente leitura; `estado_interno()` não mudou.
+- **Honestidade do fator do bandit** (desvio registrado): só vira fator uma contribuição POSITIVA,
+  ≥ `limiar_motivo`, e só quando o termo aprendido mudou a escolha (sem ele, o argmax de
+  log-prior + Gumbel daria outra ação). A fórmula literal da tarefa dava fator em 100% das decisões
+  (sempre há contribuição acima do limiar, muitas vezes ruído de Thompson).
+- **Legibilidade na vida é baixa no bandit**: 13,3% (relapso) a 18,5% (atencioso) das decisões têm
+  fator; é exatamente a fração em que o aprendido decidiu. Nos outros ~82–87% o adulto diz "não sei".
+  Instinto: 34% (atencioso) a 76% (relapso), quase tudo sono/cansaço e, no relapso, tempo sem cuidado.
+- Combate (bots, sementes de validação): adaptativo 85,2% das decisões por regra com fator; tartaruga
+  86,2% e contragolpe 69,3% caem na regra final `sempre`; aleatório 95,1% exploração. Regras que
+  nunca disparam: tartaruga #1 e contragolpe #1, #3 (sombreadas por regras anteriores).
+- **B2 recusa não existe**: o dono age direto no estado (`engine.aplicar_acao_usuario`); o pet não tem
+  ação que bloqueie isso. Exigiria mudar `engine.py`/`state.py` e o espaço de ações. Não foi criado.
+- **Parte B** (`PROTOCOLO_ARENA_V1_MEMORIA`, hash `be9aae5a833c…`, memória em todos os braços):
+  run APROVADA; JSD entre braços 0,021415 bits com memória vs 0,020406 sem (artifacts/ e
+  artifacts_ablacao/). Diferença de ~0,001 bit, sem IC, e a divergência dentro do braço também subiu
+  (0,01496 vs 0,01306). Fatores de memória citados em 3,1–6,1% das decisões (mais no aleatório).
+
 ## Versão web (`web/digilab.html`)
 
 Porte em JavaScript com as mesmas regras e parâmetros de `config.py` (motor, instinto, bandit,
@@ -220,6 +255,11 @@ editada direto; `digilab.html` ficou parado. Só a versão com sprites tem a aba
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- Motivo do bandit: com políticas quase iguais ao instinto, o adulto diz "não sei" em >80% das
+  decisões. Decidir se isso é aceitável ou se o motivo deve incluir o prior (instinto) como causa.
+- Memória: efeito na divergência é pequeno e sem incerteza; precisa de bootstrap sobre sementes
+  antes de qualquer conclusão. Recusa (B2) exige mudança no motor — decisão do pesquisador.
 
 - Combate V2 reprovado em G4/G5: decidir entre mudar bots passivos, regra de esquiva ou limiares
   (decisão do pesquisador); investigar a dominância do adaptativo antes de plugar pets.

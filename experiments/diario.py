@@ -26,17 +26,22 @@ sys.path.insert(0, str(RAIZ))
 from digilab.config import TICKS_POR_DIA  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.expressao import ESTAGIOS, estagio_por_idade, expressar  # noqa: E402
+from digilab.memoria import PoliticaBanditMemoria  # noqa: E402
 from digilab.motivo import motivos_de_partida, motivos_de_vida  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 
-FABRICAS = {"bandit": lambda c: PoliticaBandit(c), "instinto": lambda c: PoliticaInstinto(c)}
+FABRICAS = {"bandit": lambda c: PoliticaBandit(c), "instinto": lambda c: PoliticaInstinto(c),
+            "bandit_memoria": lambda c: PoliticaBanditMemoria(c)}
 
 
 def inferir(caminho: Path) -> tuple[int, str]:
+    """Semente e politica pelo nome; vidas em artifacts_v1_memoria/ usam bandit_memoria."""
     m = re.fullmatch(r"(.+)@(\d+)\.jsonl", caminho.name)
     if not m:
         raise ValueError(f"nao consigo inferir braco/semente de {caminho.name!r}; use --semente e --politica")
+    if "artifacts_v1_memoria" in caminho.parts:
+        return int(m.group(2)), "bandit_memoria"
     return int(m.group(2)), "instinto" if m.group(1).endswith("-instinto") else "bandit"
 
 

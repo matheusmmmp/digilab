@@ -203,8 +203,10 @@ class PoliticaBandit:
         self.cfg = cfg or CONFIG_PADRAO
         self.cb = cfg_bandit or CONFIG_BANDIT
         self._instinto = PoliticaInstinto(self.cfg)
+        self._n_features = self.n_features()
         self._bracos = {
-            a: _Braco(A_inv=_identidade(N_FEATURES, 1.0 / self.cb.lambda_regularizacao), b=[0.0] * N_FEATURES)
+            a: _Braco(A_inv=_identidade(self._n_features, 1.0 / self.cb.lambda_regularizacao),
+                      b=[0.0] * self._n_features)
             for a in ACOES
         }
         self._tick_ultimo_cuidado = 0
@@ -213,6 +215,16 @@ class PoliticaBandit:
         self._pendentes: list[tuple[int, list[float]]] = []
         self._n_recompensas = {"elogio": 0, "repreensao": 0, "latencia": 0, "ignorado": 0}
         self._ultima_decisao: dict | None = None
+
+    # ------------------------------------------------------------- features
+    # Subclasses (ex.: memoria) acrescentam features sobrescrevendo os dois
+    # metodos abaixo; a base e exatamente o bandit da v1.
+
+    def n_features(self) -> int:
+        return N_FEATURES
+
+    def _features(self, obs: Observacao) -> list[float]:
+        return features(obs, self.cb)
 
     # ------------------------------------------------------------- Politica
 
@@ -229,7 +241,7 @@ class PoliticaBandit:
         return {a: (1.0 - eps) * p[a] + eps / len(ACOES) for a in ACOES}
 
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
-        x = features(obs, self.cb)
+        x = self._features(obs)
         p0 = self.prior(obs)
         escala = math.sqrt(self.cb.variancia_amostra)
         melhor, melhor_score = None, -math.inf
@@ -238,7 +250,7 @@ class PoliticaBandit:
             braco = self._bracos[a]
             theta = braco.theta()
             L = braco.chol()
-            z = [rng.gauss(0.0, 1.0) for _ in range(N_FEATURES)]
+            z = [rng.gauss(0.0, 1.0) for _ in range(self._n_features)]
             Lz = _matvec(L, z)
             valor = sum((t + escala * lz) * xi for t, lz, xi in zip(theta, Lz, x))
             u = rng.random()
@@ -266,7 +278,7 @@ class PoliticaBandit:
             )
         self._tick_ultima_decisao = tick
         self._expirar(tick)
-        x = features(obs, self.cb)
+        x = self._features(obs)
         self._ultima = (x, transicao.acao)
         if transicao.acao is AcaoPet.CHAMAR_ATENCAO:
             self._pendentes.append((tick, x))
@@ -313,7 +325,7 @@ class PoliticaBandit:
         return {
             "nome": self.nome,
             "parametros_aprendidos": sum(len(br.b) for br in self._bracos.values()),
-            "n_features": N_FEATURES,
+            "n_features": self._n_features,
             "atualizacoes_por_acao": {a.value: br.n for a, br in self._bracos.items()},
             "recompensas": dict(self._n_recompensas),
             "theta": {a.value: br.theta() for a, br in self._bracos.items()},

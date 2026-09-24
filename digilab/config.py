@@ -268,3 +268,25 @@ class ConfigExpressao:
 
 
 CONFIG_EXPRESSAO = ConfigExpressao()
+
+
+# =====================================================================
+# Memoria de vida (Parte B). Entra no hash de PROTOCOLO_ARENA_V1_MEMORIA
+# (campo `memoria`), nao no de arena-v1. Todos os valores PROPOSTOS.
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigMemoria:
+    # pedido (chamar_atencao) conta para a necessidade mais baixa entre fome e
+    # higiene, se ela estiver abaixo disto; senao e pedido generico (ignorado)
+    limiar_necessidade_pedido: float = 0.5
+    # latencia normalizada = min(1, latencia / janela); pedido nao atendido
+    # dentro da janela vale 1 (sem evento de origem)
+    janela_latencia_ticks: int = 240
+    # repreensoes e elogios recentes: soma de exp(-dt / tau), normalizada por escala
+    tau_feedback_ticks: float = 360.0
+    escala_feedback: float = 3.0
+
+
+CONFIG_MEMORIA = ConfigMemoria()

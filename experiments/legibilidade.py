@@ -3,7 +3,8 @@
     python experiments/legibilidade.py
 
 Vida: as 40 vidas de artifacts_ablacao/vidas (4 donos x {bandit, instinto} x 5
-sementes), reprocessadas do log com PoliticaComMotivo (somente leitura).
+sementes) e as 20 de artifacts_v1_memoria/vidas (bandit_memoria), reprocessadas do
+log com PoliticaComMotivo (somente leitura).
 Combate: o round-robin da bateria canonica do combate V2 regerado com as
 mesmas sementes de validacao e a mesma funcao de partidas (_partidas_par).
 Saida em artifacts_expressao/: legibilidade.json e diarios/ (um log de cada
@@ -27,11 +28,13 @@ from diario import FABRICAS, diario_partida, diario_vida, formatar, inferir, ler
 from digilab.combate_v2.bots import TODOS, bot  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.expressao import ESTAGIOS  # noqa: E402
+from digilab.memoria import FATORES_MEMORIA  # noqa: E402
 from digilab.motivo import motivos_de_vida  # noqa: E402
 from run_bateria_combate import _partidas_par  # noqa: E402
 
 SAIDA = RAIZ / "artifacts_expressao"
 VIDAS = RAIZ / "artifacts_ablacao" / "vidas"
+VIDAS_MEMORIA = RAIZ / "artifacts_v1_memoria" / "vidas"
 CFG_BATERIA = RAIZ / "experiments" / "configs" / "bateria_canonico.json"
 
 
@@ -40,11 +43,11 @@ def _gravar(caminho: Path, texto: str) -> None:
     caminho.write_text(texto, encoding="utf-8", newline="\n")
 
 
-def vida() -> dict:
+def vida(pasta: Path = VIDAS, sufixo: str = "") -> dict:
     por_braco: dict[str, dict] = {}
-    for arq in sorted(VIDAS.glob("*@*.jsonl")):
+    for arq in sorted(pasta.glob("*@*.jsonl")):
         semente, pol = inferir(arq)
-        braco = arq.name.split("@")[0]
+        braco = arq.name.split("@")[0] + sufixo
         log = LogDeEventos.de_jsonl(arq.read_text(encoding="utf-8"))
         _, emb = motivos_de_vida(log, FABRICAS[pol], semente)
         b = por_braco.setdefault(braco, {"politica": pol, "decisoes": 0, "com_fator": 0, "valor_decidiu": 0,
@@ -68,9 +71,10 @@ def vida() -> dict:
             "fracao_com_fator": b["com_fator"] / n,
             "fracao_dois_fatores": b["dois_fatores"] / n,
             "fracao_com_evento_ref": b["com_evento_ref"] / n,
-            "fracao_valor_decidiu": b["valor_decidiu"] / n if b["politica"] == "bandit" else None,
-            "fracao_formula_literal_com_fator": b["formula_literal_com_fator"] / n if b["politica"] == "bandit" else None,
+            "fracao_valor_decidiu": b["valor_decidiu"] / n if b["politica"] in ("bandit", "bandit_memoria") else None,
+            "fracao_formula_literal_com_fator": b["formula_literal_com_fator"] / n if b["politica"] in ("bandit", "bandit_memoria") else None,
             "fatores_mais_frequentes": [[f, c, c / n] for f, c in b["fatores"].most_common(6)],
+            "fracao_cita_memoria": sum(c for f, c in b["fatores"].items() if f in FATORES_MEMORIA) / n,
         }
     return saida
 
@@ -121,8 +125,9 @@ def combate() -> dict:
 
 def diarios() -> list[str]:
     gerados = []
-    for arq in sorted(VIDAS.glob("*@101.jsonl")):
-        destino = SAIDA / "diarios" / f"vida_{arq.stem}.txt"
+    for arq in sorted(VIDAS.glob("*@101.jsonl")) + sorted(VIDAS_MEMORIA.glob("*@101.jsonl")):
+        sufixo = "-bandit_memoria" if arq.parent == VIDAS_MEMORIA else ""
+        destino = SAIDA / "diarios" / f"vida_{arq.stem.replace('@', sufixo + '@')}.txt"
         _gravar(destino, formatar(diario_vida(arq)))
         gerados.append(destino.relative_to(SAIDA).as_posix())
     partidas = ler_partidas(RAIZ / "artifacts_combate_v2" / "amostra_replay.jsonl")
@@ -146,6 +151,7 @@ def main() -> int:
         "aviso": "a bateria do combate V2 esta REPROVADA (G4, G5); a Parte A foi feita mesmo assim por "
                  "decisao do pesquisador (docs/REGISTRO_DESVIOS.md)",
         "vida": vida(),
+        "vida_com_memoria": vida(VIDAS_MEMORIA, "-bandit_memoria"),
         "combate": combate(),
         "diarios": diarios(),
         "ambiente": {"python": platform.python_version(), "plataforma": platform.platform()},
@@ -154,7 +160,7 @@ def main() -> int:
         d: hashlib.sha256((SAIDA / d).read_bytes()).hexdigest() for d in resultado["diarios"]
     }
     _gravar(SAIDA / "legibilidade.json", json.dumps(resultado, ensure_ascii=False, indent=2, sort_keys=True))
-    for braco, v in resultado["vida"].items():
+    for braco, v in {**resultado["vida"], **resultado["vida_com_memoria"]}.items():
         print(f"vida {braco:<22} com fator {v['fracao_com_fator']:.3f}")
     for x, c in resultado["combate"]["por_bot"].items():
         print(f"combate {x:<12} {json.dumps({k: round(v, 3) for k, v in c['fracoes'].items()})}")

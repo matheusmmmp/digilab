@@ -59,6 +59,17 @@ FATORES: dict[str, dict[str, str]] = {
              "adulto": "por causa da hora do dia"},
     "tempo_sem_cuidado": {"marcador": "sem cuidado", "bebe": "", "crianca": "[:sem cuidado:]",
                           "adolescente": "sem cuidado...", "adulto": "porque fiquei muito tempo sem cuidado"},
+    # memoria (Parte B)
+    "latencia_fome": {"marcador": "demorou com a comida", "bebe": "", "crianca": "[:demorou com a comida:]",
+                      "adolescente": "demorou com a comida...",
+                      "adulto": "porque você demorou com a comida da última vez"},
+    "latencia_higiene": {"marcador": "demorou para me limpar", "bebe": "", "crianca": "[:demorou para me limpar:]",
+                         "adolescente": "demorou para me limpar...",
+                         "adulto": "porque você demorou para me limpar da última vez"},
+    "repreensoes": {"marcador": "bronca", "bebe": "", "crianca": "[:bronca:]", "adolescente": "bronca...",
+                    "adulto": "por causa das broncas recentes"},
+    "elogios": {"marcador": "elogio", "bebe": "", "crianca": "[:elogio:]", "adolescente": "elogio...",
+                "adulto": "por causa dos elogios recentes"},
     # combate (catalogo de gambits)
     "sempre": {"marcador": "sempre faço", "bebe": "", "crianca": "[:sempre faço:]",
                "adolescente": "sempre faço...", "adulto": "porque sempre faço isso"},
