@@ -2,3 +2,4 @@
 * text=auto eol=lf
 artifacts/** -text
 artifacts_ablacao/** -text
+artifacts_combate_v2/** -text
