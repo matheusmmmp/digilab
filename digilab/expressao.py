@@ -97,6 +97,15 @@ FATORES: dict[str, dict[str, str]] = {
                         "adolescente": "você repetiu...", "adulto": "porque você repetiu '{p0}' {p1} vezes"},
     "oponente_frequente": {"marcador": "você insiste", "bebe": "", "crianca": "[:você insiste:]",
                            "adolescente": "você insiste...", "adulto": "porque você insiste em '{p0}'"},
+    # memoria por espacos (docs/ADENDO_MEMORIA_EMOCAO_DF.md, Parte 1)
+    "demora": {"marcador": "me deixou esperando", "bebe": "", "crianca": "[:me deixou esperando:]",
+               "adolescente": "me deixou esperando...", "adulto": "porque lembro que você me deixou esperando"},
+    "bronca": {"marcador": "repreensão", "bebe": "", "crianca": "[:repreensão:]",
+               "adolescente": "repreensão...", "adulto": "porque lembro da sua repreensão"},
+    "elogio": {"marcador": "parabéns", "bebe": "", "crianca": "[:parabéns:]",
+               "adolescente": "parabéns...", "adulto": "porque lembro dos seus parabéns"},
+    "carinho": {"marcador": "carinho", "bebe": "", "crianca": "[:carinho:]",
+                "adolescente": "carinho...", "adulto": "porque lembro do seu carinho"},
     # condicoes do combate V2.1 (combate_v2/v21/gambits.py)
     "turno_execucao": {"marcador": "luta longa", "bebe": "", "crianca": "[:luta longa:]",
                        "adolescente": "luta longa...", "adulto": "porque já era uma luta longa (turno {p0} ou mais)"},
@@ -184,9 +193,10 @@ def _fatores_extra() -> tuple[str, ...]:
     """Fatores alem da vida e do catalogo (memoria, Parte B), se o modulo existir."""
     try:
         from .memoria import FATORES_MEMORIA
+        from .memoria_espacos import FATORES_ESPACOS
     except ImportError:
         return ()
-    return FATORES_MEMORIA
+    return FATORES_MEMORIA + FATORES_ESPACOS
 
 
 @dataclass(frozen=True)

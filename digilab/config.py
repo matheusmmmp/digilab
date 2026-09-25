@@ -293,6 +293,38 @@ CONFIG_MEMORIA = ConfigMemoria()
 
 
 # =====================================================================
+# Memoria por espacos (docs/ADENDO_MEMORIA_EMOCAO_DF.md, Parte 1; inspirada no
+# Dwarf Fortress). Classe separada de ConfigMemoria de proposito: o protocolo
+# arena-v1-memoria (features com decaimento) continua reproduzivel. Entra no
+# hash de PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS. Todos os valores PROPOSTOS.
+# =====================================================================
+
+
+def _intensidades_categoria() -> dict:
+    # None = intensidade vem do evento (demora: latencia normalizada pela janela)
+    return {"demora": None, "bronca": 1.0, "elogio": 1.0, "carinho": 0.5, "sujeira": 0.5, "treino_forcado": 1.0}
+
+
+@dataclass(frozen=True)
+class ConfigMemoriaEspacos:
+    n_curto: int = 4
+    n_longo: int = 2
+    d_curto_ticks: int = 12 * 60             # 12 h simuladas no curto prazo
+    relembrar_ticks_acordado: int = 4 * 60   # relembra a cada 4 h ACORDADO (cronograma, sem sorteio)
+    # decaimento da ativacao entre relembrancas (o adendo nao fixa: mesma constante da memoria B1)
+    tau_ativacao_ticks: float = 360.0
+    categorias: dict = field(default_factory=_intensidades_categoria)
+    # sujeira: TAREFA_CUIDADO_CORPORAL; treino_forcado: TAREFA_TREINO_SOMBRIO
+    ativas: tuple = ("demora", "bronca", "elogio", "carinho")
+    # demora: pedido (chamar_atencao) conta para a necessidade mais baixa entre fome e higiene
+    limiar_necessidade_pedido: float = 0.5
+    janela_latencia_ticks: int = 240
+
+
+CONFIG_MEMORIA_ESPACOS = ConfigMemoriaEspacos()
+
+
+# =====================================================================
 # Combate V2.1: arvore de evolucao integrada ao combate (tecnicas por linha,
 # passivas por forma adulta, stats por especie/temperamento/carater/arquetipo).
 # Transcricao de docs/catalogo_pets.json e docs/arvore_evolucao.json (um teste

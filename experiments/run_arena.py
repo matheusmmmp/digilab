@@ -50,6 +50,7 @@ from digilab.metrics import (  # noqa: E402
     taxa_vitoria,
 )
 from digilab.memoria import PoliticaBanditMemoria  # noqa: E402
+from digilab.memoria_espacos import PoliticaBanditEspacos  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import (  # noqa: E402
@@ -59,6 +60,7 @@ from digilab.protocol import (  # noqa: E402
     Protocolo,
     ProtocoloAblacao,
     ProtocoloMemoria,
+    ProtocoloMemoriaEspacos,
     bracos_do_protocolo,
     configs_congelados,
     derivar_semente,
@@ -74,9 +76,10 @@ FABRICAS_POLITICA = {
     "bandit": lambda cfg=None: PoliticaBandit(cfg),
     "instinto": lambda cfg=None: PoliticaInstinto(cfg),
     "bandit_memoria": lambda cfg=None: PoliticaBanditMemoria(cfg),
+    "bandit_espacos": lambda cfg=None: PoliticaBanditEspacos(cfg),
 }
 # politicas que aprendem: o gate de divergencia so olha pares delas
-APRENDIZES = {"bandit", "bandit_memoria"}
+APRENDIZES = {"bandit", "bandit_memoria", "bandit_espacos"}
 
 
 class PreflightFalhou(RuntimeError):
@@ -509,6 +512,12 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
             "nota": "sem memoria = bracos bandit da run canonica (Linux/3.11) e da ablacao (mesmas vidas); "
                     "mesmas sementes, orcamento, duracao e donos",
         }
+        if isinstance(protocolo, ProtocoloMemoriaEspacos):
+            b1 = RAIZ / "artifacts_v1_memoria" / "metrics.json"
+            if not b1.exists():
+                raise FileNotFoundError("referencia da memoria B1 ausente: artifacts_v1_memoria/metrics.json")
+            metrics["divergencia_com_x_sem_memoria"]["memoria_b1_features"] = json.loads(
+                b1.read_text(encoding="utf-8"))["divergencia_resumo"]["jsd_media_entre_bracos"]
     if isinstance(protocolo, ProtocoloAblacao):
         metrics["bracos_dono_politica"] = {r: {"dono": d, "politica": pol} for r, d, pol in bracos_exec}
         metrics["divergencia_resumo"]["gate_usa"] = divergence["gate_usa"]
