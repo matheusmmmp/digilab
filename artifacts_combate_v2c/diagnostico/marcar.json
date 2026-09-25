@@ -1,0 +1,900 @@
+{
+  "partidas": [
+    {
+      "cacador": "emboscador",
+      "marca_usada": 5,
+      "oponente_com_resposta": "duelista",
+      "resultado": [
+        1.0,
+        "ko"
+      ],
+      "semente": 5788154070003745673,
+      "turnos": [
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 1
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 2
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 3
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 4
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 5
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 6
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 7
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 31.2,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "pesado",
+          "t": 8
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 9
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 10
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "pesado",
+          "t": 11
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 12
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 13
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "pesado",
+          "t": 14
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 15
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 16
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "pesado",
+          "t": 17
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 18
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 19
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "pesado",
+          "t": 20
+        }
+      ],
+      "turnos_por_distancia": {
+        "MEDIO": 15,
+        "PERTO": 5
+      }
+    },
+    {
+      "cacador": "emboscador",
+      "marca_usada": 5,
+      "oponente_com_resposta": "furioso",
+      "resultado": [
+        1.0,
+        "ko"
+      ],
+      "semente": 10069218181223105108,
+      "turnos": [
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 1
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 2
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 3
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 4
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 5
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 6
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 7
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "pesado",
+          "t": 8
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 3,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 9
+        },
+        {
+          "cacador": "defender",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 10
+        },
+        {
+          "cacador": "esquivar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "pesado",
+          "t": 11
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "preparar_pesado",
+          "t": 12
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "pesado",
+          "t": 13
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 3,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 14
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 10.67,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "golpe_rapido",
+          "t": 15
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 16
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 10.67,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "golpe_rapido",
+          "t": 17
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 18
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 10.67,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "golpe_rapido",
+          "t": 19
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 20
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 10.67,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "golpe_rapido",
+          "t": 21
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 22
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 10.67,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "golpe_rapido",
+          "t": 23
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 24
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 10.67,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "golpe_rapido",
+          "t": 25
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 26
+        }
+      ],
+      "turnos_por_distancia": {
+        "MEDIO": 16,
+        "PERTO": 10
+      }
+    },
+    {
+      "cacador": "emboscador",
+      "marca_usada": 6,
+      "oponente_com_resposta": "muralha",
+      "resultado": [
+        1.0,
+        "ko"
+      ],
+      "semente": 3766520502240013191,
+      "turnos": [
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 1
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 2
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 3
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 4
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 5
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 6
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 7
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 31.2,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 8
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 9
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 10
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 11
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 12
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 13
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 14
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 15
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 16
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 17
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 18
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 19
+        },
+        {
+          "cacador": "avancar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 20
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 2,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 21
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 1,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 22
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 23
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 24
+        },
+        {
+          "cacador": "esquivar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 25
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 2,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 26
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 1,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 27
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 28
+        },
+        {
+          "cacador": "marcar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 0,
+          "marca_usada": false,
+          "resposta": "avancar",
+          "t": 29
+        },
+        {
+          "cacador": "recuar",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 0.0,
+          "dist_fim": "MEDIO",
+          "dist_inicio": "PERTO",
+          "marca_antes": 3,
+          "marca_usada": false,
+          "resposta": "defender",
+          "t": 30
+        },
+        {
+          "cacador": "disparo",
+          "dano_no_cacador": 0.0,
+          "dano_no_oponente": 15.6,
+          "dist_fim": "PERTO",
+          "dist_inicio": "MEDIO",
+          "marca_antes": 2,
+          "marca_usada": true,
+          "resposta": "avancar",
+          "t": 31
+        }
+      ],
+      "turnos_por_distancia": {
+        "MEDIO": 17,
+        "PERTO": 14
+      }
+    }
+  ],
+  "resposta_declarada": "avancar quando longe ou medio (bots.RESPOSTAS['marcar'])"
+}

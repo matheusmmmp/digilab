@@ -1,0 +1,71 @@
+{
+  "bots": [
+    "agressivo",
+    "tartaruga",
+    "atirador",
+    "contragolpe",
+    "adaptativo"
+  ],
+  "nota": "decisoes em que ESQUIVAR era legal (guts suficiente); pesado automatico fora",
+  "partidas_por_par_por_semente": 20,
+  "por_contexto": {
+    "oponente_livre@longe": {
+      "escolheu_esquiva": 33,
+      "escolhido_no_lugar": {
+        "avancar": 101,
+        "carregar": 31,
+        "defender": 2194,
+        "disparo": 1271,
+        "recuar": 31
+      },
+      "esquiva_legal": 3661,
+      "fracao_esquiva": 0.009013930620049166
+    },
+    "oponente_livre@medio": {
+      "escolheu_esquiva": 164,
+      "escolhido_no_lugar": {
+        "avancar": 4827,
+        "carregar": 161,
+        "defender": 6978,
+        "disparo": 7063,
+        "recuar": 164
+      },
+      "esquiva_legal": 19357,
+      "fracao_esquiva": 0.008472387250090406
+    },
+    "oponente_livre@perto": {
+      "escolheu_esquiva": 287,
+      "escolhido_no_lugar": {
+        "avancar": 1684,
+        "carregar": 353,
+        "defender": 24829,
+        "golpe_rapido": 5953,
+        "preparar_pesado": 6319,
+        "recuar": 4034
+      },
+      "esquiva_legal": 43459,
+      "fracao_esquiva": 0.006603925539013783
+    },
+    "oponente_preparando": {
+      "escolheu_esquiva": 2935,
+      "escolhido_no_lugar": {
+        "avancar": 50,
+        "carregar": 35,
+        "defender": 993,
+        "disparo": 732,
+        "golpe_rapido": 25,
+        "preparar_pesado": 89,
+        "recuar": 37
+      },
+      "esquiva_legal": 4896,
+      "fracao_esquiva": 0.599468954248366
+    }
+  },
+  "sementes": [
+    1101,
+    1202,
+    1303,
+    1404,
+    1505
+  ]
+}

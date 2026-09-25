@@ -293,3 +293,32 @@ Interpretações (PROPOSTAS):
 - S2 (bots, treino uniforme 0…36, stats absolutos): "vence o tier 1 mais cedo" = treino mínimo para
   taxa ≥ 0,5 contra o tier 1 menor ou igual ao da normal; "não vence o tier 2 com taxa maior" = taxa
   média contra o tier 2 (na grade) menor ou igual à da normal.
+
+## 2026-09-25 — TAREFA_CORRECAO_COMBATE (Etapas 0–2; Etapa 3 NÃO iniciada)
+
+Resultado: a base **V2C não passou na validação** (`artifacts_combate_v2c/validacao/gates.json`:
+G3, G4, G5, G6b, G9 falham). A Etapa 3 (V21C) exige a V2C aprovada: não foi iniciada.
+
+Interpretações e desvios:
+
+- `docs/sim_combate_v2/` (protótipo citado na Etapa 1) não existe no repositório nem em `D:\Trab\digilab`.
+- **Nome da condição do C1**: a tarefa pede `turno_execucao`, mas a V2.1 já tem uma condição com esse
+  nome e outro sentido (turno da luta ≥ N). Usado `executando_pesado`.
+- V2C = chaves em `ConfigCombateV2C` (subclasse; padrões = V2 original) nos mesmos fontes de
+  `combate_v2/`. A V2 original reproduz os artefatos byte a byte (testes); o hash dos fontes da base
+  mudou (o teste que o fixava agora rejoga a amostra do artefato).
+- Finta: a finta só acerta de perto (como o pesado), interrompe quem prepara e sofre parry (é golpe
+  rápido). Só o agressivo ganhou regra de finta (`executando_pesado` + oponente esquiva com
+  frequência); o adaptativo já está no limite de 8 regras. Sem exploração no turno de execução.
+- Parry (C2) também vale contra a finta; morte súbita (C4) multiplica também o parry.
+- C5 (esquiva 20 → 15) e C6 (defender sem bônus de guts) foram testados isolados sobre C1–C4 e **não
+  adotados**: não moveram G4 nem G5.
+- Oráculo de 2 passos: distribuição do oponente limitada às 3 ações mais frequentes em cada nó (custo).
+- G6b: condição ±5% de hp e ±2 de guts inicial (a V2 usa guts inteiro).
+- G8: parâmetros perturbados listados em `run_bateria_combate.PARAMS_G8` (40 perturbações).
+- Validação com N = 400 por par (80 × 5 sementes). O G3 falha só no espelho da tartaruga (0,464,
+  tolerância 0,03): a tolerância foi fixada para 1000 partidas por par; na calibração deu 0,492.
+
+Números: nenhum número da tarefa foi ajustado na calibração (as mudanças usam os valores da própria
+tarefa: finta 8, parry 5, morte súbita no turno 25 × 1,5). A causa das falhas restantes é o desenho
+dos bots, não número (ver CLAUDE.md, seção Correção do combate).

@@ -219,6 +219,29 @@ class ConfigCombateV2:
 
 
 @dataclass(frozen=True)
+class ConfigCombateV2C(ConfigCombateV2):
+    """Base corrigida (docs/TAREFA_CORRECAO_COMBATE.md, Etapa 1). Cada chave liga UMA mudanca; os
+    valores padrao reproduzem a V2 original. As etapas C5 (custo_esquivar) e C6 (guts_extra_defender)
+    mexem em campos da propria ConfigCombateV2. Todos PROPOSTOS."""
+
+    # C1 finta: no turno de execucao do pesado, executar ou fintar (golpe rapido que acerta quem
+    # esquivou e nao quebra guarda); condicao de gambit "executando_pesado"
+    finta: bool = False
+    # C2 parry: defender contra golpe rapido (ou finta) devolve este dano ao atacante (0 = desligado)
+    dano_parry: float = 0.0
+    # C3 fuga condicionada: recuar so afasta se o oponente nao avancar; avancar ilegal em perto,
+    # recuar ilegal em longe
+    fuga_condicionada: bool = False
+    # C4 morte subita: a partir deste turno todo dano x mult (0 = desligado)
+    turno_morte_subita: int = 0
+    mult_morte_subita: float = 1.5
+    # Etapa 2: oraculo com busca de N passos (1 = o da V2); com 2+, a distribuicao do oponente em cada
+    # no fica nas `oraculo_top_oponente` acoes mais frequentes (custo)
+    oraculo_passos: int = 1
+    oraculo_top_oponente: int = 3
+
+
+@dataclass(frozen=True)
 class ConfigBateriaCombate:
     """Limiares dos gates G1-G7 da bateria (todos PROPOSTOS)."""
 
@@ -241,8 +264,29 @@ class ConfigBateriaCombate:
     taxa_min_g7: float = 0.60                # G7
 
 
+@dataclass(frozen=True)
+class ConfigBateriaV2C:
+    """Gates novos da TAREFA_CORRECAO_COMBATE (Etapa 2). Todos PROPOSTOS."""
+
+    # G6b espelho: mesmo estilo, condicao no extremo da faixa (+-5% de hp; guts inicial +-2)
+    variacao_hp_g6b: float = 0.05
+    variacao_guts_g6b: int = 2
+    taxa_max_g6b: float = 0.65
+    partidas_g6b_por_semente: int = 50
+    # G8 robustez: cada parametro numerico do combate +-10%, um por vez; G1 vale em >= 80%
+    perturbacao_g8: float = 0.10
+    fracao_min_g8: float = 0.80
+    partidas_g8_por_semente: int = 20
+    # G9 decisividade: com epsilon 0,2, no maximo 50% dos confrontos com taxa < 0,1 ou > 0,9
+    epsilon_g9: float = 0.20
+    extremo_g9: float = 0.10
+    fracao_max_g9: float = 0.50
+    partidas_g9_por_semente: int = 40
+
+
 CONFIG_COMBATE_V2 = ConfigCombateV2()
 CONFIG_BATERIA_COMBATE = ConfigBateriaCombate()
+CONFIG_BATERIA_V2C = ConfigBateriaV2C()
 
 
 # =====================================================================

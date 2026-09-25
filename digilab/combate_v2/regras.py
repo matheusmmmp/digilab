@@ -46,9 +46,18 @@ class Acao(str, Enum):
     CARREGAR = "carregar"
     # nao e escolhida: executada automaticamente no turno seguinte ao preparar
     PESADO = "pesado"
+    # V2C (C1): alternativa ao pesado, so no turno de execucao e so com ConfigCombateV2C.finta
+    FINTAR = "fintar"
 
 
-ACOES_ESCOLHIVEIS = tuple(a for a in Acao if a is not Acao.PESADO)
+ACOES_ESCOLHIVEIS = tuple(a for a in Acao if a not in (Acao.PESADO, Acao.FINTAR))
+# ataques com golpe rapido (a finta e um golpe rapido)
+GOLPES = (Acao.GOLPE_RAPIDO, Acao.FINTAR)
+
+
+def _opcao(cfg, nome: str, padrao):
+    """Chaves da V2C (ConfigCombateV2C); a ConfigCombateV2 original nao as tem: comportamento antigo."""
+    return getattr(cfg, nome, padrao)
 
 
 @dataclass(frozen=True)
@@ -105,6 +114,8 @@ def eh_legal(estado: EstadoCombate, lado: int, acao: Acao, cfg: ConfigCombateV2 
     """Legalidade de uma acao ESCOLHIDA. Quem esta preparando nao escolhe."""
     cfg = cfg or CONFIG_COMBATE_V2
     eu = estado.proprio(lado)
+    if acao is Acao.FINTAR:
+        return _opcao(cfg, "finta", False) and eu.preparando
     if eu.preparando or acao is Acao.PESADO:
         return False
     if eu.guts < custo(acao, cfg):
@@ -113,6 +124,11 @@ def eh_legal(estado: EstadoCombate, lado: int, acao: Acao, cfg: ConfigCombateV2 
         return estado.distancia is Distancia.PERTO
     if acao is Acao.DISPARO:
         return estado.distancia is not Distancia.PERTO
+    if _opcao(cfg, "fuga_condicionada", False):
+        if acao is Acao.AVANCAR:
+            return estado.distancia is not Distancia.PERTO
+        if acao is Acao.RECUAR:
+            return estado.distancia is not Distancia.LONGE
     return True
 
 
@@ -131,7 +147,7 @@ def _validar(estado: EstadoCombate, lado: int, acao: Acao, cfg: ConfigCombateV2)
         raise AcaoIlegal(f"lado {lado}: acao desconhecida {acao!r}")
     obrig = acao_obrigatoria(estado, lado)
     if obrig is not None:
-        if acao is not obrig:
+        if acao is not obrig and not (acao is Acao.FINTAR and eh_legal(estado, lado, acao, cfg)):
             raise AcaoIlegal(f"lado {lado} esta preparando: so pode executar o pesado, veio {acao.value}")
         return
     if not eh_legal(estado, lado, acao, cfg):
@@ -144,6 +160,8 @@ def _validar(estado: EstadoCombate, lado: int, acao: Acao, cfg: ConfigCombateV2)
 def _dano_bruto(acao: Acao, distancia_inicio: Distancia, cfg: ConfigCombateV2) -> float:
     if acao is Acao.GOLPE_RAPIDO:
         return cfg.dano_golpe_rapido
+    if acao is Acao.FINTAR:          # golpe rapido no lugar do pesado: so acerta de perto
+        return cfg.dano_golpe_rapido if distancia_inicio is Distancia.PERTO else 0.0
     if acao is Acao.DISPARO:
         return cfg.dano_disparo
     if acao is Acao.PESADO:
@@ -155,7 +173,7 @@ def _dano_recebido(ataque: Acao, bruto: float, reacao: Acao, cfg: ConfigCombateV
     if bruto == 0.0:
         return 0.0
     if reacao is Acao.ESQUIVAR:
-        return bruto if ataque is Acao.GOLPE_RAPIDO else 0.0
+        return bruto if ataque in GOLPES else 0.0
     if reacao is Acao.DEFENDER:
         return bruto * (cfg.mult_defender_contra_pesado if ataque is Acao.PESADO else cfg.mult_defender)
     if reacao is Acao.CARREGAR:
@@ -187,20 +205,34 @@ def resolver(
     dano = [0.0, 0.0]            # dano recebido por lado
     interrompido = [False, False]
     errou = [False, False]
+    parry = _opcao(cfg, "dano_parry", 0.0)
     for atk in (0, 1):
         alvo = 1 - atk
         bruto = _dano_bruto(acoes[atk], d0, cfg)
         if acoes[atk] is Acao.PESADO and bruto == 0.0:
             errou[atk] = True
         dano[alvo] += _dano_recebido(acoes[atk], bruto, acoes[alvo], cfg)
-        # golpe rapido interrompe quem esta PREPARANDO neste turno (o pesado
+        # golpe rapido (e a finta) interrompe quem esta PREPARANDO neste turno (o pesado
         # executando tem armadura e nao e interrompido)
-        if acoes[atk] is Acao.GOLPE_RAPIDO and acoes[alvo] is Acao.PREPARAR_PESADO:
+        if acoes[atk] in GOLPES and acoes[alvo] is Acao.PREPARAR_PESADO:
             interrompido[alvo] = True
+        # C2 parry: defender contra golpe rapido que acertou devolve dano ao atacante
+        if parry and bruto > 0.0 and acoes[atk] in GOLPES and acoes[alvo] is Acao.DEFENDER:
+            dano[atk] += parry
+    # C4 morte subita: a partir do turno N (o turno resolvido agora e estado.turno + 1)
+    t_ms = _opcao(cfg, "turno_morte_subita", 0)
+    if t_ms and estado.turno + 1 >= t_ms:
+        dano = [x * cfg.mult_morte_subita for x in dano]
 
-    # 5. movimento
+    # 5. movimento (C3: recuar nao afasta se o oponente avanca no mesmo turno)
     passo = {Acao.AVANCAR: -1, Acao.RECUAR: 1}
-    d = int(d0) + passo.get(acao_a, 0) + passo.get(acao_b, 0)
+    pa, pb = passo.get(acao_a, 0), passo.get(acao_b, 0)
+    if _opcao(cfg, "fuga_condicionada", False):
+        if acao_a is Acao.RECUAR and acao_b is Acao.AVANCAR:
+            pa = 0
+        if acao_b is Acao.RECUAR and acao_a is Acao.AVANCAR:
+            pb = 0
+    d = int(d0) + pa + pb
     distancia = Distancia(min(int(Distancia.LONGE), max(int(Distancia.PERTO), d)))
 
     # 4 + 6. dano simultaneo, regeneracao

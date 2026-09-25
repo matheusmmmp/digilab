@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from ..config import CONFIG_COMBATE_V2, ConfigCombateV2
 from .gambits import EXPLORACAO, PESADO_AUTOMATICO, Condicao as C, Motivo, lista, regra, se
 from .lutador import CondicaoFisica, Estilo, Lutador
-from .regras import Acao, Distancia, EstadoCombate, acao_obrigatoria, acoes_legais, resolver
+from .regras import Acao, Distancia, EstadoCombate, acao_obrigatoria, acoes_legais, resolver, resultado
 
 A = Acao
 PERTO, MEDIO, LONGE = Distancia.PERTO, Distancia.MEDIO, Distancia.LONGE
@@ -86,6 +86,11 @@ GAMBITS = {
     ], A.CARREGAR),
 }
 
+# V2C (C1): o agressivo (4 regras) ganha a regra de fintar contra quem costuma esquivar (so vale com
+# finta). O adaptativo ja usa as 8 regras do limite: ficaria sem uma delas; fica como esta.
+FINTA = regra(se(C("executando_pesado"), C("oponente_frequente", (A.ESQUIVAR,))), A.FINTAR)
+GAMBITS_FINTA = {n: lista([FINTA] + list(GAMBITS[n].regras), GAMBITS[n].final.acao) for n in ("agressivo",)}
+
 FIXOS = ("aleatorio", "agressivo", "tartaruga", "atirador", "contragolpe")
 ADAPTATIVO = "adaptativo"
 ORACULO = "oraculo"
@@ -108,34 +113,57 @@ class EstiloOraculo:
 
     def decidir(self, estado: EstadoCombate, lado: int, rng: random.Random, cfg: ConfigCombateV2) -> tuple[Acao, Motivo]:
         obrig = acao_obrigatoria(estado, lado)
-        if obrig is not None:
+        if obrig is not None and not getattr(cfg, "finta", False):
             return obrig, PESADO_AUTOMATICO
-        minhas = acoes_legais(estado, lado, cfg)
+        minhas = self._minhas(estado, lado, cfg)
         if self.epsilon > 0.0 and rng.random() < self.epsilon:
             return minhas[rng.randrange(len(minhas))], EXPLORACAO
-        op = 1 - lado
+        return self._busca(estado, lado, cfg, getattr(cfg, "oraculo_passos", 1))[0], "oraculo"
+
+    @staticmethod
+    def _minhas(estado: EstadoCombate, lado: int, cfg: ConfigCombateV2) -> tuple:
+        obrig = acao_obrigatoria(estado, lado)
+        if obrig is None:
+            return acoes_legais(estado, lado, cfg)
+        return (obrig, Acao.FINTAR) if getattr(cfg, "finta", False) else (obrig,)
+
+    @staticmethod
+    def _dist_oponente(estado: EstadoCombate, op: int, cfg: ConfigCombateV2, top: int | None) -> dict:
         forcada = acao_obrigatoria(estado, op)
         if forcada is not None:
-            dist = {forcada: 1.0}
-        else:
-            legais_op = acoes_legais(estado, op, cfg)
-            cont = {x: 0 for x in legais_op}
-            for x in estado.proprio(op).historico:
-                if x in cont:
-                    cont[x] += 1
-            total = sum(cont.values())
-            dist = ({x: c / total for x, c in cont.items() if c} if total
-                    else {x: 1.0 / len(legais_op) for x in legais_op})
+            return {forcada: 1.0}
+        legais_op = acoes_legais(estado, op, cfg)
+        cont = {x: 0 for x in legais_op}
+        for x in estado.proprio(op).historico:
+            if x in cont:
+                cont[x] += 1
+        total = sum(cont.values())
+        dist = ({x: c / total for x, c in cont.items() if c} if total
+                else {x: 1.0 / len(legais_op) for x in legais_op})
+        if top is not None and len(dist) > top:
+            # as `top` mais frequentes (empate: ordem fixa das acoes), renormalizadas
+            ordem = sorted(dist, key=lambda x: (-dist[x], list(Acao).index(x)))[:top]
+            s = sum(dist[x] for x in ordem)
+            dist = {x: dist[x] / s for x in ordem}
+        return dist
+
+    def _busca(self, estado: EstadoCombate, lado: int, cfg: ConfigCombateV2, passos: int):
+        """Melhor resposta de N passos (valor esperado sob a distribuicao empirica do oponente)."""
+        top = getattr(cfg, "oraculo_top_oponente", 3) if passos > 1 or getattr(cfg, "oraculo_passos", 1) > 1 else None
+        dist = self._dist_oponente(estado, 1 - lado, cfg, top)
         melhor, melhor_v = None, None
-        for a in minhas:
+        for a in self._minhas(estado, lado, cfg):
             v = 0.0
             for b, p in dist.items():
                 par = (a, b) if lado == 0 else (b, a)
                 novo, _ = resolver(estado, par[0], par[1], cfg)
-                v += p * self._valor(novo, lado, cfg)
+                if passos > 1 and resultado(novo, cfg) is None:
+                    v += p * self._busca(novo, lado, cfg, passos - 1)[1]
+                else:
+                    v += p * self._valor(novo, lado, cfg)
             if melhor_v is None or v > melhor_v:
                 melhor, melhor_v = a, v
-        return melhor, "oraculo"
+        return melhor, melhor_v
 
     @staticmethod
     def _valor(estado: EstadoCombate, lado: int, cfg: ConfigCombateV2) -> float:
@@ -152,6 +180,8 @@ class EstiloOraculo:
     def para_dict(self) -> dict:
         return {"tipo": "oraculo_1_passo", "fora_da_linguagem": True, "epsilon": self.epsilon}
 
+    # (a profundidade vem da config da partida; o hash do lutador nao muda com ela)
+
 
 def estilo(nome: str, cfg: ConfigCombateV2 | None = None) -> Estilo | EstiloOraculo:
     cfg = cfg or CONFIG_COMBATE_V2
@@ -159,7 +189,8 @@ def estilo(nome: str, cfg: ConfigCombateV2 | None = None) -> Estilo | EstiloOrac
         return EstiloOraculo(cfg.epsilon_bots)
     if nome not in GAMBITS:
         raise KeyError(f"bot desconhecido: {nome!r}")
-    return Estilo(GAMBITS[nome], 1.0 if nome == "aleatorio" else cfg.epsilon_bots)
+    g = GAMBITS_FINTA[nome] if getattr(cfg, "finta", False) and nome in GAMBITS_FINTA else GAMBITS[nome]
+    return Estilo(g, 1.0 if nome == "aleatorio" else cfg.epsilon_bots)
 
 
 def bot(nome: str, condicao: CondicaoFisica | None = None, cfg: ConfigCombateV2 | None = None) -> Lutador:

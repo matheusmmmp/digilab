@@ -38,6 +38,9 @@ CATALOGO: dict[str, tuple[str, ...]] = {
     "oponente_guts_abaixo": ("g",),
     "oponente_repete": ("a", "k"),
     "oponente_frequente": ("a",),
+    # V2C (C1): o proprio lado esta no turno de execucao do pesado (escolhe executar ou fintar).
+    # "turno_execucao" ja existe na V2.1 com outro sentido (turno da luta >= N): nome diferente.
+    "executando_pesado": (),
 }
 
 # acoes que podem aparecer no historico (inclui o pesado executado)
@@ -88,6 +91,8 @@ class Condicao:
             return eu.guts >= p[0]
         if n == "oponente_preparando":
             return op.preparando
+        if n == "executando_pesado":
+            return eu.preparando
         if n == "oponente_hp_abaixo":
             return op.fracao_hp < p[0]
         if n == "oponente_guts_abaixo":
@@ -122,7 +127,10 @@ class Regra:
     def validar(self, cfg: ConfigCombateV2) -> None:
         if not 1 <= len(self.condicoes) <= cfg.max_condicoes_por_regra:
             raise GambitInvalido(f"regra com {len(self.condicoes)} condicoes (1..{cfg.max_condicoes_por_regra})")
-        if self.acao not in ACOES_ESCOLHIVEIS:
+        if self.acao is Acao.FINTAR:
+            if Condicao("executando_pesado") not in self.condicoes:
+                raise GambitInvalido("regra de fintar precisa da condicao executando_pesado")
+        elif self.acao not in ACOES_ESCOLHIVEIS:
             raise GambitInvalido(f"acao nao escolhivel numa regra: {self.acao!r}")
         for c in self.condicoes:
             c.validar(cfg)
@@ -188,6 +196,11 @@ def decidir_gambits(
     cfg = cfg or CONFIG_COMBATE_V2
     obrig = acao_obrigatoria(estado, lado)
     if obrig is not None:
+        # C1: com finta, a primeira regra de fintar que vale troca o pesado (sem exploracao)
+        if eh_legal(estado, lado, Acao.FINTAR, cfg):
+            for i, r in enumerate(gambits.regras):
+                if r.acao is Acao.FINTAR and r.dispara(estado, lado, cfg):
+                    return Acao.FINTAR, i
         return obrig, PESADO_AUTOMATICO
     if epsilon > 0.0 and rng.random() < epsilon:
         legais = acoes_legais(estado, lado, cfg)

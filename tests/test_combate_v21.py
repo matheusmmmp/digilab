@@ -347,14 +347,24 @@ def test_trocar_lados_espelha_o_resultado():
 
 
 def test_base_v2_intacta():
-    """Os fontes de combate_v2/*.py sao os do artefato da bateria base."""
-    import sys
-    sys.path.insert(0, str(RAIZ / "experiments"))
-    from run_bateria_combate import hashes
+    """A V2 original (ConfigCombateV2, sem as chaves da V2C) reproduz a amostra de replay da bateria base.
+    Desde a TAREFA_CORRECAO_COMBATE os fontes de combate_v2/ mudam (chaves da V2C, desligadas por
+    padrao); o que se preserva e o resultado: a bateria inteira e rejogada em test_motivo_expressao."""
+    from digilab.combate_v2.bots import bot
+    from digilab.combate_v2.partida import reproduzir
 
-    gravado = json.loads((RAIZ / "artifacts_combate_v2" / "gates.json").read_text(encoding="utf-8"))
-    cfg = json.loads((RAIZ / "experiments" / "configs" / "bateria_canonico.json").read_text(encoding="utf-8"))
-    assert hashes(cfg)["regras_sha256"] == gravado["hashes"]["regras_sha256"]
+    linhas = (RAIZ / "artifacts_combate_v2" / "amostra_replay.jsonl").read_text(encoding="utf-8").splitlines()
+    logs, atual = [], []
+    for ln in linhas:
+        ev = json.loads(ln)
+        if ev["tipo"] == "cabecalho" and atual:
+            logs.append(atual)
+            atual = []
+        atual.append(ev)
+    logs.append(atual)
+    for log in logs:
+        reproduzir(log, bot(log[0]["a"]), bot(log[0]["b"]))       # diverge -> ReplayCombateDivergiu
+    assert len(logs) > 0
 
 
 def test_motivos_de_partida_v21_tem_texto_para_tudo():

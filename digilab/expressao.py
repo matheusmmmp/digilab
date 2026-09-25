@@ -122,6 +122,9 @@ FATORES: dict[str, dict[str, str]] = {
                "adolescente": "parabéns...", "adulto": "porque lembro dos seus parabéns"},
     "carinho": {"marcador": "carinho", "bebe": "", "crianca": "[:carinho:]",
                 "adolescente": "carinho...", "adulto": "porque lembro do seu carinho"},
+    # V2C (C1): turno de execucao do pesado (fintar ou executar)
+    "executando_pesado": {"marcador": "hora do pesado", "bebe": "", "crianca": "[:hora do pesado:]",
+                          "adolescente": "hora do pesado...", "adulto": "porque era a hora do pesado"},
     # condicoes do combate V2.1 (combate_v2/v21/gambits.py)
     "turno_execucao": {"marcador": "luta longa", "bebe": "", "crianca": "[:luta longa:]",
                        "adolescente": "luta longa...", "adulto": "porque já era uma luta longa (turno {p0} ou mais)"},
@@ -158,6 +161,7 @@ ACOES_COMBATE = {
     "esquivar": ("[esquivar]", "esquivar", "Esquivei"),
     "carregar": ("[carregar]", "carregar", "Carreguei guts"),
     "pesado": ("[pesado!]", "pesado!", "Soltei o pesado que eu tinha preparado"),
+    "fintar": ("[finta]", "finta", "Fintei em vez de soltar o pesado"),
     # tecnicas do combate V2.1
     "investida": ("[investida]", "investida", "Investi"),
     "contra_golpe": ("[contra]", "contra-golpe", "Fiz o contra-golpe"),
@@ -168,6 +172,7 @@ ACOES_COMBATE = {
 REACAO_BEBE = {
     "avancar": "(o_o)>", "recuar": "<(o_o)", "golpe_rapido": "(>_<)!", "preparar_pesado": "(ò_ó)...",
     "disparo": "(>_<)~", "defender": "(-_-)#", "esquivar": "(^o^)~", "carregar": "(ò_ó)*", "pesado": "(ò_ó)!!",
+    "fintar": "(¬‿¬)!",
     "investida": "(ò_ó)>>", "contra_golpe": "(ò_ó)|", "marcar": "(o_o)+", "pele_dura": "(-_-)[]",
 }
 EMOTE_HUMOR = ("(T_T)", "(-_-)", "(^_^)")

@@ -1,0 +1,245 @@
+{
+  "descricao": "TAREFA_CORRECAO_COMBATE: tabela mudanca x gate (calibracao) e resultado da validacao da V2C",
+  "diagnostico": "artifacts_combate_v2c/diagnostico/",
+  "tabela_calibracao": [
+    {
+      "G2_oraculo_adaptativo": [
+        0.9490999999999999,
+        0.9036
+      ],
+      "G4_fracao_limite": 0.31164285714285717,
+      "G4_mediana": 24.0,
+      "G5_mortas": [
+        "esquivar"
+      ],
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c0: V2 original nas sementes de calibracao (linha de base da tabela mudanca x gate). CALIBRACAO.",
+      "etapa": "c0",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G7": true
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9616,
+        0.9018
+      ],
+      "G4_fracao_limite": 0.27725,
+      "G4_mediana": 24.0,
+      "G5_mortas": [
+        "esquivar"
+      ],
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c1: C1 finta. CALIBRACAO.",
+      "etapa": "c1",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G7": true
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9530000000000001,
+        0.7781
+      ],
+      "G4_fracao_limite": 0.24878571428571428,
+      "G4_mediana": 23.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c2: C1 + C2 parry 5. CALIBRACAO.",
+      "etapa": "c2",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G7": true
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9342,
+        0.8083
+      ],
+      "G4_fracao_limite": 0.24478571428571427,
+      "G4_mediana": 23.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c3: C1-C3 + fuga condicionada. CALIBRACAO.",
+      "etapa": "c3",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G7": true
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9388,
+        0.8108000000000001
+      ],
+      "G4_fracao_limite": 0.22285714285714286,
+      "G4_mediana": 23.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c4: C1-C4 + morte subita no turno 25 (x1,5). CALIBRACAO.",
+      "etapa": "c4",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G7": true
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9388,
+        0.8108000000000001
+      ],
+      "G4_fracao_limite": 0.22285714285714286,
+      "G4_mediana": 23.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "G6b_max": 0.926,
+      "G8": 1.0,
+      "G9_eps02": 0.5714285714285714,
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c4g: C1-C4 com os gates novos (G6b, G8, G9). CALIBRACAO.",
+      "etapa": "c4g",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G6b": false,
+        "G7": true,
+        "G8": true,
+        "G9": false
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9357,
+        0.8112
+      ],
+      "G4_fracao_limite": 0.22157142857142856,
+      "G4_mediana": 23.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "G6b_max": 0.92,
+      "G8": 1.0,
+      "G9_eps02": 0.5714285714285714,
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c5: C1-C4 + C5 custo da esquiva 20 -> 15. CALIBRACAO.",
+      "etapa": "c5",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G6b": false,
+        "G7": true,
+        "G8": true,
+        "G9": false
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.9323,
+        0.8106
+      ],
+      "G4_fracao_limite": 0.22132142857142856,
+      "G4_mediana": 22.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "G6b_max": 0.926,
+      "G8": 1.0,
+      "G9_eps02": 0.5714285714285714,
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c6: C1-C4 + C6 defender sem bonus de guts (isolado, sem C5). CALIBRACAO.",
+      "etapa": "c6",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G6b": false,
+        "G7": true,
+        "G8": true,
+        "G9": false
+      }
+    },
+    {
+      "G2_oraculo_adaptativo": [
+        0.8848,
+        0.8108000000000001
+      ],
+      "G4_fracao_limite": 0.20107142857142857,
+      "G4_mediana": 21.0,
+      "G5_mortas": [
+        "esquivar",
+        "golpe_rapido"
+      ],
+      "G6b_max": 0.926,
+      "G8": 1.0,
+      "G9_eps02": 0.5714285714285714,
+      "descricao": "TAREFA_CORRECAO_COMBATE, etapa c4o: C1-C4 + oraculo de 2 passos (Etapa 2), gates novos. CALIBRACAO.",
+      "etapa": "c4o",
+      "gates": {
+        "G1": true,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false,
+        "G6": true,
+        "G6b": false,
+        "G7": true,
+        "G8": true,
+        "G9": false
+      }
+    }
+  ],
+  "validacao": {
+    "falharam": [
+      "G3_sanidade",
+      "G4_ritmo",
+      "G5_sem_acao_morta",
+      "G6b_espelho_condicao",
+      "G9_decisividade"
+    ],
+    "status": "REPROVADA"
+  }
+}
