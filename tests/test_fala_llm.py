@@ -339,3 +339,12 @@ def test_moldura_colapsa_carinhas_e_aceita_dois_pontos_tres():
     fmt = o.pedidos[-1][1]["format"]
     assert fmt["properties"]["abertura"]["maxLength"] > 0 and o.pedidos[-1][1]["options"]["repeat_penalty"] > 1
     assert fmt["properties"]["abertura"]["minLength"] >= 1 and "minLength" not in fmt["properties"]["fecho"]
+
+
+def test_surrogate_solto_do_modelo_nao_quebra():
+    solto = chr(0xD84C)                                       # metade de um par UTF-16, invalido em UTF-8
+    cru = O(OllamaFalso(bruto='{"abertura": "Eba' + solto + '!", "fecho": ""}')).gerar(ESQUIVA, "adulto")
+    escapado = O(OllamaFalso(bruto='{"abertura": "Oba\\ud84c!", "fecho": ""}')).gerar(ESQUIVA, "adulto")
+    for r in (cru, escapado):                                 # cru no texto, ou escape que so vira surrogate no parse
+        r.texto.encode("utf-8")                               # nao levanta
+        assert r.fonte == "llm" and "?" in r.texto

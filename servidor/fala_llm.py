@@ -549,12 +549,16 @@ class GeradorFala:
         if not r.completa:
             self.estatisticas["erros"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"resposta interrompida: {r.motivo_parada}")
+        # o modelo as vezes devolve surrogate solto (UTF-8 invalido): troca por "?" antes de tudo,
+        # senao a resposta do servidor (e o artefato da avaliacao) quebra ao codificar
+        texto = r.texto.encode("utf-8", "replace").decode("utf-8")
         try:
-            dados = json.loads(r.texto)
-            abertura, fecho = validar_moldura(dados["abertura"], dados["fecho"])
+            dados = json.loads(texto)
+            limpo = lambda s: s.encode("utf-8", "replace").decode("utf-8") if isinstance(s, str) else s  # noqa: E731
+            abertura, fecho = validar_moldura(limpo(dados["abertura"]), limpo(dados["fecho"]))
         except (FalaReprovada, KeyError, TypeError, json.JSONDecodeError) as err:
             self.estatisticas["reprovadas"] += 1
-            return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}", r.texto)
+            return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}", texto)
         res = Resultado(compor(abertura, template(motivo, estagio, humor), fecho), "llm",
                         f"{self.provedor.nome}: {r.modelo}")
         self.estatisticas["llm"] += 1
