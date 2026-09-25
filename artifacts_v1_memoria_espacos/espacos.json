@@ -1,0 +1,77 @@
+{
+  "fonte": "replay das vidas de artifacts_v1_memoria_espacos/vidas",
+  "fracao_motivos_citam_memoria_total": 0.0691592261904762,
+  "n_vidas": 20,
+  "por_braco": {
+    "aleatorio": {
+      "decisoes": 6720,
+      "fracao_do_tempo_na_memoria": {
+        "bronca": 0.9745535714285715,
+        "carinho": 0.9123511904761905,
+        "demora": 0.8982142857142857,
+        "elogio": 0.9665178571428571
+      },
+      "fracao_motivos_citam_memoria": 0.07782738095238095,
+      "motivos_por_categoria": {
+        "bronca": 243,
+        "carinho": 40,
+        "demora": 152,
+        "elogio": 155
+      },
+      "ocupacao_media_curto": 3.1123511904761907,
+      "ocupacao_media_longo": 1.8602678571428573
+    },
+    "atencioso": {
+      "decisoes": 6720,
+      "fracao_do_tempo_na_memoria": {
+        "bronca": 0.9748511904761905,
+        "carinho": 0.159375,
+        "demora": 0.0,
+        "elogio": 0.9991071428571429
+      },
+      "fracao_motivos_citam_memoria": 0.0625,
+      "motivos_por_categoria": {
+        "bronca": 215,
+        "carinho": 2,
+        "elogio": 221
+      },
+      "ocupacao_media_curto": 1.7983630952380953,
+      "ocupacao_media_longo": 1.2891369047619048
+    },
+    "incoerente": {
+      "decisoes": 6720,
+      "fracao_do_tempo_na_memoria": {
+        "bronca": 0.9956845238095238,
+        "carinho": 0.1269345238095238,
+        "demora": 0.0,
+        "elogio": 0.9956845238095238
+      },
+      "fracao_motivos_citam_memoria": 0.07321428571428572,
+      "motivos_por_categoria": {
+        "bronca": 238,
+        "carinho": 4,
+        "elogio": 287
+      },
+      "ocupacao_media_curto": 2.0010416666666666,
+      "ocupacao_media_longo": 1.5264880952380953
+    },
+    "relapso": {
+      "decisoes": 6720,
+      "fracao_do_tempo_na_memoria": {
+        "bronca": 0.9072916666666667,
+        "carinho": 0.868452380952381,
+        "demora": 0.8645833333333334,
+        "elogio": 0.9263392857142857
+      },
+      "fracao_motivos_citam_memoria": 0.0630952380952381,
+      "motivos_por_categoria": {
+        "bronca": 144,
+        "carinho": 29,
+        "demora": 109,
+        "elogio": 171
+      },
+      "ocupacao_media_curto": 2.598065476190476,
+      "ocupacao_media_longo": 1.8824404761904763
+    }
+  }
+}

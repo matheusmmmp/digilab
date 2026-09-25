@@ -78,3 +78,23 @@
 - Seção "Pesquisa" da especificação: arena só com adultos, ovos pareados, forma adulta como
   variável de resultado, ablação com técnicas e passivas desligadas. Não existe arena V2 com
   pets no motor Python; o caráter medido pelo desvio da política também não.
+## 2026-09-25 — memória por espaços (ADENDO_MEMORIA_EMOCAO_DF.md, Parte 1)
+
+Interpretações propostas antes de começar e aprovadas pelo pesquisador:
+
+- "Substitui a B1": a memória por espaços entra como **protocolo novo**
+  (`arena-v1-memoria-espacos`, política `bandit_espacos`, `digilab/memoria_espacos.py`,
+  `ConfigMemoriaEspacos`). A B1 (`arena-v1-memoria`, hash `be9aae5a833c…`) continua existindo e
+  reproduzível, para a comparação B1 × espaços.
+- Decaimento da ativação entre relembranças: exponencial com a mesma constante da B1
+  (`tau_ativacao_ticks` = 360).
+- "Relembrar a cada 4 h acordado": tempo acordado acumulado desde a eclosão, medido nas decisões do
+  pet (a cada 15 min, com o sono da observação); a cada 240 min acordado todas as memórias ativas
+  voltam à intensidade original.
+- `demora` junta fome e higiene numa categoria; atendimento imediato (latência 0) não gera memória;
+  pedido perdido vale 1 e nasce quando o pet percebe (próximo evento).
+- `carinho` = qualquer acariciar ou brincar do dono.
+- Comparações de força pela intensidade ORIGINAL; empate: vence a mais recente (e, entre as mais
+  fracas empatadas, sai a mais antiga).
+- Web: fica para um segundo passo (a Parte 1 foi feita só no Python).
+- Parte 2 (emoção, extremos, habituação) não iniciada: depende da `TAREFA_PERSONALIDADE_OBEDIENCIA`.

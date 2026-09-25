@@ -29,6 +29,7 @@ from typing import Callable, Sequence
 from .config import CONFIG_EXPRESSAO, ConfigExpressao
 from .events import AcaoPet, AcaoUsuario, LogDeEventos
 from .memoria import FATORES_MEMORIA
+from .memoria_espacos import FATORES_ESPACOS
 from .policy import Observacao, Politica, PoliticaInstinto, Transicao
 
 ORIGENS = ("vida", "combate")
@@ -38,7 +39,7 @@ FATOR_DA_FEATURE = (
     "habito", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo",
     "hora", "hora", "tempo_sem_cuidado",
 )
-FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA
+FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS
 
 # regra do instinto -> fatores (variaveis da condicao que disparou)
 _FATORES_INSTINTO = {
@@ -98,7 +99,9 @@ def motivo_bandit(decisao: dict, tick: int, ref_ultimo_cuidado: int | None,
     """
     x, escolhida = decisao["x"], decisao["acao"]
     amostras = decisao["amostras"]
-    nomes = FATOR_DA_FEATURE + (FATORES_MEMORIA if len(x) > len(FATOR_DA_FEATURE) else ())
+    # a politica com memoria declara os proprios fatores (B1 e espacos tem 4 features cada)
+    extras = tuple(decisao.get("fatores_memoria", FATORES_MEMORIA)) if len(x) > len(FATOR_DA_FEATURE) else ()
+    nomes = FATOR_DA_FEATURE + extras
     if len(nomes) != len(x):
         raise ValueError(f"{len(x)} features, {len(nomes)} nomes de fator")
     outras = [a for a in amostras if a is not escolhida]
@@ -121,7 +124,7 @@ def motivo_bandit(decisao: dict, tick: int, ref_ultimo_cuidado: int | None,
     for f in fatores:
         if f == "tempo_sem_cuidado" and ref_ultimo_cuidado is not None:
             refs_l.append(ref_ultimo_cuidado)
-        elif f in FATORES_MEMORIA and indice_do_ordinal is not None:
+        elif f in extras and indice_do_ordinal is not None:
             ordinal = decisao.get("refs_memoria", {}).get(f)
             if ordinal is not None:
                 refs_l.append(indice_do_ordinal(ordinal))

@@ -27,12 +27,14 @@ from digilab.config import TICKS_POR_DIA  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.expressao import ESTAGIOS, estagio_por_idade, expressar  # noqa: E402
 from digilab.memoria import PoliticaBanditMemoria  # noqa: E402
+from digilab.memoria_espacos import PoliticaBanditEspacos  # noqa: E402
 from digilab.motivo import motivos_de_partida, motivos_de_vida  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 
 FABRICAS = {"bandit": lambda c: PoliticaBandit(c), "instinto": lambda c: PoliticaInstinto(c),
-            "bandit_memoria": lambda c: PoliticaBanditMemoria(c)}
+            "bandit_memoria": lambda c: PoliticaBanditMemoria(c),
+            "bandit_espacos": lambda c: PoliticaBanditEspacos(c)}
 
 
 def inferir(caminho: Path) -> tuple[int, str]:
@@ -40,6 +42,8 @@ def inferir(caminho: Path) -> tuple[int, str]:
     m = re.fullmatch(r"(.+)@(\d+)\.jsonl", caminho.name)
     if not m:
         raise ValueError(f"nao consigo inferir braco/semente de {caminho.name!r}; use --semente e --politica")
+    if "artifacts_v1_memoria_espacos" in caminho.parts:
+        return int(m.group(2)), "bandit_espacos"
     if "artifacts_v1_memoria" in caminho.parts:
         return int(m.group(2)), "bandit_memoria"
     return int(m.group(2)), "instinto" if m.group(1).endswith("-instinto") else "bandit"
