@@ -489,7 +489,7 @@ com o mesmo pacote do Python de pesquisa: memória por espaços, temperamento, v
 recusa e motivo, desejo com métricas (cumprimento, tempo com vontade) e condição do cuidado no combate
 (vida e guts × 0,95 a 1,05 pela saúde na hora da luta). Constantes espelhadas em `CME`, `CVI`, `COB`,
 `CTP`, `CDJ`, `CCOND`. Fora da web: caráter pelo desvio da política (`evolucao.py`), que mudaria a
-evolução; a web segue com o caráter PROVISÓRIO pelos traços.
+evolução; desde 2026-09-25 os pets **v3** usam o caráter pelo desvio da política (32 sondas × 100 amostras); v1/v2 seguem pelos traços.
 
 Aba **Cenários**: monta dois pets com donos simulados (dono, dias de vida, interações/dia,
 semente). O pet A vira o pet do jogador (o anterior fica guardado para "Voltar") e o B vira o

@@ -406,3 +406,16 @@ vigor 2,5 com base 75. Diferenças da web: o oráculo continua de 1 passo e não
 de referência); a resposta redesenhada ao `marcar` é da bateria (E3), não existe no jogo. Os pets salvos
 são rejogados com o combate novo: as lutas do registro dão resultados diferentes e, com elas, o
 aprendizado dos gambits e o progresso da campanha (o replay confere).
+
+## 2026-09-25 — caráter pelo desvio da política na web (pets v3)
+
+Pedido do Matheus. `web/digilab_sprites.html`: pets novos são **versão 3** = v2 + caráter pelo desvio da
+política (espelho de `evolucao.carater`): distribuição de ações da política aprendida menos a da mesma
+política recém-nascida (mesmo temperamento), em estados-sonda fixos com números aleatórios comuns; ação →
+traço (`CA.mapa`), eixo = média dos traços, ÷ 0,05, cortado em [−1, 1]. Pets v1 e v2 continuam pelos
+traços (a evolução deles não muda no replay). Diferenças do Python: 32 sondas × 100 amostras (o Python usa
+64 × 200; ~0,15 s por medida no navegador, contra ~0,6 s); sondas e rng da web; a previsão da aba
+Evolução recalcula a cada 2 h de jogo ou ação do dono. Sem linha de base (`BASE_CARATER` não se aplica):
+com os donos simulados (80 pets, 20 por dono, sem artefato: checagem no console) as linhas saem caçador
+41%, brigão 30%, guardião 15%, colosso 14%, e variam por dono (atencioso quase só caçador/brigão; relapso
+45% colosso).
