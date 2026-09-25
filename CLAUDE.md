@@ -309,7 +309,10 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   (`DIGILAB_SENHA`, 12+ caracteres, só no ambiente), só as rotas do jogo (página, atlas, API de
   fala; o resto da pasta dá 404), API paga do Claude desligada salvo `--claude-remoto`. Sem
   `--remoto`, pedido vindo por túnel (cabeçalhos `Cf-Ray`/`X-Forwarded-For`) leva 403. O link é de
-  uso pessoal: não compartilhar nem divulgar.
+  uso pessoal: não compartilhar nem divulgar. Revisado no mesmo dia: o Matheus dispensou a senha
+  (`--remoto --sem-senha`, só ele acessa); aí o link aleatório do túnel é a única proteção e as
+  outras travas (rotas, Claude desligado) continuam. Túnel sempre para `http://127.0.0.1:<porta>`
+  (com `localhost` o cloudflared tenta IPv6 e não acha o servidor).
 - Manter a versão com placeholders originais funcionando: antes de publicar ou distribuir
   qualquer coisa, trocar por arte original ou licenciada.
 

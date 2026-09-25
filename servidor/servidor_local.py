@@ -20,10 +20,12 @@ Provedores (--provedor):
     nenhum  so template
 So escuta em 127.0.0.1.
 
-Acesso remoto (--remoto), para um tunel (ex.: Cloudflare Tunnel) apontado para esta porta:
+Acesso remoto (--remoto), para um tunel (ex.: Cloudflare Tunnel) apontado para 127.0.0.1:<porta>
+(nao "localhost": o cloudflared tenta IPv6 e o servidor so escuta IPv4). --sem-senha dispensa a
+senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica protecao.
     set DIGILAB_SENHA=<senha com 12+ caracteres>
     python servidor/servidor_local.py --remoto
-    cloudflared tunnel --url http://localhost:8765
+    cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
 - so as rotas do jogo: /v1/web/*.html, /Assets/digilab_atlas.png e /api/fala*; o resto (repo,
   .git, v0, Assets inteiro, gasto) responde 404;
@@ -73,19 +75,20 @@ def rota_permitida(caminho: str) -> bool:
 class Tratador(SimpleHTTPRequestHandler):
     gerador: GeradorFala = None      # definido em main()
     motivo_inicial: str = ""
-    senha: str | None = None         # modo remoto: exige senha e restringe rotas
+    remoto: bool = False             # modo remoto: restringe rotas (e exige senha, se houver)
+    senha: str | None = None
 
     def _barrado(self) -> bool:
         """True se a resposta ja foi enviada (sem senha, rota fora do jogo ou tunel sem --remoto)."""
-        if self.senha is None:
-            # trava: pedido vindo por tunel (cabecalhos da Cloudflare/proxy) num servidor sem senha
+        if not self.remoto:
+            # trava: pedido vindo por tunel (cabecalhos da Cloudflare/proxy) num servidor local
             if any(self.headers.get(h) for h in ("Cf-Ray", "Cf-Connecting-Ip", "X-Forwarded-For")):
-                self._json(403, {"erro": "acesso externo so com --remoto (senha)"})
+                self._json(403, {"erro": "acesso externo so com --remoto"})
                 return True
             return False
         cab = self.headers.get("Authorization", "")
-        ok = False
-        if cab.startswith("Basic "):
+        ok = self.senha is None
+        if not ok and cab.startswith("Basic "):
             try:
                 _, _, dada = base64.b64decode(cab[6:], validate=True).decode("utf-8").partition(":")
                 ok = hmac.compare_digest(dada.encode("utf-8"), self.senha.encode("utf-8"))
@@ -189,7 +192,9 @@ def main(argv=None) -> int:
                     help="destino do alerta de gasto (50%%, 80%% e 100%% do teto); SMTP em servidor/alerta.py")
     ap.add_argument("--testar-alerta", action="store_true", help="manda um e-mail de teste e sai")
     ap.add_argument("--remoto", action="store_true",
-                    help="para tunel: exige a senha de DIGILAB_SENHA e so serve as rotas do jogo")
+                    help="para tunel: so serve as rotas do jogo e exige a senha de DIGILAB_SENHA")
+    ap.add_argument("--sem-senha", action="store_true",
+                    help="com --remoto, dispensa a senha: QUALQUER UM com o link entra (decisao do Matheus)")
     ap.add_argument("--claude-remoto", action="store_true",
                     help="com --remoto, permite a API paga do Claude (quem tiver a senha gasta o credito)")
     a = ap.parse_args(argv)
@@ -201,7 +206,10 @@ def main(argv=None) -> int:
             raise SystemExit(f"teste do alerta FALHOU: {err}")
         print(f"e-mail de teste enviado para {alerta.destino}")
         return 0
-    if a.remoto:
+    if a.sem_senha and not a.remoto:
+        raise SystemExit("--sem-senha so faz sentido com --remoto")
+    Tratador.remoto = a.remoto
+    if a.remoto and not a.sem_senha:
         senha = os.environ.get("DIGILAB_SENHA", "")
         if len(senha) < SENHA_MIN:
             raise SystemExit(f"--remoto exige DIGILAB_SENHA com {SENHA_MIN}+ caracteres no ambiente")
@@ -229,7 +237,8 @@ def main(argv=None) -> int:
               flush=True)
     servidor = ThreadingHTTPServer(("127.0.0.1", a.porta), partial(Tratador, directory=str(PASTA_SERVIDA)))
     print(f"Digilab em http://localhost:{a.porta}/v1/web/digilab_sprites.html  [{estado}]"
-          + ("  [REMOTO: senha obrigatoria, so rotas do jogo]" if a.remoto else ""), flush=True)
+          + ("" if not a.remoto else "  [REMOTO SEM SENHA: quem tiver o link entra; so rotas do jogo]"
+             if a.sem_senha else "  [REMOTO: senha obrigatoria, so rotas do jogo]"), flush=True)
     try:
         servidor.serve_forever()
     except KeyboardInterrupt:

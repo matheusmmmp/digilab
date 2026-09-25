@@ -23,12 +23,14 @@ def servidor():
     Tratador.gerador = GeradorFala(None)
     Tratador.motivo_inicial = "teste"
     Tratador.senha = SENHA
+    Tratador.remoto = True
     srv = ThreadingHTTPServer(("127.0.0.1", 0), partial(Tratador, directory=str(PASTA_SERVIDA)))
     th = threading.Thread(target=srv.serve_forever, daemon=True)
     th.start()
     yield f"http://127.0.0.1:{srv.server_address[1]}"
     srv.shutdown()
     Tratador.senha = None
+    Tratador.remoto = False
 
 
 def _get(url, senha=None):
@@ -96,8 +98,17 @@ def test_alerta_sem_smtp_fica_desligado_e_nao_derruba():
         a.enviar("assunto", "texto")
 
 
+def test_remoto_sem_senha_continua_so_com_as_rotas_do_jogo(servidor):
+    Tratador.senha = None
+    assert _get(servidor + "/v1/web/digilab_sprites.html") == 200
+    assert _get(servidor + "/v1/CLAUDE.md") == 404
+    with pytest.raises(SystemExit):
+        main(["--sem-senha", "--provedor", "nenhum"])
+
+
 def test_sem_remoto_recusa_pedido_vindo_de_tunel(servidor):
     Tratador.senha = None
+    Tratador.remoto = False
     req = urllib.request.Request(servidor + "/v1/web/digilab_sprites.html", headers={"Cf-Ray": "abc"})
     with pytest.raises(urllib.error.HTTPError) as err:
         urllib.request.urlopen(req, timeout=5)
