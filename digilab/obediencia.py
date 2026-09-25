@@ -27,8 +27,8 @@ import math
 import random
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_BANDIT, CONFIG_DESEJO, CONFIG_MEMORIA_ESPACOS, CONFIG_OBEDIENCIA, CONFIG_TEMPERAMENTO,
-                     CONFIG_VINCULO, ConfigObediencia)
+from .config import (CONFIG_BANDIT, CONFIG_DESEJO, CONFIG_HABITUACAO, CONFIG_MEMORIA_ESPACOS, CONFIG_OBEDIENCIA,
+                     CONFIG_TEMPERAMENTO, CONFIG_VINCULO, ConfigObediencia)
 from .desejo import Desejo, desejo_de
 from .events import AcaoPet, AcaoUsuario
 from .memoria_espacos import PoliticaBanditEspacos
@@ -50,7 +50,7 @@ class PoliticaBanditPersonalidade(PoliticaBanditEspacos):
     derivados sao IGUAIS aos padrao e a politica e identica a PoliticaBanditEspacos."""
 
     def __init__(self, cfg=None, temperamento: Temperamento = NEUTRO, cfg_bandit=None, cfg_memoria=None,
-                 cfg_temperamento=None) -> None:
+                 cfg_temperamento=None, habituacao_ligada: bool = False, cfg_habituacao=None) -> None:
         ct = cfg_temperamento or CONFIG_TEMPERAMENTO
         cb = cfg_bandit or CONFIG_BANDIT
         self.temperamento = temperamento
@@ -61,7 +61,10 @@ class PoliticaBanditPersonalidade(PoliticaBanditEspacos):
             fator = {c: temperamento.fator_tau_rancor(ct) for c in ct.categorias_rancor}
         else:
             fator = None
-        super().__init__(cfg, cb, cfg_memoria, fator)
+        # habituacao (adendo DF 2.3): desligada = memoria e recompensa identicas as de antes
+        self.habituacao_ligada = habituacao_ligada
+        hab = (cfg_habituacao or CONFIG_HABITUACAO) if habituacao_ligada else None
+        super().__init__(cfg, cb, cfg_memoria, fator, hab, temperamento)
 
 
 def logistica(z: float) -> float:

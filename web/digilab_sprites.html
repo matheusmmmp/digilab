@@ -412,7 +412,7 @@ const CB = { lambda:1, var:.25, piso:.05, elogio:1, repr:-1, janela:120, ignorad
 const CTP = { amplitude:1, kCuriosidade:Math.LN2, kTeimosia:.5, kSensibilidade:.5, kRancor:Math.LN2 };
 const EIXOS_TEMP = ["curiosidade","teimosia","sensibilidade","rancor"];
 /* desejo (espelho de ConfigDesejo) e limiar do tom do temperamento (ConfigExpressao) */
-const CDJ = { limiarNecessidade:.3, limiarVontade:.1, limiarTom:.5, kCumprimento:60 };
+const CDJ = { limiarNecessidade:.3, limiarVontade:.1, limiarTom:.2, kCumprimento:60 };
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia (pets salvos antes
    do porte seguem iguais); 2 = memoria por espacos + vinculo + obediencia + condicao no combate */
 const VERSAO_PET = 2;
@@ -420,6 +420,36 @@ const VERSAO_PET = 2;
 const CME = { nCurto:4, nLongo:2, dCurto:12*60, relembrar:4*60, tau:360, limiarPedido:.5, janela:240,
   intensidade:{demora:null, bronca:1, elogio:1, carinho:.5} };
 const FATORES_ESPACOS = ["demora","bronca","elogio","carinho"];
+/* emocao filtrada pelo temperamento (adendo DF 2.1, espelho de emocao.py): regra vale se
+   polo*eixo > limiar; vence o eixo de maior modulo; senao a padrao. Somente leitura. */
+const CEM = { limiarEixo:.2 };
+const EMOCOES = {
+  demora:{regras:[["rancor","+","raiva",-.9],["sensibilidade","+","tristeza",-.7]], padrao:["incomodo",-.4]},
+  bronca:{regras:[["rancor","+","raiva",-.8],["sensibilidade","-","ferido",-.9],["teimosia","+","desdem",-.2]], padrao:["vergonha",-.5]},
+  elogio:{regras:[["sensibilidade","+","euforia",.9],["teimosia","+","indiferenca",.1]], padrao:["orgulho",.6]},
+  carinho:{regras:[["sensibilidade","+","ternura",.8],["curiosidade","-","timidez",.3]], padrao:["alegria",.5]},
+};
+function emocaoDe(cat, temp){
+  const e = EMOCOES[cat]; if (!e) throw new Error("categoria sem emoção: " + cat);
+  let melhor = null;
+  e.regras.forEach(([eixo, polo, nome, val], i) => {
+    const v = temp[eixo];
+    if ((polo === "+" ? v : -v) > CEM.limiarEixo && (!melhor || Math.abs(v) > melhor[0] || (Math.abs(v) === melhor[0] && i < melhor[1]))) melhor = [Math.abs(v), i, eixo, nome, val];
+  });
+  return melhor ? {nome:melhor[3], valencia:melhor[4], eixo:melhor[2]} : {nome:e.padrao[0], valencia:e.padrao[1], eixo:null};
+}
+const EMOCAO_TXT = { raiva:["raiva","(>_<)#","Senti raiva"], tristeza:["tristeza","(T.T)","Senti tristeza"], incomodo:["incômodo","(-_-;)","Senti incômodo"],
+  ferido:["ferido","(;_;)!","Fiquei ferido"], desdem:["desdém","(-.-)z","Senti desdém"], vergonha:["vergonha","(>///<)","Senti vergonha"],
+  euforia:["euforia","(^o^)//","Senti euforia"], indiferenca:["indiferença","(._.)~","Senti indiferença"], orgulho:["orgulho","(^_^)v","Senti orgulho"],
+  ternura:["ternura","(^3^)","Senti ternura"], timidez:["timidez","(//_//)","Senti timidez"], alegria:["alegria","(^v^)","Senti alegria"] };
+const CAUSA_EMOCAO = {demora:"quando você demorou", bronca:"quando você brigou comigo", elogio:"quando você falou bem de mim", carinho:"quando você me deu atenção"};
+function expressarEmocao(em, cat, est, ref){
+  const [pal, emote, adulto] = EMOCAO_TXT[em.nome];
+  if (est === "bebe") return emote;
+  if (est === "crianca") return `[${pal}]`;
+  if (est === "adolescente") return `${pal}...`;
+  return `${adulto} ${CAUSA_EMOCAO[cat]}${ref != null ? " (lembro do evento #" + ref + ")" : ""}.`;
+}
 /* vinculo e obediencia (espelho de ConfigVinculo e ConfigObediencia) */
 const CVI = { inicial:.5, alfa:.1, pesoAtend:1, pesoCoer:1, pesoDesejo:.5, janelaLat:240, janelaCoer:1440, janelaDesejo:60 };
 const COB = { b0:1, bVinculo:2, bTeimosia:1, bConflito:2, limiarConflito:.3, probFazerOutra:.5,
@@ -605,7 +635,8 @@ function inserirMemoria(esp, nova, n){
 }
 const CATEGORIA_DA_ACAO = {repreender:"bronca", elogiar:"elogio", acariciar:"carinho", brincar:"carinho"};
 class MemoriaEspacos {
-  constructor(fatorTau = {}){
+  constructor(fatorTau = {}, temp = TEMP_NEUTRO){
+    this.temp = temp; this.emocoes = []; this.nEmocoes = 0;
     this.fatorTau = fatorTau; this.curto = []; this.longo = []; this.nDono = 0; this.pend = {fome:[], higiene:[]};
     this.acordado = 0; this.tick = TICK_INICIAL; this.dormindo = false; this.relembrancas = 0; this.ultRel = null;
     this.cont = {entrou:0, substituiu:0, descartada:0, promovida:0, esquecida:0};
@@ -643,7 +674,9 @@ class MemoriaEspacos {
     if (!(cat in CME.intensidade)) throw new Error("categoria de memória desconhecida: " + cat);
     if (!(int > 0 && int <= 1)) throw new Error("intensidade fora de (0, 1]: " + int);
     this.avancar(tick);
-    let r; [this.curto, r] = inserirMemoria(this.curto, {cat, int, criada:tick, relembrada:tick, ref}, CME.nCurto);
+    const em = emocaoDe(cat, this.temp);
+    this.emocoes.push({tick, cat, ref, ...em}); this.nEmocoes++; if (this.emocoes.length > 30) this.emocoes.shift();
+    let r; [this.curto, r] = inserirMemoria(this.curto, {cat, int, criada:tick, relembrada:tick, ref, emocao:em.nome}, CME.nCurto);
     this.cont[r]++;
   }
   pedido(v, tick){
@@ -682,7 +715,7 @@ class MemoriaEspacos {
     }
     return out;
   }
-  assinatura(){ return [this.curto, this.longo, this.nDono, this.pend, this.acordado, this.tick, this.dormindo, this.relembrancas, this.cont]; }
+  assinatura(){ return [this.curto, this.longo, this.nDono, this.pend, this.acordado, this.tick, this.dormindo, this.relembrancas, this.cont, this.nEmocoes]; }
 }
 
 /* =================================================================
@@ -955,7 +988,7 @@ class Bandit {
     const fr = Math.exp(CTP.kRancor * temp.rancor);
     /* v2: memoria por espacos (rancor escala demora e bronca); v1: memoria curta antiga */
     this.v2 = versao >= 2; this.fatMem = this.v2 ? FATORES_ESPACOS : FATORES_MEMORIA;
-    this.mem = this.v2 ? new MemoriaEspacos({demora:fr, bronca:fr}) : new Memoria(fr);
+    this.mem = this.v2 ? new MemoriaEspacos({demora:fr, bronca:fr}, temp) : new Memoria(fr);
     this.tUlt = TICK_INICIAL; this.ultDecisao = null; }
   /* features do bandit v1 + memoria curta (tick = desde o ultimo cuidado + tick desse cuidado) */
   fx(obs){ return features(obs).concat(this.mem.feat(obs.tdc + this.tUlt)); }
@@ -2263,9 +2296,13 @@ function renderMemoria(){
     : "Memória curta (pet de versão antiga): quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo). Entra no aprendizado como contexto.";
   const rot = v2 ? FATORES_ESPACOS.map(c => NOME_MEM[c]) : ["Demora com a comida", "Demora para limpar", "Broncas recentes", "Elogios recentes"];
   $("memoria").innerHTML = rot.map((k, i) => `<div><b>${(f[i]*100).toFixed(0)}%</b><span>${k}</span></div>`).join("");
-  const mem = motor.pol.mem, linhaMem = (m, onde) => `<div><span class="t">${onde}</span> <b>${NOME_MEM[m.cat]}</b> <span class="muted">força ${(m.int*100).toFixed(0)}%, ativa ${(mem.ativacao(m, tick)*100).toFixed(0)}% · desde D${diaDe(m.criada)} ${hhmm(m.criada)}</span></div>`;
+  const mem = motor.pol.mem, linhaMem = (m, onde) => `<div><span class="t">${onde}</span> <b>${NOME_MEM[m.cat]}</b>${m.emocao ? " · " + EMOCAO_TXT[m.emocao][0] : ""} <span class="muted">força ${(m.int*100).toFixed(0)}%, ativa ${(mem.ativacao(m, tick)*100).toFixed(0)}% · desde D${diaDe(m.criada)} ${hhmm(m.criada)}</span></div>`;
   $("memoria-espacos").innerHTML = v2 ? (mem.curto.map(m => linhaMem(m, "recente")).join("") + mem.longo.map(m => linhaMem(m, "duradoura")).join("") || `<div class="muted">nenhuma lembrança ainda</div>`) : "";
   $("desejo-bloco").hidden = !v2;
+  if (v2 && mem.emocoes.length){
+    const ult = mem.emocoes[mem.emocoes.length - 1];
+    $("memoria-espacos").innerHTML += `<div><span class="t">sentiu</span> ${expressarEmocao(ult, ult.cat, estagioFala(motor), ult.ref == null ? null : idxDoOrdinal(motor, ult.ref))} <span class="muted">(${ult.eixo ? "pelo temperamento: " + ult.eixo : "reação padrão"})</span></div>`;
+  }
   if (v2){
     const dz = motor.dz, ob = motor.obed;
     $("desejo-metricas").innerHTML = [["Vontades anunciadas", dz.vontades], ["Cumprimento", dz.vontades ? `${(dz.cumpridas / dz.vontades * 100).toFixed(0)}%` : "—"],

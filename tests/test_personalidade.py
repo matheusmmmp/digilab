@@ -158,7 +158,7 @@ def test_tom_do_temperamento_cobre_tabela_e_so_cita_eixos_marcantes():
         tons_citados, validar_tabelas_personalidade
 
     validar_tabelas_personalidade()
-    lim = CONFIG_EXPRESSAO.limiar_tom_temperamento
+    lim = CONFIG_EXPRESSAO.limiar_extremo
     for ovo in range(1, 60):
         t = sortear(ovo)
         marcantes = {(e, "+" if v > 0 else "-") for e, v in t.para_dict().items() if abs(v) >= lim}

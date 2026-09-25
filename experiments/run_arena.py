@@ -92,8 +92,13 @@ APRENDIZES = {"bandit", "bandit_memoria", "bandit_espacos", "bandit_personalidad
 def metricas_personalidade(protocolo, vidas: dict, tv: dict, sementes: list, bracos: list, dir_vidas: Path) -> dict:
     """Vinculo, obediencia e desejo por braco; atencioso x aleatorio pareado por ovo;
     decomposicao da taxa de vitoria (resultado principal por pet) entre ovo e braco."""
-    from digilab.config import CONFIG_DESEJO
+    from collections import Counter
 
+    from digilab.config import CONFIG_DESEJO
+    from digilab.emocao import emocoes_da_memoria
+    from digilab.expressao import eixos_marcantes
+
+    parte2 = hasattr(protocolo, "habituacao_ligada")      # adendo DF, Parte 2
     boot = (protocolo.v("bootstrap_reamostragens"), protocolo.v("bootstrap_semente"), protocolo.v("nivel_confianca"))
     por_pet = {}
     for nome, v in vidas.items():
@@ -113,9 +118,17 @@ def metricas_personalidade(protocolo, vidas: dict, tv: dict, sementes: list, bra
             "cumprimento": cumprimento_desejo(m.desejos, m.acoes_recentes(10**9), CONFIG_DESEJO.k_cumprimento_ticks),
             "fracao_tempo_vontade": fracao_tempo_vontade(m.desejos, fim),
         }
+        extra = {}
+        if parte2:
+            emo = emocoes_da_memoria(m.politica.memoria, m.temperamento)
+            dados["emocoes"] = dict(sorted(Counter(e.nome for e in emo).items()))
+            dados["emocoes_por_eixo"] = dict(sorted(Counter(e.eixo or "padrao" for e in emo).items()))
+            dados["eventos_memoria"] = dict(sorted(Counter(c for _, c, _, _ in m.politica.memoria.eventos).items()))
+            dados["eixos_descritos"] = [f"{e}{p}" for e, p in eixos_marcantes(m.temperamento)]
+            extra["emocoes_detalhe"] = [e.para_dict() for e in emo]
         por_pet[nome] = dados
         (dir_vidas / f"{nome}.personalidade.json").write_text(json.dumps({
-            **dados, "serie_vinculo": m.vinculo.serie, "recusas_detalhe": [r.para_dict() for r in m.recusas],
+            **dados, **extra, "serie_vinculo": m.vinculo.serie, "recusas_detalhe": [r.para_dict() for r in m.recusas],
             "desejos_detalhe": [d.para_dict() for d in m.desejos]}, sort_keys=True), encoding="utf-8", newline="\n")
     por_braco = {}
     for b in bracos:
@@ -129,12 +142,25 @@ def metricas_personalidade(protocolo, vidas: dict, tv: dict, sementes: list, bra
             "cumprimento_agregado": sum(c["cumpridas"] for c in cum) / vont if vont else None,
             "fracao_tempo_vontade": sum(p["fracao_tempo_vontade"] for p in pets) / len(pets),
         }
+        if parte2:
+            for campo in ("emocoes", "emocoes_por_eixo", "eventos_memoria"):
+                tot = Counter()
+                for pp in pets:
+                    tot.update(pp[campo])
+                por_braco[b][campo] = dict(sorted(tot.items()))
 
     def diferenca(campo: str) -> dict:
         return bootstrap_ic([por_pet[f"atencioso@{s}"][campo] - por_pet[f"aleatorio@{s}"][campo] for s in sementes], *boot)
 
     decomp = decomposicao_ovo_braco({(str(s), b): tv[f"{b}@{s}"]["taxa"] for s in sementes for b in bracos})
-    return {"por_braco": por_braco, "atencioso_menos_aleatorio": {"vinculo": diferenca("vinculo_final"),
+    extra = {}
+    if parte2:
+        # temperamento e do ovo: igual em todos os bracos, entao a fracao e por ovo
+        descritos = [bool(por_pet[f"{bracos[0]}@{s}"]["eixos_descritos"]) for s in sementes]
+        extra = {"habituacao_ligada": protocolo.v("habituacao_ligada"),
+                 "fracao_ovos_com_eixo_descrito": sum(descritos) / len(descritos),
+                 "eixos_descritos_por_ovo": {str(s): por_pet[f"{bracos[0]}@{s}"]["eixos_descritos"] for s in sementes}}
+    return {**extra,"por_braco": por_braco, "atencioso_menos_aleatorio": {"vinculo": diferenca("vinculo_final"),
                                                                   "obediencia": diferenca("obediencia")},
             "decomposicao_taxa_vitoria_ovo_x_braco": decomp,
             "temperamento_neutro": protocolo.v("temperamento_neutro"),
@@ -148,7 +174,9 @@ def fabricas_vida(protocolo, pol: str, semente: int):
         return FABRICAS_POLITICA[pol], None
     t = NEUTRO if protocolo.v("temperamento_neutro") else sortear(semente)
     desligada = protocolo.v("obediencia_desligada")
-    return ((lambda cfg=None: PoliticaBanditPersonalidade(cfg, t)),
+    # adendo DF 2.3: so os protocolos da Parte 2 tem o campo; nos outros a habituacao fica desligada
+    hab = protocolo.v("habituacao_ligada") if hasattr(protocolo, "habituacao_ligada") else False
+    return ((lambda cfg=None: PoliticaBanditPersonalidade(cfg, t, habituacao_ligada=hab)),
             (lambda politica, cfg, semente: MotorPersonalidade(politica, cfg, semente, t,
                                                               obediencia_desligada=desligada)))
 

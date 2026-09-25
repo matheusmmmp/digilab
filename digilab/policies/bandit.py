@@ -296,7 +296,7 @@ class PoliticaBandit:
                 self._bracos[a].atualizar(x, self.cb.recompensa_elogio)
                 self._n_recompensas["elogio"] += 1
             else:
-                self._bracos[a].atualizar(x, self.cb.recompensa_repreensao)
+                self._bracos[a].atualizar(x, self.cb.recompensa_repreensao * self._peso_recompensa("bronca", tick))
                 self._n_recompensas["repreensao"] += 1
         elif acao in CUIDADOS_QUE_ATENDEM:
             janela = self.cb.janela_latencia_ticks
@@ -308,12 +308,17 @@ class PoliticaBandit:
         else:  # pragma: no cover - enum fechado
             raise ValueError(f"acao de dono desconhecida: {acao}")
 
+    def _peso_recompensa(self, categoria: str, tick: int) -> float:
+        """Multiplicador do sinal negativo (habituacao, adendo DF 2.3). 1.0 aqui: x * 1.0 == x exato."""
+        return 1.0
+
     def _expirar(self, tick: int) -> None:
         janela = self.cb.janela_latencia_ticks
         vivos = []
         for tick_pedido, x in self._pendentes:
             if tick - tick_pedido > janela:
-                self._bracos[AcaoPet.CHAMAR_ATENCAO].atualizar(x, self.cb.recompensa_pedido_ignorado)
+                self._bracos[AcaoPet.CHAMAR_ATENCAO].atualizar(x, self.cb.recompensa_pedido_ignorado
+                                                               * self._peso_recompensa("demora", tick))
                 self._n_recompensas["ignorado"] += 1
             else:
                 vivos.append((tick_pedido, x))
