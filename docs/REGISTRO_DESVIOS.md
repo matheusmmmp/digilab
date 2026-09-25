@@ -199,3 +199,19 @@ Faltavam na entrega da tarefa (achado na auditoria). Interpretações:
   é o mesmo; o aprendizado muda um pouco).
 - Desejo: mesmo cálculo de `desejo.py` (necessidade < 0,3; vontade por margem ≥ 0,1 da média da
   posterior), sem rng, mostrado na aba Estado; não muda nenhuma decisão.
+
+## 2026-09-25 — porte Python → web, versão 2 do pet (`web/digilab_sprites.html`)
+
+- Save ganhou `versao`. Save sem versão = v1 (comportamento anterior, inclusive a memória curta);
+  pets novos, rivais de cenário e o pet de exemplo nascem v2. Motivo: obediência e memória por
+  espaços mudariam o replay dos pets já salvos.
+- v2 espelha `memoria_espacos.py`, `vinculo.py`, a obediência de `obediencia.py` e as métricas de
+  desejo de `metrics.py`. Diferenças: referências de vínculo e de memória são o ordinal da ação do dono
+  (a web junta avanços de tempo no registro; o índice do evento mudaria entre ao vivo e replay) e a
+  tela converte para o índice do registro; `fazer_outra` aplica o efeito da ação atual do pet uma vez
+  (a web não tem o intervalo como parâmetro); rng da obediência = `hashSemente("obediencia", semente)`.
+- Condição no combate: `perfilDe(forma, caráter, condição)` com condição = 0,95 + 0,10 × saúde **na
+  hora da luta** (no Python de pesquisa é a saúde no fim da vida). Só v2.
+- Não portado: caráter pelo desvio da política (`evolucao.py`), que mudaria forma e evolução; decisão
+  do pesquisador.
+

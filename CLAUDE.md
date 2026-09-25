@@ -394,6 +394,14 @@ pixels no próprio arquivo. Se mudar um parâmetro em `config.py`, espelhe no ob
 
 Publicado também como artifact privado em claude.ai (link com o usuário).
 
+`web/digilab_sprites.html` (o jogo com sprites) tem **versão de pet** no save (`versao`): 1 = pets salvos
+antes de 2026-09-25 (memória curta antiga, sem vínculo nem obediência, seguem iguais); 2 = pets novos,
+com o mesmo pacote do Python de pesquisa: memória por espaços, temperamento, vínculo, obediência com
+recusa e motivo, desejo com métricas (cumprimento, tempo com vontade) e condição do cuidado no combate
+(vida e guts × 0,95 a 1,05 pela saúde na hora da luta). Constantes espelhadas em `CME`, `CVI`, `COB`,
+`CTP`, `CDJ`, `CCOND`. Fora da web: caráter pelo desvio da política (`evolucao.py`), que mudaria a
+evolução; a web segue com o caráter PROVISÓRIO pelos traços.
+
 Aba **Cenários**: monta dois pets com donos simulados (dono, dias de vida, interações/dia,
 semente). O pet A vira o pet do jogador (o anterior fica guardado para "Voltar") e o B vira o
 rival fixo da arena. Mostra lado a lado estado, sinal de aprendizado, JSD da política média ao
