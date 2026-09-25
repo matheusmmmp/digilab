@@ -86,6 +86,7 @@ class CanalDeInteracao:
         self.orcamento = orcamento
         self.max_por_passo = max_por_passo
         self.gasto = 0
+        self.rejeitados = 0          # toques de treino dentro do intervalo minimo (nao contam)
 
     def limites(self, passo: int, passos_totais: int) -> tuple[int, int]:
         restante = self.orcamento - self.gasto
@@ -109,6 +110,12 @@ class CanalDeInteracao:
         for acao in acoes:
             if not isinstance(acao, AcaoUsuario):
                 raise TypeError(f"acao invalida vinda do dono: {acao!r}")
+            # TAREFA_TREINO_SOMBRIO: toque de treino dentro do intervalo minimo e rejeitado; nao
+            # consome orcamento nem entra no log (so a contagem muda; o limite continua o mesmo)
+            aceita = getattr(self.motor, "aceita", None)
+            if aceita is not None and not aceita(acao):
+                self.rejeitados += 1
+                continue
             self.motor.observar(acao)
             self.gasto += 1
 

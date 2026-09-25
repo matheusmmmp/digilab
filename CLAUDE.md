@@ -4,7 +4,7 @@ Contexto para o Claude Code. Leia inteiro antes de mexer em qualquer coisa.
 
 ## O que é
 
-Pesquisa de mestrado paralela do Matheus (PPGCC/UFSC): um **pet virtual evolutivo e
+Projeto de pesquisa pessoal do Matheus (não é a pesquisa de mestrado dele): um **pet virtual evolutivo e
 competitivo com IA**, inspirado conceitualmente em Tamagotchi/Digimon. O dono treina o pet
 por feedback; o pet tem memória/traços persistentes; pets treinados por donos diferentes
 competem numa arena.
@@ -83,17 +83,21 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/combate_v2/v21/` | combate V2.1 (subpacote: o hash dos fontes da base não muda): `catalogo.py` (forma = espécie + caminho, stats com renormalização, perfil de combate, transições), `regras.py` (técnicas e passivas, resolução pura), `gambits.py` (capacidade por estágio, `turno_execucao`, `oponente_vai_preparar`), `partida.py` (lutador, laço, replay), `bots.py` (8 adultos, 4 adolescentes, respostas declaradas) |
 | `digilab/evolucao.py`, `experiments/run_pesquisa_v21.py` | evolução do pet de pesquisa (ovo pareado, cuidado, caráter nas sondas, forma adulta) e arena V2.1 com adultos → `artifacts_v21_pesquisa/` |
 | `digilab/campanha.py`, `experiments/run_campanha.py` | campanha contra os 3 NPCs (sem treino) → `artifacts_campanha/` |
+| `digilab/treino_stats.py`, `treino_vida.py` | treino (fadiga, forçar, sobrecarga), `MotorTreino`, plano de sessões e donos com treino (inclui o exigente) |
+| `experiments/run_treino.py`, `run_bateria_sombria.py`, `calibrar_treino.py` | runs da TAREFA_TREINO_SOMBRIO (5 braços, campanha, S2) → `artifacts_treino/`, `artifacts_campanha/treino.json`; gate S1; calibração da sobrecarga |
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 239 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 249 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 239 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 249 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
+python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
+python experiments/run_bateria_sombria.py                                     # gate S1 (formas sombrias)
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
 python experiments/legibilidade.py                                            # legibilidade + diários, ~1 min
 python experiments/diario.py --log artifacts_ablacao/vidas/atencioso-bandit@101.jsonl
@@ -250,7 +254,34 @@ V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` 
   vencê-lo. Mantido o original; a correção fica só como evidência.
 - Pets de pesquisa (bandit, IC sobre 5 ovos) contra o tier 3: atencioso 0.21 [0.03, 0.47],
   aleatório 0.25 [0.03, 0.62], incoerente 0.46 [0.14, 0.78].
-- Pendente: campanha com treino (espera a tarefa de treino) e redesenho dos NPCs para a escada funcionar.
+- Campanha com treino: feita na TAREFA_TREINO_SOMBRIO (`artifacts_campanha/treino.json`). Pendente:
+  redesenho dos NPCs para a escada funcionar (é também o que reprova o S2).
+
+## Treino, sobrecarga e formas sombrias (2026-09-25, `docs/TAREFA_TREINO_SOMBRIO.md`)
+
+Pré-condição da bateria V2.1 dispensada; decisões e interpretações em `docs/REGISTRO_DESVIOS.md`.
+`ConfigTreino`, `ConfigSombrio` (dados de `docs/pve_treino.json` e `arvore_evolucao.json`), ações
+`TREINAR_*` no `AcaoUsuario` (donos da v1 usam `ACOES_V1`: canônica intacta), `MotorTreino` sobre a
+personalidade, formas e passivas sombrias em `combate_v2/v21/`. Calibração: `sobrecarga_forcar`
+15 → 25 (ovos de calibração). Números de `artifacts_treino/resumo.json`,
+`artifacts_treino/bateria_sombria/gates.json` e `artifacts_campanha/treino.json` (10 ovos, 14 dias,
+298 interações por vida em todos os braços). Tudo PROPOSTO.
+
+- **Forçar não compensa, e custa.** Exigente × atencioso: 4/10 exigentes viram sombrios (0/10 nos
+  outros braços); vínculo 0,22 [0,16, 0,27] × 0,56 [0,50, 0,61] (diferença −0,35 [−0,42, −0,27]); na
+  arena normalizada o exigente vence o atencioso em 0,44 [0,26, 0,62] (inconclusivo); na campanha
+  (stats absolutos, treina mais: 35,8 × 28,3 pontos) perde para o atencioso contra o tier 1
+  (0,74 × 0,95) e o chefe (0,57 × 0,82; diferença −0,25 [−0,51, −0,04]).
+- **S1 passa**: nenhuma sombria vence os 8 normais; o E1 com as sombrias no pool também passa (suporte
+  inclui devastador e bastião rachado). Média contra os normais: devastador 0,74, bastião 0,58,
+  predador 0,28, colosso partido 0,08. Devastador × passivos: espelho 0,31, muralha 0,34, sentinela
+  0,99, vigia 0,80.
+- **S2 REPROVADO**: quase toda forma normal já vence o tier 1 sem treino (a escada dos NPCs não se
+  sustenta), então "mais cedo" não discrimina; predador nunca vence o tier 1 e colosso partido precisa
+  de +24; devastador e bastião passam do furioso e da muralha contra o tier 2.
+- Formas por braço e o resto em `artifacts_treino/resumo.json`. Atencioso × aleatório nesta run: 0,46
+  [0,25, 0,68] (inconclusivo).
+- Web: o treino entrou antes das runs (pedido do Matheus), com os mesmos números.
 
 ## Motivo, expressão e memória (2026-09-24, `docs/TAREFA_MEMORIA_EXPRESSAO.md`)
 

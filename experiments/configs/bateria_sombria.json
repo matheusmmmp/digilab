@@ -1,0 +1,6 @@
+{
+  "descricao": "Gate S1 da TAREFA_TREINO_SOMBRIO: 8 formas normais + 4 sombrias, sementes de VALIDACAO da bateria V2.1.",
+  "saida": "artifacts_treino/bateria_sombria",
+  "sementes": [4101, 4202, 4303, 4404, 4505],
+  "partidas_por_par_por_semente": 100
+}

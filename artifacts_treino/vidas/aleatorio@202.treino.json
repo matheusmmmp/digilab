@@ -1,0 +1,72 @@
+{
+  "braco": "aleatorio",
+  "carater_adulto": {
+    "atento": -0.26406250000000003,
+    "impetuoso": 0.36718749999999994,
+    "paciente": -0.7109375000000002,
+    "resistente": 0.240625
+  },
+  "condicao": 0.975083333333335,
+  "dono": {
+    "carinho_no_slot": 15,
+    "treino": 59
+  },
+  "enroladas": 7,
+  "especie": "cirro",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "tita",
+    "linha": "colosso",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/colosso/tita"
+  },
+  "obediencia_cuidado": 0.7658227848101266,
+  "ovo": 202,
+  "sessoes": 59,
+  "sombria": false,
+  "treino": {
+    "enroladas": 7,
+    "especie": "cirro",
+    "estresse": 10.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 1,
+    "pausas": {
+      "atendidas": 7,
+      "ignoradas": 7
+    },
+    "pontos": {
+      "folego": 6.6324736,
+      "forca": 4.123538698941993,
+      "guarda": 4.556206863855,
+      "mira": 2.4,
+      "recuperacao": 6.887446724883442,
+      "vigor": 5.565945554134564
+    },
+    "pontos_estagio": {
+      "adolescente": 6.455055441815,
+      "adulto": 14.0,
+      "crianca": 9.710556
+    },
+    "sessoes": 59,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 30.165611441815,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5759992519134719
+}

@@ -1,0 +1,72 @@
+{
+  "braco": "relapso",
+  "carater_adulto": {
+    "atento": 0.40781249999999997,
+    "impetuoso": -0.24218749999999997,
+    "paciente": -0.35781250000000003,
+    "resistente": 0.43437499999999996
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 23,
+    "treino": 51
+  },
+  "enroladas": 3,
+  "especie": "brasa",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "vigia",
+    "linha": "colosso",
+    "ramo": "arisco",
+    "rotulo": "brasa/arisco/colosso/vigia"
+  },
+  "obediencia_cuidado": 0.9466019417475728,
+  "ovo": 101,
+  "sessoes": 51,
+  "sombria": false,
+  "treino": {
+    "enroladas": 3,
+    "especie": "brasa",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 15,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.6970757270625,
+      "forca": 6.2414948812799995,
+      "guarda": 4.97014083775,
+      "mira": 2.6066595937224974,
+      "recuperacao": 4.149714368358177,
+      "vigor": 5.403430341826826
+    },
+    "pontos_estagio": {
+      "adolescente": 6.663265749999999,
+      "adulto": 14.0,
+      "crianca": 7.405249999999999
+    },
+    "sessoes": 51,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 28.06851575,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5894770559868097
+}

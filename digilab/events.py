@@ -30,6 +30,27 @@ class AcaoUsuario(str, Enum):
     ACARICIAR = "acariciar"
     ELOGIAR = "elogiar"
     REPREENDER = "repreender"
+    # treino (TAREFA_TREINO_SOMBRIO): um botao por exercicio. So o MotorTreino sabe aplicar;
+    # no motor da v1 (state.aplicar_acao_usuario) elas levantam erro. Donos da v1 usam ACOES_V1.
+    TREINAR_LEVANTAR_PEDRA = "treinar_levantar_pedra"
+    TREINAR_CORRIDA = "treinar_corrida"
+    TREINAR_ALVO = "treinar_alvo"
+    TREINAR_ESQUIVA = "treinar_esquiva"
+    TREINAR_MEDITAR = "treinar_meditar"
+    TREINAR_RESISTENCIA = "treinar_resistencia"
+
+
+# as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
+# canonica, que sorteia entre todas)
+ACOES_V1 = (AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR,
+            AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER)
+ACOES_TREINO = tuple(a for a in AcaoUsuario if a.value.startswith("treinar_"))
+
+
+def exercicio_de(acao: AcaoUsuario) -> str:
+    if acao not in ACOES_TREINO:
+        raise ValueError(f"acao nao e de treino: {acao}")
+    return acao.value[len("treinar_"):]
 
 
 class AcaoPet(str, Enum):

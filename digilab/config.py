@@ -646,3 +646,91 @@ CONFIG_CAMPANHA = ConfigCampanha()
 CONFIG_CATALOGO = ConfigCatalogo()
 CONFIG_COMBATE_V21 = ConfigCombateV21()
 CONFIG_BATERIA_V21 = ConfigBateriaV21()
+
+
+# =====================================================================
+# Treino, sobrecarga e formas sombrias (docs/TAREFA_TREINO_SOMBRIO.md). Dados de
+# docs/pve_treino.json e docs/arvore_evolucao.json > ramos_sombrios. Todos PROPOSTOS.
+# =====================================================================
+
+
+def _formas_sombrias() -> dict:
+    # linha -> forma sombria (substitui as 2 formas adultas da linha); modificadores somam zero
+    return {
+        "brigao": {"nome": "devastador", "stats": {"forca": 4, "folego": 1, "recuperacao": -3, "guarda": -2}},
+        "guardiao": {"nome": "bastiao_rachado", "stats": {"guarda": 4, "vigor": 1, "recuperacao": -3, "mira": -2}},
+        "cacador": {"nome": "predador", "stats": {"mira": 4, "forca": 1, "vigor": -3, "guarda": -2}},
+        "colosso": {"nome": "colosso_partido", "stats": {"vigor": 4, "guarda": 1, "folego": -3, "recuperacao": -2}},
+    }
+
+
+@dataclass(frozen=True)
+class ConfigSombrio:
+    formas: dict = field(default_factory=_formas_sombrias)
+    limiar_aviso: int = 30               # sobrecarga na crianca -> adolescente: marca e fala fria
+    limiar_sombrio: int = 60             # sobrecarga no adolescente -> adulto: forma sombria da linha
+    epsilon_minimo: float = 0.2          # efeitos permanentes da forma sombria
+    teto_vinculo: float = 0.6
+    # passivas sombrias (resolucao em combate_v2/v21/regras.py)
+    mult_devastador: float = 1.3         # corpo a corpo x1,3; defender e esquivar ilegais
+    fracao_contra_golpe_bastiao: float = 1.0   # contra_golpe devolve 100%
+    # "fadiga de guarda dobrada" nao existe no combate: defender nao rende guts extra (desvio registrado)
+    mult_predador: float = 1.4           # disparo x1,4; recuar ilegal
+    turnos_pele_colosso_partido: int = 3  # pele_dura dura 3 turnos
+    mult_regen_colosso_partido: float = 0.5
+
+
+def _exercicios() -> dict:
+    return {"levantar_pedra": ("forca", "vigor"), "corrida": ("folego", "recuperacao"), "alvo": ("mira", "folego"),
+            "esquiva": ("guarda", "vigor"), "meditar": ("recuperacao", "guarda"), "resistencia": ("vigor", "forca")}
+
+
+def _aptidao_especie() -> dict:
+    return {
+        "brasa": {"forca": 1.2, "guarda": 1.1, "folego": 1.0, "vigor": 0.9, "mira": 0.9, "recuperacao": 0.9},
+        "cirro": {"mira": 1.2, "recuperacao": 1.1, "folego": 1.0, "guarda": 0.9, "forca": 0.9, "vigor": 0.9},
+        "ferrugem": {"guarda": 1.2, "vigor": 1.1, "forca": 1.0, "folego": 0.9, "recuperacao": 0.9, "mira": 0.9},
+        "limo": {"recuperacao": 1.2, "folego": 1.1, "vigor": 1.0, "guarda": 0.9, "mira": 0.9, "forca": 0.9},
+        "faisca": {"folego": 1.2, "forca": 1.1, "mira": 1.0, "recuperacao": 0.9, "vigor": 0.9, "guarda": 0.9},
+        "seixo": {"vigor": 1.2, "forca": 1.1, "guarda": 1.0, "folego": 0.9, "recuperacao": 0.9, "mira": 0.9},
+    }
+
+
+@dataclass(frozen=True)
+class ConfigTreino:
+    exercicios: dict = field(default_factory=_exercicios)       # exercicio -> (principal, secundario)
+    aptidao_especie: dict = field(default_factory=_aptidao_especie)
+    ganho_principal: float = 2.0
+    ganho_secundario: float = 1.0
+    teto_por_stat: float = 10.0
+    teto_por_estagio: dict = field(default_factory=lambda: {"crianca": 10.0, "adolescente": 12.0, "adulto": 14.0})
+    teto_vida: float = 36.0
+    # fadiga: ganho x (1 - fadiga/100); recupera acordado; zera ao dormir
+    fadiga_por_sessao: float = 20.0
+    recupera_fadiga_por_hora: float = 10.0
+    limiar_pausa: float = 40.0            # pet pede descanso (desejo de necessidade)
+    limite_forcar: float = 60.0           # a sessao vira forcar_treino
+    intervalo_minimo_ticks: int = 10      # toque antes disso e rejeitado (nao consome orcamento)
+    # forcar
+    mult_forcar: float = 1.5
+    sobrecarga_forcar: float = 25.0       # calibrado 15 -> 25 (experiments/calibrar_treino.py, ovos de calibracao)
+    estresse_forcar: float = 10.0
+    vinculo_forcar: float = -0.05
+    # sobrecarga em [0, 100], nao zera na evolucao
+    sobrecarga_max: float = 100.0
+    decai_sobrecarga_hora_bem_cuidado: float = 2.0
+    decai_sobrecarga_sono_completo: float = 10.0
+    sono_completo_ticks: int = 360        # PROPOSTO: sono de 6 h ou mais conta como completo
+    limiar_bem_cuidado: float = 0.3       # PROPOSTO: fome, higiene e energia acima disto = bem cuidado
+    # vinculo e pedido de pausa: atender (a pausa acaba sem treino) = amostra 1; treinar por cima = 0
+    peso_pausa_vinculo: float = 1.0
+    # cronograma_interacoes.json: sessoes por dia (alvo e teto) por estagio; bebe nao treina
+    sessoes_alvo_dia: dict = field(default_factory=lambda: {"crianca": 10, "adolescente": 8, "adulto": 5})
+    teto_dia: dict = field(default_factory=lambda: {"crianca": 16, "adolescente": 12, "adulto": 8})
+    # vidas com treino: orcamento = cuidado por dia + sessoes-alvo do estagio (decisao do Matheus, 2026-09-25)
+    cuidado_por_dia: int = 16
+    fracao_forcar_exigente: float = 0.5   # exigente forca em 50% das sessoes possiveis acima do limite
+
+
+CONFIG_SOMBRIO = ConfigSombrio()
+CONFIG_TREINO = ConfigTreino()

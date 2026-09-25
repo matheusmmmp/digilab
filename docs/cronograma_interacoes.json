@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "versao": "cronograma-v0.2-PROPOSTO (duracoes pela metade)",
+    "versao": "cronograma-v0.3-PROPOSTO (dono exigente)",
     "base": "Ancorado nos v-pets Digimon (Ver.20th/Color: janela de 10 min, estagios de 6-12h, 24h, 36h; coco a cada 60 min no estagio II e 120 min depois) e no Tamagotchi original (janela de 15 min; bebe com fome a cada ~4 min). Numeros de fas, nao oficiais.",
     "tempo_de_sono_conta_para_evolucao": true,
     "contadores_zeram_na_evolucao": true,
@@ -111,6 +111,15 @@
       "latencia_media_min": 12,
       "feedback": "coerente",
       "volume": "menor (sai do resultado de janelas perdidas)"
+    },
+    "exigente": {
+      "fracao_janelas_atendidas": 0.95,
+      "latencia_media_min": 5,
+      "feedback": "coerente",
+      "volume": "igual ao atencioso",
+      "treino": "usa o teto diario de treino; forca quando a fadiga passa do limite em 50% das sessoes possiveis; ignora pedidos de pausa",
+      "de_onde_sai_o_treino_extra": "das interacoes de carinho; as janelas de necessidade continuam atendidas como no atencioso",
+      "comparacao": "atencioso x exigente isola o efeito de forcar o treino (ambos coerentes e com o mesmo volume)"
     }
   },
   "modo_produto": {

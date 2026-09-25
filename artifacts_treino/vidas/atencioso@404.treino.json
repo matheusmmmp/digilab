@@ -1,0 +1,72 @@
+{
+  "braco": "atencioso",
+  "carater_adulto": {
+    "atento": 0.6999999999999998,
+    "impetuoso": -0.41406250000000006,
+    "paciente": 0.2093749999999996,
+    "resistente": -0.08124999999999998
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 21,
+    "treino": 53
+  },
+  "enroladas": 10,
+  "especie": "cirro",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "emboscador",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/cacador/emboscador"
+  },
+  "obediencia_cuidado": 0.8392857142857143,
+  "ovo": 404,
+  "sessoes": 53,
+  "sombria": false,
+  "treino": {
+    "enroladas": 10,
+    "especie": "cirro",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 14,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 5.62346356012863,
+      "forca": 4.111427282175001,
+      "guarda": 3.9002832405000003,
+      "mira": 4.5713582399999995,
+      "recuperacao": 5.401919085722501,
+      "vigor": 4.129308091473871
+    },
+    "pontos_estagio": {
+      "adolescente": 6.377509500000001,
+      "adulto": 14.0,
+      "crianca": 7.360249999999999
+    },
+    "sessoes": 53,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 27.737759500000003,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5823234347231766
+}

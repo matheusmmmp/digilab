@@ -1,0 +1,72 @@
+{
+  "braco": "aleatorio",
+  "carater_adulto": {
+    "atento": 0.026562499999999975,
+    "impetuoso": 0.12265625000000005,
+    "paciente": 0.3812500000000002,
+    "resistente": -0.6531250000000001
+  },
+  "condicao": 1.0335000000000019,
+  "dono": {
+    "carinho_no_slot": 9,
+    "treino": 65
+  },
+  "enroladas": 7,
+  "especie": "brasa",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "duelista",
+    "linha": "brigao",
+    "ramo": "arisco",
+    "rotulo": "brasa/arisco/brigao/duelista"
+  },
+  "obediencia_cuidado": 0.9113924050632911,
+  "ovo": 101,
+  "sessoes": 65,
+  "sombria": false,
+  "treino": {
+    "enroladas": 7,
+    "especie": "brasa",
+    "estresse": 20.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 3,
+    "pausas": {
+      "atendidas": 7,
+      "ignoradas": 8
+    },
+    "pontos": {
+      "folego": 3.04355,
+      "forca": 7.2868733960385335,
+      "guarda": 5.595529878656344,
+      "mira": 2.9605973897494122,
+      "recuperacao": 4.482543382242305,
+      "vigor": 6.5220282438461075
+    },
+    "pontos_estagio": {
+      "adolescente": 5.891122290532701,
+      "adulto": 14.0,
+      "crianca": 10.0
+    },
+    "sessoes": 65,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 29.891122290532703,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 23.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 11.5,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5746852450284259
+}

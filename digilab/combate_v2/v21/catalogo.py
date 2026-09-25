@@ -22,12 +22,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ...config import CONFIG_CATALOGO, CONFIG_COMBATE_V21, ESTAGIOS_V21, STATS_V21, ConfigCatalogo, ConfigCombateV21
+from ...config import (CONFIG_CATALOGO, CONFIG_COMBATE_V21, CONFIG_SOMBRIO, ESTAGIOS_V21, STATS_V21, ConfigCatalogo,
+                       ConfigCombateV21)
 
 LINHAS = ("brigao", "guardiao", "cacador", "colosso")
 RAMOS_CRIANCA = ("sereno", "arisco")
 FORMAS_ADULTAS = ("duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita")
-LINHA_DA_FORMA = {f: l for l in LINHAS for f in CONFIG_CATALOGO.arquetipos_adulto[l]["formas"]}
+# formas sombrias (TAREFA_TREINO_SOMBRIO, arvore_evolucao.json > ramos_sombrios): uma por linha,
+# substitui as 2 formas adultas quando a sobrecarga passa do limiar na evolucao
+SOMBRIA_DA_LINHA = {l: CONFIG_SOMBRIO.formas[l]["nome"] for l in LINHAS}
+FORMAS_SOMBRIAS = tuple(SOMBRIA_DA_LINHA[l] for l in LINHAS)
+LINHA_DA_FORMA = {f: l for l in LINHAS for f in CONFIG_CATALOGO.arquetipos_adulto[l]["formas"]} | \
+    {f: l for l, f in SOMBRIA_DA_LINHA.items()}
 
 
 class CatalogoInvalido(ValueError):
@@ -82,6 +88,10 @@ class Forma:
         return self.adulta
 
     @property
+    def sombria(self) -> bool:
+        return self.adulta in FORMAS_SOMBRIAS
+
+    @property
     def rotulo(self) -> str:
         return "/".join(x for x in (self.especie, self.ramo, self.linha, self.adulta) if x)
 
@@ -129,10 +139,34 @@ def stats(forma: Forma, temperamento: dict | None = None, carater: dict | None =
         somar(cat.arquetipos_crianca[forma.ramo])
     if forma.linha:
         somar(cat.arquetipos_adolescente[forma.linha]["stats"])
-    if forma.adulta:
+    if forma.adulta in FORMAS_SOMBRIAS:
+        somar(CONFIG_SOMBRIO.formas[forma.linha]["stats"])
+    elif forma.adulta:
         somar(cat.arquetipos_adulto[forma.linha]["formas"][forma.adulta]["stats"])
     total = float(sum(cat.especies[forma.especie].values()))
     return renormalizar(brutos, total, cat.stat_min, cat.stat_max)
+
+
+def com_treino(base: dict, treino: dict, normalizar: bool, total: float | None = None,
+               cat: ConfigCatalogo | None = None) -> dict:
+    """Stats da forma + pontos treinados (treino_stats.py).
+
+    normalizar=True (arena e pesquisa, barreira 1 da TAREFA_TREINO_SOMBRIO): o total volta ao
+    orcamento `total` mantendo as PROPORCOES treinadas (escala e depois renormalizacao na faixa).
+    normalizar=False (campanha): ganho absoluto, sem teto de stat.
+    """
+    cat = cat or CONFIG_CATALOGO
+    extras = set(treino) - set(STATS_V21)
+    if extras:
+        raise CatalogoInvalido(f"treino com stats desconhecidos: {sorted(extras)}")
+    if any(v < 0 for v in treino.values()):
+        raise CatalogoInvalido("pontos de treino negativos")
+    brutos = {k: base[k] + treino.get(k, 0.0) for k in STATS_V21}
+    if not normalizar:
+        return brutos
+    total = float(sum(base.values())) if total is None else total
+    soma = sum(brutos.values())
+    return renormalizar({k: v * total / soma for k, v in brutos.items()}, total, cat.stat_min, cat.stat_max)
 
 
 @dataclass(frozen=True)
@@ -159,8 +193,10 @@ class Perfil:
 
 
 def perfil(forma: Forma, temperamento: dict | None = None, carater: dict | None = None,
-           condicao: float = 1.0, cfg: ConfigCombateV21 | None = None, cat: ConfigCatalogo | None = None) -> Perfil:
-    """Stats -> numeros de combate. `condicao` (do cuidado) multiplica hp_max e guts_inicial."""
+           condicao: float = 1.0, cfg: ConfigCombateV21 | None = None, cat: ConfigCatalogo | None = None,
+           treino: dict | None = None, normalizar_treino: bool = True) -> Perfil:
+    """Stats -> numeros de combate. `condicao` (do cuidado) multiplica hp_max e guts_inicial.
+    `treino`: pontos treinados somados aos stats (normalizados ao orcamento na arena; absolutos na campanha)."""
     cfg = cfg or CONFIG_COMBATE_V21
     cat = cat or CONFIG_CATALOGO
     if forma.estagio == "bebe":
@@ -168,6 +204,8 @@ def perfil(forma: Forma, temperamento: dict | None = None, carater: dict | None 
     if not cat.condicao_mult_min <= condicao <= cat.condicao_mult_max:
         raise CatalogoInvalido(f"condicao {condicao} fora de [{cat.condicao_mult_min}, {cat.condicao_mult_max}]")
     s = stats(forma, temperamento, carater, cat)
+    if treino:
+        s = com_treino(s, treino, normalizar_treino, cat=cat)
     est = cat.mult_estagio[forma.estagio]
     guts_max = (cfg.guts_max_base + cfg.guts_max_por_folego * s["folego"]) * est
     return Perfil(
@@ -215,10 +253,13 @@ def forma_adulta(linha: str, carater: dict, sparring: int, cat: ConfigCatalogo |
 
 
 def carater_canonico(adulta: str, cfg: ConfigCombateV21 | None = None) -> dict:
-    """Carater dos bots da bateria: eixo da linha +x, complementar com o sinal da forma."""
+    """Carater dos bots da bateria: eixo da linha +x, complementar com o sinal da forma.
+    Forma sombria (substitui as duas da linha): so o eixo da linha."""
     cfg = cfg or CONFIG_COMBATE_V21
     cat = CONFIG_CATALOGO
     linha = LINHA_DA_FORMA[adulta]
+    if adulta in FORMAS_SOMBRIAS:
+        return {cat.arquetipos_adolescente[linha]["eixo"]: cfg.carater_bot_linha}
     arq = cat.arquetipos_adulto[linha]
     sinal = 1.0 if arq["formas"][adulta]["sinal"] == ">=0" else -1.0
     return {cat.arquetipos_adolescente[linha]["eixo"]: cfg.carater_bot_linha,

@@ -1,0 +1,72 @@
+{
+  "braco": "relapso",
+  "carater_adulto": {
+    "atento": 0.19999999999999996,
+    "impetuoso": -0.20781249999999996,
+    "paciente": -0.12968749999999993,
+    "resistente": 0.3453124999999999
+  },
+  "condicao": 1.0443000000000007,
+  "dono": {
+    "carinho_no_slot": 23,
+    "treino": 51
+  },
+  "enroladas": 8,
+  "especie": "limo",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "sentinela",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "limo/arisco/cacador/sentinela"
+  },
+  "obediencia_cuidado": 0.9622641509433962,
+  "ovo": 1010,
+  "sessoes": 51,
+  "sombria": false,
+  "treino": {
+    "enroladas": 8,
+    "especie": "limo",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 12,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.203425521075,
+      "forca": 4.103587296000001,
+      "guarda": 4.086797796000001,
+      "mira": 2.7594000000000003,
+      "recuperacao": 5.894422006924998,
+      "vigor": 5.405394880000001
+    },
+    "pontos_estagio": {
+      "adolescente": 5.0927999999999995,
+      "adulto": 14.0,
+      "crianca": 7.360227500000001
+    },
+    "sessoes": 51,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 26.4530275,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.39685218534748384
+}

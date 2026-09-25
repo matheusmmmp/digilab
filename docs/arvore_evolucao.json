@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "versao": "arvore-v0.1-PROPOSTO",
+    "versao": "arvore-v0.3-PROPOSTO (peso desempata forma adulta; marca robusto)",
     "nota": "Arvore por arquetipos: cada especie do catalogo percorre a mesma estrutura. Forma = especie + caminho de arquetipos. Todo modificador de stat soma zero. Nada testado em combate ainda.",
     "estagios": [
       "bebe",
@@ -69,13 +69,15 @@
         "cacador": "atento",
         "colosso": "resistente"
       },
-      "nota": "Carater = desvio da politica aprendida em relacao ao instinto em contextos-sonda fixos."
+      "nota": "Carater = desvio da politica aprendida em relacao ao instinto em contextos-sonda fixos.",
+      "marca_robusto": "Crianca arisca com 3+ superalimentacoes ganha a marca 'robusto' (cuidado_corporal.json)."
     },
     "adolescente_para_adulto": {
       "moeda": "carater_complementar + sparring",
       "criterio": "sinal do eixo complementar da linha; exige sparring minimo contra bots no estagio adolescente",
       "sparring_minimo": 10,
-      "nota": "Sem o sparring minimo o pet continua adolescente. Sparring nao treina a politica."
+      "nota": "Sem o sparring minimo o pet continua adolescente. Sparring nao treina a politica.",
+      "desempate": "Se |eixo complementar| < 0.1, o peso decide (cuidado_corporal.json > peso > decide_forma_adulta)."
     }
   },
   "arquetipos": {
@@ -267,6 +269,67 @@
     "arquetipos_adultos": 8,
     "caminhos_ate_adulto_por_especie": 16,
     "formas_adultas_totais": 96,
-    "identidades_de_combate_a_balancear": "8 arquetipos adultos x 6 especies (stats), 4 tecnicas, 8 passivas"
+    "identidades_de_combate_a_balancear": "8 arquetipos adultos x 6 especies (stats), 4 tecnicas, 8 passivas",
+    "formas_sombrias": 4
+  },
+  "ramos_sombrios": {
+    "_nota": "Consequencia de forcar o treino. Primeiro aviso, depois consequencia. A linha aprendida (carater) e mantida: a sombra corrompe o que o pet e, nao apaga.",
+    "aviso_crianca_para_adolescente": {
+      "condicao": "sobrecarga >= aviso (30)",
+      "efeito": "marca visual e fala mais fria; nenhuma mudanca de forma ou stats"
+    },
+    "adolescente_para_adulto": {
+      "condicao": "sobrecarga >= limiar_sombrio (60) no momento da evolucao",
+      "efeito": "substitui as 2 formas adultas da linha pela forma sombria"
+    },
+    "efeitos_comuns": {
+      "epsilon_minimo": 0.2,
+      "teto_de_vinculo": 0.6,
+      "permanente": true,
+      "descricao": "instavel (as vezes ignora os proprios gambits), nunca volta a confiar totalmente no dono"
+    },
+    "formas": {
+      "brigao": {
+        "nome": "devastador",
+        "stats": {
+          "forca": 4,
+          "folego": 1,
+          "recuperacao": -3,
+          "guarda": -2
+        },
+        "passiva": "dano corpo a corpo +30%; nao pode defender nem esquivar"
+      },
+      "guardiao": {
+        "nome": "bastiao_rachado",
+        "stats": {
+          "guarda": 4,
+          "vigor": 1,
+          "recuperacao": -3,
+          "mira": -2
+        },
+        "passiva": "contra_golpe devolve 100%; fadiga de guarda dobrada"
+      },
+      "cacador": {
+        "nome": "predador",
+        "stats": {
+          "mira": 4,
+          "forca": 1,
+          "vigor": -3,
+          "guarda": -2
+        },
+        "passiva": "disparo +40%; recuar e proibido"
+      },
+      "colosso": {
+        "nome": "colosso_partido",
+        "stats": {
+          "vigor": 4,
+          "guarda": 1,
+          "folego": -3,
+          "recuperacao": -2
+        },
+        "passiva": "pele_dura dura 3 turnos; regeneracao de guts -50%"
+      }
+    },
+    "gates": "As 4 formas sombrias entram na bateria V2.1 (E1/E5). Nao podem dominar: sao atalho de poder com custo, nao a melhor opcao."
   }
 }

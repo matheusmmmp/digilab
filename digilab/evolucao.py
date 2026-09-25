@@ -25,7 +25,7 @@ import random
 from dataclasses import dataclass, field
 from typing import Callable
 
-from .combate_v2.v21.catalogo import Forma, forma_adulta, linha_do_adolescente, ramo_da_crianca
+from .combate_v2.v21.catalogo import SOMBRIA_DA_LINHA, Forma, forma_adulta, linha_do_adolescente, ramo_da_crianca
 from .config import CONFIG_ARENA, CONFIG_CATALOGO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, ConfigEvolucaoPesquisa
 from .events import AcaoUsuario, LogDeEventos
 from .metrics import distribuicoes_de_acao, estados_sonda
@@ -61,11 +61,14 @@ def fracao_cuidado_bebe(log: LogDeEventos, cfg: ConfigEvolucaoPesquisa | None = 
     return (atendidos / len(chamados) if chamados else 1.0), atendidos, len(chamados)
 
 
-def politica_no_tick(log: LogDeEventos, fabrica: Callable, semente: int, tick: int):
-    """Rejoga o log so ate `tick` (corta o avanco que o atravessa) e devolve a politica ali."""
+def politica_no_tick(log: LogDeEventos, fabrica: Callable, semente: int, tick: int,
+                     fabrica_motor: Callable | None = None):
+    """Rejoga o log so ate `tick` (corta o avanco que o atravessa) e devolve a politica ali.
+    `fabrica_motor(politica, cfg, semente)`: vidas com treino rejogam com o MotorTreino."""
     from .treino import MotorComFeedback
 
-    motor = MotorComFeedback(politica=fabrica(CONFIG_PADRAO), cfg=CONFIG_PADRAO, semente=semente)
+    fm = fabrica_motor or (lambda politica, cfg, s: MotorComFeedback(politica=politica, cfg=cfg, semente=s))
+    motor = fm(fabrica(CONFIG_PADRAO), CONFIG_PADRAO, semente)
     for e in log:
         if e.tick >= tick:
             break
@@ -119,7 +122,10 @@ class Evolucao:
 
 
 def evoluir(log: LogDeEventos, fabrica: Callable, semente: int, n_estados: int, amostras: int,
-            semente_sonda: int, saude_final: float, cfg: ConfigEvolucaoPesquisa | None = None) -> Evolucao:
+            semente_sonda: int, saude_final: float, cfg: ConfigEvolucaoPesquisa | None = None,
+            fabrica_motor: Callable | None = None, sombria: bool = False) -> Evolucao:
+    """`sombria` (TAREFA_TREINO_SOMBRIO): sobrecarga >= limiar no inicio do adulto -> a forma adulta
+    e a sombria da linha (a linha, aprendida, e mantida)."""
     cfg = cfg or CONFIG_EVOLUCAO_PESQUISA
     especie, temp = ovo(semente, cfg)
     frac, atend, tot = fracao_cuidado_bebe(log, cfg)
@@ -127,14 +133,16 @@ def evoluir(log: LogDeEventos, fabrica: Callable, semente: int, n_estados: int, 
     t_adol = cfg.dur_bebe_min + cfg.dur_crianca_min
     t_adul = t_adol + cfg.dur_adolescente_min
     dist_base = fabrica(CONFIG_PADRAO)            # mesma politica, recem-nascida (sem aprendizado)
-    car_adol, _ = carater(politica_no_tick(log, fabrica, semente, t_adol), dist_base, n_estados, amostras,
-                          semente_sonda, cfg)
+    car_adol, _ = carater(politica_no_tick(log, fabrica, semente, t_adol, fabrica_motor), dist_base, n_estados,
+                          amostras, semente_sonda, cfg)
     linha = linha_do_adolescente(car_adol)
-    car_adul, bruto = carater(politica_no_tick(log, fabrica, semente, t_adul), fabrica(CONFIG_PADRAO), n_estados,
-                              amostras, semente_sonda, cfg)
+    car_adul, bruto = carater(politica_no_tick(log, fabrica, semente, t_adul, fabrica_motor), fabrica(CONFIG_PADRAO),
+                              n_estados, amostras, semente_sonda, cfg)
     adulta = forma_adulta(linha, car_adul, cfg.sparring_simulado)
     if adulta is None:
         raise ValueError("sparring simulado abaixo do minimo: o pet nao chegaria a adulto")
+    if sombria:
+        adulta = SOMBRIA_DA_LINHA[linha]
     cat = CONFIG_CATALOGO
     condicao = cat.condicao_mult_min + (cat.condicao_mult_max - cat.condicao_mult_min) * max(0.0, min(1.0, saude_final))
     return Evolucao(especie, temp, frac, (atend, tot), car_adol, car_adul, bruto,

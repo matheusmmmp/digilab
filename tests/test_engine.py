@@ -22,6 +22,7 @@ from digilab import (  # noqa: E402
     PoliticaInstinto,
     reproduzir,
 )
+from digilab.events import ACOES_V1  # noqa: E402
 
 
 def _vida_simulada(motor: Motor, dias: int = 3, semente: int = 7) -> None:
@@ -31,7 +32,7 @@ def _vida_simulada(motor: Motor, dias: int = 3, semente: int = 7) -> None:
         for _ in range(24):
             motor.avancar(60)
             if rng.random() < 0.35:
-                motor.observar(rng.choice(list(AcaoUsuario)))
+                motor.observar(rng.choice(list(ACOES_V1)))
 
 
 # --------------------------------------------------------------- determinismo

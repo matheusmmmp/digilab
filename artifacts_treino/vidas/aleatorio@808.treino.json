@@ -1,0 +1,72 @@
+{
+  "braco": "aleatorio",
+  "carater_adulto": {
+    "atento": 0.20624999999999996,
+    "impetuoso": -0.17421874999999995,
+    "paciente": 0.4468750000000002,
+    "resistente": -0.3046875
+  },
+  "condicao": 0.95,
+  "dono": {
+    "carinho_no_slot": 6,
+    "treino": 68
+  },
+  "enroladas": 31,
+  "especie": "brasa",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "emboscador",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "brasa/arisco/cacador/emboscador"
+  },
+  "obediencia_cuidado": 0.45390070921985815,
+  "ovo": 808,
+  "sessoes": 68,
+  "sombria": false,
+  "treino": {
+    "enroladas": 31,
+    "especie": "brasa",
+    "estresse": 10.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 1,
+    "pausas": {
+      "atendidas": 3,
+      "ignoradas": 3
+    },
+    "pontos": {
+      "folego": 5.7342856,
+      "forca": 7.64266889702332,
+      "guarda": 3.1939500587500005,
+      "mira": 1.4849999999999999,
+      "recuperacao": 6.593128421999534,
+      "vigor": 6.241473386082145
+    },
+    "pontos_estagio": {
+      "adolescente": 9.948959738855,
+      "adulto": 14.0,
+      "crianca": 6.941546625
+    },
+    "sessoes": 68,
+    "sobrecarga": 3.5,
+    "sombria": false,
+    "total": 30.890506363855,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5434207530592369
+}

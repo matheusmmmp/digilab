@@ -1,0 +1,72 @@
+{
+  "braco": "relapso",
+  "carater_adulto": {
+    "atento": -0.12031250000000002,
+    "impetuoso": -0.06171875,
+    "paciente": 0.3343749999999999,
+    "resistente": -0.09062499999999997
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 13,
+    "treino": 61
+  },
+  "enroladas": 21,
+  "especie": "cirro",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "duelista",
+    "linha": "brigao",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/brigao/duelista"
+  },
+  "obediencia_cuidado": 0.8324873096446701,
+  "ovo": 202,
+  "sessoes": 61,
+  "sombria": false,
+  "treino": {
+    "enroladas": 21,
+    "especie": "cirro",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 12,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 6.62802075162325,
+      "forca": 5.09460398721,
+      "guarda": 5.2069838696402515,
+      "mira": 6.090294911999999,
+      "recuperacao": 5.392297511991207,
+      "vigor": 5.734383357215294
+    },
+    "pontos_estagio": {
+      "adolescente": 10.146584389680001,
+      "adulto": 14.0,
+      "crianca": 10.0
+    },
+    "sessoes": 61,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 34.14658438968,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.6400469818948225
+}

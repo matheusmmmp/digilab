@@ -18,7 +18,7 @@ Arte: placeholders em texto/ASCII, sem asset externo.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from .combate_v2.gambits import CATALOGO
 from .config import CONFIG_EXPRESSAO, ConfigExpressao
@@ -110,6 +110,9 @@ FATORES: dict[str, dict[str, str]] = {
                             "adolescente": "sem forças...", "adulto": "porque eu estava sem forças"},
     "necessidade_humor": {"marcador": "chateado", "bebe": "", "crianca": "[:chateado:]",
                           "adolescente": "chateado...", "adulto": "porque eu estava chateado"},
+    # treino (TAREFA_TREINO_SOMBRIO): fadiga do treino (forcar, pausa ignorada, pedido de pausa)
+    "fadiga_treino": {"marcador": "treino puxado", "bebe": "", "crianca": "[:treino puxado:]",
+                      "adolescente": "treino puxado...", "adulto": "por causa do treino puxado"},
     # memoria por espacos (docs/ADENDO_MEMORIA_EMOCAO_DF.md, Parte 1)
     "demora": {"marcador": "me deixou esperando", "bebe": "", "crianca": "[:me deixou esperando:]",
                "adolescente": "me deixou esperando...", "adulto": "porque lembro que você me deixou esperando"},
@@ -140,6 +143,10 @@ ACOES_VIDA = {
     # desobediencia (TAREFA_PERSONALIDADE_OBEDIENCIA): o "pedido" e a acao do dono
     "recusar": ("[não!]", "não quero", "Não quis fazer o que você pediu"),
     "fazer_outra": ("[outra coisa]", "outra coisa", "Fiz outra coisa em vez do que você pediu"),
+    # treino (TAREFA_TREINO_SOMBRIO): o "pedido" e a sessao do dono
+    "forcar_treino": ("[forçado]", "forçado", "Treinei além do meu limite"),
+    "treinar_cansado": ("[sem pausa]", "sem pausa", "Treinei mesmo pedindo para parar"),
+    "enrolar": ("[enrolei]", "enrolei", "Enrolei no treino"),
 }
 ACOES_COMBATE = {
     "avancar": ("[avançar]", "avançar", "Avancei"),
@@ -246,7 +253,7 @@ ALVOS_DESEJO = {
     "comer": ("[comer]", "comer"), "limpar": ("[banho]", "tomar banho"), "dormir": ("[dormir]", "dormir"),
     "brincar": ("[brincar]", "brincar"), "ocioso": ("[à toa]", "ficar à toa"),
     "chamar_atencao": ("[chamar]", "chamar você"), "explorar": ("[explorar]", "explorar"),
-    "emburrar": ("[emburrar]", "emburrar"),
+    "emburrar": ("[emburrar]", "emburrar"), "descansar": ("[descanso]", "descansar"),
 }
 
 
@@ -537,6 +544,20 @@ def validar_tabelas_personalidade() -> None:
             for n, e in FATORES.items():
                 if any(m in e[s] for s in ("crianca", "adolescente", "adulto")):
                     raise TabelaIncompleta(f"marcador {m!r} de {dono} aparece no fator {n!r}")
+
+
+# fala fria (TAREFA_TREINO_SOMBRIO): sobrecarga no aviso (crianca -> adolescente) ou forma sombria.
+# So o tom muda (emote apagado, abertura seca); o conteudo e os fatores citados sao os mesmos.
+EMOTE_FRIO = "(-_-)"
+ABERTURA_FRIA = "Hm."
+
+
+def esfriar(expr: Expressao) -> Expressao:
+    if expr.canal == "emote":
+        return replace(expr, conteudo=EMOTE_FRIO)
+    if expr.canal == "frase":
+        return replace(expr, conteudo=f"{ABERTURA_FRIA} {expr.conteudo}")
+    return replace(expr, conteudo=f"... {expr.conteudo}")
 
 
 def marcadores_citados(conteudo: str) -> set[str]:

@@ -257,3 +257,39 @@ sparring); pets v1 também treinam, mas sem obediência nem vínculo (os v2 enro
 forçar derruba o vínculo); a forma sombria usa o sprite da forma normal de estilo mais próximo com
 tinta escura; na arena contra bots os stats treinados são normalizados, na campanha contra NPCs valem
 inteiros. Se as runs do Python mudarem números, a web é corrigida depois.
+
+## 2026-09-25 — TAREFA_TREINO_SOMBRIO
+
+Decisões do Matheus (plano aprovado): seguir com a bateria V2.1 REPROVADA (pré-condição); orçamento =
+16 de cuidado por dia + sessões-alvo do estágio, igual nos 5 braços; manter o Soberano original (a
+correção pedida foi testada e piora, ver a entrada da campanha); arena da pesquisa = V2.1 com stats
+normalizados; ações de treino entram no `AcaoUsuario` (os donos da v1 sorteiam só de `ACOES_V1`, a
+canônica fica intacta); toque dentro do intervalo mínimo é rejeitado pelo canal sem consumir orçamento.
+
+Interpretações (PROPOSTAS):
+
+- Treino é estado próprio (`treino_stats.py`), integrado nas decisões do pet e antes de cada sessão;
+  não toca o `Estado` do motor nem a política (a sessão não é contato de cuidado nem recompensa).
+- Estresse só é registrado (o único efeito explícito, −0,05 de vínculo, vem direto do forçar).
+- "Fadiga de guarda dobrada" (bastião rachado) não existe no combate: vira "defender não rende guts".
+- Sono completo = 6 h ou mais; bem cuidado = fome, higiene e energia ≥ 0,3. Evolução zera fadiga e
+  estresse; pontos e sobrecarga ficam.
+- Pedido de pausa: fadiga ≥ 40 vira `Desejo` de necessidade (alvo "descansar"). Pausa atendida = acabar
+  sem treino (vínculo amostra 1); treinar por cima = amostra 0.
+- Donos: sessões em um bloco diário a partir das 10:00, um por passo; atencioso, relapso e incoerente
+  respeitam a pausa (carinho no lugar), exercícios em rodízio (o dono não enxerga a linha, que só é
+  calculada na evolução); aleatório sorteia o exercício e respeita a pausa com prob. 0,5; exigente
+  treina no teto do dia (o extra sai do carinho), ignora a pausa e força em 1 de cada 2 sessões
+  possíveis (alternado, sem rng).
+- Formas sombrias lutam com os gambits da forma normal de estilo mais próximo (devastador ← furioso,
+  bastião ← espelho, predador ← emboscador, colosso partido ← titã); regras com ação proibida pela
+  passiva nunca disparam.
+- **Calibração** (`experiments/calibrar_treino.py`, ovos 3101…3505, critério fixado antes: exigente
+  sombrio em ≥ 60%, nenhum outro braço sombrio, a mais próxima do original): `sobrecarga_forcar`
+  15 → 25. Com 15 o exigente nunca chegava a 60: ele só consegue forçar ~2 sessões por estágio antes
+  da evolução. A primeira varredura foi inválida (o config não chegava ao motor); corrigido e refeito.
+- S1: bateria à parte (`run_bateria_sombria.py`, sementes de validação da V2.1); a bateria canônica
+  V2.1 não foi rejogada (as formas normais não mudam de regra; o hash dos fontes V2.1 mudou).
+- S2 (bots, treino uniforme 0…36, stats absolutos): "vence o tier 1 mais cedo" = treino mínimo para
+  taxa ≥ 0,5 contra o tier 1 menor ou igual ao da normal; "não vence o tier 2 com taxa maior" = taxa
+  média contra o tier 2 (na grade) menor ou igual à da normal.
