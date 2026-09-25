@@ -450,3 +450,44 @@ PROTOCOLO_ARENA_V1_PERSONALIDADE_SEM_OBEDIENCIA = _protocolo_personalidade("aren
 for _p in (PROTOCOLO_ARENA_V1_PERSONALIDADE, PROTOCOLO_ARENA_V1_PERSONALIDADE_NEUTRO,
            PROTOCOLO_ARENA_V1_PERSONALIDADE_SEM_OBEDIENCIA):
     PROTOCOLOS[_p.versao] = _p
+
+
+# =====================================================================
+# Emocao, extremos e habituacao (docs/ADENDO_MEMORIA_EMOCAO_DF.md, Parte 2), sobre a
+# personalidade completa. Duas variantes com os MESMOS ovos: habituacao ligada e desligada.
+# Variantes novas (e nao campos no protocolo da personalidade): mudar aquele protocolo mudaria o
+# hash das runs ja gravadas em artifacts_v1_personalidade/.
+# =====================================================================
+
+
+def _json_habituacao() -> str:
+    return json.dumps({"habituacao": asdict(_config.CONFIG_HABITUACAO), "emocao": asdict(_config.CONFIG_EMOCAO),
+                       "limiar_extremo": _config.CONFIG_EXPRESSAO.limiar_extremo}, sort_keys=True, default=list)
+
+
+@dataclass(frozen=True)
+class ProtocoloHabituacao(ProtocoloPersonalidade):
+    habituacao_ligada: Campo
+    habituacao: Campo
+
+    def validar(self) -> None:
+        super().validar()
+        if not isinstance(self.v("habituacao_ligada"), bool):
+            raise ValueError("habituacao_ligada precisa ser booleano")
+        if self.v("habituacao") != _json_habituacao():
+            raise ValueError("configs de emocao/habituacao do protocolo diferem de config.py")
+
+
+def _protocolo_habituacao(versao: str, ligada: bool) -> ProtocoloHabituacao:
+    base = _protocolo_personalidade(versao, False, False)
+    return ProtocoloHabituacao(
+        **{f.name: getattr(base, f.name) for f in fields(base)},
+        habituacao_ligada=Campo(ligada, _P, "habituacao de eventos negativos (memoria e recompensa do bandit)"),
+        habituacao=Campo(_json_habituacao(), _P, "ConfigHabituacao, ConfigEmocao e limiar_extremo"),
+    )
+
+
+PROTOCOLO_ARENA_V1_HABITUACAO = _protocolo_habituacao("arena-v1-personalidade-habituacao", True)
+PROTOCOLO_ARENA_V1_SEM_HABITUACAO = _protocolo_habituacao("arena-v1-personalidade-sem-habituacao", False)
+for _p in (PROTOCOLO_ARENA_V1_HABITUACAO, PROTOCOLO_ARENA_V1_SEM_HABITUACAO):
+    PROTOCOLOS[_p.versao] = _p

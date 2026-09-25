@@ -167,7 +167,7 @@ EMOTE_HUMOR = ("(T_T)", "(-_-)", "(^_^)")
 
 # ------------------------------------------------------------------ temperamento (1.3)
 # tom por eixo e polo; o bebe ja mostra por emote (temperamento e inato, nao e causa de
-# decisao). So entram eixos com |valor| >= limiar_tom_temperamento, do mais forte ao mais
+# decisao). So entram eixos com |valor| >= limiar_extremo, do mais forte ao mais
 # fraco; mesmo esquema de marcador unico dos fatores (honestidade testavel).
 TOM_TEMPERAMENTO: dict[tuple[str, str], dict[str, str]] = {
     ("curiosidade", "+"): {"marcador": "fuçador", "bebe": "(o.o)?", "crianca": "[:fuçador:]",
@@ -188,6 +188,48 @@ TOM_TEMPERAMENTO: dict[tuple[str, str], dict[str, str]] = {
                       "adolescente": "esqueço rápido...", "adulto": "Nasci assim: esqueço rápido o que passou."},
 }
 TEMPERAMENTO_NEUTRO = {"bebe": "(o_o)", "crianca": "[~]", "adolescente": "...", "adulto": "Nasci sem nada que se destaque."}
+
+# ------------------------------------------------------------------ emocao (adendo DF 2.1)
+# emote no bebe, icone na crianca, palavra no adolescente, frase no adulto. O marcador e a
+# palavra da emocao; a causa e o evento que gerou a memoria (texto sem marcador de fator).
+def _em(marcador: str, bebe: str, adulto: str) -> dict[str, str]:
+    return {"marcador": marcador, "bebe": bebe, "crianca": f"[{marcador}]", "adolescente": f"{marcador}...",
+            "adulto": adulto}
+
+
+EMOCAO_TXT: dict[str, dict[str, str]] = {
+    "raiva": _em("raiva", "(>_<)#", "Senti raiva"),
+    "tristeza": _em("tristeza", "(T.T)", "Senti tristeza"),
+    "incomodo": _em("incômodo", "(-_-;)", "Senti incômodo"),
+    "ferido": _em("ferido", "(;_;)!", "Fiquei ferido"),
+    "desdem": _em("desdém", "(-.-)z", "Senti desdém"),
+    "vergonha": _em("vergonha", "(>///<)", "Senti vergonha"),
+    "euforia": _em("euforia", "(^o^)//", "Senti euforia"),
+    "indiferenca": _em("indiferença", "(._.)~", "Senti indiferença"),
+    "orgulho": _em("orgulho", "(^_^)v", "Senti orgulho"),
+    "ternura": _em("ternura", "(^3^)", "Senti ternura"),
+    "timidez": _em("timidez", "(//_//)", "Senti timidez"),
+    "alegria": _em("alegria", "(^v^)", "Senti alegria"),
+}
+CAUSA_EMOCAO = {"demora": "quando você demorou", "bronca": "quando você brigou comigo",
+                "elogio": "quando você falou bem de mim", "carinho": "quando você me deu atenção"}
+
+# ------------------------------------------------------------------ carater (adendo DF 2.2)
+# o carater e aprendido (medido do adolescente em diante); so eixos com |valor| >= limiar_extremo
+TOM_CARATER: dict[tuple[str, str], dict[str, str]] = {
+    ("impetuoso", "+"): {"marcador": "esquentado", "adolescente": "esquentado...", "adulto": "Virei esquentado."},
+    ("impetuoso", "-"): {"marcador": "contido", "adolescente": "contido...", "adulto": "Virei contido."},
+    ("paciente", "+"): {"marcador": "sei esperar", "adolescente": "sei esperar...",
+                        "adulto": "Virei alguém que sei esperar."},
+    ("paciente", "-"): {"marcador": "afobado", "adolescente": "afobado...", "adulto": "Virei afobado."},
+    ("atento", "+"): {"marcador": "ligado em tudo", "adolescente": "ligado em tudo...",
+                      "adulto": "Virei ligado em tudo."},
+    ("atento", "-"): {"marcador": "distraído", "adolescente": "distraído...", "adulto": "Virei distraído."},
+    ("resistente", "+"): {"marcador": "casca-grossa", "adolescente": "casca-grossa...",
+                          "adulto": "Virei casca-grossa."},
+    ("resistente", "-"): {"marcador": "frágil", "adolescente": "frágil...", "adulto": "Virei frágil."},
+}
+CARATER_NEUTRO = {"adolescente": "...", "adulto": "Não virei nada de marcante."}
 
 # ------------------------------------------------------------------ desejo (3.2)
 # o jogador distingue necessidade de vontade a partir da crianca (marcador do tipo).
@@ -341,9 +383,7 @@ def eixos_marcantes(temperamento, cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> li
     """(eixo, polo) com |valor| >= limiar, do mais forte ao mais fraco (empate: ordem de EIXOS)."""
     from .temperamento import EIXOS
 
-    vals = [(abs(getattr(temperamento, e)), -i, e) for i, e in enumerate(EIXOS)]
-    return [(e, "+" if getattr(temperamento, e) > 0 else "-")
-            for v, _, e in sorted(vals, reverse=True) if v >= cfg.limiar_tom_temperamento]
+    return eixos_extremos(temperamento.para_dict(), EIXOS, cfg)
 
 
 def expressar_temperamento(temperamento, estagio: str, cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> Expressao:
@@ -359,6 +399,47 @@ def expressar_temperamento(temperamento, estagio: str, cfg: ConfigExpressao = CO
         frases = [TOM_TEMPERAMENTO[k]["adulto"] for k in marcantes[:2]]
         return Expressao("frase", " ".join(frases[:1] + ["E n" + f[1:] for f in frases[1:]]), ref)
     return Expressao(CANAL[estagio], TOM_TEMPERAMENTO[marcantes[0]][estagio], ref)
+
+
+def expressar_emocao(emocao, estagio: str) -> Expressao:
+    """Emocao de um evento de memoria (adendo 2.1): so a emocao e o evento que a gerou."""
+    if estagio not in ESTAGIOS:
+        raise ValueError(f"estagio desconhecido: {estagio!r}")
+    if emocao.nome not in EMOCAO_TXT:
+        raise TabelaIncompleta(f"emocao sem texto: {emocao.nome!r}")
+    if emocao.categoria not in CAUSA_EMOCAO:
+        raise TabelaIncompleta(f"categoria sem causa de emocao: {emocao.categoria!r}")
+    t = EMOCAO_TXT[emocao.nome]
+    ref = ("emocao", emocao.tick)
+    if estagio == "adulto":
+        r = f" (lembro do evento #{emocao.ref})" if emocao.ref is not None else ""
+        return Expressao("frase", f"{t['adulto']} {CAUSA_EMOCAO[emocao.categoria]}{r}.", ref)
+    return Expressao(CANAL[estagio], t[estagio], ref)
+
+
+def eixos_extremos(valores: dict, ordem, cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> list[tuple[str, str]]:
+    """(eixo, polo) com |valor| >= limiar_extremo, do mais forte ao mais fraco (empate: `ordem`)."""
+    vals = [(abs(valores[e]), -i, e) for i, e in enumerate(ordem)]
+    return [(e, "+" if valores[e] > 0 else "-") for v, _, e in sorted(vals, reverse=True) if v >= cfg.limiar_extremo]
+
+
+EIXOS_CARATER = ("impetuoso", "paciente", "atento", "resistente")
+
+
+def expressar_carater(carater: dict, estagio: str, cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> Expressao:
+    """Carater aprendido (medido do adolescente em diante): mesma regra de extremos do temperamento."""
+    if estagio not in ("adolescente", "adulto"):
+        raise ValueError(f"carater so existe do adolescente em diante, nao em {estagio!r}")
+    if set(carater) != set(EIXOS_CARATER):
+        raise TabelaIncompleta(f"eixos de carater diferentes da tabela: {sorted(carater)}")
+    ext = eixos_extremos(carater, EIXOS_CARATER, cfg)
+    ref = ("carater", 0)
+    if not ext:
+        return Expressao(CANAL[estagio], CARATER_NEUTRO[estagio], ref)
+    if estagio == "adulto":
+        frases = [TOM_CARATER[k]["adulto"] for k in ext[:2]]
+        return Expressao("frase", " ".join(frases[:1] + ["E v" + f[1:] for f in frases[1:]]), ref)
+    return Expressao("fragmento", TOM_CARATER[ext[0]]["adolescente"], ref)
 
 
 def expressar_desejo(desejo, estagio: str) -> Expressao:
@@ -417,9 +498,34 @@ def validar_tabelas_personalidade() -> None:
     marc = {("fator", n): e["marcador"] for n, e in FATORES.items()}
     marc.update({("tom", k): e["marcador"] for k, e in TOM_TEMPERAMENTO.items()})
     marc.update({("desejo", k): e["marcador"] for k, e in DESEJO_TIPO.items()})
+    marc.update({("emocao", k): e["marcador"] for k, e in EMOCAO_TXT.items()})
+    marc.update({("carater", k): e["marcador"] for k, e in TOM_CARATER.items()})
     textos = {("tom", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in TOM_TEMPERAMENTO.items()}
     textos.update({("desejo", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in DESEJO_TIPO.items()})
+    textos.update({("emocao", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in EMOCAO_TXT.items()})
+    textos.update({("carater", k): [e[s] for s in ("adolescente", "adulto")] for k, e in TOM_CARATER.items()})
     fixos = list(TEMPERAMENTO_NEUTRO.values()) + [DESEJO_BEBE, VONTADE_ADULTO] + [t for par in ALVOS_DESEJO.values() for t in par]
+    fixos += list(CAUSA_EMOCAO.values()) + list(CARATER_NEUTRO.values())
+    # emocao: toda emocao da tabela de digilab/emocao.py tem texto, com marcador em cada estagio falado
+    from .emocao import EMOCOES, nomes_de_emocao
+
+    if nomes_de_emocao() - set(EMOCAO_TXT):
+        raise TabelaIncompleta(f"emocoes sem texto: {sorted(nomes_de_emocao() - set(EMOCAO_TXT))}")
+    if set(EMOCOES) - set(CAUSA_EMOCAO):
+        raise TabelaIncompleta(f"categorias sem causa de emocao: {sorted(set(EMOCOES) - set(CAUSA_EMOCAO))}")
+    for k, e in EMOCAO_TXT.items():
+        if any(e["marcador"] not in e[st] for st in ("crianca", "adolescente", "adulto")):
+            raise TabelaIncompleta(f"emocao {k!r}: texto sem o marcador")
+    if len({e["bebe"] for e in EMOCAO_TXT.values()}) != len(EMOCAO_TXT):
+        raise TabelaIncompleta("emotes de emocao repetidos")
+    for k, e in TOM_CARATER.items():
+        if any(e["marcador"] not in e[st] for st in ("adolescente", "adulto")):
+            raise TabelaIncompleta(f"carater {k}: texto sem o marcador")
+        if not e["adulto"].startswith("Virei "):
+            raise TabelaIncompleta(f"carater {k}/adulto deve comecar com 'Virei '")
+    faltam_car = sorted(f"{e}{p}" for e in EIXOS_CARATER for p in "+-" if (e, p) not in TOM_CARATER)
+    if faltam_car:
+        raise TabelaIncompleta(f"eixos de carater sem tom: {faltam_car}")
     for dono, m in marc.items():
         for outro, ts in textos.items():
             if outro != dono and any(m in t for t in ts):
@@ -436,6 +542,14 @@ def validar_tabelas_personalidade() -> None:
 def marcadores_citados(conteudo: str) -> set[str]:
     """Fatores (nome base) cujo marcador aparece no conteudo."""
     return {n for n, e in FATORES.items() if e["marcador"] in conteudo}
+
+
+def emocoes_citadas(conteudo: str) -> set[str]:
+    return {k for k, e in EMOCAO_TXT.items() if e["marcador"] in conteudo}
+
+
+def carateres_citados(conteudo: str) -> set[tuple[str, str]]:
+    return {k for k, e in TOM_CARATER.items() if e["marcador"] in conteudo}
 
 
 def tons_citados(conteudo: str) -> set[tuple[str, str]]:

@@ -215,3 +215,34 @@ Faltavam na entrega da tarefa (achado na auditoria). Interpretações:
 - Não portado: caráter pelo desvio da política (`evolucao.py`), que mudaria forma e evolução; decisão
   do pesquisador.
 
+
+## 2026-09-25 — adendo DF, Parte 2 (emoção, extremos, habituação)
+
+Interpretações (tudo PROPOSTO):
+
+- **Emoção somente leitura.** O adendo diz que "a valência multiplica a intensidade da memória" (2.1)
+  e também que emoção e extremos "são somente leitura e não podem mudar nada" (2.4, 2.5). As duas não
+  cabem juntas: mudar a intensidade muda as features do bandit. Adotado: emoção só leitura; a
+  modulação existe atrás de `ConfigEmocao.modula_memoria` (desligada, testada, sem run).
+- Emoção por **evento** que gera memória (inclusive o que é descartado dos espaços), guardada em
+  `MemoriaEspacos.eventos` (fora de `para_dict`: nenhum artefato antigo muda). Tabela em
+  `digilab/emocao.py`: regra vale se polo × eixo > 0,2; vence o eixo de maior módulo; senão a padrão
+  da categoria (garante cobertura para toda combinação). A tabela além do exemplo do adendo (demora)
+  é proposta minha.
+- A fala da emoção cita só a emoção e o evento ("Senti raiva quando você demorou"), sem marcador de
+  fator.
+- **Extremos**: `ConfigExpressao.limiar_extremo = 0,2` substitui o 0,5 que eu tinha posto no tom do
+  temperamento (1.3); vale também para o caráter (`expressar_carater`, adolescente em diante; a
+  pesquisa mede o caráter em `evolucao.py`, a arena v1 não).
+- **Habituação** (flag `habituacao_ligada`): repetições = eventos da mesma categoria nos últimos 720
+  ticks, **antes** do atual; categorias negativas = `demora` e `bronca`; teimosia > 0 acelera a das
+  broncas, `H_bronca = 0,8 × (1 − 0,2 × teimosia)`. No bandit reduz a repreensão (`bronca`) e a
+  penalidade de pedido ignorado (`demora`), pelo gancho `_peso_recompensa` do `PoliticaBandit` (1,0
+  fora da habituação: multiplicar por 1,0 é exato, as runs antigas não mudam — teste).
+- Protocolo: o adendo pede os campos dentro do `PROTOCOLO_ARENA_V1_PERSONALIDADE`; isso mudaria o
+  hash das runs já gravadas. Criadas duas variantes com os mesmos ovos
+  (`arena-v1-personalidade-habituacao` e `-sem-habituacao`) → `artifacts_v1_habituacao/{com,sem}`.
+  A "sem" reproduz a personalidade completa byte a byte (teste de uma vida; a run inteira é conferida
+  no relatório).
+- Web (`digilab_sprites.html`, pets v2): emoção por evento de memória mostrada na aba Aprendizado e
+  limiar 0,2 no tom; habituação não entrou na web (no Python ela é desligada por padrão).

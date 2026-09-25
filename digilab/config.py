@@ -265,8 +265,9 @@ class ConfigExpressao:
     # bebe: faixas de humor para o emote
     humor_alegre: float = 0.66
     humor_neutro: float = 0.33
-    # temperamento (TAREFA_PERSONALIDADE_OBEDIENCIA 1.3): eixo so vira tom se |eixo| >= isto (PROPOSTO)
-    limiar_tom_temperamento: float = 0.5
+    # adendo DF 2.2: um eixo de temperamento ou de carater so e descrito se |valor| >= isto (PROPOSTO);
+    # na faixa central nao ha texto (o Dwarf Fortress nao descreve tracos medianos)
+    limiar_extremo: float = 0.2
 
 
 CONFIG_EXPRESSAO = ConfigExpressao()
@@ -379,10 +380,32 @@ class ConfigDesejo:
     k_cumprimento_ticks: int = 60
 
 
+@dataclass(frozen=True)
+class ConfigEmocao:
+    # adendo DF 2.1: eixo do temperamento escolhe a emocao se |valor| passar disto (o de maior modulo vence)
+    limiar_eixo: float = 0.2
+    # "a valencia multiplica a intensidade da memoria": muda a memoria e, com ela, o aprendizado; o
+    # adendo pede emocao somente leitura (2.4/2.5), entao fica desligado (desvio registrado)
+    modula_memoria: bool = False
+
+
+@dataclass(frozen=True)
+class ConfigHabituacao:
+    # adendo DF 2.3: intensidade_efetiva = intensidade * H ** repeticoes_recentes (eventos negativos da
+    # mesma categoria nas ultimas `janela_ticks`, antes deste). Tudo PROPOSTO.
+    h: float = 0.8
+    janela_ticks: int = 12 * 60
+    categorias: tuple = ("demora", "bronca")                 # negativas
+    # teimosia acelera a habituacao a broncas: H_bronca = h * (1 - k * max(0, teimosia))
+    k_teimosia_bronca: float = 0.2
+
+
 CONFIG_TEMPERAMENTO = ConfigTemperamento()
 CONFIG_VINCULO = ConfigVinculo()
 CONFIG_OBEDIENCIA = ConfigObediencia()
 CONFIG_DESEJO = ConfigDesejo()
+CONFIG_EMOCAO = ConfigEmocao()
+CONFIG_HABITUACAO = ConfigHabituacao()
 
 
 # =====================================================================

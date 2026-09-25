@@ -86,12 +86,12 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 229 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 239 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 229 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 239 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
@@ -302,11 +302,11 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`. Tudo PROPOSTO.
 - Desejo (completa): cumprimento de vontade 0,445–0,545 por braço; fração do tempo com vontade ativa
   atencioso 0,552, incoerente 0,558, relapso 0,300, aleatório 0,237.
 - Expressão (1.3 e 3.2, somente leitura): `expressar_temperamento` (tom por eixo marcante,
-  |eixo| ≥ `limiar_tom_temperamento`) e `expressar_desejo` (criança em diante distingue `preciso` ×
+  |eixo| ≥ `limiar_extremo`, 0,2 desde a Parte 2 do adendo DF) e `expressar_desejo` (criança em diante distingue `preciso` ×
   `queria`); tabelas com marcador único e cobertura verificada na carga (`validar_tabelas_personalidade`).
 - Equivalência: temperamento neutro + obediência desligada reproduz as vidas de
   `artifacts_v1_memoria_espacos/` byte a byte (teste). Parte 2 do adendo DF (emoção, extremos,
-  habituação) é a próxima etapa.
+  habituação): feita, seção própria abaixo.
 
 ## Memória por espaços (2026-09-25, `docs/ADENDO_MEMORIA_EMOCAO_DF.md` Parte 1)
 
@@ -323,8 +323,31 @@ continua reproduzível. Interpretações em `docs/REGISTRO_DESVIOS.md`. Números
 - Ocupação média: curto 1,8 (atencioso) a 3,1 (aleatório) de 4; longo 1,3 a 1,9 de 2. O atencioso
   nunca tem `demora` na memória; relapso e aleatório têm `demora` em ~86–90% do tempo. `carinho`
   (intensidade 0,5) perde espaço para bronca/elogio (1,0) nos donos coerentes.
-- Parte 2 (emoção, extremos, habituação): a personalidade já existe; é a próxima etapa.
-  A web ainda usa a memória B1.
+- Parte 2 feita: ver a seção seguinte. A web usa a memória por espaços nos pets v2.
+
+## Emoção, extremos e habituação (2026-09-25, `docs/ADENDO_MEMORIA_EMOCAO_DF.md` Parte 2)
+
+`digilab/emocao.py` (tabela categoria × temperamento → emoção, `ConfigEmocao`), `ConfigHabituacao`,
+`MemoriaEspacos.eventos`/`fator_habituacao`, gancho `PoliticaBandit._peso_recompensa` (1,0 fora da
+habituação), `expressar_emocao`/`expressar_carater`/`limiar_extremo` em `expressao.py`. Protocolos
+`arena-v1-personalidade-habituacao` (`1cebd118a833…`) e `-sem-habituacao` (`ce36d15dd1e0…`), mesmos 10
+ovos, configs `experiments/configs/personalidade_{habituacao,sem_habituacao}.json`. Números de
+`artifacts_v1_habituacao/{com,sem}/metrics.json`. Interpretações em `docs/REGISTRO_DESVIOS.md`
+(emoção só leitura; a modulação da memória pela valência existe desligada). Tudo PROPOSTO.
+
+- **A habituação não muda o resultado central, mas encolhe a separação entre donos**: atencioso ×
+  aleatório 0,615 [0,480, 0,750] com × 0,615 [0,450, 0,770] sem, os dois INCONCLUSIVO. JSD entre braços
+  0,0212 com × 0,0262 sem (limiar 0,02; dentro do braço 0,0162 × 0,0195). Taxa do atencioso 0,563
+  [0,538, 0,590] com × 0,596 [0,526, 0,660] sem; ICs sobrepostos, 10 ovos.
+- Run "sem" = personalidade completa: as 80 vidas e políticas são byte a byte as de
+  `artifacts_v1_personalidade/completa/` (emoção e extremos não mudam nada).
+- Emoções (run com): aleatório e relapso são dominados por `demora` (3494 e 2426 eventos) e sentem
+  raiva (52% e 42%); atencioso e incoerente recebem elogio e bronca e sentem orgulho/euforia (27%/27% e
+  20%/20%) com raiva em 17% e 27%. O eixo que mais escolhe a emoção é rancor nos donos que deixam
+  esperando e sensibilidade nos que dão feedback.
+- **Extremos quase nunca calam**: com o limiar 0,2 e o sorteio uniforme em [−1, 1], os 10 ovos têm pelo
+  menos um eixo descrito (1,0).
+- Decomposição da taxa por pet (run com): braço 14,5%, ovo 13,2%, resíduo 72,4%.
 
 ## Fala por LLM (Parte C, 2026-09-24)
 

@@ -26,6 +26,13 @@ Regras (todas as comparacoes pela intensidade ORIGINAL da memoria):
 Categorias: demora (latencia do dono num pedido; atendimento imediato nao gera
 memoria; pedido perdido vale 1), bronca, elogio, carinho (acariciar ou brincar
 do dono). sujeira e treino_forcado existem no catalogo mas ficam inativas.
+
+Parte 2 do adendo:
+  - todo evento que gera memoria fica em `eventos` (tick, categoria, intensidade
+    bruta, ref); a emocao (digilab/emocao.py) e funcao pura disso + temperamento.
+    `eventos` nao entra em para_dict: somente leitura, nenhum artefato muda.
+  - habituacao (flag; desligada por padrao): eventos negativos repetidos da mesma
+    categoria na janela perdem forca, intensidade * H ** repeticoes.
 """
 
 from __future__ import annotations
@@ -33,7 +40,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, replace
 
-from .config import CONFIG_MEMORIA_ESPACOS, ConfigMemoriaEspacos
+from .config import CONFIG_EMOCAO, CONFIG_MEMORIA_ESPACOS, ConfigEmocao, ConfigHabituacao, ConfigMemoriaEspacos
 from .events import AcaoPet, AcaoUsuario
 from .policies.bandit import PoliticaBandit
 from .policy import Observacao, Transicao
@@ -82,8 +89,21 @@ def inserir(espacos: list[Memoria], nova: Memoria, n: int) -> tuple[list[Memoria
 
 
 class MemoriaEspacos:
-    def __init__(self, cfg: ConfigMemoriaEspacos | None = None, fator_tau: dict | None = None) -> None:
+    def __init__(self, cfg: ConfigMemoriaEspacos | None = None, fator_tau: dict | None = None,
+                 habituacao: ConfigHabituacao | None = None, temperamento=None,
+                 cfg_emocao: ConfigEmocao | None = None) -> None:
         self.cfg = cfg or CONFIG_MEMORIA_ESPACOS
+        # habituacao: None = desligada (fator 1 sempre); a teimosia do temperamento acelera a das broncas
+        self.habituacao = habituacao
+        self.temperamento = temperamento
+        self.teimosia = temperamento.teimosia if temperamento is not None else 0.0
+        # emocao modulando a memoria (adendo 2.1): so com a flag e com temperamento
+        self.cfg_emocao = cfg_emocao or CONFIG_EMOCAO
+        if habituacao is not None:
+            for c in habituacao.categorias:
+                if c not in self.cfg.categorias:
+                    raise CategoriaInvalida(f"habituacao para categoria desconhecida: {c!r}")
+        self.eventos: list[tuple[int, str, float, int | None]] = []   # (tick, categoria, intensidade bruta, ref)
         # multiplicador do tau de decaimento por categoria (temperamento: rancor); 1.0 = sem efeito
         self.fator_tau = dict(fator_tau or {})
         for c in self.fator_tau:
@@ -154,7 +174,15 @@ class MemoriaEspacos:
         if not 0.0 < intensidade <= 1.0:
             raise ValueError(f"intensidade fora de (0, 1]: {intensidade}")
         self.avancar(tick)
-        self.curto, r = inserir(self.curto, Memoria(categoria, intensidade, tick, tick, ref), self.cfg.n_curto)
+        efetiva = intensidade * self.fator_habituacao(categoria, tick)   # antes de registrar este evento
+        if self.cfg_emocao.modula_memoria and self.temperamento is not None:
+            from .emocao import emocao_de
+
+            efetiva *= abs(emocao_de(categoria, self.temperamento, tick, ref, self.cfg_emocao).valencia)
+            if efetiva <= 0.0:
+                raise ValueError(f"emocao de valencia 0 zerou a memoria de {categoria!r}")
+        self.eventos.append((tick, categoria, intensidade, ref))
+        self.curto, r = inserir(self.curto, Memoria(categoria, efetiva, tick, tick, ref), self.cfg.n_curto)
         self.contagem[r] += 1
 
     def pedido(self, obs: Observacao, tick: int) -> None:
@@ -186,6 +214,26 @@ class MemoriaEspacos:
             base = self.cfg.categorias[cat]
             self.lembrar(cat, base, tick, self.n_dono)
         self.avancar(tick)
+
+    # ------------------------------------------------------------ habituacao (adendo 2.3)
+    def h_de(self, categoria: str) -> float:
+        hb = self.habituacao
+        h = hb.h * (1.0 - hb.k_teimosia_bronca * max(0.0, self.teimosia)) if categoria == "bronca" else hb.h
+        if not 0.0 < h <= 1.0:
+            raise ValueError(f"H de habituacao fora de (0, 1]: {h}")
+        return h
+
+    def repeticoes(self, categoria: str, tick: int) -> int:
+        j = self.habituacao.janela_ticks
+        return sum(1 for t, c, _, _ in self.eventos if c == categoria and tick - t < j)
+
+    def fator_habituacao(self, categoria: str, tick: int) -> float:
+        """H ** (eventos da categoria na janela, antes de `tick` inclusive os ja registrados); 1.0 se
+        desligada ou se a categoria nao e negativa."""
+        hb = self.habituacao
+        if hb is None or categoria not in hb.categorias:
+            return 1.0
+        return self.h_de(categoria) ** self.repeticoes(categoria, tick)
 
     # ------------------------------------------------------------ leitura (pura)
     def _tau(self, categoria: str) -> float:
@@ -219,9 +267,14 @@ class PoliticaBanditEspacos(PoliticaBandit):
     nome = "bandit_thompson_espacos"
 
     def __init__(self, cfg=None, cfg_bandit=None, cfg_memoria: ConfigMemoriaEspacos | None = None,
-                 fator_tau: dict | None = None) -> None:
-        self.memoria = MemoriaEspacos(cfg_memoria, fator_tau)
+                 fator_tau: dict | None = None, habituacao: ConfigHabituacao | None = None,
+                 temperamento=None) -> None:
+        self.memoria = MemoriaEspacos(cfg_memoria, fator_tau, habituacao, temperamento)
         super().__init__(cfg, cfg_bandit)
+
+    def _peso_recompensa(self, categoria: str, tick: int) -> float:
+        # habituacao tambem enfraquece o sinal negativo que chega ao bandit (adendo 2.3)
+        return self.memoria.fator_habituacao(categoria, tick)
 
     def n_features(self) -> int:
         return super().n_features() + len(FATORES_ESPACOS)
