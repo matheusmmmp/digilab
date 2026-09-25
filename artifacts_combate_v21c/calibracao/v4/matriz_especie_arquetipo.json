@@ -1,0 +1,315 @@
+{
+  "agregada": {
+    "brasa": {
+      "brasa": 0.5,
+      "cirro": 0.64375,
+      "ferrugem": 0.4815625,
+      "limo": 0.5315625
+    },
+    "cirro": {
+      "brasa": 0.35625,
+      "cirro": 0.5,
+      "ferrugem": 0.3471875,
+      "limo": 0.51875
+    },
+    "ferrugem": {
+      "brasa": 0.5184375,
+      "cirro": 0.6528125,
+      "ferrugem": 0.5,
+      "limo": 0.6390625
+    },
+    "limo": {
+      "brasa": 0.4684375,
+      "cirro": 0.48125,
+      "ferrugem": 0.3609375,
+      "limo": 0.5
+    }
+  },
+  "dominante_por_arquetipo_informativo": {
+    "duelista": [
+      "brasa"
+    ],
+    "emboscador": [
+      "cirro"
+    ],
+    "espelho": [
+      "ferrugem"
+    ],
+    "furioso": [
+      "ferrugem"
+    ],
+    "muralha": [
+      "ferrugem"
+    ],
+    "sentinela": [
+      "cirro"
+    ],
+    "tita": [
+      "brasa"
+    ],
+    "vigia": [
+      "limo"
+    ]
+  },
+  "media_por_especie_e_arquetipo": {
+    "duelista": {
+      "brasa": 0.7424999999999999,
+      "cirro": 0.29125,
+      "ferrugem": 0.69375,
+      "limo": 0.27249999999999996
+    },
+    "emboscador": {
+      "brasa": 0.313125,
+      "cirro": 0.78,
+      "ferrugem": 0.55875,
+      "limo": 0.348125
+    },
+    "espelho": {
+      "brasa": 0.521875,
+      "cirro": 0.403125,
+      "ferrugem": 0.593125,
+      "limo": 0.481875
+    },
+    "furioso": {
+      "brasa": 0.721875,
+      "cirro": 0.26187499999999997,
+      "ferrugem": 0.73375,
+      "limo": 0.28250000000000003
+    },
+    "muralha": {
+      "brasa": 0.584375,
+      "cirro": 0.346875,
+      "ferrugem": 0.62125,
+      "limo": 0.4475
+    },
+    "sentinela": {
+      "brasa": 0.22,
+      "cirro": 0.813125,
+      "ferrugem": 0.33999999999999997,
+      "limo": 0.626875
+    },
+    "tita": {
+      "brasa": 0.64,
+      "cirro": 0.306875,
+      "ferrugem": 0.6793750000000001,
+      "limo": 0.37374999999999997
+    },
+    "vigia": {
+      "brasa": 0.57,
+      "cirro": 0.24125,
+      "ferrugem": 0.400625,
+      "limo": 0.788125
+    }
+  },
+  "por_arquetipo": {
+    "duelista": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.9325,
+        "ferrugem": 0.5725,
+        "limo": 0.965
+      },
+      "cirro": {
+        "brasa": 0.0675,
+        "cirro": 0.5,
+        "ferrugem": 0.105,
+        "limo": 0.4925
+      },
+      "ferrugem": {
+        "brasa": 0.4275,
+        "cirro": 0.895,
+        "ferrugem": 0.5,
+        "limo": 0.9525
+      },
+      "limo": {
+        "brasa": 0.035,
+        "cirro": 0.5075,
+        "ferrugem": 0.0475,
+        "limo": 0.5
+      }
+    },
+    "emboscador": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.08,
+        "ferrugem": 0.19,
+        "limo": 0.4825
+      },
+      "cirro": {
+        "brasa": 0.92,
+        "cirro": 0.5,
+        "ferrugem": 0.8275,
+        "limo": 0.8725
+      },
+      "ferrugem": {
+        "brasa": 0.81,
+        "cirro": 0.1725,
+        "ferrugem": 0.5,
+        "limo": 0.7525
+      },
+      "limo": {
+        "brasa": 0.5175,
+        "cirro": 0.1275,
+        "ferrugem": 0.2475,
+        "limo": 0.5
+      }
+    },
+    "espelho": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.6075,
+        "ferrugem": 0.4775,
+        "limo": 0.5025
+      },
+      "cirro": {
+        "brasa": 0.3925,
+        "cirro": 0.5,
+        "ferrugem": 0.275,
+        "limo": 0.445
+      },
+      "ferrugem": {
+        "brasa": 0.5225,
+        "cirro": 0.725,
+        "ferrugem": 0.5,
+        "limo": 0.625
+      },
+      "limo": {
+        "brasa": 0.4975,
+        "cirro": 0.555,
+        "ferrugem": 0.375,
+        "limo": 0.5
+      }
+    },
+    "furioso": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.985,
+        "ferrugem": 0.4875,
+        "limo": 0.915
+      },
+      "cirro": {
+        "brasa": 0.015,
+        "cirro": 0.5,
+        "ferrugem": 0.0525,
+        "limo": 0.48
+      },
+      "ferrugem": {
+        "brasa": 0.5125,
+        "cirro": 0.9475,
+        "ferrugem": 0.5,
+        "limo": 0.975
+      },
+      "limo": {
+        "brasa": 0.085,
+        "cirro": 0.52,
+        "ferrugem": 0.025,
+        "limo": 0.5
+      }
+    },
+    "muralha": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.765,
+        "ferrugem": 0.4875,
+        "limo": 0.585
+      },
+      "cirro": {
+        "brasa": 0.235,
+        "cirro": 0.5,
+        "ferrugem": 0.215,
+        "limo": 0.4375
+      },
+      "ferrugem": {
+        "brasa": 0.5125,
+        "cirro": 0.785,
+        "ferrugem": 0.5,
+        "limo": 0.6875
+      },
+      "limo": {
+        "brasa": 0.415,
+        "cirro": 0.5625,
+        "ferrugem": 0.3125,
+        "limo": 0.5
+      }
+    },
+    "sentinela": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.0025,
+        "ferrugem": 0.3375,
+        "limo": 0.04
+      },
+      "cirro": {
+        "brasa": 0.9975,
+        "cirro": 0.5,
+        "ferrugem": 0.9575,
+        "limo": 0.7975
+      },
+      "ferrugem": {
+        "brasa": 0.6625,
+        "cirro": 0.0425,
+        "ferrugem": 0.5,
+        "limo": 0.155
+      },
+      "limo": {
+        "brasa": 0.96,
+        "cirro": 0.2025,
+        "ferrugem": 0.845,
+        "limo": 0.5
+      }
+    },
+    "tita": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.94,
+        "ferrugem": 0.5375,
+        "limo": 0.5825
+      },
+      "cirro": {
+        "brasa": 0.06,
+        "cirro": 0.5,
+        "ferrugem": 0.14,
+        "limo": 0.5275
+      },
+      "ferrugem": {
+        "brasa": 0.4625,
+        "cirro": 0.86,
+        "ferrugem": 0.5,
+        "limo": 0.895
+      },
+      "limo": {
+        "brasa": 0.4175,
+        "cirro": 0.4725,
+        "ferrugem": 0.105,
+        "limo": 0.5
+      }
+    },
+    "vigia": {
+      "brasa": {
+        "brasa": 0.5,
+        "cirro": 0.8375,
+        "ferrugem": 0.7625,
+        "limo": 0.18
+      },
+      "cirro": {
+        "brasa": 0.1625,
+        "cirro": 0.5,
+        "ferrugem": 0.205,
+        "limo": 0.0975
+      },
+      "ferrugem": {
+        "brasa": 0.2375,
+        "cirro": 0.795,
+        "ferrugem": 0.5,
+        "limo": 0.07
+      },
+      "limo": {
+        "brasa": 0.82,
+        "cirro": 0.9025,
+        "ferrugem": 0.93,
+        "limo": 0.5
+      }
+    }
+  },
+  "unidade": "pontos medios da especie da linha contra a da coluna, mesmo arquetipo e estilo dos dois lados"
+}

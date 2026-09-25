@@ -1,0 +1,20 @@
+{
+  "dominantes": [],
+  "estrategia": {
+    "duelista": 5e-05,
+    "emboscador": 0.20585,
+    "espelho": 0.2095,
+    "furioso": 0.3533,
+    "muralha": 0.1865,
+    "sentinela": 0.0448,
+    "tita": 0.0,
+    "vigia": 0.0
+  },
+  "peso_minimo_suporte": 0.05,
+  "suporte": [
+    "emboscador",
+    "espelho",
+    "furioso",
+    "muralha"
+  ]
+}

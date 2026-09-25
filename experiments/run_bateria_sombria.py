@@ -31,7 +31,7 @@ from digilab.combate_v2.v21.regras import Regras  # noqa: E402
 from digilab.config import CONFIG_BATERIA_V21, CONFIG_CATALOGO, CONFIG_SOMBRIO  # noqa: E402
 from digilab.metrics import equilibrio_simetrico, matriz_taxas, suporte  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, sha256_engine  # noqa: E402
-from run_bateria_v21 import _dump, _gravar, hashes, partidas_par  # noqa: E402
+from run_bateria_v21 import _dump, _gravar, hashes, partidas_par, regras_de  # noqa: E402
 
 PASSIVOS = ("espelho", "muralha", "sentinela", "vigia")
 
@@ -50,11 +50,11 @@ def executar(caminho_cfg: Path) -> int:
     sementes, n = list(cfg["sementes"]), cfg["partidas_por_par_por_semente"]
     especies = list(CONFIG_CATALOGO.especies_ativas)
     todas = tuple(FORMAS) + tuple(SOMBRIOS)
-    r = Regras()
+    r = regras_de(cfg)          # V21C: regras_base / regras_v21 no config; sem elas, a V2.1 original
     confrontos = []
     for esp in especies:
         print(f"  {esp} ...", flush=True)
-        lut = {f: lutador_adulto(f, esp) for f in todas}
+        lut = {f: lutador_adulto(f, esp, r.v21) for f in todas}
         for i, fa in enumerate(todas):
             for fb in todas[i:]:
                 for _, _, pts, _ in partidas_par(lut[fa], lut[fb], f"sombria|{esp}", sementes, n, r):

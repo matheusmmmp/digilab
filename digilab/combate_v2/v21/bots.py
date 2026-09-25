@@ -170,6 +170,13 @@ RESPOSTAS: dict[str, tuple[Regra, ...]] = {
     "pele_dura": (regra(_d(PERTO), A.RECUAR), regra(_ga(20), A.DISPARO)),
 }
 
+# V21C: resposta ao marcar redesenhada (TAREFA_CORRECAO_COMBATE, Etapa 3). A de cima avanca sempre e
+# empurra para fora do limite de 8 as ultimas regras do oponente, que passa a jogar pior; esta so reage
+# quando o oponente de fato usa marcar: avanca do medio e golpeia de perto (a marca fragil se perde).
+RESPOSTAS_V21C = {**RESPOSTAS, "marcar": (
+    regra(se(_d(MEDIO), C("oponente_frequente", (A.MARCAR,))), A.AVANCAR),
+    regra(se(_d(PERTO), C("oponente_frequente", (A.MARCAR,))), A.GOLPE_RAPIDO))}
+
 FORMAS = tuple(ADULTOS)
 
 # formas sombrias (TAREFA_TREINO_SOMBRIO): "a sombra corrompe o que o pet e, nao apaga" -> cada uma
@@ -180,9 +187,9 @@ GAMBIT_BASE_SOMBRIA = {"devastador": "furioso", "bastiao_rachado": "espelho", "p
 SOMBRIOS: dict[str, ListaGambits] = {s: ADULTOS[b] for s, b in GAMBIT_BASE_SOMBRIA.items()}
 
 
-def com_resposta(gl: ListaGambits, tecnica: str) -> ListaGambits:
+def com_resposta(gl: ListaGambits, tecnica: str, respostas: dict | None = None) -> ListaGambits:
     """Poe a resposta no topo; se a lista estourar o limite, saem as ultimas regras."""
-    regras = RESPOSTAS[tecnica] + gl.regras
+    regras = (respostas or RESPOSTAS)[tecnica] + gl.regras
     limite = CONFIG_COMBATE_V21.max_regras_adulto
     return ListaGambits(regras[:limite], gl.final, gl.estagio)
 
