@@ -4,115 +4,115 @@
   "por_braco": {
     "aleatorio": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.9640000000000001,
-        "ic_superior": 0.9994999999999999,
-        "media": 0.986,
+        "ic_inferior": 0.8744999999999999,
+        "ic_superior": 0.9855,
+        "media": 0.931,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.9255000000000001,
-        "ic_superior": 1.0,
-        "media": 0.9695,
+        "ic_inferior": 0.3195,
+        "ic_superior": 0.8714999999999999,
+        "media": 0.6014999999999999,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.22799999999999998,
-        "ic_superior": 0.705,
-        "media": 0.46399999999999997,
+        "ic_inferior": 0.271,
+        "ic_superior": 0.667,
+        "media": 0.4715,
         "n": 10,
         "nivel": 0.95
       }
     },
     "atencioso": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.909,
-        "ic_superior": 0.9949999999999999,
-        "media": 0.9535,
+        "ic_inferior": 1.0,
+        "ic_superior": 1.0,
+        "media": 1.0,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.8175000000000001,
-        "ic_superior": 0.9365,
-        "media": 0.8755,
+        "ic_inferior": 0.4465,
+        "ic_superior": 0.9834999999999999,
+        "media": 0.7184999999999999,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.613,
-        "ic_superior": 0.994,
-        "media": 0.8205,
+        "ic_inferior": 0.327,
+        "ic_superior": 0.82,
+        "media": 0.5835,
         "n": 10,
         "nivel": 0.95
       }
     },
     "exigente": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.4795,
-        "ic_superior": 0.991,
-        "media": 0.7405,
+        "ic_inferior": 0.7165,
+        "ic_superior": 0.9845,
+        "media": 0.8545,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.7635,
-        "ic_superior": 0.9595,
-        "media": 0.8654999999999999,
+        "ic_inferior": 0.13799999999999998,
+        "ic_superior": 0.702,
+        "media": 0.4175,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.308,
-        "ic_superior": 0.8099999999999999,
-        "media": 0.5695,
+        "ic_inferior": 0.006999999999999999,
+        "ic_superior": 0.471,
+        "media": 0.20299999999999999,
         "n": 10,
         "nivel": 0.95
       }
     },
     "incoerente": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.976,
+        "ic_inferior": 0.889,
         "ic_superior": 1.0,
-        "media": 0.991,
+        "media": 0.945,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.9390000000000001,
-        "ic_superior": 1.0,
-        "media": 0.977,
+        "ic_inferior": 0.28500000000000003,
+        "ic_superior": 0.8265,
+        "media": 0.5575,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.524,
-        "ic_superior": 0.851,
-        "media": 0.6990000000000001,
+        "ic_inferior": 0.22599999999999998,
+        "ic_superior": 0.75,
+        "media": 0.4965,
         "n": 10,
         "nivel": 0.95
       }
     },
     "relapso": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.9785,
-        "ic_superior": 0.999,
-        "media": 0.9904999999999999,
+        "ic_inferior": 0.841,
+        "ic_superior": 0.9955,
+        "media": 0.9215,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.909,
-        "ic_superior": 0.9994999999999999,
-        "media": 0.9615,
+        "ic_inferior": 0.26,
+        "ic_superior": 0.8225,
+        "media": 0.5429999999999999,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.2975,
-        "ic_superior": 0.7945,
-        "media": 0.55,
+        "ic_inferior": 0.153,
+        "ic_superior": 0.613,
+        "media": 0.3745,
         "n": 10,
         "nivel": 0.95
       }
@@ -120,254 +120,254 @@
   },
   "por_pet": {
     "aleatorio@101": {
-      "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.205
+      "tier1_brutamontes": 0.855,
+      "tier2_sentinela": 0.835,
+      "tier3_soberano": 0.455
     },
     "aleatorio@1010": {
-      "tier1_brutamontes": 0.995,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.61
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.04,
+      "tier3_soberano": 0.0
     },
     "aleatorio@202": {
-      "tier1_brutamontes": 0.995,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.065
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.06,
+      "tier3_soberano": 0.905
     },
     "aleatorio@303": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.765,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.2
+      "tier3_soberano": 0.25
     },
     "aleatorio@404": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.825,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.655
+      "tier3_soberano": 0.72
     },
     "aleatorio@505": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.96,
-      "tier3_soberano": 0.01
+      "tier2_sentinela": 0.175,
+      "tier3_soberano": 0.33
     },
     "aleatorio@606": {
-      "tier1_brutamontes": 0.975,
-      "tier2_sentinela": 0.95,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 0.965
     },
     "aleatorio@707": {
-      "tier1_brutamontes": 0.895,
-      "tier2_sentinela": 0.785,
-      "tier3_soberano": 0.975
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.93,
+      "tier3_soberano": 0.485
     },
     "aleatorio@808": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.04
+      "tier2_sentinela": 0.0,
+      "tier3_soberano": 0.0
     },
     "aleatorio@909": {
-      "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.88
+      "tier1_brutamontes": 0.865,
+      "tier2_sentinela": 0.985,
+      "tier3_soberano": 0.605
     },
     "atencioso@101": {
-      "tier1_brutamontes": 0.88,
-      "tier2_sentinela": 0.8,
-      "tier3_soberano": 0.98
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.975,
+      "tier3_soberano": 0.74
     },
     "atencioso@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.99,
-      "tier3_soberano": 0.105
+      "tier2_sentinela": 0.165,
+      "tier3_soberano": 0.95
     },
     "atencioso@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.75
+      "tier2_sentinela": 0.08,
+      "tier3_soberano": 0.0
     },
     "atencioso@303": {
-      "tier1_brutamontes": 0.83,
-      "tier2_sentinela": 0.77,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.965,
+      "tier3_soberano": 0.49
     },
     "atencioso@404": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.37
+      "tier2_sentinela": 0.03,
+      "tier3_soberano": 0.0
     },
     "atencioso@505": {
-      "tier1_brutamontes": 0.995,
-      "tier2_sentinela": 0.82,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 0.975
     },
     "atencioso@606": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.98,
-      "tier3_soberano": 1.0
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.03
     },
     "atencioso@707": {
-      "tier1_brutamontes": 0.85,
-      "tier2_sentinela": 0.815,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 0.765
     },
     "atencioso@808": {
-      "tier1_brutamontes": 0.99,
-      "tier2_sentinela": 0.82,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.975
     },
     "atencioso@909": {
-      "tier1_brutamontes": 0.99,
-      "tier2_sentinela": 0.76,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.91
     },
     "exigente@101": {
-      "tier1_brutamontes": 0.97,
-      "tier2_sentinela": 0.955,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.985,
+      "tier3_soberano": 0.88
     },
     "exigente@1010": {
-      "tier1_brutamontes": 0.07,
-      "tier2_sentinela": 0.65,
+      "tier1_brutamontes": 0.54,
+      "tier2_sentinela": 0.0,
       "tier3_soberano": 0.0
     },
     "exigente@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.58
+      "tier2_sentinela": 0.08,
+      "tier3_soberano": 0.01
     },
     "exigente@303": {
-      "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.99,
-      "tier3_soberano": 0.885
+      "tier1_brutamontes": 0.95,
+      "tier2_sentinela": 0.925,
+      "tier3_soberano": 0.145
     },
     "exigente@404": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.5
+      "tier2_sentinela": 0.03,
+      "tier3_soberano": 0.0
     },
     "exigente@505": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.78,
-      "tier3_soberano": 1.0
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.98
     },
     "exigente@606": {
-      "tier1_brutamontes": 0.22,
-      "tier2_sentinela": 0.63,
+      "tier1_brutamontes": 0.47,
+      "tier2_sentinela": 0.045,
       "tier3_soberano": 0.0
     },
     "exigente@707": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.995,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.99
+      "tier3_soberano": 0.015
     },
     "exigente@808": {
-      "tier1_brutamontes": 0.145,
-      "tier2_sentinela": 0.655,
+      "tier1_brutamontes": 0.59,
+      "tier2_sentinela": 0.05,
       "tier3_soberano": 0.0
     },
     "exigente@909": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.995,
-      "tier3_soberano": 0.74
+      "tier2_sentinela": 0.06,
+      "tier3_soberano": 0.0
     },
     "incoerente@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.65
+      "tier2_sentinela": 0.16,
+      "tier3_soberano": 0.0
     },
     "incoerente@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.11
+      "tier2_sentinela": 0.245,
+      "tier3_soberano": 0.965
     },
     "incoerente@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.68
+      "tier2_sentinela": 0.05,
+      "tier3_soberano": 0.0
     },
     "incoerente@303": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.61
+      "tier2_sentinela": 0.08,
+      "tier3_soberano": 0.0
     },
     "incoerente@404": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.8,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.87
+      "tier3_soberano": 0.84
     },
     "incoerente@505": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.82,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.915
+      "tier3_soberano": 0.9
     },
     "incoerente@606": {
-      "tier1_brutamontes": 0.925,
-      "tier2_sentinela": 0.96,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 0.865
     },
     "incoerente@707": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.74
+      "tier2_sentinela": 0.06,
+      "tier3_soberano": 0.0
     },
     "incoerente@808": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.83,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.415
+      "tier3_soberano": 0.43
     },
     "incoerente@909": {
-      "tier1_brutamontes": 0.985,
-      "tier2_sentinela": 0.81,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.965
     },
     "relapso@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.01
+      "tier2_sentinela": 0.165,
+      "tier3_soberano": 0.685
     },
     "relapso@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.63
+      "tier2_sentinela": 0.02,
+      "tier3_soberano": 0.0
     },
     "relapso@202": {
-      "tier1_brutamontes": 0.99,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.025
+      "tier1_brutamontes": 0.675,
+      "tier2_sentinela": 0.0,
+      "tier3_soberano": 0.005
     },
     "relapso@303": {
-      "tier1_brutamontes": 0.98,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.03
+      "tier1_brutamontes": 0.985,
+      "tier2_sentinela": 0.225,
+      "tier3_soberano": 0.17
     },
     "relapso@404": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.995,
-      "tier3_soberano": 0.69
+      "tier2_sentinela": 0.03,
+      "tier3_soberano": 0.0
     },
     "relapso@505": {
-      "tier1_brutamontes": 0.99,
-      "tier2_sentinela": 0.85,
-      "tier3_soberano": 1.0
-    },
-    "relapso@606": {
       "tier1_brutamontes": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.265
+      "tier3_soberano": 0.975
+    },
+    "relapso@606": {
+      "tier1_brutamontes": 0.71,
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.3
     },
     "relapso@707": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.995,
-      "tier3_soberano": 1.0
+      "tier2_sentinela": 1.0,
+      "tier3_soberano": 0.04
     },
     "relapso@808": {
-      "tier1_brutamontes": 0.945,
-      "tier2_sentinela": 0.775,
-      "tier3_soberano": 1.0
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 0.76
     },
     "relapso@909": {
-      "tier1_brutamontes": 1.0,
+      "tier1_brutamontes": 0.845,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.85
+      "tier3_soberano": 0.81
     }
   }
 }

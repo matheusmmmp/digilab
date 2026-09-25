@@ -22,7 +22,7 @@
         "comparacao": {
           "duelista": {
             "tier1_mais_cedo_ou_igual": true,
-            "tier2_nao_maior": true
+            "tier2_nao_maior": false
           },
           "furioso": {
             "tier1_mais_cedo_ou_igual": true,
@@ -33,103 +33,103 @@
           "devastador": {
             "por_nivel": {
               "0": {
-                "tier1": 0.990625,
-                "tier2": 0.99375
+                "tier1": 0.734375,
+                "tier2": 0.934375
               },
               "6": {
-                "tier1": 1.0,
-                "tier2": 0.990625
+                "tier1": 0.7625,
+                "tier2": 0.95625
               },
               "12": {
-                "tier1": 1.0,
-                "tier2": 0.978125
+                "tier1": 0.83125,
+                "tier2": 0.975
               },
               "18": {
-                "tier1": 0.996875,
-                "tier2": 0.996875
+                "tier1": 0.85,
+                "tier2": 0.971875
               },
               "24": {
-                "tier1": 1.0,
-                "tier2": 0.9875
+                "tier1": 0.840625,
+                "tier2": 0.990625
               },
               "30": {
-                "tier1": 1.0,
-                "tier2": 1.0
+                "tier1": 0.86875,
+                "tier2": 0.990625
               },
               "36": {
-                "tier1": 1.0,
-                "tier2": 0.99375
+                "tier1": 0.903125,
+                "tier2": 0.984375
               }
             },
-            "tier2_media": 0.9915178571428571,
+            "tier2_media": 0.9718749999999999,
             "treino_minimo_tier1": 0
           },
           "duelista": {
             "por_nivel": {
               "0": {
-                "tier1": 0.521875,
-                "tier2": 1.0
+                "tier1": 0.378125,
+                "tier2": 0.45625000000000004
               },
               "6": {
-                "tier1": 0.559375,
-                "tier2": 1.0
+                "tier1": 0.515625,
+                "tier2": 0.290625
               },
               "12": {
-                "tier1": 0.68125,
-                "tier2": 1.0
+                "tier1": 0.590625,
+                "tier2": 0.4375
               },
               "18": {
-                "tier1": 0.8,
-                "tier2": 1.0
+                "tier1": 0.540625,
+                "tier2": 0.21875
               },
               "24": {
-                "tier1": 0.88125,
-                "tier2": 1.0
+                "tier1": 0.65,
+                "tier2": 0.071875
               },
               "30": {
-                "tier1": 0.88125,
-                "tier2": 1.0
+                "tier1": 0.615625,
+                "tier2": 0.071875
               },
               "36": {
-                "tier1": 0.8875,
-                "tier2": 1.0
+                "tier1": 0.621875,
+                "tier2": 0.084375
               }
             },
-            "tier2_media": 1.0,
-            "treino_minimo_tier1": 0
+            "tier2_media": 0.2330357142857143,
+            "treino_minimo_tier1": 6
           },
           "furioso": {
             "por_nivel": {
               "0": {
-                "tier1": 1.0,
-                "tier2": 0.978125
+                "tier1": 0.86875,
+                "tier2": 0.875
               },
               "6": {
-                "tier1": 0.996875,
-                "tier2": 0.975
+                "tier1": 0.921875,
+                "tier2": 0.8500000000000001
               },
               "12": {
-                "tier1": 1.0,
-                "tier2": 0.9875
+                "tier1": 0.978125,
+                "tier2": 0.9625
               },
               "18": {
-                "tier1": 1.0,
-                "tier2": 0.9750000000000001
+                "tier1": 0.96875,
+                "tier2": 0.98125
               },
               "24": {
-                "tier1": 1.0,
-                "tier2": 0.9875
+                "tier1": 0.965625,
+                "tier2": 0.996875
               },
               "30": {
-                "tier1": 1.0,
-                "tier2": 0.9875
+                "tier1": 0.98125,
+                "tier2": 0.996875
               },
               "36": {
-                "tier1": 1.0,
-                "tier2": 0.984375
+                "tier1": 0.975,
+                "tier2": 1.0
               }
             },
-            "tier2_media": 0.9821428571428571,
+            "tier2_media": 0.9517857142857142,
             "treino_minimo_tier1": 0
           }
         },
@@ -138,11 +138,11 @@
       "cacador": {
         "comparacao": {
           "emboscador": {
-            "tier1_mais_cedo_ou_igual": false,
+            "tier1_mais_cedo_ou_igual": true,
             "tier2_nao_maior": true
           },
           "sentinela": {
-            "tier1_mais_cedo_ou_igual": false,
+            "tier1_mais_cedo_ou_igual": true,
             "tier2_nao_maior": true
           }
         },
@@ -151,102 +151,102 @@
             "por_nivel": {
               "0": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.021875000000000002
               },
               "6": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.03125
               },
               "12": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.025
               },
               "18": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.03125
               },
               "24": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.037500000000000006
               },
               "30": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.0375
               },
               "36": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.040625
               }
             },
-            "tier2_media": 1.0,
+            "tier2_media": 0.03214285714285715,
             "treino_minimo_tier1": 0
           },
           "predador": {
             "por_nivel": {
               "0": {
-                "tier1": 0.021875,
-                "tier2": 0.575
+                "tier1": 0.503125,
+                "tier2": 0.021875000000000002
               },
               "6": {
-                "tier1": 0.028125,
-                "tier2": 0.684375
+                "tier1": 0.44375,
+                "tier2": 0.009375000000000001
               },
               "12": {
-                "tier1": 0.040625,
-                "tier2": 0.659375
+                "tier1": 0.515625,
+                "tier2": 0.034375
               },
               "18": {
-                "tier1": 0.03125,
-                "tier2": 0.690625
+                "tier1": 0.55625,
+                "tier2": 0.028125
               },
               "24": {
-                "tier1": 0.075,
-                "tier2": 0.596875
+                "tier1": 0.5,
+                "tier2": 0.03125
               },
               "30": {
-                "tier1": 0.0375,
-                "tier2": 0.684375
+                "tier1": 0.575,
+                "tier2": 0.0125
               },
               "36": {
-                "tier1": 0.0625,
-                "tier2": 0.678125
+                "tier1": 0.56875,
+                "tier2": 0.046875
               }
             },
-            "tier2_media": 0.6526785714285713,
-            "treino_minimo_tier1": null
+            "tier2_media": 0.026339285714285714,
+            "treino_minimo_tier1": 0
           },
           "sentinela": {
             "por_nivel": {
               "0": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.15
               },
               "6": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.20625
               },
               "12": {
-                "tier1": 0.996875,
-                "tier2": 1.0
+                "tier1": 1.0,
+                "tier2": 0.05
               },
               "18": {
-                "tier1": 0.996875,
-                "tier2": 1.0
+                "tier1": 1.0,
+                "tier2": 0.0625
               },
               "24": {
                 "tier1": 1.0,
-                "tier2": 0.996875
+                "tier2": 0.037500000000000006
               },
               "30": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.0375
               },
               "36": {
                 "tier1": 1.0,
-                "tier2": 1.0
+                "tier2": 0.04375
               }
             },
-            "tier2_media": 0.9995535714285715,
+            "tier2_media": 0.08392857142857144,
             "treino_minimo_tier1": 0
           }
         },
@@ -267,103 +267,103 @@
           "colosso_partido": {
             "por_nivel": {
               "0": {
-                "tier1": 0.21562499999999998,
-                "tier2": 0.025
+                "tier1": 0.44375,
+                "tier2": 0.0
               },
               "6": {
-                "tier1": 0.240625,
-                "tier2": 0.075
+                "tier1": 0.48124999999999996,
+                "tier2": 0.0
               },
               "12": {
-                "tier1": 0.40625,
-                "tier2": 0.14375000000000002
+                "tier1": 0.553125,
+                "tier2": 0.0
               },
               "18": {
-                "tier1": 0.49062500000000003,
-                "tier2": 0.21875
+                "tier1": 0.6875,
+                "tier2": 0.0125
               },
               "24": {
-                "tier1": 0.571875,
-                "tier2": 0.2125
+                "tier1": 0.7156250000000001,
+                "tier2": 0.00625
               },
               "30": {
-                "tier1": 0.709375,
-                "tier2": 0.3625
+                "tier1": 0.8125,
+                "tier2": 0.025
               },
               "36": {
-                "tier1": 0.84375,
-                "tier2": 0.44375
+                "tier1": 0.875,
+                "tier2": 0.034375
               }
             },
-            "tier2_media": 0.21160714285714285,
-            "treino_minimo_tier1": 24
+            "tier2_media": 0.011160714285714286,
+            "treino_minimo_tier1": 12
           },
           "tita": {
             "por_nivel": {
               "0": {
-                "tier1": 0.896875,
-                "tier2": 0.8
+                "tier1": 0.8625,
+                "tier2": 0.015625
               },
               "6": {
-                "tier1": 0.91875,
-                "tier2": 0.88125
+                "tier1": 0.95,
+                "tier2": 0.0125
               },
               "12": {
-                "tier1": 0.79375,
-                "tier2": 0.94375
+                "tier1": 0.9875,
+                "tier2": 0.015625
               },
               "18": {
-                "tier1": 0.946875,
-                "tier2": 0.96875
+                "tier1": 0.990625,
+                "tier2": 0.0375
               },
               "24": {
-                "tier1": 0.94375,
-                "tier2": 1.0
+                "tier1": 0.99375,
+                "tier2": 0.0875
               },
               "30": {
-                "tier1": 0.959375,
-                "tier2": 0.9875
+                "tier1": 1.0,
+                "tier2": 0.08125
               },
               "36": {
-                "tier1": 0.996875,
-                "tier2": 0.99375
+                "tier1": 1.0,
+                "tier2": 0.115625
               }
             },
-            "tier2_media": 0.9392857142857143,
+            "tier2_media": 0.05223214285714285,
             "treino_minimo_tier1": 0
           },
           "vigia": {
             "por_nivel": {
               "0": {
-                "tier1": 0.5625,
-                "tier2": 1.0
+                "tier1": 0.665625,
+                "tier2": 0.046875
               },
               "6": {
-                "tier1": 0.709375,
-                "tier2": 0.9875
+                "tier1": 0.671875,
+                "tier2": 0.1375
               },
               "12": {
-                "tier1": 0.9593750000000001,
-                "tier2": 0.9875
+                "tier1": 0.903125,
+                "tier2": 0.22187500000000002
               },
               "18": {
-                "tier1": 0.975,
-                "tier2": 0.98125
+                "tier1": 0.965625,
+                "tier2": 0.296875
               },
               "24": {
-                "tier1": 0.984375,
-                "tier2": 0.99375
+                "tier1": 0.98125,
+                "tier2": 0.4125
               },
               "30": {
-                "tier1": 1.0,
-                "tier2": 0.9875
+                "tier1": 0.990625,
+                "tier2": 0.534375
               },
               "36": {
-                "tier1": 1.0,
-                "tier2": 0.9875
+                "tier1": 0.990625,
+                "tier2": 0.671875
               }
             },
-            "tier2_media": 0.9892857142857142,
+            "tier2_media": 0.33169642857142856,
             "treino_minimo_tier1": 0
           }
         },
@@ -384,103 +384,103 @@
           "bastiao_rachado": {
             "por_nivel": {
               "0": {
-                "tier1": 0.971875,
-                "tier2": 0.99375
+                "tier1": 0.915625,
+                "tier2": 0.9875
               },
               "6": {
-                "tier1": 0.98125,
-                "tier2": 1.0
+                "tier1": 0.890625,
+                "tier2": 0.990625
               },
               "12": {
-                "tier1": 0.996875,
-                "tier2": 1.0
+                "tier1": 0.95625,
+                "tier2": 0.990625
               },
               "18": {
-                "tier1": 1.0,
-                "tier2": 1.0
+                "tier1": 0.953125,
+                "tier2": 0.9875
               },
               "24": {
-                "tier1": 0.996875,
-                "tier2": 1.0
+                "tier1": 0.95625,
+                "tier2": 0.99375
               },
               "30": {
-                "tier1": 0.99375,
-                "tier2": 1.0
+                "tier1": 0.953125,
+                "tier2": 0.9875
               },
               "36": {
-                "tier1": 1.0,
-                "tier2": 1.0
+                "tier1": 0.9624999999999999,
+                "tier2": 0.99375
               }
             },
-            "tier2_media": 0.9991071428571429,
+            "tier2_media": 0.9901785714285715,
             "treino_minimo_tier1": 0
           },
           "espelho": {
             "por_nivel": {
               "0": {
-                "tier1": 0.978125,
-                "tier2": 1.0
+                "tier1": 0.684375,
+                "tier2": 0.975
               },
               "6": {
-                "tier1": 0.96875,
-                "tier2": 1.0
+                "tier1": 0.746875,
+                "tier2": 0.95625
               },
               "12": {
-                "tier1": 1.0,
+                "tier1": 0.74375,
                 "tier2": 1.0
               },
               "18": {
-                "tier1": 0.996875,
+                "tier1": 0.7625,
                 "tier2": 1.0
               },
               "24": {
-                "tier1": 1.0,
+                "tier1": 0.8,
                 "tier2": 1.0
               },
               "30": {
-                "tier1": 1.0,
+                "tier1": 0.821875,
                 "tier2": 1.0
               },
               "36": {
-                "tier1": 1.0,
+                "tier1": 0.809375,
                 "tier2": 1.0
               }
             },
-            "tier2_media": 1.0,
+            "tier2_media": 0.9901785714285715,
             "treino_minimo_tier1": 0
           },
           "muralha": {
             "por_nivel": {
               "0": {
-                "tier1": 0.5,
-                "tier2": 0.778125
+                "tier1": 0.99375,
+                "tier2": 0.85
               },
               "6": {
-                "tier1": 0.71875,
-                "tier2": 0.75625
+                "tier1": 1.0,
+                "tier2": 0.93125
               },
               "12": {
-                "tier1": 0.76875,
-                "tier2": 0.790625
+                "tier1": 1.0,
+                "tier2": 0.940625
               },
               "18": {
-                "tier1": 0.9125,
-                "tier2": 0.765625
+                "tier1": 1.0,
+                "tier2": 0.978125
               },
               "24": {
-                "tier1": 0.909375,
-                "tier2": 0.778125
+                "tier1": 1.0,
+                "tier2": 0.98125
               },
               "30": {
-                "tier1": 0.95625,
-                "tier2": 0.7625
+                "tier1": 1.0,
+                "tier2": 0.99375
               },
               "36": {
-                "tier1": 0.95625,
-                "tier2": 0.7718750000000001
+                "tier1": 1.0,
+                "tier2": 0.996875
               }
             },
-            "tier2_media": 0.771875,
+            "tier2_media": 0.953125,
             "treino_minimo_tier1": 0
           }
         },
@@ -721,23 +721,23 @@
     },
     "campanha_exigente_menos_atencioso": {
       "tier1_brutamontes": {
-        "ic_inferior": -0.49349999999999994,
-        "ic_superior": 0.0355,
-        "media": -0.213,
+        "ic_inferior": -0.2835,
+        "ic_superior": -0.015500000000000014,
+        "media": -0.14550000000000002,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": -0.142,
-        "ic_superior": 0.11349999999999998,
-        "media": -0.009999999999999986,
+        "ic_inferior": -0.5805,
+        "ic_superior": -0.0785,
+        "media": -0.301,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": -0.5135,
-        "ic_superior": -0.0405,
-        "media": -0.251,
+        "ic_inferior": -0.6575,
+        "ic_superior": -0.11199999999999999,
+        "media": -0.38049999999999995,
         "n": 10,
         "nivel": 0.95
       }
@@ -750,7 +750,7 @@
       "nivel": 0.95
     }
   },
-  "fontes_sha256": "c6df4b07b494000948d586c32f992042edabb6a848a76db27724cd0b84e509bb",
+  "fontes_sha256": "23f0ed3c615cb82a4383a2460a37e38129a312cc90e053bc79dbc29fd4c984ee",
   "orcamento_por_vida": 298,
   "ovos": [
     101,
@@ -776,23 +776,23 @@
       },
       "campanha": {
         "tier1_brutamontes": {
-          "ic_inferior": 0.9640000000000001,
-          "ic_superior": 0.9994999999999999,
-          "media": 0.986,
+          "ic_inferior": 0.8744999999999999,
+          "ic_superior": 0.9855,
+          "media": 0.931,
           "n": 10,
           "nivel": 0.95
         },
         "tier2_sentinela": {
-          "ic_inferior": 0.9255000000000001,
-          "ic_superior": 1.0,
-          "media": 0.9695,
+          "ic_inferior": 0.3195,
+          "ic_superior": 0.8714999999999999,
+          "media": 0.6014999999999999,
           "n": 10,
           "nivel": 0.95
         },
         "tier3_soberano": {
-          "ic_inferior": 0.22799999999999998,
-          "ic_superior": 0.705,
-          "media": 0.46399999999999997,
+          "ic_inferior": 0.271,
+          "ic_superior": 0.667,
+          "media": 0.4715,
           "n": 10,
           "nivel": 0.95
         }
@@ -860,23 +860,23 @@
       },
       "campanha": {
         "tier1_brutamontes": {
-          "ic_inferior": 0.909,
-          "ic_superior": 0.9949999999999999,
-          "media": 0.9535,
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
           "n": 10,
           "nivel": 0.95
         },
         "tier2_sentinela": {
-          "ic_inferior": 0.8175000000000001,
-          "ic_superior": 0.9365,
-          "media": 0.8755,
+          "ic_inferior": 0.4465,
+          "ic_superior": 0.9834999999999999,
+          "media": 0.7184999999999999,
           "n": 10,
           "nivel": 0.95
         },
         "tier3_soberano": {
-          "ic_inferior": 0.613,
-          "ic_superior": 0.994,
-          "media": 0.8205,
+          "ic_inferior": 0.327,
+          "ic_superior": 0.82,
+          "media": 0.5835,
           "n": 10,
           "nivel": 0.95
         }
@@ -943,23 +943,23 @@
       },
       "campanha": {
         "tier1_brutamontes": {
-          "ic_inferior": 0.4795,
-          "ic_superior": 0.991,
-          "media": 0.7405,
+          "ic_inferior": 0.7165,
+          "ic_superior": 0.9845,
+          "media": 0.8545,
           "n": 10,
           "nivel": 0.95
         },
         "tier2_sentinela": {
-          "ic_inferior": 0.7635,
-          "ic_superior": 0.9595,
-          "media": 0.8654999999999999,
+          "ic_inferior": 0.13799999999999998,
+          "ic_superior": 0.702,
+          "media": 0.4175,
           "n": 10,
           "nivel": 0.95
         },
         "tier3_soberano": {
-          "ic_inferior": 0.308,
-          "ic_superior": 0.8099999999999999,
-          "media": 0.5695,
+          "ic_inferior": 0.006999999999999999,
+          "ic_superior": 0.471,
+          "media": 0.20299999999999999,
           "n": 10,
           "nivel": 0.95
         }
@@ -1026,23 +1026,23 @@
       },
       "campanha": {
         "tier1_brutamontes": {
-          "ic_inferior": 0.976,
+          "ic_inferior": 0.889,
           "ic_superior": 1.0,
-          "media": 0.991,
+          "media": 0.945,
           "n": 10,
           "nivel": 0.95
         },
         "tier2_sentinela": {
-          "ic_inferior": 0.9390000000000001,
-          "ic_superior": 1.0,
-          "media": 0.977,
+          "ic_inferior": 0.28500000000000003,
+          "ic_superior": 0.8265,
+          "media": 0.5575,
           "n": 10,
           "nivel": 0.95
         },
         "tier3_soberano": {
-          "ic_inferior": 0.524,
-          "ic_superior": 0.851,
-          "media": 0.6990000000000001,
+          "ic_inferior": 0.22599999999999998,
+          "ic_superior": 0.75,
+          "media": 0.4965,
           "n": 10,
           "nivel": 0.95
         }
@@ -1108,23 +1108,23 @@
       },
       "campanha": {
         "tier1_brutamontes": {
-          "ic_inferior": 0.9785,
-          "ic_superior": 0.999,
-          "media": 0.9904999999999999,
+          "ic_inferior": 0.841,
+          "ic_superior": 0.9955,
+          "media": 0.9215,
           "n": 10,
           "nivel": 0.95
         },
         "tier2_sentinela": {
-          "ic_inferior": 0.909,
-          "ic_superior": 0.9994999999999999,
-          "media": 0.9615,
+          "ic_inferior": 0.26,
+          "ic_superior": 0.8225,
+          "media": 0.5429999999999999,
           "n": 10,
           "nivel": 0.95
         },
         "tier3_soberano": {
-          "ic_inferior": 0.2975,
-          "ic_superior": 0.7945,
-          "media": 0.55,
+          "ic_inferior": 0.153,
+          "ic_superior": 0.613,
+          "media": 0.3745,
           "n": 10,
           "nivel": 0.95
         }

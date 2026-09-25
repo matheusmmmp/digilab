@@ -1,4 +1,4 @@
-"""Campanha contra NPCs no combate V2.1 (sem treino)."""
+"""Campanha contra NPCs (regras V21C, escada rebalanceada)."""
 
 from __future__ import annotations
 
@@ -10,19 +10,39 @@ import pytest
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.campanha import gambit_npc, npc, perfil_de_stats, traduzir  # noqa: E402
+from digilab.campanha import REGRAS_CAMPANHA, gambit_npc, npc, perfil_de_stats, traduzir  # noqa: E402
 from digilab.combate_v2.bots import GAMBITS as GAMBITS_V2  # noqa: E402
+from digilab.combate_v2.v21.bots import ADULTOS  # noqa: E402
+from digilab.combate_v2.v21.regras import TECNICAS  # noqa: E402
 from digilab.combate_v2.v21.catalogo import Forma, perfil, stats  # noqa: E402
 from digilab.combate_v2.v21.partida import jogar, reproduzir  # noqa: E402
-from digilab.config import CONFIG_CAMPANHA, STATS_V21  # noqa: E402
+from digilab.config import CONFIG_CAMPANHA, CONFIG_COMBATE_V2C, CONFIG_COMBATE_V21C, STATS_V21  # noqa: E402
 
 
-def test_npcs_tem_o_total_de_stats_do_pve_treino():
+def test_npcs_tem_o_total_de_stats_da_escada_rebalanceada():
     for tier, d in CONFIG_CAMPANHA.npcs.items():
         p = npc(tier).perfil
         assert sum(p.stats.values()) == pytest.approx(d["total_stats"])
         assert p.tecnica is None and p.passiva is None and p.estagio == "adulto"
-    assert [d["total_stats"] for d in CONFIG_CAMPANHA.npcs.values()] == [72, 80, 90]
+        assert p.hp_max == pytest.approx(CONFIG_COMBATE_V21C.hp_base + CONFIG_COMBATE_V21C.hp_por_vigor * d["total_stats"] / 6)
+    assert [(d["total_stats"], d["estilo"]) for d in CONFIG_CAMPANHA.npcs.values()] == [
+        (54, "v21:espelho"), (80, "v21:furioso"), (120, "v2c:agressivo")]
+
+
+def test_campanha_luta_com_as_regras_v21c():
+    assert REGRAS_CAMPANHA.base == CONFIG_COMBATE_V2C and REGRAS_CAMPANHA.v21 == CONFIG_COMBATE_V21C
+    assert CONFIG_COMBATE_V2C.finta and CONFIG_COMBATE_V2C.fuga_condicionada and CONFIG_COMBATE_V21C.marca_fragil
+
+
+def test_estilo_v21_do_npc_perde_so_as_regras_de_tecnica_e_do_vigia():
+    for forma, g in ADULTOS.items():
+        n = gambit_npc(f"v21:{forma}")
+        assert all(r in g.regras for r in n.regras) and n.final == g.final
+        assert not any(r.acao in TECNICAS.values() or any(c.nome == "oponente_vai_preparar" for c in r.condicoes)
+                       for r in n.regras)
+    assert gambit_npc("agressivo") == gambit_npc("v2:agressivo")
+    with pytest.raises(ValueError):
+        gambit_npc("v9:agressivo")
 
 
 def test_perfil_de_stats_e_a_mesma_conversao_do_catalogo():
@@ -46,6 +66,6 @@ def test_traducao_v2_para_v21_preserva_as_regras():
 
 def test_partida_contra_npc_rejoga_bit_a_bit():
     a, b = npc("tier1_brutamontes"), npc("tier3_soberano")
-    p = jogar(a, b, 7)
-    assert reproduzir(list(p.log), a, b).log == p.log
+    p = jogar(a, b, 7, REGRAS_CAMPANHA)
+    assert reproduzir(list(p.log), a, b, REGRAS_CAMPANHA).log == p.log
     assert set(STATS_V21) == set(a.perfil.stats)

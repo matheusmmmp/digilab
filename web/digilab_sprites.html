@@ -314,7 +314,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <div class="arena-fala" id="arena-fala" aria-live="polite"></div>
         <div>
           <h2>Campanha</h2>
-          <p class="muted" style="margin-top:4px">Três desafios em sequência; o próximo só abre depois de vencer o anterior. Os NPCs têm stats iguais em todos os atributos (somando mais que um pet), são adultos e lutam com um estilo fixo. As lutas entram no registro e ensinam os gambits. O balanceamento ainda não foi calibrado.</p>
+          <p class="muted" style="margin-top:4px">Três desafios em sequência; o próximo só abre depois de vencer o anterior. Os NPCs têm stats iguais em todos os atributos (somando de 54 a 120; um pet sem treino tem 60), são adultos e lutam com um estilo fixo. As lutas entram no registro e ensinam os gambits. O primeiro testa stats (treino decide), o segundo testa estilo e o chefe só cai com o estilo certo e muito treino.</p>
           <div class="campanha" id="campanha"></div>
         </div>
         <div>
@@ -1989,13 +1989,26 @@ const CRIANCA_V21 = {
 };
 [...Object.values(BOTS_V2), ...Object.values(BOTS_V21), ...Object.values(ADOL_V21), ...Object.values(CRIANCA_V21)].forEach(validarLista);
 /* campanha (espelho de ConfigCampanha / campanha.py): NPC = stats uniformes (total / 6), adulto,
-   sem tecnica nem passiva, gambits de um bot da bateria V2; sem renormalizar ao orcamento da especie.
-   Cada desafio so abre depois de vencer o anterior. Balanceamento ainda nao calibrado. */
+   sem tecnica nem passiva, estilo "<familia>:<nome>" (gambitNPC); sem renormalizar ao orcamento da especie.
+   Cada desafio so abre depois de vencer o anterior. Escada rebalanceada (experiments/calibrar_campanha.py):
+   tier 1 prova de stats, tier 2 prova de estilo, chefe so cai com estilo certo e treino alto. */
 const CAMPANHA = [
-  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:72, estilo:"agressivo", sugerido:"criança"},
-  {k:"npc_tier2_sentinela", nome:"Sentinela", total:80, estilo:"contragolpe", sugerido:"adolescente"},
-  {k:"npc_tier3_soberano", nome:"Soberano", total:90, estilo:"adaptativo", sugerido:"adulto"},
+  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:54, estilo:"v21:espelho", sugerido:"criança", sprite:"adulto_golpe", cor:"golpe"},
+  {k:"npc_tier2_sentinela", nome:"Sentinela", total:80, estilo:"v21:furioso", sugerido:"adolescente", sprite:"adulto_agarrao", cor:"agarrao"},
+  {k:"npc_tier3_soberano", nome:"Soberano", total:120, estilo:"v2c:agressivo", sugerido:"adulto", sprite:"adulto_carga", cor:"carga"},
 ];
+/* v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem);
+   v2c: bots redesenhados da V2C (os BOTS_V2 da web) */
+const nomeEstiloNPC = e => { const [fam, nome] = e.split(":"); return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : NOME_BOT[nome]; };
+function gambitNPC(estilo){
+  const [fam, nome] = estilo.split(":");
+  if (fam === "v21"){
+    const g = BOTS_V21[nome];
+    return {regras:g.regras.filter(r => !TECNICAS.includes(r.entao) && !r.se.some(c => c.n === "oponente_vai_preparar")), final:g.final};
+  }
+  if (fam === "v2c") return BOTS_V2[nome];
+  throw new Error("familia de estilo desconhecida: " + estilo);
+}
 const NPC = Object.fromEntries(CAMPANHA.map((c, i) => [c.k, {...c, tier:i + 1}]));
 const NOME_BOT = {aleatorio:"aleatório", agressivo:"agressivo", tartaruga:"tartaruga", atirador:"atirador",
   contragolpe:"contragolpe", adaptativo:"adaptativo", oraculo:"oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
@@ -2008,7 +2021,7 @@ const BOT_SPRITE = {aleatorio:"bebe", agressivo:"adulto_golpe", tartaruga:"adult
 const BOT_TRACO = {aleatorio:"golpe", agressivo:"golpe", tartaruga:"bloqueio", atirador:"finta", contragolpe:"agarrao", adaptativo:"carga", oraculo:"carga"};
 const copiarGambits = g => JSON.parse(JSON.stringify(g));
 const estiloBot = nome => nome === "oraculo" ? {nome, oraculo:true, eps:CV.eps}
-  : NPC[nome] ? {nome, gambits:copiarGambits(BOTS_V2[NPC[nome].estilo]), eps:CV.eps}
+  : NPC[nome] ? {nome, gambits:copiarGambits(gambitNPC(NPC[nome].estilo)), eps:CV.eps}
   : {nome, gambits:copiarGambits(BOTS_V2[nome] || BOTS_V21[nome]), eps: nome === "aleatorio" ? 1 : CV.eps};
 
 /* estilo do pet (so na web): cada evolucao semeia os gambits (ramo da crianca, linha do
@@ -2761,8 +2774,8 @@ function lutadorPet(m, rotulo, absoluto = false){
 }
 function lutadorBot(nome){
   const n = NPC[nome];
-  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total), sprite:BOT_SPRITE[n.estilo],
-                 grade:"adulto", cor:BOT_TRACO[n.estilo], estagioFala:"adulto"};
+  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total), sprite:n.sprite,
+                 grade:"adulto", cor:n.cor, estagioFala:"adulto"};
   if (BOTS_V21[nome]){
     const f = formaRival(nome);
     return {nome:"Rival " + nomeForma(f), estilo:estiloBot(nome), cond:perfilDe(f, caraterCanonico(nome)), sprite:chaveSprite(f),
@@ -2888,7 +2901,7 @@ function renderCampanha(){
     const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k);
     const st = vit ? `vencido (${vit}×)` : aberto ? "aberto" : `bloqueado: vença ${CAMPANHA[i - 1].nome}`;
     return `<div class="desafio${aberto ? "" : " bloq"}"><b>${i + 1}. ${c.nome}</b>
-      <span class="muted">stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total}) · estilo ${c.estilo} · sugerido: ${c.sugerido}</span>
+      <span class="muted">stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total}) · estilo ${nomeEstiloNPC(c.estilo)} · sugerido: ${c.sugerido}</span>
       <span class="st">${st}</span>
       <button class="sbtn${vit ? " sec" : ""}" data-npc="${c.k}"${aberto && !lutando ? "" : " disabled"}>Desafiar</button></div>`;
   }).join("");

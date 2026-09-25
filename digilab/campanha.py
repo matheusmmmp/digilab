@@ -21,15 +21,20 @@ condicoes e acoes).
 
 from __future__ import annotations
 
-from .combate_v2.bots import GAMBITS as GAMBITS_V2
+from .combate_v2.bots import GAMBITS as GAMBITS_V2, GAMBITS_V2C
 from .combate_v2.regras import Acao as AcaoV2
 from .combate_v2.v21.catalogo import Perfil
-from .combate_v2.v21.gambits import Condicao as C, ListaGambits, Regra, lista, regra, se
+from .combate_v2.v21.gambits import CONDICAO_DO_VIGIA, Condicao as C, ListaGambits, Regra, lista, regra, se
 from .combate_v2.v21.partida import Lutador
-from .combate_v2.v21.regras import Acao, Distancia
-from .config import CONFIG_CAMPANHA, CONFIG_CATALOGO, CONFIG_COMBATE_V21, STATS_V21, ConfigCampanha
+from .combate_v2.v21.bots import ADULTOS
+from .combate_v2.v21.regras import TECNICAS, Acao, Distancia, Regras
+from .config import (CONFIG_CAMPANHA, CONFIG_CATALOGO, CONFIG_COMBATE_V2C, CONFIG_COMBATE_V21, CONFIG_COMBATE_V21C,
+                     STATS_V21, ConfigCampanha)
 
 PERTO, MEDIO, LONGE = Distancia.PERTO, Distancia.MEDIO, Distancia.LONGE
+
+# a campanha luta com o combate corrigido aprovado (V2C + V21C), o mesmo da web
+REGRAS_CAMPANHA = Regras(base=CONFIG_COMBATE_V2C, v21=CONFIG_COMBATE_V21C)
 
 
 def traduzir(gl_v2, estagio: str = "adulto") -> ListaGambits:
@@ -58,9 +63,20 @@ GAMBIT_SOBERANO_RESPOSTA_LONGE = lista([
 
 
 def gambit_npc(estilo: str) -> ListaGambits:
+    """'<familia>:<nome>': v2 (bateria V2), v2c (bots redesenhados da V2C) ou v21 (gambits canonicos de
+    uma forma adulta sem as regras de tecnica e da passiva do vigia, que o NPC nao tem). Sem familia = v2."""
     if estilo == "soberano_resposta_longe":    # correcao testada e NAO adotada
         return GAMBIT_SOBERANO_RESPOSTA_LONGE
-    return traduzir(GAMBITS_V2[estilo])
+    familia, _, nome = estilo.rpartition(":")
+    if familia in ("", "v2"):
+        return traduzir(GAMBITS_V2[nome])
+    if familia == "v2c":
+        return traduzir(GAMBITS_V2C[nome])
+    if familia == "v21":                       # sem tecnica nem passiva: saem as regras que dependem delas
+        g = ADULTOS[nome]
+        return ListaGambits(tuple(r for r in g.regras if r.acao not in TECNICAS.values()
+                                  and all(c.nome != CONDICAO_DO_VIGIA for c in r.condicoes)), g.final, g.estagio)
+    raise ValueError(f"familia de estilo desconhecida: {estilo}")
 
 
 def perfil_de_stats(rotulo: str, stats: dict, estagio: str = "adulto", cfg=None, cat=None) -> Perfil:
@@ -85,4 +101,5 @@ def npc(tier: str, estilo: str | None = None, cfg: ConfigCampanha | None = None)
     d = cfg.npcs[tier]
     stats = {k: d["total_stats"] / len(STATS_V21) for k in STATS_V21}
     est = estilo or d["estilo"]
-    return Lutador(f"npc:{tier}:{est}", perfil_de_stats(tier, stats), gambit_npc(est), cfg.epsilon_npc)
+    return Lutador(f"npc:{tier}:{est}", perfil_de_stats(tier, stats, cfg=REGRAS_CAMPANHA.v21), gambit_npc(est),
+                   cfg.epsilon_npc)
