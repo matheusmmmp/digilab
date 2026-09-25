@@ -27,7 +27,9 @@ from digilab.motivo import Motivo, nome_base
 # mais barato e rapido (decisao do pesquisador, 2026-09-24); --modelo troca
 MODELO_PADRAO = "claude-haiku-4-5"
 MODELOS_COM_FALLBACK = {"claude-opus-5", "claude-fable-5-1"}
-VERSAO_PROMPT = "fala-v1"
+# fala-v2 (2026-09-24, apos a avaliacao C6 da v1): o adolescente recebe so o primeiro fator
+# (so ele pode ser citado) e o exemplo sem fator inclui "não sei" (a regra 2 ja exigia)
+VERSAO_PROMPT = "fala-v2"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
 LIMITE_POR_MINUTO = 30
@@ -250,6 +252,14 @@ def _significado(fator: str) -> str:
 
 def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
     acoes = ACOES_VIDA if motivo.origem == "vida" else ACOES_COMBATE
+    exemplo = template(motivo, estagio, humor)
+    sem_fator = motivo.exploracao or not motivo.fatores
+    if estagio == "adolescente":
+        # so o primeiro fator pode ser citado: e so ele que a LLM recebe (dizer menos e permitido)
+        motivo = Motivo(motivo.origem, motivo.acao, motivo.fatores[:1], motivo.evento_ref, motivo.intensidade,
+                        motivo.exploracao, tick=motivo.tick, turno=motivo.turno)
+        if sem_fator:
+            exemplo = f"{exemplo.strip()} não sei"
     carga = {
         "contexto": "vida do pet" if motivo.origem == "vida" else "luta na arena",
         "estagio": estagio,
@@ -260,7 +270,7 @@ def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
         "tipo_de_referencia": "evento do registro" if motivo.origem == "vida" else "turno da luta",
         "exploracao": motivo.exploracao,
         "humor": None if humor is None else round(humor, 2),
-        "exemplo": template(motivo, estagio, humor),
+        "exemplo": exemplo,
     }
     return json.dumps(carga, ensure_ascii=False, sort_keys=True)
 

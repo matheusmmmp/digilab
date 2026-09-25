@@ -10,7 +10,7 @@ artifacts_combate_v2/amostra_replay.jsonl e artifacts_combate_v21/amostra_replay
 estagios adolescente e adulto. Para cada um, gera a fala e registra se a validacao
 aprovou ou barrou (e por que).
 
-Saida em artifacts_fala/<provedor>_<modelo>/:
+Saida em artifacts_fala/<provedor>_<modelo>_<versao do prompt>/:
   falas.jsonl       uma linha por motivo: motivo, estagio, fala da LLM, aprovada, motivo da queda
   resumo.json       fracao aprovada, barrada por motivo, tempo medio
   revisao.csv       50 falas APROVADAS sorteadas para revisao humana: a validacao nao pega
@@ -37,7 +37,7 @@ from digilab.combate_v2.bots import bot  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.combate_v2.v21.bots import lutador_adulto  # noqa: E402
 from digilab.motivo import motivos_de_partida, motivos_de_partida_v21, motivos_de_vida  # noqa: E402
-from servidor.fala_llm import GeradorFala, escolher_provedor, template  # noqa: E402
+from servidor.fala_llm import VERSAO_PROMPT, GeradorFala, escolher_provedor, template  # noqa: E402
 
 SEMENTE_AMOSTRA = 20260924
 
@@ -100,9 +100,10 @@ def main(argv=None) -> int:
     gerador = GeradorFala(provedor, limite_por_minuto=10_000, gasto=gasto)
     motivos = coletar_motivos(a.n)
     linhas, resumo = avaliar(gerador, motivos)
-    resumo.update({"provedor": provedor.nome, "modelo": provedor.modelo, "semente_amostra": SEMENTE_AMOSTRA,
+    resumo.update({"provedor": provedor.nome, "modelo": provedor.modelo, "versao_prompt": VERSAO_PROMPT,
+                   "semente_amostra": SEMENTE_AMOSTRA,
                    "gasto": gasto.para_dict() if gasto else None})
-    saida = RAIZ / "artifacts_fala" / f"{provedor.nome}_{provedor.modelo.replace(':', '-')}"
+    saida = RAIZ / "artifacts_fala" / f"{provedor.nome}_{provedor.modelo.replace(':', '-')}_{VERSAO_PROMPT}"
     saida.mkdir(parents=True, exist_ok=True)
     (saida / "falas.jsonl").write_text("".join(json.dumps(l, ensure_ascii=False) + "\n" for l in linhas),
                                        encoding="utf-8", newline="\n")

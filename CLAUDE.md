@@ -271,8 +271,17 @@ partida); o teto vale do mesmo jeito. `--testar-alerta` manda um e-mail de teste
 **Entrada da página é não confiável**: `motivo_de_dict` só aceita ação, fator e parâmetros do
 catálogo (V2 e V2.1), no máximo 4 fatores e 10 referências; texto livre nunca chega ao prompt.
 As tabelas de `digilab/expressao.py` cobrem as técnicas e as condições do V2.1 (mesmos textos da web).
-**Pendente**: a avaliação com juiz da C6 (fração de causas inventadas) não foi rodada — precisa de
-credencial e de aprovação do custo. A varredura de marcadores não pega sinônimos.
+**Avaliação C6** (Ollama `qwen2.5:3b` na RTX 2060, 200 motivos reais — vida, combate V2 e V2.1 —,
+metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e `falas.jsonl`):
+- prompt `fala-v1`: 114/200 aprovadas (0,57). Adulto 88/100; adolescente 26/100, porque o pedido
+  se contradizia (recebia todos os fatores mas só pode citar o primeiro; o exemplo sem fator não
+  dizia "não sei", que a regra exige).
+- prompt `fala-v2` (corrige as duas contradições, **olhando esta mesma amostra**: não é validação
+  independente): 183/200 (0,915); adolescente 95/100, adulto 88/100. 14/200 (7%) citaram fator fora
+  do motivo e foram barradas (caíram no template). Tempo médio 2,6 s por fala.
+- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` (50 falas
+  aprovadas; "cita causa fora dos fatores?"), porque a varredura de marcadores não pega sinônimos.
+  Sem ela, a fala por LLM continua desligada por padrão.
 
 ## Versão web (`web/digilab.html`)
 
@@ -379,8 +388,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Fala por LLM: rodar `experiments/avaliar_fala.py` com o Ollama instalado e revisar `revisao.csv`
-  antes de ligar por padrão (Ollama e credencial do Claude ainda não configurados nesta máquina).
+- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` antes de ligar por
+  padrão; a v2 do prompt foi ajustada na mesma amostra da avaliação (repetir com outra semente).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.
