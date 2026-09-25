@@ -262,6 +262,15 @@ real; erro sem `usage` conta o pior caso. Acumulado em `servidor/gasto_fala.json
 zera ao reiniciar; para liberar mais, aumente `--limite-usd` ou apague o arquivo. Modelo sem preço
 na tabela `PRECOS_USD_POR_MTOK` não liga. Proteção adicional recomendada: limite de gasto do
 workspace no Console da Anthropic.
+**Alerta por e-mail** (`servidor/alerta.py`): ao cruzar 50%, 80% e 100% do teto (ou quando uma
+chamada é recusada por falta de teto) manda e-mail para `--alerta-email` (padrão
+matheusmmmp@hotmail.com), uma vez por nível (gravado em `gasto_fala.json`). SMTP só por ambiente:
+`DIGILAB_SMTP_USUARIO`, `DIGILAB_SMTP_SENHA` (senha de app), `DIGILAB_SMTP_HOST` (padrão
+smtp.gmail.com), `DIGILAB_SMTP_PORTA` (587). Sem essas variáveis o alerta fica desligado (avisa na
+partida); o teto vale do mesmo jeito. `--testar-alerta` manda um e-mail de teste e sai.
+**Entrada da página é não confiável**: `motivo_de_dict` só aceita ação, fator e parâmetros do
+catálogo (V2 e V2.1), no máximo 4 fatores e 10 referências; texto livre nunca chega ao prompt.
+As tabelas de `digilab/expressao.py` cobrem as técnicas e as condições do V2.1 (mesmos textos da web).
 **Pendente**: a avaliação com juiz da C6 (fração de causas inventadas) não foi rodada — precisa de
 credencial e de aprovação do custo. A varredura de marcadores não pega sinônimos.
 
@@ -295,6 +304,12 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   `web/digilab_sprites.html` é versionado, mas o repositório GitHub (`matheusmmmp/digilab`)
   tem que continuar **privado**. Tornar o repo público exige tirar esse arquivo antes, inclusive
   do histórico. O atlas com os pixels da Bandai continua fora do repo.
+- **Acesso remoto** (decisão do Matheus, 2026-09-24): pode abrir por túnel (Cloudflare) para
+  testar de outros computadores, **só** com `servidor_local.py --remoto` — senha obrigatória
+  (`DIGILAB_SENHA`, 12+ caracteres, só no ambiente), só as rotas do jogo (página, atlas, API de
+  fala; o resto da pasta dá 404), API paga do Claude desligada salvo `--claude-remoto`. Sem
+  `--remoto`, pedido vindo por túnel (cabeçalhos `Cf-Ray`/`X-Forwarded-For`) leva 403. O link é de
+  uso pessoal: não compartilhar nem divulgar.
 - Manter a versão com placeholders originais funcionando: antes de publicar ou distribuir
   qualquer coisa, trocar por arte original ou licenciada.
 
