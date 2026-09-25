@@ -159,7 +159,7 @@ class MotorPersonalidade(MotorComFeedback):
         tick = self._estado.tick
         obs: Observacao = transicao.observacao
         self._acao_pet_atual = transicao.acao
-        d = desejo_de(obs, self.politica._p, tick, self.cd)
+        d = self._desejo_atual(obs, tick)
         ultimo = self.desejos[-1] if self.desejos else None
         mudou = (d is None) != (ultimo is None) or (d is not None and d.chave() != ultimo.chave())
         if d is not None and mudou:
@@ -167,6 +167,10 @@ class MotorPersonalidade(MotorComFeedback):
         elif d is None and ultimo is not None and mudou:
             self.desejos.append(Desejo(tick, ultimo.tipo, ultimo.alvo, 0.0))   # desejo acabou (intensidade 0)
         self.vinculo.decisao(obs, transicao.acao, tick, d if mudou else None)
+
+    def _desejo_atual(self, obs: Observacao, tick: int) -> Desejo | None:
+        """Gancho: o MotorTreino poe o pedido de pausa (fadiga) na frente."""
+        return desejo_de(obs, self.politica._p, tick, self.cd)
 
     # ------------------------------------------------------------ acao do dono
     def _aplicar_acao_usuario(self, acao: AcaoUsuario) -> None:

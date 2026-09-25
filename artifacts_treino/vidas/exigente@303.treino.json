@@ -1,0 +1,72 @@
+{
+  "braco": "exigente",
+  "carater_adulto": {
+    "atento": 0.1890625,
+    "impetuoso": 0.05468749999999996,
+    "paciente": -0.22499999999999998,
+    "resistente": -0.07343750000000002
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 16,
+    "treino": 102
+  },
+  "enroladas": 27,
+  "especie": "cirro",
+  "fala_fria": true,
+  "forma": {
+    "adulta": "devastador",
+    "linha": "brigao",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/brigao/devastador"
+  },
+  "obediencia_cuidado": 0.6164383561643836,
+  "ovo": 303,
+  "sessoes": 102,
+  "sombria": true,
+  "treino": {
+    "enroladas": 27,
+    "especie": "cirro",
+    "estresse": 120.0,
+    "fadiga": 0.0,
+    "fala_fria": true,
+    "forcadas": 16,
+    "pausas": {
+      "atendidas": 0,
+      "ignoradas": 14
+    },
+    "pontos": {
+      "folego": 7.581493139343834,
+      "forca": 5.3769847932692265,
+      "guarda": 4.906473540370464,
+      "mira": 5.515403110330792,
+      "recuperacao": 6.050707680070265,
+      "vigor": 6.568937736615422
+    },
+    "pontos_estagio": {
+      "adolescente": 12.0,
+      "adulto": 13.999999999999998,
+      "crianca": 10.0
+    },
+    "sessoes": 102,
+    "sobrecarga": 0.0,
+    "sombria": true,
+    "total": 36.0,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 49.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 75.5,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 0.6
+  },
+  "vinculo_final": 0.295635742441857
+}

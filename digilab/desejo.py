@@ -22,6 +22,8 @@ TIPOS = ("necessidade", "vontade")
 # necessidade -> (indice em Observacao.vetor_estado, alvo)
 NECESSIDADES = {"fome": (0, "comer"), "higiene": (1, "limpar"), "energia": (2, "dormir"), "humor": (3, "brincar")}
 NECESSIDADE_DO_ALVO = {alvo: nome for nome, (_, alvo) in NECESSIDADES.items()}
+# pedido de pausa do treino (TAREFA_TREINO_SOMBRIO): necessidade que vem da fadiga, nao do estado de vida
+NECESSIDADE_DO_ALVO["descansar"] = "fadiga_treino"
 
 
 @dataclass(frozen=True)

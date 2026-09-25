@@ -1,0 +1,72 @@
+{
+  "braco": "exigente",
+  "carater_adulto": {
+    "atento": 0.25468749999999996,
+    "impetuoso": -0.38515625000000003,
+    "paciente": 0.5984375000000003,
+    "resistente": -0.08281250000000005
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 26,
+    "treino": 92
+  },
+  "enroladas": 3,
+  "especie": "limo",
+  "fala_fria": true,
+  "forma": {
+    "adulta": "predador",
+    "linha": "cacador",
+    "ramo": "arisco",
+    "rotulo": "limo/arisco/cacador/predador"
+  },
+  "obediencia_cuidado": 0.9223300970873787,
+  "ovo": 1010,
+  "sessoes": 92,
+  "sombria": true,
+  "treino": {
+    "enroladas": 3,
+    "especie": "limo",
+    "estresse": 200.0,
+    "fadiga": 0.0,
+    "fala_fria": true,
+    "forcadas": 25,
+    "pausas": {
+      "atendidas": 0,
+      "ignoradas": 17
+    },
+    "pontos": {
+      "folego": 7.349425100718784,
+      "forca": 5.435908024320001,
+      "guarda": 5.210447667873073,
+      "mira": 4.2970427784,
+      "recuperacao": 7.901739834252995,
+      "vigor": 5.805436594435145
+    },
+    "pontos_estagio": {
+      "adolescente": 12.0,
+      "adulto": 13.999999999999998,
+      "crianca": 10.0
+    },
+    "sessoes": 92,
+    "sobrecarga": 63.0,
+    "sombria": true,
+    "total": 36.0,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 46.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 77.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 0.6
+  },
+  "vinculo_final": 0.2440614489691988
+}

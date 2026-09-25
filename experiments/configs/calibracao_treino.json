@@ -1,0 +1,3271 @@
+{
+  "criterio": "exigente sombrio >= 0.6; nenhum outro braco sombrio; a mais proxima do original",
+  "descricao": "Calibracao da sobrecarga (TAREFA_TREINO_SOMBRIO, secao 9.4). So ovos de CALIBRACAO.",
+  "escolha": {
+    "distancia": 0.6666666666666666,
+    "mudancas": {
+      "decai_sobrecarga_hora_bem_cuidado": 2.0,
+      "decai_sobrecarga_sono_completo": 10.0,
+      "sobrecarga_forcar": 25.0
+    },
+    "passa": true,
+    "resultado": {
+      "aleatorio": {
+        "fala_fria": 0.0,
+        "sobrecarga_no_adulto": [
+          0.0,
+          0.0,
+          0.0,
+          48.5,
+          12.5
+        ],
+        "sombria": 0.0
+      },
+      "atencioso": {
+        "fala_fria": 0.0,
+        "sobrecarga_no_adulto": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sombria": 0.0
+      },
+      "exigente": {
+        "fala_fria": 0.6,
+        "sobrecarga_no_adulto": [
+          74.0,
+          4.5,
+          47.5,
+          73.0,
+          73.5
+        ],
+        "sombria": 0.6
+      },
+      "incoerente": {
+        "fala_fria": 0.0,
+        "sobrecarga_no_adulto": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sombria": 0.0
+      },
+      "relapso": {
+        "fala_fria": 0.0,
+        "sobrecarga_no_adulto": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "sombria": 0.0
+      }
+    }
+  },
+  "grade": {
+    "decai_sobrecarga_hora_bem_cuidado": [
+      2.0,
+      1.0,
+      0.5,
+      0.25
+    ],
+    "decai_sobrecarga_sono_completo": [
+      10.0,
+      5.0,
+      2.0
+    ],
+    "sobrecarga_forcar": [
+      15.0,
+      20.0,
+      25.0,
+      30.0
+    ]
+  },
+  "original": {
+    "decai_sobrecarga_hora_bem_cuidado": 2.0,
+    "decai_sobrecarga_sono_completo": 10.0,
+    "sobrecarga_forcar": 15.0
+  },
+  "ovos_calibracao": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "varredura": [
+    {
+      "distancia": 0.0,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            18.5,
+            2.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            34.0,
+            0.0,
+            17.5,
+            33.0,
+            33.5
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.3333333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            33.5,
+            7.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            54.0,
+            0.0,
+            32.5,
+            53.0,
+            53.5
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.6666666666666666,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            48.5,
+            12.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            74.0,
+            4.5,
+            47.5,
+            73.0,
+            73.5
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.0,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            63.5,
+            17.5
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            80.0,
+            9.5,
+            62.5,
+            79.5,
+            79.0
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.5,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            18.5,
+            2.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            34.0,
+            0.0,
+            17.5,
+            33.0,
+            33.5
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.8333333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            33.5,
+            7.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            54.0,
+            0.0,
+            32.5,
+            53.0,
+            53.5
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.1666666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            48.5,
+            12.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            74.0,
+            4.5,
+            47.5,
+            73.0,
+            73.5
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.5,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            63.5,
+            17.5
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            80.0,
+            9.5,
+            62.5,
+            79.5,
+            79.0
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.8,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            18.5,
+            2.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            34.0,
+            0.0,
+            17.5,
+            33.0,
+            33.5
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.1333333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            33.5,
+            7.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            54.0,
+            0.0,
+            32.5,
+            53.0,
+            53.5
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.4666666666666668,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            48.5,
+            12.5
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            74.0,
+            4.5,
+            47.5,
+            73.0,
+            73.5
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.8,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 2.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            63.5,
+            17.5
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            80.0,
+            9.5,
+            62.5,
+            79.5,
+            79.0
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.5,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            31.75,
+            8.75
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            47.0,
+            4.75,
+            31.25,
+            46.5,
+            46.75
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.8333333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            46.75,
+            13.75
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            67.0,
+            9.75,
+            46.25,
+            66.5,
+            66.75
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.1666666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            61.75,
+            18.75
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            87.0,
+            14.75,
+            61.25,
+            86.5,
+            86.75
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.5,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            76.75,
+            23.75
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            90.0,
+            19.75,
+            76.25,
+            89.75,
+            89.5
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.0,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            31.75,
+            8.75
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            47.0,
+            4.75,
+            31.25,
+            46.5,
+            46.75
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.3333333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            46.75,
+            13.75
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            67.0,
+            9.75,
+            46.25,
+            66.5,
+            66.75
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.6666666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            61.75,
+            18.75
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            87.0,
+            14.75,
+            61.25,
+            86.5,
+            86.75
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.0,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            76.75,
+            23.75
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            90.0,
+            19.75,
+            76.25,
+            89.75,
+            89.5
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.3,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            31.75,
+            8.75
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            47.0,
+            4.75,
+            31.25,
+            46.5,
+            46.75
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.6333333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            46.75,
+            13.75
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            67.0,
+            9.75,
+            46.25,
+            66.5,
+            66.75
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.9666666666666668,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            61.75,
+            18.75
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            87.0,
+            14.75,
+            61.25,
+            86.5,
+            86.75
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.3,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 1.0,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            76.75,
+            23.75
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            90.0,
+            19.75,
+            76.25,
+            89.75,
+            89.5
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.75,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            38.375,
+            11.875
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            53.5,
+            9.875,
+            38.125,
+            53.25,
+            53.375
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.0833333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            53.375,
+            16.875
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            73.5,
+            14.875,
+            53.125,
+            73.25,
+            73.375
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.4166666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            68.375,
+            21.875
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            93.5,
+            19.875,
+            68.125,
+            93.25,
+            93.375
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.75,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            83.375,
+            26.875
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            95.0,
+            24.875,
+            83.125,
+            94.875,
+            94.75
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.25,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            38.375,
+            11.875
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            53.5,
+            9.875,
+            38.125,
+            53.25,
+            53.375
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.5833333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            53.375,
+            16.875
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            73.5,
+            14.875,
+            53.125,
+            73.25,
+            73.375
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.9166666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            68.375,
+            21.875
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            93.5,
+            19.875,
+            68.125,
+            93.25,
+            93.375
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.25,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            83.375,
+            26.875
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            95.0,
+            24.875,
+            83.125,
+            94.875,
+            94.75
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.55,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            38.375,
+            11.875
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            53.5,
+            9.875,
+            38.125,
+            53.25,
+            53.375
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.8833333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            53.375,
+            16.875
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            73.5,
+            14.875,
+            53.125,
+            73.25,
+            73.375
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.216666666666667,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            68.375,
+            21.875
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            93.5,
+            19.875,
+            68.125,
+            93.25,
+            93.375
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.55,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.5,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            83.375,
+            26.875
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            95.0,
+            24.875,
+            83.125,
+            94.875,
+            94.75
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 0.875,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            41.6875,
+            13.4375
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            56.75,
+            12.4375,
+            41.5625,
+            56.625,
+            56.6875
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.2083333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            56.6875,
+            18.4375
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            76.75,
+            17.4375,
+            56.5625,
+            76.625,
+            76.6875
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.5416666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            71.6875,
+            23.4375
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            96.75,
+            22.4375,
+            71.5625,
+            96.625,
+            96.6875
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.875,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 10.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            86.6875,
+            28.4375
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            97.5,
+            27.4375,
+            86.5625,
+            97.4375,
+            97.375
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.375,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            41.6875,
+            13.4375
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            56.75,
+            12.4375,
+            41.5625,
+            56.625,
+            56.6875
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.7083333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            56.6875,
+            18.4375
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            76.75,
+            17.4375,
+            56.5625,
+            76.625,
+            76.6875
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.0416666666666665,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            71.6875,
+            23.4375
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            96.75,
+            22.4375,
+            71.5625,
+            96.625,
+            96.6875
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.375,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 5.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            86.6875,
+            28.4375
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            97.5,
+            27.4375,
+            86.5625,
+            97.4375,
+            97.375
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 1.675,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 15.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            41.6875,
+            13.4375
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            56.75,
+            12.4375,
+            41.5625,
+            56.625,
+            56.6875
+          ],
+          "sombria": 0.0
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.0083333333333333,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 20.0
+      },
+      "passa": true,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            56.6875,
+            18.4375
+          ],
+          "sombria": 0.0
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            76.75,
+            17.4375,
+            56.5625,
+            76.625,
+            76.6875
+          ],
+          "sombria": 0.6
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.341666666666667,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 25.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            71.6875,
+            23.4375
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            96.75,
+            22.4375,
+            71.5625,
+            96.625,
+            96.6875
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    },
+    {
+      "distancia": 2.675,
+      "mudancas": {
+        "decai_sobrecarga_hora_bem_cuidado": 0.25,
+        "decai_sobrecarga_sono_completo": 2.0,
+        "sobrecarga_forcar": 30.0
+      },
+      "passa": false,
+      "resultado": {
+        "aleatorio": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            86.6875,
+            28.4375
+          ],
+          "sombria": 0.2
+        },
+        "atencioso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "exigente": {
+          "fala_fria": 0.6,
+          "sobrecarga_no_adulto": [
+            97.5,
+            27.4375,
+            86.5625,
+            97.4375,
+            97.375
+          ],
+          "sombria": 0.8
+        },
+        "incoerente": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        },
+        "relapso": {
+          "fala_fria": 0.0,
+          "sobrecarga_no_adulto": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sombria": 0.0
+        }
+      }
+    }
+  ]
+}

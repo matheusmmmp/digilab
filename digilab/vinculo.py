@@ -36,13 +36,28 @@ class Vinculo:
         self.vontades: list[tuple[int, AcaoUsuario]] = []          # (tick, acao do dono que atende)
         self.serie: list[tuple[int, float, str, int | None]] = []   # (tick, valor, componente, ref)
         self.ultimo_ref_baixa: int | None = None                   # evento que por ultimo DERRUBOU o vinculo
+        self.teto = 1.0                                            # forma sombria: nunca volta a confiar (0,6)
 
     def _amostra(self, tick: int, componente: str, amostra: float, peso: float, ref: int | None) -> None:
         antes = self.valor
-        self.valor = min(1.0, max(0.0, self.valor + self.cfg.alfa * peso * (amostra - self.valor)))
+        self.valor = min(self.teto, max(0.0, self.valor + self.cfg.alfa * peso * (amostra - self.valor)))
         if self.valor < antes:
             self.ultimo_ref_baixa = ref
         self.serie.append((tick, self.valor, componente, ref))
+
+    def ajustar(self, tick: int, componente: str, delta: float, ref: int | None) -> None:
+        """Variacao direta (treino forcado: -0,05), nao media movel."""
+        antes = self.valor
+        self.valor = min(self.teto, max(0.0, self.valor + delta))
+        if self.valor < antes:
+            self.ultimo_ref_baixa = ref
+        self.serie.append((tick, self.valor, componente, ref))
+
+    def limitar(self, tick: int, teto: float, componente: str) -> None:
+        self.teto = teto
+        if self.valor > teto:
+            self.valor = teto
+            self.serie.append((tick, self.valor, componente, None))
 
     # ------------------------------------------------------------ eventos
     def expirar(self, tick: int) -> None:

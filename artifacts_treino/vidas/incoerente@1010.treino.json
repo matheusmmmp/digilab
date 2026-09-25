@@ -1,0 +1,72 @@
+{
+  "braco": "incoerente",
+  "carater_adulto": {
+    "atento": -0.5499999999999999,
+    "impetuoso": 0.12890625000000003,
+    "paciente": -0.2343749999999998,
+    "resistente": 0.5265624999999998
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 21,
+    "treino": 53
+  },
+  "enroladas": 3,
+  "especie": "limo",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "tita",
+    "linha": "colosso",
+    "ramo": "arisco",
+    "rotulo": "limo/arisco/colosso/tita"
+  },
+  "obediencia_cuidado": 0.967741935483871,
+  "ovo": 1010,
+  "sessoes": 53,
+  "sombria": false,
+  "treino": {
+    "enroladas": 3,
+    "especie": "limo",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 13,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 5.180922124800001,
+      "forca": 4.2391121400000005,
+      "guarda": 4.223438496,
+      "mira": 2.4415200000000006,
+      "recuperacao": 4.8620107392,
+      "vigor": 5.433544
+    },
+    "pontos_estagio": {
+      "adolescente": 5.02032,
+      "adulto": 14.0,
+      "crianca": 7.360227500000001
+    },
+    "sessoes": 53,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 26.380547500000002,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.3964917222417723
+}

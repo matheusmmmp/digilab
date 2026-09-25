@@ -41,7 +41,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from enum import Enum
 
-from ...config import CONFIG_COMBATE_V2, CONFIG_COMBATE_V21, ConfigCombateV2, ConfigCombateV21
+from ...config import CONFIG_COMBATE_V2, CONFIG_COMBATE_V21, CONFIG_SOMBRIO, ConfigCombateV2, ConfigCombateV21
 from ..regras import AcaoIlegal, Distancia
 from .catalogo import Perfil
 
@@ -155,7 +155,11 @@ def eh_legal(estado: EstadoCombate, lado: int, acao: Acao, r: Regras = REGRAS_PA
     if acao is Acao.PELE_DURA:
         return eu.pele == 0
     if acao is Acao.DEFENDER:
-        return p.passiva != "furioso"
+        return p.passiva not in ("furioso", "devastador")
+    if acao is Acao.ESQUIVAR:
+        return p.passiva != "devastador"
+    if acao is Acao.RECUAR:
+        return p.passiva != "predador"
     return True
 
 
@@ -237,8 +241,12 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
                 marca_usada[atk] = True
             if pa.passiva == "emboscador" and not eu.disparou:
                 bruto *= v.mult_emboscador
+            if pa.passiva == "predador":
+                bruto *= CONFIG_SOMBRIO.mult_predador
         if acao in CORPO_A_CORPO and pa.passiva == "furioso" and eu.fracao_hp < v.limiar_hp_furioso:
             bruto *= v.mult_furioso
+        if acao in CORPO_A_CORPO and pa.passiva == "devastador":
+            bruto *= CONFIG_SOMBRIO.mult_devastador
         if bruto == 0.0:
             continue
 
@@ -265,7 +273,9 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
                 recebido = bruto * b.mult_defender * pal.mult_guarda
             if reacao is Acao.CONTRA_GOLPE:
                 if acao in CORPO_A_CORPO:
-                    devolvido[alvo] += v.fracao_contra_golpe * bruto
+                    fr = CONFIG_SOMBRIO.fracao_contra_golpe_bastiao if pal.passiva == "bastiao_rachado" \
+                        else v.fracao_contra_golpe
+                    devolvido[alvo] += fr * bruto
                 elif acao is Acao.DISPARO and pal.passiva == "espelho":
                     devolvido[alvo] += v.fracao_espelho_disparo * bruto
         elif reacao is Acao.CARREGAR:
@@ -301,8 +311,8 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
     for i in (0, 1):
         s = lados[i]
         p = s.perfil
-        g = guts[i] + p.regen
-        if acoes[i] is Acao.DEFENDER:
+        g = guts[i] + p.regen * (CONFIG_SOMBRIO.mult_regen_colosso_partido if p.passiva == "colosso_partido" else 1.0)
+        if acoes[i] is Acao.DEFENDER and p.passiva != "bastiao_rachado":
             g += b.guts_extra_defender + (v.guts_extra_muralha if p.passiva == "muralha" else 0)
         if acoes[i] is Acao.CARREGAR:
             g += b.guts_carregar
@@ -310,7 +320,9 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
             marca = v.turnos_marcar
         else:
             marca = 0 if marca_usada[i] else max(0, s.marca - 1)
-        pele = v.turnos_pele_dura - 1 if acoes[i] is Acao.PELE_DURA else max(0, s.pele - 1)
+        turnos_pele = CONFIG_SOMBRIO.turnos_pele_colosso_partido if p.passiva == "colosso_partido" \
+            else v.turnos_pele_dura
+        pele = turnos_pele - 1 if acoes[i] is Acao.PELE_DURA else max(0, s.pele - 1)
         novos.append(replace(
             s, hp=s.hp - dano[i], guts=max(0.0, min(p.guts_max, g)),
             preparando=acoes[i] is Acao.PREPARAR_PESADO and not interrompido[i],

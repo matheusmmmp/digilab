@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from typing import Protocol, runtime_checkable
 
 from .config import CONFIG_DONOS, CONFIG_PADRAO, TICKS_POR_DIA, ConfigDonos
-from .events import AcaoPet, AcaoUsuario
+from .events import ACOES_V1, AcaoPet, AcaoUsuario
 
 CUIDADOS = (AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR)
 
@@ -210,11 +210,11 @@ class DonoAleatorio(_DonoBase):
     def _desejo(self, visao: Visao, rng: random.Random) -> list[AcaoUsuario]:
         if self._plano is None:
             self._plano = self._planejar(visao, rng)
-        acoes = list(AcaoUsuario)
+        acoes = list(ACOES_V1)
         return [rng.choice(acoes) for _ in range(self._plano[visao.passo])]
 
     def _preencher(self, visao: Visao, rng: random.Random) -> AcaoUsuario:
-        return rng.choice(list(AcaoUsuario))
+        return rng.choice(list(ACOES_V1))
 
 
 class DonoIncoerente(_DonoBase):

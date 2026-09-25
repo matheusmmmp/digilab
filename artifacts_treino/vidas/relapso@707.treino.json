@@ -1,0 +1,72 @@
+{
+  "braco": "relapso",
+  "carater_adulto": {
+    "atento": 0.5734374999999999,
+    "impetuoso": -0.10234374999999997,
+    "paciente": -0.40468750000000014,
+    "resistente": 0.03593749999999994
+  },
+  "condicao": 1.05,
+  "dono": {
+    "carinho_no_slot": 14,
+    "treino": 60
+  },
+  "enroladas": 19,
+  "especie": "cirro",
+  "fala_fria": false,
+  "forma": {
+    "adulta": "furioso",
+    "linha": "brigao",
+    "ramo": "arisco",
+    "rotulo": "cirro/arisco/brigao/furioso"
+  },
+  "obediencia_cuidado": 0.8049999999999999,
+  "ovo": 707,
+  "sessoes": 60,
+  "sombria": false,
+  "treino": {
+    "enroladas": 19,
+    "especie": "cirro",
+    "estresse": 0.0,
+    "fadiga": 0.0,
+    "fala_fria": false,
+    "forcadas": 0,
+    "pausas": {
+      "atendidas": 10,
+      "ignoradas": 0
+    },
+    "pontos": {
+      "folego": 4.742285559999999,
+      "forca": 5.09460398721,
+      "guarda": 5.023722579795,
+      "mira": 4.571662079999999,
+      "recuperacao": 4.833616950250001,
+      "vigor": 6.040847092620002
+    },
+    "pontos_estagio": {
+      "adolescente": 8.948913249875,
+      "adulto": 14.0,
+      "crianca": 7.357825
+    },
+    "sessoes": 60,
+    "sobrecarga": 0.0,
+    "sombria": false,
+    "total": 30.306738249875,
+    "transicoes": {
+      "adolescente": {
+        "sobrecarga": 0.0,
+        "tick": 900
+      },
+      "adulto": {
+        "sobrecarga": 0.0,
+        "tick": 1980
+      },
+      "crianca": {
+        "sobrecarga": 0.0,
+        "tick": 180
+      }
+    },
+    "vinculo_teto": 1.0
+  },
+  "vinculo_final": 0.5006668047954372
+}
