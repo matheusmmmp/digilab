@@ -257,13 +257,13 @@ V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` 
 - Campanha com treino: feita na TAREFA_TREINO_SOMBRIO (`artifacts_campanha/treino.json`). Pendente:
   redesenho dos NPCs para a escada funcionar (é também o que reprova o S2).
 
-## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C REPROVADA (só G6b)
+## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 
 **Com os bots redesenhados** (`GAMBITS_V2C`, `ConfigCombateV2C.bots_v2c`; configs `v2c/c7.json` e
 `v2c/validacao_bots.json`), a validação (`artifacts_combate_v2c/validacao_bots/gates.json`) passa
 G1–G9 **exceto G6b**, só pelo atirador: espelho com +5% de condição vence 0,744 (limite 0,65; os outros
 estilos 0,54–0,62). G4 11,3% no limite; G5 todas as ações ≥ 3%; G9 28,6% decisivos com ε 0,2; G8 100%.
-O Matheus aceitou a exceção do atirador: V2C considerada aprovada. **V21C REPROVADA na validação**
+O Matheus aceitou a exceção do atirador: V2C considerada aprovada. **V21C APROVADA COM RESSALVAS** (exceções aceitas pelo Matheus: E2, E4, G6b, G8; redesenho dos bots adultos tentado e não adotado, `artifacts_combate_v21c/redesenho_bots/`). Validação
 (`artifacts_combate_v21c/validacao`, config `v21c/validacao.json`: base V2C, vida por vigor 3 → 2,5 com
 `hp_base` 75, marca frágil, resposta ao `marcar` redesenhada). Passam E1, E3 (marcar com resposta 0,612 →
 0,312), E5, guardião (6,7% no limite), G9 e S1. Falham **E2** (Ferrugem vence todas por pouco; enfraquecê-la
@@ -597,7 +597,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - Memória: efeito na divergência é pequeno e sem incerteza; precisa de bootstrap sobre sementes
   antes de qualquer conclusão. Recusa (B2) exige mudança no motor — decisão do pesquisador.
 
-- Combate V2 reprovado em G4/G5: decidir entre mudar bots passivos, regra de esquiva ou limiares
+- Combate corrigido (V2C/V21C) aprovado com ressalvas: falta levar para a web (finta, parry, fuga
+  condicionada, morte súbita, bots V2C, marca frágil, vida por vigor 2,5 com base 75, resposta ao marcar);
+  E2 pede ciclo entre espécies; E4 pede redesenho do adolescente ou da passiva do adulto.
+- Combate V2 original reprovado em G4/G5: decidir entre mudar bots passivos, regra de esquiva ou limiares
   (decisão do pesquisador); investigar a dominância do adaptativo antes de plugar pets.
 - Combate V2.1 reprovado em E1–E5: falta a especificação das correções da base (finta, parry, fuga
   condicionada, morte súbita) e a `TAREFA_PERSONALIDADE_OBEDIENCIA`; espécies precisam de identidade

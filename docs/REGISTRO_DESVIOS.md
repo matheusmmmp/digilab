@@ -387,3 +387,12 @@ rejoga a amostra do artefato): C1–C4 da base também no resolvedor da V2.1 (li
   o caçador adulto perder do adolescente (E4 0,0); regras disparadas pela técnica da linha não quebram o
   resto, mas só resolvem sentinela, emboscador e titã. Mais regras para o adolescente (7 ou 8) não mudam
   o E4 (as regras do adulto usam condições que o adolescente não tem). A V21C segue com os bots da V2.1.
+- **Decisão do Matheus: "parcial + exceções".** As três regras de virada por técnica (sentinela carrega,
+  emboscador esquiva, titã prepara o pesado quando abaixo de 50% e o oponente usa a técnica da linha)
+  foram validadas (`artifacts_combate_v21c/redesenho_bots/parcial_nao_adotado/`, 500 por par, com E5):
+  G6b médio 0,725 → 0,660, mas o E1 perde o suporte (5 → 3: saem sentinela e espelho), a Brasa passa a
+  dominar (E2) e o G8 cai para 55,6%. Quebram um gate que passava: **não adotadas**.
+- **V21C APROVADA COM RESSALVAS** (a validação é `artifacts_combate_v21c/validacao`): passam E1, E3, E5,
+  guardião, G9, base V2C e S1. **Exceções aceitas pelo Matheus**: E2 (falta ciclo entre as espécies;
+  Ferrugem ainda vence todas por pouco), E4 (adulto esmaga adolescente: passiva + 8 regras), G6b (espelhos
+  sem sorteio: média 0,725) e G8 (E1 em 69,4% das perturbações).
