@@ -38,7 +38,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
-from digilab.combate_v2.v21.bots import (ADOLESCENTES, ADULTOS, FORMAS, RESPOSTAS, com_resposta,  # noqa: E402
+from digilab.combate_v2.v21.bots import (ADOLESCENTES, ADULTOS, FORMAS, RESPOSTAS, RESPOSTAS_V21C, com_resposta,  # noqa: E402
                                          lutador_adolescente, lutador_adulto)
 from digilab.combate_v2.v21.catalogo import LINHA_DA_FORMA, LINHAS, carater_canonico  # noqa: E402
 from digilab.combate_v2.v21.gambits import PESADO_AUTOMATICO  # noqa: E402
@@ -52,6 +52,7 @@ from run_arena import _imports_externos  # noqa: E402
 from run_bateria_combate import hashes as hashes_base  # noqa: E402
 
 CHAVES = {"descricao", "saida", "sementes_calibracao", "sementes_validacao", "conjunto", "regras_base", "regras_v21",
+          "respostas_v21c", "gates_v2c",
           "partidas_por_par_por_semente", "registro_calibracao", "pular_e5"}
 TECNICA_DA_LINHA = {l: CONFIG_CATALOGO.arquetipos_adolescente[l]["tecnica"] for l in LINHAS}
 
@@ -155,6 +156,55 @@ def avaliar_e1(taxa: dict, cb) -> tuple[bool, dict]:
     dominantes = [x for x in FORMAS if all(taxa[x][y] > 0.5 for y in FORMAS if y != x)]
     return (not dominantes and len(sup) >= cb.suporte_minimo_e1), {
         "dominantes": dominantes, "suporte": sup, "estrategia": eq["estrategia"]}
+
+
+def gates_v21c(gate, r, cfg21, especies, sementes, n, e5, conf_e1, linhas_csv) -> None:
+    """Gates da Etapa 2 levados a V2.1 (TAREFA_CORRECAO_COMBATE, Etapa 3) + checagem do guardiao."""
+    from digilab.config import CONFIG_BATERIA_V2C, CONFIG_BATERIA_COMBATE
+    from digilab.combate_v2.v21.catalogo import Forma, LINHA_DA_FORMA, perfil
+    cv = CONFIG_BATERIA_V2C
+    # G6b: mesmo arquetipo e especie, condicao 1,05 x 0,95 (a faixa da condicao do cuidado)
+    g6b = {}
+    for f in FORMAS:
+        vals = []
+        for esp in especies:
+            base = lutador_adulto(f, esp, cfg21)
+            fo = Forma(esp, "adulto", "sereno", LINHA_DA_FORMA[f], f)
+            fav = Lutador(f"{f}@{esp}#fav", perfil(fo, None, carater_canonico(f), 1.0 + cv.variacao_hp_g6b, cfg21), base.gambits, base.epsilon)
+            des = Lutador(f"{f}@{esp}#des", perfil(fo, None, carater_canonico(f), 1.0 - cv.variacao_hp_g6b, cfg21), base.gambits, base.epsilon)
+            vals += [x for _, _, x, _ in partidas_par(fav, des, "g6b", sementes, cv.partidas_g6b_por_semente, r)]
+        g6b[f] = sum(vals) / len(vals)
+    pior = max(g6b, key=g6b.get)
+    gate("G6b_espelho_condicao", g6b[pior] <= cv.taxa_max_g6b,
+         f"mesmo arquetipo e especie, condicao {1 + cv.variacao_hp_g6b} x {1 - cv.variacao_hp_g6b}: favorecido ate {g6b[pior]:.3f} "
+         f"({pior}); media {sum(g6b.values()) / len(g6b):.3f} (<= {cv.taxa_max_g6b})", {"taxa_favorecido": g6b})
+    # G8: o E1 continua valendo em >= 80% das perturbacoes (as do E5)
+    if e5:
+        frac = sum(v["e1_ok"] for v in e5.values()) / len(e5)
+        gate("G8_robustez", frac >= cv.fracao_min_g8, f"E1 vale em {frac:.3f} das {len(e5)} perturbacoes do E5 (>= {cv.fracao_min_g8})",
+             {"fracao": frac})
+    # G9: decisividade com epsilon 0,2 entre arquetipos (agregado nas especies)
+    conf = []
+    for esp in especies:
+        lut = {f: replace(lutador_adulto(f, esp, cfg21), epsilon=max(0.2, CONFIG_COMBATE_V2.epsilon_bots)) for f in FORMAS}
+        for i, fa in enumerate(FORMAS):
+            for fb in FORMAS[i + 1:]:
+                conf += [(fa, fb, x) for _, _, x, _ in partidas_par(lut[fa], lut[fb], f"g9|{esp}", sementes,
+                                                                    cv.partidas_g9_por_semente, r)]
+    tx = matriz_taxas(conf)
+    pares = [(a, b) for i, a in enumerate(FORMAS) for b in FORMAS[i + 1:]]
+    frac02 = sum(tx[a][b] < cv.extremo_g9 or tx[a][b] > 1 - cv.extremo_g9 for a, b in pares) / len(pares)
+    tx05 = matriz_taxas(conf_e1)
+    frac05 = sum(tx05[a][b] < cv.extremo_g9 or tx05[a][b] > 1 - cv.extremo_g9 for a, b in pares) / len(pares)
+    # guardiao: bloquear muito e esperado; os confrontos com guardiao nao podem passar do limite do G4
+    lim = CONFIG_BATERIA_COMBATE.fracao_max_limite_turnos
+    com_g = [l for l in linhas_csv if l[0] == "e1" and any(x.split("@")[0] in ("espelho", "muralha") for x in (l[3], l[4]))]
+    frac_g = sum(l[7] == "limite" for l in com_g) / len(com_g)
+    gate("guardiao_limite_turnos", frac_g < lim,
+         f"confrontos do E1 com espelho ou muralha: {frac_g:.3f} no limite de turnos (< {lim}, o do G4)", {"fracao": frac_g, "partidas": len(com_g)})
+    gate("G9_decisividade", frac02 <= cv.fracao_max_g9,
+         f"pares de arquetipos com taxa < {cv.extremo_g9} ou > {1 - cv.extremo_g9}: epsilon base {frac05:.3f}; epsilon 0,2 {frac02:.3f} "
+         f"(<= {cv.fracao_max_g9})", {"eps_base": frac05, "eps_02": frac02})
 
 
 def perturbacoes(p: float, v21=CONFIG_COMBATE_V21) -> list[tuple[str, str, object, object]]:
@@ -279,7 +329,7 @@ def executar(caminho_cfg: Path) -> int:
                 eu = lutador_adulto(u, esp, cfg21)
                 for op in FORMAS:
                     base = lutador_adulto(op, esp, cfg21, nome=f"{op}@{esp}#op")
-                    resp = lutador_adulto(op, esp, cfg21, gambits=com_resposta(ADULTOS[op], tec), nome=f"{op}@{esp}#resp")
+                    resp = lutador_adulto(op, esp, cfg21, gambits=com_resposta(ADULTOS[op], tec, RESPOSTAS_V21C if cfg.get("respostas_v21c") else None), nome=f"{op}@{esp}#resp")
                     pts_orig += [x for _, _, x, _ in partidas_par(eu, base, f"e3|{tec}", sementes,
                                                                   cb.partidas_e3_por_semente, r)]
                     pts_resp += [x for _, _, x, _ in partidas_par(eu, resp, f"e3|{tec}", sementes,
@@ -380,6 +430,9 @@ def executar(caminho_cfg: Path) -> int:
              f"status gravado da base: {base_gates['status']} (falharam {base_gates['falharam']}; reprovacao "
              f"registrada em docs/REGISTRO_DESVIOS.md, nao reavaliada aqui)",
              {"status_base": base_gates["status"], "falharam_base": base_gates["falharam"], "fontes_intactos": base_intacta})
+
+    if cfg.get("gates_v2c"):
+        gates_v21c(gate, r, cfg21, especies, sementes, n, e5, conf_e1, linhas_csv)
 
     aprovada = all(g["ok"] for g in gates if g["gate"] not in ("sanidade_informativo",))
     registro = None

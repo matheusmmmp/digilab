@@ -365,3 +365,19 @@ rejoga a amostra do artefato): C1–C4 da base também no resolvedor da V2.1 (li
   `hp_base` 70 → 80 (vida neutra continua 100). Ferrugem 0,656 → 0,575 contra as outras. Na bateria
   (E2) a Ferrugem ainda vence todas por pouco (0,508 contra a Brasa) e o E1 perde o suporte (5 → 3).
 - O gate de base da bateria V2.1, na V21C, é a validação da V2C (`G1_G9_base_v2c`).
+- **Ajustes pedidos pelo Matheus (redistribuir a Ferrugem, corrigir a resposta ao marcar, tratar o E4)**,
+  escolhidos com `experiments/avaliar_v21c.py` nas sementes de calibração:
+  - Ferrugem: redistribuir o vetor dela (mantendo 60) só transfere a dominância para a Brasa: as duas
+    vencem Cirro e Limo, e quem ganha o confronto direto "vence todas". Sem um ciclo entre as espécies
+    o E2 não passa (é desenho de identidade das espécies). A vida por vigor 2,0 derrubava o E1: fica
+    **2,5** (`hp_base` 75), que mantém o E1 e enfraquece a Ferrugem. Vetor da Ferrugem inalterado.
+  - `marcar`: a resposta declarada antiga (avançar sempre) empurrava para fora do limite de 8 as
+    últimas regras do oponente. `RESPOSTAS_V21C["marcar"]`: avança do médio e golpeia de perto só quando
+    o oponente usa marcar com frequência. E3 do marcar: 0,612 → 0,312 (validação).
+  - E4: o multiplicador de estágio do adolescente não resolve (com 1,0 muralha, vigia, titã e furioso
+    ainda 0,9–1,0; duelista cai para 0,38): a diferença vem da passiva e das 8 regras do adulto.
+    Nada adotado.
+- **Validação da V21C** (`artifacts_combate_v21c/validacao`, 500 partidas por par, com E5): passam
+  E1, E3, E5 (25/36), guardião (6,7% no limite), G9 (42,9%), base V2C e S1
+  (`artifacts_combate_v21c/bateria_sombria`); **falham E2 (Ferrugem), E4, G6b (espelhos com condição
+  ±5%: média 0,725, sentinela 0,919) e G8 (E1 em 69,4% das perturbações, precisa de 80%)**.

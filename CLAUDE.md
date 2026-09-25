@@ -263,12 +263,14 @@ V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` 
 `v2c/validacao_bots.json`), a validação (`artifacts_combate_v2c/validacao_bots/gates.json`) passa
 G1–G9 **exceto G6b**, só pelo atirador: espelho com +5% de condição vence 0,744 (limite 0,65; os outros
 estilos 0,54–0,62). G4 11,3% no limite; G5 todas as ações ≥ 3%; G9 28,6% decisivos com ε 0,2; G8 100%.
-O Matheus aceitou a exceção do atirador: V2C considerada aprovada. **Etapa 3 (V21C) em andamento,
-reprovada na calibração** (`artifacts_combate_v21c/calibracao/v0..v3`): a base V2C faz o E1 passar (suporte
-3 → 5), mas a correção da Ferrugem (vida por vigor 3 → 2) deixa a Ferrugem vencendo todas por pouco (E2) e
-derruba o E1; a marca frágil reduz o `marcar` com resposta de 0,94 para 0,72, sem chegar abaixo de sem
-resposta (0,62) (E3); E4 (adulto esmaga adolescente, 0,89–1,0) falha em todas e não está entre as
-mudanças da tarefa. Detalhes da V2C abaixo (primeira rodada, bots da V2).
+O Matheus aceitou a exceção do atirador: V2C considerada aprovada. **V21C REPROVADA na validação**
+(`artifacts_combate_v21c/validacao`, config `v21c/validacao.json`: base V2C, vida por vigor 3 → 2,5 com
+`hp_base` 75, marca frágil, resposta ao `marcar` redesenhada). Passam E1, E3 (marcar com resposta 0,612 →
+0,312), E5, guardião (6,7% no limite), G9 e S1. Falham **E2** (Ferrugem vence todas por pouco; enfraquecê-la
+passa a dominância para a Brasa: falta ciclo entre espécies), **E4** (adulto esmaga adolescente, 0,94–1,0;
+o multiplicador de estágio não resolve), **G6b** (espelhos com condição ±5%: média 0,725, sentinela 0,919)
+e **G8** (E1 em 69,4% das perturbações). Etapas em `artifacts_combate_v21c/calibracao/v0..v4`. Detalhes da
+V2C abaixo (primeira rodada, bots da V2).
 
 Etapas 0–2 feitas; **a V2C não passou na validação** e a Etapa 3 (V2.1 corrigida) não foi iniciada.
 `ConfigCombateV2C` (chaves C1–C4 desligadas por padrão: a V2 original reproduz os artefatos),
