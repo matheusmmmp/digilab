@@ -231,6 +231,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
           <p class="muted" style="margin-top:4px">O <b>jeito</b> é o temperamento de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir da criança dá para diferenciar os dois.</p>
           <div class="jeito"><span class="muted">Jeito</span> <b id="temperamento">…</b></div>
           <div class="jeito"><span class="muted">Desejo</span> <b id="desejo">…</b></div>
+          <div class="jeito"><span class="muted">Vínculo</span> <b id="vinculo">…</b></div>
           <p class="muted" id="jeito-det" style="font-size:.85em"></p>
         </div>
         <div>
@@ -250,9 +251,15 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <div class="linhas" id="politica"></div>
         <div>
           <h2>O que ele lembra de você</h2>
-          <p class="muted" style="margin-top:4px">Memória curta: quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo). Entra no aprendizado como contexto.</p>
+          <p class="muted" style="margin-top:4px" id="memoria-txt"></p>
         </div>
         <div class="kv" id="memoria"></div>
+        <div class="decisoes" id="memoria-espacos"></div>
+        <div id="desejo-bloco">
+          <h2>Desejo e obediência</h2>
+          <p class="muted" style="margin-top:4px">Cumprimento: das vontades que ele anunciou, quantas ele fez de fato em até 1 h. Se for baixo, a fala promete o que o pet não faz. Obediência: quantos cuidados seus ele aceitou.</p>
+          <div class="kv" id="desejo-metricas"></div>
+        </div>
         <div>
           <h2>Últimas decisões e o porquê</h2>
           <p class="muted" style="margin-top:4px">A fala nunca inventa causa: só cita um fator quando o que ele aprendeu mudou a escolha. No resto, quem decidiu foi o instinto e o acaso, e ele não sabe dizer por quê.</p>
@@ -405,7 +412,20 @@ const CB = { lambda:1, var:.25, piso:.05, elogio:1, repr:-1, janela:120, ignorad
 const CTP = { amplitude:1, kCuriosidade:Math.LN2, kTeimosia:.5, kSensibilidade:.5, kRancor:Math.LN2 };
 const EIXOS_TEMP = ["curiosidade","teimosia","sensibilidade","rancor"];
 /* desejo (espelho de ConfigDesejo) e limiar do tom do temperamento (ConfigExpressao) */
-const CDJ = { limiarNecessidade:.3, limiarVontade:.1, limiarTom:.5 };
+const CDJ = { limiarNecessidade:.3, limiarVontade:.1, limiarTom:.5, kCumprimento:60 };
+/* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia (pets salvos antes
+   do porte seguem iguais); 2 = memoria por espacos + vinculo + obediencia + condicao no combate */
+const VERSAO_PET = 2;
+/* memoria por espacos (espelho de ConfigMemoriaEspacos) */
+const CME = { nCurto:4, nLongo:2, dCurto:12*60, relembrar:4*60, tau:360, limiarPedido:.5, janela:240,
+  intensidade:{demora:null, bronca:1, elogio:1, carinho:.5} };
+const FATORES_ESPACOS = ["demora","bronca","elogio","carinho"];
+/* vinculo e obediencia (espelho de ConfigVinculo e ConfigObediencia) */
+const CVI = { inicial:.5, alfa:.1, pesoAtend:1, pesoCoer:1, pesoDesejo:.5, janelaLat:240, janelaCoer:1440, janelaDesejo:60 };
+const COB = { b0:1, bVinculo:2, bTeimosia:1, bConflito:2, limiarConflito:.3, probFazerOutra:.5,
+  sujeitas:["alimentar","limpar","brincar","acariciar"], limiarMotivo:.05 };
+/* condicao do cuidado no combate (ConfigCatalogo.condicao_mult_*): saude 0 -> 0,95; 1 -> 1,05 */
+const CCOND = { min:.95, max:1.05 };
 const CD = { passo:15, maxPasso:6, limAlim:.5, limLimpar:.5, sujLimpar:2, limHumBrinc:.4, limSono:.4, limPedido:.35, visitasRelapso:3, probElogioInc:.5, porDia:16 };
 const CT = { alfa:1/288 };
 const CA = { hp:100, dano:10, ganhoAf:.5, maxTurnos:40, fome:.7, hig:.7, saude:1, hora:.5,
@@ -566,11 +586,172 @@ class Memoria {
 }
 
 /* =================================================================
+   Memoria por espacos (espelho de digilab/memoria_espacos.py; adendo DF, Parte 1)
+   4 espacos de curto prazo e 2 de longo, uma memoria por categoria, a mais forte vence;
+   depois de 12 h a memoria tenta o longo prazo; a cada 4 h ACORDADO tudo e relembrado
+   (a ativacao volta a intensidade). Sem rng: o replay reconstroi.
+   ================================================================= */
+function inserirMemoria(esp, nova, n){
+  const i = esp.findIndex(m => m.cat === nova.cat);
+  if (i >= 0){
+    if (nova.int >= esp[i].int){ const r = esp.slice(); r[i] = nova; return [r, "substituiu"]; }
+    return [esp.slice(), "descartada"];
+  }
+  if (esp.length < n) return [[...esp, nova], "entrou"];
+  let k = 0;
+  for (let j = 1; j < esp.length; j++) if (esp[j].int < esp[k].int || (esp[j].int === esp[k].int && esp[j].criada < esp[k].criada)) k = j;
+  if (nova.int >= esp[k].int){ const r = esp.slice(); r[k] = nova; return [r, "substituiu"]; }
+  return [esp.slice(), "descartada"];
+}
+const CATEGORIA_DA_ACAO = {repreender:"bronca", elogiar:"elogio", acariciar:"carinho", brincar:"carinho"};
+class MemoriaEspacos {
+  constructor(fatorTau = {}){
+    this.fatorTau = fatorTau; this.curto = []; this.longo = []; this.nDono = 0; this.pend = {fome:[], higiene:[]};
+    this.acordado = 0; this.tick = TICK_INICIAL; this.dormindo = false; this.relembrancas = 0; this.ultRel = null;
+    this.cont = {entrou:0, substituiu:0, descartada:0, promovida:0, esquecida:0};
+  }
+  /* processa o tempo ate `tick` com o sono ANTERIOR; `dormindo`, se dado, vale dali em diante */
+  avancar(tick, dormindo){
+    if (tick < this.tick) throw new Error(`memória: tempo voltou (${tick} < ${this.tick})`);
+    let t = this.tick;
+    while (t < tick){
+      let fim = tick;
+      if (!this.dormindo) fim = Math.min(fim, t + (CME.relembrar - this.acordado % CME.relembrar));
+      for (const m of this.curto) if (m.criada + CME.dCurto > t) fim = Math.min(fim, m.criada + CME.dCurto);
+      if (!this.dormindo) this.acordado += fim - t;
+      t = fim;
+      this._promover(t);
+      if (!this.dormindo && this.acordado > 0 && this.acordado % CME.relembrar === 0) this._relembrar(t);
+    }
+    this.tick = tick;
+    if (dormindo !== undefined) this.dormindo = dormindo;
+  }
+  _promover(tick){
+    const vencidas = this.curto.filter(m => m.criada + CME.dCurto <= tick).sort((a, b) => a.criada - b.criada || (a.cat < b.cat ? -1 : 1));
+    for (const m of vencidas){
+      this.curto = this.curto.filter(x => x !== m);
+      let r; [this.longo, r] = inserirMemoria(this.longo, m, CME.nLongo);
+      this.cont[r !== "descartada" ? "promovida" : "esquecida"]++;
+    }
+  }
+  _relembrar(tick){
+    if (this.ultRel === tick) return;
+    this.ultRel = tick; this.relembrancas++;
+    this.curto = this.curto.map(m => ({...m, relembrada:tick})); this.longo = this.longo.map(m => ({...m, relembrada:tick}));
+  }
+  lembrar(cat, int, tick, ref){
+    if (!(cat in CME.intensidade)) throw new Error("categoria de memória desconhecida: " + cat);
+    if (!(int > 0 && int <= 1)) throw new Error("intensidade fora de (0, 1]: " + int);
+    this.avancar(tick);
+    let r; [this.curto, r] = inserirMemoria(this.curto, {cat, int, criada:tick, relembrada:tick, ref}, CME.nCurto);
+    this.cont[r]++;
+  }
+  pedido(v, tick){
+    const [fome, hig] = v; const [nec, val] = fome <= hig ? ["fome", fome] : ["higiene", hig];
+    if (val < CME.limiarPedido) this.pend[nec].push(tick);
+  }
+  expirar(tick){
+    for (const nec of ["fome","higiene"]){
+      const perdidos = this.pend[nec].filter(t => tick - t > CME.janela);
+      if (perdidos.length){
+        this.pend[nec] = this.pend[nec].filter(t => tick - t <= CME.janela);
+        this.lembrar("demora", 1, Math.max(tick, this.tick), null);   /* pedido perdido: demora maxima */
+      }
+    }
+  }
+  acaoDono(a, tick){
+    this.nDono++; this.expirar(tick);
+    const nec = a === "alimentar" ? "fome" : a === "limpar" ? "higiene" : null;
+    if (nec && this.pend[nec].length){
+      const lat = tick - this.pend[nec][0]; this.pend[nec] = [];
+      if (lat > 0) this.lembrar("demora", Math.min(1, lat / CME.janela), tick, this.nDono);
+    }
+    const cat = CATEGORIA_DA_ACAO[a];
+    if (cat) this.lembrar(cat, CME.intensidade[cat], tick, this.nDono);
+    this.avancar(tick);
+  }
+  tau(cat){ return CME.tau * (this.fatorTau[cat] ?? 1); }
+  ativacao(m, tick){ return m.int * Math.exp(-Math.max(0, tick - m.relembrada) / this.tau(m.cat)); }
+  feat(tick){ const todas = [...this.curto, ...this.longo]; return FATORES_ESPACOS.map(c => Math.min(1, todas.filter(m => m.cat === c).reduce((s, m) => s + this.ativacao(m, tick), 0))); }
+  refs(tick){
+    const out = {}, todas = [...this.curto, ...this.longo];
+    for (const c of FATORES_ESPACOS){
+      let best = null;
+      for (const m of todas.filter(x => x.cat === c)) if (!best || this.ativacao(m, tick) > this.ativacao(best, tick) || (this.ativacao(m, tick) === this.ativacao(best, tick) && m.criada > best.criada)) best = m;
+      out[c] = best ? best.ref : null;
+    }
+    return out;
+  }
+  assinatura(){ return [this.curto, this.longo, this.nDono, this.pend, this.acordado, this.tick, this.dormindo, this.relembrancas, this.cont]; }
+}
+
+/* =================================================================
+   Vinculo (espelho de digilab/vinculo.py): media movel em [0, 1] de atendimento
+   (pedido atendido rapido), coerencia (mesmo sinal de feedback para a mesma acao) e
+   vontades respeitadas. Guarda o ordinal da acao do dono que por ultimo o derrubou.
+   ================================================================= */
+const ATENDE_VONTADE = {comer:"alimentar", brincar:"brincar", chamar_atencao:"acariciar"};
+const CUIDADOS = ["alimentar","limpar","brincar","acariciar"];
+class Vinculo {
+  constructor(){ this.valor = CVI.inicial; this.pedidos = []; this.feedbacks = {}; this.vontades = []; this.n = 0; this.ultRefBaixa = null; }
+  _amostra(amostra, peso, ref){
+    const antes = this.valor;
+    this.valor = Math.min(1, Math.max(0, this.valor + CVI.alfa * peso * (amostra - this.valor)));
+    if (this.valor < antes) this.ultRefBaixa = ref;
+    this.n++;
+  }
+  expirar(tick){
+    const vivos = [];
+    for (const t of this.pedidos){ if (tick - t > CVI.janelaLat) this._amostra(0, CVI.pesoAtend, null); else vivos.push(t); }
+    this.pedidos = vivos;
+    const vivas = [];
+    for (const v of this.vontades){ if (tick - v[0] > CVI.janelaDesejo) this._amostra(0, CVI.pesoDesejo, null); else vivas.push(v); }
+    this.vontades = vivas;
+  }
+  decisao(obs, acao, tick, desejo){
+    this.expirar(tick);
+    if (acao === "chamar_atencao" && Math.min(obs.v[0], obs.v[1]) < CME.limiarPedido) this.pedidos.push(tick);
+    if (desejo && desejo.tipo === "vontade" && ATENDE_VONTADE[desejo.alvo]) this.vontades.push([tick, ATENDE_VONTADE[desejo.alvo]]);
+  }
+  acaoDono(a, tick, acaoPet, ref){
+    this.expirar(tick);
+    if (CUIDADOS.includes(a) && this.pedidos.length){
+      for (const t of this.pedidos) this._amostra(1 - (tick - t) / CVI.janelaLat, CVI.pesoAtend, ref);
+      this.pedidos = [];
+    }
+    if ((a === "elogiar" || a === "repreender") && acaoPet){
+      const sinal = a === "elogiar" ? 1 : -1, hist = (this.feedbacks[acaoPet] || []).filter(([t]) => tick - t <= CVI.janelaCoer);
+      if (hist.length) this._amostra(hist.filter(([, s]) => s === sinal).length / hist.length, CVI.pesoCoer, ref);
+      this.feedbacks[acaoPet] = [...hist, [tick, sinal]];
+    }
+    const at = this.vontades.filter(v => v[1] === a);
+    if (at.length){ this.vontades = this.vontades.filter(v => v[1] !== a); for (const _ of at) this._amostra(1, CVI.pesoDesejo, ref); }
+  }
+  assinatura(){ return [this.valor, this.pedidos, this.feedbacks, this.vontades, this.n, this.ultRefBaixa]; }
+}
+/* obediencia (espelho de obediencia.py): so acoes de cuidado; feedback sempre chega */
+const ATENDE_NECESSIDADE = {alimentar:"fome", limpar:"higiene", brincar:"humor", acariciar:"humor"};
+function conflitoDono(v, a){
+  const urg = [["fome",0],["higiene",1],["energia",2],["humor",3]].map(([n, i]) => [v[i], n]).filter(([x]) => x < COB.limiarConflito)
+    .sort((x, y) => x[0] - y[0] || (x[1] < y[1] ? -1 : 1));
+  if (!urg.length || ATENDE_NECESSIDADE[a] === urg[0][1]) return [0, null];
+  return [(COB.limiarConflito - urg[0][0]) / COB.limiarConflito, urg[0][1]];
+}
+function termosObediencia(vinculo, teimosia, conf, nec){
+  const z = COB.b0 + COB.bVinculo * vinculo - COB.bTeimosia * teimosia - COB.bConflito * conf;
+  const contrib = {vinculo_baixo:COB.bVinculo * (vinculo - CVI.inicial), teimosia:-COB.bTeimosia * teimosia};
+  if (nec) contrib["necessidade_" + nec] = -COB.bConflito * conf;
+  return [1 / (1 + Math.exp(-z)), contrib];
+}
+const condicaoDe = saude => CCOND.min + (CCOND.max - CCOND.min) * Math.max(0, Math.min(1, saude));
+
+/* =================================================================
    Motivo (espelho de digilab/motivo.py). Somente leitura: nao muda decisao.
    Fator so se a contribuicao e positiva, >= limiar e o termo aprendido MUDOU
    a escolha (sem ele, log-prior + Gumbel daria outra acao).
    ================================================================= */
 const CE = { limiar:.05 };
+const FATOR_BASE = ["habito","fome","higiene","energia","humor","saude","sujeira","dormindo","hora","hora","tempo_sem_cuidado"];
 const FATOR_DA_FEATURE = ["habito","fome","higiene","energia","humor","saude","sujeira","dormindo","hora","hora","tempo_sem_cuidado", ...FATORES_MEMORIA];
 function motivoVida(m, obs, acao, tick){
   const d = m.pol.ultDecisao;
@@ -578,7 +759,7 @@ function motivoVida(m, obs, acao, tick){
   const outras = ACOES_PET.filter(a => a !== acao), contrib = {};
   d.x.forEach((xi, i) => {
     const media = outras.reduce((s, a) => s + d.amostras[a][i], 0) / outras.length;
-    const n = FATOR_DA_FEATURE[i]; contrib[n] = (contrib[n] || 0) + xi * (d.amostras[acao][i] - media);
+    const n = i < FATOR_BASE.length ? FATOR_BASE[i] : m.pol.fatMem[i - FATOR_BASE.length]; contrib[n] = (contrib[n] || 0) + xi * (d.amostras[acao][i] - media);
   });
   let arg = null, best = -Infinity;
   for (const a of ACOES_PET){ const s = d.logPrior[a] + d.gumbel[a]; if (s > best){ best = s; arg = a; } }
@@ -590,7 +771,7 @@ function motivoVida(m, obs, acao, tick){
   const refs = [];
   for (const f of fatores){
     if (f === "tempo_sem_cuidado" && m.nDono > 0) refs.push(m.nDono);
-    else if (FATORES_MEMORIA.includes(f) && d.refsMem[f] != null) refs.push(d.refsMem[f]);
+    else if (m.pol.fatMem.includes(f) && d.refsMem[f] != null) refs.push(d.refsMem[f]);
   }
   return { origem:"vida", tick, acao, fatores, refsOrd:[...new Set(refs)].sort((a, b) => a - b), intensidade,
            exploracao:false, humor:obs.v[3], valorDecidiu };
@@ -633,11 +814,25 @@ const FATORES_TXT = {
   oponente_frequente: F("você insiste", "porque você insiste em '{p0}'"),
   turno_execucao: F("luta longa", "porque já era uma luta longa (turno {p0} ou mais)"),
   oponente_vai_preparar: F("vi o pesado vindo", "porque vi o pesado vindo antes de você preparar"),
+  /* memoria por espacos */
+  demora: F("me deixou esperando", "porque lembro que você me deixou esperando"),
+  bronca: F("repreensão", "porque lembro da sua repreensão"),
+  elogio: F("parabéns", "porque lembro dos seus parabéns"),
+  carinho: F("carinho", "porque lembro do seu carinho"),
+  /* desobediencia: termo de maior contribuicao negativa na obediencia */
+  vinculo_baixo: F("não confio", "porque ainda não confio em você"),
+  teimosia: F("teimoso", "porque eu sou teimoso"),
+  necessidade_fome: F("barriga vazia", "porque eu estava de barriga vazia"),
+  necessidade_higiene: F("todo sujo", "porque eu estava todo sujo"),
+  necessidade_energia: F("sem forças", "porque eu estava sem forças"),
+  necessidade_humor: F("chateado", "porque eu estava chateado"),
 };
 const ACOES_VIDA_TXT = {
   ocioso:["[à toa]","à toa","Fiquei à toa"], dormir:["[dormir]","dormir","Dormi"], comer:["[comer]","comer","Comi"],
   brincar:["[brincar]","brincar","Brinquei"], chamar_atencao:["[chamar]","chamar","Chamei você"],
   explorar:["[explorar]","explorar","Explorei"], emburrar:["[emburrar]","emburrar","Emburrei"],
+  recusar:["[não!]","não quero","Não quis fazer o que você pediu"],
+  fazer_outra:["[outra coisa]","outra coisa","Fiz outra coisa em vez do que você pediu"],
 };
 const ACOES_V2_TXT = {
   avancar:["[avançar]","avançar","Avancei"], recuar:["[recuar]","recuar","Recuei"], golpe_rapido:["[golpe]","golpe","Dei um golpe rápido"],
@@ -753,11 +948,15 @@ function expressar(mot, est, refs){
 }
 
 class Bandit {
-  constructor(temp = TEMP_NEUTRO){ this.bracos = Object.fromEntries(ACOES_PET.map(a => [a, new Braco()])); this.ultima = null; this.pendentes = []; this.rec = {elogio:0, repreensao:0, atendido:0, ignorado:0};
+  constructor(temp = TEMP_NEUTRO, versao = VERSAO_PET){ this.bracos = Object.fromEntries(ACOES_PET.map(a => [a, new Braco()])); this.ultima = null; this.pendentes = []; this.rec = {elogio:0, repreensao:0, atendido:0, ignorado:0};
     /* o temperamento muda so a escala com que a recompensa e usada (espelho de PoliticaBanditPersonalidade) */
     this.k = { var:CB.var * Math.exp(CTP.kCuriosidade * temp.curiosidade), elogio:CB.elogio * (1 + CTP.kSensibilidade * temp.sensibilidade),
       repr:CB.repr * (1 - CTP.kTeimosia * temp.teimosia) * (1 - CTP.kSensibilidade * temp.sensibilidade) };
-    this.mem = new Memoria(Math.exp(CTP.kRancor * temp.rancor)); this.tUlt = TICK_INICIAL; this.ultDecisao = null; }
+    const fr = Math.exp(CTP.kRancor * temp.rancor);
+    /* v2: memoria por espacos (rancor escala demora e bronca); v1: memoria curta antiga */
+    this.v2 = versao >= 2; this.fatMem = this.v2 ? FATORES_ESPACOS : FATORES_MEMORIA;
+    this.mem = this.v2 ? new MemoriaEspacos({demora:fr, bronca:fr}) : new Memoria(fr);
+    this.tUlt = TICK_INICIAL; this.ultDecisao = null; }
   /* features do bandit v1 + memoria curta (tick = desde o ultimo cuidado + tick desse cuidado) */
   fx(obs){ return features(obs).concat(this.mem.feat(obs.tdc + this.tUlt)); }
   prior(obs){ const p = distInstinto(obs); const o = {}; for (const a of ACOES_PET) o[a] = (1-CB.piso)*p[a] + CB.piso/ACOES_PET.length; return o; }
@@ -776,7 +975,7 @@ class Bandit {
       if (s > ms){ ms = s; melhor = a; }
     }
     /* registro somente leitura do que decidiu (motivo); nao muda a decisao */
-    this.ultDecisao = { x, acao:melhor, amostras, logPrior, gumbel, refsMem:this.mem.refs() };
+    this.ultDecisao = { x, acao:melhor, amostras, logPrior, gumbel, refsMem:this.mem.refs(obs.tdc + this.tUlt) };
     return melhor;
   }
   /* desejo (espelho de desejo.py): necessidade abaixo do limiar; senao a vontade = acao de maior
@@ -802,6 +1001,7 @@ class Bandit {
     this.expirar(tick);
     const x = this.fx(obs); this.ultima = [x, acao];
     if (acao === "chamar_atencao") this.pendentes.push([tick, x]);
+    if (this.v2) this.mem.avancar(tick, obs.v[6] >= .5);
     this.mem.expirar(tick);
     if (acao === "chamar_atencao") this.mem.pedido(obs.v, tick);
   }
@@ -834,12 +1034,19 @@ class Bandit {
    Motor com log de eventos (espelho de engine.py + treino.py)
    ================================================================= */
 class Motor {
-  constructor(semente){
-    this.semente = semente;
+  constructor(semente, versao = VERSAO_PET){
+    if (!(versao === 1 || versao === 2)) throw new Error("versão de pet desconhecida: " + versao);
+    this.semente = semente; this.versao = versao;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
-    this.e = estadoInicial(); this.pol = new Bandit(this.temp);
+    this.e = estadoInicial(); this.pol = new Bandit(this.temp, versao);
+    /* v2: vinculo, obediencia (rng propria) e registro do desejo (metricas) */
+    if (versao >= 2){
+      this.vinc = new Vinculo(); this.rObed = criarRng(hashSemente("obediencia", semente));
+      this.obed = {pedidos:0, recusas:0, fazerOutra:0};
+      this.dz = {atual:null, vontades:0, cumpridas:0, abertas:[], tVontade:0};
+    }
     this.acao = "ocioso"; this.prox = 0; this.log = [];
     this.tracos = Object.fromEntries(ACOES_PET.map(a => [a, 1/ACOES_PET.length]));
     this.nDecisoes = 0; this.historico = [];
@@ -899,11 +1106,61 @@ class Motor {
   }
   _aplicar(a){
     const t = this.e.tick;
+    if (this.versao >= 2 && COB.sujeitas.includes(a) && this._desobedeceu(a, t)) return;
     this.e = aplicarAcaoDono(this.e, a, this.rEnv);
     if (this.estagioAtual === "bebe") this._atender(a);
     this.pol.receberAcaoDono(a, t);
     this.nDono++;
+    if (this.versao >= 2) this.vinc.acaoDono(a, t, this.acao, this.nDono);
     this._hist({t, quem:"dono", a});
+  }
+  /* obediencia (espelho de MotorPersonalidade): p = logistica(b0 + b_v vinculo - b_t teimosia - b_c conflito).
+     Na desobediencia o efeito do dono roda num estado descartado (consome a rng do ambiente igual),
+     a tentativa conta como contato e a politica recebe a acao normalmente (recusa nao corta aprendizado) */
+  _desobedeceu(a, t){
+    this.obed.pedidos++;
+    const [conf, nec] = conflitoDono(observacao(this.e).v, a);
+    const [p, contrib] = termosObediencia(this.vinc.valor, this.temp.teimosia, conf, nec);
+    if (this.rObed.random() < p) return false;
+    const tipo = this.rObed.random() < COB.probFazerOutra ? "fazer_outra" : "recusar";
+    aplicarAcaoDono(this.e, a, this.rEnv);                        /* efeito descartado */
+    this.e = {...this.e, ultimoCuidado:t, totalCuidados:this.e.totalCuidados + 1};
+    if (tipo === "fazer_outra"){ this.e = efeitoAcaoPet(this.e, this.acao); this.obed.fazerOutra++; }
+    this.obed.recusas++;
+    this.pol.receberAcaoDono(a, t);
+    this.nDono++;
+    this.vinc.acaoDono(a, t, this.acao, this.nDono);
+    /* motivo honesto: so o termo de maior contribuicao negativa, se passar do limiar */
+    const neg = Object.entries(contrib).filter(([, c]) => c <= -COB.limiarMotivo).sort((x, y) => x[1] - y[1] || (x[0] < y[0] ? -1 : 1));
+    const fatores = neg.length ? [neg[0][0]] : [];
+    const refs = fatores[0] === "vinculo_baixo" && this.vinc.ultRefBaixa != null ? [this.vinc.ultRefBaixa] : [];
+    this.motivo = {origem:"vida", tick:t, acao:tipo, fatores, refsOrd:refs, intensidade:Math.min(1, Math.max(0, 1 - p)),
+      exploracao:false, humor:this.e.humor, valorDecidiu:true, recusa:{acaoDono:a, p}};
+    this.motivos.push(this.motivo); if (this.motivos.length > 200) this.motivos.shift();
+    this._hist({t, quem:"recusa", a:`${tipo === "recusar" ? "recusou" : "fez outra coisa em vez de"} ${a}`});
+    return true;
+  }
+  /* desejo depois de cada decisao: registra so quando muda; alimenta o vinculo e as metricas
+     (cumprimento: vontade com alvo X cumprida se o pet escolhe X em ate kCumprimento ticks) */
+  _desejo(obs, a, t){
+    const d = this.pol.desejo(obs, t), u = this.dz.atual, ch = x => x ? x.tipo + ":" + x.alvo : "";
+    const mudou = ch(d) !== ch(u);
+    if (mudou){
+      if (u && u.tipo === "vontade") this.dz.tVontade += t - u.tick;
+      if (d && d.tipo === "vontade"){ this.dz.vontades++; this.dz.abertas.push([t, d.alvo]); }
+      this.dz.atual = d ? {tick:t, tipo:d.tipo, alvo:d.alvo} : null;
+    }
+    this.dz.abertas = this.dz.abertas.filter(([t0, alvo]) => {
+      if (t - t0 > CDJ.kCumprimento) return false;
+      if (alvo === a){ this.dz.cumpridas++; return false; }
+      return true;
+    });
+    this.vinc.decisao(obs, a, t, mudou ? d : null);
+  }
+  /* fracao da vida com vontade ativa (ate agora) */
+  fracaoVontade(){
+    const vida = this.e.tick - TICK_INICIAL, u = this.dz.atual;
+    return vida > 0 ? (this.dz.tVontade + (u && u.tipo === "vontade" ? this.e.tick - u.tick : 0)) / vida : 0;
   }
   avancar(n){
     if (!(n > 0)) throw new Error("avanco precisa ser positivo");
@@ -923,6 +1180,7 @@ class Motor {
         this.e = efeitoAcaoPet(this.e, a, this.e);
         this.prox = this.e.tick + C.intervalo;
         this.pol.observar(obs, a, t);
+        if (this.versao >= 2) this._desejo(obs, a, t);
         for (const k of ACOES_PET) this.tracos[k] = (1-CT.alfa)*this.tracos[k] + (k===a ? CT.alfa : 0);
         this.nDecisoes++;
         const ult = this.historico[this.historico.length-1];
@@ -976,9 +1234,10 @@ class Motor {
   /* caráter travado na ultima evolucao que o mediu (adolescente/adulto); antes disso, neutro */
   carater(){ const ev = [...this.evolucoes].reverse().find(x => x.carater); return ev ? ev.carater : null; }
   _hist(x){ this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
-  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha]); }
-  static reproduzir(semente, log){
-    const m = new Motor(semente);
+  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
+    this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null]); }
+  static reproduzir(semente, log, versao = VERSAO_PET){
+    const m = new Motor(semente, versao);
     for (const [t, tipo, v] of log){
       if (m.e.tick !== t) throw new Error(`registro fora de ordem no tick ${t}`);
       if (tipo === "t") m._avancar(v);
@@ -1212,8 +1471,10 @@ function statsDe(f, car){
   return renormalizar(b, Object.values(CAT.especies[f.esp]).reduce((s, x) => s + x, 0));
 }
 /* stats -> numeros de combate (catalogo_pets.json); estagio multiplica vida e guts */
-function perfilDe(f, car){
-  const s = statsDe(f, car), est = CAT.estagio[f.est], gMax = (CV21.gMaxBase + CV21.gMaxFolego * s.folego) * est;
+/* condicao (do cuidado) multiplica vida e guts iniciais, como catalogo.perfil */
+function perfilDe(f, car, condicao = 1){
+  if (!(condicao >= CCOND.min && condicao <= CCOND.max)) throw new Error("condição fora da faixa: " + condicao);
+  const s = statsDe(f, car), est = CAT.estagio[f.est] * condicao, gMax = (CV21.gMaxBase + CV21.gMaxFolego * s.folego) * CAT.estagio[f.est];
   return {est:f.est, tecnica:tecnicaDe(f), passiva:f.adulta || null, stats:s,
     hpMax:(CV21.hpBase + CV21.hpVigor * s.vigor) * est, guts0:Math.min(gMax, (CV21.g0Base + CV21.g0Folego * s.folego) * est),
     gutsMax:gMax, regen:CV21.regenBase + CV21.regenRec * s.recuperacao,
@@ -1550,7 +1811,7 @@ function motivoCombate(tr, lado, estilo){
   }
   return {...base, fatores:conds.map(nomeCond), refs:[...refs].sort((a, b) => a - b)};
 }
-validarTabelasFala([...FATOR_DA_FEATURE, ...Object.keys(CATALOGO_V2)]);
+validarTabelasFala([...FATOR_DA_FEATURE, ...FATORES_ESPACOS, ...Object.keys(CATALOGO_V2), "vinculo_baixo", "teimosia", ...["fome","higiene","energia","humor"].map(n => "necessidade_" + n)]);
 validarTabelasPersonalidade();
 
 /* =================================================================
@@ -1716,11 +1977,12 @@ const POS_COCO = [0, 65, 9, 56, 18];
    ================================================================= */
 const CHAVE = "digilab-web-v21-sprites";   /* v21: arvore nova; pets salvos na arvore antiga ficam para tras */
 let motor, velocidade = 10, acumulado = 0, flash = null, nascendo = 0;
-function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify({semente:motor.semente, log:motor.log})); } catch(_){} }
+function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify({semente:motor.semente, log:motor.log, versao:motor.versao})); } catch(_){} }
 function carregar(){
   try {
     const d = JSON.parse(localStorage.getItem(CHAVE) || "null");
-    if (d && Number.isInteger(d.semente) && Array.isArray(d.log)) return Motor.reproduzir(d.semente, d.log);
+    /* save sem versao = pet de antes do porte (v1): segue igual */
+    if (d && Number.isInteger(d.semente) && Array.isArray(d.log)) return Motor.reproduzir(d.semente, d.log, d.versao ?? 1);
   } catch(_){}
   return null;
 }
@@ -1831,6 +2093,10 @@ function renderEstado(){
   const est = estagioFala(motor), des = motor.pol.desejo(observacao(e), e.tick);
   $("temperamento").textContent = expressarTemperamento(motor.temp, est);
   $("desejo").textContent = des ? expressarDesejo(des, est) : "…";
+  if (motor.versao >= 2){
+    const [pObed] = termosObediencia(motor.vinc.valor, motor.temp.teimosia, 0, null);
+    $("vinculo").textContent = `${(motor.vinc.valor*100).toFixed(0)}% · sem conflito, aceita um cuidado com ${(pObed*100).toFixed(0)}% de chance`;
+  } else $("vinculo").textContent = "pet de versão antiga: sem vínculo nem recusa (um pet novo já nasce com eles)";
   $("jeito-det").textContent = "temperamento: " + EIXOS_TEMP.map(k => `${k} ${motor.temp[k] >= 0 ? "+" : ""}${motor.temp[k].toFixed(2)}`).join(", ")
     + ` (tom só com |eixo| ≥ ${CDJ.limiarTom})` + " · desejo: " + (des ? `${des.tipo} ${des.alvo}${des.causa ? " (" + des.causa + ")" : ""}, intensidade ${des.intensidade.toFixed(2)}` : "nenhum agora");
   const af = afinidades(motor.tracos), mx = Math.max(.05, ...COMBATE.map(c => Math.abs(af[c])));
@@ -1851,7 +2117,7 @@ function renderRegistro(){
   $("neventos").textContent = motor.log.length;
   $("log").innerHTML = motor.historico.slice(-80).reverse().map(h =>
     `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>`
-      : h.quem === "gambit" ? `<span class="dono">você (gambits): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
+      : h.quem === "gambit" ? `<span class="dono">você (gambits): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : h.quem === "recusa" ? `<b>pet ${h.a}</b>` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
 }
 let paneAtual = "estado";
 function renderTudo(){
@@ -1891,7 +2157,7 @@ function mostrarPane(p){
 $("verificar").addEventListener("click", () => {
   const t0 = performance.now();
   try {
-    const r = Motor.reproduzir(motor.semente, motor.log);
+    const r = Motor.reproduzir(motor.semente, motor.log, motor.versao);
     const ok = r.assinatura() === motor.assinatura();
     $("reg-msg").innerHTML = ok
       ? `Replay idêntico: ${motor.log.length} eventos reconstruíram o mesmo pet, até o último decimal, em ${(performance.now()-t0).toFixed(0)} ms.`
@@ -1970,7 +2236,8 @@ function falaDe(m, mot){
 }
 function detalheMotivo(mot, est){
   const fat = mot.exploracao ? "exploração" : (mot.fatores.join(", ") || "nenhum");
-  const extra = mot.origem === "vida"
+  const extra = mot.recusa ? ` · você pediu ${mot.recusa.acaoDono}; chance de obedecer ${(mot.recusa.p*100).toFixed(0)}%`
+    : mot.origem === "vida"
     ? ` · o aprendido decidiu: ${mot.valorDecidiu ? "sim" : "não (instinto + acaso)"} · intensidade ${mot.intensidade.toFixed(2)}`
     : ` · regra ${typeof mot.regra === "number" ? "#" + (mot.regra + 1) : mot.regra}`;
   return `fatores: ${fat}${extra} · fala de ${NOME_ESTAGIO_FALA[est]}`;
@@ -1988,12 +2255,25 @@ function renderFala(){
 $("fala").addEventListener("click", () => {
   const d = $("fala-det"); d.hidden = !d.hidden; $("fala").setAttribute("aria-expanded", String(!d.hidden));
 });
+const NOME_MEM = {demora:"Você me deixou esperando", bronca:"Broncas", elogio:"Elogios", carinho:"Carinho"};
 function renderMemoria(){
-  const tick = motor.e.tick, f = motor.pol.mem.feat(tick);
-  $("memoria").innerHTML = [["Demora com a comida", f[0]], ["Demora para limpar", f[1]], ["Broncas recentes", f[2]], ["Elogios recentes", f[3]]]
-    .map(([k, v]) => `<div><b>${(v*100).toFixed(0)}%</b><span>${k}</span></div>`).join("");
+  const tick = motor.e.tick, f = motor.pol.mem.feat(tick), v2 = motor.versao >= 2;
+  $("memoria-txt").textContent = v2
+    ? "Memória por espaços (como no Dwarf Fortress): 4 lembranças recentes e 2 duradouras, uma por tipo; a mais forte fica. Depois de 12 h uma lembrança tenta virar duradoura; a cada 4 h acordado ele relembra tudo. Entra no aprendizado como contexto."
+    : "Memória curta (pet de versão antiga): quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo). Entra no aprendizado como contexto.";
+  const rot = v2 ? FATORES_ESPACOS.map(c => NOME_MEM[c]) : ["Demora com a comida", "Demora para limpar", "Broncas recentes", "Elogios recentes"];
+  $("memoria").innerHTML = rot.map((k, i) => `<div><b>${(f[i]*100).toFixed(0)}%</b><span>${k}</span></div>`).join("");
+  const mem = motor.pol.mem, linhaMem = (m, onde) => `<div><span class="t">${onde}</span> <b>${NOME_MEM[m.cat]}</b> <span class="muted">força ${(m.int*100).toFixed(0)}%, ativa ${(mem.ativacao(m, tick)*100).toFixed(0)}% · desde D${diaDe(m.criada)} ${hhmm(m.criada)}</span></div>`;
+  $("memoria-espacos").innerHTML = v2 ? (mem.curto.map(m => linhaMem(m, "recente")).join("") + mem.longo.map(m => linhaMem(m, "duradoura")).join("") || `<div class="muted">nenhuma lembrança ainda</div>`) : "";
+  $("desejo-bloco").hidden = !v2;
+  if (v2){
+    const dz = motor.dz, ob = motor.obed;
+    $("desejo-metricas").innerHTML = [["Vontades anunciadas", dz.vontades], ["Cumprimento", dz.vontades ? `${(dz.cumpridas / dz.vontades * 100).toFixed(0)}%` : "—"],
+      ["Tempo com vontade", `${(motor.fracaoVontade()*100).toFixed(0)}%`], ["Cuidados aceitos", ob.pedidos ? `${((ob.pedidos - ob.recusas) / ob.pedidos * 100).toFixed(0)}% de ${ob.pedidos}` : "—"],
+      ["Recusas", ob.recusas - ob.fazerOutra], ["Fez outra coisa", ob.fazerOutra]].map(([k, v]) => `<div><b>${v}</b><span>${k}</span></div>`).join("");
+  }
   $("decisoes").innerHTML = motor.motivos.slice(-12).reverse().map(mot =>
-    `<div><span class="t">D${diaDe(mot.tick)} ${hhmm(mot.tick)}</span> <b>${NOME_PET[mot.acao]}</b> <span class="muted">[${mot.fatores.join(", ") || "sem fator"}]</span> ${falaDe(motor, mot)}</div>`).join("");
+    `<div><span class="t">D${diaDe(mot.tick)} ${hhmm(mot.tick)}</span> <b>${NOME_PET[mot.acao] || (mot.recusa ? `desobedeceu (${mot.recusa.acaoDono})` : mot.acao)}</b> <span class="muted">[${mot.fatores.join(", ") || "sem fator"}]</span> ${falaDe(motor, mot)}</div>`).join("");
 }
 
 /* ------------------------------------------------ gambits do pet: hibrido (PROVISORIO, so na web)
@@ -2107,7 +2387,7 @@ class GambitsPet {
 }
 function estiloDoPet(m){ return m.gp ? {...m.gp.estilo(), base:m.gp.linha} : {...estiloBot("aleatorio"), base:"aleatorio"}; }
 function lutadorPet(m, rotulo){
-  return {nome:rotulo, estilo:estiloDoPet(m), cond:perfilDe(m.forma, m.carater()), sprite:digimon(m),
+  return {nome:rotulo, estilo:estiloDoPet(m), cond:perfilDe(m.forma, m.carater(), m.versao >= 2 ? condicaoDe(m.e.saude) : 1), sprite:digimon(m),
           grade:gradeDe(m.estagioAtual), cor:corForma(m), estagioFala:estagioFala(m)};
 }
 function lutadorBot(nome){
@@ -2493,7 +2773,7 @@ function montarCenario(cen, semente){
   const A = treinarPet(cen.a.dono, cen.a.dias, cen.a.porDia, sa);
   const B = treinarPet(cen.b.dono, cen.b.dias, cen.b.porDia, sb);
   /* o pet atual fica guardado para o botao de voltar; so o log e salvo, como sempre */
-  try { if (!localStorage.getItem(CHAVE + "-anterior")) localStorage.setItem(CHAVE + "-anterior", JSON.stringify({semente:motor.semente, log:motor.log})); } catch(_){}
+  try { if (!localStorage.getItem(CHAVE + "-anterior")) localStorage.setItem(CHAVE + "-anterior", JSON.stringify({semente:motor.semente, log:motor.log, versao:motor.versao})); } catch(_){}
   motor = A; nascendo = 0; salvar();
   rivalFixo = { rival:B, dias:cen.b.dias, tipo:cen.b.dono };
   cenarioAtual = { cen, semente, ra:resumoPet(A, cen.a), rb:resumoPet(B, cen.b) };
@@ -2566,7 +2846,7 @@ $("cen-voltar").addEventListener("click", () => {
   let d = null;
   try { d = JSON.parse(localStorage.getItem(CHAVE + "-anterior") || "null"); } catch(_){}
   if (!d) { $("cen-msg").textContent = "Não há pet anterior guardado."; return; }
-  motor = Motor.reproduzir(d.semente, d.log);
+  motor = Motor.reproduzir(d.semente, d.log, d.versao ?? 1);
   try { localStorage.removeItem(CHAVE + "-anterior"); } catch(_){}
   rivalFixo = null; cenarioAtual = null; salvar();
   renderCenario(); renderRivalFixo(); renderTudo();
