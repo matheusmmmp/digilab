@@ -177,6 +177,43 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .nota{font-size:13px;color:var(--muted);max-width:80ch}
 footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 @media (prefers-reduced-motion: reduce){.btn{transition:none}}
+.evo-rola{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* atalho de volta ao pet no celular (a tela do pet fica acima das abas) */
+.ir-pet{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:10;font:inherit;font-weight:700;border:0;border-radius:999px;padding:12px 16px;background:var(--shell);color:var(--shell-ink);box-shadow:0 4px 14px rgba(20,30,70,.35);cursor:pointer}
+.ir-pet:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (min-width:821px){.ir-pet{display:none}}
+
+/* celular */
+@media (max-width:600px){
+  body{padding-inline:12px;padding-block:12px 72px;font-size:15px}
+  .wrap{gap:14px}
+  header h1{font-size:22px}
+  header p{font-size:13.5px}
+  .grid{gap:14px}
+  .device{padding:12px;gap:10px;border-radius:22px 22px 34px 34px}
+  .bezel{padding:8px;gap:6px}
+  .strip{flex-wrap:wrap;font-size:11px;gap:2px 8px}
+  .acoes{gap:6px}
+  .btn{padding:10px 4px;min-height:52px}
+  .chip{padding:8px 12px;min-height:36px}
+  .tabs{flex-wrap:wrap;gap:4px}
+  .tab{padding:9px 8px;flex:1 1 auto;text-align:center;font-size:13.5px}
+  .pane{padding:14px;gap:14px}
+  .linha,.dupla{grid-template-columns:78px 1fr 46px;gap:8px}
+  .dupla{grid-template-columns:78px 1fr 72px}
+  .hp{gap:8px}
+  .hp .nm{flex-direction:column}
+  .sbtn{padding:11px 14px}
+  select,input,.form-cen input,.form-cen select,.gambits select{font-size:16px}  /* sem zoom automatico no iOS */
+  .gambits{padding-left:18px}
+  .gambits .g-regra{flex-basis:100%}
+  .gambits .g-bts .sbtn{padding:8px 10px}
+  .evo-svg{min-width:520px}
+  .form-cen label{grid-template-columns:1fr;gap:2px}
+  .kv{grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+  .kv b{font-size:18px}
+  .log,.decisoes{font-size:12px}
+}
 </style>
 
 <div class="wrap">
@@ -330,7 +367,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       <div class="pane" id="p-evolucao" hidden>
         <p>A evolução segue a árvore do combate V2.1, com uma moeda por transição (os contadores zeram a cada evolução). <b>Bebê → criança</b> (3 h): o <b>cuidado</b> decide o ramo; o bebê chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Criança → adolescente</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Adolescente → adulto</b> (18 h e 10 lutas de sparring): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter (PROVISÓRIO, só na web): quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
         <div class="kv" id="evo-resumo"></div>
-        <svg class="evo-svg" id="evo-arvore" viewBox="0 0 560 500" role="img" aria-label="Árvore de evolução"></svg>
+        <div class="evo-rola"><svg class="evo-svg" id="evo-arvore" viewBox="0 0 560 500" role="img" aria-label="Árvore de evolução"></svg></div>
         <div class="legend"><span style="--c:var(--accent)">caminho do seu pet</span><span style="--c:var(--line)">caminhos possíveis</span></div>
         <p class="muted">Linha tracejada: para onde ele iria se evoluísse agora. A forma muda o combate: stats, técnica e passiva (aba Catálogo). Passe o mouse num nó para ver o requisito.</p>
         <div>
@@ -3266,6 +3303,18 @@ setInterval(() => {
     if (performance.now() - ultimoSalvo > 2000){ salvar(); ultimoSalvo = performance.now(); } }
 }, 100);
 setInterval(desenharLCD, 125);
+
+/* celular: botao para voltar a tela do pet quando ela sai da vista */
+(() => {
+  const bt = document.createElement("button");
+  bt.className = "ir-pet"; bt.type = "button"; bt.textContent = "↑ Pet"; bt.hidden = true;
+  bt.setAttribute("aria-label", "Voltar para a tela do pet");
+  bt.addEventListener("click", () => document.querySelector(".device").scrollIntoView({behavior:"smooth", block:"start"}));
+  document.body.appendChild(bt);
+  const dev = document.querySelector(".device");
+  const ver = () => { bt.hidden = dev.getBoundingClientRect().bottom > 80; };
+  addEventListener("scroll", ver, {passive:true}); addEventListener("resize", ver); ver();
+})();
 
 motor = carregar() || exemplo();
 try { const aba = localStorage.getItem(CHAVE + "-aba"); if (aba && document.getElementById("p-" + aba)) paneAtual = aba; } catch(_){}
