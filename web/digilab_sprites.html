@@ -1944,10 +1944,14 @@ function desenhar(ctx, grade, x0, y0, pal, opts={}){
    momento de cada transicao (60 pets simulados: 4 donos x 15 sementes, 16 interacoes/dia,
    medida em 2026-09-24 com treinarPet ate 900 e 1980 min de vida).
    Todo pet dorme e fica a toa muito; sem a base, quase todos seriam "pacientes".
-   Caráter de um eixo = media (afinidade - base) dos tracos do eixo / escala, cortado em [-1, 1]. */
+   Caráter de um eixo = media (afinidade - base) dos tracos do eixo / escala, cortado em [-1, 1].
+   Adulto recalibrado em 2026-09-25 (pets v2): a base de cada eixo complementar foi deslocada pela
+   mediana desse eixo entre os pets da linha que ele decide (600 pets: 4 donos x 150 sementes
+   910013..911950, 16/dia; duas passadas), para a escolha entre as duas formas adultas ficar perto
+   de 50/50. Antes: golpe -0.0477, bloqueio 0.1362, agarrao -0.0035, finta -0.0527, carga -0.0322. */
 const BASE_CARATER = {
   adolescente: {golpe:-0.0554, bloqueio:0.1024, agarrao:0.0404, finta:-0.0556, carga:-0.0317},
-  adulto:      {golpe:-0.0477, bloqueio:0.1362, agarrao:-0.0035, finta:-0.0527, carga:-0.0322},
+  adulto:      {golpe:-0.0474, bloqueio:0.1218, agarrao:-0.0052, finta:-0.0674, carga:-0.0319},
 };
 function caraterDe(tracos, quando){
   const af = afinidades(tracos), base = BASE_CARATER[quando];
