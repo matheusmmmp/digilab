@@ -114,3 +114,15 @@ def test_sem_remoto_recusa_pedido_vindo_de_tunel(servidor):
         urllib.request.urlopen(req, timeout=5)
     assert err.value.code == 403
     assert _get(servidor + "/v1/web/digilab_sprites.html") == 200     # local continua livre
+
+
+def test_cliente_que_desconecta_nao_derruba_o_servidor(servidor, capsys):
+    import socket
+    from urllib.parse import urlparse
+
+    u = urlparse(servidor)
+    s = socket.create_connection((u.hostname, u.port))
+    s.sendall(b"GET /v1/web/digilab_sprites.html HTTP/1.1\r\nHost: x\r\nAuthorization: Basic "
+              + base64.b64encode(f"eu:{SENHA}".encode()) + b"\r\n\r\n")
+    s.close()                                                         # fecha sem ler a resposta
+    assert _get(servidor + "/api/fala/status", SENHA) == 200          # o servidor segue atendendo

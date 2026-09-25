@@ -1,0 +1,35 @@
+{
+  "checagens": [
+    {
+      "checagem": "python>=3.10",
+      "detalhe": "3.13.0",
+      "ok": true
+    },
+    {
+      "checagem": "digilab so usa stdlib",
+      "detalhe": "imports fora da stdlib: []",
+      "ok": true
+    },
+    {
+      "checagem": "engine.py intocado",
+      "detalhe": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+      "ok": true
+    },
+    {
+      "checagem": "protocolo valido",
+      "detalhe": "arena-v1-personalidade",
+      "ok": true
+    },
+    {
+      "checagem": "saida gravavel",
+      "detalhe": "D:\\Trab\\digilab\\v1\\artifacts_v1_personalidade\\completa",
+      "ok": true
+    },
+    {
+      "checagem": "replay v0 bit a bit",
+      "detalhe": "motor v0, 1 dia",
+      "ok": true
+    }
+  ],
+  "ok": true
+}

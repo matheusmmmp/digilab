@@ -334,3 +334,49 @@ def equilibrio_simetrico(taxa: Mapping[str, Mapping[str, float]], nomes: Sequenc
 
 def suporte(estrategia: Mapping[str, float], peso_minimo: float) -> list[str]:
     return sorted(n for n, p in estrategia.items() if p >= peso_minimo)
+
+
+# ================================================================ personalidade
+# (docs/TAREFA_PERSONALIDADE_OBEDIENCIA.md)
+
+
+def cumprimento_desejo(desejos, acoes_pet, k_ticks: int) -> dict:
+    """Fracao dos desejos `vontade` com alvo X em que o pet escolhe X nos proximos
+    `k_ticks`. Toda acao do pet e possivel a qualquer momento nesta simulacao, entao
+    toda vontade conta como oportunidade. Baixo = a fala promete o que o pet nao faz."""
+    vontades = [d for d in desejos if d.tipo == "vontade" and d.intensidade > 0]
+    cumpridos = sum(any(d.tick <= t <= d.tick + k_ticks and a.value == d.alvo for t, a in acoes_pet)
+                    for d in vontades)
+    return {"vontades": len(vontades), "cumpridas": cumpridos,
+            "cumprimento": cumpridos / len(vontades) if vontades else None}
+
+
+def fracao_tempo_vontade(desejos, tick_fim: int) -> float:
+    """Fracao do tempo de vida com um desejo `vontade` ativo (legibilidade do aprendizado)."""
+    total, t_ant, ativo = 0, 0, False
+    for d in desejos:
+        if ativo:
+            total += d.tick - t_ant
+        t_ant, ativo = d.tick, d.tipo == "vontade" and d.intensidade > 0
+    if ativo:
+        total += tick_fim - t_ant
+    return total / tick_fim if tick_fim else 0.0
+
+
+def decomposicao_ovo_braco(valor: Mapping[tuple[str, str], float]) -> dict:
+    """ANOVA de dois fatores sem interacao, uma observacao por (ovo, braco):
+    fracao da soma de quadrados explicada pelo ovo, pelo braco e o residuo."""
+    ovos = sorted({o for o, _ in valor})
+    bracos = sorted({b for _, b in valor})
+    if len(valor) != len(ovos) * len(bracos):
+        raise ValueError("decomposicao exige a tabela completa ovo x braco")
+    gm = sum(valor.values()) / len(valor)
+    m_ovo = {o: sum(valor[(o, b)] for b in bracos) / len(bracos) for o in ovos}
+    m_br = {b: sum(valor[(o, b)] for o in ovos) / len(ovos) for b in bracos}
+    ss_tot = sum((v - gm) ** 2 for v in valor.values())
+    ss_ovo = len(bracos) * sum((m - gm) ** 2 for m in m_ovo.values())
+    ss_br = len(ovos) * sum((m - gm) ** 2 for m in m_br.values())
+    frac = (lambda x: x / ss_tot) if ss_tot > 0 else (lambda x: 0.0)
+    return {"fracao_ovo": frac(ss_ovo), "fracao_braco": frac(ss_br), "fracao_residuo": frac(ss_tot - ss_ovo - ss_br),
+            "ss_total": ss_tot, "n_ovos": len(ovos), "n_bracos": len(bracos),
+            "media_por_braco": m_br}

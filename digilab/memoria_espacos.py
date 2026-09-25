@@ -82,8 +82,13 @@ def inserir(espacos: list[Memoria], nova: Memoria, n: int) -> tuple[list[Memoria
 
 
 class MemoriaEspacos:
-    def __init__(self, cfg: ConfigMemoriaEspacos | None = None) -> None:
+    def __init__(self, cfg: ConfigMemoriaEspacos | None = None, fator_tau: dict | None = None) -> None:
         self.cfg = cfg or CONFIG_MEMORIA_ESPACOS
+        # multiplicador do tau de decaimento por categoria (temperamento: rancor); 1.0 = sem efeito
+        self.fator_tau = dict(fator_tau or {})
+        for c in self.fator_tau:
+            if c not in self.cfg.categorias:
+                raise CategoriaInvalida(f"fator de decaimento para categoria desconhecida: {c!r}")
         for c in self.cfg.ativas:
             if c not in self.cfg.categorias:
                 raise CategoriaInvalida(f"categoria ativa fora do catalogo: {c!r}")
@@ -183,18 +188,21 @@ class MemoriaEspacos:
         self.avancar(tick)
 
     # ------------------------------------------------------------ leitura (pura)
+    def _tau(self, categoria: str) -> float:
+        f = self.fator_tau.get(categoria)
+        return self.cfg.tau_ativacao_ticks if f is None else self.cfg.tau_ativacao_ticks * f
+
     def features(self, tick: int) -> list[float]:
-        tau = self.cfg.tau_ativacao_ticks
-        return [min(1.0, sum(m.ativacao(tick, tau) for m in self.curto + self.longo if m.categoria == c))
+        return [min(1.0, sum(m.ativacao(tick, self._tau(c)) for m in self.curto + self.longo if m.categoria == c))
                 for c in FATORES_ESPACOS]
 
     def refs(self, tick: int | None = None) -> dict[str, int | None]:
         """categoria -> ordinal da acao do dono que criou a memoria mais ativa dela (ou None)."""
         tick = self.tick if tick is None else tick
-        tau = self.cfg.tau_ativacao_ticks
         saida = {}
         for c in FATORES_ESPACOS:
             ms = [m for m in self.curto + self.longo if m.categoria == c]
+            tau = self._tau(c)
             saida[c] = max(ms, key=lambda m: (m.ativacao(tick, tau), m.criada)).ref if ms else None
         return saida
 
@@ -210,8 +218,9 @@ class PoliticaBanditEspacos(PoliticaBandit):
 
     nome = "bandit_thompson_espacos"
 
-    def __init__(self, cfg=None, cfg_bandit=None, cfg_memoria: ConfigMemoriaEspacos | None = None) -> None:
-        self.memoria = MemoriaEspacos(cfg_memoria)
+    def __init__(self, cfg=None, cfg_bandit=None, cfg_memoria: ConfigMemoriaEspacos | None = None,
+                 fator_tau: dict | None = None) -> None:
+        self.memoria = MemoriaEspacos(cfg_memoria, fator_tau)
         super().__init__(cfg, cfg_bandit)
 
     def n_features(self) -> int:
