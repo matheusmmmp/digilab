@@ -1,0 +1,343 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "amostra_replay.jsonl": "6a235f83e64804d6de3306e01ae6a390655492e09373daee07fce83e6ab40eee",
+    "equilibrio.json": "993af240452902e1e1403c4b5e2203b4ec572169acc1d2bab41bdec1ba630aaf",
+    "matriz_arquetipos.json": "2399f3bded7fff29b7fd1ee4bdff029159d28ede047e3b843f05cdc3beb8319b",
+    "matriz_especie_arquetipo.json": "116e0db464b0fb0ba3c17b355e766b8548dcc45aa38c2df6e3c0866d21c68f7f",
+    "partidas.csv": "83302ed7de0496e2472017603ae783cedf3aae25317878f3e3c5302287ff49e2",
+    "robustez_e5.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "uso_tecnicas.json": "2e4f7f5e545ada0904cc46e2b0fda378de77b120205aad22eb3085b31f30d072"
+  },
+  "avisos": [
+    "todos os numeros de ConfigCombateV21, ConfigCatalogo e ConfigBateriaV21 sao PROPOSTOS",
+    "pre-condicoes da especificacao nao cumpridas: ver docs/REGISTRO_DESVIOS.md",
+    "conjunto de CALIBRACAO: nao e a run canonica"
+  ],
+  "config_base": {
+    "bots_v2c": false,
+    "custo_disparo": 20,
+    "custo_esquivar": 20,
+    "custo_golpe_rapido": 10,
+    "custo_preparar_pesado": 15,
+    "dano_disparo": 6.0,
+    "dano_golpe_rapido": 8.0,
+    "dano_parry": 5.0,
+    "dano_pesado": 25.0,
+    "epsilon_bots": 0.05,
+    "finta": true,
+    "fracoes_hp": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "fuga_condicionada": true,
+    "guts_carregar": 25,
+    "guts_extra_defender": 5,
+    "guts_inicial_neutro": 50,
+    "guts_max": 100,
+    "hp_neutro": 70.0,
+    "janela_frequente": 5,
+    "k_repete": [
+      2,
+      3
+    ],
+    "limiar_frequente": 0.4,
+    "limiares_guts": [
+      20,
+      40,
+      60
+    ],
+    "max_condicoes_por_regra": 2,
+    "max_regras": 8,
+    "mult_carregar": 1.5,
+    "mult_defender": 0.3,
+    "mult_defender_contra_pesado": 0.6,
+    "mult_morte_subita": 1.5,
+    "oraculo_passos": 1,
+    "oraculo_top_oponente": 3,
+    "peso_guts_oraculo": 0.002,
+    "peso_pesado_pendente_oraculo": 0.5,
+    "regen_guts_neutro": 8,
+    "t_max": 40,
+    "turno_morte_subita": 25
+  },
+  "config_bateria_v21": {
+    "fracao_min_tecnica": 0.05,
+    "iteracoes_fictitious_play": 20000,
+    "partidas_e3_por_semente": 40,
+    "partidas_e4_por_semente": 100,
+    "partidas_e5_por_semente": 20,
+    "perturbacao_e5": 0.1,
+    "peso_minimo_suporte": 0.05,
+    "suporte_minimo_e1": 4,
+    "taxa_max_e4": 0.85,
+    "taxa_min_e4": 0.6
+  },
+  "config_combate_v21": {
+    "carater_bot_complementar": 0.25,
+    "carater_bot_linha": 0.5,
+    "custo_contra_golpe": 15,
+    "custo_investida": 20,
+    "custo_marcar": 10,
+    "custo_pele_dura": 20,
+    "dano_extra_duelista": 4.0,
+    "dano_investida": 8.0,
+    "fracao_contra_golpe": 0.5,
+    "fracao_espelho_disparo": 1.0,
+    "guarda_base": 1.3,
+    "guarda_por_ponto": 0.03,
+    "guts_extra_muralha": 3,
+    "guts_inicial_base": 30.0,
+    "guts_inicial_por_folego": 2.0,
+    "guts_max_base": 80.0,
+    "guts_max_por_folego": 2.0,
+    "hp_base": 80.0,
+    "hp_por_vigor": 2.0,
+    "limiar_hp_furioso": 0.5,
+    "marca_fragil": false,
+    "max_regras_adolescente": 5,
+    "max_regras_adulto": 8,
+    "max_regras_crianca": 3,
+    "mult_base": 0.7,
+    "mult_emboscador": 2.0,
+    "mult_furioso": 1.25,
+    "mult_marcar": 2.0,
+    "mult_parry_investida": 0.0,
+    "mult_pele_dura": 0.5,
+    "mult_por_ponto": 0.03,
+    "mult_tita": 1.3,
+    "recarga_sentinela": 4,
+    "regen_base": 4.0,
+    "regen_por_recuperacao": 0.4,
+    "turnos_execucao": [
+      5,
+      10,
+      20
+    ],
+    "turnos_marcar": 3,
+    "turnos_pele_dura": 2
+  },
+  "conjunto": "calibracao",
+  "especies": [
+    "brasa",
+    "cirro",
+    "ferrugem",
+    "limo"
+  ],
+  "falharam": [
+    "E1_sem_arquetipo_dominante",
+    "E2_sem_especie_dominante",
+    "E3_tecnica_usada_e_respondivel",
+    "E4_estagio_importa_sem_esmagar",
+    "E5_robustez"
+  ],
+  "gates": [
+    {
+      "gate": "E1_sem_arquetipo_dominante",
+      "mensagem": "FALHOU: dominantes []; suporte ['emboscador', 'furioso', 'muralha'] (precisa >= 4)",
+      "ok": false,
+      "valores": {
+        "dominantes": [],
+        "estrategia": {
+          "duelista": 5e-05,
+          "emboscador": 0.31025,
+          "espelho": 0.00025,
+          "furioso": 0.3425,
+          "muralha": 0.34695,
+          "sentinela": 0.0,
+          "tita": 0.0,
+          "vigia": 0.0
+        },
+        "suporte": [
+          "emboscador",
+          "furioso",
+          "muralha"
+        ]
+      }
+    },
+    {
+      "gate": "E2_sem_especie_dominante",
+      "mensagem": "especie que vence todas as outras (agregado sobre arquetipos): ['ferrugem']; por arquetipo (informativo): {'duelista': ['brasa'], 'furioso': ['ferrugem'], 'espelho': ['ferrugem'], 'muralha': ['brasa'], 'sentinela': ['cirro'], 'emboscador': ['cirro'], 'vigia': ['limo'], 'tita': ['brasa']}",
+      "ok": false,
+      "valores": {
+        "dominante_por_arquetipo": {
+          "duelista": [
+            "brasa"
+          ],
+          "emboscador": [
+            "cirro"
+          ],
+          "espelho": [
+            "ferrugem"
+          ],
+          "furioso": [
+            "ferrugem"
+          ],
+          "muralha": [
+            "brasa"
+          ],
+          "sentinela": [
+            "cirro"
+          ],
+          "tita": [
+            "brasa"
+          ],
+          "vigia": [
+            "limo"
+          ]
+        },
+        "dominantes": [
+          "ferrugem"
+        ]
+      }
+    },
+    {
+      "gate": "E3_tecnica_usada_e_respondivel",
+      "mensagem": "tecnica abaixo de 0.05 das decisoes: nenhuma; resposta que NAO reduz a taxa do usuario: ['marcar']; investida 0.611->0.581, contra_golpe 0.519->0.462, marcar 0.631->0.939, pele_dura 0.232->0.003",
+      "ok": false,
+      "valores": {
+        "fracao_tecnica": {
+          "duelista": 0.21280546883410487,
+          "emboscador": 0.29632893355332235,
+          "espelho": 0.4246828806973541,
+          "furioso": 0.17771801551951144,
+          "muralha": 0.21429142811432228,
+          "sentinela": 0.23484906298036565,
+          "tita": 0.27011535659678026,
+          "vigia": 0.25315542326923834
+        },
+        "pouco_usadas": [],
+        "resposta": {
+          "contra_golpe": {
+            "reducao": 0.05730468749999995,
+            "taxa_com_resposta": 0.461640625,
+            "taxa_sem_resposta": 0.5189453125
+          },
+          "investida": {
+            "reducao": 0.029570312499999973,
+            "taxa_com_resposta": 0.581171875,
+            "taxa_sem_resposta": 0.6107421875
+          },
+          "marcar": {
+            "reducao": -0.3084765625,
+            "taxa_com_resposta": 0.9392578125,
+            "taxa_sem_resposta": 0.63078125
+          },
+          "pele_dura": {
+            "reducao": 0.22914062500000001,
+            "taxa_com_resposta": 0.002578125,
+            "taxa_sem_resposta": 0.23171875
+          }
+        },
+        "sem_resposta_efetiva": [
+          "marcar"
+        ]
+      }
+    },
+    {
+      "gate": "E4_estagio_importa_sem_esmagar",
+      "mensagem": "adulto x adolescente da mesma linha: fora de [0.6, 0.85]: {'furioso': 0.949, 'muralha': 0.996, 'sentinela': 0.995, 'emboscador': 0.894, 'vigia': 1.0, 'tita': 0.993}",
+      "ok": false,
+      "valores": {
+        "fora": {
+          "emboscador": 0.894,
+          "furioso": 0.94875,
+          "muralha": 0.996,
+          "sentinela": 0.9945,
+          "tita": 0.993,
+          "vigia": 1.0
+        },
+        "taxa_por_forma": {
+          "duelista": 0.80075,
+          "emboscador": 0.894,
+          "espelho": 0.623,
+          "furioso": 0.94875,
+          "muralha": 0.996,
+          "sentinela": 0.9945,
+          "tita": 0.993,
+          "vigia": 1.0
+        }
+      }
+    },
+    {
+      "gate": "E5_robustez",
+      "mensagem": "PULADO (pular_e5 no config): nao vale como aprovacao",
+      "ok": false,
+      "valores": {}
+    },
+    {
+      "gate": "sanidade_informativo",
+      "mensagem": "200 partidas rejogadas do disco bit a bit; pontos do lado 0 nos espelhos {'duelista': 0.497, 'furioso': 0.506, 'espelho': 0.524, 'muralha': 0.506, 'sentinela': 0.492, 'emboscador': 0.475, 'vigia': 0.507, 'tita': 0.501}; mediana de turnos 22.0; 0.079 no limite de turnos",
+      "ok": true,
+      "valores": {
+        "fins": {
+          "ko": 26522,
+          "limite": 2278
+        },
+        "fracao_limite": 0.07909722222222222,
+        "mediana_turnos": 22.0,
+        "pontos_lado0_espelho": {
+          "duelista": 0.496875,
+          "emboscador": 0.475,
+          "espelho": 0.524375,
+          "furioso": 0.50625,
+          "muralha": 0.505625,
+          "sentinela": 0.4925,
+          "tita": 0.50125,
+          "vigia": 0.5075
+        },
+        "replay_partidas": 200
+      }
+    },
+    {
+      "gate": "G1_G9_base_v2c",
+      "mensagem": "base V2C (artifacts_combate_v2c/validacao_bots): REPROVADA, falharam ['G6b_espelho_condicao'] (G6b do atirador aceito como excecao: docs/REGISTRO_DESVIOS.md)",
+      "ok": true,
+      "valores": {
+        "falharam": [
+          "G6b_espelho_condicao"
+        ]
+      }
+    }
+  ],
+  "hashes": {
+    "arquivos_regras": [
+      "__init__.py",
+      "bots.py",
+      "catalogo.py",
+      "gambits.py",
+      "partida.py",
+      "regras.py"
+    ],
+    "config_sha256": "4cd778281e828032f226f50105b5317e08d9c41b26afb63e7698144ccb49353f",
+    "regras_sha256": "20521e9e9612e19b86ea435312e0b5bedd843448449507d2a2a04c943597805d"
+  },
+  "partidas_por_par_por_semente": 40,
+  "registro_calibracao": null,
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sementes_calibracao": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sementes_validacao": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "status": "REPROVADA"
+}

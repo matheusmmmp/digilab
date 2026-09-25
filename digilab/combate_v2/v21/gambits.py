@@ -43,6 +43,8 @@ CATALOGO: dict[str, tuple[str, ...]] = {
     "oponente_frequente": ("a",),
     "turno_execucao": ("t",),
     "oponente_vai_preparar": (),
+    # V21C (C1 da base): o proprio lado esta no turno de execucao do pesado (adulto)
+    "executando_pesado": (),
 }
 
 CONDICOES_POR_ESTAGIO = {
@@ -51,7 +53,7 @@ CONDICOES_POR_ESTAGIO = {
 CONDICOES_POR_ESTAGIO["adolescente"] = CONDICOES_POR_ESTAGIO["crianca"] + (
     "oponente_preparando", "oponente_hp_abaixo", "oponente_guts_abaixo")
 CONDICOES_POR_ESTAGIO["adulto"] = CONDICOES_POR_ESTAGIO["adolescente"] + (
-    "oponente_repete", "oponente_frequente", "turno_execucao")
+    "oponente_repete", "oponente_frequente", "turno_execucao", "executando_pesado")
 CONDICAO_DO_VIGIA = "oponente_vai_preparar"
 
 
@@ -125,6 +127,8 @@ class Condicao:
             return sum(a is p[0] for a in ult) / b.janela_frequente >= b.limiar_frequente
         if n == "turno_execucao":
             return estado.turno >= p[0]
+        if n == "executando_pesado":
+            return eu.preparando
         if n == "oponente_vai_preparar":
             return ctx.intencao_oponente is Acao.PREPARAR_PESADO
         raise GambitInvalido(f"condicao sem avaliador: {n!r}")
@@ -148,7 +152,10 @@ class Regra:
     def validar(self) -> None:
         if not 1 <= len(self.condicoes) <= CONFIG_COMBATE_V2.max_condicoes_por_regra:
             raise GambitInvalido(f"regra com {len(self.condicoes)} condicoes")
-        if self.acao not in ACOES_ESCOLHIVEIS:
+        if self.acao is Acao.FINTAR:
+            if Condicao("executando_pesado") not in self.condicoes:
+                raise GambitInvalido("regra de fintar precisa da condicao executando_pesado")
+        elif self.acao not in ACOES_ESCOLHIVEIS:
             raise GambitInvalido(f"acao nao escolhivel numa regra: {self.acao!r}")
         for c in self.condicoes:
             c.validar()
@@ -223,6 +230,10 @@ def decidir_gambits(gambits: ListaGambits, epsilon: float, estado: EstadoCombate
                     r: Regras = REGRAS_PADRAO) -> tuple[Acao, Motivo]:
     obrig = acao_obrigatoria(estado, lado)
     if obrig is not None:
+        if eh_legal(estado, lado, Acao.FINTAR, r):
+            for i, rg in enumerate(gambits.regras):
+                if rg.acao is Acao.FINTAR and all(c.vale(estado, lado, ctx) for c in rg.condicoes):
+                    return Acao.FINTAR, i
         return obrig, PESADO_AUTOMATICO
     if epsilon > 0.0 and rng.random() < epsilon:
         legais = acoes_legais(estado, lado, r)

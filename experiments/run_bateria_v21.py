@@ -51,7 +51,7 @@ from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  #
 from run_arena import _imports_externos  # noqa: E402
 from run_bateria_combate import hashes as hashes_base  # noqa: E402
 
-CHAVES = {"descricao", "saida", "sementes_calibracao", "sementes_validacao", "conjunto",
+CHAVES = {"descricao", "saida", "sementes_calibracao", "sementes_validacao", "conjunto", "regras_base", "regras_v21",
           "partidas_por_par_por_semente", "registro_calibracao", "pular_e5"}
 TECNICA_DA_LINHA = {l: CONFIG_CATALOGO.arquetipos_adolescente[l]["tecnica"] for l in LINHAS}
 
@@ -81,13 +81,32 @@ def carregar(caminho: Path) -> dict:
     return cfg
 
 
+def regras_de(cfg_json: dict) -> Regras:
+    """V2.1 original, ou V21C: "regras_base" = campos de ConfigCombateV2C (C1-C4) e "regras_v21" = campos de
+    ConfigCombateV21C (marca_fragil, hp_base, hp_por_vigor...). TAREFA_CORRECAO_COMBATE, Etapa 3."""
+    from digilab.config import ConfigCombateV2C, ConfigCombateV21C
+    base, v21 = CONFIG_COMBATE_V2, CONFIG_COMBATE_V21
+    if "regras_base" in cfg_json:
+        extras = set(cfg_json["regras_base"]) - set(ConfigCombateV2C.__dataclass_fields__)
+        if extras:
+            raise KeyError(f"regras_base desconhecidas: {sorted(extras)}")
+        base = ConfigCombateV2C(**{**asdict(CONFIG_COMBATE_V2), **cfg_json["regras_base"]})
+    if "regras_v21" in cfg_json:
+        extras = set(cfg_json["regras_v21"]) - set(ConfigCombateV21C.__dataclass_fields__)
+        if extras:
+            raise KeyError(f"regras_v21 desconhecidas: {sorted(extras)}")
+        v21 = ConfigCombateV21C(**{**asdict(CONFIG_COMBATE_V21), **cfg_json["regras_v21"]})
+    return Regras(base=base, v21=v21)
+
+
 def hashes(cfg_json: dict) -> dict:
     fontes = sorted((RAIZ / "digilab" / "combate_v2" / "v21").glob("*.py"))
     h = hashlib.sha256()
     for f in fontes:
         h.update(f.name.encode() + b"\0" + f.read_bytes().replace(b"\r\n", b"\n") + b"\0")
     semantico = {k: v for k, v in cfg_json.items() if k not in ("saida", "descricao")}
-    carga = {"base": asdict(CONFIG_COMBATE_V2), "v21": asdict(CONFIG_COMBATE_V21),
+    r = regras_de(cfg_json)
+    carga = {"base": asdict(r.base), "v21": asdict(r.v21),
              "catalogo": asdict(CONFIG_CATALOGO), "bateria": asdict(CONFIG_BATERIA_V21), "json": semantico}
     return {"regras_sha256": h.hexdigest(), "arquivos_regras": [f.name for f in fontes],
             "config_sha256": hashlib.sha256(json.dumps(carga, sort_keys=True, default=list).encode()).hexdigest()}
@@ -138,10 +157,10 @@ def avaliar_e1(taxa: dict, cb) -> tuple[bool, dict]:
         "dominantes": dominantes, "suporte": sup, "estrategia": eq["estrategia"]}
 
 
-def perturbacoes(p: float) -> list[tuple[str, str, object, object]]:
+def perturbacoes(p: float, v21=CONFIG_COMBATE_V21) -> list[tuple[str, str, object, object]]:
     saida = []
     for campo in CAMPOS_TECNICA_PASSIVA_V21:
-        v = getattr(CONFIG_COMBATE_V21, campo)
+        v = getattr(v21, campo)
         for sinal, rot in ((-1, "-"), (1, "+")):
             if isinstance(v, int):
                 novo = round(v * (1 + sinal * p))
@@ -170,7 +189,8 @@ def executar(caminho_cfg: Path) -> int:
     sementes = list(cfg["sementes_" + cfg["conjunto"]])
     n = cfg["partidas_por_par_por_semente"]
     especies = list(CONFIG_CATALOGO.especies_ativas)
-    r = Regras()
+    r = regras_de(cfg)
+    cfg21 = r.v21
     gates = []
 
     def gate(nome, ok, msg, valores):
@@ -196,7 +216,7 @@ def executar(caminho_cfg: Path) -> int:
         cont[0] += 1
 
     print("E1 ...", flush=True)
-    conf_e1 = round_robin_arquetipos(especies, sementes, n, r, CONFIG_COMBATE_V21, guardar=guardar)
+    conf_e1 = round_robin_arquetipos(especies, sementes, n, r, cfg21, guardar=guardar)
     taxa_arq = matriz_taxas(conf_e1)
     ok_e1, val_e1 = avaliar_e1(taxa_arq, cb)
     _gravar(saida / "matriz_arquetipos.json", _dump({
@@ -215,7 +235,7 @@ def executar(caminho_cfg: Path) -> int:
     print("E2 ...", flush=True)
     conf_e2, por_forma = [], {}
     for f in FORMAS:
-        lut = {e: lutador_adulto(f, e) for e in especies}
+        lut = {e: lutador_adulto(f, e, cfg21) for e in especies}
         conf_f = []
         for i, ea in enumerate(especies):
             for eb in especies[i:]:
@@ -256,10 +276,10 @@ def executar(caminho_cfg: Path) -> int:
         pts_orig, pts_resp = [], []
         for esp in especies:
             for u in usuarios:
-                eu = lutador_adulto(u, esp)
+                eu = lutador_adulto(u, esp, cfg21)
                 for op in FORMAS:
-                    base = lutador_adulto(op, esp, nome=f"{op}@{esp}#op")
-                    resp = lutador_adulto(op, esp, gambits=com_resposta(ADULTOS[op], tec), nome=f"{op}@{esp}#resp")
+                    base = lutador_adulto(op, esp, cfg21, nome=f"{op}@{esp}#op")
+                    resp = lutador_adulto(op, esp, cfg21, gambits=com_resposta(ADULTOS[op], tec), nome=f"{op}@{esp}#resp")
                     pts_orig += [x for _, _, x, _ in partidas_par(eu, base, f"e3|{tec}", sementes,
                                                                   cb.partidas_e3_por_semente, r)]
                     pts_resp += [x for _, _, x, _ in partidas_par(eu, resp, f"e3|{tec}", sementes,
@@ -284,8 +304,8 @@ def executar(caminho_cfg: Path) -> int:
         linha = LINHA_DA_FORMA[f]
         pts = []
         for esp in especies:
-            ad = lutador_adulto(f, esp)
-            adol = lutador_adolescente(linha, esp, carater_canonico(f))
+            ad = lutador_adulto(f, esp, cfg21)
+            adol = lutador_adolescente(linha, esp, carater_canonico(f), cfg21)
             pts += [x for _, _, x, _ in partidas_par(ad, adol, "e4", sementes, cb.partidas_e4_por_semente, r)]
         e4[f] = sum(pts) / len(pts)
     fora_e4 = {f: t for f, t in e4.items() if not cb.taxa_min_e4 <= t <= cb.taxa_max_e4}
@@ -300,8 +320,8 @@ def executar(caminho_cfg: Path) -> int:
         gate("E5_robustez", False, "PULADO (pular_e5 no config): nao vale como aprovacao", {})
     else:
         print("E5 ...", flush=True)
-        for campo, rot, de, para in perturbacoes(cb.perturbacao_e5):
-            rp = Regras(v21=replace(CONFIG_COMBATE_V21, **{campo: para}))
+        for campo, rot, de, para in perturbacoes(cb.perturbacao_e5, r.v21):
+            rp = Regras(base=r.base, v21=replace(r.v21, **{campo: para}))
             conf = round_robin_arquetipos(especies, sementes, cb.partidas_e5_por_semente, rp, rp.v21, rotulo="e5")
             ok, val = avaliar_e1(matriz_taxas(conf), cb)
             e5[f"{campo}{rot}"] = {"de": de, "para": para, "e1_ok": ok, "suporte": val["suporte"],
@@ -331,7 +351,7 @@ def executar(caminho_cfg: Path) -> int:
         logs.append(atual)
     for (esp, _), log in zip(amostra, logs):
         fa, fb = log[0]["a"].split("@")[0], log[0]["b"].split("@")[0]
-        reproduzir(log, lutador_adulto(fa, esp), lutador_adulto(fb, esp))
+        reproduzir(log, lutador_adulto(fa, esp, cfg21), lutador_adulto(fb, esp, cfg21), r)
     vies = {f: sum(v) / len(v) for f, v in espelho.items() if v}
     med = statistics.median(turnos)
     frac_lim = fins["limite"] / len(turnos)
@@ -343,14 +363,23 @@ def executar(caminho_cfg: Path) -> int:
           "fracao_limite": frac_lim, "fins": fins})
 
     # ------------------------------------------------------------ base G1-G7
-    base_gates = json.loads((RAIZ / "artifacts_combate_v2" / "gates.json").read_text(encoding="utf-8"))
-    base_cfg = json.loads((RAIZ / "experiments" / "configs" / "bateria_canonico.json").read_text(encoding="utf-8"))
-    base_intacta = hashes_base(base_cfg)["regras_sha256"] == base_gates["hashes"]["regras_sha256"]
-    gate("G1_G7_base", base_intacta,
-         f"fontes da base {'INTACTOS' if base_intacta else 'ALTERADOS'} (hash igual ao de artifacts_combate_v2); "
-         f"status gravado da base: {base_gates['status']} (falharam {base_gates['falharam']}; reprovacao "
-         f"registrada em docs/REGISTRO_DESVIOS.md, nao reavaliada aqui)",
-         {"status_base": base_gates["status"], "falharam_base": base_gates["falharam"], "fontes_intactos": base_intacta})
+    if "regras_base" in cfg:
+        # V21C: a base e a V2C; vale a validacao dela (G6b do atirador aceito como excecao pelo Matheus)
+        vb = json.loads((RAIZ / "artifacts_combate_v2c" / "validacao_bots" / "gates.json").read_text(encoding="utf-8"))
+        ok_base = set(vb["falharam"]) <= {"G6b_espelho_condicao"}
+        gate("G1_G9_base_v2c", ok_base,
+             f"base V2C (artifacts_combate_v2c/validacao_bots): {vb['status']}, falharam {vb['falharam']} "
+             f"(G6b do atirador aceito como excecao: docs/REGISTRO_DESVIOS.md)",
+             {"falharam": vb["falharam"]})
+    else:
+        base_gates = json.loads((RAIZ / "artifacts_combate_v2" / "gates.json").read_text(encoding="utf-8"))
+        base_cfg = json.loads((RAIZ / "experiments" / "configs" / "bateria_canonico.json").read_text(encoding="utf-8"))
+        base_intacta = hashes_base(base_cfg)["regras_sha256"] == base_gates["hashes"]["regras_sha256"]
+        gate("G1_G7_base", base_intacta,
+             f"fontes da base {'INTACTOS' if base_intacta else 'ALTERADOS'} (hash igual ao de artifacts_combate_v2); "
+             f"status gravado da base: {base_gates['status']} (falharam {base_gates['falharam']}; reprovacao "
+             f"registrada em docs/REGISTRO_DESVIOS.md, nao reavaliada aqui)",
+             {"status_base": base_gates["status"], "falharam_base": base_gates["falharam"], "fontes_intactos": base_intacta})
 
     aprovada = all(g["ok"] for g in gates if g["gate"] not in ("sanidade_informativo",))
     registro = None
@@ -362,7 +391,7 @@ def executar(caminho_cfg: Path) -> int:
         "gates": gates, "conjunto": cfg["conjunto"], "sementes": sementes,
         "sementes_calibracao": cfg["sementes_calibracao"], "sementes_validacao": cfg["sementes_validacao"],
         "partidas_por_par_por_semente": n, "especies": especies, "hashes": hashes(cfg),
-        "config_combate_v21": asdict(CONFIG_COMBATE_V21), "config_bateria_v21": asdict(CONFIG_BATERIA_V21),
+        "config_combate_v21": asdict(cfg21), "config_base": asdict(r.base), "config_bateria_v21": asdict(CONFIG_BATERIA_V21),
         "registro_calibracao": registro,
         "avisos": ["todos os numeros de ConfigCombateV21, ConfigCatalogo e ConfigBateriaV21 sao PROPOSTOS",
                    "pre-condicoes da especificacao nao cumpridas: ver docs/REGISTRO_DESVIOS.md"]
