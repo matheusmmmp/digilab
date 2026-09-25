@@ -277,11 +277,24 @@ metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e
   se contradizia (recebia todos os fatores mas só pode citar o primeiro; o exemplo sem fator não
   dizia "não sei", que a regra exige).
 - prompt `fala-v2` (corrige as duas contradições, **olhando esta mesma amostra**: não é validação
-  independente): 183/200 (0,915); adolescente 95/100, adulto 88/100. 14/200 (7%) citaram fator fora
-  do motivo e foram barradas (caíram no template). Tempo médio 2,6 s por fala.
-- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` (50 falas
-  aprovadas; "cita causa fora dos fatores?"), porque a varredura de marcadores não pega sinônimos.
-  Sem ela, a fala por LLM continua desligada por padrão.
+  independente): 183/200 (0,915); adolescente 95/100, adulto 88/100. 14/200 foram barradas por pôr na
+  lista `fatores_citados` um nome fora do motivo (ex.: `turno_12`, `evento_ref`, `Brinquei`); o texto
+  delas não foi guardado, então isso NÃO mede quantas inventavam causa (correção de um relato
+  anterior que dizia "7% inventaram causa"). O adulto copiava a frase pronta em 68/88 aprovadas.
+- `fala-v3` (pedido do Matheus: personalidade e tom pelo humor; temperatura 0,7; semente nova
+  20260925): 108/200; quase nenhuma cópia, mas **aprovadas inventavam causa por sinônimo** (ex.:
+  "queria que você me ajudasse a descansar"). Não usar.
+- **Moldura (`fala-v4` em diante)**: a LLM devolve só `{abertura, fecho}` no tom do humor; o miolo é
+  sempre a frase de `expressao.py`, então não há como inventar causa. `validar_moldura` barra
+  conectivo de causa, número, marcador e tema de causa; o Ollama recebe limite de caracteres no
+  esquema e penalidade de repetição. Cada versão avaliada numa semente nova: v4 (s20260926) 127/200,
+  67 cortadas por loop de carinhas; v5 (s20260927) 199/200 mas quase sem abertura; **v6 (s20260928,
+  abertura obrigatória no esquema) 191/200, todas com abertura, nenhuma igual à frase pronta**
+  (ex.: "Epa... Dormi porque eu estava com sono e por causa do cansaço. :/"). "Eba!" abre 58/191.
+- O modelo às vezes devolve surrogate UTF-16 solto: o servidor saneia antes de validar (quebrava a
+  resposta e a avaliação).
+- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv`
+  (50 falas aprovadas). Sem ela, a fala por LLM continua desligada por padrão.
 
 ## Versão web (`web/digilab.html`)
 
@@ -388,7 +401,7 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` antes de ligar por
+- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv` antes de ligar por
   padrão; a v2 do prompt foi ajustada na mesma amostra da avaliação (repetir com outra semente).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
