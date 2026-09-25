@@ -583,6 +583,10 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   intervenções (`g`) entram no registro; o replay reconstrói o aprendizado e separa pet × dono.
   Lutas contra pet de cenário e as 100 lutas dos Cenários não ensinam. Parâmetros no objeto `GA`.
   PROVISÓRIO e só na web: o Python ainda não tem isso (é a arena V2 da pesquisa).
+- **Aba Campanha** (2026-09-25): mapa em SVG (Campina → Torre de pedra → Cidadela) com um lugar por NPC
+  (aberto, trancado, vencido), o pet no próximo desafio e cartão com a lição, os stats e o histórico de
+  tentativas (contado do registro). A luta acontece na própria aba: o palco da Arena (canvas, barras,
+  narração) é movido para a aba visível.
 - **Fala** sob a tela (clique mostra o motivo) e na narração da luta; mesma tabela de textos e mesma
   regra de honestidade do Python. Na web, a criança sem causa mostra ação + humor (vida) ou reação
   (luta), que são estado e não causa; no Python a criança sem causa mostra só a ação. Estágio da fala
