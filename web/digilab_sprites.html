@@ -1416,7 +1416,7 @@ class Motor {
     this.gp.semear(this.forma);
   }
   /* carater medido agora: pets v3 pelo desvio da politica aprendida; v1/v2 pelos tracos (PROVISORIO) */
-  caraterAgora(quando){ return this.versao >= 3 ? caraterPolitica(this) : caraterDe(this.tracos, quando); }
+  caraterAgora(quando){ return this.versao >= 3 ? caraterPolitica(this, quando) : caraterDe(this.tracos, quando); }
   /* caráter travado na ultima evolucao que o mediu (adolescente/adulto); antes disso, neutro */
   carater(){ const ev = [...this.evolucoes].reverse().find(x => x.carater); return ev ? ev.carater : null; }
   _hist(x){ this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
@@ -2169,6 +2169,13 @@ const BASE_CARATER = {
    ja e o "pet comum". */
 /* web: 32 sondas x 100 amostras (o Python usa 64 x 200): ~4x mais rapido, mais ruido */
 const CCP = { nEstados:32, amostras:100, semente:9001, escala:.05 };
+/* deslocamento por eixo (so na web, jogabilidade): linhas ~25% cada no adolescente e ~50/50 entre as duas
+   formas adultas, com os donos simulados. Calibrado em 2026-09-25 em 195 pets v3 (4 donos x ~50 sementes
+   910013..910650, 16/dia): antes brigao 31%, cacador 37%, colosso 15%, guardiao 16%. */
+const DESLOC_CARATER = {
+  adolescente: {atento:-0.0264, impetuoso:-0.0088, paciente:0.0990, resistente:0.0536},
+  adulto:      {atento:-0.0500, impetuoso:0.0625, paciente:0.1875, resistente:-0.0875},
+};
 let SONDAS_CAR = null;
 function sondasCarater(){
   if (SONDAS_CAR) return SONDAS_CAR;
@@ -2186,7 +2193,7 @@ function distAcoesSonda(pol){
     return cont;
   });
 }
-function caraterPolitica(m){
+function caraterPolitica(m, quando){
   const guardada = m.pol.ultDecisao;               /* sondar nao pode mexer no motivo da ultima decisao */
   const dp = distAcoesSonda(m.pol);
   m.pol.ultDecisao = guardada;
@@ -2198,15 +2205,16 @@ function caraterPolitica(m){
   }
   return Object.fromEntries(Object.entries(EIXO_TRACO).map(([eixo, ts]) => {
     const bruto = ts.reduce((s, t) => s + porTraco[t], 0) / ts.length;
-    return [eixo, Math.max(-1, Math.min(1, bruto / CCP.escala))];
+    const desloc = quando ? DESLOC_CARATER[quando][eixo] : 0;
+    return [eixo, Math.max(-1, Math.min(1, bruto / CCP.escala + desloc))];
   }));
 }
 /* previsao na aba Evolucao: o carater pela politica custa ~0,15 s; recalcula a cada 2 h de jogo ou acao do dono */
 let cacheCarPrev = {chave:null, car:null};
 function caraterPrevisto(m, quando){
   if (m.versao < 3) return caraterDe(m.tracos, quando);
-  const chave = [m.semente, Math.floor(m.e.tick / 120), m.nDono, m.evolucoes.length].join("|");
-  if (cacheCarPrev.chave !== chave) cacheCarPrev = {chave, car:caraterPolitica(m)};
+  const chave = [m.semente, Math.floor(m.e.tick / 120), m.nDono, m.evolucoes.length, quando].join("|");
+  if (cacheCarPrev.chave !== chave) cacheCarPrev = {chave, car:caraterPolitica(m, quando)};
   return cacheCarPrev.car;
 }
 function caraterDe(tracos, quando){

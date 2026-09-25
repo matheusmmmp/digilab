@@ -419,3 +419,9 @@ Evolução recalcula a cada 2 h de jogo ou ação do dono. Sem linha de base (`B
 com os donos simulados (80 pets, 20 por dono, sem artefato: checagem no console) as linhas saem caçador
 41%, brigão 30%, guardião 15%, colosso 14%, e variam por dono (atencioso quase só caçador/brigão; relapso
 45% colosso).
+- **Linhas equilibradas de novo (pedido do Matheus)**: `DESLOC_CARATER` (web) soma um deslocamento por
+  eixo ao caráter pela política (adolescente: linhas ~25%; adulto: mediana do eixo complementar por linha
+  → ~50/50), calibrado em 195 pets v3 (4 donos, sementes 910013…910650). Conferência em 80 pets de outras
+  sementes (555017…555340; checagem no console, sem artefato): colosso 30%, guardião 29%, brigão 21%,
+  caçador 20% (antes 14/15/31/41%); forma de cima 42,5% (no brigão 4 de 17: amostra pequena e a medida pela
+  política tem ruído de 32 × 100 amostras).
