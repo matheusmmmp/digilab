@@ -2332,6 +2332,7 @@ function renderEstado(){
   if (e.higiene < .25 || e.sujeira >= 3) al.push(`<span class="tag warn">Precisa de limpeza</span>`);
   if (motor.acao === "chamar_atencao") al.push(`<span class="tag warn">Chamando você</span>`);
   for (const c of motor.chamadosAbertos()) al.push(`<span class="tag warn">Bebê chamando: ${NOME_CHAMADO[c]} (${ACAO_CHAMADO[c].join(" ou ")})</span>`);
+  if (velAntesChamado !== null) al.push(`<span class="tag">Tempo em 1x até você atender o chamado</span>`);
   if (e.dormindo) al.push(`<span class="tag">Dormindo</span>`);
   if (!al.length) al.push(`<span class="tag good">Tudo bem</span>`);
   $("alertas").innerHTML = al.join("");
@@ -2418,12 +2419,28 @@ document.querySelectorAll(".btn[data-acao]").forEach(b => b.addEventListener("cl
   const a = b.dataset.acao;
   motor.observar(a);
   flash = { icone: ICONE_DONO[a], ate: performance.now() + 1400 };
+  ajustarVelocidadeChamado();                  /* atendeu o chamado: volta a velocidade de antes */
   salvar(); renderTudo();
 }));
+/* velocidade escolhida pelo jogador; o chamado do bebe desacelera para 1x e devolve depois */
+const VEL_1X = 1 / 60;
+let velAntesChamado = null;
+function definirVelocidade(v){
+  velocidade = v;
+  document.querySelectorAll(".chip[data-vel]").forEach(o => o.setAttribute("aria-pressed", String(Number(o.dataset.vel) === v)));
+}
 document.querySelectorAll(".chip[data-vel]").forEach(c => c.addEventListener("click", () => {
-  velocidade = Number(c.dataset.vel);
-  document.querySelectorAll(".chip[data-vel]").forEach(o => o.setAttribute("aria-pressed", String(o === c)));
+  velAntesChamado = null;                      /* o jogador escolheu: nao devolve a velocidade antiga */
+  definirVelocidade(Number(c.dataset.vel));
 }));
+/* chamado do bebe aberto: o tempo cai para 1x ate atender ou a janela fechar (15 min de jogo = 15 min
+   reais); sem chamado aberto, volta a velocidade de antes */
+function ajustarVelocidadeChamado(){
+  const aberto = motor.chamadosAbertos().length > 0;
+  if (aberto && velocidade > VEL_1X && velAntesChamado === null){ velAntesChamado = velocidade; definirVelocidade(VEL_1X); return true; }
+  if (!aberto && velAntesChamado !== null){ const v = velAntesChamado; velAntesChamado = null; definirVelocidade(v); }
+  return false;
+}
 $("pulo").addEventListener("click", () => { motor.avancar(60); salvar(); renderTudo(); });
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => mostrarPane(t.dataset.pane)));
 function mostrarPane(p){
@@ -3161,8 +3178,15 @@ setInterval(() => {
   ultimoLaco = agora;
   if (nascendo > 0 || velocidade === 0) return;
   acumulado += velocidade * dt;
-  const n = Math.floor(acumulado);
-  if (n > 0){ acumulado -= n; motor.avancar(n); renderTudo();
+  let n = Math.floor(acumulado);
+  if (n > 0){ acumulado -= n;
+    if (motor.estagioAtual === "bebe"){
+      /* bebe: tick a tick, para parar no instante em que um chamado abre (em 6 h/s a janela passaria
+         inteira dentro de uma execucao) */
+      while (n-- > 0){ motor.avancar(1); if (ajustarVelocidadeChamado()){ acumulado = 0; break; } }
+    } else motor.avancar(n);
+    ajustarVelocidadeChamado();
+    renderTudo();
     if (performance.now() - ultimoSalvo > 2000){ salvar(); ultimoSalvo = performance.now(); } }
 }, 100);
 setInterval(desenharLCD, 125);
