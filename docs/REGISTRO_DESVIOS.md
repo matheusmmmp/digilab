@@ -381,3 +381,9 @@ rejoga a amostra do artefato): C1–C4 da base também no resolvedor da V2.1 (li
   E1, E3, E5 (25/36), guardião (6,7% no limite), G9 (42,9%), base V2C e S1
   (`artifacts_combate_v21c/bateria_sombria`); **falham E2 (Ferrugem), E4, G6b (espelhos com condição
   ±5%: média 0,725, sentinela 0,919) e G8 (E1 em 69,4% das perturbações, precisa de 80%)**.
+- **Redesenho dos bots adultos da V2.1 (G6b, G8) e E4 — tentado e NÃO adotado** (pedido do Matheus;
+  detalhes e saídas em `artifacts_combate_v21c/redesenho_bots/`): regras de virada genéricas passam o G6b
+  nos 8 arquétipos mas derrubam o E1 (suporte 5 → 3), trocam a dominância de espécie para a Brasa e fazem
+  o caçador adulto perder do adolescente (E4 0,0); regras disparadas pela técnica da linha não quebram o
+  resto, mas só resolvem sentinela, emboscador e titã. Mais regras para o adolescente (7 ou 8) não mudam
+  o E4 (as regras do adulto usam condições que o adolescente não tem). A V21C segue com os bots da V2.1.

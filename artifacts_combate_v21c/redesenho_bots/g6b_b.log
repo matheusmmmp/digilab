@@ -1,0 +1,4 @@
+sentinela {"original": 0.926, "c0:esquivar<-marcar": 0.845, "c1:avancar<-disparo": 0.853, "c2:defender<-disparo": 0.886}
+emboscador {"original": 0.715, "c0:esquivar<-marcar": 0.701, "c1:avancar<-disparo": 0.666, "c2:defender<-disparo": 0.709}
+vigia {"original": 0.68, "c0:recuar<-pele_dura": 0.768, "c1:esquivar<-preparar_pesado": 0.795, "c2:carregar<-pele_dura": 0.759}
+tita {"original": 0.675, "c0:recuar<-pele_dura": 0.693, "c1:golpe_rapido<-preparar_pesado": 0.63, "c2:carregar<-pele_dura": 0.688}
