@@ -1,0 +1,53 @@
+{
+  "descricao": "rodada 2: combinacoes finalistas (devastador pesado com x2,0-2,6; bastiao sem ler o pesado; colosso regen 0,85), 80 partidas por par",
+  "candidatos": {
+    "combo_mult2.0": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "combo_mult2.3": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 2.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "combo_mult2.6": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 2.6
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    }
+  }
+}

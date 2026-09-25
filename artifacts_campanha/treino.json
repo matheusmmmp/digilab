@@ -50,23 +50,23 @@
     },
     "exigente": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.7165,
-        "ic_superior": 0.9845,
-        "media": 0.8545,
+        "ic_inferior": 0.704,
+        "ic_superior": 0.9574999999999999,
+        "media": 0.837,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.13799999999999998,
-        "ic_superior": 0.702,
-        "media": 0.4175,
+        "ic_inferior": 0.0915,
+        "ic_superior": 0.621,
+        "media": 0.33999999999999997,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.006999999999999999,
-        "ic_superior": 0.471,
-        "media": 0.20299999999999999,
+        "ic_inferior": 0.004,
+        "ic_superior": 0.46349999999999997,
+        "media": 0.191,
         "n": 10,
         "nivel": 0.95
       }
@@ -235,9 +235,9 @@
       "tier3_soberano": 0.01
     },
     "exigente@303": {
-      "tier1_brutamontes": 0.95,
-      "tier2_sentinela": 0.925,
-      "tier3_soberano": 0.145
+      "tier1_brutamontes": 0.775,
+      "tier2_sentinela": 0.15,
+      "tier3_soberano": 0.025
     },
     "exigente@404": {
       "tier1_brutamontes": 1.0,

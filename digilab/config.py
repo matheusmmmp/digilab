@@ -735,12 +735,14 @@ class ConfigSombrio:
     epsilon_minimo: float = 0.2          # efeitos permanentes da forma sombria
     teto_vinculo: float = 0.6
     # passivas sombrias (resolucao em combate_v2/v21/regras.py)
-    mult_devastador: float = 1.3         # corpo a corpo x1,3; defender e esquivar ilegais
+    # redesenho para o S2 (experiments/calibrar_sombrias.py, configs/sombrias/): devastador x1,3 -> x2,0 com
+    # gambits que so fecham e soltam o pesado; colosso partido regen x0,5 -> x0,85
+    mult_devastador: float = 2.0         # corpo a corpo x2; defender e esquivar ilegais
     fracao_contra_golpe_bastiao: float = 1.0   # contra_golpe devolve 100%
     # "fadiga de guarda dobrada" nao existe no combate: defender nao rende guts extra (desvio registrado)
     mult_predador: float = 1.4           # disparo x1,4; recuar ilegal
     turnos_pele_colosso_partido: int = 3  # pele_dura dura 3 turnos
-    mult_regen_colosso_partido: float = 0.5
+    mult_regen_colosso_partido: float = 0.85
 
 
 def _exercicios() -> dict:

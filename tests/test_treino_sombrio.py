@@ -147,3 +147,15 @@ def test_arvore_sombria_bate_com_o_json():
         assert CONFIG_SOMBRIO.formas[linha]["nome"] == d["nome"] and CONFIG_SOMBRIO.formas[linha]["stats"] == d["stats"]
     assert CONFIG_SOMBRIO.epsilon_minimo == arv["efeitos_comuns"]["epsilon_minimo"]
     assert CONFIG_SOMBRIO.teto_vinculo == arv["efeitos_comuns"]["teto_de_vinculo"]
+
+
+def test_sombrias_redesenhadas_para_o_s2():
+    """A sombra tira a leitura do oponente: devastador so fecha e solta o pesado; bastiao = espelho
+    sem a resposta ao pesado. Predador e colosso partido seguem com os gambits da forma base."""
+    from digilab.combate_v2.v21.bots import ADULTOS
+    dev = SOMBRIOS["devastador"]
+    assert not any(c.nome.startswith("oponente_") for r in dev.regras for c in r.condicoes)
+    assert Acao.PREPARAR_PESADO in [r.acao for r in dev.regras]
+    assert SOMBRIOS["bastiao_rachado"].regras == ADULTOS["espelho"].regras[1:]
+    assert SOMBRIOS["predador"] is ADULTOS["emboscador"] and SOMBRIOS["colosso_partido"] is ADULTOS["tita"]
+    assert CONFIG_SOMBRIO.mult_devastador == 2.0 and CONFIG_SOMBRIO.mult_regen_colosso_partido == 0.85
