@@ -561,6 +561,42 @@ class ConfigBateriaV21:
     partidas_e5_por_semente: int = 20      # por par, no E1 perturbado
 
 
+def _chamados_bebe() -> dict:
+    return {"fome": 30, "higiene": 60, "carinho": 45}
+
+
+def _eixo_traco() -> dict:
+    # caráter: cada eixo junta os tracos de combate (ConfigArena.mapa_pet_combate) que se parecem com ele
+    return {"impetuoso": ("golpe", "carga"), "paciente": ("bloqueio",), "atento": ("finta",),
+            "resistente": ("agarrao",)}
+
+
+@dataclass(frozen=True)
+class ConfigEvolucaoPesquisa:
+    """Evolucao do pet de pesquisa (ESPEC_EVOLUCAO_COMBATE.md, secao Pesquisa). Todos PROPOSTOS.
+
+    Duracoes e chamados do bebe: docs/cronograma_interacoes.json ("a pesquisa usa os valores acima").
+    """
+
+    dur_bebe_min: int = 180
+    dur_crianca_min: int = 720
+    dur_adolescente_min: int = 1080
+    chamados_bebe_min: dict = field(default_factory=_chamados_bebe)   # intervalo de cada chamado no bebe
+    janela_chamado_min: int = 15
+    # acoes do dono que atendem cada chamado
+    atende: dict = field(default_factory=lambda: {"fome": ("alimentar",), "higiene": ("limpar",),
+                                                   "carinho": ("acariciar", "brincar")})
+    # carater = desvio medio de probabilidade (politica - instinto) nas sondas / escala, cortado em [-1, 1]
+    escala_carater: float = 0.05
+    eixo_traco: dict = field(default_factory=_eixo_traco)
+    # temperamento do ovo: cada eixo uniforme em [-amplitude, amplitude]
+    amplitude_temperamento: float = 1.0
+    # condicao fisica (do cuidado) = min + (max - min) * saude no fim da vida
+    # sparring minimo: dado como cumprido na simulacao (o sparring nao treina a politica nem gasta orcamento)
+    sparring_simulado: int = 10
+
+
+CONFIG_EVOLUCAO_PESQUISA = ConfigEvolucaoPesquisa()
 CONFIG_CATALOGO = ConfigCatalogo()
 CONFIG_COMBATE_V21 = ConfigCombateV21()
 CONFIG_BATERIA_V21 = ConfigBateriaV21()

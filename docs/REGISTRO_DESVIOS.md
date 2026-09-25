@@ -126,3 +126,28 @@ Interpretações propostas antes do código e aceitas:
 - Vontade: argmax da média da posterior θ̂·x (sem prior e sem amostra); bandit recém-nascido não tem
   vontade. Necessidade tem prioridade.
 - 10 ovos (sementes 101 a 1010), os mesmos nas três variantes.
+
+## 2026-09-25 — Pesquisa do V2.1 (ESPEC_EVOLUCAO_COMBATE.md, seção Pesquisa)
+
+`docs/ESPEC_EVOLUCAO_COMBATE.md` tem o mesmo texto de `ESPEC_COMBATE_V21.md`; a parte que faltava
+era a seção Pesquisa. Decisão do pesquisador: fazê-la sem tocar em `engine.py`, no espaço de ações do
+dono nem no `CanalDeInteracao`. Interpretações:
+
+- Sem vida nova: a evolução é função pura das 40 vidas de `artifacts_ablacao/vidas` (mesmas
+  sementes, orçamento e duração da arena v1).
+- Durações dos estágios e chamados do bebê: `cronograma_interacoes.json` ("a pesquisa usa os valores
+  acima"): adulto aos 1980 min de uma vida de 14 dias.
+- Cuidado do bebê: chamados em horário fixo (fome 30, higiene 60, carinho 45 min), atendidos pela ação
+  certa do dono em até 15 min. Os donos simulados da pesquisa agem pelo estado das necessidades e
+  **não** mudaram (mudar mudaria a run canônica V1): na prática ninguém atende (cuidado 0, todo pet
+  arisco). Resultado, não bug.
+- Caráter: desvio da política aprendida contra a **mesma política recém-nascida** nas sondas da
+  métrica de divergência (64 estados, 200 amostras, semente 9001), não contra o instinto puro. Contra
+  o instinto, o bandit novo já diverge pelo ruído de Thompson ("paciente" −0,8 a −1,0 em todos os
+  donos na semente 101), e isso não é aprendizado. Ação → traço por `ConfigArena.mapa_pet_combate`;
+  eixo = média dos traços (impetuoso = golpe e carga; paciente = bloqueio; atento = finta; resistente
+  = agarrão); escala 0,05, cortado em [−1, 1].
+- Temperamento do ovo: cada eixo uniforme em [−1, 1] pela semente (iguais entre braços: ovos pareados).
+- Condição física: 0,95 + 0,10 × saúde no fim da vida. Sparring mínimo: dado como cumprido.
+- Arena: gambits canônicos da forma adulta (8 regras em todos: capacidade igual); ablação tira a
+  técnica, a passiva e as regras que dependem delas.
