@@ -296,13 +296,13 @@ avaliação com juiz antes de ligar a LLM por padrão.
 
 ## Critério de pronto
 
-- [ ] Parte A: V1 e combate V2 reproduzem artefatos idênticos; testes de
+- [x] Parte A: V1 e combate V2 reproduzem artefatos idênticos; testes de
       honestidade e cobertura passando; diário gerado para um log de cada
       braço e para partidas entre bots em cada estágio
-- [ ] Parte B (se a pré-condição existir): run `ARENA_V1_MEMORIA` com gate
+- [x] Parte B (se a pré-condição existir): run `ARENA_V1_MEMORIA` com gate
       rodado e artefatos gravados
-- [ ] Todos os testes anteriores passando
-- [ ] `CLAUDE.md` atualizado (mapa, comandos, estado, pendências)
+- [x] Todos os testes anteriores passando
+- [x] `CLAUDE.md` atualizado (mapa, comandos, estado, pendências)
 
 ## O que reportar
 

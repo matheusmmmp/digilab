@@ -165,6 +165,48 @@ REACAO_BEBE = {
 }
 EMOTE_HUMOR = ("(T_T)", "(-_-)", "(^_^)")
 
+# ------------------------------------------------------------------ temperamento (1.3)
+# tom por eixo e polo; o bebe ja mostra por emote (temperamento e inato, nao e causa de
+# decisao). So entram eixos com |valor| >= limiar_tom_temperamento, do mais forte ao mais
+# fraco; mesmo esquema de marcador unico dos fatores (honestidade testavel).
+TOM_TEMPERAMENTO: dict[tuple[str, str], dict[str, str]] = {
+    ("curiosidade", "+"): {"marcador": "fuçador", "bebe": "(o.o)?", "crianca": "[:fuçador:]",
+                           "adolescente": "fuçador...", "adulto": "Nasci fuçador, sempre atrás de novidade."},
+    ("curiosidade", "-"): {"marcador": "cauteloso", "bebe": "(._.)", "crianca": "[:cauteloso:]",
+                           "adolescente": "cauteloso...", "adulto": "Nasci cauteloso com o que não conheço."},
+    ("teimosia", "+"): {"marcador": "cabeça-dura", "bebe": "(¬_¬)", "crianca": "[:cabeça-dura:]",
+                        "adolescente": "cabeça-dura...", "adulto": "Nasci cabeça-dura."},
+    ("teimosia", "-"): {"marcador": "dócil", "bebe": "(u_u)", "crianca": "[:dócil:]",
+                        "adolescente": "dócil...", "adulto": "Nasci dócil, fácil de convencer."},
+    ("sensibilidade", "+"): {"marcador": "derretido", "bebe": "(*^_^*)", "crianca": "[:derretido:]",
+                             "adolescente": "derretido...", "adulto": "Nasci derretido com qualquer agrado."},
+    ("sensibilidade", "-"): {"marcador": "melindroso", "bebe": "(;_;)", "crianca": "[:melindroso:]",
+                             "adolescente": "melindroso...", "adulto": "Nasci melindroso com qualquer reclamação."},
+    ("rancor", "+"): {"marcador": "guardo mágoa", "bebe": "(ò_ó)", "crianca": "[:guardo mágoa:]",
+                      "adolescente": "guardo mágoa...", "adulto": "Nasci assim: guardo mágoa por muito tempo."},
+    ("rancor", "-"): {"marcador": "esqueço rápido", "bebe": "(^o^)", "crianca": "[:esqueço rápido:]",
+                      "adolescente": "esqueço rápido...", "adulto": "Nasci assim: esqueço rápido o que passou."},
+}
+TEMPERAMENTO_NEUTRO = {"bebe": "(o_o)", "crianca": "[~]", "adolescente": "...", "adulto": "Nasci sem nada que se destaque."}
+
+# ------------------------------------------------------------------ desejo (3.2)
+# o jogador distingue necessidade de vontade a partir da crianca (marcador do tipo).
+# Necessidade cita a necessidade que passou do limiar (o unico fator do calculo);
+# vontade cita so que e a acao de maior media aprendida. O bebe nao distingue.
+DESEJO_TIPO = {
+    "necessidade": {"marcador": "preciso", "crianca": "[preciso!]", "adolescente": "preciso", "adulto": "Eu preciso"},
+    "vontade": {"marcador": "queria", "crianca": "[queria?]", "adolescente": "queria", "adulto": "Eu queria"},
+}
+DESEJO_BEBE = "(>o<)"
+VONTADE_ADULTO = "é o que mais deu certo até agora"
+# alvo -> (icone, infinitivo); cobre os alvos de necessidade e todas as acoes do pet
+ALVOS_DESEJO = {
+    "comer": ("[comer]", "comer"), "limpar": ("[banho]", "tomar banho"), "dormir": ("[dormir]", "dormir"),
+    "brincar": ("[brincar]", "brincar"), "ocioso": ("[à toa]", "ficar à toa"),
+    "chamar_atencao": ("[chamar]", "chamar você"), "explorar": ("[explorar]", "explorar"),
+    "emburrar": ("[emburrar]", "emburrar"),
+}
+
 
 def validar_tabelas(fatores_obrigatorios=None) -> None:
     from .combate_v2.v21.gambits import CATALOGO as CATALOGO_V21
@@ -295,9 +337,111 @@ def expressar(motivo: Motivo, estagio: str, humor: float | None = None,
     return Expressao("frase", f"{frase} {causas}{_refs(motivo)}.", ref)
 
 
+def eixos_marcantes(temperamento, cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> list[tuple[str, str]]:
+    """(eixo, polo) com |valor| >= limiar, do mais forte ao mais fraco (empate: ordem de EIXOS)."""
+    from .temperamento import EIXOS
+
+    vals = [(abs(getattr(temperamento, e)), -i, e) for i, e in enumerate(EIXOS)]
+    return [(e, "+" if getattr(temperamento, e) > 0 else "-")
+            for v, _, e in sorted(vals, reverse=True) if v >= cfg.limiar_tom_temperamento]
+
+
+def expressar_temperamento(temperamento, estagio: str, cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> Expressao:
+    """Tom do temperamento inato (1.3): bebe emote do eixo mais forte; crianca e adolescente
+    o mais forte; adulto ate 2. Sem eixo marcante: texto neutro, sem marcador."""
+    if estagio not in ESTAGIOS:
+        raise ValueError(f"estagio desconhecido: {estagio!r}")
+    marcantes = eixos_marcantes(temperamento, cfg)
+    ref = ("temperamento", 0)
+    if not marcantes:
+        return Expressao(CANAL[estagio], TEMPERAMENTO_NEUTRO[estagio], ref)
+    if estagio == "adulto":
+        frases = [TOM_TEMPERAMENTO[k]["adulto"] for k in marcantes[:2]]
+        return Expressao("frase", " ".join(frases[:1] + ["E n" + f[1:] for f in frases[1:]]), ref)
+    return Expressao(CANAL[estagio], TOM_TEMPERAMENTO[marcantes[0]][estagio], ref)
+
+
+def expressar_desejo(desejo, estagio: str) -> Expressao:
+    """Desejo (3.2): bebe nao distingue; da crianca em diante o marcador do tipo aparece."""
+    if estagio not in ESTAGIOS:
+        raise ValueError(f"estagio desconhecido: {estagio!r}")
+    if desejo.alvo not in ALVOS_DESEJO:
+        raise TabelaIncompleta(f"alvo de desejo sem texto: {desejo.alvo!r}")
+    ref = ("desejo", desejo.tick)
+    if estagio == "bebe":
+        return Expressao("emote", DESEJO_BEBE, ref)
+    icone, verbo = ALVOS_DESEJO[desejo.alvo]
+    t = DESEJO_TIPO[desejo.tipo]
+    if estagio == "crianca":
+        return Expressao("icones", f"{t['crianca']} {icone}", ref)
+    if desejo.tipo == "necessidade":
+        from .desejo import NECESSIDADE_DO_ALVO
+
+        causa = NECESSIDADE_DO_ALVO[desejo.alvo]
+        if estagio == "adolescente":
+            return Expressao("fragmento", f"{t['adolescente']} {verbo}... {_texto_fator(causa, 'adolescente')}", ref)
+        return Expressao("frase", f"{t['adulto']} {verbo} {_texto_fator(causa, 'adulto')}.", ref)
+    if estagio == "adolescente":
+        return Expressao("fragmento", f"{t['adolescente']} {verbo}...", ref)
+    return Expressao("frase", f"{t['adulto']} {verbo}: {VONTADE_ADULTO}.", ref)
+
+
+def validar_tabelas_personalidade() -> None:
+    """Cobertura e unicidade das tabelas de temperamento e desejo (mesmas regras de FATORES)."""
+    from .desejo import NECESSIDADES, TIPOS
+    from .temperamento import EIXOS
+
+    faltam = sorted(f"{e}{p}" for e in EIXOS for p in "+-" if (e, p) not in TOM_TEMPERAMENTO)
+    if faltam:
+        raise TabelaIncompleta(f"eixos de temperamento sem tom: {faltam}")
+    for k, e in TOM_TEMPERAMENTO.items():
+        for chave in ("marcador",) + ESTAGIOS:
+            if chave not in e:
+                raise TabelaIncompleta(f"tom {k} sem entrada para {chave!r}")
+        for est in ("crianca", "adolescente", "adulto"):
+            if e["marcador"] not in e[est]:
+                raise TabelaIncompleta(f"tom {k}/{est}: texto sem o marcador {e['marcador']!r}")
+        if not e["adulto"].startswith("Nasci "):
+            raise TabelaIncompleta(f"tom {k}/adulto deve comecar com 'Nasci '")
+    if len({e["bebe"] for e in TOM_TEMPERAMENTO.values()}) != len(TOM_TEMPERAMENTO):
+        raise TabelaIncompleta("emotes de temperamento repetidos")
+    if sorted(DESEJO_TIPO) != sorted(TIPOS):
+        raise TabelaIncompleta(f"tipos de desejo sem texto: {sorted(set(TIPOS) - set(DESEJO_TIPO))}")
+    for tipo, e in DESEJO_TIPO.items():
+        if any(e["marcador"] not in e[est] for est in ("crianca", "adolescente", "adulto")):
+            raise TabelaIncompleta(f"desejo {tipo!r}: texto sem o marcador")
+    alvos = {a.value for a in AcaoPet} | {alvo for _, alvo in NECESSIDADES.values()}
+    if alvos - set(ALVOS_DESEJO):
+        raise TabelaIncompleta(f"alvos de desejo sem texto: {sorted(alvos - set(ALVOS_DESEJO))}")
+    # nenhum marcador (fator, tom ou tipo de desejo) pode aparecer em texto que nao o cita
+    marc = {("fator", n): e["marcador"] for n, e in FATORES.items()}
+    marc.update({("tom", k): e["marcador"] for k, e in TOM_TEMPERAMENTO.items()})
+    marc.update({("desejo", k): e["marcador"] for k, e in DESEJO_TIPO.items()})
+    textos = {("tom", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in TOM_TEMPERAMENTO.items()}
+    textos.update({("desejo", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in DESEJO_TIPO.items()})
+    fixos = list(TEMPERAMENTO_NEUTRO.values()) + [DESEJO_BEBE, VONTADE_ADULTO] + [t for par in ALVOS_DESEJO.values() for t in par]
+    for dono, m in marc.items():
+        for outro, ts in textos.items():
+            if outro != dono and any(m in t for t in ts):
+                raise TabelaIncompleta(f"marcador {m!r} de {dono} aparece no texto de {outro}")
+        for t in fixos:
+            if m in t:
+                raise TabelaIncompleta(f"marcador {m!r} de {dono} aparece em texto fixo {t!r}")
+        if dono[0] != "fator":
+            for n, e in FATORES.items():
+                if any(m in e[s] for s in ("crianca", "adolescente", "adulto")):
+                    raise TabelaIncompleta(f"marcador {m!r} de {dono} aparece no fator {n!r}")
+
+
 def marcadores_citados(conteudo: str) -> set[str]:
     """Fatores (nome base) cujo marcador aparece no conteudo."""
     return {n for n, e in FATORES.items() if e["marcador"] in conteudo}
 
 
+def tons_citados(conteudo: str) -> set[tuple[str, str]]:
+    """(eixo, polo) do temperamento cujo marcador aparece no conteudo."""
+    return {k for k, e in TOM_TEMPERAMENTO.items() if e["marcador"] in conteudo}
+
+
 validar_tabelas()
+validar_tabelas_personalidade()

@@ -265,6 +265,8 @@ class ConfigExpressao:
     # bebe: faixas de humor para o emote
     humor_alegre: float = 0.66
     humor_neutro: float = 0.33
+    # temperamento (TAREFA_PERSONALIDADE_OBEDIENCIA 1.3): eixo so vira tom se |eixo| >= isto (PROPOSTO)
+    limiar_tom_temperamento: float = 0.5
 
 
 CONFIG_EXPRESSAO = ConfigExpressao()

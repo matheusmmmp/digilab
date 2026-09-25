@@ -207,9 +207,9 @@ Se for baixa, a fala está prometendo o que o pet não faz.
 
 ## 6. Critério de pronto
 
-- [ ] três runs gravadas com gate rodado
-- [ ] todos os testes, antigos e novos, passando
-- [ ] `CLAUDE.md` atualizado (mapa, comandos, estado, pendências)
+- [x] três runs gravadas com gate rodado
+- [x] todos os testes, antigos e novos, passando
+- [x] `CLAUDE.md` atualizado (mapa, comandos, estado, pendências)
 
 ## 7. O que reportar
 

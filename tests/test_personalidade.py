@@ -150,3 +150,55 @@ def test_tabelas_e_protocolo():
     assert len(p.v("sementes_coorte")) == 10
     assert hash_protocolo(PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS).startswith("7dbe33a52ed6")
     assert CONFIG_DESEJO.k_cumprimento_ticks > 0
+
+
+def test_tom_do_temperamento_cobre_tabela_e_so_cita_eixos_marcantes():
+    from digilab.config import CONFIG_EXPRESSAO
+    from digilab.expressao import ESTAGIOS, TOM_TEMPERAMENTO, TabelaIncompleta, expressar_temperamento, \
+        tons_citados, validar_tabelas_personalidade
+
+    validar_tabelas_personalidade()
+    lim = CONFIG_EXPRESSAO.limiar_tom_temperamento
+    for ovo in range(1, 60):
+        t = sortear(ovo)
+        marcantes = {(e, "+" if v > 0 else "-") for e, v in t.para_dict().items() if abs(v) >= lim}
+        for est in ESTAGIOS:
+            x = expressar_temperamento(t, est)
+            citados = tons_citados(x.conteudo)
+            assert citados <= marcantes, (ovo, est, x.conteudo)
+            if est == "bebe":
+                assert not citados                    # bebe so por emote, sem palavra
+            if marcantes and est != "bebe":
+                assert citados
+    # cada polo de cada eixo aparece sozinho quando so ele passa do limiar
+    for (eixo, polo) in TOM_TEMPERAMENTO:
+        t = Temperamento(**{eixo: 0.9 if polo == "+" else -0.9})
+        assert tons_citados(expressar_temperamento(t, "adulto").conteudo) == {(eixo, polo)}
+        assert expressar_temperamento(t, "bebe").conteudo == TOM_TEMPERAMENTO[(eixo, polo)]["bebe"]
+    assert tons_citados(expressar_temperamento(NEUTRO, "adulto").conteudo) == set()
+    with pytest.raises(ValueError):
+        expressar_temperamento(NEUTRO, "velho")
+    assert issubclass(TabelaIncompleta, ValueError)
+
+
+def test_desejo_na_expressao_distingue_tipo_da_crianca_em_diante_e_so_cita_o_calculo():
+    from digilab.desejo import NECESSIDADES
+    from digilab.expressao import ALVOS_DESEJO, DESEJO_TIPO, ESTAGIOS, expressar_desejo, marcadores_citados
+
+    for tipo in ("necessidade", "vontade"):
+        alvos = [a for _, a in NECESSIDADES.values()] if tipo == "necessidade" else [a.value for a in AcaoPet]
+        for alvo in alvos:
+            d = Desejo(3, tipo, alvo, 0.5)
+            bebe = expressar_desejo(d, "bebe").conteudo
+            assert all(e["marcador"] not in bebe for e in DESEJO_TIPO.values())
+            for est in ESTAGIOS[1:]:
+                c = expressar_desejo(d, est).conteudo
+                outro = "vontade" if tipo == "necessidade" else "necessidade"
+                assert DESEJO_TIPO[tipo]["marcador"] in c and DESEJO_TIPO[outro]["marcador"] not in c, c
+                citados = marcadores_citados(c)
+                if tipo == "necessidade" and est != "crianca":
+                    nome = next(n for n, (_, a) in NECESSIDADES.items() if a == alvo)
+                    assert citados == {nome}, c        # so a necessidade que passou do limiar
+                else:
+                    assert citados == set(), c         # vontade: nenhuma causa inventada
+    assert set(ALVOS_DESEJO) >= {a.value for a in AcaoPet}

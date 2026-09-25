@@ -20,6 +20,10 @@
   se o termo de valor **mudou** a escolha (sem ele, a ação seria outra); caso contrário o motivo
   fica sem fator, porque quem decidiu foi o prior/ruído e citar um peso seria inventar causa.
   A fração sem essa checagem também é reportada.
+- Bandit (registrado depois, 2026-09-25): a A1 pede como fator o termo de maior **|contribuição|**;
+  o código só aceita contribuição **positiva** (a favor da ação escolhida), ≥ `limiar_motivo`, até 2.
+  Uma contribuição negativa pesou *contra* a ação que saiu; citá-la como causa da escolha seria
+  inventar. Documentado no `CLAUDE.md` e em `motivo.py` desde a Parte A, mas faltava aqui.
 - `hora_sin` e `hora_cos` somam contribuição num único fator `hora`; o intercepto vira o fator
   `habito` (preferência aprendida pela ação, independente do estado).
 - Os docs foram copiados de `D:\Trab\digilab\*.md` para `docs/`, onde a tarefa os referencia.
@@ -151,3 +155,35 @@ dono nem no `CanalDeInteracao`. Interpretações:
 - Condição física: 0,95 + 0,10 × saúde no fim da vida. Sparring mínimo: dado como cumprido.
 - Arena: gambits canônicos da forma adulta (8 regras em todos: capacidade igual); ablação tira a
   técnica, a passiva e as regras que dependem delas.
+
+## 2026-09-25 — campanha contra os 3 NPCs (TAREFA_TREINO_SOMBRIO, seção 5), registrado depois
+
+Registrado na auditoria das tarefas (antes estava só no `CLAUDE.md` e no docstring de `campanha.py`):
+
+- **Pré-condição dispensada**: a tarefa pede o combate V2.1 APROVADO; a campanha foi feita com a
+  bateria V2.1 REPROVADA (E1–E5), a pedido do pesquisador, e **sem treino** (a parte com treino espera a
+  tarefa de treino). Stats dos NPCs não são renormalizados ao orçamento da espécie.
+- **Correção do Soberano não adotada**: a tarefa manda corrigir o chefe porque, no protótipo
+  (`docs/pve.py`), o atirador o vencia sem treino (0,67). No V2.1 isso não se repete (atirador 0,06
+  contra o original). A correção testada (`GAMBIT_SOBERANO_RESPOSTA_LONGE`) mantém o atirador em 0,06
+  e faz emboscador (0,73) e sentinela (0,57) passarem a vencê-lo. Fica o original; números em
+  `artifacts_campanha/campanha.json`, chave `soberano`.
+- Web (`web/digilab_sprites.html`): a campanha entrou na aba Arena com desbloqueio em sequência; o
+  balanceamento continua sem calibrar (a escada 1 → 2 → 3 não se sustenta).
+
+## 2026-09-25 — expressão do temperamento e do desejo (TAREFA_PERSONALIDADE_OBEDIENCIA 1.3 e 3.2)
+
+Faltavam na entrega da tarefa (achado na auditoria). Interpretações:
+
+- Temperamento: tabela `TOM_TEMPERAMENTO` por eixo, polo (+/−) e estágio, com marcador único como os
+  fatores. Só entra eixo com |valor| ≥ `ConfigExpressao.limiar_tom_temperamento` (0,5, PROPOSTO), do
+  mais forte ao mais fraco; bebê só por emote (sem palavra), criança e adolescente o mais forte, adulto
+  até 2. É uma expressão à parte (`expressar_temperamento`), não muda o texto dos motivos: o
+  temperamento é inato, não é causa de uma decisão específica. O contraste "nasceu X, virou Y" fica
+  para quem lê os dois registros (o caráter aprendido só existe na web e no `evolucao.py`).
+- Desejo: `expressar_desejo`. Bebê: um emote só (não distingue tipo). Da criança em diante o marcador
+  do tipo aparece (`preciso` × `queria`). Necessidade cita a necessidade que passou do limiar (o único
+  fator do cálculo); vontade não cita causa além de "é o que mais deu certo" (média da posterior).
+- Somente leitura: nenhum hash, protocolo ou artefato muda (o campo novo está em `ConfigExpressao`, que
+  não entra no protocolo).
+

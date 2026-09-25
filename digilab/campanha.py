@@ -11,10 +11,10 @@ estilo em gambits:
   tier3_soberano     adaptativo da bateria V2. A tarefa pede corrigi-lo porque, no
                      prototipo (docs/pve.py, com finta/parry/morte subita), o estilo
                      atirador vencia o chefe sem treino (0,67). No combate V2.1 isso
-                     NAO se repete (atirador 0,01 contra o chefe original), e a
+                     NAO se repete (atirador 0,06 contra o chefe original), e a
                      correcao testada (GAMBIT_SOBERANO_RESPOSTA_LONGE) piora: os
                      cacadores passam a vence-lo. Fica o original; a correcao fica
-                     registrada em artifacts_campanha/soberano.json.
+                     registrada em artifacts_campanha/campanha.json, chave "soberano".
 Os gambits da V2 sao traduzidos para a linguagem da V2.1 pelo nome (mesmas
 condicoes e acoes).
 """
