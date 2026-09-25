@@ -63,6 +63,10 @@ def coletar_motivos(n: int, semente: int = SEMENTE_AMOSTRA) -> list[tuple]:
     return [(m, "adulto" if i % 2 else "adolescente", h) for i, (m, h) in enumerate(escolhidos)]
 
 
+def _norm(s: str) -> str:
+    return " ".join(s.lower().replace("...", " ").strip(" .").split())
+
+
 def avaliar(gerador: GeradorFala, motivos: list[tuple]) -> tuple[list[dict], dict]:
     linhas, quedas, tempos = [], Counter(), []
     for m, est, humor in motivos:
@@ -72,8 +76,11 @@ def avaliar(gerador: GeradorFala, motivos: list[tuple]) -> tuple[list[dict], dic
         aprovada = r.fonte == "llm"
         if not aprovada:
             quedas[r.detalhe.split(":")[0]] += 1
+        tpl = template(m, est, humor)
         linhas.append({"motivo": m.para_dict(), "estagio": est, "fala": r.texto if aprovada else None,
-                       "template": template(m, est, humor), "aprovada": aprovada, "queda": None if aprovada else r.detalhe})
+                       "fala_barrada": None if aprovada else (r.bruto or None),
+                       "template": tpl, "aprovada": aprovada, "queda": None if aprovada else r.detalhe,
+                       "igual_ao_template": aprovada and _norm(r.texto) == _norm(tpl)})
     n = len(linhas)
     com = [l for l in linhas if l["motivo"]["fatores"]]
     resumo = {
@@ -81,6 +88,13 @@ def avaliar(gerador: GeradorFala, motivos: list[tuple]) -> tuple[list[dict], dic
         "fracao_aprovada_com_fator": sum(l["aprovada"] for l in com) / len(com) if com else None,
         "fracao_aprovada_sem_fator": sum(l["aprovada"] for l in linhas if l not in com) / (n - len(com)) if n > len(com) else None,
         "quedas_por_tipo": dict(quedas), "tempo_medio_s": sum(tempos) / n, "tempo_max_s": max(tempos),
+        # fator fora do motivo na LISTA fatores_citados (o texto pode nem citar causa: ver fala_barrada)
+        "barradas_fator_fora_da_lista": sum(1 for l in linhas if l["queda"] and "fora do motivo" in l["queda"]),
+        "por_estagio": {e: {"n": sum(l["estagio"] == e for l in linhas),
+                            "aprovadas": sum(l["aprovada"] and l["estagio"] == e for l in linhas),
+                            "aprovadas_iguais_ao_template": sum(l["igual_ao_template"] and l["estagio"] == e
+                                                                for l in linhas)}
+                        for e in ("adolescente", "adulto")},
     }
     return linhas, resumo
 
@@ -90,6 +104,8 @@ def main(argv=None) -> int:
     ap.add_argument("--provedor", choices=("ollama", "claude"), default="ollama")
     ap.add_argument("--modelo", default=None)
     ap.add_argument("--n", type=int, default=200)
+    ap.add_argument("--semente", type=int, default=SEMENTE_AMOSTRA,
+                    help="semente da amostra de motivos; outra semente = avaliacao independente do ajuste")
     ap.add_argument("--aceito-custo", action="store_true", help="obrigatorio com --provedor claude (chamadas pagas)")
     a = ap.parse_args(argv)
     if a.provedor == "claude" and not a.aceito_custo:
@@ -98,18 +114,19 @@ def main(argv=None) -> int:
     if provedor is None or not provedor.disponivel()[0]:
         raise SystemExit(f"provedor indisponivel: {motivo or provedor.disponivel()[1]}")
     gerador = GeradorFala(provedor, limite_por_minuto=10_000, gasto=gasto)
-    motivos = coletar_motivos(a.n)
+    motivos = coletar_motivos(a.n, a.semente)
     linhas, resumo = avaliar(gerador, motivos)
     resumo.update({"provedor": provedor.nome, "modelo": provedor.modelo, "versao_prompt": VERSAO_PROMPT,
-                   "semente_amostra": SEMENTE_AMOSTRA,
+                   "semente_amostra": a.semente,
                    "gasto": gasto.para_dict() if gasto else None})
-    saida = RAIZ / "artifacts_fala" / f"{provedor.nome}_{provedor.modelo.replace(':', '-')}_{VERSAO_PROMPT}"
+    sufixo = "" if a.semente == SEMENTE_AMOSTRA else f"_s{a.semente}"
+    saida = RAIZ / "artifacts_fala" / f"{provedor.nome}_{provedor.modelo.replace(':', '-')}_{VERSAO_PROMPT}{sufixo}"
     saida.mkdir(parents=True, exist_ok=True)
     (saida / "falas.jsonl").write_text("".join(json.dumps(l, ensure_ascii=False) + "\n" for l in linhas),
                                        encoding="utf-8", newline="\n")
     (saida / "resumo.json").write_text(json.dumps(resumo, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     aprovadas = [l for l in linhas if l["aprovada"]]
-    amostra = random.Random(SEMENTE_AMOSTRA).sample(aprovadas, min(50, len(aprovadas)))
+    amostra = random.Random(a.semente).sample(aprovadas, min(50, len(aprovadas)))
     with (saida / "revisao.csv").open("w", encoding="utf-8-sig", newline="") as f:
         w = csv.writer(f, delimiter=";")
         w.writerow(["acao", "fatores_do_motivo", "estagio", "fala_da_llm", "frase_pronta", "cita_causa_fora_dos_fatores (s/n)"])
