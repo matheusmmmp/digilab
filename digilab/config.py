@@ -506,6 +506,27 @@ class ConfigEvolucaoPesquisa:
 
 
 CONFIG_EVOLUCAO_PESQUISA = ConfigEvolucaoPesquisa()
+
+
+def _npcs() -> dict:
+    # docs/pve_treino.json > npcs: stats uniformes no total, estilo fixo em gambits (bots da bateria V2)
+    return {
+        "tier1_brutamontes": {"total_stats": 72, "estilo": "agressivo", "estagio_minimo_sugerido": "crianca"},
+        "tier2_sentinela": {"total_stats": 80, "estilo": "contragolpe", "estagio_minimo_sugerido": "adolescente"},
+        "tier3_soberano": {"total_stats": 90, "estilo": "adaptativo", "estagio_minimo_sugerido": "adulto"},
+    }
+
+
+@dataclass(frozen=True)
+class ConfigCampanha:
+    """Campanha contra NPCs (TAREFA_TREINO_SOMBRIO, secao 5), SEM treino ainda. PROPOSTOS."""
+
+    npcs: dict = field(default_factory=_npcs)
+    partidas_por_par: int = 100          # lados trocados na metade
+    epsilon_npc: float = 0.05
+
+
+CONFIG_CAMPANHA = ConfigCampanha()
 CONFIG_CATALOGO = ConfigCatalogo()
 CONFIG_COMBATE_V21 = ConfigCombateV21()
 CONFIG_BATERIA_V21 = ConfigBateriaV21()

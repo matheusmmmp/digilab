@@ -80,6 +80,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
 | `digilab/combate_v2/v21/` | combate V2.1 (subpacote: o hash dos fontes da base não muda): `catalogo.py` (forma = espécie + caminho, stats com renormalização, perfil de combate, transições), `regras.py` (técnicas e passivas, resolução pura), `gambits.py` (capacidade por estágio, `turno_execucao`, `oponente_vai_preparar`), `partida.py` (lutador, laço, replay), `bots.py` (8 adultos, 4 adolescentes, respostas declaradas) |
 | `digilab/evolucao.py`, `experiments/run_pesquisa_v21.py` | evolução do pet de pesquisa (ovo pareado, cuidado, caráter nas sondas, forma adulta) e arena V2.1 com adultos → `artifacts_v21_pesquisa/` |
+| `digilab/campanha.py`, `experiments/run_campanha.py` | campanha contra os 3 NPCs (sem treino) → `artifacts_campanha/` |
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
@@ -230,6 +231,24 @@ da distribuição de formas: descritivo.
   e passivas 0,741 [0,341, 1,000]; instinto (mesma forma, só a condição difere) 0,585 [0,411, 0,770];
   instinto sem técnicas 0,665 [0,549, 0,785]. Por semente o bandit vai de 0,01 a 0,80: o confronto de
   arquétipos decide. Inconclusivo; a bateria V2.1 reprovada pesa aqui.
+
+## Campanha contra os 3 NPCs, sem treino (2026-09-25, `artifacts_campanha/`)
+
+`python experiments/run_campanha.py` (`digilab/campanha.py`, `ConfigCampanha`; parte da
+`TAREFA_TREINO_SOMBRIO`, feita sem o treino). NPCs com stats uniformes (72/80/90), estilos da bateria
+V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` (100 partidas por par).
+
+- **A escada de dificuldade não se sustenta**: o tier 2 (Sentinela, contragolpe, 80) é mais fácil que o
+  tier 1 (Brutamontes, agressivo, 72) para quase todas as formas; o chefe (Soberano, 90) cai para
+  adolescentes sem treino (guardião 0,98, brigão 0,66). Entre adultos só furioso (0,98) e muralha (0,90)
+  vencem o chefe; os demais ficam entre 0,00 e 0,18.
+- Soberano: o problema da tarefa (atirador vencia sem treino, 0,67, no protótipo `docs/pve.py`) **não se
+  repete** no V2.1: atirador 0.06 contra o chefe original. A correção testada (resposta à luta de
+  longe) piora: atirador 0.06, e sentinela 0.57 / emboscador 0.73 passam a
+  vencê-lo. Mantido o original; a correção fica só como evidência.
+- Pets de pesquisa (bandit, IC sobre 5 ovos) contra o tier 3: atencioso 0.21 [0.03, 0.47],
+  aleatório 0.25 [0.03, 0.62], incoerente 0.46 [0.14, 0.78].
+- Pendente: campanha com treino (espera a tarefa de treino) e redesenho dos NPCs para a escada funcionar.
 
 ## Motivo, expressão e memória (2026-09-24, `docs/TAREFA_MEMORIA_EXPRESSAO.md`)
 
