@@ -5,7 +5,8 @@
     python experiments/avaliar_fala.py --provedor claude --aceito-custo   # usa a API (respeita o teto)
 
 Motivos reais: vidas de artifacts_ablacao/vidas (bandit e instinto) e partidas de
-artifacts_combate_v2/amostra_replay.jsonl, metade com fator e metade sem, nos
+artifacts_combate_v2/amostra_replay.jsonl e artifacts_combate_v21/amostra_replay.jsonl
+(tecnicas e condicoes do V2.1), metade com fator e metade sem, nos
 estagios adolescente e adulto. Para cada um, gera a fala e registra se a validacao
 aprovou ou barrou (e por que).
 
@@ -34,7 +35,8 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 from diario import FABRICAS, inferir, ler_partidas  # noqa: E402
 from digilab.combate_v2.bots import bot  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
-from digilab.motivo import motivos_de_partida, motivos_de_vida  # noqa: E402
+from digilab.combate_v2.v21.bots import lutador_adulto  # noqa: E402
+from digilab.motivo import motivos_de_partida, motivos_de_partida_v21, motivos_de_vida  # noqa: E402
 from servidor.fala_llm import GeradorFala, escolher_provedor, template  # noqa: E402
 
 SEMENTE_AMOSTRA = 20260924
@@ -50,6 +52,9 @@ def coletar_motivos(n: int, semente: int = SEMENTE_AMOSTRA) -> list[tuple]:
     for log in ler_partidas(RAIZ / "artifacts_combate_v2" / "amostra_replay.jsonl")[:60]:
         lut = (bot(log[0]["a"]), bot(log[0]["b"]))
         pool += [(m, None) for _, _, m, _ in motivos_de_partida(log, lut) if m.acao != "pesado"]
+    for log in ler_partidas(RAIZ / "artifacts_combate_v21" / "amostra_replay.jsonl")[:60]:
+        lut = tuple(lutador_adulto(*log[0][x].split("@")) for x in ("a", "b"))
+        pool += [(m, None) for _, _, m, _ in motivos_de_partida_v21(log, lut) if m.acao != "pesado"]
     rng = random.Random(semente)
     com = [x for x in pool if x[0].fatores and not x[0].exploracao]
     sem = [x for x in pool if not x[0].fatores or x[0].exploracao]

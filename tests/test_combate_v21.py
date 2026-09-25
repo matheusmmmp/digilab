@@ -355,3 +355,17 @@ def test_base_v2_intacta():
     gravado = json.loads((RAIZ / "artifacts_combate_v2" / "gates.json").read_text(encoding="utf-8"))
     cfg = json.loads((RAIZ / "experiments" / "configs" / "bateria_canonico.json").read_text(encoding="utf-8"))
     assert hashes(cfg)["regras_sha256"] == gravado["hashes"]["regras_sha256"]
+
+
+def test_motivos_de_partida_v21_tem_texto_para_tudo():
+    from digilab.expressao import expressar
+    from digilab.motivo import motivos_de_partida_v21
+
+    a, b = lutador_adulto("vigia", "limo"), lutador_adulto("emboscador", "cirro")
+    p = jogar(a, b, 11)
+    mots = motivos_de_partida_v21(list(p.log), (a, b))
+    assert len(mots) == 2 * p.turnos
+    for _, _, m, _ in mots:
+        for est in ("crianca", "adolescente", "adulto"):
+            expressar(m, est, None)                      # tabela cobre tecnicas e condicoes V2.1
+    assert any(m.acao in ("marcar", "pele_dura") for _, _, m, _ in mots)

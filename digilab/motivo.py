@@ -318,3 +318,37 @@ def motivos_de_partida(log: list[dict], lutadores, cfg=None) -> list[tuple[int, 
             saida.append((t, lado, mot, estado))
         estado, _ = resolver(estado, Acao(ev["a"]), Acao(ev["b"]), cfg)
     return saida
+
+
+def motivos_de_partida_v21(log: list[dict], lutadores) -> list[tuple[int, int, Motivo, object]]:
+    """Como `motivos_de_partida`, para o combate V2.1 (`lutadores` = Lutador de combate_v2/v21)."""
+    from .combate_v2.v21.regras import Acao, estado_inicial, resolver
+
+    a, b = lutadores
+    estado = estado_inicial(a.perfil, b.perfil)
+    saida = []
+    for ev in log:
+        tipo = ev.get("tipo")
+        if tipo in ("cabecalho", "fim"):
+            continue
+        if tipo != "turno":
+            raise ValueError(f"evento desconhecido no log de combate: {tipo!r}")
+        t = ev["t"]
+        for lado, (acao, m) in enumerate(((ev["a"], ev["ma"]), (ev["b"], ev["mb"]))):
+            g = (a, b)[lado].gambits
+            hist_op = estado.oponente(lado).historico
+            if m == "exploracao":
+                mot = Motivo("combate", acao, (), (), None, True, turno=t)
+            elif m == "pesado_automatico":
+                mot = Motivo("combate", acao, (), (t - 1,), None, False, turno=t)
+            elif isinstance(m, int):
+                regra = g.regras[m] if m < len(g.regras) else g.final
+                conds = [c for c in regra.condicoes if c.nome != "sempre"]
+                refs = sorted({r for c in conds for r in _refs_condicao(c, t, hist_op)})
+                mot = Motivo("combate", acao, tuple(nome_condicao(c) for c in conds), tuple(refs),
+                             None, False, turno=t)
+            else:
+                raise ValueError(f"motivo de combate desconhecido: {m!r}")
+            saida.append((t, lado, mot, estado))
+        estado, _ = resolver(estado, Acao(ev["a"]), Acao(ev["b"]))
+    return saida
