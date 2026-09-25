@@ -76,6 +76,8 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/memoria.py` | `MemoriaCurta` (latência do dono por necessidade, broncas e elogios com decaimento) e `PoliticaBanditMemoria` |
 | `experiments/diario.py`, `legibilidade.py` | diário de motivo/expressão (vida ou partida) e métricas de legibilidade → `artifacts_expressao/` |
 | `experiments/configs/memoria.json` | `PROTOCOLO_ARENA_V1_MEMORIA` → `artifacts_v1_memoria/` |
+| `digilab/temperamento.py`, `vinculo.py`, `desejo.py`, `obediencia.py` | personalidade: temperamento (rng_ovo), vínculo, obediência com recusa e motivo, desejo; `configs/personalidade*.json` → `artifacts_v1_personalidade/` |
+| `digilab/memoria_espacos.py`, `experiments/memoria_espacos.py` | memória por espaços (adendo DF, Parte 1) e relatório de ocupação; `configs/memoria_espacos.json` → `artifacts_v1_memoria_espacos/` |
 | `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`: provedores Ollama local e Claude; SDK `anthropic` só aqui). `digilab/` não importa isto (teste AST) |
 | `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
 | `digilab/combate_v2/v21/` | combate V2.1 (subpacote: o hash dos fontes da base não muda): `catalogo.py` (forma = espécie + caminho, stats com renormalização, perfil de combate, transições), `regras.py` (técnicas e passivas, resolução pura), `gambits.py` (capacidade por estágio, `turno_execucao`, `oponente_vai_preparar`), `partida.py` (lutador, laço, replay), `bots.py` (8 adultos, 4 adolescentes, respostas declaradas) |
@@ -84,12 +86,12 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 194 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 223 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 194 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 223 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
@@ -276,6 +278,51 @@ Números abaixo vêm de `artifacts_expressao/legibilidade.json` e `artifacts_v1_
   artifacts_ablacao/). Diferença de ~0,001 bit, sem IC, e a divergência dentro do braço também subiu
   (0,01496 vs 0,01306). Fatores de memória citados em 3,1–6,1% das decisões (mais no aleatório).
 
+## Personalidade, obediência e desejo (2026-09-25, `docs/TAREFA_PERSONALIDADE_OBEDIENCIA.md`)
+
+Sobre a memória por espaços (decisão do Matheus); pré-condição da bateria V2 dispensada. Módulos
+`digilab/temperamento.py`, `vinculo.py`, `desejo.py`, `obediencia.py` (`MotorPersonalidade`,
+subclasse do `MotorComFeedback`; `engine.py`, `CanalDeInteracao` e `combate_v2/` intactos). Protocolos
+`arena-v1-personalidade` (`d986ff1b9308…`), `-neutro` (`edd9fdc25aae…`) e `-sem-obediencia`
+(`e43305c4b17d…`), 10 ovos (101…1010), configs `experiments/configs/personalidade*.json`. Números de
+`artifacts_v1_personalidade/{completa,neutro,sem_obediencia}/metrics.json` (seção `personalidade`).
+Interpretações em `docs/REGISTRO_DESVIOS.md`. Tudo PROPOSTO.
+
+- **O temperamento não engole o efeito do dono**: na run completa, a taxa de vitória por pet se decompõe
+  em braço 16,9%, ovo 8,5%, resíduo 74,7%.
+- Resultado central (atencioso × aleatório): completa 0,615 [0,450, 0,770] INCONCLUSIVO; temperamento
+  neutro 0,655 [0,520, 0,790] ATENCIOSO_VENCE; obediência desligada 0,685 [0,525, 0,815] ATENCIOSO_VENCE.
+  Temperamento e obediência somam ruído e empurram o central para inconclusivo.
+- **Obediência (completa)**: atencioso 0,918, incoerente 0,897, relapso 0,818, aleatório 0,771;
+  atencioso − aleatório +0,147 [0,092, 0,205]. **O vínculo não acompanha**: aleatório 0,607, atencioso
+  0,539, relapso 0,500, incoerente 0,419; atencioso − aleatório −0,069 [−0,206, 0,074]. A obediência vem
+  do conflito (o dono aleatório pede cuidado que não atende a necessidade urgente), não do vínculo; e o
+  componente de atendimento premia o dono aleatório, que faz cuidado com frequência. Revisar o desenho
+  do vínculo antes de usar como medida de coerência.
+- Desejo (completa): cumprimento de vontade 0,445–0,545 por braço; fração do tempo com vontade ativa
+  atencioso 0,552, incoerente 0,558, relapso 0,300, aleatório 0,237.
+- Equivalência: temperamento neutro + obediência desligada reproduz as vidas de
+  `artifacts_v1_memoria_espacos/` byte a byte (teste). Parte 2 do adendo DF (emoção, extremos,
+  habituação) é a próxima etapa.
+
+## Memória por espaços (2026-09-25, `docs/ADENDO_MEMORIA_EMOCAO_DF.md` Parte 1)
+
+Protocolo `arena-v1-memoria-espacos` (hash `7dbe33a52ed6…`), política `bandit_espacos`,
+`digilab/memoria_espacos.py`, `ConfigMemoriaEspacos` (tudo PROPOSTO). A B1 (`arena-v1-memoria`)
+continua reproduzível. Interpretações em `docs/REGISTRO_DESVIOS.md`. Números de
+`artifacts_v1_memoria_espacos/metrics.json` e `espacos.json` (`python experiments/memoria_espacos.py`).
+
+- Run APROVADA; central INCONCLUSIVO (0,68, IC95 [0,50, 0,83], 5 sementes). JSD entre braços 0,02281
+  bits com espaços × 0,02142 com a B1 × 0,02041 sem memória; dentro do braço 0,01629. Sem IC:
+  diferenças da ordem de 0,001 bit, não conclusivas.
+- A memória muda comportamento, mas pouco: 6,9% dos motivos citam uma memória (6,3% atencioso a 7,8%
+  aleatório). Bronca e elogio dominam as citações.
+- Ocupação média: curto 1,8 (atencioso) a 3,1 (aleatório) de 4; longo 1,3 a 1,9 de 2. O atencioso
+  nunca tem `demora` na memória; relapso e aleatório têm `demora` em ~86–90% do tempo. `carinho`
+  (intensidade 0,5) perde espaço para bronca/elogio (1,0) nos donos coerentes.
+- Parte 2 (emoção, extremos, habituação): a personalidade já existe; é a próxima etapa.
+  A web ainda usa a memória B1.
+
 ## Fala por LLM (Parte C, 2026-09-24)
 
 **Provedores** (`--provedor`, padrão `auto`): **Ollama local** (`qwen2.5:3b`, sem custo, padrão
@@ -315,11 +362,24 @@ metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e
   se contradizia (recebia todos os fatores mas só pode citar o primeiro; o exemplo sem fator não
   dizia "não sei", que a regra exige).
 - prompt `fala-v2` (corrige as duas contradições, **olhando esta mesma amostra**: não é validação
-  independente): 183/200 (0,915); adolescente 95/100, adulto 88/100. 14/200 (7%) citaram fator fora
-  do motivo e foram barradas (caíram no template). Tempo médio 2,6 s por fala.
-- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` (50 falas
-  aprovadas; "cita causa fora dos fatores?"), porque a varredura de marcadores não pega sinônimos.
-  Sem ela, a fala por LLM continua desligada por padrão.
+  independente): 183/200 (0,915); adolescente 95/100, adulto 88/100. 14/200 foram barradas por pôr na
+  lista `fatores_citados` um nome fora do motivo (ex.: `turno_12`, `evento_ref`, `Brinquei`); o texto
+  delas não foi guardado, então isso NÃO mede quantas inventavam causa (correção de um relato
+  anterior que dizia "7% inventaram causa"). O adulto copiava a frase pronta em 68/88 aprovadas.
+- `fala-v3` (pedido do Matheus: personalidade e tom pelo humor; temperatura 0,7; semente nova
+  20260925): 108/200; quase nenhuma cópia, mas **aprovadas inventavam causa por sinônimo** (ex.:
+  "queria que você me ajudasse a descansar"). Não usar.
+- **Moldura (`fala-v4` em diante)**: a LLM devolve só `{abertura, fecho}` no tom do humor; o miolo é
+  sempre a frase de `expressao.py`, então não há como inventar causa. `validar_moldura` barra
+  conectivo de causa, número, marcador e tema de causa; o Ollama recebe limite de caracteres no
+  esquema e penalidade de repetição. Cada versão avaliada numa semente nova: v4 (s20260926) 127/200,
+  67 cortadas por loop de carinhas; v5 (s20260927) 199/200 mas quase sem abertura; **v6 (s20260928,
+  abertura obrigatória no esquema) 191/200, todas com abertura, nenhuma igual à frase pronta**
+  (ex.: "Epa... Dormi porque eu estava com sono e por causa do cansaço. :/"). "Eba!" abre 58/191.
+- O modelo às vezes devolve surrogate UTF-16 solto: o servidor saneia antes de validar (quebrava a
+  resposta e a avaliação).
+- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv`
+  (50 falas aprovadas). Sem ela, a fala por LLM continua desligada por padrão.
 
 ## Versão web (`web/digilab.html`)
 
@@ -426,7 +486,7 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` antes de ligar por
+- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv` antes de ligar por
   padrão; a v2 do prompt foi ajustada na mesma amostra da avaliação (repetir com outra semente).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),

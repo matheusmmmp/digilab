@@ -97,6 +97,28 @@ FATORES: dict[str, dict[str, str]] = {
                         "adolescente": "você repetiu...", "adulto": "porque você repetiu '{p0}' {p1} vezes"},
     "oponente_frequente": {"marcador": "você insiste", "bebe": "", "crianca": "[:você insiste:]",
                            "adolescente": "você insiste...", "adulto": "porque você insiste em '{p0}'"},
+    # desobediencia: termos da logistica da obediencia (so o de maior contribuicao negativa)
+    "vinculo_baixo": {"marcador": "não confio", "bebe": "", "crianca": "[:não confio:]",
+                      "adolescente": "não confio...", "adulto": "porque ainda não confio em você"},
+    "teimosia": {"marcador": "teimoso", "bebe": "", "crianca": "[:teimoso:]",
+                 "adolescente": "teimoso...", "adulto": "porque eu sou teimoso"},
+    "necessidade_fome": {"marcador": "barriga vazia", "bebe": "", "crianca": "[:barriga vazia:]",
+                         "adolescente": "barriga vazia...", "adulto": "porque eu estava de barriga vazia"},
+    "necessidade_higiene": {"marcador": "todo sujo", "bebe": "", "crianca": "[:todo sujo:]",
+                            "adolescente": "todo sujo...", "adulto": "porque eu estava todo sujo"},
+    "necessidade_energia": {"marcador": "sem forças", "bebe": "", "crianca": "[:sem forças:]",
+                            "adolescente": "sem forças...", "adulto": "porque eu estava sem forças"},
+    "necessidade_humor": {"marcador": "chateado", "bebe": "", "crianca": "[:chateado:]",
+                          "adolescente": "chateado...", "adulto": "porque eu estava chateado"},
+    # memoria por espacos (docs/ADENDO_MEMORIA_EMOCAO_DF.md, Parte 1)
+    "demora": {"marcador": "me deixou esperando", "bebe": "", "crianca": "[:me deixou esperando:]",
+               "adolescente": "me deixou esperando...", "adulto": "porque lembro que você me deixou esperando"},
+    "bronca": {"marcador": "repreensão", "bebe": "", "crianca": "[:repreensão:]",
+               "adolescente": "repreensão...", "adulto": "porque lembro da sua repreensão"},
+    "elogio": {"marcador": "parabéns", "bebe": "", "crianca": "[:parabéns:]",
+               "adolescente": "parabéns...", "adulto": "porque lembro dos seus parabéns"},
+    "carinho": {"marcador": "carinho", "bebe": "", "crianca": "[:carinho:]",
+                "adolescente": "carinho...", "adulto": "porque lembro do seu carinho"},
     # condicoes do combate V2.1 (combate_v2/v21/gambits.py)
     "turno_execucao": {"marcador": "luta longa", "bebe": "", "crianca": "[:luta longa:]",
                        "adolescente": "luta longa...", "adulto": "porque já era uma luta longa (turno {p0} ou mais)"},
@@ -115,6 +137,9 @@ ACOES_VIDA = {
     "chamar_atencao": ("[chamar]", "chamar", "Chamei você"),
     "explorar": ("[explorar]", "explorar", "Explorei"),
     "emburrar": ("[emburrar]", "emburrar", "Emburrei"),
+    # desobediencia (TAREFA_PERSONALIDADE_OBEDIENCIA): o "pedido" e a acao do dono
+    "recusar": ("[não!]", "não quero", "Não quis fazer o que você pediu"),
+    "fazer_outra": ("[outra coisa]", "outra coisa", "Fiz outra coisa em vez do que você pediu"),
 }
 ACOES_COMBATE = {
     "avancar": ("[avançar]", "avançar", "Avancei"),
@@ -184,9 +209,10 @@ def _fatores_extra() -> tuple[str, ...]:
     """Fatores alem da vida e do catalogo (memoria, Parte B), se o modulo existir."""
     try:
         from .memoria import FATORES_MEMORIA
+        from .memoria_espacos import FATORES_ESPACOS
     except ImportError:
         return ()
-    return FATORES_MEMORIA
+    return FATORES_MEMORIA + FATORES_ESPACOS
 
 
 @dataclass(frozen=True)

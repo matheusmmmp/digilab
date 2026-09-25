@@ -43,6 +43,9 @@ from digilab.donos import criar_dono  # noqa: E402
 from digilab.metrics import (  # noqa: E402
     bootstrap_ic,
     bradley_terry,
+    cumprimento_desejo,
+    decomposicao_ovo_braco,
+    fracao_tempo_vontade,
     divergencia_politicas,
     efeito_do_treino,
     estados_sonda,
@@ -50,6 +53,9 @@ from digilab.metrics import (  # noqa: E402
     taxa_vitoria,
 )
 from digilab.memoria import PoliticaBanditMemoria  # noqa: E402
+from digilab.memoria_espacos import PoliticaBanditEspacos  # noqa: E402
+from digilab.obediencia import MotorPersonalidade, PoliticaBanditPersonalidade  # noqa: E402
+from digilab.temperamento import NEUTRO, sortear  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import (  # noqa: E402
@@ -59,6 +65,8 @@ from digilab.protocol import (  # noqa: E402
     Protocolo,
     ProtocoloAblacao,
     ProtocoloMemoria,
+    ProtocoloMemoriaEspacos,
+    ProtocoloPersonalidade,
     bracos_do_protocolo,
     configs_congelados,
     derivar_semente,
@@ -74,9 +82,75 @@ FABRICAS_POLITICA = {
     "bandit": lambda cfg=None: PoliticaBandit(cfg),
     "instinto": lambda cfg=None: PoliticaInstinto(cfg),
     "bandit_memoria": lambda cfg=None: PoliticaBanditMemoria(cfg),
+    "bandit_espacos": lambda cfg=None: PoliticaBanditEspacos(cfg),
+    "bandit_personalidade": lambda cfg=None: PoliticaBanditPersonalidade(cfg),   # temperamento: fabricas_vida
 }
 # politicas que aprendem: o gate de divergencia so olha pares delas
-APRENDIZES = {"bandit", "bandit_memoria"}
+APRENDIZES = {"bandit", "bandit_memoria", "bandit_espacos", "bandit_personalidade"}
+
+
+def metricas_personalidade(protocolo, vidas: dict, tv: dict, sementes: list, bracos: list, dir_vidas: Path) -> dict:
+    """Vinculo, obediencia e desejo por braco; atencioso x aleatorio pareado por ovo;
+    decomposicao da taxa de vitoria (resultado principal por pet) entre ovo e braco."""
+    from digilab.config import CONFIG_DESEJO
+
+    boot = (protocolo.v("bootstrap_reamostragens"), protocolo.v("bootstrap_semente"), protocolo.v("nivel_confianca"))
+    por_pet = {}
+    for nome, v in vidas.items():
+        m = v.motor
+        fim = m.estado()["tick"]
+        dados = {
+            "temperamento": m.temperamento.para_dict(),
+            "vinculo_final": m.vinculo.valor,
+            "pedidos_obediencia": m.pedidos_obediencia,
+            "recusas": len(m.recusas),
+            "obediencia": 1.0 - len(m.recusas) / m.pedidos_obediencia if m.pedidos_obediencia else 1.0,
+            "recusas_por_tipo": {k: sum(r.tipo == k for r in m.recusas) for k in ("recusar", "fazer_outra")},
+            "fatores_recusa": {f: sum(f in r.motivo.fatores for r in m.recusas)
+                               for f in sorted({f for r in m.recusas for f in r.motivo.fatores})},
+            "recusas_sem_fator": sum(not r.motivo.fatores for r in m.recusas),
+            "desejos": len(m.desejos),
+            "cumprimento": cumprimento_desejo(m.desejos, m.acoes_recentes(10**9), CONFIG_DESEJO.k_cumprimento_ticks),
+            "fracao_tempo_vontade": fracao_tempo_vontade(m.desejos, fim),
+        }
+        por_pet[nome] = dados
+        (dir_vidas / f"{nome}.personalidade.json").write_text(json.dumps({
+            **dados, "serie_vinculo": m.vinculo.serie, "recusas_detalhe": [r.para_dict() for r in m.recusas],
+            "desejos_detalhe": [d.para_dict() for d in m.desejos]}, sort_keys=True), encoding="utf-8", newline="\n")
+    por_braco = {}
+    for b in bracos:
+        pets = [por_pet[f"{b}@{s}"] for s in sementes]
+        cum = [p["cumprimento"] for p in pets]
+        vont = sum(c["vontades"] for c in cum)
+        por_braco[b] = {
+            "vinculo_final": bootstrap_ic([p["vinculo_final"] for p in pets], *boot),
+            "obediencia": bootstrap_ic([p["obediencia"] for p in pets], *boot),
+            "recusas_media": sum(p["recusas"] for p in pets) / len(pets),
+            "cumprimento_agregado": sum(c["cumpridas"] for c in cum) / vont if vont else None,
+            "fracao_tempo_vontade": sum(p["fracao_tempo_vontade"] for p in pets) / len(pets),
+        }
+
+    def diferenca(campo: str) -> dict:
+        return bootstrap_ic([por_pet[f"atencioso@{s}"][campo] - por_pet[f"aleatorio@{s}"][campo] for s in sementes], *boot)
+
+    decomp = decomposicao_ovo_braco({(str(s), b): tv[f"{b}@{s}"]["taxa"] for s in sementes for b in bracos})
+    return {"por_braco": por_braco, "atencioso_menos_aleatorio": {"vinculo": diferenca("vinculo_final"),
+                                                                  "obediencia": diferenca("obediencia")},
+            "decomposicao_taxa_vitoria_ovo_x_braco": decomp,
+            "temperamento_neutro": protocolo.v("temperamento_neutro"),
+            "obediencia_desligada": protocolo.v("obediencia_desligada")}
+
+
+def fabricas_vida(protocolo, pol: str, semente: int):
+    """(fabrica da politica, fabrica do motor ou None). Na personalidade, o temperamento
+    vem do OVO (a semente da coorte): o mesmo em todos os bracos."""
+    if pol != "bandit_personalidade":
+        return FABRICAS_POLITICA[pol], None
+    t = NEUTRO if protocolo.v("temperamento_neutro") else sortear(semente)
+    desligada = protocolo.v("obediencia_desligada")
+    return ((lambda cfg=None: PoliticaBanditPersonalidade(cfg, t)),
+            (lambda politica, cfg, semente: MotorPersonalidade(politica, cfg, semente, t,
+                                                              obediencia_desligada=desligada)))
 
 
 class PreflightFalhou(RuntimeError):
@@ -215,8 +289,9 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     for s in sementes:
         for b in bracos:
             dono = dono_de_braco[b]
-            politica = FABRICAS_POLITICA[politica_de_braco[b]]()
-            v = simular_vida(b, criar_dono(dono), politica, s, dias, orcamento, rotulo_dono=dono)
+            fab_pol, fab_motor = fabricas_vida(protocolo, politica_de_braco[b], s)
+            v = simular_vida(b, criar_dono(dono), fab_pol(), s, dias, orcamento, rotulo_dono=dono,
+                             fabrica_motor=fab_motor)
             vidas[v.nome] = v
             (dir_vidas / f"{v.nome}.jsonl").write_text(v.motor.log.para_jsonl(), encoding="utf-8", newline="\n")
             (dir_vidas / f"{v.nome}.politica.json").write_text(
@@ -233,7 +308,12 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
     reconstruidos = {}
     for nome, v in sorted(vidas.items()):
         log = LogDeEventos.de_jsonl((dir_vidas / f"{nome}.jsonl").read_text(encoding="utf-8"))
-        r = reproduzir_com_feedback(log, FABRICAS_POLITICA[politica_de_braco[v.braco]], semente=v.semente_coorte)
+        fab_pol, fab_motor = fabricas_vida(protocolo, politica_de_braco[v.braco], v.semente_coorte)
+        r = reproduzir_com_feedback(log, fab_pol, semente=v.semente_coorte, fabrica_motor=fab_motor)
+        if isinstance(v.motor, MotorPersonalidade) and (
+                r.vinculo.serie != v.motor.vinculo.serie or r.desejos != v.motor.desejos
+                or [x.para_dict() for x in r.recusas] != [x.para_dict() for x in v.motor.recusas]):
+            raise ReplayDivergiu(f"{nome}: vinculo, desejos ou recusas divergem no replay")
         salvo = json.loads((dir_vidas / f"{nome}.politica.json").read_text(encoding="utf-8"))
         if r.estado() != v.motor.estado():
             raise ReplayDivergiu(f"{nome}: estado final diverge no replay")
@@ -391,6 +471,9 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
             vals, protocolo.v("bootstrap_reamostragens"), protocolo.v("bootstrap_semente"), protocolo.v("nivel_confianca")
         )
 
+    if isinstance(protocolo, ProtocoloPersonalidade):
+        pers = metricas_personalidade(protocolo, vidas, tv, sementes, bracos, dir_vidas)
+
     # ---------------------------------------------------------- 7. gate
     limiar = protocolo.v("limiar_divergencia_jsd_bits")
     gate = []
@@ -509,6 +592,14 @@ def executar(protocolo: Protocolo, saida: Path) -> int:
             "nota": "sem memoria = bracos bandit da run canonica (Linux/3.11) e da ablacao (mesmas vidas); "
                     "mesmas sementes, orcamento, duracao e donos",
         }
+        if isinstance(protocolo, ProtocoloMemoriaEspacos):
+            b1 = RAIZ / "artifacts_v1_memoria" / "metrics.json"
+            if not b1.exists():
+                raise FileNotFoundError("referencia da memoria B1 ausente: artifacts_v1_memoria/metrics.json")
+            metrics["divergencia_com_x_sem_memoria"]["memoria_b1_features"] = json.loads(
+                b1.read_text(encoding="utf-8"))["divergencia_resumo"]["jsd_media_entre_bracos"]
+    if isinstance(protocolo, ProtocoloPersonalidade):
+        metrics["personalidade"] = pers
     if isinstance(protocolo, ProtocoloAblacao):
         metrics["bracos_dono_politica"] = {r: {"dono": d, "politica": pol} for r, d, pol in bracos_exec}
         metrics["divergencia_resumo"]["gate_usa"] = divergence["gate_usa"]
