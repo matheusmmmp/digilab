@@ -44,12 +44,19 @@ class AlertaEmail:
         """Envia agora (levanta erro se falhar). Use `avisar` para nao travar o servidor."""
         if not self.ativo:
             raise RuntimeError("alerta por e-mail desligado: " + self.motivo_inativo())
+        if not (self.usuario.isascii() and self.senha.isascii()):
+            raise RuntimeError("usuario/senha SMTP com caractere fora do ASCII: no Gmail use uma SENHA DE APP "
+                               "(16 letras, myaccount.google.com/apppasswords), nao a senha da conta")
         msg = EmailMessage()
         msg["From"], msg["To"], msg["Subject"] = self.usuario, self.destino, assunto
         msg.set_content(texto)
         with smtplib.SMTP(self.host, self.porta, timeout=TIMEOUT_SMTP_S) as s:
             s.starttls(context=ssl.create_default_context())
-            s.login(self.usuario, self.senha)
+            try:
+                s.login(self.usuario, self.senha)
+            except smtplib.SMTPAuthenticationError as err:
+                raise RuntimeError(f"login SMTP recusado ({err.smtp_code}): no Gmail use uma SENHA DE APP "
+                                   "(myaccount.google.com/apppasswords), com a verificacao em duas etapas ligada") from None
             s.send_message(msg)
 
     def avisar(self, nivel: float, gasto: dict) -> None:

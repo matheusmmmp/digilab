@@ -195,13 +195,18 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     alerta = AlertaEmail(a.alerta_email)
     if a.testar_alerta:
-        alerta.enviar("Digilab: teste do alerta de gasto", "Se este e-mail chegou, o alerta de gasto esta funcionando.")
+        try:
+            alerta.enviar("Digilab: teste do alerta de gasto", "Se este e-mail chegou, o alerta de gasto esta funcionando.")
+        except (RuntimeError, OSError) as err:
+            raise SystemExit(f"teste do alerta FALHOU: {err}")
         print(f"e-mail de teste enviado para {alerta.destino}")
         return 0
     if a.remoto:
         senha = os.environ.get("DIGILAB_SENHA", "")
         if len(senha) < SENHA_MIN:
             raise SystemExit(f"--remoto exige DIGILAB_SENHA com {SENHA_MIN}+ caracteres no ambiente")
+        if not senha.isascii():
+            raise SystemExit("DIGILAB_SENHA com caractere fora do ASCII: o navegador pode nao conseguir enviar")
         Tratador.senha = senha
     elif a.claude_remoto:
         raise SystemExit("--claude-remoto so faz sentido com --remoto")
