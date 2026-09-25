@@ -98,3 +98,31 @@ Interpretações propostas antes de começar e aprovadas pelo pesquisador:
   fracas empatadas, sai a mais antiga).
 - Web: fica para um segundo passo (a Parte 1 foi feita só no Python).
 - Parte 2 (emoção, extremos, habituação) não iniciada: depende da `TAREFA_PERSONALIDADE_OBEDIENCIA`.
+
+## 2026-09-25 — TAREFA_PERSONALIDADE_OBEDIENCIA com a bateria V2 REPROVADA
+
+- Pré-condição: bateria do combate V2 APROVADA. Em disco: REPROVADA (G4, G5). Decisão do pesquisador:
+  **ignorar** esta pré-condição (como na tarefa de memória). As outras duas estavam cumpridas.
+- Decisão do pesquisador: a base é a **memória por espaços** (adendo Dwarf Fortress), não a B1. O
+  teste de equivalência (temperamento neutro + obediência desligada) compara com
+  `artifacts_v1_memoria_espacos/`, não com `artifacts_v1_memoria/`.
+
+Interpretações propostas antes do código e aceitas:
+
+- Rancor: escala o tau de decaimento das memórias `demora` e `bronca` (2^rancor).
+- Temperamento: fatores multiplicativos que valem exatamente 1,0 no eixo 0 (curiosidade: variância
+  × 2^c; teimosia: repreensão × (1 − 0,5 t); sensibilidade: elogio × (1 + 0,5 s), repreensão ×
+  (1 − 0,5 s)). Temperamento neutro gera configs idênticos e a mesma política.
+- Obediência só para ações de cuidado (alimentar, limpar, brincar, acariciar); elogiar e repreender
+  sempre chegam. Conflito = (0,3 − nível)/0,3 da necessidade mais urgente abaixo de 0,3 que a ação do
+  dono não atende.
+- Na desobediência: a função de efeito do dono roda sobre um estado descartado (consome a rng de
+  ambiente igual a uma ação aceita: recusar não desalinha o clima); a tentativa conta como contato
+  (zera o tempo sem cuidado), senão o relógio do bandit desalinha; `fazer_outra` aplica 1 tick do
+  efeito da ação atual do pet.
+- Fator do motivo da recusa: contribuição relativa ao pet neutro (vínculo no valor inicial,
+  temperamento 0, sem conflito); só o termo mais negativo, se ≤ −0,05. Recusa sem termo assim fica
+  sem fator (sorteio contra com p alta).
+- Vontade: argmax da média da posterior θ̂·x (sem prior e sem amostra); bandit recém-nascido não tem
+  vontade. Necessidade tem prioridade.
+- 10 ovos (sementes 101 a 1010), os mesmos nas três variantes.

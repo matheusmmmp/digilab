@@ -325,6 +325,65 @@ CONFIG_MEMORIA_ESPACOS = ConfigMemoriaEspacos()
 
 
 # =====================================================================
+# Personalidade, obediencia e desejo (docs/TAREFA_PERSONALIDADE_OBEDIENCIA.md),
+# sobre a memoria por espacos. Entram no hash de PROTOCOLO_ARENA_V1_PERSONALIDADE.
+# Todos PROPOSTOS. Todo fator de temperamento vale EXATAMENTE 1.0 com o eixo em 0
+# (exp(0) = 1, 1 - k*0 = 1): temperamento neutro reproduz a memoria por espacos.
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigTemperamento:
+    amplitude: float = 1.0                                  # sorteio uniforme em [-a, a] por eixo
+    k_curiosidade: float = 0.6931471805599453               # variancia da amostra x 2^curiosidade
+    k_teimosia: float = 0.5                                 # peso da repreensao x (1 - 0,5 teimosia)
+    k_sensibilidade: float = 0.5                            # elogio x (1 + 0,5 s); repreensao x (1 - 0,5 s)
+    k_rancor: float = 0.6931471805599453                    # tau de demora e bronca x 2^rancor
+    categorias_rancor: tuple = ("demora", "bronca")
+
+
+@dataclass(frozen=True)
+class ConfigVinculo:
+    inicial: float = 0.5
+    alfa: float = 0.1                                       # media movel: v += alfa * peso * (amostra - v)
+    peso_atendimento: float = 1.0                           # pedido atendido: 1 - latencia/janela; perdido: 0
+    peso_coerencia: float = 1.0                             # feedback com o mesmo sinal dos anteriores na janela
+    peso_desejo: float = 0.5                                # vontade respeitada pelo dono na janela
+    janela_latencia_ticks: int = 240
+    janela_coerencia_ticks: int = 1440
+    janela_desejo_ticks: int = 60
+
+
+@dataclass(frozen=True)
+class ConfigObediencia:
+    # p = logistica(b0 + b_vinculo*vinculo - b_teimosia*teimosia - b_conflito*conflito)
+    b0: float = 1.0
+    b_vinculo: float = 2.0
+    b_teimosia: float = 1.0
+    b_conflito: float = 2.0
+    # conflito: a necessidade mais urgente (abaixo do limiar) e a acao do dono nao a atende;
+    # conflito = (limiar - nivel) / limiar
+    limiar_conflito: float = 0.3
+    prob_fazer_outra: float = 0.5                           # desobediencia: fazer_outra, senao recusar
+    # so acoes de cuidado podem ser recusadas; feedback (elogiar/repreender) sempre chega
+    acoes_sujeitas: tuple = ("alimentar", "limpar", "brincar", "acariciar")
+    limiar_motivo: float = 0.05                             # contribuicao negativa minima para virar fator
+
+
+@dataclass(frozen=True)
+class ConfigDesejo:
+    limiar_necessidade: float = 0.3                         # nivel abaixo disto vira desejo de necessidade
+    limiar_vontade: float = 0.1                             # margem da media da posterior (1a - 2a acao)
+    k_cumprimento_ticks: int = 60
+
+
+CONFIG_TEMPERAMENTO = ConfigTemperamento()
+CONFIG_VINCULO = ConfigVinculo()
+CONFIG_OBEDIENCIA = ConfigObediencia()
+CONFIG_DESEJO = ConfigDesejo()
+
+
+# =====================================================================
 # Combate V2.1: arvore de evolucao integrada ao combate (tecnicas por linha,
 # passivas por forma adulta, stats por especie/temperamento/carater/arquetipo).
 # Transcricao de docs/catalogo_pets.json e docs/arvore_evolucao.json (um teste

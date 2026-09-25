@@ -56,10 +56,15 @@ def reproduzir_com_feedback(
     politica_fabrica: Callable[[Config], Politica],
     cfg: Config | None = None,
     semente: int = 42,
+    fabrica_motor: Callable | None = None,
 ) -> MotorComFeedback:
-    """Mesmo contrato de engine.reproduzir, com o gancho de feedback ligado."""
+    """Mesmo contrato de engine.reproduzir, com o gancho de feedback ligado.
+
+    `fabrica_motor(politica, cfg, semente)` troca a subclasse do motor (personalidade);
+    o padrao e o MotorComFeedback de sempre."""
     cfg = cfg or CONFIG_PADRAO
-    motor = MotorComFeedback(politica=politica_fabrica(cfg), cfg=cfg, semente=semente)
+    fab = fabrica_motor or (lambda politica, cfg, semente: MotorComFeedback(politica=politica, cfg=cfg, semente=semente))
+    motor = fab(politica_fabrica(cfg), cfg, semente)
     for evento in log:
         if evento.tipo == "avanco":
             motor._avancar(int(evento.valor))
@@ -134,6 +139,7 @@ def simular_vida(
     cfg: Config | None = None,
     cfg_donos: ConfigDonos | None = None,
     rotulo_dono: str | None = None,
+    fabrica_motor: Callable | None = None,
 ) -> Vida:
     """`rotulo_dono` fixa a rng do dono independente do rotulo do braco.
 
@@ -150,7 +156,8 @@ def simular_vida(
 
     # mesma semente de ambiente para todos os bracos da coorte; a rng do
     # dono e derivada a parte e nunca toca as rngs do motor
-    motor = MotorComFeedback(politica=politica, cfg=cfg, semente=semente_coorte)
+    fab = fabrica_motor or (lambda politica, cfg, semente: MotorComFeedback(politica=politica, cfg=cfg, semente=semente))
+    motor = fab(politica, cfg, semente_coorte)
     rng_dono = random.Random(derivar_semente("dono", semente_coorte, rotulo_dono or braco))
     canal = CanalDeInteracao(motor, orcamento, cfg_donos.max_interacoes_por_passo)
 
