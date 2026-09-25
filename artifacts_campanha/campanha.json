@@ -2,12 +2,12 @@
   "adolescentes_x_tier": {
     "tier1_brutamontes": {
       "brigao": {
-        "media_especies": 0.64625,
+        "media_especies": 0.3275,
         "por_especie": {
-          "brasa": 0.865,
-          "cirro": 0.565,
-          "ferrugem": 0.87,
-          "limo": 0.285
+          "brasa": 0.58,
+          "cirro": 0.14,
+          "ferrugem": 0.41,
+          "limo": 0.18
         }
       },
       "cacador": {
@@ -20,70 +20,70 @@
         }
       },
       "colosso": {
-        "media_especies": 0.04625,
+        "media_especies": 0.12250000000000001,
         "por_especie": {
-          "brasa": 0.02,
-          "cirro": 0.0,
-          "ferrugem": 0.15,
-          "limo": 0.015
+          "brasa": 0.065,
+          "cirro": 0.025,
+          "ferrugem": 0.06,
+          "limo": 0.34
         }
       },
       "guardiao": {
-        "media_especies": 0.305,
+        "media_especies": 0.1525,
         "por_especie": {
-          "brasa": 0.435,
-          "cirro": 0.13,
-          "ferrugem": 0.37,
-          "limo": 0.285
+          "brasa": 0.24,
+          "cirro": 0.16,
+          "ferrugem": 0.105,
+          "limo": 0.105
         }
       }
     },
     "tier2_sentinela": {
       "brigao": {
-        "media_especies": 0.9824999999999999,
+        "media_especies": 0.615,
         "por_especie": {
-          "brasa": 0.96,
-          "cirro": 1.0,
-          "ferrugem": 1.0,
-          "limo": 0.97
+          "brasa": 0.85,
+          "cirro": 0.49,
+          "ferrugem": 0.885,
+          "limo": 0.235
         }
       },
       "cacador": {
-        "media_especies": 1.0,
+        "media_especies": 0.0875,
         "por_especie": {
-          "brasa": 1.0,
-          "cirro": 1.0,
-          "ferrugem": 1.0,
-          "limo": 1.0
+          "brasa": 0.03,
+          "cirro": 0.09,
+          "ferrugem": 0.21,
+          "limo": 0.02
         }
       },
       "colosso": {
-        "media_especies": 0.64,
+        "media_especies": 0.02375,
         "por_especie": {
-          "brasa": 0.615,
-          "cirro": 0.72,
-          "ferrugem": 0.695,
-          "limo": 0.53
+          "brasa": 0.02,
+          "cirro": 0.0,
+          "ferrugem": 0.075,
+          "limo": 0.0
         }
       },
       "guardiao": {
-        "media_especies": 1.0,
+        "media_especies": 0.32875,
         "por_especie": {
-          "brasa": 1.0,
-          "cirro": 1.0,
-          "ferrugem": 1.0,
-          "limo": 1.0
+          "brasa": 0.71,
+          "cirro": 0.1,
+          "ferrugem": 0.385,
+          "limo": 0.12
         }
       }
     },
     "tier3_soberano": {
       "brigao": {
-        "media_especies": 0.655,
+        "media_especies": 0.0025,
         "por_especie": {
-          "brasa": 0.96,
-          "cirro": 0.71,
-          "ferrugem": 0.91,
-          "limo": 0.04
+          "brasa": 0.0,
+          "cirro": 0.0,
+          "ferrugem": 0.01,
+          "limo": 0.0
         }
       },
       "cacador": {
@@ -105,12 +105,12 @@
         }
       },
       "guardiao": {
-        "media_especies": 0.9824999999999999,
+        "media_especies": 0.0,
         "por_especie": {
-          "brasa": 0.99,
-          "cirro": 0.96,
-          "ferrugem": 1.0,
-          "limo": 0.98
+          "brasa": 0.0,
+          "cirro": 0.0,
+          "ferrugem": 0.0,
+          "limo": 0.0
         }
       }
     }
@@ -120,8 +120,8 @@
     "python": "3.13.0"
   },
   "avisos": [
-    "SEM treino: pets com o total de stats da especie (60) contra NPCs de 72/80/90",
-    "bateria V2.1 REPROVADA: a campanha herda isso",
+    "SEM treino: pets com o total de stats da especie (60) contra NPCs sem normalizacao",
+    "combate V21C aprovado com ressalvas (E2, E4, G6b, G8): a campanha herda isso",
     "numeros PROPOSTOS"
   ],
   "config_campanha": {
@@ -129,33 +129,56 @@
     "npcs": {
       "tier1_brutamontes": {
         "estagio_minimo_sugerido": "crianca",
-        "estilo": "agressivo",
-        "total_stats": 72
+        "estilo": "v21:espelho",
+        "total_stats": 54
       },
       "tier2_sentinela": {
         "estagio_minimo_sugerido": "adolescente",
-        "estilo": "contragolpe",
+        "estilo": "v21:furioso",
         "total_stats": 80
       },
       "tier3_soberano": {
         "estagio_minimo_sugerido": "adulto",
-        "estilo": "adaptativo",
-        "total_stats": 90
+        "estilo": "v2c:agressivo",
+        "total_stats": 120
       }
     },
     "partidas_por_par": 100
   },
-  "descricao": "Campanha contra os 3 NPCs no combate V2.1, SEM treino (TAREFA_TREINO_SOMBRIO, secao 5).",
-  "fontes_sha256": "43e121c8ec47ecbcdee9da279d80e22b0abdd5d6588ac1021091b5c7f49113f0",
+  "descricao": "Campanha contra os 3 NPCs, SEM treino (TAREFA_TREINO_SOMBRIO, secao 5), regras da campanha (V21C).",
+  "estilos_v2_stats_neutros_x_tier": {
+    "tier1_brutamontes": {
+      "adaptativo": 0.87,
+      "agressivo": 0.2,
+      "atirador": 1.0,
+      "contragolpe": 0.915,
+      "tartaruga": 0.25
+    },
+    "tier2_sentinela": {
+      "adaptativo": 1.0,
+      "agressivo": 0.005,
+      "atirador": 0.81,
+      "contragolpe": 0.27,
+      "tartaruga": 0.0
+    },
+    "tier3_soberano": {
+      "adaptativo": 0.55,
+      "agressivo": 0.0,
+      "atirador": 0.0,
+      "contragolpe": 0.0,
+      "tartaruga": 0.0
+    }
+  },
+  "fontes_sha256": "58cbab580851a5851ce57e607bc7944a3dcd550c294141c4ce769e1a7c625a05",
   "formas_adultas_x_tier": {
     "tier1_brutamontes": {
       "duelista": {
-        "media_especies": 0.55,
+        "media_especies": 0.35875,
         "por_especie": {
-          "brasa": 0.975,
-          "cirro": 0.135,
-          "ferrugem": 0.985,
-          "limo": 0.105
+          "brasa": 0.495,
+          "cirro": 0.24,
+          "ferrugem": 0.5,
+          "limo": 0.2
         }
       },
       "emboscador": {
@@ -168,30 +191,30 @@
         }
       },
       "espelho": {
-        "media_especies": 0.96625,
+        "media_especies": 0.66625,
         "por_especie": {
-          "brasa": 0.98,
-          "cirro": 0.91,
-          "ferrugem": 0.99,
-          "limo": 0.985
+          "brasa": 0.685,
+          "cirro": 0.56,
+          "ferrugem": 0.715,
+          "limo": 0.705
         }
       },
       "furioso": {
+        "media_especies": 0.84875,
+        "por_especie": {
+          "brasa": 0.94,
+          "cirro": 0.605,
+          "ferrugem": 0.94,
+          "limo": 0.91
+        }
+      },
+      "muralha": {
         "media_especies": 1.0,
         "por_especie": {
           "brasa": 1.0,
           "cirro": 1.0,
           "ferrugem": 1.0,
           "limo": 1.0
-        }
-      },
-      "muralha": {
-        "media_especies": 0.51375,
-        "por_especie": {
-          "brasa": 0.815,
-          "cirro": 0.0,
-          "ferrugem": 0.905,
-          "limo": 0.335
         }
       },
       "sentinela": {
@@ -204,105 +227,105 @@
         }
       },
       "tita": {
-        "media_especies": 0.90125,
+        "media_especies": 0.91125,
         "por_especie": {
-          "brasa": 0.955,
-          "cirro": 0.875,
-          "ferrugem": 0.895,
-          "limo": 0.88
+          "brasa": 0.925,
+          "cirro": 0.885,
+          "ferrugem": 0.85,
+          "limo": 0.985
         }
       },
       "vigia": {
-        "media_especies": 0.5912499999999999,
+        "media_especies": 0.6525,
         "por_especie": {
-          "brasa": 0.59,
-          "cirro": 0.525,
-          "ferrugem": 0.29,
-          "limo": 0.96
+          "brasa": 0.82,
+          "cirro": 0.585,
+          "ferrugem": 0.265,
+          "limo": 0.94
         }
       }
     },
     "tier2_sentinela": {
       "duelista": {
-        "media_especies": 1.0,
+        "media_especies": 0.47750000000000004,
         "por_especie": {
-          "brasa": 1.0,
-          "cirro": 1.0,
-          "ferrugem": 1.0,
-          "limo": 1.0
+          "brasa": 0.91,
+          "cirro": 0.09,
+          "ferrugem": 0.9,
+          "limo": 0.01
         }
       },
       "emboscador": {
-        "media_especies": 1.0,
+        "media_especies": 0.02,
         "por_especie": {
-          "brasa": 1.0,
-          "cirro": 1.0,
-          "ferrugem": 1.0,
-          "limo": 1.0
+          "brasa": 0.01,
+          "cirro": 0.02,
+          "ferrugem": 0.04,
+          "limo": 0.01
         }
       },
       "espelho": {
-        "media_especies": 1.0,
+        "media_especies": 0.9612499999999999,
         "por_especie": {
-          "brasa": 1.0,
-          "cirro": 1.0,
-          "ferrugem": 1.0,
-          "limo": 1.0
-        }
-      },
-      "furioso": {
-        "media_especies": 0.98375,
-        "por_especie": {
-          "brasa": 0.995,
-          "cirro": 0.98,
-          "ferrugem": 1.0,
-          "limo": 0.96
-        }
-      },
-      "muralha": {
-        "media_especies": 0.71,
-        "por_especie": {
-          "brasa": 0.745,
-          "cirro": 0.695,
-          "ferrugem": 0.69,
-          "limo": 0.71
-        }
-      },
-      "sentinela": {
-        "media_especies": 0.9975,
-        "por_especie": {
-          "brasa": 0.995,
-          "cirro": 1.0,
-          "ferrugem": 0.995,
-          "limo": 1.0
-        }
-      },
-      "tita": {
-        "media_especies": 0.745,
-        "por_especie": {
-          "brasa": 0.57,
-          "cirro": 0.87,
-          "ferrugem": 0.55,
+          "brasa": 0.93,
+          "cirro": 0.95,
+          "ferrugem": 0.975,
           "limo": 0.99
         }
       },
-      "vigia": {
-        "media_especies": 0.9975,
+      "furioso": {
+        "media_especies": 0.875,
         "por_especie": {
           "brasa": 1.0,
-          "cirro": 1.0,
-          "ferrugem": 0.99,
-          "limo": 1.0
+          "cirro": 0.63,
+          "ferrugem": 1.0,
+          "limo": 0.87
+        }
+      },
+      "muralha": {
+        "media_especies": 0.8675,
+        "por_especie": {
+          "brasa": 0.935,
+          "cirro": 0.725,
+          "ferrugem": 1.0,
+          "limo": 0.81
+        }
+      },
+      "sentinela": {
+        "media_especies": 0.145,
+        "por_especie": {
+          "brasa": 0.26,
+          "cirro": 0.02,
+          "ferrugem": 0.3,
+          "limo": 0.0
+        }
+      },
+      "tita": {
+        "media_especies": 0.02375,
+        "por_especie": {
+          "brasa": 0.07,
+          "cirro": 0.0,
+          "ferrugem": 0.01,
+          "limo": 0.015
+        }
+      },
+      "vigia": {
+        "media_especies": 0.065,
+        "por_especie": {
+          "brasa": 0.045,
+          "cirro": 0.025,
+          "ferrugem": 0.03,
+          "limo": 0.16
         }
       }
     },
     "tier3_soberano": {
       "duelista": {
-        "media_especies": 0.0625,
+        "media_especies": 0.036250000000000004,
         "por_especie": {
-          "brasa": 0.13,
+          "brasa": 0.095,
           "cirro": 0.0,
-          "ferrugem": 0.12,
+          "ferrugem": 0.05,
           "limo": 0.0
         }
       },
@@ -316,48 +339,48 @@
         }
       },
       "espelho": {
-        "media_especies": 0.17875,
+        "media_especies": 0.4375,
         "por_especie": {
-          "brasa": 0.1,
-          "cirro": 0.09,
-          "ferrugem": 0.355,
-          "limo": 0.17
+          "brasa": 0.61,
+          "cirro": 0.03,
+          "ferrugem": 0.775,
+          "limo": 0.335
         }
       },
       "furioso": {
-        "media_especies": 0.9762500000000001,
+        "media_especies": 0.01,
         "por_especie": {
-          "brasa": 1.0,
-          "cirro": 0.925,
-          "ferrugem": 0.99,
-          "limo": 0.99
+          "brasa": 0.02,
+          "cirro": 0.0,
+          "ferrugem": 0.02,
+          "limo": 0.0
         }
       },
       "muralha": {
-        "media_especies": 0.9025,
+        "media_especies": 0.1975,
         "por_especie": {
-          "brasa": 0.93,
-          "cirro": 0.735,
-          "ferrugem": 1.0,
-          "limo": 0.945
+          "brasa": 0.08,
+          "cirro": 0.01,
+          "ferrugem": 0.65,
+          "limo": 0.05
         }
       },
       "sentinela": {
-        "media_especies": 0.1825,
+        "media_especies": 0.0,
         "por_especie": {
-          "brasa": 0.1,
-          "cirro": 0.19,
-          "ferrugem": 0.28,
-          "limo": 0.16
+          "brasa": 0.0,
+          "cirro": 0.0,
+          "ferrugem": 0.0,
+          "limo": 0.0
         }
       },
       "tita": {
-        "media_especies": 0.0025,
+        "media_especies": 0.05,
         "por_especie": {
-          "brasa": 0.0,
-          "cirro": 0.01,
-          "ferrugem": 0.0,
-          "limo": 0.0
+          "brasa": 0.03,
+          "cirro": 0.005,
+          "ferrugem": 0.035,
+          "limo": 0.13
         }
       },
       "vigia": {
@@ -374,89 +397,7 @@
   "npcs": {
     "tier1_brutamontes": {
       "estagio_minimo_sugerido": "crianca",
-      "estilo": "agressivo",
-      "gambits": {
-        "estagio": "adulto",
-        "final": {
-          "entao": "carregar",
-          "se": [
-            {
-              "nome": "sempre",
-              "params": []
-            }
-          ]
-        },
-        "regras": [
-          {
-            "entao": "avancar",
-            "se": [
-              {
-                "nome": "distancia_eh",
-                "params": [
-                  "longe"
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "avancar",
-            "se": [
-              {
-                "nome": "distancia_eh",
-                "params": [
-                  "medio"
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "preparar_pesado",
-            "se": [
-              {
-                "nome": "guts_proprio_acima",
-                "params": [
-                  40
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "golpe_rapido",
-            "se": [
-              {
-                "nome": "sempre",
-                "params": []
-              }
-            ]
-          }
-        ]
-      },
-      "perfil": {
-        "estagio": "adulto",
-        "guts_inicial": 54.0,
-        "guts_max": 104.0,
-        "hp_max": 106.0,
-        "mult_disparo": 1.06,
-        "mult_guarda": 0.9400000000000001,
-        "mult_perto": 1.06,
-        "passiva": null,
-        "regen": 8.8,
-        "rotulo": "tier1_brutamontes",
-        "stats": {
-          "folego": 12.0,
-          "forca": 12.0,
-          "guarda": 12.0,
-          "mira": 12.0,
-          "recuperacao": 12.0,
-          "vigor": 12.0
-        },
-        "tecnica": null
-      },
-      "total_stats": 72
-    },
-    "tier2_sentinela": {
-      "estagio_minimo_sugerido": "adolescente",
-      "estilo": "contragolpe",
+      "estilo": "v21:espelho",
       "gambits": {
         "estagio": "adulto",
         "final": {
@@ -470,30 +411,19 @@
         },
         "regras": [
           {
-            "entao": "esquivar",
-            "se": [
-              {
-                "nome": "oponente_preparando",
-                "params": []
-              }
-            ]
-          },
-          {
-            "entao": "defender",
-            "se": [
-              {
-                "nome": "oponente_preparando",
-                "params": []
-              }
-            ]
-          },
-          {
             "entao": "preparar_pesado",
             "se": [
               {
-                "nome": "oponente_guts_abaixo",
+                "nome": "distancia_eh",
                 "params": [
-                  20
+                  "perto"
+                ]
+              },
+              {
+                "nome": "oponente_repete",
+                "params": [
+                  "defender",
+                  2
                 ]
               }
             ]
@@ -502,20 +432,15 @@
             "entao": "golpe_rapido",
             "se": [
               {
-                "nome": "oponente_guts_abaixo",
-                "params": [
-                  20
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "avancar",
-            "se": [
-              {
                 "nome": "distancia_eh",
                 "params": [
-                  "longe"
+                  "perto"
+                ]
+              },
+              {
+                "nome": "guts_proprio_acima",
+                "params": [
+                  60
                 ]
               }
             ]
@@ -537,7 +462,7 @@
               {
                 "nome": "distancia_eh",
                 "params": [
-                  "medio"
+                  "longe"
                 ]
               }
             ]
@@ -546,30 +471,30 @@
       },
       "perfil": {
         "estagio": "adulto",
-        "guts_inicial": 56.66666666666667,
-        "guts_max": 106.66666666666667,
-        "hp_max": 110.0,
-        "mult_disparo": 1.1,
-        "mult_guarda": 0.9,
-        "mult_perto": 1.1,
+        "guts_inicial": 48.0,
+        "guts_max": 98.0,
+        "hp_max": 97.5,
+        "mult_disparo": 0.97,
+        "mult_guarda": 1.03,
+        "mult_perto": 0.97,
         "passiva": null,
-        "regen": 9.333333333333334,
-        "rotulo": "tier2_sentinela",
+        "regen": 7.6,
+        "rotulo": "tier1_brutamontes",
         "stats": {
-          "folego": 13.333333333333334,
-          "forca": 13.333333333333334,
-          "guarda": 13.333333333333334,
-          "mira": 13.333333333333334,
-          "recuperacao": 13.333333333333334,
-          "vigor": 13.333333333333334
+          "folego": 9.0,
+          "forca": 9.0,
+          "guarda": 9.0,
+          "mira": 9.0,
+          "recuperacao": 9.0,
+          "vigor": 9.0
         },
         "tecnica": null
       },
-      "total_stats": 80
+      "total_stats": 54
     },
-    "tier3_soberano": {
-      "estagio_minimo_sugerido": "adulto",
-      "estilo": "adaptativo",
+    "tier2_sentinela": {
+      "estagio_minimo_sugerido": "adolescente",
+      "estilo": "v21:furioso",
       "gambits": {
         "estagio": "adulto",
         "final": {
@@ -592,63 +517,35 @@
             ]
           },
           {
-            "entao": "preparar_pesado",
-            "se": [
-              {
-                "nome": "oponente_repete",
-                "params": [
-                  "defender",
-                  2
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "golpe_rapido",
-            "se": [
-              {
-                "nome": "oponente_frequente",
-                "params": [
-                  "preparar_pesado"
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "golpe_rapido",
-            "se": [
-              {
-                "nome": "oponente_frequente",
-                "params": [
-                  "carregar"
-                ]
-              }
-            ]
-          },
-          {
             "entao": "avancar",
             "se": [
               {
-                "nome": "oponente_frequente",
+                "nome": "distancia_eh",
                 "params": [
-                  "disparo"
-                ]
-              }
-            ]
-          },
-          {
-            "entao": "defender",
-            "se": [
-              {
-                "nome": "oponente_frequente",
-                "params": [
-                  "golpe_rapido"
+                  "longe"
                 ]
               }
             ]
           },
           {
             "entao": "golpe_rapido",
+            "se": [
+              {
+                "nome": "distancia_eh",
+                "params": [
+                  "perto"
+                ]
+              },
+              {
+                "nome": "hp_proprio_abaixo",
+                "params": [
+                  0.5
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "preparar_pesado",
             "se": [
               {
                 "nome": "distancia_eh",
@@ -665,7 +562,160 @@
             ]
           },
           {
+            "entao": "golpe_rapido",
+            "se": [
+              {
+                "nome": "distancia_eh",
+                "params": [
+                  "perto"
+                ]
+              }
+            ]
+          },
+          {
             "entao": "avancar",
+            "se": [
+              {
+                "nome": "distancia_eh",
+                "params": [
+                  "medio"
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "carregar",
+            "se": [
+              {
+                "nome": "guts_proprio_abaixo",
+                "params": [
+                  20
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "perfil": {
+        "estagio": "adulto",
+        "guts_inicial": 56.66666666666667,
+        "guts_max": 106.66666666666667,
+        "hp_max": 108.33333333333334,
+        "mult_disparo": 1.1,
+        "mult_guarda": 0.9,
+        "mult_perto": 1.1,
+        "passiva": null,
+        "regen": 9.333333333333334,
+        "rotulo": "tier2_sentinela",
+        "stats": {
+          "folego": 13.333333333333334,
+          "forca": 13.333333333333334,
+          "guarda": 13.333333333333334,
+          "mira": 13.333333333333334,
+          "recuperacao": 13.333333333333334,
+          "vigor": 13.333333333333334
+        },
+        "tecnica": null
+      },
+      "total_stats": 80
+    },
+    "tier3_soberano": {
+      "estagio_minimo_sugerido": "adulto",
+      "estilo": "v2c:agressivo",
+      "gambits": {
+        "estagio": "adulto",
+        "final": {
+          "entao": "carregar",
+          "se": [
+            {
+              "nome": "sempre",
+              "params": []
+            }
+          ]
+        },
+        "regras": [
+          {
+            "entao": "fintar",
+            "se": [
+              {
+                "nome": "executando_pesado",
+                "params": []
+              },
+              {
+                "nome": "oponente_frequente",
+                "params": [
+                  "esquivar"
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "defender",
+            "se": [
+              {
+                "nome": "hp_proprio_abaixo",
+                "params": [
+                  0.5
+                ]
+              },
+              {
+                "nome": "oponente_frequente",
+                "params": [
+                  "golpe_rapido"
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "avancar",
+            "se": [
+              {
+                "nome": "distancia_eh",
+                "params": [
+                  "longe"
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "avancar",
+            "se": [
+              {
+                "nome": "distancia_eh",
+                "params": [
+                  "medio"
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "golpe_rapido",
+            "se": [
+              {
+                "nome": "oponente_preparando",
+                "params": []
+              }
+            ]
+          },
+          {
+            "entao": "preparar_pesado",
+            "se": [
+              {
+                "nome": "oponente_frequente",
+                "params": [
+                  "defender"
+                ]
+              },
+              {
+                "nome": "guts_proprio_acima",
+                "params": [
+                  40
+                ]
+              }
+            ]
+          },
+          {
+            "entao": "golpe_rapido",
             "se": [
               {
                 "nome": "guts_proprio_acima",
@@ -679,210 +729,210 @@
       },
       "perfil": {
         "estagio": "adulto",
-        "guts_inicial": 60.0,
-        "guts_max": 110.0,
-        "hp_max": 115.0,
-        "mult_disparo": 1.15,
-        "mult_guarda": 0.8500000000000001,
-        "mult_perto": 1.15,
+        "guts_inicial": 70.0,
+        "guts_max": 120.0,
+        "hp_max": 125.0,
+        "mult_disparo": 1.2999999999999998,
+        "mult_guarda": 0.7000000000000001,
+        "mult_perto": 1.2999999999999998,
         "passiva": null,
-        "regen": 10.0,
+        "regen": 12.0,
         "rotulo": "tier3_soberano",
         "stats": {
-          "folego": 15.0,
-          "forca": 15.0,
-          "guarda": 15.0,
-          "mira": 15.0,
-          "recuperacao": 15.0,
-          "vigor": 15.0
+          "folego": 20.0,
+          "forca": 20.0,
+          "guarda": 20.0,
+          "mira": 20.0,
+          "recuperacao": 20.0,
+          "vigor": 20.0
         },
         "tecnica": null
       },
-      "total_stats": 90
+      "total_stats": 120
     }
   },
   "partidas_por_par": 100,
   "pets_de_pesquisa_por_braco": {
     "aleatorio-bandit": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.8160000000000001,
-        "ic_superior": 1.0,
-        "media": 0.9339999999999999,
+        "ic_inferior": 0.4640000000000001,
+        "ic_superior": 0.97,
+        "media": 0.73,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.976,
-        "ic_superior": 1.0,
-        "media": 0.992,
+        "ic_inferior": 0.182,
+        "ic_superior": 0.898,
+        "media": 0.54,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.025,
-        "ic_superior": 0.624,
-        "media": 0.251,
+        "ic_inferior": 0.001,
+        "ic_superior": 0.25,
+        "media": 0.08499999999999999,
         "n": 5,
         "nivel": 0.95
       }
     },
     "aleatorio-instinto": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.597,
-        "ic_superior": 0.905,
-        "media": 0.751,
+        "ic_inferior": 0.286,
+        "ic_superior": 0.5559999999999999,
+        "media": 0.421,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 1.0,
-        "ic_superior": 1.0,
-        "media": 1.0,
+        "ic_inferior": 0.22199999999999998,
+        "ic_superior": 0.908,
+        "media": 0.565,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.039,
-        "ic_superior": 0.263,
-        "media": 0.151,
+        "ic_inferior": 0.01,
+        "ic_superior": 0.475,
+        "media": 0.23199999999999998,
         "n": 5,
         "nivel": 0.95
       }
     },
     "atencioso-bandit": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.40499999999999997,
+        "ic_inferior": 1.0,
         "ic_superior": 1.0,
-        "media": 0.8009999999999999,
+        "media": 1.0,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.844,
-        "ic_superior": 1.0,
-        "media": 0.9480000000000001,
+        "ic_inferior": 0.016,
+        "ic_superior": 0.499,
+        "media": 0.231,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.032,
-        "ic_superior": 0.46699999999999997,
-        "media": 0.209,
+        "ic_inferior": 0.0,
+        "ic_superior": 0.006,
+        "media": 0.002,
         "n": 5,
         "nivel": 0.95
       }
     },
     "atencioso-instinto": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.634,
-        "ic_superior": 0.974,
-        "media": 0.8039999999999999,
+        "ic_inferior": 0.392,
+        "ic_superior": 0.6279999999999999,
+        "media": 0.51,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 1.0,
-        "ic_superior": 1.0,
-        "media": 1.0,
+        "ic_inferior": 0.209,
+        "ic_superior": 0.907,
+        "media": 0.558,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.03899999999999999,
-        "ic_superior": 0.302,
-        "media": 0.16,
+        "ic_inferior": 0.019,
+        "ic_superior": 0.406,
+        "media": 0.196,
         "n": 5,
         "nivel": 0.95
       }
     },
     "incoerente-bandit": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.248,
-        "ic_superior": 0.796,
-        "media": 0.522,
+        "ic_inferior": 0.671,
+        "ic_superior": 0.998,
+        "media": 0.881,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.651,
-        "ic_superior": 0.875,
-        "media": 0.746,
+        "ic_inferior": 0.343,
+        "ic_superior": 0.843,
+        "media": 0.654,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.14100000000000001,
-        "ic_superior": 0.7849999999999999,
-        "media": 0.46299999999999997,
+        "ic_inferior": 0.018,
+        "ic_superior": 0.04,
+        "media": 0.028999999999999998,
         "n": 5,
         "nivel": 0.95
       }
     },
     "incoerente-instinto": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.639,
-        "ic_superior": 0.974,
-        "media": 0.807,
+        "ic_inferior": 0.418,
+        "ic_superior": 0.677,
+        "media": 0.539,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 1.0,
-        "ic_superior": 1.0,
-        "media": 1.0,
+        "ic_inferior": 0.229,
+        "ic_superior": 0.9030000000000001,
+        "media": 0.5660000000000001,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.057999999999999996,
-        "ic_superior": 0.24500000000000002,
-        "media": 0.152,
+        "ic_inferior": 0.024,
+        "ic_superior": 0.466,
+        "media": 0.22400000000000003,
         "n": 5,
         "nivel": 0.95
       }
     },
     "relapso-bandit": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.323,
-        "ic_superior": 0.942,
-        "media": 0.667,
+        "ic_inferior": 0.515,
+        "ic_superior": 0.9640000000000001,
+        "media": 0.753,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.8140000000000001,
-        "ic_superior": 1.0,
-        "media": 0.938,
+        "ic_inferior": 0.046,
+        "ic_superior": 0.717,
+        "media": 0.369,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.018,
-        "ic_superior": 0.40800000000000003,
-        "media": 0.198,
+        "ic_inferior": 0.0,
+        "ic_superior": 0.193,
+        "media": 0.065,
         "n": 5,
         "nivel": 0.95
       }
     },
     "relapso-instinto": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.634,
-        "ic_superior": 0.96,
-        "media": 0.7969999999999999,
+        "ic_inferior": 0.393,
+        "ic_superior": 0.667,
+        "media": 0.53,
         "n": 5,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 1.0,
-        "ic_superior": 1.0,
-        "media": 1.0,
+        "ic_inferior": 0.256,
+        "ic_superior": 0.944,
+        "media": 0.6,
         "n": 5,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.031,
-        "ic_superior": 0.257,
-        "media": 0.144,
+        "ic_inferior": 0.015,
+        "ic_superior": 0.43099999999999994,
+        "media": 0.198,
         "n": 5,
         "nivel": 0.95
       }
@@ -890,245 +940,299 @@
   },
   "pets_de_pesquisa_por_pet": {
     "aleatorio-bandit@101": {
-      "tier1_brutamontes": 0.965,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.165
+      "tier1_brutamontes": 0.54,
+      "tier2_sentinela": 0.91,
+      "tier3_soberano": 0.415
     },
     "aleatorio-bandit@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.02
+      "tier2_sentinela": 0.02,
+      "tier3_soberano": 0.0
     },
     "aleatorio-bandit@303": {
-      "tier1_brutamontes": 0.705,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.085
+      "tier1_brutamontes": 0.26,
+      "tier2_sentinela": 0.81,
+      "tier3_soberano": 0.005
     },
     "aleatorio-bandit@404": {
-      "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.96,
-      "tier3_soberano": 0.985
+      "tier1_brutamontes": 0.85,
+      "tier2_sentinela": 0.93,
+      "tier3_soberano": 0.005
     },
     "aleatorio-bandit@505": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
+      "tier2_sentinela": 0.03,
       "tier3_soberano": 0.0
     },
     "aleatorio-instinto@101": {
-      "tier1_brutamontes": 0.98,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.315
+      "tier1_brutamontes": 0.625,
+      "tier2_sentinela": 0.97,
+      "tier3_soberano": 0.62
     },
     "aleatorio-instinto@202": {
-      "tier1_brutamontes": 0.56,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.03
-    },
-    "aleatorio-instinto@303": {
-      "tier1_brutamontes": 0.705,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.095
-    },
-    "aleatorio-instinto@404": {
-      "tier1_brutamontes": 0.58,
-      "tier2_sentinela": 1.0,
+      "tier1_brutamontes": 0.33,
+      "tier2_sentinela": 0.075,
       "tier3_soberano": 0.02
     },
+    "aleatorio-instinto@303": {
+      "tier1_brutamontes": 0.305,
+      "tier2_sentinela": 0.84,
+      "tier3_soberano": 0.005
+    },
+    "aleatorio-instinto@404": {
+      "tier1_brutamontes": 0.245,
+      "tier2_sentinela": 0.06,
+      "tier3_soberano": 0.01
+    },
     "aleatorio-instinto@505": {
-      "tier1_brutamontes": 0.93,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.295
+      "tier1_brutamontes": 0.6,
+      "tier2_sentinela": 0.88,
+      "tier3_soberano": 0.505
     },
     "atencioso-bandit@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.01
+      "tier2_sentinela": 0.01,
+      "tier3_soberano": 0.0
     },
     "atencioso-bandit@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.04
+      "tier2_sentinela": 0.02,
+      "tier3_soberano": 0.0
     },
     "atencioso-bandit@303": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.06
-    },
-    "atencioso-bandit@404": {
-      "tier1_brutamontes": 0.01,
-      "tier2_sentinela": 0.74,
-      "tier3_soberano": 0.695
-    },
-    "atencioso-bandit@505": {
-      "tier1_brutamontes": 0.995,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.24
-    },
-    "atencioso-instinto@101": {
-      "tier1_brutamontes": 0.985,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.2
-    },
-    "atencioso-instinto@202": {
-      "tier1_brutamontes": 0.555,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.02
-    },
-    "atencioso-instinto@303": {
-      "tier1_brutamontes": 0.94,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.145
-    },
-    "atencioso-instinto@404": {
-      "tier1_brutamontes": 0.56,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.005
-    },
-    "atencioso-instinto@505": {
-      "tier1_brutamontes": 0.98,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.43
-    },
-    "incoerente-bandit@101": {
-      "tier1_brutamontes": 0.93,
-      "tier2_sentinela": 0.99,
-      "tier3_soberano": 0.01
-    },
-    "incoerente-bandit@202": {
-      "tier1_brutamontes": 0.02,
-      "tier2_sentinela": 0.605,
-      "tier3_soberano": 0.78
-    },
-    "incoerente-bandit@303": {
-      "tier1_brutamontes": 0.38,
-      "tier2_sentinela": 0.685,
-      "tier3_soberano": 0.685
-    },
-    "incoerente-bandit@404": {
-      "tier1_brutamontes": 0.44,
-      "tier2_sentinela": 0.73,
-      "tier3_soberano": 0.84
-    },
-    "incoerente-bandit@505": {
-      "tier1_brutamontes": 0.84,
-      "tier2_sentinela": 0.72,
+      "tier2_sentinela": 0.02,
       "tier3_soberano": 0.0
     },
-    "incoerente-instinto@101": {
-      "tier1_brutamontes": 0.98,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.205
+    "atencioso-bandit@404": {
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.685,
+      "tier3_soberano": 0.01
     },
-    "incoerente-instinto@202": {
-      "tier1_brutamontes": 0.545,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.04
+    "atencioso-bandit@505": {
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.42,
+      "tier3_soberano": 0.0
     },
-    "incoerente-instinto@303": {
-      "tier1_brutamontes": 0.95,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.185
+    "atencioso-instinto@101": {
+      "tier1_brutamontes": 0.635,
+      "tier2_sentinela": 0.925,
+      "tier3_soberano": 0.365
     },
-    "incoerente-instinto@404": {
-      "tier1_brutamontes": 0.58,
-      "tier2_sentinela": 1.0,
+    "atencioso-instinto@202": {
+      "tier1_brutamontes": 0.48,
+      "tier2_sentinela": 0.065,
       "tier3_soberano": 0.015
     },
+    "atencioso-instinto@303": {
+      "tier1_brutamontes": 0.335,
+      "tier2_sentinela": 0.835,
+      "tier3_soberano": 0.035
+    },
+    "atencioso-instinto@404": {
+      "tier1_brutamontes": 0.405,
+      "tier2_sentinela": 0.04,
+      "tier3_soberano": 0.015
+    },
+    "atencioso-instinto@505": {
+      "tier1_brutamontes": 0.695,
+      "tier2_sentinela": 0.925,
+      "tier3_soberano": 0.55
+    },
+    "incoerente-bandit@101": {
+      "tier1_brutamontes": 0.47,
+      "tier2_sentinela": 0.87,
+      "tier3_soberano": 0.04
+    },
+    "incoerente-bandit@202": {
+      "tier1_brutamontes": 0.99,
+      "tier2_sentinela": 0.74,
+      "tier3_soberano": 0.015
+    },
+    "incoerente-bandit@303": {
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.855,
+      "tier3_soberano": 0.03
+    },
+    "incoerente-bandit@404": {
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.765,
+      "tier3_soberano": 0.015
+    },
+    "incoerente-bandit@505": {
+      "tier1_brutamontes": 0.945,
+      "tier2_sentinela": 0.04,
+      "tier3_soberano": 0.045
+    },
+    "incoerente-instinto@101": {
+      "tier1_brutamontes": 0.665,
+      "tier2_sentinela": 0.915,
+      "tier3_soberano": 0.39
+    },
+    "incoerente-instinto@202": {
+      "tier1_brutamontes": 0.4,
+      "tier2_sentinela": 0.095,
+      "tier3_soberano": 0.02
+    },
+    "incoerente-instinto@303": {
+      "tier1_brutamontes": 0.425,
+      "tier2_sentinela": 0.815,
+      "tier3_soberano": 0.06
+    },
+    "incoerente-instinto@404": {
+      "tier1_brutamontes": 0.44,
+      "tier2_sentinela": 0.07,
+      "tier3_soberano": 0.01
+    },
     "incoerente-instinto@505": {
-      "tier1_brutamontes": 0.98,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.315
+      "tier1_brutamontes": 0.765,
+      "tier2_sentinela": 0.935,
+      "tier3_soberano": 0.64
     },
     "relapso-bandit@101": {
-      "tier1_brutamontes": 0.76,
-      "tier2_sentinela": 1.0,
+      "tier1_brutamontes": 0.82,
+      "tier2_sentinela": 0.04,
       "tier3_soberano": 0.0
     },
     "relapso-bandit@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.09
+      "tier2_sentinela": 0.04,
+      "tier3_soberano": 0.0
     },
     "relapso-bandit@303": {
-      "tier1_brutamontes": 0.02,
-      "tier2_sentinela": 0.69,
-      "tier3_soberano": 0.57
+      "tier1_brutamontes": 1.0,
+      "tier2_sentinela": 0.77,
+      "tier3_soberano": 0.005
     },
     "relapso-bandit@404": {
-      "tier1_brutamontes": 0.58,
-      "tier2_sentinela": 1.0,
+      "tier1_brutamontes": 0.315,
+      "tier2_sentinela": 0.07,
       "tier3_soberano": 0.0
     },
     "relapso-bandit@505": {
-      "tier1_brutamontes": 0.975,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.33
+      "tier1_brutamontes": 0.63,
+      "tier2_sentinela": 0.925,
+      "tier3_soberano": 0.32
     },
     "relapso-instinto@101": {
-      "tier1_brutamontes": 0.965,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.27
+      "tier1_brutamontes": 0.72,
+      "tier2_sentinela": 0.94,
+      "tier3_soberano": 0.34
     },
     "relapso-instinto@202": {
-      "tier1_brutamontes": 0.56,
-      "tier2_sentinela": 1.0,
+      "tier1_brutamontes": 0.435,
+      "tier2_sentinela": 0.12,
       "tier3_soberano": 0.01
     },
     "relapso-instinto@303": {
-      "tier1_brutamontes": 0.89,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.135
+      "tier1_brutamontes": 0.365,
+      "tier2_sentinela": 0.89,
+      "tier3_soberano": 0.025
     },
     "relapso-instinto@404": {
-      "tier1_brutamontes": 0.58,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.0
+      "tier1_brutamontes": 0.4,
+      "tier2_sentinela": 0.075,
+      "tier3_soberano": 0.015
     },
     "relapso-instinto@505": {
-      "tier1_brutamontes": 0.99,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.305
+      "tier1_brutamontes": 0.73,
+      "tier2_sentinela": 0.975,
+      "tier3_soberano": 0.6
     }
   },
-  "replay_amostra_bit_a_bit": 96,
-  "soberano": {
-    "adaptativo": {
-      "estilos_v2_stats_neutros": {
-        "adaptativo": 0.135,
-        "agressivo": 0.05,
-        "atirador": 0.06,
-        "contragolpe": 0.0,
-        "tartaruga": 0.0
-      },
-      "formas_adultas_media_especies": {
-        "duelista": 0.07125000000000001,
-        "emboscador": 0.01,
-        "espelho": 0.20875,
-        "furioso": 0.98125,
-        "muralha": 0.885,
-        "sentinela": 0.195,
-        "tita": 0.0,
-        "vigia": 0.0
-      }
+  "regras": {
+    "base": {
+      "bots_v2c": false,
+      "custo_disparo": 20,
+      "custo_esquivar": 20,
+      "custo_golpe_rapido": 10,
+      "custo_preparar_pesado": 15,
+      "dano_disparo": 6.0,
+      "dano_golpe_rapido": 8.0,
+      "dano_parry": 5.0,
+      "dano_pesado": 25.0,
+      "epsilon_bots": 0.05,
+      "finta": true,
+      "fracoes_hp": [
+        0.25,
+        0.5,
+        0.75
+      ],
+      "fuga_condicionada": true,
+      "guts_carregar": 25,
+      "guts_extra_defender": 5,
+      "guts_inicial_neutro": 50,
+      "guts_max": 100,
+      "hp_neutro": 70.0,
+      "janela_frequente": 5,
+      "k_repete": [
+        2,
+        3
+      ],
+      "limiar_frequente": 0.4,
+      "limiares_guts": [
+        20,
+        40,
+        60
+      ],
+      "max_condicoes_por_regra": 2,
+      "max_regras": 8,
+      "mult_carregar": 1.5,
+      "mult_defender": 0.3,
+      "mult_defender_contra_pesado": 0.6,
+      "mult_morte_subita": 1.5,
+      "oraculo_passos": 1,
+      "oraculo_top_oponente": 3,
+      "peso_guts_oraculo": 0.002,
+      "peso_pesado_pendente_oraculo": 0.5,
+      "regen_guts_neutro": 8,
+      "t_max": 40,
+      "turno_morte_subita": 25
     },
-    "soberano_resposta_longe": {
-      "estilos_v2_stats_neutros": {
-        "adaptativo": 0.12,
-        "agressivo": 0.08,
-        "atirador": 0.06,
-        "contragolpe": 0.0,
-        "tartaruga": 0.0
-      },
-      "formas_adultas_media_especies": {
-        "duelista": 0.08375,
-        "emboscador": 0.73125,
-        "espelho": 0.17625000000000002,
-        "furioso": 0.98125,
-        "muralha": 0.915,
-        "sentinela": 0.5725,
-        "tita": 0.0025,
-        "vigia": 0.0
-      }
+    "v21": {
+      "carater_bot_complementar": 0.25,
+      "carater_bot_linha": 0.5,
+      "custo_contra_golpe": 15,
+      "custo_investida": 20,
+      "custo_marcar": 10,
+      "custo_pele_dura": 20,
+      "dano_extra_duelista": 4.0,
+      "dano_investida": 8.0,
+      "fracao_contra_golpe": 0.5,
+      "fracao_espelho_disparo": 1.0,
+      "guarda_base": 1.3,
+      "guarda_por_ponto": 0.03,
+      "guts_extra_muralha": 3,
+      "guts_inicial_base": 30.0,
+      "guts_inicial_por_folego": 2.0,
+      "guts_max_base": 80.0,
+      "guts_max_por_folego": 2.0,
+      "hp_base": 75.0,
+      "hp_por_vigor": 2.5,
+      "limiar_hp_furioso": 0.5,
+      "marca_fragil": true,
+      "max_regras_adolescente": 5,
+      "max_regras_adulto": 8,
+      "max_regras_crianca": 3,
+      "mult_base": 0.7,
+      "mult_emboscador": 2.0,
+      "mult_furioso": 1.25,
+      "mult_marcar": 2.0,
+      "mult_parry_investida": 0.0,
+      "mult_pele_dura": 0.5,
+      "mult_por_ponto": 0.03,
+      "mult_tita": 1.3,
+      "recarga_sentinela": 4,
+      "regen_base": 4.0,
+      "regen_por_recuperacao": 0.4,
+      "turnos_execucao": [
+        5,
+        10,
+        20
+      ],
+      "turnos_marcar": 3,
+      "turnos_pele_dura": 2
     }
-  }
+  },
+  "replay_amostra_bit_a_bit": 96
 }

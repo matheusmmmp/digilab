@@ -1,0 +1,136 @@
+{
+  "descricao": "rodada 0: diagnostico dos estilos a 72 e 90 com as regras V21C; escada atual",
+  "npcs": {
+    "v2:agressivo@72": {
+      "total": 72,
+      "estilo": "v2:agressivo"
+    },
+    "v2:agressivo@90": {
+      "total": 90,
+      "estilo": "v2:agressivo"
+    },
+    "v2:contragolpe@72": {
+      "total": 72,
+      "estilo": "v2:contragolpe"
+    },
+    "v2:contragolpe@90": {
+      "total": 90,
+      "estilo": "v2:contragolpe"
+    },
+    "v2:adaptativo@72": {
+      "total": 72,
+      "estilo": "v2:adaptativo"
+    },
+    "v2:adaptativo@90": {
+      "total": 90,
+      "estilo": "v2:adaptativo"
+    },
+    "v2c:agressivo@72": {
+      "total": 72,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@90": {
+      "total": 90,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:contragolpe@72": {
+      "total": 72,
+      "estilo": "v2c:contragolpe"
+    },
+    "v2c:contragolpe@90": {
+      "total": 90,
+      "estilo": "v2c:contragolpe"
+    },
+    "v2c:tartaruga@72": {
+      "total": 72,
+      "estilo": "v2c:tartaruga"
+    },
+    "v2c:tartaruga@90": {
+      "total": 90,
+      "estilo": "v2c:tartaruga"
+    },
+    "v2c:atirador@72": {
+      "total": 72,
+      "estilo": "v2c:atirador"
+    },
+    "v2c:atirador@90": {
+      "total": 90,
+      "estilo": "v2c:atirador"
+    },
+    "v21:duelista@72": {
+      "total": 72,
+      "estilo": "v21:duelista"
+    },
+    "v21:duelista@90": {
+      "total": 90,
+      "estilo": "v21:duelista"
+    },
+    "v21:furioso@72": {
+      "total": 72,
+      "estilo": "v21:furioso"
+    },
+    "v21:furioso@90": {
+      "total": 90,
+      "estilo": "v21:furioso"
+    },
+    "v21:espelho@72": {
+      "total": 72,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@90": {
+      "total": 90,
+      "estilo": "v21:espelho"
+    },
+    "v21:muralha@72": {
+      "total": 72,
+      "estilo": "v21:muralha"
+    },
+    "v21:muralha@90": {
+      "total": 90,
+      "estilo": "v21:muralha"
+    },
+    "v21:sentinela@72": {
+      "total": 72,
+      "estilo": "v21:sentinela"
+    },
+    "v21:sentinela@90": {
+      "total": 90,
+      "estilo": "v21:sentinela"
+    },
+    "v21:emboscador@72": {
+      "total": 72,
+      "estilo": "v21:emboscador"
+    },
+    "v21:emboscador@90": {
+      "total": 90,
+      "estilo": "v21:emboscador"
+    },
+    "v21:vigia@72": {
+      "total": 72,
+      "estilo": "v21:vigia"
+    },
+    "v21:vigia@90": {
+      "total": 90,
+      "estilo": "v21:vigia"
+    },
+    "v21:tita@72": {
+      "total": 72,
+      "estilo": "v21:tita"
+    },
+    "v21:tita@90": {
+      "total": 90,
+      "estilo": "v21:tita"
+    },
+    "atual_t2": {
+      "total": 80,
+      "estilo": "v2:contragolpe"
+    }
+  },
+  "escadas": {
+    "atual": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "atual_t2",
+      "tier3": "v2:adaptativo@90"
+    }
+  }
+}

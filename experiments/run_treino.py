@@ -12,6 +12,7 @@
    (barreira 1); gambits canonicos da forma (as sombrias: bots.SOMBRIOS), epsilon minimo 0,2 nas
    sombrias.
 4. Campanha: cada pet (stats treinados ABSOLUTOS) contra os 3 NPCs -> artifacts_campanha/treino.json.
+   A campanha e o S2 lutam com as regras da campanha (V21C, campanha.REGRAS_CAMPANHA); a arena segue a V2.1.
 5. Gate S2 (bots, sem vida): por linha, forma sombria x cada forma normal da linha, com treino
    uniforme 0..36: (a) treino minimo para vencer o tier 1 (taxa >= 0,5) da sombria <= o da normal;
    (b) taxa media contra o tier 2 da sombria <= a da normal.
@@ -32,10 +33,11 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.campanha import npc  # noqa: E402
+from digilab.campanha import REGRAS_CAMPANHA, npc  # noqa: E402
 from digilab.combate_v2.v21.bots import ADULTOS, SOMBRIOS, lutador_adulto  # noqa: E402
 from digilab.combate_v2.v21.catalogo import LINHAS, SOMBRIA_DA_LINHA, perfil  # noqa: E402
 from digilab.combate_v2.v21.partida import Lutador, jogar  # noqa: E402
+from digilab.combate_v2.v21.regras import REGRAS_PADRAO, Regras  # noqa: E402
 from digilab.config import (CONFIG_CAMPANHA, CONFIG_CATALOGO, CONFIG_COMBATE_V2, CONFIG_EVOLUCAO_PESQUISA,  # noqa: E402
                             CONFIG_SOMBRIO, CONFIG_TREINO, STATS_V21)
 from digilab.events import LogDeEventos  # noqa: E402
@@ -64,7 +66,10 @@ def _gravar(caminho: Path, texto: str) -> None:
 
 
 def lutador_pet(nome: str, ev, pontos: dict, absoluto: bool) -> Lutador:
-    p = perfil(ev.forma, ev.temperamento, ev.carater_adulto, ev.condicao, treino=pontos, normalizar_treino=not absoluto)
+    """absoluto = campanha: stats sem normalizar e vida pela formula da V21C."""
+    cfg = REGRAS_CAMPANHA.v21 if absoluto else None
+    p = perfil(ev.forma, ev.temperamento, ev.carater_adulto, ev.condicao, cfg, treino=pontos,
+               normalizar_treino=not absoluto)
     sombria = ev.forma.adulta in SOMBRIOS
     g = SOMBRIOS[ev.forma.adulta] if sombria else ADULTOS[ev.forma.adulta]
     eps = CONFIG_COMBATE_V2.epsilon_bots
@@ -73,11 +78,11 @@ def lutador_pet(nome: str, ev, pontos: dict, absoluto: bool) -> Lutador:
     return Lutador(nome, p, g, eps)
 
 
-def taxa(a: Lutador, b: Lutador, rotulo: str, n: int) -> float:
+def taxa(a: Lutador, b: Lutador, rotulo: str, n: int, r: Regras = REGRAS_PADRAO) -> float:
     pts = []
     for k in range(n):
         sp = derivar_semente("treino", rotulo, a.nome, b.nome, k)
-        pts.append(jogar(a, b, sp).pontos_a if k < n // 2 else 1.0 - jogar(b, a, sp).pontos_a)
+        pts.append(jogar(a, b, sp, r).pontos_a if k < n // 2 else 1.0 - jogar(b, a, sp, r).pontos_a)
     return sum(pts) / len(pts)
 
 
@@ -96,12 +101,13 @@ def gate_s2(n: int) -> dict:
                 tr = {k: nivel / len(STATS_V21) for k in STATS_V21}
                 v1, v2 = [], []
                 for esp in especies:
-                    base = lutador_adulto(forma, esp)
-                    p = perfil(_forma(forma, esp), None, _car(forma), 1.0, treino=tr if nivel else None,
+                    cfg = REGRAS_CAMPANHA.v21
+                    base = lutador_adulto(forma, esp, cfg)
+                    p = perfil(_forma(forma, esp), None, _car(forma, cfg), 1.0, cfg, treino=tr if nivel else None,
                                normalizar_treino=False)
                     lut = Lutador(f"{forma}+{nivel}@{esp}", p, base.gambits, base.epsilon)
-                    v1.append(taxa(lut, t1, "s2-t1", n))
-                    v2.append(taxa(lut, t2, "s2-t2", n))
+                    v1.append(taxa(lut, t1, "s2-t1", n, REGRAS_CAMPANHA))
+                    v2.append(taxa(lut, t2, "s2-t2", n, REGRAS_CAMPANHA))
                 por_nivel[nivel] = {"tier1": sum(v1) / len(v1), "tier2": sum(v2) / len(v2)}
             minimo = next((nv for nv in NIVEIS_S2 if por_nivel[nv]["tier1"] >= 0.5), None)
             curva[forma] = {"por_nivel": por_nivel, "treino_minimo_tier1": minimo,
@@ -123,9 +129,9 @@ def _forma(nome, esp):
     return Forma(esp, "adulto", "sereno", LINHA_DA_FORMA[nome], nome)
 
 
-def _car(nome):
+def _car(nome, cfg=None):
     from digilab.combate_v2.v21.catalogo import carater_canonico
-    return carater_canonico(nome)
+    return carater_canonico(nome, cfg)
 
 
 def main(argv=None) -> int:
@@ -192,7 +198,7 @@ def main(argv=None) -> int:
     camp = {}
     for (b, s), (ev, pontos, _) in pets.items():
         lut = lutador_pet(f"{b}@{s}", ev, pontos, True)
-        camp[(b, s)] = {tier: taxa(lut, npc(tier), f"campanha|{s}", CONFIG_CAMPANHA.partidas_por_par)
+        camp[(b, s)] = {tier: taxa(lut, npc(tier), f"campanha|{s}", CONFIG_CAMPANHA.partidas_por_par, REGRAS_CAMPANHA)
                         for tier in CONFIG_CAMPANHA.npcs}
 
     # 5. S2

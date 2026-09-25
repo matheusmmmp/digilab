@@ -1,0 +1,119 @@
+{
+  "descricao": "rodada 2: refinamento do tier 1 (espelho, total 54-63) e margem dos finalistas, 20 partidas por par por semente",
+  "npcs": {
+    "v21:espelho@54": {
+      "total": 54,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@57": {
+      "total": 57,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@60": {
+      "total": 60,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@63": {
+      "total": 63,
+      "estilo": "v21:espelho"
+    },
+    "v21:furioso@80": {
+      "total": 80,
+      "estilo": "v21:furioso"
+    },
+    "v21:sentinela@72": {
+      "total": 72,
+      "estilo": "v21:sentinela"
+    },
+    "v2c:agressivo@105": {
+      "total": 105,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@110": {
+      "total": 110,
+      "estilo": "v2c:agressivo"
+    }
+  },
+  "escadas": {
+    "v21:espelho@54|v21:furioso@80|v2c:agressivo@105": {
+      "tier1": "v21:espelho@54",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@54|v21:furioso@80|v2c:agressivo@110": {
+      "tier1": "v21:espelho@54",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@54|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@54",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@54|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@54",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@57|v21:furioso@80|v2c:agressivo@105": {
+      "tier1": "v21:espelho@57",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@57|v21:furioso@80|v2c:agressivo@110": {
+      "tier1": "v21:espelho@57",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@57|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@57",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@57|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@57",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:furioso@80|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:furioso@80|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@63|v21:furioso@80|v2c:agressivo@105": {
+      "tier1": "v21:espelho@63",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@63|v21:furioso@80|v2c:agressivo@110": {
+      "tier1": "v21:espelho@63",
+      "tier2": "v21:furioso@80",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@63|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@63",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@63|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@63",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    }
+  }
+}

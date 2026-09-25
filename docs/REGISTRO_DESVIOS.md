@@ -425,3 +425,51 @@ com os donos simulados (80 pets, 20 por dono, sem artefato: checagem no console)
   sementes (555017…555340; checagem no console, sem artefato): colosso 30%, guardião 29%, brigão 21%,
   caçador 20% (antes 14/15/31/41%); forma de cima 42,5% (no brigão 4 de 17: amostra pequena e a medida pela
   política tem ruído de 32 × 100 amostras).
+
+## 2026-09-25 — escada dos NPCs da campanha rebalanceada
+
+Pedido do Matheus ("rebalanceia a escada dos NPCs da campanha"). Não havia critério escrito para a escada;
+os critérios K1–K4 foram fixados em `experiments/calibrar_campanha.py` **antes** da calibração, a partir das
+lições de `docs/pve_treino.json` (tier 1 prova de stats, tier 2 prova de estilo, chefe exige estilo e treino
+alto). Medidos contra as 8 formas adultas e os 4 adolescentes canônicos × 4 espécies, com treino uniforme
+absoluto (adultos 0/18/36, adolescentes 0/18), média das espécies:
+- K1 degraus: adultos sem treino t1 > t2 > t3, cada degrau ≥ 0,10.
+- K2 tier 1: adultos sem treino ≥ 0,70; adolescentes sem treino em [0,25, 0,60]; +18 de treino rende
+  ≥ 0,15 ao adolescente.
+- K3 tier 2: adultos sem treino em [0,35, 0,65], ≥ 2 formas ≥ 0,60 e ≥ 2 ≤ 0,40; adolescentes ≤ 0,40.
+- K4 chefe: nenhuma forma adulta sem treino ≥ 0,50; adolescentes ≤ 0,15; com +36, ≥ 2 formas ≥ 0,50.
+
+Decisões e interpretações:
+- **A campanha passa a lutar com o combate corrigido aprovado (V2C + V21C)**, o mesmo da web
+  (`campanha.REGRAS_CAMPANHA`, `CONFIG_COMBATE_V2C`/`CONFIG_COMBATE_V21C` em `config.py`, iguais a
+  `experiments/configs/v21c/validacao.json`). Antes lutava com a V2.1 original. Em `run_treino.py` a campanha
+  e o S2 usam essas regras; a arena da pesquisa continua na V2.1 original (não era o pedido).
+- Estilo do NPC ganhou famílias (`campanha.gambit_npc`): `v2` (bateria V2), `v2c` (bots redesenhados) e
+  `v21` (gambits canônicos de uma forma adulta sem as regras de técnica e da passiva do vigia, que o NPC não
+  tem). Nomes e chaves dos NPCs ficam (Brutamontes, Sentinela, Soberano); `docs/pve_treino.json` fica como
+  a especificação original.
+- Diagnóstico com as regras V21C (rodada 0, `experiments/configs/campanha/r0*.json`): a escada original
+  (72 agressivo, 80 contragolpe, 90 adaptativo) passa K1, mas a muralha vence o chefe sem treino (0,97),
+  nenhuma outra forma chega a 0,5 contra ele mesmo com +36, e o adolescente empata com o tier 2 (0,48).
+  O total de stats do NPC mexe pouco; o estilo decide quase tudo.
+- Calibração só nas sementes 3101…3505 (rodadas 1–3). Escolha: tier 1 espelho sem técnica, total 54;
+  tier 2 furioso sem técnica, total 80 (o treino quase não ajuda: 0,42 → 0,48, como pede a lição); chefe
+  agressivo da V2C, total 120.
+- **Validação 1 (sementes 4101…4505) reprovou o K4 por 0,004** com o chefe em 110: o espelho sem treino
+  fez 0,504 (`validacao1_resultado.json`). O total do chefe foi recalibrado nas sementes de calibração com
+  mais partidas (rodada 3: 110 dava 0,476, sem folga) e subiu para 120. **Validação 2 passou K1–K4**
+  (`validacao2_resultado.json`). A segunda validação usou as mesmas sementes da primeira depois de ver o
+  resultado dela: é uma validação mais fraca, e está registrada assim.
+- A margem do K2 é fina: o ganho do adolescente com +18 contra o tier 1 é 0,19 na validação e 0,16 na
+  calibração (limite 0,15).
+- `run_campanha.py`: a comparação "Soberano original × correção de luta de longe" saiu (o chefe não é mais
+  o adaptativo; o resultado antigo continua no histórico do git); entrou a tabela dos estilos da V2 com
+  stats neutros contra cada tier.
+- Web: mesma escada; os saves antigos rejogam as lutas da campanha contra os NPCs novos (o progresso pode
+  mudar; o replay não aplica a trava de desafio, então nada quebra).
+- Efeito na TAREFA_TREINO_SOMBRIO (`run_treino.py` de novo; vidas, evolução e arena idênticas): na campanha
+  o exigente agora perde do atencioso nos três tiers com IC fora do zero (tier 1 −0,15, tier 2 −0,30,
+  chefe −0,38). **S2 continua reprovado**, e não pela escada: o critério (a) compara adultos contra o tier 1,
+  que o K2 exige que quase todo adulto vença sem treino; e contra o tier 2 o devastador e o bastião rachado
+  passam das formas normais da linha. Consertar o S2 pede mudar as formas sombrias ou o gate (decisão do
+  pesquisador).

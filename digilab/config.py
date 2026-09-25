@@ -680,17 +680,20 @@ CONFIG_EVOLUCAO_PESQUISA = ConfigEvolucaoPesquisa()
 
 
 def _npcs() -> dict:
-    # docs/pve_treino.json > npcs: stats uniformes no total, estilo fixo em gambits (bots da bateria V2)
+    # stats uniformes no total, estilo fixo em gambits ("<familia>:<nome>", ver campanha.gambit_npc).
+    # Rebalanceado (experiments/calibrar_campanha.py, criterios K1-K4, configs/campanha/): a escada original
+    # de docs/pve_treino.json (72 agressivo, 80 contragolpe, 90 adaptativo) tinha o chefe vencido pela
+    # muralha sem treino e o tier 1 sem efeito de treino no adolescente.
     return {
-        "tier1_brutamontes": {"total_stats": 72, "estilo": "agressivo", "estagio_minimo_sugerido": "crianca"},
-        "tier2_sentinela": {"total_stats": 80, "estilo": "contragolpe", "estagio_minimo_sugerido": "adolescente"},
-        "tier3_soberano": {"total_stats": 90, "estilo": "adaptativo", "estagio_minimo_sugerido": "adulto"},
+        "tier1_brutamontes": {"total_stats": 54, "estilo": "v21:espelho", "estagio_minimo_sugerido": "crianca"},
+        "tier2_sentinela": {"total_stats": 80, "estilo": "v21:furioso", "estagio_minimo_sugerido": "adolescente"},
+        "tier3_soberano": {"total_stats": 120, "estilo": "v2c:agressivo", "estagio_minimo_sugerido": "adulto"},
     }
 
 
 @dataclass(frozen=True)
 class ConfigCampanha:
-    """Campanha contra NPCs (TAREFA_TREINO_SOMBRIO, secao 5), SEM treino ainda. PROPOSTOS."""
+    """Campanha contra NPCs (TAREFA_TREINO_SOMBRIO, secao 5), com as regras V21C. PROPOSTOS."""
 
     npcs: dict = field(default_factory=_npcs)
     partidas_por_par: int = 100          # lados trocados na metade
@@ -700,6 +703,11 @@ class ConfigCampanha:
 CONFIG_CAMPANHA = ConfigCampanha()
 CONFIG_CATALOGO = ConfigCatalogo()
 CONFIG_COMBATE_V21 = ConfigCombateV21()
+# combate corrigido aprovado com ressalvas (TAREFA_CORRECAO_COMBATE; experiments/configs/v21c/validacao.json):
+# base V2C (C1-C4) + vida por vigor 2,5 + marca fragil. A campanha luta com estas regras.
+CONFIG_COMBATE_V2C = ConfigCombateV2C(finta=True, dano_parry=5.0, fuga_condicionada=True, turno_morte_subita=25,
+                                      mult_morte_subita=1.5)
+CONFIG_COMBATE_V21C = ConfigCombateV21C(hp_por_vigor=2.5, hp_base=75.0, marca_fragil=True)
 CONFIG_BATERIA_V21 = ConfigBateriaV21()
 
 

@@ -1,0 +1,1666 @@
+{
+  "descricao": "rodada 1: totais em volta dos estilos promissores da rodada 0 (t1 agressivo V2 ou espelho; t2 furioso ou sentinela; t3 agressivo V2C)",
+  "npcs": {
+    "v2:agressivo@60": {
+      "total": 60,
+      "estilo": "v2:agressivo"
+    },
+    "v2:agressivo@66": {
+      "total": 66,
+      "estilo": "v2:agressivo"
+    },
+    "v2:agressivo@72": {
+      "total": 72,
+      "estilo": "v2:agressivo"
+    },
+    "v2:agressivo@78": {
+      "total": 78,
+      "estilo": "v2:agressivo"
+    },
+    "v2:agressivo@84": {
+      "total": 84,
+      "estilo": "v2:agressivo"
+    },
+    "v21:espelho@60": {
+      "total": 60,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@66": {
+      "total": 66,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@72": {
+      "total": 72,
+      "estilo": "v21:espelho"
+    },
+    "v21:espelho@78": {
+      "total": 78,
+      "estilo": "v21:espelho"
+    },
+    "v21:furioso@66": {
+      "total": 66,
+      "estilo": "v21:furioso"
+    },
+    "v21:furioso@72": {
+      "total": 72,
+      "estilo": "v21:furioso"
+    },
+    "v21:furioso@78": {
+      "total": 78,
+      "estilo": "v21:furioso"
+    },
+    "v21:furioso@84": {
+      "total": 84,
+      "estilo": "v21:furioso"
+    },
+    "v21:sentinela@66": {
+      "total": 66,
+      "estilo": "v21:sentinela"
+    },
+    "v21:sentinela@72": {
+      "total": 72,
+      "estilo": "v21:sentinela"
+    },
+    "v21:sentinela@78": {
+      "total": 78,
+      "estilo": "v21:sentinela"
+    },
+    "v2c:agressivo@96": {
+      "total": 96,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@100": {
+      "total": 100,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@105": {
+      "total": 105,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@110": {
+      "total": 110,
+      "estilo": "v2c:agressivo"
+    },
+    "v2c:agressivo@120": {
+      "total": 120,
+      "estilo": "v2c:agressivo"
+    }
+  },
+  "escadas": {
+    "v2:agressivo@60|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@60|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@60|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@60|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@60|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@60|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@60|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@60|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@60|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@60|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@60|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@66|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@66|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@66|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@66|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@66|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@72|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@72|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@72|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@72|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@72|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@78|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@78|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@78|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@78|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@78|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v2:agressivo@84|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v2:agressivo@84|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v2:agressivo@84|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v2:agressivo@84|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v2:agressivo@84|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v2:agressivo@84",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@60|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@60|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@60|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@60|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@60|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@60",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@66|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@66|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@66|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@66|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@66|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@66",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@72|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@72|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@72|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@72|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@72|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@72",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:furioso@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:furioso@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:furioso@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:furioso@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:furioso@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:furioso@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:furioso@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:furioso@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:furioso@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:furioso@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:furioso@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:furioso@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:furioso@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:furioso@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:furioso@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@78",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:furioso@84|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:furioso@84|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:furioso@84|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:furioso@84|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:furioso@84|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:furioso@84",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:sentinela@66|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:sentinela@66|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:sentinela@66|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:sentinela@66|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:sentinela@66|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@66",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:sentinela@72|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:sentinela@72|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:sentinela@72|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:sentinela@72|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:sentinela@72|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@72",
+      "tier3": "v2c:agressivo@120"
+    },
+    "v21:espelho@78|v21:sentinela@78|v2c:agressivo@96": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@96"
+    },
+    "v21:espelho@78|v21:sentinela@78|v2c:agressivo@100": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@100"
+    },
+    "v21:espelho@78|v21:sentinela@78|v2c:agressivo@105": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@105"
+    },
+    "v21:espelho@78|v21:sentinela@78|v2c:agressivo@110": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@110"
+    },
+    "v21:espelho@78|v21:sentinela@78|v2c:agressivo@120": {
+      "tier1": "v21:espelho@78",
+      "tier2": "v21:sentinela@78",
+      "tier3": "v2c:agressivo@120"
+    }
+  }
+}

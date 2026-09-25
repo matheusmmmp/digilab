@@ -82,18 +82,18 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
 | `digilab/combate_v2/v21/` | combate V2.1 (subpacote: o hash dos fontes da base não muda): `catalogo.py` (forma = espécie + caminho, stats com renormalização, perfil de combate, transições), `regras.py` (técnicas e passivas, resolução pura), `gambits.py` (capacidade por estágio, `turno_execucao`, `oponente_vai_preparar`), `partida.py` (lutador, laço, replay), `bots.py` (8 adultos, 4 adolescentes, respostas declaradas) |
 | `digilab/evolucao.py`, `experiments/run_pesquisa_v21.py` | evolução do pet de pesquisa (ovo pareado, cuidado, caráter nas sondas, forma adulta) e arena V2.1 com adultos → `artifacts_v21_pesquisa/` |
-| `digilab/campanha.py`, `experiments/run_campanha.py` | campanha contra os 3 NPCs (sem treino) → `artifacts_campanha/` |
+| `digilab/campanha.py`, `experiments/run_campanha.py`, `calibrar_campanha.py` | campanha contra os 3 NPCs (regras V21C) → `artifacts_campanha/`; calibração da escada (K1–K4) → `experiments/configs/campanha/` |
 | `digilab/treino_stats.py`, `treino_vida.py` | treino (fadiga, forçar, sobrecarga), `MotorTreino`, plano de sessões e donos com treino (inclui o exigente) |
 | `experiments/run_treino.py`, `run_bateria_sombria.py`, `calibrar_treino.py` | runs da TAREFA_TREINO_SOMBRIO (5 braços, campanha, S2) → `artifacts_treino/`, `artifacts_campanha/treino.json`; gate S1; calibração da sobrecarga |
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 281 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 283 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 281 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 283 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
@@ -238,24 +238,29 @@ da distribuição de formas: descritivo.
   instinto sem técnicas 0,665 [0,549, 0,785]. Por semente o bandit vai de 0,01 a 0,80: o confronto de
   arquétipos decide. Inconclusivo; a bateria V2.1 reprovada pesa aqui.
 
-## Campanha contra os 3 NPCs, sem treino (2026-09-25, `artifacts_campanha/`)
+## Campanha contra os 3 NPCs (2026-09-25, `artifacts_campanha/`) — escada rebalanceada
 
-`python experiments/run_campanha.py` (`digilab/campanha.py`, `ConfigCampanha`; parte da
-`TAREFA_TREINO_SOMBRIO`, feita sem o treino). NPCs com stats uniformes (72/80/90), estilos da bateria
-V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` (100 partidas por par).
+`python experiments/run_campanha.py` (`digilab/campanha.py`, `ConfigCampanha`). Desde o rebalanceamento a
+campanha luta com o **combate corrigido (V2C + V21C)**, `campanha.REGRAS_CAMPANHA`
+(`CONFIG_COMBATE_V2C`/`CONFIG_COMBATE_V21C`). NPC = stats uniformes, adulto, sem técnica nem passiva,
+estilo `"<familia>:<nome>"` (`v2`, `v2c` ou `v21` = gambits de uma forma adulta sem as regras de técnica).
+Decisões em `docs/REGISTRO_DESVIOS.md`. Tudo PROPOSTO.
 
-- **A escada de dificuldade não se sustenta**: o tier 2 (Sentinela, contragolpe, 80) é mais fácil que o
-  tier 1 (Brutamontes, agressivo, 72) para quase todas as formas; o chefe (Soberano, 90) cai para
-  adolescentes sem treino (guardião 0,98, brigão 0,66). Entre adultos só furioso (0,98) e muralha (0,90)
-  vencem o chefe; os demais ficam entre 0,00 e 0,18.
-- Soberano: o problema da tarefa (atirador vencia sem treino, 0,67, no protótipo `docs/pve.py`) **não se
-  repete** no V2.1: atirador 0.06 contra o chefe original. A correção testada (resposta à luta de
-  longe) piora: atirador 0.06, e sentinela 0.57 / emboscador 0.73 passam a
-  vencê-lo. Mantido o original; a correção fica só como evidência.
-- Pets de pesquisa (bandit, IC sobre 5 ovos) contra o tier 3: atencioso 0.21 [0.03, 0.47],
-  aleatório 0.25 [0.03, 0.62], incoerente 0.46 [0.14, 0.78].
-- Campanha com treino: feita na TAREFA_TREINO_SOMBRIO (`artifacts_campanha/treino.json`). Pendente:
-  redesenho dos NPCs para a escada funcionar (é também o que reprova o S2).
+- **Escada** (`experiments/calibrar_campanha.py`, critérios K1–K4 fixados antes; rodadas em
+  `experiments/configs/campanha/`): Brutamontes 54 espelho sem técnica, Sentinela 80 furioso sem técnica,
+  Soberano 120 agressivo da V2C. A escada original (72 agressivo, 80 contragolpe, 90 adaptativo) tinha a
+  muralha vencendo o chefe sem treino (0,97) e nenhuma outra forma chegava a 0,5 com +36.
+- **Validação** (`validacao2_resultado.json`, sementes 4101…4505) passa K1–K4: adultos sem treino
+  0,82 / 0,42 / 0,10; adolescentes 0,40 / 0,27 / 0,00; adolescente contra o tier 1 com +18 de treino 0,59;
+  chefe com +36: espelho 0,95, titã 0,93, muralha 0,87, vigia 0,74 (brigões e caçadores ficam perto de 0).
+  A validação 1 (chefe 110) reprovou o K4 por 0,004 e o chefe foi recalibrado: a validação 2 usou as mesmas
+  sementes, então é mais fraca (registrado).
+- Números de `artifacts_campanha/campanha.json` (100 partidas por par): formas adultas contra o tier 1 de
+  0,36 (duelista) a 1,0; contra o tier 2 brigões e guardiões 0,48–0,96, caçadores e colossos 0,02–0,14;
+  contra o chefe só o espelho chega perto (0,44). Estilos da V2 com stats neutros: só o adaptativo vence o
+  chefe (0,55).
+- Pets de pesquisa (bandit, IC sobre 5 ovos, sem treino) contra o chefe: todos entre 0,00 e 0,08.
+- Campanha com treino: `artifacts_campanha/treino.json` (ver a seção do treino).
 
 ## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 
@@ -305,15 +310,18 @@ personalidade, formas e passivas sombrias em `combate_v2/v21/`. Calibração: `s
 - **Forçar não compensa, e custa.** Exigente × atencioso: 4/10 exigentes viram sombrios (0/10 nos
   outros braços); vínculo 0,22 [0,16, 0,27] × 0,56 [0,50, 0,61] (diferença −0,35 [−0,42, −0,27]); na
   arena normalizada o exigente vence o atencioso em 0,44 [0,26, 0,62] (inconclusivo); na campanha
-  (stats absolutos, treina mais: 35,8 × 28,3 pontos) perde para o atencioso contra o tier 1
-  (0,74 × 0,95) e o chefe (0,57 × 0,82; diferença −0,25 [−0,51, −0,04]).
+  (stats absolutos, escada rebalanceada, regras V21C) perde nos três tiers: tier 1 0,85 × 1,00, tier 2
+  0,42 × 0,72, chefe 0,20 × 0,58 (diferenças −0,15 [−0,28, −0,02], −0,30 [−0,58, −0,08],
+  −0,38 [−0,66, −0,11]).
 - **S1 passa**: nenhuma sombria vence os 8 normais; o E1 com as sombrias no pool também passa (suporte
   inclui devastador e bastião rachado). Média contra os normais: devastador 0,74, bastião 0,58,
   predador 0,28, colosso partido 0,08. Devastador × passivos: espelho 0,31, muralha 0,34, sentinela
   0,99, vigia 0,80.
-- **S2 REPROVADO**: quase toda forma normal já vence o tier 1 sem treino (a escada dos NPCs não se
-  sustenta), então "mais cedo" não discrimina; predador nunca vence o tier 1 e colosso partido precisa
-  de +24; devastador e bastião passam do furioso e da muralha contra o tier 2.
+- **S2 REPROVADO, também com a escada rebalanceada** (campanha e S2 com as regras V21C): o critério (a)
+  compara adultos contra o tier 1, e a escada exige que quase todo adulto já vença o tier 1 sem treino
+  (K2), então "mais cedo" não discrimina; colosso partido precisa de +12 (titã e vigia, 0); contra o tier 2
+  o devastador (0,97) passa do duelista (0,23) e do furioso (0,95), e o bastião (0,99) passa da muralha
+  (0,95). Resolver o S2 é desenho das formas sombrias ou do próprio gate, não da escada.
 - Formas por braço e o resto em `artifacts_treino/resumo.json`. Atencioso × aleatório nesta run: 0,46
   [0,25, 0,68] (inconclusivo).
 - Web: o treino entrou antes das runs (pedido do Matheus), com os mesmos números.
