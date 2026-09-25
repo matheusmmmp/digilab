@@ -35,13 +35,13 @@ from digilab.combate_v2.bots import ADAPTATIVO, FIXOS, ORACULO, TODOS, bot, perm
 from digilab.combate_v2.gambits import PESADO_AUTOMATICO  # noqa: E402
 from digilab.combate_v2.lutador import CondicaoFisica, Estilo, Lutador  # noqa: E402
 from digilab.combate_v2.partida import jogar, reproduzir  # noqa: E402
-from digilab.combate_v2.regras import ACOES_ESCOLHIVEIS  # noqa: E402
+from digilab.combate_v2.regras import ACOES_ESCOLHIVEIS, Acao  # noqa: E402
 from digilab.config import CONFIG_BATERIA_COMBATE, CONFIG_COMBATE_V2  # noqa: E402
 from digilab.metrics import bootstrap_ic, equilibrio_simetrico, matriz_taxas, suporte  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
 from run_arena import _imports_externos  # noqa: E402
 
-CHAVES = {"descricao", "saida", "sementes_calibracao", "sementes_validacao", "conjunto",
+CHAVES = {"descricao", "saida", "sementes_calibracao", "sementes_validacao", "conjunto", "regras", "gates_v2c",
           "partidas_por_par_por_semente", "registro_calibracao"}
 BOOT_REAMOSTRAGENS, BOOT_SEMENTE, BOOT_NIVEL = 10000, 4242, 0.95
 
@@ -72,6 +72,18 @@ def carregar(caminho: Path) -> dict:
     return cfg
 
 
+def config_regras(cfg_json: dict):
+    """V2 original (sem "regras") ou V2C: "regras" = campos de ConfigCombateV2C (inclusive os da base,
+    como custo_esquivar e guts_extra_defender). TAREFA_CORRECAO_COMBATE."""
+    if "regras" not in cfg_json:
+        return CONFIG_COMBATE_V2
+    from digilab.config import ConfigCombateV2C
+    extras = set(cfg_json["regras"]) - set(ConfigCombateV2C.__dataclass_fields__)
+    if extras:
+        raise KeyError(f"regras desconhecidas: {sorted(extras)}")
+    return ConfigCombateV2C(**{**asdict(CONFIG_COMBATE_V2), **cfg_json["regras"]})
+
+
 def hashes(cfg_json: dict) -> dict:
     fontes = sorted((RAIZ / "digilab" / "combate_v2").glob("*.py"))
     h_regras = hashlib.sha256()
@@ -79,22 +91,22 @@ def hashes(cfg_json: dict) -> dict:
         h_regras.update(f.name.encode() + b"\0" + f.read_bytes().replace(b"\r\n", b"\n") + b"\0")
     # saida e descricao nao mudam o experimento: ficam fora do hash
     semantico = {k: v for k, v in cfg_json.items() if k not in ("saida", "descricao")}
-    carga = {"combate": asdict(CONFIG_COMBATE_V2), "bateria": asdict(CONFIG_BATERIA_COMBATE), "json": semantico}
+    carga = {"combate": asdict(config_regras(cfg_json)), "bateria": asdict(CONFIG_BATERIA_COMBATE), "json": semantico}
     h_cfg = hashlib.sha256(json.dumps(carga, sort_keys=True, default=list).encode()).hexdigest()
     return {"regras_sha256": h_regras.hexdigest(), "config_sha256": h_cfg,
             "arquivos_regras": [f.name for f in fontes]}
 
 
-def _partidas_par(a: Lutador, b: Lutador, rotulo: str, sementes: list[int], n: int):
+def _partidas_par(a: Lutador, b: Lutador, rotulo: str, sementes: list[int], n: int, cc=None):
     """N partidas por semente; na segunda metade os lados trocam. Pontos sempre do ponto de vista de `a`."""
     for s in sementes:
         for k in range(n):
             sp = derivar_semente("bateria", rotulo, s, a.nome, b.nome, k)
             if k < n // 2:
-                p = jogar(a, b, sp)
+                p = jogar(a, b, sp, cc)
                 yield s, k, p, p.pontos_a, 0
             else:
-                p = jogar(b, a, sp)
+                p = jogar(b, a, sp, cc)
                 yield s, k, p, 1.0 - p.pontos_a, 1
 
 
@@ -114,13 +126,15 @@ def executar(caminho_cfg: Path) -> int:
 
     sementes = list(cfg["sementes_" + cfg["conjunto"]])
     n = cfg["partidas_por_par_por_semente"]
-    bots = {nome: bot(nome) for nome in TODOS}
+    cc = config_regras(cfg)
+    bots = {nome: bot(nome, cfg=cc) for nome in TODOS}
 
     # ------------------------------------------------ round-robin
     linhas, confrontos, amostra = [], [], []
     por_semente: dict[tuple[str, str, int], list[float]] = {}
     turnos, fins = [], {"ko": 0, "limite": 0}
-    decisoes = {nome: {a.value: 0 for a in ACOES_ESCOLHIVEIS} for nome in TODOS}
+    decisoes = {nome: {a.value: 0 for a in ACOES_ESCOLHIVEIS + ((Acao.FINTAR,) if getattr(cc, "finta", False) else ())}
+                for nome in TODOS}
     espelho_lado0 = {nome: [] for nome in TODOS}
     passo_amostra = None
     nomes = list(TODOS)
@@ -129,7 +143,7 @@ def executar(caminho_cfg: Path) -> int:
     contador = 0
     for i, na in enumerate(nomes):
         for nb in nomes[i:]:
-            for s, k, p, pts, trocado in _partidas_par(bots[na], bots[nb], "rr", sementes, n):
+            for s, k, p, pts, trocado in _partidas_par(bots[na], bots[nb], "rr", sementes, n, cc):
                 confrontos.append((na, nb, pts))
                 por_semente.setdefault((na, nb, s), []).append(pts)
                 turnos.append(p.turnos)
@@ -140,7 +154,9 @@ def executar(caminho_cfg: Path) -> int:
                     if ev["tipo"] != "turno":
                         continue
                     for lado, (acao, motivo) in ((0, (ev["a"], ev["ma"])), (1, (ev["b"], ev["mb"]))):
-                        if motivo == PESADO_AUTOMATICO:
+                        # o pesado executado nao e acao escolhivel (com finta o oraculo o escolhe no turno
+                        # de execucao; fica fora da contagem como o automatico)
+                        if motivo == PESADO_AUTOMATICO or acao == "pesado":
                             continue
                         dono = p.nome_a if lado == 0 else p.nome_b
                         decisoes[dono][acao] += 1
@@ -218,7 +234,7 @@ def executar(caminho_cfg: Path) -> int:
     if atual:
         logs.append(atual)
     for log in logs:
-        reproduzir(log, bots[log[0]["a"]], bots[log[0]["b"]])  # diverge -> ReplayCombateDivergiu
+        reproduzir(log, bots[log[0]["a"]], bots[log[0]["b"]], cc)  # diverge -> ReplayCombateDivergiu
     g3 = not fora and len(logs) == len(amostra)
     gate("G3_sanidade", g3,
          f"pontos do lado 0 nos espelhos (vies de posicao) dentro de 0.5 +- {cb.tolerancia_espelho}: "
@@ -244,7 +260,7 @@ def executar(caminho_cfg: Path) -> int:
          {"fracao_por_acao": frac, "decisoes_por_bot": decisoes})
 
     # G6
-    neutra = CondicaoFisica.neutra()
+    neutra = CondicaoFisica.neutra(cc)
     variantes = {"neutra": neutra}
     for dh in (-1, 1):
         for dg in (-1, 1):
@@ -258,7 +274,7 @@ def executar(caminho_cfg: Path) -> int:
             eu = Lutador(estilo_nome, cond, bots[estilo_nome].estilo)
             pts = [pt for op in FIXOS
                    for _, _, _, pt, _ in _partidas_par(eu, Lutador(op + "#op", neutra, bots[op].estilo),
-                                                        f"g6|{vnome}", sementes, cb.partidas_g6_por_semente)]
+                                                        f"g6|{vnome}", sementes, cb.partidas_g6_por_semente, cc)]
             taxa_cond[estilo_nome][vnome] = sum(pts) / len(pts)
     efeito_cond = {x: max(v.values()) - min(v.values()) for x, v in taxa_cond.items()}
     neutras = {x: v["neutra"] for x, v in taxa_cond.items()}
@@ -276,12 +292,15 @@ def executar(caminho_cfg: Path) -> int:
     por_perm = {}
     for ordem, gl in perms:
         emb = Lutador(f"{ADAPTATIVO}#perm{''.join(map(str, ordem))}", neutra, Estilo(gl, orig.estilo.epsilon))
-        pts = [pt for _, _, _, pt, _ in _partidas_par(orig, emb, "g7", sementes, cb.partidas_g7_por_semente)]
+        pts = [pt for _, _, _, pt, _ in _partidas_par(orig, emb, "g7", sementes, cb.partidas_g7_por_semente, cc)]
         por_perm["".join(map(str, ordem))] = sum(pts) / len(pts)
     media_g7 = sum(por_perm.values()) / len(por_perm)
     gate("G7_ordem_dos_gambits_importa", media_g7 >= cb.taxa_min_g7,
          f"adaptativo original contra {len(perms)} permutacoes da ordem: media {media_g7:.3f} (>= {cb.taxa_min_g7})",
          {"por_permutacao": por_perm, "media": media_g7})
+
+    if cfg.get("gates_v2c"):
+        gates_v2c(gate, cc, bots, taxa, sementes, neutra)
 
     aprovada = all(g["ok"] for g in gates)
     registro = None
@@ -297,7 +316,7 @@ def executar(caminho_cfg: Path) -> int:
         "sementes_validacao": cfg["sementes_validacao"],
         "partidas_por_par_por_semente": n,
         "hashes": hashes(cfg),
-        "config_combate_v2": asdict(CONFIG_COMBATE_V2),
+        "config_combate_v2": asdict(cc),
         "config_bateria": asdict(CONFIG_BATERIA_COMBATE),
         "registro_calibracao": registro,
         "avisos": ["todos os numeros de ConfigCombateV2 e ConfigBateriaCombate sao PROPOSTOS"]
@@ -312,6 +331,91 @@ def executar(caminho_cfg: Path) -> int:
     for g in gates:
         print(f"  [{'ok' if g['ok'] else 'REPROVA'}] {g['gate']}: {g['mensagem']}")
     return 0 if aprovada else 2
+
+
+# ------------------------------------------------------------------ gates da V2C (Etapa 2)
+PARAMS_G8 = ("hp_neutro", "guts_inicial_neutro", "regen_guts_neutro", "guts_max", "t_max", "custo_golpe_rapido",
+             "custo_preparar_pesado", "custo_disparo", "custo_esquivar", "dano_golpe_rapido", "dano_pesado",
+             "dano_disparo", "mult_defender", "mult_defender_contra_pesado", "mult_carregar", "guts_extra_defender",
+             "guts_carregar", "dano_parry", "turno_morte_subita", "mult_morte_subita")
+
+
+def _g1(taxa, cb) -> tuple[bool, list, list]:
+    eq = equilibrio_simetrico(taxa, list(FIXOS), cb.iteracoes_fictitious_play)
+    sup = suporte(eq["estrategia"], cb.peso_minimo_suporte)
+    dom = [x for x in FIXOS if all(taxa[x][y] > 0.5 for y in FIXOS if y != x)]
+    return (not dom and len(sup) >= cb.suporte_minimo), dom, sup
+
+
+def _round_robin(bots_, nomes, sementes, n, cc, rotulo):
+    conf = []
+    for i, na in enumerate(nomes):
+        for nb in nomes[i:]:
+            for _, _, _, pts, _ in _partidas_par(bots_[na], bots_[nb], rotulo, sementes, n, cc):
+                conf.append((na, nb, pts))
+    return matriz_taxas(conf)
+
+
+def gates_v2c(gate, cc, bots, taxa, sementes, neutra) -> None:
+    from dataclasses import replace
+
+    from digilab.config import CONFIG_BATERIA_V2C
+
+    cb, cv = CONFIG_BATERIA_COMBATE, CONFIG_BATERIA_V2C
+    estilos = [x for x in FIXOS if x != "aleatorio"] + [ADAPTATIVO]
+    # G6b
+    fav = CondicaoFisica(neutra.hp_max * (1 + cv.variacao_hp_g6b), neutra.guts_inicial + cv.variacao_guts_g6b, neutra.regen_guts)
+    des = CondicaoFisica(neutra.hp_max * (1 - cv.variacao_hp_g6b), neutra.guts_inicial - cv.variacao_guts_g6b, neutra.regen_guts)
+    g6b = {}
+    for e in estilos:
+        pts = [pt for _, _, _, pt, _ in _partidas_par(Lutador(e + "#fav", fav, bots[e].estilo), Lutador(e + "#des", des, bots[e].estilo),
+                                                     "g6b", sementes, cv.partidas_g6b_por_semente, cc)]
+        g6b[e] = sum(pts) / len(pts)
+    pior = max(g6b, key=g6b.get)
+    gate("G6b_espelho_condicao", g6b[pior] <= cv.taxa_max_g6b,
+         f"mesmo estilo, condicao +{cv.variacao_hp_g6b:.0%} x -{cv.variacao_hp_g6b:.0%} (guts +-{cv.variacao_guts_g6b}): "
+         f"taxa do favorecido ate {g6b[pior]:.3f} ({pior}); media {sum(g6b.values()) / len(g6b):.3f} (<= {cv.taxa_max_g6b})",
+         {"taxa_favorecido": g6b})
+    # G9
+    def decisivos(tx, nomes):
+        pares = [(a, b) for i, a in enumerate(nomes) for b in nomes[i + 1:]]
+        return sum(tx[a][b] < cv.extremo_g9 or tx[a][b] > 1 - cv.extremo_g9 for a, b in pares) / len(pares)
+    nomes = list(TODOS)
+    frac_005 = decisivos(taxa, nomes)
+    bots_02 = {x: Lutador(x, bots[x].condicao, replace(bots[x].estilo, epsilon=max(bots[x].estilo.epsilon, cv.epsilon_g9)))
+               for x in nomes}
+    tx02 = _round_robin(bots_02, nomes, sementes, cv.partidas_g9_por_semente, cc, "g9")
+    frac_02 = decisivos(tx02, nomes)
+    gate("G9_decisividade", frac_02 <= cv.fracao_max_g9,
+         f"confrontos com taxa < {cv.extremo_g9} ou > {1 - cv.extremo_g9}: epsilon {cc.epsilon_bots} -> {frac_005:.3f}; "
+         f"epsilon {cv.epsilon_g9} -> {frac_02:.3f} (<= {cv.fracao_max_g9})",
+         {"fracao_decisivos_eps_base": frac_005, "fracao_decisivos_eps_g9": frac_02, "taxa_eps_g9": tx02})
+    # G8
+    resultados = []
+    for campo in PARAMS_G8:
+        v = getattr(cc, campo, None)
+        if v is None or v == 0:
+            continue                          # chave desligada (0) nao e parametro desta versao
+        for sinal in (-1, 1):
+            if isinstance(v, bool):
+                continue
+            if isinstance(v, int):
+                novo = round(v * (1 + sinal * cv.perturbacao_g8))
+                novo = v + sinal if novo == v else novo
+            else:
+                novo = v * (1 + sinal * cv.perturbacao_g8)
+            try:
+                c2 = replace(cc, **{campo: novo})
+                b2 = {x: bot(x, cfg=c2) for x in FIXOS}
+                tx = _round_robin(b2, list(FIXOS), sementes, cv.partidas_g8_por_semente, c2, f"g8|{campo}|{sinal}")
+                ok, dom, sup = _g1(tx, cb)
+            except ValueError as err:                # perturbacao que torna a config invalida
+                ok, dom, sup = False, [], [f"invalida: {err}"]
+            resultados.append({"campo": campo, "de": v, "para": novo, "G1": ok, "dominantes": dom, "suporte": sup})
+    frac = sum(r["G1"] for r in resultados) / len(resultados)
+    gate("G8_robustez", frac >= cv.fracao_min_g8,
+         f"G1 vale em {frac:.3f} das {len(resultados)} perturbacoes (+-{cv.perturbacao_g8:.0%}, uma por vez; >= {cv.fracao_min_g8})",
+         {"fracao": frac, "perturbacoes": resultados})
 
 
 def main(argv=None) -> int:

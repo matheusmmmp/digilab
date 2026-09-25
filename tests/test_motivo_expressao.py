@@ -111,6 +111,9 @@ def test_bateria_combate_v2_reproduz_artefatos(tmp_path):
     b = json.loads((tmp_path / "bat" / "gates.json").read_text(encoding="utf-8"))
     for m in (a, b):
         m.pop("ambiente")
+        # TAREFA_CORRECAO_COMBATE: os fontes ganharam as chaves da V2C (desligadas na V2); o hash dos
+        # fontes muda, o resultado nao (os artefatos acima sao os mesmos bytes)
+        m["hashes"].pop("regras_sha256")
     assert a == b
 
 

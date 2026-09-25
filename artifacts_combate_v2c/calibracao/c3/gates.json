@@ -1,0 +1,384 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "amostra_replay.jsonl": "4ec3142ab59405ded6e6725ef0c89c868b29e149eaf6a8695edb8d8b36b2cd54",
+    "equilibrio.json": "4531deb20b184cd01abd7d837273b40ff9f2593cc71b0b72a835648ce5358331",
+    "matriz.json": "0c83c914f63672460812fb9d23bc44e108a5d22b5eee0539c2ee9296554e6950",
+    "partidas.csv": "b914088665c442ff9f25b5c609460caddc5fc7c6d6cbf987292524d0820685bd"
+  },
+  "avisos": [
+    "todos os numeros de ConfigCombateV2 e ConfigBateriaCombate sao PROPOSTOS",
+    "conjunto de CALIBRACAO: nao e a run canonica"
+  ],
+  "config_bateria": {
+    "fracao_max_limite_turnos": 0.2,
+    "fracao_min_acao": 0.03,
+    "iteracoes_fictitious_play": 20000,
+    "mediana_turnos_max": 30.0,
+    "mediana_turnos_min": 8.0,
+    "partidas_g6_por_semente": 50,
+    "partidas_g7_por_semente": 100,
+    "partidas_replay_amostra": 200,
+    "permutacoes_g7": 5,
+    "peso_minimo_suporte": 0.05,
+    "semente_permutacoes_g7": 7007,
+    "suporte_minimo": 3,
+    "taxa_min_adaptativo_vs_aleatorio": 0.7,
+    "taxa_min_g7": 0.6,
+    "tolerancia_espelho": 0.03,
+    "variacao_guts_inicial": 10,
+    "variacao_hp": 0.1
+  },
+  "config_combate_v2": {
+    "custo_disparo": 20,
+    "custo_esquivar": 20,
+    "custo_golpe_rapido": 10,
+    "custo_preparar_pesado": 15,
+    "dano_disparo": 6.0,
+    "dano_golpe_rapido": 8.0,
+    "dano_parry": 5.0,
+    "dano_pesado": 25.0,
+    "epsilon_bots": 0.05,
+    "finta": true,
+    "fracoes_hp": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "fuga_condicionada": true,
+    "guts_carregar": 25,
+    "guts_extra_defender": 5,
+    "guts_inicial_neutro": 50,
+    "guts_max": 100,
+    "hp_neutro": 70.0,
+    "janela_frequente": 5,
+    "k_repete": [
+      2,
+      3
+    ],
+    "limiar_frequente": 0.4,
+    "limiares_guts": [
+      20,
+      40,
+      60
+    ],
+    "max_condicoes_por_regra": 2,
+    "max_regras": 8,
+    "mult_carregar": 1.5,
+    "mult_defender": 0.3,
+    "mult_defender_contra_pesado": 0.6,
+    "mult_morte_subita": 1.5,
+    "oraculo_passos": 1,
+    "oraculo_top_oponente": 3,
+    "peso_guts_oraculo": 0.002,
+    "peso_pesado_pendente_oraculo": 0.5,
+    "regen_guts_neutro": 8,
+    "t_max": 40,
+    "turno_morte_subita": 0
+  },
+  "conjunto": "calibracao",
+  "falharam": [
+    "G4_ritmo",
+    "G5_sem_acao_morta"
+  ],
+  "gates": [
+    {
+      "gate": "G1_sem_estrategia_dominante",
+      "mensagem": "nenhum fixo vence todos os outros; suporte do equilibrio ['agressivo', 'atirador', 'tartaruga'] (>= 3)",
+      "ok": true,
+      "valores": {
+        "dominantes": [],
+        "estrategia": {
+          "agressivo": 0.32555,
+          "aleatorio": 5e-05,
+          "atirador": 0.33725,
+          "contragolpe": 0.0,
+          "tartaruga": 0.33715
+        },
+        "suporte": [
+          "agressivo",
+          "atirador",
+          "tartaruga"
+        ]
+      }
+    },
+    {
+      "gate": "G2_existe_habilidade",
+      "mensagem": "adaptativo x aleatorio 0.995 (>= 0.7), IC95 [0.991, 0.998] (inferior > 0.5: True); media contra fixos: oraculo 0.934 x adaptativo 0.808 (oraculo >= adaptativo: True)",
+      "ok": true,
+      "valores": {
+        "adaptativo_vs_aleatorio": 0.995,
+        "ic95_por_semente": {
+          "ic_inferior": 0.991,
+          "ic_superior": 0.9984999999999999,
+          "media": 0.9949999999999999,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "media_contra_fixos": {
+          "adaptativo": 0.8083,
+          "oraculo": 0.9342
+        }
+      }
+    },
+    {
+      "gate": "G3_sanidade",
+      "mensagem": "pontos do lado 0 nos espelhos (vies de posicao) dentro de 0.5 +- 0.03: sim; 200 partidas rejogadas do disco bit a bit",
+      "ok": true,
+      "valores": {
+        "pontos_lado0_espelho": {
+          "adaptativo": 0.4925,
+          "agressivo": 0.5075,
+          "aleatorio": 0.498,
+          "atirador": 0.5095,
+          "contragolpe": 0.4935,
+          "oraculo": 0.484,
+          "tartaruga": 0.4915
+        },
+        "replay_partidas": 200
+      }
+    },
+    {
+      "gate": "G4_ritmo",
+      "mensagem": "mediana de turnos 23.0 (entre 8.0 e 30.0); 0.245 das partidas no limite de turnos (< 0.2)",
+      "ok": false,
+      "valores": {
+        "fins": {
+          "ko": 21146,
+          "limite": 6854
+        },
+        "fracao_limite": 0.24478571428571427,
+        "mediana_turnos": 23.0
+      }
+    },
+    {
+      "gate": "G5_sem_acao_morta",
+      "mensagem": "fracao de cada acao nas decisoes dos bots do suporte ['agressivo', 'atirador', 'tartaruga']; abaixo de 0.03: ['esquivar', 'golpe_rapido']",
+      "ok": false,
+      "valores": {
+        "decisoes_por_bot": {
+          "adaptativo": {
+            "avancar": 18911,
+            "carregar": 1865,
+            "defender": 21257,
+            "disparo": 179,
+            "esquivar": 3746,
+            "fintar": 0,
+            "golpe_rapido": 60951,
+            "preparar_pesado": 18105,
+            "recuar": 1063
+          },
+          "agressivo": {
+            "avancar": 16390,
+            "carregar": 654,
+            "defender": 603,
+            "disparo": 134,
+            "esquivar": 625,
+            "fintar": 9416,
+            "golpe_rapido": 12667,
+            "preparar_pesado": 42996,
+            "recuar": 558
+          },
+          "aleatorio": {
+            "avancar": 19724,
+            "carregar": 34673,
+            "defender": 34560,
+            "disparo": 19538,
+            "esquivar": 34276,
+            "fintar": 0,
+            "golpe_rapido": 14641,
+            "preparar_pesado": 14628,
+            "recuar": 26297
+          },
+          "atirador": {
+            "avancar": 1411,
+            "carregar": 28077,
+            "defender": 1621,
+            "disparo": 108909,
+            "esquivar": 1341,
+            "fintar": 0,
+            "golpe_rapido": 253,
+            "preparar_pesado": 246,
+            "recuar": 30773
+          },
+          "contragolpe": {
+            "avancar": 26841,
+            "carregar": 2466,
+            "defender": 198054,
+            "disparo": 248,
+            "esquivar": 41015,
+            "fintar": 0,
+            "golpe_rapido": 2054,
+            "preparar_pesado": 3243,
+            "recuar": 2372
+          },
+          "oraculo": {
+            "avancar": 1564,
+            "carregar": 12956,
+            "defender": 54714,
+            "disparo": 54113,
+            "esquivar": 3690,
+            "fintar": 586,
+            "golpe_rapido": 18848,
+            "preparar_pesado": 25972,
+            "recuar": 1278
+          },
+          "tartaruga": {
+            "avancar": 1357,
+            "carregar": 2305,
+            "defender": 229747,
+            "disparo": 9497,
+            "esquivar": 2158,
+            "fintar": 0,
+            "golpe_rapido": 829,
+            "preparar_pesado": 869,
+            "recuar": 1739
+          }
+        },
+        "fracao_por_acao": {
+          "avancar": 0.03864377651237799,
+          "carregar": 0.06260299863441712,
+          "defender": 0.46791081957160635,
+          "disparo": 0.23910811503169888,
+          "esquivar": 0.008318558009032615,
+          "golpe_rapido": 0.027733233284721003,
+          "preparar_pesado": 0.08897670037256006,
+          "recuar": 0.06670579858358598
+        }
+      }
+    },
+    {
+      "gate": "G6_condicao_nao_domina_estilo",
+      "mensagem": "maior efeito da condicao (mesmo estilo) 0.202 (atirador) vs efeito do estilo (condicao neutra, melhor - pior) 0.338",
+      "ok": true,
+      "valores": {
+        "efeito_condicao_por_estilo": {
+          "agressivo": 0.13240000000000007,
+          "aleatorio": 0.09560000000000002,
+          "atirador": 0.20199999999999996,
+          "contragolpe": 0.06479999999999997,
+          "tartaruga": 0.02639999999999998
+        },
+        "efeito_estilo": 0.3384,
+        "taxa_contra_fixos": {
+          "agressivo": {
+            "hp+_guts+": 0.786,
+            "hp+_guts-": 0.7772,
+            "hp-_guts+": 0.664,
+            "hp-_guts-": 0.6536,
+            "neutra": 0.6688
+          },
+          "aleatorio": {
+            "hp+_guts+": 0.4148,
+            "hp+_guts-": 0.4096,
+            "hp-_guts+": 0.3508,
+            "hp-_guts-": 0.3192,
+            "neutra": 0.3624
+          },
+          "atirador": {
+            "hp+_guts+": 0.8056,
+            "hp+_guts-": 0.7024,
+            "hp-_guts+": 0.6128,
+            "hp-_guts-": 0.6036,
+            "neutra": 0.7008
+          },
+          "contragolpe": {
+            "hp+_guts+": 0.3764,
+            "hp+_guts-": 0.3912,
+            "hp-_guts+": 0.3264,
+            "hp-_guts-": 0.3404,
+            "neutra": 0.3624
+          },
+          "tartaruga": {
+            "hp+_guts+": 0.4028,
+            "hp+_guts-": 0.3964,
+            "hp-_guts+": 0.3764,
+            "hp-_guts-": 0.38,
+            "neutra": 0.3868
+          }
+        },
+        "variantes": {
+          "hp+_guts+": {
+            "guts_inicial": 60,
+            "hp_max": 77.0,
+            "regen_guts": 8
+          },
+          "hp+_guts-": {
+            "guts_inicial": 40,
+            "hp_max": 77.0,
+            "regen_guts": 8
+          },
+          "hp-_guts+": {
+            "guts_inicial": 60,
+            "hp_max": 63.0,
+            "regen_guts": 8
+          },
+          "hp-_guts-": {
+            "guts_inicial": 40,
+            "hp_max": 63.0,
+            "regen_guts": 8
+          },
+          "neutra": {
+            "guts_inicial": 50,
+            "hp_max": 70.0,
+            "regen_guts": 8
+          }
+        }
+      }
+    },
+    {
+      "gate": "G7_ordem_dos_gambits_importa",
+      "mensagem": "adaptativo original contra 5 permutacoes da ordem: media 0.848 (>= 0.6)",
+      "ok": true,
+      "valores": {
+        "media": 0.8480000000000001,
+        "por_permutacao": {
+          "02416357": 0.879,
+          "03251467": 0.56,
+          "17360425": 0.881,
+          "51760234": 0.929,
+          "70632154": 0.991
+        }
+      }
+    }
+  ],
+  "hashes": {
+    "arquivos_regras": [
+      "__init__.py",
+      "bots.py",
+      "gambits.py",
+      "lutador.py",
+      "partida.py",
+      "regras.py"
+    ],
+    "config_sha256": "25dc6cbdb1202e1329b36109e17705475b7363044b219042a3dcaa2bb521800d",
+    "regras_sha256": "ca85f89be2df070f4912f13d8a9f16214312a5ddd0e98ebee9b86d37357f8c55"
+  },
+  "partidas_por_par_por_semente": 200,
+  "registro_calibracao": null,
+  "sementes": [
+    1101,
+    1202,
+    1303,
+    1404,
+    1505
+  ],
+  "sementes_calibracao": [
+    1101,
+    1202,
+    1303,
+    1404,
+    1505
+  ],
+  "sementes_validacao": [
+    2101,
+    2202,
+    2303,
+    2404,
+    2505
+  ],
+  "status": "REPROVADA"
+}

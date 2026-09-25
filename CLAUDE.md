@@ -88,12 +88,12 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 249 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 271 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 249 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 271 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
@@ -256,6 +256,28 @@ V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` 
   aleatório 0.25 [0.03, 0.62], incoerente 0.46 [0.14, 0.78].
 - Campanha com treino: feita na TAREFA_TREINO_SOMBRIO (`artifacts_campanha/treino.json`). Pendente:
   redesenho dos NPCs para a escada funcionar (é também o que reprova o S2).
+
+## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C REPROVADA
+
+Etapas 0–2 feitas; **a V2C não passou na validação** e a Etapa 3 (V2.1 corrigida) não foi iniciada.
+`ConfigCombateV2C` (chaves C1–C4 desligadas por padrão: a V2 original reproduz os artefatos),
+`experiments/diagnostico_combate.py`, `experiments/configs/v2c/*.json`, gates G6b/G8/G9 e oráculo de N
+passos em `run_bateria_combate.py`. Números de `artifacts_combate_v2c/` (`relatorio.json`,
+`diagnostico/`, `calibracao/<etapa>/`, `validacao/`). Desvios em `docs/REGISTRO_DESVIOS.md`.
+
+- **Validação (N = 400/par)**: falham G3 (espelho da tartaruga 0,464; ruído com N menor), G4 (20,4% no
+  limite), G5 (esquivar e golpe rápido < 3%), G6b (atirador favorecido 0,924) e G9 (57,1% decisivos
+  com ε 0,2). Passam G1, G2 (oráculo de 2 passos 0,882 × adaptativo 0,809), G6, G7 e **G8 (100% das
+  40 perturbações)**.
+- Mudança × gate (calibração): C1 finta: limite 31,2% → 27,7%; C2 parry: 24,9% e **golpe rápido morre**
+  (G5); C3 fuga: 24,5%; C4 morte súbita: 22,3%; C5 e C6: nenhum efeito (não adotados); oráculo de 2
+  passos: 20,1%. G1 passa em todas.
+- **Causa das falhas restantes: os bots, não os números.** Tartaruga × contragolpe e seus espelhos
+  terminam 100% no limite (nunca se atacam: morte súbita multiplica zero); os bots do suporte não têm
+  regra de esquiva (G5); o espelho do atirador é uma corrida determinística de disparos (G6b).
+- Diagnóstico (Etapa 0): Ferrugem 0,67 contra as outras espécies no mesmo arquétipo; vigor 13 → 10 cai
+  para 0,56 e zerar `hp_por_vigor` para 0,46: a causa é a conversão vigor → vida. `marcar`: o caçador
+  recua e o oponente avança, os passos se anulam e o caçador atira de graça (C3 resolveria na V2.1).
 
 ## Treino, sobrecarga e formas sombrias (2026-09-25, `docs/TAREFA_TREINO_SOMBRIO.md`)
 

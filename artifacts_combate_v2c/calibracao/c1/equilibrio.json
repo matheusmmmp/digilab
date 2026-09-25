@@ -1,0 +1,36 @@
+{
+  "bots_fixos": {
+    "estrategia": {
+      "agressivo": 0.32195,
+      "aleatorio": 5e-05,
+      "atirador": 0.337,
+      "contragolpe": 0.0,
+      "tartaruga": 0.341
+    },
+    "explorabilidade": 0.0020215750000000016,
+    "iteracoes": 20000,
+    "metodo": "fictitious play deterministico, u = taxa - 0.5, empate pelo menor indice",
+    "peso_minimo_suporte": 0.05,
+    "suporte": [
+      "agressivo",
+      "atirador",
+      "tartaruga"
+    ]
+  },
+  "fixos_mais_adaptativo_informativo": {
+    "estrategia": {
+      "adaptativo": 0.99995,
+      "agressivo": 0.0,
+      "aleatorio": 5e-05,
+      "atirador": 0.0,
+      "contragolpe": 0.0,
+      "tartaruga": 0.0
+    },
+    "explorabilidade": 2.495e-05,
+    "iteracoes": 20000,
+    "metodo": "fictitious play deterministico, u = taxa - 0.5, empate pelo menor indice",
+    "suporte": [
+      "adaptativo"
+    ]
+  }
+}
