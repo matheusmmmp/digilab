@@ -322,3 +322,26 @@ Interpretações e desvios:
 Números: nenhum número da tarefa foi ajustado na calibração (as mudanças usam os valores da própria
 tarefa: finta 8, parry 5, morte súbita no turno 25 × 1,5). A causa das falhas restantes é o desenho
 dos bots, não número (ver CLAUDE.md, seção Correção do combate).
+
+## 2026-09-25 — TAREFA_CORRECAO_COMBATE: bots redesenhados (pedido do Matheus)
+
+A V2C com os bots da V2 reprovou por desenho dos bots; o Matheus pediu para redesenhá-los.
+`GAMBITS_V2C` em `combate_v2/bots.py`, ligados por `ConfigCombateV2C.bots_v2c` (os bots da V2 ficam
+iguais para a V2 original). Desenho escolhido nas sementes de CALIBRAÇÃO com
+`experiments/avaliar_bots_v2c.py` (40 partidas por semente), depois bateria completa:
+
+- agressivo: finta contra quem esquiva; defende golpe repetido quando está abaixo de 50% de vida
+  (o parry vira a troca); pesado contra quem defende muito; golpe rápido com guts ≥ 20; interrompe
+  quem prepara.
+- tartaruga: esquiva o pesado (defende se o oponente finta muito); **interrompe com golpe rápido quem
+  prepara com frequência** (sem isso o agressivo dominava); contra quem só defende, avança e prepara o
+  pesado (quebra o impasse que dava 100% de limite); carrega só contra oponente passivo.
+- atirador: esquiva o pesado de perto; golpe rápido de perto com guts; recua; abaixo de 50% de vida
+  contra disparo repetido, avança; esquiva disparo repetido com guts; dispara.
+- contragolpe: como a V2, mais "contra quem só defende, de perto, prepara o pesado".
+- aleatório e adaptativo: iguais à V2 (o adaptativo já usa as 8 regras).
+
+Tentativas no atirador para o G6b (espelho), todas piores ou iguais: esquivar em vez de avançar ao
+perder (0,797), tirar a esquiva por guts (0,882), esquiva por repetição (0,882), avançar com os dois
+abaixo de 75% (0,818), defender disparo sem guts (0,880). ε próprio do atirador: 0,1 → 0,73;
+0,2 → 0,67; 0,3 → 0,598 (não adotado: decisão do pesquisador).

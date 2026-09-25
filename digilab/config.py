@@ -239,6 +239,8 @@ class ConfigCombateV2C(ConfigCombateV2):
     # no fica nas `oraculo_top_oponente` acoes mais frequentes (custo)
     oraculo_passos: int = 1
     oraculo_top_oponente: int = 3
+    # redesenho dos bots (pedido do Matheus apos a V2C reprovar): bots.GAMBITS_V2C no lugar dos da V2
+    bots_v2c: bool = False
 
 
 @dataclass(frozen=True)

@@ -91,6 +91,50 @@ GAMBITS = {
 FINTA = regra(se(C("executando_pesado"), C("oponente_frequente", (A.ESQUIVAR,))), A.FINTAR)
 GAMBITS_FINTA = {n: lista([FINTA] + list(GAMBITS[n].regras), GAMBITS[n].final.acao) for n in ("agressivo",)}
 
+# V2C, redesenho dos bots (a V2C com os bots antigos reprovou: pares passivos que nunca se atacam, suporte
+# sem esquiva, espelho do atirador deterministico). So valem com ConfigCombateV2C.bots_v2c.
+_FREQ = lambda a: C("oponente_frequente", (a,))  # noqa: E731
+GAMBITS_V2C = {
+    "aleatorio": GAMBITS["aleatorio"],
+    "agressivo": lista([
+        FINTA,
+        regra(se(C("hp_proprio_abaixo", (0.5,)), _FREQ(A.GOLPE_RAPIDO)), A.DEFENDER),
+        regra(_dist(LONGE), A.AVANCAR),
+        regra(_dist(MEDIO), A.AVANCAR),
+        regra(C("oponente_preparando"), A.GOLPE_RAPIDO),
+        regra(se(_FREQ(A.DEFENDER), C("guts_proprio_acima", (40,))), A.PREPARAR_PESADO),
+        regra(C("guts_proprio_acima", (20,)), A.GOLPE_RAPIDO),
+    ], A.CARREGAR),
+    "tartaruga": lista([
+        regra(se(C("oponente_preparando"), _FREQ(A.FINTAR)), A.DEFENDER),
+        regra(C("oponente_preparando"), A.ESQUIVAR),
+        regra(se(_FREQ(A.PREPARAR_PESADO), _dist(PERTO)), A.GOLPE_RAPIDO),
+        regra(C("oponente_guts_abaixo", (20,)), A.PREPARAR_PESADO),
+        regra(se(_FREQ(A.DEFENDER), _dist(PERTO)), A.PREPARAR_PESADO),
+        regra(_FREQ(A.DEFENDER), A.AVANCAR),
+        regra(se(_FREQ(A.CARREGAR), _dist(PERTO)), A.GOLPE_RAPIDO),
+        regra(se(C("guts_proprio_abaixo", (40,)), _FREQ(A.DEFENDER)), A.CARREGAR),
+    ], A.DEFENDER),
+    "atirador": lista([
+        regra(se(C("oponente_preparando"), _dist(PERTO)), A.ESQUIVAR),
+        regra(se(_dist(PERTO), C("guts_proprio_acima", (40,))), A.GOLPE_RAPIDO),
+        regra(_dist(PERTO), A.RECUAR),
+        regra(se(C("hp_proprio_abaixo", (0.5,)), _FREQ(A.DISPARO)), A.AVANCAR),
+        regra(se(_FREQ(A.DISPARO), C("guts_proprio_acima", (40,))), A.ESQUIVAR),
+        regra(C("sempre"), A.DISPARO),
+    ], A.CARREGAR),
+    "contragolpe": lista([
+        regra(C("oponente_preparando"), A.ESQUIVAR),
+        regra(C("oponente_guts_abaixo", (20,)), A.PREPARAR_PESADO),
+        regra(C("oponente_guts_abaixo", (20,)), A.GOLPE_RAPIDO),
+        regra(se(_FREQ(A.DEFENDER), _dist(PERTO)), A.PREPARAR_PESADO),
+        regra(_dist(LONGE), A.AVANCAR),
+        regra(C("guts_proprio_abaixo", (40,)), A.CARREGAR),
+        regra(_dist(MEDIO), A.AVANCAR),
+    ], A.DEFENDER),
+    "adaptativo": GAMBITS["adaptativo"],
+}
+
 FIXOS = ("aleatorio", "agressivo", "tartaruga", "atirador", "contragolpe")
 ADAPTATIVO = "adaptativo"
 ORACULO = "oraculo"
@@ -189,7 +233,10 @@ def estilo(nome: str, cfg: ConfigCombateV2 | None = None) -> Estilo | EstiloOrac
         return EstiloOraculo(cfg.epsilon_bots)
     if nome not in GAMBITS:
         raise KeyError(f"bot desconhecido: {nome!r}")
-    g = GAMBITS_FINTA[nome] if getattr(cfg, "finta", False) and nome in GAMBITS_FINTA else GAMBITS[nome]
+    if getattr(cfg, "bots_v2c", False):
+        g = GAMBITS_V2C[nome]
+    else:
+        g = GAMBITS_FINTA[nome] if getattr(cfg, "finta", False) and nome in GAMBITS_FINTA else GAMBITS[nome]
     return Estilo(g, 1.0 if nome == "aleatorio" else cfg.epsilon_bots)
 
 
