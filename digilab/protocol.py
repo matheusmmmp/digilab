@@ -295,6 +295,10 @@ def bracos_do_protocolo(p: Protocolo) -> list[tuple[str, str, str]]:
     dono, exatamente como a run canonica v1 sempre fez.
     """
     donos = list(p.v("bracos"))
+    if isinstance(p, ProtocoloPersonalidade):
+        return [(d, d, "bandit_personalidade") for d in donos]
+    if isinstance(p, ProtocoloMemoriaEspacos):
+        return [(d, d, "bandit_espacos") for d in donos]
     if isinstance(p, ProtocoloMemoria):
         return [(d, d, "bandit_memoria") for d in donos]
     if not isinstance(p, ProtocoloAblacao):
@@ -356,8 +360,93 @@ def _campo_memoria() -> Campo:
 
 PROTOCOLO_ARENA_V1_MEMORIA = ProtocoloMemoria(versao="arena-v1-memoria", **_campos_v1(), memoria=_campo_memoria())
 
+
+@dataclass(frozen=True)
+class ProtocoloMemoriaEspacos(ProtocoloMemoria):
+    """arena-v1 + memoria por espacos (docs/ADENDO_MEMORIA_EMOCAO_DF.md, Parte 1) em todos os bracos.
+    arena-v1-memoria (features com decaimento) continua existindo e reproduzivel."""
+
+    def validar(self) -> None:
+        Protocolo.validar(self)
+        from .memoria_espacos import FATORES_ESPACOS
+
+        valor = dict(self.v("memoria"))
+        if tuple(valor.get("features", ())) != FATORES_ESPACOS:
+            raise ValueError(f"features de memoria do protocolo difere do codigo: {valor.get('features')}")
+        esperado = json.dumps(asdict(_config.CONFIG_MEMORIA_ESPACOS), sort_keys=True, default=list)
+        if valor.get("config") != esperado:
+            raise ValueError("ConfigMemoriaEspacos do protocolo difere de config.py")
+
+
+def _campo_memoria_espacos() -> Campo:
+    from .memoria_espacos import FATORES_ESPACOS
+
+    return Campo(
+        (("features", FATORES_ESPACOS),
+         ("config", json.dumps(asdict(_config.CONFIG_MEMORIA_ESPACOS), sort_keys=True, default=list))),
+        _P,
+        "memoria por espacos (4 curto, 2 longo, uma por categoria, a mais forte vence; relembra a cada 4 h "
+        "acordado): uma feature por categoria ativa (demora, bronca, elogio, carinho) em todos os bracos",
+    )
+
+
+PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS = ProtocoloMemoriaEspacos(
+    versao="arena-v1-memoria-espacos", **_campos_v1(), memoria=_campo_memoria_espacos())
+
 PROTOCOLOS = {
     PROTOCOLO_ARENA_V1.versao: PROTOCOLO_ARENA_V1,
     PROTOCOLO_ARENA_V1_ABLACAO.versao: PROTOCOLO_ARENA_V1_ABLACAO,
     PROTOCOLO_ARENA_V1_MEMORIA.versao: PROTOCOLO_ARENA_V1_MEMORIA,
+    PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS.versao: PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS,
 }
+
+
+# =====================================================================
+# Personalidade, obediencia e desejo (docs/TAREFA_PERSONALIDADE_OBEDIENCIA.md),
+# sobre a memoria por espacos. Tres variantes com os MESMOS ovos.
+# =====================================================================
+
+
+def _json_personalidade() -> str:
+    return json.dumps({"temperamento": asdict(_config.CONFIG_TEMPERAMENTO), "vinculo": asdict(_config.CONFIG_VINCULO),
+                       "obediencia": asdict(_config.CONFIG_OBEDIENCIA), "desejo": asdict(_config.CONFIG_DESEJO)},
+                      sort_keys=True, default=list)
+
+
+@dataclass(frozen=True)
+class ProtocoloPersonalidade(ProtocoloMemoriaEspacos):
+    temperamento_neutro: Campo
+    obediencia_desligada: Campo
+    personalidade: Campo
+
+    def validar(self) -> None:
+        super().validar()
+        for nome in ("temperamento_neutro", "obediencia_desligada"):
+            if not isinstance(self.v(nome), bool):
+                raise ValueError(f"{nome} precisa ser booleano")
+        if self.v("personalidade") != _json_personalidade():
+            raise ValueError("configs de personalidade do protocolo diferem de config.py")
+
+
+OVOS_PERSONALIDADE = (101, 202, 303, 404, 505, 606, 707, 808, 909, 1010)
+
+
+def _protocolo_personalidade(versao: str, neutro: bool, desligada: bool) -> ProtocoloPersonalidade:
+    campos = _campos_v1()
+    campos["sementes_coorte"] = Campo(OVOS_PERSONALIDADE, _P, "10 ovos (sementes do ovo e do ambiente), os mesmos em "
+                                      "todos os bracos e nas tres variantes: decomposicao ovo x braco")
+    return ProtocoloPersonalidade(
+        versao=versao, **campos, memoria=_campo_memoria_espacos(),
+        temperamento_neutro=Campo(neutro, _P, "todos os eixos do temperamento em 0 (reproduz a memoria por espacos)"),
+        obediencia_desligada=Campo(desligada, _P, "p de obedecer = 1 sempre (rng_obediencia nunca usada)"),
+        personalidade=Campo(_json_personalidade(), _P, "ConfigTemperamento, ConfigVinculo, ConfigObediencia, ConfigDesejo"),
+    )
+
+
+PROTOCOLO_ARENA_V1_PERSONALIDADE = _protocolo_personalidade("arena-v1-personalidade", False, False)
+PROTOCOLO_ARENA_V1_PERSONALIDADE_NEUTRO = _protocolo_personalidade("arena-v1-personalidade-neutro", True, False)
+PROTOCOLO_ARENA_V1_PERSONALIDADE_SEM_OBEDIENCIA = _protocolo_personalidade("arena-v1-personalidade-sem-obediencia",
+                                                                         False, True)
+for _p in (PROTOCOLO_ARENA_V1_PERSONALIDADE, PROTOCOLO_ARENA_V1_PERSONALIDADE_NEUTRO,
+           PROTOCOLO_ARENA_V1_PERSONALIDADE_SEM_OBEDIENCIA):
+    PROTOCOLOS[_p.versao] = _p

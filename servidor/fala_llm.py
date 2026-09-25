@@ -21,7 +21,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-from digilab.expressao import ACOES_COMBATE, ACOES_VIDA, ESTAGIOS, FATORES, _texto_fator, expressar
+from digilab.expressao import ACOES_COMBATE, ACOES_VIDA, ESTAGIOS, FATORES, expressar
 from digilab.motivo import Motivo, nome_base
 
 # mais barato e rapido (decisao do pesquisador, 2026-09-24); --modelo troca
@@ -29,7 +29,17 @@ MODELO_PADRAO = "claude-haiku-4-5"
 MODELOS_COM_FALLBACK = {"claude-opus-5", "claude-fable-5-1"}
 # fala-v2 (2026-09-24, apos a avaliacao C6 da v1): o adolescente recebe so o primeiro fator
 # (so ele pode ser citado) e o exemplo sem fator inclui "não sei" (a regra 2 ja exigia)
-VERSAO_PROMPT = "fala-v2"
+# fala-v3 (2026-09-24): na v2 o adulto copiava o exemplo em 68 de 88 falas aprovadas; o pedido
+# manda dizer com as proprias palavras, com enfeite e personalidade (pedido do Matheus), e a
+# temperatura do Ollama sobe de 0,3 para 0,7; o humor do pet vira o "tom" da frase
+# fala-v4 (2026-09-25): na v3 falas APROVADAS inventavam causa por sinonimo. A LLM passa a gerar
+# so a moldura (abertura e fecho, no tom do humor); o miolo e sempre a frase de expressao.py
+# fala-v5 (2026-09-25): na v4 o qwen entrava em loop de carinhas (67/200 cortadas por tamanho) e
+# quase nunca abria a fala. Abertura obrigatoria com exemplos por tom, limite de caracteres no
+# esquema do Ollama, penalidade de repeticao e carinhas repetidas colapsadas
+# fala-v6 (2026-09-25): na v5 a abertura vinha vazia quase sempre (60/199 falas sem moldura);
+# o esquema do Ollama passa a exigir abertura com pelo menos 2 caracteres
+VERSAO_PROMPT = "fala-v6"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
 LIMITE_POR_MINUTO = 30
@@ -39,8 +49,9 @@ URL_OLLAMA_PADRAO = "http://localhost:11434"
 TIMEOUT_OLLAMA_S = 10.0
 TIMEOUT_AQUECIMENTO_S = 90.0     # primeira chamada carrega o modelo na GPU
 MANTER_OLLAMA = "30m"            # quanto tempo o modelo fica carregado entre falas
-TEMPERATURA_OLLAMA = 0.3         # baixa: menos invencao
-MAX_TOKENS_OLLAMA = 120
+TEMPERATURA_OLLAMA = 0.7         # 0,3 -> 0,7 na fala-v3: com 0,3 o modelo copiava o exemplo
+MAX_TOKENS_OLLAMA = 60
+REPETICAO_OLLAMA = 1.5           # penaliza o loop de carinhas
 MAX_TOKENS_SAIDA = 300          # fala curta; limita o pior caso de cada chamada
 LIMITE_USD_PADRAO = 2.00        # teto TOTAL acumulado (decisao do pesquisador, 2026-09-24)
 ARQUIVO_GASTO = Path(__file__).with_name("gasto_fala.json")   # fora do git
@@ -135,28 +146,40 @@ def custo_usd(modelo: str, tokens_entrada: int, tokens_saida: int) -> float:
     pin, pout = PRECOS_USD_POR_MTOK[modelo]
     return (tokens_entrada * pin + tokens_saida * pout) / 1_000_000
 
-SISTEMA = """Você é a voz de um pet virtual (um pequeno monstro digital) falando com o dono, em português do Brasil, em primeira pessoa.
+SISTEMA = """Você dá personalidade à fala de um pet virtual (um pequeno monstro digital) que fala com o dono, em português do Brasil.
 
-Você recebe o MOTIVO registrado de uma decisão que o pet já tomou e deve dizer essa decisão com naturalidade e personalidade.
+A frase do meio ("frase") já está pronta e é a verdade: diz o que o pet fez e, se houver, por quê. Você NÃO reescreve a frase. Você só cria a moldura em volta dela:
+- "abertura" (OBRIGATÓRIA, 1 a 3 palavras): o que o pet diz ANTES da frase: interjeição, onomatopeia ou chamamento.
+- "fecho" (opcional, no máximo UMA carinha ou reação curta): o que ele diz DEPOIS.
+
+O campo "tom" manda no jeito. Exemplos (varie, não repita sempre o mesmo):
+- "rabugento": abertura "Hmpf...", "Tsc!", "Aff...", "Grr!", "Ai ai..."; fecho ">_<", "-_-", "T_T", "hmpf".
+- "neutro": abertura "Hm.", "Ei!", "Olha só:", "Então tá:", "Nhac!"; fecho "^^", "o_o", "hm".
+- "animado": abertura "Eba!", "Uhuu!", "Yay!", "Oba, oba!", "Pow!"; fecho "^_^", "\\o/", ":D", "hehe!".
 
 Regras que não podem ser quebradas:
-1. Só cite como causa os fatores listados em "fatores" do motivo, com o sentido dado em "significado_dos_fatores". Nunca acrescente outra causa, sentimento-causa, lembrança ou justificativa que não esteja ali.
-2. Se "fatores" estiver vazio ou "exploracao" for verdadeiro, diga que não sabe o porquê (use as palavras "não sei") e não sugira nenhuma causa.
-3. Estágio "adolescente": um fragmento curto de até 6 palavras, citando no máximo o primeiro fator. Estágio "adulto": uma frase, citando no máximo dois fatores.
-4. Só mencione números de evento ou turno que estejam em "evento_ref"; não invente outros números.
-5. Em "fatores_citados", liste exatamente os nomes (como aparecem em "fatores") dos fatores que sua frase menciona.
-
-O "exemplo" mostra uma forma válida de dizer o mesmo motivo; você pode variar o jeito, não o conteúdo."""
+1. A moldura nunca explica nada: sem "porque", "por causa", "pois", "já que", "então", "por isso", sem motivo, lembrança ou sentimento-causa.
+2. Sem números.
+3. Não repita palavras da frase do meio e não fale de fome, sono, cansaço, higiene, saúde, sujeira, hora, distância, guts, vida ou do oponente.
+4. Pode deixar abertura ou fecho vazios ("")."""
 
 ESQUEMA = {
     "type": "object",
-    "properties": {
-        "texto": {"type": "string"},
-        "fatores_citados": {"type": "array", "items": {"type": "string"}},
-    },
-    "required": ["texto", "fatores_citados"],
+    "properties": {"abertura": {"type": "string"}, "fecho": {"type": "string"}},   # Ollama: + maxLength
+    "required": ["abertura", "fecho"],
     "additionalProperties": False,
 }
+
+MAX_PALAVRAS_MOLDURA = 4
+MAX_CHARS_MOLDURA = 40
+MIN_CHARS_ABERTURA = 2           # so no esquema do Ollama: abertura vazia deixava a fala sem personalidade
+# conectivos de causa e palavras que abririam espaco para explicar a decisao
+_CAUSAIS = ("porque", "por que", "por causa", "pois", "já que", "ja que", "então", "entao", "por isso", "devido",
+            "motivo", "razão", "razao", "culpa", "graças", "gracas", "senão", "senao", "pra ", "para ")
+# temas das causas (tambem cobre sinonimos comuns dos marcadores)
+_TEMAS = ("fome", "comi", "comer", "sono", "dormi", "cansa", "energia", "higien", "suj", "saúde", "saude", "doente",
+          "hora", "dia", "noite", "distân", "distan", "perto", "longe", "guts", "vida", "machuc", "ferid", "fraco",
+          "oponente", "você", "voce", "turno", "evento", "lembr", "humor", "triste", "feliz", "bravo", "raiva")
 
 
 class FalaReprovada(ValueError):
@@ -245,65 +268,77 @@ def template(motivo: Motivo, estagio: str, humor: float | None) -> str:
 # ------------------------------------------------------------ pedido
 
 
-def _significado(fator: str) -> str:
-    """Texto permitido do fator: a frase do adulto da tabela da A3, com os parametros preenchidos."""
-    return _texto_fator(fator, "adulto")
+def tom_do_humor(humor: float | None) -> str:
+    """Faixas iguais as do cache e do emote do bebe (0,33 / 0,66). Sem humor: neutro."""
+    if humor is None:
+        return "neutro"
+    return "animado" if humor >= .66 else "neutro" if humor >= .33 else "rabugento"
 
 
 def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
+    """fala-v4: a LLM so ve a acao, o estagio, o tom e a frase pronta (a verdade). Nao ve fatores:
+    nao tem o que inventar nem o que citar."""
     acoes = ACOES_VIDA if motivo.origem == "vida" else ACOES_COMBATE
-    exemplo = template(motivo, estagio, humor)
-    sem_fator = motivo.exploracao or not motivo.fatores
-    if estagio == "adolescente":
-        # so o primeiro fator pode ser citado: e so ele que a LLM recebe (dizer menos e permitido)
-        motivo = Motivo(motivo.origem, motivo.acao, motivo.fatores[:1], motivo.evento_ref, motivo.intensidade,
-                        motivo.exploracao, tick=motivo.tick, turno=motivo.turno)
-        if sem_fator:
-            exemplo = f"{exemplo.strip()} não sei"
     carga = {
         "contexto": "vida do pet" if motivo.origem == "vida" else "luta na arena",
         "estagio": estagio,
         "acao": acoes[motivo.acao][2],
-        "fatores": list(motivo.fatores) if not motivo.exploracao else [],
-        "significado_dos_fatores": {f: _significado(f) for f in motivo.fatores} if not motivo.exploracao else {},
-        "evento_ref": list(motivo.evento_ref),
-        "tipo_de_referencia": "evento do registro" if motivo.origem == "vida" else "turno da luta",
-        "exploracao": motivo.exploracao,
-        "humor": None if humor is None else round(humor, 2),
-        "exemplo": exemplo,
+        "tom": tom_do_humor(humor),
+        "frase": template(motivo, estagio, humor),
     }
     return json.dumps(carga, ensure_ascii=False, sort_keys=True)
 
 
-# ------------------------------------------------------------ validacao (C4)
-
-_NUM = re.compile(r"\d+")
+# ------------------------------------------------------------ validacao da moldura (C4, fala-v4)
 
 
-def validar(texto: str, citados: list[str], motivo: Motivo, estagio: str) -> None:
-    fatores = [] if motivo.exploracao else list(motivo.fatores)
-    if not texto.strip():
-        raise FalaReprovada("texto vazio")
-    if not set(citados) <= set(fatores):
-        raise FalaReprovada(f"cita fatores fora do motivo: {sorted(set(citados) - set(fatores))}")
-    limite = 1 if estagio == "adolescente" else 2
-    if len(set(citados)) > limite:
-        raise FalaReprovada(f"cita {len(set(citados))} fatores; o estagio {estagio} permite {limite}")
-    if estagio == "adolescente" and fatores and set(citados) - {fatores[0]}:
-        raise FalaReprovada("adolescente so pode citar o primeiro fator")
-    baixo = texto.lower()
-    presentes = {nome_base(f) for f in fatores}
-    for nome, e in FATORES.items():
-        if nome not in presentes and e["marcador"].lower() in baixo:
-            raise FalaReprovada(f"texto usa o marcador de um fator ausente: {nome}")
-    if not fatores and "não sei" not in baixo:
-        raise FalaReprovada("motivo sem fator precisa dizer que nao sabe o porque")
-    permitidos = {str(r) for r in motivo.evento_ref}
-    for f in fatores:
-        permitidos |= set(_NUM.findall(_significado(f)))
-    estranhos = set(_NUM.findall(texto)) - permitidos
-    if estranhos:
-        raise FalaReprovada(f"numeros fora do evento_ref/fatores: {sorted(estranhos)}")
+def validar_moldura(abertura, fecho) -> tuple[str, str]:
+    """A moldura so pode enfeitar: curta, sem numero, sem conectivo de causa, sem marcador de
+    fator e sem tema de causa. Devolve (abertura, fecho) limpos ou levanta FalaReprovada."""
+    saida = []
+    marcadores = [e["marcador"].lower() for e in FATORES.values()]
+    for rotulo, parte in (("abertura", abertura), ("fecho", fecho)):
+        if not isinstance(parte, str):
+            raise FalaReprovada(f"{rotulo} nao e texto")
+        parte = " ".join(parte.split())
+        baixo = f" {parte.lower()} "
+        if len(parte) > MAX_CHARS_MOLDURA or len(parte.split()) > MAX_PALAVRAS_MOLDURA:
+            raise FalaReprovada(f"{rotulo} longa demais: {parte!r}")
+        if re.search(r"\d", parte.replace(":3", "")):     # ":3" e carinha, nao numero
+            raise FalaReprovada(f"{rotulo} com numero: {parte!r}")
+        for c in _CAUSAIS:
+            if c in baixo:
+                raise FalaReprovada(f"{rotulo} com conectivo de causa ({c.strip()!r}): {parte!r}")
+        for m in marcadores:
+            if m in baixo:
+                raise FalaReprovada(f"{rotulo} usa o marcador de um fator: {parte!r}")
+        for tema in _TEMAS:
+            if tema in baixo:
+                raise FalaReprovada(f"{rotulo} fala de um tema de causa ({tema!r}): {parte!r}")
+        saida.append(_sem_repeticao(parte))
+    return saida[0], saida[1]
+
+
+def _sem_repeticao(parte: str) -> str:
+    """Colapsa palavras repetidas em sequencia ('^_^ ^_^ ^_^' -> '^_^'): so estetica."""
+    out: list[str] = []
+    for w in parte.split():
+        if not out or w != out[-1]:
+            out.append(w)
+    return " ".join(out)
+
+
+def _com_limite(esquema: dict) -> dict:
+    """Ollama (gramatica do llama.cpp): limite de caracteres em cada campo de texto do esquema."""
+    props = {k: ({**v, "maxLength": MAX_CHARS_MOLDURA} if v.get("type") == "string" else v)
+             for k, v in esquema["properties"].items()}
+    if "abertura" in props:
+        props["abertura"] = {**props["abertura"], "minLength": MIN_CHARS_ABERTURA}
+    return {**esquema, "properties": props}
+
+
+def compor(abertura: str, frase: str, fecho: str) -> str:
+    return " ".join(x for x in (abertura, frase.strip(), fecho) if x)
 
 
 # ------------------------------------------------------------ provedores
@@ -414,10 +449,11 @@ class ProvedorOllama:
         corpo = {
             "model": self.modelo,
             "messages": [{"role": "system", "content": sistema}, {"role": "user", "content": pedido}],
-            "format": esquema,
+            "format": _com_limite(esquema),
             "stream": False,
             "keep_alive": MANTER_OLLAMA,
-            "options": {"temperature": TEMPERATURA_OLLAMA, "seed": semente, "num_predict": MAX_TOKENS_OLLAMA},
+            "options": {"temperature": TEMPERATURA_OLLAMA, "seed": semente, "num_predict": MAX_TOKENS_OLLAMA,
+                        "repeat_penalty": REPETICAO_OLLAMA},
         }
         d = self._pedir("/api/chat", corpo, self.timeout if self.aquecido else TIMEOUT_AQUECIMENTO_S)
         self.aquecido = True
@@ -434,6 +470,7 @@ class Resultado:
     texto: str
     fonte: str            # "llm" | "template"
     detalhe: str = ""     # provedor/modelo, ou motivo da queda para o template
+    bruto: str = ""       # texto que a LLM propôs quando foi reprovada (só avaliação; não vai à página)
 
     def para_dict(self) -> dict:
         return {"texto": self.texto, "fonte": self.fonte, "detalhe": self.detalhe}
@@ -473,9 +510,9 @@ class GeradorFala:
             self._chamadas.append(agora)
             return True
 
-    def _modelo_de_frase(self, motivo, estagio, humor, detalhe) -> Resultado:
+    def _modelo_de_frase(self, motivo, estagio, humor, detalhe, bruto: str = "") -> Resultado:
         self.estatisticas["template"] += 1
-        return Resultado(template(motivo, estagio, humor), "template", detalhe)
+        return Resultado(template(motivo, estagio, humor), "template", detalhe, bruto)
 
     def gerar(self, motivo: Motivo, estagio: str, humor: float | None = None) -> Resultado:
         if estagio not in ESTAGIOS:
@@ -512,13 +549,18 @@ class GeradorFala:
         if not r.completa:
             self.estatisticas["erros"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"resposta interrompida: {r.motivo_parada}")
+        # o modelo as vezes devolve surrogate solto (UTF-8 invalido): troca por "?" antes de tudo,
+        # senao a resposta do servidor (e o artefato da avaliacao) quebra ao codificar
+        texto = r.texto.encode("utf-8", "replace").decode("utf-8")
         try:
-            dados = json.loads(r.texto)
-            validar(dados["texto"], dados["fatores_citados"], motivo, estagio)
+            dados = json.loads(texto)
+            limpo = lambda s: s.encode("utf-8", "replace").decode("utf-8") if isinstance(s, str) else s  # noqa: E731
+            abertura, fecho = validar_moldura(limpo(dados["abertura"]), limpo(dados["fecho"]))
         except (FalaReprovada, KeyError, TypeError, json.JSONDecodeError) as err:
             self.estatisticas["reprovadas"] += 1
-            return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}")
-        res = Resultado(dados["texto"].strip(), "llm", f"{self.provedor.nome}: {r.modelo}")
+            return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}", texto)
+        res = Resultado(compor(abertura, template(motivo, estagio, humor), fecho), "llm",
+                        f"{self.provedor.nome}: {r.modelo}")
         self.estatisticas["llm"] += 1
         with self._trava:
             self._cache[chave] = res

@@ -198,6 +198,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       <div class="tempo" role="group" aria-label="Velocidade do tempo">
         <span class="lbl">TEMPO</span>
         <button class="chip" id="v0" data-vel="0" aria-pressed="false">Pausa</button>
+        <button class="chip" id="v1x" data-vel="0.016666666666666666" aria-pressed="false" title="tempo real: 1 minuto do pet = 1 minuto do relógio">1x</button>
         <button class="chip" id="v1" data-vel="10" aria-pressed="true">10 min/s</button>
         <button class="chip" id="v2" data-vel="60" aria-pressed="false">1 h/s</button>
         <button class="chip" id="v3" data-vel="360" aria-pressed="false">6 h/s</button>
@@ -2094,7 +2095,8 @@ function narrar(A, B, tr){
   const extra = [tr.interr[0] && "seu pesado foi interrompido", tr.interr[1] && "o pesado do rival foi interrompido",
     tr.errou[0] && "seu pesado errou", tr.errou[1] && "o pesado do rival errou"].filter(Boolean);
   $("arena-res").textContent = `Turno ${tr.t}: ${NOME_V2[tr.a]} × ${NOME_V2[tr.b]}` + ([dano, dano2, ...extra].filter(Boolean).length ? " · " + [dano, dano2, ...extra].filter(Boolean).join(", ") : " · ninguém se machuca");
-  const llm = falaLLM(motivoParaApi(ma), A.estagioFala, null, d => {
+  /* o tom da fala do seu pet na luta segue o humor dele na vida */
+  const llm = falaLLM(motivoParaApi(ma), A.estagioFala, motor.e.humor, d => {
     const el = document.querySelector(`#arena-fala [data-turno="${tr.t}"]`);
     if (el && d.fonte === "llm") el.textContent = "✦ " + d.texto;
   });
@@ -2411,10 +2413,15 @@ $("cen-voltar").addEventListener("click", () => {
 try { if (localStorage.getItem(CHAVE + "-anterior")) $("cen-voltar").hidden = false; } catch(_){}
 
 /* ------------------------------------------------ laco */
-let ultimoSalvo = 0;
+let ultimoSalvo = 0, ultimoLaco = performance.now();
+/* o tempo do pet anda pelo tempo REAL decorrido (nao pela contagem de execucoes): no 1x, 1 min
+   de jogo = 1 min de relogio, mesmo com a aba em segundo plano (o navegador desacelera os
+   timers). Salto maximo de 1 h real por execucao, para nao travar depois de um sono do PC. */
 setInterval(() => {
+  const agora = performance.now(), dt = Math.min(3600, (agora - ultimoLaco) / 1000);
+  ultimoLaco = agora;
   if (nascendo > 0 || velocidade === 0) return;
-  acumulado += velocidade / 10;
+  acumulado += velocidade * dt;
   const n = Math.floor(acumulado);
   if (n > 0){ acumulado -= n; motor.avancar(n); renderTudo();
     if (performance.now() - ultimoSalvo > 2000){ salvar(); ultimoSalvo = performance.now(); } }

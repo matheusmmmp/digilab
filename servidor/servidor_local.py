@@ -111,6 +111,15 @@ class Tratador(SimpleHTTPRequestHandler):
             return True
         return False
 
+    def handle(self) -> None:
+        # cliente que fecha a conexao antes da resposta (aba fechada, tunel que cancela) e normal:
+        # uma linha no log em vez de traceback; a pagina ja mostrou a frase pronta
+        try:
+            super().handle()
+        except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError) as err:
+            self.close_connection = True
+            print(f"  cliente desconectou antes da resposta ({type(err).__name__})", flush=True)
+
     def _json(self, codigo: int, dados: dict) -> None:
         corpo = json.dumps(dados, ensure_ascii=False).encode("utf-8")
         self.send_response(codigo)
