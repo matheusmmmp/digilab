@@ -246,3 +246,14 @@ Interpretações (tudo PROPOSTO):
   no relatório).
 - Web (`digilab_sprites.html`, pets v2): emoção por evento de memória mostrada na aba Aprendizado e
   limiar 0,2 no tom; habituação não entrou na web (no Python ela é desligada por padrão).
+
+## 2026-09-25 — treino no jogo web antes de fechar o Python (pedido do Matheus)
+
+O Matheus pediu o treino na web já ("quero treinar agora"), antes das runs da TAREFA_TREINO_SOMBRIO.
+A web espelha o que está no Python até aqui (ConfigTreino com a sobrecarga por forçada calibrada
+15 → 25; ConfigSombrio; passivas sombrias). Diferenças da web: fadiga e sobrecarga integradas tick a
+tick (o Python integra nas decisões); estágio do treino = estágio da evolução da web (o adulto exige
+sparring); pets v1 também treinam, mas sem obediência nem vínculo (os v2 enrolam pela obediência e o
+forçar derruba o vínculo); a forma sombria usa o sprite da forma normal de estilo mais próximo com
+tinta escura; na arena contra bots os stats treinados são normalizados, na campanha contra NPCs valem
+inteiros. Se as runs do Python mudarem números, a web é corrigida depois.
