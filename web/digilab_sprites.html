@@ -127,6 +127,10 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .log .dono{color:var(--accent)}
 .log .t{color:var(--muted)}
 .resultado{font-weight:700}
+.campanha{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:8px}
+.desafio{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.desafio.bloq{opacity:.55}
+.desafio .st{font-size:.85em;font-weight:700}
 .cenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
 .cen{font:inherit;text-align:left;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;display:grid;gap:4px}
 .cen b{font-size:14px}
@@ -282,6 +286,11 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <p class="resultado" id="arena-res">Escolha um rival e aperte Lutar.</p>
         <div class="arena-fala" id="arena-fala" aria-live="polite"></div>
+        <div>
+          <h2>Campanha</h2>
+          <p class="muted" style="margin-top:4px">Três desafios em sequência; o próximo só abre depois de vencer o anterior. Os NPCs têm stats iguais em todos os atributos (somando mais que um pet), são adultos e lutam com um estilo fixo. As lutas entram no registro e ensinam os gambits. O balanceamento ainda não foi calibrado.</p>
+          <div class="campanha" id="campanha"></div>
+        </div>
         <div>
           <h2>Gambits do seu pet</h2>
           <div id="gambits" style="margin-top:6px"></div>
@@ -745,10 +754,15 @@ class Motor {
     this.motivos = []; this.motivo = null; this.nDono = 0;
     /* gambits hibridos (so na web): nascem na evolucao, aprendem com lutas do log */
     this.gp = null;
+    /* campanha: vitorias por desafio (derivadas das lutas do registro) */
+    this.campanha = Object.fromEntries(CAMPANHA.map(c => [c.k, 0]));
   }
+  /* desafio da campanha aberto: o primeiro sempre; os outros depois de vencer o anterior */
+  desafioAberto(k){ const i = CAMPANHA.findIndex(c => c.k === k); return i === 0 || (i > 0 && this.campanha[CAMPANHA[i - 1].k] > 0); }
   /* luta contra bot: entra no registro (rival + semente) e ensina os gambits */
   lutar(rival, semente){
     if (!NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
+    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença ${CAMPANHA[NPC[rival].tier - 2].nome} antes`);
     this.log.push([this.e.tick, "l", {r:rival, s:semente}]);
     return this._lutar(rival, semente);
   }
@@ -756,6 +770,7 @@ class Motor {
     const A = lutadorPet(this, "Seu pet"), B = lutadorBot(rival), res = jogarV2(A, B, semente);
     if (this.gp) this.gp.aprender(res, semente);
     if (this.estagioAtual === "adolescente") this.sparring++;
+    if (NPC[rival] && res.pontosA === 1) this.campanha[rival]++;
     this._hist({t:this.e.tick, quem:"luta", a:`contra ${NOME_BOT[rival]}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}`});
     return {res, A, B};
   }
@@ -862,7 +877,7 @@ class Motor {
   /* caráter travado na ultima evolucao que o mediu (adolescente/adulto); antes disso, neutro */
   carater(){ const ev = [...this.evolucoes].reverse().find(x => x.carater); return ev ? ev.carater : null; }
   _hist(x){ this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
-  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null]); }
+  assinatura(){ return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha]); }
   static reproduzir(semente, log){
     const m = new Motor(semente);
     for (const [t, tipo, v] of log){
@@ -1111,6 +1126,16 @@ function perfilNeutro(){
   return {est:"adulto", tecnica:null, passiva:null, stats:Object.fromEntries(STATS.map(k => [k, 10])),
     hpMax:CV21.hpBase + 10*CV21.hpVigor, guts0:CV21.g0Base + 10*CV21.g0Folego, gutsMax:CV21.gMaxBase + 10*CV21.gMaxFolego,
     regen:CV21.regenBase + 10*CV21.regenRec, mPerto:1, mDisparo:1, mGuarda:1};
+}
+/* NPC da campanha: mesma conversao de perfilDe com stats uniformes (campanha.perfil_de_stats) */
+function perfilNPC(total){
+  const v = total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])), est = CAT.estagio.adulto,
+    gMax = (CV21.gMaxBase + CV21.gMaxFolego * v) * est;
+  return {est:"adulto", tecnica:null, passiva:null, stats:s,
+    hpMax:(CV21.hpBase + CV21.hpVigor * v) * est, guts0:Math.min(gMax, (CV21.g0Base + CV21.g0Folego * v) * est),
+    gutsMax:gMax, regen:CV21.regenBase + CV21.regenRec * v,
+    mPerto:CV21.multBase + CV21.multPonto * v, mDisparo:CV21.multBase + CV21.multPonto * v,
+    mGuarda:CV21.guardaBase - CV21.guardaPonto * v};
 }
 /* carater dos bots da bateria: eixo da linha +0,5 e complementar +-0,25 com o sinal da forma */
 function caraterCanonico(forma){
@@ -1365,8 +1390,18 @@ const CRIANCA_V21 = {
   arisco:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg([D0, GA_(20)],"golpe_rapido")], final:"carregar"},
 };
 [...Object.values(BOTS_V2), ...Object.values(BOTS_V21), ...Object.values(ADOL_V21), ...Object.values(CRIANCA_V21)].forEach(validarLista);
+/* campanha (espelho de ConfigCampanha / campanha.py): NPC = stats uniformes (total / 6), adulto,
+   sem tecnica nem passiva, gambits de um bot da bateria V2; sem renormalizar ao orcamento da especie.
+   Cada desafio so abre depois de vencer o anterior. Balanceamento ainda nao calibrado. */
+const CAMPANHA = [
+  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:72, estilo:"agressivo", sugerido:"criança"},
+  {k:"npc_tier2_sentinela", nome:"Sentinela", total:80, estilo:"contragolpe", sugerido:"adolescente"},
+  {k:"npc_tier3_soberano", nome:"Soberano", total:90, estilo:"adaptativo", sugerido:"adulto"},
+];
+const NPC = Object.fromEntries(CAMPANHA.map((c, i) => [c.k, {...c, tier:i + 1}]));
 const NOME_BOT = {aleatorio:"aleatório", agressivo:"agressivo", tartaruga:"tartaruga", atirador:"atirador",
-  contragolpe:"contragolpe", adaptativo:"adaptativo", oraculo:"oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]]))};
+  contragolpe:"contragolpe", adaptativo:"adaptativo", oraculo:"oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
+  ...Object.fromEntries(CAMPANHA.map(c => [c.k, c.nome]))};
 /* rivais V2.1: cada forma adulta com uma especie fixa (para variar os sprites) e o carater canonico */
 const RIVAL_ESPECIE = {duelista:"brasa", furioso:"ferrugem", espelho:"limo", muralha:"ferrugem", sentinela:"cirro", emboscador:"cirro", vigia:"limo", tita:"brasa"};
 const formaRival = nome => ({esp:RIVAL_ESPECIE[nome], est:"adulto", ramo:"sereno", linha:LINHA_DA_FORMA[nome], adulta:nome});
@@ -1375,6 +1410,7 @@ const BOT_SPRITE = {aleatorio:"bebe", agressivo:"adulto_golpe", tartaruga:"adult
 const BOT_TRACO = {aleatorio:"golpe", agressivo:"golpe", tartaruga:"bloqueio", atirador:"finta", contragolpe:"agarrao", adaptativo:"carga", oraculo:"carga"};
 const copiarGambits = g => JSON.parse(JSON.stringify(g));
 const estiloBot = nome => nome === "oraculo" ? {nome, oraculo:true, eps:CV.eps}
+  : NPC[nome] ? {nome, gambits:copiarGambits(BOTS_V2[NPC[nome].estilo]), eps:CV.eps}
   : {nome, gambits:copiarGambits(BOTS_V2[nome] || BOTS_V21[nome]), eps: nome === "aleatorio" ? 1 : CV.eps};
 
 /* estilo do pet (so na web): cada evolucao semeia os gambits (ramo da crianca, linha do
@@ -1970,6 +2006,9 @@ function lutadorPet(m, rotulo){
           grade:gradeDe(m.estagioAtual), cor:corForma(m), estagioFala:estagioFala(m)};
 }
 function lutadorBot(nome){
+  const n = NPC[nome];
+  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total), sprite:BOT_SPRITE[n.estilo],
+                 grade:"adulto", cor:BOT_TRACO[n.estilo], estagioFala:"adulto"};
   if (BOTS_V21[nome]){
     const f = formaRival(nome);
     return {nome:"Rival " + nomeForma(f), estilo:estiloBot(nome), cond:perfilDe(f, caraterCanonico(nome)), sprite:chaveSprite(f),
@@ -2082,12 +2121,22 @@ function prepararRival(){
 }
 function arenaPreview(){
   const A = lutadorPet(motor, "Seu pet"), B = prepararRival(), E = estadoV2(A.cond, B.cond);
-  desenharArenaV2(A, B, E, null); setBarras(E);
+  desenharArenaV2(A, B, E, null); setBarras(E); renderCampanha();
   const pa = A.cond, extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(", ");
   $("arena-estilo").textContent = `Seu pet: ${nomeForma(motor.forma)}, vida ${pa.hpMax.toFixed(0)}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; gambits semeados por ${NOME_BOT[A.estilo.base] || A.estilo.base} · rival: ${B.estilo.oraculo ? "oráculo (referência fora dos gambits)" : B.nome.replace("Rival ", "")}.`;
 }
 let lutando = false;
-function travar(v){ lutando = v; $("lutar").disabled = v; $("melhor10").disabled = v; }
+function travar(v){ lutando = v; $("lutar").disabled = v; $("melhor10").disabled = v; renderCampanha(); }
+function renderCampanha(){
+  $("campanha").innerHTML = CAMPANHA.map((c, i) => {
+    const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k);
+    const st = vit ? `vencido (${vit}×)` : aberto ? "aberto" : `bloqueado: vença ${CAMPANHA[i - 1].nome}`;
+    return `<div class="desafio${aberto ? "" : " bloq"}"><b>${i + 1}. ${c.nome}</b>
+      <span class="muted">stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total}) · estilo ${c.estilo} · sugerido: ${c.sugerido}</span>
+      <span class="st">${st}</span>
+      <button class="sbtn${vit ? " sec" : ""}" data-npc="${c.k}"${aberto && !lutando ? "" : " disabled"}>Desafiar</button></div>`;
+  }).join("");
+}
 function narrar(A, B, tr){
   const ma = motivoCombate(tr, 0, A.estilo), mb = motivoCombate(tr, 1, B.estilo);
   const fa = expressar(ma, A.estagioFala, ma.refs), fb = expressar(mb, B.estagioFala, mb.refs);
@@ -2104,14 +2153,21 @@ function narrar(A, B, tr){
   $("arena-fala").innerHTML = `<div><b>Seu pet</b> <span class="muted">(${NOME_ESTAGIO_FALA[A.estagioFala]})</span>: <span data-turno="${tr.t}"></span></div><div><b>${B.nome}</b>: ${fb}</div>`;
   document.querySelector(`#arena-fala [data-turno="${tr.t}"]`).textContent = textoPet;
 }
-$("lutar").addEventListener("click", () => {
+$("lutar").addEventListener("click", () => lutarAnimado(null));
+$("campanha").addEventListener("click", ev => {
+  const b = ev.target.closest("button[data-npc]");
+  if (b) lutarAnimado(b.dataset.npc);
+});
+/* npc != null: desafio da campanha (ignora o seletor e o pet de cenario) */
+function lutarAnimado(npc){
   if (lutando) return; travar(true);
   let A, B, res;
+  const cenario = rivalFixo && !npc;
   try {
-    if (rivalFixo){   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
+    if (cenario){   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
       A = lutadorPet(motor, "Seu pet"); B = prepararRival(); res = jogarV2(A, B, hashSemente("cenario", motor.semente, motor.log.length));
     } else {
-      ({res, A, B} = motor.lutar($("rival").value, hashSemente("luta", motor.semente, motor.log.length)));
+      ({res, A, B} = motor.lutar(npc || $("rival").value, hashSemente("luta", motor.semente, motor.log.length)));
       salvar();
     }
   } catch(err){ $("arena-res").textContent = err.message; travar(false); return; }
@@ -2122,7 +2178,9 @@ $("lutar").addEventListener("click", () => {
     if (i >= res.turnos.length){
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
       $("arena-res").textContent = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
-        + (rivalFixo ? " (Contra pet de cenário o seu não aprende.)" : "");
+        + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "")
+        + (npc && res.pontosA === 1 && NPC[npc].tier < CAMPANHA.length && motor.campanha[npc] === 1 ? ` Desafio ${CAMPANHA[NPC[npc].tier].nome} liberado!` : "")
+        + (npc && res.pontosA === 1 && NPC[npc].tier === CAMPANHA.length && motor.campanha[npc] === 1 ? " Campanha concluída!" : "");
       travar(false); renderGambits(); return;
     }
     const tr = res.turnos[i++];
@@ -2130,7 +2188,7 @@ $("lutar").addEventListener("click", () => {
     setTimeout(passo, reduz ? 80 : 650);
   };
   passo();
-});
+}
 $("melhor10").addEventListener("click", () => {
   if (lutando) return; travar(true);
   try {
