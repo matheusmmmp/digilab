@@ -323,7 +323,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <div>
           <h2>Regras</h2>
-          <p class="muted" style="margin-top:4px">Os dois revelam a ação ao mesmo tempo. Golpe rápido (perto, 10 guts, 8 de dano) interrompe quem prepara o pesado. O pesado (perto, 15 guts) sai no turno seguinte com 25 de dano e não é interrompido; foge-se dele recuando no turno da preparação ou esquivando (20 guts) no da execução. Disparo (médio/longe, 20 guts, 6 de dano). Defender reduz o dano a 30% (pesado: 60%) e rende +5 guts; carregar rende +25 guts mas o dano recebido sobe 50%. Os danos, a vida, o guts e a defesa mudam com os stats da forma (aba Catálogo); as técnicas e passivas também estão lá. Após 40 turnos vence quem tem mais vida (proporcional). Os bots clássicos lutam com stats neutros.</p>
+          <p class="muted" style="margin-top:4px">Os dois revelam a ação ao mesmo tempo. Golpe rápido (perto, 10 guts, 8 de dano) interrompe quem prepara o pesado; defender contra golpe rápido devolve 5 (parry). O pesado (perto, 15 guts) sai no turno seguinte com 25 de dano e não é interrompido; foge-se dele recuando no turno da preparação ou esquivando (20 guts) no da execução. No turno de execução dá para <b>fintar</b> em vez de soltar o pesado: um golpe de 8 que acerta quem esquivou e não quebra a guarda. Disparo (médio/longe, 20 guts, 6 de dano). Defender reduz o dano a 30% (pesado: 60%) e rende +5 guts; carregar rende +25 guts mas o dano recebido sobe 50%. <b>Recuar não afasta se o oponente avança no mesmo turno</b> (avançar é ilegal de perto e recuar é ilegal de longe). A marca do caçador se perde se ele levar dano corpo a corpo ou terminar o turno de perto. A partir do turno 25 todo dano sobe 50% (morte súbita). Os danos, a vida, o guts e a defesa mudam com os stats da forma (aba Catálogo); as técnicas e passivas também estão lá. Após 40 turnos vence quem tem mais vida (proporcional). Os bots clássicos lutam com stats neutros.</p>
         </div>
       </div>
 
@@ -929,6 +929,7 @@ const FATORES_TXT = {
   oponente_frequente: F("você insiste", "porque você insiste em '{p0}'"),
   turno_execucao: F("luta longa", "porque já era uma luta longa (turno {p0} ou mais)"),
   oponente_vai_preparar: F("vi o pesado vindo", "porque vi o pesado vindo antes de você preparar"),
+  executando_pesado: F("hora do pesado", "porque era a hora do pesado"),
   /* memoria por espacos */
   demora: F("me deixou esperando", "porque lembro que você me deixou esperando"),
   bronca: F("repreensão", "porque lembro da sua repreensão"),
@@ -960,10 +961,11 @@ const ACOES_V2_TXT = {
   pesado:["[pesado!]","pesado!","Soltei o pesado que eu tinha preparado"],
   investida:["[investida]","investida","Investi"], contra_golpe:["[contra]","contra-golpe","Fiz o contra-golpe"],
   marcar:["[marcar]","marcar","Marquei você"], pele_dura:["[pele dura]","pele dura","Endureci a pele"],
+  fintar:["[finta]","finta","Fintei em vez de soltar o pesado"],
 };
 const REACAO_BEBE = { avancar:"(o_o)>", recuar:"<(o_o)", golpe_rapido:"(>_<)!", preparar_pesado:"(ò_ó)...", disparo:"(>_<)~",
   defender:"(-_-)#", esquivar:"(^o^)~", carregar:"(ò_ó)*", pesado:"(ò_ó)!!",
-  investida:"(ò_ó)>>", contra_golpe:"(ò_ó)|", marcar:"(o_o)+", pele_dura:"(-_-)[]" };
+  investida:"(ò_ó)>>", contra_golpe:"(ò_ó)|", marcar:"(o_o)+", pele_dura:"(-_-)[]", fintar:"(¬‿¬)!" };
 const EMOTE_HUMOR = ["(T_T)", "(-_-)", "(^_^)"];
 function validarTabelasFala(obrigatorios){
   const falta = obrigatorios.filter(f => !FATORES_TXT[f]);
@@ -1554,8 +1556,11 @@ const CV = { tMax:40,
   dano:{golpe_rapido:8, disparo:6, pesado:25},
   multDef:.3, multDefPesado:.6, multCarregar:1.5, gutsDef:5, gutsCarregar:25,
   eps:.05, maxRegras:8, maxCond:2, fracoes:[.25,.5,.75], guts:[20,40,60], ks:[2,3], janelaFreq:5, limiarFreq:.4,
-  pesoGutsOr:.002, pesoPendOr:.5 };
-const CV21 = { hpBase:70, hpVigor:3, g0Base:30, g0Folego:2, gMaxBase:80, gMaxFolego:2, regenBase:4, regenRec:.4,
+  pesoGutsOr:.002, pesoPendOr:.5,
+  /* base corrigida (V2C, TAREFA_CORRECAO_COMBATE): parry contra golpe rapido e morte subita */
+  parry:5, turnoMS:25, multMS:1.5 };
+/* V21C: vida por vigor 3 -> 2,5 (base 70 -> 75; vida neutra continua 100) contra a dominancia da Ferrugem */
+const CV21 = { hpBase:75, hpVigor:2.5, g0Base:30, g0Folego:2, gMaxBase:80, gMaxFolego:2, regenBase:4, regenRec:.4,
   multBase:.7, multPonto:.03, guardaBase:1.3, guardaPonto:.03,
   custo:{investida:20, contra_golpe:15, marcar:10, pele_dura:20},
   danoInvestida:8, parry:0, fracCG:.5, turnosMarca:3, multMarca:2, turnosPele:2, multPele:.5,
@@ -1698,11 +1703,12 @@ function caraterCanonico(forma){
 }
 
 const ACOES_V2 = ["avancar","recuar","golpe_rapido","preparar_pesado","disparo","defender","esquivar","carregar", ...TECNICAS];
-const ACOES_V2_OBS = [...ACOES_V2, "pesado"];
+/* V2C: fintar so existe no turno de execucao do pesado (alternativa a executar) */
+const ACOES_V2_OBS = [...ACOES_V2, "pesado", "fintar"];
 const DIST = ["perto","medio","longe"];
 const NOME_V2 = {avancar:"avançar", recuar:"recuar", golpe_rapido:"golpe rápido", preparar_pesado:"preparar pesado",
   disparo:"disparo", defender:"defender", esquivar:"esquivar", carregar:"carregar", pesado:"pesado",
-  investida:"investida", contra_golpe:"contra-golpe", marcar:"marcar", pele_dura:"pele dura"};
+  investida:"investida", contra_golpe:"contra-golpe", marcar:"marcar", pele_dura:"pele dura", fintar:"finta"};
 const custoV2 = a => CV.custo[a] ?? CV21.custo[a] ?? 0;
 
 function estadoV2(pa, pb){
@@ -1712,7 +1718,11 @@ function estadoV2(pa, pb){
 }
 function legalV2(E, lado, a){
   const eu = E.L[lado], p = eu.p, d = E.dist;
+  if (a === "fintar") return eu.prep;              /* V2C: so no turno de execucao do pesado */
   if (eu.prep || a === "pesado" || !ACOES_V2.includes(a)) return false;
+  /* V2C fuga condicionada: avancar ilegal em perto, recuar ilegal em longe */
+  if (a === "avancar" && d === 0) return false;
+  if (a === "recuar" && d === 2) return false;
   if (TECNICAS.includes(a) && p.tecnica !== a) return false;
   if (eu.guts < custoV2(a)) return false;
   if (a === "golpe_rapido" || a === "preparar_pesado") return d === 0;
@@ -1727,21 +1737,22 @@ function legalV2(E, lado, a){
   return true;
 }
 const legaisV2 = (E, lado) => ACOES_V2.filter(a => legalV2(E, lado, a));
-const CORPO_A_CORPO = ["golpe_rapido", "pesado", "investida"];
+const CORPO_A_CORPO = ["golpe_rapido", "pesado", "investida", "fintar"];
 function resolverV2(E, aa, ab){
   const ac = [aa, ab];
   for (const l of [0, 1]){
-    if (E.L[l].prep){ if (ac[l] !== "pesado") throw new Error(`lado ${l} está preparando e escolheu ${ac[l]}`); }
+    if (E.L[l].prep){ if (ac[l] !== "pesado" && ac[l] !== "fintar") throw new Error(`lado ${l} está preparando e escolheu ${ac[l]}`); }
     else if (!legalV2(E, l, ac[l])) throw new Error(`ação ilegal do lado ${l}: ${ac[l]}`);
   }
   const guts = [0, 1].map(l => E.L[l].guts - custoV2(ac[l]));
   const pele = [0, 1].map(l => ac[l] === "pele_dura" || E.L[l].pele > 0);
   const d0 = E.dist, dano = [0, 0], dev = [0, 0], interr = [false, false], errou = [false, false];
-  const marcaUsada = [false, false], parry = [false, false];
+  const marcaUsada = [false, false], parry = [false, false], recebeuCac = [false, false];
   for (const atk of [0, 1]){
     const alvo = 1 - atk, eu = E.L[atk], pa = eu.p, pal = E.L[alvo].p, a = ac[atk], r = ac[alvo];
     let bruto = 0;
     if (a === "golpe_rapido") bruto = CV.dano.golpe_rapido * pa.mPerto;
+    else if (a === "fintar"){ if (d0 === 0) bruto = CV.dano.golpe_rapido * pa.mPerto; }   /* acerta quem esquiva, nao quebra guarda */
     else if (a === "investida") bruto = CV21.danoInvestida * pa.mPerto;
     else if (a === "pesado"){ if (d0 === 0){ bruto = CV.dano.pesado * pa.mPerto; if (pa.passiva === "tita") bruto *= CV21.multTita; } else errou[atk] = true; }
     else if (a === "disparo"){
@@ -1773,11 +1784,18 @@ function resolverV2(E, aa, ab){
     } else if (r === "carregar") rec = bruto * CV.multCarregar;
     if (pele[alvo]) rec *= CV21.multPele;
     dano[alvo] += rec;
-    if ((a === "golpe_rapido" || a === "investida") && r === "preparar_pesado" && !pele[alvo]) interr[alvo] = true;
+    if (CORPO_A_CORPO.includes(a) && rec > 0) recebeuCac[alvo] = true;
+    /* V2C parry: defender contra golpe rapido (ou finta) que acertou devolve dano ao atacante */
+    if ((a === "golpe_rapido" || a === "fintar") && r === "defender"){ dano[atk] += CV.parry; recebeuCac[atk] = true; }
+    if ((a === "golpe_rapido" || a === "investida" || a === "fintar") && r === "preparar_pesado" && !pele[alvo]) interr[alvo] = true;
   }
-  for (const i of [0, 1]) if (dev[i]) dano[1 - i] += dev[i] * (pele[1 - i] ? CV21.multPele : 1);
+  for (const i of [0, 1]) if (dev[i]){ dano[1 - i] += dev[i] * (pele[1 - i] ? CV21.multPele : 1); recebeuCac[1 - i] = true; }
+  /* V2C morte subita: a partir do turno 25 todo dano x1,5 */
+  if (E.turno + 1 >= CV.turnoMS) for (const i of [0, 1]) dano[i] *= CV.multMS;
   const passo = x => x === "avancar" || x === "investida" ? -1 : x === "recuar" ? 1 : 0;
   const passos = [0, 1].map(i => parry[i] ? 0 : passo(ac[i]));
+  /* V2C fuga condicionada: recuar nao afasta se o oponente se aproxima (a sentinela com a passiva pronta recua) */
+  for (const i of [0, 1]) if (ac[i] === "recuar" && passos[1 - i] < 0 && !(E.L[i].p.passiva === "sentinela" && E.L[i].recarga === 0)) passos[i] = 0;
   const recarga = [0, 1].map(i => Math.max(0, E.L[i].recarga - 1));
   for (const i of [0, 1])
     if (E.L[i].p.passiva === "sentinela" && ac[i] === "recuar" && passos[1 - i] < 0 && E.L[i].recarga === 0){ passos[1 - i] = 0; recarga[i] = CV21.recargaSent; }
@@ -1786,7 +1804,9 @@ function resolverV2(E, aa, ab){
     const s = E.L[l], p = s.p; let g = guts[l] + s.regen * (p.passiva === "colosso_partido" ? CSO.multRegenColosso : 1);
     if (ac[l] === "defender" && p.passiva !== "bastiao_rachado") g += CV.gutsDef + (p.passiva === "muralha" ? CV21.muralha : 0);
     if (ac[l] === "carregar") g += CV.gutsCarregar;
-    const marca = ac[l] === "marcar" ? CV21.turnosMarca : marcaUsada[l] ? 0 : Math.max(0, s.marca - 1);
+    let marca = ac[l] === "marcar" ? CV21.turnosMarca : marcaUsada[l] ? 0 : Math.max(0, s.marca - 1);
+    /* V21C marca fragil: perde com dano corpo a corpo recebido ou terminando o turno em perto */
+    if (recebeuCac[l] || dist === 0) marca = 0;
     const pl = ac[l] === "pele_dura" ? (p.passiva === "colosso_partido" ? CSO.turnosPeleColosso : CV21.turnosPele) - 1 : Math.max(0, s.pele - 1);
     return {...s, hp:s.hp - dano[l], guts:Math.max(0, Math.min(s.gutsMax, g)), prep:ac[l] === "preparar_pesado" && !interr[l],
       hist:[...s.hist, ac[l]], marca, pele:pl, recarga:recarga[l], disparou:s.disparou || ac[l] === "disparo"};
@@ -1803,13 +1823,13 @@ function fimV2(E){
 /* ------------------------------------------------ gambits */
 const CATALOGO_V2 = {sempre:[], distancia_eh:["d"], hp_proprio_abaixo:["f"], guts_proprio_abaixo:["g"], guts_proprio_acima:["g"],
   oponente_preparando:[], oponente_hp_abaixo:["f"], oponente_guts_abaixo:["g"], oponente_repete:["a","k"], oponente_frequente:["a"],
-  turno_execucao:["t"], oponente_vai_preparar:[]};
+  turno_execucao:["t"], oponente_vai_preparar:[], executando_pesado:[]};
 const DOMINIO_V2 = {d:[0,1,2], f:CV.fracoes, g:CV.guts, a:ACOES_V2_OBS, k:CV.ks, t:CV21.turnos};
 /* a evolucao muda a cabeca: condicoes por estagio (o vigia tambem ve oponente_vai_preparar) */
 const CONDICOES_ESTAGIO = (() => {
   const cri = ["sempre","distancia_eh","hp_proprio_abaixo","guts_proprio_abaixo","guts_proprio_acima"];
   const ado = [...cri, "oponente_preparando","oponente_hp_abaixo","oponente_guts_abaixo"];
-  return {bebe:[], crianca:cri, adolescente:ado, adulto:[...ado, "oponente_repete","oponente_frequente","turno_execucao"]};
+  return {bebe:[], crianca:cri, adolescente:ado, adulto:[...ado, "oponente_repete","oponente_frequente","turno_execucao","executando_pesado"]};
 })();
 function validarCond(c){
   const tipos = CATALOGO_V2[c.n];
@@ -1821,7 +1841,8 @@ function validarLista(g){
   if (g.regras.length > CV.maxRegras) throw new Error(`no máximo ${CV.maxRegras} regras além da final`);
   for (const r of g.regras){
     if (r.se.length < 1 || r.se.length > CV.maxCond) throw new Error("cada regra tem 1 ou 2 condições");
-    if (!ACOES_V2.includes(r.entao)) throw new Error("ação não escolhível: " + r.entao);
+    if (r.entao === "fintar"){ if (!r.se.some(c => c.n === "executando_pesado")) throw new Error("regra de fintar precisa de 'executando pesado'"); }
+    else if (!ACOES_V2.includes(r.entao)) throw new Error("ação não escolhível: " + r.entao);
     r.se.forEach(validarCond);
   }
   if (!["defender","carregar"].includes(g.final)) throw new Error("a regra final precisa ser 'sempre → defender' ou 'sempre → carregar'");
@@ -1842,6 +1863,7 @@ function valeCond(c, E, lado, ctx){
     case "oponente_frequente": { const u = op.hist.slice(-CV.janelaFreq); return u.filter(x => x === p[0]).length / CV.janelaFreq >= CV.limiarFreq; }
     case "turno_execucao": return E.turno >= p[0];
     case "oponente_vai_preparar": return !!ctx && ctx.intencao === "preparar_pesado";
+    case "executando_pesado": return eu.prep;
   }
   throw new Error("condição sem avaliador: " + c.n);
 }
@@ -1881,7 +1903,15 @@ function intencaoV2(estilo, E, lado){
   return legalV2(E, lado, g.final) ? g.final : "carregar";
 }
 function decidirV2(estilo, E, lado, rng, ctx){
-  if (E.L[lado].prep) return ["pesado", "pesado_automatico"];
+  if (E.L[lado].prep){
+    /* V2C finta: a primeira regra de fintar que vale troca o pesado (sem exploracao) */
+    const g = estilo.gambits;
+    if (g) for (let i = 0; i < g.regras.length; i++){
+      const r = g.regras[i];
+      if (r.entao === "fintar" && r.se.every(c => valeCond(c, E, lado, ctx))) return ["fintar", i];
+    }
+    return ["pesado", "pesado_automatico"];
+  }
   const leg = legaisV2(E, lado);
   if (estilo.eps > 0 && rng.random() < estilo.eps) return [leg[rng.int(leg.length)], "exploracao"];
   if (estilo.oraculo) return [oraculoV2(E, lado), "oraculo"];
@@ -1897,16 +1927,23 @@ function decidirV2(estilo, E, lado, rng, ctx){
 /* ------------------------------------------------ bots (espelho de combate_v2/bots.py) */
 const Cd = (n, ...p) => ({n, p});
 const Rg = (se, entao) => ({se: Array.isArray(se) ? se : [se], entao});
+const FQ_ = a => Cd("oponente_frequente", a);
 const BOTS_V2 = {
   aleatorio: {regras:[], final:"defender"},
-  agressivo: {regras:[Rg(Cd("distancia_eh",2),"avancar"), Rg(Cd("distancia_eh",1),"avancar"),
-    Rg(Cd("guts_proprio_acima",40),"preparar_pesado"), Rg(Cd("sempre"),"golpe_rapido")], final:"carregar"},
-  tartaruga: {regras:[Rg(Cd("oponente_guts_abaixo",20),"preparar_pesado"), Rg(Cd("oponente_guts_abaixo",20),"golpe_rapido"),
-    Rg(Cd("oponente_guts_abaixo",20),"disparo"), Rg(Cd("oponente_preparando"),"defender"), Rg(Cd("guts_proprio_abaixo",40),"carregar")], final:"defender"},
-  atirador: {regras:[Rg([Cd("oponente_preparando"), Cd("distancia_eh",0)],"esquivar"), Rg(Cd("distancia_eh",0),"recuar"),
-    Rg([Cd("oponente_repete","avancar",2), Cd("distancia_eh",1)],"recuar"), Rg(Cd("sempre"),"disparo")], final:"carregar"},
-  contragolpe: {regras:[Rg(Cd("oponente_preparando"),"esquivar"), Rg(Cd("oponente_preparando"),"defender"),
-    Rg(Cd("oponente_guts_abaixo",20),"preparar_pesado"), Rg(Cd("oponente_guts_abaixo",20),"golpe_rapido"),
+  /* V2C: bots redesenhados (bots.GAMBITS_V2C); a V2 original fica so no Python */
+  agressivo: {regras:[Rg([Cd("executando_pesado"), FQ_("esquivar")],"fintar"),
+    Rg([Cd("hp_proprio_abaixo",.5), FQ_("golpe_rapido")],"defender"), Rg(Cd("distancia_eh",2),"avancar"), Rg(Cd("distancia_eh",1),"avancar"),
+    Rg(Cd("oponente_preparando"),"golpe_rapido"), Rg([FQ_("defender"), Cd("guts_proprio_acima",40)],"preparar_pesado"),
+    Rg(Cd("guts_proprio_acima",20),"golpe_rapido")], final:"carregar"},
+  tartaruga: {regras:[Rg([Cd("oponente_preparando"), FQ_("fintar")],"defender"), Rg(Cd("oponente_preparando"),"esquivar"),
+    Rg([FQ_("preparar_pesado"), Cd("distancia_eh",0)],"golpe_rapido"), Rg(Cd("oponente_guts_abaixo",20),"preparar_pesado"),
+    Rg([FQ_("defender"), Cd("distancia_eh",0)],"preparar_pesado"), Rg(FQ_("defender"),"avancar"),
+    Rg([FQ_("carregar"), Cd("distancia_eh",0)],"golpe_rapido"), Rg([Cd("guts_proprio_abaixo",40), FQ_("defender")],"carregar")], final:"defender"},
+  atirador: {regras:[Rg([Cd("oponente_preparando"), Cd("distancia_eh",0)],"esquivar"), Rg([Cd("distancia_eh",0), Cd("guts_proprio_acima",40)],"golpe_rapido"),
+    Rg(Cd("distancia_eh",0),"recuar"), Rg([Cd("hp_proprio_abaixo",.5), FQ_("disparo")],"avancar"),
+    Rg([FQ_("disparo"), Cd("guts_proprio_acima",40)],"esquivar"), Rg(Cd("sempre"),"disparo")], final:"carregar"},
+  contragolpe: {regras:[Rg(Cd("oponente_preparando"),"esquivar"), Rg(Cd("oponente_guts_abaixo",20),"preparar_pesado"),
+    Rg(Cd("oponente_guts_abaixo",20),"golpe_rapido"), Rg([FQ_("defender"), Cd("distancia_eh",0)],"preparar_pesado"),
     Rg(Cd("distancia_eh",2),"avancar"), Rg(Cd("guts_proprio_abaixo",40),"carregar"), Rg(Cd("distancia_eh",1),"avancar")], final:"defender"},
   adaptativo: {regras:[Rg(Cd("oponente_preparando"),"esquivar"), Rg(Cd("oponente_repete","defender",2),"preparar_pesado"),
     Rg(Cd("oponente_frequente","preparar_pesado"),"golpe_rapido"), Rg(Cd("oponente_frequente","carregar"),"golpe_rapido"),

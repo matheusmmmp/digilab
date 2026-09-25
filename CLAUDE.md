@@ -597,9 +597,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - Memória: efeito na divergência é pequeno e sem incerteza; precisa de bootstrap sobre sementes
   antes de qualquer conclusão. Recusa (B2) exige mudança no motor — decisão do pesquisador.
 
-- Combate corrigido (V2C/V21C) aprovado com ressalvas: falta levar para a web (finta, parry, fuga
-  condicionada, morte súbita, bots V2C, marca frágil, vida por vigor 2,5 com base 75, resposta ao marcar);
-  E2 pede ciclo entre espécies; E4 pede redesenho do adolescente ou da passiva do adulto.
+- Combate corrigido (V2C/V21C) aprovado com ressalvas e já na web (2026-09-25; oráculo da web segue de 1
+  passo). E2 pede ciclo entre espécies; E4 pede redesenho do adolescente ou da passiva do adulto.
 - Combate V2 original reprovado em G4/G5: decidir entre mudar bots passivos, regra de esquiva ou limiares
   (decisão do pesquisador); investigar a dominância do adaptativo antes de plugar pets.
 - Combate V2.1 reprovado em E1–E5: falta a especificação das correções da base (finta, parry, fuga

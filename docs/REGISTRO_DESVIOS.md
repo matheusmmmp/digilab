@@ -396,3 +396,13 @@ rejoga a amostra do artefato): C1–C4 da base também no resolvedor da V2.1 (li
   guardião, G9, base V2C e S1. **Exceções aceitas pelo Matheus**: E2 (falta ciclo entre as espécies;
   Ferrugem ainda vence todas por pouco), E4 (adulto esmaga adolescente: passiva + 8 regras), G6b (espelhos
   sem sorteio: média 0,725) e G8 (E1 em 69,4% das perturbações).
+
+## 2026-09-25 — combate corrigido no jogo web (`web/digilab_sprites.html`)
+
+Levado para a web: finta (turno de execução, condição `executando_pesado` no adulto), parry 5, fuga
+condicionada (com a exceção da sentinela), morte súbita no turno 25 (×1,5), bots da V2C (agressivo,
+tartaruga, atirador, contragolpe; o adaptativo e o aleatório já eram iguais), marca frágil e vida por
+vigor 2,5 com base 75. Diferenças da web: o oráculo continua de 1 passo e não usa a finta (é só rival
+de referência); a resposta redesenhada ao `marcar` é da bateria (E3), não existe no jogo. Os pets salvos
+são rejogados com o combate novo: as lutas do registro dão resultados diferentes e, com elas, o
+aprendizado dos gambits e o progresso da campanha (o replay confere).
