@@ -24,14 +24,16 @@ from servidor.fala_llm import (  # noqa: E402
     motivo_de_dict,
     montar_pedido,
     template,
-    validar,
+    TEMPERATURA_OLLAMA,
+    compor,
+    validar_moldura,
 )
 
 ESQUIVA = Motivo("combate", "esquivar", ("oponente_preparando",), (4,), None, False, turno=5)
 DOIS = Motivo("combate", "golpe_rapido", ("distancia_eh(perto)", "guts_proprio_acima(40)"), (6,), None, False, turno=6)
 VAZIO = Motivo("vida", "comer", (), (), 0.0, False, tick=100)
 MEMORIA = Motivo("vida", "chamar_atencao", ("latencia_fome",), (12,), 0.8, False, tick=500)
-BOA = ("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
+BOA = ("Hmpf!", "^_^")                      # moldura valida (abertura, fecho)
 
 
 # ------------------------------------------------------------ Claude falso
@@ -40,9 +42,9 @@ BOA = ("Esquivei porque você ia usar o golpe pesado.", ["oponente_preparando"])
 class ClienteFalso:
     """Imita client.messages.create / client.beta.messages.create; conta as chamadas."""
 
-    def __init__(self, texto, citados, stop="end_turn", erro=None, uso=(900, 40)):
+    def __init__(self, abertura, fecho, stop="end_turn", erro=None, uso=(900, 40)):
         self.chamadas = []
-        self.saida = json.dumps({"texto": texto, "fatores_citados": citados}, ensure_ascii=False)
+        self.saida = json.dumps({"abertura": abertura, "fecho": fecho}, ensure_ascii=False)
         self.stop, self.erro, self.uso = stop, erro, uso
         self.beta = NS(messages=NS(create=self._create))
         self.messages = NS(create=self._create)
@@ -74,10 +76,10 @@ class RespostaHTTP(io.BytesIO):
 class OllamaFalso:
     """Substitui urllib.request.urlopen: /api/tags lista modelos, /api/chat devolve JSON fixo."""
 
-    def __init__(self, texto="", citados=(), modelos=("qwen2.5:3b",), fora_do_ar=False, done_reason="stop", bruto=None):
+    def __init__(self, abertura="", fecho="", modelos=("qwen2.5:3b",), fora_do_ar=False, done_reason="stop", bruto=None):
         self.pedidos = []
         self.modelos, self.fora, self.done = modelos, fora_do_ar, done_reason
-        self.conteudo = bruto if bruto is not None else json.dumps({"texto": texto, "fatores_citados": list(citados)},
+        self.conteudo = bruto if bruto is not None else json.dumps({"abertura": abertura, "fecho": fecho},
                                                                    ensure_ascii=False)
 
     def __call__(self, req, timeout=None):
@@ -97,33 +99,42 @@ def O(falso, **kw):
     return GeradorFala(ProvedorOllama(abrir=falso), **kw)
 
 
-# ------------------------------------------------------------ validacao (comum aos provedores)
+# ------------------------------------------------------------ validacao da moldura (comum aos provedores)
 
 
-@pytest.mark.parametrize("motivo,estagio,texto,citados,erro", [
-    (ESQUIVA, "adulto", "Esquivei porque estava com fome.", ["oponente_preparando"], "fator ausente"),
-    (ESQUIVA, "adulto", "Esquivei porque você ia usar o golpe pesado.", ["fome"], "fora do motivo"),
-    (VAZIO, "adulto", "Comi porque você demorou com a comida.", [], "fator ausente"),
-    (VAZIO, "adulto", "Comi porque deu vontade.", [], "nao sabe"),
-    (DOIS, "adolescente", "perto... folga de guts...", ["distancia_eh(perto)", "guts_proprio_acima(40)"], "permite 1"),
-    (ESQUIVA, "adulto", "Esquivei porque você preparou o pesado no turno 3.", ["oponente_preparando"], "numeros"),
-    (MEMORIA, "adulto", "Chamei você porque você demorou com a comida da última vez, e fiquei sem cuidado.",
-     ["latencia_fome"], "fator ausente"),
+@pytest.mark.parametrize("abertura,fecho,erro", [
+    ("Comi porque", "", "conectivo de causa"),
+    ("Eba!", "por causa disso", "conectivo de causa"),
+    ("Ai, que fome!", "", "fator"),                      # marcador de fator
+    ("Tô com sono", "", "fator"),
+    ("Hmpf, tão cansado", "", "tema de causa"),           # sinonimo de cansaco
+    ("Ei!", "turno 3", "numero"),
+    ("Uma abertura longa demais aqui", "", "longa demais"),
+    ("Ei, você!", "", "tema de causa"),                   # fala do oponente/dono como causa
 ])
-def test_validacao_reprova_e_cai_no_template_nos_dois_provedores(motivo, estagio, texto, citados, erro):
+def test_moldura_reprovada_cai_no_template_nos_dois_provedores(abertura, fecho, erro):
     with pytest.raises(FalaReprovada, match=erro):
-        validar(texto, citados, motivo, estagio)
-    for g in (G(ClienteFalso(texto, citados)), O(OllamaFalso(texto, citados))):
-        r = g.gerar(motivo, estagio, 0.5)
-        assert r.fonte == "template" and r.texto == template(motivo, estagio, 0.5)
+        validar_moldura(abertura, fecho)
+    for g in (G(ClienteFalso(abertura, fecho)), O(OllamaFalso(abertura, fecho))):
+        r = g.gerar(ESQUIVA, "adulto", 0.5)
+        assert r.fonte == "template" and r.texto == template(ESQUIVA, "adulto", 0.5)
 
 
-def test_numeros_dos_parametros_do_fator_sao_permitidos():
-    validar("Golpeei perto, com guts acima de 40.", ["distancia_eh(perto)", "guts_proprio_acima(40)"], DOIS, "adulto")
+def test_moldura_valida_envolve_a_frase_pronta_sem_mudar_o_miolo():
+    for motivo, est in ((ESQUIVA, "adulto"), (DOIS, "adolescente"), (VAZIO, "adulto"), (MEMORIA, "adulto")):
+        r = O(OllamaFalso("Eba, eba!", "^_^")).gerar(motivo, est, 0.9)
+        assert r.fonte == "llm" and r.texto == compor("Eba, eba!", template(motivo, est, 0.9), "^_^")
+    assert O(OllamaFalso("", "")).gerar(ESQUIVA, "adulto").texto == template(ESQUIVA, "adulto", None)
+
+
+def test_pedido_nao_leva_fatores_so_a_frase_e_o_tom():
+    carga = json.loads(montar_pedido(DOIS, "adulto", .1))
+    assert set(carga) == {"contexto", "estagio", "acao", "tom", "frase"}
+    assert carga["tom"] == "rabugento" and carga["frase"] == template(DOIS, "adulto", .1)
 
 
 def test_bebe_e_crianca_nunca_chamam_llm():
-    c, o = ClienteFalso("x", []), OllamaFalso("x")
+    c, o = ClienteFalso("x", ""), OllamaFalso("x")
     for g in (G(c), O(o)):
         for est in ("bebe", "crianca"):
             assert g.gerar(ESQUIVA, est, 0.5).fonte == "template"
@@ -141,13 +152,14 @@ def test_claude_fala_valida_passa_e_vai_para_o_cache():
     c = ClienteFalso(*BOA)
     g = G(c)
     r = g.gerar(ESQUIVA, "adulto")
-    assert r.fonte == "llm" and "Esquivei" in r.texto and r.detalhe.startswith("claude:")
+    assert r.fonte == "llm" and r.texto == compor(*BOA[:1], template(ESQUIVA, "adulto", None), BOA[1])
+    assert r.detalhe.startswith("claude:")
     assert g.gerar(ESQUIVA, "adulto") is r and len(c.chamadas) == 1
 
 
 def test_claude_erro_recusa_e_limite_por_minuto_caem_no_template():
-    assert G(ClienteFalso("x", [], erro=RuntimeError("rede"))).gerar(ESQUIVA, "adulto").fonte == "template"
-    assert G(ClienteFalso("x", [], stop="refusal")).gerar(ESQUIVA, "adulto").fonte == "template"
+    assert G(ClienteFalso("x", "", erro=RuntimeError("rede"))).gerar(ESQUIVA, "adulto").fonte == "template"
+    assert G(ClienteFalso("x", "", stop="refusal")).gerar(ESQUIVA, "adulto").fonte == "template"
     g = G(ClienteFalso(*BOA), limite_por_minuto=1)
     g.gerar(ESQUIVA, "adulto")
     assert g.gerar(ESQUIVA, "adolescente").detalhe == "limite de chamadas por minuto"
@@ -158,7 +170,7 @@ def test_claude_pedido_haiku_sem_effort_e_opus_com_fallback():
     G(c).gerar(ESQUIVA, "adulto")
     kw = c.chamadas[0]
     carga = json.loads(kw["messages"][0]["content"])
-    assert carga["fatores"] == ["oponente_preparando"] and carga["evento_ref"] == [4]
+    assert carga["frase"] == template(ESQUIVA, "adulto", None) and "fatores" not in carga
     assert kw["model"] == "claude-haiku-4-5" and "effort" not in kw["output_config"] and "fallbacks" not in kw
     c2 = ClienteFalso(*BOA)
     G(c2, modelo="claude-opus-5").gerar(ESQUIVA, "adulto")
@@ -176,13 +188,13 @@ def test_claude_gasto_pelo_uso_real_e_teto():
 
 
 def test_claude_teto_para_quando_acaba_o_credito():
-    g = G(ClienteFalso("Não sei, só quis.", [], uso=(1000, 100)), limite=0.01)
+    g = G(ClienteFalso("Eba!", "", uso=(1000, 100)), limite=0.01)
     fontes = [g.gerar(Motivo("vida", "comer", (), (), 0.0, False, tick=t), "adulto").fonte for t in range(100)]
     assert "llm" in fontes and fontes[-1] == "template" and g.gasto.gasto <= 0.01
 
 
 def test_claude_erro_sem_uso_conta_o_pior_caso():
-    g = G(ClienteFalso("x", [], erro=RuntimeError("timeout")))
+    g = G(ClienteFalso("x", "", erro=RuntimeError("timeout")))
     g.gerar(ESQUIVA, "adulto")
     assert g.gasto.gasto > 0 and g.gasto.reservado == pytest.approx(0.0)
 
@@ -196,9 +208,9 @@ def test_gasto_persiste_entre_reinicios(tmp_path):
 
 def test_claude_sem_preco_ou_sem_teto_nao_liga():
     with pytest.raises(ValueError, match="preco"):
-        ProvedorClaude(ClienteFalso("x", []), "modelo-inventado")
+        ProvedorClaude(ClienteFalso("x", ""), "modelo-inventado")
     with pytest.raises(ValueError, match="ControleGasto"):
-        GeradorFala(ProvedorClaude(ClienteFalso("x", [])))
+        GeradorFala(ProvedorClaude(ClienteFalso("x", "")))
 
 
 # ------------------------------------------------------------ Ollama
@@ -211,8 +223,8 @@ def test_ollama_fala_valida_sem_custo_e_com_semente_por_motivo():
     assert r.fonte == "llm" and r.detalhe == "ollama: qwen2.5:3b" and g.gasto is None
     url, corpo, timeout = o.pedidos[0]
     assert url.endswith("/api/chat") and corpo["model"] == "qwen2.5:3b" and corpo["stream"] is False
-    assert corpo["format"]["required"] == ["texto", "fatores_citados"]
-    assert corpo["options"]["temperature"] <= 0.5 and isinstance(corpo["options"]["seed"], int)
+    assert corpo["format"]["required"] == ["abertura", "fecho"]
+    assert corpo["options"]["temperature"] == TEMPERATURA_OLLAMA and isinstance(corpo["options"]["seed"], int)
     semente = corpo["options"]["seed"]
     o2 = OllamaFalso(*BOA)
     O(o2).gerar(ESQUIVA, "adulto")
@@ -284,7 +296,7 @@ def test_motivo_de_dict_e_estrito():
     # combate V2.1: tecnicas e condicoes novas tem texto
     m21 = motivo_de_dict({**base, "acao": "investida", "fatores": ["turno_execucao(5)", "oponente_vai_preparar"]})
     assert "luta longa" in template(m21, "adulto", None)
-    assert "exemplo" in json.loads(montar_pedido(m, "adulto", .5))
+    assert "frase" in json.loads(montar_pedido(m, "adulto", .5))
 
 
 def test_digilab_nao_importa_servidor_nem_anthropic():
@@ -302,11 +314,37 @@ def test_avaliacao_roda_com_ollama_falso():
     motivos = avaliar_fala.coletar_motivos(20)
     assert len(motivos) == 20
     assert sum(bool(m.fatores) and not m.exploracao for m, _, _ in motivos) == 10
-    # dizer menos do que o motivo e permitido: "nao sei" passa sempre
-    linhas, resumo = avaliar_fala.avaliar(O(OllamaFalso("Não sei, só quis.", [])), motivos)
+    # moldura so de enfeite passa sempre
+    linhas, resumo = avaliar_fala.avaliar(O(OllamaFalso("Hmpf!", "^_^")), motivos)
     assert resumo["n"] == 20 and resumo["fracao_aprovada"] == 1.0
     assert all((l["fala"] is None) == (not l["aprovada"]) for l in linhas)
-    # inventar causa ("sujeira") so passa onde o motivo tem esse fator
-    _, resumo2 = avaliar_fala.avaliar(O(OllamaFalso("Fiz isso por causa da sujeira.", ["sujeira"])), motivos)
-    tem_sujeira = sum("sujeira" in m.fatores for m, _, _ in motivos)
-    assert resumo2["aprovadas"] == tem_sujeira and resumo2["quedas_por_tipo"]
+    # moldura que tenta explicar nunca passa
+    _, resumo2 = avaliar_fala.avaliar(O(OllamaFalso("Por causa da sujeira", "")), motivos)
+    assert resumo2["aprovadas"] == 0 and resumo2["quedas_por_tipo"]
+
+
+def test_tom_segue_o_humor_e_vai_no_pedido():
+    from servidor.fala_llm import tom_do_humor
+    assert [tom_do_humor(h) for h in (None, .1, .5, .9)] == ["neutro", "rabugento", "neutro", "animado"]
+    m = motivo_de_dict({"origem": "vida", "acao": "comer", "fatores": ["fome"], "evento_ref": [3],
+                        "intensidade": .4, "exploracao": False, "tick": 900})
+    assert json.loads(montar_pedido(m, "adulto", .9))["tom"] == "animado"
+
+
+def test_moldura_colapsa_carinhas_e_aceita_dois_pontos_tres():
+    assert validar_moldura("Eba!", "^_^ ^_^ ^_^") == ("Eba!", "^_^")
+    assert validar_moldura("Oba", ":3") == ("Oba", ":3")
+    o = OllamaFalso(*BOA)
+    O(o).gerar(ESQUIVA, "adulto")
+    fmt = o.pedidos[-1][1]["format"]
+    assert fmt["properties"]["abertura"]["maxLength"] > 0 and o.pedidos[-1][1]["options"]["repeat_penalty"] > 1
+    assert fmt["properties"]["abertura"]["minLength"] >= 1 and "minLength" not in fmt["properties"]["fecho"]
+
+
+def test_surrogate_solto_do_modelo_nao_quebra():
+    solto = chr(0xD84C)                                       # metade de um par UTF-16, invalido em UTF-8
+    cru = O(OllamaFalso(bruto='{"abertura": "Eba' + solto + '!", "fecho": ""}')).gerar(ESQUIVA, "adulto")
+    escapado = O(OllamaFalso(bruto='{"abertura": "Oba\\ud84c!", "fecho": ""}')).gerar(ESQUIVA, "adulto")
+    for r in (cru, escapado):                                 # cru no texto, ou escape que so vira surrogate no parse
+        r.texto.encode("utf-8")                               # nao levanta
+        assert r.fonte == "llm" and "?" in r.texto
