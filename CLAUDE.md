@@ -84,16 +84,16 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/evolucao.py`, `experiments/run_pesquisa_v21.py` | evolução do pet de pesquisa (ovo pareado, cuidado, caráter nas sondas, forma adulta) e arena V2.1 com adultos → `artifacts_v21_pesquisa/` |
 | `digilab/campanha.py`, `experiments/run_campanha.py`, `calibrar_campanha.py` | campanha contra os 3 NPCs (regras V21C) → `artifacts_campanha/`; calibração da escada (K1–K4) → `experiments/configs/campanha/` |
 | `digilab/treino_stats.py`, `treino_vida.py` | treino (fadiga, forçar, sobrecarga), `MotorTreino`, plano de sessões e donos com treino (inclui o exigente) |
-| `experiments/run_treino.py`, `run_bateria_sombria.py`, `calibrar_treino.py` | runs da TAREFA_TREINO_SOMBRIO (5 braços, campanha, S2) → `artifacts_treino/`, `artifacts_campanha/treino.json`; gate S1; calibração da sobrecarga |
+| `experiments/run_treino.py`, `run_bateria_sombria.py`, `calibrar_treino.py`, `calibrar_sombrias.py` | runs da TAREFA_TREINO_SOMBRIO (5 braços, campanha, S2) → `artifacts_treino/`, `artifacts_campanha/treino.json`; gate S1; calibração da sobrecarga e redesenho das sombrias (`configs/sombrias/`) |
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 283 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 284 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 283 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 284 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
@@ -310,18 +310,20 @@ personalidade, formas e passivas sombrias em `combate_v2/v21/`. Calibração: `s
 - **Forçar não compensa, e custa.** Exigente × atencioso: 4/10 exigentes viram sombrios (0/10 nos
   outros braços); vínculo 0,22 [0,16, 0,27] × 0,56 [0,50, 0,61] (diferença −0,35 [−0,42, −0,27]); na
   arena normalizada o exigente vence o atencioso em 0,44 [0,26, 0,62] (inconclusivo); na campanha
-  (stats absolutos, escada rebalanceada, regras V21C) perde nos três tiers: tier 1 0,85 × 1,00, tier 2
-  0,42 × 0,72, chefe 0,20 × 0,58 (diferenças −0,15 [−0,28, −0,02], −0,30 [−0,58, −0,08],
-  −0,38 [−0,66, −0,11]).
-- **S1 passa**: nenhuma sombria vence os 8 normais; o E1 com as sombrias no pool também passa (suporte
-  inclui devastador e bastião rachado). Média contra os normais: devastador 0,74, bastião 0,58,
-  predador 0,28, colosso partido 0,08. Devastador × passivos: espelho 0,31, muralha 0,34, sentinela
-  0,99, vigia 0,80.
-- **S2 REPROVADO, também com a escada rebalanceada** (campanha e S2 com as regras V21C): o critério (a)
-  compara adultos contra o tier 1, e a escada exige que quase todo adulto já vença o tier 1 sem treino
-  (K2), então "mais cedo" não discrimina; colosso partido precisa de +12 (titã e vigia, 0); contra o tier 2
-  o devastador (0,97) passa do duelista (0,23) e do furioso (0,95), e o bastião (0,99) passa da muralha
-  (0,95). Resolver o S2 é desenho das formas sombrias ou do próprio gate, não da escada.
+  (stats absolutos, escada rebalanceada, regras V21C, sombrias redesenhadas) perde nos três tiers: tier 1
+  0,84 × 1,00, tier 2 0,34 × 0,72, chefe 0,19 × 0,58 (diferenças −0,16 [−0,30, −0,04],
+  −0,38 [−0,65, −0,11], −0,39 [−0,67, −0,12]). Arena normalizada: 0,43 [0,25, 0,61].
+- **S1 passa** (com as sombrias redesenhadas; V2.1 e V21C): nenhuma sombria vence os 8 normais; o E1 com
+  as sombrias no pool também passa (suporte V2.1: bastião rachado, emboscador, espelho, furioso, muralha,
+  sentinela). Devastador × passivos: espelho 0,12, muralha 0,36, sentinela 0,01, vigia 0,09 (antes do
+  redesenho: 0,31 / 0,34 / 0,99 / 0,80).
+- **S2 PASSA desde o redesenho das sombrias** (2026-09-25, `experiments/calibrar_sombrias.py`; desvios em
+  `docs/REGISTRO_DESVIOS.md`): "a sombra tira a leitura do oponente". Devastador só fecha e solta o pesado,
+  corpo a corpo ×2,0 (era ×1,3 com os gambits do furioso); bastião rachado = espelho sem a regra de
+  contra-golpe ao pesado; colosso partido regenera ×0,85 (era ×0,5); predador igual. Tier 1 sem treino /
+  tier 2 médio: devastador 0,60 / 0,18 (duelista 0,38 / 0,23), bastião 0,91 / 0,83 (muralha 0,95),
+  colosso partido 0,63 / 0,02, predador 0,503 / 0,03 (margem fina). S1 e E1 continuam passando nas regras
+  V2.1 e V21C; médias contra as normais: devastador 0,27, bastião 0,33, predador 0,28, colosso partido 0,16.
 - Formas por braço e o resto em `artifacts_treino/resumo.json`. Atencioso × aleatório nesta run: 0,46
   [0,25, 0,68] (inconclusivo).
 - Web: o treino entrou antes das runs (pedido do Matheus), com os mesmos números.

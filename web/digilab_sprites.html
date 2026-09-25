@@ -479,7 +479,7 @@ const APTIDAO = {
   ferrugem:{guarda:1.2, vigor:1.1, forca:1.0, folego:.9, recuperacao:.9, mira:.9},
   limo:{recuperacao:1.2, folego:1.1, vigor:1.0, guarda:.9, mira:.9, forca:.9} };
 const NOME_EXERCICIO = {levantar_pedra:"Levantar pedra", corrida:"Corrida", alvo:"Alvo", esquiva:"Esquiva", meditar:"Meditar", resistencia:"Resistência"};
-const CSO = { aviso:30, sombrio:60, epsMin:.2, tetoVinc:.6, multDev:1.3, fracBastiao:1, multPred:1.4, turnosPeleColosso:3, multRegenColosso:.5,
+const CSO = { aviso:30, sombrio:60, epsMin:.2, tetoVinc:.6, multDev:2, fracBastiao:1, multPred:1.4, turnosPeleColosso:3, multRegenColosso:.85,
   formas:{brigao:{nome:"devastador", base:"furioso", stats:{forca:4, folego:1, recuperacao:-3, guarda:-2}},
     guardiao:{nome:"bastiao_rachado", base:"espelho", stats:{guarda:4, vigor:1, recuperacao:-3, mira:-2}},
     cacador:{nome:"predador", base:"emboscador", stats:{mira:4, forca:1, vigor:-3, guarda:-2}},
@@ -1631,8 +1631,8 @@ const DESC_PASSIVA = {
   emboscador:"o primeiro disparo da luta causa o dobro",
   vigia:"vê o pesado do oponente um turno antes",
   tita:"pesado causa +30%",
-  devastador:"sombria: corpo a corpo +30%; não pode defender nem esquivar", bastiao_rachado:"sombria: contra-golpe devolve 100%; defender não rende guts",
-  predador:"sombria: disparo +40%; não pode recuar", colosso_partido:"sombria: pele dura dura 3 turnos; regenera metade do guts"};
+  devastador:"sombria: corpo a corpo x2; não pode defender nem esquivar; só fecha e solta o pesado", bastiao_rachado:"sombria: contra-golpe devolve 100%; defender não rende guts; não lê o pesado do oponente",
+  predador:"sombria: disparo +40%; não pode recuar", colosso_partido:"sombria: pele dura dura 3 turnos; regenera 85% do guts"};
 function tecnicaDe(f){ return f.linha ? CAT.adolescente[f.linha].tecnica : null; }
 function chaveSprite(f){ return f.est === "bebe" ? `${f.esp}_bebe` : f.est === "crianca" ? `${f.esp}_crianca_${f.ramo}`
   : f.est === "adolescente" ? `${f.esp}_adolescente_${f.linha}` : `${f.esp}_adulto_${SOMBRIA[f.adulta] ? SOMBRIA[f.adulta].base : f.adulta}`; }
@@ -2678,7 +2678,12 @@ function permitida(r, f){
   return !TECNICAS.includes(r.entao) || r.entao === tecnicaDe(f);
 }
 function sementeDe(f){ return f.est === "crianca" ? CRIANCA_V21[f.ramo] : f.est === "adolescente" ? ADOL_V21[f.linha]
-  : BOTS_V21[f.adulta] || BOTS_V21[SOMBRIA[f.adulta].base]; }
+  : BOTS_V21[f.adulta] || GAMBITS_SOMBRIA[f.adulta] || BOTS_V21[SOMBRIA[f.adulta].base]; }
+/* sombrias redesenhadas para o S2 (bots.SOMBRIOS): a sombra tira a leitura do oponente */
+const GAMBITS_SOMBRIA = {
+  devastador:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg([D0, GA_(20)],"preparar_pesado"), Rg(D0,"golpe_rapido")], final:"carregar"},
+  get bastiao_rachado(){ return {regras:BOTS_V21.espelho.regras.slice(1), final:BOTS_V21.espelho.final}; },
+};
 const rotuloRegra = r => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
 class GambitsPet {
   constructor(){ this.notas = {}; this.disparos = {}; this.ativas = []; this.final = "defender"; this.linha = null; this.forma = null;

@@ -473,3 +473,36 @@ Decisões e interpretações:
   que o K2 exige que quase todo adulto vença sem treino; e contra o tier 2 o devastador e o bastião rachado
   passam das formas normais da linha. Consertar o S2 pede mudar as formas sombrias ou o gate (decisão do
   pesquisador).
+
+## 2026-09-25 — formas sombrias redesenhadas para passar no S2
+
+Pedido do Matheus ("redesenha as formas sombrias pra passar no S2"). O gate S2 não mudou
+(`run_treino.gate_s2`, regras V21C, escada rebalanceada). Calibração em rótulos de sementes próprios
+(`experiments/calibrar_sombrias.py`, `experiments/configs/sombrias/r0..r2`); a decisão é da run canônica.
+Leitura de desenho adotada: "a sombra tira a leitura do oponente" — a sombria ganha força bruta (vence a
+prova de stats do tier 1) e perde estilo (cai na prova de estilo do tier 2). Desvios de
+`docs/arvore_evolucao.json > ramos_sombrios` (o JSON fica como a especificação original; stats, ε mínimo e
+teto de vínculo não mudaram):
+- **Devastador**: corpo a corpo ×1,3 → **×2,0**; gambits próprios que não leem o oponente (fecha a distância,
+  solta o pesado com guts ≥ 20, senão golpe rápido; final carregar) no lugar dos do furioso. Com os gambits
+  do furioso ele vencia o tier 2 (0,96, contra 0,24 do duelista); só com o pesado ×1,3 perdia o tier 1 sem
+  treino (0,27); ×2,0 dá tier 1 0,60 e tier 2 0,18.
+- **Bastião rachado**: gambits do espelho **sem a primeira regra** (contra-golpe quando o oponente prepara o
+  pesado). Tier 2 0,98 → 0,83 (limite: muralha 0,95); tier 1 continua 0,91. Contra-golpe de 60% também
+  passava, com folga menor (0,93).
+- **Colosso partido**: regeneração de guts ×0,5 → **×0,85**. Com ×0,5 só vencia o tier 1 com +12 de treino;
+  com ×0,85 vence sem treino (0,63) e segue quase sem chance no tier 2 (0,02).
+- Predador sem mudança.
+
+Resultados canônicos (`artifacts_treino/resumo.json`, `artifacts_treino/bateria_sombria/`,
+`artifacts_combate_v21c/bateria_sombria/`):
+- **S2 passa** nas 4 linhas. Margem fina no critério (a) do predador: 0,503 contra o tier 1 sem treino
+  (não mudou com o redesenho).
+- **S1 passa** nas duas regras (V2.1 original e V21C); E1 com as sombrias passa (suporte 6 e 5 formas).
+  Médias contra as normais (V2.1): devastador 0,74 → 0,27, bastião 0,58 → 0,33, colosso partido
+  0,08 → 0,16, predador 0,28. O devastador perde para todos os passivos (0,01–0,36) e saiu do suporte do
+  equilíbrio: não é mais a melhor opção de arena.
+- Treino (mesmas vidas; só as 4 sombrias do exigente lutam diferente): arena exigente × atencioso 0,43
+  [0,25, 0,61]; campanha, exigente − atencioso: tier 1 −0,16 [−0,30, −0,04], tier 2 −0,38 [−0,65, −0,11],
+  chefe −0,39 [−0,67, −0,12].
+- Web: mesmos números; os gambits sombrios só semeiam o pet (depois ele aprende como qualquer forma).
