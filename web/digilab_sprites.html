@@ -1948,10 +1948,14 @@ function desenhar(ctx, grade, x0, y0, pal, opts={}){
    Adulto recalibrado em 2026-09-25 (pets v2): a base de cada eixo complementar foi deslocada pela
    mediana desse eixo entre os pets da linha que ele decide (600 pets: 4 donos x 150 sementes
    910013..911950, 16/dia; duas passadas), para a escolha entre as duas formas adultas ficar perto
-   de 50/50. Antes: golpe -0.0477, bloqueio 0.1362, agarrao -0.0035, finta -0.0527, carga -0.0322. */
+   de 50/50. Antes: golpe -0.0477, bloqueio 0.1362, agarrao -0.0035, finta -0.0527, carga -0.0322.
+   Adolescente recalibrado no mesmo dia: deslocamento por eixo (iterativo) para cada linha sair em
+   ~25% (antes guardiao 38%, colosso 15%); o adulto foi recalibrado junto, com as linhas novas.
+   Os dois em 1000 pets v2 (4 donos x 250 sementes 910013..913250, 16/dia). Adolescente antes:
+   golpe -0.0554, bloqueio 0.1024, agarrao 0.0404, finta -0.0556, carga -0.0317. */
 const BASE_CARATER = {
-  adolescente: {golpe:-0.0554, bloqueio:0.1024, agarrao:0.0404, finta:-0.0556, carga:-0.0317},
-  adulto:      {golpe:-0.0474, bloqueio:0.1218, agarrao:-0.0052, finta:-0.0674, carga:-0.0319},
+  adolescente: {golpe:-0.0551, bloqueio:0.1059, agarrao:0.0364, finta:-0.0552, carga:-0.0314},
+  adulto:      {golpe:-0.0466, bloqueio:0.1246, agarrao:-0.0067, finta:-0.0680, carga:-0.0311},
 };
 function caraterDe(tracos, quando){
   const af = afinidades(tracos), base = BASE_CARATER[quando];
