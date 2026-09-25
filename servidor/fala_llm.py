@@ -29,7 +29,10 @@ MODELO_PADRAO = "claude-haiku-4-5"
 MODELOS_COM_FALLBACK = {"claude-opus-5", "claude-fable-5-1"}
 # fala-v2 (2026-09-24, apos a avaliacao C6 da v1): o adolescente recebe so o primeiro fator
 # (so ele pode ser citado) e o exemplo sem fator inclui "não sei" (a regra 2 ja exigia)
-VERSAO_PROMPT = "fala-v2"
+# fala-v3 (2026-09-24): na v2 o adulto copiava o exemplo em 68 de 88 falas aprovadas; o pedido
+# manda dizer com as proprias palavras, com enfeite e personalidade (pedido do Matheus), e a
+# temperatura do Ollama sobe de 0,3 para 0,7; o humor do pet vira o "tom" da frase
+VERSAO_PROMPT = "fala-v3"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
 LIMITE_POR_MINUTO = 30
@@ -39,7 +42,7 @@ URL_OLLAMA_PADRAO = "http://localhost:11434"
 TIMEOUT_OLLAMA_S = 10.0
 TIMEOUT_AQUECIMENTO_S = 90.0     # primeira chamada carrega o modelo na GPU
 MANTER_OLLAMA = "30m"            # quanto tempo o modelo fica carregado entre falas
-TEMPERATURA_OLLAMA = 0.3         # baixa: menos invencao
+TEMPERATURA_OLLAMA = 0.7         # 0,3 -> 0,7 na fala-v3: com 0,3 o modelo copiava o exemplo
 MAX_TOKENS_OLLAMA = 120
 MAX_TOKENS_SAIDA = 300          # fala curta; limita o pior caso de cada chamada
 LIMITE_USD_PADRAO = 2.00        # teto TOTAL acumulado (decisao do pesquisador, 2026-09-24)
@@ -146,7 +149,9 @@ Regras que não podem ser quebradas:
 4. Só mencione números de evento ou turno que estejam em "evento_ref"; não invente outros números.
 5. Em "fatores_citados", liste exatamente os nomes (como aparecem em "fatores") dos fatores que sua frase menciona.
 
-O "exemplo" mostra uma forma válida de dizer o mesmo motivo; você pode variar o jeito, não o conteúdo."""
+O "exemplo" é só a forma mínima e seca de dizer o mesmo motivo. NÃO copie o exemplo: diga com as suas próprias palavras e com PERSONALIDADE. Enfeite à vontade: interjeições ("hmpf!", "eba!", "ai ai..."), onomatopeias ("nhac", "zzz", "pow!"), tom brincalhão, manhoso ou dramático, carinhas de texto (^_^, >_<, T_T) e jeito de falar de um pequeno monstro com o dono. O enfeite é só o JEITO de falar: nunca pode virar uma causa nova, um motivo, uma lembrança ou um sentimento que explique a decisão. As causas continuam exatamente as mesmas do motivo (nem mais, nem menos), com os mesmos números.
+
+O campo "tom" diz o humor do pet agora e deve mandar no JEITO da frase: "rabugento" (manhoso, emburrado, resmungão), "neutro" ou "animado" (empolgado, saltitante). O tom nunca é causa: não diga que fez algo por estar animado ou rabugento, e não escreva a palavra "humor"."""
 
 ESQUEMA = {
     "type": "object",
@@ -250,6 +255,13 @@ def _significado(fator: str) -> str:
     return _texto_fator(fator, "adulto")
 
 
+def tom_do_humor(humor: float | None) -> str:
+    """Faixas iguais as do cache e do emote do bebe (0,33 / 0,66). Sem humor: neutro."""
+    if humor is None:
+        return "neutro"
+    return "animado" if humor >= .66 else "neutro" if humor >= .33 else "rabugento"
+
+
 def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
     acoes = ACOES_VIDA if motivo.origem == "vida" else ACOES_COMBATE
     exemplo = template(motivo, estagio, humor)
@@ -270,6 +282,7 @@ def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
         "tipo_de_referencia": "evento do registro" if motivo.origem == "vida" else "turno da luta",
         "exploracao": motivo.exploracao,
         "humor": None if humor is None else round(humor, 2),
+        "tom": tom_do_humor(humor),
         "exemplo": exemplo,
     }
     return json.dumps(carga, ensure_ascii=False, sort_keys=True)
@@ -434,6 +447,7 @@ class Resultado:
     texto: str
     fonte: str            # "llm" | "template"
     detalhe: str = ""     # provedor/modelo, ou motivo da queda para o template
+    bruto: str = ""       # texto que a LLM propôs quando foi reprovada (só avaliação; não vai à página)
 
     def para_dict(self) -> dict:
         return {"texto": self.texto, "fonte": self.fonte, "detalhe": self.detalhe}
@@ -473,9 +487,9 @@ class GeradorFala:
             self._chamadas.append(agora)
             return True
 
-    def _modelo_de_frase(self, motivo, estagio, humor, detalhe) -> Resultado:
+    def _modelo_de_frase(self, motivo, estagio, humor, detalhe, bruto: str = "") -> Resultado:
         self.estatisticas["template"] += 1
-        return Resultado(template(motivo, estagio, humor), "template", detalhe)
+        return Resultado(template(motivo, estagio, humor), "template", detalhe, bruto)
 
     def gerar(self, motivo: Motivo, estagio: str, humor: float | None = None) -> Resultado:
         if estagio not in ESTAGIOS:
@@ -512,12 +526,14 @@ class GeradorFala:
         if not r.completa:
             self.estatisticas["erros"] += 1
             return self._modelo_de_frase(motivo, estagio, humor, f"resposta interrompida: {r.motivo_parada}")
+        dados = None
         try:
             dados = json.loads(r.texto)
             validar(dados["texto"], dados["fatores_citados"], motivo, estagio)
         except (FalaReprovada, KeyError, TypeError, json.JSONDecodeError) as err:
             self.estatisticas["reprovadas"] += 1
-            return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}")
+            bruto = dados.get("texto", "") if isinstance(dados, dict) else r.texto
+            return self._modelo_de_frase(motivo, estagio, humor, f"reprovada: {err}", str(bruto))
         res = Resultado(dados["texto"].strip(), "llm", f"{self.provedor.nome}: {r.modelo}")
         self.estatisticas["llm"] += 1
         with self._trava:

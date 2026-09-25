@@ -2094,7 +2094,8 @@ function narrar(A, B, tr){
   const extra = [tr.interr[0] && "seu pesado foi interrompido", tr.interr[1] && "o pesado do rival foi interrompido",
     tr.errou[0] && "seu pesado errou", tr.errou[1] && "o pesado do rival errou"].filter(Boolean);
   $("arena-res").textContent = `Turno ${tr.t}: ${NOME_V2[tr.a]} × ${NOME_V2[tr.b]}` + ([dano, dano2, ...extra].filter(Boolean).length ? " · " + [dano, dano2, ...extra].filter(Boolean).join(", ") : " · ninguém se machuca");
-  const llm = falaLLM(motivoParaApi(ma), A.estagioFala, null, d => {
+  /* o tom da fala do seu pet na luta segue o humor dele na vida */
+  const llm = falaLLM(motivoParaApi(ma), A.estagioFala, motor.e.humor, d => {
     const el = document.querySelector(`#arena-fala [data-turno="${tr.t}"]`);
     if (el && d.fonte === "llm") el.textContent = "✦ " + d.texto;
   });

@@ -24,6 +24,7 @@ from servidor.fala_llm import (  # noqa: E402
     motivo_de_dict,
     montar_pedido,
     template,
+    TEMPERATURA_OLLAMA,
     validar,
 )
 
@@ -212,7 +213,7 @@ def test_ollama_fala_valida_sem_custo_e_com_semente_por_motivo():
     url, corpo, timeout = o.pedidos[0]
     assert url.endswith("/api/chat") and corpo["model"] == "qwen2.5:3b" and corpo["stream"] is False
     assert corpo["format"]["required"] == ["texto", "fatores_citados"]
-    assert corpo["options"]["temperature"] <= 0.5 and isinstance(corpo["options"]["seed"], int)
+    assert corpo["options"]["temperature"] == TEMPERATURA_OLLAMA and isinstance(corpo["options"]["seed"], int)
     semente = corpo["options"]["seed"]
     o2 = OllamaFalso(*BOA)
     O(o2).gerar(ESQUIVA, "adulto")
@@ -310,3 +311,11 @@ def test_avaliacao_roda_com_ollama_falso():
     _, resumo2 = avaliar_fala.avaliar(O(OllamaFalso("Fiz isso por causa da sujeira.", ["sujeira"])), motivos)
     tem_sujeira = sum("sujeira" in m.fatores for m, _, _ in motivos)
     assert resumo2["aprovadas"] == tem_sujeira and resumo2["quedas_por_tipo"]
+
+
+def test_tom_segue_o_humor_e_vai_no_pedido():
+    from servidor.fala_llm import tom_do_humor
+    assert [tom_do_humor(h) for h in (None, .1, .5, .9)] == ["neutro", "rabugento", "neutro", "animado"]
+    m = motivo_de_dict({"origem": "vida", "acao": "comer", "fatores": ["fome"], "evento_ref": [3],
+                        "intensidade": .4, "exploracao": False, "tick": 900})
+    assert json.loads(montar_pedido(m, "adulto", .9))["tom"] == "animado"
