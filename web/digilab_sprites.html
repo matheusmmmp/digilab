@@ -425,7 +425,8 @@ const EIXOS_TEMP = ["curiosidade","teimosia","sensibilidade","rancor"];
 const CDJ = { limiarNecessidade:.3, limiarVontade:.1, limiarTom:.2, kCumprimento:60 };
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia (pets salvos antes
    do porte seguem iguais); 2 = memoria por espacos + vinculo + obediencia + condicao no combate */
-const VERSAO_PET = 2;
+/* v3 = v2 + carater pelo desvio da politica (espelho de evolucao.carater); v1 e v2 seguem pelos tracos */
+const VERSAO_PET = 3;
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */
 const CME = { nCurto:4, nLongo:2, dCurto:12*60, relembrar:4*60, tau:360, limiarPedido:.5, janela:240,
   intensidade:{demora:null, bronca:1, elogio:1, carinho:.5} };
@@ -1156,7 +1157,7 @@ class Bandit {
    ================================================================= */
 class Motor {
   constructor(semente, versao = VERSAO_PET){
-    if (!(versao === 1 || versao === 2)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -1393,12 +1394,12 @@ class Motor {
       const cuidado = this.fracaoCuidado();
       nova = {estagio:"crianca", ramo:cuidado >= CAT.limiarCuidado ? "sereno" : "arisco", cuidado};
     } else if (est === "crianca" && t >= D.bebe + D.crianca){
-      const carater = caraterDe(this.tracos, "adolescente");
+      const carater = this.caraterAgora("adolescente");
       /* sobrecarga >= 30: aviso (fala fria); nada muda na forma */
       this.falaFria = this.treino.sobrecarga >= CSO.aviso;
       nova = {estagio:"adolescente", linha:linhaDoCarater(carater), carater, sobrecarga:this.treino.sobrecarga};
     } else if (est === "adolescente" && t >= D.bebe + D.crianca + D.adolescente && this.sparring >= CAT.sparring){
-      const carater = caraterDe(this.tracos, "adulto");
+      const carater = this.caraterAgora("adulto");
       /* sobrecarga >= 60: a forma adulta vira a sombria da linha (permanente: vinculo com teto, instavel na luta) */
       this.sombria = this.treino.sobrecarga >= CSO.sombrio;
       const adulta = this.sombria ? CSO.formas[this.forma.linha].nome : formaAdultaDe(this.forma.linha, carater);
@@ -1414,6 +1415,8 @@ class Motor {
     if (!this.gp) this.gp = new GambitsPet();
     this.gp.semear(this.forma);
   }
+  /* carater medido agora: pets v3 pelo desvio da politica aprendida; v1/v2 pelos tracos (PROVISORIO) */
+  caraterAgora(quando){ return this.versao >= 3 ? caraterPolitica(this) : caraterDe(this.tracos, quando); }
   /* caráter travado na ultima evolucao que o mediu (adolescente/adulto); antes disso, neutro */
   carater(){ const ev = [...this.evolucoes].reverse().find(x => x.carater); return ev ? ev.carater : null; }
   _hist(x){ this.historico.push(x); if (this.historico.length > 300) this.historico.shift(); }
@@ -2159,6 +2162,53 @@ const BASE_CARATER = {
   adolescente: {golpe:-0.0551, bloqueio:0.1059, agarrao:0.0364, finta:-0.0552, carga:-0.0314},
   adulto:      {golpe:-0.0466, bloqueio:0.1246, agarrao:-0.0067, finta:-0.0680, carga:-0.0311},
 };
+/* carater pelo desvio da politica (espelho de evolucao.carater, ConfigEvolucaoPesquisa): em estados-sonda
+   fixos, com numeros aleatorios comuns, a distribuicao de acoes da politica aprendida menos a da MESMA
+   politica recem-nascida (mesmo temperamento). Cada acao vai para o traco de combate (CA.mapa), cada
+   eixo junta seus tracos, divide pela escala e corta em [-1, 1]. Sem linha de base: a politica nova
+   ja e o "pet comum". */
+/* web: 32 sondas x 100 amostras (o Python usa 64 x 200): ~4x mais rapido, mais ruido */
+const CCP = { nEstados:32, amostras:100, semente:9001, escala:.05 };
+let SONDAS_CAR = null;
+function sondasCarater(){
+  if (SONDAS_CAR) return SONDAS_CAR;
+  const r = criarRng(hashSemente("sonda", CCP.semente));
+  SONDAS_CAR = Array.from({length:CCP.nEstados}, () => {
+    const v = [r.random(), r.random(), r.random(), r.random(), r.random(), r.int(6) / 5, r.random() < .3 ? 1 : 0, r.random()];
+    return {v, tdc:r.int(481)};
+  });
+  return SONDAS_CAR;
+}
+function distAcoesSonda(pol){
+  return sondasCarater().map((obs, k) => {
+    const r = criarRng(hashSemente("dist", CCP.semente, k)), cont = Object.fromEntries(ACOES_PET.map(a => [a, 0]));
+    for (let i = 0; i < CCP.amostras; i++) cont[pol.agir(obs, r)]++;
+    return cont;
+  });
+}
+function caraterPolitica(m){
+  const guardada = m.pol.ultDecisao;               /* sondar nao pode mexer no motivo da ultima decisao */
+  const dp = distAcoesSonda(m.pol);
+  m.pol.ultDecisao = guardada;
+  const db = distAcoesSonda(new Bandit(m.temp, m.versao));
+  const porTraco = Object.fromEntries(COMBATE.map(c => [c, 0]));
+  for (const a of ACOES_PET){
+    const desvio = dp.reduce((s, c, k) => s + (c[a] - db[k][a]) / CCP.amostras, 0) / dp.length;
+    porTraco[CA.mapa[a]] += desvio;
+  }
+  return Object.fromEntries(Object.entries(EIXO_TRACO).map(([eixo, ts]) => {
+    const bruto = ts.reduce((s, t) => s + porTraco[t], 0) / ts.length;
+    return [eixo, Math.max(-1, Math.min(1, bruto / CCP.escala))];
+  }));
+}
+/* previsao na aba Evolucao: o carater pela politica custa ~0,15 s; recalcula a cada 2 h de jogo ou acao do dono */
+let cacheCarPrev = {chave:null, car:null};
+function caraterPrevisto(m, quando){
+  if (m.versao < 3) return caraterDe(m.tracos, quando);
+  const chave = [m.semente, Math.floor(m.e.tick / 120), m.nDono, m.evolucoes.length].join("|");
+  if (cacheCarPrev.chave !== chave) cacheCarPrev = {chave, car:caraterPolitica(m)};
+  return cacheCarPrev.car;
+}
 function caraterDe(tracos, quando){
   const af = afinidades(tracos), base = BASE_CARATER[quando];
   if (!base) throw new Error("sem linha de base para " + quando);
@@ -2940,11 +2990,11 @@ function previsaoEvo(m){
       porque:`cuidado ${(c*100).toFixed(0)}% (${m.chamados.atendidos} de ${m.chamados.total} chamados atendidos em até ${CAT.janelaChamado} min)`};
   }
   if (f.est === "crianca"){
-    const car = caraterDe(m.tracos, "adolescente"), linha = linhaDoCarater(car);
+    const car = caraterPrevisto(m, "adolescente"), linha = linhaDoCarater(car);
     return {falta:D.bebe + D.crianca - t, prox:{...f, est:"adolescente", linha}, porque:`caráter ${fmtCar(car)}`};
   }
   if (f.est === "adolescente"){
-    const car = caraterDe(m.tracos, "adulto"), adulta = formaAdultaDe(f.linha, car), comp = CAT.adulto[f.linha].comp;
+    const car = caraterPrevisto(m, "adulto"), adulta = formaAdultaDe(f.linha, car), comp = CAT.adulto[f.linha].comp;
     return {falta:D.bebe + D.crianca + D.adolescente - t, prox:{...f, est:"adulto", adulta},
       porque:`${comp} ${car[comp] >= 0 ? "+" : ""}${car[comp].toFixed(2)}; sparring ${m.sparring}/${CAT.sparring}`};
   }
