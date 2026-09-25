@@ -257,7 +257,13 @@ V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` 
 - Campanha com treino: feita na TAREFA_TREINO_SOMBRIO (`artifacts_campanha/treino.json`). Pendente:
   redesenho dos NPCs para a escada funcionar (é também o que reprova o S2).
 
-## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C REPROVADA
+## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C REPROVADA (só G6b)
+
+**Com os bots redesenhados** (`GAMBITS_V2C`, `ConfigCombateV2C.bots_v2c`; configs `v2c/c7.json` e
+`v2c/validacao_bots.json`), a validação (`artifacts_combate_v2c/validacao_bots/gates.json`) passa
+G1–G9 **exceto G6b**, só pelo atirador: espelho com +5% de condição vence 0,744 (limite 0,65; os outros
+estilos 0,54–0,62). G4 11,3% no limite; G5 todas as ações ≥ 3%; G9 28,6% decisivos com ε 0,2; G8 100%.
+Etapa 3 (V2.1) espera a decisão sobre o G6b do atirador. Detalhes abaixo (primeira rodada, bots da V2).
 
 Etapas 0–2 feitas; **a V2C não passou na validação** e a Etapa 3 (V2.1 corrigida) não foi iniciada.
 `ConfigCombateV2C` (chaves C1–C4 desligadas por padrão: a V2 original reproduz os artefatos),

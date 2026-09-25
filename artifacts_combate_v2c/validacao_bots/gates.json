@@ -1,0 +1,961 @@
+{
+  "ambiente": {
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "artefatos_sha256": {
+    "amostra_replay.jsonl": "13fd255b09ba21ad15d3806dffa1e8cc43cace39c2a1d840772f0cbf220faf5b",
+    "equilibrio.json": "df28b04beb1c10f4ccc1235aa7793d8644b11c1ed67b55a637ae735eaf1564c4",
+    "matriz.json": "2a9818b176016caa4d2bad1936c8e98c0b7628c3f67f30f89ceeb0039377d198",
+    "partidas.csv": "e815ee785b3923775368405054c5db9892b0bac94b9376b4f3fd05d54e9c3d69"
+  },
+  "avisos": [
+    "todos os numeros de ConfigCombateV2 e ConfigBateriaCombate sao PROPOSTOS"
+  ],
+  "config_bateria": {
+    "fracao_max_limite_turnos": 0.2,
+    "fracao_min_acao": 0.03,
+    "iteracoes_fictitious_play": 20000,
+    "mediana_turnos_max": 30.0,
+    "mediana_turnos_min": 8.0,
+    "partidas_g6_por_semente": 50,
+    "partidas_g7_por_semente": 100,
+    "partidas_replay_amostra": 200,
+    "permutacoes_g7": 5,
+    "peso_minimo_suporte": 0.05,
+    "semente_permutacoes_g7": 7007,
+    "suporte_minimo": 3,
+    "taxa_min_adaptativo_vs_aleatorio": 0.7,
+    "taxa_min_g7": 0.6,
+    "tolerancia_espelho": 0.03,
+    "variacao_guts_inicial": 10,
+    "variacao_hp": 0.1
+  },
+  "config_combate_v2": {
+    "bots_v2c": true,
+    "custo_disparo": 20,
+    "custo_esquivar": 20,
+    "custo_golpe_rapido": 10,
+    "custo_preparar_pesado": 15,
+    "dano_disparo": 6.0,
+    "dano_golpe_rapido": 8.0,
+    "dano_parry": 5.0,
+    "dano_pesado": 25.0,
+    "epsilon_bots": 0.05,
+    "finta": true,
+    "fracoes_hp": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "fuga_condicionada": true,
+    "guts_carregar": 25,
+    "guts_extra_defender": 5,
+    "guts_inicial_neutro": 50,
+    "guts_max": 100,
+    "hp_neutro": 70.0,
+    "janela_frequente": 5,
+    "k_repete": [
+      2,
+      3
+    ],
+    "limiar_frequente": 0.4,
+    "limiares_guts": [
+      20,
+      40,
+      60
+    ],
+    "max_condicoes_por_regra": 2,
+    "max_regras": 8,
+    "mult_carregar": 1.5,
+    "mult_defender": 0.3,
+    "mult_defender_contra_pesado": 0.6,
+    "mult_morte_subita": 1.5,
+    "oraculo_passos": 2,
+    "oraculo_top_oponente": 3,
+    "peso_guts_oraculo": 0.002,
+    "peso_pesado_pendente_oraculo": 0.5,
+    "regen_guts_neutro": 8,
+    "t_max": 40,
+    "turno_morte_subita": 25
+  },
+  "conjunto": "validacao",
+  "falharam": [
+    "G6b_espelho_condicao"
+  ],
+  "gates": [
+    {
+      "gate": "G1_sem_estrategia_dominante",
+      "mensagem": "nenhum fixo vence todos os outros; suporte do equilibrio ['agressivo', 'atirador', 'tartaruga'] (>= 3)",
+      "ok": true,
+      "valores": {
+        "dominantes": [],
+        "estrategia": {
+          "agressivo": 0.38355,
+          "aleatorio": 5e-05,
+          "atirador": 0.34925,
+          "contragolpe": 0.0,
+          "tartaruga": 0.26715
+        },
+        "suporte": [
+          "agressivo",
+          "atirador",
+          "tartaruga"
+        ]
+      }
+    },
+    {
+      "gate": "G2_existe_habilidade",
+      "mensagem": "adaptativo x aleatorio 0.995 (>= 0.7), IC95 [0.991, 0.999] (inferior > 0.5: True); media contra fixos: oraculo 0.637 x adaptativo 0.614 (oraculo >= adaptativo: True)",
+      "ok": true,
+      "valores": {
+        "adaptativo_vs_aleatorio": 0.995,
+        "ic95_por_semente": {
+          "ic_inferior": 0.99125,
+          "ic_superior": 0.99875,
+          "media": 0.9949999999999999,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "media_contra_fixos": {
+          "adaptativo": 0.61375,
+          "oraculo": 0.637
+        }
+      }
+    },
+    {
+      "gate": "G3_sanidade",
+      "mensagem": "pontos do lado 0 nos espelhos (vies de posicao) dentro de 0.5 +- 0.03: sim; 200 partidas rejogadas do disco bit a bit",
+      "ok": true,
+      "valores": {
+        "pontos_lado0_espelho": {
+          "adaptativo": 0.5175,
+          "agressivo": 0.48875,
+          "aleatorio": 0.4725,
+          "atirador": 0.49625,
+          "contragolpe": 0.51,
+          "oraculo": 0.515,
+          "tartaruga": 0.50375
+        },
+        "replay_partidas": 200
+      }
+    },
+    {
+      "gate": "G4_ritmo",
+      "mensagem": "mediana de turnos 21.0 (entre 8.0 e 30.0); 0.113 das partidas no limite de turnos (< 0.2)",
+      "ok": true,
+      "valores": {
+        "fins": {
+          "ko": 9930,
+          "limite": 1270
+        },
+        "fracao_limite": 0.11339285714285714,
+        "mediana_turnos": 21.0
+      }
+    },
+    {
+      "gate": "G5_sem_acao_morta",
+      "mensagem": "fracao de cada acao nas decisoes dos bots do suporte ['agressivo', 'atirador', 'tartaruga']; abaixo de 0.03: nenhuma",
+      "ok": true,
+      "valores": {
+        "decisoes_por_bot": {
+          "adaptativo": {
+            "avancar": 7011,
+            "carregar": 857,
+            "defender": 8773,
+            "disparo": 58,
+            "esquivar": 1976,
+            "fintar": 0,
+            "golpe_rapido": 27957,
+            "preparar_pesado": 8656,
+            "recuar": 485
+          },
+          "agressivo": {
+            "avancar": 6616,
+            "carregar": 412,
+            "defender": 11477,
+            "disparo": 63,
+            "esquivar": 369,
+            "fintar": 3157,
+            "golpe_rapido": 16699,
+            "preparar_pesado": 10959,
+            "recuar": 391
+          },
+          "aleatorio": {
+            "avancar": 6655,
+            "carregar": 12444,
+            "defender": 12419,
+            "disparo": 6410,
+            "esquivar": 12082,
+            "fintar": 0,
+            "golpe_rapido": 5924,
+            "preparar_pesado": 5847,
+            "recuar": 9847
+          },
+          "atirador": {
+            "avancar": 3530,
+            "carregar": 9283,
+            "defender": 711,
+            "disparo": 34819,
+            "esquivar": 2739,
+            "fintar": 0,
+            "golpe_rapido": 10800,
+            "preparar_pesado": 177,
+            "recuar": 11929
+          },
+          "contragolpe": {
+            "avancar": 8612,
+            "carregar": 768,
+            "defender": 45425,
+            "disparo": 77,
+            "esquivar": 18611,
+            "fintar": 0,
+            "golpe_rapido": 613,
+            "preparar_pesado": 7895,
+            "recuar": 629
+          },
+          "oraculo": {
+            "avancar": 2882,
+            "carregar": 3469,
+            "defender": 16109,
+            "disparo": 6302,
+            "esquivar": 4175,
+            "fintar": 241,
+            "golpe_rapido": 12347,
+            "preparar_pesado": 12821,
+            "recuar": 524
+          },
+          "tartaruga": {
+            "avancar": 1766,
+            "carregar": 654,
+            "defender": 41963,
+            "disparo": 249,
+            "esquivar": 6331,
+            "fintar": 0,
+            "golpe_rapido": 11710,
+            "preparar_pesado": 11724,
+            "recuar": 571
+          }
+        },
+        "fracao_por_acao": {
+          "avancar": 0.060793500117381674,
+          "carregar": 0.0528166498249482,
+          "defender": 0.27636239295301673,
+          "disparo": 0.17929285196639821,
+          "esquivar": 0.04817241836870094,
+          "golpe_rapido": 0.2001051331516469,
+          "preparar_pesado": 0.11666717702177175,
+          "recuar": 0.0657898765961356
+        }
+      }
+    },
+    {
+      "gate": "G6_condicao_nao_domina_estilo",
+      "mensagem": "maior efeito da condicao (mesmo estilo) 0.300 (atirador) vs efeito do estilo (condicao neutra, melhor - pior) 0.535",
+      "ok": true,
+      "valores": {
+        "efeito_condicao_por_estilo": {
+          "agressivo": 0.12319999999999998,
+          "aleatorio": 0.1036,
+          "atirador": 0.29999999999999993,
+          "contragolpe": 0.1412,
+          "tartaruga": 0.13280000000000003
+        },
+        "efeito_estilo": 0.5352,
+        "taxa_contra_fixos": {
+          "agressivo": {
+            "hp+_guts+": 0.704,
+            "hp+_guts-": 0.716,
+            "hp-_guts+": 0.6216,
+            "hp-_guts-": 0.5928,
+            "neutra": 0.6696
+          },
+          "aleatorio": {
+            "hp+_guts+": 0.2392,
+            "hp+_guts-": 0.216,
+            "hp-_guts+": 0.1472,
+            "hp-_guts-": 0.1356,
+            "neutra": 0.1864
+          },
+          "atirador": {
+            "hp+_guts+": 0.9148,
+            "hp+_guts-": 0.7264,
+            "hp-_guts+": 0.7944,
+            "hp-_guts-": 0.6148,
+            "neutra": 0.7216
+          },
+          "contragolpe": {
+            "hp+_guts+": 0.4124,
+            "hp+_guts-": 0.422,
+            "hp-_guts+": 0.2864,
+            "hp-_guts-": 0.2808,
+            "neutra": 0.302
+          },
+          "tartaruga": {
+            "hp+_guts+": 0.6684,
+            "hp+_guts-": 0.66,
+            "hp-_guts+": 0.5356,
+            "hp-_guts-": 0.5472,
+            "neutra": 0.6448
+          }
+        },
+        "variantes": {
+          "hp+_guts+": {
+            "guts_inicial": 60,
+            "hp_max": 77.0,
+            "regen_guts": 8
+          },
+          "hp+_guts-": {
+            "guts_inicial": 40,
+            "hp_max": 77.0,
+            "regen_guts": 8
+          },
+          "hp-_guts+": {
+            "guts_inicial": 60,
+            "hp_max": 63.0,
+            "regen_guts": 8
+          },
+          "hp-_guts-": {
+            "guts_inicial": 40,
+            "hp_max": 63.0,
+            "regen_guts": 8
+          },
+          "neutra": {
+            "guts_inicial": 50,
+            "hp_max": 70.0,
+            "regen_guts": 8
+          }
+        }
+      }
+    },
+    {
+      "gate": "G7_ordem_dos_gambits_importa",
+      "mensagem": "adaptativo original contra 5 permutacoes da ordem: media 0.843 (>= 0.6)",
+      "ok": true,
+      "valores": {
+        "media": 0.8432000000000001,
+        "por_permutacao": {
+          "02416357": 0.876,
+          "03251467": 0.518,
+          "17360425": 0.915,
+          "51760234": 0.927,
+          "70632154": 0.98
+        }
+      }
+    },
+    {
+      "gate": "G6b_espelho_condicao",
+      "mensagem": "mesmo estilo, condicao +5% x -5% (guts +-2): taxa do favorecido ate 0.744 (atirador); media 0.611 (<= 0.65)",
+      "ok": false,
+      "valores": {
+        "taxa_favorecido": {
+          "adaptativo": 0.618,
+          "agressivo": 0.6,
+          "atirador": 0.744,
+          "contragolpe": 0.54,
+          "tartaruga": 0.554
+        }
+      }
+    },
+    {
+      "gate": "G9_decisividade",
+      "mensagem": "confrontos com taxa < 0.1 ou > 0.9: epsilon 0.05 -> 0.429; epsilon 0.2 -> 0.286 (<= 0.5)",
+      "ok": true,
+      "valores": {
+        "fracao_decisivos_eps_base": 0.42857142857142855,
+        "fracao_decisivos_eps_g9": 0.2857142857142857,
+        "taxa_eps_g9": {
+          "adaptativo": {
+            "adaptativo": 0.5,
+            "agressivo": 0.78,
+            "aleatorio": 0.985,
+            "atirador": 0.58,
+            "contragolpe": 0.5275,
+            "oraculo": 0.395,
+            "tartaruga": 0.56
+          },
+          "agressivo": {
+            "adaptativo": 0.22,
+            "agressivo": 0.5,
+            "aleatorio": 0.945,
+            "atirador": 0.4625,
+            "contragolpe": 0.915,
+            "oraculo": 0.2425,
+            "tartaruga": 0.2675
+          },
+          "aleatorio": {
+            "adaptativo": 0.015,
+            "agressivo": 0.055,
+            "aleatorio": 0.5,
+            "atirador": 0.0,
+            "contragolpe": 0.2975,
+            "oraculo": 0.0475,
+            "tartaruga": 0.21
+          },
+          "atirador": {
+            "adaptativo": 0.42,
+            "agressivo": 0.5375,
+            "aleatorio": 1.0,
+            "atirador": 0.5,
+            "contragolpe": 0.7825,
+            "oraculo": 0.5575,
+            "tartaruga": 0.955
+          },
+          "contragolpe": {
+            "adaptativo": 0.4725,
+            "agressivo": 0.085,
+            "aleatorio": 0.7025,
+            "atirador": 0.2175,
+            "contragolpe": 0.5,
+            "oraculo": 0.1425,
+            "tartaruga": 0.1975
+          },
+          "oraculo": {
+            "adaptativo": 0.605,
+            "agressivo": 0.7575,
+            "aleatorio": 0.9525,
+            "atirador": 0.4425,
+            "contragolpe": 0.8575,
+            "oraculo": 0.5,
+            "tartaruga": 0.1875
+          },
+          "tartaruga": {
+            "adaptativo": 0.44,
+            "agressivo": 0.7325,
+            "aleatorio": 0.79,
+            "atirador": 0.045,
+            "contragolpe": 0.8025,
+            "oraculo": 0.8125,
+            "tartaruga": 0.5
+          }
+        }
+      }
+    },
+    {
+      "gate": "G8_robustez",
+      "mensagem": "G1 vale em 1.000 das 40 perturbacoes (+-10%, uma por vez; >= 0.8)",
+      "ok": true,
+      "valores": {
+        "fracao": 1.0,
+        "perturbacoes": [
+          {
+            "G1": true,
+            "campo": "hp_neutro",
+            "de": 70.0,
+            "dominantes": [],
+            "para": 63.0,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "hp_neutro",
+            "de": 70.0,
+            "dominantes": [],
+            "para": 77.0,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_inicial_neutro",
+            "de": 50,
+            "dominantes": [],
+            "para": 45,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_inicial_neutro",
+            "de": 50,
+            "dominantes": [],
+            "para": 55,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "regen_guts_neutro",
+            "de": 8,
+            "dominantes": [],
+            "para": 7,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "regen_guts_neutro",
+            "de": 8,
+            "dominantes": [],
+            "para": 9,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_max",
+            "de": 100,
+            "dominantes": [],
+            "para": 90,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_max",
+            "de": 100,
+            "dominantes": [],
+            "para": 110,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "t_max",
+            "de": 40,
+            "dominantes": [],
+            "para": 36,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "t_max",
+            "de": 40,
+            "dominantes": [],
+            "para": 44,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_golpe_rapido",
+            "de": 10,
+            "dominantes": [],
+            "para": 9,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_golpe_rapido",
+            "de": 10,
+            "dominantes": [],
+            "para": 11,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_preparar_pesado",
+            "de": 15,
+            "dominantes": [],
+            "para": 14,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_preparar_pesado",
+            "de": 15,
+            "dominantes": [],
+            "para": 16,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_disparo",
+            "de": 20,
+            "dominantes": [],
+            "para": 18,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_disparo",
+            "de": 20,
+            "dominantes": [],
+            "para": 22,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_esquivar",
+            "de": 20,
+            "dominantes": [],
+            "para": 18,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "custo_esquivar",
+            "de": 20,
+            "dominantes": [],
+            "para": 22,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_golpe_rapido",
+            "de": 8.0,
+            "dominantes": [],
+            "para": 7.2,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_golpe_rapido",
+            "de": 8.0,
+            "dominantes": [],
+            "para": 8.8,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_pesado",
+            "de": 25.0,
+            "dominantes": [],
+            "para": 22.5,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_pesado",
+            "de": 25.0,
+            "dominantes": [],
+            "para": 27.500000000000004,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_disparo",
+            "de": 6.0,
+            "dominantes": [],
+            "para": 5.4,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_disparo",
+            "de": 6.0,
+            "dominantes": [],
+            "para": 6.6000000000000005,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_defender",
+            "de": 0.3,
+            "dominantes": [],
+            "para": 0.27,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_defender",
+            "de": 0.3,
+            "dominantes": [],
+            "para": 0.33,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_defender_contra_pesado",
+            "de": 0.6,
+            "dominantes": [],
+            "para": 0.54,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_defender_contra_pesado",
+            "de": 0.6,
+            "dominantes": [],
+            "para": 0.66,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_carregar",
+            "de": 1.5,
+            "dominantes": [],
+            "para": 1.35,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_carregar",
+            "de": 1.5,
+            "dominantes": [],
+            "para": 1.6500000000000001,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_extra_defender",
+            "de": 5,
+            "dominantes": [],
+            "para": 4,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_extra_defender",
+            "de": 5,
+            "dominantes": [],
+            "para": 6,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_carregar",
+            "de": 25,
+            "dominantes": [],
+            "para": 22,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "guts_carregar",
+            "de": 25,
+            "dominantes": [],
+            "para": 28,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_parry",
+            "de": 5.0,
+            "dominantes": [],
+            "para": 4.5,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "dano_parry",
+            "de": 5.0,
+            "dominantes": [],
+            "para": 5.5,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "turno_morte_subita",
+            "de": 25,
+            "dominantes": [],
+            "para": 22,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "turno_morte_subita",
+            "de": 25,
+            "dominantes": [],
+            "para": 28,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_morte_subita",
+            "de": 1.5,
+            "dominantes": [],
+            "para": 1.35,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          },
+          {
+            "G1": true,
+            "campo": "mult_morte_subita",
+            "de": 1.5,
+            "dominantes": [],
+            "para": 1.6500000000000001,
+            "suporte": [
+              "agressivo",
+              "atirador",
+              "tartaruga"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "hashes": {
+    "arquivos_regras": [
+      "__init__.py",
+      "bots.py",
+      "gambits.py",
+      "lutador.py",
+      "partida.py",
+      "regras.py"
+    ],
+    "config_sha256": "ccb747b9beb5a6d8f111e0cb625a91769f59d1734a4db85f36f948c1818f3cb2",
+    "regras_sha256": "7eb0face69e0bcc208e5f89d1c889b2e08d9c44fd1387fee87f340c9402a787e"
+  },
+  "partidas_por_par_por_semente": 80,
+  "registro_calibracao": null,
+  "sementes": [
+    2101,
+    2202,
+    2303,
+    2404,
+    2505
+  ],
+  "sementes_calibracao": [
+    1101,
+    1202,
+    1303,
+    1404,
+    1505
+  ],
+  "sementes_validacao": [
+    2101,
+    2202,
+    2303,
+    2404,
+    2505
+  ],
+  "status": "REPROVADA"
+}
