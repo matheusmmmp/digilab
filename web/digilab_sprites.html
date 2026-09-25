@@ -131,10 +131,6 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .treino-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin-top:8px}
 .treino-btns .sbtn.forcar{background:var(--bad);color:#fff}
 .jeito .muted{min-width:56px}
-.campanha{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:8px}
-.desafio{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
-.desafio.bloq{opacity:.55}
-.desafio .st{font-size:.85em;font-weight:700}
 .cenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
 .cen{font:inherit;text-align:left;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;display:grid;gap:4px}
 .cen b{font-size:14px}
@@ -178,6 +174,29 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 @media (prefers-reduced-motion: reduce){.btn{transition:none}}
 .evo-rola{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* mapa da campanha: ilustracao fixa (como a tela do pet), igual nos dois temas */
+.mapa-rola{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
+.mapa{width:100%;min-width:320px;height:auto;display:block;border-radius:14px;background:#7FC7A0}
+.mapa text{font-family:var(--f-pixel);font-size:9px;letter-spacing:.04em}
+.mapa .rotulo{fill:#10213A;font-weight:700}
+.mapa .rotulo-bg{fill:#F4F1E4;opacity:.92}
+.mapa .st{font-family:var(--f-body);font-size:8.5px;fill:#10213A}
+.mapa .no{cursor:pointer}
+.mapa .no:focus{outline:none}
+.mapa .no:focus-visible .anel,.mapa .no.sel .anel{stroke:#F0A534;stroke-width:4}
+.mapa .no.bloq{cursor:not-allowed}
+.mapa .no.bloq image{opacity:.35;filter:grayscale(1)}
+.mapa .no .pulso{fill:none;stroke:#F0A534;stroke-width:2;opacity:0}
+.mapa .no.aberto .pulso{animation:pulso 1.6s ease-out infinite}
+@keyframes pulso{0%{r:21;opacity:.9}100%{r:31;opacity:0}}
+.mapa .pet-mapa{animation:pula 1s steps(2) infinite}
+@keyframes pula{0%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@media (prefers-reduced-motion: reduce){.mapa .no.aberto .pulso,.mapa .pet-mapa{animation:none}}
+.camp-det{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:8px;background:var(--ground)}
+.camp-det h3{margin:0;font-size:16px}
+.camp-det .licao{font-style:italic}
+.camp-det .aviso{color:var(--warn);font-weight:700}
+.camp-prog{display:flex;gap:6px;flex-wrap:wrap}
 /* atalho de volta ao pet no celular (a tela do pet fica acima das abas) */
 .ir-pet{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:10;font:inherit;font-weight:700;border:0;border-radius:999px;padding:12px 16px;background:var(--shell);color:var(--shell-ink);box-shadow:0 4px 14px rgba(20,30,70,.35);cursor:pointer}
 .ir-pet:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -256,6 +275,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <button class="tab" role="tab" id="t-estado" data-pane="estado" aria-selected="true">Estado</button>
         <button class="tab" role="tab" id="t-aprend" data-pane="aprend" aria-selected="false">Aprendizado</button>
         <button class="tab" role="tab" id="t-arena" data-pane="arena" aria-selected="false">Arena</button>
+        <button class="tab" role="tab" id="t-campanha" data-pane="campanha" aria-selected="false">Campanha</button>
         <button class="tab" role="tab" id="t-evolucao" data-pane="evolucao" aria-selected="false">Evolução</button>
         <button class="tab" role="tab" id="t-catalogo" data-pane="catalogo" aria-selected="false">Catálogo</button>
         <button class="tab" role="tab" id="t-cenarios" data-pane="cenarios" aria-selected="false">Cenários</button>
@@ -342,6 +362,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <p class="muted" id="rival-fixo" hidden></p>
         <p class="muted" id="arena-estilo"></p>
+        <div id="palco-arena"><div id="palco" style="display:grid;gap:12px">
         <canvas id="arenacv" class="arena-cv" width="96" height="48" aria-label="Arena"></canvas>
         <div class="hp">
           <div><div class="nm">Seu pet <span><span id="hp-a">70</span> · guts <span id="gt-a">50</span></span></div><div class="bar"><i id="hpb-a" style="width:100%"></i></div><div class="bar gt"><i id="gtb-a" style="width:50%"></i></div></div>
@@ -349,11 +370,8 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <p class="resultado" id="arena-res">Escolha um rival e aperte Lutar.</p>
         <div class="arena-fala" id="arena-fala" aria-live="polite"></div>
-        <div>
-          <h2>Campanha</h2>
-          <p class="muted" style="margin-top:4px">Três desafios em sequência; o próximo só abre depois de vencer o anterior. Os NPCs têm stats iguais em todos os atributos (somando de 54 a 120; um pet sem treino tem 60), são adultos e lutam com um estilo fixo. As lutas entram no registro e ensinam os gambits. O primeiro testa stats (treino decide), o segundo testa estilo e o chefe só cai com o estilo certo e muito treino.</p>
-          <div class="campanha" id="campanha"></div>
-        </div>
+        </div></div>
+        <p class="muted">A campanha contra os NPCs fica na aba <b>Campanha</b>.</p>
         <div>
           <h2>Gambits do seu pet</h2>
           <div id="gambits" style="margin-top:6px"></div>
@@ -362,6 +380,13 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
           <h2>Regras</h2>
           <p class="muted" style="margin-top:4px">Os dois revelam a ação ao mesmo tempo. Golpe rápido (perto, 10 guts, 8 de dano) interrompe quem prepara o pesado; defender contra golpe rápido devolve 5 (parry). O pesado (perto, 15 guts) sai no turno seguinte com 25 de dano e não é interrompido; foge-se dele recuando no turno da preparação ou esquivando (20 guts) no da execução. No turno de execução dá para <b>fintar</b> em vez de soltar o pesado: um golpe de 8 que acerta quem esquivou e não quebra a guarda. Disparo (médio/longe, 20 guts, 6 de dano). Defender reduz o dano a 30% (pesado: 60%) e rende +5 guts; carregar rende +25 guts mas o dano recebido sobe 50%. <b>Recuar não afasta se o oponente avança no mesmo turno</b> (avançar é ilegal de perto e recuar é ilegal de longe). A marca do caçador se perde se ele levar dano corpo a corpo ou terminar o turno de perto. A partir do turno 25 todo dano sobe 50% (morte súbita). Os danos, a vida, o guts e a defesa mudam com os stats da forma (aba Catálogo); as técnicas e passivas também estão lá. Após 40 turnos vence quem tem mais vida (proporcional). Os bots clássicos lutam com stats neutros.</p>
         </div>
+      </div>
+
+      <div class="pane" id="p-campanha" hidden>
+        <p>Três desafios pelo mapa, em sequência: o próximo lugar só abre depois de vencer o anterior. Os NPCs têm stats iguais em todos os atributos (somando de 54 a 120; um pet sem treino tem 60), são adultos e lutam com um estilo fixo. Na campanha o treino vale inteiro (stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
+        <div class="mapa-rola"><svg class="mapa" id="mapa" viewBox="0 0 360 230" role="group" aria-label="Mapa da campanha"></svg></div>
+        <div class="camp-det" id="camp-det" aria-live="polite"></div>
+        <div id="palco-camp"></div>
       </div>
 
       <div class="pane" id="p-evolucao" hidden>
@@ -2030,9 +2055,12 @@ const CRIANCA_V21 = {
    Cada desafio so abre depois de vencer o anterior. Escada rebalanceada (experiments/calibrar_campanha.py):
    tier 1 prova de stats, tier 2 prova de estilo, chefe so cai com estilo certo e treino alto. */
 const CAMPANHA = [
-  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:54, estilo:"v21:espelho", sugerido:"criança", sprite:"adulto_golpe", cor:"golpe"},
-  {k:"npc_tier2_sentinela", nome:"Sentinela", total:80, estilo:"v21:furioso", sugerido:"adolescente", sprite:"adulto_agarrao", cor:"agarrao"},
-  {k:"npc_tier3_soberano", nome:"Soberano", total:120, estilo:"v2c:agressivo", sugerido:"adulto", sprite:"adulto_carga", cor:"carga"},
+  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:54, estilo:"v21:espelho", sugerido:"criança", est:"crianca", sprite:"adulto_golpe", cor:"golpe",
+   lugar:"Campina", x:74, y:176, licao:"Prova de stats: ele luta parecido com muita gente; quem treinou mais leva."},
+  {k:"npc_tier2_sentinela", nome:"Sentinela", total:80, estilo:"v21:furioso", sugerido:"adolescente", est:"adolescente", sprite:"adulto_agarrao", cor:"agarrao",
+   lugar:"Torre de pedra", x:196, y:118, licao:"Prova de estilo: ele parte para cima sem parar. Treino quase não ajuda; o jeito de lutar decide."},
+  {k:"npc_tier3_soberano", nome:"Soberano", total:120, estilo:"v2c:agressivo", sugerido:"adulto", est:"adulto", sprite:"adulto_carga", cor:"carga",
+   lugar:"Cidadela", x:300, y:58, licao:"O chefe: forte em tudo. Só cai com o estilo certo e muito treino."},
 ];
 /* v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem);
    v2c: bots redesenhados da V2C (os BOTS_V2 da web) */
@@ -2554,10 +2582,14 @@ document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () =>
 function mostrarPane(p){
   paneAtual = p;
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.pane === p)));
-  for (const id of ["estado","aprend","arena","evolucao","catalogo","cenarios","registro"]) $("p-" + id).hidden = id !== p;
+  for (const id of ["estado","aprend","arena","campanha","evolucao","catalogo","cenarios","registro"]) $("p-" + id).hidden = id !== p;
+  /* o palco da luta mora na aba visivel (Arena ou Campanha) */
+  if (p === "campanha") $("palco-camp").appendChild($("palco"));
+  else if (p === "arena") $("palco-arena").appendChild($("palco"));
   try { localStorage.setItem(CHAVE + "-aba", p); } catch(_){}
   renderTudo();
   if (p === "arena"){ renderGambits(); arenaPreview(); }
+  if (p === "campanha" && !lutando){ renderCampanha(); campPreview(); }
   if (p === "catalogo") renderCatalogo();
 }
 
@@ -2932,22 +2964,122 @@ function prepararRival(){
 }
 function arenaPreview(){
   const A = lutadorPet(motor, "Seu pet"), B = prepararRival(), E = estadoV2(A.cond, B.cond);
-  desenharArenaV2(A, B, E, null); setBarras(E); renderCampanha();
+  desenharArenaV2(A, B, E, null); setBarras(E);
   const pa = A.cond, extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(", ");
   $("arena-estilo").textContent = `Seu pet: ${nomeForma(motor.forma)}, vida ${pa.hpMax.toFixed(0)}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; gambits semeados por ${NOME_BOT[A.estilo.base] || A.estilo.base} · rival: ${B.estilo.oraculo ? "oráculo (referência fora dos gambits)" : B.nome.replace("Rival ", "")}.`;
 }
 let lutando = false;
-function travar(v){ lutando = v; $("lutar").disabled = v; $("melhor10").disabled = v; renderCampanha(); }
-function renderCampanha(){
-  $("campanha").innerHTML = CAMPANHA.map((c, i) => {
-    const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k);
-    const st = vit ? `vencido (${vit}×)` : aberto ? "aberto" : `bloqueado: vença ${CAMPANHA[i - 1].nome}`;
-    return `<div class="desafio${aberto ? "" : " bloq"}"><b>${i + 1}. ${c.nome}</b>
-      <span class="muted">stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total}) · estilo ${nomeEstiloNPC(c.estilo)} · sugerido: ${c.sugerido}</span>
-      <span class="st">${st}</span>
-      <button class="sbtn${vit ? " sec" : ""}" data-npc="${c.k}"${aberto && !lutando ? "" : " disabled"}>Desafiar</button></div>`;
-  }).join("");
+function travar(v){ lutando = v; $("lutar").disabled = v; $("melhor10").disabled = v; if (paneAtual === "campanha") renderCampanha(); }
+/* ------------------------------------------------ campanha: mapa */
+let campSel = null;
+const ORDEM_EST = ["ovo", "bebe", "crianca", "adolescente", "adulto"];
+function imagemChave(nome){
+  const chave = `${atlasOk ? "a" : "p"}|${nome}`;
+  if (evoCache.has(chave)) return evoCache.get(chave);
+  const c = document.createElement("canvas"), ctx = c.getContext("2d");
+  if (atlasOk && ATLAS[nome]){ const r = ATLAS[nome]; c.width = r[2]; c.height = r[3]; sprite(ctx, nome, 0, 0); }
+  else { const g = S.adulto; c.width = Math.max(...g.map(l => l.length)); c.height = g.length; desenhar(ctx, g, 0, 0, paleta("carga")); }
+  const url = c.toDataURL(); evoCache.set(chave, url); return url;
 }
+const tentativas = k => motor.log.reduce((n, e) => n + (e[1] === "l" && e[2].r === k), 0);
+/* proximo desafio: o primeiro aberto e ainda nao vencido (ou o ultimo, se tudo vencido) */
+function campProximo(){ return (CAMPANHA.find(c => motor.desafioAberto(c.k) && !motor.campanha[c.k]) || CAMPANHA[CAMPANHA.length - 1]).k; }
+function arvoreMapa(x, y, cor){ return `<polygon points="${x},${y - 14} ${x - 7},${y} ${x + 7},${y}" fill="${cor}"/><rect x="${x - 1.5}" y="${y}" width="3" height="4" fill="#6B4A2B"/>`; }
+function cenarioMapa(){
+  const t = [];
+  /* ceu ao fundo, montanhas, rio e chao */
+  t.push(`<rect width="360" height="230" fill="#8FD0A8"/>`);
+  t.push(`<rect width="360" height="70" fill="#B9E3F0"/>`);
+  t.push(`<polygon points="200,70 250,18 300,70" fill="#8C8FA3"/><polygon points="240,70 300,6 360,70" fill="#6F7389"/><polygon points="286,14 300,6 314,14 306,18 294,18" fill="#F4F6FF"/>`);
+  t.push(`<polygon points="150,70 185,40 220,70" fill="#9EA2B4"/>`);
+  t.push(`<rect y="70" width="360" height="160" fill="#8FD0A8"/>`);
+  t.push(`<path d="M0,120 C40,112 70,132 110,126 S170,140 150,170 S120,215 140,230" fill="none" stroke="#5BA9D6" stroke-width="9" opacity=".85"/>`);
+  t.push(`<rect x="120" y="150" width="26" height="6" fill="#8B6A43"/><rect x="120" y="148" width="2" height="10" fill="#6B4A2B"/><rect x="144" y="148" width="2" height="10" fill="#6B4A2B"/>`);
+  /* campina: flores e arvores */
+  for (const [x, y] of [[22,150],[36,196],[118,204],[108,180],[16,214],[58,212]]) t.push(arvoreMapa(x, y, "#3F8F5A"));
+  for (const [x, y] of [[48,160],[96,160],[40,182],[92,198],[66,150]]) t.push(`<rect x="${x}" y="${y}" width="3" height="3" fill="#F7E27A"/><rect x="${x + 5}" y="${y + 2}" width="3" height="3" fill="#F2A1B5"/>`);
+  /* torre de pedra */
+  t.push(`<rect x="218" y="88" width="20" height="46" fill="#A5A9B8"/><rect x="216" y="84" width="24" height="6" fill="#8C90A0"/>`);
+  for (let i = 0; i < 4; i++) t.push(`<rect x="${216 + i * 7}" y="79" width="4" height="6" fill="#8C90A0"/>`);
+  t.push(`<rect x="225" y="120" width="6" height="14" fill="#4B4F63"/><rect x="226" y="98" width="4" height="6" fill="#4B4F63"/>`);
+  for (const [x, y] of [[170,100],[250,140],[176,142],[262,110]]) t.push(arvoreMapa(x, y, "#357A4D"));
+  /* cidadela no morro */
+  t.push(`<polygon points="262,92 300,60 340,92" fill="#6E5B7B"/>`);
+  t.push(`<rect x="312" y="36" width="30" height="30" fill="#4E4466"/><rect x="306" y="30" width="10" height="36" fill="#5C5078"/><rect x="338" y="30" width="10" height="36" fill="#5C5078"/>`);
+  for (const x of [306, 311, 338, 343]) t.push(`<rect x="${x}" y="25" width="4" height="6" fill="#5C5078"/>`);
+  t.push(`<rect x="323" y="52" width="8" height="14" fill="#23203A"/><rect x="326" y="18" width="2" height="12" fill="#23203A"/><polygon points="328,18 338,21 328,24" fill="#C8443A"/>`);
+  /* casa (ponto de partida) */
+  t.push(`<rect x="12" y="92" width="22" height="16" fill="#E9D2A8"/><polygon points="9,93 23,80 37,93" fill="#C8443A"/><rect x="20" y="99" width="6" height="9" fill="#6B4A2B"/>`);
+  return t.join("");
+}
+function renderCampanha(){
+  const svg = $("mapa");
+  if (!svg || !motor) return;
+  if (!campSel || !NPC[campSel]) campSel = campProximo();
+  const pts = [[24, 112], ...CAMPANHA.map(c => [c.x, c.y])];
+  const vencidos = CAMPANHA.filter(c => motor.campanha[c.k]).length;
+  /* caminho: tracejado inteiro e, por cima, o trecho ja percorrido */
+  const d = pts.map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
+  const feito = pts.slice(0, vencidos + 1).map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
+  let h = cenarioMapa();
+  h += `<path d="${d}" fill="none" stroke="#F4F1E4" stroke-width="5" stroke-dasharray="2 6" stroke-linecap="round"/>`;
+  if (vencidos) h += `<path d="${feito}" fill="none" stroke="#F0A534" stroke-width="5" stroke-linecap="round"/>`;
+  CAMPANHA.forEach((c, i) => {
+    const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k);
+    const cls = ["no", aberto ? (vit ? "vencido" : "aberto") : "bloq", c.k === campSel ? "sel" : ""].filter(Boolean).join(" ");
+    const st = vit ? `vencido ${vit}×` : aberto ? "aberto" : "trancado";
+    const w = Math.max((c.lugar.length + 3) * 7.4, (c.nome.length + st.length + 3) * 5) + 14;
+    h += `<g class="${cls}" data-npc="${c.k}" tabindex="0" role="button" aria-label="${i + 1}. ${c.lugar}: ${c.nome}, ${st}">
+      <circle class="pulso" cx="${c.x}" cy="${c.y}" r="21"/>
+      <circle class="anel" cx="${c.x}" cy="${c.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
+      <image href="${imagemChave(c.sprite + "_0")}" x="${c.x - 12}" y="${c.y - 12}" width="24" height="24" style="image-rendering:pixelated"/>
+      ${aberto ? "" : `<g transform="translate(${c.x + 9},${c.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
+      ${vit ? `<g transform="translate(${c.x + 10},${c.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
+      <rect class="rotulo-bg" x="${c.x - w / 2}" y="${c.y + 23}" width="${w}" height="24" rx="4"/>
+      <text class="rotulo" x="${c.x}" y="${c.y + 33}" text-anchor="middle">${i + 1}. ${c.lugar.toUpperCase()}</text>
+      <text class="st" x="${c.x}" y="${c.y + 43}" text-anchor="middle">${c.nome} · ${st}</text>
+    </g>`;
+  });
+  /* seu pet: parado no proximo desafio (ou na casa, se nenhum aberto foi vencido ainda) */
+  const [px, py] = pts[vencidos];
+  const [ix, iy] = vencidos ? [px - 44, py - 18] : [px + 14, py - 22];     /* ao lado do lugar; na casa, a direita dela */
+  if (motor.forma.est !== "ovo")
+    h += `<g class="pet-mapa"><image href="${imagemForma(motor.forma)}" x="${ix}" y="${iy}" width="22" height="22" style="image-rendering:pixelated"/></g>`;
+  svg.innerHTML = h;
+  renderCampDet();
+}
+function renderCampDet(){
+  const c = CAMPANHA.find(x => x.k === campSel), i = CAMPANHA.indexOf(c);
+  const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k), tent = tentativas(c.k);
+  const est = motor.forma.est, cedo = ORDEM_EST.indexOf(est) < ORDEM_EST.indexOf(c.est);
+  const st = vit ? `vencido ${vit}× em ${tent} luta${tent === 1 ? "" : "s"}` : aberto ? (tent ? `${tent} tentativa${tent === 1 ? "" : "s"}, nenhuma vitória ainda` : "aberto, ainda não enfrentado") : `trancado: vença ${CAMPANHA[i - 1].nome} (${CAMPANHA[i - 1].lugar}) antes`;
+  $("camp-det").innerHTML = `<h3>${i + 1}. ${c.lugar}: ${c.nome}</h3>
+    <p class="licao">${c.licao}</p>
+    <p class="muted">stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total}) · estilo ${nomeEstiloNPC(c.estilo)} · sugerido a partir de: ${c.sugerido}</p>
+    ${cedo && aberto ? `<p class="aviso">Seu pet ainda é ${NOME_ESTAGIO_FALA[est] || est}: este desafio é pensado para ${c.sugerido} em diante.</p>` : ""}
+    <p><b>${st}</b></p>
+    <div class="row"><button class="sbtn${vit ? " sec" : ""}" data-npc="${c.k}"${aberto && !lutando && est !== "ovo" && est !== "bebe" ? "" : " disabled"}>${vit ? "Lutar de novo" : "Desafiar"}</button>
+    <span class="muted">${est === "ovo" || est === "bebe" ? "O bebê ainda não luta na campanha." : ""}</span></div>`;
+}
+function campPreview(){
+  if (!campSel) campSel = campProximo();
+  const A = lutadorPet(motor, "Seu pet", true), B = lutadorBot(campSel), E = estadoV2(A.cond, B.cond);
+  desenharArenaV2(A, B, E, null); setBarras(E);
+  if (!lutando){ $("arena-res").textContent = `Seu pet × ${B.nome.replace("Rival ", "")}: escolha um lugar no mapa e aperte Desafiar.`; $("arena-fala").innerHTML = ""; }
+}
+function selecionarLugar(k){
+  if (lutando || !NPC[k]) return;
+  campSel = k; renderCampanha(); campPreview();
+}
+$("mapa").addEventListener("click", ev => { const g = ev.target.closest("[data-npc]"); if (g) selecionarLugar(g.dataset.npc); });
+$("mapa").addEventListener("keydown", ev => {
+  const g = ev.target.closest("[data-npc]");
+  if (g && (ev.key === "Enter" || ev.key === " ")){ ev.preventDefault(); selecionarLugar(g.dataset.npc); $("mapa").querySelector(`[data-npc="${g.dataset.npc}"]`).focus(); }
+});
+$("camp-det").addEventListener("click", ev => {
+  const b = ev.target.closest("button[data-npc]");
+  if (b){ $("palco").scrollIntoView({behavior:"smooth", block:"nearest"}); lutarAnimado(b.dataset.npc); }
+});
 function narrar(A, B, tr){
   const ma = motivoCombate(tr, 0, A.estilo), mb = motivoCombate(tr, 1, B.estilo);
   const fa = expressar(ma, A.estagioFala, ma.refs), fb = expressar(mb, B.estagioFala, mb.refs);
@@ -2965,10 +3097,6 @@ function narrar(A, B, tr){
   document.querySelector(`#arena-fala [data-turno="${tr.t}"]`).textContent = textoPet;
 }
 $("lutar").addEventListener("click", () => lutarAnimado(null));
-$("campanha").addEventListener("click", ev => {
-  const b = ev.target.closest("button[data-npc]");
-  if (b) lutarAnimado(b.dataset.npc);
-});
 /* npc != null: desafio da campanha (ignora o seletor e o pet de cenario) */
 function lutarAnimado(npc){
   if (lutando) return; travar(true);
@@ -2992,6 +3120,7 @@ function lutarAnimado(npc){
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "")
         + (npc && res.pontosA === 1 && NPC[npc].tier < CAMPANHA.length && motor.campanha[npc] === 1 ? ` Desafio ${CAMPANHA[NPC[npc].tier].nome} liberado!` : "")
         + (npc && res.pontosA === 1 && NPC[npc].tier === CAMPANHA.length && motor.campanha[npc] === 1 ? " Campanha concluída!" : "");
+      if (npc && res.pontosA === 1 && motor.campanha[npc] === 1) campSel = null;   /* venceu pela 1a vez: mapa vai ao proximo */
       travar(false); renderGambits(); return;
     }
     const tr = res.turnos[i++];
