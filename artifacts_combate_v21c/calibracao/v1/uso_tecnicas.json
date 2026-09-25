@@ -1,0 +1,271 @@
+{
+  "resposta_declarada": {
+    "contra_golpe": {
+      "reducao": 0.05027343749999996,
+      "regras_resposta": [
+        {
+          "entao": "recuar",
+          "se": [
+            {
+              "nome": "distancia_eh",
+              "params": [
+                "perto"
+              ]
+            }
+          ]
+        },
+        {
+          "entao": "disparo",
+          "se": [
+            {
+              "nome": "guts_proprio_acima",
+              "params": [
+                20
+              ]
+            }
+          ]
+        }
+      ],
+      "taxa_com_resposta": 0.46234375,
+      "taxa_sem_resposta": 0.5126171875,
+      "usuarios": [
+        "espelho",
+        "muralha"
+      ]
+    },
+    "investida": {
+      "reducao": 0.029335937499999964,
+      "regras_resposta": [
+        {
+          "entao": "defender",
+          "se": [
+            {
+              "nome": "distancia_eh",
+              "params": [
+                "medio"
+              ]
+            }
+          ]
+        }
+      ],
+      "taxa_com_resposta": 0.57140625,
+      "taxa_sem_resposta": 0.6007421875,
+      "usuarios": [
+        "duelista",
+        "furioso"
+      ]
+    },
+    "marcar": {
+      "reducao": -0.30183593750000004,
+      "regras_resposta": [
+        {
+          "entao": "avancar",
+          "se": [
+            {
+              "nome": "distancia_eh",
+              "params": [
+                "longe"
+              ]
+            }
+          ]
+        },
+        {
+          "entao": "avancar",
+          "se": [
+            {
+              "nome": "distancia_eh",
+              "params": [
+                "medio"
+              ]
+            }
+          ]
+        }
+      ],
+      "taxa_com_resposta": 0.9271875,
+      "taxa_sem_resposta": 0.6253515625,
+      "usuarios": [
+        "sentinela",
+        "emboscador"
+      ]
+    },
+    "pele_dura": {
+      "reducao": 0.25027343750000003,
+      "regras_resposta": [
+        {
+          "entao": "recuar",
+          "se": [
+            {
+              "nome": "distancia_eh",
+              "params": [
+                "perto"
+              ]
+            }
+          ]
+        },
+        {
+          "entao": "disparo",
+          "se": [
+            {
+              "nome": "guts_proprio_acima",
+              "params": [
+                20
+              ]
+            }
+          ]
+        }
+      ],
+      "taxa_com_resposta": 0.002890625,
+      "taxa_sem_resposta": 0.2531640625,
+      "usuarios": [
+        "vigia",
+        "tita"
+      ]
+    }
+  },
+  "uso_nas_partidas_do_e1": {
+    "duelista": {
+      "fracao": 0.2110245289470369,
+      "por_acao": {
+        "avancar": 0.031889430777259885,
+        "carregar": 0.05408785790127234,
+        "contra_golpe": 0.0,
+        "defender": 0.009232098187773319,
+        "disparo": 0.00185361815466014,
+        "esquivar": 0.03560566523296201,
+        "golpe_rapido": 0.4332787445786168,
+        "investida": 0.2110245289470369,
+        "marcar": 0.0,
+        "pele_dura": 0.0,
+        "preparar_pesado": 0.21464178379253873,
+        "recuar": 0.008386272427879857
+      },
+      "tecnica": "investida"
+    },
+    "emboscador": {
+      "fracao": 0.2948384842613474,
+      "por_acao": {
+        "avancar": 0.006212876790648921,
+        "carregar": 0.06192548359432074,
+        "contra_golpe": 0.0,
+        "defender": 0.008544293745831084,
+        "disparo": 0.2643648953403424,
+        "esquivar": 0.009789410157862973,
+        "golpe_rapido": 0.0021726010863005432,
+        "investida": 0.0,
+        "marcar": 0.2948384842613474,
+        "pele_dura": 0.0,
+        "preparar_pesado": 0.0022869485118953087,
+        "recuar": 0.34986500651145064
+      },
+      "tecnica": "marcar"
+    },
+    "espelho": {
+      "fracao": 0.42202914568750255,
+      "por_acao": {
+        "avancar": 0.020830774898685987,
+        "carregar": 0.03773691104834418,
+        "contra_golpe": 0.42202914568750255,
+        "defender": 0.33111261205943754,
+        "disparo": 0.003909288141143723,
+        "esquivar": 0.006902656678537803,
+        "golpe_rapido": 0.16425150435957264,
+        "investida": 0.0,
+        "marcar": 0.0,
+        "pele_dura": 0.0,
+        "preparar_pesado": 0.006994760325842237,
+        "recuar": 0.006232346800933317
+      },
+      "tecnica": "contra_golpe"
+    },
+    "furioso": {
+      "fracao": 0.17592108701332637,
+      "por_acao": {
+        "avancar": 0.04478517301877636,
+        "carregar": 0.03698346336182762,
+        "contra_golpe": 0.0,
+        "defender": 0.0,
+        "disparo": 0.0013811639105603046,
+        "esquivar": 0.03780469595729591,
+        "golpe_rapido": 0.5693754899399007,
+        "investida": 0.17592108701332637,
+        "marcar": 0.0,
+        "pele_dura": 0.0,
+        "preparar_pesado": 0.12296091679420658,
+        "recuar": 0.010788010004106162
+      },
+      "tecnica": "investida"
+    },
+    "muralha": {
+      "fracao": 0.21392246816646773,
+      "por_acao": {
+        "avancar": 0.1039263713450127,
+        "carregar": 0.007930806260924657,
+        "contra_golpe": 0.21392246816646773,
+        "defender": 0.4317254877558986,
+        "disparo": 0.16343570220444736,
+        "esquivar": 0.007495234162428795,
+        "golpe_rapido": 0.004367034545958513,
+        "investida": 0.0,
+        "marcar": 0.0,
+        "pele_dura": 0.0,
+        "preparar_pesado": 0.0599053054944309,
+        "recuar": 0.0072915900644307296
+      },
+      "tecnica": "contra_golpe"
+    },
+    "sentinela": {
+      "fracao": 0.23422120555598325,
+      "por_acao": {
+        "avancar": 0.006692034444456664,
+        "carregar": 0.05654411683841239,
+        "contra_golpe": 0.0,
+        "defender": 0.008715591285508474,
+        "disparo": 0.3792904353946486,
+        "esquivar": 0.008666102123634924,
+        "golpe_rapido": 0.0020235568410518095,
+        "investida": 0.0,
+        "marcar": 0.23422120555598325,
+        "pele_dura": 0.0,
+        "preparar_pesado": 0.00197406767917826,
+        "recuar": 0.3018728898371257
+      },
+      "tecnica": "marcar"
+    },
+    "tita": {
+      "fracao": 0.267709576892665,
+      "por_acao": {
+        "avancar": 0.24871703437262593,
+        "carregar": 0.06320253027178716,
+        "contra_golpe": 0.0,
+        "defender": 0.007620273182529962,
+        "disparo": 0.0020620474736042418,
+        "esquivar": 0.035659467588644786,
+        "golpe_rapido": 0.01743437882757872,
+        "investida": 0.0,
+        "marcar": 0.0,
+        "pele_dura": 0.267709576892665,
+        "preparar_pesado": 0.3494782864850618,
+        "recuar": 0.008116404905502412
+      },
+      "tecnica": "pele_dura"
+    },
+    "vigia": {
+      "fracao": 0.25184162571097246,
+      "por_acao": {
+        "avancar": 0.19724446407863494,
+        "carregar": 0.04396156607211884,
+        "contra_golpe": 0.0,
+        "defender": 0.007449334585012977,
+        "disparo": 0.0014964934562924513,
+        "esquivar": 0.03477276492351869,
+        "golpe_rapido": 0.22923960461648904,
+        "investida": 0.0,
+        "marcar": 0.0,
+        "pele_dura": 0.25184162571097246,
+        "preparar_pesado": 0.22623557347175438,
+        "recuar": 0.007758573085206251
+      },
+      "tecnica": "pele_dura"
+    }
+  }
+}

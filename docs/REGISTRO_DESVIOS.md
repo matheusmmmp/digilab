@@ -345,3 +345,23 @@ Tentativas no atirador para o G6b (espelho), todas piores ou iguais: esquivar em
 perder (0,797), tirar a esquiva por guts (0,882), esquiva por repetição (0,882), avançar com os dois
 abaixo de 75% (0,818), defender disparo sem guts (0,880). ε próprio do atirador: 0,1 → 0,73;
 0,2 → 0,67; 0,3 → 0,598 (não adotado: decisão do pesquisador).
+- **Decisão do Matheus (2026-09-25): aceitar a exceção do atirador no G6b.** Um estilo puramente de
+  disparo é uma corrida no espelho e fica acima de 0,65 (0,744 na validação). A V2C
+  (`validacao_bots`) é considerada APROVADA com essa ressalva; a Etapa 3 (V21C) começa sobre ela.
+
+## 2026-09-25 — TAREFA_CORRECAO_COMBATE, Etapa 3 (V21C) em andamento
+
+Sobre a base V2C aprovada com a exceção do atirador. Mudanças como chaves (padrão = V2.1 original, que
+rejoga a amostra do artefato): C1–C4 da base também no resolvedor da V2.1 (lidas de `Regras.base`);
+`ConfigCombateV21C.marca_fragil`; fórmula de vida por `hp_base`/`hp_por_vigor`. Calibração em
+`artifacts_combate_v21c/calibracao/v0..v3` (sementes 3101…3505, 40 partidas por par por semente, sem E5).
+
+- Na V2.1 a finta existe (condição `executando_pesado` no adulto), mas nenhum bot da bateria V2.1 a usa.
+- Fuga condicionada na V2.1: a sentinela com a passiva pronta continua recuando (é a passiva dela).
+- Marca frágil: perde a marca quem recebe dano corpo a corpo (inclusive parry e contra-golpe) ou
+  termina o turno em perto.
+- **Calibração da Ferrugem** (`experiments/calibrar_ferrugem_v21c.py`, critério fixado antes: maior
+  taxa média de espécie ≤ 0,60, o coeficiente mais próximo do original): `hp_por_vigor` 3 → 2,
+  `hp_base` 70 → 80 (vida neutra continua 100). Ferrugem 0,656 → 0,575 contra as outras. Na bateria
+  (E2) a Ferrugem ainda vence todas por pouco (0,508 contra a Brasa) e o E1 perde o suporte (5 → 3).
+- O gate de base da bateria V2.1, na V21C, é a validação da V2C (`G1_G9_base_v2c`).

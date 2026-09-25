@@ -88,12 +88,12 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 271 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 281 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 271 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 281 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
@@ -263,7 +263,12 @@ V2 traduzidos para gambits V2.1. Números de `artifacts_campanha/campanha.json` 
 `v2c/validacao_bots.json`), a validação (`artifacts_combate_v2c/validacao_bots/gates.json`) passa
 G1–G9 **exceto G6b**, só pelo atirador: espelho com +5% de condição vence 0,744 (limite 0,65; os outros
 estilos 0,54–0,62). G4 11,3% no limite; G5 todas as ações ≥ 3%; G9 28,6% decisivos com ε 0,2; G8 100%.
-Etapa 3 (V2.1) espera a decisão sobre o G6b do atirador. Detalhes abaixo (primeira rodada, bots da V2).
+O Matheus aceitou a exceção do atirador: V2C considerada aprovada. **Etapa 3 (V21C) em andamento,
+reprovada na calibração** (`artifacts_combate_v21c/calibracao/v0..v3`): a base V2C faz o E1 passar (suporte
+3 → 5), mas a correção da Ferrugem (vida por vigor 3 → 2) deixa a Ferrugem vencendo todas por pouco (E2) e
+derruba o E1; a marca frágil reduz o `marcar` com resposta de 0,94 para 0,72, sem chegar abaixo de sem
+resposta (0,62) (E3); E4 (adulto esmaga adolescente, 0,89–1,0) falha em todas e não está entre as
+mudanças da tarefa. Detalhes da V2C abaixo (primeira rodada, bots da V2).
 
 Etapas 0–2 feitas; **a V2C não passou na validação** e a Etapa 3 (V2.1 corrigida) não foi iniciada.
 `ConfigCombateV2C` (chaves C1–C4 desligadas por padrão: a V2 original reproduz os artefatos),

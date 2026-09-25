@@ -64,12 +64,20 @@ class Acao(str, Enum):
     MARCAR = "marcar"
     PELE_DURA = "pele_dura"
     PESADO = "pesado"
+    # V21C (C1 da base): alternativa ao pesado no turno de execucao (so com a base V2C com finta)
+    FINTAR = "fintar"
 
 
-ACOES_ESCOLHIVEIS = tuple(a for a in Acao if a is not Acao.PESADO)
+ACOES_ESCOLHIVEIS = tuple(a for a in Acao if a not in (Acao.PESADO, Acao.FINTAR))
 TECNICAS = {"investida": Acao.INVESTIDA, "contra_golpe": Acao.CONTRA_GOLPE,
             "marcar": Acao.MARCAR, "pele_dura": Acao.PELE_DURA}
-CORPO_A_CORPO = (Acao.GOLPE_RAPIDO, Acao.PESADO, Acao.INVESTIDA)
+CORPO_A_CORPO = (Acao.GOLPE_RAPIDO, Acao.PESADO, Acao.INVESTIDA, Acao.FINTAR)
+GOLPES = (Acao.GOLPE_RAPIDO, Acao.FINTAR)
+
+
+def _op(cfg, nome: str, padrao):
+    """Chaves da V2C/V21C; as configs originais nao as tem: comportamento antigo."""
+    return getattr(cfg, nome, padrao)
 POSTURAS = (Acao.DEFENDER, Acao.CONTRA_GOLPE)
 
 
@@ -135,6 +143,8 @@ def custo(acao: Acao, r: Regras) -> int:
 def eh_legal(estado: EstadoCombate, lado: int, acao: Acao, r: Regras = REGRAS_PADRAO) -> bool:
     eu = estado.proprio(lado)
     p = eu.perfil
+    if acao is Acao.FINTAR:
+        return _op(r.base, "finta", False) and eu.preparando
     if eu.preparando or acao is Acao.PESADO:
         return False
     if acao in TECNICAS.values() and TECNICAS.get(p.tecnica or "") is not acao:
@@ -159,7 +169,11 @@ def eh_legal(estado: EstadoCombate, lado: int, acao: Acao, r: Regras = REGRAS_PA
     if acao is Acao.ESQUIVAR:
         return p.passiva != "devastador"
     if acao is Acao.RECUAR:
+        if _op(r.base, "fuga_condicionada", False) and d is Distancia.LONGE:
+            return False
         return p.passiva != "predador"
+    if acao is Acao.AVANCAR:
+        return not (_op(r.base, "fuga_condicionada", False) and d is Distancia.PERTO)
     return True
 
 
@@ -176,7 +190,7 @@ def _validar(estado: EstadoCombate, lado: int, acao: Acao, r: Regras) -> None:
         raise AcaoIlegal(f"lado {lado}: acao desconhecida {acao!r}")
     obrig = acao_obrigatoria(estado, lado)
     if obrig is not None:
-        if acao is not obrig:
+        if acao is not obrig and not (acao is Acao.FINTAR and eh_legal(estado, lado, acao, r)):
             raise AcaoIlegal(f"lado {lado} esta preparando: so pode executar o pesado, veio {acao.value}")
         return
     if not eh_legal(estado, lado, acao, r):
@@ -215,7 +229,9 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
     interrompido = [False, False]
     errou = [False, False]
     marca_usada = [False, False]
-    parry = [False, False]       # investida aparada: nao aproxima
+    parry_inv = [False, False]   # investida aparada: nao aproxima
+    parry = _op(b, "dano_parry", 0.0)
+    recebeu_cac = [False, False]
     for atk in (0, 1):
         alvo = 1 - atk
         eu, ele = lados[atk], lados[alvo]
@@ -225,6 +241,9 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
         bruto = 0.0
         if acao is Acao.GOLPE_RAPIDO:
             bruto = b.dano_golpe_rapido * pa.mult_perto
+        elif acao is Acao.FINTAR:
+            if d0 is Distancia.PERTO:
+                bruto = b.dano_golpe_rapido * pa.mult_perto
         elif acao is Acao.INVESTIDA:
             bruto = v.dano_investida * pa.mult_perto
         elif acao is Acao.PESADO:
@@ -266,7 +285,7 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
             elif acao is Acao.INVESTIDA:
                 recebido = bruto * v.mult_parry_investida
                 if reacao is Acao.DEFENDER:
-                    parry[atk] = True
+                    parry_inv[atk] = True
             elif acao is Acao.PESADO:
                 recebido = bruto * b.mult_defender_contra_pesado * pal.mult_guarda
             else:
@@ -283,19 +302,37 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
         if pele_ativa[alvo]:
             recebido *= v.mult_pele_dura
         dano[alvo] += recebido
+        if acao in CORPO_A_CORPO and recebido > 0.0:
+            recebeu_cac[alvo] = True
+        # C2 parry (base V2C): defender contra golpe rapido (ou finta) que acertou devolve dano
+        if parry and acao in GOLPES and reacao is Acao.DEFENDER:
+            dano[atk] += parry
+            recebeu_cac[atk] = True
 
-        # golpe rapido / investida interrompem quem esta PREPARANDO, salvo pele_dura
-        if acao in (Acao.GOLPE_RAPIDO, Acao.INVESTIDA) and reacao is Acao.PREPARAR_PESADO and not pele_ativa[alvo]:
+        # golpe rapido / investida (e a finta) interrompem quem esta PREPARANDO, salvo pele_dura
+        if acao in (Acao.GOLPE_RAPIDO, Acao.INVESTIDA, Acao.FINTAR) and reacao is Acao.PREPARAR_PESADO and not pele_ativa[alvo]:
             interrompido[alvo] = True
 
     # dano devolvido pelo contra_golpe (pele_dura do atacante tambem reduz)
     for i in (0, 1):
         if devolvido[i]:
             dano[1 - i] += devolvido[i] * (v.mult_pele_dura if pele_ativa[1 - i] else 1.0)
+            recebeu_cac[1 - i] = True
+    # C4 morte subita (base V2C)
+    t_ms = _op(b, "turno_morte_subita", 0)
+    if t_ms and estado.turno + 1 >= t_ms:
+        dano = [x * b.mult_morte_subita for x in dano]
 
     # 5. movimento
     passo = {Acao.AVANCAR: -1, Acao.RECUAR: 1, Acao.INVESTIDA: -1}
-    passos = [0 if parry[i] else passo.get(acoes[i], 0) for i in (0, 1)]
+    passos = [0 if parry_inv[i] else passo.get(acoes[i], 0) for i in (0, 1)]
+    # C3 fuga condicionada (base V2C): recuar nao afasta se o oponente se aproxima (a sentinela, com a
+    # passiva pronta, continua recuando: e a passiva dela)
+    if _op(b, "fuga_condicionada", False):
+        for i in (0, 1):
+            if (acoes[i] is Acao.RECUAR and passos[1 - i] < 0
+                    and not (lados[i].perfil.passiva == "sentinela" and lados[i].recarga == 0)):
+                passos[i] = 0
     recarga = [max(0, lados[i].recarga - 1) for i in (0, 1)]
     for i in (0, 1):
         # sentinela: o recuo vale mesmo se o oponente se aproxima
@@ -320,6 +357,9 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
             marca = v.turnos_marcar
         else:
             marca = 0 if marca_usada[i] else max(0, s.marca - 1)
+        # V21C: marca fragil: perde com dano corpo a corpo recebido ou terminando o turno em perto
+        if _op(v, "marca_fragil", False) and (recebeu_cac[i] or distancia is Distancia.PERTO):
+            marca = 0
         turnos_pele = CONFIG_SOMBRIO.turnos_pele_colosso_partido if p.passiva == "colosso_partido" \
             else v.turnos_pele_dura
         pele = turnos_pele - 1 if acoes[i] is Acao.PELE_DURA else max(0, s.pele - 1)

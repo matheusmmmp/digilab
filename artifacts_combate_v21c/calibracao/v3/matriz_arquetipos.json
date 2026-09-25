@@ -1,0 +1,100 @@
+{
+  "especies": [
+    "brasa",
+    "cirro",
+    "ferrugem",
+    "limo"
+  ],
+  "n_partidas": 28800,
+  "partidas_por_par_por_semente": 40,
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "taxa": {
+    "duelista": {
+      "duelista": 0.5,
+      "emboscador": 0.858125,
+      "espelho": 0.2,
+      "furioso": 0.07375,
+      "muralha": 0.294375,
+      "sentinela": 0.786875,
+      "tita": 0.53125,
+      "vigia": 0.904375
+    },
+    "emboscador": {
+      "duelista": 0.141875,
+      "emboscador": 0.5,
+      "espelho": 0.999375,
+      "furioso": 0.0,
+      "muralha": 0.965,
+      "sentinela": 0.529375,
+      "tita": 0.983125,
+      "vigia": 0.966875
+    },
+    "espelho": {
+      "duelista": 0.8,
+      "emboscador": 0.000625,
+      "espelho": 0.5,
+      "furioso": 0.685625,
+      "muralha": 0.7025,
+      "sentinela": 0.31625,
+      "tita": 0.96875,
+      "vigia": 0.9925
+    },
+    "furioso": {
+      "duelista": 0.92625,
+      "emboscador": 1.0,
+      "espelho": 0.314375,
+      "furioso": 0.5,
+      "muralha": 0.055625,
+      "sentinela": 1.0,
+      "tita": 0.99125,
+      "vigia": 0.991875
+    },
+    "muralha": {
+      "duelista": 0.705625,
+      "emboscador": 0.035,
+      "espelho": 0.2975,
+      "furioso": 0.944375,
+      "muralha": 0.5,
+      "sentinela": 0.01,
+      "tita": 0.4425,
+      "vigia": 0.4225
+    },
+    "sentinela": {
+      "duelista": 0.213125,
+      "emboscador": 0.470625,
+      "espelho": 0.68375,
+      "furioso": 0.0,
+      "muralha": 0.99,
+      "sentinela": 0.5,
+      "tita": 0.983125,
+      "vigia": 0.9675
+    },
+    "tita": {
+      "duelista": 0.46875,
+      "emboscador": 0.016875,
+      "espelho": 0.03125,
+      "furioso": 0.00875,
+      "muralha": 0.5575,
+      "sentinela": 0.016875,
+      "tita": 0.5,
+      "vigia": 0.036875
+    },
+    "vigia": {
+      "duelista": 0.095625,
+      "emboscador": 0.033125,
+      "espelho": 0.0075,
+      "furioso": 0.008125,
+      "muralha": 0.5775,
+      "sentinela": 0.0325,
+      "tita": 0.963125,
+      "vigia": 0.5
+    }
+  },
+  "unidade": "pontos medios da linha contra a coluna (empate = 0.5); os dois lados da mesma especie; agregado sobre as especies ativas"
+}

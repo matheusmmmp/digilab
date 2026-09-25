@@ -607,6 +607,15 @@ class ConfigCombateV21:
     carater_bot_complementar: float = 0.25
 
 
+@dataclass(frozen=True)
+class ConfigCombateV21C(ConfigCombateV21):
+    """V2.1 corrigida (TAREFA_CORRECAO_COMBATE, Etapa 3). Padroes = V2.1 original. As mudancas da base
+    (C1-C4) vem da ConfigCombateV2C em Regras.base; a correcao da Ferrugem mexe em hp_base/hp_por_vigor."""
+
+    # marcar: a marca se perde se o cacador receber dano corpo a corpo ou terminar o turno em perto
+    marca_fragil: bool = False
+
+
 # numeros de tecnica/passiva perturbados no gate E5 (+-10%)
 CAMPOS_TECNICA_PASSIVA_V21 = (
     "custo_investida", "dano_investida", "custo_contra_golpe", "fracao_contra_golpe",
