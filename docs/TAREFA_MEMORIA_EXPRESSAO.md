@@ -284,11 +284,13 @@ avaliação com juiz antes de ligar a LLM por padrão.
 
 ### C7 — critério de pronto
 
-- [ ] servidor local servindo a página e `POST /api/fala`, chave só no servidor
-- [ ] validação C4 com testes sem rede; falha sempre cai no template
-- [ ] interruptor na web; sem servidor/chave a página funciona como hoje
-- [ ] avaliação C6 rodada e reportada (fração de causas inventadas)
-- [ ] `CLAUDE.md` atualizado
+- [x] servidor local servindo a página e `POST /api/fala`, chave só no servidor
+- [x] validação C4 com testes sem rede; falha sempre cai no template
+- [x] interruptor na web; sem servidor/chave a página funciona como hoje
+- [x] avaliação C6 rodada e reportada (fração de causas inventadas): Ollama `qwen2.5:3b`, 200 motivos,
+  `artifacts_fala/ollama_qwen2.5-3b_fala-v1/` e `..._fala-v2/`. Falta a revisão humana de
+  `revisao.csv` (50 falas aprovadas), que mede o que a validação não pega (sinônimos).
+- [x] `CLAUDE.md` atualizado
 
 ---
 

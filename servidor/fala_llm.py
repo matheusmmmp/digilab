@@ -27,7 +27,9 @@ from digilab.motivo import Motivo, nome_base
 # mais barato e rapido (decisao do pesquisador, 2026-09-24); --modelo troca
 MODELO_PADRAO = "claude-haiku-4-5"
 MODELOS_COM_FALLBACK = {"claude-opus-5", "claude-fable-5-1"}
-VERSAO_PROMPT = "fala-v1"
+# fala-v2 (2026-09-24, apos a avaliacao C6 da v1): o adolescente recebe so o primeiro fator
+# (so ele pode ser citado) e o exemplo sem fator inclui "não sei" (a regra 2 ja exigia)
+VERSAO_PROMPT = "fala-v2"
 ESTAGIOS_LLM = ("adolescente", "adulto")
 TIMEOUT_S = 8.0
 LIMITE_POR_MINUTO = 30
@@ -60,9 +62,14 @@ class ControleGasto:
     teto, nao chama. Depois acerta pelo `usage` real da resposta. Se a chamada falha
     sem `usage` (timeout, rede), conta o maximo reservado como gasto: a API pode ter
     cobrado mesmo assim, e errar para o lado do credito e o objetivo.
+
+    `alerta(nivel, para_dict)` e chamado uma vez por nivel de `niveis` (fracao do teto)
+    quando o gasto o cruza, ou quando uma chamada e recusada por falta de teto; os
+    niveis ja avisados ficam no arquivo e nao se repetem ao reiniciar.
     """
 
-    def __init__(self, limite_usd: float, arquivo: Path | None = ARQUIVO_GASTO) -> None:
+    def __init__(self, limite_usd: float, arquivo: Path | None = ARQUIVO_GASTO,
+                 alerta=None, niveis: tuple = (0.5, 0.8, 1.0)) -> None:
         if limite_usd < 0:
             raise ValueError("limite de gasto negativo")
         self.limite = limite_usd
@@ -71,21 +78,44 @@ class ControleGasto:
         self.reservado = 0.0
         self.gasto = 0.0
         self.chamadas = 0
+        self.alerta = alerta
+        self.niveis = tuple(sorted(niveis))
+        self.avisados: list = []
         if arquivo is not None and arquivo.exists():
             d = json.loads(arquivo.read_text(encoding="utf-8"))
             self.gasto, self.chamadas = float(d["gasto_usd"]), int(d["chamadas"])
+            self.avisados = [float(x) for x in d.get("alertas_enviados", [])]
 
     def _salvar(self) -> None:
         if self.arquivo is not None:
             self.arquivo.write_text(json.dumps({"gasto_usd": self.gasto, "chamadas": self.chamadas,
-                                                "limite_usd": self.limite}, indent=1), encoding="utf-8")
+                                                "limite_usd": self.limite, "alertas_enviados": self.avisados},
+                                               indent=1), encoding="utf-8")
+
+    def _novos_niveis(self, esgotado: bool) -> list:
+        """Niveis cruzados e ainda nao avisados (chamar com a trava); marca e salva."""
+        frac = self.gasto / self.limite if self.limite > 0 else 1.0
+        novos = [n for n in self.niveis if n not in self.avisados and (frac >= n or (esgotado and n >= 1.0))]
+        if novos:
+            self.avisados += novos
+            self._salvar()
+        return novos
+
+    def _avisar(self, novos: list) -> None:
+        if self.alerta is not None:
+            for n in novos:
+                self.alerta(n, self.para_dict())
 
     def reservar(self, custo_max: float) -> bool:
         with self._trava:
             if self.gasto + self.reservado + custo_max > self.limite:
-                return False
-            self.reservado += custo_max
-            return True
+                novos = self._novos_niveis(esgotado=True)
+                ok = False
+            else:
+                self.reservado += custo_max
+                novos, ok = [], True
+        self._avisar(novos)
+        return ok
 
     def acertar(self, custo_max: float, custo_real: float) -> None:
         with self._trava:
@@ -93,6 +123,8 @@ class ControleGasto:
             self.gasto += custo_real
             self.chamadas += 1
             self._salvar()
+            novos = self._novos_niveis(esgotado=False)
+        self._avisar(novos)
 
     def para_dict(self) -> dict:
         return {"gasto_usd": round(self.gasto, 6), "limite_usd": self.limite, "chamadas": self.chamadas,
@@ -134,16 +166,76 @@ class FalaReprovada(ValueError):
 # ------------------------------------------------------------ motivo vindo da web
 
 
+MAX_REFS = 10
+MAX_INTEIRO = 10**7
+
+
+def _dominios_fator() -> dict:
+    """Parametros validos de cada condicao de combate, como a pagina os escreve (V2 e V2.1)."""
+    from digilab.combate_v2.regras import Distancia
+    from digilab.combate_v2.v21.gambits import CATALOGO, _dominio
+
+    def texto(x):
+        return x.rotulo if isinstance(x, Distancia) else getattr(x, "value", None) or str(x)
+
+    return {nome: tuple({texto(v) for v in _dominio(tp)} for tp in tipos) for nome, tipos in CATALOGO.items()}
+
+
+_DOMINIOS = _dominios_fator()
+
+
+def _fator_valido(f) -> str:
+    """So nomes da tabela e parametros do catalogo: texto livre nunca chega ao prompt."""
+    if not isinstance(f, str) or len(f) > 64:
+        raise ValueError(f"fator invalido: {f!r}")
+    base = nome_base(f)
+    if base not in FATORES:
+        raise ValueError(f"fator desconhecido: {base!r}")
+    params = [] if "(" not in f else f[f.index("(") + 1:-1].split(",")
+    if "(" in f and not f.endswith(")"):
+        raise ValueError(f"fator malformado: {f!r}")
+    dom = _DOMINIOS.get(base, ())
+    if len(params) != len(dom) or any(p not in d for p, d in zip(params, dom)):
+        raise ValueError(f"parametros invalidos em {f!r}")
+    return f
+
+
+def _inteiro(x, rotulo: str) -> int:
+    if isinstance(x, bool) or not isinstance(x, int) or not 0 <= x <= MAX_INTEIRO:
+        raise ValueError(f"{rotulo} invalido: {x!r}")
+    return x
+
+
 def motivo_de_dict(d: dict) -> Motivo:
-    """Motivo a partir do JSON da pagina. Campos desconhecidos ou faltando levantam erro."""
-    origem = d["origem"]
+    """Motivo a partir do JSON da pagina, validado contra as tabelas (entrada de rede nao confiavel).
+    Campos desconhecidos, faltando ou fora do catalogo levantam erro."""
+    if not isinstance(d, dict):
+        raise ValueError("motivo precisa ser um objeto")
+    origem = d.get("origem")
+    chaves = {"vida": {"origem", "acao", "fatores", "evento_ref", "intensidade", "exploracao", "tick"},
+              "combate": {"origem", "acao", "fatores", "evento_ref", "exploracao", "turno"}}
+    if origem not in chaves:
+        raise ValueError(f"origem desconhecida: {origem!r}")
+    extras = set(d) - chaves[origem] - {"intensidade", "tick", "turno"}
+    if extras or not chaves[origem] <= set(d):
+        raise ValueError(f"campos errados no motivo: sobram {sorted(extras)}, faltam {sorted(chaves[origem] - set(d))}")
+    acoes = ACOES_VIDA if origem == "vida" else ACOES_COMBATE
+    if d["acao"] not in acoes:
+        raise ValueError(f"acao desconhecida: {d['acao']!r}")
+    if not isinstance(d["fatores"], list) or len(d["fatores"]) > 4:
+        raise ValueError("fatores precisa ser lista de ate 4")
+    if not isinstance(d["evento_ref"], list) or len(d["evento_ref"]) > MAX_REFS:
+        raise ValueError(f"evento_ref precisa ser lista de ate {MAX_REFS}")
+    if not isinstance(d["exploracao"], bool):
+        raise ValueError("exploracao precisa ser booleano")
+    fatores = tuple(_fator_valido(f) for f in d["fatores"])
+    refs = tuple(_inteiro(r, "evento_ref") for r in d["evento_ref"])
     if origem == "vida":
-        return Motivo("vida", d["acao"], tuple(d["fatores"]), tuple(int(r) for r in d["evento_ref"]),
-                      float(d["intensidade"]), bool(d["exploracao"]), tick=int(d["tick"]))
-    if origem == "combate":
-        return Motivo("combate", d["acao"], tuple(d["fatores"]), tuple(int(r) for r in d["evento_ref"]),
-                      None, bool(d["exploracao"]), turno=int(d["turno"]))
-    raise ValueError(f"origem desconhecida: {origem!r}")
+        inten = float(d["intensidade"])
+        if not math.isfinite(inten):
+            raise ValueError("intensidade invalida")
+        return Motivo("vida", d["acao"], fatores, refs, inten, d["exploracao"], tick=_inteiro(d["tick"], "tick"))
+    return Motivo("combate", d["acao"], fatores, refs, None, d["exploracao"], turno=_inteiro(d["turno"], "turno"))
 
 
 def template(motivo: Motivo, estagio: str, humor: float | None) -> str:
@@ -160,6 +252,14 @@ def _significado(fator: str) -> str:
 
 def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
     acoes = ACOES_VIDA if motivo.origem == "vida" else ACOES_COMBATE
+    exemplo = template(motivo, estagio, humor)
+    sem_fator = motivo.exploracao or not motivo.fatores
+    if estagio == "adolescente":
+        # so o primeiro fator pode ser citado: e so ele que a LLM recebe (dizer menos e permitido)
+        motivo = Motivo(motivo.origem, motivo.acao, motivo.fatores[:1], motivo.evento_ref, motivo.intensidade,
+                        motivo.exploracao, tick=motivo.tick, turno=motivo.turno)
+        if sem_fator:
+            exemplo = f"{exemplo.strip()} não sei"
     carga = {
         "contexto": "vida do pet" if motivo.origem == "vida" else "luta na arena",
         "estagio": estagio,
@@ -170,7 +270,7 @@ def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
         "tipo_de_referencia": "evento do registro" if motivo.origem == "vida" else "turno da luta",
         "exploracao": motivo.exploracao,
         "humor": None if humor is None else round(humor, 2),
-        "exemplo": template(motivo, estagio, humor),
+        "exemplo": exemplo,
     }
     return json.dumps(carga, ensure_ascii=False, sort_keys=True)
 
@@ -438,9 +538,9 @@ def criar_cliente_claude():
 
 
 def escolher_provedor(nome: str, modelo: str | None = None, url_ollama: str = URL_OLLAMA_PADRAO,
-                      limite_usd: float = LIMITE_USD_PADRAO):
+                      limite_usd: float = LIMITE_USD_PADRAO, alerta=None):
     """(provedor | None, gasto | None, motivo). `auto`: Ollama se estiver pronto, senao Claude
-    se houver chave, senao nenhum (so template)."""
+    se houver chave, senao nenhum (so template). `alerta` vai para o ControleGasto."""
     if nome not in ("auto", "ollama", "claude", "nenhum"):
         raise ValueError(f"provedor desconhecido: {nome!r}")
     if nome == "nenhum":
@@ -454,7 +554,7 @@ def escolher_provedor(nome: str, modelo: str | None = None, url_ollama: str = UR
     cliente = criar_cliente_claude()
     if cliente is not None:
         return ProvedorClaude(cliente, modelo if nome == "claude" and modelo else MODELO_PADRAO), \
-            ControleGasto(limite_usd), ""
+            ControleGasto(limite_usd, alerta=alerta), ""
     if nome == "claude":
         return None, None, "sem credencial da API do Claude (ANTHROPIC_API_KEY)"
     # auto sem Ollama pronto e sem chave: fica com o Ollama, que passa a valer assim que for ligado

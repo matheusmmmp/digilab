@@ -97,6 +97,12 @@ FATORES: dict[str, dict[str, str]] = {
                         "adolescente": "você repetiu...", "adulto": "porque você repetiu '{p0}' {p1} vezes"},
     "oponente_frequente": {"marcador": "você insiste", "bebe": "", "crianca": "[:você insiste:]",
                            "adolescente": "você insiste...", "adulto": "porque você insiste em '{p0}'"},
+    # condicoes do combate V2.1 (combate_v2/v21/gambits.py)
+    "turno_execucao": {"marcador": "luta longa", "bebe": "", "crianca": "[:luta longa:]",
+                       "adolescente": "luta longa...", "adulto": "porque já era uma luta longa (turno {p0} ou mais)"},
+    "oponente_vai_preparar": {"marcador": "vi o pesado vindo", "bebe": "", "crianca": "[:vi o pesado vindo:]",
+                              "adolescente": "vi o pesado vindo...",
+                              "adulto": "porque vi o pesado vindo antes de você preparar"},
 }
 
 # ------------------------------------------------------------------ acoes
@@ -120,18 +126,26 @@ ACOES_COMBATE = {
     "esquivar": ("[esquivar]", "esquivar", "Esquivei"),
     "carregar": ("[carregar]", "carregar", "Carreguei guts"),
     "pesado": ("[pesado!]", "pesado!", "Soltei o pesado que eu tinha preparado"),
+    # tecnicas do combate V2.1
+    "investida": ("[investida]", "investida", "Investi"),
+    "contra_golpe": ("[contra]", "contra-golpe", "Fiz o contra-golpe"),
+    "marcar": ("[marcar]", "marcar", "Marquei você"),
+    "pele_dura": ("[pele dura]", "pele dura", "Endureci a pele"),
 }
 # bebe no combate: reacao pela natureza da acao, nunca a causa
 REACAO_BEBE = {
     "avancar": "(o_o)>", "recuar": "<(o_o)", "golpe_rapido": "(>_<)!", "preparar_pesado": "(ò_ó)...",
     "disparo": "(>_<)~", "defender": "(-_-)#", "esquivar": "(^o^)~", "carregar": "(ò_ó)*", "pesado": "(ò_ó)!!",
+    "investida": "(ò_ó)>>", "contra_golpe": "(ò_ó)|", "marcar": "(o_o)+", "pele_dura": "(-_-)[]",
 }
 EMOTE_HUMOR = ("(T_T)", "(-_-)", "(^_^)")
 
 
 def validar_tabelas(fatores_obrigatorios=None) -> None:
+    from .combate_v2.v21.gambits import CATALOGO as CATALOGO_V21
+
     obrig = set(fatores_obrigatorios if fatores_obrigatorios is not None
-                else set(FATORES_VIDA) | set(CATALOGO) | set(_fatores_extra()))
+                else set(FATORES_VIDA) | set(CATALOGO) | set(CATALOGO_V21) | set(_fatores_extra()))
     faltando = sorted(obrig - set(FATORES))
     if faltando:
         raise TabelaIncompleta(f"fatores sem entrada na tabela: {faltando}")
@@ -151,9 +165,11 @@ def validar_tabelas(fatores_obrigatorios=None) -> None:
                 raise TabelaIncompleta(f"marcador de {n1!r} aparece no texto de {n2!r}")
     faltam_vida = sorted(set(a.value for a in AcaoPet) - set(ACOES_VIDA))
     from .combate_v2.regras import Acao
+    from .combate_v2.v21.regras import Acao as AcaoV21
 
-    faltam_comb = sorted(set(a.value for a in Acao) - set(ACOES_COMBATE))
-    faltam_reacao = sorted(set(a.value for a in Acao) - set(REACAO_BEBE))
+    todas = set(a.value for a in Acao) | set(a.value for a in AcaoV21)
+    faltam_comb = sorted(todas - set(ACOES_COMBATE))
+    faltam_reacao = sorted(todas - set(REACAO_BEBE))
     if faltam_vida or faltam_comb or faltam_reacao:
         raise TabelaIncompleta(f"acoes sem texto: vida {faltam_vida}, combate {faltam_comb}, reacao {faltam_reacao}")
     fixos = [t for trio in list(ACOES_VIDA.values()) + list(ACOES_COMBATE.values()) for t in trio]

@@ -262,8 +262,26 @@ real; erro sem `usage` conta o pior caso. Acumulado em `servidor/gasto_fala.json
 zera ao reiniciar; para liberar mais, aumente `--limite-usd` ou apague o arquivo. Modelo sem preço
 na tabela `PRECOS_USD_POR_MTOK` não liga. Proteção adicional recomendada: limite de gasto do
 workspace no Console da Anthropic.
-**Pendente**: a avaliação com juiz da C6 (fração de causas inventadas) não foi rodada — precisa de
-credencial e de aprovação do custo. A varredura de marcadores não pega sinônimos.
+**Alerta por e-mail** (`servidor/alerta.py`): ao cruzar 50%, 80% e 100% do teto (ou quando uma
+chamada é recusada por falta de teto) manda e-mail para `--alerta-email` (padrão
+matheusmmmp@hotmail.com), uma vez por nível (gravado em `gasto_fala.json`). SMTP só por ambiente:
+`DIGILAB_SMTP_USUARIO`, `DIGILAB_SMTP_SENHA` (senha de app), `DIGILAB_SMTP_HOST` (padrão
+smtp.gmail.com), `DIGILAB_SMTP_PORTA` (587). Sem essas variáveis o alerta fica desligado (avisa na
+partida); o teto vale do mesmo jeito. `--testar-alerta` manda um e-mail de teste e sai.
+**Entrada da página é não confiável**: `motivo_de_dict` só aceita ação, fator e parâmetros do
+catálogo (V2 e V2.1), no máximo 4 fatores e 10 referências; texto livre nunca chega ao prompt.
+As tabelas de `digilab/expressao.py` cobrem as técnicas e as condições do V2.1 (mesmos textos da web).
+**Avaliação C6** (Ollama `qwen2.5:3b` na RTX 2060, 200 motivos reais — vida, combate V2 e V2.1 —,
+metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e `falas.jsonl`):
+- prompt `fala-v1`: 114/200 aprovadas (0,57). Adulto 88/100; adolescente 26/100, porque o pedido
+  se contradizia (recebia todos os fatores mas só pode citar o primeiro; o exemplo sem fator não
+  dizia "não sei", que a regra exige).
+- prompt `fala-v2` (corrige as duas contradições, **olhando esta mesma amostra**: não é validação
+  independente): 183/200 (0,915); adolescente 95/100, adulto 88/100. 14/200 (7%) citaram fator fora
+  do motivo e foram barradas (caíram no template). Tempo médio 2,6 s por fala.
+- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` (50 falas
+  aprovadas; "cita causa fora dos fatores?"), porque a varredura de marcadores não pega sinônimos.
+  Sem ela, a fala por LLM continua desligada por padrão.
 
 ## Versão web (`web/digilab.html`)
 
@@ -295,6 +313,15 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   `web/digilab_sprites.html` é versionado, mas o repositório GitHub (`matheusmmmp/digilab`)
   tem que continuar **privado**. Tornar o repo público exige tirar esse arquivo antes, inclusive
   do histórico. O atlas com os pixels da Bandai continua fora do repo.
+- **Acesso remoto** (decisão do Matheus, 2026-09-24): pode abrir por túnel (Cloudflare) para
+  testar de outros computadores, **só** com `servidor_local.py --remoto` — senha obrigatória
+  (`DIGILAB_SENHA`, 12+ caracteres, só no ambiente), só as rotas do jogo (página, atlas, API de
+  fala; o resto da pasta dá 404), API paga do Claude desligada salvo `--claude-remoto`. Sem
+  `--remoto`, pedido vindo por túnel (cabeçalhos `Cf-Ray`/`X-Forwarded-For`) leva 403. O link é de
+  uso pessoal: não compartilhar nem divulgar. Revisado no mesmo dia: o Matheus dispensou a senha
+  (`--remoto --sem-senha`, só ele acessa); aí o link aleatório do túnel é a única proteção e as
+  outras travas (rotas, Claude desligado) continuam. Túnel sempre para `http://127.0.0.1:<porta>`
+  (com `localhost` o cloudflared tenta IPv6 e não acha o servidor).
 - Manter a versão com placeholders originais funcionando: antes de publicar ou distribuir
   qualquer coisa, trocar por arte original ou licenciada.
 
@@ -361,8 +388,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Fala por LLM: rodar `experiments/avaliar_fala.py` com o Ollama instalado e revisar `revisao.csv`
-  antes de ligar por padrão (Ollama e credencial do Claude ainda não configurados nesta máquina).
+- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v2/revisao.csv` antes de ligar por
+  padrão; a v2 do prompt foi ajustada na mesma amostra da avaliação (repetir com outra semente).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.
