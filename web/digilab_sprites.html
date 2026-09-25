@@ -236,7 +236,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <div>
           <h2>Traços de combate</h2>
-          <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia. Na hora de evoluir, viram <b>caráter</b>: quanto ele está acima de um pet comum em cada eixo (aba Evolução).</p>
+          <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia, <b>comparada com um pet comum</b> (todo pet dorme e fica à toa muito, e isso conta como bloqueio; por isso a comparação). Na hora de evoluir, viram <b>caráter</b> (aba Evolução).</p>
         </div>
         <div class="linhas" id="tracos"></div>
       </div>
@@ -2136,7 +2136,10 @@ function renderEstado(){
   } else $("vinculo").textContent = "pet de versão antiga: sem vínculo nem recusa (um pet novo já nasce com eles)";
   $("jeito-det").textContent = "temperamento: " + EIXOS_TEMP.map(k => `${k} ${motor.temp[k] >= 0 ? "+" : ""}${motor.temp[k].toFixed(2)}`).join(", ")
     + ` (tom só com |eixo| ≥ ${CDJ.limiarTom})` + " · desejo: " + (des ? `${des.tipo} ${des.alvo}${des.causa ? " (" + des.causa + ")" : ""}, intensidade ${des.intensidade.toFixed(2)}` : "nenhum agora");
-  const af = afinidades(motor.tracos), mx = Math.max(.05, ...COMBATE.map(c => Math.abs(af[c])));
+  /* relativo a um pet comum (mesma base que o carater usa): dormir e ficar a toa contam como
+     bloqueio, e todo pet dorme muito; em valor bruto o bloqueio fica sempre no maximo */
+  const bruto = afinidades(motor.tracos), base = BASE_CARATER[motor.estagioAtual === "adulto" ? "adulto" : "adolescente"];
+  const af = Object.fromEntries(COMBATE.map(c => [c, bruto[c] - base[c]])), mx = Math.max(.05, ...COMBATE.map(c => Math.abs(af[c])));
   $("tracos").innerHTML = COMBATE.map(c => {
     const v = af[c] / mx, w = Math.abs(v) * 50, left = v >= 0 ? 50 : 50 - w;
     return `<div class="linha"><span>${NOME_COMB[c]}</span><div class="bar center"><i style="left:${left}%;width:${w}%;background:${CORES[c][0]}"></i></div><span class="v">${af[c] >= 0 ? "+" : ""}${af[c].toFixed(3)}</span></div>`;
