@@ -187,3 +187,15 @@ Faltavam na entrega da tarefa (achado na auditoria). Interpretações:
 - Somente leitura: nenhum hash, protocolo ou artefato muda (o campo novo está em `ConfigExpressao`, que
   não entra no protocolo).
 
+
+## 2026-09-25 — temperamento e desejo no jogo web (`web/digilab_sprites.html`)
+
+- O temperamento **age** no bandit da web (mesmos fatores de `ConfigTemperamento`: variância, peso do
+  elogio e da repreensão), para a fala "nasci X" não prometer o que o pet não é. Diferenças do Python:
+  sorteio pelo rng da web (`hashSemente("temperamento", semente)`), não o mesmo número do
+  `rng_ovo`; a web usa a memória curta antiga (não a por espaços), então o rancor só escala o
+  decaimento das broncas (a demora não decai na web).
+- Pets salvos antes disso passam a ter temperamento: o replay os reconstrói já com ele (o registro
+  é o mesmo; o aprendizado muda um pouco).
+- Desejo: mesmo cálculo de `desejo.py` (necessidade < 0,3; vontade por margem ≥ 0,1 da média da
+  posterior), sem rng, mostrado na aba Estado; não muda nenhuma decisão.

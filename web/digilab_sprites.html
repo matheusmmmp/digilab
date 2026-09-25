@@ -127,6 +127,8 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .log .dono{color:var(--accent)}
 .log .t{color:var(--muted)}
 .resultado{font-weight:700}
+.jeito{display:flex;gap:10px;align-items:baseline;margin-top:6px}
+.jeito .muted{min-width:56px}
 .campanha{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:8px}
 .desafio{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
 .desafio.bloq{opacity:.55}
@@ -224,6 +226,13 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       <div class="pane" id="p-estado">
         <div class="tags" id="alertas"></div>
         <div class="linhas" id="necessidades"></div>
+        <div>
+          <h2>Jeito e desejo</h2>
+          <p class="muted" style="margin-top:4px">O <b>jeito</b> é o temperamento de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir da criança dá para diferenciar os dois.</p>
+          <div class="jeito"><span class="muted">Jeito</span> <b id="temperamento">…</b></div>
+          <div class="jeito"><span class="muted">Desejo</span> <b id="desejo">…</b></div>
+          <p class="muted" id="jeito-det" style="font-size:.85em"></p>
+        </div>
         <div>
           <h2>Traços de combate</h2>
           <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia. Na hora de evoluir, viram <b>caráter</b>: quanto ele está acima de um pet comum em cada eixo (aba Evolução).</p>
@@ -390,11 +399,24 @@ const C = {
   intervalo:15, janelaAtencao:240,
 };
 const CB = { lambda:1, var:.25, piso:.05, elogio:1, repr:-1, janela:120, ignorado:-.5, escalaTdc:480 };
+/* temperamento inato (espelho de ConfigTemperamento): 0 e neutro e da os mesmos numeros de CB.
+   Web: rancor so escala o decaimento das broncas (a demora aqui nao decai); sorteio pela semente
+   com o rng da web (nao e o mesmo numero do Python) */
+const CTP = { amplitude:1, kCuriosidade:Math.LN2, kTeimosia:.5, kSensibilidade:.5, kRancor:Math.LN2 };
+const EIXOS_TEMP = ["curiosidade","teimosia","sensibilidade","rancor"];
+/* desejo (espelho de ConfigDesejo) e limiar do tom do temperamento (ConfigExpressao) */
+const CDJ = { limiarNecessidade:.3, limiarVontade:.1, limiarTom:.5 };
 const CD = { passo:15, maxPasso:6, limAlim:.5, limLimpar:.5, sujLimpar:2, limHumBrinc:.4, limSono:.4, limPedido:.35, visitasRelapso:3, probElogioInc:.5, porDia:16 };
 const CT = { alfa:1/288 };
 const CA = { hp:100, dano:10, ganhoAf:.5, maxTurnos:40, fome:.7, hig:.7, saude:1, hora:.5,
   mapa:{ocioso:"bloqueio",dormir:"bloqueio",comer:"agarrao",brincar:"golpe",chamar_atencao:"carga",explorar:"finta",emburrar:"agarrao"} };
 const TICK_INICIAL = 8*60;
+const TEMP_NEUTRO = Object.freeze({curiosidade:0, teimosia:0, sensibilidade:0, rancor:0});
+/* uniforme em [-amplitude, amplitude] por eixo, pela semente do ovo (stream propria) */
+function temperamentoDe(semente){
+  const r = criarRng(hashSemente("temperamento", semente));
+  return Object.freeze(Object.fromEntries(EIXOS_TEMP.map(e => [e, CTP.amplitude * (2 * r.random() - 1)])));
+}
 
 const ACOES_PET = ["ocioso","dormir","comer","brincar","chamar_atencao","explorar","emburrar"];
 const ACOES_DONO = ["alimentar","limpar","brincar","acariciar","elogiar","repreender"];
@@ -514,7 +536,8 @@ class Braco {
 const CM = { limiarPedido:.5, janela:240, tau:360, escala:3 };
 const FATORES_MEMORIA = ["latencia_fome","latencia_higiene","repreensoes","elogios"];
 class Memoria {
-  constructor(){
+  constructor(fatorTauBronca = 1){
+    this.tauBronca = CM.tau * fatorTauBronca;
     this.nDono = 0; this.pend = {fome:[], higiene:[]}; this.lat = {fome:0, higiene:0}; this.refLat = {fome:null, higiene:null};
     this.fb = {repreensoes:[0,0], elogios:[0,0]}; this.refFb = {repreensoes:null, elogios:null};
   }
@@ -536,7 +559,7 @@ class Memoria {
     const k = a === "repreender" ? "repreensoes" : a === "elogiar" ? "elogios" : null;
     if (k){ this.fb[k] = [this.decaido(k, tick) + 1, tick]; this.refFb[k] = this.nDono; }
   }
-  decaido(k, tick){ const [v, t0] = this.fb[k]; return v ? v * Math.exp(-(tick - t0) / CM.tau) : 0; }
+  decaido(k, tick){ const [v, t0] = this.fb[k]; return v ? v * Math.exp(-(tick - t0) / (k === "repreensoes" ? this.tauBronca : CM.tau)) : 0; }
   feat(tick){ return [this.lat.fome, this.lat.higiene, Math.min(1, this.decaido("repreensoes", tick)/CM.escala), Math.min(1, this.decaido("elogios", tick)/CM.escala)]; }
   refs(){ return {latencia_fome:this.refLat.fome, latencia_higiene:this.refLat.higiene, repreensoes:this.refFb.repreensoes, elogios:this.refFb.elogios}; }
   assinatura(){ return [this.nDono, this.pend, this.lat, this.refLat, this.fb, this.refFb]; }
@@ -644,6 +667,65 @@ function validarTabelasFala(obrigatorios){
   for (const a of ACOES_PET) if (!ACOES_VIDA_TXT[a]) throw new Error("acao de vida sem texto: " + a);
 }
 function estagioFala(m){ return m.estagioAtual; }
+/* temperamento e desejo na fala (espelho de expressao.py: TOM_TEMPERAMENTO, DESEJO_TIPO, ALVOS_DESEJO).
+   Mesma regra de marcador unico: so cita eixo com |valor| >= limiar e so a necessidade do calculo. */
+const TOM = (marcador, bebe, adulto) => ({marcador, bebe, crianca:`[:${marcador}:]`, adolescente:`${marcador}...`, adulto});
+const TOM_TEMPERAMENTO = {
+  "curiosidade+": TOM("fuçador", "(o.o)?", "Nasci fuçador, sempre atrás de novidade."),
+  "curiosidade-": TOM("cauteloso", "(._.)", "Nasci cauteloso com o que não conheço."),
+  "teimosia+": TOM("cabeça-dura", "(¬_¬)", "Nasci cabeça-dura."),
+  "teimosia-": TOM("dócil", "(u_u)", "Nasci dócil, fácil de convencer."),
+  "sensibilidade+": TOM("derretido", "(*^_^*)", "Nasci derretido com qualquer agrado."),
+  "sensibilidade-": TOM("melindroso", "(;_;)", "Nasci melindroso com qualquer reclamação."),
+  "rancor+": TOM("guardo mágoa", "(ò_ó)", "Nasci assim: guardo mágoa por muito tempo."),
+  "rancor-": TOM("esqueço rápido", "(^o^)", "Nasci assim: esqueço rápido o que passou."),
+};
+const TEMPERAMENTO_NEUTRO_TXT = {bebe:"(o_o)", crianca:"[~]", adolescente:"...", adulto:"Nasci sem nada que se destaque."};
+const DESEJO_TIPO = {
+  necessidade:{marcador:"preciso", crianca:"[preciso!]", adolescente:"preciso", adulto:"Eu preciso"},
+  vontade:{marcador:"queria", crianca:"[queria?]", adolescente:"queria", adulto:"Eu queria"},
+};
+const DESEJO_BEBE = "(>o<)", VONTADE_ADULTO = "é o que mais deu certo até agora";
+const ALVOS_DESEJO = { comer:["[comer]","comer"], limpar:["[banho]","tomar banho"], dormir:["[dormir]","dormir"],
+  brincar:["[brincar]","brincar"], ocioso:["[à toa]","ficar à toa"], chamar_atencao:["[chamar]","chamar você"],
+  explorar:["[explorar]","explorar"], emburrar:["[emburrar]","emburrar"] };
+function eixosMarcantes(t){
+  return EIXOS_TEMP.map((e, i) => [Math.abs(t[e]), -i, e]).sort((a, b) => b[0] - a[0] || b[1] - a[1])
+    .filter(([v]) => v >= CDJ.limiarTom).map(([, , e]) => e + (t[e] > 0 ? "+" : "-"));
+}
+function expressarTemperamento(t, est){
+  const mk = eixosMarcantes(t);
+  if (!mk.length) return TEMPERAMENTO_NEUTRO_TXT[est];
+  if (est === "adulto") return mk.slice(0, 2).map((k, i) => i ? "E n" + TOM_TEMPERAMENTO[k].adulto.slice(1) : TOM_TEMPERAMENTO[k].adulto).join(" ");
+  return TOM_TEMPERAMENTO[mk[0]][est];
+}
+function expressarDesejo(d, est){
+  if (!ALVOS_DESEJO[d.alvo]) throw new Error("alvo de desejo sem texto: " + d.alvo);
+  if (est === "bebe") return DESEJO_BEBE;
+  const [ic, verbo] = ALVOS_DESEJO[d.alvo], t = DESEJO_TIPO[d.tipo];
+  if (est === "crianca") return `${t.crianca} ${ic}`;
+  if (d.tipo === "necessidade") return est === "adolescente" ? `${t.adolescente} ${verbo}... ${textoFator(d.causa, est)}` : `${t.adulto} ${verbo} ${textoFator(d.causa, est)}.`;
+  return est === "adolescente" ? `${t.adolescente} ${verbo}...` : `${t.adulto} ${verbo}: ${VONTADE_ADULTO}.`;
+}
+function validarTabelasPersonalidade(){
+  for (const e of EIXOS_TEMP) for (const p of "+-") if (!TOM_TEMPERAMENTO[e + p]) throw new Error("eixo sem tom: " + e + p);
+  const marc = [...Object.entries(FATORES_TXT).map(([n, e]) => ["fator " + n, e.marcador]),
+    ...Object.entries(TOM_TEMPERAMENTO).map(([k, e]) => ["tom " + k, e.marcador]), ...Object.entries(DESEJO_TIPO).map(([k, e]) => ["desejo " + k, e.marcador])];
+  const textos = [...Object.entries(TOM_TEMPERAMENTO).map(([k, e]) => ["tom " + k, [e.crianca, e.adolescente, e.adulto]]),
+    ...Object.entries(DESEJO_TIPO).map(([k, e]) => ["desejo " + k, [e.crianca, e.adolescente, e.adulto]]),
+    ...Object.entries(FATORES_TXT).map(([n, e]) => ["fator " + n, [e.crianca, e.adolescente, e.adulto]])];
+  for (const [dono, ts] of textos.filter(([d]) => !d.startsWith("fator"))){
+    const m = marc.find(([d]) => d === dono)[1];
+    if (!ts.every(t => t.includes(m))) throw new Error(`${dono}: texto sem o marcador`);
+  }
+  const fixos = [...Object.values(TEMPERAMENTO_NEUTRO_TXT), DESEJO_BEBE, VONTADE_ADULTO, ...Object.values(ALVOS_DESEJO).flat()];
+  for (const [dono, m] of marc){
+    for (const [outro, ts] of textos) if (outro !== dono && !(dono.startsWith("fator") && outro.startsWith("fator")) && ts.some(t => t.includes(m)))
+      throw new Error(`marcador ${m} de ${dono} aparece no texto de ${outro}`);
+    for (const t of fixos) if (t.includes(m)) throw new Error(`marcador ${m} de ${dono} aparece em texto fixo ${t}`);
+  }
+  for (const a of ACOES_PET) if (!ALVOS_DESEJO[a]) throw new Error("acao sem texto de desejo: " + a);
+}
 function paramsFator(f){
   if (!f.includes("(")) return [];
   return f.slice(f.indexOf("(") + 1, -1).split(",").map(p => { const n = Number(p); return p !== "" && !isNaN(n) && n > 0 && n < 1 ? `${Math.round(n*100)}%` : p.replace(/_/g, " "); });
@@ -671,13 +753,16 @@ function expressar(mot, est, refs){
 }
 
 class Bandit {
-  constructor(){ this.bracos = Object.fromEntries(ACOES_PET.map(a => [a, new Braco()])); this.ultima = null; this.pendentes = []; this.rec = {elogio:0, repreensao:0, atendido:0, ignorado:0};
-    this.mem = new Memoria(); this.tUlt = TICK_INICIAL; this.ultDecisao = null; }
+  constructor(temp = TEMP_NEUTRO){ this.bracos = Object.fromEntries(ACOES_PET.map(a => [a, new Braco()])); this.ultima = null; this.pendentes = []; this.rec = {elogio:0, repreensao:0, atendido:0, ignorado:0};
+    /* o temperamento muda so a escala com que a recompensa e usada (espelho de PoliticaBanditPersonalidade) */
+    this.k = { var:CB.var * Math.exp(CTP.kCuriosidade * temp.curiosidade), elogio:CB.elogio * (1 + CTP.kSensibilidade * temp.sensibilidade),
+      repr:CB.repr * (1 - CTP.kTeimosia * temp.teimosia) * (1 - CTP.kSensibilidade * temp.sensibilidade) };
+    this.mem = new Memoria(Math.exp(CTP.kRancor * temp.rancor)); this.tUlt = TICK_INICIAL; this.ultDecisao = null; }
   /* features do bandit v1 + memoria curta (tick = desde o ultimo cuidado + tick desse cuidado) */
   fx(obs){ return features(obs).concat(this.mem.feat(obs.tdc + this.tUlt)); }
   prior(obs){ const p = distInstinto(obs); const o = {}; for (const a of ACOES_PET) o[a] = (1-CB.piso)*p[a] + CB.piso/ACOES_PET.length; return o; }
   agir(obs, rng){
-    const x = this.fx(obs), p0 = this.prior(obs), esc = Math.sqrt(CB.var);
+    const x = this.fx(obs), p0 = this.prior(obs), esc = Math.sqrt(this.k.var);
     let melhor = null, ms = -Infinity; const amostras = {}, logPrior = {}, gumbel = {};
     for (const a of ACOES_PET){
       const br = this.bracos[a], th = br.theta(), L = br.chol();
@@ -693,6 +778,18 @@ class Bandit {
     /* registro somente leitura do que decidiu (motivo); nao muda a decisao */
     this.ultDecisao = { x, acao:melhor, amostras, logPrior, gumbel, refsMem:this.mem.refs() };
     return melhor;
+  }
+  /* desejo (espelho de desejo.py): necessidade abaixo do limiar; senao a vontade = acao de maior
+     media da posterior (theta^ . x, sem prior e sem amostra) se a margem passar o limiar. Sem rng. */
+  desejo(obs, tick){
+    const nec = [["fome",0,"comer"],["higiene",1,"limpar"],["energia",2,"dormir"],["humor",3,"brincar"]]
+      .map(([n, i, alvo]) => [obs.v[i], n, alvo]).filter(([v]) => v < CDJ.limiarNecessidade)
+      .sort((a, b) => a[0] - b[0] || (a[1] < b[1] ? -1 : 1));
+    if (nec.length){ const [v, n, alvo] = nec[0]; return {tick, tipo:"necessidade", alvo, causa:n, intensidade:(CDJ.limiarNecessidade - v)/CDJ.limiarNecessidade}; }
+    const x = this.fx(obs);
+    const m = ACOES_PET.map((a, i) => [this.bracos[a].theta().reduce((s, t, j) => s + t*x[j], 0), -i, a]).sort((p, q) => q[0] - p[0] || q[1] - p[1]);
+    const margem = m[0][0] - m[1][0];
+    return margem < CDJ.limiarVontade ? null : {tick, tipo:"vontade", alvo:m[0][2], intensidade:Math.min(1, margem)};
   }
   /* distribuicao da politica media (theta^), para inspecao */
   media(obs){
@@ -714,8 +811,8 @@ class Bandit {
     if (acao === "elogiar" || acao === "repreender"){
       if (!this.ultima) return;
       const [x, a] = this.ultima;
-      if (acao === "elogiar"){ this.bracos[a].atualizar(x, CB.elogio); this.rec.elogio++; }
-      else { this.bracos[a].atualizar(x, CB.repr); this.rec.repreensao++; }
+      if (acao === "elogiar"){ this.bracos[a].atualizar(x, this.k.elogio); this.rec.elogio++; }
+      else { this.bracos[a].atualizar(x, this.k.repr); this.rec.repreensao++; }
     } else {
       for (const [tp, x] of this.pendentes){ this.bracos.chamar_atencao.atualizar(x, 1 - (tick - tp)/CB.janela); this.rec.atendido++; }
       this.pendentes = [];
@@ -740,7 +837,9 @@ class Motor {
   constructor(semente){
     this.semente = semente;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
-    this.e = estadoInicial(); this.pol = new Bandit();
+    /* temperamento do ovo: rng propria, nao mexe nas outras */
+    this.temp = temperamentoDe(semente);
+    this.e = estadoInicial(); this.pol = new Bandit(this.temp);
     this.acao = "ocioso"; this.prox = 0; this.log = [];
     this.tracos = Object.fromEntries(ACOES_PET.map(a => [a, 1/ACOES_PET.length]));
     this.nDecisoes = 0; this.historico = [];
@@ -1452,6 +1551,7 @@ function motivoCombate(tr, lado, estilo){
   return {...base, fatores:conds.map(nomeCond), refs:[...refs].sort((a, b) => a - b)};
 }
 validarTabelasFala([...FATOR_DA_FEATURE, ...Object.keys(CATALOGO_V2)]);
+validarTabelasPersonalidade();
 
 /* =================================================================
    Arte original em pixel (placeholders)
@@ -1728,6 +1828,11 @@ function renderEstado(){
   if (e.dormindo) al.push(`<span class="tag">Dormindo</span>`);
   if (!al.length) al.push(`<span class="tag good">Tudo bem</span>`);
   $("alertas").innerHTML = al.join("");
+  const est = estagioFala(motor), des = motor.pol.desejo(observacao(e), e.tick);
+  $("temperamento").textContent = expressarTemperamento(motor.temp, est);
+  $("desejo").textContent = des ? expressarDesejo(des, est) : "…";
+  $("jeito-det").textContent = "temperamento: " + EIXOS_TEMP.map(k => `${k} ${motor.temp[k] >= 0 ? "+" : ""}${motor.temp[k].toFixed(2)}`).join(", ")
+    + ` (tom só com |eixo| ≥ ${CDJ.limiarTom})` + " · desejo: " + (des ? `${des.tipo} ${des.alvo}${des.causa ? " (" + des.causa + ")" : ""}, intensidade ${des.intensidade.toFixed(2)}` : "nenhum agora");
   const af = afinidades(motor.tracos), mx = Math.max(.05, ...COMBATE.map(c => Math.abs(af[c])));
   $("tracos").innerHTML = COMBATE.map(c => {
     const v = af[c] / mx, w = Math.abs(v) * 50, left = v >= 0 ? 50 : 50 - w;
