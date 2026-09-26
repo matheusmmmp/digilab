@@ -2,22 +2,22 @@
   "taxa": {
     "bastiao_rachado": {
       "bastiao_rachado": 0.5,
-      "colosso_partido": 0.149,
-      "devastador": 0.1465,
-      "duelista": 0.73575,
+      "colosso_partido": 0.14425,
+      "devastador": 0.1545,
+      "duelista": 0.2025,
       "emboscador": 0.0,
-      "espelho": 0.794,
-      "furioso": 0.8875,
-      "muralha": 0.042,
-      "predador": 0.57675,
+      "espelho": 0.313,
+      "furioso": 0.0155,
+      "muralha": 0.017,
+      "predador": 0.58925,
       "sentinela": 0.0,
-      "tita": 0.0445,
-      "vigia": 0.16575
+      "tita": 0.04275,
+      "vigia": 0.16625
     },
     "colosso_partido": {
-      "bastiao_rachado": 0.851,
+      "bastiao_rachado": 0.85575,
       "colosso_partido": 0.5,
-      "devastador": 0.00175,
+      "devastador": 0.06125,
       "duelista": 0.28075,
       "emboscador": 0.0,
       "espelho": 0.03975,
@@ -29,23 +29,23 @@
       "vigia": 0.01425
     },
     "devastador": {
-      "bastiao_rachado": 0.8535,
-      "colosso_partido": 0.99825,
+      "bastiao_rachado": 0.8455,
+      "colosso_partido": 0.93875,
       "devastador": 0.5,
-      "duelista": 0.51125,
-      "emboscador": 0.0105,
-      "espelho": 0.1145,
-      "furioso": 0.04575,
-      "muralha": 0.3585,
+      "duelista": 0.73375,
+      "emboscador": 0.01225,
+      "espelho": 0.3525,
+      "furioso": 0.30275,
+      "muralha": 0.33825,
       "predador": 0.99275,
-      "sentinela": 0.0105,
-      "tita": 0.98675,
-      "vigia": 0.0905
+      "sentinela": 0.034,
+      "tita": 0.76225,
+      "vigia": 0.578
     },
     "duelista": {
-      "bastiao_rachado": 0.26425,
+      "bastiao_rachado": 0.7975,
       "colosso_partido": 0.71925,
-      "devastador": 0.48875,
+      "devastador": 0.26625,
       "duelista": 0.5,
       "emboscador": 0.8785,
       "espelho": 0.1995,
@@ -59,7 +59,7 @@
     "emboscador": {
       "bastiao_rachado": 1.0,
       "colosso_partido": 1.0,
-      "devastador": 0.9895,
+      "devastador": 0.98775,
       "duelista": 0.1215,
       "emboscador": 0.5,
       "espelho": 0.99525,
@@ -71,9 +71,9 @@
       "vigia": 1.0
     },
     "espelho": {
-      "bastiao_rachado": 0.206,
+      "bastiao_rachado": 0.687,
       "colosso_partido": 0.96025,
-      "devastador": 0.8855,
+      "devastador": 0.6475,
       "duelista": 0.8005,
       "emboscador": 0.00475,
       "espelho": 0.5,
@@ -85,9 +85,9 @@
       "vigia": 0.9935
     },
     "furioso": {
-      "bastiao_rachado": 0.1125,
+      "bastiao_rachado": 0.9845,
       "colosso_partido": 0.999,
-      "devastador": 0.95425,
+      "devastador": 0.69725,
       "duelista": 0.9285,
       "emboscador": 1.0,
       "espelho": 0.3755,
@@ -99,9 +99,9 @@
       "vigia": 0.9905
     },
     "muralha": {
-      "bastiao_rachado": 0.958,
+      "bastiao_rachado": 0.983,
       "colosso_partido": 0.24,
-      "devastador": 0.6415,
+      "devastador": 0.66175,
       "duelista": 0.57025,
       "emboscador": 0.04875,
       "espelho": 0.22675,
@@ -113,7 +113,7 @@
       "vigia": 0.26825
     },
     "predador": {
-      "bastiao_rachado": 0.42325,
+      "bastiao_rachado": 0.41075,
       "colosso_partido": 0.0,
       "devastador": 0.00725,
       "duelista": 0.0,
@@ -129,7 +129,7 @@
     "sentinela": {
       "bastiao_rachado": 1.0,
       "colosso_partido": 1.0,
-      "devastador": 0.9895,
+      "devastador": 0.966,
       "duelista": 0.3015,
       "emboscador": 0.73175,
       "espelho": 0.6445,
@@ -141,9 +141,9 @@
       "vigia": 0.9995
     },
     "tita": {
-      "bastiao_rachado": 0.9555,
+      "bastiao_rachado": 0.95725,
       "colosso_partido": 0.85125,
-      "devastador": 0.01325,
+      "devastador": 0.23775,
       "duelista": 0.60775,
       "emboscador": 0.0,
       "espelho": 0.04525,
@@ -155,9 +155,9 @@
       "vigia": 0.03225
     },
     "vigia": {
-      "bastiao_rachado": 0.83425,
+      "bastiao_rachado": 0.83375,
       "colosso_partido": 0.98575,
-      "devastador": 0.9095,
+      "devastador": 0.422,
       "duelista": 0.08325,
       "emboscador": 0.0,
       "espelho": 0.0065,

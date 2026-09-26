@@ -506,3 +506,70 @@ Resultados canônicos (`artifacts_treino/resumo.json`, `artifacts_treino/bateria
   [0,25, 0,61]; campanha, exigente − atencioso: tier 1 −0,16 [−0,30, −0,04], tier 2 −0,38 [−0,65, −0,11],
   chefe −0,39 [−0,67, −0,12].
 - Web: mesmos números; os gambits sombrios só semeiam o pet (depois ele aprende como qualquer forma).
+
+## 2026-09-26 — progressão da campanha: pet básico perde, pet treinado vence
+
+Pedido do Matheus: validar que um pet com stats básicos não vence o NPC inicial e um com stats maiores
+vence, para o jogador ter de melhorar o pet antes de cada desafio. Critérios P1–P4 fixados antes da
+calibração em `experiments/calibrar_progressao.py` (substituem os K1–K4 da escada anterior). Níveis de
+treino tirados das vidas reais de `artifacts_treino/vidas` (fim da infância ~8 pontos, fim da adolescência
+~15, adulto ~29).
+
+- **Diagnóstico** (rodada 0): com a escada K1–K4, P2–P4 passavam, mas a criança não vencia o tier 1 nem
+  com +12 de treino (0,10): treinar na infância não servia para nada.
+- **Impasse** (rodada 1): com NPC de tamanho de criança, qualquer um que a criança treinada vence o
+  adolescente sem treino também vence (0,57–0,87). A evolução (vida e guts ×0,6 → ×0,8) pesava muito
+  mais que o treino da infância. **Decisão do Matheus: treino mais forte.**
+- **`ConfigTreino.peso_ponto_combate` 1 → 3**: cada ponto treinado vale 3 pontos de stat em combate
+  (`catalogo.com_treino`, arena e campanha). Pontos ganhos, tetos (+10 por stat, +36 na vida) e fadiga
+  não mudam. Na arena normalizada o treino passa a especializar mais o pet. Quando um stat bate no teto
+  da normalização, a sobra vai em partes iguais aos outros (comportamento que já existia; um teste de
+  proporção usava treino alto o bastante para bater no teto e foi ajustado).
+- **Escada nova** (rodadas 2–5, só sementes de calibração):
+  - Brutamontes: NPC **de tamanho de criança** (vida e guts ×0,6), total 72, gambits da criança arisca
+    (`campanha.gambit_npc` ganhou a família `crianca`; `bots.CRIANCAS` espelha as sementes da web);
+  - Sentinela: adulto, total 72, atirador da V2C (guarda distância e atira);
+  - Soberano: adulto, total 135, agressivo da V2C.
+  O Sentinela precisou mudar: com o treino mais forte o adolescente brigão piorava contra o furioso (mais
+  guts → mais pesados punidos) e só a linha guardiã virava com treino. O espelho travava porque a linha
+  caçadora vence ele sempre, com ou sem treino.
+- **Validação** (sementes 4101…4505, `experiments/configs/progressao/validacao_resultado.json`) passa P1–P4:
+  criança 0,08 sem treino → 0,61 com +8 contra o tier 1; adolescente sem treino 0,47 contra o tier 1;
+  adolescente 0,18 → duas linhas ≥ 0,5 com +15 contra o tier 2; adulto sem treino 0,44 contra o tier 2;
+  adulto 0,06 (nenhuma forma ≥ 0,5) → 0,51 de média com +29 contra o chefe.
+- Ressalva: a medida usa treino uniforme (o mesmo em todos os stats). O jogador treina stats escolhidos;
+  em algumas linhas o treino uniforme até piora a luta (o brigão contra a Sentinela), porque muda o ritmo de
+  guts dos gambits.
+- As rodadas antigas de `experiments/configs/campanha/` e `configs/sombrias/` foram medidas com peso 1;
+  refazê-las agora dá outros números (o peso é global).
+- **Critério por linha** (pedido do Matheus depois que a média escondeu linhas travadas): com a escada
+  acima, a linha caçadora nunca vencia o tier 1 (adolescente 0–1%, adulto emboscador 15% com +36) e
+  algumas linhas venciam sem treino. Rodadas 6–11: nenhum NPC único faz toda linha perder sem treino e
+  vencer treinada; o estilo decide mais que os stats. NPC menos previsível (ε 0,2–0,5) destrava linhas,
+  mas o pet básico passa a vencer; NPC que acompanha o estágio do pet não ajuda (os gambits das linhas
+  dominam os estilos da V2). **Decisão do Matheus: média + ninguém travado, com rivais à escolha e o chefe
+  com exceção.**
+- **Campanha final** (`ConfigCampanha.npcs`, campo `lugar`; vencer qualquer rival de um lugar abre o
+  próximo):
+  - Campina: Brutamontes, criança, total 72, gambits da criança serena (a arisca travava os caçadores).
+  - Torre: 3 rivais, escolhidos pela maior folga de cobertura entre os NPCs medidos: Sentinela (atirador
+    V2C, 72), Carcereiro (furioso sem técnica, 110) e Porteiro (agressivo V2C, 72).
+  - Cidadela: Soberano, agressivo V2C, 135.
+- **Validação por lugar** (`criterios_lugares`, sementes 4101…4505, `validacao_resultado.json`): cada rival
+  vence o pet básico do estágio; nenhuma linha fica travada na Campina nem na Torre; degraus ok.
+  **Exceção aceita**: duelista, furioso, sentinela e emboscador não vencem o Soberano nem com +36. Em
+  26 estilos testados não houve chefe que os adultos sem treino percam e que essas formas vençam treinadas.
+- **S2 com a campanha nova**: tier 2 = o melhor rival da Torre (o jogador escolhe); **tolerância de 0,02**
+  no critério (b) (decisão do Matheus: as sombrias têm ε 0,2 e ganham uma luta ou outra por acaso; o
+  colosso partido ficava em 1% contra 0,4% do vigia). Sombrias recalibradas (`configs/sombrias/r6–r7`):
+  devastador bate com golpe rápido e só solta o pesado com guts ≥ 60, corpo a corpo volta a ×1,3 (valor da
+  especificação); bastião rachado = gambits do espelho sem as regras que leem o oponente (contra-golpe 100%,
+  como na especificação); colosso partido regen ×0,85; predador igual. Na calibração as 4 linhas passam
+  o S2 e o S1.
+- **Runs canônicas finais**: S2 passa nas 4 linhas (`artifacts_treino/resumo.json`). S1 passa nas regras
+  V2.1 e V21C. **E1 com as sombrias passa na V21C** (suporte emboscador, espelho, furioso, muralha), que é
+  o combate aprovado e o da web, mas **reprova na V2.1 original** (suporte de 3, mínimo 4): o bastião
+  rachado ficou fraco (média 0,10 contra as normais) e saiu do suporte. Registrado como ressalva.
+  Campanha com treino (`artifacts_campanha/treino.json`): o exigente perde do atencioso contra a Campina
+  (−0,16 [−0,31, −0,03]), o Carcereiro (−0,35), o Porteiro (−0,48) e o Soberano (−0,50); contra a Sentinela
+  −0,14 [−0,38, 0,08].

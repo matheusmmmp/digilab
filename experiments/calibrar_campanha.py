@@ -50,8 +50,11 @@ LIMIARES = {"degrau": 0.10, "t1_adulto_min": 0.70, "t1_adol": (0.25, 0.60), "t1_
 
 def lutador_npc(spec: dict, rotulo: str) -> Lutador:
     stats = {k: spec["total"] / len(STATS_V21) for k in STATS_V21}
-    return Lutador(f"npc:{rotulo}:{spec['estilo']}:{spec['total']}", perfil_de_stats(rotulo, stats, cfg=REGRAS_CAMPANHA.v21),
-                   gambit_npc(spec["estilo"]), CONFIG_CAMPANHA.epsilon_npc)
+    est = spec.get("estagio", "adulto")
+    return Lutador(f"npc:{rotulo}:{spec['estilo']}:{spec['total']}" + ("" if est == "adulto" else f":{est}")
+                   + (f":e{spec['epsilon']}" if "epsilon" in spec else ""),
+                   perfil_de_stats(rotulo, stats, est, cfg=REGRAS_CAMPANHA.v21),
+                   gambit_npc(spec["estilo"], est), spec.get("epsilon", CONFIG_CAMPANHA.epsilon_npc))
 
 
 def lutador_pet(tipo: str, nome: str, especie: str, nivel: int) -> Lutador:

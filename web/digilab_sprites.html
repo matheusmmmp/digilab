@@ -197,6 +197,8 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 .camp-det .licao{font-style:italic}
 .camp-det .aviso{color:var(--warn);font-weight:700}
 .camp-prog{display:flex;gap:6px;flex-wrap:wrap}
+.camp-rival{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:6px;background:var(--panel);cursor:pointer}
+.camp-rival.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 /* atalho de volta ao pet no celular (a tela do pet fica acima das abas) */
 .ir-pet{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:10;font:inherit;font-weight:700;border:0;border-radius:999px;padding:12px 16px;background:var(--shell);color:var(--shell-ink);box-shadow:0 4px 14px rgba(20,30,70,.35);cursor:pointer}
 .ir-pet:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -295,7 +297,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <div id="treino-bloco">
           <h2>Treino</h2>
-          <p class="muted" style="margin-top:4px">Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão da espécie e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para adulto leva à <b>forma sombria</b>. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
+          <p class="muted" style="margin-top:4px">Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão da espécie e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para adulto leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
           <div class="treino-btns" id="treino-btns"></div>
           <div class="linhas" id="treino-barras"></div>
           <p id="treino-msg" aria-live="polite" style="margin-top:6px"></p>
@@ -383,7 +385,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-campanha" hidden>
-        <p>Três desafios pelo mapa, em sequência: o próximo lugar só abre depois de vencer o anterior. Os NPCs têm stats iguais em todos os atributos (somando de 54 a 120; um pet sem treino tem 60), são adultos e lutam com um estilo fixo. Na campanha o treino vale inteiro (stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
+        <p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes: escolha o que combina com o jeito de lutar do seu pet. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 135; um pet sem treino tem 60) e lutam com um estilo fixo; o primeiro tem o tamanho de uma criança. <b>Pet sem treino perde</b>: cada desafio pede que você treine o pet no estágio sugerido (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
         <div class="mapa-rola"><svg class="mapa" id="mapa" viewBox="0 0 360 230" role="group" aria-label="Mapa da campanha"></svg></div>
         <div class="camp-det" id="camp-det" aria-live="polite"></div>
         <div id="palco-camp"></div>
@@ -529,7 +531,8 @@ const COB = { b0:1, bVinculo:2, bTeimosia:1, bConflito:2, limiarConflito:.3, pro
   sujeitas:["alimentar","limpar","brincar","acariciar"], limiarMotivo:.05 };
 /* treino (espelho de ConfigTreino, docs/pve_treino.json; sobrecarga por forcada calibrada 15 -> 25) e
    formas sombrias (espelho de ConfigSombrio). Sem rng: so a obediencia (pets v2) sorteia se o pet enrola. */
-const CTR = { exercicios:{levantar_pedra:["forca","vigor"], corrida:["folego","recuperacao"], alvo:["mira","folego"],
+const CTR = { pesoPontoCombate:3,   /* cada ponto treinado vale 3 em stat de combate (ConfigTreino.peso_ponto_combate) */
+  exercicios:{levantar_pedra:["forca","vigor"], corrida:["folego","recuperacao"], alvo:["mira","folego"],
     esquiva:["guarda","vigor"], meditar:["recuperacao","guarda"], resistencia:["vigor","forca"]},
   ganhoPri:2, ganhoSec:1, tetoStat:10, tetoEstagio:{crianca:10, adolescente:12, adulto:14}, tetoVida:36,
   fadigaSessao:20, recuperaHora:10, limiarPausa:40, limiteForcar:60, intervalo:10,
@@ -541,7 +544,7 @@ const APTIDAO = {
   ferrugem:{guarda:1.2, vigor:1.1, forca:1.0, folego:.9, recuperacao:.9, mira:.9},
   limo:{recuperacao:1.2, folego:1.1, vigor:1.0, guarda:.9, mira:.9, forca:.9} };
 const NOME_EXERCICIO = {levantar_pedra:"Levantar pedra", corrida:"Corrida", alvo:"Alvo", esquiva:"Esquiva", meditar:"Meditar", resistencia:"Resistência"};
-const CSO = { aviso:30, sombrio:60, epsMin:.2, tetoVinc:.6, multDev:2, fracBastiao:1, multPred:1.4, turnosPeleColosso:3, multRegenColosso:.85,
+const CSO = { aviso:30, sombrio:60, epsMin:.2, tetoVinc:.6, multDev:1.3, fracBastiao:1, multPred:1.4, turnosPeleColosso:3, multRegenColosso:.85,
   formas:{brigao:{nome:"devastador", base:"furioso", stats:{forca:4, folego:1, recuperacao:-3, guarda:-2}},
     guardiao:{nome:"bastiao_rachado", base:"espelho", stats:{guarda:4, vigor:1, recuperacao:-3, mira:-2}},
     cacador:{nome:"predador", base:"emboscador", stats:{mira:4, forca:1, vigor:-3, guarda:-2}},
@@ -1251,11 +1254,12 @@ class Motor {
     this.campanha = Object.fromEntries(CAMPANHA.map(c => [c.k, 0]));
   }
   /* desafio da campanha aberto: o primeiro sempre; os outros depois de vencer o anterior */
-  desafioAberto(k){ const i = CAMPANHA.findIndex(c => c.k === k); return i === 0 || (i > 0 && this.campanha[CAMPANHA[i - 1].k] > 0); }
+  lugarVencido(L){ return LUGARES[L].rivais.some(r => this.campanha[r] > 0); }
+  desafioAberto(k){ const L = NPC[k].lug; return L === 0 || this.lugarVencido(L - 1); }
   /* luta contra bot: entra no registro (rival + semente) e ensina os gambits */
   lutar(rival, semente){
     if (!NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
-    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença ${CAMPANHA[NPC[rival].tier - 2].nome} antes`);
+    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${LUGARES[NPC[rival].lug - 1].nome} antes`);
     this.log.push([this.e.tick, "l", {r:rival, s:semente}]);
     return this._lutar(rival, semente);
   }
@@ -1693,7 +1697,7 @@ const DESC_PASSIVA = {
   emboscador:"o primeiro disparo da luta causa o dobro",
   vigia:"vê o pesado do oponente um turno antes",
   tita:"pesado causa +30%",
-  devastador:"sombria: corpo a corpo x2; não pode defender nem esquivar; só fecha e solta o pesado", bastiao_rachado:"sombria: contra-golpe devolve 100%; defender não rende guts; não lê o pesado do oponente",
+  devastador:"sombria: corpo a corpo +30%; não pode defender nem esquivar; bate sem ler o rival", bastiao_rachado:"sombria: contra-golpe devolve 100%; defender não rende guts; não lê o rival",
   predador:"sombria: disparo +40%; não pode recuar", colosso_partido:"sombria: pele dura dura 3 turnos; regenera 85% do guts"};
 function tecnicaDe(f){ return f.linha ? CAT.adolescente[f.linha].tecnica : null; }
 function chaveSprite(f){ return f.est === "bebe" ? `${f.esp}_bebe` : f.est === "crianca" ? `${f.esp}_crianca_${f.ramo}`
@@ -1733,7 +1737,7 @@ function perfilDe(f, car, condicao = 1, treino = null, absoluto = false){
   let s = statsDe(f, car);
   if (treino){
     /* treino: arena normaliza ao orcamento mantendo as proporcoes; campanha usa o ganho absoluto */
-    const b = Object.fromEntries(STATS.map(k => [k, s[k] + (treino[k] || 0)]));
+    const b = Object.fromEntries(STATS.map(k => [k, s[k] + CTR.pesoPontoCombate * (treino[k] || 0)]));
     if (absoluto) s = b;
     else { const tot = STATS.reduce((a, k) => a + s[k], 0), soma = STATS.reduce((a, k) => a + b[k], 0);
       s = renormalizar(Object.fromEntries(STATS.map(k => [k, b[k] * tot / soma])), tot); }
@@ -1752,10 +1756,10 @@ function perfilNeutro(){
     regen:CV21.regenBase + 10*CV21.regenRec, mPerto:1, mDisparo:1, mGuarda:1};
 }
 /* NPC da campanha: mesma conversao de perfilDe com stats uniformes (campanha.perfil_de_stats) */
-function perfilNPC(total){
-  const v = total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])), est = CAT.estagio.adulto,
+function perfilNPC(total, estagio = "adulto"){
+  const v = total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])), est = CAT.estagio[estagio],
     gMax = (CV21.gMaxBase + CV21.gMaxFolego * v) * est;
-  return {est:"adulto", tecnica:null, passiva:null, stats:s,
+  return {est:estagio, tecnica:null, passiva:null, stats:s,
     hpMax:(CV21.hpBase + CV21.hpVigor * v) * est, guts0:Math.min(gMax, (CV21.g0Base + CV21.g0Folego * v) * est),
     gutsMax:gMax, regen:CV21.regenBase + CV21.regenRec * v,
     mPerto:CV21.multBase + CV21.multPonto * v, mDisparo:CV21.multBase + CV21.multPonto * v,
@@ -2054,17 +2058,29 @@ const CRIANCA_V21 = {
    sem tecnica nem passiva, estilo "<familia>:<nome>" (gambitNPC); sem renormalizar ao orcamento da especie.
    Cada desafio so abre depois de vencer o anterior. Escada rebalanceada (experiments/calibrar_campanha.py):
    tier 1 prova de stats, tier 2 prova de estilo, chefe so cai com estilo certo e treino alto. */
-const CAMPANHA = [
-  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:54, estilo:"v21:espelho", sugerido:"criança", est:"crianca", sprite:"adulto_golpe", cor:"golpe",
-   lugar:"Campina", x:74, y:176, licao:"Prova de stats: ele luta parecido com muita gente; quem treinou mais leva."},
-  {k:"npc_tier2_sentinela", nome:"Sentinela", total:80, estilo:"v21:furioso", sugerido:"adolescente", est:"adolescente", sprite:"adulto_agarrao", cor:"agarrao",
-   lugar:"Torre de pedra", x:196, y:118, licao:"Prova de estilo: ele parte para cima sem parar. Treino quase não ajuda; o jeito de lutar decide."},
-  {k:"npc_tier3_soberano", nome:"Soberano", total:120, estilo:"v2c:agressivo", sugerido:"adulto", est:"adulto", sprite:"adulto_carga", cor:"carga",
-   lugar:"Cidadela", x:300, y:58, licao:"O chefe: forte em tudo. Só cai com o estilo certo e muito treino."},
+/* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para
+   nenhuma linha ficar travada; experiments/calibrar_progressao.py) */
+const LUGARES = [
+  {nome:"Campina", x:74, y:176, sugerido:"criança", est:"crianca"},
+  {nome:"Torre de pedra", x:196, y:118, sugerido:"adolescente", est:"adolescente"},
+  {nome:"Cidadela", x:300, y:58, sugerido:"adulto", est:"adulto"},
 ];
+const CAMPANHA = [
+  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:72, estilo:"crianca:sereno", estagio:"crianca", lug:0, sprite:"crianca_golpe", grade:"crianca", cor:"golpe",
+   licao:"Um valentão do tamanho de uma criança, mais forte que um pet comum. Criança sem treino perde; treinando na infância dá para vencer."},
+  {k:"npc_tier2_sentinela", nome:"Sentinela", total:72, estilo:"v2c:atirador", lug:1, sprite:"adulto_finta", cor:"finta",
+   licao:"Guarda distância e atira. Boa para quem sabe fechar a distância ou atirar melhor."},
+  {k:"npc_tier2_carcereiro", nome:"Carcereiro", total:110, estilo:"v21:furioso", lug:1, sprite:"adulto_agarrao", cor:"agarrao",
+   licao:"Parte para cima sem parar, com muita vida. Boa para quem se defende e devolve."},
+  {k:"npc_tier2_porteiro", nome:"Porteiro", total:72, estilo:"v2c:agressivo", lug:1, sprite:"adulto_golpe", cor:"golpe",
+   licao:"Agressivo e esperto: finta e se defende quando apanha. Boa para quem aguenta a pancada."},
+  {k:"npc_tier3_soberano", nome:"Soberano", total:135, estilo:"v2c:agressivo", lug:2, sprite:"adulto_carga", cor:"carga",
+   licao:"O chefe: forte em tudo. Só cai com o estilo certo e muito treino. Brigões e caçadores não costumam vencê-lo."},
+];
+LUGARES.forEach((L, i) => { L.rivais = CAMPANHA.filter(c => c.lug === i).map(c => c.k); });
 /* v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem);
    v2c: bots redesenhados da V2C (os BOTS_V2 da web) */
-const nomeEstiloNPC = e => { const [fam, nome] = e.split(":"); return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : NOME_BOT[nome]; };
+const nomeEstiloNPC = e => { const [fam, nome] = e.split(":"); return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : fam === "crianca" ? `criança ${nome}` : NOME_BOT[nome]; };
 function gambitNPC(estilo){
   const [fam, nome] = estilo.split(":");
   if (fam === "v21"){
@@ -2072,9 +2088,10 @@ function gambitNPC(estilo){
     return {regras:g.regras.filter(r => !TECNICAS.includes(r.entao) && !r.se.some(c => c.n === "oponente_vai_preparar")), final:g.final};
   }
   if (fam === "v2c") return BOTS_V2[nome];
+  if (fam === "crianca") return CRIANCA_V21[nome];
   throw new Error("familia de estilo desconhecida: " + estilo);
 }
-const NPC = Object.fromEntries(CAMPANHA.map((c, i) => [c.k, {...c, tier:i + 1}]));
+const NPC = Object.fromEntries(CAMPANHA.map(c => [c.k, {...c, tier:c.lug + 1, lugar:LUGARES[c.lug].nome, sugerido:LUGARES[c.lug].sugerido, est:LUGARES[c.lug].est}]));
 const NOME_BOT = {aleatorio:"aleatório", agressivo:"agressivo", tartaruga:"tartaruga", atirador:"atirador",
   contragolpe:"contragolpe", adaptativo:"adaptativo", oraculo:"oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
   ...Object.fromEntries(CAMPANHA.map(c => [c.k, c.nome]))};
@@ -2750,8 +2767,8 @@ function sementeDe(f){ return f.est === "crianca" ? CRIANCA_V21[f.ramo] : f.est 
   : BOTS_V21[f.adulta] || GAMBITS_SOMBRIA[f.adulta] || BOTS_V21[SOMBRIA[f.adulta].base]; }
 /* sombrias redesenhadas para o S2 (bots.SOMBRIOS): a sombra tira a leitura do oponente */
 const GAMBITS_SOMBRIA = {
-  devastador:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg([D0, GA_(20)],"preparar_pesado"), Rg(D0,"golpe_rapido")], final:"carregar"},
-  get bastiao_rachado(){ return {regras:BOTS_V21.espelho.regras.slice(1), final:BOTS_V21.espelho.final}; },
+  devastador:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg([D0, GA_(60)],"preparar_pesado"), Rg(D0,"golpe_rapido")], final:"carregar"},
+  get bastiao_rachado(){ return {regras:BOTS_V21.espelho.regras.filter(r => !r.se.some(c => c.n.startsWith("oponente_"))), final:BOTS_V21.espelho.final}; },
 };
 const rotuloRegra = r => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
 class GambitsPet {
@@ -2848,8 +2865,8 @@ function lutadorPet(m, rotulo, absoluto = false){
 }
 function lutadorBot(nome){
   const n = NPC[nome];
-  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total), sprite:n.sprite,
-                 grade:"adulto", cor:n.cor, estagioFala:"adulto"};
+  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total, n.estagio || "adulto"), sprite:n.sprite,
+                 grade:n.grade || "adulto", cor:n.cor, estagioFala:n.estagio || "adulto"};
   if (BOTS_V21[nome]){
     const f = formaRival(nome);
     return {nome:"Rival " + nomeForma(f), estilo:estiloBot(nome), cond:perfilDe(f, caraterCanonico(nome)), sprite:chaveSprite(f),
@@ -2983,7 +3000,9 @@ function imagemChave(nome){
 }
 const tentativas = k => motor.log.reduce((n, e) => n + (e[1] === "l" && e[2].r === k), 0);
 /* proximo desafio: o primeiro aberto e ainda nao vencido (ou o ultimo, se tudo vencido) */
-function campProximo(){ return (CAMPANHA.find(c => motor.desafioAberto(c.k) && !motor.campanha[c.k]) || CAMPANHA[CAMPANHA.length - 1]).k; }
+/* proximo lugar: o primeiro aberto e sem vitoria (ou o ultimo); o rival sugerido e o primeiro dele */
+function campProximoLugar(){ const L = LUGARES.findIndex((_, i) => motor.desafioAberto(LUGARES[i].rivais[0]) && !motor.lugarVencido(i)); return L < 0 ? LUGARES.length - 1 : L; }
+function campProximo(){ return LUGARES[campProximoLugar()].rivais[0]; }
 function arvoreMapa(x, y, cor){ return `<polygon points="${x},${y - 14} ${x - 7},${y} ${x + 7},${y}" fill="${cor}"/><rect x="${x - 1.5}" y="${y}" width="3" height="4" fill="#6B4A2B"/>`; }
 function cenarioMapa(){
   const t = [];
@@ -3016,28 +3035,31 @@ function renderCampanha(){
   const svg = $("mapa");
   if (!svg || !motor) return;
   if (!campSel || !NPC[campSel]) campSel = campProximo();
-  const pts = [[24, 112], ...CAMPANHA.map(c => [c.x, c.y])];
-  const vencidos = CAMPANHA.filter(c => motor.campanha[c.k]).length;
+  const pts = [[24, 112], ...LUGARES.map(L => [L.x, L.y])];
+  const vencidos = LUGARES.filter((_, i) => motor.lugarVencido(i)).length;
   /* caminho: tracejado inteiro e, por cima, o trecho ja percorrido */
   const d = pts.map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
   const feito = pts.slice(0, vencidos + 1).map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
   let h = cenarioMapa();
   h += `<path d="${d}" fill="none" stroke="#F4F1E4" stroke-width="5" stroke-dasharray="2 6" stroke-linecap="round"/>`;
   if (vencidos) h += `<path d="${feito}" fill="none" stroke="#F0A534" stroke-width="5" stroke-linecap="round"/>`;
-  CAMPANHA.forEach((c, i) => {
-    const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k);
-    const cls = ["no", aberto ? (vit ? "vencido" : "aberto") : "bloq", c.k === campSel ? "sel" : ""].filter(Boolean).join(" ");
+  LUGARES.forEach((L, i) => {
+    const vit = L.rivais.reduce((n, k) => n + motor.campanha[k], 0), aberto = motor.desafioAberto(L.rivais[0]);
+    const c = NPC[L.rivais[0]], sel = NPC[campSel].lug === i;
+    const cls = ["no", aberto ? (vit ? "vencido" : "aberto") : "bloq", sel ? "sel" : ""].filter(Boolean).join(" ");
     const st = vit ? `vencido ${vit}×` : aberto ? "aberto" : "trancado";
-    const w = Math.max((c.lugar.length + 3) * 7.4, (c.nome.length + st.length + 3) * 5) + 14;
-    h += `<g class="${cls}" data-npc="${c.k}" tabindex="0" role="button" aria-label="${i + 1}. ${c.lugar}: ${c.nome}, ${st}">
-      <circle class="pulso" cx="${c.x}" cy="${c.y}" r="21"/>
-      <circle class="anel" cx="${c.x}" cy="${c.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
-      <image href="${imagemChave(c.sprite + "_0")}" x="${c.x - 12}" y="${c.y - 12}" width="24" height="24" style="image-rendering:pixelated"/>
-      ${aberto ? "" : `<g transform="translate(${c.x + 9},${c.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
-      ${vit ? `<g transform="translate(${c.x + 10},${c.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
-      <rect class="rotulo-bg" x="${c.x - w / 2}" y="${c.y + 23}" width="${w}" height="24" rx="4"/>
-      <text class="rotulo" x="${c.x}" y="${c.y + 33}" text-anchor="middle">${i + 1}. ${c.lugar.toUpperCase()}</text>
-      <text class="st" x="${c.x}" y="${c.y + 43}" text-anchor="middle">${c.nome} · ${st}</text>
+    const quem = L.rivais.length > 1 ? `${L.rivais.length} rivais` : c.nome;
+    const w = Math.max((L.nome.length + 3) * 7.4, (quem.length + st.length + 3) * 5) + 14;
+    h += `<g class="${cls}" data-lugar="${i}" tabindex="0" role="button" aria-label="${i + 1}. ${L.nome}: ${quem}, ${st}">
+      <circle class="pulso" cx="${L.x}" cy="${L.y}" r="21"/>
+      <circle class="anel" cx="${L.x}" cy="${L.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
+      <image href="${imagemChave(c.sprite + "_0")}" x="${L.x - 12}" y="${L.y - 12}" width="24" height="24" style="image-rendering:pixelated"/>
+      ${L.rivais.length > 1 ? `<g transform="translate(${L.x - 26},${L.y - 22})"><circle cx="6" cy="6" r="7" fill="#2F47A6"/><text x="6" y="9.5" text-anchor="middle" style="fill:#fff;font-size:9px">${L.rivais.length}</text></g>` : ""}
+      ${aberto ? "" : `<g transform="translate(${L.x + 9},${L.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
+      ${vit ? `<g transform="translate(${L.x + 10},${L.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
+      <rect class="rotulo-bg" x="${L.x - w / 2}" y="${L.y + 23}" width="${w}" height="24" rx="4"/>
+      <text class="rotulo" x="${L.x}" y="${L.y + 33}" text-anchor="middle">${i + 1}. ${L.nome.toUpperCase()}</text>
+      <text class="st" x="${L.x}" y="${L.y + 43}" text-anchor="middle">${quem} · ${st}</text>
     </g>`;
   });
   /* seu pet: parado no proximo desafio (ou na casa, se nenhum aberto foi vencido ainda) */
@@ -3049,17 +3071,25 @@ function renderCampanha(){
   renderCampDet();
 }
 function renderCampDet(){
-  const c = CAMPANHA.find(x => x.k === campSel), i = CAMPANHA.indexOf(c);
-  const vit = motor.campanha[c.k], aberto = motor.desafioAberto(c.k), tent = tentativas(c.k);
-  const est = motor.forma.est, cedo = ORDEM_EST.indexOf(est) < ORDEM_EST.indexOf(c.est);
-  const st = vit ? `vencido ${vit}× em ${tent} luta${tent === 1 ? "" : "s"}` : aberto ? (tent ? `${tent} tentativa${tent === 1 ? "" : "s"}, nenhuma vitória ainda` : "aberto, ainda não enfrentado") : `trancado: vença ${CAMPANHA[i - 1].nome} (${CAMPANHA[i - 1].lugar}) antes`;
-  $("camp-det").innerHTML = `<h3>${i + 1}. ${c.lugar}: ${c.nome}</h3>
-    <p class="licao">${c.licao}</p>
-    <p class="muted">stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total}) · estilo ${nomeEstiloNPC(c.estilo)} · sugerido a partir de: ${c.sugerido}</p>
-    ${cedo && aberto ? `<p class="aviso">Seu pet ainda é ${NOME_ESTAGIO_FALA[est] || est}: este desafio é pensado para ${c.sugerido} em diante.</p>` : ""}
-    <p><b>${st}</b></p>
-    <div class="row"><button class="sbtn${vit ? " sec" : ""}" data-npc="${c.k}"${aberto && !lutando && est !== "ovo" && est !== "bebe" ? "" : " disabled"}>${vit ? "Lutar de novo" : "Desafiar"}</button>
-    <span class="muted">${est === "ovo" || est === "bebe" ? "O bebê ainda não luta na campanha." : ""}</span></div>`;
+  const Li = NPC[campSel].lug, L = LUGARES[Li], aberto = motor.desafioAberto(L.rivais[0]);
+  const est = motor.forma.est, cedo = ORDEM_EST.indexOf(est) < ORDEM_EST.indexOf(L.est), podeLutar = est !== "ovo" && est !== "bebe";
+  const cab = aberto ? (L.rivais.length > 1 ? "Vença qualquer um dos rivais para abrir o próximo lugar." : "")
+    : `Trancado: vença alguém em ${LUGARES[Li - 1].nome} antes.`;
+  const rival = k => {
+    const c = NPC[k], vit = motor.campanha[k], tent = tentativas(k);
+    const st = vit ? `vencido ${vit}× em ${tent} luta${tent === 1 ? "" : "s"}` : tent ? `${tent} tentativa${tent === 1 ? "" : "s"}, nenhuma vitória` : "ainda não enfrentado";
+    return `<div class="camp-rival${k === campSel ? " sel" : ""}" data-ver="${k}">
+      <div><b>${c.nome}</b> <span class="muted">· ${nomeEstiloNPC(c.estilo)} · stats ${(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total ${c.total})</span></div>
+      <p class="licao">${c.licao}</p>
+      <div class="row"><button class="sbtn${vit ? " sec" : ""}" data-npc="${k}"${aberto && !lutando && podeLutar ? "" : " disabled"}>${vit ? "Lutar de novo" : "Desafiar"}</button><span class="muted">${st}</span></div>
+    </div>`;
+  };
+  $("camp-det").innerHTML = `<h3>${Li + 1}. ${L.nome}</h3>
+    ${cab ? `<p><b>${cab}</b></p>` : ""}
+    <p class="muted">sugerido a partir de: ${L.sugerido}</p>
+    ${cedo && aberto ? `<p class="aviso">Seu pet ainda é ${NOME_ESTAGIO_FALA[est] || est}: este lugar é pensado para ${L.sugerido} em diante.</p>` : ""}
+    ${podeLutar ? "" : `<p class="muted">O bebê ainda não luta na campanha.</p>`}
+    ${L.rivais.map(rival).join("")}`;
 }
 function campPreview(){
   if (!campSel) campSel = campProximo();
@@ -3067,18 +3097,25 @@ function campPreview(){
   desenharArenaV2(A, B, E, null); setBarras(E);
   if (!lutando){ $("arena-res").textContent = `Seu pet × ${B.nome.replace("Rival ", "")}: escolha um lugar no mapa e aperte Desafiar.`; $("arena-fala").innerHTML = ""; }
 }
-function selecionarLugar(k){
+function selecionarRival(k){
   if (lutando || !NPC[k]) return;
   campSel = k; renderCampanha(); campPreview();
 }
-$("mapa").addEventListener("click", ev => { const g = ev.target.closest("[data-npc]"); if (g) selecionarLugar(g.dataset.npc); });
+/* no mapa escolhe o lugar: o rival em foco e o primeiro ainda nao vencido dele */
+function selecionarLugar(i){
+  const L = LUGARES[i]; if (!L) return;
+  selecionarRival(L.rivais.find(k => !motor.campanha[k]) || L.rivais[0]);
+}
+$("mapa").addEventListener("click", ev => { const g = ev.target.closest("[data-lugar]"); if (g) selecionarLugar(+g.dataset.lugar); });
 $("mapa").addEventListener("keydown", ev => {
-  const g = ev.target.closest("[data-npc]");
-  if (g && (ev.key === "Enter" || ev.key === " ")){ ev.preventDefault(); selecionarLugar(g.dataset.npc); $("mapa").querySelector(`[data-npc="${g.dataset.npc}"]`).focus(); }
+  const g = ev.target.closest("[data-lugar]");
+  if (g && (ev.key === "Enter" || ev.key === " ")){ ev.preventDefault(); selecionarLugar(+g.dataset.lugar); $("mapa").querySelector(`[data-lugar="${g.dataset.lugar}"]`).focus(); }
 });
 $("camp-det").addEventListener("click", ev => {
   const b = ev.target.closest("button[data-npc]");
-  if (b){ $("palco").scrollIntoView({behavior:"smooth", block:"nearest"}); lutarAnimado(b.dataset.npc); }
+  if (b){ $("palco").scrollIntoView({behavior:"smooth", block:"nearest"}); campSel = b.dataset.npc; lutarAnimado(b.dataset.npc); return; }
+  const r = ev.target.closest("[data-ver]");
+  if (r && r.dataset.ver !== campSel) selecionarRival(r.dataset.ver);     /* ver o rival no palco antes de lutar */
 });
 function narrar(A, B, tr){
   const ma = motivoCombate(tr, 0, A.estilo), mb = motivoCombate(tr, 1, B.estilo);
@@ -3101,7 +3138,7 @@ $("lutar").addEventListener("click", () => lutarAnimado(null));
 function lutarAnimado(npc){
   if (lutando) return; travar(true);
   let A, B, res;
-  const cenario = rivalFixo && !npc;
+  const cenario = rivalFixo && !npc, lugarJaVencido = npc ? motor.lugarVencido(NPC[npc].lug) : true;
   try {
     if (cenario){   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
       A = lutadorPet(motor, "Seu pet"); B = prepararRival(); res = jogarV2(A, B, hashSemente("cenario", motor.semente, motor.log.length));
@@ -3115,12 +3152,13 @@ function lutarAnimado(npc){
   desenharArenaV2(A, B, res.E0, null); setBarras(res.E0); $("arena-fala").innerHTML = "";
   const passo = () => {
     if (i >= res.turnos.length){
+      const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
       $("arena-res").textContent = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "")
-        + (npc && res.pontosA === 1 && NPC[npc].tier < CAMPANHA.length && motor.campanha[npc] === 1 ? ` Desafio ${CAMPANHA[NPC[npc].tier].nome} liberado!` : "")
-        + (npc && res.pontosA === 1 && NPC[npc].tier === CAMPANHA.length && motor.campanha[npc] === 1 ? " Campanha concluída!" : "");
-      if (npc && res.pontosA === 1 && motor.campanha[npc] === 1) campSel = null;   /* venceu pela 1a vez: mapa vai ao proximo */
+        + (primeiraDoLugar && NPC[npc].lug < LUGARES.length - 1 ? ` ${LUGARES[NPC[npc].lug + 1].nome} liberada!` : "")
+        + (primeiraDoLugar && NPC[npc].lug === LUGARES.length - 1 ? " Campanha concluída!" : "");
+      if (primeiraDoLugar) campSel = null;   /* venceu o lugar pela 1a vez: mapa vai ao proximo */
       travar(false); renderGambits(); return;
     }
     const tr = res.turnos[i++];

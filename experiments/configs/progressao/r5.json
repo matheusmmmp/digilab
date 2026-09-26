@@ -1,0 +1,168 @@
+{
+  "descricao": "rodada 5: tier 2 com peso 3, estilos agressivos com total baixo e defensivos com total alto",
+  "npcs": {
+    "t2:v2c:agressivo@60": {
+      "total": 60,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    },
+    "t2:v2c:agressivo@66": {
+      "total": 66,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    },
+    "t2:v2c:agressivo@72": {
+      "total": 72,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    },
+    "t2:v21:furioso@60": {
+      "total": 60,
+      "estilo": "v21:furioso",
+      "peso": 3.0
+    },
+    "t2:v21:furioso@66": {
+      "total": 66,
+      "estilo": "v21:furioso",
+      "peso": 3.0
+    },
+    "t2:v21:furioso@72": {
+      "total": 72,
+      "estilo": "v21:furioso",
+      "peso": 3.0
+    },
+    "t2:v21:espelho@90": {
+      "total": 90,
+      "estilo": "v21:espelho",
+      "peso": 3.0
+    },
+    "t2:v21:espelho@100": {
+      "total": 100,
+      "estilo": "v21:espelho",
+      "peso": 3.0
+    },
+    "t2:v2c:atirador@60": {
+      "total": 60,
+      "estilo": "v2c:atirador",
+      "peso": 3.0
+    },
+    "t2:v2c:atirador@66": {
+      "total": 66,
+      "estilo": "v2c:atirador",
+      "peso": 3.0
+    },
+    "t2:v2c:atirador@72": {
+      "total": 72,
+      "estilo": "v2c:atirador",
+      "peso": 3.0
+    },
+    "t2:v2c:tartaruga@110": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "peso": 3.0
+    },
+    "t2:v2c:tartaruga@130": {
+      "total": 130,
+      "estilo": "v2c:tartaruga",
+      "peso": 3.0
+    },
+    "t2:v2c:contragolpe@110": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "peso": 3.0
+    },
+    "t2:v2c:contragolpe@130": {
+      "total": 130,
+      "estilo": "v2c:contragolpe",
+      "peso": 3.0
+    },
+    "t1": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "peso": 3.0
+    },
+    "t3": {
+      "total": 135,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    }
+  },
+  "escadas": {
+    "t2:v2c:agressivo@60": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:agressivo@60",
+      "tier3": "t3"
+    },
+    "t2:v2c:agressivo@66": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:agressivo@66",
+      "tier3": "t3"
+    },
+    "t2:v2c:agressivo@72": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:agressivo@72",
+      "tier3": "t3"
+    },
+    "t2:v21:furioso@60": {
+      "tier1": "t1",
+      "tier2": "t2:v21:furioso@60",
+      "tier3": "t3"
+    },
+    "t2:v21:furioso@66": {
+      "tier1": "t1",
+      "tier2": "t2:v21:furioso@66",
+      "tier3": "t3"
+    },
+    "t2:v21:furioso@72": {
+      "tier1": "t1",
+      "tier2": "t2:v21:furioso@72",
+      "tier3": "t3"
+    },
+    "t2:v21:espelho@90": {
+      "tier1": "t1",
+      "tier2": "t2:v21:espelho@90",
+      "tier3": "t3"
+    },
+    "t2:v21:espelho@100": {
+      "tier1": "t1",
+      "tier2": "t2:v21:espelho@100",
+      "tier3": "t3"
+    },
+    "t2:v2c:atirador@60": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:atirador@60",
+      "tier3": "t3"
+    },
+    "t2:v2c:atirador@66": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:atirador@66",
+      "tier3": "t3"
+    },
+    "t2:v2c:atirador@72": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:atirador@72",
+      "tier3": "t3"
+    },
+    "t2:v2c:tartaruga@110": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:tartaruga@110",
+      "tier3": "t3"
+    },
+    "t2:v2c:tartaruga@130": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:tartaruga@130",
+      "tier3": "t3"
+    },
+    "t2:v2c:contragolpe@110": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:contragolpe@110",
+      "tier3": "t3"
+    },
+    "t2:v2c:contragolpe@130": {
+      "tier1": "t1",
+      "tier2": "t2:v2c:contragolpe@130",
+      "tier3": "t3"
+    }
+  }
+}

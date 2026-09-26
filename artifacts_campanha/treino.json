@@ -4,23 +4,37 @@
   "por_braco": {
     "aleatorio": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.8744999999999999,
-        "ic_superior": 0.9855,
-        "media": 0.931,
+        "ic_inferior": 0.9065,
+        "ic_superior": 1.0,
+        "media": 0.9535,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.3645,
+        "ic_superior": 0.8550000000000001,
+        "media": 0.6165,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.49800000000000005,
+        "ic_superior": 0.994,
+        "media": 0.7755,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.3195,
-        "ic_superior": 0.8714999999999999,
-        "media": 0.6014999999999999,
+        "ic_inferior": 0.5045,
+        "ic_superior": 0.9734999999999999,
+        "media": 0.775,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.271,
-        "ic_superior": 0.667,
-        "media": 0.4715,
+        "ic_inferior": 0.3975,
+        "ic_superior": 0.9615,
+        "media": 0.6885,
         "n": 10,
         "nivel": 0.95
       }
@@ -33,86 +47,142 @@
         "n": 10,
         "nivel": 0.95
       },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.497,
+        "ic_superior": 1.0,
+        "media": 0.7485,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.505,
+        "ic_superior": 1.0,
+        "media": 0.774,
+        "n": 10,
+        "nivel": 0.95
+      },
       "tier2_sentinela": {
-        "ic_inferior": 0.4465,
-        "ic_superior": 0.9834999999999999,
-        "media": 0.7184999999999999,
+        "ic_inferior": 0.7030000000000001,
+        "ic_superior": 0.991,
+        "media": 0.891,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.327,
-        "ic_superior": 0.82,
-        "media": 0.5835,
+        "ic_inferior": 0.4255,
+        "ic_superior": 0.9960000000000001,
+        "media": 0.712,
         "n": 10,
         "nivel": 0.95
       }
     },
     "exigente": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.704,
-        "ic_superior": 0.9574999999999999,
-        "media": 0.837,
+        "ic_inferior": 0.689,
+        "ic_superior": 0.968,
+        "media": 0.8380000000000001,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.17099999999999999,
+        "ic_superior": 0.654,
+        "media": 0.395,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.052000000000000005,
+        "ic_superior": 0.5675,
+        "media": 0.2925,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.0915,
-        "ic_superior": 0.621,
-        "media": 0.33999999999999997,
+        "ic_inferior": 0.5415,
+        "ic_superior": 0.9385,
+        "media": 0.7515,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.004,
-        "ic_superior": 0.46349999999999997,
-        "media": 0.191,
+        "ic_inferior": 0.0075,
+        "ic_superior": 0.5,
+        "media": 0.213,
         "n": 10,
         "nivel": 0.95
       }
     },
     "incoerente": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.889,
+        "ic_inferior": 0.893,
         "ic_superior": 1.0,
-        "media": 0.945,
+        "media": 0.9484999999999999,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.351,
+        "ic_superior": 0.8775000000000001,
+        "media": 0.6125,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.302,
+        "ic_superior": 0.9,
+        "media": 0.602,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.28500000000000003,
-        "ic_superior": 0.8265,
-        "media": 0.5575,
+        "ic_inferior": 0.6980000000000001,
+        "ic_superior": 1.0,
+        "media": 0.8939999999999999,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.22599999999999998,
-        "ic_superior": 0.75,
-        "media": 0.4965,
+        "ic_inferior": 0.3,
+        "ic_superior": 0.9,
+        "media": 0.6,
         "n": 10,
         "nivel": 0.95
       }
     },
     "relapso": {
       "tier1_brutamontes": {
-        "ic_inferior": 0.841,
-        "ic_superior": 0.9955,
-        "media": 0.9215,
+        "ic_inferior": 0.7415,
+        "ic_superior": 1.0,
+        "media": 0.8905,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_carcereiro": {
+        "ic_inferior": 0.3825,
+        "ic_superior": 0.891,
+        "media": 0.647,
+        "n": 10,
+        "nivel": 0.95
+      },
+      "tier2_porteiro": {
+        "ic_inferior": 0.369,
+        "ic_superior": 0.9019999999999999,
+        "media": 0.663,
         "n": 10,
         "nivel": 0.95
       },
       "tier2_sentinela": {
-        "ic_inferior": 0.26,
-        "ic_superior": 0.8225,
-        "media": 0.5429999999999999,
+        "ic_inferior": 0.4375,
+        "ic_superior": 0.9804999999999999,
+        "media": 0.714,
         "n": 10,
         "nivel": 0.95
       },
       "tier3_soberano": {
-        "ic_inferior": 0.153,
-        "ic_superior": 0.613,
-        "media": 0.3745,
+        "ic_inferior": 0.3125,
+        "ic_superior": 0.8995,
+        "media": 0.612,
         "n": 10,
         "nivel": 0.95
       }
@@ -120,254 +190,354 @@
   },
   "por_pet": {
     "aleatorio@101": {
-      "tier1_brutamontes": 0.855,
+      "tier1_brutamontes": 0.89,
+      "tier2_carcereiro": 0.035,
+      "tier2_porteiro": 0.775,
       "tier2_sentinela": 0.835,
-      "tier3_soberano": 0.455
+      "tier3_soberano": 0.025
     },
     "aleatorio@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.04,
+      "tier2_carcereiro": 0.09,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "aleatorio@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.06,
-      "tier3_soberano": 0.905
+      "tier2_carcereiro": 0.57,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.03,
+      "tier3_soberano": 1.0
     },
     "aleatorio@303": {
-      "tier1_brutamontes": 0.765,
+      "tier1_brutamontes": 0.825,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.25
+      "tier3_soberano": 0.995
     },
     "aleatorio@404": {
-      "tier1_brutamontes": 0.825,
+      "tier1_brutamontes": 0.82,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.72
+      "tier3_soberano": 0.99
     },
     "aleatorio@505": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.175,
-      "tier3_soberano": 0.33
+      "tier2_carcereiro": 0.655,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.05,
+      "tier3_soberano": 1.0
     },
     "aleatorio@606": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.99,
-      "tier3_soberano": 0.965
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 1.0
     },
     "aleatorio@707": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.93,
-      "tier3_soberano": 0.485
+      "tier2_carcereiro": 0.98,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.9,
+      "tier3_soberano": 1.0
     },
     "aleatorio@808": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.0,
+      "tier2_carcereiro": 0.04,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 0.98,
       "tier3_soberano": 0.0
     },
     "aleatorio@909": {
-      "tier1_brutamontes": 0.865,
-      "tier2_sentinela": 0.985,
-      "tier3_soberano": 0.605
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.795,
+      "tier2_porteiro": 0.98,
+      "tier2_sentinela": 0.975,
+      "tier3_soberano": 0.875
     },
     "atencioso@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.975,
-      "tier3_soberano": 0.74
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.95,
+      "tier3_soberano": 1.0
     },
     "atencioso@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.165,
-      "tier3_soberano": 0.95
+      "tier2_carcereiro": 0.39,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.06,
+      "tier3_soberano": 1.0
     },
     "atencioso@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.08,
+      "tier2_carcereiro": 0.065,
+      "tier2_porteiro": 0.01,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "atencioso@303": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.965,
-      "tier3_soberano": 0.49
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 0.99
     },
     "atencioso@404": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.03,
+      "tier2_carcereiro": 0.03,
+      "tier2_porteiro": 0.01,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "atencioso@505": {
       "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 0.99,
-      "tier3_soberano": 0.975
+      "tier3_soberano": 1.0
     },
     "atencioso@606": {
       "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.72,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.03
+      "tier3_soberano": 0.135
     },
     "atencioso@707": {
       "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 0.98,
-      "tier3_soberano": 0.765
+      "tier3_soberano": 0.995
     },
     "atencioso@808": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.975
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.96,
+      "tier3_soberano": 1.0
     },
     "atencioso@909": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.91
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 1.0
     },
     "exigente@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.985,
-      "tier3_soberano": 0.88
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.96,
+      "tier3_soberano": 0.99
     },
     "exigente@1010": {
-      "tier1_brutamontes": 0.54,
-      "tier2_sentinela": 0.0,
+      "tier1_brutamontes": 0.68,
+      "tier2_carcereiro": 0.03,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 0.52,
       "tier3_soberano": 0.0
     },
     "exigente@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.08,
+      "tier2_carcereiro": 0.23,
+      "tier2_porteiro": 0.01,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.01
     },
     "exigente@303": {
-      "tier1_brutamontes": 0.775,
-      "tier2_sentinela": 0.15,
-      "tier3_soberano": 0.025
+      "tier1_brutamontes": 0.31,
+      "tier2_carcereiro": 0.32,
+      "tier2_porteiro": 0.105,
+      "tier2_sentinela": 0.02,
+      "tier3_soberano": 0.015
     },
     "exigente@404": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.03,
+      "tier2_carcereiro": 0.14,
+      "tier2_porteiro": 0.05,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "exigente@505": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.98
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.96,
+      "tier3_soberano": 1.0
     },
     "exigente@606": {
-      "tier1_brutamontes": 0.47,
-      "tier2_sentinela": 0.045,
+      "tier1_brutamontes": 0.74,
+      "tier2_carcereiro": 0.08,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 0.465,
       "tier3_soberano": 0.0
     },
     "exigente@707": {
-      "tier1_brutamontes": 0.995,
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.76,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.015
+      "tier3_soberano": 0.115
     },
     "exigente@808": {
-      "tier1_brutamontes": 0.59,
-      "tier2_sentinela": 0.05,
+      "tier1_brutamontes": 0.65,
+      "tier2_carcereiro": 0.08,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 0.59,
       "tier3_soberano": 0.0
     },
     "exigente@909": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.06,
+      "tier2_carcereiro": 0.07,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "incoerente@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.16,
+      "tier2_carcereiro": 0.085,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "incoerente@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.245,
-      "tier3_soberano": 0.965
+      "tier2_carcereiro": 0.69,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.03,
+      "tier3_soberano": 1.0
     },
     "incoerente@202": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.05,
+      "tier2_carcereiro": 0.13,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "incoerente@303": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.08,
+      "tier2_carcereiro": 0.07,
+      "tier2_porteiro": 0.02,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "incoerente@404": {
-      "tier1_brutamontes": 0.8,
+      "tier1_brutamontes": 0.775,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.84
+      "tier3_soberano": 1.0
     },
     "incoerente@505": {
-      "tier1_brutamontes": 0.82,
+      "tier1_brutamontes": 0.845,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.9
+      "tier3_soberano": 1.0
     },
     "incoerente@606": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.98,
-      "tier3_soberano": 0.865
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.93,
+      "tier3_soberano": 1.0
     },
     "incoerente@707": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.06,
+      "tier2_carcereiro": 0.15,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "incoerente@808": {
-      "tier1_brutamontes": 0.83,
+      "tier1_brutamontes": 0.865,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.43
+      "tier3_soberano": 1.0
     },
     "incoerente@909": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.965
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.98,
+      "tier3_soberano": 1.0
     },
     "relapso@101": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.165,
-      "tier3_soberano": 0.685
+      "tier2_carcereiro": 0.805,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.01,
+      "tier3_soberano": 1.0
     },
     "relapso@1010": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.02,
+      "tier2_carcereiro": 0.05,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "relapso@202": {
-      "tier1_brutamontes": 0.675,
-      "tier2_sentinela": 0.0,
-      "tier3_soberano": 0.005
+      "tier1_brutamontes": 0.265,
+      "tier2_carcereiro": 0.08,
+      "tier2_porteiro": 0.02,
+      "tier2_sentinela": 0.185,
+      "tier3_soberano": 0.0
     },
     "relapso@303": {
-      "tier1_brutamontes": 0.985,
-      "tier2_sentinela": 0.225,
-      "tier3_soberano": 0.17
+      "tier1_brutamontes": 1.0,
+      "tier2_carcereiro": 0.495,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.02,
+      "tier3_soberano": 1.0
     },
     "relapso@404": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.03,
+      "tier2_carcereiro": 0.05,
+      "tier2_porteiro": 0.0,
+      "tier2_sentinela": 1.0,
       "tier3_soberano": 0.0
     },
     "relapso@505": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.975
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 1.0
     },
     "relapso@606": {
-      "tier1_brutamontes": 0.71,
+      "tier1_brutamontes": 0.81,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.3
+      "tier3_soberano": 0.995
     },
     "relapso@707": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.04
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 0.61,
+      "tier2_sentinela": 0.99,
+      "tier3_soberano": 0.125
     },
     "relapso@808": {
       "tier1_brutamontes": 1.0,
-      "tier2_sentinela": 0.99,
-      "tier3_soberano": 0.76
+      "tier2_carcereiro": 0.99,
+      "tier2_porteiro": 1.0,
+      "tier2_sentinela": 0.945,
+      "tier3_soberano": 1.0
     },
     "relapso@909": {
-      "tier1_brutamontes": 0.845,
+      "tier1_brutamontes": 0.83,
+      "tier2_carcereiro": 1.0,
+      "tier2_porteiro": 1.0,
       "tier2_sentinela": 1.0,
-      "tier3_soberano": 0.81
+      "tier3_soberano": 1.0
     }
   }
 }

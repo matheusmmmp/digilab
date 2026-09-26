@@ -15,7 +15,9 @@
    A campanha e o S2 lutam com as regras da campanha (V21C, campanha.REGRAS_CAMPANHA); a arena segue a V2.1.
 5. Gate S2 (bots, sem vida): por linha, forma sombria x cada forma normal da linha, com treino
    uniforme 0..36: (a) treino minimo para vencer o tier 1 (taxa >= 0,5) da sombria <= o da normal;
-   (b) taxa media contra o tier 2 da sombria <= a da normal.
+   (b) taxa media contra o tier 2 da sombria <= a da normal + TOLERANCIA_S2 (0,02: ruido da instabilidade
+   das sombrias, decisao do Matheus). Tier 2 = a Torre, com 3 rivais a escolha: vale o MELHOR rival
+   (o jogador escolhe contra quem lutar).
 Saida em artifacts_treino/. Codigo de saida 0 se S2 passa, 2 se falha (o resto e descritivo).
 """
 
@@ -54,6 +56,7 @@ DIAS = 14
 BOOT = (PROTOCOLO_ARENA_V1.v("bootstrap_reamostragens"), PROTOCOLO_ARENA_V1.v("bootstrap_semente"),
         PROTOCOLO_ARENA_V1.v("nivel_confianca"))
 NIVEIS_S2 = (0, 6, 12, 18, 24, 30, 36)
+TOLERANCIA_S2 = 0.02
 
 
 def _dump(o) -> str:
@@ -89,7 +92,8 @@ def taxa(a: Lutador, b: Lutador, rotulo: str, n: int, r: Regras = REGRAS_PADRAO)
 def gate_s2(n: int) -> dict:
     """Bots canonicos com treino uniforme (nivel/6 em cada stat), stats absolutos (campanha)."""
     especies = list(CONFIG_CATALOGO.especies_ativas)
-    t1, t2 = npc("tier1_brutamontes"), npc("tier2_sentinela")
+    lugar = lambda n: [k for k, d in CONFIG_CAMPANHA.npcs.items() if d["lugar"] == n]  # noqa: E731
+    t1, t2s = [npc(k) for k in lugar(1)], [npc(k) for k in lugar(2)]
     res, ok = {}, True
     for linha in LINHAS:
         sombria = SOMBRIA_DA_LINHA[linha]
@@ -106,8 +110,8 @@ def gate_s2(n: int) -> dict:
                     p = perfil(_forma(forma, esp), None, _car(forma, cfg), 1.0, cfg, treino=tr if nivel else None,
                                normalizar_treino=False)
                     lut = Lutador(f"{forma}+{nivel}@{esp}", p, base.gambits, base.epsilon)
-                    v1.append(taxa(lut, t1, "s2-t1", n, REGRAS_CAMPANHA))
-                    v2.append(taxa(lut, t2, "s2-t2", n, REGRAS_CAMPANHA))
+                    v1.append(max(taxa(lut, r, "s2-t1", n, REGRAS_CAMPANHA) for r in t1))
+                    v2.append(max(taxa(lut, r, "s2-t2", n, REGRAS_CAMPANHA) for r in t2s))
                 por_nivel[nivel] = {"tier1": sum(v1) / len(v1), "tier2": sum(v2) / len(v2)}
             minimo = next((nv for nv in NIVEIS_S2 if por_nivel[nv]["tier1"] >= 0.5), None)
             curva[forma] = {"por_nivel": por_nivel, "treino_minimo_tier1": minimo,
@@ -116,7 +120,7 @@ def gate_s2(n: int) -> dict:
         for nf in normais:
             ms, mn = curva[sombria]["treino_minimo_tier1"], curva[nf]["treino_minimo_tier1"]
             mais_cedo = (ms if ms is not None else 999) <= (mn if mn is not None else 999)
-            nao_maior = curva[sombria]["tier2_media"] <= curva[nf]["tier2_media"]
+            nao_maior = curva[sombria]["tier2_media"] <= curva[nf]["tier2_media"] + TOLERANCIA_S2
             comp[nf] = {"tier1_mais_cedo_ou_igual": mais_cedo, "tier2_nao_maior": nao_maior}
             ok = ok and mais_cedo and nao_maior
         res[linha] = {"sombria": sombria, "curvas": curva, "comparacao": comp}

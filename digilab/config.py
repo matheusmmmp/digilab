@@ -685,9 +685,15 @@ def _npcs() -> dict:
     # de docs/pve_treino.json (72 agressivo, 80 contragolpe, 90 adaptativo) tinha o chefe vencido pela
     # muralha sem treino e o tier 1 sem efeito de treino no adolescente.
     return {
-        "tier1_brutamontes": {"total_stats": 54, "estilo": "v21:espelho", "estagio_minimo_sugerido": "crianca"},
-        "tier2_sentinela": {"total_stats": 80, "estilo": "v21:furioso", "estagio_minimo_sugerido": "adolescente"},
-        "tier3_soberano": {"total_stats": 120, "estilo": "v2c:agressivo", "estagio_minimo_sugerido": "adulto"},
+        # progressao (experiments/calibrar_progressao.py, configs/progressao/): o pet basico do estagio perde e o
+        # treinado vence; "lugar" = parada do mapa. A Torre tem 3 rivais a escolha (vencer qualquer um abre a
+        # Cidadela) para nenhuma linha ficar travada; o chefe trava brigoes e cacadores (excecao aceita).
+        "tier1_brutamontes": {"total_stats": 72, "estilo": "crianca:sereno", "estagio": "crianca", "lugar": 1,
+                              "estagio_minimo_sugerido": "crianca"},
+        "tier2_sentinela": {"total_stats": 72, "estilo": "v2c:atirador", "lugar": 2, "estagio_minimo_sugerido": "adolescente"},
+        "tier2_carcereiro": {"total_stats": 110, "estilo": "v21:furioso", "lugar": 2, "estagio_minimo_sugerido": "adolescente"},
+        "tier2_porteiro": {"total_stats": 72, "estilo": "v2c:agressivo", "lugar": 2, "estagio_minimo_sugerido": "adolescente"},
+        "tier3_soberano": {"total_stats": 135, "estilo": "v2c:agressivo", "lugar": 3, "estagio_minimo_sugerido": "adulto"},
     }
 
 
@@ -735,9 +741,9 @@ class ConfigSombrio:
     epsilon_minimo: float = 0.2          # efeitos permanentes da forma sombria
     teto_vinculo: float = 0.6
     # passivas sombrias (resolucao em combate_v2/v21/regras.py)
-    # redesenho para o S2 (experiments/calibrar_sombrias.py, configs/sombrias/): devastador x1,3 -> x2,0 com
-    # gambits que so fecham e soltam o pesado; colosso partido regen x0,5 -> x0,85
-    mult_devastador: float = 2.0         # corpo a corpo x2; defender e esquivar ilegais
+    # redesenho para o S2 (experiments/calibrar_sombrias.py, configs/sombrias/ r0-r7): os gambits sombrios nao
+    # leem o oponente (bots.SOMBRIOS); colosso partido regen x0,5 -> x0,85
+    mult_devastador: float = 1.3         # corpo a corpo x1,3; defender e esquivar ilegais
     fracao_contra_golpe_bastiao: float = 1.0   # contra_golpe devolve 100%
     # "fadiga de guarda dobrada" nao existe no combate: defender nao rende guts extra (desvio registrado)
     mult_predador: float = 1.4           # disparo x1,4; recuar ilegal
@@ -770,6 +776,8 @@ class ConfigTreino:
     teto_por_stat: float = 10.0
     teto_por_estagio: dict = field(default_factory=lambda: {"crianca": 10.0, "adolescente": 12.0, "adulto": 14.0})
     teto_vida: float = 36.0
+    # quanto cada ponto treinado vale em stat de combate (campanha e arena); 1 = o desenho original
+    peso_ponto_combate: float = 3.0       # 1 -> 3 (experiments/calibrar_progressao.py): o treino tem de pesar como a evolucao
     # fadiga: ganho x (1 - fadiga/100); recupera acordado; zera ao dormir
     fadiga_por_sessao: float = 20.0
     recupera_fadiga_por_hora: float = 10.0

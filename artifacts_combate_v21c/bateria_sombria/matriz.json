@@ -2,22 +2,22 @@
   "taxa": {
     "bastiao_rachado": {
       "bastiao_rachado": 0.5,
-      "colosso_partido": 0.16725,
-      "devastador": 0.1475,
-      "duelista": 0.763,
+      "colosso_partido": 0.171,
+      "devastador": 0.178,
+      "duelista": 0.28675,
       "emboscador": 0.0,
-      "espelho": 0.75375,
-      "furioso": 0.9005,
-      "muralha": 0.012,
-      "predador": 0.5515,
+      "espelho": 0.31125,
+      "furioso": 0.0535,
+      "muralha": 0.003,
+      "predador": 0.56175,
       "sentinela": 0.0,
-      "tita": 0.063,
-      "vigia": 0.23525
+      "tita": 0.06225,
+      "vigia": 0.2355
     },
     "colosso_partido": {
-      "bastiao_rachado": 0.83275,
+      "bastiao_rachado": 0.829,
       "colosso_partido": 0.5,
-      "devastador": 0.001,
+      "devastador": 0.0355,
       "duelista": 0.21275,
       "emboscador": 0.0005,
       "espelho": 0.051,
@@ -29,23 +29,23 @@
       "vigia": 0.01775
     },
     "devastador": {
-      "bastiao_rachado": 0.8525,
-      "colosso_partido": 0.999,
+      "bastiao_rachado": 0.822,
+      "colosso_partido": 0.9645,
       "devastador": 0.5,
-      "duelista": 0.55125,
-      "emboscador": 0.02075,
-      "espelho": 0.10875,
-      "furioso": 0.0585,
-      "muralha": 0.4025,
-      "predador": 0.98925,
-      "sentinela": 0.02125,
-      "tita": 0.99325,
-      "vigia": 0.102
+      "duelista": 0.743,
+      "emboscador": 0.03925,
+      "espelho": 0.29425,
+      "furioso": 0.31575,
+      "muralha": 0.27925,
+      "predador": 0.98825,
+      "sentinela": 0.04075,
+      "tita": 0.81425,
+      "vigia": 0.58625
     },
     "duelista": {
-      "bastiao_rachado": 0.237,
+      "bastiao_rachado": 0.71325,
       "colosso_partido": 0.78725,
-      "devastador": 0.44875,
+      "devastador": 0.257,
       "duelista": 0.5,
       "emboscador": 0.87025,
       "espelho": 0.19225,
@@ -59,7 +59,7 @@
     "emboscador": {
       "bastiao_rachado": 1.0,
       "colosso_partido": 0.9995,
-      "devastador": 0.97925,
+      "devastador": 0.96075,
       "duelista": 0.12975,
       "emboscador": 0.5,
       "espelho": 0.99625,
@@ -71,9 +71,9 @@
       "vigia": 0.9575
     },
     "espelho": {
-      "bastiao_rachado": 0.24625,
+      "bastiao_rachado": 0.68875,
       "colosso_partido": 0.949,
-      "devastador": 0.89125,
+      "devastador": 0.70575,
       "duelista": 0.80775,
       "emboscador": 0.00375,
       "espelho": 0.5,
@@ -85,9 +85,9 @@
       "vigia": 0.989
     },
     "furioso": {
-      "bastiao_rachado": 0.0995,
+      "bastiao_rachado": 0.9465,
       "colosso_partido": 0.99675,
-      "devastador": 0.9415,
+      "devastador": 0.68425,
       "duelista": 0.922,
       "emboscador": 1.0,
       "espelho": 0.30575,
@@ -99,9 +99,9 @@
       "vigia": 0.98975
     },
     "muralha": {
-      "bastiao_rachado": 0.988,
+      "bastiao_rachado": 0.997,
       "colosso_partido": 0.29175,
-      "devastador": 0.5975,
+      "devastador": 0.72075,
       "duelista": 0.707,
       "emboscador": 0.0645,
       "espelho": 0.274,
@@ -113,9 +113,9 @@
       "vigia": 0.39025
     },
     "predador": {
-      "bastiao_rachado": 0.4485,
+      "bastiao_rachado": 0.43825,
       "colosso_partido": 0.00225,
-      "devastador": 0.01075,
+      "devastador": 0.01175,
       "duelista": 0.0,
       "emboscador": 0.705,
       "espelho": 0.49325,
@@ -129,7 +129,7 @@
     "sentinela": {
       "bastiao_rachado": 1.0,
       "colosso_partido": 0.99875,
-      "devastador": 0.97875,
+      "devastador": 0.95925,
       "duelista": 0.21425,
       "emboscador": 0.7055,
       "espelho": 0.68825,
@@ -141,9 +141,9 @@
       "vigia": 0.96075
     },
     "tita": {
-      "bastiao_rachado": 0.937,
+      "bastiao_rachado": 0.93775,
       "colosso_partido": 0.7995,
-      "devastador": 0.00675,
+      "devastador": 0.18575,
       "duelista": 0.47525,
       "emboscador": 0.00875,
       "espelho": 0.03825,
@@ -155,9 +155,9 @@
       "vigia": 0.038
     },
     "vigia": {
-      "bastiao_rachado": 0.76475,
+      "bastiao_rachado": 0.7645,
       "colosso_partido": 0.98225,
-      "devastador": 0.898,
+      "devastador": 0.41375,
       "duelista": 0.09925,
       "emboscador": 0.0425,
       "espelho": 0.011,

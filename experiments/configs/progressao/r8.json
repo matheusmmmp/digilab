@@ -1,0 +1,246 @@
+{
+  "descricao": "rodada 8: tier 1 que acompanha o estagio do pet (crianca: gambits de crianca; depois agressivo ou tartaruga da V2)",
+  "tier": "tier1",
+  "npcs": {
+    "acompanha|v2:agressivo@66|e0.05": {
+      "total": 66,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@66|e0.05": {
+      "total": 66,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@72|e0.05": {
+      "total": 72,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@72|e0.05": {
+      "total": 72,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@78|e0.05": {
+      "total": 78,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@78|e0.05": {
+      "total": 78,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@84|e0.05": {
+      "total": 84,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@84|e0.05": {
+      "total": 84,
+      "estagio": "acompanha",
+      "epsilon": 0.05,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@66|e0.2": {
+      "total": 66,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@66|e0.2": {
+      "total": 66,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@72|e0.2": {
+      "total": 72,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@72|e0.2": {
+      "total": 72,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@78|e0.2": {
+      "total": 78,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@78|e0.2": {
+      "total": 78,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@84|e0.2": {
+      "total": 84,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@84|e0.2": {
+      "total": 84,
+      "estagio": "acompanha",
+      "epsilon": 0.2,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@66|e0.3": {
+      "total": 66,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@66|e0.3": {
+      "total": 66,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@72|e0.3": {
+      "total": 72,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@72|e0.3": {
+      "total": 72,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@78|e0.3": {
+      "total": 78,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@78|e0.3": {
+      "total": 78,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    },
+    "acompanha|v2:agressivo@84|e0.3": {
+      "total": 84,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:agressivo",
+        "adulto": "v2:agressivo"
+      }
+    },
+    "acompanha|v2:tartaruga@84|e0.3": {
+      "total": 84,
+      "estagio": "acompanha",
+      "epsilon": 0.3,
+      "estilos": {
+        "crianca": "crianca:arisco",
+        "adolescente": "v2:tartaruga",
+        "adulto": "v2:tartaruga"
+      }
+    }
+  }
+}

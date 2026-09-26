@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ...config import (CONFIG_CATALOGO, CONFIG_COMBATE_V21, CONFIG_SOMBRIO, ESTAGIOS_V21, STATS_V21, ConfigCatalogo,
+from ...config import (CONFIG_CATALOGO, CONFIG_COMBATE_V21, CONFIG_SOMBRIO, CONFIG_TREINO, ESTAGIOS_V21, STATS_V21, ConfigCatalogo,
                        ConfigCombateV21)
 
 LINHAS = ("brigao", "guardiao", "cacador", "colosso")
@@ -161,7 +161,8 @@ def com_treino(base: dict, treino: dict, normalizar: bool, total: float | None =
         raise CatalogoInvalido(f"treino com stats desconhecidos: {sorted(extras)}")
     if any(v < 0 for v in treino.values()):
         raise CatalogoInvalido("pontos de treino negativos")
-    brutos = {k: base[k] + treino.get(k, 0.0) for k in STATS_V21}
+    # cada ponto treinado vale peso_ponto_combate pontos de stat (decisao do Matheus: treino mais forte)
+    brutos = {k: base[k] + CONFIG_TREINO.peso_ponto_combate * treino.get(k, 0.0) for k in STATS_V21}
     if not normalizar:
         return brutos
     total = float(sum(base.values())) if total is None else total

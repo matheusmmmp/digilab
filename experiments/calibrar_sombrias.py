@@ -59,6 +59,12 @@ def _gambits(sombria: str, nome: str) -> ListaGambits:
     if nome == "pesado_esquiva":            # como "pesado", mas foge do pesado do oponente (so le isso)
         return lista([regra(PREP, A.ESQUIVAR), regra(_d(LONGE), A.AVANCAR), regra(_d(MEDIO), A.AVANCAR),
                       regra(se(_d(PERTO), _ga(20)), A.PREPARAR_PESADO), regra(_d(PERTO), A.GOLPE_RAPIDO)], A.CARREGAR)
+    if nome == "golpe":                     # fecha e bate rapido sem ler o oponente (sem o pesado)
+        return lista([regra(_d(LONGE), A.AVANCAR), regra(_d(MEDIO), A.AVANCAR),
+                      regra(_d(PERTO), A.GOLPE_RAPIDO)], A.CARREGAR)
+    if nome == "golpe_pesado":              # golpe rapido com guts baixo, pesado so com guts sobrando
+        return lista([regra(_d(LONGE), A.AVANCAR), regra(_d(MEDIO), A.AVANCAR),
+                      regra(se(_d(PERTO), _ga(60)), A.PREPARAR_PESADO), regra(_d(PERTO), A.GOLPE_RAPIDO)], A.CARREGAR)
     if nome.startswith("base-"):             # base sem as regras destes indices (ex.: "base-2,3")
         fora = {int(i) for i in nome[5:].split(",")}
         return ListaGambits(tuple(r for i, r in enumerate(base.regras) if i not in fora), base.final, base.estagio)
@@ -92,7 +98,8 @@ def _taxa(a, b, rot, n, r):
 def _curva(args):
     cand, forma, n = args
     aplicar(cand)
-    t1, t2 = campanha.npc("tier1_brutamontes"), campanha.npc("tier2_sentinela")
+    lugar = lambda n: [campanha.npc(k) for k, d in campanha.CONFIG_CAMPANHA.npcs.items() if d["lugar"] == n]  # noqa: E731
+    t1, t2 = lugar(1), lugar(2)
     esp = list(CONFIG_CATALOGO.especies_ativas)
     por_nivel = {}
     for nivel in NIVEIS:
@@ -103,8 +110,8 @@ def _curva(args):
             f = Forma(e, "adulto", "sereno", LINHA_DA_FORMA[forma], forma)
             p = perfil(f, None, carater_canonico(forma, R.v21), 1.0, R.v21, treino=tr, normalizar_treino=False)
             lut = Lutador(f"{forma}+{nivel}@{e}", p, base.gambits, base.epsilon)
-            v1.append(_taxa(lut, t1, "t1", n, R))
-            v2.append(_taxa(lut, t2, "t2", n, R))
+            v1.append(max(_taxa(lut, r, "t1", n, R) for r in t1))       # melhor rival do lugar
+            v2.append(max(_taxa(lut, r, "t2", n, R) for r in t2))
         por_nivel[nivel] = {"tier1": sum(v1) / len(v1), "tier2": sum(v2) / len(v2)}
     minimo = next((nv for nv in NIVEIS if por_nivel[nv]["tier1"] >= 0.5), None)
     return forma, {"por_nivel": por_nivel, "treino_minimo_tier1": minimo,
@@ -138,7 +145,7 @@ def avaliar(cand: dict, normais: dict, n: int, pool) -> dict:
         for nf in CONFIG_CATALOGO.arquetipos_adulto[linha]["formas"]:
             ms, mn = curvas[s]["treino_minimo_tier1"], normais[nf]["treino_minimo_tier1"]
             a = (999 if ms is None else ms) <= (999 if mn is None else mn)
-            b = curvas[s]["tier2_media"] <= normais[nf]["tier2_media"]
+            b = curvas[s]["tier2_media"] <= normais[nf]["tier2_media"] + 0.02      # TOLERANCIA_S2
             comp[nf] = {"a": a, "b": b}
             ok = ok and a and b
         res[s] = {"comparacao": comp, "minimo_t1": curvas[s]["treino_minimo_tier1"],
