@@ -9,7 +9,7 @@
       "espelho": 0.31125,
       "furioso": 0.0535,
       "muralha": 0.003,
-      "predador": 0.56175,
+      "predador": 0.80675,
       "sentinela": 0.0,
       "tita": 0.06225,
       "vigia": 0.2355
@@ -23,7 +23,7 @@
       "espelho": 0.051,
       "furioso": 0.00325,
       "muralha": 0.70825,
-      "predador": 0.99775,
+      "predador": 0.82525,
       "sentinela": 0.00125,
       "tita": 0.2005,
       "vigia": 0.01775
@@ -37,7 +37,7 @@
       "espelho": 0.29425,
       "furioso": 0.31575,
       "muralha": 0.27925,
-      "predador": 0.98825,
+      "predador": 0.81675,
       "sentinela": 0.04075,
       "tita": 0.81425,
       "vigia": 0.58625
@@ -51,7 +51,7 @@
       "espelho": 0.19225,
       "furioso": 0.078,
       "muralha": 0.293,
-      "predador": 1.0,
+      "predador": 0.89825,
       "sentinela": 0.78575,
       "tita": 0.52475,
       "vigia": 0.90075
@@ -65,7 +65,7 @@
       "espelho": 0.99625,
       "furioso": 0.0,
       "muralha": 0.9355,
-      "predador": 0.295,
+      "predador": 0.06625,
       "sentinela": 0.2945,
       "tita": 0.99125,
       "vigia": 0.9575
@@ -79,7 +79,7 @@
       "espelho": 0.5,
       "furioso": 0.69425,
       "muralha": 0.726,
-      "predador": 0.50675,
+      "predador": 0.832,
       "sentinela": 0.31175,
       "tita": 0.96175,
       "vigia": 0.989
@@ -93,7 +93,7 @@
       "espelho": 0.30575,
       "furioso": 0.5,
       "muralha": 0.0655,
-      "predador": 0.9995,
+      "predador": 0.98975,
       "sentinela": 0.99975,
       "tita": 0.99175,
       "vigia": 0.98975
@@ -107,24 +107,24 @@
       "espelho": 0.274,
       "furioso": 0.9345,
       "muralha": 0.5,
-      "predador": 0.708,
+      "predador": 0.999,
       "sentinela": 0.01125,
       "tita": 0.38175,
       "vigia": 0.39025
     },
     "predador": {
-      "bastiao_rachado": 0.43825,
-      "colosso_partido": 0.00225,
-      "devastador": 0.01175,
-      "duelista": 0.0,
-      "emboscador": 0.705,
-      "espelho": 0.49325,
-      "furioso": 0.0005,
-      "muralha": 0.292,
+      "bastiao_rachado": 0.19325,
+      "colosso_partido": 0.17475,
+      "devastador": 0.18325,
+      "duelista": 0.10175,
+      "emboscador": 0.93375,
+      "espelho": 0.168,
+      "furioso": 0.01025,
+      "muralha": 0.001,
       "predador": 0.5,
-      "sentinela": 0.6855,
-      "tita": 0.0,
-      "vigia": 0.0
+      "sentinela": 0.9575,
+      "tita": 0.0745,
+      "vigia": 0.35075
     },
     "sentinela": {
       "bastiao_rachado": 1.0,
@@ -135,7 +135,7 @@
       "espelho": 0.68825,
       "furioso": 0.00025,
       "muralha": 0.98875,
-      "predador": 0.3145,
+      "predador": 0.0425,
       "sentinela": 0.5,
       "tita": 0.98675,
       "vigia": 0.96075
@@ -149,7 +149,7 @@
       "espelho": 0.03825,
       "furioso": 0.00825,
       "muralha": 0.61825,
-      "predador": 1.0,
+      "predador": 0.9255,
       "sentinela": 0.01325,
       "tita": 0.5,
       "vigia": 0.038
@@ -163,7 +163,7 @@
       "espelho": 0.011,
       "furioso": 0.01025,
       "muralha": 0.60975,
-      "predador": 1.0,
+      "predador": 0.64925,
       "sentinela": 0.03925,
       "tita": 0.962,
       "vigia": 0.5

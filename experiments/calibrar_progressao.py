@@ -173,21 +173,40 @@ def criterios_lugares(m: dict) -> dict:
     return out
 
 
+def criterios_todos_vencem(m: dict) -> dict:
+    """Decisao do Matheus (2026-09-26): todo pet treinado vence CADA NPC. Para cada rival: toda linha/forma
+    alcanca >= 0,5 com o treino tipico do estagio (ALCANCE do lugar do rival). O 'basico perde' vira so
+    relatorio (media do pet sem treino no estagio sugerido)."""
+    t_de = {1: "tier1", 2: "tier2", 3: "tier3"}
+    est_sug = {"tier1": "crianca", "tier2": "adolescente", "tier3": "adulto"}
+    out = {}
+    for k, d in CONFIG_CAMPANHA.npcs.items():
+        t = t_de[d["lugar"]]
+        trav = {e: [n for n, v in m[k][e].items() if not _alcanca(v, teto)] for e, teto in ALCANCE[t].items()}
+        out[k] = {"lugar": t, "travados": trav, "ninguem_travado": not any(trav.values()),
+                  "basico_media": round(media(m[k], est_sug[t], 0), 3),
+                  "basico_max": round(max(v[0] for v in m[k][est_sug[t]].values()), 3),
+                  "treinado_media": round(media(m[k], est_sug[t], max(nv for nv in NIVEIS[est_sug[t]] if nv <= ALCANCE[t][est_sug[t]])), 3)}
+    out["ok"] = all(o["ninguem_travado"] for o in out.values())
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--candidatos")
     ap.add_argument("--validar", action="store_true")
     ap.add_argument("--saida")
     ap.add_argument("-n", type=int, default=10, help="partidas por par por semente")
+    ap.add_argument("--processos", type=int, default=None, help="processos em paralelo (padrao: todos os nucleos)")
     a = ap.parse_args()
-    with ProcessPoolExecutor() as pool:
+    with ProcessPoolExecutor(a.processos) as pool:
         if a.validar:
             specs = {k: {"total": d["total_stats"], "estilo": d["estilo"], "estagio": d.get("estagio", "adulto"),
                          **({"epsilon": d["epsilon"]} if "epsilon" in d else {})} for k, d in CONFIG_CAMPANHA.npcs.items()}
             m = {k: medir(s_, SEM_VALIDACAO, a.n, pool, CONFIG_TREINO.peso_ponto_combate) for k, s_ in specs.items()}
             out = {"conjunto": "validacao", "sementes": SEM_VALIDACAO, "npcs": specs, "medidas": m,
-                   "criterios_lugares": criterios_lugares(m)}
-            print(json.dumps(out["criterios_lugares"], ensure_ascii=False))
+                   "criterios_lugares": criterios_lugares(m), "todos_vencem": criterios_todos_vencem(m)}
+            print(json.dumps(out["todos_vencem"], ensure_ascii=False))
         else:
             cand = json.loads(Path(a.candidatos).read_text(encoding="utf-8"))
             med = {}

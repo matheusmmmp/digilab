@@ -28,8 +28,10 @@ def test_npcs_da_escada_de_progressao():
         assert p.hp_max == pytest.approx((CONFIG_COMBATE_V21C.hp_base + CONFIG_COMBATE_V21C.hp_por_vigor * d["total_stats"] / 6)
                                          * CONFIG_CATALOGO.mult_estagio[est])
     assert [(d["lugar"], d["total_stats"], d["estilo"], d.get("estagio", "adulto")) for d in CONFIG_CAMPANHA.npcs.values()] == [
-        (1, 72, "crianca:sereno", "crianca"), (2, 72, "v2c:atirador", "adulto"), (2, 110, "v21:furioso", "adulto"),
-        (2, 72, "v2c:agressivo", "adulto"), (3, 135, "v2c:agressivo", "adulto")]
+        (1, 96, "crianca:arisco", "crianca"), (2, 72, "v2c:tartaruga", "adulto"), (2, 90, "v21:espelho", "adulto"),
+        (2, 90, "v2c:agressivo", "adulto"), (3, 110, "v2c:agressivo", "adulto")]
+    assert [d["epsilon"] for d in CONFIG_CAMPANHA.npcs.values()] == [0.5, 0.4, 0.5, 0.5, 0.5]
+    assert all(npc(t).epsilon == d["epsilon"] for t, d in CONFIG_CAMPANHA.npcs.items())
 
 
 def test_ponto_de_treino_vale_o_peso_no_combate():
