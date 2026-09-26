@@ -88,12 +88,12 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
-| `tests/` | 284 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | 285 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 284 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # 285 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
@@ -238,29 +238,23 @@ da distribuição de formas: descritivo.
   instinto sem técnicas 0,665 [0,549, 0,785]. Por semente o bandit vai de 0,01 a 0,80: o confronto de
   arquétipos decide. Inconclusivo; a bateria V2.1 reprovada pesa aqui.
 
-## Campanha contra os 3 NPCs (2026-09-25, `artifacts_campanha/`) — escada rebalanceada
+## Campanha contra os NPCs (`artifacts_campanha/`) — progressão por lugar (2026-09-26)
 
-`python experiments/run_campanha.py` (`digilab/campanha.py`, `ConfigCampanha`). Desde o rebalanceamento a
-campanha luta com o **combate corrigido (V2C + V21C)**, `campanha.REGRAS_CAMPANHA`
-(`CONFIG_COMBATE_V2C`/`CONFIG_COMBATE_V21C`). NPC = stats uniformes, adulto, sem técnica nem passiva,
-estilo `"<familia>:<nome>"` (`v2`, `v2c` ou `v21` = gambits de uma forma adulta sem as regras de técnica).
-Decisões em `docs/REGISTRO_DESVIOS.md`. Tudo PROPOSTO.
+`python experiments/run_campanha.py` (`digilab/campanha.py`, `ConfigCampanha`), combate corrigido
+(V2C + V21C, `campanha.REGRAS_CAMPANHA`). NPC = stats uniformes, sem técnica nem passiva, estilo
+`"<familia>:<nome>"` (`v2`, `v2c`, `v21` sem regras de técnica, `crianca`), campos `estagio` (vida e guts
+pelo multiplicador do estágio), `lugar` e `epsilon` opcional. Decisões em `docs/REGISTRO_DESVIOS.md`
+(2026-09-25 escada K1–K4; 2026-09-26 progressão). Tudo PROPOSTO.
 
-- **Escada** (`experiments/calibrar_campanha.py`, critérios K1–K4 fixados antes; rodadas em
-  `experiments/configs/campanha/`): Brutamontes 54 espelho sem técnica, Sentinela 80 furioso sem técnica,
-  Soberano 120 agressivo da V2C. A escada original (72 agressivo, 80 contragolpe, 90 adaptativo) tinha a
-  muralha vencendo o chefe sem treino (0,97) e nenhuma outra forma chegava a 0,5 com +36.
-- **Validação** (`validacao2_resultado.json`, sementes 4101…4505) passa K1–K4: adultos sem treino
-  0,82 / 0,42 / 0,10; adolescentes 0,40 / 0,27 / 0,00; adolescente contra o tier 1 com +18 de treino 0,59;
-  chefe com +36: espelho 0,95, titã 0,93, muralha 0,87, vigia 0,74 (brigões e caçadores ficam perto de 0).
-  A validação 1 (chefe 110) reprovou o K4 por 0,004 e o chefe foi recalibrado: a validação 2 usou as mesmas
-  sementes, então é mais fraca (registrado).
-- Números de `artifacts_campanha/campanha.json` (100 partidas por par): formas adultas contra o tier 1 de
-  0,36 (duelista) a 1,0; contra o tier 2 brigões e guardiões 0,48–0,96, caçadores e colossos 0,02–0,14;
-  contra o chefe só o espelho chega perto (0,44). Estilos da V2 com stats neutros: só o adaptativo vence o
-  chefe (0,55).
-- Pets de pesquisa (bandit, IC sobre 5 ovos, sem treino) contra o chefe: todos entre 0,00 e 0,08.
-- Campanha com treino: `artifacts_campanha/treino.json` (ver a seção do treino).
+- **Treino vale 3** em combate (`ConfigTreino.peso_ponto_combate`, `catalogo.com_treino`; arena e campanha).
+- **Lugares** (vencer qualquer rival de um lugar abre o próximo): Campina — Brutamontes, criança, 72,
+  criança serena; Torre — Sentinela (atirador V2C, 72), Carcereiro (furioso sem técnica, 110), Porteiro
+  (agressivo V2C, 72); Cidadela — Soberano (agressivo V2C, 135).
+- **Validação por lugar** (`experiments/calibrar_progressao.py --validar`, `configs/progressao/validacao_resultado.json`):
+  pet básico do estágio perde de cada rival; nenhuma linha travada na Campina nem na Torre; degraus ok.
+  Exceção aceita: duelista, furioso, sentinela e emboscador não vencem o Soberano nem com +36.
+- A medida usa treino uniforme; em algumas linhas ele até piora a luta (muda o ritmo de guts dos gambits).
+- Campanha com treino e S2: seção do treino abaixo.
 
 ## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 
@@ -309,21 +303,16 @@ personalidade, formas e passivas sombrias em `combate_v2/v21/`. Calibração: `s
 
 - **Forçar não compensa, e custa.** Exigente × atencioso: 4/10 exigentes viram sombrios (0/10 nos
   outros braços); vínculo 0,22 [0,16, 0,27] × 0,56 [0,50, 0,61] (diferença −0,35 [−0,42, −0,27]); na
-  arena normalizada o exigente vence o atencioso em 0,44 [0,26, 0,62] (inconclusivo); na campanha
-  (stats absolutos, escada rebalanceada, regras V21C, sombrias redesenhadas) perde nos três tiers: tier 1
-  0,84 × 1,00, tier 2 0,34 × 0,72, chefe 0,19 × 0,58 (diferenças −0,16 [−0,30, −0,04],
-  −0,38 [−0,65, −0,11], −0,39 [−0,67, −0,12]). Arena normalizada: 0,43 [0,25, 0,61].
-- **S1 passa** (com as sombrias redesenhadas; V2.1 e V21C): nenhuma sombria vence os 8 normais; o E1 com
-  as sombrias no pool também passa (suporte V2.1: bastião rachado, emboscador, espelho, furioso, muralha,
-  sentinela). Devastador × passivos: espelho 0,12, muralha 0,36, sentinela 0,01, vigia 0,09 (antes do
-  redesenho: 0,31 / 0,34 / 0,99 / 0,80).
-- **S2 PASSA desde o redesenho das sombrias** (2026-09-25, `experiments/calibrar_sombrias.py`; desvios em
-  `docs/REGISTRO_DESVIOS.md`): "a sombra tira a leitura do oponente". Devastador só fecha e solta o pesado,
-  corpo a corpo ×2,0 (era ×1,3 com os gambits do furioso); bastião rachado = espelho sem a regra de
-  contra-golpe ao pesado; colosso partido regenera ×0,85 (era ×0,5); predador igual. Tier 1 sem treino /
-  tier 2 médio: devastador 0,60 / 0,18 (duelista 0,38 / 0,23), bastião 0,91 / 0,83 (muralha 0,95),
-  colosso partido 0,63 / 0,02, predador 0,503 / 0,03 (margem fina). S1 e E1 continuam passando nas regras
-  V2.1 e V21C; médias contra as normais: devastador 0,27, bastião 0,33, predador 0,28, colosso partido 0,16.
+  arena normalizada (treino ×3) o exigente vence o atencioso em 0,47 [0,28, 0,67] (inconclusivo); na
+  campanha por lugar perde da Campina (−0,16 [−0,31, −0,03]), do Carcereiro (−0,35 [−0,63, −0,09]), do Porteiro
+  (−0,48 [−0,76, −0,20]) e do Soberano (−0,50 [−0,79, −0,20]); contra a Sentinela −0,14 [−0,38, 0,08].
+- **S1 passa** nas regras V2.1 e V21C: nenhuma sombria vence os 8 normais. Médias contra as normais:
+  devastador 0,39, predador 0,28, colosso partido 0,16, bastião rachado 0,10.
+- **S2 PASSA** (campanha por lugar, treino ×3): tier 2 = o melhor rival da Torre, tolerância 0,02 no
+  critério (b). Sombrias (`bots.SOMBRIOS`, `experiments/calibrar_sombrias.py`): "a sombra tira a leitura do
+  oponente" — devastador bate com golpe rápido e só solta o pesado com guts ≥ 60 (×1,3); bastião rachado =
+  espelho sem as regras que leem o oponente; colosso partido regen ×0,85; predador igual. S1 passa (V2.1 e
+  V21C); E1 com as sombrias passa na V21C e reprova na V2.1 original (suporte 3; ressalva registrada).
 - Formas por braço e o resto em `artifacts_treino/resumo.json`. Atencioso × aleatório nesta run: 0,46
   [0,25, 0,68] (inconclusivo).
 - Web: o treino entrou antes das runs (pedido do Matheus), com os mesmos números.

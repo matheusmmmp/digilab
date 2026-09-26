@@ -1,0 +1,24 @@
+{
+  "descricao": "rodada 0: escada atual contra os criterios de progressao",
+  "npcs": {
+    "t1_atual": {
+      "total": 54,
+      "estilo": "v21:espelho"
+    },
+    "t2_atual": {
+      "total": 80,
+      "estilo": "v21:furioso"
+    },
+    "t3_atual": {
+      "total": 120,
+      "estilo": "v2c:agressivo"
+    }
+  },
+  "escadas": {
+    "atual": {
+      "tier1": "t1_atual",
+      "tier2": "t2_atual",
+      "tier3": "t3_atual"
+    }
+  }
+}

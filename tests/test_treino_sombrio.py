@@ -103,17 +103,17 @@ def test_donos_da_v1_nunca_sorteiam_treino():
 
 def test_normalizacao_preserva_proporcoes_e_devolve_o_total():
     base = stats(Forma("brasa", "adulto", "sereno", "brigao", "duelista"))
-    treino = {"forca": 6.0, "vigor": 3.0}
+    treino = {"forca": 2.0, "vigor": 1.0}          # abaixo do teto de stat (no teto a sobra vai em partes iguais)
     n = com_treino(base, treino, True)
     tot = sum(base.values())
     assert sum(n.values()) == pytest.approx(tot)
-    brutos = {k: base[k] + treino.get(k, 0.0) for k in STATS_V21}
+    brutos = {k: base[k] + CONFIG_TREINO.peso_ponto_combate * treino.get(k, 0.0) for k in STATS_V21}
     livres = [k for k in STATS_V21 if CONFIG_CATALOGO.stat_min < n[k] < CONFIG_CATALOGO.stat_max]
     for a in livres:
         for b in livres:
             assert n[a] / n[b] == pytest.approx(brutos[a] / brutos[b])
     absoluto = com_treino(base, treino, False)
-    assert sum(absoluto.values()) == pytest.approx(tot + 9.0)
+    assert sum(absoluto.values()) == pytest.approx(tot + 3.0 * CONFIG_TREINO.peso_ponto_combate)
 
 
 def test_passivas_sombrias():
@@ -150,12 +150,14 @@ def test_arvore_sombria_bate_com_o_json():
 
 
 def test_sombrias_redesenhadas_para_o_s2():
-    """A sombra tira a leitura do oponente: devastador so fecha e solta o pesado; bastiao = espelho
-    sem a resposta ao pesado. Predador e colosso partido seguem com os gambits da forma base."""
+    """A sombra tira a leitura do oponente: devastador fecha, bate e so solta o pesado com guts sobrando;
+    bastiao = espelho sem as regras que leem o oponente. Predador e colosso partido seguem com os da base."""
     from digilab.combate_v2.v21.bots import ADULTOS
     dev = SOMBRIOS["devastador"]
     assert not any(c.nome.startswith("oponente_") for r in dev.regras for c in r.condicoes)
     assert Acao.PREPARAR_PESADO in [r.acao for r in dev.regras]
-    assert SOMBRIOS["bastiao_rachado"].regras == ADULTOS["espelho"].regras[1:]
+    bast = SOMBRIOS["bastiao_rachado"]
+    assert bast.regras and all(r in ADULTOS["espelho"].regras for r in bast.regras)
+    assert not any(c.nome.startswith("oponente_") for r in bast.regras for c in r.condicoes)
     assert SOMBRIOS["predador"] is ADULTOS["emboscador"] and SOMBRIOS["colosso_partido"] is ADULTOS["tita"]
-    assert CONFIG_SOMBRIO.mult_devastador == 2.0 and CONFIG_SOMBRIO.mult_regen_colosso_partido == 0.85
+    assert CONFIG_SOMBRIO.mult_devastador == 1.3 and CONFIG_SOMBRIO.mult_regen_colosso_partido == 0.85

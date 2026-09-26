@@ -1,0 +1,198 @@
+{
+  "descricao": "rodada 7: tier 1 com epsilon 0,2-0,3 e stats maiores (compensa a imprecisao)",
+  "tier": "tier1",
+  "npcs": {
+    "crianca|crianca:sereno@84|e0.2": {
+      "total": 84,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:sereno@96|e0.2": {
+      "total": 96,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:sereno@108|e0.2": {
+      "total": 108,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:sereno@120|e0.2": {
+      "total": 120,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:arisco@84|e0.2": {
+      "total": 84,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:arisco@96|e0.2": {
+      "total": 96,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:arisco@108|e0.2": {
+      "total": 108,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:arisco@120|e0.2": {
+      "total": 120,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.2
+    },
+    "adolescente|v2:agressivo@60|e0.2": {
+      "total": 60,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.2
+    },
+    "adolescente|v2:agressivo@72|e0.2": {
+      "total": 72,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.2
+    },
+    "adolescente|v2:agressivo@84|e0.2": {
+      "total": 84,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.2
+    },
+    "adolescente|v2:agressivo@96|e0.2": {
+      "total": 96,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.2
+    },
+    "adulto|v2:agressivo@54|e0.2": {
+      "total": 54,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.2
+    },
+    "adulto|v2:agressivo@60|e0.2": {
+      "total": 60,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.2
+    },
+    "adulto|v2:agressivo@66|e0.2": {
+      "total": 66,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.2
+    },
+    "adulto|v2:agressivo@72|e0.2": {
+      "total": 72,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.2
+    },
+    "crianca|crianca:sereno@84|e0.3": {
+      "total": 84,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:sereno@96|e0.3": {
+      "total": 96,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:sereno@108|e0.3": {
+      "total": 108,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:sereno@120|e0.3": {
+      "total": 120,
+      "estilo": "crianca:sereno",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:arisco@84|e0.3": {
+      "total": 84,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:arisco@96|e0.3": {
+      "total": 96,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:arisco@108|e0.3": {
+      "total": 108,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "crianca|crianca:arisco@120|e0.3": {
+      "total": 120,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "epsilon": 0.3
+    },
+    "adolescente|v2:agressivo@60|e0.3": {
+      "total": 60,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.3
+    },
+    "adolescente|v2:agressivo@72|e0.3": {
+      "total": 72,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.3
+    },
+    "adolescente|v2:agressivo@84|e0.3": {
+      "total": 84,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.3
+    },
+    "adolescente|v2:agressivo@96|e0.3": {
+      "total": 96,
+      "estilo": "v2:agressivo",
+      "estagio": "adolescente",
+      "epsilon": 0.3
+    },
+    "adulto|v2:agressivo@54|e0.3": {
+      "total": 54,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.3
+    },
+    "adulto|v2:agressivo@60|e0.3": {
+      "total": 60,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.3
+    },
+    "adulto|v2:agressivo@66|e0.3": {
+      "total": 66,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.3
+    },
+    "adulto|v2:agressivo@72|e0.3": {
+      "total": 72,
+      "estilo": "v2:agressivo",
+      "estagio": "adulto",
+      "epsilon": 0.3
+    }
+  }
+}

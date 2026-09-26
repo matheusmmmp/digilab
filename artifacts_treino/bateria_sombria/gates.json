@@ -2,27 +2,24 @@
   "E1_com_sombrias": {
     "dominantes": [],
     "estrategia": {
-      "bastiao_rachado": 0.08545,
+      "bastiao_rachado": 0.0,
       "colosso_partido": 0.0,
       "devastador": 0.0,
       "duelista": 5e-05,
-      "emboscador": 0.10405,
-      "espelho": 0.1614,
-      "furioso": 0.35855,
-      "muralha": 0.1785,
+      "emboscador": 0.1122,
+      "espelho": 0.44645,
+      "furioso": 0.44045,
+      "muralha": 0.00085,
       "predador": 0.0,
-      "sentinela": 0.112,
+      "sentinela": 0.0,
       "tita": 0.0,
       "vigia": 0.0
     },
-    "ok": true,
+    "ok": false,
     "suporte": [
-      "bastiao_rachado",
       "emboscador",
       "espelho",
-      "furioso",
-      "muralha",
-      "sentinela"
+      "furioso"
     ],
     "suporte_minimo": 4
   },
@@ -34,10 +31,10 @@
     "predador": false
   },
   "devastador_x_passivos": {
-    "espelho": 0.1145,
-    "muralha": 0.3585,
-    "sentinela": 0.0105,
-    "vigia": 0.0905
+    "espelho": 0.3525,
+    "muralha": 0.33825,
+    "sentinela": 0.034,
+    "vigia": 0.578
   },
   "epsilon_minimo_sombria": 0.2,
   "especies": [
@@ -56,7 +53,7 @@
       "regras.py"
     ],
     "config_sha256": "9bb05e7b78b7e3d6c7dbe1149bcc1f04499d0d2ced834def5dd5eb5c543f9589",
-    "regras_sha256": "129d2a3e9ad37e8e42b47610e6892e056b9222f1122500d73d07c5bbc77375ca"
+    "regras_sha256": "21fc17bdfbd3a28fb4d2ba6b6716546a5356675694c0e60ad4fcf393d1e5569d"
   },
   "media_normal_da_linha_contra_normais": {
     "duelista": 0.5123928571428571,
@@ -69,9 +66,9 @@
     "vigia": 0.2570357142857143
   },
   "media_sombria_contra_normais": {
-    "bastiao_rachado": 0.3336875,
+    "bastiao_rachado": 0.094625,
     "colosso_partido": 0.1555625,
-    "devastador": 0.26603125,
+    "devastador": 0.38921875,
     "predador": 0.2773125
   },
   "n_partidas": 156000,
@@ -85,14 +82,14 @@
   ],
   "sombria_x_normais": {
     "bastiao_rachado": {
-      "duelista": 0.73575,
+      "duelista": 0.2025,
       "emboscador": 0.0,
-      "espelho": 0.794,
-      "furioso": 0.8875,
-      "muralha": 0.042,
+      "espelho": 0.313,
+      "furioso": 0.0155,
+      "muralha": 0.017,
       "sentinela": 0.0,
-      "tita": 0.0445,
-      "vigia": 0.16575
+      "tita": 0.04275,
+      "vigia": 0.16625
     },
     "colosso_partido": {
       "duelista": 0.28075,
@@ -105,14 +102,14 @@
       "vigia": 0.01425
     },
     "devastador": {
-      "duelista": 0.51125,
-      "emboscador": 0.0105,
-      "espelho": 0.1145,
-      "furioso": 0.04575,
-      "muralha": 0.3585,
-      "sentinela": 0.0105,
-      "tita": 0.98675,
-      "vigia": 0.0905
+      "duelista": 0.73375,
+      "emboscador": 0.01225,
+      "espelho": 0.3525,
+      "furioso": 0.30275,
+      "muralha": 0.33825,
+      "sentinela": 0.034,
+      "tita": 0.76225,
+      "vigia": 0.578
     },
     "predador": {
       "duelista": 0.0,

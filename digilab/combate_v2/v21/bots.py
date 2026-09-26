@@ -125,6 +125,20 @@ ADULTOS: dict[str, ListaGambits] = {
     ], A.DEFENDER),
 }
 
+# criancas (espelho de CRIANCA_V21 da web, que semeia o pet crianca): sem tecnica, 3 regras
+CRIANCAS: dict[str, ListaGambits] = {
+    "sereno": lista([
+        regra(_gb(40), A.CARREGAR),
+        regra(_d(LONGE), A.AVANCAR),
+        regra(se(_d(PERTO), _ga(40)), A.GOLPE_RAPIDO),
+    ], A.DEFENDER, "crianca"),
+    "arisco": lista([
+        regra(_d(LONGE), A.AVANCAR),
+        regra(_d(MEDIO), A.AVANCAR),
+        regra(se(_d(PERTO), _ga(20)), A.GOLPE_RAPIDO),
+    ], A.CARREGAR, "crianca"),
+}
+
 ADOLESCENTES: dict[str, ListaGambits] = {
     "brigao": lista([
         regra(PREP, A.ESQUIVAR),
@@ -185,16 +199,18 @@ FORMAS = tuple(ADULTOS)
 GAMBIT_BASE_SOMBRIA = {"devastador": "furioso", "bastiao_rachado": "espelho", "predador": "emboscador",
                        "colosso_partido": "tita"}
 # redesenho para o S2 (atalho com custo: vence a prova de stats, perde a de estilo). A sombra tira a
-# leitura do oponente: o devastador so fecha e solta o pesado; o bastiao nao responde mais ao pesado
-# do oponente com contra-golpe (sai a primeira regra do espelho). Predador e colosso partido ficam.
+# leitura do oponente: o devastador fecha e bate rapido, e so solta o pesado com guts sobrando; o bastiao
+# fica com os gambits do espelho SEM as regras que leem o oponente. Predador e colosso partido ficam.
 SOMBRIOS: dict[str, ListaGambits] = {s: ADULTOS[b] for s, b in GAMBIT_BASE_SOMBRIA.items()}
 SOMBRIOS["devastador"] = lista([
     regra(_d(LONGE), A.AVANCAR),
     regra(_d(MEDIO), A.AVANCAR),
-    regra(se(_d(PERTO), _ga(20)), A.PREPARAR_PESADO),
+    regra(se(_d(PERTO), _ga(60)), A.PREPARAR_PESADO),
     regra(_d(PERTO), A.GOLPE_RAPIDO),
 ], A.CARREGAR)
-SOMBRIOS["bastiao_rachado"] = ListaGambits(ADULTOS["espelho"].regras[1:], ADULTOS["espelho"].final, "adulto")
+SOMBRIOS["bastiao_rachado"] = ListaGambits(
+    tuple(r for r in ADULTOS["espelho"].regras if not any(c.nome.startswith("oponente_") for c in r.condicoes)),
+    ADULTOS["espelho"].final, "adulto")
 
 
 def com_resposta(gl: ListaGambits, tecnica: str, respostas: dict | None = None) -> ListaGambits:

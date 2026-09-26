@@ -1,0 +1,569 @@
+{
+  "descricao": "rodada 3: tier 2 com peso 2 e 3 (tier 1 crianca arisco 72, tier 3 atual)",
+  "npcs": {
+    "k2.0|t2:v21:furioso@80": {
+      "total": 80,
+      "estilo": "v21:furioso",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:furioso@95": {
+      "total": 95,
+      "estilo": "v21:furioso",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:furioso@110": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:espelho@80": {
+      "total": 80,
+      "estilo": "v21:espelho",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:espelho@95": {
+      "total": 95,
+      "estilo": "v21:espelho",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:espelho@110": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:muralha@80": {
+      "total": 80,
+      "estilo": "v21:muralha",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:muralha@95": {
+      "total": 95,
+      "estilo": "v21:muralha",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:muralha@110": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:duelista@80": {
+      "total": 80,
+      "estilo": "v21:duelista",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:duelista@95": {
+      "total": 95,
+      "estilo": "v21:duelista",
+      "peso": 2.0
+    },
+    "k2.0|t2:v21:duelista@110": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:tartaruga@80": {
+      "total": 80,
+      "estilo": "v2c:tartaruga",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:tartaruga@95": {
+      "total": 95,
+      "estilo": "v2c:tartaruga",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:tartaruga@110": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:contragolpe@80": {
+      "total": 80,
+      "estilo": "v2c:contragolpe",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:contragolpe@95": {
+      "total": 95,
+      "estilo": "v2c:contragolpe",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:contragolpe@110": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2:agressivo@80": {
+      "total": 80,
+      "estilo": "v2:agressivo",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2:agressivo@95": {
+      "total": 95,
+      "estilo": "v2:agressivo",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2:agressivo@110": {
+      "total": 110,
+      "estilo": "v2:agressivo",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:agressivo@80": {
+      "total": 80,
+      "estilo": "v2c:agressivo",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:agressivo@95": {
+      "total": 95,
+      "estilo": "v2c:agressivo",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:agressivo@110": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:atirador@80": {
+      "total": 80,
+      "estilo": "v2c:atirador",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:atirador@95": {
+      "total": 95,
+      "estilo": "v2c:atirador",
+      "peso": 2.0
+    },
+    "k2.0|t2:v2c:atirador@110": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "peso": 2.0
+    },
+    "k2.0|t1": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "peso": 2.0
+    },
+    "k2.0|t3": {
+      "total": 120,
+      "estilo": "v2c:agressivo",
+      "peso": 2.0
+    },
+    "k3.0|t2:v21:furioso@80": {
+      "total": 80,
+      "estilo": "v21:furioso",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:furioso@95": {
+      "total": 95,
+      "estilo": "v21:furioso",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:furioso@110": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:espelho@80": {
+      "total": 80,
+      "estilo": "v21:espelho",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:espelho@95": {
+      "total": 95,
+      "estilo": "v21:espelho",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:espelho@110": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:muralha@80": {
+      "total": 80,
+      "estilo": "v21:muralha",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:muralha@95": {
+      "total": 95,
+      "estilo": "v21:muralha",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:muralha@110": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:duelista@80": {
+      "total": 80,
+      "estilo": "v21:duelista",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:duelista@95": {
+      "total": 95,
+      "estilo": "v21:duelista",
+      "peso": 3.0
+    },
+    "k3.0|t2:v21:duelista@110": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:tartaruga@80": {
+      "total": 80,
+      "estilo": "v2c:tartaruga",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:tartaruga@95": {
+      "total": 95,
+      "estilo": "v2c:tartaruga",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:tartaruga@110": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:contragolpe@80": {
+      "total": 80,
+      "estilo": "v2c:contragolpe",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:contragolpe@95": {
+      "total": 95,
+      "estilo": "v2c:contragolpe",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:contragolpe@110": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2:agressivo@80": {
+      "total": 80,
+      "estilo": "v2:agressivo",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2:agressivo@95": {
+      "total": 95,
+      "estilo": "v2:agressivo",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2:agressivo@110": {
+      "total": 110,
+      "estilo": "v2:agressivo",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:agressivo@80": {
+      "total": 80,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:agressivo@95": {
+      "total": 95,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:agressivo@110": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:atirador@80": {
+      "total": 80,
+      "estilo": "v2c:atirador",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:atirador@95": {
+      "total": 95,
+      "estilo": "v2c:atirador",
+      "peso": 3.0
+    },
+    "k3.0|t2:v2c:atirador@110": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "peso": 3.0
+    },
+    "k3.0|t1": {
+      "total": 72,
+      "estilo": "crianca:arisco",
+      "estagio": "crianca",
+      "peso": 3.0
+    },
+    "k3.0|t3": {
+      "total": 120,
+      "estilo": "v2c:agressivo",
+      "peso": 3.0
+    }
+  },
+  "escadas": {
+    "k2.0|t2:v21:furioso@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:furioso@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:furioso@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:furioso@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:furioso@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:furioso@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:espelho@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:espelho@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:espelho@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:espelho@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:espelho@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:espelho@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:muralha@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:muralha@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:muralha@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:muralha@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:muralha@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:muralha@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:duelista@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:duelista@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:duelista@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:duelista@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v21:duelista@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v21:duelista@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:tartaruga@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:tartaruga@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:tartaruga@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:tartaruga@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:tartaruga@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:tartaruga@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:contragolpe@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:contragolpe@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:contragolpe@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:contragolpe@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:contragolpe@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:contragolpe@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2:agressivo@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2:agressivo@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2:agressivo@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2:agressivo@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2:agressivo@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2:agressivo@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:agressivo@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:agressivo@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:agressivo@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:agressivo@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:agressivo@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:agressivo@110",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:atirador@80": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:atirador@80",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:atirador@95": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:atirador@95",
+      "tier3": "k2.0|t3"
+    },
+    "k2.0|t2:v2c:atirador@110": {
+      "tier1": "k2.0|t1",
+      "tier2": "k2.0|t2:v2c:atirador@110",
+      "tier3": "k2.0|t3"
+    },
+    "k3.0|t2:v21:furioso@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:furioso@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:furioso@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:furioso@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:furioso@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:furioso@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:espelho@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:espelho@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:espelho@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:espelho@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:espelho@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:espelho@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:muralha@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:muralha@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:muralha@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:muralha@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:muralha@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:muralha@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:duelista@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:duelista@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:duelista@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:duelista@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v21:duelista@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v21:duelista@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:tartaruga@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:tartaruga@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:tartaruga@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:tartaruga@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:tartaruga@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:tartaruga@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:contragolpe@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:contragolpe@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:contragolpe@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:contragolpe@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:contragolpe@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:contragolpe@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2:agressivo@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2:agressivo@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2:agressivo@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2:agressivo@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2:agressivo@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2:agressivo@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:agressivo@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:agressivo@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:agressivo@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:agressivo@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:agressivo@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:agressivo@110",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:atirador@80": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:atirador@80",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:atirador@95": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:atirador@95",
+      "tier3": "k3.0|t3"
+    },
+    "k3.0|t2:v2c:atirador@110": {
+      "tier1": "k3.0|t1",
+      "tier2": "k3.0|t2:v2c:atirador@110",
+      "tier3": "k3.0|t3"
+    }
+  }
+}

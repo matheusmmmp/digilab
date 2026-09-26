@@ -1,0 +1,69 @@
+{
+  "descricao": "rodada 6: sombrias contra a campanha com rivais a escolha (melhor rival do lugar) e tolerancia 0,02 no S2(b)",
+  "candidatos": {
+    "atual": {
+      "devastador": {
+        "gambits": "pesado",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "golpe_pesado_x1.5": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "golpe_pesado_x1.3": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.3
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "golpe_pesado_x2.0": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 2.0
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    }
+  }
+}

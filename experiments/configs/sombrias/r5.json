@@ -1,0 +1,187 @@
+{
+  "descricao": "rodada 5: stats do colosso partido contra o atirador do tier 2",
+  "candidatos": {
+    "col_guarda2_mira-3_sem_leitura": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "sem_leitura",
+        "stats": {
+          "vigor": 4,
+          "guarda": 2,
+          "folego": -3,
+          "mira": -3
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_guarda2_mira-3_base": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "base",
+        "stats": {
+          "vigor": 4,
+          "guarda": 2,
+          "folego": -3,
+          "mira": -3
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_vigor5_rec-3_sem_leitura": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "sem_leitura",
+        "stats": {
+          "vigor": 5,
+          "forca": 1,
+          "folego": -3,
+          "recuperacao": -3
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_vigor5_rec-3_base": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "base",
+        "stats": {
+          "vigor": 5,
+          "forca": 1,
+          "folego": -3,
+          "recuperacao": -3
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_forca2_folego-4_sem_leitura": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "sem_leitura",
+        "stats": {
+          "vigor": 4,
+          "forca": 2,
+          "folego": -4,
+          "mira": -2
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_forca2_folego-4_base": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "base",
+        "stats": {
+          "vigor": 4,
+          "forca": 2,
+          "folego": -4,
+          "mira": -2
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_folego-5_sem_leitura": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "sem_leitura",
+        "stats": {
+          "vigor": 4,
+          "guarda": 1,
+          "folego": -5
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    },
+    "col_folego-5_base": {
+      "devastador": {
+        "gambits": "golpe_pesado",
+        "passiva": {
+          "mult_devastador": 1.5
+        }
+      },
+      "bastiao_rachado": {
+        "gambits": "base-0"
+      },
+      "colosso_partido": {
+        "gambits": "base",
+        "stats": {
+          "vigor": 4,
+          "guarda": 1,
+          "folego": -5
+        },
+        "passiva": {
+          "mult_regen_colosso_partido": 0.85
+        }
+      }
+    }
+  }
+}
