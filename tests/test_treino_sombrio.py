@@ -159,5 +159,6 @@ def test_sombrias_redesenhadas_para_o_s2():
     bast = SOMBRIOS["bastiao_rachado"]
     assert bast.regras and all(r in ADULTOS["espelho"].regras for r in bast.regras)
     assert not any(c.nome.startswith("oponente_") for r in bast.regras for c in r.condicoes)
-    assert SOMBRIOS["predador"] is ADULTOS["emboscador"] and SOMBRIOS["colosso_partido"] is ADULTOS["tita"]
+    assert not any(c.nome.startswith("oponente_") for r in SOMBRIOS["predador"].regras for c in r.condicoes)
+    assert SOMBRIOS["colosso_partido"] is ADULTOS["tita"]
     assert CONFIG_SOMBRIO.mult_devastador == 1.3 and CONFIG_SOMBRIO.mult_regen_colosso_partido == 0.85

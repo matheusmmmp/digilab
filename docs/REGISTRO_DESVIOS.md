@@ -573,3 +573,36 @@ treino tirados das vidas reais de `artifacts_treino/vidas` (fim da infância ~8 
   Campanha com treino (`artifacts_campanha/treino.json`): o exigente perde do atencioso contra a Campina
   (−0,16 [−0,31, −0,03]), o Carcereiro (−0,35), o Porteiro (−0,48) e o Soberano (−0,50); contra a Sentinela
   −0,14 [−0,38, 0,08].
+
+## 2026-09-26 — todo pet treinado vence cada NPC (NPCs fixos e imprevisíveis)
+
+Pedido do Matheus: "garanta que todos os pets treinados vencem todos os chefes". Respostas dele: vale
+para **cada NPC individualmente** (não basta um rival por lugar) e "treinado" = **treino típico de uma
+vida** (criança 8, adolescente 15/22, adulto 29/36, tabela `ALCANCE`).
+
+- Varredura (rodadas 12–14: tier 1 com NPC criança; Torre e chefe com 13 estilos × 4 totais × ε 0,2–0,5):
+  só NPCs bem imprevisíveis (ε 0,4–0,5) deixam toda linha vencer treinada, e neles o pet sem treino vence
+  com frequência (melhor chefe: 52% na média dos adultos sem treino).
+- Alternativa oferecida: NPC que ajusta a tática à linha do pet (os dados mostram, para toda linha em cada
+  lugar, uma tática em que ela perde sem treino e vence treinada). **Decisão do Matheus: NPC fixo e
+  imprevisível.**
+- NPCs: Brutamontes (criança, 96, criança arisca, ε 0,5); Torre: Sentinela (tartaruga V2C, 72, ε 0,4),
+  Carcereiro (espelho sem técnica, 90, ε 0,5), Porteiro (agressivo V2C, 90, ε 0,5); Soberano (agressivo
+  V2C, 110, ε 0,5). Escolhidos pela menor vitória do pet básico entre os que não travam ninguém.
+- **Validação** (sementes 4101…4505, `configs/progressao/validacao_resultado.json`, `criterios_todos_vencem`):
+  nenhuma linha travada em nenhum dos 5 NPCs. Pet sem treino do estágio sugerido: Brutamontes 0,45,
+  Sentinela 0,66, Carcereiro 0,50, Porteiro 0,39, Soberano 0,52 (média). Pet treinado: 0,81 a 0,97.
+- Consequência: a progressão por treino ficou fraca (o pet sem treino vence metade das vezes); o treino
+  garante a vitória, não a libera. Os critérios P1–P4 e o "básico perde" por lugar deixam de valer (ficam
+  como relatório).
+- Durante a varredura, rodar com os 20 processos deu erros diferentes a cada execução (TypeError em
+  estruturas do Python); num processo só e com 8 processos tudo rodou limpo. Tratado como instabilidade da
+  máquina sob carga total; `--processos` foi adicionado ao `calibrar_progressao.py`.
+- **S2 com os NPCs imprevisíveis**: só o predador reprovava (não pode recuar e nunca vencia o Brutamontes,
+  que corre para cima). Redesenho (`configs/sombrias/r8`): o predador fecha e bate rápido, sem ler o
+  oponente (passiva igual: disparo ×1,4, recuar ilegal). S2 passa; S1 passa nas duas regras; E1 com as
+  sombrias passa na V21C e segue reprovando na V2.1 original (suporte 3, mesma ressalva).
+- **Efeito na pesquisa**: com todo pet treinado vencendo todo NPC, a campanha deixou de separar os donos
+  (todos os braços, inclusive o exigente, vencem 0,96–1,00; exigente − atencioso ≈ 0 em todos os NPCs). A
+  conclusão "forçar custa na campanha" deixa de ser medível pela campanha; a arena normalizada segue
+  inconclusiva (exigente × atencioso 0,43 [0,24, 0,63]).

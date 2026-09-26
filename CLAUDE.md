@@ -247,12 +247,15 @@ pelo multiplicador do estágio), `lugar` e `epsilon` opcional. Decisões em `doc
 (2026-09-25 escada K1–K4; 2026-09-26 progressão). Tudo PROPOSTO.
 
 - **Treino vale 3** em combate (`ConfigTreino.peso_ponto_combate`, `catalogo.com_treino`; arena e campanha).
-- **Lugares** (vencer qualquer rival de um lugar abre o próximo): Campina — Brutamontes, criança, 72,
-  criança serena; Torre — Sentinela (atirador V2C, 72), Carcereiro (furioso sem técnica, 110), Porteiro
-  (agressivo V2C, 72); Cidadela — Soberano (agressivo V2C, 135).
-- **Validação por lugar** (`experiments/calibrar_progressao.py --validar`, `configs/progressao/validacao_resultado.json`):
-  pet básico do estágio perde de cada rival; nenhuma linha travada na Campina nem na Torre; degraus ok.
-  Exceção aceita: duelista, furioso, sentinela e emboscador não vencem o Soberano nem com +36.
+- **Todo pet treinado vence cada NPC** (decisão do Matheus, 2026-09-26: NPCs fixos e imprevisíveis; treino
+  típico de uma vida, tabela `ALCANCE`). Lugares (vencer qualquer rival abre o próximo): Campina —
+  Brutamontes (criança, 96, criança arisca, ε 0,5); Torre — Sentinela (tartaruga V2C, 72, ε 0,4), Carcereiro
+  (espelho sem técnica, 90, ε 0,5), Porteiro (agressivo V2C, 90, ε 0,5); Cidadela — Soberano (agressivo V2C,
+  110, ε 0,5).
+- **Validação** (`calibrar_progressao.py --validar`, `criterios_todos_vencem`): nenhuma linha travada em
+  nenhum dos 5 NPCs; pet treinado 0,81–0,97. **Custo**: o pet sem treino do estágio sugerido vence 0,39–0,66
+  (média); o treino garante a vitória, não a libera. Os critérios anteriores (P1–P4, "básico perde" por
+  lugar) ficam só como relatório.
 - A medida usa treino uniforme; em algumas linhas ele até piora a luta (muda o ritmo de guts dos gambits).
 - Campanha com treino e S2: seção do treino abaixo.
 
@@ -303,15 +306,15 @@ personalidade, formas e passivas sombrias em `combate_v2/v21/`. Calibração: `s
 
 - **Forçar não compensa, e custa.** Exigente × atencioso: 4/10 exigentes viram sombrios (0/10 nos
   outros braços); vínculo 0,22 [0,16, 0,27] × 0,56 [0,50, 0,61] (diferença −0,35 [−0,42, −0,27]); na
-  arena normalizada (treino ×3) o exigente vence o atencioso em 0,47 [0,28, 0,67] (inconclusivo); na
-  campanha por lugar perde da Campina (−0,16 [−0,31, −0,03]), do Carcereiro (−0,35 [−0,63, −0,09]), do Porteiro
-  (−0,48 [−0,76, −0,20]) e do Soberano (−0,50 [−0,79, −0,20]); contra a Sentinela −0,14 [−0,38, 0,08].
+  arena normalizada (treino ×3) o exigente vence o atencioso em 0,43 [0,24, 0,63] (inconclusivo). Na campanha
+  com os NPCs imprevisíveis (todo pet treinado vence) todos os braços vencem 0,96–1,00: a campanha não separa
+  mais os donos.
 - **S1 passa** nas regras V2.1 e V21C: nenhuma sombria vence os 8 normais. Médias contra as normais:
-  devastador 0,39, predador 0,28, colosso partido 0,16, bastião rachado 0,10.
+  devastador 0,39, colosso partido 0,16, predador 0,10, bastião rachado 0,10 (regras V2.1).
 - **S2 PASSA** (campanha por lugar, treino ×3): tier 2 = o melhor rival da Torre, tolerância 0,02 no
   critério (b). Sombrias (`bots.SOMBRIOS`, `experiments/calibrar_sombrias.py`): "a sombra tira a leitura do
   oponente" — devastador bate com golpe rápido e só solta o pesado com guts ≥ 60 (×1,3); bastião rachado =
-  espelho sem as regras que leem o oponente; colosso partido regen ×0,85; predador igual. S1 passa (V2.1 e
+  espelho sem as regras que leem o oponente; predador fecha e bate rápido; colosso partido regen ×0,85. S1 passa (V2.1 e
   V21C); E1 com as sombrias passa na V21C e reprova na V2.1 original (suporte 3; ressalva registrada).
 - Formas por braço e o resto em `artifacts_treino/resumo.json`. Atencioso × aleatório nesta run: 0,46
   [0,25, 0,68] (inconclusivo).

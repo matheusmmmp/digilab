@@ -200,12 +200,18 @@ GAMBIT_BASE_SOMBRIA = {"devastador": "furioso", "bastiao_rachado": "espelho", "p
                        "colosso_partido": "tita"}
 # redesenho para o S2 (atalho com custo: vence a prova de stats, perde a de estilo). A sombra tira a
 # leitura do oponente: o devastador fecha e bate rapido, e so solta o pesado com guts sobrando; o bastiao
-# fica com os gambits do espelho SEM as regras que leem o oponente. Predador e colosso partido ficam.
+# fica com os gambits do espelho SEM as regras que leem o oponente; o predador (nao pode recuar) fecha e
+# bate rapido. O colosso partido fica com os do tita.
 SOMBRIOS: dict[str, ListaGambits] = {s: ADULTOS[b] for s, b in GAMBIT_BASE_SOMBRIA.items()}
 SOMBRIOS["devastador"] = lista([
     regra(_d(LONGE), A.AVANCAR),
     regra(_d(MEDIO), A.AVANCAR),
     regra(se(_d(PERTO), _ga(60)), A.PREPARAR_PESADO),
+    regra(_d(PERTO), A.GOLPE_RAPIDO),
+], A.CARREGAR)
+SOMBRIOS["predador"] = lista([
+    regra(_d(LONGE), A.AVANCAR),
+    regra(_d(MEDIO), A.AVANCAR),
     regra(_d(PERTO), A.GOLPE_RAPIDO),
 ], A.CARREGAR)
 SOMBRIOS["bastiao_rachado"] = ListaGambits(

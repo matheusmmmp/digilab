@@ -54,7 +54,7 @@
       "regras.py"
     ],
     "config_sha256": "bf0e89ddacb38b097e0b7e842922439d75dac171b6d86ce3e549c5d7e695edcc",
-    "regras_sha256": "21fc17bdfbd3a28fb4d2ba6b6716546a5356675694c0e60ad4fcf393d1e5569d"
+    "regras_sha256": "c270252f2db24ba8f12bfac793abffb8abcc828ff6331f1967cfd050dcbdc6d7"
   },
   "media_normal_da_linha_contra_normais": {
     "duelista": 0.5206785714285714,
@@ -70,7 +70,7 @@
     "bastiao_rachado": 0.11903125,
     "colosso_partido": 0.14940625000000002,
     "devastador": 0.38909375,
-    "predador": 0.27203125
+    "predador": 0.3246875
   },
   "n_partidas": 156000,
   "partidas_por_par_por_semente": 100,
@@ -113,14 +113,14 @@
       "vigia": 0.58625
     },
     "predador": {
-      "duelista": 0.0,
-      "emboscador": 0.705,
-      "espelho": 0.49325,
-      "furioso": 0.0005,
-      "muralha": 0.292,
-      "sentinela": 0.6855,
-      "tita": 0.0,
-      "vigia": 0.0
+      "duelista": 0.10175,
+      "emboscador": 0.93375,
+      "espelho": 0.168,
+      "furioso": 0.01025,
+      "muralha": 0.001,
+      "sentinela": 0.9575,
+      "tita": 0.0745,
+      "vigia": 0.35075
     }
   }
 }

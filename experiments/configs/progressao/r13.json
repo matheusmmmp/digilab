@@ -1,0 +1,1046 @@
+{
+  "descricao": "rodada 13: tier 2, idem",
+  "tier": "tier2",
+  "npcs": {
+    "v21:duelista@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:duelista@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:duelista@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:duelista@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:duelista",
+      "epsilon": 0.2
+    },
+    "v21:duelista@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:duelista",
+      "epsilon": 0.3
+    },
+    "v21:duelista@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:duelista",
+      "epsilon": 0.4
+    },
+    "v21:duelista@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:duelista",
+      "epsilon": 0.5
+    },
+    "v21:furioso@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:furioso@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:furioso@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:furioso@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:furioso",
+      "epsilon": 0.2
+    },
+    "v21:furioso@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:furioso",
+      "epsilon": 0.3
+    },
+    "v21:furioso@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:furioso",
+      "epsilon": 0.4
+    },
+    "v21:furioso@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:furioso",
+      "epsilon": 0.5
+    },
+    "v21:espelho@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:espelho@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:espelho@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:espelho@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:espelho",
+      "epsilon": 0.2
+    },
+    "v21:espelho@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:espelho",
+      "epsilon": 0.3
+    },
+    "v21:espelho@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:espelho",
+      "epsilon": 0.4
+    },
+    "v21:espelho@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:espelho",
+      "epsilon": 0.5
+    },
+    "v21:muralha@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:muralha@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:muralha@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:muralha@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:muralha",
+      "epsilon": 0.2
+    },
+    "v21:muralha@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:muralha",
+      "epsilon": 0.3
+    },
+    "v21:muralha@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:muralha",
+      "epsilon": 0.4
+    },
+    "v21:muralha@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:muralha",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:sentinela@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.2
+    },
+    "v21:sentinela@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.3
+    },
+    "v21:sentinela@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.4
+    },
+    "v21:sentinela@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:sentinela",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:emboscador@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.2
+    },
+    "v21:emboscador@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.3
+    },
+    "v21:emboscador@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.4
+    },
+    "v21:emboscador@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:emboscador",
+      "epsilon": 0.5
+    },
+    "v21:vigia@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:vigia@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:vigia@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:vigia@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:vigia",
+      "epsilon": 0.2
+    },
+    "v21:vigia@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:vigia",
+      "epsilon": 0.3
+    },
+    "v21:vigia@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:vigia",
+      "epsilon": 0.4
+    },
+    "v21:vigia@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:vigia",
+      "epsilon": 0.5
+    },
+    "v21:tita@72|e0.2": {
+      "total": 72,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@72|e0.3": {
+      "total": 72,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@72|e0.4": {
+      "total": 72,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@72|e0.5": {
+      "total": 72,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v21:tita@90|e0.2": {
+      "total": 90,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@90|e0.3": {
+      "total": 90,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@90|e0.4": {
+      "total": 90,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@90|e0.5": {
+      "total": 90,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v21:tita@110|e0.2": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@110|e0.3": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@110|e0.4": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@110|e0.5": {
+      "total": 110,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v21:tita@130|e0.2": {
+      "total": 130,
+      "estilo": "v21:tita",
+      "epsilon": 0.2
+    },
+    "v21:tita@130|e0.3": {
+      "total": 130,
+      "estilo": "v21:tita",
+      "epsilon": 0.3
+    },
+    "v21:tita@130|e0.4": {
+      "total": 130,
+      "estilo": "v21:tita",
+      "epsilon": 0.4
+    },
+    "v21:tita@130|e0.5": {
+      "total": 130,
+      "estilo": "v21:tita",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@72|e0.2": {
+      "total": 72,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@72|e0.3": {
+      "total": 72,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@72|e0.4": {
+      "total": 72,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@72|e0.5": {
+      "total": 72,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@90|e0.2": {
+      "total": 90,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@90|e0.3": {
+      "total": 90,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@90|e0.4": {
+      "total": 90,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@90|e0.5": {
+      "total": 90,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:tartaruga@130|e0.2": {
+      "total": 130,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.2
+    },
+    "v2c:tartaruga@130|e0.3": {
+      "total": 130,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.3
+    },
+    "v2c:tartaruga@130|e0.4": {
+      "total": 130,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.4
+    },
+    "v2c:tartaruga@130|e0.5": {
+      "total": 130,
+      "estilo": "v2c:tartaruga",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@72|e0.2": {
+      "total": 72,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@72|e0.3": {
+      "total": 72,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@72|e0.4": {
+      "total": 72,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@72|e0.5": {
+      "total": 72,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@90|e0.2": {
+      "total": 90,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@90|e0.3": {
+      "total": 90,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@90|e0.4": {
+      "total": 90,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@90|e0.5": {
+      "total": 90,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:contragolpe@130|e0.2": {
+      "total": 130,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.2
+    },
+    "v2c:contragolpe@130|e0.3": {
+      "total": 130,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.3
+    },
+    "v2c:contragolpe@130|e0.4": {
+      "total": 130,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.4
+    },
+    "v2c:contragolpe@130|e0.5": {
+      "total": 130,
+      "estilo": "v2c:contragolpe",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@72|e0.2": {
+      "total": 72,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@72|e0.3": {
+      "total": 72,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@72|e0.4": {
+      "total": 72,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@72|e0.5": {
+      "total": 72,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@90|e0.2": {
+      "total": 90,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@90|e0.3": {
+      "total": 90,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@90|e0.4": {
+      "total": 90,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@90|e0.5": {
+      "total": 90,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:atirador@130|e0.2": {
+      "total": 130,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.2
+    },
+    "v2c:atirador@130|e0.3": {
+      "total": 130,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.3
+    },
+    "v2c:atirador@130|e0.4": {
+      "total": 130,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.4
+    },
+    "v2c:atirador@130|e0.5": {
+      "total": 130,
+      "estilo": "v2c:atirador",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@72|e0.2": {
+      "total": 72,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@72|e0.3": {
+      "total": 72,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@72|e0.4": {
+      "total": 72,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@72|e0.5": {
+      "total": 72,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@90|e0.2": {
+      "total": 90,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@90|e0.3": {
+      "total": 90,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@90|e0.4": {
+      "total": 90,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@90|e0.5": {
+      "total": 90,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@110|e0.2": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@110|e0.3": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@110|e0.4": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@110|e0.5": {
+      "total": 110,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2c:agressivo@130|e0.2": {
+      "total": 130,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.2
+    },
+    "v2c:agressivo@130|e0.3": {
+      "total": 130,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.3
+    },
+    "v2c:agressivo@130|e0.4": {
+      "total": 130,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.4
+    },
+    "v2c:agressivo@130|e0.5": {
+      "total": 130,
+      "estilo": "v2c:agressivo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@72|e0.2": {
+      "total": 72,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@72|e0.3": {
+      "total": 72,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@72|e0.4": {
+      "total": 72,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@72|e0.5": {
+      "total": 72,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@90|e0.2": {
+      "total": 90,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@90|e0.3": {
+      "total": 90,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@90|e0.4": {
+      "total": 90,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@90|e0.5": {
+      "total": 90,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@110|e0.2": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@110|e0.3": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@110|e0.4": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@110|e0.5": {
+      "total": 110,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    },
+    "v2:adaptativo@130|e0.2": {
+      "total": 130,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.2
+    },
+    "v2:adaptativo@130|e0.3": {
+      "total": 130,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.3
+    },
+    "v2:adaptativo@130|e0.4": {
+      "total": 130,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.4
+    },
+    "v2:adaptativo@130|e0.5": {
+      "total": 130,
+      "estilo": "v2:adaptativo",
+      "epsilon": 0.5
+    }
+  }
+}

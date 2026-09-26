@@ -685,15 +685,19 @@ def _npcs() -> dict:
     # de docs/pve_treino.json (72 agressivo, 80 contragolpe, 90 adaptativo) tinha o chefe vencido pela
     # muralha sem treino e o tier 1 sem efeito de treino no adolescente.
     return {
-        # progressao (experiments/calibrar_progressao.py, configs/progressao/): o pet basico do estagio perde e o
-        # treinado vence; "lugar" = parada do mapa. A Torre tem 3 rivais a escolha (vencer qualquer um abre a
-        # Cidadela) para nenhuma linha ficar travada; o chefe trava brigoes e cacadores (excecao aceita).
-        "tier1_brutamontes": {"total_stats": 72, "estilo": "crianca:sereno", "estagio": "crianca", "lugar": 1,
-                              "estagio_minimo_sugerido": "crianca"},
-        "tier2_sentinela": {"total_stats": 72, "estilo": "v2c:atirador", "lugar": 2, "estagio_minimo_sugerido": "adolescente"},
-        "tier2_carcereiro": {"total_stats": 110, "estilo": "v21:furioso", "lugar": 2, "estagio_minimo_sugerido": "adolescente"},
-        "tier2_porteiro": {"total_stats": 72, "estilo": "v2c:agressivo", "lugar": 2, "estagio_minimo_sugerido": "adolescente"},
-        "tier3_soberano": {"total_stats": 135, "estilo": "v2c:agressivo", "lugar": 3, "estagio_minimo_sugerido": "adulto"},
+        # todo pet treinado vence CADA NPC (decisao do Matheus, 2026-09-26: NPC fixo e imprevisivel; rodadas
+        # 12-14 de experiments/calibrar_progressao.py). O epsilon alto destrava todas as linhas; o custo e o pet
+        # sem treino vencer com frequencia. "lugar" = parada do mapa; vencer qualquer rival abre o proximo.
+        "tier1_brutamontes": {"total_stats": 96, "estilo": "crianca:arisco", "estagio": "crianca", "epsilon": 0.5,
+                              "lugar": 1, "estagio_minimo_sugerido": "crianca"},
+        "tier2_sentinela": {"total_stats": 72, "estilo": "v2c:tartaruga", "epsilon": 0.4, "lugar": 2,
+                            "estagio_minimo_sugerido": "adolescente"},
+        "tier2_carcereiro": {"total_stats": 90, "estilo": "v21:espelho", "epsilon": 0.5, "lugar": 2,
+                             "estagio_minimo_sugerido": "adolescente"},
+        "tier2_porteiro": {"total_stats": 90, "estilo": "v2c:agressivo", "epsilon": 0.5, "lugar": 2,
+                           "estagio_minimo_sugerido": "adolescente"},
+        "tier3_soberano": {"total_stats": 110, "estilo": "v2c:agressivo", "epsilon": 0.5, "lugar": 3,
+                           "estagio_minimo_sugerido": "adulto"},
     }
 
 

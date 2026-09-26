@@ -385,7 +385,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-campanha" hidden>
-        <p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes: escolha o que combina com o jeito de lutar do seu pet. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 135; um pet sem treino tem 60) e lutam com um estilo fixo; o primeiro tem o tamanho de uma criança. <b>Pet sem treino perde</b>: cada desafio pede que você treine o pet no estágio sugerido (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
+        <p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de uma criança. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
         <div class="mapa-rola"><svg class="mapa" id="mapa" viewBox="0 0 360 230" role="group" aria-label="Mapa da campanha"></svg></div>
         <div class="camp-det" id="camp-det" aria-live="polite"></div>
         <div id="palco-camp"></div>
@@ -1698,7 +1698,7 @@ const DESC_PASSIVA = {
   vigia:"vê o pesado do oponente um turno antes",
   tita:"pesado causa +30%",
   devastador:"sombria: corpo a corpo +30%; não pode defender nem esquivar; bate sem ler o rival", bastiao_rachado:"sombria: contra-golpe devolve 100%; defender não rende guts; não lê o rival",
-  predador:"sombria: disparo +40%; não pode recuar", colosso_partido:"sombria: pele dura dura 3 turnos; regenera 85% do guts"};
+  predador:"sombria: disparo +40%; não pode recuar; parte para cima sem ler o rival", colosso_partido:"sombria: pele dura dura 3 turnos; regenera 85% do guts"};
 function tecnicaDe(f){ return f.linha ? CAT.adolescente[f.linha].tecnica : null; }
 function chaveSprite(f){ return f.est === "bebe" ? `${f.esp}_bebe` : f.est === "crianca" ? `${f.esp}_crianca_${f.ramo}`
   : f.est === "adolescente" ? `${f.esp}_adolescente_${f.linha}` : `${f.esp}_adulto_${SOMBRIA[f.adulta] ? SOMBRIA[f.adulta].base : f.adulta}`; }
@@ -2065,17 +2065,19 @@ const LUGARES = [
   {nome:"Torre de pedra", x:196, y:118, sugerido:"adolescente", est:"adolescente"},
   {nome:"Cidadela", x:300, y:58, sugerido:"adulto", est:"adulto"},
 ];
+/* todo pet treinado vence cada NPC (decisao do Matheus: NPC fixo e imprevisivel, eps alto); o custo e o pet
+   sem treino tambem vencer com frequencia (experiments/calibrar_progressao.py, rodadas 12-14) */
 const CAMPANHA = [
-  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:72, estilo:"crianca:sereno", estagio:"crianca", lug:0, sprite:"crianca_golpe", grade:"crianca", cor:"golpe",
-   licao:"Um valentão do tamanho de uma criança, mais forte que um pet comum. Criança sem treino perde; treinando na infância dá para vencer."},
-  {k:"npc_tier2_sentinela", nome:"Sentinela", total:72, estilo:"v2c:atirador", lug:1, sprite:"adulto_finta", cor:"finta",
-   licao:"Guarda distância e atira. Boa para quem sabe fechar a distância ou atirar melhor."},
-  {k:"npc_tier2_carcereiro", nome:"Carcereiro", total:110, estilo:"v21:furioso", lug:1, sprite:"adulto_agarrao", cor:"agarrao",
-   licao:"Parte para cima sem parar, com muita vida. Boa para quem se defende e devolve."},
-  {k:"npc_tier2_porteiro", nome:"Porteiro", total:72, estilo:"v2c:agressivo", lug:1, sprite:"adulto_golpe", cor:"golpe",
-   licao:"Agressivo e esperto: finta e se defende quando apanha. Boa para quem aguenta a pancada."},
-  {k:"npc_tier3_soberano", nome:"Soberano", total:135, estilo:"v2c:agressivo", lug:2, sprite:"adulto_carga", cor:"carga",
-   licao:"O chefe: forte em tudo. Só cai com o estilo certo e muito treino. Brigões e caçadores não costumam vencê-lo."},
+  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:96, estilo:"crianca:arisco", estagio:"crianca", eps:.5, lug:0, sprite:"crianca_golpe", grade:"crianca", cor:"golpe",
+   licao:"Um valentão do tamanho de uma criança, forte mas desastrado: às vezes ataca sem pensar. Treinando na infância você vence com folga."},
+  {k:"npc_tier2_sentinela", nome:"Sentinela", total:72, estilo:"v2c:tartaruga", eps:.4, lug:1, sprite:"adulto_bloqueio", cor:"bloqueio",
+   licao:"Se fecha na defesa e espera o seu erro. Treinado, seu pet quebra a guarda dela."},
+  {k:"npc_tier2_carcereiro", nome:"Carcereiro", total:90, estilo:"v21:espelho", eps:.5, lug:1, sprite:"adulto_agarrao", cor:"agarrao",
+   licao:"Devolve o que recebe, mas se distrai. Treinado, seu pet aguenta a troca."},
+  {k:"npc_tier2_porteiro", nome:"Porteiro", total:90, estilo:"v2c:agressivo", eps:.5, lug:1, sprite:"adulto_golpe", cor:"golpe",
+   licao:"Agressivo e esperto, porém imprevisível. O mais difícil da Torre para um pet sem treino."},
+  {k:"npc_tier3_soberano", nome:"Soberano", total:110, estilo:"v2c:agressivo", eps:.5, lug:2, sprite:"adulto_carga", cor:"carga",
+   licao:"O chefe: forte em tudo, mas imprevisível. Todo pet bem treinado consegue vencê-lo."},
 ];
 LUGARES.forEach((L, i) => { L.rivais = CAMPANHA.filter(c => c.lug === i).map(c => c.k); });
 /* v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem);
@@ -2103,7 +2105,7 @@ const BOT_SPRITE = {aleatorio:"bebe", agressivo:"adulto_golpe", tartaruga:"adult
 const BOT_TRACO = {aleatorio:"golpe", agressivo:"golpe", tartaruga:"bloqueio", atirador:"finta", contragolpe:"agarrao", adaptativo:"carga", oraculo:"carga"};
 const copiarGambits = g => JSON.parse(JSON.stringify(g));
 const estiloBot = nome => nome === "oraculo" ? {nome, oraculo:true, eps:CV.eps}
-  : NPC[nome] ? {nome, gambits:copiarGambits(gambitNPC(NPC[nome].estilo)), eps:CV.eps}
+  : NPC[nome] ? {nome, gambits:copiarGambits(gambitNPC(NPC[nome].estilo)), eps:NPC[nome].eps ?? CV.eps}
   : {nome, gambits:copiarGambits(BOTS_V2[nome] || BOTS_V21[nome]), eps: nome === "aleatorio" ? 1 : CV.eps};
 
 /* estilo do pet (so na web): cada evolucao semeia os gambits (ramo da crianca, linha do
@@ -2768,6 +2770,7 @@ function sementeDe(f){ return f.est === "crianca" ? CRIANCA_V21[f.ramo] : f.est 
 /* sombrias redesenhadas para o S2 (bots.SOMBRIOS): a sombra tira a leitura do oponente */
 const GAMBITS_SOMBRIA = {
   devastador:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg([D0, GA_(60)],"preparar_pesado"), Rg(D0,"golpe_rapido")], final:"carregar"},
+  predador:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg(D0,"golpe_rapido")], final:"carregar"},
   get bastiao_rachado(){ return {regras:BOTS_V21.espelho.regras.filter(r => !r.se.some(c => c.n.startsWith("oponente_"))), final:BOTS_V21.espelho.final}; },
 };
 const rotuloRegra = r => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
