@@ -629,3 +629,20 @@ Interpretações:
 - Conferência byte a byte: com a chave desligada o `run_treino` refez vidas, evolução, arena, campanha e
   S2 idênticos; a única linha diferente em `artifacts_treino/resumo.json` é `fontes_sha256` (hash do código,
   que mudou com `condicao_na_arena`). Suíte: 289 testes.
+
+## 2026-09-27 — TAREFA_ANALISE_PODER, Etapas 1–5
+
+- **Piloto** (`experiments/run_poder.py`, `artifacts_poder/piloto/`): 20 ovos × 5 braços, 100 partidas por
+  par, 10 réplicas do par principal (pets fixos, sorteios de partida diferentes), painel B = 8 formas × 4
+  espécies com 20 partidas por bot. Neutra e real usam os mesmos pets e as mesmas sementes de partida
+  (números aleatórios comuns). 100 vidas em 107 s; 104 mil partidas por variante em ~12 s (8 processos).
+- **Definições** (interpretação): em B a unidade de ruído é a partida contra um bot fixo; a variância de
+  partida é medida em torno da média do par ovo × bot (o bot faz parte do painel, não é ruído). No poder, M
+  do desenho B = partidas por bot (cada pet joga 32 × M).
+- **Poder**: fórmula `σ²_ovo/N + σ²_partida_1/(N·M)` com teste t bilateral, conferida por simulação
+  paramétrica (2000 réplicas por célula) e contra o bootstrap do piloto (fórmula 0,0086 × bootstrap 0,0081
+  no A neutro). O plano usa bootstrap sobre ovos como teste principal; o poder foi calculado com o teste t,
+  que o aproxima com N ≥ 40.
+- **Plano** (`docs/PLANO_ANALISE.md`): desenho principal PENDENTE DE DECISÃO; condição neutra como
+  principal é PROPOSTA (não estava na tarefa). N = 160 nos dois desenhos (acima do mínimo, custo ~15 min);
+  critérios de sustentada/refutada/inconclusiva definidos sobre o IC com margem de equivalência Δ.
