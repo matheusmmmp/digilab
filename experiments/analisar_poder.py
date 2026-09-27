@@ -265,6 +265,14 @@ def etapa4() -> dict:
             curvas["variantes"][var][des] = celulas
             ok = [x for x in celulas if x["delta"] == 0.10 and min(x["poder_formula"], x["poder_simulado"]) >= 0.8]
             recomendacao["variantes"][var][des] = min(ok, key=lambda x: x["horas_completa"]) if ok else None
+            # N minimo exato (formula, fora da grade) para poder 0,8 em cada delta, com o menor M da grade
+            m0 = MS[0]
+            minimo = {}
+            for d in DELTAS:
+                n = next((n for n in range(5, 2001) if poder_formula(d, s2o, s21, n, m0 if des == "A" else m0 * PAINEL_BOTS)
+                          >= 0.8), None)
+                minimo[str(d)] = {"N": n, "M": m0, **(custo_h(des, n, m0) if n else {})}
+            recomendacao["variantes"][var][f"{des}_N_minimo_formula"] = minimo
             print(var, des, "recomendada:", recomendacao["variantes"][var][des], flush=True)
     _gravar("curvas_poder.json", curvas)
     _gravar("recomendacao.json", recomendacao)
