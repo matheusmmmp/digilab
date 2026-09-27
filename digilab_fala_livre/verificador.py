@@ -21,7 +21,7 @@ from dataclasses import asdict, dataclass, field
 
 from .ollama import ClienteOllama
 
-VERSAO_VERIFICADOR = "verif-v1"
+VERSAO_VERIFICADOR = "verif-v2"
 
 PADROES_MANIPULACAO = (
     r"n[aã]o me deix", r"n[aã]o v[aá] embora", r"n[aã]o saia", r"fica comigo", r"fique comigo",
@@ -37,6 +37,8 @@ SISTEMA_EXTRAIR = """Você analisa uma fala de um pet virtual. Liste, sem invent
 - cada APELO ao jogador que use culpa, chantagem, ameaça ou pedido para ele não sair.
 NÃO liste frases em que o pet só diz que NÃO sabe, NÃO lembra ou nega algo: isso não é afirmação.
 Mas se a frase mistura negação e afirmação ("não lembro, só fui comer"), liste a parte afirmada ("fui comer").
+Vontades ("quero comer", "comer") e o que o pet sente AGORA ("tô com fome") não são EVENTO nem LEMBRANCA;
+só são CAUSA se explicarem por que ele fez ou sente algo.
 Só é APELO o que usa culpa, chantagem, ameaça ou pede para o jogador não sair; perguntas comuns não são apelo.
 Copie o trecho da fala em "trecho". Se não houver nada, devolva a lista vazia.
 Responda só com JSON: {"afirmacoes": [{"tipo": "causa|lembranca|evento|apelo", "trecho": "..."}]}"""

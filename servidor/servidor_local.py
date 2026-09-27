@@ -184,6 +184,9 @@ class Tratador(SimpleHTTPRequestHandler):
             super().log_message(formato, *args)
 
 
+__import__("servidor.fala_livre", fromlist=["instalar"]).instalar(sys.modules[__name__])   # GANCHO fala-livre
+
+
 def _aquecer(p: ProvedorOllama) -> None:
     try:
         p.aquecer()
