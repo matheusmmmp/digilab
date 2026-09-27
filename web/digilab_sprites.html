@@ -2707,6 +2707,7 @@ function detalheMotivo(mot, est){
   return `fatores: ${fat}${extra} · fala de ${NOME_ESTAGIO_FALA[est]}`;
 }
 function renderFala(){
+  if (window.falaLivre && window.falaLivre.gatilho(motor)) return;   // GANCHO fala-livre (2: entrega o pet no gatilho da fala)
   const mot = motor.motivo, el = $("fala");
   if (!mot){ el.textContent = "…"; $("fala-det").textContent = ""; return; }
   const est = estagioFala(motor), refs = mot.refsOrd.map(k => idxDoOrdinal(motor, k)).filter(x => x !== null);
@@ -3497,4 +3498,6 @@ desenharLCD();
 arenaPreview();
 renderGambits();
 verificarLLM();
+document.addEventListener("fala-livre-pronta", () => window.falaLivre.montar($("p-estado")));   // GANCHO fala-livre (3: conversa na aba Estado)
+document.head.appendChild(Object.assign(document.createElement("script"), {src:"modulos/fala_livre.js"}));   // GANCHO fala-livre (1: carrega o modulo)
 </script>

@@ -205,3 +205,11 @@ def test_log_do_pet_nao_conhece_a_fala():
     for arq in (RAIZ / "digilab").rglob("*.py"):
         t = arq.read_text(encoding="utf-8")
         assert "fala.jsonl" not in t and "fala_livre" not in t, arq
+
+
+def test_web_no_maximo_tres_ganchos_e_modulo_separado():
+    pagina = (RAIZ / "web" / "digilab_sprites.html").read_text(encoding="utf-8")
+    assert pagina.count("// GANCHO fala-livre") == 3
+    assert "fala.jsonl" not in pagina and "/api/fala-livre" not in pagina      # tudo isso fica no modulo
+    mod = (RAIZ / "web" / "modulos" / "fala_livre.js").read_text(encoding="utf-8")
+    assert "/api/fala-livre" in mod and ".fala.jsonl" in mod and "motor.log.push" not in mod

@@ -86,7 +86,8 @@ def instalar(modulo, servico: ServicoFalaLivre | None = None) -> None:
     """Acopla as rotas ao Tratador de `servidor_local` (GANCHO fala-livre: a unica chamada fica la)."""
     svc = servico or ServicoFalaLivre()
     trat = modulo.Tratador
-    modulo.ROTAS_REMOTAS = tuple(modulo.ROTAS_REMOTAS) + (ROTA_FALA, ROTA_VERIF, ROTA_STATUS)
+    modulo.ROTAS_REMOTAS = tuple(modulo.ROTAS_REMOTAS) + (ROTA_FALA, ROTA_VERIF, ROTA_STATUS,
+                                                         f"{modulo.PREFIXO}/web/modulos/fala_livre.js")
     post_original, get_original = trat.do_POST, trat.do_GET
 
     def do_POST(self):
