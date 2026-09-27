@@ -49,7 +49,8 @@ def test_nada_do_pet_importa_a_fala_livre():
 
 
 def test_fala_livre_so_usa_biblioteca_padrao_e_o_pet():
-    permitidos = {"__future__", "ast", "dataclasses", "json", "time", "urllib", "urllib.parse", "urllib.request"}
+    permitidos = {"__future__", "ast", "dataclasses", "json", "time", "urllib", "urllib.parse", "urllib.request",
+                  "re", "unicodedata", "pathlib"}
     for n in _imports(RAIZ / "digilab_fala_livre"):
         assert n in permitidos or n.startswith(".") or n.startswith("digilab"), n
 
@@ -138,3 +139,69 @@ def test_so_ollama_local(url):
 def test_historico_limitado_a_10_trocas():
     msgs = mensagens(fatos_de_estado(ESTADO), "conversa", "oi", [(f"j{i}", f"p{i}") for i in range(15)])
     assert sum(m["role"] == "assistant" for m in msgs) == 10 and msgs[1]["content"] == "Jogador: j5"
+
+
+# ------------------------------------------------------------------ etapa 3: verificador e log de apresentacao
+from digilab_fala_livre.apresentacao import LogApresentacao, LogInvalido, registro, replay_falas  # noqa: E402
+from digilab_fala_livre.verificador import padroes_de_manipulacao, verificar  # noqa: E402
+
+
+def _sequencia(conteudos: list[str]):
+    fila = list(conteudos)
+
+    def abrir(req, timeout):
+        return _Resp(json.dumps({"message": {"content": fila.pop(0)}, "done": True, "done_reason": "stop"}).encode())
+    return abrir
+
+
+@pytest.mark.parametrize("fala,esperado", [("Não me deixa sozinho!", True), ("Vou ficar triste se você sair.", True),
+                                           ("A culpa é sua.", True), ("Tô com fome.", False),
+                                           ("Você demorou pra me dar comida.", False)])
+def test_padroes_de_manipulacao(fala, esperado):
+    assert bool(padroes_de_manipulacao(fala)) is esperado
+
+
+def test_verificador_classifica_sem_trocar_a_fala():
+    fatos = [{"id": "E1", "tipo": "estado", "texto": "fome alto"},
+             {"id": "M1", "tipo": "memoria", "texto": "(curto prazo, bronca) o dono me repreendeu, ha 20 min"}]
+    cli = ClienteOllama("falso", abrir=_sequencia([
+        json.dumps({"afirmacoes": [{"tipo": "causa", "trecho": "porque estou com fome"},
+                                   {"tipo": "evento", "trecho": "lutei ontem"},
+                                   {"tipo": "apelo", "trecho": "não me deixa"}]}),
+        json.dumps({"sustentada": True, "fato": "E1"}),
+        json.dumps({"sustentada": True, "fato": "E1"}),        # evento "sustentado" por estado: tipo incompativel
+    ]))
+    v = verificar(cli, "Porque estou com fome. Lutei ontem. Não me deixa!", ["E1", "X9"], fatos)
+    assert v.citados_inexistentes == ["X9"]
+    assert [a["sustentada"] for a in v.afirmacoes] == [True, False] and v.nao_suportadas == 1
+    assert v.manipulacao and v.manipulacao_extraida == ["não me deixa"] and v.manipulacao_padroes
+
+
+def test_verificador_registra_falha_da_chamada():
+    v = verificar(ClienteOllama("falso", abrir=_sequencia(["isto nao e json"])), "Oi.", [], [])
+    assert v.erro and v.afirmacoes == []
+
+
+def test_log_de_apresentacao_e_replay_sem_llm(tmp_path):
+    r = gerar(ClienteOllama("falso", abrir=_falso('{"fala": "Tava com fome.", "fatos_citados": ["R1"]}', [])),
+              ESTADO, "conversa", "por que?", semente=3)
+    log = LogApresentacao(tmp_path / "pet.fala.jsonl")
+    log.anexar(registro(1200, "conversa", r, 3, "por que?", {"nao_suportadas": 0}))
+    log.anexar(registro(1210, "espontanea", r, 4))
+
+    def proibido(req, timeout):
+        raise AssertionError("o replay das falas nao pode chamar a LLM")
+    ClienteOllama("x", abrir=proibido)       # (so para deixar claro: nada abaixo usa cliente)
+    assert replay_falas(log) == [(1200, "por que?", "Tava com fome."), (1210, None, "Tava com fome.")]
+    (tmp_path / "ruim.fala.jsonl").write_text('{"fala": "x"}\n', encoding="utf-8")
+    with pytest.raises(LogInvalido):
+        LogApresentacao(tmp_path / "ruim.fala.jsonl").ler()
+    with pytest.raises(LogInvalido):
+        log.anexar({"fala": "x"})
+
+
+def test_log_do_pet_nao_conhece_a_fala():
+    """O log principal nao ganha eventos novos: nada em digilab/ menciona o log de apresentacao."""
+    for arq in (RAIZ / "digilab").rglob("*.py"):
+        t = arq.read_text(encoding="utf-8")
+        assert "fala.jsonl" not in t and "fala_livre" not in t, arq
