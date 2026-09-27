@@ -711,6 +711,18 @@ class ConfigCampanha:
 
 
 CONFIG_CAMPANHA = ConfigCampanha()
+
+
+@dataclass(frozen=True)
+class ConfigArenaPesquisa:
+    """Arena da pesquisa (TAREFA_ANALISE_PODER). Desligado por padrao: as runs antigas nao mudam."""
+
+    # condicao fisica neutra (1,0) na arena normalizada: o G6b ficou como excecao (espelho com +5% de
+    # condicao vence 0,725), entao a condicao do cuidado ainda decide lutas entre pets parecidos
+    condicao_neutra: bool = False
+
+
+CONFIG_ARENA_PESQUISA = ConfigArenaPesquisa()
 CONFIG_CATALOGO = ConfigCatalogo()
 CONFIG_COMBATE_V21 = ConfigCombateV21()
 # combate corrigido aprovado com ressalvas (TAREFA_CORRECAO_COMBATE; experiments/configs/v21c/validacao.json):
