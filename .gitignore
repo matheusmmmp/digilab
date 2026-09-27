@@ -21,6 +21,7 @@ artifacts_*/
 !artifacts_treino/
 !artifacts_combate_v2c/
 !artifacts_combate_v21c/
+!artifacts_poder/
 
 # contabilidade local de gasto da fala por LLM (nao versionar)
 servidor/gasto_fala.json

@@ -73,3 +73,15 @@ def test_lutador_da_arena_sem_a_chave_e_o_de_antes():
     # na campanha (absoluto) a condicao continua a do cuidado, com ou sem a chave
     assert (lutador_pet("x", ev, pontos, True, ConfigArenaPesquisa(condicao_neutra=True)).perfil
             == lutador_pet("x", ev, pontos, True).perfil)
+
+
+def test_piloto_reproduz_com_a_mesma_semente(tmp_path):
+    """Mesmo ovo, mesmas sementes de partida: mesmos pontos, partida a partida (e a vida rejoga do disco)."""
+    from run_poder import executar
+    r1 = executar(CFG, tmp_path / "a", [50001], 4, 1, 2, 2)
+    r2 = executar(CFG, tmp_path / "b", [50001], 4, 1, 2, 2)
+    assert r1["resultados"] == r2["resultados"] and r1["pets"] == r2["pets"]
+    a, b = (tmp_path / "a" / "vidas" / "atencioso@50001.jsonl"), (tmp_path / "b" / "vidas" / "atencioso@50001.jsonl")
+    assert a.read_bytes() == b.read_bytes()
+    # a variante neutra difere da real so pela condicao (mesmas sementes de partida)
+    assert r1["resultados"]["neutra"]["50001"]["A"].keys() == r1["resultados"]["real"]["50001"]["A"].keys()
