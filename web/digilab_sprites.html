@@ -1,5 +1,5 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Digilab Pet (sprites locais)</title>
+<title>Digilab exp-fala-livre</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -173,6 +173,7 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .nota{font-size:13px;color:var(--muted);max-width:80ch}
 footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 @media (prefers-reduced-motion: reduce){.btn{transition:none}}
+.versao-exp{font-family:var(--f-pixel);font-size:12px;letter-spacing:.06em;background:var(--accent);color:var(--accent-ink);padding:3px 8px;border-radius:6px;margin:0}
 .evo-rola{overflow-x:auto;-webkit-overflow-scrolling:touch}
 /* mapa da campanha: ilustracao fixa (como a tela do pet), igual nos dois temas */
 .mapa-rola{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
@@ -240,6 +241,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 <div class="wrap">
   <header>
     <h1>DIGILAB</h1>
+    <p class="versao-exp" title="Versão experimental, isolada da principal">exp-fala-livre</p>
     <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
   </header>
 
@@ -2373,7 +2375,9 @@ const POS_COCO = [0, 65, 9, 56, 18];
 /* =================================================================
    Jogo
    ================================================================= */
-const CHAVE = "digilab-web-v21-sprites";   /* v21: arvore nova; pets salvos na arvore antiga ficam para tras */
+/* versao experimental: saves em chave propria (e a porta 8767 ja separa o localStorage da principal) */
+const VERSAO_APP = "exp-fala-livre";
+const CHAVE = "digilab-web-v21-sprites-exp-fala-livre";   /* v21: arvore nova; pets salvos na arvore antiga ficam para tras */
 let motor, velocidade = 10, acumulado = 0, flash = null, nascendo = 0;
 function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify({semente:motor.semente, log:motor.log, versao:motor.versao})); } catch(_){} }
 function carregar(){
