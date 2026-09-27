@@ -43,7 +43,7 @@ from digilab.combate_v2.v21.regras import REGRAS_PADRAO, Regras  # noqa: E402
 from digilab.config import (CONFIG_CAMPANHA, CONFIG_CATALOGO, CONFIG_COMBATE_V2, CONFIG_EVOLUCAO_PESQUISA,  # noqa: E402
                             CONFIG_SOMBRIO, CONFIG_TREINO, STATS_V21)
 from digilab.events import LogDeEventos  # noqa: E402
-from digilab.evolucao import evoluir, ovo  # noqa: E402
+from digilab.evolucao import condicao_na_arena, evoluir, ovo  # noqa: E402
 from digilab.metrics import bootstrap_ic  # noqa: E402
 from digilab.protocol import (ENGINE_SHA256_V0, OVOS_PERSONALIDADE, PROTOCOLO_ARENA_V1, derivar_semente,  # noqa: E402
                               sha256_engine)
@@ -68,10 +68,13 @@ def _gravar(caminho: Path, texto: str) -> None:
     caminho.write_text(texto, encoding="utf-8", newline="\n")
 
 
-def lutador_pet(nome: str, ev, pontos: dict, absoluto: bool) -> Lutador:
-    """absoluto = campanha: stats sem normalizar e vida pela formula da V21C."""
-    cfg = REGRAS_CAMPANHA.v21 if absoluto else None
-    p = perfil(ev.forma, ev.temperamento, ev.carater_adulto, ev.condicao, cfg, treino=pontos,
+def lutador_pet(nome: str, ev, pontos: dict, absoluto: bool, cfg_arena=None, cfg_v21=None) -> Lutador:
+    """absoluto = campanha: stats sem normalizar e vida pela formula da V21C. Na arena (normalizada) a
+    condicao pode ser neutra (ConfigArenaPesquisa.condicao_neutra, desligada por padrao). cfg_v21: regras da
+    arena (padrao: V2.1 original, como nas runs antigas)."""
+    cfg = REGRAS_CAMPANHA.v21 if absoluto else cfg_v21
+    cond = ev.condicao if absoluto else condicao_na_arena(ev.condicao, cfg_arena)
+    p = perfil(ev.forma, ev.temperamento, ev.carater_adulto, cond, cfg, treino=pontos,
                normalizar_treino=not absoluto)
     sombria = ev.forma.adulta in SOMBRIOS
     g = SOMBRIOS[ev.forma.adulta] if sombria else ADULTOS[ev.forma.adulta]

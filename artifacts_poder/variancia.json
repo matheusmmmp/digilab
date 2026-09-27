@@ -1,0 +1,105 @@
+{
+  "descricao": "Etapa 2: componentes de variancia (comparacao principal atencioso x aleatorio)",
+  "reamostragens": 10000,
+  "semente_bootstrap": 20260927,
+  "variantes": {
+    "neutra": {
+      "A": {
+        "ICC": 0.7453264137721584,
+        "M_efetivo": 100,
+        "N": 20,
+        "conferencia_replicas": {
+          "amplitude_media_das_replicas": 0.05625,
+          "formula_s2_1_sobre_M": 0.0005832702020202021,
+          "razao": 1.0224483169174152,
+          "var_entre_replicas_mesmos_pets": 0.0005963636363636364
+        },
+        "conferencia_var_estimador": {
+          "bootstrap_ovos": 0.008079711469621336,
+          "formula": 0.008564141447368423
+        },
+        "efeito_estimado": 0.07525000000000004,
+        "fracao_var_estimador_por_partidas": 0.0034053045807611484,
+        "ic95_bootstrap_ovos_taxa": [
+          0.40075000000000005,
+          0.75225
+        ],
+        "media_taxa": 0.57525,
+        "sigma2_ovo": 0.17069955874534823,
+        "sigma2_ovo_bruto": 0.17069955874534823,
+        "sigma2_partida_1": 0.058327020202020206,
+        "var_entre_ovos_y": 0.17128282894736843
+      },
+      "B": {
+        "ICC": 0.28016911274371825,
+        "M_efetivo": 640,
+        "N": 20,
+        "bots": 32,
+        "conferencia_var_estimador": {
+          "bootstrap_ovos": 0.0022424145905779545,
+          "formula": 0.0023916654887952303
+        },
+        "efeito_estimado": -0.023515625000000005,
+        "fracao_var_estimador_por_partidas": 0.003998437105238451,
+        "ic95_bootstrap_ovos_diferenca": [
+          -0.11644531250000001,
+          0.07035156249999999
+        ],
+        "partidas_por_bot": 20,
+        "sigma2_ovo": 0.04764205129523027,
+        "sigma2_ovo_bruto": 0.04764205129523027,
+        "sigma2_partida_1": 0.12240542763157895,
+        "var_entre_ovos_y": 0.04783330977590461
+      }
+    },
+    "real": {
+      "A": {
+        "ICC": 0.7414881450718087,
+        "M_efetivo": 100,
+        "N": 20,
+        "conferencia_replicas": {
+          "amplitude_media_das_replicas": 0.05475000000000002,
+          "formula_s2_1_sobre_M": 0.0005689267676767676,
+          "razao": 1.1459774961716866,
+          "var_entre_replicas_mesmos_pets": 0.000651977272727273
+        },
+        "conferencia_var_estimador": {
+          "bootstrap_ovos": 0.007706465169954496,
+          "formula": 0.008187694078947368
+        },
+        "efeito_estimado": 0.14225,
+        "fracao_var_estimador_por_partidas": 0.0034742795846490052,
+        "ic95_bootstrap_ovos_taxa": [
+          0.46950000000000003,
+          0.8095000000000001
+        ],
+        "media_taxa": 0.64225,
+        "sigma2_ovo": 0.1631849548112706,
+        "sigma2_ovo_bruto": 0.1631849548112706,
+        "sigma2_partida_1": 0.056892676767676766,
+        "var_entre_ovos_y": 0.16375388157894738
+      },
+      "B": {
+        "ICC": 0.29888172186595124,
+        "M_efetivo": 640,
+        "N": 20,
+        "bots": 32,
+        "conferencia_var_estimador": {
+          "bootstrap_ovos": 0.0025202215281024563,
+          "formula": 0.0026816389385022612
+        },
+        "efeito_estimado": 0.026523437500000004,
+        "fracao_var_estimador_por_partidas": 0.003651935012249734,
+        "ic95_bootstrap_ovos_diferenca": [
+          -0.0730078125,
+          0.12417968750000001
+        ],
+        "partidas_por_bot": 20,
+        "sigma2_ovo": 0.05343691534745065,
+        "sigma2_ovo_bruto": 0.05343691534745065,
+        "sigma2_partida_1": 0.12535259046052633,
+        "var_entre_ovos_y": 0.05363277877004523
+      }
+    }
+  }
+}

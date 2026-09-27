@@ -121,6 +121,12 @@ class Evolucao:
                 "condicao": self.condicao, "saude_final": self.saude_final}
 
 
+def condicao_na_arena(condicao: float, cfg=None) -> float:
+    """Condicao usada na arena da pesquisa: a do cuidado, ou 1,0 com ConfigArenaPesquisa.condicao_neutra."""
+    from .config import CONFIG_ARENA_PESQUISA
+    return 1.0 if (cfg or CONFIG_ARENA_PESQUISA).condicao_neutra else condicao
+
+
 def evoluir(log: LogDeEventos, fabrica: Callable, semente: int, n_estados: int, amostras: int,
             semente_sonda: int, saude_final: float, cfg: ConfigEvolucaoPesquisa | None = None,
             fabrica_motor: Callable | None = None, sombria: bool = False) -> Evolucao:

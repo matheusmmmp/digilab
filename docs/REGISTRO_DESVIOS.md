@@ -606,3 +606,43 @@ vida** (criança 8, adolescente 15/22, adulto 29/36, tabela `ALCANCE`).
   (todos os braços, inclusive o exigente, vencem 0,96–1,00; exigente − atencioso ≈ 0 em todos os NPCs). A
   conclusão "forçar custa na campanha" deixa de ser medível pela campanha; a arena normalizada segue
   inconclusiva (exigente × atencioso 0,43 [0,24, 0,63]).
+
+## 2026-09-27 — TAREFA_ANALISE_PODER, Etapa 0 (configuração fixa da pesquisa)
+
+`experiments/configs/poder_pesquisa.json`, `ConfigArenaPesquisa`, `evolucao.condicao_na_arena`, `tests/test_poder.py`.
+Interpretações:
+- **Pets da pesquisa**: o pipeline do `run_treino` (personalidade completa + treino, 5 braços, 14 dias,
+  orçamento 298 por vida, evolução até adulto), lutando na arena **V21C com stats normalizados**. O 0,615
+  citado na tarefa é da arena v1 (traços, sem formas); com combate V21C o pet precisa de forma adulta, e o
+  único pipeline de pesquisa que evolui pets com personalidade é o do treino. Os braços pedidos (atencioso,
+  aleatório + três secundários) são os `BRACOS_TREINO` (relapso, incoerente, exigente).
+- **Condição física neutra**: `ConfigArenaPesquisa.condicao_neutra` (padrão False), aplicada só na arena
+  normalizada; a campanha segue com a condição do cuidado. Com a chave desligada o lutador é o mesmo de
+  antes (teste) e o `run_treino` reproduz os artefatos (conferido rodando de novo).
+- **Ordem da normalização**: `com_treino` multiplica os pontos por `peso_ponto_combate` e só depois devolve o
+  total ao orçamento da espécie (teste). Exemplo (duelista brasa, forca +1, mira +0,5, peso 3): forca 15 →
+  16,744, igual a normalizar base + 3 × pontos; a ordem inversa daria 16,829.
+- **Sementes**: piloto 50001–50020, confirmatórias 60001–60160, rótulos de partida próprios; disjuntas das
+  antigas (lista no config). A sonda do caráter (9001) é instrumento, igual em todas as runs.
+- A arena da pesquisa já existente (`run_treino`) continua na V2.1 original; a V21C entra pelo parâmetro
+  `cfg_v21` de `lutador_pet` e pelas regras do config, só nas runs novas.
+- Conferência byte a byte: com a chave desligada o `run_treino` refez vidas, evolução, arena, campanha e
+  S2 idênticos; a única linha diferente em `artifacts_treino/resumo.json` é `fontes_sha256` (hash do código,
+  que mudou com `condicao_na_arena`). Suíte: 289 testes.
+
+## 2026-09-27 — TAREFA_ANALISE_PODER, Etapas 1–5
+
+- **Piloto** (`experiments/run_poder.py`, `artifacts_poder/piloto/`): 20 ovos × 5 braços, 100 partidas por
+  par, 10 réplicas do par principal (pets fixos, sorteios de partida diferentes), painel B = 8 formas × 4
+  espécies com 20 partidas por bot. Neutra e real usam os mesmos pets e as mesmas sementes de partida
+  (números aleatórios comuns). 100 vidas em 107 s; 104 mil partidas por variante em ~12 s (8 processos).
+- **Definições** (interpretação): em B a unidade de ruído é a partida contra um bot fixo; a variância de
+  partida é medida em torno da média do par ovo × bot (o bot faz parte do painel, não é ruído). No poder, M
+  do desenho B = partidas por bot (cada pet joga 32 × M).
+- **Poder**: fórmula `σ²_ovo/N + σ²_partida_1/(N·M)` com teste t bilateral, conferida por simulação
+  paramétrica (2000 réplicas por célula) e contra o bootstrap do piloto (fórmula 0,0086 × bootstrap 0,0081
+  no A neutro). O plano usa bootstrap sobre ovos como teste principal; o poder foi calculado com o teste t,
+  que o aproxima com N ≥ 40.
+- **Plano** (`docs/PLANO_ANALISE.md`): desenho principal PENDENTE DE DECISÃO; condição neutra como
+  principal é PROPOSTA (não estava na tarefa). N = 160 nos dois desenhos (acima do mínimo, custo ~15 min);
+  critérios de sustentada/refutada/inconclusiva definidos sobre o IC com margem de equivalência Δ.

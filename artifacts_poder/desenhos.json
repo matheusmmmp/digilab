@@ -1,0 +1,51 @@
+{
+  "descricao": "Etapa 3: desenho A (confronto direto) x B (painel fixo), mesmos pets do piloto",
+  "variantes": {
+    "neutra": {
+      "A": {
+        "efeito": 0.07525000000000004,
+        "ic95_taxa": [
+          0.40075000000000005,
+          0.75225
+        ],
+        "partidas_por_ovo": 100,
+        "razao_efeito_se": 0.8371602098368672,
+        "se_bootstrap": 0.08988721527348223
+      },
+      "B": {
+        "efeito": -0.023515625000000005,
+        "ic95_diferenca": [
+          -0.11644531250000001,
+          0.07035156249999999
+        ],
+        "partidas_por_ovo": 1280,
+        "razao_efeito_se": -0.4965906870877811,
+        "se_bootstrap": 0.04735414016300955
+      },
+      "leitura": "A mede atencioso contra aleatorio; B mede quanto cada um ganha contra o mesmo painel de bots (diferenca pareada por ovo). A escolha do principal e do Matheus."
+    },
+    "real": {
+      "A": {
+        "efeito": 0.14225,
+        "ic95_taxa": [
+          0.46950000000000003,
+          0.8095000000000001
+        ],
+        "partidas_por_ovo": 100,
+        "razao_efeito_se": 1.620409068845817,
+        "se_bootstrap": 0.08778647486916476
+      },
+      "B": {
+        "efeito": 0.026523437500000004,
+        "ic95_diferenca": [
+          -0.0730078125,
+          0.12417968750000001
+        ],
+        "partidas_por_ovo": 1280,
+        "razao_efeito_se": 0.5283362999875191,
+        "se_bootstrap": 0.050201808016270257
+      },
+      "leitura": "A mede atencioso contra aleatorio; B mede quanto cada um ganha contra o mesmo painel de bots (diferenca pareada por ovo). A escolha do principal e do Matheus."
+    }
+  }
+}
