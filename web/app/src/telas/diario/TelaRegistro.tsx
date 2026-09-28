@@ -2,11 +2,12 @@
    copiar o registro, filtros por tipo com etiqueta colorida, e o ovo novo numa area de risco separada, com
    confirmacao. A contagem diz o que e evento do registro e o que e linha reconstruida (revisao, item 3). */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { Motor, NOME_PET, type ItemHistorico } from "../../../motor/index.ts";
+import { Motor, NOME_PET, NOME_V2, type ItemHistorico } from "../../../motor/index.ts";
 import { novoPet, useJogo } from "../../jogo.ts";
 import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
-import { REPLAY, reconstruirLuta } from "../../luta.ts";
+import { LUTA, REPLAY, reconstruirLuta, reverLuta } from "../../luta.ts";
+import { ENDERECO_LUTA } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { fraseTurno } from "../lutar/ModalResultado.tsx";
@@ -40,7 +41,10 @@ function ReplayLuta({ idx, fechar }: { idx: number; fechar: () => void }) {
       <ol class="reg-replay-turnos">
         {res.turnos.map(tr => <li key={tr.t}><span class="dl-lcd">T{tr.t}</span><span>{fraseTurno(tr, A, B, null)}</span></li>)}
       </ol>
-      <button type="button" class="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button>
+      <div class="reg-replay-bts">
+        <button type="button" class="dl-btn" onClick={() => { reverLuta(idx, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Ver a luta no palco</button>
+        <button type="button" class="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button>
+      </div>
     </section>
   );
 }

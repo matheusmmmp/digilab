@@ -99,8 +99,23 @@ function UltimoTreino() {
   );
 }
 
+/** desktop (TreinoDesktop): Forcar treino escolhe o exercicio e cai na mesma confirmacao de sempre; so abre com a fadiga
+    no limite do motor (CTR.limiteForcar), como os proprios cards */
+function EscolherForcar({ escolher, fechar }: { escolher: (ex: Exercicio) => void; fechar: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null), ex = useRef<Exercicio | null>(null);
+  useEffect(() => { abrirModal(ref.current); }, []);
+  return (
+    <dialog class="modal-conf dl" ref={ref} aria-labelledby="forcar-esc-tit" onClose={() => (ex.current ? escolher(ex.current) : fechar())}>
+      <h2 id="forcar-esc-tit">Forçar qual treino?</h2>
+      <p>Rende mais, mas gera sobrecarga.</p>
+      <div class="forcar-lista">{EXERCICIOS.map(e => <button type="button" key={e} class="dl-btn dl-btn--sec" onClick={() => { ex.current = e; ref.current?.close(); }}><IconeTreino ex={e} />{NOME_EXERCICIO[e]}</button>)}</div>
+      <button type="button" class="dl-btn dl-btn--sec" onClick={() => ref.current?.close()}>Cancelar</button>
+    </dialog>
+  );
+}
+
 export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
-  const { motor: m, nascendo } = useJogo(), [msg, setMsg] = useState(""), [confirmar, setConfirmar] = useState<Exercicio | null>(null);
+  const { motor: m, nascendo } = useJogo(), [msg, setMsg] = useState(""), [confirmar, setConfirmar] = useState<Exercicio | null>(null), [escolher, setEscolher] = useState(false);
   const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), mult = t.forcaria ? CTR.multForcar : 1;
   const treinar = (ex: Exercicio) => {
     try {
@@ -157,7 +172,14 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
       <details class="dl-apoio"><summary>Como o treino funciona</summary>
         <p>Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
       </details>
-      <span class="desk-so treino-ult-caixa"><UltimoTreino /></span>
+      <span class="desk-so treino-ult-caixa"><UltimoTreino />
+        <span class="treino-ult-bts">
+          <button type="button" class="dl-btn dl-btn--sec treino-forcar" disabled={!t.forcaria || bebe || !pode || lutando || nascendo > 0}
+            title={t.forcaria ? "rende mais e gera sobrecarga" : `abre com fadiga ${CTR.limiteForcar}`} onClick={() => setEscolher(true)}>
+            <span class="treino-forcar-faixa" aria-hidden="true" />Forçar treino</button>
+          {!t.forcaria && <small class="dl-apoio">abre com fadiga {CTR.limiteForcar}</small>}
+        </span></span>
+      {escolher && <EscolherForcar escolher={ex => { setEscolher(false); setConfirmar(ex); }} fechar={() => setEscolher(false)} />}
       </div>
       {confirmar && <ConfirmarForcar ex={confirmar} fechar={() => setConfirmar(null)} forcar={() => treinar(confirmar)} />}
     </div>

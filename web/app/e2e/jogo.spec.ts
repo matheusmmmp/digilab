@@ -108,6 +108,15 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page).toHaveURL(/#\/diario\/registro$/);
     await expect(page.locator(".reg-replay")).toContainText(`em ${turnos} turnos`);
     await expect(page.locator(".reg-replay-turnos li")).toHaveCount(Number(turnos));
+    /* rever a luta no palco: animada em tela cheia, no fim volta ao Diario, e nada entra no registro */
+    const lAntes = await numLog(page, "l");
+    await page.getByRole("button", { name: "Ver a luta no palco" }).click();
+    await expect(page).toHaveURL(/#\/lutar\/luta$/);
+    await expect(page.locator("#fim-rep-tit")).toBeVisible({ timeout: 90_000 });
+    await page.getByRole("button", { name: "Voltar ao Diário" }).click();
+    await expect(page).toHaveURL(/#\/diario\/registro$/);
+    await expect(page.locator(".reg-replay")).toBeVisible();
+    expect(await numLog(page, "l")).toBe(lAntes);
     await page.goBack();
     await expect(page).toHaveURL(/#\/lutar\/arena$/);
     await page.getByRole("tab", { name: "Campanha" }).click();

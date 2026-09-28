@@ -7,7 +7,8 @@ import {
 import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
 import { Deco } from "./Deco.tsx";
 import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
-import { ENDERECO_LUTA } from "../rotas.ts";
+import { ehLuta } from "../rotas.ts";
+import { useLuta } from "../luta.ts";
 import { useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
@@ -66,7 +67,7 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
   const ref = useRef<HTMLDialogElement>(null), f = x.forma, i = ORDEM_NIVEL.indexOf(x.estagio);
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
   useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
-  useEffect(() => (location.hash === ENDERECO_LUTA ? undefined : rotaDaTelaCheia("#/evolucao")), []);
+  useEffect(() => rotaDaTelaCheia("#/evolucao"), []);
   /* linha ja percorrida: as formas que o pet foi (so o que o motor registrou) */
   const formas: Forma[] = [{ esp: f.esp, est: "bebe" }, ...m.evolucoes.map(v => v.forma)];
   return (
@@ -93,13 +94,17 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
 }
 /** acompanha as evolucoes: abre a revelacao quando o motor registra uma nova nesta sessao */
 /** revelacao em tela cheia (secao 7); Continuar leva a Crescer · Evolucao */
+/* contagem das evolucoes ja vistas e a revelacao pendente ficam fora do componente: a luta em tela cheia desmonta o app
+   (e esta revelacao) e, quando a luta faz o pet evoluir, a revelacao espera o fim da luta e o Resultado */
+const VISTAS: { motor: Motor | null; n: number; pendente: Evolucao | null } = { motor: null, n: 0, pendente: null };
 export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
-  const { motor: m } = useJogo(), vistas = useRef<{ motor: Motor; n: number } | null>(null), [aberta, setAberta] = useState<Evolucao | null>(null);
+  const { motor: m } = useJogo(), luta = useLuta(), [, redesenhar] = useState(0);
   useEffect(() => {
     const n = m.evolucoes.length;
     /* pet trocado (ovo novo, pet anterior, outra aba): comeca a contar dele */
-    if (!vistas.current || vistas.current.motor !== m || n < vistas.current.n) { vistas.current = { motor: m, n }; return; }
-    if (n > vistas.current.n) { vistas.current.n = n; setAberta(m.evolucoes[n - 1]); }
+    if (VISTAS.motor !== m || n < VISTAS.n) { VISTAS.motor = m; VISTAS.n = n; VISTAS.pendente = null; return; }
+    if (n > VISTAS.n) { VISTAS.n = n; VISTAS.pendente = m.evolucoes[n - 1]; redesenhar(x => x + 1); }
   });
-  return aberta ? <Revelacao x={aberta} m={m} fechar={() => { setAberta(null); continuar?.(); }} /> : null;
+  if (!VISTAS.pendente || luta.lutando || ehLuta(location.hash)) return null;
+  return <Revelacao x={VISTAS.pendente} m={m} fechar={() => { VISTAS.pendente = null; redesenhar(x => x + 1); continuar?.(); }} />;
 }
