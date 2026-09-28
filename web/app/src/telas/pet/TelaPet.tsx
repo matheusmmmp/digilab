@@ -4,10 +4,11 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import {
-  ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
+  ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
+import { BRASAO_DECO, Deco } from "../../decoracao.tsx";
 import { Seg, blocos } from "../../componentes/Barras.tsx";
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import {
@@ -18,7 +19,7 @@ import {
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
-import { VELOCIDADES, ajustarVelocidadeChamado, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
+import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
 import { MeusPets } from "./MeusPets.tsx";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
 
@@ -33,17 +34,19 @@ function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
   return <img class="dl-pix" src={url} width={w} height={h} alt="" />;
 }
 function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
-  const { motor: m, nascendo } = useJogo(), ovo = nascendo > 0, e = m.e;
+  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
     <header class="pet-cab">
-      <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
+      <Deco nome="TopDeco_Earth2_0" w={170} h={170} cls="pet-cab-globo" />
+      <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets: trocar parceiro" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
       <span class="pet-cab-nome">
-        <span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
-        <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
+        <span class="pet-cab-placa"><span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
+          <Deco nome={BRASAO_DECO[m.especie]} w={38} h={25} alt={`brasão ${NOME_ESP[m.especie]}`} /></span>
+        <span class="pet-cab-sub"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>{NOME_ESP[m.especie]} · dia {diaDe(e.tick)}</span>
       </span>
       <span class="pet-relogio">
         <span class="dl-num pet-hora" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>{hhmm(e.tick)}</span>
-        <span class="dl-apoio">dia {diaDe(e.tick)}</span>
+        <span class={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
       </span>
     </header>
   );
@@ -107,22 +110,38 @@ function useFala(): VistaFala {
   }
   return v;
 }
-/** balao sobre o pet, na posicao da prancha (222, 60), com o rabinho; tocar mostra o porque */
-function BalaoFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alternar: () => void }) {
-  return <button type="button" class={v.classe + " balao-palco"} aria-expanded={aberto} aria-controls="fala-det" title={v.titulo} onClick={alternar}><span class="balao-txt">{v.balao}</span></button>;
+/** balao sobre o pet (PetTela, em (223, 54) com o rabinho): a causa da ultima decisao em icones; sem causa, "?" */
+const ICONE_CAUSA: Record<string, "carne" | "tempo" | "joinha" | "coracao" | "exclam"> = {
+  fome: "carne", necessidade_fome: "carne", latencia_fome: "tempo", latencia_higiene: "tempo", tempo_sem_cuidado: "tempo", demora: "tempo",
+  elogio: "joinha", elogios: "joinha", carinho: "coracao", bronca: "exclam", repreensoes: "exclam",
+};
+function BalaoCausa() {
+  const { motor: m } = useJogo(), mot = m.motivo;
+  if (!mot || mot.origem !== "vida") return null;
+  const ic = mot.exploracao ? [] : [...new Set(mot.fatores.map(f => ICONE_CAUSA[f]).filter(Boolean))].slice(0, 3);
+  const txt = mot.exploracao || !mot.fatores.length ? "sem causa registrada" : mot.fatores.map(f => FATORES_TXT[f]?.marcador ?? f).join(" + ");
+  return (
+    <span class="balao-palco balao-causa" role="img" aria-label={`causa: ${txt}`} title={txt}>
+      {ic.length ? ic.flatMap((x, i) => [i > 0 ? <b key={"m" + i}>+</b> : null, <span key={"p" + i} class="causa-ic">{x === "tempo" ? <Peca nome="icone_tempo" /> : <Peca nome={"emoji_" + x} escala={2} />}</span>])
+        : <b class="balao-q">?</b>}
+    </span>
+  );
 }
-/** abaixo do palco: o que ele faz, a causa registrada, o porque (aberto pelo balao) e a faixa da fala (ponto + texto;
-    a troca de fonte fica na tela Conversar) */
-function LinhaFala({ v, aberto }: { v: VistaFala; aberto: boolean }) {
-  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM();
+/** abaixo do palco (PetTela): a fala num balao-botao (toque = o porque) e a faixa da fonte da fala; aberto, o que ele
+    faz, a causa registrada e o detalhe */
+const MODO_CURTO: Record<string, string> = { template: "frases prontas", moldura: "moldura", livre: "fala livre" };
+function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alternar: () => void }) {
+  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM(), fl = useFalaLivre();
   return (
     <div class="pet-fala">
       <div class="pet-fala-topo">
-        <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>
-        {v.causa}
+        <button type="button" class={v.classe + " fala-botao"} aria-expanded={aberto} aria-controls="fala-det" title={v.titulo} onClick={alternar}>
+          <span class="balao-txt">{v.balao}</span><small>toque para ver o porquê</small></button>
+        <span class="fala-status" title={`${r.texto} · ${r.titulo}`}><span class="fala-ponto" data-estado={fl.modo === "template" ? "off" : r.estado} aria-hidden="true" />{MODO_CURTO[fl.modo]}</span>
       </div>
-      {aberto && <div class="fala-det dl-apoio" id="fala-det">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</div>}
-      <div class="fala-status"><span class="fala-ponto" data-estado={r.estado} aria-hidden="true" /><span title={r.titulo}>{r.texto}</span></div>
+      {aberto && <div class="fala-det" id="fala-det">
+        <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
+        <span class="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>}
     </div>
   );
 }
@@ -176,7 +195,8 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
     const resta = Math.max(0, CAT.janelaChamado - (tick - m.chamados.abertos[c]!));
     return (
       <div class="dl-card chamado" key={c}>
-        <span class="chamado-ic">{EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
+        <span class="chamado-ic">{c === "fome" ? <Deco nome="Growth_Guide_Icon_06" w={36} h={34} reserva={<Peca nome="emoji_carne" escala={2} />} />
+          : EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
         <span class="chamado-txt"><span class="chamado-tit"><b>Chamado: {NOME_CHAMADO[c]}</b><span class="dl-apoio">janela aberta</span></span><Seg n={blocos(resta / CAT.janelaChamado, 10)} m={10} /></span>
         <button type="button" class="dl-btn" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
       </div>
@@ -204,18 +224,13 @@ const ACOES: [AcaoDono, string, string][] = [["alimentar", "Alimentar", "sec"], 
   ["acariciar", "Carinho", "sec"], ["elogiar", "Elogiar", "destaque"], ["repreender", "Repreender", "sec"]];
 const ICONE_DONO: Record<AcaoDono, string> = { alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao", repreender: "gota" };
 
-function Tempo() {
-  const { velocidade } = useTempo();
-  return (
-    <details class="tempo-teste"><summary>Tempo (teste)</summary>
-      <div class="tempo-pet" role="group" aria-label="Velocidade do tempo">
-        {VELOCIDADES.map(([rot, v, dica]) => (
-          <button type="button" key={rot} class="dl-btn dl-btn--sec" aria-pressed={velocidade === v} title={dica} onClick={() => escolherVelocidade(v)}>{rot}</button>
-        ))}
-        <button type="button" class="dl-btn dl-btn--sec" onClick={pularUmaHora}>+1 h</button>
-      </div>
-    </details>
-  );
+/* icone de cada acao do dono (PetTela): prato do guia, gota, nota, coracao, joinha e exclamacao */
+const GOTA = <svg class="ic-gota" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#2C73E0" d="M3 0h2v2h1v1h1v3h-1v1h-4v-1h-1v-3h1v-1h1z" /><path fill="#BFE3FF" d="M2 3h1v2h-1z" /></svg>;
+function IconeAcao({ a }: { a: AcaoDono }) {
+  if (a === "alimentar") return <Deco nome="Growth_Guide_Icon_06" w={24} h={24} cls="ic-acao" reserva={<Peca nome="emoji_carne" escala={2} />} />;
+  if (a === "limpar") return GOTA;
+  const em = { brincar: "emoji_nota", acariciar: "emoji_coracao", elogiar: "emoji_joinha", repreender: "emoji_exclam" }[a];
+  return em ? <Peca nome={em} escala={2} /> : null;
 }
 
 /* ------------------------------------------------ a tela */
@@ -232,23 +247,28 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
     <section class="pet-tela dl" aria-label="Tela do pet">
       <div class="pet-listra dl-faixa" aria-hidden="true" />
       <CabecalhoPet abrirMeusPets={() => setMeusPets(true)} />
-      <section class="palco-card" aria-label="Palco do pet">
-        <div class="palco-cena dl-hexcard">
-          <div class="palco-tit">Meu parceiro</div>
-          <Emocao />
-          <PalcoPet />
-          <BalaoFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
-          <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
+      <div class="pet-corpo">
+        <div class="pet-principal">
+          <section class="palco-card" aria-label="Palco do pet">
+            <div class="palco-cena dl-hexcard">
+              <div class="palco-tit">Meu parceiro</div>
+              <Emocao />
+              <PalcoPet />
+              <BalaoCausa />
+              <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
+            </div>
+          </section>
+          <LinhaFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
         </div>
-      </section>
-      <LinhaFala v={fala} aberto={aberto} />
-      <Necessidades />
-      <Chamados agir={agir} />
-      <div class="dl-par"><Desejo /></div>
-      <div class="acoes-pet" role="group" aria-label="Ações do dono">
-        {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}>{rot}</button>)}
+        <aside class="pet-lado">
+          <Necessidades />
+          <Chamados agir={agir} />
+          <div class="dl-par"><Desejo /></div>
+          <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
+            {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
+          </div>
+        </aside>
       </div>
-      <Tempo />
       {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={irRegistro} />}
     </section>
   );

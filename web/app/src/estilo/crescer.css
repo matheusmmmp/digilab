@@ -202,8 +202,8 @@
 .ensinar-balao{max-height:calc(4 * 17px + 14px)}
 
 /* Evolucao no desktop (EvoDesktop): arvore a esquerda, resumo e historico a direita */
-@media (min-width:1024px){
+@media (min-width:1100px){
   .evo-tela{grid-template-columns:minmax(0,780px) minmax(280px,1fr);align-items:start;gap:20px}
   .evo-principal,.evo-lado{display:grid;gap:12px;min-width:0}
 }
-@media (max-width:1023px){ .evo-principal,.evo-lado{display:contents} }
+@media (max-width:1099px){ .evo-principal,.evo-lado{display:contents} }

@@ -43,6 +43,7 @@ import base64
 import hmac
 import json
 import os
+import re
 import sys
 import threading
 from functools import partial
@@ -71,7 +72,7 @@ LIMITE_CORPO = 16 * 1024
 SENHA_MIN = 12
 # modo remoto: so estas rotas (o resto da pasta servida nao sai do computador)
 ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.html", "/Assets/digilab_atlas.png",
-                 "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json",
+                 "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json", "/Assets/digilab_decoracao_up.json",
                  "/api/fala", "/api/fala/status")
 
 
@@ -95,9 +96,14 @@ def rota_do_app(caminho: str) -> bool:
     return alvo == base or base in alvo.parents
 
 
+# decoracao do UP (brasoes, icones do guia de crescimento, globo, engrenagem; Assets/gerar_decoracao_up.py): so PNG
+# de nome simples dentro de Assets/decoracao_up/
+ROTA_DECORACAO = re.compile(r"/Assets/decoracao_up/[A-Za-z0-9_]+\.png")
+
+
 def rota_permitida(caminho: str) -> bool:
     c = caminho.split("?", 1)[0]
-    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c)
+    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c) or ROTA_DECORACAO.fullmatch(c) is not None
 
 
 class Tratador(SimpleHTTPRequestHandler):

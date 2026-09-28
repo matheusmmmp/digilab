@@ -79,7 +79,7 @@ button{font:inherit}
 .dl-nav button[aria-current="page"] .circ{background:#2C73E0;border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
 .dl-nav button:focus-visible{outline:none}
 .dl-nav button:focus-visible .circ{box-shadow:0 0 0 3px var(--dl-highlight)}
-@media (min-width:1024px){
+@media (min-width:900px){
   .dl-nav{top:0;right:auto;width:92px;grid-auto-flow:row;grid-auto-rows:min-content;align-content:start;gap:14px;padding:20px 0;border-top:0;border-right:3px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
   .app{padding-left:92px;padding-bottom:40px}
 }
@@ -98,8 +98,15 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
 .dl-nav .nav-ovo{image-rendering:auto;max-width:none}
 .tela-cab-pet{margin-left:auto;background:var(--dl-navy);color:#FFFFFF;border-radius:8px;padding:3px 10px;font-weight:900;font-size:13px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* desktop (pranchas *Desktop, 1280 x 720): barra lateral de 92 px com circulos de 52 */
-@media (min-width:1024px){
-  .dl-nav{gap:18px}
-  .dl-nav .circ{width:52px;height:52px}
+
+/* barra (PetTela / PetTelaDesktop): engrenagem quadrada no fim; no desktop, circulos de 48 e a engrenagem embaixo */
+.dl-nav .nav-config{justify-content:center}
+.dl-nav .nav-config .circ{border-radius:12px}
+.dl-deco{image-rendering:auto;max-width:none}
+.tela-cab-ic{filter:drop-shadow(2px 0 0 #173A8A) drop-shadow(-2px 0 0 #173A8A) drop-shadow(0 2px 0 #173A8A) drop-shadow(0 -2px 0 #173A8A)}
+@media (min-width:900px){
+  .dl-nav{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 0}
+  .dl-nav .circ{width:48px;height:48px}
+  .dl-nav button{gap:4px}
+  .dl-nav .nav-config{margin-top:auto}
 }

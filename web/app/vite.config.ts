@@ -9,16 +9,17 @@ import { defineConfig, type Plugin } from "vite";
 import preact from "@preact/preset-vite";
 
 const ASSETS = fileURLToPath(new URL("../../../Assets/", import.meta.url));
-const ATLAS: Record<string, string> = { "/Assets/digilab_atlas_up.json": "application/json", "/Assets/digilab_atlas_up.png": "image/png" };
+const ATLAS: Record<string, string> = { "/Assets/digilab_atlas_up.json": "application/json", "/Assets/digilab_atlas_up.png": "image/png",
+  "/Assets/digilab_decoracao_up.json": "application/json" };
 
-/** dev: serve so o atlas (nada mais da pasta Assets) */
+/** dev: serve so o atlas e a decoracao do UP (nada mais da pasta Assets) */
 function atlasDev(): Plugin {
   return {
     name: "digilab-atlas-dev",
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const caminho = (req.url || "").split("?")[0];
-        const tipo = ATLAS[caminho];
+        const tipo = ATLAS[caminho] ?? (/^\/Assets\/decoracao_up\/[A-Za-z0-9_]+\.png$/.test(caminho) ? "image/png" : undefined);
         if (!tipo) return next();
         const arq = ASSETS + caminho.slice("/Assets/".length);
         if (!existsSync(arq)) { res.statusCode = 404; res.end("atlas nao encontrado: " + arq); return; }

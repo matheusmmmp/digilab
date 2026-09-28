@@ -5,6 +5,7 @@ import { useAtlas } from "./atlas.ts";
 import { Nav } from "./componentes/Nav.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { nomeForma } from "../motor/index.ts";
+import { Deco } from "./decoracao.tsx";
 import { useJogo } from "./jogo.ts";
 import {
   DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco,
@@ -18,6 +19,7 @@ import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
 import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
+import { TelaConfig } from "./telas/config/TelaConfig.tsx";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
@@ -81,7 +83,7 @@ export function App() {
       {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
         : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
-        <div class="tela-cab dl-faixa"><h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1><span class="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span></div>
+        <div class="tela-cab dl-faixa">{rota.destino === "config" && <Deco nome="Common_Icon_Setting" w={26} h={26} cls="tela-cab-ic" />}<h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1><span class="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span></div>
         {abas.length > 1 && (
           <div class="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
             {abas.map(a => (
@@ -94,14 +96,11 @@ export function App() {
             : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-            : rota.aba === "catalogo" ? <TelaCatalogo /> : <TelaCenarios />}
+            : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "ajustes"
+            ? <TelaConfig irRegistro={() => { ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0); }} irConversar={() => { ir({ destino: "conversar", aba: "chat" }); scrollTo(0, 0); }} />
+            : <TelaCenarios />}
         </div>
       </section>)}
-      <footer>
-        <span>Motor do Digilab em TypeScript: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</span>
-        <span><b>Versão local com sprites do Digimon UP (Bandai), só para uso pessoal. Não publicar nem distribuir.</b></span>
-        <span><a href="../digilab_sprites.html?antigo=1">Versão antiga (HTML)</a>: mesmo save; não abra as duas ao mesmo tempo no mesmo pet.</span>
-      </footer>
       <Nav atual={rota.destino} ir={irDestino} />
       <RevelacaoEvolucao />
     </div>

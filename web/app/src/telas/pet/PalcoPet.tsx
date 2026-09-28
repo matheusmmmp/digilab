@@ -16,15 +16,18 @@ const EMOTE_ICONE: Record<string, string> = { carne: "emoji_carne", nota: "emoji
 let flash: { icone: string; ate: number } | null = null;
 export function mostrarFlash(icone: string): void { flash = { icone, ate: performance.now() + 1400 }; }
 
-/* geometria da prancha UpPet, em px de CSS dentro da cena (318 de altura): anel 212 x 60 com o topo em 226, pes do
-   pet em 248 (o sprite de 48 px da prancha vai de 104 a 248), titulo translucido ate 36 */
-const CENA_H = 318, ANEL_Y = 226, ANEL_W = 212, ANEL_H = 60, PES_Y = 248, TOPO_LIVRE = 44;
+/* geometria das pranchas PetTela (cena de 318: anel 212 x 60 com o topo em 226, pes do pet em 242, ate 3x e 150 px) e
+   PetTelaDesktop (cena de 468: anel 280 x 79 em 376, pes em 392, ate 4x e 200 px), em px de CSS; titulo translucido ate 36 */
+const TOPO_LIVRE = 44;
+let ANEL_Y = 226, ANEL_W = 212, ANEL_H = 60, PES_Y = 242, ESC_MAX = 3, ALT_MAX = 150;
 
 /* o canvas cobre a cena inteira; backing store em pixels do aparelho (K = devicePixelRatio) */
 function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number } {
-  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 382, K = devicePixelRatio || 1;
-  const bw = Math.round(W * K), bh = Math.round(CENA_H * K);
-  if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = CENA_H + "px"; }
+  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 382, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 318, K = devicePixelRatio || 1;
+  const grande = H >= 400;
+  [ANEL_Y, ANEL_W, ANEL_H, PES_Y, ESC_MAX, ALT_MAX] = grande ? [376, 280, 79, 392, 4, 200] : [226, 212, 60, 242, 3, 150];
+  const bw = Math.round(W * K), bh = Math.round(H * K);
+  if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = H + "px"; }
   return { K, W };
 }
 
@@ -61,7 +64,7 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
     return;
   }
   /* sem atlas: a cena original em placeholders, no LCD de 80 x 56 unidades centrado na cena */
-  const u = W / W0, y0 = (CENA_H - H * u) / 2;
+  const u = W / W0, y0 = (cv.height / K - H * u) / 2;
   cx.setTransform(u * K, 0, 0, u * K, 0, y0 * K);
   cx.fillStyle = noite ? "#1F2A4A" : "#BFE3D6"; cx.fillRect(0, 0, W0, H);
   if (noite) {
@@ -87,7 +90,7 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
    do idle e fixa, entao o pet nao pula entre quadros. Fora da luta, sem espelhar (guia, secao 5). */
 function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: number, quadro: number): void {
   const m = jogoAtual().motor, acao = m.acao, nome = chaveSprite(m.forma), [rw, rh] = dimSprite(a.dados, nome), e0 = escalaSprite();
-  const escCss = Math.max(1, Math.min(3, Math.floor((PES_Y - TOPO_LIVRE) / rh))), esc = escCss * e0;
+  const escCss = Math.max(1, Math.min(ESC_MAX, Math.floor(Math.min(PES_Y - TOPO_LIVRE, ALT_MAX) / rh))), esc = escCss * e0;
   const w = rw * esc / K, h = rh * esc / K;           /* em px de CSS */
   let x = W / 2 - w / 2, y = PES_Y - h;
   if (acao === "explorar") x += Math.round(Math.sin(quadro / 3) * 60);
@@ -96,10 +99,11 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: n
   desenharIcone(cx, a, K, W, x, y, w);
   if (m.e.saude < .3) { cx.fillStyle = "#C8443A"; cx.fillRect(Math.round(8 * K), Math.round(44 * K), Math.round(8 * K), Math.round(8 * K)); }
 }
-/* icone sobre o pet: o da acao do dono (flash) ou o do que ele faz; emote do UP (2x) acima e a direita do sprite */
+/* icone sobre o pet: o da acao do dono (flash); emote do UP (2x) acima e a direita do sprite */
 function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: number, x: number, y: number, w: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos));
-  const icone: string | null = flash && flash.ate > performance.now() ? flash.icone : ICONE_ACAO[m.acao] ?? null;
+  /* PetTela: sem icone fixo da acao (o que ele faz fica no porque); so o icone rapido depois de uma acao do dono */
+  const icone: string | null = flash && flash.ate > performance.now() ? flash.icone : null;
   if (!icone) return;
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;

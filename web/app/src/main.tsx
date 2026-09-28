@@ -2,6 +2,7 @@
 import { render } from "preact";
 import { App } from "./App.tsx";
 import { carregarAtlas } from "./atlas.ts";
+import { carregarDecoracao } from "./decoracao.tsx";
 import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, ouvirOutrasAbas } from "./jogo.ts";
@@ -19,6 +20,7 @@ iniciarTema();
 
 iniciarJogo(localStorage);
 carregarAtlas();
+carregarDecoracao();
 ouvirOutrasAbas();
 iniciarTempo();
 iniciarFalaLLM();

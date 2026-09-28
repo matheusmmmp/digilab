@@ -1,6 +1,6 @@
-/* LAYOUT: dois layouts, um limite so. Abaixo de 1024 px, o das pranchas de 390 x 844 (uma coluna, barra embaixo);
-   de 1024 px em diante, o das pranchas *Desktop de 1280 x 720 (barra lateral de 92 px e, nas telas que tem prancha de
-   desktop, conteudo + painel a direita). Todo @media de largura usa 1024 (min-width) / 1023 (max-width).
+/* LAYOUT (decisao do Matheus, 2026-09-28): abaixo de 900 px, o das pranchas de celular (390 x 844: uma coluna, barra
+   embaixo); de 900 px em diante, barra lateral de 92 px e uma coluna; de 1100 px em diante, o das pranchas *Desktop
+   (1280 x 720: conteudo + painel a direita). Os @media de largura usam so 900 e 1100 (max: 899 e 1099).
    Tokens da direcao Digimon UP (docs/UI_GUIDELINES.md; mesmos valores do digilab_sprites.html).
    Tema: prefers-color-scheme, sobreposto por data-tema="claro|escuro" no <html>. */
 :root{
