@@ -38,6 +38,11 @@ class AcaoUsuario(str, Enum):
     TREINAR_ESQUIVA = "treinar_esquiva"
     TREINAR_MEDITAR = "treinar_meditar"
     TREINAR_RESISTENCIA = "treinar_resistencia"
+    # educacao-v1 (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md): so o MotorEducacao sabe aplicar; nos motores
+    # anteriores levantam erro. Ficam no fim do enum para nao mexer em nada que dependa da ordem.
+    PETISCO = "petisco"
+    LEVAR_AO_BANHEIRO = "levar_ao_banheiro"
+    TRATAR_LESAO = "tratar_lesao"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -45,6 +50,7 @@ class AcaoUsuario(str, Enum):
 ACOES_V1 = (AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR,
             AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER)
 ACOES_TREINO = tuple(a for a in AcaoUsuario if a.value.startswith("treinar_"))
+ACOES_EDUCACAO = (AcaoUsuario.PETISCO, AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO)
 
 
 def exercicio_de(acao: AcaoUsuario) -> str:

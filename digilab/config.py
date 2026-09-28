@@ -865,3 +865,56 @@ class ConfigEscala:
 
 CONFIG_ESCALA = ConfigEscala()
 CONFIG_ESCALA_LIGADA = ConfigEscala(ligada=True)
+
+
+# ============================================================ educacao, lesoes e heranca (educacao-v1)
+# docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, aprovado pelo Matheus em 2026-09-28. Status e fonte de cada valor:
+# protocol.PARAMETROS_EDUCACAO_V1 (o teste confere que os valores la batem com estes).
+
+@dataclass(frozen=True)
+class ConfigEducacao:
+    """Sistema A: travessuras que abrem janela e so o dono resolve; disciplina 0-100."""
+
+    janela_min: int = 15                     # cronograma_interacoes.json, janelas.chamado_min
+    estagio_inicio_chamados: str = "crianca"
+    fracao_falso_base: float = 0.25          # fracao de chamados falsos com disciplina 0
+    reforco_por_petisco: float = 0.05        # cada petisco cedido a um chamado falso soma a fracao
+    teto_falso: float = 0.5
+    disciplina_max: int = 100
+    passo_disciplina: int = 25               # bronca certa; 4 enchem
+    acertos_para_aprender: int = 3           # acertos seguidos para o pet parar de repetir a travessura
+    fator_disciplina_ao_evoluir: float = 0.5
+
+
+@dataclass(frozen=True)
+class ConfigLesoes:
+    """Sistema C: vitorias, lesoes e evolucao (camada Color). Nao toca a resolucao do combate."""
+
+    lutas_minimas_taxa: int = 10             # igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto
+    limiar_taxa_vitoria: float = 0.8
+    prob_lesao_derrota: float = 0.2
+    lesoes_para_morte: int = 20
+    horas_sem_tratar_morte: int = 6
+
+
+@dataclass(frozen=True)
+class ConfigHeranca:
+    """Sistema B: herda temperamento (media + ruido) e especie (sorteada entre as dos pais)."""
+
+    sigma_temperamento: float = 0.1
+    estagio_minimo_pais: str = "adulto"
+
+
+@dataclass(frozen=True)
+class ConfigEquilibrio:
+    """Gate de equilibrio dos estilos de jogo (cuidar, treinar, lutar) contra o painel."""
+
+    taxa_min: float = 0.40
+    taxa_max: float = 0.60
+    margem_max: float = 0.15
+
+
+CONFIG_EDUCACAO = ConfigEducacao()
+CONFIG_LESOES = ConfigLesoes()
+CONFIG_HERANCA = ConfigHeranca()
+CONFIG_EQUILIBRIO = ConfigEquilibrio()

@@ -491,3 +491,69 @@ PROTOCOLO_ARENA_V1_HABITUACAO = _protocolo_habituacao("arena-v1-personalidade-ha
 PROTOCOLO_ARENA_V1_SEM_HABITUACAO = _protocolo_habituacao("arena-v1-personalidade-sem-habituacao", False)
 for _p in (PROTOCOLO_ARENA_V1_HABITUACAO, PROTOCOLO_ARENA_V1_SEM_HABITUACAO):
     PROTOCOLOS[_p.versao] = _p
+
+
+# =====================================================================
+# educacao-v1: parametros de educacao, lesoes, heranca e equilibrio
+# docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, aprovado pelo Matheus em 2026-09-28. Os valores moram em
+# config.py; aqui ficam o status e a fonte de cada um. "Aprovado" nao troca PROPOSTO por DECIDIDO:
+# DECIDIDO so o que veio de regra ja existente ou de decisao explicita; o resto segue PROPOSTO com fonte.
+# O protocolo de run (bracos, sementes, painel) entra na Fase 3, em PLANO_ANALISE_V3.
+# =====================================================================
+
+_NV = "fonte da comunidade, nao verificada"
+_SF = "sem fonte"
+_FONTES_EDUCACAO_V1 = {
+    "ConfigEducacao.janela_min": (_D, "docs/cronograma_interacoes.json, janelas.chamado_min"),
+    "ConfigEducacao.estagio_inicio_chamados": (_D, "Fase 0, item 6 (decisao do Matheus)"),
+    "ConfigEducacao.fracao_falso_base": (_P, _SF + "; no Tamagotchi o chamado falso some com disciplina cheia"),
+    "ConfigEducacao.reforco_por_petisco": (_P, _SF),
+    "ConfigEducacao.teto_falso": (_P, _SF),
+    "ConfigEducacao.disciplina_max": (_D, "escala 0-100, igual as outras barras do jogo"),
+    "ConfigEducacao.passo_disciplina": (_P, "medidor de 4 barras do Tamagotchi; " + _NV),
+    "ConfigEducacao.acertos_para_aprender": (_P, "Digimon Pendulum/4U (3 acertos); " + _NV),
+    "ConfigEducacao.fator_disciplina_ao_evoluir": (_P, _SF),
+    "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
+    "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
+    "ConfigLesoes.prob_lesao_derrota": (_P, _SF),
+    "ConfigLesoes.lesoes_para_morte": (_P, "Digimon Ver.20th (20 lesoes); " + _NV),
+    "ConfigLesoes.horas_sem_tratar_morte": (_P, "Digimon Ver.20th (6 h); " + _NV),
+    "ConfigHeranca.sigma_temperamento": (_P, _SF),
+    "ConfigHeranca.estagio_minimo_pais": (_P, _SF),
+    "ConfigEquilibrio.taxa_min": (_P, _SF),
+    "ConfigEquilibrio.taxa_max": (_P, _SF),
+    "ConfigEquilibrio.margem_max": (_P, _SF),
+}
+
+
+def _valor_config(nome: str) -> Any:
+    classe, campo = nome.split(".")
+    instancias = {"ConfigEducacao": _config.CONFIG_EDUCACAO, "ConfigLesoes": _config.CONFIG_LESOES,
+                  "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO}
+    return getattr(instancias[classe], campo)
+
+
+PARAMETROS_EDUCACAO_V1: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_EDUCACAO_V1.items()}
+
+
+def validar_parametros_educacao(params: dict[str, Campo] | None = None) -> None:
+    """Todo campo das 4 dataclasses tem status e fonte, e o valor registrado bate com config.py."""
+    params = PARAMETROS_EDUCACAO_V1 if params is None else params
+    esperados = {f"{type(c).__name__}.{f.name}" for c in (_config.CONFIG_EDUCACAO, _config.CONFIG_LESOES,
+                                                         _config.CONFIG_HERANCA, _config.CONFIG_EQUILIBRIO)
+                 for f in fields(c)}
+    if set(params) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(params))}; "
+                         f"registro sem parametro: {sorted(set(params) - esperados)}")
+    for n, c in params.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def hash_parametros_educacao(params: dict[str, Campo] | None = None) -> str:
+    params = PARAMETROS_EDUCACAO_V1 if params is None else params
+    carga = {"versao": "educacao-v1", "parametros": {n: c.para_dict() for n, c in sorted(params.items())},
+             "engine_sha256": sha256_engine()}
+    texto = json.dumps(carga, sort_keys=True, ensure_ascii=True, default=_para_json)
+    return hashlib.sha256(texto.encode("ascii")).hexdigest()
