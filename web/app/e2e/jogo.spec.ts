@@ -114,9 +114,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page).toHaveURL(/#\/lutar\/campanha$/);
     expect(await numLog(page, "l")).toBe(l0 + 3);
 
-    /* pausa o tempo (Diario > engrenagem > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
-    await page.locator(".dl-nav").getByRole("button", { name: "Diário", exact: true }).click();
-    await page.locator(".cab-engrenagem").click();
+    /* pausa o tempo (Ajustes no pe da barra > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
+    await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
     await page.getByRole("button", { name: /^Registro e replay/ }).click();
     await page.getByRole("button", { name: "Pausa" }).click();
     await page.waitForTimeout(300);
@@ -173,7 +172,7 @@ test("foco visível pelo teclado", async ({ page }) => {
       const el = document.activeElement as HTMLElement | null;
       if (!el || el === document.body) return "corpo";
       const estilo = (x: Element) => { const c = getComputedStyle(x); return [c.outlineStyle !== "none" && parseFloat(c.outlineWidth) > 0 ? "outline" : "", c.boxShadow].join("|"); };
-      const alvo = el.querySelector(".circ, .evo-cx") ?? el, com = estilo(alvo);
+      const alvo = el.querySelector(".circ, .quad, .evo-cx") ?? el, com = estilo(alvo);
       el.blur(); const sem = estilo(alvo); el.focus({ focusVisible: true } as FocusOptions);
       return com !== sem ? null : `${el.tagName}.${el.className} "${(el.textContent || "").trim().slice(0, 20)}"`;
     });

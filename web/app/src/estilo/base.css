@@ -80,8 +80,8 @@ button{font:inherit}
 .dl-nav button:focus-visible{outline:none}
 .dl-nav button:focus-visible .circ{box-shadow:0 0 0 3px var(--dl-highlight)}
 @media (min-width:900px){
-  .dl-nav{top:0;right:auto;width:92px;grid-auto-flow:row;grid-auto-rows:min-content;align-content:start;gap:14px;padding:20px 0;border-top:0;border-right:3px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
-  .app{padding-left:92px;padding-bottom:40px}
+  .dl-nav{top:0;right:auto;width:96px;box-sizing:border-box;grid-auto-flow:row;grid-auto-rows:min-content;align-content:start;gap:14px;padding:20px 0;border-top:0;border-right:3px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
+  .app{padding-left:96px;padding-bottom:40px}
 }
 @media (prefers-reduced-motion: reduce){ .dl-nav .circ{transition:none} }
 
@@ -99,15 +99,48 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
 .tela-cab-pet{margin-left:auto;background:var(--dl-navy);color:#FFFFFF;border-radius:8px;padding:3px 10px;font-weight:900;font-size:13px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 
-/* barra (PetTela / PetTelaDesktop): engrenagem quadrada no fim; no desktop, circulos de 48 e a engrenagem embaixo */
-.dl-nav .nav-config{justify-content:center}
-.dl-nav .nav-config .circ{border-radius:12px}
 .dl-deco{image-rendering:auto;max-width:none}
 .tela-cab-ic{filter:drop-shadow(2px 0 0 #173A8A) drop-shadow(-2px 0 0 #173A8A) drop-shadow(0 2px 0 #173A8A) drop-shadow(0 -2px 0 #173A8A)}
+/* casca (DIRETRIZES_REPLICAR secao 6; pranchas PetTela e *Desktop). Celular: barra de baixo so com os 4 destinos.
+   A partir de 900 px: coluna de 96 px com o ovo e DIGILAB, os 4 destinos (circulos de 50) e, no pe, Conversar e Ajustes
+   (quadrados de 46, raio 12). A partir de 1100 px: topo de 76 px com titulo, abas em pilula e o mini-card do pet. */
+.nav-marca,.nav-pe{display:none}
+.topo-desk{display:none}
 @media (min-width:900px){
-  .dl-nav{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 0}
-  .dl-nav .circ{width:48px;height:48px}
+  .dl-nav{display:flex;flex-direction:column;align-items:center;gap:14px;width:96px;padding:14px 0 16px}
+  .app{padding-left:96px}
+  .dl-nav .circ{width:50px;height:50px}
   .dl-nav button{gap:4px}
-  .dl-nav .nav-config{margin-top:auto}
+  .nav-marca{display:flex;flex-direction:column;align-items:center;gap:2px;padding-bottom:6px;border-bottom:2px solid var(--dl-plate);width:70px}
+  .nav-marca img{image-rendering:pixelated;max-width:none}
+  .nav-marca b{font-size:12px}
+  .nav-pe{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .dl-nav .nav-quad{font-size:11px;gap:3px}
+  .nav-quad .quad{width:46px;height:46px;border-radius:12px;background:var(--dl-navy-deep);border:2px solid var(--dl-plate-hi);display:flex;align-items:center;justify-content:center;box-sizing:border-box}
+  .nav-quad .quad svg{width:24px;height:24px;stroke:none}
+  .nav-quad[aria-current="page"] .quad{background:#2C73E0;border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
+  .dl-nav .nav-quad:focus-visible .quad{box-shadow:0 0 0 3px var(--dl-highlight)}
 }
-@media (max-width:899px){ .dl-nav .nav-config{display:none} }
+@media (min-width:1100px){
+  .topo-desk{position:relative;display:flex;align-items:center;gap:16px;height:76px;box-sizing:border-box;padding:0 24px;overflow:hidden}
+  .topo-globo{position:absolute;right:250px;top:-70px;opacity:.14;pointer-events:none}
+  .topo-tit{position:relative;margin:0;font-size:30px;line-height:1}
+  .topo-abas{position:relative;display:flex;gap:8px}
+  .topo-aba{min-height:40px;padding:0 16px;border-radius:10px;border:2px solid var(--dl-navy);background:#FFFFFF;color:var(--dl-navy);font:inherit;font-family:var(--dl-f-texto);font-weight:900;font-size:14px;cursor:pointer}
+  .topo-aba[aria-selected="true"]{border-color:#FFFFFF;background:var(--dl-navy);color:#FFFFFF}
+  .topo-aba:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+  .topo-pet{position:relative;margin-left:auto;display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:14px;box-shadow:0 0 0 2px var(--dl-navy),0 3px 0 2px var(--dl-navy-deep);padding:5px 12px 5px 5px;color:#13244D}
+  .topo-retrato{width:44px;height:44px;flex:none;border-radius:50%;background:#E8F0FB;border:2px solid #2C73E0;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:0;cursor:pointer;box-sizing:border-box}
+  .topo-retrato img{margin-top:3px;max-width:none;image-rendering:pixelated}
+  .topo-retrato:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
+  .topo-pet-txt{display:flex;flex-direction:column;gap:2px}
+  .topo-pet-nome{display:flex;align-items:center;gap:6px}
+  .topo-pet-nome b{font-weight:900;font-size:14px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topo-pet-sub{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#3A5288}
+  .topo-pet-sub .dl-tag{font-size:10px;padding:0 5px}
+  .topo-relogio{display:flex;flex-direction:column;align-items:flex-end;padding-left:8px;border-left:2px solid #E8F0FB}
+  .topo-relogio .dl-num{font-size:20px;line-height:22px}
+  .topo-relogio .pet-salvo{font-size:10px;font-weight:800}
+  /* o topo substitui os cabecalhos de cada tela */
+  .painel > .tela-cab,.painel > .tabs,.pet-cab,.pet-listra{display:none}
+}

@@ -1,4 +1,4 @@
-/* Barra de navegacao dos 4 destinos (UI_GUIDELINES 7.12): embaixo no celular, coluna a partir de 900 px.
+/* Barra de navegacao dos 4 destinos (UI_GUIDELINES 7.12; DIRETRIZES_REPLICAR secao 6): embaixo no celular, coluna a partir de 900 px.
    Cada destino volta para a ultima aba aberta nele. */
 import type { JSX } from "preact";
 import { OVO } from "../../motor/index.ts";
@@ -6,6 +6,9 @@ import { imagemAtlas, useAtlas } from "../atlas.ts";
 import { urlDeco, useDecoracao } from "../decoracao.ts";
 import { useJogo } from "../jogo.ts";
 import { NOME_DESTINO, ORDEM_DESTINOS, type Destino } from "../rotas.ts";
+import { ICONE_CONVERSAR } from "../telas/pet/TelaPet.tsx";
+
+const DESTINOS_BARRA = ORDEM_DESTINOS.filter(d => d !== "conversar");
 import { Deco } from "./Deco.tsx";
 
 /* icones das pranchas PetTela/PetTelaDesktop: o ovo da especie (Pet), o haltere do guia de crescimento (Crescer), espadas
@@ -31,18 +34,28 @@ const ICONE: Record<Destino, JSX.Element> = {
   conversar: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10l-4 4v-4H4z" /></svg>,
 };
 
+/** a barra (pranchas PetTela e *Desktop): no celular, embaixo, so os 4 destinos (Conversar e Configuracoes ficam no
+    cabecalho do Pet); a partir de 900 px, coluna de 96 px com o ovo e DIGILAB no topo, os 4 destinos e, no pe,
+    Conversar e Ajustes em quadrados de 46 px */
 export function Nav({ atual, ir, configAberta, abrirConfig }: { atual: Destino | null; ir: (d: Destino) => void; configAberta: boolean; abrirConfig: () => void }) {
   useDecoracao();
+  const a = useAtlas(), { motor: m } = useJogo(), ovo = a.tipo === "ok" ? imagemAtlas(a, OVO[m.especie]) : null;
   return (
     <nav class="dl-nav" aria-label="Destinos">
-      {ORDEM_DESTINOS.map(d => (
+      <span class="nav-marca" aria-hidden="true">{ovo && <img src={ovo.url} width={26} height={36} alt="" />}<b class="dl-num">DIGILAB</b></span>
+      {DESTINOS_BARRA.map(d => (
         <button type="button" key={d} aria-current={d === atual ? "page" : undefined} onClick={() => ir(d)}>
           <span class="circ"><IconeDestino d={d} /></span>{NOME_DESTINO[d]}
         </button>
       ))}
-      <button type="button" class="nav-config" aria-label="Configurações" aria-current={configAberta ? "page" : undefined} onClick={abrirConfig}>
-        <span class="circ">{urlDeco("Common_Icon_Setting") ? <Deco nome="Common_Icon_Setting" largura={24} altura={24} /> : ENGRENAGEM}</span>
-      </button>
+      <span class="nav-pe">
+        <button type="button" class="nav-quad" aria-current={atual === "conversar" ? "page" : undefined} onClick={() => ir("conversar")}>
+          <span class="quad">{ICONE_CONVERSAR}</span>Conversar
+        </button>
+        <button type="button" class="nav-quad" aria-current={configAberta ? "page" : undefined} onClick={abrirConfig}>
+          <span class="quad">{urlDeco("Common_Icon_Setting") ? <Deco nome="Common_Icon_Setting" largura={24} altura={24} /> : ENGRENAGEM}</span>Ajustes
+        </button>
+      </span>
     </nav>
   );
 }

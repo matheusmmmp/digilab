@@ -21,20 +21,21 @@ import {
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
-import { MeusPets } from "./MeusPets.tsx";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
 
 /* ------------------------------------------------ cabecalho e retrato */
-function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
+export function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
   const a = useAtlas();
   if (a.tipo !== "ok") return null;
   const { url, w, h } = imagemAtlas(a, ovo ? OVO[m.especie] : chaveSprite(m.forma));
   return <img class="dl-pix" src={url} width={w} height={h} alt="" />;
 }
-function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
+/** cabecalho do celular (prancha PetTela): retrato (Meus pets), nome e brasao, nivel e dia, relogio e, a direita,
+    Conversar e Configuracoes (44 px). No desktop o topo da casca faz esse papel e este cabecalho some. */
+function CabecalhoPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
   const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
     <header class="pet-cab">
@@ -42,16 +43,26 @@ function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
       <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets: trocar parceiro" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
       <span class="pet-cab-nome">
         <span class="pet-cab-placa"><span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
-          <Deco nome={BRASAO[m.especie].peca} largura={38} altura={25} alt={`brasão ${NOME_ESP[m.especie]}`} /></span>
-        <span class="pet-cab-sub"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>{NOME_ESP[m.especie]} · dia {diaDe(e.tick)}</span>
+          <Deco nome={BRASAO[m.especie].peca} largura={38} altura={25} alt={`brasão ${NOME_ESP[m.especie]}`} class="pet-cab-brasao" /></span>
+        <span class="pet-cab-sub"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>dia {diaDe(e.tick)}
+          {/* tela estreita: o brasao desce para esta linha e o nome ganha a largura */}
+          <Deco nome={BRASAO[m.especie].peca} largura={30} altura={20} class="pet-cab-brasao pet-cab-brasao--sub" /></span>
       </span>
       <span class="pet-relogio">
         <span class="dl-num pet-hora" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>{hhmm(e.tick)}</span>
         <span class={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
       </span>
+      <span class="pet-cab-bts">
+        <button type="button" class="pet-cab-bt pet-cab-bt--conversar" aria-label="Conversar" onClick={irConversar}>{ICONE_CONVERSAR}</button>
+        <button type="button" class="pet-cab-bt pet-cab-bt--config" aria-label="Configurações" onClick={abrirConfig}>
+          <Deco nome="Common_Icon_Setting" largura={24} altura={24} reserva={<span aria-hidden="true">⚙</span>} /></button>
+      </span>
     </header>
   );
 }
+
+/** balao de conversa das pranchas (PetTela, PetTelaDesktop) */
+export const ICONE_CONVERSAR = <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 5h16v10H10l-4 4v-4H4z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round" /><path d="M8 9h8M8 12h5" stroke="#173A8A" stroke-width="2" stroke-linecap="round" /></svg>;
 
 /* ------------------------------------------------ fala: balao por estagio (guia, secao 9), causa e detalhe */
 const EMOTE_KAOMOJI: Record<string, string> = { "(^_^)": "emoji_feliz", "(*^_^*)": "emoji_coracao", "(o.o)?": "emoji_surpreso" };
@@ -235,8 +246,8 @@ function IconeAcao({ a }: { a: AcaoDono }) {
 }
 
 /* ------------------------------------------------ a tela */
-export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
-  const { motor: m, nascendo } = useJogo(), [meusPets, setMeusPets] = useState(false);
+export function TelaPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
+  const { motor: m, nascendo } = useJogo();
   const agir = (a: AcaoDono) => {
     if (nascendo > 0) return;
     mudarMotor(mm => mm.observar(a));
@@ -247,7 +258,7 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
   return (
     <section class="pet-tela dl" aria-label="Tela do pet">
       <div class="pet-listra dl-faixa" aria-hidden="true" />
-      <CabecalhoPet abrirMeusPets={() => setMeusPets(true)} />
+      <CabecalhoPet abrirMeusPets={abrirMeusPets} irConversar={irConversar} abrirConfig={abrirConfig} />
       <div class="pet-corpo">
         <div class="pet-principal">
           <section class="palco-card" aria-label="Palco do pet">
@@ -271,7 +282,6 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
           </div>
         </aside>
       </div>
-      {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={irRegistro} />}
     </section>
   );
 }

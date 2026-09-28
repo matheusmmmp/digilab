@@ -26,6 +26,8 @@ import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
 import { LUTA, REPLAY, previa, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
+import { MeusPets } from "./telas/pet/MeusPets.tsx";
+import { TopoDesktop } from "./componentes/Topo.tsx";
 import { CHAVE } from "./save.ts";
 
 const armaz = (): Storage => localStorage;
@@ -45,7 +47,7 @@ export function App() {
   const [rota, setRota] = useState<Rota>(rotaInicial);
   /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
   const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
-  const [boasVindas, setBoasVindas] = useState(primeiraVisita);
+  const [boasVindas, setBoasVindas] = useState(primeiraVisita), [meusPets, setMeusPets] = useState(false);
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
   emLutaRef.current = emLuta;
@@ -93,6 +95,8 @@ export function App() {
     history.pushState(null, "", "#/diario/registro");
     setEmLuta(false); ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0);
   };
+  /* desktop (>= 1100 px): topo da casca com titulo, abas e o mini-card do pet */
+  const topo = <TopoDesktop titulo={NOME_DESTINO[rota.destino]} abas={abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })} abrirMeusPets={() => setMeusPets(true)} />;
   if (emLuta) return (
     <div class="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
@@ -122,8 +126,8 @@ export function App() {
         </div>
       )}
       {config ? <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-      : rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
-      : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
+      : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} /></>
+      : rota.destino === "conversar" ? <>{topo}<TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></> : (<>{topo}
       <section class="painel" aria-labelledby="tela-titulo">
         <div class="tela-cab dl-faixa">
           <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
@@ -149,9 +153,10 @@ export function App() {
             : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "catalogo" ? <TelaCatalogo /> : <TelaCenarios />}
         </div>
-      </section>)}
+      </section></>)}
       <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
+      {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
       {boasVindas && <BoasVindas fechar={() => setBoasVindas(false)} />}
     </div>
   );
