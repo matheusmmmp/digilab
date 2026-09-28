@@ -514,8 +514,8 @@ pesquisa: uma semente, outro RNG, sem IC.
 
 ## Assets — importante
 
-A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do Digimon World
-(Bandai). É arte e personagens protegidos, **sem licença**. Regra revisada pelo Matheus em
+A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites da Bandai: Digimon UP (usados pela
+versão web desde a TAREFA_INTERFACE_UP) e o atlas antigo do Digimon World (não é mais usado). É arte e personagens protegidos, **sem licença**. Regra revisada pelo Matheus em
 2026-09-24:
 
 - **Permitido**: usar esses sprites na versão web (`web/`) para uso pessoal e local, como
@@ -539,9 +539,15 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   qualquer coisa, trocar por arte original ou licenciada.
 
 Versão com sprites: `web/digilab_sprites.html` (versionado; repo privado), derivada de `digilab.html`, que
-lê `D:\Trab\digilab\Assets\digilab_atlas.png`. O atlas e os scripts ficam fora do repo:
-`Assets\gerar_atlas.py` (atlas) e `Assets\gerar_sprites_html.py` (regenera a cópia a partir
-de `digilab.html`; rode depois de qualquer mudança nele). Precisa de servidor local, porque o caminho é
+lê `D:\Trab\digilab\Assets\digilab_atlas_up.json` e `.png` (Digimon UP). O atlas e os scripts ficam fora
+do repo: `Assets\gerar_atlas_up.py` (atlas, a partir de `Assets\catalogo_sprites_up.json` e da pasta
+`Digimon Up Assets\Animacoes`) e `Assets\gerar_sprites_html.py` (não usar mais: a cópia é editada direto).
+**Interface UP (2026-09-27/28, `docs/TAREFA_INTERFACE_UP.md`, `docs/UI_GUIDELINES.md`)**: tokens `--dl-*` e
+componentes `dl-*`; navegação em 4 destinos (Pet, Crescer = Treinar + Aprendizado + Evolução, Lutar = Arena +
+Campanha, Diário = Registro + Catálogo + Cenários; aba lembrada em `destino/aba`); na tela os nomes são os do
+Digimon do mapa aprovado, as espécies são brasões (brasa Coragem, cirro Amizade, ferrugem Conhecimento, limo
+Sinceridade) e os estágios são níveis (In-Training, Rookie, Champion, Ultimate/Mega); ids internos, log e save
+não mudam. Páginas de conferência: `#palco-up` (sprites) e `#componentes-up` (componentes). Precisa de servidor local, porque o caminho é
 relativo: `python -m http.server 8765 --directory D:/Trab/digilab` e abrir
 `http://localhost:8765/v1/web/digilab_sprites.html`. A linha evolutiva segue o traço de combate
 dominante no momento da evolução. Se o atlas não carregar, a página mostra um aviso em
@@ -553,8 +559,8 @@ editada direto; `digilab.html` ficou parado. Só a versão com sprites tem as ab
 traço; chave do localStorage `digilab-web-v21-sprites`, pets da árvore antiga ficam para trás):
 - **4 espécies** (brasa, cirro, ferrugem, limo), sorteadas pela semente; ovo por espécie. 15 formas
   por espécie (1 bebê, 2 crianças, 4 adolescentes, 8 adultos), **cada forma com sprite próprio**:
-  60 Digimon diferentes. Mapa forma → bloco da folha em `Assets\catalogo_sprites.json` (fora do
-  repo); `gerar_atlas.py` gera `{espécie}_{forma}_{quadro}` no atlas; o HTML só tem as coordenadas.
+  60 Digimon diferentes. Mapa forma → Digimon UP (idle de cada um) em `Assets\catalogo_sprites_up.json`
+  (fora do repo); `gerar_atlas_up.py` empacota o ciclo idle; o HTML lê os recortes do JSON.
 - Transições com o cronograma de `docs/cronograma_interacoes.json` (durações pela metade): bebê
   3 h, criança 12 h, adolescente 18 h. **Bebê → criança**: o bebê chama em horário fixo (fome 30 min,
   higiene 60, carinho 45); atender ≥ 80% em até 15 min dá Sereno, senão Arisco. **Criança →
