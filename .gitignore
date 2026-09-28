@@ -37,3 +37,6 @@ web/app/playwright-report/
 # inventario de sprites (tools/inventario_sprites.py): saida local, cita arte da Bandai; nao versionar
 tools/saida/
 !artifacts_confirmatoria/
+artifacts_confirmatoria/partidas_*.json
+artifacts_confirmatoria/vidas/
+!artifacts_custo_llm/
