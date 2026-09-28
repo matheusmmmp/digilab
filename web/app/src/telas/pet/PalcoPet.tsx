@@ -3,6 +3,7 @@
    faz vem do motor; o anel de plataforma e o fundo hexagonal do card sao do UP. Sem atlas: placeholders. */
 import { useEffect, useRef } from "preact/hooks";
 import { OVO, TPD, chaveSprite, corDominante, eNoite } from "../../../motor/index.ts";
+import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
 import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
 import { jogoAtual, passarQuadroOvo } from "../../jogo.ts";
@@ -21,9 +22,9 @@ export function mostrarFlash(icone: string): void { flash = { icone, ate: perfor
 const TOPO_LIVRE = 44;
 let ANEL_Y = 226, ANEL_W = 212, ANEL_H = 60, PES_Y = 242, ESC_MAX = 3, ALT_MAX = 150;
 
-/* o canvas cobre a cena inteira; backing store em pixels do aparelho (K = devicePixelRatio) */
+/* o canvas cobre a cena inteira; backing store em pixels do aparelho (K = devicePixelRatio x zoom do desktop) */
 function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number } {
-  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 382, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 318, K = devicePixelRatio || 1;
+  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 382, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 318, K = (devicePixelRatio || 1) * zoomAtual();
   const grande = H >= 400;
   [ANEL_Y, ANEL_W, ANEL_H, PES_Y, ESC_MAX, ALT_MAX] = grande ? [376, 280, 79, 392, 4, 200] : [226, 212, 60, 242, 3, 150];
   const bw = Math.round(W * K), bh = Math.round(H * K);
@@ -90,7 +91,7 @@ function desenharPalco(cv: HTMLCanvasElement, cx: CanvasRenderingContext2D, quad
    do idle e fixa, entao o pet nao pula entre quadros. Fora da luta, sem espelhar (guia, secao 5). */
 function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: number, quadro: number): void {
   const m = jogoAtual().motor, acao = m.acao, nome = chaveSprite(m.forma), [rw, rh] = dimSprite(a.dados, nome), e0 = escalaSprite();
-  const escCss = Math.max(1, Math.min(ESC_MAX, Math.floor(Math.min(PES_Y - TOPO_LIVRE, ALT_MAX) / rh))), esc = escCss * e0;
+  const escCss = Math.max(1, Math.min(ESC_MAX, Math.floor(Math.min(PES_Y - TOPO_LIVRE, ALT_MAX) / rh))), esc = Math.max(e0, Math.floor(escCss * K));
   const w = rw * esc / K, h = rh * esc / K;           /* em px de CSS */
   let x = W / 2 - w / 2, y = PES_Y - h;
   if (acao === "explorar") x += Math.round(Math.sin(quadro / 3) * 60);

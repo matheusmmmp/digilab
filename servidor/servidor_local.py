@@ -113,6 +113,12 @@ def rota_permitida(caminho: str) -> bool:
     return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c)
 
 
+class ServidorJogo(ThreadingHTTPServer):
+    """Fila de conexoes maior que a padrao (5): a pagina pede o atlas e as pecas da decoracao de uma vez, e no Windows
+    a fila cheia vira conexao recusada (imagem que nao carrega)."""
+    request_queue_size = 128
+
+
 class Tratador(SimpleHTTPRequestHandler):
     gerador: GeradorFala = None      # definido em main()
     motivo_inicial: str = ""
@@ -288,7 +294,7 @@ def main(argv=None) -> int:
         print(f"  alerta de gasto em {', '.join(f'{n:.0%}' for n in NIVEIS_ALERTA)} do teto: "
               + (f"e-mail para {alerta.destino}" if alerta.ativo else f"e-mail DESLIGADO ({alerta.motivo_inativo()})"),
               flush=True)
-    servidor = ThreadingHTTPServer(("127.0.0.1", a.porta), partial(Tratador, directory=str(PASTA_SERVIDA)))
+    servidor = ServidorJogo(("127.0.0.1", a.porta), partial(Tratador, directory=str(PASTA_SERVIDA)))
     if not (PASTA_APP / "index.html").is_file():
         print(f"  AVISO: o app nao foi construido ({PASTA_APP} sem index.html). Rode: cd web/app && npm install && npm run build",
               flush=True)

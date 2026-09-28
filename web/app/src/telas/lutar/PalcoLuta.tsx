@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import {
   CAT, DIST, NOME_V2, NPC, chaveRegra, expressar, regraDe, rotuloRegra, type EstadoLuta, type MotivoCombate, type Turno,
 } from "../../../motor/index.ts";
+import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, imagemAtlas, quadroAgora, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
 import { FUNDO_NPC, imagemDeco, ouvirDecoracao } from "../../decoracao.ts";
@@ -18,7 +19,7 @@ const XS = [[27, 69], [18, 78], [10, 86]];   /* centro do seu pet e do rival por
 /* geometria da prancha UpLuta, em px de CSS: arena de 420 (no desktop, a altura do palco), pes a 344/420 da altura,
    sombras 120 x 18, sprite ate 170/420 da altura */
 function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
-  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 390, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 420, K = devicePixelRatio || 1;
+  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 390, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 420, K = (devicePixelRatio || 1) * zoomAtual();
   const bw = Math.round(W * K), bh = Math.round(H * K);
   if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = H + "px"; }
   return { K, W, H };
@@ -59,7 +60,7 @@ function desenharArena(cv: HTMLCanvasElement, p: Palco): void {
     if (a.tipo === "ok") {
       /* UP: so o idle; nocaute (q 3) para no quadro 0 e fica apagado. Os sprites olham para a direita: o rival
          e espelhado (o espelho vale so na luta, guia secao 5) */
-      const [w, h] = dimSprite(a.dados, L.sprite), e = escalaSprite() * escLuta;
+      const [w, h] = dimSprite(a.dados, L.sprite), e = Math.max(1, Math.floor(escLuta * K));
       if (q === 3) cx.globalAlpha = .45;
       desenharSprite(cx, a, L.sprite, x * K - w * e / 2, PES_Y * K - h * e, e, quadroAgora(a, L.sprite, q === 3), { sombria: L.sombra, espelho: !esquerda });
       cx.globalAlpha = 1;

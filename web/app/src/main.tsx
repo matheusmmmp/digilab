@@ -7,6 +7,7 @@ import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, ouvirOutrasAbas } from "./jogo.ts";
 import { textoSave } from "./save.ts";
+import { iniciarEscala } from "./escala.ts";
 import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
 import "./estilo/tokens.css";
@@ -18,6 +19,7 @@ import "./estilo/diario.css";
 import "./estilo/decoracao.css";
 
 iniciarTema();
+iniciarEscala();
 
 iniciarJogo(localStorage);
 carregarAtlas();
