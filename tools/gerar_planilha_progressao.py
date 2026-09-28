@@ -35,7 +35,7 @@ from openpyxl.utils import get_column_letter  # noqa: E402
 from digilab.combate_v2.v21.catalogo import formas_da_especie, stats  # noqa: E402
 from digilab.config import (  # noqa: E402
     CONFIG_BATERIA_V21, CONFIG_CAMPANHA, CONFIG_CATALOGO, CONFIG_COMBATE_V2C, CONFIG_COMBATE_V21C,
-    CONFIG_EVOLUCAO_PESQUISA, CONFIG_SOMBRIO, CONFIG_TREINO,
+    CONFIG_ESCALA_LIGADA, CONFIG_EVOLUCAO_PESQUISA, CONFIG_SOMBRIO, CONFIG_TREINO,
 )
 
 SAIDA_DIR = RAIZ / "artifacts_progressao"
@@ -783,7 +783,7 @@ def aba_principios(wb: Workbook) -> Aba:
 # ------------------------------------------------------------------ escala (Parte B)
 
 # proposta de escala por estagio (PROPOSTO, B2): vida exibida alvo; atributos na mesma proporcao
-ESCALA_PROPOSTA = {"bebe": 50, "crianca": 200, "adolescente": 600, "adulto": 1500}
+ESCALA_PROPOSTA = dict(CONFIG_ESCALA_LIGADA.vida_por_estagio)
 DW1 = {"bebe": (100, "In-Training: atributos até ~100 (HP de poucas centenas)"),
        "crianca": (1000, "Rookie inicial: HP alvo 1000"),
        "adolescente": (1500, "Champion 'sólido': HP ~1500 (requisitos 1000–2000)"),
@@ -809,11 +809,10 @@ CONSTANTES_ABSOLUTAS = [
 ]
 
 
-# B2.5: treino na escala (PROPOSTO): cada ponto treinado soma BETA a escala do pet (36 pontos -> x2,08); o ganho
-# relativo por sessao e maior no comeco (o mesmo ponto pesa mais na escala pequena, em numero exibido pesa menos)
-BETA_TREINO = 0.03
-# B2.7: NPC na mesma escala: fator sobre a escala do estagio dele (PROPOSTO, calibrar na Parte C)
-FATOR_NPC = {"tier1_brutamontes": 1.15, "tier2_sentinela": 1.2, "tier2_carcereiro": 1.3, "tier2_porteiro": 1.3, "tier3_soberano": 1.6}
+# Parte C: a escala aprovada esta em digilab/config.py > ConfigEscala (beta, vida por estagio, fatores calibrados)
+BETA_TREINO = CONFIG_ESCALA_LIGADA.beta_treino
+FATOR_NPC = dict(CONFIG_ESCALA_LIGADA.fator_npc)
+ESCALA_VAL = "experiments/configs/escala/validacao.json"
 
 
 def aba_escala(wb: Workbook, f: Fontes) -> Aba:
@@ -833,7 +832,7 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
         a.texto(1, est)
         rv = a.entrada(2, round(hp, 1), f"{CFG}: (hp_base + hp_por_vigor × vigor) × mult_estagio; forma {forma.rotulo} (catalogo.stats, V21C)", "CONFIG")
         rs = a.entrada(5, round(s_["vigor"], 2), f"digilab/combate_v2/v21/catalogo.py > stats({forma.rotulo})['vigor'] (pontos, soma 60)", "CONFIG")
-        rp = a.entrada(8, ESCALA_PROPOSTA[est], "proposta (TAREFA B2: ~50 / 200 / 600 / 1500)", "PROPOSTO")
+        rp = a.entrada(8, ESCALA_PROPOSTA[est], f"{CFG} > ConfigEscala.vida_por_estagio['{est}'] (aprovada na Parte B)", "CONFIG")
         rd = a.entrada(11, DW1[est][0], f"DW1: {DW1[est][1]} (aba referencias)", "REFERENCIA")
         refs[est] = (rv, rs, rp, rd)
     for i, est in enumerate(ordem, start=2):
@@ -887,7 +886,7 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
         a.nova_linha()
         a.texto(1, est)
         a.ws.cell(a.linha, 2, f"={esc[est]}")
-        rb = a.entrada(3, BETA_TREINO, "proposta: 36 pontos → ×2,08 (o treino inteiro da vida pouco mais que dobra a escala)", "PROPOSTO")
+        rb = a.entrada(3, BETA_TREINO, f"{CFG} > ConfigEscala.beta_treino (36 pontos → ×2,08)", "CONFIG")
         beta_ref = beta_ref or rb
         rpt = a.entrada(6, pts, f"{CALIB} > {fonte}", "CONFIG")
         a.formula(9, f"=B{a.linha}*(1+{rb}*{rpt})", "0")
@@ -916,7 +915,7 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
         a.texto(1, NOME_NPC[k])
         a.ws.cell(a.linha, 2, f"={esc[est]}")
         a.ws.cell(a.linha, 3, f"={esc[est]}*(1+{beta_ref}*{pts})").number_format = "0"
-        rf = a.entrada(4, FATOR_NPC[k], "proposta: NPC na escala do estágio SUGERIDO para ele, um pouco acima do pet sem treino; calibrar na Parte C", "PROPOSTO")
+        rf = a.entrada(4, FATOR_NPC[k], f"{CFG} > ConfigEscala.fator_npc['{k}'] (calibrado: experiments/configs/escala/calibracao.json)", "CONFIG")
         a.formula(7, f"={esc[v['estagio_minimo_sugerido']]}*{rf}", "0")
         e_pet = ESCALA_PROPOSTA[est]
         e_npc = ESCALA_PROPOSTA[v["estagio_minimo_sugerido"]] * FATOR_NPC[k]
@@ -927,17 +926,22 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
         me, mn, tot = cat.mult_estagio[est], cat.mult_estagio[est_npc], v["total_stats"]
         a.formula(10, f"={cat.orcamento_especie}*{me}/({tot}*{mn})", "0.00")
         a.formula(11, f"=({cat.orcamento_especie}+{ct.peso_ponto_combate}*{pts})*{me}/({tot}*{mn})", "0.00")
-        a.entrada(12, None, "", "SEM FONTE")
-        a.entrada(15, None, "", "SEM FONTE")
+        val = json.loads((RAIZ / ESCALA_VAL).read_text(encoding="utf-8"))["resultado"][k] if (RAIZ / ESCALA_VAL).exists() else None
+        if val:
+            a.entrada(12, val["sem"], f"{ESCALA_VAL} > resultado.{k}.sem (sementes de validação)", "ARTEFATO")
+            a.entrada(15, val["com"], f"{ESCALA_VAL} > resultado.{k}.com", "ARTEFATO")
+        else:
+            a.entrada(12, None, "", "SEM FONTE")
+            a.entrada(15, None, "", "SEM FONTE")
     a.nova_linha()
     a.texto(1, "leitura")
     cruza = all(sem < 1 < com for _, sem, com in razoes)
     a.texto(2, ("com os fatores propostos a razão pet/NPC fica abaixo de 1,0 sem treino e acima com o treino típico em todos os portões ("
                 if cruza else "atenção: com os fatores propostos a razão NÃO atravessa 1,0 em todos os portões (")
             + "; ".join(f"{n} {br(a_)} → {br(b_)}" for n, a_, b_ in razoes)
-            + "). Os NPCs da Torre deixam de ter tamanho de adulto: passam à escala do Champion. A taxa esperada só existe "
-              "depois de rodar (Parte C: calibrar_progressao nas sementes de calibração). As razões de hoje usam o modelo de poder "
-              "da aba jornada (contas sobre os valores do config.py, visíveis na fórmula).")
+            + "). Os NPCs da Torre deixam de ter tamanho de adulto: passam à escala do Champion. As taxas vêm da validação da "
+              "Parte C (experiments/calibrar_escala.py --validar); a Sentinela não fecha com nenhum fator (estilo tartaruga). As "
+              "razões de hoje usam o modelo de poder da aba jornada (contas sobre os valores do config.py, visíveis na fórmula).")
 
     # --- E4 (B2.6)
     titulo("E4 redefinido (B2.6, PROPOSTO)", ["item", "hoje", "proposta"])

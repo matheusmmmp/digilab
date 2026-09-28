@@ -108,8 +108,10 @@ da campanha: o ×3 absoluto era o jeito de o treino pesar como a evolução; com
 
 ### 3.4 NPCs na mesma escala (B2.7)
 
-Cada NPC na escala do estágio **sugerido** para ele, com um fator (PROPOSTO, calibrar na Parte C): Brutamontes ×1,15 do
-Rookie, Torre ×1,2–1,3 do Champion, Soberano ×1,6 do adulto. A razão pet/NPC passa a ficar abaixo de 1 sem treino e
+Cada NPC na escala do estágio **sugerido** para ele, com um fator. Proposta da Parte B: Brutamontes ×1,15 do Rookie,
+Torre ×1,2–1,3 do Champion, Soberano ×1,6 do adulto. **Calibrado na Parte C** (`ConfigEscala.fator_npc`): Brutamontes
+1,1, Sentinela 1,6, Carcereiro 1,5, Porteiro 1,1, Soberano 1,2; validação em `experiments/configs/escala/validacao.json`
+(a Sentinela não fecha as metas com nenhum fator). A razão pet/NPC passa a ficar abaixo de 1 sem treino e
 acima com o treino típico **em todos os portões** (Brutamontes 0,87 → 1,08; Sentinela 0,83 → 1,38; Carcereiro e Porteiro
 0,77 → 1,28; Soberano 0,62 → 1,30). Os NPCs da Torre **deixam de ter tamanho de adulto** (hoje lutam com vida de adulto
 contra o Champion). A taxa de vitória que isso dá é SEM FONTE: só existe rodando (Parte C, `calibrar_progressao.py`

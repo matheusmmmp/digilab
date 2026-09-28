@@ -340,6 +340,22 @@ personalidade, formas e passivas sombrias em `combate_v2/v21/`. Calibração: `s
   [0,25, 0,68] (inconclusivo).
 - Web: o treino entrou antes das runs (pedido do Matheus), com os mesmos números.
 
+## Planilha de progressão e escala de stats (2026-09-28, `docs/TAREFA_PLANILHA_PROGRESSAO.md`)
+
+`python tools/gerar_planilha_progressao.py` (fora de `digilab/`; openpyxl e matplotlib, Python do sistema) →
+`artifacts_progressao/planilha_progressao.xlsx`, `curva_progressao.png` e `docs/PROGRESSAO.md` (`--verificar`: duas
+gerações iguais, toda entrada com fonte e status). Jornada e escala aprovadas em `docs/JORNADA_JOGADOR.md`.
+
+- **Escala** (`ConfigEscala`, desligada por padrão; `CONFIG_ESCALA_LIGADA`): perfil = pontos do catálogo (soma zero);
+  E = vida do estágio (50/200/600/1500) × (1 + 0,03 × pontos treinados). Na campanha o dano vale × E_A/E_B (fração
+  exata: invariante a fator comum, `tests/test_escala.py`), a vida perde o multiplicador de estágio, o NPC tem perfil
+  neutro e E = vida do estágio sugerido × fator (ε 0,2). Arenas não usam a escala.
+- Bateria V21C com a escala (`artifacts_combate_v21c/validacao_escala`): os gates que passavam passam iguais; E4'
+  reprova (adulto sem treino vence o Champion com +22 em 0,965–1,0) e E4'' só no espelho (0,841).
+- Campanha na escala (`experiments/calibrar_escala.py`, `experiments/configs/escala/`): 4 de 5 NPCs nas metas (≤ 0,30
+  sem treino, ≥ 0,80 com o treino típico); a Sentinela não fecha com nenhum fator.
+- Web: a escala no motor (`CESC`), ligada pelo app; vários pets com um ativo (`…-guardados`) e o tutorial do Bit.
+
 ## Motivo, expressão e memória (2026-09-24, `docs/TAREFA_MEMORIA_EXPRESSAO.md`)
 
 **Pré-condição dispensada**: a Parte A exigia a bateria do combate V2 APROVADA; ela está
