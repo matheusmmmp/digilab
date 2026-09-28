@@ -1,4 +1,7 @@
-/* Tokens da direcao Digimon UP (docs/UI_GUIDELINES.md; mesmos valores do digilab_sprites.html).
+/* LAYOUT: dois layouts, um limite so. Abaixo de 1024 px, o das pranchas de 390 x 844 (uma coluna, barra embaixo);
+   de 1024 px em diante, o das pranchas *Desktop de 1280 x 720 (barra lateral de 92 px e, nas telas que tem prancha de
+   desktop, conteudo + painel a direita). Todo @media de largura usa 1024 (min-width) / 1023 (max-width).
+   Tokens da direcao Digimon UP (docs/UI_GUIDELINES.md; mesmos valores do digilab_sprites.html).
    Tema: prefers-color-scheme, sobreposto por data-tema="claro|escuro" no <html>. */
 :root{
   --dl-bg:#E8F0FB; --dl-hex:#D4E3F7; --dl-surface:#FFFFFF; --dl-surface-2:#F4F8FE;

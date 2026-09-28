@@ -152,3 +152,24 @@ test("foco visível pelo teclado", async ({ page }) => {
   expect(focados, "o teclado percorreu a tela").toBeGreaterThanOrEqual(10);
   expect(semFoco, "elementos sem indicação de foco").toEqual([]);
 });
+
+/* dois layouts, um limite (tokens.css): abaixo de 1024 px o das pranchas de celular (barra embaixo, uma coluna); de 1024
+   em diante o das pranchas *Desktop (barra lateral e, nas telas com prancha de desktop, conteudo + painel ao lado) */
+for (const largura of [390, 1023, 1024, 1280]) {
+  test(`layout em ${largura} px: ${largura >= 1024 ? "desktop" : "celular"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVES.v3);
+    const desktop = largura >= 1024;
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-det"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+      await page.goto(APP + "#/" + rota);
+      await page.waitForTimeout(500);
+      const r = await page.evaluate(([e, d]) => {
+        const nav = document.querySelector(".dl-nav")!.getBoundingClientRect(), a = document.querySelector(e)!.getBoundingClientRect(), b = document.querySelector(d)!.getBoundingClientRect();
+        return { navLateral: nav.height > nav.width, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
+      }, [esq, dir] as const);
+      expect(r.navLateral, `${rota}: barra lateral`).toBe(desktop);
+      expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(desktop);
+      expect(r.larg, `${rota}: rolagem lateral`).toBeLessThanOrEqual(r.janela);
+    }
+  });
+}

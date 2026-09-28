@@ -120,7 +120,7 @@
   background:linear-gradient(transparent,var(--dl-bg) 30%)}
 .arena-acoes .dl-btn{flex:1;min-height:52px;font-size:14px;padding:0 8px;white-space:nowrap}
 .arena-acoes .lutar-grande{flex:2;font-size:15px;min-width:0}
-@media (min-width:900px){ .arena-acoes{bottom:0} }
+@media (min-width:1024px){ .arena-acoes{bottom:0} }
 
 /* palco da luta (prancha UpLuta): arena de 420 px de ponta a ponta, HUD sobreposto, intencao e regra embaixo */
 .palco-luta{display:grid;gap:0;margin:0 -14px}
@@ -213,15 +213,15 @@
 
 .luta-leitura-tit{display:none}
 /* desktop (BatDesktop, CampDesktop): arena a esquerda e a leitura da luta a direita; mapa quadrado e o lugar ao lado */
-@media (min-width:1100px){
+@media (min-width:1024px){
   .palco-luta{grid-template-columns:minmax(0,1fr) 380px;align-items:start;margin:0 -14px}
   .luta-arena{height:600px;border-bottom:0;border-right:4px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
   .palco-luta-baixo{padding:18px 18px 0}
   .tela .luta-leitura-tit{display:block;font-family:var(--dl-f-texto);font-size:20px;font-weight:900;margin:0}
-  .camp-tela{grid-template-columns:570px minmax(0,1fr);align-items:start;gap:20px}
+  .camp-tela{grid-template-columns:minmax(0,570px) minmax(300px,1fr);align-items:start;gap:20px}
   .camp-principal,.camp-lado{display:grid;gap:12px;min-width:0}
   .camp-tela .palco-luta{grid-column:1/-1}
   .tela .camp-principal .mapa-ilhas{margin:0;height:570px;border-radius:16px;box-shadow:0 0 0 3px var(--dl-navy),0 0 0 6px #FFFFFF}
   .tela .camp-det{margin:0}
 }
-@media (max-width:1099px){ .camp-principal,.camp-lado{display:contents} }
+@media (max-width:1023px){ .camp-principal,.camp-lado{display:contents} }
