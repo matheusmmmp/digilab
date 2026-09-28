@@ -38,8 +38,8 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
-from digilab.combate_v2.v21.bots import (ADOLESCENTES, ADULTOS, FORMAS, RESPOSTAS, RESPOSTAS_V21C, com_resposta,  # noqa: E402
-                                         lutador_adolescente, lutador_adulto)
+from digilab.combate_v2.v21 import bots as _bots  # noqa: E402
+from digilab.combate_v2.v21.bots import ADOLESCENTES, ADULTOS, FORMAS, RESPOSTAS, RESPOSTAS_V21C, com_resposta  # noqa: E402
 from digilab.combate_v2.v21.catalogo import LINHA_DA_FORMA, LINHAS, carater_canonico  # noqa: E402
 from digilab.combate_v2.v21.gambits import PESADO_AUTOMATICO  # noqa: E402
 from digilab.combate_v2.v21.partida import Lutador, jogar, reproduzir  # noqa: E402
@@ -52,9 +52,21 @@ from run_arena import _imports_externos  # noqa: E402
 from run_bateria_combate import hashes as hashes_base  # noqa: E402
 
 CHAVES = {"descricao", "saida", "sementes_calibracao", "sementes_validacao", "conjunto", "regras_base", "regras_v21",
-          "respostas_v21c", "gates_v2c",
+          "respostas_v21c", "gates_v2c", "escala",
           "partidas_por_par_por_semente", "registro_calibracao", "pular_e5"}
 TECNICA_DA_LINHA = {l: CONFIG_CATALOGO.arquetipos_adolescente[l]["tecnica"] for l in LINHAS}
+
+# escala de stats (TAREFA_PLANILHA_PROGRESSAO, Parte C): "escala": true no config liga a ConfigEscala em todos os
+# lutadores. Entre adultos sem treino a razao E_A/E_B e 1 exata (a luta e a de sempre); muda o E4 (entre estagios).
+ESCALA = None
+
+
+def lutador_adulto(*a, **k):
+    return _bots.lutador_adulto(*a, **k, escala=ESCALA)
+
+
+def lutador_adolescente(*a, **k):
+    return _bots.lutador_adolescente(*a, **k, escala=ESCALA)
 
 
 def _dump(obj) -> str:
@@ -109,6 +121,9 @@ def hashes(cfg_json: dict) -> dict:
     r = regras_de(cfg_json)
     carga = {"base": asdict(r.base), "v21": asdict(r.v21),
              "catalogo": asdict(CONFIG_CATALOGO), "bateria": asdict(CONFIG_BATERIA_V21), "json": semantico}
+    if cfg_json.get("escala"):                  # so com a escala: os hashes das runs antigas nao mudam
+        from digilab.config import CONFIG_ESCALA_LIGADA
+        carga["escala"] = asdict(CONFIG_ESCALA_LIGADA)
     return {"regras_sha256": h.hexdigest(), "arquivos_regras": [f.name for f in fontes],
             "config_sha256": hashlib.sha256(json.dumps(carga, sort_keys=True, default=list).encode()).hexdigest()}
 
@@ -170,8 +185,8 @@ def gates_v21c(gate, r, cfg21, especies, sementes, n, e5, conf_e1, linhas_csv) -
         for esp in especies:
             base = lutador_adulto(f, esp, cfg21)
             fo = Forma(esp, "adulto", "sereno", LINHA_DA_FORMA[f], f)
-            fav = Lutador(f"{f}@{esp}#fav", perfil(fo, None, carater_canonico(f), 1.0 + cv.variacao_hp_g6b, cfg21), base.gambits, base.epsilon)
-            des = Lutador(f"{f}@{esp}#des", perfil(fo, None, carater_canonico(f), 1.0 - cv.variacao_hp_g6b, cfg21), base.gambits, base.epsilon)
+            fav = Lutador(f"{f}@{esp}#fav", perfil(fo, None, carater_canonico(f), 1.0 + cv.variacao_hp_g6b, cfg21, escala=ESCALA), base.gambits, base.epsilon)
+            des = Lutador(f"{f}@{esp}#des", perfil(fo, None, carater_canonico(f), 1.0 - cv.variacao_hp_g6b, cfg21, escala=ESCALA), base.gambits, base.epsilon)
             vals += [x for _, _, x, _ in partidas_par(fav, des, "g6b", sementes, cv.partidas_g6b_por_semente, r)]
         g6b[f] = sum(vals) / len(vals)
     pior = max(g6b, key=g6b.get)
@@ -242,6 +257,11 @@ def executar(caminho_cfg: Path) -> int:
     r = regras_de(cfg)
     cfg21 = r.v21
     gates = []
+    global ESCALA
+    if cfg.get("escala"):
+        from digilab.config import CONFIG_ESCALA_LIGADA
+        ESCALA = CONFIG_ESCALA_LIGADA
+        print("escala LIGADA (ConfigEscala)", flush=True)
 
     def gate(nome, ok, msg, valores):
         gates.append({"gate": nome, "ok": bool(ok), "mensagem": msg, "valores": valores})
@@ -358,11 +378,31 @@ def executar(caminho_cfg: Path) -> int:
             adol = lutador_adolescente(linha, esp, carater_canonico(f), cfg21)
             pts += [x for _, _, x, _ in partidas_par(ad, adol, "e4", sementes, cb.partidas_e4_por_semente, r)]
         e4[f] = sum(pts) / len(pts)
-    fora_e4 = {f: t for f, t in e4.items() if not cb.taxa_min_e4 <= t <= cb.taxa_max_e4}
-    gate("E4_estagio_importa_sem_esmagar", not fora_e4,
-         f"adulto x adolescente da mesma linha: fora de [{cb.taxa_min_e4}, {cb.taxa_max_e4}]: "
-         f"{ {f: round(t, 3) for f, t in fora_e4.items()} or 'nenhum'}",
-         {"taxa_por_forma": e4, "fora": fora_e4})
+    if ESCALA is None:
+        fora_e4 = {f: t for f, t in e4.items() if not cb.taxa_min_e4 <= t <= cb.taxa_max_e4}
+        gate("E4_estagio_importa_sem_esmagar", not fora_e4,
+             f"adulto x adolescente da mesma linha: fora de [{cb.taxa_min_e4}, {cb.taxa_max_e4}]: "
+             f"{ {f: round(t, 3) for f, t in fora_e4.items()} or 'nenhum'}",
+             {"taxa_por_forma": e4, "fora": fora_e4})
+    else:
+        # E4 na escala (redefinido pelo Matheus): a evolucao sempre importa. Adulto SEM treino x adolescente da mesma
+        # linha sem treino e com o treino maximo do estagio (uniforme): o adulto vence >= taxa_min_e4 nos dois; sem teto
+        from digilab.config import STATS_V21
+        tr = {k: ESCALA.treino_e4 / len(STATS_V21) for k in STATS_V21}
+        e4t = {}
+        for f in FORMAS:
+            pts = []
+            for esp in especies:
+                ad = lutador_adulto(f, esp, cfg21)
+                adol = lutador_adolescente(LINHA_DA_FORMA[f], esp, carater_canonico(f), cfg21, treino=tr)
+                pts += [x for _, _, x, _ in partidas_par(ad, adol, "e4t", sementes, cb.partidas_e4_por_semente, r)]
+            e4t[f] = sum(pts) / len(pts)
+        baixo = {f"{f} (sem treino)": t for f, t in e4.items() if t < ESCALA.taxa_min_e4}
+        baixo |= {f"{f} (+{ESCALA.treino_e4:g})": t for f, t in e4t.items() if t < ESCALA.taxa_min_e4}
+        gate("E4_escala_estagio_importa", not baixo,
+             f"adulto sem treino x adolescente (sem treino e com +{ESCALA.treino_e4:g}): abaixo de {ESCALA.taxa_min_e4}: "
+             f"{ {k: round(t, 3) for k, t in baixo.items()} or 'nenhum'}; menor {min(list(e4.values()) + list(e4t.values())):.3f}",
+             {"taxa_sem_treino": e4, "taxa_adolescente_treinado": e4t, "abaixo": baixo})
 
     # ------------------------------------------------------------ E5
     e5 = {}

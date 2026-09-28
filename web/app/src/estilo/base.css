@@ -166,3 +166,15 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
   .topo-voltar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
   .app .conv-cab{display:none}
 }
+
+/* dica do Bit (tutorial contextual): acima da barra no celular, no canto no desktop; uma frase por vez */
+.dica-bit{position:relative;margin:10px 14px 0;z-index:5;display:flex;align-items:center;gap:10px;background:var(--dl-surface);color:var(--dl-text);border-radius:14px;box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep);padding:10px 12px}
+.dica-bit p{margin:0;flex:1;font-size:13px;line-height:18px;font-weight:700}
+.dica-bit .bit{flex:none;image-rendering:pixelated}
+.dica-ok{flex:none;min-height:44px;padding:0 14px}
+@media (min-width:900px){ .dica-bit{position:fixed;margin:0;z-index:25;right:24px;bottom:24px;max-width:420px} }
+.cfg-interruptor{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px;min-height:44px}
+.cfg-interruptor span{display:grid;gap:2px}
+.cfg-interruptor small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.cfg-interruptor input{width:44px;height:26px;accent-color:var(--dl-action)}
+body:has(dialog[open]) .dica-bit{display:none}

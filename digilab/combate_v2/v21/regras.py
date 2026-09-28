@@ -318,6 +318,13 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
         if devolvido[i]:
             dano[1 - i] += devolvido[i] * (v.mult_pele_dura if pele_ativa[1 - i] else 1.0)
             recebeu_cac[1 - i] = True
+    # escala (ConfigEscala, desligada por padrao): o dano recebido por i veio do oponente e passa para as unidades
+    # de i por E_oponente / E_i (fracao exata, convertida uma vez). Sem escala nos dois lados, o dano nao e tocado.
+    ea, eb = lados[0].perfil.escala, lados[1].perfil.escala
+    if ea is not None or eb is not None:
+        if ea is None or eb is None:
+            raise ValueError("escala ligada em um lado so")
+        dano = [dano[0] * float(eb / ea), dano[1] * float(ea / eb)]
     # C4 morte subita (base V2C)
     t_ms = _op(b, "turno_morte_subita", 0)
     if t_ms and estado.turno + 1 >= t_ms:

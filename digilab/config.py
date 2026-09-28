@@ -823,3 +823,45 @@ class ConfigTreino:
 
 CONFIG_SOMBRIO = ConfigSombrio()
 CONFIG_TREINO = ConfigTreino()
+
+
+# =====================================================================
+# Escala de stats (docs/TAREFA_PLANILHA_PROGRESSAO.md, Parte C; desenho aprovado em docs/JORNADA_JOGADOR.md).
+# DESLIGADA por padrao: com `ligada=False` nada muda (as runs antigas reproduzem byte a byte).
+# Perfil = pontos do catalogo (soma zero, o que a pesquisa compara); escala E = magnitude do lutador:
+#   E = vida_por_estagio[estagio] x (1 + beta_treino x pontos treinados)
+# No combate cada lutador luta nas proprias unidades (vida sem o multiplicador de estagio; guts como hoje) e o
+# dano que A causa em B e multiplicado por E_A / E_B (fracao exata: multiplicar E dos dois lados pelo mesmo
+# fator da a mesma luta bit a bit). Vida exibida = E x vida propria / vida neutra. Todos PROPOSTOS.
+# =====================================================================
+
+
+def _vida_por_estagio() -> dict:
+    return {"bebe": 50, "crianca": 200, "adolescente": 600, "adulto": 1500}
+
+
+def _fator_npc() -> dict:
+    # E do NPC = vida_por_estagio[estagio_minimo_sugerido] x fator. Calibrado (experiments/calibrar_escala.py, sementes
+    # de calibracao, experiments/configs/escala/calibracao.json): metas <= 0,30 sem treino e >= 0,80 com o treino tipico.
+    # A Sentinela nao fecha com nenhum fator (0,8-3,0): fica o de menor violacao; excecao aceita pelo Matheus (2026-09-28).
+    return {"tier1_brutamontes": 1.1, "tier2_sentinela": 1.6, "tier2_carcereiro": 1.5, "tier2_porteiro": 1.1,
+            "tier3_soberano": 1.2}
+
+
+@dataclass(frozen=True)
+class ConfigEscala:
+    ligada: bool = False
+    vida_por_estagio: dict = field(default_factory=_vida_por_estagio)
+    beta_treino: float = 0.03            # por ponto treinado (36 pontos -> x2,08)
+    # NPCs da campanha na escala: perfil neutro (stat_neutro em todos), E pelo estagio sugerido x fator, epsilon proprio
+    fator_npc: dict = field(default_factory=_fator_npc)
+    epsilon_npc: float = 0.2
+    # E4 na escala (redefinido pelo Matheus depois da Parte C, 2026-09-28): a evolucao sempre importa. O adulto sem
+    # treino vence o adolescente da mesma linha, sem treino e com o treino maximo do estagio, em pelo menos taxa_min_e4;
+    # esmagar e aceito de proposito (sem teto). Substitui o E4' e o E4'' da Parte B, que reprovaram.
+    treino_e4: float = 22.0
+    taxa_min_e4: float = 0.60
+
+
+CONFIG_ESCALA = ConfigEscala()
+CONFIG_ESCALA_LIGADA = ConfigEscala(ligada=True)

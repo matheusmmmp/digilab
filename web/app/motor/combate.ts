@@ -102,6 +102,12 @@ export function resolverV2(E: EstadoLuta, aa: string, ab: string): ResultadoTurn
     if ((a === "golpe_rapido" || a === "investida" || a === "fintar") && r === "preparar_pesado" && !pele[alvo]) interr[alvo] = true;
   }
   for (const i of [0, 1]) if (dev[i]) { dano[1 - i] += dev[i] * (pele[1 - i] ? CV21.multPele : 1); recebeuCac[1 - i] = true; }
+  /* escala (campanha): o dano recebido por i veio do oponente e passa para as unidades de i por E_oponente / E_i */
+  const ea = E.L[0].p.escala, eb = E.L[1].p.escala;
+  if (ea !== undefined || eb !== undefined) {
+    if (ea === undefined || eb === undefined) throw new Error("escala ligada em um lado só");
+    dano[0] *= eb / ea; dano[1] *= ea / eb;
+  }
   /* V2C morte subita: a partir do turno 25 todo dano x1,5 */
   if (E.turno + 1 >= CV.turnoMS) for (const i of [0, 1]) dano[i] *= CV.multMS;
   const passo = (x: string): number => x === "avancar" || x === "investida" ? -1 : x === "recuar" ? 1 : 0;

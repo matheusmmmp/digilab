@@ -674,3 +674,44 @@ na branch `exp/fala-livre` (worktree `v1-fala-livre`, porta 8767, tag `v1-antes-
   saves própria) ficou só na branch experimental; na `main` a página usa a chave de sempre.
 - Na integração, a interface nova da `main` (Interface UP) trocou a aba Estado por uma âncora vazia: a
   conversa foi montada na tela do pet (`.pet-tela`), ao lado do balão.
+
+## 2026-09-28 — escala de stats (TAREFA_PLANILHA_PROGRESSAO, Parte C)
+
+Jornada e escala aprovadas pelo Matheus (`docs/JORNADA_JOGADOR.md`, seção 5). Ponto 6 (tempo com o app fechado): mantido
+como está (fechar = pausa), com o aviso no ovo pelo tutorial. `ConfigEscala` desligada por padrão; com ela desligada as
+runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretações e desvios:
+
+- **Vida exibida** = E × vida própria / vida neutra (100 = `hp_base` + 10 × `hp_por_vigor`). O desenho dizia "vida de
+  hoje sem o multiplicador × E", que daria 150 mil no adulto; o divisor faz a tabela 50/200/600/1500 bater.
+- **Razão como fração exata** (`fractions.Fraction`): (k·a)/(k·b) em float nem sempre é igual a a/b; com a fração, a
+  invariância vale para qualquer fator comum (teste com 2, 10, 37 e 7/3). Na web a razão é float (o teste da web usa
+  potências de 2).
+- **Guts fica com o multiplicador de estágio** (é ritmo); só a vida perde. Com a escala o treino é sempre normalizado
+  ao orçamento (o tamanho vai para E) e o `peso_ponto_combate` sai da campanha.
+- **NPC na escala**: perfil neutro (10 em cada stat; o `total_stats` deixa de valer), E = vida do estágio SUGERIDO ×
+  fator, ε 0,2; os gambits e o estágio dos gambits ficam os de antes.
+- **Só a campanha usa a escala** (a tarefa: "magnitude usada em combate na campanha"). A arena da pesquisa e a arena
+  contra bots do jogo ficam como estavam.
+- **Bateria V21C com a escala** (`artifacts_combate_v21c/validacao_escala`): todos os gates que passavam passam com os
+  mesmos números (entre adultos a razão é 1). E4' (adulto sem treino × adolescente com +22 na faixa [0,60, 0,85])
+  **reprova** em 7 de 8 formas (0,965–1,0): com β 0,03 o Champion treinado chega a E 996 contra 1500. E4'' (os dois sem
+  treino, adulto ≥ 0,90) reprova só no espelho (0,841). Para o E4' passar, β maior ou degraus menores: decisão do
+  pesquisador.
+- **Calibração dos NPCs** (`experiments/calibrar_escala.py`, critério fixado antes; sementes 3101…3505; validação
+  4101…4505): Brutamontes 1,1, Carcereiro 1,5, Porteiro 1,1 e Soberano 1,2 passam (≤ 0,30 sem treino, ≥ 0,80 com o
+  treino típico). **A Sentinela não fecha com nenhum fator** de 0,8 a 3,0: com o estilo tartaruga a linha caçadora vence
+  sempre, e o pet sem treino fica acima de 0,3; ficou o fator de menor violação (1,6: 0,41 → 0,70 na validação). A linha
+  colosso fica abaixo de 0,5 treinada contra a Sentinela e o Carcereiro (o "todo pet treinado vence cada NPC" de
+  2026-09-26 deixa de valer para esses dois). Trocar o estilo da Sentinela: decisão do Matheus.
+- **Web**: a escala entra no motor (`CESC`, chave `ESCALA`, desligada para os gabaritos) e o app liga (`?escala=0` só
+  para a conferência de paridade com o HTML antigo). Saves antigos rejogam as lutas da campanha com a regra nova (o
+  progresso pode mudar; o replay confere).
+- **Vários pets com um ativo** (pedido do Matheus durante a Parte C): o ativo segue no save de sempre; os outros ficam
+  em `…-guardados` só com o registro, parados no tempo (nenhum evento). Primeiro acesso: escada de exemplo de 6 pets,
+  do In-Training ao Mega treinado (donos simulados + treino sem forçar). Só na web.
+- **Tutorial**: o Bit (personagem original, pixels no código), uma frase por momento, marcadas como vistas em
+  `…-dicas`; interruptor em Aparência. Só na web.
+- **Decisões do Matheus depois da Parte C (2026-09-28):** (1) **exceção da Sentinela aceita** (fator 1,6; 0,41 sem treino
+  e 0,70 com o treino típico na validação); (2) **E4 redefinido** na escala: o adulto sem treino vence o adolescente da
+  mesma linha, sem treino e com o treino máximo do estágio (+22), em ≥ 0,60, sem teto (`ConfigEscala.taxa_min_e4`,
+  gate `E4_escala_estagio_importa`). O E4' e o E4'' da Parte B saíram (a faixa [0,60, 0,85] e o ≥ 0,90).

@@ -21,9 +21,10 @@ aqui ele e ENTRADA (dict eixo -> [-1, 1]). Ver docs/REGISTRO_DESVIOS.md.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from fractions import Fraction
 
 from ...config import (CONFIG_CATALOGO, CONFIG_COMBATE_V21, CONFIG_SOMBRIO, CONFIG_TREINO, ESTAGIOS_V21, STATS_V21, ConfigCatalogo,
-                       ConfigCombateV21)
+                       ConfigCombateV21, ConfigEscala)
 
 LINHAS = ("brigao", "guardiao", "cacador", "colosso")
 RAMOS_CRIANCA = ("sereno", "arisco")
@@ -186,20 +187,36 @@ class Perfil:
     mult_disparo: float
     mult_guarda: float          # multiplica os redutores de defender
     stats: dict = field(default_factory=dict)
+    # escala (ConfigEscala, Parte C da TAREFA_PLANILHA_PROGRESSAO): None = desligada (o combate de sempre).
+    # Fracao exata: a razao E_A / E_B do dano nao depende de um fator comum aos dois lados.
+    escala: Fraction | None = None
 
     def para_dict(self) -> dict:
-        return {k: getattr(self, k) for k in (
+        d = {k: getattr(self, k) for k in (
             "rotulo", "estagio", "tecnica", "passiva", "hp_max", "guts_inicial", "guts_max", "regen",
             "mult_perto", "mult_disparo", "mult_guarda")} | {"stats": dict(self.stats)}
+        if self.escala is not None:          # so aparece com a escala ligada: os logs antigos nao mudam
+            d["escala"] = str(self.escala)
+        return d
+
+
+def escala_de(estagio: str, pontos_treino: float, esc: ConfigEscala) -> Fraction:
+    """E = vida_por_estagio x (1 + beta x pontos treinados), como fracao exata."""
+    return Fraction(esc.vida_por_estagio[estagio]) * (1 + Fraction(str(esc.beta_treino)) * Fraction(pontos_treino))
 
 
 def perfil(forma: Forma, temperamento: dict | None = None, carater: dict | None = None,
            condicao: float = 1.0, cfg: ConfigCombateV21 | None = None, cat: ConfigCatalogo | None = None,
-           treino: dict | None = None, normalizar_treino: bool = True) -> Perfil:
+           treino: dict | None = None, normalizar_treino: bool = True, escala: ConfigEscala | None = None) -> Perfil:
     """Stats -> numeros de combate. `condicao` (do cuidado) multiplica hp_max e guts_inicial.
-    `treino`: pontos treinados somados aos stats (normalizados ao orcamento na arena; absolutos na campanha)."""
+    `treino`: pontos treinados somados aos stats (normalizados ao orcamento na arena; absolutos na campanha).
+    `escala` ligada: o treino e sempre normalizado (o tamanho vai para a escala E), a vida perde o multiplicador de
+    estagio (a razao E_A/E_B faz esse papel) e o guts continua com ele (ritmo)."""
     cfg = cfg or CONFIG_COMBATE_V21
     cat = cat or CONFIG_CATALOGO
+    esc = escala if escala is not None and escala.ligada else None
+    if esc is not None:
+        normalizar_treino = True
     if forma.estagio == "bebe":
         raise CatalogoInvalido("bebe nao luta")
     if not cat.condicao_mult_min <= condicao <= cat.condicao_mult_max:
@@ -209,9 +226,10 @@ def perfil(forma: Forma, temperamento: dict | None = None, carater: dict | None 
         s = com_treino(s, treino, normalizar_treino, cat=cat)
     est = cat.mult_estagio[forma.estagio]
     guts_max = (cfg.guts_max_base + cfg.guts_max_por_folego * s["folego"]) * est
+    est_vida = est if esc is None else 1.0
     return Perfil(
         rotulo=forma.rotulo, estagio=forma.estagio, tecnica=forma.tecnica, passiva=forma.passiva,
-        hp_max=(cfg.hp_base + cfg.hp_por_vigor * s["vigor"]) * est * condicao,
+        hp_max=(cfg.hp_base + cfg.hp_por_vigor * s["vigor"]) * est_vida * condicao,
         guts_inicial=min(guts_max, (cfg.guts_inicial_base + cfg.guts_inicial_por_folego * s["folego"]) * est * condicao),
         guts_max=guts_max,
         regen=cfg.regen_base + cfg.regen_por_recuperacao * s["recuperacao"],
@@ -219,6 +237,7 @@ def perfil(forma: Forma, temperamento: dict | None = None, carater: dict | None 
         mult_disparo=cfg.mult_base + cfg.mult_por_ponto * s["mira"],
         mult_guarda=cfg.guarda_base - cfg.guarda_por_ponto * s["guarda"],
         stats=s,
+        escala=None if esc is None else escala_de(forma.estagio, sum((treino or {}).values()), esc),
     )
 
 

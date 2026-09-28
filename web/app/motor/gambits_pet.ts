@@ -4,9 +4,9 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CSO, CV, CV21, GA, SOMBRIA, TECNICAS } from "./constantes.ts";
+import { CESC, CSO, CV, CV21, GA, SOMBRIA, TECNICAS } from "./constantes.ts";
 import { ADOL_V21, BOTS_V2, BOTS_V21, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival } from "./bots.ts";
-import { caraterCanonico, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
+import { ESCALA, caraterCanonico, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
@@ -175,7 +175,12 @@ export function lutadorPet(m: PetLutador, rotulo: string, absoluto = false): Lut
 /** lutador de um bot: NPC da campanha, forma adulta canonica da V2.1 ou bot classico (stats neutros) */
 export function lutadorBot(nome: string): Lutador {
   const n = NPC[nome];
-  if (n) return { nome: "Rival " + n.nome, estilo: estiloBot(nome), cond: perfilNPC(n.total, n.estagio || "adulto") };
+  if (n) {
+    /* campanha na escala: E = vida do estagio sugerido x fator; epsilon da escala */
+    if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estiloBot(nome), eps: CESC.epsNpc },
+      cond: perfilNPC(n.total, n.estagio || "adulto", CESC.vida[n.est] * CESC.fatorNpc[nome]) };
+    return { nome: "Rival " + n.nome, estilo: estiloBot(nome), cond: perfilNPC(n.total, n.estagio || "adulto") };
+  }
   if (BOTS_V21[nome as FormaAdultaNormal]) {
     const f = formaRival(nome as FormaAdultaNormal);
     return { nome: "Rival " + nomeForma(f), estilo: estiloBot(nome), cond: perfilDe(f, caraterCanonico(nome as FormaAdultaNormal)) };
