@@ -68,12 +68,6 @@ export function viver(M, sem, versao, perfil) {
   const passos = Math.round(DIAS * M.TPD / M.CD.passo), orc = Math.round(M.CD.porDia * DIAS);
   const exs = EXERCICIOS(M.CTR.exercicios), bots = Object.keys(M.NOME_BOT).filter(k => !M.NPC[k]);
   let gasto = 0, vetada = null, travada = null;
-  /* BUG do motor atual (nao corrigido aqui: muda regra de jogo): a semente do devastador tem a regra
-     "perto e guts >= 60 -> preparar pesado", que nao esta no REPERTORIO; estilo() devolve undefined e a
-     luta quebra. Pet com regra fora do repertorio nao luta nos gabaritos; conta em lutasPuladas. */
-  const listaQuebrada = () => !!m.gp && m.gp.ativas.some(k => !M.REPERTORIO.has(k));
-  m.lutasPuladas = 0;
-  const lutar = (rival, s) => { if (listaQuebrada()) m.lutasPuladas++; else m.lutar(rival, s); };
   const podeTreinar = () => m.estagioAtual !== "bebe" && m.treino.podeTocar(m.e.tick);
   for (let p = 0; p < passos; p++) {
     m.avancar(M.CD.passo);
@@ -95,18 +89,18 @@ export function viver(M, sem, versao, perfil) {
     if (perfil === "exigente" && m.estagioAtual !== "bebe") { m.avancar(M.CTR.intervalo); if (podeTreinar()) m.treinar(exs[rx.int(exs.length)]); }
 
     /* sparring do adolescente (cronograma): uma luta por passo contra o bot aleatorio, ate o minimo */
-    if (m.estagioAtual === "adolescente" && m.sparring < M.CAT.sparring) lutar("aleatorio", M.hashSemente("sparring", sem, p));
+    if (m.estagioAtual === "adolescente" && m.sparring < M.CAT.sparring) m.lutar("aleatorio", M.hashSemente("sparring", sem, p));
 
     /* adulto: arena (bots) e campanha (NPC aberto), um passo sim outro nao */
     if (m.estagioAtual === "adulto" && p % 2 === 0) {
       const npcs = M.CAMPANHA.map(c => c.k).filter(k => m.desafioAberto(k));
       const rival = (perfil === "relapso" || rx.random() < .5) && npcs.length ? npcs[rx.int(npcs.length)] : bots[rx.int(bots.length)];
-      lutar(rival, M.hashSemente("gabarito-luta", sem, p));
+      m.lutar(rival, M.hashSemente("gabarito-luta", sem, p));
     }
 
     /* intervencoes nos gambits (travar, destravar, vetar, liberar) em momentos fixos depois da crianca */
     if (m.gp && perfil !== "relapso" && p % 12 === 6) {
-      const ativas = m.gp.ativas.filter(k => M.REPERTORIO.has(k));
+      const ativas = m.gp.ativas;
       const op = ["travar", "vetar", "destravar", "liberar"][(p / 12 | 0) % 4];
       if (op === "travar" && ativas.length) { travada = ativas[rx.int(ativas.length)]; m.intervirGambit("travar", travada); }
       else if (op === "destravar" && travada) { m.intervirGambit("destravar", travada); travada = null; }
@@ -121,7 +115,7 @@ export function viver(M, sem, versao, perfil) {
 /* ---------------------------------------------------------------- cobertura */
 function cobertura(vidas) {
   const c = { vidas: vidas.length, sementes: new Set(vidas.map(v => v.semente)).size, eventos: {}, acoesDono: {}, exercicios: {},
-    gambit: {}, rivais: {}, lutasPuladas: {}, estagioFinal: {}, versao: {}, perfil: {}, ramos: {}, linhas: {}, adultas: {}, sombrias: 0, falaFria: 0,
+    gambit: {}, rivais: {}, estagioFinal: {}, versao: {}, perfil: {}, ramos: {}, linhas: {}, adultas: {}, sombrias: 0, falaFria: 0,
     checkpoints: 0, eventosTotal: 0 };
   const inc = (o, k) => { o[k] = (o[k] || 0) + 1; };
   for (const v of vidas) {
@@ -140,7 +134,6 @@ function cobertura(vidas) {
     if (f.adulta) inc(c.adultas, f.adulta);
     if (v.sombria) c.sombrias++;
     if (v.falaFria) c.falaFria++;
-    if (v.lutasPuladas) c.lutasPuladas[`${v.perfil} v${v.versao} @${v.semente} (${f.adulta})`] = v.lutasPuladas;
   }
   return c;
 }
@@ -153,6 +146,7 @@ export function exigirCobertura(c, M) {
   for (const ex of Object.keys(M.CTR.exercicios)) if (!c.exercicios[ex]) falta.push("exercicio " + ex);
   for (const op of ["travar", "destravar", "vetar", "liberar"]) if (!c.gambit[op]) falta.push("gambit " + op);
   for (const k of M.CAMPANHA.map(x => x.k)) if (!c.rivais[k]) falta.push("NPC " + k);
+  if (!c.adultas.devastador) falta.push("devastador (regra fora do repertorio)");
   for (const r of ["sereno", "arisco"]) if (!c.ramos[r]) falta.push("ramo " + r);
   if (!c.estagioFinal.adulto) falta.push("estagio adulto");
   if (!c.sombrias) falta.push("forma sombria");
@@ -178,7 +172,7 @@ function main() {
       const rep = M.Motor.reproduzir(sem, log, versao);
       if (rep.assinatura() !== vivo.assinatura()) throw new Error(`Motor.reproduzir diverge da vida: ${perfil} v${versao} @${sem}`);
       grupo.push({ semente: sem, versao, perfil, log, checkpoints: pts, final: pts[pts.length - 1], assinaturaFinal: vivo.assinatura(),
-        sombria: vivo.sombria, falaFria: vivo.falaFria, lutasPuladas: vivo.lutasPuladas });
+        sombria: vivo.sombria, falaFria: vivo.falaFria });
     }
     writeFileSync(`${DIR}vidas_v${versao}_${perfil}.json`, JSON.stringify({ versao, perfil, dias: DIAS, passoCheckpoint: PASSO_CHECKPOINT, vidas: grupo }) + "\n");
     todas.push(...grupo);

@@ -617,9 +617,9 @@ de evento t/d/l/g/tr, NPCs, sombrias) com checkpoints (sha256 da assinatura + co
 `gabaritos/constantes_python.json` (`python experiments/exportar_constantes_web.py`) pela tabela
 `mapa_constantes.json`. Rodar: `node --test "web/app/test/*.test.mjs"` (~1 min). Gabaritos são do V8 do
 Node: o Chrome difere no último bit de exp/log (libm) e o replay só é bit a bit no mesmo runtime.
-**Bug conhecido do motor atual**: a semente de gambits do devastador (sombria do brigão) tem a regra "perto e
-guts ≥ 60 → preparar pesado", que não está no `REPERTORIO`; a luta desse pet quebra (TypeError). Os
-gabaritos não fazem lutas com lista quebrada (`lutasPuladas` em `cobertura.json`).
+**Devastador corrigido (2026-09-28)**: a semente de gambits dele tem a regra "perto e guts ≥ 60 → preparar
+pesado", fora do `REPERTORIO`; a luta quebrava (TypeError). `regraDe(k)` procura no repertório e, fora dele,
+nas sementes das sombrias. O repertório (candidatas da troca) não mudou, então nenhum pet existente muda.
 
 `Assets\gerar_sprites_html.py` agora **recusa** sobrescrever o arquivo se ele tiver a aba
 Evolução (`--forcar` para passar por cima e perder as edições).

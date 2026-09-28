@@ -1840,7 +1840,7 @@ class Motor {
     if (!this.gp) throw new Error("o bebê ainda não tem gambits");
     this.gp.intervir(op, k);                     /* valida antes de gravar */
     this.log.push([this.e.tick, "g", {op, k}]);
-    this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
+    this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(regraDe(k))}`});
   }
   _gambit(op, k){
     /* no replay, uma intervencao que nao cabe mais (ex.: pet salvo antes da troca da regra de
@@ -1848,7 +1848,7 @@ class Motor {
     try {
       if (!this.gp) throw new Error("intervenção antes da evolução");
       this.gp.intervir(op, k);
-      this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(REPERTORIO.get(k))}`});
+      this._hist({t:this.e.tick, quem:"gambit", a:`${op} ${rotuloRegra(regraDe(k))}`});
     } catch(err){
       console.warn("intervencao do registro ignorada no replay:", op, err.message);
       if (this.gp) this.gp.mudancas.push({luta:this.gp.nLutas, texto:`intervenção antiga ignorada (${op}): ${err.message}`, dono:true});
@@ -3735,6 +3735,17 @@ const GAMBITS_SOMBRIA = {
   predador:{regras:[Rg(D2,"avancar"), Rg(D1,"avancar"), Rg(D0,"golpe_rapido")], final:"carregar"},
   get bastiao_rachado(){ return {regras:BOTS_V21.espelho.regras.filter(r => !r.se.some(c => c.n.startsWith("oponente_"))), final:BOTS_V21.espelho.final}; },
 };
+/* regra pela chave: o repertorio (de onde o pet tira candidatas) ou, fora dele, a semente de uma
+   sombria (a do devastador tem "perto e guts >= 60 -> preparar pesado", que nenhum bot usa). O
+   repertorio nao muda: as candidatas e o replay dos pets que ja existem ficam iguais. */
+let REGRAS_SEMENTE = null;
+function regraDe(k){
+  const r = REPERTORIO.get(k);
+  if (r) return r;
+  REGRAS_SEMENTE ??= new Map(Object.values(GAMBITS_SOMBRIA).flatMap(g => g.regras.map(x => [chaveRegra(x), x])));
+  if (!REGRAS_SEMENTE.has(k)) throw new Error("regra fora do repertório: " + k);
+  return REGRAS_SEMENTE.get(k);
+}
 const rotuloRegra = r => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
 class GambitsPet {
   constructor(){ this.notas = {}; this.disparos = {}; this.ativas = []; this.final = "defender"; this.linha = null; this.forma = null;
@@ -3750,7 +3761,7 @@ class GambitsPet {
       this.notas[k] = k in this.notas ? Math.max(this.notas[k], nb) : nb;
       if (!this.vetos.includes(k)) novas.push(k);
     });
-    for (const k of Object.keys(this.travas)) if (!novas.includes(k) && permitida(REPERTORIO.get(k), forma)) novas.push(k);
+    for (const k of Object.keys(this.travas)) if (!novas.includes(k) && REPERTORIO.has(k) && permitida(REPERTORIO.get(k), forma)) novas.push(k);
     this.ativas = novas.slice(0, cap);
     for (const k of Object.keys(this.travas)) if (!this.ativas.includes(k)) delete this.travas[k];
     this.mudancas.push({luta:this.nLutas, texto:`evoluiu para ${this.linha}: a forma semeou a lista (até ${cap} regras)`});
@@ -3770,7 +3781,7 @@ class GambitsPet {
     for (let i = 0; i < n; i++) saida.push(i in fixas ? fixas[i] : livres.shift());
     this.ativas = saida.filter(Boolean);
   }
-  estilo(){ return {nome:"aprendido", gambits:{regras:this.ativas.map(k => REPERTORIO.get(k)), final:this.final}, eps:CV.eps}; }
+  estilo(){ return {nome:"aprendido", gambits:{regras:this.ativas.map(regraDe), final:this.final}, eps:CV.eps}; }
   aprender(res, semente){
     this.nLutas++;
     const soma = {}, cont = {}, usadas = this.ativas.slice();
@@ -3792,12 +3803,12 @@ class GambitsPet {
       const nova = candidatas[criarRng(hashSemente("propor", semente)).int(candidatas.length)];
       this.ativas[this.ativas.indexOf(pior)] = nova;
       if (!(nova in this.notas)) this.notas[nova] = 0;
-      this.mudancas.push({luta:this.nLutas, texto:`trocou “${rotuloRegra(REPERTORIO.get(pior))}” (nota ${this.notas[pior].toFixed(3)}) por “${rotuloRegra(REPERTORIO.get(nova))}”`});
+      this.mudancas.push({luta:this.nLutas, texto:`trocou “${rotuloRegra(regraDe(pior))}” (nota ${this.notas[pior].toFixed(3)}) por “${rotuloRegra(REPERTORIO.get(nova))}”`});
     }
     this.ordenar(); this.versao++;
   }
   intervir(op, k){
-    if (!REPERTORIO.has(k)) throw new Error("regra fora do repertório: " + k);
+    regraDe(k);                                  /* falha alto se a regra nao existe */
     if (op === "travar"){ const i = this.ativas.indexOf(k); if (i < 0) throw new Error("só dá para travar regra ativa"); this.travas[k] = i; }
     else if (op === "destravar") delete this.travas[k];
     else if (op === "vetar"){
@@ -3813,7 +3824,7 @@ class GambitsPet {
     }
     else if (op === "liberar") this.vetos = this.vetos.filter(v => v !== k);
     else throw new Error("intervenção desconhecida: " + op);
-    this.mudancas.push({luta:this.nLutas, texto:`você: ${op} “${rotuloRegra(REPERTORIO.get(k))}”`, dono:true});
+    this.mudancas.push({luta:this.nLutas, texto:`você: ${op} “${rotuloRegra(regraDe(k))}”`, dono:true});
     this.ordenar(); this.versao++;
   }
   assinatura(){ return [this.notas, this.disparos, this.ativas, this.final, this.linha, this.forma, this.travas, this.vetos, this.nLutas]; }
@@ -3874,7 +3885,7 @@ function renderGambits(){
   const ICO_VETO = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M5 15 15 5"/></svg>';
   const ICO_LIBERA = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10l4 4 8-8"/></svg>';
   const cartao = (k, i, estado) => {
-    const r = REPERTORIO.get(k), se = r.se.map(rotuloCond).join(" e "), kk = k.replace(/'/g, "&#39;");
+    const r = regraDe(k), se = r.se.map(rotuloCond).join(" e "), kk = k.replace(/'/g, "&#39;");
     const bts = estado === "vetada"
       ? `<button type="button" class="dl-btn dl-btn--icone g-op" data-op="liberar" aria-label="Liberar esta regra">${ICO_LIBERA}</button>`
       : `<button type="button" class="dl-btn dl-btn--icone g-op${estado === "travada" ? " g-on" : ""}" data-op="${estado === "travada" ? "destravar" : "travar"}" aria-pressed="${estado === "travada"}" aria-label="${estado === "travada" ? "Destravar" : "Travar nesta posição"}">${ICO_TRAVA}</button>
@@ -4146,7 +4157,7 @@ function resultadoHtml(A, B, res, npc, notasAntes, cenario){
   let reforcada = "";
   if (!cenario && notasAntes && motor.gp){
     const gp = motor.gp, ganhos = gp.ativas.filter(k => k in notasAntes).map(k => [k, gp.notas[k] - notasAntes[k]]).filter(([, d]) => d > 1e-9).sort((x, y) => y[1] - x[1]);
-    if (ganhos.length) reforcada = `<div class="luta-regra-card dl-malha"><span class="luta-regra-cab">REGRA REFORÇADA NESTA LUTA</span><span class="luta-regra-txt">${rotuloRegra(REPERTORIO.get(ganhos[0][0]))}</span><span class="dl-apoio" style="color:#BDEFFF">nota +${dec(ganhos[0][1], 2)}</span></div>`;
+    if (ganhos.length) reforcada = `<div class="luta-regra-card dl-malha"><span class="luta-regra-cab">REGRA REFORÇADA NESTA LUTA</span><span class="luta-regra-txt">${rotuloRegra(regraDe(ganhos[0][0]))}</span><span class="dl-apoio" style="color:#BDEFFF">nota +${dec(ganhos[0][1], 2)}</span></div>`;
   }
   const sp = motor.estagioAtual === "adolescente" && !cenario ? `<span class="dl-apoio">lutas de treino para evoluir: ${Math.min(motor.sparring, CAT.sparring)} de ${CAT.sparring}</span>` : "";
   return `<div class="dl-card luta-res">
