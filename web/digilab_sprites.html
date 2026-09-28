@@ -207,7 +207,13 @@
 .fala-area .dl-balao{cursor:pointer;text-align:left}
 .fala-area .dl-balao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
 .fala-area .fala-det{margin:0}
-.device .fala-llm{justify-self:start;display:flex;gap:6px;align-items:center;color:var(--dl-text-2);margin:0}
+.device .fala-llm{justify-self:start;display:flex;gap:8px;align-items:center;color:var(--dl-text-2);margin:0;min-height:44px;cursor:pointer}
+.device .fala-llm input{width:24px;height:24px;margin:0;flex:none;accent-color:var(--dl-action)}
+.fala-area .dl-balao{min-height:44px}
+details > summary{min-height:44px;display:flex;align-items:center;gap:6px;cursor:pointer}
+details > summary::-webkit-details-marker{display:none}
+details > summary::before{content:"▸";font-size:.8em}
+details[open] > summary::before{content:"▾"}
 .fala-marca{font-size:.75rem;font-weight:900;border:1px solid var(--dl-border);border-radius:4px;padding:0 4px}
 .causa-area{display:flex;flex-wrap:wrap;gap:6px}
 .necessidades4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -476,7 +482,10 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 .evo-rola{overflow-x:auto;-webkit-overflow-scrolling:touch}
 /* mapa da campanha: ilustracao fixa (como a tela do pet), igual nos dois temas */
 .mapa-rola{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
-.mapa{width:360px;max-width:none;height:auto;display:block;border-radius:14px;background:#7FC7A0;margin-inline:auto}
+.mapa{width:100%;max-width:520px;height:auto;display:block;border-radius:14px;background:#7FC7A0;margin-inline:auto}
+.mapa-rola{position:relative;overflow:visible}
+.mapa-spr{position:absolute;overflow:hidden;pointer-events:none;display:flex;align-items:flex-start;justify-content:center}
+.mapa-spr img{max-width:none;image-rendering:pixelated}
 .mapa text{font-family:var(--f-pixel);font-size:9px;letter-spacing:.04em}
 .mapa .rotulo{fill:#10213A;font-weight:700}
 .mapa .rotulo-bg{fill:#F4F1E4;opacity:.92}
@@ -556,7 +565,12 @@ body{background-color:var(--dl-bg);background-image:var(--dl-hex-img);background
 .chip{font-family:var(--dl-f-texto);font-weight:800;min-height:36px;border:2px solid var(--dl-sec-edge);background:var(--dl-sec-bg);color:var(--dl-sec-ink)}
 .chip[aria-pressed="true"]{background:var(--dl-navy);border-color:var(--dl-navy);color:#FFFFFF}
 .kv div{background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex)}
-select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-height:44px;font-weight:800}
+select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-height:44px;font-weight:800;max-width:100%}
+#rival{width:100%}
+#p-arena .row label[for="rival"]{flex-basis:100%}
+.luta-nome{display:grid;min-width:0}
+.luta-nome b,.luta-nome small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.luta-nome small{font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
 </style>
 
 <div class="wrap">
@@ -792,7 +806,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
           <button class="sbtn sec" id="novo">Novo ovo</button>
           <button class="sbtn sec" id="novo-conf" hidden>Confirmar: apagar este pet</button>
         </div>
-        <p id="reg-msg" class="muted">Semente <span id="semente"></span> · <span id="neventos"></span> eventos no registro.</p>
+        <p id="reg-msg" class="muted">Semente <span id="semente"></span> · <span id="neventos"></span> eventos no registro (suas ações, lutas e passagens de tempo). Abaixo, o que aconteceu, reconstruído a partir dele: <span id="nlinhas"></span>.</p>
         <div class="log" id="log" aria-live="polite"></div>
       </div>
     </section>
@@ -2752,7 +2766,7 @@ function atlasCarregou(){ atlasOk = true; evoCache.clear(); evoChave = null; if 
 function atlasFalhou(url, err){
   const b = document.getElementById("aviso-atlas");
   b.hidden = false;
-  b.textContent = "Atlas de sprites não carregou (" + url + "). Rode python " + "gerar_atlas_up.py" + " em D:\Trab\digilab\Assets. Mostrando os placeholders.";
+  b.textContent = "Atlas de sprites não carregou (" + url + "). Rode python " + "gerar_atlas_up.py" + " em D:\\Trab\\digilab\\Assets. Mostrando os placeholders.";
   console.error("falha ao carregar atlas", url, err || "");
 }
 atlasImg.onload = atlasCarregou;
@@ -3163,6 +3177,8 @@ function renderAprend(){
 function renderRegistro(){
   $("semente").textContent = motor.semente;
   $("neventos").textContent = motor.log.length;
+  const nh = motor.historico.length;
+  $("nlinhas").textContent = nh > 80 ? `as últimas 80 de ${nh} linhas` : `${nh} linha${nh === 1 ? "" : "s"}`;
   $("log").innerHTML = motor.historico.slice(-80).reverse().map(h =>
     `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>`
       : h.quem === "gambit" ? `<span class="dono">você (gambits): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : h.quem === "recusa" ? `<b>pet ${h.a}</b>`
@@ -3256,9 +3272,18 @@ function lerAbaLembrada(){
   const aba = v.includes("/") ? v.split("/")[1] : v;
   return DESTINO_DA_ABA[aba] ? aba : null;
 }
+function limparPalcoLuta(){
+  $("luta-resultado").innerHTML = ""; $("luta-regra").innerHTML = ""; $("luta-intencao").innerHTML = "";
+  $("luta-callout").hidden = true; $("arena-fala").innerHTML = ""; $("turno-n").textContent = "–";
+}
 function mostrarPane(p){
   const d = DESTINO_DA_ABA[p];
   if (!d) throw new Error("aba sem destino: " + p);
+  /* o palco da luta e compartilhado por Arena e Campanha: a mensagem de um modo nao vaza para o outro */
+  if (p !== paneAtual && (p === "arena" || p === "campanha") && !lutando){
+    limparPalcoLuta();
+    if (p === "arena") $("arena-res").textContent = "Escolha um rival e aperte Lutar.";
+  }
   paneAtual = p; destinoAtual = d; ultimaAbaDoDestino[d] = p;
   document.body.dataset.destino = d;
   document.querySelectorAll("#nav [data-destino]").forEach(b => { if (b.dataset.destino === d) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
@@ -3687,7 +3712,7 @@ function prepararRival(){
 function arenaPreview(){
   const A = lutadorPet(motor, "Seu pet"), B = prepararRival(), E = estadoV2(A.cond, B.cond);
   desenharArenaV2(A, B, E, null); setBarras(E);
-  $("nome-a").textContent = nomeForma(motor.forma); $("nome-b").textContent = nomeLutador(B); $("turno-n").textContent = "–";
+  nomeTopo($("nome-a"), nomeForma(motor.forma)); nomeTopo($("nome-b"), nomeLutador(B)); $("turno-n").textContent = "–";
   const pa = A.cond, extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(", ");
   $("arena-estilo").textContent = `Seu pet: ${nomeForma(motor.forma)}, vida ${pa.hpMax.toFixed(0)}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; gambits semeados por ${NOME_BOT[A.estilo.base] || A.estilo.base} · rival: ${B.estilo.oraculo ? "oráculo (referência fora dos gambits)" : B.nome.replace("Rival ", "")}.`;
 }
@@ -3737,6 +3762,23 @@ function cenarioMapa(){
   t.push(`<rect x="12" y="92" width="22" height="16" fill="#E9D2A8"/><polygon points="9,93 23,80 37,93" fill="#C8443A"/><rect x="20" y="99" width="6" height="9" fill="#6B4A2B"/>`);
   return t.join("");
 }
+/* sprite 1x recortado num quadrado, sobre o ponto (cx, cy) do SVG do mapa (viewBox 360 x 230) */
+let spritesMapa = [];
+function posicionarSpritesMapa(){
+  const svg = $("mapa"), caixa = svg.parentElement;
+  caixa.querySelectorAll(".mapa-spr").forEach(e => e.remove());
+  const rs = svg.getBoundingClientRect(), rc = caixa.getBoundingClientRect(), k = rs.width / 360;
+  if (!(k > 0)) return;
+  /* svg nao tem offsetLeft/offsetTop: posicao pela diferenca dos retangulos */
+  const ox = rs.left - rc.left + caixa.scrollLeft, oy = rs.top - rc.top + caixa.scrollTop;
+  for (const m of spritesMapa){
+    const d = document.createElement("span"); d.className = "mapa-spr" + (m.pet ? " pet-mapa-spr" : "");
+    d.style.cssText = `left:${ox + m.cx * k - m.lado / 2}px;top:${oy + m.cy * k - m.lado / 2}px;width:${m.lado}px;height:${m.lado}px`;
+    d.innerHTML = `<img src="${m.href}" alt="">`;
+    caixa.appendChild(d);
+  }
+}
+addEventListener("resize", () => { if (paneAtual === "campanha") posicionarSpritesMapa(); });
 function renderCampanha(){
   const svg = $("mapa");
   if (!svg || !motor) return;
@@ -3747,6 +3789,7 @@ function renderCampanha(){
   const d = pts.map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
   const feito = pts.slice(0, vencidos + 1).map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
   let h = cenarioMapa();
+  const spr = [];   /* sprites do mapa: em HTML por cima do SVG, 1x (o SVG escala com a tela, o sprite nao) */
   h += `<path d="${d}" fill="none" stroke="#F4F1E4" stroke-width="5" stroke-dasharray="2 6" stroke-linecap="round"/>`;
   if (vencidos) h += `<path d="${feito}" fill="none" stroke="#F0A534" stroke-width="5" stroke-linecap="round"/>`;
   LUGARES.forEach((L, i) => {
@@ -3759,7 +3802,7 @@ function renderCampanha(){
     h += `<g class="${cls}" data-lugar="${i}" tabindex="0" role="button" aria-label="${i + 1}. ${L.nome}: ${quem}, ${st}">
       <circle class="pulso" cx="${L.x}" cy="${L.y}" r="21"/>
       <circle class="anel" cx="${L.x}" cy="${L.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
-      ${recorteSvg(imagemChave(spriteNPC(c) + "_0"), atlasOk ? dimSprite(spriteNPC(c) + "_0").slice(2) : [24, 24], L.x, L.y, 28)}
+      ${(spr.push({href:imagemChave(spriteNPC(c) + "_0"), cx:L.x, cy:L.y, lado:28}), "")}
       ${L.rivais.length > 1 ? `<g transform="translate(${L.x - 26},${L.y - 22})"><circle cx="6" cy="6" r="7" fill="#2F47A6"/><text x="6" y="9.5" text-anchor="middle" style="fill:#fff;font-size:9px">${L.rivais.length}</text></g>` : ""}
       ${aberto ? "" : `<g transform="translate(${L.x + 9},${L.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
       ${vit ? `<g transform="translate(${L.x + 10},${L.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
@@ -3772,8 +3815,9 @@ function renderCampanha(){
   const [px, py] = pts[vencidos];
   const [ix, iy] = vencidos ? [px - 44, py - 18] : [px + 14, py - 22];     /* ao lado do lugar; na casa, a direita dela */
   if (motor.forma.est !== "ovo")
-    h += `<g class="pet-mapa">${recorteSvg(imagemForma(motor.forma), dimsForma(motor.forma), ix + 11, iy + 11, 26)}</g>`;
+    spr.push({href:imagemForma(motor.forma), cx:ix + 11, cy:iy + 11, lado:26, pet:true});
   svg.innerHTML = h;
+  spritesMapa = spr; posicionarSpritesMapa();
   renderCampDet();
 }
 function renderCampDet(){
@@ -3823,6 +3867,12 @@ $("camp-det").addEventListener("click", ev => {
   const r = ev.target.closest("[data-ver]");
   if (r && r.dataset.ver !== campSel) selecionarRival(r.dataset.ver);     /* ver o rival no palco antes de lutar */
 });
+/* nome do lutador no topo da luta: o Digimon numa linha, o estilo (se houver) na segunda */
+function nomeTopo(el, nome){
+  const m = /^(.*?) \((.*)\)$/.exec(nome);
+  el.innerHTML = m ? `<span class="luta-nome"><b>${escHtml(m[1])}</b><small>${escHtml(m[2])}</small></span>` : `<span class="luta-nome"><b>${escHtml(nome)}</b></span>`;
+  el.title = nome;
+}
 /* nome na tela do lutador: o Digimon (sem o "Rival ") */
 const nomeLutador = L => L.nome === "Seu pet" ? nomeForma(motor.forma) : L.nome.replace(/^Rival /, "");
 function regraUsadaHtml(A, tr, ma){
@@ -3909,7 +3959,7 @@ function lutarAnimado(npc){
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let i = 0;
   desenharArenaV2(A, B, res.E0, null); setBarras(res.E0); $("arena-fala").innerHTML = "";
-  $("nome-a").textContent = nomeLutador(A) === "Seu pet" ? nomeForma(motor.forma) : nomeLutador(A); $("nome-b").textContent = nomeLutador(B);
+  nomeTopo($("nome-a"), nomeLutador(A)); nomeTopo($("nome-b"), nomeLutador(B));
   const passo = () => {
     if (i >= res.turnos.length){
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
