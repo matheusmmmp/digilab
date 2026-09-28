@@ -1,0 +1,54 @@
+/* Diario: Registro, Catalogo e Cenarios (mesmas regras do digilab_sprites.html). */
+.chip{font:inherit;font-family:var(--dl-f-texto);font-weight:800;font-size:.8125rem;min-height:44px;padding:4px 12px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--dl-sec-edge);background:var(--dl-sec-bg);color:var(--dl-sec-ink)}
+.chip[aria-pressed="true"]{background:var(--dl-navy);border-color:var(--dl-navy);color:#FFFFFF}
+.chip:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.dl-btn--perigo{background:var(--dl-surface);color:var(--dl-erro);border-color:var(--dl-erro);box-shadow:inset 0 -4px 0 var(--dl-hex)}
+.resultado{font-weight:900}
+.tabela-rola{overflow-x:auto}
+
+/* Registro */
+.reg-filtros{display:flex;flex-wrap:wrap;gap:8px}
+.log{font-size:.8125rem;max-height:320px;overflow:auto;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex);display:grid;gap:2px}
+.reg-tag{display:inline-block;font-family:var(--dl-f-texto);font-size:.6875rem;font-weight:900;border-radius:4px;padding:0 6px;border:1.5px solid var(--dl-border);color:var(--dl-text)}
+.reg-voce{background:var(--dl-navy);border-color:var(--dl-navy);color:#FFFFFF}
+.reg-luta{border-style:solid;border-color:var(--dl-action)}
+.reg-treino{border-style:dashed}
+.zona-risco{border:2px dashed var(--dl-erro);border-radius:12px;padding:12px;display:grid;gap:8px}
+.zona-risco h2{color:var(--dl-erro)}
+
+/* Catalogo: grade 5 x 3 com detalhe (DiarioCatalogo) */
+.cat-grade{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.cat-tile{font:inherit;background:var(--dl-surface);border:0;border-radius:10px;box-shadow:0 0 0 2px var(--dl-border);padding:4px 2px;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--dl-text);min-height:44px;min-width:0}
+.cat-tile[aria-selected="true"]{box-shadow:0 0 0 3px var(--dl-highlight),0 0 0 5px var(--dl-navy)}
+.cat-tile.meu .cat-cx{box-shadow:inset 0 0 0 2px var(--dl-ok)}
+.cat-tile:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cat-cx{width:52px;max-width:100%;height:52px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;border-radius:8px}
+.cat-cx img{max-width:none}
+.cat-nome{font-size:.5625rem;font-weight:800;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-detalhe{display:grid;gap:10px}
+.cat-det-spr{display:flex;justify-content:center;align-items:flex-end;min-height:64px}
+.cat-det-spr img{max-width:none}
+.cat-stats{display:grid;gap:6px}
+.cat-stat{display:grid;grid-template-columns:86px minmax(0,1fr) 36px;gap:8px;align-items:center;font-size:.8125rem;font-weight:800}
+.cat-stat .dl-lcd{text-align:right}
+
+/* Cenarios */
+.cenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px}
+.cen{font:inherit;text-align:left;background:var(--dl-surface);color:var(--dl-text);border:2px solid var(--dl-border);border-radius:12px;padding:10px 12px;cursor:pointer;display:grid;gap:4px}
+.cen b{font-size:.875rem;font-weight:900}
+.cen span{font-size:.78125rem;color:var(--dl-text-2)}
+.cen:hover{border-color:var(--dl-action)}
+.cen:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.form-cen{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin-top:10px}
+.form-cen fieldset{border:2px solid var(--dl-border);border-radius:10px;padding:8px 12px 12px;display:grid;gap:6px;min-width:0}
+.form-cen legend{font-weight:900;padding:0 4px}
+.form-cen label{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px;align-items:center;font-size:.84375rem}
+@media (max-width:420px){ .form-cen label{grid-template-columns:1fr;gap:2px} }
+.form-cen input,.campo-num{font:inherit;font-size:1rem;min-width:0;min-height:44px;padding:5px 8px;border:2px solid var(--dl-border);border-radius:8px;background:var(--dl-surface);color:var(--dl-text)}
+.campo-num{width:110px}
+.comp{width:100%;border-collapse:collapse;font-size:.84375rem}
+.comp th,.comp td{padding:5px 8px;border-bottom:1px solid var(--dl-hex);text-align:right;font-variant-numeric:tabular-nums}
+.comp th:first-child,.comp td:first-child{text-align:left;color:var(--dl-text-2);font-weight:700}
+.comp thead th{font-weight:900;color:var(--dl-text)}
+.comp tr.sec td{padding-top:12px;font-weight:900;color:var(--dl-text);border-bottom:0}

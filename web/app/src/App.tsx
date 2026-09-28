@@ -9,7 +9,9 @@ import {
   DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco,
   type Aba, type Destino, type Rota,
 } from "./rotas.ts";
-import { TelaProvisoria } from "./telas/Provisoria.tsx";
+import { TelaCatalogo } from "./telas/diario/TelaCatalogo.tsx";
+import { TelaCenarios } from "./telas/diario/TelaCenarios.tsx";
+import { TelaRegistro } from "./telas/diario/TelaRegistro.tsx";
 import { TelaAprend } from "./telas/crescer/TelaAprend.tsx";
 import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
@@ -88,7 +90,8 @@ export function App() {
           {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao />
             : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-            : <TelaProvisoria aba={rota.aba} />}
+            : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
+            : rota.aba === "catalogo" ? <TelaCatalogo /> : <TelaCenarios />}
         </div>
       </section>)}
       <footer>

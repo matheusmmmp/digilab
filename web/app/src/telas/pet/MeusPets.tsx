@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
+import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
 
 export const CHAVE_ANTERIOR = CHAVE + "-anterior";
@@ -17,6 +18,7 @@ export function voltarAoAnterior(): string {
   if (!Number.isInteger(d?.semente) || !Array.isArray(d?.log)) throw new Error("pet anterior guardado não tem semente e registro");
   trocarMotor(Motor.reproduzir(d.semente, d.log, d.versao ?? 1), "save");
   try { localStorage.removeItem(CHAVE_ANTERIOR); } catch { /* ja trocou */ }
+  LUTA.rivalFixo = null; previa("arena");
   return "Pet anterior restaurado pelo replay do registro.";
 }
 
