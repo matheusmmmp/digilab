@@ -24,7 +24,7 @@ import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
-import { LUTA, previa, type Modo } from "./luta.ts";
+import { LUTA, REPLAY, previa, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
 
@@ -85,9 +85,17 @@ export function App() {
     setEmLuta(false); ir({ destino: "lutar", aba: modo });
     setTimeout(() => document.querySelector<HTMLElement>(modo === "arena" ? ".lutar-grande" : ".camp-lutar")?.focus(), 60);
   };
+  /* Ver replay (Resultado): a entrada da luta vira a aba de origem e o Diario abre por cima, com a luta refeita do registro;
+     o Voltar do navegador leva de volta a aba de origem */
+  const verReplay = (modo: Modo, idx: number) => {
+    REPLAY.pedido = idx;
+    history.replaceState(null, "", `#/lutar/${modo}`);
+    history.pushState(null, "", "#/diario/registro");
+    setEmLuta(false); ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0);
+  };
   if (emLuta) return (
     <div class="app app--tela-cheia">
-      <TelaLuta sair={sairDaLuta} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
+      <TelaLuta sair={sairDaLuta} verReplay={verReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
     </div>
   );

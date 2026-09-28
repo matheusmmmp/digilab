@@ -1,12 +1,13 @@
 /* Luta em andamento (#/lutar/luta; DIRETRIZES_REPLICAR secao 7, pranchas UpLuta e BatDesktop): tela cheia, sem menu
    nem abas, rolagem do fundo travada. No fim, o modal Resultado; Continuar volta para a aba de origem (Arena ou
-   Campanha). Desistir (botao ou o Voltar do navegador) pede confirmacao: a luta ja foi decidida e gravada no registro
+   Campanha) e Ver replay abre a luta no Diario. Desistir (botao ou o Voltar do navegador) pede confirmacao: a luta ja foi decidida e gravada no registro
    quando comecou, entao desistir so pula a animacao e sai. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import { abrirModal } from "../../componentes/modal.ts";
 import { useJogo } from "../../jogo.ts";
 import { LUTA, previa, pularAnimacao, sparringTexto, useLuta, type Modo } from "../../luta.ts";
-import { ModalResultado, PalcoLuta } from "./PalcoLuta.tsx";
+import { ModalResultado } from "./ModalResultado.tsx";
+import { PalcoLuta } from "./PalcoLuta.tsx";
 
 function ConfirmarDesistir({ ficar, desistir }: { ficar: () => void; desistir: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), saiu = useRef(false);
@@ -23,7 +24,7 @@ function ConfirmarDesistir({ ficar, desistir }: { ficar: () => void; desistir: (
   );
 }
 
-export function TelaLuta({ sair, pedidoDesistir, fecharPedido }: { sair: (modo: Modo) => void; pedidoDesistir: boolean; fecharPedido: () => void }) {
+export function TelaLuta({ sair, verReplay, pedidoDesistir, fecharPedido }: { sair: (modo: Modo) => void; verReplay: (modo: Modo, idx: number) => void; pedidoDesistir: boolean; fecharPedido: () => void }) {
   const luta = useLuta(), { motor: m } = useJogo(), p = luta.palco, [desistindo, setDesistindo] = useState(false);
   const modo: Modo = p?.modo ?? "arena";
   /* tela cheia: trava a rolagem do fundo enquanto a luta esta aberta */
@@ -46,7 +47,7 @@ export function TelaLuta({ sair, pedidoDesistir, fecharPedido }: { sair: (modo: 
         <button type="button" class="dl-btn dl-btn--sec luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</button>
       </div>
       <PalcoLuta />
-      {p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} />}
+      {p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} verReplay={idx => { previa(modo); verReplay(modo, idx); }} />}
       {desistindo && luta.lutando && <ConfirmarDesistir ficar={() => setDesistindo(false)} desistir={() => { setDesistindo(false); pularAnimacao(); voltar(); }} />}
     </section>
   );

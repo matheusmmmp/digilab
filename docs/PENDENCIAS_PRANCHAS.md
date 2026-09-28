@@ -37,8 +37,8 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 |---|---|---|---|
 | ArenaEscolha, UpLuta, BatAcao, BatDesktop | existe | botões **pausar** e **×2** no palco | interface (velocidade da animação) |
 | ArenaAoVivo | parcial | ×2 e **Ver o fim** (pular a animação); "regra que ele vai usar" antes do turno | interface |
-| UpResultado | existe | experiência (×120) e vínculo ganho (+3) não existem no motor; no lugar, turnos e fintas | motor |
-| ArenaFim, BatDerrota | parcial | **Elogiar / Repreender** uma ação da luta ("o que achou do recuo no turno 6?"); **Ver replay** da luta; **Outra luta**; "O que decidiu a luta" (derrota); experiência (×120) e vínculo (+3) | elogio de ação de luta = regra nova no motor; XP não existe no motor; replay e "outra luta" = interface |
+| ResVitoria, ResDerrota, ResCampanha, ResDesktop (substituem UpResultado) | existe | **Elogiar / Repreender** a ação do momento decisivo ("o que achou do recuo no turno 9?"): o motor não tem feedback do dono sobre uma ação de luta, então o bloco fica de fora (ResNota: bloco sem dado do motor não aparece). **Ver replay** abre a luta refeita do registro no Diário como lista de turnos; rever a animação no palco ainda não existe | elogio de ação de luta = evento novo no motor; animação do replay = interface |
+| ArenaFim, BatDerrota | parcial | **Elogiar / Repreender** uma ação da luta (ver ResVitoria acima); **Outra luta**; experiência (×120) e vínculo (+3). Ver replay e "O que decidiu a luta" já existem no modal Resultado | elogio de ação de luta = regra nova no motor; XP não existe no motor; "outra luta" = interface |
 | ArenaMelhor10 | parcial | grade V/D das 10 lutas, resumo (vitórias, turnos médios, fintas), "o que ele aprendeu", **Ver regras**, **Lutar de novo** | interface |
 | ArenaRivalFixo | parcial | tela do rival fixo do Laboratório com a pergunta do Digilab e **Lutar uma / Melhor de 10** | interface |
 | BatVS | não existe | pré-luta com as regras (travar/vetar antes de começar), **Trocar rival**, **Começar luta** | interface |

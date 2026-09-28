@@ -91,15 +91,28 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.locator(".lutar-grande").click();
     await expect(page).toHaveURL(/#\/lutar\/luta$/);
     await expect(page.locator(".dl-nav")).toHaveCount(0);
-    await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 90_000 });
-    await page.getByRole("button", { name: "Continuar" }).click();
+    const res = page.locator("dialog.modal-res[open]");
+    await expect(res).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator(".res-continuar")).toBeFocused();
+    await page.keyboard.press("Escape");                     /* Esc faz o mesmo que Continuar */
+    await expect(page).toHaveURL(/#\/lutar\/arena$/);
+    await expect(page.locator(".lutar-grande")).toBeFocused();
+    /* Ver replay: a mesma luta refeita do registro no Diario; o Voltar leva de volta a Arena */
+    await page.locator(".lutar-grande").click();
+    await expect(res).toBeVisible({ timeout: 90_000 });
+    const turnos = await page.locator(".res-num", { hasText: "turnos" }).first().locator(".dl-num").textContent();
+    await page.locator(".res-replay").click();
+    await expect(page).toHaveURL(/#\/diario\/registro$/);
+    await expect(page.locator(".reg-replay")).toContainText(`em ${turnos} turnos`);
+    await expect(page.locator(".reg-replay-turnos li")).toHaveCount(Number(turnos));
+    await page.goBack();
     await expect(page).toHaveURL(/#\/lutar\/arena$/);
     await page.getByRole("tab", { name: "Campanha" }).click();
     await page.locator(".camp-lutar:not([disabled])").click();
-    await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 90_000 });
-    await page.getByRole("button", { name: "Continuar" }).click();
+    await expect(res).toBeVisible({ timeout: 90_000 });
+    await page.locator(".res-continuar").click();
     await expect(page).toHaveURL(/#\/lutar\/campanha$/);
-    expect(await numLog(page, "l")).toBe(l0 + 2);
+    expect(await numLog(page, "l")).toBe(l0 + 3);
 
     /* pausa o tempo (Diario > engrenagem > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
     await page.locator(".dl-nav").getByRole("button", { name: "Diário", exact: true }).click();
