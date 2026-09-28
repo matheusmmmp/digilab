@@ -841,9 +841,11 @@ def _vida_por_estagio() -> dict:
 
 
 def _fator_npc() -> dict:
-    # E do NPC = vida_por_estagio[estagio_minimo_sugerido] x fator (calibrado na Parte C, sementes de calibracao)
-    return {"tier1_brutamontes": 1.15, "tier2_sentinela": 1.2, "tier2_carcereiro": 1.3, "tier2_porteiro": 1.3,
-            "tier3_soberano": 1.6}
+    # E do NPC = vida_por_estagio[estagio_minimo_sugerido] x fator. Calibrado (experiments/calibrar_escala.py, sementes
+    # de calibracao, experiments/configs/escala/calibracao.json): metas <= 0,30 sem treino e >= 0,80 com o treino tipico.
+    # A Sentinela nao fecha com nenhum fator (0,8-3,0): fica o de menor violacao (registrado).
+    return {"tier1_brutamontes": 1.1, "tier2_sentinela": 1.6, "tier2_carcereiro": 1.5, "tier2_porteiro": 1.1,
+            "tier3_soberano": 1.2}
 
 
 @dataclass(frozen=True)
