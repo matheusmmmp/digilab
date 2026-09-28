@@ -10,6 +10,7 @@ import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, urlDeco, useDecoracao } from "../
 import { useJogo } from "../../jogo.ts";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, previa, tentativas, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
+import { useDesktop } from "../../desktop.ts";
 
 /* coordenadas da prancha CampMapa (mapa de 390 x 420), em % para acompanhar a largura: ilha 150 px, centro do lugar
    (trilho, plaquinha, marcador do pet) e o pad embaixo */
@@ -92,15 +93,64 @@ function Detalhe() {
     </>
   );
 }
-export function TelaCampanha({ voltarPet }: { voltarPet: () => void }) {
+/** desktop (CampDesktop): faixa do lugar, os rivais em cards (sprite, nome, estilo, licao), "Nesta ilha" com o que o
+    registro conta e os botoes Treinar antes e Desafiar */
+function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
+  const { motor: m } = useJogo(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
+  const prox = LUGARES[Li + 1], c = NPC[sel]!, vit = m.campanha[sel], podeLutar = m.forma.est !== "bebe";
+  useDecoracao();
+  const faixa = fundoDeco(FAIXA_LUGAR[Li] ?? FUNDO_NPC[sel]);
+  const regra = !aberto ? `trancado: vença alguém em ${LUGARES[Li - 1].nome} antes` : prox ? `vencer ${L.rivais.length > 1 ? "qualquer um" : c.nome} abre ${prox.nome}` : "último lugar da campanha";
+  const a = useAtlas(), img = (k: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, k); return <img class="dl-pix" src={i.url} width={i.w} height={i.h} alt="" />; };
+  const tent = L.rivais.reduce((n, k) => n + tentativas(m, k), 0), vencidos = L.rivais.filter(k => m.campanha[k] > 0).length;
+  const vitorias = L.rivais.reduce((n, k) => n + m.campanha[k], 0);
+  return (
+    <>
+      <div class="campd-faixa" style={faixa ? { backgroundImage: faixa } : undefined}>
+        <b class="dl-num">{L.nome}</b><span>sugerido: {L.sugerido} · {regra}</span>
+      </div>
+      <div class="campd-rivais" role="radiogroup" aria-label="Rivais do lugar">
+        {L.rivais.map(k => {
+          const n = NPC[k]!, moldura = molduraArena(m.campanha[k]);
+          return (
+            <button type="button" key={k} class="campd-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
+              {urlDeco(moldura) ? <RetratoRival sprite={n.k} moldura={moldura} lado={52} />
+                : <span class="camp-rival-spr">{img(n.k)}</span>}
+              <span class="campd-rival-txt"><span><b>{n.nome}</b><span class="campd-estilo">{nomeEstiloNPC(n.estilo)}</span></span><span>{n.licao}</span></span>
+            </button>
+          );
+        })}
+      </div>
+      <section class="campd-ilha" aria-labelledby="campd-ilha-tit">
+        <span class="campd-ilha-cab"><h2 id="campd-ilha-tit">Nesta ilha</h2><span>{vencidos} de {L.rivais.length} vencidos</span></span>
+        <div class="res-nums">
+          <div class="res-num"><span class="dl-num">{tent}</span><span>tentativas</span></div>
+          <div class="res-num"><span class="dl-num">{vitorias}</span><span>vitórias</span></div>
+          <div class="res-num"><span class="dl-num">{vit}</span><span>contra {c.nome}</span></div>
+        </div>
+        {!podeLutar && <p class="dl-apoio">O In-Training ainda não luta na campanha.</p>}
+        <p class="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
+      </section>
+      <div class="campd-bts">
+        <button type="button" class="dl-btn dl-btn--sec" onClick={irTreinar}>Treinar antes</button>
+        <button type="button" class="dl-btn camp-lutar" disabled={!aberto || luta.lutando || !podeLutar}
+          onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
+          {vit ? `Lutar de novo com ${c.nome}` : `Desafiar ${c.nome}`}</button>
+      </div>
+    </>
+  );
+}
+
+export function TelaCampanha({ voltarPet, irTreinar }: { voltarPet: () => void; irTreinar: () => void }) {
+  const desk = useDesktop();
   const luta = useLuta();
   /* a aba abre com o palco do proprio modo (a mensagem da arena nao aparece aqui) */
   useEffect(() => { if (!LUTA.palco || LUTA.palco.modo !== "campanha") previa("campanha"); }, []);
   return (
-    <div class="tela dl camp-tela">
+    <div class="tela dl desk camp-tela">
       <div class="camp-principal"><Mapa /></div>
-      <div class="camp-lado"><Detalhe />
-      <details class="dl-apoio"><summary>Como funciona</summary><p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>
+      <div class="camp-lado">{desk ? <DetalheDesk irTreinar={irTreinar} /> : <Detalhe />}
+      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
       </div>
     </div>
   );

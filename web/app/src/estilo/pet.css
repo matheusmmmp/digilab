@@ -368,3 +368,38 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
   .pet-cab-placa .pet-cab-brasao{display:none}
   .pet-cab-sub .pet-cab-brasao--sub{display:inline-block}
 }
+
+/* Pet no desktop (PetTelaDesktop): o topo da casca substitui o cabecalho; palco ate o fundo, Conversar ao lado da fala,
+   e "Agora ha pouco" (ultimas linhas do registro) fechando a coluna da direita */
+.pet-fala-linha{display:flex;gap:12px;align-items:stretch;min-width:0}
+.pet-fala-linha > :first-child{flex:1;min-width:0}
+.pet-conversar{flex:none;gap:8px;padding:0 18px;min-height:52px;align-self:center}
+.pet-recente{display:flex;flex-direction:column;gap:6px;padding:14px 16px}
+.pet-recente-cab{display:flex;justify-content:space-between;align-items:baseline}
+.pet-recente h2{margin:0;font-size:15px;font-weight:900}
+.pet-recente-cab small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.pet-recente ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.pet-recente li{display:flex;gap:14px;font-size:13px;font-weight:700}
+.pet-recente li .dl-lcd{color:var(--dl-plate);flex:none}
+.pet-recente-ver{align-self:flex-end;margin-top:auto;background:none;border:0;font:inherit;font-size:12px;font-weight:900;color:var(--dl-plate);text-decoration:underline;cursor:pointer;min-height:36px}
+.pet-recente-ver:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+@media (min-width:1100px){
+  .app .pet-cab,.app .pet-listra{display:none}
+  .pet-corpo{padding:20px 24px;align-items:stretch;min-height:calc(100dvh / var(--zoom, 1) - 76px);box-sizing:border-box}
+  .pet-principal,.pet-lado{display:flex;flex-direction:column;min-width:0}
+  .pet-principal .palco-card{flex:1;display:flex;flex-direction:column}
+  .pet-principal .palco-cena{flex:1;height:auto;min-height:420px}
+  .pet-recente-caixa{flex:1;display:flex;flex-direction:column}
+  .pet-recente-caixa .pet-recente{flex:1}
+}
+/* Conversar no desktop: a tela ocupa a janela abaixo do topo; a conversa rola dentro e a barra de escrever fica no pe */
+@media (min-width:1100px){
+  .conv-tela{height:calc(100dvh / var(--zoom, 1) - 76px);min-height:0;box-sizing:border-box;padding:20px 24px;grid-template-rows:0 auto auto auto minmax(0,1fr) auto auto;row-gap:0}
+  .conv-lista{margin:0;min-height:0;overflow:auto;background:var(--dl-surface)}
+  .conv-rodape{margin:0;background:var(--dl-surface)}
+  .conv-escrever{margin:0}
+  .conv-status{margin:0}
+  .conv-modos{margin:10px 0 0}
+  .conv-atalhos{padding:10px 0 0}
+  .conv-fatos{margin:12px 0 0;overflow:auto;max-height:100%;min-height:0;align-self:stretch}
+}

@@ -4,6 +4,7 @@
    "? instinto e acaso", mais desejo e obediencia em blocos. Lembrancas: 4 recentes + 2 duradouras. Jeito:
    temperamento, desejo, vinculo e tracos de combate. Valores exatos recolhidos; tudo vem do motor. */
 import { useState } from "preact/hooks";
+import { useDesktop } from "../../desktop.ts";
 import {
   ACOES_PET, BASE_CARATER, CAT, CDJ, CME, COMBATE, EIXOS_TEMP, EMOCAO_TXT, FATORES_ESPACOS, FATORES_TXT, NOME_COMB, NOME_PET,
   afinidades, chaveSprite, distInstinto, expressarDesejo, expressarEmocao, expressarTemperamento, nomeForma, observacao, termosObediencia,
@@ -116,7 +117,7 @@ function Politica() {
 }
 
 /* ------------------------------------------------ Decisoes (EnsinarDecisoes) */
-function Decisoes() {
+function Decisoes({ max = 8 }: { max?: number }) {
   const { motor: m } = useJogo();
   /* uma linha por mudanca: decisoes seguidas iguais (mesma acao e mesmos fatores) viram uma, com a hora da primeira */
   const lin: MotivoVida[] = [];
@@ -131,7 +132,7 @@ function Decisoes() {
       <section class="dl-card bloco">
         <h2>Últimas decisões e o porquê</h2>
         <div class="decisoes">
-          {lin.slice(-8).reverse().map((mot, i) => {
+          {lin.slice(-max).reverse().map((mot, i) => {
             const f = mot.fatores[0];
             return (
               <div class="dec" key={i}>
@@ -250,7 +251,16 @@ function Jeito() {
 }
 
 export function TelaAprend() {
-  const [secao, setSecao] = useState<Secao>("Agora");
+  const [secao, setSecao] = useState<Secao>("Agora"), desk = useDesktop();
+  /* desktop (AprendizadoDesktop): as secoes lado a lado, sem as abas internas */
+  if (desk) return (
+    <div class="tela dl desk aprend-desk">
+      <div class="desk-col aprend-col"><section class="aprend-agora-card"><Agora /></section></div>
+      <div class="desk-col aprend-col"><Politica />
+        <details class="aprend-jeito"><summary>Jeito: temperamento e desejo</summary><Jeito /></details></div>
+      <div class="desk-col aprend-col"><Decisoes max={4} /><Lembrancas /></div>
+    </div>
+  );
   return (
     <div class="tela dl">
       <div class="aprend-secoes" role="group" aria-label="Seções">

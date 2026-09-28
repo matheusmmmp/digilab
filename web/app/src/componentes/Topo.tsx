@@ -8,13 +8,14 @@ import { NOME_ABA, type Aba } from "../rotas.ts";
 import { Retrato, diaDe, hhmm } from "../telas/pet/TelaPet.tsx";
 import { Deco } from "./Deco.tsx";
 
-export function TopoDesktop({ titulo, abas, aba, irAba, abrirMeusPets }: {
-  titulo: string; abas: readonly Aba[]; aba: Aba | null; irAba: (a: Aba) => void; abrirMeusPets: () => void;
+export function TopoDesktop({ titulo, abas, aba, irAba, abrirMeusPets, voltar }: {
+  titulo: string; abas: readonly Aba[]; aba: Aba | null; irAba: (a: Aba) => void; abrirMeusPets: () => void; voltar?: () => void;
 }) {
   const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
     <header class="topo-desk dl-faixa">
       <Deco nome="TopDeco_Earth2_0" largura={210} altura={210} class="topo-globo" />
+      {voltar && <button type="button" class="topo-voltar" aria-label="Voltar ao Pet" onClick={voltar}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4 6 10l6 6" /></svg></button>}
       <h1 class="dl-num topo-tit">{titulo}</h1>
       {abas.length > 1 && (
         <div class="topo-abas" role="tablist" aria-label={`Abas de ${titulo}`}>

@@ -63,9 +63,10 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   return (
-    <div class="tela dl reg-tela">
+    <div class={`tela dl desk reg-tela${replay !== null ? " reg-tela--replay" : ""}`}>
       {replay !== null && <ReplayLuta idx={replay} fechar={() => setReplay(null)} />}
       <section class="dl-card reg-cab">
+        <h2 class="desk-so reg-h">Replay</h2>
         <p>O estado do pet nunca é salvo. Só este registro, e a vida é reconstruída a partir dele.</p>
         <p class="reg-semente"><b>semente</b> <span class="dl-lcd">{m.semente}</span> · <span class="dl-lcd">{m.log.length}</span> <b>eventos</b></p>
         <div class="reg-bts">
@@ -75,9 +76,11 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
         {msg && <p class={`reg-msg${msg.erro ? " erro" : ""}`} aria-live="polite"><i aria-hidden="true">{msg.erro ? "!" : "✓"}</i>{msg.txt}</p>}
       </section>
       <div class="reg-filtros" role="group" aria-label="Filtrar o registro">
+        <h2 class="desk-so reg-h">Mostrar</h2>
         {FILTROS.map(([f, rot]) => <button type="button" key={f} class="chip" aria-pressed={filtro === f} onClick={() => setFiltro(f)}>{rot}</button>)}
       </div>
       <div class="log" aria-live="polite">
+        <h2 class="desk-so reg-h reg-log-tit"><span>Registro</span><small>dia {diaDe(m.e.tick)} · o mais novo em cima</small></h2>
         {vis.length ? vis.map((h, i) => {
           const [, rot, cor] = TIPO_REG[h.quem];
           return <div class={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i}><span class="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span class={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></div>;

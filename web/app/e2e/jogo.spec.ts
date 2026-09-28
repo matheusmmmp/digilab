@@ -190,7 +190,7 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await page.setViewportSize({ width: largura, height: 800 });
     await semear(page, SAVES.v3);
     const lateral = largura >= 900, desktop = largura >= 1100;
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-det"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-lutar"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {

@@ -13,6 +13,7 @@ import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import { AMPULHETA } from "../../grades.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
+import { hhmm } from "../pet/TelaPet.tsx";
 
 /* icones de treino do UP (hexagonos pintados, nao pixel art): 54 x 61 no botao, como pede o guia (secao 6) */
 const ICONE_TREINO: Record<Exercicio, string> = { levantar_pedra: "treino_pedra", corrida: "treino_corrida", alvo: "treino_soco", esquiva: "treino_arrancada", meditar: "treino_cachoeira", resistencia: "treino_saco" };
@@ -82,6 +83,22 @@ function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => 
   );
 }
 
+/** desktop (TreinoDesktop): o ultimo treino do registro e quando sai o proximo */
+function UltimoTreino() {
+  const { motor: m } = useJogo(), t = m.treino, pode = t.podeTocar(m.e.tick);
+  let ev: (typeof m.log)[number] | null = null;
+  for (let i = m.log.length - 1; i >= 0; i--) if (m.log[i][1] === "tr") { ev = m.log[i]; break; }
+  if (!ev) return <div class="dl-card treino-ult"><span class="dl-apoio">Nenhum treino ainda.</span></div>;
+  const ex = ev[2] as Exercicio, [pri, sec] = CTR.exercicios[ex];
+  return (
+    <div class="dl-card treino-ult">
+      <IconeTreino ex={ex} />
+      <span class="treino-ult-txt"><small>último treino · {hhmm(ev[0])}</small><b>{NOME_EXERCICIO[ex]} · {NOME_STAT[pri]} e {NOME_STAT[sec]}</b></span>
+      {!pode && t.ultimo !== null && <span class="dl-lcd treino-ult-prox">próximo em {CTR.intervalo - (m.e.tick - t.ultimo)} min</span>}
+    </div>
+  );
+}
+
 export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   const { motor: m, nascendo } = useJogo(), [msg, setMsg] = useState(""), [confirmar, setConfirmar] = useState<Exercicio | null>(null);
   const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), mult = t.forcaria ? CTR.multForcar : 1;
@@ -99,9 +116,11 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   };
   const apt = APTIDAO[m.especie], fortes = STATS.filter(k => apt[k] > 1).sort((x, y) => apt[y] - apt[x]);
   return (
-    <div class="tela dl">
+    <div class="tela dl desk treino-tela">
+      <div class="desk-col treino-col-esq">
       <Sala />
       <div class="dl-card treino-medidores">
+        <h2 class="desk-so treino-med-tit">Cansaço</h2>
         <Medidor titulo="Fadiga" valor={t.fadiga} n={blocos(t.fadiga / 100, 10)} cls={t.pedePausa ? "dl-seg--necessidade" : ""} marcas={[[CTR.limiarPausa, "pede pausa"], [CTR.limiteForcar, "só forçar"]]} />
         <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
         <div class="med">
@@ -109,8 +128,11 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
           <span class="dl-apoio">{STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${dec(t.pontos[k], 1)}`).join(", ") || "nada ainda"}</span>
         </div>
       </div>
+      </div>
+      <div class="desk-col treino-col-dir">
+      <h2 class="desk-so treino-ex-tit"><span>Exercícios</span><small>um treino por vez · {CTR.intervalo} min de intervalo</small></h2>
       {!bebe && !pode && (
-        <div class="dl-card treino-intervalo"><Peca nome="icone_tempo" reserva="⏳" />
+        <div class="dl-card treino-intervalo desk-nao"><Peca nome="icone_tempo" reserva="⏳" />
           <span><b>Próximo treino em {CTR.intervalo - (m.e.tick - t.ultimo!)} min de jogo</b><span class="dl-apoio">a fadiga baixa {CTR.recuperaHora} por hora acordado e zera quando ele dorme</span></span></div>
       )}
       {bebe && <p class="dl-apoio" style={{ margin: 0 }}>O In-Training ainda não treina.</p>}
@@ -130,11 +152,13 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
           );
         })}
       </div>
-      <p class="treino-legenda"><span class="treino-selo">aptidão</span>{fortes.length ? `${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} Um treino por vez, com {CTR.intervalo} min de intervalo.</p>
+      <p class="treino-legenda desk-nao"><span class="treino-selo">aptidão</span>{fortes.length ? `${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} Um treino por vez, com {CTR.intervalo} min de intervalo.</p>
       <p class="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
       <details class="dl-apoio"><summary>Como o treino funciona</summary>
         <p>Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
       </details>
+      <span class="desk-so treino-ult-caixa"><UltimoTreino /></span>
+      </div>
       {confirmar && <ConfirmarForcar ex={confirmar} fechar={() => setConfirmar(null)} forcar={() => treinar(confirmar)} />}
     </div>
   );

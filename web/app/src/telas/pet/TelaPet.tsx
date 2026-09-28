@@ -245,8 +245,22 @@ function IconeAcao({ a }: { a: AcaoDono }) {
   return em ? <Peca nome={em} escala={2} /> : null;
 }
 
+/** desktop (PetTelaDesktop): as ultimas linhas do registro (o que voce fez e o que ele fez) e o atalho para o Diario */
+function AgoraHaPouco({ irRegistro }: { irRegistro: () => void }) {
+  const { motor: m } = useJogo();
+  const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-3).reverse();
+  const texto = (h: (typeof itens)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
+  return (
+    <section class="dl-card pet-recente" aria-labelledby="pet-recente-tit">
+      <span class="pet-recente-cab"><h2 id="pet-recente-tit">Agora há pouco</h2><small>do registro</small></span>
+      <ol>{itens.map((h, i) => <li key={i}><span class="dl-lcd">{hhmm(h.t)}</span><span>{texto(h)}</span></li>)}</ol>
+      <button type="button" class="pet-recente-ver" onClick={irRegistro}>ver no Diário</button>
+    </section>
+  );
+}
+
 /* ------------------------------------------------ a tela */
-export function TelaPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
+export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void }) {
   const { motor: m, nascendo } = useJogo();
   const agir = (a: AcaoDono) => {
     if (nascendo > 0) return;
@@ -271,7 +285,10 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeus
               <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
             </div>
           </section>
-          <LinhaFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
+          <div class="pet-fala-linha">
+            <LinhaFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
+            <button type="button" class="dl-btn pet-conversar desk-so" onClick={irConversar}>{ICONE_CONVERSAR}Conversar</button>
+          </div>
         </div>
         <aside class="pet-lado">
           <Necessidades />
@@ -280,6 +297,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeus
           <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
             {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
           </div>
+          <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
         </aside>
       </div>
     </section>

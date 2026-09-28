@@ -95,8 +95,11 @@ export function App() {
     history.pushState(null, "", "#/diario/registro");
     setEmLuta(false); ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0);
   };
+  /* replay de uma luta do registro no Diario (card da ultima luta na Arena) */
+  const abrirReplay = (idx: number) => { REPLAY.pedido = idx; ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0); };
   /* desktop (>= 1100 px): topo da casca com titulo, abas e o mini-card do pet */
-  const topo = <TopoDesktop titulo={NOME_DESTINO[rota.destino]} abas={abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })} abrirMeusPets={() => setMeusPets(true)} />;
+  const topo = <TopoDesktop titulo={config ? "Configurações" : NOME_DESTINO[rota.destino]} abas={config ? [] : abas} aba={rota.aba} irAba={a => ir({ destino: rota.destino, aba: a })}
+    abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined} />;
   if (emLuta) return (
     <div class="app app--tela-cheia">
       <TelaLuta sair={sairDaLuta} verReplay={verReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
@@ -125,8 +128,8 @@ export function App() {
             Rode <code>python gerar_decoracao_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
-      {config ? <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-      : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} /></>
+      {config ? <>{topo}<TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
+      : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} /></>
       : rota.destino === "conversar" ? <>{topo}<TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></> : (<>{topo}
       <section class="painel" aria-labelledby="tela-titulo">
         <div class="tela-cab dl-faixa">
@@ -148,8 +151,8 @@ export function App() {
         )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
           {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao />
-            : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-            : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
+            : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} verReplay={abrirReplay} />
+            : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
             : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "catalogo" ? <TelaCatalogo /> : <TelaCenarios />}
         </div>

@@ -2,7 +2,7 @@
    de icone com estado (travada, vetada, livre), contador de espacos, a regra final, as vetadas e o que o pet
    mudou. O dono so trava ou veta; tudo entra no registro. */
 import { useState } from "preact/hooks";
-import { CV, CV21, NOME_V2, regraDe, rotuloCond, type OpGambit } from "../../../motor/index.ts";
+import { CV, CV21, NOME_V2, regraDe, rotuloCond, rotuloRegra, type OpGambit } from "../../../motor/index.ts";
 import { comSinal } from "../../componentes/Barras.tsx";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 
@@ -55,6 +55,47 @@ export function EditorRegras() {
         {gp.mudancas.slice(-15).reverse().map((x, i) => { const tx = x.texto.replace(/(\d)\.(\d)/g, "$1,$2");
           return <div key={i}><span class="t">luta {x.luta}</span> {x.dono ? <b>{tx}</b> : "pet " + tx}</div>; })}
       </div></details>
+      {msg && <p class="dl-apoio erro" role="alert">{msg}</p>}
+    </div>
+  );
+}
+
+/** desktop (ArenaDesktop): as regras em cards compactos, numerados, travada ou aprendida; o card escolhido mostra
+    Travar/Vetar (ou Liberar, se vetada). Mesmas intervencoes do editor, mesmo registro. */
+export function RegrasCompactas() {
+  const { motor: m } = useJogo(), gp = m.gp, [sel, setSel] = useState<string | null>(null), [msg, setMsg] = useState("");
+  if (!gp) return <p class="dl-apoio">O In-Training ainda luta ao acaso; as regras de combate começam no Rookie.</p>;
+  const cap = CV21.maxRegras[gp.forma!.est];
+  const intervir = (op: OpGambit, k: string) => {
+    try { mudarMotor(mm => mm.intervirGambit(op, k)); setMsg(""); setSel(null); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
+  };
+  return (
+    <div class="rc">
+      <h2 class="rc-tit"><span>Regras de combate</span><small>{gp.ativas.length} de {cap}</small></h2>
+      <ol class="rc-lista">
+        {gp.ativas.map((k, i) => {
+          const trav = k in gp.travas, aberto = sel === k;
+          return (
+            <li key={k} class={`rc-card dl-malha${aberto ? " rc-card--sel" : ""}`}>
+              <button type="button" class="rc-toque" aria-expanded={aberto} onClick={() => setSel(aberto ? null : k)}>
+                <span class="rc-topo"><span class="rc-num">{i + 1}{trav ? " · TRAVADA" : ""}</span><span class="rc-sub">{trav ? "travada por você" : "aprendida"}</span></span>
+                <span class="rc-txt">{rotuloRegra(regraDe(k)).replace(/^se/, "Se")}</span>
+              </button>
+              {aberto && <span class="luta-regra-bts">
+                <button type="button" class="regra-travar" onClick={() => intervir(trav ? "destravar" : "travar", k)}><IcoTrava />{trav ? "Destravar" : "Travar"}</button>
+                <button type="button" class="regra-vetar" onClick={() => intervir("vetar", k)}>Vetar</button></span>}
+            </li>
+          );
+        })}
+        {gp.vetos.map(k => (
+          <li key={k} class="rc-vetada">
+            <button type="button" class="rc-toque" aria-expanded={sel === k} onClick={() => setSel(sel === k ? null : k)}>
+              <s>{rotuloRegra(regraDe(k)).replace(/^se /, "")}</s> · vetada</button>
+            {sel === k && <button type="button" class="dl-btn dl-btn--sec rc-liberar" onClick={() => intervir("liberar", k)}>Liberar</button>}
+          </li>
+        ))}
+      </ol>
+      <p class="dl-apoio rc-pe">Ele aprende lutando. Você só trava ou veta.</p>
       {msg && <p class="dl-apoio erro" role="alert">{msg}</p>}
     </div>
   );

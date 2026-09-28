@@ -161,9 +161,10 @@ export function TelaEvolucao() {
   const det = (x: typeof evs[number]) => x.estagio === "crianca" ? `cuidado ${(x.cuidado! * 100).toFixed(0)}%`
     : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater!)}` : `caráter: ${fmtCar(x.carater!)}; ${x.sparring} lutas de treino`;
   return (
-    <div class="tela dl evo-tela">
-      <div class="evo-principal"><Arvore m={m} p={p} /></div>
+    <div class="tela dl desk evo-tela">
+      <div class="evo-principal"><h2 class="desk-so evo-arv-tit">Árvore de {BRASAO[m.especie].nome}</h2><Arvore m={m} p={p} /></div>
       <div class="evo-lado">
+      <div class="desk-col evo-resumo">
       <p class="evo-selo"><Deco nome={BRASAO[m.especie].peca} class="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
       <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
       <details class="dl-apoio"><summary>Como funciona</summary>
@@ -176,6 +177,7 @@ export function TelaEvolucao() {
         /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
         [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? "?" : NOME_ARQ[f.adulta!]],
       ]} />
+      </div>
       {ult && <section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={ult} /></section>}
       <section class="bloco">
         <h2>Histórico</h2>
