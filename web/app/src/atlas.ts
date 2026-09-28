@@ -55,12 +55,64 @@ export function dimSprite(a: AtlasUp, nome: string): [number, number] {
   const k = chaveUp(a, nome), s = a.sprites[k];
   return s ? [s.caixa[0], s.caixa[1]] : [a.pecas[k][2], a.pecas[k][3]];
 }
-/** desenha um quadro do idle em escala inteira de pixel do aparelho, sem suavizar */
-export function desenharSprite(ctx: CanvasRenderingContext2D, e: Extract<EstadoAtlas, { tipo: "ok" }>, nome: string, x: number, y: number, escala: number, iQuadro: number): void {
+export type AtlasOk = Extract<EstadoAtlas, { tipo: "ok" }>;
+const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** quadro do idle agora (120 ms por quadro); parado ou com movimento reduzido, o primeiro */
+export function quadroAgora(a: AtlasOk, nome: string, parado = false): number {
+  const s = a.dados.sprites[chaveUp(a.dados, nome)];
+  return !s || parado || movimentoReduzido() ? 0 : Math.floor(performance.now() / a.dados.ms_por_quadro) % s.quadros.length;
+}
+
+/* forma sombria: o mesmo quadro com veu roxo (#7B3FB8) e contorno de 1 px (proposta aprovada na Etapa 0) */
+const cacheSombrio = new Map<string, HTMLCanvasElement>();
+function quadroSombrio(a: AtlasOk, q: Quadro): HTMLCanvasElement {
+  const ch = q.join(",");
+  const c0 = cacheSombrio.get(ch);
+  if (c0) return c0;
+  const [sx, sy, w, h] = q;
+  const novo = (cw: number, chh: number): [HTMLCanvasElement, CanvasRenderingContext2D] => {
+    const c = document.createElement("canvas"); c.width = cw; c.height = chh;
+    const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível"); return [c, g];
+  };
+  const [base, b] = novo(w, h), [sil, si] = novo(w, h), [c, g] = novo(w + 2, h + 2);
+  b.drawImage(a.img, sx, sy, w, h, 0, 0, w, h);
+  b.globalCompositeOperation = "source-atop"; b.fillStyle = "rgba(123,63,184,.5)"; b.fillRect(0, 0, w, h);
+  si.drawImage(a.img, sx, sy, w, h, 0, 0, w, h);
+  si.globalCompositeOperation = "source-in"; si.fillStyle = "#7B3FB8"; si.fillRect(0, 0, w, h);
+  for (const [dx, dy] of [[0, 1], [2, 1], [1, 0], [1, 2]]) g.drawImage(sil, dx, dy);
+  g.drawImage(base, 1, 1);
+  cacheSombrio.set(ch, c);
+  return c;
+}
+
+/** desenha um quadro do idle (ou uma peca) em escala inteira de pixel do aparelho, sem suavizar */
+export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: string, x: number, y: number, escala: number, iQuadro: number,
+  opc: { sombria?: boolean } = {}): void {
   if (!Number.isInteger(escala) || escala < 1) throw new Error("escala de sprite so inteira: " + escala);
   const k = chaveUp(e.dados, nome), s = e.dados.sprites[k];
-  ctx.imageSmoothingEnabled = false;
-  if (!s) { const r = e.dados.pecas[k]; ctx.drawImage(e.img, r[0], r[1], r[2], r[3], x, y, r[2] * escala, r[3] * escala); return; }
+  /* no pixel do canvas (ignora a escala do contexto), como o spriteUp do HTML */
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
+  x = Math.round(x); y = Math.round(y);
+  if (!s) { const r = e.dados.pecas[k]; ctx.drawImage(e.img, r[0], r[1], r[2], r[3], x, y, r[2] * escala, r[3] * escala); ctx.restore(); return; }
   const q = s.quadros[iQuadro % s.quadros.length];
-  ctx.drawImage(e.img, q[0], q[1], q[2], q[3], x + q[4] * escala, y + q[5] * escala, q[2] * escala, q[3] * escala);
+  if (opc.sombria) ctx.drawImage(quadroSombrio(e, q), 0, 0, q[2] + 2, q[3] + 2, x + (q[4] - 1) * escala, y + (q[5] - 1) * escala, (q[2] + 2) * escala, (q[3] + 2) * escala);
+  else ctx.drawImage(e.img, q[0], q[1], q[2], q[3], x + q[4] * escala, y + q[5] * escala, q[2] * escala, q[3] * escala);
+  ctx.restore();
+}
+/** estado do atlas fora de componente (o palco desenha num intervalo proprio) */
+export const atlasAtual = (): EstadoAtlas => estado;
+/** escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */
+export const escalaSprite = (): number => Math.max(1, Math.floor(devicePixelRatio || 1));
+
+/** imagem (data URL) de um sprite ou peca em escala inteira, primeiro quadro; cache por nome e escala */
+const cacheImagem = new Map<string, string>();
+export function imagemAtlas(a: AtlasOk, nome: string, escala = 1, opc: { sombria?: boolean } = {}): { url: string; w: number; h: number } {
+  const [w, h] = dimSprite(a.dados, nome), ch = `${nome}@${escala}@${opc.sombria ? 1 : 0}`;
+  if (!cacheImagem.has(ch)) {
+    const c = document.createElement("canvas"); c.width = w * escala; c.height = h * escala;
+    const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
+    desenharSprite(g, a, nome, 0, 0, escala, 0, opc);
+    cacheImagem.set(ch, c.toDataURL());
+  }
+  return { url: cacheImagem.get(ch)!, w: w * escala, h: h * escala };
 }
