@@ -4,6 +4,8 @@ import { useEffect } from "preact/hooks";
 import { NOME_ARQ, NOME_BOT, NOME_DONO, NOME_V2, lutadorBot, lutadorPet, nomeForma } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Seg } from "../../componentes/Barras.tsx";
+import { RetratoRival } from "../../componentes/Imagens.tsx";
+import { molduraArena, urlDeco, useDecoracao } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import {
   LUTA, RIVAIS_ADULTOS, RIVAIS_CLASSICOS, escolherRival, exibirBot, lutarAnimado, melhorDe10, previa, sparringTexto, useLuta,
@@ -13,11 +15,14 @@ import { PalcoLuta } from "./PalcoLuta.tsx";
 
 function CardRival({ k }: { k: string }) {
   const a = useAtlas(), luta = useLuta(), L = exibirBot(k);
+  useDecoracao();
+  /* moldura da arena do UP: a primeira faixa (o motor so conta vitorias na campanha) */
   const img = a.tipo === "ok" ? imagemAtlas(a, L.sprite) : null, h = a.tipo === "ok" ? dimSprite(a.dados, L.sprite)[1] : 0;
   const estilo = L.estiloTela ?? (k === "oraculo" ? "referência" : NOME_BOT[k]);
   return (
     <button type="button" class="rival-card" role="radio" aria-checked={luta.rival === k && !luta.rivalFixo} disabled={luta.lutando} onClick={() => escolherRival(k)}>
-      <span class="rival-spr">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" style={{ marginTop: `${h > 56 ? -Math.round(h * .08) : 0}px` }} />}</span>
+      {urlDeco(molduraArena(0)) ? <RetratoRival sprite={L.sprite} moldura={molduraArena(0)} />
+        : <span class="rival-spr">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" style={{ marginTop: `${h > 56 ? -Math.round(h * .08) : 0}px` }} />}</span>}
       <span class="rival-txt"><b>{L.nomeTela}</b><small>{estilo}</small></span>
     </button>
   );

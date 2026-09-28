@@ -72,11 +72,11 @@ export function ouvirDecoracao(f: () => void): () => void { ouvintes.add(f); ret
 
 /* ------------------------------------------------ o que cada lugar usa (so nomes; nada do motor muda) */
 /** brasao da especie (guia: brasa Coragem, cirro Amizade, ferrugem Conhecimento, limo Sinceridade) */
-export const BRASAO: Record<string, { peca: NomeDeco; nome: string }> = {
-  brasa: { peca: "Crest_Combine_1", nome: "Coragem" },
-  cirro: { peca: "Crest_Combine_2", nome: "Amizade" },
-  ferrugem: { peca: "Crest_Combine_4", nome: "Conhecimento" },
-  limo: { peca: "Crest_Combine_5", nome: "Sinceridade" },
+export const BRASAO: Record<string, { peca: NomeDeco; esquerda: NomeDeco; direita: NomeDeco; nome: string }> = {
+  brasa: { peca: "Crest_Combine_1", esquerda: "Crest_Left_1", direita: "Crest_Right_1", nome: "Coragem" },
+  cirro: { peca: "Crest_Combine_2", esquerda: "Crest_Left_2", direita: "Crest_Right_2", nome: "Amizade" },
+  ferrugem: { peca: "Crest_Combine_4", esquerda: "Crest_Left_4", direita: "Crest_Right_4", nome: "Conhecimento" },
+  limo: { peca: "Crest_Combine_5", esquerda: "Crest_Left_5", direita: "Crest_Right_5", nome: "Sinceridade" },
 };
 /** fundo ilustrado da luta de cada NPC da campanha (recortes sem o chefe; a arena fica com o octogono) */
 export const FUNDO_NPC: Record<string, NomeDeco> = {

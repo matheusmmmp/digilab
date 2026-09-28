@@ -5,7 +5,8 @@ import { useEffect } from "preact/hooks";
 import { LUGARES, NOME_ESTAGIO_FALA, NOME_V2, NPC, STATS, chaveSprite, nomeEstiloNPC } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { fundoDeco } from "../../componentes/Deco.tsx";
-import { FAIXA_LUGAR, FUNDO_NPC, useDecoracao } from "../../decoracao.ts";
+import { RetratoRival } from "../../componentes/Imagens.tsx";
+import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, useDecoracao } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, previa, tentativas, useLuta } from "../../luta.ts";
 import { PalcoLuta } from "./PalcoLuta.tsx";
@@ -66,7 +67,8 @@ function Detalhe() {
         const st = vit ? `vencido ${vit}× em ${tent} luta${tent === 1 ? "" : "s"}` : tent ? `${tent} tentativa${tent === 1 ? "" : "s"}, nenhuma vitória` : "ainda não enfrentado";
         return (
           <div key={k} class={`camp-rival${k === sel ? " sel" : ""}`} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
-            <div><b>{c.nome}</b> <span class="dl-apoio">· {nomeEstiloNPC(c.estilo)} · stats {(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total {c.total})</span></div>
+            <div class="camp-rival-cab"><RetratoRival sprite={c.k} moldura={molduraArena(vit)} />
+              <span><b>{c.nome}</b>{c.lug === LUGARES.length - 1 && <span class="dl-tag camp-chefe">chefe</span>} <span class="dl-apoio">· {nomeEstiloNPC(c.estilo)} · stats {(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total {c.total})</span></span></div>
             <p class="licao">{c.licao}</p>
             <div class="dl-linha">
               <button type="button" class={`dl-btn${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
