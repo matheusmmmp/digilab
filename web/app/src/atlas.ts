@@ -87,7 +87,7 @@ function quadroSombrio(a: AtlasOk, q: Quadro): HTMLCanvasElement {
 
 /** desenha um quadro do idle (ou uma peca) em escala inteira de pixel do aparelho, sem suavizar */
 export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: string, x: number, y: number, escala: number, iQuadro: number,
-  opc: { sombria?: boolean } = {}): void {
+  opc: { sombria?: boolean; espelho?: boolean } = {}): void {
   if (!Number.isInteger(escala) || escala < 1) throw new Error("escala de sprite so inteira: " + escala);
   const k = chaveUp(e.dados, nome), s = e.dados.sprites[k];
   /* no pixel do canvas (ignora a escala do contexto), como o spriteUp do HTML */
@@ -95,6 +95,8 @@ export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: 
   x = Math.round(x); y = Math.round(y);
   if (!s) { const r = e.dados.pecas[k]; ctx.drawImage(e.img, r[0], r[1], r[2], r[3], x, y, r[2] * escala, r[3] * escala); ctx.restore(); return; }
   const q = s.quadros[iQuadro % s.quadros.length];
+  /* espelho (so na luta, o rival): em volta da caixa comum do idle */
+  if (opc.espelho) { ctx.translate(x + s.caixa[0] * escala, y); ctx.scale(-1, 1); x = 0; y = 0; }
   if (opc.sombria) ctx.drawImage(quadroSombrio(e, q), 0, 0, q[2] + 2, q[3] + 2, x + (q[4] - 1) * escala, y + (q[5] - 1) * escala, (q[2] + 2) * escala, (q[3] + 2) * escala);
   else ctx.drawImage(e.img, q[0], q[1], q[2], q[3], x + q[4] * escala, y + q[5] * escala, q[2] * escala, q[3] * escala);
   ctx.restore();

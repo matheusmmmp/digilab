@@ -13,6 +13,8 @@ import { TelaProvisoria } from "./telas/Provisoria.tsx";
 import { TelaAprend } from "./telas/crescer/TelaAprend.tsx";
 import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
+import { TelaArena } from "./telas/lutar/TelaArena.tsx";
+import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
 
@@ -84,6 +86,8 @@ export function App() {
         )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
           {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao />
+            : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
+            : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : <TelaProvisoria aba={rota.aba} />}
         </div>
       </section>)}

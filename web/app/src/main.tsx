@@ -10,6 +10,7 @@ import "./estilo/tokens.css";
 import "./estilo/base.css";
 import "./estilo/pet.css";
 import "./estilo/crescer.css";
+import "./estilo/lutar.css";
 
 const tema = new URLSearchParams(location.search).get("tema");
 if (tema === "claro" || tema === "escuro") document.documentElement.dataset.tema = tema;
