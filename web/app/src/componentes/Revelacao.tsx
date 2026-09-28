@@ -2,29 +2,14 @@
    nao reabre as dele. O "por que" vem so do que o motor registrou na evolucao. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  CAT, CDJ, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Motor,
+  CAT, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Motor,
 } from "../../motor/index.ts";
 import { desenharSprite, quadroAgora, useAtlas } from "../atlas.ts";
 import { useJogo } from "../jogo.ts";
-import { Seg } from "../telas/pet/TelaPet.tsx";
+import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
 const ORDEM_NIVEL = ["bebe", "crianca", "adolescente", "adulto"] as const;
-/** rotulo relativo ao pet comum (guia 7.5): so fora da faixa comum */
-export const rotuloRel = (v: number): string => Math.abs(v) < CDJ.limiarTom ? "na faixa comum" : v >= .6 ? "muito acima" : v > 0 ? "acima" : v <= -.6 ? "muito abaixo" : "abaixo";
-const blocos = (v: number, m: number): number => Math.max(0, Math.min(m, Math.round(v * m)));
-
-/** barra relativa ao pet comum: caráter em [-1, 1], 0 = pet comum; rotulo so fora da faixa comum */
-export function BarraCarater({ eixo, v }: { eixo: string; v: number }) {
-  const rot = Math.abs(v) < CDJ.limiarTom ? "" : rotuloRel(v), f = (Math.max(-1, Math.min(1, v)) + 1) / 2;
-  return (
-    <div class="dl-rel">
-      <span style={{ minWidth: "6.5em" }}>{eixo}</span>
-      <span class="dl-rel-trilho" role="img" aria-label={`${eixo}: ${rot || "na faixa comum"}`}><i style={{ width: `${f * 100}%` }} /><b /></span>
-      <span class="dl-rel-rotulo">{rot}</span>
-    </div>
-  );
-}
-function Porque({ x }: { x: Evolucao }) {
+export function Porque({ x }: { x: Evolucao }) {
   if (x.estagio === "crianca") return <>
     <p style={{ margin: 0 }}>decidido pelo <b>cuidado</b> no In-Training: {(x.cuidado! * 100).toFixed(0)}% dos chamados atendidos a tempo (limite {CAT.limiarCuidado * 100}%).</p>
     <Seg n={blocos(x.cuidado!, 10)} m={10} cls="dl-seg--acao" marca={CAT.limiarCuidado * 10} />

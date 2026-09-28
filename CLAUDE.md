@@ -636,7 +636,8 @@ regravado). `cd web/app && npm install`; `npm run dev` (http://localhost:5173, s
 `npm run build` (sai em `web/dist/`, não versionado; o `servidor_local.py` serve em `/v1/web/dist/`, e no modo
 remoto só o que fica dentro dessa pasta); `npm run tipos` (tsc estrito: motor sem DOM + app); `npm test`
 (Vitest, ~1 min). Etapa 4 (telas), feito: **Pet** (palco, fala, necessidades, chamado, desejo, ações, tempo,
-Meus pets, revelação da evolução, conversa da fala livre com as mesmas chaves). O tempo anda e grava o save (ação
+Meus pets, revelação da evolução, conversa da fala livre com as mesmas chaves) e **Crescer** (Treinar,
+Aprendizado, Evolução). O tempo anda e grava o save (ação
 do dono na hora; tempo a cada 2 s; o pendente ao esconder/fechar a aba); se outra aba muda o save, o app relê em vez
 de gravar por cima (o HTML não faz isso: não deixar o HTML e o app abertos juntos no mesmo pet). Semear save em
 teste: por uma página da mesma origem que não seja o app (ex.: `/Assets/digilab_atlas_up.json`), senão o app grava
