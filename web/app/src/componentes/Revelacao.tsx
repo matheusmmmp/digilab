@@ -5,7 +5,7 @@ import {
   CAT, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
 } from "../../motor/index.ts";
 import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
-import { Deco } from "../decoracao.tsx";
+import { Deco } from "./Deco.tsx";
 import { useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
@@ -74,8 +74,8 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
       </div>
       <div class="revel-cena">
         <span class="revel-luz" aria-hidden="true" />
-        <Deco nome="UI_Fx_Glow_Circle_01" w={300} h={300} cls="revel-glow" />
-        <Deco nome="Digivice_Circle_01" w={280} h={280} cls="revel-digivice dl-gira" />
+        <Deco nome="UI_Fx_Glow_Circle_01" largura={300} altura={300} class="revel-glow" />
+        <Deco nome="Digivice_Circle_01" largura={280} altura={280} class="revel-digivice dl-gira" />
         <span class="revel-anel" aria-hidden="true" />
         <Palco x={x} />
         <span class="dl-placa revel-nome">{nomeForma(f)}</span>

@@ -4,7 +4,9 @@
 import { useEffect } from "preact/hooks";
 import { LUGARES, NOME_ESTAGIO_FALA, NOME_V2, NPC, STATS, chaveSprite, nomeEstiloNPC } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
-import { Peca } from "../../componentes/Imagens.tsx";
+import { fundoDeco } from "../../componentes/Deco.tsx";
+import { Peca, RetratoRival } from "../../componentes/Imagens.tsx";
+import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, urlDeco, useDecoracao } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, previa, tentativas, useLuta } from "../../luta.ts";
 import { PalcoLuta } from "./PalcoLuta.tsx";
@@ -57,18 +59,22 @@ function Detalhe() {
   const { motor: m } = useJogo(), a = useAtlas(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
   const est = m.forma.est, cedo = ORDEM_EST.indexOf(est) < ORDEM_EST.indexOf(L.est), podeLutar = est !== "bebe";
   const prox = LUGARES[Li + 1], c = NPC[sel]!, vit = m.campanha[sel], tent = tentativas(m, sel);
+  useDecoracao();
+  const faixa = fundoDeco(FAIXA_LUGAR[Li] ?? FUNDO_NPC[sel]);
   const cab = !aberto ? `Trancado: vença alguém em ${LUGARES[Li - 1].nome} antes.` : prox ? `Vencer ${L.rivais.length > 1 ? "qualquer um" : c.nome} abre ${prox.nome}.` : "Último lugar da campanha.";
   const st = vit ? `vencido ${vit}× em ${tent} luta${tent === 1 ? "" : "s"}` : tent ? `${tent} tentativa${tent === 1 ? "" : "s"}, nenhuma vitória` : "ainda não enfrentado";
   return (
     <>
       <section class="camp-det" aria-live="polite" aria-label="Lugar selecionado">
+        {faixa && <div class="camp-faixa" style={{ backgroundImage: faixa }}><span aria-hidden="true">{L.nome} · luta contra {c.nome}</span></div>}
         <span class="camp-det-cab"><b>{L.nome}</b><span>sugerido: {L.sugerido}</span></span>
         <div class="camp-rivais" role="radiogroup" aria-label="Rivais do lugar">
           {L.rivais.map(k => {
-            const n = NPC[k]!, img = a.tipo === "ok" ? imagemAtlas(a, n.k) : null;
+            const n = NPC[k]!, img = a.tipo === "ok" ? imagemAtlas(a, n.k) : null, moldura = molduraArena(m.campanha[k]);
             return (
               <button type="button" key={k} class="camp-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
-                <span class="camp-rival-spr">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
+                {urlDeco(moldura) ? <RetratoRival sprite={n.k} moldura={moldura} lado={52} />
+                  : <span class="camp-rival-spr">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>}
                 <b>{n.nome}</b><span>{m.campanha[k]} vitória{m.campanha[k] === 1 ? "" : "s"}</span>
               </button>
             );

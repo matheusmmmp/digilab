@@ -29,7 +29,7 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
     cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
 - so as rotas do jogo: /v1/web/*.html, o build do app em /v1/web/dist/ (so o que fica dentro dele),
-  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json} e /api/fala*; o resto (repo, .git, v0, codigo do
+  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json}, a decoracao listada em web/app/decoracao_nomes.json e /api/fala*; o resto (repo, .git, v0, codigo do
   app, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
@@ -70,10 +70,22 @@ PREFIXO = "/" + RAIZ.name
 VERSAO_APP = "exp-fala-livre" if RAIZ.name.endswith("fala-livre") else "principal"
 LIMITE_CORPO = 16 * 1024
 SENHA_MIN = 12
+def _nomes_decoracao() -> list[str]:
+    """Nomes dos PNGs de decoracao (web/app/decoracao_nomes.json); so letras, digitos e _ (nada de caminho)."""
+    nomes = json.loads((RAIZ / "web" / "app" / "decoracao_nomes.json").read_text(encoding="utf-8"))["pecas"]
+    for n in nomes:
+        if not re.fullmatch(r"[A-Za-z0-9_]+", n):
+            raise ValueError(f"nome de decoracao invalido: {n!r}")
+    return nomes
+
+
 # modo remoto: so estas rotas (o resto da pasta servida nao sai do computador)
 ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.html", "/Assets/digilab_atlas.png",
-                 "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json", "/Assets/digilab_decoracao_up.json",
-                 "/api/fala", "/api/fala/status")
+                 "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json",
+                 "/api/fala", "/api/fala/status",
+                 # decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs listados no repositorio
+                 "/Assets/digilab_decoracao_up.json",
+                 *(f"/Assets/decoracao_up/{n}.png" for n in _nomes_decoracao()))
 
 
 # app em TypeScript (TAREFA_FRONT_TS): o build do Vite em web/dist/ (nao versionado). No modo remoto sai so o
@@ -96,14 +108,9 @@ def rota_do_app(caminho: str) -> bool:
     return alvo == base or base in alvo.parents
 
 
-# decoracao do UP (brasoes, icones do guia de crescimento, globo, engrenagem; Assets/gerar_decoracao_up.py): so PNG
-# de nome simples dentro de Assets/decoracao_up/
-ROTA_DECORACAO = re.compile(r"/Assets/decoracao_up/[A-Za-z0-9_]+\.png")
-
-
 def rota_permitida(caminho: str) -> bool:
     c = caminho.split("?", 1)[0]
-    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c) or ROTA_DECORACAO.fullmatch(c) is not None
+    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c)
 
 
 class Tratador(SimpleHTTPRequestHandler):

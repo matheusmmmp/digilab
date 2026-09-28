@@ -10,7 +10,9 @@ import {
 } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
 import { Numeros, rotuloRel } from "../../componentes/Barras.tsx";
+import { Deco } from "../../componentes/Deco.tsx";
 import { Porque } from "../../componentes/Revelacao.tsx";
+import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 
@@ -162,6 +164,7 @@ export function TelaEvolucao() {
     <div class="tela dl evo-tela">
       <div class="evo-principal"><Arvore m={m} p={p} /></div>
       <div class="evo-lado">
+      <p class="evo-selo"><Deco nome={BRASAO[m.especie].peca} class="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
       <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
       <details class="dl-apoio"><summary>Como funciona</summary>
         <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>

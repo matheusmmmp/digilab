@@ -129,3 +129,5 @@ details.zona-risco[open]{padding-bottom:12px}
   .cat-tela > *{grid-column:1}
   .cat-tela > .cat-detalhe{grid-column:2;grid-row:1 / span 4;position:sticky;top:12px}
 }
+.cat-chip-brasao{width:26px;height:auto;aspect-ratio:295/194;margin-right:4px;vertical-align:-4px}
+.cat-brasoes .chip{display:inline-flex;align-items:center}

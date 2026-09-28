@@ -23,6 +23,7 @@ export function iniciarTema(): void {
   aplicar();
 }
 export function trocarTema(): void { escolherTema(PROXIMO_TEMA[tema]); }
+/** tema escolhido (Configuracoes > Aparencia) */
 export function escolherTema(t: Tema): void {
   tema = t;
   try { if (tema === "sistema") localStorage.removeItem(CHAVE_TEMA); else localStorage.setItem(CHAVE_TEMA, tema); } catch { /* preferencia de tela */ }

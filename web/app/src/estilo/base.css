@@ -110,3 +110,4 @@ footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:
   .dl-nav button{gap:4px}
   .dl-nav .nav-config{margin-top:auto}
 }
+@media (max-width:899px){ .dl-nav .nav-config{display:none} }

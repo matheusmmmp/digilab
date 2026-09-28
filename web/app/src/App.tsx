@@ -2,16 +2,18 @@
    4 destinos e rodape. A rota vem do endereco (#/destino/aba) ou da aba lembrada, como no HTML. */
 import { useEffect, useState } from "preact/hooks";
 import { useAtlas } from "./atlas.ts";
+import { useDecoracao } from "./decoracao.ts";
 import { Nav } from "./componentes/Nav.tsx";
 import { BoasVindas } from "./componentes/BoasVindas.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { nomeForma } from "../motor/index.ts";
-import { Deco } from "./decoracao.tsx";
 import { useJogo } from "./jogo.ts";
 import {
-  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco,
-  type Aba, type Destino, type Rota,
+  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, configDoEndereco, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
+  rotaDoEndereco, type Aba, type Destino, type ParteConfig, type Rota,
 } from "./rotas.ts";
+import { Deco } from "./componentes/Deco.tsx";
+import { TelaConfig } from "./telas/config/TelaConfig.tsx";
 import { TelaCatalogo } from "./telas/diario/TelaCatalogo.tsx";
 import { TelaCenarios } from "./telas/diario/TelaCenarios.tsx";
 import { TelaRegistro } from "./telas/diario/TelaRegistro.tsx";
@@ -20,7 +22,6 @@ import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
 import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
-import { TelaConfig } from "./telas/config/TelaConfig.tsx";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
@@ -34,31 +35,37 @@ function primeiraVisita(): boolean {
 }
 
 function rotaInicial(): Rota {
-  return rotaDoEndereco(location.hash) ?? lerAbaLembrada(armaz()) ?? ROTA_INICIAL;
+  return rotaDoEndereco(location.hash) ?? (configDoEndereco(location.hash) ? { destino: "diario", aba: "registro" } : null) ?? lerAbaLembrada(armaz()) ?? ROTA_INICIAL;
 }
 
 export function App() {
-  const jogo = useJogo(), atlas = useAtlas();
+  const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao();
   const [rota, setRota] = useState<Rota>(rotaInicial);
+  /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
+  const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
   const [boasVindas, setBoasVindas] = useState(primeiraVisita);
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
-    const alvo = enderecoDaRota(rota);
+    const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
     if (location.hash !== alvo) history.replaceState(null, "", alvo);
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
-    document.title = `${NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota]);
+    document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
+  }, [rota, config]);
   useEffect(() => {
-    const aoMudar = () => { const r = rotaDoEndereco(location.hash); if (r) setRota(r); };
+    const aoMudar = () => {
+      const c = configDoEndereco(location.hash); if (c) { setConfig(c); return; }
+      const r = rotaDoEndereco(location.hash); if (r) { setConfig(null); setRota(r); }
+    };
     addEventListener("hashchange", aoMudar);
     return () => removeEventListener("hashchange", aoMudar);
   }, []);
 
-  const ir = (r: Rota) => { setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
+  const ir = (r: Rota) => { setConfig(null); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
+  const abrirConfig = (p: ParteConfig) => { setConfig(p); scrollTo(0, 0); };
   const abas = DESTINOS[rota.destino];
 
   return (
@@ -75,10 +82,27 @@ export function App() {
           <p>{atlas.erro}. Rode <code>python gerar_atlas_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
-      {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
-        : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
+      {(deco.estado.tipo === "erro" || deco.falhas.size > 0) && (
+        <div class="aviso" role="alert">
+          Parte da decoração do Digimon UP não carregou; esses lugares ficam com o visual de antes.
+          <p>{deco.estado.tipo === "erro" ? deco.estado.erro : [...deco.falhas].map(([n, e]) => `${n} (${e})`).join(", ")}.
+            Rode <code>python gerar_decoracao_up.py</code> em D:\Trab\digilab\Assets.</p>
+        </div>
+      )}
+      {config ? <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
+      : rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
+      : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
-        <div class="tela-cab dl-faixa">{rota.destino === "config" && <Deco nome="Common_Icon_Setting" w={26} h={26} cls="tela-cab-ic" />}<h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1>{rota.destino !== "config" && <span class="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span>}</div>
+        <div class="tela-cab dl-faixa">
+          <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
+          <h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1>
+          <span class="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span>
+          {rota.destino === "diario" && (
+            <button type="button" class="cab-engrenagem" aria-label="Configurações" onClick={() => abrirConfig("principal")}>
+              <Deco nome="Common_Icon_Setting" /><span class="cab-engrenagem-reserva" aria-hidden="true">⚙</span>
+            </button>
+          )}
+        </div>
         {abas.length > 1 && (
           <div class="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
             {abas.map(a => (
@@ -91,12 +115,10 @@ export function App() {
             : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
-            : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "ajustes"
-            ? <TelaConfig irRegistro={() => { ir({ destino: "diario", aba: "registro" }); scrollTo(0, 0); }} irConversar={() => { ir({ destino: "conversar", aba: "chat" }); scrollTo(0, 0); }} />
-            : <TelaCenarios />}
+            : rota.aba === "catalogo" ? <TelaCatalogo /> : <TelaCenarios />}
         </div>
       </section>)}
-      <Nav atual={rota.destino} ir={irDestino} />
+      <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
       <RevelacaoEvolucao />
       {boasVindas && <BoasVindas fechar={() => setBoasVindas(false)} />}
     </div>

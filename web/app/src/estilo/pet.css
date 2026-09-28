@@ -263,32 +263,11 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 }
 .conv-fatos-cab{color:var(--dl-learned-ink)}
 
-/* Configuracoes (CfgPrincipal): grupos e linhas de 60 px com o icone numa caixa de 44; cada linha abre o painel */
-.cfg-tela{gap:8px}
-.cfg-grupo{font-size:12px;font-weight:900;color:var(--dl-text-2);padding:4px 4px 0;letter-spacing:.02em}
-.cfg-item{background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border)}
-.cfg-item > summary{display:flex;align-items:center;gap:12px;min-height:60px;padding:6px 12px 6px 8px;cursor:pointer;list-style:none}
-.cfg-item > summary::before{display:none}
-.cfg-item > summary:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px;border-radius:12px}
-.cfg-ic{width:44px;height:44px;flex:none;border-radius:10px;background:var(--dl-bg);display:flex;align-items:center;justify-content:center}
-.cfg-ic img{max-width:34px;max-height:34px;object-fit:contain}
-.cfg-txt{flex:1;display:grid;gap:2px;min-width:0}
-.cfg-txt b{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:900}
-.cfg-txt b .dl-tag{font-size:9px}
-.cfg-txt > span{font-size:12px;font-weight:700;color:var(--dl-text-2)}
-.cfg-painel{display:grid;gap:10px;padding:4px 12px 12px}
-.cfg-painel p{margin:0}
-.cfg-opcoes{display:flex;flex-wrap:wrap;gap:6px}
+/* Tempo (teste) em Configuracoes > Registro e replay */
 .tempo-pet{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tempo-pet .dl-btn{min-height:44px;padding:4px 10px;font-size:13px}
 .tempo-pet .dl-btn[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF;border-color:var(--dl-navy)}
-@media (min-width:900px){ .cfg-tela{max-width:640px} }
-.cfg-link{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:center;min-height:44px}
 .balao-causa .causa-ic img{width:auto;height:24px;image-rendering:auto}
-.cfg-seta{font-size:22px;font-weight:900;color:var(--dl-navy);transition:transform 120ms}
-.cfg-item[open] .cfg-seta{transform:rotate(90deg)}
-.cfg-item--off{display:flex;align-items:center;gap:12px;min-height:60px;padding:6px 12px 6px 8px;background:transparent;box-shadow:none;border:2px dashed var(--dl-border);opacity:.6}
-@media (prefers-reduced-motion:reduce){ .cfg-seta{transition:none} }
 /* Meus pets (MpAtual): tela cheia por cima do app, cabecalho com voltar, palco do pet ativo e os botoes */
 .mp-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;background-color:var(--dl-bg);
   background-image:var(--dl-img-hex);background-size:var(--dl-hex-tam);color:var(--dl-text);overflow:auto}

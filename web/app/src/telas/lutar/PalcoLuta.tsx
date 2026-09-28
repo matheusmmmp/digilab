@@ -7,6 +7,7 @@ import {
 } from "../../../motor/index.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, imagemAtlas, quadroAgora, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
+import { FUNDO_NPC, imagemDeco, ouvirDecoracao } from "../../decoracao.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { falaLLM, motivoParaApi, useFalaLLM } from "../../fala.ts";
 import { S, desenharGrade, paleta } from "../../grades.ts";
@@ -36,7 +37,14 @@ function desenharArena(cv: HTMLCanvasElement, p: Palco): void {
   cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height);
   const alt = ok ? [p.A, p.B].map(L => dimSprite(a.dados, L.sprite)[1]) : [];
   const escLuta = alt.length ? Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...alt)))) : 3;
-  if (ok) {
+  const nomeFundo = p.modo === "campanha" ? FUNDO_NPC[p.B.sprite] : undefined, ilustra = nomeFundo ? imagemDeco(nomeFundo) : null;
+  if (ilustra) {
+    /* campanha: fundo ilustrado do lugar do NPC (recorte sem o chefe), cover a partir da esquerda, pelicula de 30% */
+    const e = Math.max(cv.width / ilustra.naturalWidth, cv.height / ilustra.naturalHeight);
+    cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = "high";
+    cx.drawImage(ilustra, 0, (cv.height - ilustra.naturalHeight * e) / 2, ilustra.naturalWidth * e, ilustra.naturalHeight * e);
+    cx.fillStyle = "rgba(8,20,48,.3)"; cx.fillRect(0, 0, cv.width, cv.height);
+  } else if (ok) {
     const r = a.dados.pecas.fundo_arena; if (!r) throw new Error("peça do atlas ausente: fundo_arena");
     let esc = W / r[2]; if (r[3] * esc < ARENA_H) esc = ARENA_H / r[3];
     const dw = r[2] * esc, dh = r[3] * esc;
@@ -91,7 +99,8 @@ function Cena({ p }: { p: Palco }) {
     desenharArena(cv, p);
     /* a arena anima o idle entre os turnos (so redesenha o ultimo estado; nada do motor muda) */
     const t = setInterval(() => { if (LUTA.palco) desenharArena(cv, LUTA.palco); }, 120);
-    return () => clearInterval(t);
+    const sair = ouvirDecoracao(() => { if (LUTA.palco) desenharArena(cv, LUTA.palco); });
+    return () => { clearInterval(t); sair(); };
   }, [p, p.E, p.tr]);
   return (
     <section class="luta-arena" aria-label="Palco da luta">

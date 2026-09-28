@@ -8,7 +8,8 @@ import {
   chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
-import { BRASAO_DECO, Deco } from "../../decoracao.tsx";
+import { Deco, fundoDeco } from "../../componentes/Deco.tsx";
+import { BRASAO } from "../../decoracao.ts";
 import { Seg, blocos } from "../../componentes/Barras.tsx";
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import {
@@ -37,11 +38,11 @@ function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
   const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
     <header class="pet-cab">
-      <Deco nome="TopDeco_Earth2_0" w={170} h={170} cls="pet-cab-globo" />
+      <Deco nome="TopDeco_Earth2_0" largura={170} altura={170} class="pet-cab-globo" />
       <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets: trocar parceiro" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
       <span class="pet-cab-nome">
         <span class="pet-cab-placa"><span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
-          <Deco nome={BRASAO_DECO[m.especie]} w={38} h={25} alt={`brasão ${NOME_ESP[m.especie]}`} /></span>
+          <Deco nome={BRASAO[m.especie].peca} largura={38} altura={25} alt={`brasão ${NOME_ESP[m.especie]}`} /></span>
         <span class="pet-cab-sub"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>{NOME_ESP[m.especie]} · dia {diaDe(e.tick)}</span>
       </span>
       <span class="pet-relogio">
@@ -195,7 +196,7 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
     const resta = Math.max(0, CAT.janelaChamado - (tick - m.chamados.abertos[c]!));
     return (
       <div class="dl-card chamado" key={c}>
-        <span class="chamado-ic">{c === "fome" ? <Deco nome="Growth_Guide_Icon_06" w={36} h={34} reserva={<Peca nome="emoji_carne" escala={2} />} />
+        <span class="chamado-ic">{c === "fome" ? <Deco nome="Growth_Guide_Icon_06" largura={36} altura={34} reserva={<Peca nome="emoji_carne" escala={2} />} />
           : EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
         <span class="chamado-txt"><span class="chamado-tit"><b>Chamado: {NOME_CHAMADO[c]}</b><span class="dl-apoio">janela aberta</span></span><Seg n={blocos(resta / CAT.janelaChamado, 10)} m={10} /></span>
         <button type="button" class="dl-btn" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
@@ -227,7 +228,7 @@ const ICONE_DONO: Record<AcaoDono, string> = { alimentar: "carne", limpar: "bril
 /* icone de cada acao do dono (PetTela): prato do guia, gota, nota, coracao, joinha e exclamacao */
 const GOTA = <svg class="ic-gota" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#2C73E0" d="M3 0h2v2h1v1h1v3h-1v1h-4v-1h-1v-3h1v-1h1z" /><path fill="#BFE3FF" d="M2 3h1v2h-1z" /></svg>;
 function IconeAcao({ a }: { a: AcaoDono }) {
-  if (a === "alimentar") return <Deco nome="Growth_Guide_Icon_06" w={24} h={24} cls="ic-acao" reserva={<Peca nome="emoji_carne" escala={2} />} />;
+  if (a === "alimentar") return <Deco nome="Growth_Guide_Icon_06" largura={24} altura={24} class="ic-acao" reserva={<Peca nome="emoji_carne" escala={2} />} />;
   if (a === "limpar") return GOTA;
   const em = { brincar: "emoji_nota", acariciar: "emoji_coracao", elogiar: "emoji_joinha", repreender: "emoji_exclam" }[a];
   return em ? <Peca nome={em} escala={2} /> : null;
@@ -251,6 +252,7 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
         <div class="pet-principal">
           <section class="palco-card" aria-label="Palco do pet">
             <div class="palco-cena dl-hexcard">
+              {nascendo > 0 && <><span class="ovo-padrao" style={{ "--padrao": fundoDeco("Icon_Pattern_2") ?? "none" }} aria-hidden="true" /><Deco nome="Digivice_Circle_01" class="ovo-anel gira" /></>}
               <div class="palco-tit">Meu parceiro</div>
               <Emocao />
               <PalcoPet />

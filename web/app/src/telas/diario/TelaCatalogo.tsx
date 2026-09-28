@@ -8,6 +8,8 @@ import {
 } from "../../../motor/index.ts";
 import { imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
+import { Deco } from "../../componentes/Deco.tsx";
+import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { requisito } from "../crescer/TelaEvolucao.tsx";
 
@@ -54,7 +56,7 @@ export function TelaCatalogo() {
   return (
     <div class="tela dl cat-tela">
       <div class="cat-brasoes" role="group" aria-label="Brasão">
-        {ESPECIES.map(e => <button type="button" key={e} class="chip" aria-pressed={e === esp} onClick={() => { setEsp(e); setSel(-1); }}>{NOME_ESP[e]}</button>)}
+        {ESPECIES.map(e => <button type="button" key={e} class="chip" aria-pressed={e === esp} onClick={() => { setEsp(e); setSel(-1); }}><Deco nome={BRASAO[e].peca} class="cat-chip-brasao" />{NOME_ESP[e]}</button>)}
         <span class="cat-vistas">{formas.filter(f => vistos.has(chaveSprite(f))).length} de {formas.length} vistas</span>
       </div>
       <div class="cat-grade" role="listbox" aria-label="Formas do brasão">

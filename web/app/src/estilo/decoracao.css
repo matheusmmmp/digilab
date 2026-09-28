@@ -1,0 +1,97 @@
+/* Decoracao do Digimon UP (docs/ASSETS_UP.md): ilustracoes, com suavizacao normal (so os sprites dos Digimon
+   ficam pixelados). Movimento: parado com prefers-reduced-motion. */
+.dl-deco{image-rendering:auto;flex:none}
+
+/* faixa do lugar no cartao da campanha: ilustracao, cover a partir da esquerda, pelicula para o texto */
+.camp-faixa{position:relative;height:64px;margin:-4px 0 0;border-radius:10px;background-color:var(--dl-navy);background-size:cover;background-position:left center;overflow:hidden}
+.camp-faixa::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,20,48,.62),rgba(8,20,48,.3))}
+.camp-faixa span{position:absolute;left:12px;bottom:8px;z-index:1;color:#FFFFFF;font-weight:900;font-size:.8125rem;text-shadow:0 1px 2px #000}
+
+/* cabecalho das telas: globo em malha no canto (~0,2) e, no Diario, a engrenagem das Configuracoes */
+.tela-cab{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px}
+.tela-cab h1{position:relative}
+.cab-globo{position:absolute;right:-30px;top:-50px;width:150px;height:150px;opacity:.2;pointer-events:none}
+.cab-engrenagem{position:relative;margin-left:auto;width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:grid;place-items:center;padding:0;cursor:pointer}
+.cab-engrenagem .dl-deco{width:24px;height:24px;filter:brightness(0) saturate(100%) invert(18%) sepia(59%) saturate(2400%) hue-rotate(212deg)}
+.cab-engrenagem-reserva{font-size:1.4rem;line-height:1;color:var(--dl-navy)}
+.cab-engrenagem .dl-deco + .cab-engrenagem-reserva{display:none}
+.cab-engrenagem:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+
+/* Catalogo: brasoes do UP como filtro; silhueta nas formas que o pet ainda nao teve */
+.cat-tile{position:relative}
+.cat-nao-visto{position:absolute;top:2px;right:2px;width:18px;height:18px;opacity:.85}
+
+/* Configuracoes (Cfg*) */
+.cfg-cab{min-height:68px}
+.cfg-voltar{position:relative;width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:grid;place-items:center;padding:0;cursor:pointer}
+.cfg-voltar svg{width:20px;height:20px;fill:none;stroke:var(--dl-navy);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cfg-voltar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-cab-ic{position:relative;width:32px;height:32px;filter:drop-shadow(0 2px 0 var(--dl-navy))}
+.cfg{display:grid;gap:8px}
+.cfg-secao{margin:8px 0 0;font-size:.75rem;font-weight:900;letter-spacing:.06em;color:var(--dl-text-2)}
+.cfg-linha{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 12px;text-align:left;cursor:pointer;width:100%;
+  background:var(--dl-surface);color:var(--dl-text);border:0;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.cfg-linha:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-linha--off{cursor:default;box-shadow:none;border:2px dashed var(--dl-none-edge);background:var(--dl-none-bg);color:var(--dl-none-ink)}
+.cfg-ic{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex);font-size:1.25rem;overflow:hidden}
+.cfg-ic .dl-deco{max-width:34px;max-height:34px;width:auto;height:auto}
+.cfg-ic img.dl-pix{max-width:36px;height:auto}
+.cfg-txt{display:grid;min-width:0;flex:1}
+.cfg-txt b{font-weight:900;font-size:.9375rem;display:flex;align-items:center;gap:6px}
+.cfg-txt small{font-size:.75rem;font-weight:700;color:var(--dl-text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cfg-linha--off .cfg-txt small{color:var(--dl-none-ink)}
+.cfg-seta{width:18px;height:18px;flex:none;fill:none;stroke:var(--dl-text-2);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cfg-tag{background:var(--dl-force);color:var(--dl-force-ink);border-color:var(--dl-force-ink);font-size:.625rem}
+.cfg-bloco{display:grid;gap:8px}
+.cfg-bloco p{margin:0}
+.cfg-bloco-tit{margin:0;font-size:1rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.cfg-bloco-ic{width:28px;height:28px;object-fit:contain}
+.cfg-numeros{display:flex;gap:16px;flex-wrap:wrap}
+.cfg-numeros span{display:grid;font-size:.75rem;color:var(--dl-text-2)}
+.cfg-numeros b{font-size:1.25rem;color:var(--dl-text)}
+.cfg-temas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cfg-tema{display:grid;justify-items:center;gap:6px;padding:8px 4px;min-height:44px;border-radius:12px;cursor:pointer;background:var(--dl-surface);color:var(--dl-text);border:2px solid var(--dl-border);font-weight:900}
+.cfg-tema[aria-checked="true"]{border-color:var(--dl-navy);box-shadow:0 0 0 3px var(--dl-highlight)}
+.cfg-tema:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-tema-prev{width:100%;max-width:88px;height:52px;border-radius:8px;display:grid;grid-template-rows:14px 1fr;overflow:hidden;box-shadow:inset 0 0 0 2px var(--dl-border)}
+.cfg-tema-prev i:first-child{background:#2C73E0}
+.cfg-tema--claro .cfg-tema-prev i:last-child{background:#E8F0FB}
+.cfg-tema--escuro .cfg-tema-prev i:last-child{background:#0B1636}
+.cfg-tema--sistema .cfg-tema-prev i:last-child{background:linear-gradient(90deg,#E8F0FB 50%,#0B1636 50%)}
+.cfg-status{display:flex;align-items:center;gap:8px}
+.cfg-switch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;cursor:pointer}
+.cfg-switch > span{display:grid}
+.cfg-switch small{font-size:.75rem;color:var(--dl-text-2)}
+.cfg-switch input{width:44px;height:28px;flex:none}
+.cfg-modos{display:grid;gap:8px}
+.cfg-modo{display:grid;gap:2px;text-align:left;padding:10px 12px;min-height:56px;border-radius:12px;cursor:pointer;background:var(--dl-surface);color:var(--dl-text);border:2px solid var(--dl-border)}
+.cfg-modo b{font-weight:900;display:flex;align-items:center;gap:6px}
+.cfg-modo small{font-size:.75rem;color:var(--dl-text-2)}
+.cfg-modo[aria-checked="true"]{border-color:var(--dl-navy);box-shadow:0 0 0 3px var(--dl-highlight)}
+.cfg-modo:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-sobre-topo{position:relative;display:grid;justify-items:center;align-content:center;gap:6px;min-height:220px;overflow:hidden}
+.cfg-sobre-anel{position:absolute;width:220px;height:220px;opacity:.8;top:0;left:50%;margin-left:-110px}
+.cfg-sobre-nome{position:relative;font-size:2.25rem}
+.cfg-sobre-topo .dl-lcd{position:relative;background:var(--dl-navy);color:#FFFFFF;border-radius:6px;padding:2px 10px}
+
+/* anel de Digivice girando (ovo chocando, Sobre); parado com movimento reduzido */
+.gira{animation:dl-gira 18s linear infinite}
+@keyframes dl-gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){ .gira{animation:none} }
+
+/* retrato de rival com a moldura da arena (Profile_Outline_Arena, faixa pelas vitorias na campanha) */
+.retrato-rival{position:relative;display:grid;place-items:center;flex:none}
+.retrato-rival > *{grid-area:1/1}
+.retrato-rival-spr{width:78%;height:78%;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;border-radius:6px;background:var(--dl-surface-2)}
+.retrato-rival-spr img{max-width:none}
+.retrato-rival-moldura{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.camp-rival-cab{display:flex;align-items:center;gap:10px}
+.camp-chefe{margin-left:6px;background:#B0213F;color:#FFFFFF;border-color:#6A0F22}
+
+/* selo do brasao na aba Evolucao */
+.evo-selo{margin:0;display:flex;align-items:center;gap:10px}
+.evo-selo-img{width:56px;height:auto;aspect-ratio:295/194}
+
+/* ovo chocando no palco do Pet: padrao de ovos do UP (mascara sobre o azul do tema) e o anel de Digivice atras */
+.ovo-padrao{position:absolute;inset:0;background:var(--dl-action);-webkit-mask-image:var(--padrao);mask-image:var(--padrao);-webkit-mask-size:48px 48px;mask-size:48px 48px;opacity:.14;pointer-events:none}
+.ovo-anel{position:absolute;top:50%;left:50%;width:min(80%,240px);height:auto;aspect-ratio:1;margin:0;translate:-50% -50%;opacity:.45;pointer-events:none}

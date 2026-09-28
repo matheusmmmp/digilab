@@ -1,18 +1,22 @@
 /* Verificacao ponta a ponta (TAREFA_FRONT_TS, Etapa 5), no build servido pelo servidor local:
-   1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 6 destinos e 11 abas, cuida, treina ate o
+   1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 5 destinos e 10 abas, cuida, treina ate o
       FORCAR e forca, luta uma vez na arena e uma na campanha, pausa o tempo; a assinatura do pet vivo no app tem
       que ser a do HTML atual rodando o mesmo registro (Motor.reproduzir do digilab_sprites.html);
    2. checklist do guia (secao 14) nas 9 abas, em 360 e 390 px, claro e escuro: sem rolagem lateral, alvos de
       toque >= 44 px, sem erro no console; foco visivel pelo teclado. */
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { basename } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
-const APP = "/v1/web/dist/", HTML = "/v1/web/digilab_sprites.html?antigo=1", CHAVE = "digilab-web-v21-sprites";
+// prefixo = nome da pasta do repositorio (/v1 ou o da worktree), como no servidor_local.py
+const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
+const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?antigo=1`, CHAVE = "digilab-web-v21-sprites";
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
-  ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"], ["Configurações", "", "config/ajustes"],
+  ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar) */
@@ -41,7 +45,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".pet-cab .dl-tag--estagio")).toHaveText(/Champion/i);
 
-    /* os 6 destinos e as 11 abas, pela barra e pelas abas */
+    /* os 5 destinos e as 10 abas, pela barra e pelas abas */
     for (const [destino, aba, rota] of ABAS) {
       await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
       if (aba) await page.getByRole("tab", { name: aba }).click();
@@ -84,9 +88,10 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
     expect(await numLog(page, "l")).toBe(l0 + 2);
 
-    /* pausa o tempo (Configuracoes > Tempo) e confere a assinatura com o HTML rodando o mesmo registro */
-    await page.locator(".dl-nav").getByRole("button", { name: "Configurações", exact: true }).click();
-    await page.locator(".tempo-teste summary").click();
+    /* pausa o tempo (Diario > engrenagem > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
+    await page.locator(".dl-nav").getByRole("button", { name: "Diário", exact: true }).click();
+    await page.locator(".cab-engrenagem").click();
+    await page.getByRole("button", { name: /^Registro e replay/ }).click();
     await page.getByRole("button", { name: "Pausa" }).click();
     await page.waitForTimeout(300);
     const { assinatura, registro } = await page.evaluate(() => ({ assinatura: (window as any).__digilab.assinatura(), registro: (window as any).__digilab.registro() }));

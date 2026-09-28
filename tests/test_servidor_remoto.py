@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import base64
+import json
 import threading
 import urllib.error
 import urllib.request
 from functools import partial
+from pathlib import Path
 from http.server import ThreadingHTTPServer
 
 import pytest
@@ -65,6 +67,19 @@ def test_remoto_serve_so_o_que_fica_dentro_do_build_do_app():
     for fora in (p + "../digilab_sprites.html", p + "../../CLAUDE.md", p + "%2e%2e/%2e%2e/CLAUDE.md", p + "assets/..%2f..%2f..%2fCLAUDE.md",
                  p + "..%5c..%5cCLAUDE.md", p + "./index.html", p[:-1] + "x/index.html", p.replace("/dist/", "/app/") + "index.html",
                  p.replace("/dist/", "/app/") + "package.json"):
+        assert not rota_permitida(fora), fora
+
+
+def test_remoto_serve_so_a_decoracao_listada():
+    nomes = json.loads((Path(__file__).resolve().parents[1] / "web" / "app" / "decoracao_nomes.json").read_text(encoding="utf-8"))["pecas"]
+    assert "campina_gazimon" in nomes and "Common_Icon_Setting" in nomes
+    assert rota_permitida("/Assets/digilab_decoracao_up.json")
+    for n in nomes:
+        assert rota_permitida(f"/Assets/decoracao_up/{n}.png"), n
+    for fora in ("/Assets/decoracao_up/", "/Assets/decoracao_up/extra_lava.png", "/Assets/decoracao_up/Shop_Icon_1.png",
+                 "/Assets/decoracao_up/../catalogo_sprites_up.json", "/Assets/decoracao_up/%2e%2e/catalogo_sprites_up.json",
+                 "/Assets/Digimon%20Up%20Assets/Digimon%20Up%20Assets/Sprite/Crest_Combine_1.png",
+                 "/Assets/Digimon%20Up%20Assets/Fundos_Campanha/campina_gazimon.png", "/Assets/gerar_decoracao_up.py"):
         assert not rota_permitida(fora), fora
 
 

@@ -3,16 +3,16 @@
    antigo so com a aba vira o destino dela). */
 import { CHAVE_ABA, type Armazenamento } from "./save.ts";
 
-export type Destino = "pet" | "crescer" | "lutar" | "diario" | "conversar" | "config";
-export type Aba = "estado" | "treinar" | "aprend" | "evolucao" | "arena" | "campanha" | "registro" | "catalogo" | "cenarios" | "chat" | "ajustes";
+export type Destino = "pet" | "crescer" | "lutar" | "diario" | "conversar";
+export type Aba = "estado" | "treinar" | "aprend" | "evolucao" | "arena" | "campanha" | "registro" | "catalogo" | "cenarios" | "chat";
 export const DESTINOS: Record<Destino, readonly Aba[]> = {
-  pet: ["estado"], crescer: ["treinar", "aprend", "evolucao"], lutar: ["arena", "campanha"], diario: ["registro", "catalogo", "cenarios"], conversar: ["chat"], config: ["ajustes"],
+  pet: ["estado"], crescer: ["treinar", "aprend", "evolucao"], lutar: ["arena", "campanha"], diario: ["registro", "catalogo", "cenarios"], conversar: ["chat"],
 };
-export const ORDEM_DESTINOS: readonly Destino[] = ["pet", "crescer", "lutar", "diario", "conversar", "config"];
-export const NOME_DESTINO: Record<Destino, string> = { pet: "Pet", crescer: "Crescer", lutar: "Lutar", diario: "Diário", conversar: "Conversar", config: "Configurações" };
+export const ORDEM_DESTINOS: readonly Destino[] = ["pet", "crescer", "lutar", "diario", "conversar"];
+export const NOME_DESTINO: Record<Destino, string> = { pet: "Pet", crescer: "Crescer", lutar: "Lutar", diario: "Diário", conversar: "Conversar" };
 export const NOME_ABA: Record<Aba, string> = {
   estado: "Estado", treinar: "Treinar", aprend: "Aprendizado", evolucao: "Evolução", arena: "Arena", campanha: "Campanha",
-  registro: "Registro", catalogo: "Catálogo", cenarios: "Cenários", chat: "Conversa", ajustes: "Configurações",
+  registro: "Registro", catalogo: "Catálogo", cenarios: "Cenários", chat: "Conversa",
 };
 export const DESTINO_DA_ABA = Object.fromEntries(Object.entries(DESTINOS).flatMap(([d, abas]) => abas.map(a => [a, d]))) as Record<Aba, Destino>;
 
@@ -42,3 +42,14 @@ export function lerAbaLembrada(armaz: Armazenamento): Rota | null {
 export function gravarAbaLembrada(armaz: Armazenamento, r: Rota): void {
   try { armaz.setItem(CHAVE_ABA, r.destino + "/" + r.aba); } catch { /* preferencia de tela: sem armazenamento, so nao lembra */ }
 }
+
+/* Configuracoes (desenhos Cfg*): tela fora dos 4 destinos, aberta pela engrenagem do Diario; #/config/<parte> */
+export type ParteConfig = "principal" | "aparencia" | "dados" | "fala" | "sobre";
+const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "aparencia", "dados", "fala", "sobre"];
+/** "#/config" -> principal; "#/config/dados" -> dados; outra coisa -> null */
+export function configDoEndereco(hash: string): ParteConfig | null {
+  const [c, p] = hash.replace(/^#\/?/, "").split("/");
+  if (c !== "config") return null;
+  return !p ? "principal" : (PARTES_CONFIG as readonly string[]).includes(p) ? p as ParteConfig : null;
+}
+export const enderecoDaConfig = (p: ParteConfig): string => p === "principal" ? "#/config" : `#/config/${p}`;

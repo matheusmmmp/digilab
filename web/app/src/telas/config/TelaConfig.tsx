@@ -1,79 +1,186 @@
-/* Configuracoes (pranchas CfgPrincipal, CfgAparencia, CfgFala, CfgDados, CfgSobre): lista por grupo (Jogo, Fala, Dados,
-   Sobre); cada linha abre o seu painel ali mesmo. Aparencia = tema; Fala = modo e estado do modelo; Registro e replay =
-   resumo e atalho para o Diario; Tempo (teste) = velocidade e +1 h (saiu da tela Pet). Nada aqui muda o pet, a nao ser o
-   tempo de teste, que passa pelo motor como o tempo normal. */
+/* Configuracoes (desenhos CfgPrincipal, CfgAparencia, CfgDados, CfgFala, CfgSobre): tela aberta pela engrenagem do
+   Diario. So junta o que o app ja tinha (tema, registro e replay, tempo de teste, fala) num lugar; nada aqui muda
+   o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes (tempo e ovo novo, via jogo.ts/tempo.ts).
+   Opcoes dos desenhos que o app nao tem (tamanho do texto, reduzir movimento, dicas) ficam de fora; o som aparece
+   desligado, como proposta. */
 import type { ComponentChildren } from "preact";
+import { useState } from "preact/hooks";
+import { Motor } from "../../../motor/index.ts";
+import { Deco } from "../../componentes/Deco.tsx";
 import { Peca } from "../../componentes/Imagens.tsx";
-import { Deco } from "../../decoracao.tsx";
-import { rotuloLLM, useFalaLLM } from "../../fala.ts";
+import { ICONE } from "../../decoracao.ts";
+import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
-import { useJogo } from "../../jogo.ts";
+import { novoPet, useJogo } from "../../jogo.ts";
+import type { ParteConfig } from "../../rotas.ts";
+import { textoSave } from "../../save.ts";
 import { NOME_TEMA, escolherTema, useTema, type Tema } from "../../tema.ts";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
-const MODOS: [ModoFala, string][] = [["template", "Frases prontas"], ["moldura", "Moldura"], ["livre", "Livre"]];
-const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "modo moldura", livre: "modo livre" };
+const TITULO: Record<ParteConfig, string> = { principal: "Configurações", aparencia: "Aparência", dados: "Registro e replay", fala: "Fala do pet", sobre: "Sobre" };
+const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "moldura", livre: "livre" };
+export const nomeVelocidade = (v: number): string => VELOCIDADES.find(([, x]) => x === v)?.[0] ?? `${v} min/s`;
 
-function Item({ icone, titulo, sub, teste, cls = "", children }: { icone: ComponentChildren; titulo: string; sub: string; teste?: boolean; cls?: string; children: ComponentChildren }) {
+function Cabecalho({ parte, voltar }: { parte: ParteConfig; voltar: () => void }) {
   return (
-    <details class={`cfg-item ${cls}`}>
-      <summary><span class="cfg-ic">{icone}</span><span class="cfg-txt"><b>{titulo}{teste && <span class="dl-tag dl-tag--estagio">TESTE</span>}</b><span>{sub}</span></span><span class="cfg-seta" aria-hidden="true">›</span></summary>
-      <div class="cfg-painel">{children}</div>
-    </details>
-  );
-}
-/** escolhe o tema direto (Auto, Claro, Escuro); a preferencia fica na chave propria do tema */
-function EscolhaTema() {
-  const tema = useTema();
-  return (
-    <div class="cfg-opcoes" role="group" aria-label="Tema">
-      {(["sistema", "claro", "escuro"] as Tema[]).map(t => <button type="button" key={t} class="dl-chip" aria-pressed={tema === t} onClick={() => escolherTema(t)}>{NOME_TEMA[t]}</button>)}
-      <div class="cfg-item cfg-item--off" aria-disabled="true"><span class="cfg-ic">🔈</span><span class="cfg-txt"><b>Som</b><span>o jogo ainda não tem som (proposta)</span></span></div>
+    <div class="tela-cab dl-faixa cfg-cab">
+      <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
+      <button type="button" class="cfg-voltar" aria-label={parte === "principal" ? "Voltar ao Diário" : "Voltar a Configurações"} onClick={voltar}>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4 6 10l6 6" /></svg></button>
+      {parte === "principal" && <Deco nome="Common_Icon_Setting" class="cfg-cab-ic" />}
+      <h1 class="dl-num" id="tela-titulo">{TITULO[parte]}</h1>
     </div>
   );
 }
-
-export function TelaConfig({ irRegistro, irConversar }: { irRegistro: () => void; irConversar: () => void }) {
-  const { motor: m } = useJogo(), tema = useTema(), fl = useFalaLivre(), llm = useFalaLLM(), { velocidade } = useTempo(), r = rotuloLLM();
-  const vel = VELOCIDADES.find(([, v]) => v === velocidade)?.[0] ?? "pausado";
+/** linha da lista: icone (decoracao, com o texto ao lado), titulo, resumo e seta */
+function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ComponentChildren; titulo: string; resumo: string; tag?: string; abrir: () => void }) {
   return (
-    <div class="tela dl cfg-tela">
-      <span class="cfg-grupo">JOGO</span>
-      <Item icone={<Deco nome="Growth_Guide_Icon_10" w={34} h={34} reserva={<Peca nome="emoji_estrela" escala={2} />} />} titulo="Aparência" sub={`tema ${NOME_TEMA[tema].toLowerCase()}`}>
-        <EscolhaTema />
-        <p class="dl-apoio">Tamanho do texto e movimento reduzido ainda não existem no app (o movimento segue a preferência do sistema).</p>
-      </Item>
-      <Item icone={<Deco nome="Growth_Guide_Icon_05" w={34} h={34} reserva={<Peca nome="emoji_surpreso" escala={2} />} />} titulo="Dicas" sub="ainda não existem no app">
-        <p class="dl-apoio">As dicas da primeira vez (chamado, ensino, navegação) ainda não foram feitas.</p>
-      </Item>
-      <span class="cfg-grupo">FALA</span>
-      <Item icone={<Peca nome="emoji_joinha" escala={2} />} titulo="Fala do pet" sub={`${NOME_MODO[fl.modo]} · ${r.texto}`}>
-        <div class="cfg-opcoes" role="group" aria-label="Modo da fala">
-          {MODOS.map(([k, rot]) => <button type="button" key={k} class="dl-chip" aria-pressed={fl.modo === k} onClick={() => escolherModo(k)}>{rot}</button>)}
+    <button type="button" class="cfg-linha" onClick={abrir}>
+      <span class="cfg-ic" aria-hidden="true">{ic}</span>
+      <span class="cfg-txt"><b>{titulo}{tag && <span class="dl-tag cfg-tag">{tag}</span>}</b><small>{resumo}</small></span>
+      <svg class="cfg-seta" viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4l6 6-6 6" /></svg>
+    </button>
+  );
+}
+function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
+  const { motor: m } = useJogo(), tema = useTema(), fl = useFalaLivre(), { velocidade } = useTempo();
+  useFalaLLM();
+  return (
+    <div class="tela dl cfg">
+      <h2 class="cfg-secao">JOGO</h2>
+      <Linha ic={<Deco nome={ICONE.pets} />} titulo="Aparência" resumo={`tema ${tema === "sistema" ? "do sistema" : NOME_TEMA[tema].toLowerCase()}`} abrir={() => abrir("aparencia")} />
+      <h2 class="cfg-secao">FALA</h2>
+      <Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />
+      <h2 class="cfg-secao">DADOS</h2>
+      <Linha ic={<Deco nome={ICONE.registro} />} titulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
+      <Linha ic={<Deco nome={ICONE.tempo} />} titulo="Tempo" tag="TESTE" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
+      <h2 class="cfg-secao">SOBRE</h2>
+      <Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e uso pessoal" abrir={() => abrir("sobre")} />
+      <div class="cfg-linha cfg-linha--off" aria-disabled="true">
+        <span class="cfg-ic" aria-hidden="true">♪</span>
+        <span class="cfg-txt"><b>Som</b><small>o jogo ainda não tem som (proposta; desligado)</small></span>
+      </div>
+    </div>
+  );
+}
+function Aparencia() {
+  const tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]];
+  return (
+    <div class="tela dl cfg">
+      <h2 class="cfg-secao" id="cfg-tema">TEMA</h2>
+      <div class="cfg-temas" role="radiogroup" aria-labelledby="cfg-tema">
+        {opcoes.map(([t, rot]) => (
+          <button type="button" key={t} role="radio" aria-checked={tema === t} class={`cfg-tema cfg-tema--${t}`} onClick={() => escolherTema(t)}>
+            <span class="cfg-tema-prev" aria-hidden="true"><i /><i /></span>{rot}
+          </button>
+        ))}
+      </div>
+      <p class="dl-apoio">Sistema segue o claro ou escuro do aparelho.</p>
+    </div>
+  );
+}
+function Dados({ irPet }: { irPet: () => void }) {
+  const { motor: m } = useJogo(), { velocidade } = useTempo(), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false);
+  const verificar = () => {
+    const t0 = performance.now();
+    try {
+      const ok = Motor.reproduzir(m.semente, m.log, m.versao).assinatura() === m.assinatura();
+      setMsg(ok ? { txt: `Replay idêntico: ${m.log.length} eventos reconstruíram o mesmo pet em ${(performance.now() - t0).toFixed(0)} ms.` }
+        : { txt: "O replay divergiu do pet atual. Isso é um bug do porte; copie o registro e mande para análise.", erro: true });
+    } catch (err) { setMsg({ txt: "Replay falhou: " + (err instanceof Error ? err.message : String(err)), erro: true }); }
+  };
+  const copiar = async () => {
+    const txt = textoSave(m);
+    try { await navigator.clipboard.writeText(txt); setMsg({ txt: "Registro copiado." }); }
+    catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
+  };
+  const exportar = () => {
+    /* o mesmo conteudo do save num arquivo .json baixado pelo navegador */
+    const url = URL.createObjectURL(new Blob([textoSave(m)], { type: "application/json" })), a = document.createElement("a");
+    a.href = url; a.download = `digilab-pet-${m.semente}.json`; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setMsg({ txt: "Arquivo do pet exportado." });
+  };
+  return (
+    <div class="tela dl cfg">
+      <section class="dl-card cfg-bloco" aria-labelledby="cfg-reg">
+        <h2 class="cfg-bloco-tit" id="cfg-reg"><Deco nome={ICONE.registro} class="cfg-bloco-ic" />Registro e replay</h2>
+        <p>O estado do pet nunca é salvo: só o registro. A vida é refeita a partir dele.</p>
+        <p class="cfg-numeros"><span><b class="dl-lcd">{m.semente}</b> semente</span><span><b class="dl-lcd">{m.log.length}</b> eventos</span></p>
+        <div class="dl-linha">
+          <button type="button" class="dl-btn" onClick={verificar}>Verificar replay</button>
+          <button type="button" class="dl-btn dl-btn--sec" onClick={copiar}>Copiar registro</button>
+          <button type="button" class="dl-btn dl-btn--sec" onClick={exportar}>Exportar pet</button>
         </div>
-        <p class="dl-apoio">{llm.ativo ? r.titulo : "Sem o servidor local, o pet fala por frases prontas; nada do jogo depende disso."}</p>
-        <button type="button" class="dl-btn dl-btn--sec" onClick={irConversar}>Abrir a conversa</button>
-      </Item>
-      <span class="cfg-grupo">DADOS</span>
-      <Item icone={<Deco nome="Growth_Guide_Icon_09" w={26} h={34} reserva={<Peca nome="emoji_nota" escala={2} />} />} titulo="Registro e replay" sub={`semente ${m.semente} · ${m.log.length} eventos`}>
-        <p class="dl-apoio">O estado do pet nunca é salvo: só o registro, e a vida é refeita a partir dele.</p>
-        <button type="button" class="dl-btn dl-btn--sec" onClick={irRegistro}>Abrir o registro</button>
-      </Item>
-      <Item icone={<Deco nome="Growth_Guide_Icon_11" w={34} h={34} reserva={<Peca nome="icone_tempo" />} />} titulo="Tempo" teste cls="tempo-teste" sub={vel}>
+        {msg && <p class={msg.erro ? "erro" : "dl-apoio"} aria-live="polite" style={{ fontWeight: 900, margin: 0 }}>{msg.txt}</p>}
+      </section>
+      <section class="dl-card cfg-bloco" aria-labelledby="cfg-tempo">
+        <h2 class="cfg-bloco-tit" id="cfg-tempo"><Deco nome={ICONE.tempo} class="cfg-bloco-ic" />Tempo <span class="dl-tag cfg-tag">TESTE</span></h2>
+        <p>Acelera o relógio do pet. Tudo entra no registro.</p>
         <div class="tempo-pet" role="group" aria-label="Velocidade do tempo">
           {VELOCIDADES.map(([rot, v, dica]) => (
             <button type="button" key={rot} class="dl-btn dl-btn--sec" aria-pressed={velocidade === v} title={dica} onClick={() => escolherVelocidade(v)}>{rot}</button>
           ))}
           <button type="button" class="dl-btn dl-btn--sec" onClick={pularUmaHora}>+1 h</button>
         </div>
-      </Item>
-      <span class="cfg-grupo">SOBRE</span>
-      <Item icone={<Deco nome="Common_Icon_Setting" w={34} h={34} reserva="⚙" />} titulo="Sobre o Digilab" sub="versão, créditos e uso pessoal">
-        <p class="dl-apoio">Motor do Digilab em TypeScript: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</p>
-        <p class="dl-apoio"><b>Versão local com sprites do Digimon UP (Bandai), só para uso pessoal. Não publicar nem distribuir.</b></p>
-        <p class="dl-apoio"><a class="cfg-link" href="../digilab_sprites.html?antigo=1">Versão antiga (HTML)</a>: mesmo save; não abra as duas ao mesmo tempo no mesmo pet.</p>
-      </Item>
-      <div class="cfg-item cfg-item--off" aria-disabled="true"><span class="cfg-ic">🔈</span><span class="cfg-txt"><b>Som</b><span>o jogo ainda não tem som (proposta)</span></span></div>
+      </section>
+      <section class="zona-risco" aria-label="Área de risco">
+        <div class="dl-linha">
+          <button type="button" class="dl-btn dl-btn--sec" onClick={() => setConfirmar(true)}>Novo ovo (apaga este pet)</button>
+          {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); novoPet(); irPet(); }}>Confirmar: apagar este pet</button>}
+        </div>
+      </section>
     </div>
+  );
+}
+function Fala() {
+  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM();
+  const modos: [ModoFala, string, string, string?][] = [
+    ["template", "Frases prontas", "Sempre as mesmas frases do jogo. Nunca erra, mas repete."],
+    ["moldura", "Moldura", "O modelo completa uma moldura com os fatos do pet."],
+    ["livre", "Livre", "Sem moldura. O verificador marca o que não tiver base, sem trocar a fala.", "EXPERIMENTO"],
+  ];
+  return (
+    <div class="tela dl cfg">
+      <section class="dl-card cfg-bloco">
+        <p class="cfg-status"><span class="fala-ponto" data-estado={r.estado} aria-hidden="true" /><b title={r.titulo}>{r.texto}</b></p>
+        <p class="dl-apoio" style={{ margin: 0 }}>{fl.status ? `fala livre: ${fl.status.modelo}, local` : fl.statusErro ? "servidor sem a fala livre" : ""}</p>
+        <label class="cfg-switch"><span><b>Usar o modelo de linguagem</b><small>Só no Champion em diante. Desligado, o pet fala por frases prontas.</small></span>
+          <input type="checkbox" role="switch" checked={FALA_LLM.on} disabled={!llm.ativo} onChange={ev => ligarFalaLLM((ev.target as HTMLInputElement).checked)} /></label>
+      </section>
+      <h2 class="cfg-secao" id="cfg-modo">COMO ELE MONTA A FALA</h2>
+      <div class="cfg-modos" role="radiogroup" aria-labelledby="cfg-modo">
+        {modos.map(([k, rot, desc, tag]) => (
+          <button type="button" key={k} role="radio" aria-checked={fl.modo === k} class="cfg-modo" onClick={() => escolherModo(k)}>
+            <b>{rot}{tag && <span class="dl-tag cfg-tag">{tag}</span>}</b><small>{desc}</small>
+          </button>
+        ))}
+      </div>
+      <p class="dl-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
+    </div>
+  );
+}
+function Sobre() {
+  return (
+    <div class="tela dl cfg">
+      <div class="cfg-sobre-topo">
+        <Deco nome="Digivice_Circle_01" class="cfg-sobre-anel gira" />
+        <span class="dl-num cfg-sobre-nome">DIGILAB</span>
+        <span class="dl-lcd">motor v1 · combate V2.1</span>
+      </div>
+      <section class="dl-card cfg-bloco"><h2 class="cfg-bloco-tit">Sobre</h2>
+        <p>Um pet virtual que aprende com o dono. O estado nunca é salvo, só o registro do que aconteceu; a vida é refeita a partir dele, sempre igual.</p></section>
+      <section class="dl-card cfg-bloco"><h2 class="cfg-bloco-tit">Só para uso pessoal</h2>
+        <p>Sprites, ícones e fundos do Digimon UP (Bandai), usados só neste computador como protótipo. Não publicar nem distribuir.</p></section>
+    </div>
+  );
+}
+export function TelaConfig({ parte, abrir, fechar, irPet }: { parte: ParteConfig; abrir: (p: ParteConfig) => void; fechar: () => void; irPet: () => void }) {
+  return (
+    <section class="painel" aria-labelledby="tela-titulo">
+      <Cabecalho parte={parte} voltar={parte === "principal" ? fechar : () => abrir("principal")} />
+      {parte === "principal" ? <Principal abrir={abrir} /> : parte === "aparencia" ? <Aparencia /> : parte === "dados" ? <Dados irPet={irPet} />
+        : parte === "fala" ? <Fala /> : <Sobre />}
+    </section>
   );
 }
