@@ -1,0 +1,20 @@
+/* Motor do jogo web em TypeScript (TAREFA_FRONT_TS, Etapa 2). Sem DOM: a interface importa daqui, o motor
+   nunca importa da interface. A fala (expressao.ts) so monta texto a partir do motivo; nunca decide nada. */
+export * from "./tipos.ts";
+export * from "./rng.ts";
+export * from "./constantes.ts";
+export * from "./estado.ts";
+export * from "./memoria.ts";
+export * from "./bandit.ts";
+export * from "./vinculo.ts";
+export * from "./treino.ts";
+export * from "./nomes.ts";
+export * from "./catalogo.ts";
+export * from "./combate.ts";
+export * from "./bots.ts";
+export * from "./carater.ts";
+export * from "./gambits_pet.ts";
+export * from "./motivo.ts";
+export * from "./expressao.ts";
+export * from "./motor.ts";
+export * from "./donos.ts";

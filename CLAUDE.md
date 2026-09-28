@@ -628,13 +628,16 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
 
-**Migração para TypeScript (TAREFA_FRONT_TS, em andamento)**: `web/app/test/` tem a referência de
+**Migração para TypeScript (TAREFA_FRONT_TS, em andamento)**: o motor em TS fica em `web/app/motor/` (sem
+DOM: lib ES sem "dom", teste `motor_sem_dom`; `index.ts` exporta tudo; `Motor.aplicarEvento` é o passo do
+replay). `cd web/app && npm install`, `npm run tipos` (tsc estrito) e `npm run teste` (49 testes, ~1 min; Node
+24 roda o `.ts` direto). O HTML continua sendo o jogo até a Etapa 6. `web/app/test/` tem a referência de
 paridade. `motor_html.mjs` extrai o motor do HTML pelas marcas `@motor-inicio/@motor-fim` e roda em Node sem
 DOM; `gerar_gabaritos.mjs` grava 60 vidas (3 versões de pet × 5 donos × 4 sementes, todos os estágios, tipos
 de evento t/d/l/g/tr, NPCs, sombrias) com checkpoints (sha256 da assinatura + contadores) em
 `gabaritos/vidas_*.json`; `constantes.test.mjs` confere cada folha numérica das constantes web contra
 `gabaritos/constantes_python.json` (`python experiments/exportar_constantes_web.py`) pela tabela
-`mapa_constantes.json`. Rodar: `node --test "web/app/test/*.test.mjs"` (~1 min). Gabaritos são do V8 do
+`mapa_constantes.json`. `paridade_ts.test.mjs` passa os mesmos gabaritos no motor em TS (100% iguais, checkpoint a checkpoint). Gabaritos são do V8 do
 Node: o Chrome difere no último bit de exp/log (libm) e o replay só é bit a bit no mesmo runtime.
 **Devastador corrigido (2026-09-28)**: a semente de gambits dele tem a regra "perto e guts ≥ 60 → preparar
 pesado", fora do `REPERTORIO`; a luta quebrava (TypeError). `regraDe(k)` procura no repertório e, fora dele,
