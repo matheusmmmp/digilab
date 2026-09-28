@@ -1,0 +1,8 @@
+/* Decoracao do Digimon UP (docs/ASSETS_UP.md): ilustracoes, com suavizacao normal (so os sprites dos Digimon
+   ficam pixelados). Movimento: parado com prefers-reduced-motion. */
+.dl-deco{image-rendering:auto;flex:none}
+
+/* faixa do lugar no cartao da campanha: ilustracao, cover a partir da esquerda, pelicula para o texto */
+.camp-faixa{position:relative;height:64px;margin:-4px 0 0;border-radius:10px;background-color:var(--dl-navy);background-size:cover;background-position:left center;overflow:hidden}
+.camp-faixa::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,20,48,.62),rgba(8,20,48,.3))}
+.camp-faixa span{position:absolute;left:12px;bottom:8px;z-index:1;color:#FFFFFF;font-weight:900;font-size:.8125rem;text-shadow:0 1px 2px #000}

@@ -2,6 +2,7 @@
    4 destinos e rodape. A rota vem do endereco (#/destino/aba) ou da aba lembrada, como no HTML. */
 import { useEffect, useState } from "preact/hooks";
 import { useAtlas } from "./atlas.ts";
+import { useDecoracao } from "./decoracao.ts";
 import { Nav } from "./componentes/Nav.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { useJogo } from "./jogo.ts";
@@ -33,7 +34,7 @@ function rotaInicial(): Rota {
 }
 
 export function App() {
-  const jogo = useJogo(), atlas = useAtlas();
+  const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao();
   const [rota, setRota] = useState<Rota>(rotaInicial);
   const [boasVindas] = useState(primeiraVisita);
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
@@ -68,6 +69,13 @@ export function App() {
         <div class="aviso" role="alert">
           Atlas de sprites não carregou.
           <p>{atlas.erro}. Rode <code>python gerar_atlas_up.py</code> em D:\Trab\digilab\Assets.</p>
+        </div>
+      )}
+      {(deco.estado.tipo === "erro" || deco.falhas.size > 0) && (
+        <div class="aviso" role="alert">
+          Parte da decoração do Digimon UP não carregou; esses lugares ficam com o visual de antes.
+          <p>{deco.estado.tipo === "erro" ? deco.estado.erro : [...deco.falhas].map(([n, e]) => `${n} (${e})`).join(", ")}.
+            Rode <code>python gerar_decoracao_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
       {boasVindas && (

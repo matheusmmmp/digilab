@@ -1,5 +1,5 @@
 /* Palco da luta (desenhos ArenaAoVivo, BatAcao, UpLuta e UpResultado; porte do HTML): vida e guts dos dois,
-   turno no hexagono, arena do UP (PVP_Bg_Octagon) com os dois em escala inteira comum, distancia em etiqueta,
+   turno no hexagono, arena do UP (PVP_Bg_Octagon; na campanha, o fundo ilustrado do lugar do NPC) com os dois em escala inteira comum, distancia em etiqueta,
    intencao do rival, regra que o pet usou (travar/vetar ali mesmo), linha do turno, resultado e registro. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../../motor/index.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, imagemAtlas, quadroAgora, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
+import { FUNDO_NPC, imagemDeco } from "../../decoracao.ts";
 import { falaLLM, motivoParaApi, useFalaLLM } from "../../fala.ts";
 import { S, desenharGrade, paleta } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
@@ -39,7 +40,16 @@ function desenharArena(cv: HTMLCanvasElement, p: Palco): void {
   const alt = ok ? [p.A, p.B].map(L => dimSprite(a.dados, L.sprite)[1]) : [];
   const escLuta = alt.length ? Math.max(1, Math.min(3, Math.floor(34 * K / (Math.max(...alt) * escalaSprite())))) : 1;
   cx.setTransform(K, 0, 0, K, 0, 0); cx.imageSmoothingEnabled = false;
-  if (ok) {
+  /* campanha: fundo ilustrado do lugar do NPC (recorte sem o chefe), cover a partir da esquerda, com suavizacao e
+     pelicula escura de 30% por baixo do que vai por cima; sem ele (carregando ou falhou), o fundo de antes */
+  const nomeFundo = p.modo === "campanha" ? FUNDO_NPC[p.B.sprite] : undefined, ilustra = nomeFundo ? imagemDeco(nomeFundo) : null;
+  if (ilustra) {
+    const e = Math.max(cv.width / ilustra.naturalWidth, cv.height / ilustra.naturalHeight);
+    cx.save(); cx.setTransform(1, 0, 0, 1, 0, 0); cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = "high";
+    cx.drawImage(ilustra, 0, (cv.height - ilustra.naturalHeight * e) / 2, ilustra.naturalWidth * e, ilustra.naturalHeight * e); cx.restore();
+    cx.fillStyle = "rgba(8,20,48,.3)"; cx.fillRect(0, 0, 96, 48);
+    cx.fillStyle = "rgba(11,42,94,.35)"; cx.fillRect(0, 38, 96, 10);
+  } else if (ok) {
     /* fundo de arena do UP (pintura): faixa central do octogono cobrindo o palco, com suavizacao */
     const r = a.dados.pecas.fundo_arena; if (!r) throw new Error("peça do atlas ausente: fundo_arena");
     const sh = Math.round(r[2] * 48 / 96);

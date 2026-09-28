@@ -2,6 +2,7 @@
 import { render } from "preact";
 import { App } from "./App.tsx";
 import { carregarAtlas } from "./atlas.ts";
+import { carregarDecoracao } from "./decoracao.ts";
 import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, ouvirOutrasAbas } from "./jogo.ts";
@@ -14,11 +15,13 @@ import "./estilo/pet.css";
 import "./estilo/crescer.css";
 import "./estilo/lutar.css";
 import "./estilo/diario.css";
+import "./estilo/decoracao.css";
 
 iniciarTema();
 
 iniciarJogo(localStorage);
 carregarAtlas();
+carregarDecoracao();
 ouvirOutrasAbas();
 iniciarTempo();
 iniciarFalaLLM();

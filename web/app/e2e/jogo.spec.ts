@@ -6,9 +6,13 @@
       toque >= 44 px, sem erro no console; foco visivel pelo teclado. */
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { basename } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
-const APP = "/v1/web/dist/", HTML = "/v1/web/digilab_sprites.html?antigo=1", CHAVE = "digilab-web-v21-sprites";
+// prefixo = nome da pasta do repositorio (/v1 ou o da worktree), como no servidor_local.py
+const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
+const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?antigo=1`, CHAVE = "digilab-web-v21-sprites";
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
