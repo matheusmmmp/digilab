@@ -5,7 +5,7 @@
     POST /api/fala-livre/verificar  {"fala": "...", "fatos_citados": [...], "fatos": [...], "semente": 0}
     GET  /api/fala-livre/status
 
-So Ollama local (DIGILAB_MODELO_LIVRE, padrao qwen2.5:7b). As chamadas sao em fila (uma GPU). A pagina
+So Ollama local (DIGILAB_MODELO_LIVRE, padrao gemma2:9b). As chamadas sao em fila (uma GPU). A pagina
 guarda as falas no log de apresentacao dela; o servidor nao grava nada do pet.
 """
 
@@ -22,7 +22,7 @@ from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
 from digilab_fala_livre.verificador import verificar
 
 ROTA_FALA, ROTA_VERIF, ROTA_STATUS = "/api/fala-livre", "/api/fala-livre/verificar", "/api/fala-livre/status"
-MODELO_PADRAO = "qwen2.5:7b"
+MODELO_PADRAO = "gemma2:9b"          # escolhido na rodada 2 (artifacts_fala_livre/rodada2/RELATORIO.md)
 MAX_TEXTO_JOGADOR = 300
 MAX_TROCAS = 10
 MAX_FATOS = 40
