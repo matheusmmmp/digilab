@@ -73,6 +73,8 @@ Ações novas do dono (`AcaoUsuario`): `petisco`, `levar_ao_banheiro` e `tratar_
 | chamados a partir de | criança | DECIDIDO | Fase 0, item 6 |
 | intervalo médio dos chamados por estágio | o `intervalos_min` de cada estágio no cronograma | DECIDIDO | cronograma (hoje só o bebê usa) |
 | fração de chamados que são falsos | 0,25 × (1 − disciplina/100), mais 0,05 por `reforco_falso` (teto 0,5) | PROPOSTO | sem fonte. No Tamagotchi o chamado falso some com a disciplina cheia; a forma da curva é minha |
+| chamado real × falso (Fase 2, parte 2) | o chamado é **real** se a necessidade pedida (fome, higiene ou humor) está abaixo de 0,35, o mesmo `limiar_necessidade_pedido_adequado` dos donos. Se a necessidade está em dia, o slot vira **falso** com a chance da linha acima (0 com disciplina cheia ou depois de 3 acertos seguidos no estágio). O dono vê o pedido, nunca se é falso | DECIDIDO (limiar) / PROPOSTO (regra) | a regra imita o Tamagotchi: o dono descobre olhando os medidores |
+| petisco | 0,5 do ganho de alimentar, sem sorteio de sujeira e sem obediência. Conta como cuidado que atende: ceder **reforça o chamar_atencao** também na política aprendida | PROPOSTO | sem fonte |
 | passo de disciplina por bronca certa | +25 (4 broncas certas enchem) | PROPOSTO | comunidade Tamagotchi: o medidor tem 4 barras. Fonte não verificada; confirmar link |
 | disciplina cheia acaba com o chamado falso | sim | DECIDIDO | enunciado da tarefa |
 | aprendizado: o pet para de repetir uma travessura depois de N acertos seguidos | N = 3 | PROPOSTO | Digimon Pendulum/4U, pela comunidade. Fonte não verificada |

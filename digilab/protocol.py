@@ -504,8 +504,11 @@ for _p in (PROTOCOLO_ARENA_V1_HABITUACAO, PROTOCOLO_ARENA_V1_SEM_HABITUACAO):
 _NV = "fonte da comunidade, nao verificada"
 _SF = "sem fonte"
 _FONTES_EDUCACAO_V1 = {
+    "ConfigEducacao.ligada": (_D, "chave desligada por padrao, como ConfigEscala; runs de educacao usam a ligada"),
     "ConfigEducacao.janela_min": (_D, "docs/cronograma_interacoes.json, janelas.chamado_min"),
     "ConfigEducacao.estagio_inicio_chamados": (_D, "Fase 0, item 6 (decisao do Matheus)"),
+    "ConfigEducacao.intervalos_chamado_min": (_D, "docs/cronograma_interacoes.json, estagios.*.intervalos_min"),
+    "ConfigEducacao.limiar_necessidade_real": (_D, "igual a ConfigDonos.limiar_necessidade_pedido_adequado"),
     "ConfigEducacao.fracao_falso_base": (_P, _SF + "; no Tamagotchi o chamado falso some com disciplina cheia"),
     "ConfigEducacao.reforco_por_petisco": (_P, _SF),
     "ConfigEducacao.teto_falso": (_P, _SF),
@@ -513,6 +516,7 @@ _FONTES_EDUCACAO_V1 = {
     "ConfigEducacao.passo_disciplina": (_P, "medidor de 4 barras do Tamagotchi; " + _NV),
     "ConfigEducacao.acertos_para_aprender": (_P, "Digimon Pendulum/4U (3 acertos); " + _NV),
     "ConfigEducacao.fator_disciplina_ao_evoluir": (_P, _SF),
+    "ConfigEducacao.fracao_petisco_alimentar": (_P, _SF),
     "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
     "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
     "ConfigLesoes.prob_lesao_derrota": (_P, _SF),

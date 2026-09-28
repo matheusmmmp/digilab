@@ -40,8 +40,9 @@ from ..events import AcaoPet, AcaoUsuario
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
 ACOES = tuple(AcaoPet)
+# petisco (educacao-v1) atende como cuidado: ceder com petisco a um chamado REFORCA o chamar_atencao
 CUIDADOS_QUE_ATENDEM = frozenset(
-    {AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR}
+    {AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR, AcaoUsuario.PETISCO}
 )
 FEEDBACK = frozenset({AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER})
 

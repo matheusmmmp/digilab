@@ -871,19 +871,32 @@ CONFIG_ESCALA_LIGADA = ConfigEscala(ligada=True)
 # docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, aprovado pelo Matheus em 2026-09-28. Status e fonte de cada valor:
 # protocol.PARAMETROS_EDUCACAO_V1 (o teste confere que os valores la batem com estes).
 
+def _intervalos_chamado() -> dict:
+    return {"crianca": {"fome": 90, "higiene": 120, "carinho": 90},
+            "adolescente": {"fome": 150, "higiene": 120, "carinho": 120},
+            "adulto": {"fome": 180, "higiene": 120, "carinho": 180}}
+
+
 @dataclass(frozen=True)
 class ConfigEducacao:
     """Sistema A: travessuras que abrem janela e so o dono resolve; disciplina 0-100."""
 
+    ligada: bool = False                     # como ConfigEscala: desligada, o MotorEducacao = MotorTreino
     janela_min: int = 15                     # cronograma_interacoes.json, janelas.chamado_min
     estagio_inicio_chamados: str = "crianca"
-    fracao_falso_base: float = 0.25          # fracao de chamados falsos com disciplina 0
+    # intervalo de cada chamado por estagio (cronograma_interacoes.json, intervalos_min); carinho -> humor
+    intervalos_chamado_min: dict = field(default_factory=_intervalos_chamado)
+    # chamado real: a necessidade pedida esta abaixo disto (igual a ConfigDonos.limiar_necessidade_pedido_adequado)
+    limiar_necessidade_real: float = 0.35
+    # slot de chamado sem necessidade real: chance de virar chamado FALSO com disciplina 0
+    fracao_falso_base: float = 0.25
     reforco_por_petisco: float = 0.05        # cada petisco cedido a um chamado falso soma a fracao
     teto_falso: float = 0.5
     disciplina_max: int = 100
     passo_disciplina: int = 25               # bronca certa; 4 enchem
     acertos_para_aprender: int = 3           # acertos seguidos para o pet parar de repetir a travessura
     fator_disciplina_ao_evoluir: float = 0.5
+    fracao_petisco_alimentar: float = 0.5    # petisco = esta fracao do ganho de alimentar, sem sujeira
 
 
 @dataclass(frozen=True)
@@ -915,6 +928,7 @@ class ConfigEquilibrio:
 
 
 CONFIG_EDUCACAO = ConfigEducacao()
+CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
 CONFIG_LESOES = ConfigLesoes()
 CONFIG_HERANCA = ConfigHeranca()
 CONFIG_EQUILIBRIO = ConfigEquilibrio()

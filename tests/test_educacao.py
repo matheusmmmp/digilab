@@ -45,12 +45,18 @@ def test_log_sem_acao_nova_rejoga_igual_ao_motor_treino(braco):
     assert r.resumo_treino() == v.motor.resumo_treino() and r.vinculo.serie == v.motor.vinculo.serie
 
 
-@pytest.mark.parametrize("acao", ACOES_EDUCACAO)
+@pytest.mark.parametrize("acao", [AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO])
 def test_acao_nova_falha_alto(acao):
     esp, _ = ovo(3101)
     fp, fm = fabricas_educacao(3101, esp, sortear(3101))
     with pytest.raises(AcaoAindaSemEfeito):
         fm(fp(None), None, 3101)._aplicar_acao_usuario(acao)
+
+
+@pytest.mark.parametrize("acao", ACOES_EDUCACAO)
+def test_acao_nova_no_motor_antigo_falha_alto(acao):
+    esp, _ = ovo(3101)
+    fp, _ = fabricas_educacao(3101, esp, sortear(3101))
     antigo = MotorTreino(fp(None), None, 3101, sortear(3101), esp)
     with pytest.raises(Exception):
         antigo._aplicar_acao_usuario(acao)
@@ -84,3 +90,119 @@ def test_hash_estavel_e_sensivel():
     c = outro["ConfigHeranca.sigma_temperamento"]
     outro["ConfigHeranca.sigma_temperamento"] = replace(c, status=Status.DECIDIDO)
     assert hash_parametros_educacao(outro) != h
+
+
+# ================================================================ parte 2: chamado falso, disciplina, permissivo
+from digilab.config import CONFIG_EDUCACAO_LIGADA, CONFIG_EVOLUCAO_PESQUISA  # noqa: E402
+from digilab.donos_educacao import BRACOS_EDUCACAO, simular_vida_educacao  # noqa: E402
+
+S_EDU = 4201
+
+
+def _vida_edu(braco: str, s: int = S_EDU, dias: int = 3):
+    esp, _ = ovo(s)
+    t = sortear(s)
+    return simular_vida_educacao(braco, s, dias, esp, t), esp, t
+
+
+@pytest.fixture(scope="module")
+def vidas_edu():
+    return {b: _vida_edu(b) for b in BRACOS_EDUCACAO}
+
+
+def _motor_ligado(s: int = S_EDU):
+    esp, _ = ovo(s)
+    fp, fm = fabricas_educacao(s, esp, sortear(s), ce=CONFIG_EDUCACAO_LIGADA)
+    return fm(fp(None), None, s)
+
+
+def test_replay_bit_a_bit_com_educacao_ligada(vidas_edu):
+    for b in ("atencioso", "permissivo", "incoerente"):
+        v, esp, t = vidas_edu[b]
+        fp, fm = fabricas_educacao(S_EDU, esp, t, ce=CONFIG_EDUCACAO_LIGADA)
+        r = reproduzir_com_feedback(v.motor.log, fp, semente=S_EDU, fabrica_motor=fm)
+        assert r.estado() == v.motor.estado()
+        assert r.resumo_educacao() == v.motor.resumo_educacao()
+        assert r.historico_janelas == v.motor.historico_janelas
+        assert r.vinculo.serie == v.motor.vinculo.serie
+
+
+def test_orcamento_igual_e_mesmos_sorteios_de_travessura_entre_bracos(vidas_edu):
+    gastos = {b: v.interacoes for b, (v, _, _) in vidas_edu.items()}
+    assert len(set(gastos.values())) == 1, gastos
+    estados = {b: v.motor._rng_travessura.getstate() for b, (v, _, _) in vidas_edu.items()}
+    assert len(set(map(str, estados.values()))) == 1
+
+
+def test_chamados_so_da_crianca_em_diante(vidas_edu):
+    for v, _, _ in vidas_edu.values():
+        assert v.motor.historico_janelas
+        assert min(j["inicio"] for j in v.motor.historico_janelas) >= CONFIG_EVOLUCAO_PESQUISA.dur_bebe_min
+
+
+def test_permissivo_cede_e_nao_educa_atencioso_corrige(vidas_edu):
+    at = vidas_edu["atencioso"][0].motor.resumo_educacao()
+    pe = vidas_edu["permissivo"][0].motor.resumo_educacao()
+    assert pe["contagem"]["falsos_cedidos"] > 0 and pe["contagem"]["falsos_corrigidos"] == 0 and pe["disciplina"] == 0
+    assert at["contagem"]["falsos_corrigidos"] > 0 and at["contagem"]["falsos_cedidos"] == 0
+    assert at["disciplina"] > pe["disciplina"]
+    assert pe["contagem"]["falsos"] > at["contagem"]["falsos"]          # ceder reforca o chamado falso
+    assert vidas_edu["permissivo"][0].dono.respostas["bronca"] == 0
+
+
+def test_fracao_falso_zera_com_disciplina_cheia_ou_aprendizado():
+    m = _motor_ligado()
+    c = CONFIG_EDUCACAO_LIGADA
+    assert m.fracao_falso() == c.fracao_falso_base
+    m.petiscos_cedidos = 100
+    assert m.fracao_falso() == c.teto_falso
+    m.disciplina = c.disciplina_max
+    assert m.fracao_falso() == 0.0
+    m.disciplina, m.acertos = 0, c.acertos_para_aprender
+    assert m.fracao_falso() == 0.0
+
+
+def _abrir_falso(m, tick_rel: int = 0):
+    t = m._estado.tick + tick_rel
+    m.janela = {"tipo": "chamado", "pedido": "fome", "inicio": t, "prazo": t + CONFIG_EDUCACAO_LIGADA.janela_min,
+                "falso": True}
+
+
+def test_falso_ignorado_derruba_disciplina_e_o_pet_nao_resolve_sozinho():
+    m = _motor_ligado()
+    m.disciplina = 50
+    _abrir_falso(m)
+    m.avancar(CONFIG_EDUCACAO_LIGADA.janela_min + 16)   # proxima decisao depois do prazo
+    assert m.janela is None or m.janela["inicio"] > 0
+    assert m.historico_janelas[0]["desfecho"] == "ignorado"
+    assert m.disciplina == 50 - CONFIG_EDUCACAO_LIGADA.passo_disciplina
+
+
+def test_bronca_certa_petisco_e_refeicao_recusada():
+    m = _motor_ligado()
+    _abrir_falso(m)
+    fome = m._estado.fome
+    m.observar(AcaoUsuario.ALIMENTAR)
+    assert m._estado.fome == fome and m.janela is not None and m.contagem["refeicoes_recusadas"] == 1
+    m.observar(AcaoUsuario.REPREENDER)
+    assert m.janela is None and m.disciplina == CONFIG_EDUCACAO_LIGADA.passo_disciplina and m.acertos == 1
+    _abrir_falso(m)
+    m.observar(AcaoUsuario.PETISCO)
+    assert m.janela is None and m.petiscos_cedidos == 1 and m.acertos == 0 and m._estado.fome > fome
+
+
+def test_refeicao_recusada_consome_a_rng_de_ambiente_como_aceita():
+    a, b = _motor_ligado(), _motor_ligado()
+    _abrir_falso(a)
+    a.observar(AcaoUsuario.ALIMENTAR)
+    b._estado = replace(b._estado)
+    from digilab.state import aplicar_acao_usuario
+    aplicar_acao_usuario(b._estado, AcaoUsuario.ALIMENTAR, b.cfg, b._rng_ambiente)
+    assert a._rng_ambiente.getstate() == b._rng_ambiente.getstate()
+
+
+def test_disciplina_cai_para_metade_ao_evoluir():
+    m = _motor_ligado()
+    m.disciplina, m.acertos = 75, 2
+    m._evoluiu("adolescente", 900)
+    assert m.disciplina == 37 and m.acertos == 0
