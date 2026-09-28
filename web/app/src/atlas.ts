@@ -2,6 +2,7 @@
    gerado por Assets\gerar_atlas_up.py. Mesmo caminho relativo do HTML: a pagina em /v1/web/dist/ pede
    ../../../Assets/ (no modo dev, o vite.config serve so estes dois arquivos). Se nao carregar: aviso visivel. */
 import { useEffect, useState } from "preact/hooks";
+import { zoomAtual } from "./escala.ts";
 
 export const ATLAS_URL = "../../../Assets/digilab_atlas_up.json";
 
@@ -135,7 +136,8 @@ export function silhuetaAtlas(a: AtlasOk, nome: string): { url: string; w: numbe
 /** estado do atlas fora de componente (o palco desenha num intervalo proprio) */
 export const atlasAtual = (): EstadoAtlas => estado;
 /** escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */
-export const escalaSprite = (): number => Math.max(1, Math.floor(devicePixelRatio || 1));
+/** pixels do aparelho por pixel de CSS, inteiro (com o zoom do desktop, src/escala.ts) */
+export const escalaSprite = (): number => Math.max(1, Math.floor((devicePixelRatio || 1) * zoomAtual()));
 
 /** imagem (data URL) de um sprite ou peca em escala inteira, primeiro quadro; cache por nome e escala */
 const cacheImagem = new Map<string, string>();

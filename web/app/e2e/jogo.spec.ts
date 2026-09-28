@@ -32,7 +32,13 @@ async function semear(page: Page, save: object | null, tema?: string): Promise<v
 function vigiarErros(page: Page): string[] {
   const erros: string[] = [];
   page.on("pageerror", e => erros.push("pageerror: " + e.message));
-  page.on("console", m => { if (m.type() === "error") erros.push("console: " + m.text()); });
+  /* o favicon da pagina de semear (um JSON) as vezes termina de falhar depois que a vigia comeca: fora do app */
+  page.on("console", m => {
+    if (m.type() !== "error") return;
+    const url = m.location().url ?? "";
+    if (/favicon\.ico$/.test(url)) return;
+    erros.push("console: " + m.text() + (url ? ` (${url})` : ""));
+  });
   return erros;
 }
 const numLog = (page: Page, tipo: string) => page.evaluate(([t]) => JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] === t).length, [tipo] as const);
