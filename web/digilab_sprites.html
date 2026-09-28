@@ -207,7 +207,13 @@
 .fala-area .dl-balao{cursor:pointer;text-align:left}
 .fala-area .dl-balao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
 .fala-area .fala-det{margin:0}
-.device .fala-llm{justify-self:start;display:flex;gap:6px;align-items:center;color:var(--dl-text-2);margin:0}
+.device .fala-llm{justify-self:start;display:flex;gap:8px;align-items:center;color:var(--dl-text-2);margin:0;min-height:44px;cursor:pointer}
+.device .fala-llm input{width:24px;height:24px;margin:0;flex:none;accent-color:var(--dl-action)}
+.fala-area .dl-balao{min-height:44px}
+details > summary{min-height:44px;display:flex;align-items:center;gap:6px;cursor:pointer}
+details > summary::-webkit-details-marker{display:none}
+details > summary::before{content:"▸";font-size:.8em}
+details[open] > summary::before{content:"▾"}
 .fala-marca{font-size:.75rem;font-weight:900;border:1px solid var(--dl-border);border-radius:4px;padding:0 4px}
 .causa-area{display:flex;flex-wrap:wrap;gap:6px}
 .necessidades4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -280,6 +286,10 @@ body[data-destino="pet"] .grid{grid-template-columns:minmax(0,480px);justify-con
 .luta-res{display:grid;gap:10px;justify-items:start}
 .luta-res-rival{display:flex;align-items:center;gap:10px}
 .luta-res-rival img{max-width:96px;height:auto}
+/* revisao P1: requisito do no da arvore, no toque */
+.evo-no{cursor:pointer}
+.evo-no:focus-visible rect{stroke:var(--dl-highlight);stroke-width:3px}
+.evo-no-det{margin:0}
 /* navegacao em 4 destinos (TAREFA_INTERFACE_UP, Etapa 3; UI_GUIDELINES 7.12): barra inferior no
    celular, coluna a esquerda a partir de 900 px */
 .dl-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:space-around;gap:4px;
@@ -429,7 +439,7 @@ select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--l
 .jeito{display:flex;gap:10px;align-items:baseline;margin-top:6px}
 .treino-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin-top:8px}
 .treino-btns .sbtn.forcar{background:var(--bad);color:#fff}
-.jeito .muted{min-width:56px}
+.jeito .muted{min-width:104px;flex:none}
 .cenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
 .cen{font:inherit;text-align:left;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;display:grid;gap:4px}
 .cen b{font-size:14px}
@@ -476,7 +486,10 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 .evo-rola{overflow-x:auto;-webkit-overflow-scrolling:touch}
 /* mapa da campanha: ilustracao fixa (como a tela do pet), igual nos dois temas */
 .mapa-rola{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:14px}
-.mapa{width:360px;max-width:none;height:auto;display:block;border-radius:14px;background:#7FC7A0;margin-inline:auto}
+.mapa{width:100%;max-width:520px;height:auto;display:block;border-radius:14px;background:#7FC7A0;margin-inline:auto}
+.mapa-rola{position:relative;overflow:visible}
+.mapa-spr{position:absolute;overflow:hidden;pointer-events:none;display:flex;align-items:flex-start;justify-content:center}
+.mapa-spr img{max-width:none;image-rendering:pixelated}
 .mapa text{font-family:var(--f-pixel);font-size:9px;letter-spacing:.04em}
 .mapa .rotulo{fill:#10213A;font-weight:700}
 .mapa .rotulo-bg{fill:#F4F1E4;opacity:.92}
@@ -556,7 +569,12 @@ body{background-color:var(--dl-bg);background-image:var(--dl-hex-img);background
 .chip{font-family:var(--dl-f-texto);font-weight:800;min-height:36px;border:2px solid var(--dl-sec-edge);background:var(--dl-sec-bg);color:var(--dl-sec-ink)}
 .chip[aria-pressed="true"]{background:var(--dl-navy);border-color:var(--dl-navy);color:#FFFFFF}
 .kv div{background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex)}
-select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-height:44px;font-weight:800}
+select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-height:44px;font-weight:800;max-width:100%}
+#rival{width:100%}
+#p-arena .row label[for="rival"]{flex-basis:100%}
+.luta-nome{display:grid;min-width:0}
+.luta-nome b,.luta-nome small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.luta-nome small{font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
 </style>
 
 <div class="wrap">
@@ -634,23 +652,28 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 
       <div class="pane" id="p-aprend" hidden>
         <div>
-          <h2>Jeito e desejo</h2>
-          <p class="muted" style="margin-top:4px">O <b>jeito</b> é o temperamento de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir do Rookie dá para diferenciar os dois.</p>
-          <div class="jeito"><span class="muted">Jeito</span> <b id="temperamento">…</b></div>
+          <h2>Temperamento e desejo</h2>
+          <div class="jeito"><span class="muted">Temperamento</span> <b id="temperamento">…</b></div>
           <div class="jeito"><span class="muted">Desejo</span> <b id="desejo">…</b></div>
           <div class="jeito"><span class="muted">Vínculo</span> <b id="vinculo">…</b></div>
-          <p class="muted" id="jeito-det" style="font-size:.85em"></p>
+          <div id="temp-barras" style="margin-top:6px"></div>
+          <details class="muted"><summary>Como funciona e valores exatos</summary>
+            <p>O <b>temperamento</b> vem de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir do Rookie ele sabe dizer qual dos dois é.</p>
+            <p id="jeito-det" style="font-size:.85em"></p></details>
         </div>
         <div>
           <h2>Traços de combate</h2>
-          <p class="muted" style="margin-top:4px">Média lenta do que o pet faz no dia a dia, <b>comparada com um pet comum</b> (todo pet dorme e fica à toa muito, e isso conta como bloqueio; por isso a comparação). Na hora de evoluir, viram <b>caráter</b> (aba Evolução).</p>
+          <p class="muted" style="margin-top:4px">Comparados com um pet comum. Na evolução viram <b>caráter</b>.</p>
         </div>
-        <div class="linhas" id="tracos"></div>
-        <p>O pet decide com um bandit contextual que nasce copiando o instinto. Elogio e repreensão ajustam a ação que ele acabou de fazer. Atender um pedido de atenção rápido também conta como recompensa.</p>
+        <div id="tracos"></div>
+        <details class="muted"><summary>Como funciona e valores exatos</summary>
+          <p>Média lenta do que o pet faz no dia a dia. Todo pet dorme e fica à toa muito, e isso conta como bloqueio; por isso a comparação com um pet comum.</p>
+          <p id="tracos-det" style="font-size:.85em"></p></details>
+        <p>Elogio e repreensão ajustam a ação que ele acabou de fazer. Atender rápido um pedido de atenção também conta.</p>
         <div class="kv" id="recompensas"></div>
         <div>
           <h2>No estado de agora</h2>
-          <div class="legend" style="margin-top:6px"><span style="--c:var(--muted)">instinto</span><span style="--c:var(--accent)">política atual</span></div>
+          <div class="legend" style="margin-top:6px"><span style="--c:var(--muted)">instinto</span><span style="--c:var(--accent)">o que aprendeu com você</span></div>
         </div>
         <div class="linhas" id="politica"></div>
         <div>
@@ -672,7 +695,9 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
       </div>
 
       <div class="pane" id="p-arena" hidden>
-        <p>Combate V2.1: distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). Cada lutador decide por uma lista de <b>gambits</b> (condição → ação), maior a cada nível (Rookie 3, Champion 5, Ultimate e Mega 8). <b>Seu pet aprende os próprios gambits lutando</b>; você só pode travar ou vetar regras.</p>
+        <p>Lute contra um rival. Seu pet decide por <b>regras de combate</b> que ele mesmo aprende lutando; você pode travar ou vetar regras.</p>
+        <details class="muted"><summary>Como funciona</summary>
+          <p>Distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). A lista de regras (condição → ação) cresce a cada nível: Rookie 3, Champion 5, Ultimate e Mega 8.</p></details>
         <div class="row">
           <label for="rival">Rival</label>
           <select id="rival">
@@ -683,7 +708,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
             <option value="contragolpe">contragolpe</option>
             <option value="adaptativo">adaptativo</option>
             <option value="oraculo">oráculo (referência)</option>
-            <optgroup label="Formas adultas (V2.1)">
+            <optgroup label="Formas adultas">
               <option value="duelista">Brasa Duelista</option>
               <option value="furioso">Ferrugem Furioso</option>
               <option value="espelho">Limo Espelho</option>
@@ -716,12 +741,12 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         </div></div>
         <p class="muted">A campanha contra os NPCs fica na aba <b>Campanha</b>.</p>
         <div>
-          <h2>Gambits do seu pet</h2>
+          <h2>Regras de combate do seu pet</h2>
           <div id="gambits" style="margin-top:6px"></div>
         </div>
         <div>
-          <h2>Regras</h2>
-          <p class="muted" style="margin-top:4px">Os dois revelam a ação ao mesmo tempo. Golpe rápido (perto, 10 guts, 8 de dano) interrompe quem prepara o pesado; defender contra golpe rápido devolve 5 (parry). O pesado (perto, 15 guts) sai no turno seguinte com 25 de dano e não é interrompido; foge-se dele recuando no turno da preparação ou esquivando (20 guts) no da execução. No turno de execução dá para <b>fintar</b> em vez de soltar o pesado: um golpe de 8 que acerta quem esquivou e não quebra a guarda. Disparo (médio/longe, 20 guts, 6 de dano). Defender reduz o dano a 30% (pesado: 60%) e rende +5 guts; carregar rende +25 guts mas o dano recebido sobe 50%. <b>Recuar não afasta se o oponente avança no mesmo turno</b> (avançar é ilegal de perto e recuar é ilegal de longe). A marca do caçador se perde se ele levar dano corpo a corpo ou terminar o turno de perto. A partir do turno 25 todo dano sobe 50% (morte súbita). Os danos, a vida, o guts e a defesa mudam com os stats da forma (aba Catálogo); as técnicas e passivas também estão lá. Após 40 turnos vence quem tem mais vida (proporcional). Os bots clássicos lutam com stats neutros.</p>
+          <details class="muted"><summary>Regras da luta</summary>
+          <p>Os dois revelam a ação ao mesmo tempo. Golpe rápido (perto, 10 guts, 8 de dano) interrompe quem prepara o pesado; defender contra golpe rápido devolve 5 (parry). O pesado (perto, 15 guts) sai no turno seguinte com 25 de dano e não é interrompido; foge-se dele recuando no turno da preparação ou esquivando (20 guts) no da execução. No turno de execução dá para <b>fintar</b> em vez de soltar o pesado: um golpe de 8 que acerta quem esquivou e não quebra a guarda. Disparo (médio/longe, 20 guts, 6 de dano). Defender reduz o dano a 30% (pesado: 60%) e rende +5 guts; carregar rende +25 guts mas o dano recebido sobe 50%. <b>Recuar não afasta se o oponente avança no mesmo turno</b> (avançar é ilegal de perto e recuar é ilegal de longe). A marca do caçador se perde se ele levar dano corpo a corpo ou terminar o turno de perto. A partir do turno 25 todo dano sobe 50% (morte súbita). Os danos, a vida, o guts e a defesa mudam com os stats da forma (aba Catálogo); as técnicas e passivas também estão lá. Após 40 turnos vence quem tem mais vida (proporcional). Os bots clássicos lutam com stats neutros.</p></details>
         </div>
       </div>
 
@@ -733,11 +758,14 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
       </div>
 
       <div class="pane" id="p-evolucao" hidden>
-        <p>A evolução segue a árvore do combate V2.1, com uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de sparring): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter (PROVISÓRIO, só na web): quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
+        <p>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
+        <details class="muted"><summary>Como funciona</summary>
+          <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p></details>
         <div class="kv" id="evo-resumo"></div>
-        <div class="evo-rola"><svg class="evo-svg" id="evo-arvore" viewBox="0 0 560 500" role="img" aria-label="Árvore de evolução"></svg></div>
+        <div class="evo-rola"><svg class="evo-svg" id="evo-arvore" viewBox="0 0 560 500" role="group" aria-label="Árvore de evolução"></svg></div>
+        <p class="dl-card evo-no-det" id="evo-no-det" aria-live="polite" hidden></p>
         <div class="legend"><span style="--c:var(--accent)">caminho do seu pet</span><span style="--c:var(--line)">caminhos possíveis</span></div>
-        <p class="muted">Linha tracejada: para onde ele iria se evoluísse agora. A forma muda o combate: stats, técnica e passiva (aba Catálogo). Passe o mouse num nó para ver o requisito.</p>
+        <p class="muted">Linha tracejada: para onde ele iria se evoluísse agora. A forma muda o combate: stats, técnica e passiva (aba Catálogo). Toque num nó para ver o que leva até ele.</p>
         <div>
           <h2>Histórico</h2>
           <div class="evo-hist" id="evo-hist" style="margin-top:6px"></div>
@@ -745,7 +773,9 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
       </div>
 
       <div class="pane" id="p-catalogo" hidden>
-        <p>Os 4 brasões do jogo. Cada um percorre a mesma árvore (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas): 15 formas, cada uma com o seu sprite. Stats pela fórmula do catálogo (espécie + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do estágio. Números PROPOSTOS: a bateria V2.1 reprovou (ver CLAUDE.md).</p>
+        <p>As 15 formas de cada brasão, com os stats de cada uma.</p>
+        <details class="muted"><summary>Como funciona</summary>
+          <p>Cada brasão percorre a mesma árvore (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas). Stats pela fórmula do catálogo (brasão + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do nível. Os números ainda estão em teste.</p></details>
         <div class="row" id="cat-esp" role="group" aria-label="Espécie"></div>
         <div class="cat-grade" id="cat-grade"></div>
         <div><h2>Técnicas (Champion)</h2><div class="decisoes" id="cat-tecnicas" style="margin-top:6px"></div></div>
@@ -792,7 +822,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
           <button class="sbtn sec" id="novo">Novo ovo</button>
           <button class="sbtn sec" id="novo-conf" hidden>Confirmar: apagar este pet</button>
         </div>
-        <p id="reg-msg" class="muted">Semente <span id="semente"></span> · <span id="neventos"></span> eventos no registro.</p>
+        <p id="reg-msg" class="muted">Semente <span id="semente"></span> · <span id="neventos"></span> eventos no registro (suas ações, lutas e passagens de tempo). Abaixo, o que aconteceu, reconstruído a partir dele: <span id="nlinhas"></span>.</p>
         <div class="log" id="log" aria-live="polite"></div>
       </div>
     </section>
@@ -2752,7 +2782,7 @@ function atlasCarregou(){ atlasOk = true; evoCache.clear(); evoChave = null; if 
 function atlasFalhou(url, err){
   const b = document.getElementById("aviso-atlas");
   b.hidden = false;
-  b.textContent = "Atlas de sprites não carregou (" + url + "). Rode python " + "gerar_atlas_up.py" + " em D:\Trab\digilab\Assets. Mostrando os placeholders.";
+  b.textContent = "Atlas de sprites não carregou (" + url + "). Rode python " + "gerar_atlas_up.py" + " em D:\\Trab\\digilab\\Assets. Mostrando os placeholders.";
   console.error("falha ao carregar atlas", url, err || "");
 }
 atlasImg.onload = atlasCarregou;
@@ -3054,6 +3084,12 @@ function desenharLCDUp(e, W, CHAO, noite){
   quadro++;
 }
 
+/* numero com virgula (pt-BR) */
+const dec = (v, d) => v.toFixed(d).replace(".", ",");
+const comSinal = (v, d) => (v >= 0 ? "+" : "") + dec(v, d);
+/* rotulo relativo ao pet comum (guia 7.5): so fora da faixa comum */
+const rotuloRel = v => Math.abs(v) < CDJ.limiarTom ? "na faixa comum" : v >= .6 ? "muito acima" : v > 0 ? "acima" : v <= -.6 ? "muito abaixo" : "abaixo";
+
 /* ------------------------------------------------ paineis */
 const $ = id => document.getElementById(id);
 function hhmm(t){ const m = t % TPD; return String(Math.floor(m/60)).padStart(2,"0") + ":" + String(m%60).padStart(2,"0"); }
@@ -3097,15 +3133,15 @@ function renderCarater(){
     const [pObed] = termosObediencia(motor.vinc.valor, motor.temp.teimosia, 0, null);
     $("vinculo").textContent = `${(motor.vinc.valor*100).toFixed(0)}% · sem conflito, aceita um cuidado com ${(pObed*100).toFixed(0)}% de chance`;
   } else $("vinculo").textContent = "pet de versão antiga: sem vínculo nem recusa (um pet novo já nasce com eles)";
-  $("jeito-det").textContent = "temperamento: " + EIXOS_TEMP.map(k => `${k} ${motor.temp[k] >= 0 ? "+" : ""}${motor.temp[k].toFixed(2)}`).join(", ")
-    + ` (tom só com |eixo| ≥ ${CDJ.limiarTom})` + " · desejo: " + (des ? `${des.tipo} ${des.alvo}${des.causa ? " (" + des.causa + ")" : ""}, intensidade ${des.intensidade.toFixed(2)}` : "nenhum agora");
+  $("temp-barras").innerHTML = EIXOS_TEMP.map(k => barraCarater(k, motor.temp[k])).join("");
+  $("jeito-det").textContent = "temperamento: " + EIXOS_TEMP.map(k => `${k} ${comSinal(motor.temp[k], 2)}`).join(", ")
+    + ` (a fala só comenta eixos a partir de ${dec(CDJ.limiarTom, 1)} para mais ou para menos)` + " · desejo: " + (des ? `${des.tipo} ${des.alvo}${des.causa ? " (" + des.causa + ")" : ""}, intensidade ${dec(des.intensidade, 2)}` : "nenhum agora");
   /* relativo a um pet comum (mesma base que o carater usa); traco central = pet comum */
   const bruto = afinidades(motor.tracos), base = BASE_CARATER[motor.estagioAtual === "adulto" ? "adulto" : "adolescente"];
-  const af = Object.fromEntries(COMBATE.map(c => [c, bruto[c] - base[c]])), mx = Math.max(.05, ...COMBATE.map(c => Math.abs(af[c])));
-  $("tracos").innerHTML = COMBATE.map(c => {
-    const v = af[c] / mx, w = Math.abs(v) * 50, left = v >= 0 ? 50 : 50 - w;
-    return `<div class="linha"><span>${NOME_COMB[c]}</span><div class="bar center"><i style="left:${left}%;width:${w}%;background:${CORES[c][0]}"></i></div><span class="v">${af[c] >= 0 ? "+" : ""}${af[c].toFixed(3)}</span></div>`;
-  }).join("");
+  const af = Object.fromEntries(COMBATE.map(c => [c, bruto[c] - base[c]]));
+  /* mesma escala que vira carater na evolucao (CAT.escalaCarater): rotulo so fora da faixa comum */
+  $("tracos").innerHTML = COMBATE.map(c => barraCarater(NOME_COMB[c], af[c] / CAT.escalaCarater)).join("");
+  $("tracos-det").textContent = "diferença para o pet comum: " + COMBATE.map(c => `${NOME_COMB[c].toLowerCase()} ${comSinal(af[c], 3)}`).join(", ");
 }
 $("chamado").addEventListener("click", ev => { const b = ev.target.closest("[data-atender]"); if (b) $("a-" + ACAO_DO_CHAMADO[b.dataset.atender]).click(); });
 let chaveTreino = null;
@@ -3136,8 +3172,8 @@ function renderTreino(){
       <span class="dl-apoio">${t.forcaria ? "Acima do limite: treinar agora é forçar." : t.pedePausa ? "Pedindo pausa." : `Limite de forçar em ${CTR.limiteForcar}.`}</span></div>
     <div class="med"><span class="med-cab"><b>Sobrecarga</b><span class="dl-lcd">${t.sobrecarga.toFixed(0)} de 100</span></span>${segSob}
       <span class="dl-apoio">${t.sobrecarga >= CSO.sombrio ? "Na virada para Ultimate a forma vai ser sombria." : t.sobrecarga >= CSO.aviso ? `Aviso: com ${CSO.sombrio} ou mais na virada para Ultimate, a forma fica sombria.` : `Com ${CSO.sombrio} ou mais na virada para Ultimate, a forma fica sombria.`}</span></div>
-    <div class="med"><span class="med-cab"><b>Treinado na vida</b><span class="dl-lcd">+${t.total.toFixed(1)} de ${CTR.tetoVida}</span></span>
-      <span class="dl-apoio">${STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${t.pontos[k].toFixed(1)}`).join(", ") || "nada ainda"}</span></div>`;
+    <div class="med"><span class="med-cab"><b>Treinado na vida</b><span class="dl-lcd">+${dec(t.total, 1).replace(/,0$/, "")} de ${CTR.tetoVida}</span></span>
+      <span class="dl-apoio">${STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${dec(t.pontos[k], 1)}`).join(", ") || "nada ainda"}</span></div>`;
   $("treino-pausa").innerHTML = t.pedePausa ? `<span class="dl-balao">pausa?</span>` : "";
   $("treino-espera").textContent = bebe ? "O In-Training ainda não treina." : !pode ? `Próximo treino em ${CTR.intervalo - (motor.e.tick - t.ultimo)} min de jogo.` : "";
 }
@@ -3147,7 +3183,7 @@ $("treino-btns").addEventListener("click", ev => {
   if (t.forcaria && !confirm(`Forçar ${NOME_EXERCICIO[ex].toLowerCase()}? Rende mais agora, mas gera ${CTR.sobreForcar} de sobrecarga${motor.versao >= 2 ? " e derruba o vínculo" : ""}. Sobrecarga ${CSO.sombrio}+ na virada para Ultimate leva à forma sombria.`)) return;
   try {
     const s = motor.treinar(ex); salvar();
-    const g = Object.entries(s.ganho).map(([k, v]) => `+${v.toFixed(2)} ${NOME_STAT[k] || k}`).join(", ");
+    const g = Object.entries(s.ganho).map(([k, v]) => `+${dec(v, 2)} ${NOME_STAT[k] || k}`).join(", ");
     $("treino-msg").textContent = s.enrolou ? "Ele enrolou: a sessão não rendeu." + (s.forcada ? " A sobrecarga entrou mesmo assim." : "")
       : `${s.forcada ? "Forçado: " : ""}${g || "sem ganho (teto atingido)"}.${motor.pausaTreino ? " Ele pediu pausa." : ""}`;
   } catch (err){ $("treino-msg").textContent = err.message; }
@@ -3163,9 +3199,11 @@ function renderAprend(){
 function renderRegistro(){
   $("semente").textContent = motor.semente;
   $("neventos").textContent = motor.log.length;
+  const nh = motor.historico.length;
+  $("nlinhas").textContent = nh > 80 ? `as últimas 80 de ${nh} linhas` : `${nh} linha${nh === 1 ? "" : "s"}`;
   $("log").innerHTML = motor.historico.slice(-80).reverse().map(h =>
     `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>`
-      : h.quem === "gambit" ? `<span class="dono">você (gambits): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : h.quem === "recusa" ? `<b>pet ${h.a}</b>`
+      : h.quem === "gambit" ? `<span class="dono">você (regras de combate): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : h.quem === "recusa" ? `<b>pet ${h.a}</b>`
       : h.quem === "treino" ? `<span class="dono">treino: pet ${h.a}</span>` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
 }
 let paneAtual = "estado";
@@ -3256,9 +3294,18 @@ function lerAbaLembrada(){
   const aba = v.includes("/") ? v.split("/")[1] : v;
   return DESTINO_DA_ABA[aba] ? aba : null;
 }
+function limparPalcoLuta(){
+  $("luta-resultado").innerHTML = ""; $("luta-regra").innerHTML = ""; $("luta-intencao").innerHTML = "";
+  $("luta-callout").hidden = true; $("arena-fala").innerHTML = ""; $("turno-n").textContent = "–";
+}
 function mostrarPane(p){
   const d = DESTINO_DA_ABA[p];
   if (!d) throw new Error("aba sem destino: " + p);
+  /* o palco da luta e compartilhado por Arena e Campanha: a mensagem de um modo nao vaza para o outro */
+  if (p !== paneAtual && (p === "arena" || p === "campanha") && !lutando){
+    limparPalcoLuta();
+    if (p === "arena") $("arena-res").textContent = "Escolha um rival e aperte Lutar.";
+  }
   paneAtual = p; destinoAtual = d; ultimaAbaDoDestino[d] = p;
   document.body.dataset.destino = d;
   document.querySelectorAll("#nav [data-destino]").forEach(b => { if (b.dataset.destino === d) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
@@ -3307,7 +3354,7 @@ function rotuloLLM(){
   $("fala-llm-status").textContent = !FALA_LLM.ativo
     ? `(indisponível: ${FALA_LLM.motivo || "rode python servidor/servidor_local.py"})`
     : FALA_LLM.semCusto ? `(local: ${FALA_LLM.modelo}, sem custo)`
-    : `(Claude ${FALA_LLM.modelo}; gasto US$ ${g ? g.gasto_usd.toFixed(4) : "?"} de US$ ${g ? g.limite_usd.toFixed(2) : "?"})`;
+    : `(Claude ${FALA_LLM.modelo}; gasto US$ ${g ? dec(g.gasto_usd, 4) : "?"} de US$ ${g ? dec(g.limite_usd, 2) : "?"})`;
   $("fala-llm-on").disabled = !FALA_LLM.ativo;
 }
 async function verificarLLM(){
@@ -3362,7 +3409,7 @@ function detalheMotivo(mot, est){
   const fat = mot.exploracao ? "exploração" : (mot.fatores.join(", ") || "nenhum");
   const extra = mot.recusa ? ` · você pediu ${mot.recusa.acaoDono}; chance de obedecer ${(mot.recusa.p*100).toFixed(0)}%`
     : mot.origem === "vida"
-    ? ` · o aprendido decidiu: ${mot.valorDecidiu ? "sim" : "não (instinto + acaso)"} · intensidade ${mot.intensidade.toFixed(2)}`
+    ? ` · o aprendido decidiu: ${mot.valorDecidiu ? "sim" : "não (instinto + acaso)"} · intensidade ${dec(mot.intensidade, 2)}`
     : ` · regra ${typeof mot.regra === "number" ? "#" + (mot.regra + 1) : mot.regra}`;
   return `fatores: ${fat}${extra} · fala de ${NOME_ESTAGIO_FALA[est]}`;
 }
@@ -3412,7 +3459,7 @@ const NOME_MEM = {demora:"Você me deixou esperando", bronca:"Broncas", elogio:"
 function renderMemoria(){
   const tick = motor.e.tick, f = motor.pol.mem.feat(tick), v2 = motor.versao >= 2;
   $("memoria-txt").textContent = v2
-    ? "Memória por espaços (como no Dwarf Fortress): 4 lembranças recentes e 2 duradouras, uma por tipo; a mais forte fica. Depois de 12 h uma lembrança tenta virar duradoura; a cada 4 h acordado ele relembra tudo. Entra no aprendizado como contexto."
+    ? "4 lembranças recentes e 2 duradouras, uma por tipo; a mais forte fica. Depois de 12 h uma lembrança pode virar duradoura; a cada 4 h acordado ele relembra tudo. O que ele lembra entra no que ele aprende."
     : "Memória curta (pet de versão antiga): quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo). Entra no aprendizado como contexto.";
   const rot = v2 ? FATORES_ESPACOS.map(c => NOME_MEM[c]) : ["Demora com a comida", "Demora para limpar", "Broncas recentes", "Elogios recentes"];
   $("memoria").innerHTML = rot.map((k, i) => `<div><b>${(f[i]*100).toFixed(0)}%</b><span>${k}</span></div>`).join("");
@@ -3597,25 +3644,26 @@ function renderGambits(){
   chaveEditor = chaveEditorAtual();
   const el = $("gambits"), gp = motor.gp;
   if (!gp){
-    el.innerHTML = `<p class="muted">O In-Training ainda não tem estilo de luta: decide ao acaso. Quando evoluir para Rookie, o ramo (sereno ou arisco) semeia os primeiros 3 gambits e ele começa a aprender com as lutas.</p>`;
+    el.innerHTML = `<p class="muted">O In-Training ainda não tem estilo de luta: decide ao acaso. Quando evoluir para Rookie, o ramo (sereno ou arisco) semeia as primeiras 3 regras de combate e ele começa a aprender com as lutas.</p>`;
     return;
   }
   const linhas = gp.ativas.map((k, i) => {
     const r = REPERTORIO.get(k), trav = k in gp.travas;
     return `<li data-k='${k.replace(/'/g, "&#39;")}'>
       <span class="g-regra">${rotuloRegra(r)}</span>
-      <span class="g-nota" title="nota aprendida (saldo de dano por disparo)">${gp.notas[k] >= 0 ? "+" : ""}${gp.notas[k].toFixed(3)} · ${gp.disparos[k] || 0}×</span>
+      <span class="g-nota" title="nota aprendida (saldo de dano por uso)">nota ${comSinal(gp.notas[k], 2)} · usada ${gp.disparos[k] || 0}×</span>
       <span class="g-bts"><button class="sbtn sec g-op" data-op="${trav ? "destravar" : "travar"}">${trav ? "🔒 destravar" : "travar"}</button><button class="sbtn sec g-op" data-op="vetar">vetar</button></span></li>`;
   }).join("");
   const vetos = gp.vetos.map(k => `<li data-k='${k.replace(/'/g, "&#39;")}'><span class="g-regra">${rotuloRegra(REPERTORIO.get(k))}</span>
       <span class="g-bts"><button class="sbtn sec g-op" data-op="liberar">liberar</button></span></li>`).join("");
-  el.innerHTML = `<p>Lista aprendida pelo pet (${gp.nLutas} luta${gp.nLutas === 1 ? "" : "s"} contra bots). Semente: a forma <b>${gp.linha}</b>; cabem ${CV21.maxRegras[gp.forma.est]} regras neste estágio${gp.forma.est === "adulto" ? "" : ", e a lista cresce quando ele evoluir"}.
-      A primeira regra cujas condições valem e cuja ação é possível dispara; ${Math.round(CV.eps*100)}% das decisões são exploração.</p>
+  el.innerHTML = `<p>Lista aprendida pelo pet em ${gp.nLutas} luta${gp.nLutas === 1 ? "" : "s"}. Começou com as regras de <b>${gp.linha}</b>; cabem ${CV21.maxRegras[gp.forma.est]} regras agora${gp.forma.est === "adulto" ? "" : ", e a lista cresce quando ele evoluir"}.
+      Vale a primeira regra cujas condições batem.</p>
+    <details class="muted"><summary>Como ele escolhe</summary><p>A primeira regra cujas condições valem e cuja ação é possível dispara. Em ${Math.round(CV.eps*100)}% das decisões ele tenta algo ao acaso, para descobrir regras novas.</p></details>
     <ol class="gambits">${linhas}<li class="g-final"><span class="g-se">sempre →</span> ${NOME_V2[gp.final]}</li></ol>
     ${vetos ? `<h2 style="margin-top:10px">Vetadas por você</h2><ol class="gambits">${vetos}</ol>` : ""}
     <p class="muted">Você só pode <b>travar</b> (a regra fica nessa posição) ou <b>vetar</b> (o pet não pode usá-la). Tudo entra no registro.</p>
     <details><summary>O que o pet mudou</summary><div class="decisoes" style="margin-top:6px">${gp.mudancas.slice(-15).reverse()
-      .map(x => `<div><span class="t">luta ${x.luta}</span> ${x.dono ? "<b>" + x.texto + "</b>" : "pet " + x.texto}</div>`).join("")}</div></details>
+      .map(x => { const tx = x.texto.replace(/(\d)\.(\d)/g, "$1,$2"); return `<div><span class="t">luta ${x.luta}</span> ${x.dono ? "<b>" + tx + "</b>" : "pet " + tx}</div>`; }).join("")}</div></details>
     <p class="muted" id="g-msg"></p>`;
 }
 $("gambits").addEventListener("click", ev => {
@@ -3687,9 +3735,9 @@ function prepararRival(){
 function arenaPreview(){
   const A = lutadorPet(motor, "Seu pet"), B = prepararRival(), E = estadoV2(A.cond, B.cond);
   desenharArenaV2(A, B, E, null); setBarras(E);
-  $("nome-a").textContent = nomeForma(motor.forma); $("nome-b").textContent = nomeLutador(B); $("turno-n").textContent = "–";
+  nomeTopo($("nome-a"), nomeForma(motor.forma)); nomeTopo($("nome-b"), nomeLutador(B)); $("turno-n").textContent = "–";
   const pa = A.cond, extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(", ");
-  $("arena-estilo").textContent = `Seu pet: ${nomeForma(motor.forma)}, vida ${pa.hpMax.toFixed(0)}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; gambits semeados por ${NOME_BOT[A.estilo.base] || A.estilo.base} · rival: ${B.estilo.oraculo ? "oráculo (referência fora dos gambits)" : B.nome.replace("Rival ", "")}.`;
+  $("arena-estilo").textContent = `Seu pet: ${nomeForma(motor.forma)}, vida ${pa.hpMax.toFixed(0)}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; regras de combate semeadas por ${NOME_BOT[A.estilo.base] || A.estilo.base} · rival: ${B.estilo.oraculo ? "oráculo (referência fora das regras de combate)" : B.nome.replace("Rival ", "")}.`;
 }
 let lutando = false;
 function travar(v){ lutando = v; $("lutar").disabled = v; $("melhor10").disabled = v; if (paneAtual === "campanha") renderCampanha(); }
@@ -3737,6 +3785,23 @@ function cenarioMapa(){
   t.push(`<rect x="12" y="92" width="22" height="16" fill="#E9D2A8"/><polygon points="9,93 23,80 37,93" fill="#C8443A"/><rect x="20" y="99" width="6" height="9" fill="#6B4A2B"/>`);
   return t.join("");
 }
+/* sprite 1x recortado num quadrado, sobre o ponto (cx, cy) do SVG do mapa (viewBox 360 x 230) */
+let spritesMapa = [];
+function posicionarSpritesMapa(){
+  const svg = $("mapa"), caixa = svg.parentElement;
+  caixa.querySelectorAll(".mapa-spr").forEach(e => e.remove());
+  const rs = svg.getBoundingClientRect(), rc = caixa.getBoundingClientRect(), k = rs.width / 360;
+  if (!(k > 0)) return;
+  /* svg nao tem offsetLeft/offsetTop: posicao pela diferenca dos retangulos */
+  const ox = rs.left - rc.left + caixa.scrollLeft, oy = rs.top - rc.top + caixa.scrollTop;
+  for (const m of spritesMapa){
+    const d = document.createElement("span"); d.className = "mapa-spr" + (m.pet ? " pet-mapa-spr" : "");
+    d.style.cssText = `left:${ox + m.cx * k - m.lado / 2}px;top:${oy + m.cy * k - m.lado / 2}px;width:${m.lado}px;height:${m.lado}px`;
+    d.innerHTML = `<img src="${m.href}" alt="">`;
+    caixa.appendChild(d);
+  }
+}
+addEventListener("resize", () => { if (paneAtual === "campanha") posicionarSpritesMapa(); });
 function renderCampanha(){
   const svg = $("mapa");
   if (!svg || !motor) return;
@@ -3747,6 +3812,7 @@ function renderCampanha(){
   const d = pts.map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
   const feito = pts.slice(0, vencidos + 1).map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
   let h = cenarioMapa();
+  const spr = [];   /* sprites do mapa: em HTML por cima do SVG, 1x (o SVG escala com a tela, o sprite nao) */
   h += `<path d="${d}" fill="none" stroke="#F4F1E4" stroke-width="5" stroke-dasharray="2 6" stroke-linecap="round"/>`;
   if (vencidos) h += `<path d="${feito}" fill="none" stroke="#F0A534" stroke-width="5" stroke-linecap="round"/>`;
   LUGARES.forEach((L, i) => {
@@ -3759,7 +3825,7 @@ function renderCampanha(){
     h += `<g class="${cls}" data-lugar="${i}" tabindex="0" role="button" aria-label="${i + 1}. ${L.nome}: ${quem}, ${st}">
       <circle class="pulso" cx="${L.x}" cy="${L.y}" r="21"/>
       <circle class="anel" cx="${L.x}" cy="${L.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
-      ${recorteSvg(imagemChave(spriteNPC(c) + "_0"), atlasOk ? dimSprite(spriteNPC(c) + "_0").slice(2) : [24, 24], L.x, L.y, 28)}
+      ${(spr.push({href:imagemChave(spriteNPC(c) + "_0"), cx:L.x, cy:L.y, lado:28}), "")}
       ${L.rivais.length > 1 ? `<g transform="translate(${L.x - 26},${L.y - 22})"><circle cx="6" cy="6" r="7" fill="#2F47A6"/><text x="6" y="9.5" text-anchor="middle" style="fill:#fff;font-size:9px">${L.rivais.length}</text></g>` : ""}
       ${aberto ? "" : `<g transform="translate(${L.x + 9},${L.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
       ${vit ? `<g transform="translate(${L.x + 10},${L.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
@@ -3772,8 +3838,9 @@ function renderCampanha(){
   const [px, py] = pts[vencidos];
   const [ix, iy] = vencidos ? [px - 44, py - 18] : [px + 14, py - 22];     /* ao lado do lugar; na casa, a direita dela */
   if (motor.forma.est !== "ovo")
-    h += `<g class="pet-mapa">${recorteSvg(imagemForma(motor.forma), dimsForma(motor.forma), ix + 11, iy + 11, 26)}</g>`;
+    spr.push({href:imagemForma(motor.forma), cx:ix + 11, cy:iy + 11, lado:26, pet:true});
   svg.innerHTML = h;
+  spritesMapa = spr; posicionarSpritesMapa();
   renderCampDet();
 }
 function renderCampDet(){
@@ -3823,6 +3890,12 @@ $("camp-det").addEventListener("click", ev => {
   const r = ev.target.closest("[data-ver]");
   if (r && r.dataset.ver !== campSel) selecionarRival(r.dataset.ver);     /* ver o rival no palco antes de lutar */
 });
+/* nome do lutador no topo da luta: o Digimon numa linha, o estilo (se houver) na segunda */
+function nomeTopo(el, nome){
+  const m = /^(.*?) \((.*)\)$/.exec(nome);
+  el.innerHTML = m ? `<span class="luta-nome"><b>${escHtml(m[1])}</b><small>${escHtml(m[2])}</small></span>` : `<span class="luta-nome"><b>${escHtml(nome)}</b></span>`;
+  el.title = nome;
+}
 /* nome na tela do lutador: o Digimon (sem o "Rival ") */
 const nomeLutador = L => L.nome === "Seu pet" ? nomeForma(motor.forma) : L.nome.replace(/^Rival /, "");
 function regraUsadaHtml(A, tr, ma){
@@ -3847,7 +3920,7 @@ function narrar(A, B, tr){
   $("luta-regra").innerHTML = regraUsadaHtml(A, tr, motivoCombate(tr, 0, A.estilo));
   const ma = motivoCombate(tr, 0, A.estilo), mb = motivoCombate(tr, 1, B.estilo);
   const fa = expressar(ma, A.estagioFala, ma.refs), fb = expressar(mb, B.estagioFala, mb.refs);
-  const dano = tr.dano[1] ? `seu pet causa ${tr.dano[1].toFixed(1)}` : "", dano2 = tr.dano[0] ? `o rival causa ${tr.dano[0].toFixed(1)}` : "";
+  const dano = tr.dano[1] ? `seu pet causa ${dec(tr.dano[1], 1)}` : "", dano2 = tr.dano[0] ? `o rival causa ${dec(tr.dano[0], 1)}` : "";
   const extra = [tr.interr[0] && "seu pesado foi interrompido", tr.interr[1] && "o pesado do rival foi interrompido",
     tr.errou[0] && "seu pesado errou", tr.errou[1] && "o pesado do rival errou"].filter(Boolean);
   $("arena-res").textContent = `Turno ${tr.t}: ${NOME_V2[tr.a]} × ${NOME_V2[tr.b]}` + ([dano, dano2, ...extra].filter(Boolean).length ? " · " + [dano, dano2, ...extra].filter(Boolean).join(", ") : " · ninguém se machuca");
@@ -3880,9 +3953,9 @@ function resultadoHtml(A, B, res, npc, notasAntes, cenario){
   let reforcada = "";
   if (!cenario && notasAntes && motor.gp){
     const gp = motor.gp, ganhos = gp.ativas.filter(k => k in notasAntes).map(k => [k, gp.notas[k] - notasAntes[k]]).filter(([, d]) => d > 1e-9).sort((x, y) => y[1] - x[1]);
-    if (ganhos.length) reforcada = `<div class="luta-regra-card dl-malha"><span class="luta-regra-cab">REGRA REFORÇADA NESTA LUTA</span><span class="luta-regra-txt">${rotuloRegra(REPERTORIO.get(ganhos[0][0]))}</span><span class="dl-apoio" style="color:#BDEFFF">nota +${ganhos[0][1].toFixed(3)}</span></div>`;
+    if (ganhos.length) reforcada = `<div class="luta-regra-card dl-malha"><span class="luta-regra-cab">REGRA REFORÇADA NESTA LUTA</span><span class="luta-regra-txt">${rotuloRegra(REPERTORIO.get(ganhos[0][0]))}</span><span class="dl-apoio" style="color:#BDEFFF">nota +${dec(ganhos[0][1], 2)}</span></div>`;
   }
-  const sp = motor.estagioAtual === "adolescente" && !cenario ? `<span class="dl-apoio">sparring para evoluir: ${Math.min(motor.sparring, CAT.sparring)} de ${CAT.sparring}</span>` : "";
+  const sp = motor.estagioAtual === "adolescente" && !cenario ? `<span class="dl-apoio">lutas de treino para evoluir: ${Math.min(motor.sparring, CAT.sparring)} de ${CAT.sparring}</span>` : "";
   return `<div class="dl-card luta-res">
     <span class="dl-placa dl-placa--inclinada">${escHtml(onde)} · ${venceu ? "vitória" : empate ? "empate" : "derrota"}</span>
     <span class="luta-res-rival">${B.sprite && atlasOk ? `<img class="dl-pix" src="${imagemChave(B.sprite + "_0")}" alt="" style="${venceu ? "filter:grayscale(1);opacity:.6" : ""}">` : ""}
@@ -3909,7 +3982,7 @@ function lutarAnimado(npc){
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let i = 0;
   desenharArenaV2(A, B, res.E0, null); setBarras(res.E0); $("arena-fala").innerHTML = "";
-  $("nome-a").textContent = nomeLutador(A) === "Seu pet" ? nomeForma(motor.forma) : nomeLutador(A); $("nome-b").textContent = nomeLutador(B);
+  nomeTopo($("nome-a"), nomeLutador(A)); nomeTopo($("nome-b"), nomeLutador(B));
   const passo = () => {
     if (i >= res.turnos.length){
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
@@ -3976,7 +4049,9 @@ function duracao(min){
   const d = Math.floor(min / TPD), h = Math.floor((min % TPD) / 60), m = min % 60;
   return [d ? `${d}d` : "", h ? `${h}h` : "", !d && m ? `${m}min` : ""].filter(Boolean).join(" ") || "agora";
 }
-const fmtCar = car => Object.entries(car).map(([k, v]) => `${k} ${v >= 0 ? "+" : ""}${v.toFixed(2)}`).join(", ");
+/* caráter em palavras: so os eixos fora da faixa comum */
+const fmtCar = car => { const f = Object.entries(car).filter(([, v]) => Math.abs(v) >= CDJ.limiarTom).map(([k, v]) => `${k} ${rotuloRel(v)}`);
+  return f.length ? f.join(", ") : "todos os eixos na faixa comum"; };
 /* para onde o pet iria se a transicao acontecesse agora, e por que */
 function previsaoEvo(m){
   const t = m.e.tick - TICK_INICIAL, D = DUR_EVO, f = m.forma;
@@ -3992,7 +4067,7 @@ function previsaoEvo(m){
   if (f.est === "adolescente"){
     const car = caraterPrevisto(m, "adulto"), adulta = formaAdultaDe(f.linha, car), comp = CAT.adulto[f.linha].comp;
     return {falta:D.bebe + D.crianca + D.adolescente - t, prox:{...f, est:"adulto", adulta},
-      porque:`${comp} ${car[comp] >= 0 ? "+" : ""}${car[comp].toFixed(2)}; sparring ${m.sparring}/${CAT.sparring}`};
+      porque:`${comp} ${rotuloRel(car[comp])}; lutas de treino ${m.sparring} de ${CAT.sparring}`};
   }
   return null;
 }
@@ -4002,7 +4077,7 @@ function requisito(g){
   if (g.est === "crianca") return g.ramo === "sereno" ? `cuidado ≥ ${CAT.limiarCuidado*100}% dos chamados no In-Training` : `cuidado < ${CAT.limiarCuidado*100}% dos chamados no In-Training`;
   if (g.est === "adolescente"){ const a = CAT.adolescente[g.linha]; return `caráter dominante ${a.eixo} ao fim do Rookie · técnica ${NOME_V2[a.tecnica]}: ${DESC_TECNICA[a.tecnica]}`; }
   const a = CAT.adulto[g.linha], s = a.formas[g.adulta].sinal;
-  return `${a.comp} ${s > 0 ? "≥ 0" : "< 0"} e ${CAT.sparring} lutas de sparring · passiva: ${DESC_PASSIVA[g.adulta]}`;
+  return `${a.comp} ${s > 0 ? "acima" : "abaixo"} do pet comum e ${CAT.sparring} lutas de treino · passiva: ${DESC_PASSIVA[g.adulta]}`;
 }
 /* sprite 1x recortado num quadrado (sem redimensionar): mostra o alto e o centro, como o retrato */
 function recorteSvg(href, dims, cx, cy, lado, extra = ""){
@@ -4032,7 +4107,7 @@ let evosVistas = null;
 const ORDEM_NIVEL = ["bebe", "crianca", "adolescente", "adulto"];
 /* barra relativa ao pet comum: caráter em [-1, 1], 0 = pet comum; rotulo so fora da faixa comum */
 function barraCarater(eixo, v){
-  const rot = Math.abs(v) < CDJ.limiarTom ? "" : v >= .6 ? "muito acima" : v > 0 ? "acima" : v <= -.6 ? "muito abaixo" : "abaixo";
+  const rot = Math.abs(v) < CDJ.limiarTom ? "" : rotuloRel(v);
   return rel(eixo, (Math.max(-1, Math.min(1, v)) + 1) / 2, rot);
 }
 function porqueEvolucao(x){
@@ -4043,7 +4118,7 @@ function porqueEvolucao(x){
       + Object.keys(x.carater).map(k => barraCarater(k, x.carater[k])).join("") + `<span class="dl-apoio">traço escuro = pet comum</span>`; }
   const lin = SOMBRIA[x.adulta] ? SOMBRIA[x.adulta].linha : x.forma.linha, comp = CAT.adulto[lin].comp;
   return (SOMBRIA[x.adulta] ? `<p style="margin:0"><span class="dl-tag dl-tag--sombria">sombria</span> sobrecarga ${x.sobrecarga.toFixed(0)} na virada (limite ${CSO.sombrio}).</p>` : "")
-    + `<p style="margin:0">decidido pelo eixo complementar <b>${comp}</b> e ${x.sparring} lutas de sparring.</p>` + barraCarater(comp, x.carater[comp]) + `<span class="dl-apoio">traço escuro = pet comum</span>`;
+    + `<p style="margin:0">decidido pelo eixo complementar <b>${comp}</b> e ${x.sparring} lutas de treino.</p>` + barraCarater(comp, x.carater[comp]) + `<span class="dl-apoio">traço escuro = pet comum</span>`;
 }
 function mostrarRevelacao(x){
   const f = x.forma, k = chaveSprite(f), sp = UPA && UPA.sprites[k];
@@ -4064,6 +4139,10 @@ function mostrarRevelacao(x){
     clearInterval(mostrarRevelacao.timer); mostrarRevelacao.timer = setInterval(desenha, UPA.ms_por_quadro); desenha(); }
   dlg.showModal();
 }
+/* no toque (nao so no hover): o requisito do no aparece abaixo da arvore (guia 13) */
+function mostrarNoEvo(g){ const d = $("evo-no-det"); d.textContent = g.dataset.det; d.hidden = false; }
+$("evo-arvore").addEventListener("click", ev => { const g = ev.target.closest(".evo-no"); if (g) mostrarNoEvo(g); });
+$("evo-arvore").addEventListener("keydown", ev => { const g = ev.target.closest(".evo-no"); if (g && (ev.key === "Enter" || ev.key === " ")){ ev.preventDefault(); mostrarNoEvo(g); } });
 $("revel-ok").addEventListener("click", () => { clearInterval(mostrarRevelacao.timer); $("revelacao").close(); });
 /* so evolucoes novas nesta sessao abrem a revelacao; o save antigo nao reabre as dele */
 function checarEvolucao(){
@@ -4077,12 +4156,12 @@ function renderEvolucao(){
   $("evo-resumo").innerHTML = [
     [nomeForma(f), "forma atual"],
     [p ? (espera ? `${CAT.sparring - motor.sparring} lutas` : duracao(Math.max(0, p.falta))) : "—",
-     p ? (espera ? "de sparring (arena) para virar Ultimate ou Mega" : `até virar ${p.prox.est === "adulto" ? "Ultimate ou Mega" : nomeEstagio(p.prox)}`) : "forma final"],
+     p ? (espera ? "de treino (arena) para virar Ultimate ou Mega" : `até virar ${p.prox.est === "adulto" ? "Ultimate ou Mega" : nomeEstagio(p.prox)}`) : "forma final"],
     /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome (guia, secao 5) */
     [p ? "?" : NOME_ARQ[f.adulta], p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta]}`],
   ].map(([v, k]) => `<div><b style="font-size:16px">${v}</b><span>${k}</span></div>`).join("");
   const det = x => x.estagio === "crianca" ? `cuidado ${(x.cuidado*100).toFixed(0)}%`
-    : x.estagio === "adolescente" ? `caráter ${fmtCar(x.carater)}` : `caráter ${fmtCar(x.carater)}; ${x.sparring} lutas de sparring`;
+    : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater)}` : `caráter: ${fmtCar(x.carater)}; ${x.sparring} lutas de treino`;
   $("evo-hist").innerHTML = [`<div><span class="t">D1 ${hhmm(TICK_INICIAL)}</span><span>nasceu: <b>${nomeForma({esp:motor.especie, est:"bebe"})}</b></span></div>`]
     .concat(evs.map(x => `<div><span class="t">D${diaDe(x.tick)} ${hhmm(x.tick)}</span><span>virou <b>${nomeForma(x.forma)}</b> (${det(x)})</span></div>`)).join("");
 
@@ -4117,7 +4196,7 @@ function renderEvolucao(){
     /* so o caminho ja percorrido revela o Digimon; o resto e silhueta a 45% com "?" */
     const revelado = caminho.has(id) || id === atualId;
     const rot = g.est === "ovo" ? "Digi-Egg" : revelado ? nomeForma(g) : "?";
-    return `<g class="evo-no ${c}"><title>${revelado ? (g.est === "ovo" ? "Digi-Egg" : nomeForma(g)) : "forma ainda não decidida"}: ${requisito(g)}</title>
+    return `<g class="evo-no ${c}" tabindex="0" role="button" data-det="${escHtml((revelado ? (g.est === "ovo" ? "Digi-Egg" : nomeForma(g)) : "Forma ainda não decidida") + ": " + requisito(g))}"><title>${revelado ? (g.est === "ovo" ? "Digi-Egg" : nomeForma(g)) : "forma ainda não decidida"}: ${requisito(g)}</title>
       <rect x="${x - R}" y="${y - R}" width="${2*R}" height="${2*R}" rx="10"/>
       ${recorteSvg(revelado ? imagemForma(g) : silhuetaForma(g), dimsForma(g), x, y, 38, revelado ? "" : ' opacity=".45"')}
       ${revelado ? "" : `<text class="evo-q" x="${x}" y="${y + 6}" text-anchor="middle">?</text>`}
@@ -4137,15 +4216,15 @@ function renderCatalogo(){
   const formas = [{esp, est:"bebe"}, ...["sereno","arisco"].map(r => ({esp, est:"crianca", ramo:r})),
     ...LINHAS.map(l => ({esp, est:"adolescente", ramo:"sereno", linha:l})),
     ...FORMAS_AD.map(a => ({esp, est:"adulto", ramo:"sereno", linha:LINHA_DA_FORMA[a], adulta:a}))];
-  const meu = chaveSprite(motor.forma), n1 = x => x.toFixed(1);
+  const meu = chaveSprite(motor.forma), n1 = x => dec(x, 1).replace(/,0$/, "");
   $("cat-grade").innerHTML = formas.map(f => {
     const p = perfilDe(f, null), s = p.stats;
     const extra = f.adulta ? `técnica ${NOME_V2[p.tecnica]} · passiva: ${DESC_PASSIVA[f.adulta]}`
-      : f.linha ? `técnica ${NOME_V2[p.tecnica]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 gambits";
+      : f.linha ? `técnica ${NOME_V2[p.tecnica]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 regras de combate";
     return `<div class="cat-card${chaveSprite(f) === meu ? " meu" : ""}" title="${requisito(f)}"><span class="cat-spr"><img src="${imagemForma(f)}" alt="${nomeForma(f)}"></span>
       <b>${nomeForma(f)}</b><span class="muted">${f.est === "ovo" ? NOME_EST.ovo : nomeEstagio(f)}</span>
       <span class="st">vig ${n1(s.vigor)} · fôl ${n1(s.folego)} · rec ${n1(s.recuperacao)}<br>for ${n1(s.forca)} · mir ${n1(s.mira)} · gua ${n1(s.guarda)}</span>
-      <span class="st">vida ${p.hpMax.toFixed(0)} · guts ${p.guts0.toFixed(0)}/${p.gutsMax.toFixed(0)} · +${p.regen.toFixed(1)}</span>
+      <span class="st">vida ${p.hpMax.toFixed(0)} · guts ${p.guts0.toFixed(0)}/${p.gutsMax.toFixed(0)} · +${n1(p.regen)}</span>
       <span class="muted" style="font-size:12px">${extra}</span></div>`;
   }).join("");
   $("cat-tecnicas").innerHTML = LINHAS.map(l => { const tc = CAT.adolescente[l].tecnica;
@@ -4195,7 +4274,7 @@ function resumoPet(m, spec){
     jsdAgora: jsdBits(m.pol.media(observacao(e)), m.pol.prior(observacao(e))),
     jsdArena: jsdBits(pm, m.pol.prior(OBS_ARENA)),
     topo: m.gp ? m.gp.linha : "ao acaso (In-Training)",
-    dom: `${NOME_COMB[dom]} ${af[dom] >= 0 ? "+" : ""}${af[dom].toFixed(3)}`,
+    dom: `${NOME_COMB[dom]} ${comSinal(af[dom], 3)}`,
   };
 }
 function montarCenario(cen, semente){
@@ -4216,14 +4295,14 @@ function renderCenario(){
   const { cen, semente, ra, rb } = cenarioAtual;
   const L = (rot, k, f = x => x) => `<tr><td>${rot}</td><td>${f(ra[k])}</td><td>${f(rb[k])}</td></tr>`;
   const sec = t => `<tr class="sec"><td colspan="3">${t}</td></tr>`;
-  const bits = x => x.toFixed(4);
+  const bits = x => dec(x, 4);
   $("cen-msg").textContent = `${cen.titulo} · semente ${semente}. O pet A agora é o seu.`;
   $("cen-comp").innerHTML = `<table class="comp"><thead><tr><th></th><th>A (seu)</th><th>B (rival)</th></tr></thead><tbody>
     ${sec("Perfil")}${L("Dono","dono")}${L("Idade","idade")}${L("Interações/dia","porDia")}${L("Interações no total","total")}
     ${sec("Estado no fim")}${L("Saúde","saude",pct)}${L("Saciedade","fome",pct)}${L("Higiene","higiene",pct)}${L("Humor","humor",pct)}
     ${sec("Sinal de aprendizado")}${L("Elogios","elogio")}${L("Repreensões","repreensao")}${L("Pedidos atendidos","atendido")}${L("Pedidos ignorados","ignorado")}${L("Atualizações do bandit","atualizacoes")}
     ${sec("Quanto o aprendizado afastou a política do prior (JSD, bits)")}${L("No estado atual","jsdAgora",bits)}${L("Na arena (HP cheio)","jsdArena",bits)}
-    ${sec("Na arena (combate V2)")}${L("Gambits semeados por","topo")}${L("Traço dominante","dom")}
+    ${sec("Na arena")}${L("Regras de combate semeadas por","topo")}${L("Traço dominante","dom")}
   </tbody></table>`;
 }
 function renderRivalFixo(){
@@ -4244,8 +4323,8 @@ function rodarLutas(n){
     for (const t of r.turnos){ contA[t.a]++; contB[t.b]++; }
   }
   const linha = c => `<tr><td>${NOME_V2[c]}</td><td>${pct(contA[c]/turnos)}</td><td>${pct(contB[c]/turnos)}</td></tr>`;
-  $("cen-lutas-res").innerHTML = `<p class="resultado">${n} lutas (combate V2.1): A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e/2)/n*100).toFixed(0)}% dos pontos. Média de ${(turnos/n).toFixed(1)} turnos; ${lim} no limite.</p>
-    <p class="muted">A luta com os gambits aprendidos dele (semente: ${NOME_BOT[A.estilo.base] || A.estilo.base}); B com os dele (semente: ${NOME_BOT[B.estilo.base] || B.estilo.base}). Estas lutas não ensinam nenhum dos dois.</p>
+  $("cen-lutas-res").innerHTML = `<p class="resultado">${n} lutas: A ${v} vitórias, B ${d}, ${e} empates. A fez ${((v + e/2)/n*100).toFixed(0)}% dos pontos. Média de ${(turnos/n).toFixed(1)} turnos; ${lim} no limite.</p>
+    <p class="muted">A luta com as regras de combate aprendidas dele (semente: ${NOME_BOT[A.estilo.base] || A.estilo.base}); B com os dele (semente: ${NOME_BOT[B.estilo.base] || B.estilo.base}). Estas lutas não ensinam nenhum dos dois.</p>
     <table class="comp"><thead><tr><th>Ação usada</th><th>A</th><th>B</th></tr></thead><tbody>${ACOES_V2_OBS.map(linha).join("")}</tbody></table>`;
 }
 $("lista-cenarios").innerHTML = CENARIOS.map((c, i) => `<button class="cen" data-i="${i}"><b>${c.titulo}</b><span>${c.desc}</span></button>`).join("");
