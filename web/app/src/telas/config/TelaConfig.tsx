@@ -17,7 +17,7 @@ const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldur
 function Item({ icone, titulo, sub, teste, cls = "", children }: { icone: ComponentChildren; titulo: string; sub: string; teste?: boolean; cls?: string; children: ComponentChildren }) {
   return (
     <details class={`cfg-item ${cls}`}>
-      <summary><span class="cfg-ic">{icone}</span><span class="cfg-txt"><b>{titulo}{teste && <span class="dl-tag dl-tag--estagio">TESTE</span>}</b><span>{sub}</span></span></summary>
+      <summary><span class="cfg-ic">{icone}</span><span class="cfg-txt"><b>{titulo}{teste && <span class="dl-tag dl-tag--estagio">TESTE</span>}</b><span>{sub}</span></span><span class="cfg-seta" aria-hidden="true">›</span></summary>
       <div class="cfg-painel">{children}</div>
     </details>
   );
@@ -28,6 +28,7 @@ function EscolhaTema() {
   return (
     <div class="cfg-opcoes" role="group" aria-label="Tema">
       {(["sistema", "claro", "escuro"] as Tema[]).map(t => <button type="button" key={t} class="dl-chip" aria-pressed={tema === t} onClick={() => escolherTema(t)}>{NOME_TEMA[t]}</button>)}
+      <div class="cfg-item cfg-item--off" aria-disabled="true"><span class="cfg-ic">🔈</span><span class="cfg-txt"><b>Som</b><span>o jogo ainda não tem som (proposta)</span></span></div>
     </div>
   );
 }
@@ -67,11 +68,12 @@ export function TelaConfig({ irRegistro, irConversar }: { irRegistro: () => void
         </div>
       </Item>
       <span class="cfg-grupo">SOBRE</span>
-      <Item icone={<Deco nome="Common_Icon_Setting" w={34} h={34} reserva="⚙" />} titulo="Sobre" sub="Digilab · uso pessoal">
+      <Item icone={<Deco nome="Common_Icon_Setting" w={34} h={34} reserva="⚙" />} titulo="Sobre o Digilab" sub="versão, créditos e uso pessoal">
         <p class="dl-apoio">Motor do Digilab em TypeScript: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</p>
         <p class="dl-apoio"><b>Versão local com sprites do Digimon UP (Bandai), só para uso pessoal. Não publicar nem distribuir.</b></p>
         <p class="dl-apoio"><a class="cfg-link" href="../digilab_sprites.html?antigo=1">Versão antiga (HTML)</a>: mesmo save; não abra as duas ao mesmo tempo no mesmo pet.</p>
       </Item>
+      <div class="cfg-item cfg-item--off" aria-disabled="true"><span class="cfg-ic">🔈</span><span class="cfg-txt"><b>Som</b><span>o jogo ainda não tem som (proposta)</span></span></div>
     </div>
   );
 }
