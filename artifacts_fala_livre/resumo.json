@@ -349,7 +349,10 @@
           }
         }
       },
-      "memoria": {},
+      "memoria": {
+        "tamanho_gb": 2.16,
+        "vram_gb": 2.16
+      },
       "moldura": {
         "fracao_llm": 0.48,
         "geral": {

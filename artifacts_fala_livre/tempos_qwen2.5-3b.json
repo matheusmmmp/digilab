@@ -333,7 +333,11 @@
       2.831197699997574
     ]
   },
-  "memoria": {},
+  "memoria": {
+    "tamanho_gb": 2.16,
+    "vram_gb": 2.16
+  },
+  "memoria_medida_depois": "a medida da rodada principal veio vazia (outro modelo carregado); medida depois com so o 3b carregado (/api/ps)",
   "modelo": "qwen2.5:3b",
   "tempo_total_s": 1935.0562027000124
 }
