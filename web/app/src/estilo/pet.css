@@ -354,3 +354,5 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
   .revel-nome{top:250px}
   .revel-porque{gap:6px}
 }
+.conv-av img{width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;image-rendering:pixelated}
+.conv-av{padding:3px;box-sizing:border-box}

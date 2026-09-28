@@ -251,3 +251,10 @@
 .res-rival b{font-size:14px}
 .res-rival > span:last-child > span{font-size:12px;font-weight:700;color:var(--dl-text-2)}
 .res-voltar{justify-self:center;min-width:220px;min-height:52px;font-size:16px}
+
+/* retratos pequenos (rivais da campanha e da arena, resultado, HUD, card do pet): o Digimon inteiro dentro do quadro,
+   apoiado embaixo, como nas pranchas (CampMapa, ArenaEscolha, UpLuta); o sprite continua pixelado */
+.camp-rival-spr img,.rival-spr img,.res-rival-spr img,.hud-ret img,.arena-pet-spr img,.retrato-rival-spr img{
+  width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;image-rendering:pixelated;margin:0!important}
+.camp-rival-spr,.rival-spr,.res-rival-spr,.hud-ret,.arena-pet-spr{padding:3px;box-sizing:border-box;align-items:stretch}
+.retrato-rival-spr{align-items:stretch;padding:2px;box-sizing:border-box}
