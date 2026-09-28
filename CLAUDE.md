@@ -21,6 +21,9 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
   `digilab/combate_v2/` e o combate V2.1 — técnicas por linha e passivas por forma — em
   `digilab/combate_v2/v21/`, `docs/ESPEC_COMBATE_V21.md`. Plugar pets no Python e comandos do
   dono na luta continuam fora.)
+  Exceção autorizada em 2026-09-28 (`docs/TAREFA_FRONT_TS.md`): migrar o jogo web para Vite +
+  TypeScript + Preact em `web/app/`, com o motor separado da interface e testes de paridade contra o
+  HTML atual. Sem regra de jogo nova; formato do save e chaves do localStorage não mudam.
 - **LLM liberada** (decisão do Matheus, 2026-09-24): a proibição de LLM foi retirada. Usar LLM
   continua dependendo de a tarefa pedir, como qualquer outra coisa.
 - **Falhar alto, não em silêncio.** `raise` em vez de `dropna`, valor default ou `except: pass`.
@@ -79,7 +82,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/temperamento.py`, `vinculo.py`, `desejo.py`, `obediencia.py` | personalidade: temperamento (rng_ovo), vínculo, obediência com recusa e motivo, desejo; `configs/personalidade*.json` → `artifacts_v1_personalidade/` |
 | `digilab/memoria_espacos.py`, `experiments/memoria_espacos.py` | memória por espaços (adendo DF, Parte 1) e relatório de ocupação; `configs/memoria_espacos.json` → `artifacts_v1_memoria_espacos/` |
 | `servidor/` | servidor local do jogo web (`servidor_local.py`, substitui o `http.server`) e fala por LLM (`fala_llm.py`: provedores Ollama local e Claude; SDK `anthropic` só aqui). `digilab/` não importa isto (teste AST) |
-| `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6) |
+| `experiments/avaliar_fala.py` | avaliação da fala por LLM (C6); `--livre`: avaliação da fala livre (`digilab_fala_livre/avaliacao.py`) |
 | `digilab/combate_v2/v21/` | combate V2.1 (subpacote: o hash dos fontes da base não muda): `catalogo.py` (forma = espécie + caminho, stats com renormalização, perfil de combate, transições), `regras.py` (técnicas e passivas, resolução pura), `gambits.py` (capacidade por estágio, `turno_execucao`, `oponente_vai_preparar`), `partida.py` (lutador, laço, replay), `bots.py` (8 adultos, 4 adolescentes, respostas declaradas) |
 | `digilab/evolucao.py`, `experiments/run_pesquisa_v21.py` | evolução do pet de pesquisa (ovo pareado, cuidado, caráter nas sondas, forma adulta) e arena V2.1 com adultos → `artifacts_v21_pesquisa/` |
 | `digilab/campanha.py`, `experiments/run_campanha.py`, `calibrar_campanha.py` | campanha contra os 3 NPCs (regras V21C) → `artifacts_campanha/`; calibração da escada (K1–K4) → `experiments/configs/campanha/` |
@@ -488,6 +491,25 @@ metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e
 - **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv`
   (50 falas aprovadas). Sem ela, a fala por LLM continua desligada por padrão.
 
+## Fala livre por LLM local (2026-09-28, `docs/TAREFA_FALA_LIVRE.md`, `docs/PLANO_VERSAO_FALA_LIVRE.md`)
+
+**Aprovada só com o `gemma2:9b`** (decisão do Matheus), com `modo_fala` desligado por padrão. Desvios e
+números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO.md`.
+
+- `digilab_fala_livre/` (FORA de `digilab/`; nada do pet importa daqui, teste AST): `fatos.py` (bloco de
+  FATOS com identificadores; entrada da web tratada como não confiável), `prompt.py` (`livre-v2`), `ollama.py`
+  (só Ollama local), `saida.py` (parser que falha alto → fala genérica), `verificador.py` (`verif-v3`:
+  afirmações sem fato e manipulação; não troca a fala), `apresentacao.py` (log de apresentação separado),
+  `situacoes.py` e `avaliacao.py` (`python experiments/avaliar_fala.py --livre --rodada 2`).
+- Servidor: `servidor/fala_livre.py`, instalado por um gancho no `servidor_local.py` (`/api/fala-livre`,
+  `/api/fala-livre/verificar`, `/api/fala-livre/status`); modelo `DIGILAB_MODELO_LIVRE` (padrão `gemma2:9b`).
+- Web: `web/modulos/fala_livre.js`, três ganchos `// GANCHO fala-livre` na página; seletor de modo
+  (template/moldura/livre) e conversa na tela do pet; falas no localStorage `<chave>.fala.jsonl`, nunca no
+  registro do pet; o que o jogador escreve não ensina o pet.
+- Rodada 2: gemma2:9b 3,0% de falas com afirmação sem fato (teto; o juiz marca 10% da moldura, que só diz
+  verdades), 0/30 conversas inventaram, latência p90 4,8 s na RTX 2060 (sem outro modelo carregado).
+- Pendente: avaliação cega do Matheus (`artifacts_fala_livre/rodada2/avaliacao_cega.csv`).
+
 ## Versão web (`web/digilab.html`)
 
 Porte em JavaScript com as mesmas regras e parâmetros de `config.py` (motor, instinto, bandit,
@@ -514,8 +536,8 @@ pesquisa: uma semente, outro RNG, sem IC.
 
 ## Assets — importante
 
-A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do Digimon World
-(Bandai). É arte e personagens protegidos, **sem licença**. Regra revisada pelo Matheus em
+A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites da Bandai: Digimon UP (usados pela
+versão web desde a TAREFA_INTERFACE_UP) e o atlas antigo do Digimon World (não é mais usado). É arte e personagens protegidos, **sem licença**. Regra revisada pelo Matheus em
 2026-09-24:
 
 - **Permitido**: usar esses sprites na versão web (`web/`) para uso pessoal e local, como
@@ -539,9 +561,15 @@ A pasta `D:\Trab\digilab\Assets` (fora deste repo) contém sprites recortados do
   qualquer coisa, trocar por arte original ou licenciada.
 
 Versão com sprites: `web/digilab_sprites.html` (versionado; repo privado), derivada de `digilab.html`, que
-lê `D:\Trab\digilab\Assets\digilab_atlas.png`. O atlas e os scripts ficam fora do repo:
-`Assets\gerar_atlas.py` (atlas) e `Assets\gerar_sprites_html.py` (regenera a cópia a partir
-de `digilab.html`; rode depois de qualquer mudança nele). Precisa de servidor local, porque o caminho é
+lê `D:\Trab\digilab\Assets\digilab_atlas_up.json` e `.png` (Digimon UP). O atlas e os scripts ficam fora
+do repo: `Assets\gerar_atlas_up.py` (atlas, a partir de `Assets\catalogo_sprites_up.json` e da pasta
+`Digimon Up Assets\Animacoes`) e `Assets\gerar_sprites_html.py` (não usar mais: a cópia é editada direto).
+**Interface UP (2026-09-27/28, `docs/TAREFA_INTERFACE_UP.md`, `docs/UI_GUIDELINES.md`)**: tokens `--dl-*` e
+componentes `dl-*`; navegação em 4 destinos (Pet, Crescer = Treinar + Aprendizado + Evolução, Lutar = Arena +
+Campanha, Diário = Registro + Catálogo + Cenários; aba lembrada em `destino/aba`); na tela os nomes são os do
+Digimon do mapa aprovado, as espécies são brasões (brasa Coragem, cirro Amizade, ferrugem Conhecimento, limo
+Sinceridade) e os estágios são níveis (In-Training, Rookie, Champion, Ultimate/Mega); ids internos, log e save
+não mudam. Páginas de conferência: `#palco-up` (sprites) e `#componentes-up` (componentes). Precisa de servidor local, porque o caminho é
 relativo: `python -m http.server 8765 --directory D:/Trab/digilab` e abrir
 `http://localhost:8765/v1/web/digilab_sprites.html`. A linha evolutiva segue o traço de combate
 dominante no momento da evolução. Se o atlas não carregar, a página mostra um aviso em
@@ -553,8 +581,8 @@ editada direto; `digilab.html` ficou parado. Só a versão com sprites tem as ab
 traço; chave do localStorage `digilab-web-v21-sprites`, pets da árvore antiga ficam para trás):
 - **4 espécies** (brasa, cirro, ferrugem, limo), sorteadas pela semente; ovo por espécie. 15 formas
   por espécie (1 bebê, 2 crianças, 4 adolescentes, 8 adultos), **cada forma com sprite próprio**:
-  60 Digimon diferentes. Mapa forma → bloco da folha em `Assets\catalogo_sprites.json` (fora do
-  repo); `gerar_atlas.py` gera `{espécie}_{forma}_{quadro}` no atlas; o HTML só tem as coordenadas.
+  60 Digimon diferentes. Mapa forma → Digimon UP (idle de cada um) em `Assets\catalogo_sprites_up.json`
+  (fora do repo); `gerar_atlas_up.py` empacota o ciclo idle; o HTML lê os recortes do JSON.
 - Transições com o cronograma de `docs/cronograma_interacoes.json` (durações pela metade): bebê
   3 h, criança 12 h, adolescente 18 h. **Bebê → criança**: o bebê chama em horário fixo (fome 30 min,
   higiene 60, carinho 45); atender ≥ 80% em até 15 min dá Sereno, senão Arisco. **Criança →
@@ -599,6 +627,18 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
+
+**Migração para TypeScript (TAREFA_FRONT_TS, em andamento)**: `web/app/test/` tem a referência de
+paridade. `motor_html.mjs` extrai o motor do HTML pelas marcas `@motor-inicio/@motor-fim` e roda em Node sem
+DOM; `gerar_gabaritos.mjs` grava 60 vidas (3 versões de pet × 5 donos × 4 sementes, todos os estágios, tipos
+de evento t/d/l/g/tr, NPCs, sombrias) com checkpoints (sha256 da assinatura + contadores) em
+`gabaritos/vidas_*.json`; `constantes.test.mjs` confere cada folha numérica das constantes web contra
+`gabaritos/constantes_python.json` (`python experiments/exportar_constantes_web.py`) pela tabela
+`mapa_constantes.json`. Rodar: `node --test "web/app/test/*.test.mjs"` (~1 min). Gabaritos são do V8 do
+Node: o Chrome difere no último bit de exp/log (libm) e o replay só é bit a bit no mesmo runtime.
+**Bug conhecido do motor atual**: a semente de gambits do devastador (sombria do brigão) tem a regra "perto e
+guts ≥ 60 → preparar pesado", que não está no `REPERTORIO`; a luta desse pet quebra (TypeError). Os
+gabaritos não fazem lutas com lista quebrada (`lutasPuladas` em `cobertura.json`).
 
 `Assets\gerar_sprites_html.py` agora **recusa** sobrescrever o arquivo se ele tiver a aba
 Evolução (`--forcar` para passar por cima e perder as edições).

@@ -4,4 +4,4 @@ Pacote FORA de `digilab/`: nada do pet (motor, politica, vinculo, combate, trein
 AST). A fala e so apresentacao: le o estado do pet, nunca escreve nele. So Ollama local; nenhuma API paga.
 """
 
-VERSAO_APP = "exp-fala-livre"
+VERSAO_APP = "fala-livre"      # "exp-fala-livre" durante o experimento (os artefatos de artifacts_fala_livre/ guardam esse rotulo)

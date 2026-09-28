@@ -134,11 +134,12 @@
     if (document.getElementById("fl-bloco")) return;
     const css = document.createElement("style");
     css.textContent = `.fl-bloco{display:grid;gap:8px}.fl-bloco .row input[type=text]{flex:1 1 200px;font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);min-width:0}
-      .fl-conv{display:grid;gap:4px;font-size:14px;max-height:220px;overflow:auto;background:var(--ground);border-radius:10px;padding:8px 10px}.fl-j{color:var(--muted)}.fl-p{font-weight:700}`;
+      .fl-conv{display:grid;gap:4px;font-size:14px;max-height:220px;overflow:auto;background:var(--ground);border-radius:10px;padding:8px 10px}.fl-j{color:var(--muted)}.fl-p{font-weight:700}
+      .fl-exp{font-size:11px;letter-spacing:.06em;background:var(--accent);color:var(--accent-ink);padding:2px 7px;border-radius:6px;vertical-align:middle}`;
     document.head.appendChild(css);
     const div = document.createElement("div");
     div.id = "fl-bloco"; div.className = "fl-bloco";
-    div.innerHTML = `<h2>Conversa <span class="versao-exp" style="display:inline-block">${VERSAO_APP}</span></h2>
+    div.innerHTML = `<h2>Conversa <span class="fl-exp">experimental</span></h2>
       <div class="row"><label for="fl-modo">Modo da fala</label><select id="fl-modo">
         <option value="template">template</option><option value="moldura">moldura (LLM só abre e fecha a frase)</option>
         <option value="livre">livre (LLM local, experimento)</option></select>
@@ -147,7 +148,7 @@
       <div class="row"><input type="text" id="fl-msg" maxlength="300" placeholder="Fale com o pet (modo livre)">
         <button class="sbtn" id="fl-enviar">Falar</button><span class="muted" id="fl-pensando" hidden>pensando…</span></div>
       <p class="muted" style="font-size:12.5px">O que você escreve aqui não ensina o pet nem entra no registro dele. ⚠ = o verificador achou uma afirmação sem fato por trás.</p>`;
-    pane.prepend(div);
+    pane.appendChild(div);
     const sel = document.getElementById("fl-modo"); sel.value = FL.modo;
     const aplicar = () => {
       FL.modo = sel.value; try { localStorage.setItem(MODO, FL.modo); } catch(_){}

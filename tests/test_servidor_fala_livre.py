@@ -72,13 +72,13 @@ def test_fala_e_verificacao_pelo_servidor(servidor):
     respostas += ['{"fala": "Tava com fome.", "fatos_citados": ["R1"]}']
     cod, r = _post(url + ROTA_FALA, {"estado": ESTADO, "situacao": "conversa", "fala_jogador": "por que?",
                                      "historico": [["oi", "Oi."]], "semente": 5})
-    assert cod == 200 and r["fala"] == "Tava com fome." and r["versao_app"] == "exp-fala-livre" and r["erro"] is None
+    assert cod == 200 and r["fala"] == "Tava com fome." and r["versao_app"] == "fala-livre" and r["erro"] is None
     respostas += ['{"afirmacoes": [{"tipo": "causa", "trecho": "tava com fome"}]}', '{"sustentada": true, "fato": "E1"}']
     cod, v = _post(url + ROTA_VERIF, {"fala": r["fala"], "fatos_citados": r["fatos_citados"], "fatos": r["fatos"],
                                       "semente": 5})
     assert cod == 200 and v["nao_suportadas"] == 0 and v["manipulacao"] is False
     with urllib.request.urlopen(url + ROTA_STATUS, timeout=5) as resp:
-        assert json.loads(resp.read())["versao_app"] == "exp-fala-livre"
+        assert json.loads(resp.read())["versao_app"] == "fala-livre"
 
 
 @pytest.mark.parametrize("corpo", [{"estado": ESTADO, "situacao": "outra"},

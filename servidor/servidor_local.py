@@ -27,7 +27,7 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
     python servidor/servidor_local.py --remoto
     cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
-- so as rotas do jogo: /v1/web/*.html, /Assets/digilab_atlas.png e /api/fala*; o resto (repo,
+- so as rotas do jogo: /v1/web/*.html, /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json} e /api/fala*; o resto (repo,
   .git, v0, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
@@ -68,6 +68,7 @@ LIMITE_CORPO = 16 * 1024
 SENHA_MIN = 12
 # modo remoto: so estas rotas (o resto da pasta servida nao sai do computador)
 ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.html", "/Assets/digilab_atlas.png",
+                 "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json",
                  "/api/fala", "/api/fala/status")
 
 
