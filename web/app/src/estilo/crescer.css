@@ -14,20 +14,64 @@
 .dl-btn--forcar:disabled{background-image:none;background:var(--dl-disabled);color:var(--dl-disabled-ink);border:4px dashed var(--dl-disabled-ink)}
 .dl-btn--forcar:disabled small{color:var(--dl-disabled-ink)}
 
-/* Treinar */
-.treino-cab{display:flex;align-items:flex-end;justify-content:center;gap:12px;min-height:96px}
-.treino-pet{display:flex;align-items:flex-end}
-.treino-pet img{max-width:none}
-.treino-medidores{display:grid;gap:12px}
+/* Treinar (pranchas TreinoNormal, TreinoPausa, TreinoForcar) */
+.sala-treino{position:relative;height:190px;border-radius:14px;border:3px solid var(--dl-navy);overflow:hidden;background:var(--dl-hex) center/cover no-repeat;
+  image-rendering:pixelated;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
+.sala-sombra{position:absolute;left:50%;bottom:12px;width:96px;height:14px;margin-left:-48px;border-radius:50%;background:rgba(0,0,0,.28)}
+.sala-pet{position:relative;max-width:none}
+.sala-estado{position:absolute;top:10px;left:10px;background:var(--dl-navy);color:#FFFFFF;font-size:.75rem;font-weight:800;border-radius:6px;padding:3px 8px}
+.sala-balao{position:absolute;top:40px;right:14px;font-weight:800}
+.sala-balao::after{content:"";position:absolute;left:12px;bottom:-15px;width:9px;height:9px;border-radius:50%;background:#FFFFFF;border:3px solid var(--dl-navy)}
+.treino-medidores{display:grid;gap:14px}
 .med{display:grid;gap:2px}
-.med-cab{display:flex;justify-content:space-between;align-items:baseline}
-.med-marcas{display:flex;justify-content:space-between;font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
+.med-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.med-roxo{color:var(--dl-dark)}
+.med .dl-seg b:last-of-type{background:#D23A3A}
+.med-marcas{position:relative;height:1.1em;font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
+.med-marcas span{position:absolute;top:0;white-space:nowrap}
+.med-marcas span:first-child{transform:translateX(calc(-100% + 6px))}
+.med-marcas span:last-child{transform:translateX(-6px)}
+.treino-intervalo{display:flex;align-items:center;gap:10px}
+.treino-intervalo > span{display:grid;gap:2px}
 .treino-grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:420px){ .treino-grade{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.treino-ex{position:relative;display:grid;justify-items:center;gap:4px;text-align:center;padding:8px}
-.treino-ex .dl-btn{width:100%;min-height:48px;padding-inline:4px}
-.treino-ic{width:54px;height:61px;image-rendering:auto}
-.treino-selo{position:absolute;top:6px;right:6px;font-size:.625rem;font-weight:900;background:var(--dl-navy);color:#FFFFFF;border-radius:4px;padding:0 5px}
+.treino-ex{font:inherit;color:var(--dl-text);position:relative;display:grid;justify-items:center;align-content:start;gap:4px;text-align:center;
+  padding:12px 8px 10px;min-height:140px;background:var(--dl-surface);border:3px solid var(--dl-navy);border-radius:12px;box-shadow:0 4px 0 var(--dl-navy);cursor:pointer}
+.treino-ex:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--dl-navy)}
+.treino-ex:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.treino-ex:disabled{cursor:not-allowed;background:var(--dl-disabled);color:var(--dl-disabled-ink);border-color:var(--dl-disabled-ink);box-shadow:none}
+.treino-ex:disabled .treino-ic{filter:grayscale(1);opacity:.6}
+.treino-ex b{font-size:.875rem;line-height:1.15}
+.treino-ganho{font-size:.75rem;font-weight:700;color:var(--dl-text-2)}
+.treino-ex:disabled .treino-ganho{color:inherit}
+.treino-ic{width:50px;height:56px;image-rendering:auto}
+.treino-selo{font-size:.625rem;font-weight:900;background:var(--dl-highlight);color:var(--dl-highlight-ink);border:2px solid var(--dl-navy);border-radius:5px;padding:0 5px}
+.treino-ex .treino-selo{position:absolute;top:6px;right:6px}
+.treino-perigo{align-self:end;width:calc(100% + 16px);margin:4px -8px -10px;border-radius:0 0 9px 9px;padding:4px;
+  background:repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px)}
+.treino-perigo span{display:grid;background:var(--dl-force-ink);color:var(--dl-force);font-weight:900;letter-spacing:.04em;font-size:.8125rem;line-height:1.1;border-radius:4px;padding:3px}
+.treino-perigo small{font-size:.625rem;letter-spacing:0;color:#F4E2B8}
+.treino-ex.forcar:disabled .treino-perigo{background:none;border-top:2px dashed var(--dl-disabled-ink)}
+.treino-ex.forcar:disabled .treino-perigo span{background:none;color:inherit}
+.treino-ex.forcar:disabled .treino-perigo small{color:inherit}
+.treino-legenda{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.8125rem;color:var(--dl-text-2)}
+
+/* folha de confirmacao (dialog nativo embaixo da tela) */
+.folha{position:fixed;inset:auto 0 0 0;margin:0 auto;width:min(100%,560px);max-width:100%;max-height:90vh;box-sizing:border-box;border:3px solid var(--dl-navy);border-bottom:0;
+  border-radius:18px 18px 0 0;background:var(--dl-surface);color:var(--dl-text);padding:10px 16px calc(16px + env(safe-area-inset-bottom));display:grid;gap:12px}
+.folha:not([open]){display:none}
+.folha::backdrop{background:rgba(8,18,44,.55)}
+.folha-alca{justify-self:center;width:44px;height:5px;border-radius:3px;background:var(--dl-border)}
+.folha-cab{display:flex;align-items:center;gap:10px}
+.folha-cab > span{display:grid;gap:2px}
+.folha-cab b{font-size:1.0625rem}
+.folha-ganha,.folha-custa{display:grid;gap:2px;border-radius:10px;padding:8px 10px;font-size:.875rem;font-weight:700}
+.folha-ganha{background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-ok)}
+.folha-custa{background:var(--dl-dark-bg);color:var(--dl-dark-ink);box-shadow:inset 0 0 0 2px var(--dl-dark)}
+.folha-ganha b,.folha-custa b{font-size:.6875rem;letter-spacing:.06em}
+.folha-aviso{background:var(--dl-dark-bg);color:var(--dl-dark-ink);border-radius:10px;padding:10px 12px;font-size:.8125rem}
+.folha-bts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.folha-bts .dl-btn{min-height:48px}
 
 /* Aprendizado */
 .jeito{display:flex;gap:10px;align-items:baseline}
