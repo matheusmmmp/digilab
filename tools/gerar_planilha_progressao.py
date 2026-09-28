@@ -379,6 +379,41 @@ def _cab(*itens) -> list[str]:
     return out
 
 
+# B1: o que o jogador aprende em cada marco (no maximo duas mecanicas), como e ensinado e o sinal de que aprendeu.
+# A voz do tutorial ate o adulto e o mentor original PROPOSTO (Bit, o zelador do laboratorio); do adulto em diante, o pet.
+ENSINO = {
+    "Ovo / eclosão": ("o pet é dele; o tempo do pet anda com o app aberto (fechar = pausa)",
+                      "Bit, ao chocar: 'é seu; enquanto a janela estiver aberta, ele vive'. Uma frase por tela, some ao tocar",
+                      "tocou no ovo e escolheu a velocidade do tempo"),
+    "Fim do In-Training (bebê)": ("chamados e janela de 15 min (fome, higiene, carinho); atender rápido importa",
+                                  "no primeiro chamado: o tempo cai para 1x, Bit aponta o balão e o botão certo; na revelação: "
+                                  "'você atendeu X de Y chamados'",
+                                  "atendeu 3 chamados dentro da janela"),
+    "Rookie: Campina aberta": ("treino por botão (sem forçar); o primeiro rival pede treino",
+                               "Bit leva à sala de treino no primeiro minuto do Rookie; no primeiro Desafiar perdido, "
+                               "'faltou força: treine e volte'",
+                               "treinou 3 sessões e venceu o Brutamontes"),
+    "Fim do Rookie (criança)": ("ensinar: elogiar e repreender o que ele acabou de fazer; necessidade × vontade; a primeira recusa",
+                                "na primeira ação espontânea: Bit mostra Elogiar/Repreender e o 'o que muda'; na primeira recusa, "
+                                "o balão com o porquê",
+                                "elogiou ou repreendeu 3 vezes na janela de 2 min"),
+    "Champion: Torre de pedra": ("a linha que o caráter decidiu e a técnica; fadiga, 'Forçar' e o aviso de sobrecarga",
+                                 "revelação do Champion mostra o eixo que decidiu; na fadiga 40 o pet pede pausa (Bit explica "
+                                 "uma vez); no primeiro Forçar, a folha com o custo",
+                                 "leu o porquê da linha; atendeu uma pausa (ou forçou sabendo o custo)"),
+    "Fim do Champion (adolescente)": ("travar/vetar regras de combate; as 10 lutas de treino",
+                                      "depois da primeira luta, o Resultado mostra a regra nova com Travar/Vetar; o contador "
+                                      "'x de 10' aparece no topo",
+                                      "travou ou vetou uma regra; completou as 10 lutas"),
+    "Ultimate/Mega: Cidadela": ("forma final e passiva; a arena contra outros pets",
+                                "o próprio pet explica a passiva na revelação (a partir do adulto ele fala)",
+                                "desafiou o chefe"),
+    "Fim da vida simulada (endgame)": ("o que fazer depois: arena, Melhor de 10, cenários; um novo ovo",
+                                       "o pet sugere o que falta (formas vistas no Catálogo, chefe não vencido)",
+                                       "voltou ao jogo depois de vencer o chefe"),
+}
+
+
 def aba_jornada(wb: Workbook, f: Fontes) -> Aba:
     """Um marco por linha. Entradas em trios (valor, fonte, status); derivados em formula."""
     def E(n: str) -> tuple:
@@ -390,9 +425,12 @@ def aba_jornada(wb: Workbook, f: Fontes) -> Aba:
                "poder esperado sem treino", "poder esperado com treino típico", "conteúdo liberado", "desafio",
                E("total de stats do desafio"), E("mult. de estágio do desafio"), "poder exigido", "distância (com treino − exigido)",
                E("taxa sem treino"), E("taxa com treino típico"), E("meta sem treino"), E("meta com treino"),
-               "status da curva", "o que o jogador deve sentir")
+               "status da curva", "o que o jogador deve sentir",
+               "o jogador aprende (B1)", "como é ensinado (tutorial contextual)", "sinal de que aprendeu")
     col_status = cab.index("status da curva") + 1
-    a = Aba(wb, "jornada", cab, {1: 30, cab.index("conteúdo liberado") + 1: 30, cab.index("desafio") + 1: 30, len(cab): 46})
+    col_sentir = cab.index("o que o jogador deve sentir") + 1
+    a = Aba(wb, "jornada", cab, {1: 30, cab.index("conteúdo liberado") + 1: 30, cab.index("desafio") + 1: 30, col_sentir: 40,
+                                 col_sentir + 1: 46, col_sentir + 2: 60, col_sentir + 3: 46})
     ev = CONFIG_EVOLUCAO_PESQUISA
     t_bebe = ev.dur_bebe_min
     t_cri = t_bebe + ev.dur_crianca_min
@@ -425,6 +463,10 @@ def aba_jornada(wb: Workbook, f: Fontes) -> Aba:
     ]
     for (nome, est, tick, fonte_t, pts, fonte_pts, desafio, liberado, sentir) in marcos:
         a.nova_linha()
+        aprende, tutorial, sinal = ENSINO[nome]
+        a.texto(col_sentir + 1, aprende)
+        a.texto(col_sentir + 2, tutorial)
+        a.texto(col_sentir + 3, sinal)
         L = Linha(a)
         L.texto(nome)
         L.texto(est)
@@ -457,7 +499,7 @@ def aba_jornada(wb: Workbook, f: Fontes) -> Aba:
         L.texto(liberado)
         if not desafio:
             L.texto("—")
-            a.texto(len(cab), sentir)
+            a.texto(col_sentir, sentir)
             continue
         L.texto(" / ".join(NOME_NPC[k] for k in desafio) + (" (média dos rivais)" if len(desafio) > 1 else ""))
         tot = statistics.mean(npcs[k]["total_stats"] for k in desafio)
@@ -749,14 +791,16 @@ DW1 = {"bebe": (100, "In-Training: atributos até ~100 (HP de poucas centenas)")
 
 # constantes absolutas do combate (Parte B, B2.3): o que nao escala junto com os stats
 CONSTANTES_ABSOLUTAS = [
-    ("dano do golpe rápido", "ConfigCombateV2.dano_golpe_rapido", CONFIG_COMBATE_V2C.dano_golpe_rapido, "dano", "× mult_perto; relativo se vier da vida (fração de vida neutra)"),
+    ("dano do golpe rápido", "ConfigCombateV2.dano_golpe_rapido", CONFIG_COMBATE_V2C.dano_golpe_rapido, "dano", "vira relativo: × E_A / E_B (unidades de quem recebe)"),
     ("dano do disparo", "ConfigCombateV2.dano_disparo", CONFIG_COMBATE_V2C.dano_disparo, "dano", "idem"),
     ("dano do pesado", "ConfigCombateV2.dano_pesado", CONFIG_COMBATE_V2C.dano_pesado, "dano", "idem"),
     ("dano do parry (V2C)", "ConfigCombateV2C.dano_parry", CONFIG_COMBATE_V2C.dano_parry, "dano", "idem"),
     ("dano da investida", "ConfigCombateV21.dano_investida", CONFIG_COMBATE_V21C.dano_investida, "dano", "idem"),
     ("dano extra do duelista", "ConfigCombateV21.dano_extra_duelista", CONFIG_COMBATE_V21C.dano_extra_duelista, "dano", "idem"),
-    ("vida base", "ConfigCombateV21C.hp_base", CONFIG_COMBATE_V21C.hp_base, "vida", "a vida escala; o dano tem de escalar junto"),
+    ("vida base", "ConfigCombateV21C.hp_base", CONFIG_COMBATE_V21C.hp_base, "vida", "fica nas unidades próprias; a vida exibida é × E (não entra na luta)"),
     ("vida por vigor", "ConfigCombateV21C.hp_por_vigor", CONFIG_COMBATE_V21C.hp_por_vigor, "vida", "idem"),
+    ("multiplicador de estágio (0,4 / 0,6 / 0,8 / 1,0) na vida e no guts", "ConfigCatalogo.mult_estagio", CONFIG_CATALOGO.mult_estagio["bebe"], "vida e guts", "sai da campanha: a razão E_A/E_B faz o papel dele na vida; no guts, decidir se fica (proposta: fica, é ritmo)"),
+    ("regeneração de guts por turno (4 + 0,4 × recuperação)", "ConfigCombateV21.regen_base", CONFIG_COMBATE_V21C.regen_base, "guts", "fica absoluta (ritmo)"),
     ("custos de guts (golpe 10, pesado 15, disparo e esquiva 20)", "ConfigCombateV2.custo_*", CONFIG_COMBATE_V2C.custo_golpe_rapido, "guts", "guts não precisa escalar: é recurso de ritmo, não magnitude"),
     ("guts máximo, inicial, regen, carregar +25, defender +5", "ConfigCombateV21 / V2", CONFIG_COMBATE_V2C.guts_carregar, "guts", "idem (fica absoluto)"),
     ("limiares de guts nas condições (20, 40, 60)", "ConfigCombateV2.limiares_guts", 20, "guts", "idem"),
@@ -765,39 +809,155 @@ CONSTANTES_ABSOLUTAS = [
 ]
 
 
+# B2.5: treino na escala (PROPOSTO): cada ponto treinado soma BETA a escala do pet (36 pontos -> x2,08); o ganho
+# relativo por sessao e maior no comeco (o mesmo ponto pesa mais na escala pequena, em numero exibido pesa menos)
+BETA_TREINO = 0.03
+# B2.7: NPC na mesma escala: fator sobre a escala do estagio dele (PROPOSTO, calibrar na Parte C)
+FATOR_NPC = {"tier1_brutamontes": 1.15, "tier2_sentinela": 1.2, "tier2_carcereiro": 1.3, "tier2_porteiro": 1.3, "tier3_soberano": 1.6}
+
+
 def aba_escala(wb: Workbook, f: Fontes) -> Aba:
     a = Aba(wb, "escala", ["estágio", "vida exibida hoje (Brasa, sem treino)", "fonte", "status",
                            "stat de catálogo exibido hoje (vigor da Brasa)", "fonte", "status",
-                           "vida proposta", "fonte", "status", "DW1 (HP de referência)", "fonte", "status",
+                           "vida proposta (escala E)", "fonte", "status", "DW1 (HP de referência)", "fonte", "status",
                            "crescimento hoje (× do bebê)", "crescimento proposto (× do bebê)", "crescimento DW1 (× do In-Training)",
-                           "fator de escala proposto (vida proposta / vida hoje)"], {1: 14, 17: 22})
+                           "degrau hoje (× do estágio anterior)", "degrau proposto", "degrau DW1"], {1: 14})
     cv, cat = CONFIG_COMBATE_V21C, CONFIG_CATALOGO
     refs = {}
-    for est in ("bebe", "crianca", "adolescente", "adulto"):
+    ordem = ("bebe", "crianca", "adolescente", "adulto")
+    for est in ordem:
         forma = next(x for x in formas_da_especie("brasa") if x.estagio == est)
-        s = stats(forma)
-        hp = (cv.hp_base + cv.hp_por_vigor * s["vigor"]) * cat.mult_estagio[est]
+        s_ = stats(forma)
+        hp = (cv.hp_base + cv.hp_por_vigor * s_["vigor"]) * cat.mult_estagio[est]
         a.nova_linha()
         a.texto(1, est)
         rv = a.entrada(2, round(hp, 1), f"{CFG}: (hp_base + hp_por_vigor × vigor) × mult_estagio; forma {forma.rotulo} (catalogo.stats, V21C)", "CONFIG")
-        rs = a.entrada(5, round(s["vigor"], 2), f"digilab/combate_v2/v21/catalogo.py > stats({forma.rotulo})['vigor'] (pontos, soma 60)", "CONFIG")
-        rp = a.entrada(8, ESCALA_PROPOSTA[est], "proposta desta planilha (B2: ~50 / 200 / 600 / 1500)", "PROPOSTO")
+        rs = a.entrada(5, round(s_["vigor"], 2), f"digilab/combate_v2/v21/catalogo.py > stats({forma.rotulo})['vigor'] (pontos, soma 60)", "CONFIG")
+        rp = a.entrada(8, ESCALA_PROPOSTA[est], "proposta (TAREFA B2: ~50 / 200 / 600 / 1500)", "PROPOSTO")
         rd = a.entrada(11, DW1[est][0], f"DW1: {DW1[est][1]} (aba referencias)", "REFERENCIA")
         refs[est] = (rv, rs, rp, rd)
-        a.formula(17, f"={rp}/{rv}", "0.0")
-    b = refs["bebe"]
-    for i, est in enumerate(("bebe", "crianca", "adolescente", "adulto"), start=2):
+    for i, est in enumerate(ordem, start=2):
         rv, rs, rp, rd = refs[est]
+        b = refs["bebe"]
         a.ws.cell(i, 14, f"={rv}/{b[0]}").number_format = "0.00"
         a.ws.cell(i, 15, f"={rp}/{b[2]}").number_format = "0.0"
         a.ws.cell(i, 16, f"={rd}/{b[3]}").number_format = "0.0"
-    # constantes absolutas
+        if i > 2:
+            ant = refs[ordem[i - 3]]
+            a.ws.cell(i, 17, f"={rv}/{ant[0]}").number_format = "0.00"
+            a.ws.cell(i, 18, f"={rp}/{ant[2]}").number_format = "0.00"
+            a.ws.cell(i, 19, f"={rd}/{ant[3]}").number_format = "0.00"
+    esc = {est: refs[est][2] for est in ordem}
+
+    def titulo(txt: str, colunas: list[str]) -> None:
+        a.nova_linha()
+        a.nova_linha()
+        a.texto(1, txt)
+        a.ws.cell(a.linha, 1).font = Font(bold=True, size=12)
+        a.nova_linha()
+        for k, c in enumerate(colunas, start=1):
+            x = a.ws.cell(a.linha, k, c)
+            x.font = Font(bold=True)
+            x.fill = PatternFill("solid", fgColor=AZUL)
+            x.alignment = Alignment(wrap_text=True, vertical="top")
+
+    # --- como a escala entra no combate (B2.1 e B2.3)
+    titulo("Desenho (PROPOSTO): perfil × escala", ["peça", "regra"])
+    for peca, regra in [
+        ("perfil", "os pontos do catálogo (espécie + temperamento + caráter + arquétipos, soma zero): o que a pesquisa compara; não muda"),
+        ("escala E", "magnitude do lutador: E = E_estágio × (1 + β × pontos treinados). Vida exibida = vida de hoje sem o mult. de estágio × E"),
+        ("combate", "cada lutador luta nas próprias unidades (vida e dano de hoje, sem o mult. de estágio); o dano que A causa em B "
+                    "é multiplicado por E_A / E_B. Guts fica absoluto (é ritmo, não magnitude)"),
+        ("invariância", "multiplicar E dos dois lados pelo mesmo fator dá E_A/E_B idêntico (mesmo float): a luta é exatamente a mesma. "
+                        "Lutas entre pets do mesmo estágio e sem treino têm razão 1,0 exato: a bateria V21C não muda"),
+        ("pesquisa", "a arena da pesquisa fixa E igual nos dois lados (adultos, treino normalizado ao orçamento): a escala não entra lá"),
+        ("mult. de estágio de hoje", "sai do combate na campanha (a escala faz o papel dele); fica só na arena antiga e nas runs de pesquisa"),
+    ]:
+        a.nova_linha()
+        a.texto(1, peca)
+        a.texto(2, regra)
+
+    # --- treino na escala (B2.5)
+    titulo("Treino na escala (B2.5)", ["estágio", "E do estágio", "β por ponto", "fonte", "status", "pontos típicos no fim do estágio", "fonte", "status",
+                                       "E com treino típico", "ganho em vida exibida por ponto", "ganho relativo por ponto"])
+    beta_ref = None
+    for est, pts, fonte in (("crianca", f.alcance["tier1"]["crianca"], "ALCANCE['tier1']['crianca']"),
+                            ("adolescente", f.alcance["tier2"]["adolescente"], "ALCANCE['tier2']['adolescente']"),
+                            ("adulto", f.alcance["tier3"]["adulto"], "ALCANCE['tier3']['adulto']")):
+        a.nova_linha()
+        a.texto(1, est)
+        a.ws.cell(a.linha, 2, f"={esc[est]}")
+        rb = a.entrada(3, BETA_TREINO, "proposta: 36 pontos → ×2,08 (o treino inteiro da vida pouco mais que dobra a escala)", "PROPOSTO")
+        beta_ref = beta_ref or rb
+        rpt = a.entrada(6, pts, f"{CALIB} > {fonte}", "CONFIG")
+        a.formula(9, f"=B{a.linha}*(1+{rb}*{rpt})", "0")
+        a.formula(10, f"=B{a.linha}*{rb}", "0.0")
+        a.formula(11, f"={rb}/(1+{rb}*{rpt})", "0.0%")
     a.nova_linha()
+    a.texto(1, "peso_ponto_combate")
+    a.entrada(2, CONFIG_TREINO.peso_ponto_combate, f"{CFG} > ConfigTreino.peso_ponto_combate", "CONFIG")
+    a.texto(5, "na nova base o ponto treinado vai para a escala (β) e para o perfil (proporções, como na arena normalizada); "
+               "o ×3 absoluto sai da campanha (proposta: o perfil treinado é sempre normalizado ao orçamento)")
+
+    # --- NPCs e simulação nas metas (B2.7, sem run)
+    titulo("NPCs na escala e efeito nas metas (sem run)", [
+        "portão", "E do pet sem treino", "E do pet com treino típico", "fator do NPC", "fonte", "status", "E do NPC",
+        "razão sem treino (pet/NPC)", "razão com treino (pet/NPC)", "razão de hoje sem treino (poder)", "razão de hoje com treino (poder)",
+        "taxa esperada sem treino", "fonte", "status", "taxa esperada com treino", "fonte", "status"])
+    npcs = dict(_npcs())
+    ct, cat = CONFIG_TREINO, CONFIG_CATALOGO
+    razoes: list[tuple[str, float, float]] = []
+    for k, v in npcs.items():
+        lugar = v["lugar"]
+        est = {1: "crianca", 2: "adolescente", 3: "adulto"}[lugar]
+        est_npc = v.get("estagio", "adulto")
+        pts = f.alcance[f"tier{lugar}"][est]
+        a.nova_linha()
+        a.texto(1, NOME_NPC[k])
+        a.ws.cell(a.linha, 2, f"={esc[est]}")
+        a.ws.cell(a.linha, 3, f"={esc[est]}*(1+{beta_ref}*{pts})").number_format = "0"
+        rf = a.entrada(4, FATOR_NPC[k], "proposta: NPC na escala do estágio SUGERIDO para ele, um pouco acima do pet sem treino; calibrar na Parte C", "PROPOSTO")
+        a.formula(7, f"={esc[v['estagio_minimo_sugerido']]}*{rf}", "0")
+        e_pet = ESCALA_PROPOSTA[est]
+        e_npc = ESCALA_PROPOSTA[v["estagio_minimo_sugerido"]] * FATOR_NPC[k]
+        razoes.append((NOME_NPC[k], e_pet / e_npc, e_pet * (1 + BETA_TREINO * pts) / e_npc))
+        a.formula(8, f"=B{a.linha}/G{a.linha}", "0.00")
+        a.formula(9, f"=C{a.linha}/G{a.linha}", "0.00")
+        # conta explicita com os valores do config (orcamento, peso, mult. de estagio, total do NPC), para a origem ficar na celula
+        me, mn, tot = cat.mult_estagio[est], cat.mult_estagio[est_npc], v["total_stats"]
+        a.formula(10, f"={cat.orcamento_especie}*{me}/({tot}*{mn})", "0.00")
+        a.formula(11, f"=({cat.orcamento_especie}+{ct.peso_ponto_combate}*{pts})*{me}/({tot}*{mn})", "0.00")
+        a.entrada(12, None, "", "SEM FONTE")
+        a.entrada(15, None, "", "SEM FONTE")
     a.nova_linha()
-    for i, c in enumerate(["constante absoluta do combate", "campo", "valor", "fonte", "status", "tipo", "como tornar relativa"], start=1):
-        c_ = a.ws.cell(a.linha, i, c)
-        c_.font = Font(bold=True)
-        c_.fill = PatternFill("solid", fgColor=AZUL)
+    a.texto(1, "leitura")
+    cruza = all(sem < 1 < com for _, sem, com in razoes)
+    a.texto(2, ("com os fatores propostos a razão pet/NPC fica abaixo de 1,0 sem treino e acima com o treino típico em todos os portões ("
+                if cruza else "atenção: com os fatores propostos a razão NÃO atravessa 1,0 em todos os portões (")
+            + "; ".join(f"{n} {br(a_)} → {br(b_)}" for n, a_, b_ in razoes)
+            + "). Os NPCs da Torre deixam de ter tamanho de adulto: passam à escala do Champion. A taxa esperada só existe "
+              "depois de rodar (Parte C: calibrar_progressao nas sementes de calibração). As razões de hoje usam o modelo de poder "
+              "da aba jornada (contas sobre os valores do config.py, visíveis na fórmula).")
+
+    # --- E4 (B2.6)
+    titulo("E4 redefinido (B2.6, PROPOSTO)", ["item", "hoje", "proposta"])
+    for item, hoje, prop in [
+        ("o que mede", "adulto × adolescente da mesma linha, mesma espécie e caráter, sem treino",
+         "o treino fecha parte da distância entre estágios: adulto SEM treino × adolescente com o treino MÁXIMO do estágio (22 pontos)"),
+        ("meta", f"taxa do adulto em [{br(CONFIG_BATERIA_V21.taxa_min_e4)}, {br(CONFIG_BATERIA_V21.taxa_max_e4)}]",
+         "taxa do adulto em [0,60, 0,85] com o adolescente treinado; e adulto sem treino × adolescente sem treino ≥ 0,90 (o 'stat check' é de propósito)"),
+        ("por quê", "com escala de franquia o adulto sem treino esmaga o adolescente sem treino (E_adulto/E_adol = 2,5)",
+         "a pergunta vira 'o treino do estágio anterior compensa um pouco a evolução?' (princípio 7: treinar cedo rende)"),
+        ("resultado de hoje", ", ".join(f"{k} {br(v)}" for k, v in f.gates["E4_estagio_importa_sem_esmagar"]["valores"]["taxa_por_forma"].items()),
+         "SEM FONTE até a Parte C (bateria V21C com a escala ligada)"),
+    ]:
+        a.nova_linha()
+        a.texto(1, item)
+        a.texto(2, hoje)
+        a.texto(3, prop)
+
+    # --- constantes absolutas (B2.3)
+    titulo("Constantes absolutas do combate (B2.3)", ["constante", "campo", "valor", "fonte", "status", "tipo", "como tornar relativa"])
     for nome, campo, v, tipo, como in CONSTANTES_ABSOLUTAS:
         a.nova_linha()
         a.texto(1, nome)
@@ -805,6 +965,8 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
         a.entrada(3, v, f"{CFG} > {campo}", "CONFIG")
         a.texto(6, tipo)
         a.texto(7, como)
+    for col, w in ((1, 34), (2, 60), (3, 60), (7, 50)):
+        a.ws.column_dimensions[get_column_letter(col)].width = w
     return a
 
 
