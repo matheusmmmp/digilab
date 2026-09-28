@@ -5,15 +5,16 @@ import { carregarAtlas } from "./atlas.ts";
 import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
 import { gravarPendente, iniciarJogo, ouvirOutrasAbas } from "./jogo.ts";
+import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
 import "./estilo/tokens.css";
 import "./estilo/base.css";
 import "./estilo/pet.css";
 import "./estilo/crescer.css";
 import "./estilo/lutar.css";
+import "./estilo/diario.css";
 
-const tema = new URLSearchParams(location.search).get("tema");
-if (tema === "claro" || tema === "escuro") document.documentElement.dataset.tema = tema;
+iniciarTema();
 
 iniciarJogo(localStorage);
 carregarAtlas();
