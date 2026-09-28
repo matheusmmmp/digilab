@@ -646,3 +646,31 @@ Interpretações:
 - **Plano** (`docs/PLANO_ANALISE.md`): desenho principal PENDENTE DE DECISÃO; condição neutra como
   principal é PROPOSTA (não estava na tarefa). N = 160 nos dois desenhos (acima do mínimo, custo ~15 min);
   critérios de sustentada/refutada/inconclusiva definidos sobre o IC com margem de equivalência Δ.
+
+## 2026-09-28 — fala livre por LLM local: APROVADA só com o gemma2:9b (decisão do Matheus)
+
+`docs/TAREFA_FALA_LIVRE.md` executada pelo `docs/PLANO_VERSAO_FALA_LIVRE.md` (onde divergem, vale o plano),
+na branch `exp/fala-livre` (worktree `v1-fala-livre`, porta 8767, tag `v1-antes-fala-livre`). Relatórios em
+`artifacts_fala_livre/rodada1/` e `rodada2/RELATORIO.md`.
+
+- Desvios da tarefa pelo plano: falas e conversas no **log de apresentação separado** (`<save>.fala.jsonl`,
+  na web no localStorage), nunca no log do pet (a versão do save continua v3); pacote `digilab_fala_livre/`
+  fora de `digilab/`; servidor por um único gancho; web por três ganchos (`// GANCHO fala-livre`).
+- Interpretações: situações da avaliação tiradas das vidas de `artifacts_treino/vidas` (50 vidas × 4
+  estágios); juiz fixo `qwen2.5:7b` para todos os modelos; moldura como linha de base do erro do juiz;
+  "afirmação sem fato" medida por fala.
+- Rodada 1 (semente 20260927): mediu mal (juiz marcava ações verdadeiras, 9–27 falas truncadas por modelo,
+  timeouts no gemma). Rodada de ajuste (a única que o plano permite): juiz `verif-v3`, limites de tokens,
+  prompt `livre-v2`, **amostra nova** (semente 20260928). As 30 perguntas de conversa são as mesmas nas duas
+  rodadas.
+- Resultado da rodada 2: só o `gemma2:9b` passa na qualidade (3,0% de falas com afirmação sem fato, teto
+  por causa do erro do juiz; 0/30 conversas inventaram; 0 manipulação); latência p90 4,8 s (zona
+  intermediária do plano). `qwen2.5:3b` e `qwen2.5:7b` reprovam (46% e 25,5%; armadilhas 16/30 e 10/30).
+- **Decisão do Matheus (2026-09-28): aprovar só com o gemma2:9b**, sem esperar a avaliação cega. Merge na
+  `main` com `modo_fala` desligado por padrão (a página abre em "template"); a moldura e o template seguem
+  iguais. Modelo padrão da fala livre: `gemma2:9b` (`DIGILAB_MODELO_LIVRE` troca).
+- Pendente: avaliação cega do Matheus (`artifacts_fala_livre/rodada2/avaliacao_cega.csv`) e confirmação dos
+  dois "Não me deixe…" do 7b (não afetam o gemma). A identificação "exp-fala-livre" (título, selo e chave de
+  saves própria) ficou só na branch experimental; na `main` a página usa a chave de sempre.
+- Na integração, a interface nova da `main` (Interface UP) trocou a aba Estado por uma âncora vazia: a
+  conversa foi montada na tela do pet (`.pet-tela`), ao lado do balão.

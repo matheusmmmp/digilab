@@ -3655,6 +3655,7 @@ function causaHtml(mot, refs){
     return `<span class="dl-causa dl-causa--registro dl-malha">${EMOTE_CAUSA[c] && atlasOk ? imgPeca(EMOTE_CAUSA[c], 1, "") : ""}${c}${refs.length ? " · evento #" + refs.join(", #") : ""}</span>`; }).join("");
 }
 function renderFala(){
+  if (window.falaLivre && window.falaLivre.gatilho(motor)) return;   // GANCHO fala-livre (2: entrega o pet no gatilho da fala)
   const mot = motor.motivo, el = $("fala");
   if (!mot){ el.textContent = "…"; $("fala-det").textContent = ""; $("causa").innerHTML = ""; return; }
   const est = estagioFala(motor), refs = mot.refsOrd.map(k => idxDoOrdinal(motor, k)).filter(x => x !== null);
@@ -4625,4 +4626,6 @@ desenharLCD();
 arenaPreview();
 renderGambits();
 verificarLLM();
+document.addEventListener("fala-livre-pronta", () => window.falaLivre.montar(document.querySelector(".pet-tela")));   // GANCHO fala-livre (3: conversa na tela do pet)
+document.head.appendChild(Object.assign(document.createElement("script"), {src:"modulos/fala_livre.js"}));   // GANCHO fala-livre (1: carrega o modulo)
 </script>

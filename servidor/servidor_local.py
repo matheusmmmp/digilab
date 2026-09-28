@@ -61,10 +61,13 @@ from servidor.fala_llm import (  # noqa: E402
 )
 
 PASTA_SERVIDA = RAIZ.parent
+# prefixo da copia servida: /v1 na principal, /v1-fala-livre na versao experimental (worktree)
+PREFIXO = "/" + RAIZ.name
+VERSAO_APP = "exp-fala-livre" if RAIZ.name.endswith("fala-livre") else "principal"
 LIMITE_CORPO = 16 * 1024
 SENHA_MIN = 12
 # modo remoto: so estas rotas (o resto da pasta servida nao sai do computador)
-ROTAS_REMOTAS = ("/v1/web/digilab_sprites.html", "/v1/web/digilab.html", "/Assets/digilab_atlas.png",
+ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.html", "/Assets/digilab_atlas.png",
                  "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json",
                  "/api/fala", "/api/fala/status")
 
@@ -106,7 +109,7 @@ class Tratador(SimpleHTTPRequestHandler):
             return True
         if self.path.split("?", 1)[0] == "/":
             self.send_response(302)
-            self.send_header("Location", "/v1/web/digilab_sprites.html")
+            self.send_header("Location", f"{PREFIXO}/web/digilab_sprites.html")
             self.send_header("Content-Length", "0")
             self.end_headers()
             return True
@@ -182,6 +185,9 @@ class Tratador(SimpleHTTPRequestHandler):
             super().log_message(formato, *args)
 
 
+__import__("servidor.fala_livre", fromlist=["instalar"]).instalar(sys.modules[__name__])   # GANCHO fala-livre
+
+
 def _aquecer(p: ProvedorOllama) -> None:
     try:
         p.aquecer()
@@ -246,7 +252,7 @@ def main(argv=None) -> int:
               + (f"e-mail para {alerta.destino}" if alerta.ativo else f"e-mail DESLIGADO ({alerta.motivo_inativo()})"),
               flush=True)
     servidor = ThreadingHTTPServer(("127.0.0.1", a.porta), partial(Tratador, directory=str(PASTA_SERVIDA)))
-    print(f"Digilab em http://localhost:{a.porta}/v1/web/digilab_sprites.html  [{estado}]"
+    print(f"Digilab {VERSAO_APP} em http://localhost:{a.porta}{PREFIXO}/web/digilab_sprites.html  [{estado}]"
           + ("" if not a.remoto else "  [REMOTO SEM SENHA: quem tiver o link entra; so rotas do jogo]"
              if a.sem_senha else "  [REMOTO: senha obrigatoria, so rotas do jogo]"), flush=True)
     try:

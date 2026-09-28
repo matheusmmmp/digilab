@@ -13,7 +13,7 @@ import pytest
 
 from servidor.alerta import AlertaEmail
 from servidor.fala_llm import ControleGasto, GeradorFala
-from servidor.servidor_local import PASTA_SERVIDA, Tratador, main, rota_permitida
+from servidor.servidor_local import PASTA_SERVIDA, PREFIXO, Tratador, main, rota_permitida
 
 SENHA = "senha-de-teste-123"
 
@@ -45,15 +45,15 @@ def _get(url, senha=None):
 
 
 def test_remoto_exige_senha(servidor):
-    assert _get(servidor + "/v1/web/digilab_sprites.html") == 401
-    assert _get(servidor + "/v1/web/digilab_sprites.html", "errada") == 401
-    assert _get(servidor + "/v1/web/digilab_sprites.html", SENHA) == 200
+    assert _get(servidor + PREFIXO + "/web/digilab_sprites.html") == 401
+    assert _get(servidor + PREFIXO + "/web/digilab_sprites.html", "errada") == 401
+    assert _get(servidor + PREFIXO + "/web/digilab_sprites.html", SENHA) == 200
     assert _get(servidor + "/api/fala/status", SENHA) == 200
 
 
 def test_remoto_so_serve_as_rotas_do_jogo(servidor):
-    for caminho in ("/v1/CLAUDE.md", "/v1/.git/config", "/v1/servidor/servidor_local.py", "/v0/",
-                    "/Assets/catalogo_sprites.json", "/v1/web/../CLAUDE.md"):
+    for caminho in (PREFIXO + "/CLAUDE.md", PREFIXO + "/.git/config", PREFIXO + "/servidor/servidor_local.py", "/v0/",
+                    "/Assets/catalogo_sprites.json", PREFIXO + "/web/../CLAUDE.md"):
         assert _get(servidor + caminho, SENHA) == 404, caminho
     assert rota_permitida("/Assets/digilab_atlas.png")
 
@@ -100,8 +100,8 @@ def test_alerta_sem_smtp_fica_desligado_e_nao_derruba():
 
 def test_remoto_sem_senha_continua_so_com_as_rotas_do_jogo(servidor):
     Tratador.senha = None
-    assert _get(servidor + "/v1/web/digilab_sprites.html") == 200
-    assert _get(servidor + "/v1/CLAUDE.md") == 404
+    assert _get(servidor + PREFIXO + "/web/digilab_sprites.html") == 200
+    assert _get(servidor + PREFIXO + "/CLAUDE.md") == 404
     with pytest.raises(SystemExit):
         main(["--sem-senha", "--provedor", "nenhum"])
 
@@ -109,11 +109,11 @@ def test_remoto_sem_senha_continua_so_com_as_rotas_do_jogo(servidor):
 def test_sem_remoto_recusa_pedido_vindo_de_tunel(servidor):
     Tratador.senha = None
     Tratador.remoto = False
-    req = urllib.request.Request(servidor + "/v1/web/digilab_sprites.html", headers={"Cf-Ray": "abc"})
+    req = urllib.request.Request(servidor + PREFIXO + "/web/digilab_sprites.html", headers={"Cf-Ray": "abc"})
     with pytest.raises(urllib.error.HTTPError) as err:
         urllib.request.urlopen(req, timeout=5)
     assert err.value.code == 403
-    assert _get(servidor + "/v1/web/digilab_sprites.html") == 200     # local continua livre
+    assert _get(servidor + PREFIXO + "/web/digilab_sprites.html") == 200     # local continua livre
 
 
 def test_cliente_que_desconecta_nao_derruba_o_servidor(servidor, capsys):
@@ -122,7 +122,7 @@ def test_cliente_que_desconecta_nao_derruba_o_servidor(servidor, capsys):
 
     u = urlparse(servidor)
     s = socket.create_connection((u.hostname, u.port))
-    s.sendall(b"GET /v1/web/digilab_sprites.html HTTP/1.1\r\nHost: x\r\nAuthorization: Basic "
+    s.sendall(b"GET " + PREFIXO.encode() + b"/web/digilab_sprites.html HTTP/1.1\r\nHost: x\r\nAuthorization: Basic "
               + base64.b64encode(f"eu:{SENHA}".encode()) + b"\r\n\r\n")
     s.close()                                                         # fecha sem ler a resposta
     assert _get(servidor + "/api/fala/status", SENHA) == 200          # o servidor segue atendendo
