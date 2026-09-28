@@ -42,3 +42,14 @@ export function lerAbaLembrada(armaz: Armazenamento): Rota | null {
 export function gravarAbaLembrada(armaz: Armazenamento, r: Rota): void {
   try { armaz.setItem(CHAVE_ABA, r.destino + "/" + r.aba); } catch { /* preferencia de tela: sem armazenamento, so nao lembra */ }
 }
+
+/* Configuracoes (desenhos Cfg*): tela fora dos 4 destinos, aberta pela engrenagem do Diario; #/config/<parte> */
+export type ParteConfig = "principal" | "aparencia" | "dados" | "fala" | "sobre";
+const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "aparencia", "dados", "fala", "sobre"];
+/** "#/config" -> principal; "#/config/dados" -> dados; outra coisa -> null */
+export function configDoEndereco(hash: string): ParteConfig | null {
+  const [c, p] = hash.replace(/^#\/?/, "").split("/");
+  if (c !== "config") return null;
+  return !p ? "principal" : (PARTES_CONFIG as readonly string[]).includes(p) ? p as ParteConfig : null;
+}
+export const enderecoDaConfig = (p: ParteConfig): string => p === "principal" ? "#/config" : `#/config/${p}`;

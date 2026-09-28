@@ -1,11 +1,14 @@
-/* Revelacao da evolucao (desenho UpEvolucao): so evolucoes novas nesta sessao abrem a revelacao; o save antigo
+/* Revelacao da evolucao (desenhos UpEvolucao e AssetsEvolucao: metades do brasao se juntando, anel de Digivice,
+   anel de luz e faiscas do UP): so evolucoes novas nesta sessao abrem a revelacao; o save antigo
    nao reabre as dele. O "por que" vem so do que o motor registrou na evolucao. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
   CAT, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Motor,
 } from "../../motor/index.ts";
 import { desenharSprite, quadroAgora, useAtlas } from "../atlas.ts";
+import { BRASAO } from "../decoracao.ts";
 import { useJogo } from "../jogo.ts";
+import { Deco } from "./Deco.tsx";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
 const ORDEM_NIVEL = ["bebe", "crianca", "adolescente", "adulto"] as const;
@@ -43,7 +46,17 @@ function Palco({ x }: { x: Evolucao }) {
     const t = setInterval(desenha, a.dados.ms_por_quadro);
     return () => clearInterval(t);
   }, [a, k]);
-  return <div class="revel-palco">{sp && <canvas class="dl-pix" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} />}</div>;
+  /* atras do sprite: anel de Digivice girando, anel de luz e faiscas do UP (parados com movimento reduzido) */
+  return (
+    <div class="revel-palco">
+      <Deco nome="Digivice_Circle_01" class="revel-anel gira" />
+      <Deco nome="UI_Fx_Glow_Circle_01" class="revel-luz" />
+      {sp && <canvas class="dl-pix revel-spr" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} />}
+      <Deco nome="Fx_Sparkle_2" class="revel-faisca revel-faisca--1" />
+      <Deco nome="Fx_Sparkle_2" class="revel-faisca revel-faisca--2" />
+      <Deco nome="Fx_Sparkle_2" class="revel-faisca revel-faisca--3" />
+    </div>
+  );
 }
 function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), f = x.forma, i = ORDEM_NIVEL.indexOf(x.estagio);
@@ -54,9 +67,10 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
     <dialog class="revelacao dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
       <div class="revel-fundo">
         <p class="revel-de dl-lcd">{NOME_EST[ORDEM_NIVEL[i - 1]] || ""} → {nomeEstagio(f)}</p>
+        <span class="revel-metades" aria-hidden="true"><Deco nome={BRASAO[f.esp].esquerda} class="revel-metade revel-metade--e" /><Deco nome={BRASAO[f.esp].direita} class="revel-metade revel-metade--d" /></span>
         <h2 class="dl-num revel-tit" id="revel-tit">EVOLUÇÃO!</h2>
         <Palco x={x} />
-        <span class="dl-placa">{nomeForma(f)}</span>
+        <span class="revel-nome"><Deco nome={BRASAO[f.esp].peca} class="revel-brasao" alt={`brasão ${BRASAO[f.esp].nome}`} /><span class="dl-placa">{nomeForma(f)}</span></span>
         <ol class="revel-linha">{ORDEM_NIVEL.map((n, j) => <li key={n} aria-current={j === i ? "step" : undefined}>{j <= i ? passados[j] : "?"}</li>)}</ol>
         <section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={x} /></section>
         <button type="button" class="dl-btn dl-btn--destaque revel-ok" onClick={() => ref.current?.close()}>Continuar</button>

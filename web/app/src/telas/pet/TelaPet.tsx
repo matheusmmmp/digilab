@@ -1,5 +1,6 @@
 /* Tela Pet (desenho UpPet; porte da tela do HTML): cabecalho com retrato, palco, fala com causa, faixa da fala,
-   necessidades, chamado do In-Training, desejo, acoes do dono, tempo (teste) e a conversa da fala livre.
+   necessidades, chamado do In-Training, desejo, acoes do dono, atalho do tempo (teste; os controles ficam em
+   Configuracoes) e a conversa da fala livre.
    Tudo derivado do motor na hora de desenhar; so mudarMotor() altera o pet. */
 import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
@@ -18,7 +19,11 @@ import {
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
-import { VELOCIDADES, ajustarVelocidadeChamado, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
+import { Deco } from "../../componentes/Deco.tsx";
+import { BRASAO, ICONE } from "../../decoracao.ts";
+import type { ParteConfig } from "../../rotas.ts";
+import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
+import { nomeVelocidade } from "../config/TelaConfig.tsx";
 import { MeusPets } from "./MeusPets.tsx";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
 
@@ -36,8 +41,10 @@ function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
   const { motor: m, nascendo } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
     <header class="pet-cab">
+      <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
       <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
       <span class="pet-cab-nome">
+        <Deco nome={BRASAO[m.especie].peca} class="pet-brasao" alt={`brasão ${DO_ESP[m.especie]}`} />
         <span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
         <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
       </span>
@@ -197,17 +204,14 @@ const ACOES: [AcaoDono, string, string][] = [["alimentar", "Alimentar", "sec"], 
   ["acariciar", "Carinho", "sec"], ["elogiar", "Elogiar", "destaque"], ["repreender", "Repreender", "sec"]];
 const ICONE_DONO: Record<AcaoDono, string> = { alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao", repreender: "gota" };
 
-function Tempo() {
+/** o tempo de teste mora em Configuracoes > Registro e replay; aqui so a velocidade atual e o atalho */
+function Tempo({ abrirConfig }: { abrirConfig: (p: ParteConfig) => void }) {
   const { velocidade } = useTempo();
   return (
-    <details class="tempo-teste"><summary>Tempo (teste)</summary>
-      <div class="tempo-pet" role="group" aria-label="Velocidade do tempo">
-        {VELOCIDADES.map(([rot, v, dica]) => (
-          <button type="button" key={rot} class="dl-btn dl-btn--sec" aria-pressed={velocidade === v} title={dica} onClick={() => escolherVelocidade(v)}>{rot}</button>
-        ))}
-        <button type="button" class="dl-btn dl-btn--sec" onClick={pularUmaHora}>+1 h</button>
-      </div>
-    </details>
+    <button type="button" class="tempo-atalho" onClick={() => abrirConfig("dados")}>
+      <Deco nome={ICONE.tempo} class="tempo-atalho-ic" />
+      <span><span><b>Tempo (teste)</b> · {velocidade === 0 ? "pausado" : nomeVelocidade(velocidade)}</span><small>mudar em Configurações › Registro e replay</small></span>
+    </button>
   );
 }
 
@@ -243,7 +247,7 @@ function Conversa() {
 }
 
 /* ------------------------------------------------ a tela */
-export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
+export function TelaPet({ irRegistro, irTreinar, abrirConfig }: { irRegistro: () => void; irTreinar: () => void; abrirConfig: (p: ParteConfig) => void }) {
   const { motor: m, nascendo } = useJogo(), { freado } = useTempo(), [meusPets, setMeusPets] = useState(false);
   const agir = (a: AcaoDono) => {
     if (nascendo > 0) return;
@@ -269,9 +273,13 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
       <Chamados agir={agir} />
       <div class="dl-par"><Desejo /></div>
       <div class="acoes-pet" role="group" aria-label="Ações do dono">
-        {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}>{rot}</button>)}
+        {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}>{a === "alimentar" && <Deco nome={ICONE.alimentar} class="acao-ic" />}{rot}</button>)}
       </div>
-      <Tempo />
+      <button type="button" class="treinar-atalho" onClick={irTreinar}>
+        <Deco nome="Explore_Icon_Training" class="treinar-atalho-tile" />
+        <span><span class="treinar-atalho-tit"><Deco nome={ICONE.treinar} class="acao-ic" />Treinar</span><small>sessões de treino em Crescer</small></span>
+      </button>
+      <Tempo abrirConfig={abrirConfig} />
       <Conversa />
       {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={irRegistro} />}
     </section>

@@ -22,8 +22,10 @@ export function iniciarTema(): void {
   tema = doEndereco === "claro" || doEndereco === "escuro" ? doEndereco : salvo === "claro" || salvo === "escuro" ? salvo : "sistema";
   aplicar();
 }
-export function trocarTema(): void {
-  tema = PROXIMO_TEMA[tema];
+export function trocarTema(): void { escolherTema(PROXIMO_TEMA[tema]); }
+/** tema escolhido (Configuracoes > Aparencia) */
+export function escolherTema(t: Tema): void {
+  tema = t;
   try { if (tema === "sistema") localStorage.removeItem(CHAVE_TEMA); else localStorage.setItem(CHAVE_TEMA, tema); } catch { /* preferencia de tela */ }
   aplicar();
   for (const o of ouvintes) o();

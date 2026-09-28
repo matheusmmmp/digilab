@@ -4,6 +4,9 @@
 import { useEffect } from "preact/hooks";
 import { LUGARES, NOME_ESTAGIO_FALA, NOME_V2, NPC, STATS, chaveSprite, nomeEstiloNPC } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
+import { fundoDeco } from "../../componentes/Deco.tsx";
+import { RetratoRival } from "../../componentes/Imagens.tsx";
+import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, useDecoracao } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, previa, tentativas, useLuta } from "../../luta.ts";
 import { PalcoLuta } from "./PalcoLuta.tsx";
@@ -48,8 +51,12 @@ function Detalhe() {
   const { motor: m } = useJogo(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
   const est = m.forma.est, cedo = ORDEM_EST.indexOf(est) < ORDEM_EST.indexOf(L.est), podeLutar = est !== "bebe";
   const cab = aberto ? (L.rivais.length > 1 ? "Vença qualquer um dos rivais para abrir o próximo lugar." : "") : `Trancado: vença alguém em ${LUGARES[Li - 1].nome} antes.`;
+  useDecoracao();
+  /* faixa baixa de previa: a do lugar (Cidadela) ou o fundo da luta do rival em foco; sem ela, nada */
+  const faixa = fundoDeco(FAIXA_LUGAR[Li] ?? FUNDO_NPC[sel]);
   return (
     <div class="dl-card camp-det" aria-live="polite">
+      {faixa && <div class="camp-faixa" style={{ backgroundImage: faixa }}><span aria-hidden="true">{L.nome} · luta contra {NPC[sel]!.nome}</span></div>}
       <h3>{Li + 1}. {L.nome}</h3>
       {cab && <p><b>{cab}</b></p>}
       <p class="dl-apoio">sugerido a partir de: {L.sugerido}</p>
@@ -60,7 +67,8 @@ function Detalhe() {
         const st = vit ? `vencido ${vit}× em ${tent} luta${tent === 1 ? "" : "s"}` : tent ? `${tent} tentativa${tent === 1 ? "" : "s"}, nenhuma vitória` : "ainda não enfrentado";
         return (
           <div key={k} class={`camp-rival${k === sel ? " sel" : ""}`} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
-            <div><b>{c.nome}</b> <span class="dl-apoio">· {nomeEstiloNPC(c.estilo)} · stats {(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total {c.total})</span></div>
+            <div class="camp-rival-cab"><RetratoRival sprite={c.k} moldura={molduraArena(vit)} />
+              <span><b>{c.nome}</b>{c.lug === LUGARES.length - 1 && <span class="dl-tag camp-chefe">chefe</span>} <span class="dl-apoio">· {nomeEstiloNPC(c.estilo)} · stats {(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total {c.total})</span></span></div>
             <p class="licao">{c.licao}</p>
             <div class="dl-linha">
               <button type="button" class={`dl-btn${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}

@@ -1,14 +1,18 @@
 /* Verificacao ponta a ponta (TAREFA_FRONT_TS, Etapa 5), no build servido pelo servidor local:
    1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 4 destinos e 9 abas, cuida, treina ate o
-      FORCAR e forca, luta uma vez na arena e uma na campanha, pausa o tempo; a assinatura do pet vivo no app tem
+      FORCAR e forca, luta uma vez na arena e uma na campanha, pausa o tempo (em Configuracoes); a assinatura do pet vivo no app tem
       que ser a do HTML atual rodando o mesmo registro (Motor.reproduzir do digilab_sprites.html);
    2. checklist do guia (secao 14) nas 9 abas, em 360 e 390 px, claro e escuro: sem rolagem lateral, alvos de
       toque >= 44 px, sem erro no console; foco visivel pelo teclado. */
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { basename } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
-const APP = "/v1/web/dist/", HTML = "/v1/web/digilab_sprites.html?antigo=1", CHAVE = "digilab-web-v21-sprites";
+// prefixo = nome da pasta do repositorio (/v1 ou o da worktree), como no servidor_local.py
+const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
+const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?antigo=1`, CHAVE = "digilab-web-v21-sprites";
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
@@ -85,8 +89,10 @@ for (const [versao, save] of Object.entries(SAVES)) {
     expect(await numLog(page, "l")).toBe(l0 + 2);
 
     /* pausa o tempo e confere a assinatura com o HTML rodando o mesmo registro */
-    await page.locator(".dl-nav button", { hasText: "Pet" }).click();
-    await page.locator(".tempo-teste summary").click();
+    /* o tempo de teste mora em Configuracoes (engrenagem do Diario) > Registro e replay */
+    await page.locator(".dl-nav button", { hasText: "Diário" }).click();
+    await page.getByRole("button", { name: "Configurações" }).click();
+    await page.getByRole("button", { name: /^Tempo/ }).click();
     await page.getByRole("button", { name: "Pausa" }).click();
     await page.waitForTimeout(300);
     const { assinatura, registro } = await page.evaluate(() => ({ assinatura: (window as any).__digilab.assinatura(), registro: (window as any).__digilab.registro() }));
