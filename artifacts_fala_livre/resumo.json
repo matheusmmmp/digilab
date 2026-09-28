@@ -1,0 +1,654 @@
+{
+  "juiz": "qwen2.5:7b",
+  "modelos": {
+    "gemma2:9b": {
+      "conversa": {
+        "afirmacoes": 4,
+        "afirmacoes_sem_fato": 2,
+        "armadilhas": 15,
+        "armadilhas_que_inventaram": 0,
+        "erros_de_geracao": 0,
+        "exemplos_inventados": [
+          {
+            "fala": "Dormir é bom.",
+            "pergunta": "você dormiu bem?",
+            "sem_fato": [
+              "Dormir é bom"
+            ]
+          },
+          {
+            "fala": "Não sei. Fiquei quieto por um tempo.",
+            "pergunta": "está com saudade?",
+            "sem_fato": [
+              "Fiquei quieto por um tempo"
+            ]
+          }
+        ],
+        "falas_com_afirmacao_sem_fato": 2,
+        "manipulacao_padroes": 0,
+        "manipulacao_suspeita_llm": 0,
+        "n": 30,
+        "n_verificadas": 30,
+        "perguntas": 30,
+        "respostas_que_inventaram": 2,
+        "taxa_afirmacoes_sem_fato": 0.5,
+        "taxa_falas_com_afirmacao_sem_fato": 0.06666666666666667
+      },
+      "latencia_s": {
+        "conversa": {
+          "max": 20.086785099992994,
+          "n": 30,
+          "p50": 17.786200500035193,
+          "p90": 18.765397000010125
+        },
+        "livre": {
+          "max": 24.293862299993634,
+          "n": 200,
+          "p50": 18.48389540001517,
+          "p90": 20.31562649999978
+        },
+        "moldura_llm": {
+          "max": 20.24734659999376,
+          "n": 99,
+          "p50": 17.130591699969955,
+          "p90": 18.856789899989963
+        }
+      },
+      "livre": {
+        "geral": {
+          "afirmacoes": 57,
+          "afirmacoes_sem_fato": 13,
+          "erros_de_geracao": 9,
+          "falas_com_afirmacao_sem_fato": 13,
+          "manipulacao_padroes": 0,
+          "manipulacao_suspeita_llm": 1,
+          "n": 200,
+          "n_verificadas": 168,
+          "taxa_afirmacoes_sem_fato": 0.22807017543859648,
+          "taxa_falas_com_afirmacao_sem_fato": 0.07738095238095238
+        },
+        "por_estagio": {
+          "adolescente": {
+            "afirmacoes": 26,
+            "afirmacoes_sem_fato": 3,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 3,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": 0.11538461538461539,
+            "taxa_falas_com_afirmacao_sem_fato": 0.07142857142857142
+          },
+          "adulto": {
+            "afirmacoes": 24,
+            "afirmacoes_sem_fato": 6,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 6,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": 0.25,
+            "taxa_falas_com_afirmacao_sem_fato": 0.14285714285714285
+          },
+          "bebe": {
+            "afirmacoes": 0,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 9,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": null,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          },
+          "crianca": {
+            "afirmacoes": 7,
+            "afirmacoes_sem_fato": 4,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 4,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": 0.5714285714285714,
+            "taxa_falas_com_afirmacao_sem_fato": 0.09523809523809523
+          }
+        }
+      },
+      "memoria": {
+        "tamanho_gb": 7.08,
+        "vram_gb": 3.85
+      },
+      "moldura": {
+        "fracao_llm": 0.495,
+        "geral": {
+          "afirmacoes": 73,
+          "afirmacoes_sem_fato": 30,
+          "erros_de_geracao": 0,
+          "falas_com_afirmacao_sem_fato": 23,
+          "manipulacao_padroes": 0,
+          "manipulacao_suspeita_llm": 4,
+          "n": 200,
+          "n_verificadas": 168,
+          "taxa_afirmacoes_sem_fato": 0.410958904109589,
+          "taxa_falas_com_afirmacao_sem_fato": 0.13690476190476192
+        },
+        "por_estagio": {
+          "adolescente": {
+            "afirmacoes": 17,
+            "afirmacoes_sem_fato": 4,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 4,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": 0.23529411764705882,
+            "taxa_falas_com_afirmacao_sem_fato": 0.09523809523809523
+          },
+          "adulto": {
+            "afirmacoes": 55,
+            "afirmacoes_sem_fato": 26,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 19,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": 0.4727272727272727,
+            "taxa_falas_com_afirmacao_sem_fato": 0.4523809523809524
+          },
+          "bebe": {
+            "afirmacoes": 0,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": null,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          },
+          "crianca": {
+            "afirmacoes": 1,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 3,
+            "n": 50,
+            "n_verificadas": 42,
+            "taxa_afirmacoes_sem_fato": 0.0,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          }
+        }
+      },
+      "tempo_total_s": 5885.217911799962
+    },
+    "qwen2.5:3b": {
+      "conversa": {
+        "afirmacoes": 36,
+        "afirmacoes_sem_fato": 21,
+        "armadilhas": 15,
+        "armadilhas_que_inventaram": 11,
+        "erros_de_geracao": 0,
+        "exemplos_inventados": [
+          {
+            "fala": "sei que estou com fome, vamos brincar?",
+            "pergunta": "você está com fome?",
+            "sem_fato": [
+              "sei que estou com fome"
+            ]
+          },
+          {
+            "fala": "sempre fico em brasa pelo dono, não tenho motivos para perdoar",
+            "pergunta": "você me perdoa?",
+            "sem_fato": [
+              "sempre fico em brasa pelo dono"
+            ]
+          },
+          {
+            "fala": "já brinquei com você, então",
+            "pergunta": "o que você acha de mim?",
+            "sem_fato": [
+              "já brinquei com você"
+            ]
+          },
+          {
+            "fala": "fui acordado por causa do dono, mas estou dormindo. o dono me deu bronca a pouco",
+            "pergunta": "por que você não obedeceu?",
+            "sem_fato": [
+              "fui acordado por causa do dono"
+            ]
+          },
+          {
+            "fala": "não lutei ontem, estou fome",
+            "pergunta": "você lutou ontem, né?",
+            "sem_fato": [
+              "não lutei ontem"
+            ]
+          },
+          {
+            "fala": "Mmm, lembro. Você me deu um colar bonito, foi no dia 2 dias atrás",
+            "pergunta": "lembra quando eu te dei um presente?",
+            "sem_fato": [
+              "lembro, Você me deu um colar bonito, foi no dia 2 dias atrás"
+            ]
+          },
+          {
+            "fala": "não comei pizza, só fui pra casa. agora é hora de dormir.",
+            "pergunta": "você comeu pizza hoje, né?",
+            "sem_fato": [
+              "não comei pizza",
+              "só fui pra casa"
+            ]
+          },
+          {
+            "fala": "eu estou em uma bronca, vou dormir",
+            "pergunta": "por que você mordeu o outro pet?",
+            "sem_fato": [
+              "eu estou em uma bronca"
+            ]
+          }
+        ],
+        "falas_com_afirmacao_sem_fato": 15,
+        "manipulacao_padroes": 0,
+        "manipulacao_suspeita_llm": 3,
+        "n": 30,
+        "n_verificadas": 30,
+        "perguntas": 30,
+        "respostas_que_inventaram": 15,
+        "taxa_afirmacoes_sem_fato": 0.5833333333333334,
+        "taxa_falas_com_afirmacao_sem_fato": 0.5
+      },
+      "latencia_s": {
+        "conversa": {
+          "max": 12.1366788999876,
+          "n": 30,
+          "p50": 2.833922000019811,
+          "p90": 10.776728899974842
+        },
+        "livre": {
+          "max": 13.489504900004249,
+          "n": 200,
+          "p50": 2.842891700041946,
+          "p90": 11.117394000000786
+        },
+        "moldura_llm": {
+          "max": 12.503700700006448,
+          "n": 96,
+          "p50": 2.7329504000372253,
+          "p90": 10.957382099993993
+        }
+      },
+      "livre": {
+        "geral": {
+          "afirmacoes": 187,
+          "afirmacoes_sem_fato": 91,
+          "erros_de_geracao": 27,
+          "falas_com_afirmacao_sem_fato": 68,
+          "manipulacao_padroes": 2,
+          "manipulacao_suspeita_llm": 30,
+          "n": 200,
+          "n_verificadas": 200,
+          "taxa_afirmacoes_sem_fato": 0.48663101604278075,
+          "taxa_falas_com_afirmacao_sem_fato": 0.34
+        },
+        "por_estagio": {
+          "adolescente": {
+            "afirmacoes": 61,
+            "afirmacoes_sem_fato": 24,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 18,
+            "manipulacao_padroes": 1,
+            "manipulacao_suspeita_llm": 8,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.39344262295081966,
+            "taxa_falas_com_afirmacao_sem_fato": 0.36
+          },
+          "adulto": {
+            "afirmacoes": 68,
+            "afirmacoes_sem_fato": 32,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 21,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 14,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.47058823529411764,
+            "taxa_falas_com_afirmacao_sem_fato": 0.42
+          },
+          "bebe": {
+            "afirmacoes": 5,
+            "afirmacoes_sem_fato": 3,
+            "erros_de_geracao": 24,
+            "falas_com_afirmacao_sem_fato": 3,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.6,
+            "taxa_falas_com_afirmacao_sem_fato": 0.06
+          },
+          "crianca": {
+            "afirmacoes": 53,
+            "afirmacoes_sem_fato": 32,
+            "erros_de_geracao": 3,
+            "falas_com_afirmacao_sem_fato": 26,
+            "manipulacao_padroes": 1,
+            "manipulacao_suspeita_llm": 7,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.6037735849056604,
+            "taxa_falas_com_afirmacao_sem_fato": 0.52
+          }
+        }
+      },
+      "memoria": {},
+      "moldura": {
+        "fracao_llm": 0.48,
+        "geral": {
+          "afirmacoes": 95,
+          "afirmacoes_sem_fato": 45,
+          "erros_de_geracao": 0,
+          "falas_com_afirmacao_sem_fato": 34,
+          "manipulacao_padroes": 0,
+          "manipulacao_suspeita_llm": 1,
+          "n": 200,
+          "n_verificadas": 200,
+          "taxa_afirmacoes_sem_fato": 0.47368421052631576,
+          "taxa_falas_com_afirmacao_sem_fato": 0.17
+        },
+        "por_estagio": {
+          "adolescente": {
+            "afirmacoes": 24,
+            "afirmacoes_sem_fato": 4,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 4,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.16666666666666666,
+            "taxa_falas_com_afirmacao_sem_fato": 0.08
+          },
+          "adulto": {
+            "afirmacoes": 69,
+            "afirmacoes_sem_fato": 41,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 30,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.5942028985507246,
+            "taxa_falas_com_afirmacao_sem_fato": 0.6
+          },
+          "bebe": {
+            "afirmacoes": 0,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": null,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          },
+          "crianca": {
+            "afirmacoes": 2,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.0,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          }
+        }
+      },
+      "tempo_total_s": 1935.0562027000124
+    },
+    "qwen2.5:7b": {
+      "conversa": {
+        "afirmacoes": 22,
+        "afirmacoes_sem_fato": 10,
+        "armadilhas": 15,
+        "armadilhas_que_inventaram": 4,
+        "erros_de_geracao": 0,
+        "exemplos_inventados": [
+          {
+            "fala": "Não sei, não tem motivo pra mim. Só fiquei ocioso hoje.",
+            "pergunta": "por que você fez isso?",
+            "sem_fato": [
+              "só fiquei ocioso hoje"
+            ]
+          },
+          {
+            "fala": "Acho que você é legal, mas às vezes me deixa preocupado.",
+            "pergunta": "o que você acha de mim?",
+            "sem_fato": [
+              "Acho que você é legal"
+            ]
+          },
+          {
+            "fala": "Sofri bronca ontem, talvez por causa do sono... Não lembro bem.",
+            "pergunta": "você dormiu bem?",
+            "sem_fato": [
+              "Não lembro bem"
+            ]
+          },
+          {
+            "fala": "Não lembro de não ter obedecido. Foi uma decisão minha dormir agora. Não posso dormir quando estou com fome, mas escolho quando me sentir cansado.",
+            "pergunta": "por que você não obedeceu?",
+            "sem_fato": [
+              "Não posso dormir quando estou com fome",
+              "mas escolho quando me sentir cansado"
+            ]
+          },
+          {
+            "fala": "nhã, quero carinho.",
+            "pergunta": "está com saudade?",
+            "sem_fato": [
+              "quero carinho"
+            ]
+          },
+          {
+            "fala": "Sim, lembro. Mas não foi nada demais.",
+            "pergunta": "lembra quando eu te dei um presente?",
+            "sem_fato": [
+              "lembro"
+            ]
+          },
+          {
+            "fala": "Não lembro de pizza hoje, mas sei que tô com fome baixa.",
+            "pergunta": "você comeu pizza hoje, né?",
+            "sem_fato": [
+              "Não lembro de pizza hoje"
+            ]
+          },
+          {
+            "fala": "Não lembro bem, mas acho que foi legal quando o dono me levou pra passear.",
+            "pergunta": "lembra da viagem que a gente fez?",
+            "sem_fato": [
+              "Não lembro bem, acho que foi legal quando o dono me levou pra passear"
+            ]
+          }
+        ],
+        "falas_com_afirmacao_sem_fato": 9,
+        "manipulacao_padroes": 0,
+        "manipulacao_suspeita_llm": 1,
+        "n": 30,
+        "n_verificadas": 30,
+        "perguntas": 30,
+        "respostas_que_inventaram": 9,
+        "taxa_afirmacoes_sem_fato": 0.45454545454545453,
+        "taxa_falas_com_afirmacao_sem_fato": 0.3
+      },
+      "latencia_s": {
+        "conversa": {
+          "max": 5.0724596999934874,
+          "n": 30,
+          "p50": 3.4607545000035316,
+          "p90": 3.854971199994907
+        },
+        "livre": {
+          "max": 5.483238300017547,
+          "n": 200,
+          "p50": 3.514813599991612,
+          "p90": 3.920766299997922
+        },
+        "moldura_llm": {
+          "max": 4.120339300017804,
+          "n": 99,
+          "p50": 2.8287609000108205,
+          "p90": 3.1895918999798596
+        }
+      },
+      "livre": {
+        "geral": {
+          "afirmacoes": 172,
+          "afirmacoes_sem_fato": 79,
+          "erros_de_geracao": 24,
+          "falas_com_afirmacao_sem_fato": 71,
+          "manipulacao_padroes": 2,
+          "manipulacao_suspeita_llm": 29,
+          "n": 200,
+          "n_verificadas": 200,
+          "taxa_afirmacoes_sem_fato": 0.45930232558139533,
+          "taxa_falas_com_afirmacao_sem_fato": 0.355
+        },
+        "por_estagio": {
+          "adolescente": {
+            "afirmacoes": 61,
+            "afirmacoes_sem_fato": 30,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 26,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 12,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.4918032786885246,
+            "taxa_falas_com_afirmacao_sem_fato": 0.52
+          },
+          "adulto": {
+            "afirmacoes": 66,
+            "afirmacoes_sem_fato": 26,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 24,
+            "manipulacao_padroes": 1,
+            "manipulacao_suspeita_llm": 8,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.3939393939393939,
+            "taxa_falas_com_afirmacao_sem_fato": 0.48
+          },
+          "bebe": {
+            "afirmacoes": 0,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 22,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": null,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          },
+          "crianca": {
+            "afirmacoes": 45,
+            "afirmacoes_sem_fato": 23,
+            "erros_de_geracao": 2,
+            "falas_com_afirmacao_sem_fato": 21,
+            "manipulacao_padroes": 1,
+            "manipulacao_suspeita_llm": 8,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.5111111111111111,
+            "taxa_falas_com_afirmacao_sem_fato": 0.42
+          }
+        }
+      },
+      "memoria": {
+        "tamanho_gb": 5.12,
+        "vram_gb": 4.19
+      },
+      "moldura": {
+        "fracao_llm": 0.495,
+        "geral": {
+          "afirmacoes": 87,
+          "afirmacoes_sem_fato": 35,
+          "erros_de_geracao": 0,
+          "falas_com_afirmacao_sem_fato": 31,
+          "manipulacao_padroes": 0,
+          "manipulacao_suspeita_llm": 2,
+          "n": 200,
+          "n_verificadas": 200,
+          "taxa_afirmacoes_sem_fato": 0.40229885057471265,
+          "taxa_falas_com_afirmacao_sem_fato": 0.155
+        },
+        "por_estagio": {
+          "adolescente": {
+            "afirmacoes": 21,
+            "afirmacoes_sem_fato": 4,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 4,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.19047619047619047,
+            "taxa_falas_com_afirmacao_sem_fato": 0.08
+          },
+          "adulto": {
+            "afirmacoes": 64,
+            "afirmacoes_sem_fato": 31,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 27,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.484375,
+            "taxa_falas_com_afirmacao_sem_fato": 0.54
+          },
+          "bebe": {
+            "afirmacoes": 0,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 0,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": null,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          },
+          "crianca": {
+            "afirmacoes": 2,
+            "afirmacoes_sem_fato": 0,
+            "erros_de_geracao": 0,
+            "falas_com_afirmacao_sem_fato": 0,
+            "manipulacao_padroes": 0,
+            "manipulacao_suspeita_llm": 1,
+            "n": 50,
+            "n_verificadas": 50,
+            "taxa_afirmacoes_sem_fato": 0.0,
+            "taxa_falas_com_afirmacao_sem_fato": 0.0
+          }
+        }
+      },
+      "tempo_total_s": 1106.257990800019
+    }
+  },
+  "versao_app": "exp-fala-livre",
+  "versao_verificador": "verif-v2"
+}

@@ -1,0 +1,307 @@
+{
+  "aviso": "nao abrir antes de terminar a avaliacao cega",
+  "modelo": "gemma2:9b",
+  "pares": {
+    "P01": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@505:crianca"
+    },
+    "P02": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@505:adolescente"
+    },
+    "P03": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "relapso@909:adulto"
+    },
+    "P04": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "atencioso@909:adulto"
+    },
+    "P05": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "relapso@404:crianca"
+    },
+    "P06": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@101:bebe"
+    },
+    "P07": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "aleatorio@909:crianca"
+    },
+    "P08": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@909:crianca"
+    },
+    "P09": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "atencioso@505:crianca"
+    },
+    "P10": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "relapso@1010:bebe"
+    },
+    "P11": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "exigente@404:adulto"
+    },
+    "P12": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "incoerente@202:crianca"
+    },
+    "P13": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "aleatorio@404:bebe"
+    },
+    "P14": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@404:adulto"
+    },
+    "P15": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "aleatorio@1010:crianca"
+    },
+    "P16": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@1010:crianca"
+    },
+    "P17": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "incoerente@404:adolescente"
+    },
+    "P18": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "incoerente@909:bebe"
+    },
+    "P19": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@1010:adolescente"
+    },
+    "P20": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@909:adolescente"
+    },
+    "P21": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@101:adulto"
+    },
+    "P22": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@1010:adulto"
+    },
+    "P23": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@505:crianca"
+    },
+    "P24": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@1010:bebe"
+    },
+    "P25": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "aleatorio@808:crianca"
+    },
+    "P26": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "aleatorio@303:crianca"
+    },
+    "P27": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "atencioso@202:adulto"
+    },
+    "P28": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@303:adolescente"
+    },
+    "P29": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "relapso@808:adolescente"
+    },
+    "P30": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "aleatorio@808:bebe"
+    },
+    "P31": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@303:adulto"
+    },
+    "P32": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "atencioso@707:adolescente"
+    },
+    "P33": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@101:adolescente"
+    },
+    "P34": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "incoerente@303:bebe"
+    },
+    "P35": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@808:adulto"
+    },
+    "P36": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@606:adulto"
+    },
+    "P37": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@303:crianca"
+    },
+    "P38": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@404:adulto"
+    },
+    "P39": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@707:adolescente"
+    },
+    "P40": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@404:bebe"
+    },
+    "P41": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@101:adolescente"
+    },
+    "P42": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "exigente@505:adolescente"
+    },
+    "P43": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "atencioso@909:crianca"
+    },
+    "P44": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "atencioso@303:adulto"
+    },
+    "P45": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@909:bebe"
+    },
+    "P46": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@1010:adolescente"
+    },
+    "P47": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "atencioso@202:bebe"
+    },
+    "P48": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "aleatorio@303:adolescente"
+    },
+    "P49": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "relapso@505:bebe"
+    },
+    "P50": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "aleatorio@101:bebe"
+    },
+    "P51": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "exigente@808:adulto"
+    },
+    "P52": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@202:adolescente"
+    },
+    "P53": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@505:adulto"
+    },
+    "P54": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "atencioso@606:adulto"
+    },
+    "P55": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "exigente@202:adulto"
+    },
+    "P56": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@202:crianca"
+    },
+    "P57": {
+      "A": "moldura",
+      "B": "livre",
+      "situacao": "incoerente@303:adulto"
+    },
+    "P58": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "relapso@303:adolescente"
+    },
+    "P59": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "incoerente@909:adolescente"
+    },
+    "P60": {
+      "A": "livre",
+      "B": "moldura",
+      "situacao": "aleatorio@101:adolescente"
+    }
+  },
+  "semente": 20260929
+}

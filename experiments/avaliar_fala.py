@@ -100,6 +100,10 @@ def avaliar(gerador: GeradorFala, motivos: list[tuple]) -> tuple[list[dict], dic
 
 
 def main(argv=None) -> int:
+    argv = sys.argv[1:] if argv is None else list(argv)
+    if "--livre" in argv:        # experimento exp-fala-livre: avaliacao em digilab_fala_livre/avaliacao.py
+        from digilab_fala_livre.avaliacao import main as main_livre
+        return main_livre([x for x in argv if x != "--livre"])
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--provedor", choices=("ollama", "claude"), default="ollama")
     ap.add_argument("--modelo", default=None)

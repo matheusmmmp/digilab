@@ -50,7 +50,7 @@ def test_nada_do_pet_importa_a_fala_livre():
 
 def test_fala_livre_so_usa_biblioteca_padrao_e_o_pet():
     permitidos = {"__future__", "ast", "dataclasses", "json", "time", "urllib", "urllib.parse", "urllib.request",
-                  "re", "unicodedata", "pathlib"}
+                  "re", "unicodedata", "pathlib", "argparse", "csv", "random", "statistics", "sys", "servidor.fala_llm"}
     for n in _imports(RAIZ / "digilab_fala_livre"):
         assert n in permitidos or n.startswith(".") or n.startswith("digilab"), n
 
