@@ -31,6 +31,14 @@
   --good:#4CC486; --warn:#E3A93A; --bad:#EE6B5F; --bar-bg:#252D3C;
 }
 *{box-sizing:border-box}
+/* palco de conferencia da Etapa 1 (TAREFA_INTERFACE_UP), so com #palco-up no endereco */
+.palco-up{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:12px}
+.palco-up h2{margin:0;font-size:16px}
+.palco-up p{margin:0;color:var(--muted);font-size:13px}
+.palco-fila{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.palco-fila figure{margin:0;display:grid;justify-items:center;gap:4px;padding:8px;border-radius:10px;background:var(--ground);border:1px solid var(--line)}
+.palco-fila canvas{image-rendering:pixelated;display:block}
+.palco-fila figcaption{font-size:12px;color:var(--muted);text-align:center;max-width:136px}
 [hidden]{display:none!important}
 body{background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 40px}
 .wrap{max-width:1080px;margin-inline:auto;display:grid;gap:20px}
@@ -242,6 +250,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
     <h1>DIGILAB</h1>
     <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
   </header>
+  <section id="palco-up" class="palco-up" hidden aria-label="Palco de conferência dos sprites do Digimon UP"></section>
 
   <p id="aviso-atlas" hidden style="color:var(--bad);font-weight:700"></p>
   <div class="grid">
@@ -459,7 +468,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 
   <footer>
     <span>Porte em JavaScript do motor Digilab v1: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</span>
-    <span><b>Versão local com sprites do Digimon World (Bandai), só para uso pessoal. Não publicar nem distribuir.</b> Rips: ícones por @placebo_yue, ovos por metaldodomon, emoções por Romsstar.</span>
+    <span><b>Versão local com sprites do Digimon UP e do Digimon World (Bandai), só para uso pessoal. Não publicar nem distribuir.</b> Digimon UP: quadros extraídos dos arquivos do jogo, com os ciclos de pose propostos pelo extrator (não são as animações oficiais). Digimon World: ícones por @placebo_yue, ovos por metaldodomon, emoções por Romsstar.</span>
   </footer>
 </div>
 
@@ -2340,23 +2349,126 @@ const gradeDe = est => est === "adolescente" ? "crianca" : est;
    ================================================================= */
 const ATLAS_URL = "../../Assets/digilab_atlas.png";
 const ATLAS = {"bebe_0":[0,0,14,12],"bebe_1":[15,0,14,12],"bebe_2":[30,0,14,12],"bebe_3":[45,0,14,12],"crianca_golpe_0":[60,0,15,15],"crianca_golpe_1":[76,0,15,15],"crianca_golpe_2":[92,0,15,15],"crianca_golpe_3":[108,0,15,15],"adulto_golpe_0":[124,0,15,16],"adulto_golpe_1":[140,0,15,16],"adulto_golpe_2":[156,0,15,16],"adulto_golpe_3":[172,0,15,16],"crianca_bloqueio_0":[188,0,15,16],"crianca_bloqueio_1":[204,0,15,16],"crianca_bloqueio_2":[220,0,15,16],"crianca_bloqueio_3":[236,0,15,16],"adulto_bloqueio_0":[0,17,16,16],"adulto_bloqueio_1":[17,17,16,16],"adulto_bloqueio_2":[34,17,16,16],"adulto_bloqueio_3":[51,17,16,16],"crianca_agarrao_0":[68,17,16,16],"crianca_agarrao_1":[85,17,16,16],"crianca_agarrao_2":[102,17,16,16],"crianca_agarrao_3":[119,17,16,16],"adulto_agarrao_0":[136,17,16,16],"adulto_agarrao_1":[153,17,16,16],"adulto_agarrao_2":[170,17,16,16],"adulto_agarrao_3":[187,17,16,16],"crianca_finta_0":[204,17,16,14],"crianca_finta_1":[221,17,16,14],"crianca_finta_2":[238,17,16,14],"crianca_finta_3":[0,34,16,14],"adulto_finta_0":[17,34,16,16],"adulto_finta_1":[34,34,16,16],"adulto_finta_2":[51,34,16,16],"adulto_finta_3":[68,34,16,16],"crianca_carga_0":[85,34,16,16],"crianca_carga_1":[102,34,16,16],"crianca_carga_2":[119,34,16,16],"crianca_carga_3":[136,34,16,16],"adulto_carga_0":[153,34,16,15],"adulto_carga_1":[170,34,16,15],"adulto_carga_2":[187,34,16,15],"adulto_carga_3":[204,34,16,15],"brasa_bebe_0":[221,34,14,12],"brasa_bebe_1":[236,34,14,12],"brasa_bebe_2":[0,51,14,12],"brasa_bebe_3":[15,51,14,12],"brasa_crianca_sereno_0":[30,51,15,15],"brasa_crianca_sereno_1":[46,51,15,15],"brasa_crianca_sereno_2":[62,51,15,15],"brasa_crianca_sereno_3":[78,51,15,15],"brasa_crianca_arisco_0":[94,51,17,16],"brasa_crianca_arisco_1":[112,51,17,16],"brasa_crianca_arisco_2":[130,51,17,16],"brasa_crianca_arisco_3":[148,51,17,16],"brasa_adolescente_brigao_0":[166,51,16,16],"brasa_adolescente_brigao_1":[183,51,16,16],"brasa_adolescente_brigao_2":[200,51,16,16],"brasa_adolescente_brigao_3":[217,51,16,16],"brasa_adolescente_guardiao_0":[234,51,15,16],"brasa_adolescente_guardiao_1":[0,68,15,16],"brasa_adolescente_guardiao_2":[16,68,15,16],"brasa_adolescente_guardiao_3":[32,68,15,16],"brasa_adolescente_cacador_0":[48,68,16,16],"brasa_adolescente_cacador_1":[65,68,16,16],"brasa_adolescente_cacador_2":[82,68,16,16],"brasa_adolescente_cacador_3":[99,68,16,16],"brasa_adolescente_colosso_0":[116,68,16,15],"brasa_adolescente_colosso_1":[133,68,16,15],"brasa_adolescente_colosso_2":[150,68,16,15],"brasa_adolescente_colosso_3":[167,68,16,15],"brasa_adulto_duelista_0":[184,68,16,16],"brasa_adulto_duelista_1":[201,68,16,16],"brasa_adulto_duelista_2":[218,68,16,16],"brasa_adulto_duelista_3":[235,68,16,16],"brasa_adulto_furioso_0":[0,85,16,16],"brasa_adulto_furioso_1":[17,85,16,16],"brasa_adulto_furioso_2":[34,85,16,16],"brasa_adulto_furioso_3":[51,85,16,16],"brasa_adulto_espelho_0":[68,85,16,14],"brasa_adulto_espelho_1":[85,85,16,14],"brasa_adulto_espelho_2":[102,85,16,14],"brasa_adulto_espelho_3":[119,85,16,14],"brasa_adulto_muralha_0":[136,85,15,16],"brasa_adulto_muralha_1":[152,85,15,16],"brasa_adulto_muralha_2":[168,85,15,16],"brasa_adulto_muralha_3":[184,85,15,16],"brasa_adulto_sentinela_0":[200,85,16,16],"brasa_adulto_sentinela_1":[217,85,16,16],"brasa_adulto_sentinela_2":[234,85,16,16],"brasa_adulto_sentinela_3":[0,102,16,16],"brasa_adulto_emboscador_0":[17,102,16,16],"brasa_adulto_emboscador_1":[34,102,16,16],"brasa_adulto_emboscador_2":[51,102,16,16],"brasa_adulto_emboscador_3":[68,102,16,16],"brasa_adulto_vigia_0":[85,102,16,16],"brasa_adulto_vigia_1":[102,102,16,16],"brasa_adulto_vigia_2":[119,102,16,16],"brasa_adulto_vigia_3":[136,102,16,16],"brasa_adulto_tita_0":[153,102,16,16],"brasa_adulto_tita_1":[170,102,16,16],"brasa_adulto_tita_2":[187,102,16,16],"brasa_adulto_tita_3":[204,102,16,16],"cirro_bebe_0":[221,102,14,14],"cirro_bebe_1":[236,102,14,14],"cirro_bebe_2":[0,119,14,14],"cirro_bebe_3":[15,119,14,14],"cirro_crianca_sereno_0":[30,119,16,15],"cirro_crianca_sereno_1":[47,119,16,15],"cirro_crianca_sereno_2":[64,119,16,15],"cirro_crianca_sereno_3":[81,119,16,15],"cirro_crianca_arisco_0":[98,119,16,16],"cirro_crianca_arisco_1":[115,119,16,16],"cirro_crianca_arisco_2":[132,119,16,16],"cirro_crianca_arisco_3":[149,119,16,16],"cirro_adolescente_brigao_0":[166,119,16,16],"cirro_adolescente_brigao_1":[183,119,16,16],"cirro_adolescente_brigao_2":[200,119,16,16],"cirro_adolescente_brigao_3":[217,119,16,16],"cirro_adolescente_guardiao_0":[234,119,16,16],"cirro_adolescente_guardiao_1":[0,136,16,16],"cirro_adolescente_guardiao_2":[17,136,16,16],"cirro_adolescente_guardiao_3":[34,136,16,16],"cirro_adolescente_cacador_0":[51,136,16,16],"cirro_adolescente_cacador_1":[68,136,16,16],"cirro_adolescente_cacador_2":[85,136,16,16],"cirro_adolescente_cacador_3":[102,136,16,16],"cirro_adolescente_colosso_0":[119,136,16,16],"cirro_adolescente_colosso_1":[136,136,16,16],"cirro_adolescente_colosso_2":[153,136,16,16],"cirro_adolescente_colosso_3":[170,136,16,16],"cirro_adulto_duelista_0":[187,136,16,16],"cirro_adulto_duelista_1":[204,136,16,16],"cirro_adulto_duelista_2":[221,136,16,16],"cirro_adulto_duelista_3":[238,136,16,16],"cirro_adulto_furioso_0":[0,153,16,16],"cirro_adulto_furioso_1":[17,153,16,16],"cirro_adulto_furioso_2":[34,153,16,16],"cirro_adulto_furioso_3":[51,153,16,16],"cirro_adulto_espelho_0":[68,153,16,15],"cirro_adulto_espelho_1":[85,153,16,15],"cirro_adulto_espelho_2":[102,153,16,15],"cirro_adulto_espelho_3":[119,153,16,15],"cirro_adulto_muralha_0":[136,153,15,16],"cirro_adulto_muralha_1":[152,153,15,16],"cirro_adulto_muralha_2":[168,153,15,16],"cirro_adulto_muralha_3":[184,153,15,16],"cirro_adulto_sentinela_0":[200,153,16,16],"cirro_adulto_sentinela_1":[217,153,16,16],"cirro_adulto_sentinela_2":[234,153,16,16],"cirro_adulto_sentinela_3":[0,170,16,16],"cirro_adulto_emboscador_0":[17,170,16,16],"cirro_adulto_emboscador_1":[34,170,16,16],"cirro_adulto_emboscador_2":[51,170,16,16],"cirro_adulto_emboscador_3":[68,170,16,16],"cirro_adulto_vigia_0":[85,170,17,14],"cirro_adulto_vigia_1":[103,170,17,14],"cirro_adulto_vigia_2":[121,170,17,14],"cirro_adulto_vigia_3":[139,170,17,14],"cirro_adulto_tita_0":[157,170,16,15],"cirro_adulto_tita_1":[174,170,16,15],"cirro_adulto_tita_2":[191,170,16,15],"cirro_adulto_tita_3":[208,170,16,15],"ferrugem_bebe_0":[225,170,14,14],"ferrugem_bebe_1":[240,170,14,14],"ferrugem_bebe_2":[0,187,14,14],"ferrugem_bebe_3":[15,187,14,14],"ferrugem_crianca_sereno_0":[30,187,15,15],"ferrugem_crianca_sereno_1":[46,187,15,15],"ferrugem_crianca_sereno_2":[62,187,15,15],"ferrugem_crianca_sereno_3":[78,187,15,15],"ferrugem_crianca_arisco_0":[94,187,15,16],"ferrugem_crianca_arisco_1":[110,187,15,16],"ferrugem_crianca_arisco_2":[126,187,15,16],"ferrugem_crianca_arisco_3":[142,187,15,16],"ferrugem_adolescente_brigao_0":[158,187,16,16],"ferrugem_adolescente_brigao_1":[175,187,16,16],"ferrugem_adolescente_brigao_2":[192,187,16,16],"ferrugem_adolescente_brigao_3":[209,187,16,16],"ferrugem_adolescente_guardiao_0":[226,187,16,16],"ferrugem_adolescente_guardiao_1":[0,204,16,16],"ferrugem_adolescente_guardiao_2":[17,204,16,16],"ferrugem_adolescente_guardiao_3":[34,204,16,16],"ferrugem_adolescente_cacador_0":[51,204,16,16],"ferrugem_adolescente_cacador_1":[68,204,16,16],"ferrugem_adolescente_cacador_2":[85,204,16,16],"ferrugem_adolescente_cacador_3":[102,204,16,16],"ferrugem_adolescente_colosso_0":[119,204,16,16],"ferrugem_adolescente_colosso_1":[136,204,16,16],"ferrugem_adolescente_colosso_2":[153,204,16,16],"ferrugem_adolescente_colosso_3":[170,204,16,16],"ferrugem_adulto_duelista_0":[187,204,16,16],"ferrugem_adulto_duelista_1":[204,204,16,16],"ferrugem_adulto_duelista_2":[221,204,16,16],"ferrugem_adulto_duelista_3":[238,204,16,16],"ferrugem_adulto_furioso_0":[0,221,16,16],"ferrugem_adulto_furioso_1":[17,221,16,16],"ferrugem_adulto_furioso_2":[34,221,16,16],"ferrugem_adulto_furioso_3":[51,221,16,16],"ferrugem_adulto_espelho_0":[68,221,16,16],"ferrugem_adulto_espelho_1":[85,221,16,16],"ferrugem_adulto_espelho_2":[102,221,16,16],"ferrugem_adulto_espelho_3":[119,221,16,16],"ferrugem_adulto_muralha_0":[136,221,16,15],"ferrugem_adulto_muralha_1":[153,221,16,15],"ferrugem_adulto_muralha_2":[170,221,16,15],"ferrugem_adulto_muralha_3":[187,221,16,15],"ferrugem_adulto_sentinela_0":[204,221,16,16],"ferrugem_adulto_sentinela_1":[221,221,16,16],"ferrugem_adulto_sentinela_2":[238,221,16,16],"ferrugem_adulto_sentinela_3":[0,238,16,16],"ferrugem_adulto_emboscador_0":[17,238,17,15],"ferrugem_adulto_emboscador_1":[35,238,17,15],"ferrugem_adulto_emboscador_2":[53,238,17,15],"ferrugem_adulto_emboscador_3":[71,238,17,15],"ferrugem_adulto_vigia_0":[89,238,16,15],"ferrugem_adulto_vigia_1":[106,238,16,15],"ferrugem_adulto_vigia_2":[123,238,16,15],"ferrugem_adulto_vigia_3":[140,238,16,15],"ferrugem_adulto_tita_0":[157,238,15,16],"ferrugem_adulto_tita_1":[173,238,15,16],"ferrugem_adulto_tita_2":[189,238,15,16],"ferrugem_adulto_tita_3":[205,238,15,16],"limo_bebe_0":[221,238,15,15],"limo_bebe_1":[237,238,15,15],"limo_bebe_2":[0,255,15,15],"limo_bebe_3":[16,255,15,15],"limo_crianca_sereno_0":[32,255,16,16],"limo_crianca_sereno_1":[49,255,16,16],"limo_crianca_sereno_2":[66,255,16,16],"limo_crianca_sereno_3":[83,255,16,16],"limo_crianca_arisco_0":[100,255,15,15],"limo_crianca_arisco_1":[116,255,15,15],"limo_crianca_arisco_2":[132,255,15,15],"limo_crianca_arisco_3":[148,255,15,15],"limo_adolescente_brigao_0":[164,255,16,16],"limo_adolescente_brigao_1":[181,255,16,16],"limo_adolescente_brigao_2":[198,255,16,16],"limo_adolescente_brigao_3":[215,255,16,16],"limo_adolescente_guardiao_0":[232,255,16,15],"limo_adolescente_guardiao_1":[0,272,16,15],"limo_adolescente_guardiao_2":[17,272,16,15],"limo_adolescente_guardiao_3":[34,272,16,15],"limo_adolescente_cacador_0":[51,272,16,16],"limo_adolescente_cacador_1":[68,272,16,16],"limo_adolescente_cacador_2":[85,272,16,16],"limo_adolescente_cacador_3":[102,272,16,16],"limo_adolescente_colosso_0":[119,272,16,16],"limo_adolescente_colosso_1":[136,272,16,16],"limo_adolescente_colosso_2":[153,272,16,16],"limo_adolescente_colosso_3":[170,272,16,16],"limo_adulto_duelista_0":[187,272,16,16],"limo_adulto_duelista_1":[204,272,16,16],"limo_adulto_duelista_2":[221,272,16,16],"limo_adulto_duelista_3":[238,272,16,16],"limo_adulto_furioso_0":[0,289,16,15],"limo_adulto_furioso_1":[17,289,16,15],"limo_adulto_furioso_2":[34,289,16,15],"limo_adulto_furioso_3":[51,289,16,15],"limo_adulto_espelho_0":[68,289,15,14],"limo_adulto_espelho_1":[84,289,15,14],"limo_adulto_espelho_2":[100,289,15,14],"limo_adulto_espelho_3":[116,289,15,14],"limo_adulto_muralha_0":[132,289,16,15],"limo_adulto_muralha_1":[149,289,16,15],"limo_adulto_muralha_2":[166,289,16,15],"limo_adulto_muralha_3":[183,289,16,15],"limo_adulto_sentinela_0":[200,289,16,16],"limo_adulto_sentinela_1":[217,289,16,16],"limo_adulto_sentinela_2":[234,289,16,16],"limo_adulto_sentinela_3":[0,306,16,16],"limo_adulto_emboscador_0":[17,306,16,16],"limo_adulto_emboscador_1":[34,306,16,16],"limo_adulto_emboscador_2":[51,306,16,16],"limo_adulto_emboscador_3":[68,306,16,16],"limo_adulto_vigia_0":[85,306,16,16],"limo_adulto_vigia_1":[102,306,16,16],"limo_adulto_vigia_2":[119,306,16,16],"limo_adulto_vigia_3":[136,306,16,16],"limo_adulto_tita_0":[153,306,16,16],"limo_adulto_tita_1":[170,306,16,16],"limo_adulto_tita_2":[187,306,16,16],"limo_adulto_tita_3":[204,306,16,16],"ovo0":[221,306,26,30],"ovo1":[0,337,26,30],"ovo2":[27,337,26,30],"ovo3":[54,337,26,30],"carne":[81,337,15,15],"coco":[97,337,15,17],"raiva":[113,337,16,15],"gota":[130,337,5,12],"zz":[136,337,25,7],"caveira":[162,337,15,14]};
+/* TAREFA_INTERFACE_UP, Etapa 1: quadros do Digimon UP (Bandai; so uso pessoal e local, mesma regra).
+   Atlas e recortes em D:\Trab\digilab\Assets (gerar_atlas_up.py, fora do repo). SPRITES_UP = false
+   volta ao atlas antigo (Digimon World) para comparar; o caminho antigo sai na Etapa 4.
+   Animacao: so o grupo idle de cada forma, 120 ms por quadro (ciclos do extrator, nao os clipes
+   oficiais); com prefers-reduced-motion, o primeiro quadro parado. As telas antigas desenham em
+   unidades do LCD (80x56) e da arena (96x48); com o UP o canvas tem K pixels por unidade (K inteiro,
+   pelo espaco na tela) e fica no tamanho exato, sem esticar pelo CSS; o sprite entra em escala
+   inteira de pixel do aparelho (docs/UI_GUIDELINES.md, secao 5). */
+const SPRITES_UP = true;
+const ATLAS_UP_URL = "../../Assets/digilab_atlas_up.json";
+const movimentoReduzido = matchMedia("(prefers-reduced-motion: reduce)");
+/* escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */
+const escalaSprite = () => Math.max(1, Math.floor(devicePixelRatio || 1));
+/* canvas em unidades uw x uh com K inteiro por unidade; so redimensiona quando K muda (limpa o canvas) */
+function ajustarTela(cv, uw, uh){
+  if (!SPRITES_UP){ cv.K = 1; return; }
+  const pai = cv.parentElement, cs = getComputedStyle(pai);
+  const livre = pai.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  if (!(livre > 0)){ if (!cv.K){ cv.K = 4; cv.width = uw * 4; cv.height = uh * 4; } return; }
+  const dpr = devicePixelRatio || 1, K = Math.max(1, Math.floor(livre * dpr / uw)), larg = (uw * K / dpr) + "px";
+  if (cv.K === K && cv.width === uw * K && cv.style.width === larg) return;
+  cv.K = K; cv.width = uw * K; cv.height = uh * K;
+  cv.style.width = larg; cv.style.height = (uh * K / dpr) + "px"; cv.style.marginInline = "auto";
+}
 const atlasImg = new Image();
-let atlasOk = false;
-atlasImg.onload = () => { atlasOk = true; evoCache.clear(); evoChave = null; if (typeof paneAtual !== "undefined" && paneAtual === "evolucao") renderEvolucao(); if (typeof paneAtual !== "undefined" && paneAtual === "arena") arenaPreview(); if (typeof paneAtual !== "undefined" && paneAtual === "catalogo") renderCatalogo(); };
-atlasImg.onerror = () => {
+let atlasOk = false, UPA = null;
+function atlasCarregou(){ atlasOk = true; evoCache.clear(); evoChave = null; if (typeof paneAtual !== "undefined" && paneAtual === "evolucao") renderEvolucao(); if (typeof paneAtual !== "undefined" && paneAtual === "arena") arenaPreview(); if (typeof paneAtual !== "undefined" && paneAtual === "catalogo") renderCatalogo(); if (typeof paneAtual !== "undefined" && paneAtual === "campanha") renderCampanha(); if (typeof motor !== "undefined" && motor) desenharLCD(); palcoUp(); }
+function atlasFalhou(url, err){
   const b = document.getElementById("aviso-atlas");
   b.hidden = false;
-  b.textContent = "Atlas de sprites não carregou (" + ATLAS_URL + "). Rode python gerar_atlas.py em D:\Trab\digilab\Assets. Mostrando os placeholders.";
-  console.error("falha ao carregar atlas", ATLAS_URL);
-};
-atlasImg.src = ATLAS_URL;
+  b.textContent = "Atlas de sprites não carregou (" + url + "). Rode python " + (SPRITES_UP ? "gerar_atlas_up.py" : "gerar_atlas.py") + " em D:\Trab\digilab\Assets. Mostrando os placeholders.";
+  console.error("falha ao carregar atlas", url, err || "");
+}
+atlasImg.onload = atlasCarregou;
+if (SPRITES_UP){
+  fetch(ATLAS_UP_URL).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }).then(j => {
+    UPA = j; atlasImg.onerror = () => atlasFalhou(ATLAS_UP_URL.replace(/[^/]+$/, j.atlas));
+    atlasImg.src = ATLAS_UP_URL.replace(/[^/]+$/, j.atlas);
+  }).catch(err => atlasFalhou(ATLAS_UP_URL, err));
+} else {
+  atlasImg.onerror = () => atlasFalhou(ATLAS_URL);
+  atlasImg.src = ATLAS_URL;
+}
+/* chave do UP: o nome antigo traz o quadro no fim (_0.._3); o UP so tem o ciclo idle */
+function chaveUp(nome){
+  if (UPA.sprites[nome] || UPA.pecas[nome]) return nome;
+  const b = nome.replace(/_\d$/, "");
+  if (UPA.sprites[b]) return b;
+  throw new Error("sprite desconhecido: " + nome);
+}
+/* tamanho do sprite em pixels nativos: [x, y, largura, altura]; no UP, a caixa comum do idle */
+function dimSprite(nome){
+  if (!SPRITES_UP){ const r = ATLAS[nome]; if (!r) throw new Error("sprite desconhecido: " + nome); return r; }
+  const k = chaveUp(nome), s = UPA.sprites[k];
+  return s ? [0, 0, s.caixa[0], s.caixa[1]] : UPA.pecas[k];
+}
+const indiceQuadroUp = (s, parado) => parado || movimentoReduzido.matches ? 0 : Math.floor(performance.now() / UPA.ms_por_quadro) % s.quadros.length;
+/* forma sombria: o mesmo quadro com veu roxo (#7B3FB8) e contorno de 1 px (proposta aprovada na Etapa 0) */
+const cacheSombrio = new Map();
+function quadroSombrio(q){
+  const ch = q.join(",");
+  if (cacheSombrio.has(ch)) return cacheSombrio.get(ch);
+  const [sx, sy, w, h] = q, novo = (cw, chh) => { const c = document.createElement("canvas"); c.width = cw; c.height = chh; return [c, c.getContext("2d")]; };
+  const [base, b] = novo(w, h), [sil, si] = novo(w, h), [c, g] = novo(w + 2, h + 2);
+  b.drawImage(atlasImg, sx, sy, w, h, 0, 0, w, h);
+  b.globalCompositeOperation = "source-atop"; b.fillStyle = "rgba(123,63,184,.5)"; b.fillRect(0, 0, w, h);
+  si.drawImage(atlasImg, sx, sy, w, h, 0, 0, w, h);
+  si.globalCompositeOperation = "source-in"; si.fillStyle = "#7B3FB8"; si.fillRect(0, 0, w, h);
+  for (const [dx, dy] of [[0, 1], [2, 1], [1, 0], [1, 2]]) g.drawImage(sil, dx, dy);
+  g.drawImage(base, 1, 1);
+  cacheSombrio.set(ch, c); return c;
+}
+/* desenha no pixel do canvas (ignora a escala do contexto); escala so inteira */
+function spriteUp(ctx, nome, x, y, espelho, opc = {}){
+  const k = chaveUp(nome), s = UPA.sprites[k], e = opc.escala || 1;
+  if (!Number.isInteger(e) || e < 1) throw new Error("escala de sprite so inteira: " + e);
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
+  x = Math.round(x); y = Math.round(y);
+  if (!s){ const r = UPA.pecas[k]; ctx.drawImage(atlasImg, r[0], r[1], r[2], r[3], x, y, r[2] * e, r[3] * e); ctx.restore(); return r; }
+  const [W, H] = s.caixa, q = s.quadros[indiceQuadroUp(s, opc.parado)];
+  if (espelho){ ctx.translate(x + W * e, y); ctx.scale(-1, 1); x = 0; y = 0; }
+  if (opc.sombria) ctx.drawImage(quadroSombrio(q), 0, 0, q[2] + 2, q[3] + 2, x + (q[4] - 1) * e, y + (q[5] - 1) * e, (q[2] + 2) * e, (q[3] + 2) * e);
+  else ctx.drawImage(atlasImg, q[0], q[1], q[2], q[3], x + q[4] * e, y + q[5] * e, q[2] * e, q[3] * e);
+  ctx.restore();
+  return [0, 0, W, H];
+}
 function sprite(ctx, nome, x, y, espelho){
+  if (SPRITES_UP) return spriteUp(ctx, nome, x, y, espelho);
   const r = ATLAS[nome];
   if (!r) throw new Error("sprite desconhecido: " + nome);
   if (espelho){ ctx.save(); ctx.translate(x + r[2], y); ctx.scale(-1, 1); ctx.drawImage(atlasImg, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3]); ctx.restore(); }
   else ctx.drawImage(atlasImg, r[0], r[1], r[2], r[3], x, y, r[2], r[3]);
   return r;
 }
+/* palco de conferencia da Etapa 1: 4 bebes, 1 adulto por especie e 1 sombria, animando (#palco-up) */
+let palcoTimer = null;
+function palcoUp(){
+  const sec = document.getElementById("palco-up");
+  if (!sec || location.hash !== "#palco-up" || !SPRITES_UP || !atlasOk) return;
+  const bebes = ["brasa", "cirro", "ferrugem", "limo"].map(esp => ({esp, est:"bebe"}));
+  const adultos = [{esp:"brasa", est:"adulto", linha:"brigao", adulta:"furioso"}, {esp:"cirro", est:"adulto", linha:"guardiao", adulta:"espelho"},
+    {esp:"ferrugem", est:"adulto", linha:"colosso", adulta:"tita"}, {esp:"limo", est:"adulto", linha:"guardiao", adulta:"muralha"},
+    {esp:"ferrugem", est:"adulto", linha:"brigao", adulta:"devastador"}];
+  const filas = [["Bebês, 2×", 2, bebes], ["Um adulto por espécie e uma forma sombria, 1×", 1, adultos]];
+  sec.hidden = false;
+  sec.innerHTML = `<h2>Palco de conferência: Digimon UP</h2><p>Grupo idle de cada forma a ${UPA.ms_por_quadro} ms por quadro. São ciclos de pose propostos pelo extrator, não as animações oficiais. A sombria usa o sprite da forma base com véu roxo e contorno.</p>`
+    + filas.map(([t, e, fs], i) => `<h2>${t}</h2><div class="palco-fila">${fs.map((f, j) => {
+      const k = chaveSprite(f), sp = UPA.sprites[chaveUp(k)], somb = !!SOMBRIA[f.adulta];
+      const rev = sp.revisado.filter(Boolean).length;
+      return `<figure><canvas data-k="${k}" data-e="${e}" data-s="${somb ? 1 : 0}" width="${(sp.caixa[0] + 2) * e}" height="${(sp.caixa[1] + 2) * e}"></canvas>
+        <figcaption>${nomeForma(f)}${somb ? " · sombria" : ""}<br>${sp.digimon.replace(/_/g, " ")} · grupo ${sp.grupo}, ${sp.quadros.length} quadros${rev ? `, ${rev} com orientação conferida à mão` : ""}</figcaption></figure>`; }).join("")}</div>`).join("");
+  const telas = [...sec.querySelectorAll("canvas")];
+  const desenhar1 = () => { for (const c of telas){ const g = c.getContext("2d"), e = +c.dataset.e; g.clearRect(0, 0, c.width, c.height);
+    spriteUp(g, c.dataset.k, e, e, false, {escala:e, sombria:c.dataset.s === "1"}); } };
+  clearInterval(palcoTimer); palcoTimer = setInterval(desenhar1, UPA.ms_por_quadro); desenhar1();
+}
+addEventListener("hashchange", palcoUp);
+/* chave do sprite de um NPC da campanha ou de um bot classico */
+const spriteNPC = n => SPRITES_UP ? n.k : n.sprite;
+const spriteBot = nome => SPRITES_UP ? "bot_" + nome : BOT_SPRITE[nome];
 /* forma travada: vem da ultima evolucao registrada no motor (arvore V2.1) */
 function formaDe(m){ return m.forma; }
 function corForma(m){ return corDominante(m.tracos); }
@@ -2399,10 +2511,13 @@ function exemplo(){
 
 /* ------------------------------------------------ LCD */
 const lcd = document.getElementById("lcd"), cx = lcd.getContext("2d");
+ajustarTela(lcd, 80, 56);
 let quadro = 0;
 function desenharLCD(){
   const e = motor.e, noite = eNoite(e.tick % TPD);
   const W = 80, H = 56, CHAO = 46;
+  ajustarTela(lcd, 80, 56);
+  cx.setTransform(lcd.K, 0, 0, lcd.K, 0, 0); cx.imageSmoothingEnabled = false;
   cx.fillStyle = noite ? "#1F2A4A" : "#BFE3D6"; cx.fillRect(0,0,W,H);
   if (noite){ cx.fillStyle = "#E8ECFF"; for (const [x,y] of [[8,6],[22,12],[40,5],[57,10],[70,4],[14,20],[64,22]]) if ((quadro + x) % 23 !== 0) cx.fillRect(x,y,1,1);
     cx.fillStyle = "#F5E7A8"; cx.fillRect(66,8,5,5); cx.fillStyle = "#1F2A4A"; cx.fillRect(68,7,4,4); }
@@ -2411,15 +2526,18 @@ function desenharLCD(){
   cx.fillStyle = noite ? "#26324F" : "#7BB388"; for (let x=(quadro%2);x<W;x+=4) cx.fillRect(x,CHAO+3,2,1);
 
   const pal = paleta(corForma(motor));
-  if (atlasOk) for (let i=0;i<e.sujeira;i++) sprite(cx, "coco", POS_COCO[i], CHAO-15);
+  if (atlasOk && !SPRITES_UP) for (let i=0;i<e.sujeira;i++) sprite(cx, "coco", POS_COCO[i], CHAO-15);
   else for (let i=0;i<e.sujeira;i++) desenhar(cx, S.coco, 4 + i*8 + (i>2?34:0), CHAO-4, {...pal, d:"#8A5A2B"});
 
   if (nascendo > 0){
     const oscil = nascendo % 2 ? 1 : -1;
-    if (atlasOk) sprite(cx, OVO[motor.especie], 27 + oscil, CHAO-30+2);
+    if (atlasOk && SPRITES_UP){ const r = dimSprite(OVO[motor.especie]), e = escalaSprite();
+      spriteUp(cx, OVO[motor.especie], (W*lcd.K - r[2]*e)/2 + oscil*lcd.K, (CHAO+2)*lcd.K - r[3]*e, false, {escala:e}); }
+    else if (atlasOk) sprite(cx, OVO[motor.especie], 27 + oscil, CHAO-30+2);
     else desenhar(cx, S.ovo, 34 + oscil, CHAO-14+2, pal);
     nascendo--; quadro++; return;
   }
+  if (atlasOk && SPRITES_UP){ desenharLCDUp(e, W, CHAO, noite); return; }
   if (atlasOk){ desenharLCDSprite(e, W, CHAO, noite); return; }
   const g = S[gradeDe(motor.estagioAtual)];
   const larg = Math.max(...g.map(l => l.length)), alt = g.length;
@@ -2464,6 +2582,28 @@ function desenharLCDSprite(e, W, CHAO, noite){
     cx.fillStyle = noite ? "#E8ECFF" : "#FFFFFF"; cx.fillRect(bx-1, by-1, 9, ic.length + 2);
     desenhar(cx, ic, bx, by, paleta(corForma(motor))); }
   if (e.saude < .3) sprite(cx, "caveira", 1, 1);
+  quadro++;
+}
+
+/* UP: posicoes em unidades do LCD (como antes), sprite no tamanho nativo; a caixa do idle e fixa,
+   entao o pet nao pula entre quadros. Sem clipe de sono, comer ou chamar: o idle para no quadro 0
+   dormindo e os icones sao os placeholders originais (os emotes do UP entram nos baloes, Etapa 4). */
+function desenharLCDUp(e, W, CHAO, noite){
+  const a = motor.acao, nome = digimon(motor), r = dimSprite(nome), esc = escalaSprite(), w = r[2] * esc / lcd.K, h = r[3] * esc / lcd.K;
+  let x = W/2 - w/2, y = CHAO - h + 2;
+  if (a === "explorar") x += Math.round(Math.sin(quadro/3) * 14);
+  else if (a === "brincar") { x += Math.round(Math.sin(quadro/2) * 6); y -= (quadro % 4 < 2) ? 3 : 0; }
+  /* fora da luta, sem espelhar (UI_GUIDELINES, secao 5) */
+  spriteUp(cx, nome, x * lcd.K, y * lcd.K, false, {parado: a === "dormir", sombria: motor.sombria, escala: esc});
+  const pal = paleta(corForma(motor));
+  let icone = null;
+  if (flash && flash.ate > performance.now()) icone = flash.icone;
+  else icone = { dormir:"zz", chamar_atencao:"exclam", emburrar:"raiva", brincar:"nota", explorar:"pergunta", comer:"carne" }[a] || null;
+  if (icone){ const ic = S[icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
+    const bx = Math.round(Math.min(W - 9, x + w - 1)), by = Math.round(Math.max(1, y - 9));
+    cx.fillStyle = noite ? "#E8ECFF" : "#FFFFFF"; cx.fillRect(bx-1, by-1, 9, ic.length + 2);
+    desenhar(cx, ic, bx, by, pal); }
+  if (e.saude < .3){ cx.fillStyle = "#C8443A"; cx.fillRect(2,2,3,3); }
   quadro++;
 }
 
@@ -2868,14 +3008,14 @@ function lutadorPet(m, rotulo, absoluto = false){
 }
 function lutadorBot(nome){
   const n = NPC[nome];
-  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total, n.estagio || "adulto"), sprite:n.sprite,
+  if (n) return {nome:"Rival " + n.nome, estilo:estiloBot(nome), cond:perfilNPC(n.total, n.estagio || "adulto"), sprite:spriteNPC(n),
                  grade:n.grade || "adulto", cor:n.cor, estagioFala:n.estagio || "adulto"};
   if (BOTS_V21[nome]){
     const f = formaRival(nome);
     return {nome:"Rival " + nomeForma(f), estilo:estiloBot(nome), cond:perfilDe(f, caraterCanonico(nome)), sprite:chaveSprite(f),
             grade:"adulto", cor:"golpe", estagioFala:"adulto"};
   }
-  return {nome:"Rival " + NOME_BOT[nome], estilo:estiloBot(nome), cond:perfilNeutro(), sprite:BOT_SPRITE[nome],
+  return {nome:"Rival " + NOME_BOT[nome], estilo:estiloBot(nome), cond:perfilNeutro(), sprite:spriteBot(nome),
           grade:nome === "aleatorio" ? "bebe" : "adulto", cor:BOT_TRACO[nome], estagioFala:"adulto"};
 }
 function rotuloCond(c){
@@ -2933,6 +3073,7 @@ $("gambits").addEventListener("click", ev => {
 
 /* ------------------------------------------------ arena V2 */
 const acv = $("arenacv"), actx = acv.getContext("2d");
+ajustarTela(acv, 96, 48);
 const XS = [[38, 58], [24, 72], [10, 86]];   // centro do seu pet e do rival por distancia
 function quadroLutador(tr, lado){
   if (!tr) return 0;
@@ -2941,6 +3082,15 @@ function quadroLutador(tr, lado){
   return ["golpe_rapido","disparo","pesado","preparar_pesado"].includes(a) ? 2 : 0;
 }
 function desenharLutador(L, cx, q, esquerda){
+  if (atlasOk && SPRITES_UP && L.sprite){
+    /* UP: so o idle; nocaute (q 3) para no quadro 0 e fica apagado. Os sprites do UP olham para a
+       direita (os antigos olhavam para a esquerda): aqui quem e espelhado e o rival */
+    const r = dimSprite(L.sprite), e = escalaSprite(), K = acv.K;
+    if (q === 3) actx.globalAlpha = .45;
+    spriteUp(actx, L.sprite, cx * K - r[2]*e/2, 40 * K - r[3]*e, !esquerda, {parado: q === 3, sombria: L.sombra, escala: e});
+    actx.globalAlpha = 1;
+    return r[3] * e / K;
+  }
   if (atlasOk && L.sprite){
     const nome = L.sprite + "_" + q, r = ATLAS[nome];
     if (L.sombra) actx.filter = "brightness(.55) saturate(.4) hue-rotate(250deg)";
@@ -2952,7 +3102,11 @@ function desenharLutador(L, cx, q, esquerda){
   desenhar(actx, g, Math.round(cx - w/2), 40 - g.length, paleta(L.cor), {espelho:!esquerda, olhosFechados:q === 3});
   return g.length;
 }
+let ultimaArena = null;
 function desenharArenaV2(A, B, E, tr){
+  ultimaArena = [A, B, E, tr];
+  ajustarTela(acv, 96, 48);
+  actx.setTransform(acv.K, 0, 0, acv.K, 0, 0); actx.imageSmoothingEnabled = false;
   actx.fillStyle = "#1F2A4A"; actx.fillRect(0,0,96,48);
   actx.fillStyle = "#2E3B5E"; actx.fillRect(0,38,96,10);
   actx.fillStyle = "#3A4870"; for (let x=0;x<96;x+=6) actx.fillRect(x,41,3,1);
@@ -2997,7 +3151,7 @@ function imagemChave(nome){
   const chave = `${atlasOk ? "a" : "p"}|${nome}`;
   if (evoCache.has(chave)) return evoCache.get(chave);
   const c = document.createElement("canvas"), ctx = c.getContext("2d");
-  if (atlasOk && ATLAS[nome]){ const r = ATLAS[nome]; c.width = r[2]; c.height = r[3]; sprite(ctx, nome, 0, 0); }
+  if (atlasOk){ const r = dimSprite(nome); c.width = r[2]; c.height = r[3]; if (SPRITES_UP) spriteUp(ctx, nome, 0, 0, false, {parado:true}); else sprite(ctx, nome, 0, 0); }
   else { const g = S.adulto; c.width = Math.max(...g.map(l => l.length)); c.height = g.length; desenhar(ctx, g, 0, 0, paleta("carga")); }
   const url = c.toDataURL(); evoCache.set(chave, url); return url;
 }
@@ -3056,7 +3210,7 @@ function renderCampanha(){
     h += `<g class="${cls}" data-lugar="${i}" tabindex="0" role="button" aria-label="${i + 1}. ${L.nome}: ${quem}, ${st}">
       <circle class="pulso" cx="${L.x}" cy="${L.y}" r="21"/>
       <circle class="anel" cx="${L.x}" cy="${L.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
-      <image href="${imagemChave(c.sprite + "_0")}" x="${L.x - 12}" y="${L.y - 12}" width="24" height="24" style="image-rendering:pixelated"/>
+      <image href="${imagemChave(spriteNPC(c) + "_0")}" x="${L.x - 12}" y="${L.y - 12}" width="24" height="24" style="image-rendering:pixelated"/>
       ${L.rivais.length > 1 ? `<g transform="translate(${L.x - 26},${L.y - 22})"><circle cx="6" cy="6" r="7" fill="#2F47A6"/><text x="6" y="9.5" text-anchor="middle" style="fill:#fff;font-size:9px">${L.rivais.length}</text></g>` : ""}
       ${aberto ? "" : `<g transform="translate(${L.x + 9},${L.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
       ${vit ? `<g transform="translate(${L.x + 10},${L.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
@@ -3202,7 +3356,7 @@ function imagemForma(f){
   const chave = `${atlasOk ? "a" : "p"}|${nome}`;
   if (evoCache.has(chave)) return evoCache.get(chave);
   const c = document.createElement("canvas"), ctx = c.getContext("2d");
-  if (atlasOk && ATLAS[nome]){ const r = ATLAS[nome]; c.width = r[2]; c.height = r[3]; sprite(ctx, nome, 0, 0); }
+  if (atlasOk){ const r = dimSprite(nome); c.width = r[2]; c.height = r[3]; if (SPRITES_UP) spriteUp(ctx, nome, 0, 0, false, {parado:true}); else sprite(ctx, nome, 0, 0); }
   else {
     const g = S[f.est === "ovo" ? "ovo" : gradeDe(f.est)];
     c.width = Math.max(...g.map(l => l.length)); c.height = g.length; desenhar(ctx, g, 0, 0, paleta("golpe"));
@@ -3472,7 +3626,9 @@ setInterval(() => {
     renderTudo();
     if (performance.now() - ultimoSalvo > 2000){ salvar(); ultimoSalvo = performance.now(); } }
 }, 100);
-setInterval(desenharLCD, 125);
+setInterval(desenharLCD, SPRITES_UP ? 120 : 125);
+/* UP: a arena anima o idle entre os turnos (so redesenha o ultimo estado; nada do motor muda) */
+if (SPRITES_UP) setInterval(() => { if (atlasOk && ultimaArena && acv.offsetParent) desenharArenaV2(...ultimaArena); }, 120);
 
 /* celular: botao para voltar a tela do pet quando ela sai da vista */
 (() => {
