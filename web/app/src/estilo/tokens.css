@@ -1,0 +1,47 @@
+/* Tokens da direcao Digimon UP (docs/UI_GUIDELINES.md; mesmos valores do digilab_sprites.html).
+   Tema: prefers-color-scheme, sobreposto por data-tema="claro|escuro" no <html>. */
+:root{
+  --dl-bg:#E8F0FB; --dl-hex:#D4E3F7; --dl-surface:#FFFFFF; --dl-surface-2:#F4F8FE;
+  --dl-border:#9FC2EF; --dl-border-shadow:#7FA6DC; --dl-navy:#173A8A; --dl-navy-deep:#0F2A66;
+  --dl-action:#2C73E0; --dl-action-press:#1B54B4; --dl-text:#13244D; --dl-text-2:#3A5288;
+  --dl-need:#E5489F; --dl-learned:#6FE3FF; --dl-learned-bg:#0F3A86; --dl-highlight:#FFD23F; --dl-highlight-ink:#3B2A00;
+  --dl-ok:#3FCF6A; --dl-force:#FFCC33; --dl-force-ink:#1A1A1A; --dl-dark:#7B3FB8;
+  --dl-disabled:#C7D3E6; --dl-disabled-ink:#56657F;
+  /* derivados (fora da tabela do guia; aqui para nao espalhar cor pelos componentes) */
+  --dl-rim:#FFFFFF;
+  /* tinta sobre acao e necessidade: branco nao passa 4,5:1 no rosa (3,65) nem no azul do tema escuro (3,09) */
+  --dl-action-ink:#FFFFFF; --dl-need-ink:#0B1636;
+  --dl-sec-bg:#FFFFFF; --dl-sec-ink:#173A8A; --dl-sec-edge:#173A8A; --dl-sec-press:#E8F0FB; --dl-sec-shadow:#C7D8F5;
+  --dl-none-ink:#56657F; --dl-none-edge:#8A9AC0; --dl-none-bg:#F1F5FB;
+  --dl-dark-bg:#2A1440; --dl-dark-ink:#E8DCF5;
+  --dl-erro:#C8443A;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%23D4E3F7' stroke-width='1.5'/%3E%3C/svg%3E");
+  --dl-f-num:"Rubik", system-ui, sans-serif;
+  --dl-f-texto:"M PLUS Rounded 1c", system-ui, sans-serif;
+  --dl-f-lcd:"DotGothic16", ui-monospace, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-tema="claro"]){
+    color-scheme:dark;
+    --dl-bg:#0B1636; --dl-hex:#1B3163; --dl-surface:#152A5C; --dl-surface-2:#1B3470;
+    --dl-border:#2C5BBD; --dl-border-shadow:#0F2A66; --dl-navy:#173A8A; --dl-navy-deep:#0A1D4A;
+    --dl-action:#4F93F2; --dl-action-press:#2C73E0; --dl-text:#E6EEFF; --dl-text-2:#B4C6EC;
+    --dl-need:#FF7FC0; --dl-ok:#4BE07E; --dl-dark:#A56BE0; --dl-disabled:#2A3A60; --dl-disabled-ink:#8795B3;
+    --dl-rim:#152A5C; --dl-action-ink:#0B1636; --dl-sec-bg:#1B3470; --dl-sec-ink:#E6EEFF; --dl-sec-edge:#4F93F2; --dl-sec-press:#152A5C; --dl-sec-shadow:#0F2A66;
+    --dl-none-ink:#B4C6EC; --dl-none-edge:#6F80A8; --dl-none-bg:#152A5C;
+    --dl-erro:#EE6B5F;
+    --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+}
+:root[data-tema="escuro"]{
+  color-scheme:dark;
+  --dl-bg:#0B1636; --dl-hex:#1B3163; --dl-surface:#152A5C; --dl-surface-2:#1B3470;
+  --dl-border:#2C5BBD; --dl-border-shadow:#0F2A66; --dl-navy:#173A8A; --dl-navy-deep:#0A1D4A;
+  --dl-action:#4F93F2; --dl-action-press:#2C73E0; --dl-text:#E6EEFF; --dl-text-2:#B4C6EC;
+  --dl-need:#FF7FC0; --dl-ok:#4BE07E; --dl-dark:#A56BE0; --dl-disabled:#2A3A60; --dl-disabled-ink:#8795B3;
+  --dl-rim:#152A5C; --dl-action-ink:#0B1636; --dl-sec-bg:#1B3470; --dl-sec-ink:#E6EEFF; --dl-sec-edge:#4F93F2; --dl-sec-press:#152A5C; --dl-sec-shadow:#0F2A66;
+  --dl-none-ink:#B4C6EC; --dl-none-edge:#6F80A8; --dl-none-bg:#152A5C;
+  --dl-erro:#EE6B5F;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
+}

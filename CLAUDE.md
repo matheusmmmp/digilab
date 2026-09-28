@@ -630,8 +630,13 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
 
 **Migração para TypeScript (TAREFA_FRONT_TS, em andamento)**: o motor em TS fica em `web/app/motor/` (sem
 DOM: lib ES sem "dom", teste `motor_sem_dom`; `index.ts` exporta tudo; `Motor.aplicarEvento` é o passo do
-replay). `cd web/app && npm install`, `npm run tipos` (tsc estrito) e `npm run teste` (49 testes, ~1 min; Node
-24 roda o `.ts` direto). O HTML continua sendo o jogo até a Etapa 6. `web/app/test/` tem a referência de
+replay). App (Vite + Preact, Etapa 3): `web/app/src/` (um motor só, lido pelas telas via `useJogo()`; só
+`mudarMotor()` altera e grava; save com a mesma chave e formato do HTML; save que não abre mostra erro e não é
+regravado). `cd web/app && npm install`; `npm run dev` (http://localhost:5173, serve só o atlas de `Assets/`);
+`npm run build` (sai em `web/dist/`, não versionado; o `servidor_local.py` serve em `/v1/web/dist/`, e no modo
+remoto só o que fica dentro dessa pasta); `npm run tipos` (tsc estrito: motor sem DOM + app); `npm test`
+(Vitest, 60 testes, ~1 min). No esqueleto o tempo não anda e nada grava o save (entra com a tela Pet, Etapa 4).
+O HTML continua sendo o jogo até a Etapa 6. `web/app/test/` tem a referência de
 paridade. `motor_html.mjs` extrai o motor do HTML pelas marcas `@motor-inicio/@motor-fim` e roda em Node sem
 DOM; `gerar_gabaritos.mjs` grava 60 vidas (3 versões de pet × 5 donos × 4 sementes, todos os estágios, tipos
 de evento t/d/l/g/tr, NPCs, sombrias) com checkpoints (sha256 da assinatura + contadores) em

@@ -3,7 +3,7 @@
 // mesma assinatura final. Criterio de aceite: 100% iguais.
 //
 // Node roda o .ts direto (remocao de tipos); os gabaritos sao do V8 do Node (ver gerar_gabaritos.mjs).
-import { test } from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import * as M from "../motor/index.ts";

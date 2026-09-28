@@ -29,4 +29,4 @@ servidor/gasto_fala.json
 
 # jogo web em TypeScript (web/app)
 node_modules/
-web/app/dist/
+web/dist/

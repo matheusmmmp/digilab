@@ -1,7 +1,7 @@
 // Motor sem DOM (TAREFA_FRONT_TS, Etapa 2): o motor nao toca em janela, documento, armazenamento nem rede, e
 // nao importa nada de fora de web/app/motor. A checagem de tipos usa lib ES sem "dom" (tsconfig.json), entao
 // qualquer uso de API do navegador tambem quebra `npm run tipos`.
-import { test } from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

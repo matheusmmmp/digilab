@@ -27,8 +27,9 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
     python servidor/servidor_local.py --remoto
     cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
-- so as rotas do jogo: /v1/web/*.html, /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json} e /api/fala*; o resto (repo,
-  .git, v0, Assets inteiro, gasto) responde 404;
+- so as rotas do jogo: /v1/web/*.html, o build do app em /v1/web/dist/ (so o que fica dentro dele),
+  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json} e /api/fala*; o resto (repo, .git, v0, codigo do
+  app, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
 Os sprites sao da Bandai, sem licenca: o link e para uso pessoal; nao compartilhar (CLAUDE.md).
@@ -46,6 +47,7 @@ import threading
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import unquote
 
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
@@ -72,8 +74,29 @@ ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.
                  "/api/fala", "/api/fala/status")
 
 
+# app em TypeScript (TAREFA_FRONT_TS): o build do Vite em web/dist/ (nao versionado). No modo remoto sai so o
+# que fica DENTRO dessa pasta; o resto de web/ e do repo continua fora.
+PASTA_APP = RAIZ / "web" / "dist"
+PREFIXO_APP = f"{PREFIXO}/web/dist/"
+
+
+def rota_do_app(caminho: str) -> bool:
+    """True se o caminho (sem ?query) aponta para dentro de web/dist/ (sem .., sem barra invertida)."""
+    if caminho == PREFIXO_APP[:-1]:            # /v1/web/dist: o servidor redireciona para a barra
+        return True
+    if not caminho.startswith(PREFIXO_APP):
+        return False
+    resto = unquote(caminho[len(PREFIXO_APP):])
+    if "\\" in resto or "\x00" in resto or any(p in ("..", ".") for p in resto.split("/")):
+        return False
+    base = PASTA_APP.resolve()
+    alvo = (base / resto).resolve()
+    return alvo == base or base in alvo.parents
+
+
 def rota_permitida(caminho: str) -> bool:
-    return caminho.split("?", 1)[0] in ROTAS_REMOTAS or caminho == "/"
+    c = caminho.split("?", 1)[0]
+    return c in ROTAS_REMOTAS or c == "/" or rota_do_app(c)
 
 
 class Tratador(SimpleHTTPRequestHandler):
