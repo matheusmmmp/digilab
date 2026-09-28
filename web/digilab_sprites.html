@@ -218,13 +218,16 @@ details[open] > summary::before{content:"▾"}
 .causa-area{display:flex;flex-wrap:wrap;gap:6px}
 .necessidades4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .nec{background:var(--dl-surface);border-radius:10px;box-shadow:0 0 0 2px var(--dl-border);padding:6px 6px 4px;display:grid;gap:2px}
-.nec-rot{display:flex;align-items:center;gap:3px;font-size:.75rem;font-weight:900;min-width:0;overflow:hidden;white-space:nowrap}
+.nec-rot{display:flex;align-items:center;gap:2px;font-size:.6875rem;font-weight:900;min-width:0;overflow:hidden;white-space:nowrap}
+.nec-rot img{flex:none}
+.necessidades4{gap:6px}
+.nec{padding:6px 4px 4px}
 .nec-saude{grid-column:1/-1}
 .chamado{display:flex;align-items:center;gap:10px}
 .chamado-ic{width:44px;height:44px;flex:none;border-radius:10px;background:var(--dl-navy);display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:900}
 .chamado-txt{flex:1;display:grid;gap:2px;min-width:0}
 .acoes-pet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.acoes-pet .dl-btn{padding-inline:6px}
+.acoes-pet .dl-btn{padding-inline:4px;font-size:.875rem}
 .tempo-pet{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tempo-pet .dl-btn{min-height:44px;padding:4px 10px;font-size:.8125rem}
 .tempo-pet .dl-btn[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF;border-color:var(--dl-navy)}
@@ -290,6 +293,133 @@ body[data-destino="pet"] .grid{grid-template-columns:minmax(0,480px);justify-con
 .evo-no{cursor:pointer}
 .evo-no:focus-visible rect{stroke:var(--dl-highlight);stroke-width:3px}
 .evo-no-det{margin:0}
+/* revisao P2: tempo recolhido, faixa da fala, cabecalho por tela */
+.tempo-teste > summary{font-weight:900;color:var(--dl-text-2)}
+.tempo-teste .tempo-pet{margin-top:6px}
+.fala-status{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;width:100%;min-height:44px}
+.fala-ponto{width:10px;height:10px;border-radius:50%;background:#8795B3;flex:none}
+.fala-ponto[data-estado="ok"]{background:var(--dl-ok)}
+.fala-ponto[data-estado="pronto"]{background:var(--dl-action)}
+.fala-troca{margin-left:auto;display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;font-weight:900;color:var(--dl-text)}
+.fala-troca input{width:24px;height:24px;margin:0;accent-color:var(--dl-action)}
+.tela-cab{padding:12px 16px}
+.tela-cab h2{margin:0;font-size:1.75rem;line-height:1.1}
+body[data-destino="pet"] .tela-cab{display:none}
+/* revisao P2: registro e memoria */
+.reg-filtros{display:flex;flex-wrap:wrap;gap:8px}
+.reg-filtros .chip{min-height:44px}
+.reg-tag{display:inline-block;font-family:var(--dl-f-texto);font-size:.6875rem;font-weight:900;border-radius:4px;padding:0 6px;border:1.5px solid var(--dl-border);color:var(--dl-text)}
+.reg-voce{background:var(--dl-navy);border-color:var(--dl-navy);color:#FFFFFF}
+.reg-luta{border-style:solid;border-color:var(--dl-action)}
+.reg-treino{border-style:dashed}
+.zona-risco{border:2px dashed var(--bad, #C8443A);border-radius:12px;padding:12px;display:grid;gap:8px}
+.zona-risco h2{color:var(--bad, #C8443A)}
+.mem-tit{font-size:.9375rem;font-weight:900;margin:6px 0 4px;display:flex;gap:8px;align-items:baseline}
+.mem-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mem-slot{background:var(--dl-surface-2);border-radius:10px;box-shadow:inset 0 0 0 2px var(--dl-hex);padding:8px;display:grid;gap:3px;font-size:.8125rem}
+.mem-cab{display:flex;align-items:center;gap:4px}
+.mem-vazio{border:2px dashed var(--dl-border);box-shadow:none;background:transparent;color:var(--dl-text-2);display:grid;place-items:center;min-height:64px}
+.bar.agora i.dl-malha{border:1px dashed var(--dl-learned)}
+/* revisao P2: regras de combate em cards e escolha do rival */
+.g-cont{margin:0}
+.g-lista{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.g-card{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:8px;align-items:center;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:8px}
+.g-num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--dl-navy);color:#FFFFFF;font-family:var(--dl-f-num);font-style:italic;font-weight:900}
+.g-corpo{display:grid;gap:2px;min-width:0;font-size:.875rem}
+.g-se b,.g-entao b{font-size:.6875rem;letter-spacing:.04em;color:var(--dl-text-2);margin-right:4px}
+.g-meta{font-size:.75rem;color:var(--dl-text-2)}
+.g-bts{display:flex;gap:6px}
+.g-bts .g-on{background:var(--dl-highlight);color:#3B2A00;border-color:var(--dl-navy)}
+.g-travada{box-shadow:0 0 0 3px var(--dl-highlight),0 3px 0 2px var(--dl-border-shadow)}
+.g-vetada{opacity:.75;box-shadow:0 0 0 2px var(--dl-border);border:2px dashed var(--dl-border)}
+.g-vetada .g-num{background:var(--dl-disabled);color:var(--dl-disabled-ink)}
+.g-final .g-num{background:var(--dl-text-2)}
+.rival-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px}
+.rival-cab h2{margin:0}
+#rival-treino{display:grid;gap:2px;min-width:160px}
+.rivais-tit{font-size:.8125rem;font-weight:900;color:var(--dl-text-2);margin:4px 0}
+.rivais-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.rival-card{font:inherit;text-align:left;display:flex;align-items:center;gap:8px;min-height:64px;padding:6px 8px;border-radius:12px;cursor:pointer;background:var(--dl-surface);color:var(--dl-text);border:2px solid var(--dl-border)}
+.rival-card[aria-checked="true"]{border-color:var(--dl-navy);box-shadow:0 0 0 3px var(--dl-highlight)}
+.rival-card:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.rival-spr{width:48px;height:48px;flex:none;overflow:hidden;display:flex;justify-content:center;align-items:flex-start}
+.rival-spr img{max-width:none}
+.rival-txt{display:grid;min-width:0}
+.rival-txt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rival-txt small{font-size:.75rem;color:var(--dl-text-2);font-weight:800}
+.lutar-grande{min-height:56px;min-width:160px;font-size:1.125rem}
+/* revisao P2: Treinar */
+.treino-cab{display:flex;align-items:flex-end;justify-content:center;gap:12px;min-height:96px}
+.treino-pet{display:flex;align-items:flex-end}
+.med-marcas{display:flex;justify-content:space-between;font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
+.treino-ex{position:relative}
+.treino-selo{position:absolute;top:6px;right:6px;font-size:.625rem;font-weight:900;background:var(--dl-navy);color:#FFFFFF;border-radius:4px;padding:0 5px}
+/* revisao P2: arvore de evolucao em 4 colunas (EvoArvore) */
+.evo-arv{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.evo-linhas{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.evo-col{display:grid;grid-template-rows:auto 1fr;gap:6px;position:relative}
+.evo-col-tit{font-size:.625rem;font-weight:900;color:var(--dl-text-2);text-align:center;letter-spacing:.02em}
+.evo-col-nos{display:flex;flex-direction:column;justify-content:space-around;gap:6px;min-height:520px}
+.evo-no{font:inherit;background:none;border:0;padding:0;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--dl-text)}
+.evo-cx{position:relative;width:44px;height:44px;border-radius:12px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border)}
+.evo-cx img{max-width:none;image-rendering:pixelated}
+.evo-q{position:absolute;inset:0;display:grid;place-items:center;font:900 1.125rem var(--dl-f-num);font-style:italic;color:#FFFFFF;text-shadow:0 0 3px #173A8A,0 0 3px #173A8A}
+.evo-rot{font-size:.625rem;font-weight:800;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evo-no.percorrido .evo-cx{box-shadow:0 0 0 3px var(--dl-action)}
+.evo-no.agora .evo-cx{box-shadow:0 0 0 3px var(--dl-highlight),0 0 0 5px var(--dl-navy)}
+.evo-no.sombria .evo-cx{box-shadow:0 0 0 3px var(--dl-dark),0 0 0 5px var(--dl-navy)}
+.evo-no.fechado{opacity:.4}
+.evo-no.provavel .evo-cx{outline:2px dashed var(--dl-action);outline-offset:2px}
+.evo-no:focus-visible .evo-cx{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.evo-aresta{fill:none;stroke:var(--dl-border);stroke-width:1.5}
+.evo-aresta.percorrido{stroke:var(--dl-action);stroke-width:3}
+.evo-aresta.provavel{stroke:var(--dl-action);stroke-width:2;stroke-dasharray:4 4}
+.evo-aresta.fechado{stroke:var(--dl-hex);stroke-width:1}
+.evo-legenda{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.75rem;font-weight:800;color:var(--dl-text-2)}
+.evo-legenda li{display:flex;align-items:center;gap:6px}
+.evo-mini{width:14px;height:14px;border-radius:4px;background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border)}
+.evo-mini.percorrido{box-shadow:0 0 0 2px var(--dl-action)}
+.evo-mini.agora{box-shadow:0 0 0 2px var(--dl-highlight),0 0 0 4px var(--dl-navy)}
+.evo-mini.provavel{box-shadow:none;outline:2px dashed var(--dl-action)}
+.evo-mini.fechado{opacity:.4}
+.evo-mini.sombria{box-shadow:0 0 0 2px var(--dl-dark)}
+/* revisao P2: catalogo 5 x 3 com detalhe (DiarioCatalogo) */
+#cat-grade.cat-grade{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.cat-tile{font:inherit;background:var(--dl-surface);border:0;border-radius:10px;box-shadow:0 0 0 2px var(--dl-border);padding:4px 2px;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--dl-text);min-height:44px}
+.cat-tile[aria-selected="true"]{box-shadow:0 0 0 3px var(--dl-highlight),0 0 0 5px var(--dl-navy)}
+.cat-tile.meu .cat-cx{box-shadow:inset 0 0 0 2px var(--dl-ok)}
+.cat-tile:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cat-cx{width:52px;max-width:100%;height:52px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;border-radius:8px}
+.cat-cx img{max-width:none}
+.cat-nome{font-size:.5625rem;font-weight:800;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-detalhe{display:grid;gap:10px}
+.cat-det-spr{display:flex;justify-content:center;align-items:flex-end;min-height:64px}
+.cat-det-spr img{max-width:none}
+.cat-stats{display:grid;gap:6px}
+.cat-stat{display:grid;grid-template-columns:86px minmax(0,1fr) 36px;gap:8px;align-items:center;font-size:.8125rem;font-weight:800}
+.cat-stat .dl-lcd{text-align:right}
+/* revisao P2: palco do pet e da luta */
+.luta-dist{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:1;background:var(--dl-navy);color:#FFFFFF}
+.luta-dist:empty{display:none}
+/* revisao P2: mapa da campanha com as ilhas do UP (CampMapa) */
+.mapa-ilhas{position:relative;width:100%;max-width:520px;margin-inline:auto;aspect-ratio:1/1.3;border-radius:16px;overflow:hidden;
+  background:linear-gradient(#9FD8F5,#6FB8E8);box-shadow:0 0 0 2px var(--dl-border)}
+.mapa-ilhas .ilha,.mapa-ilhas .nuvem{position:absolute;width:54%;height:auto;pointer-events:none}
+.mapa-ilhas .nuvem{width:58%;opacity:.95}
+.mapa-caminho{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mapa-caminho line{stroke:#FFFFFF;stroke-width:1.2;stroke-dasharray:1.5 2;vector-effect:non-scaling-stroke;stroke-width:4}
+.mapa-caminho line.feito{stroke:var(--dl-highlight);stroke-dasharray:none}
+.lugar{position:absolute;transform:translate(-50%,-50%);font:inherit;background:none;border:0;padding:0;cursor:pointer;display:grid;justify-items:center;gap:2px;min-width:44px;min-height:44px;color:var(--dl-text)}
+.lugar .marcador{width:64px;height:auto;grid-area:1/1}
+.lugar-npc{grid-area:1/1;width:48px;height:48px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;margin-top:-26px}
+.lugar-npc img{max-width:none}
+.lugar-placa{display:grid;justify-items:center;background:var(--dl-navy);color:#FFFFFF;border-radius:6px;padding:1px 8px;font-size:.6875rem;line-height:1.3;white-space:nowrap}
+.lugar-placa small{font-size:.625rem;font-weight:800;opacity:.9}
+.lugar.bloq .lugar-npc{filter:grayscale(1);opacity:.6}
+.lugar.sel .lugar-placa{box-shadow:0 0 0 3px var(--dl-highlight)}
+.lugar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px;border-radius:8px}
+.pet-mapa-ilha{position:absolute;width:44px;height:44px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;pointer-events:none}
+.pet-mapa-ilha img{max-width:none}
 /* navegacao em 4 destinos (TAREFA_INTERFACE_UP, Etapa 3; UI_GUIDELINES 7.12): barra inferior no
    celular, coluna a esquerda a partir de 900 px */
 .dl-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:space-around;gap:4px;
@@ -570,7 +700,7 @@ body{background-color:var(--dl-bg);background-image:var(--dl-hex-img);background
 .chip[aria-pressed="true"]{background:var(--dl-navy);border-color:var(--dl-navy);color:#FFFFFF}
 .kv div{background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex)}
 select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-height:44px;font-weight:800;max-width:100%}
-#rival{width:100%}
+#rival:not(.sr-only){width:100%}
 #p-arena .row label[for="rival"]{flex-basis:100%}
 .luta-nome{display:grid;min-width:0}
 .luta-nome b,.luta-nome small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -578,7 +708,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 </style>
 
 <div class="wrap">
-  <header>
+  <header id="boas-vindas" hidden>
     <h1>DIGILAB</h1>
     <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
   </header>
@@ -601,7 +731,10 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
           <div id="causa" class="causa-area"></div>
           <div class="fala-det dl-apoio" id="fala-det" hidden></div>
         </div>
-        <label class="fala-llm dl-apoio"><input type="checkbox" id="fala-llm-on"> fala por LLM <span id="fala-llm-status">(verificando servidor…)</span></label>
+        <div class="fala-status dl-apoio">
+          <span class="fala-ponto" id="fala-ponto" aria-hidden="true"></span><span id="fala-llm-status">verificando o modelo…</span>
+          <label class="fala-troca"><input type="checkbox" role="switch" id="fala-llm-on"> fala por LLM</label>
+        </div>
       </div>
       <div class="necessidades4" id="necessidades"></div>
       <div id="chamado"></div>
@@ -614,8 +747,8 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         <button type="button" class="dl-btn dl-btn--destaque" id="a-elogiar" data-acao="elogiar">Elogiar</button>
         <button type="button" class="dl-btn dl-btn--sec" id="a-repreender" data-acao="repreender">Repreender</button>
       </div>
+      <details class="tempo-teste"><summary>Tempo (teste)</summary>
       <div class="tempo-pet" role="group" aria-label="Velocidade do tempo">
-        <span class="dl-lcd">TEMPO</span>
         <button type="button" class="dl-btn dl-btn--sec vel" id="v0" data-vel="0" aria-pressed="false">Pausa</button>
         <button type="button" class="dl-btn dl-btn--sec vel" id="v1x" data-vel="0.016666666666666666" aria-pressed="false" title="tempo real: 1 minuto do pet = 1 minuto do relógio">1x</button>
         <button type="button" class="dl-btn dl-btn--sec vel" id="v1" data-vel="10" aria-pressed="true">10 min/s</button>
@@ -623,9 +756,11 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         <button type="button" class="dl-btn dl-btn--sec vel" id="v3" data-vel="360" aria-pressed="false">6 h/s</button>
         <button type="button" class="dl-btn dl-btn--sec vel" id="pulo" data-pulo="60">+1 h</button>
       </div>
+      </details>
     </section>
 
     <section class="painel">
+      <div class="tela-cab dl-faixa"><h2 class="dl-num" id="tela-titulo">Crescer</h2></div>
       <div class="tabs" role="tablist">
         <button class="tab" role="tab" id="t-estado" data-pane="estado" aria-selected="true">Estado</button>
         <button class="tab" role="tab" id="t-treinar" data-pane="treinar" aria-selected="false">Treinar</button>
@@ -641,11 +776,12 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
       <div class="pane" id="p-estado" hidden><!-- o Pet mora na tela do pet (aparelho); esta aba so ancora o destino --></div>
 
       <div class="pane dl" id="p-treinar" hidden>
-        <div class="treino-cab"><h2 class="dl-titulo-card">Treinar</h2><span id="treino-pausa"></span></div>
+        <div class="treino-cab dl-card dl-hexcard"><span class="treino-pet" id="treino-pet"></span><span id="treino-pausa"></span></div>
         <div class="dl-card treino-medidores" id="treino-barras"></div>
         <div class="treino-grade" id="treino-btns"></div>
         <p id="treino-msg" aria-live="polite" class="dl-apoio" style="margin:0"></p>
         <p class="dl-apoio" id="treino-espera" style="margin:0"></p>
+        <p class="dl-apoio" style="margin:0">O ganho no card é o de base; a aptidão do brasão aumenta, e a fadiga e a proximidade do teto diminuem.</p>
         <details class="dl-apoio"><summary>Como o treino funciona</summary>
           <p>Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p></details>
       </div>
@@ -681,7 +817,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
           <p class="muted" style="margin-top:4px" id="memoria-txt"></p>
         </div>
         <div class="kv" id="memoria"></div>
-        <div class="decisoes" id="memoria-espacos"></div>
+        <div class="memoria-espacos" id="memoria-espacos"></div>
         <div id="desejo-bloco">
           <h2>Desejo e obediência</h2>
           <p class="muted" style="margin-top:4px">Cumprimento: das vontades que ele anunciou, quantas ele fez de fato em até 1 h. Se for baixo, a fala promete o que o pet não faz. Obediência: quantos cuidados seus ele aceitou.</p>
@@ -698,9 +834,11 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         <p>Lute contra um rival. Seu pet decide por <b>regras de combate</b> que ele mesmo aprende lutando; você pode travar ou vetar regras.</p>
         <details class="muted"><summary>Como funciona</summary>
           <p>Distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). A lista de regras (condição → ação) cresce a cada nível: Rookie 3, Champion 5, Ultimate e Mega 8.</p></details>
+        <div class="rival-cab"><h2>Escolha o rival</h2><span class="dl-apoio" id="rival-treino"></span></div>
+        <div class="rivais" id="rivais" role="radiogroup" aria-label="Rival"></div>
         <div class="row">
-          <label for="rival">Rival</label>
-          <select id="rival">
+          <label for="rival" class="sr-only">Rival</label>
+          <select id="rival" class="sr-only" tabindex="-1" aria-hidden="true">
             <option value="aleatorio">aleatório</option>
             <option value="agressivo" selected>agressivo</option>
             <option value="tartaruga">tartaruga</option>
@@ -719,7 +857,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
               <option value="tita">Brasa Titã</option>
             </optgroup>
           </select>
-          <button type="button" class="dl-btn" id="lutar">Lutar</button>
+          <button type="button" class="dl-btn lutar-grande" id="lutar">Lutar</button>
           <button type="button" class="dl-btn dl-btn--sec" id="melhor10">Melhor de 10</button>
         </div>
         <p class="muted" id="rival-fixo" hidden></p>
@@ -732,7 +870,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
           <div class="luta-vida"><div class="dl-vida-topo"><span id="nome-b">Rival</span><span class="dl-lcd"><span id="hp-b">70</span><span class="sr-only"> de vida, guts <span id="gt-b">50</span></span></span></div>
             <div class="dl-vida-trilho" role="img" aria-label="vida do rival"><i id="hpb-b" style="width:100%"></i></div><div class="luta-guts" role="img" aria-label="guts do rival"><i id="gtb-b" style="width:50%"></i></div></div>
         </div>
-        <div class="luta-cena"><canvas id="arenacv" class="arena-cv" width="96" height="48" aria-label="Arena"></canvas><span class="luta-callout dl-num" id="luta-callout" hidden></span></div>
+        <div class="luta-cena"><span class="dl-tag luta-dist" id="luta-dist"></span><canvas id="arenacv" class="arena-cv" width="96" height="48" aria-label="Arena"></canvas><span class="luta-callout dl-num" id="luta-callout" hidden></span></div>
         <div id="luta-intencao" aria-live="polite"></div>
         <div id="luta-regra"></div>
         <p class="dl-apoio luta-turno" id="arena-res">Escolha um rival e aperte Lutar.</p>
@@ -751,8 +889,9 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
       </div>
 
       <div class="pane" id="p-campanha" hidden>
-        <p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
-        <div class="mapa-rola"><svg class="mapa" id="mapa" viewBox="0 0 360 230" role="group" aria-label="Mapa da campanha"></svg></div>
+        <p>Três lugares em sequência: vença um rival para abrir o próximo. Treine o pet no nível sugerido.</p>
+        <details class="muted"><summary>Como funciona</summary><p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p></details>
+        <div class="mapa-ilhas" id="mapa" role="group" aria-label="Mapa da campanha"></div>
         <div class="camp-det" id="camp-det" aria-live="polite"></div>
         <div id="palco-camp"></div>
       </div>
@@ -762,10 +901,14 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         <details class="muted"><summary>Como funciona</summary>
           <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p></details>
         <div class="kv" id="evo-resumo"></div>
-        <div class="evo-rola"><svg class="evo-svg" id="evo-arvore" viewBox="0 0 560 500" role="group" aria-label="Árvore de evolução"></svg></div>
+        <div class="evo-arv" id="evo-arvore" role="group" aria-label="Árvore de evolução"></div>
         <p class="dl-card evo-no-det" id="evo-no-det" aria-live="polite" hidden></p>
-        <div class="legend"><span style="--c:var(--accent)">caminho do seu pet</span><span style="--c:var(--line)">caminhos possíveis</span></div>
-        <p class="muted">Linha tracejada: para onde ele iria se evoluísse agora. A forma muda o combate: stats, técnica e passiva (aba Catálogo). Toque num nó para ver o que leva até ele.</p>
+        <ul class="evo-legenda" aria-label="Legenda da árvore">
+          <li><span class="evo-mini percorrido"></span>percorrido</li><li><span class="evo-mini agora"></span>agora</li>
+          <li><span class="evo-mini possivel"></span>possível</li><li><span class="evo-mini provavel"></span>se evoluísse agora</li>
+          <li><span class="evo-mini fechado"></span>fechado</li><li><span class="evo-mini sombria"></span>sombria</li></ul>
+        <p class="muted" style="margin:0">Toque num nó para ver o que leva até ele.</p>
+        <div id="evo-porque"></div>
         <div>
           <h2>Histórico</h2>
           <div class="evo-hist" id="evo-hist" style="margin-top:6px"></div>
@@ -777,7 +920,8 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         <details class="muted"><summary>Como funciona</summary>
           <p>Cada brasão percorre a mesma árvore (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas). Stats pela fórmula do catálogo (brasão + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do nível. Os números ainda estão em teste.</p></details>
         <div class="row" id="cat-esp" role="group" aria-label="Espécie"></div>
-        <div class="cat-grade" id="cat-grade"></div>
+        <div class="cat-grade" id="cat-grade" role="listbox" aria-label="Formas do brasão"></div>
+        <div id="cat-det"></div>
         <div><h2>Técnicas (Champion)</h2><div class="decisoes" id="cat-tecnicas" style="margin-top:6px"></div></div>
         <div><h2>Passivas (Ultimate e Mega)</h2><div class="decisoes" id="cat-passivas" style="margin-top:6px"></div></div>
       </div>
@@ -819,11 +963,24 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
         <div class="row">
           <button class="sbtn" id="verificar">Verificar replay</button>
           <button class="sbtn sec" id="copiar">Copiar registro</button>
-          <button class="sbtn sec" id="novo">Novo ovo</button>
-          <button class="sbtn sec" id="novo-conf" hidden>Confirmar: apagar este pet</button>
+        </div>
+        <div class="reg-filtros" role="group" aria-label="Filtrar o registro">
+          <button type="button" class="chip" data-filtro="todos" aria-pressed="true">Tudo</button>
+          <button type="button" class="chip" data-filtro="voce" aria-pressed="false">Você</button>
+          <button type="button" class="chip" data-filtro="pet" aria-pressed="false">Pet</button>
+          <button type="button" class="chip" data-filtro="luta" aria-pressed="false">Lutas</button>
+          <button type="button" class="chip" data-filtro="treino" aria-pressed="false">Treino</button>
         </div>
         <p id="reg-msg" class="muted">Semente <span id="semente"></span> · <span id="neventos"></span> eventos no registro (suas ações, lutas e passagens de tempo). Abaixo, o que aconteceu, reconstruído a partir dele: <span id="nlinhas"></span>.</p>
         <div class="log" id="log" aria-live="polite"></div>
+        <section class="zona-risco" aria-label="Área de risco">
+          <h2>Área de risco</h2>
+          <p class="muted" style="margin:0">Um ovo novo apaga este pet e o registro dele. Não dá para desfazer.</p>
+          <div class="row">
+            <button class="sbtn sec" id="novo">Novo ovo</button>
+            <button class="sbtn sec" id="novo-conf" hidden>Confirmar: apagar este pet</button>
+          </div>
+        </section>
       </div>
     </section>
   </div>
@@ -2771,10 +2928,12 @@ function ajustarTela(cv, uw, uh){
   const pai = cv.parentElement, cs = getComputedStyle(pai);
   const livre = pai.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   if (!(livre > 0)){ if (!cv.K){ cv.K = 4; cv.width = uw * 4; cv.height = uh * 4; } return; }
-  const dpr = devicePixelRatio || 1, K = Math.max(1, Math.floor(livre * dpr / uw)), larg = (uw * K / dpr) + "px";
-  if (cv.K === K && cv.width === uw * K && cv.style.width === larg) return;
-  cv.K = K; cv.width = uw * K; cv.height = uh * K;
-  cv.style.width = larg; cv.style.height = (uh * K / dpr) + "px"; cv.style.marginInline = "auto";
+  /* o canvas ocupa a largura toda em pixels do aparelho (sem esticar pelo CSS); K pode ser fracionario:
+     o sprite continua em escala inteira, desenhado sem transformacao e com posicao arredondada */
+  const dpr = devicePixelRatio || 1, px = Math.max(uw, Math.floor(livre * dpr)), K = px / uw, larg = (px / dpr) + "px";
+  if (cv.K === K && cv.width === px && cv.style.width === larg) return;
+  cv.K = K; cv.width = px; cv.height = Math.round(uh * K);
+  cv.style.width = larg; cv.style.height = (cv.height / dpr) + "px"; cv.style.marginInline = "auto";
 }
 const atlasImg = new Image();
 let atlasOk = false, UPA = null;
@@ -2883,7 +3042,7 @@ const ICONE_TRACO = {
   enviar: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5"/></svg>',
 };
 const seg = (n, m, cls = "", marca = null) => `<span class="dl-seg ${cls}" role="img" aria-label="${n} de ${m}">${
-  Array.from({length:m}, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}${marca !== null ? `<b style="left:${marca / m * 100}%"></b>` : ""}</span>`;
+  Array.from({length:m}, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}${marca === null ? "" : [].concat(marca).map(x => `<b style="left:${x / m * 100}%"></b>`).join("")}</span>`;
 /* barra relativa: v em [0, 1], 0,5 = pet comum; rotulo so fora da faixa comum */
 const rel = (nome, v, rotulo) => `<div class="dl-rel"><span style="min-width:6.5em">${nome}</span><span class="dl-rel-trilho" role="img" aria-label="${nome}: ${rotulo || "na faixa comum"}"><i style="width:${v * 100}%"></i><b></b></span><span class="dl-rel-rotulo">${rotulo || ""}</span></div>`;
 function montarComponentesUp(){
@@ -3024,6 +3183,7 @@ function desenharLCD(){
   const W = 80, H = 56, CHAO = 46;
   ajustarTela(lcd, 80, 56);
   cx.setTransform(lcd.K, 0, 0, lcd.K, 0, 0); cx.imageSmoothingEnabled = false;
+  if (atlasOk){ desenharPalcoUp(e, W, H, CHAO, noite); return; }
   cx.fillStyle = noite ? "#1F2A4A" : "#BFE3D6"; cx.fillRect(0,0,W,H);
   if (noite){ cx.fillStyle = "#E8ECFF"; for (const [x,y] of [[8,6],[22,12],[40,5],[57,10],[70,4],[14,20],[64,22]]) if ((quadro + x) % 23 !== 0) cx.fillRect(x,y,1,1);
     cx.fillStyle = "#F5E7A8"; cx.fillRect(66,8,5,5); cx.fillStyle = "#1F2A4A"; cx.fillRect(68,7,4,4); }
@@ -3062,11 +3222,32 @@ function desenharLCD(){
   quadro++;
 }
 
+/* palco do Pet (desenho UpPet): fundo do card (hexagonos) aparece por tras; anel de plataforma no chao;
+   noite, sujeira e sono continuam vindo do estado do motor */
+function desenharPalcoUp(e, W, H, CHAO, noite){
+  const K = lcd.K;
+  cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, lcd.width, lcd.height);
+  if (noite){ cx.fillStyle = "rgba(11,22,54,.55)"; cx.fillRect(0, 0, lcd.width, lcd.height);
+    cx.fillStyle = "#E8ECFF"; for (const [x, y] of [[8,6],[22,12],[40,5],[57,10],[70,4],[14,20],[64,22]]) if ((quadro + x) % 23 !== 0) cx.fillRect(x * K, y * K, K, K); }
+  /* anel de plataforma (peca pintada do UP, nao pixel art): reduzido para caber, com suavizacao */
+  const r = dimSprite("anel_plataforma"), aw = Math.round(W * K * .8), ah = Math.round(aw * r[3] / r[2]);
+  cx.imageSmoothingEnabled = true; cx.drawImage(atlasImg, r[0], r[1], r[2], r[3], Math.round((W * K - aw) / 2), Math.round(CHAO * K - ah * .55), aw, ah); cx.imageSmoothingEnabled = false;
+  cx.setTransform(K, 0, 0, K, 0, 0);
+  const pal = paleta(corForma(motor));
+  for (let i = 0; i < e.sujeira; i++) desenhar(cx, S.coco, 4 + i*8 + (i>2?34:0), CHAO-4, {...pal, d:"#8A5A2B"});
+  if (nascendo > 0){
+    const oscil = nascendo % 2 ? 1 : -1, ro = dimSprite(OVO[motor.especie]), eo = escalaSprite();
+    spriteUp(cx, OVO[motor.especie], (W*K - ro[2]*eo)/2 + oscil*K, (CHAO+2)*K - ro[3]*eo, false, {escala:eo});
+    nascendo--; quadro++; return;
+  }
+  desenharLCDUp(e, W, CHAO, noite);
+}
 /* UP: posicoes em unidades do LCD (como antes), sprite no tamanho nativo; a caixa do idle e fixa,
    entao o pet nao pula entre quadros. Sem clipe de sono, comer ou chamar: o idle para no quadro 0
    dormindo e os icones sao os placeholders originais (os emotes do UP entram nos baloes, Etapa 4). */
 function desenharLCDUp(e, W, CHAO, noite){
-  const a = motor.acao, nome = digimon(motor), r = dimSprite(nome), esc = escalaSprite(), w = r[2] * esc / lcd.K, h = r[3] * esc / lcd.K;
+  const a = motor.acao, nome = digimon(motor), r = dimSprite(nome), e0 = escalaSprite();
+  const esc = e0 * Math.max(1, Math.min(3, Math.floor(40 * lcd.K / (r[3] * e0)))), w = r[2] * esc / lcd.K, h = r[3] * esc / lcd.K;
   let x = W/2 - w/2, y = CHAO - h + 2;
   if (a === "explorar") x += Math.round(Math.sin(quadro/3) * 14);
   else if (a === "brincar") { x += Math.round(Math.sin(quadro/2) * 6); y -= (quadro % 4 < 2) ? 3 : 0; }
@@ -3076,6 +3257,9 @@ function desenharLCDUp(e, W, CHAO, noite){
   let icone = null;
   if (flash && flash.ate > performance.now()) icone = flash.icone;
   else icone = { dormir:"zz", chamar_atencao:"exclam", emburrar:"raiva", brincar:"nota", explorar:"pergunta", comer:"carne" }[a] || null;
+  const EMOTE_ICONE = {carne:"emoji_carne", nota:"emoji_nota", exclam:"emoji_exclam", coracao:"emoji_coracao"};
+  if (icone && EMOTE_ICONE[icone]){ const pe = dimSprite(EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pe[2] * es / lcd.K, ph = pe[3] * es / lcd.K;
+    spriteUp(cx, EMOTE_ICONE[icone], Math.min(W - pw - 1, x + w - 2) * lcd.K, Math.max(1, y - ph - 1) * lcd.K, false, {escala:es}); icone = null; }
   if (icone){ const ic = S[icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
     const bx = Math.round(Math.min(W - 9, x + w - 1)), by = Math.round(Math.max(1, y - 9));
     cx.fillStyle = noite ? "#E8ECFF" : "#FFFFFF"; cx.fillRect(bx-1, by-1, 9, ic.length + 2);
@@ -3116,7 +3300,10 @@ function renderEstado(){
   $("chamado").innerHTML = ab.map(c => { const resta = Math.max(0, CAT.janelaChamado - (e.tick - motor.chamados.abertos[c]));
     return `<div class="dl-card chamado"><span class="chamado-ic">${EMOTE_CHAMADO[c] && atlasOk ? imgPeca(EMOTE_CHAMADO[c], 2, "") : "!"}</span>
       <span class="chamado-txt"><b>Chamado: ${NOME_CHAMADO[c]}</b>${seg(blocos(resta / CAT.janelaChamado, 5), 5, "dl-seg--acao")}<span class="dl-apoio">janela aberta</span></span>
-      <button type="button" class="dl-btn" data-atender="${c}">Atender</button></div>`; }).join("");
+      <button type="button" class="dl-btn" data-atender="${c}">Atender</button></div>`; }).join("")
+    + (!ab.length && motor.acao === "chamar_atencao" ? `<div class="dl-card chamado"><span class="chamado-ic">${atlasOk ? imgPeca("emoji_exclam", 2, "") : "!"}</span>
+      <span class="chamado-txt"><b>Chamando você</b><span class="dl-apoio">um carinho atende o pedido</span></span>
+      <button type="button" class="dl-btn" data-atender="carinho">Atender</button></div>` : "");
   /* desejo: necessidade (rosa, vem do corpo) ou vontade aprendida (malha); so o que o motor calculou */
   const des = motor.desejoAtual(observacao(e), e.tick);
   $("desejo-cards").innerHTML = !des ? "" : des.tipo === "necessidade"
@@ -3155,26 +3342,31 @@ function iconeTreino(ex){
 }
 function renderTreino(){
   const t = motor.treino, bebe = motor.estagioAtual === "bebe", pode = t.podeTocar(motor.e.tick);
-  const chave = [bebe, pode, t.forcaria, lutando, atlasOk].join("|");
+  const chave = [bebe, pode, t.forcaria, lutando, atlasOk, motor.especie].join("|");
   if (chave !== chaveTreino){
     chaveTreino = chave;
     /* Forcar so acima do limite de fadiga, com o custo escrito no botao */
     $("treino-btns").innerHTML = Object.keys(CTR.exercicios).map(ex => {
       const [pri, sec] = CTR.exercicios[ex], dis = bebe || !pode ? " disabled" : "";
-      return `<div class="dl-card treino-ex">${iconeTreino(ex)}<b>${NOME_EXERCICIO[ex]}</b><span class="dl-apoio">${NOME_STAT[pri] || pri} · ${NOME_STAT[sec] || sec}</span>
+      const apt = APTIDAO[motor.especie][pri], selo = apt > 1 ? `<span class="treino-selo" title="aptidão do brasão ${NOME_ESP[motor.especie]}">${NOME_ESP[motor.especie]} ×${dec(apt, 1)}</span>` : "";
+      return `<div class="dl-card treino-ex">${selo}${iconeTreino(ex)}<b>${NOME_EXERCICIO[ex]}</b><span class="dl-apoio">+${CTR.ganhoPri} ${NOME_STAT[pri] || pri} · +${CTR.ganhoSec} ${NOME_STAT[sec] || sec}</span>
         ${t.forcaria ? `<button type="button" class="dl-btn dl-btn--forcar" data-ex="${ex}"${dis} aria-label="Forçar ${NOME_EXERCICIO[ex]}: gera sobrecarga">FORÇAR<small>+ sobrecarga</small></button>`
           : `<button type="button" class="dl-btn" data-ex="${ex}"${dis}>Treinar</button>`}</div>`;
     }).join("");
   }
-  const segFad = seg(blocos(t.fadiga / 100, 10), 10, t.forcaria ? "dl-seg--necessidade" : "dl-seg--acao", CTR.limiteForcar / 10);
-  const segSob = seg(blocos(t.sobrecarga / 100, 10), 10, "dl-seg--sombrio", CSO.aviso / 10);
+  const segFad = seg(blocos(t.fadiga / 100, 10), 10, t.forcaria ? "dl-seg--necessidade" : "dl-seg--acao", [CTR.limiarPausa / 10, CTR.limiteForcar / 10]);
+  const segSob = seg(blocos(t.sobrecarga / 100, 10), 10, "dl-seg--sombrio", [CSO.aviso / 10, CSO.sombrio / 10]);
   $("treino-barras").innerHTML = `<div class="med"><span class="med-cab"><b>Fadiga</b><span class="dl-lcd">${t.fadiga.toFixed(0)} de 100</span></span>${segFad}
-      <span class="dl-apoio">${t.forcaria ? "Acima do limite: treinar agora é forçar." : t.pedePausa ? "Pedindo pausa." : `Limite de forçar em ${CTR.limiteForcar}.`}</span></div>
+      <span class="med-marcas"><span>${CTR.limiarPausa}: pede pausa</span><span>${CTR.limiteForcar}: forçar</span></span>
+      <span class="dl-apoio">${t.forcaria ? "Acima do limite: treinar agora é forçar." : t.pedePausa ? "Pedindo pausa." : "Treinar sobe a fadiga; ela cai com o tempo acordado e com o sono."}</span></div>
     <div class="med"><span class="med-cab"><b>Sobrecarga</b><span class="dl-lcd">${t.sobrecarga.toFixed(0)} de 100</span></span>${segSob}
+      <span class="med-marcas"><span>${CSO.aviso}: aviso</span><span>${CSO.sombrio}: forma sombria</span></span>
       <span class="dl-apoio">${t.sobrecarga >= CSO.sombrio ? "Na virada para Ultimate a forma vai ser sombria." : t.sobrecarga >= CSO.aviso ? `Aviso: com ${CSO.sombrio} ou mais na virada para Ultimate, a forma fica sombria.` : `Com ${CSO.sombrio} ou mais na virada para Ultimate, a forma fica sombria.`}</span></div>
     <div class="med"><span class="med-cab"><b>Treinado na vida</b><span class="dl-lcd">+${dec(t.total, 1).replace(/,0$/, "")} de ${CTR.tetoVida}</span></span>
       <span class="dl-apoio">${STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${dec(t.pontos[k], 1)}`).join(", ") || "nada ainda"}</span></div>`;
-  $("treino-pausa").innerHTML = t.pedePausa ? `<span class="dl-balao">pausa?</span>` : "";
+  $("treino-pausa").innerHTML = t.pedePausa ? `<span class="dl-balao">pausa?</span>` : `<span class="dl-apoio">${bebe ? "O In-Training ainda não treina." : "pronto para treinar"}</span>`;
+  const f = motor.forma, dims = atlasOk && f && f.est !== "ovo" ? dimsForma(f) : [0, 0];
+  $("treino-pet").innerHTML = dims[0] ? `<img class="dl-pix" src="${imagemForma(f)}" width="${dims[0]}" height="${dims[1]}" alt="${escHtml(nomeForma(f))}">` : "";
   $("treino-espera").textContent = bebe ? "O In-Training ainda não treina." : !pode ? `Próximo treino em ${CTR.intervalo - (motor.e.tick - t.ultimo)} min de jogo.` : "";
 }
 $("treino-btns").addEventListener("click", ev => {
@@ -3194,17 +3386,22 @@ function renderAprend(){
   $("recompensas").innerHTML = [["Elogios", r.elogio], ["Repreensões", r.repreensao], ["Pedidos atendidos", r.atendido], ["Pedidos ignorados", r.ignorado]]
     .map(([k,v]) => `<div><b>${v}</b><span>${k}</span></div>`).join("");
   const obs = observacao(motor.e), p0 = distInstinto(obs), pm = motor.pol.media(obs);
-  $("politica").innerHTML = ACOES_PET.map(a => `<div class="dupla"><span>${NOME_PET[a]}</span><div class="bars"><div class="bar prior"><i style="width:${(p0[a]*100).toFixed(1)}%"></i></div><div class="bar agora"><i style="width:${(pm[a]*100).toFixed(1)}%"></i></div></div><span class="v" style="font-family:var(--f-mono);font-size:12.5px;text-align:right">${(p0[a]*100).toFixed(0)}% → ${(pm[a]*100).toFixed(0)}%</span></div>`).join("");
+  $("politica").innerHTML = ACOES_PET.map(a => `<div class="dupla"><span>${NOME_PET[a]}</span><div class="bars"><div class="bar prior"><i style="width:${(p0[a]*100).toFixed(1)}%"></i></div><div class="bar agora"><i class="dl-malha" style="width:${(pm[a]*100).toFixed(1)}%"></i></div></div><span class="v">${Math.abs(pm[a] - p0[a]) >= .05 ? `${pm[a] > p0[a] ? "mais" : "menos"} ${Math.abs(Math.round((pm[a] - p0[a]) * 100))} pts` : ""}</span></div>`).join("");
 }
+/* tipo de cada linha do historico: [filtro, etiqueta] */
+const TIPO_REG = {dono:["voce", "você"], gambit:["voce", "você"], pet:["pet", "pet"], recusa:["pet", "recusou"], luta:["luta", "luta"], treino:["treino", "treino"]};
+let regFiltro = "todos";
 function renderRegistro(){
   $("semente").textContent = motor.semente;
   $("neventos").textContent = motor.log.length;
   const nh = motor.historico.length;
   $("nlinhas").textContent = nh > 80 ? `as últimas 80 de ${nh} linhas` : `${nh} linha${nh === 1 ? "" : "s"}`;
-  $("log").innerHTML = motor.historico.slice(-80).reverse().map(h =>
-    `<div><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> ${h.quem === "dono" ? `<span class="dono">você: ${h.a}</span>`
-      : h.quem === "gambit" ? `<span class="dono">você (regras de combate): ${h.a}</span>` : h.quem === "luta" ? `luta ${h.a}` : h.quem === "recusa" ? `<b>pet ${h.a}</b>`
-      : h.quem === "treino" ? `<span class="dono">treino: pet ${h.a}</span>` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
+  const vis = motor.historico.slice(-80).reverse().filter(h => regFiltro === "todos" || TIPO_REG[h.quem][0] === regFiltro);
+  $("log").innerHTML = vis.map(h => { const [tp, rot] = TIPO_REG[h.quem];
+    const txt = h.quem === "dono" ? h.a : h.quem === "gambit" ? `regras de combate: ${h.a}` : h.quem === "luta" ? h.a : h.quem === "recusa" ? h.a
+      : h.quem === "treino" ? h.a : NOME_PET[h.a];
+    return `<div class="reg-linha"><span class="t">D${diaDe(h.t)} ${hhmm(h.t)}</span> <span class="reg-tag reg-${tp}">${rot}</span> ${h.quem === "recusa" ? "<b>" + txt + "</b>" : txt}</div>`; }).join("")
+    || `<div class="muted">nada deste tipo nas últimas 80 linhas</div>`;
 }
 let paneAtual = "estado";
 /* topo do Pet: retrato 1x recortado no circulo (sem redimensionar), nome da forma e estagio */
@@ -3281,6 +3478,9 @@ const DESTINOS = { pet:["estado"], crescer:["treinar", "aprend", "evolucao"], lu
 const DESTINO_DA_ABA = Object.fromEntries(Object.entries(DESTINOS).flatMap(([d, abas]) => abas.map(a => [a, d])));
 const ultimaAbaDoDestino = {};
 let destinoAtual = "pet";
+const NOME_DESTINO = {pet:"Pet", crescer:"Crescer", lutar:"Lutar", diario:"Diário"};
+/* slogan so na primeira visita (preferencia de tela, chave propria; a chave do save nao muda) */
+try { if (localStorage.getItem(CHAVE + "-boas-vindas") !== "1"){ $("boas-vindas").hidden = false; localStorage.setItem(CHAVE + "-boas-vindas", "1"); } } catch(_){}
 document.querySelectorAll("#nav [data-destino]").forEach(b => b.addEventListener("click", () => {
   const d = b.dataset.destino;
   mostrarPane(ultimaAbaDoDestino[d] || DESTINOS[d][0]);
@@ -3308,6 +3508,7 @@ function mostrarPane(p){
   }
   paneAtual = p; destinoAtual = d; ultimaAbaDoDestino[d] = p;
   document.body.dataset.destino = d;
+  $("tela-titulo").textContent = NOME_DESTINO[d];
   document.querySelectorAll("#nav [data-destino]").forEach(b => { if (b.dataset.destino === d) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   document.querySelectorAll(".tab").forEach(t => { t.hidden = DESTINO_DA_ABA[t.dataset.pane] !== d; });
   document.querySelector(".tabs").hidden = DESTINOS[d].length < 2;
@@ -3318,11 +3519,18 @@ function mostrarPane(p){
   else if (p === "arena") $("palco-arena").appendChild($("palco"));
   try { localStorage.setItem(CHAVE + "-aba", d + "/" + p); } catch(_){}
   renderTudo();
-  if (p === "arena"){ renderGambits(); arenaPreview(); }
+  if (p === "arena"){ renderGambits(); arenaPreview(); renderRivais(); }
   if (p === "campanha" && !lutando){ renderCampanha(); campPreview(); }
   if (p === "catalogo") renderCatalogo();
+  if (p === "evolucao") desenharLinhasEvo();
 }
 
+document.querySelector(".reg-filtros").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-filtro]"); if (!b) return;
+  regFiltro = b.dataset.filtro;
+  document.querySelectorAll("[data-filtro]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  renderRegistro();
+});
 $("verificar").addEventListener("click", () => {
   const t0 = performance.now();
   try {
@@ -3349,12 +3557,15 @@ $("novo-conf").addEventListener("click", () => { $("novo-conf").hidden = true; n
 const FALA_LLM = { on:false, ativo:false, provedor:null, modelo:null, semCusto:false, motivo:"", gasto:null, cache:new Map(), pendentes:new Set() };
 try { FALA_LLM.on = localStorage.getItem(CHAVE + "-fala-llm") === "1"; } catch(_){}
 $("fala-llm-on").checked = FALA_LLM.on;
+/* faixa de status da fala (guia 10: LLM indisponivel = faixa discreta, sem erro assustador) */
 function rotuloLLM(){
-  const g = FALA_LLM.gasto;
-  $("fala-llm-status").textContent = !FALA_LLM.ativo
-    ? `(indisponível: ${FALA_LLM.motivo || "rode python servidor/servidor_local.py"})`
-    : FALA_LLM.semCusto ? `(local: ${FALA_LLM.modelo}, sem custo)`
-    : `(Claude ${FALA_LLM.modelo}; gasto US$ ${g ? dec(g.gasto_usd, 4) : "?"} de US$ ${g ? dec(g.limite_usd, 2) : "?"})`;
+  const g = FALA_LLM.gasto, st = $("fala-llm-status");
+  st.textContent = !FALA_LLM.ativo ? "falando por frases prontas"
+    : !FALA_LLM.on ? (FALA_LLM.semCusto ? "modelo local pronto · desligado" : "modelo pronto · desligado")
+    : FALA_LLM.semCusto ? "modelo local · sem custo"
+    : `Claude · US$ ${g ? dec(g.gasto_usd, 2) : "?"} de US$ ${g ? dec(g.limite_usd, 2) : "?"}`;
+  st.title = !FALA_LLM.ativo ? (FALA_LLM.motivo || "rode python servidor/servidor_local.py") : `${FALA_LLM.provedor || ""} ${FALA_LLM.modelo || ""}`.trim();
+  $("fala-ponto").dataset.estado = !FALA_LLM.ativo ? "off" : FALA_LLM.on ? "ok" : "pronto";
   $("fala-llm-on").disabled = !FALA_LLM.ativo;
 }
 async function verificarLLM(){
@@ -3369,7 +3580,7 @@ setInterval(() => { if (!FALA_LLM.ativo) verificarLLM(); }, 15000);
 $("fala-llm-on").addEventListener("change", ev => {
   FALA_LLM.on = ev.target.checked;
   try { localStorage.setItem(CHAVE + "-fala-llm", FALA_LLM.on ? "1" : "0"); } catch(_){}
-  renderFala();
+  rotuloLLM(); renderFala();
 });
 function motivoParaApi(mot, refs){
   return mot.origem === "vida"
@@ -3463,8 +3674,14 @@ function renderMemoria(){
     : "Memória curta (pet de versão antiga): quanto você demorou para atender o último pedido de comida ou de limpeza, e as broncas e elogios recentes (somem com o tempo). Entra no aprendizado como contexto.";
   const rot = v2 ? FATORES_ESPACOS.map(c => NOME_MEM[c]) : ["Demora com a comida", "Demora para limpar", "Broncas recentes", "Elogios recentes"];
   $("memoria").innerHTML = rot.map((k, i) => `<div><b>${(f[i]*100).toFixed(0)}%</b><span>${k}</span></div>`).join("");
-  const mem = motor.pol.mem, linhaMem = (m, onde) => `<div><span class="t">${onde}</span> <b>${NOME_MEM[m.cat]}</b>${m.emocao ? " · " + EMOCAO_TXT[m.emocao][0] : ""} <span class="muted">força ${(m.int*100).toFixed(0)}%, ativa ${(mem.ativacao(m, tick)*100).toFixed(0)}% · desde D${diaDe(m.criada)} ${hhmm(m.criada)}</span></div>`;
-  $("memoria-espacos").innerHTML = v2 ? (mem.curto.map(m => linhaMem(m, "recente")).join("") + mem.longo.map(m => linhaMem(m, "duradoura")).join("") || `<div class="muted">nenhuma lembrança ainda</div>`) : "";
+  /* espacos de memoria (4 recentes + 2 duradouros); os vazios aparecem */
+  const mem = motor.pol.mem, EMOTE_MEM = {elogio:"emoji_joinha", carinho:"emoji_coracao"};
+  const slot = m => m ? `<div class="mem-slot"><span class="mem-cab">${EMOTE_MEM[m.cat] && atlasOk ? imgPeca(EMOTE_MEM[m.cat], 1, "") : ""}<b>${NOME_MEM[m.cat]}</b></span>
+      <span class="muted">${m.emocao ? EMOCAO_TXT[m.emocao][0] + " · " : ""}força ${(m.int*100).toFixed(0)}% · desde D${diaDe(m.criada)} ${hhmm(m.criada)}</span>${seg(blocos(mem.ativacao(m, tick), 5), 5, "dl-seg--acao")}</div>`
+    : `<div class="mem-slot mem-vazio">vazio</div>`;
+  const cheio = (lst, n) => Array.from({length:n}, (_, i) => slot(lst[i]));
+  $("memoria-espacos").innerHTML = v2 ? `<h3 class="mem-tit">Recentes <span class="muted">${mem.curto.length} de ${CME.nCurto}</span></h3><div class="mem-grade">${cheio(mem.curto, CME.nCurto).join("")}</div>
+    <h3 class="mem-tit">Duradouras <span class="muted">${mem.longo.length} de ${CME.nLongo}</span></h3><div class="mem-grade">${cheio(mem.longo, CME.nLongo).join("")}</div>` : "";
   $("desejo-bloco").hidden = !v2;
   if (v2 && mem.emocoes.length){
     const ult = mem.emocoes[mem.emocoes.length - 1];
@@ -3647,20 +3864,30 @@ function renderGambits(){
     el.innerHTML = `<p class="muted">O In-Training ainda não tem estilo de luta: decide ao acaso. Quando evoluir para Rookie, o ramo (sereno ou arisco) semeia as primeiras 3 regras de combate e ele começa a aprender com as lutas.</p>`;
     return;
   }
-  const linhas = gp.ativas.map((k, i) => {
-    const r = REPERTORIO.get(k), trav = k in gp.travas;
-    return `<li data-k='${k.replace(/'/g, "&#39;")}'>
-      <span class="g-regra">${rotuloRegra(r)}</span>
-      <span class="g-nota" title="nota aprendida (saldo de dano por uso)">nota ${comSinal(gp.notas[k], 2)} · usada ${gp.disparos[k] || 0}×</span>
-      <span class="g-bts"><button class="sbtn sec g-op" data-op="${trav ? "destravar" : "travar"}">${trav ? "🔒 destravar" : "travar"}</button><button class="sbtn sec g-op" data-op="vetar">vetar</button></span></li>`;
-  }).join("");
-  const vetos = gp.vetos.map(k => `<li data-k='${k.replace(/'/g, "&#39;")}'><span class="g-regra">${rotuloRegra(REPERTORIO.get(k))}</span>
-      <span class="g-bts"><button class="sbtn sec g-op" data-op="liberar">liberar</button></span></li>`).join("");
+  const ICO_TRAVA = '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>';
+  const ICO_VETO = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M5 15 15 5"/></svg>';
+  const ICO_LIBERA = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10l4 4 8-8"/></svg>';
+  const cartao = (k, i, estado) => {
+    const r = REPERTORIO.get(k), se = r.se.map(rotuloCond).join(" e "), kk = k.replace(/'/g, "&#39;");
+    const bts = estado === "vetada"
+      ? `<button type="button" class="dl-btn dl-btn--icone g-op" data-op="liberar" aria-label="Liberar esta regra">${ICO_LIBERA}</button>`
+      : `<button type="button" class="dl-btn dl-btn--icone g-op${estado === "travada" ? " g-on" : ""}" data-op="${estado === "travada" ? "destravar" : "travar"}" aria-pressed="${estado === "travada"}" aria-label="${estado === "travada" ? "Destravar" : "Travar nesta posição"}">${ICO_TRAVA}</button>
+         <button type="button" class="dl-btn dl-btn--icone g-op" data-op="vetar" aria-label="Vetar: o pet não usa">${ICO_VETO}</button>`;
+    return `<li class="g-card g-${estado}" data-k='${kk}'>
+      <span class="g-num">${estado === "vetada" ? "×" : i + 1}</span>
+      <span class="g-corpo"><span class="g-se"><b>SE</b> ${se}</span><span class="g-entao"><b>ENTÃO</b> ${NOME_V2[r.entao]}</span>
+        <span class="g-meta">${estado === "travada" ? '<span class="dl-tag dl-tag--estagio">travada</span> ' : estado === "vetada" ? '<span class="dl-tag dl-tag--espera">vetada</span> ' : ""}${estado === "vetada" ? "" : `nota ${comSinal(gp.notas[k], 2)} · usada ${gp.disparos[k] || 0}×`}</span></span>
+      <span class="g-bts">${bts}</span></li>`;
+  };
+  const cap = CV21.maxRegras[gp.forma.est];
+  const linhas = gp.ativas.map((k, i) => cartao(k, i, k in gp.travas ? "travada" : "livre")).join("");
+  const vetos = gp.vetos.map((k, i) => cartao(k, i, "vetada")).join("");
   el.innerHTML = `<p>Lista aprendida pelo pet em ${gp.nLutas} luta${gp.nLutas === 1 ? "" : "s"}. Começou com as regras de <b>${gp.linha}</b>; cabem ${CV21.maxRegras[gp.forma.est]} regras agora${gp.forma.est === "adulto" ? "" : ", e a lista cresce quando ele evoluir"}.
       Vale a primeira regra cujas condições batem.</p>
     <details class="muted"><summary>Como ele escolhe</summary><p>A primeira regra cujas condições valem e cuja ação é possível dispara. Em ${Math.round(CV.eps*100)}% das decisões ele tenta algo ao acaso, para descobrir regras novas.</p></details>
-    <ol class="gambits">${linhas}<li class="g-final"><span class="g-se">sempre →</span> ${NOME_V2[gp.final]}</li></ol>
-    ${vetos ? `<h2 style="margin-top:10px">Vetadas por você</h2><ol class="gambits">${vetos}</ol>` : ""}
+    <p class="g-cont"><b>${gp.ativas.length} de ${cap}</b> espaços de regra ocupados</p>
+    <ol class="g-lista">${linhas}<li class="g-card g-final"><span class="g-num">∞</span><span class="g-corpo"><span class="g-se"><b>SE</b> nenhuma regra acima valer</span><span class="g-entao"><b>ENTÃO</b> ${NOME_V2[gp.final]}</span></span></li></ol>
+    ${vetos ? `<h2 style="margin-top:10px">Vetadas por você</h2><ol class="g-lista">${vetos}</ol>` : ""}
     <p class="muted">Você só pode <b>travar</b> (a regra fica nessa posição) ou <b>vetar</b> (o pet não pode usá-la). Tudo entra no registro.</p>
     <details><summary>O que o pet mudou</summary><div class="decisoes" style="margin-top:6px">${gp.mudancas.slice(-15).reverse()
       .map(x => { const tx = x.texto.replace(/(\d)\.(\d)/g, "$1,$2"); return `<div><span class="t">luta ${x.luta}</span> ${x.dono ? "<b>" + tx + "</b>" : "pet " + tx}</div>`; }).join("")}</div></details>
@@ -3704,17 +3931,21 @@ function desenharArenaV2(A, B, E, tr){
   const alt = [A, B].filter(L => L.sprite && atlasOk).map(L => dimSprite(L.sprite)[3]);
   escLuta = alt.length ? Math.max(1, Math.min(3, Math.floor(34 * acv.K / (Math.max(...alt) * escalaSprite())))) : 1;
   actx.setTransform(acv.K, 0, 0, acv.K, 0, 0); actx.imageSmoothingEnabled = false;
-  actx.fillStyle = "#0F3A86"; actx.fillRect(0,0,96,48);
-  actx.fillStyle = "rgba(111,227,255,.22)"; const fio = 1 / acv.K;
-  for (let x = 0; x < 96; x += 6) actx.fillRect(x, 0, fio, 38);
-  for (let y = 2; y < 38; y += 6) actx.fillRect(0, y, 96, fio);
-  actx.fillStyle = "#0B2A5E"; actx.fillRect(0,38,96,10);
-  actx.fillStyle = "rgba(111,227,255,.45)"; actx.fillRect(0,38,96,fio * 2);
+  const fio = 1 / acv.K;
+  if (atlasOk){
+    /* fundo de arena do UP (pintura): faixa central do octogono cobrindo o palco, com suavizacao */
+    const r = dimSprite("fundo_arena"), sh = Math.round(r[2] * 48 / 96);
+    actx.save(); actx.setTransform(1, 0, 0, 1, 0, 0); actx.imageSmoothingEnabled = true;
+    actx.drawImage(atlasImg, r[0], r[1] + Math.round((r[3] - sh) * .55), r[2], sh, 0, 0, acv.width, acv.height); actx.restore();
+    actx.fillStyle = "rgba(11,42,94,.35)"; actx.fillRect(0,38,96,10);
+  } else {
+    actx.fillStyle = "#0F3A86"; actx.fillRect(0,0,96,48);
+    actx.fillStyle = "#0B2A5E"; actx.fillRect(0,38,96,10);
+  }
   const [xa, xb] = XS[E ? E.dist : 1];
   const ha = desenharLutador(A, xa, quadroLutador(tr, 0), true), hb = desenharLutador(B, xb, quadroLutador(tr, 1), false);
   if (E){
-    actx.font = "6px monospace"; actx.textBaseline = "top"; actx.fillStyle = "#E8ECFF";
-    actx.fillText(DIST[E.dist], 48 - actx.measureText(DIST[E.dist]).width/2, 3);
+    $("luta-dist").textContent = "distância: " + DIST[E.dist];
     const pal = paleta("carga");
     if (E.L[0].prep) desenhar(actx, S.exclam, xa - 3, 40 - ha - 9, pal);
     if (E.L[1].prep) desenhar(actx, S.exclam, xb - 3, 40 - hb - 9, pal);
@@ -3758,89 +3989,45 @@ const tentativas = k => motor.log.reduce((n, e) => n + (e[1] === "l" && e[2].r =
 function campProximoLugar(){ const L = LUGARES.findIndex((_, i) => motor.desafioAberto(LUGARES[i].rivais[0]) && !motor.lugarVencido(i)); return L < 0 ? LUGARES.length - 1 : L; }
 function campProximo(){ return LUGARES[campProximoLugar()].rivais[0]; }
 function arvoreMapa(x, y, cor){ return `<polygon points="${x},${y - 14} ${x - 7},${y} ${x + 7},${y}" fill="${cor}"/><rect x="${x - 1.5}" y="${y}" width="3" height="4" fill="#6B4A2B"/>`; }
-function cenarioMapa(){
-  const t = [];
-  /* ceu ao fundo, montanhas, rio e chao */
-  t.push(`<rect width="360" height="230" fill="#8FD0A8"/>`);
-  t.push(`<rect width="360" height="70" fill="#B9E3F0"/>`);
-  t.push(`<polygon points="200,70 250,18 300,70" fill="#8C8FA3"/><polygon points="240,70 300,6 360,70" fill="#6F7389"/><polygon points="286,14 300,6 314,14 306,18 294,18" fill="#F4F6FF"/>`);
-  t.push(`<polygon points="150,70 185,40 220,70" fill="#9EA2B4"/>`);
-  t.push(`<rect y="70" width="360" height="160" fill="#8FD0A8"/>`);
-  t.push(`<path d="M0,120 C40,112 70,132 110,126 S170,140 150,170 S120,215 140,230" fill="none" stroke="#5BA9D6" stroke-width="9" opacity=".85"/>`);
-  t.push(`<rect x="120" y="150" width="26" height="6" fill="#8B6A43"/><rect x="120" y="148" width="2" height="10" fill="#6B4A2B"/><rect x="144" y="148" width="2" height="10" fill="#6B4A2B"/>`);
-  /* campina: flores e arvores */
-  for (const [x, y] of [[22,150],[36,196],[118,204],[108,180],[16,214],[58,212]]) t.push(arvoreMapa(x, y, "#3F8F5A"));
-  for (const [x, y] of [[48,160],[96,160],[40,182],[92,198],[66,150]]) t.push(`<rect x="${x}" y="${y}" width="3" height="3" fill="#F7E27A"/><rect x="${x + 5}" y="${y + 2}" width="3" height="3" fill="#F2A1B5"/>`);
-  /* torre de pedra */
-  t.push(`<rect x="218" y="88" width="20" height="46" fill="#A5A9B8"/><rect x="216" y="84" width="24" height="6" fill="#8C90A0"/>`);
-  for (let i = 0; i < 4; i++) t.push(`<rect x="${216 + i * 7}" y="79" width="4" height="6" fill="#8C90A0"/>`);
-  t.push(`<rect x="225" y="120" width="6" height="14" fill="#4B4F63"/><rect x="226" y="98" width="4" height="6" fill="#4B4F63"/>`);
-  for (const [x, y] of [[170,100],[250,140],[176,142],[262,110]]) t.push(arvoreMapa(x, y, "#357A4D"));
-  /* cidadela no morro */
-  t.push(`<polygon points="262,92 300,60 340,92" fill="#6E5B7B"/>`);
-  t.push(`<rect x="312" y="36" width="30" height="30" fill="#4E4466"/><rect x="306" y="30" width="10" height="36" fill="#5C5078"/><rect x="338" y="30" width="10" height="36" fill="#5C5078"/>`);
-  for (const x of [306, 311, 338, 343]) t.push(`<rect x="${x}" y="25" width="4" height="6" fill="#5C5078"/>`);
-  t.push(`<rect x="323" y="52" width="8" height="14" fill="#23203A"/><rect x="326" y="18" width="2" height="12" fill="#23203A"/><polygon points="328,18 338,21 328,24" fill="#C8443A"/>`);
-  /* casa (ponto de partida) */
-  t.push(`<rect x="12" y="92" width="22" height="16" fill="#E9D2A8"/><polygon points="9,93 23,80 37,93" fill="#C8443A"/><rect x="20" y="99" width="6" height="9" fill="#6B4A2B"/>`);
-  return t.join("");
+/* peca do atlas como URL (pinturas do UP: ilhas, nuvem, marcadores) */
+function urlPeca(nome){
+  const ch = "url@" + nome;
+  if (!cacheImgPeca.has(ch)){ const r = dimSprite(nome), c = document.createElement("canvas"); c.width = r[2]; c.height = r[3];
+    spriteUp(c.getContext("2d"), nome, 0, 0, false); cacheImgPeca.set(ch, c.toDataURL()); }
+  return cacheImgPeca.get(ch);
 }
-/* sprite 1x recortado num quadrado, sobre o ponto (cx, cy) do SVG do mapa (viewBox 360 x 230) */
-let spritesMapa = [];
-function posicionarSpritesMapa(){
-  const svg = $("mapa"), caixa = svg.parentElement;
-  caixa.querySelectorAll(".mapa-spr").forEach(e => e.remove());
-  const rs = svg.getBoundingClientRect(), rc = caixa.getBoundingClientRect(), k = rs.width / 360;
-  if (!(k > 0)) return;
-  /* svg nao tem offsetLeft/offsetTop: posicao pela diferenca dos retangulos */
-  const ox = rs.left - rc.left + caixa.scrollLeft, oy = rs.top - rc.top + caixa.scrollTop;
-  for (const m of spritesMapa){
-    const d = document.createElement("span"); d.className = "mapa-spr" + (m.pet ? " pet-mapa-spr" : "");
-    d.style.cssText = `left:${ox + m.cx * k - m.lado / 2}px;top:${oy + m.cy * k - m.lado / 2}px;width:${m.lado}px;height:${m.lado}px`;
-    d.innerHTML = `<img src="${m.href}" alt="">`;
-    caixa.appendChild(d);
-  }
-}
-addEventListener("resize", () => { if (paneAtual === "campanha") posicionarSpritesMapa(); });
+/* mapa da campanha (desenho CampMapa): uma ilha do UP por lugar, nuvem nos trancados, marcador com o NPC em 1x */
+const ILHA = [{peca:"ilha_campina", x:44, y:57}, {peca:"ilha_torre", x:2, y:29}, {peca:"ilha_cidadela", x:44, y:0}];
 function renderCampanha(){
-  const svg = $("mapa");
-  if (!svg || !motor) return;
+  const mapa = $("mapa");
+  if (!mapa || !motor) return;
   if (!campSel || !NPC[campSel]) campSel = campProximo();
-  const pts = [[24, 112], ...LUGARES.map(L => [L.x, L.y])];
   const vencidos = LUGARES.filter((_, i) => motor.lugarVencido(i)).length;
-  /* caminho: tracejado inteiro e, por cima, o trecho ja percorrido */
-  const d = pts.map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
-  const feito = pts.slice(0, vencidos + 1).map(([x, y], i) => (i ? "L" : "M") + x + "," + y).join(" ");
-  let h = cenarioMapa();
-  const spr = [];   /* sprites do mapa: em HTML por cima do SVG, 1x (o SVG escala com a tela, o sprite nao) */
-  h += `<path d="${d}" fill="none" stroke="#F4F1E4" stroke-width="5" stroke-dasharray="2 6" stroke-linecap="round"/>`;
-  if (vencidos) h += `<path d="${feito}" fill="none" stroke="#F0A534" stroke-width="5" stroke-linecap="round"/>`;
+  if (!atlasOk){ mapa.innerHTML = `<p class="muted">Carregando o mapa…</p>`; renderCampDet(); return; }
+  const centro = i => [ILHA[i].x + 27, ILHA[i].y + 22];   /* em % da largura e da altura */
+  let h = `<svg class="mapa-caminho" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${
+    LUGARES.slice(1).map((_, i) => { const [x1, y1] = centro(i), [x2, y2] = centro(i + 1), feito = i < vencidos;
+      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${feito ? "feito" : ""}"/>`; }).join("")}</svg>`;
   LUGARES.forEach((L, i) => {
     const vit = L.rivais.reduce((n, k) => n + motor.campanha[k], 0), aberto = motor.desafioAberto(L.rivais[0]);
-    const c = NPC[L.rivais[0]], sel = NPC[campSel].lug === i;
-    const cls = ["no", aberto ? (vit ? "vencido" : "aberto") : "bloq", sel ? "sel" : ""].filter(Boolean).join(" ");
+    const c = NPC[L.rivais[0]], sel = NPC[campSel].lug === i, [cxp, cyp] = centro(i);
     const st = vit ? `vencido ${vit}×` : aberto ? "aberto" : "trancado";
     const quem = L.rivais.length > 1 ? `${L.rivais.length} rivais` : c.nome;
-    const w = Math.max((L.nome.length + 3) * 7.4, (quem.length + st.length + 3) * 5) + 14;
-    h += `<g class="${cls}" data-lugar="${i}" tabindex="0" role="button" aria-label="${i + 1}. ${L.nome}: ${quem}, ${st}">
-      <circle class="pulso" cx="${L.x}" cy="${L.y}" r="21"/>
-      <circle class="anel" cx="${L.x}" cy="${L.y}" r="19" fill="${vit ? "#FFF3D6" : "#F4F6FF"}" stroke="${vit ? "#F0A534" : aberto ? "#2F47A6" : "#6F7389"}" stroke-width="3"/>
-      ${(spr.push({href:imagemChave(spriteNPC(c) + "_0"), cx:L.x, cy:L.y, lado:28}), "")}
-      ${L.rivais.length > 1 ? `<g transform="translate(${L.x - 26},${L.y - 22})"><circle cx="6" cy="6" r="7" fill="#2F47A6"/><text x="6" y="9.5" text-anchor="middle" style="fill:#fff;font-size:9px">${L.rivais.length}</text></g>` : ""}
-      ${aberto ? "" : `<g transform="translate(${L.x + 9},${L.y - 20})"><rect x="0" y="5" width="11" height="9" rx="1" fill="#4B4F63"/><path d="M2.5,5 v-2 a3,3 0 0 1 6,0 v2" fill="none" stroke="#4B4F63" stroke-width="2"/></g>`}
-      ${vit ? `<g transform="translate(${L.x + 10},${L.y - 24})"><rect x="0" y="0" width="2" height="16" fill="#23203A"/><polygon points="2,0 13,4 2,8" fill="#F0A534"/></g>` : ""}
-      <rect class="rotulo-bg" x="${L.x - w / 2}" y="${L.y + 23}" width="${w}" height="24" rx="4"/>
-      <text class="rotulo" x="${L.x}" y="${L.y + 33}" text-anchor="middle">${i + 1}. ${L.nome.toUpperCase()}</text>
-      <text class="st" x="${L.x}" y="${L.y + 43}" text-anchor="middle">${quem} · ${st}</text>
-    </g>`;
+    const dims = dimSprite(spriteNPC(c) + "_0").slice(2), top = dims[1] > 48 ? -Math.round(dims[1] * .08) : Math.round((48 - dims[1]) / 2);
+    h += `<img class="ilha" src="${urlPeca(ILHA[i].peca)}" alt="" style="left:${ILHA[i].x}%;top:${ILHA[i].y}%">`
+      + (aberto ? "" : `<img class="nuvem" src="${urlPeca("nuvem")}" alt="" style="left:${ILHA[i].x - 2}%;top:${ILHA[i].y - 1}%">`)
+      + `<button type="button" class="lugar${sel ? " sel" : ""}${aberto ? "" : " bloq"}${vit ? " vencido" : ""}" data-lugar="${i}" style="left:${cxp}%;top:${cyp}%"
+          aria-label="${i + 1}. ${L.nome}: ${quem}, ${st}"${sel ? ' aria-current="true"' : ""}>
+          <img class="marcador" src="${urlPeca(i === LUGARES.length - 1 ? "marcador_chefe" : vit ? "marcador_3" : "marcador_1")}" alt="">
+          <span class="lugar-npc"><img class="dl-pix" src="${imagemChave(spriteNPC(c) + "_0")}" alt="" style="margin-top:${top}px"></span>
+          <span class="lugar-placa"><b>${i + 1}. ${L.nome}</b><small>${quem} · ${st}</small></span></button>`;
   });
-  /* seu pet: parado no proximo desafio (ou na casa, se nenhum aberto foi vencido ainda) */
-  const [px, py] = pts[vencidos];
-  const [ix, iy] = vencidos ? [px - 44, py - 18] : [px + 14, py - 22];     /* ao lado do lugar; na casa, a direita dela */
-  if (motor.forma.est !== "ovo")
-    spr.push({href:imagemForma(motor.forma), cx:ix + 11, cy:iy + 11, lado:26, pet:true});
-  svg.innerHTML = h;
-  spritesMapa = spr; posicionarSpritesMapa();
+  /* seu pet: no proximo desafio (ou no primeiro lugar, se nada foi vencido) */
+  if (motor.forma.est !== "ovo"){
+    const [px, py] = centro(Math.min(vencidos, LUGARES.length - 1)), d = dimsForma(motor.forma), top = d[1] > 44 ? -Math.round(d[1] * .08) : Math.round((44 - d[1]) / 2);
+    h += `<span class="pet-mapa-ilha" style="left:calc(${px}% + 34px);top:calc(${py}% - 40px)"><img class="dl-pix" src="${imagemForma(motor.forma)}" alt="seu pet" style="margin-top:${top}px"></span>`;
+  }
+  mapa.innerHTML = h;
   renderCampDet();
 }
 function renderCampDet(){
@@ -4023,6 +4210,23 @@ $("melhor10").addEventListener("click", () => {
   travar(false);
 });
 $("rival").addEventListener("change", () => { rivalFixo = null; renderRivalFixo(); arenaPreview(); });
+/* cards de rival (desenho ArenaEscolha): sprite, nome e estilo numa linha; o select escondido continua
+   sendo o valor que a luta le */
+function renderRivais(){
+  const sel = $("rival").value, grupos = [["Bots de treino", [...$("rival").querySelectorAll(":scope > option")]], ["Formas adultas", [...$("rival").querySelectorAll("optgroup option")]]];
+  $("rivais").innerHTML = grupos.map(([tit, ops]) => `<h3 class="rivais-tit">${tit}</h3><div class="rivais-grade">${ops.map(o => {
+    const L = lutadorBot(o.value), nome = nomeLutador(L), m = /^(.*?) \((.*)\)$/.exec(nome);
+    const dims = atlasOk && L.sprite ? dimSprite(L.sprite).slice(2) : [0, 0];
+    return `<button type="button" class="rival-card" role="radio" aria-checked="${o.value === sel}" data-rival="${o.value}">
+      <span class="rival-spr">${atlasOk && L.sprite ? `<img class="dl-pix" src="${imagemChave(L.sprite + "_0")}" alt="" style="margin-top:${dims[1] > 56 ? -Math.round(dims[1] * .08) : 0}px">` : ""}</span>
+      <span class="rival-txt"><b>${escHtml(m ? m[1] : nome)}</b><small>${escHtml(m ? m[2] : o.textContent)}</small></span></button>`; }).join("")}</div>`).join("");
+  const ado = motor.estagioAtual === "adolescente";
+  $("rival-treino").innerHTML = ado ? `lutas de treino para evoluir: ${Math.min(motor.sparring, CAT.sparring)} de ${CAT.sparring} ${seg(Math.min(motor.sparring, CAT.sparring), CAT.sparring, "dl-seg--acao")}` : "";
+}
+$("rivais").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-rival]"); if (!b || lutando) return;
+  $("rival").value = b.dataset.rival; $("rival").dispatchEvent(new Event("change")); renderRivais();
+});
 /* seletor de rival: formas V2.1 com o nome do Digimon (o estilo entre parenteses) */
 for (const o of $("rival").options){
   if (BOTS_V21[o.value]) o.textContent = `${nomeForma(formaRival(o.value))} (${NOME_ARQ[o.value].toLowerCase()})`;
@@ -4139,10 +4343,24 @@ function mostrarRevelacao(x){
     clearInterval(mostrarRevelacao.timer); mostrarRevelacao.timer = setInterval(desenha, UPA.ms_por_quadro); desenha(); }
   dlg.showModal();
 }
+let evoArestas = [];
+/* linhas da arvore, a partir das posicoes dos nos na tela (a arvore e HTML; so as linhas sao SVG) */
+function desenharLinhasEvo(){
+  const arv = $("evo-arvore"), svg = $("evo-linhas");
+  if (!svg || !arv.offsetParent) return;
+  const r0 = arv.getBoundingClientRect(), pos = {};
+  arv.querySelectorAll(".evo-no").forEach(n => { const r = n.querySelector(".evo-cx").getBoundingClientRect(); pos[n.dataset.id] = [r.left - r0.left, r.right - r0.left, r.top - r0.top + r.height / 2]; });
+  svg.setAttribute("width", r0.width); svg.setAttribute("height", r0.height); svg.setAttribute("viewBox", `0 0 ${r0.width} ${r0.height}`);
+  const ordem = {fechado:0, possivel:1, provavel:2, percorrido:3};
+  svg.innerHTML = [...evoArestas].sort((a, b) => ordem[a[2]] - ordem[b[2]]).map(([a, b, c]) => { const A = pos[a], B = pos[b]; if (!A || !B) return "";
+    const x1 = A[1], y1 = A[2], x2 = B[0], y2 = B[2], xm = (x1 + x2) / 2;
+    return `<path class="evo-aresta ${c}" d="M${x1} ${y1} C ${xm} ${y1}, ${xm} ${y2}, ${x2} ${y2}"/>`; }).join("");
+}
+addEventListener("resize", () => { if (paneAtual === "evolucao") desenharLinhasEvo(); });
 /* no toque (nao so no hover): o requisito do no aparece abaixo da arvore (guia 13) */
 function mostrarNoEvo(g){ const d = $("evo-no-det"); d.textContent = g.dataset.det; d.hidden = false; }
 $("evo-arvore").addEventListener("click", ev => { const g = ev.target.closest(".evo-no"); if (g) mostrarNoEvo(g); });
-$("evo-arvore").addEventListener("keydown", ev => { const g = ev.target.closest(".evo-no"); if (g && (ev.key === "Enter" || ev.key === " ")){ ev.preventDefault(); mostrarNoEvo(g); } });
+/* os nos agora sao <button>: Enter e espaco ja disparam o clique */
 $("revel-ok").addEventListener("click", () => { clearInterval(mostrarRevelacao.timer); $("revelacao").close(); });
 /* so evolucoes novas nesta sessao abrem a revelacao; o save antigo nao reabre as dele */
 function checarEvolucao(){
@@ -4165,50 +4383,45 @@ function renderEvolucao(){
   $("evo-hist").innerHTML = [`<div><span class="t">D1 ${hhmm(TICK_INICIAL)}</span><span>nasceu: <b>${nomeForma({esp:motor.especie, est:"bebe"})}</b></span></div>`]
     .concat(evs.map(x => `<div><span class="t">D${diaDe(x.tick)} ${hhmm(x.tick)}</span><span>virou <b>${nomeForma(x.forma)}</b> (${det(x)})</span></div>`)).join("");
 
-  /* arvore: so redesenha quando algo visivel muda */
-  const idDe = g => g.est === "ovo" ? "ovo" : chaveSprite(g);
-  const chave = [atlasOk, idDe(f), p && idDe(p.prox), evs.length].join("|");
-  if (chave === evoChave) return;
+  /* arvore (desenho EvoArvore): 4 colunas em HTML, sprites 1x recortados; linhas num SVG por tras */
+  const idDe = g => chaveSprite(g);
+  const chave = [atlasOk, idDe(f), p && idDe(p.prox), evs.length, !!motor.sombria].join("|");
+  if (chave === evoChave){ desenharLinhasEvo(); return; }
   evoChave = chave;
-  const esp = motor.especie, X = {ovo:32, bebe:108, crianca:210, adolescente:340, adulto:488}, R = 21, Y = i => 46 + i*58;
-  const nos = [{esp, est:"ovo"}, {esp, est:"bebe"}], pos = {ovo:[X.ovo, Y(3.5)], [chaveSprite(nos[1])]:[X.bebe, Y(3.5)]};
-  const cri = ["sereno","arisco"].map((r, i) => ({esp, est:"crianca", ramo:r, y:Y(2 + 3*i)}));
-  const ado = LINHAS.map((l, i) => ({esp, est:"adolescente", ramo:"sereno", linha:l, y:Y(2*i + .5)}));
-  const adu = FORMAS_AD.map((a, i) => ({esp, est:"adulto", ramo:"sereno", linha:LINHA_DA_FORMA[a], adulta:a, y:Y(i)}));
-  for (const g of [...cri, ...ado, ...adu]){ pos[idDe(g)] = [X[g.est], g.y]; nos.push(g); }
-  const caminho = new Set(["ovo", chaveSprite(nos[1]), ...evs.map(x => chaveSprite(x.forma))]);
-  const passou = new Set(["bebe", ...evs.map(x => x.estagio)]);
+  const esp = motor.especie;
+  const bebe = {esp, est:"bebe"};
+  const cri = ["sereno","arisco"].map(r => ({esp, est:"crianca", ramo:r}));
+  const ado = LINHAS.map(l => ({esp, est:"adolescente", ramo:"sereno", linha:l}));
+  const adu = FORMAS_AD.map(a => ({esp, est:"adulto", ramo:"sereno", linha:LINHA_DA_FORMA[a], adulta:a}));
+  const caminho = new Set([idDe(bebe), ...evs.map(x => chaveSprite(x.forma))]);
   const atualId = idDe(f), provId = p ? idDe(p.prox) : null;
-  const fora = id => { const g = nos.find(n => idDe(n) === id); return g && g.est !== "ovo" && passou.has(g.est) && !caminho.has(id); };
-  const arestas = [];
-  const cls = (a, b) => caminho.has(a) && caminho.has(b) ? "caminho" : (a === atualId && b === provId) ? "provavel" : (fora(a) || fora(b)) ? "fora" : "";
-  const linhaEvo = (a, b) => { const [x1, y1] = pos[a], [x2, y2] = pos[b], c = cls(a, b);
-    arestas.push([c === "caminho" || c === "provavel" ? 2 : c === "fora" ? 0 : 1,
-      `<path class="evo-aresta ${c}" d="M${x1 + R} ${y1} C ${(x1 + x2)/2} ${y1}, ${(x1 + x2)/2} ${y2}, ${x2 - R} ${y2}"/>`]); };
-  linhaEvo("ovo", idDe(nos[1]));
-  for (const c of cri) linhaEvo(idDe(nos[1]), idDe(c));
-  for (const c of cri) for (const a of ado) linhaEvo(idDe(c), idDe(a));
-  for (const a of adu) linhaEvo(idDe(ado[LINHAS.indexOf(a.linha)]), idDe(a));
-  arestas.sort((a, b) => a[0] - b[0]);
+  /* o que ainda da para alcancar a partir da forma atual */
+  const alcance = new Set(f.est === "bebe" ? [...cri, ...ado, ...adu].map(idDe) : f.est === "crianca" ? [...ado, ...adu].map(idDe)
+    : f.est === "adolescente" ? adu.filter(a => a.linha === f.linha).map(idDe) : []);
+  const estado = id => id === atualId ? "agora" : caminho.has(id) ? "percorrido" : alcance.has(id) ? "possivel" : "fechado";
   const no = g => {
-    const id = idDe(g), [x, y] = pos[id];
-    const c = [caminho.has(id) ? "caminho" : "", id === atualId ? "atual" : "", id === provId ? "provavel" : "", fora(id) ? "fora" : ""].join(" ");
-    /* so o caminho ja percorrido revela o Digimon; o resto e silhueta a 45% com "?" */
-    const revelado = caminho.has(id) || id === atualId;
-    const rot = g.est === "ovo" ? "Digi-Egg" : revelado ? nomeForma(g) : "?";
-    return `<g class="evo-no ${c}" tabindex="0" role="button" data-det="${escHtml((revelado ? (g.est === "ovo" ? "Digi-Egg" : nomeForma(g)) : "Forma ainda não decidida") + ": " + requisito(g))}"><title>${revelado ? (g.est === "ovo" ? "Digi-Egg" : nomeForma(g)) : "forma ainda não decidida"}: ${requisito(g)}</title>
-      <rect x="${x - R}" y="${y - R}" width="${2*R}" height="${2*R}" rx="10"/>
-      ${recorteSvg(revelado ? imagemForma(g) : silhuetaForma(g), dimsForma(g), x, y, 38, revelado ? "" : ' opacity=".45"')}
-      ${revelado ? "" : `<text class="evo-q" x="${x}" y="${y + 6}" text-anchor="middle">?</text>`}
-      <text x="${x}" y="${y + R + 12}" text-anchor="middle">${rot}</text></g>`;
+    const id = idDe(g), st = estado(id), revelado = st === "agora" || st === "percorrido", d = dimsForma(g);
+    const img = revelado ? imagemForma(g) : silhuetaForma(g), top = d[1] > 44 ? -Math.round(d[1] * .08) : Math.round((44 - d[1]) / 2);
+    const cls = ["evo-no", st, id === provId ? "provavel" : "", st === "agora" && motor.sombria ? "sombria" : ""].filter(Boolean).join(" ");
+    const det = (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + requisito(g);
+    return `<button type="button" class="${cls}" data-id="${id}" data-det="${escHtml(det)}" aria-label="${escHtml((revelado ? nomeForma(g) : "forma ainda não decidida") + ", " + st)}">
+      <span class="evo-cx"><img class="dl-pix" src="${img}" alt="" style="margin-top:${top}px${revelado ? "" : ";opacity:.45"}">${revelado ? "" : '<b class="evo-q">?</b>'}</span>
+      <span class="evo-rot">${revelado ? escHtml(nomeForma(g)) : "?"}</span></button>`;
   };
-  const cab = [["Digi-Egg", X.ovo], ["In-Training", X.bebe], ["Rookie", X.crianca], ["Champion", X.adolescente], ["Ultimate/Mega", X.adulto]]
-    .map(([tx, x]) => `<text class="cab" x="${x}" y="16" text-anchor="middle">${tx}</text>`).join("");
-  $("evo-arvore").innerHTML = cab + arestas.map(a => a[1]).join("") + nos.map(no).join("");
+  const col = (tit, gs) => `<div class="evo-col"><span class="evo-col-tit">${tit}</span><div class="evo-col-nos">${gs.map(no).join("")}</div></div>`;
+  $("evo-arvore").innerHTML = `<svg class="evo-linhas" id="evo-linhas" aria-hidden="true"></svg>`
+    + col("In-Training", [bebe]) + col("Rookie", cri) + col("Champion", ado) + col("Ultimate/Mega", adu);
+  /* arestas: bebe -> criancas -> (qualquer) adolescente -> adultos da linha */
+  evoArestas = [...cri.map(c => [idDe(bebe), idDe(c)]), ...cri.flatMap(c => ado.map(a => [idDe(c), idDe(a)])), ...adu.map(a => [idDe(ado[LINHAS.indexOf(a.linha)]), idDe(a)])]
+    .map(([a, b]) => [a, b, caminho.has(a) && (caminho.has(b) || b === atualId) ? "percorrido" : a === atualId && b === provId ? "provavel" : estado(b) === "fechado" || estado(a) === "fechado" ? "fechado" : "possivel"]);
+  desenharLinhasEvo();
+  /* por que da forma atual (EvoPorque): os dados da ultima evolucao registrada */
+  const ult = evs[evs.length - 1];
+  $("evo-porque").innerHTML = ult ? `<section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que ${escHtml(nomeForma(f))}?</h3>${porqueEvolucao(ult)}</section>` : "";
 }
 
 /* ------------------------------------------------ catalogo */
-let catEsp = null;
+let catEsp = null, catSel = -1;
 function renderCatalogo(){
   const esp = catEsp || motor.especie;
   $("cat-esp").innerHTML = ESPECIES.map(e => `<button class="chip" data-esp="${e}" aria-pressed="${e === esp}">${NOME_ESP[e]}${e === motor.especie ? " (seu)" : ""}</button>`).join("")
@@ -4217,21 +4430,29 @@ function renderCatalogo(){
     ...LINHAS.map(l => ({esp, est:"adolescente", ramo:"sereno", linha:l})),
     ...FORMAS_AD.map(a => ({esp, est:"adulto", ramo:"sereno", linha:LINHA_DA_FORMA[a], adulta:a}))];
   const meu = chaveSprite(motor.forma), n1 = x => dec(x, 1).replace(/,0$/, "");
-  $("cat-grade").innerHTML = formas.map(f => {
-    const p = perfilDe(f, null), s = p.stats;
-    const extra = f.adulta ? `técnica ${NOME_V2[p.tecnica]} · passiva: ${DESC_PASSIVA[f.adulta]}`
-      : f.linha ? `técnica ${NOME_V2[p.tecnica]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 regras de combate";
-    return `<div class="cat-card${chaveSprite(f) === meu ? " meu" : ""}" title="${requisito(f)}"><span class="cat-spr"><img src="${imagemForma(f)}" alt="${nomeForma(f)}"></span>
-      <b>${nomeForma(f)}</b><span class="muted">${f.est === "ovo" ? NOME_EST.ovo : nomeEstagio(f)}</span>
-      <span class="st">vig ${n1(s.vigor)} · fôl ${n1(s.folego)} · rec ${n1(s.recuperacao)}<br>for ${n1(s.forca)} · mir ${n1(s.mira)} · gua ${n1(s.guarda)}</span>
-      <span class="st">vida ${p.hpMax.toFixed(0)} · guts ${p.guts0.toFixed(0)}/${p.gutsMax.toFixed(0)} · +${n1(p.regen)}</span>
-      <span class="muted" style="font-size:12px">${extra}</span></div>`;
-  }).join("");
+  /* grade 5 x 3 (DiarioCatalogo): recorte 1x de cada forma; o toque abre o detalhe com as barras dos 6 stats */
+  if (!(catSel >= 0 && catSel < formas.length)) catSel = Math.max(0, formas.findIndex(f => chaveSprite(f) === meu));
+  $("cat-grade").innerHTML = formas.map((f, i) => { const d = dimsForma(f), top = d[1] > 52 ? -Math.round(d[1] * .08) : Math.round((52 - d[1]) / 2);
+    return `<button type="button" class="cat-tile${chaveSprite(f) === meu ? " meu" : ""}" role="option" aria-selected="${i === catSel}" data-i="${i}" aria-label="${escHtml(nomeForma(f))}, ${nomeEstagio(f)}">
+      <span class="cat-cx"><img class="dl-pix" src="${imagemForma(f)}" alt="" style="margin-top:${top}px"></span><span class="cat-nome">${escHtml(nomeForma(f))}</span></button>`; }).join("");
+  const f = formas[catSel], pf = perfilDe(f, null), st = pf.stats, d = dimsForma(f);
+  const extra = f.adulta ? `técnica ${NOME_V2[pf.tecnica]} · passiva: ${DESC_PASSIVA[f.adulta]}`
+    : f.linha ? `técnica ${NOME_V2[pf.tecnica]}: ${DESC_TECNICA[pf.tecnica]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 regras de combate";
+  const barra = k => { const v = st[k], w = Math.max(0, Math.min(100, (v - CAT.min) / (CAT.max - CAT.min) * 100));
+    return `<div class="cat-stat"><span>${NOME_STAT[k]}</span><span class="dl-vida-trilho" role="img" aria-label="${NOME_STAT[k]} ${n1(v)}"><i style="width:${w}%;background:var(--dl-action)"></i></span><span class="dl-lcd">${n1(v)}</span></div>`; };
+  $("cat-det").innerHTML = `<section class="dl-card cat-detalhe">
+    <span class="cat-det-spr"><img class="dl-pix" src="${imagemForma(f)}" width="${d[0]}" height="${d[1]}" alt=""></span>
+    <div class="cat-det-txt"><span class="dl-placa">${escHtml(nomeForma(f))}</span> <span class="dl-tag dl-tag--estagio">${nomeEstagio(f)}</span>${chaveSprite(f) === meu ? ' <span class="dl-tag dl-tag--ativo">seu pet</span>' : ""}
+      <p class="dl-apoio" style="margin:6px 0">${requisito(f)}</p></div>
+    <div class="cat-stats">${STATS.map(barra).join("")}</div>
+    <p style="margin:0">vida ${pf.hpMax.toFixed(0)} · guts ${pf.guts0.toFixed(0)} de ${pf.gutsMax.toFixed(0)} · recupera ${n1(pf.regen)} por turno</p>
+    <p class="dl-apoio" style="margin:0">${extra}</p></section>`;
   $("cat-tecnicas").innerHTML = LINHAS.map(l => { const tc = CAT.adolescente[l].tecnica;
     return `<div><span class="t">${NOME_ARQ[l]}</span> <b>${NOME_V2[tc]}</b>: ${DESC_TECNICA[tc]}</div>`; }).join("");
   $("cat-passivas").innerHTML = FORMAS_AD.map(a => `<div><span class="t">${NOME_ARQ[a]}</span> ${DESC_PASSIVA[a]}</div>`).join("");
 }
-$("cat-esp").addEventListener("click", ev => { const b = ev.target.closest("[data-esp]"); if (!b) return; catEsp = b.dataset.esp; renderCatalogo(); });
+$("cat-esp").addEventListener("click", ev => { const b = ev.target.closest("[data-esp]"); if (!b) return; catEsp = b.dataset.esp; catSel = -1; renderCatalogo(); });
+$("cat-grade").addEventListener("click", ev => { const b = ev.target.closest("[data-i]"); if (!b) return; catSel = +b.dataset.i; renderCatalogo(); $("cat-det").scrollIntoView({block:"nearest"}); });
 
 /* ------------------------------------------------ cenarios de teste */
 /* Cada cenario treina dois pets com donos simulados (mesmo codigo do rival da arena).
