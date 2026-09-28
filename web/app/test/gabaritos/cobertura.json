@@ -6,8 +6,8 @@
   "t": 10857,
   "d": 2400,
   "tr": 7491,
-  "g": 820,
-  "l": 3972
+  "g": 822,
+  "l": 4128
  },
  "acoesDono": {
   "alimentar": 642,
@@ -29,33 +29,29 @@
   "vetar": 240,
   "liberar": 240,
   "travar": 192,
-  "destravar": 148
+  "destravar": 150
  },
  "rivais": {
-  "aleatorio": 690,
-  "npc_tier1_brutamontes": 482,
-  "contragolpe": 85,
-  "emboscador": 91,
-  "npc_tier2_carcereiro": 388,
-  "npc_tier2_sentinela": 390,
-  "tartaruga": 95,
-  "tita": 89,
-  "npc_tier3_soberano": 366,
-  "adaptativo": 90,
-  "atirador": 99,
-  "npc_tier2_porteiro": 379,
-  "duelista": 77,
-  "espelho": 106,
-  "muralha": 90,
-  "oraculo": 118,
-  "agressivo": 85,
-  "vigia": 71,
-  "sentinela": 84,
-  "furioso": 97
- },
- "lutasPuladas": {
-  "exigente v2 @7142 (devastador)": 78,
-  "exigente v3 @7243 (devastador)": 78
+  "aleatorio": 695,
+  "npc_tier1_brutamontes": 498,
+  "contragolpe": 90,
+  "emboscador": 95,
+  "npc_tier2_carcereiro": 402,
+  "npc_tier2_sentinela": 404,
+  "tartaruga": 99,
+  "tita": 94,
+  "npc_tier3_soberano": 379,
+  "adaptativo": 97,
+  "atirador": 101,
+  "npc_tier2_porteiro": 392,
+  "duelista": 89,
+  "espelho": 113,
+  "muralha": 91,
+  "oraculo": 125,
+  "agressivo": 91,
+  "vigia": 80,
+  "sentinela": 88,
+  "furioso": 105
  },
  "estagioFinal": {
   "adulto": 60
@@ -98,6 +94,6 @@
  },
  "sombrias": 21,
  "falaFria": 21,
- "checkpoints": 1287,
- "eventosTotal": 25540
+ "checkpoints": 1293,
+ "eventosTotal": 25698
 }
