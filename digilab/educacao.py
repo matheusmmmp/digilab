@@ -83,6 +83,12 @@ def rival_padrao(nome: str, escala=None) -> Lutador:
     raise ValueError(f"rival desconhecido: {nome!r}")
 
 
+def epsilon_disciplina(disciplina: int, ce: ConfigEducacao | None = None) -> float:
+    """epsilon do Lutador do pet: sem educacao ele ignora os proprios gambits mais vezes (PLANO_ANALISE_V3)"""
+    ce = ce or CONFIG_EDUCACAO
+    return ce.epsilon_base_pet + (1 - disciplina / ce.disciplina_max) * ce.delta_epsilon_indisciplina
+
+
 def atende(pedido: str, acao: AcaoUsuario) -> bool:
     """acao do dono que atende um chamado REAL do tipo `pedido` (carinho = mau humor: elogio tambem resolve)"""
     return (acao.value in CONFIG_EVOLUCAO_PESQUISA.atende[pedido] or (pedido == "fome" and acao is AcaoUsuario.PETISCO)
@@ -128,6 +134,8 @@ class MotorEducacao(MotorTreino):
         self.decisor_externo = decisor_externo
         self._decisoes_gravadas: list[dict] | None = None   # no replay: fila lida do log
         self.modo_livre = False
+        self._log_replay: LogDeEventos | None = None      # no replay: o log inteiro (o lutador le ate o tick)
+        self.adulto_liberado: bool | None = None           # efeito "condicao_adulto" da qualificacao
 
     @staticmethod
     def _lutas_zeradas() -> dict:
@@ -158,6 +166,8 @@ class MotorEducacao(MotorTreino):
         super()._evoluiu(estagio, tick)
         if adulto_com_lutas:
             self.transicoes["adulto"]["vitorias"] = self.qualificacao_vitorias
+            if self.cl.efeito_qualificacao == "condicao_adulto":
+                self.adulto_liberado = self.qualificacao_vitorias["qualifica"]
         self.disciplina = int(self.disciplina * self.ce.fator_disciplina_ao_evoluir)
         self.acertos = 0
         self._agendar(estagio, tick)
@@ -241,6 +251,11 @@ class MotorEducacao(MotorTreino):
         d["educacao"] = {"disciplina": self.disciplina, "lesionado": self.lesionado_desde is not None,
                          "janela": None if j is None else {k: j[k] for k in ("tipo", "pedido", "inicio", "prazo")}}
         return d
+
+    @property
+    def log_ate_agora(self) -> LogDeEventos:
+        """o log que vale agora: ao vivo, o do motor; no replay, o inteiro (quem le corta pelo tick)"""
+        return self._log_replay if self._log_replay is not None else self._log
 
     # ------------------------------------------------------------ heranca
     def registrar_origem(self, origem: Origem) -> None:
@@ -401,8 +416,11 @@ class MotorEducacao(MotorTreino):
 
 
 def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None, semente: int = 42,
-                        fabrica_motor: Callable | None = None) -> MotorEducacao:
-    """reproduzir_com_feedback + o evento `luta`. Evento desconhecido levanta erro."""
+                        fabrica_motor: Callable | None = None, ate_tick: int | None = None,
+                        pular_lutas: bool = False) -> MotorEducacao:
+    """reproduzir_com_feedback + os eventos novos. Evento desconhecido levanta erro.
+    ate_tick: para antes do primeiro evento nesse tick (corta o avanco que o atravessa), como politica_no_tick.
+    pular_lutas: para medir a politica (carater): luta nao muda politica nem estado, so contadores."""
     from .config import CONFIG_PADRAO
     cfg = cfg or CONFIG_PADRAO
     if fabrica_motor is None:
@@ -413,9 +431,15 @@ def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None,
     decisoes = [ler_decisao(e) for e in log if e.tipo == "decisao_externa"]
     if decisoes:
         motor._decisoes_gravadas = decisoes
+    motor._log_replay = log
     for evento in log:
+        if ate_tick is not None and evento.tick >= ate_tick:
+            break
         if evento.tipo == "avanco":
-            motor._avancar(int(evento.valor))
+            n = int(evento.valor) if ate_tick is None else min(int(evento.valor), ate_tick - evento.tick)
+            motor._avancar(n)
+        elif evento.tipo == "luta" and pular_lutas:
+            pass
         elif evento.tipo == "acao_usuario":
             motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
         elif evento.tipo == "luta":
@@ -426,10 +450,18 @@ def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None,
             pass                                     # ja consumida dentro do avanco que a pediu
         else:
             raise ValueError(f"tipo de evento desconhecido no log: {evento.tipo!r}")
-    if motor._decisoes_gravadas:
+    if ate_tick is None and motor._decisoes_gravadas:
         raise ValueError(f"{len(motor._decisoes_gravadas)} decisoes externas no log que o replay nao usou")
-    motor._log = LogDeEventos(list(log))
+    motor._log_replay = None
+    motor._log = LogDeEventos([e for e in log if ate_tick is None or e.tick < ate_tick])
     return motor
+
+
+def politica_no_tick_educacao(log: LogDeEventos, politica_fabrica: Callable, semente: int, tick: int,
+                              fabrica_motor: Callable):
+    """evolucao.politica_no_tick para vidas com educacao (entende os eventos novos; lutas nao mudam a politica)"""
+    return reproduzir_educacao(log, politica_fabrica, semente=semente, fabrica_motor=fabrica_motor, ate_tick=tick,
+                               pular_lutas=True).politica
 
 
 def fabricas_filho(origem: Origem, **kw):

@@ -906,6 +906,9 @@ class ConfigEducacao:
     custo_humor_acordar: float = 0.12         # acordar o pet dormindo (igual a Config.custo_repreender)
     limiar_superalimentacao: float = 0.9      # comer com fome (saciedade) acima disto faz mal
     custo_saude_superalimentacao: float = 0.05
+    # Fase 3 (PLANO_ANALISE_V3): disciplina na luta = so o epsilon do Lutador (a resolucao do combate nao muda)
+    epsilon_base_pet: float = 0.05            # = ConfigCombateV2.epsilon_bots
+    delta_epsilon_indisciplina: float = 0.10  # epsilon = base + (1 - disciplina/max) * delta
 
 
 @dataclass(frozen=True)
@@ -957,6 +960,20 @@ class ConfigDuracoes:
 
 
 CONFIG_DURACOES = ConfigDuracoes()
+
+
+@dataclass(frozen=True)
+class ConfigSparring:
+    """Fase 3 (PLANO_ANALISE_V3): sparring de verdade na vida de pesquisa, no adolescente, horarios iguais para
+    todos os bracos; rival = adolescente da mesma linha e especie, carater neutro, sem treino."""
+
+    lutas: int = 10                          # = ConfigLesoes.lutas_minimas_taxa
+    lutas_braco_lutador: int = 20
+    intervalo_min: int = 30
+    primeira_apos_inicio_min: int = 30
+
+
+CONFIG_SPARRING = ConfigSparring()
 CONFIG_EDUCACAO = ConfigEducacao()
 CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
 CONFIG_LESOES = ConfigLesoes()

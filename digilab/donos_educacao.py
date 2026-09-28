@@ -10,6 +10,10 @@ Resposta a janela (PROPOSTO, sem fonte; o dono julga pela necessidade, nunca sab
   relapso              como o atencioso, mas so nos passos de visita
   aviso antes de sujar todos menos o aleatorio levam ao banheiro (o relapso, so na visita)
   aleatorio            nada de especial (as acoes sorteadas podem acertar por acaso)
+  lutador              como o atencioso (o que muda e o numero de sparrings, na run: PLANO_ANALISE_V3)
+  lesao                tratar_lesao antes de tudo, sempre que presente (relapso: na visita; persona: presente)
+  aleatorio            sorteia entre TODOS os botoes de cuidado (6 da v1 + 3 novos): 3/9 das acoes de cuidado
+                       viram uma acao nova sorteada
   persona              so nas horas de presenca: responde com prob_atender_janela; manha -> petisco com
                        prob_ceder_petisco, senao bronca (digilab/personas.py)
 A resposta sai do mesmo orcamento: o dono de baixo decide como se ela ja tivesse sido gasta, e o passo nunca
@@ -25,14 +29,14 @@ from .config import (CONFIG_DONOS, CONFIG_DURACOES, CONFIG_EDUCACAO_LIGADA, CONF
                      Config, ConfigDonos, ConfigEducacao)
 from .donos import DonoAtencioso, DonoRelapso, Visao, _DonoBase, _feedback, julgar_acao
 from .educacao import NECESSIDADE, fabricas_educacao
-from .events import ACOES_TREINO, AcaoUsuario
+from .events import ACOES_EDUCACAO, ACOES_TREINO, AcaoUsuario
 from .personas import Persona
 from .protocol import derivar_semente
 from .temperamento import Temperamento
 from .treino import CanalDeInteracao, Vida
 from .treino_vida import BRACOS_TREINO, DonoComTreino, orcamento_treino, plano_de_treino
 
-BRACOS_EDUCACAO = tuple(BRACOS_TREINO) + ("permissivo",)
+BRACOS_EDUCACAO = tuple(BRACOS_TREINO) + ("permissivo", "lutador")
 ATENDE_PRIMEIRA = {"fome": AcaoUsuario.ALIMENTAR, "higiene": AcaoUsuario.LIMPAR, "carinho": AcaoUsuario.ACARICIAR}
 
 
@@ -94,11 +98,13 @@ class DonoComEducacao(DonoComTreino):
         elif braco not in BRACOS_EDUCACAO:
             raise KeyError(f"braco sem dono de educacao: {braco!r}")
         perfil = persona.perfil_treino if persona is not None else braco
-        super().__init__("atencioso" if perfil == "permissivo" else perfil, dias, cfg_donos, ct)
+        super().__init__("atencioso" if perfil in ("permissivo", "lutador") else perfil, dias, cfg_donos, ct)
         self.persona = persona
         if braco == "permissivo":
             self.nome = braco
             self.base = DonoPermissivo(self.cfg_donos)
+        elif braco == "lutador":
+            self.nome = braco
         elif persona is not None:
             # o treino segue as regras do atencioso (pausa respeitada); perfil_treino so muda quantas sessoes
             self.nome = braco
@@ -108,18 +114,24 @@ class DonoComEducacao(DonoComTreino):
             self.slots = set(plano_de_treino(dias, "exigente" if perfil == "exigente" else "atencioso",
                                              self.cfg_donos, self.ct, cfg_evo))
             self.n_slots = len(self.slots)
-        self.respostas = {"atende": 0, "bronca": 0, "petisco": 0, "elogio": 0, "banheiro": 0}
+        self.respostas = {"atende": 0, "bronca": 0, "petisco": 0, "elogio": 0, "banheiro": 0, "lesao": 0}
 
     def _resposta(self, visao: Visao, rng: random.Random) -> tuple[AcaoUsuario, str] | None:
-        j = visao.estado.get("educacao", {}).get("janela")
-        if j is None or self.nome == "aleatorio":
+        edu = visao.estado.get("educacao", {})
+        j = edu.get("janela")
+        lesionado = edu.get("lesionado", False)
+        if (j is None and not lesionado) or self.nome == "aleatorio":
             return None
         if self.persona is not None:
-            return self._resposta_persona(j, visao, rng)
+            if lesionado and self.persona.presente(hora_do_passo(visao.passo, self.cfg_donos)):
+                return AcaoUsuario.TRATAR_LESAO, "lesao"
+            return None if j is None else self._resposta_persona(j, visao, rng)
         if isinstance(self.base, DonoRelapso):
             self.base._planejar_dia(visao, rng, TICKS_POR_DIA // self.cfg_donos.passo_ticks)   # idempotente no dia
             if visao.passo not in self.base._visitas:
                 return None
+        if lesionado:
+            return AcaoUsuario.TRATAR_LESAO, "lesao"
         if j["tipo"] == "aviso":
             return AcaoUsuario.LEVAR_AO_BANHEIRO, "banheiro"
         if visao.estado[NECESSIDADE[j["pedido"]]] < self.ce.limiar_necessidade_real:
@@ -129,6 +141,16 @@ class DonoComEducacao(DonoComTreino):
         if self.nome == "incoerente" and rng.random() < self.cfg_donos.prob_elogio_incoerente:
             return AcaoUsuario.ELOGIAR, "elogio"
         return AcaoUsuario.REPREENDER, "bronca"
+
+    def _todos_os_botoes(self, acoes: list[AcaoUsuario], rng: random.Random) -> list[AcaoUsuario]:
+        out = []
+        for a in acoes:
+            if a not in ACOES_TREINO:
+                u = rng.random()
+                if u < 3 / 9:
+                    a = ACOES_EDUCACAO[min(2, int(u * 9))]
+            out.append(a)
+        return out
 
     def _resposta_persona(self, j: dict, visao: Visao, rng: random.Random) -> tuple[AcaoUsuario, str] | None:
         p = self.persona
@@ -149,7 +171,10 @@ class DonoComEducacao(DonoComTreino):
         cuidado_restante = (visao.orcamento - self.n_slots) - (visao.gasto - self.slots_usados)
         r = self._resposta(visao, rng) if cuidado_restante > 0 and visao.maximo_permitido > int(slot) else None
         if r is None:
-            return super().decidir(visao, rng)
+            acoes = super().decidir(visao, rng)
+            if self.nome == "aleatorio":
+                acoes = self._todos_os_botoes(acoes, rng)
+            return acoes
         r, chave = r
         self.respostas[chave] += 1
         acoes = [r] + super().decidir(replace(visao, gasto=visao.gasto + 1), rng)
@@ -162,10 +187,14 @@ class DonoComEducacao(DonoComTreino):
 def simular_vida_educacao(braco: str, semente: int, dias: int, especie: str, temperamento: Temperamento,
                           cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, ct=None,
                           ce: ConfigEducacao | None = None, duracao: str = "teste", persona: Persona | None = None,
-                          decisor_externo=None) -> Vida:
+                          decisor_externo=None, cl=None, sparring: tuple = (), rival_sparring=None,
+                          lutador_do_pet=None, rival_por_nome=None) -> Vida:
     """simular_vida_treino com o MotorEducacao (travessuras ligadas) e o DonoComEducacao; mesmo orcamento.
     duracao: "teste" (a de hoje, bit a bit igual) ou "canonica" (ConfigDuracoes).
-    persona: dono de persona (braco = 'persona:<nome>'). decisor_externo: modo livre gravado (educacao.py)."""
+    persona: dono de persona (braco = 'persona:<nome>'). decisor_externo: modo livre gravado (educacao.py).
+    sparring (PLANO_ANALISE_V3): ticks das lutas, antes da decisao do dono no passo; rival_sparring(motor) da o
+    nome do rival (rival_por_nome resolve); a semente da luta depende so do ovo e do indice (igual entre bracos).
+    Morte: a vida para ali (o dono nao age mais; o orcamento fica sem fechar e a vida sai marcada `morta`)."""
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     ce = ce or CONFIG_EDUCACAO_LIGADA
@@ -176,19 +205,30 @@ def simular_vida_educacao(braco: str, semente: int, dias: int, especie: str, tem
     else:                                        # mesma conta do orcamento_treino, com os estagios da duracao
         ctt = ct or CONFIG_TREINO
         orc = ctt.cuidado_por_dia * dias + len(plano_de_treino(dias, "atencioso", cfg_donos, ctt, cfg_evo))
+    extra = {} if rival_por_nome is None else {"rival_por_nome": rival_por_nome}
     fp, fm = fabricas_educacao(semente, especie, temperamento, ct=ct, ce=ce, cfg_evo=cfg_evo,
-                               decisor_externo=decisor_externo)
+                               decisor_externo=decisor_externo, cl=cl, lutador_do_pet=lutador_do_pet, **extra)
     motor = fm(fp(cfg), cfg, semente)
     dono = DonoComEducacao(braco, dias, cfg_donos, ct, ce, cfg_evo, persona)
     rng_dono = random.Random(derivar_semente("dono", semente, braco))
     canal = CanalDeInteracao(motor, orc, cfg_donos.max_interacoes_por_passo)
+    lutas = {t: k for k, t in enumerate(sorted(sparring))}
+    morta = False
     for passo in range(passos):
         motor.avancar(cfg_donos.passo_ticks)
+        tick = motor.estado()["tick"]
+        if tick in lutas and motor.morte is None:
+            motor.lutar(rival_sparring(motor), derivar_semente("sparring", semente, lutas[tick]))
+        if motor.morte is not None:
+            morta = True
+            break
         minimo, maximo = canal.limites(passo, passos)
         visao = Visao(estado=motor.estado(), passo=passo, passos_totais=passos, orcamento=orc, gasto=canal.gasto,
                       minimo_obrigatorio=minimo, maximo_permitido=maximo)
         canal.aplicar(dono.decidir(visao, rng_dono), passo, passos)
-    canal.fechar()
+    if not morta:
+        canal.fechar()
     v = Vida(braco=braco, semente_coorte=semente, motor=motor, interacoes=canal.gasto)
     v.dono = dono
+    v.morta = morta
     return v

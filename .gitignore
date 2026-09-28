@@ -41,3 +41,6 @@ artifacts_confirmatoria/partidas_*.json
 artifacts_confirmatoria/vidas/
 !artifacts_custo_llm/
 tools/gasto_llm_pesquisa.json
+!artifacts_educacao/
+artifacts_educacao/partidas_*.json
+artifacts_educacao/vidas/
