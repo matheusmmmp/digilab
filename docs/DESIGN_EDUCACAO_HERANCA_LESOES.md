@@ -158,6 +158,11 @@ Custo e capacidade estão em `artifacts_custo_llm/`, gerados por `tools/estimar_
   - a LLM decide ao vivo no lugar do dono ou do pet, só em **eventos** (travessura, janela aberta), nunca a cada passo;
   - cada resposta vira um evento `decisao_externa` no log;
   - numa run do tamanho da confirmatória, isso dá 84 a 102 h de GPU local (os modelos qwen), ou cerca de US$ 273 no Haiku.
+- **Implementado na Fase 2, parte 7**:
+  - `digilab/personas.py` traz o esquema, a validação e o lote com sha256;
+  - `DonoComEducacao(persona=...)` joga a persona só nas horas de presença;
+  - `tools/gerar_personas.py` gera um lote por LLM, uma persona por chamada, validada;
+  - `tools/decisor_livre.py` traz o `DecisorLLM` e o `DecisorEntropia`. O único ponto de decisão externa por enquanto é **o slot sem necessidade real: vira chamado falso?** (`ponto = slot_falso`). Novos pontos entram com o mesmo evento.
 - **Travessuras sugeridas pela LLM**: entram só como propostas neste documento, e cada uma passa pela aprovação do Matheus.
 - **A LLM fica fora de `digilab/`**, que continua só com stdlib. O cliente mora em `servidor/` ou `tools/` e chega ao motor por uma interface injetada.
 - **Análises com LLM são exploratórias**. Nunca confirmatórias.

@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "origem": "escrito a mao (nao e LLM): exemplo e fixture dos testes do DonoPersona",
+    "versao_esquema": "persona-v1"
+  },
+  "personas": [
+    {
+      "nome": "estudante-noturna",
+      "descricao": "Estuda de dia, olha o pet de manha cedo e a noite; cede ao petisco quando esta cansada.",
+      "horarios": [[7, 9], [19, 24]],
+      "prob_atender_janela": 0.8,
+      "prob_ceder_petisco": 0.6,
+      "prob_feedback_coerente": 0.7,
+      "limiar_cuidado": 0.5,
+      "perfil_treino": "atencioso"
+    },
+    {
+      "nome": "treinador-rigido",
+      "descricao": "Fica em casa quase o dia todo, treina no teto e nunca cede a manha.",
+      "horarios": [[8, 22]],
+      "prob_atender_janela": 0.95,
+      "prob_ceder_petisco": 0.0,
+      "prob_feedback_coerente": 0.9,
+      "limiar_cuidado": 0.4,
+      "perfil_treino": "exigente"
+    },
+    {
+      "nome": "plantonista",
+      "descricao": "Trabalha em plantao e so ve o pet no intervalo do almoco; responde quando da.",
+      "horarios": [[12, 14]],
+      "prob_atender_janela": 0.5,
+      "prob_ceder_petisco": 0.3,
+      "prob_feedback_coerente": 0.5,
+      "limiar_cuidado": 0.6,
+      "perfil_treino": "atencioso"
+    }
+  ]
+}

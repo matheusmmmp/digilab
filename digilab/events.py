@@ -103,6 +103,22 @@ def luta(tick: int, rival: str, semente: int) -> Evento:
     return Evento(tick=tick, tipo="luta", valor=f"{rival}|{int(semente)}")
 
 
+def decisao_externa(tick: int, ponto: str, valor: bool, fonte: str, versao: str) -> Evento:
+    """Modo livre gravado: decisao de LLM ou de acaso real. O replay le daqui e nao chama ninguem."""
+    return Evento(tick=tick, tipo="decisao_externa",
+                  valor=json.dumps({"ponto": ponto, "valor": valor, "fonte": fonte, "versao": versao},
+                                   sort_keys=True, ensure_ascii=False))
+
+
+def ler_decisao(evento: Evento) -> dict:
+    if evento.tipo != "decisao_externa":
+        raise ValueError(f"evento nao e decisao_externa: {evento.tipo!r}")
+    d = json.loads(str(evento.valor))
+    if set(d) != {"ponto", "valor", "fonte", "versao"} or not isinstance(d["valor"], bool):
+        raise ValueError(f"decisao_externa malformada: {d!r}")
+    return {**d, "tick": evento.tick}
+
+
 def ler_luta(evento: Evento) -> tuple[str, int]:
     if evento.tipo != "luta":
         raise ValueError(f"evento nao e luta: {evento.tipo!r}")

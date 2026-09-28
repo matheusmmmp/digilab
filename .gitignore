@@ -40,3 +40,4 @@ tools/saida/
 artifacts_confirmatoria/partidas_*.json
 artifacts_confirmatoria/vidas/
 !artifacts_custo_llm/
+tools/gasto_llm_pesquisa.json

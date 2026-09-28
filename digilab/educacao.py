@@ -17,6 +17,11 @@ Chamados (da crianca em diante), um slot por tipo a cada intervalo do cronograma
     necessidade e real ou o pet dorme): os bracos veem os mesmos numeros nos mesmos slots.
 O dono ve a janela (tipo e pedido), nunca se e falsa: julga pela necessidade, como no Tamagotchi.
 
+Modo livre gravado (parte 7; excecao ao determinismo no CLAUDE.md): com um `decisor_externo` (LLM ou acaso
+real, fora deste pacote), o slot sem necessidade real vira chamado falso se o DECISOR disser, nao a rng. Cada
+decisao entra no log como evento `decisao_externa` (ponto, valor, fonte, versao); o replay le do log e nunca
+chama o decisor. O sorteio da rng_travessura continua consumido (numeros comuns). `modo_livre` fica True.
+
 Parte 3 (tambem so com a chave ligada):
   - AVISO antes de sujar: os slots de `tipo_slot_aviso` (higiene) abrem um aviso, nunca chamado. levar_ao_banheiro
     no prazo -> sem sujeira (e disciplina +disciplina_por_banheiro, hoje 0); prazo vencido -> sujeira +1.
@@ -46,7 +51,7 @@ from .campanha import REGRAS_CAMPANHA, npc
 from .combate_v2.v21.bots import lutador_adulto
 from .combate_v2.v21.partida import Lutador, jogar
 from .config import (CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, ConfigEducacao, ConfigLesoes)
-from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, ler_luta, luta
+from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, decisao_externa, ler_decisao, ler_luta, luta
 from .heranca import HerancaInvalida, Origem, ler_origem
 from .obediencia import PoliticaBanditPersonalidade
 from .protocol import derivar_semente
@@ -89,7 +94,8 @@ class MotorEducacao(MotorTreino):
                  especie: str = "brasa", obediencia_desligada: bool = False, cfg_treino=None, cfg_sombrio=None,
                  cfg_educacao: ConfigEducacao | None = None, cfg_lesoes: ConfigLesoes | None = None,
                  lutador_do_pet: Callable[["MotorEducacao"], Lutador] | None = None,
-                 rival_por_nome: Callable[[str], Lutador] = rival_padrao, cfg_evo=None, **kw) -> None:
+                 rival_por_nome: Callable[[str], Lutador] = rival_padrao, cfg_evo=None,
+                 decisor_externo: Callable[[dict], tuple[bool, dict]] | None = None, **kw) -> None:
         super().__init__(politica, cfg, semente, temperamento, especie, obediencia_desligada, cfg_treino,
                          cfg_sombrio, **kw)
         if cfg_evo is not None:
@@ -118,6 +124,10 @@ class MotorEducacao(MotorTreino):
         self.historico_lutas: list[dict] = []
         self.morte: dict | None = None
         self.origem: Origem | None = None        # parte 5: filho de um cruzamento (evento `origem`, o primeiro)
+        # parte 7: modo livre gravado
+        self.decisor_externo = decisor_externo
+        self._decisoes_gravadas: list[dict] | None = None   # no replay: fila lida do log
+        self.modo_livre = False
 
     @staticmethod
     def _lutas_zeradas() -> dict:
@@ -174,11 +184,36 @@ class MotorEducacao(MotorTreino):
             self.contagem["avisos"] += 1
             return
         real = getattr(self._estado, NECESSIDADE[tipo]) < self.ce.limiar_necessidade_real
-        if not real and u >= self.fracao_falso():
+        if not real and not self._falso(tipo, tick, u):
             return
         self.janela = {"tipo": "chamado", "pedido": tipo, "inicio": tick, "prazo": tick + self.ce.janela_min,
                        "falso": not real}
         self.contagem["falsos" if not real else "chamados_reais"] += 1
+
+    def _falso(self, tipo: str, tick: int, u: float) -> bool:
+        """o slot sem necessidade real vira chamado falso? rng (padrao) ou decisor externo (gravado no log)"""
+        f = self.fracao_falso()
+        if self._decisoes_gravadas is not None:              # replay de uma vida em modo livre
+            if not self._decisoes_gravadas or self._decisoes_gravadas[0]["tick"] != tick:
+                raise ValueError(f"replay pediu decisao externa no tick {tick}, o log nao tem")
+            d = self._decisoes_gravadas.pop(0)
+            self._n_eventos += 1
+            self.modo_livre = True
+            return bool(d["valor"])
+        if self.decisor_externo is None or f == 0.0:          # disciplina cheia/aprendido: nem pergunta
+            return u < f
+        ctx = {"ponto": "slot_falso", "tick": tick, "estagio": self.treino.estagio, "pedido": tipo,
+               "fracao_falso": f, "disciplina": self.disciplina, "petiscos_cedidos": self.petiscos_cedidos,
+               "temperamento": self.temperamento.para_dict(),
+               "necessidades": {k: getattr(self._estado, k) for k in ("fome", "higiene", "energia", "humor", "saude")}}
+        valor, meta = self.decisor_externo(ctx)
+        if not isinstance(valor, bool):
+            raise TypeError(f"decisor externo devolveu {valor!r}, precisa ser bool")
+        self._log.anexar(decisao_externa(tick, "slot_falso", valor, str(meta.get("fonte", "?")),
+                                         str(meta.get("versao", "?"))))
+        self._n_eventos += 1
+        self.modo_livre = True
+        return valor
 
     def _fechar(self, desfecho: str, tick: int) -> None:
         self.historico_janelas.append({**self.janela, "desfecho": desfecho, "fim": tick})
@@ -373,6 +408,11 @@ def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None,
     if fabrica_motor is None:
         raise ValueError("reproduzir_educacao precisa da fabrica do MotorEducacao (lutador do pet, configs)")
     motor = fabrica_motor(politica_fabrica(cfg), cfg, semente)
+    if motor.decisor_externo is not None:
+        raise ValueError("replay nao chama decisor externo: use a fabrica sem ele (as decisoes vem do log)")
+    decisoes = [ler_decisao(e) for e in log if e.tipo == "decisao_externa"]
+    if decisoes:
+        motor._decisoes_gravadas = decisoes
     for evento in log:
         if evento.tipo == "avanco":
             motor._avancar(int(evento.valor))
@@ -382,8 +422,12 @@ def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None,
             motor._lutar(*ler_luta(evento))
         elif evento.tipo == "origem":
             motor._aplicar_origem(ler_origem(evento))
+        elif evento.tipo == "decisao_externa":
+            pass                                     # ja consumida dentro do avanco que a pediu
         else:
             raise ValueError(f"tipo de evento desconhecido no log: {evento.tipo!r}")
+    if motor._decisoes_gravadas:
+        raise ValueError(f"{len(motor._decisoes_gravadas)} decisoes externas no log que o replay nao usou")
     motor._log = LogDeEventos(list(log))
     return motor
 
@@ -396,11 +440,12 @@ def fabricas_filho(origem: Origem, **kw):
 def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,
                       ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
                       lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao,
-                      cfg_evo=None):
-    """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay."""
+                      cfg_evo=None, decisor_externo=None):
+    """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay (sem o decisor)."""
     fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
     fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
                                                  obediencia_desligada=obediencia_desligada, cfg_treino=ct,
                                                  cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,
-                                                 rival_por_nome=rival_por_nome, cfg_evo=cfg_evo))
+                                                 rival_por_nome=rival_por_nome, cfg_evo=cfg_evo,
+                                                 decisor_externo=decisor_externo))
     return fp, fm
