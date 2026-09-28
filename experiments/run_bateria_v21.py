@@ -385,12 +385,8 @@ def executar(caminho_cfg: Path) -> int:
              f"{ {f: round(t, 3) for f, t in fora_e4.items()} or 'nenhum'}",
              {"taxa_por_forma": e4, "fora": fora_e4})
     else:
-        # E4'' (sanidade): os dois sem treino, o adulto vence (a escala faz a luta entre estagios desigual de proposito)
-        baixo = {f: t for f, t in e4.items() if t < ESCALA.taxa_min_e4_sem_treino}
-        gate("E4b_escala_sem_treino_adulto_vence", not baixo,
-             f"adulto x adolescente sem treino: abaixo de {ESCALA.taxa_min_e4_sem_treino}: "
-             f"{ {f: round(t, 3) for f, t in baixo.items()} or 'nenhum'}", {"taxa_por_forma": e4, "abaixo": baixo})
-        # E4' : adulto SEM treino x adolescente com o treino maximo do estagio (uniforme), taxa do adulto na faixa
+        # E4 na escala (redefinido pelo Matheus): a evolucao sempre importa. Adulto SEM treino x adolescente da mesma
+        # linha sem treino e com o treino maximo do estagio (uniforme): o adulto vence >= taxa_min_e4 nos dois; sem teto
         from digilab.config import STATS_V21
         tr = {k: ESCALA.treino_e4 / len(STATS_V21) for k in STATS_V21}
         e4t = {}
@@ -401,10 +397,12 @@ def executar(caminho_cfg: Path) -> int:
                 adol = lutador_adolescente(LINHA_DA_FORMA[f], esp, carater_canonico(f), cfg21, treino=tr)
                 pts += [x for _, _, x, _ in partidas_par(ad, adol, "e4t", sementes, cb.partidas_e4_por_semente, r)]
             e4t[f] = sum(pts) / len(pts)
-        fora = {f: t for f, t in e4t.items() if not ESCALA.taxa_min_e4 <= t <= ESCALA.taxa_max_e4}
-        gate("E4_escala_treino_compensa", not fora,
-             f"adulto sem treino x adolescente com +{ESCALA.treino_e4:g}: fora de [{ESCALA.taxa_min_e4}, {ESCALA.taxa_max_e4}]: "
-             f"{ {f: round(t, 3) for f, t in fora.items()} or 'nenhum'}", {"taxa_por_forma": e4t, "fora": fora})
+        baixo = {f"{f} (sem treino)": t for f, t in e4.items() if t < ESCALA.taxa_min_e4}
+        baixo |= {f"{f} (+{ESCALA.treino_e4:g})": t for f, t in e4t.items() if t < ESCALA.taxa_min_e4}
+        gate("E4_escala_estagio_importa", not baixo,
+             f"adulto sem treino x adolescente (sem treino e com +{ESCALA.treino_e4:g}): abaixo de {ESCALA.taxa_min_e4}: "
+             f"{ {k: round(t, 3) for k, t in baixo.items()} or 'nenhum'}; menor {min(list(e4.values()) + list(e4t.values())):.3f}",
+             {"taxa_sem_treino": e4, "taxa_adolescente_treinado": e4t, "abaixo": baixo})
 
     # ------------------------------------------------------------ E5
     e5 = {}

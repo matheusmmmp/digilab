@@ -944,16 +944,16 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
               "razões de hoje usam o modelo de poder da aba jornada (contas sobre os valores do config.py, visíveis na fórmula).")
 
     # --- E4 (B2.6)
-    titulo("E4 redefinido (B2.6, PROPOSTO)", ["item", "hoje", "proposta"])
+    titulo("E4 redefinido (B2.6; definição final do Matheus depois da Parte C)", ["item", "antes da escala", "na escala"])
     for item, hoje, prop in [
         ("o que mede", "adulto × adolescente da mesma linha, mesma espécie e caráter, sem treino",
-         "o treino fecha parte da distância entre estágios: adulto SEM treino × adolescente com o treino MÁXIMO do estágio (22 pontos)"),
+         "a evolução sempre importa: adulto SEM treino × adolescente sem treino e com o treino máximo do estágio (+22)"),
         ("meta", f"taxa do adulto em [{br(CONFIG_BATERIA_V21.taxa_min_e4)}, {br(CONFIG_BATERIA_V21.taxa_max_e4)}]",
-         "taxa do adulto em [0,60, 0,85] com o adolescente treinado; e adulto sem treino × adolescente sem treino ≥ 0,90 (o 'stat check' é de propósito)"),
-        ("por quê", "com escala de franquia o adulto sem treino esmaga o adolescente sem treino (E_adulto/E_adol = 2,5)",
-         "a pergunta vira 'o treino do estágio anterior compensa um pouco a evolução?' (princípio 7: treinar cedo rende)"),
-        ("resultado de hoje", ", ".join(f"{k} {br(v)}" for k, v in f.gates["E4_estagio_importa_sem_esmagar"]["valores"]["taxa_por_forma"].items()),
-         "SEM FONTE até a Parte C (bateria V21C com a escala ligada)"),
+         f"taxa do adulto ≥ {br(CONFIG_ESCALA_LIGADA.taxa_min_e4)} nos dois casos, sem teto (esmagar é de propósito na escala)"),
+        ("por quê", "com escala de franquia o adulto sem treino esmaga o adolescente (E_adulto/E_Champion = 2,5)",
+         "a Parte B propunha E4' (treino compensa: faixa [0,60, 0,85]) e E4'' (≥ 0,90); os dois reprovaram e o Matheus redefiniu"),
+        ("resultado", ", ".join(f"{k} {br(v)}" for k, v in f.gates["E4_estagio_importa_sem_esmagar"]["valores"]["taxa_por_forma"].items()),
+         e4_escala(f)),
     ]:
         a.nova_linha()
         a.texto(1, item)
@@ -972,6 +972,15 @@ def aba_escala(wb: Workbook, f: Fontes) -> Aba:
     for col, w in ((1, 34), (2, 60), (3, 60), (7, 50)):
         a.ws.column_dimensions[get_column_letter(col)].width = w
     return a
+
+
+def e4_escala(f: Fontes) -> str:
+    """resultado do E4 na escala (artifacts_combate_v21c/validacao_escala/gates.json), se a run existir"""
+    p = RAIZ / "artifacts_combate_v21c" / "validacao_escala" / "gates.json"
+    if not p.exists():
+        return "SEM FONTE (bateria V21C com a escala)"
+    g = {x["gate"]: x for x in json.loads(p.read_text(encoding="utf-8"))["gates"]}.get("E4_escala_estagio_importa")
+    return ("OK — " if g["ok"] else "REPROVA — ") + g["mensagem"] if g else "SEM FONTE (gate E4 na escala não encontrado)"
 
 
 # ------------------------------------------------------------------ alertas e md

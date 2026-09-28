@@ -128,6 +128,10 @@ Lista com fonte na aba `escala`.
 
 ### 3.6 E4 redefinido (B2.6)
 
+**Definição final (Matheus, depois da Parte C):** a evolução sempre importa. O adulto sem treino vence o adolescente da
+mesma linha, sem treino e com o treino máximo do estágio (+22), em **pelo menos 0,60**; sem teto (esmagar é de
+propósito). O E4′ e o E4″ abaixo foram a proposta da Parte B e reprovaram na bateria com a escala.
+
 Com escala de franquia o adulto sem treino esmaga o adolescente sem treino de propósito (E_adulto/E_Champion = 2,5):
 é um "stat check". Hoje o E4 já falha por esmagar (vigia 1,00, sentinela 1,00, muralha 1,00, titã 0,99, furioso 0,94;
 `artifacts_combate_v21c/validacao/gates.json`). Proposta:

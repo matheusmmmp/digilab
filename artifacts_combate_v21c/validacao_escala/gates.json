@@ -129,8 +129,6 @@
   ],
   "falharam": [
     "E2_sem_especie_dominante",
-    "E4b_escala_sem_treino_adulto_vence",
-    "E4_escala_treino_compensa",
     "G6b_espelho_condicao",
     "G8_robustez"
   ],
@@ -237,44 +235,26 @@
       }
     },
     {
-      "gate": "E4b_escala_sem_treino_adulto_vence",
-      "mensagem": "adulto x adolescente sem treino: abaixo de 0.9: {'espelho': 0.841}",
-      "ok": false,
+      "gate": "E4_escala_estagio_importa",
+      "mensagem": "adulto sem treino x adolescente (sem treino e com +22): abaixo de 0.6: nenhum; menor 0.836",
+      "ok": true,
       "valores": {
-        "abaixo": {
-          "espelho": 0.84075
-        },
-        "taxa_por_forma": {
-          "duelista": 1.0,
-          "emboscador": 1.0,
-          "espelho": 0.84075,
-          "furioso": 1.0,
-          "muralha": 1.0,
-          "sentinela": 1.0,
-          "tita": 1.0,
-          "vigia": 1.0
-        }
-      }
-    },
-    {
-      "gate": "E4_escala_treino_compensa",
-      "mensagem": "adulto sem treino x adolescente com +22: fora de [0.6, 0.85]: {'duelista': 0.965, 'furioso': 1.0, 'muralha': 1.0, 'sentinela': 1.0, 'emboscador': 1.0, 'vigia': 1.0, 'tita': 1.0}",
-      "ok": false,
-      "valores": {
-        "fora": {
-          "duelista": 0.96525,
-          "emboscador": 1.0,
-          "furioso": 0.99975,
-          "muralha": 1.0,
-          "sentinela": 1.0,
-          "tita": 1.0,
-          "vigia": 1.0
-        },
-        "taxa_por_forma": {
+        "abaixo": {},
+        "taxa_adolescente_treinado": {
           "duelista": 0.96525,
           "emboscador": 1.0,
           "espelho": 0.8355,
           "furioso": 0.99975,
+          "muralha": 1.0,
+          "sentinela": 1.0,
+          "tita": 1.0,
+          "vigia": 1.0
+        },
+        "taxa_sem_treino": {
+          "duelista": 1.0,
+          "emboscador": 1.0,
+          "espelho": 0.84075,
+          "furioso": 1.0,
           "muralha": 1.0,
           "sentinela": 1.0,
           "tita": 1.0,
@@ -803,7 +783,7 @@
       "partida.py",
       "regras.py"
     ],
-    "config_sha256": "339087b78087c6f16ce56cad1a554f07df9d285bd3e715fca6d9215d85048209",
+    "config_sha256": "e2a1deec610e604da40ad7d802e0477e3f47555406ad4a4356327af5a5f1ddc3",
     "regras_sha256": "552a1a30f898b26add89f3366f2f2ce5852ac3ef3c62753ebd2f2c0b53bafa4e"
   },
   "partidas_por_par_por_semente": 100,

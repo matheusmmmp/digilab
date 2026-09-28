@@ -711,3 +711,7 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   do In-Training ao Mega treinado (donos simulados + treino sem forçar). Só na web.
 - **Tutorial**: o Bit (personagem original, pixels no código), uma frase por momento, marcadas como vistas em
   `…-dicas`; interruptor em Aparência. Só na web.
+- **Decisões do Matheus depois da Parte C (2026-09-28):** (1) **exceção da Sentinela aceita** (fator 1,6; 0,41 sem treino
+  e 0,70 com o treino típico na validação); (2) **E4 redefinido** na escala: o adulto sem treino vence o adolescente da
+  mesma linha, sem treino e com o treino máximo do estágio (+22), em ≥ 0,60, sem teto (`ConfigEscala.taxa_min_e4`,
+  gate `E4_escala_estagio_importa`). O E4' e o E4'' da Parte B saíram (a faixa [0,60, 0,85] e o ≥ 0,90).

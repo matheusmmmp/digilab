@@ -1,6 +1,6 @@
 # Progressão do Digilab (resumo)
 
-Gerado por `tools/gerar_planilha_progressao.py` (commit das fontes `a39b3d8`). A planilha completa, com a fonte de cada número, é `artifacts_progressao/planilha_progressao.xlsx`. Metas marcadas PROPOSTO dependem de aprovação.
+Gerado por `tools/gerar_planilha_progressao.py` (commit das fontes `8414ab6`). A planilha completa, com a fonte de cada número, é `artifacts_progressao/planilha_progressao.xlsx`. Metas marcadas PROPOSTO dependem de aprovação.
 
 ## A curva
 
