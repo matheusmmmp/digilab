@@ -30,6 +30,12 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
   Evento desconhecido no log levanta erro.
 - **Determinismo é requisito.** Mesma semente + mesmo log = mesmo resultado, até o último float.
   Se um teste de replay quebrar, pare tudo e conserte antes de qualquer outra coisa.
+  Exceção (decisão do Matheus, 2026-09-28): **modo livre gravado**. Um modo onde LLM e acaso real
+  (sem semente) decidem ao vivo. Toda saída não determinística (resposta da LLM, sorteio de entropia
+  do sistema) entra no log como evento, e o replay lê o evento em vez de sortear de novo. Assim a vida
+  continua rejogável e auditável, embora não seja reproduzível a partir da semente. O modo
+  determinístico continua sendo o padrão e o único válido para a confirmatória, os protocolos com hash
+  e a paridade Python/web.
 - **RNG de ambiente e de política separadas.** Trocar de política não pode mudar o clima do mundo.
 - **Métricas existem uma vez só** (`digilab/metrics.py`) e são compartilhadas por todos os braços.
 - **Nenhum número em resultado sem artefato em disco que o produza.**
