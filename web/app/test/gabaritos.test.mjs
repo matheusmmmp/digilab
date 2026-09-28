@@ -3,7 +3,7 @@
 // assinatura e os contadores fora dela). Na Etapa 2 o mesmo teste roda contra o motor em TS.
 //
 // Rodar em Node (os gabaritos sao do V8 do Node; ver gerar_gabaritos.mjs).
-import { test } from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { carregarMotor } from "./motor_html.mjs";

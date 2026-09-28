@@ -13,7 +13,7 @@ import pytest
 
 from servidor.alerta import AlertaEmail
 from servidor.fala_llm import ControleGasto, GeradorFala
-from servidor.servidor_local import PASTA_SERVIDA, PREFIXO, Tratador, main, rota_permitida
+from servidor.servidor_local import PASTA_SERVIDA, PREFIXO, PREFIXO_APP, Tratador, main, rota_permitida
 
 SENHA = "senha-de-teste-123"
 
@@ -56,6 +56,21 @@ def test_remoto_so_serve_as_rotas_do_jogo(servidor):
                     "/Assets/catalogo_sprites.json", PREFIXO + "/web/../CLAUDE.md"):
         assert _get(servidor + caminho, SENHA) == 404, caminho
     assert rota_permitida("/Assets/digilab_atlas.png")
+
+
+def test_remoto_serve_so_o_que_fica_dentro_do_build_do_app():
+    p = PREFIXO_APP
+    for ok in (p, p + "index.html", p + "assets/index-abc123.js", p + "assets/index.css?v=1", p[:-1]):
+        assert rota_permitida(ok), ok
+    for fora in (p + "../digilab_sprites.html", p + "../../CLAUDE.md", p + "%2e%2e/%2e%2e/CLAUDE.md", p + "assets/..%2f..%2f..%2fCLAUDE.md",
+                 p + "..%5c..%5cCLAUDE.md", p + "./index.html", p[:-1] + "x/index.html", p.replace("/dist/", "/app/") + "index.html",
+                 p.replace("/dist/", "/app/") + "package.json"):
+        assert not rota_permitida(fora), fora
+
+
+def test_remoto_nao_serve_o_codigo_do_app(servidor):
+    for caminho in (PREFIXO + "/web/app/package.json", PREFIXO + "/web/app/src/main.tsx", PREFIXO_APP + "%2e%2e/%2e%2e/CLAUDE.md"):
+        assert _get(servidor + caminho, SENHA) == 404, caminho
 
 
 def test_remoto_sem_senha_forte_nao_sobe(monkeypatch):

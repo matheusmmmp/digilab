@@ -1,0 +1,44 @@
+/* Rotas: 4 destinos, cada um com suas sub-abas (mesma organizacao do HTML, TAREFA_INTERFACE_UP Etapa 3).
+   O endereco e #/destino/aba; a aba lembrada fica em CHAVE-aba como "destino/aba" (formato do HTML: um valor
+   antigo so com a aba vira o destino dela). */
+import { CHAVE_ABA, type Armazenamento } from "./save.ts";
+
+export type Destino = "pet" | "crescer" | "lutar" | "diario";
+export type Aba = "estado" | "treinar" | "aprend" | "evolucao" | "arena" | "campanha" | "registro" | "catalogo" | "cenarios";
+export const DESTINOS: Record<Destino, readonly Aba[]> = {
+  pet: ["estado"], crescer: ["treinar", "aprend", "evolucao"], lutar: ["arena", "campanha"], diario: ["registro", "catalogo", "cenarios"],
+};
+export const ORDEM_DESTINOS: readonly Destino[] = ["pet", "crescer", "lutar", "diario"];
+export const NOME_DESTINO: Record<Destino, string> = { pet: "Pet", crescer: "Crescer", lutar: "Lutar", diario: "Diário" };
+export const NOME_ABA: Record<Aba, string> = {
+  estado: "Estado", treinar: "Treinar", aprend: "Aprendizado", evolucao: "Evolução", arena: "Arena", campanha: "Campanha",
+  registro: "Registro", catalogo: "Catálogo", cenarios: "Cenários",
+};
+export const DESTINO_DA_ABA = Object.fromEntries(Object.entries(DESTINOS).flatMap(([d, abas]) => abas.map(a => [a, d]))) as Record<Aba, Destino>;
+
+export interface Rota { destino: Destino; aba: Aba }
+export const ROTA_INICIAL: Rota = { destino: "pet", aba: "estado" };
+
+const ehAba = (x: string): x is Aba => x in DESTINO_DA_ABA;
+const ehDestino = (x: string): x is Destino => x in DESTINOS;
+
+/** "#/crescer/treinar" -> rota; "#/lutar" -> primeira aba do destino; outra coisa -> null */
+export function rotaDoEndereco(hash: string): Rota | null {
+  const [d, a] = hash.replace(/^#\/?/, "").split("/");
+  if (!d || !ehDestino(d)) return null;
+  if (a === undefined || a === "") return { destino: d, aba: DESTINOS[d][0] };
+  return ehAba(a) && DESTINO_DA_ABA[a] === d ? { destino: d, aba: a } : null;
+}
+export const enderecoDaRota = (r: Rota): string => `#/${r.destino}/${r.aba}`;
+
+/** aba lembrada: "destino/aba" ou, de uma versao antiga do HTML, so a aba */
+export function lerAbaLembrada(armaz: Armazenamento): Rota | null {
+  let v: string | null;
+  try { v = armaz.getItem(CHAVE_ABA); } catch { return null; }
+  if (!v) return null;
+  const aba = v.includes("/") ? v.split("/")[1] : v;
+  return ehAba(aba) ? { destino: DESTINO_DA_ABA[aba], aba } : null;
+}
+export function gravarAbaLembrada(armaz: Armazenamento, r: Rota): void {
+  try { armaz.setItem(CHAVE_ABA, r.destino + "/" + r.aba); } catch { /* preferencia de tela: sem armazenamento, so nao lembra */ }
+}

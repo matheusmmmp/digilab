@@ -5,8 +5,8 @@
 // Roda contra as constantes do motor em TS (web/app/motor/constantes.ts) e, enquanto o HTML existir, contra
 // as do motor extraido do HTML. Falha em qualquer diferenca e em qualquer folha numerica nova fora da tabela.
 //
-// uso: node --test web/app/test/
-import { test } from "node:test";
+// uso: npm test (em web/app)
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
