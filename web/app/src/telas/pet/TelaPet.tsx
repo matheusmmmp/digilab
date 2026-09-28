@@ -5,7 +5,7 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import {
-  ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
+  ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
@@ -40,7 +40,7 @@ function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
 function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
   const { motor: m, nascendo } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
-    <div class="pet-cab dl-faixa">
+    <header class="pet-cab">
       <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
       <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
       <span class="pet-cab-nome">
@@ -48,8 +48,11 @@ function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
         <span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
         <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>
       </span>
-      <span class="dl-lcd pet-relogio">DIA {diaDe(e.tick)} · {hhmm(e.tick)}</span>
-    </div>
+      <span class="pet-relogio">
+        <span class="dl-num pet-hora" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>{hhmm(e.tick)}</span>
+        <span class="dl-apoio">dia {diaDe(e.tick)}</span>
+      </span>
+    </header>
   );
 }
 
@@ -110,8 +113,8 @@ function Fala() {
   const r = rotuloLLM();
   return (
     <>
+      <button type="button" class={classe + " balao-palco"} aria-expanded={aberto} title={titulo} onClick={() => setAberto(!aberto)}>{balao}</button>
       <div class="fala-area">
-        <button type="button" class={classe} aria-expanded={aberto} title={titulo} onClick={() => setAberto(!aberto)}>{balao}</button>
         {causa && <div class="causa-area">{causa}</div>}
         {aberto && <div class="fala-det dl-apoio">{detalhe}</div>}
       </div>
@@ -124,8 +127,19 @@ function Fala() {
   );
 }
 
+/* emocao (prancha UpPet): a ultima emocao registrada na memoria do pet (so pets v2+; v1 nao tem emocao) */
+const EMOTE_EMOCAO: Record<string, string> = { alegria: "emoji_feliz", euforia: "emoji_feliz", orgulho: "emoji_feliz", ternura: "emoji_coracao" };
+function Emocao() {
+  const { motor: m } = useJogo();
+  if (m.versao < 2) return null;
+  const em = (m.pol.mem as unknown as { emocoes: { nome: string }[] }).emocoes;
+  const ult = em[em.length - 1];
+  if (!ult) return null;
+  return <span class="palco-emocao">{EMOTE_EMOCAO[ult.nome] && <Peca nome={EMOTE_EMOCAO[ult.nome]} />}{EMOCAO_TXT[ult.nome][0]}</span>;
+}
+
 /* ------------------------------------------------ necessidades, chamado e desejo */
-const NEC_PET: [("fome" | "energia" | "higiene" | "humor"), string, string | null][] = [["fome", "Comida", "emoji_carne"], ["energia", "Energia", null], ["higiene", "Higiene", null], ["humor", "Humor", "emoji_feliz"]];
+const NEC_PET: [("fome" | "energia" | "higiene" | "humor"), string][] = [["fome", "comida"], ["energia", "energia"], ["higiene", "higiene"], ["humor", "humor"]];
 const EMOTE_CHAMADO: Record<Chamado, string | null> = { fome: "emoji_carne", carinho: "emoji_coracao", higiene: null };
 const EMOTE_DESEJO: Record<string, string> = { comer: "emoji_carne", brincar: "emoji_nota", chamar_atencao: "emoji_exclam", explorar: "emoji_estrela" };
 
@@ -133,10 +147,10 @@ function Necessidades() {
   const { motor: m } = useJogo(), e = m.e, saude = Math.round(e.saude * 100);
   return (
     <div class="necessidades4">
-      {NEC_PET.map(([k, rot, em]) => (
+      {NEC_PET.map(([k, rot]) => (
         <div class="nec" key={k}>
-          <span class="nec-rot">{em && <Peca nome={em} />}{rot}</span>
-          <Seg n={blocos(e[k], 5)} m={5} cls={e[k] < .5 ? "dl-seg--necessidade" : ""} />
+          <span class="nec-rot">{rot}</span>
+          <Seg n={blocos(e[k], 5)} m={5} cls={e[k] < .5 ? "dl-seg--necessidade" : "dl-seg--acao"} />
         </div>
       ))}
       <div class="dl-vida nec-saude">
@@ -163,7 +177,7 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
     return (
       <div class="dl-card chamado" key={c}>
         <span class="chamado-ic">{EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
-        <span class="chamado-txt"><b>Chamado: {NOME_CHAMADO[c]}</b><Seg n={blocos(resta / CAT.janelaChamado, 5)} m={5} cls="dl-seg--acao" /><span class="dl-apoio">janela aberta</span></span>
+        <span class="chamado-txt"><span class="chamado-tit"><b>Chamado: {NOME_CHAMADO[c]}</b><span class="dl-apoio">janela aberta</span></span><Seg n={blocos(resta / CAT.janelaChamado, 10)} m={10} /></span>
         <button type="button" class="dl-btn" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
       </div>
     );
@@ -243,12 +257,18 @@ export function TelaPet({ irRegistro, irTreinar, abrirConfig }: { irRegistro: ()
   };
   return (
     <section class="pet-tela dl" aria-label="Tela do pet">
+      <div class="pet-listra dl-faixa" aria-hidden="true" />
       <CabecalhoPet abrirMeusPets={() => setMeusPets(true)} />
-      <div class="dl-card dl-card--palco dl-hexcard palco-pet">
-        <PalcoPet />
-        <div class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</div>
-        <Fala />
-      </div>
+      <section class="palco-card" aria-label="Palco do pet">
+        <div class="palco-pet dl-hexcard">
+          <div class="palco-tit">Meu parceiro</div>
+          <Emocao />
+          <PalcoPet />
+          <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
+          <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>
+          <Fala />
+        </div>
+      </section>
       <Necessidades />
       <Chamados agir={agir} />
       <div class="dl-par"><Desejo /></div>

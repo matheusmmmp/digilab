@@ -61,12 +61,16 @@ for (const [versao, save] of Object.entries(SAVES)) {
     /* treinar ate o FORCAR (fadiga 60) e forcar (com a confirmacao) */
     await page.locator(".dl-nav button", { hasText: "Crescer" }).click();
     await page.getByRole("tab", { name: "Treinar" }).click();
-    page.on("dialog", d => d.accept());
     let forcou = false;
     for (let i = 0; i < 40 && !forcou; i++) {
-      const forcar = page.locator(".treino-ex button.dl-btn--forcar:not([disabled])").first();
-      const treinar = page.locator(".treino-ex button:not(.dl-btn--forcar):not([disabled])").first();
-      if (await forcar.count()) { await forcar.click(); forcou = true; }
+      const forcar = page.locator("button.treino-ex.forcar:not([disabled])").first();
+      const treinar = page.locator("button.treino-ex:not(.forcar):not([disabled])").first();
+      if (await forcar.count()) {
+        await forcar.click();
+        await page.locator("dialog.folha").getByRole("button", { name: "Forçar mesmo assim" }).click();
+        await expect(page.locator("dialog.folha")).toHaveCount(0);
+        forcou = true;
+      }
       else if (await treinar.count()) await treinar.click();
       await page.waitForTimeout(1100);            /* 10 min/s: o intervalo entre treinos e de 10 min de jogo */
     }

@@ -1,17 +1,23 @@
-/* Treinar (desenhos TreinoNormal, TreinoPausa, TreinoForcar; porte do HTML): cena com o pet, fadiga com as
-   marcas 40 (pede pausa) e 60 (forcar), sobrecarga com 30 (aviso) e 60 (sombria), treinado na vida e os 6
-   exercicios com o ganho de base e o selo de aptidao do brasao. Acima de 60 de fadiga o botao vira FORCAR,
-   com confirmacao. */
-import { useState } from "preact/hooks";
+/* Treinar (pranchas TreinoNormal, TreinoPausa e TreinoForcar): sala de treino com o fundo do UP e o pet em 3x,
+   estado do treino e o balao "pausa?" quando o motor pede pausa; fadiga com as marcas 40 (pede pausa) e 60
+   (so forcar); sobrecarga roxa com 30 (aviso) e 60 (sombria); intervalo entre treinos num card; os 6 exercicios
+   em grade 3 x 2, o card inteiro e o botao; acima de 60 todos viram FORCAR listrado e a confirmacao e uma folha
+   com o que ganha e o que custa. Tudo o que aparece vem do motor (CTR, CSO, APTIDAO e o treino do pet). */
+import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  APTIDAO, CSO, CTR, NOME_ESP, NOME_EXERCICIO, NOME_STAT, STATS, chaveSprite, nomeForma, type Exercicio,
+  APTIDAO, CSO, CTR, NOME_ESP, NOME_EXERCICIO, NOME_STAT, STATS, chaveSprite, nomeForma, type Exercicio, type Stat,
 } from "../../../motor/index.ts";
-import { imagemAtlas, useAtlas } from "../../atlas.ts";
+import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Seg, blocos, dec } from "../../componentes/Barras.tsx";
+import { Grade, Peca } from "../../componentes/Imagens.tsx";
+import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 
 /* icones de treino do UP (hexagonos pintados, nao pixel art): 54 x 61 no botao, como pede o guia (secao 6) */
 const ICONE_TREINO: Record<Exercicio, string> = { levantar_pedra: "treino_pedra", corrida: "treino_corrida", alvo: "treino_soco", esquiva: "treino_arrancada", meditar: "treino_cachoeira", resistencia: "treino_saco" };
+const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
+const CORES_AMPULHETA = { k: "#173A8A", w: "#FFFFFF", y: "#F0B429" };
+const n1 = (x: number): string => dec(x, 1).replace(/,0$/, "");
 
 function IconeTreino({ ex }: { ex: Exercicio }) {
   const a = useAtlas();
@@ -19,71 +25,115 @@ function IconeTreino({ ex }: { ex: Exercicio }) {
   return <img class="treino-ic" src={imagemAtlas(a, ICONE_TREINO[ex]).url} width={54} height={61} alt="" />;
 }
 
+/** sala de treino: fundo do UP, sombra no chao e o pet em escala inteira (ate 3x, sem esticar) */
+function Sala() {
+  const { motor: m, nascendo } = useJogo(), a = useAtlas(), t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick);
+  const fundo = a.tipo === "ok" ? imagemAtlas(a, "fundo_treino").url : null;
+  let pet = null;
+  if (a.tipo === "ok" && nascendo === 0) {
+    const nome = chaveSprite(m.forma), [, h] = dimSprite(a.dados, nome), esc = Math.max(1, Math.min(3, Math.floor(150 / h)));
+    const img = imagemAtlas(a, nome, esc);
+    pet = <img class="dl-pix sala-pet" src={img.url} width={img.w} height={img.h} alt={nomeForma(m.forma)} />;
+  }
+  const estado = bebe ? "In-Training ainda não treina" : t.pedePausa ? "pediu pausa" : !pode ? "descansando" : "pronto para treinar";
+  return (
+    <section class="sala-treino" aria-label="Sala de treino" style={fundo ? { backgroundImage: `url(${fundo})` } : {}}>
+      <span class="sala-sombra" aria-hidden="true" />
+      {pet}
+      <span class="sala-estado">{estado}</span>
+      {t.pedePausa && <span class="dl-balao sala-balao"><Grade grade={AMPULHETA} escala={2} cores={CORES_AMPULHETA} alt="" /> pausa?</span>}
+    </section>
+  );
+}
+
+/** barra segmentada com os rotulos embaixo, cada um na posicao da sua marca */
+function Medidor({ titulo, valor, n, cls, marcas }: { titulo: string; valor: number; n: number; cls: string; marcas: [number, string][] }) {
+  return (
+    <div class="med">
+      <span class="med-cab"><b>{titulo}</b><span class={`dl-lcd ${cls === "dl-seg--sombrio" ? "med-roxo" : ""}`}>{valor.toFixed(0)} / 100</span></span>
+      <Seg n={n} m={10} cls={cls} marca={marcas.map(([x]) => x / 10)} />
+      <span class="med-marcas">{marcas.map(([x, rot]) => <span key={x} style={{ left: `${x}%` }}>{x} · {rot}</span>)}</span>
+    </div>
+  );
+}
+
+/** folha de confirmacao do forcar (TreinoForcar): o que ganha, o que custa, a sobrecarga e o aviso da sombria */
+function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => void; forcar: () => void }) {
+  const { motor: m } = useJogo(), ref = useRef<HTMLDialogElement>(null), t = m.treino;
+  useEffect(() => { ref.current?.showModal(); }, []);
+  const depois = Math.min(CTR.sobreMax, t.sobrecarga + CTR.sobreForcar);
+  return (
+    <dialog class="folha dl" ref={ref} aria-labelledby="forcar-tit" onClose={fechar}>
+      <span class="folha-alca" aria-hidden="true" />
+      <div class="folha-cab"><IconeTreino ex={ex} /><span><b id="forcar-tit">Forçar {NOME_EXERCICIO[ex].toLowerCase()}?</b><span class="dl-apoio">A fadiga passou de {CTR.limiteForcar}.</span></span></div>
+      <div class="dl-par">
+        <div class="folha-ganha"><b>GANHA</b><span>rende {n1(CTR.multForcar)}×</span></div>
+        <div class="folha-custa"><b>CUSTA</b><span>+{CTR.sobreForcar} sobrecarga</span>{m.versao >= 2 && <span>vínculo cai</span>}</div>
+      </div>
+      <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
+      <p class="folha-aviso">Com isso a sobrecarga vai a {depois.toFixed(0)}.{m.estagioAtual !== "adulto" ? ` Sobrecarga ${CSO.sombrio} ou mais na virada para Ultimate leva à forma sombria.` : ""}</p>
+      <div class="folha-bts">
+        <button type="button" class="dl-btn" onClick={() => ref.current?.close()}>Descansar</button>
+        <button type="button" class="dl-btn dl-btn--forcar" onClick={() => { forcar(); ref.current?.close(); }}>Forçar mesmo assim</button>
+      </div>
+    </dialog>
+  );
+}
+
 export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
-  const { motor: m, nascendo } = useJogo(), a = useAtlas(), [msg, setMsg] = useState("");
-  const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick);
+  const { motor: m, nascendo } = useJogo(), [msg, setMsg] = useState(""), [confirmar, setConfirmar] = useState<Exercicio | null>(null);
+  const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), mult = t.forcaria ? CTR.multForcar : 1;
   const treinar = (ex: Exercicio) => {
-    if (t.forcaria && !confirm(`Forçar ${NOME_EXERCICIO[ex].toLowerCase()}? Rende mais agora, mas gera ${CTR.sobreForcar} de sobrecarga${m.versao >= 2 ? " e derruba o vínculo" : ""}. Sobrecarga ${CSO.sombrio}+ na virada para Ultimate leva à forma sombria.`)) return;
     try {
       let texto = "";
       mudarMotor(mm => {
         const s = mm.treinar(ex);
-        const g = Object.entries(s.ganho).map(([k, v]) => `+${dec(v as number, 2)} ${NOME_STAT[k as keyof typeof NOME_STAT] || k}`).join(", ");
+        const g = Object.entries(s.ganho).map(([k, v]) => `+${dec(v as number, 2)} ${NOME_STAT[k as Stat] || k}`).join(", ");
         texto = s.enrolou ? "Ele enrolou: a sessão não rendeu." + (s.forcada ? " A sobrecarga entrou mesmo assim." : "")
           : `${s.forcada ? "Forçado: " : ""}${g || "sem ganho (teto atingido)"}.${mm.pausaTreino ? " Ele pediu pausa." : ""}`;
       });
       setMsg(texto);
     } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
-  const pet = a.tipo === "ok" && nascendo === 0 ? imagemAtlas(a, chaveSprite(m.forma)) : null;
+  const apt = APTIDAO[m.especie], fortes = STATS.filter(k => apt[k] > 1).sort((x, y) => apt[y] - apt[x]);
   return (
     <div class="tela dl">
-      <div class="treino-cab dl-card dl-hexcard">
-        <span class="treino-pet">{pet && <img class="dl-pix" src={pet.url} width={pet.w} height={pet.h} alt={nomeForma(m.forma)} />}</span>
-        {t.pedePausa ? <span class="dl-balao">pausa?</span> : <span class="dl-apoio">{bebe ? "O In-Training ainda não treina." : "pronto para treinar"}</span>}
-      </div>
+      <Sala />
       <div class="dl-card treino-medidores">
+        <Medidor titulo="Fadiga" valor={t.fadiga} n={blocos(t.fadiga / 100, 10)} cls={t.pedePausa ? "dl-seg--necessidade" : ""} marcas={[[CTR.limiarPausa, "pede pausa"], [CTR.limiteForcar, "só forçar"]]} />
+        <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
         <div class="med">
-          <span class="med-cab"><b>Fadiga</b><span class="dl-lcd">{t.fadiga.toFixed(0)} de 100</span></span>
-          <Seg n={blocos(t.fadiga / 100, 10)} m={10} cls={t.forcaria ? "dl-seg--necessidade" : "dl-seg--acao"} marca={[CTR.limiarPausa / 10, CTR.limiteForcar / 10]} />
-          <span class="med-marcas"><span>{CTR.limiarPausa}: pede pausa</span><span>{CTR.limiteForcar}: forçar</span></span>
-          <span class="dl-apoio">{t.forcaria ? "Acima do limite: treinar agora é forçar." : t.pedePausa ? "Pedindo pausa." : "Treinar sobe a fadiga; ela cai com o tempo acordado e com o sono."}</span>
-        </div>
-        <div class="med">
-          <span class="med-cab"><b>Sobrecarga</b><span class="dl-lcd">{t.sobrecarga.toFixed(0)} de 100</span></span>
-          <Seg n={blocos(t.sobrecarga / 100, 10)} m={10} cls="dl-seg--sombrio" marca={[CSO.aviso / 10, CSO.sombrio / 10]} />
-          <span class="med-marcas"><span>{CSO.aviso}: aviso</span><span>{CSO.sombrio}: forma sombria</span></span>
-          <span class="dl-apoio">{t.sobrecarga >= CSO.sombrio ? "Na virada para Ultimate a forma vai ser sombria."
-            : t.sobrecarga >= CSO.aviso ? `Aviso: com ${CSO.sombrio} ou mais na virada para Ultimate, a forma fica sombria.`
-            : `Com ${CSO.sombrio} ou mais na virada para Ultimate, a forma fica sombria.`}</span>
-        </div>
-        <div class="med">
-          <span class="med-cab"><b>Treinado na vida</b><span class="dl-lcd">+{dec(t.total, 1).replace(/,0$/, "")} de {CTR.tetoVida}</span></span>
+          <span class="med-cab"><b>Treinado na vida</b><span class="dl-lcd">+{n1(t.total)} / {CTR.tetoVida}</span></span>
           <span class="dl-apoio">{STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${dec(t.pontos[k], 1)}`).join(", ") || "nada ainda"}</span>
         </div>
       </div>
-      <div class="treino-grade">
-        {(Object.keys(CTR.exercicios) as Exercicio[]).map(ex => {
-          const [pri, sec] = CTR.exercicios[ex], apt = APTIDAO[m.especie][pri], des = bebe || !pode || lutando || nascendo > 0;
+      {!bebe && !pode && (
+        <div class="dl-card treino-intervalo"><Peca nome="icone_tempo" reserva="⏳" />
+          <span><b>Próximo treino em {CTR.intervalo - (m.e.tick - t.ultimo!)} min de jogo</b><span class="dl-apoio">a fadiga baixa {CTR.recuperaHora} por hora acordado e zera quando ele dorme</span></span></div>
+      )}
+      {bebe && <p class="dl-apoio" style={{ margin: 0 }}>O In-Training ainda não treina.</p>}
+      <div class="treino-grade" role="group" aria-label="Exercícios">
+        {EXERCICIOS.map(ex => {
+          const [pri, sec] = CTR.exercicios[ex], des = bebe || !pode || lutando || nascendo > 0;
           return (
-            <div class="dl-card treino-ex" key={ex}>
-              {apt > 1 && <span class="treino-selo" title={`aptidão do brasão ${NOME_ESP[m.especie]}`}>{NOME_ESP[m.especie]} ×{dec(apt, 1)}</span>}
+            <button type="button" key={ex} class={`treino-ex${t.forcaria ? " forcar" : ""}`} disabled={des}
+              aria-label={`${t.forcaria ? "Forçar" : "Treinar"} ${NOME_EXERCICIO[ex]}${t.forcaria ? ": gera sobrecarga" : ""}`}
+              onClick={() => (t.forcaria ? setConfirmar(ex) : treinar(ex))}>
+              {apt[pri] > 1 && <span class="treino-selo">aptidão</span>}
               <IconeTreino ex={ex} />
               <b>{NOME_EXERCICIO[ex]}</b>
-              <span class="dl-apoio">+{CTR.ganhoPri} {NOME_STAT[pri]} · +{CTR.ganhoSec} {NOME_STAT[sec]}</span>
-              {t.forcaria
-                ? <button type="button" class="dl-btn dl-btn--forcar" disabled={des} aria-label={`Forçar ${NOME_EXERCICIO[ex]}: gera sobrecarga`} onClick={() => treinar(ex)}>FORÇAR<small>+ sobrecarga</small></button>
-                : <button type="button" class="dl-btn" disabled={des} onClick={() => treinar(ex)}>Treinar</button>}
-            </div>
+              <span class="treino-ganho">+{n1(CTR.ganhoPri * mult)} {NOME_STAT[pri]} · +{n1(CTR.ganhoSec * mult)} {NOME_STAT[sec]}</span>
+              {t.forcaria && <span class="treino-perigo"><span>FORÇAR<small>+ sobrecarga</small></span></span>}
+            </button>
           );
         })}
       </div>
+      <p class="treino-legenda"><span class="treino-selo">aptidão</span>{fortes.length ? `${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} Um treino por vez, com {CTR.intervalo} min de intervalo.</p>
       <p class="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
-      <p class="dl-apoio" style={{ margin: 0 }}>{bebe ? "O In-Training ainda não treina." : !pode ? `Próximo treino em ${CTR.intervalo - (m.e.tick - t.ultimo!)} min de jogo.` : ""}</p>
-      <p class="dl-apoio" style={{ margin: 0 }}>O ganho no card é o de base; a aptidão do brasão aumenta, e a fadiga e a proximidade do teto diminuem.</p>
       <details class="dl-apoio"><summary>Como o treino funciona</summary>
         <p>Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
       </details>
+      {confirmar && <ConfirmarForcar ex={confirmar} fechar={() => setConfirmar(null)} forcar={() => treinar(confirmar)} />}
     </div>
   );
 }
