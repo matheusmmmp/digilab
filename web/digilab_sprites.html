@@ -2,7 +2,7 @@
 <title>Digilab Pet (sprites locais)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=M+PLUS+Rounded+1c:wght@700;800;900&family=Rubik:ital,wght@1,800;1,900&family=DotGothic16&display=swap">
 <style>
 :root{
   --ground:#E9EDF2; --panel:#F7F9FB; --ink:#1B2130; --muted:#5A6477; --line:#CDD4DF;
@@ -30,6 +30,168 @@
   --accent:#F3B24D; --accent-ink:#2A1A00;
   --good:#4CC486; --warn:#E3A93A; --bad:#EE6B5F; --bar-bg:#252D3C;
 }
+/* =================================================================
+   Direcao Digimon UP: tokens e componentes (TAREFA_INTERFACE_UP, Etapa 2).
+   Fonte: docs/UI_GUIDELINES.md (vale sobre a prancha UpComponentes quando divergem).
+   Tema: prefers-color-scheme, sobreposto por data-tema="claro|escuro" no <html>.
+   ================================================================= */
+:root{
+  --dl-bg:#E8F0FB; --dl-hex:#D4E3F7; --dl-surface:#FFFFFF; --dl-surface-2:#F4F8FE;
+  --dl-border:#9FC2EF; --dl-border-shadow:#7FA6DC; --dl-navy:#173A8A; --dl-navy-deep:#0F2A66;
+  --dl-action:#2C73E0; --dl-action-press:#1B54B4; --dl-text:#13244D; --dl-text-2:#3A5288;
+  --dl-need:#E5489F; --dl-learned:#6FE3FF; --dl-learned-bg:#0F3A86; --dl-highlight:#FFD23F; --dl-highlight-ink:#3B2A00;
+  --dl-ok:#3FCF6A; --dl-force:#FFCC33; --dl-force-ink:#1A1A1A; --dl-dark:#7B3FB8;
+  --dl-disabled:#C7D3E6; --dl-disabled-ink:#56657F;
+  /* derivados (fora da tabela do guia; aqui para nao espalhar cor pelos componentes) */
+  --dl-rim:#FFFFFF;
+  /* tinta sobre acao e necessidade: branco nao passa 4,5:1 no rosa (3,65) nem no azul do tema escuro (3,09) */
+  --dl-action-ink:#FFFFFF; --dl-need-ink:#0B1636;
+  --dl-sec-bg:#FFFFFF; --dl-sec-ink:#173A8A; --dl-sec-edge:#173A8A; --dl-sec-press:#E8F0FB; --dl-sec-shadow:#C7D8F5;
+  --dl-none-ink:#56657F; --dl-none-edge:#8A9AC0; --dl-none-bg:#F1F5FB;
+  --dl-dark-bg:#2A1440; --dl-dark-ink:#E8DCF5;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%23D4E3F7' stroke-width='1.5'/%3E%3C/svg%3E");
+  --dl-f-num:"Rubik", system-ui, sans-serif;
+  --dl-f-texto:"M PLUS Rounded 1c", system-ui, sans-serif;
+  --dl-f-lcd:"DotGothic16", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-tema="claro"]){
+  --dl-bg:#0B1636; --dl-hex:#1B3163; --dl-surface:#152A5C; --dl-surface-2:#1B3470;
+  --dl-border:#2C5BBD; --dl-border-shadow:#0F2A66; --dl-navy:#173A8A; --dl-navy-deep:#0A1D4A;
+  --dl-action:#4F93F2; --dl-action-press:#2C73E0; --dl-text:#E6EEFF; --dl-text-2:#B4C6EC;
+  --dl-need:#FF7FC0; --dl-ok:#4BE07E; --dl-dark:#A56BE0; --dl-disabled:#2A3A60; --dl-disabled-ink:#8795B3;
+  --dl-rim:#152A5C; --dl-action-ink:#0B1636; --dl-sec-bg:#1B3470; --dl-sec-ink:#E6EEFF; --dl-sec-edge:#4F93F2; --dl-sec-press:#152A5C; --dl-sec-shadow:#0F2A66;
+  --dl-none-ink:#B4C6EC; --dl-none-edge:#6F80A8; --dl-none-bg:#152A5C;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
+  }
+}
+:root[data-tema="escuro"]{
+  --dl-bg:#0B1636; --dl-hex:#1B3163; --dl-surface:#152A5C; --dl-surface-2:#1B3470;
+  --dl-border:#2C5BBD; --dl-border-shadow:#0F2A66; --dl-navy:#173A8A; --dl-navy-deep:#0A1D4A;
+  --dl-action:#4F93F2; --dl-action-press:#2C73E0; --dl-text:#E6EEFF; --dl-text-2:#B4C6EC;
+  --dl-need:#FF7FC0; --dl-ok:#4BE07E; --dl-dark:#A56BE0; --dl-disabled:#2A3A60; --dl-disabled-ink:#8795B3;
+  --dl-rim:#152A5C; --dl-action-ink:#0B1636; --dl-sec-bg:#1B3470; --dl-sec-ink:#E6EEFF; --dl-sec-edge:#4F93F2; --dl-sec-press:#152A5C; --dl-sec-shadow:#0F2A66;
+  --dl-none-ink:#B4C6EC; --dl-none-edge:#6F80A8; --dl-none-bg:#152A5C;
+  --dl-hex-img:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0L28 8V24L14 32L0 24V8ZM14 32V48' fill='none' stroke='%231B3163' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+.dl{font-family:var(--dl-f-texto);font-weight:700;font-size:.9375rem;line-height:1.45;color:var(--dl-text)}
+.dl-pix{image-rendering:pixelated;image-rendering:crisp-edges}
+/* fundos */
+.dl-hexbg{background-color:var(--dl-bg);background-image:var(--dl-hex-img);background-size:28px 48px}
+.dl-hexcard{background-color:var(--dl-surface-2);background-image:var(--dl-hex-img);background-size:28px 48px}
+.dl-faixa{background-color:#2C73E0;background-image:conic-gradient(rgba(255,255,255,.16) 25%,transparent 0 50%,rgba(255,255,255,.16) 0 75%,transparent 0);background-size:16px 16px;border-bottom:4px solid var(--dl-navy)}
+.dl-malha{background-color:var(--dl-learned-bg);background-image:linear-gradient(rgba(111,227,255,.38) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.38) 1px,transparent 1px);background-size:10px 10px}
+.dl-perigo{background-image:repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px)}
+/* tipografia */
+.dl-num{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:#FFFFFF;letter-spacing:.01em;
+  text-shadow:2px 0 0 var(--dl-navy),-2px 0 0 var(--dl-navy),0 2px 0 var(--dl-navy),0 -2px 0 var(--dl-navy),2px 2px 0 var(--dl-navy),-2px -2px 0 var(--dl-navy),2px -2px 0 var(--dl-navy),-2px 2px 0 var(--dl-navy),0 4px 0 var(--dl-navy-deep)}
+.dl-titulo-card{font-weight:900;font-size:1.125rem;line-height:1.25;margin:0}
+.dl-apoio{font-weight:800;font-size:.75rem;color:var(--dl-text-2)}
+.dl-lcd{font-family:var(--dl-f-lcd);font-weight:400;font-size:.9375rem}
+/* card */
+.dl-card{background:var(--dl-surface);border:3px solid var(--dl-rim);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:12px}
+.dl-card--palco{border-radius:16px}
+/* botoes: normal, pressionado (:active ou .is-press), foco (:focus-visible ou .is-foco), desativado */
+.dl-btn{font:inherit;font-weight:900;font-size:.9375rem;min-height:48px;min-width:44px;padding:6px 16px;border-radius:12px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center;transition:transform 80ms,background-color 80ms,box-shadow 80ms;
+  background:var(--dl-action);color:var(--dl-action-ink);border:3px solid var(--dl-rim);box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 var(--dl-action-press)}
+.dl-btn:active:not(:disabled),.dl-btn.is-press{background:var(--dl-action-press);color:#FFFFFF;box-shadow:0 0 0 2px var(--dl-navy),inset 0 3px 0 rgba(0,0,0,.22);transform:translateY(2px)}
+.dl-btn:focus-visible,.dl-btn.is-foco{outline:none;box-shadow:0 0 0 2px var(--dl-navy),0 0 0 5px var(--dl-highlight),inset 0 -4px 0 var(--dl-action-press)}
+.dl-btn:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink);box-shadow:none;border-color:var(--dl-disabled);cursor:not-allowed;transform:none}
+.dl-btn--sec{background:var(--dl-sec-bg);color:var(--dl-sec-ink);border-color:var(--dl-sec-edge);box-shadow:inset 0 -4px 0 var(--dl-sec-shadow)}
+.dl-btn--sec:active:not(:disabled),.dl-btn--sec.is-press{background:var(--dl-sec-press);color:var(--dl-sec-ink);box-shadow:inset 0 3px 0 var(--dl-sec-shadow)}
+.dl-btn--sec:focus-visible,.dl-btn--sec.is-foco{box-shadow:0 0 0 3px var(--dl-highlight),inset 0 -4px 0 var(--dl-sec-shadow)}
+.dl-btn--sec:disabled{border-color:var(--dl-disabled-ink);border-style:dashed}
+.dl-btn--destaque{background:var(--dl-highlight);color:var(--dl-highlight-ink);box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 #E0A800}
+.dl-btn--destaque:active:not(:disabled),.dl-btn--destaque.is-press{background:#F2C11F;color:var(--dl-highlight-ink);box-shadow:0 0 0 2px var(--dl-navy),inset 0 3px 0 #C99600}
+.dl-btn--destaque:focus-visible,.dl-btn--destaque.is-foco{box-shadow:0 0 0 2px var(--dl-navy),0 0 0 5px var(--dl-action),inset 0 -4px 0 #E0A800}
+/* forcar: a moldura listrada e o proprio botao, e o custo fica escrito nele */
+.dl-btn--forcar{flex-direction:column;gap:0;line-height:1.1;letter-spacing:.04em;color:var(--dl-force);border:4px solid transparent;
+  background-image:linear-gradient(var(--dl-force-ink),var(--dl-force-ink)),repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px);
+  background-origin:border-box;background-clip:padding-box,border-box;box-shadow:none}
+.dl-btn--forcar small{font-size:.6875rem;font-weight:800;letter-spacing:0;color:#F4E2B8}
+.dl-btn--forcar:active:not(:disabled),.dl-btn--forcar.is-press{color:var(--dl-force);background-image:linear-gradient(#000,#000),repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px);box-shadow:none}
+.dl-btn--forcar:focus-visible,.dl-btn--forcar.is-foco{box-shadow:0 0 0 3px var(--dl-highlight)}
+.dl-btn--forcar:disabled{background-image:none;background:var(--dl-disabled);color:var(--dl-disabled-ink);border:4px dashed var(--dl-disabled-ink)}
+.dl-btn--forcar:disabled small{color:var(--dl-disabled-ink)}
+.dl-btn--icone{width:44px;height:44px;min-height:44px;padding:0;background:var(--dl-sec-bg);color:var(--dl-sec-ink);border-color:var(--dl-sec-edge);box-shadow:none}
+.dl-btn--redondo{border-radius:50%}
+.dl-btn--icone svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.75;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dl-btn--icone:active:not(:disabled),.dl-btn--icone.is-press{background:var(--dl-sec-press);color:var(--dl-sec-ink);box-shadow:none}
+.dl-btn--icone:focus-visible,.dl-btn--icone.is-foco{box-shadow:0 0 0 3px var(--dl-highlight)}
+/* plaquinha de nome */
+.dl-placa{display:inline-block;background:var(--dl-navy);color:#FFFFFF;border:2px solid var(--dl-navy-deep);border-radius:6px;box-shadow:inset 0 3px 0 rgba(255,255,255,.22);font-weight:900;font-size:1rem;padding:2px 18px}
+.dl-placa--inclinada{border:none;border-radius:0;font-family:var(--dl-f-num);font-style:italic;font-weight:800;font-size:.8125rem;padding:3px 16px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+/* etiquetas (nunca mais de duas juntas) */
+.dl-tag{display:inline-block;border-radius:5px;font-size:.6875rem;font-weight:900;letter-spacing:.03em;text-transform:uppercase;padding:1px 8px;line-height:1.5}
+.dl-tag--estagio{background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+.dl-tag--ativo{background:#3FCF6A;color:#0B3A18;box-shadow:inset 0 0 0 2px #1F7A3A}
+.dl-tag--espera{background:#2C73E0;color:#FFFFFF}
+.dl-tag--sombria{background:#7B3FB8;color:#FFFFFF}
+/* barra segmentada: aria-label "N de M"; o marcador indica limite ou inicio da faixa de aviso */
+.dl-seg{position:relative;display:flex;gap:3px;padding-block:3px}
+.dl-seg i{flex:1;height:10px;border-radius:3px;background:var(--dl-hex)}
+.dl-seg i.on{background:var(--dl-ok)}
+.dl-seg--necessidade i.on{background:var(--dl-need)}
+.dl-seg--sombrio i.on{background:var(--dl-dark)}
+.dl-seg--acao i.on{background:var(--dl-action)}
+.dl-seg b{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--dl-navy);border-radius:1px;box-shadow:0 0 0 1px var(--dl-rim)}
+/* barra relativa ao pet comum: rotulo so fora da faixa comum */
+.dl-rel{display:flex;align-items:center;gap:8px}
+.dl-rel-trilho{position:relative;flex:1;height:10px;border-radius:5px;background:var(--dl-hex)}
+.dl-rel-trilho i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--dl-action)}
+.dl-rel-trilho b{position:absolute;left:50%;top:-3px;width:3px;height:16px;margin-left:-1.5px;background:var(--dl-navy);box-shadow:0 0 0 1px var(--dl-rim)}
+.dl-rel-rotulo{font-size:.6875rem;font-weight:900;color:var(--dl-text-2);min-width:5.5em}
+/* barra de vida */
+.dl-vida{display:grid;gap:2px}
+.dl-vida-topo{display:flex;justify-content:space-between;font-weight:900;font-size:.8125rem}
+.dl-vida-trilho{height:12px;border-radius:6px;background:var(--dl-hex);overflow:hidden}
+.dl-vida-trilho i{display:block;height:100%;border-radius:6px;background:var(--dl-ok)}
+/* card de desejo: necessidade (rosa solido) x vontade aprendida (malha ciano tracejada) */
+.dl-desejo{border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.dl-desejo--necessidade{background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.dl-desejo--aprendida{border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.55);color:#E6FBFF}
+.dl-desejo-cab{border-radius:6px;font-size:.6875rem;font-weight:900;text-align:center;padding:2px 0;letter-spacing:.03em}
+.dl-desejo--necessidade .dl-desejo-cab{background:var(--dl-need);color:var(--dl-need-ink);box-shadow:inset 0 3px 0 rgba(255,255,255,.25)}
+.dl-desejo--aprendida .dl-desejo-cab{background:var(--dl-learned);color:#0B2A5E}
+.dl-desejo-corpo{display:flex;align-items:center;gap:8px;padding:0 4px 2px}
+.dl-desejo-corpo strong{display:block;font-weight:900;font-size:1rem;line-height:1.2}
+.dl-desejo-corpo span{font-size:.6875rem;font-weight:800}
+.dl-desejo--necessidade .dl-desejo-corpo span{color:var(--dl-text-2)}
+.dl-desejo--aprendida .dl-desejo-corpo span{color:#BDEFFF}
+.dl-desejo-icone{width:36px;height:36px;flex:none;border-radius:50%;background:var(--dl-navy);display:flex;align-items:center;justify-content:center;color:var(--dl-learned)}
+.dl-desejo-icone svg{width:18px;height:18px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+/* chip de causa */
+.dl-causa{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:2px 8px 2px 4px;font-size:.6875rem;font-weight:900;line-height:1.6}
+.dl-causa--registro{color:#E6FBFF;border:2px solid var(--dl-learned)}
+.dl-causa--sem{background:var(--dl-none-bg);color:var(--dl-none-ink);border:2px dashed var(--dl-none-edge);padding-left:8px}
+/* balao de fala: o conteudo segue o estagio (secao 9 do guia) */
+.dl-balao{justify-self:start;display:inline-flex;align-items:center;gap:4px;max-width:100%;background:#FFFFFF;color:#13244D;border:3px solid var(--dl-navy);
+  border-radius:14px 14px 14px 4px;box-shadow:0 3px 0 var(--dl-navy-deep);padding:6px 12px;font-weight:800;font-size:.9375rem}
+.dl-balao--emote{padding:5px 8px}
+.dl-balao--sembase{background:var(--dl-none-bg);color:var(--dl-none-ink);border-style:dashed;border-color:var(--dl-none-edge);box-shadow:none;text-decoration:line-through}
+.dl-balao--sombria{background:var(--dl-dark-bg);color:var(--dl-dark-ink);border-color:var(--dl-dark);box-shadow:0 3px 0 #140820;font-weight:700}
+.dl-balao-nota{font-size:.75rem;font-weight:800;color:var(--dl-text-2);margin:4px 0 0}
+.dl-balao-tag{font-size:.6875rem;font-weight:800;color:#3A5288;border:1px solid #9FC2EF;border-radius:4px;padding:0 5px;margin-left:6px}
+@media (prefers-reduced-motion: reduce){ .dl-btn{transition:none} }
+
+/* pagina de teste dos componentes (#componentes-up) */
+.dl-teste{border-radius:16px;overflow:hidden;box-shadow:0 0 0 2px var(--dl-border)}
+.dl-teste-cab{padding:18px 14px 14px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+.dl-teste-cab h2{margin:0;font-size:1.75rem;line-height:1.1}
+.dl-teste-tema{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.dl-teste-grade{padding:16px 14px 24px;display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:start}
+.dl-teste-grade > .dl-card{display:grid;gap:12px}
+.dl-linha{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.dl-cores{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.dl-cor{display:grid;gap:2px;font-size:.75rem;font-weight:900}
+.dl-cor span:first-child{height:40px;border-radius:10px;box-shadow:inset 0 0 0 2px var(--dl-hex)}
+.dl-cor code{font-size:.6875rem;font-weight:700;color:var(--dl-text-2);font-family:var(--dl-f-texto)}
+.dl-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dl-estados{display:grid;grid-template-columns:auto repeat(4,minmax(0,1fr));gap:12px 10px;align-items:center}
+.dl-estados > .dl-resto{grid-column:span 4}
+@media (max-width:520px){ .dl-estados{grid-template-columns:repeat(2,minmax(0,1fr))} .dl-estados .cab{display:none} .dl-estados > .dl-rot{grid-column:1/-1;margin-top:4px} .dl-estados > .dl-resto{grid-column:1/-1} }
+.dl-falas{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
 *{box-sizing:border-box}
 /* palco de conferencia da Etapa 1 (TAREFA_INTERFACE_UP), so com #palco-up no endereco */
 .palco-up{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:12px}
@@ -251,6 +413,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
     <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
   </header>
   <section id="palco-up" class="palco-up" hidden aria-label="Palco de conferência dos sprites do Digimon UP"></section>
+  <section id="componentes-up" class="dl dl-teste dl-hexbg" hidden aria-label="Página de teste dos componentes da direção Digimon UP"></section>
 
   <p id="aviso-atlas" hidden style="color:var(--bad);font-weight:700"></p>
   <div class="grid">
@@ -2375,7 +2538,7 @@ function ajustarTela(cv, uw, uh){
 }
 const atlasImg = new Image();
 let atlasOk = false, UPA = null;
-function atlasCarregou(){ atlasOk = true; evoCache.clear(); evoChave = null; if (typeof paneAtual !== "undefined" && paneAtual === "evolucao") renderEvolucao(); if (typeof paneAtual !== "undefined" && paneAtual === "arena") arenaPreview(); if (typeof paneAtual !== "undefined" && paneAtual === "catalogo") renderCatalogo(); if (typeof paneAtual !== "undefined" && paneAtual === "campanha") renderCampanha(); if (typeof motor !== "undefined" && motor) desenharLCD(); palcoUp(); }
+function atlasCarregou(){ atlasOk = true; evoCache.clear(); evoChave = null; if (typeof paneAtual !== "undefined" && paneAtual === "evolucao") renderEvolucao(); if (typeof paneAtual !== "undefined" && paneAtual === "arena") arenaPreview(); if (typeof paneAtual !== "undefined" && paneAtual === "catalogo") renderCatalogo(); if (typeof paneAtual !== "undefined" && paneAtual === "campanha") renderCampanha(); if (typeof motor !== "undefined" && motor) desenharLCD(); palcoUp(); montarComponentesUp(); }
 function atlasFalhou(url, err){
   const b = document.getElementById("aviso-atlas");
   b.hidden = false;
@@ -2466,6 +2629,129 @@ function palcoUp(){
   clearInterval(palcoTimer); palcoTimer = setInterval(desenhar1, UPA.ms_por_quadro); desenhar1();
 }
 addEventListener("hashchange", palcoUp);
+/* ------------------------------------------------ Etapa 2: pagina de teste dos componentes (#componentes-up)
+   Os textos e numeros daqui sao exemplos de layout, marcados como exemplo: nada e dado do motor. */
+const cacheImgPeca = new Map();
+/* peca do atlas UP (emote, icone) como <img> em escala inteira; falha alto se nao existir */
+function imgPeca(nome, escala, alt){
+  const r = dimSprite(nome), ch = nome + "@" + escala;
+  if (!cacheImgPeca.has(ch)){
+    const c = document.createElement("canvas"); c.width = r[2] * escala; c.height = r[3] * escala;
+    spriteUp(c.getContext("2d"), nome, 0, 0, false, {escala});
+    cacheImgPeca.set(ch, c.toDataURL());
+  }
+  return `<img class="dl-pix" src="${cacheImgPeca.get(ch)}" width="${r[2] * escala}" height="${r[3] * escala}" alt="${alt}">`;
+}
+/* ampulheta em pixel art original (a criança fala com icones; o UP nao tem emote de demora) */
+const AMPULHETA = ["kkkkkkk", "kwwwwwk", ".kyyyk.", "..kyk..", "..kwk..", ".kwywk.", "kwyyywk", "kkkkkkk"];
+function imgGrade(grade, escala, cores, alt){
+  const c = document.createElement("canvas"); c.width = grade[0].length * escala; c.height = grade.length * escala;
+  const g = c.getContext("2d");
+  grade.forEach((l, y) => [...l].forEach((ch, x) => { if (ch === ".") return; if (!cores[ch]) throw new Error("cor da grade: " + ch);
+    g.fillStyle = cores[ch]; g.fillRect(x * escala, y * escala, escala, escala); }));
+  return `<img class="dl-pix" src="${c.toDataURL()}" width="${c.width}" height="${c.height}" alt="${alt}">`;
+}
+const ICONE_TRACO = {
+  pausar: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12"/></svg>',
+  voltar: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4 6 10l6 6"/></svg>',
+  enviar: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5"/></svg>',
+};
+const seg = (n, m, cls = "", marca = null) => `<span class="dl-seg ${cls}" role="img" aria-label="${n} de ${m}">${
+  Array.from({length:m}, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}${marca !== null ? `<b style="left:${marca / m * 100}%"></b>` : ""}</span>`;
+/* barra relativa: v em [0, 1], 0,5 = pet comum; rotulo so fora da faixa comum */
+const rel = (nome, v, rotulo) => `<div class="dl-rel"><span style="min-width:6.5em">${nome}</span><span class="dl-rel-trilho" role="img" aria-label="${nome}: ${rotulo || "na faixa comum"}"><i style="width:${v * 100}%"></i><b></b></span><span class="dl-rel-rotulo">${rotulo || ""}</span></div>`;
+function montarComponentesUp(){
+  const sec = document.getElementById("componentes-up");
+  if (!sec || location.hash !== "#componentes-up" || !SPRITES_UP || !atlasOk) return;
+  sec.hidden = false;
+  const TOKENS = [["--dl-bg", "fundo"], ["--dl-hex", "hexágono"], ["--dl-surface", "card"], ["--dl-border", "borda"], ["--dl-navy", "marinho"],
+    ["--dl-navy-deep", "marinho fundo"], ["--dl-action", "azul ação"], ["--dl-text", "texto"], ["--dl-text-2", "apoio"], ["--dl-need", "necessidade"],
+    ["--dl-learned", "aprendido"], ["--dl-highlight", "destaque"], ["--dl-ok", "ok, vida"], ["--dl-dark", "sombrio"], ["--dl-disabled", "desativado"]];
+  const cs = getComputedStyle(document.documentElement);
+  const estados = (rot, cls, conteudo) => `<span class="dl-rot" style="font-weight:900">${rot}</span>` + ["", "is-press", "is-foco", ""].map((st, i) =>
+    `<button type="button" class="dl-btn ${cls} ${st}"${i === 3 ? " disabled" : ""}>${conteudo}</button>`).join("");
+  sec.innerHTML = `
+  <div class="dl-teste-cab dl-faixa">
+    <h2 class="dl-num">Componentes</h2>
+    <div class="dl-teste-tema" role="group" aria-label="Tema da página">
+      ${["sistema", "claro", "escuro"].map(tm => `<button type="button" class="dl-btn dl-btn--sec" data-tema-teste="${tm}" aria-pressed="${(document.documentElement.dataset.tema || "sistema") === tm}">${tm[0].toUpperCase() + tm.slice(1)}</button>`).join("")}
+    </div>
+  </div>
+  <div class="dl-teste-grade">
+    <section class="dl-card"><h3 class="dl-titulo-card">Cores</h3>
+      <div class="dl-cores">${TOKENS.map(([v, n]) => `<div class="dl-cor"><span style="background:var(${v})"></span><span>${n}</span><code>${cs.getPropertyValue(v).trim()}</code></div>`).join("")}
+        <div class="dl-cor"><span class="dl-malha" style="border:2px dashed var(--dl-learned)"></span><span>malha aprendida</span><code>#6FE3FF / #0F3A86</code></div>
+        <div class="dl-cor"><span class="dl-perigo"></span><span>forçar</span><code>#FFCC33 / #1A1A1A</code></div></div>
+      <p class="dl-apoio" style="margin:0">Rosa sólido = vem do corpo. Malha ciano tracejada = aprendido com o dono. A forma carrega o sentido junto com a cor.</p></section>
+    <section class="dl-card"><h3 class="dl-titulo-card">Tipografia</h3>
+      <div class="dl-linha"><span class="dl-num" style="font-size:2.5rem;line-height:1.1">×1000</span><span class="dl-apoio">Rubik 900 itálico com contorno: números e títulos de tela</span></div>
+      <div class="dl-linha"><span class="dl-titulo-card">Chamado: fome</span><span class="dl-apoio">M PLUS Rounded 900: título de card</span></div>
+      <div class="dl-linha"><span>Pets em espera ficam congelados.</span><span class="dl-apoio">M PLUS Rounded 700: texto, 15 px</span></div>
+      <div class="dl-linha"><span class="dl-lcd" style="font-size:1.125rem">08:12 · T7 · LV 3</span><span class="dl-apoio">DotGothic16: LCD</span></div></section>
+    <section class="dl-card" style="grid-column:1/-1"><h3 class="dl-titulo-card">Botões</h3>
+      <div class="dl-estados">
+        <span class="cab"></span><span class="dl-apoio cab">normal</span><span class="dl-apoio cab">pressionado</span><span class="dl-apoio cab">foco</span><span class="dl-apoio cab">desativado</span>
+        ${estados("Primário", "", "Atender")}
+        ${estados("Secundário", "dl-btn--sec", "Exportar")}
+        ${estados("Destaque", "dl-btn--destaque", imgPeca("emoji_joinha", 2, "") + "Elogiar")}
+        ${estados("Forçar", "dl-btn--forcar", "FORÇAR<small>+ sobrecarga</small>")}
+        <span class="dl-rot" style="font-weight:900">Ícone</span>
+        <span class="dl-linha dl-resto">
+          <button type="button" class="dl-btn dl-btn--icone" aria-label="Voltar">${ICONE_TRACO.voltar}</button>
+          <button type="button" class="dl-btn dl-btn--icone" aria-label="Pausar">${ICONE_TRACO.pausar}</button>
+          <button type="button" class="dl-btn dl-btn--icone dl-btn--redondo is-foco" aria-label="Enviar">${ICONE_TRACO.enviar}</button>
+          <button type="button" class="dl-btn dl-btn--icone" aria-label="Pausar" disabled>${ICONE_TRACO.pausar}</button>
+          <span class="dl-apoio">44 px; rótulo acessível em todo botão só com ícone.</span></span>
+      </div>
+      <p class="dl-apoio" style="margin:0">Desativado é <code>disabled</code> de verdade; o motivo fica em texto perto quando não é óbvio. O Forçar só aparece acima do limite de fadiga.</p></section>
+    <section class="dl-card"><h3 class="dl-titulo-card">Plaquinha e etiquetas</h3>
+      <div class="dl-linha"><span class="dl-placa">Agumon</span><span class="dl-placa dl-placa--inclinada">Experiência</span></div>
+      <div class="dl-linha"><span class="dl-tag dl-tag--estagio">criança</span><span class="dl-tag dl-tag--ativo">ativo</span><span class="dl-tag dl-tag--espera">em espera</span><span class="dl-tag dl-tag--sombria">sombria</span></div>
+      <p class="dl-apoio" style="margin:0">Nunca mais de duas etiquetas juntas numa tela; aqui estão lado a lado só para comparar.</p></section>
+    <section class="dl-card"><h3 class="dl-titulo-card">Barras</h3>
+      <span class="dl-apoio">Segmentada: necessidade, fadiga com limite, sobrecarga com faixa de aviso, janela de chamado</span>
+      ${seg(3, 10, "dl-seg--necessidade")}
+      ${seg(6, 10, "dl-seg--acao", 8)}
+      ${seg(4, 10, "dl-seg--sombrio", 6)}
+      ${seg(3, 5)}
+      <span class="dl-apoio">Relativa ao pet comum (traço no meio); rótulo só fora da faixa comum</span>
+      ${rel("força", .88, "muito acima")}${rel("guarda", .52, "")}${rel("fôlego", .18, "abaixo")}
+      <div class="dl-vida"><div class="dl-vida-topo"><span>Seu pet</span><span class="dl-lcd">89 / 100</span></div><div class="dl-vida-trilho" role="img" aria-label="vida 89 de 100"><i style="width:89%"></i></div></div></section>
+    <section class="dl-card"><h3 class="dl-titulo-card">Desejo e causa</h3>
+      <div class="dl-par">
+        <div class="dl-desejo dl-desejo--necessidade"><span class="dl-desejo-cab">NECESSIDADE</span><span class="dl-desejo-corpo">${imgPeca("emoji_carne", 2, "")}<span><strong>comer</strong><span>vem do corpo</span></span></span></div>
+        <div class="dl-desejo dl-desejo--aprendida dl-malha"><span class="dl-desejo-cab">VONTADE APRENDIDA</span><span class="dl-desejo-corpo"><span class="dl-desejo-icone">${imgPeca("emoji_espadas", 2, "")}</span><span><strong>lutar de perto</strong><span>aprendida com você</span></span></span></div>
+      </div>
+      <div class="dl-linha"><span class="dl-causa dl-causa--registro dl-malha">${imgPeca("emoji_joinha", 1, "elogio")}elogio · luta, turno 7</span><span class="dl-causa dl-causa--sem">? sem motivo registrado</span></div></section>
+    <section class="dl-card"><h3 class="dl-titulo-card">Fala do pet por estágio</h3>
+      <div class="dl-falas">
+        <span style="font-weight:900">bebê</span><span class="dl-balao dl-balao--emote">${imgPeca("emoji_coracao", 2, "coração")}</span>
+        <span style="font-weight:900">criança</span><span class="dl-balao dl-balao--emote">${imgPeca("emoji_carne", 2, "comida")}<span style="font-weight:900">+</span>${imgGrade(AMPULHETA, 3, {k:"#173A8A", w:"#FFFFFF", y:"#F0B429"}, "demora")}</span>
+        <span style="font-weight:900">adolescente</span><span class="dl-balao">fome. você demorou.</span>
+        <span style="font-weight:900">adulto</span><span class="dl-balao">Recuei porque ele ia investir, e você me elogiou da última vez.</span>
+        <span style="font-weight:900">frase pronta</span><span class="dl-balao">tô com fome.<span class="dl-balao-tag">frase pronta</span></span>
+        <span style="font-weight:900">sem base</span><span><span class="dl-balao dl-balao--sembase">gosto de chuva.</span><p class="dl-balao-nota">Sem base: nada registrado sobre chuva.</p></span>
+        <span style="font-weight:900">sombria</span><span class="dl-balao dl-balao--sombria">treina. só isso.</span>
+      </div>
+      <p class="dl-apoio" style="margin:0">Exemplos de layout: as falas reais vêm da tabela de expressão do motor.</p></section>
+    <section class="dl-card dl-card--palco dl-hexcard"><h3 class="dl-titulo-card">Sprite em escala inteira</h3>
+      <div class="dl-linha" style="align-items:flex-end;justify-content:space-around">
+        ${[1, 2].map(e => { const k = "brasa_crianca_sereno", sp = UPA.sprites[k];
+          return `<span style="display:grid;justify-items:center;gap:4px"><canvas class="dl-pix" data-k="${k}" data-e="${e}" width="${sp.caixa[0] * e}" height="${sp.caixa[1] * e}" style="width:${sp.caixa[0] * e}px;height:${sp.caixa[1] * e}px" aria-label="Agumon ${e}×"></canvas><span class="dl-lcd">${e}×</span></span>`; }).join("")}
+      </div>
+      <p class="dl-apoio" style="margin:0">1× listas e retratos, 2× cards, 3× palco e luta, 4× revelação; sempre a escala menor que couber.</p></section>
+  </div>`;
+  sec.querySelectorAll("[data-tema-teste]").forEach(b => b.addEventListener("click", () => {
+    const tm = b.dataset.temaTeste, h = document.documentElement;
+    if (tm === "sistema"){ delete h.dataset.tema; delete h.dataset.theme; }
+    else { h.dataset.tema = tm; h.dataset.theme = tm === "claro" ? "light" : "dark"; }
+    montarComponentesUp();
+  }));
+  const telas = [...sec.querySelectorAll("canvas[data-k]")];
+  const desenharTelas = () => telas.forEach(c => { const g = c.getContext("2d"); g.clearRect(0, 0, c.width, c.height); spriteUp(g, c.dataset.k, 0, 0, false, {escala:+c.dataset.e}); });
+  clearInterval(montarComponentesUp.timer); montarComponentesUp.timer = setInterval(desenharTelas, UPA.ms_por_quadro); desenharTelas();
+}
+addEventListener("hashchange", montarComponentesUp);
 /* chave do sprite de um NPC da campanha ou de um bot classico */
 const spriteNPC = n => SPRITES_UP ? n.k : n.sprite;
 const spriteBot = nome => SPRITES_UP ? "bot_" + nome : BOT_SPRITE[nome];
