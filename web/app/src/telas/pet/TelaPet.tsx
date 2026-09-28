@@ -21,20 +21,23 @@ import {
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
-import { MeusPets } from "./MeusPets.tsx";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
+import { useDesktop } from "../../desktop.ts";
+import { Folha } from "../../componentes/Folha.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
 
 /* ------------------------------------------------ cabecalho e retrato */
-function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
+export function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {
   const a = useAtlas();
   if (a.tipo !== "ok") return null;
   const { url, w, h } = imagemAtlas(a, ovo ? OVO[m.especie] : chaveSprite(m.forma));
   return <img class="dl-pix" src={url} width={w} height={h} alt="" />;
 }
-function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
+/** cabecalho do celular (prancha PetTela): retrato (Meus pets), nome e brasao, nivel e dia, relogio e, a direita,
+    Conversar e Configuracoes (44 px). No desktop o topo da casca faz esse papel e este cabecalho some. */
+function CabecalhoPet({ abrirMeusPets, irConversar, abrirConfig }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void }) {
   const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e;
   return (
     <header class="pet-cab">
@@ -42,16 +45,26 @@ function CabecalhoPet({ abrirMeusPets }: { abrirMeusPets: () => void }) {
       <button type="button" class="pet-retrato" aria-haspopup="dialog" aria-label="Meus pets: trocar parceiro" onClick={abrirMeusPets}><Retrato m={m} ovo={ovo} /></button>
       <span class="pet-cab-nome">
         <span class="pet-cab-placa"><span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
-          <Deco nome={BRASAO[m.especie].peca} largura={38} altura={25} alt={`brasão ${NOME_ESP[m.especie]}`} /></span>
-        <span class="pet-cab-sub"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>{NOME_ESP[m.especie]} · dia {diaDe(e.tick)}</span>
+          <Deco nome={BRASAO[m.especie].peca} largura={38} altura={25} alt={`brasão ${NOME_ESP[m.especie]}`} class="pet-cab-brasao" /></span>
+        <span class="pet-cab-sub"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span>dia {diaDe(e.tick)}
+          {/* tela estreita: o brasao desce para esta linha e o nome ganha a largura */}
+          <Deco nome={BRASAO[m.especie].peca} largura={30} altura={20} class="pet-cab-brasao pet-cab-brasao--sub" /></span>
       </span>
       <span class="pet-relogio">
         <span class="dl-num pet-hora" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>{hhmm(e.tick)}</span>
         <span class={`pet-salvo${erroSave ? " erro" : ""}`}><i aria-hidden="true" />{erroSave ? "não salva" : "salvo"}</span>
       </span>
+      <span class="pet-cab-bts">
+        <button type="button" class="pet-cab-bt pet-cab-bt--conversar" aria-label="Conversar" onClick={irConversar}>{ICONE_CONVERSAR}</button>
+        <button type="button" class="pet-cab-bt pet-cab-bt--config" aria-label="Configurações" onClick={abrirConfig}>
+          <Deco nome="Common_Icon_Setting" largura={24} altura={24} reserva={<span aria-hidden="true">⚙</span>} /></button>
+      </span>
     </header>
   );
 }
+
+/** balao de conversa das pranchas (PetTela, PetTelaDesktop) */
+export const ICONE_CONVERSAR = <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 5h16v10H10l-4 4v-4H4z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round" /><path d="M8 9h8M8 12h5" stroke="#173A8A" stroke-width="2" stroke-linecap="round" /></svg>;
 
 /* ------------------------------------------------ fala: balao por estagio (guia, secao 9), causa e detalhe */
 const EMOTE_KAOMOJI: Record<string, string> = { "(^_^)": "emoji_feliz", "(*^_^*)": "emoji_coracao", "(o.o)?": "emoji_surpreso" };
@@ -132,7 +145,10 @@ function BalaoCausa() {
     faz, a causa registrada e o detalhe */
 const MODO_CURTO: Record<string, string> = { template: "frases prontas", moldura: "moldura", livre: "fala livre" };
 function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alternar: () => void }) {
-  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM(), fl = useFalaLivre();
+  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM(), fl = useFalaLivre(), desk = useDesktop();
+  const det = <div class="fala-det" id="fala-det">
+    <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
+    <span class="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>;
   return (
     <div class="pet-fala">
       <div class="pet-fala-topo">
@@ -140,9 +156,7 @@ function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alt
           <span class="balao-txt">{v.balao}</span><small>toque para ver o porquê</small></button>
         <span class="fala-status" title={`${r.texto} · ${r.titulo}`}><span class="fala-ponto" data-estado={fl.modo === "template" ? "off" : r.estado} aria-hidden="true" />{MODO_CURTO[fl.modo]}</span>
       </div>
-      {aberto && <div class="fala-det" id="fala-det">
-        <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
-        <span class="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>}
+      {aberto && (desk ? det : <Folha titulo="Por que ele disse isso" fechar={alternar}>{det}</Folha>)}
     </div>
   );
 }
@@ -234,9 +248,23 @@ function IconeAcao({ a }: { a: AcaoDono }) {
   return em ? <Peca nome={em} escala={2} /> : null;
 }
 
+/** desktop (PetTelaDesktop): as ultimas linhas do registro (o que voce fez e o que ele fez) e o atalho para o Diario */
+function AgoraHaPouco({ irRegistro }: { irRegistro: () => void }) {
+  const { motor: m } = useJogo();
+  const itens = m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-3).reverse();
+  const texto = (h: (typeof itens)[number]) => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
+  return (
+    <section class="dl-card pet-recente" aria-labelledby="pet-recente-tit">
+      <span class="pet-recente-cab"><h2 id="pet-recente-tit">Agora há pouco</h2><small>do registro</small></span>
+      <ol>{itens.map((h, i) => <li key={i}><span class="dl-lcd">{hhmm(h.t)}</span><span>{texto(h)}</span></li>)}</ol>
+      <button type="button" class="pet-recente-ver" onClick={irRegistro}>ver no Diário</button>
+    </section>
+  );
+}
+
 /* ------------------------------------------------ a tela */
-export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
-  const { motor: m, nascendo } = useJogo(), [meusPets, setMeusPets] = useState(false);
+export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void }) {
+  const { motor: m, nascendo } = useJogo();
   const agir = (a: AcaoDono) => {
     if (nascendo > 0) return;
     mudarMotor(mm => mm.observar(a));
@@ -247,7 +275,7 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
   return (
     <section class="pet-tela dl" aria-label="Tela do pet">
       <div class="pet-listra dl-faixa" aria-hidden="true" />
-      <CabecalhoPet abrirMeusPets={() => setMeusPets(true)} />
+      <CabecalhoPet abrirMeusPets={abrirMeusPets} irConversar={irConversar} abrirConfig={abrirConfig} />
       <div class="pet-corpo">
         <div class="pet-principal">
           <section class="palco-card" aria-label="Palco do pet">
@@ -260,7 +288,10 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
               <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
             </div>
           </section>
-          <LinhaFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
+          <div class="pet-fala-linha">
+            <LinhaFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
+            <button type="button" class="dl-btn pet-conversar desk-so" onClick={irConversar}>{ICONE_CONVERSAR}Conversar</button>
+          </div>
         </div>
         <aside class="pet-lado">
           <Necessidades />
@@ -269,9 +300,9 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
           <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
             {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
           </div>
+          <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
         </aside>
       </div>
-      {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={irRegistro} />}
     </section>
   );
 }

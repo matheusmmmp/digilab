@@ -5,7 +5,7 @@ import { useEffect, useState } from "preact/hooks";
 import {
   BOTS_V21, BOT_TRACO, CAT, LUGARES, NOME_BOT, NPC, chaveSprite, corDominante, estadoV2, formaRival, hashSemente, jogarV2,
   lutadorBot, lutadorPet, motivoCombate, nomeForma, type Estagio, type EstadoLuta, type FormaAdultaNormal, type Lutador,
-  type MotivoCombate, type Motor, type ResultadoLuta, type TracoCombate, type Turno,
+  Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate, type Turno,
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
@@ -38,11 +38,25 @@ export interface LinhaLog { t: number; pet: string; rival: string; ma: MotivoCom
 export interface Palco {
   modo: Modo; A: LutadorTela; B: LutadorTela; E: EstadoLuta; tr: Turno | null; turno: number | null;
   texto: string; callout: string; intencao: string | null; regra: { ma: MotivoCombate; A: LutadorTela } | null;
-  resultado: { res: ResultadoLuta; npc: string | null; notasAntes: Record<string, number> | null; cenario: boolean } | null; log: LinhaLog[];
+  resultado: ResultadoPalco | null; log: LinhaLog[];
 }
 /** rival fixo: o pet B de um cenario (Diario > Cenarios); luta sem ensinar, porque nao e reconstruivel do registro */
+/** o que o modal Resultado precisa, tudo do motor: a luta, o estado antes dela e a posicao dela no registro */
+export interface ResultadoPalco {
+  res: ResultadoLuta; npc: string | null; notasAntes: Record<string, number> | null; cenario: boolean;
+  /** regras ativas antes e logo depois da luta (antes de qualquer intervencao do dono na animacao): regra nova = diferenca */
+  ativasAntes: string[] | null; ativasDepois: string[] | null;
+  /** o lugar ja estava vencido antes (campanha); na arena, true */
+  lugarJaVencido: boolean;
+  /** lutas de treino (sparring) antes e se esta contou */
+  sparringAntes: number; sparringContou: boolean;
+  /** indice do evento "l" no registro (replay no Diario); null contra pet de cenario, que nao entra no registro */
+  idxLog: number | null;
+}
 export interface RivalFixo { rival: Motor; dias: number; tipo: string }
-export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null };
+export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null,
+  /* tela cheia da luta (#/lutar/luta): pausa e x2 so mudam a animacao; a luta ja esta decidida e no registro */
+  pausado: false, rapido: false };
 const ouvintes = new Set<() => void>();
 export const avisarLuta = (): void => { for (const o of ouvintes) o(); };
 export function useLuta(): typeof LUTA {
@@ -91,6 +105,8 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
   const modo: Modo = npc ? "campanha" : "arena", jogo = jogoAtual();
   let m = jogo.motor;
   const lugarJaVencido = npc ? m.lugarVencido(NPC[npc]!.lug) : true, notasAntes = m.gp ? { ...m.gp.notas } : null;
+  const ativasAntes = m.gp ? [...m.gp.ativas] : null, sparringAntes = m.sparring, adolescente = m.estagioAtual === "adolescente";
+  let idxLog: number | null = null, ativasDepois: string[] | null = null;
   let r: { res: ResultadoLuta; A: Lutador; B: Lutador };
   const cenario = !npc && !!LUTA.rivalFixo;
   try {
@@ -99,7 +115,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
       r = { res: jogarV2(A0, B0, hashSemente("cenario", m.semente, m.log.length)), A: A0, B: B0 };
     } else {
       const rival = npc || LUTA.rival;
-      mudarMotor(mm => { r = mm.lutar(rival, hashSemente("luta", mm.semente, mm.log.length)); });
+      mudarMotor(mm => { r = mm.lutar(rival, hashSemente("luta", mm.semente, mm.log.length)); idxLog = mm.log.length - 1; ativasDepois = mm.gp ? [...mm.gp.ativas] : null; });
     }
     m = jogoAtual().motor;
   } catch (err) {
@@ -123,7 +139,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
         + (primeiraDoLugar && NPC[npc!]!.lug === LUGARES.length - 1 ? " Campanha concluída!" : "")
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
-      p.resultado = { res, npc, notasAntes, cenario };
+      p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog };
       LUTA.lutando = false; avisarLuta(); return;
     }
     const tr = res.turnos[i++];
@@ -141,10 +157,20 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
       log: [{ t: tr.t, pet: A.nomeTela, rival: B.nomeTela, ma, mb, estPet: A.estagioFala, estRival: B.estagioFala, humor: jogoAtual().motor.e.humor }, ...p.log].slice(0, 8),
     });
     avisarLuta();
-    setTimeout(passo, reduz ? 80 : 650);
+    agendar();
   };
+  /* proximo turno: parado enquanto pausado; x2 corta a espera pela metade */
+  const agendar = () => { timer = setTimeout(() => { if (LUTA.pausado) agendar(); else passo(); }, LUTA.pausado ? 150 : reduz ? 80 : LUTA.rapido ? 325 : 650); };
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  pularParaOFim = () => { clearTimeout(timer); i = res.turnos.length; LUTA.pausado = false; passo(); };
+  LUTA.pausado = false;
   passo();
 }
+/** Desistir / Ver o fim: a luta ja foi decidida e gravada quando comecou; isto so pula a animacao ate o resultado */
+let pularParaOFim: () => void = () => {};
+export function pularAnimacao(): void { if (LUTA.lutando) pularParaOFim(); }
+export function alternarPausa(): void { LUTA.pausado = !LUTA.pausado; avisarLuta(); }
+export function alternarRapido(): void { LUTA.rapido = !LUTA.rapido; avisarLuta(); }
 /** 10 lutas seguidas contra o rival da arena (sem animacao); todas entram no registro */
 export function melhorDe10(): string {
   if (LUTA.lutando) return "";
@@ -178,3 +204,18 @@ export function melhorDe10(): string {
   return txt;
 }
 export const sparringTexto = (m: Motor): string | null => m.estagioAtual === "adolescente" ? `${Math.min(m.sparring, CAT.sparring)} de ${CAT.sparring}` : null;
+
+/* ------------------------------------------------ replay de uma luta do registro (Diario) */
+/** luta pedida pelo "Ver replay" do Resultado: indice do evento no registro */
+export const REPLAY = { pedido: null as number | null };
+export interface LutaReconstruida { res: ResultadoLuta; A: LutadorTela; B: LutadorTela; rival: string; npc: boolean }
+/** refaz a luta do evento idx do registro: o pet reconstruido ate ali (event sourcing), o mesmo rival e a mesma
+    semente. So leitura: nada e gravado nem ensinado ao pet vivo. */
+export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
+  const ev = m.log[idx];
+  if (!ev || ev[1] !== "l") throw new Error(`o evento ${idx} do registro não é uma luta`);
+  const { r, s } = ev[2] as { r: string; s: number };
+  const m0 = Motor.reproduzir(m.semente, m.log.slice(0, idx), m.versao), npc = !!NPC[r];
+  const A = lutadorPet(m0, "Seu pet", npc), B = lutadorBot(r), res = jogarV2(A, B, s);
+  return { res, A: exibirPet(m0, A), B: exibirBot(r, B), rival: r, npc };
+}

@@ -205,5 +205,55 @@
 @media (min-width:1100px){
   .evo-tela{grid-template-columns:minmax(0,780px) minmax(280px,1fr);align-items:start;gap:20px}
   .evo-principal,.evo-lado{display:grid;gap:12px;min-width:0}
+  .evo-tela{align-items:stretch}
+  .evo-principal{align-content:start;background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:14px 16px}
+  .tela .evo-arv-tit{margin:0;font-size:17px;font-weight:900}
+  .evo-lado{align-content:start}
+  .evo-resumo{display:grid;gap:10px;background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:14px 16px}
+  .evo-resumo > :last-child{flex-grow:0}
+  .evo-lado > .bloco{background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:14px 16px}
 }
 @media (max-width:1099px){ .evo-principal,.evo-lado{display:contents} }
+
+/* Treinar no desktop (TreinoDesktop): sala e Cansaco a esquerda; exercicios 3 x 2, o ultimo treino a direita */
+.treino-ult{display:flex;align-items:center;gap:14px;padding:12px 16px}
+.treino-ult .treino-ic{width:36px;height:auto}
+.treino-ult-txt{display:grid;gap:2px}
+.treino-ult-txt small{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.treino-ult-txt b{font-size:15px;font-weight:900}
+.treino-ult-prox{margin-left:auto;font-size:13px;color:var(--dl-text-2)}
+@media (min-width:1100px){
+  .treino-tela{grid-template-columns:285px minmax(0,1fr)}
+  .treino-col-esq > :last-child{flex-grow:1}
+  .treino-col-dir > :last-child{flex-grow:0}
+  .tela .treino-med-tit{margin:0;font-size:17px;font-weight:900}
+  .treino-col-esq .treino-medidores{align-content:start}
+  .tela .treino-ex-tit{display:flex;justify-content:space-between;align-items:baseline;margin:0;font-size:17px;font-weight:900}
+  .treino-ex-tit small{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+  .treino-col-dir .treino-grade{flex-grow:1;grid-auto-rows:1fr;gap:14px}
+  .treino-col-dir .treino-ex{justify-content:center;gap:6px;min-height:160px}
+  .treino-col-dir .treino-ex .treino-ic{width:62px;height:auto}
+  .treino-col-dir .treino-ex b{font-size:16px}
+  .treino-col-dir .treino-ex .treino-ganho{font-size:12px}
+  .treino-col-dir > details{flex:none}
+  .treino-col-esq .sala-treino{margin:0;height:225px;border:3px solid var(--dl-navy);border-radius:16px;box-shadow:0 0 0 3px #FFFFFF,0 0 0 5px var(--dl-border)}
+}
+/* Aprendizado no desktop (AprendizadoDesktop): Agora | Instinto x aprendido | Decisoes e Lembrancas */
+@media (min-width:1100px){
+  .aprend-desk{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr)}
+  .aprend-col{gap:12px}
+  .aprend-col > .ensinar-palco{margin:0;border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow)}
+  .aprend-col > .dl-card,.aprend-col > .bloco{margin:0}
+  .aprend-agora-card{background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow);padding:14px;display:flex;flex-direction:column;gap:12px}
+  .aprend-agora-card .ensinar-palco{margin:0}
+  .aprend-jeito{background:var(--dl-surface);border-radius:14px;box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px}
+  .aprend-jeito summary{font-weight:900;cursor:pointer;min-height:32px}
+}
+/* folha de informacao (ficha, evento, porque): ate 85% da altura, conteudo rola dentro */
+.folha--info{max-height:85dvh;padding:10px 14px 18px;background:var(--dl-bg);color:var(--dl-text);border-radius:18px 18px 0 0}
+.folha--info[open]{display:flex;flex-direction:column;gap:10px}
+.folha-topo{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.folha-topo b{font-size:17px;font-weight:900}
+.folha-x{width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);color:var(--dl-navy);font-size:22px;font-weight:900;cursor:pointer;line-height:1}
+.folha-x:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.folha-conteudo{overflow:auto;min-height:0;display:grid;gap:10px}

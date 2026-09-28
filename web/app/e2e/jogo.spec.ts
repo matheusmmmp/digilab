@@ -87,16 +87,35 @@ for (const [versao, save] of Object.entries(SAVES)) {
     const l0 = await numLog(page, "l");
     await page.locator(".dl-nav button", { hasText: "Lutar" }).click();
     await page.getByRole("tab", { name: "Arena" }).click();
+    /* a luta abre em tela cheia (#/lutar/luta); no fim, o modal Resultado; Continuar volta para a aba de origem */
     await page.locator(".lutar-grande").click();
-    await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
+    await expect(page).toHaveURL(/#\/lutar\/luta$/);
+    await expect(page.locator(".dl-nav")).toHaveCount(0);
+    const res = page.locator("dialog.modal-res[open]");
+    await expect(res).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator(".res-continuar")).toBeFocused();
+    await page.keyboard.press("Escape");                     /* Esc faz o mesmo que Continuar */
+    await expect(page).toHaveURL(/#\/lutar\/arena$/);
+    await expect(page.locator(".lutar-grande")).toBeFocused();
+    /* Ver replay: a mesma luta refeita do registro no Diario; o Voltar leva de volta a Arena */
+    await page.locator(".lutar-grande").click();
+    await expect(res).toBeVisible({ timeout: 90_000 });
+    const turnos = await page.locator(".res-num", { hasText: "turnos" }).first().locator(".dl-num").textContent();
+    await page.locator(".res-replay").click();
+    await expect(page).toHaveURL(/#\/diario\/registro$/);
+    await expect(page.locator(".reg-replay")).toContainText(`em ${turnos} turnos`);
+    await expect(page.locator(".reg-replay-turnos li")).toHaveCount(Number(turnos));
+    await page.goBack();
+    await expect(page).toHaveURL(/#\/lutar\/arena$/);
     await page.getByRole("tab", { name: "Campanha" }).click();
     await page.locator(".camp-lutar:not([disabled])").click();
-    await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
-    expect(await numLog(page, "l")).toBe(l0 + 2);
+    await expect(res).toBeVisible({ timeout: 90_000 });
+    await page.locator(".res-continuar").click();
+    await expect(page).toHaveURL(/#\/lutar\/campanha$/);
+    expect(await numLog(page, "l")).toBe(l0 + 3);
 
-    /* pausa o tempo (Diario > engrenagem > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
-    await page.locator(".dl-nav").getByRole("button", { name: "Diário", exact: true }).click();
-    await page.locator(".cab-engrenagem").click();
+    /* pausa o tempo (Ajustes no pe da barra > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
+    await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
     await page.getByRole("button", { name: /^Registro e replay/ }).click();
     await page.getByRole("button", { name: "Pausa" }).click();
     await page.waitForTimeout(300);
@@ -153,7 +172,7 @@ test("foco visível pelo teclado", async ({ page }) => {
       const el = document.activeElement as HTMLElement | null;
       if (!el || el === document.body) return "corpo";
       const estilo = (x: Element) => { const c = getComputedStyle(x); return [c.outlineStyle !== "none" && parseFloat(c.outlineWidth) > 0 ? "outline" : "", c.boxShadow].join("|"); };
-      const alvo = el.querySelector(".circ, .evo-cx") ?? el, com = estilo(alvo);
+      const alvo = el.querySelector(".circ, .quad, .evo-cx") ?? el, com = estilo(alvo);
       el.blur(); const sem = estilo(alvo); el.focus({ focusVisible: true } as FocusOptions);
       return com !== sem ? null : `${el.tagName}.${el.className} "${(el.textContent || "").trim().slice(0, 20)}"`;
     });
@@ -171,7 +190,7 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
     await page.setViewportSize({ width: largura, height: 800 });
     await semear(page, SAVES.v3);
     const lateral = largura >= 900, desktop = largura >= 1100;
-    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-det"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-lutar"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
       await page.goto(APP + "#/" + rota);
       await page.waitForTimeout(500);
       const r = await page.evaluate(([e, d]) => {

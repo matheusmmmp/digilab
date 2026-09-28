@@ -13,7 +13,8 @@ import { Peca } from "../../componentes/Imagens.tsx";
 import { falaLLM, motivoParaApi, useFalaLLM } from "../../fala.ts";
 import { S, desenharGrade, paleta } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
-import { LUTA, useLuta, type LutadorTela, type Palco } from "../../luta.ts";
+import { LUTA, alternarPausa, alternarRapido, useLuta, type LutadorTela, type Palco } from "../../luta.ts";
+import { abrirModal } from "../../componentes/modal.ts";
 
 const XS = [[27, 69], [18, 78], [10, 86]];   /* centro do seu pet e do rival por distancia (em 96 avos da largura) */
 /* geometria da prancha UpLuta, em px de CSS: arena de 420 (no desktop, a altura do palco), pes a 344/420 da altura,
@@ -93,7 +94,9 @@ function Lado({ L, s, rot, rival }: { L: LutadorTela; s: EstadoLuta["L"][number]
     </div>
   );
 }
-function Cena({ p }: { p: Palco }) {
+/** a arena desenhada (tela cheia da luta e previa parada da Arena); pausar e x2 so quando ha luta animada */
+export function Cena({ p, controles = false }: { p: Palco; controles?: boolean }) {
+  const luta = useLuta();
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const cv = ref.current; if (!cv) return;
@@ -116,6 +119,12 @@ function Cena({ p }: { p: Palco }) {
       </div>
       {p.E.L[1].prep && <span class="luta-intencao-balao"><b class="luta-exclam">!</b>golpe pesado</span>}
       {p.callout && <span class="luta-callout dl-num dl-num--amarelo">{p.callout}</span>}
+      {controles && luta.lutando && <div class="luta-controles">
+        <button type="button" class="luta-ctl" aria-label={luta.pausado ? "Continuar a animação" : "Pausar a animação"} aria-pressed={luta.pausado} onClick={alternarPausa}>
+          {luta.pausado ? <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3l9 5-9 5z" /></svg> : <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>}</button>
+        <button type="button" class="luta-ctl luta-ctl--x2" aria-label="Velocidade dobrada" aria-pressed={luta.rapido} onClick={alternarRapido}>×2</button>
+      </div>}
+      {!controles && <span class="luta-previa-rot">prévia · escolha um rival e aperte Lutar</span>}
     </section>
   );
 }
@@ -143,38 +152,6 @@ function RegraUsada({ ma, A }: { ma: MotivoCombate; A: LutadorTela }) {
     </div>
   );
 }
-/** fim da luta (prancha UpResultado): faixa com o lugar e o resultado, o seu pet no palco, turnos e fintas, a regra
-    reforcada nesta luta e o rival derrotado (ou que venceu). Experiencia, vinculo ganho e o elogio a uma jogada da luta
-    ainda nao existem no motor (docs/PENDENCIAS_PRANCHAS.md). */
-function Resultado({ p, voltarPet }: { p: Palco; voltarPet: () => void }) {
-  const { motor: m } = useJogo(), a = useAtlas(), r = p.resultado!, res = r.res, venceu = res.pontosA === 1, empate = res.pontosA !== 1 && res.pontosA !== 0;
-  const onde = r.npc ? NPC[r.npc]!.lugar : "Arena", fintas = res.turnos.filter(tr => tr.a === "fintar").length;
-  let reforcada: [string, number] | null = null;
-  if (!r.cenario && r.notasAntes && m.gp) {
-    const gp = m.gp, ganhos = gp.ativas.filter(k => k in r.notasAntes!).map(k => [k, gp.notas[k] - r.notasAntes![k]] as [string, number]).filter(([, d]) => d > 1e-9).sort((x, y) => y[1] - x[1]);
-    if (ganhos.length) reforcada = ganhos[0];
-  }
-  const rival = a.tipo === "ok" ? imagemAtlas(a, p.B.sprite) : null, eu = a.tipo === "ok" ? imagemAtlas(a, p.A.sprite, Math.max(1, Math.min(3, Math.floor(150 / dimSprite(a.dados, p.A.sprite)[1])))) : null;
-  const resTxt = venceu ? "vitória" : empate ? "empate" : "derrota";
-  return (
-    <section class="luta-res" aria-label="Fim da luta">
-      <div class="res-cab dl-faixa"><span class="res-tag">{onde} · {resTxt}</span><h3 class="dl-num">{venceu ? "Vitória!" : empate ? "Empate" : "Derrota"}</h3></div>
-      <div class="res-grade">
-        <div class="res-pet dl-hexcard">{eu && <img class="dl-pix" src={eu.url} width={eu.w} height={eu.h} alt="" />}<span class="dl-placa">{p.A.nomeTela}</span></div>
-        <div class="res-num"><span class="dl-placa">Turnos</span><span class="dl-num">{res.turnos.length}</span></div>
-        <div class="res-num"><span class="dl-placa">Fintas</span><span class="dl-num">{fintas}</span></div>
-      </div>
-      {reforcada && <div class="res-regra dl-malha"><span class="res-regra-ic"><Peca nome="emoji_espadas" escala={2} /></span>
-        <span><b>REGRA REFORÇADA NESTA LUTA</b><span>{rotuloRegra(regraDe(reforcada[0]))}</span><small>nota +{dec(reforcada[1], 2)}</small></span></div>}
-      <div class="res-rival"><span class="res-rival-spr">{rival && <img class="dl-pix" src={rival.url} width={rival.w} height={rival.h} alt="" style={venceu ? { filter: "grayscale(1)" } : {}} />}</span>
-        <span><b>{p.B.nomeTela} {venceu ? "derrotado" : empate ? "empatou" : "venceu"}</b>
-          <span>{resTxt} em {res.turnos.length} turnos · {res.fim === "ko" ? "nocaute" : "limite de turnos"}{fintas ? ` · ${fintas} finta${fintas > 1 ? "s" : ""}` : ""}</span></span></div>
-      {m.estagioAtual === "adolescente" && !r.cenario && <span class="dl-apoio">lutas de treino para evoluir: {Math.min(m.sparring, CAT.sparring)} de {CAT.sparring}</span>}
-      {r.cenario && <span class="dl-apoio">Contra pet de cenário o seu não aprende.</span>}
-      <button type="button" class="dl-btn res-voltar" onClick={voltarPet}>Voltar ao pet</button>
-    </section>
-  );
-}
 function Log({ p }: { p: Palco }) {
   useFalaLLM();
   return (
@@ -187,19 +164,21 @@ function Log({ p }: { p: Palco }) {
     </ol>
   );
 }
-export function PalcoLuta({ voltarPet }: { voltarPet: () => void }) {
+/** a luta em tela cheia (#/lutar/luta; pranchas UpLuta e BatDesktop): arena com pausar e x2 e os cards da leitura */
+export function PalcoLuta() {
   const luta = useLuta(), p = luta.palco;
   if (!p) return null;
   return (
     <div class="palco-luta dl">
-      <Cena p={p} />
+      <Cena p={p} controles />
       <div class="palco-luta-baixo">
-        <h2 class="luta-leitura-tit">Leitura da luta</h2>
-        <div aria-live="polite">{p.intencao && <div class="luta-intencao"><b class="luta-exclam">!</b><span>{p.intencao}</span></div>}</div>
-        {p.regra && <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} />}
-        <p class="dl-apoio luta-turno">{p.texto}</p>
-        {p.resultado && <Resultado p={p} voltarPet={voltarPet} />}
-        <Log p={p} />
+        <section class="dl-card luta-card" aria-live="polite"><h2>Intenção do rival</h2>
+          {p.intencao ? <div class="luta-intencao"><b class="luta-exclam">!</b><span>{p.intencao}</span></div>
+            : <p class="dl-apoio">{p.B.nomeTela} não anunciou nada neste turno.</p>}</section>
+        <section class="dl-card luta-card"><h2>Regra em uso</h2>
+          {p.regra ? <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} /> : <p class="dl-apoio">A luta ainda não começou.</p>}
+          {p.texto && <p class="dl-apoio luta-turno">{p.texto}</p>}</section>
+        <section class="dl-card luta-card luta-card--turnos"><h2>Turnos</h2><Log p={p} /></section>
       </div>
     </div>
   );

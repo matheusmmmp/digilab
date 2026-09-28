@@ -37,8 +37,8 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 |---|---|---|---|
 | ArenaEscolha, UpLuta, BatAcao, BatDesktop | existe | botões **pausar** e **×2** no palco | interface (velocidade da animação) |
 | ArenaAoVivo | parcial | ×2 e **Ver o fim** (pular a animação); "regra que ele vai usar" antes do turno | interface |
-| UpResultado | existe | experiência (×120) e vínculo ganho (+3) não existem no motor; no lugar, turnos e fintas | motor |
-| ArenaFim, BatDerrota | parcial | **Elogiar / Repreender** uma ação da luta ("o que achou do recuo no turno 6?"); **Ver replay** da luta; **Outra luta**; "O que decidiu a luta" (derrota); experiência (×120) e vínculo (+3) | elogio de ação de luta = regra nova no motor; XP não existe no motor; replay e "outra luta" = interface |
+| ResVitoria, ResDerrota, ResCampanha, ResDesktop (substituem UpResultado) | existe | **Elogiar / Repreender** a ação do momento decisivo ("o que achou do recuo no turno 9?"): o motor não tem feedback do dono sobre uma ação de luta, então o bloco fica de fora (ResNota: bloco sem dado do motor não aparece). **Ver replay** abre a luta refeita do registro no Diário como lista de turnos; rever a animação no palco ainda não existe | elogio de ação de luta = evento novo no motor; animação do replay = interface |
+| ArenaFim, BatDerrota | parcial | **Elogiar / Repreender** uma ação da luta (ver ResVitoria acima); **Outra luta**; experiência (×120) e vínculo (+3). Ver replay e "O que decidiu a luta" já existem no modal Resultado | elogio de ação de luta = regra nova no motor; XP não existe no motor; "outra luta" = interface |
 | ArenaMelhor10 | parcial | grade V/D das 10 lutas, resumo (vitórias, turnos médios, fintas), "o que ele aprendeu", **Ver regras**, **Lutar de novo** | interface |
 | ArenaRivalFixo | parcial | tela do rival fixo do Laboratório com a pergunta do Digilab e **Lutar uma / Melhor de 10** | interface |
 | BatVS | não existe | pré-luta com as regras (travar/vetar antes de começar), **Trocar rival**, **Começar luta** | interface |
@@ -110,7 +110,21 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 | OffRemoto | existe no servidor | — | — |
 | OffEstados, OffJogando, OffSincronizando, OffConflito | proposta | sincronização entre aparelhos | servidor + save |
 
-## Barra de navegação
+## Barra de navegação e casca (DIRETRIZES_REPLICAR seções 6 e 7)
 
-Pet, Crescer, Lutar, Diário, **Conversar** (não está nas pranchas, mas fica: decisão do Matheus) e a engrenagem de
-Configurações. Layout: celular abaixo de 900 px, barra lateral de 900 px, desktop das pranchas de 1100 px.
+Celular (abaixo de 900 px): barra de baixo com Pet, Crescer, Lutar e Diário; **Conversar** e **Configurações** no
+cabeçalho do Pet, à direita do relógio. De 900 px: barra lateral de 96 px com o ovo e DIGILAB, os 4 destinos e, no pé,
+Conversar e Ajustes. De 1100 px: topo de 76 px com título, abas em pílula e mini-card do pet (retrato abre Meus pets);
+telas nas colunas das pranchas *Desktop, até o fundo.
+
+Tipos da seção 7 já no app: luta em tela cheia (`#/lutar/luta`), Resultado em modal, revelação em tela cheia
+(`#/evolucao`), primeira vez em tela cheia (`#/inicio`), Meus pets e confirmações em modal, folhas no celular (ficha do
+Catálogo, evento do Registro, porquê do balão) que no desktop viram o painel da direita, faixa de estado no topo.
+
+Ficou de fora por falta de dado pronto no motor:
+
+| prancha | falta | precisa |
+|---|---|---|
+| TreinoDesktop | **Descansar** e **Forçar treino** como botões (o forçar hoje aparece nos próprios exercícios acima de 60 de fadiga) | ação de descanso no motor; interface para o forçar |
+| CampDesktop | "melhor turno" e "regras novas" por ilha | reconstruir as lutas do lugar a partir do registro (dá, mas custa um replay por luta) |
+| ArenaDesktop | — (última luta refeita do registro, com replay no Diário) | — |

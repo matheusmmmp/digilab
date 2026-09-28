@@ -13,6 +13,7 @@ import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { novoPet, useJogo } from "../../jogo.ts";
 import type { ParteConfig } from "../../rotas.ts";
+import { useDesktop } from "../../desktop.ts";
 import { textoSave } from "../../save.ts";
 import { NOME_TEMA, escolherTema, useTema, type Tema } from "../../tema.ts";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
@@ -33,29 +34,29 @@ function Cabecalho({ parte, voltar }: { parte: ParteConfig; voltar: () => void }
   );
 }
 /** linha da lista: icone (decoracao, com o texto ao lado), titulo, resumo e seta */
-function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ComponentChildren; titulo: string; resumo: string; tag?: string; abrir: () => void }) {
+function Linha({ ic, titulo, resumo, tag, abrir, atual = false }: { ic: ComponentChildren; titulo: string; resumo: string; tag?: string; abrir: () => void; atual?: boolean }) {
   return (
-    <button type="button" class="cfg-linha" onClick={abrir}>
+    <button type="button" class="cfg-linha" aria-current={atual ? "page" : undefined} onClick={abrir}>
       <span class="cfg-ic" aria-hidden="true">{ic}</span>
       <span class="cfg-txt"><b>{titulo}{tag && <span class="dl-tag cfg-tag">{tag}</span>}</b><small>{resumo}</small></span>
       <svg class="cfg-seta" viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4l6 6-6 6" /></svg>
     </button>
   );
 }
-function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
+function Principal({ abrir, atual = null }: { abrir: (p: ParteConfig) => void; atual?: ParteConfig | null }) {
   const { motor: m } = useJogo(), tema = useTema(), fl = useFalaLivre(), { velocidade } = useTempo();
   useFalaLLM();
   return (
     <div class="tela dl cfg">
       <h2 class="cfg-secao">JOGO</h2>
-      <Linha ic={<Deco nome={ICONE.pets} />} titulo="Aparência" resumo={`tema ${tema === "sistema" ? "do sistema" : NOME_TEMA[tema].toLowerCase()}`} abrir={() => abrir("aparencia")} />
+      <Linha ic={<Deco nome={ICONE.pets} />} titulo="Aparência" resumo={`tema ${tema === "sistema" ? "do sistema" : NOME_TEMA[tema].toLowerCase()}`} abrir={() => abrir("aparencia")} atual={atual === "aparencia"} />
       <h2 class="cfg-secao">FALA</h2>
-      <Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />
+      <Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} atual={atual === "fala"} />
       <h2 class="cfg-secao">DADOS</h2>
-      <Linha ic={<Deco nome={ICONE.registro} />} titulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
+      <Linha ic={<Deco nome={ICONE.registro} />} titulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} atual={atual === "dados"} />
       <Linha ic={<Deco nome={ICONE.tempo} />} titulo="Tempo" tag="TESTE" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
       <h2 class="cfg-secao">SOBRE</h2>
-      <Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e uso pessoal" abrir={() => abrir("sobre")} />
+      <Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e uso pessoal" abrir={() => abrir("sobre")} atual={atual === "sobre"} />
       <div class="cfg-linha cfg-linha--off" aria-disabled="true">
         <span class="cfg-ic" aria-hidden="true">♪</span>
         <span class="cfg-txt"><b>Som</b><small>o jogo ainda não tem som (proposta; desligado)</small></span>
@@ -176,6 +177,22 @@ function Sobre() {
   );
 }
 export function TelaConfig({ parte, abrir, fechar, irPet }: { parte: ParteConfig; abrir: (p: ParteConfig) => void; fechar: () => void; irPet: () => void }) {
+  const desk = useDesktop();
+  /* desktop (CfgDesktop): a lista a esquerda e a parte escolhida a direita (na principal, a Aparencia) */
+  if (desk) {
+    const p = parte === "principal" ? "aparencia" : parte;
+    return (
+      <section class="painel" aria-label={TITULO[parte]}>
+        <div class="tela dl desk cfg-desk">
+          <div class="desk-col cfg-desk-lista"><Principal abrir={abrir} atual={p} /></div>
+          <div class="desk-col cfg-desk-parte">
+            <h2 class="cfg-desk-tit">{TITULO[p]}</h2>
+            {p === "aparencia" ? <Aparencia /> : p === "dados" ? <Dados irPet={irPet} /> : p === "fala" ? <Fala /> : <Sobre />}
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section class="painel" aria-labelledby="tela-titulo">
       <Cabecalho parte={parte} voltar={parte === "principal" ? fechar : () => abrir("principal")} />

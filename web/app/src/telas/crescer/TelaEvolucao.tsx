@@ -105,12 +105,14 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
   useLayoutEffect(() => {
     const medir = () => {
       const el = arv.current; if (!el || !el.offsetParent) return;
-      const r0 = el.getBoundingClientRect(), pos: Record<string, DOMRect> = {};
+      /* com o zoom do desktop (escala.ts) as medidas da tela vem multiplicadas; o SVG desenha em px de CSS: divide pela
+         escala real da propria arvore */
+      const r0 = el.getBoundingClientRect(), z = el.offsetWidth > 0 ? r0.width / el.offsetWidth : 1, pos: Record<string, DOMRect> = {};
       el.querySelectorAll<HTMLElement>(".evo-no").forEach(n => { pos[n.dataset.id!] = n.getBoundingClientRect(); });
       const ordem = { fechado: 0, sombria: 0, possivel: 1, provavel: 2, percorrido: 3 };
       const d = [...arestas].sort((x, y) => ordem[x[2]] - ordem[y[2]]).flatMap(([a0, b, c, forma]) => {
         const [a, k] = a0.split("#"), A = pos[a], Bn = pos[b]; if (!A || !Bn) return [];
-        const L = (x: number) => x - r0.left, T = (y: number) => y - r0.top;
+        const L = (x: number) => (x - r0.left) / z, T = (y: number) => (y - r0.top) / z;
         if (forma === "elbow") {
           const x1 = L(A.left + A.width / 2), y1 = T(A.bottom), x2 = L(Bn.left + Bn.width / 2), y2 = T(Bn.top), ym = (y1 + y2) / 2;
           return [[`M${x1} ${y1} V${ym} H${x2} V${y2}`, c] as [string, string]];
@@ -119,11 +121,14 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
         const x = L(A.left) - 2, y1 = T(A.top + A.height / 2), y2 = T(Bn.top + Bn.height / 2);
         return [[`M${x + 2} ${y1} H${x - 4} V${y2} H${x + 4}`, c] as [string, string]];
       });
-      setLinhas({ w: r0.width, h: r0.height, d });
+      setLinhas({ w: el.offsetWidth, h: el.offsetHeight, d });
     };
     medir();
+    /* remede quando a arvore muda de tamanho (layout do desktop, fontes, sprites que chegam depois), nao so no resize */
+    const ro = typeof ResizeObserver === "function" ? new ResizeObserver(medir) : null;
+    if (arv.current) ro?.observe(arv.current);
     addEventListener("resize", medir);
-    return () => removeEventListener("resize", medir);
+    return () => { ro?.disconnect(); removeEventListener("resize", medir); };
   }, [chave]);
   const no = (g: Forma, sub: string, sombriaNo = false) => (
     <No key={idDe(g) + (sombriaNo ? "_s" : "")} g={g} estado={sombriaNo ? (m.sombria && idDe(g) === atualId ? "agora" : "fechado") : estado(idDe(g))}
@@ -161,9 +166,10 @@ export function TelaEvolucao() {
   const det = (x: typeof evs[number]) => x.estagio === "crianca" ? `cuidado ${(x.cuidado! * 100).toFixed(0)}%`
     : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater!)}` : `caráter: ${fmtCar(x.carater!)}; ${x.sparring} lutas de treino`;
   return (
-    <div class="tela dl evo-tela">
-      <div class="evo-principal"><Arvore m={m} p={p} /></div>
+    <div class="tela dl desk evo-tela">
+      <div class="evo-principal"><h2 class="desk-so evo-arv-tit">Árvore de {BRASAO[m.especie].nome}</h2><Arvore m={m} p={p} /></div>
       <div class="evo-lado">
+      <div class="desk-col evo-resumo">
       <p class="evo-selo"><Deco nome={BRASAO[m.especie].peca} class="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
       <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
       <details class="dl-apoio"><summary>Como funciona</summary>
@@ -176,6 +182,7 @@ export function TelaEvolucao() {
         /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
         [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? "?" : NOME_ARQ[f.adulta!]],
       ]} />
+      </div>
       {ult && <section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={ult} /></section>}
       <section class="bloco">
         <h2>Histórico</h2>

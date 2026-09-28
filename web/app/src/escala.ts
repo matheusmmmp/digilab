@@ -12,6 +12,8 @@ function aplicar(): void {
   zoom = w >= DESDE ? Math.min(ZOOM_MAX, Math.max(1, w / LARGURA_PRANCHA)) : 1;
   zoom = Math.round(zoom * 100) / 100;
   document.documentElement.style.zoom = zoom === 1 ? "" : String(zoom);
+  /* as telas do desktop medem a altura da janela (colunas ate o fundo): com zoom, 100dvh vale zoom x a janela */
+  document.documentElement.style.setProperty("--zoom", String(zoom));
 }
 export function iniciarEscala(): void {
   aplicar();
