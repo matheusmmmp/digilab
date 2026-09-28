@@ -11,10 +11,10 @@ import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Seg, blocos } from "../../componentes/Barras.tsx";
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import {
-  FALA_LLM, detalheMotivo, falaDe, falaLLM, ligarFalaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
+  detalheMotivo, falaDe, falaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
 } from "../../fala.ts";
 import {
-  FL, conversaGravada, detalheFalaLivre, enviarConversa, escolherModo, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre, type ModoFala,
+  detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
@@ -218,39 +218,6 @@ function Tempo() {
   );
 }
 
-/* ------------------------------------------------ conversa da fala livre (experimental) */
-function Conversa() {
-  const fl = useFalaLivre(), llm = useFalaLLM(), [msg, setMsg] = useState("");
-  const regs = conversaGravada();
-  const enviar = () => { enviarConversa(msg); setMsg(""); };
-  return (
-    <section class="dl-card fl-bloco" aria-labelledby="fl-titulo">
-      <h2 class="dl-titulo-card" id="fl-titulo">Conversa <span class="fl-exp">experimental</span></h2>
-      <div class="dl-linha">
-        <label for="fl-modo">Modo da fala</label>
-        <select id="fl-modo" value={fl.modo} onChange={ev => escolherModo((ev.target as HTMLSelectElement).value as ModoFala)}>
-          <option value="template">template</option><option value="moldura">moldura (LLM só abre e fecha a frase)</option>
-          <option value="livre">livre (LLM local, experimento)</option>
-        </select>
-        <span class="dl-apoio">{fl.status ? `(${fl.status.modelo}, local)` : fl.statusErro ? "(servidor sem a fala livre)" : ""}</span>
-      </div>
-      <label class="fala-troca"><input type="checkbox" role="switch" checked={FALA_LLM.on} disabled={!llm.ativo}
-        onChange={ev => ligarFalaLLM((ev.target as HTMLInputElement).checked)} /> fala por LLM (moldura)</label>
-      <div class="fl-conv" aria-live="polite">
-        {regs.length ? regs.map((r, i) => <div key={i}><div class="fl-j">você: {r.fala_jogador}</div><div class="fl-p">pet: {r.fala}{iconeVerif(r.verificacao)}</div></div>)
-          : <div class="dl-apoio">Escreva algo para o seu pet.</div>}
-      </div>
-      <div class="dl-linha">
-        <input type="text" class="fl-msg" maxLength={300} placeholder="Fale com o pet (modo livre)" aria-label="Mensagem para o pet" value={msg}
-          disabled={fl.modo !== "livre"} onInput={ev => setMsg((ev.target as HTMLInputElement).value)} onKeyDown={ev => { if (ev.key === "Enter") enviar(); }} />
-        <button type="button" class="dl-btn" disabled={fl.modo !== "livre"} onClick={enviar}>Falar</button>
-        {fl.pendente && <span class="dl-apoio">pensando…</span>}
-      </div>
-      <p class="dl-apoio" style={{ margin: 0 }}>O que você escreve aqui não ensina o pet nem entra no registro dele. ⚠ = o verificador achou uma afirmação sem fato por trás.</p>
-    </section>
-  );
-}
-
 /* ------------------------------------------------ a tela */
 export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
   const { motor: m, nascendo } = useJogo(), [meusPets, setMeusPets] = useState(false);
@@ -282,7 +249,6 @@ export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
         {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}>{rot}</button>)}
       </div>
       <Tempo />
-      <Conversa />
       {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={irRegistro} />}
     </section>
   );

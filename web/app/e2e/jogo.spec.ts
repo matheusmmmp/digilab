@@ -1,5 +1,5 @@
 /* Verificacao ponta a ponta (TAREFA_FRONT_TS, Etapa 5), no build servido pelo servidor local:
-   1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 4 destinos e 9 abas, cuida, treina ate o
+   1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 5 destinos e 10 abas, cuida, treina ate o
       FORCAR e forca, luta uma vez na arena e uma na campanha, pausa o tempo; a assinatura do pet vivo no app tem
       que ser a do HTML atual rodando o mesmo registro (Motor.reproduzir do digilab_sprites.html);
    2. checklist do guia (secao 14) nas 9 abas, em 360 e 390 px, claro e escuro: sem rolagem lateral, alvos de
@@ -12,7 +12,7 @@ const APP = "/v1/web/dist/", HTML = "/v1/web/digilab_sprites.html?antigo=1", CHA
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
-  ["Diário", "Cenários", "diario/cenarios"],
+  ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar) */
@@ -41,7 +41,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".pet-cab .dl-tag--estagio")).toHaveText(/Champion/i);
 
-    /* os 4 destinos e as 9 abas, pela barra e pelas abas */
+    /* os 5 destinos e as 10 abas, pela barra e pelas abas */
     for (const [destino, aba, rota] of ABAS) {
       await page.locator(".dl-nav button", { hasText: destino }).click();
       if (aba) await page.getByRole("tab", { name: aba }).click();

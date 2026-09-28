@@ -17,6 +17,7 @@ import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
 import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
+import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
 
@@ -76,7 +77,8 @@ export function App() {
           <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
         </header>
       )}
-      {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} /> : (
+      {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
+        : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
         <div class="tela-cab dl-faixa"><h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1></div>
         {abas.length > 1 && (

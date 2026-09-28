@@ -7,9 +7,9 @@ import { useJogo } from "../jogo.ts";
 import { NOME_DESTINO, ORDEM_DESTINOS, type Destino } from "../rotas.ts";
 import { NOME_TEMA, PROXIMO_TEMA, trocarTema, useTema, type Tema } from "../tema.ts";
 
-/* icones da prancha UpPet: o ovo da especie (Pet), estrela (Crescer), espadas (Lutar) e nota (Diario), pecas do atlas;
+/* icones da prancha UpPet: o ovo da especie (Pet), estrela (Crescer), espadas (Lutar), nota (Diario) e o rosto (Conversar), pecas do atlas;
    o ovo e reduzido para 19 x 26 como na prancha, os emotes em 2x. Sem atlas: os desenhos em traco de reserva. */
-const EMOTE_DESTINO: Partial<Record<Destino, string>> = { crescer: "emoji_estrela", lutar: "emoji_espadas", diario: "emoji_nota" };
+const EMOTE_DESTINO: Partial<Record<Destino, string>> = { crescer: "emoji_estrela", lutar: "emoji_espadas", diario: "emoji_nota", conversar: "emoji_feliz" };
 function IconeDestino({ d }: { d: Destino }) {
   const a = useAtlas(), { motor: m } = useJogo();
   if (a.tipo !== "ok") return ICONE[d];
@@ -22,6 +22,7 @@ const ICONE: Record<Destino, JSX.Element> = {
   crescer: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V11" /><path d="M12 11c0-4 3-6 7-6 0 4-3 6-7 6zM12 14c0-3-2-5-6-5 0 3 2 5 6 5z" /></svg>,
   lutar: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l10 10M20 4 10 14" /><path d="M12 16l-3 3M12 16l3 3M7 17l-2 2M17 17l2 2" /></svg>,
   diario: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z" /><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6" /></svg>,
+  conversar: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10l-4 4v-4H4z" /></svg>,
 };
 
 const ICONE_TEMA: Record<Tema, JSX.Element> = {

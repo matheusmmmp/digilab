@@ -81,14 +81,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .tempo-pet .dl-btn{min-height:44px;padding:4px 10px;font-size:.8125rem}
 .tempo-pet .dl-btn[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF;border-color:var(--dl-navy)}
 
-/* conversa da fala livre (experimental) */
-.fl-bloco{display:grid;gap:8px}
-.fl-exp{font-size:.6875rem;letter-spacing:.06em;background:var(--dl-highlight);color:var(--dl-highlight-ink);padding:2px 7px;border-radius:6px;vertical-align:middle}
-.fl-conv{display:grid;gap:4px;font-size:.875rem;max-height:220px;overflow:auto;background:var(--dl-surface-2);border-radius:10px;padding:8px 10px}
-.fl-j{color:var(--dl-text-2)}
-.fl-p{font-weight:900}
-.fl-msg{flex:1 1 200px;font:inherit;padding:8px 10px;border-radius:10px;border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-width:0;min-height:44px}
-
 /* Meus pets */
 .meus-pets{border:0;padding:0;background:transparent;max-width:min(420px,calc(100vw - 28px));width:100%}
 .meus-pets::backdrop{background:rgba(11,22,54,.55)}
@@ -170,3 +162,48 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .dl-balao--emote .balao-txt{display:inline-flex}
 .fala-troca{display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;font-weight:900;color:var(--dl-text)}
 .fala-troca input{width:24px;height:24px;margin:0;accent-color:var(--dl-action)}
+
+/* Conversar (pranchas UpConversar, ConvChat, ConvEstados): tela cheia, conversa em baloes e barra de escrever */
+.conv-tela{display:flex;flex-direction:column;width:100%;max-width:560px;margin-inline:auto;min-height:calc(100dvh - 96px)}
+.conv-cab{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.conv-voltar{width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.conv-voltar svg path{fill:none;stroke:var(--dl-navy);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.conv-voltar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.conv-cab-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.conv-cab-txt h1{margin:0;font-size:24px;line-height:26px}
+.conv-cab-txt span{font-size:11px;font-weight:800;color:#FFFFFF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conv-status{display:flex;align-items:center;gap:8px;margin:10px 14px 0;background:var(--dl-surface);border:2px solid var(--dl-border);border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800}
+.conv-status-dir{margin-left:auto;color:var(--dl-text-2);font-weight:700;text-align:right}
+.conv-modos{display:flex;gap:6px;margin:10px 14px 0;flex-wrap:wrap}
+.dl-chip{flex:1 0 auto;min-height:44px;padding:0 12px;border-radius:22px;border:2px solid var(--dl-navy);background:#FFFFFF;color:var(--dl-navy);font:inherit;font-weight:900;font-size:12px;cursor:pointer}
+.dl-chip[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF}
+.dl-chip:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.conv-lista{flex:1;display:flex;flex-direction:column;gap:12px;padding:14px 14px 10px}
+.conv-troca{display:flex;flex-direction:column;gap:12px}
+.conv-vazio{margin:0}
+.conv-linha{display:flex;align-items:flex-end;gap:8px}
+.conv-av{width:40px;height:40px;flex:none;border-radius:50%;background:#FFFFFF;border:3px solid var(--dl-action);overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
+.conv-av img{max-width:none}
+.conv-pilha{max-width:270px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.conv-balao{max-width:250px;padding:8px 12px;font-size:15px;line-height:1.35;overflow-wrap:anywhere}
+.conv-balao--pet{background:#FFFFFF;color:#13244D;border:3px solid var(--dl-navy);border-radius:14px 14px 14px 4px;box-shadow:0 3px 0 var(--dl-navy-deep);font-weight:800}
+.conv-balao--eu{align-self:flex-end;background:#2C73E0;color:#FFFFFF;border-radius:14px 14px 4px 14px;box-shadow:0 3px 0 #1B54B4;font-weight:700}
+.conv-balao--sembase{background:var(--dl-none-bg);color:var(--dl-none-ink);border:3px dashed var(--dl-none-edge);box-shadow:none;text-decoration:line-through}
+.conv-nota{display:flex;align-items:center;gap:6px;background:var(--dl-surface);border:2px solid var(--dl-none-edge);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.conv-nota-q{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:var(--dl-none-ink)}
+.conv-pensando{color:var(--dl-text-2)}
+.conv-atalhos{display:flex;gap:8px;padding:0 14px 8px;flex-wrap:wrap}
+.conv-atalho{min-height:44px;padding:0 12px;border-radius:22px;background:#FFFFFF;color:var(--dl-navy);border:2px solid var(--dl-navy);display:flex;align-items:center;gap:6px;font:inherit;font-weight:900;font-size:13px;cursor:pointer}
+.conv-atalho img{width:20px;height:20px}
+.conv-atalho--destaque{background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+.conv-atalho:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.conv-atalho:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink);border-color:var(--dl-disabled-ink);cursor:not-allowed}
+.conv-escrever{position:sticky;bottom:calc(83px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;background:var(--dl-navy);border-top:3px solid #FFFFFF;padding:10px 12px 16px;margin:0}
+.conv-escrever input{flex:1;min-width:0;min-height:46px;border-radius:12px;border:3px solid #FFFFFF;background:#FFFFFF;padding:0 12px;font:inherit;font-size:15px;font-weight:700;color:#13244D}
+.conv-escrever input:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink)}
+.conv-escrever button{width:50px;height:46px;flex:none;border-radius:12px;background:#2C73E0;border:3px solid #FFFFFF;box-shadow:inset 0 -4px 0 #1B54B4;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.conv-escrever button svg path{fill:none;stroke:#FFFFFF;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.conv-escrever button:disabled{background:var(--dl-disabled);box-shadow:none;cursor:not-allowed}
+.conv-escrever :focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.conv-rodape{margin:0 14px 8px}
+@media (min-width:900px){ .conv-escrever{bottom:0} }
