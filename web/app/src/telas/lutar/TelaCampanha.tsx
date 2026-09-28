@@ -8,7 +8,7 @@ import { fundoDeco } from "../../componentes/Deco.tsx";
 import { Peca, RetratoRival } from "../../componentes/Imagens.tsx";
 import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, urlDeco, useDecoracao } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
-import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, previa, tentativas, useLuta } from "../../luta.ts";
+import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, lutasDoRegistro, previa, tentativas, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
 
@@ -103,7 +103,9 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
   const regra = !aberto ? `trancado: vença alguém em ${LUGARES[Li - 1].nome} antes` : prox ? `vencer ${L.rivais.length > 1 ? "qualquer um" : c.nome} abre ${prox.nome}` : "último lugar da campanha";
   const a = useAtlas(), img = (k: string) => { if (a.tipo !== "ok") return null; const i = imagemAtlas(a, k); return <img class="dl-pix" src={i.url} width={i.w} height={i.h} alt="" />; };
   const tent = L.rivais.reduce((n, k) => n + tentativas(m, k), 0), vencidos = L.rivais.filter(k => m.campanha[k] > 0).length;
-  const vitorias = L.rivais.reduce((n, k) => n + m.campanha[k], 0);
+  /* melhor turno (vitoria mais curta) e regras novas: as lutas deste lugar refeitas do registro */
+  const doLugar = lutasDoRegistro(m).filter(x => L.rivais.includes(x.rival)), vitDoLugar = doLugar.filter(x => x.pontosA === 1);
+  const melhor = vitDoLugar.length ? Math.min(...vitDoLugar.map(x => x.turnos)) : null, novas = doLugar.reduce((n, x) => n + x.regrasNovas, 0);
   return (
     <>
       <div class="campd-faixa" style={faixa ? { backgroundImage: faixa } : undefined}>
@@ -125,8 +127,8 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
         <span class="campd-ilha-cab"><h2 id="campd-ilha-tit">Nesta ilha</h2><span>{vencidos} de {L.rivais.length} vencidos</span></span>
         <div class="res-nums">
           <div class="res-num"><span class="dl-num">{tent}</span><span>tentativas</span></div>
-          <div class="res-num"><span class="dl-num">{vitorias}</span><span>vitórias</span></div>
-          <div class="res-num"><span class="dl-num">{vit}</span><span>contra {c.nome}</span></div>
+          <div class="res-num"><span class="dl-num">{melhor === null ? "—" : `T${melhor}`}</span><span>melhor turno</span></div>
+          <div class="res-num"><span class="dl-num">{novas}</span><span>regras novas</span></div>
         </div>
         {!podeLutar && <p class="dl-apoio">O In-Training ainda não luta na campanha.</p>}
         <p class="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
