@@ -2457,15 +2457,15 @@ const LUGARES = [
 /* todo pet treinado vence cada NPC (decisao do Matheus: NPC fixo e imprevisivel, eps alto); o custo e o pet
    sem treino tambem vencer com frequencia (experiments/calibrar_progressao.py, rodadas 12-14) */
 const CAMPANHA = [
-  {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:96, estilo:"crianca:arisco", estagio:"crianca", eps:.5, lug:0, grade:"crianca", cor:"golpe",
+  {k:"npc_tier1_brutamontes", nome:"Gazimon", total:96, estilo:"crianca:arisco", estagio:"crianca", eps:.5, lug:0, grade:"crianca", cor:"golpe",
    licao:"Um valentão do tamanho de um Rookie, forte mas desastrado: às vezes ataca sem pensar. Treinando no Rookie você vence com folga."},
-  {k:"npc_tier2_sentinela", nome:"Sentinela", total:72, estilo:"v2c:tartaruga", eps:.4, lug:1, cor:"bloqueio",
-   licao:"Se fecha na defesa e espera o seu erro. Treinado, seu pet quebra a guarda dela."},
-  {k:"npc_tier2_carcereiro", nome:"Carcereiro", total:90, estilo:"v21:espelho", eps:.5, lug:1, cor:"agarrao",
+  {k:"npc_tier2_sentinela", nome:"Tortomon", total:72, estilo:"v2c:tartaruga", eps:.4, lug:1, cor:"bloqueio",
+   licao:"Se fecha na defesa e espera o seu erro. Treinado, seu pet quebra a guarda dele."},
+  {k:"npc_tier2_carcereiro", nome:"Guardromon", total:90, estilo:"v21:espelho", eps:.5, lug:1, cor:"agarrao",
    licao:"Devolve o que recebe, mas se distrai. Treinado, seu pet aguenta a troca."},
-  {k:"npc_tier2_porteiro", nome:"Porteiro", total:90, estilo:"v2c:agressivo", eps:.5, lug:1, cor:"golpe",
+  {k:"npc_tier2_porteiro", nome:"Devidramon", total:90, estilo:"v2c:agressivo", eps:.5, lug:1, cor:"golpe",
    licao:"Agressivo e esperto, porém imprevisível. O mais difícil da Torre para um pet sem treino."},
-  {k:"npc_tier3_soberano", nome:"Soberano", total:110, estilo:"v2c:agressivo", eps:.5, lug:2, cor:"carga",
+  {k:"npc_tier3_soberano", nome:"Piedmon", total:110, estilo:"v2c:agressivo", eps:.5, lug:2, cor:"carga",
    licao:"O chefe: forte em tudo, mas imprevisível. Todo pet bem treinado consegue vencê-lo."},
 ];
 LUGARES.forEach((L, i) => { L.rivais = CAMPANHA.filter(c => c.lug === i).map(c => c.k); });
