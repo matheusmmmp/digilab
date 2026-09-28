@@ -159,8 +159,9 @@ export function TelaEvolucao() {
   const det = (x: typeof evs[number]) => x.estagio === "crianca" ? `cuidado ${(x.cuidado! * 100).toFixed(0)}%`
     : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater!)}` : `caráter: ${fmtCar(x.carater!)}; ${x.sparring} lutas de treino`;
   return (
-    <div class="tela dl">
-      <Arvore m={m} p={p} />
+    <div class="tela dl evo-tela">
+      <div class="evo-principal"><Arvore m={m} p={p} /></div>
+      <div class="evo-lado">
       <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
       <details class="dl-apoio"><summary>Como funciona</summary>
         <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
@@ -180,6 +181,7 @@ export function TelaEvolucao() {
           {evs.map((x, i) => <div key={i}><span class="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span><span>virou <b>{nomeForma(x.forma)}</b> ({det(x)})</span></div>)}
         </div>
       </section>
+      </div>
     </div>
   );
 }

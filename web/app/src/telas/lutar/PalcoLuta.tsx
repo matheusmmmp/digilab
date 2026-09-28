@@ -14,13 +14,13 @@ import { mudarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, useLuta, type LutadorTela, type Palco } from "../../luta.ts";
 
 const XS = [[27, 69], [18, 78], [10, 86]];   /* centro do seu pet e do rival por distancia (em 96 avos da largura) */
-/* geometria da prancha UpLuta, em px de CSS: arena de 420, pes em 344, sombras 120 x 18 em 334 */
-const ARENA_H = 420, PES_Y = 344, ALT_MAX = 170;
-function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number } {
-  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 390, K = devicePixelRatio || 1;
-  const bw = Math.round(W * K), bh = Math.round(ARENA_H * K);
-  if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = ARENA_H + "px"; }
-  return { K, W };
+/* geometria da prancha UpLuta, em px de CSS: arena de 420 (no desktop, a altura do palco), pes a 344/420 da altura,
+   sombras 120 x 18, sprite ate 170/420 da altura */
+function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
+  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 390, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 420, K = devicePixelRatio || 1;
+  const bw = Math.round(W * K), bh = Math.round(H * K);
+  if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = H + "px"; }
+  return { K, W, H };
 }
 function quadroLutador(tr: Turno | null, lado: 0 | 1): number {
   if (!tr) return 0;
@@ -32,7 +32,7 @@ function quadroLutador(tr: Turno | null, lado: 0 | 1): number {
     inteira comum (ate 3x) e o "!" de quem prepara o pesado */
 function desenharArena(cv: HTMLCanvasElement, p: Palco): void {
   const cx = cv.getContext("2d"); if (!cx) throw new Error("canvas 2d indisponível");
-  const { K, W } = ajustarTela(cv), a = atlasAtual(), ok = a.tipo === "ok";
+  const { K, W, H: ARENA_H } = ajustarTela(cv), a = atlasAtual(), ok = a.tipo === "ok", PES_Y = ARENA_H * 344 / 420, ALT_MAX = ARENA_H * 170 / 420;
   cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height);
   const alt = ok ? [p.A, p.B].map(L => dimSprite(a.dados, L.sprite)[1]) : [];
   const escLuta = alt.length ? Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...alt)))) : 3;
@@ -175,6 +175,7 @@ export function PalcoLuta({ voltarPet }: { voltarPet: () => void }) {
     <div class="palco-luta dl">
       <Cena p={p} />
       <div class="palco-luta-baixo">
+        <h2 class="luta-leitura-tit">Leitura da luta</h2>
         <div aria-live="polite">{p.intencao && <div class="luta-intencao"><b class="luta-exclam">!</b><span>{p.intencao}</span></div>}</div>
         {p.regra && <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} />}
         <p class="dl-apoio luta-turno">{p.texto}</p>

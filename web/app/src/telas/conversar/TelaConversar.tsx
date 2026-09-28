@@ -4,11 +4,12 @@
    escrever. As falas ficam no log de apresentacao (<chave>.fala.jsonl), nunca no registro do pet; o que o jogador
    escreve nao ensina o pet. */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { OVO, chaveSprite, nomeEstagio, nomeForma, type AcaoDono } from "../../../motor/index.ts";
+import { CDJ, OVO, chaveSprite, nomeEstagio, nomeForma, type AcaoDono } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { rotuloLLM, useFalaLLM } from "../../fala.ts";
-import { enviarConversa, escolherModo, lerLog, useFalaLivre, type ModoFala, type RegistroFala } from "../../falaLivre.ts";
+import { enviarConversa, escolherModo, estadoDoPet, lerLog, useFalaLivre, type ModoFala, type RegistroFala } from "../../falaLivre.ts";
+import { rotuloRel } from "../../componentes/Barras.tsx";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado } from "../../tempo.ts";
 
@@ -38,6 +39,30 @@ function BalaoPet({ r }: { r: RegistroFala }) {
         {v?.erro && <div class="conv-nota"><span class="conv-nota-q">?</span>O verificador não respondeu.</div>}
       </div>
     </div>
+  );
+}
+
+/** o que o pet pode citar agora (ConvDesktop): o mesmo estado que a pagina manda ao servidor da fala livre; os
+    identificadores dos fatos sao do servidor e nao aparecem aqui. So no desktop. */
+function Fatos() {
+  const { motor: m } = useJogo();
+  const s = estadoDoPet(m) as Record<string, any>, blocos = (x: number) => `${Math.round(Math.max(0, Math.min(1, x)) * 5)} de 5`;
+  const extremos = (o: Record<string, number> | undefined, rot: string) => Object.entries(o || {}).filter(([, v]) => Math.abs(v) >= CDJ.limiarTom).map(([k, v]) => `${rot}: ${k} ${rotuloRel(v)}`);
+  const sec: [string, string[]][] = [
+    ["Identidade", [`${nomeForma(m.forma)}, ${nomeEstagio(m.forma)}${s.identidade.linha ? ", linha " + s.identidade.linha : ""}`]],
+    ["Só os extremos", [...extremos(s.temperamento, "temperamento"), ...extremos(s.carater, "caráter")]],
+    ["Estado", [`fome ${blocos(s.estado.fome)}`, `energia ${blocos(s.estado.energia)}`, `humor ${blocos(s.estado.humor)}`, ...(s.estado.emocao ? [`emoção: ${s.estado.emocao}`] : []), `fadiga ${s.estado.fadiga}`]],
+    ["Memórias", (s.memorias || []).map((x: any) => `${x.evento} · há ${x.ha_min} min`)],
+    ["Motivos recentes", (s.motivos || []).map((x: any) => `${x.acao}${x.fatores?.length ? " · " + x.fatores.join(", ") : ""}`)],
+    ["Vínculo", s.vinculo != null ? [s.vinculo >= .66 ? "alto (sem número)" : s.vinculo >= .33 ? "médio (sem número)" : "baixo (sem número)"] : []],
+  ];
+  return (
+    <aside class="conv-fatos" aria-label="O que o pet pode citar agora">
+      <div class="conv-fatos-cab dl-malha"><b>O QUE O PET PODE CITAR AGORA</b><span>A fala livre só pode afirmar causa ou lembrança que esteja nesta lista.</span></div>
+      <div class="conv-fatos-lista">
+        {sec.filter(([, l]) => l.length).map(([t, l]) => <div key={t}><h3>{t}</h3>{l.map((x, i) => <p key={i}>{x}</p>)}</div>)}
+      </div>
+    </aside>
   );
 }
 
@@ -80,6 +105,7 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
         {fl.pendente && <div class="conv-linha"><RetratoPequeno /><div class="conv-balao conv-balao--pet conv-pensando">…</div></div>}
         <div ref={fim} />
       </div>
+      <Fatos />
       <p class="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele.</p>
 
       <div class="conv-atalhos" role="group" aria-label="Ensinar agora">

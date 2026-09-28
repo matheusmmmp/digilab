@@ -91,10 +91,11 @@ export function TelaCampanha({ voltarPet }: { voltarPet: () => void }) {
   /* a aba abre com o palco do proprio modo (a mensagem da arena nao aparece aqui) */
   useEffect(() => { if (!LUTA.palco || LUTA.palco.modo !== "campanha") previa("campanha"); }, []);
   return (
-    <div class="tela dl">
-      <Mapa />
-      <Detalhe />
+    <div class="tela dl camp-tela">
+      <div class="camp-principal"><Mapa /></div>
+      <div class="camp-lado"><Detalhe />
       <details class="dl-apoio"><summary>Como funciona</summary><p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>
+      </div>
       {/* o palco mora na aba visivel: numa luta em andamento, ele vem junto */}
       {luta.palco && <PalcoLuta voltarPet={voltarPet} />}
     </div>

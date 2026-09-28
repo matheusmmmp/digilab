@@ -97,3 +97,9 @@ footer{font-size:.75rem;color:var(--dl-text-2);display:grid;gap:4px;margin:16px 
 footer a{color:var(--dl-action);font-weight:900;display:inline-flex;align-items:center;min-height:44px}
 .dl-nav .nav-ovo{image-rendering:auto;max-width:none}
 .tela-cab-pet{margin-left:auto;background:var(--dl-navy);color:#FFFFFF;border-radius:8px;padding:3px 10px;font-weight:900;font-size:13px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* desktop (pranchas *Desktop, 1280 x 720): barra lateral de 92 px com circulos de 52 */
+@media (min-width:900px){
+  .dl-nav{gap:18px}
+  .dl-nav .circ{width:52px;height:52px}
+}

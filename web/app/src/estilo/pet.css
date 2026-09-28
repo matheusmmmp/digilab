@@ -207,3 +207,26 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .conv-escrever :focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
 .conv-rodape{margin:0 14px 8px}
 @media (min-width:900px){ .conv-escrever{bottom:0} }
+
+/* Conversar no desktop (ConvDesktop): a conversa num painel a esquerda, status, modo e atalhos a direita */
+@media (min-width:1100px){
+  .conv-tela{max-width:none;margin:0;display:grid;grid-template-columns:minmax(0,760px) minmax(300px,380px);column-gap:20px;align-content:start}
+  .conv-cab{grid-column:1/-1}
+  .conv-status{grid-column:2;grid-row:2;margin:14px 14px 0 0}
+  .conv-modos{grid-column:2;grid-row:3;margin:10px 14px 0 0;align-self:start}
+  .conv-atalhos{grid-column:2;grid-row:4;padding:10px 14px 0 0;align-self:start}
+  .conv-lista{grid-column:1;grid-row:2 / span 4;margin:14px 0 0 14px;min-height:420px;background:rgba(255,255,255,.35);border-radius:16px 16px 0 0;box-shadow:0 0 0 2px var(--dl-border)}
+  .conv-rodape{grid-column:1;grid-row:6;margin:0 0 0 14px;padding:8px 14px;background:rgba(255,255,255,.35);text-align:center}
+  .conv-escrever{grid-column:1;grid-row:7;margin:0 0 0 14px;border-radius:0 0 16px 16px;position:static}
+}
+
+.conv-fatos{display:none}
+@media (min-width:1100px){
+  .conv-fatos{display:grid;gap:10px;grid-column:2;grid-row:5 / span 3;margin:12px 14px 0 0;align-self:start}
+  .conv-fatos-cab{display:grid;gap:4px;border-radius:12px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep);padding:10px 12px;font-size:12px;font-weight:700}
+  .conv-fatos-cab b{font-size:11px;color:var(--dl-learned);letter-spacing:.03em}
+  .conv-fatos-lista{background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:10px 12px;display:grid;gap:8px}
+  .conv-fatos-lista h3{margin:0 0 2px;font-size:11px;font-weight:900;color:var(--dl-text-2);text-transform:uppercase;letter-spacing:.03em}
+  .conv-fatos-lista p{margin:0;font-size:13px;font-weight:700}
+}
+.conv-fatos-cab{color:var(--dl-learned-ink)}
