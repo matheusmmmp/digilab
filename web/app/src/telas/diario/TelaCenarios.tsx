@@ -116,25 +116,21 @@ export function TelaCenarios() {
     <label>{rot} <input type="number" min={min} max={max} step={passo} value={form[p][k]} onInput={ev => setForm({ ...form, [p]: { ...form[p], [k]: (ev.target as HTMLInputElement).value } })} /></label>
   );
   const dono = (p: "ca" | "cb") => (
-    <label>Dono <select value={form[p].dono} onChange={ev => setForm({ ...form, [p]: { ...form[p], dono: (ev.target as HTMLSelectElement).value } })}>
+    <label>Dono simulado <select value={form[p].dono} onChange={ev => setForm({ ...form, [p]: { ...form[p], dono: (ev.target as HTMLSelectElement).value } })}>
       {Object.entries(NOME_DONO).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></label>
   );
   return (
     <div class="tela dl">
-      <p>Monte dois pets com donos simulados e compare o que o algoritmo aprendeu em cada um. O <b>pet A vira o seu pet</b> (você continua cuidando dele) e o <b>pet B vira o rival fixo</b> da arena. Mesma semente, mesmo resultado.</p>
-      <div class="cenarios">
-        {CENARIOS.map(c => <button type="button" key={c.id} class="cen" onClick={() => comEspera(() => montar(c, 1))}><b>{c.titulo}</b><span>{c.desc}</span></button>)}
-      </div>
-      <details>
-        <summary>Montar à mão</summary>
-        <div class="form-cen">
-          <fieldset><legend>Pet A (seu)</legend>{dono("ca")}{campo("ca", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("ca", "pd", "Interações/dia", "1", "200", "1")}</fieldset>
-          <fieldset><legend>Pet B (rival)</legend>{dono("cb")}{campo("cb", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("cb", "pd", "Interações/dia", "1", "200", "1")}</fieldset>
-        </div>
-        <div class="dl-linha" style={{ marginTop: "10px" }}>
-          <label for="c-semente">Semente</label>
-          <input id="c-semente" class="campo-num" type="number" min="1" step="1" value={form.semente} onInput={ev => setForm({ ...form, semente: (ev.target as HTMLInputElement).value })} />
-          <button type="button" class="dl-btn" onClick={montarAMao}>Montar</button>
+      <div class="lab-intro dl-malha"><b>FERRAMENTA DE PESQUISA</b>
+        <span>Monte dois pets com donos simulados e compare o que cada um aprendeu. O pet A vira o seu; o B vira o rival fixo da arena. Mesma semente, mesmo resultado.</span></div>
+      <fieldset class="lab-pet lab-pet--a"><legend>Pet A · vira o seu</legend>{dono("ca")}{campo("ca", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("ca", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
+      <fieldset class="lab-pet lab-pet--b"><legend>Pet B · rival fixo</legend>{dono("cb")}{campo("cb", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("cb", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
+      <label class="lab-semente">Semente <input id="c-semente" class="campo-num" type="number" min="1" step="1" value={form.semente} onInput={ev => setForm({ ...form, semente: (ev.target as HTMLInputElement).value })} /></label>
+      <p class="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets.</p>
+      <button type="button" class="dl-btn dl-btn--largo" onClick={montarAMao}>Simular e comparar</button>
+      <details class="dl-apoio"><summary>Cenários prontos</summary>
+        <div class="cenarios">
+          {CENARIOS.map(c => <button type="button" key={c.id} class="cen" onClick={() => comEspera(() => montar(c, 1))}><b>{c.titulo}</b><span>{c.desc}</span></button>)}
         </div>
       </details>
       {msg && <p class={msg.erro ? "erro" : "resultado"} aria-live="polite">{msg.txt}</p>}

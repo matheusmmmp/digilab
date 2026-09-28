@@ -156,3 +156,11 @@ def test_cliente_que_desconecta_nao_derruba_o_servidor(servidor, capsys):
               + base64.b64encode(f"eu:{SENHA}".encode()) + b"\r\n\r\n")
     s.close()                                                         # fecha sem ler a resposta
     assert _get(servidor + "/api/fala/status", SENHA) == 200          # o servidor segue atendendo
+
+
+def test_remoto_serve_a_decoracao_do_up_e_nada_mais_de_assets():
+    for ok in ("/Assets/digilab_decoracao_up.json", "/Assets/decoracao_up/Crest_Combine_1.png", "/Assets/decoracao_up/Growth_Guide_Icon_07.png"):
+        assert rota_permitida(ok), ok
+    for fora in ("/Assets/decoracao_up/../gerar_atlas_up.py", "/Assets/decoracao_up/x.py", "/Assets/decoracao_up/a/b.png",
+                 "/Assets/gerar_decoracao_up.py", "/Assets/Pranchas_UP/index.html", "/Assets/decoracao_up/%2e%2e/x.png"):
+        assert not rota_permitida(fora), fora

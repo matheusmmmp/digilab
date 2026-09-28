@@ -7,12 +7,13 @@ import { novoPet, useJogo } from "../../jogo.ts";
 import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 
-type Filtro = "todos" | "voce" | "pet" | "luta" | "treino";
-/* tipo de cada linha do historico: [filtro, etiqueta] */
-const TIPO_REG: Record<string, [Exclude<Filtro, "todos">, string]> = {
-  dono: ["voce", "você"], gambit: ["voce", "você"], pet: ["pet", "pet"], recusa: ["pet", "recusou"], luta: ["luta", "luta"], treino: ["treino", "treino"],
+type Filtro = "todos" | "voce" | "pet" | "luta" | "recusa" | "treino";
+/* tipo de cada linha do historico: [filtro, etiqueta, cor da etiqueta] (prancha DiarioRegistro) */
+const TIPO_REG: Record<string, [Exclude<Filtro, "todos">, string, string]> = {
+  dono: ["voce", "você", "voce"], gambit: ["voce", "regras", "regras"], pet: ["pet", "pet", "pet"], recusa: ["recusa", "recusa", "recusa"],
+  luta: ["luta", "luta", "luta"], treino: ["treino", "treino", "treino"],
 };
-const FILTROS: [Filtro, string][] = [["todos", "Tudo"], ["voce", "Você"], ["pet", "Pet"], ["luta", "Lutas"], ["treino", "Treino"]];
+const FILTROS: [Filtro, string][] = [["todos", "tudo"], ["voce", "você"], ["pet", "pet"], ["luta", "lutas"], ["recusa", "recusas"], ["treino", "treino"]];
 const textoLinha = (h: ItemHistorico): string => h.quem === "gambit" ? `regras de combate: ${h.a}` : h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] : h.a;
 
 export function TelaRegistro({ irPet }: { irPet: () => void }) {
@@ -34,31 +35,40 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   return (
-    <div class="tela dl">
-      <p>O estado do pet nunca é salvo. Só o registro de ações e passagem de tempo, e a vida é reconstruída do zero a partir dele.</p>
-      <div class="dl-linha">
-        <button type="button" class="dl-btn" onClick={verificar}>Verificar replay</button>
-        <button type="button" class="dl-btn dl-btn--sec" onClick={copiar}>Copiar registro</button>
-      </div>
-      {msg && <p class={msg.erro ? "erro" : "dl-apoio"} aria-live="polite" style={{ fontWeight: 900 }}>{msg.txt}</p>}
+    <div class="tela dl reg-tela">
+      <section class="dl-card reg-cab">
+        <p>O estado do pet nunca é salvo. Só este registro, e a vida é reconstruída a partir dele.</p>
+        <p class="reg-semente"><b>semente</b> <span class="dl-lcd">{m.semente}</span> · <span class="dl-lcd">{m.log.length}</span> <b>eventos</b></p>
+        <div class="reg-bts">
+          <button type="button" class="dl-btn" onClick={verificar}>Verificar replay</button>
+          <button type="button" class="dl-btn dl-btn--sec" onClick={copiar}>Copiar registro</button>
+        </div>
+        {msg && <p class={`reg-msg${msg.erro ? " erro" : ""}`} aria-live="polite"><i aria-hidden="true">{msg.erro ? "!" : "✓"}</i>{msg.txt}</p>}
+      </section>
       <div class="reg-filtros" role="group" aria-label="Filtrar o registro">
         {FILTROS.map(([f, rot]) => <button type="button" key={f} class="chip" aria-pressed={filtro === f} onClick={() => setFiltro(f)}>{rot}</button>)}
       </div>
-      <p class="dl-apoio">Semente {m.semente} · {m.log.length} eventos no registro (suas ações, lutas e passagens de tempo). Abaixo, o que aconteceu, reconstruído a partir dele: {nh > 80 ? `as últimas 80 de ${nh} linhas` : `${nh} linha${nh === 1 ? "" : "s"}`}.</p>
       <div class="log" aria-live="polite">
         {vis.length ? vis.map((h, i) => {
-          const [tp, rot] = TIPO_REG[h.quem];
-          return <div class="reg-linha" key={i}><span class="t">D{diaDe(h.t)} {hhmm(h.t)}</span> <span class={`reg-tag reg-${tp}`}>{rot}</span> {h.quem === "recusa" ? <b>{textoLinha(h)}</b> : textoLinha(h)}</div>;
+          const [, rot, cor] = TIPO_REG[h.quem];
+          return <div class={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i}><span class="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span class={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></div>;
         }) : <div class="dl-apoio">nada deste tipo nas últimas 80 linhas</div>}
       </div>
-      <section class="zona-risco" aria-label="Área de risco">
-        <h2>Área de risco</h2>
+      {vis[0] && <section class="dl-card reg-det" aria-label="Último evento">
+        <span class="dl-lcd">D{diaDe(vis[0].t)} {hhmm(vis[0].t)}</span>
+        <b>{textoLinha(vis[0])}</b>
+        <span class={`reg-tag reg-${TIPO_REG[vis[0].quem][2]}`}>{TIPO_REG[vis[0].quem][1]}</span>
+        <span class="dl-apoio">último evento{filtro === "todos" ? "" : " deste filtro"}</span>
+      </section>}
+      <p class="dl-apoio">Linhas reconstruídas do registro: {nh > 80 ? `as últimas 80 de ${nh}` : `${nh}`}.</p>
+      <details class="zona-risco">
+        <summary>Novo ovo (apaga este pet)</summary>
         <p class="dl-apoio">Um ovo novo apaga este pet e o registro dele. Não dá para desfazer.</p>
         <div class="dl-linha">
           <button type="button" class="dl-btn dl-btn--sec" onClick={() => setConfirmar(true)}>Novo ovo</button>
           {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); novoPet(); irPet(); }}>Confirmar: apagar este pet</button>}
         </div>
-      </section>
+      </details>
     </div>
   );
 }

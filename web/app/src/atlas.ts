@@ -23,12 +23,30 @@ let estado: EstadoAtlas = { tipo: "carregando" };
 const ouvintes = new Set<() => void>();
 const avisar = (e: EstadoAtlas): void => { estado = e; for (const o of ouvintes) o(); };
 
+/* fundos do UP como variaveis de CSS (docs/estilo_up/dl-up.css): o hexagono (linhas brancas; no tema escuro, na cor
+   --dl-hex do escuro) e o anel de plataforma. Sem atlas, fica o hexagono desenhado de reserva do tokens.css. */
+function pecaComoUrl(dados: AtlasUp, img: HTMLImageElement, nome: string, cor?: string): string {
+  const r = dados.pecas[nome];
+  if (!r) throw new Error("peça do atlas ausente: " + nome);
+  const c = document.createElement("canvas"); c.width = r[2]; c.height = r[3];
+  const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
+  g.drawImage(img, r[0], r[1], r[2], r[3], 0, 0, r[2], r[3]);
+  if (cor) { g.globalCompositeOperation = "source-in"; g.fillStyle = cor; g.fillRect(0, 0, r[2], r[3]); }
+  return `url(${c.toDataURL()})`;
+}
+function aplicarFundos(dados: AtlasUp, img: HTMLImageElement): void {
+  const st = document.documentElement.style;
+  st.setProperty("--dl-img-hex-claro", pecaComoUrl(dados, img, "fundo_hex"));
+  st.setProperty("--dl-img-hex-escuro", pecaComoUrl(dados, img, "fundo_hex", "#1F3A78"));
+  st.setProperty("--dl-img-anel", pecaComoUrl(dados, img, "anel_plataforma"));
+  document.documentElement.dataset.fundos = "up";
+}
 export function carregarAtlas(url = ATLAS_URL): void {
   fetch(url)
     .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} em ${url}`); return r.json() as Promise<AtlasUp>; })
     .then(dados => {
       const png = new URL(dados.atlas, new URL(url, document.baseURI)).href, img = new Image();
-      img.onload = () => avisar({ tipo: "ok", dados, img });
+      img.onload = () => { aplicarFundos(dados, img); avisar({ tipo: "ok", dados, img }); };
       img.onerror = () => avisar({ tipo: "erro", erro: "imagem do atlas não carregou: " + png });
       img.src = png;
     })

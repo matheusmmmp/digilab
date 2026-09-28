@@ -1,14 +1,12 @@
-/* Revelacao da evolucao (desenhos UpEvolucao e AssetsEvolucao: metades do brasao se juntando, anel de Digivice,
-   anel de luz e faiscas do UP): so evolucoes novas nesta sessao abrem a revelacao; o save antigo
+/* Revelacao da evolucao (desenho UpEvolucao): so evolucoes novas nesta sessao abrem a revelacao; o save antigo
    nao reabre as dele. O "por que" vem so do que o motor registrou na evolucao. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  CAT, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Motor,
+  CAT, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
 } from "../../motor/index.ts";
-import { desenharSprite, quadroAgora, useAtlas } from "../atlas.ts";
-import { BRASAO } from "../decoracao.ts";
-import { useJogo } from "../jogo.ts";
+import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
 import { Deco } from "./Deco.tsx";
+import { useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
 const ORDEM_NIVEL = ["bebe", "crianca", "adolescente", "adulto"] as const;
@@ -34,10 +32,11 @@ export function Porque({ x }: { x: Evolucao }) {
     <span class="dl-apoio">traço escuro = pet comum</span>
   </>;
 }
+/** o pet em escala inteira ate 4x (cabe em 224 px de altura, como o Greymon da prancha), animado no idle */
 function Palco({ x }: { x: Evolucao }) {
   const a = useAtlas(), ref = useRef<HTMLCanvasElement>(null), k = chaveSprite(x.forma);
   const sp = a.tipo === "ok" ? a.dados.sprites[k] : null;
-  const esc = sp ? Math.max(1, Math.min(4, Math.floor((Math.min(innerWidth, 480) - 56) / sp.caixa[0]), Math.floor(260 / sp.caixa[1]))) : 1;
+  const esc = sp ? Math.max(1, Math.min(4, Math.floor(260 / sp.caixa[0]), Math.floor(224 / sp.caixa[1]))) : 1;
   useEffect(() => {
     const cv = ref.current; if (!cv || a.tipo !== "ok" || !sp) return;
     const g = cv.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
@@ -46,35 +45,46 @@ function Palco({ x }: { x: Evolucao }) {
     const t = setInterval(desenha, a.dados.ms_por_quadro);
     return () => clearInterval(t);
   }, [a, k]);
-  /* atras do sprite: anel de Digivice girando, anel de luz e faiscas do UP (parados com movimento reduzido) */
+  return sp ? <canvas class="dl-pix revel-spr dl-brilho-pet" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} /> : null;
+}
+/** um passo da linha evolutiva: o Digimon que ele foi (1x, cortado) ou "?" no que ainda nao foi decidido */
+function Passo({ f, nivel, atual }: { f: Forma | null; nivel: string; atual: boolean }) {
+  const a = useAtlas(), img = f && a.tipo === "ok" ? imagemAtlas(a, chaveSprite(f)) : null;
   return (
-    <div class="revel-palco">
-      <Deco nome="Digivice_Circle_01" class="revel-anel gira" />
-      <Deco nome="UI_Fx_Glow_Circle_01" class="revel-luz" />
-      {sp && <canvas class="dl-pix revel-spr" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} />}
-      <Deco nome="Fx_Sparkle_2" class="revel-faisca revel-faisca--1" />
-      <Deco nome="Fx_Sparkle_2" class="revel-faisca revel-faisca--2" />
-      <Deco nome="Fx_Sparkle_2" class="revel-faisca revel-faisca--3" />
-    </div>
+    <li class={`revel-passo${atual ? " atual" : ""}`} aria-current={atual ? "step" : undefined}>
+      <span class="revel-passo-spr">{img ? <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt={nomeForma(f!)} /> : <b>?</b>}</span>
+      <span>{nivel}{f ? "" : " ?"}</span>
+    </li>
   );
 }
+const DECIDIDO: Record<string, string> = { crianca: "decidido pelo cuidado", adolescente: "decidido pelo caráter", adulto: "decidido pelo caráter e treino" };
+/** revelacao (pranchas UpEvolucao e EvoCrianca; receita das DIRETRIZES_REPLICAR): tela cheia listrada, circulo de luz,
+    anel do Digivice girando (parado com movimento reduzido), o pet ate 4x, a linha evolutiva e o porque */
 function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), f = x.forma, i = ORDEM_NIVEL.indexOf(x.estagio);
-  useEffect(() => { ref.current?.showModal(); }, []);
-  /* linha ja percorrida: os Digimon que o pet foi (so o que o motor registrou) */
-  const passados = [nomeForma({ esp: f.esp, est: "bebe" }), ...m.evolucoes.map(v => nomeForma(v.forma))];
+  /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
+  useEffect(() => { const d = ref.current; if (!d) return; d.showModal(); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
+  /* linha ja percorrida: as formas que o pet foi (so o que o motor registrou) */
+  const formas: Forma[] = [{ esp: f.esp, est: "bebe" }, ...m.evolucoes.map(v => v.forma)];
   return (
-    <dialog class="revelacao dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
-      <div class="revel-fundo">
-        <p class="revel-de dl-lcd">{NOME_EST[ORDEM_NIVEL[i - 1]] || ""} → {nomeEstagio(f)}</p>
-        <span class="revel-metades" aria-hidden="true"><Deco nome={BRASAO[f.esp].esquerda} class="revel-metade revel-metade--e" /><Deco nome={BRASAO[f.esp].direita} class="revel-metade revel-metade--d" /></span>
-        <h2 class="dl-num revel-tit" id="revel-tit">EVOLUÇÃO!</h2>
-        <Palco x={x} />
-        <span class="revel-nome"><Deco nome={BRASAO[f.esp].peca} class="revel-brasao" alt={`brasão ${BRASAO[f.esp].nome}`} /><span class="dl-placa">{nomeForma(f)}</span></span>
-        <ol class="revel-linha">{ORDEM_NIVEL.map((n, j) => <li key={n} aria-current={j === i ? "step" : undefined}>{j <= i ? passados[j] : "?"}</li>)}</ol>
-        <section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={x} /></section>
-        <button type="button" class="dl-btn dl-btn--destaque revel-ok" onClick={() => ref.current?.close()}>Continuar</button>
+    <dialog class="revelacao revel-tela dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
+      <div class="revel-topo">
+        <span class="revel-de">{NOME_EST[ORDEM_NIVEL[i - 1]] || ""} → {nomeEstagio(f)}</span>
+        <h2 class="dl-num dl-num--grande revel-tit" id="revel-tit" tabIndex={-1}>EVOLUÇÃO!</h2>
       </div>
+      <div class="revel-cena">
+        <span class="revel-luz" aria-hidden="true" />
+        <Deco nome="UI_Fx_Glow_Circle_01" largura={300} altura={300} class="revel-glow" />
+        <Deco nome="Digivice_Circle_01" largura={280} altura={280} class="revel-digivice dl-gira" />
+        <span class="revel-anel" aria-hidden="true" />
+        <Palco x={x} />
+        <span class="dl-placa revel-nome">{nomeForma(f)}</span>
+      </div>
+      <ol class="revel-linha" aria-label="Linha evolutiva">
+        {ORDEM_NIVEL.map((n, j) => <Passo key={n} f={j <= i ? formas[j] ?? null : null} nivel={NOME_EST[n]} atual={j === i} />)}
+      </ol>
+      <section class="revel-porque"><span class="revel-porque-cab"><b>Por que {nomeForma(f)}?</b><span>{DECIDIDO[x.estagio]}</span></span><Porque x={x} /></section>
+      <button type="button" class="dl-btn dl-btn--destaque revel-ok" onClick={() => ref.current?.close()}>Continuar</button>
     </dialog>
   );
 }

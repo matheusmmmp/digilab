@@ -1,6 +1,6 @@
 /* Verificacao ponta a ponta (TAREFA_FRONT_TS, Etapa 5), no build servido pelo servidor local:
-   1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 4 destinos e 9 abas, cuida, treina ate o
-      FORCAR e forca, luta uma vez na arena e uma na campanha, pausa o tempo (em Configuracoes); a assinatura do pet vivo no app tem
+   1. um save de cada versao (1 sem "versao", 2 e 3): abre, passa pelos 5 destinos e 10 abas, cuida, treina ate o
+      FORCAR e forca, luta uma vez na arena e uma na campanha, pausa o tempo; a assinatura do pet vivo no app tem
       que ser a do HTML atual rodando o mesmo registro (Motor.reproduzir do digilab_sprites.html);
    2. checklist do guia (secao 14) nas 9 abas, em 360 e 390 px, claro e escuro: sem rolagem lateral, alvos de
       toque >= 44 px, sem erro no console; foco visivel pelo teclado. */
@@ -16,7 +16,7 @@ const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
-  ["Diário", "Cenários", "diario/cenarios"],
+  ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar) */
@@ -45,15 +45,15 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".pet-cab .dl-tag--estagio")).toHaveText(/Champion/i);
 
-    /* os 4 destinos e as 9 abas, pela barra e pelas abas */
+    /* os 5 destinos e as 10 abas, pela barra e pelas abas */
     for (const [destino, aba, rota] of ABAS) {
-      await page.locator(".dl-nav button", { hasText: destino }).click();
+      await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
       if (aba) await page.getByRole("tab", { name: aba }).click();
       await expect(page).toHaveURL(new RegExp("#/" + rota + "$"));
     }
 
     /* cuidar */
-    await page.locator(".dl-nav button", { hasText: "Pet" }).click();
+    await page.locator(".dl-nav").getByRole("button", { name: "Pet", exact: true }).click();
     const d0 = await numLog(page, "d");
     for (const a of ["Alimentar", "Limpar", "Brincar", "Carinho", "Elogiar"]) await page.locator(".acoes-pet button", { hasText: a }).click();
     expect(await numLog(page, "d")).toBe(d0 + 5);
@@ -84,15 +84,14 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.locator(".lutar-grande").click();
     await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
     await page.getByRole("tab", { name: "Campanha" }).click();
-    await page.locator(".camp-rival button:not([disabled])").first().click();
+    await page.locator(".camp-lutar:not([disabled])").click();
     await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
     expect(await numLog(page, "l")).toBe(l0 + 2);
 
-    /* pausa o tempo e confere a assinatura com o HTML rodando o mesmo registro */
-    /* o tempo de teste mora em Configuracoes (engrenagem do Diario) > Registro e replay */
-    await page.locator(".dl-nav button", { hasText: "Diário" }).click();
-    await page.getByRole("button", { name: "Configurações" }).click();
-    await page.getByRole("button", { name: /^Tempo/ }).click();
+    /* pausa o tempo (Diario > engrenagem > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */
+    await page.locator(".dl-nav").getByRole("button", { name: "Diário", exact: true }).click();
+    await page.locator(".cab-engrenagem").click();
+    await page.getByRole("button", { name: /^Registro e replay/ }).click();
     await page.getByRole("button", { name: "Pausa" }).click();
     await page.waitForTimeout(300);
     const { assinatura, registro } = await page.evaluate(() => ({ assinatura: (window as any).__digilab.assinatura(), registro: (window as any).__digilab.registro() }));
@@ -158,3 +157,24 @@ test("foco visível pelo teclado", async ({ page }) => {
   expect(focados, "o teclado percorreu a tela").toBeGreaterThanOrEqual(10);
   expect(semFoco, "elementos sem indicação de foco").toEqual([]);
 });
+
+/* layouts (tokens.css): abaixo de 900 px o das pranchas de celular (barra embaixo, uma coluna); de 900 a 1099 barra
+   lateral e uma coluna; de 1100 em diante o das pranchas *Desktop (conteudo + painel ao lado) */
+for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
+  test(`layout em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await semear(page, SAVES.v3);
+    const lateral = largura >= 900, desktop = largura >= 1100;
+    for (const [rota, esq, dir] of [["crescer/evolucao", ".evo-arv", ".evo-hist"], ["lutar/campanha", ".mapa-ilhas", ".camp-det"], ["conversar/chat", ".conv-lista", ".conv-status"]]) {
+      await page.goto(APP + "#/" + rota);
+      await page.waitForTimeout(500);
+      const r = await page.evaluate(([e, d]) => {
+        const nav = document.querySelector(".dl-nav")!.getBoundingClientRect(), a = document.querySelector(e)!.getBoundingClientRect(), b = document.querySelector(d)!.getBoundingClientRect();
+        return { navLateral: nav.height > nav.width, aoLado: b.left >= a.right - 1, larg: document.documentElement.scrollWidth, janela: innerWidth };
+      }, [esq, dir] as const);
+      expect(r.navLateral, `${rota}: barra lateral`).toBe(lateral);
+      expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(desktop);
+      expect(r.larg, `${rota}: rolagem lateral`).toBeLessThanOrEqual(r.janela);
+    }
+  });
+}

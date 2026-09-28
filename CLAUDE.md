@@ -649,8 +649,8 @@ da seção 14 do guia nas 9 abas em 360/390 px e nos dois temas; ~45 s). `window
 (assinatura e registro do pet vivo) para essa conferência. Etapa 4 (telas), feito: **Pet** (palco, fala, necessidades, chamado, desejo, ações, tempo,
 Meus pets, revelação da evolução, conversa da fala livre com as mesmas chaves) **Crescer** (Treinar,
 Aprendizado, Evolução) **Lutar** (Arena, Campanha, palco da luta: um estado só em `src/luta.ts`, o palco vai
-para a aba visível) e **Diário** (Registro, Catálogo, Cenários; o pet B do cenário vira o rival fixo da arena). Botão de
-tema na barra (Auto/Claro/Escuro), preferência na chave `…-tema` (o save não muda). O tempo anda e grava o save (ação
+para a aba visível) e **Diário** (Registro, Catálogo, Cenários; o pet B do cenário vira o rival fixo da arena). Barra de navegação: Pet, Crescer, Lutar, Diário, **Conversar** (não está nas pranchas, mas fica: decisão do Matheus) e a engrenagem de Configurações (tema, fala, registro, Tempo (teste)). Layouts: abaixo de 900 px o das pranchas de celular; de 900 px, barra lateral; de 1100 px, o das pranchas *Desktop. Tema (Auto/Claro/Escuro) em
+Configurações, preferência na chave `…-tema` (o save não muda). O tempo anda e grava o save (ação
 do dono na hora; tempo a cada 2 s; o pendente ao esconder/fechar a aba); se outra aba muda o save, o app relê em vez
 de gravar por cima (o HTML não faz isso: não deixar o HTML e o app abertos juntos no mesmo pet). Semear save em
 teste: por uma página da mesma origem que não seja o app (ex.: `/Assets/digilab_atlas_up.json`), senão o app grava

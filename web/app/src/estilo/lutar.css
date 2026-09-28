@@ -91,3 +91,163 @@
 .camp-rival{border-radius:10px;padding:10px 12px;display:grid;gap:6px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex);cursor:pointer}
 .camp-rival.sel{box-shadow:inset 0 0 0 2px var(--dl-navy),0 0 0 3px var(--dl-highlight)}
 .licao{font-style:italic;font-weight:700}
+
+/* Arena (prancha ArenaEscolha): card do seu pet, estilos em cards de 56 px, formas adultas recolhidas e a barra de acao */
+.arena-pet{border-radius:14px;display:grid;gap:8px}
+.arena-pet-cab{display:flex;align-items:center;gap:10px}
+.arena-pet-spr{width:52px;height:52px;flex:none;border-radius:12px;background:var(--dl-bg);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.arena-pet-spr img{max-width:none}
+.arena-pet-txt{display:grid;gap:2px;min-width:0}
+.arena-pet-txt b{font-size:15px}
+.arena-pet-txt span{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.arena-pet-treino{display:grid;gap:4px}
+.arena-pet-treino > span{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:800}
+.arena-pet-treino .dl-lcd{font-size:13px;color:var(--dl-plate)}
+.arena-pet-treino .dl-seg{padding:0}
+.rivais{display:grid;gap:10px}
+.rivais .rivais-tit{color:var(--dl-text);font-family:var(--dl-f-texto);font-size:14px;font-weight:900;margin:0}
+.rivais-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rival-card{min-height:56px;padding:6px 10px 6px 6px;gap:10px;border:0;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border)}
+.rival-card[aria-checked="true"]{border:0;box-shadow:0 0 0 3px var(--dl-highlight),0 3px 0 3px #B88600}
+.rival-spr{width:44px;height:44px;border-radius:10px;background:#EEF2F8;align-items:flex-end}
+.rival-card--adulto .rival-spr{background:var(--dl-rival-bg)}
+.rival-txt{gap:1px}
+.rival-txt b{font-size:13px}
+.rival-txt small{font-size:11px;font-weight:700}
+.rivais-mais{font:inherit;justify-self:center;min-height:44px;background:none;border:0;color:var(--dl-text-2);font-size:11px;font-weight:800;cursor:pointer}
+.rivais-mais:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.arena-acoes{position:sticky;bottom:calc(83px + env(safe-area-inset-bottom));z-index:5;display:flex;gap:10px;margin:0 -14px;padding:10px 14px 16px;
+  background:linear-gradient(transparent,var(--dl-bg) 30%)}
+.arena-acoes .dl-btn{flex:1;min-height:52px;font-size:14px;padding:0 8px;white-space:nowrap}
+.arena-acoes .lutar-grande{flex:2;font-size:15px;min-width:0}
+@media (min-width:900px){ .arena-acoes{bottom:0} }
+
+/* palco da luta (prancha UpLuta): arena de 420 px de ponta a ponta, HUD sobreposto, intencao e regra embaixo */
+.palco-luta{display:grid;gap:0;margin:0 -14px}
+.luta-arena{position:relative;height:420px;overflow:hidden;background:#0B1A44;border-bottom:4px solid #FFFFFF;box-shadow:0 2px 0 var(--dl-border)}
+.luta-arena .arena-cv{position:absolute;left:0;top:0;display:block;border-radius:0;background:none}
+.luta-hud{position:absolute;left:10px;right:10px;top:12px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:start}
+.hud-lado{display:flex;align-items:center;gap:6px;background:#FFFFFF;border-radius:10px;box-shadow:0 0 0 2px var(--dl-navy);padding:4px;color:#13244D;min-width:0}
+.hud-lado--rival{box-shadow:0 0 0 2px var(--dl-rival);flex-direction:row-reverse}
+.hud-ret{width:34px;height:34px;flex:none;border-radius:8px;background:#E8F0FB;overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
+.hud-lado--rival .hud-ret{background:var(--dl-rival-bg)}
+.hud-ret img{max-width:none}
+.hud-txt{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+.hud-lado--rival .hud-txt{align-items:flex-end}
+.hud-nome{font-size:11px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.hud-vida{width:100%;height:9px;border-radius:5px;background:var(--dl-hex);display:flex}
+.hud-vida i{border-radius:5px;background:var(--dl-ok);transition:width 200ms}
+.hud-lado--rival .hud-vida{justify-content:flex-end}
+.hud-guts{width:100%;height:5px;border-radius:3px;background:var(--dl-hex);display:flex}
+.hud-guts i{border-radius:3px;background:var(--dl-highlight)}
+.hud-lado--rival .hud-guts{justify-content:flex-end}
+.hud-meio{display:flex;flex-direction:column;align-items:center;gap:6px}
+.luta-arena .turno-hex{width:50px;height:50px;background:var(--dl-navy);border:3px solid #FFFFFF;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.luta-arena .turno-hex small{font-size:8px;font-weight:900;color:#9FC2EF;line-height:1}
+.luta-arena .turno-hex .dl-num{font-size:18px;line-height:18px}
+.luta-dist{display:inline-flex;align-items:center;background:rgba(15,42,102,.85);color:#FFFFFF;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:800;white-space:nowrap}
+.luta-intencao-balao{position:absolute;right:24px;top:118px;display:flex;align-items:center;gap:4px;background:#FFFFFF;border:3px solid var(--dl-rival);border-radius:12px;padding:3px 10px 3px 4px;
+  box-shadow:0 3px 0 #4A0F22;font-weight:900;font-size:14px;color:var(--dl-rival)}
+.luta-arena .luta-callout{position:absolute;left:50%;top:184px;transform:translateX(-50%) rotate(-6deg);font-size:34px;pointer-events:none;white-space:nowrap}
+.palco-luta-baixo{display:grid;gap:10px;padding:12px 14px 0}
+.luta-intencao{display:flex;align-items:center;gap:10px;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 2px var(--dl-highlight-press),0 3px 0 2px #B88600;padding:8px 10px;font-size:13px;line-height:18px;font-weight:700;color:#13244D}
+.luta-exclam{flex:none;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--dl-highlight);color:#3B2A00;font-weight:900}
+.luta-regra-card{display:grid;gap:8px;border-radius:12px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.5);padding:10px;color:var(--dl-learned-ink)}
+.luta-regra-topo{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.luta-regra-cab{background:var(--dl-learned);color:#0B2A5E;border-radius:6px;font-size:11px;font-weight:900;padding:2px 8px;letter-spacing:0}
+.luta-regra-sub{font-size:11px;font-weight:800;color:var(--dl-learned-sub)}
+.luta-regra-txt{font-weight:900;font-size:16px;line-height:22px}
+.luta-regra-bts{display:flex;gap:8px}
+.regra-travar,.regra-vetar{flex:1;min-height:44px;border-radius:10px;border:2px solid #FFFFFF;font:inherit;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.regra-travar{background:#FFFFFF;color:var(--dl-navy);box-shadow:inset 0 -3px 0 var(--dl-sec-shadow)}
+.regra-vetar{background:var(--dl-need);color:#FFFFFF;box-shadow:inset 0 -3px 0 #B0216F}
+.regra-travar:focus-visible,.regra-vetar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.luta-log{background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:8px 12px;gap:4px;font-size:13px;font-weight:700;color:var(--dl-text-2)}
+.luta-log li,.luta-log li:first-child{padding:0;background:none;box-shadow:none;border-radius:0}
+.luta-t{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:var(--dl-plate)}
+:root[data-tema="escuro"] .luta-log{background:var(--dl-surface)}
+@media (prefers-color-scheme:dark){ :root:not([data-tema="claro"]) .luta-log{background:var(--dl-surface)} }
+.luta-arena .luta-dist{position:static;transform:none;z-index:auto}
+.regra-travar img{width:14px;height:18px;image-rendering:auto}
+
+/* Campanha (prancha CampMapa): mapa de 420 px de ponta a ponta, ilhas de 150 px, trilho, plaquinhas com etiqueta,
+   o pet num circulo com seta; o card do lugar sobe 26 px sobre o mapa */
+.tela .mapa-ilhas{position:relative;width:auto;max-width:none;aspect-ratio:auto;height:420px;margin:0 -14px;border-radius:0;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 40%,#46A6E0,#2F8FD0 60%,#1F6FB0);box-shadow:none;border:0}
+.mapa-caminho{position:absolute;inset:0;width:100%;height:100%}
+.mapa-caminho line{stroke-linecap:round}
+.mapa-caminho .trilho-sombra{stroke:#0F2A66;stroke-width:10;stroke-opacity:.35}
+.mapa-caminho .trilho{stroke:#FFFFFF;stroke-width:5;stroke-dasharray:3 10}
+.mapa-caminho .trilho.feito{stroke:var(--dl-highlight);stroke-dasharray:none}
+.tela .mapa-ilhas .ilha{position:absolute;width:38.46%;height:auto;pointer-events:none}
+.tela .mapa-ilhas .ilha.fechada{filter:saturate(.25) brightness(.8)}
+.tela .mapa-ilhas .nuvem{position:absolute;width:44.9%;height:auto;opacity:.97;pointer-events:none}
+.mapa-pad{position:absolute;width:17.4%;height:auto;pointer-events:none}
+.tela .lugar{position:absolute;transform:none;width:35.9%;min-height:44px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer}
+.tela .lugar-placa{display:block;background:var(--dl-plate);color:#FFFFFF;border:2px solid var(--dl-navy-deep);box-shadow:inset 0 3px 0 rgba(255,255,255,.25);border-radius:6px;font-weight:900;font-size:13px;padding:1px 10px;white-space:nowrap;line-height:1.4}
+.tela .lugar.bloq .lugar-placa{background:#4A5878}
+.tela .lugar.sel .lugar-placa{box-shadow:inset 0 3px 0 rgba(255,255,255,.25),0 0 0 3px var(--dl-highlight)}
+.lugar-tag{background:var(--dl-highlight);color:var(--dl-highlight-ink);border-radius:4px;font-size:9px;font-weight:900;padding:0 5px;line-height:1.5}
+.lugar-tag--ok{background:var(--dl-ok);color:var(--dl-ok-ink)}
+.lugar-tag--tranca{display:flex;align-items:center;gap:3px;background:rgba(15,42,102,.7);color:#FFFFFF}
+.lugar-tag--tranca img{width:9px;height:12px;image-rendering:auto}
+.tela .pet-mapa-ilha{position:absolute;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:none;width:auto;height:auto;background:none;border:0;box-shadow:none}
+.pet-mapa-circ{width:52px;height:52px;border-radius:50%;background:#FFFFFF;border:3px solid var(--dl-highlight);box-shadow:0 0 0 2px var(--dl-navy),0 0 14px var(--dl-highlight);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.pet-mapa-circ img{max-width:none}
+.pet-mapa-seta{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid var(--dl-highlight)}
+.tela .camp-det{position:relative;margin:-38px -2px 0;background:var(--dl-surface);border-radius:16px;box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep);padding:12px;display:flex;flex-direction:column;gap:10px}
+.camp-det-cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.camp-det-cab b{font-size:17px}
+.camp-det-cab span{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.camp-rivais{display:flex;justify-content:space-around;gap:8px}
+.tela .camp-rival{font:inherit;background:none;border:0;box-shadow:none;padding:2px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--dl-text);cursor:pointer;border-radius:10px;min-width:64px}
+.tela .camp-rival[aria-checked="true"] .camp-rival-spr{box-shadow:0 0 0 3px var(--dl-highlight)}
+.tela .camp-rival:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.camp-rival-spr{width:46px;height:46px;border-radius:10px;background:var(--dl-rival-bg);border:2px solid var(--dl-rival);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.camp-rival-spr img{max-width:none}
+.tela .camp-rival b{font-size:11px;font-weight:900}
+.tela .camp-rival > span:last-child{font-size:10px;font-weight:800;color:var(--dl-text-2)}
+.camp-det-txt{font-size:12px;font-weight:700;color:var(--dl-text-2);text-align:center}
+.camp-det .licao,.camp-det p{margin:0}
+.camp-lutar{width:100%;min-height:50px}
+
+.luta-leitura-tit{display:none}
+/* desktop (BatDesktop, CampDesktop): arena a esquerda e a leitura da luta a direita; mapa quadrado e o lugar ao lado */
+@media (min-width:1100px){
+  .palco-luta{grid-template-columns:minmax(0,1fr) 380px;align-items:start;margin:0 -14px}
+  .luta-arena{height:600px;border-bottom:0;border-right:4px solid #FFFFFF;box-shadow:2px 0 0 var(--dl-border)}
+  .palco-luta-baixo{padding:18px 18px 0}
+  .tela .luta-leitura-tit{display:block;font-family:var(--dl-f-texto);font-size:20px;font-weight:900;margin:0}
+  .camp-tela{grid-template-columns:minmax(0,570px) minmax(300px,1fr);align-items:start;gap:20px}
+  .camp-principal,.camp-lado{display:grid;gap:12px;min-width:0}
+  .camp-tela .palco-luta{grid-column:1/-1}
+  .tela .camp-principal .mapa-ilhas{margin:0;height:570px;border-radius:16px;box-shadow:0 0 0 3px var(--dl-navy),0 0 0 6px #FFFFFF}
+  .tela .camp-det{margin:0}
+}
+@media (max-width:1099px){ .camp-principal,.camp-lado{display:contents} }
+/* fim da luta (UpResultado) */
+.luta-res{display:grid;gap:10px;justify-items:stretch}
+.res-cab{display:grid;gap:2px;padding:14px;border-radius:14px 14px 0 0;margin:0 -2px}
+.res-tag{justify-self:start;background:#FFFFFF;color:var(--dl-navy);border-radius:6px;font-weight:900;font-size:12px;padding:1px 10px}
+.res-cab h3{margin:4px 0 0;font-size:30px;line-height:34px}
+.res-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.res-pet{grid-row:span 2;position:relative;min-height:190px;border-radius:10px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;padding:8px 4px;overflow:hidden}
+.res-pet::before{content:"";position:absolute;left:12px;right:12px;bottom:30px;height:40px;background:var(--dl-img-anel) center/100% 100% no-repeat}
+.res-pet img{position:relative;max-width:none}
+.res-pet .dl-placa{position:relative;font-size:15px;padding:3px 14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-num{background:var(--dl-surface);border-radius:10px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:6px;display:flex;flex-direction:column;gap:4px}
+.res-num .dl-placa{font-size:12px;padding:2px 12px;align-self:flex-start}
+.res-num .dl-num{font-size:30px;text-align:right;padding-right:4px}
+.res-regra{display:flex;align-items:center;gap:10px;border-radius:10px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.5);padding:8px 10px;color:var(--dl-learned-ink)}
+.res-regra-ic{width:44px;height:44px;flex:none;border-radius:50%;background:var(--dl-plate);border:2px solid var(--dl-learned);display:flex;align-items:center;justify-content:center}
+.res-regra > span:last-child{display:grid;gap:2px}
+.res-regra b{font-size:11px;color:var(--dl-learned)}
+.res-regra > span:last-child > span{font-weight:900;font-size:15px;line-height:20px}
+.res-regra small{font-size:11px;color:var(--dl-learned-sub)}
+.res-rival{display:flex;align-items:center;gap:10px;background:var(--dl-surface);border-radius:10px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:8px 10px}
+.res-rival-spr{width:44px;height:44px;flex:none;border-radius:10px;background:var(--dl-rival-bg);overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
+.res-rival-spr img{max-width:none}
+.res-rival > span:last-child{display:grid;gap:2px}
+.res-rival b{font-size:14px}
+.res-rival > span:last-child > span{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.res-voltar{justify-self:center;min-width:220px;min-height:52px;font-size:16px}

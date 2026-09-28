@@ -2,9 +2,7 @@
    Cenarios). Um pet por vez: o jogo guarda o registro de um pet so; ovo novo e no Registro, com confirmacao. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma } from "../../../motor/index.ts";
-import { imagemAtlas, useAtlas } from "../../atlas.ts";
-import { Deco, fundoDeco } from "../../componentes/Deco.tsx";
-import { ICONE } from "../../decoracao.ts";
+import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
@@ -24,10 +22,19 @@ export function voltarAoAnterior(): string {
   return "Pet anterior restaurado pelo replay do registro.";
 }
 
+/** Meus pets (prancha MpAtual): tela cheia com voltar, o pet ativo no palco (anel, escala inteira), o aviso de um pet
+    por vez, o pet anterior guardado (se houver) e os botoes. Exportar copia o registro (mesmo conteudo do save). */
 export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistro: () => void }) {
   const { motor: m, nascendo } = useJogo(), a = useAtlas(), ref = useRef<HTMLDialogElement>(null), [msg, setMsg] = useState("");
   useEffect(() => { ref.current?.showModal(); }, []);
-  const ovo = nascendo > 0, img = a.tipo === "ok" ? imagemAtlas(a, ovo ? OVO[m.especie] : chaveSprite(m.forma)) : null;
+  const ovo = nascendo > 0, nome = ovo ? OVO[m.especie] : chaveSprite(m.forma);
+  let img = null;
+  if (a.tipo === "ok") { const h = dimSprite(a.dados, nome)[1]; img = imagemAtlas(a, nome, Math.max(1, Math.min(3, Math.floor(170 / h)))); }
+  const anterior = lerAnterior();
+  let antImg = null;
+  if (anterior && a.tipo === "ok") {
+    try { const d = JSON.parse(anterior); antImg = Number.isInteger(d?.semente) ? imagemAtlas(a, OVO[Motor.reproduzir(d.semente, [], d.versao ?? 1).especie]) : null; } catch { antImg = null; }
+  }
   const exportar = async () => {
     /* o mesmo conteudo do save: semente, registro e versao do pet */
     const txt = JSON.stringify({ semente: m.semente, log: m.log, versao: m.versao });
@@ -35,32 +42,26 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
     catch { console.log(txt); setMsg("Não foi possível copiar automaticamente. O registro está no console do navegador."); }
   };
   return (
-    <dialog class="meus-pets dl" ref={ref} aria-labelledby="mp-titulo" onClose={fechar}>
-      <div class="dl-card">
-        <div class="dl-linha" style={{ justifyContent: "space-between" }}>
-          <h2 class="dl-titulo-card mp-titulo" id="mp-titulo"><Deco nome={ICONE.pets} class="mp-titulo-ic" />Meus pets</h2>
-          <button type="button" class="dl-btn dl-btn--icone" aria-label="Fechar" onClick={() => ref.current?.close()}>
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15" /></svg></button>
-        </div>
-        <div class="mp-slots">
-          <div class="slot">
-            <span class="mp-retrato-anel">
-              <Deco nome="Digivice_Circle_01" class="mp-anel gira" />
-              <span class="pet-retrato" aria-hidden="true">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
-            </span>
-            <span style={{ display: "grid", gap: "4px", minWidth: 0 }}>
-              <b style={{ fontWeight: 900 }}>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b>
-              <span><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span> <span class="dl-tag dl-tag--ativo">ativo</span></span>
-            </span>
-          </div>
-          <button type="button" class="slot-novo" style={{ "--padrao": fundoDeco("Icon_Pattern_2") ?? "none" }} onClick={() => { ref.current?.close(); irRegistro(); }}>
-            <span class="dl-num" style={{ fontSize: "1.5rem" }} aria-hidden="true">+</span>novo ovo</button>
-        </div>
-        <p class="dl-apoio" style={{ margin: 0 }}>Um pet por vez: o jogo guarda o registro de um pet só. Um ovo novo apaga este pet (com confirmação, no Registro).</p>
-        <div class="acoes-mp">
-          <button type="button" class="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
-          {lerAnterior() && <button type="button" class="dl-btn dl-btn--sec" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</button>}
-        </div>
+    <dialog class="meus-pets mp-tela dl" ref={ref} aria-labelledby="mp-titulo" onClose={fechar}>
+      <div class="mp-cab dl-faixa">
+        <button type="button" class="conv-voltar" aria-label="Voltar" onClick={() => ref.current?.close()}>
+          <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg></button>
+        <h2 class="dl-num" id="mp-titulo">Meus pets</h2>
+      </div>
+      <div class="mp-corpo">
+        <section class="mp-palco dl-hexcard" aria-label="Pet ativo">
+          <span class="dl-tag dl-tag--ativo mp-ativo">ATIVO</span>
+          <span class="mp-anel" aria-hidden="true" />
+          {img && <img class="dl-pix mp-spr" src={img.url} width={img.w} height={img.h} alt="" />}
+          <span class="mp-placa"><span class="dl-placa">{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
+            <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span></span>
+        </section>
+        <p class="mp-aviso">Um pet por vez: o jogo guarda o registro de um pet só.</p>
+        {anterior && <div class="mp-anterior">{antImg && <img class="dl-pix" src={antImg.url} width={antImg.w / 2} height={antImg.h / 2} alt="" />}
+          <span><b>Pet anterior guardado</b><span>ficou salvo quando você usou o Laboratório</span></span></div>}
+        {anterior && <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</button>}
+        <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={() => { ref.current?.close(); irRegistro(); }}>Registro e novo ovo</button>
+        <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={exportar}>Exportar registro</button>
         <p class="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
       </div>
     </dialog>

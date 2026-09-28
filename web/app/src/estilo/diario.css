@@ -52,3 +52,82 @@
 .comp th:first-child,.comp td:first-child{text-align:left;color:var(--dl-text-2);font-weight:700}
 .comp thead th{font-weight:900;color:var(--dl-text)}
 .comp tr.sec td{padding-top:12px;font-weight:900;color:var(--dl-text);border-bottom:0}
+
+/* Diario (DiarioRegistro, DiarioCatalogo, DiarioLab): abas em chips, registro num card, lista em linhas */
+body[data-destino="diario"] .tabs{overflow-x:auto;scrollbar-width:none;padding:10px 12px 0}
+body[data-destino="diario"] .tab{flex:0 0 auto;border-radius:22px;padding:0 12px;font-size:12px}
+.reg-cab{display:grid;gap:8px}
+.reg-cab p{margin:0}
+.reg-cab > p:first-child{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.reg-semente{font-size:12px}
+.reg-semente .dl-lcd{color:var(--dl-plate);font-size:13px}
+.reg-bts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.reg-bts .dl-btn{padding:0 8px;font-size:14px}
+.reg-msg{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#2F7A3E}
+.reg-msg i{width:18px;height:18px;flex:none;border-radius:50%;background:var(--dl-ok);color:#FFFFFF;display:grid;place-items:center;font-style:normal;font-size:11px}
+.reg-msg.erro{color:var(--dl-erro)}
+.reg-msg.erro i{background:var(--dl-erro)}
+.reg-filtros{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;margin:0 -2px;padding:2px}
+.reg-filtros .chip{flex:0 0 auto;border-radius:8px;min-height:44px;padding:0 12px;font-size:12px;font-weight:900}
+.tela .log{max-height:420px;background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border);border-radius:12px;padding:4px 12px;gap:0}
+.reg-linha{display:grid;grid-template-columns:78px 64px minmax(0,1fr);align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid var(--dl-hex);font-size:13px;font-weight:700}
+.reg-linha:last-child{border-bottom:0}
+.reg-linha .dl-lcd{font-size:13px;color:var(--dl-plate)}
+.reg-linha--recusa{background:#FFF6CC;box-shadow:0 0 0 2px var(--dl-highlight);border-radius:8px;padding-inline:6px;margin-inline:-6px}
+.reg-linha .reg-tag{justify-self:start;border:0;border-radius:4px;font-size:10px;font-weight:900;padding:1px 6px}
+.reg-voce{background:var(--dl-action);color:#FFFFFF}
+.reg-pet{background:var(--dl-hex);color:var(--dl-text-2)}
+.reg-luta{background:var(--dl-navy);color:#FFFFFF}
+.reg-regras{background:var(--dl-learned);color:#0B2A5E}
+.reg-recusa{background:var(--dl-need);color:#FFFFFF}
+.reg-treino{background:var(--dl-highlight);color:var(--dl-highlight-ink);border-style:solid}
+details.zona-risco{border:2px dashed var(--dl-need);border-radius:12px;padding:0 12px}
+details.zona-risco > summary{color:#B0216F;font-weight:900;font-size:13px}
+details.zona-risco[open]{padding-bottom:12px}
+/* Catalogo (DiarioCatalogo): chips de brasao na linha com as vistas, blocos de 66 px, detalhe em card forte */
+.cat-brasoes{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cat-brasoes .chip{min-height:44px;padding:0 10px;border-radius:22px;font-size:12px;font-weight:900}
+.cat-vistas{margin-left:auto;font-size:11px;font-weight:900;color:var(--dl-text-2)}
+.tela .cat-tile{height:66px;padding:3px 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px}
+.tela .cat-tile.nao-visto{background:var(--dl-none-bg);box-shadow:inset 0 0 0 2px var(--dl-hex)}
+.tela .cat-tile.nao-visto .cat-nome{color:var(--dl-muted)}
+.tela .cat-tile.nao-visto img{opacity:.35}
+.tela .cat-cx{flex:1;width:100%;height:auto;min-height:0;align-items:flex-end}
+.tela .cat-nome{font-size:9px;font-weight:900}
+.tela .cat-detalhe{box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep);border-radius:14px}
+.cat-det-cab{display:flex;align-items:center;gap:10px}
+.cat-det-cab b{font-size:17px;flex:1;min-width:0}
+.cat-det-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.cat-det-spr{min-height:0;display:flex;align-items:flex-end;max-height:64px;overflow:hidden}
+/* Laboratorio (DiarioLab): intro em malha, Pet A (azul) e Pet B (rival) em cards, botao largo */
+.lab-intro{display:grid;gap:4px;border-radius:12px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep);padding:10px 12px;color:var(--dl-learned-ink);font-size:12px;font-weight:700}
+.lab-intro b{font-size:11px;color:var(--dl-learned);letter-spacing:.03em}
+.lab-pet{margin:0;background:var(--dl-surface);border:3px solid var(--dl-action);border-radius:14px;padding:10px 12px;display:grid;gap:8px}
+.lab-pet--b{border-color:#C0325A}
+.lab-pet legend{font-weight:900;font-size:14px;color:var(--dl-action);padding:0 4px;float:left;width:100%;margin-bottom:4px}
+.lab-pet--b legend{color:#C0325A}
+.lab-pet label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:800}
+.lab-pet select,.lab-pet input{min-width:0;width:auto;max-width:110px;min-height:44px;border:2px solid var(--dl-border);border-radius:10px;background:var(--dl-surface);color:var(--dl-text);font:inherit;font-weight:900;text-align:center}
+.lab-semente{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:800}
+.lab-nota{margin:0;font-size:12px;font-weight:700;color:#B0216F}
+.dl-btn--largo{width:100%;min-height:52px}
+/* Registro no desktop (DiarioDesktop): filtros a esquerda, lista no meio, semente/botoes e o ultimo evento a direita */
+.reg-det{display:none}
+@media (min-width:1100px){
+  .reg-tela{grid-template-columns:200px minmax(0,1fr) 320px;align-items:start;column-gap:16px}
+  .reg-tela > .reg-filtros{grid-column:1;grid-row:1 / span 3;flex-direction:column;align-items:stretch;background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:10px;overflow:visible}
+  .reg-tela > .log{grid-column:2;grid-row:1 / span 3;max-height:calc(100dvh - 200px)}
+  .reg-tela > .reg-cab{grid-column:3;grid-row:2}
+  .reg-tela > .reg-det{grid-column:3;grid-row:1;display:grid;gap:6px}
+  .reg-det b{font-size:18px}
+  .reg-det .reg-tag{justify-self:start;border:0;border-radius:4px;font-size:10px;font-weight:900;padding:1px 6px}
+  .reg-tela > .dl-apoio,.reg-tela > .zona-risco{grid-column:2}
+}
+/* Catalogo no desktop (CatDesktop): grade a esquerda e a ficha a direita */
+@media (min-width:1100px){
+  .cat-tela{grid-template-columns:minmax(0,1fr) 380px;align-items:start;column-gap:20px}
+  .cat-tela > *{grid-column:1}
+  .cat-tela > .cat-detalhe{grid-column:2;grid-row:1 / span 4;position:sticky;top:12px}
+}
+.cat-chip-brasao{width:26px;height:auto;aspect-ratio:295/194;margin-right:4px;vertical-align:-4px}
+.cat-brasoes .chip{display:inline-flex;align-items:center}

@@ -25,13 +25,14 @@ function IconeTreino({ ex }: { ex: Exercicio }) {
   return <img class="treino-ic" src={imagemAtlas(a, ICONE_TREINO[ex]).url} width={54} height={61} alt="" />;
 }
 
-/** sala de treino: fundo do UP, sombra no chao e o pet em escala inteira (ate 3x, sem esticar) */
+/** sala de treino (prancha TreinoNormal): 190 px de ponta a ponta, fundo do UP, sombra 140 x 16 e o pet em escala
+    inteira (ate 3x, sem esticar) com os pes em 170 */
 function Sala() {
   const { motor: m, nascendo } = useJogo(), a = useAtlas(), t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick);
   const fundo = a.tipo === "ok" ? imagemAtlas(a, "fundo_treino").url : null;
   let pet = null;
   if (a.tipo === "ok" && nascendo === 0) {
-    const nome = chaveSprite(m.forma), [, h] = dimSprite(a.dados, nome), esc = Math.max(1, Math.min(3, Math.floor(150 / h)));
+    const nome = chaveSprite(m.forma), [, h] = dimSprite(a.dados, nome), esc = Math.max(1, Math.min(3, Math.floor(168 / h)));
     const img = imagemAtlas(a, nome, esc);
     pet = <img class="dl-pix sala-pet" src={img.url} width={img.w} height={img.h} alt={nomeForma(m.forma)} />;
   }

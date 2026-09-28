@@ -75,7 +75,7 @@ function Aparencia() {
           </button>
         ))}
       </div>
-      <p class="dl-apoio">Sistema segue o claro ou escuro do aparelho. O mesmo botão fica na barra de navegação.</p>
+      <p class="dl-apoio">Sistema segue o claro ou escuro do aparelho.</p>
     </div>
   );
 }
