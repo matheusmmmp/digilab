@@ -5,20 +5,22 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { CAT, LUGARES, NOME_V2, NPC, chaveRegra, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
+import { CAT, LUGARES, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { tentativas, type LutadorTela, type Palco } from "../../luta.ts";
 import { ILHA } from "./TelaCampanha.tsx";
+import { pedirDica } from "../../dicas.ts";
 
-const inteiro = (x: number): string => String(Math.round(x));
+const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
 
 /** uma linha de "o que decidiu": o que cada lado fez no turno, o dano que causou e o que falhou */
 export function fraseTurno(tr: Turno, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null): string {
   const lados = ([0, 1] as const).map(i => {
-    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i];
+    /* dano causado por este lado = recebido pelo outro, na escala de quem recebe */
+    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i] * fatorExibicao((i ? A : B).cond);
     let s = `${L.nomeTela}: ${NOME_V2[acao] ?? acao}`;
     if (dano > 0) s += ` −${inteiro(dano)}`;
     if (tr.errou[i]) s += " (o pesado errou)";
@@ -51,7 +53,7 @@ export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: Lutador
     const caiu = [hpA <= 0 && A.nomeTela, hpB <= 0 && B.nomeTela].filter(Boolean).join(" e ");
     return [...linhas, { t: `T${ult.t}`, txt: `${caiu} caiu.`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
   }
-  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA))} × ${inteiro(Math.max(0, hpB))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
+  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
 }
 
 function Numeros({ itens }: { itens: [string, string][] }) {
@@ -78,12 +80,16 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   };
   const gp = m.gp, estadoNova = nova && gp ? (gp.vetos.includes(nova.k) ? "vetada" : nova.k in gp.travas ? "travada" : gp.ativas.includes(nova.k) ? "livre" : "fora") : null;
   const momentos = momentosDecisivos(res, p.A, p.B, gp ? gp.travas : null);
+  /* tutorial (Bit): a primeira derrota na campanha e a primeira regra nova */
+  useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova) pedirDica("regra_nova"); }, []);
 
   const tag = npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
   const titulo = lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const n = res.turnos.length;
   const sub = venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${n} turnos` : perdeu ? `${p.B.nomeTela} venceu no turno ${n}` : `Empate no limite · ${n} turnos`;
-  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0), danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0);
+  /* dano na escala de quem recebeu (com a escala de stats, a campanha mostra os números grandes) */
+  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond),
+    danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
   const nums: [string, string][] = npc
     ? [[String(n), "turnos"], [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]

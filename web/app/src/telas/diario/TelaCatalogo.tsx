@@ -4,7 +4,7 @@
 import { useState } from "preact/hooks";
 import {
   CAT, DESC_PASSIVA, DESC_TECNICA, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_ESP, NOME_STAT, NOME_V2, STATS,
-  chaveSprite, nomeEstagio, nomeForma, perfilDe, type Especie, type Forma,
+  chaveSprite, nomeEstagio, nomeForma, perfilDe, vidaExibida, type Especie, type Forma,
 } from "../../../motor/index.ts";
 import { imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
@@ -45,7 +45,7 @@ function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
         const v = st[k], w = Math.max(0, Math.min(100, (v - CAT.min) / (CAT.max - CAT.min) * 100));
         return <div class="cat-stat" key={k}><span>{NOME_STAT[k]}</span><span class="dl-vida-trilho" role="img" aria-label={`${NOME_STAT[k]} ${n1(v)}`}><i style={{ width: `${w}%`, background: "var(--dl-action)" }} /></span><span class="dl-lcd">{n1(v)}</span></div>;
       })}</div>
-      <p style={{ margin: 0 }}>vida {pf.hpMax.toFixed(0)} · guts {pf.guts0.toFixed(0)} de {pf.gutsMax.toFixed(0)} · recupera {n1(pf.regen)} por turno</p>
+      <p style={{ margin: 0 }}>vida {Math.round(vidaExibida(pf)).toLocaleString("pt-BR")} · guts {pf.guts0.toFixed(0)} de {pf.gutsMax.toFixed(0)} · recupera {n1(pf.regen)} por turno</p>
       <p class="dl-apoio" style={{ margin: 0 }}>{extra}</p>
     </section>
   );

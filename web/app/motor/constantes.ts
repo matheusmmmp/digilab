@@ -155,6 +155,17 @@ export const CAT = {
   } as Record<Linha, AdultoDaLinha>,
   estagio: { bebe: .4, crianca: .6, adolescente: .8, adulto: 1 } as Record<Estagio, number>,
 };
+/* escala de stats (ConfigEscala, TAREFA_PLANILHA_PROGRESSAO Parte C): E = vida do estagio x (1 + beta x pontos);
+   no combate da CAMPANHA o dano que A causa em B vale x E_A/E_B e a vida perde o multiplicador de estagio. NPC:
+   perfil neutro, E = vida do estagio sugerido x fator, epsilon proprio. A arena contra bots nao usa a escala. */
+export const CESC = {
+  vida: { bebe: 50, crianca: 200, adolescente: 600, adulto: 1500 } as Record<Estagio, number>,
+  beta: .03,
+  fatorNpc: { npc_tier1_brutamontes: 1.1, npc_tier2_sentinela: 1.6, npc_tier2_carcereiro: 1.5, npc_tier2_porteiro: 1.1,
+    npc_tier3_soberano: 1.2 } as Record<string, number>,
+  epsNpc: .2,
+  vidaNeutra: 100,       /* hpBase + 10 x hpVigor: vida exibida = E x vida propria / vida neutra */
+};
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */
 export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };

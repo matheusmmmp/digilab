@@ -28,6 +28,8 @@ import { LUTA, REPLAY, previa, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { MeusPets } from "./telas/pet/MeusPets.tsx";
 import { TopoDesktop } from "./componentes/Topo.tsx";
+import { DicaBit } from "./componentes/Bit.tsx";
+import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
 
 const armaz = (): Storage => localStorage;
@@ -47,6 +49,18 @@ export function App() {
   const [rota, setRota] = useState<Rota>(rotaInicial);
   /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
   const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
+  /* tutorial contextual (Bit): cada momento da jornada pede a sua dica uma vez */
+  const { motor: mDica, nascendo: nascDica } = jogo;
+  useEffect(() => {
+    if (boasVindas) return;
+    const est = mDica.estagioAtual, ids: IdDica[] = [];
+    if (nascDica > 0 || (est === "bebe" && mDica.evolucoes.length === 0)) ids.push("ovo");
+    if (est === "bebe" && mDica.chamadosAbertos().length) ids.push("chamado");
+    if (est === "crianca") ids.push("rookie", "ensinar");
+    if (est === "adolescente") ids.push("champion", "lutas_treino");
+    if (est === "adulto") ids.push("adulto");
+    dicasDoMomento(ids);
+  });
   const [boasVindas, setBoasVindas] = useState(() => primeiraVisita() || location.hash === "#/inicio"), [meusPets, setMeusPets] = useState(false);
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
@@ -129,6 +143,7 @@ export function App() {
             Rode <code>python gerar_decoracao_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
+      <DicaBit />
       {config ? <>{topo}<TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
       : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} /></>
       : rota.destino === "conversar" ? <>{topo}<TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></> : (<>{topo}

@@ -14,6 +14,7 @@ import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { novoPet, useJogo } from "../../jogo.ts";
 import type { ParteConfig } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
+import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { textoSave } from "../../save.ts";
 import { NOME_TEMA, escolherTema, useTema, type Tema } from "../../tema.ts";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
@@ -65,7 +66,7 @@ function Principal({ abrir, atual = null }: { abrir: (p: ParteConfig) => void; a
   );
 }
 function Aparencia() {
-  const tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]];
+  const tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]], [dicas, setDicas] = useState(dicasLigadas);
   return (
     <div class="tela dl cfg">
       <h2 class="cfg-secao" id="cfg-tema">TEMA</h2>
@@ -77,6 +78,8 @@ function Aparencia() {
         ))}
       </div>
       <p class="dl-apoio">Sistema segue o claro ou escuro do aparelho.</p>
+      <label class="cfg-interruptor"><span><b>Mostrar dicas</b><small>o Bit explica cada coisa nova, uma vez</small></span>
+        <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
     </div>
   );
 }

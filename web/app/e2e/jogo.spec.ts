@@ -24,6 +24,8 @@ async function semear(page: Page, save: object | null, tema?: string): Promise<v
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1");
+    /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
+    localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
     if (t) localStorage.setItem(chave + "-tema", t);
   }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null] as const);
@@ -47,7 +49,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
   test(`jogo completo com save ${versao}: assinatura igual à do HTML`, async ({ page, context }) => {
     await semear(page, save);            /* a pagina de semear e um JSON: o favicon dela da 404, fora do app */
     const erros = vigiarErros(page);
-    await page.goto(APP + "#/pet/estado");
+    /* ?escala=0: a assinatura se compara com o HTML antigo, que nao tem a escala de stats (a campanha muda com ela) */
+    await page.goto(APP + "?escala=0#/pet/estado");
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".pet-cab .dl-tag--estagio")).toHaveText(/Champion/i);
 
@@ -159,6 +162,28 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390])
     expect(erros).toEqual([]);
   });
 }
+
+/* varios pets, um ativo (pedido do Matheus): a escada de exemplo e criada no primeiro acesso, os guardados ficam parados
+   no tempo (o registro deles nao muda enquanto o ativo corre) e Ativar troca o pet */
+test("vários pets: só o ativo corre o tempo", async ({ page }) => {
+  await semear(page, SAVES.v3);
+  await page.evaluate(c => localStorage.removeItem(c + "-guardados"), CHAVE);
+  await page.goto(APP + "#/pet/estado");
+  await page.waitForFunction(c => localStorage.getItem(c + "-guardados") !== null, CHAVE, { timeout: 60_000 });
+  const ler = () => page.evaluate(c => ({ g: localStorage.getItem(c + "-guardados")!, a: localStorage.getItem(c)! }), CHAVE);
+  const antes = await ler();
+  expect(JSON.parse(antes.g)).toHaveLength(6);
+  await page.waitForTimeout(3000);
+  const depois = await ler();
+  expect(depois.g).toBe(antes.g);                  /* guardados parados */
+  expect(depois.a).not.toBe(antes.a);              /* o ativo andou (o registro junta avanços de tempo seguidos) */
+  await page.locator(".topo-retrato").click();
+  await expect(page.locator(".mp-guardado")).toHaveCount(6);
+  await page.locator(".mp-g-ativar").first().click();
+  await expect(page.locator(".topo-pet .dl-tag--estagio")).toHaveText(/In-Training/i);
+  const g = JSON.parse(await page.evaluate(c => localStorage.getItem(c + "-guardados")!, CHAVE));
+  expect(g).toHaveLength(6);                       /* o Champion de antes foi para o lugar dele */
+});
 
 test("foco visível pelo teclado", async ({ page }) => {
   await semear(page, SAVES.v2);
