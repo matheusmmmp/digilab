@@ -19,14 +19,15 @@ from __future__ import annotations
 import random
 from dataclasses import replace
 
-from .config import CONFIG_DONOS, CONFIG_EDUCACAO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigDonos, ConfigEducacao
+from .config import (CONFIG_DONOS, CONFIG_DURACOES, CONFIG_EDUCACAO_LIGADA, CONFIG_PADRAO, CONFIG_TREINO, TICKS_POR_DIA,
+                     Config, ConfigDonos, ConfigEducacao)
 from .donos import DonoAtencioso, DonoRelapso, Visao, _feedback, julgar_acao
 from .educacao import NECESSIDADE, fabricas_educacao
 from .events import ACOES_TREINO, AcaoUsuario
 from .protocol import derivar_semente
 from .temperamento import Temperamento
 from .treino import CanalDeInteracao, Vida
-from .treino_vida import BRACOS_TREINO, DonoComTreino, orcamento_treino
+from .treino_vida import BRACOS_TREINO, DonoComTreino, orcamento_treino, plano_de_treino
 
 BRACOS_EDUCACAO = tuple(BRACOS_TREINO) + ("permissivo",)
 ATENDE_PRIMEIRA = {"fome": AcaoUsuario.ALIMENTAR, "higiene": AcaoUsuario.LIMPAR, "carinho": AcaoUsuario.ACARICIAR}
@@ -48,7 +49,7 @@ class DonoPermissivo(DonoAtencioso):
 
 class DonoComEducacao(DonoComTreino):
     def __init__(self, braco: str, dias: int, cfg_donos: ConfigDonos | None = None, ct=None,
-                 ce: ConfigEducacao | None = None):
+                 ce: ConfigEducacao | None = None, cfg_evo=None):
         if braco not in BRACOS_EDUCACAO:
             raise KeyError(f"braco sem dono de educacao: {braco!r}")
         super().__init__("atencioso" if braco == "permissivo" else braco, dias, cfg_donos, ct)
@@ -56,6 +57,10 @@ class DonoComEducacao(DonoComTreino):
             self.nome = braco
             self.base = DonoPermissivo(self.cfg_donos)
         self.ce = ce or CONFIG_EDUCACAO_LIGADA
+        if cfg_evo is not None:                  # slots de treino nos estagios da duracao escolhida
+            self.slots = set(plano_de_treino(dias, "exigente" if braco == "exigente" else "atencioso",
+                                             self.cfg_donos, self.ct, cfg_evo))
+            self.n_slots = len(self.slots)
         self.respostas = {"atende": 0, "bronca": 0, "petisco": 0, "elogio": 0, "banheiro": 0}
 
     def _resposta(self, visao: Visao, rng: random.Random) -> tuple[AcaoUsuario, str] | None:
@@ -95,16 +100,22 @@ class DonoComEducacao(DonoComTreino):
 
 def simular_vida_educacao(braco: str, semente: int, dias: int, especie: str, temperamento: Temperamento,
                           cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, ct=None,
-                          ce: ConfigEducacao | None = None) -> Vida:
-    """simular_vida_treino com o MotorEducacao (travessuras ligadas) e o DonoComEducacao; mesmo orcamento."""
+                          ce: ConfigEducacao | None = None, duracao: str = "teste") -> Vida:
+    """simular_vida_treino com o MotorEducacao (travessuras ligadas) e o DonoComEducacao; mesmo orcamento.
+    duracao: "teste" (a de hoje, bit a bit igual) ou "canonica" (ConfigDuracoes)."""
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     ce = ce or CONFIG_EDUCACAO_LIGADA
     passos = dias * TICKS_POR_DIA // cfg_donos.passo_ticks
-    orc, _ = orcamento_treino(dias, cfg_donos, ct)
-    fp, fm = fabricas_educacao(semente, especie, temperamento, ct=ct, ce=ce)
+    cfg_evo = None if duracao == "teste" else CONFIG_DURACOES.cfg_evo(duracao)
+    if cfg_evo is None:
+        orc, _ = orcamento_treino(dias, cfg_donos, ct)
+    else:                                        # mesma conta do orcamento_treino, com os estagios da duracao
+        ctt = ct or CONFIG_TREINO
+        orc = ctt.cuidado_por_dia * dias + len(plano_de_treino(dias, "atencioso", cfg_donos, ctt, cfg_evo))
+    fp, fm = fabricas_educacao(semente, especie, temperamento, ct=ct, ce=ce, cfg_evo=cfg_evo)
     motor = fm(fp(cfg), cfg, semente)
-    dono = DonoComEducacao(braco, dias, cfg_donos, ct, ce)
+    dono = DonoComEducacao(braco, dias, cfg_donos, ct, ce, cfg_evo)
     rng_dono = random.Random(derivar_semente("dono", semente, braco))
     canal = CanalDeInteracao(motor, orc, cfg_donos.max_interacoes_por_passo)
     for passo in range(passos):

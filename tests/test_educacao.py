@@ -426,3 +426,36 @@ def test_origem_so_na_primeira_posicao_e_com_os_tracos_herdados(pais):
     fp2, fm2 = fabricas_educacao(9, esp, sortear(9), ce=CONFIG_EDUCACAO_LIGADA)
     with pytest.raises(HerancaInvalida):
         fm2(fp2(None), None, 6001).registrar_origem(o)
+
+
+# ================================================================ parte 6: duracoes
+from digilab.config import CONFIG_DURACOES  # noqa: E402
+
+
+def test_duracao_teste_e_a_de_hoje():
+    t = CONFIG_DURACOES.cfg_evo("teste")
+    assert t == CONFIG_EVOLUCAO_PESQUISA
+    with pytest.raises(KeyError):
+        CONFIG_DURACOES.cfg_evo("rapida")
+
+
+def test_duracao_teste_explicita_bit_a_bit_igual_ao_padrao(vidas_edu):
+    esp, _ = ovo(S_EDU)
+    v = simular_vida_educacao("atencioso", S_EDU, 3, esp, sortear(S_EDU), duracao="teste")
+    assert v.motor.log.para_jsonl() == vidas_edu["atencioso"][0].motor.log.para_jsonl()
+
+
+def test_duracao_canonica_estagios_chamados_orcamento_e_replay():
+    ce = CONFIG_DURACOES.cfg_evo("canonica")
+    esp, _ = ovo(S_EDU)
+    t = sortear(S_EDU)
+    vidas = {b: simular_vida_educacao(b, S_EDU, 4, esp, t, duracao="canonica") for b in ("atencioso", "permissivo")}
+    m = vidas["atencioso"].motor
+    assert {e: d["tick"] for e, d in m.transicoes.items()} == {
+        "crianca": ce.dur_bebe_min, "adolescente": ce.dur_bebe_min + ce.dur_crianca_min,
+        "adulto": ce.dur_bebe_min + ce.dur_crianca_min + ce.dur_adolescente_min}
+    assert min(j["inicio"] for j in m.historico_janelas) >= ce.dur_bebe_min
+    assert vidas["atencioso"].interacoes == vidas["permissivo"].interacoes
+    fp, fm = fabricas_educacao(S_EDU, esp, t, ce=CONFIG_EDUCACAO_LIGADA, cfg_evo=ce)
+    r = reproduzir_educacao(m.log, fp, semente=S_EDU, fabrica_motor=fm)
+    assert r.estado() == m.estado() and r.transicoes == m.transicoes

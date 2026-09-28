@@ -6,7 +6,7 @@ governa a dinamica mora aqui e entra no PROTOCOLO.md congelado.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 TICKS_POR_DIA = 1440  # 1 tick = 1 minuto simulado
 
@@ -941,6 +941,22 @@ class ConfigEquilibrio:
     margem_max: float = 0.15
 
 
+@dataclass(frozen=True)
+class ConfigDuracoes:
+    """Sistema D: duracao (min) de bebe, crianca e adolescente. `teste` = ConfigEvolucaoPesquisa de hoje;
+    `canonica` = v-pets citados no cronograma (Ver.20th/Color: 6 h, 24 h, 36 h)."""
+
+    teste: tuple = (180, 720, 1080)
+    canonica: tuple = (360, 1440, 2160)
+
+    def cfg_evo(self, nome: str) -> "ConfigEvolucaoPesquisa":
+        if nome not in ("teste", "canonica"):
+            raise KeyError(f"duracao desconhecida: {nome!r}")
+        b, c, a = getattr(self, nome)
+        return replace(CONFIG_EVOLUCAO_PESQUISA, dur_bebe_min=b, dur_crianca_min=c, dur_adolescente_min=a)
+
+
+CONFIG_DURACOES = ConfigDuracoes()
 CONFIG_EDUCACAO = ConfigEducacao()
 CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
 CONFIG_LESOES = ConfigLesoes()

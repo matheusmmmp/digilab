@@ -533,6 +533,8 @@ _FONTES_EDUCACAO_V1 = {
     "ConfigLesoes.horas_sem_tratar_morte": (_P, "Digimon Ver.20th (6 h); " + _NV),
     "ConfigHeranca.sigma_temperamento": (_P, _SF),
     "ConfigHeranca.estagio_minimo_pais": (_P, _SF),
+    "ConfigDuracoes.teste": (_D, "Fase 0, item 8: as duracoes de hoje (ConfigEvolucaoPesquisa)"),
+    "ConfigDuracoes.canonica": (_D, "Fase 0, item 8; cronograma_interacoes.json _meta (v-pets: 6 h, 24 h, 36 h)"),
     "ConfigEquilibrio.taxa_min": (_P, _SF),
     "ConfigEquilibrio.taxa_max": (_P, _SF),
     "ConfigEquilibrio.margem_max": (_P, _SF),
@@ -542,7 +544,8 @@ _FONTES_EDUCACAO_V1 = {
 def _valor_config(nome: str) -> Any:
     classe, campo = nome.split(".")
     instancias = {"ConfigEducacao": _config.CONFIG_EDUCACAO, "ConfigLesoes": _config.CONFIG_LESOES,
-                  "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO}
+                  "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO,
+                  "ConfigDuracoes": _config.CONFIG_DURACOES}
     return getattr(instancias[classe], campo)
 
 
@@ -551,10 +554,11 @@ PARAMETROS_EDUCACAO_V1: dict[str, Campo] = {
 
 
 def validar_parametros_educacao(params: dict[str, Campo] | None = None) -> None:
-    """Todo campo das 4 dataclasses tem status e fonte, e o valor registrado bate com config.py."""
+    """Todo campo das 5 dataclasses tem status e fonte, e o valor registrado bate com config.py."""
     params = PARAMETROS_EDUCACAO_V1 if params is None else params
     esperados = {f"{type(c).__name__}.{f.name}" for c in (_config.CONFIG_EDUCACAO, _config.CONFIG_LESOES,
-                                                         _config.CONFIG_HERANCA, _config.CONFIG_EQUILIBRIO)
+                                                         _config.CONFIG_HERANCA, _config.CONFIG_EQUILIBRIO,
+                                                         _config.CONFIG_DURACOES)
                  for f in fields(c)}
     if set(params) != esperados:
         raise ValueError(f"parametros sem registro: {sorted(esperados - set(params))}; "

@@ -140,10 +140,9 @@ Nenhuma dessas regras toca a resolução do combate. Elas leem o resultado da lu
   - `teste`: 3/12/18 h (os valores de hoje, para simular rápido);
   - `canonica`: 6/24/36 h (os v-pets citados no cronograma).
   - As duas ficam em `config.py`. O protocolo novo registra qual delas usa.
-- **Relapso**: o orçamento **continua igual** entre os donos (DECIDIDO, é o que torna a comparação justa). Muda só **quando** ele aparece:
-  - 3 visitas por dia, em horas sorteadas pela RNG de política dele (hoje são fixas);
-  - quem perde as janelas de 15 min é o relapso, e é exatamente isso que o distingue.
-  - Status: PROPOSTO, sem fonte.
+- **Relapso**: o orçamento **continua igual** entre os donos (DECIDIDO, é o que torna a comparação justa). **Nada muda** (correção na Fase 2, parte 6):
+  - as 3 visitas por dia **já eram** sorteadas pela RNG de política dele (`DonoRelapso._planejar_dia`), e não fixas como este documento dizia;
+  - com as janelas de 15 min, quem as perde é o relapso: na vida de teste de 3 dias ele atende 1 de 19 avisos e 0 de 2 chamados reais. É exatamente isso que o distingue.
 - **O pet não cuida de si mesmo**: travessuras e chamados só se resolvem pela ação do dono (seção 2.2). É um teste de regressão.
 
 ## 6. Sistema E — LLM (liberado em 2026-09-28)

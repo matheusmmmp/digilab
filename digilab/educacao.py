@@ -52,6 +52,7 @@ from .obediencia import PoliticaBanditPersonalidade
 from .protocol import derivar_semente
 from .state import aplicar_acao_usuario
 from .temperamento import NEUTRO, Temperamento
+from .treino_stats import TreinoPet
 from .treino_vida import MotorTreino
 
 # necessidade que cada tipo de chamado pede (carinho -> humor)
@@ -88,9 +89,12 @@ class MotorEducacao(MotorTreino):
                  especie: str = "brasa", obediencia_desligada: bool = False, cfg_treino=None, cfg_sombrio=None,
                  cfg_educacao: ConfigEducacao | None = None, cfg_lesoes: ConfigLesoes | None = None,
                  lutador_do_pet: Callable[["MotorEducacao"], Lutador] | None = None,
-                 rival_por_nome: Callable[[str], Lutador] = rival_padrao, **kw) -> None:
+                 rival_por_nome: Callable[[str], Lutador] = rival_padrao, cfg_evo=None, **kw) -> None:
         super().__init__(politica, cfg, semente, temperamento, especie, obediencia_desligada, cfg_treino,
                          cfg_sombrio, **kw)
+        if cfg_evo is not None:
+            # parte 6: duracao dos estagios (ConfigDuracoes); o TreinoPet ainda esta no tick 0, sem nada feito
+            self.treino = TreinoPet(especie, self.ct, cfg_evo)
         self.ce = cfg_educacao or CONFIG_EDUCACAO
         self.cl = cfg_lesoes or CONFIG_LESOES
         self._rng_travessura = random.Random(derivar_semente("travessura", semente))
@@ -391,11 +395,12 @@ def fabricas_filho(origem: Origem, **kw):
 
 def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,
                       ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
-                      lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao):
+                      lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao,
+                      cfg_evo=None):
     """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay."""
     fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
     fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
                                                  obediencia_desligada=obediencia_desligada, cfg_treino=ct,
                                                  cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,
-                                                 rival_por_nome=rival_por_nome))
+                                                 rival_por_nome=rival_por_nome, cfg_evo=cfg_evo))
     return fp, fm
