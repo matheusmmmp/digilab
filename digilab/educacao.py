@@ -47,6 +47,7 @@ from .combate_v2.v21.bots import lutador_adulto
 from .combate_v2.v21.partida import Lutador, jogar
 from .config import (CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, ConfigEducacao, ConfigLesoes)
 from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, ler_luta, luta
+from .heranca import HerancaInvalida, Origem, ler_origem
 from .obediencia import PoliticaBanditPersonalidade
 from .protocol import derivar_semente
 from .state import aplicar_acao_usuario
@@ -112,6 +113,7 @@ class MotorEducacao(MotorTreino):
         self.lesionado_desde: int | None = None
         self.historico_lutas: list[dict] = []
         self.morte: dict | None = None
+        self.origem: Origem | None = None        # parte 5: filho de um cruzamento (evento `origem`, o primeiro)
 
     @staticmethod
     def _lutas_zeradas() -> dict:
@@ -200,6 +202,22 @@ class MotorEducacao(MotorTreino):
         d["educacao"] = {"disciplina": self.disciplina, "lesionado": self.lesionado_desde is not None,
                          "janela": None if j is None else {k: j[k] for k in ("tipo", "pedido", "inicio", "prazo")}}
         return d
+
+    # ------------------------------------------------------------ heranca
+    def registrar_origem(self, origem: Origem) -> None:
+        """Filho de um cruzamento: grava o evento `origem` como o PRIMEIRO do log."""
+        if len(self._log):
+            raise HerancaInvalida("a origem precisa ser o primeiro evento do log")
+        self._log.anexar(origem.evento())
+        self._aplicar_origem(origem)
+
+    def _aplicar_origem(self, origem: Origem) -> None:
+        if self.origem is not None or self._n_eventos != 0:
+            raise HerancaInvalida("evento origem fora da primeira posicao do log")
+        if origem.temperamento != self.temperamento or origem.especie != self.treino.especie:
+            raise HerancaInvalida("o motor nao tem o temperamento e a especie que a origem herda")
+        self.origem = origem
+        self._n_eventos += 1
 
     # ------------------------------------------------------------ lutas e lesoes
     def _conferir_morte(self, tick: int) -> None:
@@ -358,10 +376,17 @@ def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None,
             motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
         elif evento.tipo == "luta":
             motor._lutar(*ler_luta(evento))
+        elif evento.tipo == "origem":
+            motor._aplicar_origem(ler_origem(evento))
         else:
             raise ValueError(f"tipo de evento desconhecido no log: {evento.tipo!r}")
     motor._log = LogDeEventos(list(log))
     return motor
+
+
+def fabricas_filho(origem: Origem, **kw):
+    """fabricas_educacao com a especie e o temperamento herdados (a semente do motor vem de quem chama)."""
+    return fabricas_educacao(0, origem.especie, origem.temperamento, **kw)
 
 
 def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,

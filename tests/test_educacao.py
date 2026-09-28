@@ -358,3 +358,71 @@ def test_contadores_zeram_e_qualificacao_gravada_na_passagem_para_adulto():
     assert q["lutas"] == n == CONFIG_LESOES_LIGADA.lutas_minimas_taxa and q["vitorias"] == v
     assert q["qualifica"] == (v / n >= CONFIG_LESOES_LIGADA.limiar_taxa_vitoria)
     assert m.lutas == m._lutas_zeradas() or m.lutas["lutas"] == 0
+
+
+# ================================================================ parte 5: heranca e evento origem
+from digilab.config import CONFIG_HERANCA  # noqa: E402
+from digilab.educacao import fabricas_filho  # noqa: E402
+from digilab.heranca import HerancaInvalida, conferir_pais, cruzar, genitor, ler_origem  # noqa: E402
+from digilab.temperamento import EIXOS  # noqa: E402
+
+
+@pytest.fixture(scope="module")
+def pais():
+    out = []
+    for s, b in ((5101, "atencioso"), (5202, "permissivo")):
+        esp, t_ovo = ovo(s)
+        v = simular_vida_educacao(b, s, 2, esp, sortear(s))
+        out.append((v, genitor(v.motor.log, esp, sortear(s), t_ovo, v.motor.treino.estagio, b)))
+    return out
+
+
+def test_cruzar_e_deterministico_e_herda_dos_pais(pais):
+    (_, p), (_, m) = pais
+    assert p.estagio == m.estagio == "adulto"
+    o1, o2 = cruzar(p, m, 31, "matheus"), cruzar(p, m, 31, "matheus")
+    assert o1 == o2 and o1.especie in (p.especie, m.especie)
+    zero = cruzar(p, m, 31, "matheus", replace(CONFIG_HERANCA, sigma_temperamento=0.0))
+    for e in EIXOS:
+        assert getattr(zero.temperamento, e) == pytest.approx((p.temperamento[e] + m.temperamento[e]) / 2)
+    assert {cruzar(p, m, s, "x").especie for s in range(40)} == {p.especie, m.especie} or p.especie == m.especie
+
+
+def test_pai_que_nao_e_adulto_nao_cruza(pais):
+    (_, p), (_, m) = pais
+    with pytest.raises(HerancaInvalida):
+        cruzar(replace(p, estagio="adolescente"), m, 1, "x")
+
+
+def test_filho_rejoga_com_origem_e_confere_os_pais(pais):
+    (vp, p), (vm, m) = pais
+    o = cruzar(p, m, 77, "matheus")
+    fp, fm = fabricas_filho(o, ce=CONFIG_EDUCACAO_LIGADA)
+    f = fm(fp(None), None, 6001)
+    f.registrar_origem(o)
+    f.avancar(600)
+    f.observar(AcaoUsuario.ALIMENTAR)
+    f.avancar(600)
+    assert f.log[0].tipo == "origem"
+    r = reproduzir_educacao(f.log, fp, semente=6001, fabrica_motor=fm)
+    assert r.origem == o and r.estado() == f.estado() and r.historico_janelas == f.historico_janelas
+    assert ler_origem(f.log[0]) == o
+    conferir_pais(o, vp.motor.log, vm.motor.log)
+    with pytest.raises(HerancaInvalida):
+        conferir_pais(o, vm.motor.log, vp.motor.log)
+    with pytest.raises(ValueError):
+        reproduzir_com_feedback(f.log, fp, semente=6001, fabrica_motor=fm)
+
+
+def test_origem_so_na_primeira_posicao_e_com_os_tracos_herdados(pais):
+    (_, p), (_, m) = pais
+    o = cruzar(p, m, 77, "matheus")
+    fp, fm = fabricas_filho(o, ce=CONFIG_EDUCACAO_LIGADA)
+    f = fm(fp(None), None, 6001)
+    f.avancar(15)
+    with pytest.raises(HerancaInvalida):
+        f.registrar_origem(o)
+    esp, _ = ovo(9)
+    fp2, fm2 = fabricas_educacao(9, esp, sortear(9), ce=CONFIG_EDUCACAO_LIGADA)
+    with pytest.raises(HerancaInvalida):
+        fm2(fp2(None), None, 6001).registrar_origem(o)
