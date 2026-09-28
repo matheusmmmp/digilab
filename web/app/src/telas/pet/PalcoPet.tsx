@@ -5,7 +5,8 @@ import { useEffect, useRef } from "preact/hooks";
 import { OVO, TPD, chaveSprite, corDominante, eNoite } from "../../../motor/index.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
 import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
-import { jogoAtual, passarQuadroOvo } from "../../jogo.ts";
+import { Deco, fundoDeco } from "../../componentes/Deco.tsx";
+import { jogoAtual, passarQuadroOvo, useJogo } from "../../jogo.ts";
 
 const W = 80, H = 56, CHAO = 46;
 const ESTRELAS = [[8, 6], [22, 12], [40, 5], [57, 10], [70, 4], [14, 20], [64, 22]];
@@ -117,7 +118,14 @@ export function PalcoPet() {
     const t = setInterval(desenha, 120);
     return () => clearInterval(t);
   }, []);
-  const { motor: m, nascendo } = jogoAtual();
-  const nome = nascendo > 0 ? "ovo" : chaveSprite(m.forma);
-  return <canvas ref={ref} class="lcd" width={W} height={H} role="img" aria-label={`Tela do pet: ${nome}`} />;
+  const { motor: m, nascendo } = useJogo(), ovo = nascendo > 0;
+  const nome = ovo ? "ovo" : chaveSprite(m.forma), padrao = ovo ? fundoDeco("Icon_Pattern_2") : undefined;
+  /* ovo chocando: padrao de ovos do UP bem claro e o anel de Digivice girando atras (parado com movimento reduzido) */
+  return (
+    <div class={`lcd-caixa${ovo ? " lcd-caixa--ovo" : ""}`}>
+      {padrao && <span class="ovo-padrao" style={{ "--padrao": padrao }} aria-hidden="true" />}
+      {ovo && <Deco nome="Digivice_Circle_01" class="ovo-anel gira" />}
+      <canvas ref={ref} class="lcd" width={W} height={H} role="img" aria-label={`Tela do pet: ${nome}${ovo ? ", chocando" : ""}`} />
+    </div>
+  );
 }

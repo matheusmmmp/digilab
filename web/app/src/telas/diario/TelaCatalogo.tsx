@@ -1,13 +1,15 @@
 /* Catalogo (desenho DiarioCatalogo; porte do HTML): as 15 formas de cada brasao numa grade 5 x 3 com o recorte
-   1x de cada uma; o toque abre o detalhe com as barras dos 6 stats, vida, guts, tecnica e passiva. Stats pela
+   1x de cada uma (as que o pet ainda nao teve levam a silhueta do UP); filtro pelos brasoes do UP; o toque abre o detalhe com as barras dos 6 stats, vida, guts, tecnica e passiva. Stats pela
    formula do catalogo, sem carater e sem temperamento. */
 import { useState } from "preact/hooks";
 import {
   CAT, DESC_PASSIVA, DESC_TECNICA, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_ESP, NOME_STAT, NOME_V2, STATS,
-  chaveSprite, nomeEstagio, nomeForma, perfilDe, type Especie, type Forma,
+  chaveSprite, nomeEstagio, nomeForma, perfilDe, type Especie, type Forma, type Motor,
 } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
+import { Deco } from "../../componentes/Deco.tsx";
+import { BRASAO, ICONE } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { requisito } from "../crescer/TelaEvolucao.tsx";
 
@@ -18,11 +20,20 @@ export function formasDoBrasao(esp: Especie): Forma[] {
     ...FORMAS_AD.map(a => ({ esp, est: "adulto" as const, ramo: "sereno" as const, linha: LINHA_DA_FORMA[a], adulta: a }))];
 }
 
-function Tile({ f, sel, meu, escolher }: { f: Forma; sel: boolean; meu: boolean; escolher: () => void }) {
+/** formas que este pet ja teve (do registro: o nascimento e cada evolucao); nada novo e guardado */
+export function formasVistas(m: Motor): Set<string> {
+  const vistas = new Set<string>([chaveSprite(formasDoBrasao(m.especie)[0])]);
+  for (const ev of m.evolucoes) vistas.add(chaveSprite(ev.forma as Forma));
+  vistas.add(chaveSprite(m.forma));
+  return vistas;
+}
+
+function Tile({ f, sel, meu, vista, escolher }: { f: Forma; sel: boolean; meu: boolean; vista: boolean; escolher: () => void }) {
   const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(f)) : null;
   const h = a.tipo === "ok" ? dimSprite(a.dados, chaveSprite(f))[1] : 0, top = h > 52 ? -Math.round(h * .08) : Math.round((52 - h) / 2);
   return (
-    <button type="button" class={`cat-tile${meu ? " meu" : ""}`} role="option" aria-selected={sel} aria-label={`${nomeForma(f)}, ${nomeEstagio(f)}`} onClick={escolher}>
+    <button type="button" class={`cat-tile${meu ? " meu" : ""}`} role="option" aria-selected={sel} aria-label={`${nomeForma(f)}, ${nomeEstagio(f)}${vista ? "" : ", ainda não vista pelo seu pet"}`} onClick={escolher}>
+      {!vista && <Deco nome={ICONE.naoVisto} class="cat-nao-visto" />}
       <span class="cat-cx">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" style={{ marginTop: `${top}px` }} />}</span>
       <span class="cat-nome">{nomeForma(f)}</span>
     </button>
@@ -48,19 +59,25 @@ function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
 }
 export function TelaCatalogo() {
   const { motor: m } = useJogo(), [esp, setEsp] = useState<Especie>(m.especie), [sel, setSel] = useState(-1);
-  const formas = formasDoBrasao(esp), meu = chaveSprite(m.forma);
+  const formas = formasDoBrasao(esp), meu = chaveSprite(m.forma), vistas = formasVistas(m);
   const i = sel >= 0 && sel < formas.length ? sel : Math.max(0, formas.findIndex(f => chaveSprite(f) === meu));
   return (
     <div class="tela dl">
       <p>As 15 formas de cada brasão, com os stats de cada uma.</p>
       <details class="dl-apoio"><summary>Como funciona</summary>
         <p>Cada brasão percorre a mesma árvore (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas). Stats pela fórmula do catálogo (brasão + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do nível. Os números ainda estão em teste.</p></details>
-      <div class="dl-linha" role="group" aria-label="Brasão">
-        {ESPECIES.map(e => <button type="button" key={e} class="chip" aria-pressed={e === esp} onClick={() => { setEsp(e); setSel(-1); }}>{NOME_ESP[e]}{e === m.especie ? " (seu)" : ""}</button>)}
-        <span class="dl-apoio">{CAT.conceito[esp].split("; ").pop()}</span>
+      <h2 class="cat-brasoes-tit" id="cat-brasoes">Brasões</h2>
+      <div class="cat-brasoes" role="group" aria-labelledby="cat-brasoes">
+        {ESPECIES.map(e => (
+          <button type="button" key={e} class="cat-brasao" aria-pressed={e === esp} onClick={() => { setEsp(e); setSel(-1); }}>
+            <Deco nome={BRASAO[e].peca} class="cat-brasao-img" />
+            <span>{NOME_ESP[e]}{e === m.especie ? " (seu)" : ""}</span>
+          </button>
+        ))}
       </div>
+      <p class="dl-apoio" style={{ margin: 0 }}>{CAT.conceito[esp].split("; ").pop()}{esp === m.especie ? "" : " · as formas deste brasão ainda não foram vistas pelo seu pet"}</p>
       <div class="cat-grade" role="listbox" aria-label="Formas do brasão">
-        {formas.map((f, j) => <Tile key={chaveSprite(f)} f={f} sel={j === i} meu={chaveSprite(f) === meu} escolher={() => setSel(j)} />)}
+        {formas.map((f, j) => <Tile key={chaveSprite(f)} f={f} sel={j === i} meu={chaveSprite(f) === meu} vista={vistas.has(chaveSprite(f))} escolher={() => setSel(j)} />)}
       </div>
       <Detalhe f={formas[i]} meu={chaveSprite(formas[i]) === meu} />
       <section class="bloco"><h2>Técnicas (Champion)</h2><div class="decisoes">

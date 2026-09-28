@@ -7,9 +7,12 @@ import { Nav } from "./componentes/Nav.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { useJogo } from "./jogo.ts";
 import {
-  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco,
-  type Aba, type Destino, type Rota,
+  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, configDoEndereco, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
+  rotaDoEndereco, type Aba, type Destino, type ParteConfig, type Rota,
 } from "./rotas.ts";
+import { Deco } from "./componentes/Deco.tsx";
+import { TelaConfig } from "./telas/config/TelaConfig.tsx";
+import { DiarioAbas } from "./telas/diario/DiarioAbas.tsx";
 import { TelaCatalogo } from "./telas/diario/TelaCatalogo.tsx";
 import { TelaCenarios } from "./telas/diario/TelaCenarios.tsx";
 import { TelaRegistro } from "./telas/diario/TelaRegistro.tsx";
@@ -30,31 +33,37 @@ function primeiraVisita(): boolean {
 }
 
 function rotaInicial(): Rota {
-  return rotaDoEndereco(location.hash) ?? lerAbaLembrada(armaz()) ?? ROTA_INICIAL;
+  return rotaDoEndereco(location.hash) ?? (configDoEndereco(location.hash) ? { destino: "diario", aba: "registro" } : null) ?? lerAbaLembrada(armaz()) ?? ROTA_INICIAL;
 }
 
 export function App() {
   const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao();
   const [rota, setRota] = useState<Rota>(rotaInicial);
+  /* Configuracoes: por cima do destino (a navegacao continua no Diario, de onde se entra) */
+  const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
   const [boasVindas] = useState(primeiraVisita);
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
-    const alvo = enderecoDaRota(rota);
+    const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
     if (location.hash !== alvo) history.replaceState(null, "", alvo);
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
-    document.title = `${NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota]);
+    document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
+  }, [rota, config]);
   useEffect(() => {
-    const aoMudar = () => { const r = rotaDoEndereco(location.hash); if (r) setRota(r); };
+    const aoMudar = () => {
+      const c = configDoEndereco(location.hash); if (c) { setConfig(c); return; }
+      const r = rotaDoEndereco(location.hash); if (r) { setConfig(null); setRota(r); }
+    };
     addEventListener("hashchange", aoMudar);
     return () => removeEventListener("hashchange", aoMudar);
   }, []);
 
-  const ir = (r: Rota) => { setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
+  const ir = (r: Rota) => { setConfig(null); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
+  const abrirConfig = (p: ParteConfig) => { setConfig(p); scrollTo(0, 0); };
   const abas = DESTINOS[rota.destino];
 
   return (
@@ -84,10 +93,19 @@ export function App() {
           <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
         </header>
       )}
-      {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} /> : (
+      {config ? <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
+      : rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} abrirConfig={abrirConfig} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
-        <div class="tela-cab dl-faixa"><h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1></div>
-        {abas.length > 1 && (
+        <div class="tela-cab dl-faixa">
+          <Deco nome="TopDeco_Earth2_0" class="cab-globo" />
+          <h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1>
+          {rota.destino === "diario" && (
+            <button type="button" class="cab-engrenagem" aria-label="Configurações" onClick={() => abrirConfig("principal")}>
+              <Deco nome="Common_Icon_Setting" /><span class="cab-engrenagem-reserva" aria-hidden="true">⚙</span>
+            </button>
+          )}
+        </div>
+        {rota.destino === "diario" ? <DiarioAbas aba={rota.aba} ir={a => ir({ destino: "diario", aba: a })} /> : abas.length > 1 && (
           <div class="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
             {abas.map(a => (
               <button type="button" role="tab" key={a} class="tab" aria-selected={a === rota.aba} onClick={() => ir({ destino: rota.destino, aba: a })}>{NOME_ABA[a]}</button>

@@ -6,3 +6,142 @@
 .camp-faixa{position:relative;height:64px;margin:-4px 0 0;border-radius:10px;background-color:var(--dl-navy);background-size:cover;background-position:left center;overflow:hidden}
 .camp-faixa::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,20,48,.62),rgba(8,20,48,.3))}
 .camp-faixa span{position:absolute;left:12px;bottom:8px;z-index:1;color:#FFFFFF;font-weight:900;font-size:.8125rem;text-shadow:0 1px 2px #000}
+
+/* cabecalho das telas: globo em malha no canto (~0,2) e, no Diario, a engrenagem das Configuracoes */
+.tela-cab{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px}
+.tela-cab h1{position:relative}
+.cab-globo{position:absolute;right:-30px;top:-50px;width:150px;height:150px;opacity:.2;pointer-events:none}
+.cab-engrenagem{position:relative;margin-left:auto;width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:grid;place-items:center;padding:0;cursor:pointer}
+.cab-engrenagem .dl-deco{width:24px;height:24px;filter:brightness(0) saturate(100%) invert(18%) sepia(59%) saturate(2400%) hue-rotate(212deg)}
+.cab-engrenagem-reserva{font-size:1.4rem;line-height:1;color:var(--dl-navy)}
+.cab-engrenagem .dl-deco + .cab-engrenagem-reserva{display:none}
+.cab-engrenagem:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+
+/* abas do Diario (AssetsDiario): tiles do UP com o texto por cima da placa escura da imagem */
+.diario-abas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;border-bottom:2px solid var(--dl-border);background:var(--dl-surface)}
+.hub-tile{position:relative;border:0;padding:0;background:none;cursor:pointer;border-radius:16px;min-height:96px;color:#FFFFFF;display:block}
+.hub-tile .dl-deco{display:block;width:100%;height:auto}
+.hub-tile:not(:has(.dl-deco)){background:var(--dl-navy)}
+.hub-tile-txt{position:absolute;left:14%;right:14%;bottom:12%;display:grid;justify-items:center;line-height:1.2}
+.hub-tile-txt b{font-weight:900;font-size:.875rem;text-shadow:0 2px 0 #0F2A66}
+.hub-tile-txt small{font-size:.6875rem;font-weight:800;color:#D9ECFF}
+.hub-tile[aria-selected="true"]{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.hub-tile:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:4px;box-shadow:0 0 0 7px var(--dl-navy)}
+.hub-linha{grid-column:1/-1;display:flex;align-items:center;gap:12px;min-height:64px;padding:8px 12px;text-align:left;cursor:pointer;
+  background:var(--dl-surface);color:var(--dl-text);border:0;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.hub-linha > span:last-child{display:grid}
+.hub-linha b{font-weight:900;font-size:.9375rem}
+.hub-linha small{font-size:.75rem;font-weight:700;color:var(--dl-text-2)}
+.hub-linha-ic{width:34px;height:44px;object-fit:contain}
+.hub-linha[aria-selected="true"]{box-shadow:0 0 0 3px var(--dl-navy),0 0 0 6px var(--dl-highlight)}
+.hub-linha:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+
+/* Catalogo: brasoes do UP como filtro; silhueta nas formas que o pet ainda nao teve */
+.cat-brasoes-tit{margin:0;font-size:.75rem;font-weight:900;color:var(--dl-text-2)}
+.cat-brasoes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cat-brasao{border:0;background:none;padding:4px 0;display:grid;justify-items:center;gap:3px;color:var(--dl-text);cursor:pointer;min-height:44px;border-radius:10px;min-width:0}
+.cat-brasao span{font-size:.6875rem;font-weight:900;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-brasao-img{width:78px;max-width:100%;height:auto;aspect-ratio:295/194;opacity:.8}
+.cat-brasao[aria-pressed="true"] .cat-brasao-img{opacity:1;filter:drop-shadow(0 0 0 #FFD23F) drop-shadow(0 0 4px #FFD23F)}
+.cat-brasao[aria-pressed="true"] span{text-decoration:underline 3px var(--dl-highlight);text-underline-offset:3px}
+.cat-brasao:not(:has(.dl-deco)){box-shadow:inset 0 0 0 2px var(--dl-border)}
+.cat-brasao:not(:has(.dl-deco))[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF}
+.cat-brasao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cat-tile{position:relative}
+.cat-nao-visto{position:absolute;top:2px;right:2px;width:18px;height:18px;opacity:.85}
+
+/* Configuracoes (Cfg*) */
+.cfg-cab{min-height:68px}
+.cfg-voltar{position:relative;width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:grid;place-items:center;padding:0;cursor:pointer}
+.cfg-voltar svg{width:20px;height:20px;fill:none;stroke:var(--dl-navy);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cfg-voltar:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-cab-ic{position:relative;width:32px;height:32px;filter:drop-shadow(0 2px 0 var(--dl-navy))}
+.cfg{display:grid;gap:8px}
+.cfg-secao{margin:8px 0 0;font-size:.75rem;font-weight:900;letter-spacing:.06em;color:var(--dl-text-2)}
+.cfg-linha{display:flex;align-items:center;gap:12px;min-height:60px;padding:8px 12px;text-align:left;cursor:pointer;width:100%;
+  background:var(--dl-surface);color:var(--dl-text);border:0;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.cfg-linha:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-linha--off{cursor:default;box-shadow:none;border:2px dashed var(--dl-none-edge);background:var(--dl-none-bg);color:var(--dl-none-ink)}
+.cfg-ic{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-hex);font-size:1.25rem;overflow:hidden}
+.cfg-ic .dl-deco{max-width:34px;max-height:34px;width:auto;height:auto}
+.cfg-ic img.dl-pix{max-width:36px;height:auto}
+.cfg-txt{display:grid;min-width:0;flex:1}
+.cfg-txt b{font-weight:900;font-size:.9375rem;display:flex;align-items:center;gap:6px}
+.cfg-txt small{font-size:.75rem;font-weight:700;color:var(--dl-text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cfg-linha--off .cfg-txt small{color:var(--dl-none-ink)}
+.cfg-seta{width:18px;height:18px;flex:none;fill:none;stroke:var(--dl-text-2);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cfg-tag{background:var(--dl-force);color:var(--dl-force-ink);border-color:var(--dl-force-ink);font-size:.625rem}
+.cfg-bloco{display:grid;gap:8px}
+.cfg-bloco p{margin:0}
+.cfg-bloco-tit{margin:0;font-size:1rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.cfg-bloco-ic{width:28px;height:28px;object-fit:contain}
+.cfg-numeros{display:flex;gap:16px;flex-wrap:wrap}
+.cfg-numeros span{display:grid;font-size:.75rem;color:var(--dl-text-2)}
+.cfg-numeros b{font-size:1.25rem;color:var(--dl-text)}
+.cfg-temas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cfg-tema{display:grid;justify-items:center;gap:6px;padding:8px 4px;min-height:44px;border-radius:12px;cursor:pointer;background:var(--dl-surface);color:var(--dl-text);border:2px solid var(--dl-border);font-weight:900}
+.cfg-tema[aria-checked="true"]{border-color:var(--dl-navy);box-shadow:0 0 0 3px var(--dl-highlight)}
+.cfg-tema:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-tema-prev{width:100%;max-width:88px;height:52px;border-radius:8px;display:grid;grid-template-rows:14px 1fr;overflow:hidden;box-shadow:inset 0 0 0 2px var(--dl-border)}
+.cfg-tema-prev i:first-child{background:#2C73E0}
+.cfg-tema--claro .cfg-tema-prev i:last-child{background:#E8F0FB}
+.cfg-tema--escuro .cfg-tema-prev i:last-child{background:#0B1636}
+.cfg-tema--sistema .cfg-tema-prev i:last-child{background:linear-gradient(90deg,#E8F0FB 50%,#0B1636 50%)}
+.cfg-status{display:flex;align-items:center;gap:8px}
+.cfg-switch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;cursor:pointer}
+.cfg-switch > span{display:grid}
+.cfg-switch small{font-size:.75rem;color:var(--dl-text-2)}
+.cfg-switch input{width:44px;height:28px;flex:none}
+.cfg-modos{display:grid;gap:8px}
+.cfg-modo{display:grid;gap:2px;text-align:left;padding:10px 12px;min-height:56px;border-radius:12px;cursor:pointer;background:var(--dl-surface);color:var(--dl-text);border:2px solid var(--dl-border)}
+.cfg-modo b{font-weight:900;display:flex;align-items:center;gap:6px}
+.cfg-modo small{font-size:.75rem;color:var(--dl-text-2)}
+.cfg-modo[aria-checked="true"]{border-color:var(--dl-navy);box-shadow:0 0 0 3px var(--dl-highlight)}
+.cfg-modo:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.cfg-sobre-topo{position:relative;display:grid;justify-items:center;align-content:center;gap:6px;min-height:220px;overflow:hidden}
+.cfg-sobre-anel{position:absolute;width:220px;height:220px;opacity:.8;top:0;left:50%;margin-left:-110px}
+.cfg-sobre-nome{position:relative;font-size:2.25rem}
+.cfg-sobre-topo .dl-lcd{position:relative;background:var(--dl-navy);color:#FFFFFF;border-radius:6px;padding:2px 10px}
+
+/* atalho do tempo de teste na tela do Pet */
+.tempo-atalho{display:flex;align-items:center;gap:10px;min-height:48px;padding:6px 12px;text-align:left;cursor:pointer;width:100%;
+  background:var(--dl-surface);color:var(--dl-text);border:2px dashed var(--dl-border);border-radius:12px;font-weight:700}
+.tempo-atalho > span{display:grid}
+.tempo-atalho small{font-size:.75rem;color:var(--dl-text-2)}
+.tempo-atalho-ic{width:28px;height:28px;object-fit:contain}
+.tempo-atalho:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+
+/* anel de Digivice girando (evolucao, troca de pet, ovo chocando, Sobre); parado com movimento reduzido */
+.gira{animation:dl-gira 18s linear infinite}
+@keyframes dl-gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){ .gira{animation:none} }
+
+/* Pet: selo do brasao no cabecalho, icones das acoes, atalho de Treinar e o ovo chocando */
+.pet-cab{position:relative;overflow:hidden}
+.pet-cab > :not(.cab-globo){position:relative}
+.pet-brasao{width:34px;height:auto;aspect-ratio:295/194}
+.pet-cab-nome{flex:1 1 220px;gap:6px 8px}
+.pet-cab-nome .dl-placa{min-width:0}
+.acao-ic{width:18px;height:18px;object-fit:contain}
+.acoes-pet .dl-btn{gap:3px}
+.treinar-atalho{display:flex;align-items:center;gap:12px;min-height:64px;padding:6px 12px 6px 6px;text-align:left;cursor:pointer;width:auto;
+  background:var(--dl-surface);color:var(--dl-text);border:0;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.treinar-atalho > span{display:grid}
+.treinar-atalho-tit{display:flex;align-items:center;gap:6px;font-weight:900;font-size:.9375rem}
+.treinar-atalho small{font-size:.75rem;color:var(--dl-text-2)}
+.treinar-atalho-tile{width:64px;height:auto;aspect-ratio:489/422}
+.treinar-atalho:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.lcd-caixa{position:relative;width:100%;display:grid;justify-items:center;overflow:hidden;border-radius:10px}
+.lcd-caixa > .lcd{position:relative}
+/* o padrao do UP e branco sobre transparente: vira mascara sobre o azul do tema (claro nos dois temas) */
+.ovo-padrao{position:absolute;inset:0;background:var(--dl-action);-webkit-mask-image:var(--padrao);mask-image:var(--padrao);-webkit-mask-size:48px 48px;mask-size:48px 48px;opacity:.14}
+.ovo-anel{position:absolute;top:50%;left:50%;width:min(80%,240px);height:auto;aspect-ratio:1;margin:0;translate:-50% -50%;opacity:.45}
+
+/* Meus pets: anel de Digivice atras do pet ativo; padrao de ovos no "novo ovo" */
+.mp-titulo{display:flex;align-items:center;gap:8px}
+.mp-titulo-ic{width:28px;height:28px;object-fit:contain}
+.mp-retrato-anel{position:relative;display:grid;place-items:center;width:76px;height:76px;flex:none}
+.mp-anel{position:absolute;inset:0;width:100%;height:100%;opacity:.7}
+.mp-retrato-anel .pet-retrato{position:relative}
+.slot-novo{position:relative;overflow:hidden}
+.slot-novo::before{content:"";position:absolute;inset:0;background:var(--dl-action);-webkit-mask-image:var(--padrao);mask-image:var(--padrao);-webkit-mask-size:40px 40px;mask-size:40px 40px;opacity:.14;pointer-events:none}

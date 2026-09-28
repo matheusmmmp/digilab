@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
+import { Deco, fundoDeco } from "../../componentes/Deco.tsx";
+import { ICONE } from "../../decoracao.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
@@ -36,19 +38,22 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
     <dialog class="meus-pets dl" ref={ref} aria-labelledby="mp-titulo" onClose={fechar}>
       <div class="dl-card">
         <div class="dl-linha" style={{ justifyContent: "space-between" }}>
-          <h2 class="dl-titulo-card" id="mp-titulo">Meus pets</h2>
+          <h2 class="dl-titulo-card mp-titulo" id="mp-titulo"><Deco nome={ICONE.pets} class="mp-titulo-ic" />Meus pets</h2>
           <button type="button" class="dl-btn dl-btn--icone" aria-label="Fechar" onClick={() => ref.current?.close()}>
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15" /></svg></button>
         </div>
         <div class="mp-slots">
           <div class="slot">
-            <span class="pet-retrato" aria-hidden="true">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
+            <span class="mp-retrato-anel">
+              <Deco nome="Digivice_Circle_01" class="mp-anel gira" />
+              <span class="pet-retrato" aria-hidden="true">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
+            </span>
             <span style={{ display: "grid", gap: "4px", minWidth: 0 }}>
               <b style={{ fontWeight: 900 }}>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b>
               <span><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span> <span class="dl-tag dl-tag--ativo">ativo</span></span>
             </span>
           </div>
-          <button type="button" class="slot-novo" onClick={() => { ref.current?.close(); irRegistro(); }}>
+          <button type="button" class="slot-novo" style={{ "--padrao": fundoDeco("Icon_Pattern_2") ?? "none" }} onClick={() => { ref.current?.close(); irRegistro(); }}>
             <span class="dl-num" style={{ fontSize: "1.5rem" }} aria-hidden="true">+</span>novo ovo</button>
         </div>
         <p class="dl-apoio" style={{ margin: 0 }}>Um pet por vez: o jogo guarda o registro de um pet só. Um ovo novo apaga este pet (com confirmação, no Registro).</p>
