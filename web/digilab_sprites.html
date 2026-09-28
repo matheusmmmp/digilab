@@ -1027,6 +1027,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 
 <script>
 "use strict";
+/* @motor-inicio:nucleo (TAREFA_FRONT_TS: o gabarito de paridade extrai o motor por estas marcas) */
 /* =================================================================
    Parametros — espelho de digilab/config.py
    ================================================================= */
@@ -2723,6 +2724,7 @@ function motivoCombate(tr, lado, estilo){
 validarTabelasFala(["fadiga_treino", ...FATOR_DA_FEATURE, ...FATORES_ESPACOS, ...Object.keys(CATALOGO_V2), "vinculo_baixo", "teimosia", ...["fome","higiene","energia","humor"].map(n => "necessidade_" + n)]);
 validarTabelasPersonalidade();
 
+/* @motor-fim:nucleo */
 /* =================================================================
    Arte original em pixel (placeholders)
    ================================================================= */
@@ -2816,6 +2818,7 @@ function desenhar(ctx, grade, x0, y0, pal, opts={}){
     ctx.fillStyle = pal[ch] || "#FF00FF"; ctx.fillRect(px, y0 + y, 1, 1);
   }
 }
+/* @motor-inicio:carater */
 /* Linha de base do caráter (PROVISORIO, so na web): afinidades medias de um pet comum no
    momento de cada transicao (60 pets simulados: 4 donos x 15 sementes, 16 interacoes/dia,
    medida em 2026-09-24 com treinarPet ate 900 e 1980 min de vida).
@@ -2907,6 +2910,7 @@ function corDominante(tracos){ const af = afinidades(tracos); return COMBATE.red
 /* placeholder em grade: o adolescente usa a grade da crianca */
 const gradeDe = est => est === "adolescente" ? "crianca" : est;
 
+/* @motor-fim:carater */
 /* =================================================================
    Sprites do Digimon World (Bandai): SO USO PESSOAL E LOCAL.
    Regra em CLAUDE.md: nao publicar, nao distribuir. O atlas fica fora do
@@ -3697,6 +3701,7 @@ function renderMemoria(){
     `<div><span class="t">D${diaDe(mot.tick)} ${hhmm(mot.tick)}</span> <b>${NOME_PET[mot.acao] || (mot.recusa ? `desobedeceu (${mot.recusa.acaoDono})` : mot.acao)}</b> <span class="muted">[${mot.fatores.join(", ") || "sem fator"}]</span> ${falaDe(motor, mot)}</div>`).join("");
 }
 
+/* @motor-inicio:gambits-pet */
 /* ------------------------------------------------ gambits do pet: hibrido (PROVISORIO, so na web)
    O PET propoe e aprende: a linha evolutiva semeia a lista; depois de cada luta
    contra bot, cada regra que disparou tem a nota puxada para o saldo de dano dos
@@ -3855,6 +3860,7 @@ function rotuloCond(c){
 }
 
 /* o painel e de um pet e de uma versao da lista: redesenha quando muda */
+/* @motor-fim:gambits-pet */
 let chaveEditor = null;
 const chaveEditorAtual = () => motor.semente + "|" + digimon(motor) + "|" + (motor.gp ? motor.gp.versao : 0);
 function renderGambits(){
