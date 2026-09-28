@@ -48,8 +48,10 @@ export function aplicarEvento(m, [t, tipo, v]) {
 export function checkpoints(M, sem, versao, log) {
   const m = new M.Motor(sem, versao), pts = [ponto(m, 0)];
   let est = m.estagioAtual;
+  /* motor em TS: Motor.aplicarEvento; motor do HTML: o mesmo caminho de Motor.reproduzir */
+  const passo = typeof m.aplicarEvento === "function" ? ev => m.aplicarEvento(ev) : ev => aplicarEvento(m, ev);
   log.forEach((ev, i) => {
-    aplicarEvento(m, ev);
+    passo(ev);
     const n = i + 1;
     if (n % PASSO_CHECKPOINT === 0 || m.estagioAtual !== est || n === log.length) pts.push(ponto(m, n));
     est = m.estagioAtual;

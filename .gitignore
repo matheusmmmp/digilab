@@ -25,3 +25,7 @@ artifacts_*/
 
 # contabilidade local de gasto da fala por LLM (nao versionar)
 servidor/gasto_fala.json
+
+# jogo web em TypeScript (web/app)
+node_modules/
+web/app/dist/

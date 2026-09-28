@@ -1,0 +1,17 @@
+{
+  "name": "digilab-web",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Jogo web do Digilab em TypeScript (TAREFA_FRONT_TS). Uso pessoal; repositorio privado.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "tipos": "tsc -p tsconfig.json --noEmit",
+    "teste": "node --test \"test/*.test.mjs\""
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}
