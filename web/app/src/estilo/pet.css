@@ -367,6 +367,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 @media (max-width:419px){
   .pet-cab-placa .pet-cab-brasao{display:none}
   .pet-cab-sub .pet-cab-brasao--sub{display:inline-block}
+  .pet-cab-placa .dl-placa{font-size:14px;padding:2px 9px}
 }
 
 /* Pet no desktop (PetTelaDesktop): o topo da casca substitui o cabecalho; palco ate o fundo, Conversar ao lado da fala,

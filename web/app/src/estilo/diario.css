@@ -149,3 +149,10 @@ details.zona-risco[open]{padding-bottom:12px}
   .cfg-desk-parte > :last-child{flex-grow:0}
   .tela .cfg-desk-tit{margin:0;font-size:17px;font-weight:900}
 }
+/* linhas do registro sao botoes: tocar mostra o detalhe (folha no celular, painel da direita no desktop) */
+button.reg-linha{font:inherit;font-size:13px;font-weight:700;color:var(--dl-text);background:none;border:0;border-bottom:1px solid var(--dl-hex);width:100%;text-align:left;cursor:pointer;min-height:44px}
+button.reg-linha:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:-3px}
+button.reg-linha[aria-pressed="true"]{background:#FFF6CC;box-shadow:inset 0 0 0 2px #FFD23F;border-radius:6px}
+.reg-det--folha{display:grid;gap:6px}
+.reg-det--folha b{font-size:18px}
+.reg-det--folha .reg-tag{justify-self:start}

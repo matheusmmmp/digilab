@@ -16,3 +16,11 @@ export function abrirModal(d: HTMLDialogElement | null, voltarPara?: () => HTMLE
   }, { once: true });
 }
 export const haModalAberto = (): boolean => abertos.length > 0;
+
+/** tela cheia com rota propria (secao 7: #/inicio, #/evolucao): enquanto aberta o endereco e o dela; ao fechar volta o
+    de antes, se ninguem tiver navegado. Troca por replaceState: nao cria entrada no historico. */
+export function rotaDaTelaCheia(endereco: string): () => void {
+  const antes = location.hash;
+  if (antes !== endereco) history.replaceState(null, "", endereco);
+  return () => { if (location.hash === endereco && antes !== endereco) history.replaceState(null, "", antes); };
+}

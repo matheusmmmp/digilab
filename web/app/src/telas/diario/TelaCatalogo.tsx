@@ -11,6 +11,8 @@ import { dec } from "../../componentes/Barras.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
 import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
+import { useDesktop } from "../../desktop.ts";
+import { Folha } from "../../componentes/Folha.tsx";
 import { requisito } from "../crescer/TelaEvolucao.tsx";
 
 const n1 = (x: number): string => dec(x, 1).replace(/,0$/, "");
@@ -49,7 +51,7 @@ function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
   );
 }
 export function TelaCatalogo() {
-  const { motor: m } = useJogo(), [esp, setEsp] = useState<Especie>(m.especie), [sel, setSel] = useState(-1);
+  const { motor: m } = useJogo(), [esp, setEsp] = useState<Especie>(m.especie), [sel, setSel] = useState(-1), [folha, setFolha] = useState(false), desk = useDesktop();
   const formas = formasDoBrasao(esp), meu = chaveSprite(m.forma);
   const vistos = new Set([chaveSprite({ esp: m.especie, est: "bebe" }), ...m.evolucoes.map(x => chaveSprite(x.forma)), meu]);
   const i = sel >= 0 && sel < formas.length ? sel : Math.max(0, formas.findIndex(f => chaveSprite(f) === meu));
@@ -60,9 +62,11 @@ export function TelaCatalogo() {
         <span class="cat-vistas">{formas.filter(f => vistos.has(chaveSprite(f))).length} de {formas.length} vistas</span>
       </div>
       <div class="cat-grade" role="listbox" aria-label="Formas do brasão">
-        {formas.map((f, j) => <Tile key={chaveSprite(f)} f={f} sel={j === i} meu={chaveSprite(f) === meu} visto={vistos.has(chaveSprite(f))} escolher={() => setSel(j)} />)}
+        {formas.map((f, j) => <Tile key={chaveSprite(f)} f={f} sel={j === i} meu={chaveSprite(f) === meu} visto={vistos.has(chaveSprite(f))} escolher={() => { setSel(j); setFolha(true); }} />)}
       </div>
-      <Detalhe f={formas[i]} meu={chaveSprite(formas[i]) === meu} />
+      {/* ficha: coluna da direita no desktop; folha no celular (secao 7) */}
+      {desk ? <Detalhe f={formas[i]} meu={chaveSprite(formas[i]) === meu} />
+        : folha && <Folha titulo={`Ficha: ${nomeForma(formas[i])}`} fechar={() => setFolha(false)}><Detalhe f={formas[i]} meu={chaveSprite(formas[i]) === meu} /></Folha>}
       <details class="dl-apoio"><summary>Como funciona</summary>
         <p>Vista = forma por onde este pet passou. Cada brasão percorre a mesma árvore (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas). Stats pela fórmula do catálogo (brasão + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do nível. Os números ainda estão em teste.</p></details>
       <section class="bloco"><h2>Técnicas (Champion)</h2><div class="decisoes">

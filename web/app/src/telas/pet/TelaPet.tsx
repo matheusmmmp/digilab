@@ -22,6 +22,8 @@ import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
+import { useDesktop } from "../../desktop.ts";
+import { Folha } from "../../componentes/Folha.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -143,7 +145,10 @@ function BalaoCausa() {
     faz, a causa registrada e o detalhe */
 const MODO_CURTO: Record<string, string> = { template: "frases prontas", moldura: "moldura", livre: "fala livre" };
 function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alternar: () => void }) {
-  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM(), fl = useFalaLivre();
+  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM(), fl = useFalaLivre(), desk = useDesktop();
+  const det = <div class="fala-det" id="fala-det">
+    <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
+    <span class="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>;
   return (
     <div class="pet-fala">
       <div class="pet-fala-topo">
@@ -151,9 +156,7 @@ function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alt
           <span class="balao-txt">{v.balao}</span><small>toque para ver o porquê</small></button>
         <span class="fala-status" title={`${r.texto} · ${r.titulo}`}><span class="fala-ponto" data-estado={fl.modo === "template" ? "off" : r.estado} aria-hidden="true" />{MODO_CURTO[fl.modo]}</span>
       </div>
-      {aberto && <div class="fala-det" id="fala-det">
-        <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>{v.causa}
-        <span class="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>}
+      {aberto && (desk ? det : <Folha titulo="Por que ele disse isso" fechar={alternar}>{det}</Folha>)}
     </div>
   );
 }

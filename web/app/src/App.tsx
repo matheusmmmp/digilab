@@ -47,7 +47,7 @@ export function App() {
   const [rota, setRota] = useState<Rota>(rotaInicial);
   /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
   const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
-  const [boasVindas, setBoasVindas] = useState(primeiraVisita), [meusPets, setMeusPets] = useState(false);
+  const [boasVindas, setBoasVindas] = useState(() => primeiraVisita() || location.hash === "#/inicio"), [meusPets, setMeusPets] = useState(false);
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
   emLutaRef.current = emLuta;
@@ -56,12 +56,13 @@ export function App() {
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
     if (emLuta) { document.title = "Luta · Digilab Pet"; return; }
+    if (boasVindas) return;                      /* primeira vez aberta: o endereco e #/inicio */
     const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
     if (location.hash !== alvo) history.replaceState(null, "", alvo);
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
     document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota, config, emLuta]);
+  }, [rota, config, emLuta, boasVindas]);
   useEffect(() => {
     const aoMudar = () => {
       if (ehLuta(location.hash)) { setEmLuta(true); return; }
@@ -160,7 +161,7 @@ export function App() {
       <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {meusPets && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
-      {boasVindas && <BoasVindas fechar={() => setBoasVindas(false)} />}
+      {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); }} />}
     </div>
   );
 }

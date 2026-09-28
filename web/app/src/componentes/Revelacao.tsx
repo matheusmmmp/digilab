@@ -6,7 +6,8 @@ import {
 } from "../../motor/index.ts";
 import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
 import { Deco } from "./Deco.tsx";
-import { abrirModal } from "./modal.ts";
+import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
+import { ENDERECO_LUTA } from "../rotas.ts";
 import { useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
@@ -65,6 +66,7 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
   const ref = useRef<HTMLDialogElement>(null), f = x.forma, i = ORDEM_NIVEL.indexOf(x.estagio);
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
   useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
+  useEffect(() => (location.hash === ENDERECO_LUTA ? undefined : rotaDaTelaCheia("#/evolucao")), []);
   /* linha ja percorrida: as formas que o pet foi (so o que o motor registrou) */
   const formas: Forma[] = [{ esp: f.esp, est: "bebe" }, ...m.evolucoes.map(v => v.forma)];
   return (

@@ -249,3 +249,11 @@
   .aprend-jeito{background:var(--dl-surface);border-radius:14px;box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px}
   .aprend-jeito summary{font-weight:900;cursor:pointer;min-height:32px}
 }
+/* folha de informacao (ficha, evento, porque): ate 85% da altura, conteudo rola dentro */
+.folha--info{max-height:85dvh;padding:10px 14px 18px;background:var(--dl-bg);color:var(--dl-text);border-radius:18px 18px 0 0}
+.folha--info[open]{display:flex;flex-direction:column;gap:10px}
+.folha-topo{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.folha-topo b{font-size:17px;font-weight:900}
+.folha-x{width:44px;height:44px;flex:none;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);color:var(--dl-navy);font-size:22px;font-weight:900;cursor:pointer;line-height:1}
+.folha-x:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.folha-conteudo{overflow:auto;min-height:0;display:grid;gap:10px}

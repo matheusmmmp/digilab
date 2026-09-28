@@ -9,7 +9,9 @@ button{font:inherit}
 .dl-pix{image-rendering:pixelated;image-rendering:crisp-edges}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .app{display:flex;flex-direction:column;min-height:100dvh;min-width:0;padding-bottom:calc(96px + env(safe-area-inset-bottom))}
-.app > .aviso,.app > .boas-vindas{margin:12px 14px 0}
+.app > .boas-vindas{margin:12px 14px 0}
+/* faixa de estado (secao 7: offline, erro de save, asset que nao carregou): tira colada no topo, sem cobrir a tela */
+.app > .aviso{position:sticky;top:0;z-index:15;margin:0;border-radius:0;box-shadow:none;border-bottom:3px solid var(--dl-erro);background:#FFF1F4;padding:8px 14px;font-size:13px}
 
 /* fundos */
 .dl-hexcard{background-color:var(--dl-surface-2);background-image:var(--dl-img-hex);background-size:var(--dl-hex-tam-card)}

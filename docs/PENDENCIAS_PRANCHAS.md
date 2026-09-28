@@ -110,7 +110,21 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 | OffRemoto | existe no servidor | — | — |
 | OffEstados, OffJogando, OffSincronizando, OffConflito | proposta | sincronização entre aparelhos | servidor + save |
 
-## Barra de navegação
+## Barra de navegação e casca (DIRETRIZES_REPLICAR seções 6 e 7)
 
-Pet, Crescer, Lutar, Diário, **Conversar** (não está nas pranchas, mas fica: decisão do Matheus) e a engrenagem de
-Configurações. Layout: celular abaixo de 900 px, barra lateral de 900 px, desktop das pranchas de 1100 px.
+Celular (abaixo de 900 px): barra de baixo com Pet, Crescer, Lutar e Diário; **Conversar** e **Configurações** no
+cabeçalho do Pet, à direita do relógio. De 900 px: barra lateral de 96 px com o ovo e DIGILAB, os 4 destinos e, no pé,
+Conversar e Ajustes. De 1100 px: topo de 76 px com título, abas em pílula e mini-card do pet (retrato abre Meus pets);
+telas nas colunas das pranchas *Desktop, até o fundo.
+
+Tipos da seção 7 já no app: luta em tela cheia (`#/lutar/luta`), Resultado em modal, revelação em tela cheia
+(`#/evolucao`), primeira vez em tela cheia (`#/inicio`), Meus pets e confirmações em modal, folhas no celular (ficha do
+Catálogo, evento do Registro, porquê do balão) que no desktop viram o painel da direita, faixa de estado no topo.
+
+Ficou de fora por falta de dado pronto no motor:
+
+| prancha | falta | precisa |
+|---|---|---|
+| TreinoDesktop | **Descansar** e **Forçar treino** como botões (o forçar hoje aparece nos próprios exercícios acima de 60 de fadiga) | ação de descanso no motor; interface para o forçar |
+| CampDesktop | "melhor turno" e "regras novas" por ilha | reconstruir as lutas do lugar a partir do registro (dá, mas custa um replay por luta) |
+| ArenaDesktop | — (última luta refeita do registro, com replay no Diário) | — |
