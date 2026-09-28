@@ -4,7 +4,12 @@ Hipótese central do Digilab: treino por um dono coerente produz um pet melhor q
 mesmo volume de interação. Este plano vale para a próxima run (a confirmatória), que só roda depois de o
 Matheus aprovar este texto. Números de apoio: `artifacts_poder/` (TAREFA_ANALISE_PODER).
 
-## 1. Desenho principal — PENDENTE DE DECISÃO
+## 1. Desenho principal — DECIDIDO: B (painel fixo), condição neutra
+
+**Decisão (2026-09-28, antes da run):** o Matheus delegou a escolha ("faça o que você recomenda"). Principal = **desenho B**
+com a **condição neutra**: poder 0,78–0,82 para Δ = 0,05 contra 0,33 do A, e mede "ficou melhor contra o mundo", que é a
+pergunta da hipótese. O desenho A (os 10 pares de braços, M = 100) e a condição real rodam juntos e são **descritivos**.
+Script: `experiments/run_confirmatoria.py` → `artifacts_confirmatoria/`.
 
 | | A — confronto direto | B — painel fixo |
 |---|---|---|
@@ -18,7 +23,7 @@ Matheus aprovar este texto. Números de apoio: `artifacts_poder/` (TAREFA_ANALIS
 
 Painel B: as 8 formas adultas canônicas × 4 espécies da bateria V21C, as mesmas sementes para todos os
 pets do ovo. Os dois Δ = 0,10 não são a mesma coisa: A mede "ganha do outro braço", B mede "ficou melhor
-contra o mundo". **A escolha é do Matheus**; enquanto não houver, a run confirmatória não roda.
+contra o mundo". A escolha foi feita antes da run (seção 1).
 
 ## 2. Configuração fixa
 
@@ -26,7 +31,7 @@ contra o mundo". **A escolha é do Matheus**; enquanto não houver, a run confir
   evolução até adulto), ovos pareados (cada ovo gera um pet em cada braço).
 - Arena: combate V21C com stats normalizados (`experiments/configs/poder_pesquisa.json`), treino valendo
   `peso_ponto_combate` = 3 antes da normalização.
-- **Condição física** — PROPOSTO (confirmar com o Matheus): principal com a condição **neutra**
+- **Condição física** — DECIDIDO (ver seção 1): principal com a condição **neutra**
   (`condicao_neutra = true`), para medir o que o pet aprendeu e não o cuidado da última hora; a condição
   real roda junto e é reportada como secundária. No piloto, neutralizar a condição tirou cerca de metade do
   efeito do desenho A (0,142 → 0,075).
