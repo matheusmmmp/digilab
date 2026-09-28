@@ -24,15 +24,29 @@ Parte 3 (tambem so com a chave ligada):
     motivo: o vinculo cai `vinculo_bronca_sem_motivo`.
   - resolvem sozinhas (sem janela): acordar o pet dormindo (a acao do dono que o acorda custa humor) e
     superalimentacao (comer ja saciado, refeicao aceita ou petisco, custa saude).
+
+Parte 4 (so com ConfigLesoes.ligada): lutas fora da arena de pesquisa.
+  - `lutar(rival, semente)` grava o evento `luta` (rival + semente) e joga a partida V21C com as regras da
+    campanha; o resultado nao vai para o log: o replay joga de novo. O lutador do pet e o do rival vem de
+    fabricas injetadas (as mesmas no replay).
+  - derrota -> lesao com prob_lesao_derrota, sorteada numa rng derivada da semente da LUTA (igual entre bracos).
+  - morte: lesoes_para_morte no estagio, ou lesao sem tratar por horas_sem_tratar_morte. Depois da morte,
+    acao do dono e luta levantam PetMorto (o tempo ainda corre).
+  - tratar_lesao limpa a lesao pendente. Contadores de luta e lesao zeram ao evoluir; na passagem para adulto
+    grava-se a qualificacao por vitorias (efeito na forma: ConfigLesoes.efeito_qualificacao).
 """
 
 from __future__ import annotations
 
 import random
 from dataclasses import replace
+from typing import Callable
 
+from .campanha import REGRAS_CAMPANHA, npc
+from .combate_v2.v21.bots import lutador_adulto
+from .combate_v2.v21.partida import Lutador, jogar
 from .config import (CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, ConfigEducacao, ConfigLesoes)
-from .events import ACOES_EDUCACAO, AcaoUsuario
+from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, ler_luta, luta
 from .obediencia import PoliticaBanditPersonalidade
 from .protocol import derivar_semente
 from .state import aplicar_acao_usuario
@@ -47,6 +61,21 @@ class AcaoAindaSemEfeito(NotImplementedError):
     """Acao de educacao que existe no enum, mas cuja regra ainda nao foi implementada."""
 
 
+class PetMorto(RuntimeError):
+    """Acao do dono ou luta depois da morte."""
+
+
+def rival_padrao(nome: str, escala=None) -> Lutador:
+    """'npc:<tier>' (campanha) ou 'bot:<forma>@<especie>' (adulto canonico da bateria)."""
+    tipo, _, resto = nome.partition(":")
+    if tipo == "npc":
+        return npc(resto, escala=escala)
+    if tipo == "bot":
+        forma, especie = resto.split("@")
+        return lutador_adulto(forma, especie, escala=escala, nome=nome)
+    raise ValueError(f"rival desconhecido: {nome!r}")
+
+
 def atende(pedido: str, acao: AcaoUsuario) -> bool:
     """acao do dono que atende um chamado REAL do tipo `pedido` (carinho = mau humor: elogio tambem resolve)"""
     return (acao.value in CONFIG_EVOLUCAO_PESQUISA.atende[pedido] or (pedido == "fome" and acao is AcaoUsuario.PETISCO)
@@ -56,7 +85,9 @@ def atende(pedido: str, acao: AcaoUsuario) -> bool:
 class MotorEducacao(MotorTreino):
     def __init__(self, politica=None, cfg=None, semente: int = 42, temperamento: Temperamento = NEUTRO,
                  especie: str = "brasa", obediencia_desligada: bool = False, cfg_treino=None, cfg_sombrio=None,
-                 cfg_educacao: ConfigEducacao | None = None, cfg_lesoes: ConfigLesoes | None = None, **kw) -> None:
+                 cfg_educacao: ConfigEducacao | None = None, cfg_lesoes: ConfigLesoes | None = None,
+                 lutador_do_pet: Callable[["MotorEducacao"], Lutador] | None = None,
+                 rival_por_nome: Callable[[str], Lutador] = rival_padrao, **kw) -> None:
         super().__init__(politica, cfg, semente, temperamento, especie, obediencia_desligada, cfg_treino,
                          cfg_sombrio, **kw)
         self.ce = cfg_educacao or CONFIG_EDUCACAO
@@ -74,6 +105,17 @@ class MotorEducacao(MotorTreino):
                          "avisos": 0, "avisos_atendidos": 0, "avisos_ignorados": 0, "broncas_sem_motivo": 0,
                          "acordado": 0, "superalimentacao": 0}
         self.historico_janelas: list[dict] = []
+        # parte 4: lutas e lesoes
+        self.lutador_do_pet = lutador_do_pet
+        self.rival_por_nome = rival_por_nome
+        self.lutas = self._lutas_zeradas()
+        self.lesionado_desde: int | None = None
+        self.historico_lutas: list[dict] = []
+        self.morte: dict | None = None
+
+    @staticmethod
+    def _lutas_zeradas() -> dict:
+        return {"lutas": 0, "vitorias": 0, "derrotas": 0, "empates": 0, "lesoes": 0, "tratadas": 0}
 
     # ------------------------------------------------------------ agenda
     def _agendar(self, estagio: str, inicio: int) -> None:
@@ -89,16 +131,27 @@ class MotorEducacao(MotorTreino):
                    + c.reforco_por_petisco * self.petiscos_cedidos)
 
     def _evoluiu(self, estagio: str, tick: int) -> None:
+        adulto_com_lutas = estagio == "adulto" and self.cl.ligada
+        if adulto_com_lutas:
+            n, v = self.lutas["lutas"], self.lutas["vitorias"]
+            taxa = v / n if n else None
+            self.qualificacao_vitorias = {"lutas": n, "vitorias": v, "taxa": taxa,
+                                          "qualifica": n >= self.cl.lutas_minimas_taxa and taxa >= self.cl.limiar_taxa_vitoria,
+                                          "efeito": self.cl.efeito_qualificacao}
+        self.lutas = self._lutas_zeradas()
         super()._evoluiu(estagio, tick)
+        if adulto_com_lutas:
+            self.transicoes["adulto"]["vitorias"] = self.qualificacao_vitorias
         self.disciplina = int(self.disciplina * self.ce.fator_disciplina_ao_evoluir)
         self.acertos = 0
         self._agendar(estagio, tick)
 
     def _decisao_observada(self, transicao) -> None:
         super()._decisao_observada(transicao)          # checkpoint: pode evoluir e reagendar
+        tick = self._estado.tick
+        self._conferir_morte(tick)
         if not self.ce.ligada:
             return
-        tick = self._estado.tick
         self._expirar(tick)
         for tipo in sorted(self._proximo):
             while tick >= self._proximo[tipo]:
@@ -144,12 +197,66 @@ class MotorEducacao(MotorTreino):
     def estado(self) -> dict:
         d = super().estado()
         j = self.janela
-        d["educacao"] = {"disciplina": self.disciplina,
+        d["educacao"] = {"disciplina": self.disciplina, "lesionado": self.lesionado_desde is not None,
                          "janela": None if j is None else {k: j[k] for k in ("tipo", "pedido", "inicio", "prazo")}}
         return d
 
+    # ------------------------------------------------------------ lutas e lesoes
+    def _conferir_morte(self, tick: int) -> None:
+        if self.morte is not None or not self.cl.ligada:
+            return
+        if self.lesionado_desde is not None and tick - self.lesionado_desde >= self.cl.horas_sem_tratar_morte * 60:
+            self.morte = {"tick": tick, "causa": "lesao_sem_tratar"}
+
+    def _vivo(self) -> None:
+        if self.morte is not None:
+            raise PetMorto(f"o pet morreu no tick {self.morte['tick']} ({self.morte['causa']})")
+
+    def lutar(self, rival: str, semente: int) -> dict:
+        """Luta fora da arena de pesquisa: grava o evento e joga. Devolve o registro da luta."""
+        if not self.cl.ligada:
+            raise ValueError("luta com ConfigLesoes desligada")
+        self._vivo()
+        self._log.anexar(luta(self._estado.tick, rival, semente))
+        return self._lutar(rival, semente)
+
+    def _lutar(self, rival: str, semente: int) -> dict:
+        if not self.cl.ligada:
+            raise ValueError("evento luta no log, mas ConfigLesoes desligada")
+        tick = self._estado.tick
+        self._n_eventos += 1
+        self._checkpoint()
+        self._conferir_morte(tick)
+        self._vivo()
+        if self.lutador_do_pet is None:
+            raise ValueError("MotorEducacao sem lutador_do_pet: nao da para lutar")
+        p = jogar(self.lutador_do_pet(self), self.rival_por_nome(rival), semente, REGRAS_CAMPANHA)
+        res = "vitoria" if p.pontos_a == 1.0 else "derrota" if p.pontos_a == 0.0 else "empate"
+        self.lutas["lutas"] += 1
+        self.lutas[{"vitoria": "vitorias", "derrota": "derrotas", "empate": "empates"}[res]] += 1
+        lesao = res == "derrota" and random.Random(derivar_semente("lesao", semente)).random() < self.cl.prob_lesao_derrota
+        if lesao:
+            self.lutas["lesoes"] += 1
+            if self.lesionado_desde is None:
+                self.lesionado_desde = tick
+            if self.lutas["lesoes"] >= self.cl.lesoes_para_morte:
+                self.morte = {"tick": tick, "causa": "lesoes"}
+        reg = {"tick": tick, "rival": rival, "semente": semente, "resultado": res, "turnos": p.turnos,
+               "lesao": lesao, "estagio": self.treino.estagio}
+        self.historico_lutas.append(reg)
+        return reg
+
+    def _tratar_lesao(self, acao: AcaoUsuario, tick: int) -> None:
+        if self.lesionado_desde is not None:
+            self.lesionado_desde = None
+            self.lutas["tratadas"] += 1
+        self._contato(acao, tick)
+
     def _aplicar_acao_usuario(self, acao: AcaoUsuario) -> None:
         tick = self._estado.tick
+        if self.cl.ligada:
+            self._conferir_morte(tick)
+            self._vivo()
         self._expirar(tick)
         j = self.janela
         if j is not None and j["falso"] and acao is AcaoUsuario.ALIMENTAR:
@@ -160,6 +267,8 @@ class MotorEducacao(MotorTreino):
             self._petisco(acao, tick)
         elif acao is AcaoUsuario.LEVAR_AO_BANHEIRO:
             self._contato(acao, tick)
+        elif acao is AcaoUsuario.TRATAR_LESAO:
+            self._tratar_lesao(acao, tick)
         elif acao in ACOES_EDUCACAO:
             raise AcaoAindaSemEfeito(f"{acao.value}: regra ainda nao implementada (Fase 2, parte seguinte)")
         else:
@@ -226,16 +335,42 @@ class MotorEducacao(MotorTreino):
         self.contagem["refeicoes_recusadas"] += 1
         self._contato(acao, tick)
 
+    def estado_lutas(self) -> dict:
+        return {"lutas": dict(self.lutas), "lesionado_desde": self.lesionado_desde, "morte": self.morte}
+
     def resumo_educacao(self) -> dict:
         return {"disciplina": self.disciplina, "acertos": self.acertos, "petiscos_cedidos": self.petiscos_cedidos,
-                "contagem": dict(self.contagem)}
+                "contagem": dict(self.contagem), **self.estado_lutas()}
+
+
+def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None, semente: int = 42,
+                        fabrica_motor: Callable | None = None) -> MotorEducacao:
+    """reproduzir_com_feedback + o evento `luta`. Evento desconhecido levanta erro."""
+    from .config import CONFIG_PADRAO
+    cfg = cfg or CONFIG_PADRAO
+    if fabrica_motor is None:
+        raise ValueError("reproduzir_educacao precisa da fabrica do MotorEducacao (lutador do pet, configs)")
+    motor = fabrica_motor(politica_fabrica(cfg), cfg, semente)
+    for evento in log:
+        if evento.tipo == "avanco":
+            motor._avancar(int(evento.valor))
+        elif evento.tipo == "acao_usuario":
+            motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
+        elif evento.tipo == "luta":
+            motor._lutar(*ler_luta(evento))
+        else:
+            raise ValueError(f"tipo de evento desconhecido no log: {evento.tipo!r}")
+    motor._log = LogDeEventos(list(log))
+    return motor
 
 
 def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,
-                      ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None):
+                      ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
+                      lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao):
     """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay."""
     fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
     fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
                                                  obediencia_desligada=obediencia_desligada, cfg_treino=ct,
-                                                 cfg_educacao=ce, cfg_lesoes=cl))
+                                                 cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,
+                                                 rival_por_nome=rival_por_nome))
     return fp, fm

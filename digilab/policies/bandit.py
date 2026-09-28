@@ -44,7 +44,7 @@ ACOES = tuple(AcaoPet)
 # chamar_atencao
 CUIDADOS_QUE_ATENDEM = frozenset(
     {AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR, AcaoUsuario.PETISCO,
-     AcaoUsuario.LEVAR_AO_BANHEIRO}
+     AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO}
 )
 FEEDBACK = frozenset({AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER})
 

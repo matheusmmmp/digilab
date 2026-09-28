@@ -524,6 +524,8 @@ _FONTES_EDUCACAO_V1 = {
     "ConfigEducacao.custo_humor_acordar": (_P, _SF + "; mesma magnitude de Config.custo_repreender"),
     "ConfigEducacao.limiar_superalimentacao": (_P, _SF),
     "ConfigEducacao.custo_saude_superalimentacao": (_P, _SF),
+    "ConfigLesoes.ligada": (_D, "chave desligada por padrao, como ConfigEscala"),
+    "ConfigLesoes.efeito_qualificacao": (_P, "aguarda decisao do Matheus: o catalogo nao tem forma de vitoria"),
     "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
     "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
     "ConfigLesoes.prob_lesao_derrota": (_P, _SF),

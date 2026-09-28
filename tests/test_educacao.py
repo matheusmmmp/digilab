@@ -10,7 +10,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from digilab.config import CONFIG_EDUCACAO, CONFIG_LESOES  # noqa: E402
-from digilab.educacao import AcaoAindaSemEfeito, MotorEducacao, fabricas_educacao  # noqa: E402
+from digilab.educacao import MotorEducacao, fabricas_educacao  # noqa: E402
 from digilab.events import ACOES_EDUCACAO, ACOES_TREINO, ACOES_V1, AcaoUsuario  # noqa: E402
 from digilab.evolucao import ovo  # noqa: E402
 from digilab.protocol import (PARAMETROS_EDUCACAO_V1, Campo, Status, hash_parametros_educacao,  # noqa: E402
@@ -40,17 +40,9 @@ def test_log_sem_acao_nova_rejoga_igual_ao_motor_treino(braco):
     r = reproduzir_com_feedback(v.motor.log, fp, semente=3101, fabrica_motor=fm)
     assert isinstance(r, MotorEducacao)
     e_r, e_m = r.estado(), v.motor.estado()
-    assert e_r.pop("educacao") == {"disciplina": 0, "janela": None}
+    assert e_r.pop("educacao") == {"disciplina": 0, "lesionado": False, "janela": None}
     assert e_r == e_m
     assert r.resumo_treino() == v.motor.resumo_treino() and r.vinculo.serie == v.motor.vinculo.serie
-
-
-@pytest.mark.parametrize("acao", [AcaoUsuario.TRATAR_LESAO])
-def test_acao_nova_falha_alto(acao):
-    esp, _ = ovo(3101)
-    fp, fm = fabricas_educacao(3101, esp, sortear(3101))
-    with pytest.raises(AcaoAindaSemEfeito):
-        fm(fp(None), None, 3101)._aplicar_acao_usuario(acao)
 
 
 @pytest.mark.parametrize("acao", ACOES_EDUCACAO)
@@ -266,3 +258,103 @@ def test_desligada_nada_de_travessura_nem_consequencia():
     m.observar(AcaoUsuario.PETISCO)
     m.avancar(3 * 24 * 60)
     assert m.historico_janelas == [] and all(v == 0 for v in m.contagem.values())
+
+
+# ================================================================ parte 4: lutas, lesoes e evolucao por vitorias
+from digilab.combate_v2.v21.bots import lutador_adulto  # noqa: E402
+from digilab.config import CONFIG_LESOES_LIGADA  # noqa: E402
+from digilab.educacao import PetMorto, reproduzir_educacao  # noqa: E402
+from digilab.events import ler_luta  # noqa: E402
+
+
+def _fabricas_luta(s: int = S_EDU, cl=CONFIG_LESOES_LIGADA, forma: str = "duelista"):
+    esp, _ = ovo(s)
+    return fabricas_educacao(s, esp, sortear(s), ce=CONFIG_EDUCACAO_LIGADA, cl=cl,
+                             lutador_do_pet=lambda m: lutador_adulto(forma, esp)), esp
+
+
+def test_luta_exige_chave_e_lutador():
+    m = _motor_ligado()
+    with pytest.raises(ValueError):
+        m.lutar("npc:tier1_brutamontes", 1)
+    esp, _ = ovo(S_EDU)
+    fp, fm = fabricas_educacao(S_EDU, esp, sortear(S_EDU), cl=CONFIG_LESOES_LIGADA)
+    with pytest.raises(ValueError):
+        fm(fp(None), None, S_EDU).lutar("npc:tier1_brutamontes", 1)
+
+
+def test_lutas_no_log_rejogam_bit_a_bit_e_replay_antigo_recusa():
+    (fp, fm), _ = _fabricas_luta()
+    m = fm(fp(None), None, S_EDU)
+    for i in range(6):
+        m.avancar(60)
+        m.lutar("npc:tier2_sentinela" if i % 2 else "bot:furioso@brasa", 9000 + i)
+        m.observar(AcaoUsuario.TRATAR_LESAO)
+    lutas = [e for e in m.log if e.tipo == "luta"]
+    assert [ler_luta(e) for e in lutas] == [(h["rival"], h["semente"]) for h in m.historico_lutas]
+    r = reproduzir_educacao(m.log, fp, semente=S_EDU, fabrica_motor=fm)
+    assert r.historico_lutas == m.historico_lutas and r.estado() == m.estado()
+    assert r.resumo_educacao() == m.resumo_educacao() and r.vinculo.serie == m.vinculo.serie
+    with pytest.raises(ValueError):
+        reproduzir_com_feedback(m.log, fp, semente=S_EDU, fabrica_motor=fm)
+
+
+def test_lesao_depende_so_da_semente_da_luta():
+    (fp, fm), _ = _fabricas_luta(cl=replace(CONFIG_LESOES_LIGADA, prob_lesao_derrota=0.5))
+    a, b = fm(fp(None), None, S_EDU), fm(fp(None), None, S_EDU)
+    b.avancar(300)
+    ra = [a.lutar("npc:tier3_soberano", 7000 + i) for i in range(8)]
+    rb = [b.lutar("npc:tier3_soberano", 7000 + i) for i in range(8)]
+    for x, y in zip(ra, rb):
+        if x["resultado"] == y["resultado"] == "derrota":
+            assert x["lesao"] == y["lesao"]
+
+
+def test_lesao_sem_tratar_mata_e_depois_nada_funciona():
+    (fp, fm), _ = _fabricas_luta()
+    m = fm(fp(None), None, S_EDU)
+    m.lesionado_desde = m._estado.tick
+    m.avancar(CONFIG_LESOES_LIGADA.horas_sem_tratar_morte * 60 + 15)
+    assert m.morte is not None and m.morte["causa"] == "lesao_sem_tratar"
+    with pytest.raises(PetMorto):
+        m.observar(AcaoUsuario.ALIMENTAR)
+    with pytest.raises(PetMorto):
+        m.lutar("npc:tier1_brutamontes", 1)
+
+
+def test_tratar_a_tempo_salva():
+    (fp, fm), _ = _fabricas_luta()
+    m = fm(fp(None), None, S_EDU)
+    m.lesionado_desde = m._estado.tick
+    m.avancar(CONFIG_LESOES_LIGADA.horas_sem_tratar_morte * 60 - 30)
+    m.observar(AcaoUsuario.TRATAR_LESAO)
+    m.avancar(12 * 60)
+    assert m.morte is None and m.lesionado_desde is None      # (contador "tratadas" zera ao evoluir)
+
+
+def test_lesoes_demais_matam():
+    (fp, fm), _ = _fabricas_luta(cl=replace(CONFIG_LESOES_LIGADA, prob_lesao_derrota=1.0, lesoes_para_morte=2),
+                                 forma="vigia")
+    m = fm(fp(None), None, S_EDU)
+    for i in range(60):
+        if m.morte:
+            break
+        m.lutar("npc:tier3_soberano", 100 + i)
+    assert m.morte is not None and m.morte["causa"] == "lesoes" and m.lutas["lesoes"] == 2
+
+
+def test_contadores_zeram_e_qualificacao_gravada_na_passagem_para_adulto():
+    (fp, fm), _ = _fabricas_luta()
+    m = fm(fp(None), None, S_EDU)
+    m.avancar(CONFIG_EVOLUCAO_PESQUISA.dur_bebe_min + CONFIG_EVOLUCAO_PESQUISA.dur_crianca_min + 30)
+    assert m.treino.estagio == "adolescente"
+    for i in range(CONFIG_LESOES_LIGADA.lutas_minimas_taxa):
+        m.lutar("bot:muralha@limo", 500 + i)
+        m.observar(AcaoUsuario.TRATAR_LESAO)
+        m.avancar(15)
+    n, v = m.lutas["lutas"], m.lutas["vitorias"]
+    m.avancar(CONFIG_EVOLUCAO_PESQUISA.dur_adolescente_min)
+    q = m.transicoes["adulto"]["vitorias"]
+    assert q["lutas"] == n == CONFIG_LESOES_LIGADA.lutas_minimas_taxa and q["vitorias"] == v
+    assert q["qualifica"] == (v / n >= CONFIG_LESOES_LIGADA.limiar_taxa_vitoria)
+    assert m.lutas == m._lutas_zeradas() or m.lutas["lutas"] == 0

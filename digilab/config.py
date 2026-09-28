@@ -912,11 +912,16 @@ class ConfigEducacao:
 class ConfigLesoes:
     """Sistema C: vitorias, lesoes e evolucao (camada Color). Nao toca a resolucao do combate."""
 
+    ligada: bool = False                     # como ConfigEducacao: desligada, luta no log levanta erro
     lutas_minimas_taxa: int = 10             # igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto
     limiar_taxa_vitoria: float = 0.8
     prob_lesao_derrota: float = 0.2
     lesoes_para_morte: int = 20
     horas_sem_tratar_morte: int = 6
+    # o que a qualificacao por vitorias (>= limiar em >= lutas_minimas no adolescente) faz na forma adulta:
+    # o catalogo nao tem "forma de vitoria" (cada linha tem 2 adultas + a sombria). "registrar" = so grava
+    # a qualificacao na transicao; o efeito aguarda decisao do Matheus
+    efeito_qualificacao: str = "registrar"
 
 
 @dataclass(frozen=True)
@@ -939,5 +944,6 @@ class ConfigEquilibrio:
 CONFIG_EDUCACAO = ConfigEducacao()
 CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
 CONFIG_LESOES = ConfigLesoes()
+CONFIG_LESOES_LIGADA = ConfigLesoes(ligada=True)
 CONFIG_HERANCA = ConfigHeranca()
 CONFIG_EQUILIBRIO = ConfigEquilibrio()

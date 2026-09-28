@@ -95,6 +95,21 @@ def acao_usuario(tick: int, acao: AcaoUsuario) -> Evento:
     return Evento(tick=tick, tipo="acao_usuario", valor=acao.value)
 
 
+def luta(tick: int, rival: str, semente: int) -> Evento:
+    """educacao-v1: luta fora da arena de pesquisa. So rival e semente: o resultado e a lesao saem do
+    replay da partida. So o reproduzir_educacao entende; os replays antigos levantam erro."""
+    if "|" in rival:
+        raise ValueError(f"nome de rival com '|': {rival!r}")
+    return Evento(tick=tick, tipo="luta", valor=f"{rival}|{int(semente)}")
+
+
+def ler_luta(evento: Evento) -> tuple[str, int]:
+    if evento.tipo != "luta":
+        raise ValueError(f"evento nao e luta: {evento.tipo!r}")
+    rival, semente = str(evento.valor).rsplit("|", 1)
+    return rival, int(semente)
+
+
 class LogDeEventos:
     """Lista append-only de eventos, serializavel como JSONL."""
 
