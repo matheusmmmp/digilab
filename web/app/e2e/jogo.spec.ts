@@ -80,7 +80,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.locator(".lutar-grande").click();
     await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
     await page.getByRole("tab", { name: "Campanha" }).click();
-    await page.locator(".camp-rival button:not([disabled])").first().click();
+    await page.locator(".camp-lutar:not([disabled])").click();
     await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
     expect(await numLog(page, "l")).toBe(l0 + 2);
 

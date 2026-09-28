@@ -7,23 +7,20 @@ import {
 } from "../../../motor/index.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, imagemAtlas, quadroAgora, useAtlas } from "../../atlas.ts";
 import { dec } from "../../componentes/Barras.tsx";
+import { Peca } from "../../componentes/Imagens.tsx";
 import { falaLLM, motivoParaApi, useFalaLLM } from "../../fala.ts";
 import { S, desenharGrade, paleta } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, useLuta, type LutadorTela, type Palco } from "../../luta.ts";
 
-const XS = [[38, 58], [24, 72], [10, 86]];   /* centro do seu pet e do rival por distancia */
-const escalas = new WeakMap<HTMLCanvasElement, number>();
-function ajustarTela(cv: HTMLCanvasElement, uw: number, uh: number): number {
-  const pai = cv.parentElement, K0 = escalas.get(cv);
-  if (!pai) return K0 ?? 4;
-  const cs = getComputedStyle(pai), livre = pai.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-  if (!(livre > 0)) { if (!K0) { escalas.set(cv, 4); cv.width = uw * 4; cv.height = uh * 4; } return escalas.get(cv)!; }
-  const dpr = devicePixelRatio || 1, px = Math.max(uw, Math.floor(Math.min(livre, 640) * dpr)), K = px / uw, larg = (px / dpr) + "px";
-  if (K0 === K && cv.width === px && cv.style.width === larg) return K;
-  escalas.set(cv, K); cv.width = px; cv.height = Math.round(uh * K);
-  cv.style.width = larg; cv.style.height = (cv.height / dpr) + "px";
-  return K;
+const XS = [[27, 69], [18, 78], [10, 86]];   /* centro do seu pet e do rival por distancia (em 96 avos da largura) */
+/* geometria da prancha UpLuta, em px de CSS: arena de 420, pes em 344, sombras 120 x 18 em 334 */
+const ARENA_H = 420, PES_Y = 344, ALT_MAX = 170;
+function ajustarTela(cv: HTMLCanvasElement): { K: number; W: number } {
+  const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 390, K = devicePixelRatio || 1;
+  const bw = Math.round(W * K), bh = Math.round(ARENA_H * K);
+  if (cv.width !== bw || cv.height !== bh) { cv.width = bw; cv.height = bh; cv.style.width = W + "px"; cv.style.height = ARENA_H + "px"; }
+  return { K, W };
 }
 function quadroLutador(tr: Turno | null, lado: 0 | 1): number {
   if (!tr) return 0;
@@ -31,44 +28,61 @@ function quadroLutador(tr: Turno | null, lado: 0 | 1): number {
   const a = lado === 0 ? tr.a : tr.b;
   return ["golpe_rapido", "disparo", "pesado", "preparar_pesado"].includes(a) ? 2 : 0;
 }
-/** desenha a arena: fundo do UP, os dois lutadores e o "!" de quem prepara o pesado */
+/** desenha a arena: fundo do UP (PVP_Bg_Octagon, largura inteira, centro a 38%), sombras, os dois lutadores em escala
+    inteira comum (ate 3x) e o "!" de quem prepara o pesado */
 function desenharArena(cv: HTMLCanvasElement, p: Palco): void {
   const cx = cv.getContext("2d"); if (!cx) throw new Error("canvas 2d indisponível");
-  const K = ajustarTela(cv, 96, 48), a = atlasAtual(), ok = a.tipo === "ok";
-  /* escala inteira comum aos dois lutadores (ate 3x, guia secao 5): a maior que cabe na altura do palco */
+  const { K, W } = ajustarTela(cv), a = atlasAtual(), ok = a.tipo === "ok";
+  cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height);
   const alt = ok ? [p.A, p.B].map(L => dimSprite(a.dados, L.sprite)[1]) : [];
-  const escLuta = alt.length ? Math.max(1, Math.min(3, Math.floor(34 * K / (Math.max(...alt) * escalaSprite())))) : 1;
-  cx.setTransform(K, 0, 0, K, 0, 0); cx.imageSmoothingEnabled = false;
+  const escLuta = alt.length ? Math.max(1, Math.min(3, Math.floor(ALT_MAX / Math.max(...alt)))) : 3;
   if (ok) {
-    /* fundo de arena do UP (pintura): faixa central do octogono cobrindo o palco, com suavizacao */
     const r = a.dados.pecas.fundo_arena; if (!r) throw new Error("peça do atlas ausente: fundo_arena");
-    const sh = Math.round(r[2] * 48 / 96);
-    cx.save(); cx.setTransform(1, 0, 0, 1, 0, 0); cx.imageSmoothingEnabled = true;
-    cx.drawImage(a.img, r[0], r[1] + Math.round((r[3] - sh) * .55), r[2], sh, 0, 0, cv.width, cv.height); cx.restore();
-    cx.fillStyle = "rgba(11,42,94,.35)"; cx.fillRect(0, 38, 96, 10);
-  } else {
-    cx.fillStyle = "#0F3A86"; cx.fillRect(0, 0, 96, 48);
-    cx.fillStyle = "#0B2A5E"; cx.fillRect(0, 38, 96, 10);
-  }
-  const [xa, xb] = XS[p.E.dist];
+    let esc = W / r[2]; if (r[3] * esc < ARENA_H) esc = ARENA_H / r[3];
+    const dw = r[2] * esc, dh = r[3] * esc;
+    cx.imageSmoothingEnabled = true;
+    cx.drawImage(a.img, r[0], r[1], r[2], r[3], Math.round((W - dw) / 2 * K), Math.round((ARENA_H - dh) * .38 * K), Math.round(dw * K), Math.round(dh * K));
+  } else { cx.fillStyle = "#0B1A44"; cx.fillRect(0, 0, cv.width, cv.height); }
+  cx.imageSmoothingEnabled = false;
+  const [xa, xb] = XS[p.E.dist].map(x => x / 96 * W);
+  cx.fillStyle = "rgba(0,0,0,.45)";
+  for (const x of [xa, xb]) { cx.beginPath(); cx.ellipse(x * K, (PES_Y - 1) * K, 60 * K, 9 * K, 0, 0, Math.PI * 2); cx.fill(); }
   const lutador = (L: LutadorTela, x: number, q: number, esquerda: boolean): number => {
     if (a.tipo === "ok") {
       /* UP: so o idle; nocaute (q 3) para no quadro 0 e fica apagado. Os sprites olham para a direita: o rival
          e espelhado (o espelho vale so na luta, guia secao 5) */
       const [w, h] = dimSprite(a.dados, L.sprite), e = escalaSprite() * escLuta;
       if (q === 3) cx.globalAlpha = .45;
-      desenharSprite(cx, a, L.sprite, x * K - w * e / 2, 40 * K - h * e, e, quadroAgora(a, L.sprite, q === 3), { sombria: L.sombra, espelho: !esquerda });
+      desenharSprite(cx, a, L.sprite, x * K - w * e / 2, PES_Y * K - h * e, e, quadroAgora(a, L.sprite, q === 3), { sombria: L.sombra, espelho: !esquerda });
       cx.globalAlpha = 1;
       return h * e / K;
     }
     const g = S[L.grade], w = Math.max(...g.map(l => l.length));
-    desenharGrade(cx, g, Math.round(x - w / 2), 40 - g.length, paleta(L.cor), { espelho: !esquerda, olhosFechados: q === 3 });
-    return g.length;
+    cx.setTransform(3 * K, 0, 0, 3 * K, 0, 0);
+    desenharGrade(cx, g, Math.round(x / 3 - w / 2), Math.round(PES_Y / 3) - g.length, paleta(L.cor), { espelho: !esquerda, olhosFechados: q === 3 });
+    cx.setTransform(1, 0, 0, 1, 0, 0);
+    return g.length * 3;
   };
   const ha = lutador(p.A, xa, quadroLutador(p.tr, 0), true), hb = lutador(p.B, xb, quadroLutador(p.tr, 1), false);
   const pal = paleta("carga");
-  if (p.E.L[0].prep) desenharGrade(cx, S.exclam, xa - 3, 40 - ha - 9, pal);
-  if (p.E.L[1].prep) desenharGrade(cx, S.exclam, xb - 3, 40 - hb - 9, pal);
+  cx.setTransform(3 * K, 0, 0, 3 * K, 0, 0);
+  if (p.E.L[0].prep) desenharGrade(cx, S.exclam, Math.round(xa / 3) - 3, Math.round((PES_Y - ha) / 3) - 9, pal);
+  if (p.E.L[1].prep) desenharGrade(cx, S.exclam, Math.round(xb / 3) - 3, Math.round((PES_Y - hb) / 3) - 9, pal);
+  cx.setTransform(1, 0, 0, 1, 0, 0);
+}
+/** um lado do HUD (prancha UpLuta): retrato de 34 px, nome, vida (9 px) e guts (5 px) */
+function Lado({ L, s, rot, rival }: { L: LutadorTela; s: EstadoLuta["L"][number]; rot: string; rival?: boolean }) {
+  const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, L.sprite) : null;
+  return (
+    <div class={`hud-lado${rival ? " hud-lado--rival" : ""}`} title={L.estiloTela ? `${L.nomeTela} (${L.estiloTela})` : L.nomeTela}>
+      <span class="hud-ret">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
+      <span class="hud-txt">
+        <span class="hud-nome">{L.nomeTela}<span class="sr-only"> {Math.max(0, s.hp).toFixed(0)} de vida, guts {Math.round(s.guts)}</span></span>
+        <span class="hud-vida" role="img" aria-label={`vida ${rot}`}><i style={{ width: `${Math.max(0, s.hp / s.hpMax * 100)}%` }} /></span>
+        <span class="hud-guts" role="img" aria-label={`guts ${rot}`}><i style={{ width: `${s.guts / s.gutsMax * 100}%` }} /></span>
+      </span>
+    </div>
+  );
 }
 function Cena({ p }: { p: Palco }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -80,23 +94,19 @@ function Cena({ p }: { p: Palco }) {
     return () => clearInterval(t);
   }, [p, p.E, p.tr]);
   return (
-    <div class="luta-cena">
-      <span class="dl-tag luta-dist">distância: {DIST[p.E.dist]}</span>
+    <section class="luta-arena" aria-label="Palco da luta">
       <canvas ref={ref} class="arena-cv" width={96} height={48} role="img" aria-label={`Arena: ${p.A.nomeTela} contra ${p.B.nomeTela}`} />
-      {p.callout && <span class="luta-callout dl-num">{p.callout}</span>}
-    </div>
-  );
-}
-function NomeTopo({ L }: { L: LutadorTela }) {
-  return <span class="luta-nome" title={L.estiloTela ? `${L.nomeTela} (${L.estiloTela})` : L.nomeTela}><b>{L.nomeTela}</b>{L.estiloTela && <small>{L.estiloTela}</small>}</span>;
-}
-function Vida({ L, s, rot }: { L: LutadorTela; s: EstadoLuta["L"][number]; rot: string }) {
-  return (
-    <div class="luta-vida">
-      <div class="dl-vida-topo"><NomeTopo L={L} /><span class="dl-lcd">{Math.max(0, s.hp).toFixed(0)}<span class="sr-only"> de vida, guts {Math.round(s.guts)}</span></span></div>
-      <div class="dl-vida-trilho" role="img" aria-label={`vida ${rot}`}><i style={{ width: `${Math.max(0, s.hp / s.hpMax * 100)}%` }} /></div>
-      <div class="luta-guts" role="img" aria-label={`guts ${rot}`}><i style={{ width: `${s.guts / s.gutsMax * 100}%` }} /></div>
-    </div>
+      <div class="luta-hud">
+        <Lado L={p.A} s={p.E.L[0]} rot="do seu pet" />
+        <div class="hud-meio">
+          <div class="turno-hex" aria-label="turno"><small>TURNO</small><b class="dl-num">{p.turno ?? "–"}</b></div>
+          <span class="luta-dist">{DIST[p.E.dist]}</span>
+        </div>
+        <Lado L={p.B} s={p.E.L[1]} rot="do rival" rival />
+      </div>
+      {p.E.L[1].prep && <span class="luta-intencao-balao"><b class="luta-exclam">!</b>golpe pesado</span>}
+      {p.callout && <span class="luta-callout dl-num dl-num--amarelo">{p.callout}</span>}
+    </section>
   );
 }
 /** regra que o pet usou neste turno; travar e vetar direto daqui (so regras do proprio pet) */
@@ -114,11 +124,11 @@ function RegraUsada({ ma, A }: { ma: MotivoCombate; A: LutadorTela }) {
   };
   return (
     <div class="luta-regra-card dl-malha">
-      <span class="luta-regra-cab">REGRA QUE {A.nomeTela.toUpperCase()} USOU</span>
+      <span class="luta-regra-topo"><span class="luta-regra-cab">REGRA QUE {A.nomeTela.toUpperCase()} USOU</span><span class="luta-regra-sub">aprendida</span></span>
       <span class="luta-regra-txt">{final ? `sempre → ${NOME_V2[g.final]}` : rotuloRegra(r!)}</span>
-      {doPet && !vetada && !msg && <span class="dl-linha">
-        <button type="button" class="dl-btn dl-btn--sec" onClick={() => intervir(trav ? "destravar" : "travar")}>{trav ? "Destravar" : "Travar"}</button>
-        <button type="button" class="dl-btn dl-btn--sec" onClick={() => intervir("vetar")}>Vetar</button></span>}
+      {doPet && !vetada && !msg && <span class="luta-regra-bts">
+        <button type="button" class="regra-travar" onClick={() => intervir(trav ? "destravar" : "travar")}><Peca nome="icone_cadeado" />{trav ? "Destravar" : "Travar"}</button>
+        <button type="button" class="regra-vetar" onClick={() => intervir("vetar")}>Vetar</button></span>}
       {msg && <span class="dl-apoio">{msg}</span>}
     </div>
   );
@@ -153,7 +163,7 @@ function Log({ p }: { p: Palco }) {
       {p.log.map(l => {
         /* o tom da fala do seu pet na luta segue o humor dele na vida */
         const resp = falaLLM(motivoParaApi(l.ma, []), l.estPet, l.humor), pet = resp && resp.fonte === "llm" ? "✦ " + resp.texto : expressar(l.ma, l.estPet, l.ma.refs);
-        return <li key={l.t}><span class="dl-lcd">T{l.t}</span> <b>{l.pet}</b>: {pet} · <b>{l.rival}</b>: {expressar(l.mb, l.estRival, l.mb.refs)}</li>;
+        return <li key={l.t}><span class="luta-t">T{l.t}</span> <b>{l.pet}</b>: {pet} · <b>{l.rival}</b>: {expressar(l.mb, l.estRival, l.mb.refs)}</li>;
       })}
     </ol>
   );
@@ -163,17 +173,14 @@ export function PalcoLuta({ voltarPet }: { voltarPet: () => void }) {
   if (!p) return null;
   return (
     <div class="palco-luta dl">
-      <div class="luta-topo">
-        <Vida L={p.A} s={p.E.L[0]} rot="do seu pet" />
-        <div class="turno-hex" aria-label="turno"><span class="dl-lcd">TURNO</span><b class="dl-num">{p.turno ?? "–"}</b></div>
-        <Vida L={p.B} s={p.E.L[1]} rot="do rival" />
-      </div>
       <Cena p={p} />
-      <div aria-live="polite">{p.intencao && <span class="dl-balao luta-intencao"><b class="luta-exclam">!</b> {p.intencao}</span>}</div>
-      {p.regra && <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} />}
-      <p class="dl-apoio luta-turno">{p.texto}</p>
-      {p.resultado && <Resultado p={p} voltarPet={voltarPet} />}
-      <Log p={p} />
+      <div class="palco-luta-baixo">
+        <div aria-live="polite">{p.intencao && <div class="luta-intencao"><b class="luta-exclam">!</b><span>{p.intencao}</span></div>}</div>
+        {p.regra && <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} />}
+        <p class="dl-apoio luta-turno">{p.texto}</p>
+        {p.resultado && <Resultado p={p} voltarPet={voltarPet} />}
+        <Log p={p} />
+      </div>
     </div>
   );
 }
