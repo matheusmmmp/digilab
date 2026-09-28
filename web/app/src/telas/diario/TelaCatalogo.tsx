@@ -52,7 +52,7 @@ export function TelaCatalogo() {
   const vistos = new Set([chaveSprite({ esp: m.especie, est: "bebe" }), ...m.evolucoes.map(x => chaveSprite(x.forma)), meu]);
   const i = sel >= 0 && sel < formas.length ? sel : Math.max(0, formas.findIndex(f => chaveSprite(f) === meu));
   return (
-    <div class="tela dl">
+    <div class="tela dl cat-tela">
       <div class="cat-brasoes" role="group" aria-label="Brasão">
         {ESPECIES.map(e => <button type="button" key={e} class="chip" aria-pressed={e === esp} onClick={() => { setEsp(e); setSel(-1); }}>{NOME_ESP[e]}</button>)}
         <span class="cat-vistas">{formas.filter(f => vistos.has(chaveSprite(f))).length} de {formas.length} vistas</span>

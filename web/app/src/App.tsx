@@ -3,6 +3,7 @@
 import { useEffect, useState } from "preact/hooks";
 import { useAtlas } from "./atlas.ts";
 import { Nav } from "./componentes/Nav.tsx";
+import { BoasVindas } from "./componentes/BoasVindas.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { nomeForma } from "../motor/index.ts";
 import { Deco } from "./decoracao.tsx";
@@ -39,7 +40,7 @@ function rotaInicial(): Rota {
 export function App() {
   const jogo = useJogo(), atlas = useAtlas();
   const [rota, setRota] = useState<Rota>(rotaInicial);
-  const [boasVindas] = useState(primeiraVisita);
+  const [boasVindas, setBoasVindas] = useState(primeiraVisita);
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
@@ -74,12 +75,6 @@ export function App() {
           <p>{atlas.erro}. Rode <code>python gerar_atlas_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
-      {boasVindas && (
-        <header class="boas-vindas">
-          <h1 class="dl-num">DIGILAB</h1>
-          <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
-        </header>
-      )}
       {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
         : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
@@ -103,6 +98,7 @@ export function App() {
       </section>)}
       <Nav atual={rota.destino} ir={irDestino} />
       <RevelacaoEvolucao />
+      {boasVindas && <BoasVindas fechar={() => setBoasVindas(false)} />}
     </div>
   );
 }

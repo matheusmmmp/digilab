@@ -225,3 +225,29 @@
   .tela .camp-det{margin:0}
 }
 @media (max-width:1099px){ .camp-principal,.camp-lado{display:contents} }
+/* fim da luta (UpResultado) */
+.luta-res{display:grid;gap:10px;justify-items:stretch}
+.res-cab{display:grid;gap:2px;padding:14px;border-radius:14px 14px 0 0;margin:0 -2px}
+.res-tag{justify-self:start;background:#FFFFFF;color:var(--dl-navy);border-radius:6px;font-weight:900;font-size:12px;padding:1px 10px}
+.res-cab h3{margin:4px 0 0;font-size:30px;line-height:34px}
+.res-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.res-pet{grid-row:span 2;position:relative;min-height:190px;border-radius:10px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;padding:8px 4px;overflow:hidden}
+.res-pet::before{content:"";position:absolute;left:12px;right:12px;bottom:30px;height:40px;background:var(--dl-img-anel) center/100% 100% no-repeat}
+.res-pet img{position:relative;max-width:none}
+.res-pet .dl-placa{position:relative;font-size:15px;padding:3px 14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-num{background:var(--dl-surface);border-radius:10px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:6px;display:flex;flex-direction:column;gap:4px}
+.res-num .dl-placa{font-size:12px;padding:2px 12px;align-self:flex-start}
+.res-num .dl-num{font-size:30px;text-align:right;padding-right:4px}
+.res-regra{display:flex;align-items:center;gap:10px;border-radius:10px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.5);padding:8px 10px;color:var(--dl-learned-ink)}
+.res-regra-ic{width:44px;height:44px;flex:none;border-radius:50%;background:var(--dl-plate);border:2px solid var(--dl-learned);display:flex;align-items:center;justify-content:center}
+.res-regra > span:last-child{display:grid;gap:2px}
+.res-regra b{font-size:11px;color:var(--dl-learned)}
+.res-regra > span:last-child > span{font-weight:900;font-size:15px;line-height:20px}
+.res-regra small{font-size:11px;color:var(--dl-learned-sub)}
+.res-rival{display:flex;align-items:center;gap:10px;background:var(--dl-surface);border-radius:10px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);padding:8px 10px}
+.res-rival-spr{width:44px;height:44px;flex:none;border-radius:10px;background:var(--dl-rival-bg);overflow:hidden;display:flex;align-items:flex-start;justify-content:center}
+.res-rival-spr img{max-width:none}
+.res-rival > span:last-child{display:grid;gap:2px}
+.res-rival b{font-size:14px}
+.res-rival > span:last-child > span{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.res-voltar{justify-self:center;min-width:220px;min-height:52px;font-size:16px}

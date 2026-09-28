@@ -35,7 +35,7 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   return (
-    <div class="tela dl">
+    <div class="tela dl reg-tela">
       <section class="dl-card reg-cab">
         <p>O estado do pet nunca é salvo. Só este registro, e a vida é reconstruída a partir dele.</p>
         <p class="reg-semente"><b>semente</b> <span class="dl-lcd">{m.semente}</span> · <span class="dl-lcd">{m.log.length}</span> <b>eventos</b></p>
@@ -54,6 +54,12 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
           return <div class={`reg-linha${h.quem === "recusa" ? " reg-linha--recusa" : ""}`} key={i}><span class="dl-lcd">D{diaDe(h.t)} {hhmm(h.t)}</span><span class={`reg-tag reg-${cor}`}>{rot}</span><span>{textoLinha(h)}</span></div>;
         }) : <div class="dl-apoio">nada deste tipo nas últimas 80 linhas</div>}
       </div>
+      {vis[0] && <section class="dl-card reg-det" aria-label="Último evento">
+        <span class="dl-lcd">D{diaDe(vis[0].t)} {hhmm(vis[0].t)}</span>
+        <b>{textoLinha(vis[0])}</b>
+        <span class={`reg-tag reg-${TIPO_REG[vis[0].quem][2]}`}>{TIPO_REG[vis[0].quem][1]}</span>
+        <span class="dl-apoio">último evento{filtro === "todos" ? "" : " deste filtro"}</span>
+      </section>}
       <p class="dl-apoio">Linhas reconstruídas do registro: {nh > 80 ? `as últimas 80 de ${nh}` : `${nh}`}.</p>
       <details class="zona-risco">
         <summary>Novo ovo (apaga este pet)</summary>

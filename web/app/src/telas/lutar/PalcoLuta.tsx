@@ -133,6 +133,9 @@ function RegraUsada({ ma, A }: { ma: MotivoCombate; A: LutadorTela }) {
     </div>
   );
 }
+/** fim da luta (prancha UpResultado): faixa com o lugar e o resultado, o seu pet no palco, turnos e fintas, a regra
+    reforcada nesta luta e o rival derrotado (ou que venceu). Experiencia, vinculo ganho e o elogio a uma jogada da luta
+    ainda nao existem no motor (docs/PENDENCIAS_PRANCHAS.md). */
 function Resultado({ p, voltarPet }: { p: Palco; voltarPet: () => void }) {
   const { motor: m } = useJogo(), a = useAtlas(), r = p.resultado!, res = r.res, venceu = res.pontosA === 1, empate = res.pontosA !== 1 && res.pontosA !== 0;
   const onde = r.npc ? NPC[r.npc]!.lugar : "Arena", fintas = res.turnos.filter(tr => tr.a === "fintar").length;
@@ -141,19 +144,25 @@ function Resultado({ p, voltarPet }: { p: Palco; voltarPet: () => void }) {
     const gp = m.gp, ganhos = gp.ativas.filter(k => k in r.notasAntes!).map(k => [k, gp.notas[k] - r.notasAntes![k]] as [string, number]).filter(([, d]) => d > 1e-9).sort((x, y) => y[1] - x[1]);
     if (ganhos.length) reforcada = ganhos[0];
   }
-  const img = a.tipo === "ok" ? imagemAtlas(a, p.B.sprite) : null;
+  const rival = a.tipo === "ok" ? imagemAtlas(a, p.B.sprite) : null, eu = a.tipo === "ok" ? imagemAtlas(a, p.A.sprite, Math.max(1, Math.min(3, Math.floor(150 / dimSprite(a.dados, p.A.sprite)[1])))) : null;
+  const resTxt = venceu ? "vitória" : empate ? "empate" : "derrota";
   return (
-    <div class="dl-card luta-res">
-      <span class="dl-placa dl-placa--inclinada">{onde} · {venceu ? "vitória" : empate ? "empate" : "derrota"}</span>
-      <span class="luta-res-rival">{img && <img class="dl-pix" src={img.url} alt="" style={venceu ? { filter: "grayscale(1)", opacity: .6 } : {}} />}
-        <span><b>{p.B.nomeTela}</b> {venceu ? "derrotado" : empate ? "empatou" : "venceu"}<br />
-          <span class="dl-apoio">{res.turnos.length} turnos · {res.fim === "ko" ? "nocaute" : "limite de turnos"}{fintas ? ` · ${fintas} finta${fintas > 1 ? "s" : ""}` : ""}</span></span></span>
-      {reforcada && <div class="luta-regra-card dl-malha"><span class="luta-regra-cab">REGRA REFORÇADA NESTA LUTA</span>
-        <span class="luta-regra-txt">{rotuloRegra(regraDe(reforcada[0]))}</span><span class="dl-apoio" style={{ color: "#BDEFFF" }}>nota +{dec(reforcada[1], 2)}</span></div>}
+    <section class="luta-res" aria-label="Fim da luta">
+      <div class="res-cab dl-faixa"><span class="res-tag">{onde} · {resTxt}</span><h3 class="dl-num">{venceu ? "Vitória!" : empate ? "Empate" : "Derrota"}</h3></div>
+      <div class="res-grade">
+        <div class="res-pet dl-hexcard">{eu && <img class="dl-pix" src={eu.url} width={eu.w} height={eu.h} alt="" />}<span class="dl-placa">{p.A.nomeTela}</span></div>
+        <div class="res-num"><span class="dl-placa">Turnos</span><span class="dl-num">{res.turnos.length}</span></div>
+        <div class="res-num"><span class="dl-placa">Fintas</span><span class="dl-num">{fintas}</span></div>
+      </div>
+      {reforcada && <div class="res-regra dl-malha"><span class="res-regra-ic"><Peca nome="emoji_espadas" escala={2} /></span>
+        <span><b>REGRA REFORÇADA NESTA LUTA</b><span>{rotuloRegra(regraDe(reforcada[0]))}</span><small>nota +{dec(reforcada[1], 2)}</small></span></div>}
+      <div class="res-rival"><span class="res-rival-spr">{rival && <img class="dl-pix" src={rival.url} width={rival.w} height={rival.h} alt="" style={venceu ? { filter: "grayscale(1)" } : {}} />}</span>
+        <span><b>{p.B.nomeTela} {venceu ? "derrotado" : empate ? "empatou" : "venceu"}</b>
+          <span>{resTxt} em {res.turnos.length} turnos · {res.fim === "ko" ? "nocaute" : "limite de turnos"}{fintas ? ` · ${fintas} finta${fintas > 1 ? "s" : ""}` : ""}</span></span></div>
       {m.estagioAtual === "adolescente" && !r.cenario && <span class="dl-apoio">lutas de treino para evoluir: {Math.min(m.sparring, CAT.sparring)} de {CAT.sparring}</span>}
       {r.cenario && <span class="dl-apoio">Contra pet de cenário o seu não aprende.</span>}
-      <button type="button" class="dl-btn dl-btn--sec" onClick={voltarPet}>Voltar ao pet</button>
-    </div>
+      <button type="button" class="dl-btn res-voltar" onClick={voltarPet}>Voltar ao pet</button>
+    </section>
   );
 }
 function Log({ p }: { p: Palco }) {

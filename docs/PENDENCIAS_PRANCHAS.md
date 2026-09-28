@@ -28,7 +28,8 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 | EvoPorque | parcial | tela "Por que esta linha" com o caráter na hora da evolução, "nasceu cauteloso → virou impetuoso" e o botão **Ver na árvore** | interface (dados do motor: carater das evolucoes) |
 | EvoRumo | parcial | tela "Rumo ao adulto": os dois adultos da linha, "paciência hoje", o que falta (tempo, lutas de treino) | interface |
 | EvoSombria | parcial | aviso "Caminho sombrio à vista" na árvore quando a sobrecarga se aproxima de 60 | interface |
-| EvoCrianca, UpEvolucao, AssetsEvolucao | parcial | revelação com metades do brasão se juntando, anel de Digivice girando e brilhos (decoração já carrega) | interface |
+| EvoCrianca, UpEvolucao | existe | tela cheia no celular e modal no desktop (decisão do Matheus); o "por que" do Champion mostra os 4 eixos (a prancha mostra 2) | — |
+| AssetsEvolucao | parcial | metades do brasão se juntando e brilhos (o anel do Digivice girando e o anel de luz já entram) | interface |
 
 ## Lutar
 
@@ -36,7 +37,8 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 |---|---|---|---|
 | ArenaEscolha, UpLuta, BatAcao, BatDesktop | existe | botões **pausar** e **×2** no palco | interface (velocidade da animação) |
 | ArenaAoVivo | parcial | ×2 e **Ver o fim** (pular a animação); "regra que ele vai usar" antes do turno | interface |
-| ArenaFim, UpResultado, BatDerrota | parcial | **Elogiar / Repreender** uma ação da luta ("o que achou do recuo no turno 6?"); **Ver replay** da luta; **Outra luta**; "O que decidiu a luta" (derrota); experiência (×120) e vínculo (+3) | elogio de ação de luta = regra nova no motor; XP não existe no motor; replay e "outra luta" = interface |
+| UpResultado | existe | experiência (×120) e vínculo ganho (+3) não existem no motor; no lugar, turnos e fintas | motor |
+| ArenaFim, BatDerrota | parcial | **Elogiar / Repreender** uma ação da luta ("o que achou do recuo no turno 6?"); **Ver replay** da luta; **Outra luta**; "O que decidiu a luta" (derrota); experiência (×120) e vínculo (+3) | elogio de ação de luta = regra nova no motor; XP não existe no motor; replay e "outra luta" = interface |
 | ArenaMelhor10 | parcial | grade V/D das 10 lutas, resumo (vitórias, turnos médios, fintas), "o que ele aprendeu", **Ver regras**, **Lutar de novo** | interface |
 | ArenaRivalFixo | parcial | tela do rival fixo do Laboratório com a pergunta do Digilab e **Lutar uma / Melhor de 10** | interface |
 | BatVS | não existe | pré-luta com as regras (travar/vetar antes de começar), **Trocar rival**, **Começar luta** | interface |
@@ -51,14 +53,14 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 | prancha | estado | falta | precisa |
 |---|---|---|---|
 | DiarioRegistro | existe | — | — |
-| DiarioDesktop | parcial | layout de desktop em 3 colunas (filtros, lista, detalhe do evento escolhido) | interface |
+| DiarioDesktop | parcial | filtros com várias marcações (o app usa um filtro por vez); o card da direita mostra o último evento, não o evento tocado (linhas de 32 px não passam no alvo de 44) | decisão |
 | Abas do Diário | parcial | as pranchas têm Hoje, Registro, Lembranças, Catálogo, Lab; o app tem Registro, Catálogo, Cenários (Lab) | interface |
 | DiarioHoje | não existe | linha do tempo do dia com ‹ › entre dias e contadores (cuidados, recusas, lutas, evolução) | interface (histórico do motor) |
 | DiarioLembrancas | existe em outro lugar | no app, as lembranças estão em Crescer → Aprendizado, não no Diário | decisão (onde fica) |
 | DiarioAlbum, AlbumGrade, AlbumDetalhe | não existe | álbum de falas guardadas com a estrela (por forma, filtros, detalhe com os fatos, **Tirar do álbum**, **Copiar texto**) | interface + nova chave de armazenamento só de apresentação (decidir) |
 | DiarioLab | existe | os cenários prontos ficaram recolhidos em "Cenários prontos" (extra do app) | — |
 | DiarioCatalogo | existe | as formas não vistas ficam em silhueta, mas o detalhe ainda mostra os stats (a CatNaoVisto esconde) | decisão |
-| CatGrade, CatDesktop | parcial | contador "vistos N / 60" de todas as espécies, filtros por nível, **Buscar**, selo "SEU", ficha ao lado no desktop | interface |
+| CatGrade, CatDesktop | parcial | contador "vistos N / 60" de todas as espécies, filtros por nível, **Buscar**, selo "SEU", ficha com a arte grande em listras (a ficha já fica ao lado no desktop) | interface |
 | CatFicha | parcial | ficha com idle animado, "como se chega", técnica | interface |
 | CatNaoVisto | parcial | ficha de forma não vista | interface |
 | CatRivais | não existe | aba **Rivais** do catálogo (NPCs da campanha com vitórias) | interface |
@@ -94,7 +96,7 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 
 | prancha | estado | falta | precisa |
 |---|---|---|---|
-| PvBoasVindas | parcial | tela cheia com **Começar** (hoje é um título no topo na primeira visita) | interface |
+| PvBoasVindas | existe | a frase "funciona sem internet" virou "o progresso fica neste navegador" (o jogo precisa do servidor local) | — |
 | PvComoCuidar, PvComoEnsinar, PvComoCrescer | não existe | apresentação em 3 passos (**Pular**, **Próximo**, **Chocar meu ovo**) | interface |
 | PvOvo | não existe | tela do ovo chocando | interface |
 | PvChamado, PvEnsino, PvNavegacao | não existe | dicas na primeira vez (**Não mostrar dicas**, **Entendi**) | interface (preferência de tela) |
