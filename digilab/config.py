@@ -897,6 +897,15 @@ class ConfigEducacao:
     acertos_para_aprender: int = 3           # acertos seguidos para o pet parar de repetir a travessura
     fator_disciplina_ao_evoluir: float = 0.5
     fracao_petisco_alimentar: float = 0.5    # petisco = esta fracao do ganho de alimentar, sem sujeira
+    # parte 3: os slots deste tipo viram AVISO antes de sujar (o cronograma ancora higiene no coco dos v-pets)
+    tipo_slot_aviso: str = "higiene"
+    # o design dizia +passo_disciplina por aviso atendido; zerado na parte 3 porque o permissivo chegava a
+    # disciplina 100 so pelo banheiro e o chamado falso sumia (a educacao deixava de separar os donos)
+    disciplina_por_banheiro: int = 0
+    vinculo_bronca_sem_motivo: float = -0.05  # bronca num chamado real (igual a ConfigTreino.vinculo_forcar)
+    custo_humor_acordar: float = 0.12         # acordar o pet dormindo (igual a Config.custo_repreender)
+    limiar_superalimentacao: float = 0.9      # comer com fome (saciedade) acima disto faz mal
+    custo_saude_superalimentacao: float = 0.05
 
 
 @dataclass(frozen=True)

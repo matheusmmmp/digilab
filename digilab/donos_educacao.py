@@ -8,6 +8,7 @@ Resposta a janela (PROPOSTO, sem fonte; o dono julga pela necessidade, nunca sab
   permissivo           necessidade baixa -> atende; em dia -> petisco (cede)
   incoerente           necessidade baixa -> atende; em dia -> elogio ou bronca sorteados (prob_elogio_incoerente)
   relapso              como o atencioso, mas so nos passos de visita
+  aviso antes de sujar todos menos o aleatorio levam ao banheiro (o relapso, so na visita)
   aleatorio            nada de especial (as acoes sorteadas podem acertar por acaso)
 A resposta sai do mesmo orcamento: o dono de baixo decide como se ela ja tivesse sido gasta, e o passo nunca
 passa do teto (a ultima acao de cuidado cede o lugar).
@@ -55,9 +56,9 @@ class DonoComEducacao(DonoComTreino):
             self.nome = braco
             self.base = DonoPermissivo(self.cfg_donos)
         self.ce = ce or CONFIG_EDUCACAO_LIGADA
-        self.respostas = {"atende": 0, "bronca": 0, "petisco": 0, "elogio": 0}
+        self.respostas = {"atende": 0, "bronca": 0, "petisco": 0, "elogio": 0, "banheiro": 0}
 
-    def _resposta(self, visao: Visao, rng: random.Random) -> AcaoUsuario | None:
+    def _resposta(self, visao: Visao, rng: random.Random) -> tuple[AcaoUsuario, str] | None:
         j = visao.estado.get("educacao", {}).get("janela")
         if j is None or self.nome == "aleatorio":
             return None
@@ -65,22 +66,26 @@ class DonoComEducacao(DonoComTreino):
             self.base._planejar_dia(visao, rng, TICKS_POR_DIA // self.cfg_donos.passo_ticks)   # idempotente no dia
             if visao.passo not in self.base._visitas:
                 return None
+        if j["tipo"] == "aviso":
+            return AcaoUsuario.LEVAR_AO_BANHEIRO, "banheiro"
         if visao.estado[NECESSIDADE[j["pedido"]]] < self.ce.limiar_necessidade_real:
-            self.respostas["atende"] += 1
-            return ATENDE_PRIMEIRA[j["pedido"]]
+            return ATENDE_PRIMEIRA[j["pedido"]], "atende"
         if self.nome == "permissivo":
-            self.respostas["petisco"] += 1
-            return AcaoUsuario.PETISCO
+            return AcaoUsuario.PETISCO, "petisco"
         if self.nome == "incoerente" and rng.random() < self.cfg_donos.prob_elogio_incoerente:
-            self.respostas["elogio"] += 1
-            return AcaoUsuario.ELOGIAR
-        self.respostas["bronca"] += 1
-        return AcaoUsuario.REPREENDER
+            return AcaoUsuario.ELOGIAR, "elogio"
+        return AcaoUsuario.REPREENDER, "bronca"
 
     def decidir(self, visao: Visao, rng: random.Random) -> list[AcaoUsuario]:
-        r = self._resposta(visao, rng) if visao.maximo_permitido > 0 else None
+        # a resposta sai do orcamento de CUIDADO: os slots de treino continuam reservados (sem verba de cuidado,
+        # a janela fica sem resposta, como a de um dono sem tempo)
+        slot = (visao.passo + 1) * self.cfg_donos.passo_ticks in self.slots
+        cuidado_restante = (visao.orcamento - self.n_slots) - (visao.gasto - self.slots_usados)
+        r = self._resposta(visao, rng) if cuidado_restante > 0 and visao.maximo_permitido > int(slot) else None
         if r is None:
             return super().decidir(visao, rng)
+        r, chave = r
+        self.respostas[chave] += 1
         acoes = [r] + super().decidir(replace(visao, gasto=visao.gasto + 1), rng)
         if len(acoes) > visao.maximo_permitido:
             cuidado = [i for i, a in enumerate(acoes) if i > 0 and a not in ACOES_TREINO]

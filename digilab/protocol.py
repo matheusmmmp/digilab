@@ -517,6 +517,13 @@ _FONTES_EDUCACAO_V1 = {
     "ConfigEducacao.acertos_para_aprender": (_P, "Digimon Pendulum/4U (3 acertos); " + _NV),
     "ConfigEducacao.fator_disciplina_ao_evoluir": (_P, _SF),
     "ConfigEducacao.fracao_petisco_alimentar": (_P, _SF),
+    "ConfigEducacao.disciplina_por_banheiro": (_P, _SF + "; design previa +passo, zerado na Fase 2 parte 3 "
+                                                      "(o permissivo se educava so pelo banheiro)"),
+    "ConfigEducacao.tipo_slot_aviso": (_D, "cronograma_interacoes.json _meta: coco a cada 120 min = intervalo de higiene"),
+    "ConfigEducacao.vinculo_bronca_sem_motivo": (_P, _SF + "; mesma magnitude de ConfigTreino.vinculo_forcar"),
+    "ConfigEducacao.custo_humor_acordar": (_P, _SF + "; mesma magnitude de Config.custo_repreender"),
+    "ConfigEducacao.limiar_superalimentacao": (_P, _SF),
+    "ConfigEducacao.custo_saude_superalimentacao": (_P, _SF),
     "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
     "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
     "ConfigLesoes.prob_lesao_derrota": (_P, _SF),

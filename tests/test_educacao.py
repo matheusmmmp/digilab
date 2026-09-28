@@ -45,7 +45,7 @@ def test_log_sem_acao_nova_rejoga_igual_ao_motor_treino(braco):
     assert r.resumo_treino() == v.motor.resumo_treino() and r.vinculo.serie == v.motor.vinculo.serie
 
 
-@pytest.mark.parametrize("acao", [AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO])
+@pytest.mark.parametrize("acao", [AcaoUsuario.TRATAR_LESAO])
 def test_acao_nova_falha_alto(acao):
     esp, _ = ovo(3101)
     fp, fm = fabricas_educacao(3101, esp, sortear(3101))
@@ -206,3 +206,63 @@ def test_disciplina_cai_para_metade_ao_evoluir():
     m.disciplina, m.acertos = 75, 2
     m._evoluiu("adolescente", 900)
     assert m.disciplina == 37 and m.acertos == 0
+
+
+# ================================================================ parte 3: aviso, mau humor, resolvem sozinhas
+def _abrir(m, tipo: str, pedido: str, falso: bool = False):
+    t = m._estado.tick
+    m.janela = {"tipo": tipo, "pedido": pedido, "inicio": t, "prazo": t + CONFIG_EDUCACAO_LIGADA.janela_min,
+                "falso": falso}
+
+
+def test_aviso_atendido_nao_suja_e_ignorado_suja():
+    m = _motor_ligado()
+    _abrir(m, "aviso", "banheiro")
+    m.observar(AcaoUsuario.LEVAR_AO_BANHEIRO)
+    assert m.janela is None and m.contagem["avisos_atendidos"] == 1
+    assert m.disciplina == CONFIG_EDUCACAO_LIGADA.disciplina_por_banheiro
+    _abrir(m, "aviso", "banheiro")
+    antes = m._estado.sujeira
+    m._expirar(m._estado.tick + CONFIG_EDUCACAO_LIGADA.janela_min + 1)
+    assert m._estado.sujeira == min(m.cfg.sujeira_maxima, antes + 1) and m.contagem["avisos_ignorados"] == 1
+
+
+def test_mau_humor_elogio_resolve_e_bronca_sem_motivo_derruba_vinculo():
+    m = _motor_ligado()
+    _abrir(m, "chamado", "carinho")
+    m.observar(AcaoUsuario.ELOGIAR)
+    assert m.janela is None and m.contagem["reais_atendidos"] == 1
+    _abrir(m, "chamado", "carinho")
+    v = m.vinculo.valor
+    m.observar(AcaoUsuario.REPREENDER)
+    assert m.contagem["broncas_sem_motivo"] == 1 and m.janela is not None
+    assert m.vinculo.valor < v and m.vinculo.serie[-1][2] == "bronca_sem_motivo"
+
+
+def test_acordar_dormindo_custa_humor():
+    m = _motor_ligado()
+    m._estado = replace(m._estado, dormindo=True, humor=0.8)
+    m.observar(AcaoUsuario.BRINCAR)
+    assert not m._estado.dormindo and m.contagem["acordado"] == 1
+
+
+def test_superalimentacao_custa_saude_e_recusa_nao_conta():
+    m = _motor_ligado()
+    m._estado = replace(m._estado, fome=0.95, saude=0.9)
+    m.observar(AcaoUsuario.PETISCO)
+    assert m.contagem["superalimentacao"] == 1
+    assert m._estado.saude == pytest.approx(0.9 - CONFIG_EDUCACAO_LIGADA.custo_saude_superalimentacao)
+    _abrir_falso(m)
+    m.observar(AcaoUsuario.ALIMENTAR)                  # recusada: nao come, nao faz mal
+    assert m.contagem["superalimentacao"] == 1
+
+
+def test_desligada_nada_de_travessura_nem_consequencia():
+    esp, _ = ovo(S_EDU)
+    fp, fm = fabricas_educacao(S_EDU, esp, sortear(S_EDU))
+    m = fm(fp(None), None, S_EDU)
+    m._estado = replace(m._estado, dormindo=True, fome=0.95)
+    m.observar(AcaoUsuario.BRINCAR)
+    m.observar(AcaoUsuario.PETISCO)
+    m.avancar(3 * 24 * 60)
+    assert m.historico_janelas == [] and all(v == 0 for v in m.contagem.values())

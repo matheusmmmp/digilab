@@ -54,7 +54,7 @@ Todas abrem uma janela. O pet **não resolve sozinho**: sem a resposta do dono, 
 |---|---|---|---|
 | **Chamado falso**: chama sem necessidade real; se oferecem refeição, recusa, mas aceita petisco | `repreender` → disciplina +passo | `petisco` → cede, `reforco_falso` +1 (mais chamados falsos depois) | disciplina −passo |
 | **Mau humor legítimo**: humor baixo de verdade | `elogiar` / `acariciar` → humor sobe | `repreender` → "bronca sem motivo": vínculo cai | humor continua caindo |
-| **Aviso antes de sujar** | `levar_ao_banheiro` (ação nova) → sem sujeira, disciplina +passo | — | vira sujeira, como hoje |
+| **Aviso antes de sujar** | `levar_ao_banheiro` (ação nova) → sem sujeira; disciplina +`disciplina_por_banheiro` (**0**, desvio da Fase 2 parte 3: com +passo o permissivo chegava a disciplina 100 só pelo banheiro e o chamado falso sumia; aguarda decisão do Matheus) | — | vira sujeira, como hoje |
 
 Travessuras que se resolvem sozinhas (sem janela):
 
