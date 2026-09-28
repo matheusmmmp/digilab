@@ -13,9 +13,11 @@
     "tipos": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.app.json --noEmit",
     "teste": "vitest run",
     "test": "vitest run",
-    "gabaritos": "node test/gerar_gabaritos.mjs"
+    "gabaritos": "node test/gerar_gabaritos.mjs",
+    "e2e": "npm run build && playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
     "@preact/preset-vite": "2.10.6",
     "@types/node": "24.19.0",
     "typescript": "7.0.2",

@@ -4,7 +4,8 @@ import { App } from "./App.tsx";
 import { carregarAtlas } from "./atlas.ts";
 import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
-import { gravarPendente, iniciarJogo, ouvirOutrasAbas } from "./jogo.ts";
+import { gravarPendente, iniciarJogo, jogoAtual, ouvirOutrasAbas } from "./jogo.ts";
+import { textoSave } from "./save.ts";
 import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
 import "./estilo/tokens.css";
@@ -25,6 +26,8 @@ iniciarFalaLivre();
 /* o tempo grava no maximo a cada 2 s: o que ficou pendente sai ao esconder ou fechar a aba */
 addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") gravarPendente(); });
 addEventListener("pagehide", gravarPendente);
+/* conferencia (teste ponta a ponta, Etapa 5): so leitura do pet vivo; nada aqui muda o motor */
+Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoSave(jogoAtual().motor) } });
 const raiz = document.getElementById("app");
 if (!raiz) throw new Error("sem #app na página");
 render(<App />, raiz);

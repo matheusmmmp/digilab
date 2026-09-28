@@ -30,3 +30,5 @@ servidor/gasto_fala.json
 # jogo web em TypeScript (web/app)
 node_modules/
 web/dist/
+web/app/test-results/
+web/app/playwright-report/
