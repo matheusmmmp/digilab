@@ -900,7 +900,7 @@ class ConfigEducacao:
     # parte 3: os slots deste tipo viram AVISO antes de sujar (o cronograma ancora higiene no coco dos v-pets)
     tipo_slot_aviso: str = "higiene"
     # o design dizia +passo_disciplina por aviso atendido; zerado na parte 3 porque o permissivo chegava a
-    # disciplina 100 so pelo banheiro e o chamado falso sumia (a educacao deixava de separar os donos)
+    # disciplina 100 so pelo banheiro e o chamado falso sumia (decidido, delegado, em 2026-09-28)
     disciplina_por_banheiro: int = 0
     vinculo_bronca_sem_motivo: float = -0.05  # bronca num chamado real (igual a ConfigTreino.vinculo_forcar)
     custo_humor_acordar: float = 0.12         # acordar o pet dormindo (igual a Config.custo_repreender)
@@ -918,10 +918,10 @@ class ConfigLesoes:
     prob_lesao_derrota: float = 0.2
     lesoes_para_morte: int = 20
     horas_sem_tratar_morte: int = 6
-    # o que a qualificacao por vitorias (>= limiar em >= lutas_minimas no adolescente) faz na forma adulta:
-    # o catalogo nao tem "forma de vitoria" (cada linha tem 2 adultas + a sombria). "registrar" = so grava
-    # a qualificacao na transicao; o efeito aguarda decisao do Matheus
-    efeito_qualificacao: str = "registrar"
+    # o que a qualificacao por vitorias (>= limiar em >= lutas_minimas no adolescente) faz: "condicao_adulto" =
+    # sem ela o pet continua adolescente (como o sparring minimo). Decidido (delegado) em 2026-09-28; o catalogo
+    # nao tem "forma de vitoria"
+    efeito_qualificacao: str = "condicao_adulto"
 
 
 @dataclass(frozen=True)
