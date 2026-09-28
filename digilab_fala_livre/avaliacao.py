@@ -35,8 +35,11 @@ from .situacoes import coletar
 from .verificador import VERSAO_VERIFICADOR, verificar
 
 RAIZ = Path(__file__).resolve().parents[1]
-SAIDA = RAIZ / "artifacts_fala_livre"
-SEMENTE = 20260927
+# cada rodada tem pasta e semente proprias (a rodada 2 e a de ajuste do plano, numa amostra nova)
+SEMENTES_RODADA = {1: 20260927, 2: 20260928}
+SAIDA = RAIZ / "artifacts_fala_livre" / "rodada1"
+SEMENTE = SEMENTES_RODADA[1]
+TIMEOUT_JUIZ_S = 90.0
 MODELOS = ("qwen2.5:3b", "qwen2.5:7b", "gemma2:9b")
 JUIZ = "qwen2.5:7b"
 N_PARES = 60
@@ -160,7 +163,7 @@ def fase_gerar(modelos) -> None:
 
 # ------------------------------------------------------------------ juiz
 def fase_verificar(modelos) -> None:
-    juiz = ClienteOllama(JUIZ)
+    juiz = ClienteOllama(JUIZ, timeout=TIMEOUT_JUIZ_S)
     for modelo in modelos:
         nome = f"falas_{_slug(modelo)}.jsonl"
         linhas = _jsonl(nome)
@@ -263,7 +266,11 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--fase", choices=("situacoes", "gerar", "verificar", "resumo", "csv", "tudo"), default="tudo")
     ap.add_argument("--modelos", nargs="*", default=list(MODELOS))
+    ap.add_argument("--rodada", type=int, choices=sorted(SEMENTES_RODADA), default=2)
     a = ap.parse_args(argv)
+    global SAIDA, SEMENTE
+    SAIDA = RAIZ / "artifacts_fala_livre" / f"rodada{a.rodada}"
+    SEMENTE = SEMENTES_RODADA[a.rodada]
     if a.fase in ("situacoes", "tudo"):
         fase_situacoes()
     if a.fase in ("gerar", "tudo"):

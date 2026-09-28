@@ -34,12 +34,13 @@ class Resposta:
 
 
 class ClienteOllama:
-    def __init__(self, modelo: str, url: str = URL_PADRAO, abrir=None) -> None:
+    def __init__(self, modelo: str, url: str = URL_PADRAO, abrir=None, timeout: float = TIMEOUT_S) -> None:
         host = urllib.parse.urlparse(url).hostname
         if host not in HOSTS_LOCAIS:
             raise NaoLocal(f"so Ollama local: {url}")
         self.modelo, self.url = modelo, url.rstrip("/")
         self._abrir = abrir or urllib.request.urlopen
+        self.timeout = timeout
         self.carregado = False
 
     def _post(self, caminho: str, corpo: dict, timeout: float) -> dict:
@@ -53,7 +54,7 @@ class ClienteOllama:
                  "keep_alive": MANTER,
                  "options": {"temperature": TEMPERATURA, "seed": semente, "num_predict": max_tokens}}
         t0 = time.perf_counter()
-        d = self._post("/api/chat", corpo, TIMEOUT_S if self.carregado else TIMEOUT_CARGA_S)
+        d = self._post("/api/chat", corpo, self.timeout if self.carregado else TIMEOUT_CARGA_S)
         self.carregado = True
         motivo = d.get("done_reason", "stop" if d.get("done") else "incompleto")
         return Resposta(d.get("message", {}).get("content", ""), d.get("model", self.modelo),
