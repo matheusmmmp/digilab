@@ -8,6 +8,7 @@ import {
   chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
+import { Seg, blocos } from "../../componentes/Barras.tsx";
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import {
   FALA_LLM, detalheMotivo, falaDe, falaLLM, ligarFalaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
@@ -23,17 +24,6 @@ import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
-const blocos = (v: number, m: number): number => Math.max(0, Math.min(m, Math.round(v * m)));
-
-/** barra segmentada (guia 7.4): n de m blocos; marca opcional (limite ou inicio da faixa) */
-export function Seg({ n, m, cls = "", marca }: { n: number; m: number; cls?: string; marca?: number | number[] }) {
-  return (
-    <span class={`dl-seg ${cls}`} role="img" aria-label={`${n} de ${m}`}>
-      {Array.from({ length: m }, (_, i) => <i key={i} class={i < n ? "on" : ""} />)}
-      {marca !== undefined && ([] as number[]).concat(marca).map(x => <b key={x} style={{ left: `${x / m * 100}%` }} />)}
-    </span>
-  );
-}
 
 /* ------------------------------------------------ cabecalho e retrato */
 function Retrato({ m, ovo }: { m: Motor; ovo: boolean }) {

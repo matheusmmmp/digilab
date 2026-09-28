@@ -10,6 +10,9 @@ import {
   type Aba, type Destino, type Rota,
 } from "./rotas.ts";
 import { TelaProvisoria } from "./telas/Provisoria.tsx";
+import { TelaAprend } from "./telas/crescer/TelaAprend.tsx";
+import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
+import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
 
@@ -80,7 +83,8 @@ export function App() {
           </div>
         )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
-          <TelaProvisoria aba={rota.aba} />
+          {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao />
+            : <TelaProvisoria aba={rota.aba} />}
         </div>
       </section>)}
       <footer>

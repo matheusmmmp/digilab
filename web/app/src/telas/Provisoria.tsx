@@ -3,6 +3,7 @@
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { CAMPANHA, NOME_ESP, NOME_PET, Motor, nomeForma } from "../../motor/index.ts";
+import { Numeros } from "../componentes/Barras.tsx";
 import { useJogo } from "../jogo.ts";
 import type { Aba } from "../rotas.ts";
 
@@ -43,9 +44,7 @@ export function TelaProvisoria({ aba }: { aba: Aba }) {
   return (
     <div class="tela">
       <p class="dl-apoio" style="margin:0">Tela provisória do esqueleto: a tela desenhada entra na Etapa 4.</p>
-      {kv.length > 0 && (
-        <dl class="kv">{kv.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
-      )}
+      {kv.length > 0 && <Numeros itens={kv} />}
       {aba === "registro" && <ConferirReplay m={motor} />}
     </div>
   );

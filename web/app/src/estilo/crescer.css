@@ -1,0 +1,87 @@
+/* Crescer: Treinar, Aprendizado e Evolucao (mesmas regras do digilab_sprites.html). */
+.tela h2{font-family:var(--dl-f-texto);font-weight:900;font-size:1.0625rem;margin:0}
+.tela p{margin:0;max-width:65ch}
+.bloco{display:grid;gap:8px;min-width:0}
+.t{font-family:var(--dl-f-lcd);font-weight:400;color:var(--dl-text-2)}
+
+/* forcar: a moldura listrada e o proprio botao, e o custo fica escrito nele */
+.dl-btn--forcar{flex-direction:column;gap:0;line-height:1.1;letter-spacing:.04em;color:var(--dl-force);border:4px solid transparent;
+  background-image:linear-gradient(var(--dl-force-ink),var(--dl-force-ink)),repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px);
+  background-origin:border-box;background-clip:padding-box,border-box;box-shadow:none}
+.dl-btn--forcar small{font-size:.6875rem;font-weight:800;letter-spacing:0;color:#F4E2B8}
+.dl-btn--forcar:active:not(:disabled){color:var(--dl-force);background-image:linear-gradient(#000,#000),repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px);box-shadow:none}
+.dl-btn--forcar:focus-visible{box-shadow:0 0 0 3px var(--dl-highlight)}
+.dl-btn--forcar:disabled{background-image:none;background:var(--dl-disabled);color:var(--dl-disabled-ink);border:4px dashed var(--dl-disabled-ink)}
+.dl-btn--forcar:disabled small{color:var(--dl-disabled-ink)}
+
+/* Treinar */
+.treino-cab{display:flex;align-items:flex-end;justify-content:center;gap:12px;min-height:96px}
+.treino-pet{display:flex;align-items:flex-end}
+.treino-pet img{max-width:none}
+.treino-medidores{display:grid;gap:12px}
+.med{display:grid;gap:2px}
+.med-cab{display:flex;justify-content:space-between;align-items:baseline}
+.med-marcas{display:flex;justify-content:space-between;font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
+.treino-grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:420px){ .treino-grade{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.treino-ex{position:relative;display:grid;justify-items:center;gap:4px;text-align:center;padding:8px}
+.treino-ex .dl-btn{width:100%;min-height:48px;padding-inline:4px}
+.treino-ic{width:54px;height:61px;image-rendering:auto}
+.treino-selo{position:absolute;top:6px;right:6px;font-size:.625rem;font-weight:900;background:var(--dl-navy);color:#FFFFFF;border-radius:4px;padding:0 5px}
+
+/* Aprendizado */
+.jeito{display:flex;gap:10px;align-items:baseline}
+.jeito .dl-apoio{min-width:104px;flex:none}
+.legenda{display:flex;flex-wrap:wrap;gap:14px;font-size:.8125rem;color:var(--dl-text-2)}
+.legenda span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.leg-instinto::before{background:var(--dl-text-2)}
+.leg-aprendido::before{background:var(--dl-learned-bg);box-shadow:inset 0 0 0 1px var(--dl-learned)}
+.linhas{display:grid;gap:8px}
+.dupla{display:grid;grid-template-columns:92px minmax(0,1fr) 96px;gap:10px;align-items:center}
+.dupla .bars{display:grid;gap:3px}
+.dupla .v{font-size:.75rem;text-align:right}
+.bar{height:7px;background:var(--dl-hex);border-radius:5px;overflow:hidden;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.bar.prior i{background:var(--dl-text-2)}
+.bar.agora i.dl-malha{border:1px dashed var(--dl-learned)}
+@media (max-width:420px){ .dupla{grid-template-columns:76px minmax(0,1fr) 76px;gap:6px} }
+.mem-tit{font-size:.9375rem;font-weight:900;margin:6px 0 4px;display:flex;gap:8px;align-items:baseline}
+.mem-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mem-slot{background:var(--dl-surface-2);border-radius:10px;box-shadow:inset 0 0 0 2px var(--dl-hex);padding:8px;display:grid;gap:3px;font-size:.8125rem;min-width:0}
+.mem-cab{display:flex;align-items:center;gap:4px}
+.mem-vazio{border:2px dashed var(--dl-border);box-shadow:none;background:transparent;color:var(--dl-text-2);display:grid;place-items:center;min-height:64px}
+.decisoes{font-size:.8125rem;display:grid;gap:3px;max-height:260px;overflow:auto}
+
+/* Evolucao */
+.evo-arv{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.evo-linhas{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.evo-col{display:grid;grid-template-rows:auto 1fr;gap:6px;position:relative}
+.evo-col-tit{font-size:.625rem;font-weight:900;color:var(--dl-text-2);text-align:center;letter-spacing:.02em}
+.evo-col-nos{display:flex;flex-direction:column;justify-content:space-around;gap:6px;min-height:520px}
+.evo-no{font:inherit;background:none;border:0;padding:0;cursor:pointer;display:grid;justify-items:center;gap:2px;color:var(--dl-text);min-height:44px}
+.evo-cx{position:relative;width:44px;height:44px;border-radius:12px;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border)}
+.evo-cx img{max-width:none;image-rendering:pixelated}
+.evo-q{position:absolute;inset:0;display:grid;place-items:center;font:900 1.125rem var(--dl-f-num);font-style:italic;color:#FFFFFF;text-shadow:0 0 3px #173A8A,0 0 3px #173A8A}
+.evo-rot{font-size:.625rem;font-weight:800;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evo-no.percorrido .evo-cx{box-shadow:0 0 0 3px var(--dl-action)}
+.evo-no.agora .evo-cx{box-shadow:0 0 0 3px var(--dl-highlight),0 0 0 5px var(--dl-navy)}
+.evo-no.sombria .evo-cx{box-shadow:0 0 0 3px var(--dl-dark),0 0 0 5px var(--dl-navy)}
+.evo-no.fechado{opacity:.4}
+.evo-no.provavel .evo-cx{outline:2px dashed var(--dl-action);outline-offset:2px}
+.evo-no:focus-visible{outline:none}
+.evo-no:focus-visible .evo-cx{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.evo-aresta{fill:none;stroke:var(--dl-border);stroke-width:1.5}
+.evo-aresta.percorrido{stroke:var(--dl-action);stroke-width:3}
+.evo-aresta.provavel{stroke:var(--dl-action);stroke-width:2;stroke-dasharray:4 4}
+.evo-aresta.fechado{stroke:var(--dl-hex);stroke-width:1}
+.evo-no-det{margin:0}
+.evo-legenda{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.75rem;font-weight:800;color:var(--dl-text-2)}
+.evo-legenda li{display:flex;align-items:center;gap:6px}
+.evo-mini{width:14px;height:14px;border-radius:4px;background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border)}
+.evo-mini.percorrido{box-shadow:0 0 0 2px var(--dl-action)}
+.evo-mini.agora{box-shadow:0 0 0 2px var(--dl-highlight),0 0 0 4px var(--dl-navy)}
+.evo-mini.provavel{box-shadow:none;outline:2px dashed var(--dl-action)}
+.evo-mini.fechado{opacity:.4}
+.evo-mini.sombria{box-shadow:0 0 0 2px var(--dl-dark)}
+.evo-hist{display:grid;gap:4px;font-size:.84375rem}
+.evo-hist div{display:flex;gap:10px;flex-wrap:wrap}

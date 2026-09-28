@@ -99,6 +99,19 @@ export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: 
   else ctx.drawImage(e.img, q[0], q[1], q[2], q[3], x + q[4] * escala, y + q[5] * escala, q[2] * escala, q[3] * escala);
   ctx.restore();
 }
+/** silhueta preta (primeiro quadro) para o que o motor ainda nao decidiu */
+const cacheSilhueta = new Map<string, { url: string; w: number; h: number }>();
+export function silhuetaAtlas(a: AtlasOk, nome: string): { url: string; w: number; h: number } {
+  const pronta = cacheSilhueta.get(nome);
+  if (pronta) return pronta;
+  const [w, h] = dimSprite(a.dados, nome), c = document.createElement("canvas"); c.width = w; c.height = h;
+  const g = c.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
+  desenharSprite(g, a, nome, 0, 0, 1, 0);
+  g.globalCompositeOperation = "source-in"; g.fillStyle = "#000000"; g.fillRect(0, 0, w, h);
+  const r = { url: c.toDataURL(), w, h };
+  cacheSilhueta.set(nome, r);
+  return r;
+}
 /** estado do atlas fora de componente (o palco desenha num intervalo proprio) */
 export const atlasAtual = (): EstadoAtlas => estado;
 /** escala do sprite em pixels do aparelho: 1x em pixels CSS quando o aparelho tem densidade inteira */
