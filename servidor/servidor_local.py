@@ -6,7 +6,8 @@
 
 Serve a pasta D:\\Trab\\digilab (a pai do repo) como o `python -m http.server`
 fazia, entao os enderecos nao mudam:
-    http://localhost:8765/v1/web/digilab_sprites.html
+    http://localhost:8765/v1/web/dist/          (o jogo; build de web/app com npm run build)
+    http://localhost:8765/v1/web/digilab_sprites.html?antigo=1   (versao antiga)
 e acrescenta:
     GET  /api/fala/status   {"ativo", "provedor", "modelo", "motivo", "gasto", "estatisticas"}
     POST /api/fala          {"motivo": {...}, "estagio": "...", "humor": 0.5}
@@ -132,7 +133,7 @@ class Tratador(SimpleHTTPRequestHandler):
             return True
         if self.path.split("?", 1)[0] == "/":
             self.send_response(302)
-            self.send_header("Location", f"{PREFIXO}/web/digilab_sprites.html")
+            self.send_header("Location", PREFIXO_APP)
             self.send_header("Content-Length", "0")
             self.end_headers()
             return True
@@ -275,7 +276,10 @@ def main(argv=None) -> int:
               + (f"e-mail para {alerta.destino}" if alerta.ativo else f"e-mail DESLIGADO ({alerta.motivo_inativo()})"),
               flush=True)
     servidor = ThreadingHTTPServer(("127.0.0.1", a.porta), partial(Tratador, directory=str(PASTA_SERVIDA)))
-    print(f"Digilab {VERSAO_APP} em http://localhost:{a.porta}{PREFIXO}/web/digilab_sprites.html  [{estado}]"
+    if not (PASTA_APP / "index.html").is_file():
+        print(f"  AVISO: o app nao foi construido ({PASTA_APP} sem index.html). Rode: cd web/app && npm install && npm run build",
+              flush=True)
+    print(f"Digilab {VERSAO_APP} em http://localhost:{a.porta}{PREFIXO_APP}  (versao antiga: {PREFIXO}/web/digilab_sprites.html?antigo=1)  [{estado}]"
           + ("" if not a.remoto else "  [REMOTO SEM SENHA: quem tiver o link entra; so rotas do jogo]"
              if a.sem_senha else "  [REMOTO: senha obrigatoria, so rotas do jogo]"), flush=True)
     try:

@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
-const APP = "/v1/web/dist/", HTML = "/v1/web/digilab_sprites.html", CHAVE = "digilab-web-v21-sprites";
+const APP = "/v1/web/dist/", HTML = "/v1/web/digilab_sprites.html?antigo=1", CHAVE = "digilab-web-v21-sprites";
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],

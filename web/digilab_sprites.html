@@ -1,5 +1,11 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Digilab Pet (sprites locais)</title>
+<title>Digilab Pet (versão antiga)</title>
+<script>
+/* TAREFA_FRONT_TS, Etapa 6: o jogo agora e o app em TypeScript (web/app, build em web/dist). Esta pagina so abre
+   como "versao antiga" com ?antigo=1 (e nas paginas de conferencia #palco-up e #componentes-up); sem isso, vai para
+   o app. Mesma chave de save: nao deixar as duas abertas no mesmo pet. */
+if (!/[?&]antigo(=|&|$)/.test(location.search) && !/^#(palco-up|componentes-up)$/.test(location.hash)) location.replace("dist/");
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=M+PLUS+Rounded+1c:wght@700;800;900&family=Rubik:ital,wght@1,800;1,900&family=DotGothic16&display=swap">
@@ -705,6 +711,8 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .luta-nome{display:grid;min-width:0}
 .luta-nome b,.luta-nome small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .luta-nome small{font-size:.6875rem;font-weight:800;color:var(--dl-text-2)}
+.aviso-antiga{margin:0;border-radius:12px;padding:10px 14px;background:var(--dl-surface);color:var(--dl-text);box-shadow:0 0 0 3px var(--dl-highlight)}
+.aviso-antiga a{color:var(--dl-action);font-weight:900}
 </style>
 
 <div class="wrap">
@@ -715,6 +723,8 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
   <section id="palco-up" class="palco-up" hidden aria-label="Palco de conferência dos sprites do Digimon UP"></section>
   <section id="componentes-up" class="dl dl-teste dl-hexbg" hidden aria-label="Página de teste dos componentes da direção Digimon UP"></section>
 
+  <p class="aviso-antiga"><b>Versão antiga do jogo.</b> O jogo agora é o <a href="dist/">app novo</a>. As duas usam o mesmo save:
+    não deixe as duas abertas ao mesmo tempo no mesmo pet (esta versão não percebe o que a outra grava).</p>
   <p id="aviso-atlas" hidden style="color:var(--bad);font-weight:700"></p>
   <div class="grid">
     <section class="device pet-tela dl" aria-label="Tela do pet">

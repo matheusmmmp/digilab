@@ -68,7 +68,9 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/configs/` | `canonico.json` (o portão), `ablacao.json` (ablação treino × cuidado), `fumaca.json` e `ablacao_fumaca.json` (NÃO canônicos). Campo `protocolo` escolhe o protocolo (padrão `arena-v1`) |
 | `artifacts/` | saída da run canônica (evidência; não editar à mão) |
 | `artifacts_ablacao/` | saída da ablação (evidência; não editar à mão) |
-| `web/digilab.html` | versão web jogável (porte JS; ver abaixo) |
+| `web/app/` | **o jogo web** (desde 2026-09-28, TAREFA_FRONT_TS): motor em TypeScript (`motor/`, sem DOM), app Vite + Preact (`src/`), testes (`test/` Vitest, `e2e/` Playwright). Build em `web/dist/` (não versionado) |
+| `web/digilab_sprites.html` | versão antiga do jogo (só com `?antigo=1`; sem isso redireciona para o app); ainda é a referência dos gabaritos de paridade |
+| `web/digilab.html` | versão web jogável antiga, com placeholders (porte JS; ver abaixo) |
 | `digilab/combate_v2/` | combate V2: `regras.py` (resolução pura, sem rng), `gambits.py` (catálogo fechado de condições, `ListaGambits`, decisão com motivo), `lutador.py` (`CondicaoFisica` × `Estilo`), `partida.py` (laço, log, replay), `bots.py` (5 fixos + adaptativo em gambits; `oraculo` FORA da linguagem) |
 | `experiments/run_bateria_combate.py` | portão do combate V2: round-robin de bots, gates G1–G7 → `artifacts_combate_v2/` |
 | `experiments/calibrar_combate_v2.py` | varredura de calibração (recusa sementes de validação) |
@@ -98,7 +100,9 @@ tempo). A vida é reconstruída reprocessando o log.
 ```bash
 python -m pytest tests/ -q                                                   # 290 testes, ~4 a 7 min
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
-python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/digilab_sprites.html
+cd web/app && npm install && npm run build                                  # constrói o jogo web em web/dist/
+python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/dist/
+cd web/app && npm test && npm run tipos && npm run e2e                        # testes do jogo web (paridade, tipos, ponta a ponta)
 python experiments/run_treino.py                                             # treino: 5 braços, campanha, S2; rc 0/2
 python experiments/run_bateria_sombria.py                                     # gate S1 (formas sombrias)
 python experiments/run_arena.py --config experiments/configs/memoria.json    # arena v1 + memória, ~2 min
@@ -575,7 +579,11 @@ relativo: `python -m http.server 8765 --directory D:/Trab/digilab` e abrir
 dominante no momento da evolução. Se o atlas não carregar, a página mostra um aviso em
 vermelho e cai nos placeholders.
 
-**Desde 2026-09-24 `digilab_sprites.html` é a versão em que o Matheus quer trabalhar** e é
+**Desde 2026-09-28 o jogo web é o app em `web/app/` (TAREFA_FRONT_TS, Etapa 6)**: mudança de jogo vai em
+`web/app/motor/` (e nos gabaritos, se mudar a regra) e a tela em `web/app/src/`. O `digilab_sprites.html` ficou como
+versão antiga (`?antigo=1`) e referência dos gabaritos; o texto abaixo descreve o jogo como era nele.
+
+**De 2026-09-24 a 2026-09-28 `digilab_sprites.html` foi a versão em que o Matheus trabalhava** e era
 editada direto; `digilab.html` ficou parado. Só a versão com sprites tem as abas **Evolução** e
 **Catálogo**, que desde 2026-09-24 seguem a **árvore do combate V2.1** (substituiu as 5 linhas por
 traço; chave do localStorage `digilab-web-v21-sprites`, pets da árvore antiga ficam para trás):

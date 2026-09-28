@@ -97,6 +97,7 @@ export function App() {
       <footer>
         <span>Motor do Digilab em TypeScript: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</span>
         <span><b>Versão local com sprites do Digimon UP (Bandai), só para uso pessoal. Não publicar nem distribuir.</b></span>
+        <span><a href="../digilab_sprites.html?antigo=1">Versão antiga (HTML)</a>: mesmo save; não abra as duas ao mesmo tempo no mesmo pet.</span>
       </footer>
       <Nav atual={rota.destino} ir={irDestino} />
       <RevelacaoEvolucao />
