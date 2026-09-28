@@ -2,16 +2,24 @@
    4 destinos e rodape. A rota vem do endereco (#/destino/aba) ou da aba lembrada, como no HTML. */
 import { useEffect, useState } from "preact/hooks";
 import { useAtlas } from "./atlas.ts";
-import { Cabecalho } from "./componentes/Cabecalho.tsx";
 import { Nav } from "./componentes/Nav.tsx";
+import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { useJogo } from "./jogo.ts";
 import {
   DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco,
   type Aba, type Destino, type Rota,
 } from "./rotas.ts";
 import { TelaProvisoria } from "./telas/Provisoria.tsx";
+import { TelaPet } from "./telas/pet/TelaPet.tsx";
+import { CHAVE } from "./save.ts";
 
 const armaz = (): Storage => localStorage;
+
+/* slogan so na primeira visita (preferencia de tela, chave propria; a chave do save nao muda) */
+function primeiraVisita(): boolean {
+  try { if (localStorage.getItem(CHAVE + "-boas-vindas") !== "1") { localStorage.setItem(CHAVE + "-boas-vindas", "1"); return true; } } catch { /* sem armazenamento */ }
+  return false;
+}
 
 function rotaInicial(): Rota {
   return rotaDoEndereco(location.hash) ?? lerAbaLembrada(armaz()) ?? ROTA_INICIAL;
@@ -20,6 +28,7 @@ function rotaInicial(): Rota {
 export function App() {
   const jogo = useJogo(), atlas = useAtlas();
   const [rota, setRota] = useState<Rota>(rotaInicial);
+  const [boasVindas] = useState(primeiraVisita);
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
@@ -54,7 +63,13 @@ export function App() {
           <p>{atlas.erro}. Rode <code>python gerar_atlas_up.py</code> em D:\Trab\digilab\Assets.</p>
         </div>
       )}
-      <Cabecalho />
+      {boasVindas && (
+        <header class="boas-vindas">
+          <h1 class="dl-num">DIGILAB</h1>
+          <p>Crie, cuide e treine um pet que aprende com você. Depois, leve-o para a arena.</p>
+        </header>
+      )}
+      {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
         <div class="tela-cab dl-faixa"><h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1></div>
         {abas.length > 1 && (
@@ -67,12 +82,13 @@ export function App() {
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
           <TelaProvisoria aba={rota.aba} />
         </div>
-      </section>
+      </section>)}
       <footer>
-        <span>{jogo.origem === "save" ? "Pet aberto do save deste navegador (replay do registro)." : "Nenhum save aberto: pet de exemplo."}</span>
+        <span>Motor do Digilab em TypeScript: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</span>
         <span><b>Versão local com sprites do Digimon UP (Bandai), só para uso pessoal. Não publicar nem distribuir.</b></span>
       </footer>
       <Nav atual={rota.destino} ir={irDestino} />
+      <RevelacaoEvolucao />
     </div>
   );
 }

@@ -635,7 +635,12 @@ replay). App (Vite + Preact, Etapa 3): `web/app/src/` (um motor só, lido pelas 
 regravado). `cd web/app && npm install`; `npm run dev` (http://localhost:5173, serve só o atlas de `Assets/`);
 `npm run build` (sai em `web/dist/`, não versionado; o `servidor_local.py` serve em `/v1/web/dist/`, e no modo
 remoto só o que fica dentro dessa pasta); `npm run tipos` (tsc estrito: motor sem DOM + app); `npm test`
-(Vitest, 60 testes, ~1 min). No esqueleto o tempo não anda e nada grava o save (entra com a tela Pet, Etapa 4).
+(Vitest, ~1 min). Etapa 4 (telas), feito: **Pet** (palco, fala, necessidades, chamado, desejo, ações, tempo,
+Meus pets, revelação da evolução, conversa da fala livre com as mesmas chaves). O tempo anda e grava o save (ação
+do dono na hora; tempo a cada 2 s; o pendente ao esconder/fechar a aba); se outra aba muda o save, o app relê em vez
+de gravar por cima (o HTML não faz isso: não deixar o HTML e o app abertos juntos no mesmo pet). Semear save em
+teste: por uma página da mesma origem que não seja o app (ex.: `/Assets/digilab_atlas_up.json`), senão o app grava
+o pet dele por cima ao fechar.
 O HTML continua sendo o jogo até a Etapa 6. `web/app/test/` tem a referência de
 paridade. `motor_html.mjs` extrai o motor do HTML pelas marcas `@motor-inicio/@motor-fim` e roda em Node sem
 DOM; `gerar_gabaritos.mjs` grava 60 vidas (3 versões de pet × 5 donos × 4 sementes, todos os estágios, tipos

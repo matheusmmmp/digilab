@@ -1,0 +1,137 @@
+/* Tela Pet (UpPet) e o que ela usa: mesmas regras do digilab_sprites.html (Etapa 4 da TAREFA_INTERFACE_UP e
+   revisao P0/P1/P2). No Pet, uma coluna so, ate 480 px (guia, secao 8). */
+.dl-malha{background-color:var(--dl-learned-bg);background-image:linear-gradient(rgba(111,227,255,.38) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.38) 1px,transparent 1px);background-size:10px 10px}
+.dl-card--palco{border-radius:16px}
+.dl-btn--destaque{background:var(--dl-highlight);color:var(--dl-highlight-ink);box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 #E0A800}
+.dl-btn--destaque:active:not(:disabled){background:#F2C11F;color:var(--dl-highlight-ink);box-shadow:0 0 0 2px var(--dl-navy),inset 0 3px 0 #C99600}
+.dl-btn--destaque:focus-visible{box-shadow:0 0 0 2px var(--dl-navy),0 0 0 5px var(--dl-action),inset 0 -4px 0 #E0A800}
+.dl-btn--icone{width:44px;height:44px;min-height:44px;padding:0;background:var(--dl-sec-bg);color:var(--dl-sec-ink);border-color:var(--dl-sec-edge);box-shadow:none}
+.dl-btn--icone svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.75;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dl-btn--icone:focus-visible{box-shadow:0 0 0 3px var(--dl-highlight)}
+.dl-tag--ativo{background:#3FCF6A;color:#0B3A18;box-shadow:inset 0 0 0 2px #1F7A3A}
+.dl-linha{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.dl-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dl-par:empty{display:none}
+details > summary{min-height:44px;display:flex;align-items:center;gap:6px;cursor:pointer}
+details > summary::-webkit-details-marker{display:none}
+details > summary::before{content:"▸";font-size:.8em}
+details[open] > summary::before{content:"▾"}
+select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-height:44px;font:inherit;font-weight:800;max-width:100%;border-radius:10px;padding:0 8px}
+
+/* barras */
+.dl-seg{position:relative;display:flex;gap:3px;padding-block:3px}
+.dl-seg i{flex:1;height:10px;border-radius:3px;background:var(--dl-hex)}
+.dl-seg i.on{background:var(--dl-ok)}
+.dl-seg--necessidade i.on{background:var(--dl-need)}
+.dl-seg--sombrio i.on{background:var(--dl-dark)}
+.dl-seg--acao i.on{background:var(--dl-action)}
+.dl-seg b{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--dl-navy);border-radius:1px;box-shadow:0 0 0 1px var(--dl-rim)}
+.dl-rel{display:flex;align-items:center;gap:8px}
+.dl-rel-trilho{position:relative;flex:1;height:10px;border-radius:5px;background:var(--dl-hex)}
+.dl-rel-trilho i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--dl-action)}
+.dl-rel-trilho b{position:absolute;left:50%;top:-3px;width:3px;height:16px;margin-left:-1.5px;background:var(--dl-navy);box-shadow:0 0 0 1px var(--dl-rim)}
+.dl-rel-rotulo{font-size:.6875rem;font-weight:900;color:var(--dl-text-2);min-width:5.5em}
+.dl-vida{display:grid;gap:2px}
+.dl-vida-topo{display:flex;justify-content:space-between;font-weight:900;font-size:.8125rem}
+.dl-vida-trilho{height:12px;border-radius:6px;background:var(--dl-hex);overflow:hidden}
+.dl-vida-trilho i{display:block;height:100%;border-radius:6px;background:var(--dl-ok)}
+
+/* desejo, causa e balao */
+.dl-desejo{border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:6px}
+.dl-desejo--necessidade{background:var(--dl-surface);box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.dl-desejo--aprendida{border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.55);color:#E6FBFF}
+.dl-desejo-cab{border-radius:6px;font-size:.6875rem;font-weight:900;text-align:center;padding:2px 0;letter-spacing:.03em}
+.dl-desejo--necessidade .dl-desejo-cab{background:var(--dl-need);color:var(--dl-need-ink);box-shadow:inset 0 3px 0 rgba(255,255,255,.25)}
+.dl-desejo--aprendida .dl-desejo-cab{background:var(--dl-learned);color:#0B2A5E}
+.dl-desejo-corpo{display:flex;align-items:center;gap:8px;padding:0 4px 2px}
+.dl-desejo-corpo strong{display:block;font-weight:900;font-size:1rem;line-height:1.2}
+.dl-desejo-corpo span{font-size:.6875rem;font-weight:800}
+.dl-desejo--necessidade .dl-desejo-corpo span{color:var(--dl-text-2)}
+.dl-desejo--aprendida .dl-desejo-corpo span{color:#BDEFFF}
+.dl-desejo-icone{width:36px;height:36px;flex:none;border-radius:50%;background:var(--dl-navy);display:flex;align-items:center;justify-content:center;color:var(--dl-learned)}
+.dl-causa{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:2px 8px 2px 4px;font-size:.6875rem;font-weight:900;line-height:1.6}
+.dl-causa--registro{color:#E6FBFF;border:2px solid var(--dl-learned)}
+.dl-causa--sem{background:var(--dl-none-bg);color:var(--dl-none-ink);border:2px dashed var(--dl-none-edge);padding-left:8px}
+.dl-balao{font:inherit;justify-self:start;display:inline-flex;align-items:center;gap:4px;max-width:100%;background:#FFFFFF;color:#13244D;border:3px solid var(--dl-navy);
+  border-radius:14px 14px 14px 4px;box-shadow:0 3px 0 var(--dl-navy-deep);padding:6px 12px;font-weight:800;font-size:.9375rem;min-height:44px;cursor:pointer;text-align:left}
+.dl-balao:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.dl-balao--emote{padding:5px 8px}
+.dl-balao--sombria{background:var(--dl-dark-bg);color:var(--dl-dark-ink);border-color:var(--dl-dark);box-shadow:0 3px 0 #140820;font-weight:700}
+.dl-balao-tag{font-size:.6875rem;font-weight:800;color:#3A5288;border:1px solid #9FC2EF;border-radius:4px;padding:0 5px;margin-left:6px}
+.fala-marca{font-size:.75rem;font-weight:900;border:1px solid var(--dl-border);border-radius:4px;padding:0 4px}
+
+/* a tela */
+.boas-vindas{display:grid;gap:4px}
+.boas-vindas h1{margin:0;font-size:2rem;line-height:1.1}
+.boas-vindas p{margin:0;font-weight:800;color:var(--dl-text-2)}
+.pet-tela{background:var(--dl-bg);border-radius:16px;padding:0 0 14px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;box-shadow:0 0 0 2px var(--dl-border);
+  color:var(--dl-text);overflow:hidden;width:100%;max-width:480px;justify-self:center}
+.pet-tela > :not(.pet-cab){margin-inline:14px}
+.pet-tela .pet-cab{border-radius:0;box-shadow:none}
+.pet-retrato{padding:0;cursor:pointer;align-items:center}
+.pet-retrato img{width:auto;height:auto;max-width:none;object-fit:none;image-rendering:pixelated}
+.pet-retrato:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
+.palco-pet{display:grid;gap:8px;justify-items:center}
+.lcd{display:block;border-radius:10px;background:transparent;image-rendering:pixelated;image-rendering:crisp-edges}
+.pet-status{color:var(--dl-text-2);font-size:.875rem}
+.fala-area{display:grid;gap:6px;justify-items:start;width:100%}
+.fala-det{margin:0}
+.causa-area{display:flex;flex-wrap:wrap;gap:6px}
+.causa-area:empty{display:none}
+.fala-status{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;width:100%;min-height:44px}
+.fala-ponto{width:10px;height:10px;border-radius:50%;background:#8795B3;flex:none}
+.fala-ponto[data-estado="ok"]{background:var(--dl-ok)}
+.fala-ponto[data-estado="pronto"]{background:var(--dl-action)}
+.fala-troca{margin-left:auto;display:flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;font-weight:900;color:var(--dl-text)}
+.fala-troca input{width:24px;height:24px;margin:0;accent-color:var(--dl-action)}
+.necessidades4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.nec{background:var(--dl-surface);border-radius:10px;box-shadow:0 0 0 2px var(--dl-border);padding:6px 4px 4px;display:grid;gap:2px}
+.nec-rot{display:flex;align-items:center;gap:2px;font-size:.6875rem;font-weight:900;min-width:0;overflow:hidden;white-space:nowrap}
+.nec-rot img{flex:none}
+.nec-saude{grid-column:1/-1}
+.chamado{display:flex;align-items:center;gap:10px}
+.chamado-ic{width:44px;height:44px;flex:none;border-radius:10px;background:var(--dl-navy);display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:900}
+.chamado-txt{flex:1;display:grid;gap:2px;min-width:0}
+.acoes-pet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.acoes-pet .dl-btn{padding-inline:4px;font-size:.875rem}
+.tempo-teste > summary{font-weight:900;color:var(--dl-text-2)}
+.tempo-pet{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
+.tempo-pet .dl-btn{min-height:44px;padding:4px 10px;font-size:.8125rem}
+.tempo-pet .dl-btn[aria-pressed="true"]{background:var(--dl-navy);color:#FFFFFF;border-color:var(--dl-navy)}
+
+/* conversa da fala livre (experimental) */
+.fl-bloco{display:grid;gap:8px}
+.fl-exp{font-size:.6875rem;letter-spacing:.06em;background:var(--dl-highlight);color:var(--dl-highlight-ink);padding:2px 7px;border-radius:6px;vertical-align:middle}
+.fl-conv{display:grid;gap:4px;font-size:.875rem;max-height:220px;overflow:auto;background:var(--dl-surface-2);border-radius:10px;padding:8px 10px}
+.fl-j{color:var(--dl-text-2)}
+.fl-p{font-weight:900}
+.fl-msg{flex:1 1 200px;font:inherit;padding:8px 10px;border-radius:10px;border:2px solid var(--dl-border);background:var(--dl-surface);color:var(--dl-text);min-width:0;min-height:44px}
+
+/* Meus pets */
+.meus-pets{border:0;padding:0;background:transparent;max-width:min(420px,calc(100vw - 28px));width:100%}
+.meus-pets::backdrop{background:rgba(11,22,54,.55)}
+.meus-pets .dl-card{display:grid;gap:12px}
+.meus-pets .slot{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;background:var(--dl-surface-2);position:relative}
+.meus-pets .slot::before,.meus-pets .slot::after{content:"";position:absolute;width:12px;height:12px;border:3px solid var(--dl-highlight)}
+.meus-pets .slot::before{left:-2px;top:-2px;border-right:0;border-bottom:0;border-radius:4px 0 0 0}
+.meus-pets .slot::after{right:-2px;bottom:-2px;border-left:0;border-top:0;border-radius:0 0 4px 0}
+.meus-pets .slot .pet-retrato{cursor:default}
+.acoes-mp{display:flex;flex-wrap:wrap;gap:10px}
+.mp-slots{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:10px;align-items:stretch}
+.slot-novo{font:inherit;font-weight:900;font-size:.75rem;color:var(--dl-text-2);background:transparent;border:2px dashed var(--dl-border);border-radius:10px;cursor:pointer;display:grid;justify-items:center;align-content:center;gap:4px;min-height:76px}
+.slot-novo:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:1px}
+
+/* revelacao da evolucao (UpEvolucao) */
+.revelacao{border:0;padding:0;width:min(480px,100vw);max-width:100vw;max-height:100dvh;background:transparent}
+.revelacao::backdrop{background:rgba(11,22,54,.7)}
+.revel-fundo{border-radius:16px;overflow:auto;max-height:100dvh;padding:16px 14px;display:grid;gap:10px;justify-items:center;text-align:center;
+  background-color:#1B54B4;background-image:repeating-linear-gradient(-45deg,rgba(255,255,255,.1) 0 14px,transparent 14px 28px);color:#FFFFFF}
+.revel-de{margin:0;color:#DCE6FF}
+.revel-tit{margin:0;font-size:2.25rem;line-height:1.1}
+.revel-palco{display:flex;justify-content:center;filter:drop-shadow(0 0 12px rgba(255,255,255,.55))}
+.revel-palco canvas{display:block}
+.revel-linha{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:.75rem;font-weight:800;color:#DCE6FF}
+.revel-linha li+li::before{content:"›";margin-right:4px;opacity:.8}
+.revel-linha li[aria-current]{color:#FFFFFF;font-weight:900}
+.revel-porque{width:100%;text-align:left;display:grid;gap:8px;color:var(--dl-text)}
+.revel-ok{min-width:60%}
