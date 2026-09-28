@@ -193,6 +193,44 @@
 @media (max-width:520px){ .dl-estados{grid-template-columns:repeat(2,minmax(0,1fr))} .dl-estados .cab{display:none} .dl-estados > .dl-rot{grid-column:1/-1;margin-top:4px} .dl-estados > .dl-resto{grid-column:1/-1} }
 .dl-falas{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center}
 *{box-sizing:border-box}
+/* navegacao em 4 destinos (TAREFA_INTERFACE_UP, Etapa 3; UI_GUIDELINES 7.12): barra inferior no
+   celular, coluna a esquerda a partir de 900 px */
+.dl-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:space-around;gap:4px;
+  background:var(--dl-navy);border-top:3px solid var(--dl-navy-deep);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.dl-nav button{font:inherit;font-family:var(--dl-f-texto);font-weight:800;font-size:.75rem;color:#DCE6FF;background:none;border:0;
+  min-width:64px;padding:0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+.dl-nav .circ{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);transition:background-color 80ms}
+.dl-nav svg{width:22px;height:22px;stroke:#FFFFFF;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.dl-nav button[aria-current="page"]{color:#FFFFFF;font-weight:900}
+.dl-nav button[aria-current="page"] .circ{background:#2C73E0;box-shadow:0 0 0 3px var(--dl-learned)}
+.dl-nav button:focus-visible{outline:none}
+.dl-nav button:focus-visible .circ{box-shadow:0 0 0 3px var(--dl-highlight)}
+body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+@media (min-width:900px){
+  .dl-nav{top:0;right:auto;width:88px;flex-direction:column;justify-content:flex-start;gap:14px;padding:18px 0;border-top:0;border-right:3px solid var(--dl-navy-deep)}
+  body{padding-left:104px;padding-bottom:40px}
+}
+@media (prefers-reduced-motion: reduce){ .dl-nav .circ{transition:none} }
+/* fora do Pet o aparelho sai e o painel ocupa a largura */
+body[data-destino]:not([data-destino="pet"]) .device{display:none}
+body[data-destino]:not([data-destino="pet"]) .grid{grid-template-columns:minmax(0,1fr)}
+.tabs[hidden]{display:none}
+/* topo do Pet: retrato (abre Meus pets) + plaquinha + estagio */
+.pet-topo{display:flex;align-items:center;gap:10px;min-width:0}
+.pet-retrato{width:52px;height:52px;flex:none;border-radius:50%;padding:0;overflow:hidden;cursor:pointer;background:var(--dl-surface-2);
+  border:3px solid #FFFFFF;box-shadow:0 0 0 2px var(--dl-navy-deep);display:flex;align-items:center;justify-content:center}
+.pet-retrato img{width:auto;height:auto;max-width:none;object-fit:none;image-rendering:pixelated}
+.pet-retrato:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 0 5px var(--dl-highlight)}
+.pet-topo .dl-placa{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Meus pets */
+.meus-pets{border:0;padding:0;background:transparent;max-width:min(420px,calc(100vw - 28px));width:100%}
+.meus-pets::backdrop{background:rgba(11,22,54,.55)}
+.meus-pets .dl-card{display:grid;gap:12px}
+.meus-pets .slot{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;background:var(--dl-surface-2);position:relative}
+.meus-pets .slot::before,.meus-pets .slot::after{content:"";position:absolute;width:12px;height:12px;border:3px solid var(--dl-highlight)}
+.meus-pets .slot::before{left:-2px;top:-2px;border-right:0;border-bottom:0;border-radius:4px 0 0 0}
+.meus-pets .slot::after{right:-2px;bottom:-2px;border-left:0;border-top:0;border-radius:0 0 4px 0}
+.meus-pets .acoes-mp{display:flex;flex-wrap:wrap;gap:10px}
 /* palco de conferencia da Etapa 1 (TAREFA_INTERFACE_UP), so com #palco-up no endereco */
 .palco-up{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:12px}
 .palco-up h2{margin:0;font-size:16px}
@@ -370,9 +408,6 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
 .camp-rival{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:6px;background:var(--panel);cursor:pointer}
 .camp-rival.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 /* atalho de volta ao pet no celular (a tela do pet fica acima das abas) */
-.ir-pet{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:10;font:inherit;font-weight:700;border:0;border-radius:999px;padding:12px 16px;background:var(--shell);color:var(--shell-ink);box-shadow:0 4px 14px rgba(20,30,70,.35);cursor:pointer}
-.ir-pet:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-@media (min-width:821px){.ir-pet{display:none}}
 
 /* celular */
 @media (max-width:600px){
@@ -418,6 +453,11 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
   <p id="aviso-atlas" hidden style="color:var(--bad);font-weight:700"></p>
   <div class="grid">
     <section class="device" aria-label="Aparelho do pet">
+      <div class="pet-topo dl">
+        <button type="button" class="pet-retrato" id="retrato" aria-haspopup="dialog" aria-label="Meus pets"></button>
+        <span class="dl-placa" id="topo-nome">…</span>
+        <span class="dl-tag dl-tag--estagio" id="topo-estagio">…</span>
+      </div>
       <div class="bezel">
         <canvas id="lcd" class="lcd" width="80" height="56" aria-label="Tela do pet"></canvas>
         <div class="strip"><span id="relogio">DIA 1 · 08:00</span><span id="estagio"><b>BEBÊ</b></span></div>
@@ -448,12 +488,12 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       <div class="tabs" role="tablist">
         <button class="tab" role="tab" id="t-estado" data-pane="estado" aria-selected="true">Estado</button>
         <button class="tab" role="tab" id="t-aprend" data-pane="aprend" aria-selected="false">Aprendizado</button>
+        <button class="tab" role="tab" id="t-evolucao" data-pane="evolucao" aria-selected="false">Evolução</button>
         <button class="tab" role="tab" id="t-arena" data-pane="arena" aria-selected="false">Arena</button>
         <button class="tab" role="tab" id="t-campanha" data-pane="campanha" aria-selected="false">Campanha</button>
-        <button class="tab" role="tab" id="t-evolucao" data-pane="evolucao" aria-selected="false">Evolução</button>
+        <button class="tab" role="tab" id="t-registro" data-pane="registro" aria-selected="false">Registro</button>
         <button class="tab" role="tab" id="t-catalogo" data-pane="catalogo" aria-selected="false">Catálogo</button>
         <button class="tab" role="tab" id="t-cenarios" data-pane="cenarios" aria-selected="false">Cenários</button>
-        <button class="tab" role="tab" id="t-registro" data-pane="registro" aria-selected="false">Registro</button>
       </div>
 
       <div class="pane" id="p-estado">
@@ -461,7 +501,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         <div class="linhas" id="necessidades"></div>
         <div>
           <h2>Jeito e desejo</h2>
-          <p class="muted" style="margin-top:4px">O <b>jeito</b> é o temperamento de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir da criança dá para diferenciar os dois.</p>
+          <p class="muted" style="margin-top:4px">O <b>jeito</b> é o temperamento de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir do Rookie dá para diferenciar os dois.</p>
           <div class="jeito"><span class="muted">Jeito</span> <b id="temperamento">…</b></div>
           <div class="jeito"><span class="muted">Desejo</span> <b id="desejo">…</b></div>
           <div class="jeito"><span class="muted">Vínculo</span> <b id="vinculo">…</b></div>
@@ -469,7 +509,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
         </div>
         <div id="treino-bloco">
           <h2>Treino</h2>
-          <p class="muted" style="margin-top:4px">Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão da espécie e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para adulto leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
+          <p class="muted" style="margin-top:4px">Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão da espécie e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
           <div class="treino-btns" id="treino-btns"></div>
           <div class="linhas" id="treino-barras"></div>
           <p id="treino-msg" aria-live="polite" style="margin-top:6px"></p>
@@ -509,7 +549,7 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-arena" hidden>
-        <p>Combate V2.1: distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (adolescente) e a <b>passiva</b> (adulto). Cada lutador decide por uma lista de <b>gambits</b> (condição → ação), maior a cada estágio (criança 3, adolescente 5, adulto 8). <b>Seu pet aprende os próprios gambits lutando</b>; você só pode travar ou vetar regras.</p>
+        <p>Combate V2.1: distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). Cada lutador decide por uma lista de <b>gambits</b> (condição → ação), maior a cada nível (Rookie 3, Champion 5, Ultimate e Mega 8). <b>Seu pet aprende os próprios gambits lutando</b>; você só pode travar ou vetar regras.</p>
         <div class="row">
           <label for="rival">Rival</label>
           <select id="rival">
@@ -557,14 +597,14 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-campanha" hidden>
-        <p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de uma criança. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
+        <p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam os gambits do seu pet.</p>
         <div class="mapa-rola"><svg class="mapa" id="mapa" viewBox="0 0 360 230" role="group" aria-label="Mapa da campanha"></svg></div>
         <div class="camp-det" id="camp-det" aria-live="polite"></div>
         <div id="palco-camp"></div>
       </div>
 
       <div class="pane" id="p-evolucao" hidden>
-        <p>A evolução segue a árvore do combate V2.1, com uma moeda por transição (os contadores zeram a cada evolução). <b>Bebê → criança</b> (3 h): o <b>cuidado</b> decide o ramo; o bebê chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Criança → adolescente</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Adolescente → adulto</b> (18 h e 10 lutas de sparring): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter (PROVISÓRIO, só na web): quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
+        <p>A evolução segue a árvore do combate V2.1, com uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o bebê chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de sparring): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter (PROVISÓRIO, só na web): quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
         <div class="kv" id="evo-resumo"></div>
         <div class="evo-rola"><svg class="evo-svg" id="evo-arvore" viewBox="0 0 560 500" role="img" aria-label="Árvore de evolução"></svg></div>
         <div class="legend"><span style="--c:var(--accent)">caminho do seu pet</span><span style="--c:var(--line)">caminhos possíveis</span></div>
@@ -576,11 +616,11 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
 
       <div class="pane" id="p-catalogo" hidden>
-        <p>As 4 espécies do jogo. Cada uma percorre a mesma árvore (1 bebê, 2 crianças, 4 adolescentes, 8 adultos): 15 formas, cada uma com o seu sprite. Stats pela fórmula do catálogo (espécie + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do estágio. Números PROPOSTOS: a bateria V2.1 reprovou (ver CLAUDE.md).</p>
+        <p>Os 4 brasões do jogo. Cada um percorre a mesma árvore (1 In-Training, 2 Rookies, 4 Champions, 4 Ultimates e 4 Megas): 15 formas, cada uma com o seu sprite. Stats pela fórmula do catálogo (espécie + ramo + linha + forma; todo modificador soma zero, com renormalização nos extremos), aqui sem caráter e sem temperamento; vida e guts já com o multiplicador do estágio. Números PROPOSTOS: a bateria V2.1 reprovou (ver CLAUDE.md).</p>
         <div class="row" id="cat-esp" role="group" aria-label="Espécie"></div>
         <div class="cat-grade" id="cat-grade"></div>
-        <div><h2>Técnicas (adolescente)</h2><div class="decisoes" id="cat-tecnicas" style="margin-top:6px"></div></div>
-        <div><h2>Passivas (adulto)</h2><div class="decisoes" id="cat-passivas" style="margin-top:6px"></div></div>
+        <div><h2>Técnicas (Champion)</h2><div class="decisoes" id="cat-tecnicas" style="margin-top:6px"></div></div>
+        <div><h2>Passivas (Ultimate e Mega)</h2><div class="decisoes" id="cat-passivas" style="margin-top:6px"></div></div>
       </div>
 
       <div class="pane" id="p-cenarios" hidden>
@@ -628,6 +668,28 @@ footer{font-size:13px;color:var(--muted);display:grid;gap:4px}
       </div>
     </section>
   </div>
+
+  <nav class="dl-nav" id="nav" aria-label="Destinos">
+    <button type="button" data-destino="pet"><span class="circ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17c0-4 3-7 7-7s7 3 7 7c0 2-2 3-7 3s-7-1-7-3z"/><path d="M8 10.5 6.5 5 10 8M16 10.5 17.5 5 14 8"/><path d="M10 15h.01M14 15h.01"/></svg></span>Pet</button>
+    <button type="button" data-destino="crescer"><span class="circ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V11"/><path d="M12 11c0-4 3-6 7-6 0 4-3 6-7 6zM12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg></span>Crescer</button>
+    <button type="button" data-destino="lutar"><span class="circ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l10 10M20 4 10 14"/><path d="M12 16l-3 3M12 16l3 3M7 17l-2 2M17 17l2 2"/></svg></span>Lutar</button>
+    <button type="button" data-destino="diario"><span class="circ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg></span>Diário</button>
+  </nav>
+
+  <dialog class="meus-pets dl" id="meus-pets" aria-labelledby="mp-titulo">
+    <div class="dl-card">
+      <div class="dl-linha" style="justify-content:space-between">
+        <h2 class="dl-titulo-card" id="mp-titulo">Meus pets</h2>
+        <button type="button" class="dl-btn dl-btn--icone" id="mp-fechar" aria-label="Fechar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5 5 15"/></svg></button>
+      </div>
+      <div class="slot" id="mp-ativo"></div>
+      <p class="dl-apoio" style="margin:0">Um pet por vez: o jogo guarda o registro de um pet só.</p>
+      <div class="acoes-mp">
+        <button type="button" class="dl-btn dl-btn--sec" id="mp-voltar" hidden>Voltar ao pet anterior</button>
+        <button type="button" class="dl-btn dl-btn--sec" id="mp-registro">Registro e novo ovo</button>
+      </div>
+    </div>
+  </dialog>
 
   <footer>
     <span>Porte em JavaScript do motor Digilab v1: mesmas regras e parâmetros de <code>config.py</code>. O gerador aleatório é outro, então os resultados não batem bit a bit com os artefatos de pesquisa em Python.</span>
@@ -1137,7 +1199,7 @@ function motivoVida(m, obs, acao, tick){
    Estagio da fala: o estagio da evolucao (arvore V2.1: bebe, crianca, adolescente, adulto).
    ================================================================= */
 const ESTAGIOS_FALA = ["bebe","crianca","adolescente","adulto"];
-const NOME_ESTAGIO_FALA = {bebe:"bebê", crianca:"criança", adolescente:"adolescente", adulto:"adulto"};
+const NOME_ESTAGIO_FALA = {bebe:"In-Training", crianca:"Rookie", adolescente:"Champion", adulto:"Ultimate/Mega"};
 const GENERICO_ADULTO = "Não sei, só quis.";
 const F = (marcador, adulto) => ({ marcador, bebe:"", crianca:`[:${marcador}:]`, adolescente:`${marcador}...`, adulto });
 const FATORES_TXT = {
@@ -1850,11 +1912,24 @@ const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.ad
    cada eixo junta os tracos de combate que se parecem com ele */
 const EIXO_TRACO = {impetuoso:["golpe","carga"], paciente:["bloqueio"], atento:["finta"], resistente:["agarrao"]};
 const TECNICAS = ["investida","contra_golpe","marcar","pele_dura"];
-const NOME_ESP = {brasa:"Brasa", cirro:"Cirro", ferrugem:"Ferrugem", limo:"Limo"};
+/* nomes na tela (pedido do Matheus, 2026-09-27): especie = brasao do Digimon Adventure, forma = nome do
+   Digimon do mapa aprovado, estagio = nivel do Digimon. So rotulos: ids internos, log e save nao mudam. */
+const NOME_ESP = {brasa:"Coragem", cirro:"Amizade", ferrugem:"Conhecimento", limo:"Sinceridade"};
+const DO_ESP = {brasa:"da Coragem", cirro:"da Amizade", ferrugem:"do Conhecimento", limo:"da Sinceridade"};
+/* forma (chave de sprite) -> [nome do Digimon, nivel]; mapa da Etapa 0 (Assets/catalogo_sprites_up.json) */
+const DIGIMON_DA_FORMA = {"brasa_bebe":["Koromon","In-Training"],"brasa_crianca_sereno":["Agumon","Rookie"],"brasa_crianca_arisco":["Guilmon","Rookie"],"brasa_adolescente_brigao":["Greymon","Champion"],"brasa_adulto_duelista":["MetalGreymon","Ultimate"],"brasa_adulto_furioso":["WarGreymon","Mega"],"brasa_adolescente_guardiao":["Kyubimon","Champion"],"brasa_adulto_espelho":["Taomon","Ultimate"],"brasa_adulto_muralha":["Sakuyamon","Mega"],"brasa_adolescente_cacador":["Birdramon","Champion"],"brasa_adulto_sentinela":["Garudamon","Ultimate"],"brasa_adulto_emboscador":["Phoenixmon","Mega"],"brasa_adolescente_colosso":["Growlmon","Champion"],"brasa_adulto_vigia":["WarGrowlmon","Ultimate"],"brasa_adulto_tita":["Gallantmon","Mega"],"cirro_bebe":["Tsunomon","In-Training"],"cirro_crianca_sereno":["Patamon","Rookie"],"cirro_crianca_arisco":["Gabumon","Rookie"],"cirro_adolescente_brigao":["Garurumon","Champion"],"cirro_adulto_duelista":["WereGarurumon","Ultimate"],"cirro_adulto_furioso":["MetalGarurumon","Mega"],"cirro_adolescente_guardiao":["Angemon","Champion"],"cirro_adulto_espelho":["MagnaAngemon","Ultimate"],"cirro_adulto_muralha":["Seraphimon","Mega"],"cirro_adolescente_cacador":["Aquilamon","Champion"],"cirro_adulto_sentinela":["Silphymon","Ultimate"],"cirro_adulto_emboscador":["Valkyrimon","Mega"],"cirro_adolescente_colosso":["Gatomon","Champion"],"cirro_adulto_vigia":["Angewomon","Ultimate"],"cirro_adulto_tita":["Magnadramon","Mega"],"ferrugem_bebe":["DemiVeemon","In-Training"],"ferrugem_crianca_sereno":["Armadillomon","Rookie"],"ferrugem_crianca_arisco":["Veemon","Rookie"],"ferrugem_adolescente_brigao":["ExVeemon","Champion"],"ferrugem_adulto_duelista":["Paildramon","Ultimate"],"ferrugem_adulto_furioso":["Imperialdramon Dragon Mode","Mega"],"ferrugem_adolescente_guardiao":["Ankylomon","Champion"],"ferrugem_adulto_espelho":["Shakkoumon","Ultimate"],"ferrugem_adulto_muralha":["SlashAngemon","Mega"],"ferrugem_adolescente_cacador":["Gargomon","Champion"],"ferrugem_adulto_sentinela":["Rapidmon","Ultimate"],"ferrugem_adulto_emboscador":["MegaGargomon","Mega"],"ferrugem_adolescente_colosso":["Kabuterimon","Champion"],"ferrugem_adulto_vigia":["MegaKabuterimon","Ultimate"],"ferrugem_adulto_tita":["HerculesKabuterimon","Mega"],"limo_bebe":["Tanemon","In-Training"],"limo_crianca_sereno":["Palmon","Rookie"],"limo_crianca_arisco":["Gomamon","Rookie"],"limo_adolescente_brigao":["Stingmon","Champion"],"limo_adulto_duelista":["DinoBeemon","Ultimate"],"limo_adulto_furioso":["Imperialdramon Fighter Mode","Mega"],"limo_adolescente_guardiao":["Togemon","Champion"],"limo_adulto_espelho":["Lillymon","Ultimate"],"limo_adulto_muralha":["Rosemon","Mega"],"limo_adolescente_cacador":["Seadramon","Champion"],"limo_adulto_sentinela":["MegaSeadramon","Ultimate"],"limo_adulto_emboscador":["MetalSeadramon","Mega"],"limo_adolescente_colosso":["Ikkakumon","Champion"],"limo_adulto_vigia":["Zudomon","Ultimate"],"limo_adulto_tita":["Vikemon","Mega"]};
 const NOME_ARQ = {sereno:"Sereno", arisco:"Arisco", brigao:"Brigão", guardiao:"Guardião", cacador:"Caçador", colosso:"Colosso",
   duelista:"Duelista", furioso:"Furioso", espelho:"Espelho", muralha:"Muralha", sentinela:"Sentinela", emboscador:"Emboscador",
   vigia:"Vigia", tita:"Titã", devastador:"Devastador", bastiao_rachado:"Bastião rachado", predador:"Predador", colosso_partido:"Colosso partido"};
-const NOME_EST = {ovo:"Ovo", bebe:"Bebê", crianca:"Criança", adolescente:"Adolescente", adulto:"Adulto"};
+const NOME_EST = {ovo:"Digi-Egg", bebe:"In-Training", crianca:"Rookie", adolescente:"Champion", adulto:"Ultimate/Mega"};
+/* nivel de uma forma: o adulto e Ultimate ou Mega conforme a forma (a sombria herda o da base) */
+function nomeEstagio(f){
+  if (!f || f.est === "ovo") return NOME_EST.ovo;
+  if (f.est !== "adulto") return NOME_EST[f.est];
+  const d = DIGIMON_DA_FORMA[chaveSprite(f)];
+  if (!d) throw new Error("forma sem Digimon: " + chaveSprite(f));
+  return d[1];
+}
 const DESC_TECNICA = {
   investida:"médio, 20 guts: avança e acerta 8 no mesmo turno; esquivar não adianta; defender apara (sem dano e sem avanço)",
   contra_golpe:"perto, 15 guts: postura de defesa que devolve 50% do dano corpo a corpo (bruto)",
@@ -1875,9 +1950,10 @@ function tecnicaDe(f){ return f.linha ? CAT.adolescente[f.linha].tecnica : null;
 function chaveSprite(f){ return f.est === "bebe" ? `${f.esp}_bebe` : f.est === "crianca" ? `${f.esp}_crianca_${f.ramo}`
   : f.est === "adolescente" ? `${f.esp}_adolescente_${f.linha}` : `${f.esp}_adulto_${SOMBRIA[f.adulta] ? SOMBRIA[f.adulta].base : f.adulta}`; }
 function nomeForma(f){
-  const n = NOME_ESP[f.esp];
-  return f.est === "bebe" ? `${n} bebê` : f.est === "crianca" ? `${n} ${NOME_ARQ[f.ramo].toLowerCase()}`
-    : f.est === "adolescente" ? `${n} ${NOME_ARQ[f.linha]}` : `${n} ${NOME_ARQ[f.adulta]}`;
+  if (f.est === "ovo") return "Digi-Egg " + DO_ESP[f.esp];
+  const d = DIGIMON_DA_FORMA[chaveSprite(f)];
+  if (!d) throw new Error("forma sem Digimon: " + chaveSprite(f));
+  return SOMBRIA[f.adulta] ? d[0] + " sombrio" : d[0];
 }
 /* renormalizacao (no lugar do corte): prende no limite quem saiu da faixa e devolve a diferenca,
    em partes iguais, aos stats livres; o total volta ao orcamento da especie */
@@ -2233,15 +2309,15 @@ const CRIANCA_V21 = {
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para
    nenhuma linha ficar travada; experiments/calibrar_progressao.py) */
 const LUGARES = [
-  {nome:"Campina", x:74, y:176, sugerido:"criança", est:"crianca"},
-  {nome:"Torre de pedra", x:196, y:118, sugerido:"adolescente", est:"adolescente"},
-  {nome:"Cidadela", x:300, y:58, sugerido:"adulto", est:"adulto"},
+  {nome:"Campina", x:74, y:176, sugerido:"Rookie", est:"crianca"},
+  {nome:"Torre de pedra", x:196, y:118, sugerido:"Champion", est:"adolescente"},
+  {nome:"Cidadela", x:300, y:58, sugerido:"Ultimate", est:"adulto"},
 ];
 /* todo pet treinado vence cada NPC (decisao do Matheus: NPC fixo e imprevisivel, eps alto); o custo e o pet
    sem treino tambem vencer com frequencia (experiments/calibrar_progressao.py, rodadas 12-14) */
 const CAMPANHA = [
   {k:"npc_tier1_brutamontes", nome:"Brutamontes", total:96, estilo:"crianca:arisco", estagio:"crianca", eps:.5, lug:0, sprite:"crianca_golpe", grade:"crianca", cor:"golpe",
-   licao:"Um valentão do tamanho de uma criança, forte mas desastrado: às vezes ataca sem pensar. Treinando na infância você vence com folga."},
+   licao:"Um valentão do tamanho de um Rookie, forte mas desastrado: às vezes ataca sem pensar. Treinando no Rookie você vence com folga."},
   {k:"npc_tier2_sentinela", nome:"Sentinela", total:72, estilo:"v2c:tartaruga", eps:.4, lug:1, sprite:"adulto_bloqueio", cor:"bloqueio",
    licao:"Se fecha na defesa e espera o seu erro. Treinado, seu pet quebra a guarda dela."},
   {k:"npc_tier2_carcereiro", nome:"Carcereiro", total:90, estilo:"v21:espelho", eps:.5, lug:1, sprite:"adulto_agarrao", cor:"agarrao",
@@ -2501,7 +2577,7 @@ function formaAdultaDe(linha, car){
   return Object.entries(a.formas).find(([, f]) => (f.sinal > 0) === (car[a.comp] >= 0))[0];
 }
 function corDominante(tracos){ const af = afinidades(tracos); return COMBATE.reduce((m,c) => af[c] > af[m] ? c : m, COMBATE[0]); }
-const NOME_ESTAGIO = { bebe:"BEBÊ", crianca:"CRIANÇA", adolescente:"ADOLESCENTE", adulto:"ADULTO" };
+
 /* placeholder em grade: o adolescente usa a grade da crianca */
 const gradeDe = est => est === "adolescente" ? "crianca" : est;
 
@@ -2706,7 +2782,7 @@ function montarComponentesUp(){
       <p class="dl-apoio" style="margin:0">Desativado é <code>disabled</code> de verdade; o motivo fica em texto perto quando não é óbvio. O Forçar só aparece acima do limite de fadiga.</p></section>
     <section class="dl-card"><h3 class="dl-titulo-card">Plaquinha e etiquetas</h3>
       <div class="dl-linha"><span class="dl-placa">Agumon</span><span class="dl-placa dl-placa--inclinada">Experiência</span></div>
-      <div class="dl-linha"><span class="dl-tag dl-tag--estagio">criança</span><span class="dl-tag dl-tag--ativo">ativo</span><span class="dl-tag dl-tag--espera">em espera</span><span class="dl-tag dl-tag--sombria">sombria</span></div>
+      <div class="dl-linha"><span class="dl-tag dl-tag--estagio">Rookie</span><span class="dl-tag dl-tag--ativo">ativo</span><span class="dl-tag dl-tag--espera">em espera</span><span class="dl-tag dl-tag--sombria">sombria</span></div>
       <p class="dl-apoio" style="margin:0">Nunca mais de duas etiquetas juntas numa tela; aqui estão lado a lado só para comparar.</p></section>
     <section class="dl-card"><h3 class="dl-titulo-card">Barras</h3>
       <span class="dl-apoio">Segmentada: necessidade, fadiga com limite, sobrecarga com faixa de aviso, janela de chamado</span>
@@ -2725,10 +2801,10 @@ function montarComponentesUp(){
       <div class="dl-linha"><span class="dl-causa dl-causa--registro dl-malha">${imgPeca("emoji_joinha", 1, "elogio")}elogio · luta, turno 7</span><span class="dl-causa dl-causa--sem">? sem motivo registrado</span></div></section>
     <section class="dl-card"><h3 class="dl-titulo-card">Fala do pet por estágio</h3>
       <div class="dl-falas">
-        <span style="font-weight:900">bebê</span><span class="dl-balao dl-balao--emote">${imgPeca("emoji_coracao", 2, "coração")}</span>
-        <span style="font-weight:900">criança</span><span class="dl-balao dl-balao--emote">${imgPeca("emoji_carne", 2, "comida")}<span style="font-weight:900">+</span>${imgGrade(AMPULHETA, 3, {k:"#173A8A", w:"#FFFFFF", y:"#F0B429"}, "demora")}</span>
-        <span style="font-weight:900">adolescente</span><span class="dl-balao">fome. você demorou.</span>
-        <span style="font-weight:900">adulto</span><span class="dl-balao">Recuei porque ele ia investir, e você me elogiou da última vez.</span>
+        <span style="font-weight:900">In-Training</span><span class="dl-balao dl-balao--emote">${imgPeca("emoji_coracao", 2, "coração")}</span>
+        <span style="font-weight:900">Rookie</span><span class="dl-balao dl-balao--emote">${imgPeca("emoji_carne", 2, "comida")}<span style="font-weight:900">+</span>${imgGrade(AMPULHETA, 3, {k:"#173A8A", w:"#FFFFFF", y:"#F0B429"}, "demora")}</span>
+        <span style="font-weight:900">Champion</span><span class="dl-balao">fome. você demorou.</span>
+        <span style="font-weight:900">Ultimate/Mega</span><span class="dl-balao">Recuei porque ele ia investir, e você me elogiou da última vez.</span>
         <span style="font-weight:900">frase pronta</span><span class="dl-balao">tô com fome.<span class="dl-balao-tag">frase pronta</span></span>
         <span style="font-weight:900">sem base</span><span><span class="dl-balao dl-balao--sembase">gosto de chuva.</span><p class="dl-balao-nota">Sem base: nada registrado sobre chuva.</p></span>
         <span style="font-weight:900">sombria</span><span class="dl-balao dl-balao--sombria">treina. só isso.</span>
@@ -2903,7 +2979,7 @@ const corNivel = v => v < .25 ? "var(--bad)" : v < .5 ? "var(--warn)" : "var(--g
 function renderEstado(){
   const e = motor.e;
   $("relogio").textContent = `DIA ${diaDe(e.tick)} · ${hhmm(e.tick)}`;
-  $("estagio").innerHTML = `<b>${nomeForma(motor.forma)}</b> · ${NOME_ESTAGIO[motor.estagioAtual].toLowerCase()} · ${NOME_PET[motor.acao]}`;
+  $("estagio").innerHTML = `<b>${nomeForma(motor.forma)}</b> · ${nomeEstagio(motor.forma)} · ${NOME_PET[motor.acao]}`;
   $("necessidades").innerHTML = [
     ["Saciedade", e.fome], ["Higiene", e.higiene], ["Energia", e.energia], ["Humor", e.humor], ["Saúde", e.saude],
   ].map(([r,v]) => linha(r, v, corNivel(v))).join("");
@@ -2912,7 +2988,7 @@ function renderEstado(){
   if (e.fome < .25) al.push(`<span class="tag bad">Com muita fome</span>`); else if (e.fome < .5) al.push(`<span class="tag warn">Com fome</span>`);
   if (e.higiene < .25 || e.sujeira >= 3) al.push(`<span class="tag warn">Precisa de limpeza</span>`);
   if (motor.acao === "chamar_atencao") al.push(`<span class="tag warn">Chamando você</span>`);
-  for (const c of motor.chamadosAbertos()) al.push(`<span class="tag warn">Bebê chamando: ${NOME_CHAMADO[c]} (${ACAO_CHAMADO[c].join(" ou ")})</span>`);
+  for (const c of motor.chamadosAbertos()) al.push(`<span class="tag warn">Chamando: ${NOME_CHAMADO[c]} (${ACAO_CHAMADO[c].join(" ou ")})</span>`);
   if (velAntesChamado !== null) al.push(`<span class="tag">Tempo em 1x até você atender o chamado</span>`);
   if (e.dormindo) al.push(`<span class="tag">Dormindo</span>`);
   if (!al.length) al.push(`<span class="tag good">Tudo bem</span>`);
@@ -2950,15 +3026,15 @@ function renderTreino(){
   $("treino-barras").innerHTML = lin("Fadiga", t.fadiga, t.forcaria ? "var(--bad)" : t.pedePausa ? "var(--warn, #d9a441)" : "var(--accent)", t.fadiga.toFixed(0))
     + lin(`Sobrecarga`, t.sobrecarga, t.sobrecarga >= CSO.sombrio ? "var(--bad)" : t.sobrecarga >= CSO.aviso ? "var(--warn, #d9a441)" : "var(--muted)", t.sobrecarga.toFixed(0))
     + lin("Treinado", t.total / CTR.tetoVida * 100, "var(--accent)", `+${t.total.toFixed(1)}/${CTR.tetoVida}`)
-    + `<p class="muted" style="font-size:.85em">Sobrecarga: aviso em ${CSO.aviso} (fala fria), forma sombria com ${CSO.sombrio}+ na virada para adulto. `
+    + `<p class="muted" style="font-size:.85em">Sobrecarga: aviso em ${CSO.aviso} (fala fria), forma sombria com ${CSO.sombrio}+ na virada para Ultimate. `
     + `Treinado: ${STATS.filter(k => t.pontos[k] > 0).map(k => `${NOME_STAT[k]} +${t.pontos[k].toFixed(1)}`).join(", ") || "nada ainda"}.</p>`;
-  $("treino-espera").textContent = bebe ? "O bebê ainda não treina." : !pode ? `Próximo treino em ${CTR.intervalo - (motor.e.tick - t.ultimo)} min de jogo.`
+  $("treino-espera").textContent = bebe ? "O In-Training ainda não treina." : !pode ? `Próximo treino em ${CTR.intervalo - (motor.e.tick - t.ultimo)} min de jogo.`
     : t.pedePausa ? "Ele está pedindo pausa." : "";
 }
 $("treino-btns").addEventListener("click", ev => {
   const b = ev.target.closest("button[data-ex]"); if (!b || b.disabled) return;
   const ex = b.dataset.ex, t = motor.treino;
-  if (t.forcaria && !confirm(`Forçar ${NOME_EXERCICIO[ex].toLowerCase()}? Rende mais agora, mas gera ${CTR.sobreForcar} de sobrecarga${motor.versao >= 2 ? " e derruba o vínculo" : ""}. Sobrecarga ${CSO.sombrio}+ na virada para adulto leva à forma sombria.`)) return;
+  if (t.forcaria && !confirm(`Forçar ${NOME_EXERCICIO[ex].toLowerCase()}? Rende mais agora, mas gera ${CTR.sobreForcar} de sobrecarga${motor.versao >= 2 ? " e derruba o vínculo" : ""}. Sobrecarga ${CSO.sombrio}+ na virada para Ultimate leva à forma sombria.`)) return;
   try {
     const s = motor.treinar(ex); salvar();
     const g = Object.entries(s.ganho).map(([k, v]) => `+${v.toFixed(2)} ${NOME_STAT[k] || k}`).join(", ");
@@ -2983,7 +3059,31 @@ function renderRegistro(){
       : h.quem === "treino" ? `<span class="dono">treino: pet ${h.a}</span>` : `pet: ${NOME_PET[h.a]}`}</div>`).join("");
 }
 let paneAtual = "estado";
+/* topo do Pet: retrato 1x recortado no circulo (sem redimensionar), nome da forma e estagio */
+let retratoChave = null;
+function renderTopoPet(){
+  const f = motor.forma, ovo = !f || nascendo > 0;
+  $("topo-nome").textContent = ovo ? "Digi-Egg " + DO_ESP[motor.especie] : nomeForma(f);
+  $("topo-estagio").textContent = ovo ? NOME_EST.ovo : nomeEstagio(f);
+  const ch = (ovo ? "ovo|" + motor.especie : chaveSprite(f)) + "|" + atlasOk;
+  if (ch === retratoChave) return;
+  retratoChave = ch;
+  $("retrato").innerHTML = `<img src="${imagemForma(ovo ? {est:"ovo", esp:motor.especie} : f)}" alt="">`;
+}
+function abrirMeusPets(){
+  const f = motor.forma, ovo = !f || nascendo > 0;
+  $("mp-ativo").innerHTML = `<span class="pet-retrato" aria-hidden="true">${$("retrato").innerHTML}</span>
+    <span style="display:grid;gap:4px;min-width:0"><b style="font-weight:900">${ovo ? "Digi-Egg " + DO_ESP[motor.especie] : nomeForma(f)}</b>
+    <span><span class="dl-tag dl-tag--estagio">${ovo ? NOME_EST.ovo : nomeEstagio(f)}</span> <span class="dl-tag dl-tag--ativo">ativo</span></span></span>`;
+  $("mp-voltar").hidden = $("cen-voltar").hidden;
+  $("meus-pets").showModal();
+}
+$("retrato").addEventListener("click", abrirMeusPets);
+$("mp-fechar").addEventListener("click", () => $("meus-pets").close());
+$("mp-voltar").addEventListener("click", () => { $("meus-pets").close(); $("cen-voltar").click(); });
+$("mp-registro").addEventListener("click", () => { $("meus-pets").close(); mostrarPane("registro"); scrollTo(0, 0); $("novo").focus(); });
 function renderTudo(){
+  renderTopoPet();
   renderEstado();
   renderTreino();
   renderFala();
@@ -3024,14 +3124,38 @@ function ajustarVelocidadeChamado(){
 }
 $("pulo").addEventListener("click", () => { motor.avancar(60); salvar(); renderTudo(); });
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => mostrarPane(t.dataset.pane)));
+/* 4 destinos (TAREFA_INTERFACE_UP, Etapa 3): cada aba antiga mora em um destino so */
+const DESTINOS = { pet:["estado"], crescer:["aprend", "evolucao"], lutar:["arena", "campanha"], diario:["registro", "catalogo", "cenarios"] };
+const DESTINO_DA_ABA = Object.fromEntries(Object.entries(DESTINOS).flatMap(([d, abas]) => abas.map(a => [a, d])));
+const ultimaAbaDoDestino = {};
+let destinoAtual = "pet";
+document.querySelectorAll("#nav [data-destino]").forEach(b => b.addEventListener("click", () => {
+  const d = b.dataset.destino;
+  mostrarPane(ultimaAbaDoDestino[d] || DESTINOS[d][0]);
+  scrollTo(0, 0);
+}));
+/* aba lembrada: guarda "destino/aba"; um valor antigo (so a aba) vira o destino dela */
+function lerAbaLembrada(){
+  let v = null;
+  try { v = localStorage.getItem(CHAVE + "-aba"); } catch(_){ return null; }
+  if (!v) return null;
+  const aba = v.includes("/") ? v.split("/")[1] : v;
+  return DESTINO_DA_ABA[aba] ? aba : null;
+}
 function mostrarPane(p){
-  paneAtual = p;
+  const d = DESTINO_DA_ABA[p];
+  if (!d) throw new Error("aba sem destino: " + p);
+  paneAtual = p; destinoAtual = d; ultimaAbaDoDestino[d] = p;
+  document.body.dataset.destino = d;
+  document.querySelectorAll("#nav [data-destino]").forEach(b => { if (b.dataset.destino === d) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  document.querySelectorAll(".tab").forEach(t => { t.hidden = DESTINO_DA_ABA[t.dataset.pane] !== d; });
+  document.querySelector(".tabs").hidden = DESTINOS[d].length < 2;
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.pane === p)));
   for (const id of ["estado","aprend","arena","campanha","evolucao","catalogo","cenarios","registro"]) $("p-" + id).hidden = id !== p;
   /* o palco da luta mora na aba visivel (Arena ou Campanha) */
   if (p === "campanha") $("palco-camp").appendChild($("palco"));
   else if (p === "arena") $("palco-arena").appendChild($("palco"));
-  try { localStorage.setItem(CHAVE + "-aba", p); } catch(_){}
+  try { localStorage.setItem(CHAVE + "-aba", d + "/" + p); } catch(_){}
   renderTudo();
   if (p === "arena"){ renderGambits(); arenaPreview(); }
   if (p === "campanha" && !lutando){ renderCampanha(); campPreview(); }
@@ -3330,7 +3454,7 @@ function renderGambits(){
   chaveEditor = chaveEditorAtual();
   const el = $("gambits"), gp = motor.gp;
   if (!gp){
-    el.innerHTML = `<p class="muted">O bebê ainda não tem estilo de luta: decide ao acaso. Quando evoluir para criança, o ramo (sereno ou arisco) semeia os primeiros 3 gambits e ele começa a aprender com as lutas.</p>`;
+    el.innerHTML = `<p class="muted">O In-Training ainda não tem estilo de luta: decide ao acaso. Quando evoluir para Rookie, o ramo (sereno ou arisco) semeia os primeiros 3 gambits e ele começa a aprender com as lutas.</p>`;
     return;
   }
   const linhas = gp.ativas.map((k, i) => {
@@ -3531,7 +3655,7 @@ function renderCampDet(){
     ${cab ? `<p><b>${cab}</b></p>` : ""}
     <p class="muted">sugerido a partir de: ${L.sugerido}</p>
     ${cedo && aberto ? `<p class="aviso">Seu pet ainda é ${NOME_ESTAGIO_FALA[est] || est}: este lugar é pensado para ${L.sugerido} em diante.</p>` : ""}
-    ${podeLutar ? "" : `<p class="muted">O bebê ainda não luta na campanha.</p>`}
+    ${podeLutar ? "" : `<p class="muted">O In-Training ainda não luta na campanha.</p>`}
     ${L.rivais.map(rival).join("")}`;
 }
 function campPreview(){
@@ -3676,8 +3800,8 @@ function previsaoEvo(m){
 function requisito(g){
   if (g.est === "ovo") return "início";
   if (g.est === "bebe") return "sai do ovo";
-  if (g.est === "crianca") return g.ramo === "sereno" ? `cuidado ≥ ${CAT.limiarCuidado*100}% dos chamados no bebê` : `cuidado < ${CAT.limiarCuidado*100}% dos chamados no bebê`;
-  if (g.est === "adolescente"){ const a = CAT.adolescente[g.linha]; return `caráter dominante ${a.eixo} ao fim da criança · técnica ${NOME_V2[a.tecnica]}: ${DESC_TECNICA[a.tecnica]}`; }
+  if (g.est === "crianca") return g.ramo === "sereno" ? `cuidado ≥ ${CAT.limiarCuidado*100}% dos chamados no In-Training` : `cuidado < ${CAT.limiarCuidado*100}% dos chamados no In-Training`;
+  if (g.est === "adolescente"){ const a = CAT.adolescente[g.linha]; return `caráter dominante ${a.eixo} ao fim do Rookie · técnica ${NOME_V2[a.tecnica]}: ${DESC_TECNICA[a.tecnica]}`; }
   const a = CAT.adulto[g.linha], s = a.formas[g.adulta].sinal;
   return `${a.comp} ${s > 0 ? "≥ 0" : "< 0"} e ${CAT.sparring} lutas de sparring · passiva: ${DESC_PASSIVA[g.adulta]}`;
 }
@@ -3687,7 +3811,7 @@ function renderEvolucao(){
   $("evo-resumo").innerHTML = [
     [nomeForma(f), "forma atual"],
     [p ? (espera ? `${CAT.sparring - motor.sparring} lutas` : duracao(Math.max(0, p.falta))) : "—",
-     p ? (espera ? "de sparring (arena) para virar adulto" : `até virar ${NOME_EST[p.prox.est].toLowerCase()}`) : "forma final"],
+     p ? (espera ? "de sparring (arena) para virar Ultimate ou Mega" : `até virar ${nomeEstagio(p.prox)}`) : "forma final"],
     [p ? nomeForma(p.prox) : NOME_ARQ[f.adulta], p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta]}`],
   ].map(([v, k]) => `<div><b style="font-size:16px">${v}</b><span>${k}</span></div>`).join("");
   const det = x => x.estagio === "crianca" ? `cuidado ${(x.cuidado*100).toFixed(0)}%`
@@ -3739,7 +3863,7 @@ let catEsp = null;
 function renderCatalogo(){
   const esp = catEsp || motor.especie;
   $("cat-esp").innerHTML = ESPECIES.map(e => `<button class="chip" data-esp="${e}" aria-pressed="${e === esp}">${NOME_ESP[e]}${e === motor.especie ? " (seu)" : ""}</button>`).join("")
-    + `<span class="muted">${CAT.conceito[esp]}</span>`;
+    + `<span class="muted">${CAT.conceito[esp].split("; ").pop()}</span>`;
   const formas = [{esp, est:"bebe"}, ...["sereno","arisco"].map(r => ({esp, est:"crianca", ramo:r})),
     ...LINHAS.map(l => ({esp, est:"adolescente", ramo:"sereno", linha:l})),
     ...FORMAS_AD.map(a => ({esp, est:"adulto", ramo:"sereno", linha:LINHA_DA_FORMA[a], adulta:a}))];
@@ -3749,7 +3873,7 @@ function renderCatalogo(){
     const extra = f.adulta ? `técnica ${NOME_V2[p.tecnica]} · passiva: ${DESC_PASSIVA[f.adulta]}`
       : f.linha ? `técnica ${NOME_V2[p.tecnica]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 gambits";
     return `<div class="cat-card${chaveSprite(f) === meu ? " meu" : ""}" title="${requisito(f)}"><img src="${imagemForma(f)}" alt="${nomeForma(f)}">
-      <b>${nomeForma(f)}</b><span class="muted">${NOME_EST[f.est]}</span>
+      <b>${nomeForma(f)}</b><span class="muted">${f.est === "ovo" ? NOME_EST.ovo : nomeEstagio(f)}</span>
       <span class="st">vig ${n1(s.vigor)} · fôl ${n1(s.folego)} · rec ${n1(s.recuperacao)}<br>for ${n1(s.forca)} · mir ${n1(s.mira)} · gua ${n1(s.guarda)}</span>
       <span class="st">vida ${p.hpMax.toFixed(0)} · guts ${p.guts0.toFixed(0)}/${p.gutsMax.toFixed(0)} · +${p.regen.toFixed(1)}</span>
       <span class="muted" style="font-size:12px">${extra}</span></div>`;
@@ -3765,8 +3889,8 @@ $("cat-esp").addEventListener("click", ev => { const b = ev.target.closest("[dat
    A vira o pet do jogador; B vira o rival fixo. Sementes fixas: mesmo cenario, mesmo resultado. */
 let rivalFixo = null, cenarioAtual = null;
 const CENARIOS = [
-  { id:"adulto-bebe", titulo:"Adulto bem cuidado × bebê aleatório",
-    desc:"A: atencioso, 6 dias, 40 interações/dia. B: aleatório, 2 horas (ainda bebê), 8/dia.",
+  { id:"adulto-bebe", titulo:"Ultimate bem cuidado × In-Training aleatório",
+    desc:"A: atencioso, 6 dias, 40 interações/dia. B: aleatório, 2 horas (ainda In-Training), 8/dia.",
     a:{dono:"atencioso", dias:6, porDia:40}, b:{dono:"aleatorio", dias:.1, porDia:8} },
   { id:"controle", titulo:"Controle da pesquisa",
     desc:"Atencioso × aleatório, 5 dias, 16/dia nos dois. É a comparação do portão.",
@@ -3774,8 +3898,8 @@ const CENARIOS = [
   { id:"orcamento", titulo:"Mesmo dono, orçamento diferente",
     desc:"Atencioso nos dois, 5 dias. A com 40/dia, B com 6/dia.",
     a:{dono:"atencioso", dias:5, porDia:40}, b:{dono:"atencioso", dias:5, porDia:6} },
-  { id:"negligenciado", titulo:"Adulto negligenciado × criança cuidada",
-    desc:"A: relapso, 6 dias, 4/dia. B: atencioso, meio dia (ainda criança), 24/dia.",
+  { id:"negligenciado", titulo:"Ultimate negligenciado × Rookie cuidado",
+    desc:"A: relapso, 6 dias, 4/dia. B: atencioso, meio dia (ainda Rookie), 24/dia.",
     a:{dono:"relapso", dias:6, porDia:4}, b:{dono:"atencioso", dias:.5, porDia:24} },
   { id:"incoerente", titulo:"Incoerente × atencioso",
     desc:"Mesmo volume (16/dia, 5 dias). Só a coerência do feedback muda.",
@@ -3800,7 +3924,7 @@ function resumoPet(m, spec){
     atualizacoes: ACOES_PET.reduce((t, a) => t + m.pol.bracos[a].n, 0),
     jsdAgora: jsdBits(m.pol.media(observacao(e)), m.pol.prior(observacao(e))),
     jsdArena: jsdBits(pm, m.pol.prior(OBS_ARENA)),
-    topo: m.gp ? m.gp.linha : "ao acaso (bebê)",
+    topo: m.gp ? m.gp.linha : "ao acaso (In-Training)",
     dom: `${NOME_COMB[dom]} ${af[dom] >= 0 ? "+" : ""}${af[dom].toFixed(3)}`,
   };
 }
@@ -3916,20 +4040,10 @@ setInterval(desenharLCD, SPRITES_UP ? 120 : 125);
 /* UP: a arena anima o idle entre os turnos (so redesenha o ultimo estado; nada do motor muda) */
 if (SPRITES_UP) setInterval(() => { if (atlasOk && ultimaArena && acv.offsetParent) desenharArenaV2(...ultimaArena); }, 120);
 
-/* celular: botao para voltar a tela do pet quando ela sai da vista */
-(() => {
-  const bt = document.createElement("button");
-  bt.className = "ir-pet"; bt.type = "button"; bt.textContent = "↑ Pet"; bt.hidden = true;
-  bt.setAttribute("aria-label", "Voltar para a tela do pet");
-  bt.addEventListener("click", () => document.querySelector(".device").scrollIntoView({behavior:"smooth", block:"start"}));
-  document.body.appendChild(bt);
-  const dev = document.querySelector(".device");
-  const ver = () => { bt.hidden = dev.getBoundingClientRect().bottom > 80; };
-  addEventListener("scroll", ver, {passive:true}); addEventListener("resize", ver); ver();
-})();
+/* (o atalho flutuante "Pet" saiu na Etapa 3: a barra de navegacao leva ao Pet de qualquer tela) */
 
 motor = carregar() || exemplo();
-try { const aba = localStorage.getItem(CHAVE + "-aba"); if (aba && document.getElementById("p-" + aba)) paneAtual = aba; } catch(_){}
+{ const aba = lerAbaLembrada(); if (aba) paneAtual = aba; }
 mostrarPane(paneAtual);
 desenharLCD();
 arenaPreview();
