@@ -228,20 +228,22 @@ def com_resposta(gl: ListaGambits, tecnica: str, respostas: dict | None = None) 
 
 def lutador_adulto(forma: str, especie: str, cfg: ConfigCombateV21 | None = None,
                    gambits: ListaGambits | None = None, nome: str | None = None,
-                   cat: ConfigCatalogo | None = None) -> Lutador:
+                   cat: ConfigCatalogo | None = None, escala=None) -> Lutador:
+    """escala: ConfigEscala ligada (Parte C da TAREFA_PLANILHA_PROGRESSAO) ou None (o de sempre)."""
     cfg = cfg or CONFIG_COMBATE_V21
     f = Forma(especie, "adulto", "sereno", LINHA_DA_FORMA[forma], forma)
     eps = CONFIG_COMBATE_V2.epsilon_bots
     if f.sombria:
         eps = max(eps, CONFIG_SOMBRIO.epsilon_minimo)          # instavel: ignora os gambits as vezes
-    return Lutador(nome or f"{forma}@{especie}", perfil(f, None, carater_canonico(forma, cfg), 1.0, cfg, cat),
+    return Lutador(nome or f"{forma}@{especie}", perfil(f, None, carater_canonico(forma, cfg), 1.0, cfg, cat, escala=escala),
                    gambits or ADULTOS.get(forma) or SOMBRIOS[forma], eps)
 
 
 def lutador_adolescente(linha: str, especie: str, carater: dict, cfg: ConfigCombateV21 | None = None,
-                        cat: ConfigCatalogo | None = None) -> Lutador:
-    """Adolescente da linha com o MESMO carater do adulto comparado (E4)."""
+                        cat: ConfigCatalogo | None = None, escala=None, treino: dict | None = None) -> Lutador:
+    """Adolescente da linha com o MESMO carater do adulto comparado (E4). `treino` (so com a escala: E4')."""
     cfg = cfg or CONFIG_COMBATE_V21
     f = Forma(especie, "adolescente", "sereno", linha)
-    return Lutador(f"adolescente-{linha}@{especie}", perfil(f, None, carater, 1.0, cfg, cat),
+    sufixo = f"+{sum(treino.values()):g}" if treino else ""
+    return Lutador(f"adolescente-{linha}{sufixo}@{especie}", perfil(f, None, carater, 1.0, cfg, cat, treino=treino, escala=escala),
                    ADOLESCENTES[linha], CONFIG_COMBATE_V2.epsilon_bots)

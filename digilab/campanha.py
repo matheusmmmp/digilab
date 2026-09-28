@@ -28,8 +28,10 @@ from .combate_v2.v21.gambits import CONDICAO_DO_VIGIA, Condicao as C, ListaGambi
 from .combate_v2.v21.partida import Lutador
 from .combate_v2.v21.bots import ADULTOS, CRIANCAS
 from .combate_v2.v21.regras import TECNICAS, Acao, Distancia, Regras
+from fractions import Fraction
+
 from .config import (CONFIG_CAMPANHA, CONFIG_CATALOGO, CONFIG_COMBATE_V2C, CONFIG_COMBATE_V21, CONFIG_COMBATE_V21C,
-                     STATS_V21, ConfigCampanha)
+                     STATS_V21, ConfigCampanha, ConfigEscala)
 
 PERTO, MEDIO, LONGE = Distancia.PERTO, Distancia.MEDIO, Distancia.LONGE
 
@@ -81,16 +83,18 @@ def gambit_npc(estilo: str, estagio: str = "adulto") -> ListaGambits:
     raise ValueError(f"familia de estilo desconhecida: {estilo}")
 
 
-def perfil_de_stats(rotulo: str, stats: dict, estagio: str = "adulto", cfg=None, cat=None) -> Perfil:
-    """Mesma conversao stat -> combate de catalogo.perfil, sem forma e sem renormalizar."""
+def perfil_de_stats(rotulo: str, stats: dict, estagio: str = "adulto", cfg=None, cat=None,
+                    escala: Fraction | None = None) -> Perfil:
+    """Mesma conversao stat -> combate de catalogo.perfil, sem forma e sem renormalizar. Com `escala` (E do NPC na
+    ConfigEscala) a vida perde o multiplicador de estagio, como no pet."""
     cfg = cfg or CONFIG_COMBATE_V21
     cat = cat or CONFIG_CATALOGO
     if set(stats) != set(STATS_V21):
         raise ValueError(f"stats incompletos: {sorted(stats)}")
     est = cat.mult_estagio[estagio]
     gmax = (cfg.guts_max_base + cfg.guts_max_por_folego * stats["folego"]) * est
-    return Perfil(rotulo=rotulo, estagio=estagio, tecnica=None, passiva=None,
-                  hp_max=(cfg.hp_base + cfg.hp_por_vigor * stats["vigor"]) * est,
+    return Perfil(rotulo=rotulo, estagio=estagio, tecnica=None, passiva=None, escala=escala,
+                  hp_max=(cfg.hp_base + cfg.hp_por_vigor * stats["vigor"]) * (est if escala is None else 1.0),
                   guts_inicial=min(gmax, (cfg.guts_inicial_base + cfg.guts_inicial_por_folego * stats["folego"]) * est),
                   guts_max=gmax, regen=cfg.regen_base + cfg.regen_por_recuperacao * stats["recuperacao"],
                   mult_perto=cfg.mult_base + cfg.mult_por_ponto * stats["forca"],
@@ -98,10 +102,22 @@ def perfil_de_stats(rotulo: str, stats: dict, estagio: str = "adulto", cfg=None,
                   mult_guarda=cfg.guarda_base - cfg.guarda_por_ponto * stats["guarda"], stats=dict(stats))
 
 
-def npc(tier: str, estilo: str | None = None, cfg: ConfigCampanha | None = None) -> Lutador:
+def escala_npc(tier: str, esc: ConfigEscala, cfg: ConfigCampanha | None = None) -> Fraction:
+    """E do NPC: vida do estagio SUGERIDO para ele x fator (os NPCs da Torre deixam de ter tamanho de adulto)."""
+    d = (cfg or CONFIG_CAMPANHA).npcs[tier]
+    return Fraction(esc.vida_por_estagio[d["estagio_minimo_sugerido"]]) * Fraction(str(esc.fator_npc[tier]))
+
+
+def npc(tier: str, estilo: str | None = None, cfg: ConfigCampanha | None = None, escala: ConfigEscala | None = None) -> Lutador:
+    """Com a escala ligada: perfil neutro (stat_neutro em todos; o tamanho vem de E) e o epsilon da escala."""
     cfg = cfg or CONFIG_CAMPANHA
     d = cfg.npcs[tier]
-    stats = {k: d["total_stats"] / len(STATS_V21) for k in STATS_V21}
     est = estilo or d["estilo"]
+    if escala is not None and escala.ligada:
+        stats = {k: float(CONFIG_CATALOGO.stat_neutro) for k in STATS_V21}
+        return Lutador(f"npc:{tier}:{est}:escala", perfil_de_stats(tier, stats, d.get("estagio", "adulto"), cfg=REGRAS_CAMPANHA.v21,
+                                                                   escala=escala_npc(tier, escala, cfg)),
+                       gambit_npc(est, d.get("estagio", "adulto")), escala.epsilon_npc)
+    stats = {k: d["total_stats"] / len(STATS_V21) for k in STATS_V21}
     return Lutador(f"npc:{tier}:{est}", perfil_de_stats(tier, stats, d.get("estagio", "adulto"), cfg=REGRAS_CAMPANHA.v21),
                    gambit_npc(est, d.get("estagio", "adulto")), d.get("epsilon", cfg.epsilon_npc))
