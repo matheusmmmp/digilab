@@ -1,9 +1,22 @@
 /* Barra de navegacao dos 4 destinos (UI_GUIDELINES 7.12): embaixo no celular, coluna a partir de 900 px.
    Cada destino volta para a ultima aba aberta nele. */
 import type { JSX } from "preact";
+import { OVO } from "../../motor/index.ts";
+import { imagemAtlas, useAtlas } from "../atlas.ts";
+import { useJogo } from "../jogo.ts";
 import { NOME_DESTINO, ORDEM_DESTINOS, type Destino } from "../rotas.ts";
 import { NOME_TEMA, PROXIMO_TEMA, trocarTema, useTema, type Tema } from "../tema.ts";
 
+/* icones da prancha UpPet: o ovo da especie (Pet), estrela (Crescer), espadas (Lutar) e nota (Diario), pecas do atlas;
+   o ovo e reduzido para 19 x 26 como na prancha, os emotes em 2x. Sem atlas: os desenhos em traco de reserva. */
+const EMOTE_DESTINO: Partial<Record<Destino, string>> = { crescer: "emoji_estrela", lutar: "emoji_espadas", diario: "emoji_nota" };
+function IconeDestino({ d }: { d: Destino }) {
+  const a = useAtlas(), { motor: m } = useJogo();
+  if (a.tipo !== "ok") return ICONE[d];
+  if (d === "pet") { const o = imagemAtlas(a, OVO[m.especie]); return <img class="nav-ovo" src={o.url} width={19} height={26} alt="" />; }
+  const e = imagemAtlas(a, EMOTE_DESTINO[d]!, 2);
+  return <img class="dl-pix" src={e.url} width={e.w} height={e.h} alt="" />;
+}
 const ICONE: Record<Destino, JSX.Element> = {
   pet: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17c0-4 3-7 7-7s7 3 7 7c0 2-2 3-7 3s-7-1-7-3z" /><path d="M8 10.5 6.5 5 10 8M16 10.5 17.5 5 14 8" /><path d="M10 15h.01M14 15h.01" /></svg>,
   crescer: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V11" /><path d="M12 11c0-4 3-6 7-6 0 4-3 6-7 6zM12 14c0-3-2-5-6-5 0 3 2 5 6 5z" /></svg>,
@@ -31,7 +44,7 @@ export function Nav({ atual, ir }: { atual: Destino; ir: (d: Destino) => void })
     <nav class="dl-nav" aria-label="Destinos">
       {ORDEM_DESTINOS.map(d => (
         <button type="button" key={d} aria-current={d === atual ? "page" : undefined} onClick={() => ir(d)}>
-          <span class="circ">{ICONE[d]}</span>{NOME_DESTINO[d]}
+          <span class="circ"><IconeDestino d={d} /></span>{NOME_DESTINO[d]}
         </button>
       ))}
       <BotaoTema />

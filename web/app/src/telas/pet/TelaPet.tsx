@@ -83,40 +83,47 @@ function Causa({ mot, refs }: { mot: MotivoVida; refs: number[] }) {
     return <span key={f} class="dl-causa dl-causa--registro dl-malha">{EMOTE_CAUSA[c] && <Peca nome={EMOTE_CAUSA[c]} />}{c}{refs.length ? " · evento #" + refs.join(", #") : ""}</span>;
   })}</>;
 }
-function Fala() {
+interface VistaFala { classe: string; balao: ComponentChildren; texto: string; titulo: string; causa: ComponentChildren; detalhe: string }
+/** a fala de agora (texto da tabela de expressao, LLM na moldura ou fala livre); a fala livre reage ao pet (gatilho)
+    fora do desenho, porque dispara chamadas ao servidor */
+function useFala(): VistaFala {
   const { motor: m, revisao } = useJogo(), atlas = useAtlas(), llm = useFalaLLM(), fl = useFalaLivre();
-  const [aberto, setAberto] = useState(false);
   const [livre, setLivre] = useState(false);
-  /* a fala livre reage ao pet (gatilho) fora do desenho: dispara chamadas ao servidor */
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
   const mot = m.motivo, est = m.estagioAtual;
-  let balao: ComponentChildren = "…", classe = "dl-balao", detalhe = "", titulo = "Toque para ver o porquê", causa: ComponentChildren = null;
+  const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
   if (livre && fl.modo === "livre" && fl.ultimo) {
-    balao = "✧ " + fl.ultimo.fala + iconeVerif(fl.ultimo.verificacao);
-    detalhe = detalheFalaLivre(fl.ultimo); titulo = tituloFalaLivre(fl.ultimo);
+    v.balao = v.texto = "✧ " + fl.ultimo.fala + iconeVerif(fl.ultimo.verificacao);
+    v.detalhe = detalheFalaLivre(fl.ultimo); v.titulo = tituloFalaLivre(fl.ultimo);
   } else if (mot) {
     const refs = refsDoMotivo(m, mot), resp = falaLLM(motivoParaApi(mot, refs), est, mot.humor), usarLLM = !!resp && resp.fonte === "llm";
     const fria = m.falaFria || m.sombria, pronta = llm.on && llm.ativo && ["adolescente", "adulto"].includes(est) && !usarLLM;
-    classe = "dl-balao" + (fria ? " dl-balao--sombria" : "") + (est === "bebe" ? " dl-balao--emote" : "");
-    balao = <>{usarLLM ? "✦ " + resp!.texto : <TextoFala txt={falaDe(m, mot)} est={est} atlasOk={atlas.tipo === "ok"} />}{pronta && <span class="dl-balao-tag">frase pronta</span>}</>;
-    causa = <Causa mot={mot} refs={refs} />;
-    detalhe = detalheMotivo(mot, est) + (llm.on && llm.ativo && ["adolescente", "adulto"].includes(est)
+    v.classe = "dl-balao" + (fria ? " dl-balao--sombria" : "") + (est === "bebe" ? " dl-balao--emote" : "");
+    v.balao = <>{usarLLM ? "✦ " + resp!.texto : <TextoFala txt={falaDe(m, mot)} est={est} atlasOk={atlas.tipo === "ok"} />}{pronta && <span class="dl-balao-tag">frase pronta</span>}</>;
+    v.texto = usarLLM ? "✦ " + resp!.texto : est === "adolescente" || est === "adulto" ? falaDe(m, mot) : "";
+    v.causa = <Causa mot={mot} refs={refs} />;
+    v.detalhe = detalheMotivo(mot, est) + (llm.on && llm.ativo && ["adolescente", "adulto"].includes(est)
       ? ` · fonte: ${usarLLM ? "LLM (" + resp!.detalhe + ")" : resp ? "template (" + resp.detalhe + ")" : "template (aguardando LLM)"}` : " · fonte: template");
   }
-  const r = rotuloLLM();
+  return v;
+}
+/** balao sobre o pet, na posicao da prancha (222, 60), com o rabinho; tocar mostra o porque */
+function BalaoFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alternar: () => void }) {
+  return <button type="button" class={v.classe + " balao-palco"} aria-expanded={aberto} aria-controls="fala-det" title={v.titulo} onClick={alternar}><span class="balao-txt">{v.balao}</span></button>;
+}
+/** abaixo do palco: o que ele faz, a causa registrada, o porque (aberto pelo balao) e a faixa da fala (ponto + texto;
+    a troca de fonte fica na tela Conversar) */
+function LinhaFala({ v, aberto }: { v: VistaFala; aberto: boolean }) {
+  const { motor: m } = useJogo(), { freado } = useTempo(), r = rotuloLLM();
   return (
-    <>
-      <button type="button" class={classe + " balao-palco"} aria-expanded={aberto} title={titulo} onClick={() => setAberto(!aberto)}>{balao}</button>
-      <div class="fala-area">
-        {causa && <div class="causa-area">{causa}</div>}
-        {aberto && <div class="fala-det dl-apoio">{detalhe}</div>}
+    <div class="pet-fala">
+      <div class="pet-fala-topo">
+        <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>
+        {v.causa}
       </div>
-      <div class="fala-status dl-apoio">
-        <span class="fala-ponto" data-estado={r.estado} aria-hidden="true" /><span title={r.titulo}>{r.texto}</span>
-        <label class="fala-troca"><input type="checkbox" role="switch" checked={FALA_LLM.on} disabled={!llm.ativo}
-          onChange={ev => ligarFalaLLM((ev.target as HTMLInputElement).checked)} /> fala por LLM</label>
-      </div>
-    </>
+      {aberto && <div class="fala-det dl-apoio" id="fala-det">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</div>}
+      <div class="fala-status"><span class="fala-ponto" data-estado={r.estado} aria-hidden="true" /><span title={r.titulo}>{r.texto}</span></div>
+    </div>
   );
 }
 
@@ -213,7 +220,7 @@ function Tempo() {
 
 /* ------------------------------------------------ conversa da fala livre (experimental) */
 function Conversa() {
-  const fl = useFalaLivre(), [msg, setMsg] = useState("");
+  const fl = useFalaLivre(), llm = useFalaLLM(), [msg, setMsg] = useState("");
   const regs = conversaGravada();
   const enviar = () => { enviarConversa(msg); setMsg(""); };
   return (
@@ -227,6 +234,8 @@ function Conversa() {
         </select>
         <span class="dl-apoio">{fl.status ? `(${fl.status.modelo}, local)` : fl.statusErro ? "(servidor sem a fala livre)" : ""}</span>
       </div>
+      <label class="fala-troca"><input type="checkbox" role="switch" checked={FALA_LLM.on} disabled={!llm.ativo}
+        onChange={ev => ligarFalaLLM((ev.target as HTMLInputElement).checked)} /> fala por LLM (moldura)</label>
       <div class="fl-conv" aria-live="polite">
         {regs.length ? regs.map((r, i) => <div key={i}><div class="fl-j">você: {r.fala_jogador}</div><div class="fl-p">pet: {r.fala}{iconeVerif(r.verificacao)}</div></div>)
           : <div class="dl-apoio">Escreva algo para o seu pet.</div>}
@@ -244,27 +253,28 @@ function Conversa() {
 
 /* ------------------------------------------------ a tela */
 export function TelaPet({ irRegistro }: { irRegistro: () => void }) {
-  const { motor: m, nascendo } = useJogo(), { freado } = useTempo(), [meusPets, setMeusPets] = useState(false);
+  const { motor: m, nascendo } = useJogo(), [meusPets, setMeusPets] = useState(false);
   const agir = (a: AcaoDono) => {
     if (nascendo > 0) return;
     mudarMotor(mm => mm.observar(a));
     mostrarFlash(ICONE_DONO[a]);
     ajustarVelocidadeChamado();                  /* atendeu o chamado: volta a velocidade de antes */
   };
+  const fala = useFala(), [aberto, setAberto] = useState(false);
   return (
     <section class="pet-tela dl" aria-label="Tela do pet">
       <div class="pet-listra dl-faixa" aria-hidden="true" />
       <CabecalhoPet abrirMeusPets={() => setMeusPets(true)} />
       <section class="palco-card" aria-label="Palco do pet">
-        <div class="palco-pet dl-hexcard">
+        <div class="palco-cena dl-hexcard">
           <div class="palco-tit">Meu parceiro</div>
           <Emocao />
           <PalcoPet />
+          <BalaoFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
           <span class="dl-placa palco-nome">{nascendo > 0 ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</span>
-          <span class="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span>
-          <Fala />
         </div>
       </section>
+      <LinhaFala v={fala} aberto={aberto} />
       <Necessidades />
       <Chamados agir={agir} />
       <div class="dl-par"><Desejo /></div>
