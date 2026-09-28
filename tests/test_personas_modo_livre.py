@@ -41,7 +41,8 @@ def _base():
     lambda d: d.update(extra=1),
     lambda d: d.update(prob_ceder_petisco=1.2),
     lambda d: d.update(prob_atender_janela=True),
-    lambda d: d.update(horarios=[[10, 9]]),
+    lambda d: d.update(horarios=[[10, 10]]),
+    lambda d: d.update(horarios=[[10, 25]]),
     lambda d: d.update(horarios=[]),
     lambda d: d.update(nome="Com Espaco"),
     lambda d: d.update(perfil_treino="relaxado"),
@@ -151,3 +152,10 @@ def test_gerador_de_personas_valida_refaz_e_desduplica():
     assert modelo == "falso-1" and [p["nome"] for p in ps] == ["gerada", "gerada-2", "gerada-3"]
     for p in ps:
         validar_persona(p)
+
+
+def test_horario_que_atravessa_a_meia_noite():
+    d = _base()
+    d["horarios"] = [[22, 2], [18, 0]]
+    p = validar_persona(d)
+    assert [h for h in range(24) if p.presente(h)] == [0, 1, 18, 19, 20, 21, 22, 23]

@@ -4,7 +4,7 @@
     python tools/gerar_personas.py --provedor claude --modelo claude-haiku-4-5 --n 50 --lote haiku-01 --limite-usd 1
 
 Uma chamada por persona (saida pequena, validada uma a uma por digilab.personas.validar_persona; a que nao
-valida e refeita com outra semente, ate 3 vezes, e o lote falha alto se ainda assim nao validar). Pede
+valida e refeita com outra semente e o motivo da recusa no pedido, ate 3 vezes, e o lote falha alto se ainda assim nao validar). Pede
 diversidade dizendo ao modelo quais personas ja existem. O lote vai para o disco uma vez so; o sha256 que o
 script imprime e o que o protocolo da run registra (Fase 3). Nomes repetidos: sufixo numerico.
 """
@@ -25,7 +25,7 @@ from llm_pesquisa import LLMFalhou, abrir_provedor, chamar_json  # noqa: E402
 
 VERSAO_PROMPT = "personas-v1"
 PASTA = RAIZ / "experiments" / "personas"
-TENTATIVAS = 3
+TENTATIVAS = 5
 
 SISTEMA = (
     "Voce cria pessoas ficticias e variadas que cuidam de um bichinho virtual (estilo Tamagotchi/Digimon). "
@@ -46,23 +46,34 @@ def esquema_json() -> dict:
         elif k == "perfil_treino":
             props[k] = {"type": "string", "enum": list(regra), "description": desc}
         else:
-            props[k] = {"type": "string", "description": desc}
+            props[k] = {"type": "string", "description": desc, "maxLength": 40 if k == "nome" else regra}
     return {"type": "object", "properties": props, "required": list(ESQUEMA_PERSONA), "additionalProperties": False}
 
 
-def pedido(existentes: list[dict]) -> str:
+def _campo(k: str, tipo, regra, desc: str) -> str:
+    if tipo is float:
+        return f"{k} = {desc} (numero decimal entre {regra[0]} e {regra[1]}, ex.: 0.35; NAO use porcentagem)"
+    return f"{k} = {desc}"
+
+
+def pedido(existentes: list[dict], erro: str | None = None) -> str:
     ja = "; ".join(f"{p['nome']}: {p['descricao']}" for p in existentes[-12:]) or "nenhuma ainda"
-    return ("Crie UMA pessoa nova, bem diferente destas que ja existem: " + ja +
-            ". Campos: " + "; ".join(f"{k} = {d}" for k, (_, _, d) in ESQUEMA_PERSONA.items()))
+    txt = ("Crie UMA pessoa nova, bem diferente destas que ja existem: " + ja +
+           ". Campos: " + "; ".join(_campo(k, *v) for k, v in ESQUEMA_PERSONA.items()))
+    if erro:
+        txt += f". ATENCAO: a tentativa anterior foi rejeitada ({erro}); corrija isso."
+    return txt
 
 
 def gerar(provedor, gasto, n: int, semente_base: int) -> tuple[list[dict], str]:
     out: list[dict] = []
     modelo = "?"
     for i in range(n):
+        erro = None
         for t in range(TENTATIVAS):
             try:
-                d, modelo = chamar_json(provedor, gasto, SISTEMA, pedido(out), esquema_json(), semente_base + 1000 * t + i)
+                d, modelo = chamar_json(provedor, gasto, SISTEMA, pedido(out, erro), esquema_json(),
+                                        semente_base + 1000 * t + i)
                 nomes = {p["nome"] for p in out}
                 base, k = d.get("nome", ""), 2
                 while d.get("nome") in nomes:
@@ -73,6 +84,7 @@ def gerar(provedor, gasto, n: int, semente_base: int) -> tuple[list[dict], str]:
                 print(f"  {i + 1}/{n} {d['nome']}", flush=True)
                 break
             except (PersonaInvalida, LLMFalhou) as err:
+                erro = str(err)
                 print(f"  {i + 1}/{n} tentativa {t + 1} falhou: {err}", flush=True)
         else:
             raise LLMFalhou(f"persona {i + 1} nao validou em {TENTATIVAS} tentativas")

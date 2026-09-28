@@ -18,7 +18,8 @@ from pathlib import Path
 ESQUEMA_PERSONA = {
     "nome": (str, r"^[a-z0-9_-]{1,40}$", "identificador curto, minusculas, sem espaco"),
     "descricao": (str, 300, "uma ou duas frases sobre a rotina e o jeito dessa pessoa com o pet"),
-    "horarios": (list, None, "faixas de hora em que a pessoa olha o pet: lista de [inicio, fim], horas 0-24, inicio < fim"),
+    "horarios": (list, None, "faixas de hora em que a pessoa olha o pet: lista de [inicio, fim], horas inteiras 0-24; "
+                             "inicio maior que fim = atravessa a meia-noite (ex.: [22, 2])"),
     "prob_atender_janela": (float, (0.0, 1.0), "chance de responder quando o pet chama ou avisa, estando presente"),
     "prob_ceder_petisco": (float, (0.0, 1.0), "quando o chamado parece manha (necessidade em dia): chance de dar petisco em vez de bronca"),
     "prob_feedback_coerente": (float, (0.0, 1.0), "chance de o elogio ou a bronca combinar com o que o pet fez"),
@@ -43,7 +44,7 @@ class Persona:
     perfil_treino: str
 
     def presente(self, hora: int) -> bool:
-        return any(ini <= hora < fim for ini, fim in self.horarios)
+        return any((ini <= hora < fim) if ini < fim else (hora >= ini or hora < fim) for ini, fim in self.horarios)
 
     def para_dict(self) -> dict:
         d = {k: getattr(self, k) for k in ESQUEMA_PERSONA}
@@ -75,7 +76,7 @@ def validar_persona(d: dict) -> Persona:
         raise PersonaInvalida("horarios vazio")
     for h in hs:
         if (not isinstance(h, list) or len(h) != 2 or not all(isinstance(x, int) and not isinstance(x, bool) for x in h)
-                or not 0 <= h[0] < h[1] <= 24):
+                or not (0 <= h[0] <= 24 and 0 <= h[1] <= 24) or h[0] == h[1]):
             raise PersonaInvalida(f"faixa de horario invalida: {h!r}")
     return Persona(d["nome"], d["descricao"], tuple(tuple(h) for h in hs),
                    *(float(d[k]) for k in ("prob_atender_janela", "prob_ceder_petisco", "prob_feedback_coerente",
