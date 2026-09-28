@@ -53,7 +53,7 @@ function Agora() {
   const fala = m.motivo && m.motivo.origem === "vida" ? falaDe(m, m.motivo) : "";
   let pet = null;
   if (a.tipo === "ok" && nascendo === 0) {
-    const nome = chaveSprite(m.forma), esc = Math.max(1, Math.min(3, Math.floor(170 / dimSprite(a.dados, nome)[1])));
+    const nome = chaveSprite(m.forma), esc = Math.max(1, Math.min(3, Math.floor(168 / dimSprite(a.dados, nome)[1])));
     pet = imagemAtlas(a, nome, esc);
   }
   const agir = (x: AcaoDono) => { if (nascendo > 0) return; mudarMotor(mm => mm.observar(x)); ajustarVelocidadeChamado(); };
@@ -61,7 +61,7 @@ function Agora() {
   return (
     <>
       <section class="ensinar-palco dl-hexcard" aria-label="O que ele acabou de fazer">
-        <span class="ensinar-sombra" aria-hidden="true" />
+        <span class="ensinar-anel" aria-hidden="true" />
         {pet && <img class="dl-pix ensinar-pet" src={pet.url} width={pet.w} height={pet.h} alt={nomeForma(m.forma)} />}
         <div class="ensinar-acabou"><span>ACABOU DE</span><b>{acao ? NOME_PET[acao] : "…"}</b>{desde !== null && <span class="dl-lcd">há {m.e.tick - desde} min</span>}</div>
         {fala && <span class="dl-balao ensinar-balao">{fala}</span>}

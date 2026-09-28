@@ -4,6 +4,7 @@ import { useEffect, useState } from "preact/hooks";
 import { useAtlas } from "./atlas.ts";
 import { Nav } from "./componentes/Nav.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
+import { nomeForma } from "../motor/index.ts";
 import { useJogo } from "./jogo.ts";
 import {
   DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco,
@@ -80,7 +81,7 @@ export function App() {
       {rota.destino === "pet" ? <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} />
         : rota.destino === "conversar" ? <TelaConversar voltar={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /> : (
       <section class="painel" aria-labelledby="tela-titulo">
-        <div class="tela-cab dl-faixa"><h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1></div>
+        <div class="tela-cab dl-faixa"><h1 class="dl-num" id="tela-titulo">{NOME_DESTINO[rota.destino]}</h1><span class="tela-cab-pet">{jogo.nascendo > 0 ? "Digi-Egg" : nomeForma(jogo.motor.forma)}</span></div>
         {abas.length > 1 && (
           <div class="tabs" role="tablist" aria-label={`Abas de ${NOME_DESTINO[rota.destino]}`}>
             {abas.map(a => (
