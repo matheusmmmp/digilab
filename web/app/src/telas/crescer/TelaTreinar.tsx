@@ -11,6 +11,7 @@ import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Seg, blocos, dec } from "../../componentes/Barras.tsx";
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import { AMPULHETA } from "../../grades.ts";
+import { abrirModal } from "../../componentes/modal.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 
 /* icones de treino do UP (hexagonos pintados, nao pixel art): 54 x 61 no botao, como pede o guia (secao 6) */
@@ -61,7 +62,7 @@ function Medidor({ titulo, valor, n, cls, marcas }: { titulo: string; valor: num
 /** folha de confirmacao do forcar (TreinoForcar): o que ganha, o que custa, a sobrecarga e o aviso da sombria */
 function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => void; forcar: () => void }) {
   const { motor: m } = useJogo(), ref = useRef<HTMLDialogElement>(null), t = m.treino;
-  useEffect(() => { ref.current?.showModal(); }, []);
+  useEffect(() => { abrirModal(ref.current); }, []);
   const depois = Math.min(CTR.sobreMax, t.sobrecarga + CTR.sobreForcar);
   return (
     <dialog class="folha dl" ref={ref} aria-labelledby="forcar-tit" onClose={fechar}>

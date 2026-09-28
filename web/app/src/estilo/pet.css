@@ -336,12 +336,9 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .bv-pe{display:flex;flex-direction:column;gap:8px;padding:0 24px 28px;width:100%;max-width:440px;margin-inline:auto}
 .bv-pe span{text-align:center;font-size:12px;font-weight:800}
 .bv-comecar{min-height:54px;font-size:16px;box-shadow:0 0 0 3px var(--dl-navy),inset 0 -5px 0 var(--dl-highlight-press)}
-/* revelacao no desktop: modal centralizado sobre o app escurecido (no celular, tela cheia) */
-.revel-tela::backdrop{background:rgba(11,22,54,.72)}
-@media (min-width:900px){
-  .revel-tela{inset:0;width:430px;height:fit-content;max-height:calc(100dvh - 48px);margin:auto;border-radius:20px;border:3px solid #FFFFFF;
-    box-shadow:0 0 0 3px var(--dl-navy),0 12px 0 3px var(--dl-navy-deep);padding-bottom:22px}
-}
+/* revelacao: tela cheia tambem no desktop (DIRETRIZES_REPLICAR, secao 7) */
+.revel-tela::backdrop{background:rgba(9,20,52,.62)}
+
 @media (min-width:900px){
   .revel-topo{padding-top:16px}
   .revel-tit{font-size:38px}

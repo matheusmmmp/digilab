@@ -9,7 +9,7 @@ import { Peca, RetratoRival } from "../../componentes/Imagens.tsx";
 import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, urlDeco, useDecoracao } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, previa, tentativas, useLuta } from "../../luta.ts";
-import { PalcoLuta } from "./PalcoLuta.tsx";
+import { ENDERECO_LUTA } from "../../rotas.ts";
 
 /* coordenadas da prancha CampMapa (mapa de 390 x 420), em % para acompanhar a largura: ilha 150 px, centro do lugar
    (trilho, plaquinha, marcador do pet) e o pad embaixo */
@@ -87,7 +87,7 @@ function Detalhe() {
         <p class="licao">{c.licao}</p>
       </section>
       <button type="button" class={`dl-btn camp-lutar${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
-        onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); document.querySelector(".palco-luta")?.scrollIntoView({ behavior: "smooth", block: "nearest" }); }}>
+        onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
         {vit ? `Lutar de novo com ${c.nome}` : `Desafiar ${c.nome}`}</button>
     </>
   );
@@ -102,8 +102,6 @@ export function TelaCampanha({ voltarPet }: { voltarPet: () => void }) {
       <div class="camp-lado"><Detalhe />
       <details class="dl-apoio"><summary>Como funciona</summary><p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>
       </div>
-      {/* o palco mora na aba visivel: numa luta em andamento, ele vem junto */}
-      {luta.palco && <PalcoLuta voltarPet={voltarPet} />}
     </div>
   );
 }

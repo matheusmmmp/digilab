@@ -87,11 +87,18 @@ for (const [versao, save] of Object.entries(SAVES)) {
     const l0 = await numLog(page, "l");
     await page.locator(".dl-nav button", { hasText: "Lutar" }).click();
     await page.getByRole("tab", { name: "Arena" }).click();
+    /* a luta abre em tela cheia (#/lutar/luta); no fim, o modal Resultado; Continuar volta para a aba de origem */
     await page.locator(".lutar-grande").click();
-    await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
+    await expect(page).toHaveURL(/#\/lutar\/luta$/);
+    await expect(page.locator(".dl-nav")).toHaveCount(0);
+    await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 90_000 });
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await expect(page).toHaveURL(/#\/lutar\/arena$/);
     await page.getByRole("tab", { name: "Campanha" }).click();
     await page.locator(".camp-lutar:not([disabled])").click();
-    await expect(page.locator(".luta-res")).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator("dialog.modal-res[open]")).toBeVisible({ timeout: 90_000 });
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await expect(page).toHaveURL(/#\/lutar\/campanha$/);
     expect(await numLog(page, "l")).toBe(l0 + 2);
 
     /* pausa o tempo (Diario > engrenagem > Registro e replay) e confere a assinatura com o HTML rodando o mesmo registro */

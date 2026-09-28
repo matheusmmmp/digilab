@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
+import { abrirModal } from "../../componentes/modal.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
@@ -26,7 +27,7 @@ export function voltarAoAnterior(): string {
     por vez, o pet anterior guardado (se houver) e os botoes. Exportar copia o registro (mesmo conteudo do save). */
 export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistro: () => void }) {
   const { motor: m, nascendo } = useJogo(), a = useAtlas(), ref = useRef<HTMLDialogElement>(null), [msg, setMsg] = useState("");
-  useEffect(() => { ref.current?.showModal(); }, []);
+  useEffect(() => { abrirModal(ref.current); }, []);
   const ovo = nascendo > 0, nome = ovo ? OVO[m.especie] : chaveSprite(m.forma);
   let img = null;
   if (a.tipo === "ok") { const h = dimSprite(a.dados, nome)[1]; img = imagemAtlas(a, nome, Math.max(1, Math.min(3, Math.floor(170 / h)))); }

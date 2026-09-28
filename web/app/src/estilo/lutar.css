@@ -258,3 +258,57 @@
   width:100%;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;image-rendering:pixelated;margin:0!important}
 .camp-rival-spr,.rival-spr,.res-rival-spr,.hud-ret,.arena-pet-spr{padding:3px;box-sizing:border-box;align-items:stretch}
 .retrato-rival-spr{align-items:stretch;padding:2px;box-sizing:border-box}
+
+/* luta em tela cheia (#/lutar/luta; UpLuta no celular, BatDesktop no desktop): sem menu nem abas, fundo travado */
+body.tela-cheia{overflow:hidden}
+.app--tela-cheia{padding:0!important;min-height:100dvh}
+.luta-tela{display:flex;flex-direction:column;min-height:100dvh;height:100dvh;overflow:auto;color:var(--dl-text)}
+.luta-topo{display:flex;align-items:center;gap:12px;padding:10px 14px;flex:none}
+.luta-topo h1{margin:0;font-size:24px;line-height:1.1;white-space:nowrap}
+.luta-topo-sub{color:#FFFFFF;font-size:12px;font-weight:800;opacity:.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.luta-desistir{margin-left:auto;flex:none;min-height:44px;padding:0 16px}
+.luta-tela .palco-luta{margin:0;flex:1;display:flex;flex-direction:column}
+.luta-tela .palco-luta-baixo{padding:12px 14px 16px}
+.luta-card{display:grid;gap:8px}
+.luta-card h2{margin:0;font-size:15px;font-weight:900}
+.luta-card p{margin:0}
+.luta-card .luta-intencao{box-shadow:none;padding:0}
+.luta-card .luta-regra-card{box-shadow:0 0 0 2px var(--dl-navy-deep)}
+.luta-card--turnos{flex:1}
+.luta-card--turnos .luta-log{box-shadow:none;padding:0;background:none}
+.luta-vazia{margin:24px 14px}
+.luta-controles{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;z-index:2}
+.luta-ctl{width:44px;height:44px;border-radius:12px;background:#FFFFFF;border:3px solid var(--dl-navy);display:grid;place-items:center;padding:0;cursor:pointer;
+  font-family:var(--dl-f-num);font-style:italic;font-weight:900;font-size:15px;color:var(--dl-navy)}
+.luta-ctl svg{width:16px;height:16px;fill:var(--dl-navy)}
+.luta-ctl[aria-pressed="true"]{background:var(--dl-highlight)}
+.luta-ctl:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.luta-previa-rot{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);background:rgba(15,42,102,.85);color:#FFFFFF;border-radius:10px;padding:3px 12px;font-size:12px;font-weight:800;white-space:nowrap}
+@media (min-width:1100px){
+  .luta-topo{padding:12px 24px;min-height:66px}
+  .luta-topo h1{font-size:30px}
+  .luta-tela .palco-luta{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px;padding:14px 20px 20px;align-items:stretch;min-height:0}
+  .luta-tela .luta-arena{height:auto;min-height:420px;border:3px solid var(--dl-navy);border-radius:16px;box-shadow:0 0 0 3px #FFFFFF}
+  .luta-tela .palco-luta-baixo{padding:0;display:flex;flex-direction:column;gap:12px;min-height:0}
+}
+
+/* modais (secao 7): fundo escurecido, cartao forte, um por vez */
+dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{background:rgba(9,20,52,.62)}
+.modal-res{width:min(420px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow:auto;margin:auto;padding:0 14px 16px;border:0;border-radius:18px;
+  background:var(--dl-bg);color:var(--dl-text);box-shadow:0 0 0 3px var(--dl-navy),0 8px 0 3px var(--dl-navy-deep)}
+.modal-res[open]{display:grid}
+.modal-res .res-cab{margin:0 -14px;border-radius:16px 16px 0 0}
+.modal-conf{width:min(380px,calc(100vw - 24px));margin:auto;padding:18px;border:0;border-radius:18px;background:var(--dl-surface);color:var(--dl-text);
+  box-shadow:0 0 0 3px var(--dl-navy),0 8px 0 3px var(--dl-navy-deep);display:grid;gap:12px}
+.modal-conf:not([open]){display:none}
+.modal-conf h2{margin:0;font-size:18px;font-weight:900}
+.modal-conf p{margin:0;font-size:14px;font-weight:700;color:var(--dl-text-2)}
+.modal-bts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dl-btn--perigo{background:#FFFFFF;color:#B0216F;border:2px dashed var(--dl-need);box-shadow:none}
+
+/* Arena: a previa parada so no desktop (no celular a escolha vem sozinha, ArenaEscolha) */
+.arena-previa{display:none}
+.arena-previa .luta-arena{height:360px;margin:0;border-radius:16px;border:3px solid var(--dl-navy)}
+.arena-ultima{margin:0;font-size:13px;font-weight:700}
+@media (min-width:1100px){ .arena-previa{display:block} }
+.luta-card{align-content:start}

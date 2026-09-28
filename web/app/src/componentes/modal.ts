@@ -1,0 +1,18 @@
+/* Modais (DIRETRIZES_REPLICAR, secao 7): <dialog> com showModal() (o resto da pagina fica inerte, entao o foco fica
+   preso no modal), Esc fecha (evento cancel do navegador) e, ao fechar, o foco volta para quem abriu. Um modal por vez:
+   se ja houver um aberto, o novo espera o outro fechar. */
+const abertos: HTMLDialogElement[] = [];
+
+/** abre o dialogo como modal e devolve o foco ao elemento que estava focado antes, quando ele fechar */
+export function abrirModal(d: HTMLDialogElement | null, voltarPara?: () => HTMLElement | null): void {
+  if (!d || d.open) return;
+  const antes = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  d.showModal();
+  abertos.push(d);
+  d.addEventListener("close", () => {
+    abertos.splice(abertos.indexOf(d), 1);
+    const alvo = voltarPara?.() ?? antes;
+    if (alvo && alvo.isConnected) alvo.focus();
+  }, { once: true });
+}
+export const haModalAberto = (): boolean => abertos.length > 0;

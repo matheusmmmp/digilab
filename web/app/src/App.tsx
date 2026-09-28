@@ -1,6 +1,6 @@
 /* Esqueleto do app (TAREFA_FRONT_TS, Etapa 3): cabecalho do pet, painel do destino com sub-abas, barra dos
    4 destinos e rodape. A rota vem do endereco (#/destino/aba) ou da aba lembrada, como no HTML. */
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { useAtlas } from "./atlas.ts";
 import { useDecoracao } from "./decoracao.ts";
 import { Nav } from "./componentes/Nav.tsx";
@@ -9,7 +9,7 @@ import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { nomeForma } from "../motor/index.ts";
 import { useJogo } from "./jogo.ts";
 import {
-  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, configDoEndereco, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
+  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, ENDERECO_LUTA, configDoEndereco, ehLuta, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
   rotaDoEndereco, type Aba, type Destino, type ParteConfig, type Rota,
 } from "./rotas.ts";
 import { Deco } from "./componentes/Deco.tsx";
@@ -23,6 +23,8 @@ import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
 import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
+import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
+import { LUTA, previa, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { CHAVE } from "./save.ts";
 
@@ -44,18 +46,28 @@ export function App() {
   /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
   const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
   const [boasVindas, setBoasVindas] = useState(primeiraVisita);
+  /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
+  const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
+  emLutaRef.current = emLuta;
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
+    if (emLuta) { document.title = "Luta · Digilab Pet"; return; }
     const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
     if (location.hash !== alvo) history.replaceState(null, "", alvo);
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
     document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota, config]);
+  }, [rota, config, emLuta]);
   useEffect(() => {
     const aoMudar = () => {
+      if (ehLuta(location.hash)) { setEmLuta(true); return; }
+      if (emLutaRef.current) {
+        /* saiu da luta pelo Voltar: com a animacao rodando, fica na luta e pergunta; ja no resultado, conta como Continuar */
+        if (LUTA.lutando) { history.pushState(null, "", ENDERECO_LUTA); setPedidoDesistir(true); return; }
+        previa(LUTA.palco?.modo ?? "arena"); setEmLuta(false);
+      }
       const c = configDoEndereco(location.hash); if (c) { setConfig(c); return; }
       const r = rotaDoEndereco(location.hash); if (r) { setConfig(null); setRota(r); }
     };
@@ -67,6 +79,18 @@ export function App() {
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
   const abrirConfig = (p: ParteConfig) => { setConfig(p); scrollTo(0, 0); };
   const abas = DESTINOS[rota.destino];
+  /* fim da luta (Continuar ou Desistir): a entrada da luta no historico vira a aba de origem, e o foco volta ao botao */
+  const sairDaLuta = (modo: Modo) => {
+    history.replaceState(null, "", `#/lutar/${modo}`);
+    setEmLuta(false); ir({ destino: "lutar", aba: modo });
+    setTimeout(() => document.querySelector<HTMLElement>(modo === "arena" ? ".lutar-grande" : ".camp-lutar")?.focus(), 60);
+  };
+  if (emLuta) return (
+    <div class="app app--tela-cheia">
+      <TelaLuta sair={sairDaLuta} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
+      <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
+    </div>
+  );
 
   return (
     <div class="app">
@@ -119,7 +143,7 @@ export function App() {
         </div>
       </section>)}
       <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
-      <RevelacaoEvolucao />
+      <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {boasVindas && <BoasVindas fechar={() => setBoasVindas(false)} />}
     </div>
   );

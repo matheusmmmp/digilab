@@ -42,7 +42,9 @@ export interface Palco {
 }
 /** rival fixo: o pet B de um cenario (Diario > Cenarios); luta sem ensinar, porque nao e reconstruivel do registro */
 export interface RivalFixo { rival: Motor; dias: number; tipo: string }
-export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null };
+export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null,
+  /* tela cheia da luta (#/lutar/luta): pausa e x2 so mudam a animacao; a luta ja esta decidida e no registro */
+  pausado: false, rapido: false };
 const ouvintes = new Set<() => void>();
 export const avisarLuta = (): void => { for (const o of ouvintes) o(); };
 export function useLuta(): typeof LUTA {
@@ -141,10 +143,20 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
       log: [{ t: tr.t, pet: A.nomeTela, rival: B.nomeTela, ma, mb, estPet: A.estagioFala, estRival: B.estagioFala, humor: jogoAtual().motor.e.humor }, ...p.log].slice(0, 8),
     });
     avisarLuta();
-    setTimeout(passo, reduz ? 80 : 650);
+    agendar();
   };
+  /* proximo turno: parado enquanto pausado; x2 corta a espera pela metade */
+  const agendar = () => { timer = setTimeout(() => { if (LUTA.pausado) agendar(); else passo(); }, LUTA.pausado ? 150 : reduz ? 80 : LUTA.rapido ? 325 : 650); };
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  pularParaOFim = () => { clearTimeout(timer); i = res.turnos.length; LUTA.pausado = false; passo(); };
+  LUTA.pausado = false;
   passo();
 }
+/** Desistir / Ver o fim: a luta ja foi decidida e gravada quando comecou; isto so pula a animacao ate o resultado */
+let pularParaOFim: () => void = () => {};
+export function pularAnimacao(): void { if (LUTA.lutando) pularParaOFim(); }
+export function alternarPausa(): void { LUTA.pausado = !LUTA.pausado; avisarLuta(); }
+export function alternarRapido(): void { LUTA.rapido = !LUTA.rapido; avisarLuta(); }
 /** 10 lutas seguidas contra o rival da arena (sem animacao); todas entram no registro */
 export function melhorDe10(): string {
   if (LUTA.lutando) return "";

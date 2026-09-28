@@ -6,6 +6,7 @@ import {
 } from "../../motor/index.ts";
 import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
 import { Deco } from "./Deco.tsx";
+import { abrirModal } from "./modal.ts";
 import { useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
@@ -63,7 +64,7 @@ const DECIDIDO: Record<string, string> = { crianca: "decidido pelo cuidado", ado
 function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), f = x.forma, i = ORDEM_NIVEL.indexOf(x.estagio);
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
-  useEffect(() => { const d = ref.current; if (!d) return; d.showModal(); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
+  useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
   /* linha ja percorrida: as formas que o pet foi (so o que o motor registrou) */
   const formas: Forma[] = [{ esp: f.esp, est: "bebe" }, ...m.evolucoes.map(v => v.forma)];
   return (
@@ -89,7 +90,8 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
   );
 }
 /** acompanha as evolucoes: abre a revelacao quando o motor registra uma nova nesta sessao */
-export function RevelacaoEvolucao() {
+/** revelacao em tela cheia (secao 7); Continuar leva a Crescer · Evolucao */
+export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
   const { motor: m } = useJogo(), vistas = useRef<{ motor: Motor; n: number } | null>(null), [aberta, setAberta] = useState<Evolucao | null>(null);
   useEffect(() => {
     const n = m.evolucoes.length;
@@ -97,5 +99,5 @@ export function RevelacaoEvolucao() {
     if (!vistas.current || vistas.current.motor !== m || n < vistas.current.n) { vistas.current = { motor: m, n }; return; }
     if (n > vistas.current.n) { vistas.current.n = n; setAberta(m.evolucoes[n - 1]); }
   });
-  return aberta ? <Revelacao x={aberta} m={m} fechar={() => setAberta(null)} /> : null;
+  return aberta ? <Revelacao x={aberta} m={m} fechar={() => { setAberta(null); continuar?.(); }} /> : null;
 }

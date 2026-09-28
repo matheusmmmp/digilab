@@ -9,7 +9,8 @@ import {
   LUTA, RIVAIS_ADULTOS, RIVAIS_CLASSICOS, escolherRival, exibirBot, lutarAnimado, melhorDe10, previa, sparringTexto, useLuta,
 } from "../../luta.ts";
 import { EditorRegras } from "./EditorRegras.tsx";
-import { PalcoLuta } from "./PalcoLuta.tsx";
+import { Cena } from "./PalcoLuta.tsx";
+import { ENDERECO_LUTA } from "../../rotas.ts";
 
 function CardRival({ k, adulto = false }: { k: string; adulto?: boolean }) {
   const a = useAtlas(), luta = useLuta(), L = exibirBot(k);
@@ -63,11 +64,12 @@ export function TelaArena({ voltarPet }: { voltarPet: () => void }) {
       {luta.rivalFixo && <p class="dl-apoio">Rival do cenário: pet de dono {NOME_DONO[luta.rivalFixo.tipo]}, {luta.rivalFixo.dias} dia(s), lutando com o estilo da linha dele. Troque o rival nos cards para voltar aos bots.</p>}
       <div class="arena-acoes">
         <button type="button" class="dl-btn dl-btn--sec" disabled={luta.lutando} onClick={melhorDe10}>Melhor de 10</button>
-        <button type="button" class="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => lutarAnimado(null, NOME_V2)}>Lutar</button>
+        <button type="button" class="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>
       </div>
       <p class="dl-apoio">{`Seu pet: ${nomeForma(m.forma)}, vida ${pa.hpMax.toFixed(0)}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; regras de combate semeadas por ${NOME_BOT[A.estilo.base!] || A.estilo.base} · rival: ${luta.rivalFixo ? nomeForma(luta.rivalFixo.rival.forma) + " (cenário)" : B.estilo.oraculo ? "oráculo (referência fora das regras de combate)" : exibirBot(luta.rival).nomeTela}.`}</p>
-      {/* o palco mora na aba visivel: numa luta em andamento, ele vem junto */}
-      {luta.palco && <PalcoLuta voltarPet={voltarPet} />}
+      {/* desktop: previa parada da arena com o rival escolhido (a luta abre em tela cheia) */}
+      {luta.palco && !luta.lutando && <div class="arena-previa"><Cena p={luta.palco} /></div>}
+      {luta.palco?.texto && !luta.lutando && <p class="dl-card arena-ultima">{luta.palco.texto}</p>}
       <section class="bloco"><h2>Regras de combate do seu pet</h2><EditorRegras /></section>
       <details class="dl-apoio"><summary>Como funciona</summary>
         <p>Lute contra um rival. Seu pet decide por <b>regras de combate</b> que ele mesmo aprende lutando; você pode travar ou vetar regras. Distância, guts e golpe pesado anunciado um turno antes, com os <b>stats da forma</b>, a <b>técnica da linha</b> (Champion) e a <b>passiva</b> (Ultimate e Mega). A lista de regras (condição → ação) cresce a cada nível: Rookie 3, Champion 5, Ultimate e Mega 8. A campanha contra os NPCs fica na aba <b>Campanha</b>.</p></details>

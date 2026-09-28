@@ -52,4 +52,7 @@ export function configDoEndereco(hash: string): ParteConfig | null {
   if (c !== "config") return null;
   return !p ? "principal" : (PARTES_CONFIG as readonly string[]).includes(p) ? p as ParteConfig : null;
 }
+/* luta em andamento: tela cheia com rota propria (secao 7); a aba de origem vem do palco */
+export const ENDERECO_LUTA = "#/lutar/luta";
+export const ehLuta = (hash: string): boolean => hash.replace(/^#\/?/, "") === "lutar/luta";
 export const enderecoDaConfig = (p: ParteConfig): string => p === "principal" ? "#/config" : `#/config/${p}`;
