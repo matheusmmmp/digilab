@@ -5,7 +5,8 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { abrirModal } from "../../componentes/modal.ts";
 import { useJogo } from "../../jogo.ts";
-import { LUTA, previa, pularAnimacao, sparringTexto, useLuta, type Modo } from "../../luta.ts";
+import { LUTA, previa, pularAnimacao, reverLuta, sparringTexto, useLuta, type Modo, type Palco } from "../../luta.ts";
+import { NOME_V2 } from "../../../motor/index.ts";
 import { ModalResultado } from "./ModalResultado.tsx";
 import { PalcoLuta } from "./PalcoLuta.tsx";
 
@@ -24,7 +25,25 @@ function ConfirmarDesistir({ ficar, desistir }: { ficar: () => void; desistir: (
   );
 }
 
-export function TelaLuta({ sair, verReplay, pedidoDesistir, fecharPedido }: { sair: (modo: Modo) => void; verReplay: (modo: Modo, idx: number) => void; pedidoDesistir: boolean; fecharPedido: () => void }) {
+/** fim do replay animado: ver de novo ou voltar ao Diario (Esc volta) */
+function FimReplay({ p, deNovo, voltar }: { p: Palco; deNovo: () => void; voltar: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null), outra = useRef(false);
+  useEffect(() => { abrirModal(ref.current); }, []);
+  return (
+    <dialog class="modal-conf dl" ref={ref} aria-labelledby="fim-rep-tit" onClose={() => (outra.current ? deNovo() : voltar())}>
+      <h2 id="fim-rep-tit">Fim do replay</h2>
+      <p>{p.texto.replace(/^Fim do replay: /, "")} A luta foi refeita do registro; nada foi gravado.</p>
+      <div class="modal-bts">
+        <button type="button" class="dl-btn dl-btn--sec" onClick={() => { outra.current = true; ref.current?.close(); }}>Ver de novo</button>
+        <button type="button" class="dl-btn" autofocus onClick={() => ref.current?.close()}>Voltar ao Diário</button>
+      </div>
+    </dialog>
+  );
+}
+
+export function TelaLuta({ sair, verReplay, sairReplay, pedidoDesistir, fecharPedido }: {
+  sair: (modo: Modo) => void; verReplay: (modo: Modo, idx: number) => void; sairReplay: (idx: number) => void; pedidoDesistir: boolean; fecharPedido: () => void;
+}) {
   const luta = useLuta(), { motor: m } = useJogo(), p = luta.palco, [desistindo, setDesistindo] = useState(false);
   const modo: Modo = p?.modo ?? "arena";
   /* tela cheia: trava a rolagem do fundo enquanto a luta esta aberta */
@@ -38,16 +57,19 @@ export function TelaLuta({ sair, verReplay, pedidoDesistir, fecharPedido }: { sa
       <button type="button" class="dl-btn" onClick={() => sair("arena")}>Voltar para a Arena</button>
     </section>
   );
-  const sp = sparringTexto(m);
+  const sp = sparringTexto(m), rep = luta.replay;
   return (
     <section class="luta-tela dl" aria-labelledby="luta-tit">
       <div class="luta-topo dl-faixa">
-        <h1 class="dl-num" id="luta-tit">Luta · {modo === "arena" ? "Arena" : "Campanha"}</h1>
-        <span class="luta-topo-sub">{p.A.nomeTela} × {p.B.nomeTela}{sp && modo === "arena" && !LUTA.rivalFixo ? ` · treino ${sp}` : ""}</span>
-        <button type="button" class="dl-btn dl-btn--sec luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</button>
+        <h1 class="dl-num" id="luta-tit">{rep !== null ? "Replay" : "Luta"} · {modo === "arena" ? "Arena" : "Campanha"}</h1>
+        <span class="luta-topo-sub">{p.A.nomeTela} × {p.B.nomeTela}{rep !== null ? " · refeita do registro" : sp && modo === "arena" && !LUTA.rivalFixo ? ` · treino ${sp}` : ""}</span>
+        {rep !== null
+          ? <button type="button" class="dl-btn dl-btn--sec luta-desistir" onClick={() => { pularAnimacao(); sairReplay(rep); }}>Sair do replay</button>
+          : <button type="button" class="dl-btn dl-btn--sec luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</button>}
       </div>
       <PalcoLuta />
-      {p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} verReplay={idx => { previa(modo); verReplay(modo, idx); }} />}
+      {rep !== null && p.fimReplay && !luta.lutando && <FimReplay p={p} deNovo={() => reverLuta(rep, NOME_V2)} voltar={() => sairReplay(rep)} />}
+      {rep === null && p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} verReplay={idx => { previa(modo); verReplay(modo, idx); }} />}
       {desistindo && luta.lutando && <ConfirmarDesistir ficar={() => setDesistindo(false)} desistir={() => { setDesistindo(false); pularAnimacao(); voltar(); }} />}
     </section>
   );

@@ -39,6 +39,8 @@ export interface Palco {
   modo: Modo; A: LutadorTela; B: LutadorTela; E: EstadoLuta; tr: Turno | null; turno: number | null;
   texto: string; callout: string; intencao: string | null; regra: { ma: MotivoCombate; A: LutadorTela } | null;
   resultado: ResultadoPalco | null; log: LinhaLog[];
+  /** replay animado de uma luta do registro chegou ao fim */
+  fimReplay?: boolean;
 }
 /** rival fixo: o pet B de um cenario (Diario > Cenarios); luta sem ensinar, porque nao e reconstruivel do registro */
 /** o que o modal Resultado precisa, tudo do motor: a luta, o estado antes dela e a posicao dela no registro */
@@ -56,7 +58,9 @@ export interface ResultadoPalco {
 export interface RivalFixo { rival: Motor; dias: number; tipo: string }
 export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null,
   /* tela cheia da luta (#/lutar/luta): pausa e x2 so mudam a animacao; a luta ja esta decidida e no registro */
-  pausado: false, rapido: false };
+  pausado: false, rapido: false,
+  /** indice no registro da luta que esta sendo revista (replay animado, nada gravado); null numa luta de verdade */
+  replay: null as number | null };
 const ouvintes = new Set<() => void>();
 export const avisarLuta = (): void => { for (const o of ouvintes) o(); };
 export function useLuta(): typeof LUTA {
@@ -124,14 +128,8 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
     avisarLuta(); return;
   }
   const { res } = r!, A = exibirPet(m, r!.A), B = cenario ? exibirFixo(LUTA.rivalFixo!) : exibirBot(npc || LUTA.rival, r!.B);
-  LUTA.lutando = true;
-  LUTA.palco = { modo, A, B, E: res.E0, tr: null, turno: null, texto: "", callout: "", intencao: null, regra: null, resultado: null, log: [] };
-  avisarLuta();
-  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let i = 0;
-  const passo = () => {
-    const p = LUTA.palco!;
-    if (i >= res.turnos.length) {
+  LUTA.replay = null;
+  animar(res, A, B, modo, nomeAcaoV2, p => {
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
       p.texto = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
@@ -140,8 +138,18 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
       p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog };
-      LUTA.lutando = false; avisarLuta(); return;
-    }
+  });
+}
+/** a animacao de uma luta ja decidida: um turno por vez no palco (pausa e x2); no fim chama fim(palco) e para */
+function animar(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, modo: Modo, nomeAcaoV2: Record<string, string>, fim: (p: Palco) => void): void {
+  LUTA.lutando = true;
+  LUTA.palco = { modo, A, B, E: res.E0, tr: null, turno: null, texto: "", callout: "", intencao: null, regra: null, resultado: null, log: [] };
+  avisarLuta();
+  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let i = 0;
+  const passo = () => {
+    const p = LUTA.palco!;
+    if (i >= res.turnos.length) { fim(p); LUTA.lutando = false; avisarLuta(); return; }
     const tr = res.turnos[i++];
     const ma = motivoCombate(tr, 0, A.estilo), mb = motivoCombate(tr, 1, B.estilo);
     const dano = tr.dano[1] ? `seu pet causa ${dec1(tr.dano[1])}` : "", dano2 = tr.dano[0] ? `o rival causa ${dec1(tr.dano[0])}` : "";
@@ -206,6 +214,17 @@ export function melhorDe10(): string {
 export const sparringTexto = (m: Motor): string | null => m.estagioAtual === "adolescente" ? `${Math.min(m.sparring, CAT.sparring)} de ${CAT.sparring}` : null;
 
 /* ------------------------------------------------ replay de uma luta do registro (Diario) */
+/** rever no palco a luta do evento idx: refeita do registro e animada; nada entra no registro nem ensina o pet */
+export function reverLuta(idx: number, nomeAcaoV2: Record<string, string>): void {
+  if (LUTA.lutando) return;
+  const L = reconstruirLuta(jogoAtual().motor, idx);
+  LUTA.replay = idx;
+  animar(L.res, L.A, L.B, L.npc ? "campanha" : "arena", nomeAcaoV2, p => {
+    const txt = L.res.pontosA === 1 ? `${L.A.nomeTela} venceu` : L.res.pontosA === 0 ? `${L.B.nomeTela} venceu` : "Empate";
+    p.texto = `Fim do replay: ${txt} em ${L.res.turnos.length} turnos.`;
+    p.fimReplay = true;
+  });
+}
 /** luta pedida pelo "Ver replay" do Resultado: indice do evento no registro */
 export const REPLAY = { pedido: null as number | null };
 export interface LutaReconstruida { res: ResultadoLuta; A: LutadorTela; B: LutadorTela; rival: string; npc: boolean }
@@ -218,4 +237,25 @@ export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
   const m0 = Motor.reproduzir(m.semente, m.log.slice(0, idx), m.versao), npc = !!NPC[r];
   const A = lutadorPet(m0, "Seu pet", npc), B = lutadorBot(r), res = jogarV2(A, B, s);
   return { res, A: exibirPet(m0, A), B: exibirBot(r, B), rival: r, npc };
+}
+
+/** uma luta do registro, refeita: rival, turnos, resultado e quantas regras novas o pet tirou dela */
+export interface LutaDoRegistro { idx: number; rival: string; turnos: number; pontosA: number; regrasNovas: number }
+let cacheLutas: { semente: number; n: number; lutas: LutaDoRegistro[] } | null = null;
+/** todas as lutas do registro, refeitas numa passada so (event sourcing, so leitura). O resultado fica guardado ate
+    entrar luta nova: o tempo grava eventos a cada poucos segundos e nao muda nenhuma luta. */
+export function lutasDoRegistro(m: Motor): LutaDoRegistro[] {
+  let n = 0;
+  for (const ev of m.log) if (ev[1] === "l") n++;
+  if (cacheLutas && cacheLutas.semente === m.semente && cacheLutas.n === n) return cacheLutas.lutas;
+  const m0 = new Motor(m.semente, m.versao), lutas: LutaDoRegistro[] = [];
+  m.log.forEach((ev, idx) => {
+    if (ev[1] !== "l") { m0.aplicarEvento(ev); return; }
+    const { r, s } = ev[2] as { r: string; s: number };
+    const res = jogarV2(lutadorPet(m0, "Seu pet", !!NPC[r]), lutadorBot(r), s), antes = m0.gp ? [...m0.gp.ativas] : [];
+    m0.aplicarEvento(ev);
+    lutas.push({ idx, rival: r, turnos: res.turnos.length, pontosA: res.pontosA, regrasNovas: m0.gp ? m0.gp.ativas.filter(k => !antes.includes(k)).length : 0 });
+  });
+  cacheLutas = { semente: m.semente, n, lutas };
+  return lutas;
 }

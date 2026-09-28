@@ -24,7 +24,7 @@ import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
-import { LUTA, REPLAY, previa, type Modo } from "./luta.ts";
+import { LUTA, REPLAY, previa, pularAnimacao, type Modo } from "./luta.ts";
 import { TelaPet } from "./telas/pet/TelaPet.tsx";
 import { MeusPets } from "./telas/pet/MeusPets.tsx";
 import { TopoDesktop } from "./componentes/Topo.tsx";
@@ -68,8 +68,11 @@ export function App() {
       if (ehLuta(location.hash)) { setEmLuta(true); return; }
       if (emLutaRef.current) {
         /* saiu da luta pelo Voltar: com a animacao rodando, fica na luta e pergunta; ja no resultado, conta como Continuar */
-        if (LUTA.lutando) { history.pushState(null, "", ENDERECO_LUTA); setPedidoDesistir(true); return; }
-        previa(LUTA.palco?.modo ?? "arena"); setEmLuta(false);
+        /* replay animado: o Voltar so sai (nada foi gravado) */
+        if (LUTA.replay !== null) { REPLAY.pedido = LUTA.replay; pularAnimacao(); LUTA.replay = null; previa("arena"); }
+        else if (LUTA.lutando) { history.pushState(null, "", ENDERECO_LUTA); setPedidoDesistir(true); return; }
+        else previa(LUTA.palco?.modo ?? "arena");
+        setEmLuta(false);
       }
       const c = configDoEndereco(location.hash); if (c) { setConfig(c); return; }
       const r = rotaDoEndereco(location.hash); if (r) { setConfig(null); setRota(r); }
@@ -90,6 +93,13 @@ export function App() {
   };
   /* Ver replay (Resultado): a entrada da luta vira a aba de origem e o Diario abre por cima, com a luta refeita do registro;
      o Voltar do navegador leva de volta a aba de origem */
+  /* fim ou saida do replay animado: volta ao Diario com a mesma luta aberta */
+  const sairReplay = (idx: number) => {
+    /* o replay entrou no historico por cima do Diario: voltar uma entrada leva ao Diario sem duplica-lo (o hashchange
+       fecha a tela cheia e abre o Registro) */
+    LUTA.replay = null; REPLAY.pedido = idx;
+    history.back();
+  };
   const verReplay = (modo: Modo, idx: number) => {
     REPLAY.pedido = idx;
     history.replaceState(null, "", `#/lutar/${modo}`);
@@ -103,8 +113,7 @@ export function App() {
     abrirMeusPets={() => setMeusPets(true)} voltar={!config && rota.destino === "conversar" ? () => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); } : undefined} />;
   if (emLuta) return (
     <div class="app app--tela-cheia">
-      <TelaLuta sair={sairDaLuta} verReplay={verReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
-      <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
+      <TelaLuta sair={sairDaLuta} verReplay={verReplay} sairReplay={sairReplay} pedidoDesistir={pedidoDesistir} fecharPedido={() => setPedidoDesistir(false)} />
     </div>
   );
 

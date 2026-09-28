@@ -121,10 +121,14 @@ Tipos da seção 7 já no app: luta em tela cheia (`#/lutar/luta`), Resultado em
 (`#/evolucao`), primeira vez em tela cheia (`#/inicio`), Meus pets e confirmações em modal, folhas no celular (ficha do
 Catálogo, evento do Registro, porquê do balão) que no desktop viram o painel da direita, faixa de estado no topo.
 
-Ficou de fora por falta de dado pronto no motor:
+Feito depois (2026-09-28): rever a luta no palco (replay animado a partir do Diário, nada gravado), "melhor turno" e
+"regras novas" por ilha na CampDesktop (lutas refeitas do registro numa passada), **Forçar treino** na TreinoDesktop
+(escolhe o exercício e cai na confirmação de sempre; só abre com a fadiga no limite do motor) e a revelação da evolução
+que espera a luta acabar (depois do Resultado).
+
+Ainda de fora, porque precisam de evento novo no motor (decisão do Matheus):
 
 | prancha | falta | precisa |
 |---|---|---|
-| TreinoDesktop | **Descansar** e **Forçar treino** como botões (o forçar hoje aparece nos próprios exercícios acima de 60 de fadiga) | ação de descanso no motor; interface para o forçar |
-| CampDesktop | "melhor turno" e "regras novas" por ilha | reconstruir as lutas do lugar a partir do registro (dá, mas custa um replay por luta) |
-| ArenaDesktop | — (última luta refeita do registro, com replay no Diário) | — |
+| ResVitoria, ResDerrota, ResCampanha, ResDesktop | **Elogiar / Repreender** a ação do momento decisivo da luta | evento de feedback do dono sobre uma ação de combate |
+| TreinoDesktop | **Descansar** | ação de descanso (a fadiga hoje só baixa com o tempo acordado e com o sono) |

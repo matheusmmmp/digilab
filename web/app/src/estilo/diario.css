@@ -156,3 +156,5 @@ button.reg-linha[aria-pressed="true"]{background:#FFF6CC;box-shadow:inset 0 0 0 
 .reg-det--folha{display:grid;gap:6px}
 .reg-det--folha b{font-size:18px}
 .reg-det--folha .reg-tag{justify-self:start}
+.reg-replay-bts{display:flex;flex-wrap:wrap;gap:10px}
+.reg-replay-bts .dl-btn{min-height:48px;padding:0 16px}
