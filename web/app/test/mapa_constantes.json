@@ -1,0 +1,1911 @@
+{
+ "versao": 1,
+ "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento",
+ "pares": [
+  {
+   "web": "C.decFome",
+   "fonte": "python",
+   "py": "Config.decaimento_fome"
+  },
+  {
+   "web": "C.decHig",
+   "fonte": "python",
+   "py": "Config.decaimento_higiene"
+  },
+  {
+   "web": "C.decEn",
+   "fonte": "python",
+   "py": "Config.decaimento_energia"
+  },
+  {
+   "web": "C.decHum",
+   "fonte": "python",
+   "py": "Config.decaimento_humor"
+  },
+  {
+   "web": "C.enSono",
+   "fonte": "python",
+   "py": "Config.energia_por_tick_dormindo"
+  },
+  {
+   "web": "C.humBrinc",
+   "fonte": "python",
+   "py": "Config.humor_por_tick_brincando"
+  },
+  {
+   "web": "C.ganhoAlim",
+   "fonte": "python",
+   "py": "Config.ganho_alimentar"
+  },
+  {
+   "web": "C.ganhoLimpar",
+   "fonte": "python",
+   "py": "Config.ganho_limpar"
+  },
+  {
+   "web": "C.ganhoBrincHum",
+   "fonte": "python",
+   "py": "Config.ganho_brincar_humor"
+  },
+  {
+   "web": "C.custoBrincEn",
+   "fonte": "python",
+   "py": "Config.custo_brincar_energia"
+  },
+  {
+   "web": "C.custoBrincFome",
+   "fonte": "python",
+   "py": "Config.custo_brincar_fome"
+  },
+  {
+   "web": "C.ganhoElogiar",
+   "fonte": "python",
+   "py": "Config.ganho_elogiar"
+  },
+  {
+   "web": "C.custoRepr",
+   "fonte": "python",
+   "py": "Config.custo_repreender"
+  },
+  {
+   "web": "C.probSuj",
+   "fonte": "python",
+   "py": "Config.prob_sujeira_por_tick"
+  },
+  {
+   "web": "C.probSujRef",
+   "fonte": "python",
+   "py": "Config.prob_sujeira_pos_refeicao"
+  },
+  {
+   "web": "C.sujMax",
+   "fonte": "python",
+   "py": "Config.sujeira_maxima"
+  },
+  {
+   "web": "C.penHigSuj",
+   "fonte": "python",
+   "py": "Config.penalidade_higiene_por_sujeira"
+  },
+  {
+   "web": "C.danoSaude",
+   "fonte": "python",
+   "py": "Config.dano_saude_por_tick"
+  },
+  {
+   "web": "C.curaSaude",
+   "fonte": "python",
+   "py": "Config.cura_saude_por_tick"
+  },
+  {
+   "web": "C.iniNoite",
+   "fonte": "python",
+   "py": "Config.inicio_noite_tick"
+  },
+  {
+   "web": "C.fimNoite",
+   "fonte": "python",
+   "py": "Config.fim_noite_tick"
+  },
+  {
+   "web": "C.multNoite",
+   "fonte": "python",
+   "py": "Config.multiplicador_noturno"
+  },
+  {
+   "web": "C.intervalo",
+   "fonte": "python",
+   "py": "Config.intervalo_decisao_ticks"
+  },
+  {
+   "web": "C.janelaAtencao",
+   "fonte": "python",
+   "py": "Config.janela_atencao_ticks"
+  },
+  {
+   "web": "CB.lambda",
+   "fonte": "python",
+   "py": "ConfigBandit.lambda_regularizacao"
+  },
+  {
+   "web": "CB.var",
+   "fonte": "python",
+   "py": "ConfigBandit.variancia_amostra"
+  },
+  {
+   "web": "CB.piso",
+   "fonte": "python",
+   "py": "ConfigBandit.piso_prior"
+  },
+  {
+   "web": "CB.elogio",
+   "fonte": "python",
+   "py": "ConfigBandit.recompensa_elogio"
+  },
+  {
+   "web": "CB.repr",
+   "fonte": "python",
+   "py": "ConfigBandit.recompensa_repreensao"
+  },
+  {
+   "web": "CB.janela",
+   "fonte": "python",
+   "py": "ConfigBandit.janela_latencia_ticks"
+  },
+  {
+   "web": "CB.ignorado",
+   "fonte": "python",
+   "py": "ConfigBandit.recompensa_pedido_ignorado"
+  },
+  {
+   "web": "CB.escalaTdc",
+   "fonte": "python",
+   "py": "ConfigBandit.escala_ticks_desde_cuidado"
+  },
+  {
+   "web": "CTP.amplitude",
+   "fonte": "python",
+   "py": "ConfigTemperamento.amplitude"
+  },
+  {
+   "web": "CTP.kCuriosidade",
+   "fonte": "python",
+   "py": "ConfigTemperamento.k_curiosidade"
+  },
+  {
+   "web": "CTP.kTeimosia",
+   "fonte": "python",
+   "py": "ConfigTemperamento.k_teimosia"
+  },
+  {
+   "web": "CTP.kSensibilidade",
+   "fonte": "python",
+   "py": "ConfigTemperamento.k_sensibilidade"
+  },
+  {
+   "web": "CTP.kRancor",
+   "fonte": "python",
+   "py": "ConfigTemperamento.k_rancor"
+  },
+  {
+   "web": "CDJ.limiarNecessidade",
+   "fonte": "python",
+   "py": "ConfigDesejo.limiar_necessidade"
+  },
+  {
+   "web": "CDJ.limiarVontade",
+   "fonte": "python",
+   "py": "ConfigDesejo.limiar_vontade"
+  },
+  {
+   "web": "CDJ.kCumprimento",
+   "fonte": "python",
+   "py": "ConfigDesejo.k_cumprimento_ticks"
+  },
+  {
+   "web": "CDJ.limiarTom",
+   "fonte": "python",
+   "py": "ConfigExpressao.limiar_extremo"
+  },
+  {
+   "web": "CME.nCurto",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.n_curto"
+  },
+  {
+   "web": "CME.nLongo",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.n_longo"
+  },
+  {
+   "web": "CME.dCurto",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.d_curto_ticks"
+  },
+  {
+   "web": "CME.relembrar",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.relembrar_ticks_acordado"
+  },
+  {
+   "web": "CME.tau",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.tau_ativacao_ticks"
+  },
+  {
+   "web": "CME.limiarPedido",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.limiar_necessidade_pedido"
+  },
+  {
+   "web": "CME.janela",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.janela_latencia_ticks"
+  },
+  {
+   "web": "CME.intensidade.bronca",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.categorias.bronca"
+  },
+  {
+   "web": "CME.intensidade.elogio",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.categorias.elogio"
+  },
+  {
+   "web": "CME.intensidade.carinho",
+   "fonte": "python",
+   "py": "ConfigMemoriaEspacos.categorias.carinho"
+  },
+  {
+   "web": "CEM.limiarEixo",
+   "fonte": "python",
+   "py": "ConfigEmocao.limiar_eixo"
+  },
+  {
+   "web": "CVI.inicial",
+   "fonte": "python",
+   "py": "ConfigVinculo.inicial"
+  },
+  {
+   "web": "CVI.alfa",
+   "fonte": "python",
+   "py": "ConfigVinculo.alfa"
+  },
+  {
+   "web": "CVI.pesoAtend",
+   "fonte": "python",
+   "py": "ConfigVinculo.peso_atendimento"
+  },
+  {
+   "web": "CVI.pesoCoer",
+   "fonte": "python",
+   "py": "ConfigVinculo.peso_coerencia"
+  },
+  {
+   "web": "CVI.pesoDesejo",
+   "fonte": "python",
+   "py": "ConfigVinculo.peso_desejo"
+  },
+  {
+   "web": "CVI.janelaLat",
+   "fonte": "python",
+   "py": "ConfigVinculo.janela_latencia_ticks"
+  },
+  {
+   "web": "CVI.janelaCoer",
+   "fonte": "python",
+   "py": "ConfigVinculo.janela_coerencia_ticks"
+  },
+  {
+   "web": "CVI.janelaDesejo",
+   "fonte": "python",
+   "py": "ConfigVinculo.janela_desejo_ticks"
+  },
+  {
+   "web": "COB.b0",
+   "fonte": "python",
+   "py": "ConfigObediencia.b0"
+  },
+  {
+   "web": "COB.bVinculo",
+   "fonte": "python",
+   "py": "ConfigObediencia.b_vinculo"
+  },
+  {
+   "web": "COB.bTeimosia",
+   "fonte": "python",
+   "py": "ConfigObediencia.b_teimosia"
+  },
+  {
+   "web": "COB.bConflito",
+   "fonte": "python",
+   "py": "ConfigObediencia.b_conflito"
+  },
+  {
+   "web": "COB.limiarConflito",
+   "fonte": "python",
+   "py": "ConfigObediencia.limiar_conflito"
+  },
+  {
+   "web": "COB.probFazerOutra",
+   "fonte": "python",
+   "py": "ConfigObediencia.prob_fazer_outra"
+  },
+  {
+   "web": "COB.limiarMotivo",
+   "fonte": "python",
+   "py": "ConfigObediencia.limiar_motivo"
+  },
+  {
+   "web": "CTR.pesoPontoCombate",
+   "fonte": "python",
+   "py": "ConfigTreino.peso_ponto_combate"
+  },
+  {
+   "web": "CTR.ganhoPri",
+   "fonte": "python",
+   "py": "ConfigTreino.ganho_principal"
+  },
+  {
+   "web": "CTR.ganhoSec",
+   "fonte": "python",
+   "py": "ConfigTreino.ganho_secundario"
+  },
+  {
+   "web": "CTR.tetoStat",
+   "fonte": "python",
+   "py": "ConfigTreino.teto_por_stat"
+  },
+  {
+   "web": "CTR.tetoVida",
+   "fonte": "python",
+   "py": "ConfigTreino.teto_vida"
+  },
+  {
+   "web": "CTR.fadigaSessao",
+   "fonte": "python",
+   "py": "ConfigTreino.fadiga_por_sessao"
+  },
+  {
+   "web": "CTR.recuperaHora",
+   "fonte": "python",
+   "py": "ConfigTreino.recupera_fadiga_por_hora"
+  },
+  {
+   "web": "CTR.limiarPausa",
+   "fonte": "python",
+   "py": "ConfigTreino.limiar_pausa"
+  },
+  {
+   "web": "CTR.limiteForcar",
+   "fonte": "python",
+   "py": "ConfigTreino.limite_forcar"
+  },
+  {
+   "web": "CTR.intervalo",
+   "fonte": "python",
+   "py": "ConfigTreino.intervalo_minimo_ticks"
+  },
+  {
+   "web": "CTR.multForcar",
+   "fonte": "python",
+   "py": "ConfigTreino.mult_forcar"
+  },
+  {
+   "web": "CTR.sobreForcar",
+   "fonte": "python",
+   "py": "ConfigTreino.sobrecarga_forcar"
+  },
+  {
+   "web": "CTR.estresseForcar",
+   "fonte": "python",
+   "py": "ConfigTreino.estresse_forcar"
+  },
+  {
+   "web": "CTR.vincForcar",
+   "fonte": "python",
+   "py": "ConfigTreino.vinculo_forcar"
+  },
+  {
+   "web": "CTR.sobreMax",
+   "fonte": "python",
+   "py": "ConfigTreino.sobrecarga_max"
+  },
+  {
+   "web": "CTR.decaiHora",
+   "fonte": "python",
+   "py": "ConfigTreino.decai_sobrecarga_hora_bem_cuidado"
+  },
+  {
+   "web": "CTR.decaiSono",
+   "fonte": "python",
+   "py": "ConfigTreino.decai_sobrecarga_sono_completo"
+  },
+  {
+   "web": "CTR.sonoCompleto",
+   "fonte": "python",
+   "py": "ConfigTreino.sono_completo_ticks"
+  },
+  {
+   "web": "CTR.bemCuidado",
+   "fonte": "python",
+   "py": "ConfigTreino.limiar_bem_cuidado"
+  },
+  {
+   "web": "CTR.pesoPausa",
+   "fonte": "python",
+   "py": "ConfigTreino.peso_pausa_vinculo"
+  },
+  {
+   "web": "CTR.tetoEstagio.crianca",
+   "fonte": "python",
+   "py": "ConfigTreino.teto_por_estagio.crianca"
+  },
+  {
+   "web": "CTR.tetoEstagio.adolescente",
+   "fonte": "python",
+   "py": "ConfigTreino.teto_por_estagio.adolescente"
+  },
+  {
+   "web": "CTR.tetoEstagio.adulto",
+   "fonte": "python",
+   "py": "ConfigTreino.teto_por_estagio.adulto"
+  },
+  {
+   "web": "APTIDAO.brasa.forca",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.brasa.forca"
+  },
+  {
+   "web": "APTIDAO.brasa.guarda",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.brasa.guarda"
+  },
+  {
+   "web": "APTIDAO.brasa.folego",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.brasa.folego"
+  },
+  {
+   "web": "APTIDAO.brasa.vigor",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.brasa.vigor"
+  },
+  {
+   "web": "APTIDAO.brasa.mira",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.brasa.mira"
+  },
+  {
+   "web": "APTIDAO.brasa.recuperacao",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.brasa.recuperacao"
+  },
+  {
+   "web": "APTIDAO.cirro.mira",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.cirro.mira"
+  },
+  {
+   "web": "APTIDAO.cirro.recuperacao",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.cirro.recuperacao"
+  },
+  {
+   "web": "APTIDAO.cirro.folego",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.cirro.folego"
+  },
+  {
+   "web": "APTIDAO.cirro.guarda",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.cirro.guarda"
+  },
+  {
+   "web": "APTIDAO.cirro.forca",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.cirro.forca"
+  },
+  {
+   "web": "APTIDAO.cirro.vigor",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.cirro.vigor"
+  },
+  {
+   "web": "APTIDAO.ferrugem.guarda",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.ferrugem.guarda"
+  },
+  {
+   "web": "APTIDAO.ferrugem.vigor",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.ferrugem.vigor"
+  },
+  {
+   "web": "APTIDAO.ferrugem.forca",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.ferrugem.forca"
+  },
+  {
+   "web": "APTIDAO.ferrugem.folego",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.ferrugem.folego"
+  },
+  {
+   "web": "APTIDAO.ferrugem.recuperacao",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.ferrugem.recuperacao"
+  },
+  {
+   "web": "APTIDAO.ferrugem.mira",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.ferrugem.mira"
+  },
+  {
+   "web": "APTIDAO.limo.recuperacao",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.limo.recuperacao"
+  },
+  {
+   "web": "APTIDAO.limo.folego",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.limo.folego"
+  },
+  {
+   "web": "APTIDAO.limo.vigor",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.limo.vigor"
+  },
+  {
+   "web": "APTIDAO.limo.guarda",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.limo.guarda"
+  },
+  {
+   "web": "APTIDAO.limo.mira",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.limo.mira"
+  },
+  {
+   "web": "APTIDAO.limo.forca",
+   "fonte": "python",
+   "py": "ConfigTreino.aptidao_especie.limo.forca"
+  },
+  {
+   "web": "CSO.aviso",
+   "fonte": "python",
+   "py": "ConfigSombrio.limiar_aviso"
+  },
+  {
+   "web": "CSO.sombrio",
+   "fonte": "python",
+   "py": "ConfigSombrio.limiar_sombrio"
+  },
+  {
+   "web": "CSO.epsMin",
+   "fonte": "python",
+   "py": "ConfigSombrio.epsilon_minimo"
+  },
+  {
+   "web": "CSO.tetoVinc",
+   "fonte": "python",
+   "py": "ConfigSombrio.teto_vinculo"
+  },
+  {
+   "web": "CSO.multDev",
+   "fonte": "python",
+   "py": "ConfigSombrio.mult_devastador"
+  },
+  {
+   "web": "CSO.fracBastiao",
+   "fonte": "python",
+   "py": "ConfigSombrio.fracao_contra_golpe_bastiao"
+  },
+  {
+   "web": "CSO.multPred",
+   "fonte": "python",
+   "py": "ConfigSombrio.mult_predador"
+  },
+  {
+   "web": "CSO.turnosPeleColosso",
+   "fonte": "python",
+   "py": "ConfigSombrio.turnos_pele_colosso_partido"
+  },
+  {
+   "web": "CSO.multRegenColosso",
+   "fonte": "python",
+   "py": "ConfigSombrio.mult_regen_colosso_partido"
+  },
+  {
+   "web": "CSO.formas.brigao.stats.forca",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.brigao.stats.forca"
+  },
+  {
+   "web": "CSO.formas.brigao.stats.folego",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.brigao.stats.folego"
+  },
+  {
+   "web": "CSO.formas.brigao.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.brigao.stats.recuperacao"
+  },
+  {
+   "web": "CSO.formas.brigao.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.brigao.stats.guarda"
+  },
+  {
+   "web": "CSO.formas.guardiao.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.guardiao.stats.guarda"
+  },
+  {
+   "web": "CSO.formas.guardiao.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.guardiao.stats.vigor"
+  },
+  {
+   "web": "CSO.formas.guardiao.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.guardiao.stats.recuperacao"
+  },
+  {
+   "web": "CSO.formas.guardiao.stats.mira",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.guardiao.stats.mira"
+  },
+  {
+   "web": "CSO.formas.cacador.stats.mira",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.cacador.stats.mira"
+  },
+  {
+   "web": "CSO.formas.cacador.stats.forca",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.cacador.stats.forca"
+  },
+  {
+   "web": "CSO.formas.cacador.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.cacador.stats.vigor"
+  },
+  {
+   "web": "CSO.formas.cacador.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.cacador.stats.guarda"
+  },
+  {
+   "web": "CSO.formas.colosso.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.colosso.stats.vigor"
+  },
+  {
+   "web": "CSO.formas.colosso.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.colosso.stats.guarda"
+  },
+  {
+   "web": "CSO.formas.colosso.stats.folego",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.colosso.stats.folego"
+  },
+  {
+   "web": "CSO.formas.colosso.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigSombrio.formas.colosso.stats.recuperacao"
+  },
+  {
+   "web": "CCOND.min",
+   "fonte": "python",
+   "py": "ConfigCatalogo.condicao_mult_min"
+  },
+  {
+   "web": "CCOND.max",
+   "fonte": "python",
+   "py": "ConfigCatalogo.condicao_mult_max"
+  },
+  {
+   "web": "CD.passo",
+   "fonte": "python",
+   "py": "ConfigDonos.passo_ticks"
+  },
+  {
+   "web": "CD.maxPasso",
+   "fonte": "python",
+   "py": "ConfigDonos.max_interacoes_por_passo"
+  },
+  {
+   "web": "CD.limAlim",
+   "fonte": "python",
+   "py": "ConfigDonos.limiar_alimentar"
+  },
+  {
+   "web": "CD.limLimpar",
+   "fonte": "python",
+   "py": "ConfigDonos.limiar_limpar"
+  },
+  {
+   "web": "CD.sujLimpar",
+   "fonte": "python",
+   "py": "ConfigDonos.sujeira_para_limpar"
+  },
+  {
+   "web": "CD.limHumBrinc",
+   "fonte": "python",
+   "py": "ConfigDonos.limiar_humor_brincar"
+  },
+  {
+   "web": "CD.limSono",
+   "fonte": "python",
+   "py": "ConfigDonos.limiar_energia_sono_adequado"
+  },
+  {
+   "web": "CD.limPedido",
+   "fonte": "python",
+   "py": "ConfigDonos.limiar_necessidade_pedido_adequado"
+  },
+  {
+   "web": "CD.visitasRelapso",
+   "fonte": "python",
+   "py": "ConfigDonos.visitas_por_dia_relapso"
+  },
+  {
+   "web": "CD.probElogioInc",
+   "fonte": "python",
+   "py": "ConfigDonos.prob_elogio_incoerente"
+  },
+  {
+   "web": "CT.alfa",
+   "fonte": "python",
+   "py": "ConfigTracos.alfa_ema"
+  },
+  {
+   "web": "CA.hp",
+   "fonte": "python",
+   "py": "ConfigArena.hp_inicial"
+  },
+  {
+   "web": "CA.dano",
+   "fonte": "python",
+   "py": "ConfigArena.dano_base"
+  },
+  {
+   "web": "CA.ganhoAf",
+   "fonte": "python",
+   "py": "ConfigArena.ganho_afinidade"
+  },
+  {
+   "web": "CA.maxTurnos",
+   "fonte": "python",
+   "py": "ConfigArena.max_turnos"
+  },
+  {
+   "web": "CA.fome",
+   "fonte": "python",
+   "py": "ConfigArena.fome_arena"
+  },
+  {
+   "web": "CA.hig",
+   "fonte": "python",
+   "py": "ConfigArena.higiene_arena"
+  },
+  {
+   "web": "CA.saude",
+   "fonte": "python",
+   "py": "ConfigArena.saude_arena"
+  },
+  {
+   "web": "CA.hora",
+   "fonte": "python",
+   "py": "ConfigArena.hora_arena"
+  },
+  {
+   "web": "CE.limiar",
+   "fonte": "python",
+   "py": "ConfigExpressao.limiar_motivo"
+  },
+  {
+   "web": "CV.tMax",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.t_max"
+  },
+  {
+   "web": "CV.multDef",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.mult_defender"
+  },
+  {
+   "web": "CV.multDefPesado",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.mult_defender_contra_pesado"
+  },
+  {
+   "web": "CV.multCarregar",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.mult_carregar"
+  },
+  {
+   "web": "CV.gutsDef",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.guts_extra_defender"
+  },
+  {
+   "web": "CV.gutsCarregar",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.guts_carregar"
+  },
+  {
+   "web": "CV.eps",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.epsilon_bots"
+  },
+  {
+   "web": "CV.maxRegras",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.max_regras"
+  },
+  {
+   "web": "CV.maxCond",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.max_condicoes_por_regra"
+  },
+  {
+   "web": "CV.fracoes",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.fracoes_hp"
+  },
+  {
+   "web": "CV.guts",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.limiares_guts"
+  },
+  {
+   "web": "CV.ks",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.k_repete"
+  },
+  {
+   "web": "CV.janelaFreq",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.janela_frequente"
+  },
+  {
+   "web": "CV.limiarFreq",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.limiar_frequente"
+  },
+  {
+   "web": "CV.pesoGutsOr",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.peso_guts_oraculo"
+  },
+  {
+   "web": "CV.pesoPendOr",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.peso_pesado_pendente_oraculo"
+  },
+  {
+   "web": "CV.custo.golpe_rapido",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.custo_golpe_rapido"
+  },
+  {
+   "web": "CV.custo.preparar_pesado",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.custo_preparar_pesado"
+  },
+  {
+   "web": "CV.custo.disparo",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.custo_disparo"
+  },
+  {
+   "web": "CV.custo.esquivar",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.custo_esquivar"
+  },
+  {
+   "web": "CV.dano.golpe_rapido",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.dano_golpe_rapido"
+  },
+  {
+   "web": "CV.dano.disparo",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.dano_disparo"
+  },
+  {
+   "web": "CV.dano.pesado",
+   "fonte": "python",
+   "py": "ConfigCombateV2C.dano_pesado"
+  },
+  {
+   "web": "CV21.g0Base",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guts_inicial_base"
+  },
+  {
+   "web": "CV21.g0Folego",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guts_inicial_por_folego"
+  },
+  {
+   "web": "CV21.gMaxBase",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guts_max_base"
+  },
+  {
+   "web": "CV21.gMaxFolego",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guts_max_por_folego"
+  },
+  {
+   "web": "CV21.regenBase",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.regen_base"
+  },
+  {
+   "web": "CV21.regenRec",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.regen_por_recuperacao"
+  },
+  {
+   "web": "CV21.multBase",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_base"
+  },
+  {
+   "web": "CV21.multPonto",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_por_ponto"
+  },
+  {
+   "web": "CV21.guardaBase",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guarda_base"
+  },
+  {
+   "web": "CV21.guardaPonto",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guarda_por_ponto"
+  },
+  {
+   "web": "CV21.danoInvestida",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.dano_investida"
+  },
+  {
+   "web": "CV21.parry",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_parry_investida"
+  },
+  {
+   "web": "CV21.fracCG",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.fracao_contra_golpe"
+  },
+  {
+   "web": "CV21.turnosMarca",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.turnos_marcar"
+  },
+  {
+   "web": "CV21.multMarca",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_marcar"
+  },
+  {
+   "web": "CV21.turnosPele",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.turnos_pele_dura"
+  },
+  {
+   "web": "CV21.multPele",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_pele_dura"
+  },
+  {
+   "web": "CV21.duelista",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.dano_extra_duelista"
+  },
+  {
+   "web": "CV21.limFurioso",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.limiar_hp_furioso"
+  },
+  {
+   "web": "CV21.multFurioso",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_furioso"
+  },
+  {
+   "web": "CV21.espelho",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.fracao_espelho_disparo"
+  },
+  {
+   "web": "CV21.muralha",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.guts_extra_muralha"
+  },
+  {
+   "web": "CV21.recargaSent",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.recarga_sentinela"
+  },
+  {
+   "web": "CV21.multEmb",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_emboscador"
+  },
+  {
+   "web": "CV21.multTita",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.mult_tita"
+  },
+  {
+   "web": "CV21.turnos",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.turnos_execucao"
+  },
+  {
+   "web": "CV21.custo.investida",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.custo_investida"
+  },
+  {
+   "web": "CV21.custo.contra_golpe",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.custo_contra_golpe"
+  },
+  {
+   "web": "CV21.custo.marcar",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.custo_marcar"
+  },
+  {
+   "web": "CV21.custo.pele_dura",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.custo_pele_dura"
+  },
+  {
+   "web": "CV21.maxRegras.crianca",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.max_regras_crianca"
+  },
+  {
+   "web": "CV21.maxRegras.adolescente",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.max_regras_adolescente"
+  },
+  {
+   "web": "CV21.maxRegras.adulto",
+   "fonte": "python",
+   "py": "ConfigCombateV21C.max_regras_adulto"
+  },
+  {
+   "web": "CAT.min",
+   "fonte": "python",
+   "py": "ConfigCatalogo.stat_min"
+  },
+  {
+   "web": "CAT.max",
+   "fonte": "python",
+   "py": "ConfigCatalogo.stat_max"
+  },
+  {
+   "web": "CAT.limiarCuidado",
+   "fonte": "python",
+   "py": "ConfigCatalogo.limiar_cuidado_sereno"
+  },
+  {
+   "web": "CAT.sparring",
+   "fonte": "python",
+   "py": "ConfigCatalogo.sparring_minimo_adulto"
+  },
+  {
+   "web": "CAT.janelaChamado",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.janela_chamado_min"
+  },
+  {
+   "web": "CAT.especies.brasa.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.brasa.vigor"
+  },
+  {
+   "web": "CAT.especies.brasa.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.brasa.folego"
+  },
+  {
+   "web": "CAT.especies.brasa.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.brasa.recuperacao"
+  },
+  {
+   "web": "CAT.especies.brasa.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.brasa.forca"
+  },
+  {
+   "web": "CAT.especies.brasa.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.brasa.mira"
+  },
+  {
+   "web": "CAT.especies.brasa.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.brasa.guarda"
+  },
+  {
+   "web": "CAT.especies.cirro.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.cirro.vigor"
+  },
+  {
+   "web": "CAT.especies.cirro.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.cirro.folego"
+  },
+  {
+   "web": "CAT.especies.cirro.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.cirro.recuperacao"
+  },
+  {
+   "web": "CAT.especies.cirro.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.cirro.forca"
+  },
+  {
+   "web": "CAT.especies.cirro.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.cirro.mira"
+  },
+  {
+   "web": "CAT.especies.cirro.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.cirro.guarda"
+  },
+  {
+   "web": "CAT.especies.ferrugem.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.ferrugem.vigor"
+  },
+  {
+   "web": "CAT.especies.ferrugem.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.ferrugem.folego"
+  },
+  {
+   "web": "CAT.especies.ferrugem.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.ferrugem.recuperacao"
+  },
+  {
+   "web": "CAT.especies.ferrugem.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.ferrugem.forca"
+  },
+  {
+   "web": "CAT.especies.ferrugem.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.ferrugem.mira"
+  },
+  {
+   "web": "CAT.especies.ferrugem.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.ferrugem.guarda"
+  },
+  {
+   "web": "CAT.especies.limo.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.limo.vigor"
+  },
+  {
+   "web": "CAT.especies.limo.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.limo.folego"
+  },
+  {
+   "web": "CAT.especies.limo.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.limo.recuperacao"
+  },
+  {
+   "web": "CAT.especies.limo.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.limo.forca"
+  },
+  {
+   "web": "CAT.especies.limo.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.limo.mira"
+  },
+  {
+   "web": "CAT.especies.limo.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.especies.limo.guarda"
+  },
+  {
+   "web": "CAT.carater.impetuoso.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.impetuoso.forca"
+  },
+  {
+   "web": "CAT.carater.impetuoso.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.impetuoso.folego"
+  },
+  {
+   "web": "CAT.carater.impetuoso.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.impetuoso.guarda"
+  },
+  {
+   "web": "CAT.carater.impetuoso.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.impetuoso.recuperacao"
+  },
+  {
+   "web": "CAT.carater.paciente.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.paciente.guarda"
+  },
+  {
+   "web": "CAT.carater.paciente.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.paciente.recuperacao"
+  },
+  {
+   "web": "CAT.carater.paciente.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.paciente.forca"
+  },
+  {
+   "web": "CAT.carater.paciente.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.paciente.folego"
+  },
+  {
+   "web": "CAT.carater.atento.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.atento.mira"
+  },
+  {
+   "web": "CAT.carater.atento.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.atento.recuperacao"
+  },
+  {
+   "web": "CAT.carater.atento.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.atento.vigor"
+  },
+  {
+   "web": "CAT.carater.atento.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.atento.forca"
+  },
+  {
+   "web": "CAT.carater.resistente.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.resistente.vigor"
+  },
+  {
+   "web": "CAT.carater.resistente.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.resistente.guarda"
+  },
+  {
+   "web": "CAT.carater.resistente.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.resistente.mira"
+  },
+  {
+   "web": "CAT.carater.resistente.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.carater.resistente.folego"
+  },
+  {
+   "web": "CAT.crianca.sereno.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.sereno.recuperacao"
+  },
+  {
+   "web": "CAT.crianca.sereno.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.sereno.guarda"
+  },
+  {
+   "web": "CAT.crianca.sereno.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.sereno.forca"
+  },
+  {
+   "web": "CAT.crianca.sereno.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.sereno.mira"
+  },
+  {
+   "web": "CAT.crianca.arisco.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.arisco.forca"
+  },
+  {
+   "web": "CAT.crianca.arisco.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.arisco.mira"
+  },
+  {
+   "web": "CAT.crianca.arisco.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.arisco.recuperacao"
+  },
+  {
+   "web": "CAT.crianca.arisco.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_crianca.arisco.guarda"
+  },
+  {
+   "web": "CAT.adolescente.brigao.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.brigao.stats.forca"
+  },
+  {
+   "web": "CAT.adolescente.brigao.stats.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.brigao.stats.folego"
+  },
+  {
+   "web": "CAT.adolescente.brigao.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.brigao.stats.guarda"
+  },
+  {
+   "web": "CAT.adolescente.brigao.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.brigao.stats.mira"
+  },
+  {
+   "web": "CAT.adolescente.guardiao.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.guardiao.stats.guarda"
+  },
+  {
+   "web": "CAT.adolescente.guardiao.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.guardiao.stats.recuperacao"
+  },
+  {
+   "web": "CAT.adolescente.guardiao.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.guardiao.stats.forca"
+  },
+  {
+   "web": "CAT.adolescente.guardiao.stats.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.guardiao.stats.folego"
+  },
+  {
+   "web": "CAT.adolescente.cacador.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.cacador.stats.mira"
+  },
+  {
+   "web": "CAT.adolescente.cacador.stats.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.cacador.stats.folego"
+  },
+  {
+   "web": "CAT.adolescente.cacador.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.cacador.stats.vigor"
+  },
+  {
+   "web": "CAT.adolescente.cacador.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.cacador.stats.guarda"
+  },
+  {
+   "web": "CAT.adolescente.colosso.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.colosso.stats.vigor"
+  },
+  {
+   "web": "CAT.adolescente.colosso.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.colosso.stats.guarda"
+  },
+  {
+   "web": "CAT.adolescente.colosso.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.colosso.stats.mira"
+  },
+  {
+   "web": "CAT.adolescente.colosso.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adolescente.colosso.stats.recuperacao"
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.duelista.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.duelista.stats.mira"
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.duelista.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.duelista.stats.guarda"
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.duelista.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.duelista.stats.vigor"
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.duelista.stats.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.duelista.stats.folego"
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.furioso.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.furioso.stats.forca"
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.furioso.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.furioso.stats.guarda"
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.espelho.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.espelho.stats.forca"
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.espelho.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.espelho.stats.mira"
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.espelho.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.espelho.stats.vigor"
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.espelho.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.espelho.stats.recuperacao"
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.muralha.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.muralha.stats.vigor"
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.muralha.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.muralha.stats.forca"
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.sentinela.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.sentinela.stats.vigor"
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.sentinela.stats.guarda",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.sentinela.stats.guarda"
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.sentinela.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.sentinela.stats.mira"
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.sentinela.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.sentinela.stats.forca"
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.emboscador.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.emboscador.stats.mira"
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.emboscador.stats.vigor",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.emboscador.stats.vigor"
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.vigia.stats.mira",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.vigia.stats.mira"
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.vigia.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.vigia.stats.recuperacao"
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.vigia.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.vigia.stats.forca"
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.vigia.stats.folego",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.vigia.stats.folego"
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.tita.stats.forca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.tita.stats.forca"
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.tita.stats.recuperacao",
+   "fonte": "python",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.tita.stats.recuperacao"
+  },
+  {
+   "web": "CAT.estagio.bebe",
+   "fonte": "python",
+   "py": "ConfigCatalogo.mult_estagio.bebe"
+  },
+  {
+   "web": "CAT.estagio.crianca",
+   "fonte": "python",
+   "py": "ConfigCatalogo.mult_estagio.crianca"
+  },
+  {
+   "web": "CAT.estagio.adolescente",
+   "fonte": "python",
+   "py": "ConfigCatalogo.mult_estagio.adolescente"
+  },
+  {
+   "web": "CAT.estagio.adulto",
+   "fonte": "python",
+   "py": "ConfigCatalogo.mult_estagio.adulto"
+  },
+  {
+   "web": "CCP.escala",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.escala_carater"
+  },
+  {
+   "web": "DUR_EVO.bebe",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.dur_bebe_min"
+  },
+  {
+   "web": "DUR_EVO.crianca",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.dur_crianca_min"
+  },
+  {
+   "web": "DUR_EVO.adolescente",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.dur_adolescente_min"
+  },
+  {
+   "web": "CHAMADO_BEBE.fome",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.chamados_bebe_min.fome"
+  },
+  {
+   "web": "CHAMADO_BEBE.higiene",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.chamados_bebe_min.higiene"
+  },
+  {
+   "web": "CHAMADO_BEBE.carinho",
+   "fonte": "python",
+   "py": "ConfigEvolucaoPesquisa.chamados_bebe_min.carinho"
+  },
+  {
+   "web": "CAMPANHA[0].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier1_brutamontes.total_stats"
+  },
+  {
+   "web": "CAMPANHA[0].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier1_brutamontes.epsilon"
+  },
+  {
+   "web": "CAMPANHA[1].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_sentinela.total_stats"
+  },
+  {
+   "web": "CAMPANHA[1].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_sentinela.epsilon"
+  },
+  {
+   "web": "CAMPANHA[2].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_carcereiro.total_stats"
+  },
+  {
+   "web": "CAMPANHA[2].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_carcereiro.epsilon"
+  },
+  {
+   "web": "CAMPANHA[3].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_porteiro.total_stats"
+  },
+  {
+   "web": "CAMPANHA[3].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_porteiro.epsilon"
+  },
+  {
+   "web": "CAMPANHA[4].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier3_soberano.total_stats"
+  },
+  {
+   "web": "CAMPANHA[4].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier3_soberano.epsilon"
+  }
+ ],
+ "convertidos": [
+  {
+   "web": "CAT.adulto.brigao.formas.duelista.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.duelista.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.brigao.formas.furioso.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.brigao.formas.furioso.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.espelho.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.espelho.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.guardiao.formas.muralha.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.guardiao.formas.muralha.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.sentinela.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.sentinela.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.cacador.formas.emboscador.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.cacador.formas.emboscador.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.vigia.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.vigia.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAT.adulto.colosso.formas.tita.sinal",
+   "py": "ConfigCatalogo.arquetipos_adulto.colosso.formas.tita.sinal",
+   "conversao": "sinal",
+   "nota": "web 1/-1, Python \">=0\"/\"<0\""
+  },
+  {
+   "web": "CAMPANHA[0].lug",
+   "py": "ConfigCampanha.npcs.tier1_brutamontes.lugar",
+   "conversao": "indice_base0",
+   "nota": "web conta os lugares de 0, o Python de 1"
+  },
+  {
+   "web": "CAMPANHA[1].lug",
+   "py": "ConfigCampanha.npcs.tier2_sentinela.lugar",
+   "conversao": "indice_base0",
+   "nota": "web conta os lugares de 0, o Python de 1"
+  },
+  {
+   "web": "CAMPANHA[2].lug",
+   "py": "ConfigCampanha.npcs.tier2_carcereiro.lugar",
+   "conversao": "indice_base0",
+   "nota": "web conta os lugares de 0, o Python de 1"
+  },
+  {
+   "web": "CAMPANHA[3].lug",
+   "py": "ConfigCampanha.npcs.tier2_porteiro.lugar",
+   "conversao": "indice_base0",
+   "nota": "web conta os lugares de 0, o Python de 1"
+  },
+  {
+   "web": "CAMPANHA[4].lug",
+   "py": "ConfigCampanha.npcs.tier3_soberano.lugar",
+   "conversao": "indice_base0",
+   "nota": "web conta os lugares de 0, o Python de 1"
+  }
+ ],
+ "experimento": [
+  {
+   "web": "CV21.hpBase",
+   "arquivo": "experiments/configs/v21c/validacao.json",
+   "chave": "regras_v21.hp_base",
+   "nota": "V21C: vida base 70 -> 75 (correção da Ferrugem); o padrão de ConfigCombateV21C.hp_base é 70, o valor adotado vem desta validação (CONFIG_COMBATE_V21C em config.py)"
+  },
+  {
+   "web": "CV21.hpVigor",
+   "arquivo": "experiments/configs/v21c/validacao.json",
+   "chave": "regras_v21.hp_por_vigor",
+   "nota": "V21C: vida por vigor 3 -> 2,5; o padrão de ConfigCombateV21C.hp_por_vigor é 3,0, o valor adotado vem desta validação (CONFIG_COMBATE_V21C em config.py)"
+  },
+  {
+   "web": "CV.parry",
+   "arquivo": "experiments/configs/v21c/validacao.json",
+   "chave": "regras_base.dano_parry",
+   "nota": "V2C (C2): dano de parry contra golpe rápido; o padrão de ConfigCombateV2C.dano_parry é 0 (também em experiments/configs/v2c/validacao.json, regras.dano_parry)"
+  },
+  {
+   "web": "CV.turnoMS",
+   "arquivo": "experiments/configs/v21c/validacao.json",
+   "chave": "regras_base.turno_morte_subita",
+   "nota": "V2C (C4): turno da morte súbita; o padrão de ConfigCombateV2C.turno_morte_subita é 0 = desligada (também em v2c/validacao.json, regras.turno_morte_subita)"
+  },
+  {
+   "web": "CV.multMS",
+   "arquivo": "experiments/configs/v21c/validacao.json",
+   "chave": "regras_base.mult_morte_subita",
+   "nota": "V2C (C4): multiplicador de dano na morte súbita; o padrão de ConfigCombateV2C.mult_morte_subita também é 1,5, mas só vale com a morte súbita ligada pela validação"
+  }
+ ],
+ "so_web": [
+  {
+   "web": "CV21.maxRegras.bebe",
+   "nota": "bebê não luta; o teto 0 só existe na web (o Python só tem max_regras_crianca/adolescente/adulto)"
+  },
+  {
+   "web": "CAT.escalaCarater",
+   "nota": "escala do caráter PROVISÓRIO pelos traços (pets v1/v2), só na web; o caráter pela política (pets v3) usa CCP.escala = ConfigEvolucaoPesquisa.escala_carater (0,05)"
+  },
+  {
+   "web": "CD.porDia",
+   "nota": "orçamento de interações por dia dos rivais simulados (treinarRival); o 16/dia do Python está em digilab/protocol.py (orçamento 14 x 16) e em ConfigTreino.cuidado_por_dia, mas nenhum dos dois é confirmadamente o mesmo parâmetro"
+  },
+  {
+   "web": "CCP.nEstados",
+   "nota": "sondas do caráter pela política; o Python usa estados_sonda = 64 em digilab/protocol.py (fora de config.py); a web reduz para 32 de propósito (comentário no HTML: ~4x mais rápido)"
+  },
+  {
+   "web": "CCP.amostras",
+   "nota": "amostras por sonda do caráter; o Python usa amostras_por_estado = 200 em digilab/protocol.py (fora de config.py); a web reduz para 100 de propósito"
+  },
+  {
+   "web": "CCP.semente",
+   "nota": "semente das sondas do caráter; mesmo número de semente_sonda em digilab/protocol.py (9001), fora de config.py; o rng da web é outro, então as sondas não são as mesmas do Python"
+  },
+  {
+   "web": "GA.base",
+   "nota": "gambits híbridos do pet (aprendizado da lista de regras): PROVISÓRIO, só na web (CLAUDE.md e comentário no HTML)"
+  },
+  {
+   "web": "GA.alfa",
+   "nota": "gambits híbridos do pet (aprendizado da lista de regras): PROVISÓRIO, só na web (CLAUDE.md e comentário no HTML)"
+  },
+  {
+   "web": "GA.bonusResultado",
+   "nota": "gambits híbridos do pet (aprendizado da lista de regras): PROVISÓRIO, só na web (CLAUDE.md e comentário no HTML)"
+  },
+  {
+   "web": "GA.limiarTroca",
+   "nota": "gambits híbridos do pet (aprendizado da lista de regras): PROVISÓRIO, só na web (CLAUDE.md e comentário no HTML)"
+  },
+  {
+   "web": "BASE_CARATER.adolescente.golpe",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adolescente.bloqueio",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adolescente.agarrao",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adolescente.finta",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adolescente.carga",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adulto.golpe",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adulto.bloqueio",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adulto.agarrao",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adulto.finta",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "BASE_CARATER.adulto.carga",
+   "nota": "linha de base do caráter pelos traços (pets v1/v2): PROVISÓRIO, calibrada só na web com pets simulados"
+  },
+  {
+   "web": "DESLOC_CARATER.adolescente.atento",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adolescente.impetuoso",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adolescente.paciente",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adolescente.resistente",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adulto.atento",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adulto.impetuoso",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adulto.paciente",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "DESLOC_CARATER.adulto.resistente",
+   "nota": "deslocamento por eixo do caráter (jogabilidade: linhas ~25% e formas ~50/50), calibrado só na web"
+  },
+  {
+   "web": "LUGARES[0].x",
+   "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  },
+  {
+   "web": "LUGARES[0].y",
+   "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  },
+  {
+   "web": "LUGARES[1].x",
+   "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  },
+  {
+   "web": "LUGARES[1].y",
+   "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  },
+  {
+   "web": "LUGARES[2].x",
+   "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  },
+  {
+   "web": "LUGARES[2].y",
+   "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  }
+ ]
+}

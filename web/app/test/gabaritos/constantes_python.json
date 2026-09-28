@@ -1,0 +1,929 @@
+{
+ "Config": {
+  "cura_saude_por_tick": 0.0003333333333333333,
+  "custo_brincar_energia": 0.08,
+  "custo_brincar_fome": 0.05,
+  "custo_repreender": 0.12,
+  "dano_saude_por_tick": 0.0005,
+  "decaimento_energia": 0.0011111111111111111,
+  "decaimento_fome": 0.0008333333333333334,
+  "decaimento_higiene": 0.0006666666666666666,
+  "decaimento_humor": 0.0008333333333333334,
+  "energia_por_tick_dormindo": 0.004166666666666667,
+  "fim_noite_tick": 420,
+  "ganho_alimentar": 0.45,
+  "ganho_brincar_humor": 0.25,
+  "ganho_elogiar": 0.1,
+  "ganho_limpar": 0.6,
+  "humor_por_tick_brincando": 0.008333333333333333,
+  "inicio_noite_tick": 1320,
+  "intervalo_decisao_ticks": 15,
+  "janela_atencao_ticks": 240,
+  "limiar_privacao": 0.15,
+  "multiplicador_noturno": 1.8,
+  "penalidade_higiene_por_sujeira": 0.12,
+  "prob_sujeira_por_tick": 0.0025,
+  "prob_sujeira_pos_refeicao": 0.35,
+  "saciedade_maxima": 1.0,
+  "saciedade_minima": 0.0,
+  "sujeira_maxima": 5
+ },
+ "ConfigArena": {
+  "dano_base": 10.0,
+  "fome_arena": 0.7,
+  "ganho_afinidade": 0.5,
+  "higiene_arena": 0.7,
+  "hora_arena": 0.5,
+  "hp_inicial": 100.0,
+  "mapa_pet_combate": [
+   [
+    "ocioso",
+    "bloqueio"
+   ],
+   [
+    "dormir",
+    "bloqueio"
+   ],
+   [
+    "comer",
+    "agarrao"
+   ],
+   [
+    "brincar",
+    "golpe"
+   ],
+   [
+    "chamar_atencao",
+    "carga"
+   ],
+   [
+    "explorar",
+    "finta"
+   ],
+   [
+    "emburrar",
+    "agarrao"
+   ]
+  ],
+  "max_turnos": 40,
+  "saude_arena": 1.0
+ },
+ "ConfigArenaPesquisa": {
+  "condicao_neutra": false
+ },
+ "ConfigBandit": {
+  "escala_ticks_desde_cuidado": 480.0,
+  "iteracoes_bisseccao_prior": 40,
+  "janela_latencia_ticks": 120,
+  "lambda_regularizacao": 1.0,
+  "piso_prior": 0.05,
+  "recompensa_elogio": 1.0,
+  "recompensa_pedido_ignorado": -0.5,
+  "recompensa_repreensao": -1.0,
+  "variancia_amostra": 0.25
+ },
+ "ConfigBateriaCombate": {
+  "fracao_max_limite_turnos": 0.2,
+  "fracao_min_acao": 0.03,
+  "iteracoes_fictitious_play": 20000,
+  "mediana_turnos_max": 30.0,
+  "mediana_turnos_min": 8.0,
+  "partidas_g6_por_semente": 50,
+  "partidas_g7_por_semente": 100,
+  "partidas_replay_amostra": 200,
+  "permutacoes_g7": 5,
+  "peso_minimo_suporte": 0.05,
+  "semente_permutacoes_g7": 7007,
+  "suporte_minimo": 3,
+  "taxa_min_adaptativo_vs_aleatorio": 0.7,
+  "taxa_min_g7": 0.6,
+  "tolerancia_espelho": 0.03,
+  "variacao_guts_inicial": 10,
+  "variacao_hp": 0.1
+ },
+ "ConfigBateriaV21": {
+  "fracao_min_tecnica": 0.05,
+  "iteracoes_fictitious_play": 20000,
+  "partidas_e3_por_semente": 40,
+  "partidas_e4_por_semente": 100,
+  "partidas_e5_por_semente": 20,
+  "perturbacao_e5": 0.1,
+  "peso_minimo_suporte": 0.05,
+  "suporte_minimo_e1": 4,
+  "taxa_max_e4": 0.85,
+  "taxa_min_e4": 0.6
+ },
+ "ConfigBateriaV2C": {
+  "epsilon_g9": 0.2,
+  "extremo_g9": 0.1,
+  "fracao_max_g9": 0.5,
+  "fracao_min_g8": 0.8,
+  "partidas_g6b_por_semente": 50,
+  "partidas_g8_por_semente": 20,
+  "partidas_g9_por_semente": 40,
+  "perturbacao_g8": 0.1,
+  "taxa_max_g6b": 0.65,
+  "variacao_guts_g6b": 2,
+  "variacao_hp_g6b": 0.05
+ },
+ "ConfigCampanha": {
+  "epsilon_npc": 0.05,
+  "npcs": {
+   "tier1_brutamontes": {
+    "epsilon": 0.5,
+    "estagio": "crianca",
+    "estagio_minimo_sugerido": "crianca",
+    "estilo": "crianca:arisco",
+    "lugar": 1,
+    "total_stats": 96
+   },
+   "tier2_carcereiro": {
+    "epsilon": 0.5,
+    "estagio_minimo_sugerido": "adolescente",
+    "estilo": "v21:espelho",
+    "lugar": 2,
+    "total_stats": 90
+   },
+   "tier2_porteiro": {
+    "epsilon": 0.5,
+    "estagio_minimo_sugerido": "adolescente",
+    "estilo": "v2c:agressivo",
+    "lugar": 2,
+    "total_stats": 90
+   },
+   "tier2_sentinela": {
+    "epsilon": 0.4,
+    "estagio_minimo_sugerido": "adolescente",
+    "estilo": "v2c:tartaruga",
+    "lugar": 2,
+    "total_stats": 72
+   },
+   "tier3_soberano": {
+    "epsilon": 0.5,
+    "estagio_minimo_sugerido": "adulto",
+    "estilo": "v2c:agressivo",
+    "lugar": 3,
+    "total_stats": 110
+   }
+  },
+  "partidas_por_par": 100
+ },
+ "ConfigCatalogo": {
+  "arquetipos_adolescente": {
+   "brigao": {
+    "eixo": "impetuoso",
+    "stats": {
+     "folego": 1,
+     "forca": 3,
+     "guarda": -2,
+     "mira": -2
+    },
+    "tecnica": "investida"
+   },
+   "cacador": {
+    "eixo": "atento",
+    "stats": {
+     "folego": 1,
+     "guarda": -2,
+     "mira": 3,
+     "vigor": -2
+    },
+    "tecnica": "marcar"
+   },
+   "colosso": {
+    "eixo": "resistente",
+    "stats": {
+     "guarda": 1,
+     "mira": -2,
+     "recuperacao": -2,
+     "vigor": 3
+    },
+    "tecnica": "pele_dura"
+   },
+   "guardiao": {
+    "eixo": "paciente",
+    "stats": {
+     "folego": -2,
+     "forca": -2,
+     "guarda": 3,
+     "recuperacao": 1
+    },
+    "tecnica": "contra_golpe"
+   }
+  },
+  "arquetipos_adulto": {
+   "brigao": {
+    "eixo_complementar": "paciente",
+    "formas": {
+     "duelista": {
+      "sinal": ">=0",
+      "stats": {
+       "folego": -1,
+       "guarda": 1,
+       "mira": 1,
+       "vigor": -1
+      }
+     },
+     "furioso": {
+      "sinal": "<0",
+      "stats": {
+       "forca": 2,
+       "guarda": -2
+      }
+     }
+    }
+   },
+   "cacador": {
+    "eixo_complementar": "resistente",
+    "formas": {
+     "emboscador": {
+      "sinal": "<0",
+      "stats": {
+       "mira": 2,
+       "vigor": -2
+      }
+     },
+     "sentinela": {
+      "sinal": ">=0",
+      "stats": {
+       "forca": -1,
+       "guarda": 1,
+       "mira": -1,
+       "vigor": 1
+      }
+     }
+    }
+   },
+   "colosso": {
+    "eixo_complementar": "atento",
+    "formas": {
+     "tita": {
+      "sinal": "<0",
+      "stats": {
+       "forca": 2,
+       "recuperacao": -2
+      }
+     },
+     "vigia": {
+      "sinal": ">=0",
+      "stats": {
+       "folego": -1,
+       "forca": -1,
+       "mira": 1,
+       "recuperacao": 1
+      }
+     }
+    }
+   },
+   "guardiao": {
+    "eixo_complementar": "impetuoso",
+    "formas": {
+     "espelho": {
+      "sinal": ">=0",
+      "stats": {
+       "forca": 1,
+       "mira": 1,
+       "recuperacao": -1,
+       "vigor": -1
+      }
+     },
+     "muralha": {
+      "sinal": "<0",
+      "stats": {
+       "forca": -2,
+       "vigor": 2
+      }
+     }
+    }
+   }
+  },
+  "arquetipos_crianca": {
+   "arisco": {
+    "forca": 2,
+    "guarda": -1,
+    "mira": 1,
+    "recuperacao": -2
+   },
+   "sereno": {
+    "forca": -2,
+    "guarda": 1,
+    "mira": -1,
+    "recuperacao": 2
+   }
+  },
+  "carater": {
+   "atento": {
+    "forca": -1,
+    "mira": 3,
+    "recuperacao": 1,
+    "vigor": -3
+   },
+   "impetuoso": {
+    "folego": 1,
+    "forca": 3,
+    "guarda": -3,
+    "recuperacao": -1
+   },
+   "paciente": {
+    "folego": -1,
+    "forca": -3,
+    "guarda": 3,
+    "recuperacao": 1
+   },
+   "resistente": {
+    "folego": -1,
+    "guarda": 1,
+    "mira": -3,
+    "vigor": 3
+   }
+  },
+  "condicao_mult_max": 1.05,
+  "condicao_mult_min": 0.95,
+  "especies": {
+   "brasa": {
+    "folego": 10,
+    "forca": 14,
+    "guarda": 12,
+    "mira": 8,
+    "recuperacao": 7,
+    "vigor": 9
+   },
+   "cirro": {
+    "folego": 11,
+    "forca": 7,
+    "guarda": 9,
+    "mira": 15,
+    "recuperacao": 11,
+    "vigor": 7
+   },
+   "faisca": {
+    "folego": 13,
+    "forca": 11,
+    "guarda": 8,
+    "mira": 11,
+    "recuperacao": 9,
+    "vigor": 8
+   },
+   "ferrugem": {
+    "folego": 8,
+    "forca": 9,
+    "guarda": 15,
+    "mira": 7,
+    "recuperacao": 8,
+    "vigor": 13
+   },
+   "limo": {
+    "folego": 12,
+    "forca": 6,
+    "guarda": 9,
+    "mira": 7,
+    "recuperacao": 15,
+    "vigor": 11
+   },
+   "seixo": {
+    "folego": 7,
+    "forca": 12,
+    "guarda": 12,
+    "mira": 7,
+    "recuperacao": 7,
+    "vigor": 15
+   }
+  },
+  "especies_ativas": [
+   "brasa",
+   "cirro",
+   "ferrugem",
+   "limo"
+  ],
+  "limiar_cuidado_sereno": 0.8,
+  "mult_estagio": {
+   "adolescente": 0.8,
+   "adulto": 1.0,
+   "bebe": 0.4,
+   "crianca": 0.6
+  },
+  "orcamento_especie": 60,
+  "sparring_minimo_adulto": 10,
+  "stat_max": 20,
+  "stat_min": 3,
+  "stat_neutro": 10,
+  "temperamento": {
+   "curiosidade": {
+    "folego": 1,
+    "guarda": -2,
+    "mira": 2,
+    "vigor": -1
+   },
+   "rancor": {
+    "folego": -1,
+    "forca": 2,
+    "mira": 1,
+    "recuperacao": -2
+   },
+   "sensibilidade": {
+    "folego": 1,
+    "forca": -2,
+    "guarda": -1,
+    "recuperacao": 2
+   },
+   "teimosia": {
+    "guarda": 2,
+    "mira": -1,
+    "recuperacao": -2,
+    "vigor": 1
+   }
+  }
+ },
+ "ConfigCombateV2": {
+  "custo_disparo": 20,
+  "custo_esquivar": 20,
+  "custo_golpe_rapido": 10,
+  "custo_preparar_pesado": 15,
+  "dano_disparo": 6.0,
+  "dano_golpe_rapido": 8.0,
+  "dano_pesado": 25.0,
+  "epsilon_bots": 0.05,
+  "fracoes_hp": [
+   0.25,
+   0.5,
+   0.75
+  ],
+  "guts_carregar": 25,
+  "guts_extra_defender": 5,
+  "guts_inicial_neutro": 50,
+  "guts_max": 100,
+  "hp_neutro": 70.0,
+  "janela_frequente": 5,
+  "k_repete": [
+   2,
+   3
+  ],
+  "limiar_frequente": 0.4,
+  "limiares_guts": [
+   20,
+   40,
+   60
+  ],
+  "max_condicoes_por_regra": 2,
+  "max_regras": 8,
+  "mult_carregar": 1.5,
+  "mult_defender": 0.3,
+  "mult_defender_contra_pesado": 0.6,
+  "peso_guts_oraculo": 0.002,
+  "peso_pesado_pendente_oraculo": 0.5,
+  "regen_guts_neutro": 8,
+  "t_max": 40
+ },
+ "ConfigCombateV21": {
+  "carater_bot_complementar": 0.25,
+  "carater_bot_linha": 0.5,
+  "custo_contra_golpe": 15,
+  "custo_investida": 20,
+  "custo_marcar": 10,
+  "custo_pele_dura": 20,
+  "dano_extra_duelista": 4.0,
+  "dano_investida": 8.0,
+  "fracao_contra_golpe": 0.5,
+  "fracao_espelho_disparo": 1.0,
+  "guarda_base": 1.3,
+  "guarda_por_ponto": 0.03,
+  "guts_extra_muralha": 3,
+  "guts_inicial_base": 30.0,
+  "guts_inicial_por_folego": 2.0,
+  "guts_max_base": 80.0,
+  "guts_max_por_folego": 2.0,
+  "hp_base": 70.0,
+  "hp_por_vigor": 3.0,
+  "limiar_hp_furioso": 0.5,
+  "max_regras_adolescente": 5,
+  "max_regras_adulto": 8,
+  "max_regras_crianca": 3,
+  "mult_base": 0.7,
+  "mult_emboscador": 2.0,
+  "mult_furioso": 1.25,
+  "mult_marcar": 2.0,
+  "mult_parry_investida": 0.0,
+  "mult_pele_dura": 0.5,
+  "mult_por_ponto": 0.03,
+  "mult_tita": 1.3,
+  "recarga_sentinela": 4,
+  "regen_base": 4.0,
+  "regen_por_recuperacao": 0.4,
+  "turnos_execucao": [
+   5,
+   10,
+   20
+  ],
+  "turnos_marcar": 3,
+  "turnos_pele_dura": 2
+ },
+ "ConfigCombateV21C": {
+  "carater_bot_complementar": 0.25,
+  "carater_bot_linha": 0.5,
+  "custo_contra_golpe": 15,
+  "custo_investida": 20,
+  "custo_marcar": 10,
+  "custo_pele_dura": 20,
+  "dano_extra_duelista": 4.0,
+  "dano_investida": 8.0,
+  "fracao_contra_golpe": 0.5,
+  "fracao_espelho_disparo": 1.0,
+  "guarda_base": 1.3,
+  "guarda_por_ponto": 0.03,
+  "guts_extra_muralha": 3,
+  "guts_inicial_base": 30.0,
+  "guts_inicial_por_folego": 2.0,
+  "guts_max_base": 80.0,
+  "guts_max_por_folego": 2.0,
+  "hp_base": 70.0,
+  "hp_por_vigor": 3.0,
+  "limiar_hp_furioso": 0.5,
+  "marca_fragil": false,
+  "max_regras_adolescente": 5,
+  "max_regras_adulto": 8,
+  "max_regras_crianca": 3,
+  "mult_base": 0.7,
+  "mult_emboscador": 2.0,
+  "mult_furioso": 1.25,
+  "mult_marcar": 2.0,
+  "mult_parry_investida": 0.0,
+  "mult_pele_dura": 0.5,
+  "mult_por_ponto": 0.03,
+  "mult_tita": 1.3,
+  "recarga_sentinela": 4,
+  "regen_base": 4.0,
+  "regen_por_recuperacao": 0.4,
+  "turnos_execucao": [
+   5,
+   10,
+   20
+  ],
+  "turnos_marcar": 3,
+  "turnos_pele_dura": 2
+ },
+ "ConfigCombateV2C": {
+  "bots_v2c": false,
+  "custo_disparo": 20,
+  "custo_esquivar": 20,
+  "custo_golpe_rapido": 10,
+  "custo_preparar_pesado": 15,
+  "dano_disparo": 6.0,
+  "dano_golpe_rapido": 8.0,
+  "dano_parry": 0.0,
+  "dano_pesado": 25.0,
+  "epsilon_bots": 0.05,
+  "finta": false,
+  "fracoes_hp": [
+   0.25,
+   0.5,
+   0.75
+  ],
+  "fuga_condicionada": false,
+  "guts_carregar": 25,
+  "guts_extra_defender": 5,
+  "guts_inicial_neutro": 50,
+  "guts_max": 100,
+  "hp_neutro": 70.0,
+  "janela_frequente": 5,
+  "k_repete": [
+   2,
+   3
+  ],
+  "limiar_frequente": 0.4,
+  "limiares_guts": [
+   20,
+   40,
+   60
+  ],
+  "max_condicoes_por_regra": 2,
+  "max_regras": 8,
+  "mult_carregar": 1.5,
+  "mult_defender": 0.3,
+  "mult_defender_contra_pesado": 0.6,
+  "mult_morte_subita": 1.5,
+  "oraculo_passos": 1,
+  "oraculo_top_oponente": 3,
+  "peso_guts_oraculo": 0.002,
+  "peso_pesado_pendente_oraculo": 0.5,
+  "regen_guts_neutro": 8,
+  "t_max": 40,
+  "turno_morte_subita": 0
+ },
+ "ConfigDesejo": {
+  "k_cumprimento_ticks": 60,
+  "limiar_necessidade": 0.3,
+  "limiar_vontade": 0.1
+ },
+ "ConfigDonos": {
+  "limiar_alimentar": 0.5,
+  "limiar_energia_sono_adequado": 0.4,
+  "limiar_humor_brincar": 0.4,
+  "limiar_limpar": 0.5,
+  "limiar_necessidade_pedido_adequado": 0.35,
+  "max_interacoes_por_passo": 6,
+  "passo_ticks": 15,
+  "prob_elogio_incoerente": 0.5,
+  "sujeira_para_limpar": 2,
+  "visitas_por_dia_relapso": 3
+ },
+ "ConfigEmocao": {
+  "limiar_eixo": 0.2,
+  "modula_memoria": false
+ },
+ "ConfigEvolucaoPesquisa": {
+  "amplitude_temperamento": 1.0,
+  "atende": {
+   "carinho": [
+    "acariciar",
+    "brincar"
+   ],
+   "fome": [
+    "alimentar"
+   ],
+   "higiene": [
+    "limpar"
+   ]
+  },
+  "chamados_bebe_min": {
+   "carinho": 45,
+   "fome": 30,
+   "higiene": 60
+  },
+  "dur_adolescente_min": 1080,
+  "dur_bebe_min": 180,
+  "dur_crianca_min": 720,
+  "eixo_traco": {
+   "atento": [
+    "finta"
+   ],
+   "impetuoso": [
+    "golpe",
+    "carga"
+   ],
+   "paciente": [
+    "bloqueio"
+   ],
+   "resistente": [
+    "agarrao"
+   ]
+  },
+  "escala_carater": 0.05,
+  "janela_chamado_min": 15,
+  "sparring_simulado": 10
+ },
+ "ConfigExpressao": {
+  "dias_fim_adolescente": 7.0,
+  "dias_fim_bebe": 1.0,
+  "dias_fim_crianca": 3.0,
+  "humor_alegre": 0.66,
+  "humor_neutro": 0.33,
+  "limiar_extremo": 0.2,
+  "limiar_motivo": 0.05
+ },
+ "ConfigHabituacao": {
+  "categorias": [
+   "demora",
+   "bronca"
+  ],
+  "h": 0.8,
+  "janela_ticks": 720,
+  "k_teimosia_bronca": 0.2
+ },
+ "ConfigMemoria": {
+  "escala_feedback": 3.0,
+  "janela_latencia_ticks": 240,
+  "limiar_necessidade_pedido": 0.5,
+  "tau_feedback_ticks": 360.0
+ },
+ "ConfigMemoriaEspacos": {
+  "ativas": [
+   "demora",
+   "bronca",
+   "elogio",
+   "carinho"
+  ],
+  "categorias": {
+   "bronca": 1.0,
+   "carinho": 0.5,
+   "demora": null,
+   "elogio": 1.0,
+   "sujeira": 0.5,
+   "treino_forcado": 1.0
+  },
+  "d_curto_ticks": 720,
+  "janela_latencia_ticks": 240,
+  "limiar_necessidade_pedido": 0.5,
+  "n_curto": 4,
+  "n_longo": 2,
+  "relembrar_ticks_acordado": 240,
+  "tau_ativacao_ticks": 360.0
+ },
+ "ConfigMetricas": {
+  "max_iter_bradley_terry": 200,
+  "ridge_bradley_terry": 0.01,
+  "tolerancia_bradley_terry": 1e-10
+ },
+ "ConfigObediencia": {
+  "acoes_sujeitas": [
+   "alimentar",
+   "limpar",
+   "brincar",
+   "acariciar"
+  ],
+  "b0": 1.0,
+  "b_conflito": 2.0,
+  "b_teimosia": 1.0,
+  "b_vinculo": 2.0,
+  "limiar_conflito": 0.3,
+  "limiar_motivo": 0.05,
+  "prob_fazer_outra": 0.5
+ },
+ "ConfigSombrio": {
+  "epsilon_minimo": 0.2,
+  "formas": {
+   "brigao": {
+    "nome": "devastador",
+    "stats": {
+     "folego": 1,
+     "forca": 4,
+     "guarda": -2,
+     "recuperacao": -3
+    }
+   },
+   "cacador": {
+    "nome": "predador",
+    "stats": {
+     "forca": 1,
+     "guarda": -2,
+     "mira": 4,
+     "vigor": -3
+    }
+   },
+   "colosso": {
+    "nome": "colosso_partido",
+    "stats": {
+     "folego": -3,
+     "guarda": 1,
+     "recuperacao": -2,
+     "vigor": 4
+    }
+   },
+   "guardiao": {
+    "nome": "bastiao_rachado",
+    "stats": {
+     "guarda": 4,
+     "mira": -2,
+     "recuperacao": -3,
+     "vigor": 1
+    }
+   }
+  },
+  "fracao_contra_golpe_bastiao": 1.0,
+  "limiar_aviso": 30,
+  "limiar_sombrio": 60,
+  "mult_devastador": 1.3,
+  "mult_predador": 1.4,
+  "mult_regen_colosso_partido": 0.85,
+  "teto_vinculo": 0.6,
+  "turnos_pele_colosso_partido": 3
+ },
+ "ConfigTemperamento": {
+  "amplitude": 1.0,
+  "categorias_rancor": [
+   "demora",
+   "bronca"
+  ],
+  "k_curiosidade": 0.6931471805599453,
+  "k_rancor": 0.6931471805599453,
+  "k_sensibilidade": 0.5,
+  "k_teimosia": 0.5
+ },
+ "ConfigTracos": {
+  "alfa_ema": 0.003472222222222222
+ },
+ "ConfigTreino": {
+  "aptidao_especie": {
+   "brasa": {
+    "folego": 1.0,
+    "forca": 1.2,
+    "guarda": 1.1,
+    "mira": 0.9,
+    "recuperacao": 0.9,
+    "vigor": 0.9
+   },
+   "cirro": {
+    "folego": 1.0,
+    "forca": 0.9,
+    "guarda": 0.9,
+    "mira": 1.2,
+    "recuperacao": 1.1,
+    "vigor": 0.9
+   },
+   "faisca": {
+    "folego": 1.2,
+    "forca": 1.1,
+    "guarda": 0.9,
+    "mira": 1.0,
+    "recuperacao": 0.9,
+    "vigor": 0.9
+   },
+   "ferrugem": {
+    "folego": 0.9,
+    "forca": 1.0,
+    "guarda": 1.2,
+    "mira": 0.9,
+    "recuperacao": 0.9,
+    "vigor": 1.1
+   },
+   "limo": {
+    "folego": 1.1,
+    "forca": 0.9,
+    "guarda": 0.9,
+    "mira": 0.9,
+    "recuperacao": 1.2,
+    "vigor": 1.0
+   },
+   "seixo": {
+    "folego": 0.9,
+    "forca": 1.1,
+    "guarda": 1.0,
+    "mira": 0.9,
+    "recuperacao": 0.9,
+    "vigor": 1.2
+   }
+  },
+  "cuidado_por_dia": 16,
+  "decai_sobrecarga_hora_bem_cuidado": 2.0,
+  "decai_sobrecarga_sono_completo": 10.0,
+  "estresse_forcar": 10.0,
+  "exercicios": {
+   "alvo": [
+    "mira",
+    "folego"
+   ],
+   "corrida": [
+    "folego",
+    "recuperacao"
+   ],
+   "esquiva": [
+    "guarda",
+    "vigor"
+   ],
+   "levantar_pedra": [
+    "forca",
+    "vigor"
+   ],
+   "meditar": [
+    "recuperacao",
+    "guarda"
+   ],
+   "resistencia": [
+    "vigor",
+    "forca"
+   ]
+  },
+  "fadiga_por_sessao": 20.0,
+  "fracao_forcar_exigente": 0.5,
+  "ganho_principal": 2.0,
+  "ganho_secundario": 1.0,
+  "intervalo_minimo_ticks": 10,
+  "limiar_bem_cuidado": 0.3,
+  "limiar_pausa": 40.0,
+  "limite_forcar": 60.0,
+  "mult_forcar": 1.5,
+  "peso_pausa_vinculo": 1.0,
+  "peso_ponto_combate": 3.0,
+  "recupera_fadiga_por_hora": 10.0,
+  "sessoes_alvo_dia": {
+   "adolescente": 8,
+   "adulto": 5,
+   "crianca": 10
+  },
+  "sobrecarga_forcar": 25.0,
+  "sobrecarga_max": 100.0,
+  "sono_completo_ticks": 360,
+  "teto_dia": {
+   "adolescente": 12,
+   "adulto": 8,
+   "crianca": 16
+  },
+  "teto_por_estagio": {
+   "adolescente": 12.0,
+   "adulto": 14.0,
+   "crianca": 10.0
+  },
+  "teto_por_stat": 10.0,
+  "teto_vida": 36.0,
+  "vinculo_forcar": -0.05
+ },
+ "ConfigVinculo": {
+  "alfa": 0.1,
+  "inicial": 0.5,
+  "janela_coerencia_ticks": 1440,
+  "janela_desejo_ticks": 60,
+  "janela_latencia_ticks": 240,
+  "peso_atendimento": 1.0,
+  "peso_coerencia": 1.0,
+  "peso_desejo": 0.5
+ }
+}

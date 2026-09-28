@@ -21,6 +21,9 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
   `digilab/combate_v2/` e o combate V2.1 — técnicas por linha e passivas por forma — em
   `digilab/combate_v2/v21/`, `docs/ESPEC_COMBATE_V21.md`. Plugar pets no Python e comandos do
   dono na luta continuam fora.)
+  Exceção autorizada em 2026-09-28 (`docs/TAREFA_FRONT_TS.md`): migrar o jogo web para Vite +
+  TypeScript + Preact em `web/app/`, com o motor separado da interface e testes de paridade contra o
+  HTML atual. Sem regra de jogo nova; formato do save e chaves do localStorage não mudam.
 - **LLM liberada** (decisão do Matheus, 2026-09-24): a proibição de LLM foi retirada. Usar LLM
   continua dependendo de a tarefa pedir, como qualquer outra coisa.
 - **Falhar alto, não em silêncio.** `raise` em vez de `dropna`, valor default ou `except: pass`.
@@ -605,6 +608,18 @@ Desde 2026-09-24 a versão com sprites também tem (porte JS, **não** reproduz 
 - **Memória curta** no bandit de todos os pets (inclusive rivais de cenário); aba Aprendizado mostra
   o que ele lembra e as últimas decisões com o porquê. Pets salvos antes são reinterpretados pelo
   replay com a política nova (o registro é o mesmo; o comportamento muda).
+
+**Migração para TypeScript (TAREFA_FRONT_TS, em andamento)**: `web/app/test/` tem a referência de
+paridade. `motor_html.mjs` extrai o motor do HTML pelas marcas `@motor-inicio/@motor-fim` e roda em Node sem
+DOM; `gerar_gabaritos.mjs` grava 60 vidas (3 versões de pet × 5 donos × 4 sementes, todos os estágios, tipos
+de evento t/d/l/g/tr, NPCs, sombrias) com checkpoints (sha256 da assinatura + contadores) em
+`gabaritos/vidas_*.json`; `constantes.test.mjs` confere cada folha numérica das constantes web contra
+`gabaritos/constantes_python.json` (`python experiments/exportar_constantes_web.py`) pela tabela
+`mapa_constantes.json`. Rodar: `node --test "web/app/test/*.test.mjs"` (~1 min). Gabaritos são do V8 do
+Node: o Chrome difere no último bit de exp/log (libm) e o replay só é bit a bit no mesmo runtime.
+**Bug conhecido do motor atual**: a semente de gambits do devastador (sombria do brigão) tem a regra "perto e
+guts ≥ 60 → preparar pesado", que não está no `REPERTORIO`; a luta desse pet quebra (TypeError). Os
+gabaritos não fazem lutas com lista quebrada (`lutasPuladas` em `cobertura.json`).
 
 `Assets\gerar_sprites_html.py` agora **recusa** sobrescrever o arquivo se ele tiver a aba
 Evolução (`--forcar` para passar por cima e perder as edições).

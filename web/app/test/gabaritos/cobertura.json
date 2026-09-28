@@ -1,0 +1,103 @@
+{
+ "runtime": "node v24.19.0",
+ "vidas": 60,
+ "sementes": 60,
+ "eventos": {
+  "t": 10857,
+  "d": 2400,
+  "tr": 7491,
+  "g": 820,
+  "l": 3972
+ },
+ "acoesDono": {
+  "alimentar": 642,
+  "elogiar": 364,
+  "acariciar": 259,
+  "limpar": 610,
+  "repreender": 339,
+  "brincar": 186
+ },
+ "exercicios": {
+  "meditar": 1256,
+  "alvo": 1238,
+  "esquiva": 1273,
+  "levantar_pedra": 1235,
+  "resistencia": 1258,
+  "corrida": 1231
+ },
+ "gambit": {
+  "vetar": 240,
+  "liberar": 240,
+  "travar": 192,
+  "destravar": 148
+ },
+ "rivais": {
+  "aleatorio": 690,
+  "npc_tier1_brutamontes": 482,
+  "contragolpe": 85,
+  "emboscador": 91,
+  "npc_tier2_carcereiro": 388,
+  "npc_tier2_sentinela": 390,
+  "tartaruga": 95,
+  "tita": 89,
+  "npc_tier3_soberano": 366,
+  "adaptativo": 90,
+  "atirador": 99,
+  "npc_tier2_porteiro": 379,
+  "duelista": 77,
+  "espelho": 106,
+  "muralha": 90,
+  "oraculo": 118,
+  "agressivo": 85,
+  "vigia": 71,
+  "sentinela": 84,
+  "furioso": 97
+ },
+ "lutasPuladas": {
+  "exigente v2 @7142 (devastador)": 78,
+  "exigente v3 @7243 (devastador)": 78
+ },
+ "estagioFinal": {
+  "adulto": 60
+ },
+ "versao": {
+  "1": 20,
+  "2": 20,
+  "3": 20
+ },
+ "perfil": {
+  "atencioso": 12,
+  "relapso": 12,
+  "aleatorio": 12,
+  "incoerente": 12,
+  "exigente": 12
+ },
+ "ramos": {
+  "sereno": 36,
+  "arisco": 24
+ },
+ "linhas": {
+  "guardiao": 14,
+  "cacador": 14,
+  "brigao": 13,
+  "colosso": 19
+ },
+ "adultas": {
+  "espelho": 5,
+  "emboscador": 3,
+  "duelista": 7,
+  "vigia": 7,
+  "furioso": 4,
+  "tita": 6,
+  "predador": 7,
+  "bastiao_rachado": 6,
+  "colosso_partido": 6,
+  "sentinela": 4,
+  "muralha": 3,
+  "devastador": 2
+ },
+ "sombrias": 21,
+ "falaFria": 21,
+ "checkpoints": 1287,
+ "eventosTotal": 25540
+}
