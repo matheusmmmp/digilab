@@ -104,3 +104,34 @@ describe("pets v4", () => {
     expect(Motor.reproduzir(4242, m.log, 3).assinatura()).toBe(m.assinatura());
   });
 });
+
+describe("heranca (pets v4)", () => {
+  const adulto = (s: number) => {
+    const m = new Motor(s, 3);
+    m.avancar(INI_ADOL - TICK_INICIAL + 15);
+    m.sparring = CAT.sparring;
+    m.avancar(DUR_EVO.adolescente);
+    expect(m.estagioAtual).toBe("adulto");
+    return m;
+  };
+  test("filho herda temperamento e especie; replay pelo evento de origem", () => {
+    const p = adulto(501), q = adulto(502);
+    const f = Motor.cruzar(p, q, 777, 99, "teste");
+    expect(f.log[0][1]).toBe("o");
+    expect([p.especie, q.especie]).toContain(f.especie);
+    for (const e of Object.keys(f.temp) as (keyof typeof f.temp)[]) {
+      expect(Math.abs(f.temp[e] - (p.temp[e] + q.temp[e]) / 2)).toBeLessThan(.6);
+    }
+    f.avancar(600); f.observar("alimentar"); f.avancar(300);
+    const r = Motor.reproduzir(777, f.log, 4);
+    expect(r.assinatura()).toBe(f.assinatura());
+    expect(r.temp).toEqual(f.temp); expect(r.especie).toBe(f.especie);
+    expect(Motor.cruzar(p, q, 777, 99, "teste").temp).toEqual(f.temp);   /* deterministico */
+  });
+  test("so adultos vivos cruzam; origem so no comeco", () => {
+    const p = adulto(503), jovem = new Motor(504, 4);
+    expect(() => Motor.cruzar(p, jovem, 1, 1, "x")).toThrow();
+    const f = new Motor(9, 4); f.avancar(15);
+    expect(() => f.registrarOrigem({ pais: [{ h: 1, esp: "brasa", temp: p.temp, est: "adulto" }, { h: 2, esp: "limo", temp: p.temp, est: "adulto" }], s: 1, quem: "x" })).toThrow();
+  });
+});

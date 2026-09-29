@@ -41,6 +41,8 @@ export const CED = {
 };
 /* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
 export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8 };
+/* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
+export const CHE = { sigma: .1 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */
 export type CategoriaMemoria = "demora" | "bronca" | "elogio" | "carinho";
 export const CME = {

@@ -2,7 +2,7 @@
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import {
-  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CLE, COB, CSO, CT, CTR, C, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, EIXOS_TEMP, COB, CSO, CT, CTR, C, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -18,7 +18,7 @@ import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
 import type {
   AcaoDono, AcaoPet, Carater, Chamado, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta,
-  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, Ramo, Temperamento, VersaoPet,
+  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, Origem, Ramo, Temperamento, VersaoPet,
 } from "./tipos.ts";
 
 /** registro de uma evolucao (entra na assinatura) */
@@ -89,6 +89,7 @@ export class Motor {
   lesionadoDesde: number | null = null;
   morte: { tick: number; causa: "lesoes" | "lesao_sem_tratar" } | null = null;
   janelasFechadas: (Janela & { desfecho: string; fim: number })[] = [];
+  origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
 
   constructor(semente: number, versao: number = VERSAO_PET) {
     if (![1, 2, 3, 4].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
@@ -118,6 +119,37 @@ export class Motor {
     }
   }
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
+
+  /* ---------------------------------------------------------------- heranca (pets v4) */
+  /** cruza dois adultos vivos: o filho (v4) herda temperamento (media + ruido) e especie (de um dos pais) */
+  static cruzar(pai: Motor, mae: Motor, sementeFilho: number, sementeHeranca: number, quem: string): Motor {
+    const ver = (p: Motor) => {
+      if (p.estagioAtual !== "adulto") throw new Error("só adultos cruzam (Ultimate ou Mega)");
+      if (p.morte) throw new Error("um dos pais morreu");
+      return { h: hashSemente(JSON.stringify(p.log)), esp: p.especie, temp: { ...p.temp }, est: p.estagioAtual };
+    };
+    const filho = new Motor(sementeFilho, 4);
+    filho.registrarOrigem({ pais: [ver(pai), ver(mae)], s: sementeHeranca, quem });
+    return filho;
+  }
+  registrarOrigem(o: Origem): void {
+    if (this.log.length) throw new Error("a origem precisa ser o primeiro evento do registro");
+    this.log.push([this.e.tick, "o", o]);
+    this._origem(o);
+  }
+  private _origem(o: Origem): void {
+    if (this.versao < 4) throw new Error("origem só em pets v4");
+    if (this.origem || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL) throw new Error("evento de origem fora da primeira posição");
+    /* rng propria da heranca: especie primeiro, depois os eixos na ordem de EIXOS_TEMP */
+    const r = criarRng(hashSemente("heranca", o.s)), [p, q] = o.pais;
+    this.especie = [p.esp, q.esp][r.int(2)];
+    this.temp = Object.freeze(Object.fromEntries(EIXOS_TEMP.map(e =>
+      [e, Math.max(-1, Math.min(1, (p.temp[e] + q.temp[e]) / 2 + CHE.sigma * r.gauss()))]))) as Temperamento;
+    this.pol = new Bandit(this.temp, this.versao);
+    this.forma = { esp: this.especie, est: "bebe" };
+    this.treino = new TreinoPet(this.especie);
+    this.origem = o;
+  }
 
   /* ---------------------------------------------------------------- campanha e lutas */
   lugarVencido(L: number): boolean { return LUGARES[L].rivais.some(r => this.campanha[r] > 0); }
@@ -510,7 +542,7 @@ export class Motor {
   assinatura(): string {
     return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
-      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte]] : [])]);
+      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp]] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
@@ -522,6 +554,7 @@ export class Motor {
       case "l": this._lutar(ev[2].r, ev[2].s); break;
       case "g": this._gambit(ev[2].op, ev[2].k); break;
       case "tr": this._treinar(ev[2]); break;
+      case "o": this._origem(ev[2]); break;
       default: throw new Error("tipo de evento desconhecido no registro: " + (ev as unknown[])[1]);
     }
   }

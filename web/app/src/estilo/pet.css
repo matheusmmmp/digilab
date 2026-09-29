@@ -464,4 +464,6 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .mp-g-txt > span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--dl-text-2)}
 .mp-g-num{font-family:var(--dl-f-lcd)}
 .mp-g-ativar{flex:none;min-height:44px;padding:0 14px}
+.mp-g-bts{display:grid;gap:6px;flex:none}
+.mp-g-cruzar{min-height:44px;padding:0 14px}
 .mp-desk .mp-guardados ul{max-height:280px}

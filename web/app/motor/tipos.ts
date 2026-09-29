@@ -42,7 +42,12 @@ export type EventoDono = [tick: number, tipo: "d", acao: AcaoDono];
 export type EventoLuta = [tick: number, tipo: "l", luta: { r: string; s: number }];
 export type EventoGambit = [tick: number, tipo: "g", gambit: { op: OpGambit; k: string }];
 export type EventoTreino = [tick: number, tipo: "tr", exercicio: Exercicio];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino;
+/** heranca (pets v4): um genitor visto no cruzamento. h = impressao do registro dele (hashSemente do JSON) */
+export interface PaiOrigem { h: number; esp: Especie; temp: Temperamento; est: Estagio }
+export interface Origem { pais: [PaiOrigem, PaiOrigem]; s: number; quem: string }
+/** so como PRIMEIRO evento do registro de um filho */
+export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem;
 
 export type VersaoPet = 1 | 2 | 3 | 4;
 

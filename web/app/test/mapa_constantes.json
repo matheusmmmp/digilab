@@ -1801,6 +1801,11 @@
    "web": "CLE.limiarTaxa",
    "fonte": "python",
    "py": "ConfigLesoes.limiar_taxa_vitoria"
+  },
+  {
+   "web": "CHE.sigma",
+   "fonte": "python",
+   "py": "ConfigHeranca.sigma_temperamento"
   }
  ],
  "convertidos": [
