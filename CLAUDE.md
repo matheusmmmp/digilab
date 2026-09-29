@@ -725,8 +725,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 - Motivo do bandit: com políticas quase iguais ao instinto, o adulto diz "não sei" em >80% das
   decisões. Decidir se isso é aceitável ou se o motivo deve incluir o prior (instinto) como causa.
-- Memória: efeito na divergência é pequeno e sem incerteza; precisa de bootstrap sobre sementes
-  antes de qualquer conclusão. Recusa (B2) exige mudança no motor — decisão do pesquisador.
+- Memória: bootstrap sobre as 5 sementes feito (2026-09-29, `experiments/bootstrap_memoria.py`,
+  `artifacts_v1_memoria/bootstrap_sementes.json`): separação entre − dentro do braço muda −0,0011 bit
+  [−0,0039; +0,0029] com memória e −0,0005 [−0,0030; +0,0018] com memória por espaços — sem evidência de
+  efeito (poucas sementes: IC largo). Recusa (B2) exige mudança no motor — decisão do pesquisador.
 
 - Combate corrigido (V2C/V21C) aprovado com ressalvas e já na web (2026-09-25; oráculo da web segue de 1
   passo). E2 pede ciclo entre espécies; E4 pede redesenho do adolescente ou da passiva do adulto.
