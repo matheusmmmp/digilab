@@ -380,3 +380,88 @@ def decomposicao_ovo_braco(valor: Mapping[tuple[str, str], float]) -> dict:
     return {"fracao_ovo": frac(ss_ovo), "fracao_braco": frac(ss_br), "fracao_residuo": frac(ss_tot - ss_ovo - ss_br),
             "ss_total": ss_tot, "n_ovos": len(ovos), "n_bracos": len(bracos),
             "media_por_braco": m_br}
+
+
+# ------------------------------------------------------------ natureza x criacao (PLANO_ANALISE_LINHAGEM)
+
+COMPONENTES_CRUZADOS = ("G", "D", "R", "GD", "GR", "DR", "e")
+
+
+def tabela_cruzada(valor: Mapping[tuple, float]) -> tuple[list, list, list, list[list[list[float]]]]:
+    """(genomas, donos, ambientes, y[g][d][r]) a partir de {(genoma, dono, ambiente): valor}; exige a tabela completa."""
+    gs = sorted({k[0] for k in valor})
+    ds = sorted({k[1] for k in valor})
+    rs = sorted({k[2] for k in valor})
+    if len(valor) != len(gs) * len(ds) * len(rs):
+        raise ValueError("decomposicao cruzada exige a tabela completa genoma x dono x ambiente")
+    return gs, ds, rs, [[[float(valor[(g, d, r)]) for r in rs] for d in ds] for g in gs]
+
+
+def componentes_cruzados(y: Sequence[Sequence[Sequence[float]]]) -> dict:
+    """ANOVA de 3 fatores cruzados (genoma G, dono D, ambiente R), uma observacao por celula. Componentes de
+    variancia pelo metodo dos momentos, esperancas do modelo ALEATORIO SEM RESTRICAO (a interacao tripla fica no
+    residuo). Estimadores sem truncar (podem sair negativos); `fracao` trunca em 0."""
+    a, b, c = len(y), len(y[0]), len(y[0][0])
+    if a < 2 or b < 2 or c < 2:
+        raise ValueError("cada fator precisa de pelo menos 2 niveis")
+    n = a * b * c
+    gm = sum(v for yg in y for yd in yg for v in yd) / n
+    mg = [sum(v for yd in yg for v in yd) / (b * c) for yg in y]
+    md = [sum(y[i][j][k] for i in range(a) for k in range(c)) / (a * c) for j in range(b)]
+    mr = [sum(y[i][j][k] for i in range(a) for j in range(b)) / (a * b) for k in range(c)]
+    mgd = [[sum(y[i][j]) / c for j in range(b)] for i in range(a)]
+    mgr = [[sum(y[i][j][k] for j in range(b)) / b for k in range(c)] for i in range(a)]
+    mdr = [[sum(y[i][j][k] for i in range(a)) / a for k in range(c)] for j in range(b)]
+    ss = {"G": b * c * sum((m - gm) ** 2 for m in mg), "D": a * c * sum((m - gm) ** 2 for m in md),
+          "R": a * b * sum((m - gm) ** 2 for m in mr),
+          "GD": c * sum((mgd[i][j] - mg[i] - md[j] + gm) ** 2 for i in range(a) for j in range(b)),
+          "GR": b * sum((mgr[i][k] - mg[i] - mr[k] + gm) ** 2 for i in range(a) for k in range(c)),
+          "DR": a * sum((mdr[j][k] - md[j] - mr[k] + gm) ** 2 for j in range(b) for k in range(c))}
+    ss_tot = sum((v - gm) ** 2 for yg in y for yd in yg for v in yd)
+    ss["e"] = ss_tot - sum(ss.values())
+    gl = {"G": a - 1, "D": b - 1, "R": c - 1, "GD": (a - 1) * (b - 1), "GR": (a - 1) * (c - 1),
+          "DR": (b - 1) * (c - 1), "e": (a - 1) * (b - 1) * (c - 1)}
+    qm = {k: ss[k] / gl[k] for k in ss}
+    e = qm["e"]
+    var = {"G": (qm["G"] - qm["GD"] - qm["GR"] + e) / (b * c), "D": (qm["D"] - qm["GD"] - qm["DR"] + e) / (a * c),
+           "R": (qm["R"] - qm["GR"] - qm["DR"] + e) / (a * b), "GD": (qm["GD"] - e) / c, "GR": (qm["GR"] - e) / b,
+           "DR": (qm["DR"] - e) / a, "e": e}
+    pos = {k: max(0.0, v) for k, v in var.items()}
+    tot = sum(pos.values())
+    return {"componentes": var, "fracao": {k: (v / tot if tot > 0 else 0.0) for k, v in pos.items()},
+            "ss": ss, "gl": gl, "qm": qm, "ss_total": ss_tot, "media_geral": gm,
+            "media_por_dono": md, "niveis": {"G": a, "D": b, "R": c}}
+
+
+def decomposicao_cruzada(valor: Mapping[tuple, float]) -> dict:
+    """Extensao da decomposicao_ovo_braco para genoma x dono x ambiente (cruzados, uma observacao por celula)."""
+    gs, ds, rs, y = tabela_cruzada(valor)
+    out = componentes_cruzados(y)
+    out["media_por_dono"] = dict(zip(ds, out["media_por_dono"]))
+    out["rotulos"] = {"G": gs, "D": ds, "R": rs}
+    return out
+
+
+def bootstrap_cruzado(y: Sequence[Sequence[Sequence[float]]], estatistica, reamostragens: int, semente: int,
+                      reamostrar: str = "GR") -> list:
+    """Bootstrap 'pigeonhole' (McCullagh, 2000) para fatores cruzados: reamostra com reposicao, de forma
+    independente, os genomas (G) e/ou os ambientes (R); os donos ficam fixos. Um nivel sorteado duas vezes conta
+    como dois niveis. Devolve a `estatistica(y_reamostrado)` de cada reamostra."""
+    if not set(reamostrar) <= {"G", "R"} or not reamostrar:
+        raise ValueError(f"reamostrar deve ser 'G', 'R' ou 'GR', veio {reamostrar!r}")
+    rng = random.Random(derivar_semente("bootstrap-cruzado", semente))
+    a, c = len(y), len(y[0][0])
+    out = []
+    for _ in range(reamostragens):
+        ig = [rng.randrange(a) for _ in range(a)] if "G" in reamostrar else list(range(a))
+        ir = [rng.randrange(c) for _ in range(c)] if "R" in reamostrar else list(range(c))
+        out.append(estatistica([[[y[i][j][k] for k in ir] for j in range(len(y[i]))] for i in ig]))
+    return out
+
+
+def ic_percentil(valores: Sequence[float], nivel: float = 0.95) -> list[float]:
+    v = sorted(valores)
+    if not v:
+        raise ValueError("ic_percentil sem valores")
+    lo = (1.0 - nivel) / 2
+    return [v[int(lo * len(v))], v[int((1.0 - lo) * len(v)) - 1]]

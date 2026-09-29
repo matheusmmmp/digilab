@@ -733,3 +733,14 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   - o braço treinador fica disponível, mas fora do gate;
   - **o equilíbrio dos estilos vira tarefa própria de game design**: o estilo "lutar" precisa de um ganho sem teto e que não gere sobrecarga, e isso é decisão de design, não número a ajustar.
 - **Leitura válida**: a V3.
+
+## 2026-09-29 — linhagem E1: rodada balanceada reanalisada dos arquivos gravados
+
+- **O que aconteceu:** a rodada `especies_balanceadas` rodou as 640 vidas (769 s) e o painel (77 s), mas caiu ao gravar o `meta.json`. Outra sessão trocou o branch da pasta `v1` para `design-voz-propria` durante a run, e o script sumiu do disco.
+- **Os dados continuam válidos:** as vidas e as partidas já estavam gravadas, e o código delas já estava carregado nos processos.
+- **O que foi feito:**
+  - a análise foi refeita com `run_natureza_criacao.py --reanalisar` a partir do `pets.json` e do `partidas_neutra.json`, sem nenhuma vida nem partida nova;
+  - o motivo ficou gravado no `meta.json` (`tempos.reanalise`);
+  - conferência: a reanálise da rodada `especie_fixa` gera um `resultado.json` idêntico ao original.
+- **Daqui em diante:** as runs deste branch rodam na worktree `D:\Trab\digilab\v1-linhagem`.
+
