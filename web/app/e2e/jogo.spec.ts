@@ -187,8 +187,10 @@ test("vários pets: só o ativo corre o tempo", async ({ page }) => {
   expect(depois.g).toBe(antes.g);                  /* guardados parados */
   expect(depois.a).not.toBe(antes.a);              /* o ativo andou (o registro junta avanços de tempo seguidos) */
   await page.locator(".topo-retrato").click();
-  await expect(page.locator(".mp-guardado")).toHaveCount(6);
-  await page.locator(".mp-g-ativar").first().click();
+  /* desktop (MpListaDesktop): pagina com um espaco por pet (o ativo + 6 guardados) e o painel do escolhido */
+  await expect(page.locator(".mpl-slot:not(.mpl-livre)")).toHaveCount(7);
+  await page.locator(".mpl-slot").nth(1).click();
+  await page.locator(".mpl-detalhe").getByRole("button", { name: "Tornar ativo" }).click();
   await expect(page.locator(".topo-pet .dl-tag--estagio")).toHaveText(/In-Training/i);
   const g = JSON.parse(await page.evaluate(c => localStorage.getItem(c + "-guardados")!, CHAVE));
   expect(g).toHaveLength(6);                       /* o Champion de antes foi para o lugar dele */
