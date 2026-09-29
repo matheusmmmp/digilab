@@ -5,6 +5,8 @@
 import { useEffect, useState } from "preact/hooks";
 import { CHAVE } from "./save.ts";
 
+/** nome na tela do mentor do tutorial (nomes em Digimon; antes "Bit", decisao do Matheus em 2026-09-29) */
+export const NOME_MENTOR = "Professor Agumon";
 export const CHAVE_DICAS = CHAVE + "-dicas";          // ids das dicas ja vistas
 export const CHAVE_DICAS_LIGADAS = CHAVE + "-dicas-ligadas";
 
@@ -18,7 +20,7 @@ export const DICAS = {
   champion: "Virou Champion. Com fadiga 40 ele pede pausa; com 60 o treino vira Forçar: rende mais e gera sobrecarga.",
   regra_nova: "Ele tirou uma regra da luta. Travar a mantém na posição; Vetar proíbe. O resto ele aprende sozinho.",
   lutas_treino: "Para virar Ultimate ou Mega ele precisa de 10 lutas de treino na Arena, além do tempo.",
-  adulto: "Daqui em diante ele mesmo explica o que sente e por quê. Até mais! — Bit",
+  adulto: "Daqui em diante ele mesmo explica o que sente e por quê. Até mais! — Professor Agumon",
   /* pets v4 (educacao-v1) */
   manha: "Ele chamou: confira a barra. Se a necessidade está em dia, é manha — bronca educa; petisco ensina a pedir mais.",
   banheiro: "Ele avisou que vai sujar: leve ao banheiro em até 15 min e a sujeira não acontece.",
