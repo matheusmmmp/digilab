@@ -302,6 +302,12 @@ neutra, decidido antes da run).
   - com educação, lesões e sparring real, atencioso − aleatório **+0,121** [+0,066; +0,175] (cerca de metade vem das mortes do aleatório; pós hoc sem mortes: +0,058);
   - atencioso − permissivo +0,077;
   - gate de equilíbrio dos estilos aprovado na neutra, reprovado na real.
+- **V3c, personas** (`artifacts_educacao_v3c/`, lote `gemma2-9b-01`, 24 personas × 40 ovos, 2026-09-29):
+  - os braços fixos repetem a V3 (atencioso − aleatório +0,139 [+0,058; +0,222]);
+  - entre as personas, só o **limiar de cuidado** tem efeito com IC fora de zero: +0,065 [+0,008; +0,115] por 1,0 (cuidar mais cedo);
+  - atender a janela, ceder com petisco, a coerência do feedback e o perfil de treino não têm efeito detectável;
+  - as personas vão de 0,318 a 0,474 no painel, todas abaixo do atencioso (0,528); 17 de 960 vidas morreram;
+  - 3 aleatórios mortos têm a saúde final um pouco diferente da V3 (a morte agora é vista no fim do avanço): mesmo tick e causa, e pet morto conta 0 no painel.
 - **V3b** (`artifacts_educacao_v3b/`): "luta treina" levou 577/640 pets à forma sombria. Ficou desligado (opção B), e o equilíbrio dos estilos virou tarefa de game design (REGISTRO_DESVIOS).
 - **Web**: pets v4 (`VERSAO_PET = 4`, só ovos novos; v1–v3 e gabaritos intactos):
   - janelas, disciplina, lesão e morte, qualificação, herança (Cruzar em Meus pets);
