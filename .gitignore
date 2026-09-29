@@ -44,3 +44,6 @@ tools/gasto_llm_pesquisa.json
 !artifacts_educacao/
 artifacts_educacao/partidas_*.json
 artifacts_educacao/vidas/
+!artifacts_educacao_v3b/
+artifacts_educacao_v3b/partidas_*.json
+artifacts_educacao_v3b/vidas/

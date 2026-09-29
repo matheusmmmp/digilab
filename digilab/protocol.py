@@ -527,6 +527,7 @@ _FONTES_EDUCACAO_V1 = {
     "ConfigLesoes.ligada": (_D, "chave desligada por padrao, como ConfigEscala"),
     "ConfigLesoes.efeito_qualificacao": (_D, "Matheus delegou (2026-09-28): sem qualificacao o pet fica adolescente "
                                              "(docs/PLANO_ANALISE_V3.md)"),
+    "ConfigLesoes.luta_treina": (_P, _SF + " (adendo V3b do PLANO_ANALISE_V3: o estilo lutar sem efeito na V3)"),
     "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
     "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
     "ConfigLesoes.prob_lesao_derrota": (_P, _SF),

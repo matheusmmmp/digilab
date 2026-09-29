@@ -84,3 +84,20 @@ def test_dono_trata_lesao_antes_da_janela_e_aleatorio_usa_todos_os_botoes(vida):
     for _ in range(300):
         vistas.update(a._todos_os_botoes([AcaoUsuario.ALIMENTAR] * 3, rng))
     assert set(ACOES_EDUCACAO) <= vistas and AcaoUsuario.ALIMENTAR in vistas
+
+
+def test_v3b_luta_treina(vida):
+    m = vida[0].motor
+    treinou = [h["treinou"] for h in m.historico_lutas if h["treinou"]]
+    assert treinou and len(treinou) <= len(m.historico_lutas)
+    assert sum(1 for s in m.treino.sessoes if s.tick in {h["tick"] for h in m.historico_lutas}) == len(treinou)
+
+
+def test_v3b_treinador_cuida_no_slot_quando_precisa():
+    d = DonoComEducacao("treinador", 3)
+    assert d.n_slots == DonoComEducacao("exigente", 3).n_slots
+    d._estado_do_passo = {"fome": 0.1, "higiene": 0.9, "humor": 0.9, "sujeira": 0}
+    info = {"fadiga": 0.0, "pede_pausa": False, "forcaria": False, "sobrecarga": 0.0, "estagio": "crianca"}
+    assert d._slot(info, random.Random(1)) is AcaoUsuario.ALIMENTAR and d.contagem["cuidado_no_slot"] == 1
+    d._estado_do_passo = {"fome": 0.9, "higiene": 0.9, "humor": 0.9, "sujeira": 0}
+    assert d._slot(info, random.Random(1)).value.startswith("treinar_") and d.nome == "treinador"

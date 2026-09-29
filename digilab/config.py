@@ -925,6 +925,9 @@ class ConfigLesoes:
     # sem ela o pet continua adolescente (como o sparring minimo). Decidido (delegado) em 2026-09-28; o catalogo
     # nao tem "forma de vitoria"
     efeito_qualificacao: str = "condicao_adulto"
+    # V3b (adendo do PLANO_ANALISE_V3): cada luta fora da arena de pesquisa conta como uma sessao de treino
+    # (exercicio em rodizio, com fadiga, tetos e intervalo minimo do treino; o pet nao recusa a luta)
+    luta_treina: bool = True
 
 
 @dataclass(frozen=True)

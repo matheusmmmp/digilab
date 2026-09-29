@@ -11,6 +11,8 @@ Resposta a janela (PROPOSTO, sem fonte; o dono julga pela necessidade, nunca sab
   aviso antes de sujar todos menos o aleatorio levam ao banheiro (o relapso, so na visita)
   aleatorio            nada de especial (as acoes sorteadas podem acertar por acaso)
   lutador              como o atencioso (o que muda e o numero de sparrings, na run: PLANO_ANALISE_V3)
+  treinador            (V3b) sessoes no teto como o exigente, mas o slot de treino vira cuidado quando alguma
+                       necessidade esta abaixo do limiar do atencioso (treinar sem largar o pet)
   lesao                tratar_lesao antes de tudo, sempre que presente (relapso: na visita; persona: presente)
   aleatorio            sorteia entre TODOS os botoes de cuidado (6 da v1 + 3 novos): 3/9 das acoes de cuidado
                        viram uma acao nova sorteada
@@ -27,7 +29,7 @@ from dataclasses import replace
 
 from .config import (CONFIG_DONOS, CONFIG_DURACOES, CONFIG_EDUCACAO_LIGADA, CONFIG_PADRAO, CONFIG_TREINO, TICKS_POR_DIA,
                      Config, ConfigDonos, ConfigEducacao)
-from .donos import DonoAtencioso, DonoRelapso, Visao, _DonoBase, _feedback, julgar_acao
+from .donos import DonoAtencioso, DonoRelapso, Visao, _DonoBase, _feedback, cuidados_necessarios, julgar_acao
 from .educacao import NECESSIDADE, fabricas_educacao
 from .events import ACOES_EDUCACAO, ACOES_TREINO, AcaoUsuario
 from .personas import Persona
@@ -36,7 +38,7 @@ from .temperamento import Temperamento
 from .treino import CanalDeInteracao, Vida
 from .treino_vida import BRACOS_TREINO, DonoComTreino, orcamento_treino, plano_de_treino
 
-BRACOS_EDUCACAO = tuple(BRACOS_TREINO) + ("permissivo", "lutador")
+BRACOS_EDUCACAO = tuple(BRACOS_TREINO) + ("permissivo", "lutador", "treinador")
 ATENDE_PRIMEIRA = {"fome": AcaoUsuario.ALIMENTAR, "higiene": AcaoUsuario.LIMPAR, "carinho": AcaoUsuario.ACARICIAR}
 
 
@@ -98,12 +100,14 @@ class DonoComEducacao(DonoComTreino):
         elif braco not in BRACOS_EDUCACAO:
             raise KeyError(f"braco sem dono de educacao: {braco!r}")
         perfil = persona.perfil_treino if persona is not None else braco
+        if perfil == "treinador":
+            perfil = "exigente"
         super().__init__("atencioso" if perfil in ("permissivo", "lutador") else perfil, dias, cfg_donos, ct)
         self.persona = persona
         if braco == "permissivo":
             self.nome = braco
             self.base = DonoPermissivo(self.cfg_donos)
-        elif braco == "lutador":
+        elif braco in ("lutador", "treinador"):
             self.nome = braco
         elif persona is not None:
             # o treino segue as regras do atencioso (pausa respeitada); perfil_treino so muda quantas sessoes
@@ -142,6 +146,19 @@ class DonoComEducacao(DonoComTreino):
             return AcaoUsuario.ELOGIAR, "elogio"
         return AcaoUsuario.REPREENDER, "bronca"
 
+    def _slot(self, info: dict, rng: random.Random) -> AcaoUsuario:
+        if self.nome != "treinador":
+            return super()._slot(info, rng)
+        nec = cuidados_necessarios(self._estado_do_passo, self.cfg_donos)
+        if nec:
+            self.contagem["cuidado_no_slot"] = self.contagem.get("cuidado_no_slot", 0) + 1
+            return nec[0]
+        self.nome = "exigente"                       # no resto, o slot do exigente (forcar alternado)
+        try:
+            return super()._slot(info, rng)
+        finally:
+            self.nome = "treinador"
+
     def _todos_os_botoes(self, acoes: list[AcaoUsuario], rng: random.Random) -> list[AcaoUsuario]:
         out = []
         for a in acoes:
@@ -165,6 +182,7 @@ class DonoComEducacao(DonoComTreino):
         return AcaoUsuario.REPREENDER, "bronca"
 
     def decidir(self, visao: Visao, rng: random.Random) -> list[AcaoUsuario]:
+        self._estado_do_passo = visao.estado
         # a resposta sai do orcamento de CUIDADO: os slots de treino continuam reservados (sem verba de cuidado,
         # a janela fica sem resposta, como a de um dono sem tempo)
         slot = (visao.passo + 1) * self.cfg_donos.passo_ticks in self.slots

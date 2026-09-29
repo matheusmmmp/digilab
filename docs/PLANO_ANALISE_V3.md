@@ -69,3 +69,23 @@ A vida é a de `simular_vida_educacao`: 14 dias, duração `teste`, orçamento i
 - **Onde**: `artifacts_educacao/` (resultado.json, pets.json, meta.json). As partidas e as vidas ficam fora do git, como na confirmatória.
 - **Script**: `experiments/run_educacao.py`.
 - **Protocolo**: a run grava o `hash_parametros_educacao()` e o sha256 das fontes.
+
+## 7. Adendo V3b (registrado antes da run V3b, depois de ver a V3)
+
+O Matheus pediu os dois ajustes que recomendei ao ler a V3 (2026-09-28). A V3 fica como está (commit 371c402). O adendo corrige dois defeitos de desenho que a V3 mostrou; não é repescagem de resultado.
+
+1. **O estilo lutar não tinha efeito.** As lutas não mudavam nem a política nem o estado, e o lutador saiu idêntico ao atencioso (−0,0004).
+   - Correção: `ConfigLesoes.luta_treina`, em que cada luta fora da arena de pesquisa conta como uma sessão de treino.
+   - A sessão usa exercício em rodízio, a fadiga, os tetos e o intervalo mínimo do treino; o pet não recusa a luta.
+   - Vale para todos os braços. O lutador faz 20 lutas e os outros 10.
+   - PROPOSTO, sem fonte.
+2. **O estilo treinar (exigente) destruía a saúde pelo orçamento** (saúde final 0,02). As sessões no teto tiram verba do cuidado, e as janelas da educação apertam mais.
+   - Correção: o braço novo **treinador**, com as mesmas sessões do exigente, mas o slot de treino vira cuidado quando alguma necessidade está abaixo do limiar do atencioso.
+   - O exigente continua como está, porque é braço da confirmatória. O gate passa a usar treinar = treinador.
+   - PROPOSTO, sem fonte.
+3. **Desenho**: os mesmos 80 ovos e o mesmo rótulo de partidas da V3, pareados; 8 braços (os 7 e o treinador). Saída em `artifacts_educacao_v3b/`, config em `experiments/configs/educacao_v3b.json`.
+4. **O que olhar**:
+   - as mesmas comparações, mais treinador − atencioso e treinador − exigente;
+   - o gate com os estilos novos;
+   - quanto a luta treinou (`lutas_que_treinaram`).
+   - A leitura continua exploratória.

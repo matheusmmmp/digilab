@@ -52,7 +52,7 @@ SONDAS = (PROTOCOLO_ARENA_V1.v("estados_sonda"), PROTOCOLO_ARENA_V1.v("amostras_
           PROTOCOLO_ARENA_V1.v("semente_sonda"))
 T_ADOL = CONFIG_EVOLUCAO_PESQUISA.dur_bebe_min + CONFIG_EVOLUCAO_PESQUISA.dur_crianca_min
 T_ADUL = T_ADOL + CONFIG_EVOLUCAO_PESQUISA.dur_adolescente_min
-ESTILOS = {"cuidar": "atencioso", "treinar": "exigente", "lutar": "lutador"}
+ESTILOS_V3 = {"cuidar": "atencioso", "treinar": "exigente", "lutar": "lutador"}   # o config pode trocar ("estilos")
 
 
 def condicao_da_saude(saude: float) -> float:
@@ -135,6 +135,7 @@ def _vida(args):
     dados = {"braco": b, "ovo": s, "especie": esp, "morta": v.morta, "morte": m.morte,
              "sparring": {"lutas": len(lutas), "vitorias": sum(x["resultado"] == "vitoria" for x in lutas),
                           "lesoes": sum(x["lesao"] for x in lutas)},
+             "lutas_que_treinaram": sum(1 for x in lutas if x.get("treinou")),
              "qualificacao": m.transicoes.get("adulto", {}).get("vitorias"), "adulto_liberado": m.adulto_liberado,
              "disciplina_final": m.disciplina, "educacao": m.resumo_educacao()["contagem"],
              "saude_final": m.estado()["saude"], "vinculo_final": m.vinculo.valor, "sombria": bool(m.sombria),
@@ -200,7 +201,8 @@ def taxa(painel_braco: dict) -> float:
     return sum(pts) / len(pts)
 
 
-def analisar(res: dict, pets: dict, bracos: list[str]) -> dict:
+def analisar(res: dict, pets: dict, bracos: list[str], estilos: dict | None = None) -> dict:
+    estilos = estilos or ESTILOS_V3
     out = {}
     for var, por_ovo in res.items():
         ovos = sorted(por_ovo, key=int)
@@ -209,7 +211,9 @@ def analisar(res: dict, pets: dict, bracos: list[str]) -> dict:
         comp = {}
         for k, (x, y) in enumerate((("atencioso", "aleatorio"), ("atencioso", "permissivo"), ("relapso", "aleatorio"),
                                     ("incoerente", "aleatorio"), ("exigente", "atencioso"), ("lutador", "atencioso"),
-                                    ("permissivo", "aleatorio"))):
+                                    ("permissivo", "aleatorio"), ("treinador", "atencioso"), ("treinador", "exigente"))):
+            if x not in t or y not in t:
+                continue
             c = dif(x, y, k)
             c["leitura"] = leitura(c)
             comp[f"{x}-{y}"] = c
@@ -219,7 +223,7 @@ def analisar(res: dict, pets: dict, bracos: list[str]) -> dict:
         for i, x in enumerate(bracos):
             domina[x] = all(dif(x, y, 100 + 10 * i + j)["ic95"][0] > 0 for j, y in enumerate(bracos) if y != x)
         ce = CONFIG_EQUILIBRIO
-        est = {e: medias[b] for e, b in ESTILOS.items()}
+        est = {e: medias[b] for e, b in estilos.items()}
         margens = {e: min(est[e] - est[o] for o in est if o != e) for e in est}
         gate = {"medias_estilos": est,
                 "faixa_ok": {e: ce.taxa_min <= v <= ce.taxa_max for e, v in est.items()},
@@ -238,6 +242,7 @@ def analisar(res: dict, pets: dict, bracos: list[str]) -> dict:
             chave = d["forma"]["adulta"] or f"adolescente:{d['forma']['linha']}"
             formas[chave] = formas.get(chave, 0) + 1
         mec[b] = {"n": len(ds), "mortes": len(ds) - len(vivos),
+                  "lutas_que_treinaram_media": sum(d.get("lutas_que_treinaram", 0) for d in ds) / len(ds),
                   "causas_morte": sorted({d["morte"]["causa"] for d in ds if d["morte"]}),
                   "qualificados_adulto": sum(bool(d["adulto_liberado"]) for d in vivos),
                   "taxa_sparring_media": (sum(x["vitorias"] / x["lutas"] for x in sp) / len(sp)) if sp else None,
@@ -252,7 +257,7 @@ def analisar(res: dict, pets: dict, bracos: list[str]) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--config", default=str(CFG_PADRAO))
-    ap.add_argument("--saida", default=str(RAIZ / "artifacts_educacao"))
+    ap.add_argument("--saida", default=None, help="padrao: o 'saida' do config (ou artifacts_educacao)")
     ap.add_argument("--painel", type=int, default=None, help="partidas por bot (padrao: o do config)")
     ap.add_argument("--processos", type=int, default=None)
     ap.add_argument("--fumaca", action="store_true")
@@ -261,10 +266,10 @@ def main(argv=None) -> int:
     if sha256_engine() != ENGINE_SHA256_V0:
         raise RuntimeError("engine.py alterado")
     validar_parametros_educacao()
-    saida = Path(a.saida)
+    saida = Path(a.saida or RAIZ / cfg.get("saida", "artifacts_educacao"))
     if a.fumaca:
         ovos = cfg["sementes_fumaca"]
-        if saida.resolve() == (RAIZ / "artifacts_educacao").resolve():
+        if saida.resolve().name.startswith("artifacts_educacao"):
             raise ValueError("fumaca fora de artifacts_educacao/")
     else:
         ovos = cfg["sementes"]
@@ -296,7 +301,7 @@ def main(argv=None) -> int:
             res[nome] = por_ovo
             _gravar(saida / f"partidas_{nome}.json", _dump({"variante": nome, "por_ovo": por_ovo}))
             print(f"  painel {nome}: {n} partidas em {tempos[f'painel_{nome}_s']:.0f} s", flush=True)
-    analise = analisar(res, pets, bracos)
+    analise = analisar(res, pets, bracos, cfg.get("estilos"))
     fontes = ("experiments/run_educacao.py", "digilab/educacao.py", "digilab/donos_educacao.py", "digilab/config.py",
               "digilab/evolucao.py", "digilab/combate_v2/v21/catalogo.py", "digilab/combate_v2/v21/regras.py")
     meta = {"plano": "docs/PLANO_ANALISE_V3.md", "config": cfg, "ovos": ovos, "M_B_por_bot": m_b, "fumaca": a.fumaca,

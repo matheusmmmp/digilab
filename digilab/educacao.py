@@ -128,6 +128,7 @@ class MotorEducacao(MotorTreino):
         self.lutas = self._lutas_zeradas()
         self.lesionado_desde: int | None = None
         self.historico_lutas: list[dict] = []
+        self._lutas_que_treinaram = 0
         self.morte: dict | None = None
         self.origem: Origem | None = None        # parte 5: filho de um cruzamento (evento `origem`, o primeiro)
         # parte 7: modo livre gravado
@@ -313,8 +314,14 @@ class MotorEducacao(MotorTreino):
                 self.lesionado_desde = tick
             if self.lutas["lesoes"] >= self.cl.lesoes_para_morte:
                 self.morte = {"tick": tick, "causa": "lesoes"}
+        treinou = None
+        if self.cl.luta_treina and self.treino.estagio in self.ct.teto_por_estagio and self.treino.pode_tocar(tick):
+            exercicios = tuple(self.ct.exercicios)
+            treinou = exercicios[self._lutas_que_treinaram % len(exercicios)]
+            self.treino.sessao(tick, treinou, True)
+            self._lutas_que_treinaram += 1
         reg = {"tick": tick, "rival": rival, "semente": semente, "resultado": res, "turnos": p.turnos,
-               "lesao": lesao, "estagio": self.treino.estagio}
+               "lesao": lesao, "estagio": self.treino.estagio, "treinou": treinou}
         self.historico_lutas.append(reg)
         return reg
 
