@@ -1,5 +1,8 @@
-/* Bit, o zelador do laboratorio (mentor original do tutorial, docs/JORNADA_JOGADOR.md): um robozinho de manutencao
-   desenhado em pixels aqui mesmo (nao e sprite da franquia). A faixa da dica fica acima da barra, uma frase por vez. */
+/* Bit, o mentor do tutorial (docs/JORNADA_JOGADOR.md): desde 2026-09-28 (pedido do Matheus) e o Agumon de capelo
+   de professor do Digimon UP ("Agu", grupo B: falando e apontando a varinha), sprite "guia" do atlas. Sem o atlas,
+   volta o robozinho desenhado em pixels aqui mesmo. A faixa da dica fica acima da barra, uma frase por vez. */
+import { useEffect, useRef } from "preact/hooks";
+import { desenharSprite, dimSprite, escalaSprite, quadroAgora, useAtlas } from "../atlas.ts";
 import { dispensarDica, DICAS, useDicaAtual } from "../dicas.ts";
 
 /* 12 x 12: . vazio, n contorno, b corpo, c visor, o olho, a antena, y luz, w chave */
@@ -27,12 +30,32 @@ export function RetratoBit({ tam = 40 }: { tam?: number }) {
   );
 }
 
+/** o Agumon professor animado (canvas em escala inteira do aparelho); sem o atlas ou sem o sprite, o robozinho */
+export function RetratoGuia() {
+  const a = useAtlas(), ref = useRef<HTMLCanvasElement>(null);
+  const ok = a.tipo === "ok" && !!a.dados.sprites.guia;
+  useEffect(() => {
+    if (a.tipo !== "ok" || !ok || !ref.current) return;
+    const c = ref.current, esc = escalaSprite(), [w, h] = dimSprite(a.dados, "guia");
+    c.width = w * esc; c.height = h * esc;
+    const g = c.getContext("2d");
+    if (!g) return;
+    const passo = () => { g.clearRect(0, 0, c.width, c.height); desenharSprite(g, a, "guia", 0, 0, esc, quadroAgora(a, "guia")); };
+    passo();
+    const t = setInterval(passo, a.dados.ms_por_quadro);
+    return () => clearInterval(t);
+  }, [a, ok]);
+  if (a.tipo !== "ok" || !ok) return <RetratoBit />;
+  const [w, h] = dimSprite(a.dados, "guia");
+  return <canvas ref={ref} class="bit bit-guia" style={{ width: `${w}px`, height: `${h}px` }} aria-hidden="true" />;
+}
+
 export function DicaBit() {
   const id = useDicaAtual();
   if (!id) return null;
   return (
     <aside class="dica-bit" role="status" aria-live="polite">
-      <RetratoBit />
+      <RetratoGuia />
       <p><b>Bit:</b> {DICAS[id]}</p>
       <button type="button" class="dl-btn dl-btn--sec dica-ok" onClick={() => dispensarDica(id)}>Entendi</button>
     </aside>
