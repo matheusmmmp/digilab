@@ -1,6 +1,14 @@
 # Plano — linhagem por procriação (lente de Vida Artificial)
 
-Status: **planejamento** (pedido do Matheus, 2026-09-29). Nenhum código, teste, config ou artefato foi criado. Tudo abaixo é PROPOSTO, e nada está decidido.
+Status: **encerrado como pesquisa** (decisão do Matheus, 2026-09-29).
+
+- O E1 (natureza × criação) rodou e **o gate falhou**: `docs/PLANO_ANALISE_LINHAGEM.md` e `artifacts_linhagem/natureza_criacao/`.
+- Com a espécie fixa, o genoma explica 4,9% da variância, e o IC inclui 0. Com as 4 espécies, a espécie responde por 32% da diferença entre genomas.
+- **E2, E3 e E4 ficam arquivados.** A linhagem continua só como mecânica de jogo (herança dos pets v4); aposentadoria, retrato e árvore podem virar desenho de jogo quando o Matheus pedir.
+- **Genoma novo com aptidões por indivíduo: descartado.** Na arena da pesquisa o treino é normalizado ao orçamento, e montar um genoma só para o gate passar viciaria o teste.
+- **O que o E1 abriu:** a interação dono × ambiente (22% da variância) é a pergunta mais promissora.
+
+O texto abaixo é o planejamento original, mantido como registro.
 
 ## 1. Estado real (passo 0)
 

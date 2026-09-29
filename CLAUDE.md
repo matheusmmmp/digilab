@@ -331,6 +331,9 @@ byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decom
   entre genomas (ferrugem 0,467 × cirro 0,372: E2 de novo).
 - Donos (espécie fixa): atencioso − aleatório **+0,123** [+0,016; +0,204] (repete a V3, +0,121); atencioso −
   permissivo +0,005 [−0,127; +0,142] (na V3 era +0,077).
+- **Decisão do Matheus (2026-09-29): a linhagem para como pesquisa.** E2–E4 arquivados; fica como mecânica de jogo
+  (herança v4). Um genoma com aptidões por indivíduo foi descartado: o treino é normalizado na arena e ajustar o
+  genoma para passar o gate viciaria o teste. Pergunta aberta mais promissora: a interação dono × ambiente.
 - A rodada balanceada caiu ao gravar o meta (outra sessão trocou o branch da pasta `v1` no meio da run); a análise
   foi refeita dos arquivos gravados (`--reanalisar`, conferido: a reanálise da espécie fixa sai idêntica).
 
