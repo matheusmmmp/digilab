@@ -6,6 +6,10 @@ tamanho, e falha alto (FatosInvalidos) em qualquer outra coisa. Cada fato ganha 
 
     I identidade   T temperamento   C carater   E estado   M memoria   D desejo   R motivo   V vinculo
     G gatilho (o evento que disparou a fala espontanea)
+  voz propria (DESIGN_VOZ_PROPRIA; prompt livre-v3):
+    H habito meu   O habito do dono   P gosto   L marco        (a historia: digilab/historia.py)
+    F o que dizer agora (a versao falsa de uma MENTIRA decidida pelo motor; o registro guarda a verdade)
+    W coisa que ouvi no Digimundo (uma entrada do almanaque, pelo id: a web nunca manda o texto)
 
 Temperamento e carater entram so nos eixos extremos (|valor| >= LIMIAR_EXTREMO); o vinculo so em faixa.
 """
@@ -25,6 +29,13 @@ MAX_TEXTO = 80
 MAX_MEMORIAS = 8
 MAX_MOTIVOS = 3
 MAX_FATORES = 4
+MAX_HISTORIA = 12
+TIPO_HISTORIA = {"H": "habito meu", "O": "habito do dono", "P": "gosto", "L": "marco"}
+TIPO_MENTIRA = "dizer agora"
+TIPO_MUNDO = "coisa que ouvi no Digimundo"
+REGRAS_HISTORIA = ("sequencia", "periodo", "periodo_dono", "cuidado_dono", "cede_manha", "demora", "gosto",
+                   "desgosto", "treino_favorito", "revanche", "evolucao", "primeira_vitoria", "primeira_derrota",
+                   "venceu_depois", "lesao", "ausencia", "sombria", "cruzamento")
 
 
 class FatosInvalidos(ValueError):
@@ -36,9 +47,13 @@ class Fato:
     id: str
     tipo: str          # identidade, temperamento, carater, estado, memoria, desejo, motivo, vinculo, gatilho
     texto: str
+    meta: tuple = ()   # so para o registro (nunca vai ao prompt): a verdade de uma mentira, a regra da historia
 
     def linha(self) -> str:
         return f"[{self.id}] {self.tipo}: {self.texto}"
+
+    def para_dict(self) -> dict:
+        return {"id": self.id, "tipo": self.tipo, "texto": self.texto, **dict(self.meta)}
 
 
 def _txt(v, rotulo: str) -> str:
@@ -77,7 +92,7 @@ def fatos_de_estado(e: dict) -> list[Fato]:
     if not isinstance(e, dict):
         raise FatosInvalidos("estado precisa ser um objeto")
     desconhecidas = set(e) - {"identidade", "temperamento", "carater", "estado", "memorias", "desejo", "motivos",
-                              "vinculo", "gatilho"}
+                              "vinculo", "gatilho", "historia", "mentira", "almanaque"}
     if desconhecidas:
         raise FatosInvalidos(f"chaves desconhecidas: {sorted(desconhecidas)}")
     fatos: list[Fato] = []
@@ -155,7 +170,52 @@ def fatos_de_estado(e: dict) -> list[Fato]:
     g = e.get("gatilho")
     if g is not None:
         fatos.append(Fato("G1", "evento agora", _txt(g, "gatilho")))
+
+    hist = e.get("historia") or []
+    if not isinstance(hist, list) or len(hist) > MAX_HISTORIA:
+        raise FatosInvalidos("historia invalida")
+    cont: dict[str, int] = {}
+    for h in hist:
+        if not isinstance(h, dict) or h.get("tipo") not in TIPO_HISTORIA or h.get("regra") not in REGRAS_HISTORIA:
+            raise FatosInvalidos("fato de historia invalido")
+        cont[h["tipo"]] = cont.get(h["tipo"], 0) + 1
+        fatos.append(Fato(f"{h['tipo']}{cont[h['tipo']]}", TIPO_HISTORIA[h["tipo"]], _txt(h["texto"], "historia"),
+                          (("regra", h["regra"]), ("chave", _txt(h.get("chave", h["regra"]), "chave")),
+                           ("dados", _dados(h.get("dados") or {})))))
+
+    if e.get("mentira") is not None:
+        from .mentira import distorcer        # import tardio: mentira.py usa Fato
+        m = e["mentira"]
+        if not isinstance(m, dict) or set(m) != {"tema"} or m["tema"] not in ("estado", "historia"):
+            raise FatosInvalidos("mentira invalida")
+        verdade, falsa, molde = distorcer(m["tema"], est, fatos)
+        fatos.append(Fato("F1", TIPO_MENTIRA, falsa, (("mentira", True), ("verdade", verdade), ("molde", molde))))
+
+    if e.get("almanaque") is not None:
+        from .almanaque import entrada        # import tardio: le o arquivo versionado
+        a = e["almanaque"]
+        if not isinstance(a, dict) or set(a) != {"id"}:
+            raise FatosInvalidos("almanaque invalido")
+        ent = entrada(_txt(a["id"], "almanaque"))
+        fatos.append(Fato("W1", TIPO_MUNDO, ent["texto"], (("almanaque", ent["id"]),)))
     return fatos
+
+
+def _dados(d) -> dict:
+    """dados estruturados de um fato de historia (so para a mentira e o registro): chaves curtas, valores simples"""
+    if not isinstance(d, dict) or len(d) > 8:
+        raise FatosInvalidos("dados de historia invalidos")
+    out = {}
+    for k, v in d.items():
+        if not isinstance(k, str) or not k.isidentifier() or len(k) > 20:
+            raise FatosInvalidos("chave de dados invalida")
+        if isinstance(v, bool) or isinstance(v, (int, float)):
+            out[k] = v
+        elif isinstance(v, str):
+            out[k] = _txt(v, k)
+        else:
+            raise FatosInvalidos(f"{k}: valor de dados invalido")
+    return out
 
 
 def bloco(fatos: list[Fato]) -> str:

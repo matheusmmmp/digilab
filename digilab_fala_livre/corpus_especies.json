@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "versao": "corpus-exemplo-1",
+    "exemplo": true,
+    "descricao": "CORPUS DE EXEMPLO (2 especies), so para testar o carregador, o filtro de marcas e o bloco de estilo (DESIGN_VOZ_PROPRIA, secao 11). Tirado de D:/Trab/digilab/docs/corpus_digimon/ps1_digimon_world.md (revisado apos auditoria em 2026-09-29). O corpus auditado completo substitui este arquivo.",
+    "vereditos": {
+      "Digimon World (PS1)": "APTO COM RESSALVAS",
+      "Digimon Adventure: Cathode Tamer (WS)": "FORA DO ESCOPO"
+    },
+    "liberar_outra_midia": false
+  },
+  "especies": [
+    {
+      "especie": "Angemon",
+      "jogos": ["Digimon World (PS1)"],
+      "tracos": [
+        {"texto": "solene e devotado ao dever", "marca": "VERIFICADO", "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html"},
+        {"texto": "quando nao e entendido, troca a fala arcaica pela comum, meio resignado", "marca": "VERIFICADO", "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html"},
+        {"texto": "tem pose e bom apetite", "marca": "SEM FONTE", "fonte": "comentario de fa (retirado na auditoria)"}
+      ],
+      "fala": [
+        {"texto": "comeca arcaico e cerimonioso (ti, vos) e depois passa a falar como gente comum", "marca": "VERIFICADO", "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html"},
+        {"texto": "nas dicas e enigmatico e sereno", "marca": "PARCIAL", "reescrito": true, "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html"}
+      ],
+      "interacoes": [
+        {"com": "Devimon", "texto": "anjo contra anjo caido: rixa antiga da especie", "marca": "OUTRA MIDIA", "midia": "anime", "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター"}
+      ],
+      "citacoes": [
+        {"pt": "Eu sou Angemon, anjo que a ti protege.", "original": "我はエンジェモン。汝を守護する天使なり。", "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html", "fan_translation": false, "marca": "VERIFICADO"}
+      ],
+      "honestidade_especie": null
+    },
+    {
+      "especie": "Devimon",
+      "jogos": ["Digimon World (PS1)"],
+      "tracos": [
+        {"texto": "sarcastico e teatral", "marca": "VERIFICADO", "fonte": "https://w.atwiki.jp/digimon_world/pages/111.html"},
+        {"texto": "orgulhoso: nao aceita ser mandado por ninguem", "marca": "VERIFICADO", "fonte": "https://w.atwiki.jp/digimon_world/pages/111.html"},
+        {"texto": "cinico com todo mundo", "marca": "INFERENCIA", "fonte": "leitura do autor do corpus"}
+      ],
+      "fala": [
+        {"texto": "risadinha contida antes de provocar; ameacas secas", "marca": "VERIFICADO", "fonte": "https://w.atwiki.jp/digimon_world/pages/111.html"}
+      ],
+      "interacoes": [],
+      "citacoes": [
+        {"pt": "Eu sou Devimon! Um anjo caído seduzido pelo poder das trevas.", "original": "俺はデビモン！闇の力にみいられた堕天使さ。", "fonte": "https://w.atwiki.jp/digimon_world/pages/111.html", "fan_translation": false, "marca": "VERIFICADO"}
+      ],
+      "honestidade_especie": null
+    }
+  ]
+}
