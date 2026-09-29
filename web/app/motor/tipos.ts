@@ -28,6 +28,8 @@ export interface Forma {
   ramo?: Ramo;
   linha?: Linha;
   adulta?: FormaAdulta;
+  /** pets v5: o Ultimate que virou Mega (mesma forma, estagio adulto; so aparece depois da evolucao) */
+  mega?: true;
 }
 /** forma ou ovo (so para rotulos de tela) */
 export interface FormaOuOvo extends Omit<Forma, "est"> { est: Estagio | "ovo" }
@@ -53,7 +55,7 @@ export type Ritmo = "rapida" | "classica";
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig;
 
-export type VersaoPet = 1 | 2 | 3 | 4;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

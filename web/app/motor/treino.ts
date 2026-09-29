@@ -1,19 +1,25 @@
 /* Treino, fadiga e sobrecarga (espelho de treino_stats.py; integrado tick a tick). Estado proprio: nada
-   disso entra nas necessidades. Evolucao zera fadiga e estresse; pontos e sobrecarga ficam. */
-import { APTIDAO, CCOND, CTR, STATS, TICK_INICIAL } from "./constantes.ts";
+   disso entra nas necessidades. Evolucao zera fadiga e estresse; pontos e sobrecarga ficam.
+   Pets v5: o Mega treina como estagio proprio ("mega"), com os tetos de CMG; a chave "mega" so aparece em
+   pontosEst quando o Mega treina (a assinatura dos pets v1-v4 nao muda). */
+import { APTIDAO, CCOND, CMG, CTR, STATS, TICK_INICIAL } from "./constantes.ts";
 import type { Especie, Estagio, EstagioTreino, Exercicio, Stat, Stats } from "./tipos.ts";
+
+/** estagio do treino: o da evolucao, ou "mega" (pets v5) */
+export type EstagioDoTreino = Estagio | "mega";
+const tetoEstagio = (est: EstagioTreino | "mega"): number => est === "mega" ? CMG.tetoEstagio : CTR.tetoEstagio[est];
 
 export interface ResultadoSessao { forcada: boolean; enrolou: boolean; ganho: Partial<Stats>; fadigaAntes: number }
 
 export class TreinoPet {
   esp: Especie;
   pontos: Stats;
-  pontosEst: Record<EstagioTreino, number> = { crianca: 0, adolescente: 0, adulto: 0 };
+  pontosEst: Record<EstagioTreino, number> & { mega?: number } = { crianca: 0, adolescente: 0, adulto: 0 };
   fadiga = 0;
   sobrecarga = 0;
   estresse = 0;
   tick = TICK_INICIAL;
-  estagio: Estagio = "bebe";
+  estagio: EstagioDoTreino = "bebe";
   dormindo = false;
   inicioSono: number | null = null;
   bem = true;
@@ -25,7 +31,7 @@ export class TreinoPet {
     if (!APTIDAO[esp]) throw new Error("espécie sem aptidão de treino: " + esp);
     this.esp = esp; this.pontos = Object.fromEntries(STATS.map(k => [k, 0])) as Stats;
   }
-  avancar(tick: number, dormindo: boolean, bem: boolean, estagio: Estagio): void {
+  avancar(tick: number, dormindo: boolean, bem: boolean, estagio: EstagioDoTreino): void {
     if (tick < this.tick) throw new Error("treino: tempo voltou");
     const dt = tick - this.tick;
     if (dt && !this.dormindo) {
@@ -47,19 +53,20 @@ export class TreinoPet {
   get total(): number { return STATS.reduce((a, k) => a + this.pontos[k], 0); }
   sessao(t: number, ex: Exercicio, obedece: boolean): ResultadoSessao {
     if (!CTR.exercicios[ex]) throw new Error("exercício desconhecido: " + ex);
-    if (!(this.estagio in CTR.tetoEstagio)) throw new Error(`${this.estagio} não treina`);
+    if (!(this.estagio in CTR.tetoEstagio) && this.estagio !== "mega") throw new Error(`${this.estagio} não treina`);
     if (!this.podeTocar(t)) throw new Error("dentro do intervalo mínimo entre treinos");
     const forcada = this.forcaria, fadigaAntes = this.fadiga;
     this.ultimo = t; this.sessoes++;
     if (forcada) { this.sobrecarga = Math.min(CTR.sobreMax, this.sobrecarga + CTR.sobreForcar); this.estresse += CTR.estresseForcar; this.forcadas++; }
     if (!obedece) { this.enroladas++; return { forcada, enrolou: true, ganho: {}, fadigaAntes }; }
-    const est = this.estagio as EstagioTreino;
+    const est = this.estagio as EstagioTreino | "mega", tetoVida = est === "mega" ? CMG.tetoVida : CTR.tetoVida;
+    if (est === "mega") this.pontosEst.mega ??= 0;
     const mult = forcada ? CTR.multForcar : 1 - this.fadiga / 100, apt = APTIDAO[this.esp], ganho: Partial<Stats> = {};
     const [pri, sec] = CTR.exercicios[ex];
     for (const [st, base] of [[pri, CTR.ganhoPri], [sec, CTR.ganhoSec]] as [Stat, number][]) {
       let g = base * apt[st] * (1 - this.pontos[st] / CTR.tetoStat) * mult;
-      g = Math.max(0, Math.min(g, CTR.tetoStat - this.pontos[st], CTR.tetoEstagio[est] - this.pontosEst[est], CTR.tetoVida - this.total));
-      this.pontos[st] += g; this.pontosEst[est] += g; ganho[st] = g;
+      g = Math.max(0, Math.min(g, CTR.tetoStat - this.pontos[st], tetoEstagio(est) - this.pontosEst[est]!, tetoVida - this.total));
+      this.pontos[st] += g; this.pontosEst[est]! += g; ganho[st] = g;
     }
     this.fadiga = Math.min(100, this.fadiga + CTR.fadigaSessao);
     return { forcada, enrolou: false, ganho, fadigaAntes };

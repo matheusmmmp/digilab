@@ -29,8 +29,16 @@ export const EIXOS_TEMP: readonly EixoTemperamento[] = ["curiosidade", "teimosia
 export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kCumprimento: 60 };
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia; 2 = memoria por espacos +
    vinculo + obediencia + condicao no combate; 3 = v2 + carater pelo desvio da politica; 4 = v3 + educacao,
-   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py) */
-export const VERSAO_PET = 4;
+   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py);
+   5 = v4 + evolucao canonica: o Ultimate vira Mega (docs/DESIGN_EVOLUCAO_CANONICA.md; so no jogo, sem par no Python) */
+export const VERSAO_PET = 5;
+/* evolucao canonica (pets v5, so no jogo; docs/DESIGN_EVOLUCAO_CANONICA.md, tudo PROPOSTO). O Mega e o estagio
+   adulto com forma.mega: a forma (e a passiva) nao muda, o pet fica mais forte. Ultimate -> Mega pede o tempo do
+   Ultimate, a qualificacao da passagem para adulto (CAT.sparring lutas no estagio, CLE.limiarTaxa de vitoria) e
+   vinculo >= `vinculo`; a sombria tem vinculo com teto CSO.tetoVinc (0,6), entao nunca chega ao Mega.
+   multEstagio: vida e guts (x CAT.estagio.adulto); vida: E na escala da campanha (CESC.vida.adulto = 1500);
+   tetoEstagio/tetoVida: treino (CTR.tetoEstagio.adulto = 14, CTR.tetoVida = 36); dur*: tempo no Ultimate (min). */
+export const CMG = { multEstagio: 1.15, vida: 3000, tetoEstagio: 16, tetoVida: 40, durRapida: 1440, durClassica: 2880, vinculo: .7 };
 /* educacao (espelho de ConfigEducacao): travessuras com janela da crianca em diante, disciplina 0-100 */
 export const CED = {
   janela: 15, intervalos: { crianca: { fome: 90, higiene: 120, carinho: 90 }, adolescente: { fome: 150, higiene: 120, carinho: 120 },

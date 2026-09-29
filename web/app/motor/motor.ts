@@ -2,17 +2,17 @@
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import {
-  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, EIXOS_TEMP, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
-import { CAMPANHA, LUGARES, NOME_BOT, NPC } from "./bots.ts";
+import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { jogarV2, type Lutador, type ResultadoLuta } from "./combate.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
-import { NOME_EXERCICIO } from "./nomes.ts";
+import { NOME_EXERCICIO, nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
@@ -25,6 +25,8 @@ import type {
 export interface Evolucao {
   tick: number; estagio: Estagio; ramo?: Ramo; cuidado?: number; linha?: Linha; adulta?: FormaAdulta; carater?: Carater;
   sparring?: number; sobrecarga?: number; forma: Forma;
+  /** pets v5: Ultimate -> Mega (a forma nao muda; vinculo na hora da evolucao) */
+  mega?: true; vinculo?: number;
 }
 interface Chamados { abertos: Partial<Record<Chamado, number>>; atendidos: number; total: number }
 interface RegistroDesejo { atual: { tick: number; tipo: Desejo["tipo"]; alvo: string } | null; vontades: number; cumpridas: number; abertas: [number, string][]; tVontade: number }
@@ -93,10 +95,10 @@ export class Motor {
   origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
   /* v4: ritmo dos estagios (evento "c" no comeco do registro); sem ele, o rapido de sempre */
   ritmo: Ritmo = "rapida";
-  dur: { bebe: number; crianca: number; adolescente: number } = DUR_EVO;
+  dur: { bebe: number; crianca: number; adolescente: number; adulto: number } = { ...DUR_EVO, adulto: CMG.durRapida };
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -114,7 +116,7 @@ export class Motor {
     /* treino (todas as versoes; so os v2 enrolam por obediencia e mexem no vinculo) */
     this.treino = new TreinoPet(this.especie);
     /* campanha: vitorias por desafio (derivadas das lutas do registro) */
-    this.campanha = Object.fromEntries(CAMPANHA.map(c => [c.k, 0]));
+    this.campanha = Object.fromEntries(campanhaDe(versao).map(c => [c.k, 0]));
     if (versao >= 4) {
       /* rng propria das travessuras: sorteada em TODO slot (numeros comuns), nao mexe nas outras */
       this.rTrav = criarRng(hashSemente("travessura", semente));
@@ -125,14 +127,14 @@ export class Motor {
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
 
   /* ---------------------------------------------------------------- heranca (pets v4) */
-  /** cruza dois adultos vivos: o filho (v4) herda temperamento (media + ruido) e especie (de um dos pais) */
+  /** cruza dois adultos vivos (Ultimate ou Mega): o filho (versao atual) herda temperamento (media + ruido) e especie (de um dos pais) */
   static cruzar(pai: Motor, mae: Motor, sementeFilho: number, sementeHeranca: number, quem: string, ger?: [number, number]): Motor {
     const ver = (p: Motor, g?: number) => {
       if (p.estagioAtual !== "adulto") throw new Error("só adultos cruzam (Ultimate ou Mega)");
       if (p.morte) throw new Error("um dos pais morreu");
       return { h: hashSemente(JSON.stringify(p.log)), esp: p.especie, temp: { ...p.temp }, est: p.estagioAtual, ...(g ? { ger: g } : {}) };
     };
-    const filho = new Motor(sementeFilho, 4);
+    const filho = new Motor(sementeFilho, VERSAO_PET);
     filho.registrarOrigem({ pais: [ver(pai, ger?.[0]), ver(mae, ger?.[1])], s: sementeHeranca, quem });
     return filho;
   }
@@ -147,7 +149,7 @@ export class Motor {
     if (this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL || this.origem) throw new Error("configuração fora do começo do registro");
     if (dur !== "rapida" && dur !== "classica") throw new Error("ritmo desconhecido: " + dur);
     const [b, c, a] = dur === "classica" ? DUR_CLASSICA : [DUR_EVO.bebe, DUR_EVO.crianca, DUR_EVO.adolescente];
-    this.ritmo = dur; this.dur = { bebe: b, crianca: c, adolescente: a };
+    this.ritmo = dur; this.dur = { bebe: b, crianca: c, adolescente: a, adulto: dur === "classica" ? CMG.durClassica : CMG.durRapida };
   }
   registrarOrigem(o: Origem): void {
     if (this.log.some(ev => ev[1] !== "c")) throw new Error("a origem precisa ser o primeiro evento do registro");
@@ -169,14 +171,17 @@ export class Motor {
   }
 
   /* ---------------------------------------------------------------- campanha e lutas */
-  lugarVencido(L: number): boolean { return LUGARES[L].rivais.some(r => this.campanha[r] > 0); }
+  /** lugares da campanha desta versao (pets v5: a Montanha Espiral, com o Piedmon) */
+  get lugares(): Lugar[] { return lugaresDe(this.versao); }
+  lugarVencido(L: number): boolean { return this.lugares[L].rivais.some(r => this.campanha[r] > 0); }
   /** desafio da campanha aberto: o primeiro sempre; os outros depois de vencer o anterior */
   desafioAberto(k: string): boolean { const L = NPC[k]!.lug; return L === 0 || this.lugarVencido(L - 1); }
   /** luta contra bot: entra no registro (rival + semente) e ensina os gambits */
   lutar(rival: string, semente: number): ResultadoLutaPet {
     if (!NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
-    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${LUGARES[NPC[rival]!.lug - 1].nome} antes`);
+    if (NPC[rival] && !(rival in this.campanha)) throw new Error(`${NPC[rival]!.nome} não está na campanha deste pet`);
+    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[NPC[rival]!.lug - 1].nome} antes`);
     this.log.push([this.e.tick, "l", { r: rival, s: semente }]);
     return this._lutar(rival, semente);
   }
@@ -439,7 +444,7 @@ export class Motor {
       if (this.estagioAtual === "bebe") this._chamados();
       this._evoluir();
       const e = this.e;
-      this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.estagioAtual);
+      this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.forma.mega ? "mega" : this.estagioAtual);
       this._pausaTreino();
     }
     if (this.versao >= 4) this._conferirMorte();      /* o prazo da lesao cai no passo do dono */
@@ -526,6 +531,9 @@ export class Motor {
       /* sobrecarga >= 30: aviso (fala fria); nada muda na forma */
       this.falaFria = this.treino.sobrecarga >= CSO.aviso;
       nova = { estagio: "adolescente", linha: linhaDoCarater(carater), carater, sobrecarga: this.treino.sobrecarga };
+    } else if (est === "adulto" && this.versao >= 5 && !this.forma.mega) {
+      if (this.podeMega()) this._virarMega();
+      return;
     } else if (est === "adolescente" && t >= D.bebe + D.crianca + D.adolescente && this.sparring >= CAT.sparring
                && (this.versao < 4 || this.lutas.vitorias / this.lutas.lutas >= CLE.limiarTaxa)) {
       const carater = this.caraterAgora("adulto");
@@ -547,7 +555,30 @@ export class Motor {
       this._agendar(e2, this.e.tick);
     }
     if (!this.gp) this.gp = new GambitsPet();
-    this.gp.semear(this.forma);
+    if (this.versao >= 5) this.gp.semear(this.forma, nomeForma(this.forma)); else this.gp.semear(this.forma);
+  }
+  /* ---------------------------------------------------------------- Mega (pets v5; docs/DESIGN_EVOLUCAO_CANONICA.md) */
+  /** tick em que virou Ultimate (null antes) */
+  tickUltimate(): number | null { const ev = this.evolucoes.find(x => x.estagio === "adulto" && !x.mega); return ev ? ev.tick : null; }
+  /** o que falta para o Mega, pelas condicoes do desenho (secao 3): tempo no Ultimate, lutas, vitoria e vinculo */
+  requisitosMega(): { tempo: boolean; lutas: boolean; taxa: boolean; vinculo: boolean; falta: number } | null {
+    const t0 = this.tickUltimate();
+    if (this.versao < 5 || t0 === null || this.forma.mega) return null;
+    const falta = Math.max(0, t0 + this.dur.adulto - this.e.tick), L = this.lutas;
+    return { tempo: falta === 0, lutas: L.lutas >= CAT.sparring, taxa: L.lutas > 0 && L.vitorias / L.lutas >= CLE.limiarTaxa,
+      vinculo: this.vinc.valor >= CMG.vinculo, falta };
+  }
+  podeMega(): boolean { const r = this.requisitosMega(); return !!r && r.tempo && r.lutas && r.taxa && r.vinculo; }
+  /** a forma nao muda (nem a passiva nem o carater): o nivel sobe. A sombria nunca chega aqui: vinculo com teto 0,6 */
+  private _virarMega(): void {
+    this.forma = { ...this.forma, mega: true };
+    this.evolucoes.push({ tick: this.e.tick, estagio: "adulto", mega: true, sparring: this.lutas.lutas, vinculo: this.vinc.valor,
+      sobrecarga: this.treino.sobrecarga, forma: { ...this.forma } });
+    this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;
+    this.lutas = lutasZeradas();
+    this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
+    this._agendar("adulto", this.e.tick);
+    this.gp!.promover(this.forma, nomeForma(this.forma));
   }
   /** carater medido agora: pets v3 pelo desvio da politica aprendida; v1/v2 pelos tracos (PROVISORIO) */
   caraterAgora(quando: QuandoCarater): Carater { return this.versao >= 3 ? caraterPolitica(this, quando) : caraterDe(this.tracos, quando); }

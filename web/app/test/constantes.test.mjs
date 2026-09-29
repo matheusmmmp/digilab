@@ -22,8 +22,9 @@ const PY = lerJson(aqui("./gabaritos/constantes_python.json"));
 /* objetos de constantes do motor web cobertos pela tabela (todas as folhas numericas de cada um) */
 const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APTIDAO", "CSO", "CCOND", "CD", "CT", "CA", "CE",
   "CV", "CV21", "CAT", "CCP", "GA", "DUR_EVO", "CHAMADO_BEBE", "BASE_CARATER", "DESLOC_CARATER", "CAMPANHA", "LUGARES"];
-/* so no motor em TS: pets v4 (educacao-v1) nao existem no HTML; conferidas so contra o Python */
-const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA"];
+/* so no motor em TS: pets v4 (educacao-v1) e v5 (evolucao canonica) nao existem no HTML; conferidas so contra o
+   Python (as v5 quase todas so_web) */
+const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5"];
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
 const raizDe = cam => cam.match(/^[^.[]+/)[0];
 

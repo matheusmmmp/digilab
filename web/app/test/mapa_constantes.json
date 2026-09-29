@@ -1821,6 +1821,46 @@
    "web": "DUR_CLASSICA",
    "fonte": "python",
    "py": "ConfigDuracoes.canonica"
+  },
+  {
+   "web": "CAMPANHA_V5[0].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier1_brutamontes.total_stats"
+  },
+  {
+   "web": "CAMPANHA_V5[0].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier1_brutamontes.epsilon"
+  },
+  {
+   "web": "CAMPANHA_V5[1].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_sentinela.total_stats"
+  },
+  {
+   "web": "CAMPANHA_V5[1].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_sentinela.epsilon"
+  },
+  {
+   "web": "CAMPANHA_V5[2].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_carcereiro.total_stats"
+  },
+  {
+   "web": "CAMPANHA_V5[2].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_carcereiro.epsilon"
+  },
+  {
+   "web": "CAMPANHA_V5[3].total",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_porteiro.total_stats"
+  },
+  {
+   "web": "CAMPANHA_V5[3].eps",
+   "fonte": "python",
+   "py": "ConfigCampanha.npcs.tier2_porteiro.epsilon"
   }
  ],
  "convertidos": [
@@ -2071,6 +2111,146 @@
   {
    "web": "LUGARES[2].y",
    "nota": "coordenada do lugar no mapa da campanha (exibição), só na web"
+  },
+  {
+   "web": "CAMPANHA_V5[0].lug",
+   "nota": "campanha dos pets v5 (so no jogo): o mesmo NPC de CAMPANHA[0], no mesmo lugar (indice base 0)"
+  },
+  {
+   "web": "CAMPANHA_V5[1].lug",
+   "nota": "campanha dos pets v5 (so no jogo): o mesmo NPC de CAMPANHA[1], no mesmo lugar (indice base 0)"
+  },
+  {
+   "web": "CAMPANHA_V5[2].lug",
+   "nota": "campanha dos pets v5 (so no jogo): o mesmo NPC de CAMPANHA[2], no mesmo lugar (indice base 0)"
+  },
+  {
+   "web": "CAMPANHA_V5[3].lug",
+   "nota": "campanha dos pets v5 (so no jogo): o mesmo NPC de CAMPANHA[3], no mesmo lugar (indice base 0)"
+  },
+  {
+   "web": "CAMPANHA_V5[4].total",
+   "nota": "NPC da campanha dos pets v5, Myotismon (Cidadela): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[4].eps",
+   "nota": "NPC da campanha dos pets v5, Myotismon (Cidadela): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[4].lug",
+   "nota": "NPC da campanha dos pets v5, Myotismon (Cidadela): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[4].fator",
+   "nota": "NPC da campanha dos pets v5, Myotismon (Cidadela): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[5].total",
+   "nota": "NPC da campanha dos pets v5, Puppetmon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[5].eps",
+   "nota": "NPC da campanha dos pets v5, Puppetmon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[5].lug",
+   "nota": "NPC da campanha dos pets v5, Puppetmon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[5].fator",
+   "nota": "NPC da campanha dos pets v5, Puppetmon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[6].total",
+   "nota": "NPC da campanha dos pets v5, Machinedramon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[6].eps",
+   "nota": "NPC da campanha dos pets v5, Machinedramon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[6].lug",
+   "nota": "NPC da campanha dos pets v5, Machinedramon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[6].fator",
+   "nota": "NPC da campanha dos pets v5, Machinedramon (Montanha Espiral): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[7].total",
+   "nota": "NPC da campanha dos pets v5, Piedmon (Montanha Espiral, chefe): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[7].eps",
+   "nota": "NPC da campanha dos pets v5, Piedmon (Montanha Espiral, chefe): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[7].lug",
+   "nota": "NPC da campanha dos pets v5, Piedmon (Montanha Espiral, chefe): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "CAMPANHA_V5[7].fator",
+   "nota": "NPC da campanha dos pets v5, Piedmon (Montanha Espiral, chefe): so no jogo (evolucao canonica, docs/DESIGN_EVOLUCAO_CANONICA.md); fator calibrado em test/calibrar_mega.mjs, artifacts_campanha/mega/"
+  },
+  {
+   "web": "LUGARES_V5[0].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[0].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[1].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[1].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[2].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[2].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[3].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V5[3].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v5 (exibicao), so na web"
+  },
+  {
+   "web": "CMG.multEstagio",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMG.vida",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMG.tetoEstagio",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMG.tetoVida",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMG.durRapida",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMG.durClassica",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMG.vinculo",
+   "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
   }
  ]
 }

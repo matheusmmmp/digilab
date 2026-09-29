@@ -72,7 +72,7 @@ export const GAMBITS_SOMBRIA: Record<string, ListaGambits> = {
 
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
    linha ficar travada; experiments/calibrar_progressao.py) */
-export interface Lugar { nome: string; x: number; y: number; sugerido: string; est: Estagio; rivais: string[] }
+export interface Lugar { nome: string; x: number; y: number; sugerido: string; est: Estagio; rivais: string[]; mega?: true }
 export const LUGARES: Lugar[] = [
   { nome: "Campina", x: 74, y: 176, sugerido: "Rookie", est: "crianca", rivais: [] },
   { nome: "Torre de pedra", x: 196, y: 118, sugerido: "Champion", est: "adolescente", rivais: [] },
@@ -81,6 +81,8 @@ export const LUGARES: Lugar[] = [
 /* todo pet treinado vence cada NPC (decisao do Matheus: NPC fixo e imprevisivel, eps alto) */
 export interface DesafioCampanha {
   k: string; nome: string; total: number; estilo: string; estagio?: Estagio; eps: number; lug: number; grade?: string; cor: TracoCombate; licao: string;
+  /** so na campanha v5: E = vida do nivel x fator (os de sempre ficam em CESC.fatorNpc) e sprite de outro NPC */
+  fator?: number; sprite?: string;
 }
 export const CAMPANHA: DesafioCampanha[] = [
   { k: "npc_tier1_brutamontes", nome: "Gazimon", total: 96, estilo: "crianca:arisco", estagio: "crianca", eps: .5, lug: 0, grade: "crianca", cor: "golpe",
@@ -95,6 +97,31 @@ export const CAMPANHA: DesafioCampanha[] = [
     licao: "O chefe: forte em tudo, mas imprevisível. Todo pet bem treinado consegue vencê-lo." },
 ];
 LUGARES.forEach((L, i) => { L.rivais = CAMPANHA.filter(c => c.lug === i).map(c => c.k); });
+/* campanha dos pets v5 (evolucao canonica, so no jogo; docs/DESIGN_EVOLUCAO_CANONICA.md, secao 5). No canone o Piedmon
+   e Mega (um dos Mestres das Trevas da Montanha Espiral): ele vai para a Montanha Espiral, nova, com o Puppetmon e o
+   Machinedramon; a Cidadela fica com o Myotismon (Ultimate, com o estilo e o fator do Piedmon de sempre). Os pets
+   v1-v4 seguem em LUGARES/CAMPANHA (Piedmon na Cidadela): o replay deles nao muda. Campina e Torre sao as mesmas
+   (mesmas chaves). Fatores da Espiral: PROPOSTOS, calibrados como os de sempre (test/calibrar_mega.mjs,
+   artifacts_campanha/mega/): sem treino <= 0,30 e com o treino tipico >= 0,80. */
+export const LUGARES_V5: Lugar[] = [
+  ...LUGARES.map(L => ({ ...L, rivais: [] as string[] })),
+  { nome: "Montanha Espiral", x: 330, y: 20, sugerido: "Mega", est: "adulto", mega: true, rivais: [] },
+];
+export const CAMPANHA_V5: DesafioCampanha[] = [
+  ...CAMPANHA.filter(c => c.lug < 2),
+  { k: "npc_v5_myotismon", nome: "Myotismon", total: 110, estilo: "v2c:agressivo", eps: .5, lug: 2, cor: "carga", fator: 1.2,
+    licao: "O senhor da Cidadela: forte em tudo, mas imprevisível. Treinado, seu Ultimate vence." },
+  { k: "npc_v5_puppetmon", nome: "Puppetmon", total: 90, estilo: "v21:espelho", eps: .5, lug: 3, cor: "agarrao", fator: 2.1,
+    licao: "Um Mestre das Trevas que brinca com o rival e devolve o que recebe. Só um Mega treinado aguenta a troca." },
+  { k: "npc_v5_machinedramon", nome: "Machinedramon", total: 72, estilo: "v2c:tartaruga", eps: .4, lug: 3, cor: "bloqueio", fator: 2,
+    licao: "Uma fortaleza de metal que espera o seu erro. Um Mega treinado quebra a guarda dele." },
+  { k: "npc_v5_piedmon", nome: "Piedmon", total: 110, estilo: "v2c:agressivo", eps: .5, lug: 3, cor: "carga", fator: 1.2, sprite: "npc_tier3_soberano",
+    licao: "O chefe final, o último Mestre das Trevas: forte em tudo, mas imprevisível. Todo Mega bem treinado consegue vencê-lo." },
+];
+LUGARES_V5.forEach((L, i) => { L.rivais = CAMPANHA_V5.filter(c => c.lug === i).map(c => c.k); });
+/** campanha e lugares da versao do pet */
+export const campanhaDe = (versao: number): DesafioCampanha[] => versao >= 5 ? CAMPANHA_V5 : CAMPANHA;
+export const lugaresDe = (versao: number): Lugar[] => versao >= 5 ? LUGARES_V5 : LUGARES;
 /** v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem);
     v2c: bots redesenhados da V2C (os BOTS_V2 da web) */
 export function gambitNPC(estilo: string): ListaGambits {
@@ -107,12 +134,16 @@ export function gambitNPC(estilo: string): ListaGambits {
   if (fam === "crianca") return CRIANCA_V21[nome as Ramo];
   throw new Error("familia de estilo desconhecida: " + estilo);
 }
-export type Npc = DesafioCampanha & { tier: number; lugar: string; sugerido: string; est: Estagio };
-export const NPC: Partial<Record<string, Npc>> = Object.fromEntries(CAMPANHA.map(c => [c.k, { ...c, tier: c.lug + 1, lugar: LUGARES[c.lug].nome, sugerido: LUGARES[c.lug].sugerido, est: LUGARES[c.lug].est }]));
+export type Npc = DesafioCampanha & { tier: number; lugar: string; sugerido: string; est: Estagio; mega?: true };
+/* todos os NPCs (das duas campanhas); os que as duas tem sao os mesmos, no mesmo lugar */
+const npcDe = (c: DesafioCampanha, Ls: Lugar[]): Npc =>
+  ({ ...c, tier: c.lug + 1, lugar: Ls[c.lug].nome, sugerido: Ls[c.lug].sugerido, est: Ls[c.lug].est, ...(Ls[c.lug].mega ? { mega: true as const } : {}) });
+export const NPC: Partial<Record<string, Npc>> = Object.fromEntries([...CAMPANHA.map(c => [c.k, npcDe(c, LUGARES)]),
+  ...CAMPANHA_V5.filter(c => !CAMPANHA.includes(c)).map(c => [c.k, npcDe(c, LUGARES_V5)])]);
 export const NOME_BOT: Record<string, string> = {
   aleatorio: "aleatório", agressivo: "agressivo", tartaruga: "tartaruga", atirador: "atirador",
   contragolpe: "contragolpe", adaptativo: "adaptativo", oraculo: "oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
-  ...Object.fromEntries(CAMPANHA.map(c => [c.k, c.nome])),
+  ...Object.fromEntries([...CAMPANHA, ...CAMPANHA_V5].map(c => [c.k, c.nome])),
 };
 export const nomeEstiloNPC = (e: string): string => { const [fam, nome] = e.split(":"); return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : fam === "crianca" ? `Rookie ${nome}` : NOME_BOT[nome]; };
 /* rivais V2.1: cada forma adulta com uma especie fixa (para variar os sprites) e o carater canonico */

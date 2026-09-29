@@ -1,6 +1,6 @@
 /* Catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): stats da forma, renormalizacao e perfil de
    combate (vida, guts, multiplicadores). Espelho de combate_v2/v21/catalogo.py e campanha.perfil_de_stats. */
-import { CAT, CCOND, CESC, CTR, CV21, LINHA_DA_FORMA, SOMBRIA, STATS, type Tecnica } from "./constantes.ts";
+import { CAT, CCOND, CESC, CMG, CTR, CV21, LINHA_DA_FORMA, SOMBRIA, STATS, type Tecnica } from "./constantes.ts";
 import type { Carater, Estagio, Forma, FormaAdultaNormal, Stats } from "./tipos.ts";
 
 export interface Perfil {
@@ -8,23 +8,27 @@ export interface Perfil {
   hpMax: number; guts0: number; gutsMax: number; regen: number; mPerto: number; mDisparo: number; mGuarda: number;
   /** escala E (so no combate da campanha com a escala ligada); ausente = combate de sempre */
   escala?: number;
+  /** pets v5 e NPCs da Montanha Espiral: nivel Mega (vida e guts x CMG.multEstagio; E pela vida do Mega) */
+  mega?: true;
 }
+/** multiplicador de estagio (vida e guts): o do estagio, x CMG.multEstagio no Mega */
+export const multEstagio = (est: Estagio, mega?: boolean): number => CAT.estagio[est] * (mega ? CMG.multEstagio : 1);
 
 /* chave da escala (ConfigEscala.ligada). Desligada por padrao: os gabaritos de paridade rodam sem ela; o app liga. */
 export const ESCALA = { ligada: false };
 export function ligarEscala(v: boolean): void { ESCALA.ligada = v; }
 /** E do pet: vida do estagio x (1 + beta x pontos treinados) */
-export const escalaDe = (est: Estagio, pontos: number): number => CESC.vida[est] * (1 + CESC.beta * pontos);
+export const escalaDe = (est: Estagio, pontos: number, mega?: boolean): number => (mega ? CMG.vida : CESC.vida[est]) * (1 + CESC.beta * pontos);
 /** quanto 1 ponto de vida de combate deste lutador vale na tela (dano e vida exibidos); 1 sem a escala */
 export function fatorExibicao(p: Perfil): number {
   if (!ESCALA.ligada) return 1;
-  return p.escala !== undefined ? p.escala / CESC.vidaNeutra : escalaDe(p.est, 0) / (CESC.vidaNeutra * CAT.estagio[p.est]);
+  return p.escala !== undefined ? p.escala / CESC.vidaNeutra : escalaDe(p.est, 0, p.mega) / (CESC.vidaNeutra * multEstagio(p.est, p.mega));
 }
 /** vida mostrada ao jogador: E x vida propria / vida neutra (com a escala), ou a vida de combate (sem) */
 export function vidaExibida(p: Perfil, estagio: Estagio = p.est, pontos = 0): number {
   if (!ESCALA.ligada) return p.hpMax;
-  const propria = p.escala !== undefined ? p.hpMax : p.hpMax / CAT.estagio[p.est];
-  return (p.escala ?? escalaDe(estagio, pontos)) * propria / CESC.vidaNeutra;
+  const propria = p.escala !== undefined ? p.hpMax : p.hpMax / multEstagio(p.est, p.mega);
+  return (p.escala ?? escalaDe(estagio, pontos, p.mega)) * propria / CESC.vidaNeutra;
 }
 
 export function tecnicaDe(f: Forma): Tecnica | null { return f.linha ? CAT.adolescente[f.linha].tecnica : null; }
@@ -67,11 +71,11 @@ export function perfilDe(f: Forma, car: Partial<Carater> | null | undefined, con
       s = renormalizar(Object.fromEntries(STATS.map(k => [k, b[k] * tot / soma])) as Stats, tot);
     }
   }
-  const est = CAT.estagio[f.est] * condicao, gMax = (CV21.gMaxBase + CV21.gMaxFolego * s.folego) * CAT.estagio[f.est];
+  const mult = multEstagio(f.est, f.mega), est = mult * condicao, gMax = (CV21.gMaxBase + CV21.gMaxFolego * s.folego) * mult;
   const pontos = treino ? STATS.reduce((a, k) => a + (treino[k] || 0), 0) : 0;
   return {
     est: f.est, tecnica: tecnicaDe(f), passiva: f.adulta || null, stats: s,
-    ...(esc ? { escala: escalaDe(f.est, pontos) } : {}),
+    ...(esc ? { escala: escalaDe(f.est, pontos, f.mega) } : {}), ...(f.mega ? { mega: true as const } : {}),
     hpMax: (CV21.hpBase + CV21.hpVigor * s.vigor) * (esc ? condicao : est), guts0: Math.min(gMax, (CV21.g0Base + CV21.g0Folego * s.folego) * est),
     gutsMax: gMax, regen: CV21.regenBase + CV21.regenRec * s.recuperacao,
     mPerto: CV21.multBase + CV21.multPonto * s.forca, mDisparo: CV21.multBase + CV21.multPonto * s.mira,
@@ -88,11 +92,11 @@ export function perfilNeutro(): Perfil {
 }
 /** NPC da campanha: mesma conversao de perfilDe com stats uniformes (campanha.perfil_de_stats). Com a escala: perfil
     neutro (10 em cada stat) e `escala` = E do NPC (vida do estagio sugerido x fator; campanha.npc) */
-export function perfilNPC(total: number, estagio: Estagio = "adulto", escala?: number): Perfil {
-  const v = escala !== undefined ? 10 : total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])) as Stats, est = CAT.estagio[estagio],
+export function perfilNPC(total: number, estagio: Estagio = "adulto", escala?: number, mega?: boolean): Perfil {
+  const v = escala !== undefined ? 10 : total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])) as Stats, est = multEstagio(estagio, mega),
     gMax = (CV21.gMaxBase + CV21.gMaxFolego * v) * est;
   return {
-    est: estagio, tecnica: null, passiva: null, stats: s, ...(escala !== undefined ? { escala } : {}),
+    est: estagio, tecnica: null, passiva: null, stats: s, ...(escala !== undefined ? { escala } : {}), ...(mega ? { mega: true as const } : {}),
     hpMax: (CV21.hpBase + CV21.hpVigor * v) * (escala !== undefined ? 1 : est), guts0: Math.min(gMax, (CV21.g0Base + CV21.g0Folego * v) * est),
     gutsMax: gMax, regen: CV21.regenBase + CV21.regenRec * v,
     mPerto: CV21.multBase + CV21.multPonto * v, mDisparo: CV21.multBase + CV21.multPonto * v,
