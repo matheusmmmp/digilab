@@ -1,6 +1,6 @@
 # Design — evolução canônica: Champion → Ultimate → Mega
 
-Status: **para aprovação** (pedido do Matheus, 2026-09-29: "tem que seguir o cânone"). Nada foi implementado. Todo número abaixo é PROPOSTO (sem fonte).
+Status: **aprovado e implementado no jogo** (2026-09-29; o Matheus aprovou as quatro recomendações da seção 9). Todo número abaixo é PROPOSTO (sem fonte). O que a implementação mudou ou mediu está na seção 10.
 
 ## 1. O problema
 
@@ -129,3 +129,12 @@ O atlas não tem alternativas melhores para elas. Proponho mantê-las e revisar 
 2. **A condição do Mega (seção 3):** tempo + qualificação + vínculo ≥ 0,7. Com ela, a sombria nunca chega ao Mega.
 3. **A campanha (seção 5):** o Piedmon vai para uma Montanha Espiral nova (Mega), e o Myotismon fica na Cidadela.
 4. **Os pets antigos (seção 6):** rótulo canônico (A) ou o de hoje (B).
+
+## 10. Implementação (2026-09-29)
+
+- **O Mega é o estágio adulto com `forma.mega`**, não um id de estágio novo: a forma, a passiva, as regras de fala e as janelas da educação seguem as do adulto, e os pets v1–v4 não mudam (assinatura, gabaritos de paridade e teste de constantes iguais). As constantes do Mega ficam em `CMG` (`web/app/motor/constantes.ts`); o treino do Mega é um estágio próprio (`"mega"`) com os tetos de `CMG`.
+- **Nomes e sprites:** `nomes.ts` (`chaveSprite`, `nomeForma`, `nomeEstagio`, `nomeArquetipo`) vale para todos os pets (opção A da seção 6). O motor usa `nomeFormaLegado` na lista de gambits, que entra na assinatura dos pets v1–v4.
+- **Campanha por versão:** `CAMPANHA`/`LUGARES` (v1–v4, Piedmon na Cidadela) ficam intactos; `CAMPANHA_V5`/`LUGARES_V5` têm a Cidadela com o Myotismon (estilo e fator do Piedmon de sempre) e a Montanha Espiral (Puppetmon, Machinedramon, Piedmon). `Motor.lugares` dá a lista da versão; um pet não luta contra NPC da campanha de outra versão.
+- **Calibração da Espiral** (`web/app/test/calibrar_mega.mjs`, mesmo método de `experiments/calibrar_escala.py`, no motor web; `artifacts_campanha/mega/`): fatores Puppetmon 2,1, Machinedramon 2,0 e Piedmon 1,2. Na validação (sementes 4101…4505): sem treino 0,24 / 0,27 / 0,16 e com o treino típico (40) 0,89 / 0,85 / 0,94, todos nas metas (≤ 0,30 e ≥ 0,80), nenhuma forma travada. O Myotismon na Cidadela (Ultimates, treino 36): 0,17 / 0,92.
+- **Sprites novos no atlas** (fora do repo): Myotismon, Puppetmon e Machinedramon em `Assets/catalogo_sprites_up.json` (npcs) e a ilha da Montanha Espiral (`WorldMap_07`) em `Assets/gerar_atlas_up.py`. O Piedmon da Espiral usa o sprite de sempre.
+- **Achado sobre a condição do vínculo (para decidir):** com o vínculo de hoje, os donos simulados da web (`motor/donos.ts`, que não conhecem a educação v4) ficam longe de 0,7 quando cuidam com coerência. Em 6 vidas de 3 dias por dono (`web/app/test/medir_vinculo_mega.mjs`, `artifacts_campanha/mega/vinculo_donos.json`), o vínculo máximo no Ultimate fica em 0,23–0,50 no atencioso e 0,43–0,58 no incoerente, e nenhum dos dois vira Mega; o aleatório chega a 0,71–0,75 e vira Mega em 4 de 6. Descritivo, sem IC. É o defeito de vínculo já registrado no CLAUDE.md (o vínculo premia quem faz cuidado com frequência). A regra foi implementada como aprovada (0,7); trocar o critério ou o limiar é só mudar `CMG.vinculo` ou `Motor.requisitosMega`.
