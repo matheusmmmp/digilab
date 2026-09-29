@@ -723,6 +723,21 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
+- **Stand-by: combate 1×1 em tempo real, como no Digimon Championship (DS)** (Matheus, 2026-09-29: guardar para o futuro, sem executar).
+  - **A ideia:** o motor passa a simular espaço contínuo (posição, velocidade, alcance, tempo de recarga, passos fixos para continuar reproduzível) no lugar dos turnos e das 3 distâncias. O pet segue lutando sozinho, e o dono influencia pela criação.
+  - **O que muda:**
+    - `web/app/motor/combate.ts`, `gambits_pet.ts`, `bots.ts` e as constantes CV/CV21;
+    - o `digilab/combate_v2` e a arena no Python (paridade);
+    - as condições dos gambits (hoje "perto/médio/longe");
+    - a bateria e a calibração do combate: vira um combate V3, com protocolo e gates novos;
+    - a escala e os NPCs da campanha;
+    - os pets antigos ficam no motor de hoje.
+  - **Por que esperar:**
+    - custo alto;
+    - a diferença para o jogador é pequena perto de animar bem os turnos (a opção A, só visual, também descartada por ora);
+    - mais variância nas lutas, e o sinal da pesquisa já é pequeno.
+  - Os sprites têm quadros de animação (257 Digimon) e efeitos de ataque (187) em `Assets/Digimon Up Assets/Animacoes`.
+
 - **Evolução fora do cânone** (Matheus, 2026-09-29: "tem que seguir o cânone"; não executar ainda).
   - **Hoje:** o jogo tem 4 estágios. O Champion vai direto a Ultimate **ou** Mega, duas formas irmãs escolhidas pelo sinal do eixo complementar: ≥ 0 dá o Ultimate (duelista, espelho, sentinela, vigia); < 0 dá o Mega (furioso, muralha, emboscador, tita).
     - Ultimate e Mega ficam no mesmo nível.
