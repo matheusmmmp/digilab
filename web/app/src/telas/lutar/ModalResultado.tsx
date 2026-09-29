@@ -5,7 +5,7 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { CAT, LUGARES, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
+import { CAT, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
@@ -65,7 +65,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   useEffect(() => { abrirModal(ref.current); }, []);
   const { motor: m } = useJogo(), a = useAtlas(), r = p.resultado!, res = r.res;
   const venceu = res.pontosA === 1, perdeu = res.pontosA === 0, empate = !venceu && !perdeu;
-  const npc = r.npc ? NPC[r.npc]! : null, Li = npc ? npc.lug : -1;
+  const npc = r.npc ? NPC[r.npc]! : null, Li = npc ? npc.lug : -1, LUGARES = m.lugares;
   const lugarNovo = !!npc && venceu && !r.lugarJaVencido;
   /* regra nova: a que ficou ativa com a luta (antes de o dono mexer); fixada na abertura do modal */
   const [nova] = useState(() => {

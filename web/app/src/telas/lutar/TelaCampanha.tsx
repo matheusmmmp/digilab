@@ -2,7 +2,7 @@
    em 1x, caminho entre os lugares, o pet no proximo desafio; cartao do lugar com os rivais, a licao, os stats e
    o historico de tentativas (contado do registro). A luta acontece no palco desta aba. */
 import { useEffect } from "preact/hooks";
-import { LUGARES, NOME_ESTAGIO_FALA, NOME_V2, NPC, STATS, chaveSprite, nomeEstiloNPC } from "../../../motor/index.ts";
+import { NOME_V2, NPC, STATS, chaveSprite, nomeEstagio, nomeEstiloNPC, type Lugar, type Motor } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { fundoDeco } from "../../componentes/Deco.tsx";
 import { Peca, RetratoRival } from "../../componentes/Imagens.tsx";
@@ -17,6 +17,13 @@ import { useDesktop } from "../../desktop.ts";
 const W0 = 390, H0 = 420;
 export const ILHA = [{ peca: "ilha_campina", x: 6, y: 231, cx: 81, cy: 316, placa: 389 }, { peca: "ilha_torre", x: 120, y: 118, cx: 195, cy: 197, placa: 265 },
   { peca: "ilha_cidadela", x: 230, y: 6, cx: 305, cy: 91, placa: 163 }];
+/* pets v5 (evolucao canonica): quatro lugares em zigue-zague, com a Montanha Espiral no alto */
+export const ILHA_V5 = [{ peca: "ilha_campina", x: 6, y: 240, cx: 81, cy: 325, placa: 390 }, { peca: "ilha_torre", x: 234, y: 160, cx: 309, cy: 245, placa: 308 },
+  { peca: "ilha_cidadela", x: 6, y: 80, cx: 81, cy: 165, placa: 228 }, { peca: "ilha_espiral", x: 234, y: 0, cx: 309, cy: 85, placa: 150 }];
+const ilhasDe = (m: Motor) => m.lugares.length === ILHA_V5.length ? ILHA_V5 : ILHA;
+/** nivel pedido pelo lugar (Mega na Montanha Espiral) e se o pet ainda esta abaixo dele */
+const nivelDoLugar = (L: Lugar): string => L.mega ? "Mega" : NIVEL[L.est] ?? L.sugerido;
+const cedoPara = (m: Motor, L: Lugar): boolean => ORDEM_EST.indexOf(m.forma.est) < ORDEM_EST.indexOf(L.est) || (!!L.mega && !m.forma.mega);
 const px = (x: number) => `${x / W0 * 100}%`, py = (y: number) => `${y / H0 * 100}%`;
 const ORDEM_EST = ["ovo", "bebe", "crianca", "adolescente", "adulto"];
 const NIVEL: Record<string, string> = { crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate" };
@@ -24,19 +31,19 @@ const NIVEL: Record<string, string> = { crianca: "Rookie", adolescente: "Champio
 function Mapa() {
   const { motor: m } = useJogo(), a = useAtlas(), luta = useLuta(), sel = campAtual(m);
   if (a.tipo !== "ok") return <div class="mapa-ilhas"><p class="dl-apoio">Carregando o mapa…</p></div>;
-  const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length, url = (n: string) => imagemAtlas(a, n).url;
-  const aqui = ILHA[Math.min(vencidos, LUGARES.length - 1)], pet = imagemAtlas(a, chaveSprite(m.forma));
+  const LUGARES = m.lugares, ILHAS = ilhasDe(m), vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length, url = (n: string) => imagemAtlas(a, n).url;
+  const aqui = ILHAS[Math.min(vencidos, LUGARES.length - 1)], pet = imagemAtlas(a, chaveSprite(m.forma));
   return (
     <div class="mapa-ilhas" role="group" aria-label="Mapa da campanha">
       <svg class="mapa-caminho" viewBox={`0 0 ${W0} ${H0}`} preserveAspectRatio="none" aria-hidden="true">
         {LUGARES.slice(1).map((_, i) => {
-          const A = ILHA[i], Bq = ILHA[i + 1], feito = i < vencidos;
+          const A = ILHAS[i], Bq = ILHAS[i + 1], feito = i < vencidos;
           return <g key={i}><line x1={A.cx} y1={A.cy} x2={Bq.cx} y2={Bq.cy} class="trilho-sombra" />
             <line x1={A.cx} y1={A.cy} x2={Bq.cx} y2={Bq.cy} class={feito ? "trilho feito" : "trilho"} /></g>;
         })}
       </svg>
       {LUGARES.map((L, i) => {
-        const vit = L.rivais.reduce((n, k) => n + m.campanha[k], 0), aberto = m.desafioAberto(L.rivais[0]), eSel = NPC[sel]!.lug === i, I = ILHA[i];
+        const vit = L.rivais.reduce((n, k) => n + m.campanha[k], 0), aberto = m.desafioAberto(L.rivais[0]), eSel = NPC[sel]!.lug === i, I = ILHAS[i];
         const st = vit ? `vencido ${vit}×` : aberto ? "aberto" : "trancado";
         return [
           <img key={"p" + i} class="mapa-pad" src={url(i === LUGARES.length - 1 ? "marcador_chefe" : vit ? "marcador_3" : "marcador_1")} alt="" style={{ left: px(I.cx - 34), top: py(I.placa - 29) }} />,
@@ -45,7 +52,7 @@ function Mapa() {
           <button key={"b" + i} type="button" class={`lugar${eSel ? " sel" : ""}${aberto ? "" : " bloq"}`} disabled={luta.lutando}
             style={{ left: px(I.cx - 70), top: py(I.placa) }} aria-label={`${i + 1}. ${L.nome}: ${st}`} aria-current={eSel ? "true" : undefined} onClick={() => escolherLugar(i)}>
             <span class="lugar-placa">{L.nome}</span>
-            {vit ? <span class="lugar-tag lugar-tag--ok">VENCIDO</span> : aberto ? <span class="lugar-tag">{(NIVEL[L.est] ?? L.sugerido).toUpperCase()}</span>
+            {vit ? <span class="lugar-tag lugar-tag--ok">VENCIDO</span> : aberto ? <span class="lugar-tag">{nivelDoLugar(L).toUpperCase()}</span>
               : <span class="lugar-tag lugar-tag--tranca"><Peca nome="icone_cadeado" />trancado</span>}
           </button>,
         ];
@@ -57,8 +64,8 @@ function Mapa() {
   );
 }
 function Detalhe() {
-  const { motor: m } = useJogo(), a = useAtlas(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
-  const est = m.forma.est, cedo = ORDEM_EST.indexOf(est) < ORDEM_EST.indexOf(L.est), podeLutar = est !== "bebe";
+  const { motor: m } = useJogo(), a = useAtlas(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, LUGARES = m.lugares, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
+  const est = m.forma.est, cedo = cedoPara(m, L), podeLutar = est !== "bebe";
   const prox = LUGARES[Li + 1], c = NPC[sel]!, vit = m.campanha[sel], tent = tentativas(m, sel);
   useDecoracao();
   const faixa = fundoDeco(FAIXA_LUGAR[Li] ?? FUNDO_NPC[sel]);
@@ -71,10 +78,10 @@ function Detalhe() {
         <span class="camp-det-cab"><b>{L.nome}</b><span>sugerido: {L.sugerido}</span></span>
         <div class="camp-rivais" role="radiogroup" aria-label="Rivais do lugar">
           {L.rivais.map(k => {
-            const n = NPC[k]!, img = a.tipo === "ok" ? imagemAtlas(a, n.k) : null, moldura = molduraArena(m.campanha[k]);
+            const n = NPC[k]!, img = a.tipo === "ok" ? imagemAtlas(a, n.sprite ?? n.k) : null, moldura = molduraArena(m.campanha[k]);
             return (
               <button type="button" key={k} class="camp-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
-                {urlDeco(moldura) ? <RetratoRival sprite={n.k} moldura={moldura} lado={52} />
+                {urlDeco(moldura) ? <RetratoRival sprite={n.sprite ?? n.k} moldura={moldura} lado={52} />
                   : <span class="camp-rival-spr">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>}
                 <b>{n.nome}</b><span>{m.campanha[k]} vitória{m.campanha[k] === 1 ? "" : "s"}</span>
               </button>
@@ -82,7 +89,7 @@ function Detalhe() {
           })}
         </div>
         <span class="camp-det-txt">{cab}</span>
-        {cedo && aberto && <p class="camp-aviso">Seu pet ainda é {NOME_ESTAGIO_FALA[est]}: este lugar é pensado para {L.sugerido} em diante.</p>}
+        {cedo && aberto && <p class="camp-aviso">Seu pet ainda é {nomeEstagio(m.forma)}: este lugar é pensado para {L.sugerido} em diante.</p>}
         {!podeLutar && <p class="dl-apoio">O In-Training ainda não luta na campanha.</p>}
         <p class="dl-apoio"><b>{c.nome}</b> · {nomeEstiloNPC(c.estilo)} · stats {(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total {c.total}) · {st}</p>
         <p class="licao">{c.licao}</p>
@@ -96,7 +103,7 @@ function Detalhe() {
 /** desktop (CampDesktop): faixa do lugar, os rivais em cards (sprite, nome, estilo, licao), "Nesta ilha" com o que o
     registro conta e os botoes Treinar antes e Desafiar */
 function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
-  const { motor: m } = useJogo(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
+  const { motor: m } = useJogo(), luta = useLuta(), sel = campAtual(m), Li = NPC[sel]!.lug, LUGARES = m.lugares, L = LUGARES[Li], aberto = m.desafioAberto(L.rivais[0]);
   const prox = LUGARES[Li + 1], c = NPC[sel]!, vit = m.campanha[sel], podeLutar = m.forma.est !== "bebe";
   useDecoracao();
   const faixa = fundoDeco(FAIXA_LUGAR[Li] ?? FUNDO_NPC[sel]);
@@ -116,8 +123,8 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
           const n = NPC[k]!, moldura = molduraArena(m.campanha[k]);
           return (
             <button type="button" key={k} class="campd-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
-              {urlDeco(moldura) ? <RetratoRival sprite={n.k} moldura={moldura} lado={52} />
-                : <span class="camp-rival-spr">{img(n.k)}</span>}
+              {urlDeco(moldura) ? <RetratoRival sprite={n.sprite ?? n.k} moldura={moldura} lado={52} />
+                : <span class="camp-rival-spr">{img(n.sprite ?? n.k)}</span>}
               <span class="campd-rival-txt"><span><b>{n.nome}</b><span class="campd-estilo">{nomeEstiloNPC(n.estilo)}</span></span><span>{n.licao}</span></span>
             </button>
           );
@@ -144,7 +151,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
 }
 
 export function TelaCampanha({ voltarPet, irTreinar }: { voltarPet: () => void; irTreinar: () => void }) {
-  const desk = useDesktop();
+  const desk = useDesktop(), { motor: m } = useJogo(), v5 = m.lugares.length === ILHA_V5.length;
   const luta = useLuta();
   /* a aba abre com o palco do proprio modo (a mensagem da arena nao aparece aqui) */
   useEffect(() => { if (!LUTA.palco || LUTA.palco.modo !== "campanha") previa("campanha"); }, []);
@@ -152,7 +159,7 @@ export function TelaCampanha({ voltarPet, irTreinar }: { voltarPet: () => void; 
     <div class="tela dl desk camp-tela">
       <div class="camp-principal"><Mapa /></div>
       <div class="camp-lado">{desk ? <DetalheDesk irTreinar={irTreinar} /> : <Detalhe />}
-      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>Três lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes. Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
+      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>{v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
       </div>
     </div>
   );

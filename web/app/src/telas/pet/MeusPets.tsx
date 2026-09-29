@@ -103,6 +103,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
             <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span></span>
         </section>
         <p class="mp-aviso">Só o pet ativo tem o tempo correndo; os guardados ficam parados onde estavam.</p>
+        {!ovo && m.versao < 5 && <p class="mp-aviso">Pet de uma versão antiga: evolui até o Ultimate (o Mega é dos ovos novos).</p>}
         <Guardados ativar={ativar} cruzar={podeCruzar ? cruzar : null} />
         {anterior && <div class="mp-anterior">{antImg && <img class="dl-pix" src={antImg.url} width={antImg.w / 2} height={antImg.h / 2} alt="" />}
           <span><b>Pet anterior guardado</b><span>ficou salvo quando você usou o Laboratório</span></span></div>}

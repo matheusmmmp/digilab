@@ -81,6 +81,7 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
           <span>{diaDe(m.e.tick)} {diaDe(m.e.tick) === 1 ? "dia" : "dias"} de vida</span>
           {m.morte && <span class="mpl-tag-morto">se foi</span>}
         </div>
+        {!atual.ovo && m.versao < 5 && <p class="dl-apoio" style={{ margin: 0 }}>Pet de uma versão antiga: evolui até o Ultimate (o Mega é dos ovos novos).</p>}
         <div class="mpl-bts">
           <button type="button" class="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
           {eAtivo ? <button type="button" class="dl-btn" onClick={fechar}>Voltar ao pet</button>
