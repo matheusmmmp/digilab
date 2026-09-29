@@ -6,7 +6,8 @@ import { CME, COB, CVI } from "./constantes.ts";
 import type { AcaoDono, AcaoPet, Desejo, Observacao } from "./tipos.ts";
 
 const ATENDE_VONTADE: Partial<Record<string, AcaoDono>> = { comer: "alimentar", brincar: "brincar", chamar_atencao: "acariciar" };
-const CUIDADOS: readonly AcaoDono[] = ["alimentar", "limpar", "brincar", "acariciar"];
+/* petisco, banheiro e tratar (pets v4) atendem como cuidado, como no Python (CUIDADOS_QUE_ATENDEM) */
+const CUIDADOS: readonly AcaoDono[] = ["alimentar", "limpar", "brincar", "acariciar", "petisco", "levar_ao_banheiro", "tratar_lesao"];
 
 export class Vinculo {
   valor = CVI.inicial;

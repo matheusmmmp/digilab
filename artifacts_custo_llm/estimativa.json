@@ -1,0 +1,195 @@
+{
+  "tokens_por_chamada": {
+    "entrada": 941,
+    "saida": 300
+  },
+  "usd_por_chamada": {
+    "claude-haiku-4-5": 0.002441,
+    "claude-sonnet-5": 0.004882,
+    "claude-opus-5": 0.012205,
+    "claude-fable-5-1": 0.02441
+  },
+  "cenarios": {
+    "enxuto": {
+      "chamadas_h": 4,
+      "nota": "so travessuras/chamados decididos pela LLM (~2-3/h no cronograma) + 1 fala"
+    },
+    "tipico": {
+      "chamadas_h": 10,
+      "nota": "travessuras + reacoes ao dono + algumas falas na conversa"
+    },
+    "intenso": {
+      "chamadas_h": 30,
+      "nota": "LLM decide a cada acao do dono e conversa muito"
+    }
+  },
+  "custo_api_usd_mes_por_usuarios_simultaneos": {
+    "enxuto": {
+      "claude-haiku-4-5": {
+        "1": 7.13,
+        "10": 71.28,
+        "100": 712.77,
+        "1000": 7127.72,
+        "10000": 71277.2,
+        "100000": 712772.0
+      },
+      "claude-sonnet-5": {
+        "1": 14.26,
+        "10": 142.55,
+        "100": 1425.54,
+        "1000": 14255.44,
+        "10000": 142554.4,
+        "100000": 1425544.0
+      },
+      "claude-opus-5": {
+        "1": 35.64,
+        "10": 356.39,
+        "100": 3563.86,
+        "1000": 35638.6,
+        "10000": 356386.0,
+        "100000": 3563860.0
+      },
+      "claude-fable-5-1": {
+        "1": 71.28,
+        "10": 712.77,
+        "100": 7127.72,
+        "1000": 71277.2,
+        "10000": 712772.0,
+        "100000": 7127720.0
+      }
+    },
+    "tipico": {
+      "claude-haiku-4-5": {
+        "1": 17.82,
+        "10": 178.19,
+        "100": 1781.93,
+        "1000": 17819.3,
+        "10000": 178193.0,
+        "100000": 1781930.0
+      },
+      "claude-sonnet-5": {
+        "1": 35.64,
+        "10": 356.39,
+        "100": 3563.86,
+        "1000": 35638.6,
+        "10000": 356386.0,
+        "100000": 3563860.0
+      },
+      "claude-opus-5": {
+        "1": 89.1,
+        "10": 890.97,
+        "100": 8909.65,
+        "1000": 89096.5,
+        "10000": 890965.0,
+        "100000": 8909650.0
+      },
+      "claude-fable-5-1": {
+        "1": 178.19,
+        "10": 1781.93,
+        "100": 17819.3,
+        "1000": 178193.0,
+        "10000": 1781930.0,
+        "100000": 17819300.0
+      }
+    },
+    "intenso": {
+      "claude-haiku-4-5": {
+        "1": 53.46,
+        "10": 534.58,
+        "100": 5345.79,
+        "1000": 53457.9,
+        "10000": 534579.0,
+        "100000": 5345790.0
+      },
+      "claude-sonnet-5": {
+        "1": 106.92,
+        "10": 1069.16,
+        "100": 10691.58,
+        "1000": 106915.8,
+        "10000": 1069158.0,
+        "100000": 10691580.0
+      },
+      "claude-opus-5": {
+        "1": 267.29,
+        "10": 2672.89,
+        "100": 26728.95,
+        "1000": 267289.5,
+        "10000": 2672895.0,
+        "100000": 26728950.0
+      },
+      "claude-fable-5-1": {
+        "1": 534.58,
+        "10": 5345.79,
+        "100": 53457.9,
+        "1000": 534579.0,
+        "10000": 5345790.0,
+        "100000": 53457900.0
+      }
+    }
+  },
+  "latencia_local_medida": {
+    "gemma2-9b": {
+      "n": 329,
+      "p50_s": 4.268522699945606
+    },
+    "qwen2.5-3b": {
+      "n": 321,
+      "p50_s": 2.6932429999578744
+    },
+    "qwen2.5-7b": {
+      "n": 330,
+      "p50_s": 3.2852826000307687
+    }
+  },
+  "capacidade_uma_gpu_usuarios_simultaneos": {
+    "gemma2-9b": {
+      "enxuto": 210,
+      "tipico": 84,
+      "intenso": 28
+    },
+    "qwen2.5-3b": {
+      "enxuto": 334,
+      "tipico": 133,
+      "intenso": 44
+    },
+    "qwen2.5-7b": {
+      "enxuto": 273,
+      "tipico": 109,
+      "intenso": 36
+    }
+  },
+  "pesquisa_vidas_da_confirmatoria": {
+    "llm_a_cada_passo": {
+      "chamadas": 1075200,
+      "usd": {
+        "claude-haiku-4-5": 2624.56,
+        "claude-sonnet-5": 5249.13,
+        "claude-opus-5": 13122.82,
+        "claude-fable-5-1": 26245.63
+      },
+      "horas_gpu_local": {
+        "gemma2-9b": 1274.9,
+        "qwen2.5-3b": 804.4,
+        "qwen2.5-7b": 981.2
+      }
+    },
+    "llm_so_em_eventos": {
+      "chamadas": 112000,
+      "usd": {
+        "claude-haiku-4-5": 273.39,
+        "claude-sonnet-5": 546.78,
+        "claude-opus-5": 1366.96,
+        "claude-fable-5-1": 2733.92
+      },
+      "horas_gpu_local": {
+        "gemma2-9b": 132.8,
+        "qwen2.5-3b": 83.8,
+        "qwen2.5-7b": 102.2
+      }
+    }
+  },
+  "premissas": {
+    "horas_mes": 730,
+    "usuarios_simultaneos": "media 24h; custo escala com horas-usuario"
+  }
+}

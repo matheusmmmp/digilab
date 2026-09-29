@@ -1656,6 +1656,156 @@
    "web": "CAMPANHA[4].eps",
    "fonte": "python",
    "py": "ConfigCampanha.npcs.tier3_soberano.epsilon"
+  },
+  {
+   "web": "CED.janela",
+   "fonte": "python",
+   "py": "ConfigEducacao.janela_min"
+  },
+  {
+   "web": "CED.limiarReal",
+   "fonte": "python",
+   "py": "ConfigEducacao.limiar_necessidade_real"
+  },
+  {
+   "web": "CED.fracaoFalsoBase",
+   "fonte": "python",
+   "py": "ConfigEducacao.fracao_falso_base"
+  },
+  {
+   "web": "CED.reforcoPetisco",
+   "fonte": "python",
+   "py": "ConfigEducacao.reforco_por_petisco"
+  },
+  {
+   "web": "CED.tetoFalso",
+   "fonte": "python",
+   "py": "ConfigEducacao.teto_falso"
+  },
+  {
+   "web": "CED.disciplinaMax",
+   "fonte": "python",
+   "py": "ConfigEducacao.disciplina_max"
+  },
+  {
+   "web": "CED.passo",
+   "fonte": "python",
+   "py": "ConfigEducacao.passo_disciplina"
+  },
+  {
+   "web": "CED.acertos",
+   "fonte": "python",
+   "py": "ConfigEducacao.acertos_para_aprender"
+  },
+  {
+   "web": "CED.fatorEvoluir",
+   "fonte": "python",
+   "py": "ConfigEducacao.fator_disciplina_ao_evoluir"
+  },
+  {
+   "web": "CED.fracaoPetisco",
+   "fonte": "python",
+   "py": "ConfigEducacao.fracao_petisco_alimentar"
+  },
+  {
+   "web": "CED.disciplinaBanheiro",
+   "fonte": "python",
+   "py": "ConfigEducacao.disciplina_por_banheiro"
+  },
+  {
+   "web": "CED.vincBroncaSemMotivo",
+   "fonte": "python",
+   "py": "ConfigEducacao.vinculo_bronca_sem_motivo"
+  },
+  {
+   "web": "CED.custoHumorAcordar",
+   "fonte": "python",
+   "py": "ConfigEducacao.custo_humor_acordar"
+  },
+  {
+   "web": "CED.limiarSuper",
+   "fonte": "python",
+   "py": "ConfigEducacao.limiar_superalimentacao"
+  },
+  {
+   "web": "CED.custoSaudeSuper",
+   "fonte": "python",
+   "py": "ConfigEducacao.custo_saude_superalimentacao"
+  },
+  {
+   "web": "CED.deltaEps",
+   "fonte": "python",
+   "py": "ConfigEducacao.delta_epsilon_indisciplina"
+  },
+  {
+   "web": "CED.intervalos.crianca.fome",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.crianca.fome"
+  },
+  {
+   "web": "CED.intervalos.crianca.higiene",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.crianca.higiene"
+  },
+  {
+   "web": "CED.intervalos.crianca.carinho",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.crianca.carinho"
+  },
+  {
+   "web": "CED.intervalos.adolescente.fome",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.adolescente.fome"
+  },
+  {
+   "web": "CED.intervalos.adolescente.higiene",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.adolescente.higiene"
+  },
+  {
+   "web": "CED.intervalos.adolescente.carinho",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.adolescente.carinho"
+  },
+  {
+   "web": "CED.intervalos.adulto.fome",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.adulto.fome"
+  },
+  {
+   "web": "CED.intervalos.adulto.higiene",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.adulto.higiene"
+  },
+  {
+   "web": "CED.intervalos.adulto.carinho",
+   "fonte": "python",
+   "py": "ConfigEducacao.intervalos_chamado_min.adulto.carinho"
+  },
+  {
+   "web": "CLE.probLesao",
+   "fonte": "python",
+   "py": "ConfigLesoes.prob_lesao_derrota"
+  },
+  {
+   "web": "CLE.lesoesMorte",
+   "fonte": "python",
+   "py": "ConfigLesoes.lesoes_para_morte"
+  },
+  {
+   "web": "CLE.horasMorte",
+   "fonte": "python",
+   "py": "ConfigLesoes.horas_sem_tratar_morte"
+  },
+  {
+   "web": "CLE.limiarTaxa",
+   "fonte": "python",
+   "py": "ConfigLesoes.limiar_taxa_vitoria"
+  },
+  {
+   "web": "CHE.sigma",
+   "fonte": "python",
+   "py": "ConfigHeranca.sigma_temperamento"
   }
  ],
  "convertidos": [

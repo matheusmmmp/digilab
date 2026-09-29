@@ -1,0 +1,466 @@
+{
+  "mecanismo": {
+    "aleatorio": {
+      "causas_morte": [
+        "lesao_sem_tratar"
+      ],
+      "disciplina_final_media": 0.3125,
+      "formas": {
+        "adolescente:brigao": 14,
+        "bastiao_rachado": 26,
+        "colosso_partido": 5,
+        "devastador": 5,
+        "emboscador": 1,
+        "espelho": 2,
+        "furioso": 1,
+        "predador": 14,
+        "vigia": 1
+      },
+      "lesoes_media": 0.3125,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 11,
+      "n": 80,
+      "qualificados_adulto": 55,
+      "saude_final_media": 0.23204583333333714,
+      "taxa_sparring_media": 0.7875,
+      "treino_total_medio": 32.29798765782023
+    },
+    "atencioso": {
+      "causas_morte": [],
+      "disciplina_final_media": 98.1375,
+      "formas": {
+        "adolescente:brigao": 2,
+        "bastiao_rachado": 45,
+        "colosso_partido": 3,
+        "devastador": 5,
+        "emboscador": 2,
+        "espelho": 2,
+        "predador": 19,
+        "sentinela": 2
+      },
+      "lesoes_media": 0.0375,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 0,
+      "n": 80,
+      "qualificados_adulto": 78,
+      "saude_final_media": 0.960356250000004,
+      "taxa_sparring_media": 0.94375,
+      "treino_total_medio": 33.61962828125
+    },
+    "exigente": {
+      "causas_morte": [],
+      "disciplina_final_media": 97.1625,
+      "formas": {
+        "adolescente:brigao": 4,
+        "bastiao_rachado": 44,
+        "colosso_partido": 1,
+        "devastador": 5,
+        "emboscador": 2,
+        "predador": 24
+      },
+      "lesoes_media": 0.0625,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 0,
+      "n": 80,
+      "qualificados_adulto": 76,
+      "saude_final_media": 0.031718750000008185,
+      "taxa_sparring_media": 0.91875,
+      "treino_total_medio": 35.824790062031255
+    },
+    "incoerente": {
+      "causas_morte": [],
+      "disciplina_final_media": 72.25,
+      "formas": {
+        "adolescente:brigao": 12,
+        "bastiao_rachado": 31,
+        "colosso_partido": 9,
+        "devastador": 4,
+        "emboscador": 2,
+        "espelho": 1,
+        "furioso": 1,
+        "muralha": 3,
+        "predador": 14,
+        "sentinela": 2,
+        "vigia": 1
+      },
+      "lesoes_media": 0.1125,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 0,
+      "n": 80,
+      "qualificados_adulto": 68,
+      "saude_final_media": 0.8632687500000136,
+      "taxa_sparring_media": 0.86625,
+      "treino_total_medio": 33.4373188125
+    },
+    "lutador": {
+      "causas_morte": [],
+      "disciplina_final_media": 98.1375,
+      "formas": {
+        "adolescente:brigao": 1,
+        "bastiao_rachado": 47,
+        "colosso_partido": 3,
+        "devastador": 6,
+        "predador": 23
+      },
+      "lesoes_media": 0.05,
+      "lutas_que_treinaram_media": 20.0,
+      "mortes": 0,
+      "n": 80,
+      "qualificados_adulto": 79,
+      "saude_final_media": 0.9665333333333367,
+      "taxa_sparring_media": 0.9412499999999999,
+      "treino_total_medio": 33.61962828125
+    },
+    "permissivo": {
+      "causas_morte": [],
+      "disciplina_final_media": 0.0,
+      "formas": {
+        "adolescente:brigao": 9,
+        "adolescente:guardiao": 2,
+        "bastiao_rachado": 49,
+        "espelho": 3,
+        "predador": 17
+      },
+      "lesoes_media": 0.1125,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 0,
+      "n": 80,
+      "qualificados_adulto": 69,
+      "saude_final_media": 0.9972750000000004,
+      "taxa_sparring_media": 0.8925000000000001,
+      "treino_total_medio": 33.5737246875
+    },
+    "relapso": {
+      "causas_morte": [
+        "lesao_sem_tratar"
+      ],
+      "disciplina_final_media": 0.625,
+      "formas": {
+        "adolescente:brigao": 8,
+        "adolescente:guardiao": 1,
+        "bastiao_rachado": 30,
+        "colosso_partido": 14,
+        "devastador": 2,
+        "emboscador": 3,
+        "furioso": 2,
+        "muralha": 1,
+        "predador": 10,
+        "sentinela": 1,
+        "tita": 1,
+        "vigia": 5
+      },
+      "lesoes_media": 0.0875,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 2,
+      "n": 80,
+      "qualificados_adulto": 69,
+      "saude_final_media": 0.689456250000019,
+      "taxa_sparring_media": 0.89875,
+      "treino_total_medio": 33.25535
+    },
+    "treinador": {
+      "causas_morte": [],
+      "disciplina_final_media": 95.8,
+      "formas": {
+        "adolescente:brigao": 6,
+        "bastiao_rachado": 44,
+        "colosso_partido": 1,
+        "devastador": 3,
+        "emboscador": 2,
+        "predador": 24
+      },
+      "lesoes_media": 0.0875,
+      "lutas_que_treinaram_media": 10.0,
+      "mortes": 0,
+      "n": 80,
+      "qualificados_adulto": 74,
+      "saude_final_media": 0.6390458333333549,
+      "taxa_sparring_media": 0.9112500000000001,
+      "treino_total_medio": 35.77839109328125
+    }
+  },
+  "neutra": {
+    "comparacoes": {
+      "atencioso-aleatorio": {
+        "estimativa": 0.007480468749999999,
+        "ic95": [
+          -0.04272265625,
+          0.058328124999999995
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.7768,
+        "p_t_normal": 0.7757375836861911,
+        "t": 0.28487803613132606
+      },
+      "atencioso-permissivo": {
+        "estimativa": 0.025789062499999998,
+        "ic95": [
+          -0.015746093750000002,
+          0.0673359375
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.2172,
+        "p_t_normal": 0.22529638548141562,
+        "t": 1.2125644554231074
+      },
+      "exigente-atencioso": {
+        "estimativa": 0.004808593749999997,
+        "ic95": [
+          -0.03299609375,
+          0.04262109374999999
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.8022,
+        "p_t_normal": 0.8042619628067598,
+        "t": 0.24783514299980913
+      },
+      "incoerente-aleatorio": {
+        "estimativa": 0.039324218749999994,
+        "ic95": [
+          -0.009414062500000004,
+          0.08924218749999999
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.1122,
+        "p_t_normal": 0.12021571821963817,
+        "t": 1.553868787738877
+      },
+      "lutador-atencioso": {
+        "estimativa": -0.01563671875,
+        "ic95": [
+          -0.03044921875,
+          -0.003890624999999999
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.001,
+        "p_t_normal": 0.020643652145414748,
+        "t": -2.3144390280575142
+      },
+      "permissivo-aleatorio": {
+        "estimativa": -0.01830859375,
+        "ic95": [
+          -0.06638671875,
+          0.030109375
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.4734,
+        "p_t_normal": 0.46454237184460023,
+        "t": -0.7313877068977409
+      },
+      "relapso-aleatorio": {
+        "estimativa": -0.007562499999999997,
+        "ic95": [
+          -0.055535156249999995,
+          0.0390078125
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.733,
+        "p_t_normal": 0.7505691288537806,
+        "t": -0.3178890105721252
+      },
+      "treinador-atencioso": {
+        "estimativa": 0.01188671875,
+        "ic95": [
+          -0.026847656249999997,
+          0.050023437500000004
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.5548,
+        "p_t_normal": 0.5517860356867712,
+        "t": 0.5950859261732216
+      },
+      "treinador-exigente": {
+        "estimativa": 0.0070781250000000046,
+        "ic95": [
+          -0.0006484375000000014,
+          0.016285156250000005
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.0748,
+        "p_t_normal": 0.09914013693981438,
+        "t": 1.6490365992591478
+      }
+    },
+    "gate_equilibrio": {
+      "aprovado": false,
+      "braco_dominante": [],
+      "faixa_ok": {
+        "cuidar": false,
+        "lutar": false,
+        "treinar": false
+      },
+      "margem_ok": true,
+      "margem_sobre_os_outros": {
+        "cuidar": -0.01188671874999997,
+        "lutar": -0.02752343749999997,
+        "treinar": 0.01188671874999997
+      },
+      "medias_estilos": {
+        "cuidar": 0.2875390625,
+        "lutar": 0.27190234375,
+        "treinar": 0.29942578124999997
+      }
+    },
+    "taxa_media_por_braco": {
+      "aleatorio": 0.28005859375000003,
+      "atencioso": 0.2875390625,
+      "exigente": 0.29234765625,
+      "incoerente": 0.3193828125,
+      "lutador": 0.27190234375,
+      "permissivo": 0.26175000000000004,
+      "relapso": 0.27249609375,
+      "treinador": 0.29942578124999997
+    }
+  },
+  "real": {
+    "comparacoes": {
+      "atencioso-aleatorio": {
+        "estimativa": 0.06841015624999999,
+        "ic95": [
+          0.017824218750000002,
+          0.11965234375
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 80,
+        "p_bootstrap": 0.007,
+        "p_t_normal": 0.009544967745362287,
+        "t": 2.5918921918750315
+      },
+      "atencioso-permissivo": {
+        "estimativa": 0.022855468750000003,
+        "ic95": [
+          -0.018804687499999997,
+          0.06483984375
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.2854,
+        "p_t_normal": 0.29050344302274933,
+        "t": 1.057017845602107
+      },
+      "exigente-atencioso": {
+        "estimativa": -0.0681796875,
+        "ic95": [
+          -0.105640625,
+          -0.031167968750000004
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.0002,
+        "p_t_normal": 0.000378969631618542,
+        "t": -3.554311801321929
+      },
+      "incoerente-aleatorio": {
+        "estimativa": 0.09057421875,
+        "ic95": [
+          0.0437734375,
+          0.13923828124999998
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 80,
+        "p_bootstrap": 0.0006,
+        "p_t_normal": 0.000231790577137847,
+        "t": 3.681582700240254
+      },
+      "lutador-atencioso": {
+        "estimativa": -0.0154296875,
+        "ic95": [
+          -0.03031640625,
+          -0.0036601562499999998
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.0026,
+        "p_t_normal": 0.023416700830332093,
+        "t": -2.266566821464661
+      },
+      "permissivo-aleatorio": {
+        "estimativa": 0.0455546875,
+        "ic95": [
+          -0.002660156250000001,
+          0.0939921875
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.0644,
+        "p_t_normal": 0.0699304765044948,
+        "t": 1.8123607298411466
+      },
+      "relapso-aleatorio": {
+        "estimativa": 0.02926953125,
+        "ic95": [
+          -0.01814453125,
+          0.0752578125
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.222,
+        "p_t_normal": 0.21482568721855122,
+        "t": 1.2404048521605948
+      },
+      "treinador-atencioso": {
+        "estimativa": -0.011792968750000002,
+        "ic95": [
+          -0.053667968749999996,
+          0.02911328125
+        ],
+        "leitura": "REFUTADA",
+        "n": 80,
+        "p_bootstrap": 0.5652,
+        "p_t_normal": 0.5810094471555998,
+        "t": -0.5519108312601858
+      },
+      "treinador-exigente": {
+        "estimativa": 0.056386718749999995,
+        "ic95": [
+          0.04584375,
+          0.06779296874999999
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 80,
+        "p_bootstrap": 0.0,
+        "p_t_normal": 0.0,
+        "t": 10.151440193532187
+      }
+    },
+    "gate_equilibrio": {
+      "aprovado": false,
+      "braco_dominante": [],
+      "faixa_ok": {
+        "cuidar": false,
+        "lutar": false,
+        "treinar": false
+      },
+      "margem_ok": true,
+      "margem_sobre_os_outros": {
+        "cuidar": 0.011792968750000021,
+        "lutar": -0.015429687499999956,
+        "treinar": -0.011792968750000021
+      },
+      "medias_estilos": {
+        "cuidar": 0.3240078125,
+        "lutar": 0.30857812500000004,
+        "treinar": 0.31221484374999997
+      }
+    },
+    "taxa_media_por_braco": {
+      "aleatorio": 0.25559765625,
+      "atencioso": 0.3240078125,
+      "exigente": 0.25582812499999996,
+      "incoerente": 0.346171875,
+      "lutador": 0.30857812500000004,
+      "permissivo": 0.30115234375,
+      "relapso": 0.2848671875,
+      "treinador": 0.31221484374999997
+    }
+  }
+}

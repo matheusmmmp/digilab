@@ -33,3 +33,17 @@ node_modules/
 web/dist/
 web/app/test-results/
 web/app/playwright-report/
+
+# inventario de sprites (tools/inventario_sprites.py): saida local, cita arte da Bandai; nao versionar
+tools/saida/
+!artifacts_confirmatoria/
+artifacts_confirmatoria/partidas_*.json
+artifacts_confirmatoria/vidas/
+!artifacts_custo_llm/
+tools/gasto_llm_pesquisa.json
+!artifacts_educacao/
+artifacts_educacao/partidas_*.json
+artifacts_educacao/vidas/
+!artifacts_educacao_v3b/
+artifacts_educacao_v3b/partidas_*.json
+artifacts_educacao_v3b/vidas/

@@ -6,7 +6,7 @@ governa a dinamica mora aqui e entra no PROTOCOLO.md congelado.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 TICKS_POR_DIA = 1440  # 1 tick = 1 minuto simulado
 
@@ -865,3 +865,121 @@ class ConfigEscala:
 
 CONFIG_ESCALA = ConfigEscala()
 CONFIG_ESCALA_LIGADA = ConfigEscala(ligada=True)
+
+
+# ============================================================ educacao, lesoes e heranca (educacao-v1)
+# docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, aprovado pelo Matheus em 2026-09-28. Status e fonte de cada valor:
+# protocol.PARAMETROS_EDUCACAO_V1 (o teste confere que os valores la batem com estes).
+
+def _intervalos_chamado() -> dict:
+    return {"crianca": {"fome": 90, "higiene": 120, "carinho": 90},
+            "adolescente": {"fome": 150, "higiene": 120, "carinho": 120},
+            "adulto": {"fome": 180, "higiene": 120, "carinho": 180}}
+
+
+@dataclass(frozen=True)
+class ConfigEducacao:
+    """Sistema A: travessuras que abrem janela e so o dono resolve; disciplina 0-100."""
+
+    ligada: bool = False                     # como ConfigEscala: desligada, o MotorEducacao = MotorTreino
+    janela_min: int = 15                     # cronograma_interacoes.json, janelas.chamado_min
+    estagio_inicio_chamados: str = "crianca"
+    # intervalo de cada chamado por estagio (cronograma_interacoes.json, intervalos_min); carinho -> humor
+    intervalos_chamado_min: dict = field(default_factory=_intervalos_chamado)
+    # chamado real: a necessidade pedida esta abaixo disto (igual a ConfigDonos.limiar_necessidade_pedido_adequado)
+    limiar_necessidade_real: float = 0.35
+    # slot de chamado sem necessidade real: chance de virar chamado FALSO com disciplina 0
+    fracao_falso_base: float = 0.25
+    reforco_por_petisco: float = 0.05        # cada petisco cedido a um chamado falso soma a fracao
+    teto_falso: float = 0.5
+    disciplina_max: int = 100
+    passo_disciplina: int = 25               # bronca certa; 4 enchem
+    acertos_para_aprender: int = 3           # acertos seguidos para o pet parar de repetir a travessura
+    fator_disciplina_ao_evoluir: float = 0.5
+    fracao_petisco_alimentar: float = 0.5    # petisco = esta fracao do ganho de alimentar, sem sujeira
+    # parte 3: os slots deste tipo viram AVISO antes de sujar (o cronograma ancora higiene no coco dos v-pets)
+    tipo_slot_aviso: str = "higiene"
+    # o design dizia +passo_disciplina por aviso atendido; zerado na parte 3 porque o permissivo chegava a
+    # disciplina 100 so pelo banheiro e o chamado falso sumia (decidido, delegado, em 2026-09-28)
+    disciplina_por_banheiro: int = 0
+    vinculo_bronca_sem_motivo: float = -0.05  # bronca num chamado real (igual a ConfigTreino.vinculo_forcar)
+    custo_humor_acordar: float = 0.12         # acordar o pet dormindo (igual a Config.custo_repreender)
+    limiar_superalimentacao: float = 0.9      # comer com fome (saciedade) acima disto faz mal
+    custo_saude_superalimentacao: float = 0.05
+    # Fase 3 (PLANO_ANALISE_V3): disciplina na luta = so o epsilon do Lutador (a resolucao do combate nao muda)
+    epsilon_base_pet: float = 0.05            # = ConfigCombateV2.epsilon_bots
+    delta_epsilon_indisciplina: float = 0.10  # epsilon = base + (1 - disciplina/max) * delta
+
+
+@dataclass(frozen=True)
+class ConfigLesoes:
+    """Sistema C: vitorias, lesoes e evolucao (camada Color). Nao toca a resolucao do combate."""
+
+    ligada: bool = False                     # como ConfigEducacao: desligada, luta no log levanta erro
+    lutas_minimas_taxa: int = 10             # igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto
+    limiar_taxa_vitoria: float = 0.8
+    prob_lesao_derrota: float = 0.2
+    lesoes_para_morte: int = 20
+    horas_sem_tratar_morte: int = 6
+    # o que a qualificacao por vitorias (>= limiar em >= lutas_minimas no adolescente) faz: "condicao_adulto" =
+    # sem ela o pet continua adolescente (como o sparring minimo). Decidido (delegado) em 2026-09-28; o catalogo
+    # nao tem "forma de vitoria"
+    efeito_qualificacao: str = "condicao_adulto"
+    # V3b (adendo do PLANO_ANALISE_V3): cada luta fora da arena de pesquisa conta como uma sessao de treino.
+    # DESLIGADO depois da V3b (decisao do Matheus, opcao B, 2026-09-28): levava 90% dos pets a forma sombria
+    luta_treina: bool = False
+
+
+@dataclass(frozen=True)
+class ConfigHeranca:
+    """Sistema B: herda temperamento (media + ruido) e especie (sorteada entre as dos pais)."""
+
+    sigma_temperamento: float = 0.1
+    estagio_minimo_pais: str = "adulto"
+
+
+@dataclass(frozen=True)
+class ConfigEquilibrio:
+    """Gate de equilibrio dos estilos de jogo (cuidar, treinar, lutar) contra o painel."""
+
+    taxa_min: float = 0.40
+    taxa_max: float = 0.60
+    margem_max: float = 0.15
+
+
+@dataclass(frozen=True)
+class ConfigDuracoes:
+    """Sistema D: duracao (min) de bebe, crianca e adolescente. `teste` = ConfigEvolucaoPesquisa de hoje;
+    `canonica` = v-pets citados no cronograma (Ver.20th/Color: 6 h, 24 h, 36 h)."""
+
+    teste: tuple = (180, 720, 1080)
+    canonica: tuple = (360, 1440, 2160)
+
+    def cfg_evo(self, nome: str) -> "ConfigEvolucaoPesquisa":
+        if nome not in ("teste", "canonica"):
+            raise KeyError(f"duracao desconhecida: {nome!r}")
+        b, c, a = getattr(self, nome)
+        return replace(CONFIG_EVOLUCAO_PESQUISA, dur_bebe_min=b, dur_crianca_min=c, dur_adolescente_min=a)
+
+
+CONFIG_DURACOES = ConfigDuracoes()
+
+
+@dataclass(frozen=True)
+class ConfigSparring:
+    """Fase 3 (PLANO_ANALISE_V3): sparring de verdade na vida de pesquisa, no adolescente, horarios iguais para
+    todos os bracos; rival = adolescente da mesma linha e especie, carater neutro, sem treino."""
+
+    lutas: int = 10                          # = ConfigLesoes.lutas_minimas_taxa
+    lutas_braco_lutador: int = 20
+    intervalo_min: int = 30
+    primeira_apos_inicio_min: int = 30
+
+
+CONFIG_SPARRING = ConfigSparring()
+CONFIG_EDUCACAO = ConfigEducacao()
+CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
+CONFIG_LESOES = ConfigLesoes()
+CONFIG_LESOES_LIGADA = ConfigLesoes(ligada=True)
+CONFIG_HERANCA = ConfigHeranca()
+CONFIG_EQUILIBRIO = ConfigEquilibrio()

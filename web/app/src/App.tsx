@@ -59,6 +59,13 @@ export function App() {
     if (est === "crianca") ids.push("rookie", "ensinar");
     if (est === "adolescente") ids.push("champion", "lutas_treino");
     if (est === "adulto") ids.push("adulto");
+    if (mDica.versao >= 4) {
+      const j = mDica.janelaAberta();
+      if (j?.tipo === "chamado") ids.push("manha");
+      if (j?.tipo === "aviso") ids.push("banheiro");
+      if (mDica.lesionadoDesde !== null) ids.push("lesao");
+      if (est === "adolescente") ids.push("vitorias");
+    }
     dicasDoMomento(ids);
   });
   const [boasVindas, setBoasVindas] = useState(() => primeiraVisita() || location.hash === "#/inicio"), [meusPets, setMeusPets] = useState(false);

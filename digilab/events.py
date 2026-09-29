@@ -38,6 +38,11 @@ class AcaoUsuario(str, Enum):
     TREINAR_ESQUIVA = "treinar_esquiva"
     TREINAR_MEDITAR = "treinar_meditar"
     TREINAR_RESISTENCIA = "treinar_resistencia"
+    # educacao-v1 (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md): so o MotorEducacao sabe aplicar; nos motores
+    # anteriores levantam erro. Ficam no fim do enum para nao mexer em nada que dependa da ordem.
+    PETISCO = "petisco"
+    LEVAR_AO_BANHEIRO = "levar_ao_banheiro"
+    TRATAR_LESAO = "tratar_lesao"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -45,6 +50,7 @@ class AcaoUsuario(str, Enum):
 ACOES_V1 = (AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR,
             AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER)
 ACOES_TREINO = tuple(a for a in AcaoUsuario if a.value.startswith("treinar_"))
+ACOES_EDUCACAO = (AcaoUsuario.PETISCO, AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO)
 
 
 def exercicio_de(acao: AcaoUsuario) -> str:
@@ -87,6 +93,37 @@ def avanco(tick: int, ticks: int) -> Evento:
 
 def acao_usuario(tick: int, acao: AcaoUsuario) -> Evento:
     return Evento(tick=tick, tipo="acao_usuario", valor=acao.value)
+
+
+def luta(tick: int, rival: str, semente: int) -> Evento:
+    """educacao-v1: luta fora da arena de pesquisa. So rival e semente: o resultado e a lesao saem do
+    replay da partida. So o reproduzir_educacao entende; os replays antigos levantam erro."""
+    if "|" in rival:
+        raise ValueError(f"nome de rival com '|': {rival!r}")
+    return Evento(tick=tick, tipo="luta", valor=f"{rival}|{int(semente)}")
+
+
+def decisao_externa(tick: int, ponto: str, valor: bool, fonte: str, versao: str) -> Evento:
+    """Modo livre gravado: decisao de LLM ou de acaso real. O replay le daqui e nao chama ninguem."""
+    return Evento(tick=tick, tipo="decisao_externa",
+                  valor=json.dumps({"ponto": ponto, "valor": valor, "fonte": fonte, "versao": versao},
+                                   sort_keys=True, ensure_ascii=False))
+
+
+def ler_decisao(evento: Evento) -> dict:
+    if evento.tipo != "decisao_externa":
+        raise ValueError(f"evento nao e decisao_externa: {evento.tipo!r}")
+    d = json.loads(str(evento.valor))
+    if set(d) != {"ponto", "valor", "fonte", "versao"} or not isinstance(d["valor"], bool):
+        raise ValueError(f"decisao_externa malformada: {d!r}")
+    return {**d, "tick": evento.tick}
+
+
+def ler_luta(evento: Evento) -> tuple[str, int]:
+    if evento.tipo != "luta":
+        raise ValueError(f"evento nao e luta: {evento.tipo!r}")
+    rival, semente = str(evento.valor).rsplit("|", 1)
+    return rival, int(semente)
 
 
 class LogDeEventos:

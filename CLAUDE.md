@@ -30,6 +30,12 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
   Evento desconhecido no log levanta erro.
 - **Determinismo é requisito.** Mesma semente + mesmo log = mesmo resultado, até o último float.
   Se um teste de replay quebrar, pare tudo e conserte antes de qualquer outra coisa.
+  Exceção (decisão do Matheus, 2026-09-28): **modo livre gravado**. Um modo onde LLM e acaso real
+  (sem semente) decidem ao vivo. Toda saída não determinística (resposta da LLM, sorteio de entropia
+  do sistema) entra no log como evento, e o replay lê o evento em vez de sortear de novo. Assim a vida
+  continua rejogável e auditável, embora não seja reproduzível a partir da semente. O modo
+  determinístico continua sendo o padrão e o único válido para a confirmatória, os protocolos com hash
+  e a paridade Python/web.
 - **RNG de ambiente e de política separadas.** Trocar de política não pode mudar o clima do mundo.
 - **Métricas existem uma vez só** (`digilab/metrics.py`) e são compartilhadas por todos os braços.
 - **Nenhum número em resultado sem artefato em disco que o produza.**
@@ -271,13 +277,36 @@ pelo multiplicador do estágio), `lugar` e `epsilon` opcional. Decisões em `doc
 `experiments/run_poder.py` (piloto) e `experiments/analisar_poder.py --etapa 2|3|4`; config
 `experiments/configs/poder_pesquisa.json` (arena V21C normalizada, pets do pipeline do treino, sementes de
 piloto 50001–50020 e confirmatórias 60001–60160). `ConfigArenaPesquisa.condicao_neutra` (desligada por
-padrão; as runs antigas não mudam). Plano congelado em `docs/PLANO_ANALISE.md` (desenho principal
-PENDENTE DE DECISÃO).
+padrão; as runs antigas não mudam). Plano congelado em `docs/PLANO_ANALISE.md` (desenho B, condição
+neutra, decidido antes da run).
 
 - Os ovos dominam: σ²_ovo 0,17 × σ²_partida_1 0,058 no desenho A (ICC 0,74); com M = 100 as partidas são
   ~0,3% da variância do estimador. Aumentar N ajuda; aumentar M não.
 - Δ = 0,10 com poder 0,8: A precisa de ~135 ovos (~12 min de máquina), B de ~40–44 (~5 min).
 - Neutralizar a condição física tira cerca de metade do efeito do A no piloto (0,642 → 0,575).
+
+## Confirmatória e educação-v1 (2026-09-28, branch `educacao-heranca-lesoes`)
+
+- **Confirmatória** (`experiments/run_confirmatoria.py`, `artifacts_confirmatoria/resultado.json`, 160 ovos):
+  - desenho B, neutra: atencioso − aleatório −0,034, IC95 [−0,072; +0,006] → hipótese central **REFUTADA**;
+  - secundárias (Holm): relapso, incoerente e exigente abaixo do aleatório.
+- **educação-v1** (`docs/DESIGN_EDUCACAO_HERANCA_LESOES.md`):
+  - `MotorEducacao` (`digilab/educacao.py`, chaves `ConfigEducacao.ligada` e `ConfigLesoes.ligada`, desligadas por padrão): travessuras com janela e disciplina; eventos novos no log `luta`, `origem` e `decisao_externa`;
+  - lesões e morte; qualificação por vitórias (condição para adulto);
+  - herança (`digilab/heranca.py`);
+  - durações teste/canônica;
+  - personas de dono (`digilab/personas.py`, `tools/gerar_personas.py`);
+  - modo livre gravado (`tools/decisor_livre.py`).
+  - Parâmetros com status e fonte em `protocol.PARAMETROS_EDUCACAO_V1`.
+- **Exploratória V3** (`docs/PLANO_ANALISE_V3.md`, `artifacts_educacao/`):
+  - com educação, lesões e sparring real, atencioso − aleatório **+0,121** [+0,066; +0,175] (cerca de metade vem das mortes do aleatório; pós hoc sem mortes: +0,058);
+  - atencioso − permissivo +0,077;
+  - gate de equilíbrio dos estilos aprovado na neutra, reprovado na real.
+- **V3b** (`artifacts_educacao_v3b/`): "luta treina" levou 577/640 pets à forma sombria. Ficou desligado (opção B), e o equilíbrio dos estilos virou tarefa de game design (REGISTRO_DESVIOS).
+- **Web**: pets v4 (`VERSAO_PET = 4`, só ovos novos; v1–v3 e gabaritos intactos):
+  - janelas, disciplina, lesão e morte, qualificação, herança (Cruzar em Meus pets);
+  - dicas do Bit;
+  - constantes `CED`, `CLE` e `CHE` conferidas contra o Python.
 
 ## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 

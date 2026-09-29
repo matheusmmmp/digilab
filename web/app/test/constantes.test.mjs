@@ -22,7 +22,10 @@ const PY = lerJson(aqui("./gabaritos/constantes_python.json"));
 /* objetos de constantes do motor web cobertos pela tabela (todas as folhas numericas de cada um) */
 const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APTIDAO", "CSO", "CCOND", "CD", "CT", "CA", "CE",
   "CV", "CV21", "CAT", "CCP", "GA", "DUR_EVO", "CHAMADO_BEBE", "BASE_CARATER", "DESLOC_CARATER", "CAMPANHA", "LUGARES"];
+/* so no motor em TS: pets v4 (educacao-v1) nao existem no HTML; conferidas so contra o Python */
+const RAIZES_V4 = ["CED", "CLE", "CHE"];
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
+const raizDe = cam => cam.match(/^[^.[]+/)[0];
 
 /** folhas numericas: lista so de numeros conta como uma folha; o resto desce com .campo ou [i] */
 function folhas(o, cam, saida) {
@@ -45,7 +48,7 @@ const igual = (a, b) => typeof a === "number" && typeof b === "number" ? a === b
   : Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((x, i) => igual(x, b[i]));
 
 const LISTAS = ["pares", "convertidos", "experimento", "so_web"];
-const folhasDe = WEB => { const f = new Map(); for (const r of RAIZES) { if (!(r in WEB)) throw new Error("constante ausente: " + r); folhas(WEB[r], r, f); } return f; };
+const folhasDe = (WEB, raizes = RAIZES) => { const f = new Map(); for (const r of raizes) { if (!(r in WEB)) throw new Error("constante ausente: " + r); folhas(WEB[r], r, f); } return f; };
 
 test("ts = html: as mesmas folhas numericas, com os mesmos valores", () => {
   const [ts, html] = FONTES.map(([, W]) => folhasDe(W));
@@ -55,11 +58,14 @@ test("ts = html: as mesmas folhas numericas, com os mesmos valores", () => {
 });
 
 for (const [fonte, WEB] of FONTES) {
-  const WEB_FOLHAS = folhasDe(WEB);
+  const soTs = fonte === "ts";
+  const WEB_FOLHAS = folhasDe(WEB, soTs ? [...RAIZES, ...RAIZES_V4] : RAIZES);
+  /* no HTML, as entradas das raizes v4 nao se aplicam */
+  const aplica = e => soTs || !RAIZES_V4.includes(raizDe(e.web));
 
   test(`${fonte}: toda folha numerica do web aparece em exatamente uma lista da tabela`, () => {
     const vistos = new Map();
-    for (const L of LISTAS) for (const e of MAPA[L]) {
+    for (const L of LISTAS) for (const e of MAPA[L].filter(aplica)) {
       assert.ok(!vistos.has(e.web), `${e.web} aparece em ${vistos.get(e.web)} e em ${L}`);
       vistos.set(e.web, L);
     }
@@ -71,7 +77,7 @@ for (const [fonte, WEB] of FONTES) {
 
   test(`${fonte}: pares: valor do web = padrao do Python`, () => {
     const erros = [];
-    for (const e of MAPA.pares) {
+    for (const e of MAPA.pares.filter(aplica)) {
       const w = WEB_FOLHAS.get(e.web), p = pegar(PY, e.py);
       if (!igual(w, p)) erros.push(`${e.web} = ${JSON.stringify(w)} × ${e.py} = ${JSON.stringify(p)}`);
     }

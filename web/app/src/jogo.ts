@@ -3,7 +3,7 @@
    save. Duas abas no mesmo navegador (o HTML antigo e o app, ou dois apps) nao se sobrescrevem: quando o save
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { useEffect, useState } from "preact/hooks";
-import { Motor } from "../motor/index.ts";
+import { Motor, PetMorto } from "../motor/index.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
@@ -50,7 +50,11 @@ export function gravarPendente(): void { if (pendente) gravar(); }
     passando grava no maximo a cada 2 s (como o HTML), e o resto sai ao esconder ou fechar a aba. */
 export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "agora"): void {
   const j = jogoAtual();
-  f(j.motor);
+  try { f(j.motor); } catch (err) {
+    /* pet v4 morto: a acao nao entra no registro; a tela passa a mostrar a morte e quem chamou recebe o erro */
+    if (err instanceof PetMorto) avisar();
+    throw err;
+  }
   j.revisao++;
   if (j.origem === "exemplo" && !j.erroSave) j.origem = "save";
   pendente = true;

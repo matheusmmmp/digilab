@@ -40,6 +40,20 @@ export function ativarGuardado(i: number): void {
   previa("arena");
 }
 
+/** heranca (pets v4): cruza o ativo com o guardado i (os dois adultos e vivos). O filho vira o ativo e choca;
+    o pai ativo vai para os guardados (nada se perde). */
+export function cruzarComAtivo(i: number): void {
+  const g = lerGuardados(), par = g[i];
+  if (!par) throw new Error("pet guardado não existe: " + i);
+  const ativo = jogoAtual().motor, s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
+  const filho = Motor.cruzar(ativo, abrirGuardado(par), s, hashSemente("heranca", s), "dono");
+  g.push(JSON.parse(textoSave(ativo)) as Guardado);
+  gravarGuardados(g);
+  trocarMotor(filho, "novo", 16);
+  LUTA.rivalFixo = null;
+  previa("arena");
+}
+
 /* ------------------------------------------------ escada de exemplo (fraco -> forte) */
 interface Receita { dono: TipoDono; dias: number; porDia: number; treinoDia: number; semente: number }
 /** do mais fraco ao mais forte: In-Training, Rookie sem e com treino, Champion treinado, adultos sem e com treino */
@@ -55,7 +69,8 @@ const EXERCICIOS: readonly Exercicio[] = ["levantar_pedra", "corrida", "alvo", "
 
 /** o pet de uma receita: dono simulado (mesmo laco dos Cenarios) + treino em rodizio quando o motor deixa */
 export function petDaReceita(r: Receita): Motor {
-  const m = new Motor(r.semente), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
+  /* v3 de proposito: exemplos estaveis (na v4 o dono simulado nao trata lesao nem responde as janelas) */
+  const m = new Motor(r.semente, 3), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
   const passos = Math.round(r.dias * TPD / CD.passo), orc = Math.round(r.porDia * r.dias);
   let gasto = 0, sessoes = 0, ex = 0;
   for (let p = 0; p < passos; p++) {

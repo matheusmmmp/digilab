@@ -2,7 +2,7 @@
 // de hoje abre igual (pets v1, v2 e v3, e o save antigo sem versao = v1); save que nao abre falha alto.
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
-import { Motor } from "../motor/index.ts";
+import { Motor, VERSAO_PET } from "../motor/index.ts";
 import { CHAVE, CHAVE_ABA, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "../src/save.ts";
 import { enderecoDaRota, gravarAbaLembrada, lerAbaLembrada, rotaDoEndereco } from "../src/rotas.ts";
 
@@ -47,7 +47,7 @@ describe("save", () => {
   });
   test("texto do save: {semente, log, versao}", () => {
     const m = new Motor(7); m.avancar(30); m.observar("alimentar");
-    expect(textoSave(m)).toBe(JSON.stringify({ semente: 7, log: [[480, "t", 30], [510, "d", "alimentar"]], versao: 3 }));
+    expect(textoSave(m)).toBe(JSON.stringify({ semente: 7, log: [[480, "t", 30], [510, "d", "alimentar"]], versao: VERSAO_PET }));
   });
   test("pet de exemplo e o do HTML (semente 20260924, meio dia)", () => {
     const m = petExemplo();

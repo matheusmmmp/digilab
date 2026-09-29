@@ -626,9 +626,85 @@
   "sujeira_para_limpar": 2,
   "visitas_por_dia_relapso": 3
  },
+ "ConfigDuracoes": {
+  "canonica": [
+   360,
+   1440,
+   2160
+  ],
+  "teste": [
+   180,
+   720,
+   1080
+  ]
+ },
+ "ConfigEducacao": {
+  "acertos_para_aprender": 3,
+  "custo_humor_acordar": 0.12,
+  "custo_saude_superalimentacao": 0.05,
+  "delta_epsilon_indisciplina": 0.1,
+  "disciplina_max": 100,
+  "disciplina_por_banheiro": 0,
+  "epsilon_base_pet": 0.05,
+  "estagio_inicio_chamados": "crianca",
+  "fator_disciplina_ao_evoluir": 0.5,
+  "fracao_falso_base": 0.25,
+  "fracao_petisco_alimentar": 0.5,
+  "intervalos_chamado_min": {
+   "adolescente": {
+    "carinho": 120,
+    "fome": 150,
+    "higiene": 120
+   },
+   "adulto": {
+    "carinho": 180,
+    "fome": 180,
+    "higiene": 120
+   },
+   "crianca": {
+    "carinho": 90,
+    "fome": 90,
+    "higiene": 120
+   }
+  },
+  "janela_min": 15,
+  "ligada": false,
+  "limiar_necessidade_real": 0.35,
+  "limiar_superalimentacao": 0.9,
+  "passo_disciplina": 25,
+  "reforco_por_petisco": 0.05,
+  "teto_falso": 0.5,
+  "tipo_slot_aviso": "higiene",
+  "vinculo_bronca_sem_motivo": -0.05
+ },
  "ConfigEmocao": {
   "limiar_eixo": 0.2,
   "modula_memoria": false
+ },
+ "ConfigEquilibrio": {
+  "margem_max": 0.15,
+  "taxa_max": 0.6,
+  "taxa_min": 0.4
+ },
+ "ConfigEscala": {
+  "beta_treino": 0.03,
+  "epsilon_npc": 0.2,
+  "fator_npc": {
+   "tier1_brutamontes": 1.1,
+   "tier2_carcereiro": 1.5,
+   "tier2_porteiro": 1.1,
+   "tier2_sentinela": 1.6,
+   "tier3_soberano": 1.2
+  },
+  "ligada": false,
+  "taxa_min_e4": 0.6,
+  "treino_e4": 22.0,
+  "vida_por_estagio": {
+   "adolescente": 600,
+   "adulto": 1500,
+   "bebe": 50,
+   "crianca": 200
+  }
  },
  "ConfigEvolucaoPesquisa": {
   "amplitude_temperamento": 1.0,
@@ -688,6 +764,20 @@
   "h": 0.8,
   "janela_ticks": 720,
   "k_teimosia_bronca": 0.2
+ },
+ "ConfigHeranca": {
+  "estagio_minimo_pais": "adulto",
+  "sigma_temperamento": 0.1
+ },
+ "ConfigLesoes": {
+  "efeito_qualificacao": "condicao_adulto",
+  "horas_sem_tratar_morte": 6,
+  "lesoes_para_morte": 20,
+  "ligada": false,
+  "limiar_taxa_vitoria": 0.8,
+  "luta_treina": false,
+  "lutas_minimas_taxa": 10,
+  "prob_lesao_derrota": 0.2
  },
  "ConfigMemoria": {
   "escala_feedback": 3.0,
@@ -786,6 +876,12 @@
   "mult_regen_colosso_partido": 0.85,
   "teto_vinculo": 0.6,
   "turnos_pele_colosso_partido": 3
+ },
+ "ConfigSparring": {
+  "intervalo_min": 30,
+  "lutas": 10,
+  "lutas_braco_lutador": 20,
+  "primeira_apos_inicio_min": 30
  },
  "ConfigTemperamento": {
   "amplitude": 1.0,

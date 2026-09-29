@@ -329,8 +329,9 @@ def _sem_repeticao(parte: str) -> str:
 
 
 def _com_limite(esquema: dict) -> dict:
-    """Ollama (gramatica do llama.cpp): limite de caracteres em cada campo de texto do esquema."""
-    props = {k: ({**v, "maxLength": MAX_CHARS_MOLDURA} if v.get("type") == "string" else v)
+    """Ollama (gramatica do llama.cpp): limite de caracteres em cada campo de texto do esquema (o campo que ja
+    traz maxLength proprio, como nas ferramentas de pesquisa, fica com o dele)."""
+    props = {k: ({"maxLength": MAX_CHARS_MOLDURA, **v} if v.get("type") == "string" else v)
              for k, v in esquema["properties"].items()}
     if "abertura" in props:
         props["abertura"] = {**props["abertura"], "minLength": MIN_CHARS_ABERTURA}
@@ -362,18 +363,19 @@ class ProvedorClaude:
     nome = "claude"
     tem_custo = True
 
-    def __init__(self, cliente, modelo: str = MODELO_PADRAO) -> None:
+    def __init__(self, cliente, modelo: str = MODELO_PADRAO, max_tokens: int = MAX_TOKENS_SAIDA) -> None:
         if modelo not in PRECOS_USD_POR_MTOK:
             raise ValueError(f"modelo sem preco conhecido: {modelo!r}; sem preco nao da para garantir o teto de gasto")
         self.cliente = cliente
         self.modelo = modelo
+        self.max_tokens = max_tokens       # a fala usa o padrao; ferramentas de pesquisa pedem mais
 
     def disponivel(self) -> tuple[bool, str]:
         return (True, "") if self.cliente is not None else (False, "sem credencial da API (ANTHROPIC_API_KEY)")
 
     def custo_maximo(self, sistema: str, pedido: str) -> float:
         # entrada estimada por cima: 1 token a cada 2 caracteres
-        return custo_usd(self.modelo, math.ceil((len(sistema) + len(pedido) + 400) / 2), MAX_TOKENS_SAIDA)
+        return custo_usd(self.modelo, math.ceil((len(sistema) + len(pedido) + 400) / 2), self.max_tokens)
 
     def custo_real(self, r: RespostaProvedor) -> float | None:
         if r.tokens_entrada is None or r.tokens_saida is None:
@@ -384,7 +386,7 @@ class ProvedorClaude:
         return custo_usd(precos, r.tokens_entrada, r.tokens_saida)
 
     def gerar(self, sistema: str, pedido: str, esquema: dict, semente: int) -> RespostaProvedor:
-        base = dict(model=self.modelo, max_tokens=MAX_TOKENS_SAIDA, system=sistema,
+        base = dict(model=self.modelo, max_tokens=self.max_tokens, system=sistema,
                     messages=[{"role": "user", "content": pedido}])
         if self.modelo in MODELOS_COM_FALLBACK:
             # Opus 5 / Fable 5.1: esforco baixo e fallback de recusa do servidor da API
@@ -410,9 +412,10 @@ class ProvedorOllama:
     tem_custo = False
 
     def __init__(self, modelo: str = MODELO_OLLAMA_PADRAO, url: str = URL_OLLAMA_PADRAO,
-                 timeout: float = TIMEOUT_OLLAMA_S, abrir=None) -> None:
+                 timeout: float = TIMEOUT_OLLAMA_S, abrir=None, max_tokens: int = MAX_TOKENS_OLLAMA) -> None:
         import urllib.request
 
+        self.max_tokens = max_tokens       # a fala usa o padrao; ferramentas de pesquisa pedem mais
         self.modelo = modelo
         self.url = url.rstrip("/")
         self.timeout = timeout
@@ -452,7 +455,7 @@ class ProvedorOllama:
             "format": _com_limite(esquema),
             "stream": False,
             "keep_alive": MANTER_OLLAMA,
-            "options": {"temperature": TEMPERATURA_OLLAMA, "seed": semente, "num_predict": MAX_TOKENS_OLLAMA,
+            "options": {"temperature": TEMPERATURA_OLLAMA, "seed": semente, "num_predict": self.max_tokens,
                         "repeat_penalty": REPETICAO_OLLAMA},
         }
         d = self._pedir("/api/chat", corpo, self.timeout if self.aquecido else TIMEOUT_AQUECIMENTO_S)

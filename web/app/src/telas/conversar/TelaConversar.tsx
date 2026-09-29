@@ -10,7 +10,7 @@ import { Peca } from "../../componentes/Imagens.tsx";
 import { rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { enviarConversa, escolherModo, estadoDoPet, lerLog, useFalaLivre, type ModoFala, type RegistroFala } from "../../falaLivre.ts";
 import { rotuloRel } from "../../componentes/Barras.tsx";
-import { mudarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado } from "../../tempo.ts";
 
 /* como a fala aparece em cada nivel (guia, secao 9) */
@@ -75,7 +75,7 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
   const pronto = livre ? !!fl.status : fl.modo === "moldura" ? llm.ativo : true;
   const direita = livre ? (fl.status ? `${fl.status.modelo} pronto` : fl.statusErro ? "servidor sem a fala livre" : "conferindo…") : r.texto;
   const enviar = (ev: Event) => { ev.preventDefault(); enviarConversa(msg); setMsg(""); };
-  const agir = (a: AcaoDono) => { if (nascendo > 0) return; mudarMotor(mm => mm.observar(a)); ajustarVelocidadeChamado(); };
+  const agir = (a: AcaoDono) => { if (nascendo > 0 || jogoAtual().motor.morte) return; mudarMotor(mm => mm.observar(a)); ajustarVelocidadeChamado(); };
   return (
     <section class="conv-tela dl" aria-labelledby="conv-tit">
       <div class="conv-cab dl-faixa">

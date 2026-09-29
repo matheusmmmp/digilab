@@ -8,7 +8,7 @@ import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
 import { useDesktop } from "../../desktop.ts";
-import { abrirGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
+import { abrirGuardado, ativarGuardado, cruzarComAtivo, lerGuardados } from "../../pets.ts";
 import { dec } from "../../componentes/Barras.tsx";
 import { diaDe } from "./TelaPet.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
@@ -30,7 +30,7 @@ export function voltarAoAnterior(): string {
 }
 
 /** os pets guardados (varios pets, um ativo): parados no tempo; Ativar troca com o ativo */
-function Guardados({ ativar }: { ativar: (i: number) => void }) {
+function Guardados({ ativar, cruzar }: { ativar: (i: number) => void; cruzar: ((i: number) => void) | null }) {
   const a = useAtlas();
   const lista = useMemo(() => {
     try { return lerGuardados().map(g => abrirGuardado(g)); } catch { return null; }
@@ -40,6 +40,7 @@ function Guardados({ ativar }: { ativar: (i: number) => void }) {
   return (
     <section class="mp-guardados" aria-labelledby="mp-guard-tit">
       <h3 id="mp-guard-tit">Guardados <small>o tempo deles está parado</small></h3>
+      {cruzar && <p class="dl-apoio mp-cruzar-dica">Seu pet é adulto: ele pode cruzar com outro adulto. O filho herda o temperamento dos dois e o brasão de um deles; nada aprendido passa adiante.</p>}
       <ul>
         {lista.map((g, i) => {
           const img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(g.forma)) : null, p = lutadorPet(g, "", true).cond;
@@ -49,7 +50,12 @@ function Guardados({ ativar }: { ativar: (i: number) => void }) {
               <span class="mp-g-txt"><b>{nomeForma(g.forma)}</b>
                 <span><span class="dl-tag dl-tag--estagio">{nomeEstagio(g.forma)}</span> dia {diaDe(g.e.tick)}</span>
                 <span class="mp-g-num">vida {Math.round(vidaExibida(p, g.forma.est, g.treino.total)).toLocaleString("pt-BR")} · treino +{dec(g.treino.total, 0)}</span></span>
-              <button type="button" class="dl-btn dl-btn--sec mp-g-ativar" onClick={() => ativar(i)}>Ativar</button>
+              <span class="mp-g-bts">
+                <button type="button" class="dl-btn dl-btn--sec mp-g-ativar" onClick={() => ativar(i)}>Ativar</button>
+                {cruzar && g.estagioAtual === "adulto" && !g.morte &&
+                  <button type="button" class="dl-btn dl-btn--sec mp-g-cruzar" onClick={() => cruzar(i)}
+                    title="o filho herda o temperamento dos dois e a espécie de um deles">Cruzar</button>}
+              </span>
             </li>
           );
         })}
@@ -73,6 +79,11 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
   }
   const ativar = (i: number) => {
     try { ativarGuardado(i); setMsg(""); ref.current?.close(); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
+  };
+  /* heranca: so com o ativo adulto e vivo; o filho vira o ativo */
+  const podeCruzar = !ovo && m.estagioAtual === "adulto" && !m.morte;
+  const cruzar = (i: number) => {
+    try { cruzarComAtivo(i); setMsg(""); ref.current?.close(); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   const exportar = async () => {
     /* o mesmo conteudo do save: semente, registro e versao do pet */
@@ -99,7 +110,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
             {a.tipo === "ok" && <img class="dl-pix mpd-novo-ovo" src={imagemAtlas(a, OVO[m.especie]).url} width={26} height={36} alt="" />}<span>novo ovo</span></button>
         </div>
         <p class="mpd-aviso">Só o pet ativo tem o tempo correndo; os guardados ficam parados onde estavam. Um ovo novo apaga o pet ativo (com confirmação, no Registro).</p>
-        <Guardados ativar={ativar} />
+        <Guardados ativar={ativar} cruzar={podeCruzar ? cruzar : null} />
         <div class="mpd-bts">
           <button type="button" class="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
           {anterior && <button type="button" class="dl-btn dl-btn--sec" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</button>}
@@ -124,7 +135,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
             <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span></span>
         </section>
         <p class="mp-aviso">Só o pet ativo tem o tempo correndo; os guardados ficam parados onde estavam.</p>
-        <Guardados ativar={ativar} />
+        <Guardados ativar={ativar} cruzar={podeCruzar ? cruzar : null} />
         {anterior && <div class="mp-anterior">{antImg && <img class="dl-pix" src={antImg.url} width={antImg.w / 2} height={antImg.h / 2} alt="" />}
           <span><b>Pet anterior guardado</b><span>ficou salvo quando você usou o Laboratório</span></span></div>}
         {anterior && <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</button>}

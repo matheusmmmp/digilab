@@ -491,3 +491,95 @@ PROTOCOLO_ARENA_V1_HABITUACAO = _protocolo_habituacao("arena-v1-personalidade-ha
 PROTOCOLO_ARENA_V1_SEM_HABITUACAO = _protocolo_habituacao("arena-v1-personalidade-sem-habituacao", False)
 for _p in (PROTOCOLO_ARENA_V1_HABITUACAO, PROTOCOLO_ARENA_V1_SEM_HABITUACAO):
     PROTOCOLOS[_p.versao] = _p
+
+
+# =====================================================================
+# educacao-v1: parametros de educacao, lesoes, heranca e equilibrio
+# docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, aprovado pelo Matheus em 2026-09-28. Os valores moram em
+# config.py; aqui ficam o status e a fonte de cada um. "Aprovado" nao troca PROPOSTO por DECIDIDO:
+# DECIDIDO so o que veio de regra ja existente ou de decisao explicita; o resto segue PROPOSTO com fonte.
+# O protocolo de run (bracos, sementes, painel) entra na Fase 3, em PLANO_ANALISE_V3.
+# =====================================================================
+
+_NV = "fonte da comunidade, nao verificada"
+_SF = "sem fonte"
+_FONTES_EDUCACAO_V1 = {
+    "ConfigEducacao.ligada": (_D, "chave desligada por padrao, como ConfigEscala; runs de educacao usam a ligada"),
+    "ConfigEducacao.janela_min": (_D, "docs/cronograma_interacoes.json, janelas.chamado_min"),
+    "ConfigEducacao.estagio_inicio_chamados": (_D, "Fase 0, item 6 (decisao do Matheus)"),
+    "ConfigEducacao.intervalos_chamado_min": (_D, "docs/cronograma_interacoes.json, estagios.*.intervalos_min"),
+    "ConfigEducacao.limiar_necessidade_real": (_D, "igual a ConfigDonos.limiar_necessidade_pedido_adequado"),
+    "ConfigEducacao.fracao_falso_base": (_P, _SF + "; no Tamagotchi o chamado falso some com disciplina cheia"),
+    "ConfigEducacao.reforco_por_petisco": (_P, _SF),
+    "ConfigEducacao.teto_falso": (_P, _SF),
+    "ConfigEducacao.disciplina_max": (_D, "escala 0-100, igual as outras barras do jogo"),
+    "ConfigEducacao.passo_disciplina": (_P, "medidor de 4 barras do Tamagotchi; " + _NV),
+    "ConfigEducacao.acertos_para_aprender": (_P, "Digimon Pendulum/4U (3 acertos); " + _NV),
+    "ConfigEducacao.fator_disciplina_ao_evoluir": (_P, _SF),
+    "ConfigEducacao.fracao_petisco_alimentar": (_P, _SF),
+    "ConfigEducacao.disciplina_por_banheiro": (_D, "Matheus delegou (2026-09-28): 0; com +passo o permissivo se "
+                                                      "educava so pelo banheiro (Fase 2 parte 3)"),
+    "ConfigEducacao.tipo_slot_aviso": (_D, "cronograma_interacoes.json _meta: coco a cada 120 min = intervalo de higiene"),
+    "ConfigEducacao.vinculo_bronca_sem_motivo": (_P, _SF + "; mesma magnitude de ConfigTreino.vinculo_forcar"),
+    "ConfigEducacao.custo_humor_acordar": (_P, _SF + "; mesma magnitude de Config.custo_repreender"),
+    "ConfigEducacao.limiar_superalimentacao": (_P, _SF),
+    "ConfigEducacao.custo_saude_superalimentacao": (_P, _SF),
+    "ConfigLesoes.ligada": (_D, "chave desligada por padrao, como ConfigEscala"),
+    "ConfigLesoes.efeito_qualificacao": (_D, "Matheus delegou (2026-09-28): sem qualificacao o pet fica adolescente "
+                                             "(docs/PLANO_ANALISE_V3.md)"),
+    "ConfigLesoes.luta_treina": (_D, "Matheus, opcao B (2026-09-28): desligado; na V3b levou 577/640 pets a forma "
+                                     "sombria (artifacts_educacao_v3b)"),
+    "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
+    "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
+    "ConfigLesoes.prob_lesao_derrota": (_P, _SF),
+    "ConfigLesoes.lesoes_para_morte": (_P, "Digimon Ver.20th (20 lesoes); " + _NV),
+    "ConfigLesoes.horas_sem_tratar_morte": (_P, "Digimon Ver.20th (6 h); " + _NV),
+    "ConfigHeranca.sigma_temperamento": (_P, _SF),
+    "ConfigHeranca.estagio_minimo_pais": (_P, _SF),
+    "ConfigDuracoes.teste": (_D, "Fase 0, item 8: as duracoes de hoje (ConfigEvolucaoPesquisa)"),
+    "ConfigDuracoes.canonica": (_D, "Fase 0, item 8; cronograma_interacoes.json _meta (v-pets: 6 h, 24 h, 36 h)"),
+    "ConfigEducacao.epsilon_base_pet": (_D, "igual a ConfigCombateV2.epsilon_bots"),
+    "ConfigEducacao.delta_epsilon_indisciplina": (_P, _SF + " (PLANO_ANALISE_V3, secao 2.2)"),
+    "ConfigSparring.lutas": (_D, "igual a ConfigLesoes.lutas_minimas_taxa"),
+    "ConfigSparring.lutas_braco_lutador": (_P, _SF + " (PLANO_ANALISE_V3, secao 2.5)"),
+    "ConfigSparring.intervalo_min": (_P, _SF),
+    "ConfigSparring.primeira_apos_inicio_min": (_P, _SF),
+    "ConfigEquilibrio.taxa_min": (_P, _SF),
+    "ConfigEquilibrio.taxa_max": (_P, _SF),
+    "ConfigEquilibrio.margem_max": (_P, _SF),
+}
+
+
+def _valor_config(nome: str) -> Any:
+    classe, campo = nome.split(".")
+    instancias = {"ConfigEducacao": _config.CONFIG_EDUCACAO, "ConfigLesoes": _config.CONFIG_LESOES,
+                  "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO,
+                  "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING}
+    return getattr(instancias[classe], campo)
+
+
+PARAMETROS_EDUCACAO_V1: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_EDUCACAO_V1.items()}
+
+
+def validar_parametros_educacao(params: dict[str, Campo] | None = None) -> None:
+    """Todo campo das 6 dataclasses tem status e fonte, e o valor registrado bate com config.py."""
+    params = PARAMETROS_EDUCACAO_V1 if params is None else params
+    esperados = {f"{type(c).__name__}.{f.name}" for c in (_config.CONFIG_EDUCACAO, _config.CONFIG_LESOES,
+                                                         _config.CONFIG_HERANCA, _config.CONFIG_EQUILIBRIO,
+                                                         _config.CONFIG_DURACOES, _config.CONFIG_SPARRING)
+                 for f in fields(c)}
+    if set(params) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(params))}; "
+                         f"registro sem parametro: {sorted(set(params) - esperados)}")
+    for n, c in params.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def hash_parametros_educacao(params: dict[str, Campo] | None = None) -> str:
+    params = PARAMETROS_EDUCACAO_V1 if params is None else params
+    carga = {"versao": "educacao-v1", "parametros": {n: c.para_dict() for n, c in sorted(params.items())},
+             "engine_sha256": sha256_engine()}
+    texto = json.dumps(carga, sort_keys=True, ensure_ascii=True, default=_para_json)
+    return hashlib.sha256(texto.encode("ascii")).hexdigest()

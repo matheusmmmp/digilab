@@ -136,13 +136,15 @@ def _partidas_do_ovo(args):
     return s, {"A": a_pares, "A_replicas_principal": replicas, "B": painel}, n_part, time.perf_counter() - t0
 
 
-def executar(cfg: dict, saida: Path, ovos: list[int], m_a: int, reps: int, m_b: int, processos: int | None) -> dict:
+def executar(cfg: dict, saida: Path, ovos: list[int], m_a: int, reps: int, m_b: int, processos: int | None,
+             rotulo: str | None = None) -> dict:
+    """rotulo: rotulo das sementes de partida (padrao: o do piloto; a confirmatoria usa o proprio)."""
     if sha256_engine() != ENGINE_SHA256_V0:
         raise RuntimeError("engine.py alterado")
     if m_a % 2 or m_b % 2:
         raise ValueError("partidas precisa ser par (lados trocados na metade)")
     saida.mkdir(parents=True, exist_ok=True)
-    rotulo = cfg["rotulo_partidas_piloto"]
+    rotulo = rotulo or cfg["rotulo_partidas_piloto"]
     bracos = list(cfg["bracos_principais"]) + list(cfg["bracos_secundarios"])
     if sorted(bracos) != sorted(BRACOS_TREINO):
         raise ValueError(f"bracos do config {bracos} != BRACOS_TREINO")
