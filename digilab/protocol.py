@@ -585,3 +585,171 @@ def hash_parametros_educacao(params: dict[str, Campo] | None = None) -> str:
              "engine_sha256": sha256_engine()}
     texto = json.dumps(carga, sort_keys=True, ensure_ascii=True, default=_para_json)
     return hashlib.sha256(texto.encode("ascii")).hexdigest()
+
+
+# =====================================================================
+# Referendo dos campos PROPOSTOS (decisao do Matheus em 2026-09-29: "Referendar todos")
+# Registro a parte: o status dentro dos protocolos NAO muda (mudaria os hashes das runs antigas: canonica,
+# confirmatoria, V3). Cada campo vale so com o valor exato referendado (JSON normalizado); um valor novo
+# volta a contar como PROPOSTO nao referendado.
+# =====================================================================
+
+REFERENDO = {"data": "2026-09-29", "por": "Matheus", "decisao": "Referendar todos"}
+_REFERENDO_CAMPOS: dict[str, list[str]] = json.loads(r"""{
+ "ConfigEducacao.acertos_para_aprender": [
+  "3"
+ ],
+ "ConfigEducacao.custo_humor_acordar": [
+  "0.12"
+ ],
+ "ConfigEducacao.custo_saude_superalimentacao": [
+  "0.05"
+ ],
+ "ConfigEducacao.delta_epsilon_indisciplina": [
+  "0.1"
+ ],
+ "ConfigEducacao.fator_disciplina_ao_evoluir": [
+  "0.5"
+ ],
+ "ConfigEducacao.fracao_falso_base": [
+  "0.25"
+ ],
+ "ConfigEducacao.fracao_petisco_alimentar": [
+  "0.5"
+ ],
+ "ConfigEducacao.limiar_superalimentacao": [
+  "0.9"
+ ],
+ "ConfigEducacao.passo_disciplina": [
+  "25"
+ ],
+ "ConfigEducacao.reforco_por_petisco": [
+  "0.05"
+ ],
+ "ConfigEducacao.teto_falso": [
+  "0.5"
+ ],
+ "ConfigEducacao.vinculo_bronca_sem_motivo": [
+  "-0.05"
+ ],
+ "ConfigEquilibrio.margem_max": [
+  "0.15"
+ ],
+ "ConfigEquilibrio.taxa_max": [
+  "0.6"
+ ],
+ "ConfigEquilibrio.taxa_min": [
+  "0.4"
+ ],
+ "ConfigHeranca.estagio_minimo_pais": [
+  "\"adulto\""
+ ],
+ "ConfigHeranca.sigma_temperamento": [
+  "0.1"
+ ],
+ "ConfigLesoes.experiencia_max": [
+  "0.05"
+ ],
+ "ConfigLesoes.experiencia_por_vitoria": [
+  "0.002"
+ ],
+ "ConfigLesoes.horas_sem_tratar_morte": [
+  "6"
+ ],
+ "ConfigLesoes.lesoes_para_morte": [
+  "20"
+ ],
+ "ConfigLesoes.limiar_taxa_vitoria": [
+  "0.8"
+ ],
+ "ConfigLesoes.prob_lesao_derrota": [
+  "0.2"
+ ],
+ "ConfigSparring.intervalo_min": [
+  "30"
+ ],
+ "ConfigSparring.lutas_braco_lutador": [
+  "20"
+ ],
+ "ConfigSparring.primeira_apos_inicio_min": [
+  "30"
+ ],
+ "protocolo.amostras_por_estado": [
+  "200"
+ ],
+ "protocolo.bootstrap_reamostragens": [
+  "10000"
+ ],
+ "protocolo.bootstrap_semente": [
+  "4242"
+ ],
+ "protocolo.definicao_vitoria": [
+  "\"KO (hp do oponente chega a 0) ou, apos max_turnos, maior hp restante; hp igual = empate, conta 0.5 para cada lado\""
+ ],
+ "protocolo.dias_simulados": [
+  "14"
+ ],
+ "protocolo.estados_sonda": [
+  "64"
+ ],
+ "protocolo.habituacao": [
+  "\"{\\\"emocao\\\": {\\\"limiar_eixo\\\": 0.2, \\\"modula_memoria\\\": false}, \\\"habituacao\\\": {\\\"categorias\\\": [\\\"demora\\\", \\\"bronca\\\"], \\\"h\\\": 0.8, \\\"janela_ticks\\\": 720, \\\"k_teimosia_bronca\\\": 0.2}, \\\"limiar_extremo\\\": 0.2}\""
+ ],
+ "protocolo.habituacao_ligada": [
+  "true",
+  "false"
+ ],
+ "protocolo.limiar_divergencia_jsd_bits": [
+  "0.02"
+ ],
+ "protocolo.memoria": [
+  "[[\"features\", [\"latencia_fome\", \"latencia_higiene\", \"repreensoes\", \"elogios\"]], [\"config\", [[\"escala_feedback\", 3.0], [\"janela_latencia_ticks\", 240], [\"limiar_necessidade_pedido\", 0.5], [\"tau_feedback_ticks\", 360.0]]]]",
+  "[[\"features\", [\"demora\", \"bronca\", \"elogio\", \"carinho\"]], [\"config\", \"{\\\"ativas\\\": [\\\"demora\\\", \\\"bronca\\\", \\\"elogio\\\", \\\"carinho\\\"], \\\"categorias\\\": {\\\"bronca\\\": 1.0, \\\"carinho\\\": 0.5, \\\"demora\\\": null, \\\"elogio\\\": 1.0, \\\"sujeira\\\": 0.5, \\\"treino_forcado\\\": 1.0}, \\\"d_curto_ticks\\\": 720, \\\"janela_latencia_ticks\\\": 240, \\\"limiar_necessidade_pedido\\\": 0.5, \\\"n_curto\\\": 4, \\\"n_longo\\\": 2, \\\"relembrar_ticks_acordado\\\": 240, \\\"tau_ativacao_ticks\\\": 360.0}\"]]"
+ ],
+ "protocolo.nivel_confianca": [
+  "0.95"
+ ],
+ "protocolo.obediencia_desligada": [
+  "false",
+  "true"
+ ],
+ "protocolo.orcamento_interacoes": [
+  "224"
+ ],
+ "protocolo.partidas_por_par": [
+  "20"
+ ],
+ "protocolo.personalidade": [
+  "\"{\\\"desejo\\\": {\\\"k_cumprimento_ticks\\\": 60, \\\"limiar_necessidade\\\": 0.3, \\\"limiar_vontade\\\": 0.1}, \\\"obediencia\\\": {\\\"acoes_sujeitas\\\": [\\\"alimentar\\\", \\\"limpar\\\", \\\"brincar\\\", \\\"acariciar\\\"], \\\"b0\\\": 1.0, \\\"b_conflito\\\": 2.0, \\\"b_teimosia\\\": 1.0, \\\"b_vinculo\\\": 2.0, \\\"limiar_conflito\\\": 0.3, \\\"limiar_motivo\\\": 0.05, \\\"prob_fazer_outra\\\": 0.5}, \\\"temperamento\\\": {\\\"amplitude\\\": 1.0, \\\"categorias_rancor\\\": [\\\"demora\\\", \\\"bronca\\\"], \\\"k_curiosidade\\\": 0.6931471805599453, \\\"k_rancor\\\": 0.6931471805599453, \\\"k_sensibilidade\\\": 0.5, \\\"k_teimosia\\\": 0.5}, \\\"vinculo\\\": {\\\"alfa\\\": 0.1, \\\"inicial\\\": 0.5, \\\"janela_coerencia_ticks\\\": 1440, \\\"janela_desejo_ticks\\\": 60, \\\"janela_latencia_ticks\\\": 240, \\\"peso_atendimento\\\": 1.0, \\\"peso_coerencia\\\": 1.0, \\\"peso_desejo\\\": 0.5}}\""
+ ],
+ "protocolo.politicas": [
+  "[\"bandit\", \"instinto\"]"
+ ],
+ "protocolo.semente_sonda": [
+  "9001"
+ ],
+ "protocolo.semente_torneio": [
+  "7001"
+ ],
+ "protocolo.sementes_coorte": [
+  "[101, 202, 303, 404, 505, 606, 707, 808, 909, 1010]"
+ ],
+ "protocolo.temperamento_neutro": [
+  "false",
+  "true"
+ ]
+}""")
+
+
+def referendado(nome: str, valor: Any) -> bool:
+    """nome: 'protocolo.<campo>' ou 'ConfigX.campo' (educacao-v1)"""
+    return json.dumps(_para_json(valor), sort_keys=True, ensure_ascii=True) in _REFERENDO_CAMPOS.get(nome, ())
+
+
+def propostos_nao_referendados(p: Protocolo) -> list[str]:
+    return [n for n, c in p.campos().items() if c.status is Status.PROPOSTO and not referendado("protocolo." + n, c.valor)]
+
+
+def educacao_nao_referendados(params: dict[str, Campo] | None = None) -> list[str]:
+    params = PARAMETROS_EDUCACAO_V1 if params is None else params
+    return [n for n, c in params.items() if c.status is Status.PROPOSTO and not referendado(n, c.valor)]

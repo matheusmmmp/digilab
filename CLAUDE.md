@@ -736,7 +736,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   condicionada, morte súbita) e a `TAREFA_PERSONALIDADE_OBEDIENCIA`; espécies precisam de identidade
   que gere ciclo (E2); a resposta declarada do marcar não funciona com recuar anulando avançar (E3).
 
-- Referendar (ou alterar) os campos PROPOSTOS de `protocol.py` antes de citar qualquer resultado.
+- Campos PROPOSTOS: referendados pelo Matheus em 2026-09-29 ("Referendar todos"), em `protocol.REFERENDO` (registro à parte:
+  os status e os hashes das runs antigas não mudam; um valor novo volta a contar como não referendado). O aviso
+  "PROPOSTOS não referendados" das runs antigas fica como está, porque faz parte dos artefatos reproduzíveis.
 - Ablação feita (ver acima): inconclusiva. Aumentar `partidas_por_par` e/ou sementes antes de
   concluir qualquer coisa. Isso muda o protocolo e é decisão do pesquisador.
 - Sementes de partida derivam do nome do braço. Renomear um braço muda todas as partidas dele.
