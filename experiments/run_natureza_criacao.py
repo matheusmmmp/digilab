@@ -240,6 +240,26 @@ def rodar(nome: str, cfg: dict, saida: Path, processos: int) -> dict:
         tempos["painel_s"] = time.perf_counter() - t1
         _gravar(saida / "partidas_neutra.json", _dump({"por_celula": por_celula}))
         print(f"  [{nome}] painel: {n} partidas em {tempos['painel_s']:.0f} s", flush=True)
+    return concluir(nome, cfg, saida, genomas, ambientes, donos, esp_por_g, pets, por_celula, tempos)
+
+
+def reanalisar(nome: str, cfg: dict, saida: Path, motivo: str) -> dict:
+    """Refaz so a analise e o meta a partir do pets.json e do partidas_neutra.json ja gravados (nenhuma vida nem
+    partida nova). Usado quando a run caiu depois do painel (motivo gravado no meta)."""
+    rc = cfg["rodadas"][nome]
+    genomas, ambientes, donos = list(rc["genomas"]), list(rc["ambientes"]), list(cfg["donos"])
+    esp_por_g = {g: especie_da_rodada(rc["especie"], i) for i, g in enumerate(genomas)}
+    pets = json.loads((saida / "pets.json").read_text(encoding="utf-8"))
+    por_celula = json.loads((saida / "partidas_neutra.json").read_text(encoding="utf-8"))["por_celula"]
+    esperado = {chave(b, g, r) for g in genomas for r in ambientes for b in donos}
+    if set(pets) != esperado or set(por_celula) != {f"{g}:{r}" for g in genomas for r in ambientes}:
+        raise ValueError("arquivos gravados nao batem com a rodada do config")
+    if any(pets[chave(b, g, r)]["especie"] != esp_por_g[g] for g in genomas for r in ambientes for b in donos):
+        raise ValueError("especie gravada diferente da regra da rodada")
+    return concluir(nome, cfg, saida, genomas, ambientes, donos, esp_por_g, pets, por_celula, {"reanalise": motivo})
+
+
+def concluir(nome, cfg, saida, genomas, ambientes, donos, esp_por_g, pets, por_celula, tempos) -> dict:
     Y = {(g, b, r): taxa(por_celula[f"{g}:{r}"][b]) for g in genomas for r in ambientes for b in donos}
     t2 = time.perf_counter()
     res = analisar(Y, pets, donos, genomas, cfg["bootstrap"], com_gate=(nome == "especie_fixa"))
@@ -264,13 +284,18 @@ def main(argv=None) -> int:
     ap.add_argument("--rodada", required=True, choices=("piloto", "especie_fixa", "especies_balanceadas"))
     ap.add_argument("--saida", default=None, help="padrao: artifacts_linhagem/natureza_criacao/<rodada>")
     ap.add_argument("--processos", type=int, default=None)
+    ap.add_argument("--reanalisar", default=None, metavar="MOTIVO",
+                    help="refaz so a analise a partir dos arquivos gravados (nenhuma vida nova); o motivo vai para o meta")
     a = ap.parse_args(argv)
     if sha256_engine() != ENGINE_SHA256_V0:
         raise RuntimeError("engine.py alterado")
     validar_parametros_educacao()
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8"))
     saida = Path(a.saida) if a.saida else SAIDA_PADRAO / a.rodada
-    res = rodar(a.rodada, cfg, saida, a.processos or cfg["processos"])
+    if a.reanalisar:
+        res = reanalisar(a.rodada, cfg, saida, a.reanalisar)
+    else:
+        res = rodar(a.rodada, cfg, saida, a.processos or cfg["processos"])
     e, ic = res["estimativas"], res["ic95_pigeonhole_GR"]
     for k in ("var_G", "var_D", "var_R", "var_GD", "var_GR", "var_DR", "var_e"):
         print(f"  {k}: {e[k]:+.6f} [{ic[k][0]:+.6f}, {ic[k][1]:+.6f}]  fracao {e['frac_' + k[4:]]:.3f}")
