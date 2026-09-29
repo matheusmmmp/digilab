@@ -2,7 +2,7 @@
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import {
-  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -25,8 +25,8 @@ import type {
 export interface Evolucao {
   tick: number; estagio: Estagio; ramo?: Ramo; cuidado?: number; linha?: Linha; adulta?: FormaAdulta; carater?: Carater;
   sparring?: number; sobrecarga?: number; forma: Forma;
-  /** pets v5: Ultimate -> Mega (a forma nao muda; vinculo na hora da evolucao) */
-  mega?: true; vinculo?: number;
+  /** pets v5: Ultimate -> Mega (a forma adulta nao muda; vinculo na hora da evolucao) */
+  vinculo?: number;
 }
 interface Chamados { abertos: Partial<Record<Chamado, number>>; atendidos: number; total: number }
 interface RegistroDesejo { atual: { tick: number; tipo: Desejo["tipo"]; alvo: string } | null; vontades: number; cumpridas: number; abertas: [number, string][]; tVontade: number }
@@ -130,7 +130,7 @@ export class Motor {
   /** cruza dois adultos vivos (Ultimate ou Mega): o filho (versao atual) herda temperamento (media + ruido) e especie (de um dos pais) */
   static cruzar(pai: Motor, mae: Motor, sementeFilho: number, sementeHeranca: number, quem: string, ger?: [number, number]): Motor {
     const ver = (p: Motor, g?: number) => {
-      if (p.estagioAtual !== "adulto") throw new Error("só adultos cruzam (Ultimate ou Mega)");
+      if (p.estagioAtual !== "adulto" && p.estagioAtual !== "mega") throw new Error("só Ultimate ou Mega cruzam");
       if (p.morte) throw new Error("um dos pais morreu");
       return { h: hashSemente(JSON.stringify(p.log)), esp: p.especie, temp: { ...p.temp }, est: p.estagioAtual, ...(g ? { ger: g } : {}) };
     };
@@ -310,7 +310,7 @@ export class Motor {
     return Math.min(CED.tetoFalso, CED.fracaoFalsoBase * (1 - ed.disciplina / CED.disciplinaMax) + CED.reforcoPetisco * ed.petiscos);
   }
   private _agendar(est: Estagio, t: number): void {
-    const iv = est === "bebe" ? null : CED.intervalos[est];
+    const iv = est === "bebe" ? null : CED.intervalos[baseDe(est) as EstagioTreino];
     this.edu.proximo = iv ? Object.fromEntries(Object.entries(iv).map(([k, m]) => [k, t + m])) : {};
   }
   /** slots de chamado na decisao do pet (espelho de MotorEducacao._decisao_observada) */
@@ -319,7 +319,7 @@ export class Motor {
     this._expirar();
     for (const tipo of (Object.keys(ed.proximo) as Chamado[]).sort()) {
       while (t >= ed.proximo[tipo]!) {
-        ed.proximo[tipo]! += CED.intervalos[this.estagioAtual as EstagioTreino][tipo];
+        ed.proximo[tipo]! += CED.intervalos[baseDe(this.estagioAtual) as EstagioTreino][tipo];
         this._slot(tipo, t);
       }
     }
@@ -444,7 +444,7 @@ export class Motor {
       if (this.estagioAtual === "bebe") this._chamados();
       this._evoluir();
       const e = this.e;
-      this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.forma.mega ? "mega" : this.estagioAtual);
+      this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.estagioAtual);
       this._pausaTreino();
     }
     if (this.versao >= 4) this._conferirMorte();      /* o prazo da lesao cai no passo do dono */
@@ -531,7 +531,7 @@ export class Motor {
       /* sobrecarga >= 30: aviso (fala fria); nada muda na forma */
       this.falaFria = this.treino.sobrecarga >= CSO.aviso;
       nova = { estagio: "adolescente", linha: linhaDoCarater(carater), carater, sobrecarga: this.treino.sobrecarga };
-    } else if (est === "adulto" && this.versao >= 5 && !this.forma.mega) {
+    } else if (est === "adulto" && this.versao >= 5) {
       if (this.podeMega()) this._virarMega();
       return;
     } else if (est === "adolescente" && t >= D.bebe + D.crianca + D.adolescente && this.sparring >= CAT.sparring
@@ -559,25 +559,27 @@ export class Motor {
   }
   /* ---------------------------------------------------------------- Mega (pets v5; docs/DESIGN_EVOLUCAO_CANONICA.md) */
   /** tick em que virou Ultimate (null antes) */
-  tickUltimate(): number | null { const ev = this.evolucoes.find(x => x.estagio === "adulto" && !x.mega); return ev ? ev.tick : null; }
+  tickUltimate(): number | null { const ev = this.evolucoes.find(x => x.estagio === "adulto"); return ev ? ev.tick : null; }
   /** o que falta para o Mega, pelas condicoes do desenho (secao 3): tempo no Ultimate, lutas, vitoria e vinculo */
   requisitosMega(): { tempo: boolean; lutas: boolean; taxa: boolean; vinculo: boolean; falta: number } | null {
     const t0 = this.tickUltimate();
-    if (this.versao < 5 || t0 === null || this.forma.mega) return null;
+    /* a sombria nunca vira Mega (o vinculo dela tem teto 0,6, acima do limiar de hoje: a regra fica explicita) */
+    if (this.versao < 5 || t0 === null || this.estagioAtual !== "adulto" || this.sombria) return null;
     const falta = Math.max(0, t0 + this.dur.adulto - this.e.tick), L = this.lutas;
     return { tempo: falta === 0, lutas: L.lutas >= CAT.sparring, taxa: L.lutas > 0 && L.vitorias / L.lutas >= CLE.limiarTaxa,
       vinculo: this.vinc.valor >= CMG.vinculo, falta };
   }
   podeMega(): boolean { const r = this.requisitosMega(); return !!r && r.tempo && r.lutas && r.taxa && r.vinculo; }
-  /** a forma nao muda (nem a passiva nem o carater): o nivel sobe. A sombria nunca chega aqui: vinculo com teto 0,6 */
+  /** estagio novo; a forma adulta, a passiva e o carater vem do Ultimate. A sombria nunca chega aqui (requisitosMega) */
   private _virarMega(): void {
-    this.forma = { ...this.forma, mega: true };
-    this.evolucoes.push({ tick: this.e.tick, estagio: "adulto", mega: true, sparring: this.lutas.lutas, vinculo: this.vinc.valor,
+    this.forma = { ...this.forma, est: "mega" };
+    this.estagioAtual = "mega";
+    this.evolucoes.push({ tick: this.e.tick, estagio: "mega", sparring: this.lutas.lutas, vinculo: this.vinc.valor,
       sobrecarga: this.treino.sobrecarga, forma: { ...this.forma } });
     this.chamados = { abertos: {}, atendidos: 0, total: 0 }; this.sparring = 0;
     this.lutas = lutasZeradas();
     this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
-    this._agendar("adulto", this.e.tick);
+    this._agendar("mega", this.e.tick);
     this.gp!.promover(this.forma, nomeForma(this.forma));
   }
   /** carater medido agora: pets v3 pelo desvio da politica aprendida; v1/v2 pelos tracos (PROVISORIO) */

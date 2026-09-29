@@ -72,7 +72,7 @@ export const GAMBITS_SOMBRIA: Record<string, ListaGambits> = {
 
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
    linha ficar travada; experiments/calibrar_progressao.py) */
-export interface Lugar { nome: string; x: number; y: number; sugerido: string; est: Estagio; rivais: string[]; mega?: true }
+export interface Lugar { nome: string; x: number; y: number; sugerido: string; est: Estagio; rivais: string[] }
 export const LUGARES: Lugar[] = [
   { nome: "Campina", x: 74, y: 176, sugerido: "Rookie", est: "crianca", rivais: [] },
   { nome: "Torre de pedra", x: 196, y: 118, sugerido: "Champion", est: "adolescente", rivais: [] },
@@ -105,17 +105,17 @@ LUGARES.forEach((L, i) => { L.rivais = CAMPANHA.filter(c => c.lug === i).map(c =
    artifacts_campanha/mega/): sem treino <= 0,30 e com o treino tipico >= 0,80. */
 export const LUGARES_V5: Lugar[] = [
   ...LUGARES.map(L => ({ ...L, rivais: [] as string[] })),
-  { nome: "Montanha Espiral", x: 330, y: 20, sugerido: "Mega", est: "adulto", mega: true, rivais: [] },
+  { nome: "Montanha Espiral", x: 330, y: 20, sugerido: "Mega", est: "mega", rivais: [] },
 ];
 export const CAMPANHA_V5: DesafioCampanha[] = [
   ...CAMPANHA.filter(c => c.lug < 2),
   { k: "npc_v5_myotismon", nome: "Myotismon", total: 110, estilo: "v2c:agressivo", eps: .5, lug: 2, cor: "carga", fator: 1.2,
     licao: "O senhor da Cidadela: forte em tudo, mas imprevisível. Treinado, seu Ultimate vence." },
-  { k: "npc_v5_puppetmon", nome: "Puppetmon", total: 90, estilo: "v21:espelho", eps: .5, lug: 3, cor: "agarrao", fator: 2.1,
+  { k: "npc_v5_puppetmon", nome: "Puppetmon", total: 90, estilo: "v21:espelho", estagio: "mega", eps: .5, lug: 3, cor: "agarrao", fator: 2.1,
     licao: "Um Mestre das Trevas que brinca com o rival e devolve o que recebe. Só um Mega treinado aguenta a troca." },
-  { k: "npc_v5_machinedramon", nome: "Machinedramon", total: 72, estilo: "v2c:tartaruga", eps: .4, lug: 3, cor: "bloqueio", fator: 2,
+  { k: "npc_v5_machinedramon", nome: "Machinedramon", total: 72, estilo: "v2c:tartaruga", estagio: "mega", eps: .4, lug: 3, cor: "bloqueio", fator: 2,
     licao: "Uma fortaleza de metal que espera o seu erro. Um Mega treinado quebra a guarda dele." },
-  { k: "npc_v5_piedmon", nome: "Piedmon", total: 110, estilo: "v2c:agressivo", eps: .5, lug: 3, cor: "carga", fator: 1.2, sprite: "npc_tier3_soberano",
+  { k: "npc_v5_piedmon", nome: "Piedmon", total: 110, estilo: "v2c:agressivo", estagio: "mega", eps: .5, lug: 3, cor: "carga", fator: 1.2, sprite: "npc_tier3_soberano",
     licao: "O chefe final, o último Mestre das Trevas: forte em tudo, mas imprevisível. Todo Mega bem treinado consegue vencê-lo." },
 ];
 LUGARES_V5.forEach((L, i) => { L.rivais = CAMPANHA_V5.filter(c => c.lug === i).map(c => c.k); });
@@ -134,10 +134,10 @@ export function gambitNPC(estilo: string): ListaGambits {
   if (fam === "crianca") return CRIANCA_V21[nome as Ramo];
   throw new Error("familia de estilo desconhecida: " + estilo);
 }
-export type Npc = DesafioCampanha & { tier: number; lugar: string; sugerido: string; est: Estagio; mega?: true };
+export type Npc = DesafioCampanha & { tier: number; lugar: string; sugerido: string; est: Estagio };
 /* todos os NPCs (das duas campanhas); os que as duas tem sao os mesmos, no mesmo lugar */
 const npcDe = (c: DesafioCampanha, Ls: Lugar[]): Npc =>
-  ({ ...c, tier: c.lug + 1, lugar: Ls[c.lug].nome, sugerido: Ls[c.lug].sugerido, est: Ls[c.lug].est, ...(Ls[c.lug].mega ? { mega: true as const } : {}) });
+  ({ ...c, tier: c.lug + 1, lugar: Ls[c.lug].nome, sugerido: Ls[c.lug].sugerido, est: Ls[c.lug].est });
 export const NPC: Partial<Record<string, Npc>> = Object.fromEntries([...CAMPANHA.map(c => [c.k, npcDe(c, LUGARES)]),
   ...CAMPANHA_V5.filter(c => !CAMPANHA.includes(c)).map(c => [c.k, npcDe(c, LUGARES_V5)])]);
 export const NOME_BOT: Record<string, string> = {

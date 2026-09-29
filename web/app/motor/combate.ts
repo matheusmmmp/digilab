@@ -156,7 +156,8 @@ const DOMINIO_V2: Record<string, readonly (number | string)[]> = { d: [0, 1, 2],
 export const CONDICOES_ESTAGIO: Record<Estagio, string[]> = (() => {
   const cri = ["sempre", "distancia_eh", "hp_proprio_abaixo", "guts_proprio_abaixo", "guts_proprio_acima"];
   const ado = [...cri, "oponente_preparando", "oponente_hp_abaixo", "oponente_guts_abaixo"];
-  return { bebe: [], crianca: cri, adolescente: ado, adulto: [...ado, "oponente_repete", "oponente_frequente", "turno_execucao", "executando_pesado"] };
+  const adu = [...ado, "oponente_repete", "oponente_frequente", "turno_execucao", "executando_pesado"];
+  return { bebe: [], crianca: cri, adolescente: ado, adulto: adu, mega: adu };   /* o Mega (pets v5) pensa como o adulto */
 })();
 export function validarCond(c: Cond): void {
   const tipos = CATALOGO_V2[c.n];

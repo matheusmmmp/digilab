@@ -1,12 +1,12 @@
 /* Treino, fadiga e sobrecarga (espelho de treino_stats.py; integrado tick a tick). Estado proprio: nada
    disso entra nas necessidades. Evolucao zera fadiga e estresse; pontos e sobrecarga ficam.
-   Pets v5: o Mega treina como estagio proprio ("mega"), com os tetos de CMG; a chave "mega" so aparece em
+   Pets v5: o Mega (estagio proprio) treina com os tetos de CMG; a chave "mega" so aparece em
    pontosEst quando o Mega treina (a assinatura dos pets v1-v4 nao muda). */
 import { APTIDAO, CCOND, CMG, CTR, STATS, TICK_INICIAL } from "./constantes.ts";
 import type { Especie, Estagio, EstagioTreino, Exercicio, Stat, Stats } from "./tipos.ts";
 
-/** estagio do treino: o da evolucao, ou "mega" (pets v5) */
-export type EstagioDoTreino = Estagio | "mega";
+/** estagio do treino: o da evolucao (o Mega, pets v5, com os tetos de CMG) */
+export type EstagioDoTreino = Estagio;
 const tetoEstagio = (est: EstagioTreino | "mega"): number => est === "mega" ? CMG.tetoEstagio : CTR.tetoEstagio[est];
 
 export interface ResultadoSessao { forcada: boolean; enrolou: boolean; ganho: Partial<Stats>; fadigaAntes: number }

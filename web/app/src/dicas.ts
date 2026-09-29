@@ -21,7 +21,7 @@ export const DICAS = {
   regra_nova: "Ele tirou uma regra da luta. Travar a mantém na posição; Vetar proíbe. O resto ele aprende sozinho.",
   lutas_treino: "Para virar Ultimate ele precisa de 10 lutas de treino na Arena, além do tempo.",
   /* pets v5 (evolucao canonica): o Ultimate ainda vira Mega */
-  ultimate: "Virou Ultimate! Para o Mega: mais tempo, 10 lutas com 80% de vitórias e um vínculo forte com você. Forçado à exaustão, ele não chega lá.",
+  ultimate: "Virou Ultimate! Para o Mega: mais tempo, 10 lutas com 80% de vitórias e vínculo com você. Forçado à exaustão (forma sombria), ele não chega lá.",
   adulto: "Daqui em diante ele mesmo explica o que sente e por quê. Até mais! — Professor Agumon",
   /* pets v4 (educacao-v1) */
   manha: "Ele chamou: confira a barra. Se a necessidade está em dia, é manha — bronca educa; petisco ensina a pedir mais.",

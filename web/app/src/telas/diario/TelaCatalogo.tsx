@@ -21,9 +21,9 @@ export function formasDoBrasao(esp: Especie): Forma[] {
     ...LINHAS.map(l => ({ esp, est: "adolescente" as const, ramo: "sereno" as const, linha: l })),
     ...FORMAS_AD.map(a => ({ esp, est: "adulto" as const, ramo: "sereno" as const, linha: LINHA_DA_FORMA[a], adulta: a })),
     /* o Mega de cada linha (pets v5): o mesmo para os dois arquetipos */
-    ...LINHAS.map(l => ({ esp, est: "adulto" as const, ramo: "sereno" as const, linha: l, adulta: FORMAS_AD.find(a => LINHA_DA_FORMA[a] === l)!, mega: true as const }))];
+    ...LINHAS.map(l => ({ esp, est: "mega" as const, ramo: "sereno" as const, linha: l, adulta: FORMAS_AD.find(a => LINHA_DA_FORMA[a] === l)! }))];
 }
-const rotulo = (f: Forma): string => nomeForma(f) + (!f.mega && nomeArquetipo(f) ? ` · ${nomeArquetipo(f)}` : "");
+const rotulo = (f: Forma): string => nomeForma(f) + (f.est !== "mega" && nomeArquetipo(f) ? ` · ${nomeArquetipo(f)}` : "");
 
 /** bloco da forma (DiarioCatalogo): 66 px, a forma vista (o caminho deste pet) em cor; a nao vista em silhueta cinza */
 function Tile({ f, sel, meu, visto, escolher }: { f: Forma; sel: boolean; meu: boolean; visto: boolean; escolher: () => void }) {
@@ -31,13 +31,13 @@ function Tile({ f, sel, meu, visto, escolher }: { f: Forma; sel: boolean; meu: b
   return (
     <button type="button" class={`cat-tile${meu ? " meu" : ""}${visto ? "" : " nao-visto"}`} role="option" aria-selected={sel} aria-label={`${rotulo(f)}, ${nomeEstagio(f)}${visto ? "" : ", ainda não vista"}`} onClick={escolher}>
       <span class="cat-cx">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
-      <span class="cat-nome">{nomeForma(f)}{!f.mega && nomeArquetipo(f) && <small class="cat-arq">{nomeArquetipo(f)}</small>}</span>
+      <span class="cat-nome">{nomeForma(f)}{f.est !== "mega" && nomeArquetipo(f) && <small class="cat-arq">{nomeArquetipo(f)}</small>}</span>
     </button>
   );
 }
 function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
   const a = useAtlas(), pf = perfilDe(f, null), st = pf.stats, img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(f)) : null;
-  const extra = f.mega ? `técnica ${NOME_V2[pf.tecnica!]} · passiva: a do arquétipo do Ultimate · vida e guts ×1,15 (só pets novos)`
+  const extra = f.est === "mega" ? `técnica ${NOME_V2[pf.tecnica!]} · passiva: a do arquétipo do Ultimate · vida e guts ×1,15 (só pets novos)`
     : f.adulta ? `técnica ${NOME_V2[pf.tecnica!]} · passiva: ${DESC_PASSIVA[f.adulta]}`
     : f.linha ? `técnica ${NOME_V2[pf.tecnica!]}: ${DESC_TECNICA[pf.tecnica!]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 regras de combate";
   return (

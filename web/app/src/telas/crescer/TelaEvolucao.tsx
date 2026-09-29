@@ -42,11 +42,11 @@ export function previsaoEvo(m: Motor): { falta: number; prox: Forma; porque: str
     return { falta: D.bebe + D.crianca + D.adolescente - t, prox: { ...f, est: "adulto", adulta },
       porque: `${comp} ${rotuloRel(car[comp])}; lutas de treino ${m.sparring} de ${CAT.sparring}` };
   }
-  /* pets v5: Ultimate -> Mega (a sombria nunca: vinculo com teto) */
+  /* pets v5: Ultimate -> Mega (a sombria nunca) */
   const r = m.requisitosMega();
   if (r && !m.sombria) {
     const L = m.lutas;
-    return { falta: r.falta, prox: { ...f, mega: true },
+    return { falta: r.falta, prox: { ...f, est: "mega" },
       porque: `vínculo ${virgula(m.vinc.valor)} de ${virgula(CMG.vinculo)}; lutas no Ultimate ${L.lutas} de ${CAT.sparring}, `
         + `vitórias ${L.lutas ? Math.round(L.vitorias / L.lutas * 100) : 0}% de ${Math.round(CLE.limiarTaxa * 100)}%` };
   }
@@ -56,12 +56,12 @@ const virgula = (x: number): string => (Math.round(x * 100) / 100).toString().re
 /** id do no da arvore: as duas formas adultas da linha tem o mesmo sprite (o Ultimate), entao o no e pela forma; o Mega
     tem um no por linha */
 const linhaDe = (g: Forma): string => g.linha ?? SOMBRIA[g.adulta!]?.linha ?? LINHA_DA_FORMA[g.adulta as FormaAdultaNormal];
-export const idNo = (g: Forma): string => g.est !== "adulto" ? chaveSprite(g) : g.mega ? `${g.esp}_mega_${linhaDe(g)}` : `${g.esp}_adulto_${g.adulta}`;
+export const idNo = (g: Forma): string => g.est === "mega" ? `${g.esp}_mega_${linhaDe(g)}` : g.est === "adulto" ? `${g.esp}_adulto_${g.adulta}` : chaveSprite(g);
 export function requisito(g: Forma): string {
   if (g.est === "bebe") return "sai do ovo";
   if (g.est === "crianca") return g.ramo === "sereno" ? `cuidado ≥ ${CAT.limiarCuidado * 100}% dos chamados no In-Training` : `cuidado < ${CAT.limiarCuidado * 100}% dos chamados no In-Training`;
   if (g.est === "adolescente") { const a = CAT.adolescente[g.linha!]; return `caráter dominante ${a.eixo} ao fim do Rookie · técnica ${NOME_V2[a.tecnica]}: ${DESC_TECNICA[a.tecnica]}`; }
-  if (g.mega) return `Mega: o mesmo arquétipo do Ultimate, mais forte · ${duracao(CMG.durRapida)} como Ultimate (o dobro no ritmo clássico), ${CAT.sparring} lutas com ${CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo ${virgula(CMG.vinculo)} ou mais (a sombria não chega)`;
+  if (g.est === "mega") return `Mega: o mesmo arquétipo do Ultimate, mais forte · ${duracao(CMG.durRapida)} como Ultimate (o dobro no ritmo clássico), ${CAT.sparring} lutas com ${CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo ${virgula(CMG.vinculo)} ou mais (a sombria não chega)`;
   const a = CAT.adulto[g.linha!], s = a.formas[g.adulta as FormaAdultaNormal]!.sinal;
   return `${NOME_ARQ[g.adulta!]}: ${a.comp} ${s > 0 ? "acima" : "abaixo"} do pet comum e ${CAT.sparring} lutas de treino · passiva: ${DESC_PASSIVA[g.adulta!]}`;
 }
@@ -96,14 +96,14 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
   const ado: Forma[] = LINHAS.map(l => ({ esp, est: "adolescente", ramo: "sereno", linha: l }));
   const aduDe = (l: string): Forma[] => FORMAS_AD.filter(ad => LINHA_DA_FORMA[ad] === l).map(ad => ({ esp, est: "adulto", ramo: "sereno", linha: LINHA_DA_FORMA[ad], adulta: ad }));
   const somDe = (l: string): Forma => { const x = CSO.formas[l as keyof typeof CSO.formas]; return { esp, est: "adulto", ramo: "sereno", linha: l as Forma["linha"], adulta: x.nome as Forma["adulta"] }; };
-  const megaDe = (l: string): Forma => ({ ...aduDe(l)[0], mega: true });
+  const megaDe = (l: string): Forma => ({ ...aduDe(l)[0], est: "mega" });
   const caminho = new Set([idDe(bebe), ...evs.map(x => idDe(x.forma))]);
   const atualId = idDe(f), provId = p ? idDe(p.prox) : null;
   const adu = LINHAS.flatMap(aduDe), meg = v5 ? LINHAS.map(megaDe) : [];
   /* o que ainda da para alcancar a partir da forma atual (o Mega: so pets v5, e nunca a sombria) */
   const alcance = new Set(f.est === "bebe" ? [...cri, ...ado, ...adu, ...meg].map(idDe) : f.est === "crianca" ? [...ado, ...adu, ...meg].map(idDe)
     : f.est === "adolescente" ? [...adu, ...meg].filter(x => x.linha === f.linha).map(idDe)
-    : f.est === "adulto" && v5 && !f.mega && !m.sombria ? [idDe(megaDe(f.linha!))] : []);
+    : f.est === "adulto" && v5 && !m.sombria ? [idDe(megaDe(f.linha!))] : []);
   const estado = (id: string): EstadoNo => id === atualId ? "agora" : caminho.has(id) ? "percorrido" : alcance.has(id) ? "possivel" : "fechado";
   const tipo = (a: string, b: string): Aresta[2] => caminho.has(a) && (caminho.has(b) || b === atualId) ? "percorrido" : a === atualId && b === provId ? "provavel"
     : estado(b) === "fechado" || estado(a) === "fechado" ? "fechado" : "possivel";
@@ -184,7 +184,7 @@ export function TelaEvolucao() {
   const rMega = f.est === "adulto" ? m.requisitosMega() : null;
   /* pets v4: alem das 10 lutas, a taxa de vitoria do adolescente precisa chegar a 80% */
   const taxa = m.taxaVitoria(), faltaTaxa = m.versao >= 4 && m.sparring >= CAT.sparring && (taxa ?? 0) < CLE.limiarTaxa;
-  const det = (x: typeof evs[number]) => x.mega ? `vínculo ${virgula(x.vinculo!)}; ${x.sparring} lutas no Ultimate`
+  const det = (x: typeof evs[number]) => x.estagio === "mega" ? `vínculo ${virgula(x.vinculo!)}; ${x.sparring} lutas no Ultimate`
     : x.estagio === "crianca" ? `cuidado ${(x.cuidado! * 100).toFixed(0)}%`
     : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater!)}` : `${NOME_ARQ[x.adulta!]}; caráter: ${fmtCar(x.carater!)}; ${x.sparring} lutas de treino`;
   /* o que falta, na espera (o tempo ja passou): as lutas e as vitorias do estagio, e no Mega o vinculo */
@@ -193,7 +193,7 @@ export function TelaEvolucao() {
       : `vínculo ${virgula(m.vinc.valor)} de ${virgula(CMG.vinculo)}`;
     return faltaTaxa ? `vitórias ${Math.round((taxa ?? 0) * 100)}% de ${Math.round(CLE.limiarTaxa * 100)}%` : `${CAT.sparring - m.sparring} lutas`;
   };
-  const alvo = p ? (p.prox.mega ? "Mega" : nomeEstagio(p.prox)) : "";
+  const alvo = p ? nomeEstagio(p.prox) : "";
   return (
     <div class="tela dl desk evo-tela">
       <div class="evo-principal"><h2 class="desk-so evo-arv-tit">Árvore de {BRASAO[m.especie].nome}</h2><Arvore m={m} p={p} /></div>
@@ -213,7 +213,7 @@ export function TelaEvolucao() {
         ...(m.versao >= 4 && (f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
           m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
         /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
-        [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.mega ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
+        [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.est === "mega" ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
       ]} />
       </div>
       {ult && <section class="dl-card revel-porque"><h3 class="dl-titulo-card">Por que {nomeForma(f)}?</h3><Porque x={ult} /></section>}

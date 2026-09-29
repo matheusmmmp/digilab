@@ -2,7 +2,7 @@
    de icone com estado (travada, vetada, livre), contador de espacos, a regra final, as vetadas e o que o pet
    mudou. O dono so trava ou veta; tudo entra no registro. */
 import { useState } from "preact/hooks";
-import { CV, CV21, NOME_V2, regraDe, rotuloCond, rotuloRegra, type OpGambit } from "../../../motor/index.ts";
+import { CV, CV21, NOME_V2, regraDe, rotuloCond, rotuloRegra, type OpGambit, baseDe } from "../../../motor/index.ts";
 import { comSinal } from "../../componentes/Barras.tsx";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 
@@ -39,10 +39,10 @@ export function EditorRegras() {
       </li>
     );
   };
-  const cap = CV21.maxRegras[gp.forma!.est];
+  const cap = CV21.maxRegras[baseDe(gp.forma!.est)];
   return (
     <div class="bloco">
-      <p>Lista aprendida pelo pet em {gp.nLutas} luta{gp.nLutas === 1 ? "" : "s"}. Começou com as regras de <b>{gp.linha}</b>; cabem {cap} regras agora{gp.forma!.est === "adulto" ? "" : ", e a lista cresce quando ele evoluir"}. Vale a primeira regra cujas condições batem.</p>
+      <p>Lista aprendida pelo pet em {gp.nLutas} luta{gp.nLutas === 1 ? "" : "s"}. Começou com as regras de <b>{gp.linha}</b>; cabem {cap} regras agora{gp.forma!.est === "adulto" || gp.forma!.est === "mega" ? "" : ", e a lista cresce quando ele evoluir"}. Vale a primeira regra cujas condições batem.</p>
       <details class="dl-apoio"><summary>Como ele escolhe</summary><p>A primeira regra cujas condições valem e cuja ação é possível dispara. Em {Math.round(CV.eps * 100)}% das decisões ele tenta algo ao acaso, para descobrir regras novas.</p></details>
       <p class="g-cont"><b>{gp.ativas.length} de {cap}</b> espaços de regra ocupados</p>
       <ol class="g-lista">
@@ -65,7 +65,7 @@ export function EditorRegras() {
 export function RegrasCompactas() {
   const { motor: m } = useJogo(), gp = m.gp, [sel, setSel] = useState<string | null>(null), [msg, setMsg] = useState("");
   if (!gp) return <p class="dl-apoio">O In-Training ainda luta ao acaso; as regras de combate começam no Rookie.</p>;
-  const cap = CV21.maxRegras[gp.forma!.est];
+  const cap = CV21.maxRegras[baseDe(gp.forma!.est)];
   const intervir = (op: OpGambit, k: string) => {
     try { mudarMotor(mm => mm.intervirGambit(op, k)); setMsg(""); setSel(null); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };

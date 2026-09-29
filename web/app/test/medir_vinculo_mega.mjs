@@ -21,10 +21,10 @@ function vida(tipo, semente) {
     for (const a of acoes) { m.observar(a); gasto++; }
     if ((m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) || (m.estagioAtual === "adulto" && m.lutas.lutas < 12))
       m.lutar("aleatorio", M.hashSemente("sparring", semente, p));
-    if (m.estagioAtual === "adulto" && !m.forma.mega) maxVinculoUltimate = Math.max(maxVinculoUltimate ?? 0, m.vinc.valor);
+    if (m.estagioAtual === "adulto") maxVinculoUltimate = Math.max(maxVinculoUltimate ?? 0, m.vinc.valor);
   }
-  const ev = m.evolucoes.find(x => x.mega);
-  return { semente, estagio: m.estagioAtual, mega: !!m.forma.mega, sombria: m.sombria, vinculo_final: +m.vinc.valor.toFixed(3),
+  const ev = m.evolucoes.find(x => x.estagio === "mega");
+  return { semente, estagio: m.estagioAtual, mega: m.estagioAtual === "mega", sombria: m.sombria, vinculo_final: +m.vinc.valor.toFixed(3),
     vinculo_max_no_ultimate: maxVinculoUltimate === null ? null : +maxVinculoUltimate.toFixed(3), vinculo_na_evolucao: ev ? +ev.vinculo.toFixed(3) : null };
 }
 const out = { descricao: "Pets v5 com os donos simulados da web: quantos viram Mega (vinculo >= " + CMG.vinculo + ").", dias: DIAS, interacoes_por_dia: POR_DIA,
@@ -37,3 +37,14 @@ for (const tipo of ["atencioso", "incoerente", "relapso", "aleatorio"]) {
 const pasta = fileURLToPath(new URL("../../../artifacts_campanha/mega/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
 writeFileSync(pasta + "vinculo_donos.json", JSON.stringify(out, null, 1) + "\n");
+/* varredura do limiar (Matheus, 2026-09-29: "baixa o limiar"; adotado 0,4): Megas por dono em cada limiar */
+const atual = CMG.vinculo, varredura = {};
+for (const lim of [0.7, 0.6, 0.5, 0.45, 0.4, 0.35, 0.3]) {
+  CMG.vinculo = lim;
+  varredura[lim] = Object.fromEntries(["atencioso", "incoerente", "relapso", "aleatorio"].map(tipo =>
+    [tipo, SEMENTES.filter(s => { try { return vida(tipo, s).mega; } catch { return false; } }).length]));
+  console.log("limiar", lim, JSON.stringify(varredura[lim]));
+}
+CMG.vinculo = atual;
+writeFileSync(pasta + "limiar_vinculo.json", JSON.stringify({ descricao: `Megas (de ${SEMENTES.length} vidas) por dono simulado e limiar de vinculo; o resto como em vinculo_donos.json.`,
+  limiar_adotado: atual, dias: DIAS, interacoes_por_dia: POR_DIA, sementes: SEMENTES, megas_por_limiar: varredura }, null, 1) + "\n");

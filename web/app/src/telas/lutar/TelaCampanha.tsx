@@ -22,11 +22,11 @@ export const ILHA_V5 = [{ peca: "ilha_campina", x: 6, y: 240, cx: 81, cy: 325, p
   { peca: "ilha_cidadela", x: 6, y: 80, cx: 81, cy: 165, placa: 228 }, { peca: "ilha_espiral", x: 234, y: 0, cx: 309, cy: 85, placa: 150 }];
 const ilhasDe = (m: Motor) => m.lugares.length === ILHA_V5.length ? ILHA_V5 : ILHA;
 /** nivel pedido pelo lugar (Mega na Montanha Espiral) e se o pet ainda esta abaixo dele */
-const nivelDoLugar = (L: Lugar): string => L.mega ? "Mega" : NIVEL[L.est] ?? L.sugerido;
-const cedoPara = (m: Motor, L: Lugar): boolean => ORDEM_EST.indexOf(m.forma.est) < ORDEM_EST.indexOf(L.est) || (!!L.mega && !m.forma.mega);
+const nivelDoLugar = (L: Lugar): string => NIVEL[L.est] ?? L.sugerido;
+const cedoPara = (m: Motor, L: Lugar): boolean => ORDEM_EST.indexOf(m.forma.est) < ORDEM_EST.indexOf(L.est);
 const px = (x: number) => `${x / W0 * 100}%`, py = (y: number) => `${y / H0 * 100}%`;
-const ORDEM_EST = ["ovo", "bebe", "crianca", "adolescente", "adulto"];
-const NIVEL: Record<string, string> = { crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate" };
+const ORDEM_EST = ["ovo", "bebe", "crianca", "adolescente", "adulto", "mega"];
+const NIVEL: Record<string, string> = { crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
 
 function Mapa() {
   const { motor: m } = useJogo(), a = useAtlas(), luta = useLuta(), sel = campAtual(m);

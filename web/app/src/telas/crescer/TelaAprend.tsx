@@ -220,7 +220,7 @@ function Jeito() {
   const vinculo = m.versao >= 2
     ? `${(m.vinc.valor * 100).toFixed(0)}% · sem conflito, aceita um cuidado com ${(termosObediencia(m.vinc.valor, m.temp.teimosia, 0, null)[0] * 100).toFixed(0)}% de chance`
     : "pet de versão antiga: sem vínculo nem recusa (um pet novo já nasce com eles)";
-  const bruto = afinidades(m.tracos), base = BASE_CARATER[est === "adulto" ? "adulto" : "adolescente"];
+  const bruto = afinidades(m.tracos), base = BASE_CARATER[est === "adulto" || est === "mega" ? "adulto" : "adolescente"];
   const af = Object.fromEntries(COMBATE.map(c => [c, bruto[c] - base[c]])) as Record<string, number>;
   return (
     <>

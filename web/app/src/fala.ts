@@ -60,7 +60,7 @@ export function motivoParaApi(mot: Motivo, refs: number[]): Record<string, unkno
 }
 /** a resposta da LLM se ja chegou; senao pede (uma vez) e devolve null */
 export function falaLLM(motApi: Record<string, unknown>, est: Estagio, humor: number | null): RespostaFala | null {
-  if (!FALA_LLM.on || !FALA_LLM.ativo || !["adolescente", "adulto"].includes(est)) return null;
+  if (!FALA_LLM.on || !FALA_LLM.ativo || !["adolescente", "adulto", "mega"].includes(est)) return null;
   const faixa = humor == null ? null : humor >= .66 ? 2 : humor >= .33 ? 1 : 0;
   const chave = JSON.stringify([motApi, est, faixa]);
   const pronta = FALA_LLM.cache.get(chave);
@@ -87,7 +87,7 @@ export const refsDoMotivo = (m: Motor, mot: MotivoVida): number[] => mot.refsOrd
 export function falaDe(m: Motor, mot: MotivoVida): string {
   const est = m.estagioAtual, txt = expressar(mot, est, refsDoMotivo(m, mot));
   if (!(m.falaFria || m.sombria)) return txt;
-  return est === "bebe" ? "(-_-)" : est === "adulto" ? "Hm. " + txt : "... " + txt;
+  return est === "bebe" ? "(-_-)" : est === "adulto" || est === "mega" ? "Hm. " + txt : "... " + txt;
 }
 export function detalheMotivo(mot: Motivo, est: Estagio): string {
   const dec = (v: number) => v.toFixed(2).replace(".", ",");

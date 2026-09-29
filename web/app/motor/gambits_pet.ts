@@ -4,7 +4,7 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS } from "./constantes.ts";
+import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import { ADOL_V21, BOTS_V2, BOTS_V21, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival } from "./bots.ts";
 import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type ResultadoLuta } from "./combate.ts";
@@ -79,7 +79,7 @@ export class GambitsPet {
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
       lista cabe na capacidade do estagio */
   semear(forma: Forma, nome: string = nomeFormaLegado(forma)): void {
-    const base = sementeDe(forma), cap = CV21.maxRegras[forma.est];
+    const base = sementeDe(forma), cap = CV21.maxRegras[baseDe(forma.est)];
     this.forma = { ...forma }; this.linha = nome; this.final = base.final;
     const novas: string[] = [];
     base.regras.forEach((r, i) => {
@@ -189,8 +189,8 @@ export function lutadorBot(nome: string): Lutador {
   if (n) {
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala */
     if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estiloBot(nome), eps: CESC.epsNpc },
-      cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0, n.mega) * (n.fator ?? CESC.fatorNpc[nome]), n.mega) };
-    return { nome: "Rival " + n.nome, estilo: estiloBot(nome), cond: perfilNPC(n.total, n.estagio || "adulto", undefined, n.mega) };
+      cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0) * (n.fator ?? CESC.fatorNpc[nome])) };
+    return { nome: "Rival " + n.nome, estilo: estiloBot(nome), cond: perfilNPC(n.total, n.estagio || "adulto") };
   }
   if (BOTS_V21[nome as FormaAdultaNormal]) {
     const f = formaRival(nome as FormaAdultaNormal);

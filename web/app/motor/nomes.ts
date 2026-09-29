@@ -13,9 +13,7 @@ export const NOME_ARQ: Record<string, string> = {
   duelista: "Duelista", furioso: "Furioso", espelho: "Espelho", muralha: "Muralha", sentinela: "Sentinela", emboscador: "Emboscador",
   vigia: "Vigia", tita: "Titã", devastador: "Devastador", bastiao_rachado: "Bastião rachado", predador: "Predador", colosso_partido: "Colosso partido",
 };
-export const NOME_EST: Record<Estagio | "ovo", string> = { ovo: "Digi-Egg", bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate" };
-/** nivel do Mega (pets v5: estagio adulto com forma.mega) */
-export const NOME_MEGA = "Mega";
+export const NOME_EST: Record<Estagio | "ovo", string> = { ovo: "Digi-Egg", bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
 export const NOME_STAT: Record<Stat, string> = { vigor: "vigor", folego: "fôlego", recuperacao: "recuperação", forca: "força", mira: "mira", guarda: "guarda" };
 export const NOME_PET: Record<AcaoPet, string> = { ocioso: "à toa", dormir: "dormindo", comer: "comendo", brincar: "brincando", chamar_atencao: "chamando você", explorar: "explorando", emburrar: "emburrado" };
 export const NOME_DONO: Record<string, string> = { atencioso: "atencioso", relapso: "relapso", aleatorio: "aleatório", incoerente: "incoerente" };
@@ -57,7 +55,7 @@ const linhaAdulta = (f: FormaOuOvo): Linha => f.linha ?? SOMBRIA[f.adulta!]?.lin
 /** chave de sprite da forma: no adulto, o Ultimate da linha (ou o Mega, pets v5) */
 export function chaveSprite(f: FormaOuOvo): string {
   return f.est === "bebe" ? `${f.esp}_bebe` : f.est === "crianca" ? `${f.esp}_crianca_${f.ramo}`
-    : f.est === "adolescente" ? `${f.esp}_adolescente_${f.linha}` : `${f.esp}_adulto_${formaDoNivel(linhaAdulta(f), !!f.mega)}`;
+    : f.est === "adolescente" ? `${f.esp}_adolescente_${f.linha}` : `${f.esp}_adulto_${formaDoNivel(linhaAdulta(f), f.est === "mega")}`;
 }
 export function nomeForma(f: FormaOuOvo): string {
   if (f.est === "ovo") return "Digi-Egg " + DO_ESP[f.esp];
@@ -66,18 +64,16 @@ export function nomeForma(f: FormaOuOvo): string {
   return SOMBRIA[f.adulta!] ? d[0] + " sombrio" : d[0];
 }
 /** arquetipo da forma adulta (Duelista, Furioso...): distingue as duas formas do mesmo Ultimate; null antes do adulto */
-export const nomeArquetipo = (f: FormaOuOvo | null | undefined): string | null => f && f.est === "adulto" && f.adulta ? NOME_ARQ[f.adulta] : null;
-/** nivel de uma forma: Ultimate no adulto, Mega no Mega (pets v5) */
+export const nomeArquetipo = (f: FormaOuOvo | null | undefined): string | null => f && (f.est === "adulto" || f.est === "mega") && f.adulta ? NOME_ARQ[f.adulta] : null;
+/** nivel de uma forma (Ultimate no adulto; Mega, pets v5) */
 export function nomeEstagio(f: FormaOuOvo | null | undefined): string {
-  if (!f || f.est === "ovo") return NOME_EST.ovo;
-  if (f.est !== "adulto") return NOME_EST[f.est];
-  return f.mega ? NOME_MEGA : NOME_EST.adulto;
+  return NOME_EST[!f ? "ovo" : f.est];
 }
 /* rotulo de antes da evolucao canonica: a forma adulta era o proprio Digimon (furioso = WarGreymon, Mega). O motor
    o usa em GambitsPet.linha, que entra na assinatura dos pets v1-v4 (paridade com o HTML): nao mudar. */
 export function nomeFormaLegado(f: FormaOuOvo): string {
   if (f.est === "ovo") return "Digi-Egg " + DO_ESP[f.esp];
-  const k = f.est === "adulto" ? `${f.esp}_adulto_${SOMBRIA[f.adulta!] ? SOMBRIA[f.adulta!]!.base : f.adulta}` : chaveSprite(f);
+  const k = f.est === "adulto" || f.est === "mega" ? `${f.esp}_adulto_${SOMBRIA[f.adulta!] ? SOMBRIA[f.adulta!]!.base : f.adulta}` : chaveSprite(f);
   const d = DIGIMON_DA_FORMA[k];
   if (!d) throw new Error("forma sem Digimon: " + k);
   return SOMBRIA[f.adulta!] ? d[0] + " sombrio" : d[0];

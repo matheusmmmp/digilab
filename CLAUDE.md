@@ -340,18 +340,19 @@ byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decom
 ## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
 
 Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.
-- **Pets v5** (`VERSAO_PET = 5`, ovos novos e filhos da herança): Champion → Ultimate → Mega. O Mega é o estágio adulto com
-  `forma.mega` (mesma forma e passiva, vida e guts ×1,15, E 3000 na campanha, treino com teto 16 no estágio e 40 na vida).
-  Ultimate → Mega pede 24 h (48 h no clássico), 10 lutas com ≥ 80% de vitória e vínculo ≥ 0,7; a sombria nunca chega
-  (vínculo com teto 0,6). Constantes em `CMG`; `Motor.requisitosMega()`.
+- **Pets v5** (`VERSAO_PET = 5`, ovos novos e filhos da herança): Champion → Ultimate → Mega. O Mega é um estágio próprio
+  (`"mega"`): a forma adulta, a passiva e o caráter vêm do Ultimate; vida e guts ×1,15, E 3000 na campanha, treino com teto 16
+  no estágio e 40 na vida. Ultimate → Mega pede 24 h (48 h no clássico), 10 lutas com ≥ 80% de vitória e vínculo ≥ 0,4; a
+  sombria nunca chega (regra explícita). Constantes em `CMG` (`baseDe` leva o Mega às tabelas do adulto); `Motor.requisitosMega()`.
 - **Nomes no cânone para todos os pets:** as duas formas adultas da linha são o mesmo Ultimate (o arquétipo as distingue) e o
   Mega é o da cadeia (Greymon → MetalGreymon → WarGreymon); a sombria usa o Ultimate. Pets v1–v4 param no Ultimate; o motor
   deles não muda (`nomeFormaLegado` na assinatura dos gambits).
 - **Campanha v5:** Cidadela com o Myotismon; Montanha Espiral (Mega) com Puppetmon, Machinedramon e o Piedmon (chefe). Os
   pets v1–v4 seguem na campanha de sempre. Fatores calibrados no motor web (`web/app/test/calibrar_mega.mjs`,
   `artifacts_campanha/mega/`): validação nas metas de sempre.
-- **Achado:** com o vínculo de hoje, os donos simulados coerentes não chegam a 0,7 e o aleatório chega
-  (`artifacts_campanha/mega/vinculo_donos.json`): a condição do vínculo herda o defeito já registrado do vínculo. Decisão pendente.
+- **Limiar do vínculo 0,4** (baixado de 0,7 pelo Matheus): com 0,7 os donos simulados coerentes não chegavam ao Mega e o
+  aleatório chegava; com 0,4 o atencioso chega em 3 de 6 vidas, o aleatório em 5 de 6 (`artifacts_campanha/mega/limiar_vinculo.json`).
+  O defeito do vínculo continua (pendência abaixo).
 
 ## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 
@@ -762,8 +763,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Evolução canônica: a condição de vínculo ≥ 0,7 do Mega favorece o dono aleatório com o vínculo atual (seção acima).
-  Decidir entre manter, baixar o limiar, trocar o critério (disciplina, cuidado) ou rever o vínculo.
+- Evolução canônica: o limiar de vínculo do Mega baixou para 0,4, mas o vínculo ainda favorece o dono aleatório (5 de 6
+  vidas viram Mega, contra 3 de 6 do atencioso). Rever o desenho do vínculo resolveria de vez.
 
 - Fala por LLM: repetida com outra semente (2026-09-29, `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260929/`):
   92% aprovadas, nenhuma barrada por fator fora da lista. Pré-leitura (coluna própria no `revisao.csv`): nenhuma

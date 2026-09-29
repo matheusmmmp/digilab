@@ -23,13 +23,13 @@ const FATORES = Array.from({ length: 23 }, (_, i) => Math.round((0.8 + 0.1 * i) 
 M.ligarEscala(true);
 
 function pet(forma, esp, nivel, mega) {
-  const f = { esp, est: "adulto", ramo: "sereno", linha: LINHA_DA_FORMA[forma], adulta: forma, ...(mega ? { mega: true } : {}) };
+  const f = { esp, est: mega ? "mega" : "adulto", ramo: "sereno", linha: LINHA_DA_FORMA[forma], adulta: forma };
   const tr = nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null;
   return { nome: `${forma}+${nivel}@${esp}${mega ? ":mega" : ""}`, estilo: M.estiloBot(forma), cond: M.perfilDe(f, M.caraterCanonico(forma), 1, tr, true) };
 }
 function npc(c, fator, mega) {
   return { nome: `${c.k}x${fator}`, estilo: { ...M.estiloBot(c.k), eps: CESC.epsNpc },
-    cond: M.perfilNPC(c.total, "adulto", M.escalaDe("adulto", 0, mega) * fator, mega) };
+    cond: M.perfilNPC(c.total, mega ? "mega" : "adulto", M.escalaDe(mega ? "mega" : "adulto", 0) * fator) };
 }
 function taxa(a, b) {
   let soma = 0, tot = 0;

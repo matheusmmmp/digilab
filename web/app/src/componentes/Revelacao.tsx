@@ -2,7 +2,7 @@
    nao reabre as dele. O "por que" vem so do que o motor registrou na evolucao. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  CAT, CLE, CMG, CSO, NOME_EST, NOME_MEGA, SOMBRIA, chaveSprite, nomeArquetipo, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
+  CAT, CLE, CMG, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeArquetipo, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
 } from "../../motor/index.ts";
 import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
 import { Deco } from "./Deco.tsx";
@@ -15,10 +15,10 @@ import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 const ORDEM_NIVEL = ["bebe", "crianca", "adolescente", "adulto"] as const;
 /* pets v5: o Mega depois do Ultimate (docs/DESIGN_EVOLUCAO_CANONICA.md) */
 const ORDEM_V5 = [...ORDEM_NIVEL, "mega"] as const;
-const nomeNivel = (n: string): string => n === "mega" ? NOME_MEGA : NOME_EST[n as keyof typeof NOME_EST];
-const nivelDe = (x: Evolucao): string => x.mega ? "mega" : x.estagio;
+const nomeNivel = (n: string): string => NOME_EST[n as keyof typeof NOME_EST];
+const nivelDe = (x: Evolucao): string => x.estagio;
 export function Porque({ x }: { x: Evolucao }) {
-  if (x.mega) return <>
+  if (x.estagio === "mega") return <>
     <p style={{ margin: 0 }}>a mesma forma, mais forte: decidido pelo <b>vínculo</b> {x.vinculo!.toFixed(2).replace(".", ",")} (mínimo {String(CMG.vinculo).replace(".", ",")})
       e por {x.sparring} lutas no Ultimate com {CLE.limiarTaxa * 100}% ou mais de vitórias.</p>
     <Seg n={blocos(x.vinculo!, 10)} m={10} cls="dl-seg--acao" marca={CMG.vinculo * 10} />

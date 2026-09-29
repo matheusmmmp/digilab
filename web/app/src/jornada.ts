@@ -70,7 +70,7 @@ export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
     { rotulo: "Virou Rookie", feito: ev("crianca") },
     { rotulo: "Virou Champion", feito: ev("adolescente") },
     { rotulo: "Virou Ultimate", feito: ev("adulto") },
-    ...(m.versao >= 5 ? [{ rotulo: "Virou Mega", feito: !!m.forma.mega }] : []),
+    ...(m.versao >= 5 ? [{ rotulo: "Virou Mega", feito: ev("mega") }] : []),
     ...m.lugares.map((L, i) => ({ rotulo: `Venceu ${L.nome}`, feito: m.lugarVencido(i) })),
   ];
 }

@@ -9,7 +9,10 @@ export type EixoTemperamento = "curiosidade" | "teimosia" | "sensibilidade" | "r
 export type Temperamento = Readonly<Record<EixoTemperamento, number>>;
 
 export type Especie = "brasa" | "cirro" | "ferrugem" | "limo";
-export type Estagio = "bebe" | "crianca" | "adolescente" | "adulto";
+export type Estagio = "bebe" | "crianca" | "adolescente" | "adulto" | "mega";
+/** estagios de antes da evolucao canonica: as tabelas de constantes conferidas contra o HTML e o Python sao por eles; o
+    Mega (pets v5, so no jogo) tem as suas em CMG */
+export type EstagioBase = Exclude<Estagio, "mega">;
 export type EstagioTreino = "crianca" | "adolescente" | "adulto";
 export type Ramo = "sereno" | "arisco";
 export type Linha = "brigao" | "guardiao" | "cacador" | "colosso";
@@ -28,8 +31,6 @@ export interface Forma {
   ramo?: Ramo;
   linha?: Linha;
   adulta?: FormaAdulta;
-  /** pets v5: o Ultimate que virou Mega (mesma forma, estagio adulto; so aparece depois da evolucao) */
-  mega?: true;
 }
 /** forma ou ovo (so para rotulos de tela) */
 export interface FormaOuOvo extends Omit<Forma, "est"> { est: Estagio | "ovo" }
