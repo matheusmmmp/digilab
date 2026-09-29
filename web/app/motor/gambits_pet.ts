@@ -4,7 +4,7 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CED, CESC, CSO, CV, CV21, GA, SOMBRIA, TECNICAS } from "./constantes.ts";
+import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS } from "./constantes.ts";
 import { ADOL_V21, BOTS_V2, BOTS_V21, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival } from "./bots.ts";
 import { ESCALA, caraterCanonico, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type ResultadoLuta } from "./combate.ts";
@@ -159,13 +159,15 @@ export class GambitsPet {
 /** o que o motor precisa do pet para montar o lutador */
 export interface PetLutador {
   gp: GambitsPet | null; forma: Forma; versao: number; e: { saude: number }; treino: TreinoPet; carater(): Carater | null;
-  disciplina?: number;
+  disciplina?: number; vitoriasVida?: number;
 }
 export function estiloDoPet(m: PetLutador): Estilo {
   const e: Estilo = m.gp ? { ...m.gp.estilo(), base: m.gp.linha! } : { ...estiloBot("aleatorio"), base: "aleatorio" };
   if (SOMBRIA[m.forma.adulta!]) e.eps = Math.max(e.eps, CSO.epsMin);   /* sombria: instavel */
   /* v4: sem educacao ele ignora os proprios gambits mais vezes (PLANO_ANALISE_V3, secao 2.2) */
-  if (m.versao >= 4) e.eps += (1 - (m.disciplina ?? 0) / CED.disciplinaMax) * CED.deltaEps;
+  /* e a experiencia de combate (estilo "lutar"): cada vitoria tira um pouco, ate expMax; nunca abaixo de 0 */
+  if (m.versao >= 4) e.eps = Math.max(0, e.eps + (1 - (m.disciplina ?? 0) / CED.disciplinaMax) * CED.deltaEps
+    - Math.min(CLE.expMax, (m.vitoriasVida ?? 0) * CLE.expPorVitoria));
   return e;
 }
 /** lutador do pet (so o que a luta usa; sprite, cor e grade sao da interface) */

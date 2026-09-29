@@ -135,3 +135,35 @@ describe("heranca (pets v4)", () => {
     expect(() => f.registrarOrigem({ pais: [{ h: 1, esp: "brasa", temp: p.temp, est: "adulto" }, { h: 2, esp: "limo", temp: p.temp, est: "adulto" }], s: 1, quem: "x" })).toThrow();
   });
 });
+
+test("experiencia de combate: vitorias baixam o epsilon, com teto, e nao zeram ao evoluir", () => {
+  const m = new Motor(12, 4); m.avancar(15);
+  m.edu.disciplina = 100;
+  const base = lutadorPet(m, "x").estilo.eps;
+  m.vitoriasVida = 10;
+  expect(base - lutadorPet(m, "x").estilo.eps).toBeCloseTo(10 * CLE.expPorVitoria);
+  m.vitoriasVida = 100000;
+  expect(lutadorPet(m, "x").estilo.eps).toBeGreaterThanOrEqual(0);
+  expect(base - lutadorPet(m, "x").estilo.eps).toBeLessThanOrEqual(CLE.expMax + 1e-12);
+});
+
+describe("ritmo classico (6/24/36 h)", () => {
+  test("evolui no ritmo escolhido e o replay le do evento de config", () => {
+    const m = new Motor(21, 4); m.configurar("classica");
+    expect(m.log[0]).toEqual([TICK_INICIAL, "c", { dur: "classica" }]);
+    m.avancar(DUR_EVO.bebe + 30);
+    expect(m.estagioAtual).toBe("bebe");                          /* no rapido ja seria Rookie */
+    m.avancar(360 - DUR_EVO.bebe);
+    expect(m.estagioAtual).toBe("crianca");
+    expect(Motor.reproduzir(21, m.log, 4).assinatura()).toBe(m.assinatura());
+  });
+  test("so no comeco, so v4; a origem pode vir depois da config", () => {
+    const m = new Motor(22, 4); m.avancar(15);
+    expect(() => m.configurar("classica")).toThrow();
+    expect(() => new Motor(23, 3).configurar("classica")).toThrow();
+    const f = new Motor(24, 4); f.configurar("classica");
+    const t = f.temp;
+    f.registrarOrigem({ pais: [{ h: 1, esp: "brasa", temp: t, est: "adulto" }, { h: 2, esp: "limo", temp: t, est: "adulto" }], s: 5, quem: "x" });
+    expect(Motor.reproduzir(24, f.log, 4).assinatura()).toBe(f.assinatura());
+  });
+});

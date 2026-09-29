@@ -529,6 +529,8 @@ _FONTES_EDUCACAO_V1 = {
                                              "(docs/PLANO_ANALISE_V3.md)"),
     "ConfigLesoes.luta_treina": (_D, "Matheus, opcao B (2026-09-28): desligado; na V3b levou 577/640 pets a forma "
                                      "sombria (artifacts_educacao_v3b)"),
+    "ConfigLesoes.experiencia_por_vitoria": (_P, _SF + " (mecanica decidida pelo Matheus em 2026-09-29; valor proposto)"),
+    "ConfigLesoes.experiencia_max": (_P, _SF + " (= epsilon_base_pet: um pet muito experiente e disciplinado quase nao erra)"),
     "ConfigLesoes.lutas_minimas_taxa": (_D, "Fase 0; igual a ConfigEvolucaoPesquisa.sparring_minimo_adulto"),
     "ConfigLesoes.limiar_taxa_vitoria": (_P, "Digimon V-Pet Color (80%); " + _NV),
     "ConfigLesoes.prob_lesao_derrota": (_P, _SF),

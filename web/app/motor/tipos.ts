@@ -43,11 +43,15 @@ export type EventoLuta = [tick: number, tipo: "l", luta: { r: string; s: number 
 export type EventoGambit = [tick: number, tipo: "g", gambit: { op: OpGambit; k: string }];
 export type EventoTreino = [tick: number, tipo: "tr", exercicio: Exercicio];
 /** heranca (pets v4): um genitor visto no cruzamento. h = impressao do registro dele (hashSemente do JSON) */
-export interface PaiOrigem { h: number; esp: Especie; temp: Temperamento; est: Estagio }
+export interface PaiOrigem { h: number; esp: Especie; temp: Temperamento; est: Estagio; ger?: number }   /* ger: geracao do pai (so tela) */
 export interface Origem { pais: [PaiOrigem, PaiOrigem]; s: number; quem: string }
 /** so como PRIMEIRO evento do registro de um filho */
 export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem;
+/** ritmo dos estagios (pets v4): rapida = 3/12/18 h (o de sempre); classica = 6/24/36 h (v-pets) */
+export type Ritmo = "rapida" | "classica";
+/** so no comeco do registro (antes de qualquer outro evento, menos outra config) */
+export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig;
 
 export type VersaoPet = 1 | 2 | 3 | 4;
 

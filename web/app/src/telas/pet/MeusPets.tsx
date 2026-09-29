@@ -7,7 +7,9 @@ import { abrirModal } from "../../componentes/modal.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
-import { abrirGuardado, ativarGuardado, cruzarComAtivo, lerGuardados } from "../../pets.ts";
+import { abrirGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
+import { abrirHeranca } from "../../heranca.ts";
+import { abrirImportar, exportarArquivo, nomeArquivo } from "../../importar.ts";
 import { dec } from "../../componentes/Barras.tsx";
 import { diaDe } from "./TelaPet.tsx";
 
@@ -51,7 +53,7 @@ function Guardados({ ativar, cruzar }: { ativar: (i: number) => void; cruzar: ((
                 <button type="button" class="dl-btn dl-btn--sec mp-g-ativar" onClick={() => ativar(i)}>Ativar</button>
                 {cruzar && g.estagioAtual === "adulto" && !g.morte &&
                   <button type="button" class="dl-btn dl-btn--sec mp-g-cruzar" onClick={() => cruzar(i)}
-                    title="o filho herda o temperamento dos dois e a espécie de um deles">Cruzar</button>}
+                    title="o filho herda o temperamento dos dois e a espécie de um deles">Nova geração</button>}
               </span>
             </li>
           );
@@ -80,14 +82,10 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
   /* heranca: so com o ativo adulto e vivo; o filho vira o ativo */
   const podeCruzar = !ovo && m.estagioAtual === "adulto" && !m.morte;
   const cruzar = (i: number) => {
-    try { cruzarComAtivo(i); setMsg(""); ref.current?.close(); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
+    ref.current?.close(); abrirHeranca(i);
   };
-  const exportar = async () => {
-    /* o mesmo conteudo do save: semente, registro e versao do pet */
-    const txt = JSON.stringify({ semente: m.semente, log: m.log, versao: m.versao });
-    try { await navigator.clipboard.writeText(txt); setMsg("Registro copiado para a área de transferência."); }
-    catch { console.log(txt); setMsg("Não foi possível copiar automaticamente. O registro está no console do navegador."); }
-  };
+  /* o arquivo .digilab e o proprio save do pet (semente, registro e versao) */
+  const exportar = () => { exportarArquivo(m); setMsg("Registro baixado: " + nomeArquivo(m)); };
   /* desktop: Meus pets e uma pagina (MeusPetsDesktop, prancha MpListaDesktop); aqui so o celular (MpAtual) */
   return (
     <dialog class="meus-pets mp-tela dl" ref={ref} aria-labelledby="mp-titulo" onClose={fechar}>
@@ -111,6 +109,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
         {anterior && <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</button>}
         <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={() => { ref.current?.close(); irRegistro(); }}>Registro e novo ovo</button>
         <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={exportar}>Exportar registro</button>
+        <button type="button" class="dl-btn dl-btn--sec dl-btn--largo" onClick={() => { ref.current?.close(); abrirImportar(); }}>Importar pet</button>
         <p class="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
       </div>
     </dialog>

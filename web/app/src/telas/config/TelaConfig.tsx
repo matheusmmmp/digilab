@@ -79,7 +79,7 @@ function Aparencia() {
         ))}
       </div>
       <p class="dl-apoio">Sistema segue o claro ou escuro do aparelho.</p>
-      <label class="cfg-interruptor"><span><b>Mostrar dicas</b><small>o Bit explica cada coisa nova, uma vez</small></span>
+      <label class="cfg-interruptor"><span><b>Mostrar dicas</b><small>o Professor Agumon explica cada coisa nova, uma vez</small></span>
         <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
     </div>
   );

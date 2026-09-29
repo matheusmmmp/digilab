@@ -928,6 +928,10 @@ class ConfigLesoes:
     # V3b (adendo do PLANO_ANALISE_V3): cada luta fora da arena de pesquisa conta como uma sessao de treino.
     # DESLIGADO depois da V3b (decisao do Matheus, opcao B, 2026-09-28): levava 90% dos pets a forma sombria
     luta_treina: bool = False
+    # estilo "lutar" (decisao do Matheus, 2026-09-29): experiencia de combate. Cada vitoria fora da arena de
+    # pesquisa (a vida inteira, nao zera ao evoluir) reduz o epsilon do lutador; teto na reducao, piso 0
+    experiencia_por_vitoria: float = 0.002
+    experiencia_max: float = 0.05
 
 
 @dataclass(frozen=True)

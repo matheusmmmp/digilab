@@ -1,9 +1,9 @@
-/* Bit, o mentor do tutorial (docs/JORNADA_JOGADOR.md): desde 2026-09-28 (pedido do Matheus) e o Agumon de capelo
+/* Professor Agumon, o mentor do tutorial (docs/JORNADA_JOGADOR.md; antes "Bit"): desde 2026-09-28 (pedido do Matheus) e o Agumon de capelo
    de professor do Digimon UP ("Agu", grupo B: falando e apontando a varinha), sprite "guia" do atlas. Sem o atlas,
    volta o robozinho desenhado em pixels aqui mesmo. A faixa da dica fica acima da barra, uma frase por vez. */
 import { useEffect, useRef } from "preact/hooks";
 import { desenharSprite, dimSprite, escalaSprite, quadroAgora, useAtlas } from "../atlas.ts";
-import { dispensarDica, DICAS, useDicaAtual } from "../dicas.ts";
+import { dispensarDica, DICAS, NOME_MENTOR, useDicaAtual } from "../dicas.ts";
 
 /* 12 x 12: . vazio, n contorno, b corpo, c visor, o olho, a antena, y luz, w chave */
 const GRADE = [
@@ -56,7 +56,7 @@ export function DicaBit() {
   return (
     <aside class="dica-bit" role="status" aria-live="polite">
       <RetratoGuia />
-      <p><b>Bit:</b> {DICAS[id]}</p>
+      <p><b>{NOME_MENTOR}:</b> {DICAS[id]}</p>
       <button type="button" class="dl-btn dl-btn--sec dica-ok" onClick={() => dispensarDica(id)}>Entendi</button>
     </aside>
   );

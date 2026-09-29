@@ -40,7 +40,8 @@ export const CED = {
   limiarSuper: .9, custoSaudeSuper: .05, deltaEps: .10,
 };
 /* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
-export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8 };
+/* expPorVitoria/expMax: estilo "lutar" (experiencia de combate, decisao do Matheus em 2026-09-29) */
+export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8, expPorVitoria: .002, expMax: .05 };
 /* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
 export const CHE = { sigma: .1 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */
@@ -184,6 +185,8 @@ export const CESC = {
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */
 export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };
+/* ritmo classico (ConfigDuracoes.canonica, v-pets: 6 h, 24 h, 36 h): bebe, crianca, adolescente em minutos */
+export const DUR_CLASSICA = [360, 1440, 2160];
 export const CHAMADO_BEBE: Record<Chamado, number> = { fome: 30, higiene: 60, carinho: 45 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];

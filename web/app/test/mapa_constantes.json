@@ -1806,6 +1806,21 @@
    "web": "CHE.sigma",
    "fonte": "python",
    "py": "ConfigHeranca.sigma_temperamento"
+  },
+  {
+   "web": "CLE.expPorVitoria",
+   "fonte": "python",
+   "py": "ConfigLesoes.experiencia_por_vitoria"
+  },
+  {
+   "web": "CLE.expMax",
+   "fonte": "python",
+   "py": "ConfigLesoes.experiencia_max"
+  },
+  {
+   "web": "DUR_CLASSICA",
+   "fonte": "python",
+   "py": "ConfigDuracoes.canonica"
   }
  ],
  "convertidos": [

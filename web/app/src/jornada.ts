@@ -3,7 +3,7 @@
    ovo sai da semente (motor), entao escolher o brasao e sortear sementes ate cair na especie escolhida. A conclusao
    vista fica numa chave propria (sementes dos pets que ja viram a mensagem). */
 import { useEffect, useState } from "preact/hooks";
-import { CAMPANHA, ESPECIES, LUGARES, Motor, hashSemente, type Especie } from "../motor/index.ts";
+import { CAMPANHA, ESPECIES, LUGARES, Motor, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
@@ -35,7 +35,7 @@ export function sementeDoBrasao(esp: Especie): number {
   throw new Error("não achei um ovo desse brasão");
 }
 /** choca um ovo do brasao escolhido. guardarAtivo: o pet ativo vai para os guardados (nao se perde) */
-export function chocarDoBrasao(esp: Especie, guardarAtivo = false): void {
+export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo = "rapida"): void {
   if (guardarAtivo) {
     const g = lerGuardados();
     g.push(JSON.parse(textoSave(jogoAtual().motor)));
@@ -43,6 +43,7 @@ export function chocarDoBrasao(esp: Especie, guardarAtivo = false): void {
   }
   const m = new Motor(sementeDoBrasao(esp));
   if (m.especie !== esp) throw new Error("ovo de outro brasão");
+  if (ritmo !== "rapida") m.configurar(ritmo);
   trocarMotor(m, "novo", 16);
   guardarNoProximoOvo = false;
   fecharEscolhaBrasao();
