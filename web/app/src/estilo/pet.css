@@ -174,6 +174,12 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .chamado-tit b{font-size:15px}
 .chamado-tit .dl-apoio{font-size:11px;font-weight:700}
 .chamado-tit > *{white-space:nowrap}
+/* pets v4 (educacao-v1): dois botoes na janela (atender ou manha), lesao e morte */
+.chamado-botoes{display:grid;gap:6px;flex:none}
+.chamado--lesao{border-color:var(--dl-need)}
+.chamado--morte{flex-wrap:wrap}
+.chamado--morte .chamado-txt b{font-size:16px}
+.palco--morto img,.palco--morto canvas{filter:grayscale(1) brightness(.85)}
 .dl-par{gap:10px}
 .dl-desejo-corpo strong{font-size:16px}
 .dl-desejo-icone{width:32px;height:32px;background:var(--dl-plate)}

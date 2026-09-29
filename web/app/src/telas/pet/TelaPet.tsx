@@ -4,7 +4,7 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import {
-  ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
+  ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
@@ -19,7 +19,7 @@ import {
   detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
-import { mudarMotor, useJogo } from "../../jogo.ts";
+import { mudarMotor, novoPet, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
 import { useDesktop } from "../../desktop.ts";
@@ -193,11 +193,66 @@ function Necessidades() {
           <i style={{ width: `${e.saude * 100}%`, ...(e.saude < .3 ? { background: "var(--dl-need)" } : {}) }} />
         </div>
       </div>
+      {m.versao >= 4 && <div class="nec nec-disciplina">
+        <span class="nec-rot">Disciplina</span>
+        <Seg n={blocos(m.disciplina / CED.disciplinaMax, 4)} m={4} cls="dl-seg--acao" />
+      </div>}
+    </div>
+  );
+}
+/** pets v4: a janela aberta (chamado ou aviso) e a lesao. O dono ve o pedido, nunca se e manha: confere a
+    necessidade e decide (atender ou dar bronca). */
+function JanelaV4({ agir }: { agir: (a: AcaoDono) => void }) {
+  const { motor: m } = useJogo(), j = m.janelaAberta(), tick = m.e.tick;
+  const lesao = m.lesionadoDesde !== null ? CLE.horasMorte * 60 - (tick - m.lesionadoDesde) : null;
+  return <>
+    {lesao !== null && (
+      <div class="dl-card chamado chamado--lesao">
+        <span class="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
+        <span class="chamado-txt"><span class="chamado-tit"><b>Machucado na luta</b><span class="dl-apoio">trate em até {Math.floor(lesao / 60)} h {lesao % 60} min</span></span>
+          <Seg n={blocos(lesao / (CLE.horasMorte * 60), 10)} m={10} /></span>
+        <button type="button" class="dl-btn" onClick={() => agir("tratar_lesao")}>Tratar</button>
+      </div>
+    )}
+    {j && (() => {
+      const resta = Math.max(0, j.prazo - tick);
+      const barra = <Seg n={blocos(resta / CED.janela, 10)} m={10} />;
+      if (j.tipo === "aviso") return (
+        <div class="dl-card chamado">
+          <span class="chamado-ic"><Peca nome="emoji_surpreso" escala={2} reserva="!" /></span>
+          <span class="chamado-txt"><span class="chamado-tit"><b>Vai fazer sujeira!</b><span class="dl-apoio">leve ao banheiro</span></span>{barra}</span>
+          <button type="button" class="dl-btn" onClick={() => agir("levar_ao_banheiro")}>Banheiro</button>
+        </div>
+      );
+      const c = j.pedido as Chamado;
+      return (
+        <div class="dl-card chamado">
+          <span class="chamado-ic">{EMOTE_CHAMADO[c] ? <Peca nome={EMOTE_CHAMADO[c]!} escala={2} reserva="!" /> : "!"}</span>
+          <span class="chamado-txt"><span class="chamado-tit"><b>Chamando: {NOME_CHAMADO[c]}</b><span class="dl-apoio">precisa mesmo? confira a barra</span></span>{barra}</span>
+          <span class="chamado-botoes">
+            <button type="button" class="dl-btn" onClick={() => agir(ACAO_CHAMADO[c][0])}>Atender</button>
+            <button type="button" class="dl-btn" onClick={() => agir("repreender")}>É manha</button>
+          </span>
+        </div>
+      );
+    })()}
+  </>;
+}
+/** pets v4: morreu (lesão demais ou sem tratar). O registro fica; so um ovo novo continua o jogo */
+function Morte() {
+  const { motor: m } = useJogo();
+  if (!m.morte) return null;
+  return (
+    <div class="dl-card chamado chamado--morte" role="alert">
+      <span class="chamado-txt"><b>{nomeForma(m.forma)} se foi</b>
+        <span class="dl-apoio">{m.morte.causa === "lesoes" ? "se machucou demais nas lutas" : "a lesão ficou sem tratamento por tempo demais"}. O Diário guarda a vida inteira.</span></span>
+      <button type="button" class="dl-btn dl-btn--destaque" onClick={novoPet}>Chocar um ovo novo</button>
     </div>
   );
 }
 function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
   const { motor: m } = useJogo(), ab = m.chamadosAbertos(), tick = m.e.tick;
+  if (m.versao >= 4 && m.estagioAtual !== "bebe") return <JanelaV4 agir={agir} />;
   if (!ab.length && m.acao === "chamar_atencao") return (
     <div class="dl-card chamado">
       <span class="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
@@ -273,7 +328,7 @@ function AgoraHaPouco({ irRegistro }: { irRegistro: () => void }) {
 export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void }) {
   const { motor: m, nascendo } = useJogo();
   const agir = (a: AcaoDono) => {
-    if (nascendo > 0) return;
+    if (nascendo > 0 || m.morte) return;
     mudarMotor(mm => mm.observar(a));
     mostrarFlash(ICONE_DONO[a]);
     ajustarVelocidadeChamado();                  /* atendeu o chamado: volta a velocidade de antes */
@@ -286,7 +341,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
       <div class="pet-corpo">
         <div class="pet-principal">
           <section class="palco-card" aria-label="Palco do pet">
-            <div class="palco-cena dl-hexcard">
+            <div class={"palco-cena dl-hexcard" + (m.morte ? " palco--morto" : "")}>
               {nascendo > 0 && <><span class="ovo-padrao" style={{ "--padrao": fundoDeco("Icon_Pattern_2") ?? "none" }} aria-hidden="true" /><Deco nome="Digivice_Circle_01" class="ovo-anel gira" /></>}
               <div class="palco-tit">Meu parceiro</div>
               <Emocao />
@@ -302,11 +357,12 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
         </div>
         <aside class="pet-lado">
           <Necessidades />
-          <Chamados agir={agir} />
-          <div class="dl-par"><Desejo /></div>
-          <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
+          <Morte />
+          {!m.morte && <Chamados agir={agir} />}
+          {!m.morte && <div class="dl-par"><Desejo /></div>}
+          {!m.morte && <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
             {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
-          </div>
+          </div>}
           <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
         </aside>
       </div>

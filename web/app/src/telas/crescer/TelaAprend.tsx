@@ -15,7 +15,7 @@ import { BarraCarater, Numeros, comSinal, dec } from "../../componentes/Barras.t
 import { Grade, Peca } from "../../componentes/Imagens.tsx";
 import { falaDe, idxDoOrdinal } from "../../fala.ts";
 import { AMPULHETA } from "../../grades.ts";
-import { mudarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado } from "../../tempo.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 
@@ -57,7 +57,7 @@ function Agora() {
     const nome = chaveSprite(m.forma), esc = Math.max(1, Math.min(3, Math.floor(168 / dimSprite(a.dados, nome)[1])));
     pet = imagemAtlas(a, nome, esc);
   }
-  const agir = (x: AcaoDono) => { if (nascendo > 0) return; mudarMotor(mm => mm.observar(x)); ajustarVelocidadeChamado(); };
+  const agir = (x: AcaoDono) => { if (nascendo > 0 || jogoAtual().motor.morte) return; mudarMotor(mm => mm.observar(x)); ajustarVelocidadeChamado(); };
   const des = nascendo > 0 || !acao;
   return (
     <>
