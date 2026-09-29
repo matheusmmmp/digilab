@@ -740,7 +740,6 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - Ablação feita (ver acima): inconclusiva. Aumentar `partidas_por_par` e/ou sementes antes de
   concluir qualquer coisa. Isso muda o protocolo e é decisão do pesquisador.
 - Sementes de partida derivam do nome do braço. Renomear um braço muda todas as partidas dele.
-- Revisar orçamento/visitas do braço relapso.
 - O hash do protocolo não cobre o código de `metrics.py`; mudanças de métrica não alteram o hash.
 - A pasta irmã `D:\Trab\digilab\v0` tem os arquivos soltos (sem subpasta `digilab/`); os imports
   dela não funcionam como estão. Este repo é a versão de referência.
