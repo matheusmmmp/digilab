@@ -166,7 +166,8 @@ Como no anime, o Digimundo é um reflexo da internet, e o pet conhece a cultura 
 - **De onde vem o conhecimento:**
   - **o próprio modelo:** o gemma2:9b foi treinado em texto da internet e já conhece cultura pop e memes;
   - **o Almanaque do Digimundo** (`digilab_fala_livre/almanaque.json`): uma lista curada de ~60 entradas curtas, em texto próprio (sem copiar nada), cada uma com tema, época e uma descrição de uma linha. Cobre cultura geral da internet e memes brasileiros. Ele dá o sabor e o assunto; o modelo completa.
-- **O que não entra:** memes que expõem pessoas comuns (gente anônima que viralizou sem querer), ofensivos, políticos ou de ódio. O almanaque é revisado a mão e versionado.
+- **Nomes próprios:** podem entrar (decisão do Matheus, 2026-09-29). A entrada leva o nome do meme e das pessoas ou personagens dele, como a internet os conhece. A entrada descreve o meme; não inventa fato sobre a pessoa.
+- **O que não entra:** memes ofensivos, políticos ou de ódio. O almanaque é revisado a mão e versionado.
 - **Quando entra na fala:** na fala espontânea, com chance de 0,15 (PROPOSTO), sorteada na rng da fala, uma entrada do almanaque vira o fato `W` ("coisa que ouvi no Digimundo"). Na Conversar, entra quando o jogador puxa o assunto.
 - **Verificação:** `W` sustenta afirmações sobre o mundo e a internet, **nunca** sobre a vida do pet ou do dono. "Ouvi falar do Nyan Cat" passa; "eu comi um bolo" citando `W` é "sem fato".
 - **No jogo:** dá para desligar em Ajustes ("o pet comenta coisas da internet"), ligado por padrão.
