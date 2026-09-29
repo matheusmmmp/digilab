@@ -292,6 +292,15 @@ def montar_pedido(motivo: Motivo, estagio: str, humor: float | None) -> str:
 # ------------------------------------------------------------ validacao da moldura (C4, fala-v4)
 
 
+# alfabeto da moldura (revisao da fala-v6 com a semente 20260929: 9 de 50 falas aprovadas tinham lixo do qwen
+# 2.5 3b, como "?콝", "※�", "—㛼!"): ASCII imprimivel, letras latinas acentuadas e poucos simbolos de carinha
+_EXTRA_MOLDURA = set("☺☻♥♡♪♫★☆…–—‘’“”¡¿·°")
+
+
+def _caractere_ok(c: str) -> bool:
+    return (" " <= c <= "~") or ("À" <= c <= "ÿ" and c not in "×÷") or c in _EXTRA_MOLDURA
+
+
 def validar_moldura(abertura, fecho) -> tuple[str, str]:
     """A moldura so pode enfeitar: curta, sem numero, sem conectivo de causa, sem marcador de
     fator e sem tema de causa. Devolve (abertura, fecho) limpos ou levanta FalaReprovada."""
@@ -302,6 +311,9 @@ def validar_moldura(abertura, fecho) -> tuple[str, str]:
             raise FalaReprovada(f"{rotulo} nao e texto")
         parte = " ".join(parte.split())
         baixo = f" {parte.lower()} "
+        fora = sorted({c for c in parte if not _caractere_ok(c)})
+        if fora:
+            raise FalaReprovada(f"{rotulo} com caractere fora do alfabeto ({''.join(fora)!r}): {parte!r}")
         if len(parte) > MAX_CHARS_MOLDURA or len(parte.split()) > MAX_PALAVRAS_MOLDURA:
             raise FalaReprovada(f"{rotulo} longa demais: {parte!r}")
         if re.search(r"\d", parte.replace(":3", "")):     # ":3" e carinha, nao numero

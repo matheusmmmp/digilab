@@ -723,8 +723,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
-- Fala por LLM: revisar `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv` antes de ligar por
-  padrão; a v2 do prompt foi ajustada na mesma amostra da avaliação (repetir com outra semente).
+- Fala por LLM: repetida com outra semente (2026-09-29, `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260929/`):
+  92% aprovadas, nenhuma barrada por fator fora da lista. Pré-leitura (coluna própria no `revisao.csv`): nenhuma
+  das 50 cita causa fora dos fatores (desde a v4 a LLM só escreve a moldura); 9 tinham caractere quebrado do
+  qwen 2.5 3b, agora barrado na validação da moldura. Falta a leitura do Matheus (coluna s/n).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção. Adiado
