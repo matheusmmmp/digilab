@@ -119,6 +119,14 @@ def ler_decisao(evento: Evento) -> dict:
     return {**d, "tick": evento.tick}
 
 
+def fala(tick: int, gatilho: str) -> Evento:
+    """DESIGN_VOZ_PROPRIA (secao 9): fala espontanea disparada de fora (reencontro, marco...). So o gatilho vai
+    para o log; se ela e mentira sai da rng_mentira do motor (o replay sorteia de novo, igual)."""
+    if not gatilho or not gatilho.replace("_", "").isalnum():
+        raise ValueError(f"gatilho de fala invalido: {gatilho!r}")
+    return Evento(tick=tick, tipo="fala", valor=gatilho)
+
+
 def ler_luta(evento: Evento) -> tuple[str, int]:
     if evento.tipo != "luta":
         raise ValueError(f"evento nao e luta: {evento.tipo!r}")

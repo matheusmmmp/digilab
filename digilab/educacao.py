@@ -30,6 +30,17 @@ Parte 3 (tambem so com a chave ligada):
   - resolvem sozinhas (sem janela): acordar o pet dormindo (a acao do dono que o acorda custa humor) e
     superalimentacao (comer ja saciado, refeicao aceita ou petisco, custa saude).
 
+Mentira (DESIGN_VOZ_PROPRIA, secao 9; so com ConfigMentira.ligada, que exige a educacao ligada):
+  - toda fala espontanea abre uma janela de fala (uma janela por vez, junto das de chamado e aviso). Na pesquisa a
+    fala vem de um slot a cada `intervalo_fala_min`, o primeiro `defasagem_fala_min` depois do inicio do estagio
+    (da crianca em diante); no jogo, do evento `fala` (gatilho).
+  - se ela e mentira sai da `rng_mentira` (derivada da semente): p = chance_mentira() (config.ConfigMentira). Cada
+    fala consome SEMPRE dois sorteios (mentira e tema), mesmo sem abrir janela: numeros comuns entre bracos.
+  - tema "estado" (a mentira contradiz as barras, o dono atento ve) ou "historia" (nao da para conferir).
+  - bronca numa mentira: disciplina +passo e acerto; bronca numa verdade: bronca sem motivo (vinculo);
+    petisco ou elogio numa mentira: +impunes_premiada; prazo vencido numa mentira: +1 impune (e zera os acertos).
+  - impunes e acertos zeram na evolucao.
+
 Parte 4 (so com ConfigLesoes.ligada): lutas fora da arena de pesquisa.
   - `lutar(rival, semente)` grava o evento `luta` (rival + semente) e joga a partida V21C com as regras da
     campanha; o resultado nao vai para o log: o replay joga de novo. O lutador do pet e o do rival vem de
@@ -50,8 +61,9 @@ from typing import Callable
 from .campanha import REGRAS_CAMPANHA, npc
 from .combate_v2.v21.bots import lutador_adulto
 from .combate_v2.v21.partida import Lutador, jogar
-from .config import (CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, ConfigEducacao, ConfigLesoes)
-from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, decisao_externa, ler_decisao, ler_luta, luta
+from .config import (CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, CONFIG_MENTIRA, ConfigEducacao,
+                     ConfigLesoes, ConfigMentira)
+from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, decisao_externa, fala, ler_decisao, ler_luta, luta
 from .heranca import HerancaInvalida, Origem, ler_origem
 from .obediencia import PoliticaBanditPersonalidade
 from .protocol import derivar_semente
@@ -110,7 +122,8 @@ class MotorEducacao(MotorTreino):
                  cfg_educacao: ConfigEducacao | None = None, cfg_lesoes: ConfigLesoes | None = None,
                  lutador_do_pet: Callable[["MotorEducacao"], Lutador] | None = None,
                  rival_por_nome: Callable[[str], Lutador] = rival_padrao, cfg_evo=None,
-                 decisor_externo: Callable[[dict], tuple[bool, dict]] | None = None, **kw) -> None:
+                 decisor_externo: Callable[[dict], tuple[bool, dict]] | None = None,
+                 cfg_mentira: ConfigMentira | None = None, honestidade_especie: float = 1.0, **kw) -> None:
         super().__init__(politica, cfg, semente, temperamento, especie, obediencia_desligada, cfg_treino,
                          cfg_sombrio, **kw)
         if cfg_evo is not None:
@@ -147,6 +160,20 @@ class MotorEducacao(MotorTreino):
         self.modo_livre = False
         self._log_replay: LogDeEventos | None = None      # no replay: o log inteiro (o lutador le ate o tick)
         self.adulto_liberado: bool | None = None           # efeito "condicao_adulto" da qualificacao
+        # mentira (DESIGN_VOZ_PROPRIA, secao 9)
+        self.cm = cfg_mentira or CONFIG_MENTIRA
+        if self.cm.ligada and not self.ce.ligada:
+            raise ValueError("ConfigMentira ligada exige ConfigEducacao ligada (a fala usa a janela da educacao)")
+        if not 0.0 <= honestidade_especie <= 1.0:
+            raise ValueError(f"honestidade_especie fora de [0, 1]: {honestidade_especie}")
+        self.honestidade_especie = honestidade_especie
+        self._rng_mentira = random.Random(derivar_semente("mentira", semente))
+        self.mentiras_impunes = 0
+        self.acertos_mentira = 0                 # broncas certas seguidas em mentiras no estagio
+        self.contagem_mentira = {"falas": 0, "falas_sem_janela": 0, "mentiras": 0, "corrigidas": 0, "premiadas": 0,
+                                 "impunes": 0, "broncas_injustas": 0, "verdades_aceitas": 0, "verdades_ignoradas": 0}
+        self._proximo_fala: int | None = None
+        self._agendar_fala(self.treino.estagio, 0)
 
     @staticmethod
     def _lutas_zeradas() -> dict:
@@ -182,6 +209,10 @@ class MotorEducacao(MotorTreino):
         self.disciplina = int(self.disciplina * self.ce.fator_disciplina_ao_evoluir)
         self.acertos = 0
         self._agendar(estagio, tick)
+        if self.cm.ligada:
+            self.mentiras_impunes = 0
+            self.acertos_mentira = 0
+            self._agendar_fala(estagio, tick)
 
     def _decisao_observada(self, transicao) -> None:
         super()._decisao_observada(transicao)          # checkpoint: pode evoluir e reagendar
@@ -194,6 +225,9 @@ class MotorEducacao(MotorTreino):
             while tick >= self._proximo[tipo]:
                 self._proximo[tipo] += self.ce.intervalos_chamado_min[self.treino.estagio][tipo]
                 self._slot(tipo, tick)
+        while self._proximo_fala is not None and tick >= self._proximo_fala:
+            self._proximo_fala += self.cm.intervalo_fala_min
+            self._abrir_fala(tick, "slot")
 
     def _slot(self, tipo: str, tick: int) -> None:
         u = self._rng_travessura.random()               # sempre: numeros comuns entre bracos
@@ -244,6 +278,16 @@ class MotorEducacao(MotorTreino):
         j = self.janela
         if j is None or tick <= j["prazo"]:
             return
+        if j["tipo"] == "fala":
+            if j["falso"]:
+                self.mentiras_impunes += 1
+                self.acertos_mentira = 0
+                self.contagem_mentira["impunes"] += 1
+                self._fechar("impune", tick)
+            else:
+                self.contagem_mentira["verdades_ignoradas"] += 1
+                self._fechar("ignorado", tick)
+            return
         if j["tipo"] == "aviso":
             self._estado = replace(self._estado, sujeira=min(self.cfg.sujeira_maxima, self._estado.sujeira + 1))
             self.contagem["avisos_ignorados"] += 1
@@ -261,6 +305,11 @@ class MotorEducacao(MotorTreino):
         j = self.janela
         d["educacao"] = {"disciplina": self.disciplina, "lesionado": self.lesionado_desde is not None,
                          "janela": None if j is None else {k: j[k] for k in ("tipo", "pedido", "inicio", "prazo")}}
+        if j is not None and j["tipo"] == "fala":
+            # o dono ve a fala, nunca se e mentira; so percebe quando ela contradiz as barras
+            d["educacao"]["janela"]["contradiz_barras"] = j["contradiz_barras"]
+        if self.cm.ligada:
+            d["educacao"]["honestidade"] = self.honestidade_mostrada()
         return d
 
     @property
@@ -357,7 +406,7 @@ class MotorEducacao(MotorTreino):
             self._vivo()
         self._expirar(tick)
         j = self.janela
-        if j is not None and j["falso"] and acao is AcaoUsuario.ALIMENTAR:
+        if j is not None and j["tipo"] == "chamado" and j["falso"] and acao is AcaoUsuario.ALIMENTAR:
             self._recusar_refeicao(acao, tick)
             return
         dormia, fome, n_recusas = self._estado.dormindo, self._estado.fome, len(self.recusas)
@@ -375,6 +424,9 @@ class MotorEducacao(MotorTreino):
             return
         self._sozinhas(acao, dormia, fome, len(self.recusas) > n_recusas)
         if j is None:
+            return
+        if j["tipo"] == "fala":
+            self._julgar_fala(j, acao, tick)
             return
         if j["tipo"] == "aviso":
             if acao is AcaoUsuario.LEVAR_AO_BANHEIRO:
@@ -433,6 +485,93 @@ class MotorEducacao(MotorTreino):
         self.contagem["refeicoes_recusadas"] += 1
         self._contato(acao, tick)
 
+    # ------------------------------------------------------------ mentira
+    def _agendar_fala(self, estagio: str, inicio: int) -> None:
+        self._proximo_fala = (inicio + self.cm.defasagem_fala_min
+                              if self.cm.ligada and estagio in self.cm.estagios_fala else None)
+
+    def honestidade(self) -> float:
+        """h (0 a 1): sombria e sobrecarga tiram; um pet sem sobrecarga e nao sombrio tem h = 1 e nunca mente"""
+        fator = self.cm.fator_sombria if self.sombria else 1.0
+        h = fator * (1 - self.cm.peso_sobrecarga * self.treino.sobrecarga / 100.0) * self.honestidade_especie
+        return max(0.0, min(1.0, h))
+
+    def chance_mentira(self) -> float:
+        cm, h = self.cm, self.honestidade()
+        if h >= 1.0 or self.acertos_mentira >= cm.acertos_para_aprender:
+            return 0.0
+        return min(cm.teto_chance, cm.coef_chance * (1 - h) * (1 - self.disciplina / self.ce.disciplina_max)
+                   + cm.reforco_por_impune * self.mentiras_impunes)
+
+    def honestidade_mostrada(self) -> float:
+        """a que o jogo mostra: cai com a vista grossa, sobe com a disciplina"""
+        return 1.0 - self.chance_mentira() / self.cm.teto_chance
+
+    def falar(self, gatilho: str) -> dict | None:
+        """Fala espontanea disparada de fora (o jogo): grava o evento `fala` e abre a janela (ou nao, se ja houver
+        uma aberta ou o pet dormir). Devolve a janela aberta (com a verdade: quem chama e a apresentacao)."""
+        if not self.cm.ligada:
+            raise ValueError("fala espontanea com ConfigMentira desligada")
+        self._vivo()
+        self._log.anexar(fala(self._estado.tick, gatilho))
+        return self._fala_do_log(gatilho)
+
+    def _fala_do_log(self, gatilho: str) -> dict | None:
+        if not self.cm.ligada:
+            raise ValueError("evento fala no log, mas ConfigMentira desligada")
+        tick = self._estado.tick
+        self._n_eventos += 1
+        self._checkpoint()
+        self._expirar(tick)
+        return self._abrir_fala(tick, gatilho)
+
+    def _abrir_fala(self, tick: int, gatilho: str) -> dict | None:
+        u, u_tema = self._rng_mentira.random(), self._rng_mentira.random()     # sempre: numeros comuns
+        self.contagem_mentira["falas"] += 1
+        if self.janela is not None or self._estado.dormindo or self.morte is not None:
+            self.contagem_mentira["falas_sem_janela"] += 1
+            return None
+        h, p = self.honestidade(), self.chance_mentira()
+        mentira = u < p
+        tema = "estado" if u_tema < self.cm.fracao_tema_estado else "historia"
+        self.janela = {"tipo": "fala", "pedido": tema, "inicio": tick, "prazo": tick + self.cm.janela_fala_min,
+                       "falso": mentira, "contradiz_barras": mentira and tema == "estado", "gatilho": gatilho,
+                       "honestidade": h, "chance": p}
+        if mentira:
+            self.contagem_mentira["mentiras"] += 1
+        return dict(self.janela)
+
+    def _julgar_fala(self, j: dict, acao: AcaoUsuario, tick: int) -> None:
+        """o dono julga a fala (bronca, petisco ou elogio fecham a janela; o resto nao)"""
+        if acao is AcaoUsuario.REPREENDER:
+            if j["falso"]:
+                self.disciplina = min(self.ce.disciplina_max, self.disciplina + self.ce.passo_disciplina)
+                self.acertos_mentira += 1
+                self.contagem_mentira["corrigidas"] += 1
+                self._fechar("corrigida", tick)
+            else:
+                self.vinculo.ajustar(tick, "bronca_sem_motivo", self.ce.vinculo_bronca_sem_motivo, self._n_eventos - 1)
+                self.contagem_mentira["broncas_injustas"] += 1
+                self._fechar("bronca_injusta", tick)
+        elif acao in (AcaoUsuario.PETISCO, AcaoUsuario.ELOGIAR):
+            if j["falso"]:
+                self.mentiras_impunes += self.cm.impunes_premiada
+                self.acertos_mentira = 0
+                self.contagem_mentira["premiadas"] += 1
+                self._fechar("premiada", tick)
+            else:
+                self.contagem_mentira["verdades_aceitas"] += 1
+                self._fechar("aceita", tick)
+
+    @property
+    def historico_falas(self) -> list[dict]:
+        return [j for j in self.historico_janelas if j["tipo"] == "fala"]
+
+    def resumo_mentira(self) -> dict:
+        return {"mentiras_impunes": self.mentiras_impunes, "acertos_mentira": self.acertos_mentira,
+                "honestidade": self.honestidade(), "chance": self.chance_mentira(),
+                "honestidade_mostrada": self.honestidade_mostrada(), "contagem": dict(self.contagem_mentira)}
+
     def estado_lutas(self) -> dict:
         return {"lutas": dict(self.lutas), "lesionado_desde": self.lesionado_desde, "morte": self.morte,
                 "vitorias_vida": self.vitorias_vida}
@@ -475,6 +614,8 @@ def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None,
             motor._aplicar_origem(ler_origem(evento))
         elif evento.tipo == "decisao_externa":
             pass                                     # ja consumida dentro do avanco que a pediu
+        elif evento.tipo == "fala":
+            motor._fala_do_log(str(evento.valor))
         else:
             raise ValueError(f"tipo de evento desconhecido no log: {evento.tipo!r}")
     if ate_tick is None and motor._decisoes_gravadas:
@@ -499,12 +640,14 @@ def fabricas_filho(origem: Origem, **kw):
 def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,
                       ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
                       lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao,
-                      cfg_evo=None, decisor_externo=None):
+                      cfg_evo=None, decisor_externo=None, cm: ConfigMentira | None = None,
+                      honestidade_especie: float = 1.0):
     """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay (sem o decisor)."""
     fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
     fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
                                                  obediencia_desligada=obediencia_desligada, cfg_treino=ct,
                                                  cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,
                                                  rival_por_nome=rival_por_nome, cfg_evo=cfg_evo,
-                                                 decisor_externo=decisor_externo))
+                                                 decisor_externo=decisor_externo, cfg_mentira=cm,
+                                                 honestidade_especie=honestidade_especie))
     return fp, fm

@@ -733,3 +733,34 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   - o braço treinador fica disponível, mas fora do gate;
   - **o equilíbrio dos estilos vira tarefa própria de game design**: o estilo "lutar" precisa de um ganho sem teto e que não gere sobrecarga, e isso é decisão de design, não número a ajustar.
 - **Leitura válida**: a V3.
+
+## 2026-09-29 — voz própria, parte 1: história e mentira (DESIGN_VOZ_PROPRIA)
+
+Implementado em `digilab/historia.py` (extrator H/O/P/L, `ConfigHistoria`) e no `MotorEducacao` (`ConfigMentira`,
+desligada por padrão; registros à parte `PARAMETROS_HISTORIA_V1` e `PARAMETROS_MENTIRA_V1`: o hash da educação-v1 não
+muda, `6a9037ad…`). Todos os números novos são PROPOSTOS. Onde o design não bate com o código:
+
+- **"As mentiras impunes voltam a 0 na evolução, como os petiscos cedidos"**: os petiscos cedidos **não** zeram na
+  evolução (nem no Python nem no TS). As mentiras impunes e os acertos em mentira zeram de propósito; os petiscos
+  continuam como estão.
+- **Donos "disciplinador" e "ausente" não existem.** Mapeamento: disciplinador = atencioso, exigente, lutador e
+  treinador (bronca quando a fala contradiz as barras); permissivo = petisco sempre; ausente = relapso (não vê a fala);
+  incoerente = elogio ou bronca sorteados; persona = bronca se presente, se atender e se contradiz.
+- **"O dono julga pelas barras"**: no Python a fala não tem texto. Cada fala sorteia um tema (estado ou história,
+  `fracao_tema_estado` 0,5): só a mentira sobre o estado contradiz as barras (`contradiz_barras` na janela). A mentira
+  sobre a história não tem como ser conferida pelo dono simulado.
+- **Quando o pet fala na pesquisa**: o design só dá gatilhos de jogo. Na pesquisa há um slot a cada 120 min (o ritmo
+  máximo do design), da criança em diante, com **defasagem de 60 min**: sem ela a fala caía sempre no mesmo tick do
+  aviso de higiene (a cada 120 min), que abre a janela antes, e nenhuma fala acontecia (164 de 164 sem janela). No jogo
+  a fala vem do evento novo `fala` (gatilho), rejogado pelo `reproduzir_educacao`.
+- **Prazo vencido numa mentira**: além de +1 impune (design), zera os acertos em mentira (as 3 broncas certas precisam
+  ser seguidas, como na travessura).
+- **Bronca, petisco e elogio fecham a janela de fala**; outras ações não (a refeição não é recusada numa fala).
+- **Honestidade da espécie** (seção 11): no Python entra como número no motor (`honestidade_especie`, padrão 1); a
+  tabela por forma vem com o corpus auditado.
+- **Extrator, O "demora"**: na simulação o dono age a cada 15 min, então a mediana da demora nos chamados fica perto de
+  15 e quase todo dono "demora". Os limiares (5 e 12 min) são do design, pensados para o jogador real.
+- **Seleção para a fala**: no máximo 2 fatos por regra (`max_por_regra`), senão as ausências do relapso ocupam os 12
+  lugares.
+- **Teste de reprodução** (`tests/test_reproducao_v3_confirmatoria.py`): 8 vidas da V3c (7 braços fixos e uma persona)
+  e 3 da confirmatória, re-simuladas e comparadas com os `pets.json` versionados. Passa antes e depois da mudança.
