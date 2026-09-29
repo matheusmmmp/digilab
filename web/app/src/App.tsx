@@ -31,7 +31,7 @@ import { TopoDesktop } from "./componentes/Topo.tsx";
 import { DicaBit } from "./componentes/Bit.tsx";
 import { AcoesMeusPets, MeusPetsDesktop } from "./telas/pet/MeusPetsDesktop.tsx";
 import { useDesktop } from "./desktop.ts";
-import { Conclusao, EscolherBrasao } from "./componentes/Jornada.tsx";
+import { ComoJogar, Conclusao, EscolherBrasao } from "./componentes/Jornada.tsx";
 import { abrirEscolhaBrasao, conclusaoVista, useEscolhaBrasao, venceuOChefe } from "./jornada.ts";
 import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
@@ -77,10 +77,10 @@ export function App() {
   const [semPetNoInicio] = useState(() => jogo.origem === "exemplo"), escolhendoBrasao = useEscolhaBrasao();
   /* o pet de exemplo nao e do jogador: enquanto for ele o ativo, a escolha do brasao nao tem Voltar */
   const [sementeExemplo] = useState(() => jogo.motor.semente), aindaSemPet = semPetNoInicio && jogo.motor.semente === sementeExemplo;
-  const [conclusao, setConclusao] = useState(false), desk = useDesktop();
+  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), [comoJogar, setComoJogar] = useState(false);
   /* venceu o chefe da campanha: a mensagem de conclusao, uma vez por pet, fora da luta e sem outra tela cheia */
   useEffect(() => {
-    if (!conclusao && !emLuta && !boasVindas && !escolhendoBrasao && venceuOChefe(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
+    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && venceuOChefe(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
   });
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
@@ -207,7 +207,8 @@ export function App() {
       <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />
       <RevelacaoEvolucao continuar={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }} />
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
-      {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) abrirEscolhaBrasao(); }} />}
+      {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}
+      {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
       {escolhendoBrasao && !boasVindas && <EscolherBrasao podeVoltar={!aindaSemPet} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}
     </div>

@@ -545,3 +545,23 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .br-ritmo-op.sel{background:#FFFFFF;color:var(--dl-navy);border-color:#FFFFFF;box-shadow:0 0 0 3px var(--dl-navy)}
 .br-ritmo-op b{font-size:15px;font-weight:900}.br-ritmo-op small{font-size:11px;font-weight:700;text-align:center}
 .br-ritmo-op:focus-visible{outline:3px solid var(--dl-highlight,#FFD23F);outline-offset:2px}
+
+/* como jogar (PvComoCuidar/Ensinar/Crescer): tela cheia clara, cartao do sprite, titulo contornado, pontos e Proximo */
+.como-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;color:var(--dl-text);background:var(--dl-bg,#E8F0FB) var(--dl-img-hex,none)}
+.como-tela[open]{display:flex;flex-direction:column}
+.cj-topo{display:flex;justify-content:flex-end;padding:14px 16px 0}
+.cj-pular{background:none;border:0;font:inherit;font-weight:900;color:var(--dl-navy);text-decoration:underline;cursor:pointer;min-height:44px;padding:0 8px}
+.cj-corpo{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 20px;text-align:center}
+.cj-cartao{position:relative;width:min(300px,100%);height:250px;border-radius:18px;box-shadow:0 0 0 3px var(--dl-navy),0 6px 0 3px var(--dl-navy-deep);display:flex;align-items:flex-end;justify-content:center;padding-bottom:34px;box-sizing:border-box}
+.cj-cartao--linha{padding-bottom:40px}
+.cj-sprites{position:relative;z-index:1;display:flex;align-items:flex-end;gap:8px}
+.cj-spr{display:flex;flex-direction:column;align-items:center;gap:4px}
+.cj-spr small{font-size:9px}
+.cj-anel{position:absolute;left:50%;bottom:22px;width:180px;height:40px;margin-left:-90px;border-radius:50%;background:rgba(111,190,255,.35)}
+.cj-chips{position:absolute;top:14px;right:14px;display:flex;gap:6px;z-index:1}
+.cj-chip{display:flex;align-items:center;gap:4px;background:#FFFFFF;border:2px solid var(--dl-navy);border-radius:10px;padding:2px 8px;font-size:12px}
+.cj-faixa{position:absolute;top:18px;left:0;right:0;font-size:20px;color:#FFFFFF;-webkit-text-stroke:0}
+.cj-tit{color:#FFFFFF;font-size:40px}
+.cj-txt{margin:0;max-width:340px;font-weight:700;font-size:15px;line-height:21px}
+.cj-pontos{display:flex;gap:6px}.cj-pontos i{width:10px;height:6px;border-radius:3px;background:#9FC2EF}.cj-pontos i.on{width:24px;background:var(--dl-navy)}
+.cj-pe{padding:0 20px 24px;display:flex;justify-content:center}.cj-pe .dl-btn{width:min(360px,100%)}
