@@ -727,10 +727,12 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   padrão; a v2 do prompt foi ajustada na mesma amostra da avaliação (repetir com outra semente).
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
-  gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção.
+  gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção. Adiado
+  (2026-09-29): nenhuma pergunta de pesquisa atual depende disso.
 
-- Motivo do bandit: com políticas quase iguais ao instinto, o adulto diz "não sei" em >80% das
-  decisões. Decidir se isso é aceitável ou se o motivo deve incluir o prior (instinto) como causa.
+- Motivo do bandit (resolvido em 2026-09-29, recomendação aceita pelo Matheus): na vida, sem fator e sem exploração
+  quem decidiu foi o prior do instinto, e o adulto passa a dizer "Foi instinto: é o meu jeito." (antes "Não sei, só
+  quis.", que fica para a exploração e o combate). Python (`expressao.GENERICO_INSTINTO`) e web.
 - Memória: bootstrap sobre as 5 sementes feito (2026-09-29, `experiments/bootstrap_memoria.py`,
   `artifacts_v1_memoria/bootstrap_sementes.json`): separação entre − dentro do braço muda −0,0011 bit
   [−0,0039; +0,0029] com memória e −0,0005 [−0,0030; +0,0018] com memória por espaços — sem evidência de
@@ -747,8 +749,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - Campos PROPOSTOS: referendados pelo Matheus em 2026-09-29 ("Referendar todos"), em `protocol.REFERENDO` (registro à parte:
   os status e os hashes das runs antigas não mudam; um valor novo volta a contar como não referendado). O aviso
   "PROPOSTOS não referendados" das runs antigas fica como está, porque faz parte dos artefatos reproduzíveis.
-- Ablação feita (ver acima): inconclusiva. Aumentar `partidas_por_par` e/ou sementes antes de
-  concluir qualquer coisa. Isso muda o protocolo e é decisão do pesquisador.
+- Ablação treino × cuidado (arena v1): inconclusiva e **superada** (decisão de 2026-09-29): a pergunta foi
+  respondida no desenho atual pela confirmatória (V21C, 160 ovos) e pelas exploratórias V3/V3b/V3c; não será
+  rodada de novo.
 - Sementes de partida derivam do nome do braço. Renomear um braço muda todas as partidas dele.
 - O hash do protocolo não cobre o código de `metrics.py`; mudanças de métrica não alteram o hash.
 - A pasta irmã `D:\Trab\digilab\v0` tem os arquivos soltos (sem subpasta `digilab/`); os imports
