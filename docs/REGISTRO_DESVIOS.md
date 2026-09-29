@@ -715,3 +715,21 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   e 0,70 com o treino típico na validação); (2) **E4 redefinido** na escala: o adulto sem treino vence o adolescente da
   mesma linha, sem treino e com o treino máximo do estágio (+22), em ≥ 0,60, sem teto (`ConfigEscala.taxa_min_e4`,
   gate `E4_escala_estagio_importa`). O E4' e o E4'' da Parte B saíram (a faixa [0,60, 0,85] e o ≥ 0,90).
+
+## 2026-09-28 — educacao-v1: gate de equilíbrio dos estilos em aberto (V3 e V3b)
+
+- **V3** (`artifacts_educacao/`, PLANO_ANALISE_V3):
+  - o gate passou na condição neutra (cuidar 0,514, treinar 0,418, lutar 0,513) e **reprovou na real** (treinar 0,378);
+  - o braço lutador saiu idêntico ao atencioso (−0,0004): as lutas não mudam nem a política nem o estado;
+  - o exigente fica com saúde final 0,02, porque as sessões no teto tiram verba do cuidado.
+- **V3b** (adendo, `artifacts_educacao_v3b/`):
+  - "luta treina" e o braço treinador levaram **577 de 640** pets à forma sombria;
+  - as lutas a cada 30 min, como sessões, acumulam fadiga e viram sessões forçadas, que geram sobrecarga;
+  - todos os braços ficaram entre 0,26 e 0,32 e o gate reprovou nos três estilos;
+  - além disso, o treino bate no teto do estágio (~34), então mais lutas não viram força.
+- **Decisão do Matheus (opção B)**:
+  - parar a calibração por runs;
+  - `ConfigLesoes.luta_treina` fica **desligado** (comportamento da V3);
+  - o braço treinador fica disponível, mas fora do gate;
+  - **o equilíbrio dos estilos vira tarefa própria de game design**: o estilo "lutar" precisa de um ganho sem teto e que não gere sobrecarga, e isso é decisão de design, não número a ajustar.
+- **Leitura válida**: a V3.

@@ -86,11 +86,19 @@ def test_dono_trata_lesao_antes_da_janela_e_aleatorio_usa_todos_os_botoes(vida):
     assert set(ACOES_EDUCACAO) <= vistas and AcaoUsuario.ALIMENTAR in vistas
 
 
-def test_v3b_luta_treina(vida):
-    m = vida[0].motor
-    treinou = [h["treinou"] for h in m.historico_lutas if h["treinou"]]
-    assert treinou and len(treinou) <= len(m.historico_lutas)
-    assert sum(1 for s in m.treino.sessoes if s.tick in {h["tick"] for h in m.historico_lutas}) == len(treinou)
+def test_luta_treina_desligada_por_padrao_e_funciona_se_ligada(vida):
+    assert all(h["treinou"] is None for h in vida[0].motor.historico_lutas)       # opcao B: desligada
+    from dataclasses import replace
+    from digilab.combate_v2.v21.bots import lutador_adulto
+    from digilab.educacao import fabricas_educacao
+    esp, _ = ovo(S)
+    fp, fm = fabricas_educacao(S, esp, sortear(S), ce=CONFIG_EDUCACAO_LIGADA,
+                               cl=replace(CONFIG_LESOES_LIGADA, luta_treina=True),
+                               lutador_do_pet=lambda m: lutador_adulto("duelista", esp))
+    m = fm(fp(None), None, S)
+    m.avancar(T_ADOL + 30)
+    reg = m.lutar("bot:muralha@limo", 1)
+    assert reg["treinou"] is not None and m.treino.sessoes[-1].tick == reg["tick"]
 
 
 def test_v3b_treinador_cuida_no_slot_quando_precisa():
