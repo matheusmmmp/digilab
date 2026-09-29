@@ -24,13 +24,14 @@ class LLMFalhou(RuntimeError):
 
 
 MAX_TOKENS_PESQUISA = 600        # uma persona em JSON tem ~250 tokens; a fala do servidor fica com o seu limite
+TIMEOUT_PESQUISA_S = 180         # modelos locais maiores (gemma2 9b) passam dos 30 s da fala na primeira carga
 
 
 def abrir_provedor(nome: str, modelo: str | None = None, limite_usd: float = 2.0,
                    url_ollama: str = URL_OLLAMA_PADRAO, max_tokens: int = MAX_TOKENS_PESQUISA):
     """(provedor, controle de gasto | None). Sem o provedor pronto: erro (nada de cair em outro calado)."""
     if nome == "ollama":
-        p = ProvedorOllama(modelo or MODELO_OLLAMA_PADRAO, url_ollama, max_tokens=max_tokens)
+        p = ProvedorOllama(modelo or MODELO_OLLAMA_PADRAO, url_ollama, timeout=TIMEOUT_PESQUISA_S, max_tokens=max_tokens)
         ok, motivo = p.disponivel()
         if not ok:
             raise LLMFalhou(f"Ollama indisponivel: {motivo}")

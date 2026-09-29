@@ -89,3 +89,19 @@ O Matheus pediu os dois ajustes que recomendei ao ler a V3 (2026-09-28). A V3 fi
    - o gate com os estilos novos;
    - quanto a luta treinou (`lutas_que_treinaram`).
    - A leitura continua exploratória.
+
+## 8. Adendo V3c — personas geradas por LLM (registrado antes da run V3c)
+
+- **Pergunta (exploratória):** entre donos variados, quais traços do dono explicam a força do pet no painel? Os traços são:
+  - `prob_atender_janela`: chance de responder a uma janela;
+  - `prob_ceder_petisco`: chance de ceder com petisco a uma manha;
+  - `prob_feedback_coerente`: chance de o elogio ou a bronca combinar com o que o pet fez;
+  - `limiar_cuidado`: nível de necessidade abaixo do qual a pessoa cuida;
+  - o perfil de treino (atencioso ou exigente).
+- **Lote:** `experiments/personas/gemma2-9b-01.json`, com sha256 `9811927c…5f81`, registrado na config.
+  - Gerado pelo gemma2:9b local, `personas-v2`: cada persona recebe uma rotina e faixas de uma grade balanceada (fatorial 3⁴ embaralhado pela semente 20260928). A LLM escreve a pessoa e escolhe os números dentro das faixas.
+  - O lote v1, com personas que saíram quase iguais entre si, foi descartado antes de qualquer run.
+- **Desenho:** os mesmos 7 braços da V3 mais as 24 personas. São 40 ovos (os primeiros da V3), com o mesmo rótulo de partidas e o mesmo painel B.
+- **Análise principal:** regressão da taxa média de cada persona contra o painel (condição neutra) nos 4 traços e no perfil exigente. Os ICs vêm de bootstrap sobre os ovos (2000 reamostragens). Com 24 personas e 6 coeficientes, é descritiva.
+- **Sanidade:** os 7 braços fixos dos 40 ovos têm de repetir os números da V3 nesses ovos. É o mesmo código de vida.
+- **Saída:** `artifacts_educacao_v3c/`, com a config em `experiments/configs/educacao_v3c.json`.

@@ -41,6 +41,7 @@ from digilab.events import LogDeEventos  # noqa: E402
 from digilab.evolucao import carater, condicao_na_arena, fracao_cuidado_bebe, ovo  # noqa: E402
 from digilab.protocol import (ENGINE_SHA256_V0, PROTOCOLO_ARENA_V1, derivar_semente, hash_parametros_educacao,  # noqa: E402
                               sha256_engine, validar_parametros_educacao)
+from digilab.personas import carregar_lote  # noqa: E402
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino_vida import orcamento_treino  # noqa: E402
 from run_confirmatoria import bootstrap, leitura  # noqa: E402
@@ -112,14 +113,26 @@ def _fabricas(b, s, esp, tmp, temp_ovo):
 
 
 # ------------------------------------------------------------------ 1. vidas
+def carregar_personas(cfg: dict) -> dict:
+    """lote de personas do config (V3c): confere o sha256 registrado antes da run"""
+    if not cfg.get("lote_personas"):
+        return {}
+    ps, sha = carregar_lote(RAIZ / cfg["lote_personas"])
+    if sha != cfg["lote_personas_sha256"]:
+        raise ValueError(f"lote de personas mudou: sha256 {sha} != {cfg['lote_personas_sha256']}")
+    return {p.nome: p for p in ps}
+
+
 def _vida(args):
-    b, s, dias, saida = args
+    b, s, dias, saida, cfg = args
     t0 = time.perf_counter()
     esp, temp_ovo = ovo(s)
     tmp = sortear(s)
+    persona = carregar_personas(cfg)[b.split(":", 1)[1]] if b.startswith("persona:") else None
     fp, fm_base, _, pet = _fabricas(b, s, esp, tmp, temp_ovo)
     v = simular_vida_educacao(b, s, dias, esp, tmp, cl=CONFIG_LESOES_LIGADA, sparring=ticks_sparring(b),
-                              rival_sparring=pet.rival, lutador_do_pet=pet.lutador, rival_por_nome=rival_por_nome)
+                              rival_sparring=pet.rival, lutador_do_pet=pet.lutador, rival_por_nome=rival_por_nome,
+                              persona=persona)
     m = v.motor
     orc, _ = orcamento_treino(dias)
     if not v.morta and v.interacoes != orc:
@@ -201,7 +214,7 @@ def taxa(painel_braco: dict) -> float:
     return sum(pts) / len(pts)
 
 
-def analisar(res: dict, pets: dict, bracos: list[str], estilos: dict | None = None) -> dict:
+def analisar(res: dict, pets: dict, bracos: list[str], estilos: dict | None = None, personas: dict | None = None) -> dict:
     estilos = estilos or ESTILOS_V3
     out = {}
     for var, por_ovo in res.items():
@@ -220,8 +233,9 @@ def analisar(res: dict, pets: dict, bracos: list[str], estilos: dict | None = No
         medias = {b: sum(v) / len(v) for b, v in t.items()}
         # dominancia: IC95 da diferenca inteiro acima de 0 contra cada um dos outros
         domina = {}
-        for i, x in enumerate(bracos):
-            domina[x] = all(dif(x, y, 100 + 10 * i + j)["ic95"][0] > 0 for j, y in enumerate(bracos) if y != x)
+        fixos = [b for b in bracos if not b.startswith("persona:")]
+        for i, x in enumerate(fixos):
+            domina[x] = all(dif(x, y, 100 + 10 * i + j)["ic95"][0] > 0 for j, y in enumerate(fixos) if y != x)
         ce = CONFIG_EQUILIBRIO
         est = {e: medias[b] for e, b in estilos.items()}
         margens = {e: min(est[e] - est[o] for o in est if o != e) for e in est}
@@ -233,7 +247,7 @@ def analisar(res: dict, pets: dict, bracos: list[str], estilos: dict | None = No
         gate["aprovado"] = all(gate["faixa_ok"].values()) and gate["margem_ok"] and not gate["braco_dominante"]
         out[var] = {"taxa_media_por_braco": medias, "comparacoes": comp, "gate_equilibrio": gate}
     mec = {}
-    for b in bracos:
+    for b in [b for b in bracos if not b.startswith("persona:")]:
         ds = [d for d in pets.values() if d["braco"] == b]
         vivos = [d for d in ds if not d["morta"]]
         sp = [d["sparring"] for d in ds if d["sparring"]["lutas"]]
@@ -251,7 +265,52 @@ def analisar(res: dict, pets: dict, bracos: list[str], estilos: dict | None = No
                   "saude_final_media": sum(d["saude_final"] for d in ds) / len(ds),
                   "treino_total_medio": sum(d["treino_total"] for d in ds) / len(ds), "formas": formas}
     out["mecanismo"] = mec
+    if personas:
+        out["personas"] = analisar_personas(res["neutra"], personas, bracos)
     return out
+
+
+TRACOS = ("prob_atender_janela", "prob_ceder_petisco", "prob_feedback_coerente", "limiar_cuidado")
+
+
+def _mqo(X: list[list[float]], y: list[float]) -> list[float]:
+    """minimos quadrados pelas equacoes normais (eliminacao de Gauss); X ja com a coluna de 1"""
+    k = len(X[0])
+    A = [[sum(r[i] * r[j] for r in X) for j in range(k)] + [sum(r[i] * v for r, v in zip(X, y))] for i in range(k)]
+    for c in range(k):
+        p = max(range(c, k), key=lambda i: abs(A[i][c]))
+        A[c], A[p] = A[p], A[c]
+        if abs(A[c][c]) < 1e-12:
+            raise ValueError("regressao singular")
+        for i in range(k):
+            if i != c:
+                f = A[i][c] / A[c][c]
+                A[i] = [a - f * b for a, b in zip(A[i], A[c])]
+    return [A[i][k] / A[i][i] for i in range(k)]
+
+
+def analisar_personas(por_ovo: dict, personas: dict, bracos: list[str]) -> dict:
+    """exploratorio (adendo V3c): taxa contra o painel (neutra) por persona e o efeito de cada traco do dono.
+    Regressao da taxa media de cada persona nos 4 tracos + perfil exigente; IC por bootstrap sobre ovos."""
+    import random as _r
+    ovos = sorted(por_ovo, key=int)
+    nomes = [b for b in bracos if b.startswith("persona:")]
+    X = [[1.0] + [getattr(personas[n.split(":", 1)[1]], t) for t in TRACOS]
+         + [1.0 if personas[n.split(":", 1)[1]].perfil_treino == "exigente" else 0.0] for n in nomes]
+    def coef(amostra):
+        y = [sum(taxa(por_ovo[o][n]) for o in amostra) / len(amostra) for n in nomes]
+        return _mqo(X, y), y
+    base, y = coef(ovos)
+    rng, boots = _r.Random(SEMENTE_BOOT), []
+    for _ in range(2000):
+        boots.append(coef([ovos[rng.randrange(len(ovos))] for _ in ovos])[0])
+    rot = ["intercepto", *TRACOS, "perfil_exigente"]
+    efeitos = {}
+    for j, r in enumerate(rot):
+        v = sorted(b[j] for b in boots)
+        efeitos[r] = {"estimativa": base[j], "ic95": [v[int(.025 * len(v))], v[int(.975 * len(v)) - 1]]}
+    return {"taxa_media": {n: t for n, t in zip(nomes, y)}, "efeitos_tracos": efeitos,
+            "nota": "efeito = mudanca na taxa contra o painel por 1,0 do traco (0 a 1), com os outros fixos"}
 
 
 def main(argv=None) -> int:
@@ -278,12 +337,12 @@ def main(argv=None) -> int:
     m_b = a.painel or cfg["M_B_por_bot"]
     if m_b % 2:
         raise ValueError("partidas por bot precisa ser par")
-    bracos = cfg["bracos"]
+    bracos = list(cfg["bracos"]) + [f"persona:{n}" for n in carregar_personas(cfg)]
     saida.mkdir(parents=True, exist_ok=True)
     tempos = {}
     with ProcessPoolExecutor(a.processos or cfg["processos"]) as pool:
         t0 = time.perf_counter()
-        vidas = list(pool.map(_vida, [(b, s, cfg["dias"], str(saida)) for s in ovos for b in bracos]))
+        vidas = list(pool.map(_vida, [(b, s, cfg["dias"], str(saida), cfg) for s in ovos for b in bracos]))
         tempos["vidas_s"] = time.perf_counter() - t0
         specs = {k: sp for k, sp, _, _ in vidas}
         pets = {f"{b}@{s}": d for (b, s), _, d, _ in vidas}
@@ -301,7 +360,7 @@ def main(argv=None) -> int:
             res[nome] = por_ovo
             _gravar(saida / f"partidas_{nome}.json", _dump({"variante": nome, "por_ovo": por_ovo}))
             print(f"  painel {nome}: {n} partidas em {tempos[f'painel_{nome}_s']:.0f} s", flush=True)
-    analise = analisar(res, pets, bracos, cfg.get("estilos"))
+    analise = analisar(res, pets, bracos, cfg.get("estilos"), carregar_personas(cfg))
     fontes = ("experiments/run_educacao.py", "digilab/educacao.py", "digilab/donos_educacao.py", "digilab/config.py",
               "digilab/evolucao.py", "digilab/combate_v2/v21/catalogo.py", "digilab/combate_v2/v21/regras.py")
     meta = {"plano": "docs/PLANO_ANALISE_V3.md", "config": cfg, "ovos": ovos, "M_B_por_bot": m_b, "fumaca": a.fumaca,

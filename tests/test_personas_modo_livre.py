@@ -129,7 +129,7 @@ def test_decisor_entropia_devolve_bool():
 
 
 class _ProvedorFalso:
-    """devolve personas em sequencia; a primeira resposta e invalida (testa a nova tentativa)"""
+    """responde dentro das faixas e do perfil pedidos (lidos do pedido); a primeira resposta e invalida"""
     tem_custo = False
     nome = "falso"
 
@@ -137,21 +137,28 @@ class _ProvedorFalso:
         self.n = 0
 
     def gerar(self, sistema, pedido, esquema, semente):
+        import re
         self.n += 1
         if self.n == 1:
             return RespostaProvedor("{\"nome\": \"quebrada\"}", True, "fim", "falso-1")
         d = _base()
         d["nome"] = "gerada"                           # repetido de proposito: vira gerada-2, gerada-3
+        for k, a, b in re.findall(r"(prob_\w+|limiar_cuidado) entre ([\d.]+) e ([\d.]+)", pedido):
+            d[k] = round((float(a) + float(b)) / 2, 3)
+        d["perfil_treino"] = re.search(r"perfil_treino = (\w+)", pedido).group(1)
         return RespostaProvedor(json.dumps(d), True, "fim", "falso-1")
 
 
-def test_gerador_de_personas_valida_refaz_e_desduplica():
-    from gerar_personas import esquema_json, gerar
+def test_gerador_de_personas_valida_refaz_desduplica_e_varia():
+    from gerar_personas import esquema_json, gerar, plano
     assert set(esquema_json()["required"]) == set(_base())
-    ps, modelo = gerar(_ProvedorFalso(), None, 3, 1)
-    assert modelo == "falso-1" and [p["nome"] for p in ps] == ["gerada", "gerada-2", "gerada-3"]
+    ps, modelo, planos = gerar(_ProvedorFalso(), None, 6, 1)
+    assert modelo == "falso-1" and [p["nome"] for p in ps] == ["gerada", "gerada-2", "gerada-3", "gerada-4", "gerada-5", "gerada-6"]
     for p in ps:
         validar_persona(p)
+    assert {p["perfil_treino"] for p in ps} == {"atencioso", "exigente"}
+    assert len({json.dumps(p["faixas"], sort_keys=True) for p in plano(81, 7)}) == 81     # fatorial completo
+    assert len({p["rotina"] for p in plano(16, 7)}) == 16
 
 
 def test_horario_que_atravessa_a_meia_noite():
