@@ -11,7 +11,8 @@ import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { novoOvoGuardandoAtivo } from "../../jornada.ts";
 import { abrirImportar, exportarArquivo, nomeArquivo, useImportar } from "../../importar.ts";
-import { abrirGuardado, apagarGuardado, ativarGuardado, cruzarComAtivo, lerGuardados } from "../../pets.ts";
+import { abrirGuardado, apagarGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
+import { abrirHeranca } from "../../heranca.ts";
 import { diaDe, hhmm } from "./TelaPet.tsx";
 
 type Sel = "ativo" | number;
@@ -85,8 +86,8 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
           {eAtivo ? <button type="button" class="dl-btn" onClick={fechar}>Voltar ao pet</button>
             : <button type="button" class="dl-btn" onClick={() => agir(() => ativarGuardado(atual.k as number), fechar)}>Tornar ativo</button>}
         </div>
-        {podeCruzar && <button type="button" class="dl-btn dl-btn--sec mpl-cruzar" onClick={() => agir(() => cruzarComAtivo(atual.k as number), fechar)}
-          title="o filho herda o temperamento dos dois e o brasão de um deles">Cruzar com {nomeForma(ativo.forma)}</button>}
+        {podeCruzar && <button type="button" class="dl-btn dl-btn--sec mpl-cruzar" onClick={() => abrirHeranca(atual.k as number)}
+          title="o filho herda o temperamento dos dois e o brasão de um deles">Nova geração com {nomeForma(ativo.forma)}</button>}
         {!eAtivo && (apagar
           ? <button type="button" class="dl-btn dl-btn--perigo mpl-apagar" onClick={() => agir(() => apagarGuardado(atual.k as number), () => { setSel("ativo"); setApagar(false); })}>Confirmar: apagar {nome(atual)}</button>
           : <button type="button" class="mpl-apagar mpl-apagar--pedir" onClick={() => setApagar(true)}>Apagar este pet</button>)}

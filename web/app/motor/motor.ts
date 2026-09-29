@@ -126,14 +126,14 @@ export class Motor {
 
   /* ---------------------------------------------------------------- heranca (pets v4) */
   /** cruza dois adultos vivos: o filho (v4) herda temperamento (media + ruido) e especie (de um dos pais) */
-  static cruzar(pai: Motor, mae: Motor, sementeFilho: number, sementeHeranca: number, quem: string): Motor {
-    const ver = (p: Motor) => {
+  static cruzar(pai: Motor, mae: Motor, sementeFilho: number, sementeHeranca: number, quem: string, ger?: [number, number]): Motor {
+    const ver = (p: Motor, g?: number) => {
       if (p.estagioAtual !== "adulto") throw new Error("só adultos cruzam (Ultimate ou Mega)");
       if (p.morte) throw new Error("um dos pais morreu");
-      return { h: hashSemente(JSON.stringify(p.log)), esp: p.especie, temp: { ...p.temp }, est: p.estagioAtual };
+      return { h: hashSemente(JSON.stringify(p.log)), esp: p.especie, temp: { ...p.temp }, est: p.estagioAtual, ...(g ? { ger: g } : {}) };
     };
     const filho = new Motor(sementeFilho, 4);
-    filho.registrarOrigem({ pais: [ver(pai), ver(mae)], s: sementeHeranca, quem });
+    filho.registrarOrigem({ pais: [ver(pai, ger?.[0]), ver(mae, ger?.[1])], s: sementeHeranca, quem });
     return filho;
   }
   /** ritmo dos estagios: so no comeco do registro, antes de qualquer outro evento */
