@@ -40,6 +40,14 @@ export function ativarGuardado(i: number): void {
   previa("arena");
 }
 
+/** apaga o guardado i (a tela confirma antes); o ativo nunca e apagado por aqui */
+export function apagarGuardado(i: number): void {
+  const g = lerGuardados();
+  if (!g[i]) throw new Error("pet guardado não existe: " + i);
+  g.splice(i, 1);
+  gravarGuardados(g);
+}
+
 /** heranca (pets v4): cruza o ativo com o guardado i (os dois adultos e vivos). O filho vira o ativo e choca;
     o pai ativo vai para os guardados (nada se perde). */
 export function cruzarComAtivo(i: number): void {

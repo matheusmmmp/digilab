@@ -1,18 +1,15 @@
 /* Meus pets (desenho MeusPets): o pet ativo, exportar o registro e voltar ao pet anterior (guardado pelos
    Cenarios). Um pet por vez: o jogo guarda o registro de um pet so; ovo novo e no Registro, com confirmacao. */
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { DO_ESP, Motor, NOME_ESP, NOME_EST, OVO, chaveSprite, lutadorPet, nomeEstagio, nomeForma, vidaExibida } from "../../../motor/index.ts";
+import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, lutadorPet, nomeEstagio, nomeForma, vidaExibida } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
-import { useDesktop } from "../../desktop.ts";
 import { abrirGuardado, ativarGuardado, cruzarComAtivo, lerGuardados } from "../../pets.ts";
 import { dec } from "../../componentes/Barras.tsx";
 import { diaDe } from "./TelaPet.tsx";
-import { Deco } from "../../componentes/Deco.tsx";
-import { BRASAO } from "../../decoracao.ts";
 
 export const CHAVE_ANTERIOR = CHAVE + "-anterior";
 const lerAnterior = (): string | null => { try { return localStorage.getItem(CHAVE_ANTERIOR); } catch { return null; } };
@@ -67,7 +64,7 @@ function Guardados({ ativar, cruzar }: { ativar: (i: number) => void; cruzar: ((
 /** Meus pets (prancha MpAtual): tela cheia com voltar, o pet ativo no palco (anel, escala inteira), o aviso de um pet
     por vez, o pet anterior guardado (se houver) e os botoes. Exportar copia o registro (mesmo conteudo do save). */
 export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistro: () => void }) {
-  const { motor: m, nascendo } = useJogo(), a = useAtlas(), ref = useRef<HTMLDialogElement>(null), [msg, setMsg] = useState(""), desk = useDesktop();
+  const { motor: m, nascendo } = useJogo(), a = useAtlas(), ref = useRef<HTMLDialogElement>(null), [msg, setMsg] = useState("");
   useEffect(() => { abrirModal(ref.current); }, []);
   const ovo = nascendo > 0, nome = ovo ? OVO[m.especie] : chaveSprite(m.forma);
   let img = null;
@@ -91,34 +88,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
     try { await navigator.clipboard.writeText(txt); setMsg("Registro copiado para a área de transferência."); }
     catch { console.log(txt); setMsg("Não foi possível copiar automaticamente. O registro está no console do navegador."); }
   };
-  /* desktop (MpDesktop): modal no centro com x, o slot do pet ativo, o do ovo novo (vai ao Registro, que confirma) e os botoes */
-  if (desk) {
-    const ret = a.tipo === "ok" ? imagemAtlas(a, nome) : null;
-    return (
-      <dialog class="meus-pets mp-desk dl" ref={ref} aria-labelledby="mp-titulo" onClose={fechar}>
-        <div class="mpd-cab"><h2 class="dl-num" id="mp-titulo">Meus pets</h2>
-          <button type="button" class="mpd-x" aria-label="Fechar" onClick={() => ref.current?.close()}>×</button></div>
-        <div class="mpd-slots">
-          <div class="mpd-ativo">
-            <span class="mpd-ret">{ret && <img class="dl-pix" src={ret.url} width={ret.w} height={ret.h} alt="" />}</span>
-            <span class="mpd-txt"><span class="mpd-nome"><b>{ovo ? "Digi-Egg " + DO_ESP[m.especie] : nomeForma(m.forma)}</b>
-              <Deco nome={BRASAO[m.especie].peca} largura={30} altura={20} alt={NOME_ESP[m.especie]} /></span>
-              <span class="mpd-tags"><span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span><span class="dl-tag dl-tag--ativo">ATIVO</span></span></span>
-          </div>
-          <button type="button" class="mpd-novo" onClick={() => { ref.current?.close(); irRegistro(); }}>
-            {/* a especie do ovo novo sai da semente nova: o ovo aparece apagado */}
-            {a.tipo === "ok" && <img class="dl-pix mpd-novo-ovo" src={imagemAtlas(a, OVO[m.especie]).url} width={26} height={36} alt="" />}<span>novo ovo</span></button>
-        </div>
-        <p class="mpd-aviso">Só o pet ativo tem o tempo correndo; os guardados ficam parados onde estavam. Um ovo novo apaga o pet ativo (com confirmação, no Registro).</p>
-        <Guardados ativar={ativar} cruzar={podeCruzar ? cruzar : null} />
-        <div class="mpd-bts">
-          <button type="button" class="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
-          {anterior && <button type="button" class="dl-btn dl-btn--sec" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</button>}
-        </div>
-        {msg && <p class="dl-apoio" aria-live="polite" style={{ margin: 0 }}>{msg}</p>}
-      </dialog>
-    );
-  }
+  /* desktop: Meus pets e uma pagina (MeusPetsDesktop, prancha MpListaDesktop); aqui so o celular (MpAtual) */
   return (
     <dialog class="meus-pets mp-tela dl" ref={ref} aria-labelledby="mp-titulo" onClose={fechar}>
       <div class="mp-cab dl-faixa">

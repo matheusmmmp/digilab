@@ -19,7 +19,8 @@ import {
   detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
-import { mudarMotor, novoPet, useJogo } from "../../jogo.ts";
+import { mudarMotor, useJogo } from "../../jogo.ts";
+import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
 import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
 import { useDesktop } from "../../desktop.ts";
@@ -246,7 +247,7 @@ function Morte() {
     <div class="dl-card chamado chamado--morte" role="alert">
       <span class="chamado-txt"><b>{nomeForma(m.forma)} se foi</b>
         <span class="dl-apoio">{m.morte.causa === "lesoes" ? "se machucou demais nas lutas" : "a lesão ficou sem tratamento por tempo demais"}. O Diário guarda a vida inteira.</span></span>
-      <button type="button" class="dl-btn dl-btn--destaque" onClick={novoPet}>Chocar um ovo novo</button>
+      <button type="button" class="dl-btn dl-btn--destaque" onClick={abrirEscolhaBrasao}>Chocar um ovo novo</button>
     </div>
   );
 }
