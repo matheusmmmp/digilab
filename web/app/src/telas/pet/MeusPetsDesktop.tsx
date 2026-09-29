@@ -10,6 +10,7 @@ import { Deco } from "../../componentes/Deco.tsx";
 import { BRASAO } from "../../decoracao.ts";
 import { useJogo } from "../../jogo.ts";
 import { novoOvoGuardandoAtivo } from "../../jornada.ts";
+import { abrirImportar, exportarArquivo, nomeArquivo, useImportar } from "../../importar.ts";
 import { abrirGuardado, apagarGuardado, ativarGuardado, cruzarComAtivo, lerGuardados } from "../../pets.ts";
 import { diaDe, hhmm } from "./TelaPet.tsx";
 
@@ -17,23 +18,23 @@ type Sel = "ativo" | number;
 const vinculoTxt = (m: Motor): string | null => m.versao < 2 ? null : m.vinc.valor >= .66 ? "vínculo alto" : m.vinc.valor >= .33 ? "vínculo médio" : "vínculo baixo";
 
 /** o botao "Novo ovo" do topo (o ativo vai para a espera: ninguem e apagado sem pedir) */
-export const AcoesMeusPets = () => <button type="button" class="dl-btn mpl-novo" onClick={novoOvoGuardandoAtivo}>Novo ovo</button>;
+export const AcoesMeusPets = () => <>
+  <button type="button" class="dl-btn dl-btn--sec mpl-novo" onClick={abrirImportar}>Importar</button>
+  <button type="button" class="dl-btn mpl-novo" onClick={novoOvoGuardandoAtivo}>Novo ovo</button></>;
 
 export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
   const { motor: ativo, nascendo } = useJogo(), a = useAtlas();
   const [rev, setRev] = useState(0), [sel, setSel] = useState<Sel>("ativo"), [msg, setMsg] = useState(""), [apagar, setApagar] = useState(false);
-  const guardados = useMemo(() => { try { return lerGuardados().map(g => ({ g, m: abrirGuardado(g) })); } catch { return null; } }, [rev]);
+  const importando = useImportar();
+  /* recalcula ao voltar da importacao (um pet novo pode ter entrado na espera) */
+  const guardados = useMemo(() => { try { return lerGuardados().map(g => ({ g, m: abrirGuardado(g) })); } catch { return null; } }, [rev, importando]);
   const ovoAtivo = nascendo > 0;
   const lista: { k: Sel; m: Motor; ovo: boolean }[] = [{ k: "ativo", m: ativo, ovo: ovoAtivo },
     ...(guardados ?? []).map(({ m }, i) => ({ k: i as Sel, m, ovo: false }))];
   const atual = lista.find(x => x.k === sel) ?? lista[0], m = atual.m, eAtivo = atual.k === "ativo";
   const escolher = (k: Sel) => { setSel(k); setMsg(""); setApagar(false); };
   const agir = (f: () => void, depois?: () => void) => { try { f(); setMsg(""); setRev(r => r + 1); depois?.(); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); } };
-  const exportar = async () => {
-    const txt = JSON.stringify({ semente: m.semente, log: m.log, versao: m.versao });
-    try { await navigator.clipboard.writeText(txt); setMsg("Registro copiado para a área de transferência."); }
-    catch { console.log(txt); setMsg("Não foi possível copiar automaticamente. O registro está no console do navegador."); }
-  };
+  const exportar = () => { exportarArquivo(m); setMsg("Registro baixado: " + nomeArquivo(m)); };
   const podeCruzar = !eAtivo && !ovoAtivo && ativo.estagioAtual === "adulto" && !ativo.morte && m.estagioAtual === "adulto" && !m.morte;
   const nome = (x: { m: Motor; ovo: boolean }) => x.ovo ? "Digi-Egg" : nomeForma(x.m.forma);
   const img = (x: Motor, ovo: boolean, alvo: number) => {

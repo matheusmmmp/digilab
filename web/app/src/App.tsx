@@ -32,6 +32,8 @@ import { DicaBit } from "./componentes/Bit.tsx";
 import { AcoesMeusPets, MeusPetsDesktop } from "./telas/pet/MeusPetsDesktop.tsx";
 import { useDesktop } from "./desktop.ts";
 import { ComoJogar, Conclusao, EscolherBrasao } from "./componentes/Jornada.tsx";
+import { ImportarPet } from "./componentes/Importar.tsx";
+import { fecharImportar, useImportar } from "./importar.ts";
 import { abrirEscolhaBrasao, conclusaoVista, useEscolhaBrasao, venceuOChefe } from "./jornada.ts";
 import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
@@ -77,7 +79,7 @@ export function App() {
   const [semPetNoInicio] = useState(() => jogo.origem === "exemplo"), escolhendoBrasao = useEscolhaBrasao();
   /* o pet de exemplo nao e do jogador: enquanto for ele o ativo, a escolha do brasao nao tem Voltar */
   const [sementeExemplo] = useState(() => jogo.motor.semente), aindaSemPet = semPetNoInicio && jogo.motor.semente === sementeExemplo;
-  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), [comoJogar, setComoJogar] = useState(false);
+  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), [comoJogar, setComoJogar] = useState(false), importando = useImportar();
   /* venceu o chefe da campanha: a mensagem de conclusao, uma vez por pet, fora da luta e sem outra tela cheia */
   useEffect(() => {
     if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && venceuOChefe(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
@@ -115,7 +117,7 @@ export function App() {
     return () => removeEventListener("hashchange", aoMudar);
   }, []);
 
-  const ir = (r: Rota) => { setConfig(null); setMeusPets(false); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
+  const ir = (r: Rota) => { setConfig(null); setMeusPets(false); fecharImportar(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba })); };
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
   const abrirConfig = (p: ParteConfig) => { setMeusPets(false); setConfig(p); scrollTo(0, 0); };
   const abas = DESTINOS[rota.destino];
@@ -173,7 +175,9 @@ export function App() {
         </div>
       )}
       <DicaBit />
-      {meusPets && desk ? <><TopoDesktop titulo="Meus pets" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => {}} voltar={() => setMeusPets(false)}
+      {importando && desk ? <><TopoDesktop titulo="Importar pet" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => { fecharImportar(); setMeusPets(true); }}
+          voltar={fecharImportar} /><ImportarPet pagina fechar={fecharImportar} /></>
+      : meusPets && desk ? <><TopoDesktop titulo="Meus pets" abas={[]} aba={null} irAba={() => {}} abrirMeusPets={() => {}} voltar={() => setMeusPets(false)}
           acoes={<AcoesMeusPets />} /><MeusPetsDesktop fechar={() => setMeusPets(false)} /></>
       : config ? <>{topo}<TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} /></>
       : rota.destino === "pet" ? <>{topo}<TelaPet abrirMeusPets={() => setMeusPets(true)} irConversar={() => irDestino("conversar")} abrirConfig={() => abrirConfig("principal")} irRegistro={() => ir({ destino: "diario", aba: "registro" })} /></>
@@ -210,6 +214,7 @@ export function App() {
       {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}
       {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
       {escolhendoBrasao && !boasVindas && <EscolherBrasao podeVoltar={!aindaSemPet} />}
+      {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}
     </div>
   );

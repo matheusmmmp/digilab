@@ -565,3 +565,32 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .cj-txt{margin:0;max-width:340px;font-weight:700;font-size:15px;line-height:21px}
 .cj-pontos{display:flex;gap:6px}.cj-pontos i{width:10px;height:6px;border-radius:3px;background:#9FC2EF}.cj-pontos i.on{width:24px;background:var(--dl-navy)}
 .cj-pe{padding:0 20px 24px;display:flex;justify-content:center}.cj-pe .dl-btn{width:min(360px,100%)}
+
+/* importar pet (MpImportar / MpImportarDesktop) */
+.importar-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;color:var(--dl-text);background:var(--dl-bg,#E8F0FB) var(--dl-img-hex,none);overflow:auto}
+.importar-tela[open]{display:flex;flex-direction:column}
+.imp-cab{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.imp-cab h2{margin:0;font-size:24px}
+.imp-corpo{display:grid;gap:16px;padding:16px;align-items:start}
+@media (min-width:1100px){ .imp-corpo{grid-template-columns:340px minmax(0,1fr);padding:20px 24px} .imp-cab{padding:14px 24px} }
+.imp-col{display:flex;flex-direction:column;gap:14px}
+.imp-arquivo,.imp-lado{background:var(--dl-surface);border-radius:14px;box-shadow:0 0 0 2px #9FC2EF,0 4px 0 2px #C7D8F5;padding:14px;display:flex;flex-direction:column;gap:10px}
+.imp-arquivo h3,.imp-lado h3{margin:0;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+.imp-input{position:absolute;width:1px;height:1px;opacity:0}
+.imp-input:focus-visible + label{outline:3px solid var(--dl-highlight,#FFD23F);outline-offset:2px}
+.imp-ok{margin:0;display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:700;color:#1F7A3A}
+.imp-ok b{color:var(--dl-text);font-family:var(--dl-f-num)}
+.imp-erro{margin:0;color:#B0216F;font-weight:800;font-size:13px}
+.imp-aviso{background:#FFF4CC;border:2px solid #E0A800;border-radius:14px;padding:12px 14px}
+.imp-aviso p{margin:6px 0 0;font-size:13px;font-weight:700}
+.imp-bts{display:grid;gap:10px}
+.imp-lados{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.imp-lado.sel{box-shadow:0 0 0 3px var(--dl-highlight,#FFD23F),0 4px 0 3px #E0A800}
+.imp-palco{height:130px;border-radius:10px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.imp-palco img{image-rendering:pixelated}
+.imp-nome{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px}
+.imp-nome .dl-lcd{margin-left:auto;font-size:11px}
+.imp-hist{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:12px;font-weight:700}
+.imp-hist li{display:grid;grid-template-columns:86px 1fr;gap:6px;border-bottom:1px solid #E8F0FB;padding-bottom:4px}
+.imp-lado small{font-size:11px;font-weight:700;color:#3A5288}
+.importar-pagina .imp-corpo{padding:20px 24px}
