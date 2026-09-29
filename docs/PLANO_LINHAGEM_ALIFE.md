@@ -218,6 +218,8 @@ Todos usam `metrics.py` (taxa de vitória, Bradley-Terry, JSD, bootstrap sobre o
 
 ## 8. Backlog de Vida Artificial (avaliação curta)
 
+Para ideias mais amplas (progressão do Tamer, medalhas, economia, Battle Frontier, personalidade contínua, fairness e herança comportamental), ver `docs/IDEIAS_PROGRESSAO_PERSONALIDADE.md`, um prompt de pesquisa aprofundada ainda não rodado.
+
 | item | avaliação |
 |---|---|
 | ambiente como contexto do bandit e ritmo das necessidades | Viável sem mexer no `engine.py`: ritmos por `Config`, contexto numa política nova. Experimento: 1 × 3 ambientes, JSD entre braços × dentro do braço. Custo médio. Risco: mais features diluem o aprendizado, que já é fraco (JSD ~0,02). |
