@@ -30,6 +30,199 @@ Relacionado: `docs/PLANO_LINHAGEM_ALIFE.md` (linhagem, genoma, Baldwin), `docs/D
 
 ---
 
+## Prompt 1 ajustado ao estado do projeto (para colar no Deep Research)
+
+Versão do Prompt 1 com o contexto real do Digilab (o que existe, os resultados já medidos e as decisões tomadas), as perguntas reorganizadas e um teste em simulação por proposta (2026-09-29). O Prompt 1 original segue abaixo, sem mudança. O Prompt 2 não foi ajustado.
+
+```text
+DEEP RESEARCH — progressão, batalhas, personalidade, herança, medalhas e endgame num virtual pet de Vida Artificial
+
+Responda em português do Brasil.
+
+Estou desenvolvendo o Digilab, um virtual pet inspirado em Digimon, Tamagotchi e Vida Artificial. O jogo **já existe e já foi estudado em simulação**. Não quero um desenho do zero: quero pesquisa que parta do que existe, diga o que acrescentar, o que mudar e o que não fazer, e como testar cada proposta.
+
+## PARTE 0 — CONTEXTO DO PROJETO (fatos; não reabra)
+
+**O que é.**
+- Projeto pessoal com duas faces:
+  - **jogo web:** TypeScript, roda local;
+  - **pacote de pesquisa em Python:** simulação pura, sem humanos.
+- A hipótese de pesquisa era: "um dono coerente produz um pet melhor que feedback aleatório com o mesmo volume de interação". O volume de interação é um orçamento fixo por vida, igual em todos os braços.
+
+**Regras de arquitetura que as propostas precisam respeitar:**
+- **Registro de eventos:** o estado nunca é salvo; a vida é reconstruída do log. A mesma semente e o mesmo log dão o mesmo resultado, até o último float.
+- **O motor básico de estado e necessidades não muda.** Mecânica nova entra por camadas por cima dele.
+- **O modo determinístico é o padrão.** LLM e acaso real só entram num "modo livre gravado": a saída é gravada no log como evento, e o replay lê o evento.
+- **Geradores aleatórios separados** por finalidade: ambiente, política, ovo, herança, combate...
+- **Toda métrica existe uma vez só**, compartilhada por todos os braços: taxa de vitória, Bradley-Terry, divergência de Jensen-Shannon (JSD) entre políticas, bootstrap sobre ovos.
+- **Nenhum número sem artefato em disco que o produza.** Todo parâmetro novo nasce "PROPOSTO, sem fonte".
+
+**O que já existe:**
+
+| camada | o que existe hoje |
+|---|---|
+| **ciclo de vida** | In-Training → Rookie → Champion → adulto, por tempo. O cuidado com os chamados do bebê decide o ramo. O caráter aprendido decide a linha e a forma. A passagem para adulto pede 10 lutas no estágio com ≥ 80% de vitória. Há lesões, morte por lesões acumuladas e duas durações: rápida (3/12/18 h) e clássica (6/24/36 h), no estilo dos v-pets Ver.20th/Color. |
+| **evolução canônica (decidido)** | vai seguir o cânone Champion → Ultimate → Mega (o 5º estágio está em desenho). Proposta: o Mega exige tempo, vitórias e vínculo ≥ 0,7. |
+| **o pet decide sozinho** | a política de vida é um bandit (Thompson sampling linear) cujo prior é a distribuição exata do "instinto". Ele aprende com o feedback do dono: comida, carinho, bronca, elogio. |
+| **temperamento (inato)** | 4 eixos: curiosidade, teimosia, sensibilidade, rancor. |
+| **caráter (aprendido)** | 4 eixos: impetuoso, paciente, atento, resistente. É medido pelo desvio da política aprendida em relação ao instinto. |
+| **relação** | vínculo (0–1); obediência com recusa e motivo (só nas ações de cuidado); desejo (vontades); emoção; disciplina (travessuras com janela, chamados falsos, petisco ou bronca). |
+| **treino** | 6 stats, fadiga, pausa, teto por estágio e por vida, aptidão por espécie. **Forçar o treino** gera sobrecarga e custa vínculo; sobrecarga ≥ 60 ao virar adulto dá a **forma sombria** (vínculo com teto de 0,6, "não lê o rival"). |
+| **combate** | 1×1 **autônomo**, por turnos, 3 distâncias, guts, técnicas por linha e passivas por forma. O pet luta por **regras se→então (gambits)** que aprende; o jogador pode travar ou vetar regras **antes** da luta. **Não existe comando do dono durante a luta** (fora de escopo). |
+| **campanha** | lugares em escada (Campina, Torre, Cidadela). Vencer qualquer rival de um lugar abre o próximo. NPCs imprevisíveis; o treino típico garante a vitória. Uma escala de poder (vida do estágio × treino) vale só na campanha. |
+| **herança** | 2 genitores adultos. O temperamento é a média dos pais + ruído; a espécie é sorteada entre as dos pais. **Nada aprendido é herdado.** O log do filho registra os hashes dos pais. |
+| **fala** | o pet explica as próprias decisões por uma tabela de motivos. Uma LLM local escreve a moldura, e um verificador barra afirmação sem fato. Em desenho: hábitos, memórias e **mentira aprendida** (pets sombrios ou forçados mentem mais; mentira não repreendida reforça). |
+| **não existe** | medalhas, dinheiro, economia, itens, cartas, equipamentos, ranking, instalações, Battle Frontier, comandos na luta. |
+
+**Resultados já medidos que a pesquisa deve levar em conta:**
+1. **O aprendizado muda pouco o comportamento** (≈0,02 bit de JSD entre donos). Na confirmatória com 160 ovos, o dono atencioso **não** superou o aleatório: a hipótese central foi **refutada**. Com educação e lesões, o atencioso fica à frente (+0,12), mas metade disso vem das mortes do aleatório.
+2. **"Lutar treina" desandou:** quando cada luta dava treino, 577 de 640 pets viraram sombrios. Foi desligado. Hoje a vitória dá uma experiência pequena e com teto.
+3. **O vínculo mede o contrário do esperado:** o dono aleatório gera vínculo maior (0,61) que o atencioso (0,54), porque faz cuidado com frequência. O desenho do vínculo precisa ser revisto antes de servir de medida de relação.
+4. **Os ovos dominam a variância do desempenho** (ICC ≈ 0,74). Mas a semente do ovo também sorteia o ambiente, então genética e sorte estão misturadas. E uma espécie domina as outras: falta ciclo entre espécies.
+5. **O adulto esmaga o Champion** (0,94–1,0). A progressão horizontal esbarra na escala de vida por estágio (50/200/600/1500).
+6. Entre as personas de dono simuladas por LLM, **só o limiar de cuidado** (cuidar mais cedo) tem efeito detectável.
+
+## PARTE 1 — AS PERGUNTAS
+
+Para cada pergunta: parta do que existe (Parte 0), diga o que muda e proponha como **testar em simulação** (braços, métrica, critério de aprovação).
+
+**A. Batalha como experiência, sem grind**
+- Q1. Como recompensar batalhas comuns sem incentivar grind? Compare: XP, crescimento direto de stats, moeda, Battle Points, materiais, técnicas, conhecimento do adversário e mudança de comportamento. Diga o que pertence ao pet e o que pertence ao Tamer.
+- Q2. Como a frequência, o resultado e o **contexto** das lutas (força relativa, justiça, repetição) podem mudar a personalidade com saturação, sem repetir o resultado 2 da Parte 0? Proponha curvas de saturação e retornos decrescentes com precedentes.
+- Q3. Como um pet pode gostar ou não de lutar (um "gosto por batalha" emergente)? O que acontece quando se força a luta de quem não gosta? No projeto, forçar o **treino** já custa vínculo e gera sobrecarga: generalizar para a luta faz sentido?
+- Q4. O conflito entre a vontade do pet e a ordem do Tamer, **fora da luta**: forçar treino, forçar luta, escolher e travar regras antes do combate. Trate o comando durante a luta só como possibilidade futura, marcada como fora de escopo.
+- Q5. Como a personalidade entra nas decisões de combate de um pet **autônomo guiado por regras**? Pense em pesos de utilidade sobre as regras, probabilidade de desviar da regra, iniciativa e hesitação. Compare com Utility AI e Behavior Trees.
+- Q6. Diferencie agressividade, competitividade, coragem, crueldade, confiança, gosto por batalha e impulsividade. Quais são dimensões independentes e quais emergem de combinações? Evite a moral simplista "lutar = mal". No projeto, "sombrio" vem do **treino forçado**, não do número de lutas.
+
+**B. Personalidade e relação**
+- Q7. Quantas dimensões de personalidade são úteis? Mapeie as candidatas do prompt original (Aggressiveness, Confidence, Discipline, Trust, Independence, Sociability, Curiosity, Courage, Stress, Battle Drive) contra o que já existe:
+  - temperamento: curiosidade, teimosia, sensibilidade, rancor;
+  - caráter: impetuoso, paciente, atento, resistente;
+  - vínculo, obediência, disciplina, desejo.
+
+  Diga o que acrescentar, fundir ou descartar, usando a literatura: Big Five/HEXACO, modelos de temperamento animal, OCEAN em agentes, appraisal OCC.
+- Q8. Personalidade × relação com o Tamer: quais dimensões precisam ser separadas (confiança, vínculo, respeito, medo, dependência, afeto)? Proponha um vínculo que **não premie o dono aleatório** (resultado 3 da Parte 0).
+- Q9. Como mostrar a personalidade ao jogador de forma orgânica ("adora batalhar", "confia muito em você") a partir de números internos? O projeto já tem fala que explica as decisões e verifica fatos: como aproveitar isso?
+
+**C. Tamer, medalhas e pacing**
+- Q10. Como separar a progressão do Tamer (medalhas, ranking, dinheiro, desbloqueios) da progressão do pet, sem virar um RPG comum de captura de monstros?
+- Q11. Medalhas como trava de evolução ("pode evoluir = requisitos do pet E requisitos do Tamer"). Compare as variantes em liberdade, pacing, grind, rejogabilidade, clareza, frustração e balanceamento. Considere que o Mega canônico já é proposto com trava de vínculo.
+- Q12. Arenas e líderes que testem a **criação** (cuidado, treino, caráter, herança), não só números maiores. Use a campanha em escada de hoje como ponto de partida.
+- Q13. Itens, cartas e equipamentos que complementem a criatura sem substituí-la. Há precedente de teto por identidade?
+- Q14. Progressão horizontal e sidegrades **dentro da cadeia canônica** (Rookie < Champion < Ultimate < Mega continua valendo). Como estágios menores seguem relevantes apesar do resultado 5 da Parte 0?
+
+**D. Herança, linhagem e Vida Artificial**
+- Q15. O que fica quando o pet morre? Três memórias: a do indivíduo, a da linhagem e a do Tamer.
+- Q16. O que pode ser herdado? Como transformar a experiência de um ancestral em **predisposição**, sem transferir stats? Compare:
+  - efeito Baldwin (desvio pequeno e herdável do prior do instinto);
+  - aptidões herdáveis;
+  - herança comportamental fraca;
+  - Lamarck (hoje fixado em 0).
+
+  Traga precedentes em algoritmos evolutivos e em Vida Artificial.
+- Q17. Genótipo → fenótipo: aptidões, taxa de aprendizado, temperamento, plasticidade. Como fazer natureza × criação produzir indivíduos diferentes, e como **medir** isso separando genética de sorte (resultado 4 da Parte 0)?
+- Q18. Especialização de linhagens sem crescimento de poder sem fim: limites, regressão, mutação, trade-offs e diversidade. Como evitar que a seleção só fixe a espécie dominante?
+- Q19. Talentos latentes descobertos jogando ("parece ter talento para força"): mecanismos e precedentes.
+- Q20. Pacing entre gerações: a morte não pode soar como perda injusta de progresso. O que Tamagotchi, Monster Rancher e Creatures ensinam sobre apego e luto?
+
+**E. Endgame e IA**
+- Q21. Um Battle Frontier que teste tudo: criação, herança, personalidade, treino, relação, estratégia (regras) e evolução. Formatos, restrições e rematches.
+- Q22. Compare FSM, Behavior Trees, Utility AI, GOAP, sistemas probabilísticos, RL, algoritmos evolutivos, neuroevolução, IA procedural, LLM e híbridos para **este** projeto (autônomo, determinístico, replay por log). Para cada um:
+  - que problema resolve;
+  - custo computacional;
+  - complexidade;
+  - determinismo;
+  - capacidade de gerar comportamento emergente;
+  - facilidade de depurar;
+  - se serve para o MVP;
+  - se serve para o futuro.
+
+  Não presuma que ML ou LLM sejam superiores. O que já existe (bandit + gambits) deve ser comparado como opção real.
+- Q23. A pergunta central: como acrescentar campanha, economia, medalhas e endgame sem transformar o virtual pet num RPG comum, mantendo o pet como uma criatura que aprende, muda e tem história? A eficiência competitiva não pode ser a única medida de um pet "bom".
+
+## PARTE 2 — REFERÊNCIAS (pistas a verificar; não aceite nenhuma sem abrir a fonte)
+
+**Jogos.** Para cada um, identifique **qual mecânica exatamente** ensina algo, sem comparação superficial:
+- Digimon World (PS1) e Next Order;
+- Digimon Championship (luta autônoma, estratégia antes da luta);
+- Digital Monster Ver.20th/Color;
+- Tamagotchi (care mistakes);
+- Monster Rancher (vida útil, estresse, fadiga, combinação);
+- Creatures (genética dos Norns, bioquímica, aprendizado);
+- Pokémon (EVs, IVs, natures, criação, Battle Frontier);
+- Dragon Quest Monsters (síntese e herança de habilidades);
+- Shin Megami Tensei (fusão);
+- Monster Hunter (ciclo de materiais);
+- jogos recentes de captura de monstros, roguelites e simuladores de vida.
+
+**Ciência.** Avida, Tierra, Polyworld, o efeito Baldwin (Hinton & Nowlan), Lamarck × Darwin em algoritmos evolutivos (Ackley & Littman; Whitley), evolvability, plasticidade fenotípica, mapeamento genótipo-fenótipo, neuroevolução, agentes críveis (projeto Oz, Bates), personalidade computacional (OCEAN e appraisal OCC em agentes), apego humano-agente e virtual pets, Utility AI, IA adaptativa em jogos, pacing, travas de progressão, economia de jogo e anti-grind.
+
+Priorize trabalhos recentes, e use os clássicos quando forem a base.
+
+## PARTE 3 — MÉTODO
+
+Marque cada afirmação com exatamente uma destas etiquetas:
+- [REFERÊNCIA EXISTENTE]: usado de fato num jogo, projeto ou pesquisa, com link;
+- [EVIDÊNCIA CIENTÍFICA]: resultado sustentado por literatura, com citação completa e link;
+- [INFERÊNCIA DE DESIGN]: conclusão derivada das referências;
+- [PROPOSTA PARA O PROJETO]: mecânica nova para o Digilab;
+- [NÃO VERIFICADO]: não confirmado.
+
+Não invente mecânicas de jogos, resultados de artigos nem citações. Se não achar, diga que não achou.
+
+## PARTE 4 — SAÍDA
+
+Um documento técnico e de game design, **priorizado**, com:
+1. **Resumo executivo:** as 10 recomendações de maior valor em relação ao custo para o Digilab, em ordem.
+2. **Estado da arte e referências** (jogos e ciência), com a comparação entre sistemas.
+3. **Cartão por proposta:**
+
+   | campo | conteúdo |
+   |---|---|
+   | ideia | o que é |
+   | evidência ou precedente | com etiqueta |
+   | o que já existe no Digilab e o que muda | a ligação com a Parte 0 |
+   | vantagens e problemas | |
+   | alternativas | |
+   | complexidade | baixa / média / alta |
+   | impacto no jogo | |
+   | impacto na Vida Artificial | |
+   | como testar em simulação | braços, métrica, critério de aprovação |
+   | só jogo ou também pesquisa | |
+   | entra no MVP? | |
+
+4. **Modelos:**
+   - ciclo de vida;
+   - personalidade;
+   - relação com o Tamer;
+   - batalha como experiência;
+   - recompensa e economia;
+   - anti-grind;
+   - progressão do Tamer e medalhas;
+   - requisitos de evolução (compatíveis com Ultimate → Mega);
+   - arenas;
+   - itens;
+   - progressão horizontal;
+   - herança e genótipo-fenótipo;
+   - especialização de linhagens;
+   - anti-inflação de poder;
+   - pacing entre gerações;
+   - Battle Frontier.
+5. **Arquitetura de IA** (Q22) e a **estrutura de dados** necessária. O pseudocódigo só para os sistemas do MVP, determinístico e reproduzível pelo log.
+6. **Diagramas em Mermaid:**
+   - Tamer → Digimon → Experiência → Personalidade;
+   - Genótipo → Ambiente → Fenótipo;
+   - Batalha → Recompensa + Aprendizado + Consequência comportamental;
+   - Vida → Morte → Herança → Nova geração;
+   - Medalhas → Progressão do Tamer → Conteúdo → Potencial;
+   - o ciclo completo: Criar → Cuidar → Treinar → Explorar → Lutar → Adaptar → Evoluir → Conquistar → Envelhecer → Morrer → Herdar → Renascer.
+7. **Proposta de MVP**, em passos pequenos e cada um testável, depois as versões seguintes e os riscos técnicos e de game design.
+
+Objetivo final: avaliar se a arquitetura "experiência do Tamer + história da linhagem + vida do indivíduo" é viável, se tem precedentes, e como implementá-la aos poucos. O MVP é determinístico; um sistema mais complexo só entra quando houver benefício comprovado.
+```
+
+---
+
 ## Prompt 1 — DEEP RESEARCH: progressão, batalhas, personalidade, herança, medalhas e endgame
 
 Estou desenvolvendo um jogo inspirado conceitualmente em Digimon / Virtual Pets / Tamagotchi / Artificial Life, no qual o jogador cria, treina e convive com criaturas digitais que possuem atributos, necessidades, comportamento, desenvolvimento e evolução próprios.
