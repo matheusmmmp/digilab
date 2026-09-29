@@ -185,6 +185,8 @@ export const CESC = {
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */
 export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };
+/* ritmo classico (ConfigDuracoes.canonica, v-pets: 6 h, 24 h, 36 h): bebe, crianca, adolescente em minutos */
+export const DUR_CLASSICA = [360, 1440, 2160];
 export const CHAMADO_BEBE: Record<Chamado, number> = { fome: 30, higiene: 60, carinho: 45 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];

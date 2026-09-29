@@ -47,7 +47,11 @@ export interface PaiOrigem { h: number; esp: Especie; temp: Temperamento; est: E
 export interface Origem { pais: [PaiOrigem, PaiOrigem]; s: number; quem: string }
 /** so como PRIMEIRO evento do registro de um filho */
 export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem;
+/** ritmo dos estagios (pets v4): rapida = 3/12/18 h (o de sempre); classica = 6/24/36 h (v-pets) */
+export type Ritmo = "rapida" | "classica";
+/** so no comeco do registro (antes de qualquer outro evento, menos outra config) */
+export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig;
 
 export type VersaoPet = 1 | 2 | 3 | 4;
 

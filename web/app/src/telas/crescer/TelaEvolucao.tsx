@@ -5,7 +5,7 @@
    decidida pelo motor aparece como silhueta, sem nome (guia, secao 5). */
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import {
-  CAT, CDJ, CLE, CSO, DESC_PASSIVA, DESC_TECNICA, DUR_EVO, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_V2, TICK_INICIAL, TPD,
+  CAT, CDJ, CLE, CSO, DESC_PASSIVA, DESC_TECNICA, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_V2, TICK_INICIAL, TPD,
   caraterPrevisto, chaveSprite, formaAdultaDe, linhaDoCarater, nomeEstagio, nomeForma, type Carater, type Forma, type FormaAdultaNormal, type Motor,
 } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
@@ -27,7 +27,7 @@ export const fmtCar = (car: Partial<Carater>): string => {
 };
 /** para onde o pet iria se a transicao acontecesse agora, e por que */
 export function previsaoEvo(m: Motor): { falta: number; prox: Forma; porque: string } | null {
-  const t = m.e.tick - TICK_INICIAL, D = DUR_EVO, f = m.forma;
+  const t = m.e.tick - TICK_INICIAL, D = m.dur, f = m.forma;
   if (f.est === "bebe") {
     const c = m.fracaoCuidado();
     return { falta: D.bebe - t, prox: { ...f, est: "crianca", ramo: c >= CAT.limiarCuidado ? "sereno" : "arisco" },
@@ -175,7 +175,7 @@ export function TelaEvolucao() {
       <p class="evo-selo"><Deco nome={BRASAO[m.especie].peca} class="evo-selo-img" /><span>brasão <b>{BRASAO[m.especie].nome}</b>: as formas da árvore são as deste brasão.</span></p>
       <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
       <details class="dl-apoio"><summary>Como funciona</summary>
-        <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> (3 h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> (12 h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> (18 h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
+        <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate ou Mega</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide a forma e a passiva. Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
       </details>
       <Numeros itens={[
         ["forma atual", nomeForma(f)],

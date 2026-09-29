@@ -2,7 +2,7 @@
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import {
-  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, EIXOS_TEMP, COB, CSO, CT, CTR, C, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, EIXOS_TEMP, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -18,7 +18,7 @@ import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
 import type {
   AcaoDono, AcaoPet, Carater, Chamado, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta,
-  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, Origem, Ramo, Temperamento, VersaoPet,
+  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, Origem, Ramo, Ritmo, Temperamento, VersaoPet,
 } from "./tipos.ts";
 
 /** registro de uma evolucao (entra na assinatura) */
@@ -91,6 +91,9 @@ export class Motor {
   morte: { tick: number; causa: "lesoes" | "lesao_sem_tratar" } | null = null;
   janelasFechadas: (Janela & { desfecho: string; fim: number })[] = [];
   origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
+  /* v4: ritmo dos estagios (evento "c" no comeco do registro); sem ele, o rapido de sempre */
+  ritmo: Ritmo = "rapida";
+  dur: { bebe: number; crianca: number; adolescente: number } = DUR_EVO;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
     if (![1, 2, 3, 4].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
@@ -133,8 +136,21 @@ export class Motor {
     filho.registrarOrigem({ pais: [ver(pai), ver(mae)], s: sementeHeranca, quem });
     return filho;
   }
+  /** ritmo dos estagios: so no comeco do registro, antes de qualquer outro evento */
+  configurar(dur: Ritmo): void {
+    if (this.log.length) throw new Error("o ritmo se escolhe antes de o ovo chocar");
+    this.log.push([this.e.tick, "c", { dur }]);
+    this._config(dur);
+  }
+  private _config(dur: Ritmo): void {
+    if (this.versao < 4) throw new Error("ritmo só em pets v4");
+    if (this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL || this.origem) throw new Error("configuração fora do começo do registro");
+    if (dur !== "rapida" && dur !== "classica") throw new Error("ritmo desconhecido: " + dur);
+    const [b, c, a] = dur === "classica" ? DUR_CLASSICA : [DUR_EVO.bebe, DUR_EVO.crianca, DUR_EVO.adolescente];
+    this.ritmo = dur; this.dur = { bebe: b, crianca: c, adolescente: a };
+  }
   registrarOrigem(o: Origem): void {
-    if (this.log.length) throw new Error("a origem precisa ser o primeiro evento do registro");
+    if (this.log.some(ev => ev[1] !== "c")) throw new Error("a origem precisa ser o primeiro evento do registro");
     this.log.push([this.e.tick, "o", o]);
     this._origem(o);
   }
@@ -488,7 +504,7 @@ export class Motor {
   private _chamados(): void {
     const tk = this.e.tick, t = tk - TICK_INICIAL, ab = this.chamados.abertos;
     for (const tipo of Object.keys(ab) as Chamado[]) if (tk - ab[tipo]! > CAT.janelaChamado) { this.chamados.total++; delete ab[tipo]; }
-    for (const [tipo, iv] of Object.entries(CHAMADO_BEBE) as [Chamado, number][]) if (t > 0 && t < DUR_EVO.bebe && t % iv === 0) {
+    for (const [tipo, iv] of Object.entries(CHAMADO_BEBE) as [Chamado, number][]) if (t > 0 && t < this.dur.bebe && t % iv === 0) {
       if (tipo in ab) this.chamados.total++;
       ab[tipo] = tk;
     }
@@ -500,7 +516,7 @@ export class Motor {
   chamadosAbertos(): Chamado[] { return this.estagioAtual === "bebe" ? Object.keys(this.chamados.abertos) as Chamado[] : []; }
   fracaoCuidado(): number { return this.chamados.total ? this.chamados.atendidos / this.chamados.total : 1; }
   private _evoluir(): void {
-    const t = this.e.tick - TICK_INICIAL, est = this.estagioAtual, D = DUR_EVO;
+    const t = this.e.tick - TICK_INICIAL, est = this.estagioAtual, D = this.dur;
     let nova: Omit<Evolucao, "tick" | "forma"> | null = null;
     if (est === "bebe" && t >= D.bebe) {
       const cuidado = this.fracaoCuidado();
@@ -543,7 +559,7 @@ export class Motor {
   assinatura(): string {
     return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
-      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida]] : [])]);
+      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
@@ -556,6 +572,7 @@ export class Motor {
       case "g": this._gambit(ev[2].op, ev[2].k); break;
       case "tr": this._treinar(ev[2]); break;
       case "o": this._origem(ev[2]); break;
+      case "c": this._config(ev[2].dur); break;
       default: throw new Error("tipo de evento desconhecido no registro: " + (ev as unknown[])[1]);
     }
   }

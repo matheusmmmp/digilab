@@ -1,7 +1,7 @@
 /* Jornada do jogador (src/jornada.ts): a escolha do brasao antes de todo ovo novo e a mensagem de conclusao ao vencer o
    chefe da campanha. Mesmo visual das boas-vindas (tela cheia listrada, ovo no anel); nomes na tela em Digimon. */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { DIGIMON_DA_FORMA, ESPECIES, LUGARES, NPC, OVO, chaveSprite, nomeEstagio, nomeForma, type Especie, type Motor } from "../../motor/index.ts";
+import { DIGIMON_DA_FORMA, ESPECIES, LUGARES, NPC, OVO, chaveSprite, nomeEstagio, nomeForma, type Especie, type Motor, type Ritmo } from "../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../atlas.ts";
 import { useDesktop } from "../desktop.ts";
 import { BRASAO } from "../decoracao.ts";
@@ -15,15 +15,22 @@ const d = (k: string): string => DIGIMON_DA_FORMA[k]?.[0] ?? "?";
 /** antes de todo ovo novo: os quatro brasoes, com o ovo e os Digimon que cada um pode ter no comeco */
 export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
   const ref = useRef<HTMLDialogElement>(null), a = useAtlas(), [msg, setMsg] = useState(""), desk = useDesktop();
+  const [ritmo, setRitmo] = useState<Ritmo>("rapida");
   useEffect(() => { abrirModal(ref.current); }, []);
   const escolher = (esp: Especie) => {
-    try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo()); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
+    try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   return (
     <dialog class="brasao-tela dl" ref={ref} aria-labelledby="br-tit" onCancel={e => { if (!podeVoltar) e.preventDefault(); }} onClose={fecharEscolhaBrasao}>
       <div class="br-cab">
         <h1 class="bv-tit br-tit" id="br-tit">Escolha seu brasão</h1>
         <p class="bv-slogan">O brasão decide a família do seu Digimon. O resto, você decide cuidando.</p>
+      </div>
+      <div class="br-ritmo" role="radiogroup" aria-label="Ritmo de crescimento">
+        {([["rapida", "Rápido", "3 h · 12 h · 18 h por estágio"], ["classica", "Clássico", "6 h · 24 h · 36 h, como os v-pets"]] as [Ritmo, string, string][]).map(([r, t, d]) => (
+          <button type="button" key={r} role="radio" aria-checked={ritmo === r} class={`br-ritmo-op${ritmo === r ? " sel" : ""}`} onClick={() => setRitmo(r)}>
+            <b>{t}</b><small>{d}</small></button>
+        ))}
       </div>
       <ul class="br-lista">
         {ESPECIES.map(esp => {

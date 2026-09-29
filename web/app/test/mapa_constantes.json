@@ -1816,6 +1816,11 @@
    "web": "CLE.expMax",
    "fonte": "python",
    "py": "ConfigLesoes.experiencia_max"
+  },
+  {
+   "web": "DUR_CLASSICA",
+   "fonte": "python",
+   "py": "ConfigDuracoes.canonica"
   }
  ],
  "convertidos": [
