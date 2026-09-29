@@ -723,6 +723,25 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
+- **Evolução fora do cânone** (Matheus, 2026-09-29: "tem que seguir o cânone"; não executar ainda).
+  - **Hoje:** o jogo tem 4 estágios. O Champion vai direto a Ultimate **ou** Mega, duas formas irmãs escolhidas pelo sinal do eixo complementar: ≥ 0 dá o Ultimate (duelista, espelho, sentinela, vigia); < 0 dá o Mega (furioso, muralha, emboscador, tita).
+    - Ultimate e Mega ficam no mesmo nível.
+    - O Mega sai do caráter "desequilibrado".
+    - A forma sombria herda o nível da base: três linhas ficam sombrias em Mega; o guardião, em Ultimate.
+  - **Cânone:** Champion → Ultimate → Mega. Os pares de `web/app/motor/nomes.ts` já formam cadeias canônicas (Greymon → MetalGreymon → WarGreymon, Kyubimon → Taomon → Sakuyamon...). Três pares são frouxos:
+    - Aquilamon → Silphymon → Valkyrimon;
+    - Ankylomon → Shakkoumon → SlashAngemon;
+    - Stingmon → DinoBeemon → Imperialdramon Fighter Mode.
+  - **Rumo provável:** um 5º estágio só no jogo (pets v5; v1–v4 reproduzem como estão). O Python da pesquisa fica com 4 estágios e as runs não mudam.
+  - **A decidir no desenho:**
+    - o que faz o Ultimate virar Mega;
+    - o que acontece com a escolha pelo eixo complementar e com as passivas de combate de cada forma adulta (E4);
+    - a forma sombria em cada nível;
+    - a escala da campanha;
+    - a herança ("só adultos cruzam");
+    - os sprites, se precisar de um 2º Ultimate por linha (o atlas tem 263 Digimon);
+    - os textos "Ultimate/Mega".
+
 - Fala por LLM: repetida com outra semente (2026-09-29, `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260929/`):
   92% aprovadas, nenhuma barrada por fator fora da lista. Pré-leitura (coluna própria no `revisao.csv`): nenhuma
   das 50 cita causa fora dos fatores (desde a v4 a LLM só escreve a moldura); 9 tinham caractere quebrado do
