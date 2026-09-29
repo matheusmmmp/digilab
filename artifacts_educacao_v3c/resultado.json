@@ -1,0 +1,518 @@
+{
+  "mecanismo": {
+    "aleatorio": {
+      "causas_morte": [
+        "lesao_sem_tratar"
+      ],
+      "disciplina_final_media": 0.625,
+      "formas": {
+        "adolescente:brigao": 6,
+        "duelista": 1,
+        "emboscador": 4,
+        "espelho": 5,
+        "furioso": 4,
+        "muralha": 7,
+        "sentinela": 3,
+        "tita": 2,
+        "vigia": 1
+      },
+      "lesoes_media": 0.325,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 7,
+      "n": 40,
+      "qualificados_adulto": 27,
+      "saude_final_media": 0.2391916666666689,
+      "taxa_sparring_media": 0.7925,
+      "treino_total_medio": 27.51357055874691
+    },
+    "atencioso": {
+      "causas_morte": [],
+      "disciplina_final_media": 98.5,
+      "formas": {
+        "adolescente:brigao": 1,
+        "duelista": 3,
+        "emboscador": 11,
+        "espelho": 16,
+        "muralha": 5,
+        "sentinela": 2,
+        "tita": 2
+      },
+      "lesoes_media": 0.025,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 0,
+      "n": 40,
+      "qualificados_adulto": 39,
+      "saude_final_media": 0.9328625000000068,
+      "taxa_sparring_media": 0.95,
+      "treino_total_medio": 27.828208108149095
+    },
+    "exigente": {
+      "causas_morte": [],
+      "disciplina_final_media": 97.175,
+      "formas": {
+        "adolescente:brigao": 3,
+        "bastiao_rachado": 9,
+        "devastador": 1,
+        "emboscador": 5,
+        "espelho": 9,
+        "muralha": 5,
+        "predador": 6,
+        "sentinela": 1,
+        "tita": 1
+      },
+      "lesoes_media": 0.05,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 0,
+      "n": 40,
+      "qualificados_adulto": 37,
+      "saude_final_media": 0.02438750000000412,
+      "taxa_sparring_media": 0.9099999999999999,
+      "treino_total_medio": 34.85769257035537
+    },
+    "incoerente": {
+      "causas_morte": [],
+      "disciplina_final_media": 79.625,
+      "formas": {
+        "adolescente:brigao": 5,
+        "duelista": 1,
+        "emboscador": 6,
+        "espelho": 8,
+        "furioso": 1,
+        "muralha": 10,
+        "sentinela": 4,
+        "tita": 3,
+        "vigia": 2
+      },
+      "lesoes_media": 0.075,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 0,
+      "n": 40,
+      "qualificados_adulto": 35,
+      "saude_final_media": 0.8793500000000123,
+      "taxa_sparring_media": 0.9125,
+      "treino_total_medio": 28.34562447422208
+    },
+    "lutador": {
+      "causas_morte": [],
+      "disciplina_final_media": 98.5,
+      "formas": {
+        "adolescente:brigao": 1,
+        "duelista": 3,
+        "emboscador": 11,
+        "espelho": 16,
+        "muralha": 5,
+        "sentinela": 2,
+        "tita": 2
+      },
+      "lesoes_media": 0.05,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 0,
+      "n": 40,
+      "qualificados_adulto": 39,
+      "saude_final_media": 0.9328625000000068,
+      "taxa_sparring_media": 0.95,
+      "treino_total_medio": 27.828208108149095
+    },
+    "permissivo": {
+      "causas_morte": [],
+      "disciplina_final_media": 0.0,
+      "formas": {
+        "adolescente:brigao": 3,
+        "adolescente:guardiao": 1,
+        "emboscador": 12,
+        "espelho": 20,
+        "muralha": 4
+      },
+      "lesoes_media": 0.0,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 0,
+      "n": 40,
+      "qualificados_adulto": 36,
+      "saude_final_media": 0.9958125000000004,
+      "taxa_sparring_media": 0.915,
+      "treino_total_medio": 28.13980259752406
+    },
+    "relapso": {
+      "causas_morte": [
+        "lesao_sem_tratar"
+      ],
+      "disciplina_final_media": 0.0,
+      "formas": {
+        "adolescente:brigao": 5,
+        "adolescente:colosso": 1,
+        "adolescente:guardiao": 1,
+        "duelista": 1,
+        "emboscador": 2,
+        "espelho": 3,
+        "furioso": 2,
+        "muralha": 14,
+        "sentinela": 3,
+        "tita": 2,
+        "vigia": 5
+      },
+      "lesoes_media": 0.05,
+      "lutas_que_treinaram_media": 0.0,
+      "mortes": 1,
+      "n": 40,
+      "qualificados_adulto": 32,
+      "saude_final_media": 0.6778708333333461,
+      "taxa_sparring_media": 0.8925000000000001,
+      "treino_total_medio": 28.059293438580312
+    }
+  },
+  "neutra": {
+    "comparacoes": {
+      "atencioso-aleatorio": {
+        "estimativa": 0.1385234375,
+        "ic95": [
+          0.05815625,
+          0.2215859375
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 40,
+        "p_bootstrap": 0.0004,
+        "p_t_normal": 0.0008760949843653609,
+        "t": 3.327561978715202
+      },
+      "atencioso-permissivo": {
+        "estimativa": 0.0583125,
+        "ic95": [
+          0.001749999999999996,
+          0.1113046875
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 40,
+        "p_bootstrap": 0.0444,
+        "p_t_normal": 0.04169575773085343,
+        "t": 2.0365440178057055
+      },
+      "exigente-atencioso": {
+        "estimativa": -0.112484375,
+        "ic95": [
+          -0.1782578125,
+          -0.0452421875
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.0012,
+        "p_t_normal": 0.0011637812294864602,
+        "t": -3.247611335384311
+      },
+      "incoerente-aleatorio": {
+        "estimativa": 0.08332031250000001,
+        "ic95": [
+          -0.0032109374999999955,
+          0.1727890625
+        ],
+        "leitura": "INCONCLUSIVA",
+        "n": 40,
+        "p_bootstrap": 0.0614,
+        "p_t_normal": 0.07110563024260386,
+        "t": 1.8048022624705597
+      },
+      "lutador-atencioso": {
+        "estimativa": -0.0007890625000000012,
+        "ic95": [
+          -0.002367187500000004,
+          0.0
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.7228,
+        "p_t_normal": 0.3173105078629139,
+        "t": -1.0000000000000002
+      },
+      "permissivo-aleatorio": {
+        "estimativa": 0.08021093750000001,
+        "ic95": [
+          -0.0025312499999999927,
+          0.1638125
+        ],
+        "leitura": "INCONCLUSIVA",
+        "n": 40,
+        "p_bootstrap": 0.058,
+        "p_t_normal": 0.06121769782784048,
+        "t": 1.8719198146189473
+      },
+      "relapso-aleatorio": {
+        "estimativa": -0.023781250000000004,
+        "ic95": [
+          -0.0987890625,
+          0.0502109375
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.5448,
+        "p_t_normal": 0.5422030531180058,
+        "t": -0.6094849383455326
+      }
+    },
+    "gate_equilibrio": {
+      "aprovado": true,
+      "braco_dominante": [],
+      "faixa_ok": {
+        "cuidar": true,
+        "lutar": true,
+        "treinar": true
+      },
+      "margem_ok": true,
+      "margem_sobre_os_outros": {
+        "cuidar": 0.0007890624999999929,
+        "lutar": -0.0007890624999999929,
+        "treinar": -0.11248437499999997
+      },
+      "medias_estilos": {
+        "cuidar": 0.527734375,
+        "lutar": 0.5269453125,
+        "treinar": 0.41525
+      }
+    },
+    "taxa_media_por_braco": {
+      "aleatorio": 0.3892109375,
+      "atencioso": 0.527734375,
+      "exigente": 0.41525,
+      "incoerente": 0.47253125,
+      "lutador": 0.5269453125,
+      "permissivo": 0.469421875,
+      "persona:arara": 0.4566171875,
+      "persona:aula": 0.455578125,
+      "persona:bebe": 0.43296093750000003,
+      "persona:bio": 0.37179687499999997,
+      "persona:campo": 0.442171875,
+      "persona:celular": 0.3182421875,
+      "persona:coral": 0.426453125,
+      "persona:estrada": 0.3845078125,
+      "persona:estudante": 0.382640625,
+      "persona:fogo": 0.3640625,
+      "persona:gamer": 0.391765625,
+      "persona:garc": 0.411953125,
+      "persona:labora": 0.3861328125,
+      "persona:leao": 0.436515625,
+      "persona:lixo": 0.40895312500000003,
+      "persona:lua": 0.47371875,
+      "persona:noite": 0.47194531250000005,
+      "persona:papa": 0.431328125,
+      "persona:planta": 0.39802343749999997,
+      "persona:rodo": 0.4415625,
+      "persona:sol": 0.45092968750000006,
+      "persona:turbo": 0.4303515625,
+      "persona:viajante": 0.471234375,
+      "persona:zita": 0.45717968749999993,
+      "relapso": 0.3654296875
+    }
+  },
+  "personas": {
+    "efeitos_tracos": {
+      "intercepto": {
+        "estimativa": 0.4111103033321147,
+        "ic95": [
+          0.35756522997886453,
+          0.4625640569467802
+        ]
+      },
+      "limiar_cuidado": {
+        "estimativa": 0.06446366409962634,
+        "ic95": [
+          0.008442246683823743,
+          0.11520897928800664
+        ]
+      },
+      "perfil_exigente": {
+        "estimativa": -0.003460852762580306,
+        "ic95": [
+          -0.026312516498345664,
+          0.01946940586138298
+        ]
+      },
+      "prob_atender_janela": {
+        "estimativa": -0.017618509185295356,
+        "ic95": [
+          -0.06025952567539535,
+          0.03061899656295086
+        ]
+      },
+      "prob_ceder_petisco": {
+        "estimativa": -0.016415781637992954,
+        "ic95": [
+          -0.058713052820654504,
+          0.02709791860777909
+        ]
+      },
+      "prob_feedback_coerente": {
+        "estimativa": -0.007642601907996617,
+        "ic95": [
+          -0.0521443943095886,
+          0.03856217193338909
+        ]
+      }
+    },
+    "nota": "efeito = mudanca na taxa contra o painel por 1,0 do traco (0 a 1), com os outros fixos",
+    "taxa_media": {
+      "persona:arara": 0.4566171875,
+      "persona:aula": 0.455578125,
+      "persona:bebe": 0.43296093750000003,
+      "persona:bio": 0.37179687499999997,
+      "persona:campo": 0.442171875,
+      "persona:celular": 0.3182421875,
+      "persona:coral": 0.426453125,
+      "persona:estrada": 0.3845078125,
+      "persona:estudante": 0.382640625,
+      "persona:fogo": 0.3640625,
+      "persona:gamer": 0.391765625,
+      "persona:garc": 0.411953125,
+      "persona:labora": 0.3861328125,
+      "persona:leao": 0.436515625,
+      "persona:lixo": 0.40895312500000003,
+      "persona:lua": 0.47371875,
+      "persona:noite": 0.47194531250000005,
+      "persona:papa": 0.431328125,
+      "persona:planta": 0.39802343749999997,
+      "persona:rodo": 0.4415625,
+      "persona:sol": 0.45092968750000006,
+      "persona:turbo": 0.4303515625,
+      "persona:viajante": 0.471234375,
+      "persona:zita": 0.45717968749999993
+    }
+  },
+  "real": {
+    "comparacoes": {
+      "atencioso-aleatorio": {
+        "estimativa": 0.20528125,
+        "ic95": [
+          0.125625,
+          0.286671875
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 40,
+        "p_bootstrap": 0.0,
+        "p_t_normal": 4.4832608447897826e-07,
+        "t": 5.047202506408605
+      },
+      "atencioso-permissivo": {
+        "estimativa": 0.04608593749999999,
+        "ic95": [
+          -0.009484375000000008,
+          0.09910937499999999
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.106,
+        "p_t_normal": 0.10481747154372956,
+        "t": 1.6219340423057012
+      },
+      "exigente-atencioso": {
+        "estimativa": -0.1865234375,
+        "ic95": [
+          -0.2509375,
+          -0.11940625
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.0,
+        "p_t_normal": 5.91447097963993e-08,
+        "t": -5.421367855949373
+      },
+      "incoerente-aleatorio": {
+        "estimativa": 0.1479921875,
+        "ic95": [
+          0.062468749999999997,
+          0.234671875
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 40,
+        "p_bootstrap": 0.0012,
+        "p_t_normal": 0.0011297391406104307,
+        "t": 3.2560498511609124
+      },
+      "lutador-atencioso": {
+        "estimativa": -0.0006250000000000006,
+        "ic95": [
+          -0.0018750000000000017,
+          0.0
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.7228,
+        "p_t_normal": 0.3173105078629139,
+        "t": -1.0000000000000002
+      },
+      "permissivo-aleatorio": {
+        "estimativa": 0.15919531250000002,
+        "ic95": [
+          0.08078125,
+          0.2384375
+        ],
+        "leitura": "SUSTENTADA",
+        "n": 40,
+        "p_bootstrap": 0.0,
+        "p_t_normal": 9.216822890212306e-05,
+        "t": 3.910334932364906
+      },
+      "relapso-aleatorio": {
+        "estimativa": 0.0190234375,
+        "ic95": [
+          -0.053921874999999994,
+          0.09103125
+        ],
+        "leitura": "REFUTADA",
+        "n": 40,
+        "p_bootstrap": 0.611,
+        "p_t_normal": 0.6170637256703653,
+        "t": 0.5000161217627793
+      }
+    },
+    "gate_equilibrio": {
+      "aprovado": false,
+      "braco_dominante": [],
+      "faixa_ok": {
+        "cuidar": true,
+        "lutar": true,
+        "treinar": false
+      },
+      "margem_ok": true,
+      "margem_sobre_os_outros": {
+        "cuidar": 0.0006249999999998757,
+        "lutar": -0.0006249999999998757,
+        "treinar": -0.18652343749999994
+      },
+      "medias_estilos": {
+        "cuidar": 0.563,
+        "lutar": 0.5623750000000001,
+        "treinar": 0.3764765625
+      }
+    },
+    "taxa_media_por_braco": {
+      "aleatorio": 0.35771875,
+      "atencioso": 0.563,
+      "exigente": 0.3764765625,
+      "incoerente": 0.5057109375,
+      "lutador": 0.5623750000000001,
+      "permissivo": 0.5169140624999999,
+      "persona:arara": 0.4318203125,
+      "persona:aula": 0.49528906250000004,
+      "persona:bebe": 0.45575,
+      "persona:bio": 0.3961875,
+      "persona:campo": 0.486359375,
+      "persona:celular": 0.2885859375,
+      "persona:coral": 0.44649218749999997,
+      "persona:estrada": 0.424703125,
+      "persona:estudante": 0.411296875,
+      "persona:fogo": 0.407984375,
+      "persona:gamer": 0.408140625,
+      "persona:garc": 0.43932031250000003,
+      "persona:labora": 0.41829687499999996,
+      "persona:leao": 0.47507031250000004,
+      "persona:lixo": 0.3997265625,
+      "persona:lua": 0.501390625,
+      "persona:noite": 0.5135625,
+      "persona:papa": 0.4719375,
+      "persona:planta": 0.410625,
+      "persona:rodo": 0.48373437499999994,
+      "persona:sol": 0.485375,
+      "persona:turbo": 0.4677109375,
+      "persona:viajante": 0.510640625,
+      "persona:zita": 0.414453125,
+      "relapso": 0.3767421875
+    }
+  }
+}

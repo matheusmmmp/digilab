@@ -302,6 +302,12 @@ neutra, decidido antes da run).
   - com educação, lesões e sparring real, atencioso − aleatório **+0,121** [+0,066; +0,175] (cerca de metade vem das mortes do aleatório; pós hoc sem mortes: +0,058);
   - atencioso − permissivo +0,077;
   - gate de equilíbrio dos estilos aprovado na neutra, reprovado na real.
+- **V3c, personas** (`artifacts_educacao_v3c/`, lote `gemma2-9b-01`, 24 personas × 40 ovos, 2026-09-29):
+  - os braços fixos repetem a V3 (atencioso − aleatório +0,139 [+0,058; +0,222]);
+  - entre as personas, só o **limiar de cuidado** tem efeito com IC fora de zero: +0,065 [+0,008; +0,115] por 1,0 (cuidar mais cedo);
+  - atender a janela, ceder com petisco, a coerência do feedback e o perfil de treino não têm efeito detectável;
+  - as personas vão de 0,318 a 0,474 no painel, todas abaixo do atencioso (0,528); 17 de 960 vidas morreram;
+  - 3 aleatórios mortos têm a saúde final um pouco diferente da V3 (a morte agora é vista no fim do avanço): mesmo tick e causa, e pet morto conta 0 no painel.
 - **V3b** (`artifacts_educacao_v3b/`): "luta treina" levou 577/640 pets à forma sombria. Ficou desligado (opção B), e o equilíbrio dos estilos virou tarefa de game design (REGISTRO_DESVIOS).
 - **Web**: pets v4 (`VERSAO_PET = 4`, só ovos novos; v1–v3 e gabaritos intactos):
   - janelas, disciplina, lesão e morte, qualificação, herança (Cruzar em Meus pets);
@@ -725,8 +731,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 - Motivo do bandit: com políticas quase iguais ao instinto, o adulto diz "não sei" em >80% das
   decisões. Decidir se isso é aceitável ou se o motivo deve incluir o prior (instinto) como causa.
-- Memória: efeito na divergência é pequeno e sem incerteza; precisa de bootstrap sobre sementes
-  antes de qualquer conclusão. Recusa (B2) exige mudança no motor — decisão do pesquisador.
+- Memória: bootstrap sobre as 5 sementes feito (2026-09-29, `experiments/bootstrap_memoria.py`,
+  `artifacts_v1_memoria/bootstrap_sementes.json`): separação entre − dentro do braço muda −0,0011 bit
+  [−0,0039; +0,0029] com memória e −0,0005 [−0,0030; +0,0018] com memória por espaços — sem evidência de
+  efeito (poucas sementes: IC largo). Recusa (B2) exige mudança no motor — decisão do pesquisador.
 
 - Combate corrigido (V2C/V21C) aprovado com ressalvas e já na web (2026-09-25; oráculo da web segue de 1
   passo). E2 pede ciclo entre espécies; E4 pede redesenho do adolescente ou da passiva do adulto.
@@ -736,7 +744,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   condicionada, morte súbita) e a `TAREFA_PERSONALIDADE_OBEDIENCIA`; espécies precisam de identidade
   que gere ciclo (E2); a resposta declarada do marcar não funciona com recuar anulando avançar (E3).
 
-- Referendar (ou alterar) os campos PROPOSTOS de `protocol.py` antes de citar qualquer resultado.
+- Campos PROPOSTOS: referendados pelo Matheus em 2026-09-29 ("Referendar todos"), em `protocol.REFERENDO` (registro à parte:
+  os status e os hashes das runs antigas não mudam; um valor novo volta a contar como não referendado). O aviso
+  "PROPOSTOS não referendados" das runs antigas fica como está, porque faz parte dos artefatos reproduzíveis.
 - Ablação feita (ver acima): inconclusiva. Aumentar `partidas_por_par` e/ou sementes antes de
   concluir qualquer coisa. Isso muda o protocolo e é decisão do pesquisador.
 - Sementes de partida derivam do nome do braço. Renomear um braço muda todas as partidas dele.

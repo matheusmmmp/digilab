@@ -47,3 +47,6 @@ artifacts_educacao/vidas/
 !artifacts_educacao_v3b/
 artifacts_educacao_v3b/partidas_*.json
 artifacts_educacao_v3b/vidas/
+!artifacts_educacao_v3c/
+artifacts_educacao_v3c/partidas_*.json
+artifacts_educacao_v3c/vidas/

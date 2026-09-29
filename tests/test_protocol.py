@@ -115,3 +115,17 @@ def test_ablacao_com_politica_desconhecida_falha():
 def test_registro_de_protocolos():
     assert PROTOCOLOS["arena-v1"] is PROTOCOLO_ARENA_V1
     assert PROTOCOLOS["arena-v1-ablacao"] is PROTOCOLO_ARENA_V1_ABLACAO
+
+
+def test_referendo_cobre_os_propostos_de_hoje_sem_mudar_hashes():
+    from digilab.protocol import (PARAMETROS_EDUCACAO_V1, PROTOCOLOS, Campo, educacao_nao_referendados,
+                                  propostos_nao_referendados, referendado)
+    for p in PROTOCOLOS.values():
+        assert propostos_nao_referendados(p) == [], p.versao
+        assert p.campos_propostos()                     # o status dentro do protocolo nao mudou (hash intacto)
+    assert educacao_nao_referendados() == []
+    outro = dict(PARAMETROS_EDUCACAO_V1)
+    c = outro["ConfigLesoes.prob_lesao_derrota"]
+    outro["ConfigLesoes.prob_lesao_derrota"] = Campo(0.3, c.status, c.justificativa)
+    assert educacao_nao_referendados(outro) == ["ConfigLesoes.prob_lesao_derrota"]   # valor novo: nao referendado
+    assert not referendado("protocolo.dias_simulados", 15) and referendado("protocolo.dias_simulados", 14)
