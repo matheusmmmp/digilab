@@ -2,6 +2,7 @@
 // o tempo grava no maximo a cada 2 s e o pendente sai ao fechar a aba.
 import { describe, expect, test } from "vitest";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
+import { VERSAO_PET } from "../motor/index.ts";
 import { gravarPendente, iniciarJogo, jogoAtual, mudarMotor, novoPet } from "../src/jogo.ts";
 
 const armaz = (dados: Record<string, string> = {}) => {
@@ -55,6 +56,6 @@ describe("jogo", () => {
     const j = jogoAtual();
     expect(j.nascendo).toBe(16);
     expect(j.motor.log).toEqual([]);
-    expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log: [], versao: 3 });
+    expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log: [], versao: VERSAO_PET });
   });
 });

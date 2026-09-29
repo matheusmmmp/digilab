@@ -28,8 +28,19 @@ export const EIXOS_TEMP: readonly EixoTemperamento[] = ["curiosidade", "teimosia
 /* desejo (espelho de ConfigDesejo) e limiar do tom do temperamento (ConfigExpressao) */
 export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kCumprimento: 60 };
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia; 2 = memoria por espacos +
-   vinculo + obediencia + condicao no combate; 3 = v2 + carater pelo desvio da politica */
-export const VERSAO_PET = 3;
+   vinculo + obediencia + condicao no combate; 3 = v2 + carater pelo desvio da politica; 4 = v3 + educacao,
+   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py) */
+export const VERSAO_PET = 4;
+/* educacao (espelho de ConfigEducacao): travessuras com janela da crianca em diante, disciplina 0-100 */
+export const CED = {
+  janela: 15, intervalos: { crianca: { fome: 90, higiene: 120, carinho: 90 }, adolescente: { fome: 150, higiene: 120, carinho: 120 },
+    adulto: { fome: 180, higiene: 120, carinho: 180 } } as Record<EstagioTreino, Record<Chamado, number>>,
+  limiarReal: .35, fracaoFalsoBase: .25, reforcoPetisco: .05, tetoFalso: .5, disciplinaMax: 100, passo: 25, acertos: 3,
+  fatorEvoluir: .5, fracaoPetisco: .5, disciplinaBanheiro: 0, vincBroncaSemMotivo: -.05, custoHumorAcordar: .12,
+  limiarSuper: .9, custoSaudeSuper: .05, deltaEps: .10,
+};
+/* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
+export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */
 export type CategoriaMemoria = "demora" | "bronca" | "elogio" | "carinho";
 export const CME = {
@@ -89,6 +100,8 @@ export const TEMP_NEUTRO: Temperamento = Object.freeze({ curiosidade: 0, teimosi
 
 export const ACOES_PET: readonly AcaoPet[] = ["ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar"];
 export const ACOES_DONO: readonly AcaoDono[] = ["alimentar", "limpar", "brincar", "acariciar", "elogiar", "repreender"];
+export const ACOES_EDUCACAO: readonly AcaoDono[] = ["petisco", "levar_ao_banheiro", "tratar_lesao"];
+export const ACOES_DONO_V4: readonly AcaoDono[] = [...ACOES_DONO, ...ACOES_EDUCACAO];
 export const COMBATE: readonly TracoCombate[] = ["golpe", "bloqueio", "agarrao", "finta", "carga"];
 
 /* memoria curta dos pets v1 (espelho de digilab/memoria.py, ConfigMemoria) */

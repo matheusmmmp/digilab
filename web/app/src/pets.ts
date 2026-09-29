@@ -55,7 +55,8 @@ const EXERCICIOS: readonly Exercicio[] = ["levantar_pedra", "corrida", "alvo", "
 
 /** o pet de uma receita: dono simulado (mesmo laco dos Cenarios) + treino em rodizio quando o motor deixa */
 export function petDaReceita(r: Receita): Motor {
-  const m = new Motor(r.semente), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
+  /* v3 de proposito: exemplos estaveis (na v4 o dono simulado nao trata lesao nem responde as janelas) */
+  const m = new Motor(r.semente, 3), dono = criarDono(r.dono), rng = criarRng(hashSemente("dono", r.semente, r.dono));
   const passos = Math.round(r.dias * TPD / CD.passo), orc = Math.round(r.porDia * r.dias);
   let gasto = 0, sessoes = 0, ex = 0;
   for (let p = 0; p < passos; p++) {

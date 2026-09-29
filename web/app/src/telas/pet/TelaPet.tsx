@@ -237,14 +237,21 @@ function Desejo() {
 /* ------------------------------------------------ acoes do dono e tempo */
 const ACOES: [AcaoDono, string, string][] = [["alimentar", "Alimentar", "sec"], ["limpar", "Limpar", "sec"], ["brincar", "Brincar", "sec"],
   ["acariciar", "Carinho", "sec"], ["elogiar", "Elogiar", "destaque"], ["repreender", "Repreender", "sec"]];
-const ICONE_DONO: Record<AcaoDono, string> = { alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao", repreender: "gota" };
+/* pets v4 (educacao-v1): petisco, banheiro e tratar lesao */
+const ACOES_V4: [AcaoDono, string, string][] = [["petisco", "Petisco", "sec"], ["levar_ao_banheiro", "Banheiro", "sec"],
+  ["tratar_lesao", "Tratar", "sec"]];
+const ICONE_DONO: Record<AcaoDono, string> = { alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao",
+  repreender: "gota", petisco: "carne", levar_ao_banheiro: "brilho", tratar_lesao: "coracao" };
 
 /* icone de cada acao do dono (PetTela): prato do guia, gota, nota, coracao, joinha e exclamacao */
 const GOTA = <svg class="ic-gota" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#2C73E0" d="M3 0h2v2h1v1h1v3h-1v1h-4v-1h-1v-3h1v-1h1z" /><path fill="#BFE3FF" d="M2 3h1v2h-1z" /></svg>;
+const CRUZ = <svg class="ic-cruz" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#E0443A" d="M3 1h2v2h2v2h-2v2h-2v-2h-2v-2h2z" /></svg>;
 function IconeAcao({ a }: { a: AcaoDono }) {
   if (a === "alimentar") return <Deco nome="Growth_Guide_Icon_06" largura={24} altura={24} class="ic-acao" reserva={<Peca nome="emoji_carne" escala={2} />} />;
   if (a === "limpar") return GOTA;
-  const em = { brincar: "emoji_nota", acariciar: "emoji_coracao", elogiar: "emoji_joinha", repreender: "emoji_exclam" }[a];
+  if (a === "levar_ao_banheiro") return GOTA;
+  if (a === "tratar_lesao") return CRUZ;
+  const em = ({ brincar: "emoji_nota", acariciar: "emoji_coracao", elogiar: "emoji_joinha", repreender: "emoji_exclam", petisco: "emoji_estrela" } as Partial<Record<AcaoDono, string>>)[a];
   return em ? <Peca nome={em} escala={2} /> : null;
 }
 
@@ -298,7 +305,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
           <Chamados agir={agir} />
           <div class="dl-par"><Desejo /></div>
           <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
-            {ACOES.map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
+            {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
           </div>
           <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
         </aside>
