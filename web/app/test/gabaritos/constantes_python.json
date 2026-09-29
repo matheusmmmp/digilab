@@ -771,6 +771,8 @@
  },
  "ConfigLesoes": {
   "efeito_qualificacao": "condicao_adulto",
+  "experiencia_max": 0.05,
+  "experiencia_por_vitoria": 0.002,
   "horas_sem_tratar_morte": 6,
   "lesoes_para_morte": 20,
   "ligada": false,

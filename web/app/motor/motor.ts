@@ -87,6 +87,7 @@ export class Motor {
   edu!: Educacao;
   lutas!: Lutas;
   lesionadoDesde: number | null = null;
+  vitoriasVida = 0;                              /* v4: experiencia de combate (nao zera ao evoluir) */
   morte: { tick: number; causa: "lesoes" | "lesao_sem_tratar" } | null = null;
   janelasFechadas: (Janela & { desfecho: string; fim: number })[] = [];
   origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
@@ -174,7 +175,7 @@ export class Motor {
     if (this.versao >= 4) {
       const L = this.lutas;
       L.lutas++;
-      if (res.pontosA === 1) L.vitorias++; else if (res.pontosA === 0) L.derrotas++; else L.empates++;
+      if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida++; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
       /* lesao: so na derrota, numa rng derivada da semente da LUTA */
       lesao = res.pontosA === 0 && criarRng(hashSemente("lesao", semente)).random() < CLE.probLesao;
       if (lesao) {
@@ -542,7 +543,7 @@ export class Motor {
   assinatura(): string {
     return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
-      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp]] : [])]);
+      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida]] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {

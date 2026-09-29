@@ -182,6 +182,8 @@ export function TelaEvolucao() {
         [p ? (espera ? "de treino (arena) para virar Ultimate ou Mega" : `até virar ${p.prox.est === "adulto" ? "Ultimate ou Mega" : nomeEstagio(p.prox)}`) : "forma final",
           p ? (espera ? (faltaTaxa ? `vitórias ${Math.round((taxa ?? 0) * 100)}% de ${Math.round(CLE.limiarTaxa * 100)}%` : `${CAT.sparring - m.sparring} lutas`)
             : duracao(Math.max(0, p.falta))) : "—"],
+        ...(m.versao >= 4 ? [["experiência de combate: cada vitória o deixa mais preciso na luta",
+          `${m.vitoriasVida} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]] : []),
         ...(m.versao >= 4 && f.est === "adolescente" ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
           m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
         /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */

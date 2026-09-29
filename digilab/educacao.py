@@ -89,6 +89,15 @@ def epsilon_disciplina(disciplina: int, ce: ConfigEducacao | None = None) -> flo
     return ce.epsilon_base_pet + (1 - disciplina / ce.disciplina_max) * ce.delta_epsilon_indisciplina
 
 
+def epsilon_pet(disciplina: int, vitorias_vida: int, ce: ConfigEducacao | None = None,
+                cl: ConfigLesoes | None = None) -> float:
+    """epsilon do Lutador do pet no jogo: disciplina (PLANO_ANALISE_V3) menos a experiencia de combate (estilo
+    "lutar"). As runs V3/V3b usam so epsilon_disciplina (reprodutiveis)."""
+    cl = cl or CONFIG_LESOES
+    exp = min(cl.experiencia_max, vitorias_vida * cl.experiencia_por_vitoria)
+    return max(0.0, epsilon_disciplina(disciplina, ce) - exp)
+
+
 def atende(pedido: str, acao: AcaoUsuario) -> bool:
     """acao do dono que atende um chamado REAL do tipo `pedido` (carinho = mau humor: elogio tambem resolve)"""
     return (acao.value in CONFIG_EVOLUCAO_PESQUISA.atende[pedido] or (pedido == "fome" and acao is AcaoUsuario.PETISCO)
@@ -128,6 +137,7 @@ class MotorEducacao(MotorTreino):
         self.lutas = self._lutas_zeradas()
         self.lesionado_desde: int | None = None
         self.historico_lutas: list[dict] = []
+        self.vitorias_vida = 0                      # experiencia de combate: nao zera ao evoluir
         self._lutas_que_treinaram = 0
         self.morte: dict | None = None
         self.origem: Origem | None = None        # parte 5: filho de um cruzamento (evento `origem`, o primeiro)
@@ -314,6 +324,8 @@ class MotorEducacao(MotorTreino):
         res = "vitoria" if p.pontos_a == 1.0 else "derrota" if p.pontos_a == 0.0 else "empate"
         self.lutas["lutas"] += 1
         self.lutas[{"vitoria": "vitorias", "derrota": "derrotas", "empate": "empates"}[res]] += 1
+        if res == "vitoria":
+            self.vitorias_vida += 1
         lesao = res == "derrota" and random.Random(derivar_semente("lesao", semente)).random() < self.cl.prob_lesao_derrota
         if lesao:
             self.lutas["lesoes"] += 1
@@ -422,7 +434,8 @@ class MotorEducacao(MotorTreino):
         self._contato(acao, tick)
 
     def estado_lutas(self) -> dict:
-        return {"lutas": dict(self.lutas), "lesionado_desde": self.lesionado_desde, "morte": self.morte}
+        return {"lutas": dict(self.lutas), "lesionado_desde": self.lesionado_desde, "morte": self.morte,
+                "vitorias_vida": self.vitorias_vida}
 
     def resumo_educacao(self) -> dict:
         return {"disciplina": self.disciplina, "acertos": self.acertos, "petiscos_cedidos": self.petiscos_cedidos,

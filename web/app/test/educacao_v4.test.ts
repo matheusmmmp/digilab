@@ -135,3 +135,14 @@ describe("heranca (pets v4)", () => {
     expect(() => f.registrarOrigem({ pais: [{ h: 1, esp: "brasa", temp: p.temp, est: "adulto" }, { h: 2, esp: "limo", temp: p.temp, est: "adulto" }], s: 1, quem: "x" })).toThrow();
   });
 });
+
+test("experiencia de combate: vitorias baixam o epsilon, com teto, e nao zeram ao evoluir", () => {
+  const m = new Motor(12, 4); m.avancar(15);
+  m.edu.disciplina = 100;
+  const base = lutadorPet(m, "x").estilo.eps;
+  m.vitoriasVida = 10;
+  expect(base - lutadorPet(m, "x").estilo.eps).toBeCloseTo(10 * CLE.expPorVitoria);
+  m.vitoriasVida = 100000;
+  expect(lutadorPet(m, "x").estilo.eps).toBeGreaterThanOrEqual(0);
+  expect(base - lutadorPet(m, "x").estilo.eps).toBeLessThanOrEqual(CLE.expMax + 1e-12);
+});

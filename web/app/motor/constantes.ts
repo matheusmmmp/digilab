@@ -40,7 +40,8 @@ export const CED = {
   limiarSuper: .9, custoSaudeSuper: .05, deltaEps: .10,
 };
 /* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
-export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8 };
+/* expPorVitoria/expMax: estilo "lutar" (experiencia de combate, decisao do Matheus em 2026-09-29) */
+export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8, expPorVitoria: .002, expMax: .05 };
 /* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
 export const CHE = { sigma: .1 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */

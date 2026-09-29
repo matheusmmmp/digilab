@@ -468,3 +468,23 @@ def test_morte_no_fim_do_avanco_antes_do_dono_agir():
     m.lesionado_desde = m._estado.tick
     m.avancar(CONFIG_LESOES_LIGADA.horas_sem_tratar_morte * 60)     # termina exatamente no prazo
     assert m.morte is not None and m.morte["tick"] == m._estado.tick   # antes do passo do dono nesse tick
+
+
+def test_experiencia_de_combate_reduz_epsilon_com_teto_e_piso():
+    from digilab.educacao import epsilon_disciplina, epsilon_pet
+    c = CONFIG_LESOES_LIGADA
+    assert epsilon_pet(50, 0) == epsilon_disciplina(50)
+    assert epsilon_pet(50, 10) == pytest.approx(epsilon_disciplina(50) - 10 * c.experiencia_por_vitoria)
+    assert epsilon_pet(100, 10_000) == 0.0                      # piso
+    assert epsilon_pet(0, 10_000) == pytest.approx(epsilon_disciplina(0) - c.experiencia_max)   # teto
+
+
+def test_vitorias_da_vida_nao_zeram_ao_evoluir():
+    (fp, fm), _ = _fabricas_luta(forma="tita")
+    m = fm(fp(None), None, S_EDU)
+    for i in range(6):
+        m.lutar("bot:muralha@limo", 300 + i)
+    v = m.vitorias_vida
+    assert v == sum(h["resultado"] == "vitoria" for h in m.historico_lutas)
+    m.avancar(CONFIG_EVOLUCAO_PESQUISA.dur_bebe_min + 30)       # evolui: contadores do estagio zeram
+    assert m.lutas["lutas"] == 0 and m.vitorias_vida == v
