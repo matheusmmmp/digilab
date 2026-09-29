@@ -348,3 +348,14 @@ def test_surrogate_solto_do_modelo_nao_quebra():
     for r in (cru, escapado):                                 # cru no texto, ou escape que so vira surrogate no parse
         r.texto.encode("utf-8")                               # nao levanta
         assert r.fonte == "llm" and "?" in r.texto
+
+
+def test_moldura_com_caractere_quebrado_e_reprovada():
+    """revisao da fala-v6 (semente 20260929): o qwen 2.5 3b punha lixo na moldura ("?콝", "※�", "—㛼!")"""
+    import pytest
+    from servidor.fala_llm import FalaReprovada, validar_moldura
+    assert validar_moldura("Eba!", "^_^ ☺") == ("Eba!", "^_^ ☺")
+    assert validar_moldura("Ué, olá…", "—") == ("Ué, olá…", "—")
+    for ruim in ("?콝", "※", "—㛼!", "⁌ㅖ", "ﻻ", "�"):
+        with pytest.raises(FalaReprovada):
+            validar_moldura("Eba!", ruim)
