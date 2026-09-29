@@ -742,5 +742,5 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   - a análise foi refeita com `run_natureza_criacao.py --reanalisar` a partir do `pets.json` e do `partidas_neutra.json`, sem nenhuma vida nem partida nova;
   - o motivo ficou gravado no `meta.json` (`tempos.reanalise`);
   - conferência: a reanálise da rodada `especie_fixa` gera um `resultado.json` idêntico ao original.
-- **Daqui em diante:** as runs deste branch rodam na worktree `D:\Trab\digilab1-linhagem`.
+- **Daqui em diante:** as runs deste branch rodam na worktree `D:\Trab\digilab\v1-linhagem`.
 
