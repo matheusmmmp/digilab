@@ -459,3 +459,12 @@ def test_duracao_canonica_estagios_chamados_orcamento_e_replay():
     fp, fm = fabricas_educacao(S_EDU, esp, t, ce=CONFIG_EDUCACAO_LIGADA, cfg_evo=ce)
     r = reproduzir_educacao(m.log, fp, semente=S_EDU, fabrica_motor=fm)
     assert r.estado() == m.estado() and r.transicoes == m.transicoes
+
+
+def test_morte_no_fim_do_avanco_antes_do_dono_agir():
+    (fp, fm), _ = _fabricas_luta()
+    m = fm(fp(None), None, S_EDU)
+    m.avancar(15)
+    m.lesionado_desde = m._estado.tick
+    m.avancar(CONFIG_LESOES_LIGADA.horas_sem_tratar_morte * 60)     # termina exatamente no prazo
+    assert m.morte is not None and m.morte["tick"] == m._estado.tick   # antes do passo do dono nesse tick

@@ -281,6 +281,13 @@ class MotorEducacao(MotorTreino):
         if self.lesionado_desde is not None and tick - self.lesionado_desde >= self.cl.horas_sem_tratar_morte * 60:
             self.morte = {"tick": tick, "causa": "lesao_sem_tratar"}
 
+    def _avancar(self, ticks: int):
+        # a morte tambem e conferida no fim do avanco: o prazo da lesao cai num tick de passo do dono, antes
+        # da proxima decisao do pet (igual ao vivo e no replay: vem do evento avanco)
+        r = super()._avancar(ticks)
+        self._conferir_morte(self._estado.tick)
+        return r
+
     def _vivo(self) -> None:
         if self.morte is not None:
             raise PetMorto(f"o pet morreu no tick {self.morte['tick']} ({self.morte['causa']})")
