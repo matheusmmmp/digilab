@@ -1,6 +1,6 @@
 # Design — voz própria: hábitos, gostos e memórias na fala do pet
 
-Status: **para aprovação**. Nada foi implementado. Todo número abaixo é PROPOSTO (sem fonte) até você aprovar.
+Status: **aprovado para implementar** (2026-09-29). As seções 9 e 10 foram pedidas pelo Matheus. As decisões da seção 8 seguem as recomendações. Todo número abaixo é PROPOSTO (sem fonte).
 
 ## 1. O problema
 
@@ -96,3 +96,64 @@ Uma avaliação offline, como as rodadas da fala livre (`experiments/avaliar_voz
 1. Os limiares da seção 2 e o ritmo da seção 3 (tudo PROPOSTO).
 2. Se o pet pode falar de hábitos **do dono** ou só dos dele. Eu recomendo que sim: é o que mais surpreende ("você sempre some no fim de semana").
 3. Se a etapa de pegar expressões do dono entra agora ou depois. Eu recomendo depois, porque pede cuidado com o que o jogador escreve.
+
+## 9. Digimons que mentem (pedido do Matheus, 2026-09-29)
+
+Alguns Digimons mentem, principalmente os de **evolução sombria** e os **forçados à exaustão**.
+
+**A regra para a mentira não bagunçar a pesquisa.** A mentira é **decidida pelo motor e registrada**, nunca uma alucinação da LLM. Em toda mentira, o registro guarda o fato verdadeiro e a versão falsa. Assim:
+- o dono pode descobrir;
+- a métrica de honestidade da LLM continua medindo só o que ela inventa **sem** ordem.
+
+**Honestidade do pet (0 a 1):**
+
+    h = (0,4 se a forma for sombria, senão 1,0) × (1 − 0,5 × sobrecarga / 100)
+
+A sobrecarga vem do treino forçado à exaustão (TAREFA_TREINO_SOMBRIO). Um pet sem sobrecarga e não sombrio tem h = 1 e **nunca** mente.
+
+**Chance de mentir** numa fala espontânea: `0,5 × (1 − h)`. Um sombrio com sobrecarga 80 tem h = 0,24 e mente em 38% das falas. O sorteio usa uma rng própria da fala, derivada da semente do pet e do número da fala, e fica registrado.
+
+**Como mente:** escolhe um fato verdadeiro de um tipo que admite distorção e o transforma por um molde fixo.
+
+| tipo do fato | mentira (exemplo) |
+|---|---|
+| estado | "fome alto" → "estou cheio, nem quero comer" |
+| hábito do dono (O) | "você atende rápido" → "você nunca me atende" |
+| marco (L) | "perdi para o Devidramon" → "eu venci o Devidramon fácil" |
+| gosto (P) | "gosto de brincar" → "odeio brincar" |
+
+A LLM recebe a versão falsa com o id `F`, e a instrução é afirmá-la como verdade. O verificador sabe que `F` é falso e marca a fala como **mentira deliberada**, que é diferente de "sem fato".
+
+**No jogo:**
+- A fala mentirosa aparece normal.
+- No Diário, **depois de 1 dia de jogo**, ela ganha o selo "ele mentiu", com a verdade ao lado.
+- O dono atento percebe antes, comparando com as barras.
+- A honestidade aparece na tela do pet adulto sombrio como traço ("não confie em tudo que ele diz").
+
+## 10. O Digimundo como reflexo da internet (pedido do Matheus, 2026-09-29)
+
+Como no anime, o Digimundo é um reflexo da internet, e o pet conhece a cultura da rede, inclusive os memes brasileiros.
+
+- **De onde vem o conhecimento:**
+  - **o próprio modelo:** o gemma2:9b foi treinado em texto da internet e já conhece cultura pop e memes;
+  - **o Almanaque do Digimundo** (`digilab_fala_livre/almanaque.json`): uma lista curada de ~60 entradas curtas, em texto próprio (sem copiar nada), cada uma com tema, época e uma descrição de uma linha. Cobre cultura geral da internet e memes brasileiros. Ele dá o sabor e o assunto; o modelo completa.
+- **O que não entra:** memes que expõem pessoas comuns (gente anônima que viralizou sem querer), ofensivos, políticos ou de ódio. O almanaque é revisado a mão e versionado.
+- **Quando entra na fala:** na fala espontânea, com chance de 0,15 (PROPOSTO), sorteada na rng da fala, uma entrada do almanaque vira o fato `W` ("coisa que ouvi no Digimundo"). Na Conversar, entra quando o jogador puxa o assunto.
+- **Verificação:** `W` sustenta afirmações sobre o mundo e a internet, **nunca** sobre a vida do pet ou do dono. "Ouvi falar do Nyan Cat" passa; "eu comi um bolo" citando `W` é "sem fato".
+- **No jogo:** dá para desligar em Ajustes ("o pet comenta coisas da internet"), ligado por padrão.
+
+## 11. Partes (revisadas)
+
+1. `digilab/historia.py`: o extrator (H, O, P, L) e a honestidade do pet, com os testes.
+2. `digilab_fala_livre`:
+   - fatos H, O, P e L;
+   - a mentira (F e os moldes de distorção, marcada no registro);
+   - o almanaque (W);
+   - o verificador estendido;
+   - o prompt `livre-v3`.
+3. `experiments/avaliar_voz.py` e a rodada offline, incluindo os pets sombrios. **Paro** para você ver os números.
+4. Web:
+   - o extrator em TS;
+   - os gatilhos;
+   - a mentira no Diário com o selo depois de 1 dia;
+   - o ajuste da internet.
