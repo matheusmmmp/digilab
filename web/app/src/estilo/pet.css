@@ -467,3 +467,28 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .mp-g-bts{display:grid;gap:6px;flex:none}
 .mp-g-cruzar{min-height:44px;padding:0 14px}
 .mp-desk .mp-guardados ul{max-height:280px}
+
+/* jornada (src/componentes/Jornada.tsx): escolha do brasao e conclusao, no fundo listrado das boas-vindas */
+.brasao-tela{position:fixed;inset:0;width:100%;max-width:none;height:100%;max-height:none;margin:0;padding:0;border:0;color:#FFFFFF;overflow:auto;
+  background-color:#2A6FD8;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px),repeating-linear-gradient(135deg,#2A6FD8 0 26px,#3A82EA 26px 52px);
+  background-size:10px 10px,10px 10px,auto}
+.brasao-tela[open]{display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px 16px}
+.br-cab{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.br-tit{font-size:34px;line-height:1.05}
+.br-lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:880px}
+.br-card{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:0;border-radius:14px;cursor:pointer;
+  background:var(--dl-surface);color:var(--dl-text);box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep);font:inherit}
+.br-card:hover,.br-card:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.br-nome{font-size:17px;font-weight:900}
+.br-linha{font-size:12px;font-weight:700;text-align:center}
+.br-pe{display:flex;flex-direction:column;align-items:center;gap:8px}
+@media (min-width:900px){ .br-lista{grid-template-columns:repeat(4,minmax(0,1fr))} .br-tit{font-size:56px} }
+.conclusao-tela[open]{justify-content:center}
+.conclusao-tela .bv-palco{transform:none;height:220px}
+.conclusao-tela .bv-anel{top:160px}
+.conclusao-tela .cc-pet{bottom:40px}
+.cc-tit{font-size:40px;text-align:center}
+.cc-texto{margin:0;max-width:440px;text-align:center;font-weight:700;font-size:14px;line-height:20px}
+.cc-marcos{list-style:none;margin:0;padding:10px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;background:rgba(15,42,102,.55);border-radius:12px;font-size:13px;font-weight:800}
+.cc-marcos li{opacity:.6}
+.cc-marcos li.feito{opacity:1}

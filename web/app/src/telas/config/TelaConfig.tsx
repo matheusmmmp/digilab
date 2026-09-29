@@ -11,7 +11,8 @@ import { Peca } from "../../componentes/Imagens.tsx";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
-import { novoPet, useJogo } from "../../jogo.ts";
+import { useJogo } from "../../jogo.ts";
+import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
@@ -131,7 +132,7 @@ function Dados({ irPet }: { irPet: () => void }) {
       <section class="zona-risco" aria-label="Área de risco">
         <div class="dl-linha">
           <button type="button" class="dl-btn dl-btn--sec" onClick={() => setConfirmar(true)}>Novo ovo (apaga este pet)</button>
-          {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); novoPet(); irPet(); }}>Confirmar: apagar este pet</button>}
+          {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); abrirEscolhaBrasao(); irPet(); }}>Confirmar: apagar este pet</button>}
         </div>
       </section>
     </div>

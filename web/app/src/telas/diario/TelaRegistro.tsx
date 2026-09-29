@@ -3,7 +3,8 @@
    confirmacao. A contagem diz o que e evento do registro e o que e linha reconstruida (revisao, item 3). */
 import { useEffect, useRef, useState } from "preact/hooks";
 import { Motor, NOME_PET, NOME_V2, type ItemHistorico } from "../../../motor/index.ts";
-import { novoPet, useJogo } from "../../jogo.ts";
+import { useJogo } from "../../jogo.ts";
+import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 import { LUTA, REPLAY, reconstruirLuta, reverLuta } from "../../luta.ts";
@@ -109,7 +110,7 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
         <p class="dl-apoio">Um ovo novo apaga este pet e o registro dele. Não dá para desfazer.</p>
         <div class="dl-linha">
           <button type="button" class="dl-btn dl-btn--sec" onClick={() => setConfirmar(true)}>Novo ovo</button>
-          {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); novoPet(); irPet(); }}>Confirmar: apagar este pet</button>}
+          {confirmar && <button type="button" class="dl-btn dl-btn--perigo" onClick={() => { setConfirmar(false); abrirEscolhaBrasao(); irPet(); }}>Confirmar: apagar este pet</button>}
         </div>
       </details>
     </div>
