@@ -111,7 +111,36 @@ Alguns Digimons mentem, principalmente os de **evolução sombria** e os **forç
 
 A sobrecarga vem do treino forçado à exaustão (TAREFA_TREINO_SOMBRIO). Um pet sem sobrecarga e não sombrio tem h = 1 e **nunca** mente.
 
-**Chance de mentir** numa fala espontânea: `0,5 × (1 − h)`. Um sombrio com sobrecarga 80 tem h = 0,24 e mente em 38% das falas. O sorteio usa uma rng própria da fala, derivada da semente do pet e do número da fala, e fica registrado.
+**Mentir se aprende, como a travessura** (pedido do Matheus: "caso você não repreenda a mentira, ele aprende a mentir mais"). A mentira segue o Sistema A da educação (chamados falsos), com as mesmas peças:
+
+- **Toda fala espontânea abre uma janela de fala** de 30 min de jogo (PROPOSTO), no mesmo lugar das janelas de chamado e aviso: uma janela por vez. O dono vê a fala, **nunca** se ela é mentira; julga pelas barras e pelo que sabe do pet, como no chamado falso.
+- **Desfechos:**
+
+  | o dono, na janela | a fala era mentira | a fala era verdade |
+  |---|---|---|
+  | bronca | **acerto**: disciplina +25 (o mesmo passo da travessura) e a mentira não conta como impune | bronca sem motivo: vínculo −0,05 (igual à bronca num chamado real) |
+  | petisco ou elogio | **premiou a mentira**: +2 mentiras impunes | nada de novo (o efeito normal da ação) |
+  | nada até o prazo | **passou impune**: +1 mentira impune | nada |
+
+- **Chance de mentir** numa fala espontânea (a mesma forma da fração de chamados falsos):
+
+      p = 0                                                  se h = 1, ou com 3 broncas certas seguidas em mentiras no estágio
+      p = min(0,8, 0,5 × (1 − h) × (1 − disciplina/100) + 0,05 × mentiras_impunes)   no resto
+
+  Um sombrio com sobrecarga 80 e disciplina 0 começa com h = 0,24 e p = 0,38. A cada mentira que passa impune, sobe 0,05. Um pet com h = 1 nunca começa a mentir, então nunca acumula mentira impune. As mentiras impunes voltam a 0 na evolução, como os petiscos cedidos. Todos os números são PROPOSTOS.
+- **A honestidade que o jogo mostra** é `1 − p / 0,8`: ela cai com a vista grossa e sobe com a disciplina.
+- **Onde vive.**
+  - A mentira muda o motor (disciplina, vínculo, janela), então **é do motor**, não só da apresentação.
+  - O `MotorEducacao` ganha a janela de fala e a `rng_mentira`, derivada da semente.
+  - A fala espontânea entra no registro do jogo como um evento novo, `f`, com o tick e se foi mentira. Ela é sorteada no motor e reproduzida no replay.
+  - A LLM só escreve a frase. Se ela falhar, o pet diz o molde fixo da mentira: a fala sempre acontece e o motor não depende da LLM.
+- **Na pesquisa.**
+  - `ConfigMentira.ligada` fica **desligada** por padrão, e a V3 e a confirmatória não mudam.
+  - Ligada, os donos simulados reagem pela política deles:
+    - o disciplinador dá bronca quando a fala contradiz as barras;
+    - o permissivo dá petisco;
+    - o ausente não vê.
+  - Assim dá para medir quanto cada estilo de dono cria um mentiroso.
 
 **Como mente:** escolhe um fato verdadeiro de um tipo que admite distorção e o transforma por um molde fixo.
 
@@ -142,18 +171,62 @@ Como no anime, o Digimundo é um reflexo da internet, e o pet conhece a cultura 
 - **Verificação:** `W` sustenta afirmações sobre o mundo e a internet, **nunca** sobre a vida do pet ou do dono. "Ouvi falar do Nyan Cat" passa; "eu comi um bolo" citando `W` é "sem fato".
 - **No jogo:** dá para desligar em Ajustes ("o pet comenta coisas da internet"), ligado por padrão.
 
-## 11. Partes (revisadas)
+## 11. Corpus de personalidade Digimon (pedido do Matheus, 2026-09-29; em montagem em outro chat)
 
-1. `digilab/historia.py`: o extrator (H, O, P, L) e a honestidade do pet, com os testes.
+O Matheus monta, em outro chat, um corpus do conteúdo narrativo dos jogos de Digimon de PS1 e WonderSwan. Ele traz, por Digimon: fontes, traços de personalidade, jeito de falar (pronome e terminações em japonês, bordões), interações e até 3 citações curtas traduzidas para PT-BR. Uma auditoria separada marca cada item com [VERIFICADO], [PARCIAL], [OUTRA MÍDIA], [INFERÊNCIA], [DIVERGENTE], [SEM FONTE] ou [FONTE INVÁLIDA], e dá um veredito por jogo.
+
+**Arquivo.** `digilab_fala_livre/corpus_especies.json`, versionado (o sha vai para o registro de cada fala). Uma entrada por espécie:
+
+    { "especie": "Devimon",              // o nome da forma, igual ao do catálogo do jogo
+      "jogos": ["Digimon World (PS1)"],
+      "tracos": [{"texto": "arrogante, despreza os fracos", "marca": "VERIFICADO", "fonte": "url"}],
+      "fala":   [{"texto": "fala com ironia", "marca": "VERIFICADO", "fonte": "url"}],
+      "interacoes": [{"com": "Angemon", "texto": "...", "marca": "PARCIAL", "fonte": "url"}],
+      "citacoes": [{"pt": "...", "original": "...", "fonte": "url", "fan_translation": true, "marca": "VERIFICADO"}],
+      "honestidade_especie": null }      // só com traço verificado de enganador (ver abaixo)
+
+**O que entra.**
+- Entram os itens [VERIFICADO] e [VERIFICADO EM OUTRA FONTE] (com a fonte corrigida), e só de jogos com veredito APTO ou APTO COM RESSALVAS.
+- [PARCIAL] entra só na parte que tem suporte, reescrita na auditoria.
+- [OUTRA MÍDIA] (do anime) entra só se o Matheus liberar, marcado como anime.
+- [INFERÊNCIA], [DIVERGENTE], [SEM FONTE] e [FONTE INVÁLIDA] ficam de fora.
+- O carregador aplica esse filtro, e um teste falha se entrar item de marca proibida.
+
+**Como a fala usa o corpus.** O corpus dá o **jeito** da espécie, não fatos da vida do pet. O pet é a forma atual dele; um Devimon soa como Devimon, qualquer que seja o dono.
+- **Traços e jeito de falar** vão para o bloco de estilo do prompt ("você é um Devimon: ..."). São guia de tom e **não sustentam** afirmação nenhuma: "eu comi" citando o corpus é "sem fato", como no W.
+- **Citações** são só referência de tom, dadas ao modelo como exemplo.
+  - O pet **não repete citação**: um filtro reprova a fala com 6 ou mais palavras seguidas iguais às de uma citação do corpus. Isso respeita o direito autoral e evita que o pet vire uma gravação.
+  - Continua o limite do corpus: até 3 citações de 1–2 frases por espécie.
+- **Interações** entram quando o outro Digimon está em cena: o rival de uma luta ou um NPC da campanha. Exemplo: o pet Angemon, antes de lutar com o Devimon, pode puxar a rixa. É **estilo**, não fato: não diz que aconteceu com ele.
+- **NPCs e chefes da campanha** também ganham voz pelo corpus, na fala de antes e depois da luta.
+- **Espécie sem entrada no corpus:** segue só com o tom do estágio, como hoje. O relatório da parte 3 mostra quantas formas do jogo têm entrada.
+
+**Honestidade da espécie.**
+- Uma espécie com traço **verificado** de enganador ou trapaceiro (exemplo esperado: Piedmon) ganha um multiplicador na honestidade da seção 9: `honestidade_especie` = 0,7 (PROPOSTO).
+- Sem esse traço verificado, fica 1.
+- O mentiroso do Digilab continua vindo principalmente da criação (sombrio, exaustão). A espécie só dá o empurrão que o jogo original justifica.
+
+**No web.** O servidor local guarda o corpus e o usa em `/api/fala-livre`. O jogo recebe só `honestidade_especie` num mapa exportado, conferido contra o Python como as outras constantes (`mapa_constantes.json`).
+
+**Enquanto o corpus não chega.** As partes 1 e 2 são feitas com um corpus de exemplo pequeno (2 espécies, marcado como exemplo), só para testar o carregador e o filtro. A rodada da parte 3 espera o corpus auditado.
+
+## 12. Partes (revisadas)
+
+1. Python:
+   - `digilab/historia.py`: o extrator (H, O, P, L), com os testes;
+   - `ConfigMentira`, a honestidade e a janela de fala no `MotorEducacao` (desligada por padrão; V3 e confirmatória intactas);
+   - as reações dos donos simulados.
 2. `digilab_fala_livre`:
    - fatos H, O, P e L;
    - a mentira (F e os moldes de distorção, marcada no registro);
    - o almanaque (W);
+   - o corpus de espécies (o carregador com o filtro de marcas, o bloco de estilo, o filtro contra repetir citação);
    - o verificador estendido;
    - o prompt `livre-v3`.
-3. `experiments/avaliar_voz.py` e a rodada offline, incluindo os pets sombrios. **Paro** para você ver os números.
+3. `experiments/avaliar_voz.py` e a rodada offline, incluindo os pets sombrios e o corpus auditado. **Paro** para você ver os números.
 4. Web:
    - o extrator em TS;
    - os gatilhos;
+   - a janela de fala e o evento `f` no motor TS (com a paridade com o Python);
    - a mentira no Diário com o selo depois de 1 dia;
    - o ajuste da internet.
