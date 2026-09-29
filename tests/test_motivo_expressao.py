@@ -139,7 +139,9 @@ def _checar_honestidade(m: Motivo, humor):
             assert citados == set(bases[:2]), (m, e)
             assert _refs_citadas(e.conteudo) <= set(m.evento_ref), (m, e)
             if not bases:
-                assert expressao_mod.GENERICO_ADULTO in e.conteudo
+                geral = (expressao_mod.GENERICO_INSTINTO if m.origem == "vida" and not m.exploracao
+                         else expressao_mod.GENERICO_ADULTO)
+                assert geral in e.conteudo
 
 
 def test_honestidade_na_vida(vidas):
@@ -179,6 +181,8 @@ def test_bebe_nunca_cita_e_sem_fator_nunca_vira_causa():
         assert not marcadores_citados(expressar(vazio, est, 0.5).conteudo)
     expl = Motivo("combate", "esquivar", (), (), None, True, turno=4)
     assert expressar(expl, "adulto").conteudo.endswith(expressao_mod.GENERICO_ADULTO)
+    # vida sem fator e sem exploracao: quem decidiu foi o prior do instinto
+    assert expressar(vazio, "adulto", 0.5).conteudo.endswith(expressao_mod.GENERICO_INSTINTO)
 
 
 def test_dois_fatores_so_o_adulto_cita_os_dois():

@@ -7,8 +7,9 @@
 | adolescente | fragmento | palavras soltas do PRIMEIRO fator                    |
 | adulto      | frase     | frase com ate 2 fatores e o evento referenciado      |
 
-A fala nunca inventa causa: so cita fatores do motivo; sem fator (ou
-exploracao) o adulto diz "nao sei, so quis". Cada fator tem um MARCADOR que
+A fala nunca inventa causa: so cita fatores do motivo. Sem fator: na vida (sem exploracao) quem decidiu foi o
+prior do instinto, e o adulto diz "foi instinto" (decisao do Matheus, 2026-09-29: o "nao sei" em >80% das
+decisoes do adulto escondia essa causa verdadeira); na exploracao e no combate, "nao sei, so quis". Cada fator tem um MARCADOR que
 aparece em todo texto que o cita e em nenhum outro lugar; a carga verifica
 cobertura e unicidade (falta ou colisao levanta TabelaIncompleta). Isso e o
 que torna a honestidade testavel.
@@ -28,6 +29,7 @@ from .motivo import FATORES_VIDA, Motivo, nome_base
 ESTAGIOS = ("bebe", "crianca", "adolescente", "adulto")
 CANAL = {"bebe": "emote", "crianca": "icones", "adolescente": "fragmento", "adulto": "frase"}
 GENERICO_ADULTO = "Não sei, só quis."
+GENERICO_INSTINTO = "Foi instinto: é o meu jeito."
 
 
 class TabelaIncompleta(ValueError):
@@ -386,7 +388,8 @@ def expressar(motivo: Motivo, estagio: str, humor: float | None = None,
     if estagio == "adolescente":
         return Expressao("fragmento", f"{palavra}... " + (_texto_fator(fatores[0], "adolescente") if fatores else ""), ref)
     if not fatores:
-        return Expressao("frase", f"{frase}. {GENERICO_ADULTO}", ref)
+        geral = GENERICO_INSTINTO if motivo.origem == "vida" and not motivo.exploracao else GENERICO_ADULTO
+        return Expressao("frase", f"{frase}. {geral}", ref)
     causas = " e ".join(_texto_fator(f, "adulto") for f in fatores[:2])
     return Expressao("frase", f"{frase} {causas}{_refs(motivo)}.", ref)
 

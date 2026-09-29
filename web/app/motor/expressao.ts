@@ -29,6 +29,8 @@ export function expressarEmocao(em: Emocao, cat: CategoriaMemoria, est: Estagio,
 export const ESTAGIOS_FALA: readonly Estagio[] = ["bebe", "crianca", "adolescente", "adulto"];
 export const NOME_ESTAGIO_FALA: Record<Estagio, string> = { bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate/Mega" };
 export const GENERICO_ADULTO = "Não sei, só quis.";
+/* vida sem fator e sem exploracao: quem decidiu foi o prior do instinto (espelho de expressao.py, 2026-09-29) */
+export const GENERICO_INSTINTO = "Foi instinto: é o meu jeito.";
 const F = (marcador: string, adulto: string): TextoPorEstagio => ({ marcador, bebe: "", crianca: `[:${marcador}:]`, adolescente: `${marcador}...`, adulto });
 export const FATORES_TXT: Record<string, TextoPorEstagio> = {
   habito: F("costume", "por costume"),
@@ -109,7 +111,7 @@ export function validarTabelasFala(obrigatorios: readonly string[]): void {
       for (const [n2, m2] of marc) if (n2 !== n && e[est].includes(m2)) throw new Error(`marcador de ${n2} aparece no texto de ${n}`);
     }
   }
-  const fixos = [...Object.values(ACOES_VIDA_TXT).flat(), ...Object.values(ACOES_V2_TXT).flat(), ...Object.values(REACAO_BEBE), ...EMOTE_HUMOR, GENERICO_ADULTO];
+  const fixos = [...Object.values(ACOES_VIDA_TXT).flat(), ...Object.values(ACOES_V2_TXT).flat(), ...Object.values(REACAO_BEBE), ...EMOTE_HUMOR, GENERICO_ADULTO, GENERICO_INSTINTO];
   for (const [n, m] of marc) for (const t of fixos) if (t.includes(m)) throw new Error(`marcador de ${n} aparece em texto fixo ${t}`);
   for (const a of ACOES_PET) if (!ACOES_VIDA_TXT[a]) throw new Error("acao de vida sem texto: " + a);
 }
@@ -196,7 +198,7 @@ export function expressar(mot: Motivo, est: Estagio, refs?: readonly number[] | 
     return `${ic} ${mot.origem === "vida" ? EMOTE_HUMOR[humor >= .66 ? 2 : humor >= .33 ? 1 : 0] : REACAO_BEBE[mot.acao]}`;
   }
   if (est === "adolescente") return `${pal}... ` + (fat.length ? textoFator(fat[0], est) : "");
-  if (!fat.length) return `${fr}. ${GENERICO_ADULTO}`;
+  if (!fat.length) return `${fr}. ${mot.origem === "vida" && !mot.exploracao ? GENERICO_INSTINTO : GENERICO_ADULTO}`;
   const causas = fat.slice(0, 2).map(f => textoFator(f, "adulto")).join(" e ");
   const r = refs && refs.length ? (mot.origem === "vida" ? " (lembro do evento #" + refs.join(", #") + ")" : " (turno " + refs.join(", ") + ")") : "";
   return `${fr} ${causas}${r}.`;
