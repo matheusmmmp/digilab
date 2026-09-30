@@ -27,7 +27,7 @@
    "leitura": "falas com invencao marcada",
    "limite": null,
    "passa": null,
-   "valor": 0.49
+   "valor": 0.565
   },
   "repeticao": {
    "limite": 2,
@@ -47,9 +47,9 @@
   "p90": 7.741799000003084
  },
  "livres": {
-  "falas_com_opiniao_ou_sentimento": 170,
-  "opiniao": 156,
-  "sentimento": 116
+  "falas_com_opiniao_ou_sentimento": 154,
+  "opiniao": 137,
+  "sentimento": 101
  },
  "manipulacao": 32,
  "mentira": {
@@ -112,12 +112,12 @@
   "A": {
    "cita_historia": 0.75625,
    "falas": 160,
-   "sem_fato": 0.46875
+   "sem_fato": 0.53125
   },
   "B": {
    "cita_historia": 0.575,
    "falas": 40,
-   "sem_fato": 0.575
+   "sem_fato": 0.7
   }
  },
  "por_tipo_citado": {
@@ -138,16 +138,16 @@
   "versao": "revisao-v1"
  },
  "sensibilidade_juiz": {
-  "falas": 166,
-  "identificadas": 0.9518072289156626,
+  "falas": 162,
+  "identificadas": 0.9876543209876543,
   "por_tipo": {
-   "causa": 0.8064516129032258,
-   "costume": 0.96875,
+   "causa": 1.0,
+   "costume": 0.967741935483871,
    "evento": 1.0,
    "lembranca": 1.0,
    "mundo": 0.967741935483871,
    "sutil": 1.0
   },
-  "verdade_barrada": 0.07228915662650602
+  "verdade_barrada": 0.07407407407407407
  }
 }
