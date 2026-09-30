@@ -5,7 +5,7 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { CAT, MEDALHAS, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
+import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
@@ -153,6 +153,12 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
             <span class="res-ilha-txt"><span class="res-selo">medalha nova</span><b>{mdInfo.nome}</b>
               <span>O Tamer tem {md.n} de {MEDALHAS.length}. Ela é sua: vale para todos os seus pets.</span></span>
           </div>}
+          {r.itens.map(x => { const it = itemDe(x.id); return (
+            <div class="res-item" role="status" key={x.n}>
+              <span class="res-ilha-txt"><span class="res-selo">{x.origem === "medalha" ? "item novo" : "carta da revanche"}</span><b>{it.nome}</b>
+                <span>{it.efeito} {it.tipo === "carta" ? "Escolha antes de uma luta." : "Equipe em Crescer · Itens."}</span></span>
+            </div>); })}
+          {r.carta && <p class="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.turnos.some(tr => tr.cura?.[0]) ? " Ela curou o pet nesta luta." : ""}</p>}
           {serie && <section class="res-serie" aria-labelledby="res-serie-tit">
             <h3 id="res-serie-tit">Resistência · {r.nLutas} lutas seguidas, sem cura</h3>
             <ol>{Array.from({ length: r.nLutas }, (_, i) => {

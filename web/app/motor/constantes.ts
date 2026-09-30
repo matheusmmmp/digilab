@@ -221,6 +221,20 @@ export const CESC_V6 = {
      e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
   fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
 };
+/* itens do Tamer (medalhas, parte 3; so no jogo e so nos pets v6; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13). Numeros PROPOSTOS e SEM
+   EQUILIBRIO (decisao do Matheus, 2026-09-30: o equilibrio dos itens entra na rodada de equilibrio geral do combate, depois das
+   proximas mecanicas). vagas: chips equipados por pet pelas medalhas que ele conhece ([minimo de medalhas, chips], do maior para o
+   menor; sem medalha, nenhum). tetoChipStat: a soma dos chips de stat vale no maximo esta fracao do treino tipico do estagio (tipico:
+   o das metas da parte 2, test/calibrar_arenas.mjs). espera: minutos do relogio do pet entre duas cartas de revanche do mesmo lider.
+   gutsFolego, curaAbaixo e curaFracao: as cartas de Folego e de Cura */
+export const CIT = {
+  versaoPet: 6,
+  vagas: [[5, 3], [3, 2], [1, 1]] as readonly (readonly [number, number])[],
+  tetoChipStat: .25,
+  tipico: { crianca: 8, adolescente: 22, adulto: 36, mega: 40 } as Readonly<Partial<Record<Estagio, number>>>,
+  espera: 1440,
+  gutsFolego: 20, curaAbaixo: .3, curaFracao: .2,
+};
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */
 export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };

@@ -15,6 +15,7 @@ const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url
 const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?antigo=1`, CHAVE = "digilab-web-v21-sprites";
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
+  ["Crescer", "Itens", "crescer/itens"],
   ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Lutar", "Medalhas", "lutar/medalhas"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
   ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
@@ -270,7 +271,7 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   await rev.getByRole("button", { name: "Continuar" }).click();
   await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
   const t = await lerTamer(page);
-  expect(t.log.map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina"]);
+  expect(t.log.map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "chip_forca"]);   /* a medalha e o item dela */
   const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
   expect(reg.versao).toBe(6);
   expect(reg.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
@@ -308,7 +309,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(r.save.versao).toBe(6);
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 1, log: [] });
+  expect(r.tamer).toEqual({ versao: 2, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -335,7 +336,7 @@ test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer 
   expect(r.save.versao).toBe(6);
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 1, log: [] });
+  expect(r.tamer).toEqual({ versao: 2, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -405,7 +406,9 @@ test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no 
   await expect(res.locator(".res-medalha")).toContainText("Medalha da Cidadela");
   await page.locator(".res-continuar").click();
   const t = await lerTamer(page);
-  expect(t.log.map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "torre", "floresta", "cidadela"]);
+  /* as medalhas (os itens das 3 primeiras entraram na abertura; o da Cidadela, com ela) */
+  expect(t.log.filter((e: [string]) => e[0] === "medalha").map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "torre", "floresta", "cidadela"]);
+  expect(t.log.filter((e: [string]) => e[0] === "item").map((e: [string, { id: string }]) => e[1].id)).toEqual(["chip_forca", "chip_recuo", "chip_oportunista", "chip_guarda"]);
   const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
   const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "npc_v5_myotismon", s: expect.any(Number) });   /* o evento continua so rival e semente */
@@ -460,6 +463,132 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
     expect(r.alt / r.largMapa, "o mapa das seis ilhas e mais alto que largo").toBeGreaterThan(1.3);
     await expect(page.locator(".camp-arena")).toContainText("líder: Myotismon");
+    expect(erros).toEqual([]);
+  });
+}
+
+/* ---------------------------------------------------------------- itens do Tamer (medalhas parte 3, docs/DESIGN_MEDALHAS_ARENAS.md
+   secao 13): o lider da o item com a medalha; o chip se equipa em Crescer · Itens e vale na luta; a carta se escolhe antes da luta */
+const numTamer = (page: Page, tipo: string) => page.evaluate(([c, t]) => JSON.parse(localStorage.getItem(c + "-tamer")!).log.filter((e: unknown[]) => e[0] === t).length, [CHAVE, tipo] as const);
+/** vai para a aba pela barra e pelas abas (dentro do app, sem recarregar) */
+async function irPara(page: Page, destino: string, aba: string, rota: string): Promise<void> {
+  await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
+  await page.getByRole("tab", { name: aba }).click();
+  await expect(page).toHaveURL(new RegExp("#/" + rota + "$"));
+}
+
+test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta", async ({ page }) => {
+  test.setTimeout(180_000);
+  await semear(page, SAVE_V6);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-medalha")).toContainText("Medalha da Campina");
+  await expect(res.locator(".res-item")).toContainText("Chip de Força");
+  await expect(res.locator(".res-item")).toContainText("item novo");
+  await page.locator(".res-continuar").click();
+  /* o pet evoluiu no tick da medalha: a revelacao abre depois do Resultado */
+  const rev = page.locator("dialog.revelacao[open]");
+  await expect(rev).toBeVisible();
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
+  /* Crescer · Itens: o chip e do Tamer, e o Champion tem 1 vaga (1 medalha) */
+  await page.getByRole("tab", { name: "Itens" }).click();
+  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
+  const chip = page.locator(".item-card", { hasText: "Chip de Força" });
+  await expect(chip).not.toHaveClass(/item-falta/);
+  await expect(page.locator(".item-card", { hasText: "Chip Aparo" })).toContainText("Ainda não é seu: vença o Piedmon");
+  const i0 = await numLog(page, "i");
+  await chip.getByRole("button", { name: "Equipar" }).click();
+  await expect(chip).toHaveClass(/item-eq/);
+  await expect(chip).toContainText("Agora soma +1 de vigor, +1 de força");
+  await expect(page.locator(".itens-vagas")).toContainText("1 de 1 vaga");
+  expect(await numLog(page, "i")).toBe(i0 + 1);
+  /* sem vaga: o outro chip do Tamer (se houvesse) nao entraria; lutar com o chip na arena */
+  const l0 = await numLog(page, "l");
+  await irPara(page, "Lutar", "Arena", "lutar/arena");
+  await page.locator(".lutar-grande").click();
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await page.locator(".res-continuar").click();
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const eventos = reg.log.map((e: unknown[]) => e[1]);
+  expect(eventos.lastIndexOf("i")).toBeLessThan(eventos.lastIndexOf("l"));
+  expect(reg.log.find((e: unknown[]) => e[1] === "i")[2]).toEqual({ op: "equipar", id: "chip_forca" });
+  /* desequipar volta a vaga */
+  await irPara(page, "Crescer", "Itens", "crescer/itens");
+  await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Desequipar" }).click();
+  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
+  expect(erros).toEqual([]);
+});
+
+/* Tamer com a medalha da Campina, o item dela e uma Carta de Folego da revanche (um Rookie de antes a ganhou) */
+const TAMER_ITENS = { versao: 2, log: [
+  ["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }],
+  ["item", { id: "chip_forca", n: 1, quando: 1, origem: "medalha", lider: "npc_tier1_brutamontes", pet: SAVE_V6.semente, forma: "Armadillomon", est: "crianca", tick: 900 }],
+  ["item", { id: "carta_folego", n: 2, quando: 2, origem: "revanche", lider: "npc_tier1_brutamontes", pet: 1, forma: "Armadillomon", est: "crianca", tick: 900 }],
+] };
+
+test("itens: a carta se escolhe antes da luta, entra no registro do pet e sai do inventário do Tamer", async ({ page }) => {
+  test.setTimeout(180_000);
+  await semear(page, SAVE_V6, undefined, TAMER_ITENS);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/campanha");
+  const escolha = page.locator(".carta-escolha select");
+  await expect(escolha).toBeVisible();
+  await escolha.selectOption("carta_folego");
+  await expect(page.locator(".carta-escolha")).toContainText("+20 de guts");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-carta")).toContainText("Carta usada: Carta de Fôlego");
+  await page.locator(".res-continuar").click();
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const k = reg.log.findIndex((e: unknown[]) => e[1] === "k");
+  expect(reg.log[k][2]).toEqual({ id: "carta_folego" });
+  expect(reg.log[k + 1][1]).toBe("l");
+  expect(await numTamer(page, "carta_usada")).toBe(1);
+  /* acabou a carta: a escolha some */
+  await expect(page).toHaveURL(/#\/lutar\/campanha$/);
+  await expect(page.locator(".carta-escolha")).toHaveCount(0);
+  await irPara(page, "Crescer", "Itens", "crescer/itens");
+  await expect(page.locator(".item-card", { hasText: "Carta de Fôlego" })).toContainText("×0");
+  expect(erros).toEqual([]);
+});
+
+/* a tela dos itens: celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`itens: tela em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_V6, undefined, TAMER_ITENS);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/crescer/itens");
+    await expect(page.locator(".item-card")).toHaveCount(9);
+    await expect(page.locator(".item-card.item-falta")).toHaveCount(7);
+    await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Equipar" }).click();
+    await expect(page.locator(".item-card.item-eq")).toHaveCount(1);
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(desk => {
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".itens-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const lista = document.querySelector(".itens-col")!.getBoundingClientRect(), resumo = document.querySelector(".itens-resumo")!.getBoundingClientRect();
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+    }, largura >= 1100);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.aoLado, "desktop: os itens ao lado do resumo").toBe(largura >= 1100);
+    /* a escolha da carta na campanha, no mesmo tamanho */
+    await irPara(page, "Lutar", "Campanha", "lutar/campanha");
+    await expect(page.locator(".carta-escolha select")).toBeVisible();
+    const c = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth, alt: document.querySelector(".carta-escolha select")!.getBoundingClientRect().height }));
+    expect(c.larg).toBeLessThanOrEqual(c.janela);
+    expect(c.alt).toBeGreaterThanOrEqual(44);
     expect(erros).toEqual([]);
   });
 }

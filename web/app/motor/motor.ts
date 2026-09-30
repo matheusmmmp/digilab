@@ -9,10 +9,12 @@ import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
 import { arenaDaLuta, jogarArena, sementeDaSerie, type Arena } from "./arenas.ts";
+import { CIT } from "./constantes.ts";
+import { cartaDe, chipDe, chipServe, estagioMinimo, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
-import { GambitsPet, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
+import { GambitsPet, chaveRegra, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
 import { NOME_EXERCICIO, nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
@@ -20,7 +22,7 @@ import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
 import type {
   AcaoDono, AcaoPet, Carater, Chamado, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta,
-  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, Origem, Ramo, Ritmo, Temperamento, VersaoPet,
+  EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, OpItem, Origem, Ramo, Ritmo, Stats, Temperamento, VersaoPet,
 } from "./tipos.ts";
 
 /** medalhas do Tamer para uma evolucao (pets v6): tem X, precisa Y */
@@ -42,7 +44,11 @@ interface RegistroDesejo { atual: { tick: number; tipo: Desejo["tipo"]; alvo: st
 /** a luta como o motor a joga (Motor.montarLuta): os lutadores, a arena (pets v6 contra o lider; null fora dela), as regras
     do pet com que ele lutou (a lista ativa, ou a do Lago) e as lutas: uma, ou as seguidas da Cidadela (ate a primeira que
     nao for vitoria) */
-export interface LutaMontada { A: Lutador; B: Lutador; arena: Arena | null; usadas: string[] | null; serie: ResultadoLuta[] }
+export interface LutaMontada {
+  A: Lutador; B: Lutador; arena: Arena | null; usadas: string[] | null; serie: ResultadoLuta[];
+  /** pets v6: a carta do Tamer que valeu nesta luta (itens.ts; evento "k" logo antes da luta); null sem carta */
+  carta: string | null;
+}
 /** `res`: a ultima luta da serie (a unica, fora da Cidadela); `venceu`: todas as lutas da serie foram vitorias */
 export interface ResultadoLutaPet extends LutaMontada { res: ResultadoLuta; venceu: boolean; lesao?: boolean }
 
@@ -55,6 +61,8 @@ export interface Educacao {
 }
 export interface Lutas { lutas: number; vitorias: number; derrotas: number; empates: number; lesoes: number; tratadas: number }
 export class PetMorto extends Error {}
+const NIVEL_CHIP: Partial<Record<Estagio, string>> = { crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
+const nomeEstagioChip = (e: Estagio): string => NIVEL_CHIP[e] ?? e;
 const NECESSIDADE: Record<Chamado, "fome" | "higiene" | "humor"> = { fome: "fome", higiene: "higiene", carinho: "humor" };
 const lutasZeradas = (): Lutas => ({ lutas: 0, vitorias: 0, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 });
 /** acao que atende um chamado REAL (carinho = mau humor: elogio tambem resolve; petisco atende a fome) */
@@ -111,6 +119,14 @@ export class Motor {
   dur: { bebe: number; crianca: number; adolescente: number; adulto: number } = { ...DUR_EVO, adulto: CMG.durRapida };
   /** v6: medalhas do Tamer que este pet conhece (evento "u"); a evolucao espera por elas (docs/DESIGN_MEDALHAS_ARENAS.md) */
   medalhas = 0;
+  /** v6 (itens, medalhas parte 3; motor/itens.ts): os chips do Tamer equipados neste pet, na ordem em que entraram (evento "i") */
+  chips: string[] = [];
+  /** v6: a carta que vale na proxima luta (evento "k"); a luta a consome */
+  carta: string | null = null;
+  /** v6: as cartas que valeram nas lutas deste pet, na ordem */
+  cartasUsadas: string[] = [];
+  /** v6: o registro tem evento de item; so entao os itens entram na assinatura (a dos pets sem item nao muda) */
+  comItens = false;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
     if (![1, 2, 3, 4, 5, 6].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
@@ -204,11 +220,13 @@ export class Motor {
   /** a arena cuja regra vale na luta contra o rival (pets v6 contra o lider; docs/DESIGN_MEDALHAS_ARENAS.md, secao 3) */
   arenaDe(rival: string): Arena | null { return NPC[rival] ? arenaDaLuta(rival, this.versao) : null; }
   /** luta contra bot: entra no registro (rival + semente) e ensina os gambits */
-  lutar(rival: string, semente: number): ResultadoLutaPet {
+  lutar(rival: string, semente: number, carta: string | null = null): ResultadoLutaPet {
     if (!NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
     if (NPC[rival] && !(rival in this.campanha)) throw new Error(`${NPC[rival]!.nome} não está na campanha deste pet`);
     if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[this.lugarDe(rival) - 1].nome} antes`);
+    /* pets v6: a carta do Tamer entra no registro logo antes da luta, e a luta a consome */
+    if (carta !== null) { this._validarCarta(carta); this.log.push([this.e.tick, "k", { id: carta }]); this._armarCarta(carta); }
     this.log.push([this.e.tick, "l", { r: rival, s: semente }]);
     return this._lutar(rival, semente);
   }
@@ -217,12 +235,12 @@ export class Motor {
       fator calibrado (e o contra-golpe, na Torre de pedra), o pet com a lista sem o dono (Lago) e as lutas seguidas sem cura
       (Cidadela). O _lutar joga por aqui; a tela refaz as lutas do registro por aqui tambem */
   montarLuta(rival: string, semente: number): LutaMontada {
-    const L = this.lutadores(rival);
-    return { ...L, serie: jogarArena(L.A, L.B, semente, this.regras, L.arena?.lutas ?? 1, this.desafiado) };
+    const L = this.lutadores(rival), carta = this.carta;
+    return { ...L, carta, serie: jogarArena(L.A, L.B, semente, this.regras, L.arena?.lutas ?? 1, this.desafiado, carta ? cartaDe(carta).carta : null) };
   }
   /** os dois lados da luta contra o rival, sem jogar (a previa do palco usa isto): o pet (no Lago, com a lista sem o dono),
       o rival (o lider com a regra da arena) e as regras do pet com que ele luta */
-  lutadores(rival: string): Omit<LutaMontada, "serie"> {
+  lutadores(rival: string): Omit<LutaMontada, "serie" | "carta"> {
     const npc = !!NPC[rival], arena = this.arenaDe(rival);
     let A = lutadorPet(this, "Seu pet", npc), usadas = this.gp ? this.gp.ativas.slice() : null;
     if (arena?.regra === "vinculo" && this.gp) {
@@ -233,6 +251,10 @@ export class Motor {
   }
   private _lutar(rival: string, semente: number): ResultadoLutaPet {
     const M = this.montarLuta(rival, semente), n = M.arena?.lutas ?? 1;
+    if (this.carta) {
+      this._hist({ t: this.e.tick, quem: "carta", a: `usou a ${cartaDe(this.carta).nome} contra ${NOME_BOT[rival]}` });
+      this.cartasUsadas.push(this.carta); this.carta = null;
+    }
     let lesao = false;
     M.serie.forEach((res, k) => {
       /* cada luta da serie ensina e conta, com a semente dela (a primeira e a do evento) */
@@ -279,6 +301,49 @@ export class Motor {
       console.warn("intervencao do registro ignorada no replay:", op, msg);
       if (this.gp) this.gp.mudancas.push({ luta: this.gp.nLutas, texto: `intervenção antiga ignorada (${op}): ${msg}`, dono: true });
     }
+  }
+
+  /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
+  /** chips que este pet pode ter equipados, pelas medalhas que ele conhece (0 nos v1-v5) */
+  get vagasChip(): number { return this.versao >= CIT.versaoPet ? vagasDeChip(this.medalhas) : 0; }
+  /** por que o chip nao pode entrar agora (null: pode). O motor nao sabe se o Tamer tem o chip: o app confere antes */
+  porqueNaoEquipa(id: string): string | null {
+    if (this.versao < CIT.versaoPet) return "itens só em pets v6";
+    const c = chipDe(id);
+    if (this.morte) return "o pet morreu";
+    if (this.chips.includes(id)) return `${c.nome} já está equipado`;
+    if (!chipServe(c, this.estagioAtual)) return `${c.nome} pede um ${nomeEstagioChip(estagioMinimo(c))} ou mais`;
+    if (this.chips.length >= this.vagasChip)
+      return this.vagasChip ? `as ${this.vagasChip} vaga${this.vagasChip === 1 ? "" : "s"} de chip estão ocupadas: desequipe um antes` : "sem vaga de chip: a primeira vem com a primeira medalha";
+    return c.tipo === "chip_regra" ? this.gp!.porqueNaoEquipaRegra(chaveRegra(c.regra)) : null;
+  }
+  equipar(id: string): void { this._conferirMorte(); this._vivo(); this._validarItem("equipar", id); this.log.push([this.e.tick, "i", { op: "equipar", id }]); this._item("equipar", id); }
+  desequipar(id: string): void { this._conferirMorte(); this._vivo(); this._validarItem("desequipar", id); this.log.push([this.e.tick, "i", { op: "desequipar", id }]); this._item("desequipar", id); }
+  private _validarItem(op: OpItem, id: string): void {
+    if (op === "equipar") { const erro = this.porqueNaoEquipa(id); if (erro) throw new Error(erro); }
+    else if (op === "desequipar") { if (this.versao < CIT.versaoPet) throw new Error("itens só em pets v6"); if (!this.chips.includes(id)) throw new Error(`${chipDe(id).nome} não está equipado`); }
+    else throw new Error("operação de item desconhecida: " + JSON.stringify(op));
+  }
+  private _item(op: OpItem, id: string): void {
+    this._validarItem(op, id);
+    const c = chipDe(id);
+    if (op === "equipar") { this.chips.push(id); if (c.tipo === "chip_regra") this.gp!.equiparRegra(chaveRegra(c.regra), c.nome); }
+    else { this.chips.splice(this.chips.indexOf(id), 1); if (c.tipo === "chip_regra") this.gp!.desequiparRegra(chaveRegra(c.regra), c.nome); }
+    this.comItens = true;
+    this._hist({ t: this.e.tick, quem: "item", a: `${op === "equipar" ? "equipou" : "desequipou"} ${c.nome}` });
+  }
+  private _validarCarta(id: string): void {
+    if (this.versao < CIT.versaoPet) throw new Error("cartas só em pets v6");
+    cartaDe(id);
+    if (this.carta !== null) throw new Error("já tem uma carta para a próxima luta");
+  }
+  private _armarCarta(id: string): void { this._validarCarta(id); this.carta = id; this.comItens = true; }
+  /** o treino com que o pet luta: o dele mais o dos chips de stat, dentro dos tetos (itens.bonusChipsStat); sem chip, o de sempre */
+  pontosDeLuta(): Stats | null {
+    const treinou = this.treino.total > 0;
+    if (!this.chips.length) return treinou ? this.treino.pontos : null;
+    const est = this.estagioAtual, pe = est === "bebe" ? 0 : this.treino.pontosEst[est as EstagioTreino | "mega"] ?? 0;
+    return pontosComChips(this.chips, est, this.treino.pontos, pe, treinou);
   }
 
   /* ---------------------------------------------------------------- dono */
@@ -711,12 +776,13 @@ export class Motor {
     return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
       ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : []),
-      ...(this.versao >= 6 ? [this.medalhas] : [])]);
+      ...(this.versao >= 6 ? [this.medalhas] : []), ...(this.comItens ? [[this.chips, this.carta, this.cartasUsadas]] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
     const t = ev[0];
     if (this.e.tick !== t) throw new Error(`registro fora de ordem no tick ${t}`);
+    if (this.carta !== null && ev[1] !== "l") throw new Error(`carta para a próxima luta, mas o evento seguinte do registro não é luta (tick ${t})`);
     switch (ev[1]) {
       case "t": this._avancar(ev[2]); break;
       case "d": this._aplicar(ev[2]); break;
@@ -726,6 +792,8 @@ export class Motor {
       case "o": this._origem(ev[2]); break;
       case "c": this._config(ev[2].dur); break;
       case "u": this._liberar(ev[2].n); break;
+      case "i": this._item(ev[2].op, ev[2].id); break;
+      case "k": this._armarCarta(ev[2].id); break;
       default: throw new Error("tipo de evento desconhecido no registro: " + (ev as unknown[])[1]);
     }
   }

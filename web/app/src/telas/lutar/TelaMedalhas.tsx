@@ -1,7 +1,7 @@
 /* Lutar · Medalhas (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 3 e 4): as 6 medalhas do Tamer, quais ja sao dele, com que
    pet, onde se ganha cada uma (o lider e a regra da arena) e o que cada uma libera. Tudo sai do registro do Tamer (tamer.ts)
    e das tabelas do motor (motor/medalhas.ts e motor/arenas.ts). So leitura. */
-import { ARENA_POR_ID, CMD, LUGARES_V6, MEDALHAS, NOME_EST, NPC, nomeForma, type Estagio } from "../../../motor/index.ts";
+import { ARENA_POR_ID, CARTA_DA_REVANCHE, CMD, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, NOME_EST, NPC, itemDe, nomeForma, type Estagio } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
@@ -28,7 +28,7 @@ export function TelaMedalhas() {
         <section class="dl-card med-resumo" aria-labelledby="med-tit">
           <h2 id="med-tit">Medalhas do Tamer</h2>
           <p class="med-conta"><span class="dl-num">{t.n}</span><span>de {MEDALHAS.length}</span></p>
-          <p>As medalhas são suas, não do pet: ficam quando ele é guardado ou morre, e valem para todos os pets seguintes. Vença o <b>líder</b> de cada lugar da campanha para ganhar a dele.</p>
+          <p>As medalhas são suas, não do pet: ficam quando ele é guardado ou morre, e valem para todos os pets seguintes. Vença o <b>líder</b> de cada lugar da campanha para ganhar a dele, com um item (Crescer · Itens).</p>
           <ul class="med-regras" aria-label="O que as medalhas liberam">
             {(Object.entries(CMD) as [Estagio, number][]).map(([alvo, n]) => (
               <li key={alvo} class={t.n >= n ? "ok" : ""}><b>{n}</b><span>{passo(alvo)}</span></li>
@@ -52,6 +52,7 @@ export function TelaMedalhas() {
                 {ar && <span class="med-regra"><b>{ar.titulo}:</b> {ar.frase}</span>}
                 <span class={g ? "med-status ok" : "med-status"}>{g ? `ganha com ${g.forma} no dia ${diaDe(g.tick)}` : "ainda não"}</span>
                 <span class="med-libera">libera: {libera(i + 1)}</span>
+                <span class="med-item">dá: <b>{itemDe(ITEM_DA_MEDALHA[md.id]).nome}</b>{t.itemDaMedalha(md.lider) ? " (já é seu)" : ""} · revanche: {itemDe(CARTA_DA_REVANCHE[md.id]).nome}</span>
               </span>
               <span class="med-lider" title={`${n.nome}, líder ${noLugar(LUGARES_V6[md.lugar].nome).replace(/^n/, "d")}`}>{img(md.lider)}<small>líder</small></span>
             </li>

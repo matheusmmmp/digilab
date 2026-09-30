@@ -2630,6 +2630,58 @@
   {
    "web": "CESC_V6.fatorNpc.npc_v5_machinedramon",
    "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CIT.versaoPet",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.vagas[0]",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.vagas[1]",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.vagas[2]",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.tetoChipStat",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.tipico.crianca",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.tipico.adolescente",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.tipico.adulto",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.tipico.mega",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.espera",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.gutsFolego",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.curaAbaixo",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CIT.curaFracao",
+   "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
   }
  ],
  "chaves_v21d": [

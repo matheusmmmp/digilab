@@ -271,3 +271,31 @@
 /* Evolucao, pets v6: a medalha do Tamer que falta (pronto = o pet so espera a medalha) */
 .evo-medalha{margin:0;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border);font-size:13px;font-weight:700}
 .evo-medalha.pronto{box-shadow:inset 0 0 0 2px var(--dl-navy)}
+/* Itens do Tamer (medalhas, parte 3): o inventario e os chips do pet ativo */
+.itens-tela{align-content:start;padding-bottom:16px}
+.itens-resumo{display:grid;gap:8px}
+.itens-resumo h2{margin:0}
+.itens-conta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;font-weight:900;color:var(--dl-text-2)}
+.itens-conta .dl-num{font-size:30px;line-height:1;color:var(--dl-text)}
+.itens-vagas{display:grid;gap:2px;margin:0;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy);font-size:13px;font-weight:700}
+.itens-vagas span{font-size:12px;color:var(--dl-text-2)}
+.itens-lista{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+.item-card{display:grid;gap:4px;background:var(--dl-surface);border-radius:12px;padding:10px 12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow);min-width:0}
+.item-card.item-eq{box-shadow:0 0 0 3px var(--dl-action),0 3px 0 3px var(--dl-navy-deep)}
+.item-card.item-falta{background:var(--dl-surface-2);box-shadow:0 0 0 2px var(--dl-border)}
+.item-card.item-falta .item-nome,.item-card.item-falta .item-efeito{color:var(--dl-text-2)}
+.item-cab{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.item-nome{font-size:15px;font-weight:900}
+.item-tag--chip_stat{background:var(--dl-ok);color:var(--dl-ok-ink)}
+.item-tag--chip_regra{background:var(--dl-learned-bg);color:var(--dl-learned-ink)}
+.item-tag--carta{background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+.item-qtd{margin-left:auto;font-size:18px;font-weight:900}
+.item-efeito{font-size:13px;line-height:18px;font-weight:700}
+.item-regra{font-size:12px;line-height:17px;font-weight:800;color:var(--dl-text);background:var(--dl-surface-2);border-radius:8px;padding:4px 8px;box-shadow:inset 0 0 0 2px var(--dl-border)}
+.item-soma{font-size:12px;font-weight:800;color:var(--dl-text)}
+.item-onde,.item-porque{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.item-bt{justify-self:start}
+@media (min-width:1100px){
+  .itens-tela.desk{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);align-items:start}
+  .itens-lista{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+}

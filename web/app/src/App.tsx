@@ -20,6 +20,7 @@ import { TelaRegistro } from "./telas/diario/TelaRegistro.tsx";
 import { TelaAprend } from "./telas/crescer/TelaAprend.tsx";
 import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
+import { TelaItens } from "./telas/crescer/TelaItens.tsx";
 import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
 import { TelaMedalhas } from "./telas/lutar/TelaMedalhas.tsx";
@@ -212,7 +213,7 @@ export function App() {
           </div>
         )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
-          {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao />
+          {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
             : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} verReplay={abrirReplay} />
             : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
             : rota.aba === "medalhas" ? <TelaMedalhas />
