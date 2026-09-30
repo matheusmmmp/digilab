@@ -9,7 +9,7 @@ import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
-import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, mudarMotor, tamerAtual, useJogo } from "../../jogo.ts";
 import { tentativas, type LutadorTela, type Palco } from "../../luta.ts";
 import { mapaDe } from "./TelaCampanha.tsx";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
@@ -88,12 +88,17 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
 
   /* a Liga dos Lideres (Fronteira, pets v6): a tentativa inteira; vencer as 6 e o titulo */
   const liga = r.lideres, venceuLiga = !!liga && r.serie.length === r.nLutas && venceu;
-  const tag = liga ? "Fronteira · Liga dos Líderes" : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
-  const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
+  /* uma instalacao da Fronteira (pets v6): a sequencia de vitorias ate a primeira que nao foi; o recorde do Tamer, se bateu */
+  const inst = r.instalacao, vitInst = inst ? r.serie.filter(x => x.pontosA === 1).length : 0, rivaisLista = liga ?? r.rivais;
+  const tag = liga ? "Fronteira · Liga dos Líderes" : inst ? `Fronteira · ${inst.nome}` : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
+  const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : inst ? (r.recorde ? "Recorde!" : "Fim da sequência")
+    : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const n = res.turnos.length;
   /* lutas seguidas (Cidadela e Liga): o resultado e o da serie; "n turnos" e o da ultima luta */
   const serie = r.nLutas > 1 ? r.serie : null;
-  const sub = liga
+  const sub = inst
+    ? `${vitInst} vitória${vitInst === 1 ? "" : "s"} seguida${vitInst === 1 ? "" : "s"}; ${venceu ? `venceu as ${r.serie.length} lutas` : `parou na luta ${r.serie.length}, contra ${r.rivais![r.serie.length - 1].nomeTela}`}`
+    : liga
     ? (venceuLiga ? `${p.A.nomeTela} venceu os ${r.nLutas} líderes seguidos` : `A Liga parou na luta ${r.serie.length} de ${r.nLutas}, contra ${liga[r.serie.length - 1].nomeTela}`)
     : serie
     ? (venceu ? `${p.A.nomeTela} venceu as ${r.nLutas} lutas seguidas` : `A série parou na luta ${serie.length} de ${r.nLutas}`)
@@ -102,7 +107,10 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond, m.versao),
     danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond, m.versao);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
-  const nums: [string, string][] = liga
+  const recordeTamer = inst ? tamerAtual().recorde(inst.id) : null;
+  const nums: [string, string][] = inst
+    ? [[String(vitInst), "vitórias seguidas"], [String(m.instalacoes[inst.id].tentativas), "tentativas"], [String(recordeTamer?.valor ?? 0), "recorde"]]
+    : liga
     ? [[String(n), "turnos"], [String(m.liga.tentativas), "tentativas"], [`${r.serie.filter(x => x.pontosA === 1).length} de ${r.nLutas}`, "lutas vencidas"]]
     : npc
     ? [[String(n), "turnos"], [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]
@@ -170,16 +178,22 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
             <span class="res-ilha-txt"><span class="res-selo">medalha de ouro</span><b>Campeão da Liga dos Líderes</b>
               <span>{r.titulo.n === 1 ? "O título é seu, Tamer: a jornada chegou ao fim." : `${r.titulo.forma} também venceu a Liga (título ${r.titulo.n}).`}</span></span>
           </div>}
+          {r.recorde && inst && <div class="res-titulo res-recorde" role="status">
+            <span class="res-recorde-num dl-num" aria-hidden="true">{r.recorde.valor}</span>
+            <span class="res-ilha-txt"><span class="res-selo">recorde novo</span><b>{inst.nome}</b>
+              <span>{r.recorde.valor} vitória{r.recorde.valor === 1 ? "" : "s"} seguida{r.recorde.valor === 1 ? "" : "s"}: o recorde agora é seu, Tamer, com {r.recorde.forma}.</span></span>
+          </div>}
           {serie && <section class="res-serie" aria-labelledby="res-serie-tit">
-            <h3 id="res-serie-tit">{liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
+            <h3 id="res-serie-tit">{liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : inst ? `${inst.nome} · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
             <ol>{Array.from({ length: r.nLutas }, (_, i) => {
               const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
               return <li key={i} class={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
                 <span class="res-t">Luta {i + 1}</span>
-                <span>{liga ? <><b>{liga[i].nomeTela}</b> ({liga[i].estiloTela}): </> : null}{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
+                <span>{rivaisLista ? <><b>{rivaisLista[i].nomeTela}</b> ({rivaisLista[i].estiloTela}): </> : null}{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
               </li>;
             })}</ol>
           </section>}
+          {inst?.regra === "sozinho" && <p class="res-arena-nota" role="note">Palácio: {p.A.nomeTela} lutou sem as suas travas, vetos e chips de regra, com as regras que ele mesmo escolheu.</p>}
           {r.arena?.regra === "vinculo" && <p class="res-arena-nota" role="note">Arena do Lago: {p.A.nomeTela} lutou sem as suas travas e vetos, com as regras que ele mesmo escolheu.</p>}
           <div class="res-nums-corpo"><Numeros itens={nums} /></div>
           {momentos.length > 0 && <section class="res-decidiu" aria-labelledby="res-dec-tit">

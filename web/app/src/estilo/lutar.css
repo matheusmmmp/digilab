@@ -571,6 +571,27 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .fr-st--nao{color:var(--dl-text-2)}
 :root[data-tema="escuro"] .fr-st--der{color:var(--dl-erro)}
 @media (prefers-color-scheme:dark){ :root:not([data-tema="claro"]) .fr-st--der{color:var(--dl-erro)} }
+/* as instalacoes da Fronteira (parte 4b): um card por instalacao, com o recorde do Tamer em destaque */
+.fr-inst{display:grid;gap:8px;align-content:start}
+.fr-inst h2,.fr-inst p{margin:0}
+.fr-inst-lista{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fr-inst-card{display:grid;gap:6px}
+.fr-inst-card--fechada{opacity:.85}
+.fr-inst-cab{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fr-inst-nome{font-size:15px;font-weight:900}
+.fr-inst-rec{display:grid;justify-items:center;line-height:1}
+.fr-inst-rec .dl-num{font-size:26px}
+.fr-inst-rec small{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.fr-inst-frase{font-size:13px;line-height:18px;font-weight:700}
+.fr-inst-quem,.fr-inst-pet{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.fr-inst-tentar{width:100%;min-height:48px}
+.res-recorde-num{flex:none;min-width:40px;text-align:center;font-size:32px;line-height:1}
+.med-recordes{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.med-recordes li{display:flex;align-items:center;gap:10px;border-radius:12px;padding:6px 12px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border);font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.med-recordes li.ganha{box-shadow:inset 0 0 0 3px var(--dl-highlight)}
+.med-recordes .dl-num{flex:none;min-width:32px;text-align:center;font-size:24px;line-height:1}
+.med-recordes li > span{display:grid;gap:2px}
+.med-recordes b{font-size:14px;font-weight:900;color:var(--dl-text)}
 @media (min-width:1100px){
   .fr-tela.desk{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);align-items:start}
   .fr-lista{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
