@@ -89,12 +89,13 @@ export function perfilNeutro(): Perfil {
   };
 }
 /** NPC da campanha: mesma conversao de perfilDe com stats uniformes (campanha.perfil_de_stats). Com a escala: perfil
-    neutro (10 em cada stat) e `escala` = E do NPC (vida do estagio sugerido x fator; campanha.npc) */
-export function perfilNPC(total: number, estagio: Estagio = "adulto", escala?: number): Perfil {
+    neutro (10 em cada stat) e `escala` = E do NPC (vida do estagio sugerido x fator; campanha.npc). `tecnica`: so o lider de
+    arena que tem uma (arenas.ts; os NPCs de sempre nao tem tecnica nem passiva) */
+export function perfilNPC(total: number, estagio: Estagio = "adulto", escala?: number, tecnica: Tecnica | null = null): Perfil {
   const v = escala !== undefined ? 10 : total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])) as Stats, est = multEstagio(estagio),
     gMax = (CV21.gMaxBase + CV21.gMaxFolego * v) * est;
   return {
-    est: estagio, tecnica: null, passiva: null, stats: s, ...(escala !== undefined ? { escala } : {}),
+    est: estagio, tecnica, passiva: null, stats: s, ...(escala !== undefined ? { escala } : {}),
     hpMax: (CV21.hpBase + CV21.hpVigor * v) * (escala !== undefined ? 1 : est), guts0: Math.min(gMax, (CV21.g0Base + CV21.g0Folego * v) * est),
     gutsMax: gMax, regen: CV21.regenBase + CV21.regenRec * v,
     mPerto: CV21.multBase + CV21.multPonto * v, mDisparo: CV21.multBase + CV21.multPonto * v,

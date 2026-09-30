@@ -6,9 +6,10 @@
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
 import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
-  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE,
-  estiloBot, formaRival, gambitsAdulto,
+  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
+  estiloBot, formaRival, gambitNPC, gambitsAdulto,
 } from "./bots.ts";
+import type { Arena } from "./arenas.ts";
 import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
@@ -135,9 +136,19 @@ export class GambitsPet {
       .filter(k => !this.ativas.includes(k) && !this.vetos.includes(k) && permitida(regraDe(k), this.forma!));
   }
   estilo(): Estilo { return { nome: "aprendido", gambits: { regras: this.ativas.map(regraDe), final: this.final }, eps: CV.eps }; }
-  aprender(res: ResultadoLuta, semente: number): void {
+  /** Lago (regra de vinculo, arenas.ts): a lista que o pet usaria sem o dono. Sem as travas (so a nota dele ordena) e com as
+      regras vetadas de volta (as que ele conhece, com nota, e a forma permite), cortada na capacidade do estagio. Sem trava e
+      sem veto, e a lista de sempre (a ativa ja esta na ordem da nota) */
+  listaSozinho(): string[] {
+    const cap = CV21.maxRegras[baseDe(this.forma!.est)];
+    const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))];
+    return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
+  }
+  /** `usadas`: as regras da lista com que o pet lutou, na ordem (o indice do motivo de cada turno aponta para ela); por padrao
+      as ativas. Na arena do Lago e a listaSozinho; nas lutas seguidas da Cidadela, a lista do comeco da serie */
+  aprender(res: ResultadoLuta, semente: number, usadas: string[] = this.ativas.slice()): void {
     this.nLutas++;
-    const soma: Record<string, number> = {}, cont: Record<string, number> = {}, usadas = this.ativas.slice();
+    const soma: Record<string, number> = {}, cont: Record<string, number> = {};
     for (const tr of res.turnos) {
       if (typeof tr.ma !== "number" || tr.ma >= usadas.length) continue;
       const k = usadas[tr.ma], saldo = (tr.dano[1] - tr.dano[0]) / res.E0.L[0].hpMax;
@@ -204,14 +215,18 @@ export function lutadorPet(m: PetLutador, rotulo: string, absoluto = false): Lut
   };
 }
 /** lutador de um bot: NPC da campanha, forma adulta canonica da V2.1 ou bot classico (stats neutros); R = regras da
-    luta (CV21D contra um pet v6: a muralha e o vigia com as listas variantes) */
-export function lutadorBot(nome: string, R: RegrasLuta = null): Lutador {
+    luta (CV21D contra um pet v6: a muralha e o vigia com as listas variantes); arena = o NPC e o lider e a luta e de arena
+    (pets v6, arenas.arenaDaLuta): o fator calibrado do lider e, na Torre de pedra, o contra-golpe */
+export function lutadorBot(nome: string, R: RegrasLuta = null, arena: Arena | null = null): Lutador {
   const n = NPC[nome];
   if (n) {
+    if (arena && arena.lider !== nome) throw new Error(`${n.nome} não é o líder da arena ${arena.id}`);
+    const tec = arena?.tecnica ?? null, base = estiloBot(nome, R);
+    const estilo = tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala */
-    if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estiloBot(nome, R), eps: CESC.epsNpc },
-      cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0) * (n.fator ?? CESC.fatorNpc[nome])) };
-    return { nome: "Rival " + n.nome, estilo: estiloBot(nome, R), cond: perfilNPC(n.total, n.estagio || "adulto") };
+    if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc },
+      cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0) * (arena?.fator ?? n.fator ?? CESC.fatorNpc[nome]), tec) };
+    return { nome: "Rival " + n.nome, estilo, cond: perfilNPC(n.total, n.estagio || "adulto", undefined, tec) };
   }
   if (BOTS_V21[nome as FormaAdultaNormal]) {
     const f = formaRival(nome as FormaAdultaNormal);

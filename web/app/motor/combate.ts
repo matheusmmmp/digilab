@@ -273,9 +273,15 @@ export interface Turno {
 }
 export interface ResultadoLuta { E0: EstadoLuta; turnos: Turno[]; pontosA: number; fim: "ko" | "limite"; E: EstadoLuta }
 
-export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta = null): ResultadoLuta {
+/** `ini`: o lado A comeca com esta vida e este guts (as lutas seguidas da arena da Cidadela, sem cura; arenas.jogarArena);
+    null = a luta de sempre, os dois inteiros */
+export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta = null, ini: { hp: number; guts: number } | null = null): ResultadoLuta {
   const ra = criarRng(hashSemente("v2", semente, 0)), rb = criarRng(hashSemente("v2", semente, 1));
   let E = estadoV2(A.cond, B.cond), fim: ReturnType<typeof fimV2>;
+  if (ini) {
+    if (!(ini.hp > 0 && ini.hp <= E.L[0].hpMax) || !(ini.guts >= 0)) throw new Error(`começo da luta inválido: vida ${ini.hp}, guts ${ini.guts}`);
+    E = { ...E, L: [{ ...E.L[0], hp: ini.hp, guts: Math.min(ini.guts, E.L[0].gutsMax) }, E.L[1]] };
+  }
   const E0 = E, turnos: Turno[] = [];
   while (!(fim = fimV2(E))) {
     /* o vigia ve a intencao do oponente (sem exploracao, sem rng) antes de decidir */

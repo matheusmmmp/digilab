@@ -1,0 +1,252 @@
+{
+ "descricao": "Calibracao dos lideres das arenas (pets v6, medalhas parte 2): motor web, escala ligada, regras V21D, regra de cada arena.",
+ "conjunto": "validacao",
+ "sementes": [
+  4101,
+  4202,
+  4303,
+  4404,
+  4505
+ ],
+ "n_por_semente": 10,
+ "pet_lado": "A",
+ "metas": {
+  "sem_treino_max": 0.3,
+  "com_treino_min": 0.8,
+  "pior_forma_min": 0.5
+ },
+ "treino_tipico": {
+  "crianca": 8,
+  "adolescente": 22,
+  "adulto": 36,
+  "mega": 40
+ },
+ "arenas": {
+  "campina": {
+   "lider": "npc_tier1_brutamontes",
+   "regra": "nenhuma",
+   "estagio": "crianca",
+   "fator": 1.1,
+   "sem": 0.2162,
+   "com": 0.9788,
+   "pior": 0.97,
+   "pior_forma": "sereno",
+   "passa": true,
+   "folga": 0.0837,
+   "travados": [],
+   "por_forma": {
+    "sereno": {
+     "sem": 0.135,
+     "com": 0.97
+    },
+    "arisco": {
+     "sem": 0.2975,
+     "com": 0.9875
+    }
+   }
+  },
+  "torre": {
+   "lider": "npc_tier2_carcereiro",
+   "regra": "paciencia",
+   "estagio": "adolescente",
+   "fator": 1.4,
+   "sem": 0.2769,
+   "com": 0.8756,
+   "pior": 0.565,
+   "pior_forma": "colosso",
+   "passa": true,
+   "folga": 0.0231,
+   "travados": [],
+   "por_forma": {
+    "brigao": {
+     "sem": 0.0425,
+     "com": 0.9875
+    },
+    "guardiao": {
+     "sem": 0.0625,
+     "com": 0.95
+    },
+    "cacador": {
+     "sem": 1,
+     "com": 1
+    },
+    "colosso": {
+     "sem": 0.0025,
+     "com": 0.565
+    }
+   }
+  },
+  "floresta": {
+   "lider": "npc_v6_youkomon",
+   "regra": "leitura",
+   "estagio": "adolescente",
+   "fator": 1.2,
+   "sem": 0.205,
+   "com": 0.8919,
+   "pior": 0.665,
+   "pior_forma": "colosso",
+   "passa": true,
+   "folga": 0.0919,
+   "travados": [],
+   "por_forma": {
+    "brigao": {
+     "sem": 0.7625,
+     "com": 1
+    },
+    "guardiao": {
+     "sem": 0.0025,
+     "com": 1
+    },
+    "cacador": {
+     "sem": 0.0275,
+     "com": 0.9025
+    },
+    "colosso": {
+     "sem": 0.0275,
+     "com": 0.665
+    }
+   }
+  },
+  "cidadela": {
+   "lider": "npc_v5_myotismon",
+   "regra": "resistencia",
+   "estagio": "adulto",
+   "fator": 0.7,
+   "sem": 0.14,
+   "com": 0.92,
+   "pior": 0.615,
+   "pior_forma": "sentinela",
+   "passa": true,
+   "folga": 0.115,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.3075,
+     "com": 1
+    },
+    "furioso": {
+     "sem": 0.2275,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0.1025,
+     "com": 1
+    },
+    "muralha": {
+     "sem": 0.355,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0,
+     "com": 0.615
+    },
+    "emboscador": {
+     "sem": 0,
+     "com": 0.745
+    },
+    "vigia": {
+     "sem": 0.015,
+     "com": 1
+    },
+    "tita": {
+     "sem": 0.1125,
+     "com": 1
+    }
+   }
+  },
+  "lago": {
+   "lider": "npc_v6_marinbullmon",
+   "regra": "vinculo",
+   "estagio": "adulto",
+   "fator": 1.2,
+   "sem": 0.1144,
+   "com": 0.9216,
+   "pior": 0.67,
+   "pior_forma": "sentinela",
+   "passa": true,
+   "folga": 0.1216,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.135,
+     "com": 0.995
+    },
+    "furioso": {
+     "sem": 0.1825,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0.12,
+     "com": 1
+    },
+    "muralha": {
+     "sem": 0.1275,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0.005,
+     "com": 0.67
+    },
+    "emboscador": {
+     "sem": 0,
+     "com": 0.725
+    },
+    "vigia": {
+     "sem": 0.125,
+     "com": 0.9875
+    },
+    "tita": {
+     "sem": 0.22,
+     "com": 0.995
+    }
+   }
+  },
+  "espiral": {
+   "lider": "npc_v5_piedmon",
+   "regra": "chefe",
+   "estagio": "mega",
+   "fator": 1.2,
+   "sem": 0.175,
+   "com": 0.9294,
+   "pior": 0.71,
+   "pior_forma": "sentinela",
+   "passa": true,
+   "folga": 0.125,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.2575,
+     "com": 1
+    },
+    "furioso": {
+     "sem": 0.1925,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0.1525,
+     "com": 1
+    },
+    "muralha": {
+     "sem": 0.2175,
+     "com": 1
+    },
+    "sentinela": {
+     "sem": 0,
+     "com": 0.71
+    },
+    "emboscador": {
+     "sem": 0.01,
+     "com": 0.725
+    },
+    "vigia": {
+     "sem": 0.18,
+     "com": 1
+    },
+    "tita": {
+     "sem": 0.39,
+     "com": 1
+    }
+   }
+  }
+ }
+}

@@ -6,7 +6,7 @@
    O motor do pet NUNCA le o Tamer por fora (o replay do pet tem de dar o mesmo resultado sozinho): quando o Tamer tem
    mais medalhas do que o pet ativo conhece, o app grava no registro do pet o evento "u" (Motor.liberar), e o motor
    re-verifica a evolucao nessa hora. Um pet guardado recebe o "u" quando volta a ser o ativo. */
-import { LUGARES_V5, MEDALHAS, MEDALHA_POR_ID, Motor, NPC, PetMorto, nomeForma, type Medalha } from "../motor/index.ts";
+import { ARENA_POR_ID, LUGARES_V6, MEDALHAS, MEDALHA_POR_ID, Motor, NPC, PetMorto, nomeForma, type Medalha } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
@@ -133,8 +133,13 @@ export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: stri
 export function medalhasQueFaltam(t: Tamer, precisa: number): Medalha[] {
   return MEDALHAS.filter(x => !t.tem(x.id)).slice(0, Math.max(0, precisa - t.n));
 }
-/** onde a medalha se ganha hoje (todos os lugares da campanha sao femininos: "na Campina") */
-export const comoGanhar = (md: Medalha): string => `vença o ${NPC[md.lider]!.nome} na ${LUGARES_V5[md.lugar].nome}`;
+/** "na Campina", "no Lago": o lugar da campanha v6 com a preposicao (so o Lago e masculino) */
+export const noLugar = (nome: string): string => `${nome === "Lago" ? "no" : "na"} ${nome}`;
+/** onde a medalha se ganha: o lider da arena dela (na Cidadela, tres vezes seguidas) */
+export const comoGanhar = (md: Medalha): string => {
+  const n = ARENA_POR_ID[md.id]?.lutas ?? 1;
+  return `vença o ${NPC[md.lider]!.nome}${n > 1 ? ` ${n === 3 ? "três" : n} vezes seguidas` : ""} ${noLugar(LUGARES_V6[md.lugar].nome)}`;
+};
 /** "Falta a Medalha da Campina: vença o Gazimon na Campina." (ou a lista, quando falta mais de uma) */
 export function textoFalta(t: Tamer, precisa: number): string {
   const f = medalhasQueFaltam(t, precisa);

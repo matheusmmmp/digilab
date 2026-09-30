@@ -1,6 +1,6 @@
 /* Bots (espelho de combate_v2/bots.py e combate_v2/v21/bots.py), sementes de gambits por estagio e
    campanha contra os NPCs (espelho de ConfigCampanha / campanha.py). */
-import { CV, FORMAS_AD, LINHA_DA_FORMA, TECNICAS } from "./constantes.ts";
+import { CV, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
 import { Cd, Rg, validarLista, type Estilo, type ListaGambits, type RegrasLuta } from "./combate.ts";
 import { NOME_ARQ } from "./nomes.ts";
 import type { Especie, Estagio, Forma, FormaAdultaNormal, Linha, Ramo, TracoCombate } from "./tipos.ts";
@@ -98,6 +98,19 @@ export const GAMBITS_SOMBRIA: Record<string, ListaGambits> = {
   get bastiao_rachado(): ListaGambits { return { regras: BOTS_V21.espelho.regras.filter(r => !r.se.some(c => c.n.startsWith("oponente_"))), final: BOTS_V21.espelho.final }; },
 };
 
+/* lideres das arenas (pets v6, docs/DESIGN_MEDALHAS_ARENAS.md secao 3; motor/arenas.ts): listas proprias, familia "arena".
+   Floresta (leitura): o lider MUDA DE PADRAO no meio da luta, pela condicao de turno que a linguagem ja tem (turno_execucao).
+   Ate o turno 10 ele e um atirador (foge de perto e dispara); do turno 10 em diante, um brigao (encurta e golpeia rapido).
+   Quem tem regras condicionais (o que o oponente faz, a distancia) acompanha a troca. Sem tecnica e sem passiva, como os NPCs.
+   A lista saiu de 30 variantes medidas so nas sementes de calibracao (test/explorar_floresta.mjs,
+   artifacts_campanha/arenas/floresta_variantes.json): a primeira, com o pesado na fase 2, nao fechava as metas. */
+const T10 = Cd("turno_execucao", 10);
+export const GAMBITS_ARENA: Record<string, ListaGambits> = {
+  floresta: { regras: [Rg([T10, D2], "avancar"), Rg([T10, D1], "avancar"), Rg([T10, GA_(20)], "golpe_rapido"),
+    Rg([PREP, D0], "esquivar"), Rg(D0, "recuar"), Rg(GA_(20), "disparo")], final: "carregar" },
+};
+Object.values(GAMBITS_ARENA).forEach(validarLista);
+
 /* lugares do mapa; vencer QUALQUER rival de um lugar abre o proximo (a Torre tem 3 rivais para nenhuma
    linha ficar travada; experiments/calibrar_progressao.py) */
 export interface Lugar { nome: string; x: number; y: number; sugerido: string; est: Estagio; rivais: string[] }
@@ -147,33 +160,66 @@ export const CAMPANHA_V5: DesafioCampanha[] = [
     licao: "O chefe final, o último Mestre das Trevas: forte em tudo, mas imprevisível. Todo Mega bem treinado consegue vencê-lo." },
 ];
 LUGARES_V5.forEach((L, i) => { L.rivais = CAMPANHA_V5.filter(c => c.lug === i).map(c => c.k); });
+/* campanha dos pets v6 (medalhas, parte 2; docs/DESIGN_MEDALHAS_ARENAS.md, secao 3): seis arenas, uma por lugar, cada uma com
+   um lider (motor/arenas.ts: a regra da arena e o fator calibrado do lider). A ordem do mapa segue o nivel: Campina (Rookie),
+   Torre de pedra (Champion), Floresta (Champion, nova), Cidadela (Ultimate), Lago (Ultimate, novo), Montanha Espiral (Mega).
+   Os NPCs de antes seguem como desafiantes, com as mesmas chaves (o replay dos pets v6 ja salvos acha todos); os dois lideres
+   novos so existem aqui. Vencer qualquer rival de um lugar abre o proximo, como sempre. Pets v1-v5: campanhas de antes. */
+export const LUGARES_V6: Lugar[] = [
+  ...LUGARES.slice(0, 2).map(L => ({ ...L, rivais: [] as string[] })),
+  { nome: "Floresta", x: 250, y: 140, sugerido: "Champion", est: "adolescente", rivais: [] },
+  { ...LUGARES[2], rivais: [] },
+  { nome: "Lago", x: 240, y: 60, sugerido: "Ultimate", est: "adulto", rivais: [] },
+  { ...LUGARES_V5[3], rivais: [] },
+];
+const doV5 = (k: string, lug: number): DesafioCampanha => ({ ...CAMPANHA_V5.find(c => c.k === k)!, lug });
+export const CAMPANHA_V6: DesafioCampanha[] = [
+  ...CAMPANHA.filter(c => c.lug < 2),
+  { k: "npc_v6_youkomon", nome: "Youkomon", total: 90, estilo: "arena:floresta", eps: .5, lug: 2, cor: "finta", fator: 1.2,
+    licao: "A raposa da Floresta: começa de longe, disparando, e no meio da luta muda de jeito e parte para cima. Regras que leem o rival acompanham a troca." },
+  doV5("npc_v5_myotismon", 3),
+  { k: "npc_v6_marinbullmon", nome: "MarinBullmon", total: 110, estilo: "v2c:adaptativo", eps: .5, lug: 4, cor: "agarrao", fator: 1.2,
+    licao: "O guardião do Lago lê o que o rival repete e responde. Aqui o dono não trava nem veta: o pet luta com o que aprendeu." },
+  ...CAMPANHA_V5.filter(c => c.lug === 3).map(c => ({ ...c, lug: 5 })),
+];
+LUGARES_V6.forEach((L, i) => { L.rivais = CAMPANHA_V6.filter(c => c.lug === i).map(c => c.k); });
 /** campanha e lugares da versao do pet */
-export const campanhaDe = (versao: number): DesafioCampanha[] => versao >= 5 ? CAMPANHA_V5 : CAMPANHA;
-export const lugaresDe = (versao: number): Lugar[] => versao >= 5 ? LUGARES_V5 : LUGARES;
+export const campanhaDe = (versao: number): DesafioCampanha[] => versao >= 6 ? CAMPANHA_V6 : versao >= 5 ? CAMPANHA_V5 : CAMPANHA;
+export const lugaresDe = (versao: number): Lugar[] => versao >= 6 ? LUGARES_V6 : versao >= 5 ? LUGARES_V5 : LUGARES;
 /** v21: gambits canonicos da forma sem as regras de tecnica e da passiva do vigia (o NPC nao tem); nas lutas V21D (pets
-    v6) a lista da forma e a variante (gambitsAdulto); v2c: bots redesenhados da V2C (os BOTS_V2 da web) */
-export function gambitNPC(estilo: string, R: RegrasLuta = null): ListaGambits {
+    v6) a lista da forma e a variante (gambitsAdulto); v2c: bots redesenhados da V2C (os BOTS_V2 da web); arena: as listas
+    proprias dos lideres (GAMBITS_ARENA). `tecnica`: o lider de arena que tem tecnica (Torre de pedra: contra-golpe) fica com
+    as regras dela */
+export function gambitNPC(estilo: string, R: RegrasLuta = null, tecnica: Tecnica | null = null): ListaGambits {
   const [fam, nome] = estilo.split(":");
   if (fam === "v21") {
     const g = gambitsAdulto(nome as FormaAdultaNormal, R);
-    return { regras: g.regras.filter(r => !(TECNICAS as readonly string[]).includes(r.entao) && !r.se.some(c => c.n === "oponente_vai_preparar")), final: g.final };
+    return { regras: g.regras.filter(r => (r.entao === tecnica || !(TECNICAS as readonly string[]).includes(r.entao)) && !r.se.some(c => c.n === "oponente_vai_preparar")), final: g.final };
   }
   if (fam === "v2c") return BOTS_V2[nome];
   if (fam === "crianca") return CRIANCA_V21[nome as Ramo];
+  if (fam === "arena") { if (!GAMBITS_ARENA[nome]) throw new Error("lista de arena desconhecida: " + estilo); return GAMBITS_ARENA[nome]; }
   throw new Error("familia de estilo desconhecida: " + estilo);
 }
 export type Npc = DesafioCampanha & { tier: number; lugar: string; sugerido: string; est: Estagio };
 /* todos os NPCs (das duas campanhas); os que as duas tem sao os mesmos, no mesmo lugar */
 const npcDe = (c: DesafioCampanha, Ls: Lugar[]): Npc =>
   ({ ...c, tier: c.lug + 1, lugar: Ls[c.lug].nome, sugerido: Ls[c.lug].sugerido, est: Ls[c.lug].est });
+/* o `lug` (e o tier) de um NPC e o da primeira campanha em que ele aparece; o lugar dele na campanha de um pet sai de
+   Motor.lugarDe (na v6 o Myotismon e a Espiral mudam de indice). O resto (nome, estilo, estagio do lugar, fator) e o mesmo */
 export const NPC: Partial<Record<string, Npc>> = Object.fromEntries([...CAMPANHA.map(c => [c.k, npcDe(c, LUGARES)]),
-  ...CAMPANHA_V5.filter(c => !CAMPANHA.includes(c)).map(c => [c.k, npcDe(c, LUGARES_V5)])]);
+  ...CAMPANHA_V5.filter(c => !CAMPANHA.includes(c)).map(c => [c.k, npcDe(c, LUGARES_V5)]),
+  ...CAMPANHA_V6.filter(c => !CAMPANHA.some(x => x.k === c.k) && !CAMPANHA_V5.some(x => x.k === c.k)).map(c => [c.k, npcDe(c, LUGARES_V6)])]);
 export const NOME_BOT: Record<string, string> = {
   aleatorio: "aleatório", agressivo: "agressivo", tartaruga: "tartaruga", atirador: "atirador",
   contragolpe: "contragolpe", adaptativo: "adaptativo", oraculo: "oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
-  ...Object.fromEntries([...CAMPANHA, ...CAMPANHA_V5].map(c => [c.k, c.nome])),
+  ...Object.fromEntries([...CAMPANHA, ...CAMPANHA_V5, ...CAMPANHA_V6].map(c => [c.k, c.nome])),
 };
-export const nomeEstiloNPC = (e: string): string => { const [fam, nome] = e.split(":"); return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : fam === "crianca" ? `Rookie ${nome}` : NOME_BOT[nome]; };
+const NOME_LISTA_ARENA: Record<string, string> = { floresta: "atirador que vira brigão no turno 10" };
+export const nomeEstiloNPC = (e: string): string => {
+  const [fam, nome] = e.split(":");
+  return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : fam === "crianca" ? `Rookie ${nome}` : fam === "arena" ? NOME_LISTA_ARENA[nome] : NOME_BOT[nome];
+};
 /* rivais V2.1: cada forma adulta com uma especie fixa (para variar os sprites) e o carater canonico */
 export const RIVAL_ESPECIE: Record<FormaAdultaNormal, Especie> = { duelista: "brasa", furioso: "ferrugem", espelho: "limo", muralha: "ferrugem", sentinela: "cirro", emboscador: "cirro", vigia: "limo", tita: "brasa" };
 export const formaRival = (nome: FormaAdultaNormal): Forma => ({ esp: RIVAL_ESPECIE[nome], est: "adulto", ramo: "sereno", linha: LINHA_DA_FORMA[nome], adulta: nome });

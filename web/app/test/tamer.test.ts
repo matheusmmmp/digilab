@@ -57,7 +57,7 @@ describe("registro do Tamer", () => {
     expect(conferirMedalhas(t, m)).toEqual([]);                  /* revanche: nada novo */
     const v5 = new Motor(12, 5); v5.avancar(DUR_EVO.bebe + 30); vencer(v5, GAZIMON);
     expect(conferirMedalhas(new Tamer(), v5)).toEqual([]);
-    expect(textoFalta(t, 3)).toBe("Faltam 2 medalhas: Medalha da Torre de pedra (vença o Guardromon na Torre de pedra) e Medalha do Devidramon (vença o Devidramon na Torre de pedra).");
+    expect(textoFalta(t, 3)).toBe("Faltam 2 medalhas: Medalha da Torre de pedra (vença o Guardromon na Torre de pedra) e Medalha da Floresta (vença o Youkomon na Floresta).");
     expect(textoFalta(new Tamer(), 1)).toBe("Falta a Medalha da Campina: vença o Gazimon na Campina.");
   });
   test("sincronizar: o pet v6 recebe o u; v5 e pet em dia nao mudam", () => {

@@ -13,6 +13,7 @@ export * from "./catalogo.ts";
 export * from "./combate.ts";
 export * from "./bots.ts";
 export * from "./medalhas.ts";
+export * from "./arenas.ts";
 export * from "./carater.ts";
 export * from "./gambits_pet.ts";
 export * from "./motivo.ts";
