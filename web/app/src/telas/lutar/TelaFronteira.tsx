@@ -3,7 +3,8 @@
    do registro); o titulo do Tamer; e o botao de desafiar (a luta em tela cheia, #/lutar/luta). Tudo do motor (motor/liga.ts,
    Motor.liga, o evento de luta da Liga) e do registro do Tamer (o evento "campeao").
    Depois do titulo (medalhas parte 4b, motor/instalacoes.ts), as instalacoes: a Torre de Batalha e o Palacio, cada uma com a regra em uma
-   frase, o recorde do Tamer (o evento "recorde"), as tentativas deste pet (Motor.instalacoes) e "Tentar" (a luta em tela cheia). */
+   frase, o recorde do Tamer (o evento "recorde"), as tentativas deste pet (Motor.instalacoes) e "Tentar" (a luta em tela cheia).
+   E (medalhas parte 4c) a Fabrica e o Salao, com a escolha dos alugados e dos pets de cada nivel no proprio card (FabricaSalao.tsx). */
 import { useEffect, useMemo } from "preact/hooks";
 import {
   INSTALACOES, LIGA, MEDALHAS_LIGA, NOME_ARQ, NOME_ESP, NOME_V2, NPC, RIVAL_LIGA, LUGARES_V6, MEDALHA_POR_ID, chaveSprite, formaLiga, nomeMegaLiga,
@@ -16,6 +17,7 @@ import { LUTA, lutarInstalacao, lutarLiga, previa, reconstruirLuta, useLuta } fr
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { textoFalta, type Tamer } from "../../tamer.ts";
 import { diaDe } from "../pet/TelaPet.tsx";
+import { CartaoFabrica, CartaoSalao } from "./FabricaSalao.tsx";
 
 /** a ultima tentativa da Liga no registro do pet (null: nenhuma): as lutas jogadas (o pet no fim de cada uma) e o indice do evento */
 function ultimaTentativa(m: Motor): { idx: number; lutas: { venceu: boolean; vida: number; turnos: number }[] } | null {
@@ -30,7 +32,7 @@ const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
 
 /** uma instalacao da Fronteira: a regra em uma frase, o recorde do Tamer, o que este pet fez nela e "Tentar". Antes do titulo, trancada */
 function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Tamer; lutando: boolean }) {
-  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoInstalacao(x.id) : "a Fronteira é só dos pets v6", rec = t.recorde(x.id), c = v6 ? m.instalacoes[x.id] : null;
+  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoInstalacao(x.id) : "a Fronteira é só dos pets v6 em diante", rec = t.recorde(x.id), c = v6 ? m.instalacoes[x.id] : null;
   const tentar = () => { lutarInstalacao(x.id, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
   return (
     <li class={`dl-card fr-inst-card${t.titulo ? "" : " fr-inst-card--fechada"}`} aria-labelledby={`fr-inst-${x.id}`}>
@@ -50,7 +52,7 @@ function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Ta
 export function TelaFronteira() {
   const { motor: m, erroTamer } = useJogo(), luta = useLuta(), a = useAtlas(), t = tamerAtual();
   useEffect(() => { if (!LUTA.lutando && m.versao >= 6 && (!LUTA.palco || LUTA.palco.modo !== "fronteira")) previa("fronteira"); }, []);
-  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoLiga() : "a Fronteira é só dos pets v6";
+  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoLiga() : "a Fronteira é só dos pets v6 em diante";
   const nLiga = v6 ? m.liga.tentativas : 0;
   /* a ultima tentativa, refeita do registro (so muda com luta nova da Liga) */
   const ult = useMemo(() => (nLiga ? ultimaTentativa(m) : null), [nLiga, m.semente]);
@@ -87,7 +89,11 @@ export function TelaFronteira() {
         <section class="fr-inst" aria-labelledby="fr-inst-tit">
           <h2 id="fr-inst-tit">Instalações</h2>
           <p class="dl-apoio">{t.titulo ? "Para rejogar por recorde: nada daqui deixa o pet mais forte fora da Fronteira." : "Abrem depois do título da Liga dos Líderes, para rejogar por recorde."}</p>
-          <ul class="fr-inst-lista">{INSTALACOES.map(x => <CartaoInstalacao key={x.id} x={x} m={m} t={t} lutando={luta.lutando} />)}</ul>
+          <ul class="fr-inst-lista">
+            {INSTALACOES.map(x => <CartaoInstalacao key={x.id} x={x} m={m} t={t} lutando={luta.lutando} />)}
+            <CartaoFabrica t={t} lutando={luta.lutando} />
+            <CartaoSalao t={t} lutando={luta.lutando} />
+          </ul>
         </section>
       </div>
       <ol class="fr-lista" aria-label="Os líderes da Liga, na ordem das lutas">

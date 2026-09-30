@@ -25,6 +25,15 @@ export function lerGuardados(): Guardado[] {
 function gravarGuardados(g: Guardado[]): void {
   localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
 }
+/** o guardado i recebeu eventos sem virar o ativo (o Salao da Fronteira: o "u", o "f" e a luta dele; src/fronteira.ts): grava o registro
+    novo no lugar dele. Confere que e o mesmo pet (a semente) e que o registro so cresceu */
+export function atualizarGuardado(i: number, m: Motor): void {
+  const g = lerGuardados(), antes = g[i];
+  if (!antes) throw new Error("pet guardado não existe: " + i);
+  if (antes.semente !== m.semente || m.log.length < antes.log.length) throw new Error(`o pet guardado ${i} mudou enquanto lutava no Salão`);
+  g[i] = JSON.parse(textoSave(m)) as Guardado;
+  gravarGuardados(g);
+}
 /** reproduz um pet guardado (so para mostrar; nao muda nada) */
 export const abrirGuardado = (g: Guardado): Motor => Motor.reproduzir(g.semente, g.log, g.versao ?? 1);
 

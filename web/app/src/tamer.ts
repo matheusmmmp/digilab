@@ -20,9 +20,18 @@
    Os recordes (as instalacoes da Fronteira, medalhas parte 4b; docs/DESIGN_FRONTEIRA.md, secao 3): registro versao 4 (le a 1, a 2 e a 3).
    Evento "recorde": a maior sequencia de vitorias numa instalacao (Torre de Batalha, Palacio), com o pet que fez. So entra quando passa o
    recorde que o Tamer ja tem, e so depois do titulo. O motor do pet conta as sequencias dele (Motor.instalacoes, a partir do evento de luta
-   "l" da instalacao); o pet conhece o titulo do Tamer pelo evento "f" do registro dele (Motor.abrirFronteira), gravado aqui, como o "u". */
+   "l" da instalacao); o pet conhece o titulo do Tamer pelo evento "f" do registro dele (Motor.abrirFronteira), gravado aqui, como o "u".
+
+   A Fabrica e o Salao (medalhas parte 4c; docs/DESIGN_FRONTEIRA.md, secoes 3 e 4): registro versao 5 (le 1 a 4).
+   - Fabrica (motor/fabrica.ts): nenhum pet do jogador luta, entao a tentativa inteira fica SO aqui e se refaz sozinha a partir daqui:
+     "fabrica" (o comeco da tentativa n, com a semente dela, que sai do numero da tentativa, e o alugado escolhido entre os 3), "fabrica_luta"
+     (a luta k, com a semente dela; o replay joga a luta de novo) e "fabrica_troca" (depois da vitoria k, o alugado vira o rival derrotado).
+     O recorde (a maior sequencia de series vencidas) sai das tentativas, sem evento proprio.
+   - Salao (motor/salao.ts): cada pet luta no registro DELE (evento "l" {r: "salao", s}); aqui fica a tentativa, "salao": os pets (um por
+     estagio, na ordem), a tentativa de cada um no Salao, a semente (que sai do registro dele; o replay confere a conta) e quem venceu. O
+     recorde (quantos estagios venceu seguidos, ate 4) sai das tentativas. */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, INSTALACOES, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
   VERSAO_LIGA, cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
@@ -31,9 +40,9 @@ export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
 export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
-    recordes das instalacoes da Fronteira (parte 4b). Grava a 4; le as quatro */
-export const VERSAO_TAMER = 4;
-const VERSOES_TAMER = [1, 2, 3, 4];
+    recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c). Grava a 5; le as cinco */
+export const VERSAO_TAMER = 5;
+const VERSOES_TAMER = [1, 2, 3, 4, 5];
 
 /** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
 export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
@@ -48,7 +57,20 @@ export interface Campeao { n: number; quando: number; pet: number; forma: string
 /** um recorde numa instalacao da Fronteira: qual, o valor (a sequencia de vitorias), a hora de parede e o pet que fez (semente, forma e
     tick dele) */
 export interface Recorde { inst: IdInstalacao; valor: number; quando: number; pet: number; forma: string; tick: number }
-export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde];
+/** Fabrica: o comeco da tentativa n (1 = a primeira), a semente dela (sementeFabrica(n)) e o alugado escolhido (0 a 2) */
+export interface InicioFabrica { n: number; s: number; alugado: number; quando: number }
+/** Fabrica: a luta k (0 = a primeira) da tentativa n, com a semente dela (sementeLutaFabrica) */
+export interface EventoLutaFabrica { n: number; k: number; s: number; quando: number }
+/** Fabrica: depois da vitoria k da tentativa n, o alugado vira o rival derrotado */
+export interface TrocaFabrica { n: number; k: number; quando: number }
+/** Salao: a luta de um pet (o estagio, a semente e a forma dele, a tentativa dele no Salao, a semente da luta, o tick dele e se venceu) */
+export interface LutaSalao { est: Estagio; pet: number; forma: string; k: number; s: number; tick: number; venceu: boolean }
+/** Salao: uma tentativa (n = 1 a primeira), as lutas na ordem dos estagios, ate a primeira que nao foi vitoria */
+export interface TentativaSalao { n: number; quando: number; lutas: LutaSalao[] }
+export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde]
+  | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao];
+/** um recorde da Fabrica ou do Salao, tirado das tentativas: o valor, a tentativa que o fez (a primeira que chegou nele) e a hora de parede */
+export interface RecordeTentativa { valor: number; n: number; quando: number }
 const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
 
 export class Tamer {
@@ -62,6 +84,32 @@ export class Tamer {
   campeoes: Campeao[] = [];
   /** os recordes das instalacoes, na ordem em que foram batidos (o ultimo de cada instalacao e o recorde dela) */
   recordes: Recorde[] = [];
+  /** as tentativas da Fabrica, refeitas do registro (a ultima pode estar em andamento), e a hora de parede de cada luta delas */
+  fabrica: TentativaFabrica[] = [];
+  private quandoFabrica: number[][] = [];
+  /** as tentativas do Salao */
+  salao: TentativaSalao[] = [];
+  /** a tentativa da Fabrica em andamento (null: nenhuma; a ultima acabou) */
+  get fabricaAtual(): TentativaFabrica | null { const t = this.fabrica[this.fabrica.length - 1]; return t && !t.acabou ? t : null; }
+  /** o recorde da Fabrica: a maior sequencia de series vencidas numa tentativa (null: nenhuma serie vencida ainda) */
+  get recordeFabrica(): RecordeTentativa | null {
+    let r: RecordeTentativa | null = null;
+    this.fabrica.forEach((t, i) => {
+      if (t.series < 1 || (r && t.series <= r.valor)) return;
+      /* a hora da vitoria que fechou a ultima serie contada */
+      r = { valor: t.series, n: t.n, quando: this.quandoFabrica[i][t.series * LUTAS_SERIE_FABRICA - 1] };
+    });
+    return r;
+  }
+  /** o recorde do Salao: quantos estagios seguidos uma tentativa venceu (null: nenhum ainda) */
+  get recordeSalao(): RecordeTentativa | null {
+    let r: RecordeTentativa | null = null;
+    for (const t of this.salao) {
+      const v = t.lutas.filter(x => x.venceu).length;
+      if (v >= 1 && (!r || v > r.valor)) r = { valor: v, n: t.n, quando: t.quando };
+    }
+    return r;
+  }
   get n(): number { return this.medalhas.length; }
   /** o titulo do Tamer: o primeiro campeao (null: ainda nao venceu a Liga) */
   get titulo(): Campeao | null { return this.campeoes[0] ?? null; }
@@ -84,9 +132,13 @@ export class Tamer {
 
   /** um evento do registro (replay): confere tudo antes de aplicar */
   aplicar(ev: EventoTamer): void {
-    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde"].includes(ev[0]))
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao"].includes(ev[0]))
       throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
     if (ev[0] === "item") { this._item(ev[1]); return; }
+    if (ev[0] === "fabrica") { this._fabrica(ev[1]); return; }
+    if (ev[0] === "fabrica_luta") { this._fabricaLuta(ev[1]); return; }
+    if (ev[0] === "fabrica_troca") { this._fabricaTroca(ev[1]); return; }
+    if (ev[0] === "salao") { this._salao(ev[1]); return; }
     if (ev[0] === "campeao") { this._campeao(ev[1]); return; }
     if (ev[0] === "recorde") { this._recorde(ev[1]); return; }
     if (ev[0] === "carta_usada") { this._usada(ev[1]); return; }
@@ -145,6 +197,81 @@ export class Tamer {
     if (typeof x.forma !== "string") throw new Error("recorde sem a forma do pet no registro do Tamer");
     this.recordes.push({ ...x });
   }
+  /* ------------------------------------------------ a Fabrica (motor/fabrica.ts) */
+  private _campos(x: object | null | undefined, o: string, campos: readonly string[]): void {
+    if (!x || typeof x !== "object") throw new Error(`${o} sem dados no registro do Tamer`);
+    for (const k of campos) if (!Number.isFinite((x as Record<string, unknown>)[k])) throw new Error(`${o} sem ${k} no registro do Tamer`);
+  }
+  private _fabrica(x: InicioFabrica): void {
+    this._campos(x, "tentativa da Fábrica", ["n", "s", "alugado", "quando"]);
+    if (!this.titulo) throw new Error("tentativa da Fábrica antes do título da Liga no registro do Tamer");
+    if (x.n !== this.fabrica.length + 1) throw new Error(`tentativa da Fábrica fora de ordem no registro do Tamer: ${x.n} (esperada ${this.fabrica.length + 1})`);
+    const atual = this.fabricaAtual;
+    if (atual) throw new Error(`tentativa ${x.n} da Fábrica com a ${atual.n} ainda em andamento no registro do Tamer`);
+    if (x.s !== sementeFabrica(x.n)) throw new Error(`a tentativa ${x.n} da Fábrica tem a semente ${sementeFabrica(x.n)}, não ${x.s}, no registro do Tamer`);
+    this.fabrica.push(new TentativaFabrica(x.n, x.alugado));
+    this.quandoFabrica.push([]);
+  }
+  private _fabricaEmAndamento(n: number, o: string): TentativaFabrica {
+    const t = this.fabricaAtual;
+    if (!t || t.n !== n) throw new Error(`${o} da tentativa ${n} da Fábrica, que não está em andamento no registro do Tamer`);
+    return t;
+  }
+  private _fabricaLuta(x: EventoLutaFabrica): void {
+    this._campos(x, "luta da Fábrica", ["n", "k", "s", "quando"]);
+    const t = this._fabricaEmAndamento(x.n, "luta");
+    if (x.k !== t.lutas.length) throw new Error(`luta ${x.k} da tentativa ${x.n} da Fábrica fora de ordem no registro do Tamer (esperada ${t.lutas.length})`);
+    t.lutar(x.s);
+    this.quandoFabrica[this.fabrica.length - 1].push(x.quando);
+  }
+  private _fabricaTroca(x: TrocaFabrica): void {
+    this._campos(x, "troca da Fábrica", ["n", "k", "quando"]);
+    const t = this._fabricaEmAndamento(x.n, "troca");
+    if (x.k !== t.lutas.length - 1) throw new Error(`troca da Fábrica depois da luta ${x.k}, mas a última luta da tentativa ${x.n} é a ${t.lutas.length - 1}`);
+    t.trocar();
+  }
+  /** a tentativa nova da Fabrica, com o alugado escolhido (0 a 2) entre os 3 dela */
+  alugarFabrica(escolha: number, quando: number = Date.now()): TentativaFabrica {
+    const n = this.fabrica.length + 1;
+    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando }]);
+    return this.fabrica[this.fabrica.length - 1];
+  }
+  /** a proxima luta da tentativa em andamento (grava e joga) */
+  lutarFabrica(quando: number = Date.now()): TentativaFabrica["lutas"][number] {
+    const t = this.fabricaAtual, p = t?.proxima();
+    if (!t || !p) throw new Error("nenhuma tentativa da Fábrica em andamento");
+    this._gravar(["fabrica_luta", { n: t.n, k: p.k, s: p.s, quando }]);
+    return t.lutas[t.lutas.length - 1];
+  }
+  /** troca o alugado pelo rival que ele acabou de derrotar */
+  trocarFabrica(quando: number = Date.now()): void {
+    const t = this.fabricaAtual;
+    if (!t) throw new Error("nenhuma tentativa da Fábrica em andamento");
+    this._gravar(["fabrica_troca", { n: t.n, k: t.lutas.length - 1, quando }]);
+  }
+  /* ------------------------------------------------ o Salao (motor/salao.ts) */
+  private _salao(x: TentativaSalao): void {
+    this._campos(x, "tentativa do Salão", ["n", "quando"]);
+    if (!this.titulo) throw new Error("tentativa do Salão antes do título da Liga no registro do Tamer");
+    if (x.n !== this.salao.length + 1) throw new Error(`tentativa do Salão fora de ordem no registro do Tamer: ${x.n} (esperada ${this.salao.length + 1})`);
+    const L = x.lutas;
+    if (!Array.isArray(L) || L.length < 1 || L.length > ESTAGIOS_SALAO.length) throw new Error(`tentativa ${x.n} do Salão sem as lutas no registro do Tamer`);
+    L.forEach((l, i) => {
+      this._campos(l, `luta ${i + 1} da tentativa ${x.n} do Salão`, ["pet", "k", "s", "tick"]);
+      if (l.est !== ESTAGIOS_SALAO[i]) throw new Error(`a luta ${i + 1} do Salão é do estágio ${ESTAGIOS_SALAO[i]}, não ${JSON.stringify(l.est)}, no registro do Tamer`);
+      if (typeof l.forma !== "string" || typeof l.venceu !== "boolean") throw new Error(`luta ${i + 1} do Salão sem a forma ou o resultado no registro do Tamer`);
+      if (l.s !== sementeSalao(l.pet, l.k)) throw new Error(`a luta ${l.k} do pet ${l.pet} no Salão tem a semente ${sementeSalao(l.pet, l.k)}, não ${l.s}, no registro do Tamer`);
+      if (!l.venceu && i < L.length - 1) throw new Error(`a tentativa ${x.n} do Salão segue depois de uma derrota no registro do Tamer`);
+    });
+    if (L.length < ESTAGIOS_SALAO.length && L[L.length - 1].venceu) throw new Error(`a tentativa ${x.n} do Salão parou numa vitória no registro do Tamer`);
+    if (new Set(L.map(l => l.pet)).size !== L.length) throw new Error(`o mesmo pet em dois estágios na tentativa ${x.n} do Salão no registro do Tamer`);
+    this.salao.push({ n: x.n, quando: x.quando, lutas: L.map(l => ({ ...l })) });
+  }
+  /** a tentativa do Salao que acabou de acontecer (as lutas ja estao nos registros dos pets): grava */
+  registrarSalao(lutas: LutaSalao[], quando: number = Date.now()): TentativaSalao {
+    this._gravar(["salao", { n: this.salao.length + 1, quando, lutas: lutas.map(l => ({ ...l })) }]);
+    return this.salao[this.salao.length - 1];
+  }
   /** o pet m fez uma sequencia de `valor` vitorias na instalacao, maior que o recorde do Tamer: grava o recorde novo */
   baterRecorde(inst: IdInstalacao, valor: number, m: Motor, quando: number = Date.now()): Recorde {
     this._gravar(["recorde", { inst, valor, quando, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }]);
@@ -175,7 +302,7 @@ export class Tamer {
   static reproduzir(log: readonly EventoTamer[]): Tamer {
     const t = new Tamer();
     for (const ev of log) t.aplicar(ev);
-    t.log = log.map(ev => [ev[0], { ...ev[1] }] as EventoTamer);
+    t.log = log.map(ev => JSON.parse(JSON.stringify(ev)) as EventoTamer);
     return t;
   }
 }

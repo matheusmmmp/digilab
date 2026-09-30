@@ -3,7 +3,7 @@
    item 1). A luta entra no registro na hora (motor.lutar); a animacao so mostra os turnos que o motor ja jogou. */
 import { useEffect, useState } from "preact/hooks";
 import {
-  BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NPC, RIVAL_LIGA, cartaDe, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
+  BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NOME_EST, NPC, RIVAL_LIGA, RIVAL_SALAO, cartaDe, formaRivalSalao, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
   formaRivalInstalacao, hashSemente, instalacaoDe, jogarV2, lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio,
   type EstadoLuta, type FormaAdultaNormal, type IdInstalacao, type Instalacao, type Lutador, Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate,
   type Turno,
@@ -50,6 +50,13 @@ export function exibirRivalInstalacao(s: number, k: number, L: Lutador): Lutador
   const f = formaRivalInstalacao(s, k);
   return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "carga", estagioFala: "mega", nomeTela: nomeForma(f),
     estiloTela: `${NOME_ARQ[f.adulta!].toLowerCase()} · ${NOME_ESP[f.esp]}` };
+}
+/** o rival de uma luta do Salao (pets v6; motor/salao.ts), sorteado da semente e do estagio do pet, como lutador de tela: o sprite, o nome e,
+    no estilo, o arquetipo (ou o ramo, ou a linha) e o nivel */
+export function exibirRivalSalao(s: number, est: Estagio, L: Lutador): LutadorTela {
+  const f = formaRivalSalao(s, est), tipo = f.adulta ?? f.linha ?? f.ramo!;
+  return { ...L, sprite: chaveSprite(f), grade: gradeDe(est), cor: "carga", estagioFala: est, nomeTela: nomeForma(f),
+    estiloTela: `${NOME_ARQ[tipo].toLowerCase()} · ${NOME_EST[est]}` };
 }
 /** uma linha do registro da luta: o motivo de cada lado; o texto sai da tabela de expressao na hora de desenhar */
 export interface LinhaLog { t: number; pet: string; rival: string; ma: MotivoCombate; mb: MotivoCombate; estPet: Estagio; estRival: Estagio; humor: number }
@@ -377,7 +384,7 @@ export function reverLuta(idx: number, nomeAcaoV2: Record<string, string>): void
   if (LUTA.lutando) return;
   const L = reconstruirLuta(jogoAtual().motor, idx);
   LUTA.replay = idx;
-  animar(L.serie, L.nLutas, L.A, L.lideres ?? L.rivais ?? L.B, L.lideres || L.instalacao ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
+  animar(L.serie, L.nLutas, L.A, L.lideres ?? L.rivais ?? L.B, L.lideres || L.instalacao || L.rival === RIVAL_SALAO ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
     const txt = L.res.pontosA === 1 ? `${L.A.nomeTela} venceu` : L.res.pontosA === 0 ? `${L.B.nomeTela} venceu` : "Empate";
     const v = L.serie.filter(x => x.pontosA === 1).length;
     p.texto = `Fim do replay: ${L.instalacao ? `${L.instalacao.nome}, ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}; ` : L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${L.res.turnos.length} turnos.`;
@@ -412,6 +419,8 @@ export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
     const rivais = L.rivais!.map((x, k) => exibirRivalInstalacao(s, k, x));
     return { res, A: exibirPet(m0, L.A), B: rivais[rivais.length - 1], rival: r, npc, serie: L.serie, nLutas: L.serie.length, arena: null, lideres: null, instalacao: L.instalacao, rivais };
   }
+  /* o Salao: o rival sorteado do estagio do pet na hora da luta */
+  if (r === RIVAL_SALAO) return { res, A: exibirPet(m0, L.A), B: exibirRivalSalao(s, m0.estagioAtual, L.B), rival: r, npc, serie: L.serie, nLutas: 1, arena: null, lideres: null, instalacao: null, rivais: null };
   return { res, A: exibirPet(m0, L.A), B: exibirBot(r, L.B), rival: r, npc, serie: L.serie, nLutas: L.arena?.lutas ?? 1, arena: L.arena, lideres: null, instalacao: null, rivais: null };
 }
 
