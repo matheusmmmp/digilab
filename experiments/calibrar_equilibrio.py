@@ -391,7 +391,9 @@ def _e3(args):
     r = regras(v)
     usuarios = [f for f in FORMAS if rb.TECNICA_DA_LINHA[LINHA_DA_FORMA[f]] == tec]
     orig, resp = [], []
+    por_usuario = {}
     for u in usuarios:
+        n0 = len(orig)
         eu = lutador(u, esp, v)
         for op in FORMAS:
             base = lutador(op, esp, v, nome=f"{op}@{esp}#op")
@@ -401,7 +403,8 @@ def _e3(args):
                                                          CONFIG_BATERIA_V21.partidas_e3_por_semente, r)]
             resp += [x for _, _, x, _ in rb.partidas_par(eu, rsp, f"e3|{tec}", diag.sementes_calibracao(),
                                                          CONFIG_BATERIA_V21.partidas_e3_por_semente, r)]
-    return v, tec, esp, orig, resp
+        por_usuario[u] = (orig[n0:], resp[n0:])
+    return v, tec, esp, orig, resp, por_usuario
 
 
 def _pet_campanha(est: str, nome: str, especie: str, nivel: int, v: str) -> Lutador:
@@ -506,8 +509,8 @@ def etapa_colaterais(pool, variante: str) -> dict:
     if RODADA == 2:
         tecs = sorted(bots.RESPOSTAS)
         res3 = {}
-        for v, tec, e, o, rr in pool.map(_e3, [(v, t, e) for v in vs for t in tecs for e in esp]):
-            res3[(v, tec, e)] = (o, rr)
+        for v, tec, e, o, rr, pu in pool.map(_e3, [(v, t, e) for v in vs for t in tecs for e in esp]):
+            res3[(v, tec, e)] = (o, rr, pu)
         e3 = {}
         for v in vs:
             e3[v] = {}
@@ -516,7 +519,10 @@ def etapa_colaterais(pool, variante: str) -> dict:
                 rr = [x for e in esp for x in res3[(v, tec, e)][1]]
                 e3[v][tec] = {"taxa_sem_resposta": sum(o) / len(o), "taxa_com_resposta": sum(rr) / len(rr),
                               "reducao": sum(o) / len(o) - sum(rr) / len(rr),
-                              "usuarios": [f for f in FORMAS if rb.TECNICA_DA_LINHA[LINHA_DA_FORMA[f]] == tec]}
+                              "usuarios": [f for f in FORMAS if rb.TECNICA_DA_LINHA[LINHA_DA_FORMA[f]] == tec],
+                              "por_usuario": {u: {"taxa_sem_resposta": _media(x for e in esp for x in res3[(v, tec, e)][2][u][0]),
+                                                  "taxa_com_resposta": _media(x for e in esp for x in res3[(v, tec, e)][2][u][1])}
+                                              for u in res3[(v, tec, esp[0])][2]}}
             e3[v] = {"ok": all(x["reducao"] > 0.0 for x in e3[v].values()), "por_tecnica": e3[v]}
         gravado = _ler(E3_V4)["resposta_declarada"]
         conferencia_e3 = all(gravado[t]["taxa_sem_resposta"] == e3["v21c"]["por_tecnica"][t]["taxa_sem_resposta"]
