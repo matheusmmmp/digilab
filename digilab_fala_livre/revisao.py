@@ -18,14 +18,14 @@ from .gerar import Resultado, gerar
 from .ollama import ClienteOllama
 from .prompt import MAX_TOKENS, VERSAO_PROMPT_V4, esquema
 from .saida import FALA_GENERICA, SaidaInvalida, ler
-from .verificador import VERSAO_VERIFICADOR_V4, Verificacao, verificar
+from .verificador import VERSAO_VERIFICADOR_V4, VERSAO_VERIFICADOR_V5, Verificacao, verificar
 
 MAX_REVISOES = 2
 VERSAO_REVISAO = "revisao-v1"
 
 
 def _problemas(v: Verificacao) -> list[str]:
-    ps = [a["trecho"] for a in v.afirmacoes if not a["sustentada"]]
+    ps = [a["trecho"] for a in v.afirmacoes if a["sustentada"] is False]
     ps += v.manipulacao_extraida + [f"(padrão de cobrança: {p})" for p in v.manipulacao_padroes]
     if v.citados_inexistentes:
         ps.append(f"(citou fatos que não existem: {', '.join(v.citados_inexistentes)})")
@@ -34,14 +34,15 @@ def _problemas(v: Verificacao) -> list[str]:
 
 def _pedido_revisao(problemas: list[str]) -> str:
     lista = "\n".join(f"- {p}" for p in problemas)
-    return ("REVISÃO: na sua fala, estes trechos não têm fato nos FATOS ou cobram o jogador:\n" + lista +
+    return ("REVISÃO: na sua fala, estes trechos afirmam algo que não está nos FATOS ou cobram o jogador:\n" + lista +
             "\nReescreva a fala SEM esses trechos, com o mesmo jeito e o mesmo assunto. Diga só o que os FATOS "
             "sustentam. Mesmo formato JSON.")
 
 
 def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "espontanea", semente: int = 0,
                       versao: str = VERSAO_PROMPT_V4, especie: Especie | None = None, rival: str | None = None,
-                      max_revisoes: int = MAX_REVISOES) -> tuple[Resultado, list[dict]]:
+                      max_revisoes: int = MAX_REVISOES,
+                      versao_verificador: str = VERSAO_VERIFICADOR_V4) -> tuple[Resultado, list[dict]]:
     """(resultado final, tentativas). Cada tentativa: fala, fatos citados, problemas apontados pelo proprio modelo."""
     from .corpus import bloco_estilo
     from .fatos import fatos_de_estado
@@ -55,7 +56,7 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
     atual = r
     for n in range(max_revisoes + 1):
         v = verificar(cliente, atual.fala, atual.fatos_citados, list(atual.fatos), semente=semente + 7919 * (n + 1),
-                      versao=VERSAO_VERIFICADOR_V4)
+                      versao=versao_verificador)
         probs = _problemas(v) if v.erro is None else []
         tentativas.append({"fala": atual.fala, "fatos_citados": list(atual.fatos_citados), "problemas": probs,
                            "erro_verificacao": v.erro, "latencia_s": atual.latencia_s})

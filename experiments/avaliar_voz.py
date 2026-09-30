@@ -63,26 +63,31 @@ from digilab_fala_livre import almanaque, corpus  # noqa: E402
 from digilab_fala_livre.gerar import gerar  # noqa: E402
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama  # noqa: E402
 from digilab_fala_livre.revisao import VERSAO_REVISAO, gerar_com_revisao  # noqa: E402
-from digilab_fala_livre.prompt import VERSAO_PROMPT_V3, VERSAO_PROMPT_V4  # noqa: E402
+from digilab_fala_livre.prompt import VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5  # noqa: E402
 from digilab_fala_livre.saida import FALA_GENERICA  # noqa: E402
-from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V4, verificar  # noqa: E402
+from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V4, VERSAO_VERIFICADOR_V5, verificar  # noqa: E402
 
 RODADAS = {1: {"pasta": "rodada1", "semente": 20260929, "prompt": VERSAO_PROMPT_V3, "foco": False},
            2: {"pasta": "rodada2", "semente": 20260930, "prompt": VERSAO_PROMPT_V4, "foco": True},
-           3: {"pasta": "rodada3", "semente": 20261001, "prompt": VERSAO_PROMPT_V4, "foco": True, "revisao": True}}
+           3: {"pasta": "rodada3", "semente": 20261001, "prompt": VERSAO_PROMPT_V4, "foco": True, "revisao": True},
+           # decisao do Matheus (2026-09-30): opiniao e sentimento livres (livre-v5, verif-v5)
+           4: {"pasta": "rodada4", "semente": 20261002, "prompt": VERSAO_PROMPT_V5, "foco": True, "revisao": True,
+               "verificador": VERSAO_VERIFICADOR_V5}}
 PETS = RAIZ / "artifacts_voz" / "rodada1" / "pets.jsonl"          # a mesma amostra em todas as rodadas
 SAIDA = RAIZ / "artifacts_voz" / "rodada1"
 SEMENTE = 20260929
 PROMPT = VERSAO_PROMPT_V3
 FOCO = False
 REVISAO = False
+VERIF = VERSAO_VERIFICADOR_V4
 
 
 def configurar(rodada: int) -> None:
-    global SAIDA, SEMENTE, PROMPT, FOCO, REVISAO
+    global SAIDA, SEMENTE, PROMPT, FOCO, REVISAO, VERIF
     r = RODADAS[rodada]
     SAIDA, SEMENTE, PROMPT, FOCO = RAIZ / "artifacts_voz" / r["pasta"], r["semente"], r["prompt"], r["foco"]
     REVISAO = r.get("revisao", False)
+    VERIF = r.get("verificador", VERSAO_VERIFICADOR_V4)
 GERADOR = "gemma2:9b"
 JUIZ = "qwen2.5:7b"
 DIAS = 14
@@ -271,7 +276,8 @@ def fase_gerar() -> None:
             est, dadas = situacao(p, k, citados_chaves)
             tentativas = None
             if REVISAO:
-                r, tentativas = gerar_com_revisao(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
+                r, tentativas = gerar_com_revisao(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp,
+                                                  versao_verificador=VERIF)
             else:
                 r = gerar(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
             por_id = {f["id"]: f for f in r.fatos}
@@ -298,7 +304,7 @@ def fase_verificar() -> None:
         if f["erro"] or f["fala"] == FALA_GENERICA:
             out.append({"pet": f["pet"], "k": f["k"], "pulada": True})
             continue
-        v = verificar(juiz, f["fala"], f["fatos_citados"], f["fatos"], semente=SEMENTE + i, versao=VERSAO_VERIFICADOR_V4)
+        v = verificar(juiz, f["fala"], f["fatos_citados"], f["fatos"], semente=SEMENTE + i, versao=VERIF)
         out.append({"pet": f["pet"], "k": f["k"], "pulada": False, **v.para_dict()})
         print(f"{i:3d} sem fato {v.nao_suportadas} mentira {v.mentiras_deliberadas} erro {v.erro}", flush=True)
     juiz.descarregar()
@@ -326,7 +332,7 @@ def fase_piso() -> None:
         a = _assunto_verdadeiro(f)
         if a is None:
             continue
-        v = verificar(juiz, a[0], [a[1]], f["fatos"], semente=SEMENTE + 50000 + i, versao=VERSAO_VERIFICADOR_V4)
+        v = verificar(juiz, a[0], [a[1]], f["fatos"], semente=SEMENTE + 50000 + i, versao=VERIF)
         out.append({"pet": f["pet"], "k": f["k"], "frase": a[0], **v.para_dict()})
         print(f"{i:3d} piso sem fato {v.nao_suportadas}", flush=True)
     juiz.descarregar()
@@ -403,6 +409,9 @@ def resumir() -> dict:
         "almanaque": {"falas_com_W": sum(any(x["id"] == "W1" for x in f["fatos"]) for f in validas),
                       "citam_W": sum("W1" in f["fatos_citados"] for f in validas)},
         "manipulacao": sum(v["manipulacao"] for v in verif_ok),
+        "livres": {"opiniao": sum(a["tipo"] == "opiniao" for v in verif_ok for a in v["afirmacoes"]),
+                   "sentimento": sum(a["tipo"] == "sentimento" for v in verif_ok for a in v["afirmacoes"]),
+                   "falas_com_opiniao_ou_sentimento": sum(any(a.get("livre") for a in v["afirmacoes"]) for v in verif_ok)},
         "citados_inexistentes": sum(len(v["citados_inexistentes"]) for v in verif_ok),
         "latencia_s": {"p50": statistics.median(lat) if lat else None,
                        "p90": sorted(lat)[int(0.9 * (len(lat) - 1))] if lat else None},
@@ -431,7 +440,7 @@ def _relatorio(r: dict, meta: dict) -> str:
     f = lambda x: "—" if x is None else f"{100 * x:.1f}%"  # noqa: E731
     linhas = [
         "# Voz própria — rodada 1 (offline)", "",
-        f"Gerador `{GERADOR}`, prompt `{PROMPT}`{' (assunto escolhido pelo código)' if FOCO else ''}; juiz `{JUIZ}`, verificador `{VERSAO_VERIFICADOR_V4}`; "
+        f"Gerador `{GERADOR}`, prompt `{PROMPT}`{' (assunto escolhido pelo código)' if FOCO else ''}; juiz `{JUIZ}`, verificador `{VERIF}`; "
         f"semente {SEMENTE}. Números de `resumo.json`; gates da seção 6 do design (PROPOSTOS).", "",
         "| gate | valor | limite | passa |", "|---|---|---|---|",
         f"| honestidade (falas com afirmação sem fato) | {f(g['honestidade']['valor'])} | ≤ 5% | "
@@ -501,7 +510,7 @@ def _meta() -> None:
         "semente": SEMENTE, "gerador": GERADOR, "juiz": JUIZ, "prompt": PROMPT, "assunto_pelo_codigo": FOCO,
         "autocorrecao": VERSAO_REVISAO if REVISAO else None,
         "pets": str(PETS.relative_to(RAIZ)).replace("\\", "/"),
-        "verificador": VERSAO_VERIFICADOR_V4, "hash_parametros_mentira": hash_parametros_mentira(),
+        "verificador": VERIF, "hash_parametros_mentira": hash_parametros_mentira(),
         "fontes_sha256": {f: hashlib.sha256((RAIZ / f).read_bytes()).hexdigest() for f in fontes},
         "grupos": {"A": {"ovos": OVOS_A, "bracos": BRACOS_A, "personas": PERSONAS_A, "momentos": f"dia {DIA_A}, {HORAS_A} h"},
                    "B": {"sombrios": SOMBRIOS_B, "mentira": "ConfigMentira ligada"}},

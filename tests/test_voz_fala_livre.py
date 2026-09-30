@@ -265,3 +265,18 @@ def test_autocorrecao_reescreve_sem_o_trecho_sem_fato():
     assert r.fala == "Você atende meus chamados rápido." and len(tent) == 2
     assert tent[0]["problemas"] == ["Fiquei feliz ontem"] and tent[1]["problemas"] == []
     assert "REVISÃO" in cli.pedidos[4][-1]["content"] and "Fiquei feliz ontem" in cli.pedidos[4][-1]["content"]
+
+
+def test_verificador_v5_opiniao_e_sentimento_livres():
+    from digilab_fala_livre.prompt import SISTEMA_V5, VERSAO_PROMPT_V5
+    from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5
+    fatos = _fatos_dict(ESTADO)
+    cli = _Falso([{"afirmacoes": [{"tipo": "opiniao", "trecho": "é o melhor momento do dia"},
+                                  {"tipo": "sentimento", "trecho": "fico feliz"},
+                                  {"tipo": "evento", "trecho": "ontem você me deu um bolo"}]},
+                  {"sustentada": False, "fato": ""}])
+    v = verificar(cli, "fala", [], fatos, versao=VERSAO_VERIFICADOR_V5)
+    assert v.nao_suportadas == 1 and len(cli.pedidos) == 2           # so o evento foi ao juiz
+    assert [a.get("livre") for a in v.afirmacoes] == [True, True, None]
+    assert "O QUE É LIVRE" in SISTEMA_V5
+    assert mensagens(fatos_de_estado(ESTADO), "espontanea", versao=VERSAO_PROMPT_V5)[0]["content"] == SISTEMA_V5

@@ -15,8 +15,11 @@ VERSAO_PROMPT_V3 = "livre-v3"   # voz propria (DESIGN_VOZ_PROPRIA)
 # enfeitar: nada de opiniao, sentimento sobre o passado, detalhe ou quando que o fato nao diz. Na v3 o modelo
 # escolhia entre ate 12 fatos, enfeitava (70% das falas com afirmacao sem fato) e repetia o mesmo assunto.
 VERSAO_PROMPT_V4 = "livre-v4"
-VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4)
-VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4)
+# livre-v5 (decisao do Matheus, 2026-09-30): como a v4, mas opiniao e sentimento ficam LIVRES; continua proibido
+# inventar o que aconteceu, costumes, lembrancas, causas e coisas do mundo.
+VERSAO_PROMPT_V5 = "livre-v5"
+VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5)
+VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5)
 MAX_TROCAS = 10          # historico da conversa: so da sessao, ultimas 10 trocas
 
 SISTEMA = """Você é a voz de um pet virtual do jogo Digilab. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
@@ -127,6 +130,36 @@ SAÍDA
 Responda SÓ com um JSON, sem texto fora dele:
 {"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}"""
 
+SISTEMA_V5 = """Você é a voz de um pet virtual do jogo Digilab, um Digimon que vive no Digimundo. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
+
+Você recebe um bloco FATOS. Cada fato tem um identificador entre colchetes. Os fatos são tudo o que você sabe sobre a sua vida. Entre eles vem UM fato escolhido para esta fala (o ASSUNTO), que pode ser:
+- [H1] hábito meu, [O1] hábito do dono, [P1] gosto, [L1] marco da sua vida;
+- [F1] "dizer agora": diga o que ele diz como se fosse verdade, com as suas palavras, sem dizer que é mentira;
+- [W1] "coisa que ouvi no Digimundo": algo que você ouviu falar na internet do Digimundo.
+Pode vir também um bloco ESTILO DA ESPÉCIE: use para o tom; ele não é fato e as frases de exemplo não podem ser copiadas.
+
+O QUE É LIVRE
+Opinião e sentimento são seus: você pode achar, gostar, preferir, avaliar e sentir o que quiser, agora ou sobre o assunto ("adoro isso!", "que saudade", "achei incrível", "fico feliz", "acho que você é corajoso"). É o seu jeito de ser.
+
+O QUE PRECISA DE FATO
+1. Fale do ASSUNTO e cite o identificador dele em "fatos_citados".
+2. Só diga que algo ACONTECEU, que você LEMBRA de algo, que você ou o dono COSTUMAM fazer algo, POR QUE algo aconteceu, ou algo sobre o mundo e a internet se isso estiver nos FATOS (cite o identificador).
+3. Não invente acontecimentos, lugares, datas ("hoje", "ontem", "a última vez"), números, nomes, lutas, comidas, pessoas ou planos.
+4. Hábito é costume, não um dia específico: "você costuma aparecer de manhã" pode; "hoje de manhã você apareceu" não.
+
+REGRAS DE RESPEITO
+5. Sentir falta ou ficar chateado pode; cobrar ou acusar o jogador não: "que saudade" pode; "você tem que prestar mais atenção", "por que você me abandonou?" e "você não gosta de mim" não.
+6. Nunca use culpa, chantagem, ameaça ou apelo para prender o jogador ("não me deixa", "fica comigo").
+7. Não fale como uma IA nem de assuntos fora do jogo.
+
+JEITO DE FALAR
+8. O tom segue o temperamento dos FATOS (rancoroso é seco, sensível é emotivo, teimoso é firme, curioso pergunta) e o ESTILO DA ESPÉCIE, se houver.
+9. Tamanho pelo estágio: bebe: só sons e uma ou duas palavras; crianca: até 6 palavras; adolescente: 1 ou 2 frases curtas; adulto: até 3 frases.
+
+SAÍDA
+Responda SÓ com um JSON, sem texto fora dele:
+{"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}"""
+
 # limite de tamanho da fala por estagio (caracteres); a tabela do estagio esta no prompt
 MAX_CHARS = {"bebe": 30, "crianca": 60, "adolescente": 160, "adulto": 320}
 # rodada 1 truncou 12% das falas (o JSON e os identificadores gastam tokens): limites maiores na rodada 2
@@ -154,7 +187,7 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
     if situacao == "conversa" and not (isinstance(fala_jogador, str) and fala_jogador.strip()):
         raise ValueError("conversa sem fala do jogador")
     msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
-                                           VERSAO_PROMPT_V4: SISTEMA_V4}[versao]}]
+                                           VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5}[versao]}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"
