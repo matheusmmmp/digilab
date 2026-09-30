@@ -1,0 +1,956 @@
+{
+ "bootstrap": {
+  "reamostragens": 2000,
+  "semente": 20260930,
+  "tipo": "pigeonhole GR"
+ },
+ "descricao": "Exploratoria (pos hoc) sobre o E1 da linhagem: de onde vem a interacao dono x ambiente (22% da variancia).",
+ "entrada": "D:\\Trab\\digilab\\arquivo\\artifacts_linhagem_E1_vidas\\natureza_criacao",
+ "natureza": "exploratoria, pos hoc; sem gate",
+ "rodadas": {
+  "especie_fixa": {
+   "ambientes": [
+    82001,
+    82002,
+    82003,
+    82004
+   ],
+   "causas_de_morte": {
+    "lesao_sem_tratar": 40
+   },
+   "celulas": {
+    "aleatorio|82001": {
+     "derrotas_sparring": 34,
+     "lesionados": 1,
+     "lesoes": 1,
+     "mortes": 1,
+     "n": 40,
+     "taxa_media": 0.430453125
+    },
+    "aleatorio|82002": {
+     "derrotas_sparring": 52,
+     "lesionados": 8,
+     "lesoes": 16,
+     "mortes": 8,
+     "n": 40,
+     "taxa_media": 0.2197890625
+    },
+    "aleatorio|82003": {
+     "derrotas_sparring": 142,
+     "lesionados": 25,
+     "lesoes": 47,
+     "mortes": 15,
+     "n": 40,
+     "taxa_media": 0.31528125
+    },
+    "aleatorio|82004": {
+     "derrotas_sparring": 224,
+     "lesionados": 8,
+     "lesoes": 8,
+     "mortes": 8,
+     "n": 40,
+     "taxa_media": 0.32513281250000003
+    },
+    "atencioso|82001": {
+     "derrotas_sparring": 59,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.6173124999999999
+    },
+    "atencioso|82002": {
+     "derrotas_sparring": 27,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.40747656250000003
+    },
+    "atencioso|82003": {
+     "derrotas_sparring": 99,
+     "lesionados": 25,
+     "lesoes": 25,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.292671875
+    },
+    "atencioso|82004": {
+     "derrotas_sparring": 6,
+     "lesionados": 1,
+     "lesoes": 1,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.46421093750000003
+    },
+    "permissivo|82001": {
+     "derrotas_sparring": 33,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.41691406249999996
+    },
+    "permissivo|82002": {
+     "derrotas_sparring": 24,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.45795312499999996
+    },
+    "permissivo|82003": {
+     "derrotas_sparring": 37,
+     "lesionados": 6,
+     "lesoes": 8,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.4623046875
+    },
+    "permissivo|82004": {
+     "derrotas_sparring": 3,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.4243984375
+    },
+    "relapso|82001": {
+     "derrotas_sparring": 29,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.4025546875
+    },
+    "relapso|82002": {
+     "derrotas_sparring": 74,
+     "lesionados": 8,
+     "lesoes": 15,
+     "mortes": 8,
+     "n": 40,
+     "taxa_media": 0.3212890625
+    },
+    "relapso|82003": {
+     "derrotas_sparring": 59,
+     "lesionados": 12,
+     "lesoes": 18,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.463359375
+    },
+    "relapso|82004": {
+     "derrotas_sparring": 36,
+     "lesionados": 1,
+     "lesoes": 1,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.2558125
+    }
+   },
+   "decomposicao": {
+    "lesoes": {
+     "componentes": {
+      "D": 0.01902599715099715,
+      "DR": 0.0332175925925926,
+      "G": 0.012001424501424501,
+      "GD": -0.013470441595441592,
+      "GR": -0.0036680911680911713,
+      "R": 0.06547364672364674,
+      "e": 0.22268518518518518
+     },
+     "fracao": {
+      "D": 0.05398918700419383,
+      "DR": 0.09426001717952605,
+      "G": 0.03405588398767116,
+      "GD": 0.0,
+      "GR": 0.0,
+      "R": 0.18579152139861554,
+      "e": 0.6319033904299933
+     }
+    },
+    "morte": {
+     "componentes": {
+      "D": 0.007015669515669516,
+      "DR": 0.006419159544159546,
+      "G": 7.122507122507083e-05,
+      "GD": 0.0016648860398860415,
+      "GR": -0.001780626780626779,
+      "R": 4.4515669515668996e-05,
+      "e": 0.047400284900284896
+     },
+     "fracao": {
+      "D": 0.11204322479738378,
+      "DR": 0.1025167069529362,
+      "G": 0.0011374946679937375,
+      "GD": 0.02658893786435379,
+      "GR": 0.0,
+      "R": 0.0007109341674960817,
+      "e": 0.7570027015498365
+     }
+    },
+    "saude_final": {
+     "componentes": {
+      "D": 0.11421189701299746,
+      "DR": 0.0037958669612114713,
+      "G": 0.0021277924805614573,
+      "GD": 0.005038842850041485,
+      "GR": 0.0003666173203051692,
+      "R": -0.0011742212651351665,
+      "e": 0.05584613212250642
+     },
+     "fracao": {
+      "D": 0.6296581527498863,
+      "DR": 0.020926879260299333,
+      "G": 0.011730668326023487,
+      "GD": 0.02777949201380511,
+      "GR": 0.0020211868527426347,
+      "R": 0.0,
+      "e": 0.3078836207972431
+     }
+    },
+    "taxa": {
+     "componentes": {
+      "D": 0.001676735165153134,
+      "DR": 0.007425471506145943,
+      "G": 0.0016365422027674829,
+      "GD": -0.0004117943353462751,
+      "GR": -0.000956271558799634,
+      "R": 0.0006659472925778472,
+      "e": 0.021883186347722326
+     },
+     "fracao": {
+      "D": 0.050370736691631585,
+      "DR": 0.22306830429785313,
+      "G": 0.049163301452447954,
+      "GD": 0.0,
+      "GR": 0.0,
+      "R": 0.020005697036764976,
+      "e": 0.6573919605213023
+     }
+    }
+   },
+   "decomposicao_taxa_so_donos_sem_mortes": {
+    "componentes": {
+     "D": -0.003054717271592881,
+     "DR": 0.011904506543803418,
+     "G": 0.0011412347203442175,
+     "GD": 0.0010825733100043393,
+     "GR": 0.0009604746865818645,
+     "R": -0.0028072341266860306,
+     "e": 0.01026457253741403
+    },
+    "donos": [
+     "atencioso",
+     "permissivo"
+    ],
+    "fracao": {
+     "D": 0.0,
+     "DR": 0.46954351216149465,
+     "G": 0.0450131516849804,
+     "GD": 0.04269939894453856,
+     "GR": 0.03788352385883713,
+     "R": 0.0,
+     "e": 0.4048604133501493
+    }
+   },
+   "donos": [
+    "aleatorio",
+    "atencioso",
+    "permissivo",
+    "relapso"
+   ],
+   "dp_taxa_entre_ambientes": {
+    "aleatorio": {
+     "estimativa": 0.08614396528796346,
+     "ic95": [
+      0.0004843750000000091,
+      0.13412519605562423
+     ]
+    },
+    "atencioso": {
+     "estimativa": 0.1349960802050773,
+     "ic95": [
+      0.01288281249999998,
+      0.18047265625000003
+     ]
+    },
+    "permissivo": {
+     "estimativa": 0.023061993077331654,
+     "ic95": [
+      0.0005096920345189645,
+      0.037144370834191934
+     ]
+    },
+    "relapso": {
+     "estimativa": 0.09100432255018996,
+     "ic95": [
+      0.001019384069037929,
+      0.1201835775199811
+     ]
+    }
+   },
+   "exposicao_a_lesao_por_ambiente": {
+    "82001": 1,
+    "82002": 31,
+    "82003": 98,
+    "82004": 10
+   },
+   "forma_final": {
+    "residuo_dentro_da_forma": {
+     "componentes": {
+      "D": 0.000307521094691273,
+      "DR": 3.398513547667472e-05,
+      "G": 0.00010778292785155455,
+      "GD": 1.3462577220682765e-05,
+      "GR": -3.6642065544044265e-05,
+      "R": 2.9672614849978233e-05,
+      "e": 0.0009125709342265816
+     },
+     "fracao": {
+      "D": 0.2188769586090261,
+      "DR": 0.024188789710566063,
+      "G": 0.07671408513229981,
+      "GD": 0.009581937655562789,
+      "GR": 0.0,
+      "R": 0.02111936970977675,
+      "e": 0.6495188591827685
+     },
+     "ss_total": 0.8178912812423033
+    },
+    "residuo_medio_por_dono_vivos": {
+     "aleatorio": {
+      "media": -0.012322218451395783,
+      "n": 128
+     },
+     "atencioso": {
+      "media": 0.026774837405302433,
+      "n": 160
+     },
+     "permissivo": {
+      "media": -0.010581193378884007,
+      "n": 160
+     },
+     "relapso": {
+      "media": -0.00666933606873872,
+      "n": 152
+     }
+    },
+    "so_donos_sem_mortes": {
+     "n_formas": 8,
+     "r2": 0.929035435209216,
+     "taxa_media_por_forma": {
+      "adolescente:brigao": {
+       "n": 18,
+       "taxa": 0.4862673611111111
+      },
+      "adolescente:guardiao": {
+       "n": 27,
+       "taxa": 0.18163194444444444
+      },
+      "duelista": {
+       "n": 31,
+       "taxa": 0.6306350806451613
+      },
+      "emboscador": {
+       "n": 75,
+       "taxa": 0.5665708333333334
+      },
+      "espelho": {
+       "n": 109,
+       "taxa": 0.41490825688073396
+      },
+      "furioso": {
+       "n": 7,
+       "taxa": 0.7404464285714286
+      },
+      "muralha": {
+       "n": 52,
+       "taxa": 0.29626802884615383
+      },
+      "tita": {
+       "n": 1,
+       "taxa": 0.21625
+      }
+     }
+    },
+    "todos": {
+     "n_formas": 14,
+     "r2": 0.9585126627588196,
+     "taxa_media_por_forma": {
+      "adolescente:brigao": {
+       "n": 72,
+       "taxa": 0.4681380208333333
+      },
+      "adolescente:colosso": {
+       "n": 3,
+       "taxa": 0.022604166666666665
+      },
+      "adolescente:guardiao": {
+       "n": 27,
+       "taxa": 0.18163194444444444
+      },
+      "bastiao_rachado": {
+       "n": 15,
+       "taxa": 0.21254166666666666
+      },
+      "duelista": {
+       "n": 57,
+       "taxa": 0.6272423245614035
+      },
+      "emboscador": {
+       "n": 94,
+       "taxa": 0.5666589095744681
+      },
+      "espelho": {
+       "n": 158,
+       "taxa": 0.4055834651898734
+      },
+      "furioso": {
+       "n": 17,
+       "taxa": 0.7099448529411765
+      },
+      "morto": {
+       "n": 40,
+       "taxa": 0.0
+      },
+      "muralha": {
+       "n": 128,
+       "taxa": 0.2787890625
+      },
+      "predador": {
+       "n": 2,
+       "taxa": 0.49984375000000003
+      },
+      "sentinela": {
+       "n": 5,
+       "taxa": 0.52275
+      },
+      "tita": {
+       "n": 16,
+       "taxa": 0.188984375
+      },
+      "vigia": {
+       "n": 6,
+       "taxa": 0.28640625
+      }
+     }
+    }
+   },
+   "morte_dado_lesao": {
+    "aleatorio": {
+     "lesionados": 42,
+     "mortos": 32,
+     "p": 0.7619047619047619
+    },
+    "atencioso": {
+     "lesionados": 26,
+     "mortos": 0,
+     "p": 0.0
+    },
+    "permissivo": {
+     "lesionados": 6,
+     "mortos": 0,
+     "p": 0.0
+    },
+    "relapso": {
+     "lesionados": 21,
+     "mortos": 8,
+     "p": 0.38095238095238093
+    }
+   },
+   "mortos_sem_lesao": 0,
+   "n_genomas": 40,
+   "qualificados_adulto": {
+    "aleatorio|82001": 36,
+    "aleatorio|82002": 32,
+    "aleatorio|82003": 13,
+    "aleatorio|82004": 9,
+    "atencioso|82001": 31,
+    "atencioso|82002": 38,
+    "atencioso|82003": 15,
+    "atencioso|82004": 40,
+    "permissivo|82001": 33,
+    "permissivo|82002": 40,
+    "permissivo|82003": 38,
+    "permissivo|82004": 40,
+    "relapso|82001": 36,
+    "relapso|82002": 28,
+    "relapso|82003": 34,
+    "relapso|82004": 35
+   }
+  },
+  "especies_balanceadas": {
+   "ambientes": [
+    82001,
+    82002,
+    82003,
+    82004
+   ],
+   "causas_de_morte": {
+    "lesao_sem_tratar": 42
+   },
+   "celulas": {
+    "aleatorio|82001": {
+     "derrotas_sparring": 55,
+     "lesionados": 2,
+     "lesoes": 2,
+     "mortes": 2,
+     "n": 40,
+     "taxa_media": 0.4263515625
+    },
+    "aleatorio|82002": {
+     "derrotas_sparring": 56,
+     "lesionados": 6,
+     "lesoes": 9,
+     "mortes": 6,
+     "n": 40,
+     "taxa_media": 0.24548437500000003
+    },
+    "aleatorio|82003": {
+     "derrotas_sparring": 159,
+     "lesionados": 25,
+     "lesoes": 47,
+     "mortes": 15,
+     "n": 40,
+     "taxa_media": 0.315421875
+    },
+    "aleatorio|82004": {
+     "derrotas_sparring": 216,
+     "lesionados": 9,
+     "lesoes": 9,
+     "mortes": 9,
+     "n": 40,
+     "taxa_media": 0.3102421875
+    },
+    "atencioso|82001": {
+     "derrotas_sparring": 119,
+     "lesionados": 7,
+     "lesoes": 7,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.5894140625000001
+    },
+    "atencioso|82002": {
+     "derrotas_sparring": 23,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.4447421875
+    },
+    "atencioso|82003": {
+     "derrotas_sparring": 98,
+     "lesionados": 25,
+     "lesoes": 25,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.31639062500000004
+    },
+    "atencioso|82004": {
+     "derrotas_sparring": 5,
+     "lesionados": 1,
+     "lesoes": 1,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.51221875
+    },
+    "permissivo|82001": {
+     "derrotas_sparring": 49,
+     "lesionados": 1,
+     "lesoes": 1,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.44434375
+    },
+    "permissivo|82002": {
+     "derrotas_sparring": 11,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.4983046875
+    },
+    "permissivo|82003": {
+     "derrotas_sparring": 49,
+     "lesionados": 5,
+     "lesoes": 10,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.47924999999999995
+    },
+    "permissivo|82004": {
+     "derrotas_sparring": 2,
+     "lesionados": 0,
+     "lesoes": 0,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.474828125
+    },
+    "relapso|82001": {
+     "derrotas_sparring": 38,
+     "lesionados": 1,
+     "lesoes": 1,
+     "mortes": 1,
+     "n": 40,
+     "taxa_media": 0.40330468750000004
+    },
+    "relapso|82002": {
+     "derrotas_sparring": 68,
+     "lesionados": 9,
+     "lesoes": 12,
+     "mortes": 9,
+     "n": 40,
+     "taxa_media": 0.3342890625
+    },
+    "relapso|82003": {
+     "derrotas_sparring": 105,
+     "lesionados": 13,
+     "lesoes": 23,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.4267578125
+    },
+    "relapso|82004": {
+     "derrotas_sparring": 26,
+     "lesionados": 2,
+     "lesoes": 2,
+     "mortes": 0,
+     "n": 40,
+     "taxa_media": 0.2723125
+    }
+   },
+   "decomposicao": {
+    "lesoes": {
+     "componentes": {
+      "D": 0.012268518518518517,
+      "DR": 0.029638532763532767,
+      "G": 0.007674501424501424,
+      "GD": -0.007060185185185169,
+      "GR": 0.02461716524216525,
+      "R": 0.0712161680911681,
+      "e": 0.19796563390313385
+     },
+     "fracao": {
+      "D": 0.03572863865589795,
+      "DR": 0.0863139608748072,
+      "G": 0.022349845080830214,
+      "GD": 0.0,
+      "GR": 0.07169062836252385,
+      "R": 0.2073972283080753,
+      "e": 0.5765196987178656
+     }
+    },
+    "morte": {
+     "componentes": {
+      "D": 0.00670405982905983,
+      "DR": 0.007264957264957265,
+      "G": 0.0008547008547008534,
+      "GD": 0.0026709401709401736,
+      "GR": -0.0023504273504273473,
+      "R": -0.00077457264957265,
+      "e": 0.04898504273504273
+     },
+     "fracao": {
+      "D": 0.10084371233427081,
+      "DR": 0.10928083567697872,
+      "G": 0.012856568903173946,
+      "GD": 0.040176777822418686,
+      "GR": 0.0,
+      "R": 0.0,
+      "e": 0.7368421052631577
+     }
+    },
+    "saude_final": {
+     "componentes": {
+      "D": 0.1131626260965685,
+      "DR": 0.004094997697797425,
+      "G": 0.0028018528749702534,
+      "GD": 0.0053051166696344455,
+      "GR": -0.0005379160130280728,
+      "R": -0.0010937536918327038,
+      "e": 0.05734998831203882
+     },
+     "fracao": {
+      "D": 0.6193409692539628,
+      "DR": 0.022411991756733453,
+      "G": 0.01533458823949738,
+      "GD": 0.029034993385297424,
+      "GR": 0.0,
+      "R": 0.0,
+      "e": 0.313877457364509
+     }
+    },
+    "taxa": {
+     "componentes": {
+      "D": 0.004178637873549072,
+      "DR": 0.005408397883662469,
+      "G": 0.0030188086676529663,
+      "GD": 0.0006505898621822692,
+      "GR": -0.00018194517043241317,
+      "R": 0.00013396679044109483,
+      "e": 0.02276110464590567
+     },
+     "fracao": {
+      "D": 0.1155868279877783,
+      "DR": 0.14960366865612212,
+      "G": 0.0835043688290832,
+      "GD": 0.017996203731046097,
+      "GR": 0.0,
+      "R": 0.0037057043063743068,
+      "e": 0.629603226489596
+     }
+    }
+   },
+   "decomposicao_taxa_so_donos_sem_mortes": {
+    "componentes": {
+     "D": -0.0021445064812032574,
+     "DR": 0.008285881744123926,
+     "G": 0.0015839865190554895,
+     "GD": 0.001309881643963673,
+     "GR": 0.00214863372020232,
+     "R": -0.001694920137845549,
+     "e": 0.01221296703110394
+    },
+    "donos": [
+     "atencioso",
+     "permissivo"
+    ],
+    "fracao": {
+     "D": 0.0,
+     "DR": 0.3244104767569474,
+     "G": 0.06201655269673415,
+     "GD": 0.05128474454933926,
+     "GR": 0.0841237313145587,
+     "R": 0.0,
+     "e": 0.4781644946824205
+    }
+   },
+   "donos": [
+    "aleatorio",
+    "atencioso",
+    "permissivo",
+    "relapso"
+   ],
+   "dp_taxa_entre_ambientes": {
+    "aleatorio": {
+     "estimativa": 0.07506185193699218,
+     "ic95": [
+      0.001082031250000004,
+      0.12106428965813189
+     ]
+    },
+    "atencioso": {
+     "estimativa": 0.11576079133869412,
+     "ic95": [
+      0.012289062500000003,
+      0.15922732925536134
+     ]
+    },
+    "permissivo": {
+     "estimativa": 0.022348208849064247,
+     "ic95": [
+      9.375000000000355e-05,
+      0.04079296875000005
+     ]
+    },
+    "relapso": {
+     "estimativa": 0.06995062385446309,
+     "ic95": [
+      0.0007226562500000089,
+      0.09745552378814291
+     ]
+    }
+   },
+   "exposicao_a_lesao_por_ambiente": {
+    "82001": 11,
+    "82002": 21,
+    "82003": 105,
+    "82004": 12
+   },
+   "forma_final": {
+    "residuo_dentro_da_forma": {
+     "componentes": {
+      "D": 0.0004323473452556269,
+      "DR": 1.5316065785396137e-05,
+      "G": 0.0005790594855240616,
+      "GD": 0.0003517965346914936,
+      "GR": 9.393626609407356e-05,
+      "R": 2.280307473879486e-05,
+      "e": 0.0014257093832065904
+     },
+     "fracao": {
+      "D": 0.1480150834481826,
+      "DR": 0.0052434894771538065,
+      "G": 0.19824231375962212,
+      "GD": 0.1204383327677324,
+      "GR": 0.03215929140608971,
+      "R": 0.007806683786487152,
+      "e": 0.4880948053547322
+     },
+     "ss_total": 1.7835093172042067
+    },
+    "residuo_medio_por_dono_vivos": {
+     "aleatorio": {
+      "media": -0.01369909755522805,
+      "n": 128
+     },
+     "atencioso": {
+      "media": 0.03195079090059237,
+      "n": 160
+     },
+     "permissivo": {
+      "media": -0.01092310623774521,
+      "n": 160
+     },
+     "relapso": {
+      "media": -0.010739633726575588,
+      "n": 150
+     }
+    },
+    "so_donos_sem_mortes": {
+     "n_formas": 8,
+     "r2": 0.8455164830917619,
+     "taxa_media_por_forma": {
+      "adolescente:brigao": {
+       "n": 26,
+       "taxa": 0.4771394230769231
+      },
+      "adolescente:guardiao": {
+       "n": 25,
+       "taxa": 0.19
+      },
+      "duelista": {
+       "n": 25,
+       "taxa": 0.6139125
+      },
+      "emboscador": {
+       "n": 75,
+       "taxa": 0.6186375000000001
+      },
+      "espelho": {
+       "n": 109,
+       "taxa": 0.4644266055045872
+      },
+      "furioso": {
+       "n": 5,
+       "taxa": 0.75825
+      },
+      "muralha": {
+       "n": 54,
+       "taxa": 0.31200810185185185
+      },
+      "tita": {
+       "n": 1,
+       "taxa": 0.21625
+      }
+     }
+    },
+    "todos": {
+     "n_formas": 14,
+     "r2": 0.919083038465965,
+     "taxa_media_por_forma": {
+      "adolescente:brigao": {
+       "n": 87,
+       "taxa": 0.4565768678160919
+      },
+      "adolescente:colosso": {
+       "n": 2,
+       "taxa": 0.01546875
+      },
+      "adolescente:guardiao": {
+       "n": 25,
+       "taxa": 0.19
+      },
+      "bastiao_rachado": {
+       "n": 15,
+       "taxa": 0.2055625
+      },
+      "duelista": {
+       "n": 43,
+       "taxa": 0.6186845930232557
+      },
+      "emboscador": {
+       "n": 94,
+       "taxa": 0.6175398936170212
+      },
+      "espelho": {
+       "n": 158,
+       "taxa": 0.4540308544303797
+      },
+      "furioso": {
+       "n": 14,
+       "taxa": 0.7309151785714285
+      },
+      "morto": {
+       "n": 42,
+       "taxa": 0.0
+      },
+      "muralha": {
+       "n": 130,
+       "taxa": 0.28299278846153847
+      },
+      "predador": {
+       "n": 2,
+       "taxa": 0.50859375
+      },
+      "sentinela": {
+       "n": 5,
+       "taxa": 0.5746875
+      },
+      "tita": {
+       "n": 17,
+       "taxa": 0.18610294117647058
+      },
+      "vigia": {
+       "n": 6,
+       "taxa": 0.28239583333333335
+      }
+     }
+    }
+   },
+   "morte_dado_lesao": {
+    "aleatorio": {
+     "lesionados": 42,
+     "mortos": 32,
+     "p": 0.7619047619047619
+    },
+    "atencioso": {
+     "lesionados": 33,
+     "mortos": 0,
+     "p": 0.0
+    },
+    "permissivo": {
+     "lesionados": 6,
+     "mortos": 0,
+     "p": 0.0
+    },
+    "relapso": {
+     "lesionados": 25,
+     "mortos": 10,
+     "p": 0.4
+    }
+   },
+   "mortos_sem_lesao": 0,
+   "n_genomas": 40,
+   "qualificados_adulto": {
+    "aleatorio|82001": 34,
+    "aleatorio|82002": 32,
+    "aleatorio|82003": 12,
+    "aleatorio|82004": 9,
+    "atencioso|82001": 26,
+    "atencioso|82002": 40,
+    "atencioso|82003": 15,
+    "atencioso|82004": 40,
+    "permissivo|82001": 33,
+    "permissivo|82002": 40,
+    "permissivo|82003": 35,
+    "permissivo|82004": 40,
+    "relapso|82001": 35,
+    "relapso|82002": 29,
+    "relapso|82003": 28,
+    "relapso|82004": 36
+   }
+  }
+ }
+}
