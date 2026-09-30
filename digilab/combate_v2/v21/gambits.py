@@ -11,6 +11,8 @@
 especificacao so da o nome; registrado em docs/REGISTRO_DESVIOS.md).
 `oponente_vai_preparar`: a regra do oponente que dispararia agora (sem a
 exploracao epsilon, sem rng) e preparar_pesado. So o vigia enxerga.
+`oponente_preparando` com a chave `preparo_sob_pele_oculto` (ConfigCombateV21D,
+desligada por padrao): falso quando o preparo foi feito sob pele_dura.
 
 Decisao igual a V2: pesado automatico; epsilon -> acao legal uniforme; senao a
 primeira regra cujas condicoes valem E cuja acao e legal.
@@ -98,7 +100,7 @@ class Condicao:
             if valor not in _dominio(tipo):
                 raise GambitInvalido(f"{self.nome}: parametro {valor!r} fora de {_dominio(tipo)}")
 
-    def vale(self, estado: EstadoCombate, lado: int, ctx: Contexto) -> bool:
+    def vale(self, estado: EstadoCombate, lado: int, ctx: Contexto, r: Regras = REGRAS_PADRAO) -> bool:
         b = CONFIG_COMBATE_V2
         eu, op = estado.proprio(lado), estado.oponente(lado)
         n, p = self.nome, self.params
@@ -113,6 +115,9 @@ class Condicao:
         if n == "guts_proprio_acima":
             return eu.guts >= p[0]
         if n == "oponente_preparando":
+            # V21D, candidato A (chave desligada por padrao): o preparo feito sob pele_dura nao aparece
+            if getattr(r.v21, "preparo_sob_pele_oculto", False) and op.preparo_sob_pele:
+                return False
             return op.preparando
         if n == "oponente_hp_abaixo":
             return op.fracao_hp < p[0]
@@ -199,7 +204,7 @@ class ListaGambits:
     def primeira_regra(self, estado: EstadoCombate, lado: int, ctx: Contexto,
                        r: Regras = REGRAS_PADRAO) -> tuple[Acao, int]:
         for i, rg in enumerate(self.regras):
-            if all(c.vale(estado, lado, ctx) for c in rg.condicoes) and eh_legal(estado, lado, rg.acao, r):
+            if all(c.vale(estado, lado, ctx, r) for c in rg.condicoes) and eh_legal(estado, lado, rg.acao, r):
                 return rg.acao, i
         if eh_legal(estado, lado, self.final.acao, r):
             return self.final.acao, len(self.regras)
@@ -232,7 +237,7 @@ def decidir_gambits(gambits: ListaGambits, epsilon: float, estado: EstadoCombate
     if obrig is not None:
         if eh_legal(estado, lado, Acao.FINTAR, r):
             for i, rg in enumerate(gambits.regras):
-                if rg.acao is Acao.FINTAR and all(c.vale(estado, lado, ctx) for c in rg.condicoes):
+                if rg.acao is Acao.FINTAR and all(c.vale(estado, lado, ctx, r) for c in rg.condicoes):
                     return Acao.FINTAR, i
         return obrig, PESADO_AUTOMATICO
     if epsilon > 0.0 and rng.random() < epsilon:

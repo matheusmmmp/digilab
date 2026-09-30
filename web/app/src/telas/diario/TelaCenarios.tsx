@@ -93,7 +93,7 @@ export function TelaCenarios() {
     for (const c of ACOES_V2_OBS) { contA[c] = 0; contB[c] = 0; }
     let v = 0, d = 0, e = 0, turnos = 0, lim = 0;
     for (let k = 0; k < n; k++) {
-      const r = jogarV2(A, B, hashSemente("lab", m.semente, m.log.length, k));
+      const r = jogarV2(A, B, hashSemente("lab", m.semente, m.log.length, k), m.regras);
       if (r.pontosA === 1) v++; else if (r.pontosA === 0) d++; else e++;
       turnos += r.turnos.length; lim += r.fim === "limite" ? 1 : 0;
       for (const t of r.turnos) { contA[t.a]++; contB[t.b]++; }

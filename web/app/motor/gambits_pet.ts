@@ -5,9 +5,9 @@
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
 import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
-import { ADOL_V21, BOTS_V2, BOTS_V21, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival } from "./bots.ts";
+import { ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival, gambitsAdulto } from "./bots.ts";
 import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
-import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type ResultadoLuta } from "./combate.ts";
+import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
 import { condicaoDe, type TreinoPet } from "./treino.ts";
@@ -27,18 +27,21 @@ export function permitida(r: Regra, f: Forma): boolean {
   if (!r.se.every(c => conds.includes(c.n) || (c.n === "oponente_vai_preparar" && f.adulta === "vigia"))) return false;
   return !(TECNICAS as readonly string[]).includes(r.entao) || r.entao === tecnicaDe(f);
 }
-export function sementeDe(f: Forma): ListaGambits {
+/** semente da forma; R = CV21D (pets v6): a muralha e o vigia adultos semeiam as listas variantes */
+export function sementeDe(f: Forma, R: RegrasLuta = null): ListaGambits {
   return f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!]
-    : BOTS_V21[f.adulta as FormaAdultaNormal] || GAMBITS_SOMBRIA[f.adulta!] || BOTS_V21[SOMBRIA[f.adulta!]!.base];
+    : (BOTS_V21[f.adulta as FormaAdultaNormal] && gambitsAdulto(f.adulta as FormaAdultaNormal, R)) || GAMBITS_SOMBRIA[f.adulta!] || BOTS_V21[SOMBRIA[f.adulta!]!.base];
 }
 /* regra pela chave: o repertorio (de onde o pet tira candidatas) ou, fora dele, a semente de uma sombria (a
-   do devastador tem "perto e guts >= 60 -> preparar pesado", que nenhum bot usa). O repertorio nao muda: as
-   candidatas e o replay dos pets que ja existem ficam iguais. */
+   do devastador tem "perto e guts >= 60 -> preparar pesado", que nenhum bot usa) ou do vigia V21D (as duas regras novas
+   do reequilibrio, so na semente dos pets v6). O repertorio nao muda: as candidatas e o replay dos pets que ja existem
+   ficam iguais. */
 let REGRAS_SEMENTE: Map<string, Regra> | null = null;
 export function regraDe(k: string): Regra {
   const r = REPERTORIO.get(k);
   if (r) return r;
-  REGRAS_SEMENTE ??= new Map(Object.values(GAMBITS_SOMBRIA).flatMap(g => g.regras.map(x => [chaveRegra(x), x] as [string, Regra])));
+  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[]]
+    .flatMap(g => g.regras.map(x => [chaveRegra(x), x] as [string, Regra])));
   if (!REGRAS_SEMENTE.has(k)) throw new Error("regra fora do repertório: " + k);
   return REGRAS_SEMENTE.get(k)!;
 }
@@ -78,8 +81,8 @@ export class GambitsPet {
   versao = 0;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
       lista cabe na capacidade do estagio */
-  semear(forma: Forma, nome: string = nomeFormaLegado(forma)): void {
-    const base = sementeDe(forma), cap = CV21.maxRegras[baseDe(forma.est)];
+  semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = null): void {
+    const base = sementeDe(forma, R), cap = CV21.maxRegras[baseDe(forma.est)];
     this.forma = { ...forma }; this.linha = nome; this.final = base.final;
     const novas: string[] = [];
     base.regras.forEach((r, i) => {
@@ -183,18 +186,19 @@ export function lutadorPet(m: PetLutador, rotulo: string, absoluto = false): Lut
     cond: perfilDe(m.forma, m.carater(), m.versao >= 2 ? condicaoDe(m.e.saude) : 1, m.treino.total > 0 ? m.treino.pontos : null, absoluto),
   };
 }
-/** lutador de um bot: NPC da campanha, forma adulta canonica da V2.1 ou bot classico (stats neutros) */
-export function lutadorBot(nome: string): Lutador {
+/** lutador de um bot: NPC da campanha, forma adulta canonica da V2.1 ou bot classico (stats neutros); R = regras da
+    luta (CV21D contra um pet v6: a muralha e o vigia com as listas variantes) */
+export function lutadorBot(nome: string, R: RegrasLuta = null): Lutador {
   const n = NPC[nome];
   if (n) {
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala */
-    if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estiloBot(nome), eps: CESC.epsNpc },
+    if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estiloBot(nome, R), eps: CESC.epsNpc },
       cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0) * (n.fator ?? CESC.fatorNpc[nome])) };
-    return { nome: "Rival " + n.nome, estilo: estiloBot(nome), cond: perfilNPC(n.total, n.estagio || "adulto") };
+    return { nome: "Rival " + n.nome, estilo: estiloBot(nome, R), cond: perfilNPC(n.total, n.estagio || "adulto") };
   }
   if (BOTS_V21[nome as FormaAdultaNormal]) {
     const f = formaRival(nome as FormaAdultaNormal);
-    return { nome: "Rival " + nomeFormaLegado(f), estilo: estiloBot(nome), cond: perfilDe(f, caraterCanonico(nome as FormaAdultaNormal)) };
+    return { nome: "Rival " + nomeFormaLegado(f), estilo: estiloBot(nome, R), cond: perfilDe(f, caraterCanonico(nome as FormaAdultaNormal)) };
   }
   return { nome: "Rival " + NOME_BOT[nome], estilo: estiloBot(nome), cond: perfilNeutro() };
 }

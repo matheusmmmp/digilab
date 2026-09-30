@@ -377,6 +377,35 @@ Só no jogo web; a pesquisa em Python não tem Tamer (`docs/REGISTRO_DESVIOS.md`
 - **Saves:** na primeira abertura os pets v1–v5 (ativo e guardados) são apagados com aviso e o jogo começa num ovo novo (decisão do
   Matheus). Os Cenários seguem com pets v5 (sem Tamer). Telas: Lutar · Medalhas, requisito na Evolução, líder na Campanha.
 
+## Reequilíbrio dos arquétipos: V21D validada e nos pets v6 (2026-09-29/30)
+
+`docs/DIAGNOSTICO_ARQUETIPOS.md` → `docs/EQUILIBRIO_RODADA1.md` e `EQUILIBRIO_RODADA2.md` (calibração) →
+`docs/VALIDACAO_V21D.md`. Números de `artifacts_combate_v21c/validacao_v21d/criterios.json`.
+
+- **Python:** `ConfigCombateV21D` (subclasse da V21C) tem 7 chaves, todas **desligadas por padrão**. A V21C, a pesquisa
+  (V3, E1, confirmatória) e as baterias reproduzem. A variante escolhida, `a_c_e2v_v`
+  (`experiments/configs/v21d/validacao.json`), liga quatro chaves:
+  - `preparo_sob_pele_oculto`;
+  - `muralha_lista_espelho`;
+  - `vigia_bate_em_quem_recua`;
+  - `vigia_recua_do_preparo_sob_pele`.
+- **Validação APROVADA** (`python experiments/validar_v21d.py --conjunto validacao`, uma run, registro commitado antes),
+  com o furioso como exceção declarada (decisão do Matheus):
+  - 7 formas em [0,40; 0,60]: força de 0,407 (titã) a 0,562 (sentinela), painel de 0,432 a 0,549;
+  - A6 passa (mínimo 2 vitórias, o titã);
+  - S1, E4 na escala (menor 0,8355), campanha na escala (4 de 5, Sentinela exceção) e E3 da pele dura passam.
+- **Relatados:**
+  - furioso: força 0,722, painel 0,675;
+  - A3: suporte 4;
+  - A4: 9 e 7 pares extremos;
+  - A5: amplitude 0,316 e 0,424;
+  - E3 do contra-golpe não reduz (pelo espelho).
+- **Web:** só os pets v6 lutam com a V21D (`CV21D`, `Motor.regras`, `jogarV2(..., R)`); os v1–v5 seguem na V21C.
+  - paridade com o Python: `test/paridade_v21d.test.ts`, 272 partidas iguais;
+  - descarte único dos saves, versão 2: os v6 de antes saem com o mesmo aviso.
+- **Aberto:** o furioso (rodada 3, pela base V2C: C3 contra o avanço ou custo do golpe rápido, com G1–G9 de novo); E2,
+  E5, G6b, G8 e G9 não medidos; a pesquisa não usa a V21D.
+
 ## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 
 **Com os bots redesenhados** (`GAMBITS_V2C`, `ConfigCombateV2C.bots_v2c`; configs `v2c/c7.json` e

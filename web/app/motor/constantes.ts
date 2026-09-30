@@ -150,6 +150,13 @@ export const CV21 = {
   duelista: 4, limFurioso: .5, multFurioso: 1.25, espelho: 1, muralha: 3, recargaSent: 4, multEmb: 2, multTita: 1.3,
   maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<EstagioBase, number>, turnos: [5, 10, 20],
 };
+/* V21D: reequilibrio dos arquetipos, variante a_c_e2v_v (docs/EQUILIBRIO_RODADA2.md, validada em docs/VALIDACAO_V21D.md;
+   chaves da ConfigCombateV21D, experiments/configs/v21d/validacao.json). So nas lutas de pets v6 (versaoPet em diante):
+   os v1-v5 lutam com a V21C. As outras chaves da V21D (D2, E1, E2 no tita) ficam desligadas e nao existem na web */
+export const CV21D = {
+  versaoPet: 6,
+  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
+} as const;
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];

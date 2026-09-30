@@ -20,12 +20,13 @@ const ABAS: [string, string, string][] = [
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar). O registro do Tamer
-    (vazio, ou o dado) vai junto: com ele o app entende que a troca para as medalhas ja rodou e nao descarta os saves
-    antigos (v1-v3) que estes testes jogam */
+    (vazio, ou o dado) e o marcador do descarte (versao 2) vao junto: com eles o app entende que o descarte unico ja rodou
+    e nao descarta os saves antigos (v1-v3, e o v6) que estes testes jogam */
 async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t, tm]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
+    localStorage.setItem(chave + "-descarte", "2");
     /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
@@ -303,6 +304,33 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(r.save.versao).toBe(6);
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
+  expect(r.tamer).toEqual({ versao: 1, log: [] });
+  await page.reload();
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  expect(erros).toEqual([]);
+});
+
+test("combate V21D: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça sem medalhas", async ({ page }) => {
+  const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }]] };
+  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.evaluate(([c, s, tm]) => {
+    /* o descarte das medalhas ja rodou (Tamer gravado, sem o marcador novo): so falta o do V21D */
+    localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]"); localStorage.setItem(c + "-tamer", tm);
+  }, [CHAVE, JSON.stringify(SAVE_V6), JSON.stringify(tamer)] as const);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const aviso = page.locator("dialog.med-aviso[open]");
+  await expect(aviso).toContainText("o pet que você tinha foi descartado");
+  await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
+  await page.locator("dialog.brasao-tela[open] .br-card").first().click();
+  await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
+  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
+    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
+  expect(r.save.versao).toBe(6);
+  expect(r.save.semente).not.toBe(SAVE_V6.semente);
+  expect(r.marca).toBe("2");
   expect(r.tamer).toEqual({ versao: 1, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();

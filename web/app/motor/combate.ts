@@ -1,7 +1,7 @@
 /* Combate V2.1 (espelho de digilab/combate_v2/ e combate_v2/v21/, regras corrigidas V2C/V21C). Resolucao
    deterministica, sem rng; so as decisoes (epsilon) usam rng. Cada lutador tem um PERFIL (catalogo.ts) e,
    conforme o estagio, a tecnica da linha (adolescente) e a passiva da forma (adulto). */
-import { CSO, CV, CV21, TECNICAS } from "./constantes.ts";
+import { CSO, CV, CV21, CV21D, TECNICAS } from "./constantes.ts";
 import type { Perfil } from "./catalogo.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import type { Estagio } from "./tipos.ts";
@@ -11,17 +11,24 @@ export const ACOES_V2: readonly string[] = ["avancar", "recuar", "golpe_rapido",
 export const ACOES_V2_OBS: readonly string[] = [...ACOES_V2, "pesado", "fintar"];
 export const DIST = ["perto", "medio", "longe"];
 export const custoV2 = (a: string): number => CV.custo[a] ?? CV21.custo[a] ?? 0;
+/** regras de uma luta: null = V21C (pets v1-v5, cenarios); CV21D = a variante a_c_e2v_v do reequilibrio (docs/VALIDACAO_V21D.md),
+    so nas lutas de pets v6: o preparo sob pele nao aparece em oponente_preparando, e a muralha e o vigia (do pet e dos bots)
+    usam as listas variantes (bots.gambitsAdulto). Vale para a luta inteira, os dois lados, como as Regras do Python */
+export type RegrasLuta = typeof CV21D | null;
+export const regrasDaVersao = (versao: number): RegrasLuta => versao >= CV21D.versaoPet ? CV21D : null;
 
 export interface Lado {
   p: Perfil; hp: number; hpMax: number; guts: number; gutsMax: number; regen: number; prep: boolean; hist: string[];
   marca: number; pele: number; recarga: number; disparou: boolean;
+  /** o preparo do pesado em curso foi feito com pele_dura ativa (so e lido com CV21D.preparoSobPeleOculto) */
+  prepPele: boolean;
 }
 export interface EstadoLuta { turno: number; dist: number; L: Lado[] }
 
 export function estadoV2(pa: Perfil, pb: Perfil): EstadoLuta {
   const L = (p: Perfil): Lado => ({
     p, hp: p.hpMax, hpMax: p.hpMax, guts: p.guts0, gutsMax: p.gutsMax, regen: p.regen, prep: false, hist: [],
-    marca: 0, pele: 0, recarga: 0, disparou: false,
+    marca: 0, pele: 0, recarga: 0, disparou: false, prepPele: false,
   });
   return { turno: 0, dist: 1, L: [L(pa), L(pb)] };
 }
@@ -128,6 +135,7 @@ export function resolverV2(E: EstadoLuta, aa: string, ab: string): ResultadoTurn
     const pl = ac[l] === "pele_dura" ? (p.passiva === "colosso_partido" ? CSO.turnosPeleColosso : CV21.turnosPele) - 1 : Math.max(0, s.pele - 1);
     return {
       ...s, hp: s.hp - dano[l], guts: Math.max(0, Math.min(s.gutsMax, g)), prep: ac[l] === "preparar_pesado" && !interr[l],
+      prepPele: ac[l] === "preparar_pesado" && !interr[l] && pele[l],
       hist: [...s.hist, ac[l]], marca, pele: pl, recarga: recarga[l], disparou: s.disparou || ac[l] === "disparo",
     };
   });
@@ -177,7 +185,7 @@ export function validarLista(g: ListaGambits): ListaGambits {
   return g;
 }
 export interface Contexto { intencao: string | null }
-export function valeCond(c: Cond, E: EstadoLuta, lado: number, ctx: Contexto | null): boolean {
+export function valeCond(c: Cond, E: EstadoLuta, lado: number, ctx: Contexto | null, R: RegrasLuta = null): boolean {
   const eu = E.L[lado], op = E.L[1 - lado], p = c.p;
   switch (c.n) {
     case "sempre": return true;
@@ -185,7 +193,8 @@ export function valeCond(c: Cond, E: EstadoLuta, lado: number, ctx: Contexto | n
     case "hp_proprio_abaixo": return eu.hp / eu.hpMax < (p[0] as number);
     case "guts_proprio_abaixo": return eu.guts < (p[0] as number);
     case "guts_proprio_acima": return eu.guts >= (p[0] as number);
-    case "oponente_preparando": return op.prep;
+    /* V21D (candidato A): o preparo feito sob pele_dura nao aparece */
+    case "oponente_preparando": return op.prep && !(R?.preparoSobPeleOculto && op.prepPele);
     case "oponente_hp_abaixo": return op.hp / op.hpMax < (p[0] as number);
     case "oponente_guts_abaixo": return op.guts < (p[0] as number);
     case "oponente_repete": { const u = op.hist.slice(-(p[1] as number)); return u.length === p[1] && u.every(x => x === p[0]); }
@@ -224,21 +233,21 @@ export function oraculoV2(E: EstadoLuta, lado: number): string {
   return melhor as string;
 }
 /** o que a lista do lado escolheria agora, sem exploracao e sem rng (o que o vigia ve) */
-export function intencaoV2(estilo: Estilo, E: EstadoLuta, lado: number): string | null {
+export function intencaoV2(estilo: Estilo, E: EstadoLuta, lado: number, R: RegrasLuta = null): string | null {
   if (E.L[lado].prep) return null;
   if (estilo.oraculo) return oraculoV2(E, lado);
   const g = estilo.gambits!;
-  for (const r of g.regras) if (r.se.every(c => valeCond(c, E, lado, null)) && legalV2(E, lado, r.entao)) return r.entao;
+  for (const r of g.regras) if (r.se.every(c => valeCond(c, E, lado, null, R)) && legalV2(E, lado, r.entao)) return r.entao;
   return legalV2(E, lado, g.final) ? g.final : "carregar";
 }
 /** decisao do lado: [acao, motivo] (indice da regra, "exploracao", "oraculo" ou "pesado_automatico") */
-export function decidirV2(estilo: Estilo, E: EstadoLuta, lado: number, rng: Rng, ctx: Contexto | null): [string, number | string] {
+export function decidirV2(estilo: Estilo, E: EstadoLuta, lado: number, rng: Rng, ctx: Contexto | null, R: RegrasLuta = null): [string, number | string] {
   if (E.L[lado].prep) {
     /* V2C finta: a primeira regra de fintar que vale troca o pesado (sem exploracao) */
     const g = estilo.gambits;
     if (g) for (let i = 0; i < g.regras.length; i++) {
       const r = g.regras[i];
-      if (r.entao === "fintar" && r.se.every(c => valeCond(c, E, lado, ctx))) return ["fintar", i];
+      if (r.entao === "fintar" && r.se.every(c => valeCond(c, E, lado, ctx, R))) return ["fintar", i];
     }
     return ["pesado", "pesado_automatico"];
   }
@@ -248,7 +257,7 @@ export function decidirV2(estilo: Estilo, E: EstadoLuta, lado: number, rng: Rng,
   const g = estilo.gambits!;
   for (let i = 0; i < g.regras.length; i++) {
     const r = g.regras[i];
-    if (r.se.every(c => valeCond(c, E, lado, ctx)) && legalV2(E, lado, r.entao)) return [r.entao, i];
+    if (r.se.every(c => valeCond(c, E, lado, ctx, R)) && legalV2(E, lado, r.entao)) return [r.entao, i];
   }
   /* furioso nao defende: a final 'defender' cai para carregar */
   return [legalV2(E, lado, g.final) ? g.final : "carregar", g.regras.length];
@@ -264,15 +273,15 @@ export interface Turno {
 }
 export interface ResultadoLuta { E0: EstadoLuta; turnos: Turno[]; pontosA: number; fim: "ko" | "limite"; E: EstadoLuta }
 
-export function jogarV2(A: Lutador, B: Lutador, semente: number): ResultadoLuta {
+export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta = null): ResultadoLuta {
   const ra = criarRng(hashSemente("v2", semente, 0)), rb = criarRng(hashSemente("v2", semente, 1));
   let E = estadoV2(A.cond, B.cond), fim: ReturnType<typeof fimV2>;
   const E0 = E, turnos: Turno[] = [];
   while (!(fim = fimV2(E))) {
     /* o vigia ve a intencao do oponente (sem exploracao, sem rng) antes de decidir */
-    const ctxA = A.cond.passiva === "vigia" ? { intencao: intencaoV2(B.estilo, E, 1) } : null;
-    const ctxB = B.cond.passiva === "vigia" ? { intencao: intencaoV2(A.estilo, E, 0) } : null;
-    const [aa, ma] = decidirV2(A.estilo, E, 0, ra, ctxA), [ab, mb] = decidirV2(B.estilo, E, 1, rb, ctxB);
+    const ctxA = A.cond.passiva === "vigia" ? { intencao: intencaoV2(B.estilo, E, 1, R) } : null;
+    const ctxB = B.cond.passiva === "vigia" ? { intencao: intencaoV2(A.estilo, E, 0, R) } : null;
+    const [aa, ma] = decidirV2(A.estilo, E, 0, ra, ctxA, R), [ab, mb] = decidirV2(B.estilo, E, 1, rb, ctxB, R);
     const antes = E, r = resolverV2(E, aa, ab); E = r.E;
     turnos.push({ t: E.turno, a: aa, ma, b: ab, mb, antes, depois: E, dano: r.dano, interr: r.interr, errou: r.errou });
   }

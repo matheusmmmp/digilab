@@ -66,7 +66,7 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
   /* a aba abre com o palco do proprio modo (a mensagem da campanha nao aparece aqui) */
   useEffect(() => { if (!LUTA.palco || LUTA.palco.modo !== "arena") previa("arena"); }, []);
   useEffect(() => { if (!LUTA.lutando && LUTA.palco?.modo === "arena" && !LUTA.palco.resultado) previa("arena", true); }, [m.gp?.versao, m.estagioAtual]);
-  const A = lutadorPet(m, "Seu pet"), B = lutadorBot(luta.rival), pa = A.cond, sp = sparringTexto(m);
+  const A = lutadorPet(m, "Seu pet"), B = lutadorBot(luta.rival, m.regras), pa = A.cond, sp = sparringTexto(m);
   const extra = [pa.tecnica && `técnica ${NOME_V2[pa.tecnica]}`, pa.passiva && `passiva ${NOME_ARQ[pa.passiva]}`].filter(Boolean).join(", ");
   /* formas adultas: duas a mostra (e a escolhida), o resto num toque, como na prancha */
   /* desktop (ArenaDesktop): tres bots e tres adultas (mais o escolhido), o resto num toque */

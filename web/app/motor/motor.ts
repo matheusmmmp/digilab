@@ -9,7 +9,7 @@ import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
-import { jogarV2, type Lutador, type ResultadoLuta } from "./combate.ts";
+import { jogarV2, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
@@ -182,6 +182,8 @@ export class Motor {
   /* ---------------------------------------------------------------- campanha e lutas */
   /** lugares da campanha desta versao (pets v5: a Montanha Espiral, com o Piedmon) */
   get lugares(): Lugar[] { return lugaresDe(this.versao); }
+  /** regras das lutas deste pet: V21D nos pets v6 (docs/VALIDACAO_V21D.md), V21C nos v1-v5 */
+  get regras(): RegrasLuta { return regrasDaVersao(this.versao); }
   lugarVencido(L: number): boolean { return this.lugares[L].rivais.some(r => this.campanha[r] > 0); }
   /** desafio da campanha aberto: o primeiro sempre; os outros depois de vencer o anterior */
   desafioAberto(k: string): boolean { const L = NPC[k]!.lug; return L === 0 || this.lugarVencido(L - 1); }
@@ -196,7 +198,7 @@ export class Motor {
   }
   private _lutar(rival: string, semente: number): ResultadoLutaPet {
     /* campanha contra NPC: stats treinados absolutos; arena contra bots: normalizados ao orcamento */
-    const A = lutadorPet(this, "Seu pet", !!NPC[rival]), B = lutadorBot(rival), res = jogarV2(A, B, semente);
+    const R = this.regras, A = lutadorPet(this, "Seu pet", !!NPC[rival]), B = lutadorBot(rival, R), res = jogarV2(A, B, semente, R);
     if (this.gp) this.gp.aprender(res, semente);
     if (this.estagioAtual === "adolescente") this.sparring++;
     if (NPC[rival] && res.pontosA === 1) this.campanha[rival]++;
@@ -578,7 +580,7 @@ export class Motor {
       this._agendar(e2, this.e.tick);
     }
     if (!this.gp) this.gp = new GambitsPet();
-    if (this.versao >= 5) this.gp.semear(this.forma, nomeForma(this.forma)); else this.gp.semear(this.forma);
+    if (this.versao >= 5) this.gp.semear(this.forma, nomeForma(this.forma), this.regras); else this.gp.semear(this.forma);
   }
   /* ---------------------------------------------------------------- Mega (pets v5; docs/DESIGN_EVOLUCAO_CANONICA.md) */
   /** tick em que virou Ultimate (null antes) */
