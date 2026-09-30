@@ -9,7 +9,7 @@ Status: **IMPLEMENTADO** (2026-09-29, branch `m1-confianca`; Python e web). Todo
 - **Versão dos pets web:** o desenho dizia `VERSAO_PET = 5` como versão nova; os pets v5 já existiam no `main` (evolução canônica), então a confiança entrou neles (e na assinatura deles) sem criar v6. Pets v1–v4 não mudam.
 - **Frases com marcador em todo estágio falado:** para a cobertura conferida na carga, a versão curta da criança carrega o marcador (`[:confiante:] Ganhei!`, `[:inseguro:] Perdi de novo…`, `[:sei tudo dele:] De novo?`); o bebê mostra só o emote. A histerese vale sobre a faixa contínua (a confiança decai entre as lutas: o tick de saída da faixa é calculado, `tick_saida_faixa`).
 - **Número ilustrativo da seção 2.1:** "depois de 5 lutas seguidas, dois dias devolvem a novidade para ≈ 0,36" vale com m = 4 (antes da 5ª luta); com m = 5 (depois dela) dá ≈ 0,28. As fórmulas e os parâmetros são os da tabela; só o exemplo estava com o contador de antes.
-- **`η_s` na derrota** segue a fórmula literal `η·(1 + k_sens·sensibilidade)`: sensibilidade positiva faz a derrota pesar mais. No temperamento, "sensibilidade > 0 responde mais a elogio, < 0 mais a repreensão"; se a leitura pretendida era "o melindroso (< 0) sofre mais a derrota", o sinal de `k_sensibilidade` precisa ser revisto (decisão pendente do Matheus; teste e gabarito seguem a fórmula literal).
+- **`η_s` na derrota** usa `η·(1 − k_sens·sensibilidade)` (decisão do Matheus, 2026-09-29): no temperamento, sensibilidade < 0 é quem responde mais a repreensão, e a repreensão já pesa `1 − 0,5·s` (`ConfigTemperamento`); a derrota segue a mesma forma, e o pet melindroso sente mais a derrota. O desenho original dizia `1 + k·s`.
 - Fora do M1, como previsto: a técnica vista, eixos novos de personalidade, vínculo/M3, medalhas, herança.
 
 **Origem.** É o passo M1 da seção 28 de `docs/PESQUISA_VIDA_LINHAGEM_PROGRESSAO.md`, revisto contra a revisão bibliográfica verificada de 2026-09-29 (`D:\Trab\digilab\docs\revisao_alife_2026-09-29\`).
@@ -60,7 +60,7 @@ A confiança `c` fica em [−1, 1] e começa em 0 no ovo. Ela decai para 0 entre
     c ← c · exp(−Δt / τ_conf)                                (antes da luta)
     c ← corte(c + η_s · novidade · sinal, −1, 1)              (sinal: vitória +1, derrota −1, empate 0)
     η_s = η                           se sinal > 0
-    η_s = η · (1 + k_sens · sensibilidade)   se sinal < 0
+    η_s = η · (1 − k_sens · sensibilidade)   se sinal < 0
 
 - **Não é um eixo de personalidade novo.** É um estado derivado dos eventos de luta, na escala de horas a dias.
 - **O temperamento dá a inclinação individual:** a `sensibilidade`, que já existe no temperamento, faz a derrota pesar mais. Isso usa o formalismo de norma de reação de Dingemanse et al. (2010), com o intercepto como nível médio e a inclinação como plasticidade. A personalidade que se desenvolve da interação entre o estado inicial e a experiência é o enquadramento de Stamps e Groothuis (2010).

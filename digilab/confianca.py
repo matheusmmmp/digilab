@@ -8,7 +8,7 @@ replay recalcula tudo a partir das lutas. Nenhuma rng. Tudo PROPOSTO (ConfigConf
   confianca c em [-1, 1] (2.2), 0 no ovo:
                              c <- c * exp(-dt / tau_conf)                              (antes da luta)
                              c <- corte(c + eta_s * novidade * sinal, -1, 1)           (vitoria +1, derrota -1, empate 0)
-                             eta_s = eta (sinal > 0); eta * (1 + k_sens * sensibilidade) (sinal < 0)
+                             eta_s = eta (sinal > 0); eta * (1 - k_sens * sensibilidade) (sinal < 0)
   epsilon do lutador (2.3):  + kappa * max(0, -c)  (a confianca positiva nao reduz o epsilon)
   frases de estado (2.5):    confiante (c >= limiar), inseguro (c <= -limiar), entediado do rival (as ultimas n lutas
                              com novidade <= limiar_tedio), neutro; a frase mostrada so troca depois de
@@ -57,7 +57,7 @@ def atualizar_confianca(c: float, dt: int, sinal: int, nov: float, sensibilidade
     if not -1.0 <= sensibilidade <= 1.0:
         raise ValueError(f"sensibilidade fora de [-1, 1]: {sensibilidade}")
     c = decair_confianca(c, dt, cfg.tau_confianca_min)
-    eta = cfg.eta_confianca * (1.0 + cfg.k_sensibilidade * sensibilidade) if sinal < 0 else cfg.eta_confianca
+    eta = cfg.eta_confianca * (1.0 - cfg.k_sensibilidade * sensibilidade) if sinal < 0 else cfg.eta_confianca
     return max(-1.0, min(1.0, c + eta * nov * sinal))
 
 

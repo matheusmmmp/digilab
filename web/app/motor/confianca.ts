@@ -30,7 +30,7 @@ export function atualizarConfianca(c: number, dt: number, sinal: number, nov: nu
   if (sinal !== -1 && sinal !== 0 && sinal !== 1) throw new Error("sinal da luta inválido: " + sinal);
   if (!(sensibilidade >= -1 && sensibilidade <= 1)) throw new Error("sensibilidade fora de [-1, 1]: " + sensibilidade);
   c = decairConfianca(c, dt, cfg.tauConf);
-  const eta = sinal < 0 ? cfg.eta * (1 + cfg.kSens * sensibilidade) : cfg.eta;
+  const eta = sinal < 0 ? cfg.eta * (1 - cfg.kSens * sensibilidade) : cfg.eta;
   return Math.max(-1, Math.min(1, c + eta * nov * sinal));
 }
 /** termo da inseguranca no epsilon do lutador do pet: kappa * max(0, -c) */

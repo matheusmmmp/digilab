@@ -60,8 +60,8 @@ def test_confianca_sobe_com_vitoria_desce_com_derrota_e_corta_em_mais_menos_um()
     assert atualizar_confianca(0.0, 0, -1, 1.0, 0.0, C) == pytest.approx(-C.eta_confianca)
     assert atualizar_confianca(0.3, 0, 0, 1.0, 0.0, C) == pytest.approx(0.3)       # empate: so o decaimento
     # a derrota pesa mais pela sensibilidade; a vitoria nao
-    assert atualizar_confianca(0.0, 0, -1, 1.0, 1.0, C) == pytest.approx(-C.eta_confianca * (1 + C.k_sensibilidade))
-    assert atualizar_confianca(0.0, 0, -1, 1.0, -1.0, C) == pytest.approx(-C.eta_confianca * (1 - C.k_sensibilidade))
+    assert atualizar_confianca(0.0, 0, -1, 1.0, 1.0, C) == pytest.approx(-C.eta_confianca * (1 - C.k_sensibilidade))
+    assert atualizar_confianca(0.0, 0, -1, 1.0, -1.0, C) == pytest.approx(-C.eta_confianca * (1 + C.k_sensibilidade))
     assert atualizar_confianca(0.0, 0, 1, 1.0, 1.0, C) == pytest.approx(C.eta_confianca)
     # a novidade pesa: repetir rende menos
     assert atualizar_confianca(0.0, 0, 1, 0.1, 0.0, C) == pytest.approx(0.1 * C.eta_confianca)
@@ -127,9 +127,9 @@ def test_estado_com_limiar_e_histerese():
     assert sai is not None and cc.valor(sai) < C.limiar_frase <= cc.valor(sai - 1)
     assert cc.estado(sai + H - 1)["estado"] == "confiante"
     assert cc.estado(sai + H)["estado"] == "neutro"
-    # derrotas seguidas (sensibilidade 1: pesam mais): inseguro a partir da 2a
+    # derrotas seguidas (sensibilidade -1, o melindroso: pesam mais): inseguro a partir da 2a
     for k in range(4):
-        cc.registrar(sai + 5000 + 30 * k, "b", -1, 1.0)
+        cc.registrar(sai + 5000 + 30 * k, "b", -1, -1.0)
     ini2 = next(x["tick"] for x in cc.historico if x["c"] <= -C.limiar_frase)
     assert ini2 == sai + 5030 and cc.c <= -C.limiar_frase
     assert cc.estado(ini2 + H - 1)["estado"] == "neutro"

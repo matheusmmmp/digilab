@@ -47,7 +47,7 @@ describe("confianca (M1)", () => {
     for (let i = 0; i < 40; i++) c = atualizarConfianca(c, 0, -1, 1, 1);
     expect(c).toBe(-1);
     expect(atualizarConfianca(0.8, CCF.tauConf, 0, 1, 0)).toBeCloseTo(0.8 / Math.E, 12);
-    expect(atualizarConfianca(0, 0, -1, 1, 1)).toBeCloseTo(-CCF.eta * (1 + CCF.kSens), 12);
+    expect(atualizarConfianca(0, 0, -1, 1, 1)).toBeCloseTo(-CCF.eta * (1 - CCF.kSens), 12);
     expect(epsilonConfianca(-1, CCF.kappaEps)).toBe(CCF.kappaEps); expect(epsilonConfianca(1, CCF.kappaEps)).toBe(0);
     expect(() => atualizarConfianca(0, 0, 2, 1, 0)).toThrow();
   });

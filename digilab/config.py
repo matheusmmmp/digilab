@@ -946,7 +946,7 @@ class ConfigConfianca:
     tau_habituacao_min: int = 2880           # 48 h de jogo: quando a novidade volta
     # 2.2 confianca c em [-1, 1]: decai para 0 entre as lutas; empurrada por eta_s * novidade * sinal
     eta_confianca: float = 0.25              # quanto uma luta nova mexe na confianca
-    k_sensibilidade: float = 0.5             # na derrota, eta * (1 + k * sensibilidade do temperamento)
+    k_sensibilidade: float = 0.5             # na derrota, eta * (1 - k * sensibilidade): como a repreensao no temperamento
     tau_confianca_min: int = 1440            # 24 h de jogo: quanto dura a confianca
     # 2.3 so o epsilon do lutador do pet muda: epsilon += kappa * max(0, -c) (a confianca positiva nao reduz)
     kappa_eps: float = 0.10                  # mesma ordem de delta_epsilon_indisciplina
