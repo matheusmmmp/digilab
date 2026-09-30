@@ -1,12 +1,12 @@
 /* Registro do Tamer (src/tamer.ts; docs/DESIGN_MEDALHAS_ARENAS.md, secao 5): event sourcing proprio na chave
-   CHAVE-tamer; medalha na primeira vitoria contra o lider (so pets v6); o pet ativo recebe o "u"; a primeira abertura
-   descarta os pets v1-v5. E o ciclo no estado do app (src/jogo.ts): vencer o lider grava a medalha e libera a evolucao. */
+   CHAVE-tamer; medalha na primeira vitoria contra o lider (so pets v6); o pet ativo recebe o "u"; o descarte unico
+   tira os pets v1-v5 (medalhas) e os v6 de antes do combate V21D. E o ciclo no estado do app (src/jogo.ts): vencer o lider grava a medalha e libera a evolucao. */
 import { describe, expect, test } from "vitest";
 import { DUR_EVO, MEDALHAS, Motor, hashSemente } from "../motor/index.ts";
 import { CHAVE, textoSave, type Armazenamento } from "../src/save.ts";
 import { iniciarJogo, jogoAtual, mudarMotor, tamerAtual, trocarMotor } from "../src/jogo.ts";
 import {
-  CHAVE_AVISO_V6, CHAVE_TAMER, Tamer, conferirMedalhas, gravarTamer, lerTamer, migrarParaMedalhas, sincronizarPet, textoFalta,
+  CHAVE_AVISO_V6, CHAVE_DESCARTE, CHAVE_TAMER, Tamer, conferirMedalhas, descartarPetsAntigos, gravarTamer, lerTamer, sincronizarPet, textoFalta,
   type EventoTamer,
 } from "../src/tamer.ts";
 
@@ -72,27 +72,48 @@ describe("registro do Tamer", () => {
   });
 });
 
-describe("primeira abertura com medalhas", () => {
+describe("descarte unico dos pets antigos (medalhas e combate V21D)", () => {
   const v = (versao?: number) => JSON.stringify({ semente: 1, log: [], ...(versao ? { versao } : {}) });
-  test("os pets v1-v5 saem (ativo e guardados), o aviso fica pendente e o Tamer comeca vazio; roda uma vez", () => {
-    const a = armaz({ [CHAVE]: v(5), [GUARDADOS]: JSON.stringify([{ semente: 2, log: [], versao: 3 }, { semente: 3, log: [] }]) });
-    expect(migrarParaMedalhas(a, GUARDADOS)).toBe(3);
+  test("primeira abertura: os pets v1-v6 saem (ativo e guardados), o aviso fica pendente e o Tamer comeca vazio; roda uma vez", () => {
+    const a = armaz({ [CHAVE]: v(5), [GUARDADOS]: JSON.stringify([{ semente: 2, log: [], versao: 3 }, { semente: 3, log: [] }, { semente: 4, log: [], versao: 6 }]) });
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBe(4);
     expect(a.dados[CHAVE]).toBeUndefined();
     expect(a.dados[GUARDADOS]).toBe("[]");
-    expect(a.dados[CHAVE_AVISO_V6]).toBe("3");
+    expect(a.dados[CHAVE_AVISO_V6]).toBe("4");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("2");
     expect(lerTamer(a).n).toBe(0);
-    a.dados[CHAVE] = v(5);
-    expect(migrarParaMedalhas(a, GUARDADOS)).toBeNull();          /* ja rodou: nada sai */
-    expect(a.dados[CHAVE]).toBe(v(5));
+    a.dados[CHAVE] = v(6);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();          /* ja rodou: nada sai (o v6 de agora fica) */
+    expect(a.dados[CHAVE]).toBe(v(6));
   });
-  test("primeiro acesso (sem nada): nada sai, sem aviso; pet v6 fica; save que nao e JSON fica para o erro de sempre", () => {
+  test("depois do descarte das medalhas (Tamer sem marcador): os v6 de antes do V21D saem, o Tamer recomeca, mesmo aviso", () => {
+    const t = new Tamer(); t.ganhar("campina", new Motor(9, 6), 1);
+    const a = armaz({ [CHAVE]: v(6), [GUARDADOS]: JSON.stringify([{ semente: 5, log: [], versao: 6 }]) });
+    gravarTamer(a, t);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBe(2);
+    expect(a.dados[CHAVE]).toBeUndefined();
+    expect(a.dados[GUARDADOS]).toBe("[]");
+    expect(a.dados[CHAVE_AVISO_V6]).toBe("2");
+    expect(lerTamer(a).n).toBe(0);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
+  });
+  test("Tamer sem pet para descartar: fica como esta, sem aviso; marcador invalido falha alto", () => {
+    const t = new Tamer(); t.ganhar("campina", new Motor(9, 6), 1);
+    const a = armaz(); gravarTamer(a, t);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBe(0);
+    expect(lerTamer(a).n).toBe(1);
+    expect(a.dados[CHAVE_AVISO_V6]).toBeUndefined();
+    expect(a.dados[CHAVE_DESCARTE]).toBe("2");
+    expect(() => descartarPetsAntigos(armaz({ [CHAVE_DESCARTE]: "x" }), GUARDADOS)).toThrow();
+  });
+  test("primeiro acesso (sem nada): nada sai, sem aviso; save que nao e JSON fica para o erro de sempre", () => {
     const a = armaz();
-    expect(migrarParaMedalhas(a, GUARDADOS)).toBe(0);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBe(0);
     expect(a.dados[CHAVE_AVISO_V6]).toBeUndefined();
     expect(a.dados[GUARDADOS]).toBeUndefined();
-    const b = armaz({ [CHAVE]: v(6) }), c = armaz({ [CHAVE]: "{" });
-    expect(migrarParaMedalhas(b, GUARDADOS)).toBe(0); expect(b.dados[CHAVE]).toBe(v(6));
-    expect(migrarParaMedalhas(c, GUARDADOS)).toBe(0); expect(c.dados[CHAVE]).toBe("{");
+    expect(a.dados[CHAVE_TAMER]).toBeDefined();
+    const c = armaz({ [CHAVE]: "{" });
+    expect(descartarPetsAntigos(c, GUARDADOS)).toBe(0); expect(c.dados[CHAVE]).toBe("{");
   });
 });
 

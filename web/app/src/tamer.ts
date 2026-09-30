@@ -81,16 +81,30 @@ export function sincronizarPet(t: Tamer, m: Motor): boolean {
   return true;
 }
 
-/* ------------------------------------------------ primeira abertura com medalhas: os pets antigos saem */
-/** decisao do Matheus (2026-09-29): os pets de antes da trava (v1-v5) sao descartados, o ativo e os guardados, e o jogo
-    comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma vez: a chave do Tamer marca que ja rodou. Save que nao e
-    JSON fica como esta (o app mostra o erro e nao grava por cima, como sempre). Devolve quantos pets saíram, ou null se
-    ja tinha rodado. As geracoes aposentadas (Diario · Geracoes, so para ver) ficam. */
-export function migrarParaMedalhas(armaz: Armazenamento & { removeItem(k: string): void }, chaveGuardados: string): number | null {
-  if (armaz.getItem(CHAVE_TAMER) !== null) return null;
+/* ------------------------------------------------ descarte unico dos pets antigos */
+/** marcador do descarte unico: a versao do descarte que ja rodou neste navegador. 1 = medalhas do Tamer (2026-09-29: os
+    pets v1-v5 saem); 2 = combate V21D nos pets v6 (2026-09-30, docs/VALIDACAO_V21D.md: os v6 de antes mudariam de
+    comportamento no replay e saem tambem). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou
+    antes do marcador existir), senao 0 */
+export const CHAVE_DESCARTE = CHAVE + "-descarte";
+export const VERSAO_DESCARTE = 2;
+/** cada descarte apaga os pets ate esta versao (inclusive) */
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6 };
+
+/** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
+    (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma
+    vez por versao do descarte (CHAVE_DESCARTE). Save que nao e JSON fica como esta (o app mostra o erro e nao grava por
+    cima, como sempre). Devolve quantos pets sairam, ou null se ja tinha rodado. As geracoes aposentadas (Diario ·
+    Geracoes, so para ver) ficam. Sem pet nenhum para descartar, o Tamer que ja existe fica como esta (sem aviso). */
+export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: string): void }, chaveGuardados: string): number | null {
+  const marca = armaz.getItem(CHAVE_DESCARTE), tinhaTamer = armaz.getItem(CHAVE_TAMER) !== null;
+  const feito = marca !== null ? Number(marca) : tinhaTamer ? 1 : 0;
+  if (!Number.isInteger(feito) || feito < 0 || feito > VERSAO_DESCARTE) throw new Error(`marcador do descarte inválido: ${JSON.stringify(marca)}`);
+  if (feito >= VERSAO_DESCARTE) return null;
+  const ate = DESCARTA_ATE[VERSAO_DESCARTE];
   const antigo = (txt: string | null): boolean => {
     if (txt === null) return false;
-    try { const d = JSON.parse(txt) as { versao?: number } | null; return !!d && (d.versao ?? 1) < 6; } catch { return false; }
+    try { const d = JSON.parse(txt) as { versao?: number } | null; return !!d && (d.versao ?? 1) <= ate; } catch { return false; }
   };
   let descartados = 0;
   const ativo = armaz.getItem(CHAVE);
@@ -107,7 +121,9 @@ export function migrarParaMedalhas(armaz: Armazenamento & { removeItem(k: string
   }
   /* sem a chave dos guardados, a escada de exemplo (pets v3) seria semeada logo depois: fica vazia de proposito */
   if (descartados && armaz.getItem(chaveGuardados) === null) armaz.setItem(chaveGuardados, "[]");
-  gravarTamer(armaz, new Tamer());
+  /* o aviso de sempre diz "um ovo novo e nenhuma medalha": com pet descartado o Tamer recomeca vazio */
+  if (descartados || !tinhaTamer) gravarTamer(armaz, new Tamer());
+  armaz.setItem(CHAVE_DESCARTE, String(VERSAO_DESCARTE));
   if (descartados) armaz.setItem(CHAVE_AVISO_V6, String(descartados));
   return descartados;
 }
