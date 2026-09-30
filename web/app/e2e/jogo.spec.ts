@@ -20,13 +20,13 @@ const ABAS: [string, string, string][] = [
 ];
 
 /** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar). O registro do Tamer
-    (vazio, ou o dado) e o marcador do descarte (versao 2) vao junto: com eles o app entende que o descarte unico ja rodou
+    (vazio, ou o dado) e o marcador do descarte (versao 5) vao junto: com eles o app entende que o descarte unico ja rodou
     e nao descarta os saves antigos (v1-v3, e o v6) que estes testes jogam */
 async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t, tm]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
-    localStorage.setItem(chave + "-descarte", "2");
+    localStorage.setItem(chave + "-descarte", "5");
     /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
@@ -255,7 +255,8 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   await page.goto(APP + "#/crescer/evolucao");
   await expect(page.locator(".evo-medalha")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
   await page.goto(APP + "#/lutar/campanha");
-  await expect(page.locator(".camp-medalha")).toContainText("Gazimon é o líder");
+  await expect(page.locator(".camp-arena")).toContainText("líder: Gazimon");
+  await expect(page.locator(".camp-arena")).toContainText("Vencer Gazimon dá a Medalha da Campina.");
   await expect(page.locator(".camp-lider").first()).toContainText("LÍDER");
   await page.locator(".camp-lutar:not([disabled])").click();
   const res = page.locator("dialog.modal-res[open]");
@@ -277,7 +278,10 @@ test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ p
   await expect(page.locator(".med-conta .dl-num")).toHaveText("1");
   await expect(page.locator(".med-card.ganha")).toHaveCount(1);
   await expect(page.locator(".med-card.ganha")).toContainText("Medalha da Campina");
-  await expect(page.locator(".med-card").nth(2)).toContainText("provisória");
+  await expect(page.locator(".med-card").nth(2)).toContainText("Vença o Youkomon na Floresta");
+  await expect(page.locator(".med-card").nth(3)).toContainText("Vença o Myotismon três vezes seguidas na Cidadela");
+  await expect(page.locator(".med-card").nth(4)).toContainText("Vínculo:");
+  await expect(page.locator(".med-tela")).not.toContainText("provisória");
   expect(erros).toEqual([]);
 });
 
@@ -311,7 +315,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(erros).toEqual([]);
 });
 
-test("combate V21D: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça sem medalhas", async ({ page }) => {
+test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça sem medalhas", async ({ page }) => {
   const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }]] };
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([c, s, tm]) => {
@@ -330,7 +334,7 @@ test("combate V21D: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
   expect(r.save.versao).toBe(6);
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
-  expect(r.marca).toBe("2");
+  expect(r.marca).toBe("5");
   expect(r.tamer).toEqual({ versao: 1, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
@@ -364,6 +368,98 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
     expect(r.aoLado, "desktop: a lista ao lado do resumo").toBe(largura >= 1100);
     await expect(page.locator(".med-regras li.ok")).toHaveCount(1);
+    expect(erros).toEqual([]);
+  });
+}
+
+/* ---------------------------------------------------------------- arenas com lideres (medalhas parte 2)
+   save_arenas.json (e2e/gerar_save_arenas.mjs): pet v6 Ultimate treinado, com a Campina, a Torre e a Floresta vencidas e o
+   Tamer com as 3 medalhas; a luta do Desafiar contra o Myotismon (Cidadela: tres lutas seguidas) e a serie vencida em
+   qualquer hora das proximas 5 h de jogo */
+const SAVE_ARENAS = JSON.parse(readFileSync(new URL("./save_arenas.json", import.meta.url), "utf8"));
+const TAMER_3 = { versao: 1, log: ["campina", "torre", "floresta"].map((id, i) =>
+  ["medalha", { id, n: i + 1, quando: 1 + i, pet: SAVE_ARENAS.semente, forma: "DinoBeemon", tick: 900 + i }]) };
+
+test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no Lago as travas não valem", async ({ page }) => {
+  test.setTimeout(240_000);
+  await semear(page, SAVE_ARENAS, undefined, TAMER_3);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/campanha");
+  await expect(page.locator(".mapa-ilhas img.ilha")).toHaveCount(6);
+  const cartao = page.locator(".camp-arena");
+  await expect(cartao).toContainText("Arena · Resistência");
+  await expect(cartao).toContainText("líder: Myotismon");
+  await expect(cartao).toContainText("Três lutas seguidas, sem cura");
+  const lutar = page.locator(".camp-lutar:not([disabled])");
+  await expect(lutar).toContainText("Desafiar Myotismon (3 lutas seguidas)");
+  await lutar.click();
+  await expect(page.locator(".luta-topo-sub")).toContainText("luta 1 de 3");
+  await expect(page.locator(".luta-serie")).toContainText("sem cura entre as lutas");
+  await page.locator(".luta-ctl--x2").click();
+  await expect(page.locator(".luta-serie")).toContainText("Luta 2 de 3", { timeout: 90_000 });
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 150_000 });
+  await expect(res.locator(".res-serie li")).toHaveCount(3);
+  await expect(res.locator(".res-serie")).not.toContainText("perdeu");
+  await expect(res.locator(".res-sub")).toContainText("venceu as 3 lutas seguidas");
+  await expect(res.locator(".res-medalha")).toContainText("Medalha da Cidadela");
+  await page.locator(".res-continuar").click();
+  const t = await lerTamer(page);
+  expect(t.log.map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "torre", "floresta", "cidadela"]);
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
+  expect(lutas[lutas.length - 1][2]).toEqual({ r: "npc_v5_myotismon", s: expect.any(Number) });   /* o evento continua so rival e semente */
+  expect(reg.log.filter((e: unknown[]) => e[1] === "u").map((e: [number, string, { n: number }]) => e[2].n)).toEqual([3, 4]);
+  /* o Lago abriu: a regra do vinculo aparece no cartao e na luta */
+  await page.goto(APP + "#/lutar/campanha");
+  await expect(page.locator(".camp-arena")).toContainText("Arena · Vínculo");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  await expect(page.locator(".luta-arena-aviso")).toContainText("Arena do Lago: aqui as suas travas e vetos não valem");
+  await expect(page.locator(".regra-travar")).toHaveCount(0);
+  await page.locator(".luta-ctl--x2").click();
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-arena-nota")).toContainText("sem as suas travas e vetos");
+  await page.locator(".res-continuar").click();
+  expect(erros).toEqual([]);
+});
+
+/* a campanha dos pets v6: seis ilhas, celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`arenas: campanha com 6 ilhas em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_ARENAS, undefined, TAMER_3);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/campanha");
+    await expect(page.locator(".mapa-ilhas img.ilha")).toHaveCount(6);
+    await expect(page.locator(".mapa-ilhas .lugar")).toHaveCount(6);
+    await expect(page.locator(".camp-arena")).toBeVisible();
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(desk => {
+      const mapa = document.querySelector(".mapa-ilhas")!.getBoundingClientRect();
+      const caixas = [...document.querySelectorAll(".mapa-ilhas .lugar")].map(e => e.getBoundingClientRect());
+      const ilhas = [...document.querySelectorAll(".mapa-ilhas img.ilha")].map(e => e.getBoundingClientRect());
+      const sobrepoe = caixas.some((a, i) => caixas.some((b, j) => j > i && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom));
+      const fora = ilhas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.top < mapa.top - 1 || b.bottom > mapa.bottom + 1).length;
+      /* no celular o cartao do lugar sobe sobre o pe do mapa: nenhuma plaquinha pode ficar embaixo dele */
+      const det = document.querySelector(".camp-det"), limite = det ? Math.min(mapa.bottom, det.getBoundingClientRect().top) : mapa.bottom;
+      const placasFora = caixas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.bottom > limite + 1).length;
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".camp-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const nomes = [...document.querySelectorAll(".mapa-ilhas .lugar-placa")].map(e => e.textContent);
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, sobrepoe, fora, placasFora, pequenos, nomes, alt: mapa.height, largMapa: mapa.width };
+    }, largura >= 1100);
+    expect(r.nomes).toEqual(["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral"]);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.sobrepoe, "plaquinhas dos lugares sobrepostas").toBe(false);
+    expect(r.fora, "ilhas fora do mapa").toBe(0);
+    expect(r.placasFora, "plaquinhas fora do mapa").toBe(0);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.alt / r.largMapa, "o mapa das seis ilhas e mais alto que largo").toBeGreaterThan(1.3);
+    await expect(page.locator(".camp-arena")).toContainText("líder: Myotismon");
     expect(erros).toEqual([]);
   });
 }

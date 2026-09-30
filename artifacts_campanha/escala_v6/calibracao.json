@@ -1,0 +1,1150 @@
+{
+ "descricao": "Calibracao da escala dos pets v6: viabilidade dos lideres por beta, metas de estagio por razao de vida.",
+ "conjunto": "calibracao",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "n_por_semente": 10,
+ "regras": "v21d",
+ "treino_tipico": {
+  "crianca": 8,
+  "adolescente": 22,
+  "adulto": 36,
+  "mega": 40
+ },
+ "metas": {
+  "vizinho_pontos_max": 0.1,
+  "dois_estagios_vitorias_max": 0,
+  "lider_sem_max": 0.05,
+  "lider_com_min": 0.8,
+  "lider_pior_forma_min": 0.5
+ },
+ "margem_lider": 0.01,
+ "margem_estagio": 0.005,
+ "betas": [
+  0.03,
+  0.035,
+  0.04,
+  0.045,
+  0.05,
+  0.06,
+  0.075,
+  0.1
+ ],
+ "razoes": [
+  2,
+  2.5,
+  3,
+  3.5,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  12,
+  15,
+  20
+ ],
+ "fatores": [
+  0.5,
+  6
+ ],
+ "lideres_por_beta": {
+  "0.03": {
+   "campina": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": {
+     "fator": 1.2,
+     "sem": 0.0438,
+     "com": 0.7888,
+     "pior": 0.7525,
+     "pior_forma": "sereno",
+     "passa": false,
+     "folga": -0.0112
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0.0469,
+     "com": 0.7556,
+     "pior": 0.3875,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.1125
+    }
+   },
+   "cidadela": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": {
+     "fator": 0.8,
+     "sem": 0.0088,
+     "com": 0.8575,
+     "pior": 0.36,
+     "pior_forma": "sentinela",
+     "passa": false,
+     "folga": -0.14
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": false,
+    "fatores_que_passam": [
+     1.3
+    ],
+    "melhor": {
+     "fator": 1.3,
+     "sem": 0.0356,
+     "com": 0.885,
+     "pior": 0.5,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0
+    }
+   },
+   "espiral": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0.0331,
+     "com": 0.8812,
+     "pior": 0.45,
+     "pior_forma": "sentinela",
+     "passa": false,
+     "folga": -0.05
+    }
+   }
+  },
+  "0.035": {
+   "campina": {
+    "viavel": true,
+    "com_margem": false,
+    "fatores_que_passam": [
+     1.2
+    ],
+    "melhor": {
+     "fator": 1.2,
+     "sem": 0.0438,
+     "com": 0.8862,
+     "pior": 0.845,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.0062
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0.0469,
+     "com": 0.8044,
+     "pior": 0.485,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.015
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8
+    ],
+    "melhor": {
+     "fator": 0.8,
+     "sem": 0.0088,
+     "com": 0.9081,
+     "pior": 0.535,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.035
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4
+    ],
+    "melhor": {
+     "fator": 1.3,
+     "sem": 0.0356,
+     "com": 0.9166,
+     "pior": 0.61,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0144
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4
+    ],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0.0331,
+     "com": 0.9109,
+     "pior": 0.55,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0169
+    }
+   }
+  },
+  "0.04": {
+   "campina": {
+    "viavel": true,
+    "com_margem": false,
+    "fatores_que_passam": [
+     1.2
+    ],
+    "melhor": {
+     "fator": 1.2,
+     "sem": 0.0438,
+     "com": 0.935,
+     "pior": 0.92,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.0062
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": true,
+    "com_margem": false,
+    "fatores_que_passam": [
+     1.4
+    ],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0.0469,
+     "com": 0.8487,
+     "pior": 0.5775,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0031
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8
+    ],
+    "melhor": {
+     "fator": 0.8,
+     "sem": 0.0088,
+     "com": 0.9256,
+     "pior": 0.605,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0413
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4,
+     1.5
+    ],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0.0175,
+     "com": 0.9166,
+     "pior": 0.61,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0325
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6
+    ],
+    "melhor": {
+     "fator": 1.5,
+     "sem": 0.0103,
+     "com": 0.9141,
+     "pior": 0.57,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0397
+    }
+   }
+  },
+  "0.045": {
+   "campina": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.2,
+     1.3
+    ],
+    "melhor": {
+     "fator": 1.3,
+     "sem": 0.0025,
+     "com": 0.8287,
+     "pior": 0.805,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.0287
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5
+    ],
+    "melhor": {
+     "fator": 1.5,
+     "sem": 0.0162,
+     "com": 0.8381,
+     "pior": 0.56,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0338
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8,
+     0.9
+    ],
+    "melhor": {
+     "fator": 0.9,
+     "sem": 0.0003,
+     "com": 0.9156,
+     "pior": 0.565,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0497
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4,
+     1.5,
+     1.6
+    ],
+    "melhor": {
+     "fator": 1.5,
+     "sem": 0.0056,
+     "com": 0.9172,
+     "pior": 0.615,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0444
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7
+    ],
+    "melhor": {
+     "fator": 1.6,
+     "sem": 0.0019,
+     "com": 0.9166,
+     "pior": 0.585,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0481
+    }
+   }
+  },
+  "0.05": {
+   "campina": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.2,
+     1.3
+    ],
+    "melhor": {
+     "fator": 1.3,
+     "sem": 0.0025,
+     "com": 0.9113,
+     "pior": 0.8875,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.0475
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6
+    ],
+    "melhor": {
+     "fator": 1.5,
+     "sem": 0.0162,
+     "com": 0.8825,
+     "pior": 0.665,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0338
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8,
+     0.9
+    ],
+    "melhor": {
+     "fator": 0.9,
+     "sem": 0.0003,
+     "com": 0.935,
+     "pior": 0.665,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0497
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4,
+     1.5,
+     1.6,
+     1.7
+    ],
+    "melhor": {
+     "fator": 1.6,
+     "sem": 0.0031,
+     "com": 0.9172,
+     "pior": 0.615,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0469
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8
+    ],
+    "melhor": {
+     "fator": 1.7,
+     "sem": 0,
+     "com": 0.9197,
+     "pior": 0.605,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   }
+  },
+  "0.06": {
+   "campina": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.2,
+     1.3,
+     1.4
+    ],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0,
+     "com": 0.865,
+     "pior": 0.825,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8
+    ],
+    "melhor": {
+     "fator": 1.7,
+     "sem": 0.0013,
+     "com": 0.865,
+     "pior": 0.62,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0488
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8,
+     0.9,
+     1,
+     1.1
+    ],
+    "melhor": {
+     "fator": 1,
+     "sem": 0,
+     "com": 0.9369,
+     "pior": 0.68,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9
+    ],
+    "melhor": {
+     "fator": 1.8,
+     "sem": 0.0006,
+     "com": 0.9184,
+     "pior": 0.62,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.0494
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2,
+     2.1
+    ],
+    "melhor": {
+     "fator": 1.7,
+     "sem": 0,
+     "com": 0.9481,
+     "pior": 0.745,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   }
+  },
+  "0.075": {
+   "campina": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.2,
+     1.3,
+     1.4,
+     1.5
+    ],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0,
+     "com": 0.9775,
+     "pior": 0.975,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2
+    ],
+    "melhor": {
+     "fator": 1.8,
+     "sem": 0,
+     "com": 0.9169,
+     "pior": 0.7625,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8,
+     0.9,
+     1,
+     1.1,
+     1.2,
+     1.3
+    ],
+    "melhor": {
+     "fator": 1,
+     "sem": 0,
+     "com": 0.9659,
+     "pior": 0.8425,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2,
+     2.1,
+     2.2,
+     2.3
+    ],
+    "melhor": {
+     "fator": 2.1,
+     "sem": 0,
+     "com": 0.9191,
+     "pior": 0.625,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2,
+     2.1,
+     2.2,
+     2.3,
+     2.4
+    ],
+    "melhor": {
+     "fator": 1.7,
+     "sem": 0,
+     "com": 0.975,
+     "pior": 0.86,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   }
+  },
+  "0.1": {
+   "campina": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.2,
+     1.3,
+     1.4,
+     1.5,
+     1.6,
+     1.7
+    ],
+    "melhor": {
+     "fator": 1.4,
+     "sem": 0,
+     "com": 1,
+     "pior": 1,
+     "pior_forma": "sereno",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "torre": {
+    "viavel": false,
+    "com_margem": false,
+    "fatores_que_passam": [],
+    "melhor": null
+   },
+   "floresta": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2,
+     2.1,
+     2.2,
+     2.3,
+     2.4,
+     2.5
+    ],
+    "melhor": {
+     "fator": 1.8,
+     "sem": 0,
+     "com": 0.9863,
+     "pior": 0.965,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "cidadela": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     0.8,
+     0.9,
+     1,
+     1.1,
+     1.2,
+     1.3,
+     1.4,
+     1.5,
+     1.6
+    ],
+    "melhor": {
+     "fator": 1,
+     "sem": 0,
+     "com": 0.9837,
+     "pior": 0.93,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "lago": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.3,
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2,
+     2.1,
+     2.2,
+     2.3,
+     2.4,
+     2.5,
+     2.6,
+     2.7,
+     2.8
+    ],
+    "melhor": {
+     "fator": 2.1,
+     "sem": 0,
+     "com": 0.9688,
+     "pior": 0.85,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   },
+   "espiral": {
+    "viavel": true,
+    "com_margem": true,
+    "fatores_que_passam": [
+     1.4,
+     1.5,
+     1.6,
+     1.7,
+     1.8,
+     1.9,
+     2,
+     2.1,
+     2.2,
+     2.3,
+     2.4,
+     2.5,
+     2.6,
+     2.7,
+     2.8,
+     2.9,
+     3,
+     3.1
+    ],
+    "melhor": {
+     "fator": 1.7,
+     "sem": 0,
+     "com": 0.9881,
+     "pior": 0.93,
+     "pior_forma": "sentinela",
+     "passa": true,
+     "folga": 0.05
+    }
+   }
+  }
+ },
+ "beta": 0.045,
+ "vizinhos": {
+  "crianca x adolescente": {
+   "escolha": 3.5,
+   "medidas": [
+    {
+     "razao_vida": 2,
+     "razao_E": 0.68,
+     "pontos": 0.1503,
+     "vitorias": 0.1389
+    },
+    {
+     "razao_vida": 2.5,
+     "razao_E": 0.544,
+     "pontos": 0.1163,
+     "vitorias": 0.1075
+    },
+    {
+     "razao_vida": 3,
+     "razao_E": 0.4533,
+     "pontos": 0.1032,
+     "vitorias": 0.0945
+    },
+    {
+     "razao_vida": 3.5,
+     "razao_E": 0.3886,
+     "pontos": 0.0888,
+     "vitorias": 0.0802
+    }
+   ]
+  },
+  "adolescente x adulto": {
+   "escolha": 3.5,
+   "medidas": [
+    {
+     "razao_vida": 2,
+     "razao_E": 0.995,
+     "pontos": 0.3428,
+     "vitorias": 0.3065
+    },
+    {
+     "razao_vida": 2.5,
+     "razao_E": 0.796,
+     "pontos": 0.1653,
+     "vitorias": 0.1528
+    },
+    {
+     "razao_vida": 3,
+     "razao_E": 0.6633,
+     "pontos": 0.1166,
+     "vitorias": 0.1069
+    },
+    {
+     "razao_vida": 3.5,
+     "razao_E": 0.5686,
+     "pontos": 0.0906,
+     "vitorias": 0.0818
+    }
+   ]
+  },
+  "adulto x mega": {
+   "escolha": 9,
+   "medidas": [
+    {
+     "razao_vida": 2,
+     "razao_E": 1.31,
+     "pontos": 0.8125,
+     "vitorias": 0.7966
+    },
+    {
+     "razao_vida": 2.5,
+     "razao_E": 1.048,
+     "pontos": 0.5616,
+     "vitorias": 0.5241
+    },
+    {
+     "razao_vida": 3,
+     "razao_E": 0.8733,
+     "pontos": 0.2836,
+     "vitorias": 0.2574
+    },
+    {
+     "razao_vida": 3.5,
+     "razao_E": 0.7486,
+     "pontos": 0.1883,
+     "vitorias": 0.175
+    },
+    {
+     "razao_vida": 4,
+     "razao_E": 0.655,
+     "pontos": 0.1562,
+     "vitorias": 0.1464
+    },
+    {
+     "razao_vida": 5,
+     "razao_E": 0.524,
+     "pontos": 0.126,
+     "vitorias": 0.1177
+    },
+    {
+     "razao_vida": 6,
+     "razao_E": 0.4367,
+     "pontos": 0.1134,
+     "vitorias": 0.1056
+    },
+    {
+     "razao_vida": 7,
+     "razao_E": 0.3743,
+     "pontos": 0.1047,
+     "vitorias": 0.097
+    },
+    {
+     "razao_vida": 8,
+     "razao_E": 0.3275,
+     "pontos": 0.0976,
+     "vitorias": 0.0901
+    },
+    {
+     "razao_vida": 9,
+     "razao_E": 0.2911,
+     "pontos": 0.0917,
+     "vitorias": 0.0842
+    }
+   ]
+  }
+ },
+ "vida": {
+  "bebe": 50,
+  "crianca": 200,
+  "adolescente": 700,
+  "adulto": 2500,
+  "mega": 23000
+ },
+ "conferencia": {
+  "crianca x adolescente": {
+   "razao_vida": 3.5,
+   "razao_E": 0.3886,
+   "pontos": 0.0888,
+   "vitorias": 0.0802,
+   "partidas": 6400,
+   "vitorias_por_par": {
+    "sereno x guardiao": 60,
+    "arisco x cacador": 453
+   },
+   "passa": true
+  },
+  "adolescente x adulto": {
+   "razao_vida": 3.5714,
+   "razao_E": 0.5572,
+   "pontos": 0.0891,
+   "vitorias": 0.0803,
+   "partidas": 25600,
+   "vitorias_por_par": {
+    "brigao x duelista": 7,
+    "brigao x furioso": 1,
+    "brigao x muralha": 15,
+    "brigao x sentinela": 158,
+    "brigao x emboscador": 25,
+    "brigao x vigia": 9,
+    "guardiao x duelista": 3,
+    "guardiao x espelho": 75,
+    "guardiao x muralha": 64,
+    "cacador x muralha": 800,
+    "cacador x vigia": 166,
+    "cacador x tita": 732,
+    "colosso x emboscador": 1
+   },
+   "passa": true
+  },
+  "adulto x mega": {
+   "razao_vida": 9.2,
+   "razao_E": 0.2848,
+   "pontos": 0.0906,
+   "vitorias": 0.0831,
+   "partidas": 51200,
+   "vitorias_por_par": {
+    "duelista x duelista": 1,
+    "duelista x muralha": 19,
+    "duelista x sentinela": 3,
+    "furioso x sentinela": 432,
+    "furioso x emboscador": 338,
+    "espelho x espelho": 45,
+    "espelho x muralha": 49,
+    "muralha x duelista": 6,
+    "muralha x espelho": 60,
+    "muralha x muralha": 49,
+    "sentinela x muralha": 704,
+    "sentinela x vigia": 110,
+    "sentinela x tita": 592,
+    "emboscador x muralha": 742,
+    "emboscador x vigia": 80,
+    "emboscador x tita": 609,
+    "vigia x sentinela": 198,
+    "vigia x emboscador": 209,
+    "vigia x vigia": 8,
+    "tita x sentinela": 1
+   },
+   "passa": true
+  },
+  "crianca x adulto": {
+   "razao_vida": 12.5,
+   "razao_E": 0.1088,
+   "pontos": 0.0484,
+   "vitorias": 0.0391,
+   "partidas": 12800,
+   "vitorias_por_par": {
+    "sereno x duelista": 2,
+    "sereno x espelho": 60,
+    "sereno x muralha": 54,
+    "arisco x sentinela": 179,
+    "arisco x emboscador": 205
+   },
+   "passa": false,
+   "piso": {
+    "razao_E": 0.01,
+    "pontos": 0.0483,
+    "vitorias": 0.039,
+    "vitorias_por_par": {
+     "sereno x duelista": 2,
+     "sereno x espelho": 60,
+     "sereno x muralha": 54,
+     "arisco x sentinela": 178,
+     "arisco x emboscador": 205
+    }
+   }
+  },
+  "adolescente x mega": {
+   "razao_vida": 32.8571,
+   "razao_E": 0.0606,
+   "pontos": 0.0568,
+   "vitorias": 0.0497,
+   "partidas": 25600,
+   "vitorias_por_par": {
+    "brigao x furioso": 1,
+    "brigao x muralha": 14,
+    "guardiao x espelho": 72,
+    "guardiao x muralha": 58,
+    "cacador x muralha": 484,
+    "cacador x vigia": 100,
+    "cacador x tita": 544
+   },
+   "passa": false,
+   "piso": {
+    "razao_E": 0.01,
+    "pontos": 0.0568,
+    "vitorias": 0.0497,
+    "vitorias_por_par": {
+     "brigao x furioso": 1,
+     "brigao x muralha": 14,
+     "guardiao x espelho": 72,
+     "guardiao x muralha": 58,
+     "cacador x muralha": 484,
+     "cacador x vigia": 100,
+     "cacador x tita": 544
+    }
+   }
+  }
+ }
+}

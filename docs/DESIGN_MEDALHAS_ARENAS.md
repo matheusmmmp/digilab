@@ -1,6 +1,6 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **aprovado** (Matheus, 2026-09-29). **Parte 1 implementada no jogo web** (branch `medalhas-parte1`, 2026-09-29; seção 11); partes 2–4 não. Todo número é PROPOSTO, sem fonte.
+Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Partes 3 e 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
 
 **Decisões do Matheus (2026-09-29):**
 1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
@@ -146,3 +146,118 @@ Liberada com as 6 medalhas. O objetivo: **vencer todos os líderes na versão ma
   formas quase nunca (`docs/REGISTRO_DESVIOS.md`). Trocada pelo **Tortomon** (Torre de pedra), que o pet treinado vence.
 - O tempo de cada estágio contava desde o nascimento: um Rookie que esperou a medalha virava um Champion curto. Nos v6 ele
   conta desde a evolução anterior.
+
+## 12. O que a parte 2 implementou (2026-09-30): as arenas com líderes
+
+Só `web/app/`, só pets v6 (as lutas deles usam a V21D). A pesquisa em Python não tem arenas (`docs/REGISTRO_DESVIOS.md`, 2026-09-30).
+
+**As seis arenas** (`motor/arenas.ts`, tabela `ARENAS`; campanha v6 em `motor/bots.ts`, `LUGARES_V6`/`CAMPANHA_V6`). A ordem do mapa
+segue o nível; vencer qualquer rival de um lugar abre o próximo, como antes. Os NPCs de antes seguem como desafiantes, com as mesmas
+chaves.
+
+| # | arena | nível | líder | regra (como foi feita) |
+|---|---|---|---|---|
+| 1 | Campina | Rookie | Gazimon | nenhuma |
+| 2 | Torre de pedra | Champion | Guardromon | **paciência**: o líder ganha a técnica do guardião (contra-golpe) e a lista do espelho com as regras dela; quem prepara o pesado de perto ou insiste no golpe rápido leva o golpe de volta |
+| 3 | Floresta (nova) | Champion | **Youkomon** | **leitura**: o líder muda de padrão no turno 10, pela condição `turno_execucao` que a linguagem já tinha (`GAMBITS_ARENA.floresta`): atirador até o 10, brigão depois |
+| 4 | Cidadela | Ultimate | Myotismon | **resistência**: três lutas seguidas num evento só; o pet leva a vida e o guts de uma para a outra, o líder volta inteiro; a série para na primeira que não for vitória, e a medalha (e o lugar vencido) só vêm com as três |
+| 5 | Lago (novo) | Ultimate | **MarinBullmon** | **vínculo**: as travas e os vetos do dono não valem; o pet luta com a lista que ele mesmo faria (`GambitsPet.listaSozinho`: sem trava, só a nota ordena, e as regras vetadas que ele conhece voltam) |
+| 6 | Montanha Espiral | Mega | Piedmon | chefe da campanha, sem regra a mais |
+
+- **Líderes novos:** o Kyubimon é forma de pet (Champion guardião do brasão Coragem), então a Floresta ficou com o **Youkomon**, outra
+  raposa Champion do atlas. No Lago, o **MarinBullmon** (Ultimate aquático do atlas, não é forma de pet), com a lista do adaptativo
+  (lê o que o rival repete). Os dois e as duas ilhas (Floresta = `WorldMap_04`, Lago = `WorldMap_02`) entraram no atlas, fora do repo
+  (`Assets/catalogo_sprites_up.json`, `Assets/gerar_atlas_up.py`), no padrão da `WorldMap_07` da evolução canônica.
+- **Replay:** a regra depende só do rival e da versão do pet, que o registro já tem. O evento `l` continua `{r, s}` (as lutas 2 e 3 da
+  Cidadela usam sementes derivadas da do evento); os eventos antigos se leem como antes. `Motor.montarLuta`/`lutadores` montam a luta
+  do mesmo jeito para o motor e para a tela (replay no Diário, lutas do registro).
+- **Medalhas** (`motor/medalhas.ts`): a 3ª vem do Youkomon (Floresta) e a 5ª do MarinBullmon (Lago); acabaram as fontes provisórias
+  (Devidramon e Tortomon seguem na Torre como desafiantes).
+- **Telas:** o cartão da arena (líder, a regra em uma frase, a medalha) na Campanha; o mapa de seis ilhas (390 × 760); "luta k de 3"
+  na luta da Cidadela e o bloco da resistência no Resultado; o aviso do Lago na luta (sem os botões de travar e vetar) e no Resultado;
+  a tela de Medalhas com a regra de cada arena, sem "provisória".
+- **Correção junto:** as duas regras novas do vigia V21D voltam como candidatas de troca nos pets v6 (`candidatasDoVigia`).
+
+**Calibração dos líderes** (`web/app/test/calibrar_arenas.mjs`, método do `calibrar_mega.mjs`: motor web, escala ligada, regras dos
+pets v6, a regra de cada arena; pets de referência = as formas do estágio da arena nas 4 espécies, com treino uniforme; o pet é o lado A,
+como no jogo). Fator escolhido nas sementes de calibração (3101…3505) pela maior folga; validação uma vez nas sementes 4101…4505
+(`artifacts_campanha/arenas/calibracao.json` e `validacao.json`).
+
+**Recalibração na escala dos pets v6 (2026-09-30, decisão do Matheus: "o treino tem que decidir" e "o estágio tem que pesar").** As
+metas dos líderes ficaram mais duras: o pet do estágio da arena **sem treino vence ≤ 0,05** (era ≤ 0,30), **com o treino típico ≥ 0,80**
+(Rookie 8, Champion 22, Ultimate 36, Mega 40) e nenhuma forma abaixo de 0,5. Com o peso do treino de antes (β 0,03) só o Lago passava as
+três, sem folga (o treino pesava pouco: +8 pontos no Rookie davam só ×1,24), e a Torre não passava com fator nenhum. Por isso os pets v6 ganharam uma escala própria, `CESC_V6`
+(`web/app/motor/constantes.ts`; só nas lutas de escala dos pets v6, campanha e arenas): vida Rookie 200, Champion 700, Ultimate 2500,
+Mega 23000 e peso do ponto de treino **β = 0,045** (antes 0,03). Escolha em `web/app/test/calibrar_escala_v6.mjs`
+(`artifacts_campanha/escala_v6/`): o β é o menor da grade em que todos os líderes (menos a Torre) têm um fator com folga ≥ 0,01; as vidas
+saem das metas de estágio abaixo.
+
+**Regra do limite de turnos (decisão do Matheus, 2026-09-30):** quando a luta chega ao limite de turnos sem nocaute, **vence quem foi
+desafiado**. No jogo o pet sempre desafia (NPC da campanha, líder da arena, bot da arena), então nos pets v6 a luta que chega ao limite
+é derrota do pet; na Cidadela ela quebra a série. `combate.fimV2`/`jogarV2` recebem o desafiado (lado A, lado B ou ninguém, que é a
+fração de vida de sempre); `desafiadoDaVersao` dá o rival nos pets v6 e ninguém nos v1–v5; o `Motor.montarLuta` passa o desafiado.
+Nada novo no registro (deriva da versão do pet); cenários, pets v1–v5 e a paridade V21D com o Python não mudam. Parametrizada para a
+Fronteira, onde o desafiado será o campeão. Descarte único versão 5 (os v6 de antes decidiriam lutas de outro jeito no replay).
+
+Metas de estágio (PROPOSTAS a partir da decisão; os bots canônicos de cada forma, as 4 espécies de cada lado, lados trocados na metade):
+o de baixo **com o treino típico** contra o de cima **sem treino**. Nas medidas com a regra do limite, o desafiado é o de cima. A escala
+foi escolhida antes da regra (coluna "calibração"); com a regra só se validou de novo, sem mudar número.
+
+| par | meta | razão de vida | calibração (limite pela fração) | validação (limite pela fração, commit `0008f00`) | **validação (limite do desafiado)** |
+|---|---|---|---|---|---|
+| Rookie × Champion | ≤ 0,10 (pontos) | ×3,5 | 0,0888 | 0,0905 | **0,0008** |
+| Champion × Ultimate | ≤ 0,10 (pontos) | ×3,57 | 0,0891 | 0,0886 | **0,0108** |
+| Ultimate × Mega | ≤ 0,10 (pontos) | ×9,2 | 0,0906 | 0,0909 | **0,0041** |
+| Rookie × Ultimate | 0,00 (vitórias) | ×12,5 | 0,0391 (piso 0,039) | 0,0372 | **0,00** |
+| Champion × Mega | 0,00 (vitórias) | ×32,9 | 0,0497 (piso 0,0497) | 0,0509 | **0,00** |
+
+- **Com a regra do limite as cinco metas passam.** Pela fração de vida os dois estágios de distância não chegavam a 0,00: sobravam
+  vitórias por estilo (em alguns pares o de cima nunca acertava o de baixo, como o caçador contra o titã e a muralha, e o limite decidia
+  pela fração de vida; o "piso" é a taxa com razão de E 0,01). Com a regra essas lutas são do desafiado.
+- **Distância das razões do Digimon World** (Rookie → Champion ×2, Champion → Ultimate ×2,5; Mega ×2, o de hoje): a escala v6 se afasta
+  sobretudo pelo **peso do treino**. Cada razão de vida = (1 + β × treino típico de baixo) ÷ (razão de E que a meta pedia na calibração):
+  1,36 × 2,57; 1,99 × 1,80; 2,62 × 3,51. A parte da razão de E fica perto do DW1 nos dois primeiros degraus; no Mega ela é 3,51 (a curva
+  do Ultimate treinado contra o Mega tinha uma cauda longa de vitórias por estilo, a que a regra do limite tirou). Com a regra as metas
+  passam com folga, então a escala poderia ficar mais perto do DW1; ela não foi recalibrada (só validada de novo).
+
+Líderes na escala v6 (fatores da calibração; números da validação com a regra do limite, `artifacts_campanha/arenas/validacao.json`;
+nenhum saiu das metas, nenhum fator mudou):
+
+| arena | líder | fator | sem treino | com o treino típico | pior forma |
+|---|---|---|---|---|---|
+| Campina | Gazimon | 1,3 (era 1,1) | 0,0075 | 0,8575 | 0,800 (sereno) |
+| Torre de pedra | Guardromon | 1,6 (era 1,4) | 0,005 | 0,8125 | 0,665 (guardião) |
+| Floresta | Youkomon | 1,5 (era 1,2) | 0,0213 | 0,8675 | 0,605 (colosso) |
+| Cidadela (série de 3) | Myotismon | 0,9 (era 0,7) | 0,0006 | 0,9063 | 0,535 (sentinela) |
+| Lago | MarinBullmon | 1,5 (era 1,2) | 0,0072 | 0,8959 | 0,56 (sentinela) |
+| Montanha Espiral | Piedmon | 1,6 (era 1,2) | 0,0009 | 0,8931 | 0,555 (sentinela) |
+
+- Os seis passam nas três metas. Os mais apertados com a regra: a Torre com o treino típico (0,8125) e a pior forma na Cidadela (0,535).
+- **Guardromon (Torre, paciência):** com a lista de antes (a do espelho com o contra-golpe) nenhum fator de 0,5 a 4,0 passava: o caçador
+  sem treino vencia atirando de longe, porque o líder respondia ao disparo frequente com o contra-golpe, que não devolve disparo. A lista
+  da arena (`bots.GAMBITS_ARENA.torre`) troca só essa regra por "oponente atira com frequência → avançar" (a resposta da muralha); o
+  contra-golpe contra quem prepara o pesado, insiste no golpe rápido ou na investida fica. Escolhida entre 4 variantes só nas sementes
+  de calibração, antes da regra do limite (`web/app/test/explorar_torre.mjs`, `artifacts_campanha/arenas/torre_variantes.json`). A
+  frase da arena diz isso.
+- No Lago a regra não mexe nos pets de referência (não têm dono): a calibração mede o líder, não o efeito de tirar as travas.
+- O fator da arena vale só na luta de arena dos pets v6; os pets v1–v5 lutam com os NPCs de sempre.
+
+**Desafiantes da campanha v6** (os NPCs que não são líderes; `web/app/test/calibrar_desafiantes_v6.mjs`, metas de sempre: sem treino ≤
+0,30, com o treino típico ≥ 0,80, nenhuma forma < 0,5; fatores em `CESC_V6.fatorNpc`, só nos pets v6). Na validação com a regra do limite
+o Tortomon (1,6) e o Machinedramon (2,7) ficaram com uma forma abaixo de 0,5; os dois foram recalibrados nas sementes de calibração com a
+regra (`desafiantes_calibracao.json`) e validados de novo (`desafiantes_validacao.json`); Devidramon e Puppetmon ficaram:
+
+| desafiante | lugar | fator | sem treino | com o treino típico | pior forma |
+|---|---|---|---|---|---|
+| Tortomon | Torre de pedra | 1,5 (era 1,6) | 0,3087 | 0,8912 | 0,5775 (colosso) — **não fecha** (sem treino > 0,30) |
+| Devidramon | Torre de pedra | 1,1 | 0,1862 | 0,905 | 0,62 (caçador) |
+| Puppetmon | Montanha Espiral | 2,5 | 0,0413 | 0,8628 | 0,605 (muralha) |
+| Machinedramon | Montanha Espiral | 2,2 (era 2,7) | 0,1247 | 0,9566 | 0,7775 (duelista) |
+
+O Tortomon não fecha com nenhum fator (a exceção da Sentinela de sempre); fica o de maior folga. Como vencer qualquer rival de um lugar
+abre o próximo, um Champion sem treino ainda pode abrir a Floresta pelo Tortomon; as medalhas (e a evolução) continuam pedindo os líderes.
+
+**Saves:** descarte único versão 3 (arenas), 4 (escala v6) e 5 (limite do desafiado): os pets v6 de antes saem, com o mesmo aviso.
+
+**Ficou de fora (partes 3 e 4 e o resto da seção 4):** itens, a Fronteira, e o que mais as medalhas liberariam (regras editáveis, espaços
+de item).

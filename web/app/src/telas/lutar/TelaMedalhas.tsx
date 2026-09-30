@@ -1,11 +1,11 @@
 /* Lutar · Medalhas (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 3 e 4): as 6 medalhas do Tamer, quais ja sao dele, com que
-   pet, onde se ganha cada uma e o que cada uma libera. Tudo sai do registro do Tamer (tamer.ts) e da tabela de
-   medalhas do motor (motor/medalhas.ts); duas fontes sao provisorias ate as arenas da parte 2 existirem. So leitura. */
-import { CMD, LUGARES_V5, MEDALHAS, NOME_EST, NPC, nomeForma, type Estagio } from "../../../motor/index.ts";
+   pet, onde se ganha cada uma (o lider e a regra da arena) e o que cada uma libera. Tudo sai do registro do Tamer (tamer.ts)
+   e das tabelas do motor (motor/medalhas.ts e motor/arenas.ts). So leitura. */
+import { ARENA_POR_ID, CMD, LUGARES_V6, MEDALHAS, NOME_EST, NPC, nomeForma, type Estagio } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
-import { comoGanhar, textoFalta } from "../../tamer.ts";
+import { comoGanhar, noLugar, textoFalta } from "../../tamer.ts";
 import { diaDe } from "../pet/TelaPet.tsx";
 
 const DE: Record<string, string> = { adolescente: "Rookie", adulto: "Champion", mega: "Ultimate" };
@@ -42,17 +42,18 @@ export function TelaMedalhas() {
       </div>
       <ol class="med-lista" aria-label="As medalhas">
         {MEDALHAS.map((md, i) => {
-          const g = t.ganha(md.id), n = NPC[md.lider]!;
+          const g = t.ganha(md.id), n = NPC[md.lider]!, ar = ARENA_POR_ID[md.id];
           return (
             <li key={md.id} class={`med-card${g ? " ganha" : ""}`}>
               <SeloMedalha n={i + 1} ganha={!!g} />
               <span class="med-txt">
                 <b class="med-nome">{md.nome}</b>
-                <span class="med-onde">{comoGanhar(md).replace(/^v/, "V")}{md.provisoria && <em class="med-prov"> · provisória, {md.provisoria}</em>}</span>
+                <span class="med-onde">{comoGanhar(md).replace(/^v/, "V")}</span>
+                {ar && <span class="med-regra"><b>{ar.titulo}:</b> {ar.frase}</span>}
                 <span class={g ? "med-status ok" : "med-status"}>{g ? `ganha com ${g.forma} no dia ${diaDe(g.tick)}` : "ainda não"}</span>
                 <span class="med-libera">libera: {libera(i + 1)}</span>
               </span>
-              <span class="med-lider" title={`${n.nome}, líder da ${LUGARES_V5[md.lugar].nome}`}>{img(md.lider)}<small>líder</small></span>
+              <span class="med-lider" title={`${n.nome}, líder ${noLugar(LUGARES_V6[md.lugar].nome).replace(/^n/, "d")}`}>{img(md.lider)}<small>líder</small></span>
             </li>
           );
         })}

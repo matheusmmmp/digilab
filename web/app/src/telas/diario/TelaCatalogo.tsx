@@ -36,7 +36,7 @@ function Tile({ f, sel, meu, visto, escolher }: { f: Forma; sel: boolean; meu: b
   );
 }
 function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
-  const a = useAtlas(), pf = perfilDe(f, null), st = pf.stats, img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(f)) : null;
+  const { motor: m } = useJogo(), a = useAtlas(), pf = perfilDe(f, null), st = pf.stats, img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(f)) : null;
   const extra = f.est === "mega" ? `técnica ${NOME_V2[pf.tecnica!]} · passiva: a do arquétipo do Ultimate · vida e guts ×1,15 (só pets novos)`
     : f.adulta ? `técnica ${NOME_V2[pf.tecnica!]} · passiva: ${DESC_PASSIVA[f.adulta]}`
     : f.linha ? `técnica ${NOME_V2[pf.tecnica!]}: ${DESC_TECNICA[pf.tecnica!]}` : f.est === "bebe" ? "luta ao acaso" : "só ações base, 3 regras de combate";
@@ -49,7 +49,7 @@ function Detalhe({ f, meu }: { f: Forma; meu: boolean }) {
         const v = st[k], w = Math.max(0, Math.min(100, (v - CAT.min) / (CAT.max - CAT.min) * 100));
         return <div class="cat-stat" key={k}><span>{NOME_STAT[k]}</span><span class="dl-vida-trilho" role="img" aria-label={`${NOME_STAT[k]} ${n1(v)}`}><i style={{ width: `${w}%`, background: "var(--dl-action)" }} /></span><span class="dl-lcd">{n1(v)}</span></div>;
       })}</div>
-      <p style={{ margin: 0 }}>vida {Math.round(vidaExibida(pf)).toLocaleString("pt-BR")} · guts {pf.guts0.toFixed(0)} de {pf.gutsMax.toFixed(0)} · recupera {n1(pf.regen)} por turno</p>
+      <p style={{ margin: 0 }}>vida {Math.round(vidaExibida(pf, pf.est, 0, m.versao)).toLocaleString("pt-BR")} · guts {pf.guts0.toFixed(0)} de {pf.gutsMax.toFixed(0)} · recupera {n1(pf.regen)} por turno</p>
       <p class="dl-apoio" style={{ margin: 0 }}>{extra}</p>
     </section>
   );

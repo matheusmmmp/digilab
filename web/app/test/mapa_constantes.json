@@ -1861,6 +1861,61 @@
    "web": "CAMPANHA_V5[3].eps",
    "fonte": "python",
    "py": "ConfigCampanha.npcs.tier2_porteiro.epsilon"
+  },
+  {
+   "web": "CESC.vida.bebe",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.bebe"
+  },
+  {
+   "web": "CESC.vida.crianca",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.crianca"
+  },
+  {
+   "web": "CESC.vida.adolescente",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.adolescente"
+  },
+  {
+   "web": "CESC.vida.adulto",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.adulto"
+  },
+  {
+   "web": "CESC.beta",
+   "fonte": "python",
+   "py": "ConfigEscala.beta_treino"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier1_brutamontes",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier1_brutamontes"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier2_sentinela",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier2_sentinela"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier2_carcereiro",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier2_carcereiro"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier2_porteiro",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier2_porteiro"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier3_soberano",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier3_soberano"
+  },
+  {
+   "web": "CESC.epsNpc",
+   "fonte": "python",
+   "py": "ConfigEscala.epsilon_npc"
   }
  ],
  "convertidos": [
@@ -2291,6 +2346,290 @@
   {
    "web": "CV21D.versaoPet",
    "nota": "versao de pet a partir da qual a luta usa a V21D (pets v6, so no jogo; docs/VALIDACAO_V21D.md): no Python a variante e escolhida pelo config, nao por versao de pet"
+  },
+  {
+   "web": "CAMPANHA_V6[0].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[0].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[0].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[1].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[1].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[1].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[2].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[2].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[2].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[3].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[3].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[3].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[4].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[4].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[4].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[4].fator",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[5].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[5].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[5].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[5].fator",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[6].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[6].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[6].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[6].fator",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[7].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[7].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[7].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[7].fator",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[8].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[8].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[8].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[8].fator",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[9].total",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[9].eps",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[9].lug",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "CAMPANHA_V6[9].fator",
+   "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
+  },
+  {
+   "web": "LUGARES_V6[0].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[0].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[1].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[1].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[2].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[2].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[3].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[3].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[4].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[4].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[5].x",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "LUGARES_V6[5].y",
+   "nota": "coordenada do lugar no mapa da campanha dos pets v6 (exibicao), so na web"
+  },
+  {
+   "web": "ARENAS[0].lugar",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[1].lugar",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[1].fator",
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
+  },
+  {
+   "web": "ARENAS[2].lugar",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[3].lugar",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[3].lutas",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[3].fator",
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
+  },
+  {
+   "web": "ARENAS[4].lugar",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[5].lugar",
+   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[0].fator",
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
+  },
+  {
+   "web": "ARENAS[5].fator",
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
+  },
+  {
+   "web": "CESC.vidaNeutra",
+   "nota": "vida de combate do perfil neutro (hpBase + 10 x hpVigor), so para exibir a vida e o dano na escala; derivada, sem par no Python"
+  },
+  {
+   "web": "CESC_V6.versaoPet",
+   "nota": "versao de pet a partir da qual vale a escala propria (a das medalhas e arenas); escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.bebe",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.crianca",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.adolescente",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.adulto",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.mega",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.beta",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_tier2_sentinela",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_tier2_porteiro",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_v5_puppetmon",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_v5_machinedramon",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
   }
  ],
  "chaves_v21d": [

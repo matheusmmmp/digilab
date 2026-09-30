@@ -6,7 +6,7 @@
    O motor do pet NUNCA le o Tamer por fora (o replay do pet tem de dar o mesmo resultado sozinho): quando o Tamer tem
    mais medalhas do que o pet ativo conhece, o app grava no registro do pet o evento "u" (Motor.liberar), e o motor
    re-verifica a evolucao nessa hora. Um pet guardado recebe o "u" quando volta a ser o ativo. */
-import { LUGARES_V5, MEDALHAS, MEDALHA_POR_ID, Motor, NPC, PetMorto, nomeForma, type Medalha } from "../motor/index.ts";
+import { ARENA_POR_ID, LUGARES_V6, MEDALHAS, MEDALHA_POR_ID, Motor, NPC, PetMorto, nomeForma, type Medalha } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
@@ -84,12 +84,15 @@ export function sincronizarPet(t: Tamer, m: Motor): boolean {
 /* ------------------------------------------------ descarte unico dos pets antigos */
 /** marcador do descarte unico: a versao do descarte que ja rodou neste navegador. 1 = medalhas do Tamer (2026-09-29: os
     pets v1-v5 saem); 2 = combate V21D nos pets v6 (2026-09-30, docs/VALIDACAO_V21D.md: os v6 de antes mudariam de
-    comportamento no replay e saem tambem). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou
-    antes do marcador existir), senao 0 */
+    comportamento no replay e saem tambem); 3 = arenas com lideres (2026-09-30, DESIGN_MEDALHAS_ARENAS parte 2: as lutas
+    de arena mudam no replay dos v6 de antes, e saem de novo); 4 = escala dos pets v6 (2026-09-30, CESC_V6: as lutas da
+    campanha e das arenas mudam no replay dos v6 de antes, e eles saem de novo); 5 = limite de turnos do desafiado (2026-09-30: as
+    lutas dos v6 que chegam ao limite mudam de resultado no replay, e eles saem de novo). Sem a chave: 1 se o registro do Tamer existe (o
+    descarte das medalhas rodou antes do marcador existir), senao 0 */
 export const CHAVE_DESCARTE = CHAVE + "-descarte";
-export const VERSAO_DESCARTE = 2;
+export const VERSAO_DESCARTE = 5;
 /** cada descarte apaga os pets ate esta versao (inclusive) */
-const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6 };
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6, 4: 6, 5: 6 };
 
 /** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
     (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma
@@ -133,8 +136,13 @@ export function descartarPetsAntigos(armaz: Armazenamento & { removeItem(k: stri
 export function medalhasQueFaltam(t: Tamer, precisa: number): Medalha[] {
   return MEDALHAS.filter(x => !t.tem(x.id)).slice(0, Math.max(0, precisa - t.n));
 }
-/** onde a medalha se ganha hoje (todos os lugares da campanha sao femininos: "na Campina") */
-export const comoGanhar = (md: Medalha): string => `vença o ${NPC[md.lider]!.nome} na ${LUGARES_V5[md.lugar].nome}`;
+/** "na Campina", "no Lago": o lugar da campanha v6 com a preposicao (so o Lago e masculino) */
+export const noLugar = (nome: string): string => `${nome === "Lago" ? "no" : "na"} ${nome}`;
+/** onde a medalha se ganha: o lider da arena dela (na Cidadela, tres vezes seguidas) */
+export const comoGanhar = (md: Medalha): string => {
+  const n = ARENA_POR_ID[md.id]?.lutas ?? 1;
+  return `vença o ${NPC[md.lider]!.nome}${n > 1 ? ` ${n === 3 ? "três" : n} vezes seguidas` : ""} ${noLugar(LUGARES_V6[md.lugar].nome)}`;
+};
 /** "Falta a Medalha da Campina: vença o Gazimon na Campina." (ou a lista, quando falta mais de uma) */
 export function textoFalta(t: Tamer, precisa: number): string {
   const f = medalhasQueFaltam(t, precisa);

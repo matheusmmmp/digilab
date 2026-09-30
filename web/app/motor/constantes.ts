@@ -205,6 +205,22 @@ export const CESC = {
   epsNpc: .2,
   vidaNeutra: 100,       /* hpBase + 10 x hpVigor: vida exibida = E x vida propria / vida neutra */
 };
+/* escala dos pets v6 (so no jogo; decisao do Matheus, 2026-09-30: "o treino tem que decidir" e "o estagio tem que pesar").
+   Mesma formula da CESC (E = vida do estagio x (1 + beta x pontos); o dano da campanha vale x E_A/E_B), com a vida de cada
+   estagio (o Mega inclusive) e o peso do ponto de treino proprios. Vale so nas lutas de escala dos pets v6 (campanha e arenas:
+   o pet, pela versao dele, e o NPC, pelas regras da luta); CESC, os pets v1-v5 e o Python da pesquisa nao mudam. fatorNpc:
+   os desafiantes da campanha v6 (os NPCs que nao sao lideres) recalibrados na escala nova; os lideres tem o fator em
+   arenas.ts. Numeros PROPOSTOS, calibrados em test/calibrar_escala_v6.mjs e test/calibrar_arenas.mjs
+   (artifacts_campanha/escala_v6/, artifacts_campanha/arenas/). */
+export const CESC_V6 = {
+  versaoPet: 6,
+  vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,
+  beta: .045,
+  /* Tortomon: nenhum fator fecha as metas (o de maior folga; a excecao da Sentinela de sempre, agora na escala v6). Com a regra
+     do limite do desafiado (2026-09-30) o Tortomon e o Machinedramon sairam das metas na validacao e foram recalibrados (1,6 -> 1,5
+     e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
+  fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
+};
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */
 export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };

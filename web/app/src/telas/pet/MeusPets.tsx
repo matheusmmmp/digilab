@@ -48,7 +48,7 @@ function Guardados({ ativar, cruzar }: { ativar: (i: number) => void; cruzar: ((
               <span class="mpd-ret mp-g-ret">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
               <span class="mp-g-txt"><b>{nomeForma(g.forma)}</b>
                 <span><span class="dl-tag dl-tag--estagio">{nomeEstagio(g.forma)}</span> dia {diaDe(g.e.tick)}</span>
-                <span class="mp-g-num">vida {Math.round(vidaExibida(p, g.forma.est, g.treino.total)).toLocaleString("pt-BR")} · treino +{dec(g.treino.total, 0)}</span></span>
+                <span class="mp-g-num">vida {Math.round(vidaExibida(p, g.forma.est, g.treino.total, g.versao)).toLocaleString("pt-BR")} · treino +{dec(g.treino.total, 0)}</span></span>
               <span class="mp-g-bts">
                 <button type="button" class="dl-btn dl-btn--sec mp-g-ativar" onClick={() => ativar(i)}>Ativar</button>
                 {cruzar && podeSerPai(g) &&

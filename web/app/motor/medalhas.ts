@@ -1,32 +1,29 @@
 /* Medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 3 e 4; so no jogo, a pesquisa em Python nao tem Tamer).
-   TABELA UNICA de onde cada medalha vem: a parte 2 (arenas com lideres) troca so esta tabela. Decisao do Matheus: 6
-   arenas. Nesta parte so existem os 4 lugares da campanha v5, entao duas medalhas tem FONTE PROVISORIA (marcada em
-   `provisoria`): a 3 (a arena da Floresta ainda nao existe: vencer o Devidramon na Torre de pedra) e a 5 (o Lago ainda
-   nao existe: vencer o Tortomon na Torre de pedra; o Machinedramon da Espiral e calibrado para Mega e so os cacadores
-   Ultimate o venciam, entao ele nao pode ser a medalha que libera o Mega). Uma medalha e ganha uma vez so por Tamer, na primeira
-   vitoria contra o lider, com qualquer pet v6 (os v1-v5 nao tem Tamer). */
+   TABELA UNICA de onde cada medalha vem: uma por arena (decisao do Matheus: 6 arenas), dada pelo lider dela (as regras de
+   cada arena ficam em arenas.ts). Desde a parte 2 (arenas com lideres) as seis tem fonte definitiva: a 3a vem do lider da
+   Floresta (Youkomon) e a 5a do lider do Lago (MarinBullmon), no lugar das provisorias da parte 1 (Devidramon e Tortomon, na
+   Torre de pedra). Os ids nao mudaram. Uma medalha e ganha uma vez so por Tamer, na primeira vitoria contra o lider (na
+   Cidadela, a primeira serie de tres vitorias), com qualquer pet v6 (os v1-v5 nao tem Tamer). */
 import { CMD } from "./constantes.ts";
 import type { Estagio } from "./tipos.ts";
 
 export interface Medalha {
-  /** id interno (fica no registro do Tamer): o da arena do desenho, mesmo quando a fonte e provisoria */
+  /** id interno (fica no registro do Tamer): o da arena */
   id: string;
   /** nome na tela */
   nome: string;
-  /** o lider: chave do NPC da campanha v5 (motor/bots.ts, CAMPANHA_V5) */
+  /** o lider: chave do NPC da campanha v6 (motor/bots.ts, CAMPANHA_V6) */
   lider: string;
-  /** indice do lugar da campanha v5 onde o lider fica hoje (LUGARES_V5) */
+  /** indice do lugar da campanha v6 onde fica a arena (LUGARES_V6) */
   lugar: number;
-  /** fonte provisoria: o texto diz ate quando */
-  provisoria?: string;
 }
 export const MEDALHAS: readonly Medalha[] = [
   { id: "campina", nome: "Medalha da Campina", lider: "npc_tier1_brutamontes", lugar: 0 },
   { id: "torre", nome: "Medalha da Torre de pedra", lider: "npc_tier2_carcereiro", lugar: 1 },
-  { id: "floresta", nome: "Medalha do Devidramon", lider: "npc_tier2_porteiro", lugar: 1, provisoria: "até a arena da Floresta existir" },
-  { id: "cidadela", nome: "Medalha da Cidadela", lider: "npc_v5_myotismon", lugar: 2 },
-  { id: "lago", nome: "Medalha do Tortomon", lider: "npc_tier2_sentinela", lugar: 1, provisoria: "até a arena do Lago existir" },
-  { id: "espiral", nome: "Medalha da Montanha Espiral", lider: "npc_v5_piedmon", lugar: 3 },
+  { id: "floresta", nome: "Medalha da Floresta", lider: "npc_v6_youkomon", lugar: 2 },
+  { id: "cidadela", nome: "Medalha da Cidadela", lider: "npc_v5_myotismon", lugar: 3 },
+  { id: "lago", nome: "Medalha do Lago", lider: "npc_v6_marinbullmon", lugar: 4 },
+  { id: "espiral", nome: "Medalha da Montanha Espiral", lider: "npc_v5_piedmon", lugar: 5 },
 ];
 export const MEDALHA_POR_ID: Readonly<Record<string, Medalha>> = Object.fromEntries(MEDALHAS.map(x => [x.id, x]));
 /** a medalha que o lider da (null: o NPC nao e lider) */

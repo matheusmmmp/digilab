@@ -44,3 +44,28 @@ test("escala ligada: o treino sobe a escala (beta) e a vida exibida cresce do be
   assert.ok(vb > 40 && vb < 60, `bebê ${vb}`);
   assert.ok(va > 1300 && va < 1700, `adulto ${va}`);
 });
+
+/* escala dos pets v6 (CESC_V6, 2026-09-30): so o pet v6 (pela versao) e o NPC nas lutas V21D (pelas regras) usam a escala
+   propria; a CESC (pets v1-v5) nao muda */
+test("escala v6: o pet v6 e o NPC da luta V21D usam a CESC_V6; os v1-v5, a CESC", () => {
+  M.ligarEscala(true);
+  const { CESC, CESC_V6, CV21D, VERSAO_ESCALA_V6 } = M;
+  assert.equal(VERSAO_ESCALA_V6, 6);
+  for (const est of ["crianca", "adolescente", "adulto"]) {
+    assert.equal(M.escalaDe(est, 22), CESC.vida[est] * (1 + CESC.beta * 22));
+    assert.equal(M.escalaDe(est, 22, 5), CESC.vida[est] * (1 + CESC.beta * 22));
+    assert.equal(M.escalaDe(est, 22, 6), CESC_V6.vida[est] * (1 + CESC_V6.beta * 22));
+  }
+  assert.equal(M.escalaDe("mega", 40), M.CMG.vida * (1 + CESC.beta * 40));
+  assert.equal(M.escalaDe("mega", 40, 6), CESC_V6.vida.mega * (1 + CESC_V6.beta * 40));
+  const f = { esp: "brasa", est: "adolescente", ramo: "sereno", linha: "brigao" }, tr = Object.fromEntries(M.STATS.map(k => [k, 22 / 6]));
+  assert.equal(M.perfilDe(f, null, 1, tr, true).escala, M.escalaDe("adolescente", 22));
+  assert.equal(M.perfilDe(f, null, 1, tr, true, 6).escala, M.escalaDe("adolescente", 22, 6));
+  /* o NPC: fora da V21D a escala de sempre; com as regras dos pets v6, a vida da CESC_V6 */
+  assert.equal(M.lutadorBot("npc_tier2_porteiro").cond.escala, CESC.vida.adolescente * CESC.fatorNpc.npc_tier2_porteiro);
+  const dev6 = M.lutadorBot("npc_tier2_porteiro", CV21D).cond.escala;
+  assert.equal(dev6, CESC_V6.vida.adolescente * (CESC_V6.fatorNpc.npc_tier2_porteiro ?? CESC.fatorNpc.npc_tier2_porteiro));
+  /* a exibicao segue a versao */
+  const pa = M.perfilDe(f, null);
+  assert.equal(M.vidaExibida(pa, "adolescente", 0, 6) / M.vidaExibida(pa, "adolescente", 0), CESC_V6.vida.adolescente / CESC.vida.adolescente);
+});

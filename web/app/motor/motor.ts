@@ -8,8 +8,9 @@ import {
 import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
+import { arenaDaLuta, jogarArena, sementeDaSerie, type Arena } from "./arenas.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
-import { jogarV2, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
+import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
@@ -38,7 +39,12 @@ export interface Evolucao {
 interface Chamados { abertos: Partial<Record<Chamado, number>>; atendidos: number; total: number }
 interface RegistroDesejo { atual: { tick: number; tipo: Desejo["tipo"]; alvo: string } | null; vontades: number; cumpridas: number; abertas: [number, string][]; tVontade: number }
 
-export interface ResultadoLutaPet { res: ResultadoLuta; A: Lutador; B: Lutador; lesao?: boolean }
+/** a luta como o motor a joga (Motor.montarLuta): os lutadores, a arena (pets v6 contra o lider; null fora dela), as regras
+    do pet com que ele lutou (a lista ativa, ou a do Lago) e as lutas: uma, ou as seguidas da Cidadela (ate a primeira que
+    nao for vitoria) */
+export interface LutaMontada { A: Lutador; B: Lutador; arena: Arena | null; usadas: string[] | null; serie: ResultadoLuta[] }
+/** `res`: a ultima luta da serie (a unica, fora da Cidadela); `venceu`: todas as lutas da serie foram vitorias */
+export interface ResultadoLutaPet extends LutaMontada { res: ResultadoLuta; venceu: boolean; lesao?: boolean }
 
 /* ---------------------------------------------------------------- educacao-v1 (pets v4) */
 /** janela de travessura aberta: o dono ve tipo e pedido, nunca se e falsa */
@@ -184,40 +190,75 @@ export class Motor {
   get lugares(): Lugar[] { return lugaresDe(this.versao); }
   /** regras das lutas deste pet: V21D nos pets v6 (docs/VALIDACAO_V21D.md), V21C nos v1-v5 */
   get regras(): RegrasLuta { return regrasDaVersao(this.versao); }
+  /** quem fica com a luta no limite de turnos: nos pets v6 o rival (o pet sempre desafia); nos v1-v5, ninguem (a fracao de vida) */
+  get desafiado(): Desafiado { return desafiadoDaVersao(this.versao); }
   lugarVencido(L: number): boolean { return this.lugares[L].rivais.some(r => this.campanha[r] > 0); }
+  /** indice do lugar do NPC na campanha deste pet (na v6 o Myotismon e a Montanha Espiral mudam de indice) */
+  lugarDe(k: string): number {
+    const i = this.lugares.findIndex(L => L.rivais.includes(k));
+    if (i < 0) throw new Error(`${NOME_BOT[k] ?? k} não está na campanha deste pet`);
+    return i;
+  }
   /** desafio da campanha aberto: o primeiro sempre; os outros depois de vencer o anterior */
-  desafioAberto(k: string): boolean { const L = NPC[k]!.lug; return L === 0 || this.lugarVencido(L - 1); }
+  desafioAberto(k: string): boolean { const L = this.lugarDe(k); return L === 0 || this.lugarVencido(L - 1); }
+  /** a arena cuja regra vale na luta contra o rival (pets v6 contra o lider; docs/DESIGN_MEDALHAS_ARENAS.md, secao 3) */
+  arenaDe(rival: string): Arena | null { return NPC[rival] ? arenaDaLuta(rival, this.versao) : null; }
   /** luta contra bot: entra no registro (rival + semente) e ensina os gambits */
   lutar(rival: string, semente: number): ResultadoLutaPet {
     if (!NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
     if (NPC[rival] && !(rival in this.campanha)) throw new Error(`${NPC[rival]!.nome} não está na campanha deste pet`);
-    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[NPC[rival]!.lug - 1].nome} antes`);
+    if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[this.lugarDe(rival) - 1].nome} antes`);
     this.log.push([this.e.tick, "l", { r: rival, s: semente }]);
     return this._lutar(rival, semente);
   }
-  private _lutar(rival: string, semente: number): ResultadoLutaPet {
-    /* campanha contra NPC: stats treinados absolutos; arena contra bots: normalizados ao orcamento */
-    const R = this.regras, A = lutadorPet(this, "Seu pet", !!NPC[rival]), B = lutadorBot(rival, R), res = jogarV2(A, B, semente, R);
-    if (this.gp) this.gp.aprender(res, semente);
-    if (this.estagioAtual === "adolescente") this.sparring++;
-    if (NPC[rival] && res.pontosA === 1) this.campanha[rival]++;
-    this._hist({ t: this.e.tick, quem: "luta", a: `contra ${NOME_BOT[rival]}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
-    let lesao = false;
-    if (this.versao >= 4) {
-      const L = this.lutas;
-      L.lutas++;
-      if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida++; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
-      /* lesao: so na derrota, numa rng derivada da semente da LUTA */
-      lesao = res.pontosA === 0 && criarRng(hashSemente("lesao", semente)).random() < CLE.probLesao;
-      if (lesao) {
-        L.lesoes++;
-        if (this.lesionadoDesde === null) this.lesionadoDesde = this.e.tick;
-        if (L.lesoes >= CLE.lesoesMorte) this.morte = { tick: this.e.tick, causa: "lesoes" };
-        this._hist({ t: this.e.tick, quem: "lesao", a: "se machucou na luta" });
-      }
+  /** a luta contra o rival como o motor a joga, sem mexer no pet. Campanha contra NPC: stats treinados absolutos; arena
+      contra bots: normalizados ao orcamento. Nas arenas (pets v6 contra o lider, arenas.ts) vale a regra dela: o lider com o
+      fator calibrado (e o contra-golpe, na Torre de pedra), o pet com a lista sem o dono (Lago) e as lutas seguidas sem cura
+      (Cidadela). O _lutar joga por aqui; a tela refaz as lutas do registro por aqui tambem */
+  montarLuta(rival: string, semente: number): LutaMontada {
+    const L = this.lutadores(rival);
+    return { ...L, serie: jogarArena(L.A, L.B, semente, this.regras, L.arena?.lutas ?? 1, this.desafiado) };
+  }
+  /** os dois lados da luta contra o rival, sem jogar (a previa do palco usa isto): o pet (no Lago, com a lista sem o dono),
+      o rival (o lider com a regra da arena) e as regras do pet com que ele luta */
+  lutadores(rival: string): Omit<LutaMontada, "serie"> {
+    const npc = !!NPC[rival], arena = this.arenaDe(rival);
+    let A = lutadorPet(this, "Seu pet", npc), usadas = this.gp ? this.gp.ativas.slice() : null;
+    if (arena?.regra === "vinculo" && this.gp) {
+      usadas = this.gp.listaSozinho();
+      A = { ...A, estilo: { ...A.estilo, gambits: { regras: usadas.map(regraDe), final: this.gp.final } } };
     }
-    return { res, A, B, lesao };
+    return { A, B: lutadorBot(rival, this.regras, arena), arena, usadas };
+  }
+  private _lutar(rival: string, semente: number): ResultadoLutaPet {
+    const M = this.montarLuta(rival, semente), n = M.arena?.lutas ?? 1;
+    let lesao = false;
+    M.serie.forEach((res, k) => {
+      /* cada luta da serie ensina e conta, com a semente dela (a primeira e a do evento) */
+      const s = sementeDaSerie(semente, k);
+      if (this.gp) this.gp.aprender(res, s, M.usadas!);
+      if (this.estagioAtual === "adolescente") this.sparring++;
+      this._hist({ t: this.e.tick, quem: "luta", a: `contra ${NOME_BOT[rival]}${n > 1 ? ` (luta ${k + 1} de ${n})` : ""}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
+      if (this.versao >= 4) {
+        const L = this.lutas;
+        L.lutas++;
+        if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida++; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
+        /* lesao: so na derrota, numa rng derivada da semente da LUTA */
+        const l = res.pontosA === 0 && criarRng(hashSemente("lesao", s)).random() < CLE.probLesao;
+        if (l) {
+          lesao = true;
+          L.lesoes++;
+          if (this.lesionadoDesde === null) this.lesionadoDesde = this.e.tick;
+          if (L.lesoes >= CLE.lesoesMorte) this.morte = { tick: this.e.tick, causa: "lesoes" };
+          this._hist({ t: this.e.tick, quem: "lesao", a: "se machucou na luta" });
+        }
+      }
+    });
+    const res = M.serie[M.serie.length - 1], venceu = M.serie.length === n && res.pontosA === 1;
+    /* campanha: vitorias por desafio; na Cidadela, so a serie inteira conta */
+    if (NPC[rival] && venceu) this.campanha[rival]++;
+    return { ...M, res, venceu, lesao };
   }
   /** intervencao do dono nos gambits: travar, destravar, vetar, liberar */
   intervirGambit(op: OpGambit, k: string): void {
