@@ -463,8 +463,6 @@ Só no jogo web e só pets v6; a pesquisa não tem instalações (`docs/REGISTRO
 - **Telas:** as duas instalações em Lutar · Fronteira (regra, recorde do Tamer, tentativas do pet, "Tentar"), "Torre de Batalha · vitória N"
   na luta com a vida com que o pet começou, o Resultado (vitórias seguidas, as lutas, o recorde novo), os recordes em Medalhas. Testes:
   `test/instalacoes.test.ts`, e2e com `e2e/save_liga.json` e um Tamer campeão.
-- **Aberto:** o tempo do jogo corre durante a animação da luta; na velocidade de teste (10 min/s) uma lesão da derrota que fecha a sequência
-  pode matar o pet antes do Resultado (6 h de jogo = 36 s). Vale também para a Liga; o e2e pausa o tempo.
 
 ## Fronteira de Batalha, parte 4c: a Fábrica e o Salão (2026-09-30, `docs/DESIGN_FRONTEIRA.md`, seções 9 e 10) — SEM EQUILÍBRIO
 
@@ -957,7 +955,8 @@ Meus pets, revelação da evolução, conversa da fala livre com as mesmas chave
 Aprendizado, Evolução) **Lutar** (Arena, Campanha, palco da luta: um estado só em `src/luta.ts`, o palco vai
 para a aba visível) e **Diário** (Registro, Catálogo, Cenários; o pet B do cenário vira o rival fixo da arena). Navegação (DIRETRIZES_REPLICAR seções 6 e 7): no celular, barra de baixo com Pet, Crescer, Lutar e Diário, e **Conversar** e Configurações (tema, fala, registro, Tempo (teste)) no cabeçalho do Pet; de 900 px, barra lateral de 96 px com Conversar e Ajustes no pé; de 1100 px, topo com abas e mini-card do pet e as telas nas colunas das pranchas *Desktop. Luta em tela cheia (`#/lutar/luta`) com o modal Resultado; revelação (`#/evolucao`) e primeira vez (`#/inicio`) em tela cheia; folhas no celular viram o painel da direita no desktop. Tema (Auto/Claro/Escuro) em
 Configurações, preferência na chave `…-tema` (o save não muda). O tempo anda e grava o save (ação
-do dono na hora; tempo a cada 2 s; o pendente ao esconder/fechar a aba); se outra aba muda o save, o app relê em vez
+do dono na hora; tempo a cada 2 s; o pendente ao esconder/fechar a aba) e para durante a luta no palco e com o Resultado aberto (só a
+interface, `luta.lutaSeguraTempo`: a luta já está no registro; o tempo parado não é compensado); se outra aba muda o save, o app relê em vez
 de gravar por cima (o HTML não faz isso: não deixar o HTML e o app abertos juntos no mesmo pet). Semear save em
 teste: por uma página da mesma origem que não seja o app (ex.: `/Assets/digilab_atlas_up.json`), senão o app grava
 o pet dele por cima ao fechar.

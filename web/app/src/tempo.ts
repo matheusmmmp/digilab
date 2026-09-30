@@ -1,9 +1,11 @@
 /* Tempo do jogo (igual ao HTML): anda pelo tempo REAL decorrido, na velocidade escolhida (minutos de jogo por
    segundo). No 1x, 1 min de jogo = 1 min de relogio, mesmo com a aba em segundo plano. Salto maximo de 1 h real
    por passo, para nao travar depois de um sono do PC. O bebe anda minuto a minuto para parar no instante em que
-   um chamado abre; com chamado aberto o tempo cai para 1x ate atender (e volta depois). */
+   um chamado abre; com chamado aberto o tempo cai para 1x ate atender (e volta depois). Durante a luta no palco e com o Resultado
+   dela aberto o tempo nao anda (luta.lutaSeguraTempo): o que passou ali e descartado, como na Pausa. */
 import { useEffect, useState } from "preact/hooks";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
+import { lutaSeguraTempo } from "./luta.ts";
 
 export const VEL_1X = 1 / 60;
 export const VELOCIDADES: readonly [string, number, string?][] = [
@@ -38,7 +40,7 @@ export function iniciarTempo(): () => void {
     const agora = performance.now(), dt = Math.min(3600, (agora - ultimo) / 1000);
     ultimo = agora;
     const j = jogoAtual();
-    if (j.nascendo > 0 || velocidade === 0 || j.erroSave) return;
+    if (j.nascendo > 0 || velocidade === 0 || j.erroSave || lutaSeguraTempo()) return;
     acumulado += velocidade * dt;
     let n = Math.floor(acumulado);
     if (n <= 0) return;

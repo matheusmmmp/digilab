@@ -184,8 +184,9 @@ escala v6, V21D, limite do desafiado; o Mega de referência de cada forma × 4 e
 - O pet do teste ponta a ponta (Valkyrimon, emboscador, treino 40) vence a primeira luta nas 50 primeiras tentativas; média 7,64 na Torre e
   8,04 no Palácio. No e2e a primeira tentativa dá 7 vitórias na Torre e 9 no Palácio.
 
-**Ficou de fora (4c, seção 9):** a Fábrica e o Salão. **Aberto:** o tempo do jogo corre durante a animação; na velocidade de teste (10 min/s) uma
-lesão da derrota que fecha uma sequência longa pode matar o pet antes do Resultado (a Liga tem o mesmo caso).
+**Ficou de fora (4c, seção 9):** a Fábrica e o Salão. O tempo do jogo corria durante a animação (uma lesão da derrota que fechava uma
+sequência longa matava o pet antes do Resultado na velocidade de teste); corrigido na interface: o relógio para durante a luta no palco e
+com o Resultado aberto (Liga incluída).
 
 ## 9. O que a parte 4c implementou (2026-09-30): a Fábrica e o Salão
 
@@ -265,5 +266,5 @@ escala v6, V21D, limite do desafiado):
   `fronteira/conferencia.json` e `fronteira/conferencia_4c.json`) só mostram que é jogável. A decisão dos fatores fica para a rodada de
   equilíbrio.
 - **Registro do Tamer:** versão 5 (lê 1 a 4). Os recordes: `recorde` (Torre, Palácio) e os tirados das tentativas (Fábrica, Salão).
-- **Aberto:** o relógio corre durante a animação das lutas da Liga, da Torre e do Palácio (seção 8); a Fábrica é difícil com fator 1 (acima);
+- **Aberto:** a Fábrica é difícil com fator 1 (acima);
   as lutas da Fábrica e do Salão não têm animação no palco.
