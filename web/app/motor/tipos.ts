@@ -9,7 +9,10 @@ export type EixoTemperamento = "curiosidade" | "teimosia" | "sensibilidade" | "r
 export type Temperamento = Readonly<Record<EixoTemperamento, number>>;
 
 export type Especie = "brasa" | "cirro" | "ferrugem" | "limo";
-export type Estagio = "bebe" | "crianca" | "adolescente" | "adulto";
+export type Estagio = "bebe" | "crianca" | "adolescente" | "adulto" | "mega";
+/** estagios de antes da evolucao canonica: as tabelas de constantes conferidas contra o HTML e o Python sao por eles; o
+    Mega (pets v5, so no jogo) tem as suas em CMG */
+export type EstagioBase = Exclude<Estagio, "mega">;
 export type EstagioTreino = "crianca" | "adolescente" | "adulto";
 export type Ramo = "sereno" | "arisco";
 export type Linha = "brigao" | "guardiao" | "cacador" | "colosso";
@@ -51,13 +54,21 @@ export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
 export type Ritmo = "rapida" | "classica";
 /** so no comeco do registro (antes de qualquer outro evento, menos outra config) */
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
-/** pets v5: fala espontanea disparada por um gatilho (reencontro, marco...). So o gatilho vai para o registro; se ela
+/** pets v7: fala espontanea disparada por um gatilho (reencontro, marco...). So o gatilho vai para o registro; se ela
     e mentira sai da rng da mentira (o replay sorteia de novo, igual) */
 export type EventoFala = [tick: number, tipo: "f", gatilho: string];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig
-  | EventoFala;
+/** pets v6: o Tamer tem n medalhas a partir deste tick (o motor do pet nunca le o Tamer por fora; o replay le este evento) */
+export type EventoLiberacao = [tick: number, tipo: "u", liberacao: { n: number }];
+/** pets v6 (itens, medalhas parte 3): o dono equipa ou desequipa um chip do Tamer (motor/itens.ts). O motor confere vagas, tipo e
+    estagio; o inventario e do Tamer e o app confere antes de gravar */
+export type OpItem = "equipar" | "desequipar";
+export type EventoItem = [tick: number, tipo: "i", item: { op: OpItem; id: string }];
+/** pets v6: a carta do Tamer vale para a luta seguinte; o proximo evento do registro tem de ser a luta ("l") */
+export type EventoCarta = [tick: number, tipo: "k", carta: { id: string }];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
+  | EventoItem | EventoCarta | EventoFala;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

@@ -5,6 +5,7 @@
 import { useEffect, useState } from "preact/hooks";
 import { Motor, PetMorto } from "../motor/index.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
+import { CHAVE_TAMER, Tamer, conferirItensDasMedalhas, conferirMedalhas, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
@@ -16,20 +17,50 @@ export interface Jogo {
   revisao: number;
   /** quadros restantes do ovo chocando (so apresentacao: o tempo nao anda enquanto choca) */
   nascendo: number;
+  /** registro do Tamer que existe e nao abriu: o app mostra o erro, nao grava por cima e nao da medalha */
+  erroTamer: string | null;
+  /** o pet que acabou de voltar a ser o ativo evoluiu ao receber as medalhas: quantas evolucoes ele tinha antes (revelacao) */
+  evolucoesAoTrocar: number | null;
 }
 
 let jogo: Jogo | null = null;
 const ouvintes = new Set<() => void>();
 let armazenamento: Armazenamento | null = null;
 let ultimoGravado = 0, pendente = false;
+/** o Tamer (medalhas): um so, lido na abertura; so muda por aqui (tamer.ts) */
+let tamer = new Tamer();
 const INTERVALO_GRAVAR_MS = 2000;
 
 export function iniciarJogo(armaz: Armazenamento): Jogo {
   armazenamento = armaz;
-  const l = lerSave(armaz);
-  if (l.tipo === "ok") jogo = { motor: l.motor, origem: "save", erroSave: null, revisao: 0, nascendo: 0 };
-  else jogo = { motor: petExemplo(), origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0 };
+  let erroTamer: string | null = null;
+  try { tamer = lerTamer(armaz); } catch (err) { tamer = new Tamer(); erroTamer = err instanceof Error ? err.message : String(err); }
+  const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null };
+  if (l.tipo === "ok") jogo = { motor: l.motor, origem: "save", erroSave: null, revisao: 0, nascendo: 0, ...extra };
+  else jogo = { motor: petExemplo(), origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0, ...extra };
+  /* o pet salvo pode estar atras do Tamer (medalha ganha com outro pet): recebe o "u" ja na abertura */
+  if (l.tipo === "ok" && medalhas(jogo).mudou) gravar();
   return jogo;
+}
+export const tamerAtual = (): Tamer => tamer;
+/** depois de toda mudanca do pet: a vitoria nova contra um lider vira medalha do Tamer, com o item dela (gravados na hora), e o pet
+    ativo passa a conhecer as medalhas que o Tamer tem (evento "u"; o motor re-verifica a evolucao). Nada disso com save ou
+    registro do Tamer que nao abriu. */
+function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
+  if (!armazenamento || j.erroSave || j.erroTamer) return { novas: [], mudou: false };
+  const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor);
+  if (novas.length || itens.length) gravarTamer(armazenamento, tamer);
+  return { novas, mudou: sincronizarPet(tamer, j.motor) };
+}
+/** a unica porta de mudanca do Tamer fora das medalhas (itens: a carta usada, a carta da revanche): aplica, grava e avisa. Com o
+    registro do Tamer que nao abriu, falha (o app nao grava por cima dele) */
+export function mudarTamer<T>(f: (t: Tamer) => T): T {
+  const j = jogoAtual();
+  if (!armazenamento || j.erroTamer) throw new Error("o registro do Tamer não abriu: " + (j.erroTamer ?? "sem armazenamento"));
+  const r = f(tamer);
+  gravarTamer(armazenamento, tamer);
+  j.revisao++; avisar();
+  return r;
 }
 export function jogoAtual(): Jogo {
   if (!jogo) throw new Error("jogo nao iniciado");
@@ -55,6 +86,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
     if (err instanceof PetMorto) avisar();
     throw err;
   }
+  medalhas(j);
   j.revisao++;
   if (j.origem === "exemplo" && !j.erroSave) j.origem = "save";
   pendente = true;
@@ -65,6 +97,10 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
 export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   const j = jogoAtual();
   j.motor = m; j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
+  /* pet guardado que estava pronto: recebe as medalhas agora e evolui (a revelacao conta a partir de antes) */
+  const antes = m.evolucoes.length;
+  medalhas(j);
+  j.evolucoesAoTrocar = m.evolucoes.length > antes ? antes : null;
   gravar();
   avisar();
 }
@@ -82,6 +118,11 @@ export function passarQuadroOvo(): void {
 /** outra aba mudou o save: relê em vez de gravar por cima depois */
 export function ouvirOutrasAbas(): () => void {
   const aoMudar = (ev: StorageEvent) => {
+    if (ev.key === CHAVE_TAMER && armazenamento && jogo) {
+      /* outra aba ganhou medalha: relê o Tamer; o pet desta aba recebe o "u" na proxima mudanca */
+      try { tamer = lerTamer(armazenamento); jogo.erroTamer = null; } catch (err) { jogo.erroTamer = "outra aba gravou um registro do Tamer que não abre: " + (err instanceof Error ? err.message : String(err)); }
+      jogo.revisao++; avisar(); return;
+    }
     if (ev.key !== CHAVE || !armazenamento || !jogo) return;
     if (ev.newValue === null || ev.newValue === textoSave(jogo.motor)) return;
     const l = lerSave(armazenamento);

@@ -65,4 +65,4 @@ function desenharImagemGrade(grade: string[], escala: number, cores: Paleta): { 
   }));
   return { url: c.toDataURL(), w: c.width, h: c.height };
 }
-export const gradeDe = (est: string): string => est === "adolescente" ? "crianca" : est;
+export const gradeDe = (est: string): string => est === "adolescente" ? "crianca" : est === "mega" ? "adulto" : est;

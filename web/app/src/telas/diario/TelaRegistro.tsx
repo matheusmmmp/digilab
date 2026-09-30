@@ -20,10 +20,12 @@ type Filtro = "todos" | "voce" | "pet" | "luta" | "recusa" | "treino" | "falas";
 const TIPO_REG: Record<string, [Exclude<Filtro, "todos">, string, string]> = {
   dono: ["voce", "você", "voce"], gambit: ["voce", "regras", "regras"], pet: ["pet", "pet", "pet"], recusa: ["recusa", "recusa", "recusa"],
   luta: ["luta", "luta", "luta"], treino: ["treino", "treino", "treino"],
+  /* pets v6: o pet passou a saber das medalhas do Tamer (evento "u") */
+  tamer: ["luta", "medalha", "luta"],
 };
 const FILTROS: [Filtro, string][] = [["todos", "tudo"], ["voce", "você"], ["pet", "pet"], ["luta", "lutas"], ["recusa", "recusas"], ["treino", "treino"],
   ["falas", "falas"]];
-/** pets v5: as falas da voz propria (log de apresentacao). A mentira ganha o selo "ele mentiu" depois de 1 dia de jogo,
+/** pets v7: as falas da voz propria (log de apresentacao). A mentira ganha o selo "ele mentiu" depois de 1 dia de jogo,
     com a verdade ao lado; antes disso o dono so tem o que viu (DESIGN_VOZ_PROPRIA, secao 9) */
 function FalasDoPet({ agora }: { agora: number }) {
   let falas: RegistroFala[] = [];

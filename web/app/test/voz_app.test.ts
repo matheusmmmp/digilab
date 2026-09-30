@@ -4,16 +4,16 @@ import { describe, expect, test } from "vitest";
 import { Motor, TPD, mentiraDeHistoria } from "../motor/index.ts";
 import { RITMO_MIN, assuntoDaFala, gatilhoDe, podeFalar } from "../src/voz.ts";
 
-/** pet v5 criado e levado ate a crianca, com o dono agindo a cada 15 min */
+/** pet v7 criado e levado ate a crianca, com o dono agindo a cada 15 min */
 function crianca(semente = 11): Motor {
-  const m = new Motor(semente, 5);
+  const m = new Motor(semente, 7);
   while (m.estagioAtual === "bebe") { m.avancar(15); m.observar(m.e.fome > .5 ? "alimentar" : "acariciar"); }
   return m;
 }
 
 describe("gatilhos e ritmo", () => {
   test("ao carregar so observa; evolucao dispara marco; reencontro depois de 3 h", () => {
-    const m = new Motor(21, 5);
+    const m = new Motor(21, 7);
     expect(gatilhoDe(m)).toBeNull();                           /* primeira vez: so olha */
     const vistos: (string | null)[] = [];
     while (m.estagioAtual === "bebe") { m.avancar(15); m.observar("acariciar"); vistos.push(gatilhoDe(m)); }
@@ -22,8 +22,8 @@ describe("gatilhos e ritmo", () => {
     m.observar("acariciar"); expect(gatilhoDe(m)).toBe("reencontro");
   });
   test("ritmo: no maximo uma fala a cada 2 h; nunca com janela aberta; bebe nao fala", () => {
-    expect(podeFalar(new Motor(5, 5))).toBe(false);          /* bebe */
-    expect(podeFalar(new Motor(5, 4))).toBe(false);          /* pet v4 */
+    expect(podeFalar(new Motor(5, 7))).toBe(false);          /* bebe */
+    expect(podeFalar(new Motor(5, 6))).toBe(false);          /* pet v6 */
     const m = crianca();
     while (!podeFalar(m)) { m.avancar(15); if (m.janelaAberta()) m.observar("repreender"); }
     m.falar("marco");
@@ -57,6 +57,6 @@ describe("assunto e molde", () => {
     const m = crianca(41);
     for (let k = 0; k < 6; k++) { m.avancar(RITMO_MIN); if (podeFalar(m)) m.falar("reencontro"); if (m.janelaAberta()) m.observar("elogiar"); }
     expect(m.log.some(e => e[1] === "f")).toBe(true);
-    expect(Motor.reproduzir(41, m.log, 5).assinatura()).toBe(m.assinatura());
+    expect(Motor.reproduzir(41, m.log, 7).assinatura()).toBe(m.assinatura());
   });
 });

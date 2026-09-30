@@ -110,18 +110,18 @@ function useFala(): VistaFala {
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
   const mot = m.motivo, est = m.estagioAtual;
   const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
-  const ult = m.versao >= 5 ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
+  const ult = m.versao >= 7 ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
   if (livre && ult) {
     v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao, ult);
     v.detalhe = detalheFalaLivre(ult); v.titulo = tituloFalaLivre(ult);
   } else if (mot) {
     const refs = refsDoMotivo(m, mot), resp = falaLLM(motivoParaApi(mot, refs), est, mot.humor), usarLLM = !!resp && resp.fonte === "llm";
-    const fria = m.falaFria || m.sombria, pronta = llm.on && llm.ativo && ["adolescente", "adulto"].includes(est) && !usarLLM;
+    const fria = m.falaFria || m.sombria, pronta = llm.on && llm.ativo && ["adolescente", "adulto", "mega"].includes(est) && !usarLLM;
     v.classe = "dl-balao" + (fria ? " dl-balao--sombria" : "") + (est === "bebe" ? " dl-balao--emote" : "");
     v.balao = <>{usarLLM ? "✦ " + resp!.texto : <TextoFala txt={falaDe(m, mot)} est={est} atlasOk={atlas.tipo === "ok"} />}{pronta && <span class="dl-balao-tag">frase pronta</span>}</>;
-    v.texto = usarLLM ? "✦ " + resp!.texto : est === "adolescente" || est === "adulto" ? falaDe(m, mot) : "";
+    v.texto = usarLLM ? "✦ " + resp!.texto : est === "adolescente" || est === "adulto" || est === "mega" ? falaDe(m, mot) : "";
     v.causa = <Causa mot={mot} refs={refs} />;
-    v.detalhe = detalheMotivo(mot, est) + (llm.on && llm.ativo && ["adolescente", "adulto"].includes(est)
+    v.detalhe = detalheMotivo(mot, est) + (llm.on && llm.ativo && ["adolescente", "adulto", "mega"].includes(est)
       ? ` · fonte: ${usarLLM ? "LLM (" + resp!.detalhe + ")" : resp ? "template (" + resp.detalhe + ")" : "template (aguardando LLM)"}` : " · fonte: template");
   }
   return v;
@@ -220,7 +220,7 @@ function JanelaV4({ agir }: { agir: (a: AcaoDono) => void }) {
       const resta = Math.max(0, j.prazo - tick);
       const barra = <Seg n={blocos(resta / CED.janela, 10)} m={10} />;
       if (j.tipo === "fala") {
-        /* pets v5: ele falou (voz propria). O dono nunca sabe se foi mentira: acredita, premia ou desconfia */
+        /* pets v7: ele falou (voz propria). O dono nunca sabe se foi mentira: acredita, premia ou desconfia */
         const f = falaVozRecente(m), barraFala = <Seg n={blocos(resta / CMEN.janela, 10)} m={10} />;
         return (
           <div class="dl-card chamado chamado--fala">

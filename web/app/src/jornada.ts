@@ -1,16 +1,16 @@
-/* Jornada do jogador (pedido do Matheus, 2026-09-28): escolher o brasao -> chocar o ovo -> crescer ate Ultimate ou
-   Mega -> vencer o Piedmon na Cidadela -> mensagem de conclusao. Nada disso muda o motor nem o save: a especie do
+/* Jornada do jogador (pedido do Matheus, 2026-09-28): escolher o brasao -> chocar o ovo -> crescer ate o Ultimate (e o
+   Mega, pets v5) -> vencer o Piedmon (Cidadela nos pets v1-v4, Montanha Espiral nos v5) -> mensagem de conclusao. Nada disso muda o motor nem o save: a especie do
    ovo sai da semente (motor), entao escolher o brasao e sortear sementes ate cair na especie escolhida. A conclusao
    vista fica numa chave propria (sementes dos pets que ja viram a mensagem). */
 import { useEffect, useState } from "preact/hooks";
-import { CAMPANHA, ESPECIES, LUGARES, Motor, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
+import { ESPECIES, Motor, campanhaDe, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
 
 export const CHAVE_CONCLUSAO = CHAVE + "-conclusao";
-/** o chefe da campanha: o ultimo desafio da ultima ilha */
-export const CHEFE = CAMPANHA[CAMPANHA.length - 1].k;
+/** o chefe da campanha do pet: o ultimo desafio da ultima ilha (o Piedmon; a chave muda com a versao) */
+export const chefeDe = (m: Motor): string => { const c = campanhaDe(m.versao); return c[c.length - 1].k; };
 
 /* ------------------------------------------------ escolha do brasao (tela cheia) */
 let escolhendo = false;
@@ -60,7 +60,7 @@ export function marcarConclusao(m: Motor): void {
   try { localStorage.setItem(CHAVE_CONCLUSAO, JSON.stringify([...new Set([...vistas(), m.semente])])); } catch { /* preferencia de tela */ }
 }
 /** a jornada acabou: venceu o chefe da campanha */
-export const venceuOChefe = (m: Motor): boolean => (m.campanha[CHEFE] ?? 0) > 0;
+export const venceuOChefe = (m: Motor): boolean => (m.campanha[chefeDe(m)] ?? 0) > 0;
 
 /** os marcos da jornada, na ordem, com o que o motor diz de cada um */
 export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
@@ -69,7 +69,8 @@ export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
     { rotulo: "Chocou o ovo", feito: true },
     { rotulo: "Virou Rookie", feito: ev("crianca") },
     { rotulo: "Virou Champion", feito: ev("adolescente") },
-    { rotulo: "Virou Ultimate ou Mega", feito: ev("adulto") },
-    ...LUGARES.map((L, i) => ({ rotulo: `Venceu ${L.nome}`, feito: m.lugarVencido(i) })),
+    { rotulo: "Virou Ultimate", feito: ev("adulto") },
+    ...(m.versao >= 5 ? [{ rotulo: "Virou Mega", feito: ev("mega") }] : []),
+    ...m.lugares.map((L, i) => ({ rotulo: `Venceu ${L.nome}`, feito: m.lugarVencido(i) })),
   ];
 }

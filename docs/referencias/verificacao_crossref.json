@@ -1,0 +1,796 @@
+{
+ "10.1145/267658.267663": {
+  "doi": "10.1145/267658.267663",
+  "status": 200,
+  "title": "Creatures",
+  "year": 1997,
+  "au": [
+   "Grand",
+   "Cliff",
+   "Malhotra"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the first international",
+  "upd": []
+ },
+ "10.1023/a:1010042522104": {
+  "doi": "10.1023/a:1010042522104",
+  "status": 200,
+  "title": "Creatures: Entertainment Software Agents with Artificial Life",
+  "year": 1998,
+  "au": [
+   "Grand",
+   "Cliff"
+  ],
+  "type": "journal-article",
+  "cont": "Autonomous Agents and Multi-Agent Syst",
+  "upd": []
+ },
+ "10.1162/106454699568683": {
+  "doi": "10.1162/106454699568683",
+  "status": 200,
+  "title": "The<i>Creatures</i>Global Digital Ecosystem",
+  "year": 1999,
+  "au": [
+   "Cliff",
+   "Grand"
+  ],
+  "type": "journal-article",
+  "cont": "Artificial Life",
+  "upd": []
+ },
+ "10.1109/tevc.2005.856210": {
+  "doi": "10.1109/tevc.2005.856210",
+  "status": 200,
+  "title": "Real-Time Neuroevolution in the NERO Video Game",
+  "year": 2005,
+  "au": [
+   "Stanley",
+   "Bryant",
+   "Miikkulainen"
+  ],
+  "type": "journal-article",
+  "cont": "IEEE Transactions on Evolutionary Comp",
+  "upd": []
+ },
+ "10.1007/978-3-319-63519-4": {
+  "doi": "10.1007/978-3-319-63519-4",
+  "status": 200,
+  "title": "Artificial Intelligence and Games",
+  "year": 2018,
+  "au": [
+   "Yannakakis",
+   "Togelius"
+  ],
+  "type": "book",
+  "cont": "",
+  "upd": []
+ },
+ "10.1145/219717.219808": {
+  "doi": "10.1145/219717.219808",
+  "status": 200,
+  "title": "Artificial life meets entertainment",
+  "year": 1995,
+  "au": [
+   "Maes"
+  ],
+  "type": "journal-article",
+  "cont": "Communications of the ACM",
+  "upd": []
+ },
+ "10.7554/elife.04811": {
+  "doi": "10.7554/elife.04811",
+  "status": 200,
+  "title": "Homeostatic reinforcement learning for integrating reward collec",
+  "year": 2014,
+  "au": [
+   "Keramati",
+   "Gutkin"
+  ],
+  "type": "journal-article",
+  "cont": "eLife",
+  "upd": []
+ },
+ "10.1109/tamd.2010.2051031": {
+  "doi": "10.1109/tamd.2010.2051031",
+  "status": 200,
+  "title": "Intrinsically Motivated Reinforcement Learning: An Evolutionary ",
+  "year": 2010,
+  "au": [
+   "Singh",
+   "Lewis",
+   "Barto"
+  ],
+  "type": "journal-article",
+  "cont": "IEEE Transactions on Autonomous Mental",
+  "upd": []
+ },
+ "10.1109/tamd.2010.2056368": {
+  "doi": "10.1109/tamd.2010.2056368",
+  "status": 200,
+  "title": "Formal Theory of Creativity, Fun, and Intrinsic Motivation (1990",
+  "year": 2010,
+  "au": [
+   "Schmidhuber"
+  ],
+  "type": "journal-article",
+  "cont": "IEEE Transactions on Autonomous Mental",
+  "upd": []
+ },
+ "10.1109/cvprw.2017.70": {
+  "doi": "10.1109/cvprw.2017.70",
+  "status": 200,
+  "title": "Curiosity-Driven Exploration by Self-Supervised Prediction",
+  "year": 2017,
+  "au": [
+   "Pathak",
+   "Agrawal",
+   "Efros"
+  ],
+  "type": "proceedings-article",
+  "cont": "2017 IEEE Conference on Computer Visio",
+  "upd": []
+ },
+ "10.1007/3-540-58484-6_245": {
+  "doi": "10.1007/3-540-58484-6_245",
+  "status": 200,
+  "title": "Lamarckian evolution, the Baldwin effect and function optimizati",
+  "year": 1994,
+  "au": [
+   "Whitley",
+   "Gordon",
+   "Mathias"
+  ],
+  "type": "book-chapter",
+  "cont": "Lecture Notes in Computer Science",
+  "upd": []
+ },
+ "10.1162/evco.1996.4.3.iv": {
+  "doi": "10.1162/evco.1996.4.3.iv",
+  "status": 200,
+  "title": "Evolution, Learning, and Instinct: 100 Years of the Baldwin Effe",
+  "year": 1996,
+  "au": [
+   "Turney",
+   "Whitley",
+   "Anderson"
+  ],
+  "type": "journal-article",
+  "cont": "Evolutionary Computation",
+  "upd": []
+ },
+ "10.1145/3205651.3205763": {
+  "doi": "10.1145/3205651.3205763",
+  "status": 200,
+  "title": "Meta-learning by the baldwin effect",
+  "year": 2018,
+  "au": [
+   "Fernando",
+   "Sygnowski",
+   "Osindero"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the Genetic and Evoluti",
+  "upd": []
+ },
+ "10.1038/s41467-021-25874-z": {
+  "doi": "10.1038/s41467-021-25874-z",
+  "status": 200,
+  "title": "Embodied intelligence via learning and evolution",
+  "year": 2021,
+  "au": [
+   "Gupta",
+   "Savarese",
+   "Ganguli"
+  ],
+  "type": "journal-article",
+  "cont": "Nature Communications",
+  "upd": []
+ },
+ "10.1109/tevc.2003.819944": {
+  "doi": "10.1109/tevc.2003.819944",
+  "status": 200,
+  "title": "Meta-Lamarckian Learning in Memetic Algorithms",
+  "year": 2004,
+  "au": [
+   "Ong",
+   "Keane"
+  ],
+  "type": "journal-article",
+  "cont": "IEEE Transactions on Evolutionary Comp",
+  "upd": []
+ },
+ "10.1109/5.949485": {
+  "doi": "10.1109/5.949485",
+  "status": 200,
+  "title": "Interactive evolutionary computation: fusion of the capabilities",
+  "year": 2001,
+  "au": [
+   "Takagi"
+  ],
+  "type": "journal-article",
+  "cont": "Proceedings of the IEEE",
+  "upd": []
+ },
+ "10.1162/evco_a_00030": {
+  "doi": "10.1162/evco_a_00030",
+  "status": 200,
+  "title": "Picbreeder: A Case Study in Collaborative Evolutionary Explorati",
+  "year": 2011,
+  "au": [
+   "Secretan",
+   "Beato",
+   "D'Ambrosio"
+  ],
+  "type": "journal-article",
+  "cont": "Evolutionary Computation",
+  "upd": []
+ },
+ "10.1109/tciaig.2009.2038365": {
+  "doi": "10.1109/tciaig.2009.2038365",
+  "status": 200,
+  "title": "Automatic Content Generation in the <i>Galactic Arms Race</i> Vi",
+  "year": 2009,
+  "au": [
+   "Hastings",
+   "Guha",
+   "Stanley"
+  ],
+  "type": "journal-article",
+  "cont": "IEEE Transactions on Computational Int",
+  "upd": []
+ },
+ "10.1142/9789812832061_0004": {
+  "doi": "10.1142/9789812832061_0004",
+  "status": 200,
+  "title": "Blind Watchmaker Biomorphs",
+  "year": 1995,
+  "au": [
+   "Dawkins"
+  ],
+  "type": "book-chapter",
+  "cont": "The Pattern Book: Fractals, Art, and N",
+  "upd": []
+ },
+ "10.1145/127719.122752": {
+  "doi": "10.1145/127719.122752",
+  "status": 200,
+  "title": "Artificial evolution for computer graphics",
+  "year": 1991,
+  "au": [
+   "Sims"
+  ],
+  "type": "journal-article",
+  "cont": "ACM SIGGRAPH Computer Graphics",
+  "upd": []
+ },
+ "10.1016/b978-0-08-094832-4.50018-0": {
+  "doi": "10.1016/b978-0-08-094832-4.50018-0",
+  "status": 200,
+  "title": "Real-Coded Genetic Algorithms and Interval-Schemata",
+  "year": 1993,
+  "au": [
+   "Eshelman",
+   "Schaffer"
+  ],
+  "type": "book-chapter",
+  "cont": "Foundations of Genetic Algorithms",
+  "upd": []
+ },
+ "10.1038/nature14422": {
+  "doi": "10.1038/nature14422",
+  "status": 200,
+  "title": "Robots that can adapt like animals",
+  "year": 2015,
+  "au": [
+   "Cully",
+   "Clune",
+   "Tarapore"
+  ],
+  "type": "journal-article",
+  "cont": "Nature",
+  "upd": []
+ },
+ "10.1162/evco_a_00025": {
+  "doi": "10.1162/evco_a_00025",
+  "status": 200,
+  "title": "Abandoning Objectives: Evolution Through the Search for Novelty ",
+  "year": 2011,
+  "au": [
+   "Lehman",
+   "Stanley"
+  ],
+  "type": "journal-article",
+  "cont": "Evolutionary Computation",
+  "upd": []
+ },
+ "10.3389/frobt.2016.00040": {
+  "doi": "10.3389/frobt.2016.00040",
+  "status": 200,
+  "title": "Quality Diversity: A New Frontier for Evolutionary Computation",
+  "year": 2016,
+  "au": [
+   "Pugh",
+   "Soros",
+   "Stanley"
+  ],
+  "type": "journal-article",
+  "cont": "Frontiers in Robotics and AI",
+  "upd": []
+ },
+ "10.1109/tevc.2017.2704781": {
+  "doi": "10.1109/tevc.2017.2704781",
+  "status": 200,
+  "title": "Quality and Diversity Optimization: A Unifying Modular Framework",
+  "year": 2018,
+  "au": [
+   "Cully",
+   "Demiris"
+  ],
+  "type": "journal-article",
+  "cont": "IEEE Transactions on Evolutionary Comp",
+  "upd": []
+ },
+ "10.1007/978-3-030-66515-9_4": {
+  "doi": "10.1007/978-3-030-66515-9_4",
+  "status": 200,
+  "title": "Quality-Diversity Optimization: A Novel Branch of Stochastic Opt",
+  "year": 2021,
+  "au": [
+   "Chatzilygeroudis",
+   "Cully",
+   "Vassiliades"
+  ],
+  "type": "book-chapter",
+  "cont": "Springer Optimization and Its Applicat",
+  "upd": []
+ },
+ "10.1111/j.1469-185x.2007.00010.x": {
+  "doi": "10.1111/j.1469-185x.2007.00010.x",
+  "status": 200,
+  "title": "Integrating animal temperament within ecology and evolution",
+  "year": 2007,
+  "au": [
+   "Réale",
+   "Reader",
+   "Sol"
+  ],
+  "type": "journal-article",
+  "cont": "Biological Reviews",
+  "upd": []
+ },
+ "10.1016/j.tree.2004.04.009": {
+  "doi": "10.1016/j.tree.2004.04.009",
+  "status": 200,
+  "title": "Behavioral syndromes: an ecological and evolutionary overview",
+  "year": 2004,
+  "au": [
+   "Sih",
+   "Bell",
+   "Johnson"
+  ],
+  "type": "journal-article",
+  "cont": "Trends in Ecology &amp; Evolution",
+  "upd": []
+ },
+ "10.1111/j.1469-185x.2009.00103.x": {
+  "doi": "10.1111/j.1469-185x.2009.00103.x",
+  "status": 200,
+  "title": "The development of animal personality: relevance, concepts and p",
+  "year": 2010,
+  "au": [
+   "Stamps",
+   "Groothuis"
+  ],
+  "type": "journal-article",
+  "cont": "Biological Reviews",
+  "upd": []
+ },
+ "10.1016/j.tree.2009.07.013": {
+  "doi": "10.1016/j.tree.2009.07.013",
+  "status": 200,
+  "title": "Behavioural reaction norms: animal personality meets individual ",
+  "year": 2010,
+  "au": [
+   "Dingemanse",
+   "Kazem",
+   "Réale"
+  ],
+  "type": "journal-article",
+  "cont": "Trends in Ecology &amp; Evolution",
+  "upd": []
+ },
+ "10.1098/rspb.2014.2201": {
+  "doi": "10.1098/rspb.2014.2201",
+  "status": 200,
+  "title": "The contribution of additive genetic variation to personality va",
+  "year": 2015,
+  "au": [
+   "Dochtermann",
+   "Schwab",
+   "Sih"
+  ],
+  "type": "journal-article",
+  "cont": "Proceedings of the Royal Society B: Bi",
+  "upd": []
+ },
+ "10.1126/science.abk0639": {
+  "doi": "10.1126/science.abk0639",
+  "status": 200,
+  "title": "Ancestry-inclusive dog genomics challenges popular breed stereot",
+  "year": 2022,
+  "au": [
+   "Morrill",
+   "Hekman",
+   "Li"
+  ],
+  "type": "journal-article",
+  "cont": "Science",
+  "upd": []
+ },
+ "10.1162/artl.1993.1.1_2.179": {
+  "doi": "10.1162/artl.1993.1.1_2.179",
+  "status": 200,
+  "title": "An Evolutionary Approach to Synthetic Biology: Zen and the Art o",
+  "year": 1993,
+  "au": [
+   "Ray"
+  ],
+  "type": "journal-article",
+  "cont": "Artificial Life",
+  "upd": []
+ },
+ "10.1162/106454604773563612": {
+  "doi": "10.1162/106454604773563612",
+  "status": 200,
+  "title": "Avida: A Software Platform for Research in Computational Evoluti",
+  "year": 2004,
+  "au": [
+   "Ofria",
+   "Wilke"
+  ],
+  "type": "journal-article",
+  "cont": "Artificial Life",
+  "upd": []
+ },
+ "10.1038/nature01568": {
+  "doi": "10.1038/nature01568",
+  "status": 200,
+  "title": "The evolutionary origin of complex features",
+  "year": 2003,
+  "au": [
+   "Lenski",
+   "Ofria",
+   "Pennock"
+  ],
+  "type": "journal-article",
+  "cont": "Nature",
+  "upd": []
+ },
+ "10.1145/192161.192167": {
+  "doi": "10.1145/192161.192167",
+  "status": 200,
+  "title": "Evolving virtual creatures",
+  "year": 1994,
+  "au": [
+   "Sims"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the 21st annual confere",
+  "upd": []
+ },
+ "10.1162/artl.1994.1.4.353": {
+  "doi": "10.1162/artl.1994.1.4.353",
+  "status": 200,
+  "title": "Evolving 3D Morphology and Behavior by Competition",
+  "year": 1994,
+  "au": [
+   "Sims"
+  ],
+  "type": "journal-article",
+  "cont": "Artificial Life",
+  "upd": []
+ },
+ "10.1145/37401.37406": {
+  "doi": "10.1145/37401.37406",
+  "status": 200,
+  "title": "Flocks, herds and schools: A distributed behavioral model",
+  "year": 1987,
+  "au": [
+   "Reynolds"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the 14th annual confere",
+  "upd": []
+ },
+ "10.1016/j.tics.2003.09.012": {
+  "doi": "10.1016/j.tics.2003.09.012",
+  "status": 200,
+  "title": "Artificial life: organization, adaptation and complexity from th",
+  "year": 2003,
+  "au": [
+   "Bedau"
+  ],
+  "type": "journal-article",
+  "cont": "Trends in Cognitive Sciences",
+  "upd": []
+ },
+ "10.1073/pnas.082080899": {
+  "doi": "10.1073/pnas.082080899",
+  "status": 200,
+  "title": "Agent-based modeling: Methods and techniques for simulating huma",
+  "year": 2002,
+  "au": [
+   "Bonabeau"
+  ],
+  "type": "journal-article",
+  "cont": "Proceedings of the National Academy of",
+  "upd": []
+ },
+ "10.7551/mitpress/1427.001.0001": {
+  "doi": "10.7551/mitpress/1427.001.0001",
+  "status": 200,
+  "title": "Artificial Life",
+  "year": 1995,
+  "au": [],
+  "type": "edited-book",
+  "cont": "",
+  "upd": []
+ },
+ "10.1016/j.entcom.2025.100958": {
+  "doi": "10.1016/j.entcom.2025.100958",
+  "status": 200,
+  "title": "Purr-ogrammed love: A narrative review of virtual pets",
+  "year": 2025,
+  "au": [
+   "Dodd",
+   "Fowler",
+   "Lottridge"
+  ],
+  "type": "journal-article",
+  "cont": "Entertainment Computing",
+  "upd": []
+ },
+ "10.3389/fvets.2015.00011": {
+  "doi": "10.3389/fvets.2015.00011",
+  "status": 200,
+  "title": "Pets in the Digital Age: Live, Robot, or Virtual?",
+  "year": 2015,
+  "au": [
+   "Rault"
+  ],
+  "type": "journal-article",
+  "cont": "Frontiers in Veterinary Science",
+  "upd": []
+ },
+ "10.1016/j.jcps.2011.08.002": {
+  "doi": "10.1016/j.jcps.2011.08.002",
+  "status": 200,
+  "title": "The IKEA effect: When labor leads to love",
+  "year": 2011,
+  "au": [
+   "Norton",
+   "Mochon",
+   "Ariely"
+  ],
+  "type": "journal-article",
+  "cont": "Journal of Consumer Psychology",
+  "upd": []
+ },
+ "10.1016/j.cognition.2017.10.012": {
+  "doi": "10.1016/j.cognition.2017.10.012",
+  "status": 200,
+  "title": "When and how does labour lead to love? The ontogeny and mechanis",
+  "year": 2018,
+  "au": [
+   "Marsh",
+   "Kanngiesser",
+   "Hood"
+  ],
+  "type": "journal-article",
+  "cont": "Cognition",
+  "upd": []
+ },
+ "10.1609/aaai.v34i03.5631": {
+  "doi": "10.1609/aaai.v34i03.5631",
+  "status": 200,
+  "title": "Explainable Reinforcement Learning through a Causal Lens",
+  "year": 2020,
+  "au": [
+   "Madumal",
+   "Miller",
+   "Sonenberg"
+  ],
+  "type": "journal-article",
+  "cont": "Proceedings of the AAAI Conference on ",
+  "upd": []
+ },
+ "10.24963/ijcai.2019/184": {
+  "doi": "10.24963/ijcai.2019/184",
+  "status": 200,
+  "title": "Explaining Reinforcement Learning to Mere Mortals: An Empirical ",
+  "year": 2019,
+  "au": [
+   "Anderson",
+   "Dodge",
+   "Sadarangani"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the Twenty-Eighth Inter",
+  "upd": []
+ },
+ "10.1145/3616864": {
+  "doi": "10.1145/3616864",
+  "status": 200,
+  "title": "Explainable Reinforcement Learning: A Survey and Comparative Rev",
+  "year": 2024,
+  "au": [
+   "Milani",
+   "Topin",
+   "Veloso"
+  ],
+  "type": "journal-article",
+  "cont": "ACM Computing Surveys",
+  "upd": []
+ },
+ "10.1145/1597735.1597738": {
+  "doi": "10.1145/1597735.1597738",
+  "status": 200,
+  "title": "Interactively shaping agents via human reinforcement",
+  "year": 2009,
+  "au": [
+   "Knox",
+   "Stone"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the fifth international",
+  "upd": []
+ },
+ "10.1016/j.artint.2007.09.009": {
+  "doi": "10.1016/j.artint.2007.09.009",
+  "status": 200,
+  "title": "Teachable robots: Understanding human teaching behavior to build",
+  "year": 2008,
+  "au": [
+   "Thomaz",
+   "Breazeal"
+  ],
+  "type": "journal-article",
+  "cont": "Artificial Intelligence",
+  "upd": []
+ },
+ "10.1609/aimag.v35i4.2513": {
+  "doi": "10.1609/aimag.v35i4.2513",
+  "status": 200,
+  "title": "Power to the People: The Role of Humans in Interactive Machine L",
+  "year": 2014,
+  "au": [
+   "Amershi",
+   "Cakmak",
+   "Knox"
+  ],
+  "type": "journal-article",
+  "cont": "AI Magazine",
+  "upd": []
+ },
+ "10.1145/1772690.1772758": {
+  "doi": "10.1145/1772690.1772758",
+  "status": 200,
+  "title": "A contextual-bandit approach to personalized news article recomm",
+  "year": 2010,
+  "au": [
+   "Li",
+   "Chu",
+   "Langford"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the 19th international ",
+  "upd": []
+ },
+ "10.1561/2200000070": {
+  "doi": "10.1561/2200000070",
+  "status": 200,
+  "title": "A Tutorial on Thompson Sampling",
+  "year": 2018,
+  "au": [
+   "Russo",
+   "Van Roy",
+   "Kazerouni"
+  ],
+  "type": "journal-article",
+  "cont": "Foundations and Trends® in Machine Lea",
+  "upd": []
+ },
+ "10.1016/j.conb.2014.07.014": {
+  "doi": "10.1016/j.conb.2014.07.014",
+  "status": 200,
+  "title": "Iterated learning and the evolution of language",
+  "year": 2014,
+  "au": [
+   "Kirby",
+   "Griffiths",
+   "Smith"
+  ],
+  "type": "journal-article",
+  "cont": "Current Opinion in Neurobiology",
+  "upd": []
+ },
+ "10.1080/15326900701326576": {
+  "doi": "10.1080/15326900701326576",
+  "status": 200,
+  "title": "Language Evolution by Iterated Learning With Bayesian Agents",
+  "year": 2007,
+  "au": [
+   "Griffiths",
+   "Kalish"
+  ],
+  "type": "journal-article",
+  "cont": "Cognitive Science",
+  "upd": []
+ },
+ "10.1038/nature14544": {
+  "doi": "10.1038/nature14544",
+  "status": 200,
+  "title": "From evolutionary computation to the evolution of things",
+  "year": 2015,
+  "au": [
+   "Eiben",
+   "Smith"
+  ],
+  "type": "journal-article",
+  "cont": "Nature",
+  "upd": []
+ },
+ "10.1145/3449726.3459475": {
+  "doi": "10.1145/3449726.3459475",
+  "status": 200,
+  "title": "Evo-RL",
+  "year": 2021,
+  "au": [
+   "Hallawa",
+   "Born",
+   "Schmeink"
+  ],
+  "type": "proceedings-article",
+  "cont": "Proceedings of the Genetic and Evoluti",
+  "upd": []
+ },
+ "10.3389/neuro.12.006.2007": {
+  "doi": "10.3389/neuro.12.006.2007",
+  "status": 200,
+  "title": "What is intrinsic motivation? A typology of computational approa",
+  "year": 2007,
+  "au": [
+   "Oudeyer"
+  ],
+  "type": "journal-article",
+  "cont": "Frontiers in Neurorobotics",
+  "upd": []
+ },
+ "10.1075/is.8.2.09che": {
+  "doi": "10.1075/is.8.2.09che",
+  "status": 200,
+  "title": "The illusion of love",
+  "year": 2007,
+  "au": [
+   "Chesney",
+   "Lawson"
+  ],
+  "type": "journal-article",
+  "cont": "Interaction Studies. Social Behaviour ",
+  "upd": []
+ },
+ "10.1162/106365601750190406": {
+  "doi": "10.1162/106365601750190406",
+  "status": 200,
+  "title": "Self-Adaptive Genetic Algorithms with Simulated Binary Crossover",
+  "year": 2001,
+  "au": [
+   "Deb",
+   "Beyer"
+  ],
+  "type": "journal-article",
+  "cont": "Evolutionary Computation",
+  "upd": []
+ }
+}

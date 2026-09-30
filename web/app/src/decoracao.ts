@@ -86,8 +86,9 @@ export const FUNDO_NPC: Record<string, NomeDeco> = {
   npc_tier2_porteiro: "torre_devidramon",
   npc_tier3_soberano: "cidadela_piedmon",
 };
-/** faixa propria do lugar no cartao da campanha (indice em LUGARES); sem ela, o fundo do rival em foco */
-export const FAIXA_LUGAR: Partial<Record<number, NomeDeco>> = { 2: "cidadela_faixa" };
+/** faixa propria do lugar no cartao da campanha (pelo nome do lugar: o indice muda com a versao do pet); sem ela, o fundo do
+    rival em foco */
+export const FAIXA_LUGAR: Partial<Record<string, NomeDeco>> = { Cidadela: "cidadela_faixa" };
 /** icones de lista (Growth_Guide) */
 export const ICONE = {
   naoVisto: "Growth_Guide_Icon_05", alimentar: "Growth_Guide_Icon_06", treinar: "Growth_Guide_Icon_07",

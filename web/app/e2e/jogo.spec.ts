@@ -15,20 +15,24 @@ const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url
 const APP = `${PREFIXO}/web/dist/`, HTML = `${PREFIXO}/web/digilab_sprites.html?antigo=1`, CHAVE = "digilab-web-v21-sprites";
 const ABAS: [string, string, string][] = [
   ["Pet", "", "pet/estado"], ["Crescer", "Treinar", "crescer/treinar"], ["Crescer", "Aprendizado", "crescer/aprend"], ["Crescer", "Evolução", "crescer/evolucao"],
-  ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
+  ["Crescer", "Itens", "crescer/itens"],
+  ["Lutar", "Arena", "lutar/arena"], ["Lutar", "Campanha", "lutar/campanha"], ["Lutar", "Medalhas", "lutar/medalhas"], ["Diário", "Registro", "diario/registro"], ["Diário", "Catálogo", "diario/catalogo"],
   ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
 
-/** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar) */
-async function semear(page: Page, save: object | null, tema?: string): Promise<void> {
+/** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar). O registro do Tamer
+    (vazio, ou o dado) e o marcador do descarte (versao 5) vao junto: com eles o app entende que o descarte unico ja rodou
+    e nao descarta os saves antigos (v1-v3, e o v6) que estes testes jogam */
+async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
-  await page.evaluate(([chave, s, t]) => {
-    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1");
+  await page.evaluate(([chave, s, t, tm]) => {
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
+    localStorage.setItem(chave + "-descarte", "5");
     /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
     if (t) localStorage.setItem(chave + "-tema", t);
-  }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null] as const);
+  }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null, JSON.stringify(tamer)] as const);
 }
 /** erros de console e de pagina (falhar alto: qualquer um reprova) */
 function vigiarErros(page: Page): string[] {
@@ -54,7 +58,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await expect(page.locator(".pet-tela")).toBeVisible();
     await expect(page.locator(".pet-cab .dl-tag--estagio")).toHaveText(/Champion/i);
 
-    /* os 5 destinos e as 10 abas, pela barra e pelas abas */
+    /* os 5 destinos e as 11 abas, pela barra e pelas abas */
     for (const [destino, aba, rota] of ABAS) {
       await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
       if (aba) await page.getByRole("tab", { name: aba }).click();
@@ -237,5 +241,354 @@ for (const largura of [390, 899, 900, 1099, 1100, 1280]) {
       expect(r.aoLado, `${rota}: painel ao lado do conteúdo`).toBe(desktop);
       expect(r.larg, `${rota}: rolagem lateral`).toBeLessThanOrEqual(r.janela);
     }
+  });
+}
+
+/* ---------------------------------------------------------------- medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md)
+   save_medalhas.json (e2e/gerar_save_medalhas.mjs): pet v6 no Rookie, treinado, pronto para evoluir e esperando a 1a
+   medalha; a luta do Desafiar contra o Gazimon e vitoria em qualquer hora das proximas 5 h de jogo */
+const SAVE_V6 = JSON.parse(readFileSync(new URL("./save_medalhas.json", import.meta.url), "utf8"));
+const lerTamer = (page: Page) => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-tamer") ?? "null"), CHAVE);
+
+test("medalhas: vencer o líder dá a medalha e libera a evolução", async ({ page }) => {
+  await semear(page, SAVE_V6);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/crescer/evolucao");
+  await expect(page.locator(".evo-medalha")).toContainText("Pronto para evoluir. Falta a Medalha da Campina: vença o Gazimon na Campina.");
+  await page.goto(APP + "#/lutar/campanha");
+  await expect(page.locator(".camp-arena")).toContainText("líder: Gazimon");
+  await expect(page.locator(".camp-arena")).toContainText("Vencer Gazimon dá a Medalha da Campina.");
+  await expect(page.locator(".camp-lider").first()).toContainText("LÍDER");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-medalha")).toContainText("Medalha da Campina");
+  await page.locator(".res-continuar").click();
+  /* o pet evoluiu no tick da medalha: a revelacao abre depois do Resultado */
+  const rev = page.locator("dialog.revelacao[open]");
+  await expect(rev).toBeVisible();
+  await expect(rev.locator(".revel-de")).toContainText("Rookie → Champion");
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
+  const t = await lerTamer(page);
+  expect(t.log.map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "chip_forca"]);   /* a medalha e o item dela */
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  expect(reg.versao).toBe(6);
+  expect(reg.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
+  await page.goto(APP + "#/lutar/medalhas");
+  await expect(page.locator(".med-conta .dl-num")).toHaveText("1");
+  await expect(page.locator(".med-card.ganha")).toHaveCount(1);
+  await expect(page.locator(".med-card.ganha")).toContainText("Medalha da Campina");
+  await expect(page.locator(".med-card").nth(2)).toContainText("Vença o Youkomon na Floresta");
+  await expect(page.locator(".med-card").nth(3)).toContainText("Vença o Myotismon três vezes seguidas na Cidadela");
+  await expect(page.locator(".med-card").nth(4)).toContainText("Vínculo:");
+  await expect(page.locator(".med-tela")).not.toContainText("provisória");
+  expect(erros).toEqual([]);
+});
+
+test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o brasão do ovo novo", async ({ page }) => {
+  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.evaluate(([c, s]) => {
+    localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", JSON.stringify([JSON.parse(s)]));
+  }, [CHAVE, JSON.stringify(SAVES.v3)] as const);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const aviso = page.locator("dialog.med-aviso[open]");
+  await expect(aviso).toContainText("os 2 pets que você tinha (o ativo e os guardados) foram descartados");
+  await page.keyboard.press("Escape");                             /* o aviso so sai pelo botao */
+  await expect(aviso).toBeVisible();
+  await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
+  const br = page.locator("dialog.brasao-tela[open]");
+  await expect(br.locator("#br-tit")).toHaveText("Escolha seu brasão");
+  await expect(br.getByRole("button", { name: "Voltar" })).toHaveCount(0);
+  await br.locator(".br-card").first().click();
+  await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
+  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-v6"),
+    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
+  expect(r.save.versao).toBe(7);                     /* o ovo novo nasce na versao atual (v7: v6 + voz propria) */
+  expect(r.g).toBe("[]");
+  expect(r.aviso).toBeNull();
+  expect(r.tamer).toEqual({ versao: 2, log: [] });
+  await page.reload();
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  expect(erros).toEqual([]);
+});
+
+test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer recomeça sem medalhas", async ({ page }) => {
+  const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }]] };
+  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.evaluate(([c, s, tm]) => {
+    /* o descarte das medalhas ja rodou (Tamer gravado, sem o marcador novo): so falta o do V21D */
+    localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]"); localStorage.setItem(c + "-tamer", tm);
+  }, [CHAVE, JSON.stringify(SAVE_V6), JSON.stringify(tamer)] as const);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  const aviso = page.locator("dialog.med-aviso[open]");
+  await expect(aviso).toContainText("o pet que você tinha foi descartado");
+  await aviso.getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
+  await page.locator("dialog.brasao-tela[open] .br-card").first().click();
+  await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
+  const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
+    tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
+  expect(r.save.versao).toBe(7);                     /* o ovo novo nasce na versao atual (v7) */
+  expect(r.save.semente).not.toBe(SAVE_V6.semente);
+  expect(r.marca).toBe("5");
+  expect(r.tamer).toEqual({ versao: 2, log: [] });
+  await page.reload();
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
+  expect(erros).toEqual([]);
+});
+
+/* tela de medalhas com uma medalha ganha: celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`medalhas: tela em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    const tamer = { versao: 1, log: [["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }]] };
+    await semear(page, SAVE_V6, undefined, tamer);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/medalhas");
+    await expect(page.locator(".med-card")).toHaveCount(6);
+    await expect(page.locator(".med-card.ganha")).toContainText("ganha com Armadillomon");
+    await page.waitForTimeout(600);
+    /* no desktop, so a tela (as abas em pilula do topo da casca tem 40 px nas pranchas *Desktop; o guia 14 e do celular) */
+    const r = await page.evaluate(desk => {
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".med-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const lista = document.querySelector(".med-lista")!.getBoundingClientRect(), resumo = document.querySelector(".med-resumo")!.getBoundingClientRect();
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+    }, largura >= 1100);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.aoLado, "desktop: a lista ao lado do resumo").toBe(largura >= 1100);
+    await expect(page.locator(".med-regras li.ok")).toHaveCount(1);
+    expect(erros).toEqual([]);
+  });
+}
+
+/* ---------------------------------------------------------------- arenas com lideres (medalhas parte 2)
+   save_arenas.json (e2e/gerar_save_arenas.mjs): pet v6 Ultimate treinado, com a Campina, a Torre e a Floresta vencidas e o
+   Tamer com as 3 medalhas; a luta do Desafiar contra o Myotismon (Cidadela: tres lutas seguidas) e a serie vencida em
+   qualquer hora das proximas 5 h de jogo */
+const SAVE_ARENAS = JSON.parse(readFileSync(new URL("./save_arenas.json", import.meta.url), "utf8"));
+const TAMER_3 = { versao: 1, log: ["campina", "torre", "floresta"].map((id, i) =>
+  ["medalha", { id, n: i + 1, quando: 1 + i, pet: SAVE_ARENAS.semente, forma: "DinoBeemon", tick: 900 + i }]) };
+
+test("arenas: a Cidadela pede três lutas seguidas sem cura e dá a medalha; no Lago as travas não valem", async ({ page }) => {
+  test.setTimeout(240_000);
+  await semear(page, SAVE_ARENAS, undefined, TAMER_3);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/campanha");
+  await expect(page.locator(".mapa-ilhas img.ilha")).toHaveCount(6);
+  const cartao = page.locator(".camp-arena");
+  await expect(cartao).toContainText("Arena · Resistência");
+  await expect(cartao).toContainText("líder: Myotismon");
+  await expect(cartao).toContainText("Três lutas seguidas, sem cura");
+  const lutar = page.locator(".camp-lutar:not([disabled])");
+  await expect(lutar).toContainText("Desafiar Myotismon (3 lutas seguidas)");
+  await lutar.click();
+  await expect(page.locator(".luta-topo-sub")).toContainText("luta 1 de 3");
+  await expect(page.locator(".luta-serie")).toContainText("sem cura entre as lutas");
+  await page.locator(".luta-ctl--x2").click();
+  await expect(page.locator(".luta-serie")).toContainText("Luta 2 de 3", { timeout: 90_000 });
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 150_000 });
+  await expect(res.locator(".res-serie li")).toHaveCount(3);
+  await expect(res.locator(".res-serie")).not.toContainText("perdeu");
+  await expect(res.locator(".res-sub")).toContainText("venceu as 3 lutas seguidas");
+  await expect(res.locator(".res-medalha")).toContainText("Medalha da Cidadela");
+  await page.locator(".res-continuar").click();
+  const t = await lerTamer(page);
+  /* as medalhas (os itens das 3 primeiras entraram na abertura; o da Cidadela, com ela) */
+  expect(t.log.filter((e: [string]) => e[0] === "medalha").map((e: [string, { id: string }]) => e[1].id)).toEqual(["campina", "torre", "floresta", "cidadela"]);
+  expect(t.log.filter((e: [string]) => e[0] === "item").map((e: [string, { id: string }]) => e[1].id)).toEqual(["chip_forca", "chip_recuo", "chip_oportunista", "chip_guarda"]);
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
+  expect(lutas[lutas.length - 1][2]).toEqual({ r: "npc_v5_myotismon", s: expect.any(Number) });   /* o evento continua so rival e semente */
+  expect(reg.log.filter((e: unknown[]) => e[1] === "u").map((e: [number, string, { n: number }]) => e[2].n)).toEqual([3, 4]);
+  /* o Lago abriu: a regra do vinculo aparece no cartao e na luta */
+  await page.goto(APP + "#/lutar/campanha");
+  await expect(page.locator(".camp-arena")).toContainText("Arena · Vínculo");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  await expect(page.locator(".luta-arena-aviso")).toContainText("Arena do Lago: aqui as suas travas e vetos não valem");
+  await expect(page.locator(".regra-travar")).toHaveCount(0);
+  await page.locator(".luta-ctl--x2").click();
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-arena-nota")).toContainText("sem as suas travas e vetos");
+  await page.locator(".res-continuar").click();
+  expect(erros).toEqual([]);
+});
+
+/* a campanha dos pets v6: seis ilhas, celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`arenas: campanha com 6 ilhas em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_ARENAS, undefined, TAMER_3);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/campanha");
+    await expect(page.locator(".mapa-ilhas img.ilha")).toHaveCount(6);
+    await expect(page.locator(".mapa-ilhas .lugar")).toHaveCount(6);
+    await expect(page.locator(".camp-arena")).toBeVisible();
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(desk => {
+      const mapa = document.querySelector(".mapa-ilhas")!.getBoundingClientRect();
+      const caixas = [...document.querySelectorAll(".mapa-ilhas .lugar")].map(e => e.getBoundingClientRect());
+      const ilhas = [...document.querySelectorAll(".mapa-ilhas img.ilha")].map(e => e.getBoundingClientRect());
+      const sobrepoe = caixas.some((a, i) => caixas.some((b, j) => j > i && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom));
+      const fora = ilhas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.top < mapa.top - 1 || b.bottom > mapa.bottom + 1).length;
+      /* no celular o cartao do lugar sobe sobre o pe do mapa: nenhuma plaquinha pode ficar embaixo dele */
+      const det = document.querySelector(".camp-det"), limite = det ? Math.min(mapa.bottom, det.getBoundingClientRect().top) : mapa.bottom;
+      const placasFora = caixas.filter(b => b.left < mapa.left - 1 || b.right > mapa.right + 1 || b.bottom > limite + 1).length;
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".camp-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const nomes = [...document.querySelectorAll(".mapa-ilhas .lugar-placa")].map(e => e.textContent);
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, sobrepoe, fora, placasFora, pequenos, nomes, alt: mapa.height, largMapa: mapa.width };
+    }, largura >= 1100);
+    expect(r.nomes).toEqual(["Campina", "Torre de pedra", "Floresta", "Cidadela", "Lago", "Montanha Espiral"]);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.sobrepoe, "plaquinhas dos lugares sobrepostas").toBe(false);
+    expect(r.fora, "ilhas fora do mapa").toBe(0);
+    expect(r.placasFora, "plaquinhas fora do mapa").toBe(0);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.alt / r.largMapa, "o mapa das seis ilhas e mais alto que largo").toBeGreaterThan(1.3);
+    await expect(page.locator(".camp-arena")).toContainText("líder: Myotismon");
+    expect(erros).toEqual([]);
+  });
+}
+
+/* ---------------------------------------------------------------- itens do Tamer (medalhas parte 3, docs/DESIGN_MEDALHAS_ARENAS.md
+   secao 13): o lider da o item com a medalha; o chip se equipa em Crescer · Itens e vale na luta; a carta se escolhe antes da luta */
+const numTamer = (page: Page, tipo: string) => page.evaluate(([c, t]) => JSON.parse(localStorage.getItem(c + "-tamer")!).log.filter((e: unknown[]) => e[0] === t).length, [CHAVE, tipo] as const);
+/** vai para a aba pela barra e pelas abas (dentro do app, sem recarregar) */
+async function irPara(page: Page, destino: string, aba: string, rota: string): Promise<void> {
+  await page.locator(".dl-nav").getByRole("button", { name: destino, exact: true }).click();
+  await page.getByRole("tab", { name: aba }).click();
+  await expect(page).toHaveURL(new RegExp("#/" + rota + "$"));
+}
+
+test("itens: o líder dá o chip com a medalha, o chip se equipa e vale na luta", async ({ page }) => {
+  test.setTimeout(180_000);
+  await semear(page, SAVE_V6);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/campanha");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-medalha")).toContainText("Medalha da Campina");
+  await expect(res.locator(".res-item")).toContainText("Chip de Força");
+  await expect(res.locator(".res-item")).toContainText("item novo");
+  await page.locator(".res-continuar").click();
+  /* o pet evoluiu no tick da medalha: a revelacao abre depois do Resultado */
+  const rev = page.locator("dialog.revelacao[open]");
+  await expect(rev).toBeVisible();
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page).toHaveURL(/#\/crescer\/evolucao$/);
+  /* Crescer · Itens: o chip e do Tamer, e o Champion tem 1 vaga (1 medalha) */
+  await page.getByRole("tab", { name: "Itens" }).click();
+  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
+  const chip = page.locator(".item-card", { hasText: "Chip de Força" });
+  await expect(chip).not.toHaveClass(/item-falta/);
+  await expect(page.locator(".item-card", { hasText: "Chip Aparo" })).toContainText("Ainda não é seu: vença o Piedmon");
+  const i0 = await numLog(page, "i");
+  await chip.getByRole("button", { name: "Equipar" }).click();
+  await expect(chip).toHaveClass(/item-eq/);
+  await expect(chip).toContainText("Agora soma +1 de vigor, +1 de força");
+  await expect(page.locator(".itens-vagas")).toContainText("1 de 1 vaga");
+  expect(await numLog(page, "i")).toBe(i0 + 1);
+  /* sem vaga: o outro chip do Tamer (se houvesse) nao entraria; lutar com o chip na arena */
+  const l0 = await numLog(page, "l");
+  await irPara(page, "Lutar", "Arena", "lutar/arena");
+  await page.locator(".lutar-grande").click();
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await page.locator(".res-continuar").click();
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const eventos = reg.log.map((e: unknown[]) => e[1]);
+  expect(eventos.lastIndexOf("i")).toBeLessThan(eventos.lastIndexOf("l"));
+  expect(reg.log.find((e: unknown[]) => e[1] === "i")[2]).toEqual({ op: "equipar", id: "chip_forca" });
+  /* desequipar volta a vaga */
+  await irPara(page, "Crescer", "Itens", "crescer/itens");
+  await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Desequipar" }).click();
+  await expect(page.locator(".itens-vagas")).toContainText("0 de 1 vaga");
+  expect(erros).toEqual([]);
+});
+
+/* Tamer com a medalha da Campina, o item dela e uma Carta de Folego da revanche (um Rookie de antes a ganhou) */
+const TAMER_ITENS = { versao: 2, log: [
+  ["medalha", { id: "campina", n: 1, quando: 1, pet: SAVE_V6.semente, forma: "Armadillomon", tick: 900 }],
+  ["item", { id: "chip_forca", n: 1, quando: 1, origem: "medalha", lider: "npc_tier1_brutamontes", pet: SAVE_V6.semente, forma: "Armadillomon", est: "crianca", tick: 900 }],
+  ["item", { id: "carta_folego", n: 2, quando: 2, origem: "revanche", lider: "npc_tier1_brutamontes", pet: 1, forma: "Armadillomon", est: "crianca", tick: 900 }],
+] };
+
+test("itens: a carta se escolhe antes da luta, entra no registro do pet e sai do inventário do Tamer", async ({ page }) => {
+  test.setTimeout(180_000);
+  await semear(page, SAVE_V6, undefined, TAMER_ITENS);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/campanha");
+  const escolha = page.locator(".carta-escolha select");
+  await expect(escolha).toBeVisible();
+  await escolha.selectOption("carta_folego");
+  await expect(page.locator(".carta-escolha")).toContainText("+20 de guts");
+  await page.locator(".camp-lutar:not([disabled])").click();
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  await expect(res.locator(".res-carta")).toContainText("Carta usada: Carta de Fôlego");
+  await page.locator(".res-continuar").click();
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const k = reg.log.findIndex((e: unknown[]) => e[1] === "k");
+  expect(reg.log[k][2]).toEqual({ id: "carta_folego" });
+  expect(reg.log[k + 1][1]).toBe("l");
+  expect(await numTamer(page, "carta_usada")).toBe(1);
+  /* acabou a carta: a escolha some */
+  await expect(page).toHaveURL(/#\/lutar\/campanha$/);
+  await expect(page.locator(".carta-escolha")).toHaveCount(0);
+  await irPara(page, "Crescer", "Itens", "crescer/itens");
+  await expect(page.locator(".item-card", { hasText: "Carta de Fôlego" })).toContainText("×0");
+  expect(erros).toEqual([]);
+});
+
+/* a tela dos itens: celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`itens: tela em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_V6, undefined, TAMER_ITENS);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/crescer/itens");
+    await expect(page.locator(".item-card")).toHaveCount(9);
+    await expect(page.locator(".item-card.item-falta")).toHaveCount(7);
+    await page.locator(".item-card", { hasText: "Chip de Força" }).getByRole("button", { name: "Equipar" }).click();
+    await expect(page.locator(".item-card.item-eq")).toHaveCount(1);
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(desk => {
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".itens-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const lista = document.querySelector(".itens-col")!.getBoundingClientRect(), resumo = document.querySelector(".itens-resumo")!.getBoundingClientRect();
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= resumo.right - 1 };
+    }, largura >= 1100);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.aoLado, "desktop: os itens ao lado do resumo").toBe(largura >= 1100);
+    /* a escolha da carta na campanha, no mesmo tamanho */
+    await irPara(page, "Lutar", "Campanha", "lutar/campanha");
+    await expect(page.locator(".carta-escolha select")).toBeVisible();
+    const c = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth, alt: document.querySelector(".carta-escolha select")!.getBoundingClientRect().height }));
+    expect(c.larg).toBeLessThanOrEqual(c.janela);
+    expect(c.alt).toBeGreaterThanOrEqual(44);
+    expect(erros).toEqual([]);
   });
 }

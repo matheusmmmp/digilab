@@ -1,4 +1,4 @@
-/* Voz propria no jogo (DESIGN_VOZ_PROPRIA, parte 4): o extrator da historia e a mentira dos pets v5 conferidos contra o
+/* Voz propria no jogo (DESIGN_VOZ_PROPRIA, parte 4): o extrator da historia e a mentira dos pets v7 conferidos contra o
    Python (gabaritos/voz_python.json, de experiments/exportar_gabaritos_voz.py). As rngs sao outras (MT x mulberry32): a
    paridade e das regras (fatos, textos, ordem, formulas, desfechos), nao das vidas. */
 import { readFileSync } from "node:fs";
@@ -41,12 +41,12 @@ describe("historia.ts = digilab/historia.py", () => {
   });
 });
 
-function motorV5(): Motor { const m = new Motor(4242, 5); m.avancar(200); return m; }
+function motorV7(): Motor { const m = new Motor(4242, 7); m.avancar(200); return m; }
 
-describe("mentira (pets v5) = digilab/educacao.py", () => {
+describe("mentira (pets v7) = digilab/educacao.py", () => {
   test("grade de honestidade, chance e honestidade mostrada", () => {
     for (const g of G.mentira.grade) {
-      const m = motorV5();
+      const m = motorV7();
       m.sombria = g.sombria; m.treino.sobrecarga = g.sobrecarga; m.edu.disciplina = g.disciplina;
       m.men = { impunes: g.impunes, acertos: g.acertos };
       const r = JSON.stringify(g);
@@ -58,7 +58,7 @@ describe("mentira (pets v5) = digilab/educacao.py", () => {
   test("desfechos da janela de fala", () => {
     const acao = { bronca: "repreender", petisco: "petisco", elogio: "elogiar", carinho: "acariciar" } as const;
     for (const d of G.mentira.desfechos) {
-      const m = motorV5(), t = m.e.tick;
+      const m = motorV7(), t = m.e.tick;
       m.edu.disciplina = 25; m.men = { impunes: 1, acertos: 1 };
       m.edu.janela = { tipo: "fala", pedido: "estado", inicio: t, prazo: t + CMEN.janela, falso: d.falso, contradiz: d.falso, gatilho: "teste", h: .5, p: .5 };
       if (d.acao === "prazo") { m.avancar(40); m.observar("acariciar"); } else m.observar(acao[d.acao as keyof typeof acao]);
@@ -71,24 +71,24 @@ describe("mentira (pets v5) = digilab/educacao.py", () => {
   });
 });
 
-describe("evento f (pets v5)", () => {
+describe("evento f (pets v7)", () => {
   test("a fala entra no registro, rejoga igual e sorteia sempre duas vezes", () => {
-    expect(VERSAO_PET).toBe(5);
-    const m = new Motor(777, 5);
+    expect(VERSAO_PET).toBe(7);
+    const m = new Motor(777, 7);
     m.avancar(400);
     m.treino.sobrecarga = 100; m.sombria = true;
     const abertas: unknown[] = [];
     for (let k = 0; k < 20 && !abertas.some(Boolean); k++) { abertas.push(m.falar(k % 2 ? "marco" : "reencontro")); m.avancar(45); }
     expect(m.log.filter(e => e[1] === "f").length).toBe(abertas.length);
     expect(abertas.some(Boolean)).toBe(true);                     /* dormindo ou com outra janela aberta, nao abre */
-    const r = Motor.reproduzir(777, m.log, 5);
+    const r = Motor.reproduzir(777, m.log, 7);
     /* a sobrecarga e a forma sombria postas a mao nao estao no registro: confere so o sorteio e as contagens */
     expect(r.edu.contagem.falas).toBe(m.edu.contagem.falas);
-    expect(() => new Motor(777, 4).falar("reencontro")).toThrow();
+    expect(() => new Motor(777, 6).falar("reencontro")).toThrow();
     expect(() => m.falar("Não Pode")).toThrow();
   });
   test("pet sem sobrecarga e nao sombrio nunca mente; o registro da historia sai do motor", () => {
-    const m = new Motor(99, 5);
+    const m = new Motor(99, 7);
     for (let i = 0; i < 40; i++) { m.avancar(120); m.falar("reencontro"); if (m.janelaAberta()) m.observar("elogiar"); }
     expect(m.edu.contagem.mentiras ?? 0).toBe(0);
     expect(m.honestidadeMostrada()).toBe(1);

@@ -1,0 +1,1157 @@
+{
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "diagnostico, so sementes de calibracao; nenhuma regra mudou",
+    "config_regras": "experiments/configs/v21c/validacao.json",
+    "epsilon_bots": 0.05,
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "irma": {
+      "duelista": "furioso",
+      "emboscador": "sentinela",
+      "espelho": "muralha",
+      "furioso": "duelista",
+      "muralha": "espelho",
+      "sentinela": "emboscador",
+      "tita": "vigia",
+      "vigia": "tita"
+    },
+    "metodo": "so a forma medida muda; os 7 oponentes sao os bots canonicos; mesmos nomes e sementes da matriz (numeros aleatorios comuns); forca = media dos pontos contra as outras 7 (4 especies, 5 sementes, 100 partidas por semente); ep_entre_sementes = desvio padrao da variacao entre as 5 sementes / raiz de 5 (so indicativo)",
+    "partidas_por_par_por_semente": 100,
+    "regras": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "552a1a30f898b26add89f3366f2f2ce5852ac3ef3c62753ebd2f2c0b53bafa4e"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      3101,
+      3202,
+      3303,
+      3404,
+      3505
+    ],
+    "variantes": {
+      "gambits_irma": "(d) lista de gambits da forma irma da mesma linha, mantendo a passiva",
+      "passiva_irma": "(e) passiva da forma irma, mantendo a lista de gambits",
+      "sem_passiva": "(a) passiva desligada na forma medida (Perfil.passiva = None)",
+      "sem_tecnica": "(b) tecnica da linha desligada (Perfil.tecnica = None: a acao fica ilegal e a regra que a pede nunca dispara; a lista cai na regra seguinte)",
+      "stats_sem_forma": "(c) stats sem o delta da forma adulta (catalogo com os modificadores da forma zerados; especie, estagio, linha e carater canonico mantidos)",
+      "stats_so_especie": "(c') stats so da especie e do estagio (sem ramo, linha, forma e carater)"
+    }
+  },
+  "tabela": {
+    "duelista": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0017547312137912003,
+        "forca": 0.6108214285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.08957142857142864
+      },
+      "original": 0.52125,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.002834958517495156,
+        "forca": 0.5628214285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.04157142857142859
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.00037711985860612536,
+        "forca": 0.5102857142857143,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.010964285714285649
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.0028322576989866853,
+        "forca": 0.13742857142857143,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.38382142857142854
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0013688405640526523,
+        "forca": 0.5095357142857143,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.011714285714285677
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.0030056282239172842,
+        "forca": 0.5301785714285715,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.008928571428571508
+      }
+    },
+    "emboscador": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0016613861928018844,
+        "forca": 0.7088214285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ],
+        "variacao": 0.0942142857142858
+      },
+      "original": 0.6146071428571428,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.001988807970332271,
+        "forca": 0.5628571428571428,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.05174999999999996
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.0006149705484900818,
+        "forca": 0.5665,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.04810714285714279
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.001462324470540966,
+        "forca": 0.4511071428571429,
+        "suporte_com_a_variante": [
+          "espelho",
+          "furioso",
+          "sentinela"
+        ],
+        "variacao": -0.16349999999999992
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0015941938657618587,
+        "forca": 0.6246071428571429,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.01000000000000012
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.001175591470759488,
+        "forca": 0.6137499999999999,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.0008571428571428896
+      }
+    },
+    "espelho": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0020489855628419464,
+        "forca": 0.33914285714285713,
+        "suporte_com_a_variante": [
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.30082142857142863
+      },
+      "original": 0.6399642857142858,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.002663289741071729,
+        "forca": 0.4928571428571429,
+        "suporte_com_a_variante": [
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.14710714285714288
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.0032006655876679235,
+        "forca": 0.489,
+        "suporte_com_a_variante": [
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.15096428571428577
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.003929220725564313,
+        "forca": 0.12396428571428572,
+        "suporte_com_a_variante": [
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.516
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0018066628385631199,
+        "forca": 0.6700714285714285,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ],
+        "variacao": 0.030107142857142777
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.0023051627947292957,
+        "forca": 0.5308928571428572,
+        "suporte_com_a_variante": [
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.1090714285714286
+      }
+    },
+    "furioso": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0030636321314306963,
+        "forca": 0.7035714285714285,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ],
+        "variacao": -0.0515714285714286
+      },
+      "original": 0.7551428571428571,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.002155172941590398,
+        "forca": 0.7329285714285714,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.022214285714285742
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.002169183519865775,
+        "forca": 0.7320357142857142,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.02310714285714288
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.001650602858327317,
+        "forca": 0.6608214285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ],
+        "variacao": -0.09432142857142856
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0012443750992988689,
+        "forca": 0.7434285714285714,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.011714285714285677
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.0026634094690828132,
+        "forca": 0.7171785714285714,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.03796428571428567
+      }
+    },
+    "muralha": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.004924687910965349,
+        "forca": 0.5966071428571429,
+        "suporte_com_a_variante": [
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.19671428571428579
+      },
+      "original": 0.3998928571428571,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.0023940562027740388,
+        "forca": 0.3843214285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.015571428571428514
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.0017719109366294188,
+        "forca": 0.38125000000000003,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.018642857142857072
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.004066334532550446,
+        "forca": 0.026821428571428572,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ],
+        "variacao": -0.37307142857142855
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0011425780909318857,
+        "forca": 0.3512857142857143,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.04860714285714279
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.003926541683445724,
+        "forca": 0.229,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso"
+        ],
+        "variacao": -0.1708928571428571
+      }
+    },
+    "sentinela": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0007129451706313078,
+        "forca": 0.5431428571428571,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.1052142857142857
+      },
+      "original": 0.6483571428571429,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.001220833188224067,
+        "forca": 0.7146428571428572,
+        "suporte_com_a_variante": [
+          "espelho",
+          "furioso",
+          "sentinela"
+        ],
+        "variacao": 0.06628571428571439
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.0004608388535915764,
+        "forca": 0.6475714285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.0007857142857142785
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.001705333769473316,
+        "forca": 0.49853571428571425,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.1498214285714286
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0011259916264595982,
+        "forca": 0.6436071428571429,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha"
+        ],
+        "variacao": -0.004749999999999921
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.001946018960832158,
+        "forca": 0.6275357142857143,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.020821428571428546
+      }
+    },
+    "tita": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0009919960294522212,
+        "forca": 0.17925,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.006357142857142839
+      },
+      "original": 0.17289285714285715,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.0016925708015818241,
+        "forca": 0.12535714285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.04753571428571429
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.0016925708015818241,
+        "forca": 0.12535714285714286,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.04753571428571429
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.0021349556703326995,
+        "forca": 0.16757142857142857,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.005321428571428588
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0022289262538042745,
+        "forca": 0.17039285714285715,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.0025000000000000022
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.0030427439616777705,
+        "forca": 0.11625,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.05664285714285715
+      }
+    },
+    "vigia": {
+      "gambits_irma": {
+        "ep_entre_sementes": 0.0009516366138910114,
+        "forca": 0.09824999999999999,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.14964285714285713
+      },
+      "original": 0.24789285714285714,
+      "passiva_irma": {
+        "ep_entre_sementes": 0.0005433972876679632,
+        "forca": 0.23032142857142857,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.01757142857142857
+      },
+      "sem_passiva": {
+        "ep_entre_sementes": 0.0013322433895424657,
+        "forca": 0.10617857142857143,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.1417142857142857
+      },
+      "sem_tecnica": {
+        "ep_entre_sementes": 0.0011728758481195053,
+        "forca": 0.23757142857142857,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.010321428571428565
+      },
+      "stats_sem_forma": {
+        "ep_entre_sementes": 0.0012250052061530394,
+        "forca": 0.2544285714285714,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": 0.006535714285714256
+      },
+      "stats_so_especie": {
+        "ep_entre_sementes": 0.0016870984027045292,
+        "forca": 0.21175000000000002,
+        "suporte_com_a_variante": [
+          "emboscador",
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ],
+        "variacao": -0.036142857142857115
+      }
+    }
+  },
+  "taxa_contra_cada_oponente": {
+    "duelista": {
+      "gambits_irma": {
+        "emboscador": 1.0,
+        "espelho": 0.20025,
+        "furioso": 0.08675,
+        "muralha": 0.0335,
+        "sentinela": 1.0,
+        "tita": 0.981,
+        "vigia": 0.97425
+      },
+      "original": {
+        "emboscador": 0.88125,
+        "espelho": 0.1925,
+        "furioso": 0.07725,
+        "muralha": 0.279,
+        "sentinela": 0.78475,
+        "tita": 0.5225,
+        "vigia": 0.9115
+      },
+      "passiva_irma": {
+        "emboscador": 0.9145,
+        "espelho": 0.25325,
+        "furioso": 0.16475,
+        "muralha": 0.28125,
+        "sentinela": 0.82175,
+        "tita": 0.57,
+        "vigia": 0.93425
+      },
+      "sem_passiva": {
+        "emboscador": 0.88725,
+        "espelho": 0.192,
+        "furioso": 0.077,
+        "muralha": 0.2765,
+        "sentinela": 0.7845,
+        "tita": 0.43375,
+        "vigia": 0.921
+      },
+      "sem_tecnica": {
+        "emboscador": 0.0,
+        "espelho": 0.17,
+        "furioso": 0.00125,
+        "muralha": 0.09625,
+        "sentinela": 0.0,
+        "tita": 0.10325,
+        "vigia": 0.59125
+      },
+      "stats_sem_forma": {
+        "emboscador": 0.86475,
+        "espelho": 0.329,
+        "furioso": 0.0305,
+        "muralha": 0.32075,
+        "sentinela": 0.7895,
+        "tita": 0.31275,
+        "vigia": 0.9195
+      },
+      "stats_so_especie": {
+        "emboscador": 0.94825,
+        "espelho": 0.323,
+        "furioso": 0.0295,
+        "muralha": 0.17975,
+        "sentinela": 0.935,
+        "tita": 0.43375,
+        "vigia": 0.862
+      }
+    },
+    "emboscador": {
+      "gambits_irma": {
+        "duelista": 0.24325,
+        "espelho": 0.81375,
+        "furioso": 0.0,
+        "muralha": 0.999,
+        "sentinela": 0.94525,
+        "tita": 0.98925,
+        "vigia": 0.97125
+      },
+      "original": {
+        "duelista": 0.11875,
+        "espelho": 0.9965,
+        "furioso": 0.0,
+        "muralha": 0.93725,
+        "sentinela": 0.29575,
+        "tita": 0.98775,
+        "vigia": 0.96625
+      },
+      "passiva_irma": {
+        "duelista": 0.08525,
+        "espelho": 0.989,
+        "furioso": 0.00025,
+        "muralha": 0.8495,
+        "sentinela": 0.09225,
+        "tita": 0.968,
+        "vigia": 0.95575
+      },
+      "sem_passiva": {
+        "duelista": 0.08825,
+        "espelho": 0.989,
+        "furioso": 0.0,
+        "muralha": 0.8445,
+        "sentinela": 0.09525,
+        "tita": 0.98425,
+        "vigia": 0.96425
+      },
+      "sem_tecnica": {
+        "duelista": 0.14775,
+        "espelho": 0.0,
+        "furioso": 0.0,
+        "muralha": 1.0,
+        "sentinela": 0.0105,
+        "tita": 0.9995,
+        "vigia": 1.0
+      },
+      "stats_sem_forma": {
+        "duelista": 0.11975,
+        "espelho": 0.99775,
+        "furioso": 0.0,
+        "muralha": 0.94075,
+        "sentinela": 0.36,
+        "tita": 0.98775,
+        "vigia": 0.96625
+      },
+      "stats_so_especie": {
+        "duelista": 0.103,
+        "espelho": 1.0,
+        "furioso": 0.0,
+        "muralha": 0.93825,
+        "sentinela": 0.3005,
+        "tita": 0.98825,
+        "vigia": 0.96625
+      }
+    },
+    "espelho": {
+      "gambits_irma": {
+        "duelista": 0.57675,
+        "emboscador": 0.07575,
+        "furioso": 0.9175,
+        "muralha": 0.43025,
+        "sentinela": 0.01475,
+        "tita": 0.21925,
+        "vigia": 0.13975
+      },
+      "original": {
+        "duelista": 0.8075,
+        "emboscador": 0.0035,
+        "furioso": 0.682,
+        "muralha": 0.7155,
+        "sentinela": 0.31825,
+        "tita": 0.962,
+        "vigia": 0.991
+      },
+      "passiva_irma": {
+        "duelista": 0.68925,
+        "emboscador": 0.0,
+        "furioso": 0.79125,
+        "muralha": 0.002,
+        "sentinela": 0.0,
+        "tita": 0.97475,
+        "vigia": 0.99275
+      },
+      "sem_passiva": {
+        "duelista": 0.68375,
+        "emboscador": 0.0,
+        "furioso": 0.78425,
+        "muralha": 0.002,
+        "sentinela": 0.0,
+        "tita": 0.962,
+        "vigia": 0.991
+      },
+      "sem_tecnica": {
+        "duelista": 0.4115,
+        "emboscador": 0.0,
+        "furioso": 0.04625,
+        "muralha": 0.0005,
+        "sentinela": 0.0,
+        "tita": 0.0825,
+        "vigia": 0.327
+      },
+      "stats_sem_forma": {
+        "duelista": 0.8095,
+        "emboscador": 0.0045,
+        "furioso": 0.772,
+        "muralha": 0.7365,
+        "sentinela": 0.4,
+        "tita": 0.97425,
+        "vigia": 0.99375
+      },
+      "stats_so_especie": {
+        "duelista": 0.53825,
+        "emboscador": 0.004,
+        "furioso": 0.40225,
+        "muralha": 0.67625,
+        "sentinela": 0.22725,
+        "tita": 0.90175,
+        "vigia": 0.9665
+      }
+    },
+    "furioso": {
+      "gambits_irma": {
+        "duelista": 0.86425,
+        "emboscador": 0.9335,
+        "espelho": 0.3435,
+        "muralha": 0.2555,
+        "sentinela": 0.875,
+        "tita": 0.69775,
+        "vigia": 0.9555
+      },
+      "original": {
+        "duelista": 0.92275,
+        "emboscador": 1.0,
+        "espelho": 0.318,
+        "muralha": 0.0625,
+        "sentinela": 0.99975,
+        "tita": 0.99175,
+        "vigia": 0.99125
+      },
+      "passiva_irma": {
+        "duelista": 0.8355,
+        "emboscador": 1.0,
+        "espelho": 0.27475,
+        "muralha": 0.04925,
+        "sentinela": 0.99975,
+        "tita": 0.989,
+        "vigia": 0.98225
+      },
+      "sem_passiva": {
+        "duelista": 0.8345,
+        "emboscador": 1.0,
+        "espelho": 0.2745,
+        "muralha": 0.04825,
+        "sentinela": 0.99975,
+        "tita": 0.98775,
+        "vigia": 0.9795
+      },
+      "sem_tecnica": {
+        "duelista": 0.70725,
+        "emboscador": 0.99025,
+        "espelho": 0.03325,
+        "muralha": 0.081,
+        "sentinela": 0.9165,
+        "tita": 0.9805,
+        "vigia": 0.917
+      },
+      "stats_sem_forma": {
+        "duelista": 0.90325,
+        "emboscador": 1.0,
+        "espelho": 0.2755,
+        "muralha": 0.05225,
+        "sentinela": 0.9995,
+        "tita": 0.987,
+        "vigia": 0.9865
+      },
+      "stats_so_especie": {
+        "duelista": 0.78875,
+        "emboscador": 1.0,
+        "espelho": 0.27125,
+        "muralha": 0.033,
+        "sentinela": 1.0,
+        "tita": 0.975,
+        "vigia": 0.95225
+      }
+    },
+    "muralha": {
+      "gambits_irma": {
+        "duelista": 0.75375,
+        "emboscador": 0.0,
+        "espelho": 0.55225,
+        "furioso": 0.882,
+        "sentinela": 0.0,
+        "tita": 0.9915,
+        "vigia": 0.99675
+      },
+      "original": {
+        "duelista": 0.721,
+        "emboscador": 0.06275,
+        "espelho": 0.2845,
+        "furioso": 0.9375,
+        "sentinela": 0.01475,
+        "tita": 0.387,
+        "vigia": 0.39175
+      },
+      "passiva_irma": {
+        "duelista": 0.6235,
+        "emboscador": 0.06825,
+        "espelho": 0.29575,
+        "furioso": 0.92925,
+        "sentinela": 0.01375,
+        "tita": 0.3795,
+        "vigia": 0.38025
+      },
+      "sem_passiva": {
+        "duelista": 0.6035,
+        "emboscador": 0.05575,
+        "espelho": 0.311,
+        "furioso": 0.91175,
+        "sentinela": 0.0135,
+        "tita": 0.384,
+        "vigia": 0.38925
+      },
+      "sem_tecnica": {
+        "duelista": 0.0225,
+        "emboscador": 0.061,
+        "espelho": 0.025,
+        "furioso": 0.06525,
+        "sentinela": 0.014,
+        "tita": 0.0,
+        "vigia": 0.0
+      },
+      "stats_sem_forma": {
+        "duelista": 0.67675,
+        "emboscador": 0.039,
+        "espelho": 0.26475,
+        "furioso": 0.92125,
+        "sentinela": 0.008,
+        "tita": 0.2445,
+        "vigia": 0.30475
+      },
+      "stats_so_especie": {
+        "duelista": 0.386,
+        "emboscador": 0.0785,
+        "espelho": 0.2505,
+        "furioso": 0.808,
+        "sentinela": 0.0195,
+        "tita": 0.03925,
+        "vigia": 0.02125
+      }
+    },
+    "sentinela": {
+      "gambits_irma": {
+        "duelista": 0.09525,
+        "emboscador": 0.0655,
+        "espelho": 0.997,
+        "furioso": 0.0,
+        "muralha": 0.723,
+        "tita": 0.969,
+        "vigia": 0.95225
+      },
+      "original": {
+        "duelista": 0.21525,
+        "emboscador": 0.70425,
+        "espelho": 0.68175,
+        "furioso": 0.00025,
+        "muralha": 0.98525,
+        "tita": 0.9835,
+        "vigia": 0.96825
+      },
+      "passiva_irma": {
+        "duelista": 0.23525,
+        "emboscador": 0.93625,
+        "espelho": 0.86975,
+        "furioso": 0.0,
+        "muralha": 0.99775,
+        "tita": 0.99275,
+        "vigia": 0.97075
+      },
+      "sem_passiva": {
+        "duelista": 0.2055,
+        "emboscador": 0.70425,
+        "espelho": 0.682,
+        "furioso": 0.00025,
+        "muralha": 0.9855,
+        "tita": 0.98725,
+        "vigia": 0.96825
+      },
+      "sem_tecnica": {
+        "duelista": 0.29075,
+        "emboscador": 0.1985,
+        "espelho": 0.0005,
+        "furioso": 0.0,
+        "muralha": 1.0,
+        "tita": 1.0,
+        "vigia": 1.0
+      },
+      "stats_sem_forma": {
+        "duelista": 0.2145,
+        "emboscador": 0.7015,
+        "espelho": 0.64475,
+        "furioso": 0.00025,
+        "muralha": 0.993,
+        "tita": 0.983,
+        "vigia": 0.96825
+      },
+      "stats_so_especie": {
+        "duelista": 0.2155,
+        "emboscador": 0.536,
+        "espelho": 0.695,
+        "furioso": 0.0,
+        "muralha": 0.993,
+        "tita": 0.985,
+        "vigia": 0.96825
+      }
+    },
+    "tita": {
+      "gambits_irma": {
+        "duelista": 0.50675,
+        "emboscador": 0.01225,
+        "espelho": 0.03875,
+        "furioso": 0.00825,
+        "muralha": 0.65275,
+        "sentinela": 0.016,
+        "vigia": 0.02
+      },
+      "original": {
+        "duelista": 0.4775,
+        "emboscador": 0.01225,
+        "espelho": 0.038,
+        "furioso": 0.00825,
+        "muralha": 0.613,
+        "sentinela": 0.0165,
+        "vigia": 0.04475
+      },
+      "passiva_irma": {
+        "duelista": 0.29825,
+        "emboscador": 0.01175,
+        "espelho": 0.00675,
+        "furioso": 0.0005,
+        "muralha": 0.53325,
+        "sentinela": 0.0145,
+        "vigia": 0.0125
+      },
+      "sem_passiva": {
+        "duelista": 0.29825,
+        "emboscador": 0.01175,
+        "espelho": 0.00675,
+        "furioso": 0.0005,
+        "muralha": 0.53325,
+        "sentinela": 0.0145,
+        "vigia": 0.0125
+      },
+      "sem_tecnica": {
+        "duelista": 0.4905,
+        "emboscador": 0.001,
+        "espelho": 0.0065,
+        "furioso": 0.0085,
+        "muralha": 0.6665,
+        "sentinela": 0.0,
+        "vigia": 0.0
+      },
+      "stats_sem_forma": {
+        "duelista": 0.46825,
+        "emboscador": 0.03025,
+        "espelho": 0.03325,
+        "furioso": 0.0055,
+        "muralha": 0.589,
+        "sentinela": 0.035,
+        "vigia": 0.0315
+      },
+      "stats_so_especie": {
+        "duelista": 0.2685,
+        "emboscador": 0.03475,
+        "espelho": 0.03375,
+        "furioso": 0.0055,
+        "muralha": 0.388,
+        "sentinela": 0.033,
+        "vigia": 0.05025
+      }
+    },
+    "vigia": {
+      "gambits_irma": {
+        "duelista": 0.03275,
+        "emboscador": 0.0335,
+        "espelho": 0.01,
+        "furioso": 0.00075,
+        "muralha": 0.563,
+        "sentinela": 0.03125,
+        "tita": 0.0165
+      },
+      "original": {
+        "duelista": 0.0885,
+        "emboscador": 0.03375,
+        "espelho": 0.009,
+        "furioso": 0.00875,
+        "muralha": 0.60825,
+        "sentinela": 0.03175,
+        "tita": 0.95525
+      },
+      "passiva_irma": {
+        "duelista": 0.44425,
+        "emboscador": 0.03425,
+        "espelho": 0.04225,
+        "furioso": 0.003,
+        "muralha": 0.661,
+        "sentinela": 0.03325,
+        "tita": 0.39425
+      },
+      "sem_passiva": {
+        "duelista": 0.03875,
+        "emboscador": 0.03375,
+        "espelho": 0.009,
+        "furioso": 0.00075,
+        "muralha": 0.58475,
+        "sentinela": 0.03175,
+        "tita": 0.0445
+      },
+      "sem_tecnica": {
+        "duelista": 0.024,
+        "emboscador": 0.0,
+        "espelho": 0.001,
+        "furioso": 0.0,
+        "muralha": 0.64525,
+        "sentinela": 0.0,
+        "tita": 0.99275
+      },
+      "stats_sem_forma": {
+        "duelista": 0.0895,
+        "emboscador": 0.03175,
+        "espelho": 0.0095,
+        "furioso": 0.0125,
+        "muralha": 0.65775,
+        "sentinela": 0.0285,
+        "tita": 0.9515
+      },
+      "stats_so_especie": {
+        "duelista": 0.084,
+        "emboscador": 0.03125,
+        "espelho": 0.00525,
+        "furioso": 0.008,
+        "muralha": 0.38675,
+        "sentinela": 0.02825,
+        "tita": 0.93875
+      }
+    }
+  }
+}

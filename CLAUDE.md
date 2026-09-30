@@ -316,6 +316,159 @@ neutra, decidido antes da run).
   - dicas do Bit;
   - constantes `CED`, `CLE` e `CHE` conferidas contra o Python.
 
+## Linhagem, E1 natureza × criação (2026-09-29, `docs/PLANO_ANALISE_LINHAGEM.md`) — gate FALHOU
+
+Exceção de escopo autorizada pelo Matheus **só para o E1** de `docs/PLANO_LINHAGEM_ALIFE.md`; nenhuma mecânica nova.
+`experiments/run_natureza_criacao.py` separa a semente do genoma (`g`: espécie e os dois temperamentos) da do
+ambiente (`r`: motor, dono, travessuras, lesões, sparring) sem mexer no `engine.py`; com `g = r` a vida é a da V3
+byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decomposicao_cruzada` (estende a
+`decomposicao_ovo_braco`) e `bootstrap_cruzado` (pigeonhole). Números de
+`artifacts_linhagem/natureza_criacao/<rodada>/resultado.json`; 40 genomas × 4 donos × 4 ambientes, painel B neutra.
+
+- **Gate (espécie fixa, brasa): FALHOU.** σ²_genoma +0,0016, IC95 pigeonhole [−0,0007; +0,0032] (4,9% da variância).
+  Reamostrando só os genomas (secundário) o IC é [+0,0005; +0,0028]: a incerteza vem dos só 4 ambientes. Pelo plano
+  congelado, E2 e E3 não seguem com este genoma sem decisão do Matheus.
+- O que pesa: resíduo 66% e **dono × ambiente 22%** (as mortes do aleatório, 32 de 160, dependem do ambiente); dono 5%.
+- Com as 4 espécies (descritiva): σ²_genoma +0,0030 [+0,0002; +0,0058], 8,4%; a espécie explica 32% da variação
+  entre genomas (ferrugem 0,467 × cirro 0,372: E2 de novo).
+- Donos (espécie fixa): atencioso − aleatório **+0,123** [+0,016; +0,204] (repete a V3, +0,121); atencioso −
+  permissivo +0,005 [−0,127; +0,142] (na V3 era +0,077).
+- **Decisão do Matheus (2026-09-29): a linhagem para como pesquisa.** E2–E4 arquivados; fica como mecânica de jogo
+  (herança v4). Um genoma com aptidões por indivíduo foi descartado: o treino é normalizado na arena e ajustar o
+  genoma para passar o gate viciaria o teste. Pergunta aberta mais promissora: a interação dono × ambiente.
+- **Análise dono × ambiente** (exploratória, pós hoc, `docs/ANALISE_DONO_AMBIENTE_E1.md`,
+  `experiments/analisar_dono_ambiente.py` → `artifacts_linhagem/dono_ambiente/resultado.json`): as mortes são todas
+  "lesão sem tratar" (o ambiente sorteia a exposição; o aleatório nunca responde a lesão e o relapso só na visita:
+  regra do dono sintético). Sem as mortes a interação continua porque o ambiente muda a **forma** final, e **a forma
+  explica 96% da taxa no painel** (furioso 0,71 × titã 0,19). Dentro da forma sobra 4%; nele o dono explica 22%
+  (atencioso +0,027 acima da média da forma, pelo ε da disciplina). Leitura: o painel mede quase só o arquétipo; a
+  V4 "cuidado reduz a variância entre ambientes" testaria regras escritas por nós e **não deve rodar**.
+- A rodada balanceada caiu ao gravar o meta (outra sessão trocou o branch da pasta `v1` no meio da run); a análise
+  foi refeita dos arquivos gravados (`--reanalisar`, conferido: a reanálise da espécie fixa sai idêntica).
+
+## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
+
+Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.
+- **Pets v5** (`VERSAO_PET = 5`, ovos novos e filhos da herança): Champion → Ultimate → Mega. O Mega é um estágio próprio
+  (`"mega"`): a forma adulta, a passiva e o caráter vêm do Ultimate; vida e guts ×1,15, E 3000 na campanha, treino com teto 16
+  no estágio e 40 na vida. Ultimate → Mega pede 24 h (48 h no clássico), 10 lutas com ≥ 80% de vitória e vínculo ≥ 0,4; a
+  sombria nunca chega (regra explícita). Constantes em `CMG` (`baseDe` leva o Mega às tabelas do adulto); `Motor.requisitosMega()`.
+- **Nomes no cânone para todos os pets:** as duas formas adultas da linha são o mesmo Ultimate (o arquétipo as distingue) e o
+  Mega é o da cadeia (Greymon → MetalGreymon → WarGreymon); a sombria usa o Ultimate. Pets v1–v4 param no Ultimate; o motor
+  deles não muda (`nomeFormaLegado` na assinatura dos gambits).
+- **Campanha v5:** Cidadela com o Myotismon; Montanha Espiral (Mega) com Puppetmon, Machinedramon e o Piedmon (chefe). Os
+  pets v1–v4 seguem na campanha de sempre. Fatores calibrados no motor web (`web/app/test/calibrar_mega.mjs`,
+  `artifacts_campanha/mega/`): validação nas metas de sempre.
+- **Limiar do vínculo 0,4** (baixado de 0,7 pelo Matheus): com 0,7 os donos simulados coerentes não chegavam ao Mega e o
+  aleatório chegava; com 0,4 o atencioso chega em 3 de 6 vidas, o aleatório em 5 de 6 (`artifacts_campanha/mega/limiar_vinculo.json`).
+  O defeito do vínculo continua (pendência abaixo).
+
+## Medalhas do Tamer no jogo, parte 1 (2026-09-29, `docs/DESIGN_MEDALHAS_ARENAS.md`)
+
+Só no jogo web; a pesquisa em Python não tem Tamer (`docs/REGISTRO_DESVIOS.md`, 2026-09-29).
+- **Tamer:** o jogador. Registro próprio (event sourcing) em `…-tamer` (`src/tamer.ts`): eventos `medalha` (id, contador,
+  hora de parede, pet, forma, tick). Medalha na primeira vitória contra o líder, com qualquer pet v6; é do Tamer e sobrevive ao pet.
+- **Trava (pets v6, `VERSAO_PET = 6`):** Rookie → Champion pede 1 medalha, Champion → Ultimate 3, Ultimate → Mega 5 (`CMD`), além
+  dos requisitos de sempre. O motor nunca lê o Tamer: o app grava no registro do pet o evento `u` ("o Tamer tem N medalhas",
+  `Motor.liberar`), e o pet pronto evolui nesse tick. Pet guardado recebe o `u` ao voltar a ser o ativo. Assinatura dos v1–v5 igual.
+- **Medalhas** (`motor/medalhas.ts`, tabela única): uma por arena, do líder dela (parte 2, seção abaixo). Na parte 1 a 3ª e a 5ª
+  tinham fonte provisória (Devidramon e Tortomon, na Torre de pedra) até a Floresta e o Lago existirem.
+- **Tempo dos estágios nos v6:** conta desde a evolução anterior (`Motor.tickLimiteEstagio`), para um Rookie que esperou a
+  medalha não ganhar um Champion curto; nos v1–v5 continua desde o nascimento.
+- **Saves:** na primeira abertura os pets v1–v5 (ativo e guardados) são apagados com aviso e o jogo começa num ovo novo (decisão do
+  Matheus). Os Cenários seguem com pets v5 (sem Tamer). Telas: Lutar · Medalhas, requisito na Evolução, líder na Campanha.
+
+## Arenas com líderes, medalhas parte 2 (2026-09-30, `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 12)
+
+Só no jogo web e só pets v6; a pesquisa não tem arenas (`docs/REGISTRO_DESVIOS.md`, 2026-09-30).
+- **Seis arenas** (`motor/arenas.ts`, `ARENAS`; campanha v6 em `bots.LUGARES_V6`/`CAMPANHA_V6`, na ordem do nível): Campina (Gazimon,
+  sem regra), Torre de pedra (Guardromon com o contra-golpe: paciência), **Floresta** (Youkomon, muda de padrão no turno 10: leitura),
+  Cidadela (Myotismon, três lutas seguidas sem cura: resistência), **Lago** (MarinBullmon; as travas e vetos do dono não valem:
+  vínculo) e Montanha Espiral (Piedmon, chefe). Os NPCs de antes seguem como desafiantes, com as mesmas chaves. A 3ª medalha vem da
+  Floresta e a 5ª do Lago (fim das provisórias).
+- **Replay:** a regra depende só do rival e da versão do pet; o evento `l` continua `{r, s}` (a série da Cidadela é um evento só, com
+  sementes derivadas). `Motor.montarLuta`/`lutadores` montam a luta para o motor e para a tela; `Motor.lugarDe(k)` dá o lugar do NPC
+  na campanha do pet (os índices mudam da v5 para a v6). Pets v1–v5 e gabaritos iguais.
+- **Calibração** (`web/app/test/calibrar_arenas.mjs`, `artifacts_campanha/arenas/`, na escala dos pets v6, seção abaixo; sementes de
+  validação, com a regra do limite do desafiado): os seis líderes nas metas novas (sem treino ≤ 0,05; com o treino típico ≥ 0,80;
+  nenhuma forma < 0,5). Sem treino 0,0006–0,0213, com treino 0,8125–0,9063, pior forma 0,535 (sentinela na Cidadela). Fatores só na luta de arena: Gazimon 1,3,
+  Guardromon 1,6, Myotismon 0,9 (série), Piedmon 1,6; Youkomon e MarinBullmon 1,5. Na Torre o Guardromon ganhou lista própria de arena
+  (`GAMBITS_ARENA.torre`: contra quem atira com frequência ele avança, no lugar do contra-golpe); com a de antes nenhum fator passava.
+- **Telas:** cartão da arena (líder, regra, medalha), mapa de seis ilhas (atlas: `WorldMap_04` Floresta e `WorldMap_02` Lago, fora do
+  repo), "luta k de 3" na Cidadela, aviso do Lago na luta e no Resultado, Medalhas com a regra de cada arena.
+- **Correção do vigia:** nos pets v6 as duas regras novas do vigia V21D voltam como candidatas de troca (`candidatasDoVigia`).
+- **Saves v6:** descarte único versão 3 (arenas), 4 (escala v6) e 5 (limite do desafiado): os v6 de antes saem, com o mesmo aviso.
+- **Limite de turnos (decisão do Matheus, 2026-09-30):** nas lutas dos pets v6 (campanha, arenas, arena contra bots) a luta que chega ao
+  limite sem nocaute é de quem foi desafiado, o rival (o pet sempre desafia); na Cidadela ela quebra a série. `combate.fimV2`/`jogarV2`
+  com o desafiado (para a Fronteira: o campeão), `desafiadoDaVersao`; nada novo no registro. Pets v1–v5, cenários e o Python: a fração
+  de vida, como sempre.
+
+## Itens do Tamer, medalhas parte 3 (2026-09-30, `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 13) — SEM EQUILÍBRIO
+
+Só no jogo web e só pets v6; a pesquisa não tem itens (`docs/REGISTRO_DESVIOS.md`, 2026-09-30). **Sem equilíbrio** (decisão do Matheus,
+2026-09-30): ainda entram outras mecânicas no combate, e o equilíbrio será uma rodada só, depois; os números são os PROPOSTOS da seção 13 e
+os gates G-I1–G-I4 (13.7) ficam para essa rodada (`web/app/test/medir_itens.mjs` pronto, não rodado; sem artefato).
+- **Catálogo** (`motor/itens.ts`, `CIT` em `constantes.ts`): Chip de Força e Chip de Guarda (stat: +2 pontos de treino, só no espaço que
+  falta no teto do estágio e da vida, todos juntos ≤ 25% do treino típico); Chip Recuo e Chip Oportunista (regra, do Champion), Chip
+  Perseguidor e Chip Aparo (regra, do Ultimate); Carta de Fôlego (+20 guts), de Cura (20% da vida na primeira vez abaixo de 30%) e de Foco
+  (ε 0).
+- **De onde:** o líder dá o chip da arena com a medalha (um Tamer com medalhas de antes recebe na abertura); a revanche vencida, com um
+  pet do nível da arena, dá a carta da arena, uma por líder a cada 24 h do relógio do pet. Chips por pet pelas medalhas: 1/2/3 com 1/3/5;
+  uma carta por luta.
+- **Registro:** inventário no Tamer (registro versão 2, lê a 1: `item`, `carta_usada`); no pet, `i` (equipar/desequipar) e `k` (a carta,
+  logo antes da luta `l`; outro evento depois dela falha alto). O motor não lê o Tamer; o app confere o inventário. A assinatura dos v6 só
+  muda com item; v1–v5, gabaritos, paridade V21D e os artefatos de validação da parte 2 saem iguais. Descarte único não subiu.
+- **Telas:** Crescer · Itens; a carta antes da luta (Campanha e Arena); o item novo e a carta usada no Resultado; o item de cada medalha
+  em Medalhas; a regra de chip marcada nas regras de combate (não se veta).
+
+## Escala dos pets v6 (2026-09-30, `CESC_V6`; `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 12)
+
+Decisão do Matheus: "o treino tem que decidir" contra cada líder e "o estágio tem que pesar". Só no jogo web e só nas lutas de escala dos
+pets v6 (campanha e arenas; o pet pela versão, o NPC pelas regras V21D da luta); a `CESC`, os v1–v5 e a pesquisa não mudam
+(`docs/REGISTRO_DESVIOS.md`, 2026-09-30).
+- **Escala:** vida Rookie 200, Champion 700, Ultimate 2500, Mega 23000 (bebê 50) e β 0,045 por ponto de treino (era 600/1500/3000 e
+  0,03). `web/app/test/calibrar_escala_v6.mjs` → `artifacts_campanha/escala_v6/`: β = o menor da grade com os líderes viáveis com folga
+  0,01 (a vida cancela nas lutas de líder); vidas = as menores razões que passam as metas de estágio (margem 0,005).
+- **Metas de estágio** (baixo com o treino típico × cima sem treino; bots canônicos, 4 espécies de cada lado), validação com a regra do
+  limite do desafiado (o de cima): vizinhos ≤ 0,10 em pontos (Rookie × Champion 0,0008, Champion × Ultimate 0,0108, Ultimate × Mega
+  0,0041) e **dois estágios = 0,00** (Rookie × Ultimate e Champion × Mega: nenhuma vitória). Pelo limite da fração de vida os dois
+  estágios não fechavam (0,0372 e 0,0509: vitórias por estilo no limite, que a escala não tira). A escala foi escolhida antes da regra e
+  não foi recalibrada.
+- **DW1 como âncora** (×2, ×2,5; Mega ×2): a v6 tem ×3,5, ×3,57, ×9,2; o afastamento vem sobretudo do peso do treino (razão = (1 + β ×
+  treino típico) ÷ razão de E pedida: 1,36 × 2,57; 1,99 × 1,80; 2,62 × 3,51).
+- **Desafiantes v6** (`calibrar_desafiantes_v6.mjs`, `CESC_V6.fatorNpc`, metas de sempre ≤ 0,30 / ≥ 0,80, com a regra do limite):
+  Devidramon 1,1, Puppetmon 2,5, Machinedramon 2,2 passam; **Tortomon não fecha** com nenhum fator (1,5: sem treino 0,3087), a exceção
+  da Sentinela.
+
+## Reequilíbrio dos arquétipos: V21D validada e nos pets v6 (2026-09-29/30)
+
+`docs/DIAGNOSTICO_ARQUETIPOS.md` → `docs/EQUILIBRIO_RODADA1.md` e `EQUILIBRIO_RODADA2.md` (calibração) →
+`docs/VALIDACAO_V21D.md`. Números de `artifacts_combate_v21c/validacao_v21d/criterios.json`.
+
+- **Python:** `ConfigCombateV21D` (subclasse da V21C) tem 7 chaves, todas **desligadas por padrão**. A V21C, a pesquisa
+  (V3, E1, confirmatória) e as baterias reproduzem. A variante escolhida, `a_c_e2v_v`
+  (`experiments/configs/v21d/validacao.json`), liga quatro chaves:
+  - `preparo_sob_pele_oculto`;
+  - `muralha_lista_espelho`;
+  - `vigia_bate_em_quem_recua`;
+  - `vigia_recua_do_preparo_sob_pele`.
+- **Validação APROVADA** (`python experiments/validar_v21d.py --conjunto validacao`, uma run, registro commitado antes),
+  com o furioso como exceção declarada (decisão do Matheus):
+  - 7 formas em [0,40; 0,60]: força de 0,407 (titã) a 0,562 (sentinela), painel de 0,432 a 0,549;
+  - A6 passa (mínimo 2 vitórias, o titã);
+  - S1, E4 na escala (menor 0,8355), campanha na escala (4 de 5, Sentinela exceção) e E3 da pele dura passam.
+- **Relatados:**
+  - furioso: força 0,722, painel 0,675;
+  - A3: suporte 4;
+  - A4: 9 e 7 pares extremos;
+  - A5: amplitude 0,316 e 0,424;
+  - E3 do contra-golpe não reduz (pelo espelho).
+- **Web:** só os pets v6 lutam com a V21D (`CV21D`, `Motor.regras`, `jogarV2(..., R)`); os v1–v5 seguem na V21C.
+  - paridade com o Python: `test/paridade_v21d.test.ts`, 272 partidas iguais;
+  - descarte único dos saves, versão 2: os v6 de antes saem com o mesmo aviso.
+- **Aberto:** o furioso (rodada 3, pela base V2C: C3 contra o avanço ou custo do golpe rápido, com G1–G9 de novo); E2,
+  E5, G6b, G8 e G9 não medidos; a pesquisa não usa a V21D.
+
 ## Correção do combate V2 (2026-09-25, `docs/TAREFA_CORRECAO_COMBATE.md`) — V2C e V21C aprovadas com ressalvas
 
 **Com os bots redesenhados** (`GAMBITS_V2C`, `ConfigCombateV2C.bots_v2c`; configs `v2c/c7.json` e
@@ -391,7 +544,8 @@ gerações iguais, toda entrada com fonte e status). Jornada e escala aprovadas 
   redefinido pelo Matheus: o adulto sem treino vence o Champion (sem treino e com +22) em ≥ 0,60, sem teto.
 - Campanha na escala (`experiments/calibrar_escala.py`, `experiments/configs/escala/`): 4 de 5 NPCs nas metas (≤ 0,30
   sem treino, ≥ 0,80 com o treino típico); a Sentinela não fecha com nenhum fator (exceção aceita pelo Matheus).
-- Web: a escala no motor (`CESC`), ligada pelo app; vários pets com um ativo (`…-guardados`) e o tutorial do Bit.
+- Web: a escala no motor (`CESC`), ligada pelo app; vários pets com um ativo (`…-guardados`) e o tutorial do Bit. Os pets v6 têm escala
+  própria (`CESC_V6`, seção "Escala dos pets v6").
 
 ## Motivo, expressão e memória (2026-09-24, `docs/TAREFA_MEMORIA_EXPRESSAO.md`)
 
@@ -566,7 +720,7 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
 - Rodada 2: gemma2:9b 3,0% de falas com afirmação sem fato (teto; o juiz marca 10% da moldura, que só diz
   verdades), 0/30 conversas inventaram, latência p90 4,8 s na RTX 2060 (sem outro modelo carregado).
 - Pendente: avaliação cega do Matheus (`artifacts_fala_livre/rodada2/avaliacao_cega.csv`).
-- Voz própria no jogo (parte 4, 2026-09-30): pets **v5** (`VERSAO_PET = 5`) com janela de fala, mentira (`CMEN`) e evento `f`; `motor/historia.ts` e `motor/mentira.ts` conferidos contra o Python (`experiments/exportar_gabaritos_voz.py` → `test/gabaritos/voz_python.json`, `tests/test_gabaritos_voz.py`); gatilhos e ritmo em `src/voz.ts`; servidor com `voz: true` (livre-v6, autocorreção, verif-v5, corpus, almanaque). Avaliação: `artifacts_voz/rodada1..4` (`experiments/avaliar_voz.py --rodada N`).
+- Voz própria no jogo (parte 4, 2026-09-30): pets **v7** (`VERSAO_PET = 7`: v6 + voz própria) com janela de fala, mentira (`CMEN`) e evento `f`; `motor/historia.ts` e `motor/mentira.ts` conferidos contra o Python (`experiments/exportar_gabaritos_voz.py` → `test/gabaritos/voz_python.json`, `tests/test_gabaritos_voz.py`); gatilhos e ritmo em `src/voz.ts`; servidor com `voz: true` (livre-v6, autocorreção, verif-v5, corpus, almanaque). Avaliação: `artifacts_voz/rodada1..4` (`experiments/avaliar_voz.py --rodada N`).
 - Voz própria (DESIGN_VOZ_PROPRIA, parte 2): `livre-v3` e `verif-v4` ao lado das versões do jogo; fatos H/O/P/L, mentira F (`mentira.py`), almanaque W (`almanaque.json`), corpus de espécies (`corpus.py`, `corpus_especies.json` = EXEMPLO com 2 espécies) e filtro contra repetir citação.
 
 ## Versão web (`web/digilab.html`)
@@ -742,24 +896,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
     - mais variância nas lutas, e o sinal da pesquisa já é pequeno.
   - Os sprites têm quadros de animação (257 Digimon) e efeitos de ataque (187) em `Assets/Digimon Up Assets/Animacoes`.
 
-- **Evolução fora do cânone** (Matheus, 2026-09-29: "tem que seguir o cânone"; não executar ainda).
-  - **Hoje:** o jogo tem 4 estágios. O Champion vai direto a Ultimate **ou** Mega, duas formas irmãs escolhidas pelo sinal do eixo complementar: ≥ 0 dá o Ultimate (duelista, espelho, sentinela, vigia); < 0 dá o Mega (furioso, muralha, emboscador, tita).
-    - Ultimate e Mega ficam no mesmo nível.
-    - O Mega sai do caráter "desequilibrado".
-    - A forma sombria herda o nível da base: três linhas ficam sombrias em Mega; o guardião, em Ultimate.
-  - **Cânone:** Champion → Ultimate → Mega. Os pares de `web/app/motor/nomes.ts` já formam cadeias canônicas (Greymon → MetalGreymon → WarGreymon, Kyubimon → Taomon → Sakuyamon...). Três pares são frouxos:
-    - Aquilamon → Silphymon → Valkyrimon;
-    - Ankylomon → Shakkoumon → SlashAngemon;
-    - Stingmon → DinoBeemon → Imperialdramon Fighter Mode.
-  - **Rumo provável:** um 5º estágio só no jogo (pets v5; v1–v4 reproduzem como estão). O Python da pesquisa fica com 4 estágios e as runs não mudam.
-  - **A decidir no desenho:**
-    - o que faz o Ultimate virar Mega;
-    - o que acontece com a escolha pelo eixo complementar e com as passivas de combate de cada forma adulta (E4);
-    - a forma sombria em cada nível;
-    - a escala da campanha;
-    - a herança ("só adultos cruzam");
-    - os sprites, se precisar de um 2º Ultimate por linha (o atlas tem 263 Digimon);
-    - os textos "Ultimate/Mega".
+- Evolução canônica: o limiar de vínculo do Mega baixou para 0,4, mas o vínculo ainda favorece o dono aleatório (5 de 6
+  vidas viram Mega, contra 3 de 6 do atencioso). Rever o desenho do vínculo resolveria de vez.
 
 - Fala por LLM: repetida com outra semente (2026-09-29, `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260929/`):
   92% aprovadas, nenhuma barrada por fator fora da lista. Pré-leitura (coluna própria no `revisao.csv`): nenhuma

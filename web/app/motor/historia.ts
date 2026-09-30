@@ -26,7 +26,7 @@ export const PET_INF: Record<string, string> = { dormir: "dormir", comer: "comer
   explorar: "explorar", emburrar: "emburrar" };
 export const CUIDADO_DONO: Record<string, string> = { alimentar: "me dar comida", limpar: "me limpar", brincar: "brincar comigo",
   acariciar: "me dar carinho", petisco: "me dar petisco" };
-export const NIVEL: Record<string, string> = { bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate" };
+export const NIVEL: Record<string, string> = { bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };   /* mega: so no jogo (pets v5+) */
 export type TipoFato = "H" | "O" | "P" | "L";
 const ORDEM_TIPOS: TipoFato[] = ["L", "H", "P", "O"];
 const MAX_TEXTO = 80;

@@ -2,7 +2,7 @@
    So APRESENTACAO: le o pet (motor), nunca escreve nele. As falas e a conversa vao para o log de apresentacao
    (localStorage CHAVE + ".fala.jsonl"), nunca para o registro do pet. O que o jogador escreve nao ensina o pet.
    Mesmas chaves, mesmo formato de log e mesmas rotas do servidor que a versao do HTML.
-   Pets v5 (voz propria, src/voz.ts): a fala espontanea vem dos gatilhos novos, entra no registro do pet pelo evento
+   Pets v7 (voz propria, src/voz.ts): a fala espontanea vem dos gatilhos novos, entra no registro do pet pelo evento
    "f" (abre a janela de fala, pode ser mentira) e o texto vem do servidor com voz: true ou, sem ele, do molde. A
    conversa manda a historia do pet. O registro de apresentacao ganha o campo `voz` (a verdade fica guardada ali). */
 import { useEffect, useState } from "preact/hooks";
@@ -16,7 +16,7 @@ const LOG = CHAVE + ".fala.jsonl", MODO = CHAVE + "-modo-fala";
 const VERSAO_LOG = 1, MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
 export type ModoFala = "template" | "moldura" | "livre";
 export interface Verificacao { nao_suportadas?: number; manipulacao?: boolean; afirmacoes?: { trecho: string; sustentada: boolean | null }[]; erro?: string }
-/** pets v5: o que so a apresentacao guarda sobre a fala espontanea (a mentira fica marcada, com a verdade) */
+/** pets v7: o que so a apresentacao guarda sobre a fala espontanea (a mentira fica marcada, com a verdade) */
 export interface VozRegistro {
   gatilho: string | null; fonte: "llm" | "molde"; chaves: string[]; invencoes: string[];
   janela: { inicio: number; falso: boolean; tema: string } | null; verdade: string | null;
@@ -97,7 +97,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
   const semente = hashSemente("fala-livre", motor.semente, motor.log.length, FL.sessao.length) >>> 1;
   const t = motor.e.tick;
   try {
-    const voz = motor.versao >= 5;
+    const voz = motor.versao >= 7;
     const estado = estadoDoPet(motor, gatilho);
     if (voz) estado.historia = historiaDaConversa(motor, assuntosRecentes());
     const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico: FL.sessao.slice(-MAX_TROCAS), semente,
@@ -127,7 +127,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
   }
 }
 
-/* ------------------------------------------------ pets v5: fala espontanea da voz propria */
+/* ------------------------------------------------ pets v7: fala espontanea da voz propria */
 const chavesDe = (fatos: unknown): string[] =>
   (Array.isArray(fatos) ? fatos : []).filter((f: { chave?: string }) => typeof f.chave === "string").map((f: { chave: string }) => f.chave);
 /** os assuntos das ultimas falas (o rodizio manda para o fim o que acabou de ser assunto) */
@@ -169,10 +169,10 @@ export function falaVozRecente(m: Motor): RegistroFala | null {
 }
 
 /** gatilho (a cada mudanca do pet): fala espontanea quando ele decide, recusa, evolui, luta ou tem vontade nova.
-    Pets v5: os gatilhos da voz propria, em todos os modos (o texto so vem da LLM no modo livre).
+    Pets v7: os gatilhos da voz propria, em todos os modos (o texto so vem da LLM no modo livre).
     Devolve true quando o balao e da fala livre (a tela nao mostra o template). */
 export function gatilhoFalaLivre(m: Motor): boolean {
-  if (m.versao >= 5) {
+  if (m.versao >= 7) {
     const g = gatilhoDe(m);
     if (g && podeFalar(m)) falaVoz(m, g);
     return !!falaVozRecente(m);

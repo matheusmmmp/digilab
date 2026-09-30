@@ -4,7 +4,7 @@
    ativado, continua dali (Motor.reproduzir). Trocar = guardar o ativo e reproduzir o escolhido.
 
    Primeiro acesso a esta versao: os guardados comecam com uma escada de exemplo, do mais fraco ao mais forte
-   (In-Training ate Ultimate/Mega treinado), gerada com os donos simulados dos Cenarios e sessoes de treino dentro das
+   (In-Training ate Ultimate treinado), gerada com os donos simulados dos Cenarios e sessoes de treino dentro das
    regras (intervalo, fadiga, tudo no registro de cada pet). */
 import { CAT, CD, CTR, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";

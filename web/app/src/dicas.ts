@@ -19,14 +19,16 @@ export const DICAS = {
   derrota_campanha: "Faltou força: treine e volte. Cada ponto treinado aumenta o tamanho dele na campanha.",
   champion: "Virou Champion. Com fadiga 40 ele pede pausa; com 60 o treino vira Forçar: rende mais e gera sobrecarga.",
   regra_nova: "Ele tirou uma regra da luta. Travar a mantém na posição; Vetar proíbe. O resto ele aprende sozinho.",
-  lutas_treino: "Para virar Ultimate ou Mega ele precisa de 10 lutas de treino na Arena, além do tempo.",
+  lutas_treino: "Para virar Ultimate ele precisa de 10 lutas de treino na Arena, além do tempo.",
+  /* pets v5 (evolucao canonica): o Ultimate ainda vira Mega */
+  ultimate: "Virou Ultimate! Para o Mega: mais tempo, 10 lutas com 80% de vitórias e vínculo com você. Forçado à exaustão (forma sombria), ele não chega lá.",
   adulto: "Daqui em diante ele mesmo explica o que sente e por quê. Até mais! — Professor Agumon",
   /* pets v4 (educacao-v1) */
   manha: "Ele chamou: confira a barra. Se a necessidade está em dia, é manha — bronca educa; petisco ensina a pedir mais.",
   banheiro: "Ele avisou que vai sujar: leve ao banheiro em até 15 min e a sujeira não acontece.",
   fala: "Ele falou por conta própria. Às vezes o que ele diz não é verdade: bronca numa mentira educa; petisco ou elogio numa mentira ensina a mentir mais.",
   lesao: "Machucou na luta! Trate em até 6 h ou ele morre. Muitas lesões no mesmo estágio também matam.",
-  vitorias: "Além das 10 lutas, ele precisa vencer 80% das lutas deste estágio para virar Ultimate ou Mega.",
+  vitorias: "Além das 10 lutas, ele precisa vencer 80% das lutas deste estágio para evoluir.",
 } as const;
 export type IdDica = keyof typeof DICAS;
 

@@ -2,7 +2,7 @@
    de icone com estado (travada, vetada, livre), contador de espacos, a regra final, as vetadas e o que o pet
    mudou. O dono so trava ou veta; tudo entra no registro. */
 import { useState } from "preact/hooks";
-import { CV, CV21, NOME_V2, regraDe, rotuloCond, rotuloRegra, type OpGambit } from "../../../motor/index.ts";
+import { CV, CV21, NOME_V2, regraDe, rotuloCond, rotuloRegra, type OpGambit, baseDe } from "../../../motor/index.ts";
 import { comSinal } from "../../componentes/Barras.tsx";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 
@@ -17,14 +17,14 @@ export function EditorRegras() {
     try { mudarMotor(mm => mm.intervirGambit(op, k)); setMsg(""); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   const cartao = (k: string, i: number, estado: "livre" | "travada" | "vetada") => {
-    const r = regraDe(k);
+    const r = regraDe(k), chip = gp.chipsRegra.includes(k);
     return (
       <li class={`g-card g-${estado}`} key={k}>
         <span class="g-num">{estado === "vetada" ? "×" : i + 1}</span>
         <span class="g-corpo">
           <span class="g-se"><b>SE</b> {r.se.map(rotuloCond).join(" e ")}</span>
           <span class="g-entao"><b>ENTÃO</b> {NOME_V2[r.entao]}</span>
-          <span class="g-meta">{estado === "travada" && <><span class="dl-tag dl-tag--estagio">travada</span> </>}{estado === "vetada" && <><span class="dl-tag dl-tag--espera">vetada</span> </>}
+          <span class="g-meta">{estado === "travada" && <><span class="dl-tag dl-tag--estagio">travada</span> </>}{estado === "vetada" && <><span class="dl-tag dl-tag--espera">vetada</span> </>}{chip && <><span class="dl-tag dl-tag--chip">chip</span> </>}
             {estado === "vetada" ? "" : `nota ${comSinal(gp.notas[k], 2).replace(".", ",")} · usada ${gp.disparos[k] || 0}×`}</span>
         </span>
         <span class="g-bts">
@@ -33,16 +33,16 @@ export function EditorRegras() {
             : <>
               <button type="button" class={`dl-btn dl-btn--icone${estado === "travada" ? " g-on" : ""}`} aria-pressed={estado === "travada"}
                 aria-label={estado === "travada" ? "Destravar" : "Travar nesta posição"} onClick={() => intervir(estado === "travada" ? "destravar" : "travar", k)}><IcoTrava /></button>
-              <button type="button" class="dl-btn dl-btn--icone" aria-label="Vetar: o pet não usa" onClick={() => intervir("vetar", k)}><IcoVeto /></button>
+              {!chip && <button type="button" class="dl-btn dl-btn--icone" aria-label="Vetar: o pet não usa" onClick={() => intervir("vetar", k)}><IcoVeto /></button>}
             </>}
         </span>
       </li>
     );
   };
-  const cap = CV21.maxRegras[gp.forma!.est];
+  const cap = CV21.maxRegras[baseDe(gp.forma!.est)];
   return (
     <div class="bloco">
-      <p>Lista aprendida pelo pet em {gp.nLutas} luta{gp.nLutas === 1 ? "" : "s"}. Começou com as regras de <b>{gp.linha}</b>; cabem {cap} regras agora{gp.forma!.est === "adulto" ? "" : ", e a lista cresce quando ele evoluir"}. Vale a primeira regra cujas condições batem.</p>
+      <p>Lista aprendida pelo pet em {gp.nLutas} luta{gp.nLutas === 1 ? "" : "s"}. Começou com as regras de <b>{gp.linha}</b>; cabem {cap} regras agora{gp.forma!.est === "adulto" || gp.forma!.est === "mega" ? "" : ", e a lista cresce quando ele evoluir"}. Vale a primeira regra cujas condições batem.</p>
       <details class="dl-apoio"><summary>Como ele escolhe</summary><p>A primeira regra cujas condições valem e cuja ação é possível dispara. Em {Math.round(CV.eps * 100)}% das decisões ele tenta algo ao acaso, para descobrir regras novas.</p></details>
       <p class="g-cont"><b>{gp.ativas.length} de {cap}</b> espaços de regra ocupados</p>
       <ol class="g-lista">
@@ -65,7 +65,7 @@ export function EditorRegras() {
 export function RegrasCompactas() {
   const { motor: m } = useJogo(), gp = m.gp, [sel, setSel] = useState<string | null>(null), [msg, setMsg] = useState("");
   if (!gp) return <p class="dl-apoio">O In-Training ainda luta ao acaso; as regras de combate começam no Rookie.</p>;
-  const cap = CV21.maxRegras[gp.forma!.est];
+  const cap = CV21.maxRegras[baseDe(gp.forma!.est)];
   const intervir = (op: OpGambit, k: string) => {
     try { mudarMotor(mm => mm.intervirGambit(op, k)); setMsg(""); setSel(null); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
@@ -74,16 +74,16 @@ export function RegrasCompactas() {
       <h2 class="rc-tit"><span>Regras de combate</span><small>{gp.ativas.length} de {cap}</small></h2>
       <ol class="rc-lista">
         {gp.ativas.map((k, i) => {
-          const trav = k in gp.travas, aberto = sel === k;
+          const trav = k in gp.travas, aberto = sel === k, chip = gp.chipsRegra.includes(k);
           return (
             <li key={k} class={`rc-card dl-malha${aberto ? " rc-card--sel" : ""}`}>
               <button type="button" class="rc-toque" aria-expanded={aberto} onClick={() => setSel(aberto ? null : k)}>
-                <span class="rc-topo"><span class="rc-num">{i + 1}{trav ? " · TRAVADA" : ""}</span><span class="rc-sub">{trav ? "travada por você" : "aprendida"}</span></span>
+                <span class="rc-topo"><span class="rc-num">{i + 1}{trav ? " · TRAVADA" : ""}</span><span class="rc-sub">{trav ? "travada por você" : chip ? "de um chip" : "aprendida"}</span></span>
                 <span class="rc-txt">{rotuloRegra(regraDe(k)).replace(/^se/, "Se")}</span>
               </button>
               {aberto && <span class="luta-regra-bts">
                 <button type="button" class="regra-travar" onClick={() => intervir(trav ? "destravar" : "travar", k)}><IcoTrava />{trav ? "Destravar" : "Travar"}</button>
-                <button type="button" class="regra-vetar" onClick={() => intervir("vetar", k)}>Vetar</button></span>}
+                {!chip && <button type="button" class="regra-vetar" onClick={() => intervir("vetar", k)}>Vetar</button>}</span>}
             </li>
           );
         })}

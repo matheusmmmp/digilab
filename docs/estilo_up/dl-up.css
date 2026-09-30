@@ -1,0 +1,193 @@
+/* =====================================================================
+   dl-up.css — folha de estilo canônica da direção Digimon UP
+   Valores copiados das pranchas do canvas (Assets/Pranchas_UP/*.html).
+   Regra: se a prancha e este arquivo divergirem, vale a prancha; se o
+   guia (docs/UI_GUIDELINES.md) e a prancha divergirem, vale o guia.
+   As imagens de terceiros NÃO estão aqui: o app define as variáveis
+   --dl-img-* com o caminho do atlas/decoração (fora do repositório).
+   ===================================================================== */
+
+/* ---------- 1. Fontes ----------
+   Carregar exatamente estes pesos (os que faltam fazem o navegador
+   "engordar" a fonte e o visual muda):
+   https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Rubik:ital,wght@1,800;1,900&family=DotGothic16&display=swap
+   Offline (PWA): @fontsource/m-plus-rounded-1c (500,700,800,900),
+   @fontsource/rubik (800-italic, 900-italic), @fontsource/dotgothic16. */
+
+/* ---------- 2. Tokens ---------- */
+:root{
+  --dl-bg:#E8F0FB; --dl-surface:#FFFFFF; --dl-surface-2:#F4F8FE; --dl-hex:#D4E3F7;
+  --dl-border:#9FC2EF; --dl-border-shadow:#7FA6DC;
+  --dl-navy:#173A8A; --dl-navy-deep:#0F2A66; --dl-plate:#1F4AA8; --dl-plate-hi:#4A7EE6;
+  --dl-action:#2C73E0; --dl-action-press:#1B54B4; --dl-action-lite:#4F93F2;
+  --dl-text:#13244D; --dl-text-2:#3A5288; --dl-muted:#8A98B8;
+  --dl-need:#E5489F; --dl-need-hi:#F37CC0;
+  --dl-learned:#6FE3FF; --dl-learned-bg:#0F3A86; --dl-learned-ink:#E6FBFF; --dl-learned-sub:#BDEFFF;
+  --dl-highlight:#FFD23F; --dl-highlight-ink:#3B2A00; --dl-highlight-press:#E0A800;
+  --dl-ok:#3FCF6A; --dl-ok-ink:#0B3A18; --dl-ok-edge:#1F7A3A;
+  --dl-force:#FFCC33; --dl-force-ink:#1A1A1A;
+  --dl-dark:#7B3FB8; --dl-dark-bg:#2A1440; --dl-dark-ink:#E8DCF5;
+  --dl-rival:#7A1F3A; --dl-rival-bg:#FBE8EE; --dl-dano:#B0213F;
+  --dl-disabled:#C7D3E6; --dl-disabled-ink:#56657F; --dl-sec-shadow:#C7D8F5;
+  --dl-none-bg:#F1F5FB; --dl-none-edge:#8A9AC0; --dl-none-ink:#6A7896;
+
+  --dl-f-texto:"M PLUS Rounded 1c", system-ui, sans-serif;
+  --dl-f-num:"Rubik", system-ui, sans-serif;
+  --dl-f-lcd:"DotGothic16", ui-monospace, monospace;
+
+  /* imagens (o app preenche com o caminho real; aqui só o nome do arquivo de origem) */
+  --dl-img-hex: none;        /* Sprite/Common_Create_Bg_Pattern.png  (linhas brancas em fundo transparente) */
+  --dl-img-anel: none;       /* Sprite/Common_Create_Cha_Bg_01.png   (anel de plataforma) */
+  --dl-img-arena: none;      /* Texture2D/PVP_Bg_Octagon.png (reduzido) */
+  --dl-img-globo: none;      /* Sprite/TopDeco_Earth2_0.png */
+}
+:root[data-tema="escuro"]{
+  --dl-bg:#0B1636; --dl-surface:#152A5C; --dl-surface-2:#1B3470; --dl-hex:#1B3163;
+  --dl-border:#2C5BBD; --dl-border-shadow:#0F2A66; --dl-navy-deep:#0A1D4A;
+  --dl-action:#4F93F2; --dl-action-press:#2C73E0; --dl-text:#E6EEFF; --dl-text-2:#B4C6EC;
+  --dl-need:#FF7FC0; --dl-ok:#4BE07E; --dl-dark:#A56BE0; --dl-disabled:#2A3A60; --dl-disabled-ink:#8795B3;
+}
+
+/* ---------- 3. Base e escala ---------- */
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--dl-f-texto);font-weight:700;color:var(--dl-text);background:var(--dl-bg)}
+.dl-pix{image-rendering:pixelated}                 /* sprites e emotes, SEMPRE */
+.dl-ilustra{image-rendering:auto}                  /* fundos ilustrados (arena, campanha) */
+.dl-mono{font-family:var(--dl-f-lcd);font-weight:400}
+
+/* ---------- 4. Tela (a prancha inteira) ----------
+   A tela ocupa a largura toda (sem card por fora, sem padding de página).
+   Ordem fixa: faixa-topo (10px) ou cabeçalho → conteúdo (margem 14px) → nav fixa. */
+.dl-tela{min-height:100dvh;display:flex;flex-direction:column;background-color:var(--dl-bg);
+  background-image:var(--dl-img-hex);background-size:180px auto}   /* 180px: tamanho do hexágono das pranchas */
+.dl-conteudo{display:flex;flex-direction:column;gap:12px;padding:12px 14px calc(96px + env(safe-area-inset-bottom))}
+
+/* faixa quadriculada (topo do Pet e fundo dos cabeçalhos) */
+.dl-quadriculado{background-color:#2C73E0;background-image:conic-gradient(#4F93F2 25%,transparent 0 50%,#4F93F2 0 75%,transparent 0);background-size:16px 16px}
+.dl-faixa-topo{height:10px;border-bottom:3px solid var(--dl-navy)}           /* só na tela Pet */
+.dl-cab{position:relative;display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:3px solid var(--dl-navy);overflow:hidden}
+.dl-cab h1{margin:0;font-size:26px;line-height:1.1}                           /* + classe .dl-num */
+.dl-cab::after{content:"";position:absolute;right:-30px;top:-50px;width:150px;height:150px;background:var(--dl-img-globo) center/contain no-repeat;opacity:.22;pointer-events:none}
+
+/* ---------- 5. Texto com contorno (números, títulos de tela) ---------- */
+.dl-num{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:#FFF;
+  text-shadow:2px 0 0 var(--dl-navy),-2px 0 0 var(--dl-navy),0 2px 0 var(--dl-navy),0 -2px 0 var(--dl-navy),
+  2px 2px 0 var(--dl-navy),-2px -2px 0 var(--dl-navy),2px -2px 0 var(--dl-navy),-2px 2px 0 var(--dl-navy),0 4px 0 var(--dl-navy-deep)}
+.dl-num--grande{text-shadow:3px 0 0 var(--dl-navy),-3px 0 0 var(--dl-navy),0 3px 0 var(--dl-navy),0 -3px 0 var(--dl-navy),
+  3px 3px 0 var(--dl-navy),-3px -3px 0 var(--dl-navy),3px -3px 0 var(--dl-navy),-3px 3px 0 var(--dl-navy),0 6px 0 var(--dl-navy-deep)}
+.dl-num--amarelo{color:var(--dl-highlight);text-shadow:3px 0 0 #7A1F00,-3px 0 0 #7A1F00,0 3px 0 #7A1F00,0 -3px 0 #7A1F00,3px 3px 0 #7A1F00,-3px -3px 0 #7A1F00,3px -3px 0 #7A1F00,-3px 3px 0 #7A1F00,0 6px 0 #3A0E00}
+.dl-num--dano{text-shadow:2px 0 0 var(--dl-dano),-2px 0 0 var(--dl-dano),0 2px 0 var(--dl-dano),0 -2px 0 var(--dl-dano),2px 2px 0 var(--dl-dano),-2px -2px 0 var(--dl-dano),2px -2px 0 var(--dl-dano),-2px 2px 0 var(--dl-dano),0 4px 0 #6A0F22}
+/* escala tipográfica (px, iguais às pranchas) */
+.dl-t-tela{font-size:26px}  .dl-t-revelacao{font-size:44px}
+.dl-t-card{font-size:15px;font-weight:900}  .dl-t-corpo{font-size:14px;font-weight:700}
+.dl-t-apoio{font-size:12px;font-weight:700;color:var(--dl-text-2)}  .dl-t-legenda{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+
+/* ---------- 6. Card ---------- */
+.dl-card{background:var(--dl-surface);border-radius:12px;padding:10px 12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.dl-card--16{border-radius:16px}
+.dl-card--forte{box-shadow:0 0 0 3px var(--dl-navy),0 5px 0 3px var(--dl-navy-deep)}   /* revelação, confirmação */
+.dl-card--simples{box-shadow:0 0 0 2px var(--dl-border)}                                   /* listas, sem sombra */
+/* card de palco: moldura branca de 4px + fundo hexagonal claro */
+.dl-palco{background:var(--dl-surface);border-radius:16px;padding:4px;box-shadow:0 0 0 2px var(--dl-border),0 4px 0 2px var(--dl-border-shadow)}
+.dl-palco__cena{position:relative;height:318px;border-radius:12px;overflow:hidden;background-color:var(--dl-surface-2);background-image:var(--dl-img-hex);background-size:140px auto}
+.dl-palco__titulo{position:absolute;inset:0 0 auto;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.7);border-bottom:2px solid var(--dl-hex);font-weight:900;font-size:15px;color:var(--dl-plate)}
+.dl-palco__anel{position:absolute;width:212px;height:60px;left:50%;transform:translateX(-50%);background:var(--dl-img-anel) center/100% 100% no-repeat}
+
+/* ---------- 7. Plaquinhas e etiquetas ---------- */
+.dl-placa{display:inline-block;background:var(--dl-plate);color:#FFF;border:2px solid var(--dl-navy-deep);box-shadow:inset 0 3px 0 var(--dl-plate-hi);border-radius:6px;font-weight:900;font-size:16px;padding:3px 26px}
+.dl-placa--inclinada{border:0;border-radius:0;font-family:var(--dl-f-num);font-style:italic;font-weight:800;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);padding:2px 12px;font-size:12px}
+.dl-tag{display:inline-block;border-radius:4px;font-size:10px;font-weight:900;padding:1px 6px;text-transform:uppercase;line-height:1.5}
+.dl-tag--estagio{background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+.dl-tag--ativo{background:var(--dl-ok);color:var(--dl-ok-ink);border:2px solid var(--dl-ok-edge)}
+.dl-tag--espera{background:var(--dl-action);color:#FFF}
+.dl-tag--sombria{background:var(--dl-dark);color:#FFF}
+.dl-tag--teste{background:var(--dl-highlight);color:var(--dl-highlight-ink)}
+
+/* ---------- 8. Botões (48px de altura; 44px no mínimo) ---------- */
+.dl-btn{font:inherit;font-weight:900;font-size:15px;min-height:48px;padding:0 16px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--dl-action);color:#FFF;border:3px solid #FFF;box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 var(--dl-action-press);transition:transform 80ms}
+.dl-btn:active{background:var(--dl-action-press);box-shadow:0 0 0 2px var(--dl-navy),inset 0 3px 0 #123F8C;transform:translateY(2px)}
+.dl-btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--dl-navy),0 0 0 5px var(--dl-highlight),inset 0 -4px 0 var(--dl-action-press)}
+.dl-btn:disabled{background:var(--dl-disabled);color:var(--dl-disabled-ink);box-shadow:0 0 0 2px #9AA9C2;transform:none;cursor:not-allowed}
+.dl-btn--sec{background:#FFF;color:var(--dl-navy);border-color:var(--dl-navy);box-shadow:inset 0 -4px 0 var(--dl-sec-shadow)}
+.dl-btn--sec:active{background:var(--dl-bg);box-shadow:inset 0 3px 0 var(--dl-sec-shadow)}
+.dl-btn--destaque{background:var(--dl-highlight);color:var(--dl-highlight-ink);box-shadow:0 0 0 2px var(--dl-navy),inset 0 -4px 0 var(--dl-highlight-press)}
+.dl-btn--perigo{background:#FFF;color:#B0216F;border:2px dashed var(--dl-need);box-shadow:none}
+.dl-btn--icone{width:44px;height:44px;min-height:44px;padding:0;border-radius:12px;background:#FFF;border:3px solid var(--dl-navy);box-shadow:none}
+.dl-btn--largo{width:100%;min-height:52px}
+/* forçar: moldura listrada é o próprio botão */
+.dl-forcar{display:inline-flex;padding:3px;border-radius:12px;background-image:repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px)}
+.dl-forcar>button{flex:1;min-height:42px;border:0;border-radius:9px;background:var(--dl-force-ink);color:var(--dl-force);font:inherit;font-weight:900;font-size:13px}
+
+/* ---------- 9. Seletores ---------- */
+.dl-abas{display:flex;gap:6px;padding:10px 12px 0}                 /* sub-abas do destino */
+.dl-aba{flex:1;min-height:40px;border-radius:10px;border:2px solid var(--dl-navy);background:#FFF;color:var(--dl-navy);font:inherit;font-weight:900;font-size:14px}
+.dl-aba[aria-pressed="true"],.dl-aba[aria-selected="true"]{background:var(--dl-navy);color:#FFF}
+.dl-chip{flex-shrink:0;min-height:36px;padding:0 12px;border-radius:18px;border:2px solid var(--dl-navy);background:#FFF;color:var(--dl-navy);font:inherit;font-weight:900;font-size:12px}
+.dl-chip[aria-pressed="true"]{background:var(--dl-navy);color:#FFF}
+
+/* ---------- 10. Barras ---------- */
+.dl-seg{display:flex;gap:2px}                                       /* barra segmentada: N spans */
+.dl-seg>span{flex:1;height:8px;border-radius:2px;background:var(--dl-hex)}
+.dl-seg>span.on{background:var(--dl-action)}  .dl-seg--need>span.on{background:var(--dl-need)}  .dl-seg--ok>span.on{background:var(--dl-ok)}
+.dl-rel{position:relative;height:10px;border-radius:5px;background:var(--dl-hex)}   /* barra relativa ao pet comum */
+.dl-rel>i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--dl-action)}
+.dl-rel::after{content:"";position:absolute;left:50%;top:-3px;width:3px;height:16px;background:var(--dl-navy)}
+.dl-vida{height:9px;border-radius:5px;background:var(--dl-hex);display:flex}
+.dl-vida>i{border-radius:5px;background:var(--dl-ok)}
+
+/* ---------- 11. Semântica: necessidade × aprendido ---------- */
+.dl-need{background:#FFF;border-radius:12px;padding:6px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.dl-need__cab{background:var(--dl-need);color:#FFF;border-radius:6px;box-shadow:inset 0 3px 0 var(--dl-need-hi);font-size:11px;font-weight:900;text-align:center;padding:2px 0}
+.dl-malha{background-color:var(--dl-learned-bg);background-image:linear-gradient(rgba(111,227,255,.40) 1px,transparent 1px),linear-gradient(90deg,rgba(111,227,255,.40) 1px,transparent 1px);background-size:10px 10px;color:var(--dl-learned-ink)}
+.dl-aprendido{border-radius:12px;border:2px dashed var(--dl-learned);box-shadow:0 0 0 2px var(--dl-navy-deep),0 0 14px rgba(111,227,255,.6);padding:6px}   /* + .dl-malha */
+.dl-aprendido__cab{background:var(--dl-learned);color:#0B2A5E;border-radius:6px;font-size:11px;font-weight:900;text-align:center;padding:2px 0}
+.dl-causa{display:inline-flex;align-items:center;gap:4px;background:var(--dl-learned-bg);color:var(--dl-learned-ink);border:2px solid var(--dl-learned);border-radius:8px;padding:1px 8px 1px 3px;font-size:11px;font-weight:900}
+.dl-sem-registro{display:inline-flex;background:#FFF;color:var(--dl-none-ink);border:2px dashed var(--dl-none-edge);border-radius:8px;padding:1px 8px;font-size:11px;font-weight:900}
+
+/* ---------- 12. Balões de fala ---------- */
+.dl-balao{background:#FFF;border:3px solid var(--dl-navy);border-radius:14px 14px 14px 4px;box-shadow:0 3px 0 var(--dl-navy-deep);padding:8px 12px;font-weight:800;font-size:14px;line-height:19px}
+.dl-balao--eu{background:var(--dl-action);color:#FFF;border:0;border-radius:14px 14px 4px 14px;box-shadow:0 3px 0 var(--dl-action-press);font-weight:700}
+.dl-balao--sembase{background:var(--dl-none-bg);border-style:dashed;border-color:var(--dl-none-edge);box-shadow:none;color:var(--dl-none-ink);text-decoration:line-through}
+.dl-balao--sombria{background:var(--dl-dark-bg);color:var(--dl-dark-ink);border-color:var(--dl-dark);box-shadow:none;font-weight:700}
+.dl-balao-palco{position:absolute;display:flex;align-items:center;gap:4px;background:#FFF;border:3px solid var(--dl-navy);border-radius:12px;padding:4px 8px;box-shadow:0 3px 0 var(--dl-navy-deep)}   /* balão de causa sobre o pet */
+
+/* ---------- 13. Blocos da tela Pet ---------- */
+.dl-chamado{display:flex;align-items:center;gap:10px;background:#FFF;border-radius:12px;padding:8px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.dl-chamado__icone{width:48px;height:48px;flex-shrink:0;border-radius:10px;background:var(--dl-plate);border:2px solid var(--dl-navy-deep);box-shadow:inset 0 3px 0 var(--dl-plate-hi);display:flex;align-items:center;justify-content:center}
+.dl-necessidades{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.dl-necessidade{background:#FFF;border:2px solid var(--dl-border);border-radius:10px;padding:6px 6px 7px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.dl-retrato{width:52px;height:52px;border-radius:50%;background:#FFF;border:3px solid var(--dl-action);box-shadow:0 0 0 2px #FFF,0 3px 0 2px var(--dl-navy);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+
+/* ---------- 14. Navegação ---------- */
+.dl-nav{position:fixed;inset:auto 0 0;background:var(--dl-navy);border-top:3px solid #FFF;box-shadow:0 -2px 0 var(--dl-border);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:8px 8px calc(12px + env(safe-area-inset-bottom))}
+.dl-nav a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#C7D8F5;font-size:12px;font-weight:800}
+.dl-nav .circ{width:44px;height:44px;border-radius:50%;background:var(--dl-plate);border:3px solid var(--dl-plate-hi);display:flex;align-items:center;justify-content:center}
+.dl-nav a[aria-current="page"]{color:#FFF;font-weight:900}
+.dl-nav a[aria-current="page"] .circ{background:var(--dl-action);border-color:var(--dl-learned);box-shadow:0 0 10px var(--dl-learned)}
+@media (min-width:900px){ .dl-nav{inset:0 auto 0 0;width:92px;grid-template-columns:none;grid-auto-rows:min-content;gap:14px;padding:20px 0;border-top:0;border-right:3px solid #FFF} }
+
+/* ---------- 15. Luta ---------- */
+.dl-arena{position:relative;background-color:#0B1A44;background-image:var(--dl-img-arena);background-size:390px auto;background-position:center 38%;border-bottom:4px solid #FFF;box-shadow:0 2px 0 var(--dl-border)}
+.dl-hud{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}
+.dl-hud__lado{display:flex;align-items:center;gap:6px;background:#FFF;border-radius:10px;box-shadow:0 0 0 2px var(--dl-navy);padding:4px}
+.dl-hud__lado--rival{box-shadow:0 0 0 2px var(--dl-rival)}
+.dl-hud__nome{font-size:11px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl-turno{width:50px;height:50px;background:var(--dl-navy);border:3px solid #FFF;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dl-turno small{font-size:8px;font-weight:900;color:#9FC2EF}
+.dl-distancia{display:inline-flex;align-items:center;gap:6px;background:rgba(15,42,102,.85);color:#FFF;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:800}
+.dl-intencao{position:absolute;display:flex;align-items:center;gap:4px;background:#FFF;border:3px solid var(--dl-rival);border-radius:12px;padding:3px 10px 3px 4px;box-shadow:0 3px 0 #4A0F22;font-weight:900;font-size:14px;color:var(--dl-rival)}
+.dl-sombra{position:absolute;height:16px;border-radius:50%;background:rgba(0,0,0,.45)}
+.dl-registro{list-style:none;margin:0;padding:8px 12px;background:#FFF;border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;color:var(--dl-text-2)}
+.dl-registro b{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:var(--dl-plate)}
+
+/* ---------- 16. Fundos especiais ---------- */
+.dl-listras{background-color:#2A6FD8;background-image:repeating-linear-gradient(135deg,#2A6FD8 0 26px,#3A82EA 26px 52px)}   /* revelação, boas-vindas */
+.dl-vidro{background-color:rgba(160,200,245,.55);background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:6px 6px}   /* pet em espera */
+.dl-perigo{background-image:repeating-linear-gradient(45deg,var(--dl-force) 0 7px,var(--dl-force-ink) 7px 14px)}
+.dl-silhueta{filter:brightness(0) opacity(.45)}
+.dl-sombrio{filter:saturate(.55) brightness(.75) drop-shadow(2px 0 0 #7B3FB8) drop-shadow(-2px 0 0 #7B3FB8) drop-shadow(0 2px 0 #7B3FB8) drop-shadow(0 -2px 0 #7B3FB8)}
+.dl-brilho-pet{filter:drop-shadow(0 0 2px #FFF) drop-shadow(0 0 10px #9FE8FF)}
+.dl-gira{animation:dl-gira 18s linear infinite}
+@keyframes dl-gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .dl-gira{animation:none} .dl-btn{transition:none} }

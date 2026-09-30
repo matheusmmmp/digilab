@@ -97,7 +97,7 @@ def carregar(caminho: Path) -> dict:
 def regras_de(cfg_json: dict) -> Regras:
     """V2.1 original, ou V21C: "regras_base" = campos de ConfigCombateV2C (C1-C4) e "regras_v21" = campos de
     ConfigCombateV21C (marca_fragil, hp_base, hp_por_vigor...). TAREFA_CORRECAO_COMBATE, Etapa 3."""
-    from digilab.config import ConfigCombateV2C, ConfigCombateV21C
+    from digilab.config import ConfigCombateV2C, ConfigCombateV21C, ConfigCombateV21D
     base, v21 = CONFIG_COMBATE_V2, CONFIG_COMBATE_V21
     if "regras_base" in cfg_json:
         extras = set(cfg_json["regras_base"]) - set(ConfigCombateV2C.__dataclass_fields__)
@@ -105,10 +105,13 @@ def regras_de(cfg_json: dict) -> Regras:
             raise KeyError(f"regras_base desconhecidas: {sorted(extras)}")
         base = ConfigCombateV2C(**{**asdict(CONFIG_COMBATE_V2), **cfg_json["regras_base"]})
     if "regras_v21" in cfg_json:
-        extras = set(cfg_json["regras_v21"]) - set(ConfigCombateV21C.__dataclass_fields__)
+        extras = set(cfg_json["regras_v21"]) - set(ConfigCombateV21D.__dataclass_fields__)
         if extras:
             raise KeyError(f"regras_v21 desconhecidas: {sorted(extras)}")
-        v21 = ConfigCombateV21C(**{**asdict(CONFIG_COMBATE_V21), **cfg_json["regras_v21"]})
+        # V21D (reequilibrio, docs/EQUILIBRIO_RODADA1.md) so quando o config pede uma chave dela: as configs V21C
+        # continuam montando a ConfigCombateV21C, com o mesmo asdict e o mesmo config_sha256
+        classe = ConfigCombateV21D if set(cfg_json["regras_v21"]) - set(ConfigCombateV21C.__dataclass_fields__)             else ConfigCombateV21C
+        v21 = classe(**{**asdict(CONFIG_COMBATE_V21), **cfg_json["regras_v21"]})
     return Regras(base=base, v21=v21)
 
 
@@ -349,7 +352,7 @@ def executar(caminho_cfg: Path) -> int:
                 eu = lutador_adulto(u, esp, cfg21)
                 for op in FORMAS:
                     base = lutador_adulto(op, esp, cfg21, nome=f"{op}@{esp}#op")
-                    resp = lutador_adulto(op, esp, cfg21, gambits=com_resposta(ADULTOS[op], tec, RESPOSTAS_V21C if cfg.get("respostas_v21c") else None), nome=f"{op}@{esp}#resp")
+                    resp = lutador_adulto(op, esp, cfg21, gambits=com_resposta(_bots.gambits_adulto(op, cfg21), tec, RESPOSTAS_V21C if cfg.get("respostas_v21c") else None), nome=f"{op}@{esp}#resp")
                     pts_orig += [x for _, _, x, _ in partidas_par(eu, base, f"e3|{tec}", sementes,
                                                                   cb.partidas_e3_por_semente, r)]
                     pts_resp += [x for _, _, x, _ in partidas_par(eu, resp, f"e3|{tec}", sementes,

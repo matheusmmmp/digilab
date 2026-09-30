@@ -5,13 +5,14 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { CAT, LUGARES, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
+import { CAT, MEDALHAS, NOME_V2, NPC, cartaDe, chaveRegra, fatorExibicao, itemDe, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
-import { mudarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
 import { tentativas, type LutadorTela, type Palco } from "../../luta.ts";
-import { ILHA } from "./TelaCampanha.tsx";
+import { mapaDe } from "./TelaCampanha.tsx";
+import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { pedirDica } from "../../dicas.ts";
 
 const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
@@ -20,7 +21,7 @@ const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
 export function fraseTurno(tr: Turno, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null): string {
   const lados = ([0, 1] as const).map(i => {
     /* dano causado por este lado = recebido pelo outro, na escala de quem recebe */
-    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i] * fatorExibicao((i ? A : B).cond);
+    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i] * fatorExibicao((i ? A : B).cond, jogoAtual().motor.versao);
     let s = `${L.nomeTela}: ${NOME_V2[acao] ?? acao}`;
     if (dano > 0) s += ` −${inteiro(dano)}`;
     if (tr.errou[i]) s += " (o pesado errou)";
@@ -33,7 +34,8 @@ export function fraseTurno(tr: Turno, A: LutadorTela, B: LutadorTela, travadas: 
   return lados.join("; ") + ".";
 }
 /** os momentos que decidiram: ate dois turnos marcantes antes do ultimo, o ultimo e como acabou */
-export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null): { t: string; txt: string; tom: "" | "bom" | "ruim" }[] {
+/** `desafiado`: o limite de turnos e do rival (lutas do motor dos pets v6: o pet sempre desafia); sem ele, da fracao de vida */
+export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null, desafiado = false): { t: string; txt: string; tom: "" | "bom" | "ruim" }[] {
   const n = res.turnos.length; if (!n) return [];
   const marcante = (tr: Turno) => tr.dano[0] > 0 || tr.dano[1] > 0 || tr.errou[0] || tr.errou[1] || tr.interr[0] || tr.interr[1]
     || [tr.a, tr.b].some(x => x === "preparar_pesado" || x === "fintar");
@@ -53,7 +55,8 @@ export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: Lutador
     const caiu = [hpA <= 0 && A.nomeTela, hpB <= 0 && B.nomeTela].filter(Boolean).join(" e ");
     return [...linhas, { t: `T${ult.t}`, txt: `${caiu} caiu.`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
   }
-  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
+  if (desafiado) return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos sem nocaute: a luta fica com quem foi desafiado (${B.nomeTela}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
+  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond, jogoAtual().motor.versao))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond, jogoAtual().motor.versao))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
 }
 
 function Numeros({ itens }: { itens: [string, string][] }) {
@@ -65,7 +68,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   useEffect(() => { abrirModal(ref.current); }, []);
   const { motor: m } = useJogo(), a = useAtlas(), r = p.resultado!, res = r.res;
   const venceu = res.pontosA === 1, perdeu = res.pontosA === 0, empate = !venceu && !perdeu;
-  const npc = r.npc ? NPC[r.npc]! : null, Li = npc ? npc.lug : -1;
+  const npc = r.npc ? NPC[r.npc]! : null, Li = npc ? m.lugarDe(r.npc!) : -1, LUGARES = m.lugares;
   const lugarNovo = !!npc && venceu && !r.lugarJaVencido;
   /* regra nova: a que ficou ativa com a luta (antes de o dono mexer); fixada na abertura do modal */
   const [nova] = useState(() => {
@@ -79,17 +82,21 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
     catch (err) { setMsgRegra(err instanceof Error ? err.message : String(err)); }
   };
   const gp = m.gp, estadoNova = nova && gp ? (gp.vetos.includes(nova.k) ? "vetada" : nova.k in gp.travas ? "travada" : gp.ativas.includes(nova.k) ? "livre" : "fora") : null;
-  const momentos = momentosDecisivos(res, p.A, p.B, gp ? gp.travas : null);
+  const momentos = momentosDecisivos(res, p.A, p.B, gp ? gp.travas : null, !r.cenario && m.desafiado === 1);
   /* tutorial (Bit): a primeira derrota na campanha e a primeira regra nova */
   useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova) pedirDica("regra_nova"); }, []);
 
   const tag = npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
   const titulo = lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const n = res.turnos.length;
-  const sub = venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${n} turnos` : perdeu ? `${p.B.nomeTela} venceu no turno ${n}` : `Empate no limite · ${n} turnos`;
+  /* lutas seguidas (Cidadela): o resultado e o da serie; "n turnos" e o da ultima luta */
+  const serie = r.nLutas > 1 ? r.serie : null;
+  const sub = serie
+    ? (venceu ? `${p.A.nomeTela} venceu as ${r.nLutas} lutas seguidas` : `A série parou na luta ${serie.length} de ${r.nLutas}`)
+    : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${n} turnos` : perdeu ? `${p.B.nomeTela} venceu no turno ${n}` : `Empate no limite · ${n} turnos`;
   /* dano na escala de quem recebeu (com a escala de stats, a campanha mostra os números grandes) */
-  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond),
-    danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond);
+  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond, m.versao),
+    danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond, m.versao);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
   const nums: [string, string][] = npc
     ? [[String(n), "turnos"], [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]
@@ -112,7 +119,10 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
 
   const progresso = r.sparringContou ? Math.min(r.sparringAntes + 1, CAT.sparring) : null;
   const proximo = lugarNovo && Li < LUGARES.length - 1 ? Li + 1 : null;
-  const ilha = proximo !== null && a.tipo === "ok" ? imagemAtlas(a, ILHA[proximo].peca).url : null;
+  /* as ilhas do mapa da versao do pet (os v5 tem a Montanha Espiral; os v6, as seis arenas) */
+  const ilhas = mapaDe(m).ilhas;
+  const ilha = proximo !== null && a.tipo === "ok" ? imagemAtlas(a, ilhas[proximo].peca).url : null;
+  const md = r.medalha, mdNum = md ? MEDALHAS.findIndex(x => x.id === md.id) + 1 : 0, mdInfo = md ? MEDALHAS[mdNum - 1] : null;
 
   return (
     <dialog class={`modal-res res dl ${venceu ? "res--vit" : empate ? "res--emp" : "res--der"}`} ref={ref} aria-labelledby="res-tit"
@@ -138,6 +148,28 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
               </div>
             : <div class="res-ilha"><span class="res-ilha-txt"><span class="res-selo">concluída</span><b>Campanha concluída</b>
                 <span>{p.A.nomeTela} venceu {LUGARES[Li].nome}, o último lugar do mapa.</span></span></div>)}
+          {md && mdInfo && <div class="res-medalha" role="status">
+            <SeloMedalha n={mdNum} ganha tam={40} />
+            <span class="res-ilha-txt"><span class="res-selo">medalha nova</span><b>{mdInfo.nome}</b>
+              <span>O Tamer tem {md.n} de {MEDALHAS.length}. Ela é sua: vale para todos os seus pets.</span></span>
+          </div>}
+          {r.itens.map(x => { const it = itemDe(x.id); return (
+            <div class="res-item" role="status" key={x.n}>
+              <span class="res-ilha-txt"><span class="res-selo">{x.origem === "medalha" ? "item novo" : "carta da revanche"}</span><b>{it.nome}</b>
+                <span>{it.efeito} {it.tipo === "carta" ? "Escolha antes de uma luta." : "Equipe em Crescer · Itens."}</span></span>
+            </div>); })}
+          {r.carta && <p class="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.turnos.some(tr => tr.cura?.[0]) ? " Ela curou o pet nesta luta." : ""}</p>}
+          {serie && <section class="res-serie" aria-labelledby="res-serie-tit">
+            <h3 id="res-serie-tit">Resistência · {r.nLutas} lutas seguidas, sem cura</h3>
+            <ol>{Array.from({ length: r.nLutas }, (_, i) => {
+              const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
+              return <li key={i} class={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
+                <span class="res-t">Luta {i + 1}</span>
+                <span>{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
+              </li>;
+            })}</ol>
+          </section>}
+          {r.arena?.regra === "vinculo" && <p class="res-arena-nota" role="note">Arena do Lago: {p.A.nomeTela} lutou sem as suas travas e vetos, com as regras que ele mesmo escolheu.</p>}
           <div class="res-nums-corpo"><Numeros itens={nums} /></div>
           {momentos.length > 0 && <section class="res-decidiu" aria-labelledby="res-dec-tit">
             <h3 id="res-dec-tit">O que decidiu a luta</h3>

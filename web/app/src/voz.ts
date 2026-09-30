@@ -1,4 +1,4 @@
-/* Voz propria dos pets v5 (DESIGN_VOZ_PROPRIA, secoes 3, 9 e 10). So APRESENTACAO, fora uma coisa: a fala espontanea
+/* Voz propria dos pets v7 (DESIGN_VOZ_PROPRIA, secoes 3, 9 e 10). So APRESENTACAO, fora uma coisa: a fala espontanea
    entra no registro do pet pelo evento "f" (motor.falar), porque ela abre a janela de fala e pode ser mentira (decidido
    no motor). O texto vem do servidor (voz: prompt livre-v6, verificador que marca invencoes) ou, sem ele, do molde: o
    texto do assunto (verdade) ou a mentira do motor/mentira.ts.
@@ -48,7 +48,7 @@ function olhar(m: Motor): Visto {
 
 /** o gatilho de agora, ou null. Atualiza o que ja foi visto (chamar a cada mudanca do pet) */
 export function gatilhoDe(m: Motor): string | null {
-  if (m.versao < 5) return null;
+  if (m.versao < 7) return null;
   if (!V || V.semente !== m.semente) { V = olhar(m); return null; }            /* ao carregar: so observa */
   const a = olhar(m), t = m.e.tick;
   let g: string | null = null;
@@ -68,7 +68,7 @@ export function gatilhoDe(m: Motor): string | null {
 
 /** pode falar agora? (ritmo, janela, sono, estagio) */
 export function podeFalar(m: Motor): boolean {
-  return m.versao >= 5 && !m.morte && m.estagioAtual !== "bebe" && !m.janelaAberta() && !m.e.dormindo
+  return m.versao >= 7 && !m.morte && m.estagioAtual !== "bebe" && !m.janelaAberta() && !m.e.dormindo
     && m.e.tick - tickUltimaFala(m) >= RITMO_MIN;
 }
 
@@ -98,6 +98,6 @@ export function assuntoDaFala(m: Motor, j: Janela, dadosRecentes: string[][]): A
 
 /** fatos da historia para a CONVERSA (a selecao inteira, sem mentira) */
 export function historiaDaConversa(m: Motor, citados: string[][]): Record<string, unknown>[] {
-  return m.versao >= 5 ? selecionar(fatosDe(m, true), citados).map(paraFato) : [];
+  return m.versao >= 7 ? selecionar(fatosDe(m, true), citados).map(paraFato) : [];
 }
 export const JANELA_FALA_MIN = CMEN.janela;

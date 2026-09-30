@@ -2,7 +2,7 @@
    nao reabre as dele. O "por que" vem so do que o motor registrou na evolucao. */
 import { useEffect, useRef, useState } from "preact/hooks";
 import {
-  CAT, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
+  CAT, CLE, CMG, CSO, NOME_EST, SOMBRIA, chaveSprite, nomeArquetipo, nomeEstagio, nomeForma, type Evolucao, type Forma, type Motor,
 } from "../../motor/index.ts";
 import { desenharSprite, imagemAtlas, quadroAgora, useAtlas } from "../atlas.ts";
 import { Deco } from "./Deco.tsx";
@@ -13,7 +13,17 @@ import { useJogo } from "../jogo.ts";
 import { BarraCarater, Seg, blocos } from "./Barras.tsx";
 
 const ORDEM_NIVEL = ["bebe", "crianca", "adolescente", "adulto"] as const;
+/* pets v5: o Mega depois do Ultimate (docs/DESIGN_EVOLUCAO_CANONICA.md) */
+const ORDEM_V5 = [...ORDEM_NIVEL, "mega"] as const;
+const nomeNivel = (n: string): string => NOME_EST[n as keyof typeof NOME_EST];
+const nivelDe = (x: Evolucao): string => x.estagio;
 export function Porque({ x }: { x: Evolucao }) {
+  if (x.estagio === "mega") return <>
+    <p style={{ margin: 0 }}>a mesma forma, mais forte: decidido pelo <b>vínculo</b> {x.vinculo!.toFixed(2).replace(".", ",")} (mínimo {String(CMG.vinculo).replace(".", ",")})
+      e por {x.sparring} lutas no Ultimate com {CLE.limiarTaxa * 100}% ou mais de vitórias.</p>
+    <Seg n={blocos(x.vinculo!, 10)} m={10} cls="dl-seg--acao" marca={CMG.vinculo * 10} />
+    <span class="dl-apoio">traço escuro = vínculo mínimo para o Mega</span>
+  </>;
   if (x.estagio === "crianca") return <>
     <p style={{ margin: 0 }}>decidido pelo <b>cuidado</b> no In-Training: {(x.cuidado! * 100).toFixed(0)}% dos chamados atendidos a tempo (limite {CAT.limiarCuidado * 100}%).</p>
     <Seg n={blocos(x.cuidado!, 10)} m={10} cls="dl-seg--acao" marca={CAT.limiarCuidado * 10} />
@@ -60,11 +70,11 @@ function Passo({ f, nivel, atual }: { f: Forma | null; nivel: string; atual: boo
     </li>
   );
 }
-const DECIDIDO: Record<string, string> = { crianca: "decidido pelo cuidado", adolescente: "decidido pelo caráter", adulto: "decidido pelo caráter e treino" };
+const DECIDIDO: Record<string, string> = { crianca: "decidido pelo cuidado", adolescente: "decidido pelo caráter", adulto: "decidido pelo caráter e treino", mega: "decidido pelo vínculo e pelas vitórias" };
 /** revelacao (pranchas UpEvolucao e EvoCrianca; receita das DIRETRIZES_REPLICAR): tela cheia listrada, circulo de luz,
     anel do Digivice girando (parado com movimento reduzido), o pet ate 4x, a linha evolutiva e o porque */
 function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null), f = x.forma, i = ORDEM_NIVEL.indexOf(x.estagio);
+  const ref = useRef<HTMLDialogElement>(null), f = x.forma, ordem: readonly string[] = m.versao >= 5 ? ORDEM_V5 : ORDEM_NIVEL, i = ordem.indexOf(nivelDe(x));
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
   useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, []);
   useEffect(() => rotaDaTelaCheia("#/evolucao"), []);
@@ -73,7 +83,7 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
   return (
     <dialog class="revelacao revel-tela dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
       <div class="revel-topo">
-        <span class="revel-de">{NOME_EST[ORDEM_NIVEL[i - 1]] || ""} → {nomeEstagio(f)}</span>
+        <span class="revel-de">{i > 0 ? nomeNivel(ordem[i - 1]) : ""} → {nomeEstagio(f)}</span>
         <h2 class="dl-num dl-num--grande revel-tit" id="revel-tit" tabIndex={-1}>EVOLUÇÃO!</h2>
       </div>
       <div class="revel-cena">
@@ -82,12 +92,12 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
         <Deco nome="Digivice_Circle_01" largura={280} altura={280} class="revel-digivice dl-gira" />
         <span class="revel-anel" aria-hidden="true" />
         <Palco x={x} />
-        <span class="dl-placa revel-nome">{nomeForma(f)}</span>
+        <span class="dl-placa revel-nome">{nomeForma(f)}{nomeArquetipo(f) ? ` · ${nomeArquetipo(f)}` : ""}</span>
       </div>
       <ol class="revel-linha" aria-label="Linha evolutiva">
-        {ORDEM_NIVEL.map((n, j) => <Passo key={n} f={j <= i ? formas[j] ?? null : null} nivel={NOME_EST[n]} atual={j === i} />)}
+        {ordem.map((n, j) => <Passo key={n} f={j <= i ? formas[j] ?? null : null} nivel={nomeNivel(n)} atual={j === i} />)}
       </ol>
-      <section class="revel-porque"><span class="revel-porque-cab"><b>Por que {nomeForma(f)}?</b><span>{DECIDIDO[x.estagio]}</span></span><Porque x={x} /></section>
+      <section class="revel-porque"><span class="revel-porque-cab"><b>Por que {nomeForma(f)}?</b><span>{DECIDIDO[nivelDe(x)]}</span></span><Porque x={x} /></section>
       <button type="button" class="dl-btn dl-btn--destaque revel-ok" onClick={() => ref.current?.close()}>Continuar</button>
     </dialog>
   );
@@ -98,11 +108,15 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
    (e esta revelacao) e, quando a luta faz o pet evoluir, a revelacao espera o fim da luta e o Resultado */
 const VISTAS: { motor: Motor | null; n: number; pendente: Evolucao | null } = { motor: null, n: 0, pendente: null };
 export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
-  const { motor: m } = useJogo(), luta = useLuta(), [, redesenhar] = useState(0);
+  const jogo = useJogo(), { motor: m } = jogo, luta = useLuta(), [, redesenhar] = useState(0);
   useEffect(() => {
     const n = m.evolucoes.length;
-    /* pet trocado (ovo novo, pet anterior, outra aba): comeca a contar dele */
-    if (VISTAS.motor !== m || n < VISTAS.n) { VISTAS.motor = m; VISTAS.n = n; VISTAS.pendente = null; return; }
+    /* pet trocado (ovo novo, pet anterior, outra aba): comeca a contar dele; se ele evoluiu ao receber as medalhas do Tamer
+       na troca (pet guardado que estava pronto), a revelacao mostra essa evolucao */
+    if (VISTAS.motor !== m || n < VISTAS.n) {
+      VISTAS.motor = m; VISTAS.pendente = null; VISTAS.n = jogo.evolucoesAoTrocar ?? n; jogo.evolucoesAoTrocar = null;
+      if (VISTAS.n >= n) return;
+    }
     if (n > VISTAS.n) { VISTAS.n = n; VISTAS.pendente = m.evolucoes[n - 1]; redesenhar(x => x + 1); }
   });
   if (!VISTAS.pendente || luta.lutando || ehLuta(location.hash)) return null;

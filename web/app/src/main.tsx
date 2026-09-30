@@ -10,7 +10,8 @@ import { textoSave } from "./save.ts";
 import { iniciarEscala } from "./escala.ts";
 import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
-import { semearGuardados } from "./pets.ts";
+import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
+import { descartarPetsAntigos } from "./tamer.ts";
 import { ligarEscala } from "../motor/index.ts";
 import "./estilo/tokens.css";
 import "./estilo/base.css";
@@ -26,6 +27,10 @@ iniciarEscala();
    conferencia de paridade com o HTML antigo (e2e), que nao tem a escala */
 ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
 
+/* descarte unico dos pets antigos (decisoes do Matheus): os v1-v5 na chegada das medalhas do Tamer
+   (docs/DESIGN_MEDALHAS_ARENAS.md) e os v6 de antes do combate V21D (docs/VALIDACAO_V21D.md); o aviso fica pendente para o
+   App; roda uma vez por versao do descarte (tamer.CHAVE_DESCARTE). Antes de abrir o save */
+try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
 carregarAtlas();
 carregarDecoracao();
