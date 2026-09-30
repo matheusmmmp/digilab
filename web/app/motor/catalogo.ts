@@ -60,13 +60,14 @@ export function statsDe(f: Forma, car: Partial<Carater> | null | undefined): Sta
 }
 /** stats -> numeros de combate; estagio multiplica vida e guts; condicao (do cuidado) multiplica vida e
     guts iniciais; treino: arena normaliza ao orcamento mantendo as proporcoes, campanha usa o ganho absoluto; `versao`: a do
-    pet, que escolhe a escala da campanha (>= 6: CESC_V6) */
+    pet, que escolhe a escala da campanha (>= 6: CESC_V6). `comEscala`: a escala vale mesmo com a chave desligada (a Fabrica da Fronteira,
+    fabrica.ts: as lutas dela estao so no registro do Tamer e nao podem depender da chave do app); sem ele, a chave decide, como sempre */
 export function perfilDe(f: Forma, car: Partial<Carater> | null | undefined, condicao = 1, treino: Stats | null = null, absoluto = false,
-  versao = 0): Perfil {
+  versao = 0, comEscala = false): Perfil {
   if (!(condicao >= CCOND.min && condicao <= CCOND.max)) throw new Error("condição fora da faixa: " + condicao);
   let s = statsDe(f, car);
   /* campanha com a escala: o treino vai para a escala E; o perfil fica normalizado ao orcamento (como na arena) */
-  const esc = absoluto && ESCALA.ligada;
+  const esc = absoluto && (ESCALA.ligada || comEscala);
   if (treino) {
     const b = Object.fromEntries(STATS.map(k => [k, s[k] + CTR.pesoPontoCombate * (treino[k] || 0)])) as Stats;
     if (absoluto && !esc) s = b;
