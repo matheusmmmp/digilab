@@ -49,6 +49,7 @@ def _pedido_revisao(problemas: list[str], so_respeito: bool = False) -> str:
 
 
 def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "espontanea", semente: int = 0,
+                      fala_jogador: str | None = None, historico: list[tuple[str, str]] | None = None,
                       versao: str = VERSAO_PROMPT_V4, especie: Especie | None = None, rival: str | None = None,
                       max_revisoes: int = MAX_REVISOES,
                       versao_verificador: str = VERSAO_VERIFICADOR_V4,
@@ -57,11 +58,12 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
     from .corpus import bloco_estilo
     from .fatos import fatos_de_estado
     from .prompt import mensagens
-    r = gerar(cliente, estado, situacao, semente=semente, versao=versao, especie=especie, rival=rival)
+    r = gerar(cliente, estado, situacao, fala_jogador, historico, semente=semente, versao=versao, especie=especie,
+              rival=rival)
     tentativas = []
     if r.erro is not None:
         return r, tentativas
-    msgs = mensagens(fatos_de_estado(estado), situacao, versao=versao,
+    msgs = mensagens(fatos_de_estado(estado), situacao, fala_jogador, historico, versao=versao,
                      estilo=bloco_estilo(especie, rival) if especie is not None else None)
     atual = r
     for n in range(max_revisoes + 1):
@@ -70,7 +72,8 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
         probs = _problemas(v, so_respeito) if v.erro is None else []
         tentativas.append({"fala": atual.fala, "fatos_citados": list(atual.fatos_citados), "problemas": probs,
                            "invencoes": [a["trecho"] for a in v.afirmacoes if a["sustentada"] is False],
-                           "erro_verificacao": v.erro, "latencia_s": atual.latencia_s})
+                           "erro_verificacao": v.erro, "latencia_s": atual.latencia_s,
+                           "verificacao": v.para_dict()})
         if not probs or n == max_revisoes:
             break
         msgs = msgs + [{"role": "assistant", "content": json.dumps({"fala": atual.fala, "fatos_citados":
