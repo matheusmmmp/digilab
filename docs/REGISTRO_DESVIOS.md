@@ -870,3 +870,20 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
 - **Interpretação:** nas metas de estágio (pet contra pet) o desafiado é o pet do estágio de cima, qualquer que seja o lado.
 - **Ressalva:** a escala v6 (vidas e β) e a lista do Guardromon foram escolhidas antes da regra; com ela as metas de estágio passam com
   folga, e a escala poderia ficar mais perto do DW1. Não foi recalibrada (a tarefa pedia só validar de novo).
+
+## 2026-09-30 — itens do Tamer (medalhas, parte 3) só no jogo (pets v6), sem equilíbrio
+
+- **Desvio entre o jogo e a pesquisa:** chips e cartas (`docs/DESIGN_MEDALHAS_ARENAS.md`, seção 13) existem só em `web/app/` e só nos
+  pets v6. Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer, medalhas nem itens.
+- **Sem equilíbrio (decisão do Matheus, 2026-09-30):** o pedido original tinha uma etapa de medição com gates (G-I1–G-I4) antes das telas.
+  O Matheus decidiu não equilibrar a cada etapa: ainda entram outras mecânicas no combate, e o equilíbrio será feito numa rodada só,
+  depois. Os itens entraram com os números PROPOSTOS da especificação, sem medição e sem ajuste; os gates ficam registrados na seção 13.7
+  para essa rodada, e `web/app/test/medir_itens.mjs` fica pronto sem ter sido rodado como etapa (sem artefato).
+- **Uma passada de medição rodou antes da decisão** (só sementes de calibração), com o catálogo sendo mudado no meio dela. Os artefatos
+  foram apagados e nada dela entrou nos itens: o catálogo e os números são os da especificação. Pista qualitativa para a rodada de
+  equilíbrio na seção 13.8.
+- **Interpretações na implementação:** o chip não se gasta (qualquer pet do Tamer tem uma cópia equipada); a espera da carta de revanche
+  conta no relógio do pet que a ganhou (por pet e por líder); a carta vale para o evento de luta inteiro (na série da Cidadela, uma vez);
+  a regra de chip que já estava na lista quando o chip entrou fica nela ao desequipar (só perde a proteção).
+- **Registro do Tamer versão 2** (lê a 1): as chaves do save e o formato do registro do pet não mudam; o pet ganha os eventos `i` e `k`.
+  Nenhum registro que já existe muda no replay, e o descarte único não subiu.

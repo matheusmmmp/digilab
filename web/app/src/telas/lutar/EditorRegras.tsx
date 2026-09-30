@@ -17,14 +17,14 @@ export function EditorRegras() {
     try { mudarMotor(mm => mm.intervirGambit(op, k)); setMsg(""); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   const cartao = (k: string, i: number, estado: "livre" | "travada" | "vetada") => {
-    const r = regraDe(k);
+    const r = regraDe(k), chip = gp.chipsRegra.includes(k);
     return (
       <li class={`g-card g-${estado}`} key={k}>
         <span class="g-num">{estado === "vetada" ? "×" : i + 1}</span>
         <span class="g-corpo">
           <span class="g-se"><b>SE</b> {r.se.map(rotuloCond).join(" e ")}</span>
           <span class="g-entao"><b>ENTÃO</b> {NOME_V2[r.entao]}</span>
-          <span class="g-meta">{estado === "travada" && <><span class="dl-tag dl-tag--estagio">travada</span> </>}{estado === "vetada" && <><span class="dl-tag dl-tag--espera">vetada</span> </>}
+          <span class="g-meta">{estado === "travada" && <><span class="dl-tag dl-tag--estagio">travada</span> </>}{estado === "vetada" && <><span class="dl-tag dl-tag--espera">vetada</span> </>}{chip && <><span class="dl-tag dl-tag--chip">chip</span> </>}
             {estado === "vetada" ? "" : `nota ${comSinal(gp.notas[k], 2).replace(".", ",")} · usada ${gp.disparos[k] || 0}×`}</span>
         </span>
         <span class="g-bts">
@@ -33,7 +33,7 @@ export function EditorRegras() {
             : <>
               <button type="button" class={`dl-btn dl-btn--icone${estado === "travada" ? " g-on" : ""}`} aria-pressed={estado === "travada"}
                 aria-label={estado === "travada" ? "Destravar" : "Travar nesta posição"} onClick={() => intervir(estado === "travada" ? "destravar" : "travar", k)}><IcoTrava /></button>
-              <button type="button" class="dl-btn dl-btn--icone" aria-label="Vetar: o pet não usa" onClick={() => intervir("vetar", k)}><IcoVeto /></button>
+              {!chip && <button type="button" class="dl-btn dl-btn--icone" aria-label="Vetar: o pet não usa" onClick={() => intervir("vetar", k)}><IcoVeto /></button>}
             </>}
         </span>
       </li>
@@ -74,16 +74,16 @@ export function RegrasCompactas() {
       <h2 class="rc-tit"><span>Regras de combate</span><small>{gp.ativas.length} de {cap}</small></h2>
       <ol class="rc-lista">
         {gp.ativas.map((k, i) => {
-          const trav = k in gp.travas, aberto = sel === k;
+          const trav = k in gp.travas, aberto = sel === k, chip = gp.chipsRegra.includes(k);
           return (
             <li key={k} class={`rc-card dl-malha${aberto ? " rc-card--sel" : ""}`}>
               <button type="button" class="rc-toque" aria-expanded={aberto} onClick={() => setSel(aberto ? null : k)}>
-                <span class="rc-topo"><span class="rc-num">{i + 1}{trav ? " · TRAVADA" : ""}</span><span class="rc-sub">{trav ? "travada por você" : "aprendida"}</span></span>
+                <span class="rc-topo"><span class="rc-num">{i + 1}{trav ? " · TRAVADA" : ""}</span><span class="rc-sub">{trav ? "travada por você" : chip ? "de um chip" : "aprendida"}</span></span>
                 <span class="rc-txt">{rotuloRegra(regraDe(k)).replace(/^se/, "Se")}</span>
               </button>
               {aberto && <span class="luta-regra-bts">
                 <button type="button" class="regra-travar" onClick={() => intervir(trav ? "destravar" : "travar", k)}><IcoTrava />{trav ? "Destravar" : "Travar"}</button>
-                <button type="button" class="regra-vetar" onClick={() => intervir("vetar", k)}>Vetar</button></span>}
+                {!chip && <button type="button" class="regra-vetar" onClick={() => intervir("vetar", k)}>Vetar</button>}</span>}
             </li>
           );
         })}

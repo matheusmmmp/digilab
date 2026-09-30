@@ -1,6 +1,6 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Parte 3 (itens) especificada na seção 13 (branch `medalhas-parte3`); parte 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
+Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Parte 3 (itens) implementada no jogo web **sem equilíbrio** (branch `medalhas-parte3`, 2026-09-30; seção 13); parte 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
 
 **Decisões do Matheus (2026-09-29):**
 1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
@@ -270,6 +270,10 @@ Só `web/app/` e só pets v6. A pesquisa em Python não tem Tamer nem itens (`do
 regras decidem. Por isso o item **complementa, não substitui a criatura**: o catálogo tem mais chips que mudam comportamento (regra) do
 que chips de número, e os números ficam presos aos tetos do treino.
 
+**Sem equilíbrio (decisão do Matheus, 2026-09-30).** Ainda vão entrar outras mecânicas no combate, e o equilíbrio será feito numa rodada
+só, depois delas. Os itens entraram com os números **PROPOSTOS** desta especificação, sem medição e sem ajuste: os gates G-I1–G-I4 (13.7)
+ficam para a rodada de equilíbrio geral do combate, e nenhum item foi enfraquecido por medição.
+
 ### 13.1 Os três tipos e os tetos
 
 - **Chip de stat.** +2 pontos de treino (1 em cada um de dois stats). Três tetos, nesta ordem:
@@ -339,7 +343,10 @@ pets v1–v5, os Cenários (donos simulados), a pesquisa. Proibição na Frontei
   e as calibrações da parte 2 ficam iguais (testes e conferência no script de medição).
 - **Descarte:** não sobe; nenhum registro que existe muda no replay.
 
-### 13.7 Gates PROPOSTOS (escritos antes de medir)
+### 13.7 Gates PROPOSTOS (para a rodada de equilíbrio geral; não medidos nesta parte)
+
+A medição fica pronta em `web/app/test/medir_itens.mjs` (com `test/itens_ref.mjs`: os pets de referência e as sementes da parte 2, os
+itens pelo motor), para a rodada de equilíbrio. Não foi rodada como etapa desta parte, e não há artefato dela.
 
 Método: motor web, escala dos pets v6 ligada, regras V21D, regra do limite do desafiado, os pets de referência da parte 2 (as formas do
 estágio × 4 espécies, bots canônicos) e as sementes de calibração 3101…3505 para ajustar; **uma** validação nas 4101…4505 depois de
@@ -354,5 +361,38 @@ topo, na ordem em que são equipados, saindo a última regra da lista se ela est
 | **G-I3** o item não desequilibra as formas | na matriz das 8 formas adultas (bots canônicos, V21D, mesma espécie dos dois lados, ε 0,05, 100 partidas por par por semente e espécie, lados trocados na metade, sem escala), a forma medida com a melhor combinação e as outras sem item: força contra as outras 7 ≤ **0,60**, exceto o furioso (exceção declarada) |
 | **G-I4** o item ajuda quem precisa (relato) | para cada chip de regra: o ganho de força das formas-alvo contra as outras 7 (só aquele chip) e o ganho contra os líderes do nível (com o treino típico) |
 
-Se um item quebrar G-I1–G-I3 nas sementes de calibração, ele é enfraquecido ou restrito ali, e o motivo fica na seção 13.8. Artefatos em
-`artifacts_campanha/itens/`.
+Na rodada de equilíbrio: se um item quebrar G-I1–G-I3 nas sementes de calibração, ele é enfraquecido ou restrito ali, com o motivo
+registrado. Artefatos em `artifacts_campanha/itens/`.
+
+### 13.8 O que a parte 3 implementou (2026-09-30)
+
+Só `web/app/`, só pets v6, com os números de 13.1–13.4 como estão.
+
+- **Motor:** `motor/itens.ts` (o catálogo, `ITEM_DA_MEDALHA`, `CARTA_DA_REVANCHE`, `vagasDeChip`, `chipServe`, `bonusChipsStat`,
+  `listaComChips` para a medição); `CIT` em `constantes.ts` (vagas, teto dos chips de stat, típico, espera, Fôlego e Cura). As cartas na
+  luta: `combate.EfeitoCarta`/`comCarta` (guts a mais no começo, ε 0) e a cura em `jogarV2` (parâmetro novo, por lado); `arenas.jogarArena`
+  aplica a carta ao evento inteiro (na série da Cidadela a cura vale uma vez). Sem carta e sem chip, as funções dão a luta de sempre
+  (teste de controle).
+- **Pet:** eventos `i` (equipar/desequipar) e `k` (carta da próxima luta); `Motor.equipar`/`desequipar`/`porqueNaoEquipa`/`vagasChip`/
+  `pontosDeLuta` e `lutar(rival, semente, carta)`. O `k` entra logo antes do `l`, e o replay falha se o evento seguinte não for a luta.
+  Chip de regra em `GambitsPet` (`equiparRegra`/`desequiparRegra`, `chipsRegra`): entra no topo; o aprendizado não o troca; vetar falha;
+  atravessa a evolução. Se a regra já estava na lista quando o chip entrou, ao desequipar ela fica (só perde a proteção); senão sai e a vaga
+  volta para a melhor candidata. As regras dos chips que não estão no repertório não viram candidatas de troca (`regraDe` as acha).
+- **Assinatura:** a do pet e a dos gambits ganham os itens só quando há evento de item (`comItens`, `usouChip`). Pets v1–v5, os
+  gabaritos, a paridade V21D e os artefatos de validação da parte 2 (`calibrar_arenas.mjs --validar`, `calibrar_escala_v6.mjs
+  --validar`) saem iguais byte a byte.
+- **Tamer** (`src/tamer.ts`, registro versão 2, lê a 1): `item` e `carta_usada`; `conferirItensDasMedalhas` (na hora da medalha e,
+  retroativo, na abertura), `conferirRevanche`/`porqueSemCarta` (medalha antes, nível da arena, espera no relógio do pet). O app muda o
+  Tamer por `jogo.mudarTamer`. Descarte único: não subiu.
+- **Telas:** **Crescer · Itens** (inventário, vagas do pet, equipar e desequipar com o porquê de não poder); a escolha da carta antes da
+  luta na Campanha e na Arena (`componentes/EscolhaCarta.tsx`); no Resultado, o item novo (da medalha ou da revanche) e a carta usada;
+  em Medalhas, o item de cada medalha e a carta da revanche; nas regras de combate, a marca "chip" e sem o botão de vetar.
+- **Testes:** `test/itens.test.ts` (catálogo, tetos, cada item, vagas, replay, Tamer, v1–v5) e 8 e2e (ganhar o chip do líder, equipar,
+  lutar com ele; a carta; a tela em 360/390/1280 px, claro e escuro).
+
+**Uma passada de medição chegou a rodar antes da decisão** (só sementes de calibração), com o catálogo sendo mudado no meio dela. Os
+artefatos foram apagados e nada dela entrou nos itens: o catálogo e os números são os de 13.2–13.4. Fica como pista qualitativa para a
+rodada de equilíbrio: a luta contra o líder é um limiar estreito (um pouco de vida ou de treino a mais muda muito a taxa do pet sem
+treino), e uma regra no topo da lista pode pesar contra a própria forma, porque passa na frente das regras dela e tira uma da lista.
+
+**Ficou de fora:** a medição e o equilíbrio (rodada geral); dinheiro e loja; a proibição de cartas na Fronteira (parte 4).

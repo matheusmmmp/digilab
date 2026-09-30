@@ -281,27 +281,49 @@ export interface Lutador { nome: string; estilo: Estilo; cond: Perfil; sombra?: 
 export interface Turno {
   t: number; a: string; ma: number | string; b: string; mb: number | string; antes: EstadoLuta; depois: EstadoLuta;
   dano: number[]; interr: boolean[]; errou: boolean[];
+  /** carta de Cura (itens.ts): a vida que o lado curou no fim deste turno (so aparece no turno da cura) */
+  cura?: number[];
 }
 export interface ResultadoLuta { E0: EstadoLuta; turnos: Turno[]; pontosA: number; fim: "ko" | "limite"; E: EstadoLuta }
 
+/** efeito de uma carta na luta (itens.ts; pets v6): `guts` a mais no comeco, `foco` = sem exploracao (epsilon 0), e a `cura`: na
+    primeira vez que a vida cai abaixo de `abaixo` da maxima (e o lado nao caiu), cura `fracao` da vida maxima, uma vez */
+export interface CuraLuta { abaixo: number; fracao: number }
+export interface EfeitoCarta { guts?: number; foco?: boolean; cura?: CuraLuta }
+/** a carta no lutador: o guts a mais entra no guts do comeco (ate o maximo) e o foco zera a exploracao. A cura e da luta (jogarV2) */
+export function comCarta(L: Lutador, ef: EfeitoCarta | null): Lutador {
+  if (!ef) return L;
+  const cond = ef.guts ? { ...L.cond, guts0: Math.min(L.cond.gutsMax, L.cond.guts0 + ef.guts) } : L.cond;
+  return { ...L, cond, estilo: ef.foco ? { ...L.estilo, eps: 0 } : L.estilo };
+}
+
 /** `ini`: o lado A comeca com esta vida e este guts (as lutas seguidas da arena da Cidadela, sem cura; arenas.jogarArena);
-    null = a luta de sempre, os dois inteiros. `desafiado`: quem fica com a luta no limite de turnos (fimV2) */
+    null = a luta de sempre, os dois inteiros. `desafiado`: quem fica com a luta no limite de turnos (fimV2). `curas`: a carta de
+    Cura de cada lado ([A, B]; null = nenhuma), que vale uma vez nesta luta; sem ela, a luta de sempre */
 export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta = null, ini: { hp: number; guts: number } | null = null,
-  desafiado: Desafiado = null): ResultadoLuta {
+  desafiado: Desafiado = null, curas: readonly (CuraLuta | null)[] | null = null): ResultadoLuta {
   const ra = criarRng(hashSemente("v2", semente, 0)), rb = criarRng(hashSemente("v2", semente, 1));
   let E = estadoV2(A.cond, B.cond), fim: ReturnType<typeof fimV2>;
   if (ini) {
     if (!(ini.hp > 0 && ini.hp <= E.L[0].hpMax) || !(ini.guts >= 0)) throw new Error(`começo da luta inválido: vida ${ini.hp}, guts ${ini.guts}`);
     E = { ...E, L: [{ ...E.L[0], hp: ini.hp, guts: Math.min(ini.guts, E.L[0].gutsMax) }, E.L[1]] };
   }
-  const E0 = E, turnos: Turno[] = [];
+  const E0 = E, turnos: Turno[] = [], pendentes = curas ? [curas[0] ?? null, curas[1] ?? null] : null;
   while (!(fim = fimV2(E, desafiado))) {
     /* o vigia ve a intencao do oponente (sem exploracao, sem rng) antes de decidir */
     const ctxA = A.cond.passiva === "vigia" ? { intencao: intencaoV2(B.estilo, E, 1, R) } : null;
     const ctxB = B.cond.passiva === "vigia" ? { intencao: intencaoV2(A.estilo, E, 0, R) } : null;
     const [aa, ma] = decidirV2(A.estilo, E, 0, ra, ctxA, R), [ab, mb] = decidirV2(B.estilo, E, 1, rb, ctxB, R);
     const antes = E, r = resolverV2(E, aa, ab); E = r.E;
-    turnos.push({ t: E.turno, a: aa, ma, b: ab, mb, antes, depois: E, dano: r.dano, interr: r.interr, errou: r.errou });
+    let cura: number[] | undefined;
+    if (pendentes) for (const l of [0, 1]) {
+      const c = pendentes[l], s = E.L[l];
+      if (!c || s.hp <= 0 || s.hp >= c.abaixo * s.hpMax) continue;
+      const ganho = Math.min(s.hpMax - s.hp, c.fracao * s.hpMax);
+      E = { ...E, L: E.L.map((x, i) => i === l ? { ...x, hp: x.hp + ganho } : x) };
+      (cura ??= [0, 0])[l] = ganho; pendentes[l] = null;
+    }
+    turnos.push({ t: E.turno, a: aa, ma, b: ab, mb, antes, depois: E, dano: r.dano, interr: r.interr, errou: r.errou, ...(cura ? { cura } : {}) });
   }
   return { E0, turnos, pontosA: fim[0], fim: fim[1], E };
 }

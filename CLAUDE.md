@@ -401,6 +401,24 @@ Só no jogo web e só pets v6; a pesquisa não tem arenas (`docs/REGISTRO_DESVIO
   com o desafiado (para a Fronteira: o campeão), `desafiadoDaVersao`; nada novo no registro. Pets v1–v5, cenários e o Python: a fração
   de vida, como sempre.
 
+## Itens do Tamer, medalhas parte 3 (2026-09-30, `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 13) — SEM EQUILÍBRIO
+
+Só no jogo web e só pets v6; a pesquisa não tem itens (`docs/REGISTRO_DESVIOS.md`, 2026-09-30). **Sem equilíbrio** (decisão do Matheus,
+2026-09-30): ainda entram outras mecânicas no combate, e o equilíbrio será uma rodada só, depois; os números são os PROPOSTOS da seção 13 e
+os gates G-I1–G-I4 (13.7) ficam para essa rodada (`web/app/test/medir_itens.mjs` pronto, não rodado; sem artefato).
+- **Catálogo** (`motor/itens.ts`, `CIT` em `constantes.ts`): Chip de Força e Chip de Guarda (stat: +2 pontos de treino, só no espaço que
+  falta no teto do estágio e da vida, todos juntos ≤ 25% do treino típico); Chip Recuo e Chip Oportunista (regra, do Champion), Chip
+  Perseguidor e Chip Aparo (regra, do Ultimate); Carta de Fôlego (+20 guts), de Cura (20% da vida na primeira vez abaixo de 30%) e de Foco
+  (ε 0).
+- **De onde:** o líder dá o chip da arena com a medalha (um Tamer com medalhas de antes recebe na abertura); a revanche vencida, com um
+  pet do nível da arena, dá a carta da arena, uma por líder a cada 24 h do relógio do pet. Chips por pet pelas medalhas: 1/2/3 com 1/3/5;
+  uma carta por luta.
+- **Registro:** inventário no Tamer (registro versão 2, lê a 1: `item`, `carta_usada`); no pet, `i` (equipar/desequipar) e `k` (a carta,
+  logo antes da luta `l`; outro evento depois dela falha alto). O motor não lê o Tamer; o app confere o inventário. A assinatura dos v6 só
+  muda com item; v1–v5, gabaritos, paridade V21D e os artefatos de validação da parte 2 saem iguais. Descarte único não subiu.
+- **Telas:** Crescer · Itens; a carta antes da luta (Campanha e Arena); o item novo e a carta usada no Resultado; o item de cada medalha
+  em Medalhas; a regra de chip marcada nas regras de combate (não se veta).
+
 ## Escala dos pets v6 (2026-09-30, `CESC_V6`; `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 12)
 
 Decisão do Matheus: "o treino tem que decidir" contra cada líder e "o estágio tem que pesar". Só no jogo web e só nas lutas de escala dos

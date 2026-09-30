@@ -12,6 +12,7 @@ import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, lutasDoRegistro, previa, tentativas, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
+import { EscolhaCarta } from "../../componentes/EscolhaCarta.tsx";
 
 /* coordenadas da prancha CampMapa (mapa de 390 x 420), em % para acompanhar a largura: ilha 150 px, centro do lugar
    (trilho, plaquinha, marcador do pet) e o pad embaixo */
@@ -132,6 +133,7 @@ function Detalhe() {
         <p class="licao">{c.licao}</p>
         <CartaoArena m={m} Li={Li} />
       </section>
+      <EscolhaCarta />
       <button type="button" class={`dl-btn camp-lutar${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
         onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
         {rotuloDesafio(m, sel, vit)}</button>
@@ -184,6 +186,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
         {!podeLutar && <p class="dl-apoio">O In-Training ainda não luta na campanha.</p>}
         <p class="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
       </section>
+      <EscolhaCarta />
       <div class="campd-bts">
         <button type="button" class="dl-btn dl-btn--sec" onClick={irTreinar}>Treinar antes</button>
         <button type="button" class="dl-btn camp-lutar" disabled={!aberto || luta.lutando || !podeLutar}

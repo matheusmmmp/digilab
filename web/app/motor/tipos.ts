@@ -56,7 +56,14 @@ export type Ritmo = "rapida" | "classica";
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
 /** pets v6: o Tamer tem n medalhas a partir deste tick (o motor do pet nunca le o Tamer por fora; o replay le este evento) */
 export type EventoLiberacao = [tick: number, tipo: "u", liberacao: { n: number }];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao;
+/** pets v6 (itens, medalhas parte 3): o dono equipa ou desequipa um chip do Tamer (motor/itens.ts). O motor confere vagas, tipo e
+    estagio; o inventario e do Tamer e o app confere antes de gravar */
+export type OpItem = "equipar" | "desequipar";
+export type EventoItem = [tick: number, tipo: "i", item: { op: OpItem; id: string }];
+/** pets v6: a carta do Tamer vale para a luta seguinte; o proximo evento do registro tem de ser a luta ("l") */
+export type EventoCarta = [tick: number, tipo: "k", carta: { id: string }];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
+  | EventoItem | EventoCarta;
 
 export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6;
 

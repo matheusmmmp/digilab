@@ -21,7 +21,7 @@
    treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica aqui quando o lider e um NPC que ja existia (Gazimon 1,3,
    Guardromon 1,6, Myotismon 0,9 na serie, Piedmon 1,6; fora da arena e nos pets v1-v5, os de sempre); os lideres novos tem o
    fator no proprio NPC (bots.CAMPANHA_V6: Youkomon 1,5, MarinBullmon 1,5). */
-import { jogarV2, type Desafiado, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
+import { comCarta, jogarV2, type Desafiado, type EfeitoCarta, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import type { Tecnica } from "./constantes.ts";
 import { hashSemente } from "./rng.ts";
 
@@ -73,13 +73,17 @@ export const sementeDaSerie = (semente: number, k: number): number => k ? hashSe
 /** a luta (ou as lutas seguidas) de arena: `lutas` lutas, parando na primeira que nao for vitoria; da segunda em diante o
     pet (lado A) comeca com a vida e o guts do fim da anterior, e o lider (B) volta inteiro. Deterministico. `desafiado`: o do
     limite de turnos (combate.fimV2); nos pets v6 o rival, e uma luta da serie que chega ao limite e derrota e quebra a serie */
-export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLuta, lutas = 1, desafiado: Desafiado = null): ResultadoLuta[] {
+export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLuta, lutas = 1, desafiado: Desafiado = null,
+  carta: EfeitoCarta | null = null): ResultadoLuta[] {
   if (!Number.isInteger(lutas) || lutas < 1) throw new Error("lutas da arena inválidas: " + lutas);
-  const serie: ResultadoLuta[] = [];
-  let ini: { hp: number; guts: number } | null = null;
+  /* a carta do pet (itens.ts; pets v6) vale para o evento inteiro: o guts a mais no comeco da primeira luta (nas seguintes, o que
+     sobrou), o foco em todas e a cura uma vez so na serie */
+  const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
+  let ini: { hp: number; guts: number } | null = null, cura = carta?.cura ?? null;
   for (let k = 0; k < lutas; k++) {
-    const res = jogarV2(A, B, sementeDaSerie(semente, k), R, ini, desafiado);
+    const res = jogarV2(Ac, B, sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
     serie.push(res);
+    if (cura && res.turnos.some(t => t.cura)) cura = null;
     if (res.pontosA !== 1) break;
     ini = { hp: res.E.L[0].hp, guts: res.E.L[0].guts };
   }
