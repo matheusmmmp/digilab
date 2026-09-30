@@ -10,19 +10,25 @@
    Itens (medalhas, parte 3; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13): o inventario tambem e do Tamer. Registro versao 2 (a versao 1,
    so com medalhas, continua abrindo): eventos "item" (o item da medalha, na primeira vitoria contra o lider, e a carta da revanche) e
    "carta_usada". O chip nao se gasta (qualquer pet do Tamer pode ter uma copia equipada); a carta sai do inventario quando vale numa
-   luta. No registro do pet entram "i" (equipar, desequipar) e "k" (a carta da proxima luta): o motor do pet continua sem ler o Tamer. */
+   luta. No registro do pet entram "i" (equipar, desequipar) e "k" (a carta da proxima luta): o motor do pet continua sem ler o Tamer.
+
+   O titulo (a Liga dos Lideres na Fronteira, medalhas parte 4a; docs/DESIGN_FRONTEIRA.md, secao 2): registro versao 3 (le a 1 e a 2).
+   Evento "campeao": o pet venceu as 6 lutas da Liga (o motor do pet conta os titulos dele, Motor.liga, a partir do evento de luta "l"
+   da Liga). Um por pet (o primeiro titulo dele), so depois das 6 medalhas; o primeiro do registro e o titulo do Tamer (a medalha de
+   ouro). */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHA_POR_ID, Motor, NPC, PetMorto, cartaDe, itemDe, medalhaDoLider,
-  nomeForma, type Estagio, type Medalha,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_LIGA, cartaDe,
+  itemDe, medalhaDoLider, nomeForma, type Estagio, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
 export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
-/** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3). Grava a 2; le as duas */
-export const VERSAO_TAMER = 2;
-const VERSOES_TAMER = [1, 2];
+/** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a). Grava a 3;
+    le as tres */
+export const VERSAO_TAMER = 3;
+const VERSOES_TAMER = [1, 2, 3];
 
 /** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
 export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
@@ -31,7 +37,10 @@ export interface MedalhaGanha { id: string; n: number; quando: number; pet: numb
 export interface ItemGanho { id: string; n: number; quando: number; origem: "medalha" | "revanche"; lider: string; pet: number; forma: string; est: Estagio; tick: number }
 /** uma carta que valeu numa luta (sai do inventario) */
 export interface CartaUsada { id: string; quando: number; pet: number; tick: number }
-export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada];
+/** um titulo da Liga dos Lideres: o contador (1 = o primeiro, o titulo do Tamer), a hora de parede e o pet que venceu as 6 (semente,
+    forma e tick dele) */
+export interface Campeao { n: number; quando: number; pet: number; forma: string; tick: number }
+export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao];
 const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
 
 export class Tamer {
@@ -41,7 +50,13 @@ export class Tamer {
   /** os itens ganhos, na ordem, e as cartas usadas */
   itens: ItemGanho[] = [];
   usadas: CartaUsada[] = [];
+  /** os titulos da Liga, na ordem (um por pet) */
+  campeoes: Campeao[] = [];
   get n(): number { return this.medalhas.length; }
+  /** o titulo do Tamer: o primeiro campeao (null: ainda nao venceu a Liga) */
+  get titulo(): Campeao | null { return this.campeoes[0] ?? null; }
+  /** o titulo que o pet (semente) deu ao Tamer (null: nenhum) */
+  tituloDe(pet: number): Campeao | null { return this.campeoes.find(x => x.pet === pet) ?? null; }
   tem(id: string): boolean { return this.medalhas.some(x => x.id === id); }
   ganha(id: string): MedalhaGanha | null { return this.medalhas.find(x => x.id === id) ?? null; }
   /** o Tamer tem o chip (chip nao se gasta) */
@@ -57,9 +72,10 @@ export class Tamer {
 
   /** um evento do registro (replay): confere tudo antes de aplicar */
   aplicar(ev: EventoTamer): void {
-    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada"].includes(ev[0]))
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao"].includes(ev[0]))
       throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
     if (ev[0] === "item") { this._item(ev[1]); return; }
+    if (ev[0] === "campeao") { this._campeao(ev[1]); return; }
     if (ev[0] === "carta_usada") { this._usada(ev[1]); return; }
     const x = ev[1];
     if (!x || !MEDALHA_POR_ID[x.id]) throw new Error("medalha desconhecida no registro do Tamer: " + JSON.stringify(x?.id));
@@ -96,7 +112,21 @@ export class Tamer {
     if (this.cartas(x.id) < 1) throw new Error(`${c.nome} usada sem estar no inventário do Tamer`);
     this.usadas.push({ ...x });
   }
+  private _campeao(x: Campeao): void {
+    if (!x || typeof x !== "object") throw new Error("título sem dados no registro do Tamer");
+    if (this.n < MEDALHAS_LIGA) throw new Error(`título da Liga antes das ${MEDALHAS_LIGA} medalhas no registro do Tamer (tem ${this.n})`);
+    if (x.n !== this.campeoes.length + 1) throw new Error(`contador de títulos fora de ordem no registro do Tamer: ${x.n} (esperado ${this.campeoes.length + 1})`);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`título sem ${k} no registro do Tamer`);
+    if (typeof x.forma !== "string") throw new Error("título sem a forma do pet no registro do Tamer");
+    if (this.tituloDe(x.pet)) throw new Error(`título repetido para o mesmo pet no registro do Tamer (${x.pet})`);
+    this.campeoes.push({ ...x });
+  }
   private _gravar(ev: EventoTamer): void { this.aplicar(ev); this.log.push(ev); }
+  /** o pet m venceu a Liga: grava o titulo (o primeiro dele) */
+  ganharTitulo(m: Motor, quando: number = Date.now()): Campeao {
+    this._gravar(["campeao", { n: this.campeoes.length + 1, quando, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }]);
+    return this.campeoes[this.campeoes.length - 1];
+  }
   /** o item da medalha do lider, agora, com o pet m */
   ganharItem(id: string, origem: ItemGanho["origem"], lider: string, m: Motor, quando: number = Date.now()): ItemGanho {
     this._gravar(["item", { id, n: this.itens.length + 1, quando, origem, lider, pet: m.semente, forma: nomeForma(m.forma), est: m.estagioAtual, tick: m.e.tick }]);
@@ -174,6 +204,12 @@ export function conferirRevanche(t: Tamer, m: Motor, lider: string, venceu: bool
   if (!venceu || porqueSemCarta(t, m, lider, medalhaAntes)) return null;
   const md = medalhaDoLider(lider)!;
   return t.ganharItem(CARTA_DA_REVANCHE[md.id], "revanche", lider, m, quando);
+}
+/** o titulo que o pet acabou de dar ao Tamer: a primeira vez que ele venceu a Liga dos Lideres (o motor conta os titulos do pet pelo
+    evento de luta da Liga). So pets v6 e com as 6 medalhas no Tamer. Devolve o titulo novo (ja aplicado) ou null */
+export function conferirCampeao(t: Tamer, m: Motor, quando: number = Date.now()): Campeao | null {
+  if (m.versao < VERSAO_LIGA || m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
+  return t.ganharTitulo(m, quando);
 }
 /** o pet passa a conhecer as medalhas do Tamer (evento "u" no registro dele). Pet v1-v5 ou morto: nada.
     Devolve true se o registro do pet mudou */

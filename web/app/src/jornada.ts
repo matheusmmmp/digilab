@@ -1,14 +1,18 @@
 /* Jornada do jogador (pedido do Matheus, 2026-09-28): escolher o brasao -> chocar o ovo -> crescer ate o Ultimate (e o
-   Mega, pets v5) -> vencer o Piedmon (Cidadela nos pets v1-v4, Montanha Espiral nos v5) -> mensagem de conclusao. Nada disso muda o motor nem o save: a especie do
+   Mega, pets v5) -> vencer o Piedmon (Cidadela nos pets v1-v4, Montanha Espiral nos v5) -> mensagem de conclusao. Nos pets v6 (medalhas
+   parte 4a, docs/DESIGN_FRONTEIRA.md) a jornada termina na Liga dos Lideres da Fronteira, nao mais no Piedmon. Nada disso muda o motor nem o save: a especie do
    ovo sai da semente (motor), entao escolher o brasao e sortear sementes ate cair na especie escolhida. A conclusao
-   vista fica numa chave propria (sementes dos pets que ja viram a mensagem). */
+   vista fica numa chave propria (sementes dos pets que ja viram a mensagem; a da Liga, noutra, para o pet v6 que viu a do Piedmon
+   antes desta parte ver a nova). */
 import { useEffect, useState } from "preact/hooks";
-import { ESPECIES, Motor, campanhaDe, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
+import { ESPECIES, Motor, VERSAO_LIGA, campanhaDe, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { jogoAtual, trocarMotor } from "./jogo.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
 
 export const CHAVE_CONCLUSAO = CHAVE + "-conclusao";
+/** pets v6: a conclusao vista vem da Liga dos Lideres (chave propria) */
+export const CHAVE_CONCLUSAO_LIGA = CHAVE + "-conclusao-liga";
 /** o chefe da campanha do pet: o ultimo desafio da ultima ilha (o Piedmon; a chave muda com a versao) */
 export const chefeDe = (m: Motor): string => { const c = campanhaDe(m.versao); return c[c.length - 1].k; };
 
@@ -54,13 +58,19 @@ export const guardarAtivoNoProximoOvo = (): boolean => guardarNoProximoOvo;
 export function novoOvoGuardandoAtivo(): void { guardarNoProximoOvo = true; abrirEscolhaBrasao(); }
 
 /* ------------------------------------------------ conclusao */
-const vistas = (): number[] => { try { return JSON.parse(localStorage.getItem(CHAVE_CONCLUSAO) || "[]") as number[]; } catch { return []; } };
-export const conclusaoVista = (m: Motor): boolean => vistas().includes(m.semente);
+/** a jornada termina na Liga dos Lideres (pets v6) ou no chefe da campanha (v1-v5) */
+export const terminaNaLiga = (m: Motor): boolean => m.versao >= VERSAO_LIGA;
+const chaveConclusao = (m: Motor): string => terminaNaLiga(m) ? CHAVE_CONCLUSAO_LIGA : CHAVE_CONCLUSAO;
+const vistas = (chave: string): number[] => { try { return JSON.parse(localStorage.getItem(chave) || "[]") as number[]; } catch { return []; } };
+export const conclusaoVista = (m: Motor): boolean => vistas(chaveConclusao(m)).includes(m.semente);
 export function marcarConclusao(m: Motor): void {
-  try { localStorage.setItem(CHAVE_CONCLUSAO, JSON.stringify([...new Set([...vistas(), m.semente])])); } catch { /* preferencia de tela */ }
+  const k = chaveConclusao(m);
+  try { localStorage.setItem(k, JSON.stringify([...new Set([...vistas(k), m.semente])])); } catch { /* preferencia de tela */ }
 }
-/** a jornada acabou: venceu o chefe da campanha */
+/** venceu o chefe da campanha (o Piedmon) */
 export const venceuOChefe = (m: Motor): boolean => (m.campanha[chefeDe(m)] ?? 0) > 0;
+/** a jornada acabou: nos pets v6, venceu a Liga dos Lideres (o titulo); nos v1-v5, o chefe da campanha */
+export const concluiuJornada = (m: Motor): boolean => terminaNaLiga(m) ? m.liga.titulos > 0 : venceuOChefe(m);
 
 /** os marcos da jornada, na ordem, com o que o motor diz de cada um */
 export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
@@ -72,5 +82,6 @@ export function marcos(m: Motor): { rotulo: string; feito: boolean }[] {
     { rotulo: "Virou Ultimate", feito: ev("adulto") },
     ...(m.versao >= 5 ? [{ rotulo: "Virou Mega", feito: ev("mega") }] : []),
     ...m.lugares.map((L, i) => ({ rotulo: `Venceu ${L.nome}`, feito: m.lugarVencido(i) })),
+    ...(terminaNaLiga(m) ? [{ rotulo: "Venceu a Liga dos Líderes", feito: m.liga.titulos > 0 }] : []),
   ];
 }
