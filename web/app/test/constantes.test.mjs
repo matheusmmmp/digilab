@@ -25,7 +25,7 @@ const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APT
 /* so no motor em TS: pets v4 (educacao-v1), v5 (evolucao canonica) e v6 (medalhas do Tamer, arenas e a escala propria,
    CESC_V6) nao existem no HTML; a escala (CESC, pets v1-v5) tambem nao existe no HTML e e conferida contra a ConfigEscala;
    conferidas so contra o Python (as v5 quase todas so_web; as v6 todas) */
-const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CV21D", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CESC_V6", "CIT", "CMEN", "CCF"];   /* CMEN: pets v7 (voz propria); CCF: pets v8 (confianca, M1) */
+const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CV21D", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CESC_V6", "CIT", "CMEN", "CCF", "CV21E"];   /* CMEN: pets v7 (voz propria); CCF: pets v8 (confianca, M1); CV21E: pets v9 (combate equilibrado) */
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
 const raizDe = cam => cam.match(/^[^.[]+/)[0];
 
@@ -128,6 +128,25 @@ test("ts: chaves_v21d: toda chave booleana do CV21D tem par; valor = config da v
   const cfg = lerJson(RAIZ_REPO + "experiments/configs/v21d/validacao.json").regras_v21;
   const ligadas = Object.keys(cfg).filter(k => cfg[k]).sort();
   assert.deepEqual(MAPA.chaves_v21d.map(e => e.chave.replace("regras_v21.", "")).sort(), ligadas, "a web liga exatamente as chaves ligadas na config");
+  assert.deepEqual(erros, []);
+});
+
+/* V21E nos pets v9 (docs/EQUILIBRIO_GERAL.md, fase 1): as chaves booleanas da web = as ligadas na config da variante da fase 1 (as
+   quatro da V21D e as cinco da V21E), e cada uma e campo da ConfigCombateV21E (padrao False no Python) */
+test("ts: chaves_v21e: toda chave booleana do CV21E tem par; valor = config da variante da fase 1", () => {
+  const web = new Map(Object.entries(MOTOR_TS.CV21E).filter(([, v]) => typeof v === "boolean").map(([k, v]) => ["CV21E." + k, v]));
+  assert.deepEqual(MAPA.chaves_v21e.map(e => e.web).sort(), [...web.keys()].sort());
+  const erros = [];
+  for (const e of MAPA.chaves_v21e) {
+    if (pegar(PY, e.py) !== false) erros.push(`${e.py} precisa existir e ser desligado por padrao no Python`);
+    const c = pegar(lerJson(RAIZ_REPO + e.arquivo), e.chave);
+    if (web.get(e.web) !== c) erros.push(`${e.web} = ${web.get(e.web)} × ${e.arquivo}:${e.chave} = ${c}`);
+  }
+  const cfg = lerJson(RAIZ_REPO + "experiments/configs/v21e/calibracao.json").regras_v21;
+  const ligadas = Object.keys(cfg).filter(k => cfg[k]).sort();
+  assert.deepEqual(MAPA.chaves_v21e.map(e => e.chave.replace("regras_v21.", "")).sort(), ligadas, "a web liga exatamente as chaves ligadas na config");
+  /* as chaves da V21D ligadas nos v9 sao as da variante validada */
+  for (const [k, v] of Object.entries(MOTOR_TS.CV21D)) if (typeof v === "boolean") assert.equal(MOTOR_TS.CV21E[k], v, k);
   assert.deepEqual(erros, []);
 });
 

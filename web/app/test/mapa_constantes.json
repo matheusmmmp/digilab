@@ -1,6 +1,6 @@
 {
  "versao": 1,
- "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento; chaves_v21d: as chaves booleanas da V21D que a web liga nos pets v6, contra a config da variante validada (experiments/configs/v21d/validacao.json) e os campos da ConfigCombateV21D",
+ "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento; chaves_v21d: as chaves booleanas da V21D que a web liga nos pets v6, contra a config da variante validada (experiments/configs/v21d/validacao.json) e os campos da ConfigCombateV21D; chaves_v21e: as chaves booleanas da V21E que a web liga nos pets v9 (as quatro da V21D e as cinco novas), contra a config da variante da fase 1 da rodada de equilibrio geral (experiments/configs/v21e/calibracao.json) e os campos da ConfigCombateV21E",
  "pares": [
   {
    "web": "C.decFome",
@@ -2448,6 +2448,10 @@
    "nota": "versao de pet a partir da qual a luta usa a V21D (pets v6, so no jogo; docs/VALIDACAO_V21D.md): no Python a variante e escolhida pelo config, nao por versao de pet"
   },
   {
+   "web": "CV21E.versaoPet",
+   "nota": "versao de pet a partir da qual a luta usa a V21E (pets v9, so no jogo; docs/EQUILIBRIO_GERAL.md, fase 1): no Python a variante e escolhida pelo config, nao por versao de pet"
+  },
+  {
    "web": "CAMPANHA_V6[0].total",
    "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
   },
@@ -2812,6 +2816,71 @@
    "arquivo": "experiments/configs/v21d/validacao.json",
    "chave": "regras_v21.vigia_recua_do_preparo_sob_pele",
    "nota": "V: o vigia recua do preparo de quem usa pele (BOTS_V21D.vigia)"
+  }
+ ],
+ "chaves_v21e": [
+  {
+   "web": "CV21E.preparoSobPeleOculto",
+   "py": "ConfigCombateV21E.preparo_sob_pele_oculto",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.preparo_sob_pele_oculto",
+   "nota": "da V21D (candidato A): o preparo feito sob pele_dura nao aparece em oponente_preparando"
+  },
+  {
+   "web": "CV21E.muralhaListaEspelho",
+   "py": "ConfigCombateV21E.muralha_lista_espelho",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.muralha_lista_espelho",
+   "nota": "da V21D (candidato C): a muralha luta com a lista do espelho"
+  },
+  {
+   "web": "CV21E.vigiaBateEmQuemRecua",
+   "py": "ConfigCombateV21E.vigia_bate_em_quem_recua",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.vigia_bate_em_quem_recua",
+   "nota": "da V21D (E2 no vigia): golpe rapido de perto contra quem recua"
+  },
+  {
+   "web": "CV21E.vigiaRecuaDoPreparoSobPele",
+   "py": "ConfigCombateV21E.vigia_recua_do_preparo_sob_pele",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.vigia_recua_do_preparo_sob_pele",
+   "nota": "da V21D (V): o vigia recua do preparo de quem usa pele"
+  },
+  {
+   "web": "CV21E.duelistaDefendeDoGolpe",
+   "py": "ConfigCombateV21E.duelista_defende_do_golpe",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.duelista_defende_do_golpe",
+   "nota": "V21E: o duelista defende de perto do golpe rapido repetido; sai o carregar (BOTS_V21E.duelista)"
+  },
+  {
+   "web": "CV21E.titaDefendeDoGolpe",
+   "py": "ConfigCombateV21E.tita_defende_do_golpe",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.tita_defende_do_golpe",
+   "nota": "V21E: o tita defende de perto do golpe rapido repetido; sai o carregar (BOTS_V21E.tita)"
+  },
+  {
+   "web": "CV21E.espelhoSemCarregar",
+   "py": "ConfigCombateV21E.espelho_sem_carregar",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.espelho_sem_carregar",
+   "nota": "V21E: o espelho nao carrega (BOTS_V21E.espelho)"
+  },
+  {
+   "web": "CV21E.muralhaSemCarregar",
+   "py": "ConfigCombateV21E.muralha_sem_carregar",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.muralha_sem_carregar",
+   "nota": "V21E: a muralha nao carrega (BOTS_V21E.muralha)"
+  },
+  {
+   "web": "CV21E.muralhaContraGolpeNaPele",
+   "py": "ConfigCombateV21E.muralha_contra_golpe_na_pele",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.muralha_contra_golpe_na_pele",
+   "nota": "V21E: a muralha responde com o contra-golpe a quem usa pele dura com frequencia (BOTS_V21E.muralha)"
   }
  ]
 }

@@ -6,7 +6,8 @@
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
 import { CCF, CED, CESC, CESC_V6, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
-  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
+  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
+  REGRA_DEFENDE_DO_GOLPE, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
   estiloBot, formaRival, gambitNPC, gambitsAdulto,
 } from "./bots.ts";
 import type { Arena } from "./arenas.ts";
@@ -33,21 +34,23 @@ export function permitida(r: Regra, f: Forma): boolean {
   if (!r.se.every(c => conds.includes(c.n) || (c.n === "oponente_vai_preparar" && f.adulta === "vigia"))) return false;
   return !(TECNICAS as readonly string[]).includes(r.entao) || r.entao === tecnicaDe(f);
 }
-/** semente da forma; R = CV21D (pets v6): a muralha e o vigia adultos semeiam as listas variantes */
+/** semente da forma; R = CV21D (pets v6-v8): a muralha e o vigia adultos semeiam as listas variantes; R = CV21E (pets v9): tambem o
+    duelista, o tita, o espelho e a muralha (bots.gambitsAdulto) */
 export function sementeDe(f: Forma, R: RegrasLuta = null): ListaGambits {
   return f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!]
     : (BOTS_V21[f.adulta as FormaAdultaNormal] && gambitsAdulto(f.adulta as FormaAdultaNormal, R)) || GAMBITS_SOMBRIA[f.adulta!] || BOTS_V21[SOMBRIA[f.adulta!]!.base];
 }
 /* regra pela chave: o repertorio (de onde o pet tira candidatas) ou, fora dele, a semente de uma sombria (a
    do devastador tem "perto e guts >= 60 -> preparar pesado", que nenhum bot usa), do vigia V21D (as duas regras novas
-   do reequilibrio, so na semente dos pets v6) ou de um chip de regra (itens.ts; pets v6). O repertorio nao muda: as candidatas e o
-   replay dos pets v1-v5 ficam iguais. Nos pets v6 o vigia recebe as duas regras novas tambem como candidatas de troca
-   (candidatasDoVigia); as regras dos chips nunca viram candidatas (so entram pelo chip). */
+   do reequilibrio, so na semente dos pets v6), das listas V21E (as regras novas do equilibrio geral, so na semente dos pets v9) ou de
+   um chip de regra (itens.ts; pets v6). O repertorio nao muda: as candidatas e o replay dos pets v1-v8 ficam iguais. Nos pets v6 o
+   vigia recebe as duas regras novas tambem como candidatas de troca (candidatasDoVigia), e nos pets v9 o duelista, o tita e a muralha
+   as da V21E (candidatasV21E); as regras dos chips nunca viram candidatas (so entram pelo chip). */
 let REGRAS_SEMENTE: Map<string, Regra> | null = null;
 export function regraDe(k: string): Regra {
   const r = REPERTORIO.get(k);
   if (r) return r;
-  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[],
+  REGRAS_SEMENTE ??= new Map([...Object.values(GAMBITS_SOMBRIA), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(BOTS_V21E) as ListaGambits[],
     { regras: ITENS.flatMap(x => x.tipo === "chip_regra" ? [x.regra] : []), final: "defender" }]
     .flatMap(g => g.regras.map(x => [chaveRegra(x), x] as [string, Regra])));
   if (!REGRAS_SEMENTE.has(k)) throw new Error("regra fora do repertório: " + k);
@@ -78,6 +81,15 @@ export function candidatasDoVigia(f: Forma | null, R: RegrasLuta): string[] {
   if (!f || f.adulta !== "vigia" || !R?.vigiaBateEmQuemRecua || !R.vigiaRecuaDoPreparoSobPele) return [];
   return [REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE].map(chaveRegra).filter(k => !REPERTORIO.has(k));
 }
+/** as regras novas da V21E (bots.gambitsAdulto): nos pets v9 elas voltam como candidatas de troca para a forma que as tem na semente
+    (o duelista e o tita, "defender do golpe rapido repetido"; a muralha, "contra-golpe em quem usa pele dura"), pelo mesmo motivo
+    do vigia (candidatasDoVigia). Nas outras formas e nos pets v1-v8 as candidatas (e o replay) nao mudam */
+export function candidatasV21E(f: Forma | null, R: RegrasLuta): string[] {
+  if (!f || !R) return [];
+  const novas = (f.adulta === "duelista" && R.duelistaDefendeDoGolpe) || (f.adulta === "tita" && R.titaDefendeDoGolpe) ? [REGRA_DEFENDE_DO_GOLPE]
+    : f.adulta === "muralha" && R.muralhaContraGolpeNaPele ? [REGRA_CONTRA_GOLPE_NA_PELE] : [];
+  return novas.map(chaveRegra).filter(k => !REPERTORIO.has(k));
+}
 export const rotuloRegra = (r: Regra): string => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
 
 export interface MudancaGambit { luta: number; texto: string; dono?: boolean }
@@ -101,7 +113,8 @@ export class GambitsPet {
   chipsJaAtivos: string[] = [];
   /** algum chip de regra ja entrou: so entao os chips entram na assinatura (a dos pets sem item nao muda) */
   usouChip = false;
-  /** regras das lutas do pet (a da ultima semeadura): CV21D nos pets v6, null nos v1-v5. Nao entra na assinatura: sai da versao */
+  /** regras das lutas do pet (a da ultima semeadura): CV21E nos pets v9, CV21D nos v6-v8, null nos v1-v5. Nao entra na assinatura: sai
+      da versao */
   regras: RegrasLuta = null;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
       lista cabe na capacidade do estagio */
@@ -145,7 +158,7 @@ export class GambitsPet {
   /** candidatas de troca: regras que o pet ainda nao usa, nao vetadas e permitidas na forma. O repertorio, na ordem dele; nos
       pets v6 com a forma do vigia, mais as duas regras novas do vigia V21D (no fim, para a ordem das outras nao mudar) */
   candidatas(): string[] {
-    return [...REPERTORIO.keys(), ...candidatasDoVigia(this.forma, this.regras)]
+    return [...REPERTORIO.keys(), ...candidatasDoVigia(this.forma, this.regras), ...candidatasV21E(this.forma, this.regras)]
       .filter(k => !this.ativas.includes(k) && !this.vetos.includes(k) && permitida(regraDe(k), this.forma!));
   }
   estilo(): Estilo { return { nome: "aprendido", gambits: { regras: this.ativas.map(regraDe), final: this.final }, eps: CV.eps }; }

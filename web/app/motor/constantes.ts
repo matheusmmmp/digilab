@@ -34,8 +34,10 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    6 = v5 + trava da evolucao pelas medalhas do Tamer (evento "u" no registro; docs/DESIGN_MEDALHAS_ARENAS.md; so no jogo);
    7 = v6 + voz propria: fala espontanea com janela e mentira (evento "fl"; docs/DESIGN_VOZ_PROPRIA.md, secao 9);
    8 = v7 + confianca de combate e desgaste por rival repetido (MVP M1; nenhum evento novo, estado derivado das lutas "l";
-   docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py) */
-export const VERSAO_PET = 8;
+   docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py);
+   9 = v8 + combate equilibrado: as lutas usam a variante V21E (CV21E; rodada de equilibrio geral, fase 1, docs/EQUILIBRIO_GERAL.md);
+   nenhum evento novo */
+export const VERSAO_PET = 9;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -169,6 +171,15 @@ export const CV21 = {
 export const CV21D = {
   versaoPet: 6,
   preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
+} as const;
+/* V21E: rodada de equilibrio geral, fase 1 (docs/EQUILIBRIO_GERAL.md; chaves da ConfigCombateV21E,
+   experiments/configs/v21e/calibracao.json). So nas lutas de pets v9 (versaoPet em diante): as quatro chaves da V21D e as cinco
+   da V21E, todas listas das formas (bots.gambitsAdulto); a base (custo do golpe rapido, parry, C3) nao muda. Os v6-v8 seguem na
+   V21D e os v1-v5 na V21C */
+export const CV21E = {
+  versaoPet: 9,
+  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
+  duelistaDefendeDoGolpe: true, titaDefendeDoGolpe: true, espelhoSemCarregar: true, muralhaSemCarregar: true, muralhaContraGolpeNaPele: true,
 } as const;
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */

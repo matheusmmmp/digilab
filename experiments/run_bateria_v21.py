@@ -97,7 +97,7 @@ def carregar(caminho: Path) -> dict:
 def regras_de(cfg_json: dict) -> Regras:
     """V2.1 original, ou V21C: "regras_base" = campos de ConfigCombateV2C (C1-C4) e "regras_v21" = campos de
     ConfigCombateV21C (marca_fragil, hp_base, hp_por_vigor...). TAREFA_CORRECAO_COMBATE, Etapa 3."""
-    from digilab.config import ConfigCombateV2C, ConfigCombateV21C, ConfigCombateV21D
+    from digilab.config import ConfigCombateV2C, ConfigCombateV21C, ConfigCombateV21D, ConfigCombateV21E
     base, v21 = CONFIG_COMBATE_V2, CONFIG_COMBATE_V21
     if "regras_base" in cfg_json:
         extras = set(cfg_json["regras_base"]) - set(ConfigCombateV2C.__dataclass_fields__)
@@ -105,12 +105,15 @@ def regras_de(cfg_json: dict) -> Regras:
             raise KeyError(f"regras_base desconhecidas: {sorted(extras)}")
         base = ConfigCombateV2C(**{**asdict(CONFIG_COMBATE_V2), **cfg_json["regras_base"]})
     if "regras_v21" in cfg_json:
-        extras = set(cfg_json["regras_v21"]) - set(ConfigCombateV21D.__dataclass_fields__)
+        extras = set(cfg_json["regras_v21"]) - set(ConfigCombateV21E.__dataclass_fields__)
         if extras:
             raise KeyError(f"regras_v21 desconhecidas: {sorted(extras)}")
-        # V21D (reequilibrio, docs/EQUILIBRIO_RODADA1.md) so quando o config pede uma chave dela: as configs V21C
-        # continuam montando a ConfigCombateV21C, com o mesmo asdict e o mesmo config_sha256
-        classe = ConfigCombateV21D if set(cfg_json["regras_v21"]) - set(ConfigCombateV21C.__dataclass_fields__)             else ConfigCombateV21C
+        # V21D (reequilibrio, docs/EQUILIBRIO_RODADA1.md) so quando o config pede uma chave dela, e V21E (equilibrio
+        # geral, docs/EQUILIBRIO_GERAL.md) so quando pede uma chave dela: as configs V21C e V21D continuam montando a
+        # classe de antes, com o mesmo asdict e o mesmo config_sha256
+        chaves = set(cfg_json["regras_v21"])
+        classe = ConfigCombateV21E if chaves - set(ConfigCombateV21D.__dataclass_fields__) \
+            else ConfigCombateV21D if chaves - set(ConfigCombateV21C.__dataclass_fields__) else ConfigCombateV21C
         v21 = classe(**{**asdict(CONFIG_COMBATE_V21), **cfg_json["regras_v21"]})
     return Regras(base=base, v21=v21)
 
