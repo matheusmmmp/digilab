@@ -10,7 +10,7 @@ import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
 import { arenaDaLuta, jogarArena, sementeDaSerie, type Arena } from "./arenas.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
-import { regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
+import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
@@ -190,6 +190,8 @@ export class Motor {
   get lugares(): Lugar[] { return lugaresDe(this.versao); }
   /** regras das lutas deste pet: V21D nos pets v6 (docs/VALIDACAO_V21D.md), V21C nos v1-v5 */
   get regras(): RegrasLuta { return regrasDaVersao(this.versao); }
+  /** quem fica com a luta no limite de turnos: nos pets v6 o rival (o pet sempre desafia); nos v1-v5, ninguem (a fracao de vida) */
+  get desafiado(): Desafiado { return desafiadoDaVersao(this.versao); }
   lugarVencido(L: number): boolean { return this.lugares[L].rivais.some(r => this.campanha[r] > 0); }
   /** indice do lugar do NPC na campanha deste pet (na v6 o Myotismon e a Montanha Espiral mudam de indice) */
   lugarDe(k: string): number {
@@ -216,7 +218,7 @@ export class Motor {
       (Cidadela). O _lutar joga por aqui; a tela refaz as lutas do registro por aqui tambem */
   montarLuta(rival: string, semente: number): LutaMontada {
     const L = this.lutadores(rival);
-    return { ...L, serie: jogarArena(L.A, L.B, semente, this.regras, L.arena?.lutas ?? 1) };
+    return { ...L, serie: jogarArena(L.A, L.B, semente, this.regras, L.arena?.lutas ?? 1, this.desafiado) };
   }
   /** os dois lados da luta contra o rival, sem jogar (a previa do palco usa isto): o pet (no Lago, com a lista sem o dono),
       o rival (o lider com a regra da arena) e as regras do pet com que ele luta */

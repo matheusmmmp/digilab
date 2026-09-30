@@ -29,6 +29,10 @@
 //   3. conferencia nas vidas finais: os tres vizinhos e os dois pares de dois estagios, com o "piso" (vitorias que sobram com a
 //      razao 0,01: o de cima nunca acerta o de baixo e o limite de turnos decide pela fracao de vida; a escala nao tira isso).
 //
+// Limite de turnos: por padrao, a regra do jogo nos pets v6 (decisao do Matheus, 2026-09-30): a luta que chega ao limite sem KO e
+// do desafiado (o NPC/lider; nas metas de estagio, o pet do estagio de cima). --limite-fracao: a regra de antes (a fracao de vida
+// decide), a que gerou os artefatos de calibracao anteriores a essa decisao.
+//
 // uso (em web/app): node test/calibrar_escala_v6.mjs [--validar] [-n 10]
 //   sem --validar: sementes de calibracao, grade de beta e de razoes -> artifacts_campanha/escala_v6/calibracao.json
 //   --validar: sementes de validacao, a CESC_V6 do motor -> artifacts_campanha/escala_v6/validacao.json
@@ -41,7 +45,7 @@ const args = process.argv.slice(2), validar = args.includes("--validar");
 const n = args.includes("-n") ? Number(args[args.indexOf("-n") + 1]) : 10;
 const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
-const R = CV21D;
+const R = CV21D, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
 M.ligarEscala(true);
 
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: 40 };
@@ -81,7 +85,7 @@ function estagio(baixo, alto, rho) {
       const A = pet(fb, eb, TIPICO[baixo], rho === null ? undefined : rho), B = pet(fa, ea, 0, rho === null ? undefined : 1);
       for (const s of sementes) for (let k = 0; k < n; k++) {
         const sp = M.hashSemente("escala-v6", s, A.nome, B.nome, k);
-        const p = k < n / 2 ? M.jogarV2(A, B, sp, R).pontosA : 1 - M.jogarV2(B, A, sp, R).pontosA;
+        const p = k < n / 2 ? M.jogarV2(A, B, sp, R, null, DESAFIADO).pontosA : 1 - M.jogarV2(B, A, sp, R, null, FRACAO ? null : 0).pontosA;
         pontos += p; tot++;
         if (p === 1) { vit++; vp++; }
       }
@@ -95,7 +99,7 @@ function estagio(baixo, alto, rho) {
 function taxaArena(a, b, arena) {
   let soma = 0, tot = 0;
   for (const s of sementes) for (let k = 0; k < n; k++) {
-    const serie = M.jogarArena(a, b, M.hashSemente("calib-arena", s, a.nome, b.nome, k), R, arena.lutas ?? 1);
+    const serie = M.jogarArena(a, b, M.hashSemente("calib-arena", s, a.nome, b.nome, k), R, arena.lutas ?? 1, DESAFIADO);
     soma += serie.length === (arena.lutas ?? 1) ? serie[serie.length - 1].pontosA : 0; tot++;
   }
   return soma / tot;
@@ -129,7 +133,7 @@ function viabilidade(beta) {
 
 const pasta = fileURLToPath(new URL("../../../artifacts_campanha/escala_v6/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
-const cab = { sementes, n_por_semente: n, regras: "v21d", treino_tipico: TIPICO,
+const cab = { limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, regras: "v21d", treino_tipico: TIPICO,
   metas: { vizinho_pontos_max: META_VIZINHO, dois_estagios_vitorias_max: META_DOIS, lider_sem_max: META_SEM, lider_com_min: META_COM, lider_pior_forma_min: META_FORMA } };
 
 if (validar) {

@@ -158,9 +158,10 @@ describe("replay com o evento u", () => {
     ligarEscala(true);
     const dadas = new Set<number>();
     const dar = (m: Motor, n: number) => { if (!dadas.has(n)) { dadas.add(n); m.liberar(n); } };
-    /* semente 5303 (era 5202): sem os u o pet fica mais tempo no Rookie e luta mais com o Gazimon; com a escala dos pets v6 ele
-       perde mais, e na 5202 a linha do tempo sem os u morria de lesao sem tratar (o dono do registro nao a via) */
-    const m = vida(6, "atencioso", 5303, 3, (mm, p) => {
+    /* semente 5404 (era 5202): sem os u o pet fica mais tempo no Rookie e luta mais com o Gazimon; com a escala dos pets v6 e a
+       regra do limite do desafiado ele perde mais, e em varias sementes a linha do tempo sem os u morre de lesao sem tratar (o
+       dono do registro nao a via). A assinatura diferente e o que o teste pede; a morte tambem conta como outra linha do tempo */
+    const m = vida(6, "atencioso", 5404, 3, (mm, p) => {
       if (p === 40) dar(mm, 1);                                  /* no In-Training: nada muda na hora */
       if (mm.esperandoMedalha()) dar(mm, mm.esperandoMedalha()!.precisa);
     });
@@ -170,8 +171,9 @@ describe("replay com o evento u", () => {
     expect(r.medalhas).toBe(m.medalhas);
     expect(r.estagioAtual).toBe(m.estagioAtual);
     const semU = m.log.filter(e => e[1] !== "u");
-    expect(() => Motor.reproduzir(m.semente, semU, 6).assinatura()).not.toThrow();
-    expect(Motor.reproduzir(m.semente, semU, 6).assinatura()).not.toBe(m.assinatura());
+    let outra: string;
+    try { outra = Motor.reproduzir(m.semente, semU, 6).assinatura(); } catch (err) { outra = "morreu: " + String(err); }
+    expect(outra).not.toBe(m.assinatura());
   });
   test("a assinatura dos v6 inclui as medalhas (um u no In-Training ja muda)", () => {
     const a = new Motor(90, 6), b = new Motor(90, 6);

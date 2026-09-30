@@ -51,7 +51,8 @@ function ultimateV6(semente: number, treinados: readonly string[] = ["crianca", 
   treinar();
   let k = 0;
   while (m.sparring < CAT.sparring) lutar(m, "aleatorio", hashSemente("sp", semente, k++));
-  esperarEvoluir();
+  /* a passagem para Ultimate pede a taxa de vitoria das lutas do estagio: se o tempo passou e ele nao evoluiu, luta mais */
+  for (let j = 0; j < 40 && m.estagioAtual === "adolescente"; j++) { esperarEvoluir(); if (m.estagioAtual === "adolescente") lutar(m, "aleatorio", hashSemente("sp", semente, k++)); }
   if (m.estagioAtual !== "adulto") throw new Error("o pet de teste nao chegou a Ultimate");
   treinar();
   return m;

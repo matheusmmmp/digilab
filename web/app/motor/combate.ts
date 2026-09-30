@@ -141,10 +141,21 @@ export function resolverV2(E: EstadoLuta, aa: string, ab: string): ResultadoTurn
   });
   return { E: { turno: E.turno + 1, dist, L }, dano, dev, interr, errou };
 }
-export function fimV2(E: EstadoLuta): [number, "ko" | "limite"] | null {
+/** quem foi desafiado na luta (0 = lado A, 1 = lado B) ou null (ninguem: o limite de turnos decide pela fracao de vida, como
+    sempre). Regra do limite (decisao do Matheus, 2026-09-30, so no jogo): a luta que chega ao limite de turnos sem KO e do
+    desafiado. Nas lutas dos pets v6 o pet (lado A) sempre desafia (desafiadoDaVersao); na Fronteira o desafiado sera o campeao */
+export type Desafiado = 0 | 1 | null;
+/** versao de pet a partir da qual o limite de turnos e do desafiado */
+export const VERSAO_LIMITE_DESAFIADO = 6;
+/** o desafiado nas lutas do motor (o pet e o lado A): o rival (lado B) nos pets v6; ninguem nos v1-v5 */
+export const desafiadoDaVersao = (versao: number): Desafiado => versao >= VERSAO_LIMITE_DESAFIADO ? 1 : null;
+export function fimV2(E: EstadoLuta, desafiado: Desafiado = null): [number, "ko" | "limite"] | null {
   const [a, b] = E.L, koA = a.hp <= 0, koB = b.hp <= 0;
   if (koA || koB) return [koA && koB ? .5 : koA ? 0 : 1, "ko"];
-  if (E.turno >= CV.tMax) { const fa = a.hp / a.hpMax, fb = b.hp / b.hpMax; return [fa === fb ? .5 : fa > fb ? 1 : 0, "limite"]; }
+  if (E.turno >= CV.tMax) {
+    if (desafiado !== null) return [desafiado === 0 ? 1 : 0, "limite"];
+    const fa = a.hp / a.hpMax, fb = b.hp / b.hpMax; return [fa === fb ? .5 : fa > fb ? 1 : 0, "limite"];
+  }
   return null;
 }
 
@@ -274,8 +285,9 @@ export interface Turno {
 export interface ResultadoLuta { E0: EstadoLuta; turnos: Turno[]; pontosA: number; fim: "ko" | "limite"; E: EstadoLuta }
 
 /** `ini`: o lado A comeca com esta vida e este guts (as lutas seguidas da arena da Cidadela, sem cura; arenas.jogarArena);
-    null = a luta de sempre, os dois inteiros */
-export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta = null, ini: { hp: number; guts: number } | null = null): ResultadoLuta {
+    null = a luta de sempre, os dois inteiros. `desafiado`: quem fica com a luta no limite de turnos (fimV2) */
+export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta = null, ini: { hp: number; guts: number } | null = null,
+  desafiado: Desafiado = null): ResultadoLuta {
   const ra = criarRng(hashSemente("v2", semente, 0)), rb = criarRng(hashSemente("v2", semente, 1));
   let E = estadoV2(A.cond, B.cond), fim: ReturnType<typeof fimV2>;
   if (ini) {
@@ -283,7 +295,7 @@ export function jogarV2(A: Lutador, B: Lutador, semente: number, R: RegrasLuta =
     E = { ...E, L: [{ ...E.L[0], hp: ini.hp, guts: Math.min(ini.guts, E.L[0].gutsMax) }, E.L[1]] };
   }
   const E0 = E, turnos: Turno[] = [];
-  while (!(fim = fimV2(E))) {
+  while (!(fim = fimV2(E, desafiado))) {
     /* o vigia ve a intencao do oponente (sem exploracao, sem rng) antes de decidir */
     const ctxA = A.cond.passiva === "vigia" ? { intencao: intencaoV2(B.estilo, E, 1, R) } : null;
     const ctxB = B.cond.passiva === "vigia" ? { intencao: intencaoV2(A.estilo, E, 0, R) } : null;

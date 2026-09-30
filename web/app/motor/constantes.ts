@@ -216,8 +216,10 @@ export const CESC_V6 = {
   versaoPet: 6,
   vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,
   beta: .045,
-  /* Tortomon: nenhum fator fecha as metas (o de maior folga; a excecao da Sentinela de sempre, agora na escala v6) */
-  fatorNpc: { npc_tier2_sentinela: 1.6, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.7 } as Record<string, number>,
+  /* Tortomon: nenhum fator fecha as metas (o de maior folga; a excecao da Sentinela de sempre, agora na escala v6). Com a regra
+     do limite do desafiado (2026-09-30) o Tortomon e o Machinedramon sairam das metas na validacao e foram recalibrados (1,6 -> 1,5
+     e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
+  fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
 };
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */

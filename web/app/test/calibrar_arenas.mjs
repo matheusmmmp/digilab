@@ -15,6 +15,10 @@
 // Com a meta de 0,05 todos os lideres sao recalibrados, inclusive Campina e Montanha Espiral (o fator vale so na arena).
 // No Lago a regra (sem travas nem vetos) nao muda nada para os pets de referencia, que nao tem dono.
 //
+// Limite de turnos: por padrao, a regra do jogo nos pets v6 (decisao do Matheus, 2026-09-30): a luta que chega ao limite sem KO e
+// do desafiado (o NPC/lider; nas metas de estagio, o pet do estagio de cima). --limite-fracao: a regra de antes (a fracao de vida
+// decide), a que gerou os artefatos de calibracao anteriores a essa decisao.
+//
 // uso (em web/app): node test/calibrar_arenas.mjs [--validar] [-n 10]
 //   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> artifacts_campanha/arenas/calibracao.json
 //   --validar: sementes de validacao, os fatores de motor/arenas.ts (ou do NPC) -> artifacts_campanha/arenas/validacao.json
@@ -32,7 +36,7 @@ const FATORES = Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) 
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: CMG.tetoVida };
 /* com a meta de 0,05 nenhum lider fica so medido */
 const SO_MEDIR = new Set();
-const R = CV21D;
+const R = CV21D, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
 M.ligarEscala(true);
 
 const primeiraForma = l => FORMAS_AD.find(f => LINHA_DA_FORMA[f] === l);
@@ -49,7 +53,7 @@ function pet([nome, forma, car, g], esp, nivel) {
 function taxa(a, b, arena) {
   let soma = 0, tot = 0;
   for (const s of sementes) for (let k = 0; k < n; k++) {
-    const serie = M.jogarArena(a, b, M.hashSemente("calib-arena", s, a.nome, b.nome, k), R, arena.lutas ?? 1);
+    const serie = M.jogarArena(a, b, M.hashSemente("calib-arena", s, a.nome, b.nome, k), R, arena.lutas ?? 1, DESAFIADO);
     const ult = serie[serie.length - 1];
     soma += serie.length === (arena.lutas ?? 1) ? ult.pontosA : 0; tot++;
   }
@@ -74,7 +78,7 @@ const fatorDe = a => a.fator ?? NPC[a.lider].fator ?? CESC.fatorNpc[a.lider];
 
 const out = {
   descricao: "Calibracao dos lideres das arenas (pets v6, medalhas parte 2): motor web, escala ligada, regras V21D, regra de cada arena.",
-  conjunto: validar ? "validacao" : "calibracao", sementes, n_por_semente: n, pet_lado: "A",
+  conjunto: validar ? "validacao" : "calibracao", limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, pet_lado: "A",
   metas: { sem_treino_max: META_SEM, com_treino_min: META_COM, pior_forma_min: META_FORMA }, treino_tipico: TIPICO, arenas: {},
 };
 for (const a of ARENAS) {

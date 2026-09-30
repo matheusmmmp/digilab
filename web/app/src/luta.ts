@@ -147,7 +147,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
       p.texto = (nLutas > 1 ? (res.pontosA === 1 ? `Seu pet venceu as ${nLutas} lutas seguidas. ` : `A série parou na luta ${serie.length} de ${nLutas}. `) : "")
-        + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
+        + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : !cenario && m.desafiado === 1 ? "limite de turnos: a luta fica com quem foi desafiado" : "limite de turnos: vence quem tem mais vida"}).`
         + (primeiraDoLugar && Li < m.lugares.length - 1 ? ` ${m.lugares[Li + 1].nome} liberada!` : "")
         + (primeiraDoLugar && Li === m.lugares.length - 1 ? " Campanha concluída!" : "")
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");

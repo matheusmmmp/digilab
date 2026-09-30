@@ -9,6 +9,10 @@
 // Mega 40) e nenhuma forma < 0,5. Escolha: entre os fatores que passam, o de maior folga; se nenhum passar, o de maior folga
 // (NAO PASSA). O fator vale so nas lutas dos pets v6 (CESC_V6.fatorNpc); os v1-v5 seguem com os de sempre.
 //
+// Limite de turnos: por padrao, a regra do jogo nos pets v6 (decisao do Matheus, 2026-09-30): a luta que chega ao limite sem KO e
+// do desafiado (o NPC/lider; nas metas de estagio, o pet do estagio de cima). --limite-fracao: a regra de antes (a fracao de vida
+// decide), a que gerou os artefatos de calibracao anteriores a essa decisao.
+//
 // uso (em web/app): node test/calibrar_desafiantes_v6.mjs [--validar] [-n 10]
 //   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> artifacts_campanha/escala_v6/desafiantes_calibracao.json
 //   --validar: sementes de validacao, os fatores de CESC_V6.fatorNpc -> artifacts_campanha/escala_v6/desafiantes_validacao.json
@@ -24,7 +28,7 @@ const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
 const META_SEM = 0.30, META_COM = 0.80, META_FORMA = 0.5;
 const FATORES = Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) * 10) / 10);   /* 0,5..4,0 */
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: 40 };
-const R = CV21D;
+const R = CV21D, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
 M.ligarEscala(true);
 
 const LIDERES = new Set(ARENAS.map(a => a.lider));
@@ -42,7 +46,7 @@ function pet([nome, forma, car, g], esp, nivel) {
 }
 function taxa(a, b) {
   let soma = 0, tot = 0;
-  for (const s of sementes) for (let k = 0; k < n; k++) { soma += M.jogarV2(a, b, M.hashSemente("calib-desafiante", s, a.nome, b.nome, k), R).pontosA; tot++; }
+  for (const s of sementes) for (let k = 0; k < n; k++) { soma += M.jogarV2(a, b, M.hashSemente("calib-desafiante", s, a.nome, b.nome, k), R, null, DESAFIADO).pontosA; tot++; }
   return soma / tot;
 }
 function medir(c, fator) {
@@ -63,7 +67,7 @@ function medir(c, fator) {
 
 const out = {
   descricao: "Calibracao dos desafiantes da campanha v6 (NPCs que nao sao lideres) na escala dos pets v6: motor web, regras V21D.",
-  conjunto: validar ? "validacao" : "calibracao", sementes, n_por_semente: n, pet_lado: "A",
+  conjunto: validar ? "validacao" : "calibracao", limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, pet_lado: "A",
   escala: { vida: CESC_V6.vida, beta: CESC_V6.beta },
   metas: { sem_treino_max: META_SEM, com_treino_min: META_COM, pior_forma_min: META_FORMA }, treino_tipico: TIPICO, desafiantes: {},
 };

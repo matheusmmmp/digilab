@@ -72,7 +72,7 @@ describe("registro do Tamer", () => {
   });
 });
 
-describe("descarte unico dos pets antigos (medalhas, combate V21D, arenas e escala v6)", () => {
+describe("descarte unico dos pets antigos (medalhas, combate V21D, arenas, escala v6 e limite)", () => {
   const v = (versao?: number) => JSON.stringify({ semente: 1, log: [], ...(versao ? { versao } : {}) });
   test("primeira abertura: os pets v1-v6 saem (ativo e guardados), o aviso fica pendente e o Tamer comeca vazio; roda uma vez", () => {
     const a = armaz({ [CHAVE]: v(5), [GUARDADOS]: JSON.stringify([{ semente: 2, log: [], versao: 3 }, { semente: 3, log: [] }, { semente: 4, log: [], versao: 6 }]) });
@@ -80,7 +80,7 @@ describe("descarte unico dos pets antigos (medalhas, combate V21D, arenas e esca
     expect(a.dados[CHAVE]).toBeUndefined();
     expect(a.dados[GUARDADOS]).toBe("[]");
     expect(a.dados[CHAVE_AVISO_V6]).toBe("4");
-    expect(a.dados[CHAVE_DESCARTE]).toBe("4");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("5");
     expect(lerTamer(a).n).toBe(0);
     a.dados[CHAVE] = v(6);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();          /* ja rodou: nada sai (o v6 de agora fica) */
@@ -101,18 +101,25 @@ describe("descarte unico dos pets antigos (medalhas, combate V21D, arenas e esca
     const a = armaz({ [CHAVE]: v(6), [CHAVE_DESCARTE]: "2" });
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(1);
     expect(a.dados[CHAVE]).toBeUndefined();
-    expect(a.dados[CHAVE_DESCARTE]).toBe("4");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("5");
     expect(a.dados[CHAVE_AVISO_V6]).toBe("1");
     a.dados[CHAVE] = v(6);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
     expect(a.dados[CHAVE]).toBe(v(6));
+  });
+  test("depois do descarte da escala v6 (marcador 4): os v6 de antes da regra do limite saem de novo, mesmo aviso", () => {
+    const a = armaz({ [CHAVE]: v(6), [CHAVE_DESCARTE]: "4" });
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBe(1);
+    expect(a.dados[CHAVE]).toBeUndefined();
+    expect(a.dados[CHAVE_DESCARTE]).toBe("5");
+    expect(a.dados[CHAVE_AVISO_V6]).toBe("1");
   });
   test("depois do descarte das arenas (marcador 3): os v6 de antes da escala v6 saem de novo, mesmo aviso", () => {
     const a = armaz({ [CHAVE]: v(6), [GUARDADOS]: JSON.stringify([{ semente: 7, log: [], versao: 6 }]), [CHAVE_DESCARTE]: "3" });
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(2);
     expect(a.dados[CHAVE]).toBeUndefined();
     expect(a.dados[GUARDADOS]).toBe("[]");
-    expect(a.dados[CHAVE_DESCARTE]).toBe("4");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("5");
     expect(a.dados[CHAVE_AVISO_V6]).toBe("2");
     a.dados[CHAVE] = v(6);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
@@ -124,7 +131,7 @@ describe("descarte unico dos pets antigos (medalhas, combate V21D, arenas e esca
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(0);
     expect(lerTamer(a).n).toBe(1);
     expect(a.dados[CHAVE_AVISO_V6]).toBeUndefined();
-    expect(a.dados[CHAVE_DESCARTE]).toBe("4");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("5");
     expect(() => descartarPetsAntigos(armaz({ [CHAVE_DESCARTE]: "x" }), GUARDADOS)).toThrow();
   });
   test("primeiro acesso (sem nada): nada sai, sem aviso; save que nao e JSON fica para o erro de sempre", () => {

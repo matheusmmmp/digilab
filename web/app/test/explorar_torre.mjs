@@ -8,6 +8,8 @@
 // Champion com a lista do adolescente e o carater canonico, 4 especies, sem treino e com 22; metas sem treino <= 0,05, com o
 // treino tipico >= 0,80, nenhuma forma < 0,5; fatores 0,5..4,0). Escolha: a variante com a maior folga; empate: a mais perto
 // da lista de antes (a ordem abaixo). Saida: artifacts_campanha/arenas/torre_variantes.json.
+// Limite de turnos: a regra de antes (a fracao de vida decide); a lista foi escolhida antes da regra do desafiado (2026-09-30), e
+// com ela a validacao dos lideres foi refeita (test/calibrar_arenas.mjs --validar).
 // uso (em web/app): node test/explorar_torre.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

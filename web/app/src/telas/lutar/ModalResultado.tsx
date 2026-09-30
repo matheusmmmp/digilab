@@ -34,7 +34,8 @@ export function fraseTurno(tr: Turno, A: LutadorTela, B: LutadorTela, travadas: 
   return lados.join("; ") + ".";
 }
 /** os momentos que decidiram: ate dois turnos marcantes antes do ultimo, o ultimo e como acabou */
-export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null): { t: string; txt: string; tom: "" | "bom" | "ruim" }[] {
+/** `desafiado`: o limite de turnos e do rival (lutas do motor dos pets v6: o pet sempre desafia); sem ele, da fracao de vida */
+export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null, desafiado = false): { t: string; txt: string; tom: "" | "bom" | "ruim" }[] {
   const n = res.turnos.length; if (!n) return [];
   const marcante = (tr: Turno) => tr.dano[0] > 0 || tr.dano[1] > 0 || tr.errou[0] || tr.errou[1] || tr.interr[0] || tr.interr[1]
     || [tr.a, tr.b].some(x => x === "preparar_pesado" || x === "fintar");
@@ -54,6 +55,7 @@ export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: Lutador
     const caiu = [hpA <= 0 && A.nomeTela, hpB <= 0 && B.nomeTela].filter(Boolean).join(" e ");
     return [...linhas, { t: `T${ult.t}`, txt: `${caiu} caiu.`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
   }
+  if (desafiado) return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos sem nocaute: a luta fica com quem foi desafiado (${B.nomeTela}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
   return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond, jogoAtual().motor.versao))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond, jogoAtual().motor.versao))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
 }
 
@@ -80,7 +82,7 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
     catch (err) { setMsgRegra(err instanceof Error ? err.message : String(err)); }
   };
   const gp = m.gp, estadoNova = nova && gp ? (gp.vetos.includes(nova.k) ? "vetada" : nova.k in gp.travas ? "travada" : gp.ativas.includes(nova.k) ? "livre" : "fora") : null;
-  const momentos = momentosDecisivos(res, p.A, p.B, gp ? gp.travas : null);
+  const momentos = momentosDecisivos(res, p.A, p.B, gp ? gp.travas : null, !r.cenario && m.desafiado === 1);
   /* tutorial (Bit): a primeira derrota na campanha e a primeira regra nova */
   useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova) pedirDica("regra_nova"); }, []);
 
