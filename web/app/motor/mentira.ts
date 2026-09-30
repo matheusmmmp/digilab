@@ -32,7 +32,7 @@ export function mentiraDeHistoria(regra: string, d: Record<string, unknown>): st
   if (regra === "gosto" && s("acao") in PET_INF) return `odeio ${PET_INF[s("acao")]}`;
   if (regra === "desgosto" && s("acao") in PET_INF) return `adoro ${PET_INF[s("acao")]}`;
   if (regra === "treino_favorito" && s("exercicio")) return `odeio treinar ${s("exercicio").replace(/_/g, " ")}`;
-  if ((regra === "revanche" || regra === "venceu_depois" || regra === "primeira_derrota") && s("rival")) return `eu venci ${rivalPadrao(s("rival"))} fácil`;
+  if ((regra === "revanche" || regra === "venceu_depois" || regra === "primeira_derrota") && s("rival")) return `eu venci ${s("nome") || rivalPadrao(s("rival"))} fácil`;   /* nome: o do jogo, quando vem */
   if (regra === "primeira_vitoria") return "nunca venci uma luta";
   if (regra === "lesao") return d.tratada ? "me machuquei e ninguém me tratou" : "nunca me machuquei";
   if (regra === "ausencia") return "você nunca some";

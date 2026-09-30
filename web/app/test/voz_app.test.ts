@@ -2,7 +2,7 @@
    registro do pet pelo evento "fl" e rejoga igual. */
 import { describe, expect, test } from "vitest";
 import { Motor, TPD, mentiraDeHistoria } from "../motor/index.ts";
-import { REENCONTRO_REAL_MS, RITMO_MIN, assuntoDaFala, gatilhoDe, podeFalar } from "../src/voz.ts";
+import { REENCONTRO_REAL_MS, RITMO_MIN, TEXTO_GATILHO, assuntoDaFala, gatilhoDe, podeFalar, revancheContra } from "../src/voz.ts";
 
 /** pet v7 criado e levado ate a crianca, com o dono agindo a cada 15 min */
 function crianca(semente = 11): Motor {
@@ -67,5 +67,26 @@ describe("assunto e molde", () => {
     for (let k = 0; k < 6; k++) { m.avancar(RITMO_MIN); if (podeFalar(m)) m.falar("reencontro"); if (m.janelaAberta()) m.observar("elogiar"); }
     expect(m.log.some(e => e[1] === "fl")).toBe(true);
     expect(Motor.reproduzir(41, m.log, 7).assinatura()).toBe(m.assinatura());
+  });
+});
+
+describe("revanche", () => {
+  test("depois de perder: o fato de revanche e o assunto; fala uma vez por derrota; vencer tira", () => {
+    const m = crianca(31);
+    let s = 1;
+    while (m.lutar("furioso", s++).venceu !== false) { /* ate perder para o adulto */ }
+    const f = revancheContra(m, "furioso");
+    expect(f?.regra).toBe("revanche");
+    expect(revancheContra(m, "agressivo")).toBeNull();
+    while (!podeFalar(m)) { m.avancar(15); if (m.janelaAberta()) m.observar("elogiar"); }
+    const j = m.falar("revanche")!;
+    if (!j.falso) expect(assuntoDaFala(m, j, [], f).chaves).toEqual([f!.chave]);
+    expect(revancheContra(m, "furioso")).toBeNull();          /* ja falou depois desta derrota */
+    expect(TEXTO_GATILHO.revanche).toBeTruthy();
+    expect(Motor.reproduzir(m.semente, m.log, m.versao).assinatura()).toBe(m.assinatura());
+  });
+  test("pets antes do v7 nao falam", () => {
+    const m = new Motor(5, 6);
+    expect(revancheContra(m, "furioso")).toBeNull();
   });
 });

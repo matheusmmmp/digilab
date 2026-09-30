@@ -6,10 +6,12 @@
    Gatilhos (secao 3): reencontro (o dono volta depois de >= 3 h de jogo e 20 min de relogio sem agir), habito novo (um fato H ou O aparece pela
    primeira vez), aniversario (1 dia de jogo depois de uma evolucao), marco (evolucao, lesao tratada, vitoria sobre um
    desafio da campanha), luta e vontade nova (os de antes). Ritmo: no maximo 1 fala a cada 2 h de jogo, nunca com
-   janela aberta nem dormindo; o bebe so faz emote (nao fala). A revanche (antes de lutar contra o rival da revanche)
-   ficou para depois: a luta nao passa por aqui. */
-import { CMEN, TPD, desvioPorAcao, distorcivel, escolherAssunto, extrair, mentiraDeEstado, mentiraDeHistoria, registroDoMotor,
+   janela aberta nem dormindo; o bebe so faz emote (nao fala). Revanche (antes de lutar contra o rival do gosto "revanche":
+   quando o dono escolhe esse rival na Arena ou na Campanha) nao passa por gatilhoDe: a tela chama falaRevanche; uma vez
+   por derrota (o registro diz se ja falou depois dela). */
+import { CHIS, CMEN, TPD, desvioPorAcao, distorcivel, escolherAssunto, extrair, mentiraDeEstado, mentiraDeHistoria, registroDoMotor,
   selecionar, type FatoHistoria, type Janela, type Motor } from "../motor/index.ts";
+import { nomeRivalTela } from "./nomesRivais.ts";
 import { CHAVE } from "./save.ts";
 
 export const RITMO_MIN = 120;                     /* no maximo 1 fala espontanea a cada 2 h de jogo */
@@ -24,6 +26,7 @@ export const TEXTO_GATILHO: Record<string, string> = {
   reencontro: "o dono voltou depois de um tempo sumido", habito_novo: "percebi um hábito novo",
   aniversario: "faz um dia que evoluí", marco: "acabou de acontecer uma coisa marcante",
   luta: "acabei de lutar", vontade: "tive uma vontade nova",
+  revanche: "vou lutar de novo contra quem me venceu",
 };
 
 /** preferencia "o pet comenta coisas da internet" (fora do save; ligada por padrao) */
@@ -38,8 +41,10 @@ const tickUltimaFala = (m: Motor): number => { for (let i = m.log.length - 1; i 
 const donos = (m: Motor): number[] => m.log.filter(e => e[1] === "d").map(e => e[0] as number);
 const somaCampanha = (m: Motor): number => Object.values(m.campanha).reduce((a, b) => a + b, 0);
 
+/** fatos da historia com o rival pelo nome da tela (o texto e dados.nome, que a mentira usa); a chave segue com o id */
 function fatosDe(m: Motor, comGostos: boolean): FatoHistoria[] {
-  return extrair(registroDoMotor(m, comGostos && m.versao >= 3 ? desvioPorAcao(m) : []));
+  return extrair(registroDoMotor(m, comGostos && m.versao >= 3 ? desvioPorAcao(m) : []), CHIS, nomeRivalTela)
+    .map(f => typeof f.dados.rival === "string" ? { ...f, dados: { ...f.dados, nome: nomeRivalTela(f.dados.rival) } } : f);
 }
 function chavesHabito(fatos: FatoHistoria[]): Set<string> { return new Set(fatos.filter(f => f.tipo === "H" || f.tipo === "O").map(f => f.chave)); }
 
@@ -78,6 +83,14 @@ export function podeFalar(m: Motor): boolean {
     && m.e.tick - tickUltimaFala(m) >= RITMO_MIN;
 }
 
+/** o fato de revanche (P) contra este rival, se ele ainda nao falou dela depois da derrota; senao null */
+export function revancheContra(m: Motor, rival: string): FatoHistoria | null {
+  if (m.versao < 7) return null;
+  const f = fatosDe(m, false).find(x => x.regra === "revanche" && x.dados.rival === rival);
+  if (!f || m.log.some(e => e[1] === "fl" && e[2] === "revanche" && (e[0] as number) >= f.tick)) return null;
+  return f;
+}
+
 /* ------------------------------------------------ o que o pet diz */
 export interface AssuntoFala { historia: Record<string, unknown>[]; mentira: { tema: string } | null; chaves: string[];
   verdade: string | null; molde: string }
@@ -85,7 +98,8 @@ const paraFato = (f: FatoHistoria) => ({ tipo: f.tipo, regra: f.regra, chave: f.
 const frase = (t: string) => t[0].toUpperCase() + t.slice(1) + (/[.!?]$/.test(t) ? "" : ".");
 
 /** o assunto da fala espontanea (o codigo escolhe; a LLM so escreve) e o texto de queda (sem servidor) */
-export function assuntoDaFala(m: Motor, j: Janela, dadosRecentes: string[][]): AssuntoFala {
+/** foco: o fato que disparou a fala (revanche): e o assunto quando ele fala a verdade */
+export function assuntoDaFala(m: Motor, j: Janela, dadosRecentes: string[][], foco: FatoHistoria | null = null): AssuntoFala {
   const fatos = fatosDe(m, true);
   const e = { fome: 1 - m.e.fome, higiene: m.e.higiene, energia: m.e.energia, humor: m.e.humor, saude: m.e.saude };
   if (j.falso && j.pedido === "historia") {
@@ -97,7 +111,7 @@ export function assuntoDaFala(m: Motor, j: Janela, dadosRecentes: string[][]): A
     const me = mentiraDeEstado(e);
     return { historia: [], mentira: { tema: j.pedido === "historia" ? "historia" : "estado" }, chaves: [], verdade: me.verdade, molde: frase(me.falsa) };
   }
-  const a = escolherAssunto(fatos, dadosRecentes);
+  const a = foco ?? escolherAssunto(fatos, dadosRecentes);
   return a ? { historia: [paraFato(a)], mentira: null, chaves: [a.chave], verdade: null, molde: frase(a.texto) }
     : { historia: [], mentira: null, chaves: [], verdade: null, molde: "…" };
 }
