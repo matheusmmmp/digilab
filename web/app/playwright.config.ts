@@ -12,7 +12,8 @@ const PREFIXO = "/" + basename(REPO);
 const PY_LOCAL = resolve(REPO, ".venv/Scripts/python.exe");
 const PYTHON = process.env.DIGILAB_PYTHON ?? (existsSync(PY_LOCAL) ? PY_LOCAL : "python");
 
-const PORTA = 8799;
+// DIGILAB_PORTA_E2E: outra porta quando um e2e de outra worktree ja ocupa a 8799
+const PORTA = Number(process.env.DIGILAB_PORTA_E2E ?? 8799);
 export default defineConfig({
   testDir: "e2e",
   timeout: 240_000,

@@ -262,7 +262,154 @@ def fase_csv(modelo: str | None = None) -> str:
     return modelo
 
 
+# ------------------------------------------------------------------ comando pelo chat (TAREFA_COMANDO_CHAT, secao 4)
+#     python experiments/avaliar_fala.py --livre --comando            -> artifacts_fala_livre/comando/rodada1/
+# 60 mensagens escritas a mao (situacoes.MENSAGENS_COMANDO) x 3 sementes, gemma2:9b, prompt livre-v7 na conversa, pelo
+# mesmo `gerar` que da o comando ao servidor (a autocorrecao so reescreve a fala; o comando e o da primeira geracao).
+# Metricas: acerto por classe e falsos positivos (comando nao nulo numa negativa: o que importa). Gate PROPOSTO:
+# falsos positivos <= 5% nas negativas; imperativos claros >= 80%. Nenhum numero no relatorio sem este artefato.
+# rodada 1: SEM o bloco de estilo da especie (mede o comando em si). Rodada 2: as mesmas mensagens e sementes COM o estilo,
+# como o servidor manda no jogo: na sonda, o estilo do corpus fez o gemma2:9b responder com trechos em japones, e `ler`
+# rejeita letras fora do alfabeto latino (a fala vira a generica e o comando null); a rodada 2 mede quanto isso pesa.
+RODADAS_COMANDO = {1: {"pasta": "rodada1", "sementes": (20261003, 20261004, 20261005), "estilo": False},
+                   2: {"pasta": "rodada2_estilo", "sementes": (20261003, 20261004, 20261005), "estilo": True}}
+MODELO_COMANDO = "gemma2:9b"
+GATE_FP_NEGATIVAS = 0.05
+GATE_IMPERATIVOS = 0.80
+# tres pets de estagios diferentes, no formato do estado da pagina (com a historia da voz propria); a mensagem i usa o
+# pet i % 3. Um deles com o estilo do corpus de EXEMPLO (Angemon)
+PETS_COMANDO = (
+    {"identidade": {"estagio": "adulto", "especie": "Amizade", "forma": "Angemon"},
+     "temperamento": {"curiosidade": 0.5, "teimosia": 0.1, "sensibilidade": 0.3, "rancor": -0.1},
+     "estado": {"fome": 0.7, "higiene": 0.5, "energia": 0.6, "humor": 0.7, "saude": 0.9}, "vinculo": 0.6,
+     "historia": [{"tipo": "O", "regra": "demora", "chave": "O:demora", "texto": "você atende meus chamados rápido",
+                   "dados": {"rapido": True}},
+                  {"tipo": "P", "regra": "gosto", "chave": "P:gosto:brincar", "texto": "gosto de brincar",
+                   "dados": {"acao": "brincar"}}]},
+    {"identidade": {"estagio": "adolescente", "especie": "Coragem", "forma": "Greymon", "linha": "brigao"},
+     "temperamento": {"curiosidade": 0.1, "teimosia": 0.6, "sensibilidade": -0.2, "rancor": 0.3},
+     "estado": {"fome": 0.3, "higiene": 0.8, "energia": 0.4, "humor": 0.4, "saude": 0.7, "sujo": True}, "vinculo": 0.3,
+     "historia": [{"tipo": "H", "regra": "sequencia", "chave": "H:seq:comer:dormir", "texto": "quase sempre durmo depois de comer",
+                   "dados": {"a": "comer", "b": "dormir"}}]},
+    {"identidade": {"estagio": "crianca", "especie": "Conhecimento", "forma": "Gabumon"},
+     "temperamento": {"curiosidade": 0.3, "teimosia": -0.4, "sensibilidade": 0.6, "rancor": 0.0},
+     "estado": {"fome": 0.5, "higiene": 0.6, "energia": 0.9, "humor": 0.8, "saude": 1.0}, "vinculo": 0.5,
+     "historia": []},
+)
+
+
+def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool) -> None:
+    from .corpus import carregar
+    from .prompt import VERSAO_PROMPT_V7
+    from .situacoes import MENSAGENS_COMANDO
+    especies, _, _ = carregar()
+    cli = ClienteOllama(modelo)
+    gerar(cli, PETS_COMANDO[0], "conversa", "oi", semente=0, versao=VERSAO_PROMPT_V7, comando=True)   # aquece
+    linhas, t_ini = [], time.perf_counter()
+    for i, (texto, classe, esperado) in enumerate(MENSAGENS_COMANDO):
+        pet = PETS_COMANDO[i % len(PETS_COMANDO)]
+        esp = especies.get(pet["identidade"]["forma"]) if estilo else None
+        for k, s0 in enumerate(sementes):
+            r = gerar(cli, pet, "conversa", texto, semente=s0 + i, versao=VERSAO_PROMPT_V7, especie=esp, comando=True)
+            linhas.append({"i": i, "mensagem": texto, "classe": classe, "esperado": esperado, "pet": i % len(PETS_COMANDO),
+                           "estagio": r.estagio, "semente": s0 + i, "rodada_semente": k, "comando": r.comando,
+                           "acertou": r.comando == esperado, "fala": r.fala, "fatos_citados": list(r.fatos_citados),
+                           "especie_corpus": r.especie, "modelo": r.modelo, "versao_prompt": r.versao_prompt,
+                           "latencia_s": r.latencia_s, "erro": r.erro})
+        print(f"  {i + 1:2d}/60 {classe:<10} {texto[:40]!r:<44} -> {[l['comando'] for l in linhas[-len(sementes):]]}", flush=True)
+    cli.descarregar()
+    _gravar("mensagens.json", {"versao_app": VERSAO_APP, "modelo": modelo, "sementes": list(sementes), "estilo_da_especie": estilo,
+                               "pets": list(PETS_COMANDO),
+                               "mensagens": [{"i": i, "mensagem": m, "classe": c, "esperado": e} for i, (m, c, e) in enumerate(MENSAGENS_COMANDO)]})
+    _gravar("respostas.jsonl", "".join(json.dumps(l, ensure_ascii=False, sort_keys=True) + "\n" for l in linhas))
+    _gravar("tempos.json", {"modelo": modelo, "memoria": _memoria_modelo(modelo), "tempo_total_s": time.perf_counter() - t_ini,
+                            "latencias_s": [l["latencia_s"] for l in linhas if l["latencia_s"] is not None]})
+
+
+def fase_comando_resumo() -> dict:
+    ls = _jsonl("respostas.jsonl")
+    base = _ler("mensagens.json")
+
+    def taxa(sel: list[dict], pred) -> dict:
+        n = len(sel)
+        return {"n": n, "k": sum(pred(l) for l in sel), "taxa": (sum(pred(l) for l in sel) / n) if n else None}
+
+    por_classe = {}
+    for c in ("imperativo", "negativa", "conversa"):
+        sel = [l for l in ls if l["classe"] == c]
+        por_classe[c] = {"acerto": taxa(sel, lambda l: l["acertou"]),
+                         "comando_nao_nulo": taxa(sel, lambda l: l["comando"] is not None),
+                         "erros_de_geracao": sum(bool(l["erro"]) for l in sel),
+                         # a saida inteira rejeitada pelo parser (ex.: letras fora do alfabeto latino): comando vira null
+                         "saidas_rejeitadas": sum(bool(l["erro"]) and str(l["erro"]).startswith("saida:") for l in sel)}
+    imp = [l for l in ls if l["classe"] == "imperativo"]
+    confusao: dict = {}
+    for l in imp:
+        confusao.setdefault(l["esperado"], {}).setdefault(str(l["comando"]), 0)
+        confusao[l["esperado"]][str(l["comando"])] += 1
+    por_mensagem = [{"i": i, "mensagem": m["mensagem"], "classe": m["classe"], "esperado": m["esperado"],
+                     "comandos": [l["comando"] for l in ls if l["i"] == i],
+                     "acertos": sum(l["acertou"] for l in ls if l["i"] == i)} for i, m in enumerate(base["mensagens"])]
+    fp_neg = por_classe["negativa"]["comando_nao_nulo"]["taxa"]
+    acerto_imp = por_classe["imperativo"]["acerto"]["taxa"]
+    gates = {"falsos_positivos_negativas": {"valor": fp_neg, "limite": GATE_FP_NEGATIVAS, "passa": fp_neg is not None and fp_neg <= GATE_FP_NEGATIVAS},
+             "imperativos_claros": {"valor": acerto_imp, "limite": GATE_IMPERATIVOS, "passa": acerto_imp is not None and acerto_imp >= GATE_IMPERATIVOS},
+             "status": "PROPOSTO"}
+    gates["passa"] = bool(gates["falsos_positivos_negativas"]["passa"] and gates["imperativos_claros"]["passa"])
+    lat = [l["latencia_s"] for l in ls if l["latencia_s"] is not None]
+    out = {"versao_app": VERSAO_APP, "modelo": base["modelo"], "sementes": base["sementes"], "n_respostas": len(ls),
+           "estilo_da_especie": base.get("estilo_da_especie", False),
+           "por_classe": por_classe, "confusao_imperativos": confusao, "gates": gates,
+           "saidas_rejeitadas": [{"mensagem": l["mensagem"], "classe": l["classe"], "erro": l["erro"], "semente": l["semente"]}
+                                 for l in ls if l["erro"] and str(l["erro"]).startswith("saida:")],
+           "falsos_positivos": [{"mensagem": l["mensagem"], "classe": l["classe"], "comando": l["comando"], "fala": l["fala"], "semente": l["semente"]}
+                                for l in ls if l["classe"] != "imperativo" and l["comando"] is not None],
+           "imperativos_errados": [{"mensagem": l["mensagem"], "esperado": l["esperado"], "comando": l["comando"], "fala": l["fala"], "semente": l["semente"]}
+                                   for l in imp if not l["acertou"]],
+           "por_mensagem": por_mensagem,
+           "latencia_s": {"n": len(lat), "p50": _p(lat, .5), "p90": _p(lat, .9), "max": max(lat) if lat else None}}
+    _gravar("resumo.json", out)
+    pc = lambda v: "—" if v is None else f"{100 * v:.1f}%"  # noqa: E731
+    rel = [f"# Comando pelo chat — rodada de avaliação ({base['modelo']}, prompt livre-v7, {'com' if out['estilo_da_especie'] else 'sem'} o estilo da espécie)", "",
+           f"60 mensagens × {len(base['sementes'])} sementes = {len(ls)} respostas. Números de `resumo.json` e `respostas.jsonl` desta pasta.", "",
+           "| classe | n | acerto | comando não nulo | saídas rejeitadas pelo parser |", "|---|---|---|---|---|"]
+    for c, r in por_classe.items():
+        rel.append(f"| {c} | {r['acerto']['n']} | {pc(r['acerto']['taxa'])} | {pc(r['comando_nao_nulo']['taxa'])} | {r['saidas_rejeitadas']} |")
+    rel += ["", "## Gate (PROPOSTO)", "",
+            f"- falsos positivos nas negativas: {pc(fp_neg)} (limite ≤ {pc(GATE_FP_NEGATIVAS)}) → {'passa' if gates['falsos_positivos_negativas']['passa'] else 'FALHA'}",
+            f"- imperativos claros: {pc(acerto_imp)} (limite ≥ {pc(GATE_IMPERATIVOS)}) → {'passa' if gates['imperativos_claros']['passa'] else 'FALHA'}",
+            f"- **resultado: {'PASSA' if gates['passa'] else 'FALHA'}**", "",
+            "## Falsos positivos (negativas e conversa)", ""]
+    rel += [f"- «{x['mensagem']}» ({x['classe']}) → `{x['comando']}` · \"{x['fala']}\"" for x in out["falsos_positivos"]] or ["- nenhum"]
+    rel += ["", "## Imperativos errados", ""]
+    rel += [f"- «{x['mensagem']}» esperado `{x['esperado']}` → `{x['comando']}` · \"{x['fala']}\"" for x in out["imperativos_errados"]] or ["- nenhum"]
+    rel += ["", f"Latência p50 {out['latencia_s']['p50']:.1f} s, p90 {out['latencia_s']['p90']:.1f} s." if lat else "", ""]
+    _gravar("RELATORIO.md", "\n".join(rel))
+    return out
+
+
+def main_comando(argv) -> int:
+    ap = argparse.ArgumentParser(description="avaliacao do comando pelo chat (TAREFA_COMANDO_CHAT, secao 4)")
+    ap.add_argument("--fase", choices=("gerar", "resumo", "tudo"), default="tudo")
+    ap.add_argument("--modelo", default=MODELO_COMANDO)
+    ap.add_argument("--rodada", type=int, choices=sorted(RODADAS_COMANDO), default=1)
+    a = ap.parse_args(argv)
+    global SAIDA
+    rod = RODADAS_COMANDO[a.rodada]
+    SAIDA = RAIZ / "artifacts_fala_livre" / "comando" / rod["pasta"]
+    if a.fase in ("gerar", "tudo"):
+        fase_comando_gerar(a.modelo, rod["sementes"], rod["estilo"])
+    if a.fase in ("resumo", "tudo"):
+        r = fase_comando_resumo()
+        print(json.dumps({"por_classe": r["por_classe"], "gates": r["gates"]}, ensure_ascii=False, indent=1))
+    return 0
+
+
 def main(argv=None) -> int:
+    import sys
+    argv = sys.argv[1:] if argv is None else list(argv)
+    if "--comando" in argv:
+        return main_comando([x for x in argv if x != "--comando"])
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--fase", choices=("situacoes", "gerar", "verificar", "resumo", "csv", "tudo"), default="tudo")
     ap.add_argument("--modelos", nargs="*", default=list(MODELOS))

@@ -238,6 +238,11 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .conv-balao--sembase{background:var(--dl-none-bg);color:var(--dl-none-ink);border:3px dashed var(--dl-none-edge);box-shadow:none;text-decoration:line-through}
 .conv-nota{display:flex;align-items:center;gap:6px;background:var(--dl-surface);border:2px solid var(--dl-none-edge);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:800;color:var(--dl-text-2)}
 .conv-nota-q{font-family:var(--dl-f-num);font-style:italic;font-weight:900;color:var(--dl-none-ink)}
+/* comando pelo chat: o chip de confirmacao na ultima resposta e a marca do que foi feito no historico */
+.conv-chip{align-self:flex-start;min-height:40px;padding:0 14px;border-radius:20px;background:var(--dl-highlight);color:var(--dl-highlight-ink);border:2px solid var(--dl-navy);box-shadow:0 2px 0 var(--dl-navy-deep);font:inherit;font-weight:900;font-size:13px;cursor:pointer}
+.conv-chip:focus-visible{outline:3px solid var(--dl-navy);outline-offset:2px}
+.conv-nota--feito{border-color:var(--dl-navy);color:var(--dl-navy)}
+.conv-nota--feito .conv-nota-q{color:var(--dl-navy);font-style:normal}
 .conv-pensando{color:var(--dl-text-2)}
 .conv-atalhos{display:flex;gap:8px;padding:0 14px 8px;flex-wrap:wrap}
 .conv-atalho{min-height:44px;padding:0 12px;border-radius:22px;background:#FFFFFF;color:var(--dl-navy);border:2px solid var(--dl-navy);display:flex;align-items:center;gap:6px;font:inherit;font-weight:900;font-size:13px;cursor:pointer}

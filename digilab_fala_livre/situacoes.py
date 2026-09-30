@@ -25,6 +25,79 @@ from digilab.evolucao import ovo
 ESTAGIOS = ("bebe", "crianca", "adolescente", "adulto")
 TICKS_POR_DIA = 24 * 60
 
+# ------------------------------------------------------------------ comando pelo chat (TAREFA_COMANDO_CHAT, secao 4)
+# 60 mensagens escritas a mao: (texto, classe, comando esperado). "imperativo" = o dono mandou ou pediu de forma clara
+# (esperado = a acao do catalogo); "negativa" = fala de uma acao mas NAO deve virar comando (negacao, pergunta,
+# hipotese, adiamento); "conversa" = mensagem sem acao (algumas citam comer ou banho falando do jogador: negativas
+# dificeis). Esperado null nas duas ultimas classes. Falso positivo = comando nao nulo numa negativa ou conversa.
+MENSAGENS_COMANDO: tuple[tuple[str, str, str | None], ...] = (
+    # imperativos claros (20)
+    ("vai comer", "imperativo", "alimentar"),
+    ("come agora, tá na hora do almoço", "imperativo", "alimentar"),
+    ("hora de comer! vem", "imperativo", "alimentar"),
+    ("toma banho", "imperativo", "limpar"),
+    ("vai se limpar, você tá todo sujo", "imperativo", "limpar"),
+    ("banho agora, sem choro", "imperativo", "limpar"),
+    ("vamos brincar!", "imperativo", "brincar"),
+    ("bora brincar um pouco", "imperativo", "brincar"),
+    ("vem cá que eu vou te fazer um carinho", "imperativo", "acariciar"),
+    ("deixa eu te fazer um cafuné", "imperativo", "acariciar"),
+    ("muito bem! você foi ótimo hoje", "imperativo", "elogiar"),
+    ("parabéns, mandou bem na luta", "imperativo", "elogiar"),
+    ("isso foi feio, não faz mais isso", "imperativo", "repreender"),
+    ("toma uma bronca: parou de bagunçar", "imperativo", "repreender"),
+    ("toma um petisco", "imperativo", "petisco"),
+    ("pega esse biscoitinho", "imperativo", "petisco"),
+    ("vai no banheiro", "imperativo", "levar_ao_banheiro"),
+    ("vamos ao banheiro agora", "imperativo", "levar_ao_banheiro"),
+    ("deixa eu cuidar desse machucado", "imperativo", "tratar_lesao"),
+    ("vou fazer um curativo na sua perna", "imperativo", "tratar_lesao"),
+    # negativas e perguntas que NAO devem virar comando (20)
+    ("não come agora, espera", "negativa", None),
+    ("hoje não tem petisco", "negativa", None),
+    ("você quer comer?", "negativa", None),
+    ("já comeu hoje?", "negativa", None),
+    ("sem banho hoje, tá frio", "negativa", None),
+    ("você tá com fome?", "negativa", None),
+    ("quer brincar mais tarde?", "negativa", None),
+    ("não vamos brincar agora, tenho que sair", "negativa", None),
+    ("você gostou do carinho de ontem?", "negativa", None),
+    ("não vou te dar bronca dessa vez", "negativa", None),
+    ("você acha que merece um elogio?", "negativa", None),
+    ("o petisco acabou, não tem mais", "negativa", None),
+    ("precisa ir ao banheiro?", "negativa", None),
+    ("não precisa ir ao banheiro agora", "negativa", None),
+    ("está doendo o machucado?", "negativa", None),
+    ("não vou tratar isso agora, depois a gente vê", "negativa", None),
+    ("o que você prefere: comer ou brincar?", "negativa", None),
+    ("se você não comer, não vai crescer", "negativa", None),
+    ("amanhã a gente brinca", "negativa", None),
+    ("você já tomou banho hoje?", "negativa", None),
+    # conversa sem comando (20)
+    ("oi, tudo bem?", "conversa", None),
+    ("como foi seu dia?", "conversa", None),
+    ("você lembra do que aconteceu ontem?", "conversa", None),
+    ("me conta uma história", "conversa", None),
+    ("eu tive um dia cansativo no trabalho", "conversa", None),
+    ("qual é o seu Digimon favorito?", "conversa", None),
+    ("você tem medo do escuro?", "conversa", None),
+    ("o que você acha do Piedmon?", "conversa", None),
+    ("eu tô com saudade de você", "conversa", None),
+    ("por que você fez isso mais cedo?", "conversa", None),
+    ("você gosta de mim?", "conversa", None),
+    ("boa noite, até amanhã", "conversa", None),
+    ("tá chovendo aqui hoje", "conversa", None),
+    ("o que você sonhou?", "conversa", None),
+    ("você quer evoluir?", "conversa", None),
+    ("quem é seu melhor amigo?", "conversa", None),
+    ("hoje eu comi pizza", "conversa", None),
+    ("eu tomei banho de chuva hoje, foi engraçado", "conversa", None),
+    ("me explica como funciona a arena", "conversa", None),
+    ("você já lutou na Floresta?", "conversa", None),
+)
+assert len(MENSAGENS_COMANDO) == 60 and all(sum(m[1] == c for m in MENSAGENS_COMANDO) == 20
+                                            for c in ("imperativo", "negativa", "conversa"))
+
 
 def _hhmm(t: int) -> str:
     return f"dia {t // TICKS_POR_DIA + 1} {(t % TICKS_POR_DIA) // 60:02d}:{t % 60:02d}"

@@ -19,10 +19,11 @@ import {
   detalheFalaLivre, falaVozRecente, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
-import { mudarMotor, useJogo } from "../../jogo.ts";
+import { ROTULO_DONO, agir } from "../../acoes.ts";
+import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
-import { ajustarVelocidadeChamado, useTempo } from "../../tempo.ts";
-import { PalcoPet, mostrarFlash } from "./PalcoPet.tsx";
+import { useTempo } from "../../tempo.ts";
+import { PalcoPet } from "./PalcoPet.tsx";
 import { useDesktop } from "../../desktop.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 
@@ -340,14 +341,10 @@ function Desejo() {
   );
 }
 
-/* ------------------------------------------------ acoes do dono e tempo */
-const ACOES: [AcaoDono, string, string][] = [["alimentar", "Alimentar", "sec"], ["limpar", "Limpar", "sec"], ["brincar", "Brincar", "sec"],
-  ["acariciar", "Carinho", "sec"], ["elogiar", "Elogiar", "destaque"], ["repreender", "Repreender", "sec"]];
+/* ------------------------------------------------ acoes do dono e tempo (o clique passa por src/acoes.ts, como o comando do chat) */
+const ACOES: [AcaoDono, string][] = [["alimentar", "sec"], ["limpar", "sec"], ["brincar", "sec"], ["acariciar", "sec"], ["elogiar", "destaque"], ["repreender", "sec"]];
 /* pets v4 (educacao-v1): petisco, banheiro e tratar lesao */
-const ACOES_V4: [AcaoDono, string, string][] = [["petisco", "Petisco", "sec"], ["levar_ao_banheiro", "Banheiro", "sec"],
-  ["tratar_lesao", "Tratar", "sec"]];
-const ICONE_DONO: Record<AcaoDono, string> = { alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao",
-  repreender: "gota", petisco: "carne", levar_ao_banheiro: "brilho", tratar_lesao: "coracao" };
+const ACOES_V4: [AcaoDono, string][] = [["petisco", "sec"], ["levar_ao_banheiro", "sec"], ["tratar_lesao", "sec"]];
 
 /* icone de cada acao do dono (PetTela): prato do guia, gota, nota, coracao, joinha e exclamacao */
 const GOTA = <svg class="ic-gota" viewBox="0 0 8 8" width="24" height="24" aria-hidden="true"><path fill="#2C73E0" d="M3 0h2v2h1v1h1v3h-1v1h-4v-1h-1v-3h1v-1h1z" /><path fill="#BFE3FF" d="M2 3h1v2h-1z" /></svg>;
@@ -378,12 +375,6 @@ function AgoraHaPouco({ irRegistro }: { irRegistro: () => void }) {
 /* ------------------------------------------------ a tela */
 export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }: { abrirMeusPets: () => void; irConversar: () => void; abrirConfig: () => void; irRegistro: () => void }) {
   const { motor: m, nascendo } = useJogo();
-  const agir = (a: AcaoDono) => {
-    if (nascendo > 0 || m.morte) return;
-    mudarMotor(mm => mm.observar(a));
-    mostrarFlash(ICONE_DONO[a]);
-    ajustarVelocidadeChamado();                  /* atendeu o chamado: volta a velocidade de antes */
-  };
   const fala = useFala(), [aberto, setAberto] = useState(false);
   return (
     <section class="pet-tela dl" aria-label="Tela do pet">
@@ -413,7 +404,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
           {!m.morte && <Chamados agir={agir} />}
           {!m.morte && <div class="dl-par"><Desejo /></div>}
           {!m.morte && <div class="acoes-pet" role="group" aria-label="Cuidar e ensinar">
-            {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, rot, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{rot}</button>)}
+            {(m.versao >= 4 ? [...ACOES, ...ACOES_V4] : ACOES).map(([a, tipo]) => <button type="button" key={a} class={`dl-btn dl-btn--${tipo}`} onClick={() => agir(a)}><IconeAcao a={a} />{ROTULO_DONO[a]}</button>)}
           </div>}
           <span class="desk-so pet-recente-caixa"><AgoraHaPouco irRegistro={irRegistro} /></span>
         </aside>

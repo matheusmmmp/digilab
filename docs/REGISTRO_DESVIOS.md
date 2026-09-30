@@ -1082,3 +1082,29 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
 - **Reencontro:** além das 3 h de jogo, 20 min de relógio sem agir na página (no tempo de teste 3 h passam em 18 s).
 - **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
   e o bebê ficavam sem o estilo do corpus).
+
+## 2026-09-30 — Comando pelo chat (`docs/TAREFA_COMANDO_CHAT.md`): o texto do jogador passa a agir no pet, pelo catálogo
+
+Decisão do Matheus (2026-09-30). A regra de 2026-09-28 da fala livre, "o que o jogador escreve não ensina o pet", **deixa de valer
+para o comando**: na conversa dos pets v7+ a LLM devolve, junto com a fala, `comando` ∈ {as 9 ações de `AcaoDono`} ∪ {null}; o
+app mostra um chip de confirmação e o toque grava o evento `d` de sempre, pelo mesmo caminho do botão. O texto continua não
+ensinando nada por outra via: só o catálogo fechado age, e só com o toque. Interpretações e limites desta implementação:
+- **No registro do pet entra só o `d`.** A saída da LLM fica no log de apresentação (versão 2, lê a 1). Replay, assinaturas dos
+  pets v1–v8, gabaritos `vidas_*.json`, `paridade_ts` e `constantes.test.mjs` passam iguais; o modo livre gravado não é usado.
+- **Só na conversa com `voz: true` (pets v7+), prompt `livre-v7`** (= `livre-v6` + a regra COMANDO no sistema e a lista das ações
+  no pedido). Os pets v1–v6 conversam pelo `livre-v2` e não ganham comando: mudar a v2 alteraria as mensagens das rodadas 1–2 da
+  fala livre, que reproduzem. As rodadas 1–4 da voz (`livre-v3..v6`, espontânea) não mudam.
+- **O comando é o da primeira geração.** A autocorreção (`revisao.py`) só reescreve a fala (respeito); a reescrita não troca o
+  comando. É o que a avaliação mede com `gerar`.
+- **Validação dupla.** Servidor: `saida.ler` falha alto com valor fora do catálogo (fala genérica, comando null). App
+  (`src/acoes.ts`): catálogo, pet nascido e vivo, ações v4 (petisco, banheiro, tratar lesão) só em pets `versao >= 4`, `tratar_lesao`
+  só com lesão; o toque valida de novo contra o pet daquele momento (pet morto entre a resposta e o toque: nada entra).
+- **Um caminho só para a ação do dono** (`acoes.agir`): botões da tela do Pet, atalhos do Conversar e o chip. O flash do palco saiu
+  para `src/flash.ts` (sem DOM) para o caminho compartilhado não puxar o palco.
+- **Avaliação em duas rodadas** (`artifacts_fala_livre/comando/`): a rodada 1 mede o comando **sem** o bloco de estilo da espécie;
+  a rodada 2, **com** o estilo, como o servidor manda no jogo. Motivo: na sonda, com o estilo do corpus (que hoje tem 60 espécies e
+  texto em japonês nas fontes), o gemma2:9b respondeu com trechos em japonês em 5 de 6 mensagens, e `ler` rejeita letras fora do
+  alfabeto latino (a fala vira a genérica e o comando null). Isso é do corpus/da voz, não do comando, e vale para a conversa dos
+  pets v7 já hoje; fica registrado como pendência à parte.
+- **Sem execução direta.** O chip é obrigatório até o Matheus ver o gate (PROPOSTO: falsos positivos ≤ 5% nas negativas;
+  imperativos ≥ 80%). Treino, luta, itens, evoluir, cruzar, comando na fala espontânea e MCP de verdade ficam fora.
