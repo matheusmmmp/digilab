@@ -29,6 +29,8 @@ export const DICAS = {
   fala: "Ele falou por conta própria. Às vezes o que ele diz não é verdade: bronca numa mentira educa; petisco ou elogio numa mentira ensina a mentir mais.",
   lesao: "Machucou na luta! Trate em até 6 h ou ele morre. Muitas lesões no mesmo estágio também matam.",
   vitorias: "Além das 10 lutas, ele precisa vencer 80% das lutas deste estágio para evoluir.",
+  /* saude critica (qualquer versao): a saude so sobe sem privacao (motor/estado.ts, avancarTick) e devagar (C.curaSaude) */
+  saude: "Saúde crítica. Ela só sobe com comida, higiene e energia acima de 15%, e devagar (uns 2% por hora de jogo). Deixe-o dormir e não o canse brincando; Tratar só cuida de lesão.",
 } as const;
 export type IdDica = keyof typeof DICAS;
 
