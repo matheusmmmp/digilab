@@ -19,10 +19,11 @@ import { CIT } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
+import { ConfiancaCombate } from "./confianca.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, chaveRegra, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
-import { NOME_EXERCICIO, nomeForma } from "./nomes.ts";
+import { NOME_EXERCICIO, nomeArquetipo, nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
@@ -91,6 +92,32 @@ function atende(pedido: Chamado, a: AcaoDono): boolean {
   return ACAO_CHAMADO[pedido].includes(a) || (pedido === "fome" && a === "petisco") || (pedido === "carinho" && a === "elogiar");
 }
 
+/* ---------------------------------------------------------------- confianca (pets v8, M1): o rival de cada luta
+   A novidade conta por rival. Luta comum e de arena: a chave do evento (o bot, o NPC ou o lider; as lutas seguidas da Cidadela repetem o
+   mesmo rival). Liga: o Mega de cada lider ("liga:<lider>"). Fronteira e Salao: a forma sorteada do rival da luta ("forma:..."), a
+   mesma forma de novo e o mesmo rival */
+const chaveFormaRival = (f: Forma): string => "forma:" + [f.esp, f.est, f.ramo ?? "", f.linha ?? "", f.adulta ?? ""].join(".");
+/** o rival da luta k da serie do evento "l" (rival, semente), como a confianca o conta */
+export function rivalDaConfianca(rival: string, semente: number, k: number, est: Estagio): string {
+  if (rival === RIVAL_LIGA) return "liga:" + LIGA[k].lider;
+  if (ehInstalacao(rival)) return chaveFormaRival(formaRivalInstalacao(semente, k));
+  if (rival === RIVAL_SALAO) return chaveFormaRival(formaRivalSalao(semente, est));
+  return rival;
+}
+/** o nome na tela de um rival da confianca (rivalDaConfianca) */
+export function nomeRivalConfianca(chave: string): string {
+  if (chave.startsWith("liga:")) {
+    const i = LIGA.findIndex(x => x.lider === chave.slice(5));
+    return i >= 0 ? `${nomeMegaLiga(i)} de ${NOME_BOT[LIGA[i].lider]}` : chave;
+  }
+  if (chave.startsWith("forma:")) {
+    const [esp, est, ramo, linha, adulta] = chave.slice(6).split(".");
+    const f = { esp, est, ...(ramo ? { ramo } : {}), ...(linha ? { linha } : {}), ...(adulta ? { adulta } : {}) } as Forma, arq = nomeArquetipo(f);
+    return arq ? `${nomeForma(f)} (${arq})` : nomeForma(f);
+  }
+  return NOME_BOT[chave] ?? chave;
+}
+
 export class Motor {
   semente: number;
   versao: VersaoPet;
@@ -143,6 +170,12 @@ export class Motor {
   morte: { tick: number; causa: "lesoes" | "lesao_sem_tratar" } | null = null;
   janelasFechadas: (Janela & { desfecho: string; fim: number })[] = [];
   origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
+  /* v8 (M1): confianca de combate e novidade por rival, recalculadas das lutas do registro; null nos v1-v7 */
+  conf: ConfiancaCombate | null = null;
+  /* v8 (M1): para cada luta de conf.historico, a ordem do evento "l" dela entre os "l" do registro (uma serie tem varias lutas num
+     evento so); derivado no replay, fora da assinatura. A tela usa para apontar o "porque" da frase para o evento */
+  confEvento: number[] = [];
+  private nEventosLuta = 0;
   /* v4: ritmo dos estagios (evento "c" no comeco do registro); sem ele, o rapido de sempre */
   ritmo: Ritmo = "rapida";
   dur: { bebe: number; crianca: number; adolescente: number; adulto: number } = { ...DUR_EVO, adulto: CMG.durRapida };
@@ -171,7 +204,7 @@ export class Motor {
   salao = { tentativas: 0, vitorias: 0 };
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5, 6, 7].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6, 7, 8].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -201,6 +234,8 @@ export class Motor {
       this.rMentira = criarRng(hashSemente("mentira", semente));
       this.men = { impunes: 0, acertos: 0 };
     }
+    /* v8 (M1): a confianca de combate e a novidade por rival (estado derivado das lutas "l"; nenhum evento novo) */
+    if (versao >= 8) this.conf = new ConfiancaCombate();
   }
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
 
@@ -423,10 +458,17 @@ export class Motor {
       this.cartasUsadas.push(this.carta); this.carta = null;
     }
     let lesao = false;
+    const ordemL = this.nEventosLuta++;
     M.serie.forEach((res, k) => {
       /* cada luta da serie ensina e conta, com a semente dela (a primeira e a do evento) */
       const s = sementeDaSerie(semente, k);
-      if (this.gp) this.gp.aprender(res, s, M.usadas!);
+      /* v8 (M1, espelho de MotorEducacao._lutar): a confianca decai desde a ultima luta e e empurrada pelo resultado, pesado pela
+         novidade do rival DESTA luta (a derrota pesa mais pela sensibilidade). O passo dos gambits e a experiencia de combate somam a
+         novidade em vez de 1: repetir o mesmo rival ensina e rende menos. Nas series (Cidadela, Liga, Fronteira) cada luta conta */
+      const rc = this.conf ? this.conf.registrar(this.e.tick, rivalDaConfianca(rival, semente, k, estSalao),
+        res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0, this.temp.sensibilidade) : null;
+      if (rc) this.confEvento.push(ordemL);
+      if (this.gp) this.gp.aprender(res, s, M.usadas!, rc ? rc.novidade : 1);
       if (this.estagioAtual === "adolescente") this.sparring++;
       const contra = liga ? `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[LIGA[k].lider]}`
         : inst ? `${inst.id === "palacio" ? "no" : "na"} ${inst.nome}, contra ${nomeForma(formaRivalInstalacao(semente, k))}`
@@ -435,7 +477,7 @@ export class Motor {
       if (this.versao >= 4) {
         const L = this.lutas;
         L.lutas++;
-        if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida++; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
+        if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida += rc ? rc.novidade : 1; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
         /* lesao: so na derrota, numa rng derivada da semente da LUTA */
         const l = res.pontosA === 0 && criarRng(hashSemente("lesao", s)).random() < CLE.probLesao;
         if (l) {
@@ -1026,8 +1068,11 @@ export class Motor {
       ...(this.versao >= 6 ? [this.medalhas] : []), ...(this.comItens ? [[this.chips, this.carta, this.cartasUsadas]] : []),
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
       ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
-      ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : [])]);
+      ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : []),
+      ...(this.versao >= 8 ? [this.conf!.assinatura()] : [])]);
   }
+  /** v8 (M1): a frase de estado da confianca agora (null nos v1-v7) */
+  estadoConfianca(): ReturnType<ConfiancaCombate["estado"]> | null { return this.conf ? this.conf.estado(this.e.tick) : null; }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
     const t = ev[0];

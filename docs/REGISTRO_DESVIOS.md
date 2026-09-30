@@ -1051,3 +1051,15 @@ SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
 - **Citações com 3 frases curtas** (7) saíram, em vez de cortadas; Imperialdramon Dragon e Fighter Mode têm o mesmo conteúdo
   (o corpus não diz o modo).
 - O bloco de estilo do prompt usa no máximo 8 traços e 5 itens de fala por espécie.
+
+## 2026-09-30 — M1 (confiança de combate): pets v8 na web, e as séries de lutas
+
+- **Pet v8** (`VERSAO_PET = 8` = v7 + confiança; o desenho, `docs/DESIGN_MVP_M1_CONFIANCA.md`, dizia v5 e a primeira
+  implementação usou os v5 que já existiam). No merge do `main` (medalhas v6, V21D, Fronteira, voz v7) a confiança passou
+  a valer só para `versao >= 8`, no padrão de uma versão de pet por mecânica: pets v1–v7 não mudam de comportamento nem
+  de assinatura e nenhum save é descartado. Filhos de cruzamento nascem v8.
+- **Séries de lutas** (Cidadela, Liga, Torre de Batalha, Palácio, Salão), que o desenho não previa: cada luta da série
+  conta na confiança, com o rival dela (Cidadela: o líder repetido; Liga: o Mega de cada líder; Fronteira e Salão: a
+  forma sorteada). O ε da série inteira sai da confiança do começo. Só na web (o Python não tem séries).
+- O Python não muda: `ConfigConfianca` segue desligada por padrão, `PARAMETROS_CONFIANCA_M1` à parte (os hashes da
+  educação-v1 e da voz não mudam).

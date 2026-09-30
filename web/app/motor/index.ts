@@ -20,6 +20,7 @@ export * from "./instalacoes.ts";
 export * from "./fabrica.ts";
 export * from "./salao.ts";
 export * from "./carater.ts";
+export * from "./confianca.ts";
 export * from "./gambits_pet.ts";
 export * from "./motivo.ts";
 export * from "./expressao.ts";

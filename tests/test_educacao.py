@@ -65,7 +65,8 @@ def test_parametros_registrados_com_status_e_fonte():
 
 
 def test_registro_divergente_de_config_falha_alto():
-    ruim = dict(PARAMETROS_EDUCACAO_V1)
+    from digilab.protocol import PARAMETROS_CONFIANCA_M1
+    ruim = {**PARAMETROS_EDUCACAO_V1, **PARAMETROS_CONFIANCA_M1}       # M1: a validacao cobre as duas tabelas
     c = ruim["ConfigEducacao.passo_disciplina"]
     ruim["ConfigEducacao.passo_disciplina"] = Campo(c.valor + 1, c.status, c.justificativa)
     with pytest.raises(ValueError):

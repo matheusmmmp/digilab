@@ -54,7 +54,7 @@ describe("pets v1-v5 nao mudam", () => {
     expect(m.requisitosEvolucao()?.medalhas ?? null).toBeNull();
     expect(() => m.liberar(1)).toThrow(/v6/);
   });
-  test("ovos novos sao v7 (v6 + voz propria)", () => { expect(VERSAO_PET).toBe(7); expect(new Motor(1).versao).toBe(7); });
+  test("ovos novos sao v8 (v6 + voz propria + confianca)", () => { expect(VERSAO_PET).toBe(8); expect(new Motor(1).versao).toBe(8); });
 });
 
 describe("a trava (pets v6)", () => {

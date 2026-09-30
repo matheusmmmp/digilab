@@ -961,6 +961,29 @@ class ConfigLesoes:
 
 
 @dataclass(frozen=True)
+class ConfigConfianca:
+    """MVP M1 (docs/DESIGN_MVP_M1_CONFIANCA.md, 2026-09-29): confianca de combate e desgaste por rival repetido.
+    Estado derivado dos eventos de luta que ja existem (nenhum evento novo; o replay recalcula). Tudo PROPOSTO, sem
+    fonte (protocol.PARAMETROS_CONFIANCA_M1). Desligada: nada muda em nenhuma run nem no resumo."""
+
+    ligada: bool = False                     # como ConfigEducacao/ConfigLesoes: desligada, o motor nem calcula
+    # 2.1 novidade por rival: m[rival] <- m * exp(-dt/tau_hab) + 1 depois da luta; novidade = exp(-lambda * m antes)
+    lambda_novidade: float = 0.7             # quao rapido a repeticao satura (3a luta seguida ~0,25; 5a ~0,06)
+    tau_habituacao_min: int = 2880           # 48 h de jogo: quando a novidade volta
+    # 2.2 confianca c em [-1, 1]: decai para 0 entre as lutas; empurrada por eta_s * novidade * sinal
+    eta_confianca: float = 0.25              # quanto uma luta nova mexe na confianca
+    k_sensibilidade: float = 0.5             # na derrota, eta * (1 - k * sensibilidade): como a repreensao no temperamento
+    tau_confianca_min: int = 1440            # 24 h de jogo: quanto dura a confianca
+    # 2.3 so o epsilon do lutador do pet muda: epsilon += kappa * max(0, -c) (a confianca positiva nao reduz)
+    kappa_eps: float = 0.10                  # mesma ordem de delta_epsilon_indisciplina
+    # 2.5 frases de estado: limiar de confiante/inseguro, histerese (tempo minimo na faixa nova antes de trocar)
+    limiar_frase: float = 0.4
+    histerese_frase_min: int = 120
+    limiar_tedio: float = 0.3                # novidade das ultimas n_tedio lutas <= limiar -> "entediado do rival"
+    n_tedio: int = 3
+
+
+@dataclass(frozen=True)
 class ConfigHeranca:
     """Sistema B: herda temperamento (media + ruido) e especie (sorteada entre as dos pais)."""
 
@@ -1083,5 +1106,7 @@ CONFIG_EDUCACAO = ConfigEducacao()
 CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
 CONFIG_LESOES = ConfigLesoes()
 CONFIG_LESOES_LIGADA = ConfigLesoes(ligada=True)
+CONFIG_CONFIANCA = ConfigConfianca()
+CONFIG_CONFIANCA_LIGADA = ConfigConfianca(ligada=True)
 CONFIG_HERANCA = ConfigHeranca()
 CONFIG_EQUILIBRIO = ConfigEquilibrio()

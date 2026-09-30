@@ -73,7 +73,7 @@ describe("mentira (pets v7) = digilab/educacao.py", () => {
 
 describe("evento f (pets v7)", () => {
   test("a fala entra no registro, rejoga igual e sorteia sempre duas vezes", () => {
-    expect(VERSAO_PET).toBe(7);
+    expect(VERSAO_PET).toBeGreaterThanOrEqual(7);                    /* v8 (M1) herda a voz */
     const m = new Motor(777, 7);
     m.avancar(400);
     m.treino.sobrecarga = 100; m.sombria = true;
@@ -86,6 +86,10 @@ describe("evento f (pets v7)", () => {
     expect(r.edu.contagem.falas).toBe(m.edu.contagem.falas);
     expect(() => new Motor(777, 6).falar("reencontro")).toThrow();
     expect(() => m.falar("Não Pode")).toThrow();
+    /* pets v8 (v7 + confianca, M1): o mesmo registro de falas rejoga igual (a confianca so mexe nas lutas) */
+    const r8 = Motor.reproduzir(777, m.log, 8);
+    expect(r8.edu.contagem.falas).toBe(m.edu.contagem.falas);
+    expect(r8.log.filter(e => e[1] === "fl")).toEqual(m.log.filter(e => e[1] === "fl"));
   });
   test("pet sem sobrecarga e nao sombrio nunca mente; o registro da historia sai do motor", () => {
     const m = new Motor(99, 7);

@@ -264,6 +264,36 @@ ALVOS_DESEJO = {
 }
 
 
+# ------------------------------------------------------------------ confianca de combate (M1, 2.5)
+# estado derivado das lutas (digilab/confianca.py), nao e causa de decisao: o bebe mostra so um emote, a crianca a
+# versao curta, o adolescente o fragmento e o adulto a frase. Mesmo esquema de marcador unico. "neutro" nao tem
+# frase (expressar_confianca devolve None). O "porque" e a lista de lutas do registro em ConfiancaCombate.estado.
+CONFIANCA_TXT: dict[str, dict[str, str]] = {
+    "confiante": {"marcador": "confiante", "bebe": "(^o^)b", "crianca": "[:confiante:] Ganhei!",
+                  "adolescente": "confiante... ganhei as últimas", "adulto": "Tô confiante: ganhei as últimas."},
+    "inseguro": {"marcador": "inseguro", "bebe": "(;_;)?", "crianca": "[:inseguro:] Perdi de novo…",
+                 "adolescente": "inseguro... depois daquelas derrotas", "adulto": "Ando inseguro depois daquelas derrotas."},
+    "entediado": {"marcador": "sei tudo dele", "bebe": "(-.-)~", "crianca": "[:sei tudo dele:] De novo?",
+                  "adolescente": "de novo esse aí... sei tudo dele", "adulto": "De novo esse aí? Já sei tudo dele."},
+}
+
+
+def expressar_confianca(estado: dict, estagio: str) -> Expressao | None:
+    """Frase de estado da confianca (M1): `estado` e o dict de ConfiancaCombate.estado(tick). Neutro: None."""
+    if estagio not in ESTAGIOS:
+        raise ValueError(f"estagio desconhecido: {estagio!r}")
+    nome = estado["estado"]
+    if nome == "neutro":
+        return None
+    if nome not in CONFIANCA_TXT:
+        raise TabelaIncompleta(f"estado de confianca sem texto: {nome!r}")
+    return Expressao(CANAL[estagio], CONFIANCA_TXT[nome][estagio], ("confianca", tuple(estado["lutas"])))
+
+
+def confiancas_citadas(conteudo: str) -> set[str]:
+    return {k for k, e in CONFIANCA_TXT.items() if e["marcador"] in conteudo}
+
+
 def validar_tabelas(fatores_obrigatorios=None) -> None:
     from .combate_v2.v21.gambits import CATALOGO as CATALOGO_V21
 
@@ -515,10 +545,25 @@ def validar_tabelas_personalidade() -> None:
     marc.update({("desejo", k): e["marcador"] for k, e in DESEJO_TIPO.items()})
     marc.update({("emocao", k): e["marcador"] for k, e in EMOCAO_TXT.items()})
     marc.update({("carater", k): e["marcador"] for k, e in TOM_CARATER.items()})
+    marc.update({("confianca", k): e["marcador"] for k, e in CONFIANCA_TXT.items()})
     textos = {("tom", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in TOM_TEMPERAMENTO.items()}
     textos.update({("desejo", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in DESEJO_TIPO.items()})
     textos.update({("emocao", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in EMOCAO_TXT.items()})
     textos.update({("carater", k): [e[s] for s in ("adolescente", "adulto")] for k, e in TOM_CARATER.items()})
+    textos.update({("confianca", k): [e[s] for s in ("crianca", "adolescente", "adulto")] for k, e in CONFIANCA_TXT.items()})
+    # confianca (M1): os tres estados com frase tem texto em todo estagio, com o marcador nos falados; emotes distintos
+    from .confianca import ESTADOS
+
+    if set(ESTADOS) - {"neutro"} != set(CONFIANCA_TXT):
+        raise TabelaIncompleta(f"estados de confianca sem texto: {sorted(set(ESTADOS) - {'neutro'} - set(CONFIANCA_TXT))}")
+    for k, e in CONFIANCA_TXT.items():
+        for chave in ("marcador",) + ESTAGIOS:
+            if chave not in e or not e[chave]:
+                raise TabelaIncompleta(f"confianca {k!r} sem entrada para {chave!r}")
+        if any(e["marcador"] not in e[st] for st in ("crianca", "adolescente", "adulto")):
+            raise TabelaIncompleta(f"confianca {k!r}: texto sem o marcador")
+    if len({e["bebe"] for e in CONFIANCA_TXT.values()}) != len(CONFIANCA_TXT):
+        raise TabelaIncompleta("emotes de confianca repetidos")
     fixos = list(TEMPERAMENTO_NEUTRO.values()) + [DESEJO_BEBE, VONTADE_ADULTO] + [t for par in ALVOS_DESEJO.values() for t in par]
     fixos += list(CAUSA_EMOCAO.values()) + list(CARATER_NEUTRO.values())
     # emocao: toda emocao da tabela de digilab/emocao.py tem texto, com marcador em cada estagio falado

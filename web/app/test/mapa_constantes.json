@@ -1818,6 +1818,56 @@
    "py": "ConfigLesoes.experiencia_max"
   },
   {
+   "web": "CCF.lambda",
+   "fonte": "python",
+   "py": "ConfigConfianca.lambda_novidade"
+  },
+  {
+   "web": "CCF.tauHab",
+   "fonte": "python",
+   "py": "ConfigConfianca.tau_habituacao_min"
+  },
+  {
+   "web": "CCF.eta",
+   "fonte": "python",
+   "py": "ConfigConfianca.eta_confianca"
+  },
+  {
+   "web": "CCF.kSens",
+   "fonte": "python",
+   "py": "ConfigConfianca.k_sensibilidade"
+  },
+  {
+   "web": "CCF.tauConf",
+   "fonte": "python",
+   "py": "ConfigConfianca.tau_confianca_min"
+  },
+  {
+   "web": "CCF.kappaEps",
+   "fonte": "python",
+   "py": "ConfigConfianca.kappa_eps"
+  },
+  {
+   "web": "CCF.limiarFrase",
+   "fonte": "python",
+   "py": "ConfigConfianca.limiar_frase"
+  },
+  {
+   "web": "CCF.histerese",
+   "fonte": "python",
+   "py": "ConfigConfianca.histerese_frase_min"
+  },
+  {
+   "web": "CCF.limiarTedio",
+   "fonte": "python",
+   "py": "ConfigConfianca.limiar_tedio"
+  },
+  {
+   "web": "CCF.nTedio",
+   "fonte": "python",
+   "py": "ConfigConfianca.n_tedio"
+  },
+  {
    "web": "DUR_CLASSICA",
    "fonte": "python",
    "py": "ConfigDuracoes.canonica"

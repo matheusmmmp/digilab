@@ -1,0 +1,220 @@
+{
+ "braco": "atencioso",
+ "dias": 14,
+ "estado": {
+  "acao_atual": "dormir",
+  "dormindo": true,
+  "educacao": {
+   "disciplina": 100,
+   "janela": null,
+   "lesionado": false
+  },
+  "energia": 0.7300000000001167,
+  "fome": 0.3499999999996128,
+  "higiene": 0.32559999999999834,
+  "humor": 0.6749999999999885,
+  "saude": 1.0,
+  "sujeira": 4,
+  "tick": 20160,
+  "tick_do_dia": 0,
+  "tick_ultimo_cuidado": 19635,
+  "total_cuidados": 246,
+  "treino": {
+   "estagio": "adulto",
+   "fadiga": 0.0,
+   "forcaria": false,
+   "pede_pausa": false,
+   "sobrecarga": 0.0
+  }
+ },
+ "eventos": 1651,
+ "historico_lutas": [
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 6143502085540740009,
+   "tick": 930,
+   "treinou": null,
+   "turnos": 10
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 11465584485418805073,
+   "tick": 960,
+   "treinou": null,
+   "turnos": 10
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "empate",
+   "rival": "sparring:brigao@brasa",
+   "semente": 627823854886383755,
+   "tick": 990,
+   "treinou": null,
+   "turnos": 12
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 1628279315660357740,
+   "tick": 1020,
+   "treinou": null,
+   "turnos": 7
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 8731349014646639106,
+   "tick": 1050,
+   "treinou": null,
+   "turnos": 10
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 14223589941925794682,
+   "tick": 1080,
+   "treinou": null,
+   "turnos": 10
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "empate",
+   "rival": "sparring:brigao@brasa",
+   "semente": 9269049686729357764,
+   "tick": 1110,
+   "treinou": null,
+   "turnos": 12
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 5224793504412951769,
+   "tick": 1140,
+   "treinou": null,
+   "turnos": 9
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 101209404530555819,
+   "tick": 1170,
+   "treinou": null,
+   "turnos": 10
+  },
+  {
+   "estagio": "adolescente",
+   "lesao": false,
+   "resultado": "vitoria",
+   "rival": "sparring:brigao@brasa",
+   "semente": 5391532488030235711,
+   "tick": 1200,
+   "treinou": null,
+   "turnos": 10
+  }
+ ],
+ "log_sha256": "eab2a060891913784f3b99f89a42e163b68c58e20bc2c95b5fe84c453103317c",
+ "nota": "GATE G1 do M1 (docs/DESIGN_MVP_M1_CONFIANCA.md): vida atencioso@69001 de run_educacao._vida gerada com o codigo anterior ao M1 (ConfigConfianca nao existia). Com a chave desligada tudo continua igual.",
+ "ovo": 69001,
+ "resumo_educacao": {
+  "acertos": 3,
+  "contagem": {
+   "acordado": 0,
+   "avisos": 112,
+   "avisos_atendidos": 109,
+   "avisos_ignorados": 3,
+   "broncas_sem_motivo": 0,
+   "chamados_reais": 0,
+   "falsos": 8,
+   "falsos_cedidos": 0,
+   "falsos_corrigidos": 8,
+   "falsos_ignorados": 0,
+   "reais_atendidos": 0,
+   "reais_ignorados": 0,
+   "refeicoes_recusadas": 0,
+   "superalimentacao": 0
+  },
+  "disciplina": 100,
+  "lesionado_desde": null,
+  "lutas": {
+   "derrotas": 0,
+   "empates": 0,
+   "lesoes": 0,
+   "lutas": 0,
+   "tratadas": 0,
+   "vitorias": 0
+  },
+  "morte": null,
+  "petiscos_cedidos": 0,
+  "vitorias_vida": 8
+ },
+ "spec": {
+  "carater": {
+   "atento": -0.07499999999999997,
+   "impetuoso": 0.005468749999999979,
+   "paciente": 0.13749999999999943,
+   "resistente": -0.07343749999999996
+  },
+  "condicao": 1.05,
+  "disciplina": 100,
+  "especie": "brasa",
+  "forma": {
+   "adulta": "duelista",
+   "estagio": "adulto",
+   "linha": "brigao",
+   "ramo": "arisco"
+  },
+  "pontos": {
+   "folego": 4.7412937,
+   "forca": 5.151146496,
+   "guarda": 3.50535405,
+   "mira": 4.0859919,
+   "recuperacao": 3.7017414766557373,
+   "vigor": 4.77093237734426
+  },
+  "temp_ovo": {
+   "curiosidade": 0.8575425942078547,
+   "rancor": 0.1240800040990826,
+   "sensibilidade": -0.7097386456317571,
+   "teimosia": -0.397132929011788
+  }
+ },
+ "transicoes": {
+  "adolescente": {
+   "sobrecarga": 0.0,
+   "tick": 900
+  },
+  "adulto": {
+   "sobrecarga": 0.0,
+   "tick": 1980,
+   "vitorias": {
+    "efeito": "condicao_adulto",
+    "lutas": 10,
+    "qualifica": true,
+    "taxa": 0.8,
+    "vitorias": 8
+   }
+  },
+  "crianca": {
+   "sobrecarga": 0.0,
+   "tick": 180
+  }
+ }
+}

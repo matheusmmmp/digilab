@@ -4,12 +4,13 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CED, CESC, CESC_V6, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
+import { CCF, CED, CESC, CESC_V6, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
   ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
   estiloBot, formaRival, gambitNPC, gambitsAdulto,
 } from "./bots.ts";
 import type { Arena } from "./arenas.ts";
+import { epsilonConfianca, type ConfiancaCombate } from "./confianca.ts";
 import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
@@ -221,7 +222,9 @@ export class GambitsPet {
   }
   /** `usadas`: as regras da lista com que o pet lutou, na ordem (o indice do motivo de cada turno aponta para ela); por padrao
       as ativas. Na arena do Lago e a listaSozinho; nas lutas seguidas da Cidadela, a lista do comeco da serie */
-  aprender(res: ResultadoLuta, semente: number, usadas: string[] = this.ativas.slice()): void {
+  /** `novidade` (pets v8, M1): o passo de aprendizado e GA.alfa * novidade; 1 = o passo de sempre (v1-v7) */
+  aprender(res: ResultadoLuta, semente: number, usadas: string[] = this.ativas.slice(), novidade: number = 1): void {
+    if (!(novidade > 0 && novidade <= 1)) throw new Error("novidade fora de (0, 1]: " + novidade);
     this.nLutas++;
     const soma: Record<string, number> = {}, cont: Record<string, number> = {};
     for (const tr of res.turnos) {
@@ -229,9 +232,9 @@ export class GambitsPet {
       const k = usadas[tr.ma], saldo = (tr.dano[1] - tr.dano[0]) / res.E0.L[0].hpMax;
       soma[k] = (soma[k] || 0) + saldo; cont[k] = (cont[k] || 0) + 1;
     }
-    const bonus = GA.bonusResultado * (res.pontosA - .5);
+    const bonus = GA.bonusResultado * (res.pontosA - .5), alfa = GA.alfa * novidade;
     for (const k of Object.keys(cont)) {
-      this.notas[k] += GA.alfa * (soma[k] / cont[k] + bonus - this.notas[k]);
+      this.notas[k] += alfa * (soma[k] / cont[k] + bonus - this.notas[k]);
       this.disparos[k] = (this.disparos[k] || 0) + cont[k];
     }
     /* o pet propoe: a pior regra livre abaixo do limiar da lugar a uma candidata */
@@ -274,10 +277,12 @@ export class GambitsPet {
 
 /** o que o motor precisa do pet para montar o lutador */
 export interface PetLutador {
-  gp: GambitsPet | null; forma: Forma; versao: number; e: { saude: number }; treino: TreinoPet; carater(): Carater | null;
+  gp: GambitsPet | null; forma: Forma; versao: number; e: { saude: number; tick: number }; treino: TreinoPet; carater(): Carater | null;
   disciplina?: number; vitoriasVida?: number;
   /** o treino com que ele luta (pets v6: com os chips de stat, itens.ts); sem isto, o treino dele */
   pontosDeLuta?(): Stats | null;
+  /** v8 (M1): a confianca de combate; a inseguranca sobe o epsilon */
+  conf?: ConfiancaCombate | null;
 }
 export function estiloDoPet(m: PetLutador): Estilo {
   const e: Estilo = m.gp ? { ...m.gp.estilo(), base: m.gp.linha! } : { ...estiloBot("aleatorio"), base: "aleatorio" };
@@ -286,6 +291,8 @@ export function estiloDoPet(m: PetLutador): Estilo {
   /* e a experiencia de combate (estilo "lutar"): cada vitoria tira um pouco, ate expMax; nunca abaixo de 0 */
   if (m.versao >= 4) e.eps = Math.max(0, e.eps + (1 - (m.disciplina ?? 0) / CED.disciplinaMax) * CED.deltaEps
     - Math.min(CLE.expMax, (m.vitoriasVida ?? 0) * CLE.expPorVitoria));
+  /* v8 (M1, espelho de educacao.epsilon_pet): inseguro hesita e erra mais; a confianca positiva nao reduz */
+  if (m.versao >= 8 && m.conf) e.eps += epsilonConfianca(m.conf.valor(m.e.tick), CCF.kappaEps);
   return e;
 }
 /** lutador do pet (so o que a luta usa; sprite, cor e grade sao da interface) */
