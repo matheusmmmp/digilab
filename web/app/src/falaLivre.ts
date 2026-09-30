@@ -10,12 +10,12 @@
    chip no balao ("Alimentar?"); o toque grava o evento "d" pelo mesmo caminho do botao. E a unica coisa que o texto do
    jogador faz no pet, e so mediada pelo catalogo: fora dele o texto continua nao ensinando nada. */
 import { useEffect, useState } from "preact/hooks";
-import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type AcaoDono, type Janela, type Motor } from "../motor/index.ts";
+import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type AcaoDono, type FatoHistoria, type Janela, type Motor } from "../motor/index.ts";
 import { agir, noCatalogo, validarComando } from "./acoes.ts";
 import { FALA_LLM, ligarFalaLLM } from "./fala.ts";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
 import { CHAVE } from "./save.ts";
-import { TEXTO_GATILHO, assuntoDaFala, gatilhoDe, historiaDaConversa, internetLigada, podeFalar } from "./voz.ts";
+import { TEXTO_GATILHO, assuntoDaFala, gatilhoDe, historiaDaConversa, internetLigada, podeFalar, revancheContra } from "./voz.ts";
 
 const LOG = CHAVE + ".fala.jsonl", MODO = CHAVE + "-modo-fala";
 /* versao 2 (comando pelo chat): `comando` e `comando_executado`; a 1 continua sendo lida (campos ausentes = null/false) */
@@ -168,11 +168,11 @@ const chavesDe = (fatos: unknown): string[] =>
 function assuntosRecentes(): string[][] {
   try { return lerLog().filter(r => r.voz).slice(-5).map(r => r.voz!.chaves); } catch { return []; }
 }
-function falaVoz(m: Motor, gatilho: string): void {
+function falaVoz(m: Motor, gatilho: string, foco: FatoHistoria | null = null): void {
   let j: Janela | null = null;
   mudarMotor(mm => { j = mm.falar(gatilho); });
   if (!j) return;
-  const jan = j as Janela, as = assuntoDaFala(m, jan, assuntosRecentes()), t = m.e.tick;
+  const jan = j as Janela, as = assuntoDaFala(m, jan, assuntosRecentes(), foco), t = m.e.tick;
   const semente = hashSemente("voz", m.semente, m.log.length) >>> 1;
   const base: RegistroFala = {
     versao: VERSAO_LOG, t, situacao: "espontanea", fala_jogador: null, fala: as.molde, fatos_citados: [], fatos: as.historia,
@@ -195,6 +195,12 @@ function falaVoz(m: Motor, gatilho: string): void {
     })
     .catch((err: Error) => { FL.erro = err.message; anexar(base); })
     .finally(() => { FL.pendente = false; avisar(); });
+}
+/** pets v7: o dono escolheu (Arena ou Campanha) o rival que venceu o pet e ainda nao foi vencido: ele fala antes da luta */
+export function falaRevanche(m: Motor, rival: string): void {
+  if (m.versao < 7 || !podeFalar(m)) return;
+  const f = revancheContra(m, rival);
+  if (f) falaVoz(m, "revanche", f);
 }
 /** a fala da voz ainda vale no balao (a janela de fala dura CMEN.janela minutos de jogo) */
 export function falaVozRecente(m: Motor): RegistroFala | null {
