@@ -53,18 +53,19 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
                       versao: str = VERSAO_PROMPT_V4, especie: Especie | None = None, rival: str | None = None,
                       max_revisoes: int = MAX_REVISOES,
                       versao_verificador: str = VERSAO_VERIFICADOR_V4,
-                      so_respeito: bool = False) -> tuple[Resultado, list[dict]]:
-    """(resultado final, tentativas). Cada tentativa: fala, fatos citados, problemas apontados pelo proprio modelo."""
+                      so_respeito: bool = False, comando: bool = False) -> tuple[Resultado, list[dict]]:
+    """(resultado final, tentativas). Cada tentativa: fala, fatos citados, problemas apontados pelo proprio modelo.
+    comando (livre-v7, conversa): o comando e o da PRIMEIRA geracao; a revisao so reescreve a fala (respeito)."""
     from .corpus import bloco_estilo
     from .fatos import fatos_de_estado
     from .prompt import mensagens
     r = gerar(cliente, estado, situacao, fala_jogador, historico, semente=semente, versao=versao, especie=especie,
-              rival=rival)
+              rival=rival, comando=comando)
     tentativas = []
     if r.erro is not None:
         return r, tentativas
     msgs = mensagens(fatos_de_estado(estado), situacao, fala_jogador, historico, versao=versao,
-                     estilo=bloco_estilo(especie, rival) if especie is not None else None)
+                     estilo=bloco_estilo(especie, rival) if especie is not None else None, comando=comando)
     atual = r
     for n in range(max_revisoes + 1):
         v = verificar(cliente, atual.fala, atual.fatos_citados, list(atual.fatos), semente=semente + 7919 * (n + 1),
@@ -76,11 +77,13 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
                            "verificacao": v.para_dict()})
         if not probs or n == max_revisoes:
             break
-        msgs = msgs + [{"role": "assistant", "content": json.dumps({"fala": atual.fala, "fatos_citados":
-                                                                     list(atual.fatos_citados)}, ensure_ascii=False)},
+        anterior = {"fala": atual.fala, "fatos_citados": list(atual.fatos_citados)}
+        if comando:
+            anterior["comando"] = r.comando
+        msgs = msgs + [{"role": "assistant", "content": json.dumps(anterior, ensure_ascii=False)},
                        {"role": "user", "content": _pedido_revisao(probs, so_respeito)}]
         try:
-            resp = cliente.conversar(msgs, esquema(atual.estagio), MAX_TOKENS[atual.estagio], semente + 104729 * (n + 1))
+            resp = cliente.conversar(msgs, esquema(atual.estagio, comando), MAX_TOKENS[atual.estagio], semente + 104729 * (n + 1))
             f = ler(resp.texto)
         except (OSError, ValueError, SaidaInvalida) as err:
             tentativas.append({"fala": None, "erro": f"{type(err).__name__}: {err}"})

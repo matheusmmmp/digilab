@@ -823,6 +823,27 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
   com letra fora do alfabeto latino (`descartados["NAO LATINO"]`); o arquivo e o sha256 não mudam, o corpus de exemplo das rodadas
   1–4 não tem item assim. Medida em `artifacts_voz/estilo_latino/` (`python experiments/medir_estilo_latino.py`: 30 mensagens ×
   3 espécies, com e sem o filtro). Teste `tests/test_corpus_latino.py`.
+- **Comando pelo chat (2026-09-30, `docs/TAREFA_COMANDO_CHAT.md`, decisão do Matheus):** a regra "o que o jogador escreve não ensina o
+  pet" **deixa de valer para o comando, mediado por um catálogo fechado**; fora do catálogo o texto continua sem efeito. Na CONVERSA
+  dos pets v7+ (`voz: true`) o servidor usa o prompt `livre-v7` (= v6 + bloco COMANDO) e devolve `comando`: uma das 9 ações de
+  `AcaoDono` (`web/app/motor/tipos.ts`) ou `null`; `saida.ler` falha alto fora do catálogo (fala genérica, comando null). A LLM só
+  propõe: o app valida de novo (`src/acoes.ts`: catálogo, pet nascido e vivo, ações v4 só em pets v4+, tratar só com lesão), mostra um
+  chip no balão da resposta ("Alimentar?") e **só o toque** grava o evento `d` de sempre pelo mesmo caminho do botão (`acoes.agir`,
+  usado pela tela do Pet, pelos atalhos e pelo chip). No registro do pet não entra nada da LLM: replay, assinaturas v1–v8, gabaritos e
+  paridade iguais; sem o modo livre gravado. O chip some com outra mensagem, outra fala do pet ou 60 s. Log de apresentação versão 2
+  (`comando`, `comando_executado`; lê a 1). Treino, luta, itens, fala espontânea e pets sem voz (v1–v6, `livre-v2`) ficam fora.
+  Avaliação: `python experiments/avaliar_fala.py --livre --comando [--rodada 1|2]` → `artifacts_fala_livre/comando/rodada1/` (sem o
+  estilo da espécie) e `rodada2_estilo/` (com); 60 mensagens em `situacoes.MENSAGENS_COMANDO` × 3 sementes; gate PROPOSTO: falsos
+  positivos ≤ 5% nas negativas e imperativos ≥ 80%. **Execução direta (sem chip) só com decisão do Matheus depois do gate.**
+  - Rodada 1 (`livre-v7`, sem estilo): falsos positivos 0%, imperativos 53,3% (FALHA): elogiar, repreender, acariciar e
+    tratar_lesao acertaram 4 de 36 (a mensagem do dono É a ação e o modelo tratava como conversa).
+  - **Rodada 3 (`livre-v8`, 2026-09-30, `artifacts_fala_livre/comando/rodada3/`)**: o servidor usa a **v8** na conversa com voz
+    (= v7 com o bloco COMANDO reescrito: as quatro ações definidas pelo que o dono faz na própria mensagem; negação, pergunta,
+    hipótese, adiamento e relato = null). A v7 continua no pacote e a rodada 1 reproduz. Sementes novas (20261201/1301/1401; as
+    das rodadas 1–2 são de calibração), sem o estilo, gemma2:9b. **Gate PASSA**: falsos positivos 0/60 nas negativas e 0/60 na
+    conversa; imperativos 51/60 (85,0%). As quatro ações: 23 de 24 (tratar_lesao 5/6, uma virou acariciar). **Regressão:**
+    limpar caiu de 7/9 para 3/9 (5 viraram `repreender`: "banho agora, sem choro", "vai se limpar, você tá todo sujo"). O chip
+    continua obrigatório; a execução direta segue como decisão do Matheus.
 
 ## Versão web (`web/digilab.html`)
 
