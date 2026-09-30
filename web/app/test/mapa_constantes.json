@@ -1,6 +1,6 @@
 {
  "versao": 1,
- "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento",
+ "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento; chaves_v21d: as chaves booleanas da V21D que a web liga nos pets v6, contra a config da variante validada (experiments/configs/v21d/validacao.json) e os campos da ConfigCombateV21D",
  "pares": [
   {
    "web": "C.decFome",
@@ -2287,6 +2287,40 @@
   {
    "web": "MEDALHAS[5].lugar",
    "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
+  },
+  {
+   "web": "CV21D.versaoPet",
+   "nota": "versao de pet a partir da qual a luta usa a V21D (pets v6, so no jogo; docs/VALIDACAO_V21D.md): no Python a variante e escolhida pelo config, nao por versao de pet"
+  }
+ ],
+ "chaves_v21d": [
+  {
+   "web": "CV21D.preparoSobPeleOculto",
+   "py": "ConfigCombateV21D.preparo_sob_pele_oculto",
+   "arquivo": "experiments/configs/v21d/validacao.json",
+   "chave": "regras_v21.preparo_sob_pele_oculto",
+   "nota": "candidato A: o preparo feito sob pele_dura nao aparece em oponente_preparando"
+  },
+  {
+   "web": "CV21D.muralhaListaEspelho",
+   "py": "ConfigCombateV21D.muralha_lista_espelho",
+   "arquivo": "experiments/configs/v21d/validacao.json",
+   "chave": "regras_v21.muralha_lista_espelho",
+   "nota": "candidato C: a muralha luta com a lista do espelho (BOTS_V21D.muralha)"
+  },
+  {
+   "web": "CV21D.vigiaBateEmQuemRecua",
+   "py": "ConfigCombateV21D.vigia_bate_em_quem_recua",
+   "arquivo": "experiments/configs/v21d/validacao.json",
+   "chave": "regras_v21.vigia_bate_em_quem_recua",
+   "nota": "E2 no vigia: golpe rapido de perto contra quem recua (BOTS_V21D.vigia)"
+  },
+  {
+   "web": "CV21D.vigiaRecuaDoPreparoSobPele",
+   "py": "ConfigCombateV21D.vigia_recua_do_preparo_sob_pele",
+   "arquivo": "experiments/configs/v21d/validacao.json",
+   "chave": "regras_v21.vigia_recua_do_preparo_sob_pele",
+   "nota": "V: o vigia recua do preparo de quem usa pele (BOTS_V21D.vigia)"
   }
  ]
 }

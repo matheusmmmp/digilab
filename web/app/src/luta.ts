@@ -22,7 +22,8 @@ export interface LutadorTela extends Lutador { sprite: string; grade: string; co
 export function exibirPet(m: Motor, L: Lutador): LutadorTela {
   return { ...L, sprite: chaveSprite(m.forma), grade: gradeDe(m.estagioAtual), cor: corDominante(m.tracos), estagioFala: m.estagioAtual, nomeTela: nomeForma(m.forma), estiloTela: null };
 }
-export function exibirBot(nome: string, L: Lutador = lutadorBot(nome)): LutadorTela {
+/** L: o lutador do bot sob as regras da luta; sem ele, o das regras do pet ativo (V21D nos pets v6) */
+export function exibirBot(nome: string, L: Lutador = lutadorBot(nome, jogoAtual().motor.regras)): LutadorTela {
   const n = NPC[nome];
   if (n) return { ...L, sprite: n.sprite ?? n.k, grade: n.grade || "adulto", cor: n.cor, estagioFala: n.estagio || "adulto", nomeTela: n.nome, estiloTela: null };
   if (BOTS_V21[nome as FormaAdultaNormal]) {
@@ -120,7 +121,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
   try {
     if (cenario) {   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
       const A0 = lutadorPet(m, "Seu pet"), B0 = lutadorPet(LUTA.rivalFixo!.rival, "Rival do cenário");
-      r = { res: jogarV2(A0, B0, hashSemente("cenario", m.semente, m.log.length)), A: A0, B: B0 };
+      r = { res: jogarV2(A0, B0, hashSemente("cenario", m.semente, m.log.length), m.regras), A: A0, B: B0 };
     } else {
       const rival = npc || LUTA.rival;
       mudarMotor(mm => { r = mm.lutar(rival, hashSemente("luta", mm.semente, mm.log.length)); idxLog = mm.log.length - 1; ativasDepois = mm.gp ? [...mm.gp.ativas] : null; });
@@ -191,7 +192,7 @@ export function melhorDe10(): string {
   if (LUTA.rivalFixo) {
     const m = jogoAtual().motor, B = lutadorPet(LUTA.rivalFixo.rival, "Rival do cenário");
     for (let k = 0; k < 10; k++) {
-      const r = jogarV2(lutadorPet(m, "Seu pet"), B, hashSemente("cenario-m10", m.semente, m.log.length, k));
+      const r = jogarV2(lutadorPet(m, "Seu pet"), B, hashSemente("cenario-m10", m.semente, m.log.length, k), m.regras);
       if (r.pontosA === 1) v++; else if (r.pontosA === 0) d++; else e++;
       lim += r.fim === "limite" ? 1 : 0;
     }
@@ -240,7 +241,7 @@ export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
   if (!ev || ev[1] !== "l") throw new Error(`o evento ${idx} do registro não é uma luta`);
   const { r, s } = ev[2] as { r: string; s: number };
   const m0 = Motor.reproduzir(m.semente, m.log.slice(0, idx), m.versao), npc = !!NPC[r];
-  const A = lutadorPet(m0, "Seu pet", npc), B = lutadorBot(r), res = jogarV2(A, B, s);
+  const A = lutadorPet(m0, "Seu pet", npc), B = lutadorBot(r, m0.regras), res = jogarV2(A, B, s, m0.regras);
   return { res, A: exibirPet(m0, A), B: exibirBot(r, B), rival: r, npc };
 }
 
@@ -257,7 +258,7 @@ export function lutasDoRegistro(m: Motor): LutaDoRegistro[] {
   m.log.forEach((ev, idx) => {
     if (ev[1] !== "l") { m0.aplicarEvento(ev); return; }
     const { r, s } = ev[2] as { r: string; s: number };
-    const res = jogarV2(lutadorPet(m0, "Seu pet", !!NPC[r]), lutadorBot(r), s), antes = m0.gp ? [...m0.gp.ativas] : [];
+    const res = jogarV2(lutadorPet(m0, "Seu pet", !!NPC[r]), lutadorBot(r, m0.regras), s, m0.regras), antes = m0.gp ? [...m0.gp.ativas] : [];
     m0.aplicarEvento(ev);
     lutas.push({ idx, rival: r, turnos: res.turnos.length, pontosA: res.pontosA, regrasNovas: m0.gp ? m0.gp.ativas.filter(k => !antes.includes(k)).length : 0 });
   });

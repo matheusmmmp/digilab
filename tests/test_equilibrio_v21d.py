@@ -191,3 +191,21 @@ def test_e2_e_v_so_trocam_as_listas_do_colosso():
     assert bots.REGRA_BATE_EM_QUEM_RECUA not in tita.regras + vigia.regras
     assert bots.REGRA_RECUA_DO_PREPARO_SOB_PELE not in vigia.regras
     assert len(tita.regras) == len(vigia.regras) == 8
+
+
+# ---------------------------------------------------------------- validacao da variante a_c_e2v_v (docs/VALIDACAO_V21D.md)
+def test_config_da_validacao_v21d_e_a_variante_a_c_e2v_v():
+    """O config registrado liga exatamente as 4 chaves da a_c_e2v_v e lista as outras 3 da V21D desligadas; sem ele, a
+    ConfigCombateV21D padrao continua com tudo desligado."""
+    import validar_v21d
+    c = validar_v21d.config()
+    assert {k for k, x in c["regras_v21"].items() if x} == {
+        "preparo_sob_pele_oculto", "muralha_lista_espelho", "vigia_bate_em_quem_recua", "vigia_recua_do_preparo_sob_pele"}
+    assert not any(asdict(ConfigCombateV21D())[k] for k in c["regras_v21"])
+
+
+def test_gabarito_web_v21d_reproduz():
+    """O gabarito de paridade da web (web/app/test/gabaritos/combate_v21d_python.json) sai igual do exportador."""
+    import exportar_gabarito_v21d as ex
+    gravado = json.loads(ex.SAIDA.read_text(encoding="utf-8"))
+    assert json.loads(json.dumps(ex.gerar())) == gravado
