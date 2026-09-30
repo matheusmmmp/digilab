@@ -30,6 +30,8 @@ MARCAS = MARCAS_OK + MARCAS_FORA + ("PARCIAL", "OUTRA MIDIA")
 VEREDITOS_OK = ("APTO", "APTO COM RESSALVAS")
 MAX_CITACOES = 3
 PALAVRAS_REPETIDAS = 6
+MAX_TRACOS_ESTILO = 8               # o bloco de estilo nao incha o prompt (a ordem do arquivo decide)
+MAX_FALA_ESTILO = 5
 
 
 class CorpusInvalido(ValueError):
@@ -105,7 +107,7 @@ def _especie(e: dict, meta: dict) -> Especie | None:
     if len(cits) > MAX_CITACOES:
         raise CorpusInvalido(f"{e['especie']}: {len(cits)} citacoes (maximo {MAX_CITACOES})")
     for c in cits:
-        if set(c) - {"pt", "original", "fonte", "fan_translation", "marca", "jogo"} or _frases(c["pt"]) > 2:
+        if set(c) - {"pt", "original", "fonte", "fan_translation", "marca", "jogo", "midia", "nota_marca_original"} or _frases(c["pt"]) > 2:
             raise CorpusInvalido(f"{e['especie']}: citacao fora do formato ou com mais de 2 frases")
     enganador = any(t.get("enganador") is True for t in tracos)
     return Especie(e["especie"], jogos, tuple(t["texto"] for t in tracos), tuple(f["texto"] for f in fala),
@@ -138,9 +140,9 @@ def bloco_estilo(esp: Especie, rival: str | None = None) -> str:
     linhas = [f"ESTILO DA ESPÉCIE (só tom; não é fato, não sustenta nada e não se cita)",
               f"Você é um {esp.especie}."]
     if esp.tracos:
-        linhas.append("Jeito de ser: " + "; ".join(esp.tracos) + ".")
+        linhas.append("Jeito de ser: " + "; ".join(esp.tracos[:MAX_TRACOS_ESTILO]) + ".")
     if esp.fala:
-        linhas.append("Jeito de falar: " + "; ".join(esp.fala) + ".")
+        linhas.append("Jeito de falar: " + "; ".join(esp.fala[:MAX_FALA_ESTILO]) + ".")
     if esp.citacoes:
         linhas.append("Exemplos de tom (NÃO repita as palavras): " + " | ".join(f'"{c["pt"]}"' for c in esp.citacoes))
     for com, texto, midia in esp.interacoes:

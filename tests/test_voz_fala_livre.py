@@ -11,6 +11,7 @@ import pytest
 
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
+EXEMPLO = RAIZ / "tests" / "dados" / "corpus_exemplo.json"     # o corpus de exemplo (2 especies), fixture do filtro
 
 from digilab.config import CONFIG_MENTIRA  # noqa: E402
 from digilab_fala_livre import almanaque, corpus  # noqa: E402
@@ -105,9 +106,9 @@ PROIBIDAS = ("INFERENCIA", "INFERÊNCIA", "DIVERGENTE", "SEM FONTE", "FONTE INVA
 
 
 def test_corpus_de_exemplo_filtra_as_marcas():
-    esp, meta, sha = corpus.carregar()
+    esp, meta, sha = corpus.carregar(EXEMPLO)
     assert meta["exemplo"] is True and set(esp) == {"Angemon", "Devimon"} and len(sha) == 64
-    bruto = json.loads(corpus.ARQUIVO.read_text(encoding="utf-8"))
+    bruto = json.loads(EXEMPLO.read_text(encoding="utf-8"))
     proibidos = {it["texto"] if "texto" in it else it["pt"] for e in bruto["especies"]
                  for k in ("tracos", "fala", "interacoes", "citacoes") for it in e[k]
                  if it["marca"] in PROIBIDAS}
@@ -165,7 +166,7 @@ def test_repete_citacao():
 
 
 def test_bloco_de_estilo_so_tom():
-    esp, _, _ = corpus.carregar()
+    esp, _, _ = corpus.carregar(EXEMPLO)
     b = corpus.bloco_estilo(esp["Devimon"])
     assert b.startswith("ESTILO DA ESPÉCIE") and "Você é um Devimon." in b and "[" not in b
     assert "NÃO repita" in b
@@ -204,7 +205,7 @@ class _Falso:
 
 
 def test_gerar_v3_estilo_citacao_e_queda_da_mentira():
-    esp, _, _ = corpus.carregar()
+    esp, _, _ = corpus.carregar(EXEMPLO)
     ok = gerar(_Falso([{"fala": "Quase sempre durmo depois de comer, hehe.", "fatos_citados": ["H1"]}]), ESTADO,
                "espontanea", versao=VERSAO_PROMPT_V3, especie=esp["Devimon"])
     assert ok.erro is None and ok.especie == "Devimon" and ok.versao_prompt == VERSAO_PROMPT_V3
@@ -358,3 +359,23 @@ def test_cliente_recarrega_se_o_modelo_saiu_da_gpu():
     c.conversar([], {}, 5, 0)
     c.conversar([], {}, 5, 0)
     assert prazos == [ol.TIMEOUT_CARGA_S, ol.TIMEOUT_S, ol.TIMEOUT_CARGA_S] and c.carregado
+
+
+def test_corpus_auditado_do_jogo():
+    import re as _re
+    esp, meta, sha = corpus.carregar()
+    assert meta["exemplo"] is False and not meta["liberar_outra_midia"] and len(sha) == 64
+    ts = (RAIZ / "web" / "app" / "motor" / "nomes.ts").read_text(encoding="utf-8")
+    nomes = {v[0] for v in json.loads(_re.search(r"DIGIMON_DA_FORMA[^=]*=\s*(\{.*?\});", ts).group(1)).values()}
+    bruto = json.loads(corpus.ARQUIVO.read_text(encoding="utf-8"))
+    assert {e["especie"] for e in bruto["especies"]} == nomes                  # uma entrada por Digimon do jogo
+    assert len(esp) >= 50 and set(esp) <= nomes
+    proibidos = {it.get("texto", it.get("pt")) for e in bruto["especies"] for k in ("tracos", "fala", "interacoes", "citacoes")
+                 for it in e[k] if it["marca"] not in ("VERIFICADO", "VERIFICADO EM OUTRA FONTE")
+                 and not (it["marca"] == "PARCIAL" and it.get("reescrito"))}
+    passam = {t for e in esp.values() for t in e.tracos + e.fala} | {i[1] for e in esp.values() for i in e.interacoes} \
+        | {c["pt"] for e in esp.values() for c in e.citacoes}
+    assert proibidos and not proibidos & passam                              # anime e marcas fracas ficam de fora
+    assert all(len(e.citacoes) <= corpus.MAX_CITACOES for e in esp.values())
+    b = corpus.bloco_estilo(esp["Guilmon"])
+    assert b.count(";") <= corpus.MAX_TRACOS_ESTILO + corpus.MAX_FALA_ESTILO

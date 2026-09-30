@@ -985,3 +985,21 @@ muda, `6a9037ad…`). Todos os números novos são PROPOSTOS. Onde o design não
 - **Honestidade da espécie**: fica 1 no jogo até o corpus auditado entrar (o de exemplo não tem enganador).
 - **Servidor**: o verificar passou a aceitar as chaves de registro dos fatos novos (antes a ida e volta daria 400); o
   almanaque é sorteado pelo servidor (a página não manda id nem texto).
+
+## 2026-09-30 — corpus de espécies: o auditado entra no lugar do exemplo
+
+`digilab_fala_livre/corpus_especies.json` agora tem uma entrada para cada um dos 60 Digimon do jogo (`web/app/motor/nomes.ts`),
+montada de `docs/corpus_digimon/` (revisado após a auditoria) com a marca de cada item. O exemplo de 2 espécies virou fixture
+dos testes (`tests/dados/corpus_exemplo.json`). Passam no filtro 56 espécies, 251 itens e 57 citações; DemiVeemon, DinoBeemon,
+SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
+
+- **Anime fica de fora** (`liberar_outra_midia: false`): os itens dos três animes estão no arquivo com a marca OUTRA MÍDIA e
+  `midia: "anime"`, e entram se o Matheus liberar.
+- **Itens acrescentados na revisão** (depois da auditoria, com fonte nova conferida pelo revisor) entraram como VERIFICADO EM
+  OUTRA FONTE; a auditoria não os viu.
+- **Variantes BK/B do Digimon World 3** saíram (podem ser outra espécie, como BlackWarGreymon).
+- **Nenhum enganador**: o "Guilmon Trapaceiro" é um NPC do DW3, não um traço da espécie, e a Palmon que finge ser flor é um
+  disfarce; com a marca, todos os Guilmon e Palmon mentiriam mais. `honestidade_especie` é 1 para todas.
+- **Citações com 3 frases curtas** (7) saíram, em vez de cortadas; Imperialdramon Dragon e Fighter Mode têm o mesmo conteúdo
+  (o corpus não diz o modo).
+- O bloco de estilo do prompt usa no máximo 8 traços e 5 itens de fala por espécie.
