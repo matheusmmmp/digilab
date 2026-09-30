@@ -200,6 +200,47 @@ test("vários pets: só o ativo corre o tempo", async ({ page }) => {
   expect(g).toHaveLength(6);                       /* o Champion de antes foi para o lugar dele */
 });
 
+/* o relogio do jogo para durante a luta no palco e com o Resultado aberto (so a interface: a luta ja entrou no registro na hora);
+   fechado o Resultado, volta a andar. Na velocidade alta (1 h por segundo) 1,5 s parado seriam 90 min de jogo */
+test("tempo: o relógio para durante a animação da luta e com o Resultado aberto, e volta a andar depois", async ({ page }) => {
+  test.setTimeout(120_000);
+  await semear(page, SAVES.v3);
+  const erros = vigiarErros(page);
+  const tick = (): Promise<number> => page.evaluate(() => (window as any).__digilab.tick());
+  await page.goto(APP + "#/pet/estado");
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await page.getByRole("button", { name: /^Registro e replay/ }).click();
+  await page.getByRole("button", { name: "1 h/s" }).click();
+  await irPara(page, "Lutar", "Arena", "lutar/arena");
+  const t0 = await tick();
+  await expect.poll(tick).toBeGreaterThan(t0);                       /* fora da luta o tempo anda */
+  const l0 = await numLog(page, "l");
+  await page.locator(".lutar-grande").click();
+  await expect(page).toHaveURL(/#\/lutar\/luta$/);
+  /* a luta ja esta no registro, antes da animacao */
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  /* durante a animacao: o tick nao muda */
+  const t1 = await tick();
+  await page.waitForTimeout(1500);
+  expect(await tick(), "o tempo andou durante a animação da luta").toBe(t1);
+  /* com o Resultado aberto: tambem nao */
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 90_000 });
+  const t2 = await tick();
+  expect(t2).toBe(t1);
+  await page.waitForTimeout(1500);
+  expect(await tick(), "o tempo andou com o Resultado aberto").toBe(t2);
+  /* fechou o Resultado: volta a andar, sem compensar o tempo parado (1 h/s: menos de 3 h de jogo nos proximos 2 s) */
+  await page.locator(".res-continuar").click();
+  await expect(page).toHaveURL(/#\/lutar\/arena$/);
+  await expect.poll(tick).toBeGreaterThan(t2);
+  const t3 = await tick();
+  expect(t3 - t2, "o tempo parado nao volta de uma vez").toBeLessThan(180);
+  /* o registro so ganhou a luta (e os avancos de tempo de depois): nenhum evento novo da interface */
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  expect(erros).toEqual([]);
+});
+
 test("foco visível pelo teclado", async ({ page }) => {
   await semear(page, SAVES.v2);
   await page.goto(APP + "#/pet/estado");
@@ -751,12 +792,9 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   /* o pet passou a saber do titulo do Tamer: o evento "f" no registro dele */
   await expect(page.locator(".fr-inst-card")).toHaveCount(4);
   expect(await numLog(page, "f")).toBe(1);
-  /* o tempo do jogo pausado (Ajustes > Registro e replay): a derrota que fecha a sequencia pode machucar o pet, e na velocidade de teste
-     (10 min por segundo) a lesao sem tratar o mataria durante a animacao das lutas seguintes */
-  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
-  await page.getByRole("button", { name: /^Registro e replay/ }).click();
-  await page.getByRole("button", { name: "Pausa" }).click();
-  await irPara(page, "Lutar", "Fronteira", "lutar/fronteira");
+  /* sem pausar o tempo: a derrota que fecha a sequencia pode machucar o pet, e na velocidade de teste (10 min por segundo) a lesao sem
+     tratar o mataria em 36 s; o relogio do jogo fica parado durante a animacao e com o Resultado aberto (luta.lutaSeguraTempo), entao a
+     pausa manual que este teste fazia nao e mais necessaria */
   const torre =page.locator(".fr-inst-card", { hasText: "Torre de Batalha" });
   await expect(torre).toContainText("Megas sorteados");
   await expect(torre).toContainText("Sem recorde ainda");

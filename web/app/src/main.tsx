@@ -42,7 +42,7 @@ iniciarFalaLivre();
 addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") gravarPendente(); });
 addEventListener("pagehide", gravarPendente);
 /* conferencia (teste ponta a ponta, Etapa 5): so leitura do pet vivo; nada aqui muda o motor */
-Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoSave(jogoAtual().motor) } });
+Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoSave(jogoAtual().motor), tick: () => jogoAtual().motor.e.tick } });
 /* varios pets: no primeiro acesso a esta versao, a escada de pets guardados de exemplo (fraco -> forte), depois da
    primeira pintura para nao atrasar a abertura */
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);

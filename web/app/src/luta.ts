@@ -10,6 +10,7 @@ import {
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
+import { ehLuta } from "./rotas.ts";
 import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
@@ -109,6 +110,12 @@ export const LUTA = { lutando: false, rival: "agressivo", campSel: null as strin
   pausado: false, rapido: false,
   /** indice no registro da luta que esta sendo revista (replay animado, nada gravado); null numa luta de verdade */
   replay: null as number | null };
+/** o relogio do jogo para (so na interface: o motor, o registro e o replay nao mudam) enquanto uma luta e mostrada no palco e enquanto o
+    Resultado dela esta aberto (a tela cheia da luta com o resultado no palco). A luta ja entrou no registro na hora; sem isto, na velocidade
+    de teste a lesao da derrota que fecha uma sequencia mataria o pet durante a animacao (6 h de jogo em 36 s). Fechado o Resultado, o
+    tempo volta a correr de onde parou, sem compensar o tempo parado (tempo.ts descarta o que passou) */
+export const lutaSeguraTempo = (): boolean =>
+  LUTA.lutando || (LUTA.replay === null && !!LUTA.palco?.resultado && typeof location !== "undefined" && ehLuta(location.hash));
 const ouvintes = new Set<() => void>();
 export const avisarLuta = (): void => { for (const o of ouvintes) o(); };
 export function useLuta(): typeof LUTA {
