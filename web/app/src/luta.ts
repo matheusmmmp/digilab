@@ -3,13 +3,14 @@
    item 1). A luta entra no registro na hora (motor.lutar); a animacao so mostra os turnos que o motor ja jogou. */
 import { useEffect, useState } from "preact/hooks";
 import {
-  BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NPC, RIVAL_LIGA, cartaDe, chaveSprite, corDominante, estadoV2, formaLiga, formaRival, hashSemente, jogarV2,
-  lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio, type EstadoLuta, type FormaAdultaNormal, type Lutador,
-  Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate, type Turno,
+  BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NPC, RIVAL_LIGA, cartaDe, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
+  formaRivalInstalacao, hashSemente, instalacaoDe, jogarV2, lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio,
+  type EstadoLuta, type FormaAdultaNormal, type IdInstalacao, type Instalacao, type Lutador, Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate,
+  type Turno,
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
-import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha } from "./tamer.ts";
+import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
 export const DIGIMON_BOT: Record<string, string> = { aleatorio: "Kuramon", agressivo: "Monochromon", tartaruga: "Golemon", atirador: "Tankmon", contragolpe: "Leomon", adaptativo: "Devimon", oraculo: "Jijimon" };
@@ -43,6 +44,13 @@ export function exibirLider(i: number, L: Lutador): LutadorTela {
   return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "carga", estagioFala: "mega", nomeTela: nomeForma(f),
     estiloTela: `${NOME_ARQ[x.adulta].toLowerCase()} de ${NPC[x.lider]!.nome}` };
 }
+/** o rival da luta k (0 = a primeira) de uma tentativa numa instalacao da Fronteira (motor/instalacoes.ts), sorteado da semente dela, como
+    lutador de tela: o sprite do Mega, o nome dele e, no estilo, o arquetipo e o brasao */
+export function exibirRivalInstalacao(s: number, k: number, L: Lutador): LutadorTela {
+  const f = formaRivalInstalacao(s, k);
+  return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "carga", estagioFala: "mega", nomeTela: nomeForma(f),
+    estiloTela: `${NOME_ARQ[f.adulta!].toLowerCase()} · ${NOME_ESP[f.esp]}` };
+}
 /** uma linha do registro da luta: o motivo de cada lado; o texto sai da tabela de expressao na hora de desenhar */
 export interface LinhaLog { t: number; pet: string; rival: string; ma: MotivoCombate; mb: MotivoCombate; estPet: Estagio; estRival: Estagio; humor: number }
 export interface Palco {
@@ -57,6 +65,9 @@ export interface Palco {
   arena?: Arena | null;
   /** a Liga dos Lideres (pets v6, modo fronteira): as lutas seguidas sao contra os 6 lideres, sem cura e sem carta */
   liga?: boolean;
+  /** uma instalacao da Fronteira (pets v6, modo fronteira): qual, a luta que esta no palco (1 = a primeira: vale a vitoria k) e a vida
+      com que o pet comecou esta luta (fracao da maxima); null fora dela */
+  sequencia?: { inst: Instalacao; k: number; vida: number } | null;
 }
 /** rival fixo: o pet B de um cenario (Diario > Cenarios); luta sem ensinar, porque nao e reconstruivel do registro */
 /** o que o modal Resultado precisa, tudo do motor: a luta, o estado antes dela e a posicao dela no registro */
@@ -79,6 +90,9 @@ export interface ResultadoPalco {
   carta: string | null; itens: ItemGanho[];
   /** pets v6, a Liga dos Lideres: os 6 lideres na tela (null fora dela) e o titulo que o Tamer ganhou com esta tentativa (null: nenhum) */
   lideres: LutadorTela[] | null; titulo: Campeao | null;
+  /** pets v6, uma instalacao da Fronteira: qual, os rivais das lutas jogadas na tela e o recorde do Tamer que esta tentativa bateu (null:
+      nenhum); null e [] fora dela */
+  instalacao: Instalacao | null; rivais: LutadorTela[] | null; recorde: Recorde | null;
 }
 export interface RivalFixo { rival: Motor; dias: number; tipo: string }
 export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null,
@@ -190,7 +204,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
       p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog, medalha,
-        serie, nLutas, arena, carta, itens, lideres: null, titulo: null };
+        serie, nLutas, arena, carta, itens, lideres: null, titulo: null, instalacao: null, rivais: null, recorde: null };
   });
 }
 /** a Liga dos Lideres (pets v6; motor/liga.ts): a tentativa inteira entra no registro como uma luta (Motor.lutar com o rival da Liga,
@@ -217,23 +231,61 @@ export function lutarLiga(nomeAcaoV2: Record<string, string>): void {
     p.texto = (r!.venceu ? `Seu pet venceu os ${n} líderes seguidos: campeão da Liga. ` : `A Liga parou na luta ${serie.length} de ${n}. `)
       + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: a luta fica com quem foi desafiado, o líder"}).`;
     p.resultado = { res, npc: null, notasAntes, cenario: false, ativasAntes, ativasDepois, lugarJaVencido: true, sparringAntes, sparringContou: false, idxLog, medalha: null,
-      serie, nLutas: n, arena: null, carta: null, itens: [], lideres, titulo };
+      serie, nLutas: n, arena: null, carta: null, itens: [], lideres, titulo, instalacao: null, rivais: null, recorde: null };
   });
+}
+/** uma tentativa numa instalacao da Fronteira (pets v6; motor/instalacoes.ts): entra no registro como uma luta (Motor.lutar com o id da
+    instalacao e a semente da proxima tentativa do pet, que sai do registro; sem carta), e as lutas sao animadas uma depois da outra, cada
+    uma contra o Mega sorteado dela, ate a primeira que nao for vitoria. O recorde (a sequencia que passa a do Tamer) vira o evento
+    "recorde" do Tamer (jogo.mudarMotor confere) */
+export function lutarInstalacao(id: IdInstalacao, nomeAcaoV2: Record<string, string>): void {
+  if (LUTA.lutando) return;
+  const modo: Modo = "fronteira", inst = instalacaoDe(id), m0 = jogoAtual().motor, recordesAntes = tamerAtual().recordes.length;
+  const notasAntes = m0.gp ? { ...m0.gp.notas } : null, ativasAntes = m0.gp ? [...m0.gp.ativas] : null, sparringAntes = m0.sparring;
+  let idxLog: number | null = null, ativasDepois: string[] | null = null, s = 0;
+  let r: ReturnType<Motor["lutar"]>;
+  try {
+    mudarMotor(mm => { s = mm.sementeInstalacao(id); r = mm.lutar(id, s); idxLog = mm.log.length - 1; ativasDepois = mm.gp ? [...mm.gp.ativas] : null; });
+  } catch (err) {
+    previa(modo);
+    if (LUTA.palco) LUTA.palco.texto = err instanceof Error ? err.message : String(err);
+    avisarLuta(); return;
+  }
+  const m = jogoAtual().motor, t = tamerAtual(), recorde = t.recordes.slice(recordesAntes).find(x => x.inst === id) ?? null;
+  const { res, serie } = r!, rivais = r!.rivais!.map((L, k) => exibirRivalInstalacao(s, k, L)), A = exibirPet(m, r!.A);
+  const v = serie.filter(x => x.pontosA === 1).length;
+  LUTA.replay = null;
+  animar(serie, serie.length, A, rivais, modo, nomeAcaoV2, null, p => {
+    const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? `${rivais[serie.length - 1].nomeTela} venceu` : "Empate";
+    p.texto = `${inst.nome}: ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}. `
+      + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: a luta fica com quem foi desafiado, o rival"}).`
+      + (recorde ? ` Recorde novo do Tamer: ${recorde.valor}.` : "");
+    p.resultado = { res, npc: null, notasAntes, cenario: false, ativasAntes, ativasDepois, lugarJaVencido: true, sparringAntes, sparringContou: false, idxLog, medalha: null,
+      serie, nLutas: serie.length, arena: null, carta: null, itens: [], lideres: null, titulo: null, instalacao: inst, rivais, recorde };
+  }, inst);
 }
 /** a animacao de uma luta ja decidida (ou das lutas seguidas da Cidadela, uma depois da outra, com "luta k de n" no palco):
     um turno por vez (pausa e x2); no fim chama fim(palco) e para. nLutas: quantas lutas a serie tem (as jogadas podem ser
     menos: ela para na primeira que nao for vitoria) */
 function animar(serie: ResultadoLuta[], nLutas: number, A: LutadorTela, Bs: LutadorTela | LutadorTela[], modo: Modo, nomeAcaoV2: Record<string, string>, arena: Arena | null,
-  fim: (p: Palco) => void): void {
+  fim: (p: Palco) => void, inst: Instalacao | null = null): void {
   if (!serie.length) throw new Error("luta sem turnos para animar");
   LUTA.lutando = true;
   let j = 0, i = 0;
-  /* a Liga (varios rivais): cada luta da serie contra o dela */
-  const liga = Array.isArray(Bs), rivalDe = (k: number): LutadorTela => Array.isArray(Bs) ? Bs[k] : Bs;
+  /* a Liga e as instalacoes da Fronteira (varios rivais): cada luta da serie contra o dela. Nas instalacoes o numero de lutas nao aparece
+     (a sequencia vai ate a primeira derrota): o palco mostra a vitoria que esta em jogo e a vida com que o pet comecou */
+  const liga = Array.isArray(Bs) && !inst, rivalDe = (k: number): LutadorTela => Array.isArray(Bs) ? Bs[k] : Bs;
   let B = rivalDe(0);
   const abrir = () => {
     const k = j + 1, log = j && LUTA.palco ? LUTA.palco.log : [];
     B = rivalDe(j);
+    if (inst) {
+      const L0 = serie[j].E0.L[0], vida = Math.max(0, L0.hp) / L0.hpMax;
+      LUTA.palco = { modo, A, B, E: serie[j].E0, tr: null, turno: null, callout: `LUTA ${k}`, intencao: null, regra: null, resultado: null, log,
+        texto: `${inst.nome} · vitória ${k}: ${B.nomeTela}` + (j ? `, sem cura: seu pet começa com ${Math.round(vida * 100)}% da vida.` : "."),
+        serie: null, arena, liga: false, sequencia: { inst, k, vida } };
+      return;
+    }
     LUTA.palco = { modo, A, B, E: serie[j].E0, tr: null, turno: null, callout: nLutas > 1 ? `LUTA ${k} DE ${nLutas}` : "", intencao: null, regra: null, resultado: null, log,
       texto: nLutas > 1 ? `Luta ${k} de ${nLutas}` + (j ? ": sem cura, seu pet começa com a vida e o guts que sobraram." : liga ? `: ${B.nomeTela}, o Mega de ${NPC[LIGA[0].lider]!.nome}.` : ": vença as três seguidas.") : "",
       serie: nLutas > 1 ? { k, n: nLutas } : null, arena, liga };
@@ -325,11 +377,12 @@ export function reverLuta(idx: number, nomeAcaoV2: Record<string, string>): void
   if (LUTA.lutando) return;
   const L = reconstruirLuta(jogoAtual().motor, idx);
   LUTA.replay = idx;
-  animar(L.serie, L.nLutas, L.A, L.lideres ?? L.B, L.lideres ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
+  animar(L.serie, L.nLutas, L.A, L.lideres ?? L.rivais ?? L.B, L.lideres || L.instalacao ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
     const txt = L.res.pontosA === 1 ? `${L.A.nomeTela} venceu` : L.res.pontosA === 0 ? `${L.B.nomeTela} venceu` : "Empate";
-    p.texto = `Fim do replay: ${L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${L.res.turnos.length} turnos.`;
+    const v = L.serie.filter(x => x.pontosA === 1).length;
+    p.texto = `Fim do replay: ${L.instalacao ? `${L.instalacao.nome}, ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}; ` : L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${L.res.turnos.length} turnos.`;
     p.fimReplay = true;
-  });
+  }, L.instalacao);
 }
 /** luta pedida pelo "Ver replay" do Resultado: indice do evento no registro */
 export const REPLAY = { pedido: null as number | null };
@@ -339,6 +392,8 @@ export interface LutaReconstruida {
   serie: ResultadoLuta[]; nLutas: number; arena: Arena | null;
   /** a Liga dos Lideres: os 6 lideres na tela (B e o da ultima luta jogada); null fora dela */
   lideres: LutadorTela[] | null;
+  /** uma instalacao da Fronteira: qual e os rivais sorteados das lutas jogadas (B e o da ultima); null fora dela */
+  instalacao: Instalacao | null; rivais: LutadorTela[] | null;
 }
 /** refaz a luta do evento idx do registro: o pet reconstruido ate ali (event sourcing), o mesmo rival e a mesma
     semente. So leitura: nada e gravado nem ensinado ao pet vivo. */
@@ -351,9 +406,13 @@ export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
   const L = m0.montarLuta(r, s), res = L.serie[L.serie.length - 1];
   if (L.lideres) {
     const lideres = L.lideres.map((x, i) => exibirLider(i, x));
-    return { res, A: exibirPet(m0, L.A), B: lideres[L.serie.length - 1], rival: r, npc, serie: L.serie, nLutas: lideres.length, arena: null, lideres };
+    return { res, A: exibirPet(m0, L.A), B: lideres[L.serie.length - 1], rival: r, npc, serie: L.serie, nLutas: lideres.length, arena: null, lideres, instalacao: null, rivais: null };
   }
-  return { res, A: exibirPet(m0, L.A), B: exibirBot(r, L.B), rival: r, npc, serie: L.serie, nLutas: L.arena?.lutas ?? 1, arena: L.arena, lideres: null };
+  if (L.instalacao) {
+    const rivais = L.rivais!.map((x, k) => exibirRivalInstalacao(s, k, x));
+    return { res, A: exibirPet(m0, L.A), B: rivais[rivais.length - 1], rival: r, npc, serie: L.serie, nLutas: L.serie.length, arena: null, lideres: null, instalacao: L.instalacao, rivais };
+  }
+  return { res, A: exibirPet(m0, L.A), B: exibirBot(r, L.B), rival: r, npc, serie: L.serie, nLutas: L.arena?.lutas ?? 1, arena: L.arena, lideres: null, instalacao: null, rivais: null };
 }
 
 /** uma luta do registro, refeita: rival, turnos, resultado e quantas regras novas o pet tirou dela */

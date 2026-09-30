@@ -15,20 +15,25 @@
    O titulo (a Liga dos Lideres na Fronteira, medalhas parte 4a; docs/DESIGN_FRONTEIRA.md, secao 2): registro versao 3 (le a 1 e a 2).
    Evento "campeao": o pet venceu as 6 lutas da Liga (o motor do pet conta os titulos dele, Motor.liga, a partir do evento de luta "l"
    da Liga). Um por pet (o primeiro titulo dele), so depois das 6 medalhas; o primeiro do registro e o titulo do Tamer (a medalha de
-   ouro). */
+   ouro).
+
+   Os recordes (as instalacoes da Fronteira, medalhas parte 4b; docs/DESIGN_FRONTEIRA.md, secao 3): registro versao 4 (le a 1, a 2 e a 3).
+   Evento "recorde": a maior sequencia de vitorias numa instalacao (Torre de Batalha, Palacio), com o pet que fez. So entra quando passa o
+   recorde que o Tamer ja tem, e so depois do titulo. O motor do pet conta as sequencias dele (Motor.instalacoes, a partir do evento de luta
+   "l" da instalacao); o pet conhece o titulo do Tamer pelo evento "f" do registro dele (Motor.abrirFronteira), gravado aqui, como o "u". */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_LIGA, cartaDe,
-  itemDe, medalhaDoLider, nomeForma, type Estagio, type Medalha,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, INSTALACOES, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
+  VERSAO_LIGA, cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
 export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
-/** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a). Grava a 3;
-    le as tres */
-export const VERSAO_TAMER = 3;
-const VERSOES_TAMER = [1, 2, 3];
+/** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
+    recordes das instalacoes da Fronteira (parte 4b). Grava a 4; le as quatro */
+export const VERSAO_TAMER = 4;
+const VERSOES_TAMER = [1, 2, 3, 4];
 
 /** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
 export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
@@ -40,7 +45,10 @@ export interface CartaUsada { id: string; quando: number; pet: number; tick: num
 /** um titulo da Liga dos Lideres: o contador (1 = o primeiro, o titulo do Tamer), a hora de parede e o pet que venceu as 6 (semente,
     forma e tick dele) */
 export interface Campeao { n: number; quando: number; pet: number; forma: string; tick: number }
-export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao];
+/** um recorde numa instalacao da Fronteira: qual, o valor (a sequencia de vitorias), a hora de parede e o pet que fez (semente, forma e
+    tick dele) */
+export interface Recorde { inst: IdInstalacao; valor: number; quando: number; pet: number; forma: string; tick: number }
+export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde];
 const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
 
 export class Tamer {
@@ -52,11 +60,15 @@ export class Tamer {
   usadas: CartaUsada[] = [];
   /** os titulos da Liga, na ordem (um por pet) */
   campeoes: Campeao[] = [];
+  /** os recordes das instalacoes, na ordem em que foram batidos (o ultimo de cada instalacao e o recorde dela) */
+  recordes: Recorde[] = [];
   get n(): number { return this.medalhas.length; }
   /** o titulo do Tamer: o primeiro campeao (null: ainda nao venceu a Liga) */
   get titulo(): Campeao | null { return this.campeoes[0] ?? null; }
   /** o titulo que o pet (semente) deu ao Tamer (null: nenhum) */
   tituloDe(pet: number): Campeao | null { return this.campeoes.find(x => x.pet === pet) ?? null; }
+  /** o recorde do Tamer na instalacao (null: nenhuma vitoria la ainda) */
+  recorde(inst: IdInstalacao): Recorde | null { return [...this.recordes].reverse().find(x => x.inst === inst) ?? null; }
   tem(id: string): boolean { return this.medalhas.some(x => x.id === id); }
   ganha(id: string): MedalhaGanha | null { return this.medalhas.find(x => x.id === id) ?? null; }
   /** o Tamer tem o chip (chip nao se gasta) */
@@ -72,10 +84,11 @@ export class Tamer {
 
   /** um evento do registro (replay): confere tudo antes de aplicar */
   aplicar(ev: EventoTamer): void {
-    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao"].includes(ev[0]))
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde"].includes(ev[0]))
       throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
     if (ev[0] === "item") { this._item(ev[1]); return; }
     if (ev[0] === "campeao") { this._campeao(ev[1]); return; }
+    if (ev[0] === "recorde") { this._recorde(ev[1]); return; }
     if (ev[0] === "carta_usada") { this._usada(ev[1]); return; }
     const x = ev[1];
     if (!x || !MEDALHA_POR_ID[x.id]) throw new Error("medalha desconhecida no registro do Tamer: " + JSON.stringify(x?.id));
@@ -120,6 +133,22 @@ export class Tamer {
     if (typeof x.forma !== "string") throw new Error("título sem a forma do pet no registro do Tamer");
     if (this.tituloDe(x.pet)) throw new Error(`título repetido para o mesmo pet no registro do Tamer (${x.pet})`);
     this.campeoes.push({ ...x });
+  }
+  private _recorde(x: Recorde): void {
+    if (!x || typeof x !== "object") throw new Error("recorde sem dados no registro do Tamer");
+    if (typeof x.inst !== "string" || !ehInstalacao(x.inst)) throw new Error("recorde de instalação desconhecida no registro do Tamer: " + JSON.stringify(x.inst));
+    if (!this.titulo) throw new Error("recorde da Fronteira antes do título da Liga no registro do Tamer");
+    if (!Number.isInteger(x.valor) || x.valor < 1) throw new Error(`recorde inválido no registro do Tamer: ${JSON.stringify(x.valor)}`);
+    const antes = this.recorde(x.inst);
+    if (antes && x.valor <= antes.valor) throw new Error(`recorde que não passa o anterior no registro do Tamer (${x.inst}: ${x.valor}, o recorde era ${antes.valor})`);
+    for (const k of ["quando", "pet", "tick"] as const) if (!Number.isFinite(x[k])) throw new Error(`recorde sem ${k} no registro do Tamer`);
+    if (typeof x.forma !== "string") throw new Error("recorde sem a forma do pet no registro do Tamer");
+    this.recordes.push({ ...x });
+  }
+  /** o pet m fez uma sequencia de `valor` vitorias na instalacao, maior que o recorde do Tamer: grava o recorde novo */
+  baterRecorde(inst: IdInstalacao, valor: number, m: Motor, quando: number = Date.now()): Recorde {
+    this._gravar(["recorde", { inst, valor, quando, pet: m.semente, forma: nomeForma(m.forma), tick: m.e.tick }]);
+    return this.recordes[this.recordes.length - 1];
   }
   private _gravar(ev: EventoTamer): void { this.aplicar(ev); this.log.push(ev); }
   /** o pet m venceu a Liga: grava o titulo (o primeiro dele) */
@@ -211,12 +240,27 @@ export function conferirCampeao(t: Tamer, m: Motor, quando: number = Date.now())
   if (m.versao < VERSAO_LIGA || m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
   return t.ganharTitulo(m, quando);
 }
-/** o pet passa a conhecer as medalhas do Tamer (evento "u" no registro dele). Pet v1-v5 ou morto: nada.
-    Devolve true se o registro do pet mudou */
+/** os recordes que o pet acabou de dar ao Tamer: a maior sequencia dele numa instalacao da Fronteira, quando passa a do Tamer (o motor
+    conta as sequencias do pet pelo evento de luta da instalacao). So pets v6 e depois do titulo. Devolve os recordes novos (ja aplicados) */
+export function conferirRecordes(t: Tamer, m: Motor, quando: number = Date.now()): Recorde[] {
+  if (m.versao < VERSAO_INSTALACOES || !t.titulo) return [];
+  const novos: Recorde[] = [];
+  for (const x of INSTALACOES) {
+    const v = m.instalacoes[x.id].recorde;
+    if (v > (t.recorde(x.id)?.valor ?? 0)) novos.push(t.baterRecorde(x.id, v, m, quando));
+  }
+  return novos;
+}
+/** o pet passa a conhecer as medalhas do Tamer (evento "u" no registro dele) e, com as 6 e o titulo do Tamer, a Fronteira aberta (evento
+    "f": as instalacoes). Pet v1-v5 ou morto: nada. Devolve true se o registro do pet mudou */
 export function sincronizarPet(t: Tamer, m: Motor): boolean {
-  if (m.versao < 6 || m.morte || m.medalhas >= t.n) return false;
-  try { m.liberar(t.n); } catch (err) { if (err instanceof PetMorto) return false; throw err; }
-  return true;
+  if (m.versao < 6 || m.morte) return false;
+  let mudou = false;
+  try {
+    if (m.medalhas < t.n) { m.liberar(t.n); mudou = true; }
+    if (t.titulo && !m.fronteira && m.medalhas >= MEDALHAS_LIGA && !m.morte) { m.abrirFronteira(); mudou = true; }
+  } catch (err) { if (err instanceof PetMorto) return mudou; throw err; }
+  return mudou;
 }
 
 /* ------------------------------------------------ descarte unico dos pets antigos */

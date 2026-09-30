@@ -1,6 +1,6 @@
 # Design — a Fronteira de Batalha (parte 4 das medalhas)
 
-Status: **parte 4a implementada no jogo web** (branch `fronteira-4a`, 2026-09-30; seção 7); 4b e 4c por fazer. Especificação pedida pelo Matheus (2026-09-30: "segue com a parte 4 da fronteira"). Detalha a seção 7 do `docs/DESIGN_MEDALHAS_ARENAS.md`. Só o jogo web e só os pets v6; a pesquisa em Python não muda.
+Status: **partes 4a e 4b implementadas no jogo web** (branches `fronteira-4a` e `fronteira-4b`, 2026-09-30; seções 7 e 8); 4c por fazer. Especificação pedida pelo Matheus (2026-09-30: "segue com a parte 4 da fronteira"). Detalha a seção 7 do `docs/DESIGN_MEDALHAS_ARENAS.md`. Só o jogo web e só os pets v6; a pesquisa em Python não muda.
 
 - Todo número é PROPOSTO, sem fonte.
 - **Sem rodada de equilíbrio nesta parte** (decisão do Matheus: o equilíbrio fica para uma rodada geral, depois das próximas mecânicas do combate). Os números abaixo só precisam deixar o jogo jogável.
@@ -127,3 +127,62 @@ validação 4101…4505, 20 partidas por semente, espécie e forma):
 - O pet do teste ponta a ponta (`e2e/save_liga.json`, um Valkyrimon, emboscador, de vida de verdade) vence a Liga com a semente do botão.
 
 **Ficou de fora (4b, 4c):** as instalações (Torre de Batalha, Palácio, Fábrica, Salão), os recordes e o evento `f`.
+
+## 8. O que a parte 4b implementou (2026-09-30): a Torre de Batalha e o Palácio
+
+Só `web/app/`, só pets v6; a pesquisa em Python não muda (`docs/REGISTRO_DESVIOS.md`, 2026-09-30). Sem rodada de equilíbrio.
+
+**As instalações** (`web/app/motor/instalacoes.ts`, `INSTALACOES`):
+
+| instalação | id | regra | recorde |
+|---|---|---|---|
+| Torre de Batalha | `torre_batalha` | Megas sorteados, um depois do outro, sem cura (a vida e o guts do pet passam); perdeu, acabou; chips valem, cartas não | a maior sequência de vitórias |
+| Palácio | `palacio` | a mesma sequência; o pet decide sozinho: travas, vetos e chips de regra não valem (chips de stat valem) | a maior sequência |
+
+- **Os rivais:** em cada luta, uma das 8 formas adultas no Mega numa das 4 espécies, sorteadas de uma rng própria da luta
+  (`hashSemente("fronteira-rival", s, k)`, `formaRivalInstalacao`), com a técnica da linha, a passiva da forma, o caráter canônico e a lista
+  canônica V21D; ε dos bots canônicos. E = vida do Mega na escala dos pets v6 (23000) × `FATOR_INSTALACAO` = 1, o mesmo da Liga, sem
+  calibração.
+- **A sequência:** `arenas.jogarSequencia` (a série da Cidadela e da Liga com o rival dado na hora; `jogarSerie` passa por ela e dá as mesmas
+  lutas): cada rival começa inteiro, o pet leva a vida e o guts; para na primeira luta que não for vitória. O limite de turnos é do desafiado,
+  o rival. Teto de 100 lutas por tentativa (a tentativa é um evento só e precisa acabar); na conferência a maior sequência foi 19.
+- **O Palácio:** `GambitsPet.listaPalacio` = a lista do Lago (`listaSozinho`: sem travas, com as vetadas de volta, ordenada pela nota) menos
+  as regras que só estão no pet por um chip de regra. A regra de chip que o pet já tinha antes do chip fica (como fica ao desequipar).
+- **Entrada:** depois do título do Tamer. O motor não lê o Tamer: o app grava no registro do pet o evento **`f`** `{campeao: true}` (um por
+  pet, com as 6 medalhas conhecidas; `Motor.abrirFronteira`), como o `u` das medalhas. O In-Training não entra.
+
+**Registro e replay (seção 4):** a tentativa é um evento `l` de sempre, `{r: id da instalação, s}`. A semente sai do registro do pet:
+`s = sementeTentativa(semente do pet, instalação, número da tentativa dele ali)`; o motor recusa outra semente ao lutar e falha no replay
+(ninguém escolhe os rivais). O `f` do desenho virou "a Fronteira abriu" (a regra da tentativa sai do rival, como na Liga). `Motor.instalacoes`
+(tentativas, recorde, última) entra na assinatura só depois do `f`. O **recorde** vai ao Tamer como `["recorde", {inst, valor, quando, pet,
+forma, tick}]` (registro versão 4, lê 1 a 3): só depois do título, só quando passa o recorde do Tamer naquela instalação
+(`conferirRecordes`, a cada mudança do pet). Nada das instalações dá item, treino ou stat; as lutas fazem o que toda luta faz (o pet aprende
+regras, conta lutas e vitórias, pode se machucar na derrota).
+
+**Telas:** em Lutar · Fronteira, depois da Liga, as duas instalações (a regra em uma frase, o recorde do Tamer, as tentativas do pet e
+"Tentar"; trancadas até o título); a luta com "Torre de Batalha · vitória N", o rival (arquétipo e brasão), as vitórias até ali e a vida
+com que o pet começou; no Palácio o aviso das travas; o Resultado com as vitórias seguidas, as lutas (vida no fim de cada uma) e o recorde
+novo; os recordes em **Medalhas**.
+
+**Conferência (sem calibração)** (`web/app/test/conferir_instalacoes.mjs` → `artifacts_campanha/fronteira/conferencia.json`; motor web,
+escala v6, V21D, limite do desafiado; o Mega de referência de cada forma × 4 espécies com o treino típico (40), sem item; sementes
+4101…4505, 20 tentativas por semente, espécie e forma):
+
+| forma | Torre: vence a 1ª | média | máx | Palácio: vence a 1ª | média | máx |
+|---|---|---|---|---|---|---|
+| furioso | 1,0000 | 7,98 | 15 | 1,0000 | 7,99 | 16 |
+| duelista | 0,9750 | 5,52 | 11 | 0,9600 | 5,62 | 11 |
+| espelho | 0,9025 | 3,55 | 7 | 0,8875 | 3,61 | 9 |
+| emboscador | 0,8625 | 3,41 | 16 | 0,8350 | 3,50 | 16 |
+| vigia | 0,8000 | 3,43 | 11 | 0,7950 | 3,24 | 11 |
+| sentinela | 0,7750 | 3,57 | 14 | 0,7600 | 3,41 | 19 |
+| titã | 0,7725 | 2,35 | 7 | 0,7625 | 2,38 | 7 |
+| muralha | 0,6475 | 1,45 | 7 | 0,5775 | 1,48 | 9 |
+
+- As duas são jogáveis: a melhor forma vence a primeira luta sempre, e nenhuma tentativa chegou perto do teto. Com a lista canônica (sem
+  trava, veto nem chip) o Palácio do pet de referência é a Torre; as diferenças vêm só das sementes.
+- O pet do teste ponta a ponta (Valkyrimon, emboscador, treino 40) vence a primeira luta nas 50 primeiras tentativas; média 7,64 na Torre e
+  8,04 no Palácio. No e2e a primeira tentativa dá 7 vitórias na Torre e 9 no Palácio.
+
+**Ficou de fora (4c):** a Fábrica e o Salão. **Aberto:** o tempo do jogo corre durante a animação; na velocidade de teste (10 min/s) uma
+lesão da derrota que fecha uma sequência longa pode matar o pet antes do Resultado (a Liga tem o mesmo caso).

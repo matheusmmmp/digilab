@@ -910,3 +910,23 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   ser `jogarSerie` com o mesmo líder três vezes, a mesma conta). Descarte único não subiu.
 - **Atlas (fora do repo):** a ilha da Fronteira é a `WorldMap_05` (peça `ilha_fronteira` em `Assets/gerar_atlas_up.py`); o mapa da
   campanha v6 ficou com 390 × 864.
+
+## 2026-09-30 — Fronteira de Batalha, parte 4b (Torre de Batalha e Palácio) só no jogo (pets v6), sem equilíbrio
+
+- **Desvio entre o jogo e a pesquisa:** as instalações da Fronteira (`docs/DESIGN_FRONTEIRA.md`, seção 8) existem só em `web/app/` e só nos
+  pets v6. Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer, Liga nem instalações.
+- **Sem calibração (decisão do Matheus):** o fator dos rivais é 1, o da Liga (o Mega na escala v6); a conferência
+  (`artifacts_campanha/fronteira/conferencia.json`) só mostra que as duas são jogáveis e não escolheu número nenhum.
+- **Interpretações:** a semente da tentativa deriva do registro do **pet** (semente dele, instalação, número da tentativa dele ali), não do
+  Tamer, para o replay do pet não depender do Tamer; o motor confere a semente. O evento `f` do desenho ("início da tentativa") virou
+  "a Fronteira abriu para este pet" (o título do Tamer, gravado pelo app como o `u`), porque a regra da tentativa sai do rival. O Palácio
+  tira as travas, os vetos e as regras que só estão no pet por um chip; os chips de stat valem (são treino, não decisão); a regra de chip que
+  o pet já tinha fica. As cartas não valem nas duas (como na Liga). As lutas ensinam regras e contam lutas e lesões, como toda luta (a Liga
+  faz o mesmo); nada dá item, treino ou stat. Teto de 100 lutas por tentativa (o evento precisa acabar). O recorde só entra no Tamer quando
+  passa o anterior.
+- **Registro do Tamer versão 4** (lê 1 a 3). O registro do pet ganha o `f`; a assinatura dos v6 só muda depois dele. Pets v1–v5, gabaritos,
+  paridade V21D, a Liga e as calibrações anteriores saem iguais (`jogarSerie` passa por `jogarSequencia`, a mesma conta). Descarte único
+  não subiu.
+- **Achado (não corrigido, fora do escopo):** o relógio do jogo continua durante a animação da luta. Na velocidade de teste (10 min/s) uma
+  lesão na derrota que fecha a sequência passa das 6 h sem tratamento em 36 s e o pet morre antes do Resultado; vale também para a Liga. O e2e
+  das instalações pausa o tempo.
