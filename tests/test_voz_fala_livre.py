@@ -315,3 +315,17 @@ def test_parser_tira_id_da_fala_e_barra_outro_alfabeto():
         ler(json.dumps({"fala": "Eu estava cheio de能源充足", "fatos_citados": []}))
     with pytest.raises(SaidaInvalida):
         ler(json.dumps({"fala": "[E1]", "fatos_citados": []}))
+
+
+def test_v5_opiniao_com_cara_de_fato_vai_ao_juiz():
+    from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, tipo_de_fato_escondido
+    assert tipo_de_fato_escondido("Fiquei forte porque comi dez maçãs douradas") == "causa"
+    assert tipo_de_fato_escondido("você sempre me leva à praia") == "costume"
+    assert tipo_de_fato_escondido("ontem fiquei feliz") == "evento"
+    assert tipo_de_fato_escondido("adoro dormir, é o melhor") is None
+    fatos = _fatos_dict(ESTADO)
+    cli = _Falso([{"afirmacoes": [{"tipo": "sentimento", "trecho": "Fiquei forte porque comi dez maçãs douradas"},
+                                  {"tipo": "opiniao", "trecho": "adoro dormir"}]},
+                  {"sustentada": False, "fato": ""}])
+    v = verificar(cli, "fala", [], fatos, versao=VERSAO_VERIFICADOR_V5)
+    assert v.nao_suportadas == 1 and v.afirmacoes[0]["era"] == "sentimento" and v.afirmacoes[1]["livre"]

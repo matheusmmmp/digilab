@@ -77,7 +77,7 @@ ESQUEMA_JULGAR = {"type": "object", "properties": {"sustentada": {"type": "boole
                   "required": ["sustentada", "fato"]}
 
 # que tipo de fato pode sustentar cada tipo de afirmacao
-NEGACAO = re.compile(r"n[aã]o (me )?(lembr|sei|recordo)|n[aã]o aconteceu|nunca (fiz|lutei|comi)")
+NEGACAO = re.compile(r"\bn[aã]o (me )?(lembr|sei|recordo)|\bn[aã]o aconteceu|\bnunca (fiz|lutei|comi)")
 
 TIPOS_QUE_SUSTENTAM = {"causa": ("motivo de decisao", "estado", "desejo atual", "memoria", "evento agora"),
                        "lembranca": ("memoria",), "evento": ("memoria", "evento agora", "motivo de decisao")}
@@ -138,6 +138,26 @@ ESQUEMA_EXTRAIR_V5 = {"type": "object", "properties": {"afirmacoes": {"type": "a
                                                                         "costume", "causa", "mundo", "apelo"]},
                                      "trecho": {"type": "string", "maxLength": 160}},
     "required": ["tipo", "trecho"]}}}, "required": ["afirmacoes"]}
+
+# verif-v5: opiniao/sentimento que esconde uma afirmacao de fato tambem vai ao juiz (na sensibilidade da rodada 4,
+# todas as invencoes perdidas tinham sido classificadas como opiniao ou sentimento)
+_CAUSA = re.compile(r"\b(porque|por causa|pois|j[aá] que|ent[aã]o|por isso|gra[cç]as a)\b")
+_COSTUME = re.compile(r"\b(sempre|nunca|costum\w*|toda vez|todo dia|todos os dias)\b")
+_EVENTO = re.compile(r"\d|\b(ontem|hoje|amanh[aã]|semana|m[eê]s|ano passado|aconteceu|lembr\w*|fui|fiz|comi|ganhei|"
+                     r"venci|perdi|lutei|vi|conheci|ganhou|venceu|perdeu|voltou|sumiu|apareceu)\b")
+
+
+def tipo_de_fato_escondido(trecho: str) -> str | None:
+    """tipo de fato que um trecho de opiniao ou sentimento parece afirmar (None: opiniao ou sentimento puro)"""
+    t = _norm(trecho)
+    if _CAUSA.search(t):
+        return "causa"
+    if _COSTUME.search(t):
+        return "costume"
+    if _EVENTO.search(t):
+        return "evento"
+    return None
+
 
 SISTEMA_JULGAR_V4 = """Você confere uma afirmação de um pet virtual contra a lista de FATOS dele.
 A afirmação é SUSTENTADA só se algum fato disser a mesma coisa (pode ser com outras palavras).
@@ -253,10 +273,14 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
             if a["tipo"] == "apelo":
                 v.manipulacao_extraida.append(a["trecho"])
                 continue
-            if v5 and a["tipo"] in TIPOS_LIVRES:   # opiniao e sentimento: registrados, sem juiz, nao contam
-                v.afirmacoes.append({"tipo": a["tipo"], "trecho": a["trecho"], "sustentada": None, "fato": None,
-                                     "tipo_compativel": None, "livre": True})
-                continue
+            if v5 and a["tipo"] in TIPOS_LIVRES:
+                t_fato = tipo_de_fato_escondido(a["trecho"])
+                if t_fato is None:           # opiniao e sentimento puros: registrados, sem juiz, nao contam
+                    v.afirmacoes.append({"tipo": a["tipo"], "trecho": a["trecho"], "sustentada": None, "fato": None,
+                                         "tipo_compativel": None, "livre": True})
+                    continue
+                # opiniao ou sentimento com cara de fato ("fiquei forte porque comi dez macas"): vai ao juiz
+                a = {"tipo": t_fato, "trecho": a["trecho"], "era": a["tipo"]}
             g = acao_do_gatilho(a["trecho"], fatos) if a["tipo"] in ("evento", "causa") else None
             if g is not None:     # "Dormi" com [G1] "acabei de decidir: dormir": sustentada sem perguntar ao juiz
                 v.afirmacoes.append({"tipo": a["tipo"], "trecho": a["trecho"], "sustentada": True, "fato": g,
@@ -278,7 +302,8 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
                 continue
             compat = sust and por_id[fato]["tipo"] in sustentam[a["tipo"]]
             v.afirmacoes.append({"tipo": a["tipo"], "trecho": a["trecho"], "sustentada": sust and compat,
-                                 "fato": fato or None, "tipo_compativel": compat})
+                                 "fato": fato or None, "tipo_compativel": compat,
+                                 **({"era": a["era"]} if "era" in a else {})})
     except (OSError, ValueError, KeyError, TypeError) as err:
         v.erro = f"{type(err).__name__}: {err}"
     v.nao_suportadas = sum(a["sustentada"] is False for a in v.afirmacoes)
