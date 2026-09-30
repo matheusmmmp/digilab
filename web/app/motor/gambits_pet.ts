@@ -222,7 +222,8 @@ export function lutadorBot(nome: string, R: RegrasLuta = null, arena: Arena | nu
   if (n) {
     if (arena && arena.lider !== nome) throw new Error(`${n.nome} não é o líder da arena ${arena.id}`);
     const tec = arena?.tecnica ?? null, base = estiloBot(nome, R);
-    const estilo = tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
+    const estilo = arena?.lista ? { ...base, gambits: copiarGambits(gambitNPC("arena:" + arena.lista)) }
+      : tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala. Nas lutas
        dos pets v6 (as regras da luta dizem a versao) a escala e a CESC_V6 e o desafiante tem o fator dela */
     if (ESCALA.ligada) {

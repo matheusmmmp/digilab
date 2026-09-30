@@ -3,7 +3,7 @@
    seguidas sem cura; Lago: sem travas nem vetos), o replay de uma vida com lutas de arena e os pets v1-v5 intactos. */
 import { afterEach, beforeAll, describe, expect, test } from "vitest";
 import {
-  ARENAS, ARENA_POR_ID, CAMPANHA_V5, CAMPANHA_V6, CAT, DUR_EVO, GAMBITS_ARENA, LUGARES_V5, LUGARES_V6, MEDALHAS, NPC,
+  ARENAS, ARENA_POR_ID, CAMPANHA_V5, CAMPANHA_V6, CAT, CTR, DUR_EVO, GAMBITS_ARENA, LUGARES_V5, LUGARES_V6, MEDALHAS, NPC,
   arenaDaLuta, campanhaDe, chaveRegra, gambitNPC, hashSemente, jogarArena, jogarV2, lugaresDe, lutadorBot, perfilNPC, sementeDaSerie,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
@@ -29,15 +29,31 @@ function sementeQue(m: Motor, rival: string, quer: (serie: ReturnType<Motor["mon
   throw new Error(`nenhuma semente serve (${rotulo}, ${rival})`);
 }
 const venceTudo = (n: number) => (serie: { pontosA: number }[]) => serie.length === n && serie[serie.length - 1].pontosA === 1;
-/** um Ultimate v6 de registro legitimo (liberacoes, tempo e lutas de treino contra o aleatorio) */
-function ultimateV6(semente: number): Motor {
+/** treina no estagio de agora ate o teto dele (sessoes com a fadiga baixa, esperando entre elas; o sono espera) */
+function treinarNoEstagio(m: Motor): void {
+  const EX = ["levantar_pedra", "corrida", "alvo", "esquiva", "meditar", "resistencia"] as const, est = m.estagioAtual as "crianca" | "adolescente" | "adulto";
+  for (let k = 0; k < 400 && m.treino.pontosEst[est] < CTR.tetoEstagio[est]; k++) {
+    if (m.treino.fadiga < CTR.fadigaSessao && m.treino.podeTocar(m.e.tick)) { try { m.treinar(EX[k % EX.length]); continue; } catch { /* dormindo */ } }
+    m.avancar(30);
+  }
+  if (m.estagioAtual !== est) throw new Error("o pet de teste evoluiu no meio do treino");
+}
+/** um Ultimate v6 de registro legitimo (liberacoes, tempo, treino ate o teto de cada estagio e lutas de treino contra o
+    aleatorio). Treinado: com a escala dos pets v6 o pet sem treino quase nunca vence um lider (meta <= 0,05) */
+function ultimateV6(semente: number, treinados: readonly string[] = ["crianca", "adolescente", "adulto"]): Motor {
   const m = new Motor(semente, 6);
   m.liberar(3);
-  m.avancar(DUR_EVO.bebe + DUR_EVO.crianca + 15);
+  const esperarEvoluir = (): void => { const est = m.estagioAtual; for (let j = 0; j < 200 && m.estagioAtual === est; j++) m.avancar(30); };
+  const treinar = (): void => { if (treinados.includes(m.estagioAtual)) treinarNoEstagio(m); };
+  m.avancar(DUR_EVO.bebe + 15);
+  treinar();
+  esperarEvoluir();
+  treinar();
   let k = 0;
   while (m.sparring < CAT.sparring) lutar(m, "aleatorio", hashSemente("sp", semente, k++));
-  m.avancar(DUR_EVO.adolescente);
+  esperarEvoluir();
   if (m.estagioAtual !== "adulto") throw new Error("o pet de teste nao chegou a Ultimate");
+  treinar();
   return m;
 }
 /** vence (com uma semente que ganha) o primeiro rival de cada lugar antes do lugar `L` */
@@ -99,6 +115,9 @@ describe("as regras das arenas", () => {
     const m = new Motor(5, 6), B = m.lutadores(GUARDROMON).B, R = m.regras;
     expect(B.cond.tecnica).toBe("contra_golpe");
     expect(B.estilo.gambits!.regras.filter(r => r.entao === "contra_golpe").length).toBeGreaterThan(0);
+    /* escala dos pets v6: a lista propria da Torre; contra quem atira com frequencia ele vai buscar (nao contra-golpeia) */
+    expect(B.estilo.gambits).toEqual(GAMBITS_ARENA.torre);
+    expect(B.estilo.gambits!.regras.find(r => r.se.some(c => c.n === "oponente_frequente" && c.p[0] === "disparo"))!.entao).toBe("avancar");
     expect(lutadorBot(GUARDROMON, R).cond.tecnica).toBeNull();       /* fora da luta de arena, o de sempre */
     expect(gambitNPC("v21:espelho", R).regras.some(r => r.entao === "contra_golpe")).toBe(false);
     /* um brigao que prepara o pesado de perto leva o golpe de volta */
@@ -146,7 +165,8 @@ describe("as regras das arenas", () => {
   });
   test("Cidadela: a medalha e a vitoria no lugar so vem com as tres vitorias", () => {
     ligarEscala(true);
-    const m = ultimateV6(101), t = new Tamer();
+    /* treinado so no Rookie: forte o bastante para vencer as tres, fraco o bastante para perder no meio */
+    const m = ultimateV6(101, ["crianca"]), t = new Tamer();
     abrirAte(m, 3);
     for (const md of conferirMedalhas(t, m)) expect(["campina", "torre", "floresta"]).toContain(md.id);
     /* perde no meio: nada conta, mas as lutas jogadas contam (e ensinam) */

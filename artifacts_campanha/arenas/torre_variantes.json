@@ -1,0 +1,181 @@
+{
+ "descricao": "variantes da lista do Guardromon na arena da Torre (escala dos pets v6), sementes de calibracao",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "n_por_semente": 10,
+ "metas": {
+  "sem_treino_max": 0.05,
+  "com_treino_min": 0.8,
+  "pior_forma_min": 0.5
+ },
+ "treino_tipico": 22,
+ "final": "defender",
+ "variantes": {
+  "t0_antes": {
+   "regras": [
+    "{\"se\":[{\"n\":\"oponente_preparando\",\"p\":[]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"disparo\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"golpe_rapido\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"investida\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"oponente_repete\",\"p\":[\"defender\",2]}],\"entao\":\"preparar_pesado\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"guts_proprio_acima\",\"p\":[60]}],\"entao\":\"golpe_rapido\"}",
+    "{\"se\":[{\"n\":\"guts_proprio_abaixo\",\"p\":[40]}],\"entao\":\"carregar\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[2]}],\"entao\":\"avancar\"}"
+   ],
+   "melhor": {
+    "fator": 1.8,
+    "sem": 0.2519,
+    "com": 0.7944,
+    "pior": 0.4025,
+    "pior_forma": "colosso",
+    "passa": false,
+    "folga": -0.2019,
+    "por_forma": {
+     "brigao": {
+      "sem": 0.02,
+      "com": 0.935
+     },
+     "guardiao": {
+      "sem": 0.0025,
+      "com": 0.84
+     },
+     "cacador": {
+      "sem": 0.985,
+      "com": 1
+     },
+     "colosso": {
+      "sem": 0,
+      "com": 0.4025
+     }
+    }
+   },
+   "passa": false
+  },
+  "t1_avanca_no_disparo": {
+   "regras": [
+    "{\"se\":[{\"n\":\"oponente_preparando\",\"p\":[]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"disparo\"]}],\"entao\":\"avancar\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"golpe_rapido\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"investida\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"oponente_repete\",\"p\":[\"defender\",2]}],\"entao\":\"preparar_pesado\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"guts_proprio_acima\",\"p\":[60]}],\"entao\":\"golpe_rapido\"}",
+    "{\"se\":[{\"n\":\"guts_proprio_abaixo\",\"p\":[40]}],\"entao\":\"carregar\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[2]}],\"entao\":\"avancar\"}"
+   ],
+   "melhor": {
+    "fator": 1.6,
+    "sem": 0.0081,
+    "com": 0.8806,
+    "pior": 0.645,
+    "pior_forma": "colosso",
+    "passa": true,
+    "folga": 0.0419,
+    "por_forma": {
+     "brigao": {
+      "sem": 0.0225,
+      "com": 0.9725
+     },
+     "guardiao": {
+      "sem": 0.01,
+      "com": 0.93
+     },
+     "cacador": {
+      "sem": 0,
+      "com": 0.975
+     },
+     "colosso": {
+      "sem": 0,
+      "com": 0.645
+     }
+    }
+   },
+   "passa": true
+  },
+  "t2_avanca_depois": {
+   "regras": [
+    "{\"se\":[{\"n\":\"oponente_preparando\",\"p\":[]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"golpe_rapido\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"investida\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"disparo\"]}],\"entao\":\"avancar\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"oponente_repete\",\"p\":[\"defender\",2]}],\"entao\":\"preparar_pesado\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"guts_proprio_acima\",\"p\":[60]}],\"entao\":\"golpe_rapido\"}",
+    "{\"se\":[{\"n\":\"guts_proprio_abaixo\",\"p\":[40]}],\"entao\":\"carregar\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[2]}],\"entao\":\"avancar\"}"
+   ],
+   "melhor": {
+    "fator": 1.6,
+    "sem": 0.0081,
+    "com": 0.8806,
+    "pior": 0.645,
+    "pior_forma": "colosso",
+    "passa": true,
+    "folga": 0.0419,
+    "por_forma": {
+     "brigao": {
+      "sem": 0.0225,
+      "com": 0.9725
+     },
+     "guardiao": {
+      "sem": 0.01,
+      "com": 0.93
+     },
+     "cacador": {
+      "sem": 0,
+      "com": 0.975
+     },
+     "colosso": {
+      "sem": 0,
+      "com": 0.645
+     }
+    }
+   },
+   "passa": true
+  },
+  "t3_sempre_encurta": {
+   "regras": [
+    "{\"se\":[{\"n\":\"oponente_preparando\",\"p\":[]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"golpe_rapido\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"oponente_frequente\",\"p\":[\"investida\"]}],\"entao\":\"contra_golpe\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"oponente_repete\",\"p\":[\"defender\",2]}],\"entao\":\"preparar_pesado\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[0]},{\"n\":\"guts_proprio_acima\",\"p\":[60]}],\"entao\":\"golpe_rapido\"}",
+    "{\"se\":[{\"n\":\"guts_proprio_abaixo\",\"p\":[40]}],\"entao\":\"carregar\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[2]}],\"entao\":\"avancar\"}",
+    "{\"se\":[{\"n\":\"distancia_eh\",\"p\":[1]}],\"entao\":\"avancar\"}"
+   ],
+   "melhor": {
+    "fator": 1.4,
+    "sem": 0.0181,
+    "com": 0.8562,
+    "pior": 0.5,
+    "pior_forma": "cacador",
+    "passa": true,
+    "folga": 0,
+    "por_forma": {
+     "brigao": {
+      "sem": 0.0125,
+      "com": 1
+     },
+     "guardiao": {
+      "sem": 0.0525,
+      "com": 1
+     },
+     "cacador": {
+      "sem": 0.005,
+      "com": 0.5
+     },
+     "colosso": {
+      "sem": 0.0025,
+      "com": 0.925
+     }
+    }
+   },
+   "passa": true
+  }
+ },
+ "escolhida": "t1_avanca_no_disparo"
+}

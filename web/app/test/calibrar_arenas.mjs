@@ -4,18 +4,19 @@
 // com a semente de gambits deles; Champion: as 4 linhas com a lista do adolescente e o carater canonico; Ultimate e Mega: as 8
 // formas adultas com a lista do bot da forma, a variante V21D na muralha e no vigia), nas 4 especies, com treino uniforme; o
 // lider na escala (E = vida do estagio x fator, epsilon CESC.epsNpc), como o motor o monta na luta de arena (lutadorBot com a
-// arena). O pet e sempre o lado A, como no jogo (a serie da Cidadela so faz sentido assim).
+// arena). O pet e sempre o lado A, como no jogo (a serie da Cidadela so faz sentido assim). Escala: a dos pets v6 (CESC_V6,
+// test/calibrar_escala_v6.mjs), nos dois lados (o pet pela versao, o lider pelas regras V21D).
 //
-// Metas (as de sempre, fixadas antes): sem treino <= 0,30 e com o treino tipico >= 0,80 (media das formas e das especies), e
-// nenhuma forma travada (cada forma >= 0,5 com o treino tipico). Treino tipico por estagio (calibrar_progressao.ALCANCE e
+// Metas: sem treino <= 0,05 (decisao do Matheus, 2026-09-30: o pet sem treino vence menos de 5%; antes era <= 0,30) e com o
+// treino tipico >= 0,80 (media das formas e das especies), e nenhuma forma travada (cada forma >= 0,5 com o treino tipico). Treino tipico por estagio (calibrar_progressao.ALCANCE e
 // CMG.tetoVida): Rookie 8, Champion 22, Ultimate 36, Mega 40.
-// Escolha do fator: entre os que passam nas tres metas, o de maior folga min(0,30 - sem, com - 0,80, pior - 0,5); se nenhum
+// Escolha do fator: entre os que passam nas tres metas, o de maior folga min(0,05 - sem, com - 0,80, pior - 0,5); se nenhum
 // passar, o de maior folga (registrado como NAO PASSA). Na Cidadela a "vitoria" e a serie inteira (3 vitorias seguidas).
-// Campina e Montanha Espiral nao mudaram de regra: so se mede o fator de hoje (se nao passar, o relatorio diz).
+// Com a meta de 0,05 todos os lideres sao recalibrados, inclusive Campina e Montanha Espiral (o fator vale so na arena).
 // No Lago a regra (sem travas nem vetos) nao muda nada para os pets de referencia, que nao tem dono.
 //
 // uso (em web/app): node test/calibrar_arenas.mjs [--validar] [-n 10]
-//   sem --validar: sementes de calibracao, fatores 0,5..3,0 -> artifacts_campanha/arenas/calibracao.json
+//   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> artifacts_campanha/arenas/calibracao.json
 //   --validar: sementes de validacao, os fatores de motor/arenas.ts (ou do NPC) -> artifacts_campanha/arenas/validacao.json
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -26,11 +27,11 @@ const args = process.argv.slice(2), validar = args.includes("--validar");
 const n = args.includes("-n") ? Number(args[args.indexOf("-n") + 1]) : 10;
 const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
-const META_SEM = 0.30, META_COM = 0.80, META_FORMA = 0.5;
-const FATORES = Array.from({ length: 26 }, (_, i) => Math.round((0.5 + 0.1 * i) * 10) / 10);
+const META_SEM = 0.05, META_COM = 0.80, META_FORMA = 0.5;
+const FATORES = Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) * 10) / 10);   /* 0,5..4,0 */
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: CMG.tetoVida };
-/* lideres que a parte 2 nao mudou (so a validacao do fator de hoje) */
-const SO_MEDIR = new Set(["campina", "espiral"]);
+/* com a meta de 0,05 nenhum lider fica so medido */
+const SO_MEDIR = new Set();
 const R = CV21D;
 M.ligarEscala(true);
 
@@ -43,7 +44,7 @@ function formasDe(est) {
 }
 function pet([nome, forma, car, g], esp, nivel) {
   const tr = nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null, f = forma(esp);
-  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: M.perfilDe(f, car, 1, tr, true) };
+  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: M.perfilDe(f, car, 1, tr, true, M.VERSAO_ESCALA_V6) };
 }
 function taxa(a, b, arena) {
   let soma = 0, tot = 0;

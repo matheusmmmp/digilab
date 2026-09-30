@@ -158,7 +158,9 @@ describe("replay com o evento u", () => {
     ligarEscala(true);
     const dadas = new Set<number>();
     const dar = (m: Motor, n: number) => { if (!dadas.has(n)) { dadas.add(n); m.liberar(n); } };
-    const m = vida(6, "atencioso", 5202, 3, (mm, p) => {
+    /* semente 5303 (era 5202): sem os u o pet fica mais tempo no Rookie e luta mais com o Gazimon; com a escala dos pets v6 ele
+       perde mais, e na 5202 a linha do tempo sem os u morria de lesao sem tratar (o dono do registro nao a via) */
+    const m = vida(6, "atencioso", 5303, 3, (mm, p) => {
       if (p === 40) dar(mm, 1);                                  /* no In-Training: nada muda na hora */
       if (mm.esperandoMedalha()) dar(mm, mm.esperandoMedalha()!.precisa);
     });

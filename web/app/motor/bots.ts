@@ -105,9 +105,18 @@ export const GAMBITS_SOMBRIA: Record<string, ListaGambits> = {
    A lista saiu de 30 variantes medidas so nas sementes de calibracao (test/explorar_floresta.mjs,
    artifacts_campanha/arenas/floresta_variantes.json): a primeira, com o pesado na fase 2, nao fechava as metas. */
 const T10 = Cd("turno_execucao", 10);
+/* Torre de pedra (paciencia), escala dos pets v6: a lista do espelho com o contra-golpe (contra quem prepara o pesado, insiste no
+   golpe rapido ou na investida), mas contra quem atira com frequencia ele vai buscar (a resposta da muralha canonica) no lugar
+   do contra-golpe, que nao devolve disparo sem a passiva do espelho: com a lista de antes o cacador sem treino vencia o lider
+   atirando de longe com qualquer fator (test/explorar_torre.mjs, artifacts_campanha/arenas/torre_variantes.json, so nas
+   sementes de calibracao) */
+const CG_ = "contra_golpe";
 export const GAMBITS_ARENA: Record<string, ListaGambits> = {
   floresta: { regras: [Rg([T10, D2], "avancar"), Rg([T10, D1], "avancar"), Rg([T10, GA_(20)], "golpe_rapido"),
     Rg([PREP, D0], "esquivar"), Rg(D0, "recuar"), Rg(GA_(20), "disparo")], final: "carregar" },
+  torre: { regras: [Rg(PREP, CG_), Rg(FQ("disparo"), "avancar"), Rg(FQ("golpe_rapido"), CG_), Rg(FQ("investida"), CG_),
+    Rg([D0, Cd("oponente_repete", "defender", 2)], "preparar_pesado"), Rg([D0, GA_(60)], "golpe_rapido"), Rg(GB_(40), "carregar"), Rg(D2, "avancar")],
+    final: "defender" },
 };
 Object.values(GAMBITS_ARENA).forEach(validarLista);
 
@@ -175,10 +184,10 @@ export const LUGARES_V6: Lugar[] = [
 const doV5 = (k: string, lug: number): DesafioCampanha => ({ ...CAMPANHA_V5.find(c => c.k === k)!, lug });
 export const CAMPANHA_V6: DesafioCampanha[] = [
   ...CAMPANHA.filter(c => c.lug < 2),
-  { k: "npc_v6_youkomon", nome: "Youkomon", total: 90, estilo: "arena:floresta", eps: .5, lug: 2, cor: "finta", fator: 1.2,
+  { k: "npc_v6_youkomon", nome: "Youkomon", total: 90, estilo: "arena:floresta", eps: .5, lug: 2, cor: "finta", fator: 1.5,
     licao: "A raposa da Floresta: começa de longe, disparando, e no meio da luta muda de jeito e parte para cima. Regras que leem o rival acompanham a troca." },
   doV5("npc_v5_myotismon", 3),
-  { k: "npc_v6_marinbullmon", nome: "MarinBullmon", total: 110, estilo: "v2c:adaptativo", eps: .5, lug: 4, cor: "agarrao", fator: 1.2,
+  { k: "npc_v6_marinbullmon", nome: "MarinBullmon", total: 110, estilo: "v2c:adaptativo", eps: .5, lug: 4, cor: "agarrao", fator: 1.5,
     licao: "O guardião do Lago lê o que o rival repete e responde. Aqui o dono não trava nem veta: o pet luta com o que aprendeu." },
   ...CAMPANHA_V5.filter(c => c.lug === 3).map(c => ({ ...c, lug: 5 })),
 ];
@@ -215,7 +224,7 @@ export const NOME_BOT: Record<string, string> = {
   contragolpe: "contragolpe", adaptativo: "adaptativo", oraculo: "oráculo", ...Object.fromEntries(FORMAS_AD.map(f => [f, NOME_ARQ[f]])),
   ...Object.fromEntries([...CAMPANHA, ...CAMPANHA_V5, ...CAMPANHA_V6].map(c => [c.k, c.nome])),
 };
-const NOME_LISTA_ARENA: Record<string, string> = { floresta: "atirador que vira brigão no turno 10" };
+const NOME_LISTA_ARENA: Record<string, string> = { floresta: "atirador que vira brigão no turno 10", torre: "espelho com contra-golpe que vai buscar quem atira" };
 export const nomeEstiloNPC = (e: string): string => {
   const [fam, nome] = e.split(":");
   return fam === "v21" ? `${NOME_ARQ[nome].toLowerCase()} sem técnica` : fam === "crianca" ? `Rookie ${nome}` : fam === "arena" ? NOME_LISTA_ARENA[nome] : NOME_BOT[nome];

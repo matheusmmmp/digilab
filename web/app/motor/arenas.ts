@@ -6,7 +6,8 @@
    As regras (o que cada arena testa):
    - Campina (Rookie), Gazimon: nenhuma (o basico: cuidado e treino);
    - Torre de pedra (Champion), Guardromon: PACIENCIA. O lider tem o contra-golpe (a tecnica do guardiao) e a lista do espelho
-     com as regras dele: quem prepara o pesado de perto ou insiste no golpe rapido leva o golpe de volta;
+     com as regras dele: quem prepara o pesado de perto ou insiste no golpe rapido leva o golpe de volta; contra quem atira com
+     frequencia ele vai buscar (bots.GAMBITS_ARENA.torre, desde a escala dos pets v6);
    - Floresta (Champion, nova), Youkomon: LEITURA. O lider muda de padrao no turno 10 (bots.GAMBITS_ARENA.floresta, pela
      condicao de turno da linguagem de gambits): de atirador vira brigao;
    - Cidadela (Ultimate), Myotismon: RESISTENCIA. Tres lutas seguidas, sem cura: a vida e o guts do pet passam de uma para a
@@ -15,11 +16,11 @@
      mesmo faria (GambitsPet.listaSozinho);
    - Montanha Espiral (Mega), Piedmon: o chefe da campanha, sem regra a mais.
 
-   Fatores dos lideres: calibrados no motor web com as regras dos pets v6 (test/calibrar_arenas.mjs,
-   artifacts_campanha/arenas/): sem treino <= 0,30 e com o treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica
-   aqui quando a luta de arena muda um NPC que ja existia (Guardromon 1,4 no lugar de 1,5; Myotismon 0,7 na serie, no lugar de
-   1,2); os lideres novos tem o fator no proprio NPC (bots.CAMPANHA_V6: Youkomon 1,2, MarinBullmon 1,2). Campina e Montanha
-   Espiral ficam com os fatores de sempre (1,1 e 1,2), medidos de novo com as regras dos pets v6. */
+   Fatores dos lideres: calibrados no motor web com as regras e a escala dos pets v6 (CESC_V6; test/calibrar_arenas.mjs,
+   artifacts_campanha/arenas/). Metas (decisao do Matheus, 2026-09-30: o treino tem que decidir): sem treino <= 0,05 e com o
+   treino tipico >= 0,80, sem forma travada. PROPOSTOS. O fator fica aqui quando o lider e um NPC que ja existia (Gazimon 1,3,
+   Guardromon 1,6, Myotismon 0,9 na serie, Piedmon 1,6; fora da arena e nos pets v1-v5, os de sempre); os lideres novos tem o
+   fator no proprio NPC (bots.CAMPANHA_V6: Youkomon 1,5, MarinBullmon 1,5). */
 import { jogarV2, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import type { Tecnica } from "./constantes.ts";
 import { hashSemente } from "./rng.ts";
@@ -41,23 +42,25 @@ export interface Arena {
   fator?: number;
   /** tecnica do lider (Torre de pedra: contra-golpe); as regras dela ficam na lista dele */
   tecnica?: Tecnica;
+  /** lista propria do lider na luta de arena (bots.GAMBITS_ARENA); sem ela, a do NPC (com as regras da tecnica) */
+  lista?: string;
   /** lutas seguidas, sem cura (Cidadela: 3); sem ele, 1 */
   lutas?: number;
 }
 /** versao de pet em que as arenas valem (a das medalhas) */
 export const VERSAO_ARENAS = 6;
 export const ARENAS: readonly Arena[] = [
-  { id: "campina", lugar: 0, lider: "npc_tier1_brutamontes", regra: "nenhuma", titulo: "O básico",
+  { id: "campina", lugar: 0, lider: "npc_tier1_brutamontes", regra: "nenhuma", titulo: "O básico", fator: 1.3,
     frase: "Sem regra especial: vence o pet bem cuidado e treinado." },
-  { id: "torre", lugar: 1, lider: "npc_tier2_carcereiro", regra: "paciencia", titulo: "Paciência", tecnica: "contra_golpe", fator: 1.4,
-    frase: "O líder devolve golpe forte: preparar o pesado de perto ou insistir no golpe rápido volta contra você." },
+  { id: "torre", lugar: 1, lider: "npc_tier2_carcereiro", regra: "paciencia", titulo: "Paciência", tecnica: "contra_golpe", lista: "torre", fator: 1.6,
+    frase: "O líder devolve golpe forte: preparar o pesado de perto ou insistir no golpe rápido volta contra você. Quem só atira de longe, ele vai buscar." },
   { id: "floresta", lugar: 2, lider: "npc_v6_youkomon", regra: "leitura", titulo: "Leitura",
     frase: "O líder muda de padrão no turno 10: de longe e disparando, depois colado e golpeando. Vence quem lê o rival." },
-  { id: "cidadela", lugar: 3, lider: "npc_v5_myotismon", regra: "resistencia", titulo: "Resistência", lutas: 3, fator: .7,
+  { id: "cidadela", lugar: 3, lider: "npc_v5_myotismon", regra: "resistencia", titulo: "Resistência", lutas: 3, fator: .9,
     frase: "Três lutas seguidas, sem cura: a vida e o guts passam de uma para a outra. A medalha só vem com as três." },
   { id: "lago", lugar: 4, lider: "npc_v6_marinbullmon", regra: "vinculo", titulo: "Vínculo",
     frase: "Aqui as travas e os vetos do dono não valem: o pet decide sozinho, com as regras que ele mesmo aprendeu." },
-  { id: "espiral", lugar: 5, lider: "npc_v5_piedmon", regra: "chefe", titulo: "O chefe",
+  { id: "espiral", lugar: 5, lider: "npc_v5_piedmon", regra: "chefe", titulo: "O chefe", fator: 1.6,
     frase: "O chefe da campanha: forte em tudo. Pede tudo o que o pet aprendeu." },
 ];
 export const ARENA_POR_ID: Readonly<Record<string, Arena>> = Object.fromEntries(ARENAS.map(a => [a.id, a]));

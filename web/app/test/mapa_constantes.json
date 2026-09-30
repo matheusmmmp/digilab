@@ -2549,7 +2549,7 @@
   },
   {
    "web": "ARENAS[1].fator",
-   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
   },
   {
    "web": "ARENAS[2].lugar",
@@ -2565,7 +2565,7 @@
   },
   {
    "web": "ARENAS[3].fator",
-   "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
   },
   {
    "web": "ARENAS[4].lugar",
@@ -2574,6 +2574,14 @@
   {
    "web": "ARENAS[5].lugar",
    "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "ARENAS[0].fator",
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
+  },
+  {
+   "web": "ARENAS[5].fator",
+   "nota": "fator de escala do lider na luta de arena dos pets v6 (so no jogo; escala CESC_V6), calibrado em test/calibrar_arenas.mjs (artifacts_campanha/arenas/) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5)"
   },
   {
    "web": "CESC.vidaNeutra",
