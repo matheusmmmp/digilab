@@ -62,7 +62,7 @@ describe("combate V21D: paridade com o Python", () => {
     const ligadas = Object.entries(G.chaves_v21d).filter(([, x]) => x).map(([k]) => k).sort();
     expect(ligadas).toEqual(["muralha_lista_espelho", "preparo_sob_pele_oculto", "vigia_bate_em_quem_recua", "vigia_recua_do_preparo_sob_pele"]);
     expect([CV21D.preparoSobPeleOculto, CV21D.muralhaListaEspelho, CV21D.vigiaBateEmQuemRecua, CV21D.vigiaRecuaDoPreparoSobPele]).toEqual([true, true, true, true]);
-    expect(CV21D.versaoPet).toBe(VERSAO_PET);                  /* os pets v6 (os de agora); sem v7 */
+    expect(CV21D.versaoPet).toBe(6); expect(VERSAO_PET).toBeGreaterThanOrEqual(6);   /* do v6 em diante (o v7, voz propria, herda) */                  /* os pets v6 (os de agora); sem v7 */
   });
 
   test("listas variantes da muralha e do vigia = as do Python", () => {

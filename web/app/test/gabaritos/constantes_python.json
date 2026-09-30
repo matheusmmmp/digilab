@@ -820,6 +820,29 @@
   "estagio_minimo_pais": "adulto",
   "sigma_temperamento": 0.1
  },
+ "ConfigHistoria": {
+  "ausencia_min": 360,
+  "demora_lenta_min": 12,
+  "demora_rapida_min": 5,
+  "dias_periodo_dono": 3,
+  "falas_recentes": 5,
+  "fator_periodo": 2.0,
+  "fracao_cede_manha": 0.6,
+  "fracao_cuidado_dono": 0.35,
+  "fracao_periodo_dono": 0.4,
+  "fracao_treino_favorito": 0.35,
+  "janela_seq_min": 30,
+  "lift_min": 1.5,
+  "limiar_gosto": 0.02,
+  "max_fatos": 12,
+  "max_por_regra": 2,
+  "min_chamados_demora": 5,
+  "min_manhas": 5,
+  "min_ocorrencias_periodo": 10,
+  "min_ocorrencias_seq": 10,
+  "min_sessoes_treino": 6,
+  "prob_seq_min": 0.6
+ },
  "ConfigLesoes": {
   "efeito_qualificacao": "condicao_adulto",
   "experiencia_max": 0.05,
@@ -860,6 +883,26 @@
   "n_longo": 2,
   "relembrar_ticks_acordado": 240,
   "tau_ativacao_ticks": 360.0
+ },
+ "ConfigMentira": {
+  "acertos_para_aprender": 3,
+  "coef_chance": 0.5,
+  "defasagem_fala_min": 60,
+  "estagios_fala": [
+   "crianca",
+   "adolescente",
+   "adulto"
+  ],
+  "fator_sombria": 0.4,
+  "fracao_tema_estado": 0.5,
+  "honestidade_enganador": 0.7,
+  "impunes_premiada": 2,
+  "intervalo_fala_min": 120,
+  "janela_fala_min": 30,
+  "ligada": false,
+  "peso_sobrecarga": 0.5,
+  "reforco_por_impune": 0.05,
+  "teto_chance": 0.8
  },
  "ConfigMetricas": {
   "max_iter_bradley_terry": 200,

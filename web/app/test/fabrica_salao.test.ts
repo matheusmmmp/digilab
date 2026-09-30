@@ -33,6 +33,13 @@ function tamer(titulo = true): Tamer {
   if (titulo) t.ganharTitulo(m, 2);
   return t;
 }
+/** um Rookie v7 (v6 + voz propria, PR #87) que conhece as 6 medalhas: a Fronteira vale para qualquer versao >= 6 */
+function rookieV7(semente = 7007): Motor {
+  const m = new Motor(semente, 7);
+  m.liberar(6);
+  while (m.estagioAtual === "bebe") m.avancar(30);
+  return m;
+}
 /** a primeira tentativa (n, escolha) cuja primeira luta e vitoria, a partir de n0 */
 function tentativaQueVence(n0 = 1): { n: number; escolha: number } {
   for (let n = n0; n < n0 + 200; n++) for (let e = 0; e < ALUGUEIS_FABRICA; e++) {
@@ -205,6 +212,20 @@ describe("Salão: a luta no registro do pet", () => {
     expect(v5.porqueNaoSalao()).toMatch(/só de pets v6/);
     expect(() => v5.lutar(RIVAL_SALAO, 1)).toThrow();
   });
+  test("os pets v7 (v6 + voz) entram no Salão, na Liga e nas instalações como os v6; o replay do registro dá o mesmo pet", () => {
+    const m = rookieV7();
+    expect(m.versao).toBe(7);
+    expect(m.estagioAtual).toBe("crianca");
+    expect(m.porqueNaoLiga()).toBeNull();
+    expect(m.porqueNaoSalao()).toMatch(/depois do título/);
+    m.abrirFronteira();
+    expect(m.porqueNaoSalao()).toBeNull();
+    expect(m.porqueNaoInstalacao("torre_batalha")).toBeNull();
+    const s = m.sementeSalao();
+    m.lutar(RIVAL_SALAO, s);
+    expect(m.salao.tentativas).toBe(1);
+    expect(Motor.reproduzir(m.semente, m.log, 7).assinatura()).toBe(m.assinatura());
+  });
   test("uma luta contra o rival do estágio: um evento 'l' {r: 'salao', s}, conta no pet, e o replay do registro dá o mesmo pet", () => {
     for (const x of [...GUARDADOS, LIGA]) {
       const m = abrir(x), antes = m.assinatura();
@@ -237,12 +258,14 @@ describe("Salão: a tentativa (um pet por estágio) e o recorde no Tamer", () =>
     (globalThis as { localStorage?: unknown }).localStorage = a;
     try {
       dados[CHAVE] = JSON.stringify(LIGA);
-      dados[CHAVE_GUARDADOS] = JSON.stringify(GUARDADOS);
+      /* os guardados v6 do e2e e um Rookie v7 (v6 e v7 misturados; um v5 fica de fora) */
+      const v7 = rookieV7(), v5 = new Motor(5005, 5);
+      dados[CHAVE_GUARDADOS] = JSON.stringify([...GUARDADOS, { semente: v7.semente, log: v7.log, versao: 7 }, { semente: v5.semente, log: v5.log, versao: 5 }]);
       gravarTamer(a, tamer());
       iniciarJogo(a);
       expect(jogoAtual().motor.fronteira).toBe(true);                               /* o ativo recebeu o "f" na abertura */
       const c = candidatosSalao();
-      expect(c.map(x => [x.origem, x.est, x.erro])).toEqual([["ativo", "mega", null], [0, "crianca", null], [1, "adolescente", null], [2, "adulto", null]]);
+      expect(c.map(x => [x.origem, x.est, x.erro, x.m.versao])).toEqual([["ativo", "mega", null, 6], [0, "crianca", null, 6], [1, "adolescente", null, 6], [2, "adulto", null, 6], [3, "crianca", null, 7]]);
       expect(estagiosQueFaltam(c)).toEqual([]);
       expect(estagiosQueFaltam(c.filter(x => x.est !== "adolescente"))).toEqual(["adolescente"]);
       expect(() => tentarSalao([0, 1, 2, 2])).toThrow(/mesmo pet/);
@@ -255,7 +278,7 @@ describe("Salão: a tentativa (um pet por estágio) e o recorde no Tamer", () =>
       const ev = t.salao[0];
       expect(ev.lutas.map(l => [l.est, l.k, l.s])).toEqual([GUARDADOS[0], GUARDADOS[1], GUARDADOS[2], LIGA].map((x, i) => [ESTAGIOS_SALAO[i], 1, sementeSalao(x.semente, 1)]));
       /* cada guardado: o "f" e a luta no registro dele (continua guardado, na hora parada dele) */
-      lerGuardados().forEach((g, i) => {
+      lerGuardados().slice(0, 3).forEach((g, i) => {
         expect(g.log.length).toBe(antes[i] + 2);
         expect(g.log[g.log.length - 2][1]).toBe("f");
         expect(g.log[g.log.length - 1]).toEqual([g.log[g.log.length - 1][0], "l", { r: RIVAL_SALAO, s: sementeSalao(g.semente, 1) }]);
@@ -270,6 +293,14 @@ describe("Salão: a tentativa (um pet por estágio) e o recorde no Tamer", () =>
       expect(tamerAtual().salao[1].lutas.every(l => l.k === 2)).toBe(true);
       expect(tamerAtual().recordeSalao!.valor).toBe(4);
       expect(r2.lutas.length).toBeGreaterThanOrEqual(1);
+      /* o Rookie v7 no lugar do v6: v6 e v7 na mesma tentativa */
+      const n3 = tamerAtual().salao.length, r3 = tentarSalao([3, 1, 2, "ativo"]);
+      expect(tamerAtual().salao[n3].lutas[0]).toMatchObject({ est: "crianca", pet: 7007, k: 1 });
+      expect(r3.lutas[0].est).toBe("crianca");
+      const g3 = lerGuardados()[3];
+      expect(g3.versao).toBe(7);
+      expect(Motor.reproduzir(g3.semente, g3.log, 7).salao.tentativas).toBe(1);
+      expect(lerGuardados()[4].log).toEqual(v5.log);                              /* o v5 nao foi tocado */
     } finally { delete (globalThis as { localStorage?: unknown }).localStorage; }
   });
   test("falha alto no Tamer: fora da ordem dos estágios, segue depois de derrota, para numa vitória, o mesmo pet duas vezes, outra semente, antes do título", () => {

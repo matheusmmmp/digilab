@@ -54,7 +54,7 @@ describe("pets v1-v5 nao mudam", () => {
     expect(m.requisitosEvolucao()?.medalhas ?? null).toBeNull();
     expect(() => m.liberar(1)).toThrow(/v6/);
   });
-  test("ovos novos sao v6", () => { expect(VERSAO_PET).toBe(6); expect(new Motor(1).versao).toBe(6); });
+  test("ovos novos sao v7 (v6 + voz propria)", () => { expect(VERSAO_PET).toBe(7); expect(new Motor(1).versao).toBe(7); });
 });
 
 describe("a trava (pets v6)", () => {
@@ -190,7 +190,7 @@ describe("replay com o evento u", () => {
     const m = Motor.reproduzir(1, [u], 6);
     expect(m.medalhas).toBe(1);
   });
-  test("o filho da heranca e v6 e recebe as medalhas depois da origem", () => {
+  test("o filho da heranca nasce na versao atual (v7) e recebe as medalhas depois da origem", () => {
     const p = new Motor(91, 6), q = new Motor(92, 6);
     for (const x of [p, q]) {
       x.liberar(3); x.avancar(FIM_ROOKIE + 15); x.sparring = CAT.sparring;
@@ -198,9 +198,9 @@ describe("replay com o evento u", () => {
       expect(x.estagioAtual).toBe("adulto");
     }
     const f = Motor.cruzar(p, q, 93, 94, "t");
-    expect(f.versao).toBe(6);
+    expect(f.versao).toBe(VERSAO_PET);
     f.liberar(3);
     expect(f.log.map(e => e[1])).toEqual(["o", "u"]);
-    expect(Motor.reproduzir(93, f.log, 6).assinatura()).toBe(f.assinatura());
+    expect(Motor.reproduzir(93, f.log, f.versao).assinatura()).toBe(f.assinatura());
   });
 });

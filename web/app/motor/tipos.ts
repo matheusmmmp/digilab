@@ -54,6 +54,9 @@ export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
 export type Ritmo = "rapida" | "classica";
 /** so no comeco do registro (antes de qualquer outro evento, menos outra config) */
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
+/** pets v7: fala espontanea disparada por um gatilho (reencontro, marco...). So o gatilho vai para o registro; se ela
+    e mentira sai da rng da mentira (o replay sorteia de novo, igual) */
+export type EventoFala = [tick: number, tipo: "fl", gatilho: string];
 /** pets v6: o Tamer tem n medalhas a partir deste tick (o motor do pet nunca le o Tamer por fora; o replay le este evento) */
 export type EventoLiberacao = [tick: number, tipo: "u", liberacao: { n: number }];
 /** pets v6 (itens, medalhas parte 3): o dono equipa ou desequipa um chip do Tamer (motor/itens.ts). O motor confere vagas, tipo e
@@ -66,9 +69,9 @@ export type EventoCarta = [tick: number, tipo: "k", carta: { id: string }];
     deste tick (como o "u" das medalhas: o motor do pet nunca le o Tamer por fora; o replay le este evento). Um por pet */
 export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: true }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

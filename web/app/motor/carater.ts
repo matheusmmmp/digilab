@@ -53,6 +53,15 @@ export function caraterPolitica(m: { pol: Bandit; temp: Temperamento; versao: nu
     return [eixo, Math.max(-1, Math.min(1, bruto / CCP.escala + desloc))];
   })) as Carater;
 }
+/** desvio medio da politica sobre o bandit recem-nascido, por acao do pet, na sonda do carater (os gostos da historia:
+    espelho de digilab/historia.desvio_por_acao). Custa uma sonda (~0,15 s): so na hora da fala */
+export function desvioPorAcao(m: { pol: Bandit; temp: Temperamento; versao: number }): [string, number][] {
+  const guardada = m.pol.ultDecisao;
+  const dp = distAcoesSonda(m.pol);
+  m.pol.ultDecisao = guardada;
+  const db = distAcoesSonda(new Bandit(m.temp, m.versao));
+  return ACOES_PET.map(a => [a, dp.reduce((s, c, k) => s + (c[a] - db[k][a]) / CCP.amostras, 0) / dp.length]);
+}
 export function caraterDe(tracos: Record<AcaoPet, number>, quando: QuandoCarater): Carater {
   const af = afinidades(tracos), base = BASE_CARATER[quando];
   if (!base) throw new Error("sem linha de base para " + quando);

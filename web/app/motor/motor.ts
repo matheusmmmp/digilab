@@ -1,7 +1,7 @@
 /* Motor com registro de eventos (espelho de engine.py + treino.py + personalidade). Event sourcing: o estado
    nunca e salvo, so o registro (acoes do dono, tempo, lutas, intervencoes, treinos); a vida e reconstruida
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
-import {
+import { CMEN,
   ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET,
 } from "./constantes.ts";
@@ -66,7 +66,14 @@ export interface ResultadoLutaPet extends LutaMontada { res: ResultadoLuta; venc
 
 /* ---------------------------------------------------------------- educacao-v1 (pets v4) */
 /** janela de travessura aberta: o dono ve tipo e pedido, nunca se e falsa */
-export interface Janela { tipo: "chamado" | "aviso"; pedido: Chamado | "banheiro"; inicio: number; prazo: number; falso: boolean }
+export interface Janela {
+  tipo: "chamado" | "aviso" | "fala"; pedido: Chamado | "banheiro" | TemaFala; inicio: number; prazo: number; falso: boolean;
+  /* so na janela de fala (pets v7): a mentira contradiz as barras? o gatilho, a honestidade e a chance na hora */
+  contradiz?: boolean; gatilho?: string; h?: number; p?: number;
+}
+export type TemaFala = "estado" | "historia";
+/** pets v7: estado da mentira (DESIGN_VOZ_PROPRIA, secao 9) */
+export interface EstadoMentira { impunes: number; acertos: number }
 export interface Educacao {
   disciplina: number; acertos: number; petiscos: number; janela: Janela | null; proximo: Partial<Record<Chamado, number>>;
   contagem: Record<string, number>;
@@ -122,6 +129,14 @@ export class Motor {
   /* v4: educacao, lutas e lesoes (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md) */
   rTrav!: Rng;
   edu!: Educacao;
+  /* v7: voz propria (fala espontanea com janela e mentira) */
+  rMentira!: Rng;
+  men!: EstadoMentira;
+  honestidadeEspecie = 1;                        /* especie com traco verificado de enganador: CMEN.honestidadeEnganador */
+  /* v7: o que o extrator da historia le (motor/historia.ts). Derivado do replay: nao vai para o save nem para a
+     assinatura. episodios = inicio de cada trecho de uma mesma acao do pet (fora ocioso) */
+  vida5: { episodios: [number, AcaoPet][]; lutas: { tick: number; rival: string; resultado: "vitoria" | "derrota" | "empate"; lesao: boolean }[];
+    sessoes: [number, Exercicio][]; anterior: AcaoPet | null } = { episodios: [], lutas: [], sessoes: [], anterior: null };
   lutas!: Lutas;
   lesionadoDesde: number | null = null;
   vitoriasVida = 0;                              /* v4: experiencia de combate (nao zera ao evoluir) */
@@ -156,7 +171,7 @@ export class Motor {
   salao = { tentativas: 0, vitorias: 0 };
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5, 6].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6, 7].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -180,6 +195,11 @@ export class Motor {
       this.rTrav = criarRng(hashSemente("travessura", semente));
       this.edu = { disciplina: 0, acertos: 0, petiscos: 0, janela: null, proximo: {}, contagem: {} };
       this.lutas = lutasZeradas();
+    }
+    if (versao >= 7) {
+      /* rng propria da mentira: duas por fala, sempre (numeros comuns), nao mexe nas outras */
+      this.rMentira = criarRng(hashSemente("mentira", semente));
+      this.men = { impunes: 0, acertos: 0 };
     }
   }
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
@@ -328,7 +348,7 @@ export class Motor {
   /** por que o pet nao pode desafiar a Liga agora (null: pode). A entrada pede as 6 medalhas, que o pet conhece pelo evento "u" (o
       motor nunca le o Tamer) */
   porqueNaoLiga(): string | null {
-    if (this.versao < VERSAO_LIGA) return "a Liga dos Líderes é só de pets v6";
+    if (this.versao < VERSAO_LIGA) return "a Liga dos Líderes é só de pets v6 em diante";
     if (this.morte) return "o pet morreu";
     if (this.estagioAtual === "bebe") return "o In-Training ainda não luta na Fronteira";
     if (this.medalhas < MEDALHAS_LIGA) return `a Fronteira abre com as ${MEDALHAS_LIGA} medalhas (este pet conhece ${this.medalhas})`;
@@ -344,7 +364,7 @@ export class Motor {
     this._abrirFronteira();
   }
   private _validarFronteira(): void {
-    if (this.versao < VERSAO_INSTALACOES) throw new Error("a Fronteira é só de pets v6");
+    if (this.versao < VERSAO_INSTALACOES) throw new Error("a Fronteira é só de pets v6 em diante");
     if (this.fronteira) throw new Error("a Fronteira já está aberta para este pet");
     if (this.medalhas < MEDALHAS_LIGA) throw new Error(`a Fronteira abre com as ${MEDALHAS_LIGA} medalhas (este pet conhece ${this.medalhas})`);
   }
@@ -356,7 +376,7 @@ export class Motor {
   /** por que o pet nao pode entrar na instalacao agora (null: pode). A entrada pede o titulo do Tamer, que o pet conhece pelo evento "f" */
   porqueNaoInstalacao(id: string): string | null {
     const x = instalacaoDe(id);
-    if (this.versao < VERSAO_INSTALACOES) return `a ${x.nome} é só de pets v6`;
+    if (this.versao < VERSAO_INSTALACOES) return `a ${x.nome} é só de pets v6 em diante`;
     if (this.morte) return "o pet morreu";
     if (this.estagioAtual === "bebe") return "o In-Training ainda não luta na Fronteira";
     if (!this.fronteira) return `a ${x.nome} abre depois do título da Liga dos Líderes`;
@@ -367,7 +387,7 @@ export class Motor {
   /* ---------------------------------------------------------------- o Salao da Fronteira (pets v6; salao.ts) */
   /** por que o pet nao pode lutar no Salao agora (null: pode): v6, vivo, do Rookie ao Mega, e o titulo do Tamer (evento "f") */
   porqueNaoSalao(): string | null {
-    if (this.versao < VERSAO_SALAO) return "o Salão é só de pets v6";
+    if (this.versao < VERSAO_SALAO) return "o Salão é só de pets v6 em diante";
     if (this.morte) return "o pet morreu";
     if (!ESTAGIOS_SALAO.includes(this.estagioAtual)) return "o In-Training ainda não luta na Fronteira";
     if (!this.fronteira) return "o Salão abre depois do título da Liga dos Líderes";
@@ -437,6 +457,8 @@ export class Motor {
       const x = this.instalacoes[inst.id], v = M.serie.filter(r => r.pontosA === 1).length;
       x.tentativas++; x.ultima = v; x.recorde = Math.max(x.recorde, v);
     }
+    if (this.versao >= 7) this.vida5.lutas.push({ tick: this.e.tick, rival, lesao,
+      resultado: res.pontosA === 1 ? "vitoria" : res.pontosA === 0 ? "derrota" : "empate" });
     return { ...M, res, venceu, lesao };
   }
   /** intervencao do dono nos gambits: travar, destravar, vetar, liberar */
@@ -530,7 +552,7 @@ export class Motor {
     this._conferirMorte(); this._vivo();
     this._expirar();
     const j = ed.janela;
-    if (j && j.falso && a === "alimentar") {
+    if (j && j.tipo === "chamado" && j.falso && a === "alimentar") {
       /* chamado falso: recusa a refeicao (efeito descartado, consome a rng do ambiente igual) */
       aplicarAcaoDono(this.e, a, this.rEnv);
       this._conta("refeicoes_recusadas");
@@ -551,6 +573,7 @@ export class Motor {
     const comeu = a === "petisco" || (a === "alimentar" && this.obed.recusas === recAntes);
     if (comeu && fomeAntes >= CED.limiarSuper) { this.e = { ...this.e, saude: clamp(this.e.saude - CED.custoSaudeSuper) }; this._conta("superalimentacao"); }
     if (!j) return;
+    if (j.tipo === "fala") { this._julgarFala(j, a); return; }
     if (j.tipo === "aviso") {
       if (a === "levar_ao_banheiro") {
         ed.disciplina = Math.min(CED.disciplinaMax, ed.disciplina + CED.disciplinaBanheiro);
@@ -619,6 +642,11 @@ export class Motor {
   private _expirar(): void {
     const j = this.edu.janela, ed = this.edu;
     if (!j || this.e.tick <= j.prazo) return;
+    if (j.tipo === "fala") {
+      if (j.falso) { this.men.impunes++; this.men.acertos = 0; this._conta("mentiras_impunes"); this._fechar("impune"); }
+      else { this._conta("verdades_ignoradas"); this._fechar("ignorado"); }
+      return;
+    }
     if (j.tipo === "aviso") { this.e = { ...this.e, sujeira: Math.min(C.sujMax, this.e.sujeira + 1) }; this._conta("avisos_ignorados"); }
     else if (j.falso) { ed.disciplina = Math.max(0, ed.disciplina - CED.passo); ed.acertos = 0; this._conta("falsos_ignorados"); }
     else this._conta("reais_ignorados");
@@ -631,6 +659,61 @@ export class Motor {
   }
   private _vivo(): void {
     if (this.morte) throw new PetMorto(this.morte.causa === "lesoes" ? "ele se machucou demais nas lutas" : "a lesão ficou sem tratamento");
+  }
+  /* ---------------------------------------------------------------- voz propria: mentira (pets v7) */
+  /** h (0 a 1): sombria e sobrecarga tiram; sem sobrecarga e nao sombrio, h = 1 e o pet nunca mente */
+  honestidade(): number {
+    if (this.versao < 7) return 1;
+    const f = this.sombria ? CMEN.fatorSombria : 1;
+    return Math.max(0, Math.min(1, f * (1 - CMEN.pesoSobrecarga * this.treino.sobrecarga / 100) * this.honestidadeEspecie));
+  }
+  chanceMentira(): number {
+    if (this.versao < 7) return 0;
+    const h = this.honestidade();
+    if (h >= 1 || this.men.acertos >= CMEN.acertos) return 0;
+    return Math.min(CMEN.tetoChance, CMEN.coefChance * (1 - h) * (1 - this.edu.disciplina / CED.disciplinaMax)
+      + CMEN.reforcoImpune * this.men.impunes);
+  }
+  /** a honestidade que o jogo mostra: cai com a vista grossa, sobe com a disciplina */
+  honestidadeMostrada(): number { return 1 - this.chanceMentira() / CMEN.tetoChance; }
+  /** fala espontanea (gatilho do app): entra no registro e abre a janela, se couber. Devolve a janela (com a verdade:
+      quem chama e a apresentacao) ou null (janela ja aberta, dormindo) */
+  falar(gatilho: string): Janela | null {
+    if (this.versao < 7) throw new Error("fala espontânea só em pets v7");
+    if (!/^[a-z_]+$/.test(gatilho)) throw new Error("gatilho de fala inválido: " + gatilho);
+    this._conferirMorte(); this._vivo();
+    this.log.push([this.e.tick, "fl", gatilho]);
+    return this._falar(gatilho);
+  }
+  private _falar(gatilho: string): Janela | null {
+    if (this.versao < 7) throw new Error("evento de fala num pet anterior ao v7");
+    const t = this.e.tick;
+    this._conferirMorte();
+    this._expirar();
+    const u = this.rMentira.random(), uTema = this.rMentira.random();       /* sempre: numeros comuns */
+    this._conta("falas");
+    if (this.edu.janela || this.e.dormindo || this.morte) { this._conta("falas_sem_janela"); return null; }
+    const h = this.honestidade(), p = this.chanceMentira(), falso = u < p;
+    const tema: TemaFala = uTema < CMEN.fracaoTemaEstado ? "estado" : "historia";
+    this.edu.janela = { tipo: "fala", pedido: tema, inicio: t, prazo: t + CMEN.janela, falso, contradiz: falso && tema === "estado",
+      gatilho, h, p };
+    if (falso) this._conta("mentiras");
+    return { ...this.edu.janela };
+  }
+  /** o dono julga a fala: bronca, petisco ou elogio fecham a janela; o resto nao (espelho de _julgar_fala) */
+  private _julgarFala(j: Janela, a: AcaoDono): void {
+    const ed = this.edu;
+    if (a === "repreender") {
+      if (j.falso) {
+        ed.disciplina = Math.min(CED.disciplinaMax, ed.disciplina + CED.passo); this.men.acertos++;
+        this._conta("mentiras_corrigidas"); this._fechar("corrigida");
+      } else {
+        this.vinc.ajustar(CED.vincBroncaSemMotivo, this.nDono); this._conta("broncas_injustas"); this._fechar("bronca_injusta");
+      }
+    } else if (a === "petisco" || a === "elogiar") {
+      if (j.falso) { this.men.impunes += CMEN.impunesPremiada; this.men.acertos = 0; this._conta("mentiras_premiadas"); this._fechar("premiada"); }
+      else { this._conta("verdades_aceitas"); this._fechar("aceita"); }
+    }
   }
   /** janela aberta agora (so pets v4) */
   janelaAberta(): Janela | null { return this.versao >= 4 ? this.edu.janela : null; }
@@ -704,6 +787,11 @@ export class Motor {
         this.motivo = motivoVida(this, obs, a, t);
         this.motivos.push(this.motivo); if (this.motivos.length > 200) this.motivos.shift();
         this.acao = a;
+        if (this.versao >= 7) {
+          const v = this.vida5;
+          if (a !== v.anterior && a !== "ocioso") v.episodios.push([t, a]);
+          v.anterior = a;
+        }
         this.e = efeitoAcaoPet(this.e, a);
         this.prox = this.e.tick + C.intervalo;
         this.pol.observar(obs, a, t);
@@ -750,6 +838,7 @@ export class Motor {
       obedece = this.rObed.random() < p;
     }
     const s = this.treino.sessao(t, ex, obedece);
+    if (this.versao >= 7 && !s.enrolou) this.vida5.sessoes.push([t, ex]);
     const base = { origem: "vida" as const, tick: t, refsOrd: [], exploracao: false, humor: this.e.humor, valorDecidiu: true };
     let mot: MotivoVida | null = null;
     if (s.forcada) {
@@ -842,6 +931,7 @@ export class Motor {
       this.edu.disciplina = Math.floor(this.edu.disciplina * CED.fatorEvoluir); this.edu.acertos = 0;
       this._agendar(e2, this.e.tick);
     }
+    if (this.versao >= 7) this.men = { impunes: 0, acertos: 0 };
     if (!this.gp) this.gp = new GambitsPet();
     if (this.versao >= 5) this.gp.semear(this.forma, nomeForma(this.forma), this.regras); else this.gp.semear(this.forma);
   }
@@ -935,7 +1025,8 @@ export class Motor {
       ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : []),
       ...(this.versao >= 6 ? [this.medalhas] : []), ...(this.comItens ? [[this.chips, this.carta, this.cartasUsadas]] : []),
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
-      ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : [])]);
+      ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
+      ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
@@ -950,6 +1041,7 @@ export class Motor {
       case "tr": this._treinar(ev[2]); break;
       case "o": this._origem(ev[2]); break;
       case "c": this._config(ev[2].dur); break;
+      case "fl": this._falar(ev[2]); break;
       case "u": this._liberar(ev[2].n); break;
       case "i": this._item(ev[2].op, ev[2].id); break;
       case "k": this._armarCarta(ev[2].id); break;

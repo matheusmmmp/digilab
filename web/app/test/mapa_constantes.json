@@ -1916,6 +1916,56 @@
    "web": "CESC.epsNpc",
    "fonte": "python",
    "py": "ConfigEscala.epsilon_npc"
+  },
+  {
+   "web": "CMEN.fatorSombria",
+   "fonte": "python",
+   "py": "ConfigMentira.fator_sombria"
+  },
+  {
+   "web": "CMEN.pesoSobrecarga",
+   "fonte": "python",
+   "py": "ConfigMentira.peso_sobrecarga"
+  },
+  {
+   "web": "CMEN.coefChance",
+   "fonte": "python",
+   "py": "ConfigMentira.coef_chance"
+  },
+  {
+   "web": "CMEN.reforcoImpune",
+   "fonte": "python",
+   "py": "ConfigMentira.reforco_por_impune"
+  },
+  {
+   "web": "CMEN.tetoChance",
+   "fonte": "python",
+   "py": "ConfigMentira.teto_chance"
+  },
+  {
+   "web": "CMEN.acertos",
+   "fonte": "python",
+   "py": "ConfigMentira.acertos_para_aprender"
+  },
+  {
+   "web": "CMEN.impunesPremiada",
+   "fonte": "python",
+   "py": "ConfigMentira.impunes_premiada"
+  },
+  {
+   "web": "CMEN.janela",
+   "fonte": "python",
+   "py": "ConfigMentira.janela_fala_min"
+  },
+  {
+   "web": "CMEN.fracaoTemaEstado",
+   "fonte": "python",
+   "py": "ConfigMentira.fracao_tema_estado"
+  },
+  {
+   "web": "CMEN.honestidadeEnganador",
+   "fonte": "python",
+   "py": "ConfigMentira.honestidade_enganador"
   }
  ],
  "convertidos": [

@@ -189,7 +189,7 @@ lesão da derrota que fecha uma sequência longa pode matar o pet antes do Resul
 
 ## 9. O que a parte 4c implementou (2026-09-30): a Fábrica e o Salão
 
-Só `web/app/`, só pets v6 (a Fábrica nem usa pet); a pesquisa em Python não muda (`docs/REGISTRO_DESVIOS.md`, 2026-09-30). Sem rodada de
+Só `web/app/`, só pets v6 em diante (v6 e v7, os da voz própria, que são v6 + voz; a Fábrica nem usa pet; o Salão mistura guardados v6 e v7); a pesquisa em Python não muda (`docs/REGISTRO_DESVIOS.md`, 2026-09-30). Sem rodada de
 equilíbrio: fator 1 nas duas, como na Liga e nas outras instalações.
 
 | instalação | módulo | regra | recorde |

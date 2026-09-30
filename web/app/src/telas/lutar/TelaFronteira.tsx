@@ -32,7 +32,7 @@ const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
 
 /** uma instalacao da Fronteira: a regra em uma frase, o recorde do Tamer, o que este pet fez nela e "Tentar". Antes do titulo, trancada */
 function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Tamer; lutando: boolean }) {
-  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoInstalacao(x.id) : "a Fronteira é só dos pets v6", rec = t.recorde(x.id), c = v6 ? m.instalacoes[x.id] : null;
+  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoInstalacao(x.id) : "a Fronteira é só dos pets v6 em diante", rec = t.recorde(x.id), c = v6 ? m.instalacoes[x.id] : null;
   const tentar = () => { lutarInstalacao(x.id, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
   return (
     <li class={`dl-card fr-inst-card${t.titulo ? "" : " fr-inst-card--fechada"}`} aria-labelledby={`fr-inst-${x.id}`}>
@@ -52,7 +52,7 @@ function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Ta
 export function TelaFronteira() {
   const { motor: m, erroTamer } = useJogo(), luta = useLuta(), a = useAtlas(), t = tamerAtual();
   useEffect(() => { if (!LUTA.lutando && m.versao >= 6 && (!LUTA.palco || LUTA.palco.modo !== "fronteira")) previa("fronteira"); }, []);
-  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoLiga() : "a Fronteira é só dos pets v6";
+  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoLiga() : "a Fronteira é só dos pets v6 em diante";
   const nLiga = v6 ? m.liga.tentativas : 0;
   /* a ultima tentativa, refeita do registro (so muda com luta nova da Liga) */
   const ult = useMemo(() => (nLiga ? ultimaTentativa(m) : null), [nLiga, m.semente]);

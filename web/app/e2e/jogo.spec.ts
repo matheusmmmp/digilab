@@ -306,7 +306,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-v6"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(6);
+  expect(r.save.versao).toBe(7);                     /* o ovo novo nasce na versao atual (v7: v6 + voz propria) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.tamer).toEqual({ versao: 5, log: [] });
@@ -333,7 +333,7 @@ test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer 
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(6);
+  expect(r.save.versao).toBe(7);                     /* o ovo novo nasce na versao atual (v7) */
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("5");
   expect(r.tamer).toEqual({ versao: 5, log: [] });

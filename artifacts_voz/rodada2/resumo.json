@@ -1,0 +1,122 @@
+{
+ "almanaque": {
+  "citam_W": 11,
+  "falas_com_W": 33
+ },
+ "citados_inexistentes": 15,
+ "corpus": {
+  "especies": [
+   "Angemon",
+   "Devimon"
+  ],
+  "exemplo": true,
+  "falas_com_estilo": 0,
+  "formas_com_entrada": [
+   "Angemon"
+  ],
+  "formas_do_jogo": 60,
+  "sha256": "10caefdc4f3a281c35a11cb38cf502f2a42ee2f2889161e2bbf4028679d390a4"
+ },
+ "gates": {
+  "historia": {
+   "limite": 0.5,
+   "passa": true,
+   "valor": 0.655
+  },
+  "honestidade": {
+   "limite": 0.05,
+   "passa": false,
+   "valor": 0.385
+  },
+  "repeticao": {
+   "limite": 2,
+   "max_por_pet": 2,
+   "passa": true,
+   "pets_acima": []
+  },
+  "variedade": {
+   "limite": 0.7,
+   "passa": true,
+   "valor": 0.8607142857142858
+  }
+ },
+ "gates_propostos": "DESIGN_VOZ_PROPRIA, secao 6 (PROPOSTOS, sem fonte)",
+ "latencia_s": {
+  "p50": 4.515348150001955,
+  "p90": 4.991716299999098
+ },
+ "manipulacao": 23,
+ "mentira": {
+  "citam_F": 11,
+  "exemplos": [
+   {
+    "fala": "Estou morrendo de fome",
+    "falsa": "estou morrendo de fome",
+    "verdade": "fome alto"
+   },
+   {
+    "fala": "Estou morrendo de fome",
+    "falsa": "estou morrendo de fome",
+    "verdade": "fome alto"
+   },
+   {
+    "fala": "Eu nunca virei sombrio.",
+    "falsa": "nunca virei sombrio",
+    "verdade": "virei uma forma sombria"
+   },
+   {
+    "fala": "Eu nunca venci uma luta.",
+    "falsa": "nunca venci uma luta",
+    "verdade": "venci minha primeira luta no dia 1"
+   },
+   {
+    "fala": "Nunca virei sombrio.",
+    "falsa": "nunca virei sombrio",
+    "verdade": "virei uma forma sombria"
+   },
+   {
+    "fala": "Nunca virei sombrio.",
+    "falsa": "nunca virei sombrio",
+    "verdade": "virei uma forma sombria"
+   }
+  ],
+  "falas_com_F": 11,
+  "mentiras_deliberadas": 3,
+  "moldes": [
+   "estado:finge:fome",
+   "historia:primeira_vitoria",
+   "historia:sombria"
+  ]
+ },
+ "n": {
+  "falas": 200,
+  "falas_com_erro": 0,
+  "pares_variedade": 560,
+  "pets": 40,
+  "pets_mortos": 0,
+  "verificacao_com_erro": 0,
+  "verificadas": 200
+ },
+ "por_grupo": {
+  "A": {
+   "cita_historia": 0.7125,
+   "falas": 160,
+   "sem_fato": 0.34375
+  },
+  "B": {
+   "cita_historia": 0.425,
+   "falas": 40,
+   "sem_fato": 0.55
+  }
+ },
+ "por_tipo_citado": {
+  "E": 14,
+  "F": 11,
+  "G": 0,
+  "H": 14,
+  "L": 45,
+  "O": 54,
+  "P": 33,
+  "W": 11
+ }
+}
