@@ -29,7 +29,8 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 from digilab.campanha import REGRAS_CAMPANHA  # noqa: E402
-from digilab.combate_v2.v21.bots import ADOLESCENTES, ADULTOS, FORMAS, SOMBRIOS, lutador_adolescente, lutador_adulto  # noqa: E402
+from digilab.combate_v2.v21.bots import (ADOLESCENTES, FORMAS, SOMBRIOS, gambits_adulto, lutador_adolescente,  # noqa: E402
+                                         lutador_adulto)
 from digilab.combate_v2.v21.catalogo import (SOMBRIA_DA_LINHA, Forma, forma_adulta, linha_do_adolescente,  # noqa: E402
                                              perfil, ramo_da_crianca)
 from digilab.combate_v2.v21.partida import Lutador, jogar  # noqa: E402
@@ -181,7 +182,7 @@ def lutador_painel(nome: str, spec: dict, carena: ConfigArenaPesquisa, cfg_v21) 
     elif f["adulta"] in SOMBRIOS:
         g, eps = SOMBRIOS[f["adulta"]], max(eps, CONFIG_SOMBRIO.epsilon_minimo)
     else:
-        g = ADULTOS[f["adulta"]]
+        g = gambits_adulto(f["adulta"], cfg_v21)     # = ADULTOS com as chaves da V21D desligadas (docs/PLANO_ANALISE_V21D.md)
     return Lutador(nome, p, g, eps)
 
 

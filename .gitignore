@@ -52,3 +52,5 @@ artifacts_educacao_v3b/vidas/
 !artifacts_educacao_v3c/
 artifacts_educacao_v3c/partidas_*.json
 artifacts_educacao_v3c/vidas/
+artifacts_linhagem/natureza_criacao_v21d/*/partidas_*.json
+artifacts_linhagem/natureza_criacao_v21d/*/vidas/

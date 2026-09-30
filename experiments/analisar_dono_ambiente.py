@@ -27,7 +27,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.metrics import bootstrap_cruzado, componentes_cruzados, ic_percentil  # noqa: E402
+from digilab.metrics import bootstrap_cruzado, componentes_cruzados, ic_percentil, r2_por_categoria  # noqa: E402
 
 RODADAS = ("especie_fixa", "especies_balanceadas")
 BOOT, SEMENTE = 2000, 20260930
@@ -106,15 +106,9 @@ def analisar_rodada(pasta: Path) -> dict:
         f = x["forma"]
         return f["adulta"] if f["adulta"] else f"adolescente:{f['linha']}"
     def r2_forma(chaves: list) -> dict:
-        vals = [taxa[k] for k in chaves]
-        m = sum(vals) / len(vals)
-        grupos: dict = {}
-        for k in chaves:
-            grupos.setdefault(forma_de(por[k]), []).append(taxa[k])
-        ss_tot = sum((v - m) ** 2 for v in vals)
-        ss_ent = sum(len(v) * (sum(v) / len(v) - m) ** 2 for v in grupos.values())
-        return {"r2": ss_ent / ss_tot if ss_tot > 0 else 0.0, "n_formas": len(grupos),
-                "taxa_media_por_forma": {f: {"n": len(v), "taxa": sum(v) / len(v)} for f, v in sorted(grupos.items())}}
+        r = r2_por_categoria([taxa[k] for k in chaves], [forma_de(por[k]) for k in chaves])
+        return {"r2": r["r2"], "n_formas": r["n_categorias"],
+                "taxa_media_por_forma": {f: {"n": v["n"], "taxa": v["media"]} for f, v in r["media_por_categoria"].items()}}
     todos = sorted(por)
     forma = {"todos": r2_forma(todos), "so_donos_sem_mortes": r2_forma([k for k in todos if k[1] in sobreviventes])}
     # o que sobra dentro da forma: taxa menos a media da forma dela, decomposta como a taxa

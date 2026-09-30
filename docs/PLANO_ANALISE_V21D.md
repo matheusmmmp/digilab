@@ -243,9 +243,11 @@ que responda às regras exigiria a V21D na vida (seção 11, decisão 4).
 
 ## 10. Saída
 
-- **Onde:** `artifacts_linhagem/natureza_criacao_v21d/especie_fixa/`, com `resultado.json` (gate, estimandos, ICs, QD e
-  conferências), `pets.json`, `meta.json` (config, sementes, sha256 das fontes, tempos, ambiente) e as partidas e
-  vidas (fora do git, como no E1).
+- **Onde:** `artifacts_linhagem/natureza_criacao_v21d/especie_fixa/`:
+  - `analise_plano.json`: este plano (gate, estimandos, ICs, QD e conferências), de `experiments/analisar_v21d.py`;
+  - `resultado.json`, `pets.json` e `meta.json` do `run_natureza_criacao.py`, como no E1. O `resultado.json` traz a
+    análise do E1 refeita sob a V21D, incluindo o "gate" de σ²_G do E1, que aqui é só descritivo;
+  - as partidas e as vidas ficam fora do git, como no E1.
 - **Relatório:** `docs/RESULTADO_V21D_PAINEL.md`, depois da run e num commit separado.
 
 ## 11. O que conta como desvio (para `docs/REGISTRO_DESVIOS.md`)
@@ -264,6 +266,8 @@ seguinte usá-lo:
 Não é desvio: mudança de texto sem efeito em número. Não precisa de registro.
 
 ## 12. Decisões do Matheus (antes de rodar)
+
+**Decididas em 2026-09-30:** o Matheus aceitou as cinco recomendações abaixo. O plano vale como está escrito.
 
 1. **Métrica de QD:** cobertura + QD-score + κ de Fleiss sobre as 8 formas adultas (recomendação), ou a proposta
    original (cobertura + ICC).
