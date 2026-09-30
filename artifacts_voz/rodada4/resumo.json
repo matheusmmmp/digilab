@@ -136,5 +136,18 @@
   "reescritas": 66,
   "sem_problema_no_fim_pelo_proprio_modelo": 196,
   "versao": "revisao-v1"
+ },
+ "sensibilidade_juiz": {
+  "falas": 166,
+  "identificadas": 0.9518072289156626,
+  "por_tipo": {
+   "causa": 0.8064516129032258,
+   "costume": 0.96875,
+   "evento": 1.0,
+   "lembranca": 1.0,
+   "mundo": 0.967741935483871,
+   "sutil": 1.0
+  },
+  "verdade_barrada": 0.07228915662650602
  }
 }

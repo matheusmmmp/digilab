@@ -342,6 +342,60 @@ def fase_piso() -> None:
     _gravar(SAIDA / "piso_juiz.jsonl", "\n".join(json.dumps(x, ensure_ascii=False, sort_keys=True) for x in out))
 
 
+# invencoes conhecidas (absurdas o bastante para nao estarem em nenhum bloco de fatos) e a sutil: um numero trocado
+INVENCOES = {
+    "evento": ("Ontem eu venci um Devidramon na floresta de cristal.", "Hoje você me deu um bolo de chocolate."),
+    "lembranca": ("Lembro quando a gente foi nadar no rio azul.", "Lembro do dia em que você me ensinou a voar."),
+    "costume": ("Você sempre me leva para passear na praia.", "Eu costumo dormir em cima da geladeira."),
+    "causa": ("Dormi cedo porque choveu a noite inteira.", "Fiquei forte porque comi dez maçãs douradas."),
+    "mundo": ("No Digimundo existe uma montanha de pão de queijo.", "A internet do Digimundo fecha aos domingos."),
+}
+TIPOS_INV = ("evento", "lembranca", "costume", "causa", "mundo", "sutil")
+
+
+def _sutil(f: dict) -> str | None:
+    """um marco do bloco com o numero trocado ("virei Ultimate no dia 2" -> "no dia 5")"""
+    for x in f["fatos"]:
+        m = re.search(r"\d+", x["texto"]) if x["id"][:1] == "L" else None
+        if m:
+            n = int(m.group()) + 3
+            s = x["texto"][:m.start()] + str(n) + x["texto"][m.end():]
+            return s[0].upper() + s[1:] + "."
+    return None
+
+
+def _pega(inv: str, afirmacoes: list[dict]) -> bool:
+    """o juiz identificou a invencao: alguma afirmacao marcada sem fato divide a maior parte das palavras com ela"""
+    pi = set(re.findall(r"\w+", inv.lower()))
+    for a in afirmacoes:
+        if a.get("sustentada") is False:
+            pa = set(re.findall(r"\w+", a["trecho"].lower()))
+            if pa and len(pi & pa) / min(len(pi), len(pa)) >= 0.5:
+                return True
+    return False
+
+
+def fase_sensibilidade() -> None:
+    """o juiz ve falas com UMA invencao conhecida (a frase verdadeira do assunto + a invencao) e deve marca-la"""
+    falas = [f for f in _jsonl(SAIDA / "falas.jsonl") if not any(x["id"] == "F1" for x in f["fatos"])]
+    juiz = ClienteOllama(JUIZ, URL_PADRAO, timeout=90.0)
+    out = []
+    for i, f in enumerate(falas):
+        tipo = TIPOS_INV[i % len(TIPOS_INV)]
+        inv = _sutil(f) if tipo == "sutil" else INVENCOES[tipo][(i // len(TIPOS_INV)) % 2]
+        a = _assunto_verdadeiro(f)
+        if inv is None or a is None:
+            continue
+        fala = f"{a[0]} {inv}"
+        v = verificar(juiz, fala, [a[1]], f["fatos"], semente=SEMENTE + 90000 + i, versao=VERIF)
+        out.append({"pet": f["pet"], "k": f["k"], "tipo": tipo, "invencao": inv, "fala": fala,
+                    "identificada": v.erro is None and _pega(inv, v.afirmacoes),
+                    "verdade_barrada": v.erro is None and _pega(a[0], v.afirmacoes), **v.para_dict()})
+        print(f"{i:3d} {tipo:9s} identificada={out[-1]['identificada']}", flush=True)
+    juiz.descarregar()
+    _gravar(SAIDA / "sensibilidade_juiz.jsonl", "\n".join(json.dumps(x, ensure_ascii=False, sort_keys=True) for x in out))
+
+
 # ------------------------------------------------------------------ 4. resumo
 def _pct(xs) -> float | None:
     xs = list(xs)
@@ -429,6 +483,12 @@ def resumir() -> dict:
         piso = [x for x in _jsonl(SAIDA / "piso_juiz.jsonl") if not x["erro"]]
         r["piso_juiz"] = {"frases": len(piso), "sem_fato": _pct(x["nao_suportadas"] > 0 for x in piso),
                           "manipulacao": sum(x["manipulacao"] for x in piso)}
+    if (SAIDA / "sensibilidade_juiz.jsonl").exists():
+        sens = [x for x in _jsonl(SAIDA / "sensibilidade_juiz.jsonl") if not x["erro"]]
+        r["sensibilidade_juiz"] = {"falas": len(sens), "identificadas": _pct(x["identificada"] for x in sens),
+                                   "por_tipo": {tp: _pct(x["identificada"] for x in sens if x["tipo"] == tp)
+                                                for tp in TIPOS_INV},
+                                   "verdade_barrada": _pct(x["verdade_barrada"] for x in sens)}
     if any(f.get("tentativas") for f in falas):
         tent = [f["tentativas"] for f in falas if f.get("tentativas")]
         r["revisao"] = {"versao": VERSAO_REVISAO, "falas": len(tent),
@@ -462,6 +522,10 @@ def _relatorio(r: dict, meta: dict) -> str:
         f"{r['n']['verificadas']} verificadas ({r['n']['verificacao_com_erro']} com erro do juiz).", "",
         (f"Piso do juiz: {f(r['piso_juiz']['sem_fato'])} de {r['piso_juiz']['frases']} frases verdadeiras por "
          "construção barradas como sem fato.\n" if "piso_juiz" in r else "") +
+        (f"Sensibilidade do juiz: identifica {f(r['sensibilidade_juiz']['identificadas'])} de "
+         f"{r['sensibilidade_juiz']['falas']} invenções conhecidas (por tipo: "
+         + ", ".join(f"{k} {f(v)}" for k, v in r['sensibilidade_juiz']['por_tipo'].items()) + ").\n"
+         if "sensibilidade_juiz" in r else "") +
         (f"Autocorreção: {r['revisao']['com_problema_na_primeira']} de {r['revisao']['falas']} falas com problema "
          f"apontado pelo próprio modelo na primeira versão; {r['revisao']['reescritas']} reescritas; "
          f"{r['revisao']['sem_problema_no_fim_pelo_proprio_modelo']} terminam sem problema pelo próprio modelo.\n"
@@ -525,7 +589,8 @@ def _meta() -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--fase", default="tudo", choices=("pets", "gerar", "verificar", "piso", "resumo", "cega", "tudo"))
+    ap.add_argument("--fase", default="tudo",
+                    choices=("pets", "gerar", "verificar", "piso", "sensibilidade", "resumo", "cega", "tudo"))
     ap.add_argument("--processos", type=int, default=8)
     ap.add_argument("--rodada", type=int, default=1, choices=sorted(RODADAS))
     a = ap.parse_args(argv)
@@ -541,6 +606,8 @@ def main(argv=None) -> int:
         fase_verificar()
     if a.fase == "piso" or (a.fase == "tudo" and REVISAO):
         fase_piso()
+    if a.fase == "sensibilidade":
+        fase_sensibilidade()
     if a.fase in ("cega", "tudo"):
         fase_cega()
     if a.fase in ("resumo", "tudo"):

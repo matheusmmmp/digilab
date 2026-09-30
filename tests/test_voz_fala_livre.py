@@ -304,3 +304,14 @@ def test_v6_fala_sem_verificacao_e_cortada():
                                 so_respeito=True)
     assert r.fala == "Você atende meus chamados rápido." and r.erro == "cortada: sem verificacao"
     assert tent[0]["erro_verificacao"]
+
+
+def test_parser_tira_id_da_fala_e_barra_outro_alfabeto():
+    from digilab_fala_livre.saida import SaidaInvalida, ler
+    f = ler(json.dumps({"fala": "Ouvi falar de um vírus no [W1] , sabia?", "fatos_citados": ["L1"]}))
+    assert f.fala == "Ouvi falar de um vírus no, sabia?" and f.fatos_citados == ("L1", "W1")
+    assert ler(json.dumps({"fala": "Olá, ação ótima! ^_^ ♪", "fatos_citados": []})).fala.startswith("Olá")
+    with pytest.raises(SaidaInvalida):
+        ler(json.dumps({"fala": "Eu estava cheio de能源充足", "fatos_citados": []}))
+    with pytest.raises(SaidaInvalida):
+        ler(json.dumps({"fala": "[E1]", "fatos_citados": []}))
