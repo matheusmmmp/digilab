@@ -618,8 +618,8 @@ class ConfigCombateV21C(ConfigCombateV21):
 
 @dataclass(frozen=True)
 class ConfigCombateV21D(ConfigCombateV21C):
-    """Reequilibrio dos arquetipos, rodada 1 (docs/EQUILIBRIO_RODADA1.md, a partir de docs/DIAGNOSTICO_ARQUETIPOS.md).
-    Chaves DESLIGADAS por padrao: com as duas em False a luta e a da V21C. Classe propria (e nao campos novos na
+    """Reequilibrio dos arquetipos, rodadas 1 e 2 (docs/EQUILIBRIO_RODADA1.md e EQUILIBRIO_RODADA2.md, a partir de
+    docs/DIAGNOSTICO_ARQUETIPOS.md). Chaves DESLIGADAS por padrao: com todas em False a luta e a da V21C. Classe propria (e nao campos novos na
     V21C) para o asdict e o hash das configs V21C gravadas nao mudarem. PROPOSTO, so calibracao."""
 
     # candidato A: o preparo do pesado feito sob pele_dura nao aparece para o rival em oponente_preparando
@@ -627,6 +627,19 @@ class ConfigCombateV21D(ConfigCombateV21C):
     preparo_sob_pele_oculto: bool = False
     # candidato C: a muralha luta com a lista de gambits derivada da do espelho (bots.GAMBITS_MURALHA_V21D)
     muralha_lista_espelho: bool = False
+    # --- rodada 2 (docs/EQUILIBRIO_RODADA2.md), tambem desligadas por padrao ---
+    # D2: a investida erra quando o alvo recua a partir da distancia media, e o recuo vale contra ela (excecao a
+    # fuga condicionada so para a investida; o avanco comum continua prendendo quem recua)
+    investida_erra_contra_recuo: bool = False
+    # E1: recuar nao afasta quando o oponente prepara o pesado no mesmo turno (a fuga condicionada estendida ao
+    # preparo; vale para qualquer forma que prepara)
+    preparo_prende: bool = False
+    # E2: lista variante que bate rapido de perto contra quem recua com frequencia, antes de preparar o pesado
+    # (bots.gambits_adulto); uma chave para o tita e outra para o vigia, para medir cada uma sozinha
+    tita_bate_em_quem_recua: bool = False
+    vigia_bate_em_quem_recua: bool = False
+    # V: lista variante do vigia que recua do preparo que ele nao consegue interromper (o do rival que usa pele_dura)
+    vigia_recua_do_preparo_sob_pele: bool = False
 
 
 # numeros de tecnica/passiva perturbados no gate E5 (+-10%)

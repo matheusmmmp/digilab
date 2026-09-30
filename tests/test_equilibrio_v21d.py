@@ -108,3 +108,86 @@ def test_chave_desligada_reproduz_o_diagnostico_na_brasa():
         for fb in FORMAS[i + 1:]:
             pts = [x for _, _, x, _ in rb.partidas_par(lut[fa], lut[fb], "e1|brasa", c["sementes_calibracao"], 100, r)]
             assert sum(pts) / len(pts) == gravado[f"brasa|{fa}|{fb}"]["pontos"], (fa, fb)
+
+
+# ------------------------------------------------------------------ rodada 2 (docs/EQUILIBRIO_RODADA2.md)
+CHAVES_R2 = ("investida_erra_contra_recuo", "preparo_prende", "tita_bate_em_quem_recua", "vigia_bate_em_quem_recua",
+             "vigia_recua_do_preparo_sob_pele")
+TODAS_DESLIGADAS = {k: False for k in ("preparo_sob_pele_oculto", "muralha_lista_espelho") + CHAVES_R2}
+
+
+def test_rodada2_chaves_desligadas_por_padrao():
+    d = ConfigCombateV21D()
+    assert not any(getattr(d, k) for k in CHAVES_R2)
+    assert not set(CHAVES_R2) & set(ConfigCombateV21C.__dataclass_fields__)
+
+
+def test_rodada2_todas_desligadas_reproduzem_as_partidas():
+    rc, rd = rb.regras_de(_cfg()), _regras(**TODAS_DESLIGADAS)
+    for fa, fb in (("furioso", "sentinela"), ("furioso", "emboscador"), ("vigia", "tita"), ("tita", "sentinela"),
+                   ("vigia", "emboscador"), ("duelista", "sentinela")):
+        for k in range(6):
+            a, b = lutador_adulto(fa, "brasa", rc.v21), lutador_adulto(fb, "brasa", rc.v21)
+            a2, b2 = lutador_adulto(fa, "brasa", rd.v21), lutador_adulto(fb, "brasa", rd.v21)
+            assert a2.gambits is a.gambits and b2.gambits is b.gambits
+            assert jogar(a, b, 700 + k, rc).log == jogar(a2, b2, 700 + k, rd).log
+
+
+def _par(fa: str, fb: str, r: Regras, distancia):
+    a, b = lutador_adulto(fa, "brasa", r.v21), lutador_adulto(fb, "brasa", r.v21)
+    e = estado_inicial(a.perfil, b.perfil)
+    return replace(e, distancia=distancia, lados=tuple(replace(x, guts=x.perfil.guts_max) for x in e.lados))
+
+
+def test_d2_investida_erra_contra_recuo():
+    for chave in (False, True):
+        r = _regras(investida_erra_contra_recuo=chave)
+        e, res = resolver(_par("furioso", "emboscador", r, Distancia.MEDIO), Acao.INVESTIDA, Acao.RECUAR, r)
+        assert (res.dano_recebido[1] == 0.0) is chave
+        assert e.distancia is (Distancia.MEDIO if chave else Distancia.PERTO)
+        # o avanco comum continua prendendo quem recua (fuga condicionada)
+        e, _ = resolver(_par("furioso", "emboscador", r, Distancia.MEDIO), Acao.AVANCAR, Acao.RECUAR, r)
+        assert e.distancia is Distancia.PERTO
+        # quem nao recua continua levando a investida
+        _, res = resolver(_par("furioso", "emboscador", r, Distancia.MEDIO), Acao.INVESTIDA, Acao.MARCAR, r)
+        assert res.dano_recebido[1] > 0.0
+    # a sentinela com a passiva pronta vai para longe (a passiva anula o avanco da investida)
+    r = _regras(investida_erra_contra_recuo=True)
+    e, res = resolver(_par("furioso", "sentinela", r, Distancia.MEDIO), Acao.INVESTIDA, Acao.RECUAR, r)
+    assert res.dano_recebido[1] == 0.0 and e.distancia is Distancia.LONGE
+
+
+def test_e1_preparo_prende():
+    for chave in (False, True):
+        r = _regras(preparo_prende=chave)
+        e, _ = resolver(_par("tita", "emboscador", r, Distancia.PERTO), Acao.PREPARAR_PESADO, Acao.RECUAR, r)
+        assert e.distancia is (Distancia.PERTO if chave else Distancia.MEDIO)
+        e, _ = resolver(_par("tita", "emboscador", r, Distancia.PERTO), Acao.DEFENDER, Acao.RECUAR, r)
+        assert e.distancia is Distancia.MEDIO
+
+
+def test_e2_e_v_so_trocam_as_listas_do_colosso():
+    tita, vigia = ADULTOS["tita"], ADULTOS["vigia"]
+    for chaves, esperado_t, esperado_v in (
+            ({"tita_bate_em_quem_recua": True}, bots.GAMBITS_TITA_V21D, vigia),
+            ({"vigia_bate_em_quem_recua": True}, tita, bots.GAMBITS_VIGIA_V21D[(True, False)]),
+            ({"vigia_recua_do_preparo_sob_pele": True}, tita, bots.GAMBITS_VIGIA_V21D[(False, True)]),
+            ({"vigia_bate_em_quem_recua": True, "vigia_recua_do_preparo_sob_pele": True}, tita,
+             bots.GAMBITS_VIGIA_V21D[(True, True)])):
+        r = _regras(**chaves)
+        assert lutador_adulto("tita", "brasa", r.v21).gambits is esperado_t
+        assert lutador_adulto("vigia", "brasa", r.v21).gambits is esperado_v
+        for f in FORMAS:
+            if f not in ("tita", "vigia"):
+                assert lutador_adulto(f, "brasa", r.v21).gambits is ADULTOS[f]
+        for s in bots.SOMBRIOS:
+            assert lutador_adulto(s, "brasa", r.v21).gambits is bots.SOMBRIOS[s]
+    # listas variantes: 8 regras, a regra nova no lugar certo; as canonicas intactas
+    for g in (bots.GAMBITS_TITA_V21D, *bots.GAMBITS_VIGIA_V21D.values()):
+        assert len(g.regras) == 8
+    assert bots.GAMBITS_TITA_V21D.regras.index(bots.REGRA_BATE_EM_QUEM_RECUA) == \
+        bots.GAMBITS_TITA_V21D.regras.index(tita.regras[4]) - 1
+    assert bots.GAMBITS_VIGIA_V21D[(True, True)].regras[0] == bots.REGRA_RECUA_DO_PREPARO_SOB_PELE
+    assert bots.REGRA_BATE_EM_QUEM_RECUA not in tita.regras + vigia.regras
+    assert bots.REGRA_RECUA_DO_PREPARO_SOB_PELE not in vigia.regras
+    assert len(tita.regras) == len(vigia.regras) == 8
