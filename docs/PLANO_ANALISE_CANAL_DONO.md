@@ -196,6 +196,9 @@ Qualquer um destes, depois do commit deste plano (ou do adendo da Etapa B), vai 
 
 ## 9. Decisões do Matheus (antes de rodar)
 
+**Decididas em 2026-09-30:** o Matheus aceitou as cinco recomendações abaixo, inclusive a exceção de escopo da Etapa B
+(condicionada ao gate A). O plano vale como está escrito.
+
 1. **Escopo da Etapa B.** O `peso_carater_stats` é um parâmetro novo de mecânica, só no Python e só no painel de
    pesquisa: pede exceção de escopo. **Recomendação:** autorizar agora, condicionado ao gate A. Custo de errar: sem a
    exceção, um SINAL PRESENTE fica sem teste; com ela sem o gate, rodaria um canal sem sinal.
