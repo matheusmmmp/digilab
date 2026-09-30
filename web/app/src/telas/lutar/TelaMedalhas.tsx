@@ -1,7 +1,7 @@
 /* Lutar · Medalhas (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 3 e 4): as 6 medalhas do Tamer, quais ja sao dele, com que
    pet, onde se ganha cada uma (o lider e a regra da arena) e o que cada uma libera. Tudo sai do registro do Tamer (tamer.ts)
    e das tabelas do motor (motor/medalhas.ts e motor/arenas.ts). So leitura. */
-import { ARENA_POR_ID, CARTA_DA_REVANCHE, CMD, INSTALACOES, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, NOME_EST, NPC, itemDe, nomeForma, type Estagio } from "../../../motor/index.ts";
+import { ARENA_POR_ID, CARTA_DA_REVANCHE, CMD, ESTAGIOS_SALAO, FABRICA, INSTALACOES, SALAO, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, NOME_EST, NPC, itemDe, nomeForma, type Estagio } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
@@ -49,6 +49,14 @@ export function TelaMedalhas() {
                 <span><b>Recorde · {x.nome}</b><span>{r ? `${r.valor} vitória${r.valor === 1 ? "" : "s"} seguida${r.valor === 1 ? "" : "s"}, com ${r.forma}, no dia ${diaDe(r.tick)}.`
                   : t.titulo ? "Nenhuma vitória ainda (Lutar · Fronteira)." : "Abre depois do título da Liga dos Líderes."}</span></span>
               </li>); })}
+            {/* a Fabrica e o Salao (parte 4c): o recorde sai das tentativas do registro do Tamer */}
+            {([[FABRICA.nome, t.recordeFabrica, (v: number) => `${v} série${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"} com os alugados`],
+              [SALAO.nome, t.recordeSalao, (v: number) => `${v} de ${ESTAGIOS_SALAO.length} níveis seguidos`]] as const).map(([nome, r, txt]) => (
+              <li key={nome} class={r ? "ganha" : ""}>
+                <span class="dl-num" aria-hidden="true">{r?.valor ?? 0}</span>
+                <span><b>Recorde · {nome}</b><span>{r ? `${txt(r.valor)}, na tentativa ${r.n}.`
+                  : t.titulo ? "Nenhum ainda (Lutar · Fronteira)." : "Abre depois do título da Liga dos Líderes."}</span></span>
+              </li>))}
           </ul>
           {erroTamer && <p class="med-erro" role="alert">O registro do Tamer não abriu, e o app não vai gravar por cima dele: {erroTamer}</p>}
           {!v6 ? <p class="dl-apoio">{nomeForma(m.forma)} é de uma versão antiga: não ganha medalhas e não precisa delas para evoluir.</p>
