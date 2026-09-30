@@ -817,6 +817,12 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
 - Pendente: avaliação cega do Matheus (`artifacts_fala_livre/rodada2/avaliacao_cega.csv`).
 - Voz própria no jogo (parte 4, 2026-09-30): pets **v7** (`VERSAO_PET = 7`: v6 + voz própria) com janela de fala, mentira (`CMEN`) e evento `fl` (o `f` é da Fronteira); `motor/historia.ts` e `motor/mentira.ts` conferidos contra o Python (`experiments/exportar_gabaritos_voz.py` → `test/gabaritos/voz_python.json`, `tests/test_gabaritos_voz.py`); gatilhos e ritmo em `src/voz.ts`; servidor com `voz: true` (livre-v6, autocorreção, verif-v5, corpus, almanaque). Avaliação: `artifacts_voz/rodada1..4` (`experiments/avaliar_voz.py --rodada N`).
 - Voz própria (DESIGN_VOZ_PROPRIA, parte 2): `livre-v3` e `verif-v4` ao lado das versões do jogo; fatos H/O/P/L, mentira F (`mentira.py`), almanaque W (`almanaque.json`), corpus de espécies (`corpus.py`, `corpus_especies.json` = EXEMPLO com 2 espécies) e filtro contra repetir citação.
+- **Filtro do alfabeto no estilo (2026-09-30):** o corpus de 60 espécies descreve o registro japonês (pronomes como おいら, finais
+  como 〜だぜ) em 46 itens de "jeito de falar"; com eles no pedido o gemma2:9b respondia em japonês e `saida.ler` rejeitava a fala
+  inteira ("…"). `corpus.carregar` (padrão `so_latino=True`) deixa fora do bloco de estilo todo traço, fala, interação e citação
+  com letra fora do alfabeto latino (`descartados["NAO LATINO"]`); o arquivo e o sha256 não mudam, o corpus de exemplo das rodadas
+  1–4 não tem item assim. Medida em `artifacts_voz/estilo_latino/` (`python experiments/medir_estilo_latino.py`: 30 mensagens ×
+  3 espécies, com e sem o filtro). Teste `tests/test_corpus_latino.py`.
 
 ## Versão web (`web/digilab.html`)
 

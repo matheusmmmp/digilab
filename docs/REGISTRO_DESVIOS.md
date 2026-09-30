@@ -1082,3 +1082,18 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
 - **Reencontro:** além das 3 h de jogo, 20 min de relógio sem agir na página (no tempo de teste 3 h passam em 18 s).
 - **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
   e o bebê ficavam sem o estilo do corpus).
+
+## 2026-09-30 — Voz própria: o bloco de estilo do corpus levava o modelo a responder em japonês
+
+Achado durante a avaliação do comando pelo chat (`artifacts_fala_livre/comando/rodada2_estilo/`, branch `comando-chat`): com o
+bloco de ESTILO DA ESPÉCIE no pedido, o gemma2:9b respondeu com trechos em japonês na maioria das conversas, e `saida.ler`
+rejeita letra fora do alfabeto latino, então a fala vira a genérica "…" (e o comando, null). Causa: o corpus de 60 espécies
+(anime liberado no mesmo dia) descreve o registro japonês das falas (pronomes おいら/俺, finais 〜だぜ) em 46 itens de
+"jeito de falar", 2 traços e 1 interação; 28 espécies têm pelo menos um. O corpus de exemplo (2 espécies) das rodadas 1–4 da
+voz não tem nenhum: essas rodadas reproduzem.
+- **Decisão desta implementação:** filtrar no carregador (`corpus.carregar(so_latino=True)`), não no arquivo: o corpus e o
+  sha256 registrados em cada fala continuam os mesmos, e o item descartado fica contado em `descartados["NAO LATINO"]`.
+  Traduzir ou reescrever esses itens em português é trabalho de auditoria do corpus, fora daqui.
+- `so_latino=False` existe só para medir o antes e o depois (`experiments/medir_estilo_latino.py` →
+  `artifacts_voz/estilo_latino/`). O servidor e a avaliação usam o padrão.
+- Verificador, prompts e a regra de `saida.ler` não mudam.

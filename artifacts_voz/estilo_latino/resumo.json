@@ -1,0 +1,35 @@
+{
+  "corpus_sha256": "b1b7ad8d1eba0c3fde97f2d3c4752bcd1697e99f9a308e105f9121726256d08c",
+  "descartados_nao_latino_no_corpus": 49,
+  "especies": 56,
+  "especies_com_descarte": 28,
+  "modelo": "gemma2:9b",
+  "prompt": "livre-v6",
+  "resultado": {
+    "com_filtro": {
+      "n": 30,
+      "outros_erros": 3,
+      "por_forma": {
+        "Angemon": 0,
+        "Gabumon": 0,
+        "Garurumon": 1
+      },
+      "rejeitadas_nao_latino": 1,
+      "taxa_rejeitadas": 0.03333333333333333
+    },
+    "sem_filtro": {
+      "n": 30,
+      "outros_erros": 0,
+      "por_forma": {
+        "Angemon": 7,
+        "Gabumon": 10,
+        "Garurumon": 9
+      },
+      "rejeitadas_nao_latino": 26,
+      "taxa_rejeitadas": 0.8666666666666667
+    }
+  },
+  "semente": 20261006,
+  "tempo_total_s": 496.9022002999991,
+  "versao_app": "fala-livre"
+}

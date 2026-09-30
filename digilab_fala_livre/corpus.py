@@ -11,6 +11,12 @@ Citacoes sao so referencia de tom (ate 3 por especie, 1-2 frases); o filtro `rep
 copia 6 ou mais palavras seguidas de uma citacao. Interacoes entram quando o outro Digimon esta em cena (rival de
 luta, NPC da campanha), como rixa da especie, nunca como algo que aconteceu com o pet.
 honestidade_especie: HONESTIDADE_ENGANADOR se algum traco que entrou for de enganador (`"enganador": true`), senao 1.
+
+Filtro do alfabeto (2026-09-30): traco, jeito de falar e interacao cujo TEXTO tem letra fora do alfabeto latino (o corpus
+descreve o registro japones das especies: pronomes como おいら, finais como 〜だぜ) ficam FORA do bloco de estilo e contam
+em `descartados["NAO LATINO"]`. Com esses itens no pedido o gemma2:9b respondia com trechos em japones, e `saida.ler`
+rejeita a fala inteira (vira a generica). O arquivo do corpus nao muda (o sha256 continua o mesmo); as citacoes `pt` sao
+latinas por construcao. `carregar(..., so_latino=False)` desliga o filtro (so para medir o antes e o depois).
 """
 
 from __future__ import annotations
@@ -54,6 +60,11 @@ def _sem_acento(t: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFKD", t) if not unicodedata.combining(c))
 
 
+def latino(t: str) -> bool:
+    """True se toda letra do texto e do alfabeto latino (a mesma regra de saida.ler)."""
+    return all(unicodedata.name(c, "").startswith("LATIN") for c in t if c.isalpha())
+
+
 def _marca(item: dict, rotulo: str) -> str:
     m = item.get("marca")
     m = _sem_acento(m).strip("[]").upper() if isinstance(m, str) else m
@@ -80,7 +91,7 @@ def _frases(t: str) -> int:
     return len([p for p in re.split(r"[.!?。！？]+", t) if p.strip()])
 
 
-def _especie(e: dict, meta: dict) -> Especie | None:
+def _especie(e: dict, meta: dict, so_latino: bool = True) -> Especie | None:
     vereditos = meta["vereditos"]
     if set(e) != {"especie", "jogos", "tracos", "fala", "interacoes", "citacoes", "honestidade_especie"}:
         raise CorpusInvalido(f"especie com chaves {sorted(e)}")
@@ -91,19 +102,21 @@ def _especie(e: dict, meta: dict) -> Especie | None:
         return None
     fora: dict[str, int] = {}
 
-    def filtra(itens, rotulo):
+    def filtra(itens, rotulo, campo="texto"):
         out = []
         for it in itens:
-            if _entra(it, f"{e['especie']}.{rotulo}", meta, vereditos):
-                out.append(it)
-            else:
+            if not _entra(it, f"{e['especie']}.{rotulo}", meta, vereditos):
                 m = _marca(it, rotulo)
                 fora[m] = fora.get(m, 0) + 1
+            elif so_latino and not latino(it[campo]):
+                fora["NAO LATINO"] = fora.get("NAO LATINO", 0) + 1
+            else:
+                out.append(it)
         return out
     tracos = filtra(e["tracos"], "tracos")
     fala = filtra(e["fala"], "fala")
     inter = filtra(e["interacoes"], "interacoes")
-    cits = filtra(e["citacoes"], "citacoes")
+    cits = filtra(e["citacoes"], "citacoes", "pt")
     if len(cits) > MAX_CITACOES:
         raise CorpusInvalido(f"{e['especie']}: {len(cits)} citacoes (maximo {MAX_CITACOES})")
     for c in cits:
@@ -116,8 +129,8 @@ def _especie(e: dict, meta: dict) -> Especie | None:
                    HONESTIDADE_ENGANADOR if enganador else 1.0, fora)
 
 
-def carregar(caminho: Path = ARQUIVO) -> tuple[dict[str, Especie], dict, str]:
-    """(especie -> Especie, meta, sha256 do arquivo)."""
+def carregar(caminho: Path = ARQUIVO, so_latino: bool = True) -> tuple[dict[str, Especie], dict, str]:
+    """(especie -> Especie, meta, sha256 do arquivo). so_latino=False desliga o filtro do alfabeto (so para medir)."""
     bruto = caminho.read_bytes()
     d = json.loads(bruto.decode("utf-8"))
     if set(d) != {"meta", "especies"}:
@@ -127,7 +140,7 @@ def carregar(caminho: Path = ARQUIVO) -> tuple[dict[str, Especie], dict, str]:
         raise CorpusInvalido("meta sem vereditos ou sem a marca de exemplo")
     out = {}
     for e in d["especies"]:
-        esp = _especie(e, meta)
+        esp = _especie(e, meta, so_latino)
         if esp is not None:
             if esp.especie in out:
                 raise CorpusInvalido(f"especie repetida: {esp.especie}")
