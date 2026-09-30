@@ -1,6 +1,13 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **para aprovação** (pedido do Matheus, 2026-09-29). Nada foi implementado. Todo número é PROPOSTO, sem fonte.
+Status: **aprovado** (Matheus, 2026-09-29), implementação **depois do diagnóstico dos arquétipos**. Nada foi implementado. Todo número é PROPOSTO, sem fonte.
+
+**Decisões do Matheus (2026-09-29):**
+1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
+2. **6 arenas.**
+3. O final é a **Fronteira de Batalha com os melhores Digimons**.
+4. Começar **depois do diagnóstico** dos arquétipos.
+5. Pets v6 para a trava: segue a recomendação da seção 5 (não houve objeção).
 
 **O que ele junta.** Transforma em desenho concreto o passo M2 e as fases seguintes do `PESQUISA_VIDA_LINHAGEM_PROGRESSAO.md` (seções 13, 14, 16, 17 e 24).
 
@@ -80,7 +87,7 @@ Três tipos, cada um com teto próprio, para o equipamento **complementar** a cr
 
 Liberada com as 6 medalhas. O objetivo: **vencer todos os líderes na versão mais forte e se tornar o campeão**.
 
-- **A Liga dos Líderes:** os 6 líderes em sequência, na versão de revanche (estágio Mega e fator maior), sem cura entre as lutas. Vencer todos = **campeão**, com uma medalha de ouro e a mensagem de conclusão (a jornada de hoje termina no Piedmon; passaria a terminar aqui).
+- **A Liga dos Líderes, com os melhores Digimons** (decisão do Matheus): os 6 líderes em sequência, na versão de revanche, todos no estágio Mega e com os times mais fortes do jogo, sem cura entre as lutas. Vencer todos = **campeão**, com uma medalha de ouro e a mensagem de conclusão (a jornada de hoje termina no Piedmon; passaria a terminar aqui).
 - **Depois do título**, instalações com regras próprias (seção 24 da pesquisa), para rejogar:
   - **Torre:** sequência de lutas, com recorde;
   - **Fábrica:** Digimon alugados, que testa o conhecimento do Tamer;
