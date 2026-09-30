@@ -107,9 +107,9 @@ export const GAMBITS_SOMBRIA: Record<string, ListaGambits> = {
 const T10 = Cd("turno_execucao", 10);
 /* Torre de pedra (paciencia), escala dos pets v6: a lista do espelho com o contra-golpe (contra quem prepara o pesado, insiste no
    golpe rapido ou na investida), mas contra quem atira com frequencia ele vai buscar (a resposta da muralha canonica) no lugar
-   do contra-golpe, que nao devolve disparo sem a passiva do espelho: com a lista de antes o cacador sem treino vencia o lider
-   atirando de longe com qualquer fator (test/explorar_torre.mjs, artifacts_campanha/arenas/torre_variantes.json, so nas
-   sementes de calibracao) */
+   do contra-golpe, que nao devolve disparo sem a passiva do espelho: com a lista de antes nenhum fator passava as metas (o
+   cacador sem treino vencia o lider atirando de longe; test/explorar_torre.mjs, artifacts_campanha/arenas/torre_variantes.json,
+   so nas sementes de calibracao) */
 const CG_ = "contra_golpe";
 export const GAMBITS_ARENA: Record<string, ListaGambits> = {
   floresta: { regras: [Rg([T10, D2], "avancar"), Rg([T10, D1], "avancar"), Rg([T10, GA_(20)], "golpe_rapido"),

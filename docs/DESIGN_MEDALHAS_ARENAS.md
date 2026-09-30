@@ -180,25 +180,71 @@ chaves.
 
 **Calibração dos líderes** (`web/app/test/calibrar_arenas.mjs`, método do `calibrar_mega.mjs`: motor web, escala ligada, regras dos
 pets v6, a regra de cada arena; pets de referência = as formas do estágio da arena nas 4 espécies, com treino uniforme; o pet é o lado A,
-como no jogo). Metas fixadas antes: sem treino ≤ 0,30, com o treino típico ≥ 0,80 (Rookie 8, Champion 22, Ultimate 36, Mega 40) e
-nenhuma forma abaixo de 0,5 com o treino típico. Fator escolhido nas sementes de calibração (3101…3505) pela maior folga; validação
-nas sementes 4101…4505 (`artifacts_campanha/arenas/calibracao.json` e `validacao.json`). Campina e Espiral não mudaram de regra: só a
-medida do fator de sempre.
+como no jogo). Fator escolhido nas sementes de calibração (3101…3505) pela maior folga; validação uma vez nas sementes 4101…4505
+(`artifacts_campanha/arenas/calibracao.json` e `validacao.json`).
+
+**Recalibração na escala dos pets v6 (2026-09-30, decisão do Matheus: "o treino tem que decidir" e "o estágio tem que pesar").** As
+metas dos líderes ficaram mais duras: o pet do estágio da arena **sem treino vence ≤ 0,05** (era ≤ 0,30), **com o treino típico ≥ 0,80**
+(Rookie 8, Champion 22, Ultimate 36, Mega 40) e nenhuma forma abaixo de 0,5. Com o peso do treino de antes (β 0,03) só o Lago passava as
+três, sem folga (o treino pesava pouco: +8 pontos no Rookie davam só ×1,24), e a Torre não passava com fator nenhum. Por isso os pets v6 ganharam uma escala própria, `CESC_V6`
+(`web/app/motor/constantes.ts`; só nas lutas de escala dos pets v6, campanha e arenas): vida Rookie 200, Champion 700, Ultimate 2500,
+Mega 23000 e peso do ponto de treino **β = 0,045** (antes 0,03). Escolha em `web/app/test/calibrar_escala_v6.mjs`
+(`artifacts_campanha/escala_v6/`): o β é o menor da grade em que todos os líderes (menos a Torre) têm um fator com folga ≥ 0,01; as vidas
+saem das metas de estágio abaixo.
+
+Metas de estágio (PROPOSTAS a partir da decisão; os bots canônicos de cada forma, as 4 espécies de cada lado, lados trocados na metade):
+o de baixo **com o treino típico** contra o de cima **sem treino**.
+
+| par | meta | razão de vida | calibração | validação |
+|---|---|---|---|---|
+| Rookie × Champion | ≤ 0,10 (pontos) | ×3,5 | 0,0888 | 0,0905 |
+| Champion × Ultimate | ≤ 0,10 (pontos) | ×3,57 | 0,0891 | 0,0886 |
+| Ultimate × Mega | ≤ 0,10 (pontos) | ×9,2 | 0,0906 | 0,0909 |
+| Rookie × Ultimate | 0,00 (vitórias) | ×12,5 | 0,0391 (piso 0,039) | 0,0372 — **não fecha** |
+| Champion × Mega | 0,00 (vitórias) | ×32,9 | 0,0497 (piso 0,0497) | 0,0509 — **não fecha** |
+
+- **Dois estágios de distância não chegam a 0,00:** as vitórias que sobram são por estilo. Em alguns pares o de cima nunca acerta o de
+  baixo (o caçador contra o titã e a muralha, por exemplo) e o limite de turnos decide pela fração de vida; a escala não muda isso (o
+  "piso" é a taxa com razão de E 0,01, e a da escala já é ela). Fechar pede uma regra de combate ou listas das formas: fora desta tarefa.
+- **Distância das razões do Digimon World** (Rookie → Champion ×2, Champion → Ultimate ×2,5; Mega ×2, o de hoje): a escala v6 se afasta
+  sobretudo pelo **peso do treino**. Cada razão de vida = (1 + β × treino típico de baixo) ÷ (razão de E que a meta pede): 1,36 × 2,57;
+  1,99 × 1,80; 2,62 × 3,51. A parte da razão de E fica perto do DW1 nos dois primeiros degraus; no Mega ela é 3,51 (a curva do
+  Ultimate treinado contra o Mega tem uma cauda longa de vitórias por estilo).
+
+Líderes na escala v6 (fatores da calibração; números da validação):
 
 | arena | líder | fator | sem treino | com o treino típico | pior forma |
 |---|---|---|---|---|---|
-| Campina | Gazimon | 1,1 (o de sempre) | 0,216 | 0,979 | 0,970 (sereno) |
-| Torre de pedra | Guardromon | 1,4 (era 1,5) | 0,277 | 0,876 | 0,565 (colosso) |
-| Floresta | Youkomon | 1,2 | 0,205 | 0,892 | 0,665 (colosso) |
-| Cidadela (série de 3) | Myotismon | 0,7 (era 1,2, luta só) | 0,140 | 0,920 | 0,615 (sentinela) |
-| Lago | MarinBullmon | 1,2 | 0,114 | 0,922 | 0,670 (sentinela) |
-| Montanha Espiral | Piedmon | 1,2 (o de sempre) | 0,175 | 0,929 | 0,710 (sentinela) |
+| Campina | Gazimon | 1,3 (era 1,1) | 0,0075 | 0,8575 | 0,800 (sereno) |
+| Torre de pedra | Guardromon | 1,6 (era 1,4) | 0,0125 | 0,9025 | 0,6925 (colosso) |
+| Floresta | Youkomon | 1,5 (era 1,2) | 0,0213 | 0,8675 | 0,605 (colosso) |
+| Cidadela (série de 3) | Myotismon | 0,9 (era 0,7) | 0,0006 | 0,9159 | 0,5925 (sentinela) |
+| Lago | MarinBullmon | 1,5 (era 1,2) | 0,0072 | 0,9228 | 0,675 (sentinela) |
+| Montanha Espiral | Piedmon | 1,6 (era 1,2) | 0,0009 | 0,9175 | 0,665 (emboscador) |
 
-- Os seis passam nas três metas na validação. Os mais apertados: a Torre (o colosso a 0,565) e a Floresta, cuja primeira lista (com o
-  pesado na fase 2) não fechava as metas com nenhum fator; a lista final saiu de 30 variantes medidas **só nas sementes de calibração**
-  (`test/explorar_floresta.mjs`, `artifacts_campanha/arenas/floresta_variantes.json`).
+- Os seis passam nas três metas na validação.
+- **Guardromon (Torre, paciência):** com a lista de antes (a do espelho com o contra-golpe) nenhum fator de 0,5 a 4,0 passava: o caçador
+  sem treino vencia atirando de longe, porque o líder respondia ao disparo frequente com o contra-golpe, que não devolve disparo. A lista
+  da arena (`bots.GAMBITS_ARENA.torre`) troca só essa regra por "oponente atira com frequência → avançar" (a resposta da muralha); o
+  contra-golpe contra quem prepara o pesado, insiste no golpe rápido ou na investida fica. Escolhida entre 4 variantes só nas sementes
+  de calibração (`web/app/test/explorar_torre.mjs`, `artifacts_campanha/arenas/torre_variantes.json`). A frase da arena diz isso.
 - No Lago a regra não mexe nos pets de referência (não têm dono): a calibração mede o líder, não o efeito de tirar as travas.
-- O fator da arena (Guardromon, Myotismon) vale só na luta de arena dos pets v6; os pets v1–v5 lutam com os NPCs de sempre.
+- O fator da arena vale só na luta de arena dos pets v6; os pets v1–v5 lutam com os NPCs de sempre.
+
+**Desafiantes da campanha v6** (os NPCs que não são líderes; `web/app/test/calibrar_desafiantes_v6.mjs`, metas de sempre: sem treino ≤
+0,30, com o treino típico ≥ 0,80, nenhuma forma < 0,5; fatores em `CESC_V6.fatorNpc`, só nos pets v6), validação:
+
+| desafiante | lugar | fator | sem treino | com o treino típico | pior forma |
+|---|---|---|---|---|---|
+| Tortomon | Torre de pedra | 1,6 | 0,3912 | 0,8644 | 0,485 (colosso) — **não fecha** |
+| Devidramon | Torre de pedra | 1,1 | 0,1862 | 0,9363 | 0,745 (caçador) |
+| Puppetmon | Montanha Espiral | 2,5 | 0,1919 | 0,9334 | 0,8025 (vigia) |
+| Machinedramon | Montanha Espiral | 2,7 | 0,225 | 0,8641 | 0,5675 (duelista) |
+
+O Tortomon não fecha com nenhum fator (a exceção da Sentinela de sempre); fica o de maior folga. Como vencer qualquer rival de um lugar
+abre o próximo, um Champion sem treino ainda pode abrir a Floresta pelo Tortomon; as medalhas (e a evolução) continuam pedindo os líderes.
+
+**Saves:** descarte único versão 3 (arenas) e versão 4 (escala v6): os pets v6 de antes saem, com o mesmo aviso.
 
 **Ficou de fora (partes 3 e 4 e o resto da seção 4):** itens, a Fronteira, e o que mais as medalhas liberariam (regras editáveis, espaços
-de item). Os desafiantes (Tortomon, Devidramon, Puppetmon, Machinedramon) não foram recalibrados para a campanha v6.
+de item).

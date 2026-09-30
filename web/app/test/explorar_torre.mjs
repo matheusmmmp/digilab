@@ -1,8 +1,8 @@
 // Exploracao da lista do Guardromon na luta de arena da Torre de pedra (escala dos pets v6), SO nas sementes de calibracao (as
 // de validacao ficam para test/calibrar_arenas.mjs --validar). Com a lista de antes (a do espelho com o contra-golpe) nenhum
-// fator de 0,5 a 4,0 deixa o Champion sem treino abaixo de 0,05: o cacador vence sem treino (0,985 com o fator 1,8 e ainda
-// 0,415 com 4,0), porque o lider responde ao disparo frequente com o contra-golpe, que nao devolve disparo (so a passiva do
-// espelho devolveria, e o NPC nao tem passiva): ele fica parado defendendo e o cacador atira de longe.
+// fator de 0,5 a 4,0 passa as metas (variante t0_antes na saida): no fator de maior folga (1,8) o cacador sem treino vence
+// 0,985, porque o lider responde ao disparo frequente com o contra-golpe, que nao devolve disparo (so a passiva do espelho
+// devolveria, e o NPC nao tem passiva): ele fica parado defendendo e o cacador atira de longe.
 // A ideia da arena fica (paciencia: o contra-golpe contra quem prepara o pesado, insiste no golpe rapido ou na investida); as
 // variantes mudam so a resposta a quem atira de longe (no maximo 8 regras, o teto da linguagem). Mesmo metodo de calibrar_arenas.mjs (o pet e o lado A; as 4 linhas do
 // Champion com a lista do adolescente e o carater canonico, 4 especies, sem treino e com 22; metas sem treino <= 0,05, com o
@@ -58,7 +58,7 @@ for (const [nome, regras] of Object.entries(VARIANTES)) {
   M.validarLista({ regras, final: "defender" });
   const med = FATORES.map(f => medir(regras, f)), pool = med.some(m => m.passa) ? med.filter(m => m.passa) : med;
   const melhor = pool.reduce((x, y) => y.folga > x.folga ? y : x);
-  saida[nome] = { regras: regras.map(r => JSON.stringify(r)), melhor, passa: melhor.passa };
+  saida[nome] = { regras: regras.map(r => JSON.stringify(r)), melhor, passa: melhor.passa, medidas: med.map(({ por_forma, ...x }) => x) };
   console.log(nome, JSON.stringify({ fator: melhor.fator, sem: melhor.sem, com: melhor.com, pior: melhor.pior, pior_forma: melhor.pior_forma, passa: melhor.passa, folga: melhor.folga }));
 }
 const escolhida = Object.entries(saida).filter(([, v]) => v.passa).reduce((x, y) => !x || y[1].melhor.folga > x[1].melhor.folga ? y : x, null);
