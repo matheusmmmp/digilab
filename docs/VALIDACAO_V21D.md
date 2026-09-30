@@ -169,6 +169,8 @@ os gabaritos de paridade com o HTML e as assinaturas não mudam, e os testes de 
   - `BOTS_V21` (as listas canônicas);
   - o repertório de candidatas dos gambits híbridos. As duas regras novas do vigia saem só da semente;
     `gambits_pet.regraDe` as encontra fora do repertório, como a regra do devastador.
+    Desde 2026-09-30 (medalhas, parte 2) elas também voltam como candidatas de troca para o vigia v6
+    (`gambits_pet.candidatasDoVigia`), para uma troca não as tirar para sempre; o repertório não muda.
 - **Paridade Python × web:** `experiments/exportar_gabarito_v21d.py` → `web/app/test/gabaritos/combate_v21d_python.json`
   (272 partidas, V21C e variante, mesmas sementes; 56 das 136 partidas mudam com a V21D). `test/paridade_v21d.test.ts`
   refaz cada partida no TS e exige perfil, turnos (sha256) e fim iguais. As decisões por regra, a leitura do vigia e a

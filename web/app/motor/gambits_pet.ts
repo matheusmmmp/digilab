@@ -5,7 +5,10 @@
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
 import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
-import { ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival, gambitsAdulto } from "./bots.ts";
+import {
+  ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE,
+  estiloBot, formaRival, gambitsAdulto,
+} from "./bots.ts";
 import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
@@ -34,8 +37,8 @@ export function sementeDe(f: Forma, R: RegrasLuta = null): ListaGambits {
 }
 /* regra pela chave: o repertorio (de onde o pet tira candidatas) ou, fora dele, a semente de uma sombria (a
    do devastador tem "perto e guts >= 60 -> preparar pesado", que nenhum bot usa) ou do vigia V21D (as duas regras novas
-   do reequilibrio, so na semente dos pets v6). O repertorio nao muda: as candidatas e o replay dos pets que ja existem
-   ficam iguais. */
+   do reequilibrio, so na semente dos pets v6). O repertorio nao muda: as candidatas e o replay dos pets v1-v5 ficam
+   iguais. Nos pets v6 o vigia recebe as duas regras novas tambem como candidatas de troca (candidatasDoVigia). */
 let REGRAS_SEMENTE: Map<string, Regra> | null = null;
 export function regraDe(k: string): Regra {
   const r = REPERTORIO.get(k);
@@ -63,6 +66,13 @@ export function rotuloCond(c: Cond): string {
   }
   return c.n;
 }
+/** as duas regras novas do vigia V21D (bots.BOTS_V21D.vigia): nos pets v6 (regras V21D) elas voltam como candidatas de
+    troca para a forma do vigia (Ultimate ou Mega). Sem isso, a primeira troca que as tirasse da lista as tiraria para sempre,
+    porque o repertorio de candidatas nao as tem. So o vigia: nas outras formas as candidatas (e o replay) nao mudam */
+export function candidatasDoVigia(f: Forma | null, R: RegrasLuta): string[] {
+  if (!f || f.adulta !== "vigia" || !R?.vigiaBateEmQuemRecua || !R.vigiaRecuaDoPreparoSobPele) return [];
+  return [REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE].map(chaveRegra).filter(k => !REPERTORIO.has(k));
+}
 export const rotuloRegra = (r: Regra): string => `se ${r.se.map(rotuloCond).join(" e ")} → ${NOME_V2[r.entao]}`;
 
 export interface MudancaGambit { luta: number; texto: string; dono?: boolean }
@@ -79,11 +89,13 @@ export class GambitsPet {
   mudancas: MudancaGambit[] = [];
   nLutas = 0;
   versao = 0;
+  /** regras das lutas do pet (a da ultima semeadura): CV21D nos pets v6, null nos v1-v5. Nao entra na assinatura: sai da versao */
+  regras: RegrasLuta = null;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
       lista cabe na capacidade do estagio */
   semear(forma: Forma, nome: string = nomeFormaLegado(forma), R: RegrasLuta = null): void {
     const base = sementeDe(forma, R), cap = CV21.maxRegras[baseDe(forma.est)];
-    this.forma = { ...forma }; this.linha = nome; this.final = base.final;
+    this.forma = { ...forma }; this.linha = nome; this.final = base.final; this.regras = R;
     const novas: string[] = [];
     base.regras.forEach((r, i) => {
       const k = chaveRegra(r), nb = GA.base * (1 - i / cap);
@@ -116,6 +128,12 @@ export class GambitsPet {
     for (let i = 0; i < n; i++) saida.push(i in fixas ? fixas[i] : livres.shift());
     this.ativas = saida.filter(Boolean) as string[];
   }
+  /** candidatas de troca: regras que o pet ainda nao usa, nao vetadas e permitidas na forma. O repertorio, na ordem dele; nos
+      pets v6 com a forma do vigia, mais as duas regras novas do vigia V21D (no fim, para a ordem das outras nao mudar) */
+  candidatas(): string[] {
+    return [...REPERTORIO.keys(), ...candidatasDoVigia(this.forma, this.regras)]
+      .filter(k => !this.ativas.includes(k) && !this.vetos.includes(k) && permitida(regraDe(k), this.forma!));
+  }
   estilo(): Estilo { return { nome: "aprendido", gambits: { regras: this.ativas.map(regraDe), final: this.final }, eps: CV.eps }; }
   aprender(res: ResultadoLuta, semente: number): void {
     this.nLutas++;
@@ -133,12 +151,12 @@ export class GambitsPet {
     /* o pet propoe: a pior regra livre abaixo do limiar da lugar a uma candidata */
     const livres = this.ativas.filter(k => !(k in this.travas));
     const pior = livres.sort((a, b) => this.notas[a] - this.notas[b])[0];
-    const candidatas = [...REPERTORIO.keys()].filter(k => !this.ativas.includes(k) && !this.vetos.includes(k) && permitida(REPERTORIO.get(k)!, this.forma!));
+    const candidatas = this.candidatas();
     if (pior && this.notas[pior] < GA.limiarTroca && candidatas.length) {
       const nova = candidatas[criarRng(hashSemente("propor", semente)).int(candidatas.length)];
       this.ativas[this.ativas.indexOf(pior)] = nova;
       if (!(nova in this.notas)) this.notas[nova] = 0;
-      this.mudancas.push({ luta: this.nLutas, texto: `trocou “${rotuloRegra(regraDe(pior))}” (nota ${this.notas[pior].toFixed(3)}) por “${rotuloRegra(REPERTORIO.get(nova)!)}”` });
+      this.mudancas.push({ luta: this.nLutas, texto: `trocou “${rotuloRegra(regraDe(pior))}” (nota ${this.notas[pior].toFixed(3)}) por “${rotuloRegra(regraDe(nova))}”` });
     }
     this.ordenar(); this.versao++;
   }
@@ -151,8 +169,7 @@ export class GambitsPet {
       delete this.travas[k];
       const i = this.ativas.indexOf(k);
       if (i >= 0) {
-        const cands = [...REPERTORIO.keys()].filter(c => !this.ativas.includes(c) && !this.vetos.includes(c) && permitida(REPERTORIO.get(c)!, this.forma!))
-          .sort((a, b) => (this.notas[b] ?? 0) - (this.notas[a] ?? 0));
+        const cands = this.candidatas().sort((a, b) => (this.notas[b] ?? 0) - (this.notas[a] ?? 0));
         if (cands.length) { this.ativas[i] = cands[0]; if (!(cands[0] in this.notas)) this.notas[cands[0]] = 0; }
         else this.ativas.splice(i, 1);
       }
