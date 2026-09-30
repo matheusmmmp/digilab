@@ -67,7 +67,8 @@ describe("nomes e sprites no canone", () => {
 });
 
 describe("Ultimate -> Mega (pets v5)", () => {
-  test("ovos novos sao v5", () => { expect(VERSAO_PET).toBe(5); expect(new Motor(1).versao).toBe(5); });
+  /* desde as medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md) os ovos novos sao v6: v5 + a trava; os v5 seguem aqui */
+  test("ovos novos sao v6 (v5 + medalhas)", () => { expect(VERSAO_PET).toBe(6); expect(new Motor(1).versao).toBe(6); });
 
   test("com tempo, lutas, vitorias e vinculo vira Mega: estagio novo, com a forma adulta do Ultimate", () => {
     const m = ultimate(3101), adulta = m.forma.adulta;
@@ -147,11 +148,11 @@ describe("Ultimate -> Mega (pets v5)", () => {
     expect(r.forma).toEqual(m.forma);
   });
 
-  test("herança: Mega cruza, e o filho e v5", () => {
+  test("herança: Mega cruza, e o filho e da versao atual", () => {
     const p = ultimate(3606), q = ultimate(3707);
     p.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 }; p.avancar(CMG.durRapida - 2); p.vinc.valor = .9; p.avancar(3);
     expect(p.estagioAtual).toBe("mega");
-    expect(Motor.cruzar(p, q, 12, 13, "t").versao).toBe(5);
+    expect(Motor.cruzar(p, q, 12, 13, "t").versao).toBe(VERSAO_PET);
   });
 });
 

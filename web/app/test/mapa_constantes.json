@@ -2251,6 +2251,42 @@
   {
    "web": "CMG.vinculo",
    "nota": "evolucao canonica (pets v5, Ultimate -> Mega): so no jogo, sem par no Python (docs/DESIGN_EVOLUCAO_CANONICA.md, PROPOSTO)"
+  },
+  {
+   "web": "CMD.adolescente",
+   "nota": "medalhas do Tamer (pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md; 1/3/5 decisao do Matheus)"
+  },
+  {
+   "web": "CMD.adulto",
+   "nota": "medalhas do Tamer (pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md; 1/3/5 decisao do Matheus)"
+  },
+  {
+   "web": "CMD.mega",
+   "nota": "medalhas do Tamer (pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md; 1/3/5 decisao do Matheus)"
+  },
+  {
+   "web": "MEDALHAS[0].lugar",
+   "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
+  },
+  {
+   "web": "MEDALHAS[1].lugar",
+   "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
+  },
+  {
+   "web": "MEDALHAS[2].lugar",
+   "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
+  },
+  {
+   "web": "MEDALHAS[3].lugar",
+   "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
+  },
+  {
+   "web": "MEDALHAS[4].lugar",
+   "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
+  },
+  {
+   "web": "MEDALHAS[5].lugar",
+   "nota": "lugar da campanha v5 onde o lider da medalha fica hoje (pets v6, so no jogo; fonte provisoria na parte 1)"
   }
  ]
 }
