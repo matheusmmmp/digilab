@@ -206,3 +206,189 @@ python experiments/run_bateria_v21.py --config experiments/configs/v21e/bateria_
 python experiments/run_bateria_combate.py --config experiments/configs/v21e/bateria_v2c_calibracao.json  # G1-G9 da base
 python experiments/exportar_gabarito_v21e.py                                                             # gabarito da web
 ```
+
+## Fase 2 — a progressão (M-B1…M-B3)
+
+Status: **calibração fechada** (2026-09-30). As três metas passam nas sementes de calibração, **o Tortomon incluído** (com uma
+grade mais fina do fator, margem estreita). A validação é a da fase 4.
+
+- **Scripts** (em `web/app`, `npx tsx`, de 10 s a 40 s cada): `test/calibrar_escala_v6.mjs --conferir`, `test/calibrar_arenas.mjs`
+  (e `--conferir`), `test/calibrar_desafiantes_v6.mjs` (e `--conferir`, `--npc npc_tier2_sentinela --grade 1.4,1.7,0.01`) e
+  `test/explorar_torre.mjs`.
+- **Artefatos** em `artifacts_equilibrio_geral/fase2/`; todo número abaixo vem deles:
+  - `escala_conferencia.json`;
+  - `arenas_calibracao.json`, `arenas_conferencia.json`;
+  - `desafiantes_calibracao.json`, `desafiantes_calibracao_npc_tier2_sentinela_grade.json`, `desafiantes_conferencia.json`;
+  - `torre_variantes.json`;
+  - `conferencia_v6.json`;
+  - `v6_arenas_conferencia.json` e `v6_desafiantes_conferencia.json`: os pets v6 com os fatores deles, nas mesmas sementes, para
+    comparar.
+- **Método:** o das partes 2 e 3 das medalhas, sem mudança:
+  - pets de referência: as formas do estágio nas 4 espécies, com treino uniforme, no lado A;
+  - a regra de cada arena e o limite de turnos do desafiado;
+  - 10 partidas por semente por confronto;
+  - o fator escolhido é o de maior folga entre os que passam.
+
+  Diferenças abaixo de ~0,01 não devem ser lidas: o erro padrão entre sementes não foi estimado.
+
+### 2.1 Os scripts medem os pets v9
+
+- **Por padrão, os pets v9:**
+  - regras `CV21E`: as listas V21E nas formas de referência do Ultimate e do Mega e nos NPCs de estilo `v21` (o Puppetmon);
+  - a escala da versão 9 (`escalaDaVersao(9)`, a `CESC_V9`);
+  - os fatores dos v9: `FATOR_LIDER_V9`, pela arena da luta de um pet v9, e `CESC_V9.fatorNpc`;
+  - gravam em `artifacts_equilibrio_geral/fase2/`.
+- **`--v6`** refaz a medição de antes (pets v6, `CV21D`, `CESC_V6`, os fatores de `ARENAS`), nas pastas de antes.
+- **Opções novas:**
+  - `--conferir`: sementes de calibração, os números do motor, sem escolher;
+  - `--arena` e `--npc`: uma parte só;
+  - `--grade`: outra grade de fatores;
+  - `--lista-torre`: outra lista do líder da Torre.
+- **Conferência da opção antiga** (`conferencia_v6.json`, com o sha256 de cada artefato):
+  - **iguais byte a byte:** `desafiantes_calibracao.json`, `torre_variantes.json` e as três validações gravadas
+    (`escala_v6/validacao.json`, `arenas/validacao.json` e `escala_v6/desafiantes_validacao.json`);
+  - **`arenas/calibracao.json` e `escala_v6/calibracao.json`**, com `--limite-fracao` (a regra com que foram gerados): iguais byte a
+    byte menos a linha `"limite": "fracao"`, que o cabeçalho ganhou depois;
+  - a da escala só sai assim com a Torre na lista de antes, porque o artefato é do commit `28ea9f1`, anterior à lista da Torre
+    (`61afaf6`). Com a lista de hoje só mudam as entradas da Torre em `lideres_por_beta`, e a Torre fica fora da escolha de β;
+  - as execuções com `--validar` só refizeram artefatos dos v6 já gravados. **Nada dos pets v9 foi medido nas sementes de
+    validação.**
+
+### 2.2 O que mudou para os pets v9 (só eles)
+
+| o quê | pets v6–v8 (não muda) | pets v9 | onde |
+|---|---|---|---|
+| escala: vida Rookie/Champion/Ultimate/Mega, β | 200/700/2500/23000, 0,045 (`CESC_V6`) | **os mesmos** (`CESC_V9`, objeto próprio) | `constantes.ts` |
+| Guardromon (Torre) | 1,6 | **1,5** | `arenas.FATOR_LIDER_V9` |
+| Piedmon (Montanha Espiral) | 1,6 | **1,4** | idem |
+| Gazimon, Youkomon, Myotismon (série), MarinBullmon | 1,3; 1,5; 0,9; 1,5 | os mesmos | idem |
+| Tortomon | 1,5 | **1,53** | `CESC_V9.fatorNpc` |
+| Devidramon | 1,1 | 1,1 | idem |
+| Puppetmon | 2,5 | **1,8** | idem |
+| Machinedramon | 2,2 | **2,3** | idem |
+
+- **Escala.** `escalaDaVersao(v)` dá a `CESC_V9` do v9 em diante, a `CESC_V6` nos v6–v8 e `null` nos v1–v5 (a `CESC`); `escalaDe` e
+  `lutadorBot` passam por ela.
+- **Arenas.** `arenaDaLuta(rival, v)` dá, do v9 em diante, a arena de `ARENAS_V9`: a mesma regra, lista, técnica e lutas, com o
+  fator de `FATOR_LIDER_V9`. Nos v6–v8 dá a de `ARENAS`, o mesmo objeto de antes.
+- **A lista do Guardromon não mudou.** Com ela a Torre fecha nos v9. `torre_variantes.json` refaz as 4 variantes da parte 2 nas
+  regras v9 com o limite do desafiado: a escolhida continua a de hoje (`t1_avanca_no_disparo`, folga 0,0337), e a de antes (`t0`)
+  não passa.
+- **A Fronteira não muda.** Liga, instalações, Salão e Fábrica usam a vida do Mega da `CESC_V6`, que é a mesma nos v9; nenhum rival
+  delas muda (fase 3).
+- **Registro e saves.** Nenhum evento novo; os v1–v8 não mudam de assinatura nem de gabarito. Os v9 já salvos mudam só nas lutas
+  contra o Guardromon, o Piedmon e os desafiantes com fator novo; o ramo ainda não foi publicado, então não há descarte.
+
+### 2.3 M-B1: estágio (`escala_conferencia.json`; a escala do motor, sem mudar número)
+
+O de baixo com o treino típico contra o de cima sem treino: bots canônicos, as 4 espécies de cada lado, regras V21E, limite do
+desafiado (o de cima).
+
+| par | meta | razão de E | pontos | vitórias | partidas | |
+|---|---|---|---|---|---|---|
+| Rookie (+8) × Champion | ≤ 0,10 (pontos) | 0,389 | 0,0014 | 0,0014 | 6.400 | passa |
+| Champion (+22) × Ultimate | ≤ 0,10 (pontos) | 0,557 | 0,0104 | 0,0087 | 25.600 | passa |
+| Ultimate (+36) × Mega | ≤ 0,10 (pontos) | 0,285 | 0,0041 | 0,0040 | 51.200 | passa |
+| Rookie × Ultimate | 0,00 (vitórias) | 0,109 | 0 | 0 | 12.800 | passa |
+| Champion × Mega | 0,00 (vitórias) | 0,061 | 0 | 0 | 25.600 | passa |
+
+- **A escala dos v9 não precisou mudar.** A `CESC_V9` existe como objeto próprio por causa dos fatores dos desafiantes.
+- A calibração completa da escala (a grade de β e de razões) não rodou para os v9: a meta fechou com a escala de hoje.
+- Com a folga que sobra, a escala poderia chegar mais perto das razões do DW1. Fica para o Matheus decidir; não é meta.
+
+### 2.4 M-B2: os 6 líderes (`arenas_calibracao.json`, conferido em `arenas_conferencia.json`)
+
+Metas: sem treino ≤ 0,05; com o treino típico ≥ 0,80 (Rookie 8, Champion 22, Ultimate 36, Mega 40); pior forma ≥ 0,50. Fatores
+de 0,5 a 4,0 em passos de 0,1.
+
+| arena | líder | fator v9 (v6) | sem treino | com o treino típico | pior forma | folga |
+|---|---|---|---|---|---|---|
+| Campina | Gazimon | 1,3 (1,3) | 0,0025 | 0,8288 | 0,805 (sereno) | 0,0288 |
+| Torre de pedra | Guardromon | **1,5** (1,6) | 0,0063 | 0,8337 | 0,675 (guardião) | 0,0337 |
+| Floresta | Youkomon | 1,5 (1,5) | 0,0163 | 0,8381 | 0,560 (colosso) | 0,0338 |
+| Cidadela (série de 3) | Myotismon | 0,9 (0,9) | 0,0016 | 0,9081 | 0,545 (sentinela) | 0,0450 |
+| Lago | MarinBullmon | 1,5 (1,5) | 0,0075 | 0,8928 | 0,515 (sentinela) | 0,0150 |
+| Montanha Espiral | Piedmon | **1,4** (1,6) | 0,0359 | 0,9144 | 0,565 (sentinela) | 0,0141 |
+
+- **Os seis passam as três metas.**
+- **Com os fatores dos v6, nas regras v9** (a primeira medida, `--conferir` antes da mudança), dois não passavam:
+  - **Torre, 1,6:** com o treino 0,7925;
+  - **Montanha Espiral, 1,6:** a sentinela Mega travada, 0,455.
+- **A causa não é a V21E.** Os pets v6 nas mesmas sementes (`v6_arenas_conferencia.json`) dão os mesmos 0,7925 e 0,455:
+  - as formas que decidem essas duas medidas (as linhas do Champion e a sentinela) têm a mesma lista na V21D e na V21E, e os
+    líderes lutam igual;
+  - o que pesa é a regra do limite do desafiado nas sementes de calibração: os fatores 1,6 foram calibrados antes dela e só
+    validados depois (na validação dos v6: 0,8125 e 0,555).
+  - Os fatores dos v6 não mudam (fora do escopo); nos v9 a recalibração, com a regra, os leva a 1,5 e 1,4.
+- **Margens estreitas:**
+  - a Montanha Espiral: sem treino 0,0359, folga 0,0141;
+  - o Lago: a sentinela em 0,515, folga 0,015.
+
+  A sentinela é a pior forma nos três líderes do Ultimate e do Mega.
+
+### 2.5 M-B3: os desafiantes (`desafiantes_calibracao.json`, conferido em `desafiantes_conferencia.json`)
+
+Metas: sem treino ≤ 0,30; com o treino típico ≥ 0,80; pior forma ≥ 0,50.
+
+| desafiante | lugar | fator v9 (v6) | sem treino | com o treino típico | pior forma | folga |
+|---|---|---|---|---|---|---|
+| Tortomon | Torre de pedra | **1,53** (1,5) | 0,2825 | 0,8762 | 0,525 (colosso) | 0,0175 |
+| Devidramon | Torre de pedra | 1,1 (1,1) | 0,1756 | 0,9200 | 0,680 (caçador) | 0,1200 |
+| Puppetmon | Montanha Espiral | **1,8** (2,5) | 0,1519 | 0,9400 | 0,770 (espelho) | 0,1400 |
+| Machinedramon | Montanha Espiral | **2,3** (2,2) | 0,1194 | 0,9819 | 0,930 (vigia) | 0,1806 |
+
+- **Os quatro passam.**
+- **O Tortomon, a exceção de sempre, fecha na calibração** com uma grade mais fina (`…_grade.json`):
+  - na grade de 0,1 nenhum fator passa, como antes: 1,5 dá sem treino 0,3106 e 1,6 dá a pior forma 0,445;
+  - em passos de 0,01 passam 1,51, 1,52, 1,53 e 1,54. Escolhido o de maior folga, 1,53 (folga 0,0175);
+  - a janela é estreita (0,03 de fator) e a folga pequena: a validação da fase 4 pode reprová-lo;
+  - o Champion não muda da V21D para a V21E, então nos v6 o 1,53 daria o mesmo nestas sementes. Os fatores dos v6 não mudaram.
+- **Puppetmon e Machinedramon**, recalibrados pelo método de sempre (o fator de maior folga):
+  - com os fatores dos v6 os dois já passavam nas regras v9: 2,5 dá sem 0,0416, com 0,8488 e pior 0,635; 2,2 dá 0,1359, 0,99 e 0,95;
+  - o de maior folga passou a 1,8 e 2,3.
+
+### 2.6 As metas (calibração)
+
+| meta | critério | resultado |
+|---|---|---|
+| **M-B1** estágio | vizinhos ≤ 0,10; dois estágios = 0,00 | **passa** sem mudar a escala: 0,0014, 0,0104 e 0,0041; 0 e 0 vitórias |
+| **M-B2** líderes | sem ≤ 0,05; com ≥ 0,80; pior ≥ 0,50 | **passa** nos 6 (Torre 1,6 → 1,5; Espiral 1,6 → 1,4); menor folga 0,0141 (Espiral) |
+| **M-B3** desafiantes | sem ≤ 0,30; com ≥ 0,80; pior ≥ 0,50 | **passa** nos 4, o Tortomon com 1,53 (folga 0,0175) |
+
+### 2.7 O que não fechou e o que fica
+
+- Nada ficou fora das metas na calibração.
+- **Riscos para a validação da fase 4:**
+  - o Tortomon: janela de 1,51 a 1,54;
+  - a Montanha Espiral: sem treino 0,0359, contra o teto de 0,05;
+  - o Lago: sentinela 0,515;
+  - a Cidadela: sentinela 0,545.
+- **Os pets v6–v8 ficam como estavam:**
+  - fatores e escala sem mudança;
+  - o Tortomon dos v6 continua a exceção registrada;
+  - a Torre e a Espiral dos v6 ficam abaixo das metas nas sementes de calibração (0,7925 e 0,455), mas passaram na validação deles.
+- **Fica para a fase 3:** `conferir_liga.mjs`, `conferir_instalacoes.mjs`, `conferir_fabrica_salao.mjs`, `medir_itens.mjs` e
+  `calibrar_mega.mjs` ainda medem os pets v6.
+
+### 2.8 Testes
+
+- `test/progressao_v9.test.ts` (5 testes):
+  - os números dos v6–v8, fixos no teste;
+  - a escala e os fatores por versão: `escalaDaVersao`, `escalaDe`, `perfilDe`, `lutadorBot` com `CV21D` e com `CV21E`,
+    `arenaDaLuta`, e o `Motor` v8 × v9 contra cada líder e cada desafiante;
+  - na arena dos v9 só o fator muda;
+  - os rivais da Liga não mudam.
+- `constantes.test.mjs`: `CESC_V9` e `FATOR_LIDER_V9` entram na tabela (`mapa_constantes.json`, `so_web`).
+- Suíte da web: `npm run tipos` limpo; `npm test` com 285 testes em 27 arquivos; `npm run e2e` com 65 testes. Python: nada mudou.
+
+### 2.9 Reprodução
+
+```bash
+cd web/app
+npx tsx test/calibrar_escala_v6.mjs --conferir                                                  # M-B1
+npx tsx test/calibrar_arenas.mjs && npx tsx test/calibrar_arenas.mjs --conferir                 # M-B2
+npx tsx test/calibrar_desafiantes_v6.mjs && npx tsx test/calibrar_desafiantes_v6.mjs --conferir # M-B3
+npx tsx test/calibrar_desafiantes_v6.mjs --npc npc_tier2_sentinela --grade 1.4,1.7,0.01        # o Tortomon
+npx tsx test/explorar_torre.mjs                                                                 # a lista da Torre nos v9
+npx tsx test/calibrar_arenas.mjs --v6 --conferir                                                # os v6, para comparar (grava em artifacts_campanha/arenas/)
+```

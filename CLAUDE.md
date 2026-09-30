@@ -550,6 +550,12 @@ Branch `equilibrio-geral` (o PR é no fim da fase 4). Só sementes de calibraç�
 - **Web: pets v9** (`VERSAO_PET = 9` = v8 + combate equilibrado; `CV21E`, `regrasDaVersao`, `BOTS_V21E`, `candidatasV21E`). Os
   v6–v8 seguem na V21D e os v1–v5 na V21C (assinaturas e gabaritos iguais; nenhum save descartado). A Fábrica (sem pet) segue
   na V21D. Paridade: `experiments/exportar_gabarito_v21e.py` → `test/paridade_v21e.test.ts` (136 partidas iguais).
+- **Fase 2, a progressão (M-B1–M-B3, calibração):** os scripts `calibrar_escala_v6.mjs`, `calibrar_arenas.mjs`,
+  `calibrar_desafiantes_v6.mjs` e `explorar_torre.mjs` medem os pets v9 por padrão (`--v6`: a medição de antes, que reproduz os
+  artefatos gravados) → `artifacts_equilibrio_geral/fase2/`. Escala dos v9 = `CESC_V9` (mesma vida e β da `CESC_V6`; as metas de
+  estágio passam), fatores dos líderes dos v9 em `arenas.FATOR_LIDER_V9` (Torre 1,5 e Espiral 1,4; os outros iguais) e dos
+  desafiantes em `CESC_V9.fatorNpc` (Tortomon 1,53, fecha na grade de 0,01; Puppetmon 1,8; Machinedramon 2,3). Os v6–v8 não mudam.
+  Detalhes em `docs/EQUILIBRIO_GERAL.md`, fase 2.
 
 ## M1 — confiança de combate e desgaste por rival repetido (2026-09-29, `docs/DESIGN_MVP_M1_CONFIANCA.md`)
 

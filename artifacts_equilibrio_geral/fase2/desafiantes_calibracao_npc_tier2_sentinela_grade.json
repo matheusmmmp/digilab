@@ -1,0 +1,416 @@
+{
+ "descricao": "Calibracao dos desafiantes da campanha (NPCs que nao sao lideres) na escala dos pets v9 (CESC_V9): motor web, regras V21E.",
+ "conjunto": "calibracao",
+ "limite": "desafiado",
+ "regras": "v21e",
+ "versao_pet": 9,
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "n_por_semente": 10,
+ "pet_lado": "A",
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "metas": {
+  "sem_treino_max": 0.3,
+  "com_treino_min": 0.8,
+  "pior_forma_min": 0.5
+ },
+ "treino_tipico": {
+  "crianca": 8,
+  "adolescente": 22,
+  "adulto": 36,
+  "mega": 40
+ },
+ "desafiantes": {
+  "npc_tier2_sentinela": {
+   "nome": "Tortomon",
+   "lugar": "Torre de pedra",
+   "estagio": "adolescente",
+   "escolha": {
+    "fator": 1.53,
+    "sem": 0.2825,
+    "com": 0.8762,
+    "pior": 0.525,
+    "pior_forma": "colosso",
+    "passa": true,
+    "folga": 0.0175,
+    "travados": [],
+    "por_forma": {
+     "brigao": {
+      "sem": 0.425,
+      "com": 0.99
+     },
+     "guardiao": {
+      "sem": 0.025,
+      "com": 0.99
+     },
+     "cacador": {
+      "sem": 0.67,
+      "com": 1
+     },
+     "colosso": {
+      "sem": 0.01,
+      "com": 0.525
+     }
+    }
+   },
+   "medidas": [
+    {
+     "fator": 1.4,
+     "sem": 0.3775,
+     "com": 0.9231,
+     "pior": 0.6925,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0775,
+     "travados": []
+    },
+    {
+     "fator": 1.41,
+     "sem": 0.3731,
+     "com": 0.9181,
+     "pior": 0.675,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0731,
+     "travados": []
+    },
+    {
+     "fator": 1.42,
+     "sem": 0.37,
+     "com": 0.9138,
+     "pior": 0.6575,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.07,
+     "travados": []
+    },
+    {
+     "fator": 1.43,
+     "sem": 0.3637,
+     "com": 0.9125,
+     "pior": 0.6525,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0637,
+     "travados": []
+    },
+    {
+     "fator": 1.44,
+     "sem": 0.3594,
+     "com": 0.9106,
+     "pior": 0.645,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0594,
+     "travados": []
+    },
+    {
+     "fator": 1.45,
+     "sem": 0.3475,
+     "com": 0.9056,
+     "pior": 0.625,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0475,
+     "travados": []
+    },
+    {
+     "fator": 1.46,
+     "sem": 0.3412,
+     "com": 0.9031,
+     "pior": 0.6175,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0413,
+     "travados": []
+    },
+    {
+     "fator": 1.47,
+     "sem": 0.335,
+     "com": 0.9,
+     "pior": 0.61,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.035,
+     "travados": []
+    },
+    {
+     "fator": 1.48,
+     "sem": 0.3256,
+     "com": 0.8956,
+     "pior": 0.5925,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0256,
+     "travados": []
+    },
+    {
+     "fator": 1.49,
+     "sem": 0.3212,
+     "com": 0.8944,
+     "pior": 0.5875,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0212,
+     "travados": []
+    },
+    {
+     "fator": 1.5,
+     "sem": 0.3106,
+     "com": 0.8894,
+     "pior": 0.575,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0106,
+     "travados": []
+    },
+    {
+     "fator": 1.51,
+     "sem": 0.295,
+     "com": 0.8862,
+     "pior": 0.5625,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.005,
+     "travados": []
+    },
+    {
+     "fator": 1.52,
+     "sem": 0.2863,
+     "com": 0.8812,
+     "pior": 0.5425,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0137,
+     "travados": []
+    },
+    {
+     "fator": 1.53,
+     "sem": 0.2825,
+     "com": 0.8762,
+     "pior": 0.525,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0175,
+     "travados": []
+    },
+    {
+     "fator": 1.54,
+     "sem": 0.2769,
+     "com": 0.87,
+     "pior": 0.5025,
+     "pior_forma": "colosso",
+     "passa": true,
+     "folga": 0.0025,
+     "travados": []
+    },
+    {
+     "fator": 1.55,
+     "sem": 0.2713,
+     "com": 0.8675,
+     "pior": 0.4925,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0075,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.56,
+     "sem": 0.2681,
+     "com": 0.8631,
+     "pior": 0.485,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.015,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.57,
+     "sem": 0.265,
+     "com": 0.8569,
+     "pior": 0.4625,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0375,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.58,
+     "sem": 0.2563,
+     "com": 0.8506,
+     "pior": 0.4475,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0525,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.59,
+     "sem": 0.2487,
+     "com": 0.8494,
+     "pior": 0.4475,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0525,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.6,
+     "sem": 0.2437,
+     "com": 0.8475,
+     "pior": 0.445,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.055,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.61,
+     "sem": 0.2412,
+     "com": 0.8456,
+     "pior": 0.445,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.055,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.62,
+     "sem": 0.235,
+     "com": 0.845,
+     "pior": 0.445,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.055,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.63,
+     "sem": 0.2288,
+     "com": 0.8425,
+     "pior": 0.435,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.065,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.64,
+     "sem": 0.225,
+     "com": 0.8406,
+     "pior": 0.43,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.07,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.65,
+     "sem": 0.2194,
+     "com": 0.835,
+     "pior": 0.4225,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0775,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.66,
+     "sem": 0.2175,
+     "com": 0.8331,
+     "pior": 0.4175,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.0825,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.67,
+     "sem": 0.2112,
+     "com": 0.8294,
+     "pior": 0.41,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.09,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.68,
+     "sem": 0.2094,
+     "com": 0.825,
+     "pior": 0.405,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.095,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.69,
+     "sem": 0.2044,
+     "com": 0.8213,
+     "pior": 0.3975,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.1025,
+     "travados": [
+      "colosso"
+     ]
+    },
+    {
+     "fator": 1.7,
+     "sem": 0.2012,
+     "com": 0.8163,
+     "pior": 0.39,
+     "pior_forma": "colosso",
+     "passa": false,
+     "folga": -0.11,
+     "travados": [
+      "colosso"
+     ]
+    }
+   ]
+  }
+ }
+}
