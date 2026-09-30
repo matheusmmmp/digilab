@@ -1,6 +1,7 @@
 {
  "descricao": "Calibracao dos desafiantes da campanha v6 (NPCs que nao sao lideres) na escala dos pets v6: motor web, regras V21D.",
  "conjunto": "validacao",
+ "limite": "desafiado",
  "sementes": [
   4101,
   4202,
@@ -36,32 +37,30 @@
    "nome": "Tortomon",
    "lugar": "Torre de pedra",
    "estagio": "adolescente",
-   "fator": 1.6,
-   "sem": 0.3912,
-   "com": 0.8644,
-   "pior": 0.485,
+   "fator": 1.5,
+   "sem": 0.3087,
+   "com": 0.8912,
+   "pior": 0.5775,
    "pior_forma": "colosso",
    "passa": false,
-   "folga": -0.0912,
-   "travados": [
-    "colosso"
-   ],
+   "folga": -0.0087,
+   "travados": [],
    "por_forma": {
     "brigao": {
-     "sem": 0.5225,
-     "com": 0.99
+     "sem": 0.435,
+     "com": 0.9925
     },
     "guardiao": {
      "sem": 0.0275,
-     "com": 0.9825
+     "com": 0.995
     },
     "cacador": {
-     "sem": 1,
+     "sem": 0.75,
      "com": 1
     },
     "colosso": {
-     "sem": 0.015,
-     "com": 0.485
+     "sem": 0.0225,
+     "com": 0.5775
     }
    }
   },
@@ -71,11 +70,11 @@
    "estagio": "adolescente",
    "fator": 1.1,
    "sem": 0.1862,
-   "com": 0.9363,
-   "pior": 0.745,
+   "com": 0.905,
+   "pior": 0.62,
    "pior_forma": "cacador",
    "passa": true,
-   "folga": 0.1137,
+   "folga": 0.105,
    "travados": [],
    "por_forma": {
     "brigao": {
@@ -88,7 +87,7 @@
     },
     "cacador": {
      "sem": 0.03,
-     "com": 0.745
+     "com": 0.62
     },
     "colosso": {
      "sem": 0.1525,
@@ -101,36 +100,36 @@
    "lugar": "Montanha Espiral",
    "estagio": "mega",
    "fator": 2.5,
-   "sem": 0.1919,
-   "com": 0.9334,
-   "pior": 0.8025,
-   "pior_forma": "vigia",
+   "sem": 0.0413,
+   "com": 0.8628,
+   "pior": 0.605,
+   "pior_forma": "muralha",
    "passa": true,
-   "folga": 0.1081,
+   "folga": 0.0628,
    "travados": [],
    "por_forma": {
     "duelista": {
-     "sem": 0.005,
-     "com": 0.895
+     "sem": 0,
+     "com": 0.89
     },
     "furioso": {
      "sem": 0,
      "com": 0.995
     },
     "espelho": {
-     "sem": 0.015,
-     "com": 0.8925
+     "sem": 0,
+     "com": 0.635
     },
     "muralha": {
-     "sem": 0.02,
-     "com": 0.9075
+     "sem": 0,
+     "com": 0.605
     },
     "sentinela": {
-     "sem": 0.67,
+     "sem": 0,
      "com": 1
     },
     "emboscador": {
-     "sem": 0.825,
+     "sem": 0.33,
      "com": 1
     },
     "vigia": {
@@ -147,46 +146,46 @@
    "nome": "Machinedramon",
    "lugar": "Montanha Espiral",
    "estagio": "mega",
-   "fator": 2.7,
-   "sem": 0.225,
-   "com": 0.8641,
-   "pior": 0.5675,
+   "fator": 2.2,
+   "sem": 0.1247,
+   "com": 0.9566,
+   "pior": 0.7775,
    "pior_forma": "duelista",
    "passa": true,
-   "folga": 0.0641,
+   "folga": 0.1566,
    "travados": [],
    "por_forma": {
     "duelista": {
-     "sem": 0.015,
-     "com": 0.5675
+     "sem": 0.005,
+     "com": 0.7775
     },
     "furioso": {
-     "sem": 0.005,
-     "com": 0.955
+     "sem": 0.045,
+     "com": 0.995
     },
     "espelho": {
      "sem": 0,
-     "com": 0.905
+     "com": 0.995
     },
     "muralha": {
      "sem": 0,
-     "com": 0.8925
+     "com": 0.99
     },
     "sentinela": {
-     "sem": 0.84,
+     "sem": 0.065,
      "com": 1
     },
     "emboscador": {
-     "sem": 0.94,
+     "sem": 0.875,
      "com": 1
     },
     "vigia": {
      "sem": 0,
-     "com": 0.635
+     "com": 0.905
     },
     "tita": {
-     "sem": 0,
-     "com": 0.9575
+     "sem": 0.0075,
+     "com": 0.99
     }
    }
   }

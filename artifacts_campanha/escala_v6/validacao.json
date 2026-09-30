@@ -1,6 +1,7 @@
 {
  "descricao": "Validacao da escala dos pets v6 (CESC_V6 do motor): metas de estagio.",
  "conjunto": "validacao",
+ "limite": "desafiado",
  "sementes": [
   4101,
   4202,
@@ -36,63 +37,37 @@
  "vizinhos": {
   "crianca x adolescente": {
    "razao_E": 0.3886,
-   "pontos": 0.0905,
-   "vitorias": 0.08,
+   "pontos": 0.0008,
+   "vitorias": 0.0008,
    "partidas": 6400,
    "vitorias_por_par": {
-    "sereno x brigao": 1,
-    "sereno x guardiao": 42,
-    "arisco x cacador": 469
+    "arisco x cacador": 5
    },
    "passa": true
   },
   "adolescente x adulto": {
    "razao_E": 0.5572,
-   "pontos": 0.0886,
-   "vitorias": 0.0798,
+   "pontos": 0.0108,
+   "vitorias": 0.0093,
    "partidas": 25600,
    "vitorias_por_par": {
     "brigao x duelista": 3,
-    "brigao x muralha": 28,
-    "brigao x sentinela": 158,
+    "brigao x sentinela": 157,
     "brigao x emboscador": 30,
     "brigao x vigia": 16,
-    "guardiao x duelista": 6,
-    "guardiao x espelho": 64,
-    "guardiao x muralha": 51,
-    "cacador x muralha": 799,
-    "cacador x vigia": 165,
-    "cacador x tita": 719,
-    "colosso x sentinela": 2,
-    "colosso x emboscador": 3
+    "guardiao x duelista": 2,
+    "cacador x muralha": 30
    },
    "passa": true
   },
   "adulto x mega": {
    "razao_E": 0.2848,
-   "pontos": 0.0909,
-   "vitorias": 0.0832,
+   "pontos": 0.0041,
+   "vitorias": 0.004,
    "partidas": 51200,
    "vitorias_por_par": {
-    "duelista x muralha": 34,
-    "furioso x sentinela": 430,
-    "furioso x emboscador": 321,
-    "espelho x espelho": 63,
-    "espelho x muralha": 57,
-    "muralha x duelista": 1,
-    "muralha x espelho": 53,
-    "muralha x muralha": 53,
-    "sentinela x muralha": 707,
-    "sentinela x vigia": 101,
-    "sentinela x tita": 601,
-    "emboscador x muralha": 724,
-    "emboscador x vigia": 80,
-    "emboscador x tita": 608,
-    "vigia x sentinela": 200,
-    "vigia x emboscador": 214,
-    "vigia x vigia": 12,
-    "tita x sentinela": 1,
-    "tita x emboscador": 2
+    "furioso x sentinela": 47,
+    "furioso x emboscador": 159
    },
    "passa": true
   }
@@ -100,34 +75,19 @@
  "dois_estagios": {
   "crianca x adulto": {
    "razao_E": 0.1088,
-   "pontos": 0.0471,
-   "vitorias": 0.0372,
+   "pontos": 0,
+   "vitorias": 0,
    "partidas": 12800,
-   "vitorias_por_par": {
-    "sereno x espelho": 50,
-    "sereno x muralha": 73,
-    "arisco x sentinela": 174,
-    "arisco x emboscador": 179
-   },
-   "passa": false
+   "vitorias_por_par": {},
+   "passa": true
   },
   "adolescente x mega": {
    "razao_E": 0.0606,
-   "pontos": 0.0581,
-   "vitorias": 0.0509,
+   "pontos": 0,
+   "vitorias": 0,
    "partidas": 25600,
-   "vitorias_por_par": {
-    "brigao x muralha": 25,
-    "guardiao x duelista": 1,
-    "guardiao x espelho": 63,
-    "guardiao x muralha": 48,
-    "cacador x muralha": 470,
-    "cacador x vigia": 99,
-    "cacador x tita": 591,
-    "colosso x sentinela": 2,
-    "colosso x emboscador": 3
-   },
-   "passa": false
+   "vitorias_por_par": {},
+   "passa": true
   }
  }
 }

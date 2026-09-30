@@ -1,6 +1,7 @@
 {
  "descricao": "Calibracao dos lideres das arenas (pets v6, medalhas parte 2): motor web, escala ligada, regras V21D, regra de cada arena.",
  "conjunto": "validacao",
+ "limite": "desafiado",
  "sementes": [
   4101,
   4202,
@@ -50,24 +51,24 @@
    "regra": "paciencia",
    "estagio": "adolescente",
    "fator": 1.6,
-   "sem": 0.0125,
-   "com": 0.9025,
-   "pior": 0.6925,
-   "pior_forma": "colosso",
+   "sem": 0.005,
+   "com": 0.8125,
+   "pior": 0.665,
+   "pior_forma": "guardiao",
    "passa": true,
-   "folga": 0.0375,
+   "folga": 0.0125,
    "travados": [],
    "por_forma": {
     "brigao": {
-     "sem": 0.015,
-     "com": 0.9925
+     "sem": 0.0025,
+     "com": 0.9275
     },
     "guardiao": {
-     "sem": 0.015,
-     "com": 0.96
+     "sem": 0.0025,
+     "com": 0.665
     },
     "cacador": {
-     "sem": 0.02,
+     "sem": 0.015,
      "com": 0.965
     },
     "colosso": {
@@ -113,11 +114,11 @@
    "estagio": "adulto",
    "fator": 0.9,
    "sem": 0.0006,
-   "com": 0.9159,
-   "pior": 0.5925,
+   "com": 0.9063,
+   "pior": 0.535,
    "pior_forma": "sentinela",
    "passa": true,
-   "folga": 0.0494,
+   "folga": 0.035,
    "travados": [],
    "por_forma": {
     "duelista": {
@@ -138,11 +139,11 @@
     },
     "sentinela": {
      "sem": 0,
-     "com": 0.5925
+     "com": 0.535
     },
     "emboscador": {
      "sem": 0,
-     "com": 0.735
+     "com": 0.715
     },
     "vigia": {
      "sem": 0,
@@ -160,8 +161,8 @@
    "estagio": "adulto",
    "fator": 1.5,
    "sem": 0.0072,
-   "com": 0.9228,
-   "pior": 0.675,
+   "com": 0.8959,
+   "pior": 0.56,
    "pior_forma": "sentinela",
    "passa": true,
    "folga": 0.0428,
@@ -185,11 +186,11 @@
     },
     "sentinela": {
      "sem": 0,
-     "com": 0.675
+     "com": 0.56
     },
     "emboscador": {
      "sem": 0,
-     "com": 0.73
+     "com": 0.63
     },
     "vigia": {
      "sem": 0.0075,
@@ -207,9 +208,9 @@
    "estagio": "mega",
    "fator": 1.6,
    "sem": 0.0009,
-   "com": 0.9175,
-   "pior": 0.665,
-   "pior_forma": "emboscador",
+   "com": 0.8931,
+   "pior": 0.555,
+   "pior_forma": "sentinela",
    "passa": true,
    "folga": 0.0491,
    "travados": [],
@@ -232,11 +233,11 @@
     },
     "sentinela": {
      "sem": 0,
-     "com": 0.675
+     "com": 0.555
     },
     "emboscador": {
      "sem": 0,
-     "com": 0.665
+     "com": 0.59
     },
     "vigia": {
      "sem": 0,
