@@ -224,6 +224,7 @@ RAIZES_GATILHO_VOZ = {
     "o dono voltou depois de um tempo sumido": ("volt", "cheg", "aparec", "sum"),
     "acabei de lutar": ("lut", "brig", "combat"),
     "faz um dia que evoluí": ("evolu",),
+    "vou lutar de novo contra quem me venceu": ("revanch", "lut", "enfrent"),
 }
 
 
