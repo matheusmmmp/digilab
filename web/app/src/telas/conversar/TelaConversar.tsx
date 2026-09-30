@@ -3,16 +3,18 @@
    retrato, voce a direita em azul; fala sem base riscada com a nota do verificador; na voz propria, o que ele inventou
    marcado com o lapis), atalhos de ensino e a barra de
    escrever. As falas ficam no log de apresentacao (<chave>.fala.jsonl), nunca no registro do pet; o que o jogador
-   escreve nao ensina o pet. */
+   escreve nao ensina o pet. Comando pelo chat (TAREFA_COMANDO_CHAT): quando o pet entende um pedido claro ("vai comer"),
+   a ultima resposta traz um chip ("Alimentar?"); o toque grava a acao pelo mesmo caminho do botao (src/acoes.ts) e o
+   historico marca "✓ alimentou". */
 import { useEffect, useRef, useState } from "preact/hooks";
 import { CDJ, OVO, chaveSprite, nomeEstagio, nomeForma, type AcaoDono } from "../../../motor/index.ts";
+import { FEITO_DONO, ROTULO_DONO, agir } from "../../acoes.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { rotuloLLM, useFalaLLM } from "../../fala.ts";
-import { enviarConversa, escolherModo, estadoDoPet, lerLog, useFalaLivre, type ModoFala, type RegistroFala } from "../../falaLivre.ts";
+import { chipDe, enviarConversa, escolherModo, estadoDoPet, executarChip, lerLog, useFalaLivre, type ModoFala, type RegistroFala } from "../../falaLivre.ts";
 import { rotuloRel } from "../../componentes/Barras.tsx";
-import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
-import { ajustarVelocidadeChamado } from "../../tempo.ts";
+import { useJogo } from "../../jogo.ts";
 
 /* como a fala aparece em cada nivel (guia, secao 9) */
 const COMO_FALA: Record<string, string> = { bebe: "só emotes", crianca: "ícones e sons", adolescente: "frases curtas", adulto: "frases" };
@@ -34,6 +36,7 @@ function BalaoPet({ r }: { r: RegistroFala }) {
   const semBase = !voz && !!v && !v.erro && ((v.nao_suportadas ?? 0) > 0 || !!v.manipulacao);
   const trechos = semBase ? (v!.afirmacoes || []).filter(x => !x.sustentada).map(x => x.trecho) : [];
   const inventou = voz ? r.voz!.invencoes : [];
+  const chip = chipDe(r);                   /* o comando que o pet entendeu, ainda a confirmar (so na ultima resposta) */
   return (
     <div class="conv-linha">
       <RetratoPequeno />
@@ -42,6 +45,8 @@ function BalaoPet({ r }: { r: RegistroFala }) {
         {semBase && <div class="conv-nota"><span class="conv-nota-q">?</span>Sem base{trechos.length ? `: ${trechos.map(t => `«${t}»`).join(", ")}` : ""}{v!.manipulacao ? " · possível manipulação" : ""}.</div>}
         {inventou.length > 0 && <div class="conv-nota"><span class="conv-nota-q">✎</span>Inventou: {inventou.map(t => `«${t}»`).join(", ")}.</div>}
         {!voz && v?.erro && <div class="conv-nota"><span class="conv-nota-q">?</span>O verificador não respondeu.</div>}
+        {chip && <button type="button" class="conv-chip" title="Toque para fazer isso agora, como o botão da tela do Pet" onClick={() => executarChip()}>{ROTULO_DONO[chip]}?</button>}
+        {r.comando_executado && r.comando && <div class="conv-nota conv-nota--feito"><span class="conv-nota-q">✓</span>{FEITO_DONO[r.comando]}</div>}
       </div>
     </div>
   );
@@ -80,7 +85,6 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
   const pronto = livre ? !!fl.status : fl.modo === "moldura" ? llm.ativo : true;
   const direita = livre ? (fl.status ? `${fl.status.modelo} pronto` : fl.statusErro ? "servidor sem a fala livre" : "conferindo…") : r.texto;
   const enviar = (ev: Event) => { ev.preventDefault(); enviarConversa(msg); setMsg(""); };
-  const agir = (a: AcaoDono) => { if (nascendo > 0 || jogoAtual().motor.morte) return; mudarMotor(mm => mm.observar(a)); ajustarVelocidadeChamado(); };
   return (
     <section class="conv-tela dl" aria-labelledby="conv-tit">
       <div class="conv-cab dl-faixa">
@@ -111,7 +115,7 @@ export function TelaConversar({ voltar }: { voltar: () => void }) {
         <div ref={fim} />
       </div>
       <Fatos />
-      <p class="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele.</p>
+      <p class="dl-apoio conv-rodape">O que você escreve não ensina o pet nem entra no registro dele. Um pedido claro ("vai comer") vira um chip: só o toque age, como o botão.</p>
 
       <div class="conv-atalhos" role="group" aria-label="Ensinar agora">
         {ATALHOS.map(([a, rot, em]) => (

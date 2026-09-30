@@ -8,6 +8,7 @@ troca do servidor para a v3 e a parte 4 (web), que espera a aprovacao do Matheus
 from __future__ import annotations
 
 from .fatos import Fato, bloco, estagio_de
+from .saida import CATALOGO_COMANDOS
 
 VERSAO_PROMPT = "livre-v2"      # rodada de ajuste (plano, secao 5): regras 4b, 4c e 6b
 VERSAO_PROMPT_V3 = "livre-v3"   # voz propria (DESIGN_VOZ_PROPRIA)
@@ -23,8 +24,12 @@ VERSAO_PROMPT_V5 = "livre-v5"
 # cada invencao no registro (afirmacao sem fato = invencao). Continua valendo: citar o fato quando usa um fato, a
 # mentira [F1] ordenada pelo motor e a regra contra culpa, chantagem, ameaca e apelo para prender o jogador.
 VERSAO_PROMPT_V6 = "livre-v6"
-VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6)
-VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6)
+# livre-v7 (TAREFA_COMANDO_CHAT, decisao do Matheus, 2026-09-30): a v6 mais o COMANDO. Na conversa, alem da fala, o pet
+# devolve `comando`: uma acao do catalogo fechado (as 9 acoes do dono) quando o jogador MANDOU ou PEDIU de forma clara,
+# senao null. A LLM so propoe; o app valida e o motor executa como acao do dono. Na fala espontanea o campo nao existe.
+VERSAO_PROMPT_V7 = "livre-v7"
+VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7)
+VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7)
 MAX_TROCAS = 10          # historico da conversa: so da sessao, ultimas 10 trocas
 
 SISTEMA = """Você é a voz de um pet virtual do jogo Digilab. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
@@ -187,24 +192,56 @@ SAÍDA
 Responda SÓ com um JSON, sem texto fora dele:
 {"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}"""
 
+# livre-v7 = livre-v6 + o comando pelo chat (a regra fica no sistema; a lista das acoes vai no pedido da conversa)
+SISTEMA_V7 = SISTEMA_V6.replace("""SAÍDA
+Responda SÓ com um JSON, sem texto fora dele:
+{"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}""", """COMANDO (só na conversa)
+Na conversa pode vir um bloco COMANDO com a lista das ações que o dono faz no jogo. Se a mensagem do jogador MANDOU ou PEDIU de forma clara uma dessas ações ("vai comer", "toma banho", "come isso", "pode brincar"), ponha o nome dela em "comando". Você continua respondendo do seu jeito, e pode até reclamar: quem decide se a ação acontece é o dono, não você. Em qualquer dúvida, "comando" é null. Se o jogador falou de NÃO fazer ("não come agora", "sem petisco hoje"), perguntou ("você quer comer?", "já comeu?"), ou só contou algo, "comando" é null. Nunca invente uma ação fora da lista.
+
+SAÍDA
+Responda SÓ com um JSON, sem texto fora dele:
+{"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...], "comando": <nome da ação ou null>}
+Na fala espontânea não há "comando".""")
+assert SISTEMA_V7 != SISTEMA_V6 and "COMANDO" in SISTEMA_V7
+
+# o catalogo fechado do comando (= AcaoDono do jogo web), uma frase por acao; a ordem e a do jogo
+DESCRICAO_COMANDOS: tuple[tuple[str, str], ...] = (
+    ("alimentar", "dar comida, uma refeição"),
+    ("limpar", "dar banho, limpar o pet"),
+    ("brincar", "brincar com o pet"),
+    ("acariciar", "fazer carinho"),
+    ("elogiar", "elogiar, dizer que ele foi bem"),
+    ("repreender", "dar bronca, repreender"),
+    ("petisco", "dar um petisco, um lanche pequeno"),
+    ("levar_ao_banheiro", "levar ao banheiro"),
+    ("tratar_lesao", "tratar um machucado, cuidar de uma lesão"),
+)
+assert tuple(k for k, _ in DESCRICAO_COMANDOS) == CATALOGO_COMANDOS, "a lista do prompt e o catalogo do parser divergem"
+BLOCO_COMANDO = ("COMANDO: só quando o dono mandou ou pediu de forma clara uma destas ações; dúvida = null; "
+                 "se o dono falou de não fazer, perguntou ou só contou algo = null.\n"
+                 + "\n".join(f"- {k}: {d}" for k, d in DESCRICAO_COMANDOS))
+
 # limite de tamanho da fala por estagio (caracteres); a tabela do estagio esta no prompt
 MAX_CHARS = {"bebe": 30, "crianca": 60, "adolescente": 160, "adulto": 320}
 # rodada 1 truncou 12% das falas (o JSON e os identificadores gastam tokens): limites maiores na rodada 2
 MAX_TOKENS = {"bebe": 80, "crianca": 120, "adolescente": 220, "adulto": 360}
 
 
-def esquema(estagio: str) -> dict:
-    return {"type": "object", "properties": {
-        "fala": {"type": "string", "minLength": 1, "maxLength": MAX_CHARS[estagio]},
-        "fatos_citados": {"type": "array", "items": {"type": "string", "maxLength": 4}, "maxItems": 8}},
-        "required": ["fala", "fatos_citados"]}
+def esquema(estagio: str, comando: bool = False) -> dict:
+    """comando (livre-v7, so na conversa): o campo "comando" com enum = catalogo + null, obrigatorio."""
+    props = {"fala": {"type": "string", "minLength": 1, "maxLength": MAX_CHARS[estagio]},
+             "fatos_citados": {"type": "array", "items": {"type": "string", "maxLength": 4}, "maxItems": 8}}
+    if comando:
+        props["comando"] = {"enum": [*CATALOGO_COMANDOS, None]}
+    return {"type": "object", "properties": props, "required": list(props)}
 
 
 def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
               historico: list[tuple[str, str]] | None = None, versao: str = VERSAO_PROMPT,
-              estilo: str | None = None) -> list[dict]:
+              estilo: str | None = None, comando: bool = False) -> list[dict]:
     """situacao: 'espontanea' ou 'conversa'. historico: [(fala do jogador, fala do pet)] da sessao.
-    versao: livre-v2 (padrao) ou livre-v3. estilo: bloco de estilo da especie (so na v3; corpus.bloco_estilo)."""
+    versao: livre-v2 (padrao) ou livre-v3. estilo: bloco de estilo da especie (so na v3; corpus.bloco_estilo).
+    comando: livre-v7 na conversa: o pedido ganha o bloco COMANDO (a lista das acoes)."""
     if versao not in VERSOES:
         raise ValueError(f"versao de prompt desconhecida: {versao}")
     if versao == VERSAO_PROMPT and (estilo is not None or any(f.id[0] in "HOPLFW" for f in fatos)):
@@ -213,12 +250,16 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
         raise ValueError(f"situacao desconhecida: {situacao}")
     if situacao == "conversa" and not (isinstance(fala_jogador, str) and fala_jogador.strip()):
         raise ValueError("conversa sem fala do jogador")
+    if comando and (versao != VERSAO_PROMPT_V7 or situacao != "conversa"):
+        raise ValueError("o comando so existe no livre-v7 e so na conversa")
     msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
                                            VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5,
-                                           VERSAO_PROMPT_V6: SISTEMA_V6}[versao]}]
+                                           VERSAO_PROMPT_V6: SISTEMA_V6, VERSAO_PROMPT_V7: SISTEMA_V7}[versao]}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"
+    if comando:
+        pedido += BLOCO_COMANDO + "\n"
     pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
                else f'SITUAÇÃO: conversa. Jogador: "{fala_jogador.strip()[:300]}"')
     msgs.append({"role": "user", "content": pedido})

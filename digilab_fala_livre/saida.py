@@ -13,16 +13,21 @@ from dataclasses import dataclass
 FALA_GENERICA = "…"
 ID_NA_FALA = re.compile(r"\[([A-Z]\d{1,2})\]")
 MAX_FALA = 320
+# TAREFA_COMANDO_CHAT: catalogo FECHADO do comando pelo chat = AcaoDono do jogo web (web/app/motor/tipos.ts). A LLM so
+# propoe um destes (ou null); o app valida de novo e o motor executa como acao do dono. Treino, luta e itens ficam fora.
+CATALOGO_COMANDOS = ("alimentar", "limpar", "brincar", "acariciar", "elogiar", "repreender",
+                     "petisco", "levar_ao_banheiro", "tratar_lesao")
 
 
 class SaidaInvalida(ValueError):
-    """A LLM devolveu algo que nao e {"fala": str, "fatos_citados": [str]}."""
+    """A LLM devolveu algo que nao e {"fala": str, "fatos_citados": [str]} (com "comando" opcional no catalogo)."""
 
 
 @dataclass(frozen=True)
 class FalaLivre:
     fala: str
     fatos_citados: tuple[str, ...]
+    comando: str | None = None      # livre-v7, so na conversa: uma acao do CATALOGO_COMANDOS ou None
 
 
 def ler(texto: str) -> FalaLivre:
@@ -32,9 +37,13 @@ def ler(texto: str) -> FalaLivre:
         d = json.loads(texto)
     except json.JSONDecodeError as err:
         raise SaidaInvalida(f"nao e JSON: {err.msg}") from err
-    if not isinstance(d, dict) or set(d) != {"fala", "fatos_citados"}:
+    if not isinstance(d, dict) or set(d) - {"comando"} != {"fala", "fatos_citados"}:
         raise SaidaInvalida(f"chaves erradas: {sorted(d) if isinstance(d, dict) else type(d).__name__}")
     fala, cit = d["fala"], d["fatos_citados"]
+    # "comando" ausente (fala espontanea) = nenhum; presente, so null ou uma acao do catalogo: fora dele falha alto
+    comando = d.get("comando")
+    if comando is not None and comando not in CATALOGO_COMANDOS:
+        raise SaidaInvalida(f"comando fora do catalogo: {comando!r}")
     if not isinstance(fala, str) or not fala.strip():
         raise SaidaInvalida("fala vazia ou nao e texto")
     if len(fala) > MAX_FALA:
@@ -56,4 +65,4 @@ def ler(texto: str) -> FalaLivre:
     if not fala:
         raise SaidaInvalida("fala so com identificadores")
     citados = tuple(dict.fromkeys([c.strip().strip("[]") for c in cit] + ids))
-    return FalaLivre(fala.strip(), citados)
+    return FalaLivre(fala.strip(), citados, comando)
