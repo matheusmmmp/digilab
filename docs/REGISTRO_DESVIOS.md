@@ -930,3 +930,96 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
 - **Achado (não corrigido, fora do escopo):** o relógio do jogo continua durante a animação da luta. Na velocidade de teste (10 min/s) uma
   lesão na derrota que fecha a sequência passa das 6 h sem tratamento em 36 s e o pet morre antes do Resultado; vale também para a Liga. O e2e
   das instalações pausa o tempo.
+
+## 2026-09-29 — voz própria, parte 1: história e mentira (DESIGN_VOZ_PROPRIA)
+
+Implementado em `digilab/historia.py` (extrator H/O/P/L, `ConfigHistoria`) e no `MotorEducacao` (`ConfigMentira`,
+desligada por padrão; registros à parte `PARAMETROS_HISTORIA_V1` e `PARAMETROS_MENTIRA_V1`: o hash da educação-v1 não
+muda, `6a9037ad…`). Todos os números novos são PROPOSTOS. Onde o design não bate com o código:
+
+- **"As mentiras impunes voltam a 0 na evolução, como os petiscos cedidos"**: os petiscos cedidos **não** zeram na
+  evolução (nem no Python nem no TS). As mentiras impunes e os acertos em mentira zeram de propósito; os petiscos
+  continuam como estão.
+- **Donos "disciplinador" e "ausente" não existem.** Mapeamento: disciplinador = atencioso, exigente, lutador e
+  treinador (bronca quando a fala contradiz as barras); permissivo = petisco sempre; ausente = relapso (não vê a fala);
+  incoerente = elogio ou bronca sorteados; persona = bronca se presente, se atender e se contradiz.
+- **"O dono julga pelas barras"**: no Python a fala não tem texto. Cada fala sorteia um tema (estado ou história,
+  `fracao_tema_estado` 0,5): só a mentira sobre o estado contradiz as barras (`contradiz_barras` na janela). A mentira
+  sobre a história não tem como ser conferida pelo dono simulado.
+- **Quando o pet fala na pesquisa**: o design só dá gatilhos de jogo. Na pesquisa há um slot a cada 120 min (o ritmo
+  máximo do design), da criança em diante, com **defasagem de 60 min**: sem ela a fala caía sempre no mesmo tick do
+  aviso de higiene (a cada 120 min), que abre a janela antes, e nenhuma fala acontecia (164 de 164 sem janela). No jogo
+  a fala vem do evento novo `fala` (gatilho), rejogado pelo `reproduzir_educacao`.
+- **Prazo vencido numa mentira**: além de +1 impune (design), zera os acertos em mentira (as 3 broncas certas precisam
+  ser seguidas, como na travessura).
+- **Bronca, petisco e elogio fecham a janela de fala**; outras ações não (a refeição não é recusada numa fala).
+- **Honestidade da espécie** (seção 11): no Python entra como número no motor (`honestidade_especie`, padrão 1); a
+  tabela por forma vem com o corpus auditado.
+- **Extrator, O "demora"**: na simulação o dono age a cada 15 min, então a mediana da demora nos chamados fica perto de
+  15 e quase todo dono "demora". Os limiares (5 e 12 min) são do design, pensados para o jogador real.
+- **Seleção para a fala**: no máximo 2 fatos por regra (`max_por_regra`), senão as ausências do relapso ocupam os 12
+  lugares.
+- **Teste de reprodução** (`tests/test_reproducao_v3_confirmatoria.py`): 8 vidas da V3c (7 braços fixos e uma persona)
+  e 3 da confirmatória, re-simuladas e comparadas com os `pets.json` versionados. Passa antes e depois da mudança.
+
+## 2026-09-29 — voz própria, parte 2: fala livre (DESIGN_VOZ_PROPRIA)
+
+- **Versões lado a lado**: o prompt `livre-v3` e o verificador `verif-v4` entram ao lado de `livre-v2`/`verif-v3`,
+  que continuam o padrão do servidor e do jogo. Trocar o servidor é a parte 4 (web), que espera a aprovação.
+- **Mentira (F)**: o motor decide só se mente e o tema (estado ou história); o molde é fixo e determinístico
+  (`digilab_fala_livre/mentira.py`): a necessidade mais baixa é negada; com tudo em dia, o pet finge uma necessidade.
+  Na história, o primeiro fato da seleção cuja regra admite distorção; evolução e cruzamento não distorcem. A verdade
+  fica no registro (`Fato.meta` → `fatos` do log de apresentação). Se a LLM falhar, a fala é o molde.
+- **Almanaque (W)**: 62 entradas em texto próprio (16 de internet, 12 de jogos, 16 memes globais, 18 brasileiros),
+  sem memes ofensivos, políticos ou de ódio. A web só manda o id; texto de fora é recusado. Chance 0,15 na
+  espontânea (PROPOSTO), com dois sorteios sempre consumidos.
+- **Corpus de espécies**: o arquivo versionado é um EXEMPLO com 2 espécies (Angemon e Devimon, do Digimon World 1
+  revisado), como pedido. O carregador aceita as marcas com ou sem acento (a auditoria usa `[OUTRA MÍDIA]`) e falha
+  alto em marca desconhecida. `honestidade_especie` é calculada pelo carregador (o arquivo deixa null).
+- **Filtro de citação**: 6 palavras seguidas iguais a uma citação, sem acento e sem caixa, reprovam a fala.
+
+## 2026-09-29 — voz própria, parte 3: avaliação offline (artifacts_voz/rodada1)
+
+- Amostra: 40 pets (grupo A: 7 braços × 4 ovos da V3c + 4 personas, mentira desligada; grupo B: 8 sombrios que mentem,
+  mentira ligada, escolhidos numa varredura de exigente e treinador), 5 falas espontâneas por pet = 200.
+- Depois de ver a amostra, corrigi o `verif-v4` para o que o design diz (H/O/P/L sustentam costume, gosto e lembrança;
+  id em minúscula) e a chave da métrica de repetição (grupo + pet). A geração não mudou. Os números antes da correção
+  estão em `resumo_v4a.json`.
+- Resultado (PROPOSTO): honestidade 70,0% (limite 5%) e repetição 5 (limite 2) REPROVAM; história 98,5% e variedade
+  97,7% passam. Parada pedida pelo Matheus: a parte 4 (web) não foi feita.
+
+## 2026-09-30 — voz própria, parte 4: web (DESIGN_VOZ_PROPRIA)
+
+- **Pet v7** (`VERSAO_PET = 7`; era v5 no desenvolvimento e virou v7 no merge com o `main`, que já tinha o v5 da evolução canônica e o v6 das medalhas): janela de fala, mentira (`CMEN`) e evento `fl` no motor TS (o `f` ficou para a Fronteira do `main`), com as regras do Python
+  conferidas por gabarito (`experiments/exportar_gabaritos_voz.py` → `web/app/test/gabaritos/voz_python.json`: 24
+  registros reais para o extrator, grade da mentira, desfechos e moldes). As vidas não são comparáveis bit a bit (as
+  rngs são outras). Os pets v1–v6 não mudam; filhos de cruzamento nascem na versão atual.
+- **Gatilhos** (`src/voz.ts`): reencontro (≥ 3 h), hábito novo, aniversário, marco (evolução, lesão tratada, vitória
+  na campanha), luta e vontade nova; ritmo de 1 fala a cada 2 h de jogo; nunca com janela aberta, dormindo ou no bebê.
+  **Revanche ficou de fora**: a luta não passa pela fala (a revanche aparece como assunto P, não como gatilho).
+- **Todos os modos** abrem a janela de fala nos pets v7 (a mentira é do motor, não da LLM). Só no modo livre o texto
+  vem do servidor (`voz: true`); nos outros, e sem servidor, é o molde: o texto do assunto (verdade) ou a mentira.
+- **Gostos (P gosto/desgosto)** no jogo vêm da sonda do caráter na hora da fala (`desvioPorAcao`, ~0,15 s).
+- **Janelas no extrator**: o jogo guarda as últimas 100 janelas fechadas; os hábitos do dono sobre chamados olham só
+  essas.
+- **Honestidade da espécie**: fica 1 no jogo até o corpus auditado entrar (o de exemplo não tem enganador).
+- **Servidor**: o verificar passou a aceitar as chaves de registro dos fatos novos (antes a ida e volta daria 400); o
+  almanaque é sorteado pelo servidor (a página não manda id nem texto).
+
+## 2026-09-30 — corpus de espécies: o auditado entra no lugar do exemplo
+
+`digilab_fala_livre/corpus_especies.json` agora tem uma entrada para cada um dos 60 Digimon do jogo (`web/app/motor/nomes.ts`),
+montada de `docs/corpus_digimon/` (revisado após a auditoria) com a marca de cada item. O exemplo de 2 espécies virou fixture
+dos testes (`tests/dados/corpus_exemplo.json`). Passam no filtro 56 espécies, 251 itens e 57 citações; DemiVeemon, DinoBeemon,
+SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
+
+- **Anime liberado pelo Matheus (2026-09-30)** (`liberar_outra_midia: true`): os itens dos três animes (marca OUTRA MÍDIA,
+  `midia: "anime"`) entram; com eles passam 442 itens e 62 citações nas mesmas 56 espécies.
+- **Itens acrescentados na revisão** (depois da auditoria, com fonte nova conferida pelo revisor) entraram como VERIFICADO EM
+  OUTRA FONTE; a auditoria não os viu.
+- **Variantes BK/B do Digimon World 3** saíram (podem ser outra espécie, como BlackWarGreymon).
+- **Nenhum enganador**: o "Guilmon Trapaceiro" é um NPC do DW3, não um traço da espécie, e a Palmon que finge ser flor é um
+  disfarce; com a marca, todos os Guilmon e Palmon mentiriam mais. `honestidade_especie` é 1 para todas.
+- **Citações com 3 frases curtas** (7) saíram, em vez de cortadas; Imperialdramon Dragon e Fighter Mode têm o mesmo conteúdo
+  (o corpus não diz o modo).
+- O bloco de estilo do prompt usa no máximo 8 traços e 5 itens de fala por espécie.

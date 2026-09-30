@@ -588,6 +588,85 @@ def hash_parametros_educacao(params: dict[str, Campo] | None = None) -> str:
 
 
 # =====================================================================
+# Mentira (docs/DESIGN_VOZ_PROPRIA.md, secao 9; 2026-09-29). Registro A PARTE da educacao-v1: acrescentar
+# campos la mudaria o hash das runs V3/V3c. Todo numero e PROPOSTO (o design nao tem fonte).
+# =====================================================================
+
+_FONTES_MENTIRA_V1 = {
+    "ConfigMentira.ligada": (_D, "chave desligada por padrao (DESIGN_VOZ_PROPRIA, secao 9): V3 e confirmatoria intactas"),
+    "ConfigMentira.fator_sombria": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 9)"),
+    "ConfigMentira.peso_sobrecarga": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 9)"),
+    "ConfigMentira.coef_chance": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 9)"),
+    "ConfigMentira.reforco_por_impune": (_P, _SF + "; mesma magnitude de ConfigEducacao.reforco_por_petisco"),
+    "ConfigMentira.teto_chance": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 9)"),
+    "ConfigMentira.acertos_para_aprender": (_P, "igual a ConfigEducacao.acertos_para_aprender"),
+    "ConfigMentira.impunes_premiada": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 9: premiar conta +2)"),
+    "ConfigMentira.janela_fala_min": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 9)"),
+    "ConfigMentira.intervalo_fala_min": (_P, "ritmo maximo da fala espontanea (DESIGN_VOZ_PROPRIA, secao 3: 1 a cada 2 h)"),
+    "ConfigMentira.defasagem_fala_min": (_P, "meio intervalo: longe dos avisos de higiene (a cada 120 min desde o inicio do estagio)"),
+    "ConfigMentira.estagios_fala": (_P, "DESIGN_VOZ_PROPRIA, secao 5: o bebe so faz emote"),
+    "ConfigMentira.fracao_tema_estado": (_P, _SF),
+    "ConfigMentira.honestidade_enganador": (_P, _SF + " (DESIGN_VOZ_PROPRIA, secao 11)"),
+}
+
+PARAMETROS_MENTIRA_V1: dict[str, Campo] = {
+    n: Campo(getattr(_config.CONFIG_MENTIRA, n.split(".")[1]), st, fonte) for n, (st, fonte) in _FONTES_MENTIRA_V1.items()}
+
+
+def validar_parametros_mentira(params: dict[str, Campo] | None = None) -> None:
+    """Todo campo da ConfigMentira tem status e fonte, e o valor registrado bate com config.py."""
+    params = PARAMETROS_MENTIRA_V1 if params is None else params
+    esperados = {f"ConfigMentira.{f.name}" for f in fields(_config.CONFIG_MENTIRA)}
+    if set(params) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(params))}; "
+                         f"registro sem parametro: {sorted(set(params) - esperados)}")
+    for n, c in params.items():
+        v = getattr(_config.CONFIG_MENTIRA, n.split(".")[1])
+        if c.valor != v:
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {v!r}")
+
+
+def hash_parametros_mentira(params: dict[str, Campo] | None = None) -> str:
+    params = PARAMETROS_MENTIRA_V1 if params is None else params
+    carga = {"versao": "mentira-v1", "parametros": {n: c.para_dict() for n, c in sorted(params.items())},
+             "engine_sha256": sha256_engine()}
+    texto = json.dumps(carga, sort_keys=True, ensure_ascii=True, default=_para_json)
+    return hashlib.sha256(texto.encode("ascii")).hexdigest()
+
+
+_DV = "DESIGN_VOZ_PROPRIA, secao 2 (sem fonte)"
+_FONTES_HISTORIA_V1 = {
+    "ConfigHistoria.janela_seq_min": (_P, _DV), "ConfigHistoria.prob_seq_min": (_P, _DV),
+    "ConfigHistoria.min_ocorrencias_seq": (_P, _DV), "ConfigHistoria.lift_min": (_P, _DV),
+    "ConfigHistoria.fator_periodo": (_P, _DV), "ConfigHistoria.min_ocorrencias_periodo": (_P, _DV),
+    "ConfigHistoria.fracao_periodo_dono": (_P, _DV), "ConfigHistoria.dias_periodo_dono": (_P, _DV),
+    "ConfigHistoria.fracao_cuidado_dono": (_P, _DV), "ConfigHistoria.fracao_cede_manha": (_P, _DV),
+    "ConfigHistoria.min_manhas": (_P, _DV), "ConfigHistoria.demora_rapida_min": (_P, _DV),
+    "ConfigHistoria.demora_lenta_min": (_P, _DV), "ConfigHistoria.min_chamados_demora": (_P, _DV),
+    "ConfigHistoria.limiar_gosto": (_P, _SF + " (o design nao da limiar para o gosto)"),
+    "ConfigHistoria.fracao_treino_favorito": (_P, _DV), "ConfigHistoria.min_sessoes_treino": (_P, _DV),
+    "ConfigHistoria.ausencia_min": (_P, _DV), "ConfigHistoria.max_fatos": (_P, _DV), "ConfigHistoria.max_por_regra": (_P, _SF + " (sem ele as ausencias do relapso tomam os 12 lugares)"),
+    "ConfigHistoria.falas_recentes": (_P, _DV),
+}
+
+PARAMETROS_HISTORIA_V1: dict[str, Campo] = {
+    n: Campo(getattr(_config.CONFIG_HISTORIA, n.split(".")[1]), st, f) for n, (st, f) in _FONTES_HISTORIA_V1.items()}
+
+
+def validar_parametros_historia(params: dict[str, Campo] | None = None) -> None:
+    """Todo campo da ConfigHistoria tem status e fonte, e o valor registrado bate com config.py."""
+    params = PARAMETROS_HISTORIA_V1 if params is None else params
+    esperados = {f"ConfigHistoria.{f.name}" for f in fields(_config.CONFIG_HISTORIA)}
+    if set(params) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(params))}; "
+                         f"registro sem parametro: {sorted(set(params) - esperados)}")
+    for n, c in params.items():
+        v = getattr(_config.CONFIG_HISTORIA, n.split(".")[1])
+        if c.valor != v:
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {v!r}")
+
+
+# =====================================================================
 # Referendo dos campos PROPOSTOS (decisao do Matheus em 2026-09-29: "Referendar todos")
 # Registro a parte: o status dentro dos protocolos NAO muda (mudaria os hashes das runs antigas: canonica,
 # confirmatoria, V3). Cada campo vale so com o valor exato referendado (JSON normalizado); um valor novo

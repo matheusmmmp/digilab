@@ -99,6 +99,8 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/run_bateria_v21.py`, `calibrar_v21.py` | bateria V2.1 (E1–E5 + checagem da base) → `artifacts_combate_v21/`; varredura de calibração |
 | `experiments/configs/bateria_v21_*.json` | `bateria_v21_canonico.json` (validação) e `bateria_v21_calibracao.json` (rápida, sem E5); `calibracao_v21.json` = registro da calibração |
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
+| `digilab/historia.py` | voz própria (DESIGN_VOZ_PROPRIA, parte 1): extrator dos fatos H/O/P/L a partir do registro (função pura; `ConfigHistoria`, `PARAMETROS_HISTORIA_V1`); `fabrica_com_captura` anota as ações do pet no replay |
+| `digilab/educacao.py` (mentira) | `ConfigMentira` (desligada por padrão; `PARAMETROS_MENTIRA_V1`, à parte do hash da educação-v1): honestidade, chance de mentir, janela de fala, evento `fala`; reações dos donos em `donos_educacao.py`. `tests/test_reproducao_v3_confirmatoria.py` confere V3c e confirmatória contra os `pets.json` |
 | `tests/` | 290 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
@@ -761,6 +763,8 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
 - Rodada 2: gemma2:9b 3,0% de falas com afirmação sem fato (teto; o juiz marca 10% da moldura, que só diz
   verdades), 0/30 conversas inventaram, latência p90 4,8 s na RTX 2060 (sem outro modelo carregado).
 - Pendente: avaliação cega do Matheus (`artifacts_fala_livre/rodada2/avaliacao_cega.csv`).
+- Voz própria no jogo (parte 4, 2026-09-30): pets **v7** (`VERSAO_PET = 7`: v6 + voz própria) com janela de fala, mentira (`CMEN`) e evento `fl` (o `f` é da Fronteira); `motor/historia.ts` e `motor/mentira.ts` conferidos contra o Python (`experiments/exportar_gabaritos_voz.py` → `test/gabaritos/voz_python.json`, `tests/test_gabaritos_voz.py`); gatilhos e ritmo em `src/voz.ts`; servidor com `voz: true` (livre-v6, autocorreção, verif-v5, corpus, almanaque). Avaliação: `artifacts_voz/rodada1..4` (`experiments/avaliar_voz.py --rodada N`).
+- Voz própria (DESIGN_VOZ_PROPRIA, parte 2): `livre-v3` e `verif-v4` ao lado das versões do jogo; fatos H/O/P/L, mentira F (`mentira.py`), almanaque W (`almanaque.json`), corpus de espécies (`corpus.py`, `corpus_especies.json` = EXEMPLO com 2 espécies) e filtro contra repetir citação.
 
 ## Versão web (`web/digilab.html`)
 
@@ -919,6 +923,21 @@ nas sementes das sombrias. O repertório (candidatas da troca) não mudou, entã
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- **Stand-by: combate 1×1 em tempo real, como no Digimon Championship (DS)** (Matheus, 2026-09-29: guardar para o futuro, sem executar).
+  - **A ideia:** o motor passa a simular espaço contínuo (posição, velocidade, alcance, tempo de recarga, passos fixos para continuar reproduzível) no lugar dos turnos e das 3 distâncias. O pet segue lutando sozinho, e o dono influencia pela criação.
+  - **O que muda:**
+    - `web/app/motor/combate.ts`, `gambits_pet.ts`, `bots.ts` e as constantes CV/CV21;
+    - o `digilab/combate_v2` e a arena no Python (paridade);
+    - as condições dos gambits (hoje "perto/médio/longe");
+    - a bateria e a calibração do combate: vira um combate V3, com protocolo e gates novos;
+    - a escala e os NPCs da campanha;
+    - os pets antigos ficam no motor de hoje.
+  - **Por que esperar:**
+    - custo alto;
+    - a diferença para o jogador é pequena perto de animar bem os turnos (a opção A, só visual, também descartada por ora);
+    - mais variância nas lutas, e o sinal da pesquisa já é pequeno.
+  - Os sprites têm quadros de animação (257 Digimon) e efeitos de ataque (187) em `Assets/Digimon Up Assets/Animacoes`.
 
 - Evolução canônica: o limiar de vínculo do Mega baixou para 0,4, mas o vínculo ainda favorece o dono aleatório (5 de 6
   vidas viram Mega, contra 3 de 6 do atencioso). Rever o desenho do vínculo resolveria de vez.

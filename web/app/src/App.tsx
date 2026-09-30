@@ -78,6 +78,7 @@ export function App() {
       const j = mDica.janelaAberta();
       if (j?.tipo === "chamado") ids.push("manha");
       if (j?.tipo === "aviso") ids.push("banheiro");
+      if (j?.tipo === "fala") ids.push("fala");
       if (mDica.lesionadoDesde !== null) ids.push("lesao");
       if (est === "adolescente") ids.push("vitorias");
     }

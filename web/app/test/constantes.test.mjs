@@ -25,7 +25,7 @@ const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APT
 /* so no motor em TS: pets v4 (educacao-v1), v5 (evolucao canonica) e v6 (medalhas do Tamer, arenas e a escala propria,
    CESC_V6) nao existem no HTML; a escala (CESC, pets v1-v5) tambem nao existe no HTML e e conferida contra a ConfigEscala;
    conferidas so contra o Python (as v5 quase todas so_web; as v6 todas) */
-const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CV21D", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CESC_V6", "CIT"];
+const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CV21D", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CESC_V6", "CIT", "CMEN"];   /* CMEN: pets v7 (voz propria) */
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
 const raizDe = cam => cam.match(/^[^.[]+/)[0];
 

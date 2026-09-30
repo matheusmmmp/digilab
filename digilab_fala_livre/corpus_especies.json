@@ -1,0 +1,4879 @@
+{
+ "meta": {
+  "versao": "corpus-auditado-1",
+  "exemplo": false,
+  "descricao": "Corpus de personalidade Digimon para a voz propria (DESIGN_VOZ_PROPRIA, secao 11): as 60 especies do jogo (web/app/motor/nomes.ts), montadas de docs/corpus_digimon/ (revisado apos auditoria em 2026-09-29) com a marca de cada item. O carregador (corpus.py) so deixa entrar VERIFICADO e VERIFICADO EM OUTRA FONTE de obras aptas; PARCIAL so reescrito; anime (OUTRA MIDIA, midia anime) liberado pelo Matheus em 2026-09-30. Sem traco verificado de enganador: honestidade_especie 1 para todas.",
+  "vereditos": {
+   "Digimon World (PS1)": "APTO COM RESSALVAS",
+   "Digimon World 2 (PS1)": "APTO COM RESSALVAS",
+   "Digimon World 3 (PS1)": "APTO COM RESSALVAS",
+   "Digimon Digital Card Battle (PS1)": "APTO COM RESSALVAS",
+   "Digimon Adventure: Anode Tamer (WS)": "APTO COM RESSALVAS",
+   "Digimon Adventure 02: Tag Tamers (WS)": "APTO COM RESSALVAS",
+   "Digimon Adventure 02: D1 Tamers (WS)": "APTO COM RESSALVAS",
+   "Digimon Tamers: Brave Tamer (WSC)": "APTO COM RESSALVAS",
+   "Digimon Tamers: Battle Spirit (WSC)": "APTO COM RESSALVAS",
+   "Battle Spirit: Digimon Frontier (WSC)": "APTO COM RESSALVAS",
+   "Digimon World: Next Order": "APTO COM RESSALVAS",
+   "Digimon Adventure (anime)": "APTO COM RESSALVAS",
+   "Digimon Adventure 02 (anime)": "APTO COM RESSALVAS",
+   "Digimon Tamers (anime)": "APTO COM RESSALVAS",
+   "Digimon Adventure: Cathode Tamer (WS)": "FORA DO ESCOPO",
+   "Digimon Rumble Arena / Tamers: Battle Evolution (PS1)": "FORA DO ESCOPO"
+  },
+  "liberar_outra_midia": true
+ },
+ "especies": [
+  {
+   "especie": "Agumon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon World 2 (PS1)",
+    "Digimon World 3 (PS1)",
+    "Digimon Adventure: Anode Tamer (WS)",
+    "Digimon Adventure 02: Tag Tamers (WS)",
+    "Digimon Adventure 02: D1 Tamers (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Relutante mas de boa índole: acha a cidade caindo aos pedaços, hesita muito e acaba aceitando",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Antes da luta só solta sons sem palavras, sinal de que perdeu a língua comum",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Na cidade abre o guarda-volumes e faz serviço grátis para o herói",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Colecionador distraído e esquecido; entrega de bom grado a chave com que brincava",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Fica feliz por ter ajudado o humano",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Tom de criança, lido a partir do jeito de falar",
+     "marca": "INFERENCIA",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Como parceiro inicial, chama o Tamer pelo nome e fala em equipe",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2001/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Aflito e insistente quando pede socorro; explica a crise de um jeito atropelado",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Protetor: põe-se na frente do humano diante do perigo",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Otimista: tem a ideia de juntar aliados aos poucos para vencer",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Recebe cada companheiro libertado chamando o nome dele, com alegria",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Dividido entre dois humanos, só consegue gaguejar; no abraço final só diz o nome do outro",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Prudente: aconselha esperar em vez de partir com pressa",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Explode de alegria quando volta a se mexer depois de petrificado",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Reencontra o humano com carinho, lembrando a aventura anterior",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Nostálgico: lembra quanto trabalho deu derrotar o inimigo antigo",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/d1script.html",
+     "jogo": "Digimon Adventure 02: D1 Tamers (WS)"
+    },
+    {
+     "texto": "Grato e voluntário; lembra de ter lutado com o humano e pede licença ao parceiro para ir",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Numa pose de vitória põe a peruca de PunkAgumon",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonBattleSpirit",
+     "jogo": "Digimon Tamers: Battle Spirit (WSC)"
+    },
+    {
+     "texto": "Ler essa pose como lado exibido e brincalhão é leitura do autor",
+     "marca": "INFERENCIA",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonBattleSpirit",
+     "jogo": "Digimon Tamers: Battle Spirit (WSC)"
+    },
+    {
+     "texto": "Porteiro de facção que desconfia do jogador como espião e depois estranha ter perdido",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Guloso e tranquilo, mas esquenta na hora H; trata todo mundo como amigo",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Humor geralmente alegre; lidera os Digimon quando as crianças não estão",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://wikimon.net/Agumon_(Adventure)",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Lampejos de esperteza prática, como usar vapor para sinalizar e desconfiar de cogumelos",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom15.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "A primeira evolução nasce do impulso de proteger o parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/02/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Fica com medo de evoluir depois de uma evolução descontrolada, até treinar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/18/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome おいら/オイラ; fala casual com muxoxo ちぇっ",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Exclamações e hesitações quando não lembra das coisas; frases simples e alegres",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Frases curtas e exclamativas, com repetições",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Usa partícula final de impaciência ao cutucar o humano, segundo nota da tradutora",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Chama o mundo digital pelo termo em inglês デジタルワールド",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Chama o humano pelo nome sem honorífico, deduzido da falta de nota da tradutora",
+     "marca": "INFERENCIA",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Como parceiro, fala em balões de 1 a 2 palavras em katakana, registro de criança pequena",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://blog.ja.playstation.com/2016/03/14/20160314-digimonworld/",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Pede banheiro de forma telegráfica e comemora com um simples Eba",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://www.famitsu.com/news/201601/15097136.html",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Pronome ボク; fala infantil e direta; chama o parceiro pelo nome sem honorífico",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Capanga cômico do bando de Ogremon: chama o chefe de かしら, grita formações e entra em pânico",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/110.html",
+     "jogo": "Digimon World (PS1)",
+     "com": "Ogremon"
+    },
+    {
+     "texto": "No clímax manda, com Jijimon e Tokomon, a energia da cidade para salvar o herói",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
+     "jogo": "Digimon World (PS1)",
+     "com": "Jijimon"
+    },
+    {
+     "texto": "Responde a Angemon como a um vizinho mais velho, que o chama com familiaridade",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)",
+     "com": "Angemon"
+    },
+    {
+     "texto": "Temperamentos contrastantes na vila: V-mon apressado, Piccolomon ralha e Agumon aconselha cautela",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)",
+     "com": "V-mon"
+    },
+    {
+     "texto": "Forma equipe com V-mon e Wormmon; traz a nostalgia do trio",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/d1script.html",
+     "jogo": "Digimon Adventure 02: D1 Tamers (WS)",
+     "com": "Wormmon"
+    },
+    {
+     "texto": "Etemon o humilha chamando-o de fraco",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)",
+     "com": "Etemon"
+    },
+    {
+     "texto": "Disfarçado, diz aos Numemon que não queria lutar com eles",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom26.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Numemon"
+    },
+    {
+     "texto": "Defende diante de BlackWarGreymon que se importar e confiar provam o coração e que podem ser amigos",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_32.html",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "BlackWarGreymon"
+    },
+    {
+     "texto": "Diz que não sabe o sentido de viver, mas que o que viveu o fez quem é",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "BlackWarGreymon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Cidade… aquela caindo aos pedaços?",
+     "original": "「街って…あのオンボロ？」",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Eu te protejo, Ryo! Fica pra trás!",
+     "original": "\"I'll protect you, Ryo! Stay back!\"",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Angemon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon World 2 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon Adventure (anime)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Solene e devotado ao dever; desperta de um selo e vira registrador do ancião",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Quando não o entendem, troca o arcaísmo pela fala comum, com uma ponta de resignação",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Nas dicas é enigmático e sereno",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/119.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Protetor de um refúgio de Digimon que não ficaram selvagens; tido como Digimon da justiça",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2004/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Prestativo, resolvedor de problemas e mediador; sabe a quem pedir cada coisa",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Veterano altivo de arena, quer adversários à altura e se orgulha de defender o posto",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2007/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Perde sem rancor e admite que não está acostumado a perder",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2007/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Ao evoluir de Patamon fica digno e firme",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Solene e pronto para o sacrifício; pede desculpas ao parceiro por quebrar a promessa",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/13/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Contra o vilão fala como juiz, mandando-o se render",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom36.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Arcaico: 我 e 汝 com conjugações clássicas; depois 私/あなた com です/ます",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Chama o ancião de ジジモン様",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Na versão EN mantém um arcaísmo com erros",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-World/Update%2033/",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Polido e articulado, com reticências de quem pensa antes do sim",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Pronome 私; registro formal e declarativo com 〜のだ",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/13/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "No 02, a partir do nível Adulto usa 私 com tom mais digno",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/パタモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "DIVERGENTE"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Chama Agumon pelo nome com familiaridade e pede com gentileza que avise se lembrar de algo",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "jogo": "Digimon World 2 (PS1)",
+     "com": "Agumon"
+    },
+    {
+     "texto": "É sequestrado por Numemon, que o usa para chantagear os moradores do refúgio",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2004/",
+     "jogo": "Digimon World 2 (PS1)",
+     "com": "Numemon"
+    },
+    {
+     "texto": "Fala nobre e contida ao se sacrificar, contra a zombaria teatral de Devimon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/13/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL",
+     "com": "Devimon"
+    },
+    {
+     "texto": "Dispara com Angewomon a flecha da profecia; os dois anjos lutam lado a lado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom37.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Angewomon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Eu sou Angemon, anjo que a ti protege.",
+     "original": "「我はエンジェモン。汝を守護する天使なり。」",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "…Eu vou para a cidade, então esforce-se você também… Assim está bom?",
+     "original": "「……私は街へ行きますのであなたもがんばってください……。これでよいですか？」",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Agumon! A gente estava agora mesmo falando de você.",
+     "original": "Agumon! We were just talking about you.",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2020/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 2 (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Angewomon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Ao virar Angewomon deixa de fazer manha com a parceira",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Passar de dependente a adulta independente é leitura do autor",
+     "marca": "INFERENCIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Justiceira: acusa o vilão de atrapalhar a missão das crianças e invadir o mundo real",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom36.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Tom altivo e feminino com 〜わ e 〜のよ; a forma exata da fala citada é atribuição inferida",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom37.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Briga de igual para igual com LadyDevimon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom49.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "LadyDevimon"
+    },
+    {
+     "texto": "Manda AtlurKabuterimon sair do caminho, e ele se desculpa",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom49.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "AtlurKabuterimon"
+    },
+    {
+     "texto": "Dispara com Angemon a flecha da profecia; os dois anjos lutam lado a lado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom37.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Angemon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Ei, tá atrapalhando, sai logo da frente.",
+     "original": "「ちょっとジャマ、早くどいて」",
+     "fonte": "http://mamemamemon.com/custom49.html",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Ankylomon",
+   "jogos": [
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Aquilamon",
+   "jogos": [
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Dentro da fusão Silphymon, é a metade que pede desculpas à parceira depois de matar LadyDevimon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Armadillomon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Como carta parceira do jogador não fala; só falam NPCs e oponentes",
+     "marca": "INFERENCIA",
+     "fonte": "docs/corpus_digimon/ps1_digital_card_battle.md",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Oferece-se sem rodeio para ir dar uns tapas no inimigo",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Alegre e tranquilo, ou desligado pelo lado ruim",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Maior comilão do grupo, mas quer ficar esbelto; adora geleia de chupar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Alma simples e infantil, muito curiosa; conclusões simples ajudam o parceiro a entender",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://wikimon.net/Armadimon_(Adventure)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Fala no dialeto de Nagoya, com o final dagya, segundo nota da tradutora",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Dialeto de Nagoya, bordão 〜だぎゃ, pronome オレ",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Põe dagyaa até quando a frase não precisa",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Cita provérbios com frequência",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/アルマジモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    },
+    {
+     "texto": "A dubladora fala o dialeto nativamente e dá voz também ao parceiro, como um duplo dele",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Drimogemon, de outro dialeto, zomba dele por ser inútil na água",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)",
+     "com": "Drimogemon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Entendido, dagya! Vou lá dar uns tapas nele por você, dagya.",
+     "original": "Got it, dagya! I'll go smack him for ya, dagya.",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "pt": "Tá tudo bem, dagyaa, Iori! Deixa comigo!",
+     "original": "It's all right, dagyaa, Iori! Just leave it to me!",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/post/69843078585",
+     "fan_translation": true,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure 02 (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Birdramon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Frio, lacônico e seguro de si; solta um フ… antes de falar",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Luta pelo ninho e depois sugere ele mesmo ir para a cidade, onde vira transportador",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Dá a entender que já houve outros humanos na ilha",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Filosófico e desafiador: pergunta ao jogador qual é o propósito dele",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Guarda um portão, não acredita em quem diz vir mandado pelo ancião e ataca",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Derrotado, decide que não é digno de guardar o portão e vira transportador",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Desconfiado e honrado, como leitura do autor",
+     "marca": "INFERENCIA",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome 俺, trata o humano por あんた; frases curtas",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "A partir de Birdramon a linha de Piyomon usa 私",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Biyomon, que não consegue voar, entra na cidade para aprender com ele",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order",
+     "com": "Biyomon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Heh… Não vai me convidar para a cidade?",
+     "original": "「フ…俺を街へさそわないのか？」",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Você deve ser o único humano que restou na ilha.",
+     "original": "\"You're probably the only human left on the island.\"",
+     "fonte": "https://lparchive.org/Digimon-World/Update%2008/",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Qual é o seu propósito? Você já pensou nisso?",
+     "original": "What is your purpose? Have you given it any thought?",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "DemiVeemon",
+   "jogos": [],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "DinoBeemon",
+   "jogos": [],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "ExVeemon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Fã dos Royal Knights que quer um autógrafo",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Diz a Stingmon que o dever dele é viver junto do parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Franco e brincalhão com o parceiro diante do medo",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_48.html",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome オレ, registrado numa transcrição de fã",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_48.html",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Magnamon lhe dá o autógrafo com o conselho de não idolatrar e sim ficar forte",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order",
+     "com": "Magnamon"
+    },
+    {
+     "texto": "Convence Stingmon, que quer expiar culpas; da conversa nasce a primeira fusão",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Stingmon"
+    },
+    {
+     "texto": "Como metade de Paildramon, avisa que BlackWarGreymon é diferente de tudo que já enfrentaram",
+     "marca": "OUTRA MIDIA",
+     "fonte": "docs/corpus_digimon/anime_adventure_02.md",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "BlackWarGreymon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Agora você achou que eu ia perder, né?",
+     "original": "今、オレが負けると思っただろ？",
+     "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_48.html",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure 02 (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Gabumon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Adventure: Anode Tamer (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Chorão e do contra: odeia lutar, mas fugir dá raiva; só quer ir quando dizem que não precisa",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/98.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Confiável e sereno; na despedida diz que não esquecerá o tempo juntos",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Grato e voluntário; lembra de ter lutado com o humano e pede licença ao parceiro para ir",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Às vezes banca o durão, mas no fundo é tímido e atencioso",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Adora a gaita do parceiro e odeia tirar a pele que veste",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Fiel até o sacrifício: tira a pele para aquecer o parceiro e pega o resfriado dele",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/09/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Pede ao parceiro que também precise dele, como ele precisa do parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom50.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome ぼく; fala chorosa e exagerada",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/98.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Como parceiro, fala em balões curtos em katakana, como Achei!; contexto não verificado",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://www.famitsu.com/news/201601/15097136.html",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Pronome オレ, mas ボク no primeiro episódio",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Usa 敬語 com estranhos e com o pai do parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Final 〜ろよ; chamar o registro de casual masculino é leitura do autor com base em uma fala",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/09/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Capanga cômico do bando de Ogremon: entra em pânico e avisa o chefe que estão encrencados",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/110.html",
+     "jogo": "Digimon World (PS1)",
+     "com": "Ogremon"
+    },
+    {
+     "texto": "Diz que os desertores Pumpmon e Gotsumon nem dão vontade de lutar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom32.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Pumpmon"
+    },
+    {
+     "texto": "Defende que Patamon não é rancoroso",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom32.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Patamon"
+    },
+    {
+     "texto": "Pede ao frágil Tokomon que proteja o parceiro dele",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom22.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Tokomon"
+    },
+    {
+     "texto": "Diz que BlackWarGreymon sofre por ter coração sem ser um ser vivo",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "BlackWarGreymon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Claro! Pode contar com a gente, tá?",
+     "original": "\"Of course! Rely on us, okay?\"",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "pt": "Achei!",
+     "original": "「アタッタ！」",
+     "fonte": "https://www.famitsu.com/news/201601/15097136.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Gallantmon",
+   "jogos": [
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Salto de maturidade: veterano e marcial, bem diferente do Guilmon infantil",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Fala de si como このデュークモン e tem como bordão que jamais perdoará",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/デュークモン",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Às vezes fala em uníssono com o parceiro humano; uso dessa fala híbrida ainda pendente",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/デュークモン",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Derruba Chatsuramon, que queria matar Lopmon, com uma frase altiva de desdém",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/チャツラモン",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Chatsuramon"
+    },
+    {
+     "texto": "Grani, a máquina que ganhou consciência, se funde a ele",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO",
+     "com": "Grani"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Este Dukemon não vai perdoar isso de jeito nenhum!",
+     "original": "「このデュークモンが絶対に許さない！」",
+     "fonte": "https://dic.pixiv.net/a/デュークモン",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Tamers (anime)"
+    },
+    {
+     "pt": "Mesmo sendo um Deva, você não é páreo para este Dukemon!",
+     "original": "「例えデーヴァであっても、このデュークモンの敵ではない！」",
+     "fonte": "https://dic.pixiv.net/a/チャツラモン",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Tamers (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Gargomon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Fabrica itens de batalha na cidade",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://blog.ja.playstation.com/2016/03/14/20160314-digimonworld/",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Atirador que ri de forma inocente enquanto dispara a metralhadora",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/13759.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Estica as vogais no fim das frases",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://blog.ja.playstation.com/2016/03/14/20160314-digimonworld/",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Anuncia a mercadoria como feirante",
+     "marca": "INFERENCIA",
+     "fonte": "https://blog.ja.playstation.com/2016/03/14/20160314-digimonworld/",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Tô fabricando item de batalha sem parar! Tem de sobra, dá até pra vender!",
+     "original": "「戦闘アイテムをじゃんじゃん作ってるぞー売るほどあるぞー」",
+     "fonte": "https://blog.ja.playstation.com/2016/03/14/20160314-digimonworld/",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "pt": "Beleza, vou botar pra quebrar~♪",
+     "original": "「よ～し、暴れちゃうぞ～♪」",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/13759.html",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Tamers (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Garudamon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "No pós-jogo só avisa o jogador de que ainda há adversários esperando",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2018/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Territorial: embosca o jogador dizendo que dois pontos de coleta são dele",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Depois de perder descobre que o território nem era dele; diz algo como fico aqui e só se muda depois",
+     "marca": "PARCIAL",
+     "fonte": "https://game-masahiro.liblo.jp/archives/1054269344.html",
+     "jogo": "Digimon World: Next Order",
+     "reescrito": true
+    },
+    {
+     "texto": "Na cidade vira caçador de tesouros pago",
+     "marca": "VERIFICADO",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Territorial e depois bonachão, como leitura do autor",
+     "marca": "INFERENCIA",
+     "fonte": "docs/corpus_digimon/ps4_next_order.md",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Falas de serviço da loja de tesouros, conhecidas só de forma aproximada; não usar como bordão",
+     "marca": "PARCIAL",
+     "fonte": "https://game-masahiro.liblo.jp/archives/1054269344.html",
+     "jogo": "Digimon World: Next Order",
+     "reescrito": true
+    },
+    {
+     "texto": "Da forma Birdramon em diante a linha de Piyomon usa 私",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Ainda tem mais dois Card Tamers esperando a vez. Cuidado!",
+     "original": "There are two more Card Tamers waiting for their turn. Watch out!",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2018/",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "Olha só, arranjei uma coisa tremenda! (fala aproximada pelo blogueiro)",
+     "original": "「とんでもないものが入手できたぞ」",
+     "fonte": "https://game-masahiro.liblo.jp/archives/1054269344.html",
+     "fan_translation": false,
+     "marca": "PARCIAL",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Garurumon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Duelista orgulhoso e fair-play: acha dois contra um covardia e marca duelo para outro dia",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/99.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Não escuta as respostas do humano",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/99.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Na cidade vira cozinheiro de pratos nutritivos",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/99.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Controlado, pede socorro com a voz fraca; libertado, pede revanche num registro formal",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2004/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Não cita o controle ao pedir revanche; o eu não era eu mesmo é paráfrase do LP",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2004/",
+     "jogo": "Digimon Digital Card Battle (PS1)",
+     "reescrito": true
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome 俺, trata o humano por おまえ; finais 〜ぜ e 〜ねえ",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/99.html",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Olha, no um contra um eu nunca perco!",
+     "original": "「俺はなぁ、1対1なら絶対負けねえ！」",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/99.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Baixei a guarda, mas dois contra um não é justo.",
+     "original": "\"I let my guard down,but two on one isn't fair.\"",
+     "fonte": "https://lparchive.org/Digimon-World/Update%2012/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Se pretende seguir adiante, devo pedir que lute comigo outra vez.",
+     "original": "If you intend to continue on, I must ask you to battle with me again.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2004/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Gatomon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure: Anode Tamer (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Em Asuka, as Gatomon cuidam das pousadas como aprendizes de gerente, educadas",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2007/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Fala da Kari com respeito e preocupação: diz que ela é sensível à energia maligna",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U07/PSOGL036)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Prestativa: entrega ao jogador um item que achou faz tempo",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U11/PSOGL014)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Única fala no jogo: na despedida pede a Ryo que nunca se esqueça deles",
+     "marca": "PARCIAL",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)",
+     "reescrito": true
+    },
+    {
+     "texto": "Séria e firme; explica a ameaça sem rodeios",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Como Rikka, parceira de Himari: manhosa e sempre grudada nela, até virar Angewomon",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "A mais adulta dos parceiros, de gênio forte",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Madura e sensata, põe o dever de proteger acima da própria vida e explica os perigos aos outros",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://wikimon.net/Tailmon_(Adventure)",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Meio mandona, com humor provocador",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://wikimon.net/Tailmon_(Adventure)",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Cresceu sozinha esperando alguém; maltratada por Vamdemon, endureceu e esqueceu o passado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Não consegue matar Hikari e não sabe por quê; recupera a memória e a assume como parceira",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/34/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "No 02, irmã mais velha calma e às vezes brincalhona; gosta de kamaboko com queijo",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Sem o Holy Ring, reclama de ser um peso até surgir o Digimental da Luz",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Realista: admite que não teria chance contra BlackWarGreymon nem como Perfeito",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_adventure_02.md (ep. 31)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Fala em nome do grupo, usando nós",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2007/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Tom prestativo e protetor",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U07/PSOGL036)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Pronome 私; às vezes fala com os colegas em tom de ordem",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Como serva de Vamdemon, tom seco e masculino, frases com だ e な",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom28.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Depois passa a falar como irmã mais velha, com final feminino",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom37.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Frases de sentença: todo mundo tem hora de querer ficar sozinho",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom43.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Mistura registro neutro e feminino sem regra clara",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/テイルモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Diante de Vamdemon, que a insulta, relembra Wizarmon, que lhe ensinou o que importa",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)",
+     "com": "Vamdemon"
+    },
+    {
+     "texto": "Deu água a Wizarmon no deserto e ganhou a lealdade dele; ele morre protegendo-a",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://wikimon.net/Wizarmon_(Adventure)",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Wizarmon",
+     "nota_marca_original": "PARCIAL"
+    },
+    {
+     "texto": "Disputa com PicoDevimon o favor de Vamdemon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom30.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "PicoDevimon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Dá ordens aos outros parceiros e leva só Patamon consigo contra VenomVamdemon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom37.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Patamon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Sugere deixar Gomamon brigar até cansar; ele reage mal e Tentomon apazigua",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom44.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Gomamon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Wormmon se põe à frente dela para impedir que toque no Ken-chan",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "Wormmon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "V-mon tem uma queda por ela e vê Patamon como rival por isso",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "V-mon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "É quem identifica Vamdemon dentro de Oikawa",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_48.html",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "Vamdemon"
+    },
+    {
+     "texto": "Diante da ilusão de BelialVamdemon, diz que o futuro se pega com as próprias mãos",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "BelialVamdemon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Estamos todas aqui para aprender a ser gerentes das pousadas.",
+     "original": "We're all here to learn how to become managers of the Inns.",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2007/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "A Kari tem uma habilidade estranha. Ela é facilmente afetada por energia maligna.",
+     "original": "Kari possesses a strange ability. She's easily affected by evil energy.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U07/PSOGL036)",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "É sério, a gente vai se ver de novo! Nunca se esqueça de nós!",
+     "original": "Really, we'll meet again! Never forget us!",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Gomamon",
+   "jogos": [
+    "Digimon Adventure: Anode Tamer (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Despreocupado: na despedida tranquiliza Ryo e promete reencontro",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Grato e voluntário; lembra ter lutado ao lado de Ryo e pede licença ao parceiro para ir",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Coleciona Fishy Pictures e se muda para a cidade para fazer parte da coleção do jogador",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Otimista e colecionador",
+     "marca": "INFERENCIA",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Travesso e atrevido, vive provocando o certinho Jō",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Presta atenção em tudo e percebe as oscilações de humor do parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Fica bravo quando perguntam se aquilo é mão ou pata",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Leal: acompanha Jō para não deixá-lo sozinho e ameaça quem caçoar dele",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/07/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Arma planos para devolver a confiança do parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/11/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Comanda cardumes de peixinhos",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome おいら; registro coloquial e malandro, com よな e 合点だい",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    },
+    {
+     "texto": "Não dá o braço a torcer: puxa para si o mérito, meio de brincadeira",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/07/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Irrita-se com Tailmon no ep. 45; Tentomon apazigua",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom44.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Gatomon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Não se preocupa tanto, Ryo! A gente se encontra de novo por aí!",
+     "original": "Don't worry so much! Ryo! We'll meet again somewhere!",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "pt": "Puxa, esse Jō não dá o braço a torcer, hein.",
+     "original": "まったく、素直じゃないよな丈は",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/07/",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "pt": "Acho que foi mais graças ao meu esforço do que à coragem do Jō, talvez... não, com certeza.",
+     "original": "丈の勇気というよりオイラが頑張ったおかげだと思うよ、多分……いや絶対そうに違いない",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/07/",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Greymon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure 02: Tag Tamers (WS)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Lutador errante e fanfarrão de bom coração; chega desafiando e apostando alto",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Perde com elegância, elogia o adversário e logo vira mentor exigente",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Fica na cidade para treinar o herói e inaugura o Coliseu, onde vira anfitrião entusiasmado",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "No pós-jogo, no café de Beginner City, agradece a ajuda recebida em Wiseman Tower",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U12/PSOGL036)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Controlado, estuda o adversário e volta no outro mundo com as técnicas aprendidas",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Pede uma pastilha de magma e depois vende tendas na cidade",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome 俺, trata por おまえ e おまえ達, termina com ぜ e だな, ri com ふふ",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Desafios curtos e diretos; vai logo ao assunto",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Fala lacônica, de quem memoriza as técnicas do rival",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Fala pouco",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_adventure.md (seção Agumon, Evolução)",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Luta como chefe do Black Ship sob controle de Millenniummon",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)",
+     "com": "Millenniummon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Heh, me dar trabalho assim, nada mal. Mas pro que vocês querem fazer, ainda estão muito verdes!",
+     "original": "ふふ、俺を苦戦させるとはさすがだな。だが、おまえ達の目的を果たすにはまだまだ未熟よ！",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Obrigado por me ajudar em Wiseman Tower.",
+     "original": "Thanks for helping me at Wiseman Tower.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U12/PSOGL036)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Growlmon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Ainda infantil, como Guilmon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/ギルモン",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Fala muito em 3ª pessoa e chama os outros pelo nome em vez de você",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon.fandom.com/wiki/Guilmon_(Tamers)",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Voz mais crescida que a de Guilmon; passa a chamar o parceiro também de Tamer",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Respeita profundamente Leomon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンテイマーズ",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Leomon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "No ep. 34 pergunta a Leomon como ser forte e gentil",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://tamers2021.hateblo.jp/entry/2021/06/08/163404",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Leomon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Guilmon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Os Guilmon NPC formam uma família: uns dão pistas vagas, outros são simplórios",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2005/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Alguns Guilmon NPC ficam reflexivos no deserto",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2010/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "O Guilmon Trapaceiro entrega um Blue Card falso; pego, gagueja desculpas e depois ri",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2006/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Ingênuo: entende errado uma palavra e pergunta se é um tipo de pão",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Quer reconhecimento: diz que Guilmon também se esforçou",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Como Yukimura: cortês com todos e estoico, como um samurai",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Leal ao parceiro mesmo sob abuso; renasce com a memória e perdoa o Tamer",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Recém-nascido de um desenho: ingênuo, curioso, brincalhão; adora cavar e comer pão",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Ao sentir um inimigo o olhar muda e vira predador; no início nem obedece ao parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO EM OUTRA FONTE"
+    },
+    {
+     "texto": "Às vezes mostra uma intuição profunda",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon.fandom.com/wiki/Guilmon_(Tamers)",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Maturidade de criança dos primeiros anos do primário",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Como parceiro inicial, fala de si na 3ª pessoa e promete fazer do Tamer um campeão",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2001/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Fala de si na 3ª pessoa, com gramática simples e quebrada",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Yukimura fala de modo formal, com voz grave e madura, e cobra etiqueta",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Como parceiro Rookie, balões de 1 ou 2 palavras em katakana, como criança pequena",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://blog.ja.playstation.com/2016/03/14/20160314-digimonworld/",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "No início quase não fala; o som que faz é ギル",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/ギルモン",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Pronome ギルモン em 3ª pessoa e ぼく; as fontes divergem se troca ou alterna",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/ギルモン",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Chama os outros pelo nome em vez de você",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon.fandom.com/wiki/Guilmon_(Tamers)",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Monodramon pergunta se ele não tem medo, ele entende pão e Monodramon desiste",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)",
+     "com": "Monodramon"
+    },
+    {
+     "texto": "Na despedida consola Culumon: diz que é uma despedida alegre",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)",
+     "com": "Culumon"
+    },
+    {
+     "texto": "Conheceu Renamon como inimiga, que tentou absorver seus dados",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/6262.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Renamon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Respeita profundamente Leomon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンテイマーズ",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Leomon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Afeiçoou-se a Grani e vivia falando com ele",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンテイマーズ",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Grani",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Muito amigo de Terriermon e Calumon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_tamers.md (seção Guilmon)",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Terriermon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "O Guilmon vai fazer do Junior um campeão!",
+     "original": "Guilmon's going to make Junior into a champion!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2001/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Guilmon luta! A gente não vai perder pro Impmon!",
+     "original": "Guilmon fight! We won't lose to impmon!",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "pt": "Antes de perguntar o nome de alguém, não seria educado dizer o seu primeiro?",
+     "original": "Before you ask someone's name, isn't it polite to give your own name, first?",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "HerculesKabuterimon",
+   "jogos": [
+    "Digimon World: Next Order"
+   ],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [
+    {
+     "texto": "Entre os Veggie Troops, desperta do feitiço com que Rosemon controlava os súditos",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Rosemon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Ikkakumon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Oponente em Wiseman Tower que fala do próprio parceiro humano, o Joe",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U09/PSOGL028)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Repete o que o parceiro vive dizendo",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U09/PSOGL028)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Mantém o registro de Gomamon: オイラ e ênfase com やい",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/14/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Fã da comida de Seraphimon; por sentir falta dela, faz o restaurante reabrir",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Seraphimon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Bom, é o que o meu parceiro, o Joe, vive dizendo.",
+     "original": "Well, that's what my Partner, Joe, says all the time.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U09/PSOGL028)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "O meu chifre é que é mais incrível!",
+     "original": "オイラのツノの方がすごいやい！",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/14/",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Imperialdramon Dragon Mode",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Na versão B é arrogante e ameaçador; chama o herói de tolo",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2030/",
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Mestre da Extra Arena de Flame City, imperial e teatral",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL017)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Ao perder, coroa o jogador novo imperador e admite que o deck talvez não mereça o nome",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL018)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Nasce no ep. 39 com um DigiCore de Qinglongmon; no ep. 50 dá o golpe final em BelialVamdemon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/インペリアルドラモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Reticências e exclamações duplas",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL017)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Fusão: no original fala com as vozes separadas dos dois componentes",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/0230yokoku.htm",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Você tem coragem! Gostei de você!",
+     "original": "You've got courage! I like you!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2017/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Tolo! Eu te dei a chance de ir embora e você continua aqui!",
+     "original": "Fool! I gave you a chance to leave and you're still here!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2030/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Nos veremos no Battle Cafe... Você é o novo imperador!!",
+     "original": "I shall see you at Battle Cafe... You are the new emperor!!",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL017)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Imperialdramon Fighter Mode",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Na versão B é arrogante e ameaçador; chama o herói de tolo",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2030/",
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Mestre da Extra Arena de Flame City, imperial e teatral",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL017)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Ao perder, coroa o jogador novo imperador e admite que o deck talvez não mereça o nome",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL018)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Nasce no ep. 39 com um DigiCore de Qinglongmon; no ep. 50 dá o golpe final em BelialVamdemon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/インペリアルドラモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Reticências e exclamações duplas",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL017)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Fusão: no original fala com as vozes separadas dos dois componentes",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/0230yokoku.htm",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Você tem coragem! Gostei de você!",
+     "original": "You've got courage! I like you!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2017/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Tolo! Eu te dei a chance de ir embora e você continua aqui!",
+     "original": "Fool! I gave you a chance to leave and you're still here!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2030/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Nos veremos no Battle Cafe... Você é o novo imperador!!",
+     "original": "I shall see you at Battle Cafe... You are the new emperor!!",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U19/PSOGL017)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Kabuterimon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Pesquisa golpes, mas cansou de treinar e quer luta de verdade",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/108.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Pede luta para treinar e se muda para ficar tão forte quanto o jogador",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Competitivo",
+     "marca": "INFERENCIA",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Fala quebrada, com espaços entre as palavras, vocabulário mínimo e sem partículas",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/108.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "No inglês, frases gramaticais, mas curtas",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World/Update%2010/",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Como inseto Champion, grita em caixa-alta na localização em inglês",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Mantém o Kansai de Tentomon depois de evoluir",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/カブテリモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Pede desculpas em Kansai, com えろうすんまへん",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom10.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Kuwagamon é obcecado em vencê-lo; os Kabuterimon só querem luta real",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/108.html",
+     "jogo": "Digimon World (PS1)",
+     "com": "Kuwagamon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Treino, cansei. Quero treinar em luta de verdade.",
+     "original": "トレーニング　あきた。　実戦できたえたい。",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/108.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Cansei de treinar. Quero luta de verdade.",
+     "original": "I'm tired of training. I want to do live battle.",
+     "fonte": "https://lparchive.org/Digimon-World/Update%2010/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Koromon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Bebê tutor da cidade, solícito",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Na abertura aparece no V-Pet tentando falar com o garoto",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Digimon_World",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Mesmo bebê, insiste que precisa proteger o parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/01/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "No mundo real fica abalado quando uma menina lhe mostra que ele é um ser estranho ali",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom21.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "DIVERGENTE"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Cumprimenta com やあやあ e chama Jijimon de じっちゃん",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Pronome ぼく",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/01/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Fã de Justimon, fica arrasado ao ouvir que o herói maltrata fracos; era Hyogamon disfarçado",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Hyogamon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Mas eu tenho que proteger o Taichi...",
+     "original": "だって、ぼくは太一を守らなきゃ……",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/01/",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Kyubimon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Divide-se em três e aplica um enigma cuja resposta é 9; se o jogador erra, as três lutam",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Orgulhosa e cerimonial",
+     "marca": "INFERENCIA",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Forma de Renamon com motivos de raposa mística e onmyōdō",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_tamers.md (seção Renamon, Evolução)",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [],
+   "interacoes": [
+    {
+     "texto": "Serve a Taomon como guardiã, ao lado de Meramon",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Taomon"
+    },
+    {
+     "texto": "No ep. 34, conversando com Leomon e Growlmon, lembra que escolheu a parceira pela força",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://tamers2021.hateblo.jp/entry/2021/06/08/163404",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Leomon"
+    },
+    {
+     "texto": "Leomon a salva de Beelzemon agarrando-o por trás e morre nessa luta",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://lineup.toei-anim.co.jp/ja/tv/digimon_t/episode/34/",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Leomon",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Lillymon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [],
+   "fala": [
+    {
+     "texto": "Pronome 私; fala com mais serenidade que Palmon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom34.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Passa fome porque Vegiemon açambarcou as hortas para bajular Rosemon",
+     "marca": "VERIFICADO",
+     "fonte": "ps4_next_order.md (Fandom, seção Next Order da espécie)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Vegiemon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MagnaAngemon",
+   "jogos": [
+    "Digimon Adventure (anime)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Nas formas adultas de Patamon o caráter fica altivo e firme",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/パタモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome 私, com tom mais digno",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/パタモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Visão moral rígida: diz que BlackWarGreymon não deveria existir e quer destruí-lo",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "BlackWarGreymon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Você não pode existir neste Mundo Digital!",
+     "original": "お前はこのデジタルワールドに、あってはならない！",
+     "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_34.html",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Magnadramon",
+   "jogos": [
+    "Digimon World: Next Order"
+   ],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MegaGargomon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Na fusão ainda se ouve a voz de Terriermon falando do parceiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/13759.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "É quem faz o D-Reaper regredir no fim da série",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/13759.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MegaKabuterimon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "No pós-jogo cumprimenta o jogador com familiaridade alegre e agradece a ajuda recebida",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2018/ (PSOGL003)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Como AtlurKabuterimon continua no dialeto de Kansai de Tentomon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/カブテリモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Pede desculpas em Kansai, com えろうすんません (ep. 50)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom49.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Chora ao ler a carta do amigo sumido Stingmon e se muda para a cidade para reencontrá-lo",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Stingmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Stingmon"
+    },
+    {
+     "texto": "Amizade terna com Stingmon",
+     "marca": "INFERENCIA",
+     "fonte": "https://digimon.fandom.com/wiki/Stingmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Stingmon"
+    },
+    {
+     "texto": "Angewomon o manda sair do caminho numa briga e ele, intimidado, pede desculpas (ep. 50)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom49.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Angewomon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Oi, sou eu, o MegaKabuterimon! Obrigado pela ajuda em Wiseman Tower!",
+     "original": "Hi, it's me, MegaKabuterimon! Thanks for your help at Wiseman Tower!",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2018/ (PSOGL003)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MegaSeadramon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order"
+   ],
+   "tracos": [
+    {
+     "texto": "Se ofende quando o chamam de peixe",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder ; https://digimon.fandom.com/wiki/WaruSeadramon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "O autor da LP diz que ele fala como robô de busca de alvo, mas não há captura da fala",
+     "marca": "SEM FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2010/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "WaruSeadramon apronta e pede para ser chamado de MegaSeadramon (Lake), negando tudo",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/WaruSeadramon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "WaruSeadramon"
+    },
+    {
+     "texto": "Achava lixo um desenho que o colecionador Gomamon recebe com entusiasmo",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Gomamon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Gomamon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MetalGarurumon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure 02: Tag Tamers (WS)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [],
+   "fala": [
+    {
+     "texto": "Aparece só em imagens no prólogo, sem fala",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Tem voz na abertura; depois de renascer como parceiro fica quase mudo, só frases genéricas e grunhidos",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "No prólogo salva o protagonista junto com WarGreymon e os dois se fundem em Omegamon por instantes",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order",
+     "com": "WarGreymon"
+    },
+    {
+     "texto": "Luta contra o amigo WarGreymon por Yamato e o provoca; WarGreymon custa a crer que é sério (ep. 45)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom44.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "WarGreymon",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MetalGreymon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon World 3 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure 02: Tag Tamers (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Guerreiro estoico que bloqueia o caminho por dever",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Libertado do controle, sai de cena com dignidade e promete reencontro",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "No bar do Coliseu inventa apelidos heroicos para o parceiro do herói",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Mentor-comandante: manda o jogador à Infinity Tower derrotar os Card Tamers das Trevas",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/ (PSOGL003, PSOGL063)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Controlado por Millenniummon, rouba as técnicas do herói em tom ameaçador",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Infectado, não fala: só grunhidos",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronomes 俺 e おまえ; fala seca de guarda",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Trata Ryo por omae e Ken por kisama, como Millenniummon",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html (notas 10 e 11)",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Greymon e MetalGreymon falam pouco",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime"
+    },
+    {
+     "texto": "O pronome 僕 só aparece no blog de fã, numa fala de MetalGreymon (ep. 20)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom20.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Único chefe controlado em que está documentado o padrão de pronomes de Millenniummon",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)",
+     "com": "Millenniummon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Não vai ser assim. Meu trabalho é não deixar vocês passarem daqui.",
+     "original": "そうはいかん。おまえ達をここから先へ行かせないのが俺の仕事だ。",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Vá à Infinity Tower e derrote todos os Card Tamers das Trevas!",
+     "original": "Go to Infinity Tower and defeat all the Darkness Card Tamers!",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/ (PSOGL063)",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "Criança Escolhida... vou tomar para mim as suas técnicas!",
+     "original": "Chosen Child... I shall accept your techniques!",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "MetalSeadramon",
+   "jogos": [
+    "Digimon World 2 (PS1)",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Como Chaos MetalSeadramon, general intelectual e arrogante que sorri de canto (ニヤリ)",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド2",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Achava melhor deixar o herói lutar com Crimson do que lutar ele mesmo",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド2",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Proclama-se o mais forte dos Chaos Generals",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2027/",
+     "jogo": "Digimon World 2 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Menospreza o próprio chefe, o humano Crimson",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2027/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "O mais impaciente e explosivo dos Dark Masters",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/メタルシードラモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Arrogante, chama a perseguição de caçada para saborear devagar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/メタルシードラモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Como chefe, premia quem acerta e castiga quem falha",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/7315.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime"
+    },
+    {
+     "texto": "Um pouco confiante demais",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/メタルシードラモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome ワシ segundo a enciclopédia; no EN se gaba de saber tudo",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド2 ; https://lparchive.org/Digimon-World-2/Update%2027/",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "texto": "Ameaças secas e sarcásticas, com o riso ククク",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/42/ ; http://mamemamemon.com/custom41.html ; https://w.atwiki.jp/aniwotawiki/pages/7315.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime"
+    },
+    {
+     "texto": "Voz que ressoa do fundo da garganta, com eco",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/メタルシードラモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Acha Piemon mole demais (ep. 40)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom39.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Piemon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Atira do alto o subordinado Anomalocarimon (ep. 41)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Anomalocarimon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Whamon se lança contra ele para salvar WarGreymon e morre (eps. 41 e 42)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/メタルシードラモン ; http://mamemamemon.com/custom41.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Whamon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Eu sei de tudo!",
+     "original": "I know everything!",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2027/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "pt": "Ele não é tão durão quanto eu pensava.",
+     "original": "He's not as tough as I thought.",
+     "fonte": "https://lparchive.org/Digimon-World-2/Update%2027/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 2 (PS1)"
+    },
+    {
+     "pt": "Divirtam-se brincando de submarino enquanto podem.",
+     "original": "せいぜい潜水艦ごっこを楽しむがいい",
+     "fonte": "http://mamemamemon.com/custom41.html",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Paildramon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Bravateiro, mas com medo de agulha",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2011/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "A metade XV-mon diz que BlackWarGreymon é diferente de tudo que já enfrentaram (ep. 30)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    },
+    {
+     "texto": "Explica que a energia sombria de Oikawa e o poder de BlackWarGreymon se perturbam (ep. 47)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Fala com duas vozes separadas, as de XV-mon e Stingmon; o roteiro marca cada lado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/0230yokoku.htm",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Diante dele, Patamon lamenta não evoluir mais ao Perfeito como antes (ep. 27)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/post/66739999513",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "Patamon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Nem pensar! Eles te espetam com uma agulha pra isso!",
+     "original": "No way! They stab you with a needle for that!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2011/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Palmon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Adventure: Anode Tamer (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Pacifista: depois de perder, confessa que odeia lutar",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Finge ser uma flor para evitar contato e se irrita quando insistem",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Aceita ir para a cidade quando o herói diz que lá é pacífico, e promete ser útil",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Tímida",
+     "marca": "INFERENCIA",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Animada e determinada; estrategista otimista que propõe ajudar outros para ganhar aliados",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Promete à parceira dar o melhor de si",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Na despedida diz que os corações estarão com Ryo e o convida para outra aventura",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Grata e voluntária; lembra de ter lutado com Ryo e pede licença à parceira para ir",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Pede três ingredientes e passa a cuidar da produção de carne da cidade",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Palmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Prática",
+     "marca": "INFERENCIA",
+     "fonte": "https://digimon.fandom.com/wiki/Palmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Vai no próprio ritmo e acalma quem está perto; emoções marcadas e jeito infantil",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Brincalhona, extrovertida, sensível e gentil",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://wikimon.net/Palmon_(Adventure)",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Se vê como a flor mais bonita do continente e se abala quando acham sua aparência de mau gosto",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom14.html ; http://mamemamemon.com/custom34.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    },
+    {
+     "texto": "Espelha a parceira e chora quando ela chora, mas a enfrenta quando ela vira tirana",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/10/ ; http://mamemamemon.com/custom8.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome ボク; finais 〜よー e 〜だってば",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Pronome アタシ; fala de si na 3ª pessoa quando chora",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター ; https://www.toei-anim.co.jp/tv/dejimon/episode/summary/10/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Na sucessão da horta, assume o lugar de Tanemon, que fica descansando em algum lugar",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true,
+     "com": "Tanemon"
+    },
+    {
+     "texto": "Emprestada pela parceira para ajudar Agumon, faz com Tentomon um plano de ganhar aliados",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)",
+     "com": "Tentomon"
+    },
+    {
+     "texto": "A coragem dos Numemon protegendo a parceira a inspira a evoluir (ep. 6)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom5.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Numemon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Briga de brincadeira com Piyomon (ep. 32)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom31.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Piyomon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Com Agumon, embebeda o mercenário Nanimon, que sai dançando até cair (ep. 27)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Nanimon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Eu já disse que sou uma flor! Que insistência!",
+     "original": "花なんだってば！しつこいなー！",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Ah, chega! Eu odeio lutar!",
+     "original": "あーもう！僕は戦いがキライなんだよー。",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Mimi, vou dar o meu melhor! Você vai ver!",
+     "original": "Mimi, I'll do my best! You'll see!",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Patamon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon World 2 (PS1)",
+    "Digimon World 3 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure: Anode Tamer (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Criança entediada e teimosa: luta sem motivo, só porque está à toa",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Pede revanche até chorar porque não consegue ganhar",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html ; https://lparchive.org/Digimon-World/Update%2006/",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Como lojista, fica emburrado com quem só olha",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Sinceridade infantil: diz que, depois do parceiro, Ryo é quem ele mais gosta",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    },
+    {
+     "texto": "Grato e voluntário; lembra de ter lutado com Ryo e pede licença ao parceiro para ir",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Ataca achando que o jogador controla os Machinedramon e pede desculpas ao saber a verdade",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Patamon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Impulsivo, mas justo",
+     "marca": "INFERENCIA",
+     "fonte": "https://digimon.fandom.com/wiki/Patamon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Chorão e fofo, tratado como protegido pelos outros parceiros; obediente e esforçado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Sofre por não conseguir voar rápido",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Promete não evoluir para continuar amigo do parceiro (ep. 12)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/12/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "No 02 está mais confiável, mas segue chorão e infantil; gosta de sorvete",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Rejeita totalmente as trevas e se ressente de ser um peso para o grupo",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronome ぼく; fala infantil com 〜よー, vogais esticadas e ♪; resmunga ちぇ",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Na escolha de parceiro, cumprimenta e promete não decepcionar",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2001/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Como carta jogável do jogador, não fala",
+     "marca": "INFERENCIA",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Pronome ボク; muda para 私 só nas formas adultas",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター ; https://ja.wikipedia.org/wiki/パタモン",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "É salvo por Leomon de um Goburimon",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html",
+     "jogo": "Digimon World (PS1)",
+     "com": "Leomon"
+    },
+    {
+     "texto": "Elecmon o toma por inimigo; a disputa vira cabo de guerra e os dois apertam as mãos (ep. 12)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/12/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Elecmon",
+     "nota_marca_original": "PARCIAL"
+    },
+    {
+     "texto": "Anda sempre com Tailmon, os dois portadores do poder sagrado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Tailmon",
+     "nota_marca_original": "PARCIAL"
+    },
+    {
+     "texto": "Tailmon escolhe só ele para enfrentar VenomVamdemon (eps. 37 a 39)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom37.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Tailmon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Gabumon defende que Patamon não é rancoroso (ep. 33)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom32.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Gabumon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Devimon sabe desde o início que ele é a ameaça e não pode evoluir (ep. 13)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/13/",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "com": "Devimon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Lamenta diante de Paildramon não evoluir mais ao Perfeito como antes (ep. 27)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/post/66739999513",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "Paildramon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "V-mon o vê como rival por causa de Tailmon (ep. 22)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "V-mon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Sei lá, por nada. Tô à toa.",
+     "original": "何となくなんだ。ヒマだし。",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "pt": "Oi! Não vou te decepcionar.",
+     "original": "Hi! I won't disappoint you.",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2001/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Depois do Takeru, você é quem eu mais gosto!",
+     "original": "I like you second to Takeru!",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Phoenixmon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order"
+   ],
+   "tracos": [
+    {
+     "texto": "Oponente de arena que perde prometendo revanche",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2002/ (PSOGL028)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "No café vira conselheiro prático: manda o jogador usar as peças que o parceiro recebeu",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2002/ (PSOGL049)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Acha que os humanos desequilibraram o mundo e deveriam sumir",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Phoenixmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Vencida, admite que o jogador é bom, mas se muda para vigiá-lo caso ele se corrompa",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Phoenixmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Da próxima vez, vou te derrotar com meus Super Ataques Aéreos!",
+     "original": "Next time, I'll defeat you with my Super Air Attacks!",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2002/ (PSOGL028)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "Você devia usar as Digi-Parts que o seu parceiro recebeu, senão elas vão para o lixo.",
+     "original": "You should use the Digi-Parts your Partner received or they'll go to waste.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2002/ (PSOGL049)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Rapidmon",
+   "jogos": [
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [
+    {
+     "texto": "Insiste em chamar Beelzemon de Impmon e o elogia; ele corrige, irritado (ep. 43)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/10566.html",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Beelzemon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Rosemon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order"
+   ],
+   "tracos": [
+    {
+     "texto": "Guia misteriosa que dá avisos curtos e enigmáticos",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2007/ ; https://lparchive.org/Digimon-Digital-Card-Battle/Update%2010/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Fica sem nome até Wiseman Tower, onde se apresenta e diz reunir informações sobre ele",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/ (PSOGL066)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Afetuosa com o jogador: lamenta as conversas que poderiam ter tido",
+     "marca": "VERIFICADO",
+     "fonte": "https://wikimon.net/Rosemon_(Digital_Card_Arena) ; https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/ (PSOGL067)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "No clímax revela que é só um programa de segurança e se isola com o vilão para prendê-lo",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2010/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "A Rosemon verdadeira é Babamon, que recupera a matriz e a forma original",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://wikimon.net/Rosemon_(Digital_Card_Arena)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Lady Rosemon, controla súditos com feitiço",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Vencida, agradece e admite que só entrou no plano para ganhar o palácio",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "No pós-jogo, furiosa com a sujeira das tropas, vira Burst Mode e ameaça os próprios subordinados",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "No clímax passa a um tom frio e vitorioso, com jargão técnico de sistema",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2010/ (PSOGL093)",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "No japonês, a forma verdadeira segue falando como velha, com わし e じゃ, e se diz Babamon",
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "fonte": "https://gamefaqs.gamespot.com/ps/526754-digimon-digital-card-battle/faqs/79361",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Myotismon dos jogos de cartas a procura como sweetheart; ela não comenta",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2012/ (PSOGL040)",
+     "jogo": "Digimon Digital Card Battle (PS1)",
+     "reescrito": true,
+     "com": "Myotismon"
+    },
+    {
+     "texto": "Planejou com Myotismon destruir a região para redesenvolvê-la",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order",
+     "com": "Myotismon"
+    },
+    {
+     "texto": "Vegiemon açambarca as hortas para bajulá-la",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order",
+     "com": "Vegiemon"
+    },
+    {
+     "texto": "HerculesKabuterimon desperta do feitiço dela",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order",
+     "com": "HerculesKabuterimon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "A gente podia ter tido tantas conversas mais interessantes, não acha?",
+     "original": "We could've had so many more interesting conversations, don't you think?",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2009/ (PSOGL067)",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "Sou só uma parte do sistema de segurança... Nem sou um Digimon.",
+     "original": "I'm just a part of the security system... I'm not even a Digimon.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2010/ (PSOGL072)",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "pt": "Coloquei seu diretório atual no meu Domínio. Você não tem como escapar.",
+     "original": "I have placed your current directory in my Domain. You cannot escape.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/Update%2010/ (PSOGL093)",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Sakuyamon",
+   "jogos": [
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [],
+   "fala": [
+    {
+     "texto": "Na fusão passa a falar de modo feminino, ao contrário do tom neutro de Renamon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/13766.html ; http://www.konaka.com/",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Ao usar o 金剛界曼陀羅, canta uma canção como de ninar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://www.konaka.com/",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Foi mestra de Taomon, que depois rompeu com a colega Kuzuhamon por certo motivo",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order",
+     "com": "Taomon"
+    },
+    {
+     "texto": "Foi mestra de Kuzuhamon, colega de Taomon",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order",
+     "com": "Kuzuhamon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Seadramon",
+   "jogos": [
+    "Digimon World (PS1)"
+   ],
+   "tracos": [
+    {
+     "texto": "Senhor do lago, digno e generoso, com tom de gênio da lâmpada",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Concede um desejo a quem pesca muito; se o pedido é amizade, dá uma flauta como prova",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html ; https://lparchive.org/Digimon-World/Update%2010/",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Pronomes 私 e お前; solene, com いかにも, よかろう e 〜なさい",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "De agora em diante, você e eu somos amigos.",
+     "original": "お前と私は今から友達だ。",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Seraphimon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order"
+   ],
+   "tracos": [
+    {
+     "texto": "O BlackSeraphimon das catacumbas testava a coragem do herói",
+     "marca": "PARCIAL",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド3_新たなる冒険の扉",
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Fechou o próprio restaurante por uma grande missão",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Seraphimon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [],
+   "interacoes": [
+    {
+     "texto": "Reabre o restaurante porque o fã Ikkakumon sente falta da comida",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Seraphimon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Ikkakumon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Shakkoumon",
+   "jogos": [
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Querido pela equipe de produção; sempre flutua um pouco acima do chão (nota do diretor)",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/0236yokoku.htm",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Nenhuma fala própria registrada nas fontes do original",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_adventure_02.md (lacunas)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO (lacuna confirmada)"
+    },
+    {
+     "texto": "Pela regra das fusões no original, cada metade falaria com a própria voz; não há fala dele que confirme",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/0230yokoku.htm",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO (regra geral das fusões)"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Silphymon",
+   "jogos": [
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "No ep. 35 a metade Tailmon se recusa a atacar para não pôr Iori em risco",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 35)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "No original cada metade fala com a própria voz, não em uníssono",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (eps. 35 e 44)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Depois de matar LadyDevimon, pede desculpas a Miyako só com a voz de Aquilamon: fala a metade que agiu",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 44)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "LadyDevimon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "SlashAngemon",
+   "jogos": [],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Stingmon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Forma adulta de Wormmon; muito calmo e frio, cool and collected",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon.fandom.com/wiki/Wormmon_(Adventure)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Diz que também quer expiar os crimes que cometeu",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 26)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Passa a chamar Ken só de Ken, sem o -chan, embora às vezes volte ao Ken-chan",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://dic.pixiv.net/a/スティングモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "sem marca própria; acrescentado na revisão a pedido da auditoria (item 55)"
+    },
+    {
+     "texto": "Na fusão Paildramon fala com a própria voz, a metade marcada W no roteiro",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://web.archive.org/web/2001/http://www.linkclub.or.jp/~kakudou/hidari/02yokoku/0230yokoku.htm",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Manda uma carta ao amigo sumido, sem pressa; MegaKabuterimon chora ao ler e se muda para reencontrá-lo",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Stingmon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "MegaKabuterimon"
+    },
+    {
+     "texto": "Amizade terna com MegaKabuterimon (leitura do autor)",
+     "marca": "INFERENCIA",
+     "fonte": "ps4_next_order.md",
+     "jogo": "Digimon World: Next Order",
+     "com": "MegaKabuterimon"
+    },
+    {
+     "texto": "ExVeemon lhe diz que o dever dele é viver junto do parceiro; desse consenso nasce Paildramon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 26)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "ExVeemon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Tanemon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Acha normal que carne nasça na horta e estranha a surpresa do outro",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    },
+    {
+     "texto": "Depois que Palmon chega à cidade, fica feliz fazendo fotossíntese",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Mistura desu/masu com fala casual, em frases curtas e simples",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Passa a horta a Palmon e vai descansar em algum lugar; trabalho comunitário em revezamento",
+     "marca": "PARCIAL",
+     "fonte": "ps1_digimon_world.md",
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true,
+     "com": "Palmon"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "É. Tem algo estranho?",
+     "original": "うん。何かおかしい？",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "fan_translation": false,
+     "marca": "VERIFICADO EM OUTRA FONTE",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Taomon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Sábio recluso no pico de um vulcão, com Birdramon, Meramon e Kyubimon guardando o portão",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Misantropo, teimoso e pessimista; quieto, raramente se dá ao trabalho de lidar com os outros",
+     "marca": "VERIFICADO",
+     "fonte": "https://d1vtv52f4vjbmu.cloudfront.net/manuals/dwno/PS4-DWNO_manual_GBQS_WEB.pdf",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Não perde chance de alfinetar humanos e Digimon; de condescendente passa a só rabugento",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/Characters/DigimonWorldNextOrder",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Notou outra vontade tentando distorcer o mundo; de observador isolado vira aliado central",
+     "marca": "VERIFICADO",
+     "fonte": "https://d1vtv52f4vjbmu.cloudfront.net/manuals/dwno/PS4-DWNO_manual_GBQS_WEB.pdf",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Seco e sarcástico: chama o jogador de burro e ingênuo e deseja boa sorte com ironia",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Doumon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Aconselha não confiar em todo Digimon",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Doumon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Voz masculina no original JP; no dub EN voz feminina, mas o jogo o trata como macho",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Velho amigo de briga de Jijimon; romperam e voltam a planejar juntos o reinício do mundo",
+     "marca": "VERIFICADO",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order",
+     "com": "Jijimon"
+    },
+    {
+     "texto": "Desmascara Doumon por explorar a bondade do humano; acusado de hipocrisia, não se explica e manda puni-lo",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Doumon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Doumon"
+    },
+    {
+     "texto": "Estudou com Kuzuhamon sob Sakuyamon e romperam por certo motivo; no DLC ela o ajuda no rastreio",
+     "marca": "PARCIAL",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド_-next_0rder-",
+     "jogo": "Digimon World: Next Order",
+     "reescrito": true,
+     "com": "Kuzuhamon"
+    },
+    {
+     "texto": "Quando Renamon vira Taomon, de forma humanoide, Vajramon sente repulsa e acha que ela evoluiu errado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_tamers.md (Wikipedia JA; pixiv)",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "com": "Vajramon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Togemon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Franca: diz que falta algo no golpe novo de Veemon, e era para ajudar",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Togemon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Impressionada com a volta de Veemon, também exige lutar com o jogador",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Togemon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [],
+   "interacoes": [
+    {
+     "texto": "A crítica dela fere o orgulho de Veemon; a reconciliação passa por treino e luta",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Togemon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Veemon"
+    },
+    {
+     "texto": "Amigos orgulhosos e brigões (leitura do autor)",
+     "marca": "INFERENCIA",
+     "fonte": "ps4_next_order.md",
+     "jogo": "Digimon World: Next Order",
+     "com": "Veemon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Tsunomon",
+   "jogos": [
+    "Digimon World (PS1)",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Orgulhoso de ter consertado a ponte com os amigos",
+     "marca": "PARCIAL",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Usa boku para si, em tom infantil de bebê tutor da cidade",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
+     "jogo": "Digimon World (PS1)"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Valkyrimon",
+   "jogos": [],
+   "tracos": [],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Veemon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Digital Card Battle (PS1)",
+    "Digimon Adventure 02: Tag Tamers (WS)",
+    "Digimon Adventure 02: D1 Tamers (WS)",
+    "Digimon Tamers: Brave Tamer (WSC)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure 02 (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Brincalhão e competitivo: propõe esconde-esconde na floresta em troca de botas",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2004/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Preso pela A.o.A., se gaba do que faria se digievoluísse",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2023/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Impetuoso, impaciente e autoconfiante: corta os cumprimentos e quer partir só com Ryo",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Diante de Taichi e Agumon petrificados, a bravata vira aflição",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Ansioso: mal cumprimenta e já quer ir ao torneio",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/d1script.html",
+     "jogo": "Digimon Adventure 02: D1 Tamers (WS)"
+    },
+    {
+     "texto": "Implicante e carinhoso; lembra de já ter lutado ao lado de Ryo",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Ofende-se quando Togemon diz que falta algo no golpe novo e foge",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Veemon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Descobre que era ajuda, fica envergonhado demais para voltar e só volta depois de treinar",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Veemon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Simples, impetuoso e leal aos amigos; gosta de chocolate",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Costuma rebater as tolices de Daisuke, mas também é distraído e leva invertidas",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "reescrito": true,
+     "nota_marca_original": "PARCIAL"
+    },
+    {
+     "texto": "Tem queda por Tailmon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Pede desculpas a Daisuke quando não consegue evoluir no treino forçado",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 22)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Cutuca Daisuke para ele não desistir de Hikari e leva sacudidas",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_adventure_02.md (ep. 31)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Provoca com risadinha: hehehe, não vai ser tão fácil",
+     "marca": "VERIFICADO",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2004/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Como carta do jogador não fala; só fala quando é NPC ou oponente",
+     "marca": "INFERENCIA",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "Muito informal; chama Gennai de vovô",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Repete expressões, como tá tudo bem, tá tudo bem",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Alonga a sílaba quando hesita e se gaba: eu~ eu acho",
+     "marca": "PARCIAL",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)",
+     "reescrito": true
+    },
+    {
+     "texto": "O vovô viria de jiisan no original (não verificado)",
+     "marca": "INFERENCIA",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    },
+    {
+     "texto": "Gagueja quando se explica: e-eu quero ajudar, não quer dizer que te odeio",
+     "marca": "VERIFICADO",
+     "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+    },
+    {
+     "texto": "Usa ore para si",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Voz original de criança pequena e agitada",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Sem bordão ou terminação fixa; o da ga ne não se confirmou em nenhuma fonte",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Frase ao evoluir por armadura: a coragem que se inflama, ao virar Fladramon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/ブイモン",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Fala solta de moleque quando é pego: ehehe, me pegaram",
+     "marca": "OUTRA MIDIA",
+     "fonte": "anime_adventure_02.md (ep. 2, transcrição de fã)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Na vila atropela os cumprimentos; Piccolomon o chama de convencido e Agumon aconselha cautela",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)",
+     "com": "Piccolomon"
+    },
+    {
+     "texto": "Desespera-se ao ver Agumon petrificado: não estão se mexendo",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)",
+     "com": "Agumon"
+    },
+    {
+     "texto": "Reencontra Agumon e Wormmon no time de Ryo e traz a pressa ao trio",
+     "marca": "VERIFICADO",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/d1script.html",
+     "jogo": "Digimon Adventure 02: D1 Tamers (WS)",
+     "com": "Wormmon"
+    },
+    {
+     "texto": "A crítica de Togemon fere seu orgulho; reconciliação por treino e luta",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Veemon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Togemon"
+    },
+    {
+     "texto": "Amigos orgulhosos e brigões com Togemon (leitura do autor)",
+     "marca": "INFERENCIA",
+     "fonte": "ps4_next_order.md",
+     "jogo": "Digimon World: Next Order",
+     "com": "Togemon"
+    },
+    {
+     "texto": "Pede desculpas aos Digimon escravizados que teve de enfrentar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 2)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "Digimon escravizados pelo Kaiser",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Trata Patamon como rival por causa de Tailmon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "Patamon",
+     "nota_marca_original": "VERIFICADO"
+    },
+    {
+     "texto": "Diz a BlackWarGreymon que a vida tem sentido porque se entrega a tudo, até a comer, dormir e brincar",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://digimon-jp-and-en.tumblr.com/ (ep. 46)",
+     "jogo": "Digimon Adventure 02 (anime)",
+     "midia": "anime",
+     "com": "BlackWarGreymon",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Hehehe. Não vai ser tão fácil!",
+     "original": "Heh heh heh. It won't be that easy!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2004/",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Tá tudo bem, tá tudo bem! Vovô, espera aqui.",
+     "original": "It's fine, it's fine! Gramps, wait back here.",
+     "fonte": "http://www.syldra.net/yesterday/wonderswan/tagscript.html",
+     "fan_translation": true,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Adventure 02: Tag Tamers (WS)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Vikemon",
+   "jogos": [
+    "Digimon Digital Card Battle (PS1)"
+   ],
+   "tracos": [],
+   "fala": [
+    {
+     "texto": "Na versão JP fala no famoso dialeto de Nagoya, como Armadimon; o texto da fala não foi achado",
+     "marca": "VERIFICADO",
+     "fonte": "https://w.atwiki.jp/aniwotawiki/pages/55282.html",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    },
+    {
+     "texto": "A versão EN provavelmente neutraliza o dialeto (não verificado)",
+     "marca": "INFERENCIA",
+     "fonte": "ps1_digital_card_battle.md",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "WarGreymon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon Adventure 02: Tag Tamers (WS)",
+    "Digimon Tamers: Battle Spirit (WSC)",
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Na versão B é arrogante e ameaçador, com insultos como tolo",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2030/",
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Parceiro no prólogo: com MetalGarurumon salva o protagonista e se funde em Omegamon",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/List_of_characters_in_Digimon_World:_Next_Order",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Tem voz na abertura; renascido como parceiro, fica quase mudo, só frases genéricas e grunhidos",
+     "marca": "VERIFICADO",
+     "fonte": "https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DigimonWorldNextOrder",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "Troca o boku de Agumon por ore ao virar WarGreymon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "nota_marca_original": "VERIFICADO"
+    }
+   ],
+   "interacoes": [
+    {
+     "texto": "Reluta em lutar com MetalGarurumon, que o provoca, e custa a crer que o amigo fala sério",
+     "marca": "OUTRA MIDIA",
+     "fonte": "http://mamemamemon.com/custom44.html",
+     "jogo": "Digimon Adventure (anime)",
+     "midia": "anime",
+     "reescrito": true,
+     "com": "MetalGarurumon",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "citacoes": [
+    {
+     "pt": "Você está falando sério, né?",
+     "original": "本気なんだね",
+     "fonte": "http://mamemamemon.com/custom44.html",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Adventure (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "WarGrowlmon",
+   "jogos": [
+    "Digimon World 3 (PS1)",
+    "Digimon World: Next Order",
+    "Digimon Tamers (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Infantil: acordado no meio de um sonho em que comia pão",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2009/",
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Preguiçoso (leitura do autor)",
+     "marca": "INFERENCIA",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2009/",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "texto": "Na versão B, JP MegaloGrowmon, é arrogante e ameaçador",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2030/",
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Yukimura renasce perdoando o Tamer que o levou ao limite e depois alcança WarGrowlmon, o Ultimate verdadeiro",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Yukimura",
+     "jogo": "Digimon World: Next Order"
+    },
+    {
+     "texto": "As fontes se contradizem sobre a infantilidade de Guilmon sumir ou não ao virar WarGrowlmon",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://tamers2021.hateblo.jp/entry/2021/05/02/003735",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "fala": [
+    {
+     "texto": "Mantém boku e a voz infantil, chora e agradece; passa a chamar Takato também de Tamer",
+     "marca": "OUTRA MIDIA",
+     "fonte": "https://tamers2021.hateblo.jp/entry/2021/05/02/003735",
+     "jogo": "Digimon Tamers (anime)",
+     "midia": "anime",
+     "nota_marca_original": "PARCIAL"
+    }
+   ],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Eu estava tendo um sonho bom comendo pão!",
+     "original": "I was having a good dream eating bread!",
+     "fonte": "https://lparchive.org/Digimon-World-3/Update%2009/",
+     "fan_translation": false,
+     "marca": "PARCIAL",
+     "jogo": "Digimon World 3 (PS1)"
+    },
+    {
+     "pt": "Obrigado, Tamer. Por lutar junto comigo…",
+     "original": "ありがとう、テイマー。一緒に戦ってくれて――。",
+     "fonte": "https://tamers2021.hateblo.jp/entry/2021/05/02/003735",
+     "fan_translation": false,
+     "marca": "OUTRA MIDIA",
+     "jogo": "Digimon Tamers (anime)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "WereGarurumon",
+   "jogos": [
+    "Digimon World 2 (PS1)",
+    "Digimon Digital Card Battle (PS1)"
+   ],
+   "tracos": [
+    {
+     "texto": "Cortês e esportivo na derrota: não tem arrependimentos e gostou do duelo",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U09/PSOGL052)",
+     "jogo": "Digimon Digital Card Battle (PS1)",
+     "reescrito": true
+    },
+    {
+     "texto": "Generoso com quem o venceu: dá ao jogador a carta Hacking, crucial contra A",
+     "marca": "PARCIAL",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U09/PSOGL062)",
+     "jogo": "Digimon Digital Card Battle (PS1)",
+     "reescrito": true
+    }
+   ],
+   "fala": [],
+   "interacoes": [],
+   "citacoes": [
+    {
+     "pt": "Quero te dar esta carta.",
+     "original": "Let me give you this Card.",
+     "fonte": "https://lparchive.org/Digimon-Digital-Card-Battle/ (U09/PSOGL061)",
+     "fan_translation": false,
+     "marca": "VERIFICADO",
+     "jogo": "Digimon Digital Card Battle (PS1)"
+    }
+   ],
+   "honestidade_especie": null
+  },
+  {
+   "especie": "Zudomon",
+   "jogos": [
+    "Digimon World: Next Order",
+    "Digimon Adventure (anime)"
+   ],
+   "tracos": [
+    {
+     "texto": "Mestre gritão",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Zudomon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order"
+    }
+   ],
+   "fala": [],
+   "interacoes": [
+    {
+     "texto": "O aprendiz Gumdramon o chamou de idiota e fugiu; os dois se reconciliam por meio do jogador",
+     "marca": "VERIFICADO",
+     "fonte": "https://digimon.fandom.com/wiki/Zudomon (seção Digimon World: Next Order)",
+     "jogo": "Digimon World: Next Order",
+     "com": "Gumdramon"
+    }
+   ],
+   "citacoes": [],
+   "honestidade_especie": null
+  }
+ ]
+}
