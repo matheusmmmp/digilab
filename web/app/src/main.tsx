@@ -10,7 +10,8 @@ import { textoSave } from "./save.ts";
 import { iniciarEscala } from "./escala.ts";
 import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
-import { semearGuardados } from "./pets.ts";
+import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
+import { migrarParaMedalhas } from "./tamer.ts";
 import { ligarEscala } from "../motor/index.ts";
 import "./estilo/tokens.css";
 import "./estilo/base.css";
@@ -26,6 +27,9 @@ iniciarEscala();
    conferencia de paridade com o HTML antigo (e2e), que nao tem a escala */
 ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
 
+/* primeira abertura com as medalhas do Tamer (docs/DESIGN_MEDALHAS_ARENAS.md): os pets v1-v5 saem (decisao do Matheus) e
+   o aviso fica pendente para o App; roda uma vez (a chave do Tamer marca). Antes de abrir o save */
+try { migrarParaMedalhas(localStorage, CHAVE_GUARDADOS); } catch (err) { console.error("medalhas: a troca dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
 carregarAtlas();
 carregarDecoracao();

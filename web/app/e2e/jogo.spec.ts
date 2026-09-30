@@ -19,16 +19,18 @@ const ABAS: [string, string, string][] = [
   ["Diário", "Cenários", "diario/cenarios"], ["Conversar", "", "conversar/chat"],
 ];
 
-/** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar) */
-async function semear(page: Page, save: object | null, tema?: string): Promise<void> {
+/** semeia o save por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar). O registro do Tamer
+    (vazio, ou o dado) vai junto: com ele o app entende que a troca para as medalhas ja rodou e nao descarta os saves
+    antigos (v1-v3) que estes testes jogam */
+async function semear(page: Page, save: object | null, tema?: string, tamer: object = { versao: 1, log: [] }): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
-  await page.evaluate(([chave, s, t]) => {
-    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1");
+  await page.evaluate(([chave, s, t, tm]) => {
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", tm);
     /* dicas do Bit desligadas e sem os pets guardados de exemplo: os testes de fluxo nao dependem deles */
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
     if (t) localStorage.setItem(chave + "-tema", t);
-  }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null] as const);
+  }, [CHAVE, save ? JSON.stringify(save) : null, tema ?? null, JSON.stringify(tamer)] as const);
 }
 /** erros de console e de pagina (falhar alto: qualquer um reprova) */
 function vigiarErros(page: Page): string[] {
