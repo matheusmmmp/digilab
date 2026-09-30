@@ -55,6 +55,10 @@ export const CED = {
 export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8, expPorVitoria: .002, expMax: .05 };
 /* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
 export const CHE = { sigma: .1 };
+/* confianca de combate e desgaste por rival repetido (MVP M1, espelho de ConfigConfianca; pets v5; tudo PROPOSTO,
+   sem fonte). lambda/tauHab: novidade por rival; eta/kSens/tauConf: a confianca; kappaEps: so o epsilon do lutador
+   sobe com a inseguranca; limiarFrase/histerese/limiarTedio/nTedio: as frases de estado (motor/confianca.ts) */
+export const CCF = { lambda: .7, tauHab: 2880, eta: .25, kSens: .5, tauConf: 1440, kappaEps: .10, limiarFrase: .4, histerese: 120, limiarTedio: .3, nTedio: 3 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */
 export type CategoriaMemoria = "demora" | "bronca" | "elogio" | "carinho";
 export const CME = {

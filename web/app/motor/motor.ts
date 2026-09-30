@@ -9,6 +9,7 @@ import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { jogarV2, type Lutador, type ResultadoLuta } from "./combate.ts";
+import { ConfiancaCombate } from "./confianca.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
@@ -93,6 +94,8 @@ export class Motor {
   morte: { tick: number; causa: "lesoes" | "lesao_sem_tratar" } | null = null;
   janelasFechadas: (Janela & { desfecho: string; fim: number })[] = [];
   origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
+  /* v5 (M1): confianca de combate e novidade por rival, recalculadas das lutas do registro; null nos v1-v4 */
+  conf: ConfiancaCombate | null = null;
   /* v4: ritmo dos estagios (evento "c" no comeco do registro); sem ele, o rapido de sempre */
   ritmo: Ritmo = "rapida";
   dur: { bebe: number; crianca: number; adolescente: number; adulto: number } = { ...DUR_EVO, adulto: CMG.durRapida };
@@ -123,6 +126,7 @@ export class Motor {
       this.edu = { disciplina: 0, acertos: 0, petiscos: 0, janela: null, proximo: {}, contagem: {} };
       this.lutas = lutasZeradas();
     }
+    if (versao >= 5) this.conf = new ConfiancaCombate();
   }
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
 
@@ -188,7 +192,11 @@ export class Motor {
   private _lutar(rival: string, semente: number): ResultadoLutaPet {
     /* campanha contra NPC: stats treinados absolutos; arena contra bots: normalizados ao orcamento */
     const A = lutadorPet(this, "Seu pet", !!NPC[rival]), B = lutadorBot(rival), res = jogarV2(A, B, semente);
-    if (this.gp) this.gp.aprender(res, semente);
+    /* v5 (M1, espelho de MotorEducacao._lutar): a confianca decai desde a ultima luta e e empurrada pelo resultado,
+       pesado pela novidade do rival (a derrota pesa mais pela sensibilidade). O passo dos gambits e a experiencia de
+       combate somam a novidade em vez de 1: repetir o mesmo rival ensina e rende menos */
+    const rc = this.conf ? this.conf.registrar(this.e.tick, rival, res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0, this.temp.sensibilidade) : null;
+    if (this.gp) this.gp.aprender(res, semente, rc ? rc.novidade : 1);
     if (this.estagioAtual === "adolescente") this.sparring++;
     if (NPC[rival] && res.pontosA === 1) this.campanha[rival]++;
     this._hist({ t: this.e.tick, quem: "luta", a: `contra ${NOME_BOT[rival]}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
@@ -196,7 +204,7 @@ export class Motor {
     if (this.versao >= 4) {
       const L = this.lutas;
       L.lutas++;
-      if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida++; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
+      if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida += rc ? rc.novidade : 1; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
       /* lesao: so na derrota, numa rng derivada da semente da LUTA */
       lesao = res.pontosA === 0 && criarRng(hashSemente("lesao", semente)).random() < CLE.probLesao;
       if (lesao) {
@@ -592,8 +600,11 @@ export class Motor {
   assinatura(): string {
     return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
-      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : [])]);
+      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : []),
+      ...(this.versao >= 5 ? [this.conf!.assinatura()] : [])]);
   }
+  /** v5 (M1): a frase de estado da confianca agora (null nos v1-v4) */
+  estadoConfianca(): ReturnType<ConfiancaCombate["estado"]> | null { return this.conf ? this.conf.estado(this.e.tick) : null; }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
     const t = ev[0];

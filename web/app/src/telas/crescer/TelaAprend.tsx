@@ -8,7 +8,7 @@ import { useDesktop } from "../../desktop.ts";
 import {
   ACOES_PET, BASE_CARATER, CAT, CDJ, CME, COMBATE, EIXOS_TEMP, EMOCAO_TXT, FATORES_ESPACOS, FATORES_TXT, NOME_COMB, NOME_PET,
   afinidades, chaveSprite, distInstinto, expressarDesejo, expressarEmocao, expressarTemperamento, nomeForma, observacao, termosObediencia,
-  type AcaoDono, type AcaoPet, type Lembranca, type MemoriaEspacos, type MotivoVida,
+  type AcaoDono, type AcaoPet, type Lembranca, type MemoriaEspacos, type Motor, type MotivoVida,
 } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { BarraCarater, Numeros, comSinal, dec } from "../../componentes/Barras.tsx";
@@ -17,7 +17,7 @@ import { falaDe, idxDoOrdinal } from "../../fala.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
 import { ajustarVelocidadeChamado } from "../../tempo.ts";
-import { diaDe, hhmm } from "../pet/TelaPet.tsx";
+import { diaDe, hhmm, lutasDaCausa } from "../pet/TelaPet.tsx";
 
 const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Carinho" };
 const EMOTE_MEM: Record<string, string> = { elogio: "emoji_joinha", carinho: "emoji_coracao", bronca: "emoji_exclam" };
@@ -215,6 +215,16 @@ function Lembrancas() {
 }
 
 /* ------------------------------------------------ Jeito: temperamento, desejo, vinculo e tracos */
+/** confianca de combate (M1, pets v5) so em palavras: o estado mostrado (com histerese) e as lutas da causa */
+function confiancaEmPalavras(m: Motor): string {
+  if (m.versao < 5) return "pet de versão antiga: sem confiança de combate (um pet novo já nasce com ela)";
+  const e = m.estadoConfianca()!, n = lutasDaCausa(m, e.lutas, e.estado).length;
+  const desde = e.desde !== null ? ` desde D${diaDe(e.desde)} ${hhmm(e.desde)}` : "";
+  if (e.estado === "confiante") return `confiante${desde}: ganhou as últimas (${n} ${n === 1 ? "vitória" : "vitórias"} no registro); nada muda na luta`;
+  if (e.estado === "inseguro") return `inseguro${desde}: perdeu as últimas (${n} ${n === 1 ? "derrota" : "derrotas"} no registro); hesita e erra mais na luta`;
+  if (e.estado === "entediado") return `entediado do rival${desde}: as últimas ${n} lutas foram contra rival repetido; elas ensinam e rendem menos`;
+  return m.conf!.historico.length ? "sem estado marcante: nem confiante nem inseguro" : "ainda não lutou: nem confiante nem inseguro";
+}
 function Jeito() {
   const { motor: m } = useJogo(), e = m.e, est = m.estagioAtual, des = m.desejoAtual(observacao(e), e.tick);
   const vinculo = m.versao >= 2
@@ -229,6 +239,7 @@ function Jeito() {
         <div class="jeito"><span class="dl-apoio">Temperamento</span> <b>{expressarTemperamento(m.temp, est)}</b></div>
         <div class="jeito"><span class="dl-apoio">Desejo</span> <b>{des ? expressarDesejo(des, est) : "…"}</b></div>
         <div class="jeito"><span class="dl-apoio">Vínculo</span> <b>{vinculo}</b></div>
+        <div class="jeito"><span class="dl-apoio">Confiança</span> <b>{confiancaEmPalavras(m)}</b></div>
         <div>{EIXOS_TEMP.map(k => <BarraCarater key={k} eixo={k} v={m.temp[k]} />)}</div>
         <details class="dl-apoio"><summary>Como funciona e valores exatos</summary>
           <p>O <b>temperamento</b> vem de nascença (sorteado pela semente, igual a vida inteira): muda <i>como</i> o pet aprende, não <i>o que</i>. O <b>desejo</b> é calculado agora: uma necessidade abaixo do limite ou, se não houver, a ação que ele aprendeu a preferir. A partir do Rookie ele sabe dizer qual dos dois é.</p>

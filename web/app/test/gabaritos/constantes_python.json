@@ -609,6 +609,19 @@
   "t_max": 40,
   "turno_morte_subita": 0
  },
+ "ConfigConfianca": {
+  "eta_confianca": 0.25,
+  "histerese_frase_min": 120,
+  "k_sensibilidade": 0.5,
+  "kappa_eps": 0.1,
+  "lambda_novidade": 0.7,
+  "ligada": false,
+  "limiar_frase": 0.4,
+  "limiar_tedio": 0.3,
+  "n_tedio": 3,
+  "tau_confianca_min": 1440,
+  "tau_habituacao_min": 2880
+ },
  "ConfigDesejo": {
   "k_cumprimento_ticks": 60,
   "limiar_necessidade": 0.3,

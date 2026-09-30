@@ -160,6 +160,15 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-fala .fala-ponto{width:8px;height:8px}
 .fala-det{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0}
 .pet-status{color:var(--dl-text-2);font-size:14px}
+/* confianca de combate (M1, pets v5): a frase de estado e, aberta, as lutas do registro que a causaram */
+.pet-conf{display:grid;gap:4px;margin-top:6px}
+.pet-conf-frase{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;min-height:44px;padding:6px 12px;background:var(--dl-surface);color:inherit;
+  border:2px solid var(--dl-border);border-radius:12px;font:inherit;font-size:13px;text-align:left;cursor:pointer}
+.pet-conf-frase:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.pet-conf-frase small{font-size:11px;font-weight:700;color:var(--dl-text-2)}
+.pet-conf-tag{flex:none}
+.pet-conf-det{margin:0;padding:0 12px 4px;list-style:none;display:grid;gap:3px}
+.pet-conf-det .dl-lcd{margin-right:4px}
 .necessidades4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0}
 .nec{background:var(--dl-surface);border:2px solid var(--dl-border);border-radius:10px;padding:6px 8px 7px;display:flex;flex-direction:column;gap:5px;align-items:stretch}
 .nec-rot{font-size:11px;font-weight:800;color:var(--dl-text-2);white-space:nowrap}
