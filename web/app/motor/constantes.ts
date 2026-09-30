@@ -29,8 +29,9 @@ export const EIXOS_TEMP: readonly EixoTemperamento[] = ["curiosidade", "teimosia
 export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kCumprimento: 60 };
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia; 2 = memoria por espacos +
    vinculo + obediencia + condicao no combate; 3 = v2 + carater pelo desvio da politica; 4 = v3 + educacao,
-   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py) */
-export const VERSAO_PET = 4;
+   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py);
+   5 = v4 + voz propria: fala espontanea com janela e mentira (docs/DESIGN_VOZ_PROPRIA.md, secao 9) */
+export const VERSAO_PET = 5;
 /* educacao (espelho de ConfigEducacao): travessuras com janela da crianca em diante, disciplina 0-100 */
 export const CED = {
   janela: 15, intervalos: { crianca: { fome: 90, higiene: 120, carinho: 90 }, adolescente: { fome: 150, higiene: 120, carinho: 120 },
@@ -42,6 +43,12 @@ export const CED = {
 /* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
 /* expPorVitoria/expMax: estilo "lutar" (experiencia de combate, decisao do Matheus em 2026-09-29) */
 export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8, expPorVitoria: .002, expMax: .05 };
+/* mentira (pets v5; espelho de ConfigMentira, DESIGN_VOZ_PROPRIA secao 9). No jogo a fala vem do evento "f" (gatilho);
+   os slots da pesquisa (intervalo_fala_min, defasagem_fala_min) nao existem aqui.
+   h = (fatorSombria se sombria) x (1 - pesoSobrecarga x sobrecarga/100) x especie; p = 0 com h = 1 ou `acertos` broncas
+   certas seguidas em mentiras; senao min(tetoChance, coefChance (1-h)(1-disciplina/max) + reforcoImpune x impunes) */
+export const CMEN = { fatorSombria: .4, pesoSobrecarga: .5, coefChance: .5, reforcoImpune: .05, tetoChance: .8, acertos: 3,
+  impunesPremiada: 2, janela: 30, fracaoTemaEstado: .5, honestidadeEnganador: .7 };
 /* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
 export const CHE = { sigma: .1 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */

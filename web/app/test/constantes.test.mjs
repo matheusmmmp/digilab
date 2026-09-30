@@ -23,7 +23,7 @@ const PY = lerJson(aqui("./gabaritos/constantes_python.json"));
 const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APTIDAO", "CSO", "CCOND", "CD", "CT", "CA", "CE",
   "CV", "CV21", "CAT", "CCP", "GA", "DUR_EVO", "CHAMADO_BEBE", "BASE_CARATER", "DESLOC_CARATER", "CAMPANHA", "LUGARES"];
 /* so no motor em TS: pets v4 (educacao-v1) nao existem no HTML; conferidas so contra o Python */
-const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA"];
+const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMEN"];   /* CMEN: pets v5 (voz propria), so no TS */
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
 const raizDe = cam => cam.match(/^[^.[]+/)[0];
 

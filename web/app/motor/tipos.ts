@@ -51,9 +51,13 @@ export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
 export type Ritmo = "rapida" | "classica";
 /** so no comeco do registro (antes de qualquer outro evento, menos outra config) */
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig;
+/** pets v5: fala espontanea disparada por um gatilho (reencontro, marco...). So o gatilho vai para o registro; se ela
+    e mentira sai da rng da mentira (o replay sorteia de novo, igual) */
+export type EventoFala = [tick: number, tipo: "f", gatilho: string];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig
+  | EventoFala;
 
-export type VersaoPet = 1 | 2 | 3 | 4;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {
