@@ -492,6 +492,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .cc-marcos{list-style:none;margin:0;padding:10px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;background:rgba(15,42,102,.55);border-radius:12px;font-size:13px;font-weight:800}
 .cc-marcos li{opacity:.6}
 .cc-marcos li.feito{opacity:1}
+.cc-ouro{margin:0;display:flex;align-items:center;gap:10px;justify-content:center;font-weight:800;font-size:14px;line-height:20px}
 
 /* Meus pets no desktop (prancha MpListaDesktop): grade de espacos a esquerda, o pet escolhido a direita */
 .topo-acoes{position:relative;margin-left:auto;display:flex;gap:10px}
