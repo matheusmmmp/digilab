@@ -1,6 +1,6 @@
 # Design — a Fronteira de Batalha (parte 4 das medalhas)
 
-Status: **partes 4a e 4b implementadas no jogo web** (branches `fronteira-4a` e `fronteira-4b`, 2026-09-30; seções 7 e 8); 4c por fazer. Especificação pedida pelo Matheus (2026-09-30: "segue com a parte 4 da fronteira"). Detalha a seção 7 do `docs/DESIGN_MEDALHAS_ARENAS.md`. Só o jogo web e só os pets v6; a pesquisa em Python não muda.
+Status: **Fronteira completa no jogo web:** partes 4a, 4b e 4c implementadas (branches `fronteira-4a`, `fronteira-4b` e `fronteira-4c`, 2026-09-30; seções 7, 8 e 9; a Fronteira inteira na seção 10). Especificação pedida pelo Matheus (2026-09-30: "segue com a parte 4 da fronteira"). Detalha a seção 7 do `docs/DESIGN_MEDALHAS_ARENAS.md`. Só o jogo web e só os pets v6; a pesquisa em Python não muda.
 
 - Todo número é PROPOSTO, sem fonte.
 - **Sem rodada de equilíbrio nesta parte** (decisão do Matheus: o equilíbrio fica para uma rodada geral, depois das próximas mecânicas do combate). Os números abaixo só precisam deixar o jogo jogável.
@@ -184,5 +184,86 @@ escala v6, V21D, limite do desafiado; o Mega de referência de cada forma × 4 e
 - O pet do teste ponta a ponta (Valkyrimon, emboscador, treino 40) vence a primeira luta nas 50 primeiras tentativas; média 7,64 na Torre e
   8,04 no Palácio. No e2e a primeira tentativa dá 7 vitórias na Torre e 9 no Palácio.
 
-**Ficou de fora (4c):** a Fábrica e o Salão. **Aberto:** o tempo do jogo corre durante a animação; na velocidade de teste (10 min/s) uma
+**Ficou de fora (4c, seção 9):** a Fábrica e o Salão. **Aberto:** o tempo do jogo corre durante a animação; na velocidade de teste (10 min/s) uma
 lesão da derrota que fecha uma sequência longa pode matar o pet antes do Resultado (a Liga tem o mesmo caso).
+
+## 9. O que a parte 4c implementou (2026-09-30): a Fábrica e o Salão
+
+Só `web/app/`, só pets v6 (a Fábrica nem usa pet); a pesquisa em Python não muda (`docs/REGISTRO_DESVIOS.md`, 2026-09-30). Sem rodada de
+equilíbrio: fator 1 nas duas, como na Liga e nas outras instalações.
+
+| instalação | módulo | regra | recorde |
+|---|---|---|---|
+| Fábrica | `web/app/motor/fabrica.ts` | o jogador não usa o pet: aluga 1 de 3 Megas sorteados e luta séries de 3 lutas sem cura; ao vencer, pode trocar o alugado pelo rival derrotado; perdeu, acabou | a maior sequência de séries vencidas |
+| Salão | `web/app/motor/salao.ts` | um pet de cada nível (Rookie, Champion, Ultimate, Mega), entre o ativo e os guardados, cada um contra um rival sorteado do mesmo nível, na ordem; perdeu, acabou | quantos níveis venceu seguidos (até 4) |
+
+**A Fábrica:**
+- **Os alugados:** a cada tentativa, 3 formas adultas **distintas** (arquétipos diferentes) no Mega, cada uma numa espécie sorteada, de
+  `hashSemente("fabrica-aluguel", s)`, com `s = sementeFabrica(n) = hashSemente("fronteira", "fabrica", n)` e `n` = o número da tentativa
+  no registro do Tamer. Técnica da linha, passiva da forma, caráter canônico, lista canônica V21D, ε dos bots canônicos, **sem treino e sem
+  itens**; E = vida do Mega na escala dos pets v6 (23000) × `FATOR_FABRICA` = 1.
+- **Os rivais:** a luta k (0 = a primeira) é contra uma das 8 formas numa das 4 espécies, de `hashSemente("fabrica-rival", s, k)`, com a
+  mesma montagem; a semente da luta é `hashSemente("fabrica-luta", s, k)`.
+- **A série:** 3 lutas; dentro dela o alugado leva a vida e o guts de uma luta para a outra e cada rival começa inteiro; a série seguinte
+  começa com o alugado inteiro. O limite de turnos é do desafiado, o rival. A primeira luta que não for vitória encerra a tentativa.
+- **A troca:** depois de cada vitória (uma vez), o jogador pode trocar o alugado pelo rival que acabou de derrotar. O novo alugado entra com a
+  **mesma fração da vida** e o mesmo guts (até o máximo dele) com que o anterior terminou a luta: **a troca não cura** (interpretação
+  registrada; a variante "entra inteiro" foi medida e não adotada, abaixo).
+- **Registro e replay:** nenhum pet luta, então a tentativa vai **só para o registro do Tamer** (versão 5): `["fabrica", {n, s, alugado,
+  quando}]` (o começo, com a escolha), `["fabrica_luta", {n, k, s, quando}]` (cada luta, com a semente) e `["fabrica_troca", {n, k,
+  quando}]`. O replay do Tamer joga as lutas de novo (`TentativaFabrica`) e confere a semente da tentativa, a de cada luta, a ordem, a troca
+  só depois de vitória e uma tentativa por vez. A escala vale sempre ali (`perfilDe(..., comEscala)`): o replay não depende da chave do app.
+  O recorde sai das tentativas (`Tamer.recordeFabrica`).
+
+**O Salão:**
+- **O rival:** o bot canônico do nível, sorteado de `hashSemente("salao-rival", s, estágio)`: a espécie e, pelo nível, o ramo (Rookie, com a
+  semente de 3 regras da web), a linha (Champion, lista do adolescente) ou a forma adulta (Ultimate e Mega, lista canônica V21D, técnica e
+  passiva), com o caráter canônico (os bots de referência das metas de estágio). E = vida do nível na escala dos pets v6 × `FATOR_SALAO` = 1.
+- **O pet:** como na Liga e nas outras instalações (treino absoluto na escala, a lista dele, chips valem, cartas não); limite do rival.
+- **Registro e replay:** a luta de cada pet é um evento `l` do registro **dele**, `{r: "salao", s}`, com `s = sementeSalao(semente do pet,
+  número da luta dele no Salão)`; o motor confere a semente, a entrada (o título, evento `f`) e a carta, ao lutar e no replay. `Motor.salao`
+  (tentativas, vitórias) entra na assinatura só depois da primeira luta ali. O Tamer grava a tentativa, `["salao", {n, quando, lutas: [{est,
+  pet, forma, k, s, tick, venceu}]}]`, e confere a ordem dos níveis, a semente de cada luta pela conta do pet, um pet por nível, e que a
+  tentativa só para numa derrota. O recorde sai das tentativas (`Tamer.recordeSalao`).
+- **Os guardados:** um guardado escolhido recebe no registro dele, na hora parada em que está, o que o ativo receberia (o `u` das medalhas e o
+  `f`, `tamer.sincronizarPet`) e a luta; ele continua guardado. O app (`src/fronteira.ts`) joga a tentativa antes em cópias e só então grava,
+  pet por pet e por fim no Tamer; se a gravação der outro resultado, falha alto.
+
+**Telas:** em Lutar · Fronteira, depois da Torre de Batalha e do Palácio, a **Fábrica** (a regra, o recorde do Tamer, "Tentar"; a escolha
+entre os 3 alugados com o Digimon, o arquétipo, o nível e o brasão; a tentativa em andamento com o alugado e a vida, a série e a luta, a
+última luta e, depois de cada vitória, a oferta de troca; as lutas da tentativa) e o **Salão** (a regra, o recorde, o pet de cada nível numa
+lista com o ativo e os guardados, o aviso de qual nível falta, "Tentar" e a última tentativa). As lutas das duas **não são animadas**: o
+resultado aparece no próprio card (a luta do Salão fica no registro do pet e pode ser revista no Diário). Os quatro recordes em **Medalhas**.
+
+**Conferência (sem calibração)** (`web/app/test/conferir_fabrica_salao.mjs` → `artifacts_campanha/fronteira/conferencia_4c.json`; motor web,
+escala v6, V21D, limite do desafiado):
+
+- **Fábrica** (as 2000 primeiras tentativas do jogo): o jogador que aluga o de melhor arquétipo (a ordem da conferência da 4b) vence a 1ª
+  luta em 0,4420 das tentativas e **vence uma série em 0,0180** (sem troca) ou **0,0190** (trocando quando o rival derrotado é de arquétipo
+  melhor); máximo 2 séries. Por luta da série: 0,4443 / 0,2141 / 0,2010 (o dreno sem cura). Alugando sempre o primeiro: 0,3625 e 0,008. É
+  jogável, mas difícil: são lutas de espelho (Megas iguais, sem treino) com o limite de turnos do rival e sem cura. Variantes **não adotadas**
+  (relato para a rodada de equilíbrio): a troca entrando inteira, trocando por arquétipo melhor 0,028; trocando sempre, para curar, 0,054.
+- **Salão** (o pet de referência de cada nível com o treino típico, as formas de referência × 4 espécies, sementes 4101…4505): Rookie 0,8950
+  (sereno 0,79, arisco 1,00), Champion 0,7600 (guardião 0,5625 a brigão 0,9925), Ultimate 0,8153 (muralha 0,5925 a furioso 1,00), Mega
+  0,8309 (muralha 0,61 a furioso 1,00). As lutas são independentes: vencer os 4 com o time médio 0,4608, com as melhores formas 0,9925, com
+  as piores 0,1606; **sem treino** cada nível fica em 0,35–0,38 e os 4 em 0,0187 (o treino decide). Os pets do e2e (50 primeiras lutas de
+  cada um): Patamon 0,86, Growlmon 0,76, MegaSeadramon 1,00, Valkyrimon 1,00.
+
+## 10. A Fronteira completa
+
+| parte | o que | onde vive | registro |
+|---|---|---|---|
+| 4a | a Liga dos Líderes (6 líderes com Megas, sem cura), o título, a medalha de ouro, a conclusão da jornada | `motor/liga.ts` | pet: `l` `{r: "liga"}`; Tamer: `campeao` |
+| 4b | Torre de Batalha e Palácio (Megas sorteados até perder; no Palácio o pet decide sozinho) | `motor/instalacoes.ts` | pet: `f` e `l` `{r: "torre_batalha"}` ou `{r: "palacio"}`; Tamer: `recorde` |
+| 4c | Fábrica (alugados, séries de 3, troca) e Salão (um pet por nível) | `motor/fabrica.ts`, `motor/salao.ts` | Fábrica: só o Tamer (`fabrica`, `fabrica_luta`, `fabrica_troca`); Salão: pet `l` `{r: "salao"}` e Tamer `salao` |
+
+- **Entrada:** a Liga com as 6 medalhas (evento `u` do pet); as quatro instalações depois do título do Tamer (evento `f` do pet; a Fábrica
+  confere o título no próprio registro do Tamer).
+- **Nada da Fronteira deixa o pet mais forte fora dela:** nenhuma dá item, treino ou stat; as lutas do pet fazem o que toda luta faz (aprender
+  regras, contar lutas e vitórias, lesão na derrota). A Fábrica não toca pet nenhum.
+- **Força:** fator 1 em tudo (o Mega, ou o nível, na escala dos pets v6), sem calibração; as conferências (`artifacts_campanha/liga/`,
+  `fronteira/conferencia.json` e `fronteira/conferencia_4c.json`) só mostram que é jogável. A decisão dos fatores fica para a rodada de
+  equilíbrio.
+- **Registro do Tamer:** versão 5 (lê 1 a 4). Os recordes: `recorde` (Torre, Palácio) e os tirados das tentativas (Fábrica, Salão).
+- **Aberto:** o relógio corre durante a animação das lutas da Liga, da Torre e do Palácio (seção 8); a Fábrica é difícil com fator 1 (acima);
+  as lutas da Fábrica e do Salão não têm animação no palco.
