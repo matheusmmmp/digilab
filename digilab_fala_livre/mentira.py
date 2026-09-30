@@ -70,8 +70,10 @@ def _historia(regra: str, d: dict) -> str | None:
     return None                         # evolucao, cruzamento: nada a distorcer
 
 
-def distorcer(tema: str, est: dict, fatos: list) -> tuple[str, str, str]:
-    """(texto verdadeiro, texto falso, molde). `fatos`: os Fato ja montados (a historia traz regra e dados)."""
+def distorcer(tema: str, est: dict, fatos: list) -> tuple[str, str, str, str | None]:
+    """(texto verdadeiro, texto falso, molde, id do fato distorcido ou None). `fatos`: os Fato ja montados (a
+    historia traz regra e dados). Quem chama tira do bloco o fato de historia distorcido: a LLM nao ve a verdade
+    que contradiz o [F1] (a verdade fica so no registro)."""
     if tema not in ("estado", "historia"):
         raise ValueError(f"tema de mentira desconhecido: {tema!r}")
     if tema == "historia":
@@ -81,5 +83,5 @@ def distorcer(tema: str, est: dict, fatos: list) -> tuple[str, str, str]:
                 continue
             falsa = _historia(meta["regra"], meta.get("dados") or {})
             if falsa is not None:
-                return f.texto, falsa, f"historia:{meta['regra']}"
-    return _estado(est)
+                return f.texto, falsa, f"historia:{meta['regra']}", f.id
+    return (*_estado(est), None)

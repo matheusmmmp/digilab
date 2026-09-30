@@ -189,7 +189,8 @@ def fatos_de_estado(e: dict) -> list[Fato]:
         m = e["mentira"]
         if not isinstance(m, dict) or set(m) != {"tema"} or m["tema"] not in ("estado", "historia"):
             raise FatosInvalidos("mentira invalida")
-        verdade, falsa, molde = distorcer(m["tema"], est, fatos)
+        verdade, falsa, molde, fonte = distorcer(m["tema"], est, fatos)
+        fatos = [f for f in fatos if f.id != fonte]
         fatos.append(Fato("F1", TIPO_MENTIRA, falsa, (("mentira", True), ("verdade", verdade), ("molde", molde))))
 
     if e.get("almanaque") is not None:

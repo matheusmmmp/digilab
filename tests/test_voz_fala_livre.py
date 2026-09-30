@@ -63,13 +63,14 @@ def test_mentira_de_estado_nega_ou_finge():
     meta = dict(f.meta)
     assert f.texto == "estou cheio, nem quero comer" and meta["verdade"] == "fome baixo" and meta["mentira"] is True
     em_dia = {"fome": 0.9, "humor": 0.9}
-    assert distorcer("estado", em_dia, [])[1] == "estou morrendo de fome"
+    assert distorcer("estado", em_dia, [])[1:] == ("estou morrendo de fome", "estado:finge:fome", None)
 
 
 def test_mentira_de_historia_pelo_molde_da_regra():
     fatos = fatos_de_estado({**ESTADO, "mentira": {"tema": "historia"}})
     f = next(x for x in fatos if x.id == "F1")
     assert f.texto == "você nunca some" and dict(f.meta)["verdade"] == "você sumiu por 9 h no dia 3"
+    assert "L1" not in {x.id for x in fatos}                                 # a verdade distorcida sai do bloco
     so_evolucao = [{"tipo": "L", "regra": "evolucao", "texto": "virei Rookie no dia 1"}]
     f2 = next(x for x in fatos_de_estado({**ESTADO, "historia": so_evolucao, "mentira": {"tema": "historia"}})
               if x.id == "F1")
@@ -181,6 +182,9 @@ def test_prompt_v3_so_com_historia_e_v2_recusa():
     for regra in ("4d.", "4e.", "[F1]", "[W1]", "ESTILO DA ESPÉCIE", "até 2 fatos"):
         assert regra in SISTEMA_V3
     assert SISTEMA_V3 != SISTEMA
+    from digilab_fala_livre.prompt import SISTEMA_V4, VERSAO_PROMPT_V4
+    m4 = mensagens(fatos, "espontanea", versao=VERSAO_PROMPT_V4)
+    assert m4[0]["content"] == SISTEMA_V4 and "FALE SÓ O QUE O FATO DIZ" in SISTEMA_V4
 
 
 # ------------------------------------------------------------ gerar e verificar com cliente falso

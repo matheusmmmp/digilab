@@ -13,7 +13,8 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 from digilab.config import CONFIG_HISTORIA, CONFIG_LESOES_LIGADA, TICKS_POR_DIA  # noqa: E402
-from digilab.historia import (FatoHistoria, HistoriaInvalida, RegistroVida, extrair, fabrica_com_captura, ids,  # noqa: E402
+from digilab.historia import (FatoHistoria, HistoriaInvalida, RegistroVida, escolher_assunto, extrair,  # noqa: E402
+                              fabrica_com_captura, ids,
                               periodo_do_tick, registro_de_motor, selecionar)
 from digilab.protocol import validar_parametros_historia  # noqa: E402
 
@@ -205,3 +206,16 @@ def test_captura_so_observa_e_mesmo_registro_mesmos_fatos(vida_real):
     assert r1 == r2
     f1, f2 = extrair(r1), extrair(r2)
     assert [f.para_dict() for f in f1] == [f.para_dict() for f in f2] and f1
+
+
+def test_escolher_assunto_gira_entre_tipos():
+    fatos = [FatoHistoria("L", "evolucao", f"L:evo:{k}", f"virei Rookie no dia {k}", k) for k in range(3)]
+    fatos += [FatoHistoria("O", "demora", "O:demora", "você demora para atender meus chamados", 0),
+              FatoHistoria("H", "sequencia", "H:seq:comer:dormir", "quase sempre durmo depois de comer", 0)]
+    dados = []
+    for _ in range(5):
+        a = escolher_assunto(fatos, dados)
+        dados.append([a.chave])
+    assert [d[0][:1] for d in dados] == ["L", "H", "O", "L", "H"]
+    assert dados[0] != dados[3]                                     # dentro do tipo, o recente vai para o fim
+    assert escolher_assunto([], []) is None

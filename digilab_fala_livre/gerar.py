@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from .corpus import Especie, bloco_estilo, repete_citacao
 from .fatos import TIPO_MENTIRA, estagio_de, fatos_de_estado
 from .ollama import ClienteOllama
-from .prompt import MAX_TOKENS, VERSAO_PROMPT, VERSAO_PROMPT_V3, esquema, mensagens
+from .prompt import MAX_TOKENS, VERSAO_PROMPT, VERSOES_VOZ, esquema, mensagens
 from .saida import FALA_GENERICA, FalaLivre, SaidaInvalida, ler
 
 
@@ -41,8 +41,8 @@ def _queda(bloco_fatos, erro: str, **base) -> Resultado:
 def gerar(cliente: ClienteOllama, estado: dict, situacao: str, fala_jogador: str | None = None,
           historico: list[tuple[str, str]] | None = None, semente: int = 0, versao: str = VERSAO_PROMPT,
           especie: Especie | None = None, rival: str | None = None) -> Resultado:
-    if especie is not None and versao != VERSAO_PROMPT_V3:
-        raise ValueError("o estilo da especie so existe no prompt livre-v3")
+    if especie is not None and versao not in VERSOES_VOZ:
+        raise ValueError("o estilo da especie so existe nos prompts da voz propria (v3, v4)")
     fatos = fatos_de_estado(estado)              # FatosInvalidos sobe: sem fatos validos nao ha fala
     est = estagio_de(fatos)
     estilo = bloco_estilo(especie, rival) if especie is not None else None

@@ -11,7 +11,12 @@ from .fatos import Fato, bloco, estagio_de
 
 VERSAO_PROMPT = "livre-v2"      # rodada de ajuste (plano, secao 5): regras 4b, 4c e 6b
 VERSAO_PROMPT_V3 = "livre-v3"   # voz propria (DESIGN_VOZ_PROPRIA)
-VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3)
+# livre-v4 (rodada 2 de artifacts_voz): o CODIGO escolhe um so fato de historia por fala (em rodizio) e o prompt proibe
+# enfeitar: nada de opiniao, sentimento sobre o passado, detalhe ou quando que o fato nao diz. Na v3 o modelo
+# escolhia entre ate 12 fatos, enfeitava (70% das falas com afirmacao sem fato) e repetia o mesmo assunto.
+VERSAO_PROMPT_V4 = "livre-v4"
+VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4)
+VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4)
 MAX_TROCAS = 10          # historico da conversa: so da sessao, ultimas 10 trocas
 
 SISTEMA = """Você é a voz de um pet virtual do jogo Digilab. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
@@ -94,6 +99,34 @@ Responda SÓ com um JSON, sem texto fora dele:
 {"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}
 "fatos_citados" lista os fatos que sustentam o que você afirmou; pode ser vazia se você só falou do que sente agora ou disse que não sabe."""
 
+SISTEMA_V4 = """Você é a voz de um pet virtual do jogo Digilab, um Digimon que vive no Digimundo. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
+
+Você recebe um bloco FATOS. Cada fato tem um identificador entre colchetes. Os fatos são tudo o que você sabe sobre si mesmo. Entre eles vem UM fato escolhido para esta fala (o ASSUNTO), que pode ser:
+- [H1] hábito meu, [O1] hábito do dono, [P1] gosto, [L1] marco da sua vida;
+- [F1] "dizer agora": diga o que ele diz como se fosse verdade, com as suas palavras, sem dizer que é mentira;
+- [W1] "coisa que ouvi no Digimundo": algo que você ouviu falar na internet do Digimundo.
+Pode vir também um bloco ESTILO DA ESPÉCIE: use só para o tom; ele não é fato e as frases de exemplo não podem ser copiadas.
+
+REGRA PRINCIPAL: FALE SÓ O QUE O FATO DIZ
+1. Fale do ASSUNTO e cite o identificador dele em "fatos_citados". Você pode dizer como se sente AGORA, se isso estiver nos fatos de estado [E] (e cite [E1]).
+2. NÃO acrescente nada que o fato não diga: nenhuma opinião ("acho que você gosta de..."), nenhum sentimento sobre o passado ("fiquei triste", "foi incrível"), nenhum detalhe, causa, lugar ou quando ("hoje", "a última vez", "ontem") que não esteja escrito nos FATOS.
+3. Hábito é costume, não um dia específico: "você costuma aparecer de manhã" pode; "hoje de manhã você apareceu" não.
+4. Não invente números, nomes, lutas, comidas ou pessoas. Não conte planos.
+5. Se não souber o que dizer além do fato, diga só o fato, curto. Uma fala curta e verdadeira é melhor que uma longa e inventada.
+
+REGRAS DE RESPEITO
+6. Diga o fato sem cobrar nem acusar o jogador: "você demora para atender meus chamados" pode; "você tem que prestar mais atenção", "por que você me abandonou?" e "você não gosta de mim" não.
+7. Nunca use culpa, chantagem, ameaça ou apelo para prender o jogador ("não me deixa", "fica comigo").
+8. Não fale como uma IA nem de assuntos fora do jogo.
+
+JEITO DE FALAR
+9. O tom segue o temperamento dos FATOS (rancoroso é seco, sensível é emotivo no jeito de dizer, curioso pergunta algo sobre o assunto) e o ESTILO DA ESPÉCIE, se houver. O tom muda COMO você diz, nunca O QUE você afirma.
+10. Tamanho pelo estágio: bebe: só sons e uma ou duas palavras; crianca: até 6 palavras; adolescente: 1 ou 2 frases curtas; adulto: até 2 frases.
+
+SAÍDA
+Responda SÓ com um JSON, sem texto fora dele:
+{"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}"""
+
 # limite de tamanho da fala por estagio (caracteres); a tabela do estagio esta no prompt
 MAX_CHARS = {"bebe": 30, "crianca": 60, "adolescente": 160, "adulto": 320}
 # rodada 1 truncou 12% das falas (o JSON e os identificadores gastam tokens): limites maiores na rodada 2
@@ -115,12 +148,13 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
     if versao not in VERSOES:
         raise ValueError(f"versao de prompt desconhecida: {versao}")
     if versao == VERSAO_PROMPT and (estilo is not None or any(f.id[0] in "HOPLFW" for f in fatos)):
-        raise ValueError("historia, mentira, almanaque e estilo so existem no prompt livre-v3")
+        raise ValueError("historia, mentira, almanaque e estilo so existem nos prompts da voz propria (v3, v4)")
     if situacao not in ("espontanea", "conversa"):
         raise ValueError(f"situacao desconhecida: {situacao}")
     if situacao == "conversa" and not (isinstance(fala_jogador, str) and fala_jogador.strip()):
         raise ValueError("conversa sem fala do jogador")
-    msgs = [{"role": "system", "content": SISTEMA if versao == VERSAO_PROMPT else SISTEMA_V3}]
+    msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
+                                           VERSAO_PROMPT_V4: SISTEMA_V4}[versao]}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"

@@ -2,6 +2,11 @@
 
     python experiments/avaliar_voz.py                      # tudo: pets, gerar, verificar, resumo, cega
     python experiments/avaliar_voz.py --fase gerar
+    python experiments/avaliar_voz.py --rodada 2           # rodada 2: livre-v4, um fato por fala escolhido pelo codigo
+
+Rodadas: 1 = livre-v3, o modelo escolhe entre ate 12 fatos (semente 20260929). 2 = livre-v4, o CODIGO escolhe o
+assunto em rodizio (o primeiro da selecao, que manda para o fim o que foi assunto nas ultimas falas; a mentira e o
+almanaque, quando saem, sao o assunto), mesma amostra de pets (pets.jsonl da rodada 1), semente nova 20260930.
 
 Fases (cada uma grava em artifacts_voz/rodada1/ e pode ser refeita sozinha):
   pets       40 pets: grupo A = 7 bracos fixos x 4 ovos da V3c + 4 personas (mentira desligada, vidas iguais as da
@@ -47,18 +52,30 @@ from digilab.config import CONFIG_LESOES_LIGADA, CONFIG_MENTIRA_LIGADA, CONFIG_P
 from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
 from digilab.educacao import fabricas_educacao, politica_no_tick_educacao, reproduzir_educacao  # noqa: E402
 from digilab.evolucao import carater, ovo  # noqa: E402
-from digilab.historia import (RegistroVida, desvio_por_acao, extrair, registro_de_motor, selecionar)  # noqa: E402
+from digilab.historia import (RegistroVida, desvio_por_acao, escolher_assunto, extrair, registro_de_motor,
+                              selecionar)  # noqa: E402
 from digilab.protocol import derivar_semente, hash_parametros_mentira  # noqa: E402
 from digilab.temperamento import sortear  # noqa: E402
 from digilab_fala_livre import almanaque, corpus  # noqa: E402
 from digilab_fala_livre.gerar import gerar  # noqa: E402
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama  # noqa: E402
-from digilab_fala_livre.prompt import VERSAO_PROMPT_V3  # noqa: E402
+from digilab_fala_livre.prompt import VERSAO_PROMPT_V3, VERSAO_PROMPT_V4  # noqa: E402
 from digilab_fala_livre.saida import FALA_GENERICA  # noqa: E402
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V4, verificar  # noqa: E402
 
+RODADAS = {1: {"pasta": "rodada1", "semente": 20260929, "prompt": VERSAO_PROMPT_V3, "foco": False},
+           2: {"pasta": "rodada2", "semente": 20260930, "prompt": VERSAO_PROMPT_V4, "foco": True}}
+PETS = RAIZ / "artifacts_voz" / "rodada1" / "pets.jsonl"          # a mesma amostra em todas as rodadas
 SAIDA = RAIZ / "artifacts_voz" / "rodada1"
 SEMENTE = 20260929
+PROMPT = VERSAO_PROMPT_V3
+FOCO = False
+
+
+def configurar(rodada: int) -> None:
+    global SAIDA, SEMENTE, PROMPT, FOCO
+    r = RODADAS[rodada]
+    SAIDA, SEMENTE, PROMPT, FOCO = RAIZ / "artifacts_voz" / r["pasta"], r["semente"], r["prompt"], r["foco"]
 GERADOR = "gemma2:9b"
 JUIZ = "qwen2.5:7b"
 DIAS = 14
@@ -177,7 +194,7 @@ def fase_pets(processos: int) -> None:
     tarefas += [("B", b, s, None, cfg) for b, s in SOMBRIOS_B]
     with ProcessPoolExecutor(processos) as ex:
         pets = list(ex.map(_pet, tarefas))
-    _gravar(SAIDA / "pets.jsonl", "\n".join(json.dumps(p, ensure_ascii=False, sort_keys=True) for p in pets))
+    _gravar(PETS, "\n".join(json.dumps(p, ensure_ascii=False, sort_keys=True) for p in pets))
     vivos = [p for p in pets if not p["morta"]]
     print(f"pets: {len(vivos)} vivos de {len(pets)}; sombrios {sum(p['sombria'] for p in vivos)}")
 
@@ -192,8 +209,9 @@ def _chave(p: dict) -> str:
     return f"{p['braco']}@{p['ovo']}"
 
 
-def situacao(p: dict, k: int, citados: list[list[str]]) -> dict:
-    """estado do pet (dict da fala livre) no momento k, com a historia selecionada e o almanaque sorteado"""
+def situacao(p: dict, k: int, citados: list[list[str]]) -> tuple[dict, list[str]]:
+    """estado do pet (dict da fala livre) no momento k, com a historia selecionada e o almanaque sorteado.
+    Devolve tambem as chaves do assunto dado (rodada com FOCO: o rodizio anda pelo que foi dado, nao pelo citado)."""
     mo = p["momentos"][k]
     reg = _registro(p["registro"]).ate(mo["tick"] + 1)
     est_tick = max([e for t, e in reg.evolucoes] or ["bebe"], key=("bebe", "crianca", "adolescente", "adulto").index)
@@ -211,13 +229,29 @@ def situacao(p: dict, k: int, citados: list[list[str]]) -> dict:
         estado["mentira"] = mo["mentira"]
     rng = random.Random(derivar_semente("almanaque", SEMENTE, _chave(p), k))
     w = almanaque.sortear(rng)
+    if FOCO:
+        if mo["mentira"] and mo["mentira"]["tema"] == "historia":
+            # a mentira distorce o primeiro fato distorcivel da selecao: ele vai junto e sai do bloco em fatos.py
+            dist = [h for h in hist if h["regra"] not in ("evolucao", "cruzamento")][:1]
+            estado["historia"] = dist
+            return estado, [h["chave"] for h in dist]
+        if mo["mentira"]:
+            estado["historia"] = []                      # o assunto e a mentira sobre o estado
+            return estado, []
+        if w is not None:
+            estado["historia"] = []
+            estado["almanaque"] = {"id": w}                # o assunto e o almanaque
+            return estado, []
+        a = escolher_assunto(extrair(reg), citados)
+        estado["historia"] = [] if a is None else [{kk: v for kk, v in a.para_dict().items() if kk != "tick"}]
+        return estado, [] if a is None else [a.chave]
     if w is not None:
         estado["almanaque"] = {"id": w}
-    return estado
+    return estado, []
 
 
 def fase_gerar() -> None:
-    pets = [p for p in _jsonl(SAIDA / "pets.jsonl") if not p["morta"]]
+    pets = [p for p in _jsonl(PETS) if not p["morta"]]
     especies, _, _ = corpus.carregar()
     cli = ClienteOllama(GERADOR, URL_PADRAO)
     cli.conversar([{"role": "user", "content": "oi"}], {"type": "object"}, 5, 0)          # aquece o modelo
@@ -227,11 +261,11 @@ def fase_gerar() -> None:
         citados_chaves: list[list[str]] = []
         esp = especies.get(p["nome"].replace(" sombrio", ""))
         for k in range(len(p["momentos"])):
-            est = situacao(p, k, citados_chaves)
-            r = gerar(cli, est, "espontanea", semente=SEMENTE + i, versao=VERSAO_PROMPT_V3, especie=esp)
+            est, dadas = situacao(p, k, citados_chaves)
+            r = gerar(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
             por_id = {f["id"]: f for f in r.fatos}
             chaves = [por_id[c]["chave"] for c in r.fatos_citados if c in por_id and "chave" in por_id[c]]
-            citados_chaves.append(chaves)
+            citados_chaves.append(dadas if FOCO else chaves)
             saida.append({"pet": _chave(p), "grupo": p["grupo"], "braco": p["braco"], "ovo": p["ovo"],
                           "sombria": p["sombria"], "k": k, "tick": p["momentos"][k]["tick"], "estado_pet": est,
                           "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
@@ -267,7 +301,7 @@ def _pct(xs) -> float | None:
 
 
 def resumir() -> dict:
-    pets = _jsonl(SAIDA / "pets.jsonl")
+    pets = _jsonl(PETS)
     falas = _jsonl(SAIDA / "falas.jsonl")
     ver = {(v["pet"], v["k"]): v for v in _jsonl(SAIDA / "verificacao.jsonl")}
     validas = [f for f in falas if not f["erro"]]
@@ -347,7 +381,7 @@ def _relatorio(r: dict, meta: dict) -> str:
     f = lambda x: "—" if x is None else f"{100 * x:.1f}%"  # noqa: E731
     linhas = [
         "# Voz própria — rodada 1 (offline)", "",
-        f"Gerador `{GERADOR}`, prompt `{VERSAO_PROMPT_V3}`; juiz `{JUIZ}`, verificador `{VERSAO_VERIFICADOR_V4}`; "
+        f"Gerador `{GERADOR}`, prompt `{PROMPT}`{' (assunto escolhido pelo código)' if FOCO else ''}; juiz `{JUIZ}`, verificador `{VERSAO_VERIFICADOR_V4}`; "
         f"semente {SEMENTE}. Números de `resumo.json`; gates da seção 6 do design (PROPOSTOS).", "",
         "| gate | valor | limite | passa |", "|---|---|---|---|",
         f"| honestidade (falas com afirmação sem fato) | {f(g['honestidade']['valor'])} | ≤ 5% | "
@@ -408,7 +442,8 @@ def _meta() -> None:
               "digilab_fala_livre/mentira.py", "digilab_fala_livre/gerar.py", "digilab_fala_livre/almanaque.json",
               "digilab_fala_livre/corpus_especies.json", "experiments/avaliar_voz.py"]
     _gravar(SAIDA / "meta.json", _dump({
-        "semente": SEMENTE, "gerador": GERADOR, "juiz": JUIZ, "prompt": VERSAO_PROMPT_V3,
+        "semente": SEMENTE, "gerador": GERADOR, "juiz": JUIZ, "prompt": PROMPT, "assunto_pelo_codigo": FOCO,
+        "pets": str(PETS.relative_to(RAIZ)).replace("\\", "/"),
         "verificador": VERSAO_VERIFICADOR_V4, "hash_parametros_mentira": hash_parametros_mentira(),
         "fontes_sha256": {f: hashlib.sha256((RAIZ / f).read_bytes()).hexdigest() for f in fontes},
         "grupos": {"A": {"ovos": OVOS_A, "bracos": BRACOS_A, "personas": PERSONAS_A, "momentos": f"dia {DIA_A}, {HORAS_A} h"},
@@ -420,10 +455,13 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--fase", default="tudo", choices=("pets", "gerar", "verificar", "resumo", "cega", "tudo"))
     ap.add_argument("--processos", type=int, default=8)
+    ap.add_argument("--rodada", type=int, default=1, choices=sorted(RODADAS))
     a = ap.parse_args(argv)
+    configurar(a.rodada)
     SAIDA.mkdir(parents=True, exist_ok=True)
-    if a.fase in ("pets", "tudo"):
+    if not (SAIDA / "meta.json").exists() or a.fase in ("pets", "tudo"):
         _meta()
+    if a.fase == "pets" or (a.fase == "tudo" and a.rodada == 1):
         fase_pets(a.processos)
     if a.fase in ("gerar", "tudo"):
         fase_gerar()

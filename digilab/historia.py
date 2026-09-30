@@ -17,7 +17,7 @@ e vem de `fabrica_com_captura`, que anota cada decisao durante o replay. Os limi
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from statistics import median
 from typing import Callable, Sequence
 
@@ -310,6 +310,23 @@ def selecionar(fatos: Sequence[FatoHistoria], citados_recentes: Sequence[Sequenc
             por_regra[f.regra] = por_regra.get(f.regra, 0) + 1
             out.append(f)
     return out[:c.max_fatos]
+
+
+def escolher_assunto(fatos: Sequence[FatoHistoria], dados_recentes: Sequence[Sequence[str]] = (),
+                     c: ConfigHistoria | None = None) -> FatoHistoria | None:
+    """O assunto de UMA fala (prompt livre-v4): gira entre os tipos (o tipo dado ha mais tempo primeiro) e, dentro
+    do tipo, segue a ordem de `selecionar` (recentes para o fim). `dados_recentes`: chaves dos assuntos das falas
+    anteriores (a chave comeca pela letra do tipo). Funcao pura."""
+    c = c or CONFIG_HISTORIA
+    cands = selecionar(fatos, dados_recentes, replace(c, max_fatos=len(fatos) or 1, max_por_regra=len(fatos) or 1))
+    if not cands:
+        return None
+    ultimo = {}                                  # tipo -> ha quantas falas foi assunto (0 = na ultima)
+    for idade, fala in enumerate(reversed(list(dados_recentes))):
+        for k in fala:
+            ultimo.setdefault(k[:1], idade)
+    tipos = sorted({f.tipo for f in cands}, key=lambda t: (-ultimo.get(t, 10 ** 6), "LHPO".index(t)))
+    return next(f for f in cands if f.tipo == tipos[0])
 
 
 def ids(fatos: Sequence[FatoHistoria]) -> list[tuple[str, FatoHistoria]]:
