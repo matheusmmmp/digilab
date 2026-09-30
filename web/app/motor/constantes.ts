@@ -32,7 +32,7 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py);
    5 = v4 + evolucao canonica: o Ultimate vira Mega, um estagio proprio (docs/DESIGN_EVOLUCAO_CANONICA.md; so no jogo);
    6 = v5 + trava da evolucao pelas medalhas do Tamer (evento "u" no registro; docs/DESIGN_MEDALHAS_ARENAS.md; so no jogo);
-   7 = v6 + voz propria: fala espontanea com janela e mentira (evento "f"; docs/DESIGN_VOZ_PROPRIA.md, secao 9) */
+   7 = v6 + voz propria: fala espontanea com janela e mentira (evento "fl"; docs/DESIGN_VOZ_PROPRIA.md, secao 9) */
 export const VERSAO_PET = 7;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
@@ -59,7 +59,7 @@ export const CED = {
 /* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
 /* expPorVitoria/expMax: estilo "lutar" (experiencia de combate, decisao do Matheus em 2026-09-29) */
 export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8, expPorVitoria: .002, expMax: .05 };
-/* mentira (pets v5; espelho de ConfigMentira, DESIGN_VOZ_PROPRIA secao 9). No jogo a fala vem do evento "f" (gatilho);
+/* mentira (pets v7; espelho de ConfigMentira, DESIGN_VOZ_PROPRIA secao 9). No jogo a fala vem do evento "fl" (gatilho);
    os slots da pesquisa (intervalo_fala_min, defasagem_fala_min) nao existem aqui.
    h = (fatorSombria se sombria) x (1 - pesoSobrecarga x sobrecarga/100) x especie; p = 0 com h = 1 ou `acertos` broncas
    certas seguidas em mentiras; senao min(tetoChance, coefChance (1-h)(1-disciplina/max) + reforcoImpune x impunes) */

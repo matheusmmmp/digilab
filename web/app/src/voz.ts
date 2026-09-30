@@ -1,5 +1,5 @@
 /* Voz propria dos pets v7 (DESIGN_VOZ_PROPRIA, secoes 3, 9 e 10). So APRESENTACAO, fora uma coisa: a fala espontanea
-   entra no registro do pet pelo evento "f" (motor.falar), porque ela abre a janela de fala e pode ser mentira (decidido
+   entra no registro do pet pelo evento "fl" (motor.falar), porque ela abre a janela de fala e pode ser mentira (decidido
    no motor). O texto vem do servidor (voz: prompt livre-v6, verificador que marca invencoes) ou, sem ele, do molde: o
    texto do assunto (verdade) ou a mentira do motor/mentira.ts.
 
@@ -30,7 +30,7 @@ export function ligarInternet(on: boolean): void { try { localStorage.setItem(IN
 interface Visto { semente: number; nDono: number; ultDono: number; nEvo: number; nLutas: number; tratadas: number; campanha: number;
   desejo: string; chaves: Set<string> | null; tExtr: number; aniversarios: Set<number> }
 let V: Visto | null = null;
-const tickUltimaFala = (m: Motor): number => { for (let i = m.log.length - 1; i >= 0; i--) if (m.log[i][1] === "f") return m.log[i][0] as number; return -Infinity; };
+const tickUltimaFala = (m: Motor): number => { for (let i = m.log.length - 1; i >= 0; i--) if (m.log[i][1] === "fl") return m.log[i][0] as number; return -Infinity; };
 const donos = (m: Motor): number[] => m.log.filter(e => e[1] === "d").map(e => e[0] as number);
 const somaCampanha = (m: Motor): number => Object.values(m.campanha).reduce((a, b) => a + b, 0);
 

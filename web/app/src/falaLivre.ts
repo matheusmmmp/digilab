@@ -3,7 +3,7 @@
    (localStorage CHAVE + ".fala.jsonl"), nunca para o registro do pet. O que o jogador escreve nao ensina o pet.
    Mesmas chaves, mesmo formato de log e mesmas rotas do servidor que a versao do HTML.
    Pets v7 (voz propria, src/voz.ts): a fala espontanea vem dos gatilhos novos, entra no registro do pet pelo evento
-   "f" (abre a janela de fala, pode ser mentira) e o texto vem do servidor com voz: true ou, sem ele, do molde. A
+   "fl" (abre a janela de fala, pode ser mentira) e o texto vem do servidor com voz: true ou, sem ele, do molde. A
    conversa manda a historia do pet. O registro de apresentacao ganha o campo `voz` (a verdade fica guardada ali). */
 import { useEffect, useState } from "preact/hooks";
 import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type Janela, type Motor } from "../motor/index.ts";

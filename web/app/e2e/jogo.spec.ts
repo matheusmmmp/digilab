@@ -309,7 +309,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(r.save.versao).toBe(7);                     /* o ovo novo nasce na versao atual (v7: v6 + voz propria) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 3, log: [] });
+  expect(r.tamer).toEqual({ versao: 4, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -336,7 +336,7 @@ test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer 
   expect(r.save.versao).toBe(7);                     /* o ovo novo nasce na versao atual (v7) */
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 3, log: [] });
+  expect(r.tamer).toEqual({ versao: 4, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -642,7 +642,7 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "liga", s: expect.any(Number) });
   /* o titulo no Tamer, com o pet e a forma */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(3);
+  expect(t.versao).toBe(4);
   const c = t.log.filter((e: [string]) => e[0] === "campeao");
   expect(c).toHaveLength(1);
   expect(c[0][1]).toMatchObject({ n: 1, pet: SAVE_LIGA.semente, forma: "Valkyrimon" });
@@ -710,6 +710,127 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     await expect(page.locator(".med-ouro")).toBeVisible();
     const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(m.larg).toBeLessThanOrEqual(m.janela);
+    expect(erros).toEqual([]);
+  });
+}
+
+/* ---------------------------------------------------------------- as instalacoes da Fronteira: a Torre de Batalha e o Palacio (medalhas
+   parte 4b, docs/DESIGN_FRONTEIRA.md). O save preparado e o da Liga (e2e/save_liga.json) com um Tamer que ja tem o titulo (de outro pet):
+   na abertura o app grava no registro do pet o evento "f" (as instalacoes abrem). A semente da tentativa sai do registro do pet (a primeira
+   tentativa de cada instalacao), entao o resultado e fixo: na Torre 7 vitorias seguidas (8 lutas), no Palacio 9 (conferido com o motor em
+   qualquer hora das proximas 5 h de jogo) */
+const TAMER_CAMPEAO = { versao: 3, log: [...TAMER_6.log, ["campeao", { n: 1, quando: 10, pet: 1, forma: "WarGreymon", tick: 950 }]] };
+const TAMER_RECORDE = { versao: 4, log: [...TAMER_CAMPEAO.log, ["recorde", { inst: "torre_batalha", valor: 4, quando: 11, pet: 1, forma: "WarGreymon", tick: 960 }]] };
+
+test("fronteira: antes do título as instalações ficam trancadas", async ({ page }) => {
+  await semear(page, SAVE_LIGA, undefined, TAMER_6);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/fronteira");
+  await expect(page.locator(".fr-inst-card")).toHaveCount(2);
+  await expect(page.locator(".fr-inst-card").first()).toContainText("Torre de Batalha");
+  await expect(page.locator(".fr-inst-card").last()).toContainText("Palácio");
+  await expect(page.locator(".fr-inst-card").first()).toContainText("Abre depois do título da Liga dos Líderes.");
+  await expect(page.locator(".fr-inst-tentar")).toHaveCount(2);
+  for (const b of await page.locator(".fr-inst-tentar").all()) await expect(b).toBeDisabled();
+  expect(await numLog(page, "f")).toBe(0);
+  await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
+  await expect(page.locator(".med-recordes li")).toHaveCount(2);
+  await expect(page.locator(".med-recordes")).toContainText("Abre depois do título");
+  expect(erros).toEqual([]);
+});
+
+test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem cura e o recorde; o Palácio sem as travas", async ({ page }) => {
+  test.setTimeout(240_000);
+  await semear(page, SAVE_LIGA, undefined, TAMER_CAMPEAO);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/fronteira");
+  /* o pet passou a saber do titulo do Tamer: o evento "f" no registro dele */
+  await expect(page.locator(".fr-inst-card")).toHaveCount(2);
+  expect(await numLog(page, "f")).toBe(1);
+  /* o tempo do jogo pausado (Ajustes > Registro e replay): a derrota que fecha a sequencia pode machucar o pet, e na velocidade de teste
+     (10 min por segundo) a lesao sem tratar o mataria durante a animacao das lutas seguintes */
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await page.getByRole("button", { name: /^Registro e replay/ }).click();
+  await page.getByRole("button", { name: "Pausa" }).click();
+  await irPara(page, "Lutar", "Fronteira", "lutar/fronteira");
+  const torre =page.locator(".fr-inst-card", { hasText: "Torre de Batalha" });
+  await expect(torre).toContainText("Megas sorteados");
+  await expect(torre).toContainText("Sem recorde ainda");
+  const l0 = await numLog(page, "l");
+  await torre.locator(".fr-inst-tentar:not([disabled])").click();
+  await expect(page.locator(".luta-inst")).toContainText("Torre de Batalha · vitória 1");
+  await expect(page.locator(".luta-topo-sub")).toContainText("vitória 1");
+  await page.locator(".luta-ctl--x2").click();
+  await expect(page.locator(".luta-inst")).toContainText("vitória 2", { timeout: 90_000 });
+  await expect(page.locator(".luta-inst")).toContainText("sem cura, seu pet começou esta luta com");
+  const res = page.locator("dialog.modal-res[open]");
+  await expect(res).toBeVisible({ timeout: 200_000 });
+  await expect(res.locator(".res-tag")).toHaveText("Fronteira · Torre de Batalha");
+  await expect(res.locator(".res-tit")).toHaveText("Recorde!");
+  await expect(res.locator(".res-sub")).toContainText("7 vitórias seguidas; parou na luta 8");
+  await expect(res.locator(".res-serie li")).toHaveCount(8);
+  await expect(res.locator(".res-recorde")).toContainText("7 vitórias seguidas");
+  await page.locator(".res-continuar").click();
+  /* uma luta so no registro do pet: a tentativa inteira, {r, s}; o recorde no Tamer */
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
+  expect(lutas[lutas.length - 1][2]).toEqual({ r: "torre_batalha", s: expect.any(Number) });
+  let t = await lerTamer(page);
+  expect(t.versao).toBe(4);
+  expect(t.log.filter((e: [string]) => e[0] === "recorde")).toEqual([["recorde", expect.objectContaining({ inst: "torre_batalha", valor: 7, pet: SAVE_LIGA.semente, forma: "Valkyrimon" })]]);
+  await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
+  await expect(torre.locator(".fr-inst-rec .dl-num")).toHaveText("7");
+  await expect(torre).toContainText("Este pet: 1 tentativa, melhor 7, última 7");
+  /* o Palacio: o aviso de que o pet decide sozinho; a animacao pulada (a tentativa ja foi decidida e gravada) */
+  const palacio = page.locator(".fr-inst-card", { hasText: "Palácio" });
+  await palacio.locator(".fr-inst-tentar:not([disabled])").click();
+  await expect(page.locator(".luta-inst")).toContainText("Palácio · vitória 1");
+  await expect(page.locator(".luta-inst")).toContainText("travas, vetos e chips de regra não valem");
+  await page.locator(".luta-desistir").click();
+  await page.locator("dialog.modal-conf[open]").getByRole("button", { name: "Desistir" }).click();
+  await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
+  await expect(palacio.locator(".fr-inst-rec .dl-num")).toHaveText("9");
+  t = await lerTamer(page);
+  expect(t.log.filter((e: [string]) => e[0] === "recorde").map((e: [string, { inst: string; valor: number }]) => [e[1].inst, e[1].valor])).toEqual([["torre_batalha", 7], ["palacio", 9]]);
+  /* os recordes na tela de Medalhas */
+  await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
+  await expect(page.locator(".med-recordes li.ganha")).toHaveCount(2);
+  await expect(page.locator(".med-recordes li", { hasText: "Torre de Batalha" })).toContainText("7 vitórias seguidas, com Valkyrimon");
+  await expect(page.locator(".med-recordes li", { hasText: "Palácio" })).toContainText("9 vitórias seguidas");
+  expect(erros).toEqual([]);
+});
+
+/* a tela das instalacoes, com o titulo e um recorde: celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`fronteira: instalações em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    await semear(page, SAVE_LIGA, undefined, TAMER_RECORDE);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/fronteira");
+    await expect(page.locator(".fr-inst-card")).toHaveCount(2);
+    await expect(page.locator(".fr-inst-card").first().locator(".fr-inst-rec .dl-num")).toHaveText("4");
+    await expect(page.locator(".fr-inst-card").first()).toContainText("Recorde do Tamer: 4 vitórias seguidas, com WarGreymon");
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(desk => {
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".fr-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const lista = document.querySelector(".fr-lista")!.getBoundingClientRect(), inst = document.querySelector(".fr-inst")!.getBoundingClientRect();
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, aoLado: lista.left >= inst.right - 1 };
+    }, largura >= 1100);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.aoLado, "desktop: as instalações na coluna da Liga, ao lado dos líderes").toBe(largura >= 1100);
+    await page.screenshot({ path: `test-results/fronteira-instalacoes-${largura}-${tema}.png`, fullPage: true });
+    await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
+    await expect(page.locator(".med-recordes li.ganha")).toHaveCount(1);
+    const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
+    expect(m.larg).toBeLessThanOrEqual(m.janela);
+    await page.screenshot({ path: `test-results/fronteira-medalhas-${largura}-${tema}.png`, fullPage: true });
     expect(erros).toEqual([]);
   });
 }

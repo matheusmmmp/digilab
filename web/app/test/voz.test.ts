@@ -79,7 +79,7 @@ describe("evento f (pets v7)", () => {
     m.treino.sobrecarga = 100; m.sombria = true;
     const abertas: unknown[] = [];
     for (let k = 0; k < 20 && !abertas.some(Boolean); k++) { abertas.push(m.falar(k % 2 ? "marco" : "reencontro")); m.avancar(45); }
-    expect(m.log.filter(e => e[1] === "f").length).toBe(abertas.length);
+    expect(m.log.filter(e => e[1] === "fl").length).toBe(abertas.length);
     expect(abertas.some(Boolean)).toBe(true);                     /* dormindo ou com outra janela aberta, nao abre */
     const r = Motor.reproduzir(777, m.log, 7);
     /* a sobrecarga e a forma sombria postas a mao nao estao no registro: confere so o sorteio e as contagens */

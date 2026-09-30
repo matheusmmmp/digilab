@@ -16,6 +16,7 @@ export * from "./medalhas.ts";
 export * from "./arenas.ts";
 export * from "./itens.ts";
 export * from "./liga.ts";
+export * from "./instalacoes.ts";
 export * from "./carater.ts";
 export * from "./gambits_pet.ts";
 export * from "./motivo.ts";

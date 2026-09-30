@@ -1,5 +1,5 @@
 /* Voz propria no app (src/voz.ts): gatilhos, ritmo, assunto da fala e a queda sem o servidor (o molde). A fala entra no
-   registro do pet pelo evento "f" e rejoga igual. */
+   registro do pet pelo evento "fl" e rejoga igual. */
 import { describe, expect, test } from "vitest";
 import { Motor, TPD, mentiraDeHistoria } from "../motor/index.ts";
 import { RITMO_MIN, assuntoDaFala, gatilhoDe, podeFalar } from "../src/voz.ts";
@@ -56,7 +56,7 @@ describe("assunto e molde", () => {
   test("a fala espontanea rejoga igual pelo registro", () => {
     const m = crianca(41);
     for (let k = 0; k < 6; k++) { m.avancar(RITMO_MIN); if (podeFalar(m)) m.falar("reencontro"); if (m.janelaAberta()) m.observar("elogiar"); }
-    expect(m.log.some(e => e[1] === "f")).toBe(true);
+    expect(m.log.some(e => e[1] === "fl")).toBe(true);
     expect(Motor.reproduzir(41, m.log, 7).assinatura()).toBe(m.assinatura());
   });
 });

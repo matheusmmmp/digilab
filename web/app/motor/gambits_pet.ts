@@ -156,6 +156,17 @@ export class GambitsPet {
     const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))];
     return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
   }
+  /** Palacio da Fronteira (instalacoes.ts): a lista que o pet faria sozinho, sem o dono e sem os chips. A do Lago (listaSozinho: sem
+      as travas, com as vetadas de volta) menos as regras que so estao no pet por um chip de regra. A regra de chip que ja estava na lista
+      quando o chip entrou (chipsJaAtivos) e do pet: fica, como fica ao desequipar. Sem chip de regra, e a do Lago */
+  listaPalacio(): string[] {
+    const soDoChip = this.chipsRegra.filter(k => !this.chipsJaAtivos.includes(k));
+    if (!soDoChip.length) return this.listaSozinho();
+    const cap = CV21.maxRegras[baseDe(this.forma!.est)];
+    const ks = [...this.ativas, ...this.vetos.filter(k => k in this.notas && !this.ativas.includes(k) && permitida(regraDe(k), this.forma!))]
+      .filter(k => !soDoChip.includes(k));
+    return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
+  }
   /* ---------------------------------------------------------------- chips de regra (pets v6; itens.ts) */
   /** por que a regra do chip nao pode entrar agora (null: pode). A regra entra no topo; com a lista cheia sai a regra livre (nao
       travada e nao de chip) de nota mais baixa */

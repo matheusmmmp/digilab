@@ -1,15 +1,20 @@
 /* Lutar · Fronteira (docs/DESIGN_FRONTEIRA.md, secoes 2 e 5; medalhas parte 4a; so pets v6): a Liga dos Lideres. Os 6 lideres com os
    Megas deles, na ordem das lutas; as regras da Liga; a ultima tentativa (ate que luta chegou e a vida que sobrou em cada uma, refeitas
    do registro); o titulo do Tamer; e o botao de desafiar (a luta em tela cheia, #/lutar/luta). Tudo do motor (motor/liga.ts,
-   Motor.liga, o evento de luta da Liga) e do registro do Tamer (o evento "campeao"). */
+   Motor.liga, o evento de luta da Liga) e do registro do Tamer (o evento "campeao").
+   Depois do titulo (medalhas parte 4b, motor/instalacoes.ts), as instalacoes: a Torre de Batalha e o Palacio, cada uma com a regra em uma
+   frase, o recorde do Tamer (o evento "recorde"), as tentativas deste pet (Motor.instalacoes) e "Tentar" (a luta em tela cheia). */
 import { useEffect, useMemo } from "preact/hooks";
-import { LIGA, MEDALHAS_LIGA, NOME_ARQ, NOME_ESP, NOME_V2, NPC, RIVAL_LIGA, LUGARES_V6, MEDALHA_POR_ID, chaveSprite, formaLiga, nomeMegaLiga, type Motor } from "../../../motor/index.ts";
+import {
+  INSTALACOES, LIGA, MEDALHAS_LIGA, NOME_ARQ, NOME_ESP, NOME_V2, NPC, RIVAL_LIGA, LUGARES_V6, MEDALHA_POR_ID, chaveSprite, formaLiga, nomeMegaLiga,
+  type Instalacao, type Motor,
+} from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
-import { LUTA, lutarLiga, previa, reconstruirLuta, useLuta } from "../../luta.ts";
+import { LUTA, lutarInstalacao, lutarLiga, previa, reconstruirLuta, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
-import { textoFalta } from "../../tamer.ts";
+import { textoFalta, type Tamer } from "../../tamer.ts";
 import { diaDe } from "../pet/TelaPet.tsx";
 
 /** a ultima tentativa da Liga no registro do pet (null: nenhuma): as lutas jogadas (o pet no fim de cada uma) e o indice do evento */
@@ -21,6 +26,26 @@ function ultimaTentativa(m: Motor): { idx: number; lutas: { venceu: boolean; vid
   return { idx, lutas: L.serie.map(r => ({ venceu: r.pontosA === 1, vida: Math.max(0, r.E.L[0].hp) / r.E.L[0].hpMax, turnos: r.turnos.length })) };
 }
 const pct = (x: number): string => `${Math.round(x * 100)}%`;
+const vitorias = (n: number): string => `${n} vitória${n === 1 ? "" : "s"}`;
+
+/** uma instalacao da Fronteira: a regra em uma frase, o recorde do Tamer, o que este pet fez nela e "Tentar". Antes do titulo, trancada */
+function CartaoInstalacao({ x, m, t, lutando }: { x: Instalacao; m: Motor; t: Tamer; lutando: boolean }) {
+  const v6 = m.versao >= 6, erro = v6 ? m.porqueNaoInstalacao(x.id) : "a Fronteira é só dos pets v6", rec = t.recorde(x.id), c = v6 ? m.instalacoes[x.id] : null;
+  const tentar = () => { lutarInstalacao(x.id, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; };
+  return (
+    <li class={`dl-card fr-inst-card${t.titulo ? "" : " fr-inst-card--fechada"}`} aria-labelledby={`fr-inst-${x.id}`}>
+      <span class="fr-inst-cab">
+        <b class="fr-inst-nome" id={`fr-inst-${x.id}`}>{x.nome}</b>
+        <span class="fr-inst-rec" aria-label={`recorde do Tamer: ${vitorias(rec?.valor ?? 0)}`}><span class="dl-num">{rec?.valor ?? 0}</span><small>recorde</small></span>
+      </span>
+      <span class="fr-inst-frase">{x.frase}</span>
+      <span class="fr-inst-quem">{rec ? `Recorde do Tamer: ${vitorias(rec.valor)} seguidas, com ${rec.forma}, no dia ${diaDe(rec.tick)}.` : t.titulo ? "Sem recorde ainda: a primeira vitória já é um." : "Abre depois do título da Liga dos Líderes."}</span>
+      {c && c.tentativas > 0 && <span class="fr-inst-pet">Este pet: {c.tentativas} tentativa{c.tentativas === 1 ? "" : "s"}, melhor {c.recorde}, última {c.ultima} (vitórias seguidas).</span>}
+      {t.titulo && erro && <span class="dl-apoio">Agora não dá para entrar: {erro}.</span>}
+      <button type="button" class="dl-btn fr-inst-tentar" disabled={!!erro || lutando} onClick={tentar}>{c && c.tentativas ? "Tentar de novo" : "Tentar"}</button>
+    </li>
+  );
+}
 
 export function TelaFronteira() {
   const { motor: m, erroTamer } = useJogo(), luta = useLuta(), a = useAtlas(), t = tamerAtual();
@@ -59,6 +84,11 @@ export function TelaFronteira() {
         </section>
         <button type="button" class="dl-btn fr-lutar" disabled={!!erro || luta.lutando} onClick={desafiar}>
           {nLiga ? "Tentar a Liga de novo" : "Desafiar a Liga"} ({LIGA.length} lutas seguidas)</button>
+        <section class="fr-inst" aria-labelledby="fr-inst-tit">
+          <h2 id="fr-inst-tit">Instalações</h2>
+          <p class="dl-apoio">{t.titulo ? "Para rejogar por recorde: nada daqui deixa o pet mais forte fora da Fronteira." : "Abrem depois do título da Liga dos Líderes, para rejogar por recorde."}</p>
+          <ul class="fr-inst-lista">{INSTALACOES.map(x => <CartaoInstalacao key={x.id} x={x} m={m} t={t} lutando={luta.lutando} />)}</ul>
+        </section>
       </div>
       <ol class="fr-lista" aria-label="Os líderes da Liga, na ordem das lutas">
         {LIGA.map((x, i) => {
