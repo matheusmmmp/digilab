@@ -2,7 +2,7 @@
  "meta": {
   "versao": "corpus-auditado-1",
   "exemplo": false,
-  "descricao": "Corpus de personalidade Digimon para a voz propria (DESIGN_VOZ_PROPRIA, secao 11): as 60 especies do jogo (web/app/motor/nomes.ts), montadas de docs/corpus_digimon/ (revisado apos auditoria em 2026-09-29) com a marca de cada item. O carregador (corpus.py) so deixa entrar VERIFICADO e VERIFICADO EM OUTRA FONTE de obras aptas; PARCIAL so reescrito; anime (OUTRA MIDIA) so com liberar_outra_midia. Sem traco verificado de enganador: honestidade_especie 1 para todas.",
+  "descricao": "Corpus de personalidade Digimon para a voz propria (DESIGN_VOZ_PROPRIA, secao 11): as 60 especies do jogo (web/app/motor/nomes.ts), montadas de docs/corpus_digimon/ (revisado apos auditoria em 2026-09-29) com a marca de cada item. O carregador (corpus.py) so deixa entrar VERIFICADO e VERIFICADO EM OUTRA FONTE de obras aptas; PARCIAL so reescrito; anime (OUTRA MIDIA, midia anime) liberado pelo Matheus em 2026-09-30. Sem traco verificado de enganador: honestidade_especie 1 para todas.",
   "vereditos": {
    "Digimon World (PS1)": "APTO COM RESSALVAS",
    "Digimon World 2 (PS1)": "APTO COM RESSALVAS",
@@ -21,7 +21,7 @@
    "Digimon Adventure: Cathode Tamer (WS)": "FORA DO ESCOPO",
    "Digimon Rumble Arena / Tamers: Battle Evolution (PS1)": "FORA DO ESCOPO"
   },
-  "liberar_outra_midia": false
+  "liberar_outra_midia": true
  },
  "especies": [
   {

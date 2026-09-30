@@ -993,8 +993,8 @@ montada de `docs/corpus_digimon/` (revisado após a auditoria) com a marca de ca
 dos testes (`tests/dados/corpus_exemplo.json`). Passam no filtro 56 espécies, 251 itens e 57 citações; DemiVeemon, DinoBeemon,
 SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
 
-- **Anime fica de fora** (`liberar_outra_midia: false`): os itens dos três animes estão no arquivo com a marca OUTRA MÍDIA e
-  `midia: "anime"`, e entram se o Matheus liberar.
+- **Anime liberado pelo Matheus (2026-09-30)** (`liberar_outra_midia: true`): os itens dos três animes (marca OUTRA MÍDIA,
+  `midia: "anime"`) entram; com eles passam 442 itens e 62 citações nas mesmas 56 espécies.
 - **Itens acrescentados na revisão** (depois da auditoria, com fonte nova conferida pelo revisor) entraram como VERIFICADO EM
   OUTRA FONTE; a auditoria não os viu.
 - **Variantes BK/B do Digimon World 3** saíram (podem ser outra espécie, como BlackWarGreymon).

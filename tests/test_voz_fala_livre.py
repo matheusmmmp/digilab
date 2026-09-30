@@ -364,7 +364,7 @@ def test_cliente_recarrega_se_o_modelo_saiu_da_gpu():
 def test_corpus_auditado_do_jogo():
     import re as _re
     esp, meta, sha = corpus.carregar()
-    assert meta["exemplo"] is False and not meta["liberar_outra_midia"] and len(sha) == 64
+    assert meta["exemplo"] is False and meta["liberar_outra_midia"] is True and len(sha) == 64   # anime liberado (2026-09-30)
     ts = (RAIZ / "web" / "app" / "motor" / "nomes.ts").read_text(encoding="utf-8")
     nomes = {v[0] for v in json.loads(_re.search(r"DIGIMON_DA_FORMA[^=]*=\s*(\{.*?\});", ts).group(1)).values()}
     bruto = json.loads(corpus.ARQUIVO.read_text(encoding="utf-8"))
@@ -372,10 +372,14 @@ def test_corpus_auditado_do_jogo():
     assert len(esp) >= 50 and set(esp) <= nomes
     proibidos = {it.get("texto", it.get("pt")) for e in bruto["especies"] for k in ("tracos", "fala", "interacoes", "citacoes")
                  for it in e[k] if it["marca"] not in ("VERIFICADO", "VERIFICADO EM OUTRA FONTE")
-                 and not (it["marca"] == "PARCIAL" and it.get("reescrito"))}
+                 and not (it["marca"] == "PARCIAL" and it.get("reescrito"))
+                 and not (it["marca"] == "OUTRA MIDIA" and it.get("midia") == "anime")}
     passam = {t for e in esp.values() for t in e.tracos + e.fala} | {i[1] for e in esp.values() for i in e.interacoes} \
         | {c["pt"] for e in esp.values() for c in e.citacoes}
-    assert proibidos and not proibidos & passam                              # anime e marcas fracas ficam de fora
+    assert proibidos and not proibidos & passam                              # marcas fracas ficam de fora
+    assert any(e.interacoes and e.interacoes[0][2] == "anime" for e in esp.values())     # o anime entra marcado
     assert all(len(e.citacoes) <= corpus.MAX_CITACOES for e in esp.values())
-    b = corpus.bloco_estilo(esp["Guilmon"])
-    assert b.count(";") <= corpus.MAX_TRACOS_ESTILO + corpus.MAX_FALA_ESTILO
+    g = max(esp.values(), key=lambda e: len(e.tracos))
+    assert len(g.tracos) > corpus.MAX_TRACOS_ESTILO
+    b = corpus.bloco_estilo(g)
+    assert all(x in b for x in g.tracos[:corpus.MAX_TRACOS_ESTILO]) and g.tracos[corpus.MAX_TRACOS_ESTILO] not in b
