@@ -309,7 +309,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(r.save.versao).toBe(6);
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 3, log: [] });
+  expect(r.tamer).toEqual({ versao: 4, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -336,7 +336,7 @@ test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer 
   expect(r.save.versao).toBe(6);
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 3, log: [] });
+  expect(r.tamer).toEqual({ versao: 4, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
