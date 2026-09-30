@@ -329,3 +329,32 @@ def test_v5_opiniao_com_cara_de_fato_vai_ao_juiz():
                   {"sustentada": False, "fato": ""}])
     v = verificar(cli, "fala", [], fatos, versao=VERSAO_VERIFICADOR_V5)
     assert v.nao_suportadas == 1 and v.afirmacoes[0]["era"] == "sentimento" and v.afirmacoes[1]["livre"]
+
+
+def test_cliente_recarrega_se_o_modelo_saiu_da_gpu():
+    from digilab_fala_livre import ollama as ol
+    prazos = []
+
+    class _Resp:
+        def __init__(self, corpo):
+            self.corpo = corpo
+
+        def read(self):
+            return self.corpo
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def abrir(req, timeout):
+        prazos.append(timeout)
+        if len(prazos) == 2:                          # segunda fala: o modelo saiu da GPU, estoura o prazo curto
+            raise TimeoutError("timed out")
+        return _Resp(json.dumps({"message": {"content": "{}"}, "done": True}).encode())
+
+    c = ol.ClienteOllama("gemma2:9b", abrir=abrir)
+    c.conversar([], {}, 5, 0)
+    c.conversar([], {}, 5, 0)
+    assert prazos == [ol.TIMEOUT_CARGA_S, ol.TIMEOUT_S, ol.TIMEOUT_CARGA_S] and c.carregado

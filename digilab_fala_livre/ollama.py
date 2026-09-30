@@ -54,7 +54,15 @@ class ClienteOllama:
                  "keep_alive": MANTER,
                  "options": {"temperature": TEMPERATURA, "seed": semente, "num_predict": max_tokens}}
         t0 = time.perf_counter()
-        d = self._post("/api/chat", corpo, self.timeout if self.carregado else TIMEOUT_CARGA_S)
+        try:
+            d = self._post("/api/chat", corpo, self.timeout if self.carregado else TIMEOUT_CARGA_S)
+        except TimeoutError:
+            if not self.carregado:
+                raise
+            # outro processo pode ter trocado o modelo na GPU (o Ollama descarrega): recarregar leva mais que o
+            # prazo normal. Uma nova tentativa, com o prazo de carga
+            self.carregado = False
+            d = self._post("/api/chat", corpo, TIMEOUT_CARGA_S)
         self.carregado = True
         motivo = d.get("done_reason", "stop" if d.get("done") else "incompleto")
         return Resposta(d.get("message", {}).get("content", ""), d.get("model", self.modelo),
