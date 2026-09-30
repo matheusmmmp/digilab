@@ -7,7 +7,7 @@ Status: **aprovado** (Matheus, 2026-09-29), implementação **depois do diagnós
 2. **6 arenas.**
 3. O final é a **Fronteira de Batalha com os melhores Digimons**.
 4. Começar **depois do diagnóstico** dos arquétipos.
-5. Pets v6 para a trava: segue a recomendação da seção 5 (não houve objeção).
+5. **Os pets salvos de hoje podem ser descartados** ("pode matar e regerar os pets que já tem hoje"): quando a trava entrar, os saves do jogador (o pet ativo e os guardados) são apagados e o jogo começa de um ovo novo. Não é preciso manter os pets v5 funcionando sem a trava.
 
 **O que ele junta.** Transforma em desenho concreto o passo M2 e as fases seguintes do `PESQUISA_VIDA_LINHAGEM_PROGRESSAO.md` (seções 13, 14, 16, 17 e 24).
 
@@ -67,7 +67,7 @@ Este é o ponto técnico que decide a implementação.
 
 - **O Tamer ganha um registro próprio**, como o pet, com os eventos `medalha` (qual, quando, com que pet) e, depois, `item`. Fica numa chave nova do save; o registro do pet não muda de formato.
 - **O motor do pet não pode ler o Tamer por fora**, porque o replay do pet tem de dar o mesmo resultado sozinho. Então, quando o Tamer ganha a medalha que libera uma evolução, **entra um evento `u` (liberação) no registro do pet**: "o Tamer tem N medalhas a partir deste tick". O replay do pet lê esse evento, como já lê a luta e a origem.
-- **Pets v5 existentes não mudam.** A trava vale para uma versão nova de pet (v6) ou só para pets criados depois de o Tamer existir. Recomendo **v6**, para ficar explícito no save.
+- **Pets salvos de hoje: descartados** (decisão do Matheus). A versão do pet sobe para v6 mesmo assim, porque é o que diz ao replay que o registro tem o evento `u`; mas, em vez de manter os v5 jogáveis, o app apaga os saves antigos na primeira abertura depois da atualização, com um aviso, e começa num ovo novo. Os **gabaritos de paridade** dos testes (pets v1–v3 e as vidas de referência) continuam: são fixtures de teste, não saves do jogador.
 - **A pesquisa em Python não muda.** Medalhas e Tamer são só do jogo, como os gambits híbridos. O desvio vai para o `REGISTRO_DESVIOS`.
 
 ## 6. Itens e cartas
