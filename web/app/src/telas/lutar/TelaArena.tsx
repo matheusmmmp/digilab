@@ -38,7 +38,7 @@ function CardPet() {
         <span class="arena-pet-txt"><b>{nomeForma(m.forma)}</b>
           <span>{nomeEstagio(m.forma)} · {nRegras ? `${nRegras} regras de combate` : "luta ao acaso"}{extra ? " · " + extra : ""}</span></span>
       </div>
-      {sp && <div class="arena-pet-treino"><span><span>lutas de treino para virar Ultimate ou Mega</span><span class="dl-lcd">{Math.min(m.sparring, 10)} de 10</span></span>
+      {sp && <div class="arena-pet-treino"><span><span>lutas de treino para virar Ultimate</span><span class="dl-lcd">{Math.min(m.sparring, 10)} de 10</span></span>
         <Seg n={Math.min(m.sparring, 10)} m={10} cls="dl-seg--acao" /></div>}
     </div>
   );

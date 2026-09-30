@@ -4,11 +4,11 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS } from "./constantes.ts";
+import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import { ADOL_V21, BOTS_V2, BOTS_V21, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, estiloBot, formaRival } from "./bots.ts";
-import { ESCALA, caraterCanonico, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
+import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type ResultadoLuta } from "./combate.ts";
-import { NOME_V2, nomeForma } from "./nomes.ts";
+import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
 import { condicaoDe, type TreinoPet } from "./treino.ts";
 import type { Carater, Forma, FormaAdultaNormal, OpGambit } from "./tipos.ts";
@@ -78,9 +78,9 @@ export class GambitsPet {
   versao = 0;
   /** evolucao: a semente da forma nova entra com nota-base pela posicao; o que ja foi aprendido fica; a
       lista cabe na capacidade do estagio */
-  semear(forma: Forma): void {
-    const base = sementeDe(forma), cap = CV21.maxRegras[forma.est];
-    this.forma = { ...forma }; this.linha = nomeForma(forma); this.final = base.final;
+  semear(forma: Forma, nome: string = nomeFormaLegado(forma)): void {
+    const base = sementeDe(forma), cap = CV21.maxRegras[baseDe(forma.est)];
+    this.forma = { ...forma }; this.linha = nome; this.final = base.final;
     const novas: string[] = [];
     base.regras.forEach((r, i) => {
       const k = chaveRegra(r), nb = GA.base * (1 - i / cap);
@@ -92,6 +92,12 @@ export class GambitsPet {
     for (const k of Object.keys(this.travas)) if (!this.ativas.includes(k)) delete this.travas[k];
     this.mudancas.push({ luta: this.nLutas, texto: `evoluiu para ${this.linha}: a forma semeou a lista (até ${cap} regras)` });
     this.ordenar(); this.versao++;
+  }
+  /** pets v5: o Ultimate virou Mega. A forma e a mesma, entao a lista aprendida fica como esta (nao semeia de novo) */
+  promover(forma: Forma, nome: string): void {
+    this.forma = { ...forma }; this.linha = nome;
+    this.mudancas.push({ luta: this.nLutas, texto: `evoluiu para ${nome}: a lista aprendida continua` });
+    this.versao++;
   }
   ordenar(): void {
     const n = this.ativas.length, fixas: Record<number, string> = {}, livres: string[] = [];
@@ -181,14 +187,14 @@ export function lutadorPet(m: PetLutador, rotulo: string, absoluto = false): Lut
 export function lutadorBot(nome: string): Lutador {
   const n = NPC[nome];
   if (n) {
-    /* campanha na escala: E = vida do estagio sugerido x fator; epsilon da escala */
+    /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala */
     if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estiloBot(nome), eps: CESC.epsNpc },
-      cond: perfilNPC(n.total, n.estagio || "adulto", CESC.vida[n.est] * CESC.fatorNpc[nome]) };
+      cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0) * (n.fator ?? CESC.fatorNpc[nome])) };
     return { nome: "Rival " + n.nome, estilo: estiloBot(nome), cond: perfilNPC(n.total, n.estagio || "adulto") };
   }
   if (BOTS_V21[nome as FormaAdultaNormal]) {
     const f = formaRival(nome as FormaAdultaNormal);
-    return { nome: "Rival " + nomeForma(f), estilo: estiloBot(nome), cond: perfilDe(f, caraterCanonico(nome as FormaAdultaNormal)) };
+    return { nome: "Rival " + nomeFormaLegado(f), estilo: estiloBot(nome), cond: perfilDe(f, caraterCanonico(nome as FormaAdultaNormal)) };
   }
   return { nome: "Rival " + NOME_BOT[nome], estilo: estiloBot(nome), cond: perfilNeutro() };
 }

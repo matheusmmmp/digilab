@@ -7,7 +7,8 @@ import { CATALOGO_V2 } from "./combate.ts";
 import type { Emocao } from "./memoria.ts";
 import { FATOR_DA_FEATURE } from "./motivo.ts";
 import type { CategoriaMemoria } from "./constantes.ts";
-import type { Desejo, Estagio, Motivo, Temperamento } from "./tipos.ts";
+import type { Desejo, Estagio, EstagioBase, Motivo, Temperamento } from "./tipos.ts";
+import { baseDe } from "./constantes.ts";
 
 type TextoPorEstagio = { marcador: string; bebe: string; crianca: string; adolescente: string; adulto: string };
 
@@ -18,7 +19,8 @@ export const EMOCAO_TXT: Record<string, [string, string, string]> = {
   ternura: ["ternura", "(^3^)", "Senti ternura"], timidez: ["timidez", "(//_//)", "Senti timidez"], alegria: ["alegria", "(^v^)", "Senti alegria"],
 };
 export const CAUSA_EMOCAO: Record<CategoriaMemoria, string> = { demora: "quando você demorou", bronca: "quando você brigou comigo", elogio: "quando você falou bem de mim", carinho: "quando você me deu atenção" };
-export function expressarEmocao(em: Emocao, cat: CategoriaMemoria, est: Estagio, ref: number | null | undefined): string {
+export function expressarEmocao(em: Emocao, cat: CategoriaMemoria, est0: Estagio, ref: number | null | undefined): string {
+  const est = baseDe(est0);   /* o Mega (pets v5) fala como o adulto */
   const [pal, emote, adulto] = EMOCAO_TXT[em.nome];
   if (est === "bebe") return emote;
   if (est === "crianca") return `[${pal}]`;
@@ -27,7 +29,7 @@ export function expressarEmocao(em: Emocao, cat: CategoriaMemoria, est: Estagio,
 }
 
 export const ESTAGIOS_FALA: readonly Estagio[] = ["bebe", "crianca", "adolescente", "adulto"];
-export const NOME_ESTAGIO_FALA: Record<Estagio, string> = { bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate/Mega" };
+export const NOME_ESTAGIO_FALA: Record<Estagio, string> = { bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
 export const GENERICO_ADULTO = "Não sei, só quis.";
 /* vida sem fator e sem exploracao: quem decidiu foi o prior do instinto (espelho de expressao.py, 2026-09-29) */
 export const GENERICO_INSTINTO = "Foi instinto: é o meu jeito.";
@@ -129,7 +131,7 @@ export const TOM_TEMPERAMENTO: Record<string, TextoPorEstagio> = {
   "rancor+": TOM("guardo mágoa", "(ò_ó)", "Nasci assim: guardo mágoa por muito tempo."),
   "rancor-": TOM("esqueço rápido", "(^o^)", "Nasci assim: esqueço rápido o que passou."),
 };
-export const TEMPERAMENTO_NEUTRO_TXT: Record<Estagio, string> = { bebe: "(o_o)", crianca: "[~]", adolescente: "...", adulto: "Nasci sem nada que se destaque." };
+export const TEMPERAMENTO_NEUTRO_TXT: Record<EstagioBase, string> = { bebe: "(o_o)", crianca: "[~]", adolescente: "...", adulto: "Nasci sem nada que se destaque." };
 export const DESEJO_TIPO: Record<"necessidade" | "vontade", { marcador: string; crianca: string; adolescente: string; adulto: string }> = {
   necessidade: { marcador: "preciso", crianca: "[preciso!]", adolescente: "preciso", adulto: "Eu preciso" },
   vontade: { marcador: "queria", crianca: "[queria?]", adolescente: "queria", adulto: "Eu queria" },
@@ -144,13 +146,15 @@ export function eixosMarcantes(t: Temperamento): string[] {
   return EIXOS_TEMP.map((e, i) => [Math.abs(t[e]), -i, e] as const).sort((a, b) => b[0] - a[0] || b[1] - a[1])
     .filter(([v]) => v >= CDJ.limiarTom).map(([, , e]) => e + (t[e] > 0 ? "+" : "-"));
 }
-export function expressarTemperamento(t: Temperamento, est: Estagio): string {
+export function expressarTemperamento(t: Temperamento, est0: Estagio): string {
+  const est = baseDe(est0);
   const mk = eixosMarcantes(t);
   if (!mk.length) return TEMPERAMENTO_NEUTRO_TXT[est];
   if (est === "adulto") return mk.slice(0, 2).map((k, i) => i ? "E n" + TOM_TEMPERAMENTO[k].adulto.slice(1) : TOM_TEMPERAMENTO[k].adulto).join(" ");
   return TOM_TEMPERAMENTO[mk[0]][est];
 }
-export function expressarDesejo(d: Desejo, est: Estagio): string {
+export function expressarDesejo(d: Desejo, est0: Estagio): string {
+  const est = baseDe(est0);
   if (!ALVOS_DESEJO[d.alvo]) throw new Error("alvo de desejo sem texto: " + d.alvo);
   if (est === "bebe") return DESEJO_BEBE;
   const [ic, verbo] = ALVOS_DESEJO[d.alvo], t = DESEJO_TIPO[d.tipo];
@@ -187,7 +191,8 @@ export function textoFator(f: string, est: "crianca" | "adolescente" | "adulto")
   const ps = paramsFator(f); return e[est].replace(/\{p(\d)\}/g, (_, i) => ps[Number(i)]);
 }
 /** refs: numeros ja convertidos (indice de evento na vida; turno no combate) */
-export function expressar(mot: Motivo, est: Estagio, refs?: readonly number[] | null): string {
+export function expressar(mot: Motivo, est0: Estagio, refs?: readonly number[] | null): string {
+  const est = baseDe(est0);
   const [ic, pal, fr] = (mot.origem === "vida" ? ACOES_VIDA_TXT : ACOES_V2_TXT)[mot.acao];
   const fat = mot.exploracao ? [] : mot.fatores;
   const humor = mot.origem === "vida" ? mot.humor : 0;

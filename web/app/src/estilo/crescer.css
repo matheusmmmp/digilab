@@ -159,7 +159,7 @@
 .evo-nivel--crianca{grid-template-columns:repeat(2,minmax(0,1fr))}
 .evo-nivel--crianca .evo-no{width:calc(50% + 10px);justify-self:center;min-width:84px}
 .evo-coluna{display:grid;gap:8px;align-content:start}
-.evo-coluna .evo-no--adulto:not(.sombria){height:66px}
+.evo-coluna .evo-no--adulto:not(.sombria),.evo-coluna .evo-no--mega{height:66px}
 .evo-coluna .sombria{height:60px;margin-top:16px}
 .evo-no{position:relative;font:inherit;cursor:pointer;height:74px;min-width:0;border-radius:10px;padding:0 2px 3px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   background:rgba(255,255,255,.35);border:2px solid var(--dl-hex);color:var(--dl-muted)}

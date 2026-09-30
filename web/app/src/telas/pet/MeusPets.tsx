@@ -8,7 +8,7 @@ import { trocarMotor, useJogo } from "../../jogo.ts";
 import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
 import { abrirGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
-import { abrirHeranca } from "../../heranca.ts";
+import { abrirHeranca, podeSerPai } from "../../heranca.ts";
 import { abrirImportar, exportarArquivo, nomeArquivo } from "../../importar.ts";
 import { dec } from "../../componentes/Barras.tsx";
 import { diaDe } from "./TelaPet.tsx";
@@ -51,7 +51,7 @@ function Guardados({ ativar, cruzar }: { ativar: (i: number) => void; cruzar: ((
                 <span class="mp-g-num">vida {Math.round(vidaExibida(p, g.forma.est, g.treino.total)).toLocaleString("pt-BR")} · treino +{dec(g.treino.total, 0)}</span></span>
               <span class="mp-g-bts">
                 <button type="button" class="dl-btn dl-btn--sec mp-g-ativar" onClick={() => ativar(i)}>Ativar</button>
-                {cruzar && g.estagioAtual === "adulto" && !g.morte &&
+                {cruzar && podeSerPai(g) &&
                   <button type="button" class="dl-btn dl-btn--sec mp-g-cruzar" onClick={() => cruzar(i)}
                     title="o filho herda o temperamento dos dois e a espécie de um deles">Nova geração</button>}
               </span>
@@ -80,7 +80,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
     try { ativarGuardado(i); setMsg(""); ref.current?.close(); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   /* heranca: so com o ativo adulto e vivo; o filho vira o ativo */
-  const podeCruzar = !ovo && m.estagioAtual === "adulto" && !m.morte;
+  const podeCruzar = !ovo && podeSerPai(m);
   const cruzar = (i: number) => {
     ref.current?.close(); abrirHeranca(i);
   };
@@ -103,6 +103,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
             <span class="dl-tag dl-tag--estagio">{ovo ? NOME_EST.ovo : nomeEstagio(m.forma)}</span></span>
         </section>
         <p class="mp-aviso">Só o pet ativo tem o tempo correndo; os guardados ficam parados onde estavam.</p>
+        {!ovo && m.versao < 5 && <p class="mp-aviso">Pet de uma versão antiga: evolui até o Ultimate (o Mega é dos ovos novos).</p>}
         <Guardados ativar={ativar} cruzar={podeCruzar ? cruzar : null} />
         {anterior && <div class="mp-anterior">{antImg && <img class="dl-pix" src={antImg.url} width={antImg.w / 2} height={antImg.h / 2} alt="" />}
           <span><b>Pet anterior guardado</b><span>ficou salvo quando você usou o Laboratório</span></span></div>}

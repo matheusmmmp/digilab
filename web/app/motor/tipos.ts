@@ -9,7 +9,10 @@ export type EixoTemperamento = "curiosidade" | "teimosia" | "sensibilidade" | "r
 export type Temperamento = Readonly<Record<EixoTemperamento, number>>;
 
 export type Especie = "brasa" | "cirro" | "ferrugem" | "limo";
-export type Estagio = "bebe" | "crianca" | "adolescente" | "adulto";
+export type Estagio = "bebe" | "crianca" | "adolescente" | "adulto" | "mega";
+/** estagios de antes da evolucao canonica: as tabelas de constantes conferidas contra o HTML e o Python sao por eles; o
+    Mega (pets v5, so no jogo) tem as suas em CMG */
+export type EstagioBase = Exclude<Estagio, "mega">;
 export type EstagioTreino = "crianca" | "adolescente" | "adulto";
 export type Ramo = "sereno" | "arisco";
 export type Linha = "brigao" | "guardiao" | "cacador" | "colosso";
@@ -53,7 +56,7 @@ export type Ritmo = "rapida" | "classica";
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig;
 
-export type VersaoPet = 1 | 2 | 3 | 4;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

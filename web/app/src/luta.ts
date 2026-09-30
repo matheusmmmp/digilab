@@ -3,7 +3,7 @@
    item 1). A luta entra no registro na hora (motor.lutar); a animacao so mostra os turnos que o motor ja jogou. */
 import { useEffect, useState } from "preact/hooks";
 import {
-  BOTS_V21, BOT_TRACO, CAT, LUGARES, NOME_BOT, NPC, chaveSprite, corDominante, estadoV2, formaRival, hashSemente, jogarV2,
+  BOTS_V21, BOT_TRACO, CAT, NOME_BOT, NPC, chaveSprite, corDominante, estadoV2, formaRival, hashSemente, jogarV2,
   lutadorBot, lutadorPet, motivoCombate, nomeForma, type Estagio, type EstadoLuta, type FormaAdultaNormal, type Lutador,
   Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate, type Turno,
 } from "../motor/index.ts";
@@ -23,7 +23,7 @@ export function exibirPet(m: Motor, L: Lutador): LutadorTela {
 }
 export function exibirBot(nome: string, L: Lutador = lutadorBot(nome)): LutadorTela {
   const n = NPC[nome];
-  if (n) return { ...L, sprite: n.k, grade: n.grade || "adulto", cor: n.cor, estagioFala: n.estagio || "adulto", nomeTela: n.nome, estiloTela: null };
+  if (n) return { ...L, sprite: n.sprite ?? n.k, grade: n.grade || "adulto", cor: n.cor, estagioFala: n.estagio || "adulto", nomeTela: n.nome, estiloTela: null };
   if (BOTS_V21[nome as FormaAdultaNormal]) {
     const f = formaRival(nome as FormaAdultaNormal);
     return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "golpe", estagioFala: "adulto", nomeTela: nomeForma(f), estiloTela: NOME_BOT[nome].toLowerCase() };
@@ -71,9 +71,10 @@ export function useLuta(): typeof LUTA {
 
 /* ------------------------------------------------ campanha: selecao */
 /** proximo lugar: o primeiro aberto e sem vitoria (ou o ultimo); o rival sugerido e o primeiro dele */
-export function campProximoLugar(m: Motor): number { const L = LUGARES.findIndex((_, i) => m.desafioAberto(LUGARES[i].rivais[0]) && !m.lugarVencido(i)); return L < 0 ? LUGARES.length - 1 : L; }
-export const campProximo = (m: Motor): string => LUGARES[campProximoLugar(m)].rivais[0];
-export const campAtual = (m: Motor): string => (LUTA.campSel && NPC[LUTA.campSel] ? LUTA.campSel : (LUTA.campSel = campProximo(m)));
+export function campProximoLugar(m: Motor): number { const Ls = m.lugares, L = Ls.findIndex((_, i) => m.desafioAberto(Ls[i].rivais[0]) && !m.lugarVencido(i)); return L < 0 ? Ls.length - 1 : L; }
+export const campProximo = (m: Motor): string => m.lugares[campProximoLugar(m)].rivais[0];
+/* o desafio em foco precisa ser da campanha deste pet (pets v5 tem a Montanha Espiral; os antigos, o Piedmon na Cidadela) */
+export const campAtual = (m: Motor): string => (LUTA.campSel && LUTA.campSel in m.campanha ? LUTA.campSel : (LUTA.campSel = campProximo(m)));
 export const tentativas = (m: Motor, k: string): number => m.log.reduce((n, e) => n + (e[1] === "l" && e[2].r === k ? 1 : 0), 0);
 
 /* ------------------------------------------------ palco em repouso (previa) */
@@ -92,10 +93,10 @@ export function escolherRival(k: string): void { if (LUTA.lutando) return; LUTA.
 export function exibirFixo(f: RivalFixo): LutadorTela {
   return { ...exibirPet(f.rival, lutadorPet(f.rival, "Rival do cenário")), nomeTela: nomeForma(f.rival.forma), estiloTela: "pet do cenário" };
 }
-export function escolherDesafio(k: string): void { if (LUTA.lutando || !NPC[k]) return; LUTA.campSel = k; previa("campanha"); }
+export function escolherDesafio(k: string): void { if (LUTA.lutando || !(k in jogoAtual().motor.campanha)) return; LUTA.campSel = k; previa("campanha"); }
 /** no mapa escolhe o lugar: o rival em foco e o primeiro ainda nao vencido dele */
 export function escolherLugar(i: number): void {
-  const L = LUGARES[i]; if (!L) return;
+  const L = jogoAtual().motor.lugares[i]; if (!L) return;
   escolherDesafio(L.rivais.find(k => !jogoAtual().motor.campanha[k]) || L.rivais[0]);
 }
 
@@ -133,8 +134,8 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
       p.texto = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
-        + (primeiraDoLugar && NPC[npc!]!.lug < LUGARES.length - 1 ? ` ${LUGARES[NPC[npc!]!.lug + 1].nome} liberada!` : "")
-        + (primeiraDoLugar && NPC[npc!]!.lug === LUGARES.length - 1 ? " Campanha concluída!" : "")
+        + (primeiraDoLugar && NPC[npc!]!.lug < m.lugares.length - 1 ? ` ${m.lugares[NPC[npc!]!.lug + 1].nome} liberada!` : "")
+        + (primeiraDoLugar && NPC[npc!]!.lug === m.lugares.length - 1 ? " Campanha concluída!" : "")
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
       p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog };

@@ -123,7 +123,7 @@ describe("heranca (pets v4)", () => {
       expect(Math.abs(f.temp[e] - (p.temp[e] + q.temp[e]) / 2)).toBeLessThan(.6);
     }
     f.avancar(600); f.observar("alimentar"); f.avancar(300);
-    const r = Motor.reproduzir(777, f.log, 4);
+    const r = Motor.reproduzir(777, f.log, f.versao);
     expect(r.assinatura()).toBe(f.assinatura());
     expect(r.temp).toEqual(f.temp); expect(r.especie).toBe(f.especie);
     expect(Motor.cruzar(p, q, 777, 99, "teste").temp).toEqual(f.temp);   /* deterministico */

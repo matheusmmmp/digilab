@@ -74,7 +74,7 @@ function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => 
         <div class="folha-custa"><b>CUSTA</b><span>+{CTR.sobreForcar} sobrecarga</span>{m.versao >= 2 && <span>vínculo cai</span>}</div>
       </div>
       <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
-      <p class="folha-aviso">Com isso a sobrecarga vai a {depois.toFixed(0)}.{m.estagioAtual !== "adulto" ? ` Sobrecarga ${CSO.sombrio} ou mais na virada para Ultimate leva à forma sombria.` : ""}</p>
+      <p class="folha-aviso">Com isso a sobrecarga vai a {depois.toFixed(0)}.{m.estagioAtual !== "adulto" && m.estagioAtual !== "mega" ? ` Sobrecarga ${CSO.sombrio} ou mais na virada para Ultimate leva à forma sombria.` : ""}</p>
       <div class="folha-bts">
         <button type="button" class="dl-btn" onClick={() => ref.current?.close()}>Descansar</button>
         <button type="button" class="dl-btn dl-btn--forcar" onClick={() => { forcar(); ref.current?.close(); }}>Forçar mesmo assim</button>

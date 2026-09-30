@@ -12,7 +12,7 @@ import { useJogo } from "../../jogo.ts";
 import { novoOvoGuardandoAtivo } from "../../jornada.ts";
 import { abrirImportar, exportarArquivo, nomeArquivo, useImportar } from "../../importar.ts";
 import { abrirGuardado, apagarGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
-import { abrirHeranca } from "../../heranca.ts";
+import { abrirHeranca, podeSerPai } from "../../heranca.ts";
 import { diaDe, hhmm } from "./TelaPet.tsx";
 
 type Sel = "ativo" | number;
@@ -36,7 +36,7 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
   const escolher = (k: Sel) => { setSel(k); setMsg(""); setApagar(false); };
   const agir = (f: () => void, depois?: () => void) => { try { f(); setMsg(""); setRev(r => r + 1); depois?.(); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); } };
   const exportar = () => { exportarArquivo(m); setMsg("Registro baixado: " + nomeArquivo(m)); };
-  const podeCruzar = !eAtivo && !ovoAtivo && ativo.estagioAtual === "adulto" && !ativo.morte && m.estagioAtual === "adulto" && !m.morte;
+  const podeCruzar = !eAtivo && !ovoAtivo && podeSerPai(ativo) && podeSerPai(m);
   const nome = (x: { m: Motor; ovo: boolean }) => x.ovo ? "Digi-Egg" : nomeForma(x.m.forma);
   const img = (x: Motor, ovo: boolean, alvo: number) => {
     if (a.tipo !== "ok") return null;
@@ -81,6 +81,7 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
           <span>{diaDe(m.e.tick)} {diaDe(m.e.tick) === 1 ? "dia" : "dias"} de vida</span>
           {m.morte && <span class="mpl-tag-morto">se foi</span>}
         </div>
+        {!atual.ovo && m.versao < 5 && <p class="dl-apoio" style={{ margin: 0 }}>Pet de uma versão antiga: evolui até o Ultimate (o Mega é dos ovos novos).</p>}
         <div class="mpl-bts">
           <button type="button" class="dl-btn dl-btn--sec" onClick={exportar}>Exportar</button>
           {eAtivo ? <button type="button" class="dl-btn" onClick={fechar}>Voltar ao pet</button>

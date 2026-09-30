@@ -2,7 +2,7 @@
    O teste de constantes (test/constantes.test.mjs, tabela test/mapa_constantes.json) confere cada
    numero contra o Python; mudar um valor aqui sem mudar la faz o teste falhar. */
 import type {
-  AcaoDono, AcaoPet, Carater, Chamado, EixoCarater, EixoTemperamento, Especie, Estagio, EstagioTreino, Exercicio,
+  AcaoDono, AcaoPet, Carater, Chamado, EixoCarater, EixoTemperamento, Especie, Estagio, EstagioBase, EstagioTreino, Exercicio,
   FormaAdultaNormal, FormaSombria, Linha, Ramo, Stat, Stats, Temperamento, TracoCombate,
 } from "./tipos.ts";
 
@@ -29,8 +29,19 @@ export const EIXOS_TEMP: readonly EixoTemperamento[] = ["curiosidade", "teimosia
 export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kCumprimento: 60 };
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia; 2 = memoria por espacos +
    vinculo + obediencia + condicao no combate; 3 = v2 + carater pelo desvio da politica; 4 = v3 + educacao,
-   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py) */
-export const VERSAO_PET = 4;
+   lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py);
+   5 = v4 + evolucao canonica: o Ultimate vira Mega, um estagio proprio (docs/DESIGN_EVOLUCAO_CANONICA.md; so no jogo) */
+export const VERSAO_PET = 5;
+/* evolucao canonica (pets v5, so no jogo; docs/DESIGN_EVOLUCAO_CANONICA.md, tudo PROPOSTO). O Mega e um estagio proprio
+   depois do adulto (Ultimate): a forma (e a passiva) vem do Ultimate, o pet fica mais forte. Ultimate -> Mega pede o tempo do
+   Ultimate, a qualificacao da passagem para adulto (CAT.sparring lutas no estagio, CLE.limiarTaxa de vitoria) e
+   vinculo >= `vinculo`; a sombria nunca chega ao Mega (regra explicita em Motor.requisitosMega). `vinculo` baixou de 0,7
+   para 0,4 (Matheus, 2026-09-29): com 0,7 nenhum dono simulado coerente chegava (artifacts_campanha/mega/limiar_vinculo.json).
+   multEstagio: vida e guts (x CAT.estagio.adulto); vida: E na escala da campanha (CESC.vida.adulto = 1500);
+   tetoEstagio/tetoVida: treino (CTR.tetoEstagio.adulto = 14, CTR.tetoVida = 36); dur*: tempo no Ultimate (min). */
+export const CMG = { multEstagio: 1.15, vida: 3000, tetoEstagio: 16, tetoVida: 40, durRapida: 1440, durClassica: 2880, vinculo: .4 };
+/** o estagio das tabelas de sempre: o Mega usa as do adulto (gambits, fala, janelas da educacao) */
+export const baseDe = (est: Estagio): EstagioBase => est === "mega" ? "adulto" : est;
 /* educacao (espelho de ConfigEducacao): travessuras com janela da crianca em diante, disciplina 0-100 */
 export const CED = {
   janela: 15, intervalos: { crianca: { fome: 90, higiene: 120, carinho: 90 }, adolescente: { fome: 150, higiene: 120, carinho: 120 },
@@ -132,7 +143,7 @@ export const CV21 = {
   custo: { investida: 20, contra_golpe: 15, marcar: 10, pele_dura: 20 } as Record<string, number>,
   danoInvestida: 8, parry: 0, fracCG: .5, turnosMarca: 3, multMarca: 2, turnosPele: 2, multPele: .5,
   duelista: 4, limFurioso: .5, multFurioso: 1.25, espelho: 1, muralha: 3, recargaSent: 4, multEmb: 2, multTita: 1.3,
-  maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<Estagio, number>, turnos: [5, 10, 20],
+  maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<EstagioBase, number>, turnos: [5, 10, 20],
 };
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
@@ -169,13 +180,13 @@ export const CAT = {
     cacador: { comp: "resistente", formas: { sentinela: { sinal: 1, stats: { vigor: 1, guarda: 1, mira: -1, forca: -1 } }, emboscador: { sinal: -1, stats: { mira: 2, vigor: -2 } } } },
     colosso: { comp: "atento", formas: { vigia: { sinal: 1, stats: { mira: 1, recuperacao: 1, forca: -1, folego: -1 } }, tita: { sinal: -1, stats: { forca: 2, recuperacao: -2 } } } },
   } as Record<Linha, AdultoDaLinha>,
-  estagio: { bebe: .4, crianca: .6, adolescente: .8, adulto: 1 } as Record<Estagio, number>,
+  estagio: { bebe: .4, crianca: .6, adolescente: .8, adulto: 1 } as Record<EstagioBase, number>,
 };
 /* escala de stats (ConfigEscala, TAREFA_PLANILHA_PROGRESSAO Parte C): E = vida do estagio x (1 + beta x pontos);
    no combate da CAMPANHA o dano que A causa em B vale x E_A/E_B e a vida perde o multiplicador de estagio. NPC:
    perfil neutro, E = vida do estagio sugerido x fator, epsilon proprio. A arena contra bots nao usa a escala. */
 export const CESC = {
-  vida: { bebe: 50, crianca: 200, adolescente: 600, adulto: 1500 } as Record<Estagio, number>,
+  vida: { bebe: 50, crianca: 200, adolescente: 600, adulto: 1500 } as Record<EstagioBase, number>,
   beta: .03,
   fatorNpc: { npc_tier1_brutamontes: 1.1, npc_tier2_sentinela: 1.6, npc_tier2_carcereiro: 1.5, npc_tier2_porteiro: 1.1,
     npc_tier3_soberano: 1.2 } as Record<string, number>,

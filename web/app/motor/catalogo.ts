@@ -1,6 +1,6 @@
 /* Catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): stats da forma, renormalizacao e perfil de
    combate (vida, guts, multiplicadores). Espelho de combate_v2/v21/catalogo.py e campanha.perfil_de_stats. */
-import { CAT, CCOND, CESC, CTR, CV21, LINHA_DA_FORMA, SOMBRIA, STATS, type Tecnica } from "./constantes.ts";
+import { CAT, CCOND, CESC, CMG, CTR, CV21, LINHA_DA_FORMA, SOMBRIA, STATS, type Tecnica } from "./constantes.ts";
 import type { Carater, Estagio, Forma, FormaAdultaNormal, Stats } from "./tipos.ts";
 
 export interface Perfil {
@@ -9,21 +9,23 @@ export interface Perfil {
   /** escala E (so no combate da campanha com a escala ligada); ausente = combate de sempre */
   escala?: number;
 }
+/** multiplicador de estagio (vida e guts); o Mega (pets v5) e o do adulto x CMG.multEstagio */
+export const multEstagio = (est: Estagio): number => est === "mega" ? CAT.estagio.adulto * CMG.multEstagio : CAT.estagio[est];
 
 /* chave da escala (ConfigEscala.ligada). Desligada por padrao: os gabaritos de paridade rodam sem ela; o app liga. */
 export const ESCALA = { ligada: false };
 export function ligarEscala(v: boolean): void { ESCALA.ligada = v; }
 /** E do pet: vida do estagio x (1 + beta x pontos treinados) */
-export const escalaDe = (est: Estagio, pontos: number): number => CESC.vida[est] * (1 + CESC.beta * pontos);
+export const escalaDe = (est: Estagio, pontos: number): number => (est === "mega" ? CMG.vida : CESC.vida[est]) * (1 + CESC.beta * pontos);
 /** quanto 1 ponto de vida de combate deste lutador vale na tela (dano e vida exibidos); 1 sem a escala */
 export function fatorExibicao(p: Perfil): number {
   if (!ESCALA.ligada) return 1;
-  return p.escala !== undefined ? p.escala / CESC.vidaNeutra : escalaDe(p.est, 0) / (CESC.vidaNeutra * CAT.estagio[p.est]);
+  return p.escala !== undefined ? p.escala / CESC.vidaNeutra : escalaDe(p.est, 0) / (CESC.vidaNeutra * multEstagio(p.est));
 }
 /** vida mostrada ao jogador: E x vida propria / vida neutra (com a escala), ou a vida de combate (sem) */
 export function vidaExibida(p: Perfil, estagio: Estagio = p.est, pontos = 0): number {
   if (!ESCALA.ligada) return p.hpMax;
-  const propria = p.escala !== undefined ? p.hpMax : p.hpMax / CAT.estagio[p.est];
+  const propria = p.escala !== undefined ? p.hpMax : p.hpMax / multEstagio(p.est);
   return (p.escala ?? escalaDe(estagio, pontos)) * propria / CESC.vidaNeutra;
 }
 
@@ -67,7 +69,7 @@ export function perfilDe(f: Forma, car: Partial<Carater> | null | undefined, con
       s = renormalizar(Object.fromEntries(STATS.map(k => [k, b[k] * tot / soma])) as Stats, tot);
     }
   }
-  const est = CAT.estagio[f.est] * condicao, gMax = (CV21.gMaxBase + CV21.gMaxFolego * s.folego) * CAT.estagio[f.est];
+  const mult = multEstagio(f.est), est = mult * condicao, gMax = (CV21.gMaxBase + CV21.gMaxFolego * s.folego) * mult;
   const pontos = treino ? STATS.reduce((a, k) => a + (treino[k] || 0), 0) : 0;
   return {
     est: f.est, tecnica: tecnicaDe(f), passiva: f.adulta || null, stats: s,
@@ -89,7 +91,7 @@ export function perfilNeutro(): Perfil {
 /** NPC da campanha: mesma conversao de perfilDe com stats uniformes (campanha.perfil_de_stats). Com a escala: perfil
     neutro (10 em cada stat) e `escala` = E do NPC (vida do estagio sugerido x fator; campanha.npc) */
 export function perfilNPC(total: number, estagio: Estagio = "adulto", escala?: number): Perfil {
-  const v = escala !== undefined ? 10 : total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])) as Stats, est = CAT.estagio[estagio],
+  const v = escala !== undefined ? 10 : total / STATS.length, s = Object.fromEntries(STATS.map(k => [k, v])) as Stats, est = multEstagio(estagio),
     gMax = (CV21.gMaxBase + CV21.gMaxFolego * v) * est;
   return {
     est: estagio, tecnica: null, passiva: null, stats: s, ...(escala !== undefined ? { escala } : {}),
