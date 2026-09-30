@@ -126,7 +126,7 @@ export function TelaCenarios() {
       <fieldset class="lab-pet lab-pet--a"><legend>Pet A · vira o seu</legend>{dono("ca")}{campo("ca", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("ca", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
       <fieldset class="lab-pet lab-pet--b"><legend>Pet B · rival fixo</legend>{dono("cb")}{campo("cb", "dias", "Dias de vida", "0.5", "14", "0.5")}{campo("cb", "pd", "Interações por dia", "1", "200", "1")}</fieldset>
       <label class="lab-semente">Semente <input id="c-semente" class="campo-num" type="number" min="1" step="1" value={form.semente} onInput={ev => setForm({ ...form, semente: (ev.target as HTMLInputElement).value })} /></label>
-      <p class="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets.</p>
+      <p class="lab-nota">Simular troca o seu pet atual. Dá para voltar ao anterior em Meus pets. Os pets simulados são da versão sem medalhas: evoluem sem o Tamer e não ganham medalhas.</p>
       <button type="button" class="dl-btn dl-btn--largo" onClick={montarAMao}>Simular e comparar</button>
       <details class="dl-apoio"><summary>Cenários prontos</summary>
         <div class="cenarios">

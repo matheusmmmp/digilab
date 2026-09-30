@@ -2,12 +2,13 @@
    em 1x, caminho entre os lugares, o pet no proximo desafio; cartao do lugar com os rivais, a licao, os stats e
    o historico de tentativas (contado do registro). A luta acontece no palco desta aba. */
 import { useEffect } from "preact/hooks";
-import { NOME_V2, NPC, STATS, chaveSprite, nomeEstagio, nomeEstiloNPC, type Lugar, type Motor } from "../../../motor/index.ts";
+import { MEDALHAS, NOME_V2, NPC, STATS, chaveSprite, medalhaDoLider, nomeEstagio, nomeEstiloNPC, type Lugar, type Motor } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { fundoDeco } from "../../componentes/Deco.tsx";
 import { Peca, RetratoRival } from "../../componentes/Imagens.tsx";
 import { FAIXA_LUGAR, FUNDO_NPC, molduraArena, urlDeco, useDecoracao } from "../../decoracao.ts";
-import { useJogo } from "../../jogo.ts";
+import { tamerAtual, useJogo } from "../../jogo.ts";
+import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { LUTA, campAtual, escolherDesafio, escolherLugar, lutarAnimado, lutasDoRegistro, previa, tentativas, useLuta } from "../../luta.ts";
 import { ENDERECO_LUTA } from "../../rotas.ts";
 import { useDesktop } from "../../desktop.ts";
@@ -27,6 +28,21 @@ const cedoPara = (m: Motor, L: Lugar): boolean => ORDEM_EST.indexOf(m.forma.est)
 const px = (x: number) => `${x / W0 * 100}%`, py = (y: number) => `${y / H0 * 100}%`;
 const ORDEM_EST = ["ovo", "bebe", "crianca", "adolescente", "adulto", "mega"];
 const NIVEL: Record<string, string> = { crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
+/** pets v6: o lider do lugar (docs/DESIGN_MEDALHAS_ARENAS.md) aparece marcado, com o selo da medalha dele (cheio se o Tamer
+    ja tem). Os pets v1-v5 nao ganham medalha: sem marca */
+function MarcaLider({ m, k }: { m: Motor; k: string }) {
+  const md = m.versao >= 6 ? medalhaDoLider(k) : null;
+  if (!md) return null;
+  return <span class="camp-lider"><SeloMedalha n={MEDALHAS.indexOf(md) + 1} ganha={tamerAtual().tem(md.id)} tam={16} />LÍDER</span>;
+}
+/** a frase da medalha do rival em foco (so do lider) */
+function FraseMedalha({ m, k }: { m: Motor; k: string }) {
+  const md = m.versao >= 6 ? medalhaDoLider(k) : null;
+  if (!md) return null;
+  const g = tamerAtual().ganha(md.id);
+  return <p class={`camp-medalha${g ? " ganha" : ""}`}><SeloMedalha n={MEDALHAS.indexOf(md) + 1} ganha={!!g} tam={24} />
+    <span><b>{NPC[k]!.nome} é o líder.</b> {g ? `A ${md.nome} já é sua (com ${g.forma}).` : `Vencer dá a ${md.nome}${md.provisoria ? ` (provisória, ${md.provisoria})` : ""}.`}</span></p>;
+}
 
 function Mapa() {
   const { motor: m } = useJogo(), a = useAtlas(), luta = useLuta(), sel = campAtual(m);
@@ -83,7 +99,7 @@ function Detalhe() {
               <button type="button" key={k} class="camp-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
                 {urlDeco(moldura) ? <RetratoRival sprite={n.sprite ?? n.k} moldura={moldura} lado={52} />
                   : <span class="camp-rival-spr">{img && <img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>}
-                <b>{n.nome}</b><span>{m.campanha[k]} vitória{m.campanha[k] === 1 ? "" : "s"}</span>
+                <b>{n.nome}</b><MarcaLider m={m} k={k} /><span>{m.campanha[k]} vitória{m.campanha[k] === 1 ? "" : "s"}</span>
               </button>
             );
           })}
@@ -93,6 +109,7 @@ function Detalhe() {
         {!podeLutar && <p class="dl-apoio">O In-Training ainda não luta na campanha.</p>}
         <p class="dl-apoio"><b>{c.nome}</b> · {nomeEstiloNPC(c.estilo)} · stats {(c.total / STATS.length).toFixed(1).replace(".0", "").replace(".", ",")} em cada (total {c.total}) · {st}</p>
         <p class="licao">{c.licao}</p>
+        <FraseMedalha m={m} k={sel} />
       </section>
       <button type="button" class={`dl-btn camp-lutar${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
         onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
@@ -125,7 +142,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
             <button type="button" key={k} class="campd-rival" role="radio" aria-checked={k === sel} disabled={luta.lutando} onClick={() => { if (k !== sel) escolherDesafio(k); }}>
               {urlDeco(moldura) ? <RetratoRival sprite={n.sprite ?? n.k} moldura={moldura} lado={52} />
                 : <span class="camp-rival-spr">{img(n.sprite ?? n.k)}</span>}
-              <span class="campd-rival-txt"><span><b>{n.nome}</b><span class="campd-estilo">{nomeEstiloNPC(n.estilo)}</span></span><span>{n.licao}</span></span>
+              <span class="campd-rival-txt"><span><b>{n.nome}</b><MarcaLider m={m} k={k} /><span class="campd-estilo">{nomeEstiloNPC(n.estilo)}</span></span><span>{n.licao}</span></span>
             </button>
           );
         })}
@@ -137,6 +154,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
           <div class="res-num"><span class="dl-num">{melhor === null ? "—" : `T${melhor}`}</span><span>melhor turno</span></div>
           <div class="res-num"><span class="dl-num">{novas}</span><span>regras novas</span></div>
         </div>
+        <FraseMedalha m={m} k={sel} />
         {!podeLutar && <p class="dl-apoio">O In-Training ainda não luta na campanha.</p>}
         <p class="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
       </section>
@@ -159,7 +177,7 @@ export function TelaCampanha({ voltarPet, irTreinar }: { voltarPet: () => void; 
     <div class="tela dl desk camp-tela">
       <div class="camp-principal"><Mapa /></div>
       <div class="camp-lado">{desk ? <DetalheDesk irTreinar={irTreinar} /> : <Detalhe />}
-      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>{v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
+      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>{v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. {m.versao >= 6 ? " O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas)." : ""} Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
       </div>
     </div>
   );

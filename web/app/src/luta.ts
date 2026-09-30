@@ -8,7 +8,8 @@ import {
   Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate, type Turno,
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
-import { jogoAtual, mudarMotor } from "./jogo.ts";
+import { jogoAtual, mudarMotor, tamerAtual } from "./jogo.ts";
+import type { MedalhaGanha } from "./tamer.ts";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
 export const DIGIMON_BOT: Record<string, string> = { aleatorio: "Kuramon", agressivo: "Monochromon", tartaruga: "Golemon", atirador: "Tankmon", contragolpe: "Leomon", adaptativo: "Devimon", oraculo: "Jijimon" };
@@ -54,6 +55,8 @@ export interface ResultadoPalco {
   sparringAntes: number; sparringContou: boolean;
   /** indice do evento "l" no registro (replay no Diario); null contra pet de cenario, que nao entra no registro */
   idxLog: number | null;
+  /** pets v6: a medalha que o Tamer ganhou com esta luta (primeira vitoria contra o lider); null se nenhuma */
+  medalha: MedalhaGanha | null;
 }
 export interface RivalFixo { rival: Motor; dias: number; tipo: string }
 export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null,
@@ -113,7 +116,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
   const ativasAntes = m.gp ? [...m.gp.ativas] : null, sparringAntes = m.sparring, adolescente = m.estagioAtual === "adolescente";
   let idxLog: number | null = null, ativasDepois: string[] | null = null;
   let r: { res: ResultadoLuta; A: Lutador; B: Lutador };
-  const cenario = !npc && !!LUTA.rivalFixo;
+  const cenario = !npc && !!LUTA.rivalFixo, medalhasAntes = tamerAtual().n;
   try {
     if (cenario) {   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
       const A0 = lutadorPet(m, "Seu pet"), B0 = lutadorPet(LUTA.rivalFixo!.rival, "Rival do cenário");
@@ -128,6 +131,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
     if (LUTA.palco) LUTA.palco.texto = err instanceof Error ? err.message : String(err);
     avisarLuta(); return;
   }
+  const t = tamerAtual(), medalha = t.n > medalhasAntes ? t.medalhas[t.n - 1] : null;
   const { res } = r!, A = exibirPet(m, r!.A), B = cenario ? exibirFixo(LUTA.rivalFixo!) : exibirBot(npc || LUTA.rival, r!.B);
   LUTA.replay = null;
   animar(res, A, B, modo, nomeAcaoV2, p => {
@@ -138,7 +142,7 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
         + (primeiraDoLugar && NPC[npc!]!.lug === m.lugares.length - 1 ? " Campanha concluída!" : "")
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
-      p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog };
+      p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog, medalha };
   });
 }
 /** a animacao de uma luta ja decidida: um turno por vez no palco (pausa e x2); no fim chama fim(palco) e para */

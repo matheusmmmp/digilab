@@ -54,9 +54,11 @@ export type EventoOrigem = [tick: number, tipo: "o", origem: Origem];
 export type Ritmo = "rapida" | "classica";
 /** so no comeco do registro (antes de qualquer outro evento, menos outra config) */
 export type EventoConfig = [tick: number, tipo: "c", config: { dur: Ritmo }];
-export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig;
+/** pets v6: o Tamer tem n medalhas a partir deste tick (o motor do pet nunca le o Tamer por fora; o replay le este evento) */
+export type EventoLiberacao = [tick: number, tipo: "u", liberacao: { n: number }];
+export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

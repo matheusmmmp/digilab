@@ -7,6 +7,7 @@ import {
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
+import { MEDALHAS, medalhasPara } from "./medalhas.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { jogarV2, type Lutador, type ResultadoLuta } from "./combate.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
@@ -21,6 +22,12 @@ import type {
   EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpGambit, Origem, Ramo, Ritmo, Temperamento, VersaoPet,
 } from "./tipos.ts";
 
+/** medalhas do Tamer para uma evolucao (pets v6): tem X, precisa Y */
+export interface RequisitoMedalhas { tem: number; precisa: number; ok: boolean }
+/** a proxima evolucao do pet e o que falta: so os campos que a evolucao pede (lutas e taxa no Champion e no Mega; vinculo no Mega) */
+export interface RequisitosEvolucao {
+  alvo: Estagio; falta: number; tempo: boolean; lutas?: boolean; taxa?: boolean; vinculo?: boolean; medalhas: RequisitoMedalhas | null; pronto: boolean;
+}
 /** registro de uma evolucao (entra na assinatura) */
 export interface Evolucao {
   tick: number; estagio: Estagio; ramo?: Ramo; cuidado?: number; linha?: Linha; adulta?: FormaAdulta; carater?: Carater;
@@ -96,9 +103,11 @@ export class Motor {
   /* v4: ritmo dos estagios (evento "c" no comeco do registro); sem ele, o rapido de sempre */
   ritmo: Ritmo = "rapida";
   dur: { bebe: number; crianca: number; adolescente: number; adulto: number } = { ...DUR_EVO, adulto: CMG.durRapida };
+  /** v6: medalhas do Tamer que este pet conhece (evento "u"); a evolucao espera por elas (docs/DESIGN_MEDALHAS_ARENAS.md) */
+  medalhas = 0;
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -520,13 +529,27 @@ export class Motor {
   }
   chamadosAbertos(): Chamado[] { return this.estagioAtual === "bebe" ? Object.keys(this.chamados.abertos) as Chamado[] : []; }
   fracaoCuidado(): number { return this.chamados.total ? this.chamados.atendidos / this.chamados.total : 1; }
+  /** tick em que a condicao de tempo do estagio atual se cumpre (In-Training, Rookie e Champion; null nos outros).
+      v1-v5: desde o nascimento (bebe, bebe + crianca, bebe + crianca + adolescente). v6: desde a evolucao anterior, para
+      um pet que esperou a medalha nao ganhar um estagio seguinte curto (DESIGN_MEDALHAS_ARENAS, parte 1). */
+  tickLimiteEstagio(): number | null {
+    const est = this.estagioAtual, D = this.dur;
+    if (est === "bebe") return TICK_INICIAL + D.bebe;
+    if (est !== "crianca" && est !== "adolescente") return null;
+    if (this.versao < 6) return TICK_INICIAL + D.bebe + D.crianca + (est === "adolescente" ? D.adolescente : 0);
+    const ev = [...this.evolucoes].reverse().find(x => x.estagio === est);
+    if (!ev) throw new Error(`pet v6 no estagio ${est} sem a evolucao que o trouxe ate ele`);
+    return ev.tick + (est === "crianca" ? D.crianca : D.adolescente);
+  }
   private _evoluir(): void {
-    const t = this.e.tick - TICK_INICIAL, est = this.estagioAtual, D = this.dur;
+    const t = this.e.tick - TICK_INICIAL, est = this.estagioAtual, D = this.dur, lim = this.tickLimiteEstagio();
     let nova: Omit<Evolucao, "tick" | "forma"> | null = null;
     if (est === "bebe" && t >= D.bebe) {
       const cuidado = this.fracaoCuidado();
       nova = { estagio: "crianca", ramo: cuidado >= CAT.limiarCuidado ? "sereno" : "arisco", cuidado };
-    } else if (est === "crianca" && t >= D.bebe + D.crianca) {
+    } else if (est === "crianca" && this.e.tick >= lim!) {
+      /* v6: pronto para evoluir, mas o Tamer ainda nao tem as medalhas: espera (nada muda ate o evento "u") */
+      if (!this.medalhasBastam("adolescente")) return;
       const carater = this.caraterAgora("adolescente");
       /* sobrecarga >= 30: aviso (fala fria); nada muda na forma */
       this.falaFria = this.treino.sobrecarga >= CSO.aviso;
@@ -534,8 +557,8 @@ export class Motor {
     } else if (est === "adulto" && this.versao >= 5) {
       if (this.podeMega()) this._virarMega();
       return;
-    } else if (est === "adolescente" && t >= D.bebe + D.crianca + D.adolescente && this.sparring >= CAT.sparring
-               && (this.versao < 4 || this.lutas.vitorias / this.lutas.lutas >= CLE.limiarTaxa)) {
+    } else if (est === "adolescente" && this.e.tick >= lim! && this.sparring >= CAT.sparring
+               && (this.versao < 4 || this.lutas.vitorias / this.lutas.lutas >= CLE.limiarTaxa) && this.medalhasBastam("adulto")) {
       const carater = this.caraterAgora("adulto");
       /* sobrecarga >= 60: a forma adulta vira a sombria da linha (permanente: vinculo com teto, instavel na luta) */
       this.sombria = this.treino.sobrecarga >= CSO.sombrio;
@@ -560,16 +583,68 @@ export class Motor {
   /* ---------------------------------------------------------------- Mega (pets v5; docs/DESIGN_EVOLUCAO_CANONICA.md) */
   /** tick em que virou Ultimate (null antes) */
   tickUltimate(): number | null { const ev = this.evolucoes.find(x => x.estagio === "adulto"); return ev ? ev.tick : null; }
-  /** o que falta para o Mega, pelas condicoes do desenho (secao 3): tempo no Ultimate, lutas, vitoria e vinculo */
-  requisitosMega(): { tempo: boolean; lutas: boolean; taxa: boolean; vinculo: boolean; falta: number } | null {
+  /** o que falta para o Mega, pelas condicoes do desenho (secao 3): tempo no Ultimate, lutas, vitoria e vinculo; pets v6:
+      e as medalhas do Tamer (tem X, precisa Y; null nos v5) */
+  requisitosMega(): { tempo: boolean; lutas: boolean; taxa: boolean; vinculo: boolean; falta: number; medalhas: RequisitoMedalhas | null } | null {
     const t0 = this.tickUltimate();
     /* a sombria nunca vira Mega (o vinculo dela tem teto 0,6, acima do limiar de hoje: a regra fica explicita) */
     if (this.versao < 5 || t0 === null || this.estagioAtual !== "adulto" || this.sombria) return null;
     const falta = Math.max(0, t0 + this.dur.adulto - this.e.tick), L = this.lutas;
     return { tempo: falta === 0, lutas: L.lutas >= CAT.sparring, taxa: L.lutas > 0 && L.vitorias / L.lutas >= CLE.limiarTaxa,
-      vinculo: this.vinc.valor >= CMG.vinculo, falta };
+      vinculo: this.vinc.valor >= CMG.vinculo, falta, medalhas: this.requisitoMedalhas("mega") };
   }
-  podeMega(): boolean { const r = this.requisitosMega(); return !!r && r.tempo && r.lutas && r.taxa && r.vinculo; }
+  podeMega(): boolean { const r = this.requisitosMega(); return !!r && r.tempo && r.lutas && r.taxa && r.vinculo && (!r.medalhas || r.medalhas.ok); }
+
+  /* ---------------------------------------------------------------- medalhas do Tamer (pets v6; docs/DESIGN_MEDALHAS_ARENAS.md) */
+  /** medalhas que a evolucao para `alvo` pede e quantas o Tamer tem (null: pet sem trava, v1-v5) */
+  requisitoMedalhas(alvo: Estagio): RequisitoMedalhas | null {
+    if (this.versao < 6) return null;
+    const precisa = medalhasPara(alvo);
+    return { tem: this.medalhas, precisa, ok: this.medalhas >= precisa };
+  }
+  private medalhasBastam(alvo: Estagio): boolean { const r = this.requisitoMedalhas(alvo); return !r || r.ok; }
+  /** a proxima evolucao e o que falta para ela (o equivalente do requisitosMega para as outras): tempo, lutas e vitoria do
+      estagio (Champion), vinculo (Mega) e as medalhas do Tamer (v6). null: nao ha proxima (In-Training, Mega, sombria) */
+  requisitosEvolucao(): RequisitosEvolucao | null {
+    const est = this.estagioAtual, lim = this.tickLimiteEstagio();
+    if (est === "crianca") {
+      const falta = Math.max(0, lim! - this.e.tick), medalhas = this.requisitoMedalhas("adolescente");
+      return { alvo: "adolescente", falta, tempo: falta === 0, medalhas, pronto: falta === 0 && (!medalhas || medalhas.ok) };
+    }
+    if (est === "adolescente") {
+      const falta = Math.max(0, lim! - this.e.tick), medalhas = this.requisitoMedalhas("adulto");
+      const lutas = this.sparring >= CAT.sparring, taxa = this.versao < 4 || (this.lutas.lutas > 0 && this.lutas.vitorias / this.lutas.lutas >= CLE.limiarTaxa);
+      return { alvo: "adulto", falta, tempo: falta === 0, lutas, taxa, medalhas, pronto: falta === 0 && lutas && taxa && (!medalhas || medalhas.ok) };
+    }
+    const r = this.requisitosMega();
+    if (!r) return null;
+    return { alvo: "mega", falta: r.falta, tempo: r.tempo, lutas: r.lutas, taxa: r.taxa, vinculo: r.vinculo, medalhas: r.medalhas,
+      pronto: r.tempo && r.lutas && r.taxa && r.vinculo && (!r.medalhas || r.medalhas.ok) };
+  }
+  /** pronto para evoluir, so esperando medalha do Tamer: quantas tem e quantas precisa (null: nao esta esperando medalha) */
+  esperandoMedalha(): RequisitoMedalhas | null {
+    const r = this.requisitosEvolucao();
+    if (!r || !r.medalhas || r.medalhas.ok) return null;
+    return r.tempo && (r.lutas ?? true) && (r.taxa ?? true) && (r.vinculo ?? true) ? r.medalhas : null;
+  }
+  /** o Tamer ganhou medalha: grava "o Tamer tem n medalhas a partir deste tick" e re-verifica a evolucao na hora */
+  liberar(n: number): void {
+    this._conferirMorte(); this._vivo();
+    this._validarLiberacao(n);
+    this.log.push([this.e.tick, "u", { n }]);
+    this._liberar(n);
+  }
+  private _validarLiberacao(n: number): void {
+    if (this.versao < 6) throw new Error("medalhas do Tamer só em pets v6");
+    if (!Number.isInteger(n) || n <= this.medalhas || n > MEDALHAS.length)
+      throw new Error(`liberação inválida: ${n} medalhas (o pet já conhece ${this.medalhas}; o máximo é ${MEDALHAS.length})`);
+  }
+  private _liberar(n: number): void {
+    this._validarLiberacao(n);
+    this.medalhas = n;
+    this._hist({ t: this.e.tick, quem: "tamer", a: `o Tamer tem ${n} medalha${n === 1 ? "" : "s"}` });
+    this._evoluir();
+  }
   /** estagio novo; a forma adulta, a passiva e o carater vem do Ultimate. A sombria nunca chega aqui (requisitosMega) */
   private _virarMega(): void {
     this.forma = { ...this.forma, est: "mega" };
@@ -592,7 +667,8 @@ export class Motor {
   assinatura(): string {
     return JSON.stringify([this.e, this.acao, this.tracos, this.pol.assinatura(), this.evolucoes, this.forma, this.chamados, this.sparring, this.gp ? this.gp.assinatura() : null, this.campanha,
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
-      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : [])]);
+      ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : []),
+      ...(this.versao >= 6 ? [this.medalhas] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
@@ -606,6 +682,7 @@ export class Motor {
       case "tr": this._treinar(ev[2]); break;
       case "o": this._origem(ev[2]); break;
       case "c": this._config(ev[2].dur); break;
+      case "u": this._liberar(ev[2].n); break;
       default: throw new Error("tipo de evento desconhecido no registro: " + (ev as unknown[])[1]);
     }
   }
