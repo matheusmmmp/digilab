@@ -128,7 +128,7 @@ def test_rota_devolve_o_comando_so_na_conversa_com_voz(servidor):
     respostas += ['{"fala": "Eba, comida!", "fatos_citados": [], "comando": "alimentar"}', '{"afirmacoes": []}']
     cod, r = _post(url + "/api/fala-livre", {"estado": VOZ, "situacao": "conversa", "fala_jogador": "vai comer",
                                              "semente": 3, "voz": True})
-    assert cod == 200 and r["comando"] == "alimentar" and r["versao_prompt"] == "livre-v7" and r["erro"] is None
+    assert cod == 200 and r["comando"] == "alimentar" and r["versao_prompt"] == "livre-v8" and r["erro"] is None
     assert pedidos[0]["format"]["properties"]["comando"]["enum"][0] == "alimentar" and "COMANDO" in pedidos[0]["messages"][-1]["content"]
     respostas += ['{"fala": "Oi!", "fatos_citados": []}', '{"afirmacoes": []}']
     cod, r = _post(url + "/api/fala-livre", {"estado": VOZ, "situacao": "espontanea", "semente": 3, "voz": True})
@@ -154,3 +154,36 @@ def test_mensagens_da_avaliacao_20_por_classe_e_esperado_no_catalogo():
         assert classe in ("imperativo", "negativa", "conversa") and 0 < len(texto) <= 300
         assert (esperado in CATALOGO_COMANDOS) if classe == "imperativo" else esperado is None
     assert {m[2] for m in MENSAGENS_COMANDO if m[1] == "imperativo"} == set(CATALOGO_COMANDOS)   # toda acao aparece
+
+
+# ------------------------------------------------------------ livre-v8 (rodada 3 do comando)
+def test_livre_v8_so_muda_o_bloco_comando():
+    from digilab_fala_livre.prompt import (BLOCO_COMANDO_V8, DESCRICAO_COMANDOS, DESCRICAO_COMANDOS_V8, SISTEMA_V8,
+                                           VERSAO_PROMPT_V8, VERSOES_COMANDO)
+    assert VERSAO_PROMPT_V8 in VERSOES and VERSAO_PROMPT_V8 in VERSOES_VOZ and VERSOES_COMANDO == (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)
+    # o sistema: igual a v7 fora da regra do COMANDO
+    antes, depois = SISTEMA_V7.split("Na conversa pode vir um bloco COMANDO")[0], SISTEMA_V7.split("Nunca invente uma ação fora da lista.")[1]
+    assert SISTEMA_V8.startswith(antes) and SISTEMA_V8.endswith(depois) and SISTEMA_V8 != SISTEMA_V7
+    for trecho in ('"elogiar"', '"repreender"', '"acariciar"', '"tratar_lesao"', "hipótese", "deixou para depois"):
+        assert trecho in SISTEMA_V8
+    # a lista: so as quatro acoes em que a mensagem e a propria acao mudam
+    mudaram = {k for (k, a), (_, b) in zip(DESCRICAO_COMANDOS, DESCRICAO_COMANDOS_V8) if a != b}
+    assert mudaram == {"elogiar", "repreender", "acariciar", "tratar_lesao"}
+    fatos = fatos_de_estado(VOZ)
+    v8 = mensagens(fatos, "conversa", "muito bem!", versao=VERSAO_PROMPT_V8, comando=True)
+    v7 = mensagens(fatos, "conversa", "muito bem!", versao=VERSAO_PROMPT_V7, comando=True)
+    assert v8[0]["content"] == SISTEMA_V8 and BLOCO_COMANDO_V8 in v8[-1]["content"] and BLOCO_COMANDO not in v8[-1]["content"]
+    assert v7[0]["content"] == SISTEMA_V7 and BLOCO_COMANDO in v7[-1]["content"]          # a v7 nao muda
+    assert v8[-1]["content"].replace(BLOCO_COMANDO_V8, "") == v7[-1]["content"].replace(BLOCO_COMANDO, "")
+    with pytest.raises(ValueError):
+        mensagens(fatos, "espontanea", versao=VERSAO_PROMPT_V8, comando=True)
+
+
+def test_rodada3_do_comando_com_sementes_novas_e_livre_v8():
+    from digilab_fala_livre.avaliacao import RODADAS_COMANDO
+    r1, r3 = RODADAS_COMANDO[1], RODADAS_COMANDO[3]
+    assert r3["prompt"] == "livre-v8" and r3["estilo"] is False and r1["prompt"] == "livre-v7"
+    usadas = {s for k, r in RODADAS_COMANDO.items() if k != 3 for s in r["sementes"]}
+    # a mensagem i usa semente + i: nenhuma semente da rodada 3 cai em nenhuma semente das outras rodadas
+    n = len(MENSAGENS_COMANDO)
+    assert not {s + i for s in r3["sementes"] for i in range(n)} & {s + i for s in usadas for i in range(n)}

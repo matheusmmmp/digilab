@@ -28,8 +28,15 @@ VERSAO_PROMPT_V6 = "livre-v6"
 # devolve `comando`: uma acao do catalogo fechado (as 9 acoes do dono) quando o jogador MANDOU ou PEDIU de forma clara,
 # senao null. A LLM so propoe; o app valida e o motor executa como acao do dono. Na fala espontanea o campo nao existe.
 VERSAO_PROMPT_V7 = "livre-v7"
-VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7)
-VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7)
+# livre-v8 (rodada 3 do comando, 2026-09-30): a v7 com outro bloco COMANDO. Na rodada 1 (artifacts_fala_livre/comando/
+# rodada1) elogiar, repreender, acariciar e tratar_lesao acertaram 4 de 36: nelas a mensagem do dono E a propria acao ("muito
+# bem!" e o elogio), e o modelo tratava como conversa. A v8 define essas quatro pelo que o dono faz na propria mensagem e
+# escreve a regra do null inteira (negacao, pergunta, hipotese, adiamento, relato). O resto e a v7; a v7 nao muda.
+VERSAO_PROMPT_V8 = "livre-v8"
+VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7,
+           VERSAO_PROMPT_V8)
+VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6, VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)
+VERSOES_COMANDO = (VERSAO_PROMPT_V7, VERSAO_PROMPT_V8)
 MAX_TROCAS = 10          # historico da conversa: so da sessao, ultimas 10 trocas
 
 SISTEMA = """Você é a voz de um pet virtual do jogo Digilab. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
@@ -204,6 +211,11 @@ Responda SÓ com um JSON, sem texto fora dele:
 Na fala espontânea não há "comando".""")
 assert SISTEMA_V7 != SISTEMA_V6 and "COMANDO" in SISTEMA_V7
 
+# livre-v8 = livre-v7 com a regra do COMANDO reescrita (so ela muda)
+_REGRA_COMANDO_V7 = """Se a mensagem do jogador MANDOU ou PEDIU de forma clara uma dessas ações ("vai comer", "toma banho", "come isso", "pode brincar"), ponha o nome dela em "comando". Você continua respondendo do seu jeito, e pode até reclamar: quem decide se a ação acontece é o dono, não você. Em qualquer dúvida, "comando" é null. Se o jogador falou de NÃO fazer ("não come agora", "sem petisco hoje"), perguntou ("você quer comer?", "já comeu?"), ou só contou algo, "comando" é null. Nunca invente uma ação fora da lista."""
+SISTEMA_V8 = SISTEMA_V7.replace(_REGRA_COMANDO_V7, """Se a mensagem do jogador MANDOU ou PEDIU de forma clara uma dessas ações ("vai comer", "toma banho", "come isso", "pode brincar"), ponha o nome dela em "comando". Em quatro ações a própria mensagem do dono É a ação: se ele elogia você ("muito bem!", "parabéns"), o comando é "elogiar"; se ele dá bronca ("isso foi feio", "não faz mais"), é "repreender"; se diz que vai fazer carinho ou cafuné, é "acariciar"; se diz que vai cuidar do seu machucado ou fazer um curativo, é "tratar_lesao". Você continua respondendo do seu jeito, e pode até reclamar: quem decide se a ação acontece é o dono, não você. Em qualquer dúvida, "comando" é null. Se o jogador falou de NÃO fazer a ação ("não come agora", "sem petisco hoje", "não vou te dar bronca"), perguntou ("você quer comer?", "já comeu?"), levantou uma hipótese ("se você se comportar, ganha petisco"), deixou para depois ("mais tarde eu te dou banho") ou só contou algo, "comando" é null. Nunca invente uma ação fora da lista.""")
+assert SISTEMA_V8 != SISTEMA_V7 and _REGRA_COMANDO_V7 not in SISTEMA_V8
+
 # o catalogo fechado do comando (= AcaoDono do jogo web), uma frase por acao; a ordem e a do jogo
 DESCRICAO_COMANDOS: tuple[tuple[str, str], ...] = (
     ("alimentar", "dar comida, uma refeição"),
@@ -220,6 +232,20 @@ assert tuple(k for k, _ in DESCRICAO_COMANDOS) == CATALOGO_COMANDOS, "a lista do
 BLOCO_COMANDO = ("COMANDO: só quando o dono mandou ou pediu de forma clara uma destas ações; dúvida = null; "
                  "se o dono falou de não fazer, perguntou ou só contou algo = null.\n"
                  + "\n".join(f"- {k}: {d}" for k, d in DESCRICAO_COMANDOS))
+
+# livre-v8: as quatro acoes em que a mensagem do dono e a propria acao, definidas pelo que ele faz na mensagem
+_ACAO_NA_MENSAGEM_V8 = {
+    "acariciar": "quando o dono diz que vai fazer carinho ou cafuné",
+    "elogiar": "quando o dono elogia o pet na própria mensagem (\"muito bem!\", \"parabéns\")",
+    "repreender": "quando o dono dá bronca na própria mensagem (\"isso foi feio\", \"não faz mais\")",
+    "tratar_lesao": "quando o dono diz que vai cuidar do machucado ou fazer curativo",
+}
+DESCRICAO_COMANDOS_V8: tuple[tuple[str, str], ...] = tuple((k, _ACAO_NA_MENSAGEM_V8.get(k, d)) for k, d in DESCRICAO_COMANDOS)
+assert tuple(k for k, _ in DESCRICAO_COMANDOS_V8) == CATALOGO_COMANDOS
+BLOCO_COMANDO_V8 = ("COMANDO: quando o dono mandou ou pediu de forma clara uma destas ações, ou quando a própria mensagem dele "
+                    "é a ação (o elogio, a bronca, o carinho, o curativo); dúvida = null; se o dono falou de não fazer, "
+                    "perguntou, levantou uma hipótese, deixou para depois ou só contou algo = null.\n"
+                    + "\n".join(f"- {k}: {d}" for k, d in DESCRICAO_COMANDOS_V8))
 
 # limite de tamanho da fala por estagio (caracteres); a tabela do estagio esta no prompt
 MAX_CHARS = {"bebe": 30, "crianca": 60, "adolescente": 160, "adulto": 320}
@@ -250,16 +276,17 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
         raise ValueError(f"situacao desconhecida: {situacao}")
     if situacao == "conversa" and not (isinstance(fala_jogador, str) and fala_jogador.strip()):
         raise ValueError("conversa sem fala do jogador")
-    if comando and (versao != VERSAO_PROMPT_V7 or situacao != "conversa"):
-        raise ValueError("o comando so existe no livre-v7 e so na conversa")
+    if comando and (versao not in VERSOES_COMANDO or situacao != "conversa"):
+        raise ValueError("o comando so existe no livre-v7/v8 e so na conversa")
     msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
                                            VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5,
-                                           VERSAO_PROMPT_V6: SISTEMA_V6, VERSAO_PROMPT_V7: SISTEMA_V7}[versao]}]
+                                           VERSAO_PROMPT_V6: SISTEMA_V6, VERSAO_PROMPT_V7: SISTEMA_V7,
+                                           VERSAO_PROMPT_V8: SISTEMA_V8}[versao]}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"
     if comando:
-        pedido += BLOCO_COMANDO + "\n"
+        pedido += (BLOCO_COMANDO_V8 if versao == VERSAO_PROMPT_V8 else BLOCO_COMANDO) + "\n"
     pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
                else f'SITUAÇÃO: conversa. Jogador: "{fala_jogador.strip()[:300]}"')
     msgs.append({"role": "user", "content": pedido})

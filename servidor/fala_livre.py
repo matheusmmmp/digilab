@@ -15,7 +15,8 @@ Digimundo (com "internet": true, na espontanea, chance almanaque.CHANCE_ESPONTAN
 da especie (fato A1, arvore.py). A resposta
 traz a verificacao da versao escolhida. Sem "voz", tudo como antes (livre-v2, verif-v3).
 
-Comando pelo chat (TAREFA_COMANDO_CHAT, 2026-09-30): na CONVERSA com "voz": true o prompt e o livre-v7 e a resposta
+Comando pelo chat (TAREFA_COMANDO_CHAT, 2026-09-30): na CONVERSA com "voz": true o prompt e o livre-v8 (era a v7 ate a
+rodada 3 do comando; a v7 continua no pacote e a rodada 1 reproduz) e a resposta
 traz "comando": uma acao do catalogo fechado (as 9 acoes do dono) que o pet entendeu como pedido claro, ou null. O
 servidor so propoe (saida.ler falha alto fora do catalogo); o app valida de novo e grava o evento `d` de sempre. Na fala
 espontanea e sem "voz" o campo vem null.
@@ -34,7 +35,7 @@ from digilab_fala_livre import almanaque, corpus
 from digilab_fala_livre.arvore import ARVORE
 from digilab_fala_livre.gerar import gerar
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
-from digilab_fala_livre.prompt import VERSAO_PROMPT_V6, VERSAO_PROMPT_V7
+from digilab_fala_livre.prompt import VERSAO_PROMPT_V6, VERSAO_PROMPT_V8
 from digilab_fala_livre.revisao import gerar_com_revisao
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, verificar
 
@@ -114,10 +115,10 @@ class ServicoFalaLivre:
                 estado["historia"] = []                  # o assunto passa a ser o que ele ouviu no Digimundo
         forma = (estado.get("identidade") or {}).get("forma")
         especie = self.especies.get(forma.removesuffix(" sombrio")) if isinstance(forma, str) else None
-        comando = situacao == "conversa"             # livre-v7: o comando so existe na conversa
+        comando = situacao == "conversa"             # livre-v8: o comando so existe na conversa
         with self.trava:
             r, tent = gerar_com_revisao(self.cliente, estado, situacao, semente, jog, hist,
-                                        versao=VERSAO_PROMPT_V7 if comando else VERSAO_PROMPT_V6,
+                                        versao=VERSAO_PROMPT_V8 if comando else VERSAO_PROMPT_V6,
                                         especie=especie, rival=rival, versao_verificador=VERSAO_VERIFICADOR_V5,
                                         so_respeito=True, comando=comando)
         escolhida = next((x for x in reversed(tent) if x.get("fala") == r.fala), None)
