@@ -1064,3 +1064,22 @@ SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
   forma sorteada). O ε da série inteira sai da confiança do começo. Só na web (o Python não tem séries).
 - O Python não muda: `ConfigConfianca` segue desligada por padrão, `PARAMETROS_CONFIANCA_M1` à parte (os hashes da
   educação-v1 e da voz não mudam).
+
+## 2026-09-30 — equilíbrio geral, fase 1 (as formas): a V21E fecha pelas listas, não pela base
+
+- **A base não mudou.** O plano (`docs/PLANO_EQUILIBRIO_GERAL.md`, seção 3) e o diagnóstico apontavam a base (custo do golpe
+  rápido, dano do parry, a C3) como a alavanca do furioso. Medidas na calibração sobre a V21D, nenhuma o tira de ~0,72
+  (`artifacts_equilibrio_geral/fase1/matriz.json`: golpe 12/15/20, parry 8/12, sem C3). O que o tira é o parry que já existe
+  (C2 da V2C): nenhuma forma que o golpe rápido repetido esmagava se defendia dele. A V21E (`ConfigCombateV21E`, subclasse
+  da V21D, chaves desligadas por padrão) só tem listas variantes; a `ConfigCombateV2C`, `combate_v2/*.py` e a bateria da base
+  não mudam.
+- **Uma chave por edição de lista** (como a V21D), cinco: `duelista_defende_do_golpe`, `tita_defende_do_golpe`,
+  `espelho_sem_carregar`, `muralha_sem_carregar`, `muralha_contra_golpe_na_pele`. As da muralha pedem `muralha_lista_espelho`
+  (falha alto sem ela).
+- **Web: pets v9** (`VERSAO_PET = 9` = v8 + combate equilibrado; `CV21E`). Os v6–v8 seguem na V21D e os v1–v5 na V21C; nenhum
+  save é descartado. A Fábrica (sem pet; lutas no registro do Tamer) continua na V21D (`VERSAO_FABRICA = 6`): mudar as regras
+  dela mudaria o replay das tentativas já gravadas. As regras novas da V21E ficam fora do repertório de candidatas (como as
+  do vigia V21D) e voltam como candidatas de troca só para a forma que as tem, nos pets v9 (`candidatasV21E`).
+- **Sementes da bateria da base.** A meta M-A5 pede G1–G9 da V2C: a bateria da base tem sementes próprias (calibração
+  1101…1505, validação 2101…2505); na fase 1 roda a de calibração (`experiments/configs/v21e/bateria_v2c_calibracao.json`, igual
+  à etapa c7). As 3101…3505 valem para tudo o que é V2.1.
