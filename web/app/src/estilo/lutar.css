@@ -582,3 +582,5 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .med-ouro b{font-size:15px;font-weight:900;color:var(--dl-text)}
 .res-titulo{display:flex;align-items:center;gap:12px;background:var(--dl-bg);border-radius:14px;box-shadow:0 0 0 3px var(--dl-highlight);padding:8px 12px}
 .tela .lugar-tag--fronteira{background:var(--dl-navy);color:#FFFFFF}
+/* Lutar tem quatro abas desde a Fronteira: no celular estreito (360 px) elas cabem com a letra e o respiro um pouco menores */
+@media (max-width:380px){ body[data-destino="lutar"] .tab{padding:0 5px;font-size:13px} }
