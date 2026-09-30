@@ -1,7 +1,7 @@
 """Diagnostico do desequilibrio entre as 8 formas adultas (arquetipos) do combate V21C. So leitura: nenhuma regra muda.
 
     python experiments/diagnosticar_arquetipos.py --etapa todas --processos 8
-    python experiments/diagnosticar_arquetipos.py --etapa reproducao|mecanismo|atribuicao|leitura|epsilon|painel
+    python experiments/diagnosticar_arquetipos.py --etapa reproducao|mecanismo|atribuicao|leitura|epsilon|painel|candidatos
 
 Regras: as da validacao V21C (experiments/configs/v21c/validacao.json, montadas por run_bateria_v21.regras_de; o
 config_sha256 tem de ser o gravado em artifacts_combate_v21c/validacao/gates.json). Sementes: SO as de calibracao
@@ -18,6 +18,8 @@ Etapas (saida em artifacts_combate_v21c/diagnostico_arquetipos/):
   leitura     (3b) mecanismo: a forma sem as regras que leem o preparo do pesado (oponente_preparando), os
               oponentes sem elas, e a matriz inteira sem nenhuma leitura.
   epsilon     (4) a matriz com epsilon dos bots 0; 0,05 (o de hoje); 0,15; 0,30.
+  candidatos  previa (NAO aplicada) dos candidatos que se montam so com gambits: A (preparo sob pele escondido) e
+              A + C (muralha com a lista do espelho). Matriz inteira, mesmas sementes.
   painel      (5) forca de cada forma contra o painel B da pesquisa (8 formas x 4 especies), mesmo metodo de
               run_educacao._painel_do_ovo, com o bot canonico no lugar do pet.
 """
@@ -46,7 +48,7 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import run_bateria_v21 as rb  # noqa: E402
 from digilab.combate_v2.v21.bots import ADULTOS, FORMAS, lutador_adulto  # noqa: E402
 from digilab.combate_v2.v21.catalogo import LINHA_DA_FORMA, Forma, carater_canonico, perfil  # noqa: E402
-from digilab.combate_v2.v21.gambits import CONDICAO_DO_VIGIA, GambitInvalido, ListaGambits  # noqa: E402
+from digilab.combate_v2.v21.gambits import CONDICAO_DO_VIGIA, Condicao, GambitInvalido, ListaGambits, Regra  # noqa: E402
 from digilab.combate_v2.v21.partida import Lutador, jogar, sementes_de_rng  # noqa: E402
 from digilab.combate_v2.v21.regras import (CORPO_A_CORPO, POSTURAS, TECNICAS, Acao, Distancia,  # noqa: E402
                                            estado_inicial, resolver, resultado)
@@ -167,6 +169,24 @@ class LutadorDiag(Lutador):
             raise GambitInvalido(f"{self.nome}: gambits de {self.gambits.estagio} num {self.perfil.estagio}")
 
 
+@dataclass(frozen=True)
+class CondicaoPreparoSobPele(Condicao):
+    """Candidato A (previa, NAO aplicado): o preparo feito sob pele_dura nao aparece em oponente_preparando.
+    Com turnos_pele_dura = 2, a pele esta ativa no turno do preparo se a acao anterior foi pele_dura."""
+
+    def vale(self, estado, lado, ctx) -> bool:
+        if self.nome == "oponente_preparando":
+            op = estado.oponente(lado)
+            return op.preparando and not (len(op.historico) >= 2 and op.historico[-2] is Acao.PELE_DURA)
+        return super().vale(estado, lado, ctx)
+
+
+def _lista_candidato_a(g: ListaGambits) -> ListaGambits:
+    def troca(c):
+        return CondicaoPreparoSobPele(c.nome, c.params) if c.nome == "oponente_preparando" else c
+    return ListaGambits(tuple(Regra(tuple(troca(c) for c in x.condicoes), x.acao) for x in g.regras), g.final, g.estagio)
+
+
 def _catalogo_sem(forma: str, tudo: bool):
     cat = CONFIG_CATALOGO
     linha = LINHA_DA_FORMA[forma]
@@ -207,6 +227,12 @@ def lutador(forma: str, especie: str, variante: str = "original", epsilon: float
         g = ADULTOS[IRMA[forma]]
     elif variante == "passiva_irma":
         p = replace(p, passiva=IRMA[forma])
+    elif variante == "cand_a":
+        if regras().v21.turnos_pele_dura != 2:
+            raise RuntimeError("a condicao do candidato A supoe turnos_pele_dura = 2")
+        g = _lista_candidato_a(g)
+    elif variante == "cand_a_c":
+        g = _lista_candidato_a(ADULTOS["espelho"] if forma == "muralha" else g)
     elif variante == "sem_leitura_do_preparo":
         g = ListaGambits(tuple(x for x in g.regras if not any(c.nome == "oponente_preparando" for c in x.condicoes)),
                          g.final, g.estagio)
@@ -673,6 +699,41 @@ def etapa_leitura(pool, base_rep: dict) -> dict:
             "tabela": tabela, "matriz_sem_nenhuma_leitura": resumo_matriz(conf)}
 
 
+CANDIDATOS = {
+    "cand_a": "A: o preparo feito sob pele_dura nao aparece em oponente_preparando (todos os bots)",
+    "cand_a_c": "A + C: A e a muralha com a lista de gambits do espelho",
+}
+
+
+def _rr_variante(args):
+    esp, n, variante = args
+    r = regras()
+    lut = {f: lutador(f, esp, variante) for f in FORMAS}
+    conf = []
+    for i, fa in enumerate(FORMAS):
+        for fb in FORMAS[i:]:
+            conf += [(fa, fb, x) for x in jogar_par(lut[fa], lut[fb], f"e1|{esp}", sementes_calibracao(), n, r)]
+    return esp, conf
+
+
+def etapa_candidatos(pool, base_rep: dict) -> dict:
+    """Previa de candidatos que se montam so com dados (gambits) no script. NAO aplicados; so calibracao."""
+    esp = list(CONFIG_CATALOGO.especies_ativas)
+    f0 = base_rep["matriz_calibracao_n100"]["forca_media_contra_as_outras_7"]
+    saida = {}
+    for v in CANDIDATOS:
+        conf = []
+        for _, c in sorted(pool.map(_rr_variante, [(e, N_POR_SEMENTE, v) for e in esp])):
+            conf += c
+        res = resumo_matriz(conf)
+        res["variacao_da_forca"] = {f: res["forca_media_contra_as_outras_7"][f] - f0[f] for f in FORMAS}
+        saida[v] = res
+    return {"meta": meta({"partidas_por_par_por_semente": N_POR_SEMENTE, "candidatos": CANDIDATOS,
+                          "aviso_candidatos": "previa na calibracao, uma rodada, sem ajuste; NAO e validacao nem mudanca "
+                                              "de regra (a condicao e uma subclasse de Condicao montada neste script)"}),
+            "por_candidato": saida}
+
+
 # ------------------------------------------------------------------ 4. epsilon
 def etapa_epsilon(pool) -> dict:
     esp = list(CONFIG_CATALOGO.especies_ativas)
@@ -737,7 +798,8 @@ def etapa_painel(pool) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Diagnostico dos arquetipos do combate V21C (so leitura)")
     ap.add_argument("--etapa", default="todas",
-                    choices=("todas", "reproducao", "mecanismo", "atribuicao", "leitura", "epsilon", "painel"))
+                    choices=("todas", "reproducao", "mecanismo", "atribuicao", "leitura", "epsilon", "painel",
+                             "candidatos"))
     ap.add_argument("--processos", type=int, default=8)   # 18 derrubou o pool nesta maquina
     ap.add_argument("--rapido", type=Path, default=None, help="fumaca: N = 4, M = 4, saida nesta pasta (nao canonica)")
     a = ap.parse_args(argv)
@@ -747,7 +809,7 @@ def main(argv=None) -> int:
         N_POR_SEMENTE, M_PAINEL, SAIDA = 4, 4, a.rapido
     conferir_regras()
     sementes_calibracao()
-    etapas = ("reproducao", "mecanismo", "atribuicao", "leitura", "epsilon", "painel") if a.etapa == "todas" else (a.etapa,)
+    etapas = ("reproducao", "mecanismo", "atribuicao", "leitura", "epsilon", "painel", "candidatos") if a.etapa == "todas" else (a.etapa,)
     with ProcessPoolExecutor(max_workers=a.processos) as pool:
         rep = None
         for et in etapas:
@@ -757,10 +819,11 @@ def main(argv=None) -> int:
                 rep = etapa_reproducao(pool)
                 _gravar("reproducao.json", rep)
             else:
-                if et in ("mecanismo", "atribuicao", "leitura") and rep is None:
+                if et in ("mecanismo", "atribuicao", "leitura", "candidatos") and rep is None:
                     rep = json.loads((SAIDA / "reproducao.json").read_text(encoding="utf-8"))
                 obj = {"mecanismo": lambda: etapa_mecanismo(pool, rep), "atribuicao": lambda: etapa_atribuicao(pool, rep),
                        "leitura": lambda: etapa_leitura(pool, rep),
+                       "candidatos": lambda: etapa_candidatos(pool, rep),
                        "epsilon": lambda: etapa_epsilon(pool), "painel": lambda: etapa_painel(pool)}[et]()
                 _gravar(f"{et}.json", obj)
             print(f"  {et}: {time.perf_counter() - t0:.0f} s", flush=True)
