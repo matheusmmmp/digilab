@@ -84,12 +84,13 @@ export function sincronizarPet(t: Tamer, m: Motor): boolean {
 /* ------------------------------------------------ descarte unico dos pets antigos */
 /** marcador do descarte unico: a versao do descarte que ja rodou neste navegador. 1 = medalhas do Tamer (2026-09-29: os
     pets v1-v5 saem); 2 = combate V21D nos pets v6 (2026-09-30, docs/VALIDACAO_V21D.md: os v6 de antes mudariam de
-    comportamento no replay e saem tambem). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou
+    comportamento no replay e saem tambem); 3 = arenas com lideres (2026-09-30, DESIGN_MEDALHAS_ARENAS parte 2: as lutas
+    de arena mudam no replay dos v6 de antes, e saem de novo). Sem a chave: 1 se o registro do Tamer existe (o descarte das medalhas rodou
     antes do marcador existir), senao 0 */
 export const CHAVE_DESCARTE = CHAVE + "-descarte";
-export const VERSAO_DESCARTE = 2;
+export const VERSAO_DESCARTE = 3;
 /** cada descarte apaga os pets ate esta versao (inclusive) */
-const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6 };
+const DESCARTA_ATE: Record<number, number> = { 1: 5, 2: 6, 3: 6 };
 
 /** decisoes do Matheus: os pets de antes da trava das medalhas (v1-v5, 2026-09-29) e os v6 de antes do combate V21D
     (2026-09-30) sao descartados, o ativo e os guardados, e o jogo comeca num ovo novo v6 com o Tamer sem medalhas. Roda uma

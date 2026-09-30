@@ -80,7 +80,7 @@ describe("descarte unico dos pets antigos (medalhas e combate V21D)", () => {
     expect(a.dados[CHAVE]).toBeUndefined();
     expect(a.dados[GUARDADOS]).toBe("[]");
     expect(a.dados[CHAVE_AVISO_V6]).toBe("4");
-    expect(a.dados[CHAVE_DESCARTE]).toBe("2");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("3");
     expect(lerTamer(a).n).toBe(0);
     a.dados[CHAVE] = v(6);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();          /* ja rodou: nada sai (o v6 de agora fica) */
@@ -97,13 +97,23 @@ describe("descarte unico dos pets antigos (medalhas e combate V21D)", () => {
     expect(lerTamer(a).n).toBe(0);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
   });
+  test("depois do descarte do V21D (marcador 2): os v6 de antes das arenas saem de novo, mesmo aviso", () => {
+    const a = armaz({ [CHAVE]: v(6), [CHAVE_DESCARTE]: "2" });
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBe(1);
+    expect(a.dados[CHAVE]).toBeUndefined();
+    expect(a.dados[CHAVE_DESCARTE]).toBe("3");
+    expect(a.dados[CHAVE_AVISO_V6]).toBe("1");
+    a.dados[CHAVE] = v(6);
+    expect(descartarPetsAntigos(a, GUARDADOS)).toBeNull();
+    expect(a.dados[CHAVE]).toBe(v(6));
+  });
   test("Tamer sem pet para descartar: fica como esta, sem aviso; marcador invalido falha alto", () => {
     const t = new Tamer(); t.ganhar("campina", new Motor(9, 6), 1);
     const a = armaz(); gravarTamer(a, t);
     expect(descartarPetsAntigos(a, GUARDADOS)).toBe(0);
     expect(lerTamer(a).n).toBe(1);
     expect(a.dados[CHAVE_AVISO_V6]).toBeUndefined();
-    expect(a.dados[CHAVE_DESCARTE]).toBe("2");
+    expect(a.dados[CHAVE_DESCARTE]).toBe("3");
     expect(() => descartarPetsAntigos(armaz({ [CHAVE_DESCARTE]: "x" }), GUARDADOS)).toThrow();
   });
   test("primeiro acesso (sem nada): nada sai, sem aviso; save que nao e JSON fica para o erro de sempre", () => {
