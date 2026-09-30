@@ -1,6 +1,6 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **aprovado** (Matheus, 2026-09-29), implementação **depois do diagnóstico dos arquétipos**. Nada foi implementado. Todo número é PROPOSTO, sem fonte.
+Status: **aprovado** (Matheus, 2026-09-29). **Parte 1 implementada no jogo web** (branch `medalhas-parte1`, 2026-09-29; seção 11); partes 2–4 não. Todo número é PROPOSTO, sem fonte.
 
 **Decisões do Matheus (2026-09-29):**
 1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
@@ -116,3 +116,31 @@ Liberada com as 6 medalhas. O objetivo: **vencer todos os líderes na versão ma
 3. **Pets v6** para a trava, deixando os v5 como estão.
 4. **O fim do jogo passa a ser a Fronteira**, e não mais o Piedmon.
 5. **A ordem:** Tamer e medalhas primeiro (não dependem do equilíbrio), com os líderes e os itens esperando o diagnóstico.
+
+## 11. O que a parte 1 implementou (2026-09-29) e o que ficou para a parte 2
+
+**Implementado (só `web/app/`):**
+- **Pets v6** (`VERSAO_PET = 6`): a trava 1/3/5 (`CMD` em `motor/constantes.ts`). O pet que cumpre os próprios requisitos e não tem
+  as medalhas fica pronto e evolui no tick do evento `u` (`Motor.liberar`, `esperandoMedalha`, `requisitoMedalhas`,
+  `requisitosEvolucao`; `requisitosMega` expõe `medalhas: {tem, precisa, ok}`). O caráter e o resto da evolução são medidos na hora
+  em que ela acontece. A assinatura dos v6 inclui as medalhas; a dos v1–v5 não mudou.
+- **A tabela das medalhas** (`motor/medalhas.ts`, única): Campina/Gazimon, Torre de pedra/Guardromon, **provisória**
+  Devidramon (Torre de pedra, no lugar da Floresta), Cidadela/Myotismon, **provisória** Machinedramon (Montanha Espiral, no lugar do
+  Lago), Montanha Espiral/Piedmon. A parte 2 troca só esta tabela (os ids já são os das arenas: `floresta`, `lago`).
+- **O Tamer** (`src/tamer.ts`): registro próprio na chave `digilab-web-v21-sprites-tamer` (`{versao: 1, log}`, eventos
+  `["medalha", {id, n, quando, pet, forma, tick}]`), reproduzido como o pet; evento desconhecido falha alto. Medalha na primeira
+  vitória contra o líder, com qualquer pet **v6**. O app grava a medalha e põe o `u` no pet ativo; um pet guardado recebe o `u`
+  quando volta a ser o ativo (e a revelação mostra a evolução).
+- **Saves de antes descartados** na primeira abertura, com aviso, e ovo novo pela escolha do brasão (seção 5).
+- **Telas:** Lutar · Medalhas; o requisito de medalha na Evolução ("Falta a Medalha da Campina: vença o Gazimon na Campina."); o
+  líder marcado na Campanha, com o selo; a medalha nova no Resultado da luta.
+
+**Ficou para a parte 2 (e depois):**
+- as arenas com regra própria, os lugares novos (Floresta e Lago) e a calibração dos líderes (seção 3), que dependem do equilíbrio
+  entre arquétipos;
+- as outras coisas que as medalhas liberam (seção 4): regras de luta editáveis, lugares do mapa, espaços de item, a Fronteira;
+- itens (seção 6) e a Fronteira (seção 7).
+
+**Onde o código não batia com o desenho:** a 5ª medalha provisória vem de um NPC calibrado para Mega; um Ultimate treinado vence o
+Machinedramon 0,28 em média, e 5 das 8 formas quase nunca (`docs/REGISTRO_DESVIOS.md`, 2026-09-29). Até a parte 2, o Mega depende
+de o Tamer ter um caçador. A 3ª medalha e as outras ficam no nível pensado (a Torre é de Champion).
