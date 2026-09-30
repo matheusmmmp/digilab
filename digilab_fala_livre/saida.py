@@ -30,6 +30,24 @@ class FalaLivre:
     comando: str | None = None      # livre-v7, so na conversa: uma acao do CATALOGO_COMANDOS ou None
 
 
+FIM_DE_FRASE = ".!?…"
+
+
+def aparar(fala: str, limite: int) -> str:
+    """A fala que bateu no limite de caracteres do esquema veio cortada no meio da palavra (o Ollama para a geracao na
+    gramatica: "Vou co-c"). Fica so o que e inteiro: ate o ultimo fim de frase; sem fim de frase, ate o ultimo espaco, com
+    reticencias. Abaixo do limite a fala nao muda (as rodadas gravadas nao mudam)."""
+    if len(fala) < limite:
+        return fala
+    corte = max(fala.rfind(c) for c in FIM_DE_FRASE)
+    if corte > 0:
+        return fala[:corte + 1].strip()
+    espaco = fala.rfind(" ")
+    if espaco > 0:
+        return fala[:espaco].rstrip(",;:-") + "…"
+    return fala
+
+
 def ler(texto: str) -> FalaLivre:
     if not isinstance(texto, str) or not texto.strip():
         raise SaidaInvalida("saida vazia")

@@ -20,8 +20,8 @@ from dataclasses import replace
 from .corpus import Especie
 from .gerar import Resultado, gerar
 from .ollama import ClienteOllama
-from .prompt import MAX_TOKENS, VERSAO_PROMPT_V4, esquema
-from .saida import FALA_GENERICA, SaidaInvalida, ler
+from .prompt import MAX_CHARS, MAX_TOKENS, VERSAO_PROMPT_V4, esquema
+from .saida import FALA_GENERICA, SaidaInvalida, aparar, ler
 from .verificador import VERSAO_VERIFICADOR_V4, VERSAO_VERIFICADOR_V5, Verificacao, verificar
 
 MAX_REVISOES = 2
@@ -88,7 +88,8 @@ def gerar_com_revisao(cliente: ClienteOllama, estado: dict, situacao: str = "esp
         except (OSError, ValueError, SaidaInvalida) as err:
             tentativas.append({"fala": None, "erro": f"{type(err).__name__}: {err}"})
             break
-        atual = replace(atual, fala=f.fala, fatos_citados=f.fatos_citados, latencia_s=resp.latencia_s)
+        atual = replace(atual, fala=aparar(f.fala, MAX_CHARS[atual.estagio]), fatos_citados=f.fatos_citados,
+                        latencia_s=resp.latencia_s)
     validas = [(i, t) for i, t in enumerate(tentativas) if t.get("fala") not in (None, FALA_GENERICA)]
     if so_respeito:
         # livre-v6 (decisao do Matheus): inventar pode, desde que a invencao seja IDENTIFICADA. Fala que o

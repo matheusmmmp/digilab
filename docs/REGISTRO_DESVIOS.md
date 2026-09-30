@@ -1143,3 +1143,11 @@ ação ("muito bem!" é o elogio) e o modelo tratava como conversa.
   `repreender` ("banho agora, sem choro" e "vai se limpar, você tá todo sujo", mensagens de tom bravo) e 1 null. Com o chip, o
   jogador veria "Repreender?" no lugar de "Limpar?": é um erro de ação, não um falso positivo numa negativa.
 - **Execução direta continua fora**: o chip segue obrigatório; liberar para os imperativos é decisão do Matheus.
+
+## 2026-09-30 — Fala livre: a fala que bate no limite do esquema sai cortada no meio da palavra
+
+Visto no teste do chip no jogo: o Koromon (bebê, `MAX_CHARS` 30) respondeu "M-mm! Já tô com fome! Vou co-c". O `maxLength` do
+esquema JSON é uma gramática: o Ollama para de gerar no 30º caractere, e o verificador marcava o toco como invenção. Correção
+só na saída (`saida.aparar`, chamada em `gerar` e na reescrita da autocorreção): quando a fala tem o tamanho do limite, fica
+só a parte inteira, até o último fim de frase (".", "!", "?", "…"); sem fim de frase, até o último espaço, com reticências.
+Abaixo do limite a fala não muda, então as rodadas gravadas não mudam. Prompts, esquema e limites continuam os mesmos.
