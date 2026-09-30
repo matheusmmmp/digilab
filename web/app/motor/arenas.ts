@@ -76,12 +76,20 @@ export const sementeDaSerie = (semente: number, k: number): number => k ? hashSe
 export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLuta, lutas = 1, desafiado: Desafiado = null,
   carta: EfeitoCarta | null = null): ResultadoLuta[] {
   if (!Number.isInteger(lutas) || lutas < 1) throw new Error("lutas da arena inválidas: " + lutas);
+  return jogarSerie(A, Array.from({ length: lutas }, () => B), semente, R, desafiado, carta);
+}
+/** lutas seguidas sem cura, uma contra cada rival de `Bs`, na ordem (a Cidadela: o mesmo lider tres vezes; a Liga dos Lideres,
+    liga.ts: os 6 lideres). Para na primeira que nao for vitoria; da segunda em diante o pet (lado A) comeca com a vida e o guts do
+    fim da anterior, e cada rival comeca inteiro. A luta k usa a semente sementeDaSerie(semente, k). Deterministico */
+export function jogarSerie(A: Lutador, Bs: readonly Lutador[], semente: number, R: RegrasLuta, desafiado: Desafiado = null,
+  carta: EfeitoCarta | null = null): ResultadoLuta[] {
+  if (!Bs.length) throw new Error("série de lutas sem rival");
   /* a carta do pet (itens.ts; pets v6) vale para o evento inteiro: o guts a mais no comeco da primeira luta (nas seguintes, o que
      sobrou), o foco em todas e a cura uma vez so na serie */
   const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
   let ini: { hp: number; guts: number } | null = null, cura = carta?.cura ?? null;
-  for (let k = 0; k < lutas; k++) {
-    const res = jogarV2(Ac, B, sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
+  for (let k = 0; k < Bs.length; k++) {
+    const res = jogarV2(Ac, Bs[k], sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
     serie.push(res);
     if (cura && res.turnos.some(t => t.cura)) cura = null;
     if (res.pontosA !== 1) break;

@@ -69,7 +69,8 @@ pet**, nunca mais de uma frase por tela.
    sutil.
 7. **Regras de combate.** Travar/Vetar é o conceito mais abstrato do jogo; os jogadores do Digital Tamers 2 reclamam de
    treino complicado, e aqui o treino + regras somam fadiga, forçar, sobrecarga, aptidão e gambits.
-8. **Depois do chefe, nada pede nada.** O endgame não tem meta no tempo (ver 4.).
+8. **Depois do chefe, nada pede nada.** O endgame não tem meta no tempo (ver 4.). Nos pets v6 (2026-09-30) a jornada passou a terminar na
+   Liga dos Líderes da Fronteira, depois das 6 medalhas (`docs/DESIGN_FRONTEIRA.md`), e não mais no Piedmon.
 
 ## 3. Nova escala de stats (B2)
 

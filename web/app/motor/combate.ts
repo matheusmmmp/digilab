@@ -143,7 +143,7 @@ export function resolverV2(E: EstadoLuta, aa: string, ab: string): ResultadoTurn
 }
 /** quem foi desafiado na luta (0 = lado A, 1 = lado B) ou null (ninguem: o limite de turnos decide pela fracao de vida, como
     sempre). Regra do limite (decisao do Matheus, 2026-09-30, so no jogo): a luta que chega ao limite de turnos sem KO e do
-    desafiado. Nas lutas dos pets v6 o pet (lado A) sempre desafia (desafiadoDaVersao); na Fronteira o desafiado sera o campeao */
+    desafiado. Nas lutas dos pets v6 o pet (lado A) sempre desafia (desafiadoDaVersao), tambem na Liga dos Lideres da Fronteira (o desafiado e o lider; liga.ts) */
 export type Desafiado = 0 | 1 | null;
 /** versao de pet a partir da qual o limite de turnos e do desafiado */
 export const VERSAO_LIMITE_DESAFIADO = 6;

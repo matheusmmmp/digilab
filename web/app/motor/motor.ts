@@ -8,7 +8,8 @@ import { CMEN,
 import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
 import { MEDALHAS, medalhasPara } from "./medalhas.ts";
-import { arenaDaLuta, jogarArena, sementeDaSerie, type Arena } from "./arenas.ts";
+import { arenaDaLuta, jogarSerie, sementeDaSerie, type Arena } from "./arenas.ts";
+import { LIGA, MEDALHAS_LIGA, RIVAL_LIGA, VERSAO_LIGA, lutadoresLiga, nomeMegaLiga } from "./liga.ts";
 import { CIT } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
@@ -46,6 +47,8 @@ interface RegistroDesejo { atual: { tick: number; tipo: Desejo["tipo"]; alvo: st
     nao for vitoria) */
 export interface LutaMontada {
   A: Lutador; B: Lutador; arena: Arena | null; usadas: string[] | null; serie: ResultadoLuta[];
+  /** pets v6, a Liga dos Lideres (liga.ts): os 6 rivais, na ordem (B e o primeiro); null fora dela */
+  lideres: Lutador[] | null;
   /** pets v6: a carta do Tamer que valeu nesta luta (itens.ts; evento "k" logo antes da luta); null sem carta */
   carta: string | null;
 }
@@ -142,6 +145,9 @@ export class Motor {
   cartasUsadas: string[] = [];
   /** v6: o registro tem evento de item; so entao os itens entram na assinatura (a dos pets sem item nao muda) */
   comItens = false;
+  /** v6: a Liga dos Lideres (liga.ts): tentativas e titulos (as 6 vencidas) deste pet. Entra na assinatura so depois da primeira
+      tentativa (a dos pets que nunca entraram na Liga nao muda) */
+  liga = { tentativas: 0, titulos: 0 };
 
   constructor(semente: number, versao: number = VERSAO_PET) {
     if (![1, 2, 3, 4, 5, 6, 7].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
@@ -241,8 +247,9 @@ export class Motor {
   arenaDe(rival: string): Arena | null { return NPC[rival] ? arenaDaLuta(rival, this.versao) : null; }
   /** luta contra bot: entra no registro (rival + semente) e ensina os gambits */
   lutar(rival: string, semente: number, carta: string | null = null): ResultadoLutaPet {
-    if (!NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
+    if (rival !== RIVAL_LIGA && !NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
+    if (rival === RIVAL_LIGA) { const erro = this.porqueNaoLiga(); if (erro) throw new Error(erro); if (carta !== null) throw new Error("as cartas não valem na Liga dos Líderes"); }
     if (NPC[rival] && !(rival in this.campanha)) throw new Error(`${NPC[rival]!.nome} não está na campanha deste pet`);
     if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[this.lugarDe(rival) - 1].nome} antes`);
     /* pets v6: a carta do Tamer entra no registro logo antes da luta, e a luta a consome */
@@ -256,21 +263,44 @@ export class Motor {
       (Cidadela). O _lutar joga por aqui; a tela refaz as lutas do registro por aqui tambem */
   montarLuta(rival: string, semente: number): LutaMontada {
     const L = this.lutadores(rival), carta = this.carta;
-    return { ...L, carta, serie: jogarArena(L.A, L.B, semente, this.regras, L.arena?.lutas ?? 1, this.desafiado, carta ? cartaDe(carta).carta : null) };
+    /* a Liga (liga.ts): os 6 lideres em sequencia, sem cura e sem carta (a carta armada antes dela falha em _lutar) */
+    if (L.lideres) return { ...L, carta: null, serie: jogarSerie(L.A, L.lideres, semente, this.regras, this.desafiado, null) };
+    return { ...L, carta, serie: jogarSerie(L.A, Array.from({ length: L.arena?.lutas ?? 1 }, () => L.B), semente, this.regras, this.desafiado, carta ? cartaDe(carta).carta : null) };
   }
   /** os dois lados da luta contra o rival, sem jogar (a previa do palco usa isto): o pet (no Lago, com a lista sem o dono),
       o rival (o lider com a regra da arena) e as regras do pet com que ele luta */
   lutadores(rival: string): Omit<LutaMontada, "serie" | "carta"> {
+    if (rival === RIVAL_LIGA) {
+      /* a Liga: o pet como na campanha (treino absoluto, na escala) com a lista dele (chips valem); os 6 Megas dos lideres */
+      const lideres = lutadoresLiga(this.regras);
+      return { A: lutadorPet(this, "Seu pet", true), B: lideres[0], lideres, arena: null, usadas: this.gp ? this.gp.ativas.slice() : null };
+    }
     const npc = !!NPC[rival], arena = this.arenaDe(rival);
     let A = lutadorPet(this, "Seu pet", npc), usadas = this.gp ? this.gp.ativas.slice() : null;
     if (arena?.regra === "vinculo" && this.gp) {
       usadas = this.gp.listaSozinho();
       A = { ...A, estilo: { ...A.estilo, gambits: { regras: usadas.map(regraDe), final: this.gp.final } } };
     }
-    return { A, B: lutadorBot(rival, this.regras, arena), arena, usadas };
+    return { A, B: lutadorBot(rival, this.regras, arena), arena, usadas, lideres: null };
+  }
+  /* ---------------------------------------------------------------- a Liga dos Lideres (pets v6; liga.ts) */
+  /** por que o pet nao pode desafiar a Liga agora (null: pode). A entrada pede as 6 medalhas, que o pet conhece pelo evento "u" (o
+      motor nunca le o Tamer) */
+  porqueNaoLiga(): string | null {
+    if (this.versao < VERSAO_LIGA) return "a Liga dos Líderes é só de pets v6";
+    if (this.morte) return "o pet morreu";
+    if (this.estagioAtual === "bebe") return "o In-Training ainda não luta na Fronteira";
+    if (this.medalhas < MEDALHAS_LIGA) return `a Fronteira abre com as ${MEDALHAS_LIGA} medalhas (este pet conhece ${this.medalhas})`;
+    return null;
   }
   private _lutar(rival: string, semente: number): ResultadoLutaPet {
-    const M = this.montarLuta(rival, semente), n = M.arena?.lutas ?? 1;
+    const liga = rival === RIVAL_LIGA;
+    if (liga) {
+      /* no replay tambem: a entrada (as medalhas que o pet conhecia) e a carta, que nao vale na Liga */
+      const erro = this.porqueNaoLiga(); if (erro) throw new Error(`luta da Liga no registro sem poder: ${erro}`);
+      if (this.carta !== null) throw new Error("as cartas não valem na Liga dos Líderes: carta no registro logo antes da luta da Liga");
+    }
+    const M = this.montarLuta(rival, semente), n = M.lideres ? M.lideres.length : M.arena?.lutas ?? 1;
     if (this.carta) {
       this._hist({ t: this.e.tick, quem: "carta", a: `usou a ${cartaDe(this.carta).nome} contra ${NOME_BOT[rival]}` });
       this.cartasUsadas.push(this.carta); this.carta = null;
@@ -281,7 +311,8 @@ export class Motor {
       const s = sementeDaSerie(semente, k);
       if (this.gp) this.gp.aprender(res, s, M.usadas!);
       if (this.estagioAtual === "adolescente") this.sparring++;
-      this._hist({ t: this.e.tick, quem: "luta", a: `contra ${NOME_BOT[rival]}${n > 1 ? ` (luta ${k + 1} de ${n})` : ""}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
+      const contra = liga ? `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[LIGA[k].lider]}` : `contra ${NOME_BOT[rival]}`;
+      this._hist({ t: this.e.tick, quem: "luta", a: `${contra}${n > 1 ? ` (luta ${k + 1} de ${n})` : ""}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
       if (this.versao >= 4) {
         const L = this.lutas;
         L.lutas++;
@@ -298,8 +329,9 @@ export class Motor {
       }
     });
     const res = M.serie[M.serie.length - 1], venceu = M.serie.length === n && res.pontosA === 1;
-    /* campanha: vitorias por desafio; na Cidadela, so a serie inteira conta */
+    /* campanha: vitorias por desafio; na Cidadela, so a serie inteira conta. A Liga: a tentativa e o titulo (as 6 vencidas) */
     if (NPC[rival] && venceu) this.campanha[rival]++;
+    if (liga) { this.liga.tentativas++; if (venceu) this.liga.titulos++; }
     if (this.versao >= 7) this.vida5.lutas.push({ tick: this.e.tick, rival, lesao,
       resultado: res.pontosA === 1 ? "vitoria" : res.pontosA === 0 ? "derrota" : "empate" });
     return { ...M, res, venceu, lesao };
@@ -867,6 +899,7 @@ export class Motor {
       this.versao >= 2 ? [this.vinc.assinatura(), this.obed, this.dz] : null, this.treino.assinatura(), this.pausas, this.falaFria, this.sombria,
       ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : []),
       ...(this.versao >= 6 ? [this.medalhas] : []), ...(this.comItens ? [[this.chips, this.carta, this.cartasUsadas]] : []),
+      ...(this.liga.tentativas ? [["liga", this.liga]] : []),
       ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : [])]);
   }
   /** um evento do registro, sem regravar no registro (replay) */

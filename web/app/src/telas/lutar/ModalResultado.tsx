@@ -86,19 +86,25 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
   /* tutorial (Bit): a primeira derrota na campanha e a primeira regra nova */
   useEffect(() => { if (npc && perdeu) pedirDica("derrota_campanha"); if (nova) pedirDica("regra_nova"); }, []);
 
-  const tag = npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
-  const titulo = lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
+  /* a Liga dos Lideres (Fronteira, pets v6): a tentativa inteira; vencer as 6 e o titulo */
+  const liga = r.lideres, venceuLiga = !!liga && r.serie.length === r.nLutas && venceu;
+  const tag = liga ? "Fronteira · Liga dos Líderes" : npc ? `Campanha · ${LUGARES[Li].nome}` : "Arena · fim da luta";
+  const titulo = liga ? (venceuLiga ? "Campeão!" : perdeu ? "Derrota" : "Empate") : lugarNovo ? "Ilha vencida!" : venceu ? "Vitória!" : perdeu ? "Derrota" : "Empate";
   const n = res.turnos.length;
-  /* lutas seguidas (Cidadela): o resultado e o da serie; "n turnos" e o da ultima luta */
+  /* lutas seguidas (Cidadela e Liga): o resultado e o da serie; "n turnos" e o da ultima luta */
   const serie = r.nLutas > 1 ? r.serie : null;
-  const sub = serie
+  const sub = liga
+    ? (venceuLiga ? `${p.A.nomeTela} venceu os ${r.nLutas} líderes seguidos` : `A Liga parou na luta ${r.serie.length} de ${r.nLutas}, contra ${liga[r.serie.length - 1].nomeTela}`)
+    : serie
     ? (venceu ? `${p.A.nomeTela} venceu as ${r.nLutas} lutas seguidas` : `A série parou na luta ${serie.length} de ${r.nLutas}`)
     : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${n} turnos` : perdeu ? `${p.B.nomeTela} venceu no turno ${n}` : `Empate no limite · ${n} turnos`;
   /* dano na escala de quem recebeu (com a escala de stats, a campanha mostra os números grandes) */
   const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond, m.versao),
     danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond, m.versao);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
-  const nums: [string, string][] = npc
+  const nums: [string, string][] = liga
+    ? [[String(n), "turnos"], [String(m.liga.tentativas), "tentativas"], [`${r.serie.filter(x => x.pontosA === 1).length} de ${r.nLutas}`, "lutas vencidas"]]
+    : npc
     ? [[String(n), "turnos"], [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]
     : [[String(n), "turnos"], [inteiro(danoDado), "dano dado"], [inteiro(danoLevado), "dano levado"]];
 
@@ -159,13 +165,18 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
                 <span>{it.efeito} {it.tipo === "carta" ? "Escolha antes de uma luta." : "Equipe em Crescer · Itens."}</span></span>
             </div>); })}
           {r.carta && <p class="res-carta" role="note">Carta usada: <b>{cartaDe(r.carta).nome}</b>. {cartaDe(r.carta).efeito}{res.turnos.some(tr => tr.cura?.[0]) ? " Ela curou o pet nesta luta." : ""}</p>}
+          {r.titulo && <div class="res-titulo" role="status">
+            <SeloMedalha n={0} ouro ganha tam={40} />
+            <span class="res-ilha-txt"><span class="res-selo">medalha de ouro</span><b>Campeão da Liga dos Líderes</b>
+              <span>{r.titulo.n === 1 ? "O título é seu, Tamer: a jornada chegou ao fim." : `${r.titulo.forma} também venceu a Liga (título ${r.titulo.n}).`}</span></span>
+          </div>}
           {serie && <section class="res-serie" aria-labelledby="res-serie-tit">
-            <h3 id="res-serie-tit">Resistência · {r.nLutas} lutas seguidas, sem cura</h3>
+            <h3 id="res-serie-tit">{liga ? `Liga dos Líderes · ${r.nLutas} lutas seguidas, sem cura` : `Resistência · ${r.nLutas} lutas seguidas, sem cura`}</h3>
             <ol>{Array.from({ length: r.nLutas }, (_, i) => {
               const x = serie[i], fimVida = x ? Math.max(0, x.E.L[0].hp) / x.E.L[0].hpMax : 0;
               return <li key={i} class={!x ? "res-serie-nao" : x.pontosA === 1 ? "res-serie-vit" : "res-serie-der"}>
                 <span class="res-t">Luta {i + 1}</span>
-                <span>{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
+                <span>{liga ? <><b>{liga[i].nomeTela}</b> ({liga[i].estiloTela}): </> : null}{!x ? "não chegou a lutar" : `${x.pontosA === 1 ? "venceu" : x.pontosA === 0 ? "perdeu" : "empatou"} em ${x.turnos.length} turnos · terminou com ${Math.round(fimVida * 100)}% da vida`}</span>
               </li>;
             })}</ol>
           </section>}
