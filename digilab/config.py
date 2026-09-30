@@ -616,6 +616,19 @@ class ConfigCombateV21C(ConfigCombateV21):
     marca_fragil: bool = False
 
 
+@dataclass(frozen=True)
+class ConfigCombateV21D(ConfigCombateV21C):
+    """Reequilibrio dos arquetipos, rodada 1 (docs/EQUILIBRIO_RODADA1.md, a partir de docs/DIAGNOSTICO_ARQUETIPOS.md).
+    Chaves DESLIGADAS por padrao: com as duas em False a luta e a da V21C. Classe propria (e nao campos novos na
+    V21C) para o asdict e o hash das configs V21C gravadas nao mudarem. PROPOSTO, so calibracao."""
+
+    # candidato A: o preparo do pesado feito sob pele_dura nao aparece para o rival em oponente_preparando
+    # (a pele esconde o pesado, alem de protege-lo). A condicao do vigia (oponente_vai_preparar) nao muda.
+    preparo_sob_pele_oculto: bool = False
+    # candidato C: a muralha luta com a lista de gambits derivada da do espelho (bots.GAMBITS_MURALHA_V21D)
+    muralha_lista_espelho: bool = False
+
+
 # numeros de tecnica/passiva perturbados no gate E5 (+-10%)
 CAMPOS_TECNICA_PASSIVA_V21 = (
     "custo_investida", "dano_investida", "custo_contra_golpe", "fracao_contra_golpe",

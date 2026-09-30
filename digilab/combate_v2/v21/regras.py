@@ -101,6 +101,9 @@ class EstadoLutador:
     pele: int = 0               # turnos restantes de pele_dura DEPOIS do atual
     recarga: int = 0            # sentinela
     disparou: bool = False      # emboscador
+    # o preparo do pesado em curso foi feito com pele_dura ativa (so e lido com a chave preparo_sob_pele_oculto
+    # da ConfigCombateV21D; sem ela nada muda)
+    preparo_sob_pele: bool = False
 
     @property
     def hp_max(self) -> float:
@@ -373,6 +376,7 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
         novos.append(replace(
             s, hp=s.hp - dano[i], guts=max(0.0, min(p.guts_max, g)),
             preparando=acoes[i] is Acao.PREPARAR_PESADO and not interrompido[i],
+            preparo_sob_pele=acoes[i] is Acao.PREPARAR_PESADO and not interrompido[i] and pele_ativa[i],
             historico=s.historico + (acoes[i],), marca=marca, pele=pele, recarga=recarga[i],
             disparou=s.disparou or acoes[i] is Acao.DISPARO,
         ))

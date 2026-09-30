@@ -193,6 +193,25 @@ RESPOSTAS_V21C = {**RESPOSTAS, "marcar": (
 
 FORMAS = tuple(ADULTOS)
 
+# V21D, candidato C (docs/EQUILIBRIO_RODADA1.md; chave muralha_lista_espelho, desligada por padrao): a muralha luta
+# com a lista do espelho, como a alavanca (d) "gambits da irma" medida no diagnostico dos arquetipos. As regras de
+# contra_golpe fora de perto ficam na lista mas nunca disparam na muralha (sem a passiva do espelho o contra_golpe
+# so e legal de perto; a lista cai na regra seguinte). ADULTOS["muralha"] (a canonica) nao muda.
+GAMBITS_MURALHA_V21D = ListaGambits(ADULTOS["espelho"].regras, ADULTOS["espelho"].final, "adulto")
+
+
+def gambits_adulto(forma: str, cfg: ConfigCombateV21 | None = None) -> ListaGambits:
+    """Lista canonica da forma adulta (normal ou sombria) sob as regras `cfg`: a de ADULTOS/SOMBRIOS, salvo a da
+    muralha com a chave muralha_lista_espelho (ConfigCombateV21D) ligada."""
+    cfg = cfg or CONFIG_COMBATE_V21
+    if forma == "muralha" and getattr(cfg, "muralha_lista_espelho", False):
+        return GAMBITS_MURALHA_V21D
+    if forma in ADULTOS:
+        return ADULTOS[forma]
+    if forma in SOMBRIOS:
+        return SOMBRIOS[forma]
+    raise KeyError(f"forma adulta desconhecida: {forma!r}")
+
 # formas sombrias (TAREFA_TREINO_SOMBRIO): "a sombra corrompe o que o pet e, nao apaga" -> cada uma
 # luta com os gambits da forma normal da linha de estilo mais proximo; regras com acao que a passiva
 # sombria proibe simplesmente nunca disparam (eh_legal). PROPOSTO.
@@ -236,7 +255,7 @@ def lutador_adulto(forma: str, especie: str, cfg: ConfigCombateV21 | None = None
     if f.sombria:
         eps = max(eps, CONFIG_SOMBRIO.epsilon_minimo)          # instavel: ignora os gambits as vezes
     return Lutador(nome or f"{forma}@{especie}", perfil(f, None, carater_canonico(forma, cfg), 1.0, cfg, cat, escala=escala),
-                   gambits or ADULTOS.get(forma) or SOMBRIOS[forma], eps)
+                   gambits or gambits_adulto(forma, cfg), eps)
 
 
 def lutador_adolescente(linha: str, especie: str, carater: dict, cfg: ConfigCombateV21 | None = None,
