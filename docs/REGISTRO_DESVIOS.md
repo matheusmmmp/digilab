@@ -1023,3 +1023,21 @@ SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
 - **Citações com 3 frases curtas** (7) saíram, em vez de cortadas; Imperialdramon Dragon e Fighter Mode têm o mesmo conteúdo
   (o corpus não diz o modo).
 - O bloco de estilo do prompt usa no máximo 8 traços e 5 itens de fala por espécie.
+
+## 2026-09-30 — Voz própria: ajustes depois do teste do Matheus no jogo
+
+Relato: a conversa riscava como "Sem base" falas da voz (inclusive "Agumon evolui pra Greymon", que é verdade no jogo), o
+pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vida dele.
+- **Tela da conversa:** nos pets v7 a fala da voz não é mais riscada. O que ele inventou aparece marcado com o lápis
+  ("✎ Inventou: «…»"), pela regra do Matheus (inventar pode, desde que se saiba). Os pets antigos seguem com o riscado.
+- **Árvore da espécie como fato (A1, "arvore da minha especie")**: o servidor liga na voz (`digilab_fala_livre/arvore.py`,
+  igual ao `DIGIMON_DA_FORMA` do jogo, teste `tests/test_arvore_fala.py`); a página não pode mandar. Sustenta evento,
+  costume e mundo no verif-v4/v5. Só existe quando o servidor liga: as rodadas 1–4 não mudam.
+- **Gatilhos da voz no verificador:** "evento agora" da voz (reencontro, luta, aniversário) sustenta pela regra
+  determinística (`RAIZES_GATILHO_VOZ`), como já valia para "acabei de decidir: X". No save do Matheus o "Você voltou!"
+  era verdade (o dono voltou depois de 9866 min de jogo) e o juiz não sustentou.
+- **verif-v5, fato escondido em opinião:** "amigo(s)", "evolu…" e "vira/viram/virou/virei" passam a ir ao juiz. Muda o
+  verif-v5 daqui para a frente (as rodadas gravadas ficam como estão; uma rodada nova usaria esta regra).
+- **Reencontro:** além das 3 h de jogo, 20 min de relógio sem agir na página (no tempo de teste 3 h passam em 18 s).
+- **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
+  e o bebê ficavam sem o estilo do corpus).

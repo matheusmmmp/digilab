@@ -10,6 +10,7 @@ tamanho, e falha alto (FatosInvalidos) em qualquer outra coisa. Cada fato ganha 
     H habito meu   O habito do dono   P gosto   L marco        (a historia: digilab/historia.py)
     F o que dizer agora (a versao falsa de uma MENTIRA decidida pelo motor; o registro guarda a verdade)
     W coisa que ouvi no Digimundo (uma entrada do almanaque, pelo id: a web nunca manda o texto)
+    A arvore da minha especie (com "arvore": true, so o servidor liga; o texto vem de arvore.py pela especie)
 
 Temperamento e carater entram so nos eixos extremos (|valor| >= LIMIAR_EXTREMO); o vinculo so em faixa.
 """
@@ -92,7 +93,7 @@ def fatos_de_estado(e: dict) -> list[Fato]:
     if not isinstance(e, dict):
         raise FatosInvalidos("estado precisa ser um objeto")
     desconhecidas = set(e) - {"identidade", "temperamento", "carater", "estado", "memorias", "desejo", "motivos",
-                              "vinculo", "gatilho", "historia", "mentira", "almanaque"}
+                              "vinculo", "gatilho", "historia", "mentira", "almanaque", "arvore"}
     if desconhecidas:
         raise FatosInvalidos(f"chaves desconhecidas: {sorted(desconhecidas)}")
     fatos: list[Fato] = []
@@ -105,6 +106,11 @@ def fatos_de_estado(e: dict) -> list[Fato]:
         if ident.get(k) is not None:
             partes.insert(len(partes) - 1, f"{k} {_txt(ident[k], k)}")
     fatos.append(Fato("I1", "identidade", ", ".join(partes)))
+    if e.get("arvore") is not None:
+        from .arvore import ARVORE, TIPO_ARVORE, texto_arvore
+        if e["arvore"] is not True or ident.get("especie") not in ARVORE:
+            raise FatosInvalidos("arvore invalida (precisa de true e de uma especie do jogo)")
+        fatos.append(Fato("A1", TIPO_ARVORE, texto_arvore(ident["especie"])))
 
     for chave, eixos, letra, tipo in (("temperamento", EIXOS_TEMPERAMENTO, "T", "temperamento marcante"),
                                      ("carater", EIXOS_CARATER, "C", "carater marcante")):

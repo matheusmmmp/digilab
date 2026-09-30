@@ -1,6 +1,7 @@
 /* Conversar (pranchas UpConversar, ConvChat e ConvEstados): tela cheia com cabecalho (voltar, titulo e como o pet fala
    no nivel dele), faixa de status da fala (ponto + texto), o modo da fala, a conversa em baloes (pet a esquerda com o
-   retrato, voce a direita em azul; fala sem base riscada com a nota do verificador), atalhos de ensino e a barra de
+   retrato, voce a direita em azul; fala sem base riscada com a nota do verificador; na voz propria, o que ele inventou
+   marcado com o lapis), atalhos de ensino e a barra de
    escrever. As falas ficam no log de apresentacao (<chave>.fala.jsonl), nunca no registro do pet; o que o jogador
    escreve nao ensina o pet. */
 import { useEffect, useRef, useState } from "preact/hooks";
@@ -26,17 +27,21 @@ function RetratoPequeno() {
   const img = imagemAtlas(a, nascendo > 0 ? OVO[m.especie] : chaveSprite(m.forma));
   return <span class="conv-av" aria-hidden="true"><img class="dl-pix" src={img.url} width={img.w} height={img.h} alt="" /></span>;
 }
-/** fala do pet: sem base (verificador achou afirmacao sem fato) fica riscada, com a nota embaixo */
+/** fala do pet: sem base (verificador achou afirmacao sem fato) fica riscada, com a nota embaixo. Pets v7 (voz propria):
+    inventar pode, desde que se saiba; a fala fica inteira e a nota marca com o lapis o que ele inventou */
 function BalaoPet({ r }: { r: RegistroFala }) {
-  const v = r.verificacao, semBase = !!v && !v.erro && ((v.nao_suportadas ?? 0) > 0 || !!v.manipulacao);
+  const v = r.verificacao, voz = !!r.voz;
+  const semBase = !voz && !!v && !v.erro && ((v.nao_suportadas ?? 0) > 0 || !!v.manipulacao);
   const trechos = semBase ? (v!.afirmacoes || []).filter(x => !x.sustentada).map(x => x.trecho) : [];
+  const inventou = voz ? r.voz!.invencoes : [];
   return (
     <div class="conv-linha">
       <RetratoPequeno />
       <div class="conv-pilha">
         <div class={`conv-balao conv-balao--pet${semBase ? " conv-balao--sembase" : ""}`}>{r.fala}</div>
         {semBase && <div class="conv-nota"><span class="conv-nota-q">?</span>Sem base{trechos.length ? `: ${trechos.map(t => `«${t}»`).join(", ")}` : ""}{v!.manipulacao ? " · possível manipulação" : ""}.</div>}
-        {v?.erro && <div class="conv-nota"><span class="conv-nota-q">?</span>O verificador não respondeu.</div>}
+        {inventou.length > 0 && <div class="conv-nota"><span class="conv-nota-q">✎</span>Inventou: {inventou.map(t => `«${t}»`).join(", ")}.</div>}
+        {!voz && v?.erro && <div class="conv-nota"><span class="conv-nota-q">?</span>O verificador não respondeu.</div>}
       </div>
     </div>
   );

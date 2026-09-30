@@ -55,7 +55,7 @@ const fatoresTxt = (f: string[]): string[] => f.map(x => (FATORES_TXT[x] && FATO
 export function estadoDoPet(m: Motor, gatilho?: string | null): Record<string, unknown> {
   const f = m.forma, e = m.e, est = f.est;
   const ident: Record<string, unknown> = { estagio: est, especie: f.esp };
-  if (f.adulta || f.linha) ident.forma = nomeForma(f).slice(0, 60);
+  ident.forma = nomeForma(f).slice(0, 60);          /* o Digimon de agora, em todo estagio (o corpus da especie vem dele) */
   if (f.linha) ident.linha = f.linha;
   const estado: Record<string, unknown> = { fome: 1 - e.fome, higiene: e.higiene, energia: e.energia, humor: e.humor, saude: e.saude };
   const mem = m.pol.mem as unknown as { emocoes: { emocao?: string; nome: string }[]; curto: { cat: string; criada: number }[]; longo: { cat: string; criada: number }[] };
