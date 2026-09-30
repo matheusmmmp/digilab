@@ -4,7 +4,7 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
+import { CED, CESC, CESC_V6, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
   ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
   estiloBot, formaRival, gambitNPC, gambitsAdulto,
@@ -211,7 +211,7 @@ export function estiloDoPet(m: PetLutador): Estilo {
 export function lutadorPet(m: PetLutador, rotulo: string, absoluto = false): Lutador {
   return {
     nome: rotulo, estilo: estiloDoPet(m), sombra: !!SOMBRIA[m.forma.adulta!],
-    cond: perfilDe(m.forma, m.carater(), m.versao >= 2 ? condicaoDe(m.e.saude) : 1, m.treino.total > 0 ? m.treino.pontos : null, absoluto),
+    cond: perfilDe(m.forma, m.carater(), m.versao >= 2 ? condicaoDe(m.e.saude) : 1, m.treino.total > 0 ? m.treino.pontos : null, absoluto, m.versao),
   };
 }
 /** lutador de um bot: NPC da campanha, forma adulta canonica da V2.1 ou bot classico (stats neutros); R = regras da
@@ -223,9 +223,13 @@ export function lutadorBot(nome: string, R: RegrasLuta = null, arena: Arena | nu
     if (arena && arena.lider !== nome) throw new Error(`${n.nome} não é o líder da arena ${arena.id}`);
     const tec = arena?.tecnica ?? null, base = estiloBot(nome, R);
     const estilo = tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
-    /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala */
-    if (ESCALA.ligada) return { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc },
-      cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0) * (arena?.fator ?? n.fator ?? CESC.fatorNpc[nome]), tec) };
+    /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala. Nas lutas
+       dos pets v6 (as regras da luta dizem a versao) a escala e a CESC_V6 e o desafiante tem o fator dela */
+    if (ESCALA.ligada) {
+      const versao = R?.versaoPet ?? 0, fator = arena?.fator ?? (versao >= CESC_V6.versaoPet ? CESC_V6.fatorNpc[nome] : undefined) ?? n.fator ?? CESC.fatorNpc[nome];
+      if (fator === undefined) throw new Error(`${n.nome} sem fator de escala`);
+      return { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc }, cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0, versao) * fator, tec) };
+    }
     return { nome: "Rival " + n.nome, estilo, cond: perfilNPC(n.total, n.estagio || "adulto", undefined, tec) };
   }
   if (BOTS_V21[nome as FormaAdultaNormal]) {

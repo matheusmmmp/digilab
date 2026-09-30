@@ -1861,6 +1861,61 @@
    "web": "CAMPANHA_V5[3].eps",
    "fonte": "python",
    "py": "ConfigCampanha.npcs.tier2_porteiro.epsilon"
+  },
+  {
+   "web": "CESC.vida.bebe",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.bebe"
+  },
+  {
+   "web": "CESC.vida.crianca",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.crianca"
+  },
+  {
+   "web": "CESC.vida.adolescente",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.adolescente"
+  },
+  {
+   "web": "CESC.vida.adulto",
+   "fonte": "python",
+   "py": "ConfigEscala.vida_por_estagio.adulto"
+  },
+  {
+   "web": "CESC.beta",
+   "fonte": "python",
+   "py": "ConfigEscala.beta_treino"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier1_brutamontes",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier1_brutamontes"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier2_sentinela",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier2_sentinela"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier2_carcereiro",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier2_carcereiro"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier2_porteiro",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier2_porteiro"
+  },
+  {
+   "web": "CESC.fatorNpc.npc_tier3_soberano",
+   "fonte": "python",
+   "py": "ConfigEscala.fator_npc.tier3_soberano"
+  },
+  {
+   "web": "CESC.epsNpc",
+   "fonte": "python",
+   "py": "ConfigEscala.epsilon_npc"
   }
  ],
  "convertidos": [
@@ -2519,6 +2574,38 @@
   {
    "web": "ARENAS[5].lugar",
    "nota": "arena dos pets v6 (so no jogo; motor/arenas.ts): indice do lugar em LUGARES_V6, fator calibrado do lider (test/calibrar_arenas.mjs, artifacts_campanha/arenas/) e lutas seguidas da Cidadela"
+  },
+  {
+   "web": "CESC.vidaNeutra",
+   "nota": "vida de combate do perfil neutro (hpBase + 10 x hpVigor), so para exibir a vida e o dano na escala; derivada, sem par no Python"
+  },
+  {
+   "web": "CESC_V6.versaoPet",
+   "nota": "versao de pet a partir da qual vale a escala propria (a das medalhas e arenas); escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.bebe",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.crianca",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.adolescente",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.adulto",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.vida.mega",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.beta",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
   }
  ],
  "chaves_v21d": [

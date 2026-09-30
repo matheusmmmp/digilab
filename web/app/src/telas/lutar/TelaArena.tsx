@@ -93,7 +93,7 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
         {sp && <span class="desk-so arena-treino"><span><span>lutas de treino</span><b class="dl-lcd">{Math.min(m.sparring, 10)} de 10</b></span>
           <Seg n={Math.min(m.sparring, 10)} m={10} cls="dl-seg--acao" /></span>}
       </div>
-      <p class="dl-apoio desk-nao">{`Seu pet: ${nomeForma(m.forma)}, vida ${Math.round(vidaExibida(pa, m.forma.est, m.treino.total)).toLocaleString("pt-BR")}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; regras de combate semeadas por ${NOME_BOT[A.estilo.base!] || A.estilo.base} · rival: ${luta.rivalFixo ? nomeForma(luta.rivalFixo.rival.forma) + " (cenário)" : B.estilo.oraculo ? "oráculo (referência fora das regras de combate)" : exibirBot(luta.rival).nomeTela}.`}</p>
+      <p class="dl-apoio desk-nao">{`Seu pet: ${nomeForma(m.forma)}, vida ${Math.round(vidaExibida(pa, m.forma.est, m.treino.total, m.versao)).toLocaleString("pt-BR")}, guts ${pa.guts0.toFixed(0)}/${pa.gutsMax.toFixed(0)}${extra ? ", " + extra : ""}; regras de combate semeadas por ${NOME_BOT[A.estilo.base!] || A.estilo.base} · rival: ${luta.rivalFixo ? nomeForma(luta.rivalFixo.rival.forma) + " (cenário)" : B.estilo.oraculo ? "oráculo (referência fora das regras de combate)" : exibirBot(luta.rival).nomeTela}.`}</p>
       {/* desktop: previa parada da arena com o rival escolhido (a luta abre em tela cheia) */}
       {luta.palco && !luta.lutando && <div class="arena-previa"><Cena p={luta.palco} /></div>}
       {luta.palco?.texto && !luta.lutando && <p class="dl-card arena-ultima desk-nao">{luta.palco.texto}</p>}

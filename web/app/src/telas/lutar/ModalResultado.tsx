@@ -9,7 +9,7 @@ import { CAT, MEDALHAS, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotulo
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
-import { mudarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, mudarMotor, useJogo } from "../../jogo.ts";
 import { tentativas, type LutadorTela, type Palco } from "../../luta.ts";
 import { mapaDe } from "./TelaCampanha.tsx";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
@@ -21,7 +21,7 @@ const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
 export function fraseTurno(tr: Turno, A: LutadorTela, B: LutadorTela, travadas: Record<string, number> | null): string {
   const lados = ([0, 1] as const).map(i => {
     /* dano causado por este lado = recebido pelo outro, na escala de quem recebe */
-    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i] * fatorExibicao((i ? A : B).cond);
+    const L = i ? B : A, acao = i ? tr.b : tr.a, dano = tr.dano[1 - i] * fatorExibicao((i ? A : B).cond, jogoAtual().motor.versao);
     let s = `${L.nomeTela}: ${NOME_V2[acao] ?? acao}`;
     if (dano > 0) s += ` −${inteiro(dano)}`;
     if (tr.errou[i]) s += " (o pesado errou)";
@@ -54,7 +54,7 @@ export function momentosDecisivos(res: ResultadoLuta, A: LutadorTela, B: Lutador
     const caiu = [hpA <= 0 && A.nomeTela, hpB <= 0 && B.nomeTela].filter(Boolean).join(" e ");
     return [...linhas, { t: `T${ult.t}`, txt: `${caiu} caiu.`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
   }
-  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
+  return [...linhas, { t: `T${ult.t}`, txt: `Limite de turnos: vence quem tem mais vida (${inteiro(Math.max(0, hpA) * fatorExibicao(A.cond, jogoAtual().motor.versao))} × ${inteiro(Math.max(0, hpB) * fatorExibicao(B.cond, jogoAtual().motor.versao))}).`, tom: res.pontosA === 1 ? "bom" : res.pontosA === 0 ? "ruim" : "" }];
 }
 
 function Numeros({ itens }: { itens: [string, string][] }) {
@@ -93,8 +93,8 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
     ? (venceu ? `${p.A.nomeTela} venceu as ${r.nLutas} lutas seguidas` : `A série parou na luta ${serie.length} de ${r.nLutas}`)
     : venceu ? `${p.A.nomeTela} venceu ${p.B.nomeTela} · ${n} turnos` : perdeu ? `${p.B.nomeTela} venceu no turno ${n}` : `Empate no limite · ${n} turnos`;
   /* dano na escala de quem recebeu (com a escala de stats, a campanha mostra os números grandes) */
-  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond),
-    danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond);
+  const danoDado = res.turnos.reduce((s, tr) => s + tr.dano[1], 0) * fatorExibicao(p.B.cond, m.versao),
+    danoLevado = res.turnos.reduce((s, tr) => s + tr.dano[0], 0) * fatorExibicao(p.A.cond, m.versao);
   const vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length;
   const nums: [string, string][] = npc
     ? [[String(n), "turnos"], [String(tentativas(m, r.npc!)), "tentativas"], [`${vencidos} de ${LUGARES.length}`, "ilhas"]]
