@@ -11,6 +11,10 @@
 //   --validar: sementes de validacao, fatores de CAMPANHA_V5 -> artifacts_campanha/mega/validacao.json
 //   --v21d (so com --validar): as lutas com as regras dos pets v6 (CV21D, docs/VALIDACAO_V21D.md): a muralha e o vigia com
 //     as listas variantes e o preparo sob pele oculto; mesmos fatores -> artifacts_campanha/mega/validacao_v21d.json (relato)
+//
+// Pets v9 (rodada de equilibrio geral, fase 3): este script mede a campanha dos pets v5 (CAMPANHA_V5, CESC); os pets v6 em diante lutam
+// na campanha v6, e os desafiantes da Montanha Espiral dos v9 (Puppetmon, Machinedramon, com CESC_V9.fatorNpc) sao medidos por
+// test/calibrar_desafiantes_v6.mjs (fase 2, artifacts_equilibrio_geral/fase2/). Nada dos v9 passa por aqui; o script continua o de antes.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";

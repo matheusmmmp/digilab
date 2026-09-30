@@ -274,6 +274,17 @@ export const CIT = {
   espera: 1440,
   gutsFolego: 20, curaAbaixo: .3, curaFracao: .2,
 };
+/* itens nos pets v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, metas M-D1 a M-D3; itens.ts): restricoes de uso e valores
+   so para os pets v9. treinoMinimo: os itens (chips e carta) so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel
+   (CIT.tipico); cartaSoContraNpc: a carta so vale contra os NPCs da campanha (nao na arena contra bots); fatorChipStat: o valor do ponto
+   do chip de stat. O chip de regra entra no fim da lista (itens.listaComChips, GambitsPet.listaDeLuta). Calibrados em test/medir_itens.mjs
+   (sementes de calibracao). PROPOSTOS */
+export const CIT_V9 = {
+  versaoPet: 9,
+  treinoMinimo: .5,
+  cartaSoContraNpc: true,
+  fatorChipStat: .5,
+};
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */
 export const DUR_EVO = { bebe: 180, crianca: 720, adolescente: 1080 };

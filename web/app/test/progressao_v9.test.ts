@@ -4,7 +4,7 @@
    CESC e sem arena. */
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import {
-  ARENAS, ARENAS_V9, CESC, CESC_V6, CESC_V9, CV21D, CV21E, FATOR_LIDER_V9, LIGA, LUGARES_V6, NPC, VERSAO_ARENAS_V9, VERSAO_ESCALA_V9,
+  ARENAS, ARENAS_V9, CESC, CESC_V6, CESC_V9, CV21D, CV21E, FATOR_LIDER_V9, FATOR_LIGA_V9, LIGA, LUGARES_V6, NPC, VERSAO_ARENAS_V9, VERSAO_ESCALA_V9,
   arenaDaLuta, escalaDaVersao, escalaDe, lutadorBot, lutadorLiga, perfilDe,
 } from "../motor/index.ts";
 import { ESCALA, ligarEscala } from "../motor/catalogo.ts";
@@ -75,10 +75,10 @@ describe("progressao dos pets v9: escala e fatores separados por versao", () => 
     });
   });
 
-  test("a Fronteira (fase 3) nao muda: os rivais da Liga seguem na vida da CESC_V6, a mesma dos v9", () => {
+  test("a Liga: a vida do Mega da CESC_V6, a mesma dos v9; o fator dos v9 (fase 3) so nas lutas V21E", () => {
     expect(CESC_V9.vida.mega).toBe(V6_VIDA.mega);
-    LIGA.forEach((_, i) => {
-      expect(lutadorLiga(i, CV21E).cond.escala).toBe(V6_VIDA.mega);
+    LIGA.forEach((x, i) => {
+      expect(lutadorLiga(i, CV21E).cond.escala).toBeCloseTo(V6_VIDA.mega * FATOR_LIGA_V9[x.arena], 9);
       expect(lutadorLiga(i, CV21D).cond.escala).toBe(V6_VIDA.mega);
     });
   });

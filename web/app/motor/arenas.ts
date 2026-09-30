@@ -100,16 +100,19 @@ export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLut
     liga.ts: os 6 lideres). Para na primeira que nao for vitoria; da segunda em diante o pet (lado A) comeca com a vida e o guts do
     fim da anterior, e cada rival comeca inteiro. A luta k usa a semente sementeDaSerie(semente, k). Deterministico */
 export function jogarSerie(A: Lutador, Bs: readonly Lutador[], semente: number, R: RegrasLuta, desafiado: Desafiado = null,
-  carta: EfeitoCarta | null = null): ResultadoLuta[] {
+  carta: EfeitoCarta | null = null, curaEntre = 0): ResultadoLuta[] {
   if (!Bs.length) throw new Error("série de lutas sem rival");
-  return jogarSequencia(A, k => Bs[k], Bs.length, semente, R, desafiado, carta);
+  return jogarSequencia(A, k => Bs[k], Bs.length, semente, R, desafiado, carta, curaEntre);
 }
 /** a mesma conta de jogarSerie, com o rival de cada luta dado na hora (rivalDe(k), so para as lutas que acontecem) e no maximo `max`
     lutas: as instalacoes da Fronteira (instalacoes.ts), em que os rivais sao sorteados e a sequencia vai ate a primeira luta que nao for
-    vitoria. jogarSerie e esta funcao com os rivais de uma lista: as lutas sao as mesmas */
+    vitoria. jogarSerie e esta funcao com os rivais de uma lista: as lutas sao as mesmas.
+    `curaEntre`: a cura parcial entre as lutas (a Liga dos pets v9, liga.ts): depois de cada vitoria o pet recupera esta fracao da vida
+    maxima (ate o maximo); o guts passa como esta. 0 = sem cura, as lutas de sempre (nenhuma conta muda) */
 export function jogarSequencia(A: Lutador, rivalDe: (k: number) => Lutador, max: number, semente: number, R: RegrasLuta, desafiado: Desafiado = null,
-  carta: EfeitoCarta | null = null): ResultadoLuta[] {
+  carta: EfeitoCarta | null = null, curaEntre = 0): ResultadoLuta[] {
   if (!Number.isInteger(max) || max < 1) throw new Error("sequência de lutas sem luta: " + max);
+  if (!(curaEntre >= 0 && curaEntre <= 1)) throw new Error("cura entre as lutas inválida: " + curaEntre);
   /* a carta do pet (itens.ts; pets v6) vale para o evento inteiro: o guts a mais no comeco da primeira luta (nas seguintes, o que
      sobrou), o foco em todas e a cura uma vez so na serie */
   const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
@@ -119,7 +122,8 @@ export function jogarSequencia(A: Lutador, rivalDe: (k: number) => Lutador, max:
     serie.push(res);
     if (cura && res.turnos.some(t => t.cura)) cura = null;
     if (res.pontosA !== 1) break;
-    ini = { hp: res.E.L[0].hp, guts: res.E.L[0].guts };
+    const fim = res.E.L[0];
+    ini = { hp: curaEntre > 0 ? Math.min(fim.hpMax, fim.hp + curaEntre * fim.hpMax) : fim.hp, guts: fim.guts };
   }
   return serie;
 }

@@ -12,12 +12,20 @@
 //   referencia e a Torre (as sementes de tentativa mudam pelo nome da instalacao). A diferenca so aparece num pet com intervencoes do dono;
 // - o pet do teste ponta a ponta (e2e/save_liga.json, um Valkyrimon de vida de verdade) nas 50 primeiras tentativas de cada instalacao, pelo
 //   motor (Motor.montarLuta com a semente de cada tentativa: o sorteio do jogo).
-// uso (em web/app): npx tsx test/conferir_instalacoes.mjs  ->  artifacts_campanha/fronteira/conferencia.json
+//
+// Pets v9 (padrao; rodada de equilibrio geral, fase 3, meta M-E1): o mesmo metodo com as regras das lutas dos pets v9 (combate V21E: as listas
+// V21E nas formas de referencia e nos rivais), a escala da versao 9 (CESC_V9, a mesma vida do Mega) e o fator dos rivais das instalacoes
+// (FATOR_INSTALACAO = 1, o mesmo: a meta passou sem mudar), nas sementes de calibracao (3101...3505). Meta M-E1: na Torre de Batalha e no
+// Palacio, a melhor forma vence a 1a luta >= 0,70 e a pior >= 0,40. O pet do teste ponta a ponta (um v6) fica so no --v6.
+// uso (em web/app): npx tsx test/conferir_instalacoes.mjs [--v6]
+//   --v6: artifacts_campanha/fronteira/conferencia.json (a de antes, byte a byte); padrao: artifacts_equilibrio_geral/fase3/instalacoes_conferencia.json
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
-import { R, formasDe, lutador } from "./itens_ref.mjs";
+import { R, R9, formasDe, lutador } from "./itens_ref.mjs";
 
+/* ------------------------------------------------------------------------------------------------ pets v6 (a conferencia de antes) */
+function conferirV6() {
 const { CIT, ESPECIES, INSTALACOES, LUTAS_MAX_INSTALACAO, FATOR_INSTALACAO } = M;
 M.ligarEscala(true);
 const SEMENTES = [4101, 4202, 4303, 4404, 4505], N = 20, TIPICO = CIT.tipico.mega, N_SAVE = 50;
@@ -77,3 +85,55 @@ for (const [id, x] of Object.entries(porInst)) {
   console.log(`pet do e2e (${p.pet}, ${p.arquetipo}, treino ${p.treino}): vence a 1a ${p.vence_a_primeira}; média ${p.media}; mediana ${p.mediana}; máx ${p.maximo}`);
 }
 console.log("jogável:", jogavel);
+}
+
+/* ------------------------------------------------------------------------------------------------ pets v9 (meta M-E1) */
+function conferirV9() {
+  const { ESPECIES, INSTALACOES, LUTAS_MAX_INSTALACAO, FATOR_INSTALACAO, CIT } = M;
+  M.ligarEscala(true);
+  const SEMENTES = [3101, 3202, 3303, 3404, 3505], N = 20, TIPICO = CIT.tipico.mega, META_MELHOR = 0.70, META_PIOR = 0.40;
+  const r4 = x => +x.toFixed(4);
+  function resumo(vs) {
+    const o = [...vs].sort((a, b) => a - b), q = p => o[Math.min(o.length - 1, Math.floor(p * o.length))];
+    return { tentativas: o.length, vence_a_primeira: r4(o.filter(v => v >= 1).length / o.length), media: r4(o.reduce((a, b) => a + b, 0) / o.length),
+      mediana: q(.5), p90: q(.9), maximo: o[o.length - 1], no_teto: o.filter(v => v >= LUTAS_MAX_INSTALACAO).length };
+  }
+  const porInst = {};
+  for (const x of INSTALACOES) {
+    const porForma = {};
+    for (const fo of formasDe("mega", R9)) {
+      const vs = [];
+      for (const e of ESPECIES) {
+        const A = lutador(fo, e, TIPICO, [], true, M.VERSAO_ESCALA_V9);
+        for (const s of SEMENTES) for (let k = 0; k < N; k++) {
+          const st = M.hashSemente("conferir-fronteira", x.id, s, A.nome, k);
+          vs.push(M.jogarSequencia(A, j => M.rivalInstalacao(st, j, R9), LUTAS_MAX_INSTALACAO, st, R9, 1, null).filter(r => r.pontosA === 1).length);
+        }
+      }
+      porForma[fo[0]] = resumo(vs);
+    }
+    const ord = Object.entries(porForma).sort((a, b) => b[1].vence_a_primeira - a[1].vence_a_primeira);
+    const melhor = { forma: ord[0][0], vence_a_primeira: ord[0][1].vence_a_primeira }, pior = { forma: ord[ord.length - 1][0], vence_a_primeira: ord[ord.length - 1][1].vence_a_primeira };
+    porInst[x.id] = { nome: x.nome, melhor, pior, meta_e1: { passa: melhor.vence_a_primeira >= META_MELHOR && pior.vence_a_primeira >= META_PIOR,
+      folga: r4(Math.min(melhor.vence_a_primeira - META_MELHOR, pior.vence_a_primeira - META_PIOR)) }, por_forma: porForma };
+  }
+  const saida = {
+    descricao: "Conferencia das instalacoes da Fronteira dos pets v9 (fase 3, meta M-E1): o Mega de referencia com o treino tipico na Torre de Batalha e no Palacio",
+    motor: "web/app/motor (escala CESC_V9 ligada, regras V21E, limite do desafiado = o rival)", conjunto: "calibracao",
+    fator: FATOR_INSTALACAO, teto_de_lutas: LUTAS_MAX_INSTALACAO, treino_tipico_mega: TIPICO, sementes: SEMENTES, tentativas_por_semente_especie_forma: N,
+    metas: { melhor_forma_vence_a_primeira_min: META_MELHOR, pior_forma_vence_a_primeira_min: META_PIOR },
+    nota_palacio: "com a lista canonica (sem trava, veto nem chip de regra) o Palacio do pet de referencia e a Torre; muda so a semente das tentativas",
+    meta_e1: { passa: Object.values(porInst).every(x => x.meta_e1.passa), menor_folga: Math.min(...Object.values(porInst).map(x => x.meta_e1.folga)) },
+    por_instalacao: porInst,
+  };
+  const pasta = fileURLToPath(new URL("../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
+  mkdirSync(pasta, { recursive: true });
+  writeFileSync(pasta + "instalacoes_conferencia.json", JSON.stringify(saida, null, 1) + "\n");
+  for (const [id, x] of Object.entries(porInst)) {
+    console.log(`--- ${x.nome} (${id}): melhor ${x.melhor.forma} ${x.melhor.vence_a_primeira}; pior ${x.pior.forma} ${x.pior.vence_a_primeira}; M-E1 ${x.meta_e1.passa}`);
+    for (const [f, r] of Object.entries(x.por_forma)) console.log(`${f}: vence a 1a ${r.vence_a_primeira}; média ${r.media}; máx ${r.maximo}`);
+  }
+}
+
+if (process.argv.slice(2).includes("--v6")) conferirV6();
+else conferirV9();

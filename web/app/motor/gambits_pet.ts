@@ -113,6 +113,10 @@ export class GambitsPet {
   chipsJaAtivos: string[] = [];
   /** algum chip de regra ja entrou: so entao os chips entram na assinatura (a dos pets sem item nao muda) */
   usouChip = false;
+  /** pets v9 (itens.ts, rodada de equilibrio geral fase 3): o chip de regra nao entra na lista (ativas); a regra dele vai para o fim da lista
+      com que o pet luta (comChips), sem tirar nenhuma, e o pet nao a reordena nem a troca. O motor liga ao criar (sai da versao; nao entra
+      na assinatura) */
+  chipsNoFim = false;
   /** regras das lutas do pet (a da ultima semeadura): CV21E nos pets v9, CV21D nos v6-v8, null nos v1-v5. Nao entra na assinatura: sai
       da versao */
   regras: RegrasLuta = null;
@@ -128,8 +132,9 @@ export class GambitsPet {
       if (!this.vetos.includes(k)) novas.push(k);
     });
     for (const k of Object.keys(this.travas)) if (!novas.includes(k) && REPERTORIO.has(k) && permitida(REPERTORIO.get(k)!, forma)) novas.push(k);
-    /* pets v6: as regras dos chips equipados continuam na lista da forma nova (na frente, para o corte da capacidade nao tira-las) */
-    for (const k of [...this.chipsRegra].reverse()) if (permitida(regraDe(k), forma)) { const i = novas.indexOf(k); if (i >= 0) novas.splice(i, 1); novas.unshift(k); }
+    /* pets v6: as regras dos chips equipados continuam na lista da forma nova (na frente, para o corte da capacidade nao tira-las); nos v9
+       elas ficam fora da lista (comChips) */
+    if (!this.chipsNoFim) for (const k of [...this.chipsRegra].reverse()) if (permitida(regraDe(k), forma)) { const i = novas.indexOf(k); if (i >= 0) novas.splice(i, 1); novas.unshift(k); }
     this.ativas = novas.slice(0, cap);
     for (const k of Object.keys(this.travas)) if (!this.ativas.includes(k)) delete this.travas[k];
     this.mudancas.push({ luta: this.nLutas, texto: `evoluiu para ${this.linha}: a forma semeou a lista (até ${cap} regras)` });
@@ -182,6 +187,12 @@ export class GambitsPet {
     return ks.map((k, i) => ({ k, i })).sort((a, b) => (this.notas[b.k] - this.notas[a.k]) || (a.i - b.i)).slice(0, cap).map(x => x.k);
   }
   /* ---------------------------------------------------------------- chips de regra (pets v6; itens.ts) */
+  /** pets v9: a lista `base` com as regras dos chips equipados no fim (as que ja estao nela ficam onde estao; so as que a forma permite).
+      Nos v6-v8 (chipsNoFim falso) os chips ja estao na lista: `base` como esta */
+  comChips(base: readonly string[]): string[] {
+    if (!this.chipsNoFim || !this.forma) return base.slice();
+    return [...base, ...this.chipsRegra.filter(k => !base.includes(k) && permitida(regraDe(k), this.forma!))];
+  }
   /** por que a regra do chip nao pode entrar agora (null: pode). A regra entra no topo; com a lista cheia sai a regra livre (nao
       travada e nao de chip) de nota mais baixa */
   porqueNaoEquipaRegra(k: string): string | null {
@@ -190,13 +201,21 @@ export class GambitsPet {
     if (this.vetos.includes(k)) return "você vetou esta regra: libere o veto antes";
     if (!permitida(regraDe(k), this.forma)) return "a regra usa condições que esta forma ainda não tem";
     const cap = CV21.maxRegras[baseDe(this.forma.est)];
-    if (!this.ativas.includes(k) && this.ativas.length >= cap && !this.ativas.some(x => !(x in this.travas) && !this.chipsRegra.includes(x)))
+    if (!this.chipsNoFim && !this.ativas.includes(k) && this.ativas.length >= cap && !this.ativas.some(x => !(x in this.travas) && !this.chipsRegra.includes(x)))
       return "a lista está cheia de regras travadas e de chips: destrave uma antes";
     return null;
   }
   equiparRegra(k: string, nome: string): void {
     const erro = this.porqueNaoEquipaRegra(k);
     if (erro) throw new Error(erro);
+    if (this.chipsNoFim) {
+      /* pets v9: fica fora da lista, no fim da lista de luta (comChips); a nota comeca em 0 (o aprendizado mexe nela como nas outras) */
+      if (!(k in this.notas)) this.notas[k] = 0;
+      this.chipsRegra.push(k); this.usouChip = true;
+      this.mudancas.push({ luta: this.nLutas, texto: `${nome}: “${rotuloRegra(regraDe(k))}” entrou no fim da lista`, dono: true });
+      this.versao++;
+      return;
+    }
     const cap = CV21.maxRegras[baseDe(this.forma!.est)], ja = this.ativas.includes(k);
     if (ja) this.ativas.splice(this.ativas.indexOf(k), 1);
     else if (this.ativas.length >= cap) {
@@ -218,6 +237,11 @@ export class GambitsPet {
     const i = this.chipsRegra.indexOf(k);
     if (i < 0) throw new Error("esta regra não está no pet por um chip");
     this.chipsRegra.splice(i, 1);
+    if (this.chipsNoFim) {
+      this.mudancas.push({ luta: this.nLutas, texto: `${nome} saiu: “${rotuloRegra(regraDe(k))}” saiu do fim da lista`, dono: true });
+      this.versao++;
+      return;
+    }
     const ja = this.chipsJaAtivos.indexOf(k);
     if (ja >= 0) this.chipsJaAtivos.splice(ja, 1);
     else {
@@ -296,9 +320,13 @@ export interface PetLutador {
   pontosDeLuta?(): Stats | null;
   /** v8 (M1): a confianca de combate; a inseguranca sobe o epsilon */
   conf?: ConfiancaCombate | null;
+  /** pets v9 (itens.ts): os chips de regra fazem efeito agora (o treino minimo)? Sem isto, nao ha chip no fim da lista */
+  chipsValem?(): boolean;
 }
 export function estiloDoPet(m: PetLutador): Estilo {
   const e: Estilo = m.gp ? { ...m.gp.estilo(), base: m.gp.linha! } : { ...estiloBot("aleatorio"), base: "aleatorio" };
+  /* pets v9: as regras dos chips no fim da lista, se os itens valem (o treino minimo) */
+  if (m.gp?.chipsNoFim && m.gp.chipsRegra.length && m.chipsValem?.()) e.gambits = { regras: m.gp.comChips(m.gp.ativas).map(regraDe), final: m.gp.final };
   if (SOMBRIA[m.forma.adulta!]) e.eps = Math.max(e.eps, CSO.epsMin);   /* sombria: instavel */
   /* v4: sem educacao ele ignora os proprios gambits mais vezes (PLANO_ANALISE_V3, secao 2.2) */
   /* e a experiencia de combate (estilo "lutar"): cada vitoria tira um pouco, ate expMax; nunca abaixo de 0 */

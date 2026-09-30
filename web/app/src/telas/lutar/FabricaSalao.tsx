@@ -69,7 +69,7 @@ export function CartaoFabrica({ t, lutando }: { t: Tamer; lutando: boolean }) {
         </div>
         {u && <p class="fb-ultima" role="status">Luta {u.k + 1}: venceu {nomeForma(u.rival)} ({arq(u.rival)}) em {u.res.turnos.length} turnos.</p>}
         {troca && u && <div class="fb-troca">
-          <span>Trocar o alugado pelo rival derrotado? {nomeForma(u.rival)} entra com a mesma parte da vida: a troca não cura.</span>
+          <span>Trocar o alugado pelo rival derrotado? {nomeForma(u.rival)} {atual!.regra.trocaInteira ? "entra com a vida cheia." : "entra com a mesma parte da vida: a troca não cura."}</span>
           <button type="button" class="dl-btn dl-btn--sec fb-trocar" disabled={lutando} onClick={() => agir(trocarFabrica)}>Trocar por {nomeForma(u.rival)} ({arq(u.rival)})</button>
         </div>}
         <button type="button" class="dl-btn fr-inst-tentar fb-lutar" disabled={lutando} onClick={() => agir(lutarFabrica)}>Lutar: série {p.serie}, luta {p.naSerie} de {LUTAS_SERIE_FABRICA}</button>

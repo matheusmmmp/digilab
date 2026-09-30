@@ -2854,6 +2854,66 @@
   {
    "web": "FATOR_LIDER_V9.espiral",
    "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "CIT_V9.versaoPet",
+   "nota": "versao de pet a partir da qual valem os itens da fase 3 (so no jogo; restricoes e valores dos itens nos pets v9, motor/itens.ts); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "CIT_V9.treinoMinimo",
+   "nota": "itens dos pets v9 (so no jogo): os chips e a carta so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel (meta M-D1, test/medir_itens.mjs, artifacts_equilibrio_geral/fase3/itens_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "CIT_V9.fatorChipStat",
+   "nota": "itens dos pets v9 (so no jogo): o valor do ponto do chip de stat (meta M-D3, test/medir_itens.mjs, artifacts_equilibrio_geral/fase3/itens_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.campina",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.torre",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.floresta",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.cidadela",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.lago",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.espiral",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "CURA_LIGA_V9",
+   "nota": "cura parcial entre as lutas da Liga dos pets v9 (so no jogo; motor/liga.ts): medida de 0 a 0,5 em test/conferir_liga.mjs --calibrar e escolhida 0 (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.crianca",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.adolescente",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.adulto",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.mega",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_RIVAL_FABRICA_V9",
+   "nota": "fator dos rivais da Fabrica nas tentativas com as regras dos v9 (so no jogo; motor/fabrica.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C2, o maior com folga >= 0,05, artifacts_equilibrio_geral/fase3/fabrica_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
   }
  ],
  "chaves_v21d": [

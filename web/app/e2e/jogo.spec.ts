@@ -350,7 +350,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(r.save.versao).toBe(9);                     /* o ovo novo nasce na versao atual (v9: v8 + combate equilibrado) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 5, log: [] });
+  expect(r.tamer).toEqual({ versao: 6, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -377,7 +377,7 @@ test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer 
   expect(r.save.versao).toBe(9);                     /* o ovo novo nasce na versao atual (v9) */
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 5, log: [] });
+  expect(r.tamer).toEqual({ versao: 6, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -683,7 +683,7 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "liga", s: expect.any(Number) });
   /* o titulo no Tamer, com o pet e a forma */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(5);
+  expect(t.versao).toBe(6);
   const c = t.log.filter((e: [string]) => e[0] === "campeao");
   expect(c).toHaveLength(1);
   expect(c[0][1]).toMatchObject({ n: 1, pet: SAVE_LIGA.semente, forma: "Valkyrimon" });
@@ -819,7 +819,7 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "torre_batalha", s: expect.any(Number) });
   let t = await lerTamer(page);
-  expect(t.versao).toBe(5);
+  expect(t.versao).toBe(6);
   expect(t.log.filter((e: [string]) => e[0] === "recorde")).toEqual([["recorde", expect.objectContaining({ inst: "torre_batalha", valor: 7, pet: SAVE_LIGA.semente, forma: "Valkyrimon" })]]);
   await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
   await expect(torre.locator(".fr-inst-rec .dl-num")).toHaveText("7");
@@ -913,23 +913,28 @@ test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da 
   await expect(fab.locator(".fb-alugado")).toContainText("Sakuyamon");
   await fab.locator(".fb-lutar").click();
   await expect(fab.locator(".fb-ultima")).toContainText("Luta 1: venceu Imperialdramon Fighter Mode (Duelista)");
-  /* a oferta de troca depois da vitoria; trocando, o alugado passa a ser o rival derrotado, sem cura */
-  await expect(fab.locator(".fb-troca")).toContainText("a troca não cura");
+  /* a oferta de troca depois da vitoria; trocando, o alugado passa a ser o rival derrotado, que entra com a vida cheia (as regras dos v9,
+     fase 3 do equilibrio geral: a tentativa nova grava a versao das regras no registro do Tamer) */
+  await expect(fab.locator(".fb-troca")).toContainText("entra com a vida cheia");
   await fab.locator(".fb-trocar").click();
   await expect(fab.locator(".fb-troca")).toHaveCount(0);
   await expect(fab.locator(".fb-alugado")).toContainText("Imperialdramon Fighter Mode");
   await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
   await fab.locator(".fb-lutar").click();
+  await expect(fab.locator(".fb-ultima")).toContainText("Luta 2: venceu SlashAngemon (Espelho)");
+  await expect(fab.locator(".fb-status")).toContainText("série 1, luta 3 de 3");
+  await fab.locator(".fb-lutar").click();
   /* perdeu, acabou: o resumo e "Tentar de novo" */
   await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
-  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 2");
+  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 3");
   await expect(fab.locator(".fr-inst-tentar")).toHaveText("Tentar de novo");
-  await expect(fab.locator(".fb-lutas li")).toHaveCount(2);
-  /* so no registro do Tamer (versao 5): o comeco, as duas lutas e a troca; nenhuma luta no registro do pet */
+  await expect(fab.locator(".fb-lutas li")).toHaveCount(3);
+  /* so no registro do Tamer (versao 6, a tentativa com as regras dos v9): o comeco, as tres lutas e a troca; nenhuma luta no registro do pet */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(5);
+  expect(t.versao).toBe(6);
+  expect(t.log.find((e: [string]) => e[0] === "fabrica")[1].v).toBe(9);
   expect(t.log.filter((e: [string]) => e[0].startsWith("fabrica")).map((e: [string, { n: number; k?: number; alugado?: number }]) => [e[0], e[1].n, e[1].k ?? e[1].alugado]))
-    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
+    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1], ["fabrica_luta", 1, 2]]);
   expect(await numLog(page, "l")).toBe(l0);
   /* a proxima tentativa oferece outros alugados (a semente da tentativa 2) */
   await fab.locator(".fr-inst-tentar").click();
