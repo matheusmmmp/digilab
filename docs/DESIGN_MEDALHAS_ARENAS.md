@@ -192,59 +192,72 @@ Mega 23000 e peso do ponto de treino **β = 0,045** (antes 0,03). Escolha em `we
 (`artifacts_campanha/escala_v6/`): o β é o menor da grade em que todos os líderes (menos a Torre) têm um fator com folga ≥ 0,01; as vidas
 saem das metas de estágio abaixo.
 
+**Regra do limite de turnos (decisão do Matheus, 2026-09-30):** quando a luta chega ao limite de turnos sem nocaute, **vence quem foi
+desafiado**. No jogo o pet sempre desafia (NPC da campanha, líder da arena, bot da arena), então nos pets v6 a luta que chega ao limite
+é derrota do pet; na Cidadela ela quebra a série. `combate.fimV2`/`jogarV2` recebem o desafiado (lado A, lado B ou ninguém, que é a
+fração de vida de sempre); `desafiadoDaVersao` dá o rival nos pets v6 e ninguém nos v1–v5; o `Motor.montarLuta` passa o desafiado.
+Nada novo no registro (deriva da versão do pet); cenários, pets v1–v5 e a paridade V21D com o Python não mudam. Parametrizada para a
+Fronteira, onde o desafiado será o campeão. Descarte único versão 5 (os v6 de antes decidiriam lutas de outro jeito no replay).
+
 Metas de estágio (PROPOSTAS a partir da decisão; os bots canônicos de cada forma, as 4 espécies de cada lado, lados trocados na metade):
-o de baixo **com o treino típico** contra o de cima **sem treino**.
+o de baixo **com o treino típico** contra o de cima **sem treino**. Nas medidas com a regra do limite, o desafiado é o de cima. A escala
+foi escolhida antes da regra (coluna "calibração"); com a regra só se validou de novo, sem mudar número.
 
-| par | meta | razão de vida | calibração | validação |
-|---|---|---|---|---|
-| Rookie × Champion | ≤ 0,10 (pontos) | ×3,5 | 0,0888 | 0,0905 |
-| Champion × Ultimate | ≤ 0,10 (pontos) | ×3,57 | 0,0891 | 0,0886 |
-| Ultimate × Mega | ≤ 0,10 (pontos) | ×9,2 | 0,0906 | 0,0909 |
-| Rookie × Ultimate | 0,00 (vitórias) | ×12,5 | 0,0391 (piso 0,039) | 0,0372 — **não fecha** |
-| Champion × Mega | 0,00 (vitórias) | ×32,9 | 0,0497 (piso 0,0497) | 0,0509 — **não fecha** |
+| par | meta | razão de vida | calibração (limite pela fração) | validação (limite pela fração, commit `0008f00`) | **validação (limite do desafiado)** |
+|---|---|---|---|---|---|
+| Rookie × Champion | ≤ 0,10 (pontos) | ×3,5 | 0,0888 | 0,0905 | **0,0008** |
+| Champion × Ultimate | ≤ 0,10 (pontos) | ×3,57 | 0,0891 | 0,0886 | **0,0108** |
+| Ultimate × Mega | ≤ 0,10 (pontos) | ×9,2 | 0,0906 | 0,0909 | **0,0041** |
+| Rookie × Ultimate | 0,00 (vitórias) | ×12,5 | 0,0391 (piso 0,039) | 0,0372 | **0,00** |
+| Champion × Mega | 0,00 (vitórias) | ×32,9 | 0,0497 (piso 0,0497) | 0,0509 | **0,00** |
 
-- **Dois estágios de distância não chegam a 0,00:** as vitórias que sobram são por estilo. Em alguns pares o de cima nunca acerta o de
-  baixo (o caçador contra o titã e a muralha, por exemplo) e o limite de turnos decide pela fração de vida; a escala não muda isso (o
-  "piso" é a taxa com razão de E 0,01, e a da escala já é ela). Fechar pede uma regra de combate ou listas das formas: fora desta tarefa.
+- **Com a regra do limite as cinco metas passam.** Pela fração de vida os dois estágios de distância não chegavam a 0,00: sobravam
+  vitórias por estilo (em alguns pares o de cima nunca acertava o de baixo, como o caçador contra o titã e a muralha, e o limite decidia
+  pela fração de vida; o "piso" é a taxa com razão de E 0,01). Com a regra essas lutas são do desafiado.
 - **Distância das razões do Digimon World** (Rookie → Champion ×2, Champion → Ultimate ×2,5; Mega ×2, o de hoje): a escala v6 se afasta
-  sobretudo pelo **peso do treino**. Cada razão de vida = (1 + β × treino típico de baixo) ÷ (razão de E que a meta pede): 1,36 × 2,57;
-  1,99 × 1,80; 2,62 × 3,51. A parte da razão de E fica perto do DW1 nos dois primeiros degraus; no Mega ela é 3,51 (a curva do
-  Ultimate treinado contra o Mega tem uma cauda longa de vitórias por estilo).
+  sobretudo pelo **peso do treino**. Cada razão de vida = (1 + β × treino típico de baixo) ÷ (razão de E que a meta pedia na calibração):
+  1,36 × 2,57; 1,99 × 1,80; 2,62 × 3,51. A parte da razão de E fica perto do DW1 nos dois primeiros degraus; no Mega ela é 3,51 (a curva
+  do Ultimate treinado contra o Mega tinha uma cauda longa de vitórias por estilo, a que a regra do limite tirou). Com a regra as metas
+  passam com folga, então a escala poderia ficar mais perto do DW1; ela não foi recalibrada (só validada de novo).
 
-Líderes na escala v6 (fatores da calibração; números da validação):
+Líderes na escala v6 (fatores da calibração; números da validação com a regra do limite, `artifacts_campanha/arenas/validacao.json`;
+nenhum saiu das metas, nenhum fator mudou):
 
 | arena | líder | fator | sem treino | com o treino típico | pior forma |
 |---|---|---|---|---|---|
 | Campina | Gazimon | 1,3 (era 1,1) | 0,0075 | 0,8575 | 0,800 (sereno) |
-| Torre de pedra | Guardromon | 1,6 (era 1,4) | 0,0125 | 0,9025 | 0,6925 (colosso) |
+| Torre de pedra | Guardromon | 1,6 (era 1,4) | 0,005 | 0,8125 | 0,665 (guardião) |
 | Floresta | Youkomon | 1,5 (era 1,2) | 0,0213 | 0,8675 | 0,605 (colosso) |
-| Cidadela (série de 3) | Myotismon | 0,9 (era 0,7) | 0,0006 | 0,9159 | 0,5925 (sentinela) |
-| Lago | MarinBullmon | 1,5 (era 1,2) | 0,0072 | 0,9228 | 0,675 (sentinela) |
-| Montanha Espiral | Piedmon | 1,6 (era 1,2) | 0,0009 | 0,9175 | 0,665 (emboscador) |
+| Cidadela (série de 3) | Myotismon | 0,9 (era 0,7) | 0,0006 | 0,9063 | 0,535 (sentinela) |
+| Lago | MarinBullmon | 1,5 (era 1,2) | 0,0072 | 0,8959 | 0,56 (sentinela) |
+| Montanha Espiral | Piedmon | 1,6 (era 1,2) | 0,0009 | 0,8931 | 0,555 (sentinela) |
 
-- Os seis passam nas três metas na validação.
+- Os seis passam nas três metas. Os mais apertados com a regra: a Torre com o treino típico (0,8125) e a pior forma na Cidadela (0,535).
 - **Guardromon (Torre, paciência):** com a lista de antes (a do espelho com o contra-golpe) nenhum fator de 0,5 a 4,0 passava: o caçador
   sem treino vencia atirando de longe, porque o líder respondia ao disparo frequente com o contra-golpe, que não devolve disparo. A lista
   da arena (`bots.GAMBITS_ARENA.torre`) troca só essa regra por "oponente atira com frequência → avançar" (a resposta da muralha); o
   contra-golpe contra quem prepara o pesado, insiste no golpe rápido ou na investida fica. Escolhida entre 4 variantes só nas sementes
-  de calibração (`web/app/test/explorar_torre.mjs`, `artifacts_campanha/arenas/torre_variantes.json`). A frase da arena diz isso.
+  de calibração, antes da regra do limite (`web/app/test/explorar_torre.mjs`, `artifacts_campanha/arenas/torre_variantes.json`). A
+  frase da arena diz isso.
 - No Lago a regra não mexe nos pets de referência (não têm dono): a calibração mede o líder, não o efeito de tirar as travas.
 - O fator da arena vale só na luta de arena dos pets v6; os pets v1–v5 lutam com os NPCs de sempre.
 
 **Desafiantes da campanha v6** (os NPCs que não são líderes; `web/app/test/calibrar_desafiantes_v6.mjs`, metas de sempre: sem treino ≤
-0,30, com o treino típico ≥ 0,80, nenhuma forma < 0,5; fatores em `CESC_V6.fatorNpc`, só nos pets v6), validação:
+0,30, com o treino típico ≥ 0,80, nenhuma forma < 0,5; fatores em `CESC_V6.fatorNpc`, só nos pets v6). Na validação com a regra do limite
+o Tortomon (1,6) e o Machinedramon (2,7) ficaram com uma forma abaixo de 0,5; os dois foram recalibrados nas sementes de calibração com a
+regra (`desafiantes_calibracao.json`) e validados de novo (`desafiantes_validacao.json`); Devidramon e Puppetmon ficaram:
 
 | desafiante | lugar | fator | sem treino | com o treino típico | pior forma |
 |---|---|---|---|---|---|
-| Tortomon | Torre de pedra | 1,6 | 0,3912 | 0,8644 | 0,485 (colosso) — **não fecha** |
-| Devidramon | Torre de pedra | 1,1 | 0,1862 | 0,9363 | 0,745 (caçador) |
-| Puppetmon | Montanha Espiral | 2,5 | 0,1919 | 0,9334 | 0,8025 (vigia) |
-| Machinedramon | Montanha Espiral | 2,7 | 0,225 | 0,8641 | 0,5675 (duelista) |
+| Tortomon | Torre de pedra | 1,5 (era 1,6) | 0,3087 | 0,8912 | 0,5775 (colosso) — **não fecha** (sem treino > 0,30) |
+| Devidramon | Torre de pedra | 1,1 | 0,1862 | 0,905 | 0,62 (caçador) |
+| Puppetmon | Montanha Espiral | 2,5 | 0,0413 | 0,8628 | 0,605 (muralha) |
+| Machinedramon | Montanha Espiral | 2,2 (era 2,7) | 0,1247 | 0,9566 | 0,7775 (duelista) |
 
 O Tortomon não fecha com nenhum fator (a exceção da Sentinela de sempre); fica o de maior folga. Como vencer qualquer rival de um lugar
 abre o próximo, um Champion sem treino ainda pode abrir a Floresta pelo Tortomon; as medalhas (e a evolução) continuam pedindo os líderes.
 
-**Saves:** descarte único versão 3 (arenas) e versão 4 (escala v6): os pets v6 de antes saem, com o mesmo aviso.
+**Saves:** descarte único versão 3 (arenas), 4 (escala v6) e 5 (limite do desafiado): os pets v6 de antes saem, com o mesmo aviso.
 
 **Ficou de fora (partes 3 e 4 e o resto da seção 4):** itens, a Fronteira, e o que mais as medalhas liberariam (regras editáveis, espaços
 de item).
