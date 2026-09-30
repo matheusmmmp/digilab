@@ -17,16 +17,19 @@ O final do jogo. Depois das 6 medalhas, o Tamer desafia a **Liga dos Líderes**:
 - **O que vale:** os chips equipados valem; **as cartas não valem na Liga**. Perder uma luta encerra a tentativa. Tentar de novo não tem custo.
 - **Os melhores Digimons:** cada líder luta com um Mega do jogo, cada um de um **arquétipo adulto diferente** e com a lista de regras canônica dele (V21D), para a Liga testar o conhecimento do jogador sobre os arquétipos, não só a força. A sugestão, que o implementador pode ajustar só se um sprite faltar:
 
-  | líder | luta com | arquétipo |
+  | líder | luta com (Mega da cadeia · arquétipo) | espécie |
   |---|---|---|
-  | Gazimon (Campina) | WarGreymon | furioso |
-  | Guardromon (Torre) | Sakuyamon | muralha |
-  | Youkomon (Floresta) | Phoenixmon | emboscador |
-  | Myotismon (Cidadela) | MetalGarurumon | furioso → trocar para duelista, se a espécie repetir o arquétipo do WarGreymon |
-  | MarinBullmon (Lago) | Seraphimon | muralha → trocar para espelho, para não repetir |
-  | Piedmon (Espiral) | Imperialdramon Dragon Mode | furioso → trocar para sentinela ou vigia |
+  | Gazimon (Campina) | WarGreymon · Furioso | brasa |
+  | Guardromon (Torre) | Seraphimon · Espelho | cirro |
+  | Youkomon (Floresta) | MegaGargomon · Sentinela | ferrugem |
+  | Myotismon (Cidadela) | Vikemon · Titã | limo |
+  | MarinBullmon (Lago) | Rosemon · Muralha | limo |
+  | Piedmon (Espiral) | Imperialdramon Dragon Mode · Duelista | ferrugem |
 
-  Regra prática: 6 arquétipos distintos entre os 8, com espécies variadas. O implementador escolhe a combinação final respeitando isso e registra a tabela.
+  (Na evolução canônica o Mega de cada linha é o mesmo Digimon para as duas formas adultas; o arquétipo é que muda. Os
+  sprites já estão no atlas.)
+
+  Regra: 6 arquétipos distintos entre os 8 e as 4 espécies presentes. O implementador só troca uma linha da tabela se algo faltar, e registra a troca.
 - **A força dos rivais:** estágio Mega na escala v6, com um fator de rival igual ao do Piedmon da Espiral (o líder mais forte hoje). Sem calibração: só conferir que um Mega bem treinado, com a forma certa, consegue vencer uma luta da Liga (o jogo precisa ser completável).
 - **O limite de turnos:** vence quem foi desafiado, ou seja, o líder da Liga.
 - **O título:** vencer as 6 dá o evento `campeao` no registro do Tamer (com o pet e a forma), a **medalha de ouro** na tela de Medalhas e a **tela de conclusão da jornada**. A conclusão deixa de ser a vitória sobre o Piedmon na Espiral e passa a ser a Liga.
