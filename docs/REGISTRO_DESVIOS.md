@@ -1108,3 +1108,24 @@ ensinando nada por outra via: só o catálogo fechado age, e só com o toque. In
   pets v7 já hoje; fica registrado como pendência à parte.
 - **Sem execução direta.** O chip é obrigatório até o Matheus ver o gate (PROPOSTO: falsos positivos ≤ 5% nas negativas;
   imperativos ≥ 80%). Treino, luta, itens, evoluir, cruzar, comando na fala espontânea e MCP de verdade ficam fora.
+
+## 2026-09-30 — Comando pelo chat, rodada 3: prompt `livre-v8`
+
+A rodada 1 (`livre-v7`, `artifacts_fala_livre/comando/rodada1/`) passou nos falsos positivos (0%) e falhou nos imperativos
+(53,3%, gate ≥ 80%): elogiar, repreender, acariciar e tratar_lesao acertaram 4 de 36, porque nelas a mensagem do dono é a própria
+ação ("muito bem!" é o elogio) e o modelo tratava como conversa.
+- **`livre-v8` ao lado da v7** (`digilab_fala_livre/prompt.py`): muda só o bloco COMANDO. A regra no sistema diz que em quatro
+  ações a própria mensagem é a ação (elogiar: "muito bem!", "parabéns"; repreender: "isso foi feio", "não faz mais"; acariciar:
+  diz que vai fazer carinho ou cafuné; tratar_lesao: diz que vai cuidar do machucado ou fazer curativo) e escreve inteira a regra
+  do null (negação da ação, pergunta, hipótese, adiamento e relato); a lista do pedido (`DESCRICAO_COMANDOS_V8`) troca a frase
+  dessas quatro. A v7 não muda (a rodada 1 reproduz). O servidor usa a v8 na conversa com voz.
+- **A v8 foi escrita olhando a rodada 1**: por isso a rodada 3 usa **sementes novas** (20261201, 20261301, 20261401; nenhuma
+  semente + i cruza as das rodadas 1–2, teste), as mesmas 60 mensagens, sem o estilo da espécie, gemma2:9b. As sementes das
+  rodadas 1–2 passam a ser de calibração. As mensagens são as mesmas: a v8 não é validação independente das **mensagens**, só
+  das sementes.
+- **Resultado** (`artifacts_fala_livre/comando/rodada3/resumo.json`): gate PROPOSTO **passa**. Falsos positivos 0/60 nas negativas
+  e 0/60 na conversa; imperativos 51/60 (85,0%). Elogiar 6/6, repreender 6/6, acariciar 6/6, tratar_lesao 5/6 (uma virou
+  acariciar); alimentar 9/9, petisco 6/6, brincar 5/6, banheiro 5/6. **Regressão em limpar: 3/9** (rodada 1: 7/9); 5 viraram
+  `repreender` ("banho agora, sem choro" e "vai se limpar, você tá todo sujo", mensagens de tom bravo) e 1 null. Com o chip, o
+  jogador veria "Repreender?" no lugar de "Limpar?": é um erro de ação, não um falso positivo numa negativa.
+- **Execução direta continua fora**: o chip segue obrigatório; liberar para os imperativos é decisão do Matheus.

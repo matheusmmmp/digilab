@@ -264,15 +264,19 @@ def fase_csv(modelo: str | None = None) -> str:
 
 # ------------------------------------------------------------------ comando pelo chat (TAREFA_COMANDO_CHAT, secao 4)
 #     python experiments/avaliar_fala.py --livre --comando            -> artifacts_fala_livre/comando/rodada1/
-# 60 mensagens escritas a mao (situacoes.MENSAGENS_COMANDO) x 3 sementes, gemma2:9b, prompt livre-v7 na conversa, pelo
+# 60 mensagens escritas a mao (situacoes.MENSAGENS_COMANDO) x 3 sementes, gemma2:9b, prompt da rodada (v7; v8 na 3) na conversa, pelo
 # mesmo `gerar` que da o comando ao servidor (a autocorrecao so reescreve a fala; o comando e o da primeira geracao).
 # Metricas: acerto por classe e falsos positivos (comando nao nulo numa negativa: o que importa). Gate PROPOSTO:
 # falsos positivos <= 5% nas negativas; imperativos claros >= 80%. Nenhum numero no relatorio sem este artefato.
 # rodada 1: SEM o bloco de estilo da especie (mede o comando em si). Rodada 2: as mesmas mensagens e sementes COM o estilo,
 # como o servidor manda no jogo: na sonda, o estilo do corpus fez o gemma2:9b responder com trechos em japones, e `ler`
 # rejeita letras fora do alfabeto latino (a fala vira a generica e o comando null); a rodada 2 mede quanto isso pesa.
-RODADAS_COMANDO = {1: {"pasta": "rodada1", "sementes": (20261003, 20261004, 20261005), "estilo": False},
-                   2: {"pasta": "rodada2_estilo", "sementes": (20261003, 20261004, 20261005), "estilo": True}}
+# rodada 3: prompt livre-v8 (as quatro acoes em que a mensagem do dono e a propria acao: elogiar, repreender, acariciar,
+# tratar_lesao), as mesmas 60 mensagens, SEMENTES NOVAS (as das rodadas 1 e 2 viraram de calibracao: a v8 foi escrita
+# olhando a rodada 1) e sem o estilo da especie, como a rodada 1. Gate igual.
+RODADAS_COMANDO = {1: {"pasta": "rodada1", "sementes": (20261003, 20261004, 20261005), "estilo": False, "prompt": "livre-v7"},
+                   2: {"pasta": "rodada2_estilo", "sementes": (20261003, 20261004, 20261005), "estilo": True, "prompt": "livre-v7"},
+                   3: {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"}}
 MODELO_COMANDO = "gemma2:9b"
 GATE_FP_NEGATIVAS = 0.05
 GATE_IMPERATIVOS = 0.80
@@ -298,19 +302,21 @@ PETS_COMANDO = (
 )
 
 
-def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool) -> None:
+def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool, versao: str) -> None:
     from .corpus import carregar
-    from .prompt import VERSAO_PROMPT_V7
+    from .prompt import VERSOES_COMANDO
     from .situacoes import MENSAGENS_COMANDO
+    if versao not in VERSOES_COMANDO:
+        raise ValueError(f"prompt sem comando: {versao}")
     especies, _, _ = carregar()
     cli = ClienteOllama(modelo)
-    gerar(cli, PETS_COMANDO[0], "conversa", "oi", semente=0, versao=VERSAO_PROMPT_V7, comando=True)   # aquece
+    gerar(cli, PETS_COMANDO[0], "conversa", "oi", semente=0, versao=versao, comando=True)   # aquece
     linhas, t_ini = [], time.perf_counter()
     for i, (texto, classe, esperado) in enumerate(MENSAGENS_COMANDO):
         pet = PETS_COMANDO[i % len(PETS_COMANDO)]
         esp = especies.get(pet["identidade"]["forma"]) if estilo else None
         for k, s0 in enumerate(sementes):
-            r = gerar(cli, pet, "conversa", texto, semente=s0 + i, versao=VERSAO_PROMPT_V7, especie=esp, comando=True)
+            r = gerar(cli, pet, "conversa", texto, semente=s0 + i, versao=versao, especie=esp, comando=True)
             linhas.append({"i": i, "mensagem": texto, "classe": classe, "esperado": esperado, "pet": i % len(PETS_COMANDO),
                            "estagio": r.estagio, "semente": s0 + i, "rodada_semente": k, "comando": r.comando,
                            "acertou": r.comando == esperado, "fala": r.fala, "fatos_citados": list(r.fatos_citados),
@@ -319,6 +325,7 @@ def fase_comando_gerar(modelo: str, sementes: tuple[int, ...], estilo: bool) -> 
         print(f"  {i + 1:2d}/60 {classe:<10} {texto[:40]!r:<44} -> {[l['comando'] for l in linhas[-len(sementes):]]}", flush=True)
     cli.descarregar()
     _gravar("mensagens.json", {"versao_app": VERSAO_APP, "modelo": modelo, "sementes": list(sementes), "estilo_da_especie": estilo,
+                               "versao_prompt": versao,
                                "pets": list(PETS_COMANDO),
                                "mensagens": [{"i": i, "mensagem": m, "classe": c, "esperado": e} for i, (m, c, e) in enumerate(MENSAGENS_COMANDO)]})
     _gravar("respostas.jsonl", "".join(json.dumps(l, ensure_ascii=False, sort_keys=True) + "\n" for l in linhas))
@@ -357,7 +364,9 @@ def fase_comando_resumo() -> dict:
              "status": "PROPOSTO"}
     gates["passa"] = bool(gates["falsos_positivos_negativas"]["passa"] and gates["imperativos_claros"]["passa"])
     lat = [l["latencia_s"] for l in ls if l["latencia_s"] is not None]
+    versoes = sorted({l["versao_prompt"] for l in ls})
     out = {"versao_app": VERSAO_APP, "modelo": base["modelo"], "sementes": base["sementes"], "n_respostas": len(ls),
+           "versao_prompt": versoes[0] if len(versoes) == 1 else versoes,
            "estilo_da_especie": base.get("estilo_da_especie", False),
            "por_classe": por_classe, "confusao_imperativos": confusao, "gates": gates,
            "saidas_rejeitadas": [{"mensagem": l["mensagem"], "classe": l["classe"], "erro": l["erro"], "semente": l["semente"]}
@@ -370,7 +379,7 @@ def fase_comando_resumo() -> dict:
            "latencia_s": {"n": len(lat), "p50": _p(lat, .5), "p90": _p(lat, .9), "max": max(lat) if lat else None}}
     _gravar("resumo.json", out)
     pc = lambda v: "—" if v is None else f"{100 * v:.1f}%"  # noqa: E731
-    rel = [f"# Comando pelo chat — rodada de avaliação ({base['modelo']}, prompt livre-v7, {'com' if out['estilo_da_especie'] else 'sem'} o estilo da espécie)", "",
+    rel = [f"# Comando pelo chat — rodada de avaliação ({base['modelo']}, prompt {', '.join(versoes)}, {'com' if out['estilo_da_especie'] else 'sem'} o estilo da espécie)", "",
            f"60 mensagens × {len(base['sementes'])} sementes = {len(ls)} respostas. Números de `resumo.json` e `respostas.jsonl` desta pasta.", "",
            "| classe | n | acerto | comando não nulo | saídas rejeitadas pelo parser |", "|---|---|---|---|---|"]
     for c, r in por_classe.items():
@@ -398,7 +407,7 @@ def main_comando(argv) -> int:
     rod = RODADAS_COMANDO[a.rodada]
     SAIDA = RAIZ / "artifacts_fala_livre" / "comando" / rod["pasta"]
     if a.fase in ("gerar", "tudo"):
-        fase_comando_gerar(a.modelo, rod["sementes"], rod["estilo"])
+        fase_comando_gerar(a.modelo, rod["sementes"], rod["estilo"], rod["prompt"])
     if a.fase in ("resumo", "tudo"):
         r = fase_comando_resumo()
         print(json.dumps({"por_classe": r["por_classe"], "gates": r["gates"]}, ensure_ascii=False, indent=1))

@@ -829,6 +829,15 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
   Avaliação: `python experiments/avaliar_fala.py --livre --comando [--rodada 1|2]` → `artifacts_fala_livre/comando/rodada1/` (sem o
   estilo da espécie) e `rodada2_estilo/` (com); 60 mensagens em `situacoes.MENSAGENS_COMANDO` × 3 sementes; gate PROPOSTO: falsos
   positivos ≤ 5% nas negativas e imperativos ≥ 80%. **Execução direta (sem chip) só com decisão do Matheus depois do gate.**
+  - Rodada 1 (`livre-v7`, sem estilo): falsos positivos 0%, imperativos 53,3% (FALHA): elogiar, repreender, acariciar e
+    tratar_lesao acertaram 4 de 36 (a mensagem do dono É a ação e o modelo tratava como conversa).
+  - **Rodada 3 (`livre-v8`, 2026-09-30, `artifacts_fala_livre/comando/rodada3/`)**: o servidor usa a **v8** na conversa com voz
+    (= v7 com o bloco COMANDO reescrito: as quatro ações definidas pelo que o dono faz na própria mensagem; negação, pergunta,
+    hipótese, adiamento e relato = null). A v7 continua no pacote e a rodada 1 reproduz. Sementes novas (20261201/1301/1401; as
+    das rodadas 1–2 são de calibração), sem o estilo, gemma2:9b. **Gate PASSA**: falsos positivos 0/60 nas negativas e 0/60 na
+    conversa; imperativos 51/60 (85,0%). As quatro ações: 23 de 24 (tratar_lesao 5/6, uma virou acariciar). **Regressão:**
+    limpar caiu de 7/9 para 3/9 (5 viraram `repreender`: "banho agora, sem choro", "vai se limpar, você tá todo sujo"). O chip
+    continua obrigatório; a execução direta segue como decisão do Matheus.
 
 ## Versão web (`web/digilab.html`)
 
