@@ -277,6 +277,8 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .arena-previa{display:none}
 .arena-previa .luta-arena{height:360px;margin:0;border-radius:16px;border:3px solid var(--dl-navy)}
 .arena-ultima{margin:0;font-size:13px;font-weight:700}
+.fala-revanche{margin:0;font-size:14px;font-weight:800;border-color:var(--dl-highlight)}
+.fala-revanche .dl-apoio{font-size:12px;font-weight:700}
 @media (min-width:1100px){ .arena-previa{display:block} }
 .luta-card{align-content:start}
 

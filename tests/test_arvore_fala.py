@@ -58,3 +58,5 @@ def test_gatilhos_da_voz_sustentam_o_que_dizem():
     assert set(RAIZES_GATILHO_VOZ) <= textos
     g1 = [{"id": "G1", "tipo": "evento agora", "texto": "o dono voltou depois de um tempo sumido"}]
     assert acao_do_gatilho("Você voltou", g1) == "G1" and acao_do_gatilho("Ontem lutei muito", g1) is None
+    rev = [{"id": "G1", "tipo": "evento agora", "texto": "vou lutar de novo contra quem me venceu"}]
+    assert acao_do_gatilho("Quero minha revanche", rev) == "G1" and acao_do_gatilho("Você voltou", rev) is None

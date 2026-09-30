@@ -1082,3 +1082,16 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
 - **Reencontro:** além das 3 h de jogo, 20 min de relógio sem agir na página (no tempo de teste 3 h passam em 18 s).
 - **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
   e o bebê ficavam sem o estilo do corpus).
+
+## 2026-09-30 — Voz própria: gatilho de revanche
+
+O gatilho da seção 3 do DESIGN_VOZ_PROPRIA ("antes de lutar contra o rival do gosto revanche"), que tinha ficado de fora.
+- **Quando:** ao escolher (Arena ou Campanha) o rival que venceu o pet e ainda não foi vencido depois. A luta não espera a
+  fala: ela aparece acima do Lutar/Desafiar (a janela de julgar fica na tela do Pet, como nas outras falas). Uma vez por
+  derrota: o registro diz se já houve um `fl` "revanche" depois dela. Mesmo ritmo das outras falas (2 h, nunca dormindo nem
+  com janela aberta). O assunto da fala, quando é verdade, é o próprio fato de revanche.
+- **Nada novo no motor:** o gatilho é só o texto do evento `fl` (pets v7 em diante); assinatura e replay iguais.
+- **Nomes dos rivais (correção):** na web os fatos da história e a mentira diziam "contra o ." (o nome padrão é o do
+  formato da pesquisa, `npc:tier1_x`). Agora a web passa o nome da tela (`src/nomesRivais.ts`: NPC, Digimon do bot) e
+  manda `dados.nome`; a mentira (TS e Python) usa esse nome quando vem. Os gabaritos Python × TS não mudam.
+- O verificador sustenta a fala pelo [G1] "vou lutar de novo contra quem me venceu" (revanche, luta, enfrentar).
