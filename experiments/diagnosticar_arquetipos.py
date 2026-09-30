@@ -1,7 +1,7 @@
 """Diagnostico do desequilibrio entre as 8 formas adultas (arquetipos) do combate V21C. So leitura: nenhuma regra muda.
 
     python experiments/diagnosticar_arquetipos.py --etapa todas --processos 8
-    python experiments/diagnosticar_arquetipos.py --etapa reproducao|mecanismo|atribuicao|epsilon|painel
+    python experiments/diagnosticar_arquetipos.py --etapa reproducao|mecanismo|atribuicao|leitura|epsilon|painel
 
 Regras: as da validacao V21C (experiments/configs/v21c/validacao.json, montadas por run_bateria_v21.regras_de; o
 config_sha256 tem de ser o gravado em artifacts_combate_v21c/validacao/gates.json). Sementes: SO as de calibracao
@@ -15,6 +15,8 @@ Etapas (saida em artifacts_combate_v21c/diagnostico_arquetipos/):
               acoes, dano por tipo de acao, golpe pesado, guts, turnos, fim, disparos e dano da passiva e da tecnica.
   atribuicao  (3) forca de cada forma (media contra as outras 7) com UMA alavanca mudada por vez, so na forma medida
               (os 7 oponentes sao os canonicos). Mesmos nomes e sementes da matriz: numeros aleatorios comuns.
+  leitura     (3b) mecanismo: a forma sem as regras que leem o preparo do pesado (oponente_preparando), os
+              oponentes sem elas, e a matriz inteira sem nenhuma leitura.
   epsilon     (4) a matriz com epsilon dos bots 0; 0,05 (o de hoje); 0,15; 0,30.
   painel      (5) forca de cada forma contra o painel B da pesquisa (8 formas x 4 especies), mesmo metodo de
               run_educacao._painel_do_ovo, com o bot canonico no lugar do pet.
@@ -44,7 +46,7 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import run_bateria_v21 as rb  # noqa: E402
 from digilab.combate_v2.v21.bots import ADULTOS, FORMAS, lutador_adulto  # noqa: E402
 from digilab.combate_v2.v21.catalogo import LINHA_DA_FORMA, Forma, carater_canonico, perfil  # noqa: E402
-from digilab.combate_v2.v21.gambits import CONDICAO_DO_VIGIA, GambitInvalido  # noqa: E402
+from digilab.combate_v2.v21.gambits import CONDICAO_DO_VIGIA, GambitInvalido, ListaGambits  # noqa: E402
 from digilab.combate_v2.v21.partida import Lutador, jogar, sementes_de_rng  # noqa: E402
 from digilab.combate_v2.v21.regras import (CORPO_A_CORPO, POSTURAS, TECNICAS, Acao, Distancia,  # noqa: E402
                                            estado_inicial, resolver, resultado)
@@ -74,6 +76,12 @@ VARIANTES = {
     "stats_so_especie": "(c') stats so da especie e do estagio (sem ramo, linha, forma e carater)",
     "gambits_irma": "(d) lista de gambits da forma irma da mesma linha, mantendo a passiva",
     "passiva_irma": "(e) passiva da forma irma, mantendo a lista de gambits",
+}
+# contrafactuais de mecanismo (etapa "leitura"): o pesado e anunciado um turno antes e quase toda lista adulta
+# comeca por "oponente_preparando -> resposta"
+VARIANTES_LEITURA = {
+    "sem_leitura_do_preparo": "a forma medida sem as regras com a condicao oponente_preparando (oponentes canonicos)",
+    "oponentes_sem_leitura": "a forma medida canonica; os 7 oponentes sem as regras com oponente_preparando",
 }
 
 
@@ -199,6 +207,9 @@ def lutador(forma: str, especie: str, variante: str = "original", epsilon: float
         g = ADULTOS[IRMA[forma]]
     elif variante == "passiva_irma":
         p = replace(p, passiva=IRMA[forma])
+    elif variante == "sem_leitura_do_preparo":
+        g = ListaGambits(tuple(x for x in g.regras if not any(c.nome == "oponente_preparando" for c in x.condicoes)),
+                         g.final, g.estagio)
     else:
         raise ValueError(f"variante desconhecida: {variante!r}")
     if (p.passiva, p.tecnica) != (base.perfil.passiva, base.perfil.tecnica) and variante.startswith("stats"):
@@ -289,7 +300,7 @@ def _novo_lado() -> dict:
     return {"partidas": 0, "pontos": 0.0, "turnos": 0, "decisoes": 0, "exploracao": 0, "guts_soma": 0.0,
             "hp_final_fracao_soma": 0.0, "fim": collections.Counter(), "acoes": collections.Counter(),
             "dano": collections.Counter(), "pesado": collections.Counter(), "passiva": collections.Counter(),
-            "tecnica": collections.Counter()}
+            "tecnica": collections.Counter(), "reflexo_por_acao_refletida": collections.Counter()}
 
 
 def _somar(a: dict, b: dict) -> None:
@@ -331,6 +342,8 @@ def _registrar_turno(e, esc, res, lut, lados, r) -> None:
         if acao in ATAQUES:
             L["dano"][acao.value] += ataque[i]
         L["dano"]["reflexo_contra_golpe"] += refl[i]
+        if refl[i]:
+            L["reflexo_por_acao_refletida"][acoes[j].value] += refl[i]
         L["dano"]["parry"] += parry_de[i]
         # golpe pesado
         if acao is Acao.PREPARAR_PESADO:
@@ -473,6 +486,7 @@ def _normalizar(L: dict) -> dict:
                                                         "fintas", "dano_acertos", "dano_defendido")},
         "passiva_por_partida": {k: c / n for k, c in sorted(L["passiva"].items())},
         "tecnica_por_partida": {k: c / n for k, c in sorted(L["tecnica"].items())},
+        "reflexo_por_acao_refletida_por_partida": {k: c / n for k, c in sorted(L["reflexo_por_acao_refletida"].items())},
     }
 
 
@@ -511,7 +525,8 @@ def etapa_mecanismo(pool, base_rep: dict) -> dict:
                 "acoes": pr["acoes_fracao"], "acoes_do_oponente": op["acoes_fracao"],
                 "guts_medio": pr["guts_medio"], "guts_medio_oponente": op["guts_medio"],
                 "passiva": pr["passiva_por_partida"], "tecnica": pr["tecnica_por_partida"],
-                "passiva_oponente": op["passiva_por_partida"], "tecnica_oponente": op["tecnica_por_partida"]}
+                "passiva_oponente": op["passiva_por_partida"], "tecnica_oponente": op["tecnica_por_partida"],
+                "reflexo_sofrido_por_acao_refletida": op["reflexo_por_acao_refletida_por_partida"]}
 
     destaques = {
         "furioso_vence": [linha_destaque("furioso", y) for y in FORMAS if y != "furioso" and tx["furioso"][y] > 0.9],
@@ -544,12 +559,12 @@ def etapa_mecanismo(pool, base_rep: dict) -> dict:
 def _forca_variante(args):
     variante, forma, esp, n = args
     r = regras()
-    eu = lutador(forma, esp, variante)
+    eu = lutador(forma, esp, "original" if variante == "oponentes_sem_leitura" else variante)
     linha = {}
     for o in FORMAS:
         if o == forma:
             continue
-        op = lutador(o, esp)
+        op = lutador(o, esp, "sem_leitura_do_preparo" if variante == "oponentes_sem_leitura" else "original")
         if FORMAS.index(forma) < FORMAS.index(o):
             pts = jogar_par(eu, op, f"e1|{esp}", sementes_calibracao(), n, r)
         else:
@@ -619,6 +634,45 @@ def etapa_atribuicao(pool, base_rep: dict) -> dict:
             "tabela": tabela, "taxa_contra_cada_oponente": detalhe}
 
 
+def _rr_sem_leitura(args):
+    esp, n = args
+    r = regras()
+    lut = {f: lutador(f, esp, "sem_leitura_do_preparo") for f in FORMAS}
+    conf = []
+    for i, fa in enumerate(FORMAS):
+        for fb in FORMAS[i:]:
+            conf += [(fa, fb, x) for x in jogar_par(lut[fa], lut[fb], f"e1|{esp}", sementes_calibracao(), n, r)]
+    return esp, conf
+
+
+def etapa_leitura(pool, base_rep: dict) -> dict:
+    """Quanto da forca (e da fraqueza) vem de ler o preparo do pesado: por forma (a forma sem ler; os oponentes sem
+    ler) e a matriz inteira sem nenhum bot ler."""
+    esp = list(CONFIG_CATALOGO.especies_ativas)
+    tarefas = [(v, f, e, N_POR_SEMENTE) for v in VARIANTES_LEITURA for f in FORMAS for e in esp]
+    linhas = collections.defaultdict(dict)
+    for v, f, e, linha in pool.map(_forca_variante, tarefas):
+        linhas[(v, f)][e] = linha
+    tx_base = base_rep["matriz_calibracao_n100"]["taxa"]
+    tabela = {}
+    for f in FORMAS:
+        f0 = _media(tx_base[f][o] for o in FORMAS if o != f)
+        tabela[f] = {"original": f0}
+        for v in VARIANTES_LEITURA:
+            tc = {o: _media(x for e in esp for x in linhas[(v, f)][e][o]) for o in FORMAS if o != f}
+            tabela[f][v] = {"forca": _media(tc.values()), "variacao": _media(tc.values()) - f0, "taxa_contra": tc}
+    conf = []
+    for _, c in sorted(pool.map(_rr_sem_leitura, [(e, N_POR_SEMENTE) for e in esp])):
+        conf += c
+    regras_lidas = {f: [i for i, x in enumerate(ADULTOS[f].regras) if any(c.nome == "oponente_preparando" for c in x.condicoes)]
+                    for f in FORMAS}
+    return {"meta": meta({"partidas_por_par_por_semente": N_POR_SEMENTE, "variantes": VARIANTES_LEITURA,
+                          "regras_removidas_por_forma": regras_lidas,
+                          "metodo": "mesmas sementes e nomes da matriz; as regras com oponente_preparando saem da "
+                                    "lista (a ordem das outras nao muda)"}),
+            "tabela": tabela, "matriz_sem_nenhuma_leitura": resumo_matriz(conf)}
+
+
 # ------------------------------------------------------------------ 4. epsilon
 def etapa_epsilon(pool) -> dict:
     esp = list(CONFIG_CATALOGO.especies_ativas)
@@ -683,7 +737,7 @@ def etapa_painel(pool) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Diagnostico dos arquetipos do combate V21C (so leitura)")
     ap.add_argument("--etapa", default="todas",
-                    choices=("todas", "reproducao", "mecanismo", "atribuicao", "epsilon", "painel"))
+                    choices=("todas", "reproducao", "mecanismo", "atribuicao", "leitura", "epsilon", "painel"))
     ap.add_argument("--processos", type=int, default=8)   # 18 derrubou o pool nesta maquina
     ap.add_argument("--rapido", type=Path, default=None, help="fumaca: N = 4, M = 4, saida nesta pasta (nao canonica)")
     a = ap.parse_args(argv)
@@ -693,7 +747,7 @@ def main(argv=None) -> int:
         N_POR_SEMENTE, M_PAINEL, SAIDA = 4, 4, a.rapido
     conferir_regras()
     sementes_calibracao()
-    etapas = ("reproducao", "mecanismo", "atribuicao", "epsilon", "painel") if a.etapa == "todas" else (a.etapa,)
+    etapas = ("reproducao", "mecanismo", "atribuicao", "leitura", "epsilon", "painel") if a.etapa == "todas" else (a.etapa,)
     with ProcessPoolExecutor(max_workers=a.processos) as pool:
         rep = None
         for et in etapas:
@@ -703,9 +757,10 @@ def main(argv=None) -> int:
                 rep = etapa_reproducao(pool)
                 _gravar("reproducao.json", rep)
             else:
-                if et in ("mecanismo", "atribuicao") and rep is None:
+                if et in ("mecanismo", "atribuicao", "leitura") and rep is None:
                     rep = json.loads((SAIDA / "reproducao.json").read_text(encoding="utf-8"))
                 obj = {"mecanismo": lambda: etapa_mecanismo(pool, rep), "atribuicao": lambda: etapa_atribuicao(pool, rep),
+                       "leitura": lambda: etapa_leitura(pool, rep),
                        "epsilon": lambda: etapa_epsilon(pool), "painel": lambda: etapa_painel(pool)}[et]()
                 _gravar(f"{et}.json", obj)
             print(f"  {et}: {time.perf_counter() - t0:.0f} s", flush=True)

@@ -90,6 +90,12 @@
           "tentativas": 0.1415
         },
         "pontos": 0.318,
+        "reflexo_sofrido_por_acao_refletida": {
+          "disparo": 0.041909999999999996,
+          "golpe_rapido": 70.45073562500004,
+          "investida": 5.212514375000011,
+          "pesado": 15.6078515625
+        },
         "tecnica": {
           "aparadas_pelo_defender": 1.899,
           "dano": 1.3732825,
@@ -189,6 +195,10 @@
           "tentativas": 0.423
         },
         "pontos": 0.0625,
+        "reflexo_sofrido_por_acao_refletida": {
+          "golpe_rapido": 54.15901249999998,
+          "pesado": 25.864748046875
+        },
         "tecnica": {
           "aparadas_pelo_defender": 1.6065,
           "dano": 8.332518125000005,
@@ -291,6 +301,7 @@
           "tentativas": 2.7265
         },
         "pontos": 0.92275,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "aparadas_pelo_defender": 0.009,
           "dano": 10.087745000000034,
@@ -390,6 +401,7 @@
           "tentativas": 0.055
         },
         "pontos": 0.99975,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "aparadas_pelo_defender": 0.0515,
           "dano": 63.08784437499994,
@@ -490,6 +502,7 @@
           "tentativas": 0.0535
         },
         "pontos": 1.0,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "aparadas_pelo_defender": 0.0485,
           "dano": 51.09394624999997,
@@ -591,6 +604,7 @@
           "tentativas": 7.5705
         },
         "pontos": 0.99125,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "aparadas_pelo_defender": 0.0085,
           "dano": 10.564578125000022,
@@ -691,6 +705,7 @@
           "tentativas": 5.5285
         },
         "pontos": 0.99175,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "aparadas_pelo_defender": 0.0045,
           "dano": 10.180745000000028,
@@ -794,6 +809,7 @@
           "tentativas": 3.8425
         },
         "pontos": 0.4775,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 15.208367208875034,
           "turnos_com_pele": 5.012,
@@ -894,6 +910,10 @@
           "tentativas": 0.402
         },
         "pontos": 0.613,
+        "reflexo_sofrido_por_acao_refletida": {
+          "golpe_rapido": 0.009309999999999999,
+          "pesado": 102.50851812499988
+        },
         "tecnica": {
           "dano_evitado": 3.329639756562499,
           "turnos_com_pele": 5.228,
@@ -994,6 +1014,10 @@
           "tentativas": 0.3235
         },
         "pontos": 0.60825,
+        "reflexo_sofrido_por_acao_refletida": {
+          "golpe_rapido": 0.02032375,
+          "pesado": 102.6917734375
+        },
         "tecnica": {
           "dano_evitado": 0.37350685937500017,
           "turnos_com_pele": 9.06,
@@ -1094,6 +1118,7 @@
           "tentativas": 12.0325
         },
         "pontos": 0.95525,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 3.070084538125,
           "turnos_com_pele": 7.5915,
@@ -1196,6 +1221,7 @@
           "tentativas": 2.7
         },
         "pontos": 0.00825,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 17.272134425625037,
           "turnos_com_pele": 5.7,
@@ -1295,6 +1321,9 @@
           "tentativas": 0.1215
         },
         "pontos": 0.038,
+        "reflexo_sofrido_por_acao_refletida": {
+          "pesado": 61.32892390625012
+        },
         "tecnica": {
           "dano_evitado": 18.214322719250077,
           "turnos_com_pele": 6.9625,
@@ -1393,6 +1422,7 @@
           "tentativas": 0.137
         },
         "pontos": 0.0165,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 2.142983723906247,
           "turnos_com_pele": 20.4605,
@@ -1493,6 +1523,7 @@
           "tentativas": 0.1315
         },
         "pontos": 0.01225,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 1.093035330625,
           "turnos_com_pele": 19.178,
@@ -1594,6 +1625,7 @@
           "tentativas": 5.1075
         },
         "pontos": 0.04475,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 46.96246172896876,
           "turnos_com_pele": 14.3785,
@@ -1698,6 +1730,7 @@
           "tentativas": 3.179
         },
         "pontos": 0.0885,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 33.75638923518749,
           "turnos_com_pele": 9.3285,
@@ -1799,6 +1832,7 @@
           "tentativas": 2.012
         },
         "pontos": 0.00875,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 34.600158725781256,
           "turnos_com_pele": 8.3395,
@@ -1901,6 +1935,11 @@
           "tentativas": 0.136
         },
         "pontos": 0.009,
+        "reflexo_sofrido_por_acao_refletida": {
+          "disparo": 0.005055,
+          "golpe_rapido": 0.0026475,
+          "pesado": 54.87184375
+        },
         "tecnica": {
           "dano_evitado": 24.850038732625006,
           "turnos_com_pele": 9.3515,
@@ -1996,6 +2035,7 @@
           "tentativas": 0.1385
         },
         "pontos": 0.03175,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 1.7079008175000003,
           "turnos_com_pele": 27.9435,
@@ -2093,6 +2133,7 @@
           "tentativas": 0.1475
         },
         "pontos": 0.03375,
+        "reflexo_sofrido_por_acao_refletida": {},
         "tecnica": {
           "dano_evitado": 1.2792344140625,
           "turnos_com_pele": 27.5595,
@@ -2214,6 +2255,7 @@
         "tentativas": 2.664
       },
       "pontos": 0.88125,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0565,
         "dano": 56.74723000000002,
@@ -2272,6 +2314,7 @@
         "tentativas": 4.4115
       },
       "pontos": 0.1925,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 1.9575,
         "dano": 1.3822349999999997,
@@ -2330,6 +2373,7 @@
         "tentativas": 2.7265
       },
       "pontos": 0.07725,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0,
         "dano": 8.924780000000007,
@@ -2388,6 +2432,7 @@
         "tentativas": 4.562
       },
       "pontos": 0.279,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 4.6995,
         "dano": 8.897085000000006,
@@ -2446,6 +2491,7 @@
         "tentativas": 3.6795
       },
       "pontos": 0.78475,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0625,
         "dano": 69.30865999999983,
@@ -2504,6 +2550,7 @@
         "tentativas": 3.8425
       },
       "pontos": 0.5225,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.007,
         "dano": 8.773202500000007,
@@ -2562,6 +2609,7 @@
         "tentativas": 3.179
       },
       "pontos": 0.9115,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.006,
         "dano": 9.758110000000011,
@@ -2619,6 +2667,7 @@
         "tentativas": 0.049
       },
       "pontos": 0.11875,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 51.99794024999989,
         "disparos_marcados": 2.8645,
@@ -2676,6 +2725,7 @@
         "tentativas": 0.0065
       },
       "pontos": 0.9965,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 103.41614624999984,
         "disparos_marcados": 6.528,
@@ -2733,6 +2783,7 @@
         "tentativas": 0.0535
       },
       "pontos": 0.0,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 26.59682850000006,
         "disparos_marcados": 1.298,
@@ -2790,6 +2841,7 @@
         "tentativas": 0.055
       },
       "pontos": 0.93725,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 113.55033599999975,
         "disparos_marcados": 6.5685,
@@ -2845,6 +2897,7 @@
         "tentativas": 0.0
       },
       "pontos": 0.29575,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 89.9906595000002,
         "disparos_marcados": 5.1025,
@@ -2902,6 +2955,7 @@
         "tentativas": 0.1315
       },
       "pontos": 0.98775,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 94.10796074999995,
         "disparos_marcados": 4.8605,
@@ -2959,6 +3013,7 @@
         "tentativas": 0.1475
       },
       "pontos": 0.96625,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 67.01218799999992,
         "disparos_marcados": 3.2445,
@@ -3017,6 +3072,12 @@
         "tentativas": 0.1395
       },
       "pontos": 0.8075,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 0.04077,
+        "golpe_rapido": 38.610369999999946,
+        "investida": 4.612582500000006,
+        "pesado": 39.50892187499999
+      },
       "tecnica_por_partida": {
         "dano": 82.77264437499994,
         "usos": 16.2865
@@ -3074,6 +3135,11 @@
         "tentativas": 0.0025
       },
       "pontos": 0.0035,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 55.19177099999983,
+        "golpe_rapido": 0.0068,
+        "pesado": 0.0360625
+      },
       "tecnica_por_partida": {
         "dano": 55.23463349999983,
         "usos": 9.2505
@@ -3131,6 +3197,12 @@
         "tentativas": 0.1415
       },
       "pontos": 0.682,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 0.041909999999999996,
+        "golpe_rapido": 70.45073562500004,
+        "investida": 5.212514375000011,
+        "pesado": 15.6078515625
+      },
       "tecnica_por_partida": {
         "dano": 91.3130115624999,
         "usos": 18.0145
@@ -3188,6 +3260,11 @@
         "tentativas": 0.684
       },
       "pontos": 0.7155,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 76.5407625,
+        "golpe_rapido": 0.026352499999999997,
+        "pesado": 0.7946640625
+      },
       "tecnica_por_partida": {
         "dano": 77.36177906249999,
         "usos": 20.907
@@ -3245,6 +3322,11 @@
         "tentativas": 0.001
       },
       "pontos": 0.31825,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 86.29518825000012,
+        "golpe_rapido": 0.0066549999999999995,
+        "pesado": 0.01175
+      },
       "tecnica_por_partida": {
         "dano": 86.31359325000012,
         "usos": 19.0165
@@ -3300,6 +3382,9 @@
         "tentativas": 0.1215
       },
       "pontos": 0.962,
+      "reflexo_por_acao_refletida_por_partida": {
+        "pesado": 61.32892390625012
+      },
       "tecnica_por_partida": {
         "dano": 61.32892390625012,
         "usos": 4.0625
@@ -3357,6 +3442,11 @@
         "tentativas": 0.136
       },
       "pontos": 0.991,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 0.005055,
+        "golpe_rapido": 0.0026475,
+        "pesado": 54.87184375
+      },
       "tecnica_por_partida": {
         "dano": 54.87954625,
         "usos": 5.2395
@@ -3413,6 +3503,7 @@
         "tentativas": 1.432
       },
       "pontos": 0.92275,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.009,
         "dano": 10.087745000000034,
@@ -3470,6 +3561,7 @@
         "tentativas": 1.8495
       },
       "pontos": 1.0,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0485,
         "dano": 51.09394624999997,
@@ -3527,6 +3619,7 @@
         "tentativas": 1.4655
       },
       "pontos": 0.318,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 1.899,
         "dano": 1.3732825,
@@ -3584,6 +3677,7 @@
         "tentativas": 1.9725
       },
       "pontos": 0.0625,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 1.6065,
         "dano": 8.332518125000005,
@@ -3641,6 +3735,7 @@
         "tentativas": 1.9715
       },
       "pontos": 0.99975,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0515,
         "dano": 63.08784437499994,
@@ -3698,6 +3793,7 @@
         "tentativas": 2.7
       },
       "pontos": 0.99175,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0045,
         "dano": 10.180745000000028,
@@ -3755,6 +3851,7 @@
         "tentativas": 2.012
       },
       "pontos": 0.99125,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.0085,
         "dano": 10.564578125000022,
@@ -3812,6 +3909,10 @@
         "tentativas": 0.28
       },
       "pontos": 0.721,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 20.76498500000003,
+        "pesado": 55.62734375
+      },
       "tecnica_por_partida": {
         "dano": 76.39232874999998,
         "usos": 11.06
@@ -3868,6 +3969,10 @@
         "tentativas": 0.0705
       },
       "pontos": 0.06275,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 0.0016549999999999998,
+        "pesado": 0.6198109374999999
+      },
       "tecnica_por_partida": {
         "dano": 0.6214659375,
         "usos": 0.0845
@@ -3924,6 +4029,10 @@
         "tentativas": 0.271
       },
       "pontos": 0.2845,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 12.901680000000002,
+        "pesado": 7.23390625
+      },
       "tecnica_por_partida": {
         "dano": 20.13558625,
         "usos": 4.2025
@@ -3980,6 +4089,10 @@
         "tentativas": 0.423
       },
       "pontos": 0.9375,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 54.15901249999998,
+        "pesado": 25.864748046875
+      },
       "tecnica_por_partida": {
         "dano": 80.02376054687505,
         "usos": 13.928
@@ -4036,6 +4149,9 @@
         "tentativas": 2.049
       },
       "pontos": 0.01475,
+      "reflexo_por_acao_refletida_por_partida": {
+        "pesado": 0.41915625
+      },
       "tecnica_por_partida": {
         "dano": 0.41915625,
         "usos": 0.0765
@@ -4092,6 +4208,10 @@
         "tentativas": 0.402
       },
       "pontos": 0.387,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 0.009309999999999999,
+        "pesado": 102.50851812499988
+      },
       "tecnica_por_partida": {
         "dano": 102.5178281249999,
         "usos": 6.571
@@ -4148,6 +4268,10 @@
         "tentativas": 0.3235
       },
       "pontos": 0.39175,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 0.02032375,
+        "pesado": 102.6917734375
+      },
       "tecnica_por_partida": {
         "dano": 102.7120971875,
         "usos": 9.2385
@@ -4203,6 +4327,7 @@
         "tentativas": 0.0645
       },
       "pontos": 0.21525,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 57.15576825000003,
         "disparos_marcados": 4.359,
@@ -4257,6 +4382,7 @@
         "tentativas": 0.0
       },
       "pontos": 0.70425,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 53.332924499999905,
         "disparos_marcados": 3.9995,
@@ -4313,6 +4439,7 @@
         "tentativas": 0.002
       },
       "pontos": 0.68175,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 85.63071300000009,
         "disparos_marcados": 6.32,
@@ -4369,6 +4496,7 @@
         "tentativas": 0.055
       },
       "pontos": 0.00025,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 24.856735499999974,
         "disparos_marcados": 2.0295,
@@ -4425,6 +4553,7 @@
         "tentativas": 0.0565
       },
       "pontos": 0.98525,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 62.47985099999986,
         "disparos_marcados": 4.6495,
@@ -4481,6 +4610,7 @@
         "tentativas": 0.137
       },
       "pontos": 0.9835,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 70.94118075000007,
         "disparos_marcados": 4.785,
@@ -4537,6 +4667,7 @@
         "tentativas": 0.1385
       },
       "pontos": 0.96825,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 48.79495950000002,
         "disparos_marcados": 3.2885,
@@ -4594,6 +4725,7 @@
         "tentativas": 5.421
       },
       "pontos": 0.4775,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 15.208367208875034,
         "turnos_com_pele": 5.012,
@@ -4651,6 +4783,7 @@
         "tentativas": 5.105
       },
       "pontos": 0.01225,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 1.093035330625,
         "turnos_com_pele": 19.178,
@@ -4708,6 +4841,7 @@
         "tentativas": 7.611
       },
       "pontos": 0.038,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 18.214322719250077,
         "turnos_com_pele": 6.9625,
@@ -4765,6 +4899,7 @@
         "tentativas": 5.5285
       },
       "pontos": 0.00825,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 17.272134425625037,
         "turnos_com_pele": 5.7,
@@ -4822,6 +4957,7 @@
         "tentativas": 6.912
       },
       "pontos": 0.613,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 3.329639756562499,
         "turnos_com_pele": 5.228,
@@ -4879,6 +5015,7 @@
         "tentativas": 5.3055
       },
       "pontos": 0.0165,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 2.142983723906247,
         "turnos_com_pele": 20.4605,
@@ -4936,6 +5073,7 @@
         "tentativas": 12.0325
       },
       "pontos": 0.04475,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 46.96246172896876,
         "turnos_com_pele": 14.3785,
@@ -4994,6 +5132,7 @@
         "tentativas": 8.143
       },
       "pontos": 0.0885,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 33.75638923518749,
         "turnos_com_pele": 9.3285,
@@ -5048,6 +5187,7 @@
         "tentativas": 3.0885
       },
       "pontos": 0.03375,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 1.2792344140625,
         "turnos_com_pele": 27.5595,
@@ -5106,6 +5246,7 @@
         "tentativas": 8.8205
       },
       "pontos": 0.009,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 24.850038732625006,
         "turnos_com_pele": 9.3515,
@@ -5164,6 +5305,7 @@
         "tentativas": 7.5705
       },
       "pontos": 0.00875,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 34.600158725781256,
         "turnos_com_pele": 8.3395,
@@ -5222,6 +5364,7 @@
         "tentativas": 9.5225
       },
       "pontos": 0.60825,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 0.37350685937500017,
         "turnos_com_pele": 9.06,
@@ -5276,6 +5419,7 @@
         "tentativas": 3.0285
       },
       "pontos": 0.03175,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 1.7079008175000003,
         "turnos_com_pele": 27.9435,
@@ -5334,6 +5478,7 @@
         "tentativas": 5.1075
       },
       "pontos": 0.95525,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 3.070084538125,
         "turnos_com_pele": 7.5915,
@@ -6068,6 +6213,7 @@
         "tentativas": 3.5807142857142855
       },
       "pontos": 0.52125,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.9698571428571429,
         "dano": 23.398757499999988,
@@ -6125,6 +6271,7 @@
         "tentativas": 0.06328571428571429
       },
       "pontos": 0.6146071428571429,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 78.09600846428566,
         "disparos_marcados": 4.352357142857143,
@@ -6183,6 +6330,12 @@
         "tentativas": 0.17514285714285716
       },
       "pontos": 0.6399642857142858,
+      "reflexo_por_acao_refletida_por_partida": {
+        "disparo": 31.159350964285707,
+        "golpe_rapido": 15.586222946428567,
+        "investida": 1.4035852678571454,
+        "pesado": 24.594288236607156
+      },
       "tecnica_por_partida": {
         "dano": 72.74344741517857,
         "usos": 13.253857142857143
@@ -6239,6 +6392,7 @@
         "tentativas": 1.9147142857142858
       },
       "pontos": 0.7551428571428571,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "aparadas_pelo_defender": 0.5182142857142857,
         "dano": 22.102951339285717,
@@ -6296,6 +6450,10 @@
         "tentativas": 0.5455714285714286
       },
       "pontos": 0.39989285714285716,
+      "reflexo_por_acao_refletida_por_partida": {
+        "golpe_rapido": 12.55099517857143,
+        "pesado": 42.13789382812499
+      },
       "tecnica_por_partida": {
         "dano": 54.688889006696414,
         "usos": 6.4515714285714285
@@ -6351,6 +6509,7 @@
         "tentativas": 0.06478571428571428
       },
       "pontos": 0.6483571428571429,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano": 57.598876071428556,
         "disparos_marcados": 4.204428571428571,
@@ -6408,6 +6567,7 @@
         "tentativas": 6.845071428571429
       },
       "pontos": 0.17289285714285715,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 14.888992127687523,
         "turnos_com_pele": 10.9885,
@@ -6466,6 +6626,7 @@
         "tentativas": 6.468714285714285
       },
       "pontos": 0.24789285714285714,
+      "reflexo_por_acao_refletida_por_partida": {},
       "tecnica_por_partida": {
         "dano_evitado": 14.233901903236609,
         "turnos_com_pele": 14.167714285714286,
