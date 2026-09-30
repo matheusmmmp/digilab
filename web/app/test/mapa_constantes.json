@@ -2614,6 +2614,22 @@
   {
    "web": "CESC_V6.beta",
    "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_tier2_sentinela",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_tier2_porteiro",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_v5_puppetmon",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
+  },
+  {
+   "web": "CESC_V6.fatorNpc.npc_v5_machinedramon",
+   "nota": "escala dos pets v6 (so no jogo, 2026-09-30; a pesquisa segue na CESC/ConfigEscala): vida por estagio e peso do ponto de treino calibrados em test/calibrar_escala_v6.mjs (artifacts_campanha/escala_v6/); fatores dos desafiantes da campanha v6 em test/calibrar_desafiantes_v6.mjs; divergencia registrada em docs/REGISTRO_DESVIOS.md"
   }
  ],
  "chaves_v21d": [
