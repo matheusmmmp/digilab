@@ -22,6 +22,11 @@ Tecnicas (acao nova, so para quem tem a linha):
                 mult e a preparacao do pesado nao pode ser interrompida.
                 Ilegal com pele ativa.
 
+Chaves da ConfigCombateV21D (reequilibrio, rodada 2; desligadas por padrao):
+  investida_erra_contra_recuo  a investida nao acerta o alvo que recua, e o recuo
+                vale contra ela (excecao a fuga condicionada so para a investida)
+  preparo_prende  recuar nao afasta de quem prepara o pesado no mesmo turno
+
 Passivas (modificadores de regra, nunca stats escondidos):
   duelista    pesado contra esquiva: causa dano extra fixo e devolve o guts do
               preparar (adaptacao da "finta", que nao existe na base)
@@ -101,6 +106,9 @@ class EstadoLutador:
     pele: int = 0               # turnos restantes de pele_dura DEPOIS do atual
     recarga: int = 0            # sentinela
     disparou: bool = False      # emboscador
+    # o preparo do pesado em curso foi feito com pele_dura ativa (so e lido com a chave preparo_sob_pele_oculto
+    # da ConfigCombateV21D; sem ela nada muda)
+    preparo_sob_pele: bool = False
 
     @property
     def hp_max(self) -> float:
@@ -245,7 +253,9 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
             if d0 is Distancia.PERTO:
                 bruto = b.dano_golpe_rapido * pa.mult_perto
         elif acao is Acao.INVESTIDA:
-            bruto = v.dano_investida * pa.mult_perto
+            # V21D, D2 (chave desligada por padrao): o alvo que recua da distancia media escapa da investida
+            if not (_op(v, "investida_erra_contra_recuo", False) and reacao is Acao.RECUAR):
+                bruto = v.dano_investida * pa.mult_perto
         elif acao is Acao.PESADO:
             if d0 is Distancia.PERTO:
                 bruto = b.dano_pesado * pa.mult_perto
@@ -335,10 +345,18 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
     passos = [0 if parry_inv[i] else passo.get(acoes[i], 0) for i in (0, 1)]
     # C3 fuga condicionada (base V2C): recuar nao afasta se o oponente se aproxima (a sentinela, com a
     # passiva pronta, continua recuando: e a passiva dela)
+    # V21D, D2: contra a investida o recuo vale (a investida errou); o avanco comum continua prendendo
+    investida_escapa = _op(v, "investida_erra_contra_recuo", False)
     if _op(b, "fuga_condicionada", False):
         for i in (0, 1):
             if (acoes[i] is Acao.RECUAR and passos[1 - i] < 0
-                    and not (lados[i].perfil.passiva == "sentinela" and lados[i].recarga == 0)):
+                    and not (lados[i].perfil.passiva == "sentinela" and lados[i].recarga == 0)
+                    and not (investida_escapa and acoes[1 - i] is Acao.INVESTIDA)):
+                passos[i] = 0
+    # V21D, E1 (chave desligada por padrao): recuar nao afasta de quem prepara o pesado no mesmo turno
+    if _op(v, "preparo_prende", False):
+        for i in (0, 1):
+            if acoes[i] is Acao.RECUAR and acoes[1 - i] is Acao.PREPARAR_PESADO:
                 passos[i] = 0
     recarga = [max(0, lados[i].recarga - 1) for i in (0, 1)]
     for i in (0, 1):
@@ -373,6 +391,7 @@ def resolver(estado: EstadoCombate, acao_a: Acao, acao_b: Acao,
         novos.append(replace(
             s, hp=s.hp - dano[i], guts=max(0.0, min(p.guts_max, g)),
             preparando=acoes[i] is Acao.PREPARAR_PESADO and not interrompido[i],
+            preparo_sob_pele=acoes[i] is Acao.PREPARAR_PESADO and not interrompido[i] and pele_ativa[i],
             historico=s.historico + (acoes[i],), marca=marca, pele=pele, recarga=recarga[i],
             disparou=s.disparou or acoes[i] is Acao.DISPARO,
         ))

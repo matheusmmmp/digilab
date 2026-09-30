@@ -1,0 +1,513 @@
+{
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "rodada 1 do reequilibrio, so sementes de calibracao; chaves da ConfigCombateV21D, desligadas por padrao",
+    "config_regras": "experiments/configs/v21c/validacao.json",
+    "epsilon_bots_canonico": 0.05,
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "gate": {
+      "amplitude_max": 0.2,
+      "extremos_max": {
+        "0.05": 7,
+        "0.15": 4
+      },
+      "faixa": [
+        0.4,
+        0.6
+      ],
+      "fonte": "docs/DIAGNOSTICO_ARQUETIPOS.md, secao 7 (PROPOSTO); aqui nas sementes de CALIBRACAO, nao e o gate de validacao",
+      "suporte_min": 6,
+      "vitorias_min": 2
+    },
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      3101,
+      3202,
+      3303,
+      3404,
+      3505
+    ],
+    "variantes": {
+      "a": {
+        "chaves": {
+          "preparo_sob_pele_oculto": true
+        },
+        "descricao": "A: o preparo do pesado feito sob pele_dura nao aparece em oponente_preparando (todos os bots)",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "95b959e728c250225c9e485fc58c574cb624bf5cedadbf70583694b88c31586c",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      },
+      "a_c": {
+        "chaves": {
+          "muralha_lista_espelho": true,
+          "preparo_sob_pele_oculto": true
+        },
+        "descricao": "A + C",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "bac8d3681fbe3cac240a229dce41ed37a180d551edeb10443a6b1b3d025c8fd8",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      },
+      "c": {
+        "chaves": {
+          "muralha_lista_espelho": true
+        },
+        "descricao": "C: a muralha luta com a lista de gambits do espelho",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "34644983dfccb84443d84002d9bca4f474de2ae71594c733686e9d1f84f60ffb",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      },
+      "v21c": {
+        "chaves": {},
+        "descricao": "V21C de hoje (sem chave)",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+          "regras_sha256": "582882af3ea7a70b940abf6c3b9f08a915d5c7a5ed62d301c8e46b9014e47674"
+        }
+      }
+    }
+  },
+  "por_variante": {
+    "a": {
+      "distancia_ate_a_faixa_forca": 0.33878571428571436,
+      "distancia_ate_a_faixa_painel": 0.20554687500000002,
+      "falham": [
+        "A1_forca_entre_formas",
+        "A2_forca_contra_painel",
+        "A3_suporte",
+        "A4_decisividade",
+        "A5_amplitude"
+      ],
+      "forca": {
+        "duelista": 0.4714642857142857,
+        "emboscador": 0.6139642857142856,
+        "espelho": 0.4445,
+        "furioso": 0.7178214285714286,
+        "muralha": 0.313,
+        "sentinela": 0.6468214285714285,
+        "tita": 0.4656071428571429,
+        "vigia": 0.32682142857142854
+      },
+      "itens": {
+        "A1_forca_entre_formas": {
+          "dentro": 3,
+          "fora": {
+            "emboscador": 0.614,
+            "furioso": 0.718,
+            "muralha": 0.313,
+            "sentinela": 0.647,
+            "vigia": 0.327
+          },
+          "ok": false
+        },
+        "A2_forca_contra_painel": {
+          "dentro": 3,
+          "fora": {
+            "emboscador": 0.611,
+            "furioso": 0.659,
+            "muralha": 0.325,
+            "sentinela": 0.614,
+            "vigia": 0.353
+          },
+          "ok": false
+        },
+        "A3_suporte": {
+          "ok": false,
+          "suporte": [
+            "emboscador",
+            "espelho",
+            "furioso",
+            "muralha"
+          ],
+          "tamanho": 4
+        },
+        "A4_decisividade": {
+          "extremos_eps_0.05": 14,
+          "extremos_eps_0.15": 11,
+          "ok": false
+        },
+        "A5_amplitude": {
+          "amplitude_eps_0.05": 0.4048214285714286,
+          "amplitude_eps_0.15": 0.5068214285714285,
+          "ok": false
+        },
+        "A6_lugar_no_ciclo": {
+          "abaixo": {},
+          "ok": true,
+          "vitorias": {
+            "duelista": 3,
+            "emboscador": 4,
+            "espelho": 3,
+            "furioso": 5,
+            "muralha": 2,
+            "sentinela": 5,
+            "tita": 4,
+            "vigia": 2
+          }
+        }
+      },
+      "painel": {
+        "duelista": 0.4841875,
+        "emboscador": 0.6111875,
+        "espelho": 0.446625,
+        "furioso": 0.658640625,
+        "muralha": 0.325359375,
+        "sentinela": 0.6144375,
+        "tita": 0.50215625,
+        "vigia": 0.35335937500000003
+      },
+      "passam": [
+        "A6_lugar_no_ciclo"
+      ]
+    },
+    "a_c": {
+      "distancia_ate_a_faixa_forca": 0.33300000000000013,
+      "distancia_ate_a_faixa_painel": 0.22167187500000018,
+      "falham": [
+        "A1_forca_entre_formas",
+        "A2_forca_contra_painel",
+        "A3_suporte",
+        "A4_decisividade",
+        "A5_amplitude",
+        "A6_lugar_no_ciclo"
+      ],
+      "forca": {
+        "duelista": 0.4667857142857143,
+        "emboscador": 0.6229285714285714,
+        "espelho": 0.40625,
+        "furioso": 0.72575,
+        "muralha": 0.402,
+        "sentinela": 0.6489285714285715,
+        "tita": 0.46275000000000005,
+        "vigia": 0.2646071428571429
+      },
+      "itens": {
+        "A1_forca_entre_formas": {
+          "dentro": 4,
+          "fora": {
+            "emboscador": 0.623,
+            "furioso": 0.726,
+            "sentinela": 0.649,
+            "vigia": 0.265
+          },
+          "ok": false
+        },
+        "A2_forca_contra_painel": {
+          "dentro": 4,
+          "fora": {
+            "emboscador": 0.622,
+            "furioso": 0.67,
+            "sentinela": 0.618,
+            "vigia": 0.288
+          },
+          "ok": false
+        },
+        "A3_suporte": {
+          "ok": false,
+          "suporte": [
+            "furioso",
+            "muralha",
+            "sentinela"
+          ],
+          "tamanho": 3
+        },
+        "A4_decisividade": {
+          "extremos_eps_0.05": 11,
+          "extremos_eps_0.15": 9,
+          "ok": false
+        },
+        "A5_amplitude": {
+          "amplitude_eps_0.05": 0.46114285714285713,
+          "amplitude_eps_0.15": 0.43449999999999994,
+          "ok": false
+        },
+        "A6_lugar_no_ciclo": {
+          "abaixo": {
+            "vigia": 1
+          },
+          "ok": false,
+          "vitorias": {
+            "duelista": 3,
+            "emboscador": 4,
+            "espelho": 2,
+            "furioso": 5,
+            "muralha": 4,
+            "sentinela": 5,
+            "tita": 4,
+            "vigia": 1
+          }
+        }
+      },
+      "painel": {
+        "duelista": 0.480734375,
+        "emboscador": 0.62203125,
+        "espelho": 0.411703125,
+        "furioso": 0.6698125,
+        "muralha": 0.413484375,
+        "sentinela": 0.61784375,
+        "tita": 0.49173437499999995,
+        "vigia": 0.288015625
+      },
+      "passam": []
+    },
+    "c": {
+      "distancia_ate_a_faixa_forca": 0.7908214285714286,
+      "distancia_ate_a_faixa_painel": 0.5859531250000001,
+      "falham": [
+        "A1_forca_entre_formas",
+        "A2_forca_contra_painel",
+        "A3_suporte",
+        "A4_decisividade",
+        "A5_amplitude",
+        "A6_lugar_no_ciclo"
+      ],
+      "forca": {
+        "duelista": 0.5165714285714286,
+        "emboscador": 0.6235714285714286,
+        "espelho": 0.6017142857142856,
+        "furioso": 0.7630714285714285,
+        "muralha": 0.5966071428571429,
+        "sentinela": 0.6504642857142857,
+        "tita": 0.08653571428571429,
+        "vigia": 0.1614642857142857
+      },
+      "itens": {
+        "A1_forca_entre_formas": {
+          "dentro": 2,
+          "fora": {
+            "emboscador": 0.624,
+            "espelho": 0.602,
+            "furioso": 0.763,
+            "sentinela": 0.65,
+            "tita": 0.087,
+            "vigia": 0.161
+          },
+          "ok": false
+        },
+        "A2_forca_contra_painel": {
+          "dentro": 3,
+          "fora": {
+            "emboscador": 0.622,
+            "furioso": 0.713,
+            "sentinela": 0.618,
+            "tita": 0.157,
+            "vigia": 0.212
+          },
+          "ok": false
+        },
+        "A3_suporte": {
+          "ok": false,
+          "suporte": [
+            "furioso",
+            "muralha",
+            "sentinela"
+          ],
+          "tamanho": 3
+        },
+        "A4_decisividade": {
+          "extremos_eps_0.05": 18,
+          "extremos_eps_0.15": 14,
+          "ok": false
+        },
+        "A5_amplitude": {
+          "amplitude_eps_0.05": 0.6765357142857142,
+          "amplitude_eps_0.15": 0.6708928571428572,
+          "ok": false
+        },
+        "A6_lugar_no_ciclo": {
+          "abaixo": {
+            "tita": 0,
+            "vigia": 1
+          },
+          "ok": false,
+          "vitorias": {
+            "duelista": 4,
+            "emboscador": 4,
+            "espelho": 4,
+            "furioso": 5,
+            "muralha": 5,
+            "sentinela": 5,
+            "tita": 0,
+            "vigia": 1
+          }
+        }
+      },
+      "painel": {
+        "duelista": 0.528453125,
+        "emboscador": 0.62234375,
+        "espelho": 0.573484375,
+        "furioso": 0.71340625,
+        "muralha": 0.571203125,
+        "sentinela": 0.61840625,
+        "tita": 0.156609375,
+        "vigia": 0.21159375000000002
+      },
+      "passam": []
+    },
+    "v21c": {
+      "distancia_ate_a_faixa_forca": 0.6373928571428573,
+      "distancia_ate_a_faixa_painel": 0.41532812500000016,
+      "falham": [
+        "A1_forca_entre_formas",
+        "A2_forca_contra_painel",
+        "A3_suporte",
+        "A4_decisividade",
+        "A5_amplitude",
+        "A6_lugar_no_ciclo"
+      ],
+      "forca": {
+        "duelista": 0.52125,
+        "emboscador": 0.6146071428571428,
+        "espelho": 0.6399642857142858,
+        "furioso": 0.7551428571428571,
+        "muralha": 0.3998928571428571,
+        "sentinela": 0.6483571428571429,
+        "tita": 0.17289285714285715,
+        "vigia": 0.24789285714285714
+      },
+      "itens": {
+        "A1_forca_entre_formas": {
+          "dentro": 1,
+          "fora": {
+            "emboscador": 0.615,
+            "espelho": 0.64,
+            "furioso": 0.755,
+            "muralha": 0.4,
+            "sentinela": 0.648,
+            "tita": 0.173,
+            "vigia": 0.248
+          },
+          "ok": false
+        },
+        "A2_forca_contra_painel": {
+          "dentro": 2,
+          "fora": {
+            "emboscador": 0.612,
+            "espelho": 0.608,
+            "furioso": 0.702,
+            "sentinela": 0.615,
+            "tita": 0.235,
+            "vigia": 0.287
+          },
+          "ok": false
+        },
+        "A3_suporte": {
+          "ok": false,
+          "suporte": [
+            "emboscador",
+            "espelho",
+            "furioso",
+            "muralha",
+            "sentinela"
+          ],
+          "tamanho": 5
+        },
+        "A4_decisividade": {
+          "extremos_eps_0.05": 17,
+          "extremos_eps_0.15": 12,
+          "ok": false
+        },
+        "A5_amplitude": {
+          "amplitude_eps_0.05": 0.5822499999999999,
+          "amplitude_eps_0.15": 0.5873571428571428,
+          "ok": false
+        },
+        "A6_lugar_no_ciclo": {
+          "abaixo": {
+            "tita": 1
+          },
+          "ok": false,
+          "vitorias": {
+            "duelista": 4,
+            "emboscador": 4,
+            "espelho": 5,
+            "furioso": 5,
+            "muralha": 2,
+            "sentinela": 5,
+            "tita": 1,
+            "vigia": 2
+          }
+        }
+      },
+      "painel": {
+        "duelista": 0.53190625,
+        "emboscador": 0.6115,
+        "espelho": 0.60840625,
+        "furioso": 0.702234375,
+        "muralha": 0.405953125,
+        "sentinela": 0.615,
+        "tita": 0.235140625,
+        "vigia": 0.286671875
+      },
+      "passam": []
+    }
+  }
+}
