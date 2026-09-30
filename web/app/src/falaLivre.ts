@@ -4,16 +4,25 @@
    Mesmas chaves, mesmo formato de log e mesmas rotas do servidor que a versao do HTML.
    Pets v7 (voz propria, src/voz.ts): a fala espontanea vem dos gatilhos novos, entra no registro do pet pelo evento
    "fl" (abre a janela de fala, pode ser mentira) e o texto vem do servidor com voz: true ou, sem ele, do molde. A
-   conversa manda a historia do pet. O registro de apresentacao ganha o campo `voz` (a verdade fica guardada ali). */
+   conversa manda a historia do pet. O registro de apresentacao ganha o campo `voz` (a verdade fica guardada ali).
+   Comando pelo chat (TAREFA_COMANDO_CHAT, decisao do Matheus, 2026-09-30): na conversa dos pets v7 o servidor devolve
+   `comando` (uma acao do catalogo AcaoDono ou null). A LLM so propoe: o app valida de novo (src/acoes.ts) e mostra um
+   chip no balao ("Alimentar?"); o toque grava o evento "d" pelo mesmo caminho do botao. E a unica coisa que o texto do
+   jogador faz no pet, e so mediada pelo catalogo: fora dele o texto continua nao ensinando nada. */
 import { useEffect, useState } from "preact/hooks";
-import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type FatoHistoria, type Janela, type Motor } from "../motor/index.ts";
+import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type AcaoDono, type FatoHistoria, type Janela, type Motor } from "../motor/index.ts";
+import { agir, noCatalogo, validarComando } from "./acoes.ts";
 import { FALA_LLM, ligarFalaLLM } from "./fala.ts";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
 import { CHAVE } from "./save.ts";
 import { TEXTO_GATILHO, assuntoDaFala, gatilhoDe, historiaDaConversa, internetLigada, podeFalar, revancheContra } from "./voz.ts";
 
 const LOG = CHAVE + ".fala.jsonl", MODO = CHAVE + "-modo-fala";
-const VERSAO_LOG = 1, MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
+/* versao 2 (comando pelo chat): `comando` e `comando_executado`; a 1 continua sendo lida (campos ausentes = null/false) */
+export const VERSAO_LOG = 2;
+const MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
+/** o chip do comando some sozinho depois de 60 s de parede */
+export const CHIP_MS = 60000;
 export type ModoFala = "template" | "moldura" | "livre";
 export interface Verificacao { nao_suportadas?: number; manipulacao?: boolean; afirmacoes?: { trecho: string; sustentada: boolean | null }[]; erro?: string }
 /** pets v7: o que so a apresentacao guarda sobre a fala espontanea (a mentira fica marcada, com a verdade) */
@@ -24,11 +33,16 @@ export interface VozRegistro {
 export interface RegistroFala {
   versao: number; t: number; situacao: "espontanea" | "conversa"; fala_jogador: string | null; fala: string; fatos_citados: string[];
   fatos: unknown; estagio: string; modelo: string; versao_prompt: string; semente: number; latencia_s?: number; erro?: string; verificacao: Verificacao | null; voz?: VozRegistro;
+  /** o que a LLM propos (ja no catalogo, pelo servidor) e se o jogador tocou no chip e a acao entrou no registro do pet */
+  comando: AcaoDono | null; comando_executado: boolean;
 }
+/** o chip de confirmacao do comando: a resposta que o trouxe, a acao ja validada e ate quando vale (relogio de parede) */
+export interface Chip { reg: RegistroFala; acao: AcaoDono; ate: number }
 export const FL = {
   modo: "template" as ModoFala, ultimo: null as RegistroFala | null, pendente: false, sessao: [] as [string, string][],
   ultMotivo: null as unknown, ultForma: null as string | null, ultLutas: 0, ultDesejo: "", tEspontanea: 0,
   status: null as { modelo: string } | null, statusErro: false, erro: null as string | null, fila: [] as [string, string | null, string | undefined][],
+  chip: null as Chip | null,
 };
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
@@ -39,12 +53,24 @@ export function lerLog(): RegistroFala[] {
   let txt = ""; try { txt = localStorage.getItem(LOG) || ""; } catch { return []; }
   return txt.split("\n").filter(Boolean).map((l, i) => {
     const r = JSON.parse(l);
-    if (r.versao !== VERSAO_LOG || typeof r.fala !== "string") throw new Error(`log de fala invalido (linha ${i + 1})`);
+    if (!(r.versao === 1 || r.versao === VERSAO_LOG) || typeof r.fala !== "string") throw new Error(`log de fala invalido (linha ${i + 1})`);
+    if (r.versao === 1) { r.comando = null; r.comando_executado = false; }      /* a versao 1 nao tinha comando */
     return r as RegistroFala;
   });
 }
 function anexar(reg: RegistroFala): void {
   try { localStorage.setItem(LOG, (localStorage.getItem(LOG) || "") + JSON.stringify(reg) + "\n"); } catch { /* sem armazenamento */ }
+}
+/** o mesmo registro (conversa: tick, semente e o que o jogador escreveu) */
+const mesmoRegistro = (a: RegistroFala, b: RegistroFala): boolean =>
+  a.situacao === "conversa" && b.situacao === "conversa" && a.t === b.t && a.semente === b.semente && a.fala_jogador === b.fala_jogador;
+/** regrava um registro ja anexado (o comando executado depois do toque) */
+function atualizar(reg: RegistroFala): void {
+  let regs: RegistroFala[]; try { regs = lerLog(); } catch { return; }
+  const i = regs.findIndex(r => mesmoRegistro(r, reg));
+  if (i < 0) return;
+  regs[i] = reg;
+  try { localStorage.setItem(LOG, regs.map(r => JSON.stringify(r) + "\n").join("")); } catch { /* sem armazenamento */ }
 }
 
 /* ------------------------------------------------ fatos do pet (mesmo formato que digilab_fala_livre/fatos.py) */
@@ -106,9 +132,17 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
       versao: VERSAO_LOG, t, situacao, fala_jogador: falaJogador || null, fala: d.fala as string, fatos_citados: d.fatos_citados as string[],
       fatos: d.fatos, estagio: d.estagio as string, modelo: d.modelo as string, versao_prompt: d.versao_prompt as string, semente,
       latencia_s: d.latencia_s as number | undefined, erro: d.erro as string | undefined, verificacao: null,
+      comando: null, comando_executado: false,
     };
     if (situacao === "conversa") FL.sessao.push([falaJogador!, reg.fala]);
-    FL.ultimo = reg; avisar();
+    FL.ultimo = reg; FL.chip = null;               /* o pet respondeu de novo: o chip de antes some */
+    /* comando pelo chat (so na conversa): o registro guarda o que a LLM propos; o chip so com a validacao do app */
+    if (situacao === "conversa") {
+      reg.comando = noCatalogo(d.comando);
+      const j = jogoAtual(), a = validarComando(j.motor, j.nascendo, reg.comando);
+      if (a) armarChip(reg, a);
+    }
+    avisar();
     if (voz) {                                     /* a voz ja volta verificada (autocorrecao no servidor) */
       reg.verificacao = (d.verificacao as Verificacao) ?? null;
       reg.voz = { gatilho: null, fonte: "llm", chaves: chavesDe(d.fatos), invencoes: (d.invencoes as string[]) ?? [], janela: null, verdade: null };
@@ -142,11 +176,11 @@ function falaVoz(m: Motor, gatilho: string, foco: FatoHistoria | null = null): v
   const semente = hashSemente("voz", m.semente, m.log.length) >>> 1;
   const base: RegistroFala = {
     versao: VERSAO_LOG, t, situacao: "espontanea", fala_jogador: null, fala: as.molde, fatos_citados: [], fatos: as.historia,
-    estagio: m.estagioAtual, modelo: "molde", versao_prompt: "molde", semente, verificacao: null,
+    estagio: m.estagioAtual, modelo: "molde", versao_prompt: "molde", semente, verificacao: null, comando: null, comando_executado: false,
     voz: { gatilho, fonte: "molde", chaves: as.chaves, invencoes: [], janela: { inicio: jan.inicio, falso: jan.falso, tema: String(jan.pedido) },
       verdade: as.verdade },
   };
-  FL.ultimo = base; avisar();
+  FL.ultimo = base; FL.chip = null; avisar();      /* o pet falou de novo: o chip de antes some */
   if (FL.modo !== "livre" || !FL.status || FL.pendente) { anexar(base); return; }
   FL.pendente = true; avisar();
   const estado: Record<string, unknown> = { ...estadoDoPet(m, TEXTO_GATILHO[gatilho] ?? gatilho), historia: as.historia };
@@ -220,7 +254,41 @@ export function escolherModo(modo: ModoFala): void {
   ligarFalaLLM(modo === "moldura");
   avisar();
 }
-export function enviarConversa(txt: string): void { if (txt.trim() && FL.modo === "livre") falar("conversa", null, txt.trim()); }
+export function enviarConversa(txt: string): void {
+  if (!txt.trim() || FL.modo !== "livre") return;
+  if (FL.chip) { FL.chip = null; avisar(); }      /* outra mensagem: o chip de antes some */
+  falar("conversa", null, txt.trim());
+}
+
+/* ------------------------------------------------ comando pelo chat: o chip de confirmacao */
+function armarChip(reg: RegistroFala, acao: AcaoDono): void {
+  const chip: Chip = { reg, acao, ate: Date.now() + CHIP_MS };
+  FL.chip = chip;
+  setTimeout(() => { if (FL.chip === chip) { FL.chip = null; avisar(); } }, CHIP_MS);
+}
+/** o chip que ainda vale (60 s de parede), ou null */
+export function chipAtual(agora: number = Date.now()): Chip | null {
+  const c = FL.chip;
+  if (c && agora > c.ate) { FL.chip = null; return null; }
+  return c;
+}
+/** a acao do chip se ele pertence a este registro da conversa (a tela le o log, que devolve objetos novos) */
+export function chipDe(r: RegistroFala, agora: number = Date.now()): AcaoDono | null {
+  const c = chipAtual(agora);
+  return c && mesmoRegistro(c.reg, r) ? c.acao : null;
+}
+/** o toque no chip: valida de novo contra o pet de agora e grava o evento "d" pelo mesmo caminho do botao (acoes.agir).
+    Devolve true se a acao entrou no registro do pet. */
+export function executarChip(): boolean {
+  const c = chipAtual();
+  if (!c) return false;
+  FL.chip = null;
+  const j = jogoAtual(), a = validarComando(j.motor, j.nascendo, c.acao);
+  const feito = !!a && agir(a);
+  if (feito) { c.reg.comando_executado = true; atualizar(c.reg); }
+  avisar();
+  return feito;
+}
 export function conversaGravada(): RegistroFala[] {
   try { return lerLog().filter(r => r.situacao === "conversa").slice(-MAX_TROCAS); } catch { return []; }
 }

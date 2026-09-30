@@ -28,6 +28,7 @@ class Resultado:
     latencia_s: float | None
     erro: str | None                # SaidaInvalida, falha de rede ou citacao repetida: a fala vira a generica
     especie: str | None = None      # livre-v3: especie do bloco de estilo (corpus)
+    comando: str | None = None      # livre-v7, conversa: a acao do dono que o pet entendeu (catalogo) ou None
 
 
 def _queda(bloco_fatos, erro: str, **base) -> Resultado:
@@ -40,17 +41,19 @@ def _queda(bloco_fatos, erro: str, **base) -> Resultado:
 
 def gerar(cliente: ClienteOllama, estado: dict, situacao: str, fala_jogador: str | None = None,
           historico: list[tuple[str, str]] | None = None, semente: int = 0, versao: str = VERSAO_PROMPT,
-          especie: Especie | None = None, rival: str | None = None) -> Resultado:
+          especie: Especie | None = None, rival: str | None = None, comando: bool = False) -> Resultado:
+    """comando (livre-v7, so na conversa): pede e le o campo "comando". Saida invalida (inclusive comando fora do
+    catalogo) vira a fala generica com comando None: a LLM nunca faz o pet agir por engano de formato."""
     if especie is not None and versao not in VERSOES_VOZ:
         raise ValueError("o estilo da especie so existe nos prompts da voz propria (v3, v4)")
     fatos = fatos_de_estado(estado)              # FatosInvalidos sobe: sem fatos validos nao ha fala
     est = estagio_de(fatos)
     estilo = bloco_estilo(especie, rival) if especie is not None else None
-    msgs = mensagens(fatos, situacao, fala_jogador, historico, versao=versao, estilo=estilo)
+    msgs = mensagens(fatos, situacao, fala_jogador, historico, versao=versao, estilo=estilo, comando=comando)
     base = dict(fatos=tuple(f.para_dict() for f in fatos), estagio=est, modelo=cliente.modelo, versao_prompt=versao,
                 especie=especie.especie if especie is not None else None)
     try:
-        r = cliente.conversar(msgs, esquema(est), MAX_TOKENS[est], semente)
+        r = cliente.conversar(msgs, esquema(est, comando), MAX_TOKENS[est], semente)
     except (OSError, ValueError) as err:          # rede, timeout, resposta que nao e JSON do Ollama
         return _queda(fatos, f"chamada: {type(err).__name__}: {err}", latencia_s=None, **base)
     try:
@@ -61,4 +64,5 @@ def gerar(cliente: ClienteOllama, estado: dict, situacao: str, fala_jogador: str
         c = repete_citacao(f.fala, especie.citacoes)
         if c is not None:
             return _queda(fatos, f"repete_citacao: {c}", latencia_s=r.latencia_s, **base)
-    return Resultado(f.fala, f.fatos_citados, latencia_s=r.latencia_s, erro=None, **base)
+    return Resultado(f.fala, f.fatos_citados, latencia_s=r.latencia_s, erro=None, comando=f.comando if comando else None,
+                     **base)

@@ -14,6 +14,12 @@ verificador verif-v5 (cada invencao fica marcada), estilo da especie pelo corpus
 Digimundo (com "internet": true, na espontanea, chance almanaque.CHANCE_ESPONTANEA sorteada da semente) e a arvore
 da especie (fato A1, arvore.py). A resposta
 traz a verificacao da versao escolhida. Sem "voz", tudo como antes (livre-v2, verif-v3).
+
+Comando pelo chat (TAREFA_COMANDO_CHAT, 2026-09-30): na CONVERSA com "voz": true o prompt e o livre-v8 (era a v7 ate a
+rodada 3 do comando; a v7 continua no pacote e a rodada 1 reproduz) e a resposta
+traz "comando": uma acao do catalogo fechado (as 9 acoes do dono) que o pet entendeu como pedido claro, ou null. O
+servidor so propoe (saida.ler falha alto fora do catalogo); o app valida de novo e grava o evento `d` de sempre. Na fala
+espontanea e sem "voz" o campo vem null.
 """
 
 from __future__ import annotations
@@ -29,7 +35,7 @@ from digilab_fala_livre import almanaque, corpus
 from digilab_fala_livre.arvore import ARVORE
 from digilab_fala_livre.gerar import gerar
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
-from digilab_fala_livre.prompt import VERSAO_PROMPT_V6
+from digilab_fala_livre.prompt import VERSAO_PROMPT_V6, VERSAO_PROMPT_V8
 from digilab_fala_livre.revisao import gerar_com_revisao
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5, verificar
 
@@ -87,7 +93,7 @@ class ServicoFalaLivre:
             r = gerar(self.cliente, d.get("estado"), situacao, jog, hist, semente)
         return {"versao_app": VERSAO_APP, "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
-                "erro": r.erro}
+                "erro": r.erro, "comando": None}
 
     def _fala_voz(self, d: dict, situacao: str, jog, hist, semente: int) -> dict:
         estado = d.get("estado")
@@ -109,14 +115,17 @@ class ServicoFalaLivre:
                 estado["historia"] = []                  # o assunto passa a ser o que ele ouviu no Digimundo
         forma = (estado.get("identidade") or {}).get("forma")
         especie = self.especies.get(forma.removesuffix(" sombrio")) if isinstance(forma, str) else None
+        comando = situacao == "conversa"             # livre-v8: o comando so existe na conversa
         with self.trava:
-            r, tent = gerar_com_revisao(self.cliente, estado, situacao, semente, jog, hist, versao=VERSAO_PROMPT_V6,
+            r, tent = gerar_com_revisao(self.cliente, estado, situacao, semente, jog, hist,
+                                        versao=VERSAO_PROMPT_V8 if comando else VERSAO_PROMPT_V6,
                                         especie=especie, rival=rival, versao_verificador=VERSAO_VERIFICADOR_V5,
-                                        so_respeito=True)
+                                        so_respeito=True, comando=comando)
         escolhida = next((x for x in reversed(tent) if x.get("fala") == r.fala), None)
         return {"versao_app": VERSAO_APP, "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
-                "erro": r.erro, "verificacao": escolhida["verificacao"] if escolhida else None,
+                "erro": r.erro, "comando": r.comando if comando else None,
+                "verificacao": escolhida["verificacao"] if escolhida else None,
                 "invencoes": escolhida["invencoes"] if escolhida else [], "revisoes": max(0, len(tent) - 1),
                 "especie_corpus": r.especie, "corpus_sha256": self.corpus_sha, "corpus_exemplo": self.corpus_exemplo,
                 "almanaque_sha256": self.almanaque_sha}

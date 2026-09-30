@@ -6,6 +6,7 @@ import { OVO, TPD, chaveSprite, corDominante, eNoite } from "../../../motor/inde
 import { zoomAtual } from "../../escala.ts";
 import { atlasAtual, desenharSprite, dimSprite, escalaSprite, quadroAgora, type AtlasOk } from "../../atlas.ts";
 import { S, desenharGrade, gradeDe, paleta } from "../../grades.ts";
+import { flashAtual } from "../../flash.ts";
 import { jogoAtual, passarQuadroOvo } from "../../jogo.ts";
 
 const W0 = 80, H = 56, CHAO = 46;       /* LCD dos placeholders (sem atlas) */
@@ -13,9 +14,8 @@ const ESTRELAS = [[8, 6], [22, 12], [40, 5], [57, 10], [70, 4], [14, 20], [64, 2
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
 const EMOTE_ICONE: Record<string, string> = { carne: "emoji_carne", nota: "emoji_nota", exclam: "emoji_exclam", coracao: "emoji_coracao" };
 
-/* icone rapido depois de uma acao do dono (1,4 s); so apresentacao */
-let flash: { icone: string; ate: number } | null = null;
-export function mostrarFlash(icone: string): void { flash = { icone, ate: performance.now() + 1400 }; }
+/* icone rapido depois de uma acao do dono (1,4 s): src/flash.ts (o caminho compartilhado das acoes, src/acoes.ts, o dispara) */
+export { mostrarFlash } from "../../flash.ts";
 
 /* geometria das pranchas PetTela (cena de 318: anel 212 x 60 com o topo em 226, pes do pet em 242, ate 3x e 150 px) e
    PetTelaDesktop (cena de 468: anel 280 x 79 em 376, pes em 392, ate 4x e 200 px), em px de CSS; titulo translucido ate 36 */
@@ -104,7 +104,7 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: n
 function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: number, x: number, y: number, w: number): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos));
   /* PetTela: sem icone fixo da acao (o que ele faz fica no porque); so o icone rapido depois de uma acao do dono */
-  const icone: string | null = flash && flash.ate > performance.now() ? flash.icone : null;
+  const icone: string | null = flashAtual();
   if (!icone) return;
   if (EMOTE_ICONE[icone]) {
     const [pw0, ph0] = dimSprite(a.dados, EMOTE_ICONE[icone]), es = escalaSprite() * 2, pw = pw0 * es / K, ph = ph0 * es / K;
@@ -121,7 +121,7 @@ function desenharIcone(cx: CanvasRenderingContext2D, a: AtlasOk, K: number, W: n
 /* sem atlas: icone em grade, nas unidades do LCD */
 function desenharIconeGrade(cx: CanvasRenderingContext2D, x: number, y: number, w: number, noite: boolean): void {
   const m = jogoAtual().motor, pal = paleta(corDominante(m.tracos));
-  const icone: string | null = flash && flash.ate > performance.now() ? flash.icone : ICONE_ACAO[m.acao] ?? null;
+  const icone: string | null = flashAtual() ?? ICONE_ACAO[m.acao] ?? null;
   if (!icone) return;
   const ic = S[icone]; if (!ic) throw new Error("icone desconhecido: " + icone);
   const bx = Math.round(Math.min(W0 - 9, x + w - 1)), by = Math.round(Math.max(1, y - 9));
