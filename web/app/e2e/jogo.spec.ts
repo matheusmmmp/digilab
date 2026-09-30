@@ -309,7 +309,7 @@ test("medalhas: a primeira abertura descarta os pets antigos, avisa e pede o bra
   expect(r.save.versao).toBe(6);
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
-  expect(r.tamer).toEqual({ versao: 4, log: [] });
+  expect(r.tamer).toEqual({ versao: 5, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -336,7 +336,7 @@ test("combate V21D e arenas: o pet v6 de antes sai com o mesmo aviso, e o Tamer 
   expect(r.save.versao).toBe(6);
   expect(r.save.semente).not.toBe(SAVE_V6.semente);
   expect(r.marca).toBe("5");
-  expect(r.tamer).toEqual({ versao: 4, log: [] });
+  expect(r.tamer).toEqual({ versao: 5, log: [] });
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.med-aviso")).toHaveCount(0);
@@ -642,7 +642,7 @@ test("fronteira: com as 6 medalhas a ilha abre; a Liga tem 6 lutas sem cura, dá
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "liga", s: expect.any(Number) });
   /* o titulo no Tamer, com o pet e a forma */
   const t = await lerTamer(page);
-  expect(t.versao).toBe(4);
+  expect(t.versao).toBe(5);
   const c = t.log.filter((e: [string]) => e[0] === "campeao");
   expect(c).toHaveLength(1);
   expect(c[0][1]).toMatchObject({ n: 1, pet: SAVE_LIGA.semente, forma: "Valkyrimon" });
@@ -726,15 +726,19 @@ test("fronteira: antes do título as instalações ficam trancadas", async ({ pa
   await semear(page, SAVE_LIGA, undefined, TAMER_6);
   const erros = vigiarErros(page);
   await page.goto(APP + "#/lutar/fronteira");
-  await expect(page.locator(".fr-inst-card")).toHaveCount(2);
+  /* as quatro instalacoes (4b e 4c), todas trancadas */
+  await expect(page.locator(".fr-inst-card")).toHaveCount(4);
   await expect(page.locator(".fr-inst-card").first()).toContainText("Torre de Batalha");
-  await expect(page.locator(".fr-inst-card").last()).toContainText("Palácio");
-  await expect(page.locator(".fr-inst-card").first()).toContainText("Abre depois do título da Liga dos Líderes.");
-  await expect(page.locator(".fr-inst-tentar")).toHaveCount(2);
+  await expect(page.locator(".fr-inst-card").nth(1)).toContainText("Palácio");
+  await expect(page.locator(".fr-inst-card").nth(2)).toContainText("Fábrica");
+  await expect(page.locator(".fr-inst-card").nth(3)).toContainText("Salão");
+  for (const c of await page.locator(".fr-inst-card").all()) await expect(c).toContainText("Abre depois do título da Liga dos Líderes.");
+  await expect(page.locator(".fr-inst-tentar")).toHaveCount(4);
   for (const b of await page.locator(".fr-inst-tentar").all()) await expect(b).toBeDisabled();
+  await expect(page.locator(".sl-niveis")).toHaveCount(0);
   expect(await numLog(page, "f")).toBe(0);
   await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
-  await expect(page.locator(".med-recordes li")).toHaveCount(2);
+  await expect(page.locator(".med-recordes li")).toHaveCount(4);
   await expect(page.locator(".med-recordes")).toContainText("Abre depois do título");
   expect(erros).toEqual([]);
 });
@@ -745,7 +749,7 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   const erros = vigiarErros(page);
   await page.goto(APP + "#/lutar/fronteira");
   /* o pet passou a saber do titulo do Tamer: o evento "f" no registro dele */
-  await expect(page.locator(".fr-inst-card")).toHaveCount(2);
+  await expect(page.locator(".fr-inst-card")).toHaveCount(4);
   expect(await numLog(page, "f")).toBe(1);
   /* o tempo do jogo pausado (Ajustes > Registro e replay): a derrota que fecha a sequencia pode machucar o pet, e na velocidade de teste
      (10 min por segundo) a lesao sem tratar o mataria durante a animacao das lutas seguintes */
@@ -777,7 +781,7 @@ test("fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem 
   const lutas = reg.log.filter((e: unknown[]) => e[1] === "l");
   expect(lutas[lutas.length - 1][2]).toEqual({ r: "torre_batalha", s: expect.any(Number) });
   let t = await lerTamer(page);
-  expect(t.versao).toBe(4);
+  expect(t.versao).toBe(5);
   expect(t.log.filter((e: [string]) => e[0] === "recorde")).toEqual([["recorde", expect.objectContaining({ inst: "torre_batalha", valor: 7, pet: SAVE_LIGA.semente, forma: "Valkyrimon" })]]);
   await expect(page).toHaveURL(/#\/lutar\/fronteira$/);
   await expect(torre.locator(".fr-inst-rec .dl-num")).toHaveText("7");
@@ -809,7 +813,7 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     await semear(page, SAVE_LIGA, undefined, TAMER_RECORDE);
     const erros = vigiarErros(page);
     await page.goto(APP + "#/lutar/fronteira");
-    await expect(page.locator(".fr-inst-card")).toHaveCount(2);
+    await expect(page.locator(".fr-inst-card")).toHaveCount(4);
     await expect(page.locator(".fr-inst-card").first().locator(".fr-inst-rec .dl-num")).toHaveText("4");
     await expect(page.locator(".fr-inst-card").first()).toContainText("Recorde do Tamer: 4 vitórias seguidas, com WarGreymon");
     await page.waitForTimeout(600);
@@ -831,6 +835,159 @@ for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 
     const m = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
     expect(m.larg).toBeLessThanOrEqual(m.janela);
     await page.screenshot({ path: `test-results/fronteira-medalhas-${largura}-${tema}.png`, fullPage: true });
+    expect(erros).toEqual([]);
+  });
+}
+
+/* ---------------------------------------------------------------- a Fabrica e o Salao da Fronteira (medalhas parte 4c,
+   docs/DESIGN_FRONTEIRA.md). A Fabrica nao usa pet: a tentativa 1 do Tamer (semente do numero da tentativa) oferece Sakuyamon (muralha),
+   HerculesKabuterimon (vigia) e Imperialdramon Dragon Mode (duelista); com a Sakuyamon a luta 1 e vitoria contra Imperialdramon Fighter Mode
+   e, trocando por ele, a luta 2 e derrota (conferido com o motor; a Fabrica nao depende da hora nem do pet). O Salao: o Mega do teste da Liga
+   (o ativo) e os guardados de e2e/save_salao.json (e2e/gerar_save_salao.mjs: um Rookie, um Champion e um Ultimate), que vencem a primeira
+   luta de cada um la (os guardados nao andam no tempo; o Mega vence em qualquer hora das proximas 5 h) */
+const SALAO = JSON.parse(readFileSync(new URL("./save_salao.json", import.meta.url), "utf8")) as { guardados: { semente: number; log: unknown[]; versao: number }[] };
+/** o Tamer campeao e os pets guardados do Salao (a semeadura de sempre deixa os guardados vazios) */
+async function semearSalao(page: Page, tamer: object = TAMER_CAMPEAO): Promise<void> {
+  await semear(page, SAVE_LIGA, undefined, tamer);
+  await page.evaluate(([c, g]) => localStorage.setItem(c + "-guardados", g), [CHAVE, JSON.stringify(SALAO.guardados)] as const);
+}
+const lerGuardadosE2e = (page: Page) => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-guardados") ?? "[]"), CHAVE);
+
+test("fronteira: a Fábrica aluga 1 de 3 Megas, luta, oferece a troca depois da vitória e grava tudo só no Tamer", async ({ page }) => {
+  await semear(page, SAVE_LIGA, undefined, TAMER_CAMPEAO);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/fronteira");
+  const fab = page.locator(".fb-card");
+  await expect(fab).toContainText("Você não usa o seu pet");
+  await expect(fab).toContainText("Sem recorde ainda");
+  const l0 = await numLog(page, "l");
+  await fab.locator(".fr-inst-tentar:not([disabled])").click();
+  /* a escolha: os 3 alugados, com o Digimon, o arquetipo e o nivel */
+  const alug = fab.locator(".fb-aluguel");
+  await expect(alug).toHaveCount(3);
+  await expect(alug.nth(0)).toContainText("Sakuyamon");
+  await expect(alug.nth(0)).toContainText("Muralha");
+  await expect(alug.nth(0)).toContainText("Mega");
+  await expect(alug.nth(1)).toContainText("HerculesKabuterimon");
+  await expect(alug.nth(2)).toContainText("Imperialdramon Dragon Mode");
+  await alug.nth(0).click();
+  await expect(fab.locator(".fb-status")).toContainText("Tentativa 1 · série 1, luta 1 de 3 · 0 séries vencidas");
+  await expect(fab.locator(".fb-alugado")).toContainText("Sakuyamon");
+  await fab.locator(".fb-lutar").click();
+  await expect(fab.locator(".fb-ultima")).toContainText("Luta 1: venceu Imperialdramon Fighter Mode (Duelista)");
+  /* a oferta de troca depois da vitoria; trocando, o alugado passa a ser o rival derrotado, sem cura */
+  await expect(fab.locator(".fb-troca")).toContainText("a troca não cura");
+  await fab.locator(".fb-trocar").click();
+  await expect(fab.locator(".fb-troca")).toHaveCount(0);
+  await expect(fab.locator(".fb-alugado")).toContainText("Imperialdramon Fighter Mode");
+  await expect(fab.locator(".fb-status")).toContainText("série 1, luta 2 de 3");
+  await fab.locator(".fb-lutar").click();
+  /* perdeu, acabou: o resumo e "Tentar de novo" */
+  await expect(fab.locator(".fb-ultima")).toContainText("Última tentativa: 0 séries vencidas; perdeu para");
+  await expect(fab.locator(".fb-ultima")).toContainText("na série 1, luta 2");
+  await expect(fab.locator(".fr-inst-tentar")).toHaveText("Tentar de novo");
+  await expect(fab.locator(".fb-lutas li")).toHaveCount(2);
+  /* so no registro do Tamer (versao 5): o comeco, as duas lutas e a troca; nenhuma luta no registro do pet */
+  const t = await lerTamer(page);
+  expect(t.versao).toBe(5);
+  expect(t.log.filter((e: [string]) => e[0].startsWith("fabrica")).map((e: [string, { n: number; k?: number; alugado?: number }]) => [e[0], e[1].n, e[1].k ?? e[1].alugado]))
+    .toEqual([["fabrica", 1, 0], ["fabrica_luta", 1, 0], ["fabrica_troca", 1, 0], ["fabrica_luta", 1, 1]]);
+  expect(await numLog(page, "l")).toBe(l0);
+  /* a proxima tentativa oferece outros alugados (a semente da tentativa 2) */
+  await fab.locator(".fr-inst-tentar").click();
+  await expect(fab.locator(".fb-aluguel")).toHaveCount(3);
+  await expect(fab.locator(".fb-status")).toContainText("Tentativa 2");
+  await fab.locator(".fb-voltar").click();
+  await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
+  await expect(page.locator(".med-recordes li", { hasText: "Fábrica" })).toContainText("Nenhum ainda");
+  expect(erros).toEqual([]);
+});
+
+test("fronteira: o Salão, com um pet de cada nível (o ativo e os guardados), grava a luta no registro de cada um e o recorde no Tamer", async ({ page }) => {
+  await semearSalao(page);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/fronteira");
+  const sl = page.locator(".sl-card");
+  await expect(sl).toContainText("Um pet seu de cada nível");
+  const sels = sl.locator(".sl-sel");
+  await expect(sels).toHaveCount(4);
+  await expect(sl.locator(".sl-niveis li").nth(0)).toContainText("Rookie");
+  await expect(sels.nth(0).locator("option:checked")).toHaveText("Patamon (guardado)");
+  await expect(sels.nth(1).locator("option:checked")).toHaveText("Growlmon (guardado)");
+  await expect(sels.nth(2).locator("option:checked")).toHaveText("MegaSeadramon (guardado)");
+  await expect(sels.nth(3).locator("option:checked")).toHaveText("Valkyrimon (ativo)");
+  await expect(sl.locator(".med-espera")).toHaveCount(0);
+  const l0 = await numLog(page, "l"), g0 = (await lerGuardadosE2e(page)).map((g: { log: unknown[] }) => g.log.length);
+  await sl.locator(".fr-inst-tentar:not([disabled])").click();
+  await expect(sl.locator("p[role=status]", { hasText: "Venceu os 4 níveis!" })).toBeVisible();
+  await expect(sl.locator(".fr-inst-rec .dl-num")).toHaveText("4");
+  await expect(sl.locator(".sl-ultima li.vit")).toHaveCount(4);
+  /* a luta de cada pet no registro dele: o ativo (uma luta a mais) e os guardados (o "f" e a luta), que continuam guardados */
+  expect(await numLog(page, "l")).toBe(l0 + 1);
+  const reg = JSON.parse(await page.evaluate(() => (window as any).__digilab.registro()));
+  expect(reg.log.filter((e: unknown[]) => e[1] === "l").pop()[2]).toEqual({ r: "salao", s: expect.any(Number) });
+  const gs = await lerGuardadosE2e(page);
+  gs.forEach((g: { log: [number, string, { r?: string }][] }, i: number) => {
+    expect(g.log.length).toBe(g0[i] + 2);
+    expect(g.log[g.log.length - 1][2]).toEqual({ r: "salao", s: expect.any(Number) });
+  });
+  const t = await lerTamer(page);
+  const ev = t.log.filter((e: [string]) => e[0] === "salao");
+  expect(ev).toHaveLength(1);
+  expect(ev[0][1].lutas.map((l: { est: string; forma: string; venceu: boolean }) => [l.est, l.forma, l.venceu]))
+    .toEqual([["crianca", "Patamon", true], ["adolescente", "Growlmon", true], ["adulto", "MegaSeadramon", true], ["mega", "Valkyrimon", true]]);
+  await irPara(page, "Lutar", "Medalhas", "lutar/medalhas");
+  await expect(page.locator(".med-recordes li", { hasText: "Salão" })).toContainText("4 de 4 níveis seguidos, na tentativa 1.");
+  expect(erros).toEqual([]);
+});
+
+test("fronteira: sem pet de algum nível o Salão diz qual falta e não deixa tentar", async ({ page }) => {
+  await semear(page, SAVE_LIGA, undefined, TAMER_CAMPEAO);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/lutar/fronteira");
+  const sl = page.locator(".sl-card");
+  await expect(sl.locator(".sl-sel")).toHaveCount(1);
+  await expect(sl.locator(".sl-falta")).toHaveCount(3);
+  await expect(sl.locator(".med-espera")).toContainText("Falta pet dos níveis Rookie, Champion e Ultimate.");
+  await expect(sl.locator(".fr-inst-tentar")).toBeDisabled();
+  expect(erros).toEqual([]);
+});
+
+/* a Fabrica e o Salao na tela: a escolha dos alugados aberta e os pets de cada nivel, celular (360, 390) e desktop (1280), claro e escuro */
+for (const tema of ["light", "dark"] as const) for (const largura of [360, 390, 1280]) {
+  test(`fronteira: Fábrica e Salão em ${largura} px, tema ${tema === "light" ? "claro" : "escuro"}`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 800 });
+    await page.emulateMedia({ colorScheme: tema });
+    await semearSalao(page);
+    const erros = vigiarErros(page);
+    await page.goto(APP + "#/lutar/fronteira");
+    await page.locator(".fb-card .fr-inst-tentar:not([disabled])").click();
+    await expect(page.locator(".fb-aluguel")).toHaveCount(3);
+    await expect(page.locator(".sl-sel")).toHaveCount(4);
+    await page.waitForTimeout(600);
+    const r = await page.evaluate(desk => {
+      const visivel = (e: Element) => (e as HTMLElement).offsetParent !== null;
+      const pequenos = [...document.querySelector(desk ? ".fr-tela" : "body")!.querySelectorAll("button, select, input, summary, a")].filter(visivel).flatMap(e => {
+        const b = e.getBoundingClientRect();
+        return b.height < 44 || b.width < 44 ? [`${e.tagName}.${(e as HTMLElement).className} ${Math.round(b.width)}x${Math.round(b.height)}`] : [];
+      });
+      const fora = [...document.querySelectorAll(".fb-card *, .sl-card *")].filter(e => { const b = e.getBoundingClientRect(); return b.width > 0 && (b.right > innerWidth + 1 || b.left < -1); })
+        .map(e => (e as HTMLElement).className);
+      return { larg: document.documentElement.scrollWidth, janela: innerWidth, pequenos, fora };
+    }, largura >= 1100);
+    expect(r.larg, "rolagem lateral").toBeLessThanOrEqual(r.janela);
+    expect(r.pequenos, "alvos menores que 44 px").toEqual([]);
+    expect(r.fora, "elementos da Fábrica e do Salão fora da tela").toEqual([]);
+    await page.locator(".fb-card").screenshot({ path: `test-results/fronteira-fabrica-${largura}-${tema}.png` });
+    await page.locator(".sl-card").screenshot({ path: `test-results/fronteira-salao-${largura}-${tema}.png` });
+    await page.screenshot({ path: `test-results/fronteira-4c-${largura}-${tema}.png`, fullPage: true });
+    /* uma luta da Fabrica: o alugado com a vida e a oferta de troca */
+    await page.locator(".fb-aluguel").first().click();
+    await page.locator(".fb-lutar").click();
+    await expect(page.locator(".fb-troca")).toBeVisible();
+    const r2 = await page.evaluate(() => ({ larg: document.documentElement.scrollWidth, janela: innerWidth }));
+    expect(r2.larg).toBeLessThanOrEqual(r2.janela);
+    await page.locator(".fb-card").screenshot({ path: `test-results/fronteira-fabrica-troca-${largura}-${tema}.png` });
     expect(erros).toEqual([]);
   });
 }

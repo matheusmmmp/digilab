@@ -4,7 +4,7 @@
    - o Salao: a regra, o recorde e a escolha do pet de cada nivel (o ativo e os guardados; a tela diz qual nivel falta) e a ultima tentativa.
    Tudo sai do registro do Tamer (as tentativas) e dos pets; as lutas nao sao animadas aqui: o resultado aparece no proprio card. */
 import { useMemo, useState } from "preact/hooks";
-import { ALUGUEIS_FABRICA, ESTAGIOS_SALAO, FABRICA, LUTAS_SERIE_FABRICA, NOME_ARQ, NOME_ESP, NOME_EST, SALAO, alugueisFabrica, chaveSprite, formaRivalSalao,
+import { ALUGUEIS_FABRICA, DO_ESP, ESTAGIOS_SALAO, FABRICA, LUTAS_SERIE_FABRICA, NOME_ARQ, NOME_ESP, NOME_EST, SALAO, alugueisFabrica, chaveSprite, formaRivalSalao,
   nomeForma, sementeFabrica, type Estagio, type Forma, type TentativaFabrica } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { useJogo } from "../../jogo.ts";
@@ -78,7 +78,7 @@ export function CartaoFabrica({ t, lutando }: { t: Tamer; lutando: boolean }) {
         <ul class="fb-alugueis" aria-label="Os alugados desta tentativa">
           {alugueis.map((f, i) => (
             <li key={i}><button type="button" class="fb-aluguel" disabled={lutando} onClick={() => agir(() => { alugarFabrica(i); setEscolhendo(false); })}
-              aria-label={`Alugar ${nomeForma(f)}: ${arq(f)}, Mega, brasão da ${NOME_ESP[f.esp]}`}>
+              aria-label={`Alugar ${nomeForma(f)}: ${arq(f)}, Mega, brasão ${DO_ESP[f.esp]}`}>
               <Sprite f={f} cls="fb-spr" /><b>{nomeForma(f)}</b><span class="dl-tag fr-tag-arq">{arq(f)}</span><small>Mega · {NOME_ESP[f.esp]}</small>
             </button></li>
           ))}
