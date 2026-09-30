@@ -1,6 +1,6 @@
 {
   "versao": "almanaque-v1",
-  "descricao": "Almanaque do Digimundo (DESIGN_VOZ_PROPRIA, secao 10): o Digimundo e um reflexo da internet. Entradas curtas em texto proprio, revisadas a mao; sem memes ofensivos, politicos ou de odio. Nomes proprios podem entrar (decisao do Matheus, 2026-09-29): a entrada descreve o meme, nao afirma nada sobre a pessoa.",
+  "descricao": "Almanaque do Digimundo (DESIGN_VOZ_PROPRIA, secao 10): o Digimundo e um reflexo da internet. Entradas curtas em texto proprio, revisadas a mao; sem filtro de tema (decisao do Matheus, 2026-09-29). Nomes proprios podem entrar (decisao do Matheus, 2026-09-29): a entrada descreve o meme, nao afirma nada sobre a pessoa.",
   "entradas": [
     {"id": "i01", "tema": "internet", "epoca": "sempre", "nomes": [], "texto": "o erro 404 aparece quando a página que você procura não existe"},
     {"id": "i02", "tema": "internet", "epoca": "sempre", "nomes": [], "texto": "um GIF é uma imagem que se mexe em loop, sem som"},

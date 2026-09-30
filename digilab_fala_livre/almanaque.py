@@ -1,6 +1,6 @@
 """Almanaque do Digimundo (DESIGN_VOZ_PROPRIA, secao 10): o Digimundo e um reflexo da internet.
 
-`almanaque.json` e versionado e revisado a mao (texto proprio; sem memes ofensivos, politicos ou de odio). O sha256
+`almanaque.json` e versionado e revisado a mao (texto proprio; sem filtro de tema, decisao do Matheus em 2026-09-29). O sha256
 dele vai para o registro de cada fala. Uma entrada vira o fato [W1] ("coisa que ouvi no Digimundo"), que sustenta
 afirmacoes sobre a internet e o mundo, NUNCA sobre a vida do pet ou do dono (verificador).
 
