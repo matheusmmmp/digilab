@@ -1,6 +1,6 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Partes 3 e 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
+Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Parte 3 (itens) especificada na seção 13 (branch `medalhas-parte3`); parte 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
 
 **Decisões do Matheus (2026-09-29):**
 1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
@@ -261,3 +261,98 @@ abre o próximo, um Champion sem treino ainda pode abrir a Floresta pelo Tortomo
 
 **Ficou de fora (partes 3 e 4 e o resto da seção 4):** itens, a Fronteira, e o que mais as medalhas liberariam (regras editáveis, espaços
 de item).
+
+## 13. Parte 3: itens (chips e cartas) — especificação (2026-09-30)
+
+Só `web/app/` e só pets v6. A pesquisa em Python não tem Tamer nem itens (`docs/REGISTRO_DESVIOS.md`). Todo número desta seção é
+**PROPOSTO**; os gates (13.7) foram escritos antes de medir, e a medição só pode mudar um item nas sementes de calibração, dizendo o porquê
+(13.8, depois da medição). Princípio (seção 6 e `docs/DIAGNOSTICO_ARQUETIPOS.md`): os stats da forma pesam pouco, a técnica e a lista de
+regras decidem. Por isso o item **complementa, não substitui a criatura**: o catálogo tem mais chips que mudam comportamento (regra) do
+que chips de número, e os números ficam presos aos tetos do treino.
+
+### 13.1 Os três tipos e os tetos
+
+- **Chip de stat.** +2 pontos de treino (1 em cada um de dois stats). Três tetos, nesta ordem:
+  1. a soma dos chips de stat equipados vale no máximo **25% do treino típico do estágio atual** (Rookie 8 → 2; Champion 22 → 5,5;
+     Ultimate 36 → 9; Mega 40 → 10; o típico é o da parte 2);
+  2. **dentro dos tetos do treino:** o ponto de chip só ocupa o espaço que falta no estágio (teto do estágio − pontos treinados nele),
+     na vida (teto da vida − total treinado) e no stat (10 − pontos do stat). O chip **adianta** treino: num pet que já treinou o
+     estágio até o teto ele não soma nada;
+  3. vale como ponto de treino na luta (no perfil e, na campanha e nas arenas, na escala E = vida × (1 + β × pontos) dos pets v6). Não
+     entra no treino do registro, na fadiga nem na sobrecarga, e sai quando o chip sai.
+- **Chip de regra.** Uma regra de um **catálogo fechado** entra na lista de gambits do pet:
+  - ocupa uma vaga da lista (capacidade 3/5/8); com a lista cheia, sai a regra livre de nota mais baixa;
+  - entra no topo (nota igual à maior da lista, na frente dela); depois o aprendizado muda a nota dela como a das outras, mas o pet **não a
+    troca** enquanto o chip estiver equipado;
+  - o dono pode **travar** a posição dela; **vetar** não (para tirar, desequipe o chip);
+  - só com as condições do estágio (a regra que usa "o oponente insiste em…" pede um Ultimate);
+  - nunca a regra que define outro arquétipo: nenhuma técnica (cada linha só usa a sua), nenhuma leitura da intenção (a passiva do vigia)
+    e nenhuma das duas regras do vigia V21D;
+  - ao desequipar, sai da lista, e a vaga volta para a melhor candidata (como no veto).
+- **Carta.** Efeito de uma luta só. **Uma carta por luta**, escolhida antes; é **consumida** (sai do inventário do Tamer). Na Cidadela a série
+  de três lutas é uma luta (um evento do registro): a carta vale para a série inteira, uma vez.
+
+### 13.2 Catálogo (9 itens)
+
+| id | item | tipo | efeito | pede | de onde vem | fraqueza medida que ataca |
+|---|---|---|---|---|---|---|
+| `chip_forca` | Chip de Força | chip de stat | +1 força, +1 vigor | Rookie | medalha da Campina (Gazimon) | o básico: adianta o treino de quem começa |
+| `chip_guarda` | Chip de Guarda | chip de stat | +1 guarda, +1 recuperação | Rookie | medalha da Cidadela (Myotismon) | resistência |
+| `chip_recuo` | Chip Recuo | chip de regra | "oponente preparando pesado → recuar" | Champion | medalha da Torre de pedra (Guardromon) | o pesado anunciado (diagnóstico, seção 2): quem responde a ele gastando guts (esquiva) ou com a pele |
+| `chip_oportunista` | Chip Oportunista | chip de regra | "perto e guts do oponente < 20 → preparar pesado" | Champion | medalha da Floresta (Youkomon) | as linhas lentas (guardião e colosso), as piores formas contra os líderes do nível delas na parte 2 |
+| `chip_perseguidor` | Chip Perseguidor | chip de regra | "oponente insiste em disparo → avançar" | Ultimate | medalha do Lago (MarinBullmon) | colossos e guardiãs contra os caçadores (titã 0,015; sentinela × muralha 1,00; espelho × emboscador 0,006) |
+| `chip_aparo` | Chip Aparo | chip de regra | "oponente insiste em golpe rápido → defender" (o aparo devolve dano) | Ultimate | medalha da Montanha Espiral (Piedmon) | caçadores, titã e vigia contra o furioso e os líderes agressivos (o aparo é o único freio medido do furioso) |
+| `carta_folego` | Carta de Fôlego | carta | +20 de guts no começo da luta (até o máximo) | — | revanche na Campina e na Floresta | — |
+| `carta_cura` | Carta de Cura | carta | na primeira vez que a vida cai abaixo de 30%, cura 20% da vida máxima | — | revanche na Cidadela e na Montanha Espiral | — |
+| `carta_foco` | Carta de Foco | carta | o pet não se distrai: segue as próprias regras em todos os turnos (ε = 0) | — | revanche na Torre de pedra e no Lago | — |
+
+### 13.3 De onde vêm (sem economia)
+
+- **Medalha → item:** a primeira vitória contra um líder dá a medalha **e** o item daquela arena (tabela acima). Um Tamer que já tinha a
+  medalha antes desta parte recebe o item na abertura (a regra é "tem a medalha e não tem o item dela").
+- **Revanche → carta:** vitória contra um líder cuja medalha o Tamer já tinha antes da luta, com um pet **do nível da arena** (um Mega que
+  volta à Campina não ganha carta), dá a carta daquela arena. **Espera:** cada pet ganha no máximo 1 carta por líder a cada **24 h do
+  relógio dele** (1440 min de jogo). Na Cidadela, vitória = a série de três.
+- Nada mais dá item. Sem dinheiro e sem loja (seção 6).
+
+### 13.4 Espaços (seção 4)
+
+- **Chips por pet:** pelas medalhas que o pet conhece (evento `u`): **0** sem medalha, **1** com 1–2, **2** com 3–4, **3** com 5–6.
+- **Cartas:** 1 por luta.
+- O chip não se gasta: o Tamer tem o chip, e qualquer pet dele pode ter uma cópia equipada (só o ativo luta).
+
+### 13.5 Onde os itens valem
+
+Nas lutas do pet v6 que entram no registro: campanha (desafiantes e líderes), arenas e arena contra bots. Os chips estão no pet (lista e
+treino), então valem também contra o pet de cenário; a carta só em luta que entra no registro (a Melhor de 10 não usa carta). Não valem:
+pets v1–v5, os Cenários (donos simulados), a pesquisa. Proibição na Fronteira (seção 6): parte 4.
+
+### 13.6 Registro e replay
+
+- **Tamer** (`src/tamer.ts`, registro versão 2; a versão 1, só com medalhas, continua abrindo): eventos novos `["item", {id, n, quando,
+  origem: "medalha" | "revanche", lider, pet, forma, est, tick}]` e `["carta_usada", {id, quando, pet, tick}]`. O replay confere o item da
+  medalha, a medalha antes da carta de revanche, o nível e a espera, e que a carta usada estava no inventário. Evento desconhecido falha alto.
+- **Pet** (eventos novos, só v6): `["i", {op: "equipar" | "desequipar", id}]` e `["k", {id}]` (a carta vale para a luta seguinte: o
+  próximo evento do registro tem de ser a luta `l`, senão o replay falha). O motor confere vagas (pelas medalhas que o pet conhece),
+  tipo, estágio e vida; **não lê o Tamer**: o app confere o inventário antes de gravar.
+- **Assinatura:** a dos v6 só muda quando há item no registro. Sem item, pets v1–v6, gabaritos de paridade, a paridade V21D (272 partidas)
+  e as calibrações da parte 2 ficam iguais (testes e conferência no script de medição).
+- **Descarte:** não sobe; nenhum registro que existe muda no replay.
+
+### 13.7 Gates PROPOSTOS (escritos antes de medir)
+
+Método: motor web, escala dos pets v6 ligada, regras V21D, regra do limite do desafiado, os pets de referência da parte 2 (as formas do
+estágio × 4 espécies, bots canônicos) e as sementes de calibração 3101…3505 para ajustar; **uma** validação nas 4101…4505 depois de
+fechar os itens. "Melhor combinação" = o máximo, **por forma**, entre todas as combinações de até **3 chips** permitidos no estágio (a
+geração de um Tamer com as 6 medalhas) com nenhuma carta ou uma das 3 cartas. Os chips de regra entram como no pet recém-equipado: no
+topo, na ordem em que são equipados, saindo a última regra da lista se ela estiver cheia.
+
+| gate | critério |
+|---|---|
+| **G-I1** o item não substitui o treino | com a melhor combinação, o pet **sem treino** contra cada um dos 6 líderes vence ≤ **0,05** (média das formas e espécies, como na parte 2; relata a pior forma) |
+| **G-I2** o estágio continua pesando | o de baixo com o treino típico **e a melhor combinação** (por forma de baixo, a que dá mais pontos contra as formas de cima) contra o de cima sem treino e sem item: vizinhos ≤ **0,10** (pontos), dois estágios = **0,00** (vitórias) |
+| **G-I3** o item não desequilibra as formas | na matriz das 8 formas adultas (bots canônicos, V21D, mesma espécie dos dois lados, ε 0,05, 100 partidas por par por semente e espécie, lados trocados na metade, sem escala), a forma medida com a melhor combinação e as outras sem item: força contra as outras 7 ≤ **0,60**, exceto o furioso (exceção declarada) |
+| **G-I4** o item ajuda quem precisa (relato) | para cada chip de regra: o ganho de força das formas-alvo contra as outras 7 (só aquele chip) e o ganho contra os líderes do nível (com o treino típico) |
+
+Se um item quebrar G-I1–G-I3 nas sementes de calibração, ele é enfraquecido ou restrito ali, e o motivo fica na seção 13.8. Artefatos em
+`artifacts_campanha/itens/`.
