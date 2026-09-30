@@ -347,6 +347,30 @@ byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decom
 - A rodada balanceada caiu ao gravar o meta (outra sessão trocou o branch da pasta `v1` no meio da run); a análise
   foi refeita dos arquivos gravados (`--reanalisar`, conferido: a reanálise da espécie fixa sai idêntica).
 
+## Painel do E1 com a V21D: força do canal de forma (2026-09-30, `docs/PLANO_ANALISE_V21D.md`) — COMPRESSÃO NÃO VERIFICADA
+
+Pergunta adotada: que propriedade do mapa até o desempenho dá efeito mensurável ao dono? O desenho é pareado: as mesmas
+640 vidas e sementes do E1 (vida em V21C: o sparring usa a `REGRAS_CAMPANHA`), e só o painel B luta com as quatro chaves
+da V21D. Rodam `experiments/configs/linhagem/natureza_criacao_v21d.json` e `experiments/analisar_v21d.py`. Números de
+`artifacts_linhagem/natureza_criacao_v21d/especie_fixa/analise_plano.json`; relatório em `docs/RESULTADO_V21D_PAINEL.md`.
+
+- **Gate: COMPRESSÃO NÃO VERIFICADA**, no subconjunto primário (atencioso + permissivo, sem mortes):
+  - r²_forma 0,929 → 0,939, Δ +0,010 [−0,042; +0,040];
+  - pelo plano o experimento não testa a hipótese, e nada se conclui sobre o dono (o passo 2, Δfrac_D, não se aplica).
+- **Por quê:** a V21D encolhe a amplitude entre as formas adultas (0,521 → 0,387), mas **troca a ordem** das duas mais
+  comuns:
+  - espelho (158 pets) 0,406 → 0,301;
+  - muralha (128 pets) 0,279 → 0,351.
+  Pesada pela distribuição de formas que a vida produz, a variância entre formas não cai. A compressão da validação é
+  dos bots com pesos iguais.
+- **QD:** o κ de Fleiss da forma entre ambientes fica perto de 0 em três donos (permissivo 0,27): o ambiente decide a
+  forma mais que o dono ou o genoma.
+- **Código:**
+  - `regras_de` monta a `ConfigCombateV21D` só com uma chave dela na config;
+  - `lutador_painel` usa `gambits_adulto`;
+  - o `metrics.py` ganhou `r2_por_categoria`, `kappa_fleiss`, `qualidade_diversidade` e `icc_um_fator`;
+  - conferido: vidas byte a byte iguais, piloto V21C igual e `analisar_dono_ambiente` igual.
+
 ## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
 
 Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.
