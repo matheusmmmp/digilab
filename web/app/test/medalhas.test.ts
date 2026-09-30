@@ -102,6 +102,24 @@ describe("a trava (pets v6)", () => {
     expect(m.estagioAtual).toBe("adulto");
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(m.e.tick);
   });
+  test("o Champion dura o tempo inteiro mesmo quando o Rookie esperou a medalha (tempo desde a evolucao anterior)", () => {
+    const m = new Motor(80, 6), v5 = new Motor(80, 5);
+    m.avancar(FIM_ROOKIE + 600); v5.avancar(FIM_ROOKIE + 600);
+    expect(m.estagioAtual).toBe("crianca");
+    m.liberar(1);
+    const t1 = m.e.tick;
+    expect(m.estagioAtual).toBe("adolescente");
+    expect(m.tickLimiteEstagio()).toBe(t1 + m.dur.adolescente);
+    expect(v5.tickLimiteEstagio()).toBe(TICK_INICIAL + DUR_EVO.bebe + DUR_EVO.crianca + DUR_EVO.adolescente);   /* v5: desde o nascimento */
+    m.sparring = CAT.sparring;
+    m.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 };
+    m.liberar(3);
+    m.avancar(m.dur.adolescente - 15);
+    expect(m.estagioAtual).toBe("adolescente");
+    expect(m.requisitosEvolucao()!.falta).toBe(15);
+    m.avancar(15);
+    expect(m.estagioAtual).toBe("adulto");
+  });
   test("Ultimate -> Mega: pede 5 medalhas; requisitosMega mostra tem e precisa", () => {
     const m = new Motor(80, 6);
     m.liberar(3);

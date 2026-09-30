@@ -529,13 +529,25 @@ export class Motor {
   }
   chamadosAbertos(): Chamado[] { return this.estagioAtual === "bebe" ? Object.keys(this.chamados.abertos) as Chamado[] : []; }
   fracaoCuidado(): number { return this.chamados.total ? this.chamados.atendidos / this.chamados.total : 1; }
+  /** tick em que a condicao de tempo do estagio atual se cumpre (In-Training, Rookie e Champion; null nos outros).
+      v1-v5: desde o nascimento (bebe, bebe + crianca, bebe + crianca + adolescente). v6: desde a evolucao anterior, para
+      um pet que esperou a medalha nao ganhar um estagio seguinte curto (DESIGN_MEDALHAS_ARENAS, parte 1). */
+  tickLimiteEstagio(): number | null {
+    const est = this.estagioAtual, D = this.dur;
+    if (est === "bebe") return TICK_INICIAL + D.bebe;
+    if (est !== "crianca" && est !== "adolescente") return null;
+    if (this.versao < 6) return TICK_INICIAL + D.bebe + D.crianca + (est === "adolescente" ? D.adolescente : 0);
+    const ev = [...this.evolucoes].reverse().find(x => x.estagio === est);
+    if (!ev) throw new Error(`pet v6 no estagio ${est} sem a evolucao que o trouxe ate ele`);
+    return ev.tick + (est === "crianca" ? D.crianca : D.adolescente);
+  }
   private _evoluir(): void {
-    const t = this.e.tick - TICK_INICIAL, est = this.estagioAtual, D = this.dur;
+    const t = this.e.tick - TICK_INICIAL, est = this.estagioAtual, D = this.dur, lim = this.tickLimiteEstagio();
     let nova: Omit<Evolucao, "tick" | "forma"> | null = null;
     if (est === "bebe" && t >= D.bebe) {
       const cuidado = this.fracaoCuidado();
       nova = { estagio: "crianca", ramo: cuidado >= CAT.limiarCuidado ? "sereno" : "arisco", cuidado };
-    } else if (est === "crianca" && t >= D.bebe + D.crianca) {
+    } else if (est === "crianca" && this.e.tick >= lim!) {
       /* v6: pronto para evoluir, mas o Tamer ainda nao tem as medalhas: espera (nada muda ate o evento "u") */
       if (!this.medalhasBastam("adolescente")) return;
       const carater = this.caraterAgora("adolescente");
@@ -545,7 +557,7 @@ export class Motor {
     } else if (est === "adulto" && this.versao >= 5) {
       if (this.podeMega()) this._virarMega();
       return;
-    } else if (est === "adolescente" && t >= D.bebe + D.crianca + D.adolescente && this.sparring >= CAT.sparring
+    } else if (est === "adolescente" && this.e.tick >= lim! && this.sparring >= CAT.sparring
                && (this.versao < 4 || this.lutas.vitorias / this.lutas.lutas >= CLE.limiarTaxa) && this.medalhasBastam("adulto")) {
       const carater = this.caraterAgora("adulto");
       /* sobrecarga >= 60: a forma adulta vira a sombria da linha (permanente: vinculo com teto, instavel na luta) */
@@ -594,13 +606,13 @@ export class Motor {
   /** a proxima evolucao e o que falta para ela (o equivalente do requisitosMega para as outras): tempo, lutas e vitoria do
       estagio (Champion), vinculo (Mega) e as medalhas do Tamer (v6). null: nao ha proxima (In-Training, Mega, sombria) */
   requisitosEvolucao(): RequisitosEvolucao | null {
-    const t = this.e.tick - TICK_INICIAL, D = this.dur, est = this.estagioAtual;
+    const est = this.estagioAtual, lim = this.tickLimiteEstagio();
     if (est === "crianca") {
-      const falta = Math.max(0, D.bebe + D.crianca - t), medalhas = this.requisitoMedalhas("adolescente");
+      const falta = Math.max(0, lim! - this.e.tick), medalhas = this.requisitoMedalhas("adolescente");
       return { alvo: "adolescente", falta, tempo: falta === 0, medalhas, pronto: falta === 0 && (!medalhas || medalhas.ok) };
     }
     if (est === "adolescente") {
-      const falta = Math.max(0, D.bebe + D.crianca + D.adolescente - t), medalhas = this.requisitoMedalhas("adulto");
+      const falta = Math.max(0, lim! - this.e.tick), medalhas = this.requisitoMedalhas("adulto");
       const lutas = this.sparring >= CAT.sparring, taxa = this.versao < 4 || (this.lutas.lutas > 0 && this.lutas.vitorias / this.lutas.lutas >= CLE.limiarTaxa);
       return { alvo: "adulto", falta, tempo: falta === 0, lutas, taxa, medalhas, pronto: falta === 0 && lutas && taxa && (!medalhas || medalhas.ok) };
     }

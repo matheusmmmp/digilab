@@ -36,11 +36,11 @@ export function previsaoEvo(m: Motor): { falta: number; prox: Forma; porque: str
   }
   if (f.est === "crianca") {
     const car = caraterPrevisto(m, "adolescente"), linha = linhaDoCarater(car);
-    return { falta: D.bebe + D.crianca - t, prox: { ...f, est: "adolescente", linha }, porque: `caráter ${fmtCar(car)}` };
+    return { falta: m.tickLimiteEstagio()! - m.e.tick, prox: { ...f, est: "adolescente", linha }, porque: `caráter ${fmtCar(car)}` };
   }
   if (f.est === "adolescente") {
     const car = caraterPrevisto(m, "adulto"), adulta = formaAdultaDe(f.linha!, car), comp = CAT.adulto[f.linha!].comp;
-    return { falta: D.bebe + D.crianca + D.adolescente - t, prox: { ...f, est: "adulto", adulta },
+    return { falta: m.tickLimiteEstagio()! - m.e.tick, prox: { ...f, est: "adulto", adulta },
       porque: `${comp} ${rotuloRel(car[comp])}; lutas de treino ${m.sparring} de ${CAT.sparring}` };
   }
   /* pets v5: Ultimate -> Mega (a sombria nunca) */

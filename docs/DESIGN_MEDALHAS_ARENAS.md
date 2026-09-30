@@ -125,7 +125,7 @@ Liberada com as 6 medalhas. O objetivo: **vencer todos os líderes na versão ma
   `requisitosEvolucao`; `requisitosMega` expõe `medalhas: {tem, precisa, ok}`). O caráter e o resto da evolução são medidos na hora
   em que ela acontece. A assinatura dos v6 inclui as medalhas; a dos v1–v5 não mudou.
 - **A tabela das medalhas** (`motor/medalhas.ts`, única): Campina/Gazimon, Torre de pedra/Guardromon, **provisória**
-  Devidramon (Torre de pedra, no lugar da Floresta), Cidadela/Myotismon, **provisória** Machinedramon (Montanha Espiral, no lugar do
+  Devidramon (Torre de pedra, no lugar da Floresta), Cidadela/Myotismon, **provisória** Tortomon (Torre de pedra, no lugar do
   Lago), Montanha Espiral/Piedmon. A parte 2 troca só esta tabela (os ids já são os das arenas: `floresta`, `lago`).
 - **O Tamer** (`src/tamer.ts`): registro próprio na chave `digilab-web-v21-sprites-tamer` (`{versao: 1, log}`, eventos
   `["medalha", {id, n, quando, pet, forma, tick}]`), reproduzido como o pet; evento desconhecido falha alto. Medalha na primeira
@@ -141,6 +141,8 @@ Liberada com as 6 medalhas. O objetivo: **vencer todos os líderes na versão ma
 - as outras coisas que as medalhas liberam (seção 4): regras de luta editáveis, lugares do mapa, espaços de item, a Fronteira;
 - itens (seção 6) e a Fronteira (seção 7).
 
-**Onde o código não batia com o desenho:** a 5ª medalha provisória vem de um NPC calibrado para Mega; um Ultimate treinado vence o
-Machinedramon 0,28 em média, e 5 das 8 formas quase nunca (`docs/REGISTRO_DESVIOS.md`, 2026-09-29). Até a parte 2, o Mega depende
-de o Tamer ter um caçador. A 3ª medalha e as outras ficam no nível pensado (a Torre é de Champion).
+**Onde o código não batia com o desenho, e o que foi corrigido:**
+- A 5ª medalha provisória vinha do Machinedramon, calibrado para Mega: um Ultimate treinado o vencia 0,28 em média, e 5 das 8
+  formas quase nunca (`docs/REGISTRO_DESVIOS.md`). Trocada pelo **Tortomon** (Torre de pedra), que o pet treinado vence.
+- O tempo de cada estágio contava desde o nascimento: um Rookie que esperou a medalha virava um Champion curto. Nos v6 ele
+  conta desde a evolução anterior.

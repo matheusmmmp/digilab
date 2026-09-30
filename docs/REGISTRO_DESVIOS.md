@@ -757,4 +757,9 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   treino típico (36) vence o Machinedramon **0,28** em média, e só as formas caçadoras passam de 0,5 (sentinela e emboscador ≈ 1,0;
   muralha, titã, vigia, duelista e espelho ≈ 0–0,08). Com a fonte provisória, a 5ª medalha, e com ela o Mega, depende de o Tamer ter
   (ou criar) um caçador. O Lago da parte 2, calibrado para Ultimate, resolve.
+  **Corrigido no mesmo dia** (recomendação aceita pelo Matheus): a 5ª provisória passou a vir do **Tortomon** (Torre de pedra),
+  que o pet treinado vence (a campanha é calibrada para isso). O número acima fica como o motivo da troca.
+- **Tempo dos estágios nos pets v6:** Rookie → Champion e Champion → Ultimate contam o tempo desde a evolução anterior
+  (`Motor.tickLimiteEstagio`), não desde o nascimento. Com a trava, um Rookie que esperou a medalha ganharia um Champion curto.
+  Os v1–v5 não mudam (teste).
 - **Cenários:** os pets simulados (Diário · Cenários) ficam v5 (`VERSAO_CENARIO`), sem Tamer: evoluem como antes e não ganham medalha.

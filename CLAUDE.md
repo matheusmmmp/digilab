@@ -363,8 +363,10 @@ Só no jogo web; a pesquisa em Python não tem Tamer (`docs/REGISTRO_DESVIOS.md`
   dos requisitos de sempre. O motor nunca lê o Tamer: o app grava no registro do pet o evento `u` ("o Tamer tem N medalhas",
   `Motor.liberar`), e o pet pronto evolui nesse tick. Pet guardado recebe o `u` ao voltar a ser o ativo. Assinatura dos v1–v5 igual.
 - **Medalhas** (`motor/medalhas.ts`, tabela única): Gazimon, Guardromon, Devidramon (**provisória**, até a Floresta), Myotismon,
-  Machinedramon (**provisória**, até o Lago), Piedmon. A 5ª provisória vem de um NPC de Mega: um Ultimate treinado vence 0,28 em
-  média e só os caçadores passam (medido, sem artefato em disco; ver o REGISTRO_DESVIOS).
+  Tortomon (**provisória**, até o Lago), Piedmon. A 5ª provisória vinha do Machinedramon (NPC de Mega: um Ultimate treinado vencia
+  0,28 e só os caçadores passavam) e foi trocada pelo Tortomon, da Torre de pedra (ver o REGISTRO_DESVIOS).
+- **Tempo dos estágios nos v6:** conta desde a evolução anterior (`Motor.tickLimiteEstagio`), para um Rookie que esperou a
+  medalha não ganhar um Champion curto; nos v1–v5 continua desde o nascimento.
 - **Saves:** na primeira abertura os pets v1–v5 (ativo e guardados) são apagados com aviso e o jogo começa num ovo novo (decisão do
   Matheus). Os Cenários seguem com pets v5 (sem Tamer). Telas: Lutar · Medalhas, requisito na Evolução, líder na Campanha.
 

@@ -2,7 +2,8 @@
    TABELA UNICA de onde cada medalha vem: a parte 2 (arenas com lideres) troca so esta tabela. Decisao do Matheus: 6
    arenas. Nesta parte so existem os 4 lugares da campanha v5, entao duas medalhas tem FONTE PROVISORIA (marcada em
    `provisoria`): a 3 (a arena da Floresta ainda nao existe: vencer o Devidramon na Torre de pedra) e a 5 (o Lago ainda
-   nao existe: vencer o Machinedramon na Montanha Espiral). Uma medalha e ganha uma vez so por Tamer, na primeira
+   nao existe: vencer o Tortomon na Torre de pedra; o Machinedramon da Espiral e calibrado para Mega e so os cacadores
+   Ultimate o venciam, entao ele nao pode ser a medalha que libera o Mega). Uma medalha e ganha uma vez so por Tamer, na primeira
    vitoria contra o lider, com qualquer pet v6 (os v1-v5 nao tem Tamer). */
 import { CMD } from "./constantes.ts";
 import type { Estagio } from "./tipos.ts";
@@ -24,7 +25,7 @@ export const MEDALHAS: readonly Medalha[] = [
   { id: "torre", nome: "Medalha da Torre de pedra", lider: "npc_tier2_carcereiro", lugar: 1 },
   { id: "floresta", nome: "Medalha do Devidramon", lider: "npc_tier2_porteiro", lugar: 1, provisoria: "até a arena da Floresta existir" },
   { id: "cidadela", nome: "Medalha da Cidadela", lider: "npc_v5_myotismon", lugar: 2 },
-  { id: "lago", nome: "Medalha do Machinedramon", lider: "npc_v5_machinedramon", lugar: 3, provisoria: "até a arena do Lago existir" },
+  { id: "lago", nome: "Medalha do Tortomon", lider: "npc_tier2_sentinela", lugar: 1, provisoria: "até a arena do Lago existir" },
   { id: "espiral", nome: "Medalha da Montanha Espiral", lider: "npc_v5_piedmon", lugar: 3 },
 ];
 export const MEDALHA_POR_ID: Readonly<Record<string, Medalha>> = Object.fromEntries(MEDALHAS.map(x => [x.id, x]));
