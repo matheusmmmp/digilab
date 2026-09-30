@@ -4,7 +4,7 @@
 import { useEffect, useState } from "preact/hooks";
 import {
   BOTS_V21, BOT_TRACO, CAT, NOME_BOT, NPC, chaveSprite, corDominante, estadoV2, formaRival, hashSemente, jogarV2,
-  lutadorBot, lutadorPet, motivoCombate, nomeForma, type Estagio, type EstadoLuta, type FormaAdultaNormal, type Lutador,
+  lutadorBot, lutadorPet, motivoCombate, nomeForma, type Arena, type Estagio, type EstadoLuta, type FormaAdultaNormal, type Lutador,
   Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate, type Turno,
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
@@ -22,8 +22,9 @@ export interface LutadorTela extends Lutador { sprite: string; grade: string; co
 export function exibirPet(m: Motor, L: Lutador): LutadorTela {
   return { ...L, sprite: chaveSprite(m.forma), grade: gradeDe(m.estagioAtual), cor: corDominante(m.tracos), estagioFala: m.estagioAtual, nomeTela: nomeForma(m.forma), estiloTela: null };
 }
-/** L: o lutador do bot sob as regras da luta; sem ele, o das regras do pet ativo (V21D nos pets v6) */
-export function exibirBot(nome: string, L: Lutador = lutadorBot(nome, jogoAtual().motor.regras)): LutadorTela {
+/** L: o lutador do bot sob as regras da luta; sem ele, o das regras do pet ativo (V21D nos pets v6; o lider com a regra da
+    arena) */
+export function exibirBot(nome: string, L: Lutador = lutadorBot(nome, jogoAtual().motor.regras, jogoAtual().motor.arenaDe(nome))): LutadorTela {
   const n = NPC[nome];
   if (n) return { ...L, sprite: n.sprite ?? n.k, grade: n.grade || "adulto", cor: n.cor, estagioFala: n.estagio || "adulto", nomeTela: n.nome, estiloTela: null };
   if (BOTS_V21[nome as FormaAdultaNormal]) {
@@ -43,6 +44,10 @@ export interface Palco {
   resultado: ResultadoPalco | null; log: LinhaLog[];
   /** replay animado de uma luta do registro chegou ao fim */
   fimReplay?: boolean;
+  /** lutas seguidas da arena (Cidadela): a luta que esta no palco (1 = a primeira) e quantas sao; null numa luta so */
+  serie?: { k: number; n: number } | null;
+  /** a arena da luta (pets v6 contra o lider; motor/arenas.ts); null fora dela */
+  arena?: Arena | null;
 }
 /** rival fixo: o pet B de um cenario (Diario > Cenarios); luta sem ensinar, porque nao e reconstruivel do registro */
 /** o que o modal Resultado precisa, tudo do motor: a luta, o estado antes dela e a posicao dela no registro */
@@ -58,6 +63,8 @@ export interface ResultadoPalco {
   idxLog: number | null;
   /** pets v6: a medalha que o Tamer ganhou com esta luta (primeira vitoria contra o lider); null se nenhuma */
   medalha: MedalhaGanha | null;
+  /** as lutas jogadas (a ultima e `res`), quantas a serie tem (1, ou 3 na Cidadela) e a arena (null fora dela) */
+  serie: ResultadoLuta[]; nLutas: number; arena: Arena | null;
 }
 export interface RivalFixo { rival: Motor; dias: number; tipo: string }
 export const LUTA = { lutando: false, rival: "agressivo", campSel: null as string | null, palco: null as Palco | null, rivalFixo: null as RivalFixo | null,
@@ -86,9 +93,9 @@ export const tentativas = (m: Motor, k: string): number => m.log.reduce((n, e) =
 export function previa(modo: Modo, manterTexto = false): void {
   if (LUTA.lutando) return;
   const textoAntes = manterTexto && LUTA.palco?.modo === modo ? LUTA.palco.texto : null;
-  const m = jogoAtual().motor, npc = modo === "campanha" ? campAtual(m) : null;
-  const A = exibirPet(m, lutadorPet(m, "Seu pet", modo === "campanha")), B = !npc && LUTA.rivalFixo ? exibirFixo(LUTA.rivalFixo) : exibirBot(npc ?? LUTA.rival), E = estadoV2(A.cond, B.cond);
-  LUTA.palco = { modo, A, B, E, tr: null, turno: null, callout: "", intencao: null, regra: null, resultado: null, log: [],
+  const m = jogoAtual().motor, npc = modo === "campanha" ? campAtual(m) : null, L = npc ? m.lutadores(npc) : null;
+  const A = exibirPet(m, L ? L.A : lutadorPet(m, "Seu pet")), B = !npc && LUTA.rivalFixo ? exibirFixo(LUTA.rivalFixo) : exibirBot(npc ?? LUTA.rival, L?.B), E = estadoV2(A.cond, B.cond);
+  LUTA.palco = { modo, A, B, E, tr: null, turno: null, callout: "", intencao: null, regra: null, resultado: null, log: [], arena: L?.arena ?? null,
     texto: textoAntes ?? (modo === "arena" ? "Escolha um rival e aperte Lutar." : `Seu pet × ${B.nomeTela}: escolha um lugar no mapa e aperte Desafiar.`) };
   avisarLuta();
 }
@@ -113,15 +120,16 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
   if (LUTA.lutando) return;
   const modo: Modo = npc ? "campanha" : "arena", jogo = jogoAtual();
   let m = jogo.motor;
-  const lugarJaVencido = npc ? m.lugarVencido(NPC[npc]!.lug) : true, notasAntes = m.gp ? { ...m.gp.notas } : null;
+  const Li = npc ? m.lugarDe(npc) : -1, lugarJaVencido = npc ? m.lugarVencido(Li) : true, notasAntes = m.gp ? { ...m.gp.notas } : null;
   const ativasAntes = m.gp ? [...m.gp.ativas] : null, sparringAntes = m.sparring, adolescente = m.estagioAtual === "adolescente";
   let idxLog: number | null = null, ativasDepois: string[] | null = null;
-  let r: { res: ResultadoLuta; A: Lutador; B: Lutador };
+  let r: { res: ResultadoLuta; A: Lutador; B: Lutador; serie: ResultadoLuta[]; arena: Arena | null };
   const cenario = !npc && !!LUTA.rivalFixo, medalhasAntes = tamerAtual().n;
   try {
     if (cenario) {   /* pet de cenario nao e reconstruivel do registro: luta sem ensinar */
       const A0 = lutadorPet(m, "Seu pet"), B0 = lutadorPet(LUTA.rivalFixo!.rival, "Rival do cenário");
-      r = { res: jogarV2(A0, B0, hashSemente("cenario", m.semente, m.log.length), m.regras), A: A0, B: B0 };
+      const res0 = jogarV2(A0, B0, hashSemente("cenario", m.semente, m.log.length), m.regras);
+      r = { res: res0, A: A0, B: B0, serie: [res0], arena: null };
     } else {
       const rival = npc || LUTA.rival;
       mudarMotor(mm => { r = mm.lutar(rival, hashSemente("luta", mm.semente, mm.log.length)); idxLog = mm.log.length - 1; ativasDepois = mm.gp ? [...mm.gp.ativas] : null; });
@@ -133,29 +141,45 @@ export function lutarAnimado(npc: string | null, nomeAcaoV2: Record<string, stri
     avisarLuta(); return;
   }
   const t = tamerAtual(), medalha = t.n > medalhasAntes ? t.medalhas[t.n - 1] : null;
-  const { res } = r!, A = exibirPet(m, r!.A), B = cenario ? exibirFixo(LUTA.rivalFixo!) : exibirBot(npc || LUTA.rival, r!.B);
+  const { res, serie, arena } = r!, nLutas = arena?.lutas ?? 1, A = exibirPet(m, r!.A), B = cenario ? exibirFixo(LUTA.rivalFixo!) : exibirBot(npc || LUTA.rival, r!.B);
   LUTA.replay = null;
-  animar(res, A, B, modo, nomeAcaoV2, p => {
+  animar(serie, nLutas, A, B, modo, nomeAcaoV2, arena, p => {
       const primeiraDoLugar = !lugarJaVencido && res.pontosA === 1;
       const txt = res.pontosA === 1 ? "Seu pet venceu" : res.pontosA === 0 ? "O rival venceu" : "Empate";
-      p.texto = `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
-        + (primeiraDoLugar && NPC[npc!]!.lug < m.lugares.length - 1 ? ` ${m.lugares[NPC[npc!]!.lug + 1].nome} liberada!` : "")
-        + (primeiraDoLugar && NPC[npc!]!.lug === m.lugares.length - 1 ? " Campanha concluída!" : "")
+      p.texto = (nLutas > 1 ? (res.pontosA === 1 ? `Seu pet venceu as ${nLutas} lutas seguidas. ` : `A série parou na luta ${serie.length} de ${nLutas}. `) : "")
+        + `${txt} em ${res.turnos.length} turnos (${res.fim === "ko" ? "nocaute" : "limite de turnos: vence quem tem mais vida"}).`
+        + (primeiraDoLugar && Li < m.lugares.length - 1 ? ` ${m.lugares[Li + 1].nome} liberada!` : "")
+        + (primeiraDoLugar && Li === m.lugares.length - 1 ? " Campanha concluída!" : "")
         + (cenario ? " (Contra pet de cenário o seu não aprende.)" : "");
       if (primeiraDoLugar) LUTA.campSel = null;   /* venceu o lugar pela 1a vez: o mapa vai ao proximo */
-      p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog, medalha };
+      p.resultado = { res, npc, notasAntes, cenario, ativasAntes, ativasDepois, lugarJaVencido, sparringAntes, sparringContou: adolescente && !cenario, idxLog, medalha,
+        serie, nLutas, arena };
   });
 }
-/** a animacao de uma luta ja decidida: um turno por vez no palco (pausa e x2); no fim chama fim(palco) e para */
-function animar(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, modo: Modo, nomeAcaoV2: Record<string, string>, fim: (p: Palco) => void): void {
+/** a animacao de uma luta ja decidida (ou das lutas seguidas da Cidadela, uma depois da outra, com "luta k de n" no palco):
+    um turno por vez (pausa e x2); no fim chama fim(palco) e para. nLutas: quantas lutas a serie tem (as jogadas podem ser
+    menos: ela para na primeira que nao for vitoria) */
+function animar(serie: ResultadoLuta[], nLutas: number, A: LutadorTela, B: LutadorTela, modo: Modo, nomeAcaoV2: Record<string, string>, arena: Arena | null,
+  fim: (p: Palco) => void): void {
+  if (!serie.length) throw new Error("luta sem turnos para animar");
   LUTA.lutando = true;
-  LUTA.palco = { modo, A, B, E: res.E0, tr: null, turno: null, texto: "", callout: "", intencao: null, regra: null, resultado: null, log: [] };
+  let j = 0, i = 0;
+  const abrir = () => {
+    const k = j + 1, log = j && LUTA.palco ? LUTA.palco.log : [];
+    LUTA.palco = { modo, A, B, E: serie[j].E0, tr: null, turno: null, callout: nLutas > 1 ? `LUTA ${k} DE ${nLutas}` : "", intencao: null, regra: null, resultado: null, log,
+      texto: nLutas > 1 ? `Luta ${k} de ${nLutas}` + (j ? ": sem cura, seu pet começa com a vida e o guts que sobraram." : ": vença as três seguidas.") : "",
+      serie: nLutas > 1 ? { k, n: nLutas } : null, arena };
+  };
+  abrir();
   avisarLuta();
   const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let i = 0;
   const passo = () => {
-    const p = LUTA.palco!;
-    if (i >= res.turnos.length) { fim(p); LUTA.lutando = false; avisarLuta(); return; }
+    const p = LUTA.palco!, res = serie[j];
+    if (i >= res.turnos.length) {
+      /* a proxima luta da serie: o palco recomeca com a vida que sobrou (uma pausa maior entre elas) */
+      if (j < serie.length - 1) { j++; i = 0; abrir(); avisarLuta(); agendar(3); return; }
+      fim(p); LUTA.lutando = false; avisarLuta(); return;
+    }
     const tr = res.turnos[i++];
     const ma = motivoCombate(tr, 0, A.estilo), mb = motivoCombate(tr, 1, B.estilo);
     const dano = tr.dano[1] ? `seu pet causa ${dec1(tr.dano[1])}` : "", dano2 = tr.dano[0] ? `o rival causa ${dec1(tr.dano[0])}` : "";
@@ -174,9 +198,17 @@ function animar(res: ResultadoLuta, A: LutadorTela, B: LutadorTela, modo: Modo, 
     agendar();
   };
   /* proximo turno: parado enquanto pausado; x2 corta a espera pela metade */
-  const agendar = () => { timer = setTimeout(() => { if (LUTA.pausado) agendar(); else passo(); }, LUTA.pausado ? 150 : reduz ? 80 : LUTA.rapido ? 325 : 650); };
+  const agendar = (vezes = 1) => { timer = setTimeout(() => { if (LUTA.pausado) agendar(); else passo(); }, LUTA.pausado ? 150 : (reduz ? 80 : LUTA.rapido ? 325 : 650) * vezes); };
   let timer: ReturnType<typeof setTimeout> | undefined;
-  pularParaOFim = () => { clearTimeout(timer); i = res.turnos.length; LUTA.pausado = false; passo(); };
+  /* pular: vai para o fim da ultima luta jogada, com o palco no estado final dela */
+  pularParaOFim = () => {
+    clearTimeout(timer); LUTA.pausado = false;
+    if (j < serie.length - 1) { j = serie.length - 1; abrir(); }
+    const res = serie[j], ult = res.turnos[res.turnos.length - 1];
+    i = res.turnos.length;
+    if (LUTA.palco && ult) Object.assign(LUTA.palco, { E: res.E, tr: ult, turno: ult.t });
+    passo();
+  };
   LUTA.pausado = false;
   passo();
 }
@@ -225,15 +257,19 @@ export function reverLuta(idx: number, nomeAcaoV2: Record<string, string>): void
   if (LUTA.lutando) return;
   const L = reconstruirLuta(jogoAtual().motor, idx);
   LUTA.replay = idx;
-  animar(L.res, L.A, L.B, L.npc ? "campanha" : "arena", nomeAcaoV2, p => {
+  animar(L.serie, L.nLutas, L.A, L.B, L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
     const txt = L.res.pontosA === 1 ? `${L.A.nomeTela} venceu` : L.res.pontosA === 0 ? `${L.B.nomeTela} venceu` : "Empate";
-    p.texto = `Fim do replay: ${txt} em ${L.res.turnos.length} turnos.`;
+    p.texto = `Fim do replay: ${L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${L.res.turnos.length} turnos.`;
     p.fimReplay = true;
   });
 }
 /** luta pedida pelo "Ver replay" do Resultado: indice do evento no registro */
 export const REPLAY = { pedido: null as number | null };
-export interface LutaReconstruida { res: ResultadoLuta; A: LutadorTela; B: LutadorTela; rival: string; npc: boolean }
+export interface LutaReconstruida {
+  res: ResultadoLuta; A: LutadorTela; B: LutadorTela; rival: string; npc: boolean;
+  /** as lutas do evento (mais de uma so nas seguidas da Cidadela), quantas a serie tem e a arena */
+  serie: ResultadoLuta[]; nLutas: number; arena: Arena | null;
+}
 /** refaz a luta do evento idx do registro: o pet reconstruido ate ali (event sourcing), o mesmo rival e a mesma
     semente. So leitura: nada e gravado nem ensinado ao pet vivo. */
 export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
@@ -241,8 +277,9 @@ export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
   if (!ev || ev[1] !== "l") throw new Error(`o evento ${idx} do registro não é uma luta`);
   const { r, s } = ev[2] as { r: string; s: number };
   const m0 = Motor.reproduzir(m.semente, m.log.slice(0, idx), m.versao), npc = !!NPC[r];
-  const A = lutadorPet(m0, "Seu pet", npc), B = lutadorBot(r, m0.regras), res = jogarV2(A, B, s, m0.regras);
-  return { res, A: exibirPet(m0, A), B: exibirBot(r, B), rival: r, npc };
+  /* a mesma luta que o motor jogou (Motor.montarLuta: a regra da arena, se houver) */
+  const L = m0.montarLuta(r, s), res = L.serie[L.serie.length - 1];
+  return { res, A: exibirPet(m0, L.A), B: exibirBot(r, L.B), rival: r, npc, serie: L.serie, nLutas: L.arena?.lutas ?? 1, arena: L.arena };
 }
 
 /** uma luta do registro, refeita: rival, turnos, resultado e quantas regras novas o pet tirou dela */
@@ -258,9 +295,11 @@ export function lutasDoRegistro(m: Motor): LutaDoRegistro[] {
   m.log.forEach((ev, idx) => {
     if (ev[1] !== "l") { m0.aplicarEvento(ev); return; }
     const { r, s } = ev[2] as { r: string; s: number };
-    const res = jogarV2(lutadorPet(m0, "Seu pet", !!NPC[r]), lutadorBot(r, m0.regras), s, m0.regras), antes = m0.gp ? [...m0.gp.ativas] : [];
+    /* a luta como o motor a jogou (nas seguidas da Cidadela, a serie: turnos somados, o resultado da ultima) */
+    const serie = m0.montarLuta(r, s).serie, res = serie[serie.length - 1], antes = m0.gp ? [...m0.gp.ativas] : [];
     m0.aplicarEvento(ev);
-    lutas.push({ idx, rival: r, turnos: res.turnos.length, pontosA: res.pontosA, regrasNovas: m0.gp ? m0.gp.ativas.filter(k => !antes.includes(k)).length : 0 });
+    lutas.push({ idx, rival: r, turnos: serie.reduce((n, x) => n + x.turnos.length, 0), pontosA: res.pontosA,
+      regrasNovas: m0.gp ? m0.gp.ativas.filter(k => !antes.includes(k)).length : 0 });
   });
   cacheLutas = { semente: m.semente, n, lutas };
   return lutas;

@@ -129,14 +129,15 @@ export function Cena({ p, controles = false }: { p: Palco; controles?: boolean }
   );
 }
 /** regra que o pet usou neste turno; travar e vetar direto daqui (so regras do proprio pet) */
-function RegraUsada({ ma, A }: { ma: MotivoCombate; A: LutadorTela }) {
+function RegraUsada({ ma, A, semDono }: { ma: MotivoCombate; A: LutadorTela; semDono?: boolean }) {
   const { motor: m } = useJogo(), [msg, setMsg] = useState("");
   if (ma.exploracao) return <div class="dl-card luta-regra-card"><span class="dl-causa dl-causa--sem">? {A.nomeTela} decidiu ao acaso (exploração)</span></div>;
   if (ma.regra === "pesado_automatico") return <div class="dl-card luta-regra-card"><span class="dl-apoio">{A.nomeTela} soltou o pesado que tinha preparado.</span></div>;
   const g = A.estilo.gambits;
   if (!g || typeof ma.regra !== "number") return null;
   const final = ma.regra >= g.regras.length, r = final ? null : g.regras[ma.regra], k = r ? chaveRegra(r) : null;
-  const gp = m.gp, doPet = !!(gp && k && k in gp.notas), trav = doPet && k! in gp!.travas, vetada = doPet && gp!.vetos.includes(k!);
+  /* no Lago (semDono) as travas e os vetos nao valem nesta luta: sem os botoes */
+  const gp = m.gp, doPet = !semDono && !!(gp && k && k in gp.notas), trav = doPet && k! in gp!.travas, vetada = doPet && gp!.vetos.includes(k!);
   const intervir = (op: "travar" | "destravar" | "vetar") => {
     try { mudarMotor(mm => mm.intervirGambit(op, k!)); setMsg(op === "vetar" ? "vetada: o pet não usa mais" : op === "travar" ? "travada nesta posição" : "destravada"); }
     catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
@@ -176,7 +177,7 @@ export function PalcoLuta() {
           {p.intencao ? <div class="luta-intencao"><b class="luta-exclam">!</b><span>{p.intencao}</span></div>
             : <p class="dl-apoio">{p.B.nomeTela} não anunciou nada neste turno.</p>}</section>
         <section class="dl-card luta-card"><h2>Regra em uso</h2>
-          {p.regra ? <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} /> : <p class="dl-apoio">A luta ainda não começou.</p>}
+          {p.regra ? <RegraUsada key={p.turno} ma={p.regra.ma} A={p.regra.A} semDono={p.arena?.regra === "vinculo"} /> : <p class="dl-apoio">A luta ainda não começou.</p>}
           {p.texto && <p class="dl-apoio luta-turno">{p.texto}</p>}</section>
         <section class="dl-card luta-card luta-card--turnos"><h2>Turnos</h2><Log p={p} /></section>
       </div>

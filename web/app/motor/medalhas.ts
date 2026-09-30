@@ -16,8 +16,6 @@ export interface Medalha {
   lider: string;
   /** indice do lugar da campanha v6 onde fica a arena (LUGARES_V6) */
   lugar: number;
-  /** fonte provisoria (parte 1): nenhuma desde a parte 2; o campo sai junto com as telas */
-  provisoria?: string;
 }
 export const MEDALHAS: readonly Medalha[] = [
   { id: "campina", nome: "Medalha da Campina", lider: "npc_tier1_brutamontes", lugar: 0 },

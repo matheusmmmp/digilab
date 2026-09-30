@@ -62,11 +62,13 @@ export function TelaLuta({ sair, verReplay, sairReplay, pedidoDesistir, fecharPe
     <section class="luta-tela dl" aria-labelledby="luta-tit">
       <div class="luta-topo dl-faixa">
         <h1 class="dl-num" id="luta-tit">{rep !== null ? "Replay" : "Luta"} · {modo === "arena" ? "Arena" : "Campanha"}</h1>
-        <span class="luta-topo-sub">{p.A.nomeTela} × {p.B.nomeTela}{rep !== null ? " · refeita do registro" : sp && modo === "arena" && !LUTA.rivalFixo ? ` · treino ${sp}` : ""}</span>
+        <span class="luta-topo-sub">{p.A.nomeTela} × {p.B.nomeTela}{p.serie ? ` · luta ${p.serie.k} de ${p.serie.n}` : ""}{rep !== null ? " · refeita do registro" : sp && modo === "arena" && !LUTA.rivalFixo ? ` · treino ${sp}` : ""}</span>
         {rep !== null
           ? <button type="button" class="dl-btn dl-btn--sec luta-desistir" onClick={() => { pularAnimacao(); sairReplay(rep); }}>Sair do replay</button>
           : <button type="button" class="dl-btn dl-btn--sec luta-desistir" disabled={!luta.lutando} onClick={() => setDesistindo(true)}>Desistir</button>}
       </div>
+      {p.serie && <p class="luta-arena-aviso luta-serie" role="status"><b>Luta {p.serie.k} de {p.serie.n}</b> · Cidadela: sem cura entre as lutas; a medalha só vem com as {p.serie.n} vitórias.</p>}
+      {p.arena?.regra === "vinculo" && <p class="luta-arena-aviso" role="note"><b>Arena do Lago:</b> aqui as suas travas e vetos não valem. {p.A.nomeTela} decide sozinho, com as regras que ele aprendeu.</p>}
       <PalcoLuta />
       {rep !== null && p.fimReplay && !luta.lutando && <FimReplay p={p} deNovo={() => reverLuta(rep, NOME_V2)} voltar={() => sairReplay(rep)} />}
       {rep === null && p.resultado && !luta.lutando && <ModalResultado p={p} continuar={voltar} verReplay={idx => { previa(modo); verReplay(modo, idx); }} />}

@@ -75,7 +75,7 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
       </div>
       <div class="bv-texto">
         <h1 class="bv-tit cc-tit" id="cc-tit">Jornada concluída!</h1>
-        <p class="bv-slogan">{nomeForma(m.forma)} venceu {chefe.nome} na {m.lugares[chefe.lug].nome}.</p>
+        <p class="bv-slogan">{nomeForma(m.forma)} venceu {chefe.nome} na {m.lugares[m.lugarDe(chefe.k)].nome}.</p>
         <p class="cc-texto">
           Do Digi-Egg ao {nomeEstagio(m.forma)}, com o brasão da <b>{b.nome}</b>, em {diaDe(m.e.tick)} dia{diaDe(m.e.tick) > 1 ? "s" : ""} e {lutas} luta{lutas === 1 ? "" : "s"}.
           Tudo o que ele é saiu do que vocês viveram juntos.
