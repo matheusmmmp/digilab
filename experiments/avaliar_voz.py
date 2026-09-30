@@ -7,6 +7,9 @@
 Rodadas: 1 = livre-v3, o modelo escolhe entre ate 12 fatos (semente 20260929). 2 = livre-v4, o CODIGO escolhe o
 assunto em rodizio (o primeiro da selecao, que manda para o fim o que foi assunto nas ultimas falas; a mentira e o
 almanaque, quando saem, sao o assunto), mesma amostra de pets (pets.jsonl da rodada 1), semente nova 20260930.
+3 = como a 2, com AUTOCORRECAO (digilab_fala_livre/revisao.py): o proprio gemma2:9b verifica a fala e a reescreve sem
+os trechos sem fato (ate 2 vezes); semente 20261001. Fase `piso`: o juiz verifica frases verdadeiras por construcao
+(o texto do proprio assunto) para medir o erro dele.
 
 Fases (cada uma grava em artifacts_voz/rodada1/ e pode ser refeita sozinha):
   pets       40 pets: grupo A = 7 bracos fixos x 4 ovos da V3c + 4 personas (mentira desligada, vidas iguais as da
@@ -59,23 +62,27 @@ from digilab.temperamento import sortear  # noqa: E402
 from digilab_fala_livre import almanaque, corpus  # noqa: E402
 from digilab_fala_livre.gerar import gerar  # noqa: E402
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama  # noqa: E402
+from digilab_fala_livre.revisao import VERSAO_REVISAO, gerar_com_revisao  # noqa: E402
 from digilab_fala_livre.prompt import VERSAO_PROMPT_V3, VERSAO_PROMPT_V4  # noqa: E402
 from digilab_fala_livre.saida import FALA_GENERICA  # noqa: E402
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V4, verificar  # noqa: E402
 
 RODADAS = {1: {"pasta": "rodada1", "semente": 20260929, "prompt": VERSAO_PROMPT_V3, "foco": False},
-           2: {"pasta": "rodada2", "semente": 20260930, "prompt": VERSAO_PROMPT_V4, "foco": True}}
+           2: {"pasta": "rodada2", "semente": 20260930, "prompt": VERSAO_PROMPT_V4, "foco": True},
+           3: {"pasta": "rodada3", "semente": 20261001, "prompt": VERSAO_PROMPT_V4, "foco": True, "revisao": True}}
 PETS = RAIZ / "artifacts_voz" / "rodada1" / "pets.jsonl"          # a mesma amostra em todas as rodadas
 SAIDA = RAIZ / "artifacts_voz" / "rodada1"
 SEMENTE = 20260929
 PROMPT = VERSAO_PROMPT_V3
 FOCO = False
+REVISAO = False
 
 
 def configurar(rodada: int) -> None:
-    global SAIDA, SEMENTE, PROMPT, FOCO
+    global SAIDA, SEMENTE, PROMPT, FOCO, REVISAO
     r = RODADAS[rodada]
     SAIDA, SEMENTE, PROMPT, FOCO = RAIZ / "artifacts_voz" / r["pasta"], r["semente"], r["prompt"], r["foco"]
+    REVISAO = r.get("revisao", False)
 GERADOR = "gemma2:9b"
 JUIZ = "qwen2.5:7b"
 DIAS = 14
@@ -262,7 +269,11 @@ def fase_gerar() -> None:
         esp = especies.get(p["nome"].replace(" sombrio", ""))
         for k in range(len(p["momentos"])):
             est, dadas = situacao(p, k, citados_chaves)
-            r = gerar(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
+            tentativas = None
+            if REVISAO:
+                r, tentativas = gerar_com_revisao(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
+            else:
+                r = gerar(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
             por_id = {f["id"]: f for f in r.fatos}
             chaves = [por_id[c]["chave"] for c in r.fatos_citados if c in por_id and "chave" in por_id[c]]
             citados_chaves.append(dadas if FOCO else chaves)
@@ -271,7 +282,7 @@ def fase_gerar() -> None:
                           "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                           "chaves_citadas": chaves, "estagio": r.estagio, "especie_corpus": r.especie,
                           "modelo": r.modelo, "versao_prompt": r.versao_prompt, "semente": SEMENTE + i,
-                          "latencia_s": r.latencia_s, "erro": r.erro})
+                          "latencia_s": r.latencia_s, "erro": r.erro, "tentativas": tentativas})
             i += 1
             print(f"{i:3d} {_chave(p)} k{k} {r.latencia_s or 0:.1f}s {r.fala[:90]!r}", flush=True)
     cli.descarregar()
@@ -292,6 +303,34 @@ def fase_verificar() -> None:
         print(f"{i:3d} sem fato {v.nao_suportadas} mentira {v.mentiras_deliberadas} erro {v.erro}", flush=True)
     juiz.descarregar()
     _gravar(SAIDA / "verificacao.jsonl", "\n".join(json.dumps(x, ensure_ascii=False, sort_keys=True) for x in out))
+
+
+def _assunto_verdadeiro(f: dict) -> tuple[str, str] | None:
+    """(frase verdadeira por construcao, id) do assunto dado: o texto do fato, em 1a pessoa. A mentira nao entra
+    (nao e verdadeira)."""
+    por_id = {x["id"]: x for x in f["fatos"]}
+    if "F1" in por_id:
+        return None
+    if "W1" in por_id:
+        return f"Ouvi no Digimundo que {por_id['W1']['texto']}.", "W1"
+    x = next((x for x in f["fatos"] if x["id"][:1] in "HOPL"), None)
+    return None if x is None else (x["texto"][0].upper() + x["texto"][1:] + ".", x["id"])
+
+
+def fase_piso() -> None:
+    """o juiz verifica, com os mesmos blocos de fatos, frases que so dizem o fato: tudo que ele barrar e erro dele"""
+    falas = _jsonl(SAIDA / "falas.jsonl")
+    juiz = ClienteOllama(JUIZ, URL_PADRAO, timeout=90.0)
+    out = []
+    for i, f in enumerate(falas):
+        a = _assunto_verdadeiro(f)
+        if a is None:
+            continue
+        v = verificar(juiz, a[0], [a[1]], f["fatos"], semente=SEMENTE + 50000 + i, versao=VERSAO_VERIFICADOR_V4)
+        out.append({"pet": f["pet"], "k": f["k"], "frase": a[0], **v.para_dict()})
+        print(f"{i:3d} piso sem fato {v.nao_suportadas}", flush=True)
+    juiz.descarregar()
+    _gravar(SAIDA / "piso_juiz.jsonl", "\n".join(json.dumps(x, ensure_ascii=False, sort_keys=True) for x in out))
 
 
 # ------------------------------------------------------------------ 4. resumo
@@ -373,6 +412,17 @@ def resumir() -> dict:
                    "falas_com_estilo": sum(f["especie_corpus"] is not None for f in falas)},
         "gates_propostos": "DESIGN_VOZ_PROPRIA, secao 6 (PROPOSTOS, sem fonte)",
     }
+    if (SAIDA / "piso_juiz.jsonl").exists():
+        piso = [x for x in _jsonl(SAIDA / "piso_juiz.jsonl") if not x["erro"]]
+        r["piso_juiz"] = {"frases": len(piso), "sem_fato": _pct(x["nao_suportadas"] > 0 for x in piso),
+                          "manipulacao": sum(x["manipulacao"] for x in piso)}
+    if any(f.get("tentativas") for f in falas):
+        tent = [f["tentativas"] for f in falas if f.get("tentativas")]
+        r["revisao"] = {"versao": VERSAO_REVISAO, "falas": len(tent),
+                        "com_problema_na_primeira": sum(bool(t[0]["problemas"]) for t in tent),
+                        "reescritas": sum(len([x for x in t[1:] if x.get("fala")]) for t in tent),
+                        "sem_problema_no_fim_pelo_proprio_modelo": sum(not min(len(x["problemas"]) for x in t
+                                                                               if x.get("fala")) for t in tent)}
     return r
 
 
@@ -395,6 +445,12 @@ def _relatorio(r: dict, meta: dict) -> str:
         f"Amostra: {r['n']['pets'] - r['n']['pets_mortos']} pets vivos ({r['n']['pets_mortos']} mortos), "
         f"{r['n']['falas']} falas, {r['n']['falas_com_erro']} com erro (viraram a genérica ou o molde), "
         f"{r['n']['verificadas']} verificadas ({r['n']['verificacao_com_erro']} com erro do juiz).", "",
+        (f"Piso do juiz: {f(r['piso_juiz']['sem_fato'])} de {r['piso_juiz']['frases']} frases verdadeiras por "
+         "construção barradas como sem fato.\n" if "piso_juiz" in r else "") +
+        (f"Autocorreção: {r['revisao']['com_problema_na_primeira']} de {r['revisao']['falas']} falas com problema "
+         f"apontado pelo próprio modelo na primeira versão; {r['revisao']['reescritas']} reescritas; "
+         f"{r['revisao']['sem_problema_no_fim_pelo_proprio_modelo']} terminam sem problema pelo próprio modelo.\n"
+         if "revisao" in r else "") +
         f"Mentira (grupo B, sombrios): {r['mentira']['falas_com_F']} falas com [F1], "
         f"{r['mentira']['citam_F']} citam [F1], {r['mentira']['mentiras_deliberadas']} afirmações marcadas como "
         "mentira deliberada.", "",
@@ -439,10 +495,11 @@ def fase_cega() -> None:
 def _meta() -> None:
     fontes = ["digilab/historia.py", "digilab/educacao.py", "digilab/donos_educacao.py", "digilab/config.py",
               "digilab_fala_livre/fatos.py", "digilab_fala_livre/prompt.py", "digilab_fala_livre/verificador.py",
-              "digilab_fala_livre/mentira.py", "digilab_fala_livre/gerar.py", "digilab_fala_livre/almanaque.json",
+              "digilab_fala_livre/mentira.py", "digilab_fala_livre/gerar.py", "digilab_fala_livre/revisao.py", "digilab_fala_livre/almanaque.json",
               "digilab_fala_livre/corpus_especies.json", "experiments/avaliar_voz.py"]
     _gravar(SAIDA / "meta.json", _dump({
         "semente": SEMENTE, "gerador": GERADOR, "juiz": JUIZ, "prompt": PROMPT, "assunto_pelo_codigo": FOCO,
+        "autocorrecao": VERSAO_REVISAO if REVISAO else None,
         "pets": str(PETS.relative_to(RAIZ)).replace("\\", "/"),
         "verificador": VERSAO_VERIFICADOR_V4, "hash_parametros_mentira": hash_parametros_mentira(),
         "fontes_sha256": {f: hashlib.sha256((RAIZ / f).read_bytes()).hexdigest() for f in fontes},
@@ -453,7 +510,7 @@ def _meta() -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--fase", default="tudo", choices=("pets", "gerar", "verificar", "resumo", "cega", "tudo"))
+    ap.add_argument("--fase", default="tudo", choices=("pets", "gerar", "verificar", "piso", "resumo", "cega", "tudo"))
     ap.add_argument("--processos", type=int, default=8)
     ap.add_argument("--rodada", type=int, default=1, choices=sorted(RODADAS))
     a = ap.parse_args(argv)
@@ -467,6 +524,8 @@ def main(argv=None) -> int:
         fase_gerar()
     if a.fase in ("verificar", "tudo"):
         fase_verificar()
+    if a.fase == "piso" or (a.fase == "tudo" and REVISAO):
+        fase_piso()
     if a.fase in ("cega", "tudo"):
         fase_cega()
     if a.fase in ("resumo", "tudo"):

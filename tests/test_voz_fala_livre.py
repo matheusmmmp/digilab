@@ -247,3 +247,21 @@ def test_verificador_v3_intacto():
     fatos = _fatos_dict({"identidade": {"estagio": "adulto"}, "estado": {"fome": 0.2}})
     v = verificar(_Falso([{"afirmacoes": []}]), "oi", [], fatos)
     assert v.versao == "verif-v3" and "mentiras_deliberadas" not in v.para_dict()
+
+
+def test_autocorrecao_reescreve_sem_o_trecho_sem_fato():
+    from digilab_fala_livre.prompt import VERSAO_PROMPT_V4
+    from digilab_fala_livre.revisao import gerar_com_revisao
+    est = {**ESTADO, "historia": [HIST[3]]}
+    cli = _Falso([
+        {"fala": "Você atende meus chamados rápido. Fiquei feliz ontem.", "fatos_citados": ["O1"]},   # 1a versao
+        {"afirmacoes": [{"tipo": "costume", "trecho": "Você atende meus chamados rápido"},
+                        {"tipo": "evento", "trecho": "Fiquei feliz ontem"}]},
+        {"sustentada": True, "fato": "O1"}, {"sustentada": False, "fato": ""},
+        {"fala": "Você atende meus chamados rápido.", "fatos_citados": ["O1"]},                       # reescrita
+        {"afirmacoes": [{"tipo": "costume", "trecho": "Você atende meus chamados rápido"}]},
+        {"sustentada": True, "fato": "O1"}])
+    r, tent = gerar_com_revisao(cli, est, semente=1, versao=VERSAO_PROMPT_V4)
+    assert r.fala == "Você atende meus chamados rápido." and len(tent) == 2
+    assert tent[0]["problemas"] == ["Fiquei feliz ontem"] and tent[1]["problemas"] == []
+    assert "REVISÃO" in cli.pedidos[4][-1]["content"] and "Fiquei feliz ontem" in cli.pedidos[4][-1]["content"]
