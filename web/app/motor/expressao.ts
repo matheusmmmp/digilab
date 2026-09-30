@@ -4,6 +4,7 @@
    Estagio da fala: o estagio da evolucao (bebe, crianca, adolescente, adulto). */
 import { ACOES_PET, CDJ, EIXOS_TEMP, FATORES_ESPACOS } from "./constantes.ts";
 import { CATALOGO_V2 } from "./combate.ts";
+import { ESTADOS_CONFIANCA, type EstadoConfianca } from "./confianca.ts";
 import type { Emocao } from "./memoria.ts";
 import { FATOR_DA_FEATURE } from "./motivo.ts";
 import type { CategoriaMemoria } from "./constantes.ts";
@@ -162,12 +163,31 @@ export function expressarDesejo(d: Desejo, est0: Estagio): string {
   if (d.tipo === "necessidade") return est === "adolescente" ? `${t.adolescente} ${verbo}... ${textoFator(d.causa!, est)}` : `${t.adulto} ${verbo} ${textoFator(d.causa!, est)}.`;
   return est === "adolescente" ? `${t.adolescente} ${verbo}...` : `${t.adulto} ${verbo}: ${VONTADE_ADULTO}.`;
 }
+/* confianca de combate (M1, espelho de expressao.CONFIANCA_TXT): estado derivado das lutas, nao e causa de decisao.
+   Bebe so emote, crianca a versao curta, adolescente o fragmento, adulto a frase; "neutro" nao tem frase. */
+export const CONFIANCA_TXT: Record<Exclude<EstadoConfianca, "neutro">, TextoPorEstagio> = {
+  confiante: { marcador: "confiante", bebe: "(^o^)b", crianca: "[:confiante:] Ganhei!", adolescente: "confiante... ganhei as últimas", adulto: "Tô confiante: ganhei as últimas." },
+  inseguro: { marcador: "inseguro", bebe: "(;_;)?", crianca: "[:inseguro:] Perdi de novo…", adolescente: "inseguro... depois daquelas derrotas", adulto: "Ando inseguro depois daquelas derrotas." },
+  entediado: { marcador: "sei tudo dele", bebe: "(-.-)~", crianca: "[:sei tudo dele:] De novo?", adolescente: "de novo esse aí... sei tudo dele", adulto: "De novo esse aí? Já sei tudo dele." },
+};
+/** frase de estado da confianca (M1): null no neutro. O "porque" sao as lutas em VistaConfianca.lutas */
+export function expressarConfianca(estado: EstadoConfianca, est0: Estagio): string | null {
+  const est = baseDe(est0);
+  if (estado === "neutro") return null;
+  const e = CONFIANCA_TXT[estado];
+  if (!e) throw new Error("estado de confiança sem texto: " + estado);
+  return e[est];
+}
 export function validarTabelasPersonalidade(): void {
   for (const e of EIXOS_TEMP) for (const p of "+-") if (!TOM_TEMPERAMENTO[e + p]) throw new Error("eixo sem tom: " + e + p);
+  for (const s of ESTADOS_CONFIANCA) if (s !== "neutro" && !CONFIANCA_TXT[s]) throw new Error("estado de confiança sem texto: " + s);
+  if (new Set(Object.values(CONFIANCA_TXT).map(e => e.bebe)).size !== Object.keys(CONFIANCA_TXT).length) throw new Error("emotes de confiança repetidos");
   const marc = [...Object.entries(FATORES_TXT).map(([n, e]) => ["fator " + n, e.marcador] as const),
-    ...Object.entries(TOM_TEMPERAMENTO).map(([k, e]) => ["tom " + k, e.marcador] as const), ...Object.entries(DESEJO_TIPO).map(([k, e]) => ["desejo " + k, e.marcador] as const)];
+    ...Object.entries(TOM_TEMPERAMENTO).map(([k, e]) => ["tom " + k, e.marcador] as const), ...Object.entries(DESEJO_TIPO).map(([k, e]) => ["desejo " + k, e.marcador] as const),
+    ...Object.entries(CONFIANCA_TXT).map(([k, e]) => ["confianca " + k, e.marcador] as const)];
   const textos = [...Object.entries(TOM_TEMPERAMENTO).map(([k, e]) => ["tom " + k, [e.crianca, e.adolescente, e.adulto]] as const),
     ...Object.entries(DESEJO_TIPO).map(([k, e]) => ["desejo " + k, [e.crianca, e.adolescente, e.adulto]] as const),
+    ...Object.entries(CONFIANCA_TXT).map(([k, e]) => ["confianca " + k, [e.crianca, e.adolescente, e.adulto]] as const),
     ...Object.entries(FATORES_TXT).map(([n, e]) => ["fator " + n, [e.crianca, e.adolescente, e.adulto]] as const)];
   for (const [dono, ts] of textos.filter(([d]) => !d.startsWith("fator"))) {
     const m = marc.find(([d]) => d === dono)![1];

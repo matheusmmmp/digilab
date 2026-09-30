@@ -552,24 +552,47 @@ _FONTES_EDUCACAO_V1 = {
 }
 
 
+# M1 (docs/DESIGN_MVP_M1_CONFIANCA.md, 2026-09-29): confianca de combate e desgaste por rival repetido. Registro a
+# parte do educacao-v1 (hash_parametros_educacao nao muda: e o que as runs V3/E1 gravaram no meta). Todo numero e
+# PROPOSTO, sem fonte, e ainda nao referendado (confianca_nao_referendados).
+_FONTES_CONFIANCA_M1 = {
+    "ConfigConfianca.ligada": (_D, "chave desligada por padrao, como ConfigEducacao e ConfigLesoes"),
+    "ConfigConfianca.lambda_novidade": (_P, _SF + " (M1 2.1: 3a luta seguida ~0,25, 5a ~0,06)"),
+    "ConfigConfianca.tau_habituacao_min": (_P, _SF + " (M1 2.1: 48 h de jogo)"),
+    "ConfigConfianca.eta_confianca": (_P, _SF + " (M1 2.2)"),
+    "ConfigConfianca.k_sensibilidade": (_P, _SF + " (M1 2.2: a derrota pesa mais pela sensibilidade do temperamento)"),
+    "ConfigConfianca.tau_confianca_min": (_P, _SF + " (M1 2.2: 24 h de jogo)"),
+    "ConfigConfianca.kappa_eps": (_P, _SF + " (M1 2.3: mesma ordem de delta_epsilon_indisciplina)"),
+    "ConfigConfianca.limiar_frase": (_P, _SF + " (M1 2.5)"),
+    "ConfigConfianca.histerese_frase_min": (_P, _SF + " (M1 2.5: 2 h de jogo)"),
+    "ConfigConfianca.limiar_tedio": (_P, _SF + " (M1 2.5)"),
+    "ConfigConfianca.n_tedio": (_P, _SF + " (M1 2.5)"),
+}
+
+
 def _valor_config(nome: str) -> Any:
     classe, campo = nome.split(".")
     instancias = {"ConfigEducacao": _config.CONFIG_EDUCACAO, "ConfigLesoes": _config.CONFIG_LESOES,
                   "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO,
-                  "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING}
+                  "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING,
+                  "ConfigConfianca": _config.CONFIG_CONFIANCA}
     return getattr(instancias[classe], campo)
 
 
 PARAMETROS_EDUCACAO_V1: dict[str, Campo] = {
     n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_EDUCACAO_V1.items()}
+PARAMETROS_CONFIANCA_M1: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_CONFIANCA_M1.items()}
 
 
 def validar_parametros_educacao(params: dict[str, Campo] | None = None) -> None:
-    """Todo campo das 6 dataclasses tem status e fonte, e o valor registrado bate com config.py."""
-    params = PARAMETROS_EDUCACAO_V1 if params is None else params
+    """Todo campo das 7 dataclasses (educacao-v1 + ConfigConfianca do M1) tem status e fonte, e o valor registrado
+    bate com config.py."""
+    params = {**PARAMETROS_EDUCACAO_V1, **PARAMETROS_CONFIANCA_M1} if params is None else params
     esperados = {f"{type(c).__name__}.{f.name}" for c in (_config.CONFIG_EDUCACAO, _config.CONFIG_LESOES,
                                                          _config.CONFIG_HERANCA, _config.CONFIG_EQUILIBRIO,
-                                                         _config.CONFIG_DURACOES, _config.CONFIG_SPARRING)
+                                                         _config.CONFIG_DURACOES, _config.CONFIG_SPARRING,
+                                                         _config.CONFIG_CONFIANCA)
                  for f in fields(c)}
     if set(params) != esperados:
         raise ValueError(f"parametros sem registro: {sorted(esperados - set(params))}; "
@@ -832,3 +855,8 @@ def propostos_nao_referendados(p: Protocolo) -> list[str]:
 def educacao_nao_referendados(params: dict[str, Campo] | None = None) -> list[str]:
     params = PARAMETROS_EDUCACAO_V1 if params is None else params
     return [n for n, c in params.items() if c.status is Status.PROPOSTO and not referendado(n, c.valor)]
+
+
+def confianca_nao_referendados() -> list[str]:
+    """M1: os numeros da confianca vieram depois do referendo de 2026-09-29; nenhum esta referendado."""
+    return educacao_nao_referendados(PARAMETROS_CONFIANCA_M1)

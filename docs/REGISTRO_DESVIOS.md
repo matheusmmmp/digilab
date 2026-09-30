@@ -927,9 +927,38 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
 - **Registro do Tamer versão 4** (lê 1 a 3). O registro do pet ganha o `f`; a assinatura dos v6 só muda depois dele. Pets v1–v5, gabaritos,
   paridade V21D, a Liga e as calibrações anteriores saem iguais (`jogarSerie` passa por `jogarSequencia`, a mesma conta). Descarte único
   não subiu.
-- **Achado (não corrigido, fora do escopo):** o relógio do jogo continua durante a animação da luta. Na velocidade de teste (10 min/s) uma
-  lesão na derrota que fecha a sequência passa das 6 h sem tratamento em 36 s e o pet morre antes do Resultado; vale também para a Liga. O e2e
-  das instalações pausa o tempo.
+- **Achado (corrigido depois, 2026-09-30, só na interface):** o relógio do jogo continuava durante a animação da luta, e na velocidade de
+  teste (10 min/s) uma lesão na derrota que fecha a sequência passava das 6 h sem tratamento em 36 s (o pet morria antes do Resultado; a Liga
+  também). Agora o tempo não anda com a luta no palco nem com o Resultado aberto (`web/app/src/luta.ts`, `lutaSeguraTempo`); motor, registro
+  e replay não mudam, e o e2e das instalações não pausa mais o tempo.
+
+## 2026-09-30 — Fronteira de Batalha, parte 4c (Fábrica e Salão) só no jogo (pets v6), sem equilíbrio
+
+- **Desvio entre o jogo e a pesquisa:** a Fábrica e o Salão (`docs/DESIGN_FRONTEIRA.md`, seções 9 e 10) existem só em `web/app/` e só nos
+  pets v6 (a Fábrica nem usa pet). Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer nem Fronteira.
+- **Sem calibração (decisão do Matheus):** fator 1 nas duas (o Mega, ou o nível, na escala dos pets v6), como na Liga e na 4b. A conferência
+  (`artifacts_campanha/fronteira/conferencia_4c.json`) só mostra que são jogáveis e não escolheu número nenhum. **Para a rodada de
+  equilíbrio:** a Fábrica é difícil (com o melhor arquétipo, uma série vencida em 0,018–0,019 das tentativas; lutas de espelho sem cura e
+  com o limite de turnos do rival); a troca entrando inteira foi medida (0,028 trocando por arquétipo melhor, 0,054 trocando sempre) e não
+  adotada.
+- **Interpretações:** (1) a Fábrica: 3 alugados de **arquétipos distintos** (a escolha precisa ter o que escolher); "sem cura" vale dentro da
+  série, e a série seguinte começa com o alugado inteiro; **a troca não cura** (o novo alugado entra com a mesma fração da vida e o mesmo guts
+  do anterior), senão "sem cura" deixaria de valer; a troca vale uma vez depois de cada vitória, inclusive a que fecha a série; empate conta
+  como derrota. (2) A semente da Fábrica sai do número da tentativa no registro do **Tamer** (não há pet); as das lutas saem dela. (3) O
+  Salão: a semente de cada luta sai do registro do **pet** (como na 4b), para o replay do pet não depender do Tamer; o Tamer grava a tentativa
+  e confere a conta. O rival do Salão é o bot canônico do nível com o caráter canônico das metas de estágio (Rookie: a semente de 3 regras da
+  web, sem caráter). Os níveis lutam na ordem (Rookie a Mega) e a tentativa para na primeira derrota ("quantos estágios venceu seguidos"),
+  como as outras instalações. (4) Um guardado que luta no Salão recebe na hora parada dele o `u` e o `f` (o que receberia ao voltar a ser o
+  ativo) e continua guardado. (5) Chips valem e cartas não no Salão, como na Liga e na 4b. (6) As lutas da Fábrica e do Salão não são
+  animadas no palco: o resultado aparece no card.
+- **Registro do Tamer versão 5** (lê 1 a 4): eventos `fabrica`, `fabrica_luta`, `fabrica_troca` e `salao`; os recordes da Fábrica e do Salão
+  saem das tentativas (sem evento `recorde`). O registro do pet não muda de formato (a luta do Salão é um `l`); a assinatura dos v6 só ganha o
+  Salão depois da primeira luta ali. `perfilDe` ganhou o parâmetro `comEscala` (desligado por padrão; só a Fábrica o usa). Pets v1–v5,
+  gabaritos, paridade V21D, a Liga, a Torre de Batalha, o Palácio e as calibrações anteriores saem iguais. Descarte único não subiu.
+- **Merge com a voz própria (PR #87, pets v7 = v6 + voz):** a Fronteira inteira (Liga, Torre, Palácio, Fábrica, Salão) vale para qualquer
+  pet de versão ≥ 6; os testes de versão já eram `>= 6`, e o Salão aceita guardados v6 e v7 misturados (teste com um Rookie v7). As
+  mensagens passaram a dizer "pets v6 em diante". Na assinatura, o Salão vem antes do bloco da voz (a dos v7 que nunca lutaram lá é a do
+  `main`). O registro do Tamer (versão 5) e o descarte único (versão 5) não mudaram na voz, então a numeração da 4c ficou.
 
 ## 2026-09-29 — voz própria, parte 1: história e mentira (DESIGN_VOZ_PROPRIA)
 
@@ -1023,6 +1052,18 @@ SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
 - **Citações com 3 frases curtas** (7) saíram, em vez de cortadas; Imperialdramon Dragon e Fighter Mode têm o mesmo conteúdo
   (o corpus não diz o modo).
 - O bloco de estilo do prompt usa no máximo 8 traços e 5 itens de fala por espécie.
+
+## 2026-09-30 — M1 (confiança de combate): pets v8 na web, e as séries de lutas
+
+- **Pet v8** (`VERSAO_PET = 8` = v7 + confiança; o desenho, `docs/DESIGN_MVP_M1_CONFIANCA.md`, dizia v5 e a primeira
+  implementação usou os v5 que já existiam). No merge do `main` (medalhas v6, V21D, Fronteira, voz v7) a confiança passou
+  a valer só para `versao >= 8`, no padrão de uma versão de pet por mecânica: pets v1–v7 não mudam de comportamento nem
+  de assinatura e nenhum save é descartado. Filhos de cruzamento nascem v8.
+- **Séries de lutas** (Cidadela, Liga, Torre de Batalha, Palácio, Salão), que o desenho não previa: cada luta da série
+  conta na confiança, com o rival dela (Cidadela: o líder repetido; Liga: o Mega de cada líder; Fronteira e Salão: a
+  forma sorteada). O ε da série inteira sai da confiança do começo. Só na web (o Python não tem séries).
+- O Python não muda: `ConfigConfianca` segue desligada por padrão, `PARAMETROS_CONFIANCA_M1` à parte (os hashes da
+  educação-v1 e da voz não mudam).
 
 ## 2026-09-30 — Voz própria: ajustes depois do teste do Matheus no jogo
 

@@ -50,6 +50,12 @@ Parte 4 (so com ConfigLesoes.ligada): lutas fora da arena de pesquisa.
     acao do dono e luta levantam PetMorto (o tempo ainda corre).
   - tratar_lesao limpa a lesao pendente. Contadores de luta e lesao zeram ao evoluir; na passagem para adulto
     grava-se a qualificacao por vitorias (efeito na forma: ConfigLesoes.efeito_qualificacao).
+
+M1 (so com ConfigConfianca.ligada; docs/DESIGN_MVP_M1_CONFIANCA.md): confianca de combate e desgaste por rival
+repetido (digilab/confianca.py), recalculados das lutas que ja estao no log (nenhum evento novo). Com a chave
+ligada a experiencia de combate (`vitorias_vida`) soma a NOVIDADE da luta em vez de 1, o registro da luta e o
+resumo ganham a confianca, e `epsilon_lutador()` soma kappa * max(0, -c). Desligada: nada disso existe e a vida,
+o log e o resumo sao byte a byte os de antes (tests/test_confianca.py, gate G1).
 """
 
 from __future__ import annotations
@@ -61,8 +67,9 @@ from typing import Callable
 from .campanha import REGRAS_CAMPANHA, npc
 from .combate_v2.v21.bots import lutador_adulto
 from .combate_v2.v21.partida import Lutador, jogar
-from .config import (CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, CONFIG_MENTIRA, ConfigEducacao,
-                     ConfigLesoes, ConfigMentira)
+from .confianca import ConfiancaCombate, epsilon_confianca
+from .config import (CONFIG_CONFIANCA, CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LESOES, CONFIG_MENTIRA,
+                     ConfigConfianca, ConfigEducacao, ConfigLesoes, ConfigMentira)
 from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, decisao_externa, fala, ler_decisao, ler_luta, luta
 from .heranca import HerancaInvalida, Origem, ler_origem
 from .obediencia import PoliticaBanditPersonalidade
@@ -101,13 +108,16 @@ def epsilon_disciplina(disciplina: int, ce: ConfigEducacao | None = None) -> flo
     return ce.epsilon_base_pet + (1 - disciplina / ce.disciplina_max) * ce.delta_epsilon_indisciplina
 
 
-def epsilon_pet(disciplina: int, vitorias_vida: int, ce: ConfigEducacao | None = None,
-                cl: ConfigLesoes | None = None) -> float:
+def epsilon_pet(disciplina: int, vitorias_vida: float, ce: ConfigEducacao | None = None,
+                cl: ConfigLesoes | None = None, confianca: float = 0.0, cc: ConfigConfianca | None = None) -> float:
     """epsilon do Lutador do pet no jogo: disciplina (PLANO_ANALISE_V3) menos a experiencia de combate (estilo
-    "lutar"). As runs V3/V3b usam so epsilon_disciplina (reprodutiveis)."""
+    "lutar"), mais a inseguranca (M1: kappa * max(0, -c), so com ConfigConfianca.ligada; a confianca positiva
+    nao reduz alem do que a experiencia ja reduz). As runs V3/V3b usam so epsilon_disciplina (reprodutiveis)."""
     cl = cl or CONFIG_LESOES
+    cc = cc or CONFIG_CONFIANCA
     exp = min(cl.experiencia_max, vitorias_vida * cl.experiencia_por_vitoria)
-    return max(0.0, epsilon_disciplina(disciplina, ce) - exp)
+    inseguranca = epsilon_confianca(confianca, cc.kappa_eps) if cc.ligada else 0.0
+    return max(0.0, epsilon_disciplina(disciplina, ce) - exp) + inseguranca
 
 
 def atende(pedido: str, acao: AcaoUsuario) -> bool:
@@ -123,7 +133,8 @@ class MotorEducacao(MotorTreino):
                  lutador_do_pet: Callable[["MotorEducacao"], Lutador] | None = None,
                  rival_por_nome: Callable[[str], Lutador] = rival_padrao, cfg_evo=None,
                  decisor_externo: Callable[[dict], tuple[bool, dict]] | None = None,
-                 cfg_mentira: ConfigMentira | None = None, honestidade_especie: float = 1.0, **kw) -> None:
+                 cfg_mentira: ConfigMentira | None = None, honestidade_especie: float = 1.0,
+                 cfg_confianca: ConfigConfianca | None = None, **kw) -> None:
         super().__init__(politica, cfg, semente, temperamento, especie, obediencia_desligada, cfg_treino,
                          cfg_sombrio, **kw)
         if cfg_evo is not None:
@@ -131,6 +142,9 @@ class MotorEducacao(MotorTreino):
             self.treino = TreinoPet(especie, self.ct, cfg_evo)
         self.ce = cfg_educacao or CONFIG_EDUCACAO
         self.cl = cfg_lesoes or CONFIG_LESOES
+        self.cc = cfg_confianca or CONFIG_CONFIANCA
+        # M1: so existe com a chave ligada (desligada, nenhum calculo e nenhuma chave nova no resumo)
+        self.confianca: ConfiancaCombate | None = ConfiancaCombate(self.cc) if self.cc.ligada else None
         self._rng_travessura = random.Random(derivar_semente("travessura", semente))
         self.disciplina = 0
         self.janela: dict | None = None          # {"tipo", "pedido", "inicio", "prazo", "falso"}
@@ -373,8 +387,14 @@ class MotorEducacao(MotorTreino):
         res = "vitoria" if p.pontos_a == 1.0 else "derrota" if p.pontos_a == 0.0 else "empate"
         self.lutas["lutas"] += 1
         self.lutas[{"vitoria": "vitorias", "derrota": "derrotas", "empate": "empates"}[res]] += 1
+        conf = None
+        if self.confianca is not None:
+            # M1: decai desde a ultima luta, pesa pela novidade do rival; a derrota pesa mais pela sensibilidade
+            sinal = {"vitoria": 1, "derrota": -1, "empate": 0}[res]
+            conf = self.confianca.registrar(tick, rival, sinal, self.temperamento.sensibilidade)
         if res == "vitoria":
-            self.vitorias_vida += 1
+            # experiencia de combate: com a confianca ligada, soma a novidade (repetir o rival rende menos)
+            self.vitorias_vida += conf["novidade"] if conf is not None else 1
         lesao = res == "derrota" and random.Random(derivar_semente("lesao", semente)).random() < self.cl.prob_lesao_derrota
         if lesao:
             self.lutas["lesoes"] += 1
@@ -390,8 +410,15 @@ class MotorEducacao(MotorTreino):
             self._lutas_que_treinaram += 1
         reg = {"tick": tick, "rival": rival, "semente": semente, "resultado": res, "turnos": p.turnos,
                "lesao": lesao, "estagio": self.treino.estagio, "treinou": treinou}
+        if conf is not None:
+            reg["confianca"] = conf
         self.historico_lutas.append(reg)
         return reg
+
+    def epsilon_lutador(self) -> float:
+        """epsilon do lutador do pet no jogo, agora: disciplina, experiencia e (M1, so ligada) a inseguranca"""
+        c = self.confianca.valor(self._estado.tick) if self.confianca is not None else 0.0
+        return epsilon_pet(self.disciplina, self.vitorias_vida, self.ce, self.cl, c, self.cc)
 
     def _tratar_lesao(self, acao: AcaoUsuario, tick: int) -> None:
         if self.lesionado_desde is not None:
@@ -577,8 +604,11 @@ class MotorEducacao(MotorTreino):
                 "vitorias_vida": self.vitorias_vida}
 
     def resumo_educacao(self) -> dict:
-        return {"disciplina": self.disciplina, "acertos": self.acertos, "petiscos_cedidos": self.petiscos_cedidos,
-                "contagem": dict(self.contagem), **self.estado_lutas()}
+        r = {"disciplina": self.disciplina, "acertos": self.acertos, "petiscos_cedidos": self.petiscos_cedidos,
+             "contagem": dict(self.contagem), **self.estado_lutas()}
+        if self.confianca is not None:          # M1: so com a chave ligada (desligada, o resumo e o de antes)
+            r["confianca"] = self.confianca.para_dict()
+        return r
 
 
 def reproduzir_educacao(log: LogDeEventos, politica_fabrica: Callable, cfg=None, semente: int = 42,
@@ -641,7 +671,7 @@ def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, ob
                       ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
                       lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao,
                       cfg_evo=None, decisor_externo=None, cm: ConfigMentira | None = None,
-                      honestidade_especie: float = 1.0):
+                      honestidade_especie: float = 1.0, cc: ConfigConfianca | None = None):
     """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay (sem o decisor)."""
     fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
     fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
@@ -649,5 +679,5 @@ def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, ob
                                                  cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,
                                                  rival_por_nome=rival_por_nome, cfg_evo=cfg_evo,
                                                  decisor_externo=decisor_externo, cfg_mentira=cm,
-                                                 honestidade_especie=honestidade_especie))
+                                                 honestidade_especie=honestidade_especie, cfg_confianca=cc))
     return fp, fm

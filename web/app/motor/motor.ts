@@ -14,14 +14,16 @@ import {
   INSTALACOES, LUTAS_MAX_INSTALACAO, VERSAO_INSTALACOES, ehInstalacao, formaRivalInstalacao, instalacaoDe, rivalInstalacao, sementeTentativa,
   type IdInstalacao, type Instalacao,
 } from "./instalacoes.ts";
+import { ESTAGIOS_SALAO, RIVAL_SALAO, VERSAO_SALAO, formaRivalSalao, rivalSalao, sementeSalao } from "./salao.ts";
 import { CIT } from "./constantes.ts";
 import { cartaDe, chipDe, chipServe, estagioMinimo, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterDe, caraterPolitica, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { desafiadoDaVersao, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta, type Desafiado } from "./combate.ts";
+import { ConfiancaCombate } from "./confianca.ts";
 import { aplicarAcaoDono, avancarTick, clamp, efeitoAcaoPet, estadoInicial, observacao, temperamentoDe } from "./estado.ts";
 import { GambitsPet, chaveRegra, lutadorBot, lutadorPet, regraDe, rotuloRegra } from "./gambits_pet.ts";
 import { motivoVida } from "./motivo.ts";
-import { NOME_EXERCICIO, nomeForma } from "./nomes.ts";
+import { NOME_EXERCICIO, nomeArquetipo, nomeForma } from "./nomes.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo, conflitoDono, termosObediencia } from "./vinculo.ts";
@@ -90,6 +92,32 @@ function atende(pedido: Chamado, a: AcaoDono): boolean {
   return ACAO_CHAMADO[pedido].includes(a) || (pedido === "fome" && a === "petisco") || (pedido === "carinho" && a === "elogiar");
 }
 
+/* ---------------------------------------------------------------- confianca (pets v8, M1): o rival de cada luta
+   A novidade conta por rival. Luta comum e de arena: a chave do evento (o bot, o NPC ou o lider; as lutas seguidas da Cidadela repetem o
+   mesmo rival). Liga: o Mega de cada lider ("liga:<lider>"). Fronteira e Salao: a forma sorteada do rival da luta ("forma:..."), a
+   mesma forma de novo e o mesmo rival */
+const chaveFormaRival = (f: Forma): string => "forma:" + [f.esp, f.est, f.ramo ?? "", f.linha ?? "", f.adulta ?? ""].join(".");
+/** o rival da luta k da serie do evento "l" (rival, semente), como a confianca o conta */
+export function rivalDaConfianca(rival: string, semente: number, k: number, est: Estagio): string {
+  if (rival === RIVAL_LIGA) return "liga:" + LIGA[k].lider;
+  if (ehInstalacao(rival)) return chaveFormaRival(formaRivalInstalacao(semente, k));
+  if (rival === RIVAL_SALAO) return chaveFormaRival(formaRivalSalao(semente, est));
+  return rival;
+}
+/** o nome na tela de um rival da confianca (rivalDaConfianca) */
+export function nomeRivalConfianca(chave: string): string {
+  if (chave.startsWith("liga:")) {
+    const i = LIGA.findIndex(x => x.lider === chave.slice(5));
+    return i >= 0 ? `${nomeMegaLiga(i)} de ${NOME_BOT[LIGA[i].lider]}` : chave;
+  }
+  if (chave.startsWith("forma:")) {
+    const [esp, est, ramo, linha, adulta] = chave.slice(6).split(".");
+    const f = { esp, est, ...(ramo ? { ramo } : {}), ...(linha ? { linha } : {}), ...(adulta ? { adulta } : {}) } as Forma, arq = nomeArquetipo(f);
+    return arq ? `${nomeForma(f)} (${arq})` : nomeForma(f);
+  }
+  return NOME_BOT[chave] ?? chave;
+}
+
 export class Motor {
   semente: number;
   versao: VersaoPet;
@@ -142,6 +170,12 @@ export class Motor {
   morte: { tick: number; causa: "lesoes" | "lesao_sem_tratar" } | null = null;
   janelasFechadas: (Janela & { desfecho: string; fim: number })[] = [];
   origem: Origem | null = null;                   /* v4: filho de um cruzamento (evento "o", o primeiro) */
+  /* v8 (M1): confianca de combate e novidade por rival, recalculadas das lutas do registro; null nos v1-v7 */
+  conf: ConfiancaCombate | null = null;
+  /* v8 (M1): para cada luta de conf.historico, a ordem do evento "l" dela entre os "l" do registro (uma serie tem varias lutas num
+     evento so); derivado no replay, fora da assinatura. A tela usa para apontar o "porque" da frase para o evento */
+  confEvento: number[] = [];
+  private nEventosLuta = 0;
   /* v4: ritmo dos estagios (evento "c" no comeco do registro); sem ele, o rapido de sempre */
   ritmo: Ritmo = "rapida";
   dur: { bebe: number; crianca: number; adolescente: number; adulto: number } = { ...DUR_EVO, adulto: CMG.durRapida };
@@ -165,9 +199,12 @@ export class Motor {
       Entra na assinatura so depois do evento "f" */
   instalacoes: Record<IdInstalacao, ContaInstalacao> =
     Object.fromEntries(INSTALACOES.map(x => [x.id, { tentativas: 0, recorde: 0, ultima: 0 }])) as Record<IdInstalacao, ContaInstalacao>;
+  /** v6: as lutas deste pet no Salao da Fronteira (salao.ts): quantas (uma por tentativa do Tamer em que ele lutou) e quantas venceu. Entra
+      na assinatura so depois da primeira (a dos pets que nunca lutaram la nao muda) */
+  salao = { tentativas: 0, vitorias: 0 };
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5, 6, 7].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6, 7, 8].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
@@ -197,6 +234,8 @@ export class Motor {
       this.rMentira = criarRng(hashSemente("mentira", semente));
       this.men = { impunes: 0, acertos: 0 };
     }
+    /* v8 (M1): a confianca de combate e a novidade por rival (estado derivado das lutas "l"; nenhum evento novo) */
+    if (versao >= 8) this.conf = new ConfiancaCombate();
   }
   get disciplina(): number { return this.versao >= 4 ? this.edu.disciplina : 0; }
 
@@ -264,7 +303,7 @@ export class Motor {
   arenaDe(rival: string): Arena | null { return NPC[rival] ? arenaDaLuta(rival, this.versao) : null; }
   /** luta contra bot: entra no registro (rival + semente) e ensina os gambits */
   lutar(rival: string, semente: number, carta: string | null = null): ResultadoLutaPet {
-    if (rival !== RIVAL_LIGA && !ehInstalacao(rival) && !NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
+    if (rival !== RIVAL_LIGA && rival !== RIVAL_SALAO && !ehInstalacao(rival) && !NOME_BOT[rival]) throw new Error("rival desconhecido: " + rival);
     if (this.versao >= 4) { this._conferirMorte(); this._vivo(); }
     if (rival === RIVAL_LIGA) { const erro = this.porqueNaoLiga(); if (erro) throw new Error(erro); if (carta !== null) throw new Error("as cartas não valem na Liga dos Líderes"); }
     if (ehInstalacao(rival)) {
@@ -273,6 +312,12 @@ export class Motor {
       if (erro) throw new Error(erro);
       if (carta !== null) throw new Error(`as cartas não valem na ${x.nome}`);
       if (semente !== this.sementeInstalacao(rival)) throw new Error(`a semente da tentativa na ${x.nome} sai do registro do pet: ${this.sementeInstalacao(rival)}, não ${semente}`);
+    }
+    if (rival === RIVAL_SALAO) {
+      /* o Salao depois do titulo: a entrada, a carta (nao vale) e a semente da luta (sai do registro do pet) */
+      const erro = this.porqueNaoSalao(); if (erro) throw new Error(erro);
+      if (carta !== null) throw new Error("as cartas não valem no Salão");
+      if (semente !== this.sementeSalao()) throw new Error(`a semente da luta no Salão sai do registro do pet: ${this.sementeSalao()}, não ${semente}`);
     }
     if (NPC[rival] && !(rival in this.campanha)) throw new Error(`${NPC[rival]!.nome} não está na campanha deste pet`);
     if (NPC[rival] && !this.desafioAberto(rival)) throw new Error(`desafio bloqueado: vença alguém em ${this.lugares[this.lugarDe(rival) - 1].nome} antes`);
@@ -289,6 +334,8 @@ export class Motor {
     const L = this.lutadores(rival, semente), carta = this.carta;
     /* a Liga (liga.ts): os 6 lideres em sequencia, sem cura e sem carta (a carta armada antes dela falha em _lutar) */
     if (L.lideres) return { ...L, carta: null, rivais: null, serie: jogarSerie(L.A, L.lideres, semente, this.regras, this.desafiado, null) };
+    /* o Salao (salao.ts): uma luta contra o rival sorteado do estagio do pet, sem carta */
+    if (rival === RIVAL_SALAO) return { ...L, carta: null, rivais: null, serie: jogarSerie(L.A, [L.B], semente, this.regras, this.desafiado, null) };
     /* uma instalacao da Fronteira (instalacoes.ts): rivais sorteados da semente, um por luta, ate a primeira que nao for vitoria (ou o
        teto); sem cura e sem carta (a carta armada antes dela falha em _lutar) */
     if (L.instalacao) {
@@ -318,6 +365,12 @@ export class Motor {
       }
       return { A, B: rivalInstalacao(s, 0, this.regras), lideres: null, arena: null, usadas, instalacao };
     }
+    if (rival === RIVAL_SALAO) {
+      /* o Salao: o pet como na Liga (chips valem); o rival sorteado do estagio dele (sem a semente, a da proxima luta deste pet la) */
+      const s = semente ?? this.sementeSalao();
+      return { A: lutadorPet(this, "Seu pet", true), B: rivalSalao(s, this.estagioAtual, this.regras), lideres: null, arena: null,
+        usadas: this.gp ? this.gp.ativas.slice() : null, instalacao: null };
+    }
     const npc = !!NPC[rival], arena = this.arenaDe(rival);
     let A = lutadorPet(this, "Seu pet", npc), usadas = this.gp ? this.gp.ativas.slice() : null;
     if (arena?.regra === "vinculo" && this.gp) {
@@ -330,7 +383,7 @@ export class Motor {
   /** por que o pet nao pode desafiar a Liga agora (null: pode). A entrada pede as 6 medalhas, que o pet conhece pelo evento "u" (o
       motor nunca le o Tamer) */
   porqueNaoLiga(): string | null {
-    if (this.versao < VERSAO_LIGA) return "a Liga dos Líderes é só de pets v6";
+    if (this.versao < VERSAO_LIGA) return "a Liga dos Líderes é só de pets v6 em diante";
     if (this.morte) return "o pet morreu";
     if (this.estagioAtual === "bebe") return "o In-Training ainda não luta na Fronteira";
     if (this.medalhas < MEDALHAS_LIGA) return `a Fronteira abre com as ${MEDALHAS_LIGA} medalhas (este pet conhece ${this.medalhas})`;
@@ -346,7 +399,7 @@ export class Motor {
     this._abrirFronteira();
   }
   private _validarFronteira(): void {
-    if (this.versao < VERSAO_INSTALACOES) throw new Error("a Fronteira é só de pets v6");
+    if (this.versao < VERSAO_INSTALACOES) throw new Error("a Fronteira é só de pets v6 em diante");
     if (this.fronteira) throw new Error("a Fronteira já está aberta para este pet");
     if (this.medalhas < MEDALHAS_LIGA) throw new Error(`a Fronteira abre com as ${MEDALHAS_LIGA} medalhas (este pet conhece ${this.medalhas})`);
   }
@@ -358,7 +411,7 @@ export class Motor {
   /** por que o pet nao pode entrar na instalacao agora (null: pode). A entrada pede o titulo do Tamer, que o pet conhece pelo evento "f" */
   porqueNaoInstalacao(id: string): string | null {
     const x = instalacaoDe(id);
-    if (this.versao < VERSAO_INSTALACOES) return `a ${x.nome} é só de pets v6`;
+    if (this.versao < VERSAO_INSTALACOES) return `a ${x.nome} é só de pets v6 em diante`;
     if (this.morte) return "o pet morreu";
     if (this.estagioAtual === "bebe") return "o In-Training ainda não luta na Fronteira";
     if (!this.fronteira) return `a ${x.nome} abre depois do título da Liga dos Líderes`;
@@ -366,8 +419,19 @@ export class Motor {
   }
   /** a semente da proxima tentativa deste pet na instalacao (sai do registro: a semente do pet e quantas tentativas ele ja fez ali) */
   sementeInstalacao(id: IdInstalacao): number { return sementeTentativa(this.semente, id, this.instalacoes[id].tentativas + 1); }
+  /* ---------------------------------------------------------------- o Salao da Fronteira (pets v6; salao.ts) */
+  /** por que o pet nao pode lutar no Salao agora (null: pode): v6, vivo, do Rookie ao Mega, e o titulo do Tamer (evento "f") */
+  porqueNaoSalao(): string | null {
+    if (this.versao < VERSAO_SALAO) return "o Salão é só de pets v6 em diante";
+    if (this.morte) return "o pet morreu";
+    if (!ESTAGIOS_SALAO.includes(this.estagioAtual)) return "o In-Training ainda não luta na Fronteira";
+    if (!this.fronteira) return "o Salão abre depois do título da Liga dos Líderes";
+    return null;
+  }
+  /** a semente da proxima luta deste pet no Salao (sai do registro: a semente do pet e quantas vezes ele ja lutou la) */
+  sementeSalao(): number { return sementeSalao(this.semente, this.salao.tentativas + 1); }
   private _lutar(rival: string, semente: number): ResultadoLutaPet {
-    const liga = rival === RIVAL_LIGA, inst = ehInstalacao(rival) ? instalacaoDe(rival) : null;
+    const liga = rival === RIVAL_LIGA, inst = ehInstalacao(rival) ? instalacaoDe(rival) : null, salao = rival === RIVAL_SALAO;
     if (liga) {
       /* no replay tambem: a entrada (as medalhas que o pet conhecia) e a carta, que nao vale na Liga */
       const erro = this.porqueNaoLiga(); if (erro) throw new Error(`luta da Liga no registro sem poder: ${erro}`);
@@ -380,24 +444,40 @@ export class Motor {
       const s = this.sementeInstalacao(inst.id);
       if (semente !== s) throw new Error(`luta da ${inst.nome} no registro com a semente ${semente}; a tentativa ${this.instalacoes[inst.id].tentativas + 1} deste pet tem a ${s}`);
     }
+    if (salao) {
+      /* no replay tambem: a entrada (o titulo que o pet conhecia), a carta e a semente, que sai do registro */
+      const erro = this.porqueNaoSalao(); if (erro) throw new Error(`luta do Salão no registro sem poder: ${erro}`);
+      if (this.carta !== null) throw new Error("as cartas não valem no Salão: carta no registro logo antes da luta");
+      const s = this.sementeSalao();
+      if (semente !== s) throw new Error(`luta do Salão no registro com a semente ${semente}; a luta ${this.salao.tentativas + 1} deste pet lá tem a ${s}`);
+    }
+    const estSalao = this.estagioAtual;
     const M = this.montarLuta(rival, semente), n = M.lideres ? M.lideres.length : inst ? LUTAS_MAX_INSTALACAO : M.arena?.lutas ?? 1;
     if (this.carta) {
       this._hist({ t: this.e.tick, quem: "carta", a: `usou a ${cartaDe(this.carta).nome} contra ${NOME_BOT[rival]}` });
       this.cartasUsadas.push(this.carta); this.carta = null;
     }
     let lesao = false;
+    const ordemL = this.nEventosLuta++;
     M.serie.forEach((res, k) => {
       /* cada luta da serie ensina e conta, com a semente dela (a primeira e a do evento) */
       const s = sementeDaSerie(semente, k);
-      if (this.gp) this.gp.aprender(res, s, M.usadas!);
+      /* v8 (M1, espelho de MotorEducacao._lutar): a confianca decai desde a ultima luta e e empurrada pelo resultado, pesado pela
+         novidade do rival DESTA luta (a derrota pesa mais pela sensibilidade). O passo dos gambits e a experiencia de combate somam a
+         novidade em vez de 1: repetir o mesmo rival ensina e rende menos. Nas series (Cidadela, Liga, Fronteira) cada luta conta */
+      const rc = this.conf ? this.conf.registrar(this.e.tick, rivalDaConfianca(rival, semente, k, estSalao),
+        res.pontosA === 1 ? 1 : res.pontosA === 0 ? -1 : 0, this.temp.sensibilidade) : null;
+      if (rc) this.confEvento.push(ordemL);
+      if (this.gp) this.gp.aprender(res, s, M.usadas!, rc ? rc.novidade : 1);
       if (this.estagioAtual === "adolescente") this.sparring++;
       const contra = liga ? `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[LIGA[k].lider]}`
-        : inst ? `${inst.id === "palacio" ? "no" : "na"} ${inst.nome}, contra ${nomeForma(formaRivalInstalacao(semente, k))}` : `contra ${NOME_BOT[rival]}`;
+        : inst ? `${inst.id === "palacio" ? "no" : "na"} ${inst.nome}, contra ${nomeForma(formaRivalInstalacao(semente, k))}`
+        : salao ? `no Salão, contra ${nomeForma(formaRivalSalao(semente, estSalao))}` : `contra ${NOME_BOT[rival]}`;
       this._hist({ t: this.e.tick, quem: "luta", a: `${contra}${inst ? ` (luta ${k + 1})` : n > 1 ? ` (luta ${k + 1} de ${n})` : ""}: ${res.pontosA === 1 ? "venceu" : res.pontosA === 0 ? "perdeu" : "empatou"}` });
       if (this.versao >= 4) {
         const L = this.lutas;
         L.lutas++;
-        if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida++; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
+        if (res.pontosA === 1) { L.vitorias++; this.vitoriasVida += rc ? rc.novidade : 1; } else if (res.pontosA === 0) L.derrotas++; else L.empates++;
         /* lesao: so na derrota, numa rng derivada da semente da LUTA */
         const l = res.pontosA === 0 && criarRng(hashSemente("lesao", s)).random() < CLE.probLesao;
         if (l) {
@@ -413,6 +493,7 @@ export class Motor {
     /* campanha: vitorias por desafio; na Cidadela, so a serie inteira conta. A Liga: a tentativa e o titulo (as 6 vencidas) */
     if (NPC[rival] && venceu) this.campanha[rival]++;
     if (liga) { this.liga.tentativas++; if (venceu) this.liga.titulos++; }
+    if (salao) { this.salao.tentativas++; if (venceu) this.salao.vitorias++; }
     /* a instalacao: a tentativa, a sequencia de vitorias dela e o recorde do pet ali (o do Tamer sai daqui, src/tamer.ts) */
     if (inst) {
       const x = this.instalacoes[inst.id], v = M.serie.filter(r => r.pontosA === 1).length;
@@ -986,9 +1067,12 @@ export class Motor {
       ...(this.versao >= 4 ? [[this.edu, this.lutas, this.lesionadoDesde, this.morte, this.origem, this.especie, this.temp, this.vitoriasVida, this.ritmo]] : []),
       ...(this.versao >= 6 ? [this.medalhas] : []), ...(this.comItens ? [[this.chips, this.carta, this.cartasUsadas]] : []),
       ...(this.liga.tentativas ? [["liga", this.liga]] : []),
-      ...(this.fronteira ? [["fronteira", this.instalacoes]] : []),
-      ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : [])]);
+      ...(this.fronteira ? [["fronteira", this.instalacoes]] : []), ...(this.salao.tentativas ? [["salao", this.salao]] : []),
+      ...(this.versao >= 7 ? [[this.men, this.honestidadeEspecie]] : []),
+      ...(this.versao >= 8 ? [this.conf!.assinatura()] : [])]);
   }
+  /** v8 (M1): a frase de estado da confianca agora (null nos v1-v7) */
+  estadoConfianca(): ReturnType<ConfiancaCombate["estado"]> | null { return this.conf ? this.conf.estado(this.e.tick) : null; }
   /** um evento do registro, sem regravar no registro (replay) */
   aplicarEvento(ev: EventoRegistro): void {
     const t = ev[0];

@@ -32,8 +32,10 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py);
    5 = v4 + evolucao canonica: o Ultimate vira Mega, um estagio proprio (docs/DESIGN_EVOLUCAO_CANONICA.md; so no jogo);
    6 = v5 + trava da evolucao pelas medalhas do Tamer (evento "u" no registro; docs/DESIGN_MEDALHAS_ARENAS.md; so no jogo);
-   7 = v6 + voz propria: fala espontanea com janela e mentira (evento "fl"; docs/DESIGN_VOZ_PROPRIA.md, secao 9) */
-export const VERSAO_PET = 7;
+   7 = v6 + voz propria: fala espontanea com janela e mentira (evento "fl"; docs/DESIGN_VOZ_PROPRIA.md, secao 9);
+   8 = v7 + confianca de combate e desgaste por rival repetido (MVP M1; nenhum evento novo, estado derivado das lutas "l";
+   docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py) */
+export const VERSAO_PET = 8;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -67,6 +69,10 @@ export const CMEN = { fatorSombria: .4, pesoSobrecarga: .5, coefChance: .5, refo
   impunesPremiada: 2, janela: 30, fracaoTemaEstado: .5, honestidadeEnganador: .7 };
 /* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
 export const CHE = { sigma: .1 };
+/* confianca de combate e desgaste por rival repetido (MVP M1, espelho de ConfigConfianca; pets v8; tudo PROPOSTO,
+   sem fonte). lambda/tauHab: novidade por rival; eta/kSens/tauConf: a confianca; kappaEps: so o epsilon do lutador
+   sobe com a inseguranca; limiarFrase/histerese/limiarTedio/nTedio: as frases de estado (motor/confianca.ts) */
+export const CCF = { lambda: .7, tauHab: 2880, eta: .25, kSens: .5, tauConf: 1440, kappaEps: .10, limiarFrase: .4, histerese: 120, limiarTedio: .3, nTedio: 3 };
 /* memoria por espacos (espelho de ConfigMemoriaEspacos) */
 export type CategoriaMemoria = "demora" | "bronca" | "elogio" | "carinho";
 export const CME = {

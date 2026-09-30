@@ -5,7 +5,7 @@ import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import {
   ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, CMEN, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
-  chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
+  chaveSprite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Deco, fundoDeco } from "../../componentes/Deco.tsx";
@@ -159,6 +159,39 @@ function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alt
         <span class="fala-status" title={`${r.texto} · ${r.titulo}`}><span class="fala-ponto" data-estado={fl.modo === "template" ? "off" : r.estado} aria-hidden="true" />{MODO_CURTO[fl.modo]}</span>
       </div>
       {aberto && (desk ? det : <Folha titulo="Por que ele disse isso" fechar={alternar}>{det}</Folha>)}
+    </div>
+  );
+}
+
+/* confianca de combate (M1, so pets v8): a frase de estado (confiante, inseguro, entediado do rival) quando existe, com
+   o "porque" apontando para as lutas do registro que a causaram (ConfiancaCombate.estado). Neutro: nada. */
+const RESULTADO_LUTA: Record<number, string> = { 1: "venceu", 0: "empatou", [-1]: "perdeu" };
+export function lutasDaCausa(m: Motor, lutas: readonly number[], estado: string): { idx: number; k: number; tick: number; rival: string; sinal: number }[] {
+  if (!m.conf) return [];
+  /* a i-esima luta da confianca e de um evento "l" do registro (event sourcing): Motor.confEvento da a ordem dele entre os "l"
+     (uma serie, como a Liga ou a Cidadela, tem varias lutas num evento so) */
+  const idxL: number[] = [];
+  m.log.forEach((ev, i) => { if (ev[1] === "l") idxL.push(i); });
+  const sinal = estado === "confiante" ? 1 : estado === "inseguro" ? -1 : null;
+  return m.conf.historico.map((h, i) => ({ idx: idxL[m.confEvento[i]], k: i, tick: h.tick, rival: h.rival, sinal: h.sinal }))
+    .filter(x => lutas.includes(x.tick) && (sinal === null || x.sinal === sinal)).reverse();
+}
+function EstadoConfianca() {
+  const { motor: m, nascendo } = useJogo(), [aberto, setAberto] = useState(false);
+  if (m.versao < 8 || nascendo > 0 || m.morte) return null;
+  const e = m.estadoConfianca();
+  if (!e || e.estado === "neutro") return null;
+  const txt = expressarConfianca(e.estado, m.estagioAtual)!, causa = lutasDaCausa(m, e.lutas, e.estado);
+  const desde = e.desde !== null ? `desde D${diaDe(e.desde)} ${hhmm(e.desde)}` : "";
+  return (
+    <div class="pet-conf">
+      <button type="button" class="pet-conf-frase" aria-expanded={aberto} aria-controls="conf-det" title="Toque para ver as lutas que causaram" onClick={() => setAberto(!aberto)}>
+        <span class="dl-tag pet-conf-tag">{e.estado === "entediado" ? "entediado do rival" : e.estado}</span>
+        <b><TextoFala txt={txt} est={m.estagioAtual} atlasOk={false} /></b><small>{desde}</small></button>
+      {aberto && <ul class="pet-conf-det dl-apoio" id="conf-det">
+        {causa.map(x => <li key={x.k}><span class="dl-lcd">D{diaDe(x.tick)} {hhmm(x.tick)}</span> {RESULTADO_LUTA[x.sinal]} de {nomeRivalConfianca(x.rival)} · evento #{x.idx} do registro</li>)}
+        {!causa.length && <li>sem luta registrada</li>}
+      </ul>}
     </div>
   );
 }
@@ -372,6 +405,7 @@ export function TelaPet({ abrirMeusPets, irConversar, abrirConfig, irRegistro }:
             <LinhaFala v={fala} aberto={aberto} alternar={() => setAberto(!aberto)} />
             <button type="button" class="dl-btn pet-conversar desk-so" onClick={irConversar}>{ICONE_CONVERSAR}Conversar</button>
           </div>
+          <EstadoConfianca />
         </div>
         <aside class="pet-lado">
           <Necessidades />

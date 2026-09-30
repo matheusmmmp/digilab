@@ -3,13 +3,14 @@
    item 1). A luta entra no registro na hora (motor.lutar); a animacao so mostra os turnos que o motor ja jogou. */
 import { useEffect, useState } from "preact/hooks";
 import {
-  BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NPC, RIVAL_LIGA, cartaDe, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
+  BOTS_V21, BOT_TRACO, CAT, LIGA, NOME_ARQ, NOME_BOT, NOME_ESP, NOME_EST, NPC, RIVAL_LIGA, RIVAL_SALAO, cartaDe, formaRivalSalao, chaveSprite, corDominante, estadoV2, formaLiga, formaRival,
   formaRivalInstalacao, hashSemente, instalacaoDe, jogarV2, lutadorBot, lutadorPet, medalhaDoLider, motivoCombate, nomeForma, type Arena, type Estagio,
   type EstadoLuta, type FormaAdultaNormal, type IdInstalacao, type Instalacao, type Lutador, Motor, type MotivoCombate, type ResultadoLuta, type TracoCombate,
   type Turno,
 } from "../motor/index.ts";
 import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
+import { ehLuta } from "./rotas.ts";
 import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
@@ -50,6 +51,13 @@ export function exibirRivalInstalacao(s: number, k: number, L: Lutador): Lutador
   const f = formaRivalInstalacao(s, k);
   return { ...L, sprite: chaveSprite(f), grade: "adulto", cor: "carga", estagioFala: "mega", nomeTela: nomeForma(f),
     estiloTela: `${NOME_ARQ[f.adulta!].toLowerCase()} · ${NOME_ESP[f.esp]}` };
+}
+/** o rival de uma luta do Salao (pets v6; motor/salao.ts), sorteado da semente e do estagio do pet, como lutador de tela: o sprite, o nome e,
+    no estilo, o arquetipo (ou o ramo, ou a linha) e o nivel */
+export function exibirRivalSalao(s: number, est: Estagio, L: Lutador): LutadorTela {
+  const f = formaRivalSalao(s, est), tipo = f.adulta ?? f.linha ?? f.ramo!;
+  return { ...L, sprite: chaveSprite(f), grade: gradeDe(est), cor: "carga", estagioFala: est, nomeTela: nomeForma(f),
+    estiloTela: `${NOME_ARQ[tipo].toLowerCase()} · ${NOME_EST[est]}` };
 }
 /** uma linha do registro da luta: o motivo de cada lado; o texto sai da tabela de expressao na hora de desenhar */
 export interface LinhaLog { t: number; pet: string; rival: string; ma: MotivoCombate; mb: MotivoCombate; estPet: Estagio; estRival: Estagio; humor: number }
@@ -102,6 +110,12 @@ export const LUTA = { lutando: false, rival: "agressivo", campSel: null as strin
   pausado: false, rapido: false,
   /** indice no registro da luta que esta sendo revista (replay animado, nada gravado); null numa luta de verdade */
   replay: null as number | null };
+/** o relogio do jogo para (so na interface: o motor, o registro e o replay nao mudam) enquanto uma luta e mostrada no palco e enquanto o
+    Resultado dela esta aberto (a tela cheia da luta com o resultado no palco). A luta ja entrou no registro na hora; sem isto, na velocidade
+    de teste a lesao da derrota que fecha uma sequencia mataria o pet durante a animacao (6 h de jogo em 36 s). Fechado o Resultado, o
+    tempo volta a correr de onde parou, sem compensar o tempo parado (tempo.ts descarta o que passou) */
+export const lutaSeguraTempo = (): boolean =>
+  LUTA.lutando || (LUTA.replay === null && !!LUTA.palco?.resultado && typeof location !== "undefined" && ehLuta(location.hash));
 const ouvintes = new Set<() => void>();
 export const avisarLuta = (): void => { for (const o of ouvintes) o(); };
 export function useLuta(): typeof LUTA {
@@ -377,7 +391,7 @@ export function reverLuta(idx: number, nomeAcaoV2: Record<string, string>): void
   if (LUTA.lutando) return;
   const L = reconstruirLuta(jogoAtual().motor, idx);
   LUTA.replay = idx;
-  animar(L.serie, L.nLutas, L.A, L.lideres ?? L.rivais ?? L.B, L.lideres || L.instalacao ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
+  animar(L.serie, L.nLutas, L.A, L.lideres ?? L.rivais ?? L.B, L.lideres || L.instalacao || L.rival === RIVAL_SALAO ? "fronteira" : L.npc ? "campanha" : "arena", nomeAcaoV2, L.arena, p => {
     const txt = L.res.pontosA === 1 ? `${L.A.nomeTela} venceu` : L.res.pontosA === 0 ? `${L.B.nomeTela} venceu` : "Empate";
     const v = L.serie.filter(x => x.pontosA === 1).length;
     p.texto = `Fim do replay: ${L.instalacao ? `${L.instalacao.nome}, ${v} vitória${v === 1 ? "" : "s"} seguida${v === 1 ? "" : "s"}; ` : L.nLutas > 1 ? `luta ${L.serie.length} de ${L.nLutas}, ` : ""}${txt} em ${L.res.turnos.length} turnos.`;
@@ -412,6 +426,8 @@ export function reconstruirLuta(m: Motor, idx: number): LutaReconstruida {
     const rivais = L.rivais!.map((x, k) => exibirRivalInstalacao(s, k, x));
     return { res, A: exibirPet(m0, L.A), B: rivais[rivais.length - 1], rival: r, npc, serie: L.serie, nLutas: L.serie.length, arena: null, lideres: null, instalacao: L.instalacao, rivais };
   }
+  /* o Salao: o rival sorteado do estagio do pet na hora da luta */
+  if (r === RIVAL_SALAO) return { res, A: exibirPet(m0, L.A), B: exibirRivalSalao(s, m0.estagioAtual, L.B), rival: r, npc, serie: L.serie, nLutas: 1, arena: null, lideres: null, instalacao: null, rivais: null };
   return { res, A: exibirPet(m0, L.A), B: exibirBot(r, L.B), rival: r, npc, serie: L.serie, nLutas: L.arena?.lutas ?? 1, arena: L.arena, lideres: null, instalacao: null, rivais: null };
 }
 

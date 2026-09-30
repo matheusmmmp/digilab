@@ -122,7 +122,7 @@ function Dados({ irPet }: { irPet: () => void }) {
       </section>
       <section class="dl-card cfg-bloco" aria-labelledby="cfg-tempo">
         <h2 class="cfg-bloco-tit" id="cfg-tempo"><Deco nome={ICONE.tempo} class="cfg-bloco-ic" />Tempo <span class="dl-tag cfg-tag">TESTE</span></h2>
-        <p>Acelera o relógio do pet. Tudo entra no registro.</p>
+        <p>Acelera o relógio do pet. Tudo entra no registro. Durante a luta e o Resultado dela o relógio para.</p>
         <div class="tempo-pet" role="group" aria-label="Velocidade do tempo">
           {VELOCIDADES.map(([rot, v, dica]) => (
             <button type="button" key={rot} class="dl-btn dl-btn--sec" aria-pressed={velocidade === v} title={dica} onClick={() => escolherVelocidade(v)}>{rot}</button>

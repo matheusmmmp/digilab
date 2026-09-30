@@ -71,7 +71,7 @@ export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: tr
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {
