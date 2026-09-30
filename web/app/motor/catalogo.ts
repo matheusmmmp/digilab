@@ -1,6 +1,6 @@
 /* Catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): stats da forma, renormalizacao e perfil de
    combate (vida, guts, multiplicadores). Espelho de combate_v2/v21/catalogo.py e campanha.perfil_de_stats. */
-import { CAT, CCOND, CESC, CESC_V6, CMG, CTR, CV21, LINHA_DA_FORMA, SOMBRIA, STATS, type Tecnica } from "./constantes.ts";
+import { CAT, CCOND, CESC, CESC_V6, CESC_V9, CMG, CTR, CV21, LINHA_DA_FORMA, SOMBRIA, STATS, type Tecnica } from "./constantes.ts";
 import type { Carater, Estagio, Forma, FormaAdultaNormal, Stats } from "./tipos.ts";
 
 export interface Perfil {
@@ -17,10 +17,16 @@ export const ESCALA = { ligada: false };
 export function ligarEscala(v: boolean): void { ESCALA.ligada = v; }
 /** versao de pet da escala propria (CESC_V6) */
 export const VERSAO_ESCALA_V6 = CESC_V6.versaoPet;
-/** E do pet: vida do estagio x (1 + beta x pontos treinados); `versao` = a do pet (>= 6: a escala dos pets v6) */
-export const escalaDe = (est: Estagio, pontos: number, versao = 0): number => versao >= VERSAO_ESCALA_V6
-  ? CESC_V6.vida[est] * (1 + CESC_V6.beta * pontos)
-  : (est === "mega" ? CMG.vida : CESC.vida[est]) * (1 + CESC.beta * pontos);
+/** versao de pet da escala dos pets v9 (CESC_V9; rodada de equilibrio geral, fase 2) */
+export const VERSAO_ESCALA_V9 = CESC_V9.versaoPet;
+/** a escala propria da versao do pet: CESC_V9 (v9 em diante), CESC_V6 (v6-v8); null nos v1-v5 (a CESC) */
+export const escalaDaVersao = (versao: number): typeof CESC_V6 | null =>
+  versao >= VERSAO_ESCALA_V9 ? CESC_V9 : versao >= VERSAO_ESCALA_V6 ? CESC_V6 : null;
+/** E do pet: vida do estagio x (1 + beta x pontos treinados); `versao` = a do pet (>= 6: a escala dos pets v6; >= 9: a dos v9) */
+export const escalaDe = (est: Estagio, pontos: number, versao = 0): number => {
+  const E = escalaDaVersao(versao);
+  return E ? E.vida[est] * (1 + E.beta * pontos) : (est === "mega" ? CMG.vida : CESC.vida[est]) * (1 + CESC.beta * pontos);
+};
 /** quanto 1 ponto de vida de combate deste lutador vale na tela (dano e vida exibidos); 1 sem a escala */
 export function fatorExibicao(p: Perfil, versao = 0): number {
   if (!ESCALA.ligada) return 1;

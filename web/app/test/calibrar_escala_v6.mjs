@@ -33,19 +33,29 @@
 // do desafiado (o NPC/lider; nas metas de estagio, o pet do estagio de cima). --limite-fracao: a regra de antes (a fracao de vida
 // decide), a que gerou os artefatos de calibracao anteriores a essa decisao.
 //
-// uso (em web/app): node test/calibrar_escala_v6.mjs [--validar] [-n 10]
-//   sem --validar: sementes de calibracao, grade de beta e de razoes -> artifacts_campanha/escala_v6/calibracao.json
-//   --validar: sementes de validacao, a CESC_V6 do motor -> artifacts_campanha/escala_v6/validacao.json
+// Pets v9 (rodada de equilibrio geral, fase 2; docs/PLANO_EQUILIBRIO_GERAL.md, meta M-B1): por padrao o script mede os pets v9,
+// com as regras das lutas deles (combate V21E, CV21E) e a escala da versao 9 (escalaDaVersao(9): a CESC_V9); os lideres pelas regras
+// V21E (as listas V21E nos NPCs de estilo v21). --v6: a medicao de antes, os pets v6 com a V21D e a CESC_V6, nas pastas de antes
+// (reproduz os artefatos gravados em artifacts_campanha/escala_v6/). Os pets v9 gravam em artifacts_equilibrio_geral/fase2/.
+//
+// uso (em web/app): node test/calibrar_escala_v6.mjs [--v6] [--validar | --conferir] [-n 10]
+//   sem --validar: sementes de calibracao, grade de beta e de razoes -> escala_calibracao.json (v9) ou
+//     artifacts_campanha/escala_v6/calibracao.json (--v6)
+//   --conferir: sementes de calibracao, a escala do motor (as metas de estagio, sem escolher nada) -> escala_conferencia.json
+//   --validar: sementes de validacao, a escala do motor -> escala_validacao.json (v9; so na fase 4) ou
+//     artifacts_campanha/escala_v6/validacao.json (--v6)
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
-const { ADOL_V21, ARENAS, CESC_V6, CRIANCA_V21, CV, CV21D, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, LUGARES_V6, STATS } = M;
-const args = process.argv.slice(2), validar = args.includes("--validar");
+const { ADOL_V21, ARENAS, CRIANCA_V21, CV, CV21D, CV21E, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, LUGARES_V6, STATS } = M;
+const args = process.argv.slice(2), validar = args.includes("--validar"), conferir = args.includes("--conferir"), V6 = args.includes("--v6");
+if (validar && conferir) throw new Error("--validar e --conferir juntos");
 const n = args.includes("-n") ? Number(args[args.indexOf("-n") + 1]) : 10;
 const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
-const R = CV21D, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
+/* as regras da luta e a versao do pet (a escala: escalaDe(..., VERSAO)) */
+const R = V6 ? CV21D : CV21E, VERSAO = R.versaoPet, ESC = M.escalaDaVersao(VERSAO), FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
 M.ligarEscala(true);
 
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: 40 };
@@ -70,7 +80,7 @@ function formasDe(est) {
 /** pet de referencia; E: a escala sobreposta (calibracao) ou undefined (a do motor, pets v6) */
 function pet([nome, forma, car, g], esp, nivel, E) {
   const tr = nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null;
-  const cond = M.perfilDe(forma(esp), car, 1, tr, true, M.VERSAO_ESCALA_V6);
+  const cond = M.perfilDe(forma(esp), car, 1, tr, true, VERSAO);
   return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: E === undefined ? cond : { ...cond, escala: E } };
 }
 
@@ -131,24 +141,26 @@ function viabilidade(beta) {
   return out;
 }
 
-const pasta = fileURLToPath(new URL("../../../artifacts_campanha/escala_v6/", import.meta.url));
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/escala_v6/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
+const arquivo = nome => pasta + (V6 ? nome : "escala_" + nome);
 mkdirSync(pasta, { recursive: true });
-const cab = { limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, regras: "v21d", treino_tipico: TIPICO,
+const cab = { limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, regras: V6 ? "v21d" : "v21e", ...(V6 ? {} : { versao_pet: VERSAO }), treino_tipico: TIPICO,
   metas: { vizinho_pontos_max: META_VIZINHO, dois_estagios_vitorias_max: META_DOIS, lider_sem_max: META_SEM, lider_com_min: META_COM, lider_pior_forma_min: META_FORMA } };
 
-if (validar) {
-  const E = (est, pontos) => M.escalaDe(est, pontos, M.VERSAO_ESCALA_V6);
-  const out = { descricao: "Validacao da escala dos pets v6 (CESC_V6 do motor): metas de estagio.", conjunto: "validacao", ...cab,
-    escala: { vida: CESC_V6.vida, beta: CESC_V6.beta }, vizinhos: {}, dois_estagios: {} };
+if (validar || conferir) {
+  const E = (est, pontos) => M.escalaDe(est, pontos, VERSAO);
+  const out = { descricao: V6 ? "Validacao da escala dos pets v6 (CESC_V6 do motor): metas de estagio."
+    : `${validar ? "Validacao" : "Conferencia"} da escala dos pets v9 (a do motor, versao 9; regras V21E): metas de estagio.`,
+    conjunto: validar ? "validacao" : "calibracao", ...cab, escala: { vida: ESC.vida, beta: ESC.beta }, vizinhos: {}, dois_estagios: {} };
   for (const [b, a] of [...VIZINHOS, ...DOIS]) {
     const viz = VIZINHOS.some(([x, y]) => x === b && y === a), r = estagio(b, a, null), rho = E(b, TIPICO[b]) / E(a, 0);
     const passa = viz ? r.pontos <= META_VIZINHO : r.vitorias <= META_DOIS;
     (viz ? out.vizinhos : out.dois_estagios)[`${b} x ${a}`] = { razao_E: +rho.toFixed(4), ...r, passa };
     console.log(`${b} (+${TIPICO[b]}) x ${a}: razao ${rho.toFixed(3)} pontos ${r.pontos} vitorias ${r.vitorias} ${passa ? "OK" : "NAO PASSA"}`);
   }
-  writeFileSync(pasta + "validacao.json", JSON.stringify(out, null, 1) + "\n");
+  writeFileSync(arquivo(validar ? "validacao.json" : "conferencia.json"), JSON.stringify(out, null, 1) + "\n");
 } else {
-  const out = { descricao: "Calibracao da escala dos pets v6: viabilidade dos lideres por beta, metas de estagio por razao de vida.",
+  const out = { descricao: `Calibracao da escala dos pets ${V6 ? "v6" : "v9 (regras V21E)"}: viabilidade dos lideres por beta, metas de estagio por razao de vida.`,
     conjunto: "calibracao", ...cab, margem_lider: MARGEM_LIDER, margem_estagio: MARGEM_ESTAGIO, betas: BETAS, razoes: RAZOES, fatores: [FATORES[0], FATORES[FATORES.length - 1]], lideres_por_beta: {} };
   /* 1. beta: o menor com todos os lideres viaveis (a Torre fora: a alavanca dela e a lista) */
   let beta = null;
@@ -187,5 +199,5 @@ if (validar) {
       ...(piso ? { piso: { razao_E: 0.01, pontos: piso.pontos, vitorias: piso.vitorias, vitorias_por_par: piso.vitorias_por_par } } : {}) };
     console.log(`  ${b} (+${TIPICO[b]}) x ${a}: E ${rho.toFixed(4)} pontos ${r.pontos} vitorias ${r.vitorias}${piso ? `; piso (E 0,01) vitorias ${piso.vitorias}` : ""}`);
   }
-  writeFileSync(pasta + "calibracao.json", JSON.stringify(out, null, 1) + "\n");
+  writeFileSync(arquivo("calibracao.json"), JSON.stringify(out, null, 1) + "\n");
 }

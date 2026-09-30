@@ -19,15 +19,28 @@
 // do desafiado (o NPC/lider; nas metas de estagio, o pet do estagio de cima). --limite-fracao: a regra de antes (a fracao de vida
 // decide), a que gerou os artefatos de calibracao anteriores a essa decisao.
 //
-// uso (em web/app): node test/calibrar_arenas.mjs [--validar] [-n 10]
-//   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> artifacts_campanha/arenas/calibracao.json
-//   --validar: sementes de validacao, os fatores de motor/arenas.ts (ou do NPC) -> artifacts_campanha/arenas/validacao.json
+// Pets v9 (rodada de equilibrio geral, fase 2; docs/PLANO_EQUILIBRIO_GERAL.md, meta M-B2): por padrao o script mede os pets v9, com
+// as regras das lutas deles (combate V21E, CV21E: as listas V21E nas formas de referencia e nos NPCs de estilo v21), a escala da
+// versao 9 (CESC_V9) e os fatores dos lideres dos pets v9 (arenas.FATOR_LIDER_V9, pela arena da luta de um pet v9). --v6: a medicao
+// de antes (pets v6, V21D, CESC_V6, os fatores de ARENAS), na pasta de antes. Os pets v9 gravam em artifacts_equilibrio_geral/fase2/.
+// --lista-torre <nome>: na Torre, a lista do lider e bots.GAMBITS_ARENA[<nome>] (a alavanca da parte 2; test/explorar_torre.mjs).
+//
+// uso (em web/app): node test/calibrar_arenas.mjs [--v6] [--validar | --conferir] [--arena <id>] [-n 10]
+//   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> arenas_calibracao.json (v9) ou artifacts_campanha/arenas/calibracao.json
+//   --conferir: sementes de calibracao, os fatores do motor (sem escolher) -> arenas_conferencia.json (v9)
+//   --validar: sementes de validacao, os fatores do motor -> arenas_validacao.json (v9; so na fase 4) ou
+//     artifacts_campanha/arenas/validacao.json (--v6)
+//   --arena <id>: so uma arena (para rodar em paralelo) -> o arquivo com o sufixo _<id>
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
-const { ADOL_V21, ARENAS, CESC, CMG, CRIANCA_V21, CV, CV21D, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, LUGARES_V6, NPC, STATS } = M;
-const args = process.argv.slice(2), validar = args.includes("--validar");
+const { ADOL_V21, ARENAS, CESC, CMG, CRIANCA_V21, CV, CV21D, CV21E, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, LUGARES_V6, NPC, STATS } = M;
+const args = process.argv.slice(2), validar = args.includes("--validar"), conferir = args.includes("--conferir"), V6 = args.includes("--v6");
+if (validar && conferir) throw new Error("--validar e --conferir juntos");
+const opcao = k => args.includes(k) ? args[args.indexOf(k) + 1] : null;
+const SO_ARENA = opcao("--arena"), LISTA_TORRE = opcao("--lista-torre");
+if (SO_ARENA && !ARENAS.some(a => a.id === SO_ARENA)) throw new Error("arena desconhecida: " + SO_ARENA);
 const n = args.includes("-n") ? Number(args[args.indexOf("-n") + 1]) : 10;
 const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
@@ -36,7 +49,8 @@ const FATORES = Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) 
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: CMG.tetoVida };
 /* com a meta de 0,05 nenhum lider fica so medido */
 const SO_MEDIR = new Set();
-const R = CV21D, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
+/* as regras da luta e a versao do pet (a escala: escalaDe(..., VERSAO); o fator do lider: a arena da luta de um pet desta versao) */
+const R = V6 ? CV21D : CV21E, VERSAO = R.versaoPet, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
 M.ligarEscala(true);
 
 const primeiraForma = l => FORMAS_AD.find(f => LINHA_DA_FORMA[f] === l);
@@ -48,7 +62,7 @@ function formasDe(est) {
 }
 function pet([nome, forma, car, g], esp, nivel) {
   const tr = nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null, f = forma(esp);
-  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: M.perfilDe(f, car, 1, tr, true, M.VERSAO_ESCALA_V6) };
+  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: M.perfilDe(f, car, 1, tr, true, VERSAO) };
 }
 function taxa(a, b, arena) {
   let soma = 0, tot = 0;
@@ -60,7 +74,7 @@ function taxa(a, b, arena) {
   return soma / tot;
 }
 function medir(arena, fator) {
-  const est = LUGARES_V6[arena.lugar].est, formas = formasDe(est), nv = TIPICO[est], ar = { ...arena, fator };
+  const est = LUGARES_V6[arena.lugar].est, formas = formasDe(est), nv = TIPICO[est], ar = { ...arena, fator, ...(LISTA_TORRE && arena.id === "torre" ? { lista: LISTA_TORRE } : {}) };
   const B = M.lutadorBot(arena.lider, R, ar);
   const por = {};
   for (const fo of formas) {
@@ -74,17 +88,23 @@ function medir(arena, fator) {
     folga: +Math.min(META_SEM - sem, com - META_COM, pior - META_FORMA).toFixed(4),
     travados: ks.filter(k => por[k].com < META_FORMA), por_forma: por };
 }
-const fatorDe = a => a.fator ?? NPC[a.lider].fator ?? CESC.fatorNpc[a.lider];
+const fatorDe = V6 ? a => a.fator ?? NPC[a.lider].fator ?? CESC.fatorNpc[a.lider] : a => {
+  const f = M.arenaDaLuta(a.lider, VERSAO)?.fator;
+  if (f === undefined) throw new Error("lider sem fator dos pets v9: " + a.id);
+  return f;
+};
 
 const out = {
-  descricao: "Calibracao dos lideres das arenas (pets v6, medalhas parte 2): motor web, escala ligada, regras V21D, regra de cada arena.",
-  conjunto: validar ? "validacao" : "calibracao", limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, pet_lado: "A",
+  descricao: V6 ? "Calibracao dos lideres das arenas (pets v6, medalhas parte 2): motor web, escala ligada, regras V21D, regra de cada arena."
+    : `${conferir ? "Conferencia" : "Calibracao"} dos lideres das arenas (pets v9, rodada de equilibrio geral fase 2): motor web, escala ligada (CESC_V9), regras V21E, regra de cada arena.`,
+  conjunto: validar ? "validacao" : "calibracao", limite: FRACAO ? "fracao" : "desafiado", ...(V6 ? {} : { regras: "v21e", versao_pet: VERSAO }),
+  ...(LISTA_TORRE ? { lista_torre: LISTA_TORRE } : {}), sementes, n_por_semente: n, pet_lado: "A",
   metas: { sem_treino_max: META_SEM, com_treino_min: META_COM, pior_forma_min: META_FORMA }, treino_tipico: TIPICO, arenas: {},
 };
-for (const a of ARENAS) {
+for (const a of ARENAS.filter(x => !SO_ARENA || x.id === SO_ARENA)) {
   const est = LUGARES_V6[a.lugar].est, cab = `${a.id} (${NPC[a.lider].nome}, ${est}, ${a.regra})`;
   let r;
-  if (validar || SO_MEDIR.has(a.id)) { r = medir(a, fatorDe(a)); out.arenas[a.id] = { lider: a.lider, regra: a.regra, estagio: est, ...r }; }
+  if (validar || conferir || SO_MEDIR.has(a.id)) { r = medir(a, fatorDe(a)); out.arenas[a.id] = { lider: a.lider, regra: a.regra, estagio: est, ...r }; }
   else {
     const med = FATORES.map(f => medir(a, f)), pool = med.some(m => m.passa) ? med.filter(m => m.passa) : med;
     r = pool.reduce((x, y) => y.folga > x.folga ? y : x);
@@ -92,6 +112,7 @@ for (const a of ARENAS) {
   }
   console.log(`${cab}: fator ${r.fator} sem ${r.sem} com ${r.com} pior ${r.pior} (${r.pior_forma}) ${r.passa ? "OK" : "NAO PASSA"}${r.travados.length ? " travados " + r.travados : ""}`);
 }
-const pasta = fileURLToPath(new URL("../../../artifacts_campanha/arenas/", import.meta.url));
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/arenas/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
-writeFileSync(pasta + (validar ? "validacao.json" : "calibracao.json"), JSON.stringify(out, null, 1) + "\n");
+const nome = (validar ? "validacao" : conferir ? "conferencia" : "calibracao") + (LISTA_TORRE ? "_" + LISTA_TORRE : "") + (SO_ARENA ? "_" + SO_ARENA : "");
+writeFileSync(pasta + (V6 ? "" : "arenas_") + nome + ".json", JSON.stringify(out, null, 1) + "\n");

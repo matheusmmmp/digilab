@@ -13,26 +13,42 @@
 // do desafiado (o NPC/lider; nas metas de estagio, o pet do estagio de cima). --limite-fracao: a regra de antes (a fracao de vida
 // decide), a que gerou os artefatos de calibracao anteriores a essa decisao.
 //
-// uso (em web/app): node test/calibrar_desafiantes_v6.mjs [--validar] [-n 10]
-//   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> artifacts_campanha/escala_v6/desafiantes_calibracao.json
-//   --validar: sementes de validacao, os fatores de CESC_V6.fatorNpc -> artifacts_campanha/escala_v6/desafiantes_validacao.json
+// Pets v9 (rodada de equilibrio geral, fase 2; docs/PLANO_EQUILIBRIO_GERAL.md, meta M-B3): por padrao o script mede os pets v9, com
+// as regras das lutas deles (combate V21E, CV21E: as listas V21E nas formas de referencia e nos NPCs de estilo v21) e a escala da
+// versao 9 (CESC_V9: a vida e os fatores dos desafiantes, CESC_V9.fatorNpc). --v6: a medicao de antes (pets v6, V21D, CESC_V6), na
+// pasta de antes. Os pets v9 gravam em artifacts_equilibrio_geral/fase2/.
+//
+// uso (em web/app): node test/calibrar_desafiantes_v6.mjs [--v6] [--validar | --conferir] [--npc <chave>] [-n 10]
+//   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> desafiantes_calibracao.json (v9, em artifacts_equilibrio_geral/fase2/)
+//     ou artifacts_campanha/escala_v6/desafiantes_calibracao.json (--v6)
+//   --conferir: sementes de calibracao, os fatores do motor (sem escolher) -> desafiantes_conferencia.json (v9)
+//   --validar: sementes de validacao, os fatores do motor -> desafiantes_validacao.json (v9: so na fase 4)
+//   --npc <chave>: so um desafiante (para rodar em paralelo) -> o arquivo com o sufixo _<chave>
+//   --grade <inicio>,<fim>,<passo>: outra grade de fatores (a do Tortomon em passos de 0,01, fase 2) -> o sufixo _grade
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
-const { ADOL_V21, ARENAS, CAMPANHA_V6, CESC_V6, CV, CV21D, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, LUGARES_V6, STATS } = M;
-const args = process.argv.slice(2), validar = args.includes("--validar");
+const { ADOL_V21, ARENAS, CAMPANHA_V6, CV, CV21D, CV21E, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, LUGARES_V6, STATS } = M;
+const args = process.argv.slice(2), validar = args.includes("--validar"), conferir = args.includes("--conferir"), V6 = args.includes("--v6");
+if (validar && conferir) throw new Error("--validar e --conferir juntos");
+const SO_NPC = args.includes("--npc") ? args[args.indexOf("--npc") + 1] : null;
 const n = args.includes("-n") ? Number(args[args.indexOf("-n") + 1]) : 10;
 const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
 const META_SEM = 0.30, META_COM = 0.80, META_FORMA = 0.5;
-const FATORES = Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) * 10) / 10);   /* 0,5..4,0 */
+const GRADE = args.includes("--grade") ? args[args.indexOf("--grade") + 1].split(",").map(Number) : null;
+if (GRADE && (GRADE.length !== 3 || GRADE.some(x => !(x > 0)) || GRADE[1] < GRADE[0])) throw new Error("--grade inicio,fim,passo");
+const FATORES = GRADE ? Array.from({ length: Math.round((GRADE[1] - GRADE[0]) / GRADE[2]) + 1 }, (_, i) => Math.round((GRADE[0] + GRADE[2] * i) * 1000) / 1000)
+  : Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) * 10) / 10);   /* 0,5..4,0 */
 const TIPICO = { crianca: 8, adolescente: 22, adulto: 36, mega: 40 };
-const R = CV21D, FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
+/* as regras da luta e a versao do pet (a escala e os fatores: escalaDaVersao(VERSAO)) */
+const R = V6 ? CV21D : CV21E, VERSAO = R.versaoPet, ESC = M.escalaDaVersao(VERSAO), FRACAO = args.includes("--limite-fracao"), DESAFIADO = FRACAO ? null : 1;
 M.ligarEscala(true);
 
 const LIDERES = new Set(ARENAS.map(a => a.lider));
-const DESAFIANTES = CAMPANHA_V6.filter(c => !LIDERES.has(c.k));
+const DESAFIANTES = CAMPANHA_V6.filter(c => !LIDERES.has(c.k) && (!SO_NPC || c.k === SO_NPC));
+if (!DESAFIANTES.length) throw new Error("desafiante desconhecido: " + SO_NPC);
 const primeiraForma = l => FORMAS_AD.find(f => LINHA_DA_FORMA[f] === l);
 function formasDe(est) {
   if (est === "adolescente") return LINHAS.map(l => [l, e => ({ esp: e, est, ramo: "sereno", linha: l }), M.caraterCanonico(primeiraForma(l)), ADOL_V21[l]]);
@@ -42,7 +58,7 @@ function formasDe(est) {
 }
 function pet([nome, forma, car, g], esp, nivel) {
   const tr = nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null;
-  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: M.perfilDe(forma(esp), car, 1, tr, true, M.VERSAO_ESCALA_V6) };
+  return { nome: `${nome}+${nivel}@${esp}`, estilo: { nome, gambits: M.copiarGambits(g), eps: CV.eps }, cond: M.perfilDe(forma(esp), car, 1, tr, true, VERSAO) };
 }
 function taxa(a, b) {
   let soma = 0, tot = 0;
@@ -51,7 +67,7 @@ function taxa(a, b) {
 }
 function medir(c, fator) {
   const est = LUGARES_V6[c.lug].est, formas = formasDe(est), nv = TIPICO[est];
-  const B0 = M.lutadorBot(c.k, R), B = { ...B0, cond: { ...B0.cond, escala: M.escalaDe(est, 0, M.VERSAO_ESCALA_V6) * fator } };
+  const B0 = M.lutadorBot(c.k, R), B = { ...B0, cond: { ...B0.cond, escala: M.escalaDe(est, 0, VERSAO) * fator } };
   const por = {};
   for (const fo of formas) {
     const v = [0, nv].map(nivel => ESPECIES.reduce((s, e) => s + taxa(pet(fo, e, nivel), B), 0) / ESPECIES.length);
@@ -66,20 +82,22 @@ function medir(c, fator) {
 }
 
 const out = {
-  descricao: "Calibracao dos desafiantes da campanha v6 (NPCs que nao sao lideres) na escala dos pets v6: motor web, regras V21D.",
-  conjunto: validar ? "validacao" : "calibracao", limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, pet_lado: "A",
-  escala: { vida: CESC_V6.vida, beta: CESC_V6.beta },
+  descricao: V6 ? "Calibracao dos desafiantes da campanha v6 (NPCs que nao sao lideres) na escala dos pets v6: motor web, regras V21D."
+    : `${conferir ? "Conferencia" : "Calibracao"} dos desafiantes da campanha (NPCs que nao sao lideres) na escala dos pets v9 (CESC_V9): motor web, regras V21E.`,
+  conjunto: validar ? "validacao" : "calibracao", limite: FRACAO ? "fracao" : "desafiado", ...(V6 ? {} : { regras: "v21e", versao_pet: VERSAO }),
+  sementes, n_por_semente: n, pet_lado: "A",
+  escala: { vida: ESC.vida, beta: ESC.beta },
   metas: { sem_treino_max: META_SEM, com_treino_min: META_COM, pior_forma_min: META_FORMA }, treino_tipico: TIPICO, desafiantes: {},
 };
 for (const c of DESAFIANTES) {
   const est = LUGARES_V6[c.lug].est;
   let r;
-  if (validar) {
-    const f = CESC_V6.fatorNpc[c.k];
-    if (f === undefined) throw new Error(`${c.nome} sem fator na CESC_V6`);
+  if (validar || conferir) {
+    const f = ESC.fatorNpc[c.k];
+    if (f === undefined) throw new Error(`${c.nome} sem fator na escala da versao ${VERSAO}`);
     r = medir(c, f);
     /* o NPC como o motor o monta tem de ter a escala medida */
-    if (M.lutadorBot(c.k, R).cond.escala !== M.escalaDe(est, 0, M.VERSAO_ESCALA_V6) * f) throw new Error("escala do NPC diferente da medida: " + c.k);
+    if (M.lutadorBot(c.k, R).cond.escala !== M.escalaDe(est, 0, VERSAO) * f) throw new Error("escala do NPC diferente da medida: " + c.k);
     out.desafiantes[c.k] = { nome: c.nome, lugar: LUGARES_V6[c.lug].nome, estagio: est, ...r };
   } else {
     const med = FATORES.map(f => medir(c, f)), pool = med.some(m => m.passa) ? med.filter(m => m.passa) : med;
@@ -88,6 +106,7 @@ for (const c of DESAFIANTES) {
   }
   console.log(`${c.nome} (${LUGARES_V6[c.lug].nome}, ${est}): fator ${r.fator} sem ${r.sem} com ${r.com} pior ${r.pior} (${r.pior_forma}) ${r.passa ? "OK" : "NAO PASSA"}${r.travados.length ? " travados " + r.travados : ""}`);
 }
-const pasta = fileURLToPath(new URL("../../../artifacts_campanha/escala_v6/", import.meta.url));
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/escala_v6/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
-writeFileSync(pasta + (validar ? "desafiantes_validacao.json" : "desafiantes_calibracao.json"), JSON.stringify(out, null, 1) + "\n");
+const nome = "desafiantes_" + (validar ? "validacao" : conferir ? "conferencia" : "calibracao") + (SO_NPC ? "_" + SO_NPC : "") + (GRADE ? "_grade" : "");
+writeFileSync(pasta + nome + ".json", JSON.stringify(out, null, 1) + "\n");

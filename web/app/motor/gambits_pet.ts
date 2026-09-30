@@ -4,7 +4,7 @@
    se reordena pela nota; uma regra ativa com nota ruim e trocada por uma candidata do repertorio (regras de
    todos os estilos, catalogo fechado). O DONO so pode travar (regra fica na posicao) ou vetar (pet nao pode
    usar). Lutas, travas e vetos entram no registro: o replay reconstroi o aprendizado. */
-import { CCF, CED, CESC, CESC_V6, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
+import { CCF, CED, CESC, CLE, CSO, CV, CV21, GA, SOMBRIA, TECNICAS, baseDe } from "./constantes.ts";
 import {
   ADOL_V21, BOTS_V2, BOTS_V21, BOTS_V21D, BOTS_V21E, CRIANCA_V21, GAMBITS_SOMBRIA, NOME_BOT, NPC, REGRA_BATE_EM_QUEM_RECUA, REGRA_CONTRA_GOLPE_NA_PELE,
   REGRA_DEFENDE_DO_GOLPE, REGRA_RECUA_DO_PREPARO_SOB_PELE, copiarGambits,
@@ -12,7 +12,7 @@ import {
 } from "./bots.ts";
 import type { Arena } from "./arenas.ts";
 import { epsilonConfianca, type ConfiancaCombate } from "./confianca.ts";
-import { ESCALA, caraterCanonico, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
+import { ESCALA, caraterCanonico, escalaDaVersao, escalaDe, perfilDe, perfilNPC, perfilNeutro, tecnicaDe } from "./catalogo.ts";
 import { CONDICOES_ESTAGIO, DIST, type Cond, type Estilo, type ListaGambits, type Lutador, type Regra, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
 import { NOME_V2, nomeFormaLegado } from "./nomes.ts";
 import { criarRng, hashSemente } from "./rng.ts";
@@ -327,9 +327,9 @@ export function lutadorBot(nome: string, R: RegrasLuta = null, arena: Arena | nu
     const estilo = arena?.lista ? { ...base, gambits: copiarGambits(gambitNPC("arena:" + arena.lista)) }
       : tec ? { ...base, gambits: copiarGambits(gambitNPC(n.estilo, R, tec)) } : base;
     /* campanha na escala: E = vida do estagio sugerido (ou do Mega, na Montanha Espiral) x fator; epsilon da escala. Nas lutas
-       dos pets v6 (as regras da luta dizem a versao) a escala e a CESC_V6 e o desafiante tem o fator dela */
+       dos pets v6 (as regras da luta dizem a versao) a escala e a CESC_V6 e o desafiante tem o fator dela; nas dos pets v9, a CESC_V9 */
     if (ESCALA.ligada) {
-      const versao = R?.versaoPet ?? 0, fator = arena?.fator ?? (versao >= CESC_V6.versaoPet ? CESC_V6.fatorNpc[nome] : undefined) ?? n.fator ?? CESC.fatorNpc[nome];
+      const versao = R?.versaoPet ?? 0, fator = arena?.fator ?? escalaDaVersao(versao)?.fatorNpc[nome] ?? n.fator ?? CESC.fatorNpc[nome];
       if (fator === undefined) throw new Error(`${n.nome} sem fator de escala`);
       return { nome: "Rival " + n.nome, estilo: { ...estilo, eps: CESC.epsNpc }, cond: perfilNPC(n.total, n.estagio || "adulto", escalaDe(n.est, 0, versao) * fator, tec) };
     }

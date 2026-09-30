@@ -245,6 +245,21 @@ export const CESC_V6 = {
      e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
   fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
 };
+/* escala dos pets v9 (rodada de equilibrio geral, fase 2; docs/EQUILIBRIO_GERAL.md, metas M-B1 e M-B3): a mesma formula e o mesmo
+   uso da CESC_V6, so nas lutas de escala dos pets v9 (o pet pela versao, o NPC pelas regras V21E da luta). A CESC_V6 (pets v6-v8) nao
+   muda. vida e beta: os da CESC_V6 (com as regras V21E as metas de estagio passam sem mudar a escala: test/calibrar_escala_v6.mjs
+   --conferir, artifacts_equilibrio_geral/fase2/escala_conferencia.json); os rivais da Fronteira (Liga, instalacoes, Salao) seguem na
+   vida da CESC_V6, a mesma. fatorNpc: os desafiantes da campanha recalibrados nas regras V21E, pelo metodo de sempre (o fator de
+   maior folga; test/calibrar_desafiantes_v6.mjs, desafiantes_calibracao.json): Devidramon 1,1 (igual), Puppetmon 2,5 -> 1,8,
+   Machinedramon 2,2 -> 2,3; o Tortomon, que nao fechava com a grade de 0,1, fecha com 1,53 (grade de 0,01 entre 1,4 e 1,7,
+   desafiantes_calibracao_npc_tier2_sentinela_grade.json; passa de 1,51 a 1,54). Os lideres tem o fator dos pets v9 em arenas.ts
+   (FATOR_LIDER_V9). So sementes de calibracao; PROPOSTOS */
+export const CESC_V9 = {
+  versaoPet: 9,
+  vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,
+  beta: .045,
+  fatorNpc: { npc_tier2_sentinela: 1.53, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 1.8, npc_v5_machinedramon: 2.3 } as Record<string, number>,
+};
 /* itens do Tamer (medalhas, parte 3; so no jogo e so nos pets v6; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13). Numeros PROPOSTOS e SEM
    EQUILIBRIO (decisao do Matheus, 2026-09-30: o equilibrio dos itens entra na rodada de equilibrio geral do combate, depois das
    proximas mecanicas). vagas: chips equipados por pet pelas medalhas que ele conhece ([minimo de medalhas, chips], do maior para o

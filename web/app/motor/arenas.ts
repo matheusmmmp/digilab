@@ -64,10 +64,28 @@ export const ARENAS: readonly Arena[] = [
     frase: "O chefe da campanha: forte em tudo. Pede tudo o que o pet aprendeu." },
 ];
 export const ARENA_POR_ID: Readonly<Record<string, Arena>> = Object.fromEntries(ARENAS.map(a => [a.id, a]));
-/** a arena de que o NPC e lider (null: ele e desafiante) */
-export const arenaDoLider = (k: string): Arena | null => ARENAS.find(a => a.lider === k) ?? null;
-/** a arena cuja regra vale nesta luta: so pets v6 contra o lider */
-export const arenaDaLuta = (rival: string, versao: number): Arena | null => versao >= VERSAO_ARENAS ? arenaDoLider(rival) : null;
+/* fatores dos lideres nas lutas de arena dos pets v9 (rodada de equilibrio geral, fase 2; docs/EQUILIBRIO_GERAL.md, meta M-B2):
+   recalibrados com as regras das lutas dos pets v9 (combate V21E) e a escala deles (CESC_V9), pelo mesmo metodo e as mesmas metas da
+   parte 2 (test/calibrar_arenas.mjs, artifacts_equilibrio_geral/fase2/arenas_calibracao.json; so as sementes de calibracao). Os fatores
+   dos pets v6-v8 (ARENAS, e o do NPC para Youkomon e MarinBullmon) nao mudam. PROPOSTOS */
+/** versao de pet dos fatores dos lideres da fase 2 (a do combate V21E) */
+export const VERSAO_ARENAS_V9 = 9;
+/* na calibracao (sementes 3101...3505): a Torre cai de 1,6 para 1,5 e a Montanha Espiral de 1,6 para 1,4 (com 1,6 a sentinela Mega ficava
+   travada, 0,455); as outras quatro ficam com o fator dos v6 (o Youkomon e o MarinBullmon com o do NPC, 1,5). A lista da Torre
+   (GAMBITS_ARENA.torre) nao muda: com ela a Torre fecha */
+export const FATOR_LIDER_V9: Readonly<Record<string, number>> = { campina: 1.3, torre: 1.5, floresta: 1.5, cidadela: .9, lago: 1.5, espiral: 1.4 };
+/** as arenas como valem nas lutas dos pets v9: as mesmas, com o fator do lider de FATOR_LIDER_V9 */
+export const ARENAS_V9: readonly Arena[] = ARENAS.map(a => {
+  const fator = FATOR_LIDER_V9[a.id];
+  if (fator === undefined) throw new Error("arena sem fator dos pets v9: " + a.id);
+  return { ...a, fator };
+});
+if (Object.keys(FATOR_LIDER_V9).length !== ARENAS.length) throw new Error("FATOR_LIDER_V9 com arena a mais");
+/** a arena de que o NPC e lider (null: ele e desafiante); `versao` >= 9: a arena com o fator dos pets v9 */
+export const arenaDoLider = (k: string, versao = VERSAO_ARENAS): Arena | null =>
+  (versao >= VERSAO_ARENAS_V9 ? ARENAS_V9 : ARENAS).find(a => a.lider === k) ?? null;
+/** a arena cuja regra vale nesta luta: so pets v6 em diante contra o lider (nos v9, com o fator dos v9) */
+export const arenaDaLuta = (rival: string, versao: number): Arena | null => versao >= VERSAO_ARENAS ? arenaDoLider(rival, versao) : null;
 /** semente da luta k (0 = a primeira) de uma serie: a primeira e a semente do evento; as outras saem dela */
 export const sementeDaSerie = (semente: number, k: number): number => k ? hashSemente("serie-arena", semente, k) : semente;
 /** a luta (ou as lutas seguidas) de arena: `lutas` lutas, parando na primeira que nao for vitoria; da segunda em diante o
