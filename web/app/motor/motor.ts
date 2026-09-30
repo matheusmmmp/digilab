@@ -419,7 +419,6 @@ export class Motor {
     this.edu.janela = { tipo: "fala", pedido: tema, inicio: t, prazo: t + CMEN.janela, falso, contradiz: falso && tema === "estado",
       gatilho, h, p };
     if (falso) this._conta("mentiras");
-    this._hist({ t, quem: "pet", a: "falou" });
     return { ...this.edu.janela };
   }
   /** o dono julga a fala: bronca, petisco ou elogio fecham a janela; o resto nao (espelho de _julgar_fala) */

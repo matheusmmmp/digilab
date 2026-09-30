@@ -4,7 +4,7 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import {
-  ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
+  ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, CMEN, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
@@ -16,7 +16,7 @@ import {
   detalheMotivo, falaDe, falaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
 } from "../../fala.ts";
 import {
-  detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
+  detalheFalaLivre, falaVozRecente, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
@@ -110,9 +110,10 @@ function useFala(): VistaFala {
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
   const mot = m.motivo, est = m.estagioAtual;
   const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
-  if (livre && fl.modo === "livre" && fl.ultimo) {
-    v.balao = v.texto = "✧ " + fl.ultimo.fala + iconeVerif(fl.ultimo.verificacao);
-    v.detalhe = detalheFalaLivre(fl.ultimo); v.titulo = tituloFalaLivre(fl.ultimo);
+  const ult = m.versao >= 5 ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
+  if (livre && ult) {
+    v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao, ult);
+    v.detalhe = detalheFalaLivre(ult); v.titulo = tituloFalaLivre(ult);
   } else if (mot) {
     const refs = refsDoMotivo(m, mot), resp = falaLLM(motivoParaApi(mot, refs), est, mot.humor), usarLLM = !!resp && resp.fonte === "llm";
     const fria = m.falaFria || m.sombria, pronta = llm.on && llm.ativo && ["adolescente", "adulto"].includes(est) && !usarLLM;
@@ -218,6 +219,22 @@ function JanelaV4({ agir }: { agir: (a: AcaoDono) => void }) {
     {j && (() => {
       const resta = Math.max(0, j.prazo - tick);
       const barra = <Seg n={blocos(resta / CED.janela, 10)} m={10} />;
+      if (j.tipo === "fala") {
+        /* pets v5: ele falou (voz propria). O dono nunca sabe se foi mentira: acredita, premia ou desconfia */
+        const f = falaVozRecente(m), barraFala = <Seg n={blocos(resta / CMEN.janela, 10)} m={10} />;
+        return (
+          <div class="dl-card chamado chamado--fala">
+            <span class="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
+            <span class="chamado-txt"><span class="chamado-tit"><b>{f ? `“${f.fala}”` : "Ele disse uma coisa"}</b>
+              <span class="dl-apoio">{m.sombria ? "é sombrio: não confie em tudo que ele diz" : "acredita? confira o que você sabe dele"}</span></span>{barraFala}</span>
+            <span class="chamado-botoes">
+              <button type="button" class="dl-btn" onClick={() => agir("elogiar")}>Acreditar</button>
+              <button type="button" class="dl-btn" onClick={() => agir("petisco")}>Petisco</button>
+              <button type="button" class="dl-btn" onClick={() => agir("repreender")}>É mentira!</button>
+            </span>
+          </div>
+        );
+      }
       if (j.tipo === "aviso") return (
         <div class="dl-card chamado">
           <span class="chamado-ic"><Peca nome="emoji_surpreso" escala={2} reserva="!" /></span>

@@ -25,6 +25,7 @@ from digilab.educacao import fabricas_educacao  # noqa: E402
 from digilab.events import AcaoUsuario  # noqa: E402
 from digilab.historia import RegistroVida, escolher_assunto, extrair, selecionar  # noqa: E402
 from digilab.temperamento import NEUTRO  # noqa: E402
+from digilab_fala_livre.mentira import _estado, _historia  # noqa: E402
 
 SAIDA = RAIZ / "web" / "app" / "test" / "gabaritos" / "voz_python.json"
 PETS = RAIZ / "artifacts_voz" / "rodada1" / "pets.jsonl"
@@ -108,7 +109,19 @@ def mentira() -> dict:
                               "desfecho": m.historico_falas[-1]["desfecho"] if m.historico_falas else None,
                               "disciplina": m.disciplina, "impunes": m.mentiras_impunes, "acertos": m.acertos_mentira,
                               "bronca_injusta": m.contagem_mentira["broncas_injustas"]})
-    return {"grade": grade, "desfechos": desfechos}
+    # moldes: cada fato dos gabaritos de historia e uma grade de estados
+    fatos = [f for c in historia() for f in c["fatos"]]
+    moldes = sorted({json.dumps([f["regra"], f["dados"]], sort_keys=True) for f in fatos})
+    historia_m = [{"regra": r, "dados": d, "falsa": _historia(r, d)} for r, d in map(json.loads, moldes)]
+    estados = []
+    for fome in (.1, .5, .9):
+        for humor in (.2, .8):
+            for higiene in (.3, .95):
+                e = {"fome": fome, "humor": humor, "higiene": higiene, "energia": .6, "saude": 1.0}
+                v, f, m = _estado(e)
+                estados.append({"estado": e, "verdade": v, "falsa": f, "molde": m})
+    estados.append({"estado": {}, **dict(zip(("verdade", "falsa", "molde"), _estado({})))})
+    return {"grade": grade, "desfechos": desfechos, "moldes_historia": historia_m, "moldes_estado": estados}
 
 
 def main() -> int:

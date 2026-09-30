@@ -18,3 +18,5 @@ export * from "./motivo.ts";
 export * from "./expressao.ts";
 export * from "./motor.ts";
 export * from "./donos.ts";
+export * from "./historia.ts";
+export * from "./mentira.ts";

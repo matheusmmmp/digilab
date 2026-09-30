@@ -790,3 +790,21 @@ muda, `6a9037ad…`). Todos os números novos são PROPOSTOS. Onde o design não
   estão em `resumo_v4a.json`.
 - Resultado (PROPOSTO): honestidade 70,0% (limite 5%) e repetição 5 (limite 2) REPROVAM; história 98,5% e variedade
   97,7% passam. Parada pedida pelo Matheus: a parte 4 (web) não foi feita.
+
+## 2026-09-30 — voz própria, parte 4: web (DESIGN_VOZ_PROPRIA)
+
+- **Pet v5** (`VERSAO_PET = 5`): janela de fala, mentira (`CMEN`) e evento `f` no motor TS, com as regras do Python
+  conferidas por gabarito (`experiments/exportar_gabaritos_voz.py` → `web/app/test/gabaritos/voz_python.json`: 24
+  registros reais para o extrator, grade da mentira, desfechos e moldes). As vidas não são comparáveis bit a bit (as
+  rngs são outras). Os pets v1–v4 não mudam; filhos de cruzamento nascem v5.
+- **Gatilhos** (`src/voz.ts`): reencontro (≥ 3 h), hábito novo, aniversário, marco (evolução, lesão tratada, vitória
+  na campanha), luta e vontade nova; ritmo de 1 fala a cada 2 h de jogo; nunca com janela aberta, dormindo ou no bebê.
+  **Revanche ficou de fora**: a luta não passa pela fala (a revanche aparece como assunto P, não como gatilho).
+- **Todos os modos** abrem a janela de fala nos pets v5 (a mentira é do motor, não da LLM). Só no modo livre o texto
+  vem do servidor (`voz: true`); nos outros, e sem servidor, é o molde: o texto do assunto (verdade) ou a mentira.
+- **Gostos (P gosto/desgosto)** no jogo vêm da sonda do caráter na hora da fala (`desvioPorAcao`, ~0,15 s).
+- **Janelas no extrator**: o jogo guarda as últimas 100 janelas fechadas; os hábitos do dono sobre chamados olham só
+  essas.
+- **Honestidade da espécie**: fica 1 no jogo até o corpus auditado entrar (o de exemplo não tem enganador).
+- **Servidor**: o verificar passou a aceitar as chaves de registro dos fatos novos (antes a ida e volta daria 400); o
+  almanaque é sorteado pelo servidor (a página não manda id nem texto).

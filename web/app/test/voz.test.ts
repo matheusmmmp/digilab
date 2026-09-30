@@ -98,3 +98,14 @@ describe("evento f (pets v5)", () => {
     expect(extrair(reg).some(f => f.regra === "evolucao")).toBe(true);
   });
 });
+
+describe("moldes da mentira = digilab_fala_livre/mentira.py", () => {
+  test("historia e estado", async () => {
+    const { mentiraDeEstado, mentiraDeHistoria } = await import("../motor/mentira.ts");
+    const M = G.mentira as unknown as { moldes_historia: { regra: string; dados: Record<string, unknown>; falsa: string | null }[];
+      moldes_estado: { estado: Record<string, number>; verdade: string; falsa: string; molde: string }[] };
+    expect(M.moldes_historia.length).toBeGreaterThan(20);
+    for (const x of M.moldes_historia) expect(mentiraDeHistoria(x.regra, x.dados), x.regra).toBe(x.falsa);
+    for (const x of M.moldes_estado) expect(mentiraDeEstado(x.estado)).toEqual({ verdade: x.verdade, falsa: x.falsa, molde: x.molde });
+  });
+});
