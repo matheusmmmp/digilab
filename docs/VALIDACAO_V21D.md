@@ -151,3 +151,52 @@ Os números repetem os da calibração (`docs/EQUILIBRIO_RODADA2.md`, seção 4)
 e o painel em no máximo 0,005. Na calibração o furioso tinha 0,725 e o titã 0,406.
 
 **Não medidos:** E2 (espécies), E5, G6b, G8, G9 e as runs de pesquisa com pets reais.
+
+## 5. No jogo web: pets v6
+
+Depois da validação, a variante entrou no jogo web **só nos pets v6** (`web/app/`). Os pets v1–v5 lutam como antes (V21C):
+os gabaritos de paridade com o HTML e as assinaturas não mudam, e os testes de antes continuam passando.
+
+- **Regras da luta** (`combate.RegrasLuta`): `null` é a V21C, e `CV21D` (`constantes.ts`) é a variante, com as quatro
+  chaves ligadas. `Motor.regras` dá `CV21D` para os pets v6. A regra vale para a luta inteira (os dois lados), como as
+  `Regras` do Python, em todas as lutas de um pet v6: arena, campanha, sparring, replay do registro, pet de cenário como
+  rival e "Melhor de 10".
+- **O que muda na luta:**
+  - o preparo feito sob pele não aparece em `oponente_preparando` (estado `prepPele` no lutador);
+  - a muralha e o vigia usam as listas variantes (`bots.BOTS_V21D`, `gambitsAdulto`), tanto o pet v6 (a semente dos
+    gambits na evolução para adulto) quanto os bots e NPCs com esses estilos que lutam contra ele.
+- **O que não muda:**
+  - `BOTS_V21` (as listas canônicas);
+  - o repertório de candidatas dos gambits híbridos. As duas regras novas do vigia saem só da semente;
+    `gambits_pet.regraDe` as encontra fora do repertório, como a regra do devastador.
+- **Paridade Python × web:** `experiments/exportar_gabarito_v21d.py` → `web/app/test/gabaritos/combate_v21d_python.json`
+  (272 partidas, V21C e variante, mesmas sementes; 56 das 136 partidas mudam com a V21D). `test/paridade_v21d.test.ts`
+  refaz cada partida no TS e exige perfil, turnos (sha256) e fim iguais. As decisões por regra, a leitura do vigia e a
+  resolução são do TS; só as ações de exploração vêm do gabarito, porque a rng do Python não é a da web. As 272 partidas
+  saem iguais.
+- **Constantes:** `CV21D` no `mapa_constantes.json`. A lista `chaves_v21d` confere as quatro chaves booleanas contra
+  `experiments/configs/v21d/validacao.json` e contra os campos da `ConfigCombateV21D`; `versaoPet` fica em `so_web`.
+- **Saves:** os pets v6 criados antes desta mudança mudariam de comportamento no replay. O descarte único do app
+  (`src/tamer.ts`, `descartarPetsAntigos`) ganhou um marcador de versão (`…-descarte`, versão 2):
+  - na primeira abertura depois da atualização, os pets até v6 (o ativo e os guardados) saem, com o mesmo aviso das
+    medalhas;
+  - com pet descartado, o Tamer recomeça sem medalhas, porque o aviso diz "um ovo novo e nenhuma medalha";
+  - não há v7.
+
+**Relato: NPCs da campanha v5 no motor web com a V21D.** Medido depois da validação; não é critério e nenhum fator mudou.
+Fonte: `artifacts_campanha/mega/validacao_v21d.json`, de `node test/calibrar_mega.mjs --validar --v21d` (sementes de
+validação, mesmo método de `validacao.json`, que sai igual rodado de novo).
+
+| NPC | V21C (sem / com) | V21D (sem / com) |
+|---|---|---|
+| Puppetmon | 0,236 / 0,893 | 0,227 / 0,870 |
+| Machinedramon | 0,267 / 0,853 | 0,268 / 0,911 |
+| Piedmon (Espiral) | 0,155 / 0,941 | 0,196 / 0,941 |
+| Myotismon (Cidadela, Ultimate) | 0,171 / 0,921 | 0,212 / 0,921 |
+
+Os quatro seguem nas metas (≤ 0,30 sem treino, ≥ 0,80 com o treino típico), sem forma travada.
+
+**Testes** (chaves desligadas no Python):
+- `python -m pytest tests/ -q`: 428 passaram e 1 foi pulado (os 426 da rodada 2 mais 2 novos: o config da validação e o
+  gabarito da web reproduzem);
+- web: `npm run tipos` limpo, `npm test` com 135 testes em 15 arquivos, `npm run e2e` com 24 testes.
