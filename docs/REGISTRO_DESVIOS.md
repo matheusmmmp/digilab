@@ -927,9 +927,10 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
 - **Registro do Tamer versão 4** (lê 1 a 3). O registro do pet ganha o `f`; a assinatura dos v6 só muda depois dele. Pets v1–v5, gabaritos,
   paridade V21D, a Liga e as calibrações anteriores saem iguais (`jogarSerie` passa por `jogarSequencia`, a mesma conta). Descarte único
   não subiu.
-- **Achado (não corrigido, fora do escopo):** o relógio do jogo continua durante a animação da luta. Na velocidade de teste (10 min/s) uma
-  lesão na derrota que fecha a sequência passa das 6 h sem tratamento em 36 s e o pet morre antes do Resultado; vale também para a Liga. O e2e
-  das instalações pausa o tempo.
+- **Achado (corrigido depois, 2026-09-30, só na interface):** o relógio do jogo continuava durante a animação da luta, e na velocidade de
+  teste (10 min/s) uma lesão na derrota que fecha a sequência passava das 6 h sem tratamento em 36 s (o pet morria antes do Resultado; a Liga
+  também). Agora o tempo não anda com a luta no palco nem com o Resultado aberto (`web/app/src/luta.ts`, `lutaSeguraTempo`); motor, registro
+  e replay não mudam, e o e2e das instalações não pausa mais o tempo.
 
 ## 2026-09-30 — Fronteira de Batalha, parte 4c (Fábrica e Salão) só no jogo (pets v6), sem equilíbrio
 
