@@ -1,0 +1,444 @@
+{
+ "descricao": "Calibracao da Fabrica dos pets v9 (fase 3, meta M-C2): o fator dos rivais, com a troca entrando inteira e as regras V21E",
+ "conjunto": "calibracao",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "tentativas_por_semente": 400,
+ "teto_de_lutas": 120,
+ "meta": {
+  "pelo_menos_uma_serie_min": 0.25
+ },
+ "folga_minima": 0.05,
+ "politica": "melhor_arquetipo_troca_por_melhor",
+ "ordem_dos_arquetipos": [
+  "furioso",
+  "duelista",
+  "espelho",
+  "emboscador",
+  "vigia",
+  "sentinela",
+  "tita",
+  "muralha"
+ ],
+ "regra": "o maior fator com folga >= folga_minima (o mais perto de 1)",
+ "grade": [
+  0.3,
+  0.35,
+  0.4,
+  0.45,
+  0.5,
+  0.55,
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95,
+  1
+ ],
+ "escolha": {
+  "fator": 0.6,
+  "pelo_menos_uma_serie": 0.367,
+  "folga": 0.117,
+  "passa": true
+ },
+ "medidas": [
+  {
+   "fator": 0.3,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.9535,
+   "vitorias_media": 97.718,
+   "series_media": 32.5205,
+   "pelo_menos_uma_serie": 0.899,
+   "maximo_de_series": 40,
+   "no_teto": 1613,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 65428,
+     "vence": 0.9974
+    },
+    {
+     "lutas": 65260,
+     "vence": 0.9981
+    },
+    {
+     "lutas": 65135,
+     "vence": 0.9986
+    }
+   ],
+   "lutas_no_limite": 0.0019,
+   "folga": 0.649
+  },
+  {
+   "fator": 0.35,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.948,
+   "vitorias_media": 93.627,
+   "series_media": 31.1405,
+   "pelo_menos_uma_serie": 0.8825,
+   "maximo_de_series": 40,
+   "no_teto": 1534,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 62747,
+     "vence": 0.9969
+    },
+    {
+     "lutas": 62555,
+     "vence": 0.9978
+    },
+    {
+     "lutas": 62418,
+     "vence": 0.9978
+    }
+   ],
+   "lutas_no_limite": 0.0021,
+   "folga": 0.6325
+  },
+  {
+   "fator": 0.4,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.938,
+   "vitorias_media": 78.609,
+   "series_media": 26.007,
+   "pelo_menos_uma_serie": 0.8545,
+   "maximo_de_series": 40,
+   "no_teto": 1118,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 52896,
+     "vence": 0.996
+    },
+    {
+     "lutas": 52683,
+     "vence": 0.9969
+    },
+    {
+     "lutas": 52521,
+     "vence": 0.9903
+    }
+   ],
+   "lutas_no_limite": 0.0026,
+   "folga": 0.6045
+  },
+  {
+   "fator": 0.45,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.925,
+   "vitorias_media": 42.0865,
+   "series_media": 13.61,
+   "pelo_menos_uma_serie": 0.7905,
+   "maximo_de_series": 40,
+   "no_teto": 395,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 28825,
+     "vence": 0.9916
+    },
+    {
+     "lutas": 28582,
+     "vence": 0.9926
+    },
+    {
+     "lutas": 28371,
+     "vence": 0.9594
+    }
+   ],
+   "lutas_no_limite": 0.0048,
+   "folga": 0.5405
+  },
+  {
+   "fator": 0.5,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.9125,
+   "vitorias_media": 13.8055,
+   "series_media": 4.0705,
+   "pelo_menos_uma_serie": 0.668,
+   "maximo_de_series": 40,
+   "no_teto": 15,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 10126,
+     "vence": 0.9759
+    },
+    {
+     "lutas": 9882,
+     "vence": 0.9702
+    },
+    {
+     "lutas": 9588,
+     "vence": 0.8491
+    }
+   ],
+   "lutas_no_limite": 0.0122,
+   "folga": 0.418
+  },
+  {
+   "fator": 0.55,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.903,
+   "vitorias_media": 5.683,
+   "series_media": 1.385,
+   "pelo_menos_uma_serie": 0.512,
+   "maximo_de_series": 16,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 4770,
+     "vence": 0.9497
+    },
+    {
+     "lutas": 4530,
+     "vence": 0.8976
+    },
+    {
+     "lutas": 4066,
+     "vence": 0.6813
+    }
+   ],
+   "lutas_no_limite": 0.0241,
+   "folga": 0.262
+  },
+  {
+   "fator": 0.6,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.8945,
+   "vitorias_media": 3.413,
+   "series_media": 0.672,
+   "pelo_menos_uma_serie": 0.367,
+   "maximo_de_series": 8,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 3344,
+     "vence": 0.9267
+    },
+    {
+     "lutas": 3099,
+     "vence": 0.769
+    },
+    {
+     "lutas": 2383,
+     "vence": 0.564
+    }
+   ],
+   "lutas_no_limite": 0.0334,
+   "folga": 0.117
+  },
+  {
+   "fator": 0.65,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.88,
+   "vitorias_media": 2.3825,
+   "series_media": 0.364,
+   "pelo_menos_uma_serie": 0.252,
+   "maximo_de_series": 5,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2728,
+     "vence": 0.9036
+    },
+    {
+     "lutas": 2465,
+     "vence": 0.6377
+    },
+    {
+     "lutas": 1572,
+     "vence": 0.4631
+    }
+   ],
+   "lutas_no_limite": 0.0408,
+   "folga": 0.002
+  },
+  {
+   "fator": 0.7,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.8575,
+   "vitorias_media": 1.851,
+   "series_media": 0.219,
+   "pelo_menos_uma_serie": 0.174,
+   "maximo_de_series": 5,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2438,
+     "vence": 0.8728
+    },
+    {
+     "lutas": 2128,
+     "vence": 0.5338
+    },
+    {
+     "lutas": 1136,
+     "vence": 0.3856
+    }
+   ],
+   "lutas_no_limite": 0.047,
+   "folga": -0.076
+  },
+  {
+   "fator": 0.75,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.815,
+   "vitorias_media": 1.52,
+   "series_media": 0.15,
+   "pelo_menos_uma_serie": 0.127,
+   "maximo_de_series": 4,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2300,
+     "vence": 0.8261
+    },
+    {
+     "lutas": 1900,
+     "vence": 0.4421
+    },
+    {
+     "lutas": 840,
+     "vence": 0.3571
+    }
+   ],
+   "lutas_no_limite": 0.05,
+   "folga": -0.123
+  },
+  {
+   "fator": 0.8,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.7575,
+   "vitorias_media": 1.2865,
+   "series_media": 0.107,
+   "pelo_menos_uma_serie": 0.0935,
+   "maximo_de_series": 4,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2214,
+     "vence": 0.7683
+    },
+    {
+     "lutas": 1701,
+     "vence": 0.3868
+    },
+    {
+     "lutas": 658,
+     "vence": 0.3252
+    }
+   ],
+   "lutas_no_limite": 0.0525,
+   "folga": -0.1565
+  },
+  {
+   "fator": 0.85,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.6775,
+   "vitorias_media": 1.0765,
+   "series_media": 0.0795,
+   "pelo_menos_uma_serie": 0.0705,
+   "maximo_de_series": 2,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2159,
+     "vence": 0.6869
+    },
+    {
+     "lutas": 1483,
+     "vence": 0.3446
+    },
+    {
+     "lutas": 511,
+     "vence": 0.3112
+    }
+   ],
+   "lutas_no_limite": 0.0539,
+   "folga": -0.1795
+  },
+  {
+   "fator": 0.9,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.5925,
+   "vitorias_media": 0.8725,
+   "series_media": 0.051,
+   "pelo_menos_uma_serie": 0.0475,
+   "maximo_de_series": 2,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2102,
+     "vence": 0.5966
+    },
+    {
+     "lutas": 1254,
+     "vence": 0.3102
+    },
+    {
+     "lutas": 389,
+     "vence": 0.2622
+    }
+   ],
+   "lutas_no_limite": 0.0561,
+   "folga": -0.2025
+  },
+  {
+   "fator": 0.95,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.511,
+   "vitorias_media": 0.728,
+   "series_media": 0.043,
+   "pelo_menos_uma_serie": 0.0405,
+   "maximo_de_series": 2,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2086,
+     "vence": 0.5153
+    },
+    {
+     "lutas": 1075,
+     "vence": 0.2744
+    },
+    {
+     "lutas": 295,
+     "vence": 0.2915
+    }
+   ],
+   "lutas_no_limite": 0.0608,
+   "folga": -0.2095
+  },
+  {
+   "fator": 1,
+   "tentativas": 2000,
+   "vence_a_primeira": 0.4185,
+   "vitorias_media": 0.5715,
+   "series_media": 0.03,
+   "pelo_menos_uma_serie": 0.0285,
+   "maximo_de_series": 2,
+   "no_teto": 0,
+   "vence_por_luta_da_serie": [
+    {
+     "lutas": 2060,
+     "vence": 0.4194
+    },
+    {
+     "lutas": 864,
+     "vence": 0.2535
+    },
+    {
+     "lutas": 219,
+     "vence": 0.274
+    }
+   ],
+   "lutas_no_limite": 0.0643,
+   "folga": -0.2215
+  }
+ ]
+}

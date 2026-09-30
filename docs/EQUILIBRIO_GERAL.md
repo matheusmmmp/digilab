@@ -392,3 +392,299 @@ npx tsx test/calibrar_desafiantes_v6.mjs --npc npc_tier2_sentinela --grade 1.4,1
 npx tsx test/explorar_torre.mjs                                                                 # a lista da Torre nos v9
 npx tsx test/calibrar_arenas.mjs --v6 --conferir                                                # os v6, para comparar (grava em artifacts_campanha/arenas/)
 ```
+
+## Fase 3 — o fim de jogo e os itens (M-C1…M-C3, M-D1…M-D3, M-E1)
+
+Status: **calibração feita** (2026-09-30). Passam M-C2, M-C3, M-D1, M-D2, M-D3 e M-E1; **M-C1 não fecha** (a muralha). A validação é a da fase 4.
+
+- **Scripts** (em `web/app`, `npx tsx`):
+  - `test/conferir_liga.mjs` (e `--calibrar`);
+  - `test/conferir_instalacoes.mjs`;
+  - `test/conferir_fabrica_salao.mjs` (e `--calibrar`);
+  - `test/medir_itens.mjs` (e `--itens-v6`).
+
+  Todos medem os pets v9 por padrão; `--v6` refaz a medição de antes. `test/itens_ref.mjs` recebe a versão; `test/pool.mjs` é o pool de
+  workers da Liga e da Fábrica.
+- **Artefatos** em `artifacts_equilibrio_geral/fase3/`; todo número abaixo vem deles:
+  - `liga_calibracao.json`, `liga_conferencia.json`;
+  - `instalacoes_conferencia.json`;
+  - `fabrica_calibracao.json`, `salao_calibracao.json`, `fabrica_salao_conferencia.json`;
+  - `itens_calibracao.json` e `itens_calibracao_itens_v6.json` (os itens de antes nas regras dos v9, para comparar);
+  - `conferencia_v6.json`.
+- **Método:** o das partes 4a–4c e 3, com as regras dos pets v9 (V21E), a escala da versão 9 (`CESC_V9`, a mesma vida do Mega), os fatores
+  dos líderes da fase 2 e o limite do desafiado. Pet de referência: as formas do estágio × 4 espécies, com treino uniforme. Só as sementes de
+  calibração (3101…3505). A Fábrica tira as sementes das tentativas delas (`hashSemente("conferir-fabrica", semente, i)`, 400 por semente):
+  as do jogo saem do número da tentativa. Diferenças abaixo de ~0,01 não devem ser lidas.
+
+### 3.1 Os scripts medem os pets v9
+
+- **Por padrão, os pets v9:** regras `CV21E`, `CESC_V9`, `FATOR_LIDER_V9`, e os números novos desta fase (Liga, Fábrica, Salão, itens) pelo
+  motor.
+- **`--v6`** refaz a medição de antes (V21D, `CESC_V6`, os fatores e os itens de antes). Conferência gravada em `conferencia_v6.json` (sha256):
+  - iguais byte a byte: `artifacts_campanha/liga/conferencia.json`, `fronteira/conferencia.json` e `fronteira/conferencia_4c.json` (sementes de
+    validação, como foram gerados; só refazem os artefatos dos v6);
+  - `medir_itens.mjs` nunca tinha rodado. `--v6 --gates gi1,gi2,gi4` gravou `artifacts_campanha/itens/calibracao.json`; a linha sem item dele
+    é igual à dos v6 da fase 2 nas mesmas sementes (12 de 12);
+  - nos v9, a linha sem item de `itens_calibracao.json` é igual à conferência da fase 2 (17 de 17: líderes sem e com o treino típico, metas
+    de estágio).
+- `calibrar_mega.mjs` mede a campanha dos pets v5 e não muda: os desafiantes da Espiral dos v9 são os de `calibrar_desafiantes_v6.mjs` (fase 2).
+
+### 3.2 O que mudou (só nos pets v9)
+
+| o quê | pets v6–v8 (não muda) | pets v9 | onde |
+|---|---|---|---|
+| Liga: fator dos Megas | 1 nos 6 | WarGreymon 0,4; Seraphimon 0,3; MegaGargomon 0,1; Vikemon 1; Rosemon 1,7; Imperialdramon 0,9 | `liga.FATOR_LIGA_V9` |
+| Liga: cura entre as lutas | sem cura | **sem cura** (medida, não adotada) | `liga.CURA_LIGA_V9 = 0` |
+| Torre de Batalha e Palácio | fator 1 | **o mesmo** | `instalacoes.ts` |
+| Fábrica: regras | V21D, fator 1, a troca não cura | V21E, rivais × 0,6 (alugados × 1), **a troca entra com a vida cheia** | `fabrica.regraFabrica(9)` |
+| Salão: fator do rival | 1 | Rookie 1,15; Champion 1; Ultimate 1,05; Mega 1,05 | `salao.FATOR_SALAO_V9` |
+| itens: quando valem | sempre | com o treino ≥ **metade do típico** do nível | `CIT_V9.treinoMinimo` |
+| itens: onde vale a carta | campanha, arenas e arena contra bots | **só contra os NPCs da campanha** (desafiantes e líderes) | `CIT_V9.cartaSoContraNpc` |
+| chip de regra | no topo da lista (sai a de nota mais baixa) | **no fim da lista**, sem tirar regra; o pet não a reordena nem troca | `itens.listaComChips`, `GambitsPet.comChips` |
+| chip de stat | +2 pontos | **+1** (o ponto vale 0,5) | `CIT_V9.fatorChipStat` |
+
+- **Separação por versão.** Liga, Salão e instalações escolhem o fator pelas regras da luta (`R.versaoPet >= 9`); os itens pela versão do pet
+  (`itens.itensDosV9`; `GambitsPet.chipsNoFim` é ligado pelo motor nos v9). Assinaturas, gabaritos e replays dos v1–v8 iguais (suíte).
+- **A Fábrica: a regra nova vai na tentativa.** Decisão registrada: a versão das regras é gravada no próprio evento de começo da tentativa no
+  registro do Tamer (campo `v` do `fabrica`; registro versão 6, lê 1 a 5). Motivos: a Fábrica não tem pet, e o Tamer é um só para pets de
+  várias versões.
+  - Sem `v`: a tentativa é da Fábrica de antes e se refaz igual (teste).
+  - As tentativas novas gravam `v: 9`.
+  - `v` desconhecida falha alto.
+- **Telas:**
+  - a oferta de troca diz "entra com a vida cheia" nas tentativas dos v9;
+  - a frase da Fábrica diz a regra nova;
+  - Crescer · Itens diz quando os itens não fazem efeito e explica as regras dos v9;
+  - a escolha da carta some fora da campanha e sem o treino mínimo, com o porquê.
+
+### 3.3 M-C1: a Liga (`liga_calibracao.json`, `liga_conferencia.json`)
+
+Meta: com o treino típico do Mega (40), toda forma com chance de título ≥ 0,25 e nenhuma > 0,85 (400 tentativas por forma).
+
+**A busca** (regra registrada no script antes de rodar):
+- para cada cura (0 a 0,5 da vida máxima), busca por coordenadas nos 6 fatores (0,1 a 3,0), com 8 pontos de partida;
+- ordem: 1) mais formas na faixa; 2) a menor soma do que falta até a faixa; 3) a menor cura; 4) fatores mais perto de 1;
+- a melhor de cada cura, medida de novo com 20 partidas:
+
+| cura entre as lutas | formas na faixa | falta até a faixa | pior | melhor |
+|---|---|---|---|---|
+| **0 (escolhida)** | **7** | **0,165** | muralha 0,085 | furioso 0,725 |
+| 0,1 | 6 | 0,198 | muralha 0,070 | furioso 0,830 |
+| 0,2 | 6 | 0,320 | muralha 0,048 | furioso 0,840 |
+| 0,3 | 5 | 0,265 | muralha 0,048 | furioso 0,883 |
+| 0,4 | 6 | 0,230 | muralha 0,060 | vigia 0,800 |
+| 0,5 | 6 | 0,228 | muralha 0,060 | vigia 0,805 |
+
+Com cura a Liga fica pior: o dreno sem cura é o que segura o furioso e o vigia.
+
+**Títulos por forma** (a Liga dos v9, `liga_conferencia.json`):
+
+| forma | fator de antes (1, sem cura) | Liga dos v9 | |
+|---|---|---|---|
+| duelista | 0,315 | 0,485 | na faixa |
+| furioso | 0,628 | 0,725 | na faixa |
+| espelho | 0,310 | 0,255 | na faixa (folga 0,005) |
+| muralha | 0,000 | **0,085** | **fora** |
+| sentinela | 0,053 | 0,273 | na faixa (folga 0,023) |
+| emboscador | 0,083 | 0,435 | na faixa |
+| vigia | 0,428 | 0,398 | na faixa |
+| titã | 0,008 | 0,263 | na faixa (folga 0,013) |
+
+**Por luta** (o pet inteiro contra cada líder, com o fator dos v9): as travas que sobram são de estilo, no limite de turnos (que é do líder):
+
+| luta | Mega (fator) | as formas que perdem |
+|---|---|---|
+| 1 | WarGreymon (0,4) | sentinela 0,675 |
+| 2 | Seraphimon (0,3) | espelho 0,638, muralha 0,698 |
+| 3 | MegaGargomon (0,1) | titã 0,275, muralha 0,475, vigia 0,885 |
+| 4 | Vikemon (1) | sentinela 0,278, emboscador 0,520 |
+| 5 | Rosemon (1,7) | espelho 0,403, muralha 0,430, duelista 0,570 |
+| 6 | Imperialdramon Dragon Mode (0,9) | muralha 0,753 |
+
+**Não fecha pela muralha.**
+- Ela perde para os guardiões no limite de turnos, que é do líder (0,698 contra o Seraphimon mesmo com 0,3, 0,430 contra a Rosemon), e não
+  alcança a sentinela: 0,475 contra o MegaGargomon mesmo com 0,1, o piso da grade.
+- O produto das lutas dela fica perto de 0,1 (0,698 × 0,475 × 0,430 × 0,753 ≈ 0,107; com o dreno, 0,085).
+- O titã só entra na faixa com o MegaGargomon no piso (0,275 contra ele).
+- Nenhuma alavanca desta fase mexe nisso. As que mexeriam estão fora das permitidas:
+  - o limite do desafiado (decisão do Matheus);
+  - os Megas da Liga (a tabela do desenho);
+  - deixar perder uma luta.
+
+**Atenção a três números da escolha:**
+- **MegaGargomon com 0,1** (o piso da grade): um Mega com um décimo da vida, para a muralha e o titã terem chance;
+- **Seraphimon 0,3 e WarGreymon 0,4:** a Liga fica mais fácil para quem já vencia;
+- **espelho, titã e sentinela** passam com folga de 0,005 a 0,023: a fase 4 pode reprová-los.
+
+### 3.4 M-C2: a Fábrica (`fabrica_calibracao.json`, `fabrica_salao_conferencia.json`)
+
+Meta: escolhendo o melhor alugado, vencer ao menos uma série em ≥ 0,25 das tentativas. Política da meta: alugar o de melhor arquétipo e
+trocar pelo rival derrotado quando ele é de arquétipo melhor. A ordem dos arquétipos é a de antes, que também é a da Torre de Batalha dos v9.
+
+- **A troca entrando inteira foi adotada** (era a variante medida e não adotada na 4c): a troca vira uma escolha de verdade, e com ela o fator
+  dos rivais fica mais perto de 1.
+- **A cura entre séries não mudou:** a série seguinte já começava inteira.
+- **O fator dos rivais** (regra registrada: o maior fator com folga ≥ 0,05, a Fábrica mais difícil que passa), com a troca inteira:
+
+| fator dos rivais | 1,0 | 0,9 | 0,8 | 0,7 | 0,65 | **0,6** | 0,55 | 0,5 |
+|---|---|---|---|---|---|---|---|---|
+| vence a 1ª luta | 0,419 | 0,593 | 0,758 | 0,858 | 0,880 | **0,895** | 0,903 | 0,913 |
+| ≥ 1 série | 0,029 | 0,048 | 0,094 | 0,174 | 0,252 | **0,367** | 0,512 | 0,668 |
+
+- **Com 0,6: passa, ≥ 1 série 0,367 (folga 0,117).**
+- Relato: sem troca 0,275; alugando sempre o primeiro 0,206; média de 0,67 séries; máximo 8 séries; nenhuma tentativa no teto de 120 lutas.
+- Por luta da série: 0,927, 0,769 e 0,564 (o dreno sem cura dentro da série continua).
+- Com 0,45 ou menos a tentativa passa a ir longe (com 0,45, 395 de 2000 chegam ao teto).
+
+### 3.5 M-C3: o Salão (`salao_calibracao.json`, `fabrica_salao_conferencia.json`)
+
+Meta: cada nível, com o treino típico, entre 0,70 e 0,95 (média das formas e espécies).
+
+**Regra** (registrada):
+- só fatores ≥ 1: o rival não fica mais fraco que o de antes, e sem treino o pet não vence mais que hoje;
+- entre eles, a maior folga robusta: a menor folga entre o fator e os dois vizinhos da grade (passos de 0,05).
+
+**Por que a restrição:** a maior folga pura levava o Champion a 0,5, e aí o pet **sem treino** vencia 0,75 (a meta não olha o sem treino). O
+Rookie tem um degrau: 1,2 → 0,855, 1,25 → 0,738, 1,3 → 0,591.
+
+| nível | fator de antes → v9 | com o treino típico (fator 1 → v9) | pior forma | sem treino | folga |
+|---|---|---|---|---|---|
+| Rookie | 1 → **1,15** | 0,916 → 0,894 | sereno 0,80 | 0,025 | 0,056 |
+| Champion | 1 → 1 | 0,754 | guardião 0,54 | 0,341 | 0,054 |
+| Ultimate | 1 → **1,05** | 0,832 → 0,826 | muralha 0,625 | 0,320 | 0,124 |
+| Mega | 1 → **1,05** | 0,830 → 0,826 | muralha 0,62 | 0,309 | 0,124 |
+
+- **Passa nos 4.** A meta já passava com o fator 1; a mudança só aumenta a folga do Rookie, do Ultimate e do Mega.
+- Vencer os 4 com o time médio: 0,478; sem treino, 0,0005.
+
+### 3.6 M-E1: a Torre de Batalha e o Palácio (`instalacoes_conferencia.json`)
+
+Meta: a melhor forma vence a 1ª luta ≥ 0,70 e a pior ≥ 0,40. **Passa sem mudar nada** (fator 1):
+
+| instalação | melhor (vence a 1ª) | pior (vence a 1ª) | folga | média de vitórias |
+|---|---|---|---|---|
+| Torre de Batalha | furioso 1,000 | muralha 0,608 | 0,208 | 1,5 (muralha) a 7,6 (furioso) |
+| Palácio | furioso 1,000 | muralha 0,608 | 0,208 | 1,4 (muralha) a 7,6 (furioso) |
+
+Com a lista canônica o Palácio do pet de referência é a Torre (outras sementes).
+
+### 3.7 M-D1…M-D3: os itens (`itens_calibracao.json`; antes: `itens_calibracao_itens_v6.json`)
+
+"Melhor combinação": o máximo, por forma, entre todas as combinações de até 3 chips permitidos no estágio (um Tamer com as 6 medalhas) e
+nenhuma carta ou uma das 3 cartas permitidas. O método é o da seção 13.7 do `DESIGN_MEDALHAS_ARENAS.md`.
+
+**M-D1** (pet sem treino × cada líder ≤ 0,05):
+
+| arena | sem item | itens de antes | itens dos v9 |
+|---|---|---|---|
+| Campina | 0,0025 | 0,425 | 0,0025 |
+| Torre | 0,0063 | 0,325 | 0,0063 |
+| Floresta | 0,0163 | 0,269 | 0,0163 |
+| Cidadela | 0,0016 | 0,307 | 0,0016 |
+| Lago | 0,0075 | 0,262 | 0,0075 |
+| Espiral | 0,0359 | 0,530 | 0,0359 |
+
+- Os itens de antes quebravam a meta nos 6 líderes, sobretudo pelos chips de stat (sozinho, o de Força leva a Espiral a 0,169) e pela Carta
+  de Cura (0,123).
+- Na Espiral o pet sem item já está em 0,036 (fase 2): qualquer ajuda passa do teto. Baixar os valores não resolvia (só as regras de chip, no
+  topo, já davam 0,075 na Espiral; exploração sem artefato).
+- **Nos v9 passa pela trava do treino mínimo:** sem treino, nenhum item faz efeito.
+- **Relato no limiar** (o pet com metade do treino típico e a melhor combinação): Campina 0,199 → **0,934**, Torre 0,471 → 0,752, Floresta
+  0,383 → 0,708, Cidadela 0,704 → 0,782, Lago 0,736 → 0,797, Espiral 0,818 → 0,848. Nos Rookies, os itens no limiar levam o pet além do pet
+  com o treino típico sem item (0,829). A trava de 0,5 é uma escolha: não há meta para o limiar.
+
+**M-D2** (o de baixo com o treino típico e a melhor combinação × o de cima sem treino): **passa**:
+
+| par | meta | sem item | itens de antes | itens dos v9 |
+|---|---|---|---|---|
+| Rookie × Champion | ≤ 0,10 (pontos) | 0,0014 | 0,0209 | 0,0122 |
+| Champion × Ultimate | ≤ 0,10 (pontos) | 0,0104 | 0,0670 | 0,0206 |
+| Ultimate × Mega | ≤ 0,10 (pontos) | 0,0041 | 0,0065 | 0,0063 |
+| Rookie × Ultimate | 0,00 (vitórias) | 0 | 0 | 0 |
+| Champion × Mega | 0,00 (vitórias) | 0 | 0 | 0 |
+
+**M-D3** (a matriz das 8 formas, a forma medida com a melhor combinação, as outras sem item; ≤ 0,60, **sem a exceção do furioso**). Medida sem
+a trava do treino (a matriz é sem treino: mede o efeito do item em si); nos v9 sem carta, que não vale na arena contra bots:
+
+| forma | sem item | itens de antes (com carta) | itens dos v9 | a melhor combinação dos v9 |
+|---|---|---|---|---|
+| duelista | 0,508 | **0,740** | 0,569 | Força + Guarda + Perseguidor |
+| furioso | 0,528 | **0,812** | 0,561 | Força |
+| espelho | 0,455 | **0,670** | 0,493 | Força + Aparo + Recuo |
+| muralha | 0,449 | 0,571 | 0,465 | Força + Perseguidor |
+| sentinela | 0,580 | **0,670** | 0,580 | nenhum |
+| emboscador | 0,545 | **0,677** | **0,594** | Recuo + Oportunista + Perseguidor |
+| vigia | 0,476 | **0,833** | 0,478 | Força + Guarda + Oportunista |
+| titã | 0,459 | 0,594 | 0,478 | Força + Oportunista |
+
+- Com os itens de antes 6 das 8 passavam de 0,60.
+- O chip de regra no topo tira uma regra da forma e muda o ciclo (`itens_calibracao_itens_v6.json`, G-I4): o Aparo leva o vigia de 0,476 a
+  0,631 e o Oportunista leva o furioso a 0,621.
+- Numa exploração sem artefato (só chips, nas regras dos v9): Oportunista + Perseguidor no topo levavam o duelista a 0,630, o chip de stat
+  inteiro a 0,616, e a Carta de Cura sozinha somava de +0,07 a +0,16 em todas as formas.
+- **Nos v9 passa**, com a menor folga no emboscador (0,006).
+
+**G-I4 (relato): o custo.** No fim da lista, as regras dos chips quase nunca disparam (as listas das formas têm regras que valem antes da ação
+final):
+- ganho de força de −0,021 a +0,048 (só o Perseguidor no emboscador passa de 0,01);
+- contra os líderes, com o treino típico, nenhum chip muda a taxa em mais de 0,005.
+
+Com os itens de antes o chip de regra mais atrapalhava do que ajudava: na matriz, de −0,25 a +0,15; o Aparo levava a Cidadela e a Espiral a
+0,995 e 0,988, com a pior forma a 0,97 e 0,92. **Os chips de regra dos v9 ficam equilibrados porque quase não fazem nada.**
+
+### 3.8 As metas (calibração)
+
+| meta | critério | resultado |
+|---|---|---|
+| **M-C1** Liga | toda forma ≥ 0,25; nenhuma > 0,85 | **não fecha**: 7 de 8 na faixa; muralha 0,085 (com o fator de antes: 4 de 8, muralha 0, titã 0,008) |
+| **M-C2** Fábrica | ≥ 1 série em ≥ 0,25 | **passa**: 0,367 (nas regras dos v9 com fator 1 e a troca inteira: 0,029) |
+| **M-C3** Salão | cada nível em [0,70; 0,95] | **passa**: 0,894 / 0,754 / 0,826 / 0,826; menor folga 0,054 (Champion) |
+| **M-E1** Torre e Palácio | melhor ≥ 0,70; pior ≥ 0,40 na 1ª luta | **passa** sem mudança: 1,000 e 0,608 nas duas |
+| **M-D1** itens × treino | sem treino × cada líder ≤ 0,05 | **passa** pela trava: 0,0016–0,0359 (itens de antes: 0,262–0,530) |
+| **M-D2** itens × estágio | vizinhos ≤ 0,10; dois estágios = 0 | **passa**: 0,0122 / 0,0206 / 0,0063; 0 e 0 |
+| **M-D3** itens × formas | força ≤ 0,60 | **passa**: 0,465–0,594 (itens de antes: 6 de 8 acima, até 0,833) |
+
+### 3.9 O que não fechou e o que fica
+
+- **M-C1, a muralha** (seção 3.3). Com as alavancas permitidas a muralha não chega a 0,25. Para o Matheus decidir:
+  - aceitar como exceção;
+  - mudar uma regra da Liga fora das alavancas (os Megas da tabela, deixar perder uma luta);
+  - medir a Liga com chips (a Liga os permite). Com os chips de antes a sentinela vencia o WarGreymon com o Aparo, e a muralha ia de 0,04 a
+    0,28 contra o MegaGargomon com o Perseguidor (fator 0,5; exploração sem artefato). Com os chips dos v9 no fim da lista isso não vale mais.
+- **A Liga escolhida é esquisita:** o MegaGargomon com um décimo da vida, o Seraphimon com 0,3. É o que a regra da busca dá. Com os Megas mais
+  fortes a meta fica pior (com o fator 1: 4 de 8).
+- **Os chips de regra dos v9 quase não fazem efeito** (seção 3.7, G-I4). É o preço de M-D3 com o chip no fim da lista. As alternativas (no
+  topo com um chip de regra só, ou vetos por forma: o Aparo no vigia, o Oportunista no furioso) não foram medidas até o fim.
+- **A trava do treino mínimo é uma escolha:** com metade do treino, os itens levam os Rookies além do treino típico (0,934 × 0,829 na Campina).
+- **Riscos para a validação da fase 4** (folgas estreitas):
+  - M-C1: o espelho (0,005), o titã (0,013), a sentinela (0,023);
+  - M-D3: o emboscador (0,006);
+  - M-C3: o Champion (0,054) e o Rookie (0,056, perto do degrau).
+- **Os pets v6–v8 ficam como estavam:** a Liga, a Fábrica das tentativas antigas, o Salão e os itens de antes. Os itens de antes quebram G-I1
+  também nos v6 (`artifacts_campanha/itens/calibracao.json`: Espiral 0,274).
+
+### 3.10 Testes
+
+- `test/fronteira_itens_v9.test.ts` (12 testes):
+  - Liga: o fator pela versão, `jogarLiga` sem cura = a série de sempre, a cura entre as lutas, o motor v8 × v9;
+  - Torre e Palácio sem mudança; Salão com o fator por nível;
+  - Fábrica: as regras de cada versão, a tentativa sem versão igual à de antes, o rival × 0,6, a troca inteira, o Tamer gravando `v: 9` e
+    refazendo as duas, a versão desconhecida;
+  - itens: a trava, o chip de stat pela metade, o chip de regra no fim (fora da lista; no fim da lista de luta só com o treino mínimo; o
+    replay), a carta só contra NPC (e o replay que falha com ela), e o v8 sem mudança.
+- `progressao_v9.test.ts`: a Liga dos v9 com o fator novo. Os testes do Tamer passam a gravar a versão 6 (lê 1 a 5).
+- `constantes.test.mjs`: `CIT_V9`, `FATOR_LIGA_V9`, `CURA_LIGA_V9`, `FATOR_SALAO_V9` e `FATOR_RIVAL_FABRICA_V9` na tabela (`so_web`).
+- e2e da Fábrica: a tentativa nova nas regras dos v9 (três lutas, a troca com a vida cheia, `v: 9` no registro); o Tamer grava a versão 6.
+- Suíte da web: `npm run tipos` limpo; `npm test` com 297 testes em 28 arquivos; `npm run e2e` com 65 testes. Python: nada mudou.
+
+### 3.11 Reprodução
+
+```bash
+cd web/app
+npx tsx test/conferir_liga.mjs --calibrar && npx tsx test/conferir_liga.mjs                     # M-C1
+npx tsx test/conferir_fabrica_salao.mjs --calibrar && npx tsx test/conferir_fabrica_salao.mjs   # M-C2, M-C3
+npx tsx test/conferir_instalacoes.mjs                                                           # M-E1
+npx tsx test/medir_itens.mjs && npx tsx test/medir_itens.mjs --itens-v6                         # M-D1 a M-D3 (~10 e ~20 min)
+npx tsx test/conferir_liga.mjs --v6; npx tsx test/conferir_instalacoes.mjs --v6; npx tsx test/conferir_fabrica_salao.mjs --v6   # os v6
+npx tsx test/medir_itens.mjs --v6 --gates gi1,gi2,gi4                                           # os itens dos v6 (artifacts_campanha/itens/)
+```
