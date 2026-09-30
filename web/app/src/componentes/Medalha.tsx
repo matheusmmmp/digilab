@@ -8,13 +8,15 @@ import { abrirModal } from "./modal.ts";
 
 /** selo da medalha n: ganha = cheio (azul de acao, numero branco); nao ganha = apagado e tracejado. O sentido vai
     tambem pela forma (cheio x tracejado) e pelo texto ao lado; o selo em si e decorativo */
-export function SeloMedalha({ n, ganha, tam = 36 }: { n: number; ganha: boolean; tam?: number }) {
+export function SeloMedalha({ n, ganha, tam = 36, ouro = false }: { n: number; ganha: boolean; tam?: number; ouro?: boolean }) {
+  /* ouro: a medalha do titulo da Liga dos Lideres (Fronteira, medalhas parte 4a), com uma estrela no lugar do numero */
   return (
-    <svg class={`med-selo${ganha ? " ganha" : ""}`} viewBox="0 0 36 44" width={tam} height={tam * 44 / 36} aria-hidden="true">
+    <svg class={`med-selo${ganha ? " ganha" : ""}${ouro ? " ouro" : ""}`} viewBox="0 0 36 44" width={tam} height={tam * 44 / 36} aria-hidden="true">
       <path class="med-fita" d="M9 2h7l-3 16H6zM20 2h7l3 16h-7z" />
       <circle class="med-disco" cx="18" cy="27" r="14" />
       <circle class="med-aro" cx="18" cy="27" r="10.5" />
-      <text x="18" y="32" text-anchor="middle">{n}</text>
+      {ouro ? <path class="med-estrela" d="M18 19.5l2.3 4.7 5.2.8-3.8 3.6.9 5.1-4.6-2.4-4.6 2.4.9-5.1-3.8-3.6 5.2-.8z" />
+        : <text x="18" y="32" text-anchor="middle">{n}</text>}
     </svg>
   );
 }

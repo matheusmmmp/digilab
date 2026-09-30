@@ -2,7 +2,9 @@
    em 1x, caminho entre os lugares, o pet no proximo desafio; cartao do lugar com os rivais, a licao, os stats e
    o historico de tentativas (contado do registro). A luta acontece no palco desta aba. */
 import { useEffect } from "preact/hooks";
-import { ARENAS, MEDALHAS, MEDALHA_POR_ID, NOME_V2, NPC, STATS, chaveSprite, medalhaDoLider, nomeEstagio, nomeEstiloNPC, type Lugar, type Motor } from "../../../motor/index.ts";
+import {
+  ARENAS, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, NOME_V2, NPC, STATS, VERSAO_LIGA, chaveSprite, medalhaDoLider, nomeEstagio, nomeEstiloNPC, type Lugar, type Motor,
+} from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { fundoDeco } from "../../componentes/Deco.tsx";
 import { Peca, RetratoRival } from "../../componentes/Imagens.tsx";
@@ -22,17 +24,20 @@ export const ILHA = [{ peca: "ilha_campina", x: 6, y: 231, cx: 81, cy: 316, plac
 /* pets v5 (evolucao canonica): quatro lugares em zigue-zague, com a Montanha Espiral no alto */
 export const ILHA_V5 = [{ peca: "ilha_campina", x: 6, y: 240, cx: 81, cy: 325, placa: 390 }, { peca: "ilha_torre", x: 234, y: 160, cx: 309, cy: 245, placa: 308 },
   { peca: "ilha_cidadela", x: 6, y: 80, cx: 81, cy: 165, placa: 228 }, { peca: "ilha_espiral", x: 234, y: 0, cx: 309, cy: 85, placa: 150 }];
-/* pets v6 (medalhas, parte 2): seis arenas em zigue-zague num mapa mais alto (390 x 760), na ordem do nivel: Campina, Torre de
-   pedra, Floresta, Cidadela, Lago e, no alto, a Montanha Espiral. Mesma ilha de 150 px e o mesmo passo lateral do mapa v5; a
-   plaquinha de baixo fica acima dos 38 px que o cartao do lugar cobre no celular */
-export const ILHA_V6 = ["ilha_campina", "ilha_torre", "ilha_floresta", "ilha_cidadela", "ilha_lago", "ilha_espiral"].map((peca, i) => {
-  const x = i % 2 ? 234 : 6, y = 530 - 104 * i;
+/* pets v6 (medalhas, parte 2): seis arenas em zigue-zague num mapa mais alto, na ordem do nivel: Campina, Torre de pedra, Floresta,
+   Cidadela, Lago e a Montanha Espiral; no alto, a Fronteira de Batalha (medalhas parte 4a: a Liga dos Lideres, que nao e um lugar da
+   campanha e abre com as 6 medalhas). Mapa de 390 x 864; mesma ilha de 150 px e o mesmo passo lateral do mapa v5; a plaquinha de baixo
+   fica acima dos 38 px que o cartao do lugar cobre no celular */
+const ilhaV6 = (peca: string, i: number) => {
+  const x = i % 2 ? 234 : 6, y = 634 - 104 * i;
   return { peca, x, y, cx: x + 75, cy: y + 85, placa: y + 150 };
-});
-/** as ilhas e a altura do mapa da campanha da versao do pet (3, 4 ou 6 lugares) */
+};
+export const ILHA_V6 = ["ilha_campina", "ilha_torre", "ilha_floresta", "ilha_cidadela", "ilha_lago", "ilha_espiral"].map(ilhaV6);
+export const ILHA_FRONTEIRA = ilhaV6("ilha_fronteira", ILHA_V6.length);
+/** as ilhas e a altura do mapa da campanha da versao do pet (3, 4 ou 6 lugares; os pets v6 tem tambem a Fronteira) */
 export function mapaDe(m: Motor): { ilhas: typeof ILHA; H: number } {
   const n = m.lugares.length;
-  return n === ILHA_V6.length ? { ilhas: ILHA_V6, H: 760 } : n === ILHA_V5.length ? { ilhas: ILHA_V5, H: 420 } : { ilhas: ILHA, H: 420 };
+  return n === ILHA_V6.length ? { ilhas: ILHA_V6, H: 864 } : n === ILHA_V5.length ? { ilhas: ILHA_V5, H: 420 } : { ilhas: ILHA, H: 420 };
 }
 /** nivel pedido pelo lugar (Mega na Montanha Espiral) e se o pet ainda esta abaixo dele */
 const nivelDoLugar = (L: Lugar): string => NIVEL[L.est] ?? L.sugerido;
@@ -70,7 +75,9 @@ function Mapa() {
   if (a.tipo !== "ok") return <div class="mapa-ilhas"><p class="dl-apoio">Carregando o mapa…</p></div>;
   const LUGARES = m.lugares, { ilhas: ILHAS, H } = mapaDe(m), vencidos = LUGARES.filter((_, i) => m.lugarVencido(i)).length, url = (n: string) => imagemAtlas(a, n).url;
   const py = (y: number) => `${y / H * 100}%`, Lsel = m.lugarDe(sel);
-  const aqui = ILHAS[Math.min(vencidos, LUGARES.length - 1)], pet = imagemAtlas(a, chaveSprite(m.forma));
+  /* pets v6: a Fronteira no alto, aberta com as 6 medalhas (as que o pet conhece); tocar leva a Lutar · Fronteira */
+  const fronteira = m.versao >= VERSAO_LIGA && LUGARES.length === ILHA_V6.length, frAberta = fronteira && m.medalhas >= MEDALHAS_LIGA, F = ILHA_FRONTEIRA;
+  const aqui = fronteira && vencidos >= LUGARES.length && frAberta ? F : ILHAS[Math.min(vencidos, LUGARES.length - 1)], pet = imagemAtlas(a, chaveSprite(m.forma));
   return (
     <div class={`mapa-ilhas${LUGARES.length === ILHA_V6.length ? " mapa-ilhas--v6" : ""}`} role="group" aria-label="Mapa da campanha">
       <svg class="mapa-caminho" viewBox={`0 0 ${W0} ${H}`} preserveAspectRatio="none" aria-hidden="true">
@@ -79,6 +86,8 @@ function Mapa() {
           return <g key={i}><line x1={A.cx} y1={A.cy} x2={Bq.cx} y2={Bq.cy} class="trilho-sombra" />
             <line x1={A.cx} y1={A.cy} x2={Bq.cx} y2={Bq.cy} class={feito ? "trilho feito" : "trilho"} /></g>;
         })}
+        {fronteira && (() => { const A = ILHAS[LUGARES.length - 1]; return <g><line x1={A.cx} y1={A.cy} x2={F.cx} y2={F.cy} class="trilho-sombra" />
+          <line x1={A.cx} y1={A.cy} x2={F.cx} y2={F.cy} class={m.liga.titulos > 0 ? "trilho feito" : "trilho"} /></g>; })()}
       </svg>
       {LUGARES.map((L, i) => {
         const vit = L.rivais.reduce((n, k) => n + m.campanha[k], 0), aberto = m.desafioAberto(L.rivais[0]), eSel = Lsel === i, I = ILHAS[i];
@@ -95,7 +104,19 @@ function Mapa() {
           </button>,
         ];
       })}
-      {/* seu pet: no proximo desafio (ou no primeiro lugar, se nada foi vencido) */}
+      {fronteira && [
+        <img key="fp" class="mapa-pad" src={url("marcador_chefe")} alt="" style={{ left: px(F.cx - 34), top: py(F.placa - 29) }} />,
+        <img key="fi" class={`ilha${frAberta ? "" : " fechada"}`} src={url(F.peca)} alt="" style={{ left: px(F.x), top: py(F.y) }} />,
+        !frAberta && <img key="fn" class="nuvem" src={url("nuvem")} alt="" style={{ left: px(F.x - 12), top: py(F.y - 6) }} />,
+        <button key="fb" type="button" class={`lugar lugar--fronteira${frAberta ? "" : " bloq"}`} disabled={luta.lutando} style={{ left: px(F.cx - 70), top: py(F.placa) }}
+          aria-label={`Fronteira de Batalha: ${m.liga.titulos ? "campeão" : frAberta ? "a Liga dos Líderes está aberta" : `trancada, abre com as ${MEDALHAS_LIGA} medalhas`}`}
+          onClick={() => { location.hash = "#/lutar/fronteira"; }}>
+          <span class="lugar-placa">Fronteira</span>
+          {m.liga.titulos ? <span class="lugar-tag lugar-tag--ok">CAMPEÃO</span> : frAberta ? <span class="lugar-tag lugar-tag--fronteira">LIGA</span>
+            : <span class="lugar-tag lugar-tag--tranca"><Peca nome="icone_cadeado" />{MEDALHAS_LIGA} medalhas</span>}
+        </button>,
+      ]}
+      {/* seu pet: no proximo desafio (ou no primeiro lugar, se nada foi vencido; na Fronteira, com a campanha vencida e ela aberta) */}
       <span class="pet-mapa-ilha" style={{ left: px(aqui.cx - 26), top: py(aqui.cy - 39) }} aria-hidden="true">
         <span class="pet-mapa-circ"><img class="dl-pix" src={pet.url} width={pet.w} height={pet.h} alt="" /></span><span class="pet-mapa-seta" /></span>
     </div>
@@ -206,7 +227,7 @@ export function TelaCampanha({ voltarPet, irTreinar }: { voltarPet: () => void; 
     <div class="tela dl desk camp-tela">
       <div class="camp-principal"><Mapa /></div>
       <div class="camp-lado">{desk ? <DetalheDesk irTreinar={irTreinar} /> : <Detalhe />}
-      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>{v6 ? "Seis" : v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 || v6 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""}{v6 ? " Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. {m.versao >= 6 ? " O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas)." : ""} Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
+      {!desk && <details class="dl-apoio"><summary>Como funciona</summary><p>{v6 ? "Seis" : v5 ? "Quatro" : "Três"} lugares pelo mapa, em sequência: o próximo só abre depois de vencer um rival do anterior. Na Torre há três rivais com estilos diferentes.{v5 || v6 ? " No alto fica a Montanha Espiral, com os Mestres das Trevas: ela é pensada para o Mega." : ""}{v6 ? " Cada lugar é uma arena com um líder e uma regra própria: a Torre pune o golpe impulsivo, o líder da Floresta muda de padrão no meio da luta, a Cidadela pede três vitórias seguidas sem cura e no Lago o pet luta sozinho, sem as suas travas e vetos. Acima de tudo fica a Fronteira: com as seis medalhas, a Liga dos Líderes." : ""} Todo pet bem treinado vence qualquer um deles; sem treino, a luta vira sorte. {m.versao >= 6 ? " O líder de cada lugar dá uma medalha ao Tamer na primeira vitória; as medalhas liberam as evoluções (Lutar · Medalhas)." : ""} Os NPCs têm stats iguais em todos os atributos (somando de 72 a 110; um pet sem treino tem 60), lutam com um estilo fixo e são imprevisíveis; o primeiro tem o tamanho de um Rookie. <b>Treine o pet no estágio sugerido</b> para vencer com segurança (na campanha o treino vale inteiro, stats absolutos). As lutas entram no registro e ensinam as regras de combate do seu pet.</p></details>}
       </div>
     </div>
   );

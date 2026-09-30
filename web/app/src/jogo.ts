@@ -5,7 +5,7 @@
 import { useEffect, useState } from "preact/hooks";
 import { Motor, PetMorto } from "../motor/index.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
-import { CHAVE_TAMER, Tamer, conferirItensDasMedalhas, conferirMedalhas, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
+import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
@@ -43,13 +43,13 @@ export function iniciarJogo(armaz: Armazenamento): Jogo {
   return jogo;
 }
 export const tamerAtual = (): Tamer => tamer;
-/** depois de toda mudanca do pet: a vitoria nova contra um lider vira medalha do Tamer, com o item dela (gravados na hora), e o pet
-    ativo passa a conhecer as medalhas que o Tamer tem (evento "u"; o motor re-verifica a evolucao). Nada disso com save ou
-    registro do Tamer que nao abriu. */
+/** depois de toda mudanca do pet: a vitoria nova contra um lider vira medalha do Tamer, com o item dela (gravados na hora), o primeiro
+    titulo do pet na Liga dos Lideres vira o evento "campeao" do Tamer, e o pet ativo passa a conhecer as medalhas que o Tamer tem
+    (evento "u"; o motor re-verifica a evolucao). Nada disso com save ou registro do Tamer que nao abriu. */
 function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
   if (!armazenamento || j.erroSave || j.erroTamer) return { novas: [], mudou: false };
-  const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor);
-  if (novas.length || itens.length) gravarTamer(armazenamento, tamer);
+  const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor), titulo = conferirCampeao(tamer, j.motor);
+  if (novas.length || itens.length || titulo) gravarTamer(armazenamento, tamer);
   return { novas, mudou: sincronizarPet(tamer, j.motor) };
 }
 /** a unica porta de mudanca do Tamer fora das medalhas (itens: a carta usada, a carta da revanche): aplica, grava e avisa. Com o

@@ -1,7 +1,7 @@
 /* Lutar · Medalhas (docs/DESIGN_MEDALHAS_ARENAS.md, secoes 3 e 4): as 6 medalhas do Tamer, quais ja sao dele, com que
    pet, onde se ganha cada uma (o lider e a regra da arena) e o que cada uma libera. Tudo sai do registro do Tamer (tamer.ts)
    e das tabelas do motor (motor/medalhas.ts e motor/arenas.ts). So leitura. */
-import { ARENA_POR_ID, CARTA_DA_REVANCHE, CMD, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, NOME_EST, NPC, itemDe, nomeForma, type Estagio } from "../../../motor/index.ts";
+import { ARENA_POR_ID, CARTA_DA_REVANCHE, CMD, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, NOME_EST, NPC, itemDe, nomeForma, type Estagio } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { tamerAtual, useJogo } from "../../jogo.ts";
@@ -15,7 +15,7 @@ const passo = (alvo: Estagio): string => `${DE[alvo]} → ${NOME_EST[alvo as key
 function libera(n: number): string {
   const alvo = (Object.entries(CMD) as [Estagio, number][]).find(([, v]) => v === n)?.[0];
   if (alvo) return `${passo(alvo)} (${n} medalha${n === 1 ? "" : "s"})`;
-  return n === MEDALHAS.length ? "a coleção completa" : "conta para a próxima evolução";
+  return n === MEDALHAS.length ? "a coleção completa e a Fronteira (a Liga dos Líderes)" : "conta para a próxima evolução";
 }
 
 export function TelaMedalhas() {
@@ -34,6 +34,13 @@ export function TelaMedalhas() {
               <li key={alvo} class={t.n >= n ? "ok" : ""}><b>{n}</b><span>{passo(alvo)}</span></li>
             ))}
           </ul>
+          {/* a medalha de ouro: o titulo da Liga dos Lideres (Fronteira, medalhas parte 4a) */}
+          <div class={`med-ouro${t.titulo ? " ganha" : ""}`}>
+            <SeloMedalha n={0} ouro ganha={!!t.titulo} />
+            <span><b>Medalha de ouro</b>{t.titulo
+              ? <span>Campeão da Liga dos Líderes com {t.titulo.forma} no dia {diaDe(t.titulo.tick)}.{t.campeoes.length > 1 ? ` ${t.campeoes.length} títulos, um por pet.` : ""}</span>
+              : <span>Ainda não: com as {MEDALHAS_LIGA} medalhas, vença a Liga dos Líderes na Fronteira (Lutar · Fronteira).</span>}</span>
+          </div>
           {erroTamer && <p class="med-erro" role="alert">O registro do Tamer não abriu, e o app não vai gravar por cima dele: {erroTamer}</p>}
           {!v6 ? <p class="dl-apoio">{nomeForma(m.forma)} é de uma versão antiga: não ganha medalhas e não precisa delas para evoluir.</p>
             : espera ? <p class="med-espera" role="status"><b>{nomeForma(m.forma)} está pronto para evoluir</b> e espera o Tamer: {textoFalta(t, espera.precisa)}</p>

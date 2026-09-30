@@ -887,3 +887,26 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   a regra de chip que já estava na lista quando o chip entrou fica nela ao desequipar (só perde a proteção).
 - **Registro do Tamer versão 2** (lê a 1): as chaves do save e o formato do registro do pet não mudam; o pet ganha os eventos `i` e `k`.
   Nenhum registro que já existe muda no replay, e o descarte único não subiu.
+
+## 2026-09-30 — Fronteira de Batalha, parte 4a (a Liga dos Líderes e o fim do jogo) só no jogo (pets v6); a Liga sem fator
+
+- **Desvio entre o jogo e a pesquisa:** a Liga dos Líderes, o título do Tamer e a Fronteira (`docs/DESIGN_FRONTEIRA.md`, seção 7) existem
+  só em `web/app/` e só nos pets v6. Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer, medalhas nem Liga.
+- **Desvio do desenho: o fator dos Megas da Liga é 1, não o do Piedmon da Espiral (1,6).** O desenho pedia só conferir que um Mega bem
+  treinado, com a forma certa, vence cada luta, e mandava ajustar o fator de uma luta só se ela fosse impossível para todas as formas.
+  Cada luta sozinha é vencível com o 1,6, mas a Liga inteira (sem cura) não: nenhuma das 8 formas venceu as 6 seguidas nas sementes de
+  validação (0 nas 8 formas). Mexer só na 5ª e na 6ª não bastava (sementes de calibração: com elas a 0,3 e as outras a 1,6, a melhor forma
+  vence 0,03), porque o dreno de vida vem das primeiras lutas. O jogo precisa ser completável, então a Liga ficou sem fator (o Mega na
+  escala dos pets v6, como ele é): o Piedmon precisava do 1,6 por ser um NPC de perfil neutro, sem técnica nem passiva, e os Megas da Liga
+  lutam com técnica, passiva e lista canônica. Com o 1: furioso 0,7850, vigia 0,4275, duelista 0,4075, espelho 0,2075, sentinela 0,0600, emboscador 0,0600, titã 0,0050, muralha 0,0000 (`artifacts_campanha/liga/conferencia.json`). A grade 1,6 / 1,4 / 1,2 / 1
+  foi olhada nas sementes de calibração antes da escolha e é relato; o 1 não saiu de uma meta. **Para o Matheus decidir** na rodada de
+  equilíbrio: manter sem fator, ou pôr um fator entre 1 e 1,2 (com 1,2 só o vigia ainda vence, 0,0975).
+- **Interpretações:** a tentativa inteira é um evento de luta `l` do pet, `{r: "liga", s}` (como a série da Cidadela), sem o evento `f` do
+  desenho (a regra sai do rival); as lesões da derrota na Liga seguem a regra de toda luta ("tentar de novo sem custo" = sem custo de
+  entrada); o título é um evento `campeao` por pet (o primeiro é o título do Tamer); a entrada confere as medalhas que o pet conhece
+  (evento `u`), porque o motor não lê o Tamer; o In-Training não entra.
+- **Registro do Tamer versão 3** (lê a 1 e a 2). O registro do pet não muda de formato; a assinatura dos v6 só ganha a Liga depois da
+  primeira tentativa. Pets v1–v5, gabaritos, paridade V21D e as calibrações das partes 2 e 3 saem iguais (a série da Cidadela passou a
+  ser `jogarSerie` com o mesmo líder três vezes, a mesma conta). Descarte único não subiu.
+- **Atlas (fora do repo):** a ilha da Fronteira é a `WorldMap_05` (peça `ilha_fronteira` em `Assets/gerar_atlas_up.py`); o mapa da
+  campanha v6 ficou com 390 × 864.

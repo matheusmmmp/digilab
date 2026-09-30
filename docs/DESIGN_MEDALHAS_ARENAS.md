@@ -1,6 +1,6 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Parte 3 (itens) implementada no jogo web **sem equilíbrio** (branch `medalhas-parte3`, 2026-09-30; seção 13); parte 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
+Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Parte 3 (itens) implementada no jogo web **sem equilíbrio** (branch `medalhas-parte3`, 2026-09-30; seção 13); parte 4 detalhada em `docs/DESIGN_FRONTEIRA.md`, com a 4a (a Liga dos Líderes e o fim do jogo) implementada (branch `fronteira-4a`, 2026-09-30). Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
 
 **Decisões do Matheus (2026-09-29):**
 1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
