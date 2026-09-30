@@ -334,6 +334,13 @@ byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decom
 - **Decisão do Matheus (2026-09-29): a linhagem para como pesquisa.** E2–E4 arquivados; fica como mecânica de jogo
   (herança v4). Um genoma com aptidões por indivíduo foi descartado: o treino é normalizado na arena e ajustar o
   genoma para passar o gate viciaria o teste. Pergunta aberta mais promissora: a interação dono × ambiente.
+- **Análise dono × ambiente** (exploratória, pós hoc, `docs/ANALISE_DONO_AMBIENTE_E1.md`,
+  `experiments/analisar_dono_ambiente.py` → `artifacts_linhagem/dono_ambiente/resultado.json`): as mortes são todas
+  "lesão sem tratar" (o ambiente sorteia a exposição; o aleatório nunca responde a lesão e o relapso só na visita:
+  regra do dono sintético). Sem as mortes a interação continua porque o ambiente muda a **forma** final, e **a forma
+  explica 96% da taxa no painel** (furioso 0,71 × titã 0,19). Dentro da forma sobra 4%; nele o dono explica 22%
+  (atencioso +0,027 acima da média da forma, pelo ε da disciplina). Leitura: o painel mede quase só o arquétipo; a
+  V4 "cuidado reduz a variância entre ambientes" testaria regras escritas por nós e **não deve rodar**.
 - A rodada balanceada caiu ao gravar o meta (outra sessão trocou o branch da pasta `v1` no meio da run); a análise
   foi refeita dos arquivos gravados (`--reanalisar`, conferido: a reanálise da espécie fixa sai idêntica).
 
