@@ -176,7 +176,8 @@ def fatos_de_estado(e: dict) -> list[Fato]:
         raise FatosInvalidos("historia invalida")
     cont: dict[str, int] = {}
     for h in hist:
-        if not isinstance(h, dict) or h.get("tipo") not in TIPO_HISTORIA or h.get("regra") not in REGRAS_HISTORIA:
+        if (not isinstance(h, dict) or set(h) - {"tipo", "regra", "chave", "texto", "dados"}
+                or h.get("tipo") not in TIPO_HISTORIA or h.get("regra") not in REGRAS_HISTORIA):
             raise FatosInvalidos("fato de historia invalido")
         cont[h["tipo"]] = cont.get(h["tipo"], 0) + 1
         fatos.append(Fato(f"{h['tipo']}{cont[h['tipo']]}", TIPO_HISTORIA[h["tipo"]], _txt(h["texto"], "historia"),

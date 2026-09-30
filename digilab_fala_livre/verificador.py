@@ -75,12 +75,16 @@ TIPOS_QUE_SUSTENTAM = {"causa": ("motivo de decisao", "estado", "desejo atual", 
                        "lembranca": ("memoria",), "evento": ("memoria", "evento agora", "motivo de decisao")}
 
 TIPO_MENTIRA = "dizer agora"                     # = fatos.TIPO_MENTIRA
+# design (secao 4): H, O, P e L sustentam afirmacoes de costume, gosto e lembranca (e evento e causa, que o extrator
+# tambem usa para o mesmo trecho). A primeira versao aqui era mais estreita (so H/O para costume, so L para lembranca):
+# corrigida em 2026-09-29 depois da rodada 1 de artifacts_voz (declarado no relatorio).
+_HISTORIA = ("habito meu", "habito do dono", "gosto", "marco")
 TIPOS_QUE_SUSTENTAM_V4 = {
-    "causa": TIPOS_QUE_SUSTENTAM["causa"] + ("habito meu", "habito do dono", "gosto", "marco"),
-    "lembranca": ("memoria", "marco"),
-    "evento": TIPOS_QUE_SUSTENTAM["evento"] + ("marco",),
-    "costume": ("habito meu", "habito do dono"),
-    "gosto": ("gosto",),
+    "causa": TIPOS_QUE_SUSTENTAM["causa"] + _HISTORIA,
+    "lembranca": ("memoria",) + _HISTORIA,
+    "evento": TIPOS_QUE_SUSTENTAM["evento"] + _HISTORIA,
+    "costume": _HISTORIA,
+    "gosto": _HISTORIA,
     "mundo": ("coisa que ouvi no Digimundo",),
 }
 
@@ -228,6 +232,8 @@ def verificar(cliente: ClienteOllama, fala: str, fatos_citados, fatos: list[dict
                            ESQUEMA_JULGAR, 40, semente)
             jd = json.loads(j.texto)
             fato = jd.get("fato", "").strip().strip("[]")
+            if v4:
+                fato = fato.upper()                  # o juiz as vezes devolve "o1"
             sust = bool(jd["sustentada"]) and fato in por_id
             if v4 and sust and por_id[fato]["tipo"] == TIPO_MENTIRA:
                 # a mentira ordenada pelo motor: nao e alucinacao da LLM, conta a parte

@@ -780,3 +780,13 @@ muda, `6a9037ad…`). Todos os números novos são PROPOSTOS. Onde o design não
   revisado), como pedido. O carregador aceita as marcas com ou sem acento (a auditoria usa `[OUTRA MÍDIA]`) e falha
   alto em marca desconhecida. `honestidade_especie` é calculada pelo carregador (o arquivo deixa null).
 - **Filtro de citação**: 6 palavras seguidas iguais a uma citação, sem acento e sem caixa, reprovam a fala.
+
+## 2026-09-29 — voz própria, parte 3: avaliação offline (artifacts_voz/rodada1)
+
+- Amostra: 40 pets (grupo A: 7 braços × 4 ovos da V3c + 4 personas, mentira desligada; grupo B: 8 sombrios que mentem,
+  mentira ligada, escolhidos numa varredura de exigente e treinador), 5 falas espontâneas por pet = 200.
+- Depois de ver a amostra, corrigi o `verif-v4` para o que o design diz (H/O/P/L sustentam costume, gosto e lembrança;
+  id em minúscula) e a chave da métrica de repetição (grupo + pet). A geração não mudou. Os números antes da correção
+  estão em `resumo_v4a.json`.
+- Resultado (PROPOSTO): honestidade 70,0% (limite 5%) e repetição 5 (limite 2) REPROVAM; história 98,5% e variedade
+  97,7% passam. Parada pedida pelo Matheus: a parte 4 (web) não foi feita.
