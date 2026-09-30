@@ -369,13 +369,31 @@ Só no jogo web; a pesquisa em Python não tem Tamer (`docs/REGISTRO_DESVIOS.md`
 - **Trava (pets v6, `VERSAO_PET = 6`):** Rookie → Champion pede 1 medalha, Champion → Ultimate 3, Ultimate → Mega 5 (`CMD`), além
   dos requisitos de sempre. O motor nunca lê o Tamer: o app grava no registro do pet o evento `u` ("o Tamer tem N medalhas",
   `Motor.liberar`), e o pet pronto evolui nesse tick. Pet guardado recebe o `u` ao voltar a ser o ativo. Assinatura dos v1–v5 igual.
-- **Medalhas** (`motor/medalhas.ts`, tabela única): Gazimon, Guardromon, Devidramon (**provisória**, até a Floresta), Myotismon,
-  Tortomon (**provisória**, até o Lago), Piedmon. A 5ª provisória vinha do Machinedramon (NPC de Mega: um Ultimate treinado vencia
-  0,28 e só os caçadores passavam) e foi trocada pelo Tortomon, da Torre de pedra (ver o REGISTRO_DESVIOS).
+- **Medalhas** (`motor/medalhas.ts`, tabela única): uma por arena, do líder dela (parte 2, seção abaixo). Na parte 1 a 3ª e a 5ª
+  tinham fonte provisória (Devidramon e Tortomon, na Torre de pedra) até a Floresta e o Lago existirem.
 - **Tempo dos estágios nos v6:** conta desde a evolução anterior (`Motor.tickLimiteEstagio`), para um Rookie que esperou a
   medalha não ganhar um Champion curto; nos v1–v5 continua desde o nascimento.
 - **Saves:** na primeira abertura os pets v1–v5 (ativo e guardados) são apagados com aviso e o jogo começa num ovo novo (decisão do
   Matheus). Os Cenários seguem com pets v5 (sem Tamer). Telas: Lutar · Medalhas, requisito na Evolução, líder na Campanha.
+
+## Arenas com líderes, medalhas parte 2 (2026-09-30, `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 12)
+
+Só no jogo web e só pets v6; a pesquisa não tem arenas (`docs/REGISTRO_DESVIOS.md`, 2026-09-30).
+- **Seis arenas** (`motor/arenas.ts`, `ARENAS`; campanha v6 em `bots.LUGARES_V6`/`CAMPANHA_V6`, na ordem do nível): Campina (Gazimon,
+  sem regra), Torre de pedra (Guardromon com o contra-golpe: paciência), **Floresta** (Youkomon, muda de padrão no turno 10: leitura),
+  Cidadela (Myotismon, três lutas seguidas sem cura: resistência), **Lago** (MarinBullmon; as travas e vetos do dono não valem:
+  vínculo) e Montanha Espiral (Piedmon, chefe). Os NPCs de antes seguem como desafiantes, com as mesmas chaves. A 3ª medalha vem da
+  Floresta e a 5ª do Lago (fim das provisórias).
+- **Replay:** a regra depende só do rival e da versão do pet; o evento `l` continua `{r, s}` (a série da Cidadela é um evento só, com
+  sementes derivadas). `Motor.montarLuta`/`lutadores` montam a luta para o motor e para a tela; `Motor.lugarDe(k)` dá o lugar do NPC
+  na campanha do pet (os índices mudam da v5 para a v6). Pets v1–v5 e gabaritos iguais.
+- **Calibração** (`web/app/test/calibrar_arenas.mjs`, `artifacts_campanha/arenas/`, sementes de validação): os seis líderes nas metas
+  (sem treino ≤ 0,30; com o treino típico ≥ 0,80; nenhuma forma < 0,5). Sem treino 0,11–0,28, com treino 0,88–0,98, pior forma
+  0,565 (colosso na Torre). Fatores: Guardromon 1,4 e Myotismon 0,7 só na luta de arena; Youkomon e MarinBullmon 1,2.
+- **Telas:** cartão da arena (líder, regra, medalha), mapa de seis ilhas (atlas: `WorldMap_04` Floresta e `WorldMap_02` Lago, fora do
+  repo), "luta k de 3" na Cidadela, aviso do Lago na luta e no Resultado, Medalhas com a regra de cada arena.
+- **Correção do vigia:** nos pets v6 as duas regras novas do vigia V21D voltam como candidatas de troca (`candidatasDoVigia`).
+- **Saves v6 não descartados:** os já salvos que lutaram contra o Guardromon ou o Myotismon refazem essas lutas com a regra da arena.
 
 ## Reequilíbrio dos arquétipos: V21D validada e nos pets v6 (2026-09-29/30)
 

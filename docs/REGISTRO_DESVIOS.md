@@ -790,3 +790,30 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   - Sem pet para descartar, o Tamer fica como está.
 - **NPCs web-only da campanha v5** (Espiral e Cidadela): não entraram nos critérios. Foram medidos com a V21D depois,
   como relato, e seguem nas metas (`artifacts_campanha/mega/validacao_v21d.json`).
+
+
+## 2026-09-30 — arenas com líderes (medalhas, parte 2) só no jogo (pets v6)
+
+- **Desvio entre o jogo e a pesquisa:** as seis arenas, os lugares novos (Floresta e Lago), as regras de arena e os líderes existem
+  **só no jogo web** (`web/app/`, pets v6; `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 12). `digilab/` e `experiments/` não mudam; a
+  campanha da pesquisa continua a de sempre.
+- **Líderes:** a Floresta ficou com o **Youkomon** e não com o Kyubimon sugerido, porque o Kyubimon é forma de pet (Champion guardião
+  do brasão Coragem). O Lago ficou com o **MarinBullmon** (Ultimate do atlas que não é forma de pet).
+- **Como cada regra foi feita (interpretações):**
+  - Torre (paciência): o NPC líder ganha técnica (os NPCs não tinham): o contra-golpe, com as regras dele da lista do espelho.
+  - Floresta (leitura): a troca de padrão é pela condição de turno (`turno_execucao` 10) numa lista própria do líder, sem mexer no
+    combate. A primeira lista não fechava as metas; a final saiu de 30 variantes medidas só nas sementes de calibração.
+  - Cidadela (resistência): as três lutas são **um evento `l` só** (sem campo novo): as sementes da 2ª e da 3ª derivam da do evento;
+    o pet leva vida e guts, o líder volta inteiro; o pet luta a série com a lista do começo e aprende depois de cada luta, na ordem;
+    cada luta conta nas lutas do estágio e na lesão; a vitória no lugar e a medalha só vêm com as três.
+  - Lago (vínculo): "o pet decide sozinho" = a lista sem as travas (só a nota ordena) e com as regras vetadas de volta, as que ele
+    conhece (com nota) e a forma permite, cortada na capacidade. Sem trava nem veto é a lista de sempre.
+- **Fatores dos líderes:** calibrados no motor web com as regras dos pets v6 (`web/app/test/calibrar_arenas.mjs`,
+  `artifacts_campanha/arenas/`). O pet de referência fica sempre no lado A (o `calibrar_mega.mjs` alternava os lados), porque a série
+  da Cidadela só existe com o pet no lado A, como no jogo. O Guardromon e o Myotismon têm um fator só na luta de arena (1,4 e 0,7); nas
+  campanhas de antes continuam 1,5 e 1,2.
+- **Saves v6 não foram descartados** (não houve autorização nova): os pets v6 já salvos que lutaram contra o Guardromon ou o Myotismon
+  refazem essas lutas com a regra da arena no replay (o registro é o mesmo, a luta muda). Um pet que venceu o Myotismon numa luta só
+  pode perder a série no replay e deixar a Cidadela sem vitória no pet (as medalhas do Tamer ficam). O mesmo vale para um vigia v6 que
+  fizer uma troca de regra (a correção do vigia). Se o Matheus preferir, um descarte versão 3 resolve (o mecanismo existe).
+- **Correção do vigia (mesmo branch):** as duas regras novas do vigia V21D viraram candidatas de troca nos pets v6 (seção V21D acima).

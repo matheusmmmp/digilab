@@ -1,6 +1,6 @@
 # Design — medalhas, arenas, itens e a Fronteira de Batalha
 
-Status: **aprovado** (Matheus, 2026-09-29). **Parte 1 implementada no jogo web** (branch `medalhas-parte1`, 2026-09-29; seção 11); partes 2–4 não. Todo número é PROPOSTO, sem fonte.
+Status: **aprovado** (Matheus, 2026-09-29). **Partes 1 e 2 implementadas no jogo web**: parte 1 (branch `medalhas-parte1`, 2026-09-29; seção 11) e parte 2, as arenas com líderes (branch `medalhas-parte2`, 2026-09-30; seção 12). Partes 3 e 4 não. Todo número é PROPOSTO; os fatores dos líderes têm artefato (seção 12).
 
 **Decisões do Matheus (2026-09-29):**
 1. Trava na evolução: **1, 3 e 5 medalhas** para Champion, Ultimate e Mega.
@@ -146,3 +146,59 @@ Liberada com as 6 medalhas. O objetivo: **vencer todos os líderes na versão ma
   formas quase nunca (`docs/REGISTRO_DESVIOS.md`). Trocada pelo **Tortomon** (Torre de pedra), que o pet treinado vence.
 - O tempo de cada estágio contava desde o nascimento: um Rookie que esperou a medalha virava um Champion curto. Nos v6 ele
   conta desde a evolução anterior.
+
+## 12. O que a parte 2 implementou (2026-09-30): as arenas com líderes
+
+Só `web/app/`, só pets v6 (as lutas deles usam a V21D). A pesquisa em Python não tem arenas (`docs/REGISTRO_DESVIOS.md`, 2026-09-30).
+
+**As seis arenas** (`motor/arenas.ts`, tabela `ARENAS`; campanha v6 em `motor/bots.ts`, `LUGARES_V6`/`CAMPANHA_V6`). A ordem do mapa
+segue o nível; vencer qualquer rival de um lugar abre o próximo, como antes. Os NPCs de antes seguem como desafiantes, com as mesmas
+chaves.
+
+| # | arena | nível | líder | regra (como foi feita) |
+|---|---|---|---|---|
+| 1 | Campina | Rookie | Gazimon | nenhuma |
+| 2 | Torre de pedra | Champion | Guardromon | **paciência**: o líder ganha a técnica do guardião (contra-golpe) e a lista do espelho com as regras dela; quem prepara o pesado de perto ou insiste no golpe rápido leva o golpe de volta |
+| 3 | Floresta (nova) | Champion | **Youkomon** | **leitura**: o líder muda de padrão no turno 10, pela condição `turno_execucao` que a linguagem já tinha (`GAMBITS_ARENA.floresta`): atirador até o 10, brigão depois |
+| 4 | Cidadela | Ultimate | Myotismon | **resistência**: três lutas seguidas num evento só; o pet leva a vida e o guts de uma para a outra, o líder volta inteiro; a série para na primeira que não for vitória, e a medalha (e o lugar vencido) só vêm com as três |
+| 5 | Lago (novo) | Ultimate | **MarinBullmon** | **vínculo**: as travas e os vetos do dono não valem; o pet luta com a lista que ele mesmo faria (`GambitsPet.listaSozinho`: sem trava, só a nota ordena, e as regras vetadas que ele conhece voltam) |
+| 6 | Montanha Espiral | Mega | Piedmon | chefe da campanha, sem regra a mais |
+
+- **Líderes novos:** o Kyubimon é forma de pet (Champion guardião do brasão Coragem), então a Floresta ficou com o **Youkomon**, outra
+  raposa Champion do atlas. No Lago, o **MarinBullmon** (Ultimate aquático do atlas, não é forma de pet), com a lista do adaptativo
+  (lê o que o rival repete). Os dois e as duas ilhas (Floresta = `WorldMap_04`, Lago = `WorldMap_02`) entraram no atlas, fora do repo
+  (`Assets/catalogo_sprites_up.json`, `Assets/gerar_atlas_up.py`), no padrão da `WorldMap_07` da evolução canônica.
+- **Replay:** a regra depende só do rival e da versão do pet, que o registro já tem. O evento `l` continua `{r, s}` (as lutas 2 e 3 da
+  Cidadela usam sementes derivadas da do evento); os eventos antigos se leem como antes. `Motor.montarLuta`/`lutadores` montam a luta
+  do mesmo jeito para o motor e para a tela (replay no Diário, lutas do registro).
+- **Medalhas** (`motor/medalhas.ts`): a 3ª vem do Youkomon (Floresta) e a 5ª do MarinBullmon (Lago); acabaram as fontes provisórias
+  (Devidramon e Tortomon seguem na Torre como desafiantes).
+- **Telas:** o cartão da arena (líder, a regra em uma frase, a medalha) na Campanha; o mapa de seis ilhas (390 × 760); "luta k de 3"
+  na luta da Cidadela e o bloco da resistência no Resultado; o aviso do Lago na luta (sem os botões de travar e vetar) e no Resultado;
+  a tela de Medalhas com a regra de cada arena, sem "provisória".
+- **Correção junto:** as duas regras novas do vigia V21D voltam como candidatas de troca nos pets v6 (`candidatasDoVigia`).
+
+**Calibração dos líderes** (`web/app/test/calibrar_arenas.mjs`, método do `calibrar_mega.mjs`: motor web, escala ligada, regras dos
+pets v6, a regra de cada arena; pets de referência = as formas do estágio da arena nas 4 espécies, com treino uniforme; o pet é o lado A,
+como no jogo). Metas fixadas antes: sem treino ≤ 0,30, com o treino típico ≥ 0,80 (Rookie 8, Champion 22, Ultimate 36, Mega 40) e
+nenhuma forma abaixo de 0,5 com o treino típico. Fator escolhido nas sementes de calibração (3101…3505) pela maior folga; validação
+nas sementes 4101…4505 (`artifacts_campanha/arenas/calibracao.json` e `validacao.json`). Campina e Espiral não mudaram de regra: só a
+medida do fator de sempre.
+
+| arena | líder | fator | sem treino | com o treino típico | pior forma |
+|---|---|---|---|---|---|
+| Campina | Gazimon | 1,1 (o de sempre) | 0,216 | 0,979 | 0,970 (sereno) |
+| Torre de pedra | Guardromon | 1,4 (era 1,5) | 0,277 | 0,876 | 0,565 (colosso) |
+| Floresta | Youkomon | 1,2 | 0,205 | 0,892 | 0,665 (colosso) |
+| Cidadela (série de 3) | Myotismon | 0,7 (era 1,2, luta só) | 0,140 | 0,920 | 0,615 (sentinela) |
+| Lago | MarinBullmon | 1,2 | 0,114 | 0,922 | 0,670 (sentinela) |
+| Montanha Espiral | Piedmon | 1,2 (o de sempre) | 0,175 | 0,929 | 0,710 (sentinela) |
+
+- Os seis passam nas três metas na validação. Os mais apertados: a Torre (o colosso a 0,565) e a Floresta, cuja primeira lista (com o
+  pesado na fase 2) não fechava as metas com nenhum fator; a lista final saiu de 30 variantes medidas **só nas sementes de calibração**
+  (`test/explorar_floresta.mjs`, `artifacts_campanha/arenas/floresta_variantes.json`).
+- No Lago a regra não mexe nos pets de referência (não têm dono): a calibração mede o líder, não o efeito de tirar as travas.
+- O fator da arena (Guardromon, Myotismon) vale só na luta de arena dos pets v6; os pets v1–v5 lutam com os NPCs de sempre.
+
+**Ficou de fora (partes 3 e 4 e o resto da seção 4):** itens, a Fronteira, e o que mais as medalhas liberariam (regras editáveis, espaços
+de item). Os desafiantes (Tortomon, Devidramon, Puppetmon, Machinedramon) não foram recalibrados para a campanha v6.
