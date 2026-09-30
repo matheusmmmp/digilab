@@ -92,11 +92,16 @@ def conferir(nome: str, dados: dict, ref: dict) -> None:
             raise RuntimeError(f"{nome}: replay difere do pets.json do E1 em {k}: {dados.get(k)!r} != {ref.get(k)!r}")
 
 
-def estatistica(nomes: list[str]):
-    """y[g][d][r] = tupla de portadores -> componentes e fracoes de cada um"""
+def estatistica(nomes: list[str], donos: list[str]):
+    """y[g][d][r] = tupla de portadores -> componentes, fracoes e medias por dono de cada um, e o contraste
+    atencioso - aleatorio (secao 3 do plano)"""
+    ja, jl = donos.index("atencioso"), donos.index("aleatorio")
+
     def f(y) -> dict:
         out = {}
         for i, n in enumerate(nomes):
+            vals = [yg[ja][k][i] - yg[jl][k][i] for yg in y for k in range(len(yg[0]))]
+            out[f"{n}|atencioso-aleatorio"] = sum(vals) / len(vals)
             c = componentes_cruzados([[[cel[i] for cel in yd] for yd in yg] for yg in y])
             for k in COMPONENTES:
                 out[f"{n}|var_{k}"] = c["componentes"][k]
@@ -147,7 +152,7 @@ def main(argv=None) -> int:
                 + (float(d["disciplina_final"]), float(d["saude_final"]), float(d["vinculo_final"]))
                 + tuple((p["treino"].get(s, 0.0) / tot) if tot > 0 else 0.0 for s in stats_treino))
     y = [[[valores(chave(d, g, r)) for r in rs] for d in ds] for g in gs]
-    f = estatistica(nomes)
+    f = estatistica(nomes, ds)
     t1 = time.perf_counter()
     pontual = f(y)
     boots = bootstrap_cruzado(y, f, REAMOSTRAS, SEMENTE, reamostrar="GR")
@@ -162,7 +167,8 @@ def main(argv=None) -> int:
             "componentes": {k: {"estimativa": pontual[f"{n}|var_{k}"], "ic95": ic95[f"{n}|var_{k}"]} for k in COMPONENTES},
             "fracao": {k: {"estimativa": pontual[f"{n}|frac_{k}"], "ic95": ic95[f"{n}|frac_{k}"]} for k in COMPONENTES},
             "media_por_dono": {d: {"estimativa": pontual[f"{n}|media_dono_{j}"], "ic95": ic95[f"{n}|media_dono_{j}"]}
-                               for j, d in enumerate(ds)}}
+                               for j, d in enumerate(ds)},
+            "atencioso-aleatorio": {"estimativa": pontual[f"{n}|atencioso-aleatorio"], "ic95": ic95[f"{n}|atencioso-aleatorio"]}}
     gate_eixos = {e: {"var_D": pontual[f"carater_adol:{e}|var_D"], f"ic{NIVEL_GATE:.4f}": ic_gate[f"carater_adol:{e}|var_D"],
                       "passa": ic_gate[f"carater_adol:{e}|var_D"][0] > 0} for e in eixos}
     gate = {"criterio": f"em algum eixo do carater em T_ADOL, limite inferior do IC {NIVEL_GATE:.4f} (Bonferroni, 4 eixos) "
@@ -196,6 +202,8 @@ def main(argv=None) -> int:
                         "digilab/metrics.py", "digilab/educacao.py", "digilab/evolucao.py", "digilab/config.py"))).hexdigest(),
                     "ambiente": {"python": platform.python_version(), "plataforma": platform.platform()}}}
     SAIDA.mkdir(parents=True, exist_ok=True)
+    (SAIDA / "portadores_por_pet.json").write_text(json.dumps(port, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
+                                                   encoding="utf-8", newline="\n")
     (SAIDA / "resultado.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
                                           encoding="utf-8", newline="\n")
     for e, v in gate_eixos.items():
