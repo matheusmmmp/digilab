@@ -297,13 +297,13 @@ describe("inventario no registro do Tamer", () => {
     expect(t.cartas("carta_folego")).toBe(0);
     expect(() => t.usarCarta("carta_folego", m, 6)).toThrow(/sem estar no inventário/);
   });
-  test("o registro grava a versao 3 (o titulo da Liga, parte 4a) e le a 1 (so medalhas) e a 2 (itens)", () => {
+  test("o registro grava a versao 4 (os recordes da Fronteira, parte 4b) e le a 1 (so medalhas), a 2 (itens) e a 3 (o titulo)", () => {
     const t = new Tamer(), m = new Motor(95, 6), a = armaz();
     t.ganhar("campina", m, 1);
     gravarTamer(a, t);
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(3);
-    for (const versao of [1, 2]) expect(lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao, log: t.log }) })).n).toBe(1);
-    expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 4, log: [] }) }))).toThrow(/versão/);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(4);
+    for (const versao of [1, 2, 3]) expect(lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao, log: t.log }) })).n).toBe(1);
+    expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 5, log: [] }) }))).toThrow(/versão/);
   });
   test("no app: a abertura da o item das medalhas de antes; mudarTamer grava", () => {
     const m = petV6(96, "crianca", 1), t = new Tamer();

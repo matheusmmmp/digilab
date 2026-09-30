@@ -62,8 +62,11 @@ export type OpItem = "equipar" | "desequipar";
 export type EventoItem = [tick: number, tipo: "i", item: { op: OpItem; id: string }];
 /** pets v6: a carta do Tamer vale para a luta seguinte; o proximo evento do registro tem de ser a luta ("l") */
 export type EventoCarta = [tick: number, tipo: "k", carta: { id: string }];
+/** pets v6 (Fronteira, medalhas parte 4b): o Tamer venceu a Liga dos Lideres, e as instalacoes da Fronteira abrem para este pet a partir
+    deste tick (como o "u" das medalhas: o motor do pet nunca le o Tamer por fora; o replay le este evento). Um por pet */
+export type EventoFronteira = [tick: number, tipo: "f", fronteira: { campeao: true }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta;
+  | EventoItem | EventoCarta | EventoFronteira;
 
 export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6;
 

@@ -84,12 +84,20 @@ export function jogarArena(A: Lutador, B: Lutador, semente: number, R: RegrasLut
 export function jogarSerie(A: Lutador, Bs: readonly Lutador[], semente: number, R: RegrasLuta, desafiado: Desafiado = null,
   carta: EfeitoCarta | null = null): ResultadoLuta[] {
   if (!Bs.length) throw new Error("série de lutas sem rival");
+  return jogarSequencia(A, k => Bs[k], Bs.length, semente, R, desafiado, carta);
+}
+/** a mesma conta de jogarSerie, com o rival de cada luta dado na hora (rivalDe(k), so para as lutas que acontecem) e no maximo `max`
+    lutas: as instalacoes da Fronteira (instalacoes.ts), em que os rivais sao sorteados e a sequencia vai ate a primeira luta que nao for
+    vitoria. jogarSerie e esta funcao com os rivais de uma lista: as lutas sao as mesmas */
+export function jogarSequencia(A: Lutador, rivalDe: (k: number) => Lutador, max: number, semente: number, R: RegrasLuta, desafiado: Desafiado = null,
+  carta: EfeitoCarta | null = null): ResultadoLuta[] {
+  if (!Number.isInteger(max) || max < 1) throw new Error("sequência de lutas sem luta: " + max);
   /* a carta do pet (itens.ts; pets v6) vale para o evento inteiro: o guts a mais no comeco da primeira luta (nas seguintes, o que
      sobrou), o foco em todas e a cura uma vez so na serie */
   const Ac = comCarta(A, carta), serie: ResultadoLuta[] = [];
   let ini: { hp: number; guts: number } | null = null, cura = carta?.cura ?? null;
-  for (let k = 0; k < Bs.length; k++) {
-    const res = jogarV2(Ac, Bs[k], sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
+  for (let k = 0; k < max; k++) {
+    const res = jogarV2(Ac, rivalDe(k), sementeDaSerie(semente, k), R, ini, desafiado, cura ? [cura, null] : null);
     serie.push(res);
     if (cura && res.turnos.some(t => t.cura)) cura = null;
     if (res.pontosA !== 1) break;
