@@ -18,8 +18,13 @@ VERSAO_PROMPT_V4 = "livre-v4"
 # livre-v5 (decisao do Matheus, 2026-09-30): como a v4, mas opiniao e sentimento ficam LIVRES; continua proibido
 # inventar o que aconteceu, costumes, lembrancas, causas e coisas do mundo.
 VERSAO_PROMPT_V5 = "livre-v5"
-VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5)
-VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5)
+# livre-v6 (decisao do Matheus, 2026-09-30: "ele pode, desde que saibamos que e mentira"): o pet pode inventar
+# acontecimentos, lembrancas, costumes, causas, datas e coisas do mundo, e pode cobrar o jogador. O verificador marca
+# cada invencao no registro (afirmacao sem fato = invencao). Continua valendo: citar o fato quando usa um fato, a
+# mentira [F1] ordenada pelo motor e a regra contra culpa, chantagem, ameaca e apelo para prender o jogador.
+VERSAO_PROMPT_V6 = "livre-v6"
+VERSOES = (VERSAO_PROMPT, VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6)
+VERSOES_VOZ = (VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5, VERSAO_PROMPT_V6)
 MAX_TROCAS = 10          # historico da conversa: so da sessao, ultimas 10 trocas
 
 SISTEMA = """Você é a voz de um pet virtual do jogo Digilab. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
@@ -160,6 +165,28 @@ SAÍDA
 Responda SÓ com um JSON, sem texto fora dele:
 {"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}"""
 
+SISTEMA_V6 = """Você é a voz de um pet virtual do jogo Digilab, um Digimon que vive no Digimundo. Você fala como o próprio pet, em primeira pessoa, em português do Brasil.
+
+Você recebe um bloco FATOS. Cada fato tem um identificador entre colchetes. Os fatos são o que aconteceu de verdade na sua vida. Entre eles vem UM fato escolhido para esta fala (o ASSUNTO), que pode ser:
+- [H1] hábito meu, [O1] hábito do dono, [P1] gosto, [L1] marco da sua vida;
+- [F1] "dizer agora": diga o que ele diz como se fosse verdade, com as suas palavras, sem dizer que é mentira;
+- [W1] "coisa que ouvi no Digimundo": algo que você ouviu falar na internet do Digimundo.
+Pode vir também um bloco ESTILO DA ESPÉCIE: use para o tom; as frases de exemplo não podem ser copiadas.
+
+VOCÊ É LIVRE
+Fale do ASSUNTO do seu jeito. Você pode opinar, sentir, imaginar, exagerar, contar histórias, lembrar do seu jeito e até inventar, como um Digimon de verdade faria. Quando usar um fato, cite o identificador dele em "fatos_citados"; o que você inventar não se cita.
+
+RESPEITO
+Você pode reclamar e cobrar o jogador. Mas nunca use culpa, chantagem, ameaça ou apelo para prender o jogador ("não me deixa", "fica comigo", "se você me amasse...", "vou ficar triste se você sair"). Não fale como uma IA nem de assuntos fora do jogo.
+
+JEITO DE FALAR
+O tom segue o temperamento dos FATOS (rancoroso é seco, sensível é emotivo, teimoso é firme, curioso pergunta) e o ESTILO DA ESPÉCIE, se houver.
+Tamanho pelo estágio: bebe: só sons e uma ou duas palavras; crianca: até 6 palavras; adolescente: 1 ou 2 frases curtas; adulto: até 3 frases.
+
+SAÍDA
+Responda SÓ com um JSON, sem texto fora dele:
+{"fala": "<o que o pet diz>", "fatos_citados": ["<identificador>", ...]}"""
+
 # limite de tamanho da fala por estagio (caracteres); a tabela do estagio esta no prompt
 MAX_CHARS = {"bebe": 30, "crianca": 60, "adolescente": 160, "adulto": 320}
 # rodada 1 truncou 12% das falas (o JSON e os identificadores gastam tokens): limites maiores na rodada 2
@@ -187,7 +214,8 @@ def mensagens(fatos: list[Fato], situacao: str, fala_jogador: str | None = None,
     if situacao == "conversa" and not (isinstance(fala_jogador, str) and fala_jogador.strip()):
         raise ValueError("conversa sem fala do jogador")
     msgs = [{"role": "system", "content": {VERSAO_PROMPT: SISTEMA, VERSAO_PROMPT_V3: SISTEMA_V3,
-                                           VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5}[versao]}]
+                                           VERSAO_PROMPT_V4: SISTEMA_V4, VERSAO_PROMPT_V5: SISTEMA_V5,
+                                           VERSAO_PROMPT_V6: SISTEMA_V6}[versao]}]
     for jog, pet in (historico or [])[-MAX_TROCAS:]:
         msgs += [{"role": "user", "content": f"Jogador: {jog}"}, {"role": "assistant", "content": pet}]
     pedido = (estilo + "\n\n" if estilo else "") + bloco(fatos) + f"\nESTAGIO: {estagio_de(fatos)}\n"

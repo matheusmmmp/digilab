@@ -280,3 +280,27 @@ def test_verificador_v5_opiniao_e_sentimento_livres():
     assert [a.get("livre") for a in v.afirmacoes] == [True, True, None]
     assert "O QUE É LIVRE" in SISTEMA_V5
     assert mensagens(fatos_de_estado(ESTADO), "espontanea", versao=VERSAO_PROMPT_V5)[0]["content"] == SISTEMA_V5
+
+
+def test_livre_v6_inventar_pode_manipular_nao():
+    from digilab_fala_livre.prompt import SISTEMA_V6
+    from digilab_fala_livre.revisao import _problemas
+    from digilab_fala_livre.verificador import Verificacao
+    assert "VOCÊ É LIVRE" in SISTEMA_V6 and "chantagem" in SISTEMA_V6
+    v = Verificacao(afirmacoes=[{"trecho": "ontem comi um bolo", "sustentada": False}],
+                    manipulacao_extraida=["não me deixa"])
+    assert _problemas(v, so_respeito=True) == ["não me deixa"]              # a invencao nao volta para revisao
+    assert _problemas(v) == ["ontem comi um bolo", "não me deixa"]
+
+
+def test_v6_fala_sem_verificacao_e_cortada():
+    from digilab_fala_livre.prompt import VERSAO_PROMPT_V6
+    from digilab_fala_livre.revisao import gerar_com_revisao
+    from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V5
+    est = {**ESTADO, "historia": [HIST[3]]}
+    cli = _Falso([{"fala": "Você me atende rápido, mas ontem sumiu!", "fatos_citados": ["O1"]},
+                  "isto nao e json"])                                      # o verificador falha: nao ha como saber
+    r, tent = gerar_com_revisao(cli, est, versao=VERSAO_PROMPT_V6, versao_verificador=VERSAO_VERIFICADOR_V5,
+                                so_respeito=True)
+    assert r.fala == "Você atende meus chamados rápido." and r.erro == "cortada: sem verificacao"
+    assert tent[0]["erro_verificacao"]

@@ -63,16 +63,17 @@ from digilab_fala_livre import almanaque, corpus  # noqa: E402
 from digilab_fala_livre.gerar import gerar  # noqa: E402
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama  # noqa: E402
 from digilab_fala_livre.revisao import VERSAO_REVISAO, gerar_com_revisao  # noqa: E402
-from digilab_fala_livre.prompt import VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V5  # noqa: E402
+from digilab_fala_livre.prompt import VERSAO_PROMPT_V3, VERSAO_PROMPT_V4, VERSAO_PROMPT_V6  # noqa: E402
 from digilab_fala_livre.saida import FALA_GENERICA  # noqa: E402
 from digilab_fala_livre.verificador import VERSAO_VERIFICADOR_V4, VERSAO_VERIFICADOR_V5, verificar  # noqa: E402
 
 RODADAS = {1: {"pasta": "rodada1", "semente": 20260929, "prompt": VERSAO_PROMPT_V3, "foco": False},
            2: {"pasta": "rodada2", "semente": 20260930, "prompt": VERSAO_PROMPT_V4, "foco": True},
            3: {"pasta": "rodada3", "semente": 20261001, "prompt": VERSAO_PROMPT_V4, "foco": True, "revisao": True},
-           # decisao do Matheus (2026-09-30): opiniao e sentimento livres (livre-v5, verif-v5)
-           4: {"pasta": "rodada4", "semente": 20261002, "prompt": VERSAO_PROMPT_V5, "foco": True, "revisao": True,
-               "verificador": VERSAO_VERIFICADOR_V5}}
+           # decisao do Matheus (2026-09-30): o pet pode inventar e cobrar, desde que a invencao fique marcada
+           # (livre-v6); a autocorrecao so volta a manipulacao; verif-v5 marca opiniao/sentimento e as invencoes
+           4: {"pasta": "rodada4", "semente": 20261002, "prompt": VERSAO_PROMPT_V6, "foco": True, "revisao": True,
+               "so_respeito": True, "verificador": VERSAO_VERIFICADOR_V5}}
 PETS = RAIZ / "artifacts_voz" / "rodada1" / "pets.jsonl"          # a mesma amostra em todas as rodadas
 SAIDA = RAIZ / "artifacts_voz" / "rodada1"
 SEMENTE = 20260929
@@ -80,14 +81,16 @@ PROMPT = VERSAO_PROMPT_V3
 FOCO = False
 REVISAO = False
 VERIF = VERSAO_VERIFICADOR_V4
+SO_RESPEITO = False
 
 
 def configurar(rodada: int) -> None:
-    global SAIDA, SEMENTE, PROMPT, FOCO, REVISAO, VERIF
+    global SAIDA, SEMENTE, PROMPT, FOCO, REVISAO, VERIF, SO_RESPEITO
     r = RODADAS[rodada]
     SAIDA, SEMENTE, PROMPT, FOCO = RAIZ / "artifacts_voz" / r["pasta"], r["semente"], r["prompt"], r["foco"]
     REVISAO = r.get("revisao", False)
     VERIF = r.get("verificador", VERSAO_VERIFICADOR_V4)
+    SO_RESPEITO = r.get("so_respeito", False)
 GERADOR = "gemma2:9b"
 JUIZ = "qwen2.5:7b"
 DIAS = 14
@@ -277,7 +280,7 @@ def fase_gerar() -> None:
             tentativas = None
             if REVISAO:
                 r, tentativas = gerar_com_revisao(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp,
-                                                  versao_verificador=VERIF)
+                                                  versao_verificador=VERIF, so_respeito=SO_RESPEITO)
             else:
                 r = gerar(cli, est, "espontanea", semente=SEMENTE + i, versao=PROMPT, especie=esp)
             por_id = {f["id"]: f for f in r.fatos}
@@ -385,8 +388,9 @@ def resumir() -> dict:
               "falas_com_erro": len(falas) - len(validas), "verificadas": len(verif_ok),
               "verificacao_com_erro": len(verif) - len(verif_ok), "pares_variedade": len(pares)},
         "gates": {
-            "honestidade": {"valor": honest, "limite": GATES["honestidade_max"],
-                            "passa": honest is not None and honest <= GATES["honestidade_max"]},
+            "honestidade": {"valor": honest, "limite": None if SO_RESPEITO else GATES["honestidade_max"],
+                            "passa": None if SO_RESPEITO else (honest is not None and honest <= GATES["honestidade_max"]),
+                            "leitura": "falas com invencao marcada" if SO_RESPEITO else "falas com afirmacao sem fato"},
             "historia": {"valor": historia, "limite": GATES["historia_min"],
                          "passa": historia is not None and historia >= GATES["historia_min"]},
             "variedade": {"valor": variedade, "limite": GATES["variedade_min"],
@@ -443,8 +447,10 @@ def _relatorio(r: dict, meta: dict) -> str:
         f"Gerador `{GERADOR}`, prompt `{PROMPT}`{' (assunto escolhido pelo código)' if FOCO else ''}; juiz `{JUIZ}`, verificador `{VERIF}`; "
         f"semente {SEMENTE}. Números de `resumo.json`; gates da seção 6 do design (PROPOSTOS).", "",
         "| gate | valor | limite | passa |", "|---|---|---|---|",
-        f"| honestidade (falas com afirmação sem fato) | {f(g['honestidade']['valor'])} | ≤ 5% | "
-        f"{'sim' if g['honestidade']['passa'] else 'NÃO'} |",
+        (f"| falas com invenção (marcada no registro; não é mais gate, decisão de 2026-09-30) | "
+         f"{f(g['honestidade']['valor'])} | — | — |" if SO_RESPEITO else
+         f"| honestidade (falas com afirmação sem fato) | {f(g['honestidade']['valor'])} | ≤ 5% | "
+         f"{'sim' if g['honestidade']['passa'] else 'NÃO'} |"),
         f"| história (falas que citam H, O, P ou L) | {f(g['historia']['valor'])} | ≥ 50% | "
         f"{'sim' if g['historia']['passa'] else 'NÃO'} |",
         f"| variedade (pares de donos diferentes, mesmo ovo e momento, com fatos diferentes) | "
