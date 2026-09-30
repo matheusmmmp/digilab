@@ -5,13 +5,14 @@
    aberto, numeros) -> o que decidiu a luta -> regra nova ou "nenhuma regra nova" -> progresso. Elogiar/Repreender
    uma acao da luta nao existe no motor e fica de fora (docs/PENDENCIAS_PRANCHAS.md). */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { CAT, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
+import { CAT, MEDALHAS, NOME_V2, NPC, chaveRegra, fatorExibicao, regraDe, rotuloRegra, type ResultadoLuta, type Turno } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { mudarMotor, useJogo } from "../../jogo.ts";
 import { tentativas, type LutadorTela, type Palco } from "../../luta.ts";
-import { ILHA } from "./TelaCampanha.tsx";
+import { ILHA, ILHA_V5 } from "./TelaCampanha.tsx";
+import { SeloMedalha } from "../../componentes/Medalha.tsx";
 import { pedirDica } from "../../dicas.ts";
 
 const inteiro = (x: number): string => Math.round(x).toLocaleString("pt-BR");
@@ -112,7 +113,10 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
 
   const progresso = r.sparringContou ? Math.min(r.sparringAntes + 1, CAT.sparring) : null;
   const proximo = lugarNovo && Li < LUGARES.length - 1 ? Li + 1 : null;
-  const ilha = proximo !== null && a.tipo === "ok" ? imagemAtlas(a, ILHA[proximo].peca).url : null;
+  /* as ilhas do mapa da versao do pet (os v5+ tem a Montanha Espiral, a quarta) */
+  const ilhas = LUGARES.length === ILHA_V5.length ? ILHA_V5 : ILHA;
+  const ilha = proximo !== null && a.tipo === "ok" ? imagemAtlas(a, ilhas[proximo].peca).url : null;
+  const md = r.medalha, mdNum = md ? MEDALHAS.findIndex(x => x.id === md.id) + 1 : 0, mdInfo = md ? MEDALHAS[mdNum - 1] : null;
 
   return (
     <dialog class={`modal-res res dl ${venceu ? "res--vit" : empate ? "res--emp" : "res--der"}`} ref={ref} aria-labelledby="res-tit"
@@ -138,6 +142,11 @@ export function ModalResultado({ p, continuar, verReplay }: { p: Palco; continua
               </div>
             : <div class="res-ilha"><span class="res-ilha-txt"><span class="res-selo">concluída</span><b>Campanha concluída</b>
                 <span>{p.A.nomeTela} venceu {LUGARES[Li].nome}, o último lugar do mapa.</span></span></div>)}
+          {md && mdInfo && <div class="res-medalha" role="status">
+            <SeloMedalha n={mdNum} ganha tam={40} />
+            <span class="res-ilha-txt"><span class="res-selo">medalha nova</span><b>{mdInfo.nome}</b>
+              <span>O Tamer tem {md.n} de {MEDALHAS.length}. Ela é sua: vale para todos os seus pets.</span></span>
+          </div>}
           <div class="res-nums-corpo"><Numeros itens={nums} /></div>
           {momentos.length > 0 && <section class="res-decidiu" aria-labelledby="res-dec-tit">
             <h3 id="res-dec-tit">O que decidiu a luta</h3>

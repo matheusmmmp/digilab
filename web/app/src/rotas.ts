@@ -4,14 +4,14 @@
 import { CHAVE_ABA, type Armazenamento } from "./save.ts";
 
 export type Destino = "pet" | "crescer" | "lutar" | "diario" | "conversar";
-export type Aba = "estado" | "treinar" | "aprend" | "evolucao" | "arena" | "campanha" | "registro" | "catalogo" | "geracoes" | "cenarios" | "chat";
+export type Aba = "estado" | "treinar" | "aprend" | "evolucao" | "arena" | "campanha" | "medalhas" | "registro" | "catalogo" | "geracoes" | "cenarios" | "chat";
 export const DESTINOS: Record<Destino, readonly Aba[]> = {
-  pet: ["estado"], crescer: ["treinar", "aprend", "evolucao"], lutar: ["arena", "campanha"], diario: ["registro", "catalogo", "geracoes", "cenarios"], conversar: ["chat"],
+  pet: ["estado"], crescer: ["treinar", "aprend", "evolucao"], lutar: ["arena", "campanha", "medalhas"], diario: ["registro", "catalogo", "geracoes", "cenarios"], conversar: ["chat"],
 };
 export const ORDEM_DESTINOS: readonly Destino[] = ["pet", "crescer", "lutar", "diario", "conversar"];
 export const NOME_DESTINO: Record<Destino, string> = { pet: "Pet", crescer: "Crescer", lutar: "Lutar", diario: "Diário", conversar: "Conversar" };
 export const NOME_ABA: Record<Aba, string> = {
-  estado: "Estado", treinar: "Treinar", aprend: "Aprendizado", evolucao: "Evolução", arena: "Arena", campanha: "Campanha",
+  estado: "Estado", treinar: "Treinar", aprend: "Aprendizado", evolucao: "Evolução", arena: "Arena", campanha: "Campanha", medalhas: "Medalhas",
   registro: "Registro", catalogo: "Catálogo", geracoes: "Gerações", cenarios: "Cenários", chat: "Conversa",
 };
 export const DESTINO_DA_ABA = Object.fromEntries(Object.entries(DESTINOS).flatMap(([d, abas]) => abas.map(a => [a, d]))) as Record<Aba, Destino>;
