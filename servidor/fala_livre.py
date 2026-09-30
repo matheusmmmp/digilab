@@ -11,7 +11,8 @@ guarda as falas no log de apresentacao dela; o servidor nao grava nada do pet.
 Voz propria (DESIGN_VOZ_PROPRIA, parte 4; pedido com "voz": true, pets v5): prompt livre-v6 (o pet pode inventar,
 opinar e cobrar), autocorrecao pelo proprio modelo (so volta manipulacao; a fala que nao pode ser verificada e cortada),
 verificador verif-v5 (cada invencao fica marcada), estilo da especie pelo corpus (identidade.forma) e o almanaque do
-Digimundo (com "internet": true, na espontanea, chance almanaque.CHANCE_ESPONTANEA sorteada da semente). A resposta
+Digimundo (com "internet": true, na espontanea, chance almanaque.CHANCE_ESPONTANEA sorteada da semente) e a arvore
+da especie (fato A1, arvore.py). A resposta
 traz a verificacao da versao escolhida. Sem "voz", tudo como antes (livre-v2, verif-v3).
 """
 
@@ -25,6 +26,7 @@ import threading
 from digilab_fala_livre import VERSAO_APP
 from digilab_fala_livre.fatos import FatosInvalidos
 from digilab_fala_livre import almanaque, corpus
+from digilab_fala_livre.arvore import ARVORE
 from digilab_fala_livre.gerar import gerar
 from digilab_fala_livre.ollama import URL_PADRAO, ClienteOllama
 from digilab_fala_livre.prompt import VERSAO_PROMPT_V6
@@ -95,9 +97,11 @@ class ServicoFalaLivre:
         rival = d.get("rival")
         if not isinstance(internet, bool) or (rival is not None and not isinstance(rival, str)):
             raise PedidoInvalido("internet ou rival invalidos")
-        if "almanaque" in estado:
-            raise PedidoInvalido("o almanaque e sorteado pelo servidor")
+        if "almanaque" in estado or "arvore" in estado:
+            raise PedidoInvalido("o almanaque e a arvore sao do servidor")
         estado = dict(estado)
+        if (estado.get("identidade") or {}).get("especie") in ARVORE:
+            estado["arvore"] = True                      # o pet sabe a arvore da especie dele (fato A1)
         if internet and situacao == "espontanea" and "mentira" not in estado:
             w = almanaque.sortear(random.Random(semente))
             if w is not None:

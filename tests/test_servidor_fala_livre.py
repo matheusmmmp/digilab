@@ -139,3 +139,17 @@ def test_verificar_recusa_meta_de_tipo_errado(servidor):
     ruim = [{"id": "F1", "tipo": "dizer agora", "texto": "x", "mentira": "sim"}]
     cod, _r = _post(url + ROTA_VERIF, {"fala": "x", "fatos_citados": [], "fatos": ruim, "voz": True})
     assert cod == 400 and pedidos == []
+
+
+def test_voz_arvore_da_especie_pelo_servidor_e_nao_pela_pagina(servidor):
+    url, respostas, pedidos = servidor
+    agumon = {**VOZ, "identidade": {"estagio": "crianca", "especie": "brasa", "forma": "Agumon"}}
+    cod, _r = _post(url + ROTA_FALA, {"estado": {**agumon, "arvore": True}, "situacao": "espontanea", "voz": True})
+    assert cod == 400 and pedidos == []
+    respostas += ['{"fala": "Agumon vira Greymon!", "fatos_citados": ["A1"]}',
+                  '{"afirmacoes": [{"tipo": "mundo", "trecho": "Agumon vira Greymon"}]}', '{"sustentada": true, "fato": "A1"}']
+    cod, r = _post(url + ROTA_FALA, {"estado": agumon, "situacao": "conversa", "fala_jogador": "qual a evolucao dele?",
+                                     "semente": 2, "voz": True})
+    a1 = next(f for f in r["fatos"] if f["id"] == "A1")
+    assert cod == 200 and a1["tipo"] == "arvore da minha especie" and "Agumon e Guilmon viram Greymon" in a1["texto"]
+    assert r["invencoes"] == [] and r["verificacao"]["nao_suportadas"] == 0
