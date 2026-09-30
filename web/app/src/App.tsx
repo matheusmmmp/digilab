@@ -20,8 +20,13 @@ import { TelaRegistro } from "./telas/diario/TelaRegistro.tsx";
 import { TelaAprend } from "./telas/crescer/TelaAprend.tsx";
 import { TelaEvolucao } from "./telas/crescer/TelaEvolucao.tsx";
 import { TelaTreinar } from "./telas/crescer/TelaTreinar.tsx";
+import { TelaItens } from "./telas/crescer/TelaItens.tsx";
 import { TelaArena } from "./telas/lutar/TelaArena.tsx";
 import { TelaCampanha } from "./telas/lutar/TelaCampanha.tsx";
+import { TelaMedalhas } from "./telas/lutar/TelaMedalhas.tsx";
+import { TelaFronteira } from "./telas/lutar/TelaFronteira.tsx";
+import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
+import { CHAVE_AVISO_V6 } from "./tamer.ts";
 import { TelaConversar } from "./telas/conversar/TelaConversar.tsx";
 import { TelaLuta } from "./telas/lutar/TelaLuta.tsx";
 import { LUTA, REPLAY, previa, pularAnimacao, type Modo } from "./luta.ts";
@@ -37,7 +42,7 @@ import { fecharImportar, useImportar } from "./importar.ts";
 import { Heranca } from "./componentes/Heranca.tsx";
 import { TelaGeracoes } from "./telas/diario/TelaGeracoes.tsx";
 import { fecharHeranca, useHeranca } from "./heranca.ts";
-import { abrirEscolhaBrasao, conclusaoVista, useEscolhaBrasao, venceuOChefe } from "./jornada.ts";
+import { abrirEscolhaBrasao, concluiuJornada, conclusaoVista, useEscolhaBrasao } from "./jornada.ts";
 import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
 
@@ -73,6 +78,7 @@ export function App() {
       const j = mDica.janelaAberta();
       if (j?.tipo === "chamado") ids.push("manha");
       if (j?.tipo === "aviso") ids.push("banheiro");
+      if (j?.tipo === "fala") ids.push("fala");
       if (mDica.lesionadoDesde !== null) ids.push("lesao");
       if (est === "adolescente") ids.push("vitorias");
     }
@@ -83,10 +89,13 @@ export function App() {
   const [semPetNoInicio] = useState(() => jogo.origem === "exemplo"), escolhendoBrasao = useEscolhaBrasao();
   /* o pet de exemplo nao e do jogador: enquanto for ele o ativo, a escolha do brasao nao tem Voltar */
   const [sementeExemplo] = useState(() => jogo.motor.semente), aindaSemPet = semPetNoInicio && jogo.motor.semente === sementeExemplo;
+  /* primeira abertura com as medalhas: os pets antigos sairam (main.tsx); o aviso fica ate o jogador ler */
+  const [descartados, setDescartados] = useState(() => { try { return Number(localStorage.getItem(CHAVE_AVISO_V6) ?? 0); } catch { return 0; } });
   const [conclusao, setConclusao] = useState(false), desk = useDesktop(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca();
-  /* venceu o chefe da campanha: a mensagem de conclusao, uma vez por pet, fora da luta e sem outra tela cheia */
+  /* a jornada acabou (pets v6: a Liga dos Lideres; v1-v5: o chefe da campanha): a mensagem de conclusao, uma vez por pet, fora da luta
+     e sem outra tela cheia */
   useEffect(() => {
-    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && venceuOChefe(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
+    if (!conclusao && !emLuta && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
   });
   /* luta em tela cheia (#/lutar/luta); o Voltar do navegador durante a animacao vira pedido de Desistir */
   const [emLuta, setEmLuta] = useState(() => ehLuta(location.hash)), emLutaRef = useRef(emLuta), [pedidoDesistir, setPedidoDesistir] = useState(false);
@@ -129,7 +138,7 @@ export function App() {
   const sairDaLuta = (modo: Modo) => {
     history.replaceState(null, "", `#/lutar/${modo}`);
     setEmLuta(false); ir({ destino: "lutar", aba: modo });
-    setTimeout(() => document.querySelector<HTMLElement>(modo === "arena" ? ".lutar-grande" : ".camp-lutar")?.focus(), 60);
+    setTimeout(() => document.querySelector<HTMLElement>(modo === "arena" ? ".lutar-grande" : modo === "fronteira" ? ".fr-lutar" : ".camp-lutar")?.focus(), 60);
   };
   /* Ver replay (Resultado): a entrada da luta vira a aba de origem e o Diario abre por cima, com a luta refeita do registro;
      o Voltar do navegador leva de volta a aba de origem */
@@ -207,9 +216,11 @@ export function App() {
           </div>
         )}
         <div role={abas.length > 1 ? "tabpanel" : undefined}>
-          {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao />
+          {rota.aba === "treinar" ? <TelaTreinar /> : rota.aba === "aprend" ? <TelaAprend /> : rota.aba === "evolucao" ? <TelaEvolucao /> : rota.aba === "itens" ? <TelaItens />
             : rota.aba === "arena" ? <TelaArena voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} verReplay={abrirReplay} />
             : rota.aba === "campanha" ? <TelaCampanha voltarPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} irTreinar={() => { ir({ destino: "crescer", aba: "treinar" }); scrollTo(0, 0); }} />
+            : rota.aba === "medalhas" ? <TelaMedalhas />
+            : rota.aba === "fronteira" ? <TelaFronteira />
             : rota.aba === "registro" ? <TelaRegistro irPet={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />
             : rota.aba === "catalogo" ? <TelaCatalogo /> : rota.aba === "geracoes" ? <TelaGeracoes /> : <TelaCenarios />}
         </div>
@@ -219,7 +230,8 @@ export function App() {
       {meusPets && !desk && <MeusPets fechar={() => setMeusPets(false)} irRegistro={() => { setMeusPets(false); ir({ destino: "diario", aba: "registro" }); }} />}
       {boasVindas && <BoasVindas fechar={() => { setBoasVindas(false); ir({ destino: "pet", aba: "estado" }); if (semPetNoInicio) setComoJogar(true); }} />}
       {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
-      {escolhendoBrasao && !boasVindas && <EscolherBrasao podeVoltar={!aindaSemPet} />}
+      {escolhendoBrasao && !boasVindas && !descartados && <EscolherBrasao podeVoltar={!aindaSemPet} />}
+      {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
       {her && !desk && <Heranca pai2={her.pai2} fim={() => { ir({ destino: "pet", aba: "estado" }); scrollTo(0, 0); }} />}
       {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}

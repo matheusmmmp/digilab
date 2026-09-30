@@ -96,3 +96,46 @@ def test_rota_antiga_continua(servidor):
     url, _, _ = servidor
     cod, _r = _post(url + "/api/fala", {"motivo": {}, "estagio": "adulto"})
     assert cod in (200, 400)          # a rota da moldura continua sendo tratada pelo servidor original
+
+
+VOZ = {"identidade": {"estagio": "adulto", "especie": "Amizade", "forma": "Angemon"},
+       "estado": {"fome": 0.8, "humor": 0.7}, "vinculo": 0.6,
+       "historia": [{"tipo": "O", "regra": "demora", "chave": "O:demora", "texto": "você atende meus chamados rápido",
+                     "dados": {"rapido": True}}]}
+
+
+def test_voz_livre_v6_com_autocorrecao_estilo_e_ida_e_volta(servidor):
+    url, respostas, pedidos = servidor
+    respostas += ['{"fala": "Ontem você me deu um bolo! E você atende rápido.", "fatos_citados": ["O1"]}',
+                  '{"afirmacoes": [{"tipo": "evento", "trecho": "Ontem você me deu um bolo"},'
+                  ' {"tipo": "costume", "trecho": "você atende rápido"}]}',
+                  '{"sustentada": false, "fato": ""}', '{"sustentada": true, "fato": "O1"}']
+    cod, r = _post(url + ROTA_FALA, {"estado": VOZ, "situacao": "espontanea", "semente": 3, "voz": True})
+    assert cod == 200 and r["versao_prompt"] == "livre-v6" and r["erro"] is None
+    assert r["invencoes"] == ["Ontem você me deu um bolo"] and r["revisoes"] == 0      # inventar pode: nao revisa
+    assert r["especie_corpus"] == "Angemon" and "ESTILO DA ESPÉCIE" in pedidos[0]["messages"][-1]["content"]
+    assert r["verificacao"]["versao"] == "verif-v5" and len(r["corpus_sha256"]) == 64
+    respostas += ['{"afirmacoes": []}']
+    cod, v = _post(url + ROTA_VERIF, {"fala": r["fala"], "fatos_citados": r["fatos_citados"], "fatos": r["fatos"],
+                                      "semente": 3, "voz": True})
+    assert cod == 200 and v["versao"] == "verif-v5"                     # os fatos com meta voltam sem 400
+
+
+def test_voz_almanaque_sorteado_pelo_servidor_e_nao_pela_pagina(servidor):
+    url, respostas, _ = servidor
+    cod, r = _post(url + ROTA_FALA, {"estado": {**VOZ, "almanaque": {"id": "m01"}}, "situacao": "espontanea",
+                                     "voz": True})
+    assert cod == 400
+    import random as _r
+    from digilab_fala_livre import almanaque
+    s = next(s for s in range(500) if almanaque.sortear(_r.Random(s)) is not None)
+    respostas += ['{"fala": "Ouvi falar disso!", "fatos_citados": ["W1"]}', '{"afirmacoes": []}']
+    cod, r = _post(url + ROTA_FALA, {"estado": VOZ, "situacao": "espontanea", "semente": s, "voz": True, "internet": True})
+    assert cod == 200 and any(f["id"] == "W1" for f in r["fatos"]) and not any(f["id"] == "O1" for f in r["fatos"])
+
+
+def test_verificar_recusa_meta_de_tipo_errado(servidor):
+    url, _, pedidos = servidor
+    ruim = [{"id": "F1", "tipo": "dizer agora", "texto": "x", "mentira": "sim"}]
+    cod, _r = _post(url + ROTA_VERIF, {"fala": "x", "fatos_citados": [], "fatos": ruim, "voz": True})
+    assert cod == 400 and pedidos == []

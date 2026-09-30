@@ -1,11 +1,14 @@
-/* Jornada do jogador (src/jornada.ts): a escolha do brasao antes de todo ovo novo e a mensagem de conclusao ao vencer o
-   chefe da campanha. Mesmo visual das boas-vindas (tela cheia listrada, ovo no anel); nomes na tela em Digimon. */
+/* Jornada do jogador (src/jornada.ts): a escolha do brasao antes de todo ovo novo e a mensagem de conclusao ao vencer a Liga dos
+   Lideres (pets v6; o chefe da campanha nos v1-v5). Mesmo visual das boas-vindas (tela cheia listrada, ovo no anel); nomes na tela em
+   Digimon. */
 import { useEffect, useRef, useState } from "preact/hooks";
-import { DIGIMON_DA_FORMA, ESPECIES, NPC, OVO, chaveSprite, nomeEstagio, nomeForma, type Especie, type Motor, type Ritmo } from "../../motor/index.ts";
+import { DIGIMON_DA_FORMA, ESPECIES, LIGA, NPC, OVO, chaveSprite, nomeEstagio, nomeForma, type Especie, type Motor, type Ritmo } from "../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../atlas.ts";
 import { useDesktop } from "../desktop.ts";
 import { BRASAO } from "../decoracao.ts";
-import { chefeDe, chocarDoBrasao, fecharEscolhaBrasao, guardarAtivoNoProximoOvo, marcarConclusao, marcos, novoOvoGuardandoAtivo } from "../jornada.ts";
+import { chefeDe, chocarDoBrasao, fecharEscolhaBrasao, guardarAtivoNoProximoOvo, marcarConclusao, marcos, novoOvoGuardandoAtivo, terminaNaLiga } from "../jornada.ts";
+import { tamerAtual } from "../jogo.ts";
+import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal } from "./modal.ts";
 import { Deco } from "./Deco.tsx";
 import { Peca } from "./Imagens.tsx";
@@ -57,14 +60,15 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
   );
 }
 
-/** vencer o chefe: a jornada acabou (uma vez por pet). Continuar com ele ou chocar outro (este vai para os guardados) */
+/** vencer a Liga dos Lideres (pets v6; o chefe nos v1-v5): a jornada acabou (uma vez por pet). Continuar com ele ou chocar outro (este
+    vai para os guardados) */
 export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), a = useAtlas();
   useEffect(() => { abrirModal(ref.current); marcarConclusao(m); }, []);
   /* escala inteira que cabe no palco (170 px de altura, como em Meus pets) */
   const k = chaveSprite(m.forma), spr = a.tipo === "ok" ? imagemAtlas(a, k, Math.max(1, Math.min(3, Math.floor(170 / dimSprite(a.dados, k)[1])))) : null;
   const b = BRASAO[m.especie];
-  const lutas = m.log.filter(e => e[1] === "l").length, chefe = NPC[chefeDe(m)]!;
+  const lutas = m.log.filter(e => e[1] === "l").length, chefe = NPC[chefeDe(m)]!, liga = terminaNaLiga(m), titulo = liga ? tamerAtual().tituloDe(m.semente) : null;
   return (
     <dialog class="brasao-tela conclusao-tela dl" ref={ref} aria-labelledby="cc-tit" onClose={fechar}>
       <div class="bv-centro">
@@ -74,8 +78,10 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
         </div>
       </div>
       <div class="bv-texto">
-        <h1 class="bv-tit cc-tit" id="cc-tit">Jornada concluída!</h1>
-        <p class="bv-slogan">{nomeForma(m.forma)} venceu {chefe.nome} na {m.lugares[chefe.lug].nome}.</p>
+        <h1 class="bv-tit cc-tit" id="cc-tit">{liga ? "Campeão!" : "Jornada concluída!"}</h1>
+        <p class="bv-slogan">{liga ? `${nomeForma(m.forma)} venceu os ${LIGA.length} líderes da Liga, em sequência, sem cura. A jornada está concluída.`
+          : `${nomeForma(m.forma)} venceu ${chefe.nome} na ${m.lugares[m.lugarDe(chefe.k)].nome}.`}</p>
+        {liga && <p class="cc-ouro"><SeloMedalha n={0} ouro ganha tam={32} /><span>{titulo && titulo.n > 1 ? `Mais um título para o Tamer (o ${titulo.n}º).` : "A medalha de ouro é sua: ela fica em Lutar · Medalhas."}</span></p>}
         <p class="cc-texto">
           Do Digi-Egg ao {nomeEstagio(m.forma)}, com o brasão da <b>{b.nome}</b>, em {diaDe(m.e.tick)} dia{diaDe(m.e.tick) > 1 ? "s" : ""} e {lutas} luta{lutas === 1 ? "" : "s"}.
           Tudo o que ele é saiu do que vocês viveram juntos.

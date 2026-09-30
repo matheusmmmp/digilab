@@ -443,3 +443,203 @@ dialog.modal-res::backdrop,dialog.modal-conf::backdrop,dialog.folha::backdrop{ba
 .campd-ilha p{margin:0}
 .campd-bts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px}
 .campd-bts .dl-btn{min-height:50px}
+
+/* ---------------------------------------------------------------- medalhas do Tamer (pets v6; docs/DESIGN_MEDALHAS_ARENAS.md)
+   selo: desenho original em SVG. Ganha = cheio (acao, numero branco); nao ganha = apagado e tracejado (forma e cor) */
+.med-selo{flex:none;display:block}
+.med-selo .med-fita{fill:var(--dl-disabled);stroke:var(--dl-disabled-ink);stroke-width:1.5}
+.med-selo .med-disco{fill:var(--dl-disabled);stroke:var(--dl-disabled-ink);stroke-width:2;stroke-dasharray:4 3}
+.med-selo .med-aro{fill:none;stroke:var(--dl-disabled-ink);stroke-width:1.5;opacity:.5}
+.med-selo text{font:900 13px var(--dl-f-texto, sans-serif);fill:var(--dl-disabled-ink)}
+.med-selo.ganha .med-fita{fill:var(--dl-navy);stroke:var(--dl-navy-deep)}
+.med-selo.ganha .med-disco{fill:var(--dl-action);stroke:var(--dl-navy);stroke-dasharray:none}
+.med-selo.ganha .med-aro{stroke:var(--dl-action-ink);opacity:.8}
+.med-selo.ganha text{fill:var(--dl-action-ink)}
+
+.med-tela{align-content:start;padding-bottom:16px}
+.med-resumo{display:grid;gap:8px}
+.med-resumo h2{margin:0}
+.med-conta{display:flex;align-items:baseline;gap:8px;margin:0}
+.med-conta .dl-num{font-size:34px;line-height:1}
+.med-conta span:last-child{font-weight:900;color:var(--dl-text-2)}
+.med-regras{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.med-regras li{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--dl-text-2)}
+.med-regras li b{flex:none;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--dl-disabled);color:var(--dl-disabled-ink);font-weight:900}
+.med-regras li.ok{color:var(--dl-text)}
+.med-regras li.ok b{background:var(--dl-action);color:var(--dl-action-ink)}
+.med-espera{margin:0;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy);font-size:13px;font-weight:700}
+.med-erro{margin:0;color:var(--dl-erro);font-weight:800;font-size:13px}
+.med-lista{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+.med-card{display:flex;align-items:center;gap:10px;background:var(--dl-surface);border-radius:12px;padding:10px 12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.med-card.ganha{box-shadow:0 0 0 3px var(--dl-action),0 3px 0 3px var(--dl-navy-deep)}
+.med-txt{display:grid;gap:2px;min-width:0;flex:1}
+.med-nome{font-size:15px;font-weight:900}
+.med-onde,.med-libera{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.med-status{font-size:12px;font-weight:900;color:var(--dl-disabled-ink)}
+.med-status.ok{color:var(--dl-text)}
+.med-lider{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px}
+.med-lider img{display:block;width:46px;height:46px;object-fit:contain;object-position:bottom;border-radius:10px;background:var(--dl-rival-bg);box-shadow:inset 0 0 0 2px var(--dl-rival);image-rendering:pixelated}
+.med-lider small{font-size:10px;font-weight:900;text-transform:uppercase;color:var(--dl-text-2)}
+@media (min-width:1100px){
+  .med-tela.desk{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);align-items:start}
+  .med-lista{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+}
+
+/* campanha: o lider do lugar e a frase da medalha */
+.camp-lider{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:900;letter-spacing:.02em;color:var(--dl-text)}
+.camp-medalha{display:flex;align-items:center;gap:8px;margin:0;font-size:13px;font-weight:700}
+.camp-medalha b{font-weight:900}
+.res-medalha{display:flex;align-items:center;gap:12px;background:var(--dl-bg);border-radius:14px;box-shadow:0 0 0 3px var(--dl-action);padding:8px 12px}
+
+/* arenas com lideres (pets v6, medalhas parte 2): o mapa de seis ilhas, o cartao da arena, a serie da Cidadela e o aviso
+   do Lago */
+.tela .mapa-ilhas.mapa-ilhas--v6{height:864px}
+@media (min-width:1100px){
+  .tela .camp-principal .mapa-ilhas.mapa-ilhas--v6{flex:none;height:auto;min-height:0;aspect-ratio:390/864}
+}
+.camp-arena{display:flex;align-items:flex-start;gap:10px;margin:0;border-radius:12px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy)}
+.camp-arena.ganha{box-shadow:inset 0 0 0 3px var(--dl-action)}
+.camp-arena-txt{display:grid;gap:3px;min-width:0}
+.camp-arena-cab{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 8px}
+.camp-arena-cab b{font-size:14px;font-weight:900}
+.camp-arena-cab span{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.camp-arena-regra{font-size:13px;line-height:18px;font-weight:700}
+.camp-arena-med{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.med-regra{font-size:12px;line-height:17px;font-weight:700;color:var(--dl-text)}
+.med-regra b{font-weight:900}
+.res-serie{background:var(--dl-surface);border-radius:12px;box-shadow:0 0 0 2px var(--dl-border);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.res-serie h3{margin:0;font-weight:900;font-size:15px}
+.res-serie ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.res-serie li{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:18px;font-weight:700}
+.res-serie .res-t{flex:none;min-width:52px}
+.res-serie-nao{color:var(--dl-text-2)}
+.res-arena-nota,.luta-arena-aviso{margin:0;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy);font-size:13px;line-height:18px;font-weight:700;color:var(--dl-text)}
+.luta-arena-aviso{margin:8px 0 0}
+/* itens (medalhas, parte 3): a carta antes da luta, o item novo e a carta usada no Resultado, o item de cada medalha */
+.carta-escolha{display:grid;gap:4px;font-size:13px;font-weight:800}
+.carta-escolha select{width:100%}
+.carta-escolha-rot{color:var(--dl-text-2)}
+.carta-escolha-ef{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.res-item{display:flex;align-items:center;gap:12px;background:var(--dl-bg);border-radius:14px;box-shadow:0 0 0 3px var(--dl-highlight);padding:8px 12px}
+.res-carta{margin:0;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border);font-size:13px;line-height:18px;font-weight:700;color:var(--dl-text)}
+.med-item{font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.med-item b{color:var(--dl-text);font-weight:900}
+.dl-tag--chip{background:var(--dl-learned-bg);color:var(--dl-learned-ink)}
+
+/* ---------------------------------------------------------------- Fronteira de Batalha (medalhas parte 4a; docs/DESIGN_FRONTEIRA.md):
+   a Liga dos Lideres (os 6 lideres com os Megas, a ultima tentativa, o titulo), a medalha de ouro e a ilha no mapa */
+.med-selo.ouro .med-estrela{fill:var(--dl-disabled-ink);opacity:.6}
+.med-selo.ouro.ganha .med-fita{fill:var(--dl-navy);stroke:var(--dl-navy-deep)}
+.med-selo.ouro.ganha .med-disco{fill:var(--dl-highlight);stroke:var(--dl-navy);stroke-dasharray:none}
+.med-selo.ouro.ganha .med-aro{stroke:var(--dl-highlight-ink);opacity:.45}
+.med-selo.ouro.ganha .med-estrela{fill:var(--dl-highlight-ink);opacity:1}
+.fr-tela{align-content:start;padding-bottom:16px}
+.fr-cab{display:grid;gap:8px}
+.fr-cab h2,.fr-cab p{margin:0}
+.fr-regras{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.fr-regras li{font-size:13px;line-height:18px;font-weight:700;color:var(--dl-text-2);padding-left:14px;position:relative}
+.fr-regras li::before{content:"";position:absolute;left:2px;top:7px;width:6px;height:6px;border-radius:2px;background:var(--dl-navy)}
+.fr-regras li b{color:var(--dl-text);font-weight:900}
+.fr-titulo{display:flex;align-items:center;gap:12px;border-radius:12px;padding:8px 12px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 3px var(--dl-highlight)}
+.fr-titulo > span{display:grid;gap:2px;font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.fr-titulo b{font-size:15px;font-weight:900;color:var(--dl-text)}
+.fr-conta{display:flex;gap:16px;align-items:baseline;font-size:13px;font-weight:800;color:var(--dl-text-2)}
+.fr-conta .dl-num{font-size:26px;line-height:1;margin-right:4px}
+.fr-ultima{font-size:13px;line-height:18px;font-weight:800;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border)}
+.fr-lutar{width:100%;min-height:50px}
+.fr-lista{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+.fr-card{display:flex;align-items:center;gap:10px;background:var(--dl-surface);border-radius:12px;padding:10px 12px;box-shadow:0 0 0 2px var(--dl-border),0 3px 0 2px var(--dl-border-shadow)}
+.fr-card--vit{box-shadow:0 0 0 3px var(--dl-ok),0 3px 0 3px var(--dl-navy-deep)}
+.fr-card--der{box-shadow:0 0 0 3px var(--dl-rival),0 3px 0 3px var(--dl-navy-deep)}
+.fr-card--nao{opacity:.85}
+.fr-num{flex:none;width:28px;text-align:center;font-size:24px;line-height:1}
+.fr-sprs{flex:none;display:flex;gap:4px;align-items:flex-end}
+.fr-sprs img{display:block;width:46px;height:46px;object-fit:contain;object-position:bottom;border-radius:10px;image-rendering:pixelated}
+.fr-sprs .fr-lider{width:34px;height:34px;background:var(--dl-rival-bg);box-shadow:inset 0 0 0 2px var(--dl-rival)}
+.fr-sprs .fr-mega{background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy)}
+.fr-txt{display:grid;gap:3px;min-width:0;flex:1}
+.fr-nome{font-size:14px;font-weight:900}
+.fr-nome span{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.fr-mega-txt{font-size:13px;font-weight:700}
+.fr-mega-txt b{font-weight:900}
+.fr-tags{display:flex;flex-wrap:wrap;gap:4px}
+.fr-tag-arq{background:var(--dl-rival);color:#FFFFFF}
+.fr-tag-esp{background:var(--dl-navy);color:#FFFFFF}
+.fr-st{font-size:12px;font-weight:900}
+.fr-st--vit{color:var(--dl-text)}
+.fr-st--der{color:var(--dl-dano)}
+.fr-st--nao{color:var(--dl-text-2)}
+:root[data-tema="escuro"] .fr-st--der{color:var(--dl-erro)}
+@media (prefers-color-scheme:dark){ :root:not([data-tema="claro"]) .fr-st--der{color:var(--dl-erro)} }
+/* as instalacoes da Fronteira (parte 4b): um card por instalacao, com o recorde do Tamer em destaque */
+.fr-inst{display:grid;gap:8px;align-content:start}
+.fr-inst h2,.fr-inst p{margin:0}
+.fr-inst-lista{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.fr-inst-card{display:grid;gap:6px}
+.fr-inst-card--fechada{opacity:.85}
+.fr-inst-cab{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fr-inst-nome{font-size:15px;font-weight:900}
+.fr-inst-rec{display:grid;justify-items:center;line-height:1}
+.fr-inst-rec .dl-num{font-size:26px}
+.fr-inst-rec small{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.fr-inst-frase{font-size:13px;line-height:18px;font-weight:700}
+.fr-inst-quem,.fr-inst-pet{font-size:12px;font-weight:800;color:var(--dl-text-2)}
+.fr-inst-tentar{width:100%;min-height:48px}
+.res-recorde-num{flex:none;min-width:40px;text-align:center;font-size:32px;line-height:1}
+.med-recordes{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.med-recordes li{display:flex;align-items:center;gap:10px;border-radius:12px;padding:6px 12px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border);font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.med-recordes li.ganha{box-shadow:inset 0 0 0 3px var(--dl-highlight)}
+.med-recordes .dl-num{flex:none;min-width:32px;text-align:center;font-size:24px;line-height:1}
+.med-recordes li > span{display:grid;gap:2px}
+.med-recordes b{font-size:14px;font-weight:900;color:var(--dl-text)}
+@media (min-width:1100px){
+  .fr-tela.desk{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);align-items:start}
+  .fr-lista{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .fr-lado > .fr-lutar{flex-grow:0}
+}
+.med-ouro{display:flex;align-items:center;gap:12px;border-radius:12px;padding:8px 12px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border)}
+.med-ouro.ganha{box-shadow:inset 0 0 0 3px var(--dl-highlight)}
+.med-ouro > span{display:grid;gap:2px;font-size:12px;font-weight:700;color:var(--dl-text-2)}
+.med-ouro b{font-size:15px;font-weight:900;color:var(--dl-text)}
+.res-titulo{display:flex;align-items:center;gap:12px;background:var(--dl-bg);border-radius:14px;box-shadow:0 0 0 3px var(--dl-highlight);padding:8px 12px}
+.tela .lugar-tag--fronteira{background:var(--dl-navy);color:#FFFFFF}
+/* Lutar tem quatro abas desde a Fronteira: no celular estreito (360 px) elas cabem com a letra e o respiro um pouco menores */
+@media (max-width:380px){ body[data-destino="lutar"] .tab{padding:0 5px;font-size:13px} }
+/* a Fabrica e o Salao (parte 4c): a escolha dos alugados, o alugado com a vida, a oferta de troca e o pet de cada nivel */
+.fb-status,.fb-ultima{margin:0;font-size:13px;line-height:18px;font-weight:800}
+.fb-ultima{border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border)}
+.fb-spr{display:block;width:46px;height:46px;object-fit:contain;object-position:bottom;image-rendering:pixelated}
+.fb-alugueis{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fb-alugueis li{display:grid}
+.fb-aluguel{width:100%;min-height:44px;display:grid;justify-items:center;gap:4px;padding:8px 4px;border:0;border-radius:10px;cursor:pointer;
+  font:inherit;color:var(--dl-text);background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-navy),0 3px 0 0 var(--dl-border-shadow)}
+.fb-aluguel b{font-size:12px;font-weight:900;line-height:15px;text-align:center;overflow-wrap:anywhere}
+.fb-aluguel small{font-size:11px;font-weight:800;color:var(--dl-text-2);text-align:center}
+.fb-aluguel .dl-tag{font-size:11px}
+.fb-aluguel:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px var(--dl-navy)}
+.fb-aluguel:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.fb-aluguel:disabled{cursor:default;opacity:.6}
+.fb-alugado{display:flex;align-items:center;gap:10px;border-radius:10px;padding:8px 10px;background:var(--dl-surface-2);box-shadow:inset 0 0 0 2px var(--dl-border)}
+.fb-alugado-txt{display:grid;gap:4px;min-width:0;flex:1}
+.fb-alugado-txt > b{font-size:14px;font-weight:900}
+.fb-vida{display:grid;gap:2px}
+.fb-vida small{font-size:11px;font-weight:800;color:var(--dl-text-2)}
+.fb-vida-trilho{display:block;height:9px;border-radius:6px;background:var(--dl-hex);overflow:hidden}
+.fb-vida-trilho i{display:block;height:100%;border-radius:6px;background:var(--dl-ok)}
+.fb-troca{display:grid;gap:6px;border-radius:10px;padding:8px 10px;box-shadow:inset 0 0 0 2px var(--dl-highlight);font-size:13px;line-height:18px;font-weight:700}
+.fb-trocar,.fb-voltar{width:100%;min-height:48px}
+.fb-lutas{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.fb-lutas li{display:flex;gap:8px;align-items:baseline;font-size:12px;line-height:16px;font-weight:700;color:var(--dl-text-2)}
+.fb-lutas li b{color:var(--dl-text);font-weight:900}
+.fb-lutas li.der b{color:var(--dl-dano)}
+:root[data-tema="escuro"] .fb-lutas li.der b{color:var(--dl-erro)}
+@media (prefers-color-scheme:dark){ :root:not([data-tema="claro"]) .fb-lutas li.der b{color:var(--dl-erro)} }
+.fb-lutas .dl-lcd{flex:none;min-width:48px}
+.sl-niveis{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.sl-niveis li{display:grid;grid-template-columns:46px 76px minmax(0,1fr);align-items:center;gap:8px}
+.sl-spr{width:46px;height:46px}
+.sl-nivel{font-size:13px;font-weight:900}
+.sl-sel{min-height:44px;width:100%;min-width:0;border-radius:10px;border:2px solid var(--dl-navy);background:var(--dl-surface);color:var(--dl-text);font:inherit;font-size:13px;font-weight:800;padding:0 8px}
+.sl-sel:focus-visible{outline:3px solid var(--dl-highlight);outline-offset:2px}
+.sl-falta{font-size:12px;font-weight:900;color:var(--dl-text-2);border-radius:10px;padding:8px;box-shadow:inset 0 0 0 2px var(--dl-border);border:0;background:none}
+.sl-niveis li.falta .sl-spr{border-radius:10px;box-shadow:inset 0 0 0 2px var(--dl-border)}

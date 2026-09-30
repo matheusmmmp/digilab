@@ -93,6 +93,8 @@ Sete resultados, todos EXECUTADOS com artefato em disco. Eles mudam o rumo:
 
    O resultado é uma versão coerente do jogo, com um único "pet v5", pronta para ser jogada por você por alguns dias antes de qualquer mecânica nova. Custo: baixo, é trabalho de integração.
 
+> **Atualização (mesmo dia, `docs/ANALISE_DONO_AMBIENTE_E1.md`):** a análise dos registros do E1 mostrou que a interação dono × ambiente vem de regras que nós escrevemos (quem trata lesão; a qualificação no sparring) e da loteria de formas: **a forma final explica 96% da taxa no painel**. A V4 proposta abaixo testaria essas regras e **não deve rodar**. O caminho B passa a ser: medir o dono pela distribuição de formas que ele produz, ou equilibrar os arquétipos antes de qualquer nova medida de efeito do dono.
+
 **Caminho B — reescrever a pesquisa.** A hipótese central morreu, e o que sobrou de sinal é o cuidado e o ambiente. A pergunta que os dados apontam:
 
 > *O cuidado coerente reduz a variância de desfecho do pet entre ambientes, e essa redução, não a força na arena, é o que diferencia um bom dono.*

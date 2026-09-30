@@ -4,8 +4,8 @@
 import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import {
-  ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_BOT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
-  chaveSprite, expressarConfianca, nomeEstagio, nomeForma, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
+  ACAO_CHAMADO, ALVOS_DESEJO, CAT, CED, CLE, CMEN, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
+  chaveSprite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Deco, fundoDeco } from "../../componentes/Deco.tsx";
@@ -16,7 +16,7 @@ import {
   detalheMotivo, falaDe, falaLLM, motivoParaApi, refsDoMotivo, rotuloLLM, useFalaLLM,
 } from "../../fala.ts";
 import {
-  detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
+  detalheFalaLivre, falaVozRecente, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
@@ -110,9 +110,10 @@ function useFala(): VistaFala {
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
   const mot = m.motivo, est = m.estagioAtual;
   const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
-  if (livre && fl.modo === "livre" && fl.ultimo) {
-    v.balao = v.texto = "✧ " + fl.ultimo.fala + iconeVerif(fl.ultimo.verificacao);
-    v.detalhe = detalheFalaLivre(fl.ultimo); v.titulo = tituloFalaLivre(fl.ultimo);
+  const ult = m.versao >= 7 ? falaVozRecente(m) : fl.modo === "livre" ? fl.ultimo : null;
+  if (livre && ult) {
+    v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao, ult);
+    v.detalhe = detalheFalaLivre(ult); v.titulo = tituloFalaLivre(ult);
   } else if (mot) {
     const refs = refsDoMotivo(m, mot), resp = falaLLM(motivoParaApi(mot, refs), est, mot.humor), usarLLM = !!resp && resp.fonte === "llm";
     const fria = m.falaFria || m.sombria, pronta = llm.on && llm.ativo && ["adolescente", "adulto", "mega"].includes(est) && !usarLLM;
@@ -162,21 +163,22 @@ function LinhaFala({ v, aberto, alternar }: { v: VistaFala; aberto: boolean; alt
   );
 }
 
-/* confianca de combate (M1, so pets v5): a frase de estado (confiante, inseguro, entediado do rival) quando existe, com
+/* confianca de combate (M1, so pets v8): a frase de estado (confiante, inseguro, entediado do rival) quando existe, com
    o "porque" apontando para as lutas do registro que a causaram (ConfiancaCombate.estado). Neutro: nada. */
 const RESULTADO_LUTA: Record<number, string> = { 1: "venceu", 0: "empatou", [-1]: "perdeu" };
-export function lutasDaCausa(m: Motor, lutas: readonly number[], estado: string): { idx: number; tick: number; rival: string; sinal: number }[] {
+export function lutasDaCausa(m: Motor, lutas: readonly number[], estado: string): { idx: number; k: number; tick: number; rival: string; sinal: number }[] {
   if (!m.conf) return [];
-  /* a i-esima luta da confianca e o i-esimo evento "l" do registro (event sourcing) */
+  /* a i-esima luta da confianca e de um evento "l" do registro (event sourcing): Motor.confEvento da a ordem dele entre os "l"
+     (uma serie, como a Liga ou a Cidadela, tem varias lutas num evento so) */
   const idxL: number[] = [];
   m.log.forEach((ev, i) => { if (ev[1] === "l") idxL.push(i); });
   const sinal = estado === "confiante" ? 1 : estado === "inseguro" ? -1 : null;
-  return m.conf.historico.map((h, i) => ({ idx: idxL[i], tick: h.tick, rival: h.rival, sinal: h.sinal }))
+  return m.conf.historico.map((h, i) => ({ idx: idxL[m.confEvento[i]], k: i, tick: h.tick, rival: h.rival, sinal: h.sinal }))
     .filter(x => lutas.includes(x.tick) && (sinal === null || x.sinal === sinal)).reverse();
 }
 function EstadoConfianca() {
   const { motor: m, nascendo } = useJogo(), [aberto, setAberto] = useState(false);
-  if (m.versao < 5 || nascendo > 0 || m.morte) return null;
+  if (m.versao < 8 || nascendo > 0 || m.morte) return null;
   const e = m.estadoConfianca();
   if (!e || e.estado === "neutro") return null;
   const txt = expressarConfianca(e.estado, m.estagioAtual)!, causa = lutasDaCausa(m, e.lutas, e.estado);
@@ -187,7 +189,7 @@ function EstadoConfianca() {
         <span class="dl-tag pet-conf-tag">{e.estado === "entediado" ? "entediado do rival" : e.estado}</span>
         <b><TextoFala txt={txt} est={m.estagioAtual} atlasOk={false} /></b><small>{desde}</small></button>
       {aberto && <ul class="pet-conf-det dl-apoio" id="conf-det">
-        {causa.map(x => <li key={x.idx}><span class="dl-lcd">D{diaDe(x.tick)} {hhmm(x.tick)}</span> {RESULTADO_LUTA[x.sinal]} de {NOME_BOT[x.rival] ?? x.rival} · evento #{x.idx} do registro</li>)}
+        {causa.map(x => <li key={x.k}><span class="dl-lcd">D{diaDe(x.tick)} {hhmm(x.tick)}</span> {RESULTADO_LUTA[x.sinal]} de {nomeRivalConfianca(x.rival)} · evento #{x.idx} do registro</li>)}
         {!causa.length && <li>sem luta registrada</li>}
       </ul>}
     </div>
@@ -250,6 +252,22 @@ function JanelaV4({ agir }: { agir: (a: AcaoDono) => void }) {
     {j && (() => {
       const resta = Math.max(0, j.prazo - tick);
       const barra = <Seg n={blocos(resta / CED.janela, 10)} m={10} />;
+      if (j.tipo === "fala") {
+        /* pets v7: ele falou (voz propria). O dono nunca sabe se foi mentira: acredita, premia ou desconfia */
+        const f = falaVozRecente(m), barraFala = <Seg n={blocos(resta / CMEN.janela, 10)} m={10} />;
+        return (
+          <div class="dl-card chamado chamado--fala">
+            <span class="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
+            <span class="chamado-txt"><span class="chamado-tit"><b>{f ? `“${f.fala}”` : "Ele disse uma coisa"}</b>
+              <span class="dl-apoio">{m.sombria ? "é sombrio: não confie em tudo que ele diz" : "acredita? confira o que você sabe dele"}</span></span>{barraFala}</span>
+            <span class="chamado-botoes">
+              <button type="button" class="dl-btn" onClick={() => agir("elogiar")}>Acreditar</button>
+              <button type="button" class="dl-btn" onClick={() => agir("petisco")}>Petisco</button>
+              <button type="button" class="dl-btn" onClick={() => agir("repreender")}>É mentira!</button>
+            </span>
+          </div>
+        );
+      }
       if (j.tipo === "aviso") return (
         <div class="dl-card chamado">
           <span class="chamado-ic"><Peca nome="emoji_surpreso" escala={2} reserva="!" /></span>

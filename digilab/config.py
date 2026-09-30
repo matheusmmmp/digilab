@@ -616,6 +616,32 @@ class ConfigCombateV21C(ConfigCombateV21):
     marca_fragil: bool = False
 
 
+@dataclass(frozen=True)
+class ConfigCombateV21D(ConfigCombateV21C):
+    """Reequilibrio dos arquetipos, rodadas 1 e 2 (docs/EQUILIBRIO_RODADA1.md e EQUILIBRIO_RODADA2.md, a partir de
+    docs/DIAGNOSTICO_ARQUETIPOS.md). Chaves DESLIGADAS por padrao: com todas em False a luta e a da V21C. Classe propria (e nao campos novos na
+    V21C) para o asdict e o hash das configs V21C gravadas nao mudarem. PROPOSTO, so calibracao."""
+
+    # candidato A: o preparo do pesado feito sob pele_dura nao aparece para o rival em oponente_preparando
+    # (a pele esconde o pesado, alem de protege-lo). A condicao do vigia (oponente_vai_preparar) nao muda.
+    preparo_sob_pele_oculto: bool = False
+    # candidato C: a muralha luta com a lista de gambits derivada da do espelho (bots.GAMBITS_MURALHA_V21D)
+    muralha_lista_espelho: bool = False
+    # --- rodada 2 (docs/EQUILIBRIO_RODADA2.md), tambem desligadas por padrao ---
+    # D2: a investida erra quando o alvo recua a partir da distancia media, e o recuo vale contra ela (excecao a
+    # fuga condicionada so para a investida; o avanco comum continua prendendo quem recua)
+    investida_erra_contra_recuo: bool = False
+    # E1: recuar nao afasta quando o oponente prepara o pesado no mesmo turno (a fuga condicionada estendida ao
+    # preparo; vale para qualquer forma que prepara)
+    preparo_prende: bool = False
+    # E2: lista variante que bate rapido de perto contra quem recua com frequencia, antes de preparar o pesado
+    # (bots.gambits_adulto); uma chave para o tita e outra para o vigia, para medir cada uma sozinha
+    tita_bate_em_quem_recua: bool = False
+    vigia_bate_em_quem_recua: bool = False
+    # V: lista variante do vigia que recua do preparo que ele nao consegue interromper (o do rival que usa pele_dura)
+    vigia_recua_do_preparo_sob_pele: bool = False
+
+
 # numeros de tecnica/passiva perturbados no gate E5 (+-10%)
 CAMPOS_TECNICA_PASSIVA_V21 = (
     "custo_investida", "dano_investida", "custo_contra_golpe", "fracao_contra_golpe",
@@ -1003,7 +1029,79 @@ class ConfigSparring:
     primeira_apos_inicio_min: int = 30
 
 
+@dataclass(frozen=True)
+class ConfigMentira:
+    """Digimons que mentem (docs/DESIGN_VOZ_PROPRIA.md, secao 9). A mentira e decidida pelo MOTOR (rng_mentira,
+    derivada da semente) e registrada; a LLM so escreve a frase. Toda fala espontanea abre uma janela de fala,
+    como o chamado falso da travessura; o dono ve a fala, nunca se e mentira. Status e fonte de cada valor:
+    protocol.PARAMETROS_MENTIRA_V1 (registro a parte: o hash da educacao-v1 nao muda).
+
+        h = fator_sombria (se a forma for sombria, senao 1) x (1 - peso_sobrecarga x sobrecarga/100) x especie
+        p = 0 se h = 1 ou depois de `acertos_para_aprender` broncas certas seguidas em mentiras no estagio
+        p = min(teto_chance, coef_chance x (1 - h) x (1 - disciplina/max) + reforco_por_impune x impunes)
+    """
+
+    ligada: bool = False                     # desligada: nenhuma fala, nenhum sorteio (V3 e confirmatoria intactas)
+    fator_sombria: float = 0.4
+    peso_sobrecarga: float = 0.5             # sobrecarga 0-100 do treino forcado (TAREFA_TREINO_SOMBRIO)
+    coef_chance: float = 0.5
+    reforco_por_impune: float = 0.05
+    teto_chance: float = 0.8
+    acertos_para_aprender: int = 3           # igual a ConfigEducacao.acertos_para_aprender
+    impunes_premiada: int = 2                # petisco ou elogio numa mentira: conta como 2 impunes
+    janela_fala_min: int = 30
+    # pesquisa: uma fala espontanea (slot) a cada tantos minutos, da crianca em diante (bebe so emote). No jogo o
+    # gatilho vem de fora (reencontro, marco...) pelo evento `fala`; o ritmo maximo do design e 1 a cada 2 h
+    intervalo_fala_min: int = 120
+    # o primeiro slot de fala vem esta defasagem depois do inicio do estagio: sem ela a fala cairia sempre no
+    # mesmo tick do aviso de higiene (a cada 120 min), que abre a janela antes e a fala nunca aconteceria
+    defasagem_fala_min: int = 60
+    estagios_fala: tuple = ("crianca", "adolescente", "adulto")
+    # a fala mentirosa distorce um fato de estado (o dono atento ve que contradiz as barras) ou um da historia
+    # (habito, marco, gosto: o dono nao tem como conferir pelas barras). Fracao das falas sobre estado:
+    fracao_tema_estado: float = 0.5
+    honestidade_enganador: float = 0.7       # especie com traco VERIFICADO de enganador (corpus_especies.json)
+
+
+@dataclass(frozen=True)
+class ConfigHistoria:
+    """Extrator da historia do pet (digilab/historia.py; DESIGN_VOZ_PROPRIA, secao 2). Limiares dos fatos H
+    (habito meu), O (habito do dono), P (gosto) e L (marco). Todos PROPOSTOS (protocol.PARAMETROS_HISTORIA_V1)."""
+
+    # H, sequencia A -> B: P(B em ate janela_seq_min depois de A) >= prob_seq_min, A com >= min_ocorrencias_seq,
+    # lift >= lift_min sobre a taxa de B numa janela qualquer
+    janela_seq_min: int = 30
+    prob_seq_min: float = 0.6
+    min_ocorrencias_seq: int = 10
+    lift_min: float = 1.5
+    # H, periodo do dia: taxa da acao no periodo >= fator_periodo x a media do dia, >= min_ocorrencias_periodo
+    fator_periodo: float = 2.0
+    min_ocorrencias_periodo: int = 10
+    # O
+    fracao_periodo_dono: float = 0.4         # periodo com >= esta fracao das acoes do dono
+    dias_periodo_dono: int = 3               # ... em >= tantos dias diferentes
+    fracao_cuidado_dono: float = 0.35        # acao de cuidado com >= esta fracao das acoes do dono
+    fracao_cede_manha: float = 0.6           # petisco / (petisco + bronca) nas manhas
+    min_manhas: int = 5
+    demora_rapida_min: int = 5               # mediana da demora nos chamados <= isto: "atende rapido"
+    demora_lenta_min: int = 12               # >= isto: "demora"
+    min_chamados_demora: int = 5
+    # P
+    limiar_gosto: float = 0.02               # |desvio da politica sobre o bandit recem-nascido| na sonda do carater
+    fracao_treino_favorito: float = 0.35
+    min_sessoes_treino: int = 6
+    # L
+    ausencia_min: int = 360                  # >= 6 h de jogo sem o dono agir
+    # selecao para uma fala
+    max_fatos: int = 12
+    max_por_regra: int = 2                   # no maximo tantos fatos da mesma regra (ex.: ausencias)
+    falas_recentes: int = 5                  # fato citado nas ultimas tantas falas vai para o fim
+
+
 CONFIG_SPARRING = ConfigSparring()
+CONFIG_HISTORIA = ConfigHistoria()
+CONFIG_MENTIRA = ConfigMentira()
+CONFIG_MENTIRA_LIGADA = ConfigMentira(ligada=True)
 CONFIG_EDUCACAO = ConfigEducacao()
 CONFIG_EDUCACAO_LIGADA = ConfigEducacao(ligada=True)
 CONFIG_LESOES = ConfigLesoes()

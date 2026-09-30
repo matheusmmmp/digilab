@@ -108,11 +108,15 @@ function Revelacao({ x, m, fechar }: { x: Evolucao; m: Motor; fechar: () => void
    (e esta revelacao) e, quando a luta faz o pet evoluir, a revelacao espera o fim da luta e o Resultado */
 const VISTAS: { motor: Motor | null; n: number; pendente: Evolucao | null } = { motor: null, n: 0, pendente: null };
 export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
-  const { motor: m } = useJogo(), luta = useLuta(), [, redesenhar] = useState(0);
+  const jogo = useJogo(), { motor: m } = jogo, luta = useLuta(), [, redesenhar] = useState(0);
   useEffect(() => {
     const n = m.evolucoes.length;
-    /* pet trocado (ovo novo, pet anterior, outra aba): comeca a contar dele */
-    if (VISTAS.motor !== m || n < VISTAS.n) { VISTAS.motor = m; VISTAS.n = n; VISTAS.pendente = null; return; }
+    /* pet trocado (ovo novo, pet anterior, outra aba): comeca a contar dele; se ele evoluiu ao receber as medalhas do Tamer
+       na troca (pet guardado que estava pronto), a revelacao mostra essa evolucao */
+    if (VISTAS.motor !== m || n < VISTAS.n) {
+      VISTAS.motor = m; VISTAS.pendente = null; VISTAS.n = jogo.evolucoesAoTrocar ?? n; jogo.evolucoesAoTrocar = null;
+      if (VISTAS.n >= n) return;
+    }
     if (n > VISTAS.n) { VISTAS.n = n; VISTAS.pendente = m.evolucoes[n - 1]; redesenhar(x => x + 1); }
   });
   if (!VISTAS.pendente || luta.lutando || ehLuta(location.hash)) return null;

@@ -1,20 +1,29 @@
 /* Fala livre por LLM local (porte de web/modulos/fala_livre.js; docs/PLANO_VERSAO_FALA_LIVRE.md).
    So APRESENTACAO: le o pet (motor), nunca escreve nele. As falas e a conversa vao para o log de apresentacao
    (localStorage CHAVE + ".fala.jsonl"), nunca para o registro do pet. O que o jogador escreve nao ensina o pet.
-   Mesmas chaves, mesmo formato de log e mesmas rotas do servidor que a versao do HTML. */
+   Mesmas chaves, mesmo formato de log e mesmas rotas do servidor que a versao do HTML.
+   Pets v7 (voz propria, src/voz.ts): a fala espontanea vem dos gatilhos novos, entra no registro do pet pelo evento
+   "fl" (abre a janela de fala, pode ser mentira) e o texto vem do servidor com voz: true ou, sem ele, do molde. A
+   conversa manda a historia do pet. O registro de apresentacao ganha o campo `voz` (a verdade fica guardada ali). */
 import { useEffect, useState } from "preact/hooks";
-import { FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type Motor } from "../motor/index.ts";
+import { CMEN, FATORES_TXT, TICK_INICIAL, TPD, hashSemente, nomeForma, type Janela, type Motor } from "../motor/index.ts";
 import { FALA_LLM, ligarFalaLLM } from "./fala.ts";
-import { jogoAtual } from "./jogo.ts";
+import { jogoAtual, mudarMotor } from "./jogo.ts";
 import { CHAVE } from "./save.ts";
+import { TEXTO_GATILHO, assuntoDaFala, gatilhoDe, historiaDaConversa, internetLigada, podeFalar } from "./voz.ts";
 
 const LOG = CHAVE + ".fala.jsonl", MODO = CHAVE + "-modo-fala";
 const VERSAO_LOG = 1, MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
 export type ModoFala = "template" | "moldura" | "livre";
-export interface Verificacao { nao_suportadas?: number; manipulacao?: boolean; afirmacoes?: { trecho: string; sustentada: boolean }[]; erro?: string }
+export interface Verificacao { nao_suportadas?: number; manipulacao?: boolean; afirmacoes?: { trecho: string; sustentada: boolean | null }[]; erro?: string }
+/** pets v7: o que so a apresentacao guarda sobre a fala espontanea (a mentira fica marcada, com a verdade) */
+export interface VozRegistro {
+  gatilho: string | null; fonte: "llm" | "molde"; chaves: string[]; invencoes: string[];
+  janela: { inicio: number; falso: boolean; tema: string } | null; verdade: string | null;
+}
 export interface RegistroFala {
   versao: number; t: number; situacao: "espontanea" | "conversa"; fala_jogador: string | null; fala: string; fatos_citados: string[];
-  fatos: unknown; estagio: string; modelo: string; versao_prompt: string; semente: number; latencia_s?: number; erro?: string; verificacao: Verificacao | null;
+  fatos: unknown; estagio: string; modelo: string; versao_prompt: string; semente: number; latencia_s?: number; erro?: string; verificacao: Verificacao | null; voz?: VozRegistro;
 }
 export const FL = {
   modo: "template" as ModoFala, ultimo: null as RegistroFala | null, pendente: false, sessao: [] as [string, string][],
@@ -88,7 +97,11 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
   const semente = hashSemente("fala-livre", motor.semente, motor.log.length, FL.sessao.length) >>> 1;
   const t = motor.e.tick;
   try {
-    const d = await post("/api/fala-livre", { estado: estadoDoPet(motor, gatilho), situacao, fala_jogador: falaJogador, historico: FL.sessao.slice(-MAX_TROCAS), semente });
+    const voz = motor.versao >= 7;
+    const estado = estadoDoPet(motor, gatilho);
+    if (voz) estado.historia = historiaDaConversa(motor, assuntosRecentes());
+    const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico: FL.sessao.slice(-MAX_TROCAS), semente,
+      ...(voz ? { voz: true } : {}) });
     const reg: RegistroFala = {
       versao: VERSAO_LOG, t, situacao, fala_jogador: falaJogador || null, fala: d.fala as string, fatos_citados: d.fatos_citados as string[],
       fatos: d.fatos, estagio: d.estagio as string, modelo: d.modelo as string, versao_prompt: d.versao_prompt as string, semente,
@@ -96,6 +109,11 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     };
     if (situacao === "conversa") FL.sessao.push([falaJogador!, reg.fala]);
     FL.ultimo = reg; avisar();
+    if (voz) {                                     /* a voz ja volta verificada (autocorrecao no servidor) */
+      reg.verificacao = (d.verificacao as Verificacao) ?? null;
+      reg.voz = { gatilho: null, fonte: "llm", chaves: chavesDe(d.fatos), invencoes: (d.invencoes as string[]) ?? [], janela: null, verdade: null };
+      anexar(reg); return;
+    }
     /* a verificacao vem depois: a fala aparece na hora e o icone chega quando ela terminar */
     if (!reg.erro) post("/api/fala-livre/verificar", { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: reg.fatos, semente })
       .then(v => { reg.verificacao = v as Verificacao; anexar(reg); avisar(); })
@@ -109,9 +127,56 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
   }
 }
 
+/* ------------------------------------------------ pets v7: fala espontanea da voz propria */
+const chavesDe = (fatos: unknown): string[] =>
+  (Array.isArray(fatos) ? fatos : []).filter((f: { chave?: string }) => typeof f.chave === "string").map((f: { chave: string }) => f.chave);
+/** os assuntos das ultimas falas (o rodizio manda para o fim o que acabou de ser assunto) */
+function assuntosRecentes(): string[][] {
+  try { return lerLog().filter(r => r.voz).slice(-5).map(r => r.voz!.chaves); } catch { return []; }
+}
+function falaVoz(m: Motor, gatilho: string): void {
+  let j: Janela | null = null;
+  mudarMotor(mm => { j = mm.falar(gatilho); });
+  if (!j) return;
+  const jan = j as Janela, as = assuntoDaFala(m, jan, assuntosRecentes()), t = m.e.tick;
+  const semente = hashSemente("voz", m.semente, m.log.length) >>> 1;
+  const base: RegistroFala = {
+    versao: VERSAO_LOG, t, situacao: "espontanea", fala_jogador: null, fala: as.molde, fatos_citados: [], fatos: as.historia,
+    estagio: m.estagioAtual, modelo: "molde", versao_prompt: "molde", semente, verificacao: null,
+    voz: { gatilho, fonte: "molde", chaves: as.chaves, invencoes: [], janela: { inicio: jan.inicio, falso: jan.falso, tema: String(jan.pedido) },
+      verdade: as.verdade },
+  };
+  FL.ultimo = base; avisar();
+  if (FL.modo !== "livre" || !FL.status || FL.pendente) { anexar(base); return; }
+  FL.pendente = true; avisar();
+  const estado: Record<string, unknown> = { ...estadoDoPet(m, TEXTO_GATILHO[gatilho] ?? gatilho), historia: as.historia };
+  if (as.mentira) estado.mentira = as.mentira;
+  post("/api/fala-livre", { estado, situacao: "espontanea", semente, voz: true, internet: internetLigada() && !as.mentira })
+    .then(d => {
+      const reg: RegistroFala = { ...base, fala: d.fala as string, fatos_citados: d.fatos_citados as string[], fatos: d.fatos,
+        modelo: d.modelo as string, versao_prompt: d.versao_prompt as string, latencia_s: d.latencia_s as number | undefined,
+        erro: d.erro as string | undefined, verificacao: (d.verificacao as Verificacao) ?? null,
+        voz: { ...base.voz!, fonte: "llm", chaves: chavesDe(d.fatos), invencoes: (d.invencoes as string[]) ?? [] } };
+      FL.ultimo = reg; anexar(reg);
+    })
+    .catch((err: Error) => { FL.erro = err.message; anexar(base); })
+    .finally(() => { FL.pendente = false; avisar(); });
+}
+/** a fala da voz ainda vale no balao (a janela de fala dura CMEN.janela minutos de jogo) */
+export function falaVozRecente(m: Motor): RegistroFala | null {
+  const u = FL.ultimo;
+  return u && u.voz && u.situacao === "espontanea" && m.e.tick - u.t <= CMEN.janela ? u : null;
+}
+
 /** gatilho (a cada mudanca do pet): fala espontanea quando ele decide, recusa, evolui, luta ou tem vontade nova.
+    Pets v7: os gatilhos da voz propria, em todos os modos (o texto so vem da LLM no modo livre).
     Devolve true quando o balao e da fala livre (a tela nao mostra o template). */
 export function gatilhoFalaLivre(m: Motor): boolean {
+  if (m.versao >= 7) {
+    const g = gatilhoDe(m);
+    if (g && podeFalar(m)) falaVoz(m, g);
+    return !!falaVozRecente(m);
+  }
   if (FL.modo !== "livre") return false;
   let g: string | null = null;
   if (m.motivo && m.motivo !== FL.ultMotivo) { FL.ultMotivo = m.motivo; g = m.motivo.recusa ? "recusei o que o dono pediu" : "acabei de decidir o que fazer"; }
@@ -122,19 +187,25 @@ export function gatilhoFalaLivre(m: Motor): boolean {
   if (g && agora - FL.tEspontanea >= INTERVALO_ESPONTANEA_MS) { FL.tEspontanea = agora; falar("espontanea", g); }
   return !!FL.ultimo;
 }
-export function iconeVerif(v: Verificacao | null): string {
+export function iconeVerif(v: Verificacao | null, r?: RegistroFala): string {
+  if (r?.voz) return r.voz.invencoes.length ? " ✎" : "";      /* voz: inventar pode; o lapis marca o que ele inventou */
   if (!v) return "";
   if (v.erro) return " ·?";
   return ((v.nao_suportadas ?? 0) > 0 || v.manipulacao) ? " ⚠" : "";
 }
 export function detalheFalaLivre(r: RegistroFala): string {
   const v = r.verificacao;
+  if (r.voz) return `${r.voz.fonte === "llm" ? `voz própria (${r.modelo}${r.latencia_s ? ", " + r.latencia_s.toFixed(1) + " s" : ""})` : "voz própria (sem o modelo: o fato dito do jeito dele)"}`
+    + (r.voz.gatilho ? ` · por quê: ${TEXTO_GATILHO[r.voz.gatilho] ?? r.voz.gatilho}` : "")
+    + (r.voz.invencoes.length ? ` · inventou: ${r.voz.invencoes.map(x => `«${x}»`).join(" ")}` : "")
+    + (r.erro ? ` · erro: ${r.erro}` : "");
   return `fala livre (${r.modelo}${r.latencia_s ? ", " + r.latencia_s.toFixed(1) + " s" : ""}) · fatos citados: ${r.fatos_citados.join(", ") || "nenhum"}`
     + (v && !v.erro ? ` · verificador: ${v.nao_suportadas} sem fato` + (v.afirmacoes || []).filter(a => !a.sustentada).map(a => ` «${a.trecho}»`).join("") : "")
     + (r.erro ? ` · erro: ${r.erro}` : "");
 }
 export function tituloFalaLivre(r: RegistroFala): string {
   const v = r.verificacao;
+  if (r.voz) return r.voz.invencoes.length ? `ele inventou ${r.voz.invencoes.length} coisa(s) nesta fala` : "voz própria";
   return v && ((v.nao_suportadas ?? 0) > 0 || v.manipulacao) ? `verificador: ${v.nao_suportadas} afirmação(ões) sem fato${v.manipulacao ? ", possível manipulação" : ""}` : "fala livre";
 }
 

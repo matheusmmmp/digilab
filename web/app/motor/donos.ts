@@ -72,8 +72,11 @@ export function criarDono(tipo: TipoDono): Dono {
   throw new Error("dono desconhecido: " + tipo);
 }
 export function treinarRival(tipo: TipoDono, dias: number, semente: number): Motor { return treinarPet(tipo, dias, CD.porDia, semente); }
+/** pet simulado dos Cenarios: v5 de proposito (os pets v6 esperam as medalhas do Tamer, e a simulacao nao tem Tamer;
+    docs/DESIGN_MEDALHAS_ARENAS.md). Um v5 nao ganha medalha */
+export const VERSAO_CENARIO = 5;
 export function treinarPet(tipo: TipoDono, dias: number, porDia: number, semente: number): Motor {
-  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const m = new Motor(semente, VERSAO_CENARIO), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(porDia * dias);
   if (passos < 1) throw new Error("dias de vida precisa ser positivo");
   if (orc < 1) throw new Error("o orçamento precisa ter pelo menos 1 interação");

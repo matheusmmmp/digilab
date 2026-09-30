@@ -1,0 +1,877 @@
+{
+  "descricao": "Conferencia da Liga dos Lideres (sem calibracao): o Mega de referencia com o treino tipico contra cada lider e a Liga inteira",
+  "motor": "web/app/motor (escala CESC_V6 ligada, regras V21D, limite do desafiado = o lider)",
+  "fator_desenho": 1.6,
+  "fator_adotado": 1,
+  "treino_tipico_mega": 40,
+  "sementes": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "partidas_por_semente_especie_forma": 20,
+  "por_fator": [
+    {
+      "fator": 1.6,
+      "por_luta": [
+        {
+          "luta": 1,
+          "lider": "Gazimon",
+          "mega": "WarGreymon",
+          "arquetipo": "Furioso",
+          "especie": "Coragem",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.96,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.025,
+            "emboscador": 0.0175,
+            "vigia": 0.975,
+            "tita": 0.98
+          }
+        },
+        {
+          "luta": 2,
+          "lider": "Guardromon",
+          "mega": "Seraphimon",
+          "arquetipo": "Espelho",
+          "especie": "Amizade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 0.4275,
+            "muralha": 0.5225,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 3,
+          "lider": "Youkomon",
+          "mega": "MegaGargomon",
+          "arquetipo": "Sentinela",
+          "especie": "Conhecimento",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 0.2025,
+            "tita": 0.005
+          }
+        },
+        {
+          "luta": 4,
+          "lider": "Myotismon",
+          "mega": "Vikemon",
+          "arquetipo": "Titã",
+          "especie": "Sinceridade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.045,
+            "emboscador": 0.11,
+            "vigia": 0.9875,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 5,
+          "lider": "MarinBullmon",
+          "mega": "Rosemon",
+          "arquetipo": "Muralha",
+          "especie": "Sinceridade",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.7525,
+            "furioso": 1,
+            "espelho": 0.4625,
+            "muralha": 0.465,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 6,
+          "lider": "Piedmon",
+          "mega": "Imperialdramon Dragon Mode",
+          "arquetipo": "Duelista",
+          "especie": "Conhecimento",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.9975,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0.7675,
+            "sentinela": 0.765,
+            "emboscador": 0.435,
+            "vigia": 0.995,
+            "tita": 1
+          }
+        }
+      ],
+      "liga_inteira": {
+        "duelista": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.96,
+            0.6,
+            0.1975,
+            0,
+            0
+          ]
+        },
+        "furioso": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.66,
+            0.595,
+            0.0025,
+            0
+          ]
+        },
+        "espelho": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.4175,
+            0.2075,
+            0,
+            0
+          ]
+        },
+        "muralha": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.4825,
+            0,
+            0,
+            0
+          ]
+        },
+        "sentinela": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.0175,
+            0.0025,
+            0,
+            0,
+            0
+          ]
+        },
+        "emboscador": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.0275,
+            0.0125,
+            0.0025,
+            0.0025,
+            0.0025
+          ]
+        },
+        "vigia": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.9675,
+            0.8725,
+            0.2075,
+            0.055,
+            0
+          ]
+        },
+        "tita": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.985,
+            0.63,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "vencivel_cada_luta": true,
+      "liga_completavel": false,
+      "melhor_forma_na_liga": {
+        "forma": "duelista",
+        "titulos": 0
+      }
+    },
+    {
+      "fator": 1.4,
+      "por_luta": [
+        {
+          "luta": 1,
+          "lider": "Gazimon",
+          "mega": "WarGreymon",
+          "arquetipo": "Furioso",
+          "especie": "Coragem",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.9875,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.0425,
+            "emboscador": 0.0525,
+            "vigia": 0.9875,
+            "tita": 0.9975
+          }
+        },
+        {
+          "luta": 2,
+          "lider": "Guardromon",
+          "mega": "Seraphimon",
+          "arquetipo": "Espelho",
+          "especie": "Amizade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 0.4575,
+            "muralha": 0.565,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 3,
+          "lider": "Youkomon",
+          "mega": "MegaGargomon",
+          "arquetipo": "Sentinela",
+          "especie": "Conhecimento",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 0.305,
+            "tita": 0.0125
+          }
+        },
+        {
+          "luta": 4,
+          "lider": "Myotismon",
+          "mega": "Vikemon",
+          "arquetipo": "Titã",
+          "especie": "Sinceridade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.07,
+            "emboscador": 0.23,
+            "vigia": 0.9975,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 5,
+          "lider": "MarinBullmon",
+          "mega": "Rosemon",
+          "arquetipo": "Muralha",
+          "especie": "Sinceridade",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.7975,
+            "furioso": 1,
+            "espelho": 0.485,
+            "muralha": 0.485,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 6,
+          "lider": "Piedmon",
+          "mega": "Imperialdramon Dragon Mode",
+          "arquetipo": "Duelista",
+          "especie": "Conhecimento",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.9975,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0.8025,
+            "sentinela": 0.9275,
+            "emboscador": 0.805,
+            "vigia": 0.9975,
+            "tita": 1
+          }
+        }
+      ],
+      "liga_inteira": {
+        "duelista": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.9825,
+            0.9175,
+            0.7575,
+            0.01,
+            0
+          ]
+        },
+        "furioso": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.98,
+            0.975,
+            0.1625,
+            0.005
+          ]
+        },
+        "espelho": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.4575,
+            0.4525,
+            0.01,
+            0
+          ]
+        },
+        "muralha": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.5225,
+            0,
+            0,
+            0
+          ]
+        },
+        "sentinela": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.0425,
+            0.0275,
+            0.005,
+            0.0025,
+            0.0025
+          ]
+        },
+        "emboscador": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.0625,
+            0.055,
+            0.025,
+            0.005,
+            0.005
+          ]
+        },
+        "vigia": {
+          "titulos": 0.0025,
+          "chegou_na_luta": [
+            1,
+            0.9875,
+            0.95,
+            0.3425,
+            0.255,
+            0.0425
+          ]
+        },
+        "tita": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            0.9975,
+            0.905,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "vencivel_cada_luta": true,
+      "liga_completavel": true,
+      "melhor_forma_na_liga": {
+        "forma": "vigia",
+        "titulos": 0.0025
+      }
+    },
+    {
+      "fator": 1.2,
+      "por_luta": [
+        {
+          "luta": 1,
+          "lider": "Gazimon",
+          "mega": "WarGreymon",
+          "arquetipo": "Furioso",
+          "especie": "Coragem",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.995,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.085,
+            "emboscador": 0.1575,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 2,
+          "lider": "Guardromon",
+          "mega": "Seraphimon",
+          "arquetipo": "Espelho",
+          "especie": "Amizade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 0.49,
+            "muralha": 0.6025,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 3,
+          "lider": "Youkomon",
+          "mega": "MegaGargomon",
+          "arquetipo": "Sentinela",
+          "especie": "Conhecimento",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 0.3925,
+            "tita": 0.035
+          }
+        },
+        {
+          "luta": 4,
+          "lider": "Myotismon",
+          "mega": "Vikemon",
+          "arquetipo": "Titã",
+          "especie": "Sinceridade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.13,
+            "emboscador": 0.34,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 5,
+          "lider": "MarinBullmon",
+          "mega": "Rosemon",
+          "arquetipo": "Muralha",
+          "especie": "Sinceridade",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.83,
+            "furioso": 1,
+            "espelho": 0.5375,
+            "muralha": 0.5125,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 6,
+          "lider": "Piedmon",
+          "mega": "Imperialdramon Dragon Mode",
+          "arquetipo": "Duelista",
+          "especie": "Conhecimento",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0.825,
+            "sentinela": 0.9925,
+            "emboscador": 0.93,
+            "vigia": 1,
+            "tita": 1
+          }
+        }
+      ],
+      "liga_inteira": {
+        "duelista": {
+          "titulos": 0.005,
+          "chegou_na_luta": [
+            1,
+            0.9975,
+            0.9775,
+            0.9675,
+            0.53,
+            0.035
+          ]
+        },
+        "furioso": {
+          "titulos": 0.015,
+          "chegou_na_luta": [
+            1,
+            1,
+            1,
+            1,
+            0.9275,
+            0.16
+          ]
+        },
+        "espelho": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.4975,
+            0.4975,
+            0.3175,
+            0.02
+          ]
+        },
+        "muralha": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.555,
+            0,
+            0,
+            0
+          ]
+        },
+        "sentinela": {
+          "titulos": 0.0025,
+          "chegou_na_luta": [
+            1,
+            0.0975,
+            0.075,
+            0.04,
+            0.0225,
+            0.0225
+          ]
+        },
+        "emboscador": {
+          "titulos": 0.0025,
+          "chegou_na_luta": [
+            1,
+            0.23,
+            0.1825,
+            0.07,
+            0.0175,
+            0.0175
+          ]
+        },
+        "vigia": {
+          "titulos": 0.0975,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.975,
+            0.5325,
+            0.5125,
+            0.3225
+          ]
+        },
+        "tita": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.9925,
+            0.0175,
+            0.0075,
+            0.0025
+          ]
+        }
+      },
+      "vencivel_cada_luta": true,
+      "liga_completavel": true,
+      "melhor_forma_na_liga": {
+        "forma": "vigia",
+        "titulos": 0.0975
+      }
+    },
+    {
+      "fator": 1,
+      "por_luta": [
+        {
+          "luta": 1,
+          "lider": "Gazimon",
+          "mega": "WarGreymon",
+          "arquetipo": "Furioso",
+          "especie": "Coragem",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.24,
+            "emboscador": 0.44,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 2,
+          "lider": "Guardromon",
+          "mega": "Seraphimon",
+          "arquetipo": "Espelho",
+          "especie": "Amizade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 0.515,
+            "muralha": 0.615,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 3,
+          "lider": "Youkomon",
+          "mega": "MegaGargomon",
+          "arquetipo": "Sentinela",
+          "especie": "Conhecimento",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 0.5,
+            "tita": 0.04
+          }
+        },
+        {
+          "luta": 4,
+          "lider": "Myotismon",
+          "mega": "Vikemon",
+          "arquetipo": "Titã",
+          "especie": "Sinceridade",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 1,
+            "sentinela": 0.2675,
+            "emboscador": 0.5175,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 5,
+          "lider": "MarinBullmon",
+          "mega": "Rosemon",
+          "arquetipo": "Muralha",
+          "especie": "Sinceridade",
+          "melhor_forma": "furioso",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 0.8425,
+            "furioso": 1,
+            "espelho": 0.5875,
+            "muralha": 0.55,
+            "sentinela": 1,
+            "emboscador": 1,
+            "vigia": 1,
+            "tita": 1
+          }
+        },
+        {
+          "luta": 6,
+          "lider": "Piedmon",
+          "mega": "Imperialdramon Dragon Mode",
+          "arquetipo": "Duelista",
+          "especie": "Conhecimento",
+          "melhor_forma": "duelista",
+          "melhor_taxa": 1,
+          "por_forma": {
+            "duelista": 1,
+            "furioso": 1,
+            "espelho": 1,
+            "muralha": 0.835,
+            "sentinela": 0.995,
+            "emboscador": 0.9975,
+            "vigia": 1,
+            "tita": 1
+          }
+        }
+      ],
+      "liga_inteira": {
+        "duelista": {
+          "titulos": 0.4075,
+          "chegou_na_luta": [
+            1,
+            1,
+            1,
+            0.9975,
+            0.985,
+            0.6975
+          ]
+        },
+        "furioso": {
+          "titulos": 0.785,
+          "chegou_na_luta": [
+            1,
+            1,
+            1,
+            1,
+            0.9975,
+            0.9225
+          ]
+        },
+        "espelho": {
+          "titulos": 0.2075,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.5225,
+            0.5225,
+            0.5225,
+            0.275
+          ]
+        },
+        "muralha": {
+          "titulos": 0,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.585,
+            0,
+            0,
+            0
+          ]
+        },
+        "sentinela": {
+          "titulos": 0.06,
+          "chegou_na_luta": [
+            1,
+            0.2675,
+            0.2625,
+            0.2175,
+            0.15,
+            0.145
+          ]
+        },
+        "emboscador": {
+          "titulos": 0.06,
+          "chegou_na_luta": [
+            1,
+            0.4525,
+            0.445,
+            0.355,
+            0.1725,
+            0.1725
+          ]
+        },
+        "vigia": {
+          "titulos": 0.4275,
+          "chegou_na_luta": [
+            1,
+            1,
+            0.9975,
+            0.565,
+            0.5625,
+            0.5575
+          ]
+        },
+        "tita": {
+          "titulos": 0.005,
+          "chegou_na_luta": [
+            1,
+            1,
+            1,
+            0.0425,
+            0.0325,
+            0.015
+          ]
+        }
+      },
+      "vencivel_cada_luta": true,
+      "liga_completavel": true,
+      "melhor_forma_na_liga": {
+        "forma": "furioso",
+        "titulos": 0.785
+      }
+    }
+  ]
+}

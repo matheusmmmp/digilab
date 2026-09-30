@@ -1,0 +1,221 @@
+{
+  "descricao": "Conferencia das instalacoes da Fronteira (sem calibracao): o Mega de referencia com o treino tipico na Torre de Batalha e no Palacio",
+  "motor": "web/app/motor (escala CESC_V6 ligada, regras V21D, limite do desafiado = o rival)",
+  "fator": 1,
+  "teto_de_lutas": 100,
+  "treino_tipico_mega": 40,
+  "sementes": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "tentativas_por_semente_especie_forma": 20,
+  "nota_palacio": "com a lista canonica (sem trava, veto nem chip de regra) o Palacio do pet de referencia e a Torre; muda so a semente das tentativas",
+  "jogavel_melhor_forma_vence_a_primeira_em_metade_e_ninguem_no_teto": true,
+  "por_instalacao": {
+    "torre_batalha": {
+      "nome": "Torre de Batalha",
+      "referencia": {
+        "por_forma": {
+          "duelista": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.975,
+            "media": 5.515,
+            "mediana": 6,
+            "p90": 8,
+            "maximo": 11,
+            "no_teto": 0
+          },
+          "furioso": {
+            "tentativas": 400,
+            "vence_a_primeira": 1,
+            "media": 7.9775,
+            "mediana": 8,
+            "p90": 11,
+            "maximo": 15,
+            "no_teto": 0
+          },
+          "espelho": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.9025,
+            "media": 3.545,
+            "mediana": 4,
+            "p90": 6,
+            "maximo": 7,
+            "no_teto": 0
+          },
+          "muralha": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.6475,
+            "media": 1.4525,
+            "mediana": 1,
+            "p90": 4,
+            "maximo": 7,
+            "no_teto": 0
+          },
+          "sentinela": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.775,
+            "media": 3.565,
+            "mediana": 3,
+            "p90": 9,
+            "maximo": 14,
+            "no_teto": 0
+          },
+          "emboscador": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.8625,
+            "media": 3.41,
+            "mediana": 3,
+            "p90": 7,
+            "maximo": 16,
+            "no_teto": 0
+          },
+          "vigia": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.8,
+            "media": 3.43,
+            "mediana": 3,
+            "p90": 7,
+            "maximo": 11,
+            "no_teto": 0
+          },
+          "tita": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.7725,
+            "media": 2.3475,
+            "mediana": 2,
+            "p90": 5,
+            "maximo": 7,
+            "no_teto": 0
+          }
+        },
+        "melhor_forma": {
+          "forma": "furioso",
+          "tentativas": 400,
+          "vence_a_primeira": 1,
+          "media": 7.9775,
+          "mediana": 8,
+          "p90": 11,
+          "maximo": 15,
+          "no_teto": 0
+        }
+      },
+      "pet_do_e2e": {
+        "pet": "Valkyrimon",
+        "arquetipo": "Emboscador",
+        "treino": 40,
+        "tentativas": 50,
+        "vence_a_primeira": 1,
+        "media": 7.64,
+        "mediana": 8,
+        "p90": 11,
+        "maximo": 14,
+        "no_teto": 0
+      }
+    },
+    "palacio": {
+      "nome": "Palácio",
+      "referencia": {
+        "por_forma": {
+          "duelista": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.96,
+            "media": 5.6225,
+            "mediana": 6,
+            "p90": 8,
+            "maximo": 11,
+            "no_teto": 0
+          },
+          "furioso": {
+            "tentativas": 400,
+            "vence_a_primeira": 1,
+            "media": 7.985,
+            "mediana": 8,
+            "p90": 11,
+            "maximo": 16,
+            "no_teto": 0
+          },
+          "espelho": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.8875,
+            "media": 3.6125,
+            "mediana": 4,
+            "p90": 6,
+            "maximo": 9,
+            "no_teto": 0
+          },
+          "muralha": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.5775,
+            "media": 1.48,
+            "mediana": 1,
+            "p90": 4,
+            "maximo": 9,
+            "no_teto": 0
+          },
+          "sentinela": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.76,
+            "media": 3.4125,
+            "mediana": 3,
+            "p90": 8,
+            "maximo": 19,
+            "no_teto": 0
+          },
+          "emboscador": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.835,
+            "media": 3.4975,
+            "mediana": 3,
+            "p90": 8,
+            "maximo": 16,
+            "no_teto": 0
+          },
+          "vigia": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.795,
+            "media": 3.235,
+            "mediana": 3,
+            "p90": 7,
+            "maximo": 11,
+            "no_teto": 0
+          },
+          "tita": {
+            "tentativas": 400,
+            "vence_a_primeira": 0.7625,
+            "media": 2.3825,
+            "mediana": 2,
+            "p90": 5,
+            "maximo": 7,
+            "no_teto": 0
+          }
+        },
+        "melhor_forma": {
+          "forma": "furioso",
+          "tentativas": 400,
+          "vence_a_primeira": 1,
+          "media": 7.985,
+          "mediana": 8,
+          "p90": 11,
+          "maximo": 16,
+          "no_teto": 0
+        }
+      },
+      "pet_do_e2e": {
+        "pet": "Valkyrimon",
+        "arquetipo": "Emboscador",
+        "treino": 40,
+        "tentativas": 50,
+        "vence_a_primeira": 1,
+        "media": 8.04,
+        "mediana": 8,
+        "p90": 12,
+        "maximo": 14,
+        "no_teto": 0
+      }
+    }
+  }
+}

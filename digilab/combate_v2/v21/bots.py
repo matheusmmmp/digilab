@@ -193,6 +193,60 @@ RESPOSTAS_V21C = {**RESPOSTAS, "marcar": (
 
 FORMAS = tuple(ADULTOS)
 
+# V21D, candidato C (docs/EQUILIBRIO_RODADA1.md; chave muralha_lista_espelho, desligada por padrao): a muralha luta
+# com a lista do espelho, como a alavanca (d) "gambits da irma" medida no diagnostico dos arquetipos. As regras de
+# contra_golpe fora de perto ficam na lista mas nunca disparam na muralha (sem a passiva do espelho o contra_golpe
+# so e legal de perto; a lista cai na regra seguinte). ADULTOS["muralha"] (a canonica) nao muda.
+GAMBITS_MURALHA_V21D = ListaGambits(ADULTOS["espelho"].regras, ADULTOS["espelho"].final, "adulto")
+
+
+# V21D, rodada 2 (docs/EQUILIBRIO_RODADA2.md; chaves desligadas por padrao). Listas variantes do colosso, montadas a
+# partir das canonicas (ADULTOS["tita"] e ADULTOS["vigia"] nao mudam):
+# - E2 (tita_bate_em_quem_recua, vigia_bate_em_quem_recua): "de perto, contra quem recua com frequencia, golpe
+#   rapido" entra logo antes do preparar; sai "oponente preparando -> esquivar" (com o candidato A o preparo sob pele
+#   ja nao aparece, e o tita responde ao preparo com a pele antes).
+# - V (vigia_recua_do_preparo_sob_pele): "o oponente vai preparar e usa pele com frequencia -> recuar" entra no topo
+#   do vigia: o preparo sob pele nao se interrompe, entao ele sai de perto e o pesado erra por distancia. Sai
+#   "guts abaixo de 20 -> carregar" (a final defender tambem recupera guts).
+REGRA_BATE_EM_QUEM_RECUA = regra(se(_d(PERTO), C("oponente_frequente", (A.RECUAR,))), A.GOLPE_RAPIDO)
+REGRA_RECUA_DO_PREPARO_SOB_PELE = regra(se(C("oponente_vai_preparar"), C("oponente_frequente", (A.PELE_DURA,))),
+                                        A.RECUAR)
+
+
+def _lista_colosso_v21d(forma: str, bate: bool, recua: bool) -> ListaGambits:
+    regras = list(ADULTOS[forma].regras)
+    if bate:
+        regras.remove(regra(PREP, A.ESQUIVAR))
+        regras.insert(regras.index(regra(se(_d(PERTO), _ga(20)), A.PREPARAR_PESADO)), REGRA_BATE_EM_QUEM_RECUA)
+    if recua:
+        regras.remove(regra(_gb(20), A.CARREGAR))
+        regras.insert(0, REGRA_RECUA_DO_PREPARO_SOB_PELE)
+    return ListaGambits(tuple(regras), ADULTOS[forma].final, "adulto")
+
+
+GAMBITS_TITA_V21D = _lista_colosso_v21d("tita", bate=True, recua=False)
+GAMBITS_VIGIA_V21D = {(b, r): _lista_colosso_v21d("vigia", b, r) for b, r in ((True, False), (False, True), (True, True))}
+
+
+def gambits_adulto(forma: str, cfg: ConfigCombateV21 | None = None) -> ListaGambits:
+    """Lista canonica da forma adulta (normal ou sombria) sob as regras `cfg`: a de ADULTOS/SOMBRIOS, salvo as listas
+    variantes das chaves da ConfigCombateV21D ligadas (muralha: muralha_lista_espelho; tita: tita_bate_em_quem_recua;
+    vigia: vigia_bate_em_quem_recua e vigia_recua_do_preparo_sob_pele). As sombrias nao mudam."""
+    cfg = cfg or CONFIG_COMBATE_V21
+    if forma == "muralha" and getattr(cfg, "muralha_lista_espelho", False):
+        return GAMBITS_MURALHA_V21D
+    if forma == "tita" and getattr(cfg, "tita_bate_em_quem_recua", False):
+        return GAMBITS_TITA_V21D
+    if forma == "vigia":
+        chave = (getattr(cfg, "vigia_bate_em_quem_recua", False), getattr(cfg, "vigia_recua_do_preparo_sob_pele", False))
+        if any(chave):
+            return GAMBITS_VIGIA_V21D[chave]
+    if forma in ADULTOS:
+        return ADULTOS[forma]
+    if forma in SOMBRIOS:
+        return SOMBRIOS[forma]
+    raise KeyError(f"forma adulta desconhecida: {forma!r}")
+
 # formas sombrias (TAREFA_TREINO_SOMBRIO): "a sombra corrompe o que o pet e, nao apaga" -> cada uma
 # luta com os gambits da forma normal da linha de estilo mais proximo; regras com acao que a passiva
 # sombria proibe simplesmente nunca disparam (eh_legal). PROPOSTO.
@@ -236,7 +290,7 @@ def lutador_adulto(forma: str, especie: str, cfg: ConfigCombateV21 | None = None
     if f.sombria:
         eps = max(eps, CONFIG_SOMBRIO.epsilon_minimo)          # instavel: ignora os gambits as vezes
     return Lutador(nome or f"{forma}@{especie}", perfil(f, None, carater_canonico(forma, cfg), 1.0, cfg, cat, escala=escala),
-                   gambits or ADULTOS.get(forma) or SOMBRIOS[forma], eps)
+                   gambits or gambits_adulto(forma, cfg), eps)
 
 
 def lutador_adolescente(linha: str, especie: str, carater: dict, cfg: ConfigCombateV21 | None = None,

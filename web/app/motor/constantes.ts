@@ -30,8 +30,16 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
 /* versao do pet salvo: 1 = memoria curta antiga, sem vinculo nem obediencia; 2 = memoria por espacos +
    vinculo + obediencia + condicao no combate; 3 = v2 + carater pelo desvio da politica; 4 = v3 + educacao,
    lesoes e qualificacao por vitorias (docs/DESIGN_EDUCACAO_HERANCA_LESOES.md, espelho de digilab/educacao.py);
-   5 = v4 + evolucao canonica: o Ultimate vira Mega, um estagio proprio (docs/DESIGN_EVOLUCAO_CANONICA.md; so no jogo) */
-export const VERSAO_PET = 5;
+   5 = v4 + evolucao canonica: o Ultimate vira Mega, um estagio proprio (docs/DESIGN_EVOLUCAO_CANONICA.md; so no jogo);
+   6 = v5 + trava da evolucao pelas medalhas do Tamer (evento "u" no registro; docs/DESIGN_MEDALHAS_ARENAS.md; so no jogo);
+   7 = v6 + voz propria: fala espontanea com janela e mentira (evento "fl"; docs/DESIGN_VOZ_PROPRIA.md, secao 9);
+   8 = v7 + confianca de combate e desgaste por rival repetido (MVP M1; nenhum evento novo, estado derivado das lutas "l";
+   docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py) */
+export const VERSAO_PET = 8;
+/* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
+   chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
+   In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
+export const CMD = { adolescente: 1, adulto: 3, mega: 5 };
 /* evolucao canonica (pets v5, so no jogo; docs/DESIGN_EVOLUCAO_CANONICA.md, tudo PROPOSTO). O Mega e um estagio proprio
    depois do adulto (Ultimate): a forma (e a passiva) vem do Ultimate, o pet fica mais forte. Ultimate -> Mega pede o tempo do
    Ultimate, a qualificacao da passagem para adulto (CAT.sparring lutas no estagio, CLE.limiarTaxa de vitoria) e
@@ -53,9 +61,15 @@ export const CED = {
 /* lesoes e qualificacao por vitorias (espelho de ConfigLesoes): so lutas fora da arena de pesquisa */
 /* expPorVitoria/expMax: estilo "lutar" (experiencia de combate, decisao do Matheus em 2026-09-29) */
 export const CLE = { probLesao: .2, lesoesMorte: 20, horasMorte: 6, limiarTaxa: .8, expPorVitoria: .002, expMax: .05 };
+/* mentira (pets v7; espelho de ConfigMentira, DESIGN_VOZ_PROPRIA secao 9). No jogo a fala vem do evento "fl" (gatilho);
+   os slots da pesquisa (intervalo_fala_min, defasagem_fala_min) nao existem aqui.
+   h = (fatorSombria se sombria) x (1 - pesoSobrecarga x sobrecarga/100) x especie; p = 0 com h = 1 ou `acertos` broncas
+   certas seguidas em mentiras; senao min(tetoChance, coefChance (1-h)(1-disciplina/max) + reforcoImpune x impunes) */
+export const CMEN = { fatorSombria: .4, pesoSobrecarga: .5, coefChance: .5, reforcoImpune: .05, tetoChance: .8, acertos: 3,
+  impunesPremiada: 2, janela: 30, fracaoTemaEstado: .5, honestidadeEnganador: .7 };
 /* heranca (espelho de ConfigHeranca): temperamento = media dos pais + N(0, sigma); especie sorteada entre as dos pais */
 export const CHE = { sigma: .1 };
-/* confianca de combate e desgaste por rival repetido (MVP M1, espelho de ConfigConfianca; pets v5; tudo PROPOSTO,
+/* confianca de combate e desgaste por rival repetido (MVP M1, espelho de ConfigConfianca; pets v8; tudo PROPOSTO,
    sem fonte). lambda/tauHab: novidade por rival; eta/kSens/tauConf: a confianca; kappaEps: so o epsilon do lutador
    sobe com a inseguranca; limiarFrase/histerese/limiarTedio/nTedio: as frases de estado (motor/confianca.ts) */
 export const CCF = { lambda: .7, tauHab: 2880, eta: .25, kSens: .5, tauConf: 1440, kappaEps: .10, limiarFrase: .4, histerese: 120, limiarTedio: .3, nTedio: 3 };
@@ -149,6 +163,13 @@ export const CV21 = {
   duelista: 4, limFurioso: .5, multFurioso: 1.25, espelho: 1, muralha: 3, recargaSent: 4, multEmb: 2, multTita: 1.3,
   maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<EstagioBase, number>, turnos: [5, 10, 20],
 };
+/* V21D: reequilibrio dos arquetipos, variante a_c_e2v_v (docs/EQUILIBRIO_RODADA2.md, validada em docs/VALIDACAO_V21D.md;
+   chaves da ConfigCombateV21D, experiments/configs/v21d/validacao.json). So nas lutas de pets v6 (versaoPet em diante):
+   os v1-v5 lutam com a V21C. As outras chaves da V21D (D2, E1, E2 no tita) ficam desligadas e nao existem na web */
+export const CV21D = {
+  versaoPet: 6,
+  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
+} as const;
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];
@@ -196,6 +217,36 @@ export const CESC = {
     npc_tier3_soberano: 1.2 } as Record<string, number>,
   epsNpc: .2,
   vidaNeutra: 100,       /* hpBase + 10 x hpVigor: vida exibida = E x vida propria / vida neutra */
+};
+/* escala dos pets v6 (so no jogo; decisao do Matheus, 2026-09-30: "o treino tem que decidir" e "o estagio tem que pesar").
+   Mesma formula da CESC (E = vida do estagio x (1 + beta x pontos); o dano da campanha vale x E_A/E_B), com a vida de cada
+   estagio (o Mega inclusive) e o peso do ponto de treino proprios. Vale so nas lutas de escala dos pets v6 (campanha e arenas:
+   o pet, pela versao dele, e o NPC, pelas regras da luta); CESC, os pets v1-v5 e o Python da pesquisa nao mudam. fatorNpc:
+   os desafiantes da campanha v6 (os NPCs que nao sao lideres) recalibrados na escala nova; os lideres tem o fator em
+   arenas.ts. Numeros PROPOSTOS, calibrados em test/calibrar_escala_v6.mjs e test/calibrar_arenas.mjs
+   (artifacts_campanha/escala_v6/, artifacts_campanha/arenas/). */
+export const CESC_V6 = {
+  versaoPet: 6,
+  vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,
+  beta: .045,
+  /* Tortomon: nenhum fator fecha as metas (o de maior folga; a excecao da Sentinela de sempre, agora na escala v6). Com a regra
+     do limite do desafiado (2026-09-30) o Tortomon e o Machinedramon sairam das metas na validacao e foram recalibrados (1,6 -> 1,5
+     e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
+  fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
+};
+/* itens do Tamer (medalhas, parte 3; so no jogo e so nos pets v6; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13). Numeros PROPOSTOS e SEM
+   EQUILIBRIO (decisao do Matheus, 2026-09-30: o equilibrio dos itens entra na rodada de equilibrio geral do combate, depois das
+   proximas mecanicas). vagas: chips equipados por pet pelas medalhas que ele conhece ([minimo de medalhas, chips], do maior para o
+   menor; sem medalha, nenhum). tetoChipStat: a soma dos chips de stat vale no maximo esta fracao do treino tipico do estagio (tipico:
+   o das metas da parte 2, test/calibrar_arenas.mjs). espera: minutos do relogio do pet entre duas cartas de revanche do mesmo lider.
+   gutsFolego, curaAbaixo e curaFracao: as cartas de Folego e de Cura */
+export const CIT = {
+  versaoPet: 6,
+  vagas: [[5, 3], [3, 2], [1, 1]] as readonly (readonly [number, number])[],
+  tetoChipStat: .25,
+  tipico: { crianca: 8, adolescente: 22, adulto: 36, mega: 40 } as Readonly<Partial<Record<Estagio, number>>>,
+  espera: 1440,
+  gutsFolego: 20, curaAbaixo: .3, curaFracao: .2,
 };
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */

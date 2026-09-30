@@ -160,7 +160,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .pet-fala .fala-ponto{width:8px;height:8px}
 .fala-det{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0}
 .pet-status{color:var(--dl-text-2);font-size:14px}
-/* confianca de combate (M1, pets v5): a frase de estado e, aberta, as lutas do registro que a causaram */
+/* confianca de combate (M1, pets v8): a frase de estado e, aberta, as lutas do registro que a causaram */
 .pet-conf{display:grid;gap:4px;margin-top:6px}
 .pet-conf-frase{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;min-height:44px;padding:6px 12px;background:var(--dl-surface);color:inherit;
   border:2px solid var(--dl-border);border-radius:12px;font:inherit;font-size:13px;text-align:left;cursor:pointer}
@@ -501,6 +501,7 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .cc-marcos{list-style:none;margin:0;padding:10px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;background:rgba(15,42,102,.55);border-radius:12px;font-size:13px;font-weight:800}
 .cc-marcos li{opacity:.6}
 .cc-marcos li.feito{opacity:1}
+.cc-ouro{margin:0;display:flex;align-items:center;gap:10px;justify-content:center;font-weight:800;font-size:14px;line-height:20px}
 
 /* Meus pets no desktop (prancha MpListaDesktop): grade de espacos a esquerda, o pet escolhido a direita */
 .topo-acoes{position:relative;margin-left:auto;display:flex;gap:10px}

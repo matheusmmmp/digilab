@@ -9,6 +9,7 @@ import { Motor } from "../../../motor/index.ts";
 import { Deco } from "../../componentes/Deco.tsx";
 import { Peca } from "../../componentes/Imagens.tsx";
 import { ICONE } from "../../decoracao.ts";
+import { internetLigada, ligarInternet } from "../../voz.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { useJogo } from "../../jogo.ts";
@@ -140,6 +141,7 @@ function Dados({ irPet }: { irPet: () => void }) {
 }
 function Fala() {
   const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM();
+  const [internet, setInternet] = useState(internetLigada);
   const modos: [ModoFala, string, string, string?][] = [
     ["template", "Frases prontas", "Sempre as mesmas frases do jogo. Nunca erra, mas repete."],
     ["moldura", "Moldura", "O modelo completa uma moldura com os fatos do pet."],
@@ -161,6 +163,10 @@ function Fala() {
           </button>
         ))}
       </div>
+      <section class="dl-card cfg-bloco">
+        <label class="cfg-switch"><span><b>O pet comenta coisas da internet</b><small>Pets novos: de vez em quando ele fala de algo que ouviu no Digimundo (memes, jogos, internet). Só no modo livre.</small></span>
+          <input type="checkbox" role="switch" checked={internet} onChange={ev => { const on = (ev.target as HTMLInputElement).checked; ligarInternet(on); setInternet(on); }} /></label>
+      </section>
       <p class="dl-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
     </div>
   );

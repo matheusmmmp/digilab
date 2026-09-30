@@ -1,12 +1,13 @@
 # Design — MVP, passo M1: confiança de combate e desgaste por rival repetido
 
-Status: **IMPLEMENTADO** (2026-09-29, branch `m1-confianca`; Python e web). Todo número é PROPOSTO, sem fonte. Especificado no mesmo dia, a pedido do Matheus.
+Status: **IMPLEMENTADO** (2026-09-29, branch `m1-confianca`; Python e web; na web, **pets v8** desde o merge do `main` de 2026-09-30). Todo número é PROPOSTO, sem fonte. Especificado no mesmo dia, a pedido do Matheus.
 
 **O que foi feito e o que mudou em relação ao desenho** (detalhe na seção do M1 do `CLAUDE.md`):
-- Python: `digilab/confianca.py`, `ConfigConfianca` (`config.py`, `ligada = False`), `MotorEducacao` (só com a chave), `expressao.expressar_confianca`, registro `protocol.PARAMETROS_CONFIANCA_M1`; testes em `tests/test_confianca.py`. Web: `motor/confianca.ts`, `CCF`, `Motor.conf` nos pets v5, `estiloDoPet`, `GambitsPet.aprender(res, semente, novidade)`, `expressarConfianca`, a frase na tela do Pet (com o porquê apontando para os eventos `l` do registro) e a linha "Confiança" no Aprendizado; `test/confianca.test.ts`.
+- Python: `digilab/confianca.py`, `ConfigConfianca` (`config.py`, `ligada = False`), `MotorEducacao` (só com a chave), `expressao.expressar_confianca`, registro `protocol.PARAMETROS_CONFIANCA_M1`; testes em `tests/test_confianca.py`. Web: `motor/confianca.ts`, `CCF`, `Motor.conf` nos pets v8, `estiloDoPet`, `GambitsPet.aprender(res, semente, usadas, novidade)`, `expressarConfianca`, a frase na tela do Pet (com o porquê apontando para os eventos `l` do registro) e a linha "Confiança" no Aprendizado; `test/confianca.test.ts`.
 - **Gates rodados:** G1 (reprodução com a chave desligada: vida `atencioso@69001` byte a byte, gabaritos web v1–v3 intactos) e G2 (paridade Python × web em 200 lutas, `c` e novidade até 1e−12, mais as frases de estado com histerese). **G3–G6 não foram rodados**: pedem `docs/PLANO_ANALISE_M1.md` registrado antes, com sementes de calibração separadas (seção 5). Ficam como pendência.
 - **Registro de parâmetros à parte** (`PARAMETROS_CONFIANCA_M1`, não dentro de `PARAMETROS_EDUCACAO_V1`): assim `hash_parametros_educacao()`, gravado no meta das runs V3/E1, não muda. Nenhum dos 10 números está referendado (`confianca_nao_referendados`).
-- **Versão dos pets web:** o desenho dizia `VERSAO_PET = 5` como versão nova; os pets v5 já existiam no `main` (evolução canônica), então a confiança entrou neles (e na assinatura deles) sem criar v6. Pets v1–v4 não mudam.
+- **Versão dos pets web: v8** (`VERSAO_PET = 8` = v7 + confiança; padrão do projeto, uma versão de pet por mecânica). O desenho dizia `VERSAO_PET = 5`; a primeira implementação pôs a confiança nos v5 (que já existiam, evolução canônica). Enquanto isso entraram no `main` as medalhas (v6), o combate V21D, a Fronteira e a voz própria (v7), e no merge de 2026-09-30 a confiança passou a valer só para `versao >= 8`: pets v1–v7 não mudam de comportamento nem de assinatura, e nenhum save é descartado. Onde o texto abaixo diz "v5", leia "v8" (e "v4", "v7").
+- **Séries de lutas (Cidadela, Liga, Fronteira; não existiam no desenho):** cada luta da série é uma luta da confiança, com o rival dela (`rivalDaConfianca`): as 3 seguidas da Cidadela são o mesmo rival repetido (a novidade cai dentro da série); na Liga cada Mega de líder é um rival (`liga:<líder>`); na Torre, no Palácio e no Salão o rival é a forma sorteada (`forma:…`, a mesma forma de novo é o mesmo rival). O ε da série sai da confiança do começo dela (o lutador é montado uma vez). `Motor.confEvento` liga cada luta da confiança ao seu evento `l` (a tela aponta o "porquê" para ele). Só na web; o Python não tem séries.
 - **Frases com marcador em todo estágio falado:** para a cobertura conferida na carga, a versão curta da criança carrega o marcador (`[:confiante:] Ganhei!`, `[:inseguro:] Perdi de novo…`, `[:sei tudo dele:] De novo?`); o bebê mostra só o emote. A histerese vale sobre a faixa contínua (a confiança decai entre as lutas: o tick de saída da faixa é calculado, `tick_saida_faixa`).
 - **Número ilustrativo da seção 2.1:** "depois de 5 lutas seguidas, dois dias devolvem a novidade para ≈ 0,36" vale com m = 4 (antes da 5ª luta); com m = 5 (depois dela) dá ≈ 0,28. As fórmulas e os parâmetros são os da tabela; só o exemplo estava com o contador de antes.
 - **`η_s` na derrota** usa `η·(1 − k_sens·sensibilidade)` (decisão do Matheus, 2026-09-29): no temperamento, sensibilidade < 0 é quem responde mais a repreensão, e a repreensão já pesa `1 − 0,5·s` (`ConfigTemperamento`); a derrota segue a mesma forma, e o pet melindroso sente mais a derrota. O desenho original dizia `1 + k·s`.
@@ -81,7 +82,7 @@ Só o **ε do lutador do pet** (a chance de ignorar os próprios gambits) muda, 
 - A confiança positiva **não** reduz o ε além do que o v4 já faz. O ganho de ser confiante fica na fala e no aprendizado dos gambits (2.4), e isso impede um efeito vencedor que se retroalimenta na força.
 - Com κ = 0,10, um pet no fundo do poço (c = −1) tem +0,10 de ε. É da mesma ordem que um pet sem disciplina (`delta_epsilon_indisciplina` = 0,10).
 
-### 2.4 Experiência e aprendizado de gambits, pesados pela novidade (pets v5)
+### 2.4 Experiência e aprendizado de gambits, pesados pela novidade (pets v5; na implementação, v8)
 
 - **Experiência de combate:** cada vitória soma `novidade` em vez de 1. O teto `CLE.expMax` continua. Nos dois lados (Python e web).
 - **Gambits híbridos:** o passo de aprendizado de cada luta é `GA.alfa · novidade`. Os gambits híbridos existem só na web, e continuam só na web (`REGISTRO_DESVIOS`, como hoje).
@@ -126,7 +127,7 @@ Quatro frases, com limiar e histerese (a frase só troca depois de 2 h de jogo n
 **Web** (`web/app/`):
 - `motor/confianca.ts` (espelho).
 - `motor/constantes.ts`: `CCF`, conferido contra o Python por `mapa_constantes.json` e `constantes.test.mjs`.
-- `motor/motor.ts` e `gambits_pet.ts`: `VERSAO_PET = 5`. Os pets v1–v4 rejogam igual; só os ovos novos são v5.
+- `motor/motor.ts` e `gambits_pet.ts`: `VERSAO_PET = 5`. Os pets v1–v4 rejogam igual; só os ovos novos são v5. (Na implementação, depois do merge do `main`: `VERSAO_PET = 8`, v1–v7 rejogam igual.)
 - `motor/expressao.ts` e a tela do Pet: a frase de estado e o "porquê" com as lutas da causa.
 - `Aprendizado`: uma linha "Confiança", só em palavras.
 

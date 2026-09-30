@@ -22,9 +22,10 @@ const PY = lerJson(aqui("./gabaritos/constantes_python.json"));
 /* objetos de constantes do motor web cobertos pela tabela (todas as folhas numericas de cada um) */
 const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APTIDAO", "CSO", "CCOND", "CD", "CT", "CA", "CE",
   "CV", "CV21", "CAT", "CCP", "GA", "DUR_EVO", "CHAMADO_BEBE", "BASE_CARATER", "DESLOC_CARATER", "CAMPANHA", "LUGARES"];
-/* so no motor em TS: pets v4 (educacao-v1) e v5 (evolucao canonica) nao existem no HTML; conferidas so contra o
-   Python (as v5 quase todas so_web) */
-const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CCF"];
+/* so no motor em TS: pets v4 (educacao-v1), v5 (evolucao canonica) e v6 (medalhas do Tamer, arenas e a escala propria,
+   CESC_V6) nao existem no HTML; a escala (CESC, pets v1-v5) tambem nao existe no HTML e e conferida contra a ConfigEscala;
+   conferidas so contra o Python (as v5 quase todas so_web; as v6 todas) */
+const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CV21D", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CESC_V6", "CIT", "CMEN", "CCF"];   /* CMEN: pets v7 (voz propria); CCF: pets v8 (confianca, M1) */
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
 const raizDe = cam => cam.match(/^[^.[]+/)[0];
 
@@ -111,6 +112,24 @@ for (const [fonte, WEB] of FONTES) {
   });
 
 }
+
+/* V21D nos pets v6 (docs/VALIDACAO_V21D.md): as chaves booleanas da web = as ligadas na config da variante validada, e cada
+   uma e campo da ConfigCombateV21D (padrao False no Python: la a variante vem do config). As chaves que a config deixa
+   desligadas nao existem na web */
+test("ts: chaves_v21d: toda chave booleana do CV21D tem par; valor = config da variante validada", () => {
+  const web = new Map(Object.entries(MOTOR_TS.CV21D).filter(([, v]) => typeof v === "boolean").map(([k, v]) => ["CV21D." + k, v]));
+  assert.deepEqual(MAPA.chaves_v21d.map(e => e.web).sort(), [...web.keys()].sort());
+  const erros = [];
+  for (const e of MAPA.chaves_v21d) {
+    if (pegar(PY, e.py) !== false) erros.push(`${e.py} precisa existir e ser desligado por padrao no Python`);
+    const c = pegar(lerJson(RAIZ_REPO + e.arquivo), e.chave);
+    if (web.get(e.web) !== c) erros.push(`${e.web} = ${web.get(e.web)} × ${e.arquivo}:${e.chave} = ${c}`);
+  }
+  const cfg = lerJson(RAIZ_REPO + "experiments/configs/v21d/validacao.json").regras_v21;
+  const ligadas = Object.keys(cfg).filter(k => cfg[k]).sort();
+  assert.deepEqual(MAPA.chaves_v21d.map(e => e.chave.replace("regras_v21.", "")).sort(), ligadas, "a web liga exatamente as chaves ligadas na config");
+  assert.deepEqual(erros, []);
+});
 
 test("o teste pega uma diferenca (controle negativo)", () => {
   const e = MAPA.pares[0], p = pegar(PY, e.py);

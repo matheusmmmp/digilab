@@ -6,15 +6,19 @@
 // folga min(0,30 - sem, com - 0,80); se nenhum passar, o de maior folga. A Cidadela dos pets v5 (Myotismon = o Piedmon
 // de sempre, fator 1,2) e medida com Ultimates (treino tipico 36), so para conferir.
 //
-// uso (em web/app): node test/calibrar_mega.mjs [--validar] [-n 10]
+// uso (em web/app): node test/calibrar_mega.mjs [--validar] [--v21d] [-n 10]
 //   sem --validar: sementes de calibracao, fatores 0,8..3,0 -> artifacts_campanha/mega/calibracao.json
 //   --validar: sementes de validacao, fatores de CAMPANHA_V5 -> artifacts_campanha/mega/validacao.json
+//   --v21d (so com --validar): as lutas com as regras dos pets v6 (CV21D, docs/VALIDACAO_V21D.md): a muralha e o vigia com
+//     as listas variantes e o preparo sob pele oculto; mesmos fatores -> artifacts_campanha/mega/validacao_v21d.json (relato)
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
 const { CAMPANHA_V5, CESC, CMG, ESPECIES, FORMAS_AD, LINHA_DA_FORMA, STATS } = M;
-const args = process.argv.slice(2), validar = args.includes("--validar");
+const args = process.argv.slice(2), validar = args.includes("--validar"), v21d = args.includes("--v21d");
+if (v21d && !validar) throw new Error("--v21d so mede os fatores de hoje (--validar): nao recalibra");
+const R = v21d ? M.CV21D : null;
 const n = args.includes("-n") ? Number(args[args.indexOf("-n") + 1]) : 10;
 const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO;
@@ -25,17 +29,17 @@ M.ligarEscala(true);
 function pet(forma, esp, nivel, mega) {
   const f = { esp, est: mega ? "mega" : "adulto", ramo: "sereno", linha: LINHA_DA_FORMA[forma], adulta: forma };
   const tr = nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null;
-  return { nome: `${forma}+${nivel}@${esp}${mega ? ":mega" : ""}`, estilo: M.estiloBot(forma), cond: M.perfilDe(f, M.caraterCanonico(forma), 1, tr, true) };
+  return { nome: `${forma}+${nivel}@${esp}${mega ? ":mega" : ""}`, estilo: M.estiloBot(forma, R), cond: M.perfilDe(f, M.caraterCanonico(forma), 1, tr, true) };
 }
 function npc(c, fator, mega) {
-  return { nome: `${c.k}x${fator}`, estilo: { ...M.estiloBot(c.k), eps: CESC.epsNpc },
+  return { nome: `${c.k}x${fator}`, estilo: { ...M.estiloBot(c.k, R), eps: CESC.epsNpc },
     cond: M.perfilNPC(c.total, mega ? "mega" : "adulto", M.escalaDe(mega ? "mega" : "adulto", 0) * fator) };
 }
 function taxa(a, b) {
   let soma = 0, tot = 0;
   for (const s of sementes) for (let k = 0; k < n; k++) {
     const sp = M.hashSemente("calib-mega", s, a.nome, b.nome, k);
-    soma += k < n / 2 ? M.jogarV2(a, b, sp).pontosA : 1 - M.jogarV2(b, a, sp).pontosA; tot++;
+    soma += k < n / 2 ? M.jogarV2(a, b, sp, R).pontosA : 1 - M.jogarV2(b, a, sp, R).pontosA; tot++;
   }
   return soma / tot;
 }
@@ -51,7 +55,8 @@ function medir(c, fator, mega, nivelTipico) {
 }
 
 const espiral = CAMPANHA_V5.filter(c => c.lug === 3), cidadela = CAMPANHA_V5.filter(c => c.lug === 2);
-const out = { descricao: "Calibracao dos NPCs da Montanha Espiral (pets v5): motor web, escala ligada.", conjunto: validar ? "validacao" : "calibracao",
+const out = { descricao: "Calibracao dos NPCs da Montanha Espiral (pets v5): motor web, escala ligada." + (v21d ? " Regras V21D (pets v6), so relato." : ""),
+  conjunto: validar ? "validacao" : "calibracao", ...(v21d ? { regras: "v21d" } : {}),
   sementes, n_por_semente: n, metas: { sem_treino_max: META_SEM, com_treino_min: META_COM }, treino_tipico: { mega: CMG.tetoVida, ultimate: 36 },
   espiral: {}, cidadela: {} };
 for (const c of espiral) {
@@ -71,4 +76,4 @@ for (const c of cidadela) {
 }
 const pasta = fileURLToPath(new URL("../../../artifacts_campanha/mega/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
-writeFileSync(pasta + (validar ? "validacao.json" : "calibracao.json"), JSON.stringify(out, null, 1) + "\n");
+writeFileSync(pasta + (validar ? (v21d ? "validacao_v21d.json" : "validacao.json") : "calibracao.json"), JSON.stringify(out, null, 1) + "\n");

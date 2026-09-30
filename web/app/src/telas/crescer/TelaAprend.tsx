@@ -215,9 +215,9 @@ function Lembrancas() {
 }
 
 /* ------------------------------------------------ Jeito: temperamento, desejo, vinculo e tracos */
-/** confianca de combate (M1, pets v5) so em palavras: o estado mostrado (com histerese) e as lutas da causa */
+/** confianca de combate (M1, pets v8) so em palavras: o estado mostrado (com histerese) e as lutas da causa */
 function confiancaEmPalavras(m: Motor): string {
-  if (m.versao < 5) return "pet de versão antiga: sem confiança de combate (um pet novo já nasce com ela)";
+  if (m.versao < 8) return "pet de versão antiga: sem confiança de combate (um pet novo já nasce com ela)";
   const e = m.estadoConfianca()!, n = lutasDaCausa(m, e.lutas, e.estado).length;
   const desde = e.desde !== null ? ` desde D${diaDe(e.desde)} ${hhmm(e.desde)}` : "";
   if (e.estado === "confiante") return `confiante${desde}: ganhou as últimas (${n} ${n === 1 ? "vitória" : "vitórias"} no registro); nada muda na luta`;

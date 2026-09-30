@@ -744,3 +744,322 @@ runs antigas não mudam (teste e suíte: 344 passaram, 1 pulado). Interpretaçõ
   - conferência: a reanálise da rodada `especie_fixa` gera um `resultado.json` idêntico ao original.
 - **Daqui em diante:** as runs deste branch rodam na worktree `D:\Trab\digilab\v1-linhagem`.
 
+
+## 2026-09-29 — medalhas do Tamer e trava da evolução só no jogo (pets v6)
+
+- **Desvio entre o jogo e a pesquisa:** o Tamer, as medalhas e a trava da evolução (1/3/5 medalhas para Champion/Ultimate/Mega)
+  existem **só no jogo web** (`web/app/`, pets v6, evento `u` no registro do pet; `docs/DESIGN_MEDALHAS_ARENAS.md`, parte 1). O
+  Python da pesquisa (`digilab/`, `experiments/`), os protocolos e os hashes não mudam; o pet de pesquisa evolui sem medalha.
+- **Saves descartados** (decisão do Matheus): na primeira abertura depois da atualização o app apaga o pet ativo e os guardados
+  (v1–v5), avisa e começa num ovo novo v6. Os gabaritos de paridade (v1–v3) e os testes de v4/v5 continuam iguais.
+- **Fonte provisória de duas medalhas** até as arenas da parte 2: a 3ª vem do Devidramon (Torre de pedra) e a 5ª do Machinedramon
+  (Montanha Espiral). Medido no motor web (sementes 4101…4505, escala ligada, 10 lutas por semente, sem IC): um Ultimate com o
+  treino típico (36) vence o Machinedramon **0,28** em média, e só as formas caçadoras passam de 0,5 (sentinela e emboscador ≈ 1,0;
+  muralha, titã, vigia, duelista e espelho ≈ 0–0,08). Com a fonte provisória, a 5ª medalha, e com ela o Mega, depende de o Tamer ter
+  (ou criar) um caçador. O Lago da parte 2, calibrado para Ultimate, resolve.
+  **Corrigido no mesmo dia** (recomendação aceita pelo Matheus): a 5ª provisória passou a vir do **Tortomon** (Torre de pedra),
+  que o pet treinado vence (a campanha é calibrada para isso). O número acima fica como o motivo da troca.
+- **Tempo dos estágios nos pets v6:** Rookie → Champion e Champion → Ultimate contam o tempo desde a evolução anterior
+  (`Motor.tickLimiteEstagio`), não desde o nascimento. Com a trava, um Rookie que esperou a medalha ganharia um Champion curto.
+  Os v1–v5 não mudam (teste).
+- **Cenários:** os pets simulados (Diário · Cenários) ficam v5 (`VERSAO_CENARIO`), sem Tamer: evoluem como antes e não ganham medalha.
+
+
+## 2026-09-30 — V21D (variante a_c_e2v_v) validada e levada ao jogo só nos pets v6
+
+- **Decisão do Matheus:** fixar o ganho da rodada 2 com o furioso como exceção conhecida. O gate proposto
+  (`docs/DIAGNOSTICO_ARQUETIPOS.md`, seção 7) foi reduzido na validação:
+  - A1 e A2 valem para as 7 formas que não são o furioso;
+  - A3, A4 e A5 são só relatados.
+  Critérios registrados e commitados antes da run (`docs/VALIDACAO_V21D.md`, commit `357ab23`). Resultado: APROVADA.
+- **Python:** as chaves da `ConfigCombateV21D` continuam desligadas por padrão. A pesquisa (V3, E1, confirmatória) não
+  lê as chaves e não muda.
+- **Desvio entre o jogo e a pesquisa:** no jogo, os pets v6 lutam com a V21D e os v1–v5 com a V21C. Não há versão de
+  pet nova.
+- **Repertório dos gambits híbridos (só na web) não muda.** As duas regras novas do vigia entram só pela semente do vigia
+  v6, e o pet não as recebe como candidatas numa troca. Mexer no repertório mudaria o replay dos pets v1–v5.
+  **Corrigido em 2026-09-30** (medalhas, parte 2): sem elas nas candidatas, a primeira troca que as tirasse da lista as tiraria
+  para sempre. Nos pets v6, a forma do vigia (Ultimate ou Mega) recebe as duas também como candidatas de troca, no fim da lista
+  (`gambits_pet.candidatasDoVigia`, `GambitsPet.candidatas`). O repertório continua igual; os v1–v5 e as outras formas têm as
+  mesmas candidatas (`test/vigia_candidatas.test.ts`). Um vigia v6 já salvo que fizer uma troca daqui em diante pode trocar
+  por uma delas (os saves v6 não foram descartados de novo).
+- **Saves descartados de novo** (autorizado pelo Matheus): os pets v6 de antes mudariam de comportamento no replay.
+  - O descarte único ganhou um marcador de versão (`…-descarte` = 2) e tira os pets até v6, com o mesmo aviso.
+  - Com pet descartado, o registro do Tamer também recomeça sem medalhas, porque o aviso diz "nenhuma medalha". As
+    medalhas ganhas com o combate antigo saem junto.
+  - Sem pet para descartar, o Tamer fica como está.
+- **NPCs web-only da campanha v5** (Espiral e Cidadela): não entraram nos critérios. Foram medidos com a V21D depois,
+  como relato, e seguem nas metas (`artifacts_campanha/mega/validacao_v21d.json`).
+
+
+## 2026-09-30 — arenas com líderes (medalhas, parte 2) só no jogo (pets v6)
+
+- **Desvio entre o jogo e a pesquisa:** as seis arenas, os lugares novos (Floresta e Lago), as regras de arena e os líderes existem
+  **só no jogo web** (`web/app/`, pets v6; `docs/DESIGN_MEDALHAS_ARENAS.md`, seção 12). `digilab/` e `experiments/` não mudam; a
+  campanha da pesquisa continua a de sempre.
+- **Líderes:** a Floresta ficou com o **Youkomon** e não com o Kyubimon sugerido, porque o Kyubimon é forma de pet (Champion guardião
+  do brasão Coragem). O Lago ficou com o **MarinBullmon** (Ultimate do atlas que não é forma de pet).
+- **Como cada regra foi feita (interpretações):**
+  - Torre (paciência): o NPC líder ganha técnica (os NPCs não tinham): o contra-golpe, com as regras dele da lista do espelho.
+  - Floresta (leitura): a troca de padrão é pela condição de turno (`turno_execucao` 10) numa lista própria do líder, sem mexer no
+    combate. A primeira lista não fechava as metas; a final saiu de 30 variantes medidas só nas sementes de calibração.
+  - Cidadela (resistência): as três lutas são **um evento `l` só** (sem campo novo): as sementes da 2ª e da 3ª derivam da do evento;
+    o pet leva vida e guts, o líder volta inteiro; o pet luta a série com a lista do começo e aprende depois de cada luta, na ordem;
+    cada luta conta nas lutas do estágio e na lesão; a vitória no lugar e a medalha só vêm com as três.
+  - Lago (vínculo): "o pet decide sozinho" = a lista sem as travas (só a nota ordena) e com as regras vetadas de volta, as que ele
+    conhece (com nota) e a forma permite, cortada na capacidade. Sem trava nem veto é a lista de sempre.
+- **Fatores dos líderes:** calibrados no motor web com as regras dos pets v6 (`web/app/test/calibrar_arenas.mjs`,
+  `artifacts_campanha/arenas/`). O pet de referência fica sempre no lado A (o `calibrar_mega.mjs` alternava os lados), porque a série
+  da Cidadela só existe com o pet no lado A, como no jogo. Os fatores da luta de arena valem só nela; nas campanhas de antes os NPCs
+  seguem com os de sempre. Recalibrados na escala dos pets v6 (entrada seguinte).
+- **Saves v6:** o descarte único versão 3 (no mesmo branch) tira os pets v6 de antes das arenas, com o mesmo aviso (o replay das lutas
+  contra o Guardromon e o Myotismon mudaria); a versão 4 tira os de antes da escala v6 (entrada seguinte).
+- **Correção do vigia (mesmo branch):** as duas regras novas do vigia V21D viraram candidatas de troca nos pets v6 (seção V21D acima).
+
+## 2026-09-30 — escala dos pets v6 (`CESC_V6`) diverge da escala da pesquisa
+
+- **Desvio entre o jogo e a pesquisa:** decisão do Matheus (2026-09-30): "o treino tem que decidir" contra cada líder e "o estágio tem
+  que pesar" (um Champion não derrota um Mega; contra um Ultimate, passa sufoco). As lutas de escala dos pets v6 (campanha e arenas)
+  usam uma escala própria, `CESC_V6` (`web/app/motor/constantes.ts`): mesma fórmula da `ConfigEscala` (E = vida do estágio × (1 + β ×
+  pontos); dano × E_A/E_B), com vida Rookie 200, Champion 700, Ultimate 2500, Mega 23000 (bebê 50) e **β = 0,045** (na pesquisa: 200,
+  600, 1500, Mega 3000 do `CMG`, β 0,03). A `CESC`, a `ConfigEscala`, os pets v1–v5, os gabaritos e `digilab/`/`experiments/` não
+  mudam; o `constantes.test.mjs` passou a conferir a `CESC` contra a `ConfigEscala` e registra a `CESC_V6` como só na web.
+- **Quem usa qual escala:** o pet pela versão dele; o NPC pelas regras da luta (a luta de um pet v6 usa a V21D, e com ela a escala v6).
+  Os desafiantes da campanha v6 (não líderes) ganharam fatores próprios em `CESC_V6.fatorNpc`; nos pets v1–v5, os de sempre.
+- **Metas (PROPOSTAS a partir da decisão, medidas na escala com os bots canônicos e as 4 espécies de cada lado):** vizinhos (baixo com o
+  treino típico × cima sem treino) ≤ 0,10 em pontos; dois estágios de distância: nenhuma vitória. Líderes: sem treino ≤ 0,05, com o
+  treino típico ≥ 0,80, nenhuma forma < 0,5. Desafiantes: as de sempre (≤ 0,30 / ≥ 0,80 / nenhuma forma < 0,5).
+- **Método e escolhas** (`web/app/test/calibrar_escala_v6.mjs`, `artifacts_campanha/escala_v6/calibracao.json`): a luta na escala só
+  depende da razão E_A/E_B; o β sai da viabilidade dos líderes (a vida do estágio cancela) e as vidas saem das metas de estágio. Com
+  margem de 0,01 nos líderes e 0,005 nos vizinhos (cerca de 2 erros-padrão), o menor β da grade com todos os líderes viáveis (menos a
+  Torre, cuja alavanca é a lista) é 0,045 (com 0,03, 0,035 e 0,04 algum líder fica sem folga); as razões de vida são as menores da grade
+  que passam, arredondadas para cima em 2 algarismos.
+- **Distância das razões do DW1** (âncora pedida pelo Matheus: Rookie → Champion ×2, Champion → Ultimate ×2,5; Ultimate → Mega ×2, o
+  `CMG`): a escala v6 tem ×3,5, ×3,57 e ×9,2. Cada razão = (1 + β × treino típico de baixo) ÷ (razão de E que a meta pede): Rookie →
+  Champion 1,36 × 2,57; Champion → Ultimate 1,99 × 1,80; Ultimate → Mega 2,62 × 3,51. A parte do combate fica perto do DW1 (2,57 e 1,80
+  contra 2 e 2,5), menos no Mega (3,51: a curva do Ultimate treinado contra o Mega tem uma cauda longa, com vitórias por estilo); o resto
+  do afastamento vem do **peso do treino**, que precisa pesar para o treino decidir contra os líderes e que a vida do estágio de cima
+  compensa. (A razão de E do jogo equivale a vida e ataque juntos: E ×2 nos dois lados é o "HP ×2 e ataque ×2" do DW1.)
+- **O que não fechou:**
+  - **dois estágios de distância = 0,00:** não fecha com a escala. Validação: Rookie típico × Ultimate 0,0372 de vitórias, Champion
+    típico × Mega 0,0509. São vitórias por estilo: em alguns pares o de cima nunca acerta o de baixo em 40 turnos (ex.: caçador ×
+    titã, caçador × muralha), e o limite de turnos decide pela fração de vida, que a escala não muda. Na calibração a taxa já é o
+    piso (a mesma com razão de E 0,01). Fechar pede regra de combate (ex.: o limite de turnos na escala) ou mudar listas das formas,
+    fora das alavancas desta tarefa: decisão do Matheus. **Resolvido pela regra do limite do desafiado** (entrada seguinte).
+  - **Tortomon** (desafiante da Torre): nenhum fator fecha as metas (a exceção da Sentinela de sempre): fator 1,6, sem treino 0,3912,
+    colosso 0,485 na validação.
+- **Guardromon na arena da Torre:** a lista mudou (só na luta de arena dos pets v6): contra quem atira com frequência ele avança, no
+  lugar do contra-golpe (que não devolve disparo sem a passiva do espelho). Com a lista de antes nenhum fator passava a meta de 0,05 (o
+  caçador sem treino vencia atirando de longe). A ideia "paciência: devolve golpe forte" fica (`web/app/test/explorar_torre.mjs`,
+  `artifacts_campanha/arenas/torre_variantes.json`, só nas sementes de calibração).
+- **Saves:** descarte único versão 4: os pets v6 de antes da escala nova saem, com o mesmo aviso (as lutas deles mudariam no replay).
+
+## 2026-09-30 — limite de turnos: vence quem foi desafiado (só no jogo, pets v6)
+
+- **Desvio entre o jogo e a pesquisa:** decisão do Matheus (substitui a ideia de "vida absoluta", que não foi implementada): quando a
+  luta chega ao limite de turnos sem nocaute, vence quem foi desafiado. No jogo o pet sempre desafia (NPC da campanha, líder da arena,
+  bot da arena), então nos pets v6 a luta que chega ao limite é derrota do pet, e na série da Cidadela ela quebra a série. No combate
+  V21C/V21D do Python (e nos pets v1–v5, nos cenários e no gabarito de paridade V21D) o limite continua decidido pela fração de vida.
+- **Como:** `web/app/motor/combate.ts` (`fimV2`/`jogarV2` com o desafiado: lado A, lado B ou ninguém; `desafiadoDaVersao`),
+  `arenas.jogarArena` e `Motor.montarLuta`. Deriva da versão do pet: nada novo no registro. Descarte único versão 5.
+- **Validação de novo** (sementes 4101…4505, uma vez, nenhum número da escala mudou): metas de estágio (o desafiado é o de cima) vizinhos
+  0,0008, 0,0108 e 0,0041 (≤ 0,10) e **dois estágios 0,00 e 0,00** (fecha); os seis líderes passam sem mudar fator (com o treino típico
+  0,8125–0,9063, pior forma 0,535 na Cidadela); desafiantes: Tortomon e Machinedramon saíram das metas (uma forma abaixo de 0,5) e foram
+  recalibrados nas sementes de calibração (1,6 → 1,5 e 2,7 → 2,2); na nova validação o Machinedramon passa e o Tortomon não (sem treino
+  0,3087 > 0,30). Números em `artifacts_campanha/escala_v6/` e `artifacts_campanha/arenas/validacao.json`.
+- **Interpretação:** nas metas de estágio (pet contra pet) o desafiado é o pet do estágio de cima, qualquer que seja o lado.
+- **Ressalva:** a escala v6 (vidas e β) e a lista do Guardromon foram escolhidas antes da regra; com ela as metas de estágio passam com
+  folga, e a escala poderia ficar mais perto do DW1. Não foi recalibrada (a tarefa pedia só validar de novo).
+
+## 2026-09-30 — itens do Tamer (medalhas, parte 3) só no jogo (pets v6), sem equilíbrio
+
+- **Desvio entre o jogo e a pesquisa:** chips e cartas (`docs/DESIGN_MEDALHAS_ARENAS.md`, seção 13) existem só em `web/app/` e só nos
+  pets v6. Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer, medalhas nem itens.
+- **Sem equilíbrio (decisão do Matheus, 2026-09-30):** o pedido original tinha uma etapa de medição com gates (G-I1–G-I4) antes das telas.
+  O Matheus decidiu não equilibrar a cada etapa: ainda entram outras mecânicas no combate, e o equilíbrio será feito numa rodada só,
+  depois. Os itens entraram com os números PROPOSTOS da especificação, sem medição e sem ajuste; os gates ficam registrados na seção 13.7
+  para essa rodada, e `web/app/test/medir_itens.mjs` fica pronto sem ter sido rodado como etapa (sem artefato).
+- **Uma passada de medição rodou antes da decisão** (só sementes de calibração), com o catálogo sendo mudado no meio dela. Os artefatos
+  foram apagados e nada dela entrou nos itens: o catálogo e os números são os da especificação. Pista qualitativa para a rodada de
+  equilíbrio na seção 13.8.
+- **Interpretações na implementação:** o chip não se gasta (qualquer pet do Tamer tem uma cópia equipada); a espera da carta de revanche
+  conta no relógio do pet que a ganhou (por pet e por líder); a carta vale para o evento de luta inteiro (na série da Cidadela, uma vez);
+  a regra de chip que já estava na lista quando o chip entrou fica nela ao desequipar (só perde a proteção).
+- **Registro do Tamer versão 2** (lê a 1): as chaves do save e o formato do registro do pet não mudam; o pet ganha os eventos `i` e `k`.
+  Nenhum registro que já existe muda no replay, e o descarte único não subiu.
+
+## 2026-09-30 — Fronteira de Batalha, parte 4a (a Liga dos Líderes e o fim do jogo) só no jogo (pets v6); a Liga sem fator
+
+- **Desvio entre o jogo e a pesquisa:** a Liga dos Líderes, o título do Tamer e a Fronteira (`docs/DESIGN_FRONTEIRA.md`, seção 7) existem
+  só em `web/app/` e só nos pets v6. Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer, medalhas nem Liga.
+- **Desvio do desenho: o fator dos Megas da Liga é 1, não o do Piedmon da Espiral (1,6).** O desenho pedia só conferir que um Mega bem
+  treinado, com a forma certa, vence cada luta, e mandava ajustar o fator de uma luta só se ela fosse impossível para todas as formas.
+  Cada luta sozinha é vencível com o 1,6, mas a Liga inteira (sem cura) não: nenhuma das 8 formas venceu as 6 seguidas nas sementes de
+  validação (0 nas 8 formas). Mexer só na 5ª e na 6ª não bastava (sementes de calibração: com elas a 0,3 e as outras a 1,6, a melhor forma
+  vence 0,03), porque o dreno de vida vem das primeiras lutas. O jogo precisa ser completável, então a Liga ficou sem fator (o Mega na
+  escala dos pets v6, como ele é): o Piedmon precisava do 1,6 por ser um NPC de perfil neutro, sem técnica nem passiva, e os Megas da Liga
+  lutam com técnica, passiva e lista canônica. Com o 1: furioso 0,7850, vigia 0,4275, duelista 0,4075, espelho 0,2075, sentinela 0,0600, emboscador 0,0600, titã 0,0050, muralha 0,0000 (`artifacts_campanha/liga/conferencia.json`). A grade 1,6 / 1,4 / 1,2 / 1
+  foi olhada nas sementes de calibração antes da escolha e é relato; o 1 não saiu de uma meta. **Para o Matheus decidir** na rodada de
+  equilíbrio: manter sem fator, ou pôr um fator entre 1 e 1,2 (com 1,2 só o vigia ainda vence, 0,0975).
+- **Interpretações:** a tentativa inteira é um evento de luta `l` do pet, `{r: "liga", s}` (como a série da Cidadela), sem o evento `f` do
+  desenho (a regra sai do rival); as lesões da derrota na Liga seguem a regra de toda luta ("tentar de novo sem custo" = sem custo de
+  entrada); o título é um evento `campeao` por pet (o primeiro é o título do Tamer); a entrada confere as medalhas que o pet conhece
+  (evento `u`), porque o motor não lê o Tamer; o In-Training não entra.
+- **Registro do Tamer versão 3** (lê a 1 e a 2). O registro do pet não muda de formato; a assinatura dos v6 só ganha a Liga depois da
+  primeira tentativa. Pets v1–v5, gabaritos, paridade V21D e as calibrações das partes 2 e 3 saem iguais (a série da Cidadela passou a
+  ser `jogarSerie` com o mesmo líder três vezes, a mesma conta). Descarte único não subiu.
+- **Atlas (fora do repo):** a ilha da Fronteira é a `WorldMap_05` (peça `ilha_fronteira` em `Assets/gerar_atlas_up.py`); o mapa da
+  campanha v6 ficou com 390 × 864.
+
+## 2026-09-30 — Fronteira de Batalha, parte 4b (Torre de Batalha e Palácio) só no jogo (pets v6), sem equilíbrio
+
+- **Desvio entre o jogo e a pesquisa:** as instalações da Fronteira (`docs/DESIGN_FRONTEIRA.md`, seção 8) existem só em `web/app/` e só nos
+  pets v6. Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer, Liga nem instalações.
+- **Sem calibração (decisão do Matheus):** o fator dos rivais é 1, o da Liga (o Mega na escala v6); a conferência
+  (`artifacts_campanha/fronteira/conferencia.json`) só mostra que as duas são jogáveis e não escolheu número nenhum.
+- **Interpretações:** a semente da tentativa deriva do registro do **pet** (semente dele, instalação, número da tentativa dele ali), não do
+  Tamer, para o replay do pet não depender do Tamer; o motor confere a semente. O evento `f` do desenho ("início da tentativa") virou
+  "a Fronteira abriu para este pet" (o título do Tamer, gravado pelo app como o `u`), porque a regra da tentativa sai do rival. O Palácio
+  tira as travas, os vetos e as regras que só estão no pet por um chip; os chips de stat valem (são treino, não decisão); a regra de chip que
+  o pet já tinha fica. As cartas não valem nas duas (como na Liga). As lutas ensinam regras e contam lutas e lesões, como toda luta (a Liga
+  faz o mesmo); nada dá item, treino ou stat. Teto de 100 lutas por tentativa (o evento precisa acabar). O recorde só entra no Tamer quando
+  passa o anterior.
+- **Registro do Tamer versão 4** (lê 1 a 3). O registro do pet ganha o `f`; a assinatura dos v6 só muda depois dele. Pets v1–v5, gabaritos,
+  paridade V21D, a Liga e as calibrações anteriores saem iguais (`jogarSerie` passa por `jogarSequencia`, a mesma conta). Descarte único
+  não subiu.
+- **Achado (não corrigido, fora do escopo):** o relógio do jogo continua durante a animação da luta. Na velocidade de teste (10 min/s) uma
+  lesão na derrota que fecha a sequência passa das 6 h sem tratamento em 36 s e o pet morre antes do Resultado; vale também para a Liga. O e2e
+  das instalações pausa o tempo.
+
+## 2026-09-30 — Fronteira de Batalha, parte 4c (Fábrica e Salão) só no jogo (pets v6), sem equilíbrio
+
+- **Desvio entre o jogo e a pesquisa:** a Fábrica e o Salão (`docs/DESIGN_FRONTEIRA.md`, seções 9 e 10) existem só em `web/app/` e só nos
+  pets v6 (a Fábrica nem usa pet). Nada em `digilab/` nem em `experiments/`: a pesquisa não tem Tamer nem Fronteira.
+- **Sem calibração (decisão do Matheus):** fator 1 nas duas (o Mega, ou o nível, na escala dos pets v6), como na Liga e na 4b. A conferência
+  (`artifacts_campanha/fronteira/conferencia_4c.json`) só mostra que são jogáveis e não escolheu número nenhum. **Para a rodada de
+  equilíbrio:** a Fábrica é difícil (com o melhor arquétipo, uma série vencida em 0,018–0,019 das tentativas; lutas de espelho sem cura e
+  com o limite de turnos do rival); a troca entrando inteira foi medida (0,028 trocando por arquétipo melhor, 0,054 trocando sempre) e não
+  adotada.
+- **Interpretações:** (1) a Fábrica: 3 alugados de **arquétipos distintos** (a escolha precisa ter o que escolher); "sem cura" vale dentro da
+  série, e a série seguinte começa com o alugado inteiro; **a troca não cura** (o novo alugado entra com a mesma fração da vida e o mesmo guts
+  do anterior), senão "sem cura" deixaria de valer; a troca vale uma vez depois de cada vitória, inclusive a que fecha a série; empate conta
+  como derrota. (2) A semente da Fábrica sai do número da tentativa no registro do **Tamer** (não há pet); as das lutas saem dela. (3) O
+  Salão: a semente de cada luta sai do registro do **pet** (como na 4b), para o replay do pet não depender do Tamer; o Tamer grava a tentativa
+  e confere a conta. O rival do Salão é o bot canônico do nível com o caráter canônico das metas de estágio (Rookie: a semente de 3 regras da
+  web, sem caráter). Os níveis lutam na ordem (Rookie a Mega) e a tentativa para na primeira derrota ("quantos estágios venceu seguidos"),
+  como as outras instalações. (4) Um guardado que luta no Salão recebe na hora parada dele o `u` e o `f` (o que receberia ao voltar a ser o
+  ativo) e continua guardado. (5) Chips valem e cartas não no Salão, como na Liga e na 4b. (6) As lutas da Fábrica e do Salão não são
+  animadas no palco: o resultado aparece no card.
+- **Registro do Tamer versão 5** (lê 1 a 4): eventos `fabrica`, `fabrica_luta`, `fabrica_troca` e `salao`; os recordes da Fábrica e do Salão
+  saem das tentativas (sem evento `recorde`). O registro do pet não muda de formato (a luta do Salão é um `l`); a assinatura dos v6 só ganha o
+  Salão depois da primeira luta ali. `perfilDe` ganhou o parâmetro `comEscala` (desligado por padrão; só a Fábrica o usa). Pets v1–v5,
+  gabaritos, paridade V21D, a Liga, a Torre de Batalha, o Palácio e as calibrações anteriores saem iguais. Descarte único não subiu.
+- **Merge com a voz própria (PR #87, pets v7 = v6 + voz):** a Fronteira inteira (Liga, Torre, Palácio, Fábrica, Salão) vale para qualquer
+  pet de versão ≥ 6; os testes de versão já eram `>= 6`, e o Salão aceita guardados v6 e v7 misturados (teste com um Rookie v7). As
+  mensagens passaram a dizer "pets v6 em diante". Na assinatura, o Salão vem antes do bloco da voz (a dos v7 que nunca lutaram lá é a do
+  `main`). O registro do Tamer (versão 5) e o descarte único (versão 5) não mudaram na voz, então a numeração da 4c ficou.
+
+## 2026-09-29 — voz própria, parte 1: história e mentira (DESIGN_VOZ_PROPRIA)
+
+Implementado em `digilab/historia.py` (extrator H/O/P/L, `ConfigHistoria`) e no `MotorEducacao` (`ConfigMentira`,
+desligada por padrão; registros à parte `PARAMETROS_HISTORIA_V1` e `PARAMETROS_MENTIRA_V1`: o hash da educação-v1 não
+muda, `6a9037ad…`). Todos os números novos são PROPOSTOS. Onde o design não bate com o código:
+
+- **"As mentiras impunes voltam a 0 na evolução, como os petiscos cedidos"**: os petiscos cedidos **não** zeram na
+  evolução (nem no Python nem no TS). As mentiras impunes e os acertos em mentira zeram de propósito; os petiscos
+  continuam como estão.
+- **Donos "disciplinador" e "ausente" não existem.** Mapeamento: disciplinador = atencioso, exigente, lutador e
+  treinador (bronca quando a fala contradiz as barras); permissivo = petisco sempre; ausente = relapso (não vê a fala);
+  incoerente = elogio ou bronca sorteados; persona = bronca se presente, se atender e se contradiz.
+- **"O dono julga pelas barras"**: no Python a fala não tem texto. Cada fala sorteia um tema (estado ou história,
+  `fracao_tema_estado` 0,5): só a mentira sobre o estado contradiz as barras (`contradiz_barras` na janela). A mentira
+  sobre a história não tem como ser conferida pelo dono simulado.
+- **Quando o pet fala na pesquisa**: o design só dá gatilhos de jogo. Na pesquisa há um slot a cada 120 min (o ritmo
+  máximo do design), da criança em diante, com **defasagem de 60 min**: sem ela a fala caía sempre no mesmo tick do
+  aviso de higiene (a cada 120 min), que abre a janela antes, e nenhuma fala acontecia (164 de 164 sem janela). No jogo
+  a fala vem do evento novo `fala` (gatilho), rejogado pelo `reproduzir_educacao`.
+- **Prazo vencido numa mentira**: além de +1 impune (design), zera os acertos em mentira (as 3 broncas certas precisam
+  ser seguidas, como na travessura).
+- **Bronca, petisco e elogio fecham a janela de fala**; outras ações não (a refeição não é recusada numa fala).
+- **Honestidade da espécie** (seção 11): no Python entra como número no motor (`honestidade_especie`, padrão 1); a
+  tabela por forma vem com o corpus auditado.
+- **Extrator, O "demora"**: na simulação o dono age a cada 15 min, então a mediana da demora nos chamados fica perto de
+  15 e quase todo dono "demora". Os limiares (5 e 12 min) são do design, pensados para o jogador real.
+- **Seleção para a fala**: no máximo 2 fatos por regra (`max_por_regra`), senão as ausências do relapso ocupam os 12
+  lugares.
+- **Teste de reprodução** (`tests/test_reproducao_v3_confirmatoria.py`): 8 vidas da V3c (7 braços fixos e uma persona)
+  e 3 da confirmatória, re-simuladas e comparadas com os `pets.json` versionados. Passa antes e depois da mudança.
+
+## 2026-09-29 — voz própria, parte 2: fala livre (DESIGN_VOZ_PROPRIA)
+
+- **Versões lado a lado**: o prompt `livre-v3` e o verificador `verif-v4` entram ao lado de `livre-v2`/`verif-v3`,
+  que continuam o padrão do servidor e do jogo. Trocar o servidor é a parte 4 (web), que espera a aprovação.
+- **Mentira (F)**: o motor decide só se mente e o tema (estado ou história); o molde é fixo e determinístico
+  (`digilab_fala_livre/mentira.py`): a necessidade mais baixa é negada; com tudo em dia, o pet finge uma necessidade.
+  Na história, o primeiro fato da seleção cuja regra admite distorção; evolução e cruzamento não distorcem. A verdade
+  fica no registro (`Fato.meta` → `fatos` do log de apresentação). Se a LLM falhar, a fala é o molde.
+- **Almanaque (W)**: 62 entradas em texto próprio (16 de internet, 12 de jogos, 16 memes globais, 18 brasileiros),
+  sem memes ofensivos, políticos ou de ódio. A web só manda o id; texto de fora é recusado. Chance 0,15 na
+  espontânea (PROPOSTO), com dois sorteios sempre consumidos.
+- **Corpus de espécies**: o arquivo versionado é um EXEMPLO com 2 espécies (Angemon e Devimon, do Digimon World 1
+  revisado), como pedido. O carregador aceita as marcas com ou sem acento (a auditoria usa `[OUTRA MÍDIA]`) e falha
+  alto em marca desconhecida. `honestidade_especie` é calculada pelo carregador (o arquivo deixa null).
+- **Filtro de citação**: 6 palavras seguidas iguais a uma citação, sem acento e sem caixa, reprovam a fala.
+
+## 2026-09-29 — voz própria, parte 3: avaliação offline (artifacts_voz/rodada1)
+
+- Amostra: 40 pets (grupo A: 7 braços × 4 ovos da V3c + 4 personas, mentira desligada; grupo B: 8 sombrios que mentem,
+  mentira ligada, escolhidos numa varredura de exigente e treinador), 5 falas espontâneas por pet = 200.
+- Depois de ver a amostra, corrigi o `verif-v4` para o que o design diz (H/O/P/L sustentam costume, gosto e lembrança;
+  id em minúscula) e a chave da métrica de repetição (grupo + pet). A geração não mudou. Os números antes da correção
+  estão em `resumo_v4a.json`.
+- Resultado (PROPOSTO): honestidade 70,0% (limite 5%) e repetição 5 (limite 2) REPROVAM; história 98,5% e variedade
+  97,7% passam. Parada pedida pelo Matheus: a parte 4 (web) não foi feita.
+
+## 2026-09-30 — voz própria, parte 4: web (DESIGN_VOZ_PROPRIA)
+
+- **Pet v7** (`VERSAO_PET = 7`; era v5 no desenvolvimento e virou v7 no merge com o `main`, que já tinha o v5 da evolução canônica e o v6 das medalhas): janela de fala, mentira (`CMEN`) e evento `fl` no motor TS (o `f` ficou para a Fronteira do `main`), com as regras do Python
+  conferidas por gabarito (`experiments/exportar_gabaritos_voz.py` → `web/app/test/gabaritos/voz_python.json`: 24
+  registros reais para o extrator, grade da mentira, desfechos e moldes). As vidas não são comparáveis bit a bit (as
+  rngs são outras). Os pets v1–v6 não mudam; filhos de cruzamento nascem na versão atual.
+- **Gatilhos** (`src/voz.ts`): reencontro (≥ 3 h), hábito novo, aniversário, marco (evolução, lesão tratada, vitória
+  na campanha), luta e vontade nova; ritmo de 1 fala a cada 2 h de jogo; nunca com janela aberta, dormindo ou no bebê.
+  **Revanche ficou de fora**: a luta não passa pela fala (a revanche aparece como assunto P, não como gatilho).
+- **Todos os modos** abrem a janela de fala nos pets v7 (a mentira é do motor, não da LLM). Só no modo livre o texto
+  vem do servidor (`voz: true`); nos outros, e sem servidor, é o molde: o texto do assunto (verdade) ou a mentira.
+- **Gostos (P gosto/desgosto)** no jogo vêm da sonda do caráter na hora da fala (`desvioPorAcao`, ~0,15 s).
+- **Janelas no extrator**: o jogo guarda as últimas 100 janelas fechadas; os hábitos do dono sobre chamados olham só
+  essas.
+- **Honestidade da espécie**: fica 1 no jogo até o corpus auditado entrar (o de exemplo não tem enganador).
+- **Servidor**: o verificar passou a aceitar as chaves de registro dos fatos novos (antes a ida e volta daria 400); o
+  almanaque é sorteado pelo servidor (a página não manda id nem texto).
+
+## 2026-09-30 — corpus de espécies: o auditado entra no lugar do exemplo
+
+`digilab_fala_livre/corpus_especies.json` agora tem uma entrada para cada um dos 60 Digimon do jogo (`web/app/motor/nomes.ts`),
+montada de `docs/corpus_digimon/` (revisado após a auditoria) com a marca de cada item. O exemplo de 2 espécies virou fixture
+dos testes (`tests/dados/corpus_exemplo.json`). Passam no filtro 56 espécies, 251 itens e 57 citações; DemiVeemon, DinoBeemon,
+SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
+
+- **Anime liberado pelo Matheus (2026-09-30)** (`liberar_outra_midia: true`): os itens dos três animes (marca OUTRA MÍDIA,
+  `midia: "anime"`) entram; com eles passam 442 itens e 62 citações nas mesmas 56 espécies.
+- **Itens acrescentados na revisão** (depois da auditoria, com fonte nova conferida pelo revisor) entraram como VERIFICADO EM
+  OUTRA FONTE; a auditoria não os viu.
+- **Variantes BK/B do Digimon World 3** saíram (podem ser outra espécie, como BlackWarGreymon).
+- **Nenhum enganador**: o "Guilmon Trapaceiro" é um NPC do DW3, não um traço da espécie, e a Palmon que finge ser flor é um
+  disfarce; com a marca, todos os Guilmon e Palmon mentiriam mais. `honestidade_especie` é 1 para todas.
+- **Citações com 3 frases curtas** (7) saíram, em vez de cortadas; Imperialdramon Dragon e Fighter Mode têm o mesmo conteúdo
+  (o corpus não diz o modo).
+- O bloco de estilo do prompt usa no máximo 8 traços e 5 itens de fala por espécie.
+
+## 2026-09-30 — M1 (confiança de combate): pets v8 na web, e as séries de lutas
+
+- **Pet v8** (`VERSAO_PET = 8` = v7 + confiança; o desenho, `docs/DESIGN_MVP_M1_CONFIANCA.md`, dizia v5 e a primeira
+  implementação usou os v5 que já existiam). No merge do `main` (medalhas v6, V21D, Fronteira, voz v7) a confiança passou
+  a valer só para `versao >= 8`, no padrão de uma versão de pet por mecânica: pets v1–v7 não mudam de comportamento nem
+  de assinatura e nenhum save é descartado. Filhos de cruzamento nascem v8.
+- **Séries de lutas** (Cidadela, Liga, Torre de Batalha, Palácio, Salão), que o desenho não previa: cada luta da série
+  conta na confiança, com o rival dela (Cidadela: o líder repetido; Liga: o Mega de cada líder; Fronteira e Salão: a
+  forma sorteada). O ε da série inteira sai da confiança do começo. Só na web (o Python não tem séries).
+- O Python não muda: `ConfigConfianca` segue desligada por padrão, `PARAMETROS_CONFIANCA_M1` à parte (os hashes da
+  educação-v1 e da voz não mudam).

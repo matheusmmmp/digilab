@@ -1,0 +1,358 @@
+{
+  "conferencias_v21c_com_artefatos_de_validacao": {
+    "E3_v21c_igual_validacao/uso_tecnicas.json": true,
+    "E4_v21c_igual_validacao_escala/gates.json": true,
+    "S1_v21c_igual_bateria_sombria/gates.json (outra config de regras: informativo)": true,
+    "campanha_v21c_igual_configs/escala/validacao.json": true,
+    "matriz_v21c_igual_validacao/matriz_arquetipos.json": true
+  },
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "chaves": {
+      "muralha_lista_espelho": true,
+      "preparo_sob_pele_oculto": true,
+      "vigia_bate_em_quem_recua": true,
+      "vigia_recua_do_preparo_sob_pele": true
+    },
+    "config": "experiments/configs/v21d/validacao.json",
+    "config_sha256": "e329a02d4fbe4c7aaf7e9e84922d67a268cad649527e8071df2377fe4af04f27",
+    "conjunto": "validacao",
+    "epsilons": [
+      0.05,
+      0.15
+    ],
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "hashes": {
+      "a_c_e2v_v": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "ba601d09a6d74f8424b0e9af242bb6c8cc95a51429c534b9b1883bdbe1b0e1ee",
+        "regras_sha256": "6a7735f8778fdcd4402e85aee1de8977baa4a7e21f96425b9b505e41daa329db"
+      },
+      "v21c": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "6a7735f8778fdcd4402e85aee1de8977baa4a7e21f96425b9b505e41daa329db"
+      }
+    },
+    "partidas_e3_por_semente": 40,
+    "partidas_e4_por_semente": 100,
+    "partidas_por_bot_por_semente_painel": 50,
+    "partidas_por_par_por_semente": 100,
+    "partidas_por_semente_campanha": 10,
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "6a7735f8778fdcd4402e85aee1de8977baa4a7e21f96425b9b505e41daa329db"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "segundos": 196,
+    "sementes": [
+      4101,
+      4202,
+      4303,
+      4404,
+      4505
+    ],
+    "variante": "a_c_e2v_v"
+  },
+  "v21c_nas_mesmas_sementes": {
+    "forca": {
+      "duelista": 0.5177142857142857,
+      "emboscador": 0.6163928571428572,
+      "espelho": 0.6449642857142858,
+      "furioso": 0.7530357142857144,
+      "muralha": 0.4032142857142857,
+      "sentinela": 0.6458571428571428,
+      "tita": 0.17089285714285715,
+      "vigia": 0.24792857142857144
+    },
+    "painel": {
+      "duelista": 0.530921875,
+      "emboscador": 0.607453125,
+      "espelho": 0.61434375,
+      "furioso": 0.70428125,
+      "muralha": 0.41284375,
+      "sentinela": 0.6145625,
+      "tita": 0.233140625,
+      "vigia": 0.285078125
+    }
+  },
+  "variante": {
+    "falham": [],
+    "itens": {
+      "A1_forca_entre_formas_sem_o_furioso": {
+        "fora": {},
+        "forca": {
+          "duelista": 0.47535714285714287,
+          "emboscador": 0.5438214285714286,
+          "espelho": 0.41760714285714284,
+          "furioso": 0.72225,
+          "muralha": 0.4230714285714286,
+          "sentinela": 0.5620714285714286,
+          "tita": 0.40653571428571433,
+          "vigia": 0.4492857142857143
+        },
+        "ok": true
+      },
+      "A2_forca_contra_painel_sem_o_furioso": {
+        "fora": {},
+        "ok": true,
+        "painel": {
+          "duelista": 0.491796875,
+          "emboscador": 0.5493125,
+          "espelho": 0.43360937499999996,
+          "furioso": 0.674578125,
+          "muralha": 0.431609375,
+          "sentinela": 0.543328125,
+          "tita": 0.436203125,
+          "vigia": 0.44384375
+        }
+      },
+      "A6_lugar_no_ciclo": {
+        "abaixo": {},
+        "ok": true,
+        "vitorias": {
+          "duelista": 4,
+          "emboscador": 3,
+          "espelho": 3,
+          "furioso": 5,
+          "muralha": 4,
+          "sentinela": 4,
+          "tita": 2,
+          "vigia": 3
+        }
+      },
+      "E3_pele_dura": {
+        "ok": true,
+        "por_usuario": {
+          "tita": {
+            "taxa_com_resposta": 0.006484375,
+            "taxa_sem_resposta": 0.412734375
+          },
+          "vigia": {
+            "taxa_com_resposta": 0.194609375,
+            "taxa_sem_resposta": 0.4578125
+          }
+        },
+        "taxa_com_resposta": 0.100546875,
+        "taxa_sem_resposta": 0.4352734375
+      },
+      "E4_escala": {
+        "abaixo_de_0.60": {},
+        "menor": 0.8355,
+        "ok": true
+      },
+      "S1_sombrias": {
+        "media_sombria_contra_normais": {
+          "bastiao_rachado": 0.151625,
+          "colosso_partido": 0.23334375,
+          "devastador": 0.37390625,
+          "predador": 0.32609375
+        },
+        "ok": true,
+        "vence_todos_os_normais": {
+          "bastiao_rachado": false,
+          "colosso_partido": false,
+          "devastador": false,
+          "predador": false
+        },
+        "vitorias_contra_normais": {
+          "bastiao_rachado": [],
+          "colosso_partido": [
+            "espelho",
+            "muralha"
+          ],
+          "devastador": [
+            "duelista",
+            "tita",
+            "vigia"
+          ],
+          "predador": [
+            "emboscador",
+            "sentinela"
+          ]
+        }
+      },
+      "campanha_escala_sem_a_sentinela": {
+        "ok": true,
+        "por_npc": {
+          "tier1_brutamontes": {
+            "com": 0.9688,
+            "passa": true,
+            "sem": 0.2213,
+            "travados": []
+          },
+          "tier2_carcereiro": {
+            "com": 0.8413,
+            "passa": true,
+            "sem": 0.2606,
+            "travados": [
+              "colosso"
+            ]
+          },
+          "tier2_porteiro": {
+            "com": 0.8938,
+            "passa": true,
+            "sem": 0.1963,
+            "travados": []
+          },
+          "tier2_sentinela": {
+            "com": 0.7375,
+            "passa": false,
+            "sem": 0.4175,
+            "travados": [
+              "colosso"
+            ]
+          },
+          "tier3_soberano": {
+            "com": 0.9125,
+            "passa": true,
+            "sem": 0.2025,
+            "travados": []
+          }
+        }
+      }
+    },
+    "passam": [
+      "A1_forca_entre_formas_sem_o_furioso",
+      "A2_forca_contra_painel_sem_o_furioso",
+      "A6_lugar_no_ciclo",
+      "E3_pele_dura",
+      "E4_escala",
+      "S1_sombrias",
+      "campanha_escala_sem_a_sentinela"
+    ],
+    "relatados_nao_reprovam": {
+      "A1_A2_com_o_furioso": {
+        "forca_8_na_faixa": false,
+        "painel_8_na_faixa": false
+      },
+      "A3_suporte": {
+        "estrategia": {
+          "duelista": 5e-05,
+          "emboscador": 0.0042,
+          "espelho": 0.1547,
+          "furioso": 0.31835,
+          "muralha": 0.26055,
+          "sentinela": 0.2621,
+          "tita": 5e-05,
+          "vigia": 0.0
+        },
+        "passaria": false,
+        "suporte": [
+          "espelho",
+          "furioso",
+          "muralha",
+          "sentinela"
+        ]
+      },
+      "A4_decisividade": {
+        "extremos_eps_0.05": 9,
+        "extremos_eps_0.15": 7,
+        "passaria": false
+      },
+      "A5_amplitude": {
+        "amplitude_eps_0.05": 0.3157142857142856,
+        "amplitude_eps_0.15": 0.42375,
+        "passaria": false
+      },
+      "E3_outras_tecnicas": {
+        "contra_golpe": {
+          "reducao": -0.06484374999999998,
+          "taxa_com_resposta": 0.495625,
+          "taxa_sem_resposta": 0.43078125
+        },
+        "investida": {
+          "reducao": 0.09132812499999998,
+          "taxa_com_resposta": 0.4951171875,
+          "taxa_sem_resposta": 0.5864453125
+        },
+        "marcar": {
+          "reducao": 0.09054687499999997,
+          "taxa_com_resposta": 0.452109375,
+          "taxa_sem_resposta": 0.54265625
+        }
+      },
+      "campanha_sentinela_excecao_aceita": {
+        "com": 0.7375,
+        "estagio": "adolescente",
+        "fator": 1.6,
+        "nivel_tipico": 22,
+        "passa": false,
+        "por_forma": {
+          "brigao": {
+            "0": 0.6,
+            "22": 0.97
+          },
+          "cacador": {
+            "0": 1.0,
+            "22": 1.0
+          },
+          "colosso": {
+            "0": 0.035,
+            "22": 0.245
+          },
+          "guardiao": {
+            "0": 0.035,
+            "22": 0.735
+          }
+        },
+        "sem": 0.4175,
+        "travados": [
+          "colosso"
+        ]
+      },
+      "furioso": {
+        "dentro_da_faixa_forca": false,
+        "dentro_da_faixa_painel": false,
+        "forca": 0.72225,
+        "painel": 0.674578125,
+        "vitorias": 5
+      }
+    },
+    "status": "APROVADA"
+  }
+}
