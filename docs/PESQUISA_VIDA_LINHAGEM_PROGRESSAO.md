@@ -2,6 +2,8 @@
 
 Status: **pesquisa e proposta de design** (pedido do Matheus, 2026-09-29). Nenhum código foi alterado. Nada aqui está decidido: toda proposta é candidata, com a indicação de entrar ou não no MVP.
 
+> **Aviso da revisão bibliográfica de 2026-09-29** (`docs/referencias/referencias_verificadas.csv`, coluna vinculante). Este documento foi escrito **antes** da revisão. Só valem como evidência as referências marcadas VERIFICADA lá. As seguintes, citadas abaixo, **não estão na lista verificada** e passam a contar como não verificadas: Bates 1994; Bell et al. 2009; Benito et al. 2026; Bickmore e Picard 2005; Bopp et al. 2019; Carter e Allison 2017; Chen 2007; Colledanchise e Ögren 2018; Dugatkin 1997; Fleeson 2001; Gebhard 2005; Glickman 1999; Gosling e John 1999; Hsu e Wolf 1999; Hsu et al. 2006; Isla 2005; Maier e Seligman 2016; Mark 2009; Orkin 2006; Perez-Liebana et al. 2021; Pigliucci 2001; Rankin et al. 2009; Rault et al. 2020; Risi e Togelius 2017; Sarkar et al. 2017; Spronck et al. 2006; Teigen 1994; Wagner e Altenberg 1996; Waddington 1942; Wardrip-Fruin et al. 2009; West et al. 2022; West-Eberhard 2003; Yan et al. 2024; Zagal et al. 2013. **Nenhum jogo comercial** (Pokémon, Monster Rancher, Digimon World e os demais) vale como evidência: são pista. As três afirmações bloqueadas pela revisão (instinto × aprendido; herdar o prior; "ensinado pelo dono") não podem ser apresentadas como novidade. A arquitetura, o MVP e as respostas às perguntas continuam válidos como **proposta**.
+
 **Como ler as marcas.** Cada afirmação traz uma marca:
 
 | marca | o que quer dizer |
