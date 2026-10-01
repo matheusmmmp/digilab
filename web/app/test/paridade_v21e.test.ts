@@ -64,7 +64,7 @@ describe("combate V21E: paridade com o Python", () => {
     const web = Object.entries(CV21E).filter(([, x]) => typeof x === "boolean").map(([k]) => k).sort();
     expect(web).toEqual(ligadas);
     for (const k of web) expect((CV21E as Record<string, unknown>)[k], k).toBe(true);
-    expect(CV21E.versaoPet).toBe(9); expect(VERSAO_PET).toBe(9);
+    expect(CV21E.versaoPet).toBe(9); expect(VERSAO_PET).toBeGreaterThanOrEqual(9);   /* o v10 (vinculo B) herda a V21E */
   });
 
   test("listas da V21E (duelista, tita, espelho, muralha) e a do vigia = as do Python", () => {
@@ -108,7 +108,8 @@ describe("combate V21E: so nos pets v9", () => {
     for (const v of [1, 2, 3, 4, 5]) { expect(regrasDaVersao(v)).toBeNull(); expect(new Motor(123, v).regras).toBeNull(); }
     for (const v of [6, 7, 8]) { expect(regrasDaVersao(v)).toBe(CV21D); expect(new Motor(123, v).regras).toBe(CV21D); }
     expect(regrasDaVersao(9)).toBe(CV21E);
-    expect(new Motor(123).versao).toBe(9);
+    expect(new Motor(123).versao).toBe(10);                       /* o v10 (vinculo B) herda a V21E */
+    expect(regrasDaVersao(10)).toBe(CV21E);
     expect(new Motor(123).regras).toBe(CV21E);
   });
 

@@ -303,6 +303,16 @@
    "py": "ConfigVinculo.janela_desejo_ticks"
   },
   {
+   "web": "CVB.limNec",
+   "fonte": "python",
+   "py": "ConfigVinculoSituacao.limiar_necessidade"
+  },
+  {
+   "web": "CVB.limEnergia",
+   "fonte": "python",
+   "py": "ConfigVinculoSituacao.limiar_energia"
+  },
+  {
    "web": "COB.b0",
    "fonte": "python",
    "py": "ConfigObediencia.b0"
@@ -2450,6 +2460,10 @@
   {
    "web": "CV21E.versaoPet",
    "nota": "versao de pet a partir da qual a luta usa a V21E (pets v9, so no jogo; docs/EQUILIBRIO_GERAL.md, fase 1): no Python a variante e escolhida pelo config, nao por versao de pet"
+  },
+  {
+   "web": "CVB.versaoPet",
+   "nota": "versao de pet a partir da qual o vinculo e a variante B (pets v10, so no jogo; docs/PLANO_ANALISE_V2_VINCULO.md): no Python a variante e escolhida pelo config (ConfigVinculoSituacao.ligada), nao por versao de pet"
   },
   {
    "web": "CAMPANHA_V6[0].total",

@@ -1241,3 +1241,29 @@ e subclasses ficam congelados só para reproduzir a v1. O aprendiz da V2 é `dig
   (3,3%), imperativos 53/60 (88,3%), 2/180 saídas rejeitadas pelo parser (não por japonês), latência p50 6,3 s. Rodada 3 (sem estilo):
   0/60 e 51/60; rodada 2 (estilo com o corpus antigo): 160/180 rejeitadas. Erros que ficam: "limpar" (3/9), "levar_ao_banheiro"
   (4/6), e «não vou te dar bronca dessa vez» virou repreender 2 vezes. Nada mudou no prompt, verificador, corpus ou servidor.
+
+## V2, F0 — vínculo B: previsibilidade + desejo (2026-10-01, `docs/PLANO_ANALISE_V2_VINCULO.md`) — GATE PASSA
+
+Decisão do Matheus (2026-10-01): a **alternativa B** de `docs/V2_VINCULO_PROPOSTA.md` (o diagnóstico: o vínculo de hoje premia o dono
+aleatório porque o atendimento e o desejo só amostram quem deixa o pet em falta). Plano registrado antes da run; tarefa
+`docs/TAREFA_V2_F0_VINCULO_NOVO.md`. Números de `artifacts_v2_vinculo_novo/{calibracao,validacao}/resumo.json` e `mega_v10.json`.
+- **Python:** `ConfigVinculoSituacao` (`ligada` False por padrão; `limiar_necessidade` 0,5 = o limiar do pedido; `limiar_energia` 0,25 = a
+  regra de exaustão do instinto; noite por `ConfigPadrao.e_noite`), **à parte da `ConfigVinculo`**: o hash `d986ff1b9308…` dos protocolos da
+  personalidade não muda. Registro `protocol.PARAMETROS_VINCULO_B` (nenhum referendado). Ligada: o pedido não abre (o atendimento sai) e a
+  coerência agrupa o feedback por (ação do pet, situação em que ele a decidiu); desejo, ajustes diretos, pausa e teto da sombria iguais.
+  `MotorPersonalidade(..., cfg_vinculo_situacao=)`, `fabricas_treino`/`simular_vida_treino` idem. Desligada: byte a byte (`tests/test_vinculo_b.py`).
+- **Web: pets v10** (`VERSAO_PET = 10` = v9 + vínculo B; `CVB`, `Vinculo(porSituacao)` em `motor/vinculo.ts`); v1–v9 iguais (assinaturas e
+  gabaritos). Paridade: `experiments/exportar_gabarito_vinculo.py` → `test/gabaritos/vinculo_python.json` → `test/vinculo.test.ts` (3256
+  chamadas, modos hoje e B, ≤ 1e−12).
+- **Run** (`experiments/run_vinculo_novo.py`: vidas novas do pipeline do treino, 5 braços × 5 sementes × {hoje, B}, 14 dias, orçamento igual,
+  replay do disco conferido): calibração 3101…3505 (fumaça, +0,232 [+0,035; +0,359]); **validação 5101…5505, uma vez: GATE PASSA**,
+  atencioso − aleatório no vínculo final **+0,171 [+0,046; +0,280]** com o B (por semente +0,068, +0,294, +0,278, −0,041, +0,255), contra
+  −0,066 [−0,188; +0,017] com o vínculo de hoje nas mesmas sementes. Vínculo final B: atencioso 0,665, relapso 0,613, aleatório 0,494,
+  incoerente 0,387, exigente 0,247 (hoje: 0,557, 0,472, 0,623, 0,431, 0,343). Exigente − atencioso −0,418 [−0,471; −0,361] (o forçar segue
+  separando); incoerente − aleatório −0,107 [−0,177; −0,035]. Obediência B: atencioso 0,911, aleatório 0,699. Com 5 sementes o IC é curto.
+- **Mega no jogo** (`web/app/test/medir_vinculo_mega.mjs --versao 10` → `mega_v10.json`; 6 vidas de 3 dias, 16/dia, limiar 0,4, **só relato: o
+  limiar não muda**): atencioso 1, incoerente 2, relapso 3, aleatório 3 (pets v5 com o vínculo de hoje: 3/3/4/5). Em 48 interações o atencioso
+  da web quase não dá feedback (1 e 4 nas duas vidas conferidas; o resto é chamado e limpeza), então o vínculo B dele é quase só desejo expirado: 0,13–0,37 no fim, máximo no
+  Ultimate 0,23–0,48 (aleatório 0,36–0,53); 8 das 24 vidas nem chegam ao adulto em 3 dias nos v10 (qualificação por vitórias). No jogo
+  curto o B não inverte o Mega; o que fazer com o limiar e com o desejo fica para o Matheus.
+- Desvios e interpretações em `docs/REGISTRO_DESVIOS.md` (2026-10-01, vínculo B).

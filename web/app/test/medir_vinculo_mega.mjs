@@ -3,13 +3,19 @@
 // aqui eles tratam a lesao e lutam na arena ate qualificar (10 lutas no Champion, 12 no Ultimate). Descritivo, sem IC.
 //
 // uso (em web/app): node test/medir_vinculo_mega.mjs -> artifacts_campanha/mega/vinculo_donos.json
+//   --versao 10: as mesmas vidas em pets v10 (vinculo B; docs/PLANO_ANALISE_V2_VINCULO.md, secao 3), com as medalhas do Tamer
+//   liberadas no ovo (a evolucao dos v6+ pede medalhas) -> artifacts_v2_vinculo_novo/mega_v10.json (donos e varredura no mesmo
+//   arquivo). O limiar do Mega nao muda: so relato. Sem --versao, o script e o de antes, byte a byte.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
+const args = process.argv.slice(2), VERSAO = args.includes("--versao") ? Number(args[args.indexOf("--versao") + 1]) : 5;
+if (!Number.isInteger(VERSAO) || VERSAO < 5) throw new Error("--versao precisa ser um inteiro >= 5");
 const { CAT, CD, CMG, TPD } = M, DIAS = 3, POR_DIA = 16, SEMENTES = [2001, 2002, 2003, 2004, 2005, 2006];
 function vida(tipo, semente) {
-  const m = new M.Motor(semente, 5), dono = M.criarDono(tipo), r = M.criarRng(M.hashSemente("dono", semente, tipo));
+  const m = new M.Motor(semente, VERSAO), dono = M.criarDono(tipo), r = M.criarRng(M.hashSemente("dono", semente, tipo));
+  if (VERSAO >= 6) m.liberar(M.MEDALHAS_LIGA);            /* v6+: as medalhas do Tamer travam a evolucao; aqui nao ha Tamer */
   const passos = Math.round(DIAS * TPD / CD.passo), orc = Math.round(POR_DIA * DIAS);
   let gasto = 0, maxVinculoUltimate = null;
   for (let p = 0; p < passos && !m.morte; p++) {
@@ -27,16 +33,16 @@ function vida(tipo, semente) {
   return { semente, estagio: m.estagioAtual, mega: m.estagioAtual === "mega", sombria: m.sombria, vinculo_final: +m.vinc.valor.toFixed(3),
     vinculo_max_no_ultimate: maxVinculoUltimate === null ? null : +maxVinculoUltimate.toFixed(3), vinculo_na_evolucao: ev ? +ev.vinculo.toFixed(3) : null };
 }
-const out = { descricao: "Pets v5 com os donos simulados da web: quantos viram Mega (vinculo >= " + CMG.vinculo + ").", dias: DIAS, interacoes_por_dia: POR_DIA,
+const out = { descricao: `Pets v${VERSAO} com os donos simulados da web: quantos viram Mega (vinculo >= ${CMG.vinculo}).`, versao_pet: VERSAO, dias: DIAS, interacoes_por_dia: POR_DIA,
   sementes: SEMENTES, donos: {} };
 for (const tipo of ["atencioso", "incoerente", "relapso", "aleatorio"]) {
   const vidas = SEMENTES.map(s => { try { return vida(tipo, s); } catch (err) { return { semente: s, erro: String(err.message ?? err) }; } });
   out.donos[tipo] = { megas: vidas.filter(v => v.mega).length, vidas };
   console.log(tipo, `${out.donos[tipo].megas}/${SEMENTES.length} Mega`, vidas.map(v => v.erro ?? v.vinculo_max_no_ultimate).join(" "));
 }
-const pasta = fileURLToPath(new URL("../../../artifacts_campanha/mega/", import.meta.url));
+const pasta = fileURLToPath(new URL(VERSAO === 5 ? "../../../artifacts_campanha/mega/" : "../../../artifacts_v2_vinculo_novo/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
-writeFileSync(pasta + "vinculo_donos.json", JSON.stringify(out, null, 1) + "\n");
+if (VERSAO === 5) writeFileSync(pasta + "vinculo_donos.json", JSON.stringify(out, null, 1) + "\n");
 /* varredura do limiar (Matheus, 2026-09-29: "baixa o limiar"; adotado 0,4): Megas por dono em cada limiar */
 const atual = CMG.vinculo, varredura = {};
 for (const lim of [0.7, 0.6, 0.5, 0.45, 0.4, 0.35, 0.3]) {
@@ -46,5 +52,8 @@ for (const lim of [0.7, 0.6, 0.5, 0.45, 0.4, 0.35, 0.3]) {
   console.log("limiar", lim, JSON.stringify(varredura[lim]));
 }
 CMG.vinculo = atual;
-writeFileSync(pasta + "limiar_vinculo.json", JSON.stringify({ descricao: `Megas (de ${SEMENTES.length} vidas) por dono simulado e limiar de vinculo; o resto como em vinculo_donos.json.`,
-  limiar_adotado: atual, dias: DIAS, interacoes_por_dia: POR_DIA, sementes: SEMENTES, megas_por_limiar: varredura }, null, 1) + "\n");
+const lim = { descricao: `Megas (de ${SEMENTES.length} vidas) por dono simulado e limiar de vinculo; o resto como em vinculo_donos.json.`,
+  limiar_adotado: atual, dias: DIAS, interacoes_por_dia: POR_DIA, sementes: SEMENTES, megas_por_limiar: varredura };
+if (VERSAO === 5) writeFileSync(pasta + "limiar_vinculo.json", JSON.stringify(lim, null, 1) + "\n");
+else writeFileSync(pasta + `mega_v${VERSAO}.json`, JSON.stringify({ ...out, descricao: out.descricao + ` Pets v${VERSAO} com as medalhas liberadas no ovo; o limiar do Mega nao muda (so relato).`,
+  plano: "docs/PLANO_ANALISE_V2_VINCULO.md", varredura_de_limiar: lim }, null, 1) + "\n");

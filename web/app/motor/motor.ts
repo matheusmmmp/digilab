@@ -3,7 +3,7 @@
    reprocessando o registro. Mesma semente + mesmo registro = mesma assinatura, no mesmo runtime. */
 import { CMEN,
   ACAO_CHAMADO, ACOES_DONO, ACOES_DONO_V4, ACOES_PET, CAT, CDJ, CED, CHAMADO_BEBE, CHE, CLE, CMG, EIXOS_TEMP, baseDe, COB, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET,
+  TICK_INICIAL, VERSAO_PET, CVB,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -204,14 +204,15 @@ export class Motor {
   salao = { tentativas: 0, vitorias: 0 };
 
   constructor(semente: number, versao: number = VERSAO_PET) {
-    if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
+    if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(versao)) throw new Error("versão de pet desconhecida: " + versao);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.rEnv = criarRng(semente); this.rPol = criarRng(semente + 1000003);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     this.e = estadoInicial(); this.pol = new Bandit(this.temp, versao);
     if (versao >= 2) {
-      this.vinc = new Vinculo(); this.rObed = criarRng(hashSemente("obediencia", semente));
+      /* v10: o vinculo B (coerencia por situacao, sem pedido); ate o v9, o de sempre */
+      this.vinc = new Vinculo(versao >= CVB.versaoPet); this.rObed = criarRng(hashSemente("obediencia", semente));
       this.obed = { pedidos: 0, recusas: 0, fazerOutra: 0 };
       this.dz = { atual: null, vontades: 0, cumpridas: 0, abertas: [], tVontade: 0 };
     }
