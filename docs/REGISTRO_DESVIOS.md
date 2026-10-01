@@ -1083,3 +1083,81 @@ SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
 - **Sementes da bateria da base.** A meta M-A5 pede G1–G9 da V2C: a bateria da base tem sementes próprias (calibração
   1101…1505, validação 2101…2505); na fase 1 roda a de calibração (`experiments/configs/v21e/bateria_v2c_calibracao.json`, igual
   à etapa c7). As 3101…3505 valem para tudo o que é V2.1.
+
+## 2026-09-30 — Voz própria: ajustes depois do teste do Matheus no jogo
+
+Relato: a conversa riscava como "Sem base" falas da voz (inclusive "Agumon evolui pra Greymon", que é verdade no jogo), o
+pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vida dele.
+- **Tela da conversa:** nos pets v7 a fala da voz não é mais riscada. O que ele inventou aparece marcado com o lápis
+  ("✎ Inventou: «…»"), pela regra do Matheus (inventar pode, desde que se saiba). Os pets antigos seguem com o riscado.
+- **Árvore da espécie como fato (A1, "arvore da minha especie")**: o servidor liga na voz (`digilab_fala_livre/arvore.py`,
+  igual ao `DIGIMON_DA_FORMA` do jogo, teste `tests/test_arvore_fala.py`); a página não pode mandar. Sustenta evento,
+  costume e mundo no verif-v4/v5. Só existe quando o servidor liga: as rodadas 1–4 não mudam.
+- **Gatilhos da voz no verificador:** "evento agora" da voz (reencontro, luta, aniversário) sustenta pela regra
+  determinística (`RAIZES_GATILHO_VOZ`), como já valia para "acabei de decidir: X". No save do Matheus o "Você voltou!"
+  era verdade (o dono voltou depois de 9866 min de jogo) e o juiz não sustentou.
+- **verif-v5, fato escondido em opinião:** "amigo(s)", "evolu…" e "vira/viram/virou/virei" passam a ir ao juiz. Muda o
+  verif-v5 daqui para a frente (as rodadas gravadas ficam como estão; uma rodada nova usaria esta regra).
+- **Reencontro:** além das 3 h de jogo, 20 min de relógio sem agir na página (no tempo de teste 3 h passam em 18 s).
+- **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
+  e o bebê ficavam sem o estilo do corpus).
+
+## 2026-09-30 — Comando pelo chat (`docs/TAREFA_COMANDO_CHAT.md`): o texto do jogador passa a agir no pet, pelo catálogo
+
+Decisão do Matheus (2026-09-30). A regra de 2026-09-28 da fala livre, "o que o jogador escreve não ensina o pet", **deixa de valer
+para o comando**: na conversa dos pets v7+ a LLM devolve, junto com a fala, `comando` ∈ {as 9 ações de `AcaoDono`} ∪ {null}; o
+app mostra um chip de confirmação e o toque grava o evento `d` de sempre, pelo mesmo caminho do botão. O texto continua não
+ensinando nada por outra via: só o catálogo fechado age, e só com o toque. Interpretações e limites desta implementação:
+- **No registro do pet entra só o `d`.** A saída da LLM fica no log de apresentação (versão 2, lê a 1). Replay, assinaturas dos
+  pets v1–v8, gabaritos `vidas_*.json`, `paridade_ts` e `constantes.test.mjs` passam iguais; o modo livre gravado não é usado.
+- **Só na conversa com `voz: true` (pets v7+), prompt `livre-v7`** (= `livre-v6` + a regra COMANDO no sistema e a lista das ações
+  no pedido). Os pets v1–v6 conversam pelo `livre-v2` e não ganham comando: mudar a v2 alteraria as mensagens das rodadas 1–2 da
+  fala livre, que reproduzem. As rodadas 1–4 da voz (`livre-v3..v6`, espontânea) não mudam.
+- **O comando é o da primeira geração.** A autocorreção (`revisao.py`) só reescreve a fala (respeito); a reescrita não troca o
+  comando. É o que a avaliação mede com `gerar`.
+- **Validação dupla.** Servidor: `saida.ler` falha alto com valor fora do catálogo (fala genérica, comando null). App
+  (`src/acoes.ts`): catálogo, pet nascido e vivo, ações v4 (petisco, banheiro, tratar lesão) só em pets `versao >= 4`, `tratar_lesao`
+  só com lesão; o toque valida de novo contra o pet daquele momento (pet morto entre a resposta e o toque: nada entra).
+- **Um caminho só para a ação do dono** (`acoes.agir`): botões da tela do Pet, atalhos do Conversar e o chip. O flash do palco saiu
+  para `src/flash.ts` (sem DOM) para o caminho compartilhado não puxar o palco.
+- **Avaliação em duas rodadas** (`artifacts_fala_livre/comando/`): a rodada 1 mede o comando **sem** o bloco de estilo da espécie;
+  a rodada 2, **com** o estilo, como o servidor manda no jogo. Motivo: na sonda, com o estilo do corpus (que hoje tem 60 espécies e
+  texto em japonês nas fontes), o gemma2:9b respondeu com trechos em japonês em 5 de 6 mensagens, e `ler` rejeita letras fora do
+  alfabeto latino (a fala vira a genérica e o comando null). Isso é do corpus/da voz, não do comando, e vale para a conversa dos
+  pets v7 já hoje; fica registrado como pendência à parte.
+- **Sem execução direta.** O chip é obrigatório até o Matheus ver o gate (PROPOSTO: falsos positivos ≤ 5% nas negativas;
+  imperativos ≥ 80%). Treino, luta, itens, evoluir, cruzar, comando na fala espontânea e MCP de verdade ficam fora.
+
+## 2026-09-30 — Comando pelo chat, rodada 3: prompt `livre-v8`
+
+A rodada 1 (`livre-v7`, `artifacts_fala_livre/comando/rodada1/`) passou nos falsos positivos (0%) e falhou nos imperativos
+(53,3%, gate ≥ 80%): elogiar, repreender, acariciar e tratar_lesao acertaram 4 de 36, porque nelas a mensagem do dono é a própria
+ação ("muito bem!" é o elogio) e o modelo tratava como conversa.
+- **`livre-v8` ao lado da v7** (`digilab_fala_livre/prompt.py`): muda só o bloco COMANDO. A regra no sistema diz que em quatro
+  ações a própria mensagem é a ação (elogiar: "muito bem!", "parabéns"; repreender: "isso foi feio", "não faz mais"; acariciar:
+  diz que vai fazer carinho ou cafuné; tratar_lesao: diz que vai cuidar do machucado ou fazer curativo) e escreve inteira a regra
+  do null (negação da ação, pergunta, hipótese, adiamento e relato); a lista do pedido (`DESCRICAO_COMANDOS_V8`) troca a frase
+  dessas quatro. A v7 não muda (a rodada 1 reproduz). O servidor usa a v8 na conversa com voz.
+- **A v8 foi escrita olhando a rodada 1**: por isso a rodada 3 usa **sementes novas** (20261201, 20261301, 20261401; nenhuma
+  semente + i cruza as das rodadas 1–2, teste), as mesmas 60 mensagens, sem o estilo da espécie, gemma2:9b. As sementes das
+  rodadas 1–2 passam a ser de calibração. As mensagens são as mesmas: a v8 não é validação independente das **mensagens**, só
+  das sementes.
+- **Resultado** (`artifacts_fala_livre/comando/rodada3/resumo.json`): gate PROPOSTO **passa**. Falsos positivos 0/60 nas negativas
+  e 0/60 na conversa; imperativos 51/60 (85,0%). Elogiar 6/6, repreender 6/6, acariciar 6/6, tratar_lesao 5/6 (uma virou
+  acariciar); alimentar 9/9, petisco 6/6, brincar 5/6, banheiro 5/6. **Regressão em limpar: 3/9** (rodada 1: 7/9); 5 viraram
+  `repreender` ("banho agora, sem choro" e "vai se limpar, você tá todo sujo", mensagens de tom bravo) e 1 null. Com o chip, o
+  jogador veria "Repreender?" no lugar de "Limpar?": é um erro de ação, não um falso positivo numa negativa.
+- **Execução direta continua fora**: o chip segue obrigatório; liberar para os imperativos é decisão do Matheus.
+
+## 2026-09-30 — Voz própria: gatilho de revanche
+
+O gatilho da seção 3 do DESIGN_VOZ_PROPRIA ("antes de lutar contra o rival do gosto revanche"), que tinha ficado de fora.
+- **Quando:** ao escolher (Arena ou Campanha) o rival que venceu o pet e ainda não foi vencido depois. A luta não espera a
+  fala: ela aparece acima do Lutar/Desafiar (a janela de julgar fica na tela do Pet, como nas outras falas). Uma vez por
+  derrota: o registro diz se já houve um `fl` "revanche" depois dela. Mesmo ritmo das outras falas (2 h, nunca dormindo nem
+  com janela aberta). O assunto da fala, quando é verdade, é o próprio fato de revanche.
+- **Nada novo no motor:** o gatilho é só o texto do evento `fl` (pets v7 em diante); assinatura e replay iguais.
+- **Nomes dos rivais (correção):** na web os fatos da história e a mentira diziam "contra o ." (o nome padrão é o do
+  formato da pesquisa, `npc:tier1_x`). Agora a web passa o nome da tela (`src/nomesRivais.ts`: NPC, Digimon do bot) e
+  manda `dados.nome`; a mentira (TS e Python) usa esse nome quando vem. Os gabaritos Python × TS não mudam.
+- O verificador sustenta a fala pelo [G1] "vou lutar de novo contra quem me venceu" (revanche, luta, enfrentar).

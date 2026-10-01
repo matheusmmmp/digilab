@@ -87,13 +87,16 @@ TIPO_MENTIRA = "dizer agora"                     # = fatos.TIPO_MENTIRA
 # tambem usa para o mesmo trecho). A primeira versao aqui era mais estreita (so H/O para costume, so L para lembranca):
 # corrigida em 2026-09-29 depois da rodada 1 de artifacts_voz (declarado no relatorio).
 _HISTORIA = ("habito meu", "habito do dono", "gosto", "marco")
+# a arvore da especie [A] (2026-09-30) sustenta o que o pet diz de quem vira quem ("Agumon evolui pra Greymon"); so
+# existe quando o servidor liga, entao as rodadas de antes nao mudam
+_ARVORE = ("arvore da minha especie",)
 TIPOS_QUE_SUSTENTAM_V4 = {
     "causa": TIPOS_QUE_SUSTENTAM["causa"] + _HISTORIA,
     "lembranca": ("memoria",) + _HISTORIA,
-    "evento": TIPOS_QUE_SUSTENTAM["evento"] + _HISTORIA,
-    "costume": _HISTORIA,
+    "evento": TIPOS_QUE_SUSTENTAM["evento"] + _HISTORIA + _ARVORE,
+    "costume": _HISTORIA + _ARVORE,
     "gosto": _HISTORIA,
-    "mundo": ("coisa que ouvi no Digimundo",),
+    "mundo": ("coisa que ouvi no Digimundo",) + _ARVORE,
 }
 
 SISTEMA_EXTRAIR_V4 = """Você analisa uma fala de um pet virtual. Liste, sem inventar nada:
@@ -144,7 +147,7 @@ ESQUEMA_EXTRAIR_V5 = {"type": "object", "properties": {"afirmacoes": {"type": "a
 _CAUSA = re.compile(r"\b(porque|por causa|pois|j[aá] que|ent[aã]o|por isso|gra[cç]as a)\b")
 _COSTUME = re.compile(r"\b(sempre|nunca|costum\w*|toda vez|todo dia|todos os dias)\b")
 _EVENTO = re.compile(r"\d|\b(ontem|hoje|amanh[aã]|semana|m[eê]s|ano passado|aconteceu|lembr\w*|fui|fiz|comi|ganhei|"
-                     r"venci|perdi|lutei|vi|conheci|ganhou|venceu|perdeu|voltou|sumiu|apareceu)\b")
+                     r"venci|perdi|lutei|vi|conheci|ganhou|venceu|perdeu|voltou|sumiu|apareceu|amig[oa]s?|evolu\w*|vir(a|am|ou|ei))\b")
 
 
 def tipo_de_fato_escondido(trecho: str) -> str | None:
@@ -215,14 +218,28 @@ def _raiz(palavra: str) -> str:
     return p
 
 
+# gatilhos da voz propria (web/app/src/voz.ts, TEXTO_GATILHO): o texto do [G1] e as raizes que dizem o mesmo. "Voce
+# voltou!" com [G1] "o dono voltou depois de um tempo sumido" e verdade; o juiz do gemma deixava passar como sem base
+RAIZES_GATILHO_VOZ = {
+    "o dono voltou depois de um tempo sumido": ("volt", "cheg", "aparec", "sum"),
+    "acabei de lutar": ("lut", "brig", "combat"),
+    "faz um dia que evoluí": ("evolu",),
+    "vou lutar de novo contra quem me venceu": ("revanch", "lut", "enfrent"),
+}
+
+
 def acao_do_gatilho(trecho: str, fatos: list[dict]) -> str | None:
     """Id do fato "evento agora" cuja acao aparece no trecho (regra deterministica, antes do juiz)."""
     palavras = {_raiz(w) for w in re.findall(r"\w+", _norm(trecho)) if len(w) >= 3}
     for f in fatos:
-        if f["tipo"] == "evento agora" and ":" in f["texto"]:
+        if f["tipo"] != "evento agora":
+            continue
+        if ":" in f["texto"]:
             acao = f["texto"].split(":", 1)[1].split()
             if acao and _raiz(acao[0]) in palavras:
                 return f["id"]
+        elif any(p.startswith(r) for p in palavras for r in RAIZES_GATILHO_VOZ.get(f["texto"], ())):
+            return f["id"]
     return None
 
 

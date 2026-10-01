@@ -54,7 +54,7 @@ def _historia(regra: str, d: dict) -> str | None:
     if regra == "treino_favorito" and d.get("exercicio"):
         return f"odeio treinar {str(d['exercicio']).replace('_', ' ')}"
     if regra in ("revanche", "venceu_depois", "primeira_derrota") and d.get("rival"):
-        return f"eu venci {_rival_padrao(str(d['rival']))} fácil"
+        return f"eu venci {d.get('nome') or _rival_padrao(str(d['rival']))} fácil"   # nome: o do jogo web, quando vem
     if regra == "primeira_vitoria":
         return "nunca venci uma luta"
     if regra == "lesao":

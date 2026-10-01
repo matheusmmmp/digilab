@@ -12,9 +12,11 @@ import { gradeDe } from "./grades.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
 import { ehLuta } from "./rotas.ts";
 import { conferirRevanche, type Campeao, type ItemGanho, type MedalhaGanha, type Recorde } from "./tamer.ts";
+import { falaRevanche } from "./falaLivre.ts";
 
 /* bots classicos: Digimon do mapa da Etapa 0 (so rotulo) */
-export const DIGIMON_BOT: Record<string, string> = { aleatorio: "Kuramon", agressivo: "Monochromon", tartaruga: "Golemon", atirador: "Tankmon", contragolpe: "Leomon", adaptativo: "Devimon", oraculo: "Jijimon" };
+import { DIGIMON_BOT } from "./nomesRivais.ts";
+export { DIGIMON_BOT };
 export const RIVAIS_CLASSICOS = ["aleatorio", "agressivo", "tartaruga", "atirador", "contragolpe", "adaptativo", "oraculo"];
 export const RIVAIS_ADULTOS: FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];
 
@@ -150,6 +152,8 @@ export function previa(modo: Modo, manterTexto = false): void {
   LUTA.palco = { modo, A, B, E, tr: null, turno: null, callout: "", intencao: null, regra: null, resultado: null, log: [], arena: L?.arena ?? null,
     texto: textoAntes ?? (modo === "arena" ? "Escolha um rival e aperte Lutar." : `Seu pet × ${B.nomeTela}: escolha um lugar no mapa e aperte Desafiar.`) };
   avisarLuta();
+  /* pets v7: diante do rival que o venceu (e ainda nao foi vencido), ele fala antes da luta */
+  if (LUTA.replay === null && (npc || !LUTA.rivalFixo)) falaRevanche(m, npc ?? LUTA.rival);
 }
 export function escolherRival(k: string): void { if (LUTA.lutando) return; LUTA.rival = k; LUTA.rivalFixo = null; previa("arena"); }
 /** o pet B do cenario como lutador de tela */

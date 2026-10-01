@@ -74,6 +74,7 @@ export function App() {
     if (est === "adolescente") ids.push("champion", "lutas_treino");
     if (est === "adulto") ids.push(mDica.versao >= 5 && !mDica.sombria ? "ultimate" : "adulto");
     if (est === "mega") ids.push("adulto");
+    if (nascDica === 0 && !mDica.morte && mDica.e.saude < .3) ids.push("saude");
     if (mDica.versao >= 4) {
       const j = mDica.janelaAberta();
       if (j?.tipo === "chamado") ids.push("manha");
