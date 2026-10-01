@@ -334,8 +334,9 @@ def test_l1_bronca_inverte_o_sinal():
 
 def test_l1_passo_depende_da_politica_atual():
     """O mesmo elogio, a mesma acao: quanto mais provavel a acao ja e, menor o passo (termo 1 - p)."""
-    S = CONFIG_LOBOS_APRENDIZ.escala
-    p = PoliticaLobos(cfg_lobos=CONFIG_LOBOS_APRENDIZ)
+    cfg = ConfigLobos(aprendizado_ligado=True, passo=128, teto=1 << 20)     # sem teto, para medir so o termo (1 - p)
+    S = cfg.escala
+    p = PoliticaLobos(cfg_lobos=cfg)
     obs = _obs_tempo_livre()
     # forca OCIOSO como escolhida duas vezes: antes e depois de deixar OCIOSO muito mais provavel
     def passo_para_ocioso(pol):

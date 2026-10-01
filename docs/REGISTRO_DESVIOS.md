@@ -1403,3 +1403,11 @@ Interpretações do desenho, registradas com o plano (antes da calibração). Os
   ação do dono, então o ambiente pode diferir no detalhe); (c) G5(c) = JSD(atencioso, relapso) − JSD(acoplado, relapso) > 0; (d) a
   norma de reação usa a regressão conjunta de Finlay–Wilkinson (índice do ambiente = média de todos os pets no ambiente), porque os
   ambientes são sementes, sem gradiente medido; (e) o teto do G3-T é a política ótima do dono avaliada nos estados que o pet visitou.
+- **Calibração (2026-10-01, `artifacts_v2_l1/calibracao/`): não fechou.** Nenhum ponto passa G6; a regra da seção 5 escolheu passo
+  512, teto 1024 (menor razão 14/7), com 12 vidas no teto. Nada foi reajustado; o ponto vai ao config da validação e à `ConfigLobos`
+  como o plano manda, e o referendo decide se vale rodar a validação com ele.
+- **Índice do ambiente mal condicionado na norma de reação.** Com ambientes que são sementes, o índice de Finlay–Wilkinson tem
+  amplitude 0,007 e as inclinações saem com IC de dezenas; só os interceptos são legíveis. Fica relatado; uma versão com um gradiente
+  de ambiente medido (por exemplo, a dificuldade do ambiente) é desenho novo e não entra sem plano.
+- **Artefatos pesados fora do git.** Os `vidas/*.politica.json` da L1 (um motivo por decisão) somam 600 MB; `.gitignore` os deixa de
+  fora e eles se regeneram pelo replay do `.jsonl` com o mesmo código (o orquestrador confere o replay bit a bit antes de medir).

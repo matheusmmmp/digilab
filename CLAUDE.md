@@ -76,6 +76,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/treino.py` | `CanalDeInteracao` impõe orçamento exato; `MotorComFeedback` (subclasse, só sobrescreve `_aplicar_acao_usuario`); `reproduzir_com_feedback`; `simular_vida` |
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
+| `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
 | `digilab/metrics.py` | taxa de vitória, Bradley-Terry (erro padrão projetado em soma-zero), JSD com números aleatórios comuns, bootstrap, `efeito_do_treino` (ablação) |
@@ -1231,3 +1232,46 @@ e subclasses ficam congelados só para reproduzir a v1. O aprendiz da V2 é `dig
 - **Aberto:** o instinto puro não roda no `MotorPersonalidade` (o embrulho repassa `receber_acao_dono`); o controle do G2 ali é o
   instinto com gancho vazio, definido no teste. L1 (ligar o aprendizado), L2/L3 (peças do DF), A1 e o porte para a web ficam para as
   tarefas seguintes.
+
+## V2, L1 — o lobo de decisão aprende (2026-10-01, `docs/TAREFA_V2_L1_DECISAO.md`, `docs/PLANO_ANALISE_V2_L1.md` rev. 2) — CALIBRAÇÃO FEITA, NÃO FECHOU; validação aguarda o referendo
+
+Nó L1 da fase 1b (H1), com as decisões D1–D4 de `docs/DEFINICOES_V2.md`. Números de `artifacts_v2_l1/calibracao/` (sementes de
+calibração 3101…3505; `escolha.json`, `varredura.jsonl`, `passo512_teto1024/{resultado,divergence,tarefa,legibilidade,deriva,
+custo_gargalo,so_cuidado,norma_de_reacao}.json`, `educacao/resultado.json`; os `vidas/*.politica.json` ficam fora do git: 600 MB de
+motivos, regeneráveis por replay dos `.jsonl`). **A validação (4101…4505) não rodou: só depois do referendo dos gates pelo Matheus.**
+- **Código.** `PoliticaLobos` com `ConfigLobos(aprendizado_ligado=True)` (`CONFIG_LOBOS_APRENDIZ`): só o lobo de decisão muda, por
+  `Δw = arred(f·S·passo·X_j·(S·1[a=a*] − P_a)/(S·S·W_a))` em inteiros (a direção do gradiente de `log p(a*)` da política proporcional
+  com o sinal do dono no lugar da vantagem, COACH), janela de crédito da v1 (elogio/bronca na última decisão; chamado com latência),
+  piso no peso efetivo e teto `|w − w0| ≤ teto`. Base `lobos.Aprendiz` compartilhada com o **controle sem lobos** `policies/camada_unica.py`
+  (490 pesos por 7 fatias do dia, toda ação candidata, sem regra do instinto). `motivo.motivo_lobos` (impulso/prior × lobo de decisão,
+  regra de honestidade do bandit). `metrics.acerto_na_tarefa`, `eficiencia_amostral`, `norma_de_reacao` (Finlay–Wilkinson).
+  `fabricas_educacao`/`simular_vida_educacao` com `politica_fabrica` opcional (padrão intacto). L0 intacta (G1/G2 passam);
+  `tests/test_lobos.py` 40 testes. Parâmetros novos em `ConfigLobos` (7, PROPOSTOS; `lobos.PARAMETROS_LOBOS_L1`); `passo` 512 e `teto`
+  1024 vieram da calibração.
+- **Calibração (grade 5 passos × 3 tetos, 39 min): não fechou.** Nenhum ponto passa o G6: com passo 32 a deriva ainda cresce linear
+  (razão JSD dia 14 / dia 7 = 2,33) e de 64 em diante há pesos no teto. O ponto escolhido pela regra da seção 5 (menor razão) é
+  **passo 512, teto 1024** (razão 1,19, mas 12 das 20 vidas com peso no teto). A divergência cresce com o passo (0,0014 → 0,034 bit) e
+  o G4 do aprendido também (0,03 → 0,19); nenhum ponto chega perto dos alvos.
+- **Gates no ponto escolhido (calibração, não validação):**
+  - **G3 FALHA**: atencioso × relapso 0,029 bit [0,023; 0,038] (alvo 0,10; o bandit nas mesmas sementes dá 0,017; instinto 0,0). Na
+    conta da v1: entre braços 0,035, dentro do braço 0,021 (v1: 0,020 e 0,013).
+  - **G4 FALHA**: o lobo de decisão decide em 20,6% das decisões e tem fator em 18,8% [15,9; 21,6] (alvo 50%); bruto 70,5% (instinto
+    51,6%; bandit 15,9% nos dois).
+  - **G5**: (a) = G3, falha; **(c) passa**: ensino − acoplado +0,0196 bit [+0,0146; +0,0256] (o ensino diverge acima do cuidado); (b)
+    insuficiente (2 sementes sem lesão nem morte; 1 morte, 6 pets com lesão; leitura com todos 0,102).
+  - **G6 FALHA** pelo teto (12 vidas); razão 1,19 passa.
+- **G3-T (sem gate): o aprendiz aprende a tarefa ensinada.** Acerto nos 7 últimos dias, atencioso: lobos **0,719** (instinto 0,574,
+  bandit 0,598, teto do dono 1,0); relapso 0,529 (0,514); aleatório 0,624 (0,640); incoerente 0,481 (0,572). Eficiência amostral:
+  40 sinais em média (de 138 na vida); o bandit chega à metade com 19, mas sobe pouco. O acoplado só cuidado cai a 0,467 (o canal do
+  chamado ensina a chamar mais).
+- **Controle sem lobos (D2):** diverge mais (G3 0,134 [0,105; 0,163]) e é mais "legível" pelo aprendido (0,284 × 0,188: lobos − controle
+  −0,096 [−0,126; −0,064]): **a modularidade não compra legibilidade** por esta medida. **Custo do gargalo** a favor dos lobos: +0,386
+  [+0,361; +0,413] de acerto (o controle, sem regra de sono, cuida mal de si).
+- **Norma de reação (3.2):** Δα ensino − só cuidado +0,228 [+0,196; +0,260] no acerto e +0,020 na JSD ao instinto; **a inclinação é
+  mal condicionada**: o índice do ambiente tem amplitude 0,007 (os 4 ambientes mal mudam a média), IC de Δβ [−3,5; +12,3].
+- **Acoplado (D4):** 81–94 interações contra 224 (os sinais são 60% do atencioso); JSD acoplado × ensino 0,027; a variante sem carinho sai
+  igual (o atencioso quase não acaricia).
+- **Leitura, antes da validação:** o aprendiz da V2 aprende o que o dono ensina (G3-T sobe 0,145 sobre o instinto) e isso é ensino, não
+  cuidado (G5c), mas o que se aprende quase não muda a distribuição de ações nas sondas (G3) nem decide muitas decisões (G4): o impulso
+  (as regras do instinto) decide 79% das vezes. Os alvos 0,10 bit e 50% foram escritos antes de se ver o aprendiz; a decisão de
+  mantê-los, relaxá-los ou declarar resultado negativo é do referendo. Interpretações em `docs/REGISTRO_DESVIOS.md`.

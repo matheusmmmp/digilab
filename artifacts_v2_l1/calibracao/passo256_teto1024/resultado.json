@@ -1,0 +1,1307 @@
+{
+  "deriva_fim": {
+    "aleatorio-lobos@3101": {
+      "cortes_teto": 144,
+      "desvio_maximo": 1014,
+      "n_atualizacoes": 530,
+      "pesos_no_teto": 0
+    },
+    "aleatorio-lobos@3202": {
+      "cortes_teto": 0,
+      "desvio_maximo": 795,
+      "n_atualizacoes": 651,
+      "pesos_no_teto": 0
+    },
+    "aleatorio-lobos@3303": {
+      "cortes_teto": 178,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 750,
+      "pesos_no_teto": 1
+    },
+    "aleatorio-lobos@3404": {
+      "cortes_teto": 25,
+      "desvio_maximo": 991,
+      "n_atualizacoes": 745,
+      "pesos_no_teto": 0
+    },
+    "aleatorio-lobos@3505": {
+      "cortes_teto": 75,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 632,
+      "pesos_no_teto": 7
+    },
+    "atencioso-lobos@3101": {
+      "cortes_teto": 305,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 153,
+      "pesos_no_teto": 13
+    },
+    "atencioso-lobos@3202": {
+      "cortes_teto": 139,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 176,
+      "pesos_no_teto": 4
+    },
+    "atencioso-lobos@3303": {
+      "cortes_teto": 118,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 224,
+      "pesos_no_teto": 3
+    },
+    "atencioso-lobos@3404": {
+      "cortes_teto": 289,
+      "desvio_maximo": 951,
+      "n_atualizacoes": 187,
+      "pesos_no_teto": 0
+    },
+    "atencioso-lobos@3505": {
+      "cortes_teto": 51,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 199,
+      "pesos_no_teto": 1
+    },
+    "incoerente-lobos@3101": {
+      "cortes_teto": 21,
+      "desvio_maximo": 850,
+      "n_atualizacoes": 234,
+      "pesos_no_teto": 0
+    },
+    "incoerente-lobos@3202": {
+      "cortes_teto": 16,
+      "desvio_maximo": 983,
+      "n_atualizacoes": 184,
+      "pesos_no_teto": 0
+    },
+    "incoerente-lobos@3303": {
+      "cortes_teto": 0,
+      "desvio_maximo": 591,
+      "n_atualizacoes": 361,
+      "pesos_no_teto": 0
+    },
+    "incoerente-lobos@3404": {
+      "cortes_teto": 61,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 370,
+      "pesos_no_teto": 4
+    },
+    "incoerente-lobos@3505": {
+      "cortes_teto": 12,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 152,
+      "pesos_no_teto": 6
+    },
+    "relapso-lobos@3101": {
+      "cortes_teto": 30,
+      "desvio_maximo": 1024,
+      "n_atualizacoes": 641,
+      "pesos_no_teto": 7
+    },
+    "relapso-lobos@3202": {
+      "cortes_teto": 7,
+      "desvio_maximo": 639,
+      "n_atualizacoes": 634,
+      "pesos_no_teto": 0
+    },
+    "relapso-lobos@3303": {
+      "cortes_teto": 15,
+      "desvio_maximo": 1016,
+      "n_atualizacoes": 595,
+      "pesos_no_teto": 0
+    },
+    "relapso-lobos@3404": {
+      "cortes_teto": 7,
+      "desvio_maximo": 1014,
+      "n_atualizacoes": 566,
+      "pesos_no_teto": 0
+    },
+    "relapso-lobos@3505": {
+      "cortes_teto": 0,
+      "desvio_maximo": 424,
+      "n_atualizacoes": 594,
+      "pesos_no_teto": 0
+    }
+  },
+  "deriva_media_por_dia": {
+    "1": 0.002791929865504685,
+    "10": 0.011968178644910819,
+    "11": 0.012919488143212124,
+    "12": 0.013005754752820644,
+    "13": 0.014177194223174035,
+    "14": 0.014098713482835095,
+    "2": 0.004894222549271203,
+    "3": 0.005910122343519293,
+    "4": 0.007141916678232526,
+    "5": 0.007945049845035655,
+    "6": 0.009656217081410146,
+    "7": 0.010651979241027119,
+    "8": 0.011062801013653159,
+    "9": 0.011767559572202647
+  },
+  "divergencia": {
+    "bandit": {
+      "coerente_x_aleatorio": {
+        "atencioso": {
+          "ic_inferior": 0.0181594064354441,
+          "ic_superior": 0.024367238580430155,
+          "media": 0.02098215341828589,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.01785125641934575,
+            "3202": 0.02260772865973546,
+            "3303": 0.01955757280412111,
+            "3404": 0.027125735941023188,
+            "3505": 0.017768473267203946
+          }
+        },
+        "relapso": {
+          "ic_inferior": 0.016481305230195125,
+          "ic_superior": 0.022672639018358864,
+          "media": 0.01928929696580734,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.01797870955035384,
+            "3202": 0.016920348282191234,
+            "3303": 0.020855461135050372,
+            "3404": 0.025398405843321602,
+            "3505": 0.015293560018119656
+          }
+        }
+      },
+      "conta_v1": {
+        "jsd_dentro_do_braco": 0.012738662592889994,
+        "jsd_entre_bracos": 0.018328482130686496,
+        "n_pares_dentro": 40,
+        "n_pares_entre": 150,
+        "piso_ruido": 0.011655396139513151
+      },
+      "jsd_vs_instinto": {
+        "aleatorio-bandit@3101": 0.031241426181698943,
+        "aleatorio-bandit@3202": 0.03905026912871565,
+        "aleatorio-bandit@3303": 0.03064340839814189,
+        "aleatorio-bandit@3404": 0.040411764118503356,
+        "aleatorio-bandit@3505": 0.02969828543370044,
+        "atencioso-bandit@3101": 0.03428595274321522,
+        "atencioso-bandit@3202": 0.03368286968212613,
+        "atencioso-bandit@3303": 0.03515865620573857,
+        "atencioso-bandit@3404": 0.034448268647588,
+        "atencioso-bandit@3505": 0.033251638230165866,
+        "incoerente-bandit@3101": 0.03398806514681154,
+        "incoerente-bandit@3202": 0.030477020508047382,
+        "incoerente-bandit@3303": 0.02818839607585173,
+        "incoerente-bandit@3404": 0.029954798614144105,
+        "incoerente-bandit@3505": 0.02867210937887148,
+        "relapso-bandit@3101": 0.0316570237759222,
+        "relapso-bandit@3202": 0.04054438685881898,
+        "relapso-bandit@3303": 0.04165545708418405,
+        "relapso-bandit@3404": 0.04406515167701864,
+        "relapso-bandit@3505": 0.038346841792637996
+      },
+      "media_seis_pares": {
+        "ic_inferior": 0.017265828055819367,
+        "ic_superior": 0.01946962886694894,
+        "media": 0.018367728461384153,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.01756196531427134,
+          "3202": 0.018346458875537378,
+          "3303": 0.019606823249694847,
+          "3404": 0.019894019479908813,
+          "3505": 0.01642937538750839
+        }
+      },
+      "primario_atencioso_x_relapso": {
+        "ic_inferior": 0.013239036654037622,
+        "ic_superior": 0.02023734463290325,
+        "media": 0.016738190643470437,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.015151795273015753,
+          "3202": 0.020981398776539817,
+          "3303": 0.02180485407402883,
+          "3404": 0.01013868763038882,
+          "3505": 0.01561421746337896
+        }
+      }
+    },
+    "instinto": {
+      "coerente_x_aleatorio": {
+        "atencioso": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.0,
+            "3202": 0.0,
+            "3303": 0.0,
+            "3404": 0.0,
+            "3505": 0.0
+          }
+        },
+        "relapso": {
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.0,
+            "3202": 0.0,
+            "3303": 0.0,
+            "3404": 0.0,
+            "3505": 0.0
+          }
+        }
+      },
+      "conta_v1": {
+        "jsd_dentro_do_braco": 0.0,
+        "jsd_entre_bracos": 0.0,
+        "n_pares_dentro": 40,
+        "n_pares_entre": 150,
+        "piso_ruido": 0.0007015604289118158
+      },
+      "jsd_vs_instinto": {
+        "aleatorio-instinto@3101": 0.0,
+        "aleatorio-instinto@3202": 0.0,
+        "aleatorio-instinto@3303": 0.0,
+        "aleatorio-instinto@3404": 0.0,
+        "aleatorio-instinto@3505": 0.0,
+        "atencioso-instinto@3101": 0.0,
+        "atencioso-instinto@3202": 0.0,
+        "atencioso-instinto@3303": 0.0,
+        "atencioso-instinto@3404": 0.0,
+        "atencioso-instinto@3505": 0.0,
+        "incoerente-instinto@3101": 0.0,
+        "incoerente-instinto@3202": 0.0,
+        "incoerente-instinto@3303": 0.0,
+        "incoerente-instinto@3404": 0.0,
+        "incoerente-instinto@3505": 0.0,
+        "relapso-instinto@3101": 0.0,
+        "relapso-instinto@3202": 0.0,
+        "relapso-instinto@3303": 0.0,
+        "relapso-instinto@3404": 0.0,
+        "relapso-instinto@3505": 0.0
+      },
+      "media_seis_pares": {
+        "ic_inferior": 0.0,
+        "ic_superior": 0.0,
+        "media": 0.0,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.0,
+          "3202": 0.0,
+          "3303": 0.0,
+          "3404": 0.0,
+          "3505": 0.0
+        }
+      },
+      "primario_atencioso_x_relapso": {
+        "ic_inferior": 0.0,
+        "ic_superior": 0.0,
+        "media": 0.0,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.0,
+          "3202": 0.0,
+          "3303": 0.0,
+          "3404": 0.0,
+          "3505": 0.0
+        }
+      }
+    },
+    "lobos": {
+      "coerente_x_aleatorio": {
+        "atencioso": {
+          "ic_inferior": 0.034418629295475234,
+          "ic_superior": 0.055434555141446476,
+          "media": 0.04625248144557691,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.05770634137355997,
+            "3202": 0.04558244101393758,
+            "3303": 0.0483175806607425,
+            "3404": 0.022934788029959543,
+            "3505": 0.056721256149684963
+          }
+        },
+        "relapso": {
+          "ic_inferior": 0.025959416544231145,
+          "ic_superior": 0.054860634111454955,
+          "media": 0.04184990856496758,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.04466884066841079,
+            "3202": 0.038812134007491415,
+            "3303": 0.06254313250519808,
+            "3404": 0.01348646712811138,
+            "3505": 0.0497389685156262
+          }
+        }
+      },
+      "conta_v1": {
+        "jsd_dentro_do_braco": 0.011109340666922866,
+        "jsd_entre_bracos": 0.02830639848638662,
+        "n_pares_dentro": 40,
+        "n_pares_entre": 150,
+        "piso_ruido": 0.0007525395919516884
+      },
+      "jsd_vs_instinto": {
+        "aleatorio-lobos@3101": 0.026729155212529204,
+        "aleatorio-lobos@3202": 0.017602052944426655,
+        "aleatorio-lobos@3303": 0.021052521009173153,
+        "aleatorio-lobos@3404": 0.0023325779323196197,
+        "aleatorio-lobos@3505": 0.019437441480397773,
+        "atencioso-lobos@3101": 0.02281739625033222,
+        "atencioso-lobos@3202": 0.025279990280929518,
+        "atencioso-lobos@3303": 0.015513741427080216,
+        "atencioso-lobos@3404": 0.02123640018757823,
+        "atencioso-lobos@3505": 0.02030860906358148,
+        "incoerente-lobos@3101": 0.008490193052106753,
+        "incoerente-lobos@3202": 0.005880597422759162,
+        "incoerente-lobos@3303": 0.005024080092657567,
+        "incoerente-lobos@3404": 0.008196804265996668,
+        "incoerente-lobos@3505": 0.004763560359745073,
+        "relapso-lobos@3101": 0.00464719844377883,
+        "relapso-lobos@3202": 0.011705920776667395,
+        "relapso-lobos@3303": 0.017013499417092515,
+        "relapso-lobos@3404": 0.01075588562387107,
+        "relapso-lobos@3505": 0.013186644413678804
+      },
+      "media_seis_pares": {
+        "ic_inferior": 0.024379802675370536,
+        "ic_superior": 0.03256101389581206,
+        "media": 0.02917130494432253,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.028430818983844502,
+          "3202": 0.03114692201422146,
+          "3303": 0.033710009312793054,
+          "3404": 0.02044970999112727,
+          "3505": 0.03211906441962637
+        }
+      },
+      "primario_atencioso_x_relapso": {
+        "ic_inferior": 0.02131357381843451,
+        "ic_superior": 0.03573674787428479,
+        "media": 0.028525654296525028,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.01670142731834334,
+          "3202": 0.03729024013862178,
+          "3303": 0.0242955047502788,
+          "3404": 0.03976215981879919,
+          "3505": 0.024578939456582006
+        }
+      }
+    }
+  },
+  "gates": {
+    "G3": {
+      "ic_inferior": 0.02131357381843451,
+      "ic_superior": 0.03573674787428479,
+      "media": 0.028525654296525028,
+      "minimo_ic": 0.02,
+      "minimo_media": 0.1,
+      "passa": false
+    },
+    "G4": {
+      "fracao_aprendido_com_fator": 0.12942708333333333,
+      "fracao_aprendido_decidiu": 0.15747767857142858,
+      "fracao_bruta_com_fator": 0.649516369047619,
+      "ic": {
+        "ic_inferior": 0.11123511904761904,
+        "ic_superior": 0.14769345238095238,
+        "media": 0.12942708333333333,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "minimo": 0.5,
+      "passa": false
+    },
+    "G5": {
+      "nota": "desenho da arena v1: sem morte e sem lesao por construcao; G5(a) = G3. (b): braco de educacao; (c): acoplado",
+      "passa_a": false
+    },
+    "G6": {
+      "maximo_razao": 1.5,
+      "passa": false,
+      "passa_a": true,
+      "passa_b": false,
+      "razao_14_7": 1.3235768831141306,
+      "vidas_com_peso_no_teto": 9
+    }
+  },
+  "legibilidade_total": {
+    "bandit": {
+      "decisoes": 26880,
+      "fracao_com_fator": 0.15941220238095238,
+      "fracao_decisao_com_fator": 0.15941220238095238,
+      "fracao_decisao_decidiu": 0.15941220238095238,
+      "fracao_impulsos_com_fator": 0.0,
+      "fracao_impulsos_decidiu": 0.8405877976190477
+    },
+    "instinto": {
+      "decisoes": 26880,
+      "fracao_com_fator": 0.5164434523809524,
+      "fracao_decisao_com_fator": 0.0,
+      "fracao_decisao_decidiu": 0.0,
+      "fracao_impulsos_com_fator": 0.5164434523809524,
+      "fracao_impulsos_decidiu": 1.0
+    },
+    "lobos": {
+      "decisoes": 26880,
+      "fracao_com_fator": 0.649516369047619,
+      "fracao_decisao_com_fator": 0.12942708333333333,
+      "fracao_decisao_decidiu": 0.15747767857142858,
+      "fracao_impulsos_com_fator": 0.5200892857142857,
+      "fracao_impulsos_decidiu": 0.8425223214285714
+    }
+  },
+  "ponto": {
+    "passo": 256,
+    "teto": 1024
+  },
+  "segundos": 135.28527939999913,
+  "sementes": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "tarefa_por_dono": {
+    "bandit": {
+      "aleatorio": {
+        "acerto_total": {
+          "ic_inferior": 0.6141369047619047,
+          "ic_superior": 0.6949404761904762,
+          "media": 0.6523809523809524,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.55,
+          0.7229166666666667,
+          0.6395833333333333,
+          0.6125,
+          0.69375,
+          0.70625,
+          0.7125,
+          0.5958333333333333,
+          0.6729166666666667,
+          0.6479166666666666,
+          0.65,
+          0.6020833333333334,
+          0.675,
+          0.6520833333333333
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 17.6,
+          "ic_superior": 48.6,
+          "media": 31.6,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            64,
+            30,
+            13,
+            16,
+            35
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.6191964285714285,
+          "ic_superior": 0.7050595238095237,
+          "media": 0.6665178571428572,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 69.8,
+          "ic_superior": 81.6,
+          "media": 75.2,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.6080357142857142,
+          "ic_superior": 0.6875,
+          "media": 0.6422619047619047,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "atencioso": {
+        "acerto_total": {
+          "ic_inferior": 0.5876488095238095,
+          "ic_superior": 0.6139880952380952,
+          "media": 0.6014880952380952,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.6166666666666667,
+          0.5770833333333333,
+          0.625,
+          0.6291666666666667,
+          0.6,
+          0.6020833333333334,
+          0.5875,
+          0.6104166666666667,
+          0.6020833333333333,
+          0.59375,
+          0.6041666666666667,
+          0.58125,
+          0.5958333333333333,
+          0.5958333333333334
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 10.0,
+          "ic_superior": 28.0,
+          "media": 19.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            10,
+            33,
+            9,
+            31,
+            12
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5589285714285714,
+          "ic_superior": 0.5861607142857143,
+          "media": 0.5729166666666667,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 135.0,
+          "ic_superior": 144.0,
+          "media": 139.2,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.58125,
+          "ic_superior": 0.6133928571428571,
+          "media": 0.5976190476190476,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "incoerente": {
+        "acerto_total": {
+          "ic_inferior": 0.5571428571428572,
+          "ic_superior": 0.587202380952381,
+          "media": 0.5703869047619048,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.5645833333333333,
+          0.5666666666666667,
+          0.5479166666666667,
+          0.5791666666666667,
+          0.5583333333333333,
+          0.5895833333333333,
+          0.5770833333333333,
+          0.5854166666666667,
+          0.5708333333333333,
+          0.5583333333333333,
+          0.5708333333333333,
+          0.5479166666666667,
+          0.56875,
+          0.6
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 21.4,
+          "ic_superior": 56.4,
+          "media": 38.8,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            11,
+            23,
+            52,
+            69,
+            39
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5645833333333334,
+          "ic_superior": 0.5830357142857143,
+          "media": 0.5723214285714285,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 136.8,
+          "ic_superior": 143.4,
+          "media": 140.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.549702380952381,
+          "ic_superior": 0.5943452380952381,
+          "media": 0.5717261904761906,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "relapso": {
+        "acerto_total": {
+          "ic_inferior": 0.48526785714285714,
+          "ic_superior": 0.513095238095238,
+          "media": 0.4980654761904762,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.38958333333333334,
+          0.4729166666666667,
+          0.5583333333333333,
+          0.5145833333333333,
+          0.44375,
+          0.5541666666666667,
+          0.5479166666666667,
+          0.5270833333333333,
+          0.50625,
+          0.5083333333333333,
+          0.4375,
+          0.5,
+          0.5354166666666667,
+          0.4770833333333333
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 8.2,
+          "ic_superior": 13.0,
+          "media": 10.4,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            9,
+            8,
+            8,
+            15,
+            12
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.49642857142857144,
+          "ic_superior": 0.5254464285714286,
+          "media": 0.5120535714285714,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 37.2,
+          "ic_superior": 40.8,
+          "media": 39.2,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.47767857142857145,
+          "ic_superior": 0.51875,
+          "media": 0.4988095238095238,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    },
+    "instinto": {
+      "aleatorio": {
+        "acerto_total": {
+          "ic_inferior": 0.6191964285714285,
+          "ic_superior": 0.7050595238095237,
+          "media": 0.6665178571428572,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.5770833333333334,
+          0.775,
+          0.68125,
+          0.6520833333333333,
+          0.6729166666666667,
+          0.7541666666666667,
+          0.7354166666666666,
+          0.5833333333333334,
+          0.6666666666666667,
+          0.7083333333333333,
+          0.6541666666666667,
+          0.59375,
+          0.6375,
+          0.6395833333333334
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 14.0,
+          "ic_superior": 41.0,
+          "media": 26.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            52,
+            14,
+            13,
+            16,
+            35
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.6191964285714285,
+          "ic_superior": 0.7050595238095237,
+          "media": 0.6665178571428572,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 69.8,
+          "ic_superior": 81.6,
+          "media": 75.2,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.5946428571428571,
+          "ic_superior": 0.6928571428571428,
+          "media": 0.6404761904761905,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "atencioso": {
+        "acerto_total": {
+          "ic_inferior": 0.5589285714285714,
+          "ic_superior": 0.5861607142857143,
+          "media": 0.5729166666666667,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.5958333333333333,
+          0.5833333333333333,
+          0.5895833333333333,
+          0.55,
+          0.5854166666666667,
+          0.5708333333333334,
+          0.5270833333333333,
+          0.5666666666666667,
+          0.5875,
+          0.56875,
+          0.5645833333333334,
+          0.5770833333333334,
+          0.5854166666666667,
+          0.56875
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 14.4,
+          "ic_superior": 43.6,
+          "media": 29.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            30,
+            13,
+            8,
+            48,
+            46
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5589285714285714,
+          "ic_superior": 0.5861607142857143,
+          "media": 0.5729166666666667,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 133.6,
+          "ic_superior": 138.4,
+          "media": 135.6,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.5577380952380953,
+          "ic_superior": 0.5928571428571429,
+          "media": 0.5741071428571429,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "incoerente": {
+        "acerto_total": {
+          "ic_inferior": 0.5645833333333334,
+          "ic_superior": 0.5830357142857143,
+          "media": 0.5723214285714285,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.5979166666666667,
+          0.5791666666666667,
+          0.5854166666666667,
+          0.5458333333333333,
+          0.5854166666666667,
+          0.5791666666666667,
+          0.5354166666666667,
+          0.5958333333333333,
+          0.54375,
+          0.5729166666666666,
+          0.5895833333333333,
+          0.55,
+          0.5708333333333333,
+          0.58125
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 8.6,
+          "ic_superior": 35.8,
+          "media": 21.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            30,
+            13,
+            8,
+            7,
+            47
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5645833333333334,
+          "ic_superior": 0.5830357142857143,
+          "media": 0.5723214285714285,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 128.4,
+          "ic_superior": 141.4,
+          "media": 135.6,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.5511904761904762,
+          "ic_superior": 0.5913690476190476,
+          "media": 0.5720238095238095,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "relapso": {
+        "acerto_total": {
+          "ic_inferior": 0.49642857142857144,
+          "ic_superior": 0.5254464285714286,
+          "media": 0.5120535714285714,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.39583333333333337,
+          0.5,
+          0.55,
+          0.5541666666666667,
+          0.4375,
+          0.56875,
+          0.5625,
+          0.5458333333333333,
+          0.4875,
+          0.5041666666666667,
+          0.5333333333333333,
+          0.525,
+          0.5375,
+          0.4666666666666666
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 8.4,
+          "ic_superior": 16.8,
+          "media": 12.6,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            9,
+            12,
+            18,
+            18,
+            6
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.49642857142857144,
+          "ic_superior": 0.5254464285714286,
+          "media": 0.5120535714285714,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 39.0,
+          "ic_superior": 41.2,
+          "media": 40.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.4886904761904762,
+          "ic_superior": 0.5342261904761905,
+          "media": 0.5142857142857142,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    },
+    "lobos": {
+      "aleatorio": {
+        "acerto_total": {
+          "ic_inferior": 0.5867559523809524,
+          "ic_superior": 0.703125,
+          "media": 0.6575892857142857,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.5416666666666667,
+          0.7145833333333333,
+          0.6541666666666667,
+          0.6104166666666666,
+          0.7020833333333333,
+          0.7375,
+          0.74375,
+          0.6229166666666667,
+          0.64375,
+          0.6770833333333333,
+          0.6979166666666667,
+          0.5979166666666667,
+          0.66875,
+          0.59375
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 13.8,
+          "ic_superior": 27.0,
+          "media": 18.6,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            15,
+            14,
+            13,
+            16,
+            35
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.6191964285714285,
+          "ic_superior": 0.7050595238095237,
+          "media": 0.6665178571428572,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 69.8,
+          "ic_superior": 81.6,
+          "media": 75.2,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.55,
+          "ic_superior": 0.726190476190476,
+          "media": 0.6431547619047618,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "atencioso": {
+        "acerto_total": {
+          "ic_inferior": 0.6529761904761905,
+          "ic_superior": 0.7074404761904762,
+          "media": 0.6802083333333334,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.6208333333333333,
+          0.5979166666666667,
+          0.6375,
+          0.6520833333333333,
+          0.6833333333333333,
+          0.69375,
+          0.6916666666666667,
+          0.6895833333333333,
+          0.7166666666666667,
+          0.6916666666666667,
+          0.6875,
+          0.70625,
+          0.73125,
+          0.7229166666666667
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 28.8,
+          "ic_superior": 43.2,
+          "media": 36.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            30,
+            34,
+            25,
+            47,
+            44
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5589285714285714,
+          "ic_superior": 0.5861607142857143,
+          "media": 0.5729166666666667,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 133.6,
+          "ic_superior": 142.4,
+          "media": 137.6,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.6755952380952381,
+          "ic_superior": 0.7336309523809523,
+          "media": 0.706547619047619,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "incoerente": {
+        "acerto_total": {
+          "ic_inferior": 0.5264880952380953,
+          "ic_superior": 0.6068452380952382,
+          "media": 0.566220238095238,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.5958333333333333,
+          0.53125,
+          0.56875,
+          0.5854166666666666,
+          0.5666666666666667,
+          0.5604166666666666,
+          0.5520833333333333,
+          0.5770833333333334,
+          0.5916666666666667,
+          0.55,
+          0.5520833333333334,
+          0.55,
+          0.5833333333333334,
+          0.5625
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 18.6,
+          "ic_superior": 46.6,
+          "media": 33.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            31,
+            55,
+            7,
+            35,
+            37
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.5645833333333334,
+          "ic_superior": 0.5830357142857143,
+          "media": 0.5723214285714285,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 129.4,
+          "ic_superior": 141.8,
+          "media": 135.6,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.5154761904761905,
+          "ic_superior": 0.6178571428571429,
+          "media": 0.5666666666666667,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "relapso": {
+        "acerto_total": {
+          "ic_inferior": 0.5071428571428572,
+          "ic_superior": 0.5449404761904761,
+          "media": 0.5260416666666667,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "curva_media": [
+          0.4208333333333333,
+          0.5208333333333334,
+          0.5541666666666667,
+          0.55,
+          0.4729166666666667,
+          0.5708333333333334,
+          0.55,
+          0.5770833333333333,
+          0.5375,
+          0.5041666666666667,
+          0.5479166666666667,
+          0.5104166666666667,
+          0.5625,
+          0.4854166666666666
+        ],
+        "eficiencia_sinais": {
+          "chegaram": 5,
+          "ic_inferior": 7.8,
+          "ic_superior": 16.8,
+          "media": 12.0,
+          "n": 5,
+          "nivel": 0.95,
+          "por_vida": [
+            8,
+            11,
+            21,
+            14,
+            6
+          ]
+        },
+        "piso": {
+          "ic_inferior": 0.49642857142857144,
+          "ic_superior": 0.5254464285714286,
+          "media": 0.5120535714285714,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "sinais_total": {
+          "ic_inferior": 39.0,
+          "ic_superior": 39.6,
+          "media": 39.2,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "teto_ultimos_7": {
+          "ic_inferior": 1.0,
+          "ic_superior": 1.0,
+          "media": 1.0,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "ultimos_7": {
+          "ic_inferior": 0.5026785714285714,
+          "ic_superior": 0.5642857142857143,
+          "media": 0.5321428571428573,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    }
+  }
+}

@@ -1165,8 +1165,9 @@ class ConfigLobos:
     # Atualizacao do lobo de decisao, em inteiros: dw = arred(f*S * passo * X_j * (S*1[a=a*] - P_a) / (S*S*W_a)).
     # passo e teto sao PROPOSTOS e CALIBRADOS nas sementes 3101...3505 (grade do plano, secao 5); os outros sao
     # PROPOSTOS, copiados da ConfigBandit (mesma janela de credito da v1) e nao calibrados.
-    passo: int = 128                         # PROPOSTO, calibrado: S/8 (grade {32, 64, 128, 256, 512})
-    teto: int = 2048                         # PROPOSTO, calibrado: |w - w0| <= teto (grade {1024, 2048, 4096})
+    passo: int = 512                         # PROPOSTO, calibrado em 3101...3505: S/2 (grade {32, 64, 128, 256, 512}; a calibracao
+                                             # nao fechou: nenhum ponto passou G6; escolhido pela regra da secao 5 do plano)
+    teto: int = 1024                         # PROPOSTO, calibrado: |w - w0| <= teto = 1*S (grade {1024, 2048, 4096})
     piso_peso: int = 64                      # PROPOSTO: S/16; peso efetivo minimo dos candidatos com o aprendizado ligado
     janela_latencia_ticks: int = 120         # PROPOSTO: = ConfigBandit.janela_latencia_ticks (chamado atendido paga 1 - L/janela)
     recompensa_pedido_ignorado: float = -0.5  # PROPOSTO: = ConfigBandit.recompensa_pedido_ignorado

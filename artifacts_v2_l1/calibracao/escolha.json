@@ -1,0 +1,216 @@
+{
+  "calibracao_fechou": false,
+  "custo_gargalo": {
+    "custo_gargalo_g3t_atencioso_lobos_menos_controle": {
+      "ic_inferior": 0.36071428571428565,
+      "ic_superior": 0.4127976190476191,
+      "media": 0.38571428571428573,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.35565476190476186,
+        "3202": 0.36904761904761907,
+        "3303": 0.41220238095238093,
+        "3404": 0.43005952380952384,
+        "3505": 0.36160714285714285
+      }
+    },
+    "g4_aprendido_lobos_menos_controle": {
+      "ic_inferior": -0.1263764880952381,
+      "ic_superior": -0.06402529761904763,
+      "media": -0.09627976190476192,
+      "modularidade_compra_legibilidade": false,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": -0.10639880952380956,
+        "3202": -0.09300595238095238,
+        "3303": -0.037946428571428575,
+        "3404": -0.1441592261904762,
+        "3505": -0.09988839285714288
+      }
+    }
+  },
+  "divergencia_controle": {
+    "ic_inferior": 0.10500229953156752,
+    "ic_superior": 0.1633913909319436,
+    "media": 0.13419684523175557,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": {
+      "3101": 0.11478689345716768,
+      "3202": 0.129028744676473,
+      "3303": 0.16938697313168835,
+      "3404": 0.1745771318599342,
+      "3505": 0.08320448303351465
+    }
+  },
+  "gates": {
+    "G3": {
+      "ic_inferior": 0.0231894665394035,
+      "ic_superior": 0.03815001114807966,
+      "media": 0.029246946256629314,
+      "minimo_ic": 0.02,
+      "minimo_media": 0.1,
+      "passa": false
+    },
+    "G4": {
+      "fracao_aprendido_com_fator": 0.18820684523809525,
+      "fracao_aprendido_decidiu": 0.2060639880952381,
+      "fracao_bruta_com_fator": 0.7049851190476191,
+      "ic": {
+        "ic_inferior": 0.15915178571428573,
+        "ic_superior": 0.21607142857142855,
+        "media": 0.18820684523809522,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "minimo": 0.5,
+      "passa": false
+    },
+    "G5": {
+      "b": {
+        "n_sementes": 2,
+        "passa": null,
+        "resultado": "insuficiente"
+      },
+      "c": {
+        "delta": {
+          "ic_inferior": 0.014637683531677752,
+          "ic_superior": 0.025576091080688534,
+          "media": 0.019604120921932068,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "3101": 0.01995178307697272,
+            "3202": 0.030891382330737426,
+            "3303": 0.012660703082386121,
+            "3404": 0.01926221078530639,
+            "3505": 0.015254525334257684
+          }
+        },
+        "passa": true
+      },
+      "nota": "desenho da arena v1: sem morte e sem lesao por construcao; G5(a) = G3. (b): braco de educacao; (c): acoplado",
+      "passa": false,
+      "passa_a": false
+    },
+    "G6": {
+      "maximo_razao": 1.5,
+      "passa": false,
+      "passa_a": true,
+      "passa_b": false,
+      "razao_14_7": 1.191595929034252,
+      "vidas_com_peso_no_teto": 12
+    }
+  },
+  "norma_de_reacao": {
+    "acerto_ultimos_7": {
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": -0.10833333333333336,
+          "ic_superior": -0.09017857142857148,
+          "media": -0.0991071428571429,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -3.763808521830607,
+          "ic_superior": 3.586270384008376,
+          "media": -0.15781167806419583,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.1962797619047619,
+          "ic_superior": 0.2601190476190476,
+          "media": 0.2279017857142857,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -3.517622304050369,
+          "ic_superior": 12.345607574960496,
+          "media": 4.413992635455063,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.09322916666666665,
+          "ic_superior": 0.16145833333333326,
+          "media": 0.12879464285714282,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -1.9410836401892682,
+          "ic_superior": 11.694634402945812,
+          "media": 4.2561809573908675,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    },
+    "jsd_vs_instinto": {
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.0042221454338201205,
+          "ic_superior": 0.006444313066987567,
+          "media": 0.005086919837678642,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -0.028936298639451342,
+          "ic_superior": 2.2341636864125882,
+          "media": 0.7555529933451273,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.018120108251038672,
+          "ic_superior": 0.023064315101496563,
+          "media": 0.02016695588784185,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.04367902608654605,
+          "ic_superior": 3.4475636107003664,
+          "media": 1.4888940133097444,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.02243233338171056,
+          "ic_superior": 0.02839202045353888,
+          "media": 0.025253875725520493,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.05721858040989171,
+          "ic_superior": 4.431675432899851,
+          "media": 2.244447006654872,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    }
+  },
+  "nota": "nenhum ponto passa G6: escolhido pela menor razao 14/7; a calibracao nao fechou",
+  "ponto": {
+    "passo": 512,
+    "teto": 1024
+  },
+  "regra": "secao 5 do plano (rev. 2): G6 e G4 do aprendido passando, maior IC inferior do G3; empate: menor passo, menor teto",
+  "segundos_total": 2356.2514126999977
+}

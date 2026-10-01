@@ -1,0 +1,8 @@
+{
+  "descricao": "V2, L1 (docs/PLANO_ANALISE_V2_L1.md, secao 6): validacao UNICA no ponto escolhido pela calibracao (artifacts_v2_l1/calibracao/escolha.json: passo 512, teto 1024; a calibracao NAO fechou: nenhum ponto passou G6). So roda depois do referendo do Matheus.",
+  "conjunto": "validacao",
+  "sementes": [4101, 4202, 4303, 4404, 4505],
+  "saida": "artifacts_v2_l1/validacao",
+  "ponto": {"passo": 512, "teto": 1024},
+  "educacao": true
+}

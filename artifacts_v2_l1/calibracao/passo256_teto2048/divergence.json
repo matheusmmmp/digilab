@@ -1,0 +1,269 @@
+{
+  "bandit": {
+    "coerente_x_aleatorio": {
+      "atencioso": {
+        "ic_inferior": 0.0181594064354441,
+        "ic_superior": 0.024367238580430155,
+        "media": 0.02098215341828589,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.01785125641934575,
+          "3202": 0.02260772865973546,
+          "3303": 0.01955757280412111,
+          "3404": 0.027125735941023188,
+          "3505": 0.017768473267203946
+        }
+      },
+      "relapso": {
+        "ic_inferior": 0.016481305230195125,
+        "ic_superior": 0.022672639018358864,
+        "media": 0.01928929696580734,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.01797870955035384,
+          "3202": 0.016920348282191234,
+          "3303": 0.020855461135050372,
+          "3404": 0.025398405843321602,
+          "3505": 0.015293560018119656
+        }
+      }
+    },
+    "conta_v1": {
+      "jsd_dentro_do_braco": 0.012738662592889994,
+      "jsd_entre_bracos": 0.018328482130686496,
+      "n_pares_dentro": 40,
+      "n_pares_entre": 150,
+      "piso_ruido": 0.011655396139513151
+    },
+    "jsd_vs_instinto": {
+      "aleatorio-bandit@3101": 0.031241426181698943,
+      "aleatorio-bandit@3202": 0.03905026912871565,
+      "aleatorio-bandit@3303": 0.03064340839814189,
+      "aleatorio-bandit@3404": 0.040411764118503356,
+      "aleatorio-bandit@3505": 0.02969828543370044,
+      "atencioso-bandit@3101": 0.03428595274321522,
+      "atencioso-bandit@3202": 0.03368286968212613,
+      "atencioso-bandit@3303": 0.03515865620573857,
+      "atencioso-bandit@3404": 0.034448268647588,
+      "atencioso-bandit@3505": 0.033251638230165866,
+      "incoerente-bandit@3101": 0.03398806514681154,
+      "incoerente-bandit@3202": 0.030477020508047382,
+      "incoerente-bandit@3303": 0.02818839607585173,
+      "incoerente-bandit@3404": 0.029954798614144105,
+      "incoerente-bandit@3505": 0.02867210937887148,
+      "relapso-bandit@3101": 0.0316570237759222,
+      "relapso-bandit@3202": 0.04054438685881898,
+      "relapso-bandit@3303": 0.04165545708418405,
+      "relapso-bandit@3404": 0.04406515167701864,
+      "relapso-bandit@3505": 0.038346841792637996
+    },
+    "media_seis_pares": {
+      "ic_inferior": 0.017265828055819367,
+      "ic_superior": 0.01946962886694894,
+      "media": 0.018367728461384153,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.01756196531427134,
+        "3202": 0.018346458875537378,
+        "3303": 0.019606823249694847,
+        "3404": 0.019894019479908813,
+        "3505": 0.01642937538750839
+      }
+    },
+    "primario_atencioso_x_relapso": {
+      "ic_inferior": 0.013239036654037622,
+      "ic_superior": 0.02023734463290325,
+      "media": 0.016738190643470437,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.015151795273015753,
+        "3202": 0.020981398776539817,
+        "3303": 0.02180485407402883,
+        "3404": 0.01013868763038882,
+        "3505": 0.01561421746337896
+      }
+    }
+  },
+  "instinto": {
+    "coerente_x_aleatorio": {
+      "atencioso": {
+        "ic_inferior": 0.0,
+        "ic_superior": 0.0,
+        "media": 0.0,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.0,
+          "3202": 0.0,
+          "3303": 0.0,
+          "3404": 0.0,
+          "3505": 0.0
+        }
+      },
+      "relapso": {
+        "ic_inferior": 0.0,
+        "ic_superior": 0.0,
+        "media": 0.0,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.0,
+          "3202": 0.0,
+          "3303": 0.0,
+          "3404": 0.0,
+          "3505": 0.0
+        }
+      }
+    },
+    "conta_v1": {
+      "jsd_dentro_do_braco": 0.0,
+      "jsd_entre_bracos": 0.0,
+      "n_pares_dentro": 40,
+      "n_pares_entre": 150,
+      "piso_ruido": 0.0007015604289118158
+    },
+    "jsd_vs_instinto": {
+      "aleatorio-instinto@3101": 0.0,
+      "aleatorio-instinto@3202": 0.0,
+      "aleatorio-instinto@3303": 0.0,
+      "aleatorio-instinto@3404": 0.0,
+      "aleatorio-instinto@3505": 0.0,
+      "atencioso-instinto@3101": 0.0,
+      "atencioso-instinto@3202": 0.0,
+      "atencioso-instinto@3303": 0.0,
+      "atencioso-instinto@3404": 0.0,
+      "atencioso-instinto@3505": 0.0,
+      "incoerente-instinto@3101": 0.0,
+      "incoerente-instinto@3202": 0.0,
+      "incoerente-instinto@3303": 0.0,
+      "incoerente-instinto@3404": 0.0,
+      "incoerente-instinto@3505": 0.0,
+      "relapso-instinto@3101": 0.0,
+      "relapso-instinto@3202": 0.0,
+      "relapso-instinto@3303": 0.0,
+      "relapso-instinto@3404": 0.0,
+      "relapso-instinto@3505": 0.0
+    },
+    "media_seis_pares": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.0,
+        "3202": 0.0,
+        "3303": 0.0,
+        "3404": 0.0,
+        "3505": 0.0
+      }
+    },
+    "primario_atencioso_x_relapso": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.0,
+        "3202": 0.0,
+        "3303": 0.0,
+        "3404": 0.0,
+        "3505": 0.0
+      }
+    }
+  },
+  "lobos": {
+    "coerente_x_aleatorio": {
+      "atencioso": {
+        "ic_inferior": 0.03989013310726898,
+        "ic_superior": 0.05409103891997889,
+        "media": 0.04702607792847387,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.051650924791866,
+          "3202": 0.04511865770401754,
+          "3303": 0.04506276441385664,
+          "3404": 0.034245658776874084,
+          "3505": 0.05905238395575509
+        }
+      },
+      "relapso": {
+        "ic_inferior": 0.014431738092383125,
+        "ic_superior": 0.05763200493956823,
+        "media": 0.03603187151597568,
+        "n": 5,
+        "nivel": 0.95,
+        "por_semente": {
+          "3101": 0.039695001325061,
+          "3202": 0.005158978271147886,
+          "3303": 0.0687202725449848,
+          "3404": 0.011072866297279431,
+          "3505": 0.05551223914140526
+        }
+      }
+    },
+    "conta_v1": {
+      "jsd_dentro_do_braco": 0.012420608672821921,
+      "jsd_entre_bracos": 0.028002184995524797,
+      "n_pares_dentro": 40,
+      "n_pares_entre": 150,
+      "piso_ruido": 0.0007615956050700403
+    },
+    "jsd_vs_instinto": {
+      "aleatorio-lobos@3101": 0.023117909568095507,
+      "aleatorio-lobos@3202": 0.017602052944426655,
+      "aleatorio-lobos@3303": 0.025552844433326942,
+      "aleatorio-lobos@3404": 0.0031813633908039244,
+      "aleatorio-lobos@3505": 0.02208784642134186,
+      "atencioso-lobos@3101": 0.02281739625033222,
+      "atencioso-lobos@3202": 0.024761042411618597,
+      "atencioso-lobos@3303": 0.008312274498871265,
+      "atencioso-lobos@3404": 0.02550907363952183,
+      "atencioso-lobos@3505": 0.0196547954984165,
+      "incoerente-lobos@3101": 0.009642851391749432,
+      "incoerente-lobos@3202": 0.005880597422759162,
+      "incoerente-lobos@3303": 0.005024080092657567,
+      "incoerente-lobos@3404": 0.011215879585670824,
+      "incoerente-lobos@3505": 0.004763560359745073,
+      "relapso-lobos@3101": 0.00464719844377883,
+      "relapso-lobos@3202": 0.005813390329556568,
+      "relapso-lobos@3303": 0.017013499417092515,
+      "relapso-lobos@3404": 0.01075588562387107,
+      "relapso-lobos@3505": 0.013186644413678804
+    },
+    "media_seis_pares": {
+      "ic_inferior": 0.02539262052215968,
+      "ic_superior": 0.03179691809835623,
+      "media": 0.028579206653032936,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.02680032383332048,
+        "3202": 0.024485517307330475,
+        "3303": 0.0323271208594715,
+        "3404": 0.025595872081408486,
+        "3505": 0.03368719918363373
+      }
+    },
+    "primario_atencioso_x_relapso": {
+      "ic_inferior": 0.018130780438673975,
+      "ic_superior": 0.03064671275626437,
+      "media": 0.024388746597469174,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "3101": 0.01670142731834334,
+        "3202": 0.03488114338728575,
+        "3303": 0.01668566515985082,
+        "3404": 0.029795779884884407,
+        "3505": 0.023879717236981558
+      }
+    }
+  }
+}
