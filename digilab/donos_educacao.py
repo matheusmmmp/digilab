@@ -233,14 +233,16 @@ def simular_vida_educacao(braco: str, semente: int, dias: int, especie: str, tem
                           cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, ct=None,
                           ce: ConfigEducacao | None = None, duracao: str = "teste", persona: Persona | None = None,
                           decisor_externo=None, cl=None, sparring: tuple = (), rival_sparring=None,
-                          lutador_do_pet=None, rival_por_nome=None, cm=None, honestidade_especie: float = 1.0) -> Vida:
+                          lutador_do_pet=None, rival_por_nome=None, cm=None, honestidade_especie: float = 1.0,
+                          politica_fabrica=None) -> Vida:
     """simular_vida_treino com o MotorEducacao (travessuras ligadas) e o DonoComEducacao; mesmo orcamento.
     duracao: "teste" (a de hoje, bit a bit igual) ou "canonica" (ConfigDuracoes).
     persona: dono de persona (braco = 'persona:<nome>'). decisor_externo: modo livre gravado (educacao.py).
     sparring (PLANO_ANALISE_V3): ticks das lutas, antes da decisao do dono no passo; rival_sparring(motor) da o
     nome do rival (rival_por_nome resolve); a semente da luta depende so do ovo e do indice (igual entre bracos).
     Morte: a vida para ali (o dono nao age mais; o orcamento fica sem fechar e a vida sai marcada `morta`).
-    cm: ConfigMentira (desligada por padrao: a vida e bit a bit a de antes)."""
+    cm: ConfigMentira (desligada por padrao: a vida e bit a bit a de antes).
+    politica_fabrica (V2, L1): a politica do pet (padrao None: o bandit da personalidade, como sempre)."""
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     ce = ce or CONFIG_EDUCACAO_LIGADA
@@ -254,7 +256,7 @@ def simular_vida_educacao(braco: str, semente: int, dias: int, especie: str, tem
     extra = {} if rival_por_nome is None else {"rival_por_nome": rival_por_nome}
     fp, fm = fabricas_educacao(semente, especie, temperamento, ct=ct, ce=ce, cfg_evo=cfg_evo,
                                decisor_externo=decisor_externo, cl=cl, lutador_do_pet=lutador_do_pet, cm=cm,
-                               honestidade_especie=honestidade_especie, **extra)
+                               honestidade_especie=honestidade_especie, politica_fabrica=politica_fabrica, **extra)
     motor = fm(fp(cfg), cfg, semente)
     dono = DonoComEducacao(braco, dias, cfg_donos, ct, ce, cfg_evo, persona)
     rng_dono = random.Random(derivar_semente("dono", semente, braco))

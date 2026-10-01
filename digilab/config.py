@@ -1161,6 +1161,17 @@ class ConfigLobos:
     bits_ponto_fixo: int = 10
     escala_ticks_desde_cuidado: float = 480.0
     maximo_pesos: int = 1000
+    # --- L1 (docs/TAREFA_V2_L1_DECISAO.md, docs/PLANO_ANALISE_V2_L1.md): so valem com aprendizado_ligado ---
+    # Atualizacao do lobo de decisao, em inteiros: dw = arred(f*S * passo * X_j * (S*1[a=a*] - P_a) / (S*S*W_a)).
+    # passo e teto sao PROPOSTOS e CALIBRADOS nas sementes 3101...3505 (grade do plano, secao 5); os outros sao
+    # PROPOSTOS, copiados da ConfigBandit (mesma janela de credito da v1) e nao calibrados.
+    passo: int = 128                         # PROPOSTO, calibrado: S/8 (grade {32, 64, 128, 256, 512})
+    teto: int = 2048                         # PROPOSTO, calibrado: |w - w0| <= teto (grade {1024, 2048, 4096})
+    piso_peso: int = 64                      # PROPOSTO: S/16; peso efetivo minimo dos candidatos com o aprendizado ligado
+    janela_latencia_ticks: int = 120         # PROPOSTO: = ConfigBandit.janela_latencia_ticks (chamado atendido paga 1 - L/janela)
+    recompensa_pedido_ignorado: float = -0.5  # PROPOSTO: = ConfigBandit.recompensa_pedido_ignorado
+    recompensa_elogio: float = 1.0           # PROPOSTO: = ConfigBandit.recompensa_elogio
+    recompensa_repreensao: float = -1.0      # PROPOSTO: = ConfigBandit.recompensa_repreensao
 
     @property
     def escala(self) -> int:
@@ -1169,3 +1180,4 @@ class ConfigLobos:
 
 
 CONFIG_LOBOS = ConfigLobos()
+CONFIG_LOBOS_APRENDIZ = ConfigLobos(aprendizado_ligado=True)      # L1: o aprendiz da V2 com o lobo de decisao aprendendo

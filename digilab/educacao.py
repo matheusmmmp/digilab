@@ -671,9 +671,11 @@ def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, ob
                       ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
                       lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao,
                       cfg_evo=None, decisor_externo=None, cm: ConfigMentira | None = None,
-                      honestidade_especie: float = 1.0, cc: ConfigConfianca | None = None):
-    """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay (sem o decisor)."""
-    fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
+                      honestidade_especie: float = 1.0, cc: ConfigConfianca | None = None,
+                      politica_fabrica: Callable | None = None):
+    """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay (sem o decisor).
+    politica_fabrica (V2, L1): troca a politica do pet (padrao: o bandit da personalidade, bit a bit como antes)."""
+    fp = politica_fabrica or (lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento))  # noqa: E731
     fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
                                                  obediencia_desligada=obediencia_desligada, cfg_treino=ct,
                                                  cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,

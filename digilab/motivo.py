@@ -12,6 +12,11 @@ Vida
     argmax de log(prior) + Gumbel ja daria a mesma acao, quem decidiu foi o
     prior/ruido e o motivo fica sem fator (ver docs/REGISTRO_DESVIOS.md).
   - PoliticaInstinto: a regra que disparou (ultima_regra).
+  - PoliticaLobos (V2, L1): quem decidiu foi o impulso (regra com um candidato, ou o
+    sorteio com os pesos do prior e o mesmo u da a mesma acao) -> os fatores da regra
+    do instinto; senao o lobo de decisao decidiu -> contribuicao da entrada j =
+    x_j * (delta_escolhida_j - media dos delta_j dos outros candidatos), delta = w - w0,
+    e vale a regra do bandit (positiva, >= limiar, no maximo 2). docs/PLANO_ANALISE_V2_L1.md, 4.1.
   Captura: PoliticaComMotivo embrulha a politica e le o registro depois de
   cada agir(); delega tudo o mais sem alterar nada.
 
@@ -31,6 +36,7 @@ from .events import AcaoPet, AcaoUsuario, LogDeEventos
 from .memoria import FATORES_MEMORIA
 from .memoria_espacos import FATORES_ESPACOS
 from .policy import Observacao, Politica, PoliticaInstinto, Transicao
+from .policies.lobos import ENTRADAS as ENTRADAS_LOBOS, sortear as sortear_lobos
 
 ORIGENS = ("vida", "combate")
 
@@ -40,6 +46,9 @@ FATOR_DA_FEATURE = (
     "hora", "hora", "tempo_sem_cuidado",
 )
 FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS
+# nome do fator por entrada da percepcao da PoliticaLobos (policies/lobos.ENTRADAS): os mesmos nomes do bandit
+FATOR_DA_ENTRADA_LOBOS = ("habito", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora",
+                          "tempo_sem_cuidado")
 
 # regra do instinto -> fatores (variaveis da condicao que disparou)
 _FATORES_INSTINTO = {
@@ -160,6 +169,51 @@ def motivo_instinto(regra: str, obs: Observacao, acao: AcaoPet, tick: int, ref_u
     return Motivo("vida", acao.value, fatores, refs, intensidade, False, tick=tick)
 
 
+def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
+                 cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> tuple[Motivo, dict]:
+    """(Motivo, diagnostico) da PoliticaLobos. Funcao pura do registro da decisao (`ultimo_motivo`).
+
+    O impulso decidiu quando a regra tem um candidato so, ou quando o sorteio com os pesos do PRIOR e o mesmo
+    u devolve a mesma acao: os fatores sao os da regra do instinto (motivo_instinto). Senao, o lobo de decisao
+    decidiu: contribuicao da entrada j = termo aprendido da escolhida menos a media dos termos aprendidos dos
+    outros candidatos; so vira fator uma contribuicao positiva e >= limiar_motivo (no maximo 2)."""
+    if len(ENTRADAS_LOBOS) != len(FATOR_DA_ENTRADA_LOBOS):
+        raise ValueError("entradas da PoliticaLobos e nomes de fator com tamanhos diferentes")
+    acao = AcaoPet(registro["acao"])
+    candidatos = list(registro["candidatos"])
+    prior = registro["contribuicoes"]["impulsos"]
+    if len(candidatos) == 1:
+        impulso_decidiu = True
+    else:
+        impulso_decidiu = candidatos[sortear_lobos([prior[a] for a in candidatos], registro["u"])] == registro["acao"]
+    if impulso_decidiu and registro.get("sem_impulsos"):
+        # controle sem lobos (camada_unica): o prior decidiu e nao ha regra para citar
+        intensidade = registro["pesos"][registro["acao"]] / sum(registro["pesos"][a] for a in candidatos)
+        m = Motivo("vida", acao.value, (), (), min(1.0, max(0.0, intensidade)), False, tick=tick)
+        return m, {"valor_decidiu": False, "fator_formula_literal": None, "lobo": "prior"}
+    if impulso_decidiu:
+        p = registro["percepcao"]
+        obs = Observacao(vetor_estado=(p["fome"], p["higiene"], p["energia"], p["humor"], p["saude"], p["sujeira"],
+                                       p["dormindo"], p["hora"]), ticks_desde_cuidado=0, total_cuidados=0)
+        m = motivo_instinto(registro["regra"], obs, acao, tick, ref_ultimo_cuidado)
+        return m, {"valor_decidiu": False, "fator_formula_literal": None, "lobo": "impulsos"}
+    aprendido = registro["aprendido"]
+    if aprendido is None:
+        raise RuntimeError("o lobo de decisao decidiu sem registro do termo aprendido")
+    outras = [b for b in candidatos if b != registro["acao"]]
+    contrib: dict[str, float] = {}
+    for j, nome in enumerate(FATOR_DA_ENTRADA_LOBOS):
+        media = sum(aprendido[b][j] for b in outras) / len(outras)
+        contrib[nome] = contrib.get(nome, 0.0) + (aprendido[registro["acao"]][j] - media)
+    positivos = sorted(((c, n) for n, c in contrib.items() if c >= cfg.limiar_motivo), reverse=True)
+    fatores = tuple(n for _, n in positivos[:2])
+    soma_pos = sum(c for c in contrib.values() if c > 0)
+    intensidade = (positivos[0][0] / soma_pos) if fatores and soma_pos > 0 else 0.0
+    refs = (ref_ultimo_cuidado,) if "tempo_sem_cuidado" in fatores and ref_ultimo_cuidado is not None else ()
+    diag = {"valor_decidiu": True, "fator_formula_literal": None, "lobo": "decisao"}
+    return Motivo("vida", acao.value, fatores, refs, min(1.0, intensidade), False, tick=tick), diag
+
+
 class PoliticaComMotivo:
     """Embrulha uma politica de vida e registra o motivo de cada decisao.
 
@@ -194,6 +248,11 @@ class PoliticaComMotivo:
         if isinstance(self.interna, PoliticaInstinto):
             m = motivo_instinto(self.interna.ultima_regra, obs, acao, tick, self._ref_cuidado())
             diag = {"valor_decidiu": None, "fator_formula_literal": None}
+        elif hasattr(self.interna, "ultimo_motivo"):
+            reg = self.interna.ultimo_motivo
+            if reg is None or reg["acao"] != acao.value:
+                raise RuntimeError("registro da decisao da PoliticaLobos nao corresponde a acao devolvida")
+            m, diag = motivo_lobos(reg, tick, self._ref_cuidado(), self.cfg)
         elif hasattr(self.interna, "ultima_decisao"):
             dec = self.interna.ultima_decisao
             if dec is None or dec["acao"] is not acao:
