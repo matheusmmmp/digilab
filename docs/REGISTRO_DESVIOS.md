@@ -1247,3 +1247,20 @@ nascido e vivo, ações v4 só em pets v4+, tratar só com lesão) passa a grava
 (`acoes.agir`); o chip "Alimentar?" da primeira versão saiu. O registro do pet continua recebendo só o `d`; o log de apresentação
 marca `comando_executado`. Risco aceito: os erros de ação da rodada 3 (6 de 9 em "limpar" lidos como `repreender`) viram ação
 sem desfazer. Sem mudança no servidor, nos prompts nem nas rodadas gravadas.
+
+## 2026-10-01 — V2, F0-INVENTARIO: divergências entre documento e código encontradas no inventário
+
+Tarefa `docs/TAREFA_V2_F0_INVENTARIO.md`; entrega `docs/V2_INVENTARIO_JOGO.md` (seção 5). Só documento; nenhum código, número de
+resultado ou artefato muda. Conferido na `main` em `83fc08f`.
+- `CLAUDE.md` diz "290 testes" (mapa e comandos); `python -m pytest tests/ -q` na worktree dá 571 passados e 1 pulado (a auditoria
+  `01_CURRENT_STATE.md` contou 538 em `3fe6d76`). Correção do texto é do coordenador.
+- `CLAUDE.md` diz "Ambiente do usuário: pasta `D:\Trab\digilab\v1`"; desde 2026-09-30 o trabalho é em `v2` e nas worktrees
+  (`docs/V2_TRABALHO_PARALELO.md`).
+- `web/app/motor/confianca.ts`, cabeçalho: "Só os pets v5 usam"; o motor aplica a confiança nos pets v8 em diante (`motor.ts`,
+  `versao >= 8`). Comentário desatualizado; o comportamento é o descrito no `CLAUDE.md` (M1).
+- `web/app/motor/donos.ts`, cabeçalho: "a evolução não existe no Python". Existe (`digilab/evolucao.py`); o que não existe no Python é o
+  dono sintético ver o chamado do bebê ao vivo (contado depois por `evolucao.fracao_cuidado_bebe`). Consequência medida: 548 de 548
+  pets vivos da V3 nasceram ariscos (`artifacts_educacao/pets.json`).
+- `docs/TODO_INTERACAO_CORPO.md` e `docs/PLANO_V2_PESQUISA.md`: "o aprendido muda a política em cerca de 0,02 bit". O 0,02 bit é a JSD
+  entre braços (`artifacts/divergence.json`, 0,0204); a distância ao instinto é ≈0,03–0,05 bit (`CLAUDE.md`, "Estado atual"). O uso
+  como referência do G3 (divergência entre donos) está certo; só a frase é imprecisa.
