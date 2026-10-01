@@ -3,6 +3,7 @@ latino ficam fora do bloco de estilo (contados em descartados["NAO LATINO"]); o 
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -36,6 +37,10 @@ def test_citacao_pt_nao_latina_tambem_fica_fora(tmp_path):
     assert esp["Piedmon"].citacoes == () and esp["Piedmon"].descartados == {"NAO LATINO": 1}
 
 
+def _itens(especies) -> int:
+    return sum(len(e.fala) + len(e.tracos) + len(e.interacoes) + len(e.citacoes) for e in especies.values())
+
+
 def test_corpus_do_jogo_so_manda_latino_ao_prompt_e_o_sha_nao_muda():
     esp, meta, sha = corpus.carregar()
     assert all(corpus.latino(corpus.bloco_estilo(e, None)) for e in esp.values())
@@ -44,9 +49,29 @@ def test_corpus_do_jogo_so_manda_latino_ao_prompt_e_o_sha_nao_muda():
             assert corpus.latino(texto), (e.especie, com)
     fora = sum(e.descartados.get("NAO LATINO", 0) for e in esp.values())
     sem, _, sha2 = corpus.carregar(so_latino=False)
-    assert sha == sha2 and fora > 0
-    assert sum(len(e.fala) + len(e.tracos) + len(e.interacoes) + len(e.citacoes) for e in sem.values()) == \
-        sum(len(e.fala) + len(e.tracos) + len(e.interacoes) + len(e.citacoes) for e in esp.values()) + fora
+    assert sha == sha2
+    assert _itens(sem) == _itens(esp) + fora
+
+
+def test_corpus_do_jogo_reescrito_em_portugues_nao_perde_item(tmp_path):
+    """F0-CORPUS (2026-10-01): os itens que o filtro deixava fora foram reescritos em portugues (`reescrito: true`),
+    entao com e sem o filtro entram os mesmos itens e nenhum texto do arquivo tem letra fora do alfabeto latino."""
+    com, _, _ = corpus.carregar()
+    sem, _, _ = corpus.carregar(so_latino=False)
+    assert _itens(com) == _itens(sem) and _itens(com) > 0
+    assert not any(e.descartados.get("NAO LATINO") for e in com.values())
+    bruto = json.loads(corpus.ARQUIVO.read_text(encoding="utf-8"))
+    for e in bruto["especies"]:
+        for k in ("tracos", "fala", "interacoes", "citacoes"):
+            for it in e[k]:
+                texto = it.get("texto", it.get("pt"))
+                assert corpus.latino(texto) and len(texto) <= 120, (e["especie"], k, texto)
+    # a reescrita guarda marca, fonte e jogo: nenhum item reescrito ficou sem fonte
+    reescritos = [it for e in bruto["especies"] for k in ("tracos", "fala", "interacoes") for it in e[k] if it.get("reescrito") is True]
+    assert reescritos and all(it.get("fonte") and it.get("marca") for it in reescritos)
+    # o filtro continua existindo: um corpus com item japones ainda o deixa fora
+    esp, _, _ = corpus.carregar(_corpus(tmp_path, [_esp(fala=[JP])]))
+    assert esp["Piedmon"].descartados == {"NAO LATINO": 1}
 
 
 def test_corpus_de_exemplo_nao_muda():
