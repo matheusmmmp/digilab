@@ -1247,3 +1247,14 @@ nascido e vivo, ações v4 só em pets v4+, tratar só com lesão) passa a grava
 (`acoes.agir`); o chip "Alimentar?" da primeira versão saiu. O registro do pet continua recebendo só o `d`; o log de apresentação
 marca `comando_executado`. Risco aceito: os erros de ação da rodada 3 (6 de 9 em "limpar" lidos como `repreender`) viram ação
 sem desfazer. Sem mudança no servidor, nos prompts nem nas rodadas gravadas.
+
+## 2026-10-01 — V2: o aprendiz deixa de ser o bandit; rodada 1 de frentes paralelas
+
+**Decisão do Matheus (2026-10-01): a V2 foca na nova arquitetura e abandona o bandit.** O aprendiz da V2 é a política com lobos nomeados do
+`docs/PLANO_V2_PESQUISA.md` (fase 1b). O bandit (`digilab/policies/bandit.py` e subclasses) fica congelado só para reproduzir as runs da v1: não é
+apagado, não muda e não é estendido. Os gates da fase 1 continuam PROPOSTOS até o referendo do plano.
+
+Rodada 1 (coordenação, `docs/V2_TRABALHO_PARALELO.md`): quatro frentes sem run estatística e sem GPU, uma por worktree:
+`TAREFA_V2_F0_INVENTARIO.md` (inventário e escolha da interação da 1a), `TAREFA_V2_L0_LOBOS.md` (esqueleto dos lobos, aprendizado desligado, igual ao
+instinto byte a byte), `TAREFA_V2_F0_VINCULO.md` (diagnóstico e proposta, sem código) e `TAREFA_V2_F0_CORPUS.md` (itens não latinos do corpus reescritos em
+português). Reservas: nenhuma faixa de semente (nenhuma run nesta rodada); `VERSAO_PET = 10` reservado para a primeira versão web dos lobos (depois do L1).
