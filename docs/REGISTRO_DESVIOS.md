@@ -1337,3 +1337,23 @@ Interpretações do desenho, todas conferidas pelo gate G2 (vida byte a byte igu
   G4).
 - **Tarefa fora da `main`:** `docs/TAREFA_V2_L0_LOBOS.md` estava só no branch `v2-coord-r1` do coordenador quando o worker abriu; o
   trabalho partiu da `main` (`83fc08f`) e leu a tarefa de lá. O arquivo não entra neste PR, para não conflitar com o do coordenador.
+
+## 2026-10-01 — F0-VINCULO: diagnóstico do vínculo; Python e web conferem no valor, diferem num contador
+
+Tarefa `docs/TAREFA_V2_F0_VINCULO.md` (diagnóstico e proposta; nenhum código do motor muda). Conferência por leitura de
+`digilab/vinculo.py` contra `web/app/motor/vinculo.ts` e dos pontos de chamada (`obediencia.py`/`educacao.py`/`treino_vida.py`
+contra `motor.ts`), registrada em `docs/V2_VINCULO_PROPOSTA.md`, seção 2.
+- **Valor igual:** fórmula, componentes, pesos, janelas, lista de cuidados que fecham pedido, ajustes diretos (forçar −0,05,
+  bronca sem motivo −0,05), pausa de treino e teto da sombria são os mesmos nos dois motores. Não existe gabarito de paridade
+  do vínculo entre os dois (os RNGs diferem, então as vidas diferem); a conferência é do código, não de números.
+- **Diferença de contagem, não de valor:** no Python, `Vinculo.limitar` (teto 0,6 da sombria) acrescenta uma entrada à série
+  quando corta o valor, e `para_dict` relata `atualizacoes = len(serie)`; na web, `Vinculo.limitar` não incrementa o contador `n`,
+  que entra na assinatura dos pets v2+. Um pet sombrio com vínculo acima de 0,6 na hora da evolução tem `atualizacoes` uma unidade
+  maior no Python do que `n` na web. Nenhum valor de vínculo, decisão ou tela depende disso; os dois contadores não são comparados
+  em teste nenhum. **Nenhuma correção nesta tarefa** (mudar qualquer dos dois alteraria assinaturas ou a série gravada); fica
+  registrado para a frente que implementar o vínculo novo.
+- **Conta sobre vidas gravadas** (`experiments/analisar_vinculo.py` → `artifacts_v2_vinculo/`): sem semente nova, sem vida nova. O
+  script troca o `Vinculo` do motor por uma subclasse que só anota as atualizações (o valor final é conferido contra o artefato de
+  cada vida: 40 da personalidade e 640 do E1, todas iguais) e lê o estado do pet antes de cada ação do dono. Os contrafactuais
+  recalculam o vínculo sobre o fluxo de amostras gravado com os eventos fixos; na vida real um vínculo diferente mudaria a
+  obediência e, com ela, um pouco da vida. São conta, não run.
