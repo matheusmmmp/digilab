@@ -1,7 +1,7 @@
 /* Confianca de combate e desgaste por rival repetido (MVP M1; espelho fiel de digilab/confianca.py: mesmas
    formulas, mesma ordem de operacoes; paridade conferida em test/confianca.test.ts contra o gabarito do Python).
    Um ESTADO derivado das lutas que ja estao no registro (evento "l"): nenhum evento novo, o replay recalcula.
-   Sem rng. So os pets v5 usam (docs/DESIGN_MVP_M1_CONFIANCA.md, tudo PROPOSTO em CCF). */
+   Sem rng. So os pets v8 em diante usam (motor.ts, versao >= 8; docs/DESIGN_MVP_M1_CONFIANCA.md, tudo PROPOSTO em CCF). */
 import { CCF } from "./constantes.ts";
 
 export type EstadoConfianca = "confiante" | "inseguro" | "entediado" | "neutro";
