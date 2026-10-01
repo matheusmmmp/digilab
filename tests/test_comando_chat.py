@@ -187,3 +187,17 @@ def test_rodada3_do_comando_com_sementes_novas_e_livre_v8():
     # a mensagem i usa semente + i: nenhuma semente da rodada 3 cai em nenhuma semente das outras rodadas
     n = len(MENSAGENS_COMANDO)
     assert not {s + i for s in r3["sementes"] for i in range(n)} & {s + i for s in usadas for i in range(n)}
+
+
+def test_rodada4_do_comando_com_estilo_e_sementes_novas():
+    """GPU-ESTILO (docs/PLANO_ANALISE_V2_GPU_ESTILO.md): livre-v8 com o estilo da especie, pasta propria, sementes reservadas
+    pelo coordenador (20261501/1601/1701); semente + i de nenhuma mensagem cai nas rodadas 1-3; as rodadas 1-3 nao mudam."""
+    from digilab_fala_livre.avaliacao import RODADAS_COMANDO
+    r4 = RODADAS_COMANDO[4]
+    assert r4 == {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"}
+    assert RODADAS_COMANDO[3] == {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"}
+    assert RODADAS_COMANDO[2]["sementes"] == RODADAS_COMANDO[1]["sementes"] == (20261003, 20261004, 20261005)
+    assert len({r["pasta"] for r in RODADAS_COMANDO.values()}) == 4
+    n = len(MENSAGENS_COMANDO)
+    usadas = {s + i for k, r in RODADAS_COMANDO.items() if k != 4 for s in r["sementes"] for i in range(n)}
+    assert not {s + i for s in r4["sementes"] for i in range(n)} & usadas

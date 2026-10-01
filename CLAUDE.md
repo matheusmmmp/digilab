@@ -1232,6 +1232,15 @@ e subclasses ficam congelados só para reproduzir a v1. O aprendiz da V2 é `dig
 - **Aberto:** o instinto puro não roda no `MotorPersonalidade` (o embrulho repassa `receber_acao_dono`); o controle do G2 ali é o
   instinto com gancho vazio, definido no teste. L1 (ligar o aprendizado), L2/L3 (peças do DF), A1 e o porte para a web ficam para as
   tarefas seguintes.
+- **GPU-ESTILO (2026-10-01, `docs/TAREFA_V2_GPU_ESTILO.md`, plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md`):** com o corpus em português
+  (F0-CORPUS) o estilo da espécie volta a funcionar no gemma2:9b. **Medida A** (`experiments/medir_estilo_latino.py --saida
+  estilo_portugues` → `artifacts_voz/estilo_portugues/`; 30 mensagens × 3 espécies, livre-v6, um modo só porque o filtro não tira
+  nada): **0/30 rejeitadas** por letra não latina, 0 outros erros, 0 falas não latinas (antes, `estilo_latino/`: 1/30 com o filtro e
+  26/30 sem). **Medida B, rodada 4 do comando** (`avaliar_fala.py --livre --comando --rodada 4` → `artifacts_fala_livre/comando/
+  rodada4_estilo/`; livre-v8 **com** o estilo, sementes 20261501/1601/1701): **gate PASSA**: falsos positivos nas negativas 2/60
+  (3,3%), imperativos 53/60 (88,3%), 2/180 saídas rejeitadas pelo parser (não por japonês), latência p50 6,3 s. Rodada 3 (sem estilo):
+  0/60 e 51/60; rodada 2 (estilo com o corpus antigo): 160/180 rejeitadas. Erros que ficam: "limpar" (3/9), "levar_ao_banheiro"
+  (4/6), e «não vou te dar bronca dessa vez» virou repreender 2 vezes. Nada mudou no prompt, verificador, corpus ou servidor.
 
 ## V2, F0 — vínculo B: previsibilidade + desejo (2026-10-01, `docs/PLANO_ANALISE_V2_VINCULO.md`) — GATE PASSA
 

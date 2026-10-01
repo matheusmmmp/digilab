@@ -1428,3 +1428,15 @@ Tarefa `docs/TAREFA_V2_F0_VINCULO_NOVO.md`; plano `docs/PLANO_ANALISE_V2_VINCULO
   pouco) aparecendo no jogo curto. Nenhum ajuste foi feito (o plano não previa e a validação já tinha rodado).
 - `medir_vinculo_mega.mjs` ganhou `--versao`; sem ela o script é o de antes, byte a byte (os artefatos dos v5 não foram regravados).
 - `web/app/test/save.test.ts` usava `versao: 10` como exemplo de versão desconhecida; passou a 11.
+
+## 2026-10-01 — GPU-ESTILO: o estilo com o corpus em português (medida A e rodada 4 do comando)
+
+Plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md` commitado antes da run; uma run de cada, nada ajustado. Desvios e interpretações:
+- **Medida A roda um modo só.** Com o corpus em português o filtro do alfabeto não tira nada (0 itens não latinos), então o bloco "com
+  filtro" é igual ao "sem filtro" item a item; o script ganhou `--saida` e, nesse caso, gera só o modo que o servidor manda e grava
+  `filtro_sem_efeito`. `artifacts_voz/estilo_latino/` (corpus anterior) não é refeito. Critério PROPOSTO ≤ 1/30 rejeitadas: 0/30.
+- **A primeira execução da medida A foi interrompida aos ~60 s** (o processo estava preso ao teto de 10 min da ferramenta) e relançada
+  inteira como processo independente; nada tinha sido gravado. Os artefatos são da segunda execução (10:19 a 10:42).
+- **Rodada 4 do comando: gate PASSA com o estilo** (3,3% falsos positivos; 88,3% imperativos). Comparação com a rodada 3 é descritiva
+  (sementes diferentes, sem teste). As 2 saídas rejeitadas pelo parser não são por letra não latina.
+- **Testes:** `python -m pytest tests/ -q` na worktree, depois das runs: 596 passed, 1 skipped (7 min 8 s, Windows, Python 3.13.0).
