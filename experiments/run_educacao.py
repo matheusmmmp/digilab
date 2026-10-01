@@ -171,11 +171,11 @@ def _vida(args):
 
 
 # ------------------------------------------------------------------ 2. painel
-def lutador_painel(nome: str, spec: dict, carena: ConfigArenaPesquisa, cfg_v21) -> Lutador:
+def lutador_painel(nome: str, spec: dict, carena: ConfigArenaPesquisa, cfg_v21, cat=None) -> Lutador:
     f = spec["forma"]
     forma = Forma(spec["especie"], f["estagio"], f["ramo"], f["linha"], f["adulta"])
     p = perfil(forma, spec["temp_ovo"], spec["carater"], condicao_na_arena(spec["condicao"], carena), cfg_v21,
-               treino=spec["pontos"], normalizar_treino=True)
+               cat=cat, treino=spec["pontos"], normalizar_treino=True)
     eps = epsilon_disciplina(spec["disciplina"])
     if f["adulta"] is None:
         g = ADOLESCENTES[f["linha"]]

@@ -25,6 +25,7 @@ import platform
 import sys
 import time
 from concurrent.futures import ProcessPoolExecutor
+from dataclasses import replace
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -123,11 +124,23 @@ def _vida(args):
 
 
 # ------------------------------------------------------------------ 2. painel
+def catalogo_do_painel(cfg: dict):
+    """catalogo do pet no painel: o padrao, salvo `catalogo_painel` na config (docs/PLANO_ANALISE_CANAL_DONO.md,
+    Etapa B). A vida e os bots do painel usam sempre o padrao."""
+    extra = cfg.get("catalogo_painel")
+    if not extra:
+        return None
+    if set(extra) != {"peso_carater_stats"}:
+        raise ValueError(f"catalogo_painel so aceita peso_carater_stats: {sorted(extra)}")
+    return replace(CONFIG_CATALOGO, **extra)
+
+
 def _painel_da_celula(args):
     g, r, specs, cfg, m_b, rotulo = args
     regras = regras_de(cfg)
     carena = ConfigArenaPesquisa(condicao_neutra=True)
-    lut = {b: (None if sp is None else lutador_painel(chave(b, g, r), sp, carena, regras.v21)) for b, sp in specs.items()}
+    cat = catalogo_do_painel(cfg)
+    lut = {b: (None if sp is None else lutador_painel(chave(b, g, r), sp, carena, regras.v21, cat)) for b, sp in specs.items()}
     painel, n = {}, 0
     for esp in CONFIG_CATALOGO.especies_ativas:
         for f in FORMAS:

@@ -537,6 +537,9 @@ def _arquetipos_adulto() -> dict:
 @dataclass(frozen=True)
 class ConfigCatalogo:
     stat_neutro: int = 10
+    # canal do dono fora da forma (docs/PLANO_ANALISE_CANAL_DONO.md, Etapa B): multiplica o termo do carater nos stats.
+    # 1,0 = o de sempre (exato); so o pet do painel de pesquisa usa outro valor. PROPOSTO.
+    peso_carater_stats: float = 1.0
     stat_min: int = 3
     stat_max: int = 20
     orcamento_especie: int = 60
