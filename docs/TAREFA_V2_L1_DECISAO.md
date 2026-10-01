@@ -11,7 +11,9 @@ coerentes produzem políticas distinguíveis entre si e do aleatório, com decis
 ## 2. Depende de
 
 - PR #108 (`PoliticaLobos`, L0) mesclado; PRs #102 e #104 na `main`.
-- **Referendo dos gates G3–G6 pelo Matheus** antes da run de **validação** (a calibração pode rodar antes, com o plano commitado).
+- ~~Referendo dos gates G3–G6 antes da validação~~ **Decisão do Matheus (2026-10-01): a validação roda já**, no ponto escolhido na
+  calibração (passo 512, teto 1024; PR #119), com os alvos e as interpretações do plano rev. 2 como estão. Falhar não bloqueia a V2;
+  o resultado é registrado e as validações iniciais serão revistas quando o escopo mudar.
 
 ## 3. Mudança mínima
 
@@ -48,13 +50,14 @@ coerentes produzem políticas distinguíveis entre si e do aleatório, com decis
     - análise por norma de reação (intercepto = nível, inclinação = sensibilidade ao ambiente) nos braços ensino × só cuidado (seção 3 das definições).
   - O sha256 de `digilab/policies/lobos.py` e de `digilab/config.py` vai no meta da run (o hash de protocolo não cobre código).
 - Artefatos em `artifacts_v2_l1/{calibracao,validacao}/`. GPU: não.
-- Parada: G3, G4 ou G5 falhando na validação = resultado negativo registrado; nada de reajustar olhando a validação.
+- Parada: G3, G4 ou G5 falhando na validação = resultado negativo registrado; nada de reajustar olhando a validação. **Não para a V2**
+  (decisão do Matheus, 2026-10-01).
 
 ## 5. Entrega
 
 - Testes: `python -m pytest tests/ -q` (inclui os de L0 e `test_engine_nao_foi_alterado`).
 - Registro: seção própria no fim do `CLAUDE.md` e do `docs/REGISTRO_DESVIOS.md`.
-- **Dois PRs:** (1) plano de análise + código + calibração, antes da validação; (2) validação, depois do referendo. Números com artefato. Aviso ao
+- **Dois PRs:** (1) plano de análise + código + calibração, antes da validação; (2) validação, liberada pela decisão de 2026-10-01. Números com artefato. Aviso ao
   coordenador. Merge só pelo Matheus.
 
 ## 6. Fora desta tarefa
