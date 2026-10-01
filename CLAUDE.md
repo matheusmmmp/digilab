@@ -45,6 +45,14 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
 - Português nos comentários e docstrings, **sem acentos em identificadores**.
 - Só biblioteca padrão no pacote `digilab/` (o preflight verifica por AST). `pytest` só para testes.
 
+## Trabalho em paralelo na V2 (2026-10-01, `docs/V2_TRABALHO_PARALELO.md`) — PROPOSTO
+
+- A pasta `D:\Trab\digilab\v2` é só a referência da `main`: ninguém troca o branch dela. Cada frente trabalha na própria worktree
+  `D:\Trab\digilab\v2-<frente>` (branch `v2-<frente>`), criada de `origin/main`.
+- Um chat coordenador (plano, tarefas, sementes, versão de pet, fila da GPU, marco de cada rodada) e um chat worker por frente. A tarefa de cada
+  frente fica em `docs/TAREFA_V2_<FRENTE>.md` (modelo em `docs/modelos/TAREFA_V2_MODELO.md`).
+- Worker entrega um PR e para; merge só pelo Matheus. Em `CLAUDE.md` e `REGISTRO_DESVIOS.md`, cada um acrescenta a própria seção no fim.
+
 ## Arquitetura — três camadas com velocidades diferentes
 
 1. **Estado e necessidades** (`state.py`) — determinístico, escrito à mão. É o ambiente, não o
@@ -961,6 +969,17 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
     conversa; imperativos 51/60 (85,0%). As quatro ações: 23 de 24 (tratar_lesao 5/6, uma virou acariciar). **Regressão:**
     limpar caiu de 7/9 para 3/9 (5 viraram `repreender`: "banho agora, sem choro", "vai se limpar, você tá todo sujo"). O chip
     continua obrigatório; a execução direta segue como decisão do Matheus.
+- **Corpus reescrito em português (F0-CORPUS, 2026-10-01, `docs/TAREFA_V2_F0_CORPUS.md`):** os itens que o filtro do alfabeto
+  deixava fora voltaram ao bloco de estilo, reescritos em português sem a palavra japonesa (por exemplo, "pronome rústico e
+  descontraído" no lugar do pronome original), cada um com `marca`, `fonte` e `jogo` iguais e `"reescrito": true`; o texto só diz o
+  que a fonte do item (`docs/corpus_digimon/`, fora do repo) diz. Pelo `corpus.latino` eram **49** itens em 28 espécies (46 falas,
+  2 traços, 1 interação), não 46: três falas de Guilmon e Growlmon só tinham o ordinal "3ª", que conta como letra não latina, e
+  viraram "terceira pessoa". **Nenhum item saiu.** Com o filtro entram 504 itens, os mesmos que sem ele (antes 455 × 504;
+  `descartados["NAO LATINO"]` 0, antes 49). Vocabulário fixo para os pronomes: "infantil e modesto", "masculino informal", "rústico
+  e descontraído", "formal", "de velho", "feminino informal". O filtro, o prompt, o verificador e o almanaque não mudam; o sha256
+  do corpus mudou (`b1b7ad8d…` → `785f7834…`; `artifacts_voz/estilo_latino/` mede o corpus anterior e não foi refeito). Sem run
+  com o gemma2:9b: a conferência da fala com o estilo é frente própria na fila da GPU. Critério e itens limítrofes em
+  `docs/REGISTRO_DESVIOS.md`; teste `tests/test_corpus_latino.py::test_corpus_do_jogo_reescrito_em_portugues_nao_perde_item`.
 
 ## Versão web (`web/digilab.html`)
 
@@ -1127,8 +1146,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: mecânicas de Dwarf Fortress → V2** (`docs/futuro/dwarf_fortress.md`, Matheus, 2026-10-01): contexto das peças (slots 8+8,
   memória nuclear, faceta × valor, duas prioridades, estresse em duas escalas) para o planejamento da V2; a v1 não recebe nada. O
   desenho (`docs/futuro/proposta_df.md`) só depois do gatilho da tarefa, junto com a fase 1b do plano da V2. DF é pista, não evidência.
-- **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). Não há
-  pergunta de pesquisa viva; uma nova, se vier, é sobre o aprendiz.
+- **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). **V2 = pesquisa
+  primeiro** (decisão do Matheus, 2026-10-01): plano PROPOSTO em `docs/PLANO_V2_PESQUISA.md` (pergunta sobre o aprendiz e o
+  ambiente; fase 0 fecha a v1, fase 1 testa ambiente mínimo e política com lobos, fase 2 humanos, fase 3 criação × seleção).
+  Nenhuma run sem o plano de análise da fase registrado antes.
 
 - **Stand-by: combate 1×1 em tempo real, como no Digimon Championship (DS)** (Matheus, 2026-09-29: guardar para o futuro, sem executar).
   - **A ideia:** o motor passa a simular espaço contínuo (posição, velocidade, alcance, tempo de recarga, passos fixos para continuar reproduzível) no lugar dos turnos e das 3 distâncias. O pet segue lutando sozinho, e o dono influencia pela criação.

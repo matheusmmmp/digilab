@@ -1248,6 +1248,64 @@ nascido e vivo, ações v4 só em pets v4+, tratar só com lesão) passa a grava
 marca `comando_executado`. Risco aceito: os erros de ação da rodada 3 (6 de 9 em "limpar" lidos como `repreender`) viram ação
 sem desfazer. Sem mudança no servidor, nos prompts nem nas rodadas gravadas.
 
+## 2026-10-01 — V2: o aprendiz deixa de ser o bandit; rodada 1 de frentes paralelas
+
+**Decisão do Matheus (2026-10-01): a V2 foca na nova arquitetura e abandona o bandit.** O aprendiz da V2 é a política com lobos nomeados do
+`docs/PLANO_V2_PESQUISA.md` (fase 1b). O bandit (`digilab/policies/bandit.py` e subclasses) fica congelado só para reproduzir as runs da v1: não é
+apagado, não muda e não é estendido. Os gates da fase 1 continuam PROPOSTOS até o referendo do plano.
+
+Rodada 1 (coordenação, `docs/V2_TRABALHO_PARALELO.md`): quatro frentes sem run estatística e sem GPU, uma por worktree:
+`TAREFA_V2_F0_INVENTARIO.md` (inventário e escolha da interação da 1a), `TAREFA_V2_L0_LOBOS.md` (esqueleto dos lobos, aprendizado desligado, igual ao
+instinto byte a byte), `TAREFA_V2_F0_VINCULO.md` (diagnóstico e proposta, sem código) e `TAREFA_V2_F0_CORPUS.md` (itens não latinos do corpus reescritos em
+português). Reservas: nenhuma faixa de semente (nenhuma run nesta rodada); `VERSAO_PET` reservado pelo coordenador (rodada 2: 10 = vínculo novo, 11 = lobos na web, 12 = bola da 1a; as versões são cumulativas, então o número segue a ordem de chegada na web).
+
+## 2026-10-01 — V2, F0-INVENTARIO: divergências entre documento e código encontradas no inventário
+
+Tarefa `docs/TAREFA_V2_F0_INVENTARIO.md`; entrega `docs/V2_INVENTARIO_JOGO.md` (seção 5). Só documento; nenhum código, número de
+resultado ou artefato muda. Conferido na `main` em `83fc08f`.
+- `CLAUDE.md` diz "290 testes" (mapa e comandos); `python -m pytest tests/ -q` na worktree dá 571 passados e 1 pulado (a auditoria
+  `01_CURRENT_STATE.md` contou 538 em `3fe6d76`). Correção do texto é do coordenador.
+- `CLAUDE.md` diz "Ambiente do usuário: pasta `D:\Trab\digilab\v1`"; desde 2026-09-30 o trabalho é em `v2` e nas worktrees
+  (`docs/V2_TRABALHO_PARALELO.md`).
+- `web/app/motor/confianca.ts`, cabeçalho: "Só os pets v5 usam"; o motor aplica a confiança nos pets v8 em diante (`motor.ts`,
+  `versao >= 8`). Comentário desatualizado; o comportamento é o descrito no `CLAUDE.md` (M1).
+- `web/app/motor/donos.ts`, cabeçalho: "a evolução não existe no Python". Existe (`digilab/evolucao.py`); o que não existe no Python é o
+  dono sintético ver o chamado do bebê ao vivo (contado depois por `evolucao.fracao_cuidado_bebe`). Consequência medida: 548 de 548
+  pets vivos da V3 nasceram ariscos (`artifacts_educacao/pets.json`).
+- `docs/TODO_INTERACAO_CORPO.md` e `docs/PLANO_V2_PESQUISA.md`: "o aprendido muda a política em cerca de 0,02 bit". O 0,02 bit é a JSD
+  entre braços (`artifacts/divergence.json`, 0,0204); a distância ao instinto é ≈0,03–0,05 bit (`CLAUDE.md`, "Estado atual"). O uso
+  como referência do G3 (divergência entre donos) está certo; só a frase é imprecisa.
+
+## 2026-10-01 — F0-CORPUS: itens do corpus de espécies em japonês reescritos em português
+
+Tarefa `docs/TAREFA_V2_F0_CORPUS.md` (fase 0, item 3 do plano da V2). Só `digilab_fala_livre/corpus_especies.json` e os testes mudam;
+o filtro do alfabeto, o prompt, o verificador e o almanaque ficam como estão.
+- **Critério da reescrita:** todo traço, jeito de falar ou interação cujo texto tem letra fora do alfabeto latino (pelo `corpus.latino`,
+  a mesma regra do carregador) foi reescrito em português, com até 120 caracteres, descrevendo o jeito sem a palavra japonesa e
+  dizendo só o que a fonte do item diz (conferido em `docs/corpus_digimon/*.md` e `auditoria/*.md`, fora do repositório). O item
+  mantém `marca`, `fonte` e `jogo` e ganha `"reescrito": true`. Os pronomes seguem um vocabulário fixo, para o estilo não variar por
+  espécie: "pronome infantil e modesto" (o de menino), "masculino informal", "rústico e descontraído", "formal", "de velho",
+  "feminino informal", "pronomes solenes" (o arcaico). Partículas e finais de frase viram a função deles ("finais de frase
+  enfáticos", "partículas femininas no fim das frases", "fecho explicativo"); risos e muxoxos viram a descrição ("riso curto e
+  seco", "riso baixo e gutural", "muxoxo de contrariedade").
+- **Contagem:** 49 itens em 28 espécies (46 falas, 2 traços, 1 interação), não os 46 da contagem de partida: três falas de Guilmon
+  (2) e Growlmon (1) só tinham o ordinal "3ª", que o `latino()` conta como letra não latina (o indicador ordinal não é LATIN no
+  Unicode); viraram "terceira pessoa". A seção da fala livre do `CLAUDE.md` de 2026-09-30 falava em 46 pela contagem de kana/kanji.
+- **Itens removidos: nenhum.** Os limítrofes, em que a reescrita perde o original: MetalGreymon (fala 3, anime), uma nota sobre a
+  grafia em kanji do pronome no blog de fã, ficou com o que a fonte sustenta ("como MetalGreymon ainda usa o pronome infantil e
+  modesto, ep. 20, só no blog de fã"); Guilmon (fala 4), o som que ele faz virou "a primeira sílaba do próprio nome"; Sakuyamon
+  (fala 1), o nome da técnica virou "a técnica da mandala"; Gallantmon (fala 0), "este Dukemon" virou "fala de si na terceira
+  pessoa, com ênfase no próprio nome"; Agumon (fala 4, Anode Tamer), o termo em inglês ficou escrito em inglês ("Digital World").
+- **`"reescrito": true` fora do PARCIAL:** a chave nasceu para o PARCIAL (entra só a parte reescrita na auditoria); em VERIFICADO,
+  VERIFICADO EM OUTRA FONTE e OUTRA MIDIA o carregador não a lê, então o filtro das marcas não muda (44 itens). Os 5 PARCIAL já
+  reescritos na auditoria que ainda tinham japonês (Agumon, Angemon ×2, Koromon, Palmon) foram reescritos de novo e seguem entrando.
+- **Números:** com o filtro entram 504 itens, os mesmos que sem ele (antes: 455 com, 504 sem; `descartados["NAO LATINO"]` 49 → 0);
+  os outros descartes não mudam (INFERENCIA 23, OUTRA MIDIA sem anime 9, PARCIAL sem reescrita 5, SEM FONTE 1). O sha256 do corpus
+  mudou (`b1b7ad8d…` → `785f7834…`): `artifacts_voz/estilo_latino/resumo.json` registra o sha anterior e mede o corpus de antes; não
+  é refeito nesta tarefa.
+- **Sem run.** A conferência com o gemma2:9b (fala com o estilo, sem japonês e sem saída rejeitada) fica para uma frente própria
+  na fila da GPU, depois deste PR, como a tarefa pede.
+
 ## 2026-10-01 — V2, L0: política com lobos, aprendizado desligado (`docs/TAREFA_V2_L0_LOBOS.md`)
 
 Interpretações do desenho, todas conferidas pelo gate G2 (vida byte a byte igual à do instinto) em `tests/test_lobos.py`.
