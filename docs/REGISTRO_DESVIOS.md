@@ -1358,6 +1358,56 @@ contra `motor.ts`), registrada em `docs/V2_VINCULO_PROPOSTA.md`, seção 2.
   recalculam o vínculo sobre o fluxo de amostras gravado com os eventos fixos; na vida real um vínculo diferente mudaria a
   obediência e, com ela, um pouco da vida. São conta, não run.
 
+## 2026-10-01 — Correção no corpus DigiBrain: "Ackroff 2017" era Bodnar (2018)
+
+O corpus de pesquisa DigiBrain (`D:\Trab\digilab\docs\digibrain\`, fora do repositório) atribuía o DOI `10.1016/j.appet.2016.12.015` a "Ackroff
+2017, Conditioned flavor preferences". O DOI resolve no Crossref para **Bodnar, R. J. (2018), "Conditioned flavor preferences in animals: merging
+pharmacology, brain sites and genetic variance", Appetite 122, 17–25** (busca da V2, `V2_SINTESE_Q1_Q7.md`, "Pendências e correções"; linha VERIFICADA
+na `v2_referencias_verificadas.csv`). A entrada foi **corrigida** (não removida), porque o DOI é real e a revisão sustenta o que o corpus usava
+(substratos das preferências de sabor condicionadas): `sources/SOURCE_INDEX.md` (R3), `mechanisms/food_behavior.md`, `mechanisms/hedonism.md`,
+`integration/02_RESEARCH_CROSSWALK.md` e `integration/09_PROMPT_CLAUDE_SCIENCE.md`. Trabalhos reais de Ackroff e Sclafani têm outros DOIs
+(`10.1016/j.appet.2010.04.011`, `10.1016/j.appet.2020.104793`) e não foram citados, por não terem sido verificados pelo projeto. O repositório não citava
+"Ackroff 2017" em lugar nenhum. Como o corpus está fora do git, este registro é a trilha da correção.
+
+## 2026-10-01 — V2: decisões D1–D11 das definições (aprovadas pelo Matheus)
+
+O Matheus aprovou como recomendadas as onze decisões de `docs/DEFINICOES_V2.md`. Efeito nos documentos:
+- **D1–D4 entram na L1** (`docs/TAREFA_V2_L1_DECISAO.md`, atualizada antes de qualquer validação): G3 mantém 0,10 bit como convenção, com G3-T
+  (acerto na tarefa ensinada) ao lado sem gate; G4 medido só sobre o aprendido; braço de controle de capacidade equivalente sem lobos com o custo do
+  gargalo; braço "só cuidado" acoplado, com acariciar como cuidado e a variante sem acariciar como sensibilidade.
+- **D5–D8:** registro do "só cuidado" como contribuição metodológica ("não localizamos"); duas perguntas por alavanca (pet × dono); peças do Dwarf
+  Fortress pela tabela da seção 5; G1 com igualdade exata nos inteiros.
+- **D9:** a busca bibliográfica da V2 entrou no repositório (`docs/referencias/V2_SINTESE_Q1_Q7.md`, `v2_referencias_verificadas.csv`,
+  `v2_referencias.bib`, `v2_verificacao_crossref.json`, `REGRAS_CITACAO_DIGILAB.md`). A síntese cita `v2_referencias.csv` e `v2_verificacao.json`;
+  os arquivos se chamam `v2_referencias_verificadas.csv` e `v2_verificacao_crossref.json` (nomes mantidos como vieram da busca).
+- **D10:** a 1a continua com a **bola**; **frutas, gosto hedônico e vício** são a alavanca seguinte, depois de a bola passar, com o "só cuidado"
+  obrigatório em qualquer braço com frutas.
+- **D11:** antes de desenhar as frutas, pesquisa verificada sobre vício e sensibilização de incentivo (prompt para o Claude Science fora do
+  repositório, `D:\Trab\digilab\docs\digibrain\integration\10_PROMPT_CLAUDE_SCIENCE_VICIO.md`).
+
+## 2026-10-01 — V2, F0-LIMPEZA: textos corrigidos e `Config.limiar_privacao` passa a ser lido
+
+Tarefa `docs/TAREFA_V2_F0_LIMPEZA.md` (fecha a fase 0). Corrige as divergências documento × código do inventário (PR #106, `docs/V2_INVENTARIO_JOGO.md`,
+seção 5) **sem mudar nenhum resultado**. `engine.py` intocado (sha256 conferido pela suíte).
+- **`Estado.em_privacao` lia o literal 0,15** (`digilab/state.py`); `Config.limiar_privacao = 0.15` existia e não era lido. Agora
+  `em_privacao(cfg)` lê `cfg.limiar_privacao`, com o mesmo valor: a propriedade virou método com o `Config` (único uso dentro de
+  `avancar_um_tick`, que já recebe `cfg`; nenhum outro módulo o chamava). O valor não muda, logo o hash de protocolo (que inclui o `Config`)
+  e todas as vidas gravadas saem iguais; os testes de reprodução byte a byte (`test_canonico_intacto.py`, `test_reproducao_v3_confirmatoria.py`,
+  `test_natureza_criacao.py`, `test_confianca.py`) e os de hash passam. A web (`estado.ts`) já usava a constante.
+- **`Config.saciedade_maxima` (1,0) e `saciedade_minima` (0,0) continuam não lidos: registrado, não mudado.** Onde deveriam valer: nos
+  limites de `state._limitar` (padrão 0,0 e 1,0), chamado para fome, higiene, energia, humor e saúde em `avancar_um_tick` e
+  `aplicar_acao_usuario`, e em `policy.efeito_da_acao_do_pet` (comer, brincar, explorar, emburrar); e no `clamp` de `web/app/motor/estado.ts`.
+  Como os dois valem exatamente os padrões de `_limitar`, trocar seria só nome; fica para quando um valor diferente for necessário (nunca
+  foi). Os dois já entram no hash de protocolo e nos `metrics.json` gravados (`artifacts/metrics.json`, `configs.Config`).
+- **Textos:** `CLAUDE.md` deixa de ter contagem fixa de testes (mapa e comandos; a contagem do dia vai no PR de cada frente) e passa a
+  apontar a pasta `v2` e as worktrees; `web/app/motor/confianca.ts` ("pets v5" → v8 em diante, como `motor.ts`); `web/app/motor/donos.ts`
+  (a evolução existe no Python; o que não existe é o dono sintético ver o chamado do bebê ao vivo); `docs/TODO_INTERACAO_CORPO.md` e
+  `docs/PLANO_V2_PESQUISA.md` ("o aprendido muda a política em cerca de 0,02 bit" → a JSD entre os braços dos donos é 0,02 bit,
+  `artifacts/divergence.json`; ao instinto, 0,03–0,05 bit). O G3 do plano não muda: a referência dele já era a divergência entre donos.
+- **Conferência:** `python -m pytest tests/ -q` na worktree `v2-f0-limpeza` (Windows, Python 3.13): 595 passados, 1 pulado, 7 min 32 s, com
+  `test_canonico_intacto.py`, `test_reproducao_v3_confirmatoria.py`, `test_natureza_criacao.py`, `test_confianca.py` e `test_protocol.py` (hash e
+  `engine.py`) passando; `cd web/app && npm run tipos` sem erros; `npm test` 306 testes em 29 arquivos passando (só comentários mudaram lá).
+
 ## 2026-10-01 — GPU-ESTILO: o estilo com o corpus em português (medida A e rodada 4 do comando)
 
 Plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md` commitado antes da run; uma run de cada, nada ajustado. Desvios e interpretações:
