@@ -1123,6 +1123,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: interação do jogador e corpo do pet** (`docs/TODO_INTERACAO_CORPO.md`, Matheus, 2026-09-30): ambiente 2D manipulável ao estilo do
   Championship (comida, bola, obstáculo, áreas), para criar decisões do pet com consequência onde o dono importa. Não autoriza
   implementação; o próximo passo é escolher a interação mínima e o gate antes de ampliar o ambiente.
+- **IDEIA: mecânicas de Dwarf Fortress → V2** (`docs/futuro/dwarf_fortress.md`, Matheus, 2026-10-01): contexto das peças (slots 8+8,
+  memória nuclear, faceta × valor, duas prioridades, estresse em duas escalas) para o planejamento da V2; a v1 não recebe nada. O
+  desenho (`docs/futuro/proposta_df.md`) só depois do gatilho da tarefa, junto com a fase 1b do plano da V2. DF é pista, não evidência.
 - **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). Não há
   pergunta de pesquisa viva; uma nova, se vier, é sobre o aprendiz.
 
