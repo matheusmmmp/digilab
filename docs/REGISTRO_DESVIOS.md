@@ -1102,6 +1102,20 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
 - **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
   e o bebê ficavam sem o estilo do corpus).
 
+## 2026-09-30 — Voz própria: o bloco de estilo do corpus levava o modelo a responder em japonês
+
+Achado durante a avaliação do comando pelo chat (`artifacts_fala_livre/comando/rodada2_estilo/`, branch `comando-chat`): com o
+bloco de ESTILO DA ESPÉCIE no pedido, o gemma2:9b respondeu com trechos em japonês na maioria das conversas, e `saida.ler`
+rejeita letra fora do alfabeto latino, então a fala vira a genérica "…" (e o comando, null). Causa: o corpus de 60 espécies
+(anime liberado no mesmo dia) descreve o registro japonês das falas (pronomes おいら/俺, finais 〜だぜ) em 46 itens de
+"jeito de falar", 2 traços e 1 interação; 28 espécies têm pelo menos um. O corpus de exemplo (2 espécies) das rodadas 1–4 da
+voz não tem nenhum: essas rodadas reproduzem.
+- **Decisão desta implementação:** filtrar no carregador (`corpus.carregar(so_latino=True)`), não no arquivo: o corpus e o
+  sha256 registrados em cada fala continuam os mesmos, e o item descartado fica contado em `descartados["NAO LATINO"]`.
+  Traduzir ou reescrever esses itens em português é trabalho de auditoria do corpus, fora daqui.
+- `so_latino=False` existe só para medir o antes e o depois (`experiments/medir_estilo_latino.py` →
+  `artifacts_voz/estilo_latino/`). O servidor e a avaliação usam o padrão.
+- Verificador, prompts e a regra de `saida.ler` não mudam.
 ## 2026-09-30 — Canal do dono, Etapa B: dose alta k = 9 → k = 8
 
 `docs/PLANO_ANALISE_CANAL_DONO.md`, adendo B.
@@ -1174,6 +1188,13 @@ ação ("muito bem!" é o elogio) e o modelo tratava como conversa.
   jogador veria "Repreender?" no lugar de "Limpar?": é um erro de ação, não um falso positivo numa negativa.
 - **Execução direta continua fora**: o chip segue obrigatório; liberar para os imperativos é decisão do Matheus.
 
+## 2026-09-30 — Fala livre: a fala que bate no limite do esquema sai cortada no meio da palavra
+
+Visto no teste do chip no jogo: o Koromon (bebê, `MAX_CHARS` 30) respondeu "M-mm! Já tô com fome! Vou co-c". O `maxLength` do
+esquema JSON é uma gramática: o Ollama para de gerar no 30º caractere, e o verificador marcava o toco como invenção. Correção
+só na saída (`saida.aparar`, chamada em `gerar` e na reescrita da autocorreção): quando a fala tem o tamanho do limite, fica
+só a parte inteira, até o último fim de frase (".", "!", "?", "…"); sem fim de frase, até o último espaço, com reticências.
+Abaixo do limite a fala não muda, então as rodadas gravadas não mudam. Prompts, esquema e limites continuam os mesmos.
 ## 2026-09-30 — Voz própria: gatilho de revanche
 
 O gatilho da seção 3 do DESIGN_VOZ_PROPRIA ("antes de lutar contra o rival do gosto revanche"), que tinha ficado de fora.

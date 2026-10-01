@@ -13,8 +13,8 @@ from dataclasses import dataclass
 from .corpus import Especie, bloco_estilo, repete_citacao
 from .fatos import TIPO_MENTIRA, estagio_de, fatos_de_estado
 from .ollama import ClienteOllama
-from .prompt import MAX_TOKENS, VERSAO_PROMPT, VERSOES_VOZ, esquema, mensagens
-from .saida import FALA_GENERICA, FalaLivre, SaidaInvalida, ler
+from .prompt import MAX_CHARS, MAX_TOKENS, VERSAO_PROMPT, VERSOES_VOZ, esquema, mensagens
+from .saida import FALA_GENERICA, FalaLivre, SaidaInvalida, aparar, ler
 
 
 @dataclass(frozen=True)
@@ -60,9 +60,10 @@ def gerar(cliente: ClienteOllama, estado: dict, situacao: str, fala_jogador: str
         f: FalaLivre = ler(r.texto)
     except SaidaInvalida as err:
         return _queda(fatos, f"saida: {err}", latencia_s=r.latencia_s, **base)
+    fala = aparar(f.fala, MAX_CHARS[est])        # bateu no limite do esquema: fica so a parte inteira
     if especie is not None:
-        c = repete_citacao(f.fala, especie.citacoes)
+        c = repete_citacao(fala, especie.citacoes)
         if c is not None:
             return _queda(fatos, f"repete_citacao: {c}", latencia_s=r.latencia_s, **base)
-    return Resultado(f.fala, f.fatos_citados, latencia_s=r.latencia_s, erro=None, comando=f.comando if comando else None,
+    return Resultado(fala, f.fatos_citados, latencia_s=r.latencia_s, erro=None, comando=f.comando if comando else None,
                      **base)
