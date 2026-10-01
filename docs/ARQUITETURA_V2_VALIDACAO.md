@@ -78,9 +78,10 @@ da tabela verificada do projeto: valem como pista até entrarem nela).
 4. **"O projeto já usa RL homeostático" não é verdade.** O instinto são regras escritas à mão sobre drives homeostáticos,
    sem aprendizado; o RL homeostático é só a base teórica citada. Valor homeostático como reforço é mecânica nova.
 
-**NORNBRAIN (CfC) fica como hipótese concorrente, não como peça.** O CfC usa funções transcendentais e pesos em ponto
-flutuante, e a V2 exige ativação sem transcendental e pesos inteiros para o replay e a paridade Python/web (G1, D8). Trocar
-por CfC quebraria o requisito central do projeto.
+**NORNBRAIN (CfC) entra como hipótese concorrente, na pesquisa.** Decisão do Matheus (2026-10-01): os testes da pesquisa
+rodam no Python, e o produto é outra coisa; a web roda **um** DigiBrain só, o escolhido. Então o CfC (ponto flutuante,
+funções transcendentais) pode ser braço de comparação no Python, com replay bit a bit no mesmo runtime. A paridade
+Python/web (G1, D8) vale só para o cérebro que for para o produto (`docs/research/digibrain/synthesis/brain_comparison.md`).
 
 ## 4. Três definições que o diagrama precisa antes de virar código
 
@@ -119,7 +120,8 @@ antes da run. Uma peça por vez: cada uma passa sozinha antes de se juntar às o
 | N8 | valor instrumental (D-B) e comparação de canais (D-C) | N4, N5 | canais separados × escalar somado, com o mesmo orçamento | novo |
 | N9 | vício (assimetria querer × gostar) | N4 | `ROADMAP_V2.md`, P8 | depois das frutas |
 | N10 | genoma → fisiologia, cérebro inicial e plasticidade | fase 3 | genoma com variância herdável, com plano próprio (no E1 o genoma pesou 4,9%) | fase 3; Baldwin já publicado, não é novidade |
-| — | corpo 2D, luta dentro do mesmo cérebro, CfC | — | — | **fora** da fase de experimentos (stand-by) |
+| N11 | comparação DigiBrain A (C3-like) × B (CfC/A2C) × C (Fly-like), só no Python | marco da fase 1, frutas | `docs/research/digibrain/synthesis/brain_comparison.md` | IDEIA |
+| — | corpo 2D, luta dentro do mesmo cérebro | — | — | **fora** da fase de experimentos (stand-by) |
 
 **A pergunta de pesquisa que a arquitetura abre** (incluída na pergunta maior da seção 6, como os braços P2 e P2e): *um pet que aprende pela
 consequência no mundo absorve informação do dono de um jeito que se separa do cuidado?* Ela troca a pergunta de hoje
@@ -196,6 +198,6 @@ desenho; só depois o genoma o produz (N10). Assim a pergunta não espera o geno
 | A10 | "Vantagem adaptativa" = desempenho no próprio ambiente (privação, saúde, G3-T), nunca a força na arena | Sim | Pela arena, mede-se o arquétipo, não a plasticidade |
 | A11 | Eixo de ambiente casado × descasado × mutável, com as frutas | Sim; o experimento P0–P3 vem depois do N4 | Só com a bola não há o que descasar, e a pergunta não tem condição |
 | A12 | Braço P2e (o dono informa errado) | Incluir | Sem ele, "o mundo valida ou refuta" nunca é testado |
-| A7 | CfC (NORNBRAIN) fora | Fora; registrar como hipótese concorrente | Adotar quebra o replay e a paridade |
+| A7 | CfC (NORNBRAIN) | **Decidido pelo Matheus (2026-10-01):** entra como braço de pesquisa no Python (N11); a web roda um DigiBrain só, o escolhido | — |
 | A8 | Pedir ao Claude Science a verificação das pistas (FlyWire, Fróes, Berto, Rossi, Sakabe, A.L.I.V.E., ALGA) | Sim, antes de qualquer texto que as cite | Citar pista como evidência é o erro que a revisão de literatura já bloqueou |
 | A9 | Luta dentro do mesmo cérebro | Fora da fase de experimentos | Juntar os gambits do combate ao cérebro da vida muda o combate inteiro (gates V21C/V21D/V21E) |
