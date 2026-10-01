@@ -1,12 +1,13 @@
 # DEFINIÇÕES DA V2 — as seis restrições da literatura sobre os gates PROPOSTOS
 
-Status: **PROPOSTO** (2026-10-01). Este documento não decide desenho, não muda código e não autoriza run. Ele fixa, para cada gate
+Status: **DECIDIDO pelo Matheus em 2026-10-01** (D1–D11 aprovadas como recomendadas; tabela no fim). Os números dos gates
+continuam PROPOSTOS até o referendo do plano. Este documento não decide desenho, não muda código e não autoriza run. Ele fixa, para cada gate
 PROPOSTO de `docs/PLANO_V2_PESQUISA.md` (fase 1) que a busca bibliográfica da V2 restringiu, **a definição, a justificativa e o artefato
 que vai medi-la**. Tudo vale até o referendo do Matheus. A última seção planeja um pedido novo dele (frutas, gosto hedônico e vício) só
 como pergunta.
 
-**Fontes.** Busca da V2 (2026-10-01): `V2_SINTESE_Q1_Q7.md` e `v2_referencias_verificadas.csv`, hoje em `D:\Trab\digilab\v1\docs\referencias\`
-(fora da `main`; ver decisão D9). Rótulos de verificação da coluna `verificada` são vinculantes; nada NÃO LOCALIZADA é citado aqui. Números da v1
+**Fontes.** Busca da V2 (2026-10-01): `V2_SINTESE_Q1_Q7.md` e `v2_referencias_verificadas.csv`, em `docs/referencias/`
+(no repositório desde a decisão D9). Rótulos de verificação da coluna `verificada` são vinculantes; nada NÃO LOCALIZADA é citado aqui. Números da v1
 apontam o artefato em disco; números novos não existem ainda (nenhuma run foi feita).
 
 **Não reabre nada.** A hipótese central da v1 continua refutada (`artifacts_confirmatoria/resultado.json`), a linhagem continua encerrada
@@ -62,7 +63,7 @@ tenha sido aprendido**.
   sempre, passe ou não o G4.
 
 **Artefato.** `artifacts_v2_l1/validacao/legibilidade.json` (G4 aprendido, G4 bruto, por braço, lobos e controle) e
-`artifacts_v2_l1/validacao/custo_gargalo.json`. O controle entra no `docs/PLANO_ANALISE_V2_L1.md` se o Matheus aprovar (D2).
+`artifacts_v2_l1/validacao/custo_gargalo.json`. O controle entra no `docs/PLANO_ANALISE_V2_L1.md` (D2, aprovada).
 
 ## 3. Braço "só cuidado" (V2-H0)
 
@@ -188,7 +189,7 @@ Aqui fica só o que isso pede da pesquisa; o desenho é dele.
 
 ---
 
-## Decisões que só o Matheus pode tomar
+## Decisões (todas aprovadas pelo Matheus como recomendadas, 2026-10-01)
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
