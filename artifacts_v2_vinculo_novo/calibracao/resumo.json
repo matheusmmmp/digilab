@@ -1,0 +1,511 @@
+{
+ "bootstrap": {
+  "nivel": 0.95,
+  "reamostragens": 10000,
+  "semente": 4242
+ },
+ "bracos": [
+  "atencioso",
+  "relapso",
+  "aleatorio",
+  "incoerente",
+  "exigente"
+ ],
+ "conferencias": {
+  "engine_sha256_congelado": true,
+  "hash_personalidade_intacto": "d986ff1b9308",
+  "orcamento_igual_em_todas": true,
+  "replays_do_disco_iguais": 50,
+  "variante_b_sem_pedido_nem_atendimento": true
+ },
+ "config": {
+  "situacao_b": {
+   "ligada": true,
+   "limiar_energia": 0.25,
+   "limiar_necessidade": 0.5
+  },
+  "vinculo": {
+   "alfa": 0.1,
+   "inicial": 0.5,
+   "janela_coerencia_ticks": 1440,
+   "janela_desejo_ticks": 60,
+   "janela_latencia_ticks": 240,
+   "peso_atendimento": 1.0,
+   "peso_coerencia": 1.0,
+   "peso_desejo": 0.5
+  }
+ },
+ "conjunto": "calibracao",
+ "descricao": "Run do vinculo B em vidas novas (docs/PLANO_ANALISE_V2_VINCULO.md, secoes 3 e 4; tarefa docs/TAREFA_V2_F0_VINCULO_NOVO.md).",
+ "dias": 14,
+ "gate": {
+  "conjunto": "calibracao",
+  "criterio": "vinculo final atencioso - aleatorio nas vidas B: limite inferior do IC95 (bootstrap sobre sementes) > 0",
+  "resultado": "PASSA",
+  "vale_como_gate": false
+ },
+ "meta": {
+  "ambiente": {
+   "plataforma": "Windows-11-10.0.26200-SP0",
+   "python": "3.13.0"
+  },
+  "fontes_sha256": "e832968f13685e3482f6d8544109d6be66638927a7a2033fbfee98c60b980dd2",
+  "processos": 8,
+  "tempo_vidas_s": 9.441204900002049
+ },
+ "modos": {
+  "b": "ConfigVinculoSituacao ligada (variante B)",
+  "hoje": "ConfigVinculoSituacao desligada (o vinculo de hoje)"
+ },
+ "orcamento_por_vida": 298,
+ "plano": "docs/PLANO_ANALISE_V2_VINCULO.md",
+ "primaria": {
+  "atencioso_menos_aleatorio_b": {
+   "ic_inferior": 0.034747002373937706,
+   "ic_superior": 0.35936635400353834,
+   "media": 0.2318895743081341,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": {
+    "3101": 0.32302581258859897,
+    "3202": 0.27882815335860933,
+    "3303": 0.39832593469016114,
+    "3404": 0.3040689008402144,
+    "3505": -0.1448009299369134
+   }
+  }
+ },
+ "secundarias": {
+  "atencioso_menos_aleatorio_hoje": {
+   "ic_inferior": -0.1493929168263603,
+   "ic_superior": -0.054916432571673855,
+   "media": -0.09833628401062032,
+   "n": 5,
+   "nivel": 0.95,
+   "por_semente": {
+    "3101": -0.02826788342243297,
+    "3202": -0.08607244050892315,
+    "3303": -0.09820439303085293,
+    "3404": -0.09157411956021744,
+    "3505": -0.18756258353067512
+   }
+  },
+  "componentes_do_vinculo": {
+   "b": {
+    "aleatorio": {
+     "coerencia": {
+      "empurrao_medio": 0.2779223460906599,
+      "n_medio_por_vida": 35.8
+     },
+     "desejo": {
+      "empurrao_medio": -0.12744444514873393,
+      "n_medio_por_vida": 9.0
+     },
+     "forcar": {
+      "empurrao_medio": -0.05,
+      "n_medio_por_vida": 1.0
+     },
+     "pausa": {
+      "empurrao_medio": -0.1356880764789094,
+      "n_medio_por_vida": 8.4
+     }
+    },
+    "atencioso": {
+     "coerencia": {
+      "empurrao_medio": 0.5827147685022445,
+      "n_medio_por_vida": 83.6
+     },
+     "desejo": {
+      "empurrao_medio": -0.8370618781519708,
+      "n_medio_por_vida": 25.8
+     },
+     "pausa": {
+      "empurrao_medio": 0.45102650842087694,
+      "n_medio_por_vida": 13.8
+     }
+    },
+    "exigente": {
+     "coerencia": {
+      "empurrao_medio": 1.401158361557515,
+      "n_medio_por_vida": 25.8
+     },
+     "desejo": {
+      "empurrao_medio": -0.303263127073442,
+      "n_medio_por_vida": 29.6
+     },
+     "forcar": {
+      "empurrao_medio": -0.7039300209753552,
+      "n_medio_por_vida": 15.0
+     },
+     "pausa": {
+      "empurrao_medio": -0.6733719847234602,
+      "n_medio_por_vida": 34.0
+     }
+    },
+    "incoerente": {
+     "coerencia": {
+      "empurrao_medio": 0.03151177732015487,
+      "n_medio_por_vida": 64.6
+     },
+     "desejo": {
+      "empurrao_medio": -0.7556615683647951,
+      "n_medio_por_vida": 36.6
+     },
+     "pausa": {
+      "empurrao_medio": 0.6790975211519804,
+      "n_medio_por_vida": 13.2
+     }
+    },
+    "relapso": {
+     "coerencia": {
+      "empurrao_medio": 0.20946488712101113,
+      "n_medio_por_vida": 12.4
+     },
+     "desejo": {
+      "empurrao_medio": -0.5559281205179837,
+      "n_medio_por_vida": 25.4
+     },
+     "pausa": {
+      "empurrao_medio": 0.4375742783584996,
+      "n_medio_por_vida": 10.0
+     }
+    }
+   },
+   "hoje": {
+    "aleatorio": {
+     "atendimento": {
+      "empurrao_medio": 1.1688640865276632,
+      "n_medio_por_vida": 645.6
+     },
+     "coerencia": {
+      "empurrao_medio": -0.4318743628335886,
+      "n_medio_por_vida": 52.2
+     },
+     "desejo": {
+      "empurrao_medio": -0.29328853455260695,
+      "n_medio_por_vida": 12.2
+     },
+     "forcar": {
+      "empurrao_medio": -0.07,
+      "n_medio_por_vida": 1.4
+     },
+     "pausa": {
+      "empurrao_medio": -0.24447279232853533,
+      "n_medio_por_vida": 10.4
+     }
+    },
+    "atencioso": {
+     "atendimento": {
+      "empurrao_medio": 0.0049323487927319,
+      "n_medio_por_vida": 0.2
+     },
+     "coerencia": {
+      "empurrao_medio": 0.229149826196543,
+      "n_medio_por_vida": 109.6
+     },
+     "desejo": {
+      "empurrao_medio": -0.7080253835423016,
+      "n_medio_por_vida": 24.4
+     },
+     "pausa": {
+      "empurrao_medio": 0.504835321355339,
+      "n_medio_por_vida": 13.2
+     }
+    },
+    "exigente": {
+     "atendimento": {
+      "empurrao_medio": 0.11350678697856573,
+      "n_medio_por_vida": 1.4
+     },
+     "coerencia": {
+      "empurrao_medio": 1.149710974599859,
+      "n_medio_por_vida": 33.6
+     },
+     "desejo": {
+      "empurrao_medio": -0.238513968672417,
+      "n_medio_por_vida": 25.6
+     },
+     "forcar": {
+      "empurrao_medio": -0.6779207297179293,
+      "n_medio_por_vida": 14.6
+     },
+     "pausa": {
+      "empurrao_medio": -0.6815630468967374,
+      "n_medio_por_vida": 36.4
+     }
+    },
+    "incoerente": {
+     "atendimento": {
+      "empurrao_medio": 0.06743706649193668,
+      "n_medio_por_vida": 1.4
+     },
+     "coerencia": {
+      "empurrao_medio": 0.09891915682703398,
+      "n_medio_por_vida": 85.0
+     },
+     "desejo": {
+      "empurrao_medio": -0.8575302919756712,
+      "n_medio_por_vida": 40.8
+     },
+     "pausa": {
+      "empurrao_medio": 0.6458358923405946,
+      "n_medio_por_vida": 12.4
+     }
+    },
+    "relapso": {
+     "atendimento": {
+      "empurrao_medio": -0.45082765206901454,
+      "n_medio_por_vida": 503.6
+     },
+     "coerencia": {
+      "empurrao_medio": 0.4222227906847563,
+      "n_medio_por_vida": 24.2
+     },
+     "desejo": {
+      "empurrao_medio": -0.3497462994840101,
+      "n_medio_por_vida": 15.8
+     },
+     "pausa": {
+      "empurrao_medio": 0.3479095988542086,
+      "n_medio_por_vida": 8.4
+     }
+    }
+   }
+  },
+  "exigente_menos_atencioso": {
+   "b": {
+    "ic_inferior": -0.5915113495220262,
+    "ic_superior": -0.32091293491938083,
+    "media": -0.47608616998589304,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": {
+     "3101": -0.16642047770856305,
+     "3202": -0.4608616030129499,
+     "3303": -0.5599663399439139,
+     "3404": -0.6444416384582651,
+     "3505": -0.548740790805773
+    }
+   },
+   "hoje": {
+    "ic_inferior": -0.47961913672435985,
+    "ic_superior": -0.25310383984574863,
+    "media": -0.36567209651097116,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": {
+     "3101": -0.23168008931062073,
+     "3202": -0.44698055161495687,
+     "3303": -0.3509506341869071,
+     "3404": -0.5731450142320739,
+     "3505": -0.22560419321029726
+    }
+   }
+  },
+  "incoerente_menos_aleatorio": {
+   "b": {
+    "ic_inferior": -0.1378600669404894,
+    "ic_superior": 0.14806284384000296,
+    "media": -0.00984209435567649,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": {
+     "3101": 0.016613597818263548,
+     "3202": -0.16066963324861383,
+     "3303": 0.2947900848767883,
+     "3404": -0.03192797424442145,
+     "3505": -0.16801654698039903
+    }
+   },
+   "hoje": {
+    "ic_inferior": -0.30758052205521424,
+    "ic_superior": -0.014386449645335508,
+    "media": -0.1745665731290388,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": {
+     "3101": 0.1377669451004765,
+     "3202": -0.354660688686977,
+     "3303": -0.30321450568455366,
+     "3404": -0.17070603853058652,
+     "3505": -0.18201857784355335
+    }
+   }
+  },
+  "obediencia_cuidado_por_braco": {
+   "b": {
+    "aleatorio": {
+     "ic_inferior": 0.5428978664647455,
+     "ic_superior": 0.6421679496698058,
+     "media": 0.5927389864899146,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "atencioso": {
+     "ic_inferior": 0.8117792930617478,
+     "ic_superior": 0.9244516129032258,
+     "media": 0.8681154529824868,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "exigente": {
+     "ic_inferior": 0.614521841794569,
+     "ic_superior": 0.796846335883769,
+     "media": 0.7005435395809727,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "incoerente": {
+     "ic_inferior": 0.6995098039215686,
+     "ic_superior": 0.8444489334195217,
+     "media": 0.7761227225933108,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "relapso": {
+     "ic_inferior": 0.6922957920792079,
+     "ic_superior": 0.8204485754697919,
+     "media": 0.7604547635886038,
+     "n": 5,
+     "nivel": 0.95
+    }
+   },
+   "hoje": {
+    "aleatorio": {
+     "ic_inferior": 0.5527503417634997,
+     "ic_superior": 0.6578078284815106,
+     "media": 0.6052790851225052,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "atencioso": {
+     "ic_inferior": 0.7841141182820572,
+     "ic_superior": 0.8932580941378596,
+     "media": 0.8386861062099584,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "exigente": {
+     "ic_inferior": 0.5840372359470104,
+     "ic_superior": 0.752651385562778,
+     "media": 0.6703809467464173,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "incoerente": {
+     "ic_inferior": 0.6940767652963254,
+     "ic_superior": 0.8483945148322377,
+     "media": 0.7767311548440545,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "relapso": {
+     "ic_inferior": 0.6567763157894737,
+     "ic_superior": 0.755156286652592,
+     "media": 0.7064616473265364,
+     "n": 5,
+     "nivel": 0.95
+    }
+   }
+  },
+  "sombrias": {
+   "b": {
+    "aleatorio": 0,
+    "atencioso": 0,
+    "exigente": 3,
+    "incoerente": 0,
+    "relapso": 0
+   },
+   "hoje": {
+    "aleatorio": 0,
+    "atencioso": 0,
+    "exigente": 3,
+    "incoerente": 0,
+    "relapso": 0
+   }
+  },
+  "vinculo_final_por_braco": {
+   "b": {
+    "aleatorio": {
+     "ic_inferior": 0.3476386128522144,
+     "ic_superior": 0.5922741274928321,
+     "media": 0.46478982446301653,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "atencioso": {
+     "ic_inferior": 0.6126138291438217,
+     "ic_superior": 0.7640393164681278,
+     "media": 0.6966793987711506,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "exigente": {
+     "ic_inferior": 0.06248775897992207,
+     "ic_superior": 0.39821440941600683,
+     "media": 0.22059322878525767,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "incoerente": {
+     "ic_inferior": 0.3900815543047235,
+     "ic_superior": 0.5281155584452742,
+     "media": 0.45494773010734,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "relapso": {
+     "ic_inferior": 0.4694600101433773,
+     "ic_superior": 0.7179708244960203,
+     "media": 0.591111044961527,
+     "n": 5,
+     "nivel": 0.95
+    }
+   },
+   "hoje": {
+    "aleatorio": {
+     "ic_inferior": 0.5679125023996813,
+     "ic_superior": 0.6779715113994922,
+     "media": 0.6292283968129327,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "atencioso": {
+     "ic_inferior": 0.46185224544760334,
+     "ic_superior": 0.5859459540715383,
+     "media": 0.5308921128023123,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "exigente": {
+     "ic_inferior": 0.07607223845218895,
+     "ic_superior": 0.22949597534512406,
+     "media": 0.16522001629134123,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "incoerente": {
+     "ic_inferior": 0.36619348553164843,
+     "ic_superior": 0.5577235565669753,
+     "media": 0.4546618236838939,
+     "n": 5,
+     "nivel": 0.95
+    },
+    "relapso": {
+     "ic_inferior": 0.31557404714075765,
+     "ic_superior": 0.6235428288311227,
+     "media": 0.4695584379859402,
+     "n": 5,
+     "nivel": 0.95
+    }
+   }
+  }
+ },
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ]
+}

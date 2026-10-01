@@ -1,0 +1,63 @@
+{
+ "acoes_do_dono": {
+  "acariciar": 13,
+  "alimentar": 47,
+  "elogiar": 49,
+  "limpar": 61,
+  "repreender": 23,
+  "treinar_alvo": 18,
+  "treinar_corrida": 18,
+  "treinar_esquiva": 17,
+  "treinar_levantar_pedra": 18,
+  "treinar_meditar": 17,
+  "treinar_resistencia": 17
+ },
+ "braco": "exigente",
+ "chaves_feedback": [
+  "brincar|000",
+  "brincar|001",
+  "chamar_atencao|000",
+  "chamar_atencao|001",
+  "dormir|000",
+  "dormir|001",
+  "dormir|010",
+  "explorar|000",
+  "explorar|001"
+ ],
+ "dono": {
+  "carinho_no_slot": 13,
+  "treino": 105
+ },
+ "empurrao_por_componente": {
+  "coerencia": 1.8638503351653248,
+  "desejo": -0.4957739795530574,
+  "forcar": -0.6526619369984306,
+  "pausa": -0.8751594186138368
+ },
+ "enroladas": 25,
+ "especie": "limo",
+ "interacoes": 298,
+ "modo": "b",
+ "n_amostras_por_componente": {
+  "coerencia": 35,
+  "desejo": 34,
+  "forcar": 14,
+  "pausa": 30
+ },
+ "obediencia_cuidado": 0.7024793388429752,
+ "pedidos_obediencia": 121,
+ "recusas": 36,
+ "semente": 3202,
+ "sessoes": 105,
+ "sobrecarga_adulto": 4.5,
+ "sombria": false,
+ "vinculo": {
+  "atualizacoes": 113,
+  "pedidos_pendentes": [],
+  "situacao_atual": "001",
+  "valor": 0.34025500000000003,
+  "variante": "b",
+  "vontades_pendentes": []
+ },
+ "vinculo_final": 0.34025500000000003
+}

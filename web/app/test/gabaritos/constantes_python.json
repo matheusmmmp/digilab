@@ -924,6 +924,12 @@
   "lutas_minimas_taxa": 10,
   "prob_lesao_derrota": 0.2
  },
+ "ConfigLobos": {
+  "aprendizado_ligado": false,
+  "bits_ponto_fixo": 10,
+  "escala_ticks_desde_cuidado": 480.0,
+  "maximo_pesos": 1000
+ },
  "ConfigMemoria": {
   "escala_feedback": 3.0,
   "janela_latencia_ticks": 240,
@@ -1186,5 +1192,10 @@
   "peso_atendimento": 1.0,
   "peso_coerencia": 1.0,
   "peso_desejo": 0.5
+ },
+ "ConfigVinculoSituacao": {
+  "ligada": false,
+  "limiar_energia": 0.25,
+  "limiar_necessidade": 0.5
  }
 }

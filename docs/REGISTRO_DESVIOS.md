@@ -1408,6 +1408,39 @@ seção 5) **sem mudar nenhum resultado**. `engine.py` intocado (sha256 conferid
   `test_canonico_intacto.py`, `test_reproducao_v3_confirmatoria.py`, `test_natureza_criacao.py`, `test_confianca.py` e `test_protocol.py` (hash e
   `engine.py`) passando; `cd web/app && npm run tipos` sem erros; `npm test` 306 testes em 29 arquivos passando (só comentários mudaram lá).
 
+## 2026-10-01 — F0-VINCULO-NOVO: vínculo B implementado (Python atrás de chave, web pets v10); interpretações
+
+Tarefa `docs/TAREFA_V2_F0_VINCULO_NOVO.md`; plano `docs/PLANO_ANALISE_V2_VINCULO.md` (commit `e507e54`, antes do código e da run).
+- **Situação lida na decisão do pet, não na ação do dono.** A conta do #109 (`analisar_vinculo.py`) classificava a situação pelo estado que o
+  dono via antes de agir; a implementação usa a observação com que o pet decidiu a ação atual (`Vinculo.decisao(obs, …)`), que já chega ao
+  vínculo: é "a situação em que o pet fez o que o dono julga", e não exige gancho novo no motor nem na web. As células mudam pouco em 15 ticks.
+  Registrado no plano (seção 2) antes da run.
+- **Config à parte.** `ConfigVinculoSituacao` em vez de campos novos na `ConfigVinculo`, porque ela entra em `_json_personalidade` e no hash dos
+  três protocolos da personalidade (`d986ff1b9308…`), que as runs gravadas carregam. Mesmo padrão da `ConfigConfianca` (M1).
+- **Validação com 5 sementes** (5101, 5202, 5303, 5404, 5505: a faixa reservada, uma por centena, como as de sempre). O IC95 por bootstrap sobre
+  5 unidades é curto; uma das cinco diferenças é negativa (5404: −0,041). O gate pede só o limite inferior > 0, e passou (+0,046).
+- **Mega na web, pets v10:** os donos simulados não têm Tamer, então as medalhas são liberadas no ovo (`Motor.liberar(MEDALHAS_LIGA)`), como os
+  saves do e2e fazem. A comparação com `artifacts_campanha/mega/limiar_vinculo.json` (pets v5) **não é pareada**: nos v10 valem a qualificação
+  por vitórias, as medalhas e o tempo contado desde a evolução anterior, e 8 das 24 vidas não chegam ao adulto em 3 dias. O limiar 0,4 não
+  mudou (fora da tarefa); o relato está no CLAUDE.md.
+- **O atencioso da web fala pouco.** Em 3 dias e 48 interações, quase nenhuma é feedback (1 e 4 nas duas vidas conferidas; o resto atende chamados e limpa); com o atendimento fora, o
+  vínculo B dele vive do desejo, que expira, e termina em 0,13–0,37. É o risco apontado no #109 para a alternativa B (frágil quando o dono fala
+  pouco) aparecendo no jogo curto. Nenhum ajuste foi feito (o plano não previa e a validação já tinha rodado).
+- `medir_vinculo_mega.mjs` ganhou `--versao`; sem ela o script é o de antes, byte a byte (os artefatos dos v5 não foram regravados).
+- `web/app/test/save.test.ts` usava `versao: 10` como exemplo de versão desconhecida; passou a 11.
+
+## 2026-10-01 — GPU-ESTILO: o estilo com o corpus em português (medida A e rodada 4 do comando)
+
+Plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md` commitado antes da run; uma run de cada, nada ajustado. Desvios e interpretações:
+- **Medida A roda um modo só.** Com o corpus em português o filtro do alfabeto não tira nada (0 itens não latinos), então o bloco "com
+  filtro" é igual ao "sem filtro" item a item; o script ganhou `--saida` e, nesse caso, gera só o modo que o servidor manda e grava
+  `filtro_sem_efeito`. `artifacts_voz/estilo_latino/` (corpus anterior) não é refeito. Critério PROPOSTO ≤ 1/30 rejeitadas: 0/30.
+- **A primeira execução da medida A foi interrompida aos ~60 s** (o processo estava preso ao teto de 10 min da ferramenta) e relançada
+  inteira como processo independente; nada tinha sido gravado. Os artefatos são da segunda execução (10:19 a 10:42).
+- **Rodada 4 do comando: gate PASSA com o estilo** (3,3% falsos positivos; 88,3% imperativos). Comparação com a rodada 3 é descritiva
+  (sementes diferentes, sem teste). As 2 saídas rejeitadas pelo parser não são por letra não latina.
+- **Testes:** `python -m pytest tests/ -q` na worktree, depois das runs: 596 passed, 1 skipped (7 min 8 s, Windows, Python 3.13.0).
+
 ## 2026-10-01 — V2, L1: o lobo de decisão aprende (`docs/TAREFA_V2_L1_DECISAO.md`, `docs/PLANO_ANALISE_V2_L1.md`)
 
 Interpretações do desenho, registradas com o plano (antes da calibração). Os números da calibração ficam no `CLAUDE.md` (seção "V2, L1").

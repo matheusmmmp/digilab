@@ -274,9 +274,12 @@ def fase_csv(modelo: str | None = None) -> str:
 # rodada 3: prompt livre-v8 (as quatro acoes em que a mensagem do dono e a propria acao: elogiar, repreender, acariciar,
 # tratar_lesao), as mesmas 60 mensagens, SEMENTES NOVAS (as das rodadas 1 e 2 viraram de calibracao: a v8 foi escrita
 # olhando a rodada 1) e sem o estilo da especie, como a rodada 1. Gate igual.
+# rodada 4 (GPU-ESTILO, 2026-10-01): livre-v8 COM o estilo da especie, com o corpus reescrito em portugues (F0-CORPUS: o filtro do
+# alfabeto nao tira mais nada), as mesmas 60 mensagens e sementes novas reservadas pelo coordenador. Gate igual; compara com a 3.
 RODADAS_COMANDO = {1: {"pasta": "rodada1", "sementes": (20261003, 20261004, 20261005), "estilo": False, "prompt": "livre-v7"},
                    2: {"pasta": "rodada2_estilo", "sementes": (20261003, 20261004, 20261005), "estilo": True, "prompt": "livre-v7"},
-                   3: {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"}}
+                   3: {"pasta": "rodada3", "sementes": (20261201, 20261301, 20261401), "estilo": False, "prompt": "livre-v8"},
+                   4: {"pasta": "rodada4_estilo", "sementes": (20261501, 20261601, 20261701), "estilo": True, "prompt": "livre-v8"}}
 MODELO_COMANDO = "gemma2:9b"
 GATE_FP_NEGATIVAS = 0.05
 GATE_IMPERATIVOS = 0.80

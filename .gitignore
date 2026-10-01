@@ -27,6 +27,8 @@ artifacts_*/
 !artifacts_voz/
 !artifacts_equilibrio_geral/
 !artifacts_v2_vinculo/
+!artifacts_v2_vinculo_novo/
+
 !artifacts_v2_l1/
 # V2, L1: os politica.json das vidas (motivos por decisao) pesam ~600 MB e sao regeneraveis por replay do .jsonl
 artifacts_v2_l1/**/vidas/*.politica.json

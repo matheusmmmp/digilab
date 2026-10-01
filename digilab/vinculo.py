@@ -12,11 +12,17 @@ Componentes (pesos em ConfigVinculo):
                dono a atende na janela, 0 se expira
 Cada atualizacao registra o indice do evento de log que a moveu (ou None).
 Vinculo nunca entra em CondicaoFisica, Estilo nem em combate_v2 (teste por AST).
+
+Variante B (ConfigVinculoSituacao.ligada; docs/PLANO_ANALISE_V2_VINCULO.md): o atendimento sai (o pedido nao abre) e a
+coerencia agrupa o historico por (acao do pet, situacao do pet). Situacao = tres bits lidos da observacao com que o pet
+decidiu a acao atual: necessidade baixa (min(fome, higiene) < limiar), cansado (energia < limiar) e noite. Desligada
+(padrao), a classe e a de sempre, byte a byte.
 """
 
 from __future__ import annotations
 
-from .config import CONFIG_MEMORIA_ESPACOS, CONFIG_VINCULO, ConfigVinculo
+from .config import (CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO, CONFIG_VINCULO, CONFIG_VINCULO_SITUACAO, TICKS_POR_DIA,
+                     ConfigVinculo, ConfigVinculoSituacao)
 from .desejo import Desejo
 from .events import AcaoPet, AcaoUsuario
 from .policies.bandit import CUIDADOS_QUE_ATENDEM
@@ -27,10 +33,20 @@ ATENDE_VONTADE = {"comer": AcaoUsuario.ALIMENTAR, "brincar": AcaoUsuario.BRINCAR
                   "chamar_atencao": AcaoUsuario.ACARICIAR}
 
 
+def situacao_de(vetor_estado: tuple[float, ...], cs: ConfigVinculoSituacao) -> str:
+    """tres bits da situacao do pet: necessidade baixa, cansado, noite (mesma conta no web: vinculo.ts, situacaoDe)"""
+    fome, higiene, energia, hora = vetor_estado[0], vetor_estado[1], vetor_estado[2], vetor_estado[7]
+    bits = (min(fome, higiene) < cs.limiar_necessidade, energia < cs.limiar_energia,
+            CONFIG_PADRAO.e_noite(int(round(hora * TICKS_POR_DIA))))
+    return "".join("1" if b else "0" for b in bits)
+
+
 class Vinculo:
-    def __init__(self, cfg: ConfigVinculo | None = None) -> None:
+    def __init__(self, cfg: ConfigVinculo | None = None, cfg_situacao: ConfigVinculoSituacao | None = None) -> None:
         self.cfg = cfg or CONFIG_VINCULO
+        self.cs = cfg_situacao or CONFIG_VINCULO_SITUACAO
         self.valor = self.cfg.inicial
+        self.situacao_atual: str | None = None                     # variante B: situacao em que o pet decidiu a acao atual
         self.pedidos: list[int] = []
         self.feedbacks: dict[str, list[tuple[int, int]]] = {}     # acao do pet -> [(tick, sinal)]
         self.vontades: list[tuple[int, AcaoUsuario]] = []          # (tick, acao do dono que atende)
@@ -79,7 +95,9 @@ class Vinculo:
 
     def decisao(self, obs: Observacao, acao: AcaoPet, tick: int, desejo: Desejo | None) -> None:
         self.expirar(tick)
-        if acao is AcaoPet.CHAMAR_ATENCAO:
+        if self.cs.ligada:
+            self.situacao_atual = situacao_de(obs.vetor_estado, self.cs)
+        elif acao is AcaoPet.CHAMAR_ATENCAO:
             fome, higiene = obs.vetor_estado[0], obs.vetor_estado[1]
             if min(fome, higiene) < CONFIG_MEMORIA_ESPACOS.limiar_necessidade_pedido:
                 self.pedidos.append(tick)
@@ -95,10 +113,12 @@ class Vinculo:
             self.pedidos = []
         if acao in (AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER) and acao_pet is not None:
             sinal = 1 if acao is AcaoUsuario.ELOGIAR else -1
-            hist = [(t, s) for t, s in self.feedbacks.get(acao_pet.value, []) if tick - t <= c.janela_coerencia_ticks]
+            # variante B: o historico e por (acao do pet, situacao em que ele a decidiu)
+            chave = acao_pet.value if not self.cs.ligada else f"{acao_pet.value}|{self.situacao_atual}"
+            hist = [(t, s) for t, s in self.feedbacks.get(chave, []) if tick - t <= c.janela_coerencia_ticks]
             if hist:
                 self._amostra(tick, "coerencia", sum(s == sinal for _, s in hist) / len(hist), c.peso_coerencia, ref)
-            self.feedbacks[acao_pet.value] = hist + [(tick, sinal)]
+            self.feedbacks[chave] = hist + [(tick, sinal)]
         atendidas = [v for v in self.vontades if v[1] is acao]
         if atendidas:
             self.vontades = [v for v in self.vontades if v[1] is not acao]
@@ -106,5 +126,9 @@ class Vinculo:
                 self._amostra(tick, "desejo", 1.0, c.peso_desejo, ref)
 
     def para_dict(self) -> dict:
-        return {"valor": self.valor, "atualizacoes": len(self.serie), "pedidos_pendentes": list(self.pedidos),
-                "vontades_pendentes": [[t, a.value] for t, a in self.vontades]}
+        d = {"valor": self.valor, "atualizacoes": len(self.serie), "pedidos_pendentes": list(self.pedidos),
+             "vontades_pendentes": [[t, a.value] for t, a in self.vontades]}
+        if self.cs.ligada:
+            d["variante"] = "b"
+            d["situacao_atual"] = self.situacao_atual
+        return d

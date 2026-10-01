@@ -260,24 +260,26 @@ class DonoComTreino:
 
 
 def fabricas_treino(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,
-                    ct: ConfigTreino | None = None):
-    """(fabrica da politica, fabrica do motor) de uma vida com treino; reusadas no replay."""
+                    ct: ConfigTreino | None = None, cfg_vinculo_situacao=None):
+    """(fabrica da politica, fabrica do motor) de uma vida com treino; reusadas no replay.
+    cfg_vinculo_situacao: a variante B do vinculo (docs/PLANO_ANALISE_V2_VINCULO.md); None = o vinculo de sempre."""
     fp = lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento)  # noqa: E731
     fm = (lambda politica, cfg, s: MotorTreino(politica, cfg, s, temperamento, especie,  # noqa: E731
-                                               obediencia_desligada=obediencia_desligada, cfg_treino=ct))
+                                               obediencia_desligada=obediencia_desligada, cfg_treino=ct,
+                                               cfg_vinculo_situacao=cfg_vinculo_situacao))
     return fp, fm
 
 
 def simular_vida_treino(braco: str, semente: int, dias: int, especie: str, temperamento: Temperamento,
                         cfg: Config | None = None, cfg_donos: ConfigDonos | None = None,
-                        ct: ConfigTreino | None = None) -> Vida:
+                        ct: ConfigTreino | None = None, cfg_vinculo_situacao=None) -> Vida:
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     ct = ct or CONFIG_TREINO
     total = dias * TICKS_POR_DIA
     passos = total // cfg_donos.passo_ticks
     orc, _ = orcamento_treino(dias, cfg_donos, ct)
-    fp, fm = fabricas_treino(semente, especie, temperamento, ct=ct)
+    fp, fm = fabricas_treino(semente, especie, temperamento, ct=ct, cfg_vinculo_situacao=cfg_vinculo_situacao)
     motor = fm(fp(cfg), cfg, semente)
     dono = DonoComTreino(braco, dias, cfg_donos, ct)
     # rng do dono: propria de cada braco (derivada da semente e do braco), como na v1
