@@ -62,5 +62,6 @@ nunca achado), `REPOSITÓRIO` (o que o código e os artefatos mostram hoje, com 
    (`docs/LEITURA_CONSOLIDADA_DONO.md`). Analogia com ALGA, Berridge ou dopamina não reabre nada.
 6. **Não alegar novidade bloqueada:** instinto × aprendido (Hallawa et al.), herdar o prior (Baldwin) e "ensinado pelo
    dono" (Black & White).
-7. **Determinismo e paridade.** Todo mecanismo candidato à web precisa caber em inteiros ou floats com replay bit a bit
-   (G1, D8 de `docs/DEFINICOES_V2.md`). O que não cabe pode existir só como braço de pesquisa em Python.
+7. **Pesquisa em Python, produto na web** (decisão do Matheus, 2026-10-01). As comparações entre cérebros e todos os
+   experimentos rodam no Python, com replay bit a bit no mesmo runtime. A web roda **um** DigiBrain só, o escolhido para o
+   produto, e só ele precisa de porte e paridade Python/web. Um cérebro de pesquisa não precisa caber na web.

@@ -11,7 +11,7 @@ congelado) foram respondidas em `docs\digibrain\integration\01_CURRENT_STATE.md`
 3. Um canal de reforço primeiro ou vários — D-C.
 4. Que canais o mundo da pesquisa precisa ter antes de os canais fazerem sentido (hoje quase só há fome e dono).
 5. Vício: derivado do RL homeostático ou mecânica nova (as duas são novas: o instinto não aprende).
-6. Comparação de DigiBrains: o B (CfC/A2C) entra mesmo sem porte para a web?
+6. ~~O B entra sem porte para a web?~~ Decidido (2026-10-01): a comparação roda só no Python; a web roda um DigiBrain só. Fica aberto: qual critério escolhe o cérebro do produto.
 7. A luta entra no mesmo cérebro? (Recomendação: fora da fase de experimentos.)
 
 ## Da literatura (pedir ao Claude Science)

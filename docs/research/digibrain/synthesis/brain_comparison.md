@@ -20,7 +20,7 @@
 | peças | drives + plasticidade neural local + reforço químico | CfC + ator-crítico + elegibilidade + gradiente | circuitos especializados + canais de reforço paralelos + plasticidade local + competição de comportamentos + memória dependente de estado |
 | fonte da família | `sources/creatures3.md` | `sources/nornbrain.md` | `sources/drosophila.md` |
 | mais perto do que existe | lobos L0/L1 com regra local | nada no repositório | lobos + canais (`reinforcement.md`) + circuitos (`action_selection.md`) |
-| cabe na web (inteiros, sem transcendental)? | sim, se a regra local for em inteiros | **não**: só braço de pesquisa em Python | sim, nas mesmas condições do A |
+| porte para a web, se for o escolhido para o produto | direto, se a regra local for em inteiros | difícil: ponto flutuante e funções transcendentais | direto, nas mesmas condições do A |
 
 ## Por que a comparação é interessante
 
@@ -45,8 +45,10 @@ família é um nível do estudo: organismo (A), aprendizagem moderna (B), circui
    contra montar e comparar "Frankensteins".
 4. **"Inspirado em" fala do nosso cérebro, não da fonte.** Um resultado do B não diz nada do NORNBRAIN (trabalho em andamento);
    um resultado do C não diz nada da mosca; um resultado do A não diz nada do Creatures 3.
-5. **Determinismo.** A e C em inteiros, com replay bit a bit e paridade web. B em ponto flutuante, só em Python, com replay bit
-   a bit no mesmo runtime (a regra do projeto aceita isso; a paridade web não vale para ele).
+5. **Onde roda.** Os três rodam **só no Python** (decisão do Matheus, 2026-10-01): a pesquisa é no Python, o produto é
+   outra coisa. Replay bit a bit no mesmo runtime para os três. A web roda **um** DigiBrain, o escolhido depois da
+   comparação; só ele ganha porte e paridade, numa versão de pet própria. A dificuldade de portar entra como critério de
+   escolha do produto, não da pesquisa.
 
 ## Métricas (da pergunta maior; nunca a força na arena)
 

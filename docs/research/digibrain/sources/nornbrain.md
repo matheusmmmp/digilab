@@ -26,6 +26,7 @@ conectividade, aprendiz e lobo alvo ao mesmo tempo: sem ablação, não diz qual
 Estudo de caso de engenharia (trocar o substrato de aprendizado preservando o resto) e **hipótese concorrente**: é a família
 do **DigiBrain B (CfC/A2C)** em `synthesis/brain_comparison.md`.
 
-**Restrição do projeto:** CfC usa funções transcendentais e pesos em ponto flutuante; a V2 pede pesos inteiros para a
-paridade Python/web (D8). O B só cabe como braço de pesquisa em Python (determinístico no mesmo runtime), sem porte para a
-web. Um resultado do nosso B fala do nosso B, não do NORNBRAIN.
+**No projeto:** a comparação roda no Python (decisão do Matheus, 2026-10-01: a web roda um DigiBrain só, o do produto).
+O B entra como braço de pesquisa, em ponto flutuante, com replay bit a bit no mesmo runtime. Só se ele fosse o escolhido
+para o produto o porte para a web viraria problema (o `exp`/`tanh` do V8 e o do CPython diferem no último bit). Um
+resultado do nosso B fala do nosso B, não do NORNBRAIN.
