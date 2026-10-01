@@ -1,6 +1,7 @@
-/* Comando pelo chat (TAREFA_COMANDO_CHAT): a LLM propoe, o app valida, o toque no chip grava o evento "d" pelo mesmo
-   caminho do botao Alimentar. Registro do pet identico ao do clique (mesmo evento, mesma assinatura); log de apresentacao
-   na versao 2 lendo a 1; o chip some com outra mensagem, com outra fala do pet e depois de 60 s. */
+/* Comando pelo chat (TAREFA_COMANDO_CHAT): a LLM propoe, o app valida e a acao entra no registro do pet NA HORA pelo mesmo
+   caminho do botao Alimentar (execucao direta, decisao do Matheus em 2026-10-01 depois do gate da rodada 3). Registro
+   identico ao do clique (mesmo evento, mesma assinatura); log de apresentacao na versao 2 lendo a 1; comando invalido para o
+   pet nao entra. */
 import { beforeAll, describe, expect, test } from "vitest";
 import { Motor, VERSAO_PET } from "../motor/index.ts";
 import type { Armazenamento } from "../src/save.ts";
@@ -30,7 +31,7 @@ const pedidos: Record<string, unknown>[] = [];
 };
 const tick = () => new Promise(r => setTimeout(r, 0));
 async function conversar(txt: string, comando: string | null, extra: Record<string, unknown> = {}): Promise<void> {
-  resposta = { fala: "Tá bom!", fatos_citados: [], fatos: [], estagio: "adulto", modelo: "falso", versao_prompt: "livre-v7", comando,
+  resposta = { fala: "Tá bom!", fatos_citados: [], fatos: [], estagio: "adulto", modelo: "falso", versao_prompt: "livre-v8", comando,
     verificacao: null, invencoes: [], ...extra };
   fl.enviarConversa(txt);
   for (let k = 0; k < 5 && fl.FL.pendente; k++) await tick();
@@ -38,7 +39,7 @@ async function conversar(txt: string, comando: string | null, extra: Record<stri
 function jogoNovo(m: Motor = save.petExemplo()): Motor {
   jogo.iniciarJogo(armaz);
   jogo.trocarMotor(m, "save");
-  fl.FL.modo = "livre"; fl.FL.status = { modelo: "falso" }; fl.FL.chip = null; fl.FL.sessao = [];
+  fl.FL.modo = "livre"; fl.FL.status = { modelo: "falso" }; fl.FL.sessao = [];
   dados[save.CHAVE + ".fala.jsonl"] = "";
   return jogo.jogoAtual().motor;
 }
@@ -76,18 +77,13 @@ describe("log de apresentacao", () => {
   });
 });
 
-describe("o chip e o registro do pet", () => {
-  test('"vai comer" + toque grava exatamente o evento "d" do botao Alimentar (mesma assinatura)', async () => {
+describe("execucao direta e o registro do pet", () => {
+  test('"vai comer" grava na hora exatamente o evento "d" do botao Alimentar (mesma assinatura)', async () => {
     const m = jogoNovo();
     expect(m.versao).toBe(VERSAO_PET);
     const antes = m.log.map(e => [...e]), n = antes.length;
     await conversar("vai comer", "alimentar");
     expect(pedidos[pedidos.length - 1].voz).toBe(true);
-    expect(m.log.length).toBe(n);                                                 /* so a proposta: nada no registro */
-    const chip = fl.chipAtual();
-    expect(chip?.acao).toBe("alimentar");
-    expect(fl.chipDe(fl.lerLog()[0])).toBe("alimentar");
-    expect(fl.executarChip()).toBe(true);
     /* o gemeo: o mesmo registro ate antes, mais o clique no botao Alimentar (Motor.observar, como acoes.agir) */
     const gemeo = Motor.reproduzir(m.semente, antes as never, m.versao);
     gemeo.observar("alimentar");
@@ -95,46 +91,37 @@ describe("o chip e o registro do pet", () => {
     expect(m.log[n]).toEqual([m.e.tick, "d", "alimentar"]);
     expect(m.log[n]).toEqual(gemeo.log[n]);
     expect(m.assinatura()).toBe(gemeo.assinatura());
-    /* o log de apresentacao marca a execucao; o chip some; o save saiu igual ao motor */
+    /* o log de apresentacao marca a execucao; o save saiu igual ao motor */
     const reg = fl.lerLog()[0];
     expect(reg.comando).toBe("alimentar"); expect(reg.comando_executado).toBe(true);
-    expect(fl.chipAtual()).toBeNull();
-    expect(fl.executarChip()).toBe(false);
     expect(dados[save.CHAVE]).toBe(save.textoSave(m));
   });
-  test("comando invalido para este pet: registro guarda a proposta, sem chip e sem evento", async () => {
+  test("comando invalido para este pet: registro guarda a proposta, nada entra", async () => {
     const m = jogoNovo();
     const n = m.log.length;
     await conversar("cuida do machucado", "tratar_lesao");                          /* no catalogo, mas sem lesao */
-    expect(fl.chipAtual()).toBeNull();
     const reg = fl.lerLog()[0];
     expect(reg.comando).toBe("tratar_lesao"); expect(reg.comando_executado).toBe(false);
     await conversar("vai treinar", "treinar");                                        /* fora do catalogo (nunca vem do servidor) */
-    expect(fl.chipAtual()).toBeNull(); expect(fl.lerLog()[1].comando).toBeNull();
+    expect(fl.lerLog()[1].comando).toBeNull(); expect(fl.lerLog()[1].comando_executado).toBe(false);
     await conversar("oi", null);
-    expect(fl.chipAtual()).toBeNull();
+    expect(fl.lerLog()[2].comando_executado).toBe(false);
     expect(m.log.length).toBe(n);
   });
-  test("o chip some com outra mensagem, com outra resposta do pet e depois de 60 s", async () => {
+  test("pet morto quando a resposta chega: nada entra no registro", async () => {
+    const m = jogoNovo();
+    m.morte = { tick: m.e.tick, causa: "lesoes" };
+    const n = m.log.length;
+    await conversar("vai comer", "alimentar");
+    expect(fl.lerLog()[0].comando).toBe("alimentar"); expect(fl.lerLog()[0].comando_executado).toBe(false);
+    expect(m.log.length).toBe(n);
+  });
+  test("duas mensagens seguidas: duas acoes, na ordem", async () => {
     const m = jogoNovo();
     const n = m.log.length;
     await conversar("toma banho", "limpar");
-    expect(fl.chipAtual()?.acao).toBe("limpar");
-    await conversar("oi", null);                                                      /* outra mensagem e outra resposta */
-    expect(fl.chipAtual()).toBeNull();
     await conversar("vamos brincar", "brincar");
-    const c = fl.chipAtual()!;
-    expect(fl.chipAtual(c.ate)).not.toBeNull();
-    expect(fl.chipAtual(c.ate + 1)).toBeNull();                                       /* 60 s de parede */
-    expect(fl.executarChip()).toBe(false);
-    expect(m.log.length).toBe(n);
-  });
-  test("pet morto na hora do toque: nada entra no registro", async () => {
-    const m = jogoNovo();
-    await conversar("vai comer", "alimentar");
-    expect(fl.chipAtual()?.acao).toBe("alimentar");
-    m.morte = { tick: m.e.tick, causa: "lesoes" };
-    expect(fl.executarChip()).toBe(false);
-    expect(fl.lerLog()[0].comando_executado).toBe(false);
+    expect(m.log.slice(n).map(e => e[2])).toEqual(["limpar", "brincar"]);
+    expect(fl.lerLog().map(r => r.comando_executado)).toEqual([true, true]);
   });
 });

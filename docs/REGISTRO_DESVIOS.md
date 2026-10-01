@@ -1238,3 +1238,12 @@ O gatilho da seção 3 do DESIGN_VOZ_PROPRIA ("antes de lutar contra o rival do 
   4101…4505 desde as medalhas; para os pets v9 elas não tinham sido usadas em nada antes da fase 4 (as fases 1–3 só rodaram
   3101…3505). A conferência "linha sem item = fase 2" do `medir_itens.mjs --validar` não existe nos v9 (sem referência gravada);
   a igualdade com `arenas_validacao.json` foi conferida à mão no relatório.
+
+## 2026-10-01 — Comando pelo chat: execução direta, sem o chip de confirmação
+
+Decisão do Matheus (2026-10-01), depois do gate PROPOSTO da rodada 3 passar (`artifacts_fala_livre/comando/rodada3/`: falsos
+positivos 0% nas negativas, imperativos 85%). O comando que a LLM propõe e o app valida (`acoes.validarComando`: catálogo, pet
+nascido e vivo, ações v4 só em pets v4+, tratar só com lesão) passa a gravar o evento `d` na hora, pelo mesmo caminho do botão
+(`acoes.agir`); o chip "Alimentar?" da primeira versão saiu. O registro do pet continua recebendo só o `d`; o log de apresentação
+marca `comando_executado`. Risco aceito: os erros de ação da rodada 3 (6 de 9 em "limpar" lidos como `repreender`) viram ação
+sem desfazer. Sem mudança no servidor, nos prompts nem nas rodadas gravadas.

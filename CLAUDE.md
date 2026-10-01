@@ -942,13 +942,15 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
   dos pets v7+ (`voz: true`) o servidor usa o prompt `livre-v7` (= v6 + bloco COMANDO) e devolve `comando`: uma das 9 ações de
   `AcaoDono` (`web/app/motor/tipos.ts`) ou `null`; `saida.ler` falha alto fora do catálogo (fala genérica, comando null). A LLM só
   propõe: o app valida de novo (`src/acoes.ts`: catálogo, pet nascido e vivo, ações v4 só em pets v4+, tratar só com lesão), mostra um
-  chip no balão da resposta ("Alimentar?") e **só o toque** grava o evento `d` de sempre pelo mesmo caminho do botão (`acoes.agir`,
+  grava o evento `d` de sempre **na hora** pelo mesmo caminho do botão (`acoes.agir`,
   usado pela tela do Pet, pelos atalhos e pelo chip). No registro do pet não entra nada da LLM: replay, assinaturas v1–v8, gabaritos e
   paridade iguais; sem o modo livre gravado. O chip some com outra mensagem, outra fala do pet ou 60 s. Log de apresentação versão 2
   (`comando`, `comando_executado`; lê a 1). Treino, luta, itens, fala espontânea e pets sem voz (v1–v6, `livre-v2`) ficam fora.
   Avaliação: `python experiments/avaliar_fala.py --livre --comando [--rodada 1|2]` → `artifacts_fala_livre/comando/rodada1/` (sem o
   estilo da espécie) e `rodada2_estilo/` (com); 60 mensagens em `situacoes.MENSAGENS_COMANDO` × 3 sementes; gate PROPOSTO: falsos
-  positivos ≤ 5% nas negativas e imperativos ≥ 80%. **Execução direta (sem chip) só com decisão do Matheus depois do gate.**
+  positivos ≤ 5% nas negativas e imperativos ≥ 80%. **Execução direta liberada pelo Matheus em 2026-10-01**, depois do gate da rodada 3; o chip de confirmação da primeira
+  versão saiu (`web/app/src/falaLivre.ts`, `executarComando`). O erro conhecido da rodada 3 fica no jogo: "banho agora, sem choro" pode
+  virar repreender.
   - Rodada 1 (`livre-v7`, sem estilo): falsos positivos 0%, imperativos 53,3% (FALHA): elogiar, repreender, acariciar e
     tratar_lesao acertaram 4 de 36 (a mensagem do dono É a ação e o modelo tratava como conversa).
   - **Rodada 3 (`livre-v8`, 2026-09-30, `artifacts_fala_livre/comando/rodada3/`)**: o servidor usa a **v8** na conversa com voz
