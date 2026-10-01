@@ -39,7 +39,7 @@ o comando só dispara ações que já existem.
 - Validação no app, de novo: o valor tem que estar em `AcaoDono`; o pet não pode estar morto nem nascendo; as ações
   v4 (petisco, banheiro, tratar_lesao) só em pets `versao >= 4`; `tratar_lesao` só com lesão. Fora disso, não executa e
   o registro fica com `comando_executado: false`.
-- **Confirmação (primeira versão):** o comando não executa sozinho. O balão da resposta mostra um chip com a ação
+- **Confirmação (primeira versão; substituída pela execução direta em 2026-10-01, decisão do Matheus):** o comando não executa sozinho. O balão da resposta mostra um chip com a ação
   ("Alimentar?") e o toque executa. Ao tocar, o app chama o mesmo caminho do botão da tela do Pet
   (`TelaPet.tsx`, `agir`, linha 381: `mudarMotor(mm => mm.observar(a))`, flash e `ajustarVelocidadeChamado`).
   Extrair esse `agir` para um módulo compartilhado (`src/acoes.ts`) e usar nos dois lugares: não duplicar.
