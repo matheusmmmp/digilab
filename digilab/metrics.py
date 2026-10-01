@@ -538,3 +538,84 @@ def icc_um_fator(tabela: Sequence[Sequence[float]]) -> float:
     if den <= 0:
         raise ValueError("icc_um_fator indefinida: sem variancia")
     return (qm_entre - qm_dentro) / den
+
+
+# ------------------------------------------------------------ V2, L1: tarefa ensinada (G3-T) e norma de reacao
+# docs/PLANO_ANALISE_V2_L1.md, secoes 3.2 e 4.2; docs/DEFINICOES_V2.md, D1 e D4. Biblioteca padrao, uma vez so.
+
+
+def acerto_na_tarefa(decisoes: Sequence[tuple[int, Mapping, str]], julgar, acoes: Sequence[str],
+                     ticks_por_dia: int) -> dict:
+    """G3-T. `decisoes` = [(tick, estado, acao)] de uma vida; `julgar(estado, acao) -> int` e a tarefa do dono
+    (+1 elogia, -1 repreende, 0 nada a dizer; donos.julgar_acao). Por dia: n, acerto = fracao com +1 (o 0 conta
+    como nao elogiado) e teto = fracao das decisoes em que ALGUMA das `acoes` teria +1 nos mesmos estados (a
+    politica otima do dono, avaliada nos estados que o pet visitou)."""
+    if ticks_por_dia <= 0:
+        raise ValueError("ticks_por_dia precisa ser positivo")
+    por_dia: dict[int, list[tuple[bool, bool]]] = {}
+    for tick, estado, acao in decisoes:
+        certo = julgar(estado, acao) == 1
+        teto = any(julgar(estado, a) == 1 for a in acoes)
+        por_dia.setdefault(tick // ticks_por_dia, []).append((certo, teto))
+    if not por_dia:
+        raise ValueError("vida sem decisoes")
+    dias = sorted(por_dia)
+    n = [len(por_dia[d]) for d in dias]
+    acerto = [sum(c for c, _ in por_dia[d]) / len(por_dia[d]) for d in dias]
+    teto = [sum(t for _, t in por_dia[d]) / len(por_dia[d]) for d in dias]
+    total = sum(n)
+    return {"dias": dias, "n": n, "acerto": acerto, "teto": teto,
+            "acerto_total": sum(c for d in dias for c, _ in por_dia[d]) / total,
+            "teto_total": sum(t for d in dias for _, t in por_dia[d]) / total}
+
+
+def eficiencia_amostral(acerto_por_dia: Sequence[float], sinais_acumulados_por_dia: Sequence[int], piso: float,
+                        maximo: float | None = None) -> dict:
+    """Quantos sinais do dono (acumulados ate o fim do dia) ate o primeiro dia com acerto >= (piso + maximo) / 2.
+    `maximo` = o maximo da curva, se nao vier. dia = None quando a curva nunca chega la."""
+    if len(acerto_por_dia) != len(sinais_acumulados_por_dia) or not acerto_por_dia:
+        raise ValueError("curva de acerto e sinais acumulados com tamanhos diferentes ou vazios")
+    maximo = max(acerto_por_dia) if maximo is None else maximo
+    alvo = 0.5 * (piso + maximo)
+    for d, (a, s) in enumerate(zip(acerto_por_dia, sinais_acumulados_por_dia)):
+        if a >= alvo:
+            return {"alvo": alvo, "piso": piso, "maximo": maximo, "dia": d, "sinais": s}
+    return {"alvo": alvo, "piso": piso, "maximo": maximo, "dia": None, "sinais": None}
+
+
+def norma_de_reacao(y: Mapping[str, Mapping[str, Mapping[str, float]]], condicao_a: str, condicao_b: str) -> dict:
+    """Regressao conjunta (Finlay-Wilkinson) para ovo x ambiente x condicao, y[condicao][ovo][ambiente].
+
+    Indice do ambiente z_r = media de y de todos os pets (todas as condicoes e ovos) no ambiente r, centrada.
+    Por (condicao, ovo): y = alpha + beta * z por minimos quadrados sobre os ambientes (alpha = nivel, beta =
+    sensibilidade ao ambiente; com z centrado, alpha = media de y do pet). Devolve z, alpha e beta por celula,
+    as medias por condicao e, por ovo, as diferencas alpha_a - alpha_b e beta_a - beta_b (para bootstrap fora)."""
+    condicoes = list(y)
+    if condicao_a not in y or condicao_b not in y:
+        raise KeyError(f"condicoes {condicao_a!r} e {condicao_b!r} precisam estar em {condicoes}")
+    ovos = sorted(y[condicao_a])
+    ambientes = sorted(y[condicao_a][ovos[0]])
+    if len(ambientes) < 2 or len(ovos) < 1:
+        raise ValueError("precisa de pelo menos 2 ambientes e 1 ovo")
+    for c in condicoes:
+        if sorted(y[c]) != ovos or any(sorted(y[c][g]) != ambientes for g in ovos):
+            raise ValueError(f"condicao {c!r} com ovos ou ambientes diferentes")
+    z_bruto = {r: sum(y[c][g][r] for c in condicoes for g in ovos) / (len(condicoes) * len(ovos)) for r in ambientes}
+    z_medio = sum(z_bruto.values()) / len(ambientes)
+    z = {r: z_bruto[r] - z_medio for r in ambientes}
+    szz = sum(v * v for v in z.values())
+    if szz <= 0.0:
+        raise ValueError("ambientes sem variacao: o indice do ambiente e constante")
+    celulas: dict[str, dict[str, dict]] = {}
+    for c in condicoes:
+        celulas[c] = {}
+        for g in ovos:
+            ym = sum(y[c][g][r] for r in ambientes) / len(ambientes)
+            beta = sum(z[r] * (y[c][g][r] - ym) for r in ambientes) / szz
+            celulas[c][g] = {"alpha": ym, "beta": beta}
+    medias = {c: {"alpha": sum(celulas[c][g]["alpha"] for g in ovos) / len(ovos),
+                  "beta": sum(celulas[c][g]["beta"] for g in ovos) / len(ovos)} for c in condicoes}
+    dif = {g: {"alpha": celulas[condicao_a][g]["alpha"] - celulas[condicao_b][g]["alpha"],
+               "beta": celulas[condicao_a][g]["beta"] - celulas[condicao_b][g]["beta"]} for g in ovos}
+    return {"ambientes": ambientes, "ovos": ovos, "z": z, "celulas": celulas, "medias": medias,
+            "diferenca_por_ovo": dif, "condicoes": [condicao_a, condicao_b]}

@@ -1440,3 +1440,57 @@ Plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md` commitado antes da run; uma run de c
 - **Rodada 4 do comando: gate PASSA com o estilo** (3,3% falsos positivos; 88,3% imperativos). Comparação com a rodada 3 é descritiva
   (sementes diferentes, sem teste). As 2 saídas rejeitadas pelo parser não são por letra não latina.
 - **Testes:** `python -m pytest tests/ -q` na worktree, depois das runs: 596 passed, 1 skipped (7 min 8 s, Windows, Python 3.13.0).
+
+## 2026-10-01 — V2, L1: o lobo de decisão aprende (`docs/TAREFA_V2_L1_DECISAO.md`, `docs/PLANO_ANALISE_V2_L1.md`)
+
+Interpretações do desenho, registradas com o plano (antes da calibração). Os números da calibração ficam no `CLAUDE.md` (seção "V2, L1").
+- **"Feedback como vantagem" em inteiros.** A política é proporcional (`p(a) = w_eff(a) / Σ`), não softmax: o gradiente exato de
+  `log p(a*)` é `(x_j/S)·(1[a = a*] − p(a)) / w_eff(a)`. A atualização implementa essa direção em inteiros,
+  `Δw = arred(f·S · passo · X_j · (S·1[a = a*] − P_a) / (S·S·W_a))`, com `P` e `W` **da política no momento da decisão**
+  (elegibilidade à COACH); o passo se divide por `w_eff(a)`, então um peso efetivo grande anda menos. O sinal escalar `f` entra no lugar
+  da vantagem. Arredondamento simétrico (meio longe do zero) para não haver viés de sinal; `round()` do Python é meio-para-par.
+- **Janela de crédito igual à da v1, inclusive o chamado.** Elogio e bronca creditam a última decisão; cada `chamar_atencao` fica
+  pendente até o primeiro cuidado (paga `1 − L/janela`) ou expira (paga −0,5). Os valores foram **copiados** da `ConfigBandit` para a
+  `ConfigLobos`, não compartilhados: o bandit está congelado e a V2 não deve depender da config dele.
+- **Piso no peso efetivo, não nos pesos.** Com o aprendizado ligado o peso efetivo dos candidatos nunca cai abaixo de `piso_peso/S`
+  (S/16), para o sorteio e o gradiente não encontrarem peso ≤ 0. Entra no motivo como um quarto termo (`piso`), para a soma das
+  contribuições continuar fechando com a decisão. Com o aprendizado desligado o termo é 0,0 e nada muda na L0 (G1/G2 ficam).
+- **Teto simétrico em torno do prior**, `|w − w0| ≤ teto`, por peso. É o freio duro; o G6 mede se o freio foi necessário (peso no
+  teto = a dinâmica queria ir além).
+- **Regras com um candidato não aprendem.** `1[a = a*] − p(a) = 0` quando o candidato é único: sono, pedido e abandono ficam como no
+  instinto. O aprendizado age na fome moderada e no tempo livre. É consequência do desenho L0 (candidatos vêm do impulso), não escolha
+  nova; registrado porque limita o que o G3 pode mostrar.
+- **Sem torneio.** O desenho da arena v1 inclui o round-robin; os gates G3–G6 são todos sobre a política e a pergunta "pet melhor na
+  arena" está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`). O orquestrador `experiments/run_v2_l1.py` roda as vidas, o replay e as
+  sondas da arena v1, sem a luta. As partidas podem ser jogadas depois a partir das vidas gravadas, se alguém quiser.
+- **"Donos coerentes" = atencioso e relapso.** São os dois que aplicam `donos.feedback_coerente`; o incoerente sorteia a polaridade e o
+  aleatório sorteia a ação. O G3 primário é atencioso × relapso pareado por semente; os outros pares são relatados. Sujeito ao referendo.
+- **G4 sobre o total, com a leitura estrita ao lado.** Na `PoliticaLobos` o impulso é uma regra explícita; quando ele decide, o fator é
+  o da regra (a mesma regra do braço instinto, 34–76% na v1). A fração "o lobo de decisão decidiu com fator" é o número comparável aos
+  13–18% do bandit, e vai relatada em separado. O gate no total pode ser lido como frouxo: fica para o referendo.
+- **G5(a) por construção.** O desenho da arena v1 não tem morte, lesão nem luta; o G5 ali é o G3. O braço de educação (lesões e sparring
+  da V3) é a medida própria, informativa: com 5 sementes e mortes/lesões no aleatório e no atencioso, a leitura "sem lesão nem morte"
+  pode ficar com menos de 3 sementes ("insuficiente").
+- **G6: razão JSD(14)/JSD(7) ≤ 1,5 e nenhum peso no teto.** Convergindo a razão tende a 1; crescimento linear dá 2. O 1,5 é PROPOSTO.
+- **A sonda acrescenta motivos.** `distribuicoes_de_acao` chama `agir`, e a `PoliticaLobos` registra um motivo por chamada (sem
+  `observar`, nada de aprendizado muda). O `politica.json` é gravado antes da sonda; o replay compara com ele.
+- **`fabricas_educacao` ganhou `politica_fabrica` opcional** (e `simular_vida_educacao` repassa). Padrão `None` = o bandit da
+  personalidade, bit a bit como antes (`tests/test_reproducao_v3_confirmatoria.py` continua conferindo a V3c e a confirmatória).
+- **Plano revisado antes da calibração válida (revisão 2, D1–D4).** A revisão 1 do plano (`ab53d00`) foi commitada antes de o
+  coordenador trazer `docs/DEFINICOES_V2.md`; uma calibração começou sob ela e foi interrompida e descartada sem artefato. A revisão 2
+  acrescenta G3-T, o G4 só do aprendido, o controle sem lobos, o acoplado e a norma de reação, e muda a regra de escolha da calibração
+  (G4 do aprendido). Interpretações próprias da revisão 2: (a) o controle sem lobos tem 490 pesos por um índice de contexto sem
+  semântica (o sétimo do dia), para igualar a contagem; seu prior é o tempo livre do instinto em todo contexto e 1,0 nas ações de regra
+  (ele não dorme por regra): é o que "sem módulos" custa; (b) o acoplado é o log do atencioso sem os eventos de elogio e bronca,
+  rejogado com uma política nova e a mesma semente (as ações de cuidado nos mesmos ticks; a rng de ambiente consome menos sorteios de
+  ação do dono, então o ambiente pode diferir no detalhe); (c) G5(c) = JSD(atencioso, relapso) − JSD(acoplado, relapso) > 0; (d) a
+  norma de reação usa a regressão conjunta de Finlay–Wilkinson (índice do ambiente = média de todos os pets no ambiente), porque os
+  ambientes são sementes, sem gradiente medido; (e) o teto do G3-T é a política ótima do dono avaliada nos estados que o pet visitou.
+- **Calibração (2026-10-01, `artifacts_v2_l1/calibracao/`): não fechou.** Nenhum ponto passa G6; a regra da seção 5 escolheu passo
+  512, teto 1024 (menor razão 14/7), com 12 vidas no teto. Nada foi reajustado; o ponto vai ao config da validação e à `ConfigLobos`
+  como o plano manda, e o referendo decide se vale rodar a validação com ele.
+- **Índice do ambiente mal condicionado na norma de reação.** Com ambientes que são sementes, o índice de Finlay–Wilkinson tem
+  amplitude 0,007 e as inclinações saem com IC de dezenas; só os interceptos são legíveis. Fica relatado; uma versão com um gradiente
+  de ambiente medido (por exemplo, a dificuldade do ambiente) é desenho novo e não entra sem plano.
+- **Artefatos pesados fora do git.** Os `vidas/*.politica.json` da L1 (um motivo por decisão) somam 600 MB; `.gitignore` os deixa de
+  fora e eles se regeneram pelo replay do `.jsonl` com o mesmo código (o orquestrador confere o replay bit a bit antes de medir).

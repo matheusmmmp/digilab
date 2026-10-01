@@ -1,0 +1,8 @@
+{
+  "descricao": "V2, L1 (docs/PLANO_ANALISE_V2_L1.md, secao 5): grade passo x teto nas sementes de calibracao; instinto e bandit como base.",
+  "conjunto": "calibracao",
+  "sementes": [3101, 3202, 3303, 3404, 3505],
+  "saida": "artifacts_v2_l1/calibracao",
+  "grade": {"passo": [32, 64, 128, 256, 512], "teto": [1024, 2048, 4096]},
+  "educacao": true
+}
