@@ -446,8 +446,24 @@ class ConfigHabituacao:
     k_teimosia_bronca: float = 0.2
 
 
+@dataclass(frozen=True)
+class ConfigVinculoSituacao:
+    """Vinculo B, previsibilidade + desejo (docs/V2_VINCULO_PROPOSTA.md, alternativa B; decisao do Matheus, 2026-10-01;
+    plano docs/PLANO_ANALISE_V2_VINCULO.md). A parte da ConfigVinculo de proposito: ela entra no hash dos protocolos da
+    personalidade, e as runs gravadas precisam continuar reproduzindo. Tudo PROPOSTO (protocol.PARAMETROS_VINCULO_B).
+    Ligada: o pedido nao abre (o atendimento sai do vinculo) e a coerencia agrupa o historico de feedback por (acao do
+    pet, situacao do pet); a situacao = (necessidade baixa, cansado, noite) e lida da observacao com que o pet decidiu
+    a acao atual. Desejo, ajustes diretos, pausa de treino e teto da sombria nao mudam. Desligada: nada muda."""
+    ligada: bool = False
+    limiar_necessidade: float = 0.5           # = ConfigMemoriaEspacos.limiar_necessidade_pedido (o criterio do pedido)
+    limiar_energia: float = 0.25              # = a regra de exaustao da PoliticaInstinto ("energia < 0,25 -> dormir")
+    # noite: ConfigPadrao.e_noite, pela hora do vetor de estado (round(hora * TICKS_POR_DIA))
+
+
 CONFIG_TEMPERAMENTO = ConfigTemperamento()
 CONFIG_VINCULO = ConfigVinculo()
+CONFIG_VINCULO_SITUACAO = ConfigVinculoSituacao()
+CONFIG_VINCULO_B_LIGADA = ConfigVinculoSituacao(ligada=True)
 CONFIG_OBEDIENCIA = ConfigObediencia()
 CONFIG_DESEJO = ConfigDesejo()
 CONFIG_EMOCAO = ConfigEmocao()

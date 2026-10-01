@@ -135,14 +135,14 @@ class _PoliticaObservada:
 class MotorPersonalidade(MotorComFeedback):
     def __init__(self, politica=None, cfg=None, semente: int = 42, temperamento: Temperamento = NEUTRO,
                  obediencia_desligada: bool = False, cfg_obediencia: ConfigObediencia | None = None,
-                 cfg_vinculo=None, cfg_desejo=None) -> None:
+                 cfg_vinculo=None, cfg_desejo=None, cfg_vinculo_situacao=None) -> None:
         super().__init__(politica=politica, cfg=cfg, semente=semente)
         self.politica = _PoliticaObservada(self.politica, self)
         self.temperamento = temperamento
         self.obediencia_desligada = obediencia_desligada
         self.co = cfg_obediencia or CONFIG_OBEDIENCIA
         self.cd = cfg_desejo or CONFIG_DESEJO
-        self.vinculo = Vinculo(cfg_vinculo or CONFIG_VINCULO)
+        self.vinculo = Vinculo(cfg_vinculo or CONFIG_VINCULO, cfg_vinculo_situacao)   # variante B so se pedida
         self._rng_obediencia = random.Random(derivar_semente("obediencia", semente))
         self.desejos: list[Desejo] = []
         self.recusas: list[Recusa] = []
