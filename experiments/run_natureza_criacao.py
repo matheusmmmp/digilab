@@ -125,14 +125,18 @@ def _vida(args):
 
 # ------------------------------------------------------------------ 2. painel
 def catalogo_do_painel(cfg: dict):
-    """catalogo do pet no painel: o padrao, salvo `catalogo_painel` na config (docs/PLANO_ANALISE_CANAL_DONO.md,
-    Etapa B). A vida e os bots do painel usam sempre o padrao."""
+    """catalogo do pet no painel: o padrao, salvo `catalogo_painel.peso_carater_stats` = k na config
+    (docs/PLANO_ANALISE_CANAL_DONO.md, Etapa B): os modificadores do carater nos stats multiplicados por k (inteiros
+    vezes k, exatos). Fica fora da ConfigCatalogo e do catalogo.py, que entram nos hashes gravados das validacoes.
+    A vida e os bots do painel usam sempre o padrao."""
     extra = cfg.get("catalogo_painel")
     if not extra:
         return None
     if set(extra) != {"peso_carater_stats"}:
         raise ValueError(f"catalogo_painel so aceita peso_carater_stats: {sorted(extra)}")
-    return replace(CONFIG_CATALOGO, **extra)
+    k = float(extra["peso_carater_stats"])
+    return replace(CONFIG_CATALOGO, carater={e: {s: m * k for s, m in mods.items()}
+                                             for e, mods in CONFIG_CATALOGO.carater.items()})
 
 
 def _painel_da_celula(args):

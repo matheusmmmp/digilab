@@ -135,7 +135,7 @@ def stats(forma: Forma, temperamento: dict | None = None, carater: dict | None =
     for eixo, v in temp.items():
         somar(cat.temperamento[eixo], v)
     for eixo, v in car.items():
-        somar(cat.carater[eixo], v * cat.peso_carater_stats)
+        somar(cat.carater[eixo], v)
     if forma.ramo:
         somar(cat.arquetipos_crianca[forma.ramo])
     if forma.linha:
