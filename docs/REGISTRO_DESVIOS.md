@@ -1305,3 +1305,35 @@ o filtro do alfabeto, o prompt, o verificador e o almanaque ficam como estão.
   é refeito nesta tarefa.
 - **Sem run.** A conferência com o gemma2:9b (fala com o estilo, sem japonês e sem saída rejeitada) fica para uma frente própria
   na fila da GPU, depois deste PR, como a tarefa pede.
+
+## 2026-10-01 — V2, L0: política com lobos, aprendizado desligado (`docs/TAREFA_V2_L0_LOBOS.md`)
+
+Interpretações do desenho, todas conferidas pelo gate G2 (vida byte a byte igual à do instinto) em `tests/test_lobos.py`.
+- **"Pesos iniciados no prior do instinto":** a decisão guarda `w[regra][ação][entrada]` inteiros (escala S = 2¹⁰) e o prior são os
+  coeficientes literais de `PoliticaInstinto.agir` vezes S (tempo livre: ocioso 3; explorar 2 + 2·energia; brincar 1 + 3·humor;
+  chamar 1; fome moderada: comer 1 e chamar 1, que é "comer se u < 0,5"; regras deterministas: o único candidato com 1). A FORMA do
+  prior (qual regra dispara e quais ações concorrem) não é copiada: o lobo de impulsos executa o próprio código do instinto com uma
+  rng-sonda (a mesma técnica do prior do bandit), sem consumir a rng do motor. Se o instinto mudar, os impulsos seguem e o G2 denuncia a
+  tabela desatualizada.
+- **"Decisão em ponto fixo":** os pesos são inteiros; a ativação usa as entradas em float (o estado é float) e `w/S` com S potência de
+  dois, que é exato. É o que fecha a restrição de desenho da seção 3 (consumir a rng exatamente como o instinto) sem relaxar o gate: o
+  sorteio replica `random.choices(k=1)` passo a passo (`accumulate`, `total + 0.0`, `bisect_right(…, u * total)`), com UMA chamada de
+  `random()`, igual ao instinto nas duas regras com sorteio. Não foi preciso parar e reportar.
+- **Soma sem compensação:** a ativação é um laço da esquerda para a direita, não `sum()`, porque do Python 3.12 em diante o `sum()` de
+  floats é compensado e o instinto soma termo a termo. No L0 os termos extras são 0,0 e nada muda; no L1 isso vai importar.
+- **Entradas da percepção:** vies + `Estado.vetor` (8) + tempo sem cuidado normalizado pela mesma escala do bandit (480 ticks), 10 ao
+  todo. O tempo sem cuidado tem coeficiente zero no prior (o instinto só o usa na regra de abandono, que fica nos impulsos); entra para o
+  L1 ter a mesma informação que o bandit tinha.
+- **Tabela cheia:** 7 regras × 7 ações × 10 entradas = 490 pesos, inclusive os das ações que não são candidatas de cada regra (zeros).
+  Mantidos para o L1 decidir se amplia os candidatos; abaixo do teto de mil.
+- **`MotorPersonalidade` não roda o instinto puro:** `_PoliticaObservada` sempre repassa `receber_acao_dono`, e o instinto não o tem
+  (`AttributeError`). O controle do G2 nesse motor é um `PoliticaInstinto` com gancho vazio, definido no próprio teste;
+  `obediencia.py` não mudou. O `desejo_de` trata as duas políticas igual (sem `_bracos`: sem vontade).
+- **Motivo inteiro no `estado_interno()`:** a tarefa pede a contribuição de cada lobo "por decisão"; a lista completa de motivos fica no
+  `estado_interno()` (vida de 14 dias: 1344 motivos). Nenhuma run grava isso ainda; se pesar no `politica.json`, a decisão de resumir é
+  do L1/G4.
+- **Nome do atributo:** o registro da última decisão chama-se `ultimo_motivo`, não `ultima_decisao`, porque `motivo.PoliticaComMotivo`
+  despacha pelo nome `ultima_decisao` e espera o formato do bandit. O `PoliticaComMotivo` ainda não aceita a `PoliticaLobos` (fica para o
+  G4).
+- **Tarefa fora da `main`:** `docs/TAREFA_V2_L0_LOBOS.md` estava só no branch `v2-coord-r1` do coordenador quando o worker abriu; o
+  trabalho partiu da `main` (`83fc08f`) e leu a tarefa de lá. O arquivo não entra neste PR, para não conflitar com o do coordenador.
