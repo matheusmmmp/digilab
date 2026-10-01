@@ -1,16 +1,19 @@
 /* Escolha da carta antes da luta (itens, medalhas parte 3; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13): so pets v6 e so com carta no
    inventario do Tamer. A carta escolhida fica em LUTA.carta ate a luta que a usa (luta.lutarAnimado grava o evento "k" no registro do
-   pet e a carta usada no do Tamer). */
+   pet e a carta usada no do Tamer). Nos pets v9 (rodada de equilibrio geral, fase 3) a carta so vale contra os NPCs da campanha e com o
+   treino minimo (Motor.porqueSemCartaV9): fora disso a escolha some e fica a frase do porque. */
 import { CIT, ITENS, cartaDe } from "../../motor/index.ts";
 import { tamerAtual, useJogo } from "../jogo.ts";
 import { LUTA, avisarLuta, useLuta } from "../luta.ts";
 
-export function EscolhaCarta() {
+export function EscolhaCarta({ rival }: { rival: string | null }) {
   const { motor: m } = useJogo(), luta = useLuta(), t = tamerAtual();
   if (m.versao < CIT.versaoPet || luta.rivalFixo) return null;
   const tem = ITENS.filter(x => x.tipo === "carta" && t.cartas(x.id) > 0);
   if (LUTA.carta && t.cartas(LUTA.carta) < 1) LUTA.carta = null;
   if (!tem.length) return null;
+  const semCarta = rival ? m.porqueSemCartaV9(rival) : null;
+  if (semCarta) { if (LUTA.carta) LUTA.carta = null; return <p class="dl-apoio carta-escolha-sem">Sem carta nesta luta: {semCarta}.</p>; }
   return (
     <label class="carta-escolha">
       <span class="carta-escolha-rot">Carta para esta luta</span>

@@ -1,10 +1,11 @@
 /* Crescer · Itens (medalhas, parte 3; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13): o inventario do Tamer (chips e cartas, do registro
    dele, src/tamer.ts) e os chips equipados no pet ativo (eventos "i" do registro do pet). Equipar e desequipar gravam no registro do
    pet; o motor confere vagas, estagio e lista, e esta tela so oferece o que o Tamer tem. As cartas se escolhem antes da luta (Campanha
-   e Arena). Itens sem equilibrio: numeros PROPOSTOS (secao 13). */
+   e Arena). Itens sem equilibrio: numeros PROPOSTOS (secao 13). Nos pets v9 (rodada de equilibrio geral, fase 3; itens.ts) os itens pedem
+   o treino minimo do nivel, a carta so vale na Campanha, o chip de regra vai para o fim da lista e o de stat vale metade: a tela diz isso. */
 import { useState } from "preact/hooks";
 import {
-  CARTA_DA_REVANCHE, CIT, ITENS, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHA_POR_ID, NOME_STAT, NPC, STATS, estagioMinimo, nomeForma, rotuloRegra,
+  CARTA_DA_REVANCHE, CIT, CIT_V9, ITENS, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHA_POR_ID, NOME_STAT, NPC, STATS, estagioMinimo, nomeForma, rotuloRegra,
   type Item, type Motor, type Stat,
 } from "../../../motor/index.ts";
 import { mudarMotor, tamerAtual, useJogo } from "../../jogo.ts";
@@ -50,7 +51,7 @@ function CardChip({ it, m, t, agir }: { it: Item & { tipo: "chip_stat" | "chip_r
 
 export function TelaItens() {
   const { motor: m, erroTamer } = useJogo(), t = tamerAtual(), [msg, setMsg] = useState("");
-  const v6 = m.versao >= CIT.versaoPet, chips = ITENS.filter((x): x is Item & { tipo: "chip_stat" | "chip_regra" } => x.tipo !== "carta"), cartas = ITENS.filter(x => x.tipo === "carta");
+  const v6 = m.versao >= CIT.versaoPet, v9 = m.versao >= CIT_V9.versaoPet, semEfeito = v9 ? m.porqueItensNaoValem() : null, chips = ITENS.filter((x): x is Item & { tipo: "chip_stat" | "chip_regra" } => x.tipo !== "carta"), cartas = ITENS.filter(x => x.tipo === "carta");
   const agir = (op: "equipar" | "desequipar", id: string) => {
     try {
       if (op === "equipar" && !t.temChip(id)) throw new Error("o Tamer não tem este chip");
@@ -70,15 +71,22 @@ export function TelaItens() {
           {!v6 ? <p class="dl-apoio">{nomeForma(m.forma)} é de uma versão antiga: não usa itens.</p>
             : <p class="itens-vagas" role="status"><b>{nomeForma(m.forma)}: {m.chips.length} de {m.vagasChip} vaga{m.vagasChip === 1 ? "" : "s"} de chip</b>
               <span>1 vaga com 1 medalha, 2 com 3 e 3 com 5 (o Tamer tem {t.n}).</span></p>}
+          {semEfeito && <p class="dl-apoio itens-sem-efeito" role="status">Agora os itens não fazem efeito: {semEfeito}.</p>}
           {erroTamer && <p class="med-erro" role="alert">O registro do Tamer não abriu, e o app não vai gravar por cima dele: {erroTamer}</p>}
           {msg && <p class="dl-apoio erro" role="alert">{msg}</p>}
-          <details class="dl-apoio"><summary>Como funciona</summary>
+          {v9 ? <details class="dl-apoio"><summary>Como funciona</summary>
+            <p><b>Os itens pedem treino:</b> com menos da metade do treino típico do nível, os chips não fazem efeito e a carta não pode ser usada.
+              <b>Chip de stat:</b> +1 ponto de treino, só no espaço que ainda falta no teto do estágio e da vida (1/4 do treino típico no máximo).
+              <b>Chip de regra:</b> a regra entra no fim da lista de combate, depois das regras do pet e sem tirar nenhuma: completa a forma, não
+              passa na frente dela. <b>Carta:</b> só na Campanha (desafiantes e líderes), escolhida antes da luta; uma por luta. A carta da revanche
+              vem com um pet do nível da arena, no máximo uma por líder a cada 24 h do relógio do pet.</p></details>
+          : <details class="dl-apoio"><summary>Como funciona</summary>
             <p><b>Chip de stat:</b> +2 pontos de treino, mas só no espaço que ainda falta no teto do estágio e da vida, e todos os chips de stat
               juntos valem no máximo 1/4 do treino típico do estágio: o chip adianta o treino, não passa do teto. <b>Chip de regra:</b> uma regra
               nova entra no topo da lista de combate do pet (sai a de nota mais baixa se a lista estiver cheia); o pet não a troca enquanto o chip
               estiver equipado, e você pode travá-la, não vetá-la. <b>Carta:</b> escolha antes de uma luta na Campanha ou na Arena; uma por luta.
               A carta da revanche vem com um pet do nível da arena, no máximo uma por líder a cada 24 h do relógio do pet. Os números dos itens
-              ainda são provisórios.</p></details>
+              ainda são provisórios.</p></details>}
         </section>
       </div>
       <div class="desk-col itens-col">

@@ -396,3 +396,13 @@ rodada de equilíbrio: a luta contra o líder é um limiar estreito (um pouco de
 treino), e uma regra no topo da lista pode pesar contra a própria forma, porque passa na frente das regras dela e tira uma da lista.
 
 **Ficou de fora:** a medição e o equilíbrio (rodada geral); dinheiro e loja; a proibição de cartas na Fronteira (parte 4).
+
+### 13.9 A rodada de equilíbrio geral, fase 3 (pets v9)
+
+Os gates G-I1–G-I3 viraram as metas M-D1–M-D3 da rodada de equilíbrio geral e foram medidos nos pets v9 (`test/medir_itens.mjs`,
+`artifacts_equilibrio_geral/fase3/`; relatório em `docs/EQUILIBRIO_GERAL.md`, fase 3). Com os números desta seção, nas regras dos v9, G-I1 e
+G-I3 não passavam. Nos pets v9 (`CIT_V9`, `itens.ts`; os v6–v8 não mudam):
+- os itens pedem treino: com menos da metade do treino típico do nível, os chips não fazem efeito e a carta não pode ser usada;
+- a carta só vale contra os NPCs da campanha (desafiantes e líderes), não na arena contra bots;
+- o chip de regra vai para o fim da lista, sem tirar regra nenhuma;
+- o ponto do chip de stat vale a metade.

@@ -347,6 +347,77 @@ byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decom
 - A rodada balanceada caiu ao gravar o meta (outra sessão trocou o branch da pasta `v1` no meio da run); a análise
   foi refeita dos arquivos gravados (`--reanalisar`, conferido: a reanálise da espécie fixa sai idêntica).
 
+## Pergunta do efeito do dono: ENCERRADA (2026-10-01, `docs/LEITURA_CONSOLIDADA_DONO.md`)
+
+Decisão do Matheus, depois das três runs abaixo (V21D no painel, Etapa A e Etapa B). Leitura consolidada: **neste
+motor, o dono pesa pelo cuidado (mortes, saúde, limiar de cuidado), não pelo ensino.** O feedback deixa pouca marca no
+que o pet aprende, essa marca depende mais do ambiente que do dono, e nem comprimir as formas nem levar o caráter
+direto aos stats deu peso ao dono.
+- **Não rodar de novo** calibrações de forma ou de peso do caráter atrás de efeito do dono, nem a "V4" (cuidado
+  reduz a variância entre ambientes).
+- **Reabrir só com uma pergunta nova sobre o aprendiz**, com plano registrado antes da run.
+- O código das runs fica, com as chaves desligadas por padrão.
+
+## Painel do E1 com a V21D: força do canal de forma (2026-09-30, `docs/PLANO_ANALISE_V21D.md`) — COMPRESSÃO NÃO VERIFICADA
+
+Pergunta adotada: que propriedade do mapa até o desempenho dá efeito mensurável ao dono? O desenho é pareado: as mesmas
+640 vidas e sementes do E1 (vida em V21C: o sparring usa a `REGRAS_CAMPANHA`), e só o painel B luta com as quatro chaves
+da V21D. Rodam `experiments/configs/linhagem/natureza_criacao_v21d.json` e `experiments/analisar_v21d.py`. Números de
+`artifacts_linhagem/natureza_criacao_v21d/especie_fixa/analise_plano.json`; relatório em `docs/RESULTADO_V21D_PAINEL.md`.
+
+- **Gate: COMPRESSÃO NÃO VERIFICADA**, no subconjunto primário (atencioso + permissivo, sem mortes):
+  - r²_forma 0,929 → 0,939, Δ +0,010 [−0,042; +0,040];
+  - pelo plano o experimento não testa a hipótese, e nada se conclui sobre o dono (o passo 2, Δfrac_D, não se aplica).
+- **Por quê:** a V21D encolhe a amplitude entre as formas adultas (0,521 → 0,387), mas **troca a ordem** das duas mais
+  comuns:
+  - espelho (158 pets) 0,406 → 0,301;
+  - muralha (128 pets) 0,279 → 0,351.
+  Pesada pela distribuição de formas que a vida produz, a variância entre formas não cai. A compressão da validação é
+  dos bots com pesos iguais.
+- **QD:** o κ de Fleiss da forma entre ambientes fica perto de 0 em três donos (permissivo 0,27): o ambiente decide a
+  forma mais que o dono ou o genoma.
+- **Código:**
+  - `regras_de` monta a `ConfigCombateV21D` só com uma chave dela na config;
+  - `lutador_painel` usa `gambits_adulto`;
+  - o `metrics.py` ganhou `r2_por_categoria`, `kappa_fleiss`, `qualidade_diversidade` e `icc_um_fator`;
+  - conferido: vidas byte a byte iguais, piloto V21C igual e `analisar_dono_ambiente` igual.
+
+## Canal do dono fora da forma, Etapa A (2026-09-30, `docs/PLANO_ANALISE_CANAL_DONO.md`) — SINAL PRESENTE
+
+A Etapa A mede se o sinal do dono chega ao que o pet aprende. Não usa vida nova nem mecânica nova: o
+`experiments/sinal_dono.py` reproduz as 640 vidas arquivadas do E1, confere cada uma contra o `pets.json` e decompõe
+o caráter em `T_ADOL` por genoma × dono × ambiente. Números de `artifacts_linhagem/sinal_dono/resultado.json`;
+relatório em `docs/RESULTADO_SINAL_DONO.md`.
+
+- **Gate A: SINAL PRESENTE**, só pelo eixo **resistente**: σ²_D +0,0034, IC 98,75% [+0,0009; +0,0121], frac D 0,208.
+  Atento, impetuoso e paciente não passam.
+- **O sinal não é o da coerência.**
+  - No eixo resistente, atencioso − aleatório é +0,012 [−0,091; +0,115]; o que se separa é o permissivo (−0,220) do
+    relapso (−0,058).
+  - Atencioso − aleatório só aparece no eixo paciente (+0,212 [+0,001; +0,461]), que não passa com Bonferroni.
+- **O ambiente move o aprendizado:** dono × ambiente fica entre 24% e 48% de cada eixo.
+- **A linha já é loteria:** o κ de Fleiss da linha entre ambientes fica perto de 0, salvo no permissivo (0,41).
+- **Impostos** (descritivo): a disciplina é 99% dono; o vínculo tem atencioso − aleatório −0,176 (o defeito
+  conhecido).
+- **Etapa B:** autorizada pelo Matheus, condicionada a este gate. Pelo plano, só roda depois de um adendo registrado
+  antes da run.
+
+## Canal do dono fora da forma, Etapa B (2026-09-30) — CANAL NÃO ABERTO
+
+O pet do painel luta com o peso do caráter nos stats multiplicado por k (`ConfigCatalogo.peso_carater_stats`, padrão
+1,0; só no pet do painel, vidas iguais às do E1). k = 3 e k = 8: o k = 9 do plano quebrava a renormalização em 3 pets
+e foi trocado antes da run (desvio registrado). Números de `artifacts_linhagem/natureza_criacao_canal/analise_plano.json`
+(`experiments/analisar_canal.py`); relatório em `docs/RESULTADO_CANAL_DONO.md`.
+
+- **Gate B: CANAL NÃO ABERTO**, por margem mínima: Δr² da forma nos vivos (k = 8) −0,039, IC95 [−0,081; +0,0008].
+- **Descritivo:** o dono perde peso.
+  - frac_D da taxa: 0,050 → 0,039 → 0,028;
+  - atencioso − aleatório: Δ +0,007 [−0,018; +0,029].
+  - O caráter amplificado afasta as formas (emboscador sobe, espelho e titã descem) e alimenta dono × ambiente.
+  - Com k = 8, 30% dos stats ficam presos no limite.
+- **Leitura:** o caminho da arquitetura, como testado, fecha negativo. O gargalo é o que o pet aprende, que carrega
+  mais ambiente que dono. Neste motor o dono pesa pelo cuidado, não pelo ensino.
+
 ## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
 
 Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.
@@ -535,6 +606,45 @@ pets v6 (campanha e arenas; o pet pela versão, o NPC pelas regras V21D da luta)
   - descarte único dos saves, versão 2: os v6 de antes saem com o mesmo aviso.
 - **Aberto:** o furioso (rodada 3, pela base V2C: C3 contra o avanço ou custo do golpe rápido, com G1–G9 de novo); E2,
   E5, G6b, G8 e G9 não medidos; a pesquisa não usa a V21D.
+
+## Equilíbrio geral, fase 1: as formas (2026-09-30, `docs/PLANO_EQUILIBRIO_GERAL.md`, `docs/EQUILIBRIO_GERAL.md`)
+
+Branch `equilibrio-geral` (o PR é no fim da fase 4). Fases 1–3 só com sementes de calibração; **a fase 4 (validação única, sementes
+4101…4505) está feita** (último item desta seção).
+- **Python:** `ConfigCombateV21E` (subclasse da V21D) com cinco chaves de lista, **desligadas por padrão**:
+  `duelista_defende_do_golpe`, `tita_defende_do_golpe` ("de perto, contra golpe rápido frequente → defender", sai o carregar),
+  `espelho_sem_carregar`, `muralha_sem_carregar` e `muralha_contra_golpe_na_pele`. Edições em `bots._lista_v21e`, por cima da
+  V21D. A base (custo do golpe rápido, parry, C3) foi medida e **não mudou**: nenhum valor tirou o furioso de ~0,72; o que o
+  tira é o parry que já existe, usado pelas formas que o golpe repetido esmagava. Config `experiments/configs/v21e/calibracao.json`;
+  `python experiments/calibrar_equilibrio_geral.py --etapa todas` → `artifacts_equilibrio_geral/fase1/` (V21D reproduz a rodada 2).
+- **Metas na calibração (V21E):** M-A1–M-A4 passam com as 8 formas, furioso incluído (força 0,450–0,579, painel 0,446–0,554,
+  amplitude 0,129, toda forma vence ≥ 3). M-A5 e o que não fechou: `docs/EQUILIBRIO_GERAL.md`, fase 1.
+- **Web: pets v9** (`VERSAO_PET = 9` = v8 + combate equilibrado; `CV21E`, `regrasDaVersao`, `BOTS_V21E`, `candidatasV21E`). Os
+  v6–v8 seguem na V21D e os v1–v5 na V21C (assinaturas e gabaritos iguais; nenhum save descartado). A Fábrica (sem pet) segue
+  na V21D. Paridade: `experiments/exportar_gabarito_v21e.py` → `test/paridade_v21e.test.ts` (136 partidas iguais).
+- **Fase 2, a progressão (M-B1–M-B3, calibração):** os scripts `calibrar_escala_v6.mjs`, `calibrar_arenas.mjs`,
+  `calibrar_desafiantes_v6.mjs` e `explorar_torre.mjs` medem os pets v9 por padrão (`--v6`: a medição de antes, que reproduz os
+  artefatos gravados) → `artifacts_equilibrio_geral/fase2/`. Escala dos v9 = `CESC_V9` (mesma vida e β da `CESC_V6`; as metas de
+  estágio passam), fatores dos líderes dos v9 em `arenas.FATOR_LIDER_V9` (Torre 1,5 e Espiral 1,4; os outros iguais) e dos
+  desafiantes em `CESC_V9.fatorNpc` (Tortomon 1,53, fecha na grade de 0,01; Puppetmon 1,8; Machinedramon 2,3). Os v6–v8 não mudam.
+  Detalhes em `docs/EQUILIBRIO_GERAL.md`, fase 2.
+- **Fase 3, o fim de jogo e os itens (M-C1–M-C3, M-D1–M-D3, M-E1, calibração):** `conferir_liga.mjs`, `conferir_instalacoes.mjs`,
+  `conferir_fabrica_salao.mjs` e `medir_itens.mjs` medem os pets v9 por padrão (`--v6`: a conferência de antes, byte a byte; `--calibrar`
+  na Liga, na Fábrica e no Salão) → `artifacts_equilibrio_geral/fase3/`. Só nos v9: Liga com fator por líder (`liga.FATOR_LIGA_V9`; a cura
+  entre as lutas foi medida e ficou 0), Fábrica com as regras gravadas na tentativa (campo `v` do evento `fabrica`, registro do Tamer
+  versão 6: V21E, rivais × 0,6, a troca entra inteira; tentativas sem `v` se refazem como antes), Salão com fator por nível
+  (`salao.FATOR_SALAO_V9`), Torre e Palácio sem mudança, e os itens (`CIT_V9`): valem só com metade do treino típico do nível, a carta só
+  contra NPC da campanha, o chip de regra vai para o fim da lista sem tirar regra, o chip de stat vale a metade. Passam M-C2, M-C3, M-D1–M-D3
+  e M-E1; **M-C1 não fecha** (a muralha, 0,085). Detalhes e o que ficou aberto em `docs/EQUILIBRIO_GERAL.md`, fase 3.
+- **Fase 4, a validação única (2026-09-30, sementes 4101…4505, tudo congelado; `artifacts_equilibrio_geral/fase4/`):** os scripts das
+  fases 1–3 ganharam `--validar` (`calibrar_equilibrio_geral.py --validar`, só `v21d` e `v21e`, conferido contra
+  `artifacts_combate_v21c/validacao_v21d/`; `configs/v21e/bateria_v21e_validacao.json` e `bateria_v2c_validacao.json`; os sete `.mjs`
+  com `--validar` → `*_validacao.json`), sem mudar o padrão nem os artefatos das fases 1–3. **Passam** M-A1–M-A4 (força 0,451–0,576,
+  painel 0,449–0,551, amplitude 0,125, toda forma vence ≥ 3), M-B1–M-B3 (o Tortomon por 0,0062), M-C2 (0,390), M-C3 (0,760–0,8725),
+  M-D1–M-D3 (emboscador 0,595) e M-E1 (pior 0,580). **Reprovam:** M-C1 (muralha 0,085, **exceção aceita pelo Matheus em 2026-09-30**:
+  perde para os guardiões pelo limite do desafiado e não alcança o MegaGargomon com nenhuma alavanca permitida; **espelho 0,240**, 0,010
+  abaixo da faixa, **exceção aceita em 2026-10-01**: a diferença está no ruído entre sementes) e, em M-A5, só o E3 do contra-golpe (0,458 → 0,480; E1, E5, G8, G9 e o guardião passam; E2, E4 e G6b são as exceções de sempre; a base V2C sai byte a byte igual a `validacao_bots/`). **Pendente de aceite do Matheus:** só o E3 do contra-golpe. Nenhum número mudou por causa da validação. Tabela completa, o que reprovou e as exceções em
+  `docs/EQUILIBRIO_GERAL.md`, fase 4. PR #96 mergeado em 2026-10-01.
 
 ## M1 — confiança de combate e desgaste por rival repetido (2026-09-29, `docs/DESIGN_MVP_M1_CONFIANCA.md`)
 
@@ -1003,6 +1113,9 @@ nas sementes das sombrias. O repertório (candidatas da troca) não mudou, entã
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). Não há
+  pergunta de pesquisa viva; uma nova, se vier, é sobre o aprendiz.
 
 - **Stand-by: combate 1×1 em tempo real, como no Digimon Championship (DS)** (Matheus, 2026-09-29: guardar para o futuro, sem executar).
   - **A ideia:** o motor passa a simular espaço contínuo (posição, velocidade, alcance, tempo de recarga, passos fixos para continuar reproduzível) no lugar dos turnos e das 3 distâncias. O pet segue lutando sozinho, e o dono influencia pela criação.

@@ -1,0 +1,195 @@
+{
+ "descricao": "Calibracao dos desafiantes da campanha (NPCs que nao sao lideres) na escala dos pets v9 (CESC_V9): motor web, regras V21E.",
+ "conjunto": "validacao",
+ "limite": "desafiado",
+ "regras": "v21e",
+ "versao_pet": 9,
+ "sementes": [
+  4101,
+  4202,
+  4303,
+  4404,
+  4505
+ ],
+ "n_por_semente": 10,
+ "pet_lado": "A",
+ "escala": {
+  "vida": {
+   "bebe": 50,
+   "crianca": 200,
+   "adolescente": 700,
+   "adulto": 2500,
+   "mega": 23000
+  },
+  "beta": 0.045
+ },
+ "metas": {
+  "sem_treino_max": 0.3,
+  "com_treino_min": 0.8,
+  "pior_forma_min": 0.5
+ },
+ "treino_tipico": {
+  "crianca": 8,
+  "adolescente": 22,
+  "adulto": 36,
+  "mega": 40
+ },
+ "desafiantes": {
+  "npc_tier2_sentinela": {
+   "nome": "Tortomon",
+   "lugar": "Torre de pedra",
+   "estagio": "adolescente",
+   "fator": 1.53,
+   "sem": 0.2938,
+   "com": 0.8794,
+   "pior": 0.535,
+   "pior_forma": "colosso",
+   "passa": true,
+   "folga": 0.0062,
+   "travados": [],
+   "por_forma": {
+    "brigao": {
+     "sem": 0.4075,
+     "com": 0.99
+    },
+    "guardiao": {
+     "sem": 0.0275,
+     "com": 0.9925
+    },
+    "cacador": {
+     "sem": 0.72,
+     "com": 1
+    },
+    "colosso": {
+     "sem": 0.02,
+     "com": 0.535
+    }
+   }
+  },
+  "npc_tier2_porteiro": {
+   "nome": "Devidramon",
+   "lugar": "Torre de pedra",
+   "estagio": "adolescente",
+   "fator": 1.1,
+   "sem": 0.1862,
+   "com": 0.905,
+   "pior": 0.62,
+   "pior_forma": "cacador",
+   "passa": true,
+   "folga": 0.105,
+   "travados": [],
+   "por_forma": {
+    "brigao": {
+     "sem": 0.4225,
+     "com": 1
+    },
+    "guardiao": {
+     "sem": 0.14,
+     "com": 1
+    },
+    "cacador": {
+     "sem": 0.03,
+     "com": 0.62
+    },
+    "colosso": {
+     "sem": 0.1525,
+     "com": 1
+    }
+   }
+  },
+  "npc_v5_puppetmon": {
+   "nome": "Puppetmon",
+   "lugar": "Montanha Espiral",
+   "estagio": "mega",
+   "fator": 1.8,
+   "sem": 0.1484,
+   "com": 0.9306,
+   "pior": 0.745,
+   "pior_forma": "muralha",
+   "passa": true,
+   "folga": 0.1306,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0,
+     "com": 0.935
+    },
+    "furioso": {
+     "sem": 0,
+     "com": 1
+    },
+    "espelho": {
+     "sem": 0,
+     "com": 0.77
+    },
+    "muralha": {
+     "sem": 0,
+     "com": 0.745
+    },
+    "sentinela": {
+     "sem": 0.23,
+     "com": 1
+    },
+    "emboscador": {
+     "sem": 0.9575,
+     "com": 1
+    },
+    "vigia": {
+     "sem": 0,
+     "com": 0.995
+    },
+    "tita": {
+     "sem": 0,
+     "com": 1
+    }
+   }
+  },
+  "npc_v5_machinedramon": {
+   "nome": "Machinedramon",
+   "lugar": "Montanha Espiral",
+   "estagio": "mega",
+   "fator": 2.3,
+   "sem": 0.11,
+   "com": 0.9753,
+   "pior": 0.87,
+   "pior_forma": "vigia",
+   "passa": true,
+   "folga": 0.1753,
+   "travados": [],
+   "por_forma": {
+    "duelista": {
+     "sem": 0.0125,
+     "com": 0.9925
+    },
+    "furioso": {
+     "sem": 0.03,
+     "com": 0.99
+    },
+    "espelho": {
+     "sem": 0,
+     "com": 0.975
+    },
+    "muralha": {
+     "sem": 0,
+     "com": 0.99
+    },
+    "sentinela": {
+     "sem": 0.03,
+     "com": 1
+    },
+    "emboscador": {
+     "sem": 0.8075,
+     "com": 1
+    },
+    "vigia": {
+     "sem": 0,
+     "com": 0.87
+    },
+    "tita": {
+     "sem": 0,
+     "com": 0.985
+    }
+   }
+  }
+ }
+}

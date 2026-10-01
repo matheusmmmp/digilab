@@ -11,8 +11,17 @@
    - carta: efeito de uma luta so (combate.EfeitoCarta), consumida; uma por luta.
    O inventario e do Tamer (src/tamer.ts); no registro do pet entram os eventos "i" (equipar/desequipar) e "k" (carta da proxima
    luta). O motor do pet nunca le o Tamer. Numeros PROPOSTOS e sem equilibrio (CIT em constantes.ts): o equilibrio dos itens entra na
-   rodada de equilibrio geral do combate (decisao do Matheus, 2026-09-30); test/medir_itens.mjs tem os gates da secao 13.7 para ela. */
-import { CIT, CMG, CTR, CV21, STATS, TECNICAS, baseDe } from "./constantes.ts";
+   rodada de equilibrio geral do combate (decisao do Matheus, 2026-09-30); test/medir_itens.mjs tem os gates da secao 13.7 para ela.
+
+   Os itens nos pets v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, metas M-D1 a M-D3; CIT_V9 em constantes.ts): o mesmo
+   catalogo e a mesma origem, com restricoes de uso e valores so para os pets v9 (os v6-v8 nao mudam):
+   - os itens pedem treino: com o treino do pet abaixo de CIT_V9.treinoMinimo do treino tipico do nivel dele, os chips nao fazem efeito na
+     luta (nem os de stat nem os de regra) e a carta nao pode ser usada (itensValem);
+   - a carta so vale contra os NPCs da campanha (desafiantes e lideres): nao na arena contra bots (nem na Fronteira, como antes);
+   - o chip de regra completa a lista em vez de passar na frente das regras da forma: a regra dele vai para o FIM (depois das regras da
+     lista, antes da acao final), sem tirar nenhuma (a vaga e a do chip), e o pet nao a reordena nem a troca (GambitsPet.listaDeLuta);
+   - os pontos do chip de stat valem CIT_V9.fatorChipStat dos de antes. */
+import { CIT, CIT_V9, CMG, CTR, CV21, STATS, TECNICAS, baseDe } from "./constantes.ts";
 import { CONDICOES_ESTAGIO, Cd, Rg, validarLista, type EfeitoCarta, type ListaGambits, type Regra } from "./combate.ts";
 import { REGRA_BATE_EM_QUEM_RECUA, REGRA_RECUA_DO_PREPARO_SOB_PELE } from "./bots.ts";
 import type { Estagio, EstagioTreino, Stat, Stats } from "./tipos.ts";
@@ -83,6 +92,23 @@ export function cartaDe(id: string): Carta {
   if (it.tipo !== "carta") throw new Error(`${it.nome} não é carta`);
   return it;
 }
+/** os itens valem como nos pets v9 (CIT_V9) nesta versao de pet? */
+export const itensDosV9 = (versao: number): boolean => versao >= CIT_V9.versaoPet;
+/** os itens fazem efeito num pet desta versao, neste nivel, com este treino (pontos no total)? Nos pets v9 pedem o treino minimo
+    (CIT_V9.treinoMinimo do treino tipico do nivel); nos v6-v8, sempre (o bebe nao tem item) */
+export function itensValem(versao: number, est: Estagio, treinoTotal: number): boolean {
+  if (!itensDosV9(versao)) return true;
+  const tip = CIT.tipico[est];
+  return tip !== undefined && treinoTotal >= CIT_V9.treinoMinimo * tip - 1e-9;
+}
+/** por que os itens nao fazem efeito agora (null: fazem) — a frase da tela */
+export function porqueItensNaoValem(versao: number, est: Estagio, treinoTotal: number): string | null {
+  if (itensValem(versao, est, treinoTotal)) return null;
+  const tip = CIT.tipico[est];
+  if (tip === undefined) return "o In-Training não usa itens";
+  return `os itens pedem treino: pelo menos ${Math.ceil(CIT_V9.treinoMinimo * tip)} pontos neste nível (o seu pet tem ${Math.floor(treinoTotal)})`;
+}
+
 /** chips que o pet pode ter equipados pelas medalhas que conhece (0 sem medalha) */
 export const vagasDeChip = (medalhas: number): number => CIT.vagas.find(([m]) => medalhas >= m)?.[1] ?? 0;
 
@@ -111,19 +137,23 @@ const tetoEstagio = (est: Estagio): number => est === "mega" ? CMG.tetoEstagio :
 const tetoVida = (est: Estagio): number => est === "mega" ? CMG.tetoVida : CTR.tetoVida;
 /** os pontos que os chips de stat somam na luta (null: nenhum). A soma pedida pelos chips (ChipStat.pontos) e cortada, nesta ordem:
     25% do treino tipico do estagio (CIT.tetoChipStat), o espaco que falta no teto do estagio (`pontosEst` = pontos treinados nele) e
-    no teto da vida (`pontos` = o treino do pet); depois cada stat fica abaixo do teto dele. Adianta treino: com o estagio no teto, nada */
-export function bonusChipsStat(ids: readonly string[], est: Estagio, pontos: Readonly<Stats>, pontosEst: number): Stats | null {
+    no teto da vida (`pontos` = o treino do pet); depois cada stat fica abaixo do teto dele. Adianta treino: com o estagio no teto, nada.
+    Nos pets v9 (`versao`) cada ponto do chip vale CIT_V9.fatorChipStat */
+export function bonusChipsStat(ids: readonly string[], est: Estagio, pontos: Readonly<Stats>, pontosEst: number, versao = CIT.versaoPet): Stats | null {
   const chips = ids.map(chipDe).filter((c): c is ChipStat => c.tipo === "chip_stat");
   if (!chips.length || est === "bebe") return null;
-  const pedido = Object.fromEntries(STATS.map(k => [k, chips.reduce((s, c) => s + (c.pontos[k] ?? 0), 0)])) as Stats;
+  const mult = itensDosV9(versao) ? CIT_V9.fatorChipStat : 1;
+  const pedido = Object.fromEntries(STATS.map(k => [k, chips.reduce((s, c) => s + (c.pontos[k] ?? 0) * mult, 0)])) as Stats;
   const soma = STATS.reduce((s, k) => s + pedido[k], 0), total = STATS.reduce((s, k) => s + pontos[k], 0);
   const cabe = Math.max(0, Math.min(soma, CIT.tetoChipStat * CIT.tipico[est]!, tetoEstagio(est) - pontosEst, tetoVida(est) - total));
   const f = soma > 0 ? cabe / soma : 0;
   return Object.fromEntries(STATS.map(k => [k, Math.max(0, Math.min(f * pedido[k], CTR.tetoStat - pontos[k]))])) as Stats;
 }
-/** o treino com que o pet luta: o do pet mais o dos chips de stat (null: sem treino e sem chip, o perfil de sempre) */
-export function pontosComChips(ids: readonly string[], est: Estagio, pontos: Readonly<Stats>, pontosEst: number, treinou: boolean): Stats | null {
-  const b = bonusChipsStat(ids, est, pontos, pontosEst);
+/** o treino com que o pet luta: o do pet mais o dos chips de stat (null: sem treino e sem chip, o perfil de sempre). A trava do treino
+    minimo dos pets v9 (itensValem) fica com quem chama (o motor: Motor.pontosDeLuta) */
+export function pontosComChips(ids: readonly string[], est: Estagio, pontos: Readonly<Stats>, pontosEst: number, treinou: boolean,
+  versao = CIT.versaoPet): Stats | null {
+  const b = bonusChipsStat(ids, est, pontos, pontosEst, versao);
   if (!b) return treinou ? { ...pontos } : null;
   return Object.fromEntries(STATS.map((k: Stat) => [k, pontos[k] + b[k]])) as Stats;
 }
@@ -132,15 +162,18 @@ export function pontosComChips(ids: readonly string[], est: Estagio, pontos: Rea
 /** capacidade da lista no estagio */
 export const capacidadeLista = (est: Estagio): number => CV21.maxRegras[baseDe(est)];
 /** a lista com os chips de regra como no pet recem-equipado (GambitsPet.equiparRegra): cada chip, na ordem dos ids, vai para o topo
-    (o ultimo equipado fica na frente; se a regra ja estava na lista, ela sobe); passando da capacidade, sai a ultima regra. Para a
-    medicao com os bots de referencia (test/medir_itens.mjs) */
-export function listaComChips(g: ListaGambits, ids: readonly string[], cap: number): ListaGambits {
+    (o ultimo equipado fica na frente; se a regra ja estava na lista, ela sobe); passando da capacidade, sai a ultima regra. Nos pets v9
+    (itensDosV9) o chip completa a lista: a regra dele entra no fim, depois das regras da forma e antes da acao final, sem tirar nenhuma
+    (a vaga e a do chip, nao a da lista); se ja estava na lista, fica onde esta (GambitsPet.listaDeLuta). Para a medicao com os bots de
+    referencia (test/medir_itens.mjs) */
+export function listaComChips(g: ListaGambits, ids: readonly string[], cap: number, versao = CIT.versaoPet): ListaGambits {
   let regras = [...g.regras];
   const chave = (r: Regra) => JSON.stringify([r.se.map(c => [c.n, c.p]), r.entao]);
   for (const id of ids) {
     const c = chipDe(id);
     if (c.tipo !== "chip_regra") continue;
-    regras = [c.regra, ...regras.filter(r => chave(r) !== chave(c.regra))].slice(0, cap);
+    if (!itensDosV9(versao)) regras = [c.regra, ...regras.filter(r => chave(r) !== chave(c.regra))].slice(0, cap);
+    else if (!regras.some(r => chave(r) === chave(c.regra))) regras.push(c.regra);
   }
   return { regras, final: g.final };
 }

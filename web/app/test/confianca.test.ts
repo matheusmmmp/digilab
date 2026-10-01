@@ -92,7 +92,7 @@ describe("pets v8 com confianca", () => {
 
   test("v8: conf existe, e recalculada no replay e entra na assinatura; v1-v7 nao tem", () => {
     for (const v of [1, 2, 3, 4, 5, 6, 7]) expect(new Motor(1, v).conf).toBeNull();
-    expect(new Motor(1).versao).toBe(8);
+    expect(new Motor(1).versao).toBeGreaterThanOrEqual(8);   /* os ovos novos (v9: combate equilibrado) herdam a confianca */
     const m = viverELutar(8, ["aleatorio", "aleatorio", "agressivo", "aleatorio"]);
     expect(m.conf!.historico.length).toBe(4);
     const h = m.conf!.historico;

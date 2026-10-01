@@ -642,6 +642,30 @@ class ConfigCombateV21D(ConfigCombateV21C):
     vigia_recua_do_preparo_sob_pele: bool = False
 
 
+@dataclass(frozen=True)
+class ConfigCombateV21E(ConfigCombateV21D):
+    """Rodada de equilibrio geral, fase 1: as formas (docs/PLANO_EQUILIBRIO_GERAL.md, docs/EQUILIBRIO_GERAL.md). Parte da
+    variante V21D validada (a_c_e2v_v: as quatro chaves dela ligadas) e acrescenta listas variantes das formas. Chaves
+    DESLIGADAS por padrao: com todas em False a luta e a da V21D com as mesmas chaves. Classe propria (e nao campos novos
+    na V21D) para o asdict e o hash das configs V21D gravadas nao mudarem. PROPOSTO, so calibracao (3101..3505).
+
+    A base (custo do golpe rapido, dano do parry, a fuga condicionada C3) foi medida na calibracao e nao mudou: nenhum
+    valor tirou o furioso de ~0,72 (docs/EQUILIBRIO_GERAL.md, fase 1). O que o tira e o parry que ja existe (C2 da V2C):
+    as formas que o golpe rapido repetido esmagava passam a se defender dele. Listas em bots.gambits_adulto."""
+
+    # o duelista e o tita defendem de perto quando o oponente usa golpe_rapido com frequencia (a regra entra logo depois
+    # das que leem o preparo do oponente; sai "guts abaixo de 20 -> carregar": a final defender tambem recupera guts)
+    duelista_defende_do_golpe: bool = False
+    tita_defende_do_golpe: bool = False
+    # as guardias nao carregam (sai "guts abaixo de 40 -> carregar": carregar recebe dano x1,5, e a final defender
+    # recupera guts); a da muralha pede muralha_lista_espelho
+    espelho_sem_carregar: bool = False
+    muralha_sem_carregar: bool = False
+    # a muralha (sem o contra-golpe a distancia) responde com o contra-golpe a quem usa pele_dura com frequencia (o
+    # colosso, cujo preparo sob pele ela nao ve); pede muralha_lista_espelho
+    muralha_contra_golpe_na_pele: bool = False
+
+
 # numeros de tecnica/passiva perturbados no gate E5 (+-10%)
 CAMPOS_TECNICA_PASSIVA_V21 = (
     "custo_investida", "dano_investida", "custo_contra_golpe", "fracao_contra_golpe",
