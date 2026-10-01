@@ -693,7 +693,8 @@ npx tsx test/medir_itens.mjs --v6 --gates gi1,gi2,gi4                           
 
 Status: **validação feita** (2026-09-30), com **tudo congelado**: nenhum fator, lista, escala ou item mudou por causa do resultado.
 Passam M-A1…M-A4, M-B1…M-B3, M-C2, M-C3, M-D1…M-D3 e M-E1; **reprovam M-C1** (a muralha e o espelho, 0,010 abaixo da faixa;
-as duas são exceções aceitas pelo Matheus) e, dentro de M-A5, **o E3 do contra-golpe** (como na calibração). O que reprovou está relatado na seção 4.3 e
+as duas são exceções aceitas pelo Matheus) e, dentro de M-A5, **o E3 do contra-golpe** (como na calibração; aceito como exceção
+em 2026-10-01). O que reprovou está relatado na seção 4.3 e
 as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido usadas em nada dos pets v9 até aqui (fases 1–3 só com
 3101…3505; os artefatos dos v6 nas sementes de validação são de antes da rodada).
 
@@ -719,7 +720,7 @@ as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido 
 | **M-A2** força contra o painel B | as 8 em [0,40; 0,60] | 0,446 (titã) a 0,554 (sentinela); margem 0,046 | 0,449 (titã) a 0,551 (sentinela); margem 0,049 | **passa** |
 | **M-A3** mais forte − mais fraca | ≤ 0,20 | 0,129 | 0,125 (sentinela − muralha) | **passa** |
 | **M-A4** lugar no ciclo | toda forma vence ≥ 2 das outras 7 | mínimo 3 | mínimo 3 (duelista, emboscador, muralha, vigia) | **passa** |
-| **M-A5** a base de pé | G1–G9 da V2C e E1/E3/E5 da V21C (exceções aceitas: E2, G6b, G8) | E1 suporte 5; E3 técnica 17,7–36,7%; E3 resposta: **contra-golpe 0,460 → 0,481**; E5 35/36; G8 0,972; G9 0,286; guardião 0,191; G6b 0,692, E2 (ferrugem) e E4 (0,887–0,994) como exceções; G1–G9 da base = etapa c7 | E1 suporte 5 (espelho, furioso, sentinela, titã, vigia); E3 técnica 17,7–36,8%; **contra-golpe 0,458 → 0,480**; E5 35/36 (cai `custo_pele_dura−`); G8 0,972; G9 0,286; guardião 0,190; G6b 0,693 (sentinela 0,919), E2 (ferrugem) e E4 (0,886–0,998) como exceções; G1–G9 da base = `validacao_bots` byte a byte (só G6b do atirador, exceção) | **passa com as exceções aceitas, menos o E3 do contra-golpe** (pendente, como na fase 1) |
+| **M-A5** a base de pé | G1–G9 da V2C e E1/E3/E5 da V21C (exceções aceitas: E2, G6b, G8) | E1 suporte 5; E3 técnica 17,7–36,7%; E3 resposta: **contra-golpe 0,460 → 0,481**; E5 35/36; G8 0,972; G9 0,286; guardião 0,191; G6b 0,692, E2 (ferrugem) e E4 (0,887–0,994) como exceções; G1–G9 da base = etapa c7 | E1 suporte 5 (espelho, furioso, sentinela, titã, vigia); E3 técnica 17,7–36,8%; **contra-golpe 0,458 → 0,480**; E5 35/36 (cai `custo_pele_dura−`); G8 0,972; G9 0,286; guardião 0,190; G6b 0,693 (sentinela 0,919), E2 (ferrugem) e E4 (0,886–0,998) como exceções; G1–G9 da base = `validacao_bots` byte a byte (só G6b do atirador, exceção) | **passa com as exceções aceitas** (o E3 do contra-golpe entre elas, aceito em 2026-10-01) |
 | **M-B1** estágio | vizinhos ≤ 0,10 (pontos); dois estágios = 0,00 (vitórias) | 0,0014 / 0,0104 / 0,0041; 0 e 0 | 0,0008 / 0,0110 / 0,0041; 0 e 0 | **passa** |
 | **M-B2** líderes das 6 arenas | sem treino ≤ 0,05; com o típico ≥ 0,80; pior forma ≥ 0,50 | sem 0,0016–0,0359; com 0,8288–0,9144; pior 0,515 (Lago); menor folga 0,0141 (Espiral) | sem 0,0006–0,0284; com 0,8575–0,9188; pior 0,535 (Cidadela); menor folga 0,0216 (Espiral) | **passa** nos 6 |
 | **M-B3** desafiantes | sem ≤ 0,30; com ≥ 0,80; pior ≥ 0,50 | Tortomon 0,2825 / 0,8762 / 0,525 (folga 0,0175); os outros 3 com folga ≥ 0,12 | Tortomon 0,2938 / 0,8794 / 0,535 (folga 0,0062); Devidramon 0,1862 / 0,9050 / 0,620; Puppetmon 0,1484 / 0,9306 / 0,745; Machinedramon 0,1100 / 0,9753 / 0,870 | **passa** nos 4 |
@@ -831,10 +832,10 @@ as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido 
   diferença para a faixa (0,010) está no tamanho do ruído entre sementes (~0,01, não estimado): não dá para dizer que o espelho
   "piorou", só que a folga de 0,005 não aguentou a troca de sementes. O titã (0,260) e a sentinela (0,2675) passam por 0,010 e
   0,0175: as três formas reativas estão na borda da Liga.
-- **M-A5, o E3 do contra-golpe (0,458 → 0,480; pendente desde a fase 1).** A resposta declarada ("de perto, recuar; com guts,
+- **M-A5, o E3 do contra-golpe (0,458 → 0,480; exceção aceita em 2026-10-01).** A resposta declarada ("de perto, recuar; com guts,
   disparo") zera a muralha (0,456 → 0,000) e dispara o espelho (0,461 → 0,961), porque a passiva dele devolve o disparo inteiro. Vem
-  da V21D (0,431 → 0,496 nas mesmas sementes); a V21E diminui a diferença (+0,065 → +0,022) sem fechar. A decisão continua a da
-  fase 1: aceitar como exceção ou mudar a resposta declarada do espelho (fora das alavancas).
+  da V21D (0,431 → 0,496 nas mesmas sementes); a V21E diminui a diferença (+0,065 → +0,022) sem fechar. O Matheus aceitou como
+  exceção (2026-10-01); a resposta declarada do espelho não muda.
 - **M-A5, o resto (`bateria_v21e/gates.json`, `bateria_v2c/`).** A bateria V2.1 com a V21E nas sementes de validação sai como na
   calibração: E1 passa (suporte 5), E5 35 de 36 (a perturbação que cai mudou: `turnos_pele_dura−` na calibração, `custo_pele_dura−`
   na validação; o E1 continua valendo em 0,972, G8), G9 0,286, o guardião no limite de turnos 0,190 (margem 0,010, como os 0,009 da
@@ -856,12 +857,14 @@ as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido 
 - **M-C1, o espelho na Liga (0,240 na validação, 0,010 abaixo da faixa; 0,255 na calibração): aceita como exceção em
   2026-10-01.** Motivo: a diferença está no tamanho do ruído entre sementes (~0,01) e a fase 4 é única, nada muda por causa do
   resultado. Nenhum número muda.
+- **E3 do contra-golpe (M-A5; 0,458 → 0,480 na validação): aceito como exceção em 2026-10-01.** A resposta declarada não reduz os
+  usuários por causa do espelho, cuja passiva devolve o disparo inteiro; é o que a V21D já fazia na prática. A resposta declarada
+  não muda e nenhum número muda.
 
-**Pendentes de aceite do Matheus:**
-- **E3 do contra-golpe** (M-A5): a resposta declarada não reduz os usuários (0,458 → 0,480), pelo espelho. Opções: aceitar como
-  exceção (como a V21D fazia na prática) ou mudar a resposta declarada ao contra-golpe do espelho.
 - **E4 da V21C** (o adulto esmaga o adolescente): aceito na V21C e redefinido na escala (M-B1, que passa); a bateria V2.1 continua
   a medi-lo sem escala e a reprová-lo (0,886–0,998), só como relato.
+
+**Pendentes de aceite do Matheus:** nenhum.
 
 ### 4.5 Testes
 

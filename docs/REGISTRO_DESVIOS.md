@@ -1210,8 +1210,9 @@ O gatilho da seção 3 do DESIGN_VOZ_PROPRIA ("antes de lutar contra o rival do 
   (o limite do desafiado, os Megas da tabela, deixar perder uma luta) são decisões anteriores do Matheus. Nenhum número muda.
 - **M-C1, o espelho: aceito como exceção pelo Matheus (2026-10-01).** 0,240 na validação, 0,010 abaixo da faixa (0,255 na
   calibração, folga 0,005, risco apontado na fase 3); a diferença está no ruído entre sementes e a fase 4 é única. Nenhum número muda.
-- **Pendente de aceite** (relatado, sem mudança): o E3 do contra-golpe (desde a fase 1: 0,458 → 0,480 na validação, pelo espelho);
-  o E4 da V21C segue como exceção aceita (redefinido na escala, M-B1).
+- **E3 do contra-golpe: aceito como exceção pelo Matheus (2026-10-01).** Reprovava desde a fase 1 (0,458 → 0,480 na validação,
+  pelo espelho, cuja passiva devolve o disparo inteiro). A resposta declarada não muda. Com isso a rodada não tem mais pendência de
+  aceite; o E4 da V21C segue como exceção aceita (redefinido na escala, M-B1).
 - **Sementes de validação e os pets v6.** Os artefatos dos v6 (`artifacts_campanha/arenas/validacao.json` etc.) usam as mesmas
   4101…4505 desde as medalhas; para os pets v9 elas não tinham sido usadas em nada antes da fase 4 (as fases 1–3 só rodaram
   3101…3505). A conferência "linha sem item = fase 2" do `medir_itens.mjs --validar` não existe nos v9 (sem referência gravada);
