@@ -1,0 +1,46 @@
+{
+  "descricao": "Rodada de equilibrio geral, fase 1, meta M-A5: bateria V2.1 (E1-E5, G6b, G8, G9, guardiao) na CALIBRACAO com a V21E escolhida na fase 1 (experiments/configs/v21e/calibracao.json). Base V2C, vida por vigor, marca fragil e resposta ao marcar da validacao V21C (experiments/configs/v21c/validacao.json); 100 partidas por par por semente, com E5.",
+  "saida": "artifacts_equilibrio_geral/fase1/bateria_v21e",
+  "conjunto": "calibracao",
+  "sementes_calibracao": [
+    3101,
+    3202,
+    3303,
+    3404,
+    3505
+  ],
+  "sementes_validacao": [
+    4101,
+    4202,
+    4303,
+    4404,
+    4505
+  ],
+  "partidas_por_par_por_semente": 100,
+  "regras_base": {
+    "finta": true,
+    "dano_parry": 5.0,
+    "fuga_condicionada": true,
+    "turno_morte_subita": 25,
+    "mult_morte_subita": 1.5
+  },
+  "regras_v21": {
+    "hp_por_vigor": 2.5,
+    "hp_base": 75.0,
+    "marca_fragil": true,
+    "preparo_sob_pele_oculto": true,
+    "muralha_lista_espelho": true,
+    "vigia_bate_em_quem_recua": true,
+    "vigia_recua_do_preparo_sob_pele": true,
+    "investida_erra_contra_recuo": false,
+    "preparo_prende": false,
+    "tita_bate_em_quem_recua": false,
+    "duelista_defende_do_golpe": true,
+    "tita_defende_do_golpe": true,
+    "espelho_sem_carregar": true,
+    "muralha_sem_carregar": true,
+    "muralha_contra_golpe_na_pele": true
+  },
+  "respostas_v21c": true,
+  "gates_v2c": true
+}

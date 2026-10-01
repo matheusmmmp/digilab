@@ -1,0 +1,274 @@
+{
+  "meta": {
+    "ambiente": {
+      "plataforma": "Windows-11-10.0.26200-SP0",
+      "python": "3.13.0"
+    },
+    "aviso": "fase 4 da rodada de equilibrio geral: a validacao unica nas sementes de validacao, tudo congelado (nenhum numero muda por causa do resultado); so as variantes v21d e v21e; chaves da ConfigCombateV21E desligadas por padrao",
+    "config": "experiments/configs/v21e/calibracao.json",
+    "config_sha256": "f0d5b4c0bfc8093a1a1cb93b68252daec06c3ff75d4d8d826ee2aa16ee8391c0",
+    "conjunto": "validacao",
+    "epsilon_bots_canonico": 0.05,
+    "especies": [
+      "brasa",
+      "cirro",
+      "ferrugem",
+      "limo"
+    ],
+    "fase": 4,
+    "metodo": "run_bateria_sombria: 12 formas (8 normais + 4 sombrias), mesma especie, rotulo 'sombria|<especie>'; S1 = nenhuma sombria vence (> 0,5) as 8 normais",
+    "partidas_por_par_por_semente": 100,
+    "regras_v21c": {
+      "atual": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+      },
+      "fontes_iguais_a_validacao": false,
+      "validacao_gravado": {
+        "arquivos_regras": [
+          "__init__.py",
+          "bots.py",
+          "catalogo.py",
+          "gambits.py",
+          "partida.py",
+          "regras.py"
+        ],
+        "config_sha256": "0a849c1e98604e36e4c63d3bb2bb7ab91308ddcda90dc8fb6c557f32b23c8140",
+        "regras_sha256": "8081fff4e2ae9131f8d3494e899c470d9b0ac0f6f4271c50868e92a3a208432a"
+      }
+    },
+    "sementes": [
+      4101,
+      4202,
+      4303,
+      4404,
+      4505
+    ],
+    "variantes": {
+      "v21d": {
+        "base": {},
+        "descricao": "V21D validada (a_c_e2v_v): o combate dos pets v6-v8",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "76ef7389f38585c03b3d3a1562f3397dc9329d0af34764d2af944db09d60ebbc",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "investida_erra_contra_recuo": false,
+          "muralha_lista_espelho": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      },
+      "v21e": {
+        "base": {},
+        "descricao": "V21E escolhida (experiments/configs/v21e/calibracao.json): as cinco chaves da V21E",
+        "hashes": {
+          "arquivos_regras": [
+            "__init__.py",
+            "bots.py",
+            "catalogo.py",
+            "gambits.py",
+            "partida.py",
+            "regras.py"
+          ],
+          "config_sha256": "d08010297ae1f40051bfe9bf3b311328d1645d34c898023102fa66195058a36c",
+          "regras_sha256": "cba09fbdbb2f931ed6cdaddc557b9ba08298b1df946d0624916efe6d55d0c1d9"
+        },
+        "regras_v21": {
+          "duelista_defende_do_golpe": true,
+          "espelho_sem_carregar": true,
+          "investida_erra_contra_recuo": false,
+          "muralha_contra_golpe_na_pele": true,
+          "muralha_lista_espelho": true,
+          "muralha_sem_carregar": true,
+          "preparo_prende": false,
+          "preparo_sob_pele_oculto": true,
+          "tita_bate_em_quem_recua": false,
+          "tita_defende_do_golpe": true,
+          "vigia_bate_em_quem_recua": true,
+          "vigia_recua_do_preparo_sob_pele": true
+        }
+      }
+    }
+  },
+  "por_variante": {
+    "v21d": {
+      "S1_ok": true,
+      "media_sombria_contra_normais": {
+        "bastiao_rachado": 0.151625,
+        "colosso_partido": 0.23334375,
+        "devastador": 0.37390625,
+        "predador": 0.32609375
+      },
+      "sombria_x_normais": {
+        "bastiao_rachado": {
+          "duelista": 0.28675,
+          "emboscador": 0.0,
+          "espelho": 0.31125,
+          "furioso": 0.0535,
+          "muralha": 0.2325,
+          "sentinela": 0.0,
+          "tita": 0.06225,
+          "vigia": 0.26675
+        },
+        "colosso_partido": {
+          "duelista": 0.319,
+          "emboscador": 0.003,
+          "espelho": 0.61225,
+          "furioso": 0.02675,
+          "muralha": 0.60375,
+          "sentinela": 0.00825,
+          "tita": 0.18125,
+          "vigia": 0.1125
+        },
+        "devastador": {
+          "duelista": 0.743,
+          "emboscador": 0.03925,
+          "espelho": 0.29425,
+          "furioso": 0.31575,
+          "muralha": 0.123,
+          "sentinela": 0.04075,
+          "tita": 0.81425,
+          "vigia": 0.621
+        },
+        "predador": {
+          "duelista": 0.10175,
+          "emboscador": 0.93375,
+          "espelho": 0.168,
+          "furioso": 0.01025,
+          "muralha": 0.06075,
+          "sentinela": 0.9575,
+          "tita": 0.0745,
+          "vigia": 0.30225
+        }
+      },
+      "suporte_com_sombrias": [
+        "furioso",
+        "muralha",
+        "sentinela"
+      ],
+      "vence_todos_os_normais": {
+        "bastiao_rachado": false,
+        "colosso_partido": false,
+        "devastador": false,
+        "predador": false
+      },
+      "vitorias_contra_normais": {
+        "bastiao_rachado": [],
+        "colosso_partido": [
+          "espelho",
+          "muralha"
+        ],
+        "devastador": [
+          "duelista",
+          "tita",
+          "vigia"
+        ],
+        "predador": [
+          "emboscador",
+          "sentinela"
+        ]
+      }
+    },
+    "v21e": {
+      "S1_ok": true,
+      "media_sombria_contra_normais": {
+        "bastiao_rachado": 0.07746875,
+        "colosso_partido": 0.2260625,
+        "devastador": 0.32115625,
+        "predador": 0.276875
+      },
+      "sombria_x_normais": {
+        "bastiao_rachado": {
+          "duelista": 0.0165,
+          "emboscador": 0.0,
+          "espelho": 0.1545,
+          "furioso": 0.0535,
+          "muralha": 0.12675,
+          "sentinela": 0.0,
+          "tita": 0.00175,
+          "vigia": 0.26675
+        },
+        "colosso_partido": {
+          "duelista": 0.28775,
+          "emboscador": 0.003,
+          "espelho": 0.61475,
+          "furioso": 0.02675,
+          "muralha": 0.54325,
+          "sentinela": 0.00825,
+          "tita": 0.21225,
+          "vigia": 0.1125
+        },
+        "devastador": {
+          "duelista": 0.599,
+          "emboscador": 0.03925,
+          "espelho": 0.1855,
+          "furioso": 0.31575,
+          "muralha": 0.07925,
+          "sentinela": 0.04075,
+          "tita": 0.68875,
+          "vigia": 0.621
+        },
+        "predador": {
+          "duelista": 0.00175,
+          "emboscador": 0.93375,
+          "espelho": 0.007,
+          "furioso": 0.01025,
+          "muralha": 0.00225,
+          "sentinela": 0.9575,
+          "tita": 0.00025,
+          "vigia": 0.30225
+        }
+      },
+      "suporte_com_sombrias": [
+        "espelho",
+        "furioso",
+        "sentinela",
+        "tita",
+        "vigia"
+      ],
+      "vence_todos_os_normais": {
+        "bastiao_rachado": false,
+        "colosso_partido": false,
+        "devastador": false,
+        "predador": false
+      },
+      "vitorias_contra_normais": {
+        "bastiao_rachado": [],
+        "colosso_partido": [
+          "espelho",
+          "muralha"
+        ],
+        "devastador": [
+          "duelista",
+          "tita",
+          "vigia"
+        ],
+        "predador": [
+          "emboscador",
+          "sentinela"
+        ]
+      }
+    }
+  },
+  "v21d_igual_validacao_v21d": true
+}

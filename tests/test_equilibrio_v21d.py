@@ -208,4 +208,10 @@ def test_gabarito_web_v21d_reproduz():
     """O gabarito de paridade da web (web/app/test/gabaritos/combate_v21d_python.json) sai igual do exportador."""
     import exportar_gabarito_v21d as ex
     gravado = json.loads(ex.SAIDA.read_text(encoding="utf-8"))
-    assert json.loads(json.dumps(ex.gerar())) == gravado
+    assert _sem_hash_dos_fontes(json.loads(json.dumps(ex.gerar()))) == _sem_hash_dos_fontes(gravado)
+
+
+def _sem_hash_dos_fontes(g: dict) -> dict:
+    """O hash dos fontes de combate_v2/v21 (regras_sha256) muda quando os fontes ganham chaves novas desligadas (a V21E da
+    rodada de equilibrio geral); as partidas, as listas e o config_sha256 nao podem mudar."""
+    return {**g, "hashes": {v: {k: x for k, x in h.items() if k != "regras_sha256"} for v, h in g["hashes"].items()}}

@@ -1065,6 +1065,25 @@ SlashAngemon e Valkyrimon não têm nada nos jogos do corpus. Decisões:
 - O Python não muda: `ConfigConfianca` segue desligada por padrão, `PARAMETROS_CONFIANCA_M1` à parte (os hashes da
   educação-v1 e da voz não mudam).
 
+## 2026-09-30 — equilíbrio geral, fase 1 (as formas): a V21E fecha pelas listas, não pela base
+
+- **A base não mudou.** O plano (`docs/PLANO_EQUILIBRIO_GERAL.md`, seção 3) e o diagnóstico apontavam a base (custo do golpe
+  rápido, dano do parry, a C3) como a alavanca do furioso. Medidas na calibração sobre a V21D, nenhuma o tira de ~0,72
+  (`artifacts_equilibrio_geral/fase1/matriz.json`: golpe 12/15/20, parry 8/12, sem C3). O que o tira é o parry que já existe
+  (C2 da V2C): nenhuma forma que o golpe rápido repetido esmagava se defendia dele. A V21E (`ConfigCombateV21E`, subclasse
+  da V21D, chaves desligadas por padrão) só tem listas variantes; a `ConfigCombateV2C`, `combate_v2/*.py` e a bateria da base
+  não mudam.
+- **Uma chave por edição de lista** (como a V21D), cinco: `duelista_defende_do_golpe`, `tita_defende_do_golpe`,
+  `espelho_sem_carregar`, `muralha_sem_carregar`, `muralha_contra_golpe_na_pele`. As da muralha pedem `muralha_lista_espelho`
+  (falha alto sem ela).
+- **Web: pets v9** (`VERSAO_PET = 9` = v8 + combate equilibrado; `CV21E`). Os v6–v8 seguem na V21D e os v1–v5 na V21C; nenhum
+  save é descartado. A Fábrica (sem pet; lutas no registro do Tamer) continua na V21D (`VERSAO_FABRICA = 6`): mudar as regras
+  dela mudaria o replay das tentativas já gravadas. As regras novas da V21E ficam fora do repertório de candidatas (como as
+  do vigia V21D) e voltam como candidatas de troca só para a forma que as tem, nos pets v9 (`candidatasV21E`).
+- **Sementes da bateria da base.** A meta M-A5 pede G1–G9 da V2C: a bateria da base tem sementes próprias (calibração
+  1101…1505, validação 2101…2505); na fase 1 roda a de calibração (`experiments/configs/v21e/bateria_v2c_calibracao.json`, igual
+  à etapa c7). As 3101…3505 valem para tudo o que é V2.1.
+
 ## 2026-09-30 — Voz própria: ajustes depois do teste do Matheus no jogo
 
 Relato: a conversa riscava como "Sem base" falas da voz (inclusive "Agumon evolui pra Greymon", que é verdade no jogo), o
@@ -1107,3 +1126,93 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
   - k = 8: 0 pets com stats diferentes. A run de k = 8 **vale como está**;
   - k = 3: 108 pets diferem no último bit. A run de k = 3 **foi refeita** com a implementação nova, antes de qualquer
     leitura dela entrar em relatório.
+
+## 2026-09-30 — Comando pelo chat (`docs/TAREFA_COMANDO_CHAT.md`): o texto do jogador passa a agir no pet, pelo catálogo
+
+Decisão do Matheus (2026-09-30). A regra de 2026-09-28 da fala livre, "o que o jogador escreve não ensina o pet", **deixa de valer
+para o comando**: na conversa dos pets v7+ a LLM devolve, junto com a fala, `comando` ∈ {as 9 ações de `AcaoDono`} ∪ {null}; o
+app mostra um chip de confirmação e o toque grava o evento `d` de sempre, pelo mesmo caminho do botão. O texto continua não
+ensinando nada por outra via: só o catálogo fechado age, e só com o toque. Interpretações e limites desta implementação:
+- **No registro do pet entra só o `d`.** A saída da LLM fica no log de apresentação (versão 2, lê a 1). Replay, assinaturas dos
+  pets v1–v8, gabaritos `vidas_*.json`, `paridade_ts` e `constantes.test.mjs` passam iguais; o modo livre gravado não é usado.
+- **Só na conversa com `voz: true` (pets v7+), prompt `livre-v7`** (= `livre-v6` + a regra COMANDO no sistema e a lista das ações
+  no pedido). Os pets v1–v6 conversam pelo `livre-v2` e não ganham comando: mudar a v2 alteraria as mensagens das rodadas 1–2 da
+  fala livre, que reproduzem. As rodadas 1–4 da voz (`livre-v3..v6`, espontânea) não mudam.
+- **O comando é o da primeira geração.** A autocorreção (`revisao.py`) só reescreve a fala (respeito); a reescrita não troca o
+  comando. É o que a avaliação mede com `gerar`.
+- **Validação dupla.** Servidor: `saida.ler` falha alto com valor fora do catálogo (fala genérica, comando null). App
+  (`src/acoes.ts`): catálogo, pet nascido e vivo, ações v4 (petisco, banheiro, tratar lesão) só em pets `versao >= 4`, `tratar_lesao`
+  só com lesão; o toque valida de novo contra o pet daquele momento (pet morto entre a resposta e o toque: nada entra).
+- **Um caminho só para a ação do dono** (`acoes.agir`): botões da tela do Pet, atalhos do Conversar e o chip. O flash do palco saiu
+  para `src/flash.ts` (sem DOM) para o caminho compartilhado não puxar o palco.
+- **Avaliação em duas rodadas** (`artifacts_fala_livre/comando/`): a rodada 1 mede o comando **sem** o bloco de estilo da espécie;
+  a rodada 2, **com** o estilo, como o servidor manda no jogo. Motivo: na sonda, com o estilo do corpus (que hoje tem 60 espécies e
+  texto em japonês nas fontes), o gemma2:9b respondeu com trechos em japonês em 5 de 6 mensagens, e `ler` rejeita letras fora do
+  alfabeto latino (a fala vira a genérica e o comando null). Isso é do corpus/da voz, não do comando, e vale para a conversa dos
+  pets v7 já hoje; fica registrado como pendência à parte.
+- **Sem execução direta.** O chip é obrigatório até o Matheus ver o gate (PROPOSTO: falsos positivos ≤ 5% nas negativas;
+  imperativos ≥ 80%). Treino, luta, itens, evoluir, cruzar, comando na fala espontânea e MCP de verdade ficam fora.
+
+## 2026-09-30 — Comando pelo chat, rodada 3: prompt `livre-v8`
+
+A rodada 1 (`livre-v7`, `artifacts_fala_livre/comando/rodada1/`) passou nos falsos positivos (0%) e falhou nos imperativos
+(53,3%, gate ≥ 80%): elogiar, repreender, acariciar e tratar_lesao acertaram 4 de 36, porque nelas a mensagem do dono é a própria
+ação ("muito bem!" é o elogio) e o modelo tratava como conversa.
+- **`livre-v8` ao lado da v7** (`digilab_fala_livre/prompt.py`): muda só o bloco COMANDO. A regra no sistema diz que em quatro
+  ações a própria mensagem é a ação (elogiar: "muito bem!", "parabéns"; repreender: "isso foi feio", "não faz mais"; acariciar:
+  diz que vai fazer carinho ou cafuné; tratar_lesao: diz que vai cuidar do machucado ou fazer curativo) e escreve inteira a regra
+  do null (negação da ação, pergunta, hipótese, adiamento e relato); a lista do pedido (`DESCRICAO_COMANDOS_V8`) troca a frase
+  dessas quatro. A v7 não muda (a rodada 1 reproduz). O servidor usa a v8 na conversa com voz.
+- **A v8 foi escrita olhando a rodada 1**: por isso a rodada 3 usa **sementes novas** (20261201, 20261301, 20261401; nenhuma
+  semente + i cruza as das rodadas 1–2, teste), as mesmas 60 mensagens, sem o estilo da espécie, gemma2:9b. As sementes das
+  rodadas 1–2 passam a ser de calibração. As mensagens são as mesmas: a v8 não é validação independente das **mensagens**, só
+  das sementes.
+- **Resultado** (`artifacts_fala_livre/comando/rodada3/resumo.json`): gate PROPOSTO **passa**. Falsos positivos 0/60 nas negativas
+  e 0/60 na conversa; imperativos 51/60 (85,0%). Elogiar 6/6, repreender 6/6, acariciar 6/6, tratar_lesao 5/6 (uma virou
+  acariciar); alimentar 9/9, petisco 6/6, brincar 5/6, banheiro 5/6. **Regressão em limpar: 3/9** (rodada 1: 7/9); 5 viraram
+  `repreender` ("banho agora, sem choro" e "vai se limpar, você tá todo sujo", mensagens de tom bravo) e 1 null. Com o chip, o
+  jogador veria "Repreender?" no lugar de "Limpar?": é um erro de ação, não um falso positivo numa negativa.
+- **Execução direta continua fora**: o chip segue obrigatório; liberar para os imperativos é decisão do Matheus.
+
+## 2026-09-30 — Voz própria: gatilho de revanche
+
+O gatilho da seção 3 do DESIGN_VOZ_PROPRIA ("antes de lutar contra o rival do gosto revanche"), que tinha ficado de fora.
+- **Quando:** ao escolher (Arena ou Campanha) o rival que venceu o pet e ainda não foi vencido depois. A luta não espera a
+  fala: ela aparece acima do Lutar/Desafiar (a janela de julgar fica na tela do Pet, como nas outras falas). Uma vez por
+  derrota: o registro diz se já houve um `fl` "revanche" depois dela. Mesmo ritmo das outras falas (2 h, nunca dormindo nem
+  com janela aberta). O assunto da fala, quando é verdade, é o próprio fato de revanche.
+- **Nada novo no motor:** o gatilho é só o texto do evento `fl` (pets v7 em diante); assinatura e replay iguais.
+- **Nomes dos rivais (correção):** na web os fatos da história e a mentira diziam "contra o ." (o nome padrão é o do
+  formato da pesquisa, `npc:tier1_x`). Agora a web passa o nome da tela (`src/nomesRivais.ts`: NPC, Digimon do bot) e
+  manda `dados.nome`; a mentira (TS e Python) usa esse nome quando vem. Os gabaritos Python × TS não mudam.
+- O verificador sustenta a fala pelo [G1] "vou lutar de novo contra quem me venceu" (revanche, luta, enfrentar).
+
+## 2026-09-30 — equilíbrio geral, fase 4: validação única, tudo congelado; a muralha na Liga aceita como exceção
+
+- **Nada mudou por causa do resultado** (o plano, seção 4: "nenhum número muda"). A validação rodou uma vez, nas sementes
+  4101…4505, com os fatores, listas, escala e itens das fases 1–3. O que reprovou foi relatado (`docs/EQUILIBRIO_GERAL.md`, fase 4,
+  seções 4.3 e 4.4), não corrigido.
+- **Os scripts ganharam `--validar`**, no padrão dos que já tinham (`SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505]`, artefato
+  `*_validacao.json`, pasta `artifacts_equilibrio_geral/fase4/`): `experiments/calibrar_equilibrio_geral.py` (só as variantes `v21d` e
+  `v21e`; a conferência que falha alto passa a ser a validação da V21D nas mesmas sementes, `artifacts_combate_v21c/validacao_v21d/`,
+  e saiu igual), `conferir_liga.mjs`, `conferir_fabrica_salao.mjs` e `conferir_instalacoes.mjs` (não tinham) e os que já tinham
+  (`calibrar_escala_v6.mjs`, `calibrar_arenas.mjs`, `calibrar_desafiantes_v6.mjs`, `medir_itens.mjs`) passam a gravar os v9 em
+  `fase4/` em vez de `fase2/`/`fase3/`. O padrão (calibração) e os artefatos das fases 1–3 não mudam (conferido: `conferir_liga`,
+  `conferir_fabrica_salao`, `conferir_instalacoes` e `calibrar_equilibrio_geral --etapa metas` rodados de novo no padrão saem byte a
+  byte). A bateria M-A5 tem configs próprios de validação (`experiments/configs/v21e/bateria_v21e_validacao.json`,
+  `bateria_v2c_validacao.json`: os mesmos das de calibração, só o conjunto e a saída; a da base com N = 80, o da validação da V2C).
+- **A V21D não foi rodada na bateria de validação** (na fase 1 rodou na calibração, para comparar): não é meta, e a validação da V21D
+  já existe (`validacao_v21d/`). A matriz, o painel, o E3 e o S1 da V21D nas sementes de validação saem do `--validar` do script da
+  fase 1, como conferência.
+- **M-C1, a muralha: aceita como exceção pelo Matheus (2026-09-30).** 0,085 de título na calibração e na validação. Motivo: ela
+  perde para os guardiões pelo limite do desafiado (que é do líder: 0,7025 contra o Seraphimon mesmo com 0,3, 0,440 contra a Rosemon)
+  e não alcança o MegaGargomon com nenhuma alavanca permitida (0,3775 com o fator 0,1, o piso da grade). As alavancas que mexeriam
+  (o limite do desafiado, os Megas da tabela, deixar perder uma luta) são decisões anteriores do Matheus. Nenhum número muda.
+- **M-C1, o espelho: aceito como exceção pelo Matheus (2026-10-01).** 0,240 na validação, 0,010 abaixo da faixa (0,255 na
+  calibração, folga 0,005, risco apontado na fase 3); a diferença está no ruído entre sementes e a fase 4 é única. Nenhum número muda.
+- **Pendente de aceite** (relatado, sem mudança): o E3 do contra-golpe (desde a fase 1: 0,458 → 0,480 na validação, pelo espelho);
+  o E4 da V21C segue como exceção aceita (redefinido na escala, M-B1).
+- **Sementes de validação e os pets v6.** Os artefatos dos v6 (`artifacts_campanha/arenas/validacao.json` etc.) usam as mesmas
+  4101…4505 desde as medalhas; para os pets v9 elas não tinham sido usadas em nada antes da fase 4 (as fases 1–3 só rodaram
+  3101…3505). A conferência "linha sem item = fase 2" do `medir_itens.mjs --validar` não existe nos v9 (sem referência gravada);
+  a igualdade com `arenas_validacao.json` foi conferida à mão no relatório.
