@@ -39,7 +39,7 @@ from digilab.combate_v2.v21.bots import FORMAS, lutador_adulto  # noqa: E402
 from digilab.combate_v2.v21.partida import jogar  # noqa: E402
 from digilab.combate_v2.v21.regras import Regras  # noqa: E402
 from digilab.config import (CONFIG_CATALOGO, CONFIG_COMBATE_V2, CONFIG_COMBATE_V21, ConfigArenaPesquisa,  # noqa: E402
-                            ConfigCombateV2C, ConfigCombateV21C)
+                            ConfigCombateV2C, ConfigCombateV21C, ConfigCombateV21D)
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.evolucao import evoluir, ovo  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, PROTOCOLO_ARENA_V1, derivar_semente, sha256_engine  # noqa: E402
@@ -62,10 +62,14 @@ def _gravar(caminho: Path, texto: str) -> None:
 
 
 def regras_de(cfg: dict) -> Regras:
-    from dataclasses import asdict as _a
+    """Regras da config. Com alguma chave da ConfigCombateV21D em `regras_v21` (docs/PLANO_ANALISE_V21D.md) a V2.1 e a
+    V21D; sem nenhuma, a V21C de sempre (as runs antigas nao mudam)."""
+    from dataclasses import asdict as _a, fields as _f
     c = cfg["combate"]
+    chaves_v21d = {x.name for x in _f(ConfigCombateV21D)} - {x.name for x in _f(ConfigCombateV21C)}
+    cls = ConfigCombateV21D if set(c["regras_v21"]) & chaves_v21d else ConfigCombateV21C
     return Regras(base=ConfigCombateV2C(**{**_a(CONFIG_COMBATE_V2), **c["regras_base"]}),
-                  v21=ConfigCombateV21C(**{**_a(CONFIG_COMBATE_V21), **c["regras_v21"]}))
+                  v21=cls(**{**_a(CONFIG_COMBATE_V21), **c["regras_v21"]}))
 
 
 # ------------------------------------------------------------------ 1. vidas

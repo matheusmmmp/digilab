@@ -90,7 +90,7 @@ export function TelaArena({ voltarPet, verReplay }: { voltarPet: () => void; ver
       <div class="desk-col arena-col-meio">
       {luta.rivalFixo && <p class="dl-apoio">Rival do cenário: pet de dono {NOME_DONO[luta.rivalFixo.tipo]}, {luta.rivalFixo.dias} dia(s), lutando com o estilo da linha dele. Troque o rival nos cards para voltar aos bots.</p>}
       <FalaRevanche />
-      <EscolhaCarta />
+      <EscolhaCarta rival={luta.rival} />
       <div class="arena-acoes">
         <button type="button" class="dl-btn dl-btn--sec" disabled={luta.lutando} onClick={melhorDe10}>Melhor de 10</button>
         <button type="button" class="dl-btn lutar-grande" disabled={luta.lutando} onClick={() => { lutarAnimado(null, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Lutar</button>

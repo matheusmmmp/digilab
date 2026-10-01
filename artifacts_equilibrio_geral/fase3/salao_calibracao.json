@@ -1,0 +1,2240 @@
+{
+ "descricao": "Calibracao do Salao dos pets v9 (fase 3, meta M-C3): o fator do rival de cada nivel, regras V21E, escala CESC_V9",
+ "conjunto": "calibracao",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "lutas_por_semente_especie_forma": 20,
+ "meta": {
+  "min": 0.7,
+  "max": 0.95
+ },
+ "regra": "fator >= 1; entre eles, a maior folga robusta (a menor folga entre o fator e os dois vizinhos da grade)",
+ "grade": [
+  0.3,
+  0.35,
+  0.4,
+  0.45,
+  0.5,
+  0.55,
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  0.95,
+  1,
+  1.05,
+  1.1,
+  1.15,
+  1.2,
+  1.25,
+  1.3,
+  1.35,
+  1.4,
+  1.45,
+  1.5,
+  1.55,
+  1.6,
+  1.65,
+  1.7,
+  1.75,
+  1.8,
+  1.85,
+  1.9,
+  1.95,
+  2
+ ],
+ "niveis": {
+  "crianca": {
+   "treino": 8,
+   "escolha": {
+    "fator": 1.15,
+    "media": 0.8938,
+    "folga": 0.0562,
+    "folga_robusta": 0.0413,
+    "passa": true,
+    "pior": {
+     "forma": "sereno",
+     "vence": 0.8
+    }
+   },
+   "maior_folga_sem_restricao": {
+    "fator": 1.2,
+    "media": 0.855,
+    "folga": 0.095
+   },
+   "medidas": [
+    {
+     "fator": 0.3,
+     "media": 0.9363,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8725
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0137,
+     "passa": true,
+     "folga_robusta": 0.0137
+    },
+    {
+     "fator": 0.35,
+     "media": 0.935,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.87
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.015,
+     "passa": true,
+     "folga_robusta": 0.0137
+    },
+    {
+     "fator": 0.4,
+     "media": 0.9338,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8675
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0162,
+     "passa": true,
+     "folga_robusta": 0.015
+    },
+    {
+     "fator": 0.45,
+     "media": 0.9313,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8625
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0187,
+     "passa": true,
+     "folga_robusta": 0.0162
+    },
+    {
+     "fator": 0.5,
+     "media": 0.9313,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8625
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0187,
+     "passa": true,
+     "folga_robusta": 0.0187
+    },
+    {
+     "fator": 0.55,
+     "media": 0.93,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.86
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.02,
+     "passa": true,
+     "folga_robusta": 0.0187
+    },
+    {
+     "fator": 0.6,
+     "media": 0.9287,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8575
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0212,
+     "passa": true,
+     "folga_robusta": 0.02
+    },
+    {
+     "fator": 0.65,
+     "media": 0.9275,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.855
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0225,
+     "passa": true,
+     "folga_robusta": 0.0212
+    },
+    {
+     "fator": 0.7,
+     "media": 0.9263,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8525
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0237,
+     "passa": true,
+     "folga_robusta": 0.0225
+    },
+    {
+     "fator": 0.75,
+     "media": 0.9263,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8525
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0237,
+     "passa": true,
+     "folga_robusta": 0.0237
+    },
+    {
+     "fator": 0.8,
+     "media": 0.9238,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8475
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0262,
+     "passa": true,
+     "folga_robusta": 0.0237
+    },
+    {
+     "fator": 0.85,
+     "media": 0.9225,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.845
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0275,
+     "passa": true,
+     "folga_robusta": 0.0262
+    },
+    {
+     "fator": 0.9,
+     "media": 0.92,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.84
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.03,
+     "passa": true,
+     "folga_robusta": 0.0275
+    },
+    {
+     "fator": 0.95,
+     "media": 0.9187,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8375
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0313,
+     "passa": true,
+     "folga_robusta": 0.03
+    },
+    {
+     "fator": 1,
+     "media": 0.9163,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8325
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0337,
+     "passa": true,
+     "folga_robusta": 0.0313
+    },
+    {
+     "fator": 1.05,
+     "media": 0.9138,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8275
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0362,
+     "passa": true,
+     "folga_robusta": 0.0337
+    },
+    {
+     "fator": 1.1,
+     "media": 0.9087,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8175
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 1
+     },
+     "folga": 0.0413,
+     "passa": true,
+     "folga_robusta": 0.0362
+    },
+    {
+     "fator": 1.15,
+     "media": 0.8938,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.8
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.9875
+     },
+     "folga": 0.0562,
+     "passa": true,
+     "folga_robusta": 0.0413
+    },
+    {
+     "fator": 1.2,
+     "media": 0.855,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.7575
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.9525
+     },
+     "folga": 0.095,
+     "passa": true,
+     "folga_robusta": 0.0375
+    },
+    {
+     "fator": 1.25,
+     "media": 0.7375,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.5675
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.9075
+     },
+     "folga": 0.0375,
+     "passa": true,
+     "folga_robusta": -0.1088
+    },
+    {
+     "fator": 1.3,
+     "media": 0.5912,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.425
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.7575
+     },
+     "folga": -0.1088,
+     "passa": false,
+     "folga_robusta": -0.2725
+    },
+    {
+     "fator": 1.35,
+     "media": 0.4275,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.285
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.57
+     },
+     "folga": -0.2725,
+     "passa": false,
+     "folga_robusta": -0.4375
+    },
+    {
+     "fator": 1.4,
+     "media": 0.2625,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.12
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.405
+     },
+     "folga": -0.4375,
+     "passa": false,
+     "folga_robusta": -0.55
+    },
+    {
+     "fator": 1.45,
+     "media": 0.15,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.0725
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.2275
+     },
+     "folga": -0.55,
+     "passa": false,
+     "folga_robusta": -0.6412
+    },
+    {
+     "fator": 1.5,
+     "media": 0.0587,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.0225
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.095
+     },
+     "folga": -0.6412,
+     "passa": false,
+     "folga_robusta": -0.6762
+    },
+    {
+     "fator": 1.55,
+     "media": 0.0238,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.0075
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.04
+     },
+     "folga": -0.6762,
+     "passa": false,
+     "folga_robusta": -0.6962
+    },
+    {
+     "fator": 1.6,
+     "media": 0.0037,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.0025
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.005
+     },
+     "folga": -0.6962,
+     "passa": false,
+     "folga_robusta": -0.6975
+    },
+    {
+     "fator": 1.65,
+     "media": 0.0025,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0.0025
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0.0025
+     },
+     "folga": -0.6975,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 1.7,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 1.75,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 1.8,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 1.85,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 1.9,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 1.95,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    },
+    {
+     "fator": 2,
+     "media": 0,
+     "pior": {
+      "forma": "sereno",
+      "vence": 0
+     },
+     "melhor": {
+      "forma": "arisco",
+      "vence": 0
+     },
+     "folga": -0.7,
+     "passa": false,
+     "folga_robusta": -0.7
+    }
+   ]
+  },
+  "adolescente": {
+   "treino": 22,
+   "escolha": {
+    "fator": 1,
+    "media": 0.7544,
+    "folga": 0.0544,
+    "folga_robusta": 0.045,
+    "passa": true,
+    "pior": {
+     "forma": "guardiao",
+     "vence": 0.54
+    }
+   },
+   "maior_folga_sem_restricao": {
+    "fator": 0.5,
+    "media": 0.8206,
+    "folga": 0.1206
+   },
+   "medidas": [
+    {
+     "fator": 0.3,
+     "media": 0.8475,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.6675
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1025,
+     "passa": true,
+     "folga_robusta": 0.1025
+    },
+    {
+     "fator": 0.35,
+     "media": 0.8419,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.6525
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1081,
+     "passa": true,
+     "folga_robusta": 0.1025
+    },
+    {
+     "fator": 0.4,
+     "media": 0.8369,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.64
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1131,
+     "passa": true,
+     "folga_robusta": 0.1081
+    },
+    {
+     "fator": 0.45,
+     "media": 0.8306,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.63
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1194,
+     "passa": true,
+     "folga_robusta": 0.1131
+    },
+    {
+     "fator": 0.5,
+     "media": 0.8206,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.6175
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1206,
+     "passa": true,
+     "folga_robusta": 0.1088
+    },
+    {
+     "fator": 0.55,
+     "media": 0.8088,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.6
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1088,
+     "passa": true,
+     "folga_robusta": 0.1006
+    },
+    {
+     "fator": 0.6,
+     "media": 0.8006,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.585
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.1006,
+     "passa": true,
+     "folga_robusta": 0.0956
+    },
+    {
+     "fator": 0.65,
+     "media": 0.7956,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.575
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0956,
+     "passa": true,
+     "folga_robusta": 0.0906
+    },
+    {
+     "fator": 0.7,
+     "media": 0.7906,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.57
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0906,
+     "passa": true,
+     "folga_robusta": 0.0856
+    },
+    {
+     "fator": 0.75,
+     "media": 0.7856,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5625
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0856,
+     "passa": true,
+     "folga_robusta": 0.0813
+    },
+    {
+     "fator": 0.8,
+     "media": 0.7813,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5575
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0813,
+     "passa": true,
+     "folga_robusta": 0.075
+    },
+    {
+     "fator": 0.85,
+     "media": 0.775,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5525
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.075,
+     "passa": true,
+     "folga_robusta": 0.0669
+    },
+    {
+     "fator": 0.9,
+     "media": 0.7669,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5425
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0669,
+     "passa": true,
+     "folga_robusta": 0.0613
+    },
+    {
+     "fator": 0.95,
+     "media": 0.7612,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.54
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0613,
+     "passa": true,
+     "folga_robusta": 0.0544
+    },
+    {
+     "fator": 1,
+     "media": 0.7544,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.54
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0544,
+     "passa": true,
+     "folga_robusta": 0.045
+    },
+    {
+     "fator": 1.05,
+     "media": 0.745,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5325
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.045,
+     "passa": true,
+     "folga_robusta": 0.0313
+    },
+    {
+     "fator": 1.1,
+     "media": 0.7313,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5175
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0313,
+     "passa": true,
+     "folga_robusta": 0.0194
+    },
+    {
+     "fator": 1.15,
+     "media": 0.7194,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5125
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0194,
+     "passa": true,
+     "folga_robusta": 0.0069
+    },
+    {
+     "fator": 1.2,
+     "media": 0.7069,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5125
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": 0.0069,
+     "passa": true,
+     "folga_robusta": -0.0087
+    },
+    {
+     "fator": 1.25,
+     "media": 0.6913,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5075
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": -0.0087,
+     "passa": false,
+     "folga_robusta": -0.0294
+    },
+    {
+     "fator": 1.3,
+     "media": 0.6706,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.5
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": -0.0294,
+     "passa": false,
+     "folga_robusta": -0.0519
+    },
+    {
+     "fator": 1.35,
+     "media": 0.6481,
+     "pior": {
+      "forma": "guardiao",
+      "vence": 0.48
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": -0.0519,
+     "passa": false,
+     "folga_robusta": -0.0656
+    },
+    {
+     "fator": 1.4,
+     "media": 0.6344,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.4575
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9925
+     },
+     "folga": -0.0656,
+     "passa": false,
+     "folga_robusta": -0.0825
+    },
+    {
+     "fator": 1.45,
+     "media": 0.6175,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.4225
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9875
+     },
+     "folga": -0.0825,
+     "passa": false,
+     "folga_robusta": -0.0919
+    },
+    {
+     "fator": 1.5,
+     "media": 0.6081,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.4025
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9875
+     },
+     "folga": -0.0919,
+     "passa": false,
+     "folga_robusta": -0.0987
+    },
+    {
+     "fator": 1.55,
+     "media": 0.6013,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.3875
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9875
+     },
+     "folga": -0.0987,
+     "passa": false,
+     "folga_robusta": -0.1144
+    },
+    {
+     "fator": 1.6,
+     "media": 0.5856,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.36
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9875
+     },
+     "folga": -0.1144,
+     "passa": false,
+     "folga_robusta": -0.1275
+    },
+    {
+     "fator": 1.65,
+     "media": 0.5725,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.335
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.98
+     },
+     "folga": -0.1275,
+     "passa": false,
+     "folga_robusta": -0.1438
+    },
+    {
+     "fator": 1.7,
+     "media": 0.5562,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.3025
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9725
+     },
+     "folga": -0.1438,
+     "passa": false,
+     "folga_robusta": -0.1581
+    },
+    {
+     "fator": 1.75,
+     "media": 0.5419,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.2825
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9525
+     },
+     "folga": -0.1581,
+     "passa": false,
+     "folga_robusta": -0.1862
+    },
+    {
+     "fator": 1.8,
+     "media": 0.5138,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.2525
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.9125
+     },
+     "folga": -0.1862,
+     "passa": false,
+     "folga_robusta": -0.22
+    },
+    {
+     "fator": 1.85,
+     "media": 0.48,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.23
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.8825
+     },
+     "folga": -0.22,
+     "passa": false,
+     "folga_robusta": -0.2594
+    },
+    {
+     "fator": 1.9,
+     "media": 0.4406,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.1725
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.8625
+     },
+     "folga": -0.2594,
+     "passa": false,
+     "folga_robusta": -0.2994
+    },
+    {
+     "fator": 1.95,
+     "media": 0.4006,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.1225
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.8225
+     },
+     "folga": -0.2994,
+     "passa": false,
+     "folga_robusta": -0.3412
+    },
+    {
+     "fator": 2,
+     "media": 0.3588,
+     "pior": {
+      "forma": "colosso",
+      "vence": 0.08
+     },
+     "melhor": {
+      "forma": "brigao",
+      "vence": 0.7775
+     },
+     "folga": -0.3412,
+     "passa": false,
+     "folga_robusta": -0.3412
+    }
+   ]
+  },
+  "adulto": {
+   "treino": 36,
+   "escolha": {
+    "fator": 1.05,
+    "media": 0.8259,
+    "folga": 0.1241,
+    "folga_robusta": 0.1184,
+    "passa": true,
+    "pior": {
+     "forma": "muralha",
+     "vence": 0.625
+    }
+   },
+   "maior_folga_sem_restricao": {
+    "fator": 1.05,
+    "media": 0.8259,
+    "folga": 0.1241
+   },
+   "medidas": [
+    {
+     "fator": 0.3,
+     "media": 0.8969,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6875
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0531,
+     "passa": true,
+     "folga_robusta": 0.0531
+    },
+    {
+     "fator": 0.35,
+     "media": 0.8903,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6875
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0597,
+     "passa": true,
+     "folga_robusta": 0.0531
+    },
+    {
+     "fator": 0.4,
+     "media": 0.8863,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6775
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0637,
+     "passa": true,
+     "folga_robusta": 0.0597
+    },
+    {
+     "fator": 0.45,
+     "media": 0.8819,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6725
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0681,
+     "passa": true,
+     "folga_robusta": 0.0637
+    },
+    {
+     "fator": 0.5,
+     "media": 0.8788,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6675
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0712,
+     "passa": true,
+     "folga_robusta": 0.0681
+    },
+    {
+     "fator": 0.55,
+     "media": 0.8769,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.665
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0731,
+     "passa": true,
+     "folga_robusta": 0.0712
+    },
+    {
+     "fator": 0.6,
+     "media": 0.8709,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6575
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0791,
+     "passa": true,
+     "folga_robusta": 0.0731
+    },
+    {
+     "fator": 0.65,
+     "media": 0.8647,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6525
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0853,
+     "passa": true,
+     "folga_robusta": 0.0791
+    },
+    {
+     "fator": 0.7,
+     "media": 0.8597,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6475
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0903,
+     "passa": true,
+     "folga_robusta": 0.0853
+    },
+    {
+     "fator": 0.75,
+     "media": 0.8569,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6475
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0931,
+     "passa": true,
+     "folga_robusta": 0.0903
+    },
+    {
+     "fator": 0.8,
+     "media": 0.8522,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6475
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0978,
+     "passa": true,
+     "folga_robusta": 0.0931
+    },
+    {
+     "fator": 0.85,
+     "media": 0.8466,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.64
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1034,
+     "passa": true,
+     "folga_robusta": 0.0978
+    },
+    {
+     "fator": 0.9,
+     "media": 0.8422,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6325
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1078,
+     "passa": true,
+     "folga_robusta": 0.1034
+    },
+    {
+     "fator": 0.95,
+     "media": 0.8353,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.63
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1147,
+     "passa": true,
+     "folga_robusta": 0.1078
+    },
+    {
+     "fator": 1,
+     "media": 0.8316,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6275
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1184,
+     "passa": true,
+     "folga_robusta": 0.1147
+    },
+    {
+     "fator": 1.05,
+     "media": 0.8259,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.625
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1241,
+     "passa": true,
+     "folga_robusta": 0.1184
+    },
+    {
+     "fator": 1.1,
+     "media": 0.8206,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.62
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1206,
+     "passa": true,
+     "folga_robusta": 0.1156
+    },
+    {
+     "fator": 1.15,
+     "media": 0.8156,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6175
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1156,
+     "passa": true,
+     "folga_robusta": 0.1125
+    },
+    {
+     "fator": 1.2,
+     "media": 0.8125,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6175
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1125,
+     "passa": true,
+     "folga_robusta": 0.1069
+    },
+    {
+     "fator": 1.25,
+     "media": 0.8069,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6125
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1069,
+     "passa": true,
+     "folga_robusta": 0.1031
+    },
+    {
+     "fator": 1.3,
+     "media": 0.8031,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.605
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1031,
+     "passa": true,
+     "folga_robusta": 0.0991
+    },
+    {
+     "fator": 1.35,
+     "media": 0.7991,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0991,
+     "passa": true,
+     "folga_robusta": 0.095
+    },
+    {
+     "fator": 1.4,
+     "media": 0.795,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5925
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.095,
+     "passa": true,
+     "folga_robusta": 0.0913
+    },
+    {
+     "fator": 1.45,
+     "media": 0.7913,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5925
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0913,
+     "passa": true,
+     "folga_robusta": 0.0856
+    },
+    {
+     "fator": 1.5,
+     "media": 0.7856,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.59
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0856,
+     "passa": true,
+     "folga_robusta": 0.0784
+    },
+    {
+     "fator": 1.55,
+     "media": 0.7784,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.585
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9975
+     },
+     "folga": 0.0784,
+     "passa": true,
+     "folga_robusta": 0.0716
+    },
+    {
+     "fator": 1.6,
+     "media": 0.7716,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5775
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9975
+     },
+     "folga": 0.0716,
+     "passa": true,
+     "folga_robusta": 0.0678
+    },
+    {
+     "fator": 1.65,
+     "media": 0.7678,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.575
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.995
+     },
+     "folga": 0.0678,
+     "passa": true,
+     "folga_robusta": 0.0606
+    },
+    {
+     "fator": 1.7,
+     "media": 0.7606,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.57
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9875
+     },
+     "folga": 0.0606,
+     "passa": true,
+     "folga_robusta": 0.0519
+    },
+    {
+     "fator": 1.75,
+     "media": 0.7519,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.57
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.985
+     },
+     "folga": 0.0519,
+     "passa": true,
+     "folga_robusta": 0.0434
+    },
+    {
+     "fator": 1.8,
+     "media": 0.7434,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.56
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.98
+     },
+     "folga": 0.0434,
+     "passa": true,
+     "folga_robusta": 0.0322
+    },
+    {
+     "fator": 1.85,
+     "media": 0.7322,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.56
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9675
+     },
+     "folga": 0.0322,
+     "passa": true,
+     "folga_robusta": 0.0206
+    },
+    {
+     "fator": 1.9,
+     "media": 0.7206,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5475
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9525
+     },
+     "folga": 0.0206,
+     "passa": true,
+     "folga_robusta": 0.0066
+    },
+    {
+     "fator": 1.95,
+     "media": 0.7066,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.54
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9325
+     },
+     "folga": 0.0066,
+     "passa": true,
+     "folga_robusta": -0.0091
+    },
+    {
+     "fator": 2,
+     "media": 0.6909,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5275
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9
+     },
+     "folga": -0.0091,
+     "passa": false,
+     "folga_robusta": -0.0091
+    }
+   ]
+  },
+  "mega": {
+   "treino": 40,
+   "escolha": {
+    "fator": 1.05,
+    "media": 0.8256,
+    "folga": 0.1244,
+    "folga_robusta": 0.1191,
+    "passa": true,
+    "pior": {
+     "forma": "muralha",
+     "vence": 0.62
+    }
+   },
+   "maior_folga_sem_restricao": {
+    "fator": 1.05,
+    "media": 0.8256,
+    "folga": 0.1244
+   },
+   "medidas": [
+    {
+     "fator": 0.3,
+     "media": 0.8987,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6975
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0513,
+     "passa": true,
+     "folga_robusta": 0.0513
+    },
+    {
+     "fator": 0.35,
+     "media": 0.8909,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6925
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0591,
+     "passa": true,
+     "folga_robusta": 0.0513
+    },
+    {
+     "fator": 0.4,
+     "media": 0.8859,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.68
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0641,
+     "passa": true,
+     "folga_robusta": 0.0591
+    },
+    {
+     "fator": 0.45,
+     "media": 0.8828,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.675
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0672,
+     "passa": true,
+     "folga_robusta": 0.0641
+    },
+    {
+     "fator": 0.5,
+     "media": 0.88,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6725
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.07,
+     "passa": true,
+     "folga_robusta": 0.0672
+    },
+    {
+     "fator": 0.55,
+     "media": 0.8759,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.66
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0741,
+     "passa": true,
+     "folga_robusta": 0.07
+    },
+    {
+     "fator": 0.6,
+     "media": 0.8744,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6525
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0756,
+     "passa": true,
+     "folga_robusta": 0.0741
+    },
+    {
+     "fator": 0.65,
+     "media": 0.8706,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6475
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0794,
+     "passa": true,
+     "folga_robusta": 0.0756
+    },
+    {
+     "fator": 0.7,
+     "media": 0.8634,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6425
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0866,
+     "passa": true,
+     "folga_robusta": 0.0794
+    },
+    {
+     "fator": 0.75,
+     "media": 0.8584,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.635
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0916,
+     "passa": true,
+     "folga_robusta": 0.0866
+    },
+    {
+     "fator": 0.8,
+     "media": 0.8509,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.635
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0991,
+     "passa": true,
+     "folga_robusta": 0.0916
+    },
+    {
+     "fator": 0.85,
+     "media": 0.8475,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.635
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1025,
+     "passa": true,
+     "folga_robusta": 0.0991
+    },
+    {
+     "fator": 0.9,
+     "media": 0.8438,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6325
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1062,
+     "passa": true,
+     "folga_robusta": 0.1025
+    },
+    {
+     "fator": 0.95,
+     "media": 0.8356,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.63
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1144,
+     "passa": true,
+     "folga_robusta": 0.1062
+    },
+    {
+     "fator": 1,
+     "media": 0.8303,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6225
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1197,
+     "passa": true,
+     "folga_robusta": 0.1144
+    },
+    {
+     "fator": 1.05,
+     "media": 0.8256,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.62
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1244,
+     "passa": true,
+     "folga_robusta": 0.1191
+    },
+    {
+     "fator": 1.1,
+     "media": 0.8191,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.62
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1191,
+     "passa": true,
+     "folga_robusta": 0.115
+    },
+    {
+     "fator": 1.15,
+     "media": 0.815,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6175
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.115,
+     "passa": true,
+     "folga_robusta": 0.11
+    },
+    {
+     "fator": 1.2,
+     "media": 0.81,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6125
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.11,
+     "passa": true,
+     "folga_robusta": 0.1034
+    },
+    {
+     "fator": 1.25,
+     "media": 0.8034,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6125
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1034,
+     "passa": true,
+     "folga_robusta": 0.1
+    },
+    {
+     "fator": 1.3,
+     "media": 0.8,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.6025
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.1,
+     "passa": true,
+     "folga_robusta": 0.0972
+    },
+    {
+     "fator": 1.35,
+     "media": 0.7972,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5975
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0972,
+     "passa": true,
+     "folga_robusta": 0.0944
+    },
+    {
+     "fator": 1.4,
+     "media": 0.7944,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5925
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0944,
+     "passa": true,
+     "folga_robusta": 0.0909
+    },
+    {
+     "fator": 1.45,
+     "media": 0.7909,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.59
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0909,
+     "passa": true,
+     "folga_robusta": 0.0872
+    },
+    {
+     "fator": 1.5,
+     "media": 0.7872,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.59
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0872,
+     "passa": true,
+     "folga_robusta": 0.0825
+    },
+    {
+     "fator": 1.55,
+     "media": 0.7825,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.59
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0825,
+     "passa": true,
+     "folga_robusta": 0.0794
+    },
+    {
+     "fator": 1.6,
+     "media": 0.7794,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5875
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.0794,
+     "passa": true,
+     "folga_robusta": 0.075
+    },
+    {
+     "fator": 1.65,
+     "media": 0.775,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.585
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 1
+     },
+     "folga": 0.075,
+     "passa": true,
+     "folga_robusta": 0.0681
+    },
+    {
+     "fator": 1.7,
+     "media": 0.7681,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5825
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9975
+     },
+     "folga": 0.0681,
+     "passa": true,
+     "folga_robusta": 0.0634
+    },
+    {
+     "fator": 1.75,
+     "media": 0.7634,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.575
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9975
+     },
+     "folga": 0.0634,
+     "passa": true,
+     "folga_robusta": 0.0566
+    },
+    {
+     "fator": 1.8,
+     "media": 0.7566,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.565
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.995
+     },
+     "folga": 0.0566,
+     "passa": true,
+     "folga_robusta": 0.0509
+    },
+    {
+     "fator": 1.85,
+     "media": 0.7509,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.56
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9925
+     },
+     "folga": 0.0509,
+     "passa": true,
+     "folga_robusta": 0.0419
+    },
+    {
+     "fator": 1.9,
+     "media": 0.7419,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.5575
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.9875
+     },
+     "folga": 0.0419,
+     "passa": true,
+     "folga_robusta": 0.0325
+    },
+    {
+     "fator": 1.95,
+     "media": 0.7325,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.55
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.98
+     },
+     "folga": 0.0325,
+     "passa": true,
+     "folga_robusta": 0.0206
+    },
+    {
+     "fator": 2,
+     "media": 0.7206,
+     "pior": {
+      "forma": "muralha",
+      "vence": 0.54
+     },
+     "melhor": {
+      "forma": "furioso",
+      "vence": 0.965
+     },
+     "folga": 0.0206,
+     "passa": true,
+     "folga_robusta": 0.0206
+    }
+   ]
+  }
+ }
+}

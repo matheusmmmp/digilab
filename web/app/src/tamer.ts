@@ -29,9 +29,14 @@
      O recorde (a maior sequencia de series vencidas) sai das tentativas, sem evento proprio.
    - Salao (motor/salao.ts): cada pet luta no registro DELE (evento "l" {r: "salao", s}); aqui fica a tentativa, "salao": os pets (um por
      estagio, na ordem), a tentativa de cada um no Salao, a semente (que sai do registro dele; o replay confere a conta) e quem venceu. O
-     recorde (quantos estagios venceu seguidos, ate 4) sai das tentativas. */
+     recorde (quantos estagios venceu seguidos, ate 4) sai das tentativas.
+
+   A Fabrica dos v9 (rodada de equilibrio geral, fase 3; motor/fabrica.ts): registro versao 6 (le 1 a 5). O evento "fabrica" ganha o campo
+   `v`, a versao das regras da tentativa (VERSOES_FABRICA): sem ele, a Fabrica de antes (V21D, fator 1, a troca nao cura), e as tentativas
+   ja gravadas se refazem iguais; as tentativas novas gravam `v: 9` (VERSAO_FABRICA_ATUAL: V21E, o fator dos rivais dos v9, a troca com a
+   vida cheia). Versao desconhecida falha alto. */
 import {
-  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
+  ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto, VERSAO_INSTALACOES,
   VERSAO_LIGA, cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
@@ -40,9 +45,10 @@ export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
 export const CHAVE_AVISO_V6 = CHAVE + "-aviso-v6";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
-    recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c). Grava a 5; le as cinco */
-export const VERSAO_TAMER = 5;
-const VERSOES_TAMER = [1, 2, 3, 4, 5];
+    recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
+    Fabrica (campo `v`, equilibrio geral fase 3). Grava a 6; le as seis */
+export const VERSAO_TAMER = 6;
+const VERSOES_TAMER = [1, 2, 3, 4, 5, 6];
 
 /** uma medalha ganha: qual, o contador (1 = a primeira), a hora de parede, o pet que venceu (semente, forma e tick dele) */
 export interface MedalhaGanha { id: string; n: number; quando: number; pet: number; forma: string; tick: number }
@@ -57,8 +63,9 @@ export interface Campeao { n: number; quando: number; pet: number; forma: string
 /** um recorde numa instalacao da Fronteira: qual, o valor (a sequencia de vitorias), a hora de parede e o pet que fez (semente, forma e
     tick dele) */
 export interface Recorde { inst: IdInstalacao; valor: number; quando: number; pet: number; forma: string; tick: number }
-/** Fabrica: o comeco da tentativa n (1 = a primeira), a semente dela (sementeFabrica(n)) e o alugado escolhido (0 a 2) */
-export interface InicioFabrica { n: number; s: number; alugado: number; quando: number }
+/** Fabrica: o comeco da tentativa n (1 = a primeira), a semente dela (sementeFabrica(n)), o alugado escolhido (0 a 2) e a versao das regras
+    (registro versao 6; sem ela, a Fabrica de antes, VERSAO_FABRICA) */
+export interface InicioFabrica { n: number; s: number; alugado: number; quando: number; v?: number }
 /** Fabrica: a luta k (0 = a primeira) da tentativa n, com a semente dela (sementeLutaFabrica) */
 export interface EventoLutaFabrica { n: number; k: number; s: number; quando: number }
 /** Fabrica: depois da vitoria k da tentativa n, o alugado vira o rival derrotado */
@@ -209,7 +216,8 @@ export class Tamer {
     const atual = this.fabricaAtual;
     if (atual) throw new Error(`tentativa ${x.n} da Fábrica com a ${atual.n} ainda em andamento no registro do Tamer`);
     if (x.s !== sementeFabrica(x.n)) throw new Error(`a tentativa ${x.n} da Fábrica tem a semente ${sementeFabrica(x.n)}, não ${x.s}, no registro do Tamer`);
-    this.fabrica.push(new TentativaFabrica(x.n, x.alugado));
+    if (x.v !== undefined && !VERSOES_FABRICA.includes(x.v)) throw new Error(`a tentativa ${x.n} da Fábrica com as regras da versão ${JSON.stringify(x.v)}, desconhecida, no registro do Tamer`);
+    this.fabrica.push(new TentativaFabrica(x.n, x.alugado, x.v ?? VERSAO_FABRICA));
     this.quandoFabrica.push([]);
   }
   private _fabricaEmAndamento(n: number, o: string): TentativaFabrica {
@@ -230,10 +238,10 @@ export class Tamer {
     if (x.k !== t.lutas.length - 1) throw new Error(`troca da Fábrica depois da luta ${x.k}, mas a última luta da tentativa ${x.n} é a ${t.lutas.length - 1}`);
     t.trocar();
   }
-  /** a tentativa nova da Fabrica, com o alugado escolhido (0 a 2) entre os 3 dela */
+  /** a tentativa nova da Fabrica, com o alugado escolhido (0 a 2) entre os 3 dela, nas regras de hoje (VERSAO_FABRICA_ATUAL) */
   alugarFabrica(escolha: number, quando: number = Date.now()): TentativaFabrica {
     const n = this.fabrica.length + 1;
-    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando }]);
+    this._gravar(["fabrica", { n, s: sementeFabrica(n), alugado: escolha, quando, v: VERSAO_FABRICA_ATUAL }]);
     return this.fabrica[this.fabrica.length - 1];
   }
   /** a proxima luta da tentativa em andamento (grava e joga) */

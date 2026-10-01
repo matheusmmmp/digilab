@@ -34,8 +34,10 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    6 = v5 + trava da evolucao pelas medalhas do Tamer (evento "u" no registro; docs/DESIGN_MEDALHAS_ARENAS.md; so no jogo);
    7 = v6 + voz propria: fala espontanea com janela e mentira (evento "fl"; docs/DESIGN_VOZ_PROPRIA.md, secao 9);
    8 = v7 + confianca de combate e desgaste por rival repetido (MVP M1; nenhum evento novo, estado derivado das lutas "l";
-   docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py) */
-export const VERSAO_PET = 8;
+   docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py);
+   9 = v8 + combate equilibrado: as lutas usam a variante V21E (CV21E; rodada de equilibrio geral, fase 1, docs/EQUILIBRIO_GERAL.md);
+   nenhum evento novo */
+export const VERSAO_PET = 9;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -170,6 +172,15 @@ export const CV21D = {
   versaoPet: 6,
   preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
 } as const;
+/* V21E: rodada de equilibrio geral, fase 1 (docs/EQUILIBRIO_GERAL.md; chaves da ConfigCombateV21E,
+   experiments/configs/v21e/calibracao.json). So nas lutas de pets v9 (versaoPet em diante): as quatro chaves da V21D e as cinco
+   da V21E, todas listas das formas (bots.gambitsAdulto); a base (custo do golpe rapido, parry, C3) nao muda. Os v6-v8 seguem na
+   V21D e os v1-v5 na V21C */
+export const CV21E = {
+  versaoPet: 9,
+  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
+  duelistaDefendeDoGolpe: true, titaDefendeDoGolpe: true, espelhoSemCarregar: true, muralhaSemCarregar: true, muralhaContraGolpeNaPele: true,
+} as const;
 
 /* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];
@@ -234,6 +245,21 @@ export const CESC_V6 = {
      e 2,7 -> 2,2); Devidramon e Puppetmon seguiram nas metas e ficaram */
   fatorNpc: { npc_tier2_sentinela: 1.5, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 2.5, npc_v5_machinedramon: 2.2 } as Record<string, number>,
 };
+/* escala dos pets v9 (rodada de equilibrio geral, fase 2; docs/EQUILIBRIO_GERAL.md, metas M-B1 e M-B3): a mesma formula e o mesmo
+   uso da CESC_V6, so nas lutas de escala dos pets v9 (o pet pela versao, o NPC pelas regras V21E da luta). A CESC_V6 (pets v6-v8) nao
+   muda. vida e beta: os da CESC_V6 (com as regras V21E as metas de estagio passam sem mudar a escala: test/calibrar_escala_v6.mjs
+   --conferir, artifacts_equilibrio_geral/fase2/escala_conferencia.json); os rivais da Fronteira (Liga, instalacoes, Salao) seguem na
+   vida da CESC_V6, a mesma. fatorNpc: os desafiantes da campanha recalibrados nas regras V21E, pelo metodo de sempre (o fator de
+   maior folga; test/calibrar_desafiantes_v6.mjs, desafiantes_calibracao.json): Devidramon 1,1 (igual), Puppetmon 2,5 -> 1,8,
+   Machinedramon 2,2 -> 2,3; o Tortomon, que nao fechava com a grade de 0,1, fecha com 1,53 (grade de 0,01 entre 1,4 e 1,7,
+   desafiantes_calibracao_npc_tier2_sentinela_grade.json; passa de 1,51 a 1,54). Os lideres tem o fator dos pets v9 em arenas.ts
+   (FATOR_LIDER_V9). So sementes de calibracao; PROPOSTOS */
+export const CESC_V9 = {
+  versaoPet: 9,
+  vida: { bebe: 50, crianca: 200, adolescente: 700, adulto: 2500, mega: 23000 } as Record<Estagio, number>,
+  beta: .045,
+  fatorNpc: { npc_tier2_sentinela: 1.53, npc_tier2_porteiro: 1.1, npc_v5_puppetmon: 1.8, npc_v5_machinedramon: 2.3 } as Record<string, number>,
+};
 /* itens do Tamer (medalhas, parte 3; so no jogo e so nos pets v6; docs/DESIGN_MEDALHAS_ARENAS.md, secao 13). Numeros PROPOSTOS e SEM
    EQUILIBRIO (decisao do Matheus, 2026-09-30: o equilibrio dos itens entra na rodada de equilibrio geral do combate, depois das
    proximas mecanicas). vagas: chips equipados por pet pelas medalhas que ele conhece ([minimo de medalhas, chips], do maior para o
@@ -247,6 +273,17 @@ export const CIT = {
   tipico: { crianca: 8, adolescente: 22, adulto: 36, mega: 40 } as Readonly<Partial<Record<Estagio, number>>>,
   espera: 1440,
   gutsFolego: 20, curaAbaixo: .3, curaFracao: .2,
+};
+/* itens nos pets v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, metas M-D1 a M-D3; itens.ts): restricoes de uso e valores
+   so para os pets v9. treinoMinimo: os itens (chips e carta) so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel
+   (CIT.tipico); cartaSoContraNpc: a carta so vale contra os NPCs da campanha (nao na arena contra bots); fatorChipStat: o valor do ponto
+   do chip de stat. O chip de regra entra no fim da lista (itens.listaComChips, GambitsPet.listaDeLuta). Calibrados em test/medir_itens.mjs
+   (sementes de calibracao). PROPOSTOS */
+export const CIT_V9 = {
+  versaoPet: 9,
+  treinoMinimo: .5,
+  cartaSoContraNpc: true,
+  fatorChipStat: .5,
 };
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
    acoes do dono que atendem cada chamado */

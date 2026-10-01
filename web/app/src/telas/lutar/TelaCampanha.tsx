@@ -156,7 +156,7 @@ function Detalhe() {
         <CartaoArena m={m} Li={Li} />
       </section>
       <FalaRevanche />
-      <EscolhaCarta />
+      <EscolhaCarta rival={sel} />
       <button type="button" class={`dl-btn camp-lutar${vit ? " dl-btn--sec" : ""}`} disabled={!aberto || luta.lutando || !podeLutar}
         onClick={() => { LUTA.campSel = sel; lutarAnimado(sel, NOME_V2); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>
         {rotuloDesafio(m, sel, vit)}</button>
@@ -210,7 +210,7 @@ function DetalheDesk({ irTreinar }: { irTreinar: () => void }) {
         <p class="dl-apoio">Perder também ensina: a regra que ele tirar da luta aparece em Arena · Regras.</p>
       </section>
       <FalaRevanche />
-      <EscolhaCarta />
+      <EscolhaCarta rival={sel} />
       <div class="campd-bts">
         <button type="button" class="dl-btn dl-btn--sec" onClick={irTreinar}>Treinar antes</button>
         <button type="button" class="dl-btn camp-lutar" disabled={!aberto || luta.lutando || !podeLutar}

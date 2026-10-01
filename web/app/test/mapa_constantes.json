@@ -1,6 +1,6 @@
 {
  "versao": 1,
- "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento; chaves_v21d: as chaves booleanas da V21D que a web liga nos pets v6, contra a config da variante validada (experiments/configs/v21d/validacao.json) e os campos da ConfigCombateV21D",
+ "nota": "TAREFA_FRONT_TS Etapa 1: cada folha numerica das constantes do motor web aparece em exatamente uma lista; o teste constantes.test.mjs confere tudo contra gabaritos/constantes_python.json (gerado por experiments/exportar_constantes_web.py) e as configs de experimento; chaves_v21d: as chaves booleanas da V21D que a web liga nos pets v6, contra a config da variante validada (experiments/configs/v21d/validacao.json) e os campos da ConfigCombateV21D; chaves_v21e: as chaves booleanas da V21E que a web liga nos pets v9 (as quatro da V21D e as cinco novas), contra a config da variante da fase 1 da rodada de equilibrio geral (experiments/configs/v21e/calibracao.json) e os campos da ConfigCombateV21E",
  "pares": [
   {
    "web": "C.decFome",
@@ -2448,6 +2448,10 @@
    "nota": "versao de pet a partir da qual a luta usa a V21D (pets v6, so no jogo; docs/VALIDACAO_V21D.md): no Python a variante e escolhida pelo config, nao por versao de pet"
   },
   {
+   "web": "CV21E.versaoPet",
+   "nota": "versao de pet a partir da qual a luta usa a V21E (pets v9, so no jogo; docs/EQUILIBRIO_GERAL.md, fase 1): no Python a variante e escolhida pelo config, nao por versao de pet"
+  },
+  {
    "web": "CAMPANHA_V6[0].total",
    "nota": "campanha dos pets v6 (so no jogo; medalhas parte 2, arenas): NPCs das campanhas de antes com o lugar da v6 e os lideres novos (Youkomon, MarinBullmon) com o fator calibrado em test/calibrar_arenas.mjs, artifacts_campanha/arenas/"
   },
@@ -2782,6 +2786,134 @@
   {
    "web": "CIT.curaFracao",
    "nota": "itens do Tamer (medalhas parte 3, pets v6): so no jogo, sem par no Python (docs/DESIGN_MEDALHAS_ARENAS.md secao 13); PROPOSTO e sem equilibrio"
+  },
+  {
+   "web": "CESC_V9.versaoPet",
+   "nota": "versao de pet a partir da qual vale a escala dos pets v9; escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.vida.bebe",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.vida.crianca",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.vida.adolescente",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.vida.adulto",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.vida.mega",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.beta",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.fatorNpc.npc_tier2_sentinela",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.fatorNpc.npc_tier2_porteiro",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.fatorNpc.npc_v5_puppetmon",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "CESC_V9.fatorNpc.npc_v5_machinedramon",
+   "nota": "escala dos pets v9 (so no jogo; rodada de equilibrio geral, fase 2, docs/EQUILIBRIO_GERAL.md): vida e peso do ponto de treino iguais aos da CESC_V6 (as metas de estagio passam com as regras V21E: test/calibrar_escala_v6.mjs --conferir); fatores dos desafiantes recalibrados nas regras V21E em test/calibrar_desafiantes_v6.mjs (artifacts_equilibrio_geral/fase2/); so sementes de calibracao"
+  },
+  {
+   "web": "FATOR_LIDER_V9.campina",
+   "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "FATOR_LIDER_V9.torre",
+   "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "FATOR_LIDER_V9.floresta",
+   "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "FATOR_LIDER_V9.cidadela",
+   "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "FATOR_LIDER_V9.lago",
+   "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "FATOR_LIDER_V9.espiral",
+   "nota": "fator de escala do lider na luta de arena dos pets v9 (so no jogo; escala CESC_V9), recalibrado nas regras V21E em test/calibrar_arenas.mjs (artifacts_equilibrio_geral/fase2/arenas_calibracao.json) com as metas de 2026-09-30 (sem treino <= 0,05, com o treino tipico >= 0,80, nenhuma forma < 0,5); so sementes de calibracao"
+  },
+  {
+   "web": "CIT_V9.versaoPet",
+   "nota": "versao de pet a partir da qual valem os itens da fase 3 (so no jogo; restricoes e valores dos itens nos pets v9, motor/itens.ts); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "CIT_V9.treinoMinimo",
+   "nota": "itens dos pets v9 (so no jogo): os chips e a carta so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel (meta M-D1, test/medir_itens.mjs, artifacts_equilibrio_geral/fase3/itens_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "CIT_V9.fatorChipStat",
+   "nota": "itens dos pets v9 (so no jogo): o valor do ponto do chip de stat (meta M-D3, test/medir_itens.mjs, artifacts_equilibrio_geral/fase3/itens_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.campina",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.torre",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.floresta",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.cidadela",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.lago",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_LIGA_V9.espiral",
+   "nota": "fator do Mega do lider na Liga dos pets v9 (so no jogo; motor/liga.ts), calibrado em test/conferir_liga.mjs --calibrar (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "CURA_LIGA_V9",
+   "nota": "cura parcial entre as lutas da Liga dos pets v9 (so no jogo; motor/liga.ts): medida de 0 a 0,5 em test/conferir_liga.mjs --calibrar e escolhida 0 (meta M-C1, artifacts_equilibrio_geral/fase3/liga_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.crianca",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.adolescente",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.adulto",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_SALAO_V9.mega",
+   "nota": "fator do rival do Salao dos pets v9 por nivel (so no jogo; motor/salao.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C3: fator >= 1 e a maior folga robusta, artifacts_equilibrio_geral/fase3/salao_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
+  },
+  {
+   "web": "FATOR_RIVAL_FABRICA_V9",
+   "nota": "fator dos rivais da Fabrica nas tentativas com as regras dos v9 (so no jogo; motor/fabrica.ts), calibrado em test/conferir_fabrica_salao.mjs --calibrar (meta M-C2, o maior com folga >= 0,05, artifacts_equilibrio_geral/fase3/fabrica_calibracao.json); so sementes de calibracao (rodada de equilibrio geral, fase 3, docs/EQUILIBRIO_GERAL.md)"
   }
  ],
  "chaves_v21d": [
@@ -2812,6 +2944,71 @@
    "arquivo": "experiments/configs/v21d/validacao.json",
    "chave": "regras_v21.vigia_recua_do_preparo_sob_pele",
    "nota": "V: o vigia recua do preparo de quem usa pele (BOTS_V21D.vigia)"
+  }
+ ],
+ "chaves_v21e": [
+  {
+   "web": "CV21E.preparoSobPeleOculto",
+   "py": "ConfigCombateV21E.preparo_sob_pele_oculto",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.preparo_sob_pele_oculto",
+   "nota": "da V21D (candidato A): o preparo feito sob pele_dura nao aparece em oponente_preparando"
+  },
+  {
+   "web": "CV21E.muralhaListaEspelho",
+   "py": "ConfigCombateV21E.muralha_lista_espelho",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.muralha_lista_espelho",
+   "nota": "da V21D (candidato C): a muralha luta com a lista do espelho"
+  },
+  {
+   "web": "CV21E.vigiaBateEmQuemRecua",
+   "py": "ConfigCombateV21E.vigia_bate_em_quem_recua",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.vigia_bate_em_quem_recua",
+   "nota": "da V21D (E2 no vigia): golpe rapido de perto contra quem recua"
+  },
+  {
+   "web": "CV21E.vigiaRecuaDoPreparoSobPele",
+   "py": "ConfigCombateV21E.vigia_recua_do_preparo_sob_pele",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.vigia_recua_do_preparo_sob_pele",
+   "nota": "da V21D (V): o vigia recua do preparo de quem usa pele"
+  },
+  {
+   "web": "CV21E.duelistaDefendeDoGolpe",
+   "py": "ConfigCombateV21E.duelista_defende_do_golpe",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.duelista_defende_do_golpe",
+   "nota": "V21E: o duelista defende de perto do golpe rapido repetido; sai o carregar (BOTS_V21E.duelista)"
+  },
+  {
+   "web": "CV21E.titaDefendeDoGolpe",
+   "py": "ConfigCombateV21E.tita_defende_do_golpe",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.tita_defende_do_golpe",
+   "nota": "V21E: o tita defende de perto do golpe rapido repetido; sai o carregar (BOTS_V21E.tita)"
+  },
+  {
+   "web": "CV21E.espelhoSemCarregar",
+   "py": "ConfigCombateV21E.espelho_sem_carregar",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.espelho_sem_carregar",
+   "nota": "V21E: o espelho nao carrega (BOTS_V21E.espelho)"
+  },
+  {
+   "web": "CV21E.muralhaSemCarregar",
+   "py": "ConfigCombateV21E.muralha_sem_carregar",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.muralha_sem_carregar",
+   "nota": "V21E: a muralha nao carrega (BOTS_V21E.muralha)"
+  },
+  {
+   "web": "CV21E.muralhaContraGolpeNaPele",
+   "py": "ConfigCombateV21E.muralha_contra_golpe_na_pele",
+   "arquivo": "experiments/configs/v21e/calibracao.json",
+   "chave": "regras_v21.muralha_contra_golpe_na_pele",
+   "nota": "V21E: a muralha responde com o contra-golpe a quem usa pele dura com frequencia (BOTS_V21E.muralha)"
   }
  ]
 }
