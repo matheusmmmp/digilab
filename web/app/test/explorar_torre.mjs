@@ -10,13 +10,19 @@
 // da lista de antes (a ordem abaixo). Saida: artifacts_campanha/arenas/torre_variantes.json.
 // Limite de turnos: a regra de antes (a fracao de vida decide); a lista foi escolhida antes da regra do desafiado (2026-09-30), e
 // com ela a validacao dos lideres foi refeita (test/calibrar_arenas.mjs --validar).
-// uso (em web/app): node test/explorar_torre.mjs
+// Pets v9 (rodada de equilibrio geral, fase 2, meta M-B2): por padrao o script mede os pets v9, com as regras das lutas deles (combate
+// V21E, CV21E), a escala da versao 9 (CESC_V9) e a regra do limite de turnos do jogo (a luta que chega ao limite e do lider, o
+// desafiado), com as mesmas variantes e as variantes t4... (so as sementes de calibracao) -> artifacts_equilibrio_geral/fase2/
+// torre_variantes.json. --v6: a exploracao de antes (pets v6, V21D, CESC_V6, limite pela fracao de vida), na pasta de antes.
+// uso (em web/app): node test/explorar_torre.mjs [--v6]
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
-const { ADOL_V21, ARENAS, CV, CV21D, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, STATS, Cd, Rg } = M;
-const R = CV21D; M.ligarEscala(true);
+const { ADOL_V21, ARENAS, CV, CV21D, CV21E, ESPECIES, FORMAS_AD, LINHAS, LINHA_DA_FORMA, STATS, Cd, Rg } = M;
+const V6 = process.argv.slice(2).includes("--v6");
+/* as regras da luta, a versao do pet (a escala) e o desafiado do limite de turnos (v6: a fracao de vida, como antes) */
+const R = V6 ? CV21D : CV21E, VERSAO = R.versaoPet, DESAFIADO = V6 ? null : 1; M.ligarEscala(true);
 const SEM = [3101, 3202, 3303, 3404, 3505], n = 10;
 const META_SEM = 0.05, META_COM = 0.80, META_FORMA = 0.5, TIPICO = 22;
 const FATORES = Array.from({ length: 36 }, (_, i) => Math.round((0.5 + 0.1 * i) * 10) / 10);
@@ -40,13 +46,13 @@ const arena = ARENAS.find(a => a.id === "torre");
 const primeiraForma = l => FORMAS_AD.find(f => LINHA_DA_FORMA[f] === l);
 const pet = (l, e, nivel) => ({ nome: `${l}+${nivel}@${e}`, estilo: { nome: l, gambits: M.copiarGambits(ADOL_V21[l]), eps: CV.eps },
   cond: M.perfilDe({ esp: e, est: "adolescente", ramo: "sereno", linha: l }, M.caraterCanonico(primeiraForma(l)), 1,
-    nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null, true, M.VERSAO_ESCALA_V6) });
+    nivel ? Object.fromEntries(STATS.map(k => [k, nivel / STATS.length])) : null, true, VERSAO) });
 function medir(regras, fator) {
   const B0 = M.lutadorBot(arena.lider, R, { ...arena, fator }), B = { ...B0, estilo: { ...B0.estilo, gambits: { regras, final: "defender" } } };
   const por = {};
   for (const l of LINHAS) por[l] = [0, TIPICO].map(nv => {
     let s = 0, t = 0;
-    for (const e of ESPECIES) { const A = pet(l, e, nv); for (const se of SEM) for (let k = 0; k < n; k++) { s += M.jogarV2(A, B, M.hashSemente("calib-arena", se, A.nome, B.nome, k), R).pontosA; t++; } }
+    for (const e of ESPECIES) { const A = pet(l, e, nv); for (const se of SEM) for (let k = 0; k < n; k++) { s += M.jogarV2(A, B, M.hashSemente("calib-arena", se, A.nome, B.nome, k), R, null, DESAFIADO).pontosA; t++; } }
     return s / t;
   });
   const sem = LINHAS.reduce((a, l) => a + por[l][0], 0) / LINHAS.length, com = LINHAS.reduce((a, l) => a + por[l][1], 0) / LINHAS.length;
@@ -65,8 +71,9 @@ for (const [nome, regras] of Object.entries(VARIANTES)) {
 }
 const escolhida = Object.entries(saida).filter(([, v]) => v.passa).reduce((x, y) => !x || y[1].melhor.folga > x[1].melhor.folga ? y : x, null);
 console.log("escolhida:", escolhida ? escolhida[0] : "nenhuma passa");
-const pasta = fileURLToPath(new URL("../../../artifacts_campanha/arenas/", import.meta.url));
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/arenas/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
-writeFileSync(pasta + "torre_variantes.json", JSON.stringify({ descricao: "variantes da lista do Guardromon na arena da Torre (escala dos pets v6), sementes de calibracao",
-  sementes: SEM, n_por_semente: n, metas: { sem_treino_max: META_SEM, com_treino_min: META_COM, pior_forma_min: META_FORMA }, treino_tipico: TIPICO,
+writeFileSync(pasta + "torre_variantes.json", JSON.stringify({ descricao: V6 ? "variantes da lista do Guardromon na arena da Torre (escala dos pets v6), sementes de calibracao"
+  : "variantes da lista do Guardromon na arena da Torre (pets v9: regras V21E, escala CESC_V9, limite do desafiado), sementes de calibracao",
+  ...(V6 ? {} : { regras: "v21e", versao_pet: VERSAO, limite: "desafiado" }), sementes: SEM, n_por_semente: n, metas: { sem_treino_max: META_SEM, com_treino_min: META_COM, pior_forma_min: META_FORMA }, treino_tipico: TIPICO,
   final: "defender", variantes: saida, escolhida: escolhida ? escolhida[0] : null }, null, 1) + "\n");

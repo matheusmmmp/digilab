@@ -34,7 +34,7 @@ describe("registro do Tamer", () => {
     expect(r.n).toBe(2);
     expect(r.medalhas).toEqual(t.medalhas);
     expect(r.ganha("floresta")).toMatchObject({ n: 2, quando: 2000, pet: 5 });
-    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 5, log: t.log });
+    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 6, log: t.log });
     expect(lerTamer(armaz()).n).toBe(0);                          /* sem a chave: Tamer novo */
   });
   test("evento desconhecido, medalha repetida, contador fora de ordem e JSON quebrado falham alto", () => {

@@ -268,3 +268,14 @@ escala v6, V21D, limite do desafiado):
 - **Registro do Tamer:** versão 5 (lê 1 a 4). Os recordes: `recorde` (Torre, Palácio) e os tirados das tentativas (Fábrica, Salão).
 - **Aberto:** a Fábrica é difícil com fator 1 (acima);
   as lutas da Fábrica e do Salão não têm animação no palco.
+
+## 11. A rodada de equilíbrio geral, fase 3 (pets v9)
+
+A Fronteira dos pets v9 ganhou números calibrados (só as sementes de calibração; `docs/EQUILIBRIO_GERAL.md`, fase 3). Os pets v6–v8 e as
+tentativas da Fábrica já gravadas não mudam.
+- **Liga:** um fator por líder (`liga.FATOR_LIGA_V9`), nas lutas V21E. A cura parcial entre as lutas foi medida e não entrou (`CURA_LIGA_V9 = 0`):
+  a Liga continua sem cura.
+- **Torre de Batalha e Palácio:** sem mudança (a meta M-E1 passou com o fator 1).
+- **Fábrica:** as regras vão na própria tentativa (campo `v` do evento `fabrica`, registro do Tamer versão 6). As tentativas novas usam as
+  regras dos v9: V21E, rivais com fator 0,6, e a troca entra com a vida cheia. As tentativas sem `v` se refazem com as regras de antes.
+- **Salão:** um fator do rival por nível (`salao.FATOR_SALAO_V9`), nas lutas dos pets v9.

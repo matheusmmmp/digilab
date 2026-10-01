@@ -1,0 +1,30 @@
+{
+ "descricao": "Conferencia da opcao --v6 dos scripts da fase 3: a medicao dos pets v6 (regras V21D, CESC_V6, os fatores e os itens de antes) refeita pelo codigo novo reproduz os artefatos gravados. As conferencias de antes usavam as sementes de validacao (so refazem artefatos dos v6 ja gravados; nada dos pets v9 foi medido nelas).",
+ "arquivos": {
+  "artifacts_campanha/liga/conferencia.json": {
+   "comando": "npx tsx test/conferir_liga.mjs --v6",
+   "resultado": "igual byte a byte",
+   "sha256": "cdffceb9a1b904bca0ba30a43628721164368570374ae1f13287e2dab314a475"
+  },
+  "artifacts_campanha/fronteira/conferencia.json": {
+   "comando": "npx tsx test/conferir_instalacoes.mjs --v6",
+   "resultado": "igual byte a byte",
+   "sha256": "ea3769a5e6e1ea2c2e4dabd6319a87456c7a0d656a7e30d827e9ebafdfb7d04a"
+  },
+  "artifacts_campanha/fronteira/conferencia_4c.json": {
+   "comando": "npx tsx test/conferir_fabrica_salao.mjs --v6",
+   "resultado": "igual byte a byte",
+   "sha256": "f67203407a2d9c1fa357fdb3bbb8a2795e2e41b07a7646bfe50c22060a4807e7"
+  },
+  "artifacts_campanha/itens/calibracao.json": {
+   "comando": "npx tsx test/medir_itens.mjs --v6 --gates gi1,gi2,gi4",
+   "resultado": "artefato novo (medir_itens nunca tinha rodado): a linha sem item e igual a medida dos v6 da fase 2 nas mesmas sementes (12 de 12 iguais, artifacts_equilibrio_geral/fase2/v6_arenas_conferencia.json)",
+   "sha256": "33644b7914b952e845cfb61a1dd005d74d23d0542760a38121cd957ef0c462e0"
+  },
+  "artifacts_equilibrio_geral/fase3/itens_calibracao.json": {
+   "comando": "npx tsx test/medir_itens.mjs",
+   "resultado": "pets v9: a linha sem item e igual a conferencia da fase 2 nas mesmas sementes (17 de 17 iguais: arenas_conferencia.json sem e com o treino tipico, escala_conferencia.json)",
+   "sha256": "47c23130a3e72250a150579765d37e09ec95edc5f996bb852e3d0e0b7c1e66b1"
+  }
+ }
+}

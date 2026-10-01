@@ -216,7 +216,7 @@ describe("o Palacio: o pet decide sozinho", () => {
 });
 
 describe("o recorde no registro do Tamer", () => {
-  test("a maior sequencia do pet vira 'recorde' quando passa a do Tamer; so depois do titulo; o registro reproduz (grava a versao 5, a da parte 4c)", () => {
+  test("a maior sequencia do pet vira 'recorde' quando passa a do Tamer; so depois do titulo; o registro reproduz (grava a versao 6, a da fase 3)", () => {
     const m = mega();
     let n = 0;
     while (m.instalacoes[TORRE].recorde < 1 && n++ < 20) tentar(m, TORRE);
@@ -232,7 +232,7 @@ describe("o recorde no registro do Tamer", () => {
     expect(conferirRecordes(t, m, 78)).toMatchObject([{ inst: TORRE, valor: v + 2 }]);
     expect(t.recordes).toHaveLength(2);
     const a = armaz(); gravarTamer(a, t);
-    expect(JSON.parse(Object.values(a.dados)[0]).versao).toBe(5);
+    expect(JSON.parse(Object.values(a.dados)[0]).versao).toBe(6);
     const r = lerTamer(a);
     expect(r.recordes).toEqual(t.recordes);
     expect(r.recorde(TORRE)?.valor).toBe(v + 2);
