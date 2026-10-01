@@ -538,7 +538,8 @@ pets v6 (campanha e arenas; o pet pela versão, o NPC pelas regras V21D da luta)
 
 ## Equilíbrio geral, fase 1: as formas (2026-09-30, `docs/PLANO_EQUILIBRIO_GERAL.md`, `docs/EQUILIBRIO_GERAL.md`)
 
-Branch `equilibrio-geral` (o PR é no fim da fase 4). Só sementes de calibração; a validação única é a fase 4.
+Branch `equilibrio-geral` (o PR é no fim da fase 4). Fases 1–3 só com sementes de calibração; **a fase 4 (validação única, sementes
+4101…4505) está feita** (último item desta seção).
 - **Python:** `ConfigCombateV21E` (subclasse da V21D) com cinco chaves de lista, **desligadas por padrão**:
   `duelista_defende_do_golpe`, `tita_defende_do_golpe` ("de perto, contra golpe rápido frequente → defender", sai o carregar),
   `espelho_sem_carregar`, `muralha_sem_carregar` e `muralha_contra_golpe_na_pele`. Edições em `bots._lista_v21e`, por cima da
@@ -564,6 +565,16 @@ Branch `equilibrio-geral` (o PR é no fim da fase 4). Só sementes de calibraç�
   (`salao.FATOR_SALAO_V9`), Torre e Palácio sem mudança, e os itens (`CIT_V9`): valem só com metade do treino típico do nível, a carta só
   contra NPC da campanha, o chip de regra vai para o fim da lista sem tirar regra, o chip de stat vale a metade. Passam M-C2, M-C3, M-D1–M-D3
   e M-E1; **M-C1 não fecha** (a muralha, 0,085). Detalhes e o que ficou aberto em `docs/EQUILIBRIO_GERAL.md`, fase 3.
+- **Fase 4, a validação única (2026-09-30, sementes 4101…4505, tudo congelado; `artifacts_equilibrio_geral/fase4/`):** os scripts das
+  fases 1–3 ganharam `--validar` (`calibrar_equilibrio_geral.py --validar`, só `v21d` e `v21e`, conferido contra
+  `artifacts_combate_v21c/validacao_v21d/`; `configs/v21e/bateria_v21e_validacao.json` e `bateria_v2c_validacao.json`; os sete `.mjs`
+  com `--validar` → `*_validacao.json`), sem mudar o padrão nem os artefatos das fases 1–3. **Passam** M-A1–M-A4 (força 0,451–0,576,
+  painel 0,449–0,551, amplitude 0,125, toda forma vence ≥ 3), M-B1–M-B3 (o Tortomon por 0,0062), M-C2 (0,390), M-C3 (0,760–0,8725),
+  M-D1–M-D3 (emboscador 0,595) e M-E1 (pior 0,580). **Reprovam:** M-C1 (muralha 0,085, **exceção aceita pelo Matheus em 2026-09-30**:
+  perde para os guardiões pelo limite do desafiado e não alcança o MegaGargomon com nenhuma alavanca permitida; **espelho 0,240**, 0,010
+  abaixo da faixa, pendente) e, em M-A5, só o E3 do contra-golpe (0,458 → 0,480; E1, E5, G8, G9 e o guardião passam; E2, E4 e G6b são as exceções de sempre; a base V2C sai byte a byte igual a `validacao_bots/`). **Pendentes de aceite do Matheus:** E3 do contra-golpe, o espelho na Liga
+  (0,240). Nenhum número mudou por causa da validação. Tabela completa, o que reprovou e as exceções em
+  `docs/EQUILIBRIO_GERAL.md`, fase 4. Falta o PR.
 
 ## M1 — confiança de combate e desgaste por rival repetido (2026-09-29, `docs/DESIGN_MVP_M1_CONFIANCA.md`)
 

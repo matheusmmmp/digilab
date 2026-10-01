@@ -688,3 +688,207 @@ npx tsx test/medir_itens.mjs && npx tsx test/medir_itens.mjs --itens-v6         
 npx tsx test/conferir_liga.mjs --v6; npx tsx test/conferir_instalacoes.mjs --v6; npx tsx test/conferir_fabrica_salao.mjs --v6   # os v6
 npx tsx test/medir_itens.mjs --v6 --gates gi1,gi2,gi4                                           # os itens dos v6 (artifacts_campanha/itens/)
 ```
+
+## Fase 4 — validação única (sementes 4101…4505)
+
+Status: **validação feita** (2026-09-30), com **tudo congelado**: nenhum fator, lista, escala ou item mudou por causa do resultado.
+Passam M-A1…M-A4, M-B1…M-B3, M-C2, M-C3, M-D1…M-D3 e M-E1; **reprovam M-C1** (a muralha, exceção aceita pelo Matheus, e o espelho,
+0,010 abaixo da faixa) e, dentro de M-A5, **o E3 do contra-golpe** (como na calibração). O que reprovou está relatado na seção 4.3 e
+as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido usadas em nada dos pets v9 até aqui (fases 1–3 só com
+3101…3505; os artefatos dos v6 nas sementes de validação são de antes da rodada).
+
+- **Scripts:** os das fases 1–3 com a opção `--validar` (sementes de validação, os números do motor, sem escolher nada; a opção não
+  muda o padrão nem os artefatos das fases 1–3): `experiments/calibrar_equilibrio_geral.py --validar` (só as variantes `v21d` e
+  `v21e`; a conferência que falha alto passa a ser a validação da V21D, `artifacts_combate_v21c/validacao_v21d/`, nas mesmas
+  sementes: matriz, painel, E3 e S1 da `a_c_e2v_v` saíram iguais), `experiments/configs/v21e/bateria_v21e_validacao.json` e
+  `bateria_v2c_validacao.json` (M-A5), e, em `web/app`, `calibrar_escala_v6.mjs`, `calibrar_arenas.mjs`, `calibrar_desafiantes_v6.mjs`,
+  `conferir_liga.mjs`, `conferir_fabrica_salao.mjs`, `conferir_instalacoes.mjs` e `medir_itens.mjs`, todos com `--validar`
+  (`SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505]`, artefato `*_validacao.json`).
+- **Artefatos** em `artifacts_equilibrio_geral/fase4/`; todo número abaixo vem deles: `matriz.json`, `painel.json`, `metas.json`,
+  `e3.json`, `s1.json`, `mecanismo.json` (fase 1); `bateria_v21e/` e `bateria_v2c/` (M-A5); `escala_validacao.json`,
+  `arenas_validacao.json`, `desafiantes_validacao.json` (fase 2); `liga_validacao.json`, `fabrica_salao_validacao.json`,
+  `instalacoes_validacao.json`, `itens_validacao.json` (fase 3).
+- **Método:** o de cada fase, sem mudança (N, pets de referência, regras, limite do desafiado, fatores do motor). Diferenças abaixo
+  de ~0,01 não devem ser lidas como mudança: o erro padrão entre sementes não foi estimado.
+
+### 4.1 Todas as metas: calibração × validação
+
+| meta | alvo | calibração (fases 1–3) | validação (fase 4) | |
+|---|---|---|---|---|
+| **M-A1** força contra as outras 7 | as 8 em [0,40; 0,60] | 0,450 (muralha) a 0,579 (sentinela); margem 0,021 | 0,451 (muralha) a 0,576 (sentinela); margem 0,024 | **passa** |
+| **M-A2** força contra o painel B | as 8 em [0,40; 0,60] | 0,446 (titã) a 0,554 (sentinela); margem 0,046 | 0,449 (titã) a 0,551 (sentinela); margem 0,049 | **passa** |
+| **M-A3** mais forte − mais fraca | ≤ 0,20 | 0,129 | 0,125 (sentinela − muralha) | **passa** |
+| **M-A4** lugar no ciclo | toda forma vence ≥ 2 das outras 7 | mínimo 3 | mínimo 3 (duelista, emboscador, muralha, vigia) | **passa** |
+| **M-A5** a base de pé | G1–G9 da V2C e E1/E3/E5 da V21C (exceções aceitas: E2, G6b, G8) | E1 suporte 5; E3 técnica 17,7–36,7%; E3 resposta: **contra-golpe 0,460 → 0,481**; E5 35/36; G8 0,972; G9 0,286; guardião 0,191; G6b 0,692, E2 (ferrugem) e E4 (0,887–0,994) como exceções; G1–G9 da base = etapa c7 | E1 suporte 5 (espelho, furioso, sentinela, titã, vigia); E3 técnica 17,7–36,8%; **contra-golpe 0,458 → 0,480**; E5 35/36 (cai `custo_pele_dura−`); G8 0,972; G9 0,286; guardião 0,190; G6b 0,693 (sentinela 0,919), E2 (ferrugem) e E4 (0,886–0,998) como exceções; G1–G9 da base = `validacao_bots` byte a byte (só G6b do atirador, exceção) | **passa com as exceções aceitas, menos o E3 do contra-golpe** (pendente, como na fase 1) |
+| **M-B1** estágio | vizinhos ≤ 0,10 (pontos); dois estágios = 0,00 (vitórias) | 0,0014 / 0,0104 / 0,0041; 0 e 0 | 0,0008 / 0,0110 / 0,0041; 0 e 0 | **passa** |
+| **M-B2** líderes das 6 arenas | sem treino ≤ 0,05; com o típico ≥ 0,80; pior forma ≥ 0,50 | sem 0,0016–0,0359; com 0,8288–0,9144; pior 0,515 (Lago); menor folga 0,0141 (Espiral) | sem 0,0006–0,0284; com 0,8575–0,9188; pior 0,535 (Cidadela); menor folga 0,0216 (Espiral) | **passa** nos 6 |
+| **M-B3** desafiantes | sem ≤ 0,30; com ≥ 0,80; pior ≥ 0,50 | Tortomon 0,2825 / 0,8762 / 0,525 (folga 0,0175); os outros 3 com folga ≥ 0,12 | Tortomon 0,2938 / 0,8794 / 0,535 (folga 0,0062); Devidramon 0,1862 / 0,9050 / 0,620; Puppetmon 0,1484 / 0,9306 / 0,745; Machinedramon 0,1100 / 0,9753 / 0,870 | **passa** nos 4 |
+| **M-C1** Liga | toda forma ≥ 0,25 e nenhuma > 0,85 | 7 de 8; muralha 0,085; espelho 0,255 | 6 de 8; **muralha 0,085**, **espelho 0,240**; titã 0,260, sentinela 0,2675; máximo furioso 0,725 | **reprova** (muralha: exceção aceita; espelho: pendente) |
+| **M-C2** Fábrica | ≥ 1 série em ≥ 0,25 das tentativas | 0,367 | 0,390 (folga 0,140) | **passa** |
+| **M-C3** Salão | cada nível em [0,70; 0,95] | 0,894 / 0,754 / 0,826 / 0,826; menor folga 0,054 | 0,8725 / 0,760 / 0,8078 / 0,8194; menor folga 0,060 (Champion) | **passa** |
+| **M-D1** itens × treino | sem treino, com os melhores itens, × cada líder ≤ 0,05 | 0,0016–0,0359 (= sem item, pela trava) | 0,0006–0,0284 (= sem item, pela trava) | **passa** |
+| **M-D2** itens × estágio | vizinhos ≤ 0,10; dois estágios = 0 | 0,0122 / 0,0206 / 0,0063; 0 e 0 | 0,0122 / 0,0215 / 0,0064; 0 e 0 | **passa** |
+| **M-D3** itens × formas | força com o melhor item ≤ 0,60 | 0,465–0,594 (emboscador, folga 0,006) | 0,463–0,595 (emboscador, folga 0,005) | **passa** |
+| **M-E1** Torre e Palácio | melhor forma ≥ 0,70 e pior ≥ 0,40 na 1ª luta | 1,000 e 0,608 (as duas) | Torre 1,000 (furioso) e 0,6475 (muralha); Palácio 1,000 e 0,580 | **passa** |
+
+### 4.2 Detalhes por fase
+
+**Fase 1, as formas** (`matriz.json`, `painel.json`, `metas.json`; V21E, ε 0,05):
+
+| forma | força (cal → val) | painel (cal → val) | vence (val) |
+|---|---|---|---|
+| duelista | 0,517 → 0,506 | 0,518 → 0,515 | 3: emboscador, sentinela, vigia |
+| furioso | 0,527 → 0,527 | 0,532 → 0,532 | 4: duelista, emboscador, sentinela, vigia |
+| espelho | 0,455 → 0,462 | 0,468 → 0,474 | 4: duelista, furioso, muralha, vigia |
+| muralha | 0,450 → 0,451 | 0,449 → 0,453 | 3: duelista, furioso, vigia |
+| sentinela | 0,579 → 0,576 | 0,554 → 0,551 | 4: emboscador, espelho, muralha, titã |
+| emboscador | 0,544 → 0,543 | 0,552 → 0,549 | 3: espelho, muralha, titã |
+| vigia | 0,477 → 0,480 | 0,488 → 0,482 | 3: emboscador, sentinela, titã |
+| titã | 0,452 → 0,455 | 0,446 → 0,449 | 4: duelista, espelho, furioso, muralha |
+
+- Nenhuma forma mudou mais de 0,011 da calibração para a validação; a V21D nas mesmas sementes reproduz a validação da V21D
+  (furioso 0,722, as 7 outras em [0,407; 0,562]), como o `validacao_v21d/` já dizia.
+- Espelho × muralha virou 0,506/0,494 (na calibração 0,497/0,503): o espelho passa a "vencer" a muralha e ela deixa de vencê-lo; os
+  dois continuam com ≥ 3 vitórias, e a diferença está abaixo do ruído.
+- Informativo (não é meta): suporte 5 (espelho, furioso, sentinela, titã, vigia); 9 pares fora de [0,1; 0,9] com ε 0,05 e 7 com
+  ε 0,15; com ε 0,15 o furioso 0,666, o emboscador 0,620 e a sentinela 0,597 (na calibração 0,603) ficam acima de 0,60 e o espelho
+  0,384 e a muralha 0,397 abaixo de 0,40; amplitude 0,282; 18,0% das partidas no limite de turnos.
+- **S1** (`s1.json`): nenhuma sombria vence as 8; devastador 0,321 (duelista, titã, vigia), predador 0,277, colosso partido 0,226,
+  bastião rachado 0,077.
+- **E3 da resposta declarada** (`e3.json`, V21E): investida 0,518 → 0,499, marcar 0,549 → 0,524 e pele dura 0,471 → 0,097 reduzem;
+  **contra-golpe 0,458 → 0,480 não reduz** (muralha 0,456 → 0,000; espelho 0,461 → 0,961, pela passiva que devolve o disparo),
+  como na calibração (0,460 → 0,481) e na V21D nas mesmas sementes (0,431 → 0,496).
+
+**Fase 2, a progressão** (`escala_validacao.json`, `arenas_validacao.json`, `desafiantes_validacao.json`):
+
+| líder / desafiante | fator | sem treino | com o treino típico | pior forma | folga (cal → val) |
+|---|---|---|---|---|---|
+| Gazimon (Campina) | 1,3 | 0,0075 | 0,8575 | 0,800 (sereno) | 0,0288 → 0,0425 |
+| Guardromon (Torre de pedra) | 1,5 | 0,0081 | 0,8656 | 0,715 (guardião) | 0,0337 → 0,0419 |
+| Youkomon (Floresta) | 1,5 | 0,0213 | 0,8675 | 0,605 (colosso) | 0,0338 → 0,0288 |
+| Myotismon (Cidadela, série de 3) | 0,9 | 0,0006 | 0,9063 | 0,535 (sentinela) | 0,0450 → 0,0350 |
+| MarinBullmon (Lago) | 1,5 | 0,0088 | 0,8972 | 0,560 (sentinela) | 0,0150 → 0,0413 |
+| Piedmon (Montanha Espiral) | 1,4 | 0,0284 | 0,9188 | 0,655 (sentinela) | 0,0141 → 0,0216 |
+| Tortomon (Torre de pedra) | 1,53 | **0,2938** | 0,8794 | 0,535 (colosso) | 0,0175 → **0,0062** |
+| Devidramon (Torre de pedra) | 1,1 | 0,1862 | 0,9050 | 0,620 (caçador) | 0,1200 → 0,1050 |
+| Puppetmon (Montanha Espiral) | 1,8 | 0,1484 | 0,9306 | 0,745 (muralha) | 0,1400 → 0,1306 |
+| Machinedramon (Montanha Espiral) | 2,3 | 0,1100 | 0,9753 | 0,870 (vigia) | 0,1806 → 0,1753 |
+
+- As três metas passam; os riscos apontados na fase 2 (a Espiral sem treino, o Lago e a Cidadela com a sentinela) ficaram com mais
+  folga, não menos. **O Tortomon passa por 0,0062** (sem treino 0,2938 contra o teto 0,30): é a folga mais estreita da rodada e está
+  abaixo do ruído; a janela de 1,51–1,54 da calibração se confirma estreita.
+- Metas de estágio: Rookie × Champion 0,0008, Champion × Ultimate 0,0110, Ultimate × Mega 0,0041 (pontos); Rookie × Ultimate e
+  Champion × Mega sem vitória (12.800 e 25.600 partidas).
+
+**Fase 3, o fim de jogo** (`liga_validacao.json`, `fabrica_salao_validacao.json`, `instalacoes_validacao.json`):
+
+| forma | títulos na Liga (cal → val) | | forma | títulos (cal → val) | |
+|---|---|---|---|---|---|
+| duelista | 0,485 → 0,455 | na faixa | sentinela | 0,2725 → 0,2675 | na faixa (folga 0,0175) |
+| furioso | 0,725 → 0,725 | na faixa | emboscador | 0,435 → 0,490 | na faixa |
+| espelho | 0,255 → **0,240** | **fora** (0,010 abaixo) | vigia | 0,3975 → 0,4075 | na faixa |
+| muralha | 0,085 → **0,085** | **fora** (exceção aceita) | titã | 0,2625 → 0,260 | na faixa (folga 0,010) |
+
+- Por luta, as travas de estilo são as da calibração: sentinela 0,71 contra o WarGreymon; espelho 0,595 e muralha 0,7025 contra o
+  Seraphimon; muralha 0,3775 e titã 0,3025 contra o MegaGargomon; sentinela 0,2675 e emboscador 0,5175 contra o Vikemon; espelho
+  0,430, muralha 0,440 e duelista 0,600 contra a Rosemon; muralha 0,7625 contra o Imperialdramon. O espelho cai nas lutas 2 e 5
+  (chega à 6ª em 0,2425 e vence 0,240).
+- Com o fator de antes (1 nos 6, relato): 4 de 8 na faixa, muralha 0,000, titã 0,0125.
+- Fábrica (política da meta, 2.000 tentativas): vence a 1ª luta 0,8965, ≥ 1 série **0,390**, média de 0,702 séries, máximo 10,
+  nenhuma no teto; por luta da série 0,929 / 0,782 / 0,568. Sem troca 0,2865; alugando o primeiro 0,205.
+- Salão (treino típico): Rookie 0,8725 (pior sereno 0,755), Champion 0,760 (guardião 0,5625), Ultimate 0,8078 (muralha 0,590),
+  Mega 0,8194 (muralha 0,600); sem treino 0,0175 / 0,3481 / 0,3272 / 0,3066; vencer os 4 com o time médio 0,4389 (sem treino 0,0006).
+- Torre de Batalha: vence a 1ª de 0,6475 (muralha) a 1,000 (furioso), média de vitórias 1,5 (muralha) a 7,6 (furioso); Palácio
+  0,580 (muralha) a 1,000, média 1,5 a 7,5. Folga da meta 0,2475 e 0,180.
+
+**Fase 3, os itens** (`itens_validacao.json`; 775 s com 6 workers):
+
+| meta | o quê | calibração | validação |
+|---|---|---|---|
+| M-D1 | sem treino + os melhores itens × cada líder | 0,0025 / 0,0063 / 0,0163 / 0,0016 / 0,0075 / 0,0359 | 0,0075 / 0,0081 / 0,0213 / 0,0006 / 0,0088 / 0,0284 (Campina, Torre, Floresta, Cidadela, Lago, Espiral) |
+| M-D2 | o de baixo com o típico + os melhores itens × o de cima | 0,0122 / 0,0206 / 0,0063; 0 e 0 | 0,0122 / 0,0215 / 0,0064; 0 e 0 |
+| M-D3 | força com a melhor combinação | duelista 0,569, furioso 0,561, espelho 0,493, muralha 0,465, sentinela 0,580, emboscador 0,594, vigia 0,478, titã 0,478 | duelista 0,570, furioso 0,560, espelho 0,494, muralha 0,463, sentinela 0,584, **emboscador 0,595**, vigia 0,476, titã 0,475 |
+
+- M-D1 continua passando **pela trava do treino mínimo**: sem treino nenhum item faz efeito, e a linha "com os melhores itens" é a
+  linha sem item da fase 2 nas mesmas sementes (as 6 iguais a `arenas_validacao.json`).
+- Relato no limiar (metade do treino típico + a melhor combinação): Campina 0,2075 → 0,9387, Torre 0,4738 → 0,7406, Floresta 0,3831
+  → 0,7225, Cidadela 0,7228 → 0,7991, Lago 0,7284 → 0,8113, Espiral 0,8209 → 0,845 (na calibração 0,934 / 0,752 / 0,708 / 0,782 /
+  0,797 / 0,848): nos Rookies os itens no limiar continuam levando o pet além do treino típico sem item (0,8575).
+- M-D3: a melhor combinação de cada forma é a mesma da calibração (sentinela e vigia sem item); o emboscador passa por 0,005
+  (0,5953, com Recuo + Oportunista + Perseguidor), abaixo do ruído. Com a regra do limite do desafiado (relato) todas ficam ≤ 0,54.
+- G-I4 (relato): os chips de regra no fim da lista seguem quase sem efeito: ganho de força de −0,022 a +0,050 (só o Perseguidor no
+  emboscador, +0,0495, passa de 0,01; o Aparo é 0 nas 8); contra os líderes com o treino típico, nenhum chip muda a taxa em mais de
+  0,0013.
+
+### 4.3 O que reprovou e por quê
+
+- **M-C1, a muralha (0,085; exceção aceita, seção 4.4).** O mesmo da calibração: ela perde para os guardiões no limite de turnos,
+  que é do líder (0,7025 contra o Seraphimon mesmo com 0,3; 0,440 contra a Rosemon; 0,7625 contra o Imperialdramon), e não alcança
+  a sentinela (0,3775 contra o MegaGargomon com 0,1, o piso da grade). O produto das lutas dela fica perto de 0,1. Nenhuma alavanca
+  permitida mexe nisso (o limite do desafiado e os Megas da tabela são decisões do Matheus).
+- **M-C1, o espelho (0,240; pendente).** Na calibração passava por 0,005 (0,255) e a fase 3 já o apontava como risco. Na validação
+  perde 0,010 a mais: cai nas lutas 2 (Seraphimon, espelho × espelho, 0,595) e 5 (Rosemon, 0,430), e chega à 6ª em 0,2425. A
+  diferença para a faixa (0,010) está no tamanho do ruído entre sementes (~0,01, não estimado): não dá para dizer que o espelho
+  "piorou", só que a folga de 0,005 não aguentou a troca de sementes. O titã (0,260) e a sentinela (0,2675) passam por 0,010 e
+  0,0175: as três formas reativas estão na borda da Liga.
+- **M-A5, o E3 do contra-golpe (0,458 → 0,480; pendente desde a fase 1).** A resposta declarada ("de perto, recuar; com guts,
+  disparo") zera a muralha (0,456 → 0,000) e dispara o espelho (0,461 → 0,961), porque a passiva dele devolve o disparo inteiro. Vem
+  da V21D (0,431 → 0,496 nas mesmas sementes); a V21E diminui a diferença (+0,065 → +0,022) sem fechar. A decisão continua a da
+  fase 1: aceitar como exceção ou mudar a resposta declarada do espelho (fora das alavancas).
+- **M-A5, o resto (`bateria_v21e/gates.json`, `bateria_v2c/`).** A bateria V2.1 com a V21E nas sementes de validação sai como na
+  calibração: E1 passa (suporte 5), E5 35 de 36 (a perturbação que cai mudou: `turnos_pele_dura−` na calibração, `custo_pele_dura−`
+  na validação; o E1 continua valendo em 0,972, G8), G9 0,286, o guardião no limite de turnos 0,190 (margem 0,010, como os 0,009 da
+  calibração). Reprovam só as exceções já aceitas: E2 (ferrugem), G6b (0,693; a sentinela 0,919) e E4 (o adulto esmaga o adolescente
+  da mesma linha, 0,886–0,998: redefinido na escala, que é o M-B1). A bateria da base V2C sai **byte a byte igual** à validação
+  gravada da V2C (`artifacts_combate_v2c/validacao_bots/`, os 5 artefatos): a V21E não tocou na base.
+- **Folgas que ficaram estreitas (passam, mas abaixo do ruído):** o Tortomon em M-B3 (0,2938 contra 0,30, folga 0,0062; na
+  calibração 0,0175), o emboscador em M-D3 (0,5953, folga 0,005; 0,006), o titã (0,010) e a sentinela (0,0175) em M-C1. As folgas da
+  fase 2 que preocupavam (Espiral, Lago, Cidadela) cresceram na validação; a do Champion no Salão (0,060) e a do Rookie (0,0775) também.
+
+### 4.4 Exceções
+
+**Aceitas pelo Matheus:**
+- **E2** (ferrugem vence as outras espécies), **G6b** (o atirador nos espelhos com condição) e **G8** (V2.1): aceitas na V21C/V2C;
+  continuam valendo (seção 4.1, M-A5).
+- **M-C1, a muralha na Liga (0,085 na calibração e na validação): aceita como exceção em 2026-09-30.** Motivo: perde para os
+  guardiões pelo limite do desafiado (que é do líder) e não alcança o MegaGargomon com nenhuma alavanca permitida (o fator já está no
+  piso da grade, 0,1). Nenhum número muda.
+
+**Pendentes de aceite do Matheus:**
+- **E3 do contra-golpe** (M-A5): a resposta declarada não reduz os usuários (0,458 → 0,480), pelo espelho. Opções: aceitar como
+  exceção (como a V21D fazia na prática) ou mudar a resposta declarada ao contra-golpe do espelho.
+- **M-C1, o espelho na Liga** (0,240, 0,010 abaixo da faixa; na calibração 0,255). Opções: aceitar como exceção (a diferença está
+  no ruído), ou reabrir a calibração da Liga (fora desta rodada: a fase 4 é única e nada muda por causa do resultado).
+- **E4 da V21C** (o adulto esmaga o adolescente): aceito na V21C e redefinido na escala (M-B1, que passa); a bateria V2.1 continua
+  a medi-lo sem escala e a reprová-lo (0,886–0,998), só como relato.
+
+### 4.5 Testes
+
+- **O merge com a main** (commit `76643fb`: a voz/revanche e o comando pelo chat, PR #91; conflitos em `TelaArena.tsx`,
+  `TelaCampanha.tsx` e `docs/REGISTRO_DESVIOS.md`): nada quebrou. Em `web/app`, `npm ci`, `npm run tipos` limpo e `npm test` com
+  **306 testes em 29 arquivos**, todos passando (85 s). Na raiz, `python -m pytest tests/ -q`: **545 passaram, 1 pulado** (15 min).
+- Os scripts com `--validar` não mudam o padrão: a opção só troca as sementes, a pasta (`fase4/`) e o nome do artefato; as fases
+  1–3 não foram rodadas de novo e os artefatos delas estão intactos (`git status`).
+- A conferência que falha alto do Python (`calibrar_equilibrio_geral.py --validar`): matriz, painel, E3 e S1 da V21D nas sementes de
+  validação saem iguais a `artifacts_combate_v21c/validacao_v21d/` (`v21d_igual_validacao_v21d*: true` nos artefatos).
+- Tempos: `calibrar_equilibrio_geral.py --validar` 8 min com 6 processos; a bateria V21E 19 min e a da base 1 min (um processo
+  cada); os `.mjs` de 10 s a 13 min (`medir_itens`, 6 workers). Nenhum processo além de 8 ao mesmo tempo.
+- As duas baterias terminam com rc 2 (REPROVADA) pelas exceções aceitas e pelo E3 do contra-golpe; é o esperado e está na tabela.
+
+### 4.6 Reprodução
+
+```bash
+cd web/app && npm ci && npm run tipos && npm test                                                     # o merge com a main
+python -m pytest tests/ -q
+python experiments/calibrar_equilibrio_geral.py --validar --etapa todas --processos 6                  # M-A1 a M-A4, E3, S1 (~8 min)
+python experiments/run_bateria_v21.py --config experiments/configs/v21e/bateria_v21e_validacao.json     # M-A5 (~20 min)
+python experiments/run_bateria_combate.py --config experiments/configs/v21e/bateria_v2c_validacao.json  # G1-G9 da base
+cd web/app
+npx tsx test/calibrar_escala_v6.mjs --validar                                                           # M-B1
+npx tsx test/calibrar_arenas.mjs --validar                                                              # M-B2
+npx tsx test/calibrar_desafiantes_v6.mjs --validar                                                      # M-B3
+npx tsx test/conferir_instalacoes.mjs --validar                                                         # M-E1
+DIGILAB_WORKERS=6 npx tsx test/conferir_liga.mjs --validar                                              # M-C1
+DIGILAB_WORKERS=6 npx tsx test/conferir_fabrica_salao.mjs --validar                                     # M-C2, M-C3
+DIGILAB_WORKERS=6 npx tsx test/medir_itens.mjs --validar                                                # M-D1 a M-D3 (~15 min)
+```
