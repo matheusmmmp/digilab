@@ -1,5 +1,6 @@
 /* Donos sinteticos para treinar rivais e para a aba Cenarios (espelho de donos.py). Os chamados abertos do
-   bebe viram a primeira acao de quem cuida (so na web: a evolucao nao existe no Python). */
+   bebe viram a primeira acao de quem cuida (so na web: no Python o dono sintetico nao ve o chamado ao vivo; a evolucao
+   le o cuidado do bebe depois, do log, em evolucao.fracao_cuidado_bebe). */
 import { ACAO_CHAMADO, ACOES_DONO, CAT, CD, TPD } from "./constantes.ts";
 import { eNoite } from "./estado.ts";
 import { Motor } from "./motor.ts";

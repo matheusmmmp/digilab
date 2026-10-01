@@ -30,8 +30,9 @@ Hipótese de design: um ambiente manipulável pode aumentar as oportunidades de 
 comportamento do pet. Isso não garante aprendizagem nem personalidade emergente. A expansão também pode apenas acrescentar
 tarefas repetitivas; esse risco deve ser avaliado.
 
-Ligação com o que já foi medido (2026-09-30): a confirmatória refutou a hipótese central e o aprendido muda a política em
-cerca de 0,02 bit, com fator explicável em 13–18% das decisões. A leitura registrada é que o ambiente tem poucas decisões em
+Ligação com o que já foi medido (2026-09-30): a confirmatória refutou a hipótese central; a divergência entre os braços dos donos
+ficou em 0,02 bit (JSD, `artifacts/divergence.json`; a distância do aprendido ao instinto é de 0,03 a 0,05 bit, `CLAUDE.md`,
+"Estado atual"), com fator explicável em 13–18% das decisões. A leitura registrada é que o ambiente tem poucas decisões em
 que o dono importa. Esta proposta é uma das formas de criar essas decisões; a outra discutida foi uma política com lobos
 (ver conversa de 2026-09-30, sem tarefa aberta). As duas só valem com o gate de divergência entre donos definido antes.
 

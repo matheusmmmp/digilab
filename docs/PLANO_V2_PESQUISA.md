@@ -9,7 +9,7 @@ Nada aqui está referendado: cada valor abaixo é PROPOSTO até o Matheus marcar
 
 A v1 fecha com uma leitura consolidada (`docs/LEITURA_CONSOLIDADA_DONO.md`): **neste motor o dono pesa pelo cuidado,
 não pelo ensino.** A hipótese central foi refutada na confirmatória (atencioso − aleatório −0,034 [−0,072; +0,006]);
-o aprendido muda a política em cerca de 0,02 bit; só 13–18% das decisões têm fator explicável; o genoma explica 4,9%;
+a divergência entre os braços dos donos é de 0,02 bit (JSD, `artifacts/divergence.json`; ao instinto, 0,03–0,05 bit); só 13–18% das decisões têm fator explicável; o genoma explica 4,9%;
 a forma final explica 96% da taxa no painel; o canal contínuo do caráter até a luta não abriu. A pergunta do efeito do
 dono está **encerrada**. O que sobra é a pergunta sobre o aprendiz e sobre o ambiente em que ele age.
 
