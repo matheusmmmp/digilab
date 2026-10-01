@@ -391,6 +391,22 @@ relatório em `docs/RESULTADO_SINAL_DONO.md`.
 - **Etapa B:** autorizada pelo Matheus, condicionada a este gate. Pelo plano, só roda depois de um adendo registrado
   antes da run.
 
+## Canal do dono fora da forma, Etapa B (2026-09-30) — CANAL NÃO ABERTO
+
+O pet do painel luta com o peso do caráter nos stats multiplicado por k (`ConfigCatalogo.peso_carater_stats`, padrão
+1,0; só no pet do painel, vidas iguais às do E1). k = 3 e k = 8: o k = 9 do plano quebrava a renormalização em 3 pets
+e foi trocado antes da run (desvio registrado). Números de `artifacts_linhagem/natureza_criacao_canal/analise_plano.json`
+(`experiments/analisar_canal.py`); relatório em `docs/RESULTADO_CANAL_DONO.md`.
+
+- **Gate B: CANAL NÃO ABERTO**, por margem mínima: Δr² da forma nos vivos (k = 8) −0,039, IC95 [−0,081; +0,0008].
+- **Descritivo:** o dono perde peso.
+  - frac_D da taxa: 0,050 → 0,039 → 0,028;
+  - atencioso − aleatório: Δ +0,007 [−0,018; +0,029].
+  - O caráter amplificado afasta as formas (emboscador sobe, espelho e titã descem) e alimenta dono × ambiente.
+  - Com k = 8, 30% dos stats ficam presos no limite.
+- **Leitura:** o caminho da arquitetura, como testado, fecha negativo. O gargalo é o que o pet aprende, que carrega
+  mais ambiente que dono. Neste motor o dono pesa pelo cuidado, não pelo ensino.
+
 ## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
 
 Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.

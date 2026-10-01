@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import json
 import sys
-from dataclasses import replace
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -25,7 +24,7 @@ from digilab.config import CONFIG_CATALOGO  # noqa: E402
 from digilab.metrics import bootstrap_cruzado, ic_percentil  # noqa: E402
 from analisar_v21d import (COMPONENTES, DELTA, NICHOS, REAMOSTRAS, SEMENTE, VIDAS_E1, _celulas, _comp,  # noqa: E402
                            _media_contraste, _r2, carregar, forma_de)
-from run_natureza_criacao import genoma  # noqa: E402
+from run_natureza_criacao import catalogo_do_painel, genoma  # noqa: E402
 
 E1 = RAIZ / "artifacts_linhagem" / "natureza_criacao" / "especie_fixa"
 CANAL = RAIZ / "artifacts_linhagem" / "natureza_criacao_canal"
@@ -113,7 +112,7 @@ def corte_dos_stats(pets: dict, port: dict) -> dict:
     """fracao dos stats (6 por pet vivo) presos em stat_min ou stat_max em cada k (so stats(), antes do treino)"""
     out = {}
     for k in NIVEIS:
-        cat = replace(CONFIG_CATALOGO, peso_carater_stats=float(k))
+        cat = catalogo_do_painel({"catalogo_painel": {"peso_carater_stats": float(k)}}) if k != 1 else CONFIG_CATALOGO
         presos = total = 0
         for nome, p in pets.items():
             if p["morta"]:
