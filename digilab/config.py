@@ -1134,3 +1134,38 @@ CONFIG_CONFIANCA = ConfigConfianca()
 CONFIG_CONFIANCA_LIGADA = ConfigConfianca(ligada=True)
 CONFIG_HERANCA = ConfigHeranca()
 CONFIG_EQUILIBRIO = ConfigEquilibrio()
+
+
+# =====================================================================
+# V2, L0 (docs/TAREFA_V2_L0_LOBOS.md, 2026-10-01): politica com lobos nomeados, aprendizado desligado.
+# Nao entra em nenhum hash de protocolo da v1. Todo campo e PROPOSTO, sem fonte e nao referendado; o status de
+# cada um esta em digilab/policies/lobos.py (PARAMETROS_LOBOS_L0, conferido por teste).
+# =====================================================================
+
+
+@dataclass(frozen=True)
+class ConfigLobos:
+    """Politica com lobos nomeados (percepcao, memoria e emocao, impulsos, decisao). L0: so o esqueleto.
+
+    aprendizado_ligado          PROPOSTO  False no L0: os pesos nunca mudam. True e o L1, que ainda nao existe
+                                          (a politica falha alto na construcao).
+    bits_ponto_fixo             PROPOSTO  escala dos pesos S = 2**bits. Potencia de dois de proposito: dividir um
+                                          inteiro por S e exato em ponto flutuante, e e isso que da ao prior os
+                                          MESMOS floats que o instinto escreve (igualdade byte a byte, gate G2).
+    escala_ticks_desde_cuidado  PROPOSTO  entrada da percepcao: min(1, ticks sem cuidado / escala); o mesmo valor
+                                          da ConfigBandit. Coeficiente zero no prior.
+    maximo_pesos                PROPOSTO  teto do plano da V2 (fase 1b: "abaixo de mil pesos, para o replay").
+    """
+
+    aprendizado_ligado: bool = False
+    bits_ponto_fixo: int = 10
+    escala_ticks_desde_cuidado: float = 480.0
+    maximo_pesos: int = 1000
+
+    @property
+    def escala(self) -> int:
+        """S = 2**bits: a unidade 1.0 dos pesos em ponto fixo."""
+        return 1 << self.bits_ponto_fixo
+
+
+CONFIG_LOBOS = ConfigLobos()

@@ -1248,6 +1248,96 @@ nascido e vivo, ações v4 só em pets v4+, tratar só com lesão) passa a grava
 marca `comando_executado`. Risco aceito: os erros de ação da rodada 3 (6 de 9 em "limpar" lidos como `repreender`) viram ação
 sem desfazer. Sem mudança no servidor, nos prompts nem nas rodadas gravadas.
 
+## 2026-10-01 — V2: o aprendiz deixa de ser o bandit; rodada 1 de frentes paralelas
+
+**Decisão do Matheus (2026-10-01): a V2 foca na nova arquitetura e abandona o bandit.** O aprendiz da V2 é a política com lobos nomeados do
+`docs/PLANO_V2_PESQUISA.md` (fase 1b). O bandit (`digilab/policies/bandit.py` e subclasses) fica congelado só para reproduzir as runs da v1: não é
+apagado, não muda e não é estendido. Os gates da fase 1 continuam PROPOSTOS até o referendo do plano.
+
+Rodada 1 (coordenação, `docs/V2_TRABALHO_PARALELO.md`): quatro frentes sem run estatística e sem GPU, uma por worktree:
+`TAREFA_V2_F0_INVENTARIO.md` (inventário e escolha da interação da 1a), `TAREFA_V2_L0_LOBOS.md` (esqueleto dos lobos, aprendizado desligado, igual ao
+instinto byte a byte), `TAREFA_V2_F0_VINCULO.md` (diagnóstico e proposta, sem código) e `TAREFA_V2_F0_CORPUS.md` (itens não latinos do corpus reescritos em
+português). Reservas: nenhuma faixa de semente (nenhuma run nesta rodada); `VERSAO_PET` reservado pelo coordenador (rodada 2: 10 = vínculo novo, 11 = lobos na web, 12 = bola da 1a; as versões são cumulativas, então o número segue a ordem de chegada na web).
+
+## 2026-10-01 — V2, F0-INVENTARIO: divergências entre documento e código encontradas no inventário
+
+Tarefa `docs/TAREFA_V2_F0_INVENTARIO.md`; entrega `docs/V2_INVENTARIO_JOGO.md` (seção 5). Só documento; nenhum código, número de
+resultado ou artefato muda. Conferido na `main` em `83fc08f`.
+- `CLAUDE.md` diz "290 testes" (mapa e comandos); `python -m pytest tests/ -q` na worktree dá 571 passados e 1 pulado (a auditoria
+  `01_CURRENT_STATE.md` contou 538 em `3fe6d76`). Correção do texto é do coordenador.
+- `CLAUDE.md` diz "Ambiente do usuário: pasta `D:\Trab\digilab\v1`"; desde 2026-09-30 o trabalho é em `v2` e nas worktrees
+  (`docs/V2_TRABALHO_PARALELO.md`).
+- `web/app/motor/confianca.ts`, cabeçalho: "Só os pets v5 usam"; o motor aplica a confiança nos pets v8 em diante (`motor.ts`,
+  `versao >= 8`). Comentário desatualizado; o comportamento é o descrito no `CLAUDE.md` (M1).
+- `web/app/motor/donos.ts`, cabeçalho: "a evolução não existe no Python". Existe (`digilab/evolucao.py`); o que não existe no Python é o
+  dono sintético ver o chamado do bebê ao vivo (contado depois por `evolucao.fracao_cuidado_bebe`). Consequência medida: 548 de 548
+  pets vivos da V3 nasceram ariscos (`artifacts_educacao/pets.json`).
+- `docs/TODO_INTERACAO_CORPO.md` e `docs/PLANO_V2_PESQUISA.md`: "o aprendido muda a política em cerca de 0,02 bit". O 0,02 bit é a JSD
+  entre braços (`artifacts/divergence.json`, 0,0204); a distância ao instinto é ≈0,03–0,05 bit (`CLAUDE.md`, "Estado atual"). O uso
+  como referência do G3 (divergência entre donos) está certo; só a frase é imprecisa.
+
+## 2026-10-01 — F0-CORPUS: itens do corpus de espécies em japonês reescritos em português
+
+Tarefa `docs/TAREFA_V2_F0_CORPUS.md` (fase 0, item 3 do plano da V2). Só `digilab_fala_livre/corpus_especies.json` e os testes mudam;
+o filtro do alfabeto, o prompt, o verificador e o almanaque ficam como estão.
+- **Critério da reescrita:** todo traço, jeito de falar ou interação cujo texto tem letra fora do alfabeto latino (pelo `corpus.latino`,
+  a mesma regra do carregador) foi reescrito em português, com até 120 caracteres, descrevendo o jeito sem a palavra japonesa e
+  dizendo só o que a fonte do item diz (conferido em `docs/corpus_digimon/*.md` e `auditoria/*.md`, fora do repositório). O item
+  mantém `marca`, `fonte` e `jogo` e ganha `"reescrito": true`. Os pronomes seguem um vocabulário fixo, para o estilo não variar por
+  espécie: "pronome infantil e modesto" (o de menino), "masculino informal", "rústico e descontraído", "formal", "de velho",
+  "feminino informal", "pronomes solenes" (o arcaico). Partículas e finais de frase viram a função deles ("finais de frase
+  enfáticos", "partículas femininas no fim das frases", "fecho explicativo"); risos e muxoxos viram a descrição ("riso curto e
+  seco", "riso baixo e gutural", "muxoxo de contrariedade").
+- **Contagem:** 49 itens em 28 espécies (46 falas, 2 traços, 1 interação), não os 46 da contagem de partida: três falas de Guilmon
+  (2) e Growlmon (1) só tinham o ordinal "3ª", que o `latino()` conta como letra não latina (o indicador ordinal não é LATIN no
+  Unicode); viraram "terceira pessoa". A seção da fala livre do `CLAUDE.md` de 2026-09-30 falava em 46 pela contagem de kana/kanji.
+- **Itens removidos: nenhum.** Os limítrofes, em que a reescrita perde o original: MetalGreymon (fala 3, anime), uma nota sobre a
+  grafia em kanji do pronome no blog de fã, ficou com o que a fonte sustenta ("como MetalGreymon ainda usa o pronome infantil e
+  modesto, ep. 20, só no blog de fã"); Guilmon (fala 4), o som que ele faz virou "a primeira sílaba do próprio nome"; Sakuyamon
+  (fala 1), o nome da técnica virou "a técnica da mandala"; Gallantmon (fala 0), "este Dukemon" virou "fala de si na terceira
+  pessoa, com ênfase no próprio nome"; Agumon (fala 4, Anode Tamer), o termo em inglês ficou escrito em inglês ("Digital World").
+- **`"reescrito": true` fora do PARCIAL:** a chave nasceu para o PARCIAL (entra só a parte reescrita na auditoria); em VERIFICADO,
+  VERIFICADO EM OUTRA FONTE e OUTRA MIDIA o carregador não a lê, então o filtro das marcas não muda (44 itens). Os 5 PARCIAL já
+  reescritos na auditoria que ainda tinham japonês (Agumon, Angemon ×2, Koromon, Palmon) foram reescritos de novo e seguem entrando.
+- **Números:** com o filtro entram 504 itens, os mesmos que sem ele (antes: 455 com, 504 sem; `descartados["NAO LATINO"]` 49 → 0);
+  os outros descartes não mudam (INFERENCIA 23, OUTRA MIDIA sem anime 9, PARCIAL sem reescrita 5, SEM FONTE 1). O sha256 do corpus
+  mudou (`b1b7ad8d…` → `785f7834…`): `artifacts_voz/estilo_latino/resumo.json` registra o sha anterior e mede o corpus de antes; não
+  é refeito nesta tarefa.
+- **Sem run.** A conferência com o gemma2:9b (fala com o estilo, sem japonês e sem saída rejeitada) fica para uma frente própria
+  na fila da GPU, depois deste PR, como a tarefa pede.
+
+## 2026-10-01 — V2, L0: política com lobos, aprendizado desligado (`docs/TAREFA_V2_L0_LOBOS.md`)
+
+Interpretações do desenho, todas conferidas pelo gate G2 (vida byte a byte igual à do instinto) em `tests/test_lobos.py`.
+- **"Pesos iniciados no prior do instinto":** a decisão guarda `w[regra][ação][entrada]` inteiros (escala S = 2¹⁰) e o prior são os
+  coeficientes literais de `PoliticaInstinto.agir` vezes S (tempo livre: ocioso 3; explorar 2 + 2·energia; brincar 1 + 3·humor;
+  chamar 1; fome moderada: comer 1 e chamar 1, que é "comer se u < 0,5"; regras deterministas: o único candidato com 1). A FORMA do
+  prior (qual regra dispara e quais ações concorrem) não é copiada: o lobo de impulsos executa o próprio código do instinto com uma
+  rng-sonda (a mesma técnica do prior do bandit), sem consumir a rng do motor. Se o instinto mudar, os impulsos seguem e o G2 denuncia a
+  tabela desatualizada.
+- **"Decisão em ponto fixo":** os pesos são inteiros; a ativação usa as entradas em float (o estado é float) e `w/S` com S potência de
+  dois, que é exato. É o que fecha a restrição de desenho da seção 3 (consumir a rng exatamente como o instinto) sem relaxar o gate: o
+  sorteio replica `random.choices(k=1)` passo a passo (`accumulate`, `total + 0.0`, `bisect_right(…, u * total)`), com UMA chamada de
+  `random()`, igual ao instinto nas duas regras com sorteio. Não foi preciso parar e reportar.
+- **Soma sem compensação:** a ativação é um laço da esquerda para a direita, não `sum()`, porque do Python 3.12 em diante o `sum()` de
+  floats é compensado e o instinto soma termo a termo. No L0 os termos extras são 0,0 e nada muda; no L1 isso vai importar.
+- **Entradas da percepção:** vies + `Estado.vetor` (8) + tempo sem cuidado normalizado pela mesma escala do bandit (480 ticks), 10 ao
+  todo. O tempo sem cuidado tem coeficiente zero no prior (o instinto só o usa na regra de abandono, que fica nos impulsos); entra para o
+  L1 ter a mesma informação que o bandit tinha.
+- **Tabela cheia:** 7 regras × 7 ações × 10 entradas = 490 pesos, inclusive os das ações que não são candidatas de cada regra (zeros).
+  Mantidos para o L1 decidir se amplia os candidatos; abaixo do teto de mil.
+- **`MotorPersonalidade` não roda o instinto puro:** `_PoliticaObservada` sempre repassa `receber_acao_dono`, e o instinto não o tem
+  (`AttributeError`). O controle do G2 nesse motor é um `PoliticaInstinto` com gancho vazio, definido no próprio teste;
+  `obediencia.py` não mudou. O `desejo_de` trata as duas políticas igual (sem `_bracos`: sem vontade).
+- **Motivo inteiro no `estado_interno()`:** a tarefa pede a contribuição de cada lobo "por decisão"; a lista completa de motivos fica no
+  `estado_interno()` (vida de 14 dias: 1344 motivos). Nenhuma run grava isso ainda; se pesar no `politica.json`, a decisão de resumir é
+  do L1/G4.
+- **Nome do atributo:** o registro da última decisão chama-se `ultimo_motivo`, não `ultima_decisao`, porque `motivo.PoliticaComMotivo`
+  despacha pelo nome `ultima_decisao` e espera o formato do bandit. O `PoliticaComMotivo` ainda não aceita a `PoliticaLobos` (fica para o
+  G4).
+- **Tarefa fora da `main`:** `docs/TAREFA_V2_L0_LOBOS.md` estava só no branch `v2-coord-r1` do coordenador quando o worker abriu; o
+  trabalho partiu da `main` (`83fc08f`) e leu a tarefa de lá. O arquivo não entra neste PR, para não conflitar com o do coordenador.
+
 ## 2026-10-01 — F0-VINCULO: diagnóstico do vínculo; Python e web conferem no valor, diferem num contador
 
 Tarefa `docs/TAREFA_V2_F0_VINCULO.md` (diagnóstico e proposta; nenhum código do motor muda). Conferência por leitura de
