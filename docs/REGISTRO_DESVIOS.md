@@ -1368,3 +1368,19 @@ na `v2_referencias_verificadas.csv`). A entrada foi **corrigida** (não removida
 `integration/02_RESEARCH_CROSSWALK.md` e `integration/09_PROMPT_CLAUDE_SCIENCE.md`. Trabalhos reais de Ackroff e Sclafani têm outros DOIs
 (`10.1016/j.appet.2010.04.011`, `10.1016/j.appet.2020.104793`) e não foram citados, por não terem sido verificados pelo projeto. O repositório não citava
 "Ackroff 2017" em lugar nenhum. Como o corpus está fora do git, este registro é a trilha da correção.
+
+## 2026-10-01 — V2: decisões D1–D11 das definições (aprovadas pelo Matheus)
+
+O Matheus aprovou como recomendadas as onze decisões de `docs/DEFINICOES_V2.md`. Efeito nos documentos:
+- **D1–D4 entram na L1** (`docs/TAREFA_V2_L1_DECISAO.md`, atualizada antes de qualquer validação): G3 mantém 0,10 bit como convenção, com G3-T
+  (acerto na tarefa ensinada) ao lado sem gate; G4 medido só sobre o aprendido; braço de controle de capacidade equivalente sem lobos com o custo do
+  gargalo; braço "só cuidado" acoplado, com acariciar como cuidado e a variante sem acariciar como sensibilidade.
+- **D5–D8:** registro do "só cuidado" como contribuição metodológica ("não localizamos"); duas perguntas por alavanca (pet × dono); peças do Dwarf
+  Fortress pela tabela da seção 5; G1 com igualdade exata nos inteiros.
+- **D9:** a busca bibliográfica da V2 entrou no repositório (`docs/referencias/V2_SINTESE_Q1_Q7.md`, `v2_referencias_verificadas.csv`,
+  `v2_referencias.bib`, `v2_verificacao_crossref.json`, `REGRAS_CITACAO_DIGILAB.md`). A síntese cita `v2_referencias.csv` e `v2_verificacao.json`;
+  os arquivos se chamam `v2_referencias_verificadas.csv` e `v2_verificacao_crossref.json` (nomes mantidos como vieram da busca).
+- **D10:** a 1a continua com a **bola**; **frutas, gosto hedônico e vício** são a alavanca seguinte, depois de a bola passar, com o "só cuidado"
+  obrigatório em qualquer braço com frutas.
+- **D11:** antes de desenhar as frutas, pesquisa verificada sobre vício e sensibilização de incentivo (prompt para o Claude Science fora do
+  repositório, `D:\Trab\digilab\docs\digibrain\integration\10_PROMPT_CLAUDE_SCIENCE_VICIO.md`).
