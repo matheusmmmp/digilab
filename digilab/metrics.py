@@ -465,3 +465,76 @@ def ic_percentil(valores: Sequence[float], nivel: float = 0.95) -> list[float]:
         raise ValueError("ic_percentil sem valores")
     lo = (1.0 - nivel) / 2
     return [v[int(lo * len(v))], v[int((1.0 - lo) * len(v)) - 1]]
+
+
+# ------------------------------------------------------------ forma final e diversidade (docs/PLANO_ANALISE_V21D.md)
+
+
+def r2_por_categoria(valores: Sequence[float], categorias: Sequence[str]) -> dict:
+    """Fracao da soma de quadrados de `valores` entre as `categorias` (r2 de um fator so). Mesma conta, na mesma
+    ordem, do r2 da forma final de experiments/analisar_dono_ambiente.py."""
+    if len(valores) != len(categorias) or not valores:
+        raise ValueError("r2_por_categoria: valores e categorias vazios ou de tamanhos diferentes")
+    m = sum(valores) / len(valores)
+    grupos: dict[str, list[float]] = {}
+    for v, c in zip(valores, categorias):
+        grupos.setdefault(c, []).append(v)
+    ss_tot = sum((v - m) ** 2 for v in valores)
+    ss_ent = sum(len(v) * (sum(v) / len(v) - m) ** 2 for v in grupos.values())
+    return {"r2": ss_ent / ss_tot if ss_tot > 0 else 0.0, "n_categorias": len(grupos),
+            "media_por_categoria": {c: {"n": len(v), "media": sum(v) / len(v)} for c, v in sorted(grupos.items())}}
+
+
+def kappa_fleiss(itens: Sequence[Sequence[str]]) -> dict:
+    """Concordancia categorica: cada item e classificado pelo mesmo numero de avaliadores (aqui: a forma final de um
+    genoma nos ambientes). Devolve o kappa de Fleiss e a concordancia media entre pares (P barra). Falha alto quando o
+    kappa nao e definido (todos na mesma categoria) ou quando os itens tem numero diferente de avaliadores."""
+    if not itens:
+        raise ValueError("kappa_fleiss sem itens")
+    n = len(itens[0])
+    if n < 2 or any(len(x) != n for x in itens):
+        raise ValueError("kappa_fleiss: todo item precisa do mesmo numero (>= 2) de avaliadores")
+    total: dict[str, int] = {}
+    p_itens = []
+    for x in itens:
+        cont: dict[str, int] = {}
+        for c in x:
+            cont[c] = cont.get(c, 0) + 1
+            total[c] = total.get(c, 0) + 1
+        p_itens.append((sum(k * k for k in cont.values()) - n) / (n * (n - 1)))
+    p_barra = sum(p_itens) / len(p_itens)
+    p_e = sum((k / (len(itens) * n)) ** 2 for k in total.values())
+    if p_e >= 1.0:
+        raise ValueError("kappa_fleiss indefinido: todas as classificacoes na mesma categoria")
+    return {"kappa": (p_barra - p_e) / (1.0 - p_e), "concordancia_pares": p_barra, "acaso": p_e}
+
+
+def qualidade_diversidade(valores: Sequence[float], categorias: Sequence[str], nichos: Sequence[str]) -> dict:
+    """Cobertura (nichos com pelo menos um valor / numero de nichos) e QD-score (soma, nos nichos alcancados, da media
+    dos valores do nicho). Categorias fora de `nichos` nao contam."""
+    if len(valores) != len(categorias) or not nichos:
+        raise ValueError("qualidade_diversidade: entradas invalidas")
+    alvo = set(nichos)
+    por: dict[str, list[float]] = {}
+    for v, c in zip(valores, categorias):
+        if c in alvo:
+            por.setdefault(c, []).append(v)
+    medias = {c: sum(v) / len(v) for c, v in sorted(por.items())}
+    return {"cobertura": len(por) / len(alvo), "qd_score": sum(medias.values()), "media_por_nicho": medias,
+            "n_por_nicho": {c: len(v) for c, v in sorted(por.items())}}
+
+
+def icc_um_fator(tabela: Sequence[Sequence[float]]) -> float:
+    """ICC(1) de um fator: linhas = sujeitos (genomas), colunas = avaliacoes (ambientes). (QM_entre - QM_dentro) /
+    (QM_entre + (k - 1) QM_dentro). Pode sair negativa. Falha alto sem variancia."""
+    n, k = len(tabela), len(tabela[0]) if tabela else 0
+    if n < 2 or k < 2 or any(len(x) != k for x in tabela):
+        raise ValueError("icc_um_fator: tabela precisa de >= 2 linhas e >= 2 colunas, todas do mesmo tamanho")
+    gm = sum(v for x in tabela for v in x) / (n * k)
+    medias = [sum(x) / k for x in tabela]
+    qm_entre = k * sum((m - gm) ** 2 for m in medias) / (n - 1)
+    qm_dentro = sum((v - medias[i]) ** 2 for i, x in enumerate(tabela) for v in x) / (n * (k - 1))
+    den = qm_entre + (k - 1) * qm_dentro
+    if den <= 0:
+        raise ValueError("icc_um_fator indefinida: sem variancia")
+    return (qm_entre - qm_dentro) / den

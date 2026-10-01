@@ -1102,6 +1102,31 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
 - **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
   e o bebê ficavam sem o estilo do corpus).
 
+## 2026-09-30 — Canal do dono, Etapa B: dose alta k = 9 → k = 8
+
+`docs/PLANO_ANALISE_CANAL_DONO.md`, adendo B.
+- **Problema:** com `peso_carater_stats` = 9, a renormalização dos stats não tem solução para 3 dos 600 pets vivos do
+  E1: todos os stats ficam presos no limite (`CatalogoInvalido`, "renormalizacao sem stats livres").
+- **Troca:** a dose alta passa a ser o maior k inteiro ≤ 9 sem nenhuma falha, k = 8. A regra não olha a taxa, os donos
+  nem nenhum resultado.
+- **Quando:** a run de k = 9 foi parada ainda nas vidas, antes do painel. Nenhum resultado de k = 9 existe.
+
+## 2026-09-30 — Canal do dono, Etapa B: implementação do k trocada (hashes das validações)
+
+- **Problema:** a primeira implementação punha `peso_carater_stats` na `ConfigCatalogo` e o usava no `catalogo.stats`.
+  Os dois entram nos hashes gravados das validações (`tests/test_equilibrio_v21d.py`: o config da validação V21D e o
+  gabarito web da V21D), e os dois testes falharam.
+- **Troca:** o k fica só em `run_natureza_criacao.catalogo_do_painel`. É um catálogo com os modificadores do caráter
+  multiplicados por k; `digilab/config.py` e `catalogo.py` voltaram a ser os de antes.
+- **Conta:**
+  - a antiga somava (v × k) × m;
+  - a nova soma v × (m × k);
+  - com m inteiro e k = 8, potência de 2, as duas são exatas e iguais.
+- **Conferência** (stats dos 600 pets vivos, as duas implementações):
+  - k = 8: 0 pets com stats diferentes. A run de k = 8 **vale como está**;
+  - k = 3: 108 pets diferem no último bit. A run de k = 3 **foi refeita** com a implementação nova, antes de qualquer
+    leitura dela entrar em relatório.
+
 ## 2026-09-30 — Comando pelo chat (`docs/TAREFA_COMANDO_CHAT.md`): o texto do jogador passa a agir no pet, pelo catálogo
 
 Decisão do Matheus (2026-09-30). A regra de 2026-09-28 da fala livre, "o que o jogador escreve não ensina o pet", **deixa de valer

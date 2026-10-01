@@ -347,6 +347,77 @@ byte a byte (teste e logs da V3 em disco). `metrics.componentes_cruzados`/`decom
 - A rodada balanceada caiu ao gravar o meta (outra sessão trocou o branch da pasta `v1` no meio da run); a análise
   foi refeita dos arquivos gravados (`--reanalisar`, conferido: a reanálise da espécie fixa sai idêntica).
 
+## Pergunta do efeito do dono: ENCERRADA (2026-10-01, `docs/LEITURA_CONSOLIDADA_DONO.md`)
+
+Decisão do Matheus, depois das três runs abaixo (V21D no painel, Etapa A e Etapa B). Leitura consolidada: **neste
+motor, o dono pesa pelo cuidado (mortes, saúde, limiar de cuidado), não pelo ensino.** O feedback deixa pouca marca no
+que o pet aprende, essa marca depende mais do ambiente que do dono, e nem comprimir as formas nem levar o caráter
+direto aos stats deu peso ao dono.
+- **Não rodar de novo** calibrações de forma ou de peso do caráter atrás de efeito do dono, nem a "V4" (cuidado
+  reduz a variância entre ambientes).
+- **Reabrir só com uma pergunta nova sobre o aprendiz**, com plano registrado antes da run.
+- O código das runs fica, com as chaves desligadas por padrão.
+
+## Painel do E1 com a V21D: força do canal de forma (2026-09-30, `docs/PLANO_ANALISE_V21D.md`) — COMPRESSÃO NÃO VERIFICADA
+
+Pergunta adotada: que propriedade do mapa até o desempenho dá efeito mensurável ao dono? O desenho é pareado: as mesmas
+640 vidas e sementes do E1 (vida em V21C: o sparring usa a `REGRAS_CAMPANHA`), e só o painel B luta com as quatro chaves
+da V21D. Rodam `experiments/configs/linhagem/natureza_criacao_v21d.json` e `experiments/analisar_v21d.py`. Números de
+`artifacts_linhagem/natureza_criacao_v21d/especie_fixa/analise_plano.json`; relatório em `docs/RESULTADO_V21D_PAINEL.md`.
+
+- **Gate: COMPRESSÃO NÃO VERIFICADA**, no subconjunto primário (atencioso + permissivo, sem mortes):
+  - r²_forma 0,929 → 0,939, Δ +0,010 [−0,042; +0,040];
+  - pelo plano o experimento não testa a hipótese, e nada se conclui sobre o dono (o passo 2, Δfrac_D, não se aplica).
+- **Por quê:** a V21D encolhe a amplitude entre as formas adultas (0,521 → 0,387), mas **troca a ordem** das duas mais
+  comuns:
+  - espelho (158 pets) 0,406 → 0,301;
+  - muralha (128 pets) 0,279 → 0,351.
+  Pesada pela distribuição de formas que a vida produz, a variância entre formas não cai. A compressão da validação é
+  dos bots com pesos iguais.
+- **QD:** o κ de Fleiss da forma entre ambientes fica perto de 0 em três donos (permissivo 0,27): o ambiente decide a
+  forma mais que o dono ou o genoma.
+- **Código:**
+  - `regras_de` monta a `ConfigCombateV21D` só com uma chave dela na config;
+  - `lutador_painel` usa `gambits_adulto`;
+  - o `metrics.py` ganhou `r2_por_categoria`, `kappa_fleiss`, `qualidade_diversidade` e `icc_um_fator`;
+  - conferido: vidas byte a byte iguais, piloto V21C igual e `analisar_dono_ambiente` igual.
+
+## Canal do dono fora da forma, Etapa A (2026-09-30, `docs/PLANO_ANALISE_CANAL_DONO.md`) — SINAL PRESENTE
+
+A Etapa A mede se o sinal do dono chega ao que o pet aprende. Não usa vida nova nem mecânica nova: o
+`experiments/sinal_dono.py` reproduz as 640 vidas arquivadas do E1, confere cada uma contra o `pets.json` e decompõe
+o caráter em `T_ADOL` por genoma × dono × ambiente. Números de `artifacts_linhagem/sinal_dono/resultado.json`;
+relatório em `docs/RESULTADO_SINAL_DONO.md`.
+
+- **Gate A: SINAL PRESENTE**, só pelo eixo **resistente**: σ²_D +0,0034, IC 98,75% [+0,0009; +0,0121], frac D 0,208.
+  Atento, impetuoso e paciente não passam.
+- **O sinal não é o da coerência.**
+  - No eixo resistente, atencioso − aleatório é +0,012 [−0,091; +0,115]; o que se separa é o permissivo (−0,220) do
+    relapso (−0,058).
+  - Atencioso − aleatório só aparece no eixo paciente (+0,212 [+0,001; +0,461]), que não passa com Bonferroni.
+- **O ambiente move o aprendizado:** dono × ambiente fica entre 24% e 48% de cada eixo.
+- **A linha já é loteria:** o κ de Fleiss da linha entre ambientes fica perto de 0, salvo no permissivo (0,41).
+- **Impostos** (descritivo): a disciplina é 99% dono; o vínculo tem atencioso − aleatório −0,176 (o defeito
+  conhecido).
+- **Etapa B:** autorizada pelo Matheus, condicionada a este gate. Pelo plano, só roda depois de um adendo registrado
+  antes da run.
+
+## Canal do dono fora da forma, Etapa B (2026-09-30) — CANAL NÃO ABERTO
+
+O pet do painel luta com o peso do caráter nos stats multiplicado por k (`ConfigCatalogo.peso_carater_stats`, padrão
+1,0; só no pet do painel, vidas iguais às do E1). k = 3 e k = 8: o k = 9 do plano quebrava a renormalização em 3 pets
+e foi trocado antes da run (desvio registrado). Números de `artifacts_linhagem/natureza_criacao_canal/analise_plano.json`
+(`experiments/analisar_canal.py`); relatório em `docs/RESULTADO_CANAL_DONO.md`.
+
+- **Gate B: CANAL NÃO ABERTO**, por margem mínima: Δr² da forma nos vivos (k = 8) −0,039, IC95 [−0,081; +0,0008].
+- **Descritivo:** o dono perde peso.
+  - frac_D da taxa: 0,050 → 0,039 → 0,028;
+  - atencioso − aleatório: Δ +0,007 [−0,018; +0,029].
+  - O caráter amplificado afasta as formas (emboscador sobe, espelho e titã descem) e alimenta dono × ambiente.
+  - Com k = 8, 30% dos stats ficam presos no limite.
+- **Leitura:** o caminho da arquitetura, como testado, fecha negativo. O gargalo é o que o pet aprende, que carrega
+  mais ambiente que dono. Neste motor o dono pesa pelo cuidado, não pelo ensino.
+
 ## Evolução canônica no jogo (2026-09-29, `docs/DESIGN_EVOLUCAO_CANONICA.md`)
 
 Pedido do Matheus ("tem que seguir o cânone"), só no jogo web; o Python da pesquisa segue com 4 estágios.
@@ -1036,6 +1107,9 @@ nas sementes das sombrias. O repertório (candidatas da troca) não mudou, entã
 Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
+
+- **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). Não há
+  pergunta de pesquisa viva; uma nova, se vier, é sobre o aprendiz.
 
 - **Stand-by: combate 1×1 em tempo real, como no Digimon Championship (DS)** (Matheus, 2026-09-29: guardar para o futuro, sem executar).
   - **A ideia:** o motor passa a simular espaço contínuo (posição, velocidade, alcance, tempo de recarga, passos fixos para continuar reproduzível) no lugar dos turnos e das 3 distâncias. O pet segue lutando sozinho, e o dono influencia pela criação.
