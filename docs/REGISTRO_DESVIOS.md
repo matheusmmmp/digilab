@@ -1257,4 +1257,4 @@ apagado, não muda e não é estendido. Os gates da fase 1 continuam PROPOSTOS a
 Rodada 1 (coordenação, `docs/V2_TRABALHO_PARALELO.md`): quatro frentes sem run estatística e sem GPU, uma por worktree:
 `TAREFA_V2_F0_INVENTARIO.md` (inventário e escolha da interação da 1a), `TAREFA_V2_L0_LOBOS.md` (esqueleto dos lobos, aprendizado desligado, igual ao
 instinto byte a byte), `TAREFA_V2_F0_VINCULO.md` (diagnóstico e proposta, sem código) e `TAREFA_V2_F0_CORPUS.md` (itens não latinos do corpus reescritos em
-português). Reservas: nenhuma faixa de semente (nenhuma run nesta rodada); `VERSAO_PET = 10` reservado para a primeira versão web dos lobos (depois do L1).
+português). Reservas: nenhuma faixa de semente (nenhuma run nesta rodada); `VERSAO_PET` reservado pelo coordenador (rodada 2: 10 = vínculo novo, 11 = lobos na web, 12 = bola da 1a; as versões são cumulativas, então o número segue a ordem de chegada na web).

@@ -46,4 +46,4 @@ coerentes produzem políticas distinguíveis entre si e do aleatório, com decis
 
 ## 6. Fora desta tarefa
 
-Recompensa multidimensional; janela de crédito maior; L2/L3 (peças do Dwarf Fortress); A1; porte para a web (`VERSAO_PET = 10` reservado, só depois do G3–G5).
+Recompensa multidimensional; janela de crédito maior; L2/L3 (peças do Dwarf Fortress); A1; porte para a web (`VERSAO_PET = 11` reservado, só depois do G3–G5).
