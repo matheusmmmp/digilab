@@ -1518,3 +1518,16 @@ ter de ser revistas. Efeito:
   CORPUS ainda não está em disco: quando estiver, ela atualiza `docs/research/digibrain/references/source_index.md`.
 - **Roteiro do vídeo e posts:** revisados e números conferidos pelo Matheus (arquivos fora do repositório, `D:\Trab\digilab\docs\`).
 
+## 2026-10-01 — PLANO_V2_PESQUISA, revisão 2 (decisão do Matheus: M3)
+
+O Matheus adotou a pergunta maior ("em que condições a plasticidade durante a vida produz vantagem adaptativa sobre as
+predisposições herdadas?") e a arquitetura com o dono informante como alvo da V2. `docs/PLANO_V2_PESQUISA.md` foi reescrito:
+- a H1 antiga (donos coerentes distinguíveis) vira o braço P3, com os mesmos gates G3–G6;
+- braços P0–P3 e condições casado/descasado/mutável;
+- vantagem adaptativa medida no próprio ambiente, nunca pela força na arena;
+- a fase 0 é dada como feita;
+- pesquisa no Python, um DigiBrain na web;
+- a regra de parada de 2026-10-01 continua.
+
+Nenhum número de gate mudou. M5–M9 do `docs/ROADMAP_V2.md` continuam abertas.
+

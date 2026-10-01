@@ -189,12 +189,12 @@ desenho; só depois o genoma o produz (N10). Assim a pergunta não espera o geno
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| A1 | Adotar esta arquitetura como alvo da V2 | Adotar como alvo, construída pela ordem N0 → N10 | Sem um alvo, cada nó vira mecânica solta; tudo de uma vez, nenhum gate isola o que funcionou |
+| A1 | Adotar esta arquitetura como alvo da V2 | **DECIDIDO pelo Matheus (2026-10-01):** adotada (`PLANO_V2_PESQUISA.md`, revisão 2) | — |
 | A2 | A L1 (dono avaliador, COACH) continua | Continuar até a validação, como braço de comparação do dono informante | Parar a L1 agora joga fora o único contraste direto com o resultado da v1 |
 | A3 | Informação do dono entra pela percepção, nunca como reforço (D-A) | Sim | Como reforço, repete o desenho refutado |
 | A4 | Valor instrumental sem o dono (D-B) | Sim, (1) | Com o objetivo do dono, o dono volta como recompensa |
 | A5 | Um canal de reforço primeiro, o homeostático (D-C) | Sim | Três canais de uma vez impedem saber qual deles fez efeito |
-| A6 | A pergunta maior (seção 6) como pergunta da V2 no `PLANO_V2_PESQUISA.md` | Adotar como pergunta da fase 1 **completa**, com a H1 (L1) como o braço P3; registrar agora, antes da validação da L1, para que o resultado da L1 não decida a pergunta | Adotada depois da validação da L1, parece fuga de um possível negativo |
+| A6 | A pergunta maior (seção 6) como pergunta da V2 no `PLANO_V2_PESQUISA.md` | **DECIDIDO pelo Matheus (2026-10-01):** adotada; a H1 antiga vira o braço P3 | — |
 | A10 | "Vantagem adaptativa" = desempenho no próprio ambiente (privação, saúde, G3-T), nunca a força na arena | Sim | Pela arena, mede-se o arquétipo, não a plasticidade |
 | A11 | Eixo de ambiente casado × descasado × mutável, com as frutas | Sim; o experimento P0–P3 vem depois do N4 | Só com a bola não há o que descasar, e a pergunta não tem condição |
 | A12 | Braço P2e (o dono informa errado) | Incluir | Sem ele, "o mundo valida ou refuta" nunca é testado |
