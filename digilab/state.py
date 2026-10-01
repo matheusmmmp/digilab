@@ -39,9 +39,9 @@ class Estado:
     def tick_do_dia(self) -> int:
         return self.tick % TICKS_POR_DIA
 
-    @property
-    def em_privacao(self) -> bool:
-        return min(self.fome, self.higiene, self.energia) < 0.15
+    def em_privacao(self, cfg: Config) -> bool:
+        """Alguma necessidade vital abaixo de `Config.limiar_privacao` (humor nao conta)."""
+        return min(self.fome, self.higiene, self.energia) < cfg.limiar_privacao
 
     def vetor(self) -> tuple[float, ...]:
         """Representacao numerica para a politica. Ordem congelada."""
@@ -86,7 +86,7 @@ def avancar_um_tick(estado: Estado, cfg: Config, rng: random.Random) -> Estado:
         sujeira=sujeira,
     )
 
-    if provisorio.em_privacao:
+    if provisorio.em_privacao(cfg):
         saude = estado.saude - cfg.dano_saude_por_tick
     else:
         saude = estado.saude + cfg.cura_saude_por_tick

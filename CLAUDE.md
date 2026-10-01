@@ -112,12 +112,12 @@ tempo). A vida é reconstruída reprocessando o log.
 | `docs/` | especificações (`ESPEC_COMBATE_V2.md`, `ESPEC_COMBATE_V21.md`, `TAREFA_MEMORIA_EXPRESSAO.md`), dados PROPOSTOS do V2.1 (`catalogo_pets.json`, `arvore_evolucao.json`, `cronograma_interacoes.json`) e `REGISTRO_DESVIOS.md` |
 | `digilab/historia.py` | voz própria (DESIGN_VOZ_PROPRIA, parte 1): extrator dos fatos H/O/P/L a partir do registro (função pura; `ConfigHistoria`, `PARAMETROS_HISTORIA_V1`); `fabrica_com_captura` anota as ações do pet no replay |
 | `digilab/educacao.py` (mentira) | `ConfigMentira` (desligada por padrão; `PARAMETROS_MENTIRA_V1`, à parte do hash da educação-v1): honestidade, chance de mentir, janela de fala, evento `fala`; reações dos donos em `donos_educacao.py`. `tests/test_reproducao_v3_confirmatoria.py` confere V3c e confirmatória contra os `pets.json` |
-| `tests/` | 290 testes; `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
+| `tests/` | a suíte inteira (`python -m pytest tests/ -q`; a contagem do dia fica no PR de cada frente, nunca aqui, porque envelhece); `test_canonico_intacto.py` roda a canônica V1 (~70 s) e `test_motivo_expressao.py` a bateria V2 (~50 s); `test_combate_v21.py` confere `config.py` contra os JSONs de `docs/` |
 
 ## Comandos
 
 ```bash
-python -m pytest tests/ -q                                                   # 290 testes, ~4 a 7 min
+python -m pytest tests/ -q                                                   # a suíte inteira, ~7 min (a contagem do dia vai no PR de cada frente)
 python experiments/run_bateria_v21.py --config experiments/configs/bateria_v21_canonico.json  # combate V2.1, ~10 min; rc 0/2
 cd web/app && npm install && npm run build                                  # constrói o jogo web em web/dist/
 python servidor/servidor_local.py                                             # jogo web + fala por LLM em http://localhost:8765/v1/web/dist/
@@ -134,7 +134,8 @@ python experiments/run_arena.py --config experiments/configs/fumaca.json     # f
 python run_demo.py                                                            # demo do v0
 ```
 
-Ambiente do usuário: Windows, pasta `D:\Trab\digilab\v1`. Python 3.10+.
+Ambiente do usuário: Windows, pasta `D:\Trab\digilab\v2` (referência da `main`; o trabalho é nas worktrees `D:\Trab\digilab\v2-<frente>`,
+`docs/V2_TRABALHO_PARALELO.md`; a `v1` é só leitura). Python 3.10+.
 
 ## Estado atual (run canônica em `artifacts/`, protocolo `adce99fc3fdc…`)
 

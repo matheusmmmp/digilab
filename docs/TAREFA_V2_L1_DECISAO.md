@@ -26,13 +26,26 @@ coerentes produzem políticas distinguíveis entre si e do aleatório, com decis
 ## 4. Experimento e gate
 
 - Plano de análise **`docs/PLANO_ANALISE_V2_L1.md` commitado antes de qualquer run**, com:
-  - **Desenho:** o da arena v1 (`PROTOCOLO_ARENA_V1`: mesmos donos sintéticos, orçamento, 14 dias), trocando o bandit pela `PoliticaLobos`; mais o braço
-    **"só cuidado"** (V2-H0) e o **bandit nas mesmas sementes** como referência da v1 (não é braço novo de pesquisa, é o controle).
+  - **Desenho:** o da arena v1 (`PROTOCOLO_ARENA_V1`: mesmos donos sintéticos, orçamento, 14 dias), trocando o bandit pela `PoliticaLobos`; mais o
+    **bandit nas mesmas sementes** como referência da v1 (controle, não braço novo de pesquisa).
+  - **Braços obrigatórios pelas decisões de `docs/DEFINICOES_V2.md` (aprovadas pelo Matheus em 2026-10-01):**
+    - **"Só cuidado" acoplado (D4, seção 3):** para cada ovo e ambiente do atencioso, mesma semente e as mesmas ações de cuidado nos mesmos ticks
+      (alimentar, limpar, levar ao banheiro, tratar lesão, acariciar), copiadas do registro do atencioso, sem elogiar nem repreender. Variante sem
+      acariciar como sensibilidade.
+    - **Controle de capacidade equivalente sem lobos (D2, seção 2):** mesmo número de pesos inteiros, mesmas entradas, mesma regra de atualização e
+      mesmas sementes, numa camada de decisão única; atribuição pelos mesmos grupos de entrada.
   - **Sementes:** calibração **3101…3505** (ajustar passo e teto); validação **4101…4505**, **uma única vez**, depois do referendo.
-  - **Métricas e gates (PROPOSTOS, do plano da V2):** G3 JSD entre donos coerentes ≥ 0,10 bit com IC fora de 0,02, pela mesma função de `digilab/metrics.py`
-    (`divergencia_politicas`, `jsd_bits`); G4 fator explicável em ≥ 50% das decisões; G5 a divergência se mantém sem mortes e sem lesão (no desenho da
-    arena v1 não há morte: registrar isso e medir também no motor de educação com lesões, braço próprio); G6 distância ao instinto sem crescer sem limite em
-    14 dias.
+  - **Métricas e gates (PROPOSTOS, do plano da V2, com as definições de `docs/DEFINICOES_V2.md`):**
+    - G3 JSD entre donos coerentes ≥ 0,10 bit com IC fora de 0,02 (`divergencia_politicas`, `jsd_bits`); é convenção do projeto (D1);
+    - **G3-T ao lado, sem gate (D1):** acerto na tarefa ensinada (a regra de `donos.julgar_acao`), eficiência amostral (sinais do dono até metade do
+      caminho entre o instinto e o máximo) e a política ótima do próprio dono como teto; nova função em `digilab/metrics.py`;
+    - **G4 só sobre o aprendido (D3):** fração de decisões em que a diferença entre os pesos atuais e os do prior muda a escolha e é atribuível a um
+      fator nomeado; a fração bruta (com o instinto) reportada sem gate; G4 dos lobos × G4 do controle sem lobos, com IC; custo de desempenho do
+      gargalo = G3-T dos lobos − G3-T do controle;
+    - G5 a divergência se mantém sem mortes e sem lesão **e** acima do "só cuidado" acoplado (no desenho da arena v1 não há morte: registrar isso e medir
+      também no motor de educação com lesões, braço próprio);
+    - G6 distância ao instinto sem crescer sem limite em 14 dias;
+    - análise por norma de reação (intercepto = nível, inclinação = sensibilidade ao ambiente) nos braços ensino × só cuidado (seção 3 das definições).
   - O sha256 de `digilab/policies/lobos.py` e de `digilab/config.py` vai no meta da run (o hash de protocolo não cobre código).
 - Artefatos em `artifacts_v2_l1/{calibracao,validacao}/`. GPU: não.
 - Parada: G3, G4 ou G5 falhando na validação = resultado negativo registrado; nada de reajustar olhando a validação.
