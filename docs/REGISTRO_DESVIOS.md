@@ -1506,3 +1506,7 @@ ter de ser revistas. Efeito:
   estão (substitui o referendo M1 do `docs/ROADMAP_V2.md`); M4 decidido;
 - continuam valendo: plano antes da run, validação uma vez, sementes separadas, nada de reajustar olhando a validação.
 
+- **Validação (2026-10-01, `artifacts_v2_l1/validacao/`): rodada uma vez, no ponto 512/1024, liberada pelo PR #120 sem o referendo
+  dos gates (decisão do Matheus: falhar não para a V2). Nada foi reajustado.** G3, G4, G5 e G6 falham; G5(c) passava na calibração e
+  cruza zero na validação (5 sementes). Uma semente do acoplado (4505) ficou com 144 interações contra 85–91 das outras: o atencioso
+  dessa vida deu menos sinais; relatado, não tratado. O ponto e os alvos continuam os do plano; a revisão é do Matheus.
