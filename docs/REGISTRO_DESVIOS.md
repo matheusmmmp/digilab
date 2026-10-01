@@ -1368,5 +1368,4 @@ Plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md` commitado antes da run; uma run de c
   inteira como processo independente; nada tinha sido gravado. Os artefatos são da segunda execução (10:19 a 10:42).
 - **Rodada 4 do comando: gate PASSA com o estilo** (3,3% falsos positivos; 88,3% imperativos). Comparação com a rodada 3 é descritiva
   (sementes diferentes, sem teste). As 2 saídas rejeitadas pelo parser não são por letra não latina.
-- **Suíte completa não rodada nesta entrega** (limite de uso da sessão); rodados `tests/test_comando_chat.py` e `test_corpus_latino.py`
-  (26 passed) depois das mudanças de código. Pendência: rodar `python -m pytest tests/ -q` antes do merge.
+- **Testes:** `python -m pytest tests/ -q` na worktree, depois das runs: 596 passed, 1 skipped (7 min 8 s, Windows, Python 3.13.0).
