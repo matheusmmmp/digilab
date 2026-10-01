@@ -1494,3 +1494,15 @@ Interpretações do desenho, registradas com o plano (antes da calibração). Os
   de ambiente medido (por exemplo, a dificuldade do ambiente) é desenho novo e não entra sem plano.
 - **Artefatos pesados fora do git.** Os `vidas/*.politica.json` da L1 (um motivo por decisão) somam 600 MB; `.gitignore` os deixa de
   fora e eles se regeneram pelo replay do `.jsonl` com o mesmo código (o orquestrador confere o replay bit a bit antes de medir).
+
+## 2026-10-01 — V2: seguir mesmo com validações falhando (decisão do Matheus)
+
+Depois da calibração da L1 (PR #119: G3 0,029 bit contra 0,10; G4 do aprendido 0,188 contra 0,50; G6 com pesos no teto; G5 (c)
+passa; `artifacts_v2_l1/calibracao/`), o Matheus decidiu: **a V2 segue mesmo se as validações falharem agora**, porque as
+implementações futuras (pergunta maior, frutas, comparação de cérebros) mudam tanto o escopo que todas as validações iniciais vão
+ter de ser revistas. Efeito:
+- a parada do `docs/PLANO_V2_PESQUISA.md` (seção 3, fase 1) deixa de bloquear; o resultado de cada validação é registrado como sair;
+- a validação da L1 roda já, no ponto da calibração (passo 512, teto 1024), com os alvos e as interpretações do plano rev. 2 como
+  estão (substitui o referendo M1 do `docs/ROADMAP_V2.md`); M4 decidido;
+- continuam valendo: plano antes da run, validação uma vez, sementes separadas, nada de reajustar olhando a validação.
+

@@ -70,7 +70,10 @@ Gates da fase 1 (PROPOSTOS; plano de análise congelado antes; sementes de calib
 | G5 separação do cuidado | a divergência de G3 se mantém no braço sem mortes e sem lesão | metade do efeito da V3 vinha das mortes |
 | G6 sem deriva | distância da política ao instinto não cresce sem limite em 14 dias | traços como freio |
 
-Só com G3, G4 e G5 passando a fase 2 começa. Falhando, a V2 registra o resultado negativo e para: é um resultado.
+Só com G3, G4 e G5 passando a fase 2 começa. **Decisão do Matheus (2026-10-01): a V2 segue mesmo com gates falhando agora.** O
+resultado de cada validação é registrado tal como sair (negativo inclusive) e não bloqueia as etapas seguintes, porque as
+implementações futuras (pergunta maior, frutas, comparação de cérebros: `docs/ROADMAP_V2.md`) mudam o escopo a ponto de todas as
+validações iniciais terem de ser revistas. Continua valendo: plano antes da run, validação uma vez, nada de reajustar olhando a validação.
 
 ### Fase 2 — humanos (H2)
 

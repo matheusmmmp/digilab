@@ -116,10 +116,10 @@ para o produto. Frutas e vício só ganham versão se forem para o produto.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| M1 | Referendar G3–G6 com D1–D4 | agora | sem referendo a L1 não valida |
+| M1 | Referendar G3–G6 com D1–D4 | **substituído (2026-10-01):** a validação da L1 roda com os alvos do plano rev. 2 como estão, sem bloquear | — |
 | M2 | Aprovar o desenho da bola (#113) | aprovar | ação nova do pet quebraria a v1 (V5) |
 | M3 | Adotar a pergunta maior e a arquitetura (A1, A6 de `ARQUITETURA_V2_VALIDACAO.md`) | adotar agora, antes da validação da L1 | adotada depois parece fuga de um negativo |
-| M4 | Falha da L1 não para a V2 (é só o braço P3) | sim, registrar no `PLANO_V2_PESQUISA.md` | manter a parada antiga encerra a pesquisa por causa de um braço que a v1 já previa fraco |
+| M4 | Falha da L1 não para a V2 (é só o braço P3) | **DECIDIDO pelo Matheus (2026-10-01)**, e ampliado: nenhuma validação que falhe agora bloqueia a V2; o escopo futuro vai pedir revisão de todas | — |
 | M5 | Frutas como sub-decisão de comer (V5) | sim | ações novas quebram a reprodução da v1 |
 | M6 | O chat D deixa a fila da GPU e faz a bancada | sim | sem a bancada, cada nó monta o próprio orquestrador e P1–P3 deixam de ser comparáveis |
 | M7 | Reservas de sementes da seção 6 | aprovar | reusar validação vicia o teste |
