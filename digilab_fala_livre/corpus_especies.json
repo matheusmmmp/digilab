@@ -206,7 +206,7 @@
    ],
    "fala": [
     {
-     "texto": "Pronome おいら/オイラ; fala casual com muxoxo ちぇっ",
+     "texto": "Pronome rústico e descontraído; fala casual, com muxoxo de contrariedade",
      "marca": "PARCIAL",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
      "jogo": "Digimon World (PS1)",
@@ -231,10 +231,11 @@
      "jogo": "Digimon Adventure: Anode Tamer (WS)"
     },
     {
-     "texto": "Chama o mundo digital pelo termo em inglês デジタルワールド",
+     "texto": "Chama o mundo digital pelo termo em inglês, Digital World",
      "marca": "VERIFICADO",
      "fonte": "http://www.syldra.net/yesterday/wonderswan/anodescript-a.html",
-     "jogo": "Digimon Adventure: Anode Tamer (WS)"
+     "jogo": "Digimon Adventure: Anode Tamer (WS)",
+     "reescrito": true
     },
     {
      "texto": "Chama o humano pelo nome sem honorífico, deduzido da falta de nota da tradutora",
@@ -255,21 +256,23 @@
      "jogo": "Digimon World: Next Order"
     },
     {
-     "texto": "Pronome ボク; fala infantil e direta; chama o parceiro pelo nome sem honorífico",
+     "texto": "Pronome infantil e modesto; fala infantil e direta; chama o parceiro pelo nome, sem título de respeito",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
     {
-     "texto": "Capanga cômico do bando de Ogremon: chama o chefe de かしら, grita formações e entra em pânico",
+     "texto": "Capanga cômico do bando de Ogremon: chama Ogremon de chefe, grita formações e entra em pânico",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/110.html",
      "jogo": "Digimon World (PS1)",
-     "com": "Ogremon"
+     "com": "Ogremon",
+     "reescrito": true
     },
     {
      "texto": "No clímax manda, com Jijimon e Tokomon, a energia da cidade para salvar o herói",
@@ -437,14 +440,14 @@
    ],
    "fala": [
     {
-     "texto": "Arcaico: 我 e 汝 com conjugações clássicas; depois 私/あなた com です/ます",
+     "texto": "Primeiro arcaico, com pronomes solenes e conjugações clássicas; depois formal e polido, com pronomes neutros",
      "marca": "PARCIAL",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
      "jogo": "Digimon World (PS1)",
      "reescrito": true
     },
     {
-     "texto": "Chama o ancião de ジジモン様",
+     "texto": "Chama o ancião Jijimon com um título de grande respeito",
      "marca": "PARCIAL",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/114.html",
      "jogo": "Digimon World (PS1)",
@@ -463,20 +466,22 @@
      "jogo": "Digimon World 2 (PS1)"
     },
     {
-     "texto": "Pronome 私; registro formal e declarativo com 〜のだ",
+     "texto": "Pronome formal; registro formal e declarativo, com fecho explicativo nas frases",
      "marca": "OUTRA MIDIA",
      "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/13/",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
-     "texto": "No 02, a partir do nível Adulto usa 私 com tom mais digno",
+     "texto": "No 02, a partir do nível Adulto usa um pronome formal, com tom mais digno",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/パタモン",
      "jogo": "Digimon Adventure 02 (anime)",
      "midia": "anime",
-     "nota_marca_original": "DIVERGENTE"
+     "nota_marca_original": "DIVERGENTE",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -571,12 +576,13 @@
    ],
    "fala": [
     {
-     "texto": "Tom altivo e feminino com 〜わ e 〜のよ; a forma exata da fala citada é atribuição inferida",
+     "texto": "Tom altivo e feminino, com partículas femininas no fim das frases; a forma exata da fala citada é atribuição inferida",
      "marca": "OUTRA MIDIA",
      "fonte": "http://mamemamemon.com/custom37.html",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -704,12 +710,13 @@
      "jogo": "Digimon Tamers: Brave Tamer (WSC)"
     },
     {
-     "texto": "Dialeto de Nagoya, bordão 〜だぎゃ, pronome オレ",
+     "texto": "Fala no dialeto de Nagoya, com um bordão regional no fim das frases; pronome masculino informal",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャー02の登場キャラクター",
      "jogo": "Digimon Adventure 02 (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
      "texto": "Põe dagyaa até quando a frase não precisa",
@@ -774,10 +781,11 @@
    ],
    "tracos": [
     {
-     "texto": "Frio, lacônico e seguro de si; solta um フ… antes de falar",
+     "texto": "Frio, lacônico e seguro de si; solta um riso curto e seco antes de falar",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     },
     {
      "texto": "Luta pelo ninho e depois sugere ele mesmo ir para a cidade, onde vira transportador",
@@ -818,18 +826,20 @@
    ],
    "fala": [
     {
-     "texto": "Pronome 俺, trata o humano por あんた; frases curtas",
+     "texto": "Pronome masculino informal; trata o humano de modo informal e seco; frases curtas",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/101.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     },
     {
-     "texto": "A partir de Birdramon a linha de Piyomon usa 私",
+     "texto": "A partir de Birdramon a linha de Piyomon usa um pronome formal",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -918,11 +928,12 @@
    ],
    "fala": [
     {
-     "texto": "Pronome オレ, registrado numa transcrição de fã",
+     "texto": "Pronome masculino informal, registrado numa transcrição de fã",
      "marca": "OUTRA MIDIA",
      "fonte": "https://web.archive.org/web/2025/http://www4.plala.or.jp/ozzy/red/02_record/02_48.html",
      "jogo": "Digimon Adventure 02 (anime)",
-     "midia": "anime"
+     "midia": "anime",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -1028,10 +1039,11 @@
    ],
    "fala": [
     {
-     "texto": "Pronome ぼく; fala chorosa e exagerada",
+     "texto": "Pronome infantil e modesto; fala chorosa e exagerada",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/98.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     },
     {
      "texto": "Como parceiro, fala em balões curtos em katakana, como Achei!; contexto não verificado",
@@ -1040,28 +1052,31 @@
      "jogo": "Digimon World: Next Order"
     },
     {
-     "texto": "Pronome オレ, mas ボク no primeiro episódio",
+     "texto": "Pronome masculino informal, mas o infantil e modesto no primeiro episódio",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
-     "texto": "Usa 敬語 com estranhos e com o pai do parceiro",
+     "texto": "Usa linguagem polida com estranhos e com o pai do parceiro",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
-     "texto": "Final 〜ろよ; chamar o registro de casual masculino é leitura do autor com base em uma fala",
+     "texto": "Imperativo casual no fim da frase; chamar o registro de casual masculino é leitura do autor com base em uma fala",
      "marca": "OUTRA MIDIA",
      "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/09/",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -1148,12 +1163,13 @@
    ],
    "fala": [
     {
-     "texto": "Fala de si como このデュークモン e tem como bordão que jamais perdoará",
+     "texto": "Fala de si na terceira pessoa, com ênfase no próprio nome, e tem como bordão que jamais perdoará",
      "marca": "OUTRA MIDIA",
      "fonte": "https://dic.pixiv.net/a/デュークモン",
      "jogo": "Digimon Tamers (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
      "texto": "Às vezes fala em uníssono com o parceiro humano; uso dessa fala híbrida ainda pendente",
@@ -1310,12 +1326,13 @@
      "reescrito": true
     },
     {
-     "texto": "Da forma Birdramon em diante a linha de Piyomon usa 私",
+     "texto": "Da forma Birdramon em diante a linha de Piyomon usa um pronome formal",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     }
    ],
    "interacoes": [],
@@ -1381,10 +1398,11 @@
    ],
    "fala": [
     {
-     "texto": "Pronome 俺, trata o humano por おまえ; finais 〜ぜ e 〜ねえ",
+     "texto": "Pronome masculino informal; trata o humano de modo brusco; finais de frase enfáticos e descontraídos",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/99.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     }
    ],
    "interacoes": [],
@@ -1544,20 +1562,22 @@
      "jogo": "Digimon Digital Card Battle (PS1)"
     },
     {
-     "texto": "Pronome 私; às vezes fala com os colegas em tom de ordem",
+     "texto": "Pronome formal; às vezes fala com os colegas em tom de ordem",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
-     "texto": "Como serva de Vamdemon, tom seco e masculino, frases com だ e な",
+     "texto": "Como serva de Vamdemon, tom seco e masculino, com finais de frase curtos e afirmativos",
      "marca": "OUTRA MIDIA",
      "fonte": "http://mamemamemon.com/custom28.html",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
      "texto": "Depois passa a falar como irmã mais velha, com final feminino",
@@ -1776,12 +1796,13 @@
    ],
    "fala": [
     {
-     "texto": "Pronome おいら; registro coloquial e malandro, com よな e 合点だい",
+     "texto": "Pronome rústico e descontraído; registro coloquial e malandro, com fechos de confirmação e aceite à moda antiga",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     },
     {
      "texto": "Não dá o braço a torcer: puxa para si o mérito, meio de brincadeira",
@@ -1884,10 +1905,11 @@
    ],
    "fala": [
     {
-     "texto": "Pronome 俺, trata por おまえ e おまえ達, termina com ぜ e だな, ri com ふふ",
+     "texto": "Pronome masculino informal; trata os outros de modo brusco; finais de frase enfáticos; ri baixinho",
      "marca": "VERIFICADO EM OUTRA FONTE",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     },
     {
      "texto": "Desafios curtos e diretos; vai logo ao assunto",
@@ -1956,12 +1978,13 @@
    ],
    "fala": [
     {
-     "texto": "Fala muito em 3ª pessoa e chama os outros pelo nome em vez de você",
+     "texto": "Fala muito em terceira pessoa e chama os outros pelo nome em vez de você",
      "marca": "OUTRA MIDIA",
      "fonte": "https://digimon.fandom.com/wiki/Guilmon_(Tamers)",
      "jogo": "Digimon Tamers (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
      "texto": "Voz mais crescida que a de Guilmon; passa a chamar o parceiro também de Tamer",
@@ -2081,16 +2104,18 @@
    ],
    "fala": [
     {
-     "texto": "Como parceiro inicial, fala de si na 3ª pessoa e promete fazer do Tamer um campeão",
+     "texto": "Como parceiro inicial, fala de si na terceira pessoa e promete fazer do Tamer um campeão",
      "marca": "VERIFICADO",
      "fonte": "https://lparchive.org/Digimon-World-3/Update%2001/",
-     "jogo": "Digimon World 3 (PS1)"
+     "jogo": "Digimon World 3 (PS1)",
+     "reescrito": true
     },
     {
-     "texto": "Fala de si na 3ª pessoa, com gramática simples e quebrada",
+     "texto": "Fala de si na terceira pessoa, com gramática simples e quebrada",
      "marca": "VERIFICADO",
      "fonte": "http://syldra.net/yesterday/wonderswan/btscript.html",
-     "jogo": "Digimon Tamers: Brave Tamer (WSC)"
+     "jogo": "Digimon Tamers: Brave Tamer (WSC)",
+     "reescrito": true
     },
     {
      "texto": "Yukimura fala de modo formal, com voz grave e madura, e cobra etiqueta",
@@ -2105,20 +2130,22 @@
      "jogo": "Digimon World: Next Order"
     },
     {
-     "texto": "No início quase não fala; o som que faz é ギル",
+     "texto": "No início quase não fala; só faz um som curto, a primeira sílaba do próprio nome",
      "marca": "OUTRA MIDIA",
      "fonte": "https://dic.pixiv.net/a/ギルモン",
      "jogo": "Digimon Tamers (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
-     "texto": "Pronome ギルモン em 3ª pessoa e ぼく; as fontes divergem se troca ou alterna",
+     "texto": "Usa o próprio nome na terceira pessoa e um pronome infantil e modesto; as fontes divergem se troca ou alterna",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/ギルモン",
      "jogo": "Digimon Tamers (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     },
     {
      "texto": "Chama os outros pelo nome em vez de você",
@@ -2250,12 +2277,13 @@
      "jogo": "Digimon Digital Card Battle (PS1)"
     },
     {
-     "texto": "Mantém o registro de Gomamon: オイラ e ênfase com やい",
+     "texto": "Mantém o registro de Gomamon: pronome rústico e descontraído, com ênfase de desafio no fim da frase",
      "marca": "OUTRA MIDIA",
      "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/14/",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -2505,12 +2533,13 @@
      "nota_marca_original": "VERIFICADO"
     },
     {
-     "texto": "Pede desculpas em Kansai, com えろうすんまへん",
+     "texto": "Pede desculpas no dialeto de Kansai",
      "marca": "OUTRA MIDIA",
      "fonte": "http://mamemamemon.com/custom10.html",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -2582,19 +2611,20 @@
    ],
    "fala": [
     {
-     "texto": "Cumprimenta com やあやあ e chama Jijimon de じっちゃん",
+     "texto": "Cumprimenta com um 'oi, oi' animado e chama Jijimon de vovô, com intimidade",
      "marca": "PARCIAL",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/112.html",
      "jogo": "Digimon World (PS1)",
      "reescrito": true
     },
     {
-     "texto": "Pronome ぼく",
+     "texto": "Pronome infantil e modesto",
      "marca": "OUTRA MIDIA",
      "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/01/",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -2686,12 +2716,13 @@
    "tracos": [],
    "fala": [
     {
-     "texto": "Pronome 私; fala com mais serenidade que Palmon",
+     "texto": "Pronome formal; fala com mais serenidade que Palmon",
      "marca": "OUTRA MIDIA",
      "fonte": "http://mamemamemon.com/custom34.html",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -2723,11 +2754,12 @@
    ],
    "fala": [
     {
-     "texto": "Pronome 私, com tom mais digno",
+     "texto": "Pronome formal, com tom mais digno",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/パタモン",
      "jogo": "Digimon Adventure 02 (anime)",
-     "midia": "anime"
+     "midia": "anime",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -2820,12 +2852,13 @@
      "nota_marca_original": "VERIFICADO"
     },
     {
-     "texto": "Pede desculpas em Kansai, com えろうすんません (ep. 50)",
+     "texto": "Pede desculpas no dialeto de Kansai (ep. 50)",
      "marca": "OUTRA MIDIA",
      "fonte": "http://mamemamemon.com/custom49.html",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -3000,10 +3033,11 @@
    ],
    "fala": [
     {
-     "texto": "Pronomes 俺 e おまえ; fala seca de guarda",
+     "texto": "Pronome masculino informal e tratamento brusco; fala seca de guarda",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/107.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     },
     {
      "texto": "Trata Ryo por omae e Ken por kisama, como Millenniummon",
@@ -3019,12 +3053,13 @@
      "midia": "anime"
     },
     {
-     "texto": "O pronome 僕 só aparece no blog de fã, numa fala de MetalGreymon (ep. 20)",
+     "texto": "Como MetalGreymon ainda usa o pronome infantil e modesto (ep. 20, só no blog de fã)",
      "marca": "OUTRA MIDIA",
      "fonte": "http://mamemamemon.com/custom20.html",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "PARCIAL"
+     "nota_marca_original": "PARCIAL",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -3072,10 +3107,11 @@
    ],
    "tracos": [
     {
-     "texto": "Como Chaos MetalSeadramon, general intelectual e arrogante que sorri de canto (ニヤリ)",
+     "texto": "Como Chaos MetalSeadramon, general intelectual e arrogante que sorri de canto",
      "marca": "VERIFICADO",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド2",
-     "jogo": "Digimon World 2 (PS1)"
+     "jogo": "Digimon World 2 (PS1)",
+     "reescrito": true
     },
     {
      "texto": "Achava melhor deixar o herói lutar com Crimson do que lutar ele mesmo",
@@ -3129,17 +3165,19 @@
    ],
    "fala": [
     {
-     "texto": "Pronome ワシ segundo a enciclopédia; no EN se gaba de saber tudo",
+     "texto": "Pronome de velho, segundo a enciclopédia; no EN se gaba de saber tudo",
      "marca": "VERIFICADO",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンワールド2 ; https://lparchive.org/Digimon-World-2/Update%2027/",
-     "jogo": "Digimon World 2 (PS1)"
+     "jogo": "Digimon World 2 (PS1)",
+     "reescrito": true
     },
     {
-     "texto": "Ameaças secas e sarcásticas, com o riso ククク",
+     "texto": "Ameaças secas e sarcásticas, com um riso baixo e gutural",
      "marca": "OUTRA MIDIA",
      "fonte": "https://www.toei-anim.co.jp/tv/dejimon/episode/summary/42/ ; http://mamemamemon.com/custom41.html ; https://w.atwiki.jp/aniwotawiki/pages/7315.html",
      "jogo": "Digimon Adventure (anime)",
-     "midia": "anime"
+     "midia": "anime",
+     "reescrito": true
     },
     {
      "texto": "Voz que ressoa do fundo da garganta, com eco",
@@ -3376,19 +3414,20 @@
    ],
    "fala": [
     {
-     "texto": "Pronome ボク; finais 〜よー e 〜だってば",
+     "texto": "Pronome infantil e modesto; finais de frase esticados e insistentes",
      "marca": "PARCIAL",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
      "jogo": "Digimon World (PS1)",
      "reescrito": true
     },
     {
-     "texto": "Pronome アタシ; fala de si na 3ª pessoa quando chora",
+     "texto": "Pronome feminino informal; fala de si na terceira pessoa quando chora",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター ; https://www.toei-anim.co.jp/tv/dejimon/episode/summary/10/",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -3562,10 +3601,11 @@
    ],
    "fala": [
     {
-     "texto": "Pronome ぼく; fala infantil com 〜よー, vogais esticadas e ♪; resmunga ちぇ",
+     "texto": "Pronome infantil e modesto; fala infantil com finais e vogais esticados e notinhas musicais; resmunga com muxoxo",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/103.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     },
     {
      "texto": "Na escolha de parceiro, cumprimenta e promete não decepcionar",
@@ -3580,12 +3620,13 @@
      "jogo": "Digimon Digital Card Battle (PS1)"
     },
     {
-     "texto": "Pronome ボク; muda para 私 só nas formas adultas",
+     "texto": "Pronome infantil e modesto; muda para um pronome formal só nas formas adultas",
      "marca": "OUTRA MIDIA",
      "fonte": "https://ja.wikipedia.org/wiki/デジモンアドベンチャーの登場キャラクター ; https://ja.wikipedia.org/wiki/パタモン",
      "jogo": "Digimon Adventure (anime)",
      "midia": "anime",
-     "nota_marca_original": "VERIFICADO"
+     "nota_marca_original": "VERIFICADO",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -3827,10 +3868,11 @@
      "jogo": "Digimon Digital Card Battle (PS1)"
     },
     {
-     "texto": "No japonês, a forma verdadeira segue falando como velha, com わし e じゃ, e se diz Babamon",
+     "texto": "No japonês, a forma verdadeira segue falando como velha, com pronome e finais de gente idosa, e se diz Babamon",
      "marca": "VERIFICADO EM OUTRA FONTE",
      "fonte": "https://gamefaqs.gamespot.com/ps/526754-digimon-digital-card-battle/faqs/79361",
-     "jogo": "Digimon Digital Card Battle (PS1)"
+     "jogo": "Digimon Digital Card Battle (PS1)",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -3910,11 +3952,12 @@
      "nota_marca_original": "VERIFICADO"
     },
     {
-     "texto": "Ao usar o 金剛界曼陀羅, canta uma canção como de ninar",
+     "texto": "Ao usar a técnica da mandala, canta uma canção como de ninar",
      "marca": "OUTRA MIDIA",
      "fonte": "http://www.konaka.com/",
      "jogo": "Digimon Tamers (anime)",
-     "midia": "anime"
+     "midia": "anime",
+     "reescrito": true
     }
    ],
    "interacoes": [
@@ -3957,10 +4000,11 @@
    ],
    "fala": [
     {
-     "texto": "Pronomes 私 e お前; solene, com いかにも, よかろう e 〜なさい",
+     "texto": "Pronome formal e tratamento altivo do outro; solene, com assentimentos cerimoniosos e ordens brandas",
      "marca": "VERIFICADO",
      "fonte": "https://w.atwiki.jp/digimon_world/pages/100.html",
-     "jogo": "Digimon World (PS1)"
+     "jogo": "Digimon World (PS1)",
+     "reescrito": true
     }
    ],
    "interacoes": [],

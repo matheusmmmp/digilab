@@ -960,6 +960,17 @@ números em `docs/REGISTRO_DESVIOS.md` e `artifacts_fala_livre/rodada2/RELATORIO
     conversa; imperativos 51/60 (85,0%). As quatro ações: 23 de 24 (tratar_lesao 5/6, uma virou acariciar). **Regressão:**
     limpar caiu de 7/9 para 3/9 (5 viraram `repreender`: "banho agora, sem choro", "vai se limpar, você tá todo sujo"). O chip
     continua obrigatório; a execução direta segue como decisão do Matheus.
+- **Corpus reescrito em português (F0-CORPUS, 2026-10-01, `docs/TAREFA_V2_F0_CORPUS.md`):** os itens que o filtro do alfabeto
+  deixava fora voltaram ao bloco de estilo, reescritos em português sem a palavra japonesa (por exemplo, "pronome rústico e
+  descontraído" no lugar do pronome original), cada um com `marca`, `fonte` e `jogo` iguais e `"reescrito": true`; o texto só diz o
+  que a fonte do item (`docs/corpus_digimon/`, fora do repo) diz. Pelo `corpus.latino` eram **49** itens em 28 espécies (46 falas,
+  2 traços, 1 interação), não 46: três falas de Guilmon e Growlmon só tinham o ordinal "3ª", que conta como letra não latina, e
+  viraram "terceira pessoa". **Nenhum item saiu.** Com o filtro entram 504 itens, os mesmos que sem ele (antes 455 × 504;
+  `descartados["NAO LATINO"]` 0, antes 49). Vocabulário fixo para os pronomes: "infantil e modesto", "masculino informal", "rústico
+  e descontraído", "formal", "de velho", "feminino informal". O filtro, o prompt, o verificador e o almanaque não mudam; o sha256
+  do corpus mudou (`b1b7ad8d…` → `785f7834…`; `artifacts_voz/estilo_latino/` mede o corpus anterior e não foi refeito). Sem run
+  com o gemma2:9b: a conferência da fala com o estilo é frente própria na fila da GPU. Critério e itens limítrofes em
+  `docs/REGISTRO_DESVIOS.md`; teste `tests/test_corpus_latino.py::test_corpus_do_jogo_reescrito_em_portugues_nao_perde_item`.
 
 ## Versão web (`web/digilab.html`)
 
