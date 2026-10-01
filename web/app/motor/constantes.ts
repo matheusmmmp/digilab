@@ -36,8 +36,11 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    8 = v7 + confianca de combate e desgaste por rival repetido (MVP M1; nenhum evento novo, estado derivado das lutas "l";
    docs/DESIGN_MVP_M1_CONFIANCA.md, espelho de digilab/confianca.py);
    9 = v8 + combate equilibrado: as lutas usam a variante V21E (CV21E; rodada de equilibrio geral, fase 1, docs/EQUILIBRIO_GERAL.md);
-   nenhum evento novo */
-export const VERSAO_PET = 9;
+   nenhum evento novo;
+   10 = v9 + vinculo B, previsibilidade + desejo (CVB; docs/V2_VINCULO_PROPOSTA.md, alternativa B, decisao do Matheus de
+   2026-10-01; plano docs/PLANO_ANALISE_V2_VINCULO.md; espelho de ConfigVinculoSituacao ligada): o pedido nao abre e a coerencia
+   do feedback agrupa por (acao do pet, situacao do pet); nenhum evento novo */
+export const VERSAO_PET = 10;
 /* medalhas do Tamer que cada evolucao pede nos pets v6 (decisao do Matheus, 2026-09-29: 1, 3 e 5; so no jogo), pela
    chave do estagio de destino: Rookie -> Champion (adolescente), Champion -> Ultimate (adulto), Ultimate -> Mega (mega).
    In-Training -> Rookie nao pede medalha. A tabela das medalhas fica em medalhas.ts */
@@ -86,6 +89,11 @@ export const FATORES_ESPACOS: readonly CategoriaMemoria[] = ["demora", "bronca",
 export const CEM = { limiarEixo: .2 };
 /* vinculo e obediencia (espelho de ConfigVinculo e ConfigObediencia) */
 export const CVI = { inicial: .5, alfa: .1, pesoAtend: 1, pesoCoer: 1, pesoDesejo: .5, janelaLat: 240, janelaCoer: 1440, janelaDesejo: 60 };
+/* vinculo B (pets v10; espelho de ConfigVinculoSituacao, tudo PROPOSTO): a situacao do pet = (necessidade baixa: min(fome, higiene)
+   < limNec, o limiar do pedido; cansado: energia < limEnergia, a regra de exaustao do instinto; noite: eNoite), lida da observacao
+   com que o pet decidiu a acao atual. versaoPet: a partir de qual versao o vinculo e o B (no Python a variante e escolhida pelo
+   config, nao por versao de pet) */
+export const CVB = { versaoPet: 10, limNec: .5, limEnergia: .25 };
 export const COB = {
   b0: 1, bVinculo: 2, bTeimosia: 1, bConflito: 2, limiarConflito: .3, probFazerOutra: .5,
   sujeitas: ["alimentar", "limpar", "brincar", "acariciar"] as readonly AcaoDono[], limiarMotivo: .05,

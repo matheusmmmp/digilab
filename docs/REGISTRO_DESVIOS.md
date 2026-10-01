@@ -1407,3 +1407,24 @@ seção 5) **sem mudar nenhum resultado**. `engine.py` intocado (sha256 conferid
 - **Conferência:** `python -m pytest tests/ -q` na worktree `v2-f0-limpeza` (Windows, Python 3.13): 595 passados, 1 pulado, 7 min 32 s, com
   `test_canonico_intacto.py`, `test_reproducao_v3_confirmatoria.py`, `test_natureza_criacao.py`, `test_confianca.py` e `test_protocol.py` (hash e
   `engine.py`) passando; `cd web/app && npm run tipos` sem erros; `npm test` 306 testes em 29 arquivos passando (só comentários mudaram lá).
+
+## 2026-10-01 — F0-VINCULO-NOVO: vínculo B implementado (Python atrás de chave, web pets v10); interpretações
+
+Tarefa `docs/TAREFA_V2_F0_VINCULO_NOVO.md`; plano `docs/PLANO_ANALISE_V2_VINCULO.md` (commit `e507e54`, antes do código e da run).
+- **Situação lida na decisão do pet, não na ação do dono.** A conta do #109 (`analisar_vinculo.py`) classificava a situação pelo estado que o
+  dono via antes de agir; a implementação usa a observação com que o pet decidiu a ação atual (`Vinculo.decisao(obs, …)`), que já chega ao
+  vínculo: é "a situação em que o pet fez o que o dono julga", e não exige gancho novo no motor nem na web. As células mudam pouco em 15 ticks.
+  Registrado no plano (seção 2) antes da run.
+- **Config à parte.** `ConfigVinculoSituacao` em vez de campos novos na `ConfigVinculo`, porque ela entra em `_json_personalidade` e no hash dos
+  três protocolos da personalidade (`d986ff1b9308…`), que as runs gravadas carregam. Mesmo padrão da `ConfigConfianca` (M1).
+- **Validação com 5 sementes** (5101, 5202, 5303, 5404, 5505: a faixa reservada, uma por centena, como as de sempre). O IC95 por bootstrap sobre
+  5 unidades é curto; uma das cinco diferenças é negativa (5404: −0,041). O gate pede só o limite inferior > 0, e passou (+0,046).
+- **Mega na web, pets v10:** os donos simulados não têm Tamer, então as medalhas são liberadas no ovo (`Motor.liberar(MEDALHAS_LIGA)`), como os
+  saves do e2e fazem. A comparação com `artifacts_campanha/mega/limiar_vinculo.json` (pets v5) **não é pareada**: nos v10 valem a qualificação
+  por vitórias, as medalhas e o tempo contado desde a evolução anterior, e 8 das 24 vidas não chegam ao adulto em 3 dias. O limiar 0,4 não
+  mudou (fora da tarefa); o relato está no CLAUDE.md.
+- **O atencioso da web fala pouco.** Em 3 dias e 48 interações, quase nenhuma é feedback (1 e 4 nas duas vidas conferidas; o resto atende chamados e limpa); com o atendimento fora, o
+  vínculo B dele vive do desejo, que expira, e termina em 0,13–0,37. É o risco apontado no #109 para a alternativa B (frágil quando o dono fala
+  pouco) aparecendo no jogo curto. Nenhum ajuste foi feito (o plano não previa e a validação já tinha rodado).
+- `medir_vinculo_mega.mjs` ganhou `--versao`; sem ela o script é o de antes, byte a byte (os artefatos dos v5 não foram regravados).
+- `web/app/test/save.test.ts` usava `versao: 10` como exemplo de versão desconhecida; passou a 11.

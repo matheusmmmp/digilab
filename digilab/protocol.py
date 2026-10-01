@@ -575,7 +575,8 @@ def _valor_config(nome: str) -> Any:
     instancias = {"ConfigEducacao": _config.CONFIG_EDUCACAO, "ConfigLesoes": _config.CONFIG_LESOES,
                   "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO,
                   "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING,
-                  "ConfigConfianca": _config.CONFIG_CONFIANCA}
+                  "ConfigConfianca": _config.CONFIG_CONFIANCA,
+                  "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO}
     return getattr(instancias[classe], campo)
 
 
@@ -583,6 +584,31 @@ PARAMETROS_EDUCACAO_V1: dict[str, Campo] = {
     n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_EDUCACAO_V1.items()}
 PARAMETROS_CONFIANCA_M1: dict[str, Campo] = {
     n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_CONFIANCA_M1.items()}
+
+# Vinculo B (docs/V2_VINCULO_PROPOSTA.md, alternativa B; plano docs/PLANO_ANALISE_V2_VINCULO.md): registro a parte, como o
+# da confianca; a ConfigVinculo e os protocolos da personalidade nao mudam. Nenhum valor referendado.
+_FONTES_VINCULO_B = {
+    "ConfigVinculoSituacao.ligada": (_D, "chave desligada por padrao, como ConfigConfianca.ligada"),
+    "ConfigVinculoSituacao.limiar_necessidade": (_P, "= ConfigMemoriaEspacos.limiar_necessidade_pedido (o criterio do pedido do pet)"),
+    "ConfigVinculoSituacao.limiar_energia": (_P, "= a regra de exaustao da PoliticaInstinto (energia < 0,25 -> dormir)"),
+}
+PARAMETROS_VINCULO_B: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_VINCULO_B.items()}
+
+
+def validar_parametros_vinculo_b() -> None:
+    """Todo campo da ConfigVinculoSituacao tem status e fonte, e o valor registrado bate com config.py."""
+    esperados = {f"ConfigVinculoSituacao.{f.name}" for f in fields(_config.CONFIG_VINCULO_SITUACAO)}
+    if set(PARAMETROS_VINCULO_B) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(PARAMETROS_VINCULO_B))}; "
+                         f"registro sem parametro: {sorted(set(PARAMETROS_VINCULO_B) - esperados)}")
+    for n, c in PARAMETROS_VINCULO_B.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def vinculo_b_nao_referendados() -> list[str]:
+    return educacao_nao_referendados(PARAMETROS_VINCULO_B)
 
 
 def validar_parametros_educacao(params: dict[str, Campo] | None = None) -> None:
