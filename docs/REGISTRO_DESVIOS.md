@@ -1357,3 +1357,16 @@ contra `motor.ts`), registrada em `docs/V2_VINCULO_PROPOSTA.md`, seção 2.
   cada vida: 40 da personalidade e 640 do E1, todas iguais) e lê o estado do pet antes de cada ação do dono. Os contrafactuais
   recalculam o vínculo sobre o fluxo de amostras gravado com os eventos fixos; na vida real um vínculo diferente mudaria a
   obediência e, com ela, um pouco da vida. São conta, não run.
+
+## 2026-10-01 — GPU-ESTILO: o estilo com o corpus em português (medida A e rodada 4 do comando)
+
+Plano `docs/PLANO_ANALISE_V2_GPU_ESTILO.md` commitado antes da run; uma run de cada, nada ajustado. Desvios e interpretações:
+- **Medida A roda um modo só.** Com o corpus em português o filtro do alfabeto não tira nada (0 itens não latinos), então o bloco "com
+  filtro" é igual ao "sem filtro" item a item; o script ganhou `--saida` e, nesse caso, gera só o modo que o servidor manda e grava
+  `filtro_sem_efeito`. `artifacts_voz/estilo_latino/` (corpus anterior) não é refeito. Critério PROPOSTO ≤ 1/30 rejeitadas: 0/30.
+- **A primeira execução da medida A foi interrompida aos ~60 s** (o processo estava preso ao teto de 10 min da ferramenta) e relançada
+  inteira como processo independente; nada tinha sido gravado. Os artefatos são da segunda execução (10:19 a 10:42).
+- **Rodada 4 do comando: gate PASSA com o estilo** (3,3% falsos positivos; 88,3% imperativos). Comparação com a rodada 3 é descritiva
+  (sementes diferentes, sem teste). As 2 saídas rejeitadas pelo parser não são por letra não latina.
+- **Suíte completa não rodada nesta entrega** (limite de uso da sessão); rodados `tests/test_comando_chat.py` e `test_corpus_latino.py`
+  (26 passed) depois das mudanças de código. Pendência: rodar `python -m pytest tests/ -q` antes do merge.
