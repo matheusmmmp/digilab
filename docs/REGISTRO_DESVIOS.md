@@ -1357,3 +1357,14 @@ contra `motor.ts`), registrada em `docs/V2_VINCULO_PROPOSTA.md`, seção 2.
   cada vida: 40 da personalidade e 640 do E1, todas iguais) e lê o estado do pet antes de cada ação do dono. Os contrafactuais
   recalculam o vínculo sobre o fluxo de amostras gravado com os eventos fixos; na vida real um vínculo diferente mudaria a
   obediência e, com ela, um pouco da vida. São conta, não run.
+
+## 2026-10-01 — Correção no corpus DigiBrain: "Ackroff 2017" era Bodnar (2018)
+
+O corpus de pesquisa DigiBrain (`D:\Trab\digilab\docs\digibrain\`, fora do repositório) atribuía o DOI `10.1016/j.appet.2016.12.015` a "Ackroff
+2017, Conditioned flavor preferences". O DOI resolve no Crossref para **Bodnar, R. J. (2018), "Conditioned flavor preferences in animals: merging
+pharmacology, brain sites and genetic variance", Appetite 122, 17–25** (busca da V2, `V2_SINTESE_Q1_Q7.md`, "Pendências e correções"; linha VERIFICADA
+na `v2_referencias_verificadas.csv`). A entrada foi **corrigida** (não removida), porque o DOI é real e a revisão sustenta o que o corpus usava
+(substratos das preferências de sabor condicionadas): `sources/SOURCE_INDEX.md` (R3), `mechanisms/food_behavior.md`, `mechanisms/hedonism.md`,
+`integration/02_RESEARCH_CROSSWALK.md` e `integration/09_PROMPT_CLAUDE_SCIENCE.md`. Trabalhos reais de Ackroff e Sclafani têm outros DOIs
+(`10.1016/j.appet.2010.04.011`, `10.1016/j.appet.2020.104793`) e não foram citados, por não terem sido verificados pelo projeto. O repositório não citava
+"Ackroff 2017" em lugar nenhum. Como o corpus está fora do git, este registro é a trilha da correção.
