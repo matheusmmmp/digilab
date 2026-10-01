@@ -209,3 +209,34 @@ Qualquer um destes, depois do commit deste plano (ou do adendo da Etapa B), vai 
 4. **Portadores impostos fora do gate e da Etapa B.** **Recomendação:** manter. Custo de errar: incluí-los testaria
    regras que escrevemos, e o resultado estaria decidido antes.
 5. **δ = 0,05 na Etapa B.** **Recomendação:** manter, igual ao V21D. Custo de errar: o mesmo do V21D.
+
+## Adendo B (2026-09-30, registrado antes da run da Etapa B)
+
+**Gate A:** SINAL PRESENTE, só pelo eixo **resistente** (σ²_D +0,0034, IC 98,75% [+0,0009; +0,0121]; frac D 0,208),
+de `artifacts_linhagem/sinal_dono/resultado.json`. O relatório é o `docs/RESULTADO_SINAL_DONO.md`. O sinal que passou
+separa o permissivo do relapso, não o atencioso do aleatório.
+
+**Decisão do Matheus** (aceitou a recomendação):
+- O canal fica como a seção 4 escreve: **k multiplica o termo do caráter inteiro** em `catalogo.stats`, nos 4 eixos.
+  Não age só no resistente, para o eixo não ser escolhido pelo resultado.
+- **k = 3 e k = 9**, como estava. k = 1 é o E1 e não roda de novo.
+- O resistente entra só na medida de transmissão: frac_D da taxa ÷ 0,208.
+- Nada mais muda:
+  - painel V21C, condição neutra, rótulo `linhagem-e1`;
+  - morto = 0 no primário (4 donos), e o subconjunto atencioso + permissivo como secundário;
+  - o gate B em dois passos;
+  - δ = 0,05;
+  - bootstrap pigeonhole com 10 000 reamostras e semente 20260930.
+
+**A manipulação, escrita sem ambiguidade:** 1 − r²_forma sobre os pets vivos, com as 13 categorias de forma, nos 4
+donos. CANAL ABERTO quando o IC95 de Δr²_vivos (k = 9 − k = 1) fica todo abaixo de 0, que é o mesmo que o IC95 de
+Δ(1 − r²) ficar todo acima de 0.
+
+**Implementação:**
+- `ConfigCatalogo.peso_carater_stats` (padrão 1,0);
+- `catalogo.stats` soma o termo do caráter com peso v × k;
+- `lutador_painel(..., cat)`: só o pet usa o catálogo com k; os bots do painel e a vida usam o padrão;
+- configs `experiments/configs/linhagem/natureza_criacao_canal_k3.json` e `_k9.json`, com o campo
+  `catalogo_painel.peso_carater_stats`;
+- a análise em `experiments/analisar_canal.py`, com as mesmas conferências do V21D: vidas iguais às do E1 byte a byte,
+  `pets.json` e hash iguais.
