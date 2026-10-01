@@ -45,6 +45,14 @@ Se isso não se sustentar, o produto continua válido como jogo, mas a hipótese
 - Português nos comentários e docstrings, **sem acentos em identificadores**.
 - Só biblioteca padrão no pacote `digilab/` (o preflight verifica por AST). `pytest` só para testes.
 
+## Trabalho em paralelo na V2 (2026-10-01, `docs/V2_TRABALHO_PARALELO.md`) — PROPOSTO
+
+- A pasta `D:\Trab\digilab\v2` é só a referência da `main`: ninguém troca o branch dela. Cada frente trabalha na própria worktree
+  `D:\Trab\digilab\v2-<frente>` (branch `v2-<frente>`), criada de `origin/main`.
+- Um chat coordenador (plano, tarefas, sementes, versão de pet, fila da GPU, marco de cada rodada) e um chat worker por frente. A tarefa de cada
+  frente fica em `docs/TAREFA_V2_<FRENTE>.md` (modelo em `docs/modelos/TAREFA_V2_MODELO.md`).
+- Worker entrega um PR e para; merge só pelo Matheus. Em `CLAUDE.md` e `REGISTRO_DESVIOS.md`, cada um acrescenta a própria seção no fim.
+
 ## Arquitetura — três camadas com velocidades diferentes
 
 1. **Estado e necessidades** (`state.py`) — determinístico, escrito à mão. É o ambiente, não o
