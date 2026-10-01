@@ -1134,8 +1134,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: mecânicas de Dwarf Fortress → V2** (`docs/futuro/dwarf_fortress.md`, Matheus, 2026-10-01): contexto das peças (slots 8+8,
   memória nuclear, faceta × valor, duas prioridades, estresse em duas escalas) para o planejamento da V2; a v1 não recebe nada. O
   desenho (`docs/futuro/proposta_df.md`) só depois do gatilho da tarefa, junto com a fase 1b do plano da V2. DF é pista, não evidência.
-- **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). Não há
-  pergunta de pesquisa viva; uma nova, se vier, é sobre o aprendiz.
+- **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). **V2 = pesquisa
+  primeiro** (decisão do Matheus, 2026-10-01): plano PROPOSTO em `docs/PLANO_V2_PESQUISA.md` (pergunta sobre o aprendiz e o
+  ambiente; fase 0 fecha a v1, fase 1 testa ambiente mínimo e política com lobos, fase 2 humanos, fase 3 criação × seleção).
+  Nenhuma run sem o plano de análise da fase registrado antes.
 
 - **Stand-by: combate 1×1 em tempo real, como no Digimon Championship (DS)** (Matheus, 2026-09-29: guardar para o futuro, sem executar).
   - **A ideia:** o motor passa a simular espaço contínuo (posição, velocidade, alcance, tempo de recarga, passos fixos para continuar reproduzível) no lugar dos turnos e das 3 distâncias. O pet segue lutando sozinho, e o dono influencia pela criação.
