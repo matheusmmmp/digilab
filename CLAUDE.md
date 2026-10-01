@@ -572,9 +572,8 @@ Branch `equilibrio-geral` (o PR é no fim da fase 4). Fases 1–3 só com sement
   painel 0,449–0,551, amplitude 0,125, toda forma vence ≥ 3), M-B1–M-B3 (o Tortomon por 0,0062), M-C2 (0,390), M-C3 (0,760–0,8725),
   M-D1–M-D3 (emboscador 0,595) e M-E1 (pior 0,580). **Reprovam:** M-C1 (muralha 0,085, **exceção aceita pelo Matheus em 2026-09-30**:
   perde para os guardiões pelo limite do desafiado e não alcança o MegaGargomon com nenhuma alavanca permitida; **espelho 0,240**, 0,010
-  abaixo da faixa, pendente) e, em M-A5, só o E3 do contra-golpe (0,458 → 0,480; E1, E5, G8, G9 e o guardião passam; E2, E4 e G6b são as exceções de sempre; a base V2C sai byte a byte igual a `validacao_bots/`). **Pendentes de aceite do Matheus:** E3 do contra-golpe, o espelho na Liga
-  (0,240). Nenhum número mudou por causa da validação. Tabela completa, o que reprovou e as exceções em
-  `docs/EQUILIBRIO_GERAL.md`, fase 4. Falta o PR.
+  abaixo da faixa, **exceção aceita em 2026-10-01**: a diferença está no ruído entre sementes) e, em M-A5, só o E3 do contra-golpe (0,458 → 0,480; E1, E5, G8, G9 e o guardião passam; E2, E4 e G6b são as exceções de sempre; a base V2C sai byte a byte igual a `validacao_bots/`). **Pendente de aceite do Matheus:** só o E3 do contra-golpe. Nenhum número mudou por causa da validação. Tabela completa, o que reprovou e as exceções em
+  `docs/EQUILIBRIO_GERAL.md`, fase 4. PR #96 mergeado em 2026-10-01.
 
 ## M1 — confiança de combate e desgaste por rival repetido (2026-09-29, `docs/DESIGN_MVP_M1_CONFIANCA.md`)
 

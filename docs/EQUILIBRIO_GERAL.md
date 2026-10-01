@@ -692,8 +692,8 @@ npx tsx test/medir_itens.mjs --v6 --gates gi1,gi2,gi4                           
 ## Fase 4 — validação única (sementes 4101…4505)
 
 Status: **validação feita** (2026-09-30), com **tudo congelado**: nenhum fator, lista, escala ou item mudou por causa do resultado.
-Passam M-A1…M-A4, M-B1…M-B3, M-C2, M-C3, M-D1…M-D3 e M-E1; **reprovam M-C1** (a muralha, exceção aceita pelo Matheus, e o espelho,
-0,010 abaixo da faixa) e, dentro de M-A5, **o E3 do contra-golpe** (como na calibração). O que reprovou está relatado na seção 4.3 e
+Passam M-A1…M-A4, M-B1…M-B3, M-C2, M-C3, M-D1…M-D3 e M-E1; **reprovam M-C1** (a muralha e o espelho, 0,010 abaixo da faixa;
+as duas são exceções aceitas pelo Matheus) e, dentro de M-A5, **o E3 do contra-golpe** (como na calibração). O que reprovou está relatado na seção 4.3 e
 as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido usadas em nada dos pets v9 até aqui (fases 1–3 só com
 3101…3505; os artefatos dos v6 nas sementes de validação são de antes da rodada).
 
@@ -723,7 +723,7 @@ as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido 
 | **M-B1** estágio | vizinhos ≤ 0,10 (pontos); dois estágios = 0,00 (vitórias) | 0,0014 / 0,0104 / 0,0041; 0 e 0 | 0,0008 / 0,0110 / 0,0041; 0 e 0 | **passa** |
 | **M-B2** líderes das 6 arenas | sem treino ≤ 0,05; com o típico ≥ 0,80; pior forma ≥ 0,50 | sem 0,0016–0,0359; com 0,8288–0,9144; pior 0,515 (Lago); menor folga 0,0141 (Espiral) | sem 0,0006–0,0284; com 0,8575–0,9188; pior 0,535 (Cidadela); menor folga 0,0216 (Espiral) | **passa** nos 6 |
 | **M-B3** desafiantes | sem ≤ 0,30; com ≥ 0,80; pior ≥ 0,50 | Tortomon 0,2825 / 0,8762 / 0,525 (folga 0,0175); os outros 3 com folga ≥ 0,12 | Tortomon 0,2938 / 0,8794 / 0,535 (folga 0,0062); Devidramon 0,1862 / 0,9050 / 0,620; Puppetmon 0,1484 / 0,9306 / 0,745; Machinedramon 0,1100 / 0,9753 / 0,870 | **passa** nos 4 |
-| **M-C1** Liga | toda forma ≥ 0,25 e nenhuma > 0,85 | 7 de 8; muralha 0,085; espelho 0,255 | 6 de 8; **muralha 0,085**, **espelho 0,240**; titã 0,260, sentinela 0,2675; máximo furioso 0,725 | **reprova** (muralha: exceção aceita; espelho: pendente) |
+| **M-C1** Liga | toda forma ≥ 0,25 e nenhuma > 0,85 | 7 de 8; muralha 0,085; espelho 0,255 | 6 de 8; **muralha 0,085**, **espelho 0,240**; titã 0,260, sentinela 0,2675; máximo furioso 0,725 | **reprova** (muralha e espelho: exceções aceitas) |
 | **M-C2** Fábrica | ≥ 1 série em ≥ 0,25 das tentativas | 0,367 | 0,390 (folga 0,140) | **passa** |
 | **M-C3** Salão | cada nível em [0,70; 0,95] | 0,894 / 0,754 / 0,826 / 0,826; menor folga 0,054 | 0,8725 / 0,760 / 0,8078 / 0,8194; menor folga 0,060 (Champion) | **passa** |
 | **M-D1** itens × treino | sem treino, com os melhores itens, × cada líder ≤ 0,05 | 0,0016–0,0359 (= sem item, pela trava) | 0,0006–0,0284 (= sem item, pela trava) | **passa** |
@@ -826,7 +826,7 @@ as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido 
   que é do líder (0,7025 contra o Seraphimon mesmo com 0,3; 0,440 contra a Rosemon; 0,7625 contra o Imperialdramon), e não alcança
   a sentinela (0,3775 contra o MegaGargomon com 0,1, o piso da grade). O produto das lutas dela fica perto de 0,1. Nenhuma alavanca
   permitida mexe nisso (o limite do desafiado e os Megas da tabela são decisões do Matheus).
-- **M-C1, o espelho (0,240; pendente).** Na calibração passava por 0,005 (0,255) e a fase 3 já o apontava como risco. Na validação
+- **M-C1, o espelho (0,240; exceção aceita em 2026-10-01).** Na calibração passava por 0,005 (0,255) e a fase 3 já o apontava como risco. Na validação
   perde 0,010 a mais: cai nas lutas 2 (Seraphimon, espelho × espelho, 0,595) e 5 (Rosemon, 0,430), e chega à 6ª em 0,2425. A
   diferença para a faixa (0,010) está no tamanho do ruído entre sementes (~0,01, não estimado): não dá para dizer que o espelho
   "piorou", só que a folga de 0,005 não aguentou a troca de sementes. O titã (0,260) e a sentinela (0,2675) passam por 0,010 e
@@ -853,12 +853,13 @@ as exceções na 4.4. As sementes de validação (4101…4505) não tinham sido 
 - **M-C1, a muralha na Liga (0,085 na calibração e na validação): aceita como exceção em 2026-09-30.** Motivo: perde para os
   guardiões pelo limite do desafiado (que é do líder) e não alcança o MegaGargomon com nenhuma alavanca permitida (o fator já está no
   piso da grade, 0,1). Nenhum número muda.
+- **M-C1, o espelho na Liga (0,240 na validação, 0,010 abaixo da faixa; 0,255 na calibração): aceita como exceção em
+  2026-10-01.** Motivo: a diferença está no tamanho do ruído entre sementes (~0,01) e a fase 4 é única, nada muda por causa do
+  resultado. Nenhum número muda.
 
 **Pendentes de aceite do Matheus:**
 - **E3 do contra-golpe** (M-A5): a resposta declarada não reduz os usuários (0,458 → 0,480), pelo espelho. Opções: aceitar como
   exceção (como a V21D fazia na prática) ou mudar a resposta declarada ao contra-golpe do espelho.
-- **M-C1, o espelho na Liga** (0,240, 0,010 abaixo da faixa; na calibração 0,255). Opções: aceitar como exceção (a diferença está
-  no ruído), ou reabrir a calibração da Liga (fora desta rodada: a fase 4 é única e nada muda por causa do resultado).
 - **E4 da V21C** (o adulto esmaga o adolescente): aceito na V21C e redefinido na escala (M-B1, que passa); a bateria V2.1 continua
   a medi-lo sem escala e a reprová-lo (0,886–0,998), só como relato.
 
