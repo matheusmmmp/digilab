@@ -4,7 +4,7 @@ Status: **PROPOSTO, para aprovação do Matheus** (tarefa `docs/TAREFA_V2_A1_BOL
 implementação vira tarefa própria depois da aprovação. Decisão de partida: a bola como interação mínima com consequência da fase 1a
 (Matheus, 2026-10-01, a partir de `docs/V2_INVENTARIO_JOGO.md`, seções 3 e 4; mantida como 1a na decisão D10 de
 `docs/DEFINICOES_V2.md`, com as frutas como alavanca seguinte). Hipótese H1, alavanca 1a do `docs/PLANO_V2_PESQUISA.md`. As definições dos gates
-e as duas perguntas por alavanca (1a-pet e 1a-dono) são as de `docs/DEFINICOES_V2.md`, seções 3, 4 e 6 (PROPOSTAS, até o referendo).
+e as duas perguntas por alavanca (1a-pet e 1a-dono) são as de `docs/DEFINICOES_V2.md`, seções 3, 4 e 6 (decididas pelo Matheus em 2026-10-01, D1–D11; os números dos gates seguem PROPOSTOS até o referendo do plano).
 
 Todo número aqui é PROPOSTO e sem fonte, salvo quando aponta um artefato ou um símbolo de `digilab/config.py`. Nada do que o desenho diz
 sobre o Championship ou outro jogo é evidência (`literatura-digilab`, regra 4).
@@ -193,7 +193,7 @@ evidência para a segunda.
 |---|---|---|---|
 | instinto + bola | `PoliticaInstinto` (não vê a bola) | donos põem | o efeito do **ambiente** na vida sem nenhuma política reagir: humor, brincadeiras, orçamento gasto |
 | lobos + bola | `PoliticaLobos`, aprendizado desligado, `w_bola` no prior | donos põem | o efeito de uma política **que vê a bola** mas não aprende: os donos diferem só por quando põem |
-| **só cuidado acoplado (H0)** | as duas políticas | nunca | o controle permanente da V2, na forma de `docs/DEFINICOES_V2.md`, seção 3: as mesmas ações de cuidado do atencioso nos mesmos ticks, sem elogio, bronca nem bola |
+| **só cuidado acoplado (H0)** | as duas políticas | nunca | o controle permanente da V2, na forma de `docs/DEFINICOES_V2.md`, seção 3: as mesmas ações de cuidado do atencioso nos mesmos ticks, sem elogio, bronca nem bola; acariciar conta como cuidado, com a variante sem acariciar como sensibilidade (D4) |
 
 Com `w_bola` fixo e igual em todos os donos, a política é a mesma em todos os braços; o que a 1a sozinha e sem aprendizado testa é se **as
 situações criadas pelo dono** já separam as vidas (decisões com a bola, humor, brincadeiras à noite). Os gates aqui são G1, G2 e G5
@@ -206,6 +206,8 @@ Só depois de a 1a passar G1, G2 e G5 sozinha e de a L1 passar G3–G5 sozinha (
 Aí a `PoliticaLobos` com aprendizado ligado recebe a entrada `bola`, e respondem-se as duas perguntas: **1a-pet** (sem dono no laço) e
 **1a-dono** (2 × 2 bola × dono sobre G3, em sondas **com e sem** bola, e sobre G3-T, o acerto na tarefa ensinada de `DEFINICOES_V2`, seção 1).
 É o teste da H1 inteira: aprendiz novo **e** ambiente onde o dono importa. O plano escreve que 1a-pet passar não é evidência para 1a-dono.
+O braço de controle de capacidade equivalente sem lobos (D2, o da L1) entra também aqui, com a entrada `bola` entre as suas, para o G4 da
+bola ter com o que ser comparado.
 
 ---
 
@@ -235,7 +237,7 @@ Gates do plano da V2 (PROPOSTOS, não referendados), lidos para a bola:
 
 | gate | critério | como se mede com a bola |
 |---|---|---|
-| G1 replay | vida bit a bit pelo log, Python (e web, no v12) | `reproduzir_ambiente` das vidas gravadas; teste |
+| G1 replay | vida bit a bit pelo log, Python (e web, no v12): igualdade exata nas ações e nos pesos inteiros dos lobos, tolerância só nos floats do motor da v1 (D8) | `reproduzir_ambiente` das vidas gravadas; teste |
 | G2 equivalência | sem bola no log, `MotorAmbiente` = `MotorEducacao` e lobos sem aprendizado = instinto, byte a byte | rejogar vidas da V3 e da confirmatória; teste |
 | G3 divergência | JSD entre donos coerentes ≥ 0,10 bit, IC fora de 0,02 (convenção do projeto, `DEFINICOES_V2` seção 1) | **só com a L1** (4.2); sondas com e sem bola; G3-T (acerto na tarefa ensinada) reportado ao lado |
 | G4 legibilidade | fator explicável em ≥ 50% das decisões **aprendidas** (`DEFINICOES_V2`, seção 2, D3) | o fator `bola_no_cenario` conta quando o peso aprendido da bola mudou a escolha; a fração bruta (prior incluído) ao lado, sem gate; **só com a L1** |
@@ -259,7 +261,7 @@ O que o `docs/PLANO_ANALISE_V2_A1.md` (commitado antes da run) vai precisar:
    `artifacts_v2_a1_l1/interacao.json` para o desenho combinado.
 7. **O braço só cuidado acoplado:** copiar as ações de cuidado do atencioso nos mesmos ticks exige gravar a vida do atencioso primeiro e rejogar o
    acoplado a partir dela (um dono sintético que lê um log): entra no plano como peça de código própria, com teste de que o acoplado tem as
-   mesmas ações de cuidado e nenhum sinal de ensino nem bola.
+   mesmas ações de cuidado (acariciar incluído, D4) e nenhum sinal de ensino nem bola.
 
 ---
 
