@@ -121,12 +121,69 @@ antes da run. Uma peça por vez: cada uma passa sozinha antes de se juntar às o
 | N10 | genoma → fisiologia, cérebro inicial e plasticidade | fase 3 | genoma com variância herdável, com plano próprio (no E1 o genoma pesou 4,9%) | fase 3; Baldwin já publicado, não é novidade |
 | — | corpo 2D, luta dentro do mesmo cérebro, CfC | — | — | **fora** da fase de experimentos (stand-by) |
 
-**A pergunta de pesquisa que a arquitetura abre** (para o plano da V2, se o Matheus adotar): *um pet que aprende pela
+**A pergunta de pesquisa que a arquitetura abre** (incluída na pergunta maior da seção 6, como os braços P2 e P2e): *um pet que aprende pela
 consequência no mundo absorve informação do dono de um jeito que se separa do cuidado?* Ela troca a pergunta de hoje
 ("o dono avaliador separa políticas?", a L1) e, se o N5 passar, é a que vai para os humanos na fase 2: lá o dono humano
 dá informação, e o desenho de gêmeos mede se o pet dele é reconhecível.
 
-## 6. Decisões que só o Matheus pode tomar
+## 6. A pergunta maior (proposta do Matheus, 2026-10-01)
+
+> **Em que condições a plasticidade durante a vida produz vantagem adaptativa sobre as predisposições herdadas?**
+> Fontes de plasticidade: só consequências · ensino contextual · feedback explícito.
+
+**Avaliação.** É a pergunta certa para a arquitetura, por três razões:
+- Ela usa os nós N1, N3 e N5 como **braços de um mesmo experimento**, em vez de três mecânicas soltas.
+- Ela põe a pergunta encerrada da v1 no lugar dela: o feedback explícito vira **uma condição entre três**, não a tese.
+  O resultado da v1 (feedback explícito com o bandit não separou os donos) entra como um dado, sem ser reaberto.
+- A literatura verificada apoia a separação entre ensino contextual e feedback explícito: as pessoas tentam guiar,
+  e não só avaliar (Thomaz e Breazeal 2008, `10.1016/j.artint.2007.09.009`).
+
+**O que ela não é: novidade.** A pergunta geral (quando aprender na vida compensa diante do que é herdado) é a pergunta
+clássica do efeito Baldwin: Hinton e Nowlan 1987 (sem DOI), Fernando et al. 2018 (`10.1145/3205651.3205763`), e a partição
+instinto × aprendido de Hallawa et al. (`10.1145/3449726.3459475`). O que pode ser contribuição é a **decomposição da
+plasticidade por fonte** (consequência × ensino contextual × feedback explícito) no mesmo agente, com o cuidado controlado.
+Isso só pode ser dito como "não localizamos" depois de uma busca própria (decisão A8). A ponte entre as cinco fontes é
+moldura do Digilab, não evidência delas (seção 3).
+
+**Como ela vira experimento.** Uma pergunta tão ampla não falha. Ela precisa de quatro escolhas para virar gate:
+
+1. **O que é "vantagem adaptativa".** Recomendação: desempenho no próprio ambiente, medido por:
+   - tempo fora de privação e saúde ao longo da vida;
+   - acerto na tarefa do ambiente (o G3-T de `docs/DEFINICOES_V2.md`).
+
+   **Nunca a força na arena**: no E1 a forma final explicava 96% da taxa no painel
+   (`artifacts_linhagem/dono_ambiente/resultado.json`).
+2. **"Em que condições" é um eixo do desenho, não um adjetivo.** O ambiente varia em três níveis:
+   - **casado:** o mundo é aquele para o qual o prior foi feito;
+   - **descasado:** o mundo contradiz o prior (por exemplo, a fruta preferida de nascença faz mal);
+   - **mutável:** o mundo muda no meio da vida.
+
+   A bola não serve para isso, porque não contradiz nada do instinto. As frutas servem (N4). Por isso este experimento
+   vem depois do N4.
+3. **A plasticidade tem de ter custo.** Exploração, deriva (G6) e o tempo até aprender, medidos e reportados. Sem custo,
+   a plasticidade ganha por construção no mundo descasado e o resultado é trivial.
+4. **Braços** (todos com o "só cuidado" acoplado e o controle de capacidade equivalente):
+
+| braço | plasticidade | nó |
+|---|---|---|
+| P0 | nenhuma: só a predisposição herdada (o prior fixo) | N0 |
+| P1 | só consequências | N3 |
+| P2 | ensino contextual com informação **certa** + consequências | N5 |
+| P2e | ensino contextual com informação **errada** + consequências: o mundo tem de refutar | N5 |
+| P3 | feedback explícito (COACH) | N1 |
+
+**Predições a registrar no plano antes da run** (hipóteses do Digilab, não afirmações das fontes):
+- P0 vence no ambiente casado, porque não paga o custo de aprender.
+- P1 vence P0 no descasado e no mutável, se a vida for longa o bastante.
+- P2 chega lá com menos consequências que P1 (eficiência amostral, a medida do G3-T).
+- P2e piora no começo e se recupera quando o mundo refuta. Se não se recuperar, o pet obedece ao dono contra o mundo, e o
+  diagrama "o mundo valida" não se sustenta.
+- P3 fica perto de P0: é o que a v1 sugere, e é a predição mais fácil de falhar.
+
+**Onde entram as predisposições herdadas que evoluem.** Na fase 3. Primeiro o prior é fixo e casado ou descasado por
+desenho; só depois o genoma o produz (N10). Assim a pergunta não espera o genoma para começar.
+
+## 7. Decisões que só o Matheus pode tomar
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
@@ -135,7 +192,10 @@ dá informação, e o desenho de gêmeos mede se o pet dele é reconhecível.
 | A3 | Informação do dono entra pela percepção, nunca como reforço (D-A) | Sim | Como reforço, repete o desenho refutado |
 | A4 | Valor instrumental sem o dono (D-B) | Sim, (1) | Com o objetivo do dono, o dono volta como recompensa |
 | A5 | Um canal de reforço primeiro, o homeostático (D-C) | Sim | Três canais de uma vez impedem saber qual deles fez efeito |
-| A6 | Pergunta de pesquisa nova (seção 5) no `PLANO_V2_PESQUISA.md` | Registrar como PROPOSTA ao lado da H1, decidir depois da validação da L1 | Trocar a pergunta antes da validação da L1 parece fuga de um possível negativo |
+| A6 | A pergunta maior (seção 6) como pergunta da V2 no `PLANO_V2_PESQUISA.md` | Adotar como pergunta da fase 1 **completa**, com a H1 (L1) como o braço P3; registrar agora, antes da validação da L1, para que o resultado da L1 não decida a pergunta | Adotada depois da validação da L1, parece fuga de um possível negativo |
+| A10 | "Vantagem adaptativa" = desempenho no próprio ambiente (privação, saúde, G3-T), nunca a força na arena | Sim | Pela arena, mede-se o arquétipo, não a plasticidade |
+| A11 | Eixo de ambiente casado × descasado × mutável, com as frutas | Sim; o experimento P0–P3 vem depois do N4 | Só com a bola não há o que descasar, e a pergunta não tem condição |
+| A12 | Braço P2e (o dono informa errado) | Incluir | Sem ele, "o mundo valida ou refuta" nunca é testado |
 | A7 | CfC (NORNBRAIN) fora | Fora; registrar como hipótese concorrente | Adotar quebra o replay e a paridade |
 | A8 | Pedir ao Claude Science a verificação das pistas (FlyWire, Fróes, Berto, Rossi, Sakabe, A.L.I.V.E., ALGA) | Sim, antes de qualquer texto que as cite | Citar pista como evidência é o erro que a revisão de literatura já bloqueou |
 | A9 | Luta dentro do mesmo cérebro | Fora da fase de experimentos | Juntar os gambits do combate ao cérebro da vida muda o combate inteiro (gates V21C/V21D/V21E) |
