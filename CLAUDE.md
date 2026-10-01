@@ -1118,6 +1118,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 
 ## Pendências conhecidas
 
+- **IDEIA: interação do jogador e corpo do pet** (`docs/TODO_INTERACAO_CORPO.md`, Matheus, 2026-09-30): ambiente 2D manipulável ao estilo do
+  Championship (comida, bola, obstáculo, áreas), para criar decisões do pet com consequência onde o dono importa. Não autoriza
+  implementação; o próximo passo é escolher a interação mínima e o gate antes de ampliar o ambiente.
 - **Pesquisa:** a pergunta do efeito do dono está encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`, 2026-10-01). Não há
   pergunta de pesquisa viva; uma nova, se vier, é sobre o aprendiz.
 
