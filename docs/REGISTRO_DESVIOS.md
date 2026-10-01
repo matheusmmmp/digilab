@@ -1368,3 +1368,25 @@ na `v2_referencias_verificadas.csv`). A entrada foi **corrigida** (não removida
 `integration/02_RESEARCH_CROSSWALK.md` e `integration/09_PROMPT_CLAUDE_SCIENCE.md`. Trabalhos reais de Ackroff e Sclafani têm outros DOIs
 (`10.1016/j.appet.2010.04.011`, `10.1016/j.appet.2020.104793`) e não foram citados, por não terem sido verificados pelo projeto. O repositório não citava
 "Ackroff 2017" em lugar nenhum. Como o corpus está fora do git, este registro é a trilha da correção.
+## 2026-10-01 — V2, F0-LIMPEZA: textos corrigidos e `Config.limiar_privacao` passa a ser lido
+
+Tarefa `docs/TAREFA_V2_F0_LIMPEZA.md` (fecha a fase 0). Corrige as divergências documento × código do inventário (PR #106, `docs/V2_INVENTARIO_JOGO.md`,
+seção 5) **sem mudar nenhum resultado**. `engine.py` intocado (sha256 conferido pela suíte).
+- **`Estado.em_privacao` lia o literal 0,15** (`digilab/state.py`); `Config.limiar_privacao = 0.15` existia e não era lido. Agora
+  `em_privacao(cfg)` lê `cfg.limiar_privacao`, com o mesmo valor: a propriedade virou método com o `Config` (único uso dentro de
+  `avancar_um_tick`, que já recebe `cfg`; nenhum outro módulo o chamava). O valor não muda, logo o hash de protocolo (que inclui o `Config`)
+  e todas as vidas gravadas saem iguais; os testes de reprodução byte a byte (`test_canonico_intacto.py`, `test_reproducao_v3_confirmatoria.py`,
+  `test_natureza_criacao.py`, `test_confianca.py`) e os de hash passam. A web (`estado.ts`) já usava a constante.
+- **`Config.saciedade_maxima` (1,0) e `saciedade_minima` (0,0) continuam não lidos: registrado, não mudado.** Onde deveriam valer: nos
+  limites de `state._limitar` (padrão 0,0 e 1,0), chamado para fome, higiene, energia, humor e saúde em `avancar_um_tick` e
+  `aplicar_acao_usuario`, e em `policy.efeito_da_acao_do_pet` (comer, brincar, explorar, emburrar); e no `clamp` de `web/app/motor/estado.ts`.
+  Como os dois valem exatamente os padrões de `_limitar`, trocar seria só nome; fica para quando um valor diferente for necessário (nunca
+  foi). Os dois já entram no hash de protocolo e nos `metrics.json` gravados (`artifacts/metrics.json`, `configs.Config`).
+- **Textos:** `CLAUDE.md` deixa de ter contagem fixa de testes (mapa e comandos; a contagem do dia vai no PR de cada frente) e passa a
+  apontar a pasta `v2` e as worktrees; `web/app/motor/confianca.ts` ("pets v5" → v8 em diante, como `motor.ts`); `web/app/motor/donos.ts`
+  (a evolução existe no Python; o que não existe é o dono sintético ver o chamado do bebê ao vivo); `docs/TODO_INTERACAO_CORPO.md` e
+  `docs/PLANO_V2_PESQUISA.md` ("o aprendido muda a política em cerca de 0,02 bit" → a JSD entre os braços dos donos é 0,02 bit,
+  `artifacts/divergence.json`; ao instinto, 0,03–0,05 bit). O G3 do plano não muda: a referência dele já era a divergência entre donos.
+- **Conferência:** `python -m pytest tests/ -q` na worktree `v2-f0-limpeza` (Windows, Python 3.13): 595 passados, 1 pulado, 7 min 32 s, com
+  `test_canonico_intacto.py`, `test_reproducao_v3_confirmatoria.py`, `test_natureza_criacao.py`, `test_confianca.py` e `test_protocol.py` (hash e
+  `engine.py`) passando; `cd web/app && npm run tipos` sem erros; `npm test` 306 testes em 29 arquivos passando (só comentários mudaram lá).
