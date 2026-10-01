@@ -39,7 +39,7 @@ def test_peso_maior_afasta_os_stats_do_carater_neutro():
 def test_catalogo_do_painel():
     e1 = json.loads((CFG / "natureza_criacao.json").read_text(encoding="utf-8"))
     assert catalogo_do_painel(e1) is None
-    for k in (3, 9):
+    for k in (3, 8):
         c = json.loads((CFG / f"natureza_criacao_canal_k{k}.json").read_text(encoding="utf-8"))
         assert catalogo_do_painel(c).peso_carater_stats == float(k)
         assert {x: c[x] for x in ("rodadas", "rotulo_partidas", "M_B_por_bot", "bootstrap", "combate", "donos", "dias")} == \

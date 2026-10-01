@@ -1082,3 +1082,12 @@ pet disse "Você voltou!" e contou ser amigo de um Agumon que não existe na vid
 - **Reencontro:** além das 3 h de jogo, 20 min de relógio sem agir na página (no tempo de teste 3 h passam em 18 s).
 - **Forma na identidade:** a página manda o Digimon de agora em todo estágio (antes só do Champion em diante: o Rookie
   e o bebê ficavam sem o estilo do corpus).
+
+## 2026-09-30 — Canal do dono, Etapa B: dose alta k = 9 → k = 8
+
+`docs/PLANO_ANALISE_CANAL_DONO.md`, adendo B.
+- **Problema:** com `peso_carater_stats` = 9, a renormalização dos stats não tem solução para 3 dos 600 pets vivos do
+  E1: todos os stats ficam presos no limite (`CatalogoInvalido`, "renormalizacao sem stats livres").
+- **Troca:** a dose alta passa a ser o maior k inteiro ≤ 9 sem nenhuma falha, k = 8. A regra não olha a taxa, os donos
+  nem nenhum resultado.
+- **Quando:** a run de k = 9 foi parada ainda nas vidas, antes do painel. Nenhum resultado de k = 9 existe.

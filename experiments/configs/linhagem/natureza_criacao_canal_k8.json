@@ -1,5 +1,5 @@
 {
- "descricao": "Canal do dono, Etapa B (docs/PLANO_ANALISE_CANAL_DONO.md, adendo B, registrado antes da run): as mesmas vidas e sementes do E1; so o pet do painel B usa peso_carater_stats = 9.",
+ "descricao": "Canal do dono, Etapa B (docs/PLANO_ANALISE_CANAL_DONO.md, adendo B, registrado antes da run): as mesmas vidas e sementes do E1; so o pet do painel B usa peso_carater_stats = 8 (desvio do adendo B: k = 9 quebra a renormalizacao em 3 pets).",
  "plano": "docs/PLANO_ANALISE_CANAL_DONO.md",
  "combate": {
   "regras_base": {
@@ -398,6 +398,6 @@
   20260928
  ],
  "catalogo_painel": {
-  "peso_carater_stats": 9.0
+  "peso_carater_stats": 8.0
  }
 }

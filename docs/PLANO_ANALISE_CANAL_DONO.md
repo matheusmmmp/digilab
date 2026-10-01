@@ -240,3 +240,16 @@ donos. CANAL ABERTO quando o IC95 de Δr²_vivos (k = 9 − k = 1) fica todo aba
   `catalogo_painel.peso_carater_stats`;
 - a análise em `experiments/analisar_canal.py`, com as mesmas conferências do V21D: vidas iguais às do E1 byte a byte,
   `pets.json` e hash iguais.
+
+### Desvio do adendo B (2026-09-30, antes da run de k alto): k = 9 → k = 8
+
+- **Problema:** com k = 9, a renormalização dos stats (`catalogo.renormalizar`) fica sem stats livres em **3 dos 600
+  pets vivos** e levanta `CatalogoInvalido`. A run de k = 9 falharia no painel, e foi parada antes de chegar lá.
+  Com k = 7 ou 8 nenhum pet quebra (os de k = 1 a 6 também foram conferidos).
+- **Regra da troca, que não olha a taxa nem os donos:** a dose alta passa a ser o **maior k inteiro ≤ 9 em que todos
+  os 600 pets vivos têm stats válidos**, que é **k = 8**.
+- O resto não muda:
+  - o gate passa a usar Δ(k = 8 − k = 1) onde dizia k = 9;
+  - k = 3 segue igual;
+  - a config passa a ser `natureza_criacao_canal_k8.json`.
+- Registrado também em `docs/REGISTRO_DESVIOS.md`.
