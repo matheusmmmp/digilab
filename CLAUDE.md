@@ -66,7 +66,8 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/protocol.py` | protocolos congelados `PROTOCOLO_ARENA_V1` e `PROTOCOLO_ARENA_V1_ABLACAO` (herda tudo da v1 + campo `politicas`); cada campo DECIDIDO/PROPOSTO; hash cobre protocolo + configs + engine; `bracos_do_protocolo` dá (rótulo, dono, política) |
 | `digilab/donos.py` | donos sintéticos: atencioso, relapso, aleatório (controle crítico), incoerente |
 | `digilab/treino.py` | `CanalDeInteracao` impõe orçamento exato; `MotorComFeedback` (subclasse, só sobrescreve `_aplicar_acao_usuario`); `reproduzir_com_feedback`; `simular_vida` |
-| `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max |
+| `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
+| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
 | `digilab/metrics.py` | taxa de vitória, Bradley-Terry (erro padrão projetado em soma-zero), JSD com números aleatórios comuns, bootstrap, `efeito_do_treino` (ablação) |
@@ -1182,3 +1183,30 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - O hash do protocolo não cobre o código de `metrics.py`; mudanças de métrica não alteram o hash.
 - A pasta irmã `D:\Trab\digilab\v0` tem os arquivos soltos (sem subpasta `digilab/`); os imports
   dela não funcionam como estão. Este repo é a versão de referência.
+
+## V2, L0 — a política com lobos, aprendizado desligado (2026-10-01, `docs/TAREFA_V2_L0_LOBOS.md`) — G1 e G2 PASSAM
+
+Nó L0 da fase 1b do `docs/PLANO_V2_PESQUISA.md` (H1). **Decisão do Matheus (2026-10-01): a V2 abandona o bandit**; `policies/bandit.py`
+e subclasses ficam congelados só para reproduzir a v1. O aprendiz da V2 é `digilab/policies/lobos.py` (`PoliticaLobos`, sob o `Protocol`
+`Politica` e o gancho `receber_acao_dono`), com `ConfigLobos` em `config.py` (4 campos, todos PROPOSTOS, sem fonte; registro de status em
+`lobos.PARAMETROS_LOBOS_L0`, conferido por teste; fora de qualquer hash de protocolo). Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Os lobos** são estágios internos com nome, não interfaces: percepção (1, `Estado.vetor`, tempo sem cuidado normalizado como no
+  bandit: 10 entradas); memória e emoção (só contadores do que o dono fez; contribuição zero); impulsos (as regras do `PoliticaInstinto`,
+  executadas pelo próprio código dele com uma rng-sonda: devolvem a regra e os candidatos, na ordem do instinto); decisão (490 pesos
+  inteiros `w[regra][ação][entrada]`, escala S = 2¹⁰, iniciados no prior: os coeficientes literais do instinto vezes S; ativação
+  linear sem `exp`/`log`; sorteio proporcional com uma chamada de `random()`, a conta de `random.choices(k=1)` passo a passo).
+- **Por que fecha byte a byte:** S potência de dois torna `w/S` exato e devolve os mesmos floats que o instinto escreve, somados na
+  mesma ordem (laço, não `sum()` compensado); regra determinista = um candidato = nenhuma rng; na fome moderada os pesos [1, 1] viram
+  `2u < 1`, isto é, `u < 0,5`, a conta literal do instinto. A restrição de desenho da tarefa (seção 3) foi resolvida sem relaxar o gate.
+- **Gates** (`tests/test_lobos.py`, 23 testes, ~4 s; sementes 101…505, só as dos testes): **G2 passa** nos dois motores (`MotorComFeedback`
+  e `MotorPersonalidade`, 4 donos × 5 sementes × 3 dias, mais um orçamento baixo com o aleatório onde as 7 regras disparam): log, estado
+  final, ações e o estado das rngs de ambiente, política e obediência iguais aos do instinto; decisão a decisão em 3000 observações
+  aleatórias (todas as regras), ação e estado da rng iguais. **G1 passa**: replay pelo log bit a bit, inclusive o `estado_interno()`.
+  Os pesos nunca mudam com o feedback do dono (vida do atencioso + todas as ações de dono); `aprendizado_ligado=True` falha alto (é o L1).
+- **Motivo (base do G4):** `estado_interno()["motivos"]` guarda, por decisão, regra, candidatos, entradas, a contribuição de cada lobo por
+  candidato, os pesos efetivos, o `u` sorteado e o lobo decisivo; a soma das contribuições é o peso sobre o qual se sorteia, então fecha
+  com a decisão por construção (teste).
+- **Não mudou:** `engine.py` (sha256 igual), o bandit, protocolos, runs da v1, `obediencia.py`, o jogo web. Sem versão de pet nova.
+- **Aberto:** o instinto puro não roda no `MotorPersonalidade` (o embrulho repassa `receber_acao_dono`); o controle do G2 ali é o
+  instinto com gancho vazio, definido no teste. L1 (ligar o aprendizado), L2/L3 (peças do DF), A1 e o porte para a web ficam para as
+  tarefas seguintes.
