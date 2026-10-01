@@ -1,0 +1,1921 @@
+{
+ "descricao": "Medicao dos itens nos pets v9 (rodada de equilibrio geral, fase 3; metas M-D1 a M-D3 = G-I1 a G-I3): motor web, regras V21E, escala CESC_V9, fatores dos lideres dos v9, itens dos v9, limite do desafiado.",
+ "conjunto": "calibracao",
+ "regras": "v21e",
+ "versao_pet": 9,
+ "itens": "os de antes (v6)",
+ "sementes": [
+  3101,
+  3202,
+  3303,
+  3404,
+  3505
+ ],
+ "catalogo": [
+  "chip_forca",
+  "chip_guarda",
+  "chip_recuo",
+  "chip_oportunista",
+  "chip_perseguidor",
+  "chip_aparo",
+  "carta_folego",
+  "carta_cura",
+  "carta_foco"
+ ],
+ "fora_do_catalogo": [],
+ "vagas": 3,
+ "n": {
+  "lider": 10,
+  "estagio": 10,
+  "matriz": 100
+ },
+ "metas": {
+  "gi1_sem_treino_max": 0.05,
+  "gi2_vizinho_pontos_max": 0.1,
+  "gi2_dois_estagios_vitorias_max": 0,
+  "gi3_forca_max": 0.6
+ },
+ "gi1": {
+  "campina": {
+   "lider": "Gazimon",
+   "estagio": "crianca",
+   "combinacoes": 16,
+   "sem_item": 0.0025,
+   "com_itens": 0.425,
+   "pior_forma": "arisco",
+   "pior_forma_taxa": 0.47,
+   "passa": false,
+   "item_sozinho": {
+    "carta_folego": 0.0088,
+    "carta_cura": 0.04,
+    "carta_foco": 0.005,
+    "chip_forca": 0.1175,
+    "chip_guarda": 0.0288
+   },
+   "por_forma": {
+    "sereno": {
+     "sem_item": 0,
+     "melhor": 0.38,
+     "combinacao": "chip_forca + carta_cura",
+     "top3": [
+      "chip_forca + carta_cura 0.3800",
+      "chip_forca + chip_guarda + carta_cura 0.2475",
+      "chip_guarda + carta_cura 0.1325"
+     ]
+    },
+    "arisco": {
+     "sem_item": 0.005,
+     "melhor": 0.47,
+     "combinacao": "chip_forca + carta_cura",
+     "top3": [
+      "chip_forca + carta_cura 0.4700",
+      "chip_forca + chip_guarda + carta_cura 0.4125",
+      "chip_guarda + carta_cura 0.2650"
+     ]
+    }
+   }
+  },
+  "torre": {
+   "lider": "Guardromon",
+   "estagio": "adolescente",
+   "combinacoes": 72,
+   "sem_item": 0.0063,
+   "com_itens": 0.325,
+   "pior_forma": "cacador",
+   "pior_forma_taxa": 0.63,
+   "passa": false,
+   "item_sozinho": {
+    "carta_folego": 0.0244,
+    "carta_cura": 0.0294,
+    "carta_foco": 0.005,
+    "chip_recuo": 0.0269,
+    "chip_oportunista": 0.0238,
+    "chip_forca": 0.0369,
+    "chip_guarda": 0.035
+   },
+   "por_forma": {
+    "brigao": {
+     "sem_item": 0.0025,
+     "melhor": 0.3275,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.3275",
+      "chip_forca + carta_cura 0.1675",
+      "chip_forca + chip_guarda + sem carta 0.1200"
+     ]
+    },
+    "guardiao": {
+     "sem_item": 0.0025,
+     "melhor": 0.2375,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.2375",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.2375",
+      "chip_forca + carta_cura 0.1700"
+     ]
+    },
+    "cacador": {
+     "sem_item": 0.02,
+     "melhor": 0.63,
+     "combinacao": "chip_forca + chip_guarda + chip_recuo + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_recuo + carta_cura 0.6300",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.6200",
+      "chip_forca + chip_guarda + chip_recuo + carta_folego 0.5425"
+     ]
+    },
+    "colosso": {
+     "sem_item": 0,
+     "melhor": 0.105,
+     "combinacao": "chip_forca + chip_guarda + chip_oportunista + carta_folego",
+     "top3": [
+      "chip_forca + chip_guarda + chip_oportunista + carta_folego 0.1050",
+      "chip_forca + chip_guarda + carta_folego 0.1025",
+      "chip_forca + chip_guarda + chip_recuo + carta_folego 0.0850"
+     ]
+    }
+   }
+  },
+  "floresta": {
+   "lider": "Youkomon",
+   "estagio": "adolescente",
+   "combinacoes": 72,
+   "sem_item": 0.0163,
+   "com_itens": 0.2694,
+   "pior_forma": "brigao",
+   "pior_forma_taxa": 0.8875,
+   "passa": false,
+   "item_sozinho": {
+    "carta_folego": 0.0106,
+    "carta_cura": 0.0525,
+    "carta_foco": 0.0225,
+    "chip_recuo": 0,
+    "chip_oportunista": 0,
+    "chip_forca": 0.0856,
+    "chip_guarda": 0.0456
+   },
+   "por_forma": {
+    "brigao": {
+     "sem_item": 0.065,
+     "melhor": 0.8875,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.8875",
+      "chip_forca + chip_guarda + carta_foco 0.8400",
+      "chip_forca + chip_guarda + sem carta 0.7225"
+     ]
+    },
+    "guardiao": {
+     "sem_item": 0,
+     "melhor": 0.03,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.0300",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.0300",
+      "chip_forca + chip_guarda + chip_recuo + carta_cura 0.0275"
+     ]
+    },
+    "cacador": {
+     "sem_item": 0,
+     "melhor": 0.025,
+     "combinacao": "chip_forca + chip_guarda + chip_recuo + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_recuo + carta_cura 0.0250",
+      "chip_forca + chip_guarda + carta_foco 0.0100",
+      "chip_forca + chip_guarda + chip_recuo + carta_folego 0.0100"
+     ]
+    },
+    "colosso": {
+     "sem_item": 0,
+     "melhor": 0.135,
+     "combinacao": "chip_forca + chip_recuo + chip_oportunista + carta_cura",
+     "top3": [
+      "chip_forca + chip_recuo + chip_oportunista + carta_cura 0.1350",
+      "chip_forca + chip_oportunista + chip_recuo + carta_cura 0.1350",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.1125"
+     ]
+    }
+   }
+  },
+  "cidadela": {
+   "lider": "Myotismon",
+   "estagio": "adulto",
+   "combinacoes": 320,
+   "sem_item": 0.0016,
+   "com_itens": 0.3069,
+   "pior_forma": "muralha",
+   "pior_forma_taxa": 0.8025,
+   "passa": false,
+   "item_sozinho": {
+    "carta_folego": 0.0006,
+    "carta_cura": 0.0106,
+    "carta_foco": 0.0028,
+    "chip_recuo": 0,
+    "chip_oportunista": 0.0016,
+    "chip_perseguidor": 0.0009,
+    "chip_aparo": 0.0009,
+    "chip_forca": 0.0303,
+    "chip_guarda": 0.0097
+   },
+   "por_forma": {
+    "duelista": {
+     "sem_item": 0.005,
+     "melhor": 0.2075,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.2075",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.1725",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.1700"
+     ]
+    },
+    "furioso": {
+     "sem_item": 0,
+     "melhor": 0.2925,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.2925",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.2925",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.2925"
+     ]
+    },
+    "espelho": {
+     "sem_item": 0,
+     "melhor": 0.595,
+     "combinacao": "chip_forca + chip_guarda + chip_oportunista + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.5950",
+      "chip_forca + chip_guarda + carta_cura 0.5825",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.5825"
+     ]
+    },
+    "muralha": {
+     "sem_item": 0.0075,
+     "melhor": 0.8025,
+     "combinacao": "chip_forca + chip_guarda + chip_oportunista + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.8025",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.7975",
+      "chip_forca + chip_guarda + carta_cura 0.7725"
+     ]
+    },
+    "sentinela": {
+     "sem_item": 0,
+     "melhor": 0,
+     "combinacao": "sem carta",
+     "top3": [
+      "sem carta 0.0000",
+      "carta_folego 0.0000",
+      "carta_cura 0.0000"
+     ]
+    },
+    "emboscador": {
+     "sem_item": 0,
+     "melhor": 0,
+     "combinacao": "sem carta",
+     "top3": [
+      "sem carta 0.0000",
+      "carta_folego 0.0000",
+      "carta_cura 0.0000"
+     ]
+    },
+    "vigia": {
+     "sem_item": 0,
+     "melhor": 0.43,
+     "combinacao": "chip_recuo + chip_oportunista + chip_perseguidor + carta_foco",
+     "top3": [
+      "chip_recuo + chip_oportunista + chip_perseguidor + carta_foco 0.4300",
+      "chip_recuo + chip_perseguidor + chip_oportunista + carta_foco 0.4300",
+      "chip_perseguidor + chip_recuo + chip_oportunista + carta_foco 0.4300"
+     ]
+    },
+    "tita": {
+     "sem_item": 0,
+     "melhor": 0.1275,
+     "combinacao": "chip_forca + chip_guarda + chip_oportunista + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.1275",
+      "chip_forca + chip_guarda + carta_cura 0.1200",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.1125"
+     ]
+    }
+   }
+  },
+  "lago": {
+   "lider": "MarinBullmon",
+   "estagio": "adulto",
+   "combinacoes": 320,
+   "sem_item": 0.0075,
+   "com_itens": 0.2616,
+   "pior_forma": "espelho",
+   "pior_forma_taxa": 0.515,
+   "passa": false,
+   "item_sozinho": {
+    "carta_folego": 0.0053,
+    "carta_cura": 0.0347,
+    "carta_foco": 0.0147,
+    "chip_recuo": 0.0041,
+    "chip_oportunista": 0.0059,
+    "chip_perseguidor": 0.0063,
+    "chip_aparo": 0.0022,
+    "chip_forca": 0.0575,
+    "chip_guarda": 0.0341
+   },
+   "por_forma": {
+    "duelista": {
+     "sem_item": 0.0125,
+     "melhor": 0.245,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.2450",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.1775",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.1775"
+     ]
+    },
+    "furioso": {
+     "sem_item": 0.01,
+     "melhor": 0.2925,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.2925",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.2925",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.2925"
+     ]
+    },
+    "espelho": {
+     "sem_item": 0.02,
+     "melhor": 0.515,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.5150",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.5150",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.5100"
+     ]
+    },
+    "muralha": {
+     "sem_item": 0.0175,
+     "melhor": 0.505,
+     "combinacao": "chip_forca + chip_oportunista + chip_perseguidor + carta_cura",
+     "top3": [
+      "chip_forca + chip_oportunista + chip_perseguidor + carta_cura 0.5050",
+      "chip_forca + chip_perseguidor + chip_oportunista + carta_cura 0.5050",
+      "chip_guarda + chip_oportunista + chip_perseguidor + carta_cura 0.4975"
+     ]
+    },
+    "sentinela": {
+     "sem_item": 0,
+     "melhor": 0.02,
+     "combinacao": "chip_forca + chip_guarda + chip_recuo + carta_foco",
+     "top3": [
+      "chip_forca + chip_guarda + chip_recuo + carta_foco 0.0200",
+      "chip_forca + chip_guarda + carta_foco 0.0150",
+      "chip_forca + chip_guarda + chip_recuo + sem carta 0.0150"
+     ]
+    },
+    "emboscador": {
+     "sem_item": 0,
+     "melhor": 0,
+     "combinacao": "sem carta",
+     "top3": [
+      "sem carta 0.0000",
+      "carta_folego 0.0000",
+      "carta_cura 0.0000"
+     ]
+    },
+    "vigia": {
+     "sem_item": 0,
+     "melhor": 0.19,
+     "combinacao": "chip_forca + chip_guarda + chip_perseguidor + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.1900",
+      "chip_forca + chip_guarda + carta_cura 0.1850",
+      "chip_forca + chip_guarda + chip_recuo + carta_cura 0.1825"
+     ]
+    },
+    "tita": {
+     "sem_item": 0,
+     "melhor": 0.325,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_aparo + carta_cura 0.3250",
+      "chip_forca + chip_guarda + carta_cura 0.2400",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.2400"
+     ]
+    }
+   }
+  },
+  "espiral": {
+   "lider": "Piedmon",
+   "estagio": "mega",
+   "combinacoes": 320,
+   "sem_item": 0.0359,
+   "com_itens": 0.5297,
+   "pior_forma": "muralha",
+   "pior_forma_taxa": 0.9625,
+   "passa": false,
+   "item_sozinho": {
+    "carta_folego": 0.0325,
+    "carta_cura": 0.1234,
+    "carta_foco": 0.0462,
+    "chip_recuo": 0.01,
+    "chip_oportunista": 0.0428,
+    "chip_perseguidor": 0.0381,
+    "chip_aparo": 0.0338,
+    "chip_forca": 0.1694,
+    "chip_guarda": 0.1159
+   },
+   "por_forma": {
+    "duelista": {
+     "sem_item": 0.07,
+     "melhor": 0.605,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.6050",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.5750",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.5750"
+     ]
+    },
+    "furioso": {
+     "sem_item": 0.035,
+     "melhor": 0.58,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.5800",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.5800",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.5800"
+     ]
+    },
+    "espelho": {
+     "sem_item": 0.035,
+     "melhor": 0.7625,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.7625",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.7625",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.7625"
+     ]
+    },
+    "muralha": {
+     "sem_item": 0.1075,
+     "melhor": 0.9625,
+     "combinacao": "chip_forca + chip_guarda + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + carta_cura 0.9625",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.9625",
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.9525"
+     ]
+    },
+    "sentinela": {
+     "sem_item": 0.005,
+     "melhor": 0.03,
+     "combinacao": "chip_forca + chip_guarda + carta_foco",
+     "top3": [
+      "chip_forca + chip_guarda + carta_foco 0.0300",
+      "chip_forca + chip_guarda + chip_oportunista + carta_foco 0.0300",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_foco 0.0300"
+     ]
+    },
+    "emboscador": {
+     "sem_item": 0,
+     "melhor": 0.02,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_foco",
+     "top3": [
+      "chip_forca + chip_guarda + chip_aparo + carta_foco 0.0200",
+      "chip_forca + chip_recuo + chip_aparo + carta_cura 0.0150",
+      "chip_forca + chip_guarda + chip_aparo + carta_cura 0.0150"
+     ]
+    },
+    "vigia": {
+     "sem_item": 0.01,
+     "melhor": 0.6975,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_aparo + carta_cura 0.6975",
+      "chip_forca + chip_aparo + chip_oportunista + carta_cura 0.6700",
+      "chip_forca + chip_perseguidor + chip_aparo + carta_cura 0.6425"
+     ]
+    },
+    "tita": {
+     "sem_item": 0.025,
+     "melhor": 0.58,
+     "combinacao": "chip_forca + chip_guarda + chip_oportunista + carta_cura",
+     "top3": [
+      "chip_forca + chip_guarda + chip_oportunista + carta_cura 0.5800",
+      "chip_forca + chip_guarda + carta_cura 0.5725",
+      "chip_forca + chip_guarda + chip_perseguidor + carta_cura 0.5700"
+     ]
+    }
+   }
+  }
+ },
+ "gi1_limiar": {
+  "campina": {
+   "lider": "Gazimon",
+   "estagio": "crianca",
+   "treino": 4,
+   "sem_item": 0.1987,
+   "com_itens": 0.9612,
+   "por_forma": {
+    "sereno": {
+     "sem_item": 0.1475,
+     "melhor": 0.9425,
+     "combinacao": "chip_forca + carta_cura"
+    },
+    "arisco": {
+     "sem_item": 0.25,
+     "melhor": 0.98,
+     "combinacao": "chip_forca + carta_cura"
+    }
+   }
+  },
+  "torre": {
+   "lider": "Guardromon",
+   "estagio": "adolescente",
+   "treino": 11,
+   "sem_item": 0.4713,
+   "com_itens": 0.8219,
+   "por_forma": {
+    "brigao": {
+     "sem_item": 0.63,
+     "melhor": 0.85,
+     "combinacao": "chip_forca + chip_guarda + carta_foco"
+    },
+    "guardiao": {
+     "sem_item": 0.46,
+     "melhor": 0.6025,
+     "combinacao": "chip_forca + chip_guarda + carta_foco"
+    },
+    "cacador": {
+     "sem_item": 0.605,
+     "melhor": 1,
+     "combinacao": "chip_recuo + carta_cura"
+    },
+    "colosso": {
+     "sem_item": 0.19,
+     "melhor": 0.835,
+     "combinacao": "chip_forca + chip_guarda + chip_recuo + carta_folego"
+    }
+   }
+  },
+  "floresta": {
+   "lider": "Youkomon",
+   "estagio": "adolescente",
+   "treino": 11,
+   "sem_item": 0.3825,
+   "com_itens": 0.9194,
+   "por_forma": {
+    "brigao": {
+     "sem_item": 0.97,
+     "melhor": 1,
+     "combinacao": "carta_foco"
+    },
+    "guardiao": {
+     "sem_item": 0.195,
+     "melhor": 0.9875,
+     "combinacao": "chip_forca + chip_guarda + chip_recuo + carta_cura"
+    },
+    "cacador": {
+     "sem_item": 0.25,
+     "melhor": 0.76,
+     "combinacao": "chip_forca + chip_guarda + carta_foco"
+    },
+    "colosso": {
+     "sem_item": 0.115,
+     "melhor": 0.93,
+     "combinacao": "chip_guarda + chip_recuo + chip_oportunista + carta_cura"
+    }
+   }
+  },
+  "cidadela": {
+   "lider": "Myotismon",
+   "estagio": "adulto",
+   "treino": 18,
+   "sem_item": 0.7038,
+   "com_itens": 0.9569,
+   "por_forma": {
+    "duelista": {
+     "sem_item": 0.9775,
+     "melhor": 1,
+     "combinacao": "carta_foco"
+    },
+    "furioso": {
+     "sem_item": 0.9925,
+     "melhor": 1,
+     "combinacao": "carta_foco"
+    },
+    "espelho": {
+     "sem_item": 1,
+     "melhor": 1,
+     "combinacao": "sem carta"
+    },
+    "muralha": {
+     "sem_item": 1,
+     "melhor": 1,
+     "combinacao": "sem carta"
+    },
+    "sentinela": {
+     "sem_item": 0.03,
+     "melhor": 0.745,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_cura"
+    },
+    "emboscador": {
+     "sem_item": 0.065,
+     "melhor": 0.91,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_cura"
+    },
+    "vigia": {
+     "sem_item": 0.6825,
+     "melhor": 1,
+     "combinacao": "chip_recuo + chip_oportunista + chip_perseguidor + sem carta"
+    },
+    "tita": {
+     "sem_item": 0.8825,
+     "melhor": 1,
+     "combinacao": "chip_guarda + carta_cura"
+    }
+   }
+  },
+  "lago": {
+   "lider": "MarinBullmon",
+   "estagio": "adulto",
+   "treino": 18,
+   "sem_item": 0.7359,
+   "com_itens": 0.8266,
+   "por_forma": {
+    "duelista": {
+     "sem_item": 0.9575,
+     "melhor": 1,
+     "combinacao": "chip_forca + chip_oportunista + carta_cura"
+    },
+    "furioso": {
+     "sem_item": 0.9775,
+     "melhor": 1,
+     "combinacao": "carta_cura"
+    },
+    "espelho": {
+     "sem_item": 0.99,
+     "melhor": 0.995,
+     "combinacao": "carta_cura"
+    },
+    "muralha": {
+     "sem_item": 0.985,
+     "melhor": 1,
+     "combinacao": "chip_oportunista + chip_perseguidor + carta_cura"
+    },
+    "sentinela": {
+     "sem_item": 0.1625,
+     "melhor": 0.275,
+     "combinacao": "chip_forca + chip_guarda + chip_recuo + carta_foco"
+    },
+    "emboscador": {
+     "sem_item": 0.185,
+     "melhor": 0.345,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_cura"
+    },
+    "vigia": {
+     "sem_item": 0.6675,
+     "melhor": 0.9975,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_cura"
+    },
+    "tita": {
+     "sem_item": 0.9625,
+     "melhor": 1,
+     "combinacao": "chip_aparo + carta_cura"
+    }
+   }
+  },
+  "espiral": {
+   "lider": "Piedmon",
+   "estagio": "mega",
+   "treino": 20,
+   "sem_item": 0.8178,
+   "com_itens": 0.9544,
+   "por_forma": {
+    "duelista": {
+     "sem_item": 1,
+     "melhor": 1,
+     "combinacao": "sem carta"
+    },
+    "furioso": {
+     "sem_item": 0.995,
+     "melhor": 1,
+     "combinacao": "carta_cura"
+    },
+    "espelho": {
+     "sem_item": 1,
+     "melhor": 1,
+     "combinacao": "sem carta"
+    },
+    "muralha": {
+     "sem_item": 1,
+     "melhor": 1,
+     "combinacao": "sem carta"
+    },
+    "sentinela": {
+     "sem_item": 0.245,
+     "melhor": 0.715,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_foco"
+    },
+    "emboscador": {
+     "sem_item": 0.3275,
+     "melhor": 0.92,
+     "combinacao": "chip_forca + chip_guarda + chip_aparo + carta_foco"
+    },
+    "vigia": {
+     "sem_item": 0.9775,
+     "melhor": 1,
+     "combinacao": "carta_folego"
+    },
+    "tita": {
+     "sem_item": 0.9975,
+     "melhor": 1,
+     "combinacao": "carta_cura"
+    }
+   }
+  }
+ },
+ "gi2": {
+  "crianca x adolescente": {
+   "tipo": "vizinhos",
+   "sem_item": {
+    "pontos": 0.0014,
+    "vitorias": 0.0014
+   },
+   "com_itens": {
+    "pontos": 0.0209,
+    "vitorias": 0.0208
+   },
+   "partidas": 6400,
+   "passa": true,
+   "por_forma_de_baixo": {
+    "sereno": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0.0002,
+      "vitorias": 0
+     },
+     "combinacao": "chip_forca + carta_cura"
+    },
+    "arisco": {
+     "sem_item": {
+      "pontos": 0.0028,
+      "vitorias": 0.0028
+     },
+     "melhor": {
+      "pontos": 0.0416,
+      "vitorias": 0.0416
+     },
+     "combinacao": "chip_forca + carta_foco"
+    }
+   }
+  },
+  "adolescente x adulto": {
+   "tipo": "vizinhos",
+   "sem_item": {
+    "pontos": 0.0104,
+    "vitorias": 0.0087
+   },
+   "com_itens": {
+    "pontos": 0.067,
+    "vitorias": 0.067
+   },
+   "partidas": 25600,
+   "passa": true,
+   "por_forma_de_baixo": {
+    "brigao": {
+     "sem_item": {
+      "pontos": 0.0369,
+      "vitorias": 0.0302
+     },
+     "melhor": {
+      "pontos": 0.2444,
+      "vitorias": 0.2444
+     },
+     "combinacao": "chip_recuo + chip_oportunista + carta_foco"
+    },
+    "guardiao": {
+     "sem_item": {
+      "pontos": 0.0006,
+      "vitorias": 0.0006
+     },
+     "melhor": {
+      "pontos": 0.0006,
+      "vitorias": 0.0006
+     },
+     "combinacao": "sem carta"
+    },
+    "cacador": {
+     "sem_item": {
+      "pontos": 0.0033,
+      "vitorias": 0.0033
+     },
+     "melhor": {
+      "pontos": 0.0219,
+      "vitorias": 0.0219
+     },
+     "combinacao": "chip_recuo + carta_folego"
+    },
+    "colosso": {
+     "sem_item": {
+      "pontos": 0.0006,
+      "vitorias": 0.0006
+     },
+     "melhor": {
+      "pontos": 0.0009,
+      "vitorias": 0.0009
+     },
+     "combinacao": "chip_oportunista + carta_cura"
+    }
+   }
+  },
+  "adulto x mega": {
+   "tipo": "vizinhos",
+   "sem_item": {
+    "pontos": 0.0041,
+    "vitorias": 0.004
+   },
+   "com_itens": {
+    "pontos": 0.0065,
+    "vitorias": 0.0064
+   },
+   "partidas": 51200,
+   "passa": true,
+   "por_forma_de_baixo": {
+    "duelista": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "furioso": {
+     "sem_item": {
+      "pontos": 0.0324,
+      "vitorias": 0.0323
+     },
+     "melhor": {
+      "pontos": 0.0516,
+      "vitorias": 0.0514
+     },
+     "combinacao": "chip_recuo + carta_foco"
+    },
+    "espelho": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "muralha": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "sentinela": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "emboscador": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "vigia": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "tita": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0.0001,
+      "vitorias": 0
+     },
+     "combinacao": "chip_recuo + chip_oportunista + sem carta"
+    }
+   }
+  },
+  "crianca x adulto": {
+   "tipo": "dois estagios",
+   "sem_item": {
+    "pontos": 0,
+    "vitorias": 0
+   },
+   "com_itens": {
+    "pontos": 0,
+    "vitorias": 0
+   },
+   "partidas": 12800,
+   "passa": true,
+   "por_forma_de_baixo": {
+    "sereno": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "arisco": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    }
+   }
+  },
+  "adolescente x mega": {
+   "tipo": "dois estagios",
+   "sem_item": {
+    "pontos": 0,
+    "vitorias": 0
+   },
+   "com_itens": {
+    "pontos": 0,
+    "vitorias": 0
+   },
+   "partidas": 25600,
+   "passa": true,
+   "por_forma_de_baixo": {
+    "brigao": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "guardiao": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "cacador": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    },
+    "colosso": {
+     "sem_item": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "melhor": {
+      "pontos": 0,
+      "vitorias": 0
+     },
+     "combinacao": "sem carta"
+    }
+   }
+  }
+ },
+ "gi3": {
+  "limite": "fracao de vida (a matriz da validacao V21D); relato: o limite do desafiado, a forma medida desafia",
+  "combinacoes": 320,
+  "formas": {
+   "duelista": {
+    "sem_item": 0.5078,
+    "com_itens": 0.7404,
+    "combinacao": "chip_forca + carta_cura",
+    "passa": false,
+    "por_rival_sem_item": {
+     "furioso": 0.4472,
+     "espelho": 0.1212,
+     "muralha": 0.3182,
+     "sentinela": 0.7963,
+     "emboscador": 0.8705,
+     "vigia": 0.5695,
+     "tita": 0.4318
+    },
+    "por_rival_com_itens": {
+     "furioso": 0.9395,
+     "espelho": 0.2203,
+     "muralha": 0.4392,
+     "sentinela": 0.9845,
+     "emboscador": 0.9832,
+     "vigia": 0.7618,
+     "tita": 0.8542
+    },
+    "top3": [
+     "chip_forca + carta_cura 0.7404",
+     "chip_forca + chip_guarda + carta_cura 0.7128",
+     "chip_forca + chip_oportunista + carta_cura 0.7105"
+    ],
+    "desafiado": {
+     "sem_item": 0.4768,
+     "com_itens": 0.6994
+    }
+   },
+   "furioso": {
+    "sem_item": 0.5278,
+    "com_itens": 0.8124,
+    "combinacao": "chip_forca + chip_oportunista + chip_aparo + carta_cura",
+    "passa": false,
+    "por_rival_sem_item": {
+     "duelista": 0.5675,
+     "espelho": 0.036,
+     "muralha": 0.0305,
+     "sentinela": 1,
+     "emboscador": 1,
+     "vigia": 0.7702,
+     "tita": 0.29
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.836,
+     "espelho": 0.725,
+     "muralha": 0.5072,
+     "sentinela": 1,
+     "emboscador": 1,
+     "vigia": 0.9595,
+     "tita": 0.659
+    },
+    "top3": [
+     "chip_forca + chip_oportunista + chip_aparo + carta_cura 0.8124",
+     "chip_forca + chip_aparo + chip_oportunista + carta_cura 0.8124",
+     "chip_forca + chip_oportunista + chip_perseguidor + carta_cura 0.8115"
+    ],
+    "desafiado": {
+     "sem_item": 0.5278,
+     "com_itens": 0.7865
+    }
+   },
+   "espelho": {
+    "sem_item": 0.4545,
+    "com_itens": 0.6704,
+    "combinacao": "chip_forca + carta_cura",
+    "passa": false,
+    "por_rival_sem_item": {
+     "duelista": 0.8732,
+     "furioso": 0.9718,
+     "muralha": 0.4928,
+     "sentinela": 0.1978,
+     "emboscador": 0.0045,
+     "vigia": 0.534,
+     "tita": 0.1075
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.9595,
+     "furioso": 0.9978,
+     "muralha": 0.612,
+     "sentinela": 0.5803,
+     "emboscador": 0.1175,
+     "vigia": 0.772,
+     "tita": 0.6535
+    },
+    "top3": [
+     "chip_forca + carta_cura 0.6704",
+     "chip_forca + chip_guarda + carta_cura 0.6655",
+     "carta_cura 0.6177"
+    ],
+    "desafiado": {
+     "sem_item": 0.4002,
+     "com_itens": 0.5937
+    }
+   },
+   "muralha": {
+    "sem_item": 0.4492,
+    "com_itens": 0.5708,
+    "combinacao": "chip_forca + carta_cura",
+    "passa": true,
+    "por_rival_sem_item": {
+     "duelista": 0.6727,
+     "furioso": 0.974,
+     "espelho": 0.4895,
+     "sentinela": 0,
+     "emboscador": 0,
+     "vigia": 0.8572,
+     "tita": 0.1512
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.7768,
+     "furioso": 0.998,
+     "espelho": 0.6178,
+     "sentinela": 0,
+     "emboscador": 0,
+     "vigia": 0.9752,
+     "tita": 0.628
+    },
+    "top3": [
+     "chip_forca + carta_cura 0.5708",
+     "chip_forca + chip_perseguidor + carta_cura 0.5596",
+     "chip_forca + chip_guarda + carta_cura 0.5511"
+    ],
+    "desafiado": {
+     "sem_item": 0.3512,
+     "com_itens": 0.4531
+    }
+   },
+   "sentinela": {
+    "sem_item": 0.5797,
+    "com_itens": 0.6703,
+    "combinacao": "chip_forca + chip_recuo + chip_aparo + carta_cura",
+    "passa": false,
+    "por_rival_sem_item": {
+     "duelista": 0.208,
+     "furioso": 0,
+     "espelho": 0.7975,
+     "muralha": 1,
+     "emboscador": 0.6847,
+     "vigia": 0.384,
+     "tita": 0.984
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.38,
+     "furioso": 0.0855,
+     "espelho": 0.9473,
+     "muralha": 1,
+     "emboscador": 0.946,
+     "vigia": 0.376,
+     "tita": 0.9575
+    },
+    "top3": [
+     "chip_forca + chip_recuo + chip_aparo + carta_cura 0.6703",
+     "chip_forca + chip_aparo + chip_recuo + carta_cura 0.6689",
+     "chip_forca + chip_aparo + carta_cura 0.6621"
+    ],
+    "desafiado": {
+     "sem_item": 0.4151,
+     "com_itens": 0.4778
+    }
+   },
+   "emboscador": {
+    "sem_item": 0.5454,
+    "com_itens": 0.6769,
+    "combinacao": "chip_forca + chip_recuo + chip_aparo + carta_cura",
+    "passa": false,
+    "por_rival_sem_item": {
+     "duelista": 0.119,
+     "furioso": 0,
+     "espelho": 0.9965,
+     "muralha": 1,
+     "sentinela": 0.31,
+     "vigia": 0.406,
+     "tita": 0.9865
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.4007,
+     "furioso": 0.0638,
+     "espelho": 0.9998,
+     "muralha": 1,
+     "sentinela": 0.8825,
+     "vigia": 0.4175,
+     "tita": 0.9738
+    },
+    "top3": [
+     "chip_forca + chip_recuo + chip_aparo + carta_cura 0.6769",
+     "chip_forca + chip_aparo + chip_recuo + carta_cura 0.6755",
+     "chip_forca + chip_oportunista + chip_aparo + carta_cura 0.6676"
+    ],
+    "desafiado": {
+     "sem_item": 0.4238,
+     "com_itens": 0.4924
+    }
+   },
+   "vigia": {
+    "sem_item": 0.476,
+    "com_itens": 0.8334,
+    "combinacao": "chip_forca + chip_aparo + carta_foco",
+    "passa": false,
+    "por_rival_sem_item": {
+     "duelista": 0.433,
+     "furioso": 0.225,
+     "espelho": 0.4805,
+     "muralha": 0.1398,
+     "sentinela": 0.6082,
+     "emboscador": 0.5942,
+     "tita": 0.8515
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.4863,
+     "furioso": 0.9835,
+     "espelho": 0.9063,
+     "muralha": 0.8698,
+     "sentinela": 0.7865,
+     "emboscador": 0.8535,
+     "tita": 0.9477
+    },
+    "top3": [
+     "chip_forca + chip_aparo + carta_foco 0.8334",
+     "chip_forca + chip_guarda + chip_aparo + carta_foco 0.8207",
+     "chip_forca + chip_aparo + carta_cura 0.8047"
+    ],
+    "desafiado": {
+     "sem_item": 0.3207,
+     "com_itens": 0.6866
+    }
+   },
+   "tita": {
+    "sem_item": 0.4591,
+    "com_itens": 0.5939,
+    "combinacao": "chip_forca + carta_cura",
+    "passa": true,
+    "por_rival_sem_item": {
+     "duelista": 0.5765,
+     "furioso": 0.729,
+     "espelho": 0.8722,
+     "muralha": 0.8662,
+     "sentinela": 0.0203,
+     "emboscador": 0.0095,
+     "vigia": 0.1398
+    },
+    "por_rival_com_itens": {
+     "duelista": 0.8805,
+     "furioso": 0.948,
+     "espelho": 0.978,
+     "muralha": 0.9745,
+     "sentinela": 0.018,
+     "emboscador": 0.0065,
+     "vigia": 0.3518
+    },
+    "top3": [
+     "chip_forca + carta_cura 0.5939",
+     "chip_forca + chip_perseguidor + carta_cura 0.5933",
+     "chip_forca + chip_aparo + carta_cura 0.5919"
+    ],
+    "desafiado": {
+     "sem_item": 0.453,
+     "com_itens": 0.584
+    }
+   }
+  },
+  "passa": false
+ },
+ "gi4": {
+  "matriz": {
+   "chip_recuo": {
+    "duelista": {
+     "sem": 0.5078,
+     "com": 0.3034,
+     "ganho": -0.2044
+    },
+    "furioso": {
+     "sem": 0.5278,
+     "com": 0.5202,
+     "ganho": -0.0076
+    },
+    "espelho": {
+     "sem": 0.4545,
+     "com": 0.3751,
+     "ganho": -0.0794
+    },
+    "muralha": {
+     "sem": 0.4492,
+     "com": 0.3448,
+     "ganho": -0.1045
+    },
+    "sentinela": {
+     "sem": 0.5797,
+     "com": 0.5892,
+     "ganho": 0.0094
+    },
+    "emboscador": {
+     "sem": 0.5454,
+     "com": 0.552,
+     "ganho": 0.0066
+    },
+    "vigia": {
+     "sem": 0.476,
+     "com": 0.4085,
+     "ganho": -0.0676
+    },
+    "tita": {
+     "sem": 0.4591,
+     "com": 0.2082,
+     "ganho": -0.2509
+    }
+   },
+   "chip_oportunista": {
+    "duelista": {
+     "sem": 0.5078,
+     "com": 0.4291,
+     "ganho": -0.0787
+    },
+    "furioso": {
+     "sem": 0.5278,
+     "com": 0.6213,
+     "ganho": 0.0936
+    },
+    "espelho": {
+     "sem": 0.4545,
+     "com": 0.2256,
+     "ganho": -0.2289
+    },
+    "muralha": {
+     "sem": 0.4492,
+     "com": 0.2167,
+     "ganho": -0.2325
+    },
+    "sentinela": {
+     "sem": 0.5797,
+     "com": 0.58,
+     "ganho": 0.0003
+    },
+    "emboscador": {
+     "sem": 0.5454,
+     "com": 0.5218,
+     "ganho": -0.0236
+    },
+    "vigia": {
+     "sem": 0.476,
+     "com": 0.4397,
+     "ganho": -0.0363
+    },
+    "tita": {
+     "sem": 0.4591,
+     "com": 0.4011,
+     "ganho": -0.0579
+    }
+   },
+   "chip_perseguidor": {
+    "duelista": {
+     "sem": 0.5078,
+     "com": 0.4464,
+     "ganho": -0.0615
+    },
+    "furioso": {
+     "sem": 0.5278,
+     "com": 0.5275,
+     "ganho": -0.0003
+    },
+    "espelho": {
+     "sem": 0.4545,
+     "com": 0.4263,
+     "ganho": -0.0282
+    },
+    "muralha": {
+     "sem": 0.4492,
+     "com": 0.4526,
+     "ganho": 0.0033
+    },
+    "sentinela": {
+     "sem": 0.5797,
+     "com": 0.4895,
+     "ganho": -0.0902
+    },
+    "emboscador": {
+     "sem": 0.5454,
+     "com": 0.4999,
+     "ganho": -0.0455
+    },
+    "vigia": {
+     "sem": 0.476,
+     "com": 0.4425,
+     "ganho": -0.0336
+    },
+    "tita": {
+     "sem": 0.4591,
+     "com": 0.4585,
+     "ganho": -0.0006
+    }
+   },
+   "chip_aparo": {
+    "duelista": {
+     "sem": 0.5078,
+     "com": 0.3213,
+     "ganho": -0.1865
+    },
+    "furioso": {
+     "sem": 0.5278,
+     "com": 0.5278,
+     "ganho": 0
+    },
+    "espelho": {
+     "sem": 0.4545,
+     "com": 0.3397,
+     "ganho": -0.1148
+    },
+    "muralha": {
+     "sem": 0.4492,
+     "com": 0.3589,
+     "ganho": -0.0903
+    },
+    "sentinela": {
+     "sem": 0.5797,
+     "com": 0.5843,
+     "ganho": 0.0045
+    },
+    "emboscador": {
+     "sem": 0.5454,
+     "com": 0.5253,
+     "ganho": -0.0201
+    },
+    "vigia": {
+     "sem": 0.476,
+     "com": 0.6305,
+     "ganho": 0.1545
+    },
+    "tita": {
+     "sem": 0.4591,
+     "com": 0.43,
+     "ganho": -0.0291
+    }
+   }
+  },
+  "lideres": {
+   "campina": {
+    "lider": "Gazimon",
+    "estagio": "crianca",
+    "treino": 8,
+    "sem_chip": {
+     "media": 0.8288,
+     "pior": 0.805,
+     "por_forma": {
+      "sereno": 0.805,
+      "arisco": 0.8525
+     }
+    }
+   },
+   "torre": {
+    "lider": "Guardromon",
+    "estagio": "adolescente",
+    "treino": 22,
+    "sem_chip": {
+     "media": 0.8337,
+     "pior": 0.675,
+     "por_forma": {
+      "brigao": 0.9225,
+      "guardiao": 0.675,
+      "cacador": 0.9825,
+      "colosso": 0.755
+     }
+    },
+    "chip_recuo": {
+     "media": 0.7288,
+     "pior": 0.475,
+     "por_forma": {
+      "brigao": 0.6775,
+      "guardiao": 0.475,
+      "cacador": 1,
+      "colosso": 0.7625
+     }
+    },
+    "chip_oportunista": {
+     "media": 0.7775,
+     "pior": 0.675,
+     "por_forma": {
+      "brigao": 0.675,
+      "guardiao": 0.675,
+      "cacador": 1,
+      "colosso": 0.76
+     }
+    }
+   },
+   "floresta": {
+    "lider": "Youkomon",
+    "estagio": "adolescente",
+    "treino": 22,
+    "sem_chip": {
+     "media": 0.8381,
+     "pior": 0.56,
+     "por_forma": {
+      "brigao": 1,
+      "guardiao": 0.995,
+      "cacador": 0.7975,
+      "colosso": 0.56
+     }
+    },
+    "chip_recuo": {
+     "media": 0.785,
+     "pior": 0.58,
+     "por_forma": {
+      "brigao": 0.8,
+      "guardiao": 0.995,
+      "cacador": 0.765,
+      "colosso": 0.58
+     }
+    },
+    "chip_oportunista": {
+     "media": 0.7956,
+     "pior": 0.6125,
+     "por_forma": {
+      "brigao": 0.815,
+      "guardiao": 0.995,
+      "cacador": 0.76,
+      "colosso": 0.6125
+     }
+    }
+   },
+   "cidadela": {
+    "lider": "Myotismon",
+    "estagio": "adulto",
+    "treino": 36,
+    "sem_chip": {
+     "media": 0.9081,
+     "pior": 0.545,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.545,
+      "emboscador": 0.72,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_recuo": {
+     "media": 0.8997,
+     "pior": 0.535,
+     "por_forma": {
+      "duelista": 0.99,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.535,
+      "emboscador": 0.6725,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_oportunista": {
+     "media": 0.9038,
+     "pior": 0.545,
+     "por_forma": {
+      "duelista": 0.995,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.545,
+      "emboscador": 0.69,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_perseguidor": {
+     "media": 0.9019,
+     "pior": 0.54,
+     "por_forma": {
+      "duelista": 0.995,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.54,
+      "emboscador": 0.68,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_aparo": {
+     "media": 0.9953,
+     "pior": 0.9725,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.9725,
+      "emboscador": 0.99,
+      "vigia": 1,
+      "tita": 1
+     }
+    }
+   },
+   "lago": {
+    "lider": "MarinBullmon",
+    "estagio": "adulto",
+    "treino": 36,
+    "sem_chip": {
+     "media": 0.8928,
+     "pior": 0.515,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.515,
+      "emboscador": 0.6325,
+      "vigia": 0.995,
+      "tita": 1
+     }
+    },
+    "chip_recuo": {
+     "media": 0.8906,
+     "pior": 0.535,
+     "por_forma": {
+      "duelista": 0.995,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.535,
+      "emboscador": 0.6075,
+      "vigia": 0.995,
+      "tita": 0.9925
+     }
+    },
+    "chip_oportunista": {
+     "media": 0.8922,
+     "pior": 0.515,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.515,
+      "emboscador": 0.6275,
+      "vigia": 0.995,
+      "tita": 1
+     }
+    },
+    "chip_perseguidor": {
+     "media": 0.8891,
+     "pior": 0.505,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.505,
+      "emboscador": 0.6125,
+      "vigia": 0.995,
+      "tita": 1
+     }
+    },
+    "chip_aparo": {
+     "media": 0.8938,
+     "pior": 0.4775,
+     "por_forma": {
+      "duelista": 0.95,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.4775,
+      "emboscador": 0.725,
+      "vigia": 1,
+      "tita": 0.9975
+     }
+    }
+   },
+   "espiral": {
+    "lider": "Piedmon",
+    "estagio": "mega",
+    "treino": 40,
+    "sem_chip": {
+     "media": 0.9144,
+     "pior": 0.565,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.565,
+      "emboscador": 0.75,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_recuo": {
+     "media": 0.9175,
+     "pior": 0.58,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 0.9975,
+      "muralha": 1,
+      "sentinela": 0.58,
+      "emboscador": 0.765,
+      "vigia": 1,
+      "tita": 0.9975
+     }
+    },
+    "chip_oportunista": {
+     "media": 0.9137,
+     "pior": 0.565,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.565,
+      "emboscador": 0.745,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_perseguidor": {
+     "media": 0.9125,
+     "pior": 0.565,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.565,
+      "emboscador": 0.735,
+      "vigia": 1,
+      "tita": 1
+     }
+    },
+    "chip_aparo": {
+     "media": 0.9875,
+     "pior": 0.92,
+     "por_forma": {
+      "duelista": 1,
+      "furioso": 1,
+      "espelho": 1,
+      "muralha": 1,
+      "sentinela": 0.92,
+      "emboscador": 0.98,
+      "vigia": 1,
+      "tita": 1
+     }
+    }
+   }
+  }
+ },
+ "conferencia": [
+  {
+   "o_que": "G-I1 campina sem item = fase2/arenas_conferencia.json sem",
+   "esperado": 0.0025,
+   "obtido": 0.0025,
+   "igual": true
+  },
+  {
+   "o_que": "G-I1 torre sem item = fase2/arenas_conferencia.json sem",
+   "esperado": 0.0063,
+   "obtido": 0.0063,
+   "igual": true
+  },
+  {
+   "o_que": "G-I1 floresta sem item = fase2/arenas_conferencia.json sem",
+   "esperado": 0.0163,
+   "obtido": 0.0163,
+   "igual": true
+  },
+  {
+   "o_que": "G-I1 cidadela sem item = fase2/arenas_conferencia.json sem",
+   "esperado": 0.0016,
+   "obtido": 0.0016,
+   "igual": true
+  },
+  {
+   "o_que": "G-I1 lago sem item = fase2/arenas_conferencia.json sem",
+   "esperado": 0.0075,
+   "obtido": 0.0075,
+   "igual": true
+  },
+  {
+   "o_que": "G-I1 espiral sem item = fase2/arenas_conferencia.json sem",
+   "esperado": 0.0359,
+   "obtido": 0.0359,
+   "igual": true
+  },
+  {
+   "o_que": "G-I2 crianca x adolescente sem item = fase2/escala_conferencia.json",
+   "esperado": [
+    0.0014,
+    0.0014
+   ],
+   "obtido": [
+    0.0014,
+    0.0014
+   ],
+   "igual": true
+  },
+  {
+   "o_que": "G-I2 adolescente x adulto sem item = fase2/escala_conferencia.json",
+   "esperado": [
+    0.0104,
+    0.0087
+   ],
+   "obtido": [
+    0.0104,
+    0.0087
+   ],
+   "igual": true
+  },
+  {
+   "o_que": "G-I2 adulto x mega sem item = fase2/escala_conferencia.json",
+   "esperado": [
+    0.0041,
+    0.004
+   ],
+   "obtido": [
+    0.0041,
+    0.004
+   ],
+   "igual": true
+  },
+  {
+   "o_que": "G-I2 crianca x adulto sem item = fase2/escala_conferencia.json",
+   "esperado": [
+    0,
+    0
+   ],
+   "obtido": [
+    0,
+    0
+   ],
+   "igual": true
+  },
+  {
+   "o_que": "G-I2 adolescente x mega sem item = fase2/escala_conferencia.json",
+   "esperado": [
+    0,
+    0
+   ],
+   "obtido": [
+    0,
+    0
+   ],
+   "igual": true
+  },
+  {
+   "o_que": "G-I4 campina sem chip com o treino tipico = fase2/arenas_conferencia.json com",
+   "esperado": 0.8288,
+   "obtido": 0.8288,
+   "igual": true
+  },
+  {
+   "o_que": "G-I4 torre sem chip com o treino tipico = fase2/arenas_conferencia.json com",
+   "esperado": 0.8337,
+   "obtido": 0.8337,
+   "igual": true
+  },
+  {
+   "o_que": "G-I4 floresta sem chip com o treino tipico = fase2/arenas_conferencia.json com",
+   "esperado": 0.8381,
+   "obtido": 0.8381,
+   "igual": true
+  },
+  {
+   "o_que": "G-I4 cidadela sem chip com o treino tipico = fase2/arenas_conferencia.json com",
+   "esperado": 0.9081,
+   "obtido": 0.9081,
+   "igual": true
+  },
+  {
+   "o_que": "G-I4 lago sem chip com o treino tipico = fase2/arenas_conferencia.json com",
+   "esperado": 0.8928,
+   "obtido": 0.8928,
+   "igual": true
+  },
+  {
+   "o_que": "G-I4 espiral sem chip com o treino tipico = fase2/arenas_conferencia.json com",
+   "esperado": 0.9144,
+   "obtido": 0.9144,
+   "igual": true
+  }
+ ],
+ "segundos": 1202
+}

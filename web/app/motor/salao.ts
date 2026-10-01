@@ -34,6 +34,16 @@ export const SALAO = {
 export const ESTAGIOS_SALAO: readonly Estagio[] = ["crianca", "adolescente", "adulto", "mega"];
 /** o fator dos rivais do Salao: 1, o da Liga (sem calibracao) */
 export const FATOR_SALAO = 1;
+/* o Salao dos pets v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, meta M-C3): o fator do rival de cada nivel, nas lutas
+   dos pets v9 (as regras V21E da luta: cada pet luta com as regras da versao dele). Calibrado em test/conferir_fabrica_salao.mjs --calibrar
+   (sementes de calibracao; faixa [0,70; 0,95]: entre os fatores >= 1, para o pet sem treino nao vencer mais que antes, o de maior folga
+   robusta, a menor folga entre o fator e os vizinhos da grade), artifacts_equilibrio_geral/fase3/salao_calibracao.json. Os pets v6-v8
+   seguem com FATOR_SALAO. PROPOSTOS */
+export const VERSAO_SALAO_V9 = 9;
+export const FATOR_SALAO_V9: Readonly<Record<string, number>> = { crianca: 1.15, adolescente: 1, adulto: 1.05, mega: 1.05 };
+if (ESTAGIOS_SALAO.some(e => FATOR_SALAO_V9[e] === undefined)) throw new Error("FATOR_SALAO_V9 sem um nível do Salão");
+/** o fator do rival do nivel `est` nas lutas destas regras: FATOR_SALAO_V9 nas dos pets v9, FATOR_SALAO nas outras */
+export const fatorSalao = (est: Estagio, R: RegrasLuta): number => (R?.versaoPet ?? 0) >= VERSAO_SALAO_V9 ? FATOR_SALAO_V9[est] : FATOR_SALAO;
 const RAMOS: readonly Ramo[] = ["sereno", "arisco"];
 const primeiraForma = (l: Linha): FormaAdultaNormal => FORMAS_AD.find(f => LINHA_DA_FORMA[f] === l)!;
 
@@ -53,7 +63,7 @@ export function formaRivalSalao(s: number, est: Estagio): Forma {
 }
 /** o lutador do rival: o bot canonico do estagio (ver o cabecalho); com a escala ligada (o app), E = vida do estagio na escala dos pets v6 x
     fator, sem treino */
-export function rivalSalao(s: number, est: Estagio, R: RegrasLuta, fator: number = FATOR_SALAO): Lutador {
+export function rivalSalao(s: number, est: Estagio, R: RegrasLuta, fator: number = fatorSalao(est, R)): Lutador {
   const f = formaRivalSalao(s, est);
   const car = f.est === "crianca" ? null : caraterCanonico(f.adulta ? f.adulta as FormaAdultaNormal : primeiraForma(f.linha!));
   const g = f.est === "crianca" ? CRIANCA_V21[f.ramo!] : f.est === "adolescente" ? ADOL_V21[f.linha!] : gambitsAdulto(f.adulta as FormaAdultaNormal, R);

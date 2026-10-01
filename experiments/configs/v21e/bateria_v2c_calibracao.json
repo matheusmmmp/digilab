@@ -1,0 +1,30 @@
+{
+  "descricao": "Rodada de equilibrio geral, fase 1, meta M-A5: a bateria da base V2C (G1-G9) na CALIBRACAO, a mesma da etapa c7 (experiments/configs/v2c/c7.json). A V21E nao muda a base (nem combate_v2/*.py nem a ConfigCombateV2C): a bateria tem de sair igual a artifacts_combate_v2c/calibracao/c7.",
+  "saida": "artifacts_equilibrio_geral/fase1/bateria_v2c",
+  "sementes_calibracao": [
+    1101,
+    1202,
+    1303,
+    1404,
+    1505
+  ],
+  "sementes_validacao": [
+    2101,
+    2202,
+    2303,
+    2404,
+    2505
+  ],
+  "conjunto": "calibracao",
+  "partidas_por_par_por_semente": 200,
+  "regras": {
+    "finta": true,
+    "dano_parry": 5.0,
+    "fuga_condicionada": true,
+    "turno_morte_subita": 25,
+    "mult_morte_subita": 1.5,
+    "oraculo_passos": 2,
+    "bots_v2c": true
+  },
+  "gates_v2c": true
+}

@@ -1,6 +1,6 @@
 /* Bots (espelho de combate_v2/bots.py e combate_v2/v21/bots.py), sementes de gambits por estagio e
    campanha contra os NPCs (espelho de ConfigCampanha / campanha.py). */
-import { CV, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
+import { CV, CV21E, FORMAS_AD, LINHA_DA_FORMA, TECNICAS, type Tecnica } from "./constantes.ts";
 import { Cd, Rg, validarLista, type Estilo, type ListaGambits, type RegrasLuta } from "./combate.ts";
 import { NOME_ARQ } from "./nomes.ts";
 import type { Especie, Estagio, Forma, FormaAdultaNormal, Linha, Ramo, TracoCombate } from "./tipos.ts";
@@ -75,10 +75,45 @@ export const BOTS_V21D: Partial<Record<FormaAdultaNormal, ListaGambits>> = {
   muralha: { regras: BOTS_V21.espelho.regras, final: BOTS_V21.espelho.final },
   vigia: vigiaV21D(),
 };
-/** lista canonica da forma adulta sob as regras da luta: nas lutas V21D (pets v6), a muralha e o vigia usam a variante */
-export const gambitsAdulto = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits =>
+const gambitsV21D = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits =>
   (R && ((forma === "muralha" && R.muralhaListaEspelho) || (forma === "vigia" && R.vigiaBateEmQuemRecua && R.vigiaRecuaDoPreparoSobPele))
     ? BOTS_V21D[forma] : undefined) ?? BOTS_V21[forma];
+/* V21E (pets v9; espelho de bots._lista_v21e, chaves da ConfigCombateV21E): edicoes sobre a lista que a forma teria na V21D.
+   - duelista e tita (duelistaDefendeDoGolpe, titaDefendeDoGolpe): "de perto, contra quem usa golpe rapido com frequencia, defender"
+     logo depois das regras que leem o preparo do oponente; sai "guts < 20 -> carregar";
+   - espelho e muralha (espelhoSemCarregar, muralhaSemCarregar): sai "guts < 40 -> carregar";
+   - muralha (muralhaContraGolpeNaPele): "o oponente usa pele dura com frequencia -> contra-golpe" em segundo */
+export const REGRA_DEFENDE_DO_GOLPE = Rg([D0, FQ("golpe_rapido")], "defender");
+export const REGRA_CONTRA_GOLPE_NA_PELE = Rg(FQ("pele_dura"), "contra_golpe");
+function editarV21E(forma: FormaAdultaNormal, g: ListaGambits, R: NonNullable<RegrasLuta>): ListaGambits {
+  const regras = [...g.regras], tira = (r: typeof regras[number]) => {
+    const i = regras.findIndex(x => chaveRg(x) === chaveRg(r));
+    if (i < 0) throw new Error(`regra da lista de ${forma} nao encontrada: ${chaveRg(r)}`);
+    regras.splice(i, 1);
+  };
+  if ((forma === "duelista" && R.duelistaDefendeDoGolpe) || (forma === "tita" && R.titaDefendeDoGolpe)) {
+    tira(Rg(GB_(20), "carregar"));
+    let i = 0;
+    while (i < regras.length && regras[i].se.some(c => c.n === "oponente_preparando")) i++;
+    regras.splice(i, 0, REGRA_DEFENDE_DO_GOLPE);
+  } else if ((forma === "espelho" && R.espelhoSemCarregar) || (forma === "muralha" && R.muralhaSemCarregar)) tira(Rg(GB_(40), "carregar"));
+  if (forma === "muralha" && R.muralhaContraGolpeNaPele) regras.splice(1, 0, REGRA_CONTRA_GOLPE_NA_PELE);
+  if (forma === "muralha" && (R.muralhaSemCarregar || R.muralhaContraGolpeNaPele) && !R.muralhaListaEspelho)
+    throw new Error("as chaves da muralha na V21E pedem a lista do espelho (muralhaListaEspelho)");
+  return regras.length === g.regras.length && regras.every((r, i) => r === g.regras[i]) ? g : { regras, final: g.final };
+}
+const temV21E = (R: RegrasLuta): R is NonNullable<RegrasLuta> => !!R && !!(R.duelistaDefendeDoGolpe || R.titaDefendeDoGolpe
+  || R.espelhoSemCarregar || R.muralhaSemCarregar || R.muralhaContraGolpeNaPele);
+/** as listas da V21E (pets v9) que mudam: duelista, tita, espelho e muralha */
+export const BOTS_V21E: Partial<Record<FormaAdultaNormal, ListaGambits>> = Object.fromEntries(
+  (["duelista", "tita", "espelho", "muralha"] as const).map(f => [f, editarV21E(f, gambitsV21D(f, CV21E), CV21E)]));
+/** lista canonica da forma adulta sob as regras da luta: nas lutas V21D (pets v6-v8), a muralha e o vigia usam a variante; nas
+    lutas V21E (pets v9), tambem o duelista, o tita, o espelho e a muralha com as edicoes da V21E */
+export const gambitsAdulto = (forma: FormaAdultaNormal, R: RegrasLuta): ListaGambits => {
+  const g = gambitsV21D(forma, R);
+  if (!temV21E(R)) return g;
+  return R === CV21E ? BOTS_V21E[forma] ?? g : editarV21E(forma, g, R);
+};
 export const ADOL_V21: Record<Linha, ListaGambits> = {
   brigao: { regras: [Rg(PREP, "esquivar"), Rg(D1, "investida"), Rg(D2, "avancar"), Rg([D0, GA_(40)], "preparar_pesado"), Rg(D0, "golpe_rapido")], final: "defender" },
   guardiao: { regras: [Rg(PREP, "contra_golpe"), Rg([D0, Cd("oponente_guts_abaixo", 20)], "preparar_pesado"), Rg([D0, GA_(60)], "golpe_rapido"),
@@ -90,7 +125,7 @@ export const CRIANCA_V21: Record<Ramo, ListaGambits> = {
   sereno: { regras: [Rg(GB_(40), "carregar"), Rg(D2, "avancar"), Rg([D0, GA_(40)], "golpe_rapido")], final: "defender" },
   arisco: { regras: [Rg(D2, "avancar"), Rg(D1, "avancar"), Rg([D0, GA_(20)], "golpe_rapido")], final: "carregar" },
 };
-[...Object.values(BOTS_V2), ...Object.values(BOTS_V21), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(ADOL_V21), ...Object.values(CRIANCA_V21)].forEach(validarLista);
+[...Object.values(BOTS_V2), ...Object.values(BOTS_V21), ...Object.values(BOTS_V21D) as ListaGambits[], ...Object.values(BOTS_V21E) as ListaGambits[], ...Object.values(ADOL_V21), ...Object.values(CRIANCA_V21)].forEach(validarLista);
 /* sombrias redesenhadas para o S2 (bots.SOMBRIOS): a sombra tira a leitura do oponente */
 export const GAMBITS_SOMBRIA: Record<string, ListaGambits> = {
   devastador: { regras: [Rg(D2, "avancar"), Rg(D1, "avancar"), Rg([D0, GA_(60)], "preparar_pesado"), Rg(D0, "golpe_rapido")], final: "carregar" },

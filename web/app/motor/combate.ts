@@ -1,7 +1,7 @@
 /* Combate V2.1 (espelho de digilab/combate_v2/ e combate_v2/v21/, regras corrigidas V2C/V21C). Resolucao
    deterministica, sem rng; so as decisoes (epsilon) usam rng. Cada lutador tem um PERFIL (catalogo.ts) e,
    conforme o estagio, a tecnica da linha (adolescente) e a passiva da forma (adulto). */
-import { CSO, CV, CV21, CV21D, TECNICAS } from "./constantes.ts";
+import { CSO, CV, CV21, CV21D, CV21E, TECNICAS } from "./constantes.ts";
 import type { Perfil } from "./catalogo.ts";
 import { criarRng, hashSemente, type Rng } from "./rng.ts";
 import type { Estagio } from "./tipos.ts";
@@ -12,10 +12,21 @@ export const ACOES_V2_OBS: readonly string[] = [...ACOES_V2, "pesado", "fintar"]
 export const DIST = ["perto", "medio", "longe"];
 export const custoV2 = (a: string): number => CV.custo[a] ?? CV21.custo[a] ?? 0;
 /** regras de uma luta: null = V21C (pets v1-v5, cenarios); CV21D = a variante a_c_e2v_v do reequilibrio (docs/VALIDACAO_V21D.md),
-    so nas lutas de pets v6: o preparo sob pele nao aparece em oponente_preparando, e a muralha e o vigia (do pet e dos bots)
-    usam as listas variantes (bots.gambitsAdulto). Vale para a luta inteira, os dois lados, como as Regras do Python */
-export type RegrasLuta = typeof CV21D | null;
-export const regrasDaVersao = (versao: number): RegrasLuta => versao >= CV21D.versaoPet ? CV21D : null;
+    nas lutas de pets v6-v8: o preparo sob pele nao aparece em oponente_preparando, e a muralha e o vigia (do pet e dos bots)
+    usam as listas variantes (bots.gambitsAdulto); CV21E = a V21D mais as listas da rodada de equilibrio geral (fase 1,
+    docs/EQUILIBRIO_GERAL.md), nas lutas de pets v9: o duelista e o tita defendem do golpe rapido repetido, o espelho e a muralha
+    nao carregam e a muralha responde a pele com o contra-golpe. Vale para a luta inteira, os dois lados, como as Regras do Python */
+export interface RegrasV21 {
+  readonly versaoPet: number;
+  readonly preparoSobPeleOculto: boolean; readonly muralhaListaEspelho: boolean;
+  readonly vigiaBateEmQuemRecua: boolean; readonly vigiaRecuaDoPreparoSobPele: boolean;
+  /* V21E (so no CV21E) */
+  readonly duelistaDefendeDoGolpe?: boolean; readonly titaDefendeDoGolpe?: boolean; readonly espelhoSemCarregar?: boolean;
+  readonly muralhaSemCarregar?: boolean; readonly muralhaContraGolpeNaPele?: boolean;
+}
+export type RegrasLuta = RegrasV21 | null;
+export const regrasDaVersao = (versao: number): RegrasLuta =>
+  versao >= CV21E.versaoPet ? CV21E : versao >= CV21D.versaoPet ? CV21D : null;
 
 export interface Lado {
   p: Perfil; hp: number; hpMax: number; guts: number; gutsMax: number; regen: number; prep: boolean; hist: string[];

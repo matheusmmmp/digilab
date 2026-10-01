@@ -228,11 +228,66 @@ GAMBITS_TITA_V21D = _lista_colosso_v21d("tita", bate=True, recua=False)
 GAMBITS_VIGIA_V21D = {(b, r): _lista_colosso_v21d("vigia", b, r) for b, r in ((True, False), (False, True), (True, True))}
 
 
+# V21E, rodada de equilibrio geral, fase 1 (docs/EQUILIBRIO_GERAL.md; chaves da ConfigCombateV21E, desligadas por
+# padrao). Edicoes sobre a lista que a forma teria sem elas (a canonica ou a variante da V21D):
+# - duelista_defende_do_golpe, tita_defende_do_golpe: "de perto, contra quem usa golpe rapido com frequencia, defender"
+#   entra logo depois das regras que leem o preparo do oponente (o parry da base V2C devolve dano a cada golpe
+#   defendido); sai "guts abaixo de 20 -> carregar" (a final defender tambem recupera guts).
+# - espelho_sem_carregar, muralha_sem_carregar: sai "guts abaixo de 40 -> carregar" (carregar recebe dano x1,5).
+# - muralha_contra_golpe_na_pele: "o oponente usa pele_dura com frequencia -> contra_golpe" entra logo depois da
+#   primeira regra (a do preparo): o preparo sob pele nao aparece (candidato A) e a muralha nao tem o contra-golpe a
+#   distancia do espelho.
+REGRA_DEFENDE_DO_GOLPE = regra(se(_d(PERTO), C("oponente_frequente", (A.GOLPE_RAPIDO,))), A.DEFENDER)
+REGRA_CONTRA_GOLPE_NA_PELE = regra(C("oponente_frequente", (A.PELE_DURA,)), A.CONTRA_GOLPE)
+_CARREGAR_20 = regra(_gb(20), A.CARREGAR)
+_CARREGAR_40 = regra(_gb(40), A.CARREGAR)
+
+
+def _depois_das_leituras_do_preparo(regras: list) -> int:
+    """Indice logo depois da ultima regra do topo que le o preparo do oponente (oponente_preparando)."""
+    i = 0
+    while i < len(regras) and PREP in regras[i].condicoes:
+        i += 1
+    return i
+
+
+def _lista_v21e(forma: str, gl: ListaGambits, cfg) -> ListaGambits:
+    """Aplica as edicoes das chaves da ConfigCombateV21E ligadas para `forma` sobre `gl`. Regra a remover que nao esta na
+    lista falha alto (ValueError de list.remove)."""
+    k = lambda nome: getattr(cfg, nome, False)  # noqa: E731
+    regras = list(gl.regras)
+    if forma in ("duelista", "tita") and k(f"{forma}_defende_do_golpe"):
+        regras.remove(_CARREGAR_20)
+        regras.insert(_depois_das_leituras_do_preparo(regras), REGRA_DEFENDE_DO_GOLPE)
+    elif forma in ("espelho", "muralha") and k(f"{forma}_sem_carregar"):
+        regras.remove(_CARREGAR_40)
+    if forma == "muralha" and k("muralha_contra_golpe_na_pele"):
+        regras.insert(1, REGRA_CONTRA_GOLPE_NA_PELE)
+    if forma == "muralha" and (k("muralha_sem_carregar") or k("muralha_contra_golpe_na_pele")) and not k(
+            "muralha_lista_espelho"):
+        raise ValueError("as chaves da muralha na V21E pedem muralha_lista_espelho")
+    if regras == list(gl.regras):
+        return gl
+    return ListaGambits(tuple(regras), gl.final, "adulto")
+
+
+CHAVES_LISTAS_V21E = ("duelista_defende_do_golpe", "tita_defende_do_golpe", "espelho_sem_carregar",
+                      "muralha_sem_carregar", "muralha_contra_golpe_na_pele")
+
+
 def gambits_adulto(forma: str, cfg: ConfigCombateV21 | None = None) -> ListaGambits:
     """Lista canonica da forma adulta (normal ou sombria) sob as regras `cfg`: a de ADULTOS/SOMBRIOS, salvo as listas
     variantes das chaves da ConfigCombateV21D ligadas (muralha: muralha_lista_espelho; tita: tita_bate_em_quem_recua;
-    vigia: vigia_bate_em_quem_recua e vigia_recua_do_preparo_sob_pele). As sombrias nao mudam."""
+    vigia: vigia_bate_em_quem_recua e vigia_recua_do_preparo_sob_pele) e, por cima delas, as edicoes das chaves da
+    ConfigCombateV21E (_lista_v21e). As sombrias nao mudam."""
     cfg = cfg or CONFIG_COMBATE_V21
+    gl = _gambits_adulto_v21d(forma, cfg)
+    if forma in FORMAS and any(getattr(cfg, c, False) for c in CHAVES_LISTAS_V21E):
+        return _lista_v21e(forma, gl, cfg)
+    return gl
+
+
+def _gambits_adulto_v21d(forma: str, cfg) -> ListaGambits:
     if forma == "muralha" and getattr(cfg, "muralha_lista_espelho", False):
         return GAMBITS_MURALHA_V21D
     if forma == "tita" and getattr(cfg, "tita_bate_em_quem_recua", False):

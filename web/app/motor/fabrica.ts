@@ -13,7 +13,14 @@
    Registro e replay: nenhum pet do jogador luta, entao as lutas vao SO para o registro do Tamer (src/tamer.ts: "fabrica", "fabrica_luta",
    "fabrica_troca"), reproduziveis sozinhas a partir dele. A semente da tentativa sai do registro do Tamer (o numero da tentativa,
    sementeFabrica); os alugueis, os rivais e as sementes das lutas saem dela, e o replay confere cada uma. A escala vale sempre aqui
-   (perfilDe com comEscala), independente da chave do app: o replay do Tamer nao pode depender dela. Nada daqui toca pet nenhum. */
+   (perfilDe com comEscala), independente da chave do app: o replay do Tamer nao pode depender dela. Nada daqui toca pet nenhum.
+
+   A Fabrica dos v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, meta M-C2): as regras da tentativa vao no proprio evento
+   de comeco dela no registro do Tamer (campo `v`, registro versao 6): sem o campo, a tentativa e da Fabrica de antes (VERSAO_FABRICA = 6:
+   V21D, fator 1, a troca nao cura) e se refaz igual; as tentativas novas gravam `v: 9` (VERSAO_FABRICA_V9): combate V21E (as listas V21E
+   nos alugados e nos rivais), os rivais com FATOR_RIVAL_FABRICA_V9 (os alugados seguem com 1) e a troca entrando com a vida cheia (o
+   rival derrotado entra inteiro: vida e guts do comeco). A cura entre as series nao muda (a serie seguinte ja comeca inteira). Calibrado
+   em test/conferir_fabrica_salao.mjs --calibrar (sementes de calibracao), artifacts_equilibrio_geral/fase3/fabrica_calibracao.json. */
 import { copiarGambits, gambitsAdulto } from "./bots.ts";
 import { caraterCanonico, perfilDe } from "./catalogo.ts";
 import { desafiadoDaVersao, jogarV2, regrasDaVersao, type Lutador, type RegrasLuta, type ResultadoLuta } from "./combate.ts";
@@ -28,13 +35,27 @@ export const VERSAO_FABRICA = VERSAO_LIGA;
 export const REGRAS_FABRICA: RegrasLuta = regrasDaVersao(VERSAO_FABRICA);
 export const FABRICA = {
   id: "fabrica" as const, nome: "Fábrica",
-  frase: "Você não usa o seu pet: aluga 1 de 3 Megas sorteados e luta séries de 3 lutas sem cura. Ao vencer, pode trocar o alugado pelo rival derrotado.",
+  frase: "Você não usa o seu pet: aluga 1 de 3 Megas sorteados e luta séries de 3 lutas sem cura. Ao vencer, pode trocar o alugado pelo rival derrotado, que entra com a vida cheia.",
 };
 /** quantos alugados a tentativa oferece e quantas lutas tem uma serie */
 export const ALUGUEIS_FABRICA = 3;
 export const LUTAS_SERIE_FABRICA = 3;
 /** o fator de rival (e dos alugados): 1, o da Liga (sem calibracao) */
 export const FATOR_FABRICA = 1;
+/** a Fabrica dos v9: a versao das regras gravada nas tentativas novas, o fator dos rivais (os alugados seguem com FATOR_FABRICA) e a troca
+    com a vida cheia. PROPOSTOS; calibrados nas sementes de calibracao (ver o cabecalho) */
+export const VERSAO_FABRICA_V9 = 9;
+export const FATOR_RIVAL_FABRICA_V9 = 0.6;
+/** as versoes das regras da Fabrica que o registro conhece; as tentativas novas usam a ultima */
+export const VERSOES_FABRICA: readonly number[] = [VERSAO_FABRICA, VERSAO_FABRICA_V9];
+export const VERSAO_FABRICA_ATUAL = VERSAO_FABRICA_V9;
+/** as regras da Fabrica numa versao: as regras da luta, o fator dos rivais e se a troca entra inteira */
+export interface RegraFabrica { versao: number; R: RegrasLuta; fatorRival: number; trocaInteira: boolean }
+export function regraFabrica(versao: number, fatorRival?: number): RegraFabrica {
+  if (versao === VERSAO_FABRICA) return { versao, R: REGRAS_FABRICA, fatorRival: fatorRival ?? FATOR_FABRICA, trocaInteira: false };
+  if (versao === VERSAO_FABRICA_V9) return { versao, R: regrasDaVersao(VERSAO_FABRICA_V9), fatorRival: fatorRival ?? FATOR_RIVAL_FABRICA_V9, trocaInteira: true };
+  throw new Error("versão das regras da Fábrica desconhecida: " + JSON.stringify(versao));
+}
 
 /** a semente da tentativa n (1 = a primeira) do Tamer na Fabrica: sai do registro do Tamer (quantas tentativas ele ja fez), e o replay confere */
 export const sementeFabrica = (n: number): number => {
@@ -63,11 +84,12 @@ export function formaRivalFabrica(s: number, k: number): Forma {
   return mega(adulta, ESPECIES[r.int(ESPECIES.length)]);
 }
 /** o lutador de um Mega da Fabrica (alugado ou rival): tecnica da linha, passiva da forma, carater canonico, lista canonica V21D, epsilon dos
-    bots canonicos; E = vida do Mega na escala dos pets v6 x fator, sem treino e sem item. A escala vale sempre (comEscala) */
+    bots canonicos; E = vida do Mega na escala x fator, sem treino e sem item (a escala da versao das regras R: CESC_V6 ou CESC_V9, a mesma
+    vida do Mega). A escala vale sempre (comEscala) */
 export function megaFabrica(f: Forma, nome: string, fator: number = FATOR_FABRICA, R: RegrasLuta = REGRAS_FABRICA): Lutador {
   const adulta = f.adulta as FormaAdultaNormal;
   if (f.est !== "mega" || !FORMAS_AD.includes(adulta)) throw new Error("a Fábrica só tem Megas das 8 formas adultas: " + JSON.stringify(f));
-  const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, VERSAO_FABRICA, true);
+  const p = perfilDe(f, caraterCanonico(adulta), 1, null, true, R?.versaoPet ?? VERSAO_FABRICA, true);
   return { nome, estilo: { nome: `fabrica:${adulta}`, gambits: copiarGambits(gambitsAdulto(adulta, R)), eps: CV.eps }, cond: { ...p, escala: p.escala! * fator } };
 }
 
@@ -81,12 +103,15 @@ export interface LutaFabrica {
 export interface ProximaLutaFabrica { k: number; s: number; serie: number; naSerie: number; rival: Forma }
 
 /** uma tentativa da Fabrica, refeita das decisoes do jogador (a escolha, as lutas e as trocas) e das sementes. Deterministica: o registro do
-    Tamer guarda so as decisoes e as sementes, e o replay joga as lutas de novo por aqui */
+    Tamer guarda so as decisoes e as sementes (e, desde a fase 3, a versao das regras), e o replay joga as lutas de novo por aqui.
+    `versao`: as regras da tentativa (regraFabrica; sem ela, as de antes). `semente` e `fatorRival`: so as conferencias (test/) usam outros
+    (a semente do jogo sai de n; o fator, da versao) */
 export class TentativaFabrica {
   readonly n: number;
   readonly s: number;
   readonly alugueis: readonly Forma[];
   readonly escolha: number;
+  readonly regra: RegraFabrica;
   /** o alugado de agora (muda na troca) */
   alugado: Forma;
   lutas: LutaFabrica[] = [];
@@ -94,8 +119,9 @@ export class TentativaFabrica {
   acabou = false;
   /** a vida e o guts com que o alugado comeca a proxima luta, dentro da serie; null = inteiro (comeco de serie) */
   private ini: { hp: number; guts: number } | null = null;
-  constructor(n: number, escolha: number) {
-    this.n = n; this.s = sementeFabrica(n); this.alugueis = alugueisFabrica(this.s);
+  constructor(n: number, escolha: number, versao: number = VERSAO_FABRICA, semente: number = sementeFabrica(n), fatorRival?: number) {
+    this.regra = regraFabrica(versao, fatorRival);
+    this.n = n; this.s = semente; this.alugueis = alugueisFabrica(this.s);
     if (!Number.isInteger(escolha) || escolha < 0 || escolha >= ALUGUEIS_FABRICA) throw new Error("escolha de alugado inválida na Fábrica: " + JSON.stringify(escolha));
     this.escolha = escolha; this.alugado = this.alugueis[escolha];
   }
@@ -105,7 +131,11 @@ export class TentativaFabrica {
   /** a fracao da vida com que o alugado entra na proxima luta (1 no comeco de serie) */
   get vidaAgora(): number {
     if (!this.ini) return 1;
-    return this.ini.hp / megaFabrica(this.alugado, "Alugado").cond.hpMax;
+    return this.ini.hp / this.mega(this.alugado, "Alugado").cond.hpMax;
+  }
+  /** o lutador de um Mega desta tentativa: alugado (fator 1) ou rival (o fator dos rivais das regras dela) */
+  private mega(f: Forma, nome: string, rival = false): Lutador {
+    return megaFabrica(f, nome, rival ? this.regra.fatorRival : FATOR_FABRICA, this.regra.R);
   }
   proxima(): ProximaLutaFabrica | null {
     if (this.acabou) return null;
@@ -116,14 +146,14 @@ export class TentativaFabrica {
   lutadores(): { A: Lutador; B: Lutador; ini: { hp: number; guts: number } | null } {
     const p = this.proxima();
     if (!p) throw new Error(`a tentativa ${this.n} da Fábrica já acabou`);
-    return { A: megaFabrica(this.alugado, "Alugado " + nomeForma(this.alugado)), B: megaFabrica(p.rival, "Rival " + nomeForma(p.rival)), ini: p.naSerie === 1 ? null : this.ini };
+    return { A: this.mega(this.alugado, "Alugado " + nomeForma(this.alugado)), B: this.mega(p.rival, "Rival " + nomeForma(p.rival), true), ini: p.naSerie === 1 ? null : this.ini };
   }
   /** joga a proxima luta com a semente dada (tem de ser a da tentativa: ninguem escolhe os rivais) */
   lutar(s: number): LutaFabrica {
     const p = this.proxima();
     if (!p) throw new Error(`a tentativa ${this.n} da Fábrica já acabou`);
     if (s !== p.s) throw new Error(`a luta ${p.k + 1} da tentativa ${this.n} da Fábrica tem a semente ${p.s}, não ${s}`);
-    const { A, B, ini } = this.lutadores(), res = jogarV2(A, B, s, REGRAS_FABRICA, ini, desafiadoDaVersao(VERSAO_FABRICA));
+    const { A, B, ini } = this.lutadores(), res = jogarV2(A, B, s, this.regra.R, ini, desafiadoDaVersao(this.regra.versao));
     const fim = res.E.L[0], venceu = res.pontosA === 1;
     const luta: LutaFabrica = { k: p.k, s, alugado: this.alugado, rival: p.rival, res, venceu, vidaFim: Math.max(0, fim.hp) / fim.hpMax, trocou: false };
     this.lutas.push(luta);
@@ -138,13 +168,15 @@ export class TentativaFabrica {
     if (u.trocou) return "já trocou depois desta vitória";
     return null;
   }
-  /** troca o alugado pelo rival derrotado na ultima luta: ele entra com a mesma fracao da vida e o mesmo guts (ate o maximo dele) */
+  /** troca o alugado pelo rival derrotado na ultima luta: ele entra com a mesma fracao da vida e o mesmo guts (ate o maximo dele); nas
+      regras dos v9, inteiro (a vida e o guts do comeco) */
   trocar(): void {
     const erro = this.porqueNaoTroca();
     if (erro) throw new Error(`troca na Fábrica recusada: ${erro}`);
-    const u = this.lutas[this.lutas.length - 1], novo = megaFabrica(u.rival, "Alugado");
-    if (this.ini) {
-      const velho = megaFabrica(this.alugado, "Alugado");
+    const u = this.lutas[this.lutas.length - 1], novo = this.mega(u.rival, "Alugado");
+    if (this.regra.trocaInteira) this.ini = null;
+    else if (this.ini) {
+      const velho = this.mega(this.alugado, "Alugado");
       this.ini = { hp: this.ini.hp / velho.cond.hpMax * novo.cond.hpMax, guts: Math.min(this.ini.guts, novo.cond.gutsMax) };
     }
     this.alugado = u.rival; u.trocou = true;
