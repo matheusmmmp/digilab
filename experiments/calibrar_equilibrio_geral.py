@@ -3,6 +3,12 @@ docs/EQUILIBRIO_GERAL.md). So sementes de CALIBRACAO (3101..3505); as de validac
 
     python experiments/calibrar_equilibrio_geral.py --etapa todas            # ~25 min com 8 processos
     python experiments/calibrar_equilibrio_geral.py --etapa matriz|painel|metas|e3|s1|mecanismo
+    python experiments/calibrar_equilibrio_geral.py --validar                # FASE 4: a validacao unica (abaixo)
+
+--validar (fase 4, a validacao unica): as mesmas etapas nas sementes de VALIDACAO (4101..4505), so com as variantes v21d e v21e
+(nenhum numero muda por causa do resultado), saida em artifacts_equilibrio_geral/fase4/. A conferencia que falha alto passa a ser
+a da validacao da V21D (artifacts_combate_v21c/validacao_v21d/: matriz, painel, E3 e S1 da a_c_e2v_v nas mesmas sementes). Sem a
+opcao nada muda: o padrao continua a fase 1 (calibracao, as 12 variantes, artifacts_equilibrio_geral/fase1/).
 
 Variantes (regras da validacao V21C, experiments/configs/v21c/validacao.json, mais as chaves; parte sempre da V21D
 validada, a_c_e2v_v, que e o combate dos pets v6-v8):
@@ -62,12 +68,23 @@ from digilab.protocol import derivar_semente  # noqa: E402
 
 CFG = RAIZ / "experiments" / "configs" / "v21e" / "calibracao.json"
 CFG_V21D = RAIZ / "experiments" / "configs" / "v21d" / "validacao.json"
-SAIDA = Path(os.environ.get("EG_SAIDA", RAIZ / "artifacts_equilibrio_geral" / "fase1"))
+# fase 4 (--validar): lido aqui, no modulo, porque os processos do pool reimportam o modulo (o main tambem grava a variavel de
+# ambiente, para o caso de o argv nao chegar aos filhos)
+VALIDAR = "--validar" in sys.argv[1:] or os.environ.get("EG_CONJUNTO") == "validacao"
+CONJUNTO = "validacao" if VALIDAR else "calibracao"
+SAIDA = Path(os.environ.get("EG_SAIDA", RAIZ / "artifacts_equilibrio_geral" / ("fase4" if VALIDAR else "fase1")))
 R2 = RAIZ / "artifacts_combate_v21c" / "equilibrio_rodada2"
+VAL_V21D = RAIZ / "artifacts_combate_v21c" / "validacao_v21d"
+# a referencia da v21d (a_c_e2v_v) nas mesmas sementes: a rodada 2 (calibracao) ou a validacao da V21D (fase 4)
+REF = VAL_V21D if VALIDAR else R2
+REF_COLATERAIS = REF / ("colaterais.json" if VALIDAR else "colaterais_a_c_e2v_v.json")
+REF_NOME = "validacao_v21d" if VALIDAR else "equilibrio_rodada2"
+CHAVE_CONF = f"v21d_igual_{REF_NOME}_a_c_e2v_v"
 N_POR_SEMENTE = int(os.environ.get("EG_N", 100))
 M_PAINEL = int(os.environ.get("EG_M", 50))
 EPSILONS = (0.05, 0.15)
 TODAS = tuple(FORMAS) + tuple(SOMBRIOS)
+VARIANTES_VALIDACAO = ("v21d", "v21e")
 
 
 def _ler(p: Path) -> dict:
@@ -154,6 +171,8 @@ def _variantes() -> dict:
 
 
 VARIANTES = _variantes()
+if VALIDAR:
+    VARIANTES = {v: VARIANTES[v] for v in VARIANTES_VALIDACAO}
 
 
 def cfg_variante(v: str) -> dict:
@@ -184,15 +203,31 @@ def lutador(forma: str, especie: str, v: str, epsilon: float | None = None, nome
     return b if epsilon is None else replace(b, epsilon=epsilon)
 
 
+_SEMENTES_VALIDACAO: list[int] | None = None
+
+
 def sementes() -> list[int]:
+    global _SEMENTES_VALIDACAO
+    c = config()
+    if VALIDAR:
+        if _SEMENTES_VALIDACAO is None:
+            s = list(c["sementes_validacao"])
+            if set(s) & set(c["sementes_calibracao"]):
+                raise ValueError("sementes de validacao e de calibracao se cruzam")
+            if s != _ler(VAL_V21D / "matriz.json")["meta"]["sementes"]:
+                raise ValueError("sementes de validacao diferem das da validacao da V21D")
+            _SEMENTES_VALIDACAO = s
+        return list(_SEMENTES_VALIDACAO)
     s = diag.sementes_calibracao()
-    if s != list(config()["sementes_calibracao"]):
+    if s != list(c["sementes_calibracao"]):
         raise ValueError("sementes de calibracao divergem")
     return s
 
 
 def meta(extra: dict | None = None) -> dict:
-    return {"fase": 1, "config": str(CFG.relative_to(RAIZ)).replace("\\", "/"),
+    # "conjunto" so na fase 4: os artefatos da fase 1 nao mudam de forma
+    return {"fase": 4 if VALIDAR else 1, **({"conjunto": CONJUNTO} if VALIDAR else {}),
+            "config": str(CFG.relative_to(RAIZ)).replace("\\", "/"),
             "config_sha256": hashlib.sha256(CFG.read_bytes()).hexdigest(),
             "regras_v21c": diag.conferir_regras(),
             "variantes": {v: {"base": b, "regras_v21": k, "descricao": d, "hashes": rb.hashes(cfg_variante(v))}
@@ -200,8 +235,11 @@ def meta(extra: dict | None = None) -> dict:
             "sementes": sementes(), "especies": list(CONFIG_CATALOGO.especies_ativas),
             "epsilon_bots_canonico": CONFIG_COMBATE_V2.epsilon_bots,
             "ambiente": {"python": platform.python_version(), "plataforma": platform.platform()},
-            "aviso": "fase 1 da rodada de equilibrio geral: so sementes de calibracao; chaves da ConfigCombateV21E "
-                     "desligadas por padrao"} | (extra or {})
+            "aviso": ("fase 4 da rodada de equilibrio geral: a validacao unica nas sementes de validacao, tudo congelado "
+                      "(nenhum numero muda por causa do resultado); so as variantes v21d e v21e; chaves da "
+                      "ConfigCombateV21E desligadas por padrao" if VALIDAR else
+                      "fase 1 da rodada de equilibrio geral: so sementes de calibracao; chaves da ConfigCombateV21E "
+                      "desligadas por padrao")} | (extra or {})
 
 
 # ------------------------------------------------------------------ matriz
@@ -233,18 +271,18 @@ def etapa_matriz(pool) -> dict:
             saida[v][f"{eps:.2f}"] = {**res, "fracao_no_limite_de_turnos": lim[(v, eps)] / len(conf[(v, eps)])}
     conferencia = None
     if N_POR_SEMENTE == 100:
-        gravado = _ler(R2 / "matriz.json")["por_variante"]["a_c_e2v_v"]
+        gravado = _ler(REF / "matriz.json")["por_variante"]["a_c_e2v_v"]
         sem_limite = {e: {k: x for k, x in d.items() if k != "fracao_no_limite_de_turnos"} for e, d in saida["v21d"].items()}
         conferencia = _igual(sem_limite, gravado)
         if not conferencia:
-            raise RuntimeError("matriz da v21d difere de artifacts_combate_v21c/equilibrio_rodada2/matriz.json (a_c_e2v_v)")
+            raise RuntimeError(f"matriz da v21d difere de artifacts_combate_v21c/{REF_NOME}/matriz.json (a_c_e2v_v)")
     return {"meta": meta({"partidas_por_par_por_semente": N_POR_SEMENTE, "epsilons": list(EPSILONS),
                           "metodo": "round-robin das 8 formas, os dois lados da mesma especie, media das 4 especies; "
                                     "sementes derivar_semente('bateria-v21', 'e1|<especie>', semente, nome_a, nome_b, k) "
                                     "(run_bateria_v21.partidas_par); epsilon trocado nos 8 bots dos dois lados; limite "
                                     "de turnos pela fracao de vida (a regra do Python); forca = media contra as outras 7; "
                                     "vitorias = oponentes com taxa > 0,5"}),
-            "v21d_igual_equilibrio_rodada2_a_c_e2v_v": conferencia, "por_variante": saida}
+            CHAVE_CONF: conferencia, "por_variante": saida}
 
 
 # ------------------------------------------------------------------ painel B
@@ -281,15 +319,15 @@ def etapa_painel(pool) -> dict:
         saida[v] = tab
     conferencia = None
     if M_PAINEL == 50:
-        conferencia = _igual(saida["v21d"], _ler(R2 / "painel.json")["por_variante"]["a_c_e2v_v"])
+        conferencia = _igual(saida["v21d"], _ler(REF / "painel.json")["por_variante"]["a_c_e2v_v"])
         if not conferencia:
-            raise RuntimeError("painel da v21d difere de artifacts_combate_v21c/equilibrio_rodada2/painel.json")
+            raise RuntimeError(f"painel da v21d difere de artifacts_combate_v21c/{REF_NOME}/painel.json")
     return {"meta": meta({"partidas_por_bot_por_semente": M_PAINEL, "epsilon_pet": CONFIG_COMBATE_V2.epsilon_bots,
                           "metodo": "pet = bot canonico da forma (epsilon 0,05, sem treino, condicao 1,0) sob as regras "
                                     "da variante; painel = os 32 bots canonicos (8 formas x 4 especies) sob as MESMAS "
                                     "regras e listas; sementes derivar_semente('diag-arquetipos|B|<semente>', bot, k), "
                                     "lados trocados na metade (diagnosticar_arquetipos.etapa_painel)"}),
-            "v21d_igual_equilibrio_rodada2_a_c_e2v_v": conferencia, "por_variante": saida}
+            CHAVE_CONF: conferencia, "por_variante": saida}
 
 
 # ------------------------------------------------------------------ metas M-A1..M-A4
@@ -331,12 +369,13 @@ def etapa_metas() -> dict:
     mat = _ler(SAIDA / "matriz.json")["por_variante"]
     pain = _ler(SAIDA / "painel.json")["por_variante"]
     return {"meta": meta({"metas": c["metas"], "fonte": "docs/PLANO_EQUILIBRIO_GERAL.md, secao 2 (M-A1..M-A4); aqui "
-                                                        "nas sementes de CALIBRACAO (a validacao e a fase 4)"}),
+                                                        + ("nas sementes de VALIDACAO (fase 4, a validacao unica)" if VALIDAR
+                                                           else "nas sementes de CALIBRACAO (a validacao e a fase 4)")}),
             "por_variante": {v: avaliar_metas(mat[v], pain[v], c) for v in VARIANTES}}
 
 
 # ------------------------------------------------------------------ E3 (resposta declarada)
-VARIANTES_E3 = ("v21d", "v21e", "v21e_espelho_disparo_08")
+VARIANTES_E3 = VARIANTES_VALIDACAO if VALIDAR else ("v21d", "v21e", "v21e_espelho_disparo_08")
 
 
 def _e3(args):
@@ -378,14 +417,14 @@ def etapa_e3(pool) -> dict:
                                               "taxa_com_resposta": _media(x for e in esp for x in res[(v, tec, e)][2][u][1])}
                                           for u in res[(v, tec, esp[0])][2]}}
         e3[v] = {"ok": all(x["reducao"] > 0.0 for x in e3[v].values()), "por_tecnica": e3[v]}
-    conferencia = _igual(e3["v21d"], _ler(R2 / "colaterais_a_c_e2v_v.json")["E3"]["a_c_e2v_v"])
+    conferencia = _igual(e3["v21d"], _ler(REF_COLATERAIS)["E3"]["a_c_e2v_v"])
     if not conferencia:
-        raise RuntimeError("E3 da v21d difere de equilibrio_rodada2/colaterais_a_c_e2v_v.json")
+        raise RuntimeError(f"E3 da v21d difere de {REF_NOME}/{REF_COLATERAIS.name}")
     return {"meta": meta({"partidas_por_par_por_semente": CONFIG_BATERIA_V21.partidas_e3_por_semente,
                           "metodo": "E3 de run_bateria_v21: o usuario da tecnica contra as 8 formas, sem e com a "
                                     "resposta declarada (RESPOSTAS_V21C) no topo da lista do oponente; ok = a resposta "
                                     "reduz a taxa media dos usuarios"}),
-            "v21d_igual_equilibrio_rodada2": conferencia, "por_variante": e3}
+            f"v21d_igual_{REF_NOME}": conferencia, "por_variante": e3}
 
 
 # ------------------------------------------------------------------ S1 (sombrias)
@@ -421,13 +460,13 @@ def etapa_s1(pool) -> dict:
                  "suporte_com_sombrias": suporte(eq["estrategia"], CONFIG_BATERIA_V21.peso_minimo_suporte)}
     conferencia = None
     if N_POR_SEMENTE == 100:
-        conferencia = _igual(s1["v21d"], _ler(R2 / "colaterais_a_c_e2v_v.json")["S1"]["a_c_e2v_v"])
+        conferencia = _igual(s1["v21d"], _ler(REF_COLATERAIS)["S1"]["a_c_e2v_v"])
         if not conferencia:
-            raise RuntimeError("S1 da v21d difere de equilibrio_rodada2/colaterais_a_c_e2v_v.json")
+            raise RuntimeError(f"S1 da v21d difere de {REF_NOME}/{REF_COLATERAIS.name}")
     return {"meta": meta({"partidas_por_par_por_semente": N_POR_SEMENTE,
                           "metodo": "run_bateria_sombria: 12 formas (8 normais + 4 sombrias), mesma especie, rotulo "
                                     "'sombria|<especie>'; S1 = nenhuma sombria vence (> 0,5) as 8 normais"}),
-            "v21d_igual_equilibrio_rodada2": conferencia, "por_variante": s1}
+            f"v21d_igual_{REF_NOME}": conferencia, "por_variante": s1}
 
 
 # ------------------------------------------------------------------ mecanismo
@@ -511,12 +550,19 @@ def etapa_mecanismo(pool) -> dict:
 
 # ------------------------------------------------------------------ main
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="Equilibrio geral, fase 1: as formas (so calibracao)")
+    ap = argparse.ArgumentParser(description="Equilibrio geral, fase 1: as formas (so calibracao); --validar: a fase 4")
     ap.add_argument("--etapa", default="todas", choices=("todas", "matriz", "painel", "metas", "e3", "s1", "mecanismo"))
     ap.add_argument("--processos", type=int, default=8)
+    ap.add_argument("--validar", action="store_true",
+                    help="fase 4: sementes de validacao, so v21d e v21e, saida em artifacts_equilibrio_geral/fase4/")
     a = ap.parse_args(argv)
     if a.processos > 8:
         raise ValueError("no maximo 8 processos nesta maquina")
+    if a.validar != VALIDAR:
+        raise RuntimeError("--validar tem de estar no argv do processo (o modulo le a opcao na importacao)")
+    if VALIDAR:
+        os.environ["EG_CONJUNTO"] = "validacao"      # os processos do pool reimportam o modulo
+        print(f"FASE 4, validacao unica: sementes {sementes()}, variantes {list(VARIANTES)}, saida {SAIDA}", flush=True)
     config()
     diag.conferir_regras()
     etapas = ("matriz", "painel", "metas", "e3", "s1", "mecanismo") if a.etapa == "todas" else (a.etapa,)

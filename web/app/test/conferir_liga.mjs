@@ -21,9 +21,10 @@
 // fixos, ate nao melhorar) com N_BUSCA partidas por semente, especie e forma, a partir de INICIOS pontos (todos em 1 e INICIOS - 1
 // sorteados da grade por uma rng com semente fixa); o fim de cada busca e medido de novo com N e a escolhida e a melhor delas. Ordem (registrada antes de rodar): 1) mais formas dentro da faixa [0,25; 0,85]; 2) a menor soma do
 // que falta as formas de fora ate a faixa; 3) a menor cura; 4) os fatores mais perto de 1 (a soma de |fator - 1|).
-// uso (em web/app): npx tsx test/conferir_liga.mjs [--v6 | --calibrar]
+// --validar (fase 4, a validacao unica): a conferencia dos v9 (a Liga do motor, nada muda) nas sementes de validacao (4101...4505).
+// uso (em web/app): npx tsx test/conferir_liga.mjs [--v6 | --calibrar | --validar]
 //   --v6: artifacts_campanha/liga/conferencia.json; padrao: artifacts_equilibrio_geral/fase3/liga_conferencia.json;
-//   --calibrar: artifacts_equilibrio_geral/fase3/liga_calibracao.json
+//   --calibrar: artifacts_equilibrio_geral/fase3/liga_calibracao.json; --validar: artifacts_equilibrio_geral/fase4/liga_validacao.json
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { isMainThread } from "node:worker_threads";
@@ -100,7 +101,7 @@ for (const c of porFator) {
 
 /* ------------------------------------------------------------------------------------------------ pets v9 */
 const r4 = x => +x.toFixed(4);
-const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505];
+const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const META_MIN = 0.25, META_MAX = 0.85;
 const N = 20, N_BUSCA = 5;
 const FATORES = Array.from({ length: 30 }, (_, i) => Math.round((0.1 + 0.1 * i) * 10) / 10);   /* 0,1..3,0 */
@@ -157,12 +158,14 @@ function melhor(a, b) {
   return distancia1(b.fatores) < distancia1(a.fatores) - 1e-9 ? b : a;
 }
 
-async function v9(calibrar) {
+async function v9(calibrar, validar) {
+  if (calibrar && validar) throw new Error("--calibrar e --validar juntos");
+  const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO, conjunto = validar ? "validacao" : "calibracao";
   const pool = criarPool(new URL(import.meta.url));
   const t0 = performance.now(), relogio = () => `${((performance.now() - t0) / 1000).toFixed(0)} s`;
   /** mede as configuracoes (fatores, cura) com n partidas: os titulos por forma e a meta */
   async function medir(configs, n) {
-    const tarefas = configs.flatMap(c => formas9.map((_, f) => ({ tipo: "liga", forma: f, fatores: c.fatores, cura: c.cura, sementes: SEM_CALIBRACAO, n })));
+    const tarefas = configs.flatMap(c => formas9.map((_, f) => ({ tipo: "liga", forma: f, fatores: c.fatores, cura: c.cura, sementes, n })));
     const r = await pool.executar(tarefas);
     return configs.map((c, i) => {
       const por = Object.fromEntries(formas9.map((fo, f) => [fo[0], r[i * formas9.length + f]]));
@@ -207,7 +210,7 @@ async function v9(calibrar) {
   } else {
     /* a Liga dos v9 como o motor a joga (fatores e cura do motor) */
     const [liga, antes] = await medir([{ fatores: null, cura: null }, { fatores: LIGA.map(() => FATOR_LIGA), cura: 0 }], N);
-    const tarefas = LIGA.flatMap((_, i) => formas9.map((_, f) => ({ tipo: "luta", forma: f, lider: i, sementes: SEM_CALIBRACAO, n: N })));
+    const tarefas = LIGA.flatMap((_, i) => formas9.map((_, f) => ({ tipo: "luta", forma: f, lider: i, sementes, n: N })));
     const r = await pool.executar(tarefas);
     const porLuta = LIGA.map((x, i) => {
       const por = Object.fromEntries(formas9.map((fo, f) => [fo[0], r4(r[i * formas9.length + f])]));
@@ -216,9 +219,10 @@ async function v9(calibrar) {
         melhor_forma: ord[0][0], melhor_taxa: ord[0][1], pior_forma: ord[ord.length - 1][0], pior_taxa: ord[ord.length - 1][1], por_forma: por };
     });
     out = {
-      descricao: "Conferencia da Liga dos Lideres dos pets v9 (rodada de equilibrio geral, fase 3, meta M-C1): a Liga do motor, o Mega de referencia com o treino tipico",
+      descricao: validar ? "Validacao da Liga dos Lideres dos pets v9 (rodada de equilibrio geral, fase 4, meta M-C1): a Liga do motor, tudo congelado, nas sementes de validacao"
+        : "Conferencia da Liga dos Lideres dos pets v9 (rodada de equilibrio geral, fase 3, meta M-C1): a Liga do motor, o Mega de referencia com o treino tipico",
       motor: "web/app/motor (escala CESC_V9 ligada, regras V21E, limite do desafiado = o lider; liga.jogarLiga com FATOR_LIGA_V9 e CURA_LIGA_V9)",
-      conjunto: "calibracao", sementes: SEM_CALIBRACAO, treino_tipico_mega: TIPICO, partidas_por_semente_especie_forma: N,
+      conjunto, sementes, treino_tipico_mega: TIPICO, partidas_por_semente_especie_forma: N,
       metas: { titulo_min: META_MIN, titulo_max: META_MAX },
       fatores: Object.fromEntries(LIGA.map((x, i) => [x.arena, M.fatorLiga(i, R9)])), cura_entre_lutas: M.curaLiga(R9),
       meta_c1: liga.meta, titulos: liga.titulos,
@@ -231,9 +235,9 @@ async function v9(calibrar) {
     for (const [f, x] of Object.entries(out.liga_inteira)) console.log(`Liga inteira, ${f}: títulos ${x.titulos}; chegou`, x.chegou_na_luta.join(" "));
     console.log("M-C1:", JSON.stringify(out.meta_c1));
   }
-  const pasta = fileURLToPath(new URL("../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
+  const pasta = fileURLToPath(new URL(validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
   mkdirSync(pasta, { recursive: true });
-  writeFileSync(pasta + (calibrar ? "liga_calibracao.json" : "liga_conferencia.json"), JSON.stringify(out, null, 1) + "\n");
+  writeFileSync(pasta + (calibrar ? "liga_calibracao.json" : validar ? "liga_validacao.json" : "liga_conferencia.json"), JSON.stringify(out, null, 1) + "\n");
   console.log(`[${relogio()}]`);
   await pool.fechar();
 }
@@ -241,4 +245,4 @@ async function v9(calibrar) {
 const args = process.argv.slice(2);
 if (!isMainThread) servir(TRABALHOS);
 else if (args.includes("--v6")) conferirV6();
-else await v9(args.includes("--calibrar"));
+else await v9(args.includes("--calibrar"), args.includes("--validar"));

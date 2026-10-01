@@ -22,7 +22,7 @@
 //   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> desafiantes_calibracao.json (v9, em artifacts_equilibrio_geral/fase2/)
 //     ou artifacts_campanha/escala_v6/desafiantes_calibracao.json (--v6)
 //   --conferir: sementes de calibracao, os fatores do motor (sem escolher) -> desafiantes_conferencia.json (v9)
-//   --validar: sementes de validacao, os fatores do motor -> desafiantes_validacao.json (v9: so na fase 4)
+//   --validar: sementes de validacao, os fatores do motor -> artifacts_equilibrio_geral/fase4/desafiantes_validacao.json (v9: so na fase 4)
 //   --npc <chave>: so um desafiante (para rodar em paralelo) -> o arquivo com o sufixo _<chave>
 //   --grade <inicio>,<fim>,<passo>: outra grade de fatores (a do Tortomon em passos de 0,01, fase 2) -> o sufixo _grade
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -106,7 +106,8 @@ for (const c of DESAFIANTES) {
   }
   console.log(`${c.nome} (${LUGARES_V6[c.lug].nome}, ${est}): fator ${r.fator} sem ${r.sem} com ${r.com} pior ${r.pior} (${r.pior_forma}) ${r.passa ? "OK" : "NAO PASSA"}${r.travados.length ? " travados " + r.travados : ""}`);
 }
-const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/escala_v6/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
+/* os pets v9: a calibracao e a conferencia na fase 2; a validacao (--validar) na fase 4 */
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/escala_v6/" : validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
 const nome = "desafiantes_" + (validar ? "validacao" : conferir ? "conferencia" : "calibracao") + (SO_NPC ? "_" + SO_NPC : "") + (GRADE ? "_grade" : "");
 writeFileSync(pasta + nome + ".json", JSON.stringify(out, null, 1) + "\n");

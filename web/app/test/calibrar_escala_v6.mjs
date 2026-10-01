@@ -42,7 +42,7 @@
 //   sem --validar: sementes de calibracao, grade de beta e de razoes -> escala_calibracao.json (v9) ou
 //     artifacts_campanha/escala_v6/calibracao.json (--v6)
 //   --conferir: sementes de calibracao, a escala do motor (as metas de estagio, sem escolher nada) -> escala_conferencia.json
-//   --validar: sementes de validacao, a escala do motor -> escala_validacao.json (v9; so na fase 4) ou
+//   --validar: sementes de validacao, a escala do motor -> artifacts_equilibrio_geral/fase4/escala_validacao.json (v9; so na fase 4) ou
 //     artifacts_campanha/escala_v6/validacao.json (--v6)
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -141,7 +141,8 @@ function viabilidade(beta) {
   return out;
 }
 
-const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/escala_v6/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
+/* os pets v9: a calibracao e a conferencia na fase 2; a validacao (--validar) na fase 4 */
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/escala_v6/" : validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
 const arquivo = nome => pasta + (V6 ? nome : "escala_" + nome);
 mkdirSync(pasta, { recursive: true });
 const cab = { limite: FRACAO ? "fracao" : "desafiado", sementes, n_por_semente: n, regras: V6 ? "v21d" : "v21e", ...(V6 ? {} : { versao_pet: VERSAO }), treino_tipico: TIPICO,

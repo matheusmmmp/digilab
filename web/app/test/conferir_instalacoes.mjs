@@ -17,8 +17,10 @@
 // V21E nas formas de referencia e nos rivais), a escala da versao 9 (CESC_V9, a mesma vida do Mega) e o fator dos rivais das instalacoes
 // (FATOR_INSTALACAO = 1, o mesmo: a meta passou sem mudar), nas sementes de calibracao (3101...3505). Meta M-E1: na Torre de Batalha e no
 // Palacio, a melhor forma vence a 1a luta >= 0,70 e a pior >= 0,40. O pet do teste ponta a ponta (um v6) fica so no --v6.
-// uso (em web/app): npx tsx test/conferir_instalacoes.mjs [--v6]
-//   --v6: artifacts_campanha/fronteira/conferencia.json (a de antes, byte a byte); padrao: artifacts_equilibrio_geral/fase3/instalacoes_conferencia.json
+// --validar (fase 4, a validacao unica): a conferencia dos v9 (nada muda) nas sementes de validacao (4101...4505).
+// uso (em web/app): npx tsx test/conferir_instalacoes.mjs [--v6 | --validar]
+//   --v6: artifacts_campanha/fronteira/conferencia.json (a de antes, byte a byte); padrao: artifacts_equilibrio_geral/fase3/instalacoes_conferencia.json;
+//   --validar: artifacts_equilibrio_geral/fase4/instalacoes_validacao.json
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
@@ -88,10 +90,11 @@ console.log("jogável:", jogavel);
 }
 
 /* ------------------------------------------------------------------------------------------------ pets v9 (meta M-E1) */
-function conferirV9() {
+function conferirV9(validar) {
   const { ESPECIES, INSTALACOES, LUTAS_MAX_INSTALACAO, FATOR_INSTALACAO, CIT } = M;
   M.ligarEscala(true);
-  const SEMENTES = [3101, 3202, 3303, 3404, 3505], N = 20, TIPICO = CIT.tipico.mega, META_MELHOR = 0.70, META_PIOR = 0.40;
+  const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
+  const SEMENTES = validar ? SEM_VALIDACAO : SEM_CALIBRACAO, N = 20, TIPICO = CIT.tipico.mega, META_MELHOR = 0.70, META_PIOR = 0.40;
   const r4 = x => +x.toFixed(4);
   function resumo(vs) {
     const o = [...vs].sort((a, b) => a - b), q = p => o[Math.min(o.length - 1, Math.floor(p * o.length))];
@@ -118,22 +121,24 @@ function conferirV9() {
       folga: r4(Math.min(melhor.vence_a_primeira - META_MELHOR, pior.vence_a_primeira - META_PIOR)) }, por_forma: porForma };
   }
   const saida = {
-    descricao: "Conferencia das instalacoes da Fronteira dos pets v9 (fase 3, meta M-E1): o Mega de referencia com o treino tipico na Torre de Batalha e no Palacio",
-    motor: "web/app/motor (escala CESC_V9 ligada, regras V21E, limite do desafiado = o rival)", conjunto: "calibracao",
+    descricao: validar ? "Validacao das instalacoes da Fronteira dos pets v9 (fase 4, meta M-E1): tudo congelado, nas sementes de validacao"
+      : "Conferencia das instalacoes da Fronteira dos pets v9 (fase 3, meta M-E1): o Mega de referencia com o treino tipico na Torre de Batalha e no Palacio",
+    motor: "web/app/motor (escala CESC_V9 ligada, regras V21E, limite do desafiado = o rival)", conjunto: validar ? "validacao" : "calibracao",
     fator: FATOR_INSTALACAO, teto_de_lutas: LUTAS_MAX_INSTALACAO, treino_tipico_mega: TIPICO, sementes: SEMENTES, tentativas_por_semente_especie_forma: N,
     metas: { melhor_forma_vence_a_primeira_min: META_MELHOR, pior_forma_vence_a_primeira_min: META_PIOR },
     nota_palacio: "com a lista canonica (sem trava, veto nem chip de regra) o Palacio do pet de referencia e a Torre; muda so a semente das tentativas",
     meta_e1: { passa: Object.values(porInst).every(x => x.meta_e1.passa), menor_folga: Math.min(...Object.values(porInst).map(x => x.meta_e1.folga)) },
     por_instalacao: porInst,
   };
-  const pasta = fileURLToPath(new URL("../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
+  const pasta = fileURLToPath(new URL(validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
   mkdirSync(pasta, { recursive: true });
-  writeFileSync(pasta + "instalacoes_conferencia.json", JSON.stringify(saida, null, 1) + "\n");
+  writeFileSync(pasta + (validar ? "instalacoes_validacao.json" : "instalacoes_conferencia.json"), JSON.stringify(saida, null, 1) + "\n");
   for (const [id, x] of Object.entries(porInst)) {
     console.log(`--- ${x.nome} (${id}): melhor ${x.melhor.forma} ${x.melhor.vence_a_primeira}; pior ${x.pior.forma} ${x.pior.vence_a_primeira}; M-E1 ${x.meta_e1.passa}`);
     for (const [f, r] of Object.entries(x.por_forma)) console.log(`${f}: vence a 1a ${r.vence_a_primeira}; média ${r.media}; máx ${r.maximo}`);
   }
 }
 
-if (process.argv.slice(2).includes("--v6")) conferirV6();
-else conferirV9();
+const args = process.argv.slice(2);
+if (args.includes("--v6")) conferirV6();
+else conferirV9(args.includes("--validar"));

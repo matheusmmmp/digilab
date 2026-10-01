@@ -28,7 +28,7 @@
 // uso (em web/app): node test/calibrar_arenas.mjs [--v6] [--validar | --conferir] [--arena <id>] [-n 10]
 //   sem --validar: sementes de calibracao, fatores 0,5..4,0 -> arenas_calibracao.json (v9) ou artifacts_campanha/arenas/calibracao.json
 //   --conferir: sementes de calibracao, os fatores do motor (sem escolher) -> arenas_conferencia.json (v9)
-//   --validar: sementes de validacao, os fatores do motor -> arenas_validacao.json (v9; so na fase 4) ou
+//   --validar: sementes de validacao, os fatores do motor -> artifacts_equilibrio_geral/fase4/arenas_validacao.json (v9; so na fase 4) ou
 //     artifacts_campanha/arenas/validacao.json (--v6)
 //   --arena <id>: so uma arena (para rodar em paralelo) -> o arquivo com o sufixo _<id>
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -112,7 +112,8 @@ for (const a of ARENAS.filter(x => !SO_ARENA || x.id === SO_ARENA)) {
   }
   console.log(`${cab}: fator ${r.fator} sem ${r.sem} com ${r.com} pior ${r.pior} (${r.pior_forma}) ${r.passa ? "OK" : "NAO PASSA"}${r.travados.length ? " travados " + r.travados : ""}`);
 }
-const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/arenas/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
+/* os pets v9: a calibracao e a conferencia na fase 2; a validacao (--validar) na fase 4 */
+const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/arenas/" : validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase2/", import.meta.url));
 mkdirSync(pasta, { recursive: true });
 const nome = (validar ? "validacao" : conferir ? "conferencia" : "calibracao") + (LISTA_TORRE ? "_" + LISTA_TORRE : "") + (SO_ARENA ? "_" + SO_ARENA : "");
 writeFileSync(pasta + (V6 ? "" : "arenas_") + nome + ".json", JSON.stringify(out, null, 1) + "\n");

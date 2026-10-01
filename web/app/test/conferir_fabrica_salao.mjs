@@ -30,9 +30,11 @@
 //   >= 1 (o rival nao fica mais fraco que o de antes: sem treino o pet nao vence mais que hoje; a maior folga pura levava o Champion a 0,5,
 //   com o pet sem treino vencendo 0,75), e entre eles o de maior folga robusta: a menor folga min(taxa - 0,70, 0,95 - taxa) entre o fator e
 //   os dois vizinhos da grade (o Rookie tem um degrau entre 1,2 e 1,3).
-// uso (em web/app): npx tsx test/conferir_fabrica_salao.mjs [--v6 | --calibrar]
+// --validar (fase 4, a validacao unica): a conferencia dos v9 (a Fabrica e o Salao do motor, nada muda) nas sementes de validacao (4101...4505).
+// uso (em web/app): npx tsx test/conferir_fabrica_salao.mjs [--v6 | --calibrar | --validar]
 //   --v6: artifacts_campanha/fronteira/conferencia_4c.json; padrao: artifacts_equilibrio_geral/fase3/fabrica_salao_conferencia.json;
-//   --calibrar: artifacts_equilibrio_geral/fase3/fabrica_calibracao.json e salao_calibracao.json
+//   --calibrar: artifacts_equilibrio_geral/fase3/fabrica_calibracao.json e salao_calibracao.json;
+//   --validar: artifacts_equilibrio_geral/fase4/fabrica_salao_validacao.json
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { isMainThread } from "node:worker_threads";
@@ -168,7 +170,7 @@ console.log("jogável:", jogavel);
 
 /* ------------------------------------------------------------------------------------------------ pets v9 */
 const r4 = x => +x.toFixed(4);
-const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505];
+const SEM_CALIBRACAO = [3101, 3202, 3303, 3404, 3505], SEM_VALIDACAO = [4101, 4202, 4303, 4404, 4505];
 const POR_SEMENTE = 400, LUTAS_MAX = 120, N_SALAO = 20;
 const META_FABRICA = 0.25, FOLGA_FABRICA = 0.05, META_SALAO_MIN = 0.70, META_SALAO_MAX = 0.95;
 const FATORES_FABRICA = Array.from({ length: 15 }, (_, i) => Math.round((0.3 + 0.05 * i) * 100) / 100);   /* 0,30..1,00 */
@@ -198,14 +200,15 @@ function tarefaFabrica(t) {
   }
   return out;
 }
-/** a tarefa: a taxa de vitoria de uma forma de referencia no Salao dos v9, num nivel, com um treino e um fator (null: o do motor) */
+/** a tarefa: a taxa de vitoria de uma forma de referencia no Salao dos v9, num nivel, com um treino e um fator (null: o do motor), nas
+    sementes da tarefa (as de calibracao, ou as de validacao na fase 4) */
 function tarefaSalao(t) {
   M.ligarEscala(true);
   const fo = formasDe(t.est, R9)[t.forma];
   let v = 0, tot = 0;
   for (const e of M.ESPECIES) {
     const A = lutador(fo, e, t.nivel, [], true, M.VERSAO_ESCALA_V9);
-    for (const s of SEM_CALIBRACAO) for (let k = 0; k < N_SALAO; k++) {
+    for (const s of t.sementes) for (let k = 0; k < N_SALAO; k++) {
       const st = M.hashSemente("conferir-salao", t.est, s, A.nome, k);
       if (M.jogarV2(A, M.rivalSalao(st, t.est, R9, t.fator ?? undefined), st, R9, null, 1).pontosA === 1) v++;
       tot++;
@@ -224,18 +227,20 @@ function resumoFabrica(ts) {
     no_teto: ts.filter(t => t.teto).length, vence_por_luta_da_serie: porLuta, lutas_no_limite: r4(ts.reduce((a, t) => a + t.limite, 0) / lutas) };
 }
 
-async function v9(calibrar) {
+async function v9(calibrar, validar) {
+  if (calibrar && validar) throw new Error("--calibrar e --validar juntos");
+  const sementes = validar ? SEM_VALIDACAO : SEM_CALIBRACAO, conjunto = validar ? "validacao" : "calibracao";
   const pool = criarPool(new URL(import.meta.url));
   const t0 = performance.now(), relogio = () => `${((performance.now() - t0) / 1000).toFixed(0)} s`;
   async function fabrica(politica, fatores) {
-    const tar = fatores.flatMap(fator => SEM_CALIBRACAO.map(semente => ({ tipo: "fabrica", politica, fator, semente, por: POR_SEMENTE })));
+    const tar = fatores.flatMap(fator => sementes.map(semente => ({ tipo: "fabrica", politica, fator, semente, por: POR_SEMENTE })));
     const r = await pool.executar(tar);
-    return fatores.map((_, i) => resumoFabrica(r.slice(i * SEM_CALIBRACAO.length, (i + 1) * SEM_CALIBRACAO.length).flat()));
+    return fatores.map((_, i) => resumoFabrica(r.slice(i * sementes.length, (i + 1) * sementes.length).flat()));
   }
   async function salao(fatorDe, niveis) {
     const tar = [], idx = [];
     for (const est of M.ESTAGIOS_SALAO) for (const nivel of niveis(est)) for (const fator of fatorDe(est)) formasDe(est, R9).forEach((fo, f) => {
-      tar.push({ tipo: "salao", est, forma: f, nivel, fator }); idx.push([est, nivel, fator, fo[0]]);
+      tar.push({ tipo: "salao", est, forma: f, nivel, fator, sementes }); idx.push([est, nivel, fator, fo[0]]);
     });
     const r = await pool.executar(tar), out = {};
     idx.forEach(([est, nivel, fator, fo], i) => { ((out[est] ??= {})[nivel] ??= {})[fator ?? "motor"] ??= {}; out[est][nivel][fator ?? "motor"][fo] = r4(r[i]); });
@@ -246,10 +251,10 @@ async function v9(calibrar) {
     return { media: r4(media), pior: { forma: ord[0][0], vence: ord[0][1] }, melhor: { forma: ord[ord.length - 1][0], vence: ord[ord.length - 1][1] },
       folga: r4(Math.min(media - META_SALAO_MIN, META_SALAO_MAX - media)), passa: media >= META_SALAO_MIN && media <= META_SALAO_MAX, por_forma: por };
   };
-  const pasta = fileURLToPath(new URL("../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
+  const pasta = fileURLToPath(new URL(validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
   mkdirSync(pasta, { recursive: true });
   const gravar = (nome, o) => writeFileSync(pasta + nome, JSON.stringify(o, null, 1) + "\n");
-  const cab = { conjunto: "calibracao", sementes: SEM_CALIBRACAO };
+  const cab = { conjunto, sementes };
   if (calibrar) {
     /* a Fabrica: a grade do fator dos rivais, na politica da meta */
     const med = (await fabrica(POLITICA_META, FATORES_FABRICA)).map((x, i) => ({ fator: FATORES_FABRICA[i], ...x, folga: r4(x.pelo_menos_uma_serie - META_FABRICA) }));
@@ -286,7 +291,8 @@ async function v9(calibrar) {
     const sem = Object.fromEntries(M.ESTAGIOS_SALAO.map(est => [est, resumoSalao(s[est][0].motor).media]));
     const produto = f => r4(M.ESTAGIOS_SALAO.reduce((p, est) => p * f(est), 1));
     const saida = {
-      descricao: "Conferencia da Fabrica e do Salao dos pets v9 (fase 3, metas M-C2 e M-C3): as regras do motor",
+      descricao: validar ? "Validacao da Fabrica e do Salao dos pets v9 (fase 4, metas M-C2 e M-C3): as regras do motor, tudo congelado, nas sementes de validacao"
+        : "Conferencia da Fabrica e do Salao dos pets v9 (fase 3, metas M-C2 e M-C3): as regras do motor",
       motor: "web/app/motor (regras V21E; Fabrica: TentativaFabrica versao 9, a troca com a vida cheia; Salao: escala CESC_V9, fatorSalao; limite do desafiado = o rival)",
       ...cab,
       fabrica: { fator_rivais: M.FATOR_RIVAL_FABRICA_V9, fator_alugados: M.FATOR_FABRICA, troca_inteira: M.regraFabrica(M.VERSAO_FABRICA_V9).trocaInteira,
@@ -296,7 +302,7 @@ async function v9(calibrar) {
         menor_folga: r4(Math.min(...Object.values(com).map(x => x.folga))) }, com_o_treino_tipico: com, sem_treino: sem,
         vence_os_4_time_medio: produto(est => com[est].media), vence_os_4_sem_treino_time_medio: produto(est => sem[est]) },
     };
-    gravar("fabrica_salao_conferencia.json", saida);
+    gravar(validar ? "fabrica_salao_validacao.json" : "fabrica_salao_conferencia.json", saida);
     for (const [k, x] of Object.entries(fab)) console.log(`Fábrica ${k}: 1a ${x.vence_a_primeira}; >= 1 série ${x.pelo_menos_uma_serie}; séries ${x.series_media}; máx ${x.maximo_de_series}; teto ${x.no_teto}`);
     for (const est of M.ESTAGIOS_SALAO) console.log(`Salão ${est} (fator ${com[est].fator}): média ${com[est].media} (pior ${com[est].pior.forma} ${com[est].pior.vence}) folga ${com[est].folga}; sem treino ${sem[est]}`);
     console.log("M-C2:", JSON.stringify(saida.fabrica.meta_c2), "M-C3:", JSON.stringify(saida.salao.meta_c3));
@@ -308,4 +314,4 @@ async function v9(calibrar) {
 const args = process.argv.slice(2);
 if (!isMainThread) servir(TRABALHOS);
 else if (args.includes("--v6")) conferirV6();
-else await v9(args.includes("--calibrar"));
+else await v9(args.includes("--calibrar"), args.includes("--validar"));

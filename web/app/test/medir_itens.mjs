@@ -33,7 +33,7 @@
 // uso (em web/app): node test/medir_itens.mjs [--v6] [--validar] [--gates gi1,gi2,gi3,gi4] [--sem-itens id,id] [--saida nome]
 //   sem --validar: sementes de calibracao -> artifacts_equilibrio_geral/fase3/itens_calibracao.json (v9) ou
 //     artifacts_campanha/itens/calibracao.json (--v6)
-//   --validar: sementes de validacao -> artifacts_equilibrio_geral/fase3/itens_validacao.json (v9; so na fase 4) ou
+//   --validar: sementes de validacao -> artifacts_equilibrio_geral/fase4/itens_validacao.json (v9; so na fase 4) ou
 //     artifacts_campanha/itens/validacao.json (--v6)
 //   --sem-itens: tira itens do catalogo (explorar um item fora); --saida: o nome do arquivo (explorar sem sobrescrever)
 //   --itens-v6 (so nos v9): os itens de antes (sem trava, chip de regra no topo, chip de stat inteiro, carta em toda luta) nas regras e
@@ -278,7 +278,8 @@ async function principal() {
     console.log(falhas.length ? `CONFERENCIA FALHOU: ${falhas.map(c => c.o_que).join("; ")}` : `conferencia com os artefatos gravados: ${conferencia.length} iguais`);
   }
   out.segundos = Math.round((performance.now() - t0) / 1000);
-  const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/itens/" : "../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
+  /* os pets v9: a calibracao na fase 3; a validacao (--validar) na fase 4 */
+  const pasta = fileURLToPath(new URL(V6 ? "../../../artifacts_campanha/itens/" : validar ? "../../../artifacts_equilibrio_geral/fase4/" : "../../../artifacts_equilibrio_geral/fase3/", import.meta.url));
   mkdirSync(pasta, { recursive: true });
   const nome = (V6 ? "" : "itens_") + arg("--saida", (validar ? "validacao" : "calibracao") + (itensV6 ? "_itens_v6" : ""));
   writeFileSync(pasta + nome + ".json", JSON.stringify(out, null, 1) + "\n");
