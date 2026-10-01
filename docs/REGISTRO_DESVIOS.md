@@ -1506,3 +1506,15 @@ ter de ser revistas. Efeito:
   estão (substitui o referendo M1 do `docs/ROADMAP_V2.md`); M4 decidido;
 - continuam valendo: plano antes da run, validação uma vez, sementes separadas, nada de reajustar olhando a validação.
 
+## 2026-10-01 — Pendências fechadas pelo Matheus
+
+- **Limiar do Mega nos pets v10:** fica em 0,4 (recomendação do coordenador aceita). O vínculo B passa na pesquisa
+  (`artifacts_v2_vinculo_novo/validacao/resumo.json`), mas no jogo curto não inverte o Mega (`artifacts_v2_vinculo_novo/mega_v10.json`);
+  rever só com medida de dono humano.
+- **`revisao.csv` da moldura** (`artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/`): revisado pelo Matheus. Ligar a fala por LLM
+  por padrão segue decisão à parte.
+- **Claude Science, prompts 09 e 10 e verificação das fontes do corpus DigiBrain:** executados pelo Matheus. As sínteses V2 e V3
+  estão em `v1/docs/referencias/` (a V3 entra no repositório pela tarefa FRUTAS-DEFINICOES). A saída da verificação das fontes
+  CORPUS ainda não está em disco: quando estiver, ela atualiza `docs/research/digibrain/references/source_index.md`.
+- **Roteiro do vídeo e posts:** revisados e números conferidos pelo Matheus (arquivos fora do repositório, `D:\Trab\digilab\docs\`).
+
