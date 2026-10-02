@@ -915,8 +915,8 @@ metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e
   (ex.: "Epa... Dormi porque eu estava com sono e por causa do cansaço. :/"). "Eba!" abre 58/191.
 - O modelo às vezes devolve surrogate UTF-16 solto: o servidor saneia antes de validar (quebrava a
   resposta e a avaliação).
-- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv`
-  (50 falas aprovadas). Sem ela, a fala por LLM continua desligada por padrão.
+- Revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv` (50 falas aprovadas): **feita pelo Matheus
+  (2026-10-01)**. Ligar a fala por LLM por padrão continua sendo decisão dele (hoje desligada).
 
 ## Fala livre por LLM local (2026-09-28, `docs/TAREFA_FALA_LIVRE.md`, `docs/PLANO_VERSAO_FALA_LIVRE.md`)
 
@@ -1168,13 +1168,14 @@ Evolução (`--forcar` para passar por cima e perder as edições).
     - mais variância nas lutas, e o sinal da pesquisa já é pequeno.
   - Os sprites têm quadros de animação (257 Digimon) e efeitos de ataque (187) em `Assets/Digimon Up Assets/Animacoes`.
 
-- Evolução canônica: o limiar de vínculo do Mega baixou para 0,4, mas o vínculo ainda favorece o dono aleatório (5 de 6
-  vidas viram Mega, contra 3 de 6 do atencioso). Rever o desenho do vínculo resolveria de vez.
+- Evolução canônica: o vínculo foi redesenhado (vínculo B, pets v10, PR #114). **Decisão do Matheus (2026-10-01): o limiar do Mega
+  fica em 0,4** nos pets v10 (no jogo curto o dono da web quase não dá feedback e o B não inverte o Mega,
+  `artifacts_v2_vinculo_novo/mega_v10.json`); rever só com medida de dono humano.
 
 - Fala por LLM: repetida com outra semente (2026-09-29, `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260929/`):
   92% aprovadas, nenhuma barrada por fator fora da lista. Pré-leitura (coluna própria no `revisao.csv`): nenhuma
   das 50 cita causa fora dos fatores (desde a v4 a LLM só escreve a moldura); 9 tinham caractere quebrado do
-  qwen 2.5 3b, agora barrado na validação da moldura. Falta a leitura do Matheus (coluna s/n).
+  qwen 2.5 3b, agora barrado na validação da moldura. Leitura do Matheus feita em 2026-10-01.
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção. Adiado
@@ -1270,12 +1271,13 @@ aleatório porque o atendimento e o desejo só amostram quem deixa o pet em falt
 - Desvios e interpretações em `docs/REGISTRO_DESVIOS.md` (2026-10-01, vínculo B).
 
 
-## V2, L1 — o lobo de decisão aprende (2026-10-01, `docs/TAREFA_V2_L1_DECISAO.md`, `docs/PLANO_ANALISE_V2_L1.md` rev. 2) — CALIBRAÇÃO FEITA, NÃO FECHOU; validação aguarda o referendo
+## V2, L1 — o lobo de decisão aprende (2026-10-01, `docs/TAREFA_V2_L1_DECISAO.md`, `docs/PLANO_ANALISE_V2_L1.md` rev. 2) — VALIDAÇÃO FEITA: G3, G4, G5 e G6 FALHAM (resultado negativo registrado)
 
 Nó L1 da fase 1b (H1), com as decisões D1–D4 de `docs/DEFINICOES_V2.md`. Números de `artifacts_v2_l1/calibracao/` (sementes de
 calibração 3101…3505; `escolha.json`, `varredura.jsonl`, `passo512_teto1024/{resultado,divergence,tarefa,legibilidade,deriva,
 custo_gargalo,so_cuidado,norma_de_reacao}.json`, `educacao/resultado.json`; os `vidas/*.politica.json` ficam fora do git: 600 MB de
-motivos, regeneráveis por replay dos `.jsonl`). **A validação (4101…4505) não rodou: só depois do referendo dos gates pelo Matheus.**
+motivos, regeneráveis por replay dos `.jsonl`). **Validação (4101…4505) feita uma vez em 2026-10-01**, liberada pela decisão do Matheus
+(PR #120: falhar não para a V2), sem reajuste: `artifacts_v2_l1/validacao/`, relatório em `docs/RESULTADO_V2_L1.md`; último item desta seção.
 - **Código.** `PoliticaLobos` com `ConfigLobos(aprendizado_ligado=True)` (`CONFIG_LOBOS_APRENDIZ`): só o lobo de decisão muda, por
   `Δw = arred(f·S·passo·X_j·(S·1[a=a*] − P_a)/(S·S·W_a))` em inteiros (a direção do gradiente de `log p(a*)` da política proporcional
   com o sinal do dono no lugar da vantagem, COACH), janela de crédito da v1 (elogio/bronca na última decisão; chamado com latência),
@@ -1312,6 +1314,15 @@ motivos, regeneráveis por replay dos `.jsonl`). **A validação (4101…4505) n
   cuidado (G5c), mas o que se aprende quase não muda a distribuição de ações nas sondas (G3) nem decide muitas decisões (G4): o impulso
   (as regras do instinto) decide 79% das vezes. Os alvos 0,10 bit e 50% foram escritos antes de se ver o aprendiz; a decisão de
   mantê-los, relaxá-los ou declarar resultado negativo é do referendo. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Validação (sementes 4101…4505, ponto 512/1024, 5 min; `docs/RESULTADO_V2_L1.md`):** **G3 FALHA** 0,041 bit [0,026; 0,062]
+  (bandit 0,012; calibração 0,029); **G4 FALHA** 0,182 [0,145; 0,236] (bruto 0,703); **G5 FALHA**: (a) = G3; (c) ensino − acoplado
+  +0,0099 [−0,010; +0,025] (na calibração passava); (b) 1 semente limpa, insuficiente; **G6 FALHA** pelo teto (12 de 20 vidas; razão
+  1,45 passa). **G3-T**: atencioso 0,663 (instinto 0,577, bandit 0,607, controle 0,349, acoplado 0,446); incoerente 0,520 abaixo do
+  instinto 0,586. Controle sem lobos: G3 0,113, G4 aprendido 0,283 (lobos − controle −0,101 [−0,136; −0,049]); custo do gargalo +0,314
+  [+0,177; +0,422]. Norma de reação: Δα ensino − cuidado +0,238 [+0,211; +0,258]; inclinação mal condicionada. **Leitura:** resultado
+  negativo para H1 com este aprendiz: o ensino chega (G3-T, Δα), mas o instinto decide 80% das decisões e o teto 1·S limita o resto; o
+  controle sem lobos aprende mais e cuida pior. Os alvos e o ponto ficam como estão (nada se ajusta olhando a validação); a revisão
+  das validações iniciais é decisão do Matheus.
 
 ## V2, A1 — a bola, primeiro objeto do mundo com consequência (2026-10-01, `docs/TAREFA_V2_A1_BOLA_IMPL.md`, `docs/PLANO_ANALISE_V2_A1.md`) — CALIBRAÇÃO NÃO FECHOU
 

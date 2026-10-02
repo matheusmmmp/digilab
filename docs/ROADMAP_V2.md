@@ -72,6 +72,7 @@ a v1 já prevê fraco. Isto troca a regra de parada da revisão 1 e precisa de d
 | R6.4 | H-R2/H-R4 canais e genoma | N4, R6.1 | canais separados × escalar somado; sensibilidade por genoma com experiência acoplada | aprendizado desligado = vidas idênticas entre genomas |
 | R7 | **N11 cérebros** | R6.1 | DigiBrain A (C3-like), B (CfC/A2C, ponto flutuante) e C (Fly-like), **só no Python**, com ablação das peças | `docs/research/digibrain/synthesis/brain_comparison.md` |
 | R8 | **marco da fase 1** | R6–R7 | `docs/LEITURA_CONSOLIDADA_V2_FASE1.md` e a **escolha do DigiBrain do produto** | — |
+| R8.1 | **decisão de produto: tirar elogiar e repreender** (Matheus, 2026-10-01: adiada para cá) | R6 (P1 × P3), R8 | decidir se o pet do produto aprende só pela consequência. Se sim, redesenhar o que depende dos botões: vínculo B (a coerência agrupa o feedback), disciplina das travessuras, mentira repreendida, catálogo do comando pelo chat; versão de pet própria | P1 ≥ P3 no experimento maior |
 | W | **web** | R8 | porte do DigiBrain escolhido (pets v11), com gabarito Python → web | paridade |
 | F2 | **humanos** | R8, ética, arte | gêmeos: o dono humano informa; reconhecimento e preferência | plano próprio |
 | F3 | **genoma** | F2 | genoma com variância herdável (fisiologia, prior, sensibilidade por canal) | plano próprio; E1 falhou com 4,9% |
@@ -118,7 +119,7 @@ para o produto. Frutas e vício só ganham versão se forem para o produto.
 |---|---|---|---|
 | M1 | Referendar G3–G6 com D1–D4 | **substituído (2026-10-01):** a validação da L1 roda com os alvos do plano rev. 2 como estão, sem bloquear | — |
 | M2 | Aprovar o desenho da bola (#113) | aprovar | ação nova do pet quebraria a v1 (V5) |
-| M3 | Adotar a pergunta maior e a arquitetura (A1, A6 de `ARQUITETURA_V2_VALIDACAO.md`) | adotar agora, antes da validação da L1 | adotada depois parece fuga de um negativo |
+| M3 | Adotar a pergunta maior e a arquitetura (A1, A6 de `ARQUITETURA_V2_VALIDACAO.md`) | **DECIDIDO pelo Matheus (2026-10-01):** adotadas; `PLANO_V2_PESQUISA.md` revisão 2 | — |
 | M4 | Falha da L1 não para a V2 (é só o braço P3) | **DECIDIDO pelo Matheus (2026-10-01)**, e ampliado: nenhuma validação que falhe agora bloqueia a V2; o escopo futuro vai pedir revisão de todas | — |
 | M5 | Frutas como sub-decisão de comer (V5) | sim | ações novas quebram a reprodução da v1 |
 | M6 | O chat D deixa a fila da GPU e faz a bancada | sim | sem a bancada, cada nó monta o próprio orquestrador e P1–P3 deixam de ser comparáveis |
