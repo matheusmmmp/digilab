@@ -915,8 +915,8 @@ metade com fator, semente 20260924; números de `artifacts_fala/*/resumo.json` e
   (ex.: "Epa... Dormi porque eu estava com sono e por causa do cansaço. :/"). "Eba!" abre 58/191.
 - O modelo às vezes devolve surrogate UTF-16 solto: o servidor saneia antes de validar (quebrava a
   resposta e a avaliação).
-- **Pendente**: revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv`
-  (50 falas aprovadas). Sem ela, a fala por LLM continua desligada por padrão.
+- Revisão humana de `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/revisao.csv` (50 falas aprovadas): **feita pelo Matheus
+  (2026-10-01)**. Ligar a fala por LLM por padrão continua sendo decisão dele (hoje desligada).
 
 ## Fala livre por LLM local (2026-09-28, `docs/TAREFA_FALA_LIVRE.md`, `docs/PLANO_VERSAO_FALA_LIVRE.md`)
 
@@ -1168,13 +1168,14 @@ Evolução (`--forcar` para passar por cima e perder as edições).
     - mais variância nas lutas, e o sinal da pesquisa já é pequeno.
   - Os sprites têm quadros de animação (257 Digimon) e efeitos de ataque (187) em `Assets/Digimon Up Assets/Animacoes`.
 
-- Evolução canônica: o limiar de vínculo do Mega baixou para 0,4, mas o vínculo ainda favorece o dono aleatório (5 de 6
-  vidas viram Mega, contra 3 de 6 do atencioso). Rever o desenho do vínculo resolveria de vez.
+- Evolução canônica: o vínculo foi redesenhado (vínculo B, pets v10, PR #114). **Decisão do Matheus (2026-10-01): o limiar do Mega
+  fica em 0,4** nos pets v10 (no jogo curto o dono da web quase não dá feedback e o B não inverte o Mega,
+  `artifacts_v2_vinculo_novo/mega_v10.json`); rever só com medida de dono humano.
 
 - Fala por LLM: repetida com outra semente (2026-09-29, `artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260929/`):
   92% aprovadas, nenhuma barrada por fator fora da lista. Pré-leitura (coluna própria no `revisao.csv`): nenhuma
   das 50 cita causa fora dos fatores (desde a v4 a LLM só escreve a moldura); 9 tinham caractere quebrado do
-  qwen 2.5 3b, agora barrado na validação da moldura. Falta a leitura do Matheus (coluna s/n).
+  qwen 2.5 3b, agora barrado na validação da moldura. Leitura do Matheus feita em 2026-10-01.
 
 - Gambits híbridos existem só na web; levar para o Python exige protocolo próprio (arena V2),
   gate de que o aprendizado de gambits separa donos, e ablação trava/veto × sem intervenção. Adiado

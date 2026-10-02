@@ -1510,3 +1510,29 @@ ter de ser revistas. Efeito:
   dos gates (decisão do Matheus: falhar não para a V2). Nada foi reajustado.** G3, G4, G5 e G6 falham; G5(c) passava na calibração e
   cruza zero na validação (5 sementes). Uma semente do acoplado (4505) ficou com 144 interações contra 85–91 das outras: o atencioso
   dessa vida deu menos sinais; relatado, não tratado. O ponto e os alvos continuam os do plano; a revisão é do Matheus.
+
+## 2026-10-01 — Pendências fechadas pelo Matheus
+
+- **Limiar do Mega nos pets v10:** fica em 0,4 (recomendação do coordenador aceita). O vínculo B passa na pesquisa
+  (`artifacts_v2_vinculo_novo/validacao/resumo.json`), mas no jogo curto não inverte o Mega (`artifacts_v2_vinculo_novo/mega_v10.json`);
+  rever só com medida de dono humano.
+- **`revisao.csv` da moldura** (`artifacts_fala/ollama_qwen2.5-3b_fala-v6_s20260928/`): revisado pelo Matheus. Ligar a fala por LLM
+  por padrão segue decisão à parte.
+- **Claude Science, prompts 09 e 10 e verificação das fontes do corpus DigiBrain:** executados pelo Matheus. As sínteses V2 e V3
+  estão em `v1/docs/referencias/` (a V3 entra no repositório pela tarefa FRUTAS-DEFINICOES). A saída da verificação das fontes
+  CORPUS ainda não está em disco: quando estiver, ela atualiza `docs/research/digibrain/references/source_index.md`.
+- **Roteiro do vídeo e posts:** revisados e números conferidos pelo Matheus (arquivos fora do repositório, `D:\Trab\digilab\docs\`).
+
+## 2026-10-01 — PLANO_V2_PESQUISA, revisão 2 (decisão do Matheus: M3)
+
+O Matheus adotou a pergunta maior ("em que condições a plasticidade durante a vida produz vantagem adaptativa sobre as
+predisposições herdadas?") e a arquitetura com o dono informante como alvo da V2. `docs/PLANO_V2_PESQUISA.md` foi reescrito:
+- a H1 antiga (donos coerentes distinguíveis) vira o braço P3, com os mesmos gates G3–G6;
+- braços P0–P3 e condições casado/descasado/mutável;
+- vantagem adaptativa medida no próprio ambiente, nunca pela força na arena;
+- a fase 0 é dada como feita;
+- pesquisa no Python, um DigiBrain na web;
+- a regra de parada de 2026-10-01 continua.
+
+Nenhum número de gate mudou. M5–M9 do `docs/ROADMAP_V2.md` continuam abertas.
+
