@@ -1536,6 +1536,51 @@ predisposições herdadas?") e a arquitetura com o dono informante como alvo da 
 
 Nenhum número de gate mudou. M5–M9 do `docs/ROADMAP_V2.md` continuam abertas.
 
+## 2026-10-01 — FRUTAS-DEFINICOES: definições das frutas no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_FRUTAS_DEFINICOES.md`; entrega `docs/DEFINICOES_FRUTAS_V2.md`. Nenhum código, nenhuma run, nenhum número.
+- **"Campo do log" lido pela regra do projeto.** As ações do pet não entram no log (`digilab/events.py`): são derivadas pelo replay. Então o
+  registro de cada restrição é de um de três tipos, declarado em cada uma: **evento** (só o que o dono faz: a oferta da fruta, como
+  `acao_usuario`; a escolha no modo livre, como `decisao_externa`), **registro derivado** (incentivo, avaliação, oferta, consumo, primeiro
+  contato, reconstruídos pelo replay e expostos em `estado_interno()` e nos artefatos) ou **genoma** (neofobia e preferência inata, da semente
+  do ovo ou do `origem` dos filhos). Gravar a escolha do pet no log quebraria a regra do event sourcing.
+- **A busca V1–V6 entrou como cópia literal** de `v1/docs/referencias/` (quatro arquivos, como a da V2 pela decisão D9). Os nomes de arquivo
+  citados dentro da síntese (`v3_referencias.csv`, `v3_verificacao.json`) diferem dos arquivos copiados (`v3_referencias_verificadas.csv`,
+  `v3_verificacao_crossref.json`); o texto não foi editado, para a cópia ser a mesma da origem.
+- **Rótulos.** Todas as 30 referências citadas estão VERIFICADA nas tabelas; as oito verificadas só por título e metadados vêm marcadas no
+  texto (Rolls et al. 1981, Beauchamp e Moran, de Araujo et al., Grand e Cliff 1998, Drummond e Sauer, King e Delfabbro, Karlsen, Veiga et al.).
+  O livro de Grand (2001) aparece só como VERIFICADA (sem DOI) quanto à existência, com o conteúdo não lido. Nenhuma linha NÃO LOCALIZADA da
+  busca foi citada. Os itens do corpus DigiBrain marcados como pista na nota do sistema hedônico não foram usados.
+- **A frase de comparação com o Creatures** não aparece no documento; ela segue na seção 7 de `docs/DEFINICOES_V2.md`, como citação do pedido
+  original. A troca é a decisão F10, do coordenador.
+- **Interpretação da validação "A6"** citada na tarefa (restrição 5): lida como a decisão A6 da arquitetura (a pergunta maior adotada), que
+  não depende do vício; a V8 do roadmap (o genoma já modula a sensibilidade ao reforço) foi usada como o único precedente de vulnerabilidade
+  por genoma no código.
+
+## 2026-10-01 — V2, BANCADA: interpretações do orquestrador dos braços
+
+Tarefa `docs/TAREFA_V2_BANCADA.md`. Sem run de pesquisa; só as sementes dos testes.
+- **P0 é o aprendiz com o aprendizado desligado, não o aprendiz ligado sem sinal.** A tarefa define P0 como "só o herdado (o prior fixo)".
+  Um `PoliticaLobos` ligado a quem não chega nada ainda mudaria: o `Aprendiz` credita o chamado pendente que expira (`_expirar`, chamado
+  dentro do `observar`) com a recompensa do pedido ignorado, e isso é um sinal do dono ausente. Por isso a fonte `nenhuma` usa o mesmo
+  cérebro, o mesmo prior e a mesma `ConfigLobos` com `aprendizado_ligado=False`, e não repassa nada do dono (nem para a memória, que
+  contribui zero). É o que faz o P0 sair byte a byte igual ao instinto.
+- **O P3 usa o aprendiz da L1 como ele foi validado** (`CONFIG_LOBOS_APRENDIZ`, passo 512 e teto 1024), com os gates da L1 falhando
+  (`docs/RESULTADO_V2_L1.md`): a bancada não muda o aprendiz, só fixa como ele entra nos braços (decisão M4: falha não bloqueia).
+- **"Acoplado reproduz" foi lido de três jeitos, e os três viraram teste:** (1) o acoplado no próprio braço, sem filtro, é a vida de
+  origem byte a byte; (2) o P3 acoplado ao próprio registro sem os sinais é o "só cuidado" acoplado da L1 (`vidas_acopladas`), byte a byte,
+  com e sem carinho; (3) com o sinal desligado (P0) no registro do P3 sem os sinais, o log é o da origem com os sinais retirados, evento
+  a evento, e a vida é a do instinto nesse registro. As funções da L1 não foram trocadas pela bancada: os artefatos da L1 continuam
+  saindo do código que os gerou.
+- **Tempo fora de privação e saúde média são amostrados em cada decisão** (a cada `intervalo_decisao_ticks` = 15 ticks, uma grade
+  regular), não tick a tick. Medir tick a tick exigiria partir os avanços do replay, e o `MotorPersonalidade` conta os avanços
+  (`_n_eventos`), o que mudaria a vida. A privação usa a regra do estado (`Estado.em_privacao`), não uma cópia dela.
+- **"Tempo até metade do caminho" é o da curva de acerto**, pela `eficiencia_amostral` (dia e sinais), com o piso no acerto do P0 da
+  mesma célula (genoma, mundo, dono, semente), como a L1 usava o instinto. Os sinais contados são os que **chegaram ao aprendiz**
+  (`PoliticaDoBraco.sinais_entregues`); os que o dono deu ficam ao lado (`sinais_do_dono`). No P0 o dono elogia e repreende e nada chega.
+- **Só o cérebro `lobos`**: a tarefa deixa fora "qualquer cérebro além dos lobos"; o controle sem lobos (`camada_unica`), que a seção 6
+  pede em todos os braços, entra quando a comparação de cérebros (N11) for tarefa.
+
 ## 2026-10-01 — V2, A1: a bola sem aprendizado (`docs/TAREFA_V2_A1_BOLA_IMPL.md`, `docs/PLANO_ANALISE_V2_A1.md`)
 
 Plano commitado antes de qualquer run (primeiro commit do branch `v2-a1-bola-impl`). Interpretações do desenho e da calibração:
