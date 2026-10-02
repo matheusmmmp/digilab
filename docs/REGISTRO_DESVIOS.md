@@ -1536,6 +1536,27 @@ predisposições herdadas?") e a arquitetura com o dono informante como alvo da 
 
 Nenhum número de gate mudou. M5–M9 do `docs/ROADMAP_V2.md` continuam abertas.
 
+## 2026-10-01 — FRUTAS-DEFINICOES: definições das frutas no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_FRUTAS_DEFINICOES.md`; entrega `docs/DEFINICOES_FRUTAS_V2.md`. Nenhum código, nenhuma run, nenhum número.
+- **"Campo do log" lido pela regra do projeto.** As ações do pet não entram no log (`digilab/events.py`): são derivadas pelo replay. Então o
+  registro de cada restrição é de um de três tipos, declarado em cada uma: **evento** (só o que o dono faz: a oferta da fruta, como
+  `acao_usuario`; a escolha no modo livre, como `decisao_externa`), **registro derivado** (incentivo, avaliação, oferta, consumo, primeiro
+  contato, reconstruídos pelo replay e expostos em `estado_interno()` e nos artefatos) ou **genoma** (neofobia e preferência inata, da semente
+  do ovo ou do `origem` dos filhos). Gravar a escolha do pet no log quebraria a regra do event sourcing.
+- **A busca V1–V6 entrou como cópia literal** de `v1/docs/referencias/` (quatro arquivos, como a da V2 pela decisão D9). Os nomes de arquivo
+  citados dentro da síntese (`v3_referencias.csv`, `v3_verificacao.json`) diferem dos arquivos copiados (`v3_referencias_verificadas.csv`,
+  `v3_verificacao_crossref.json`); o texto não foi editado, para a cópia ser a mesma da origem.
+- **Rótulos.** Todas as 30 referências citadas estão VERIFICADA nas tabelas; as oito verificadas só por título e metadados vêm marcadas no
+  texto (Rolls et al. 1981, Beauchamp e Moran, de Araujo et al., Grand e Cliff 1998, Drummond e Sauer, King e Delfabbro, Karlsen, Veiga et al.).
+  O livro de Grand (2001) aparece só como VERIFICADA (sem DOI) quanto à existência, com o conteúdo não lido. Nenhuma linha NÃO LOCALIZADA da
+  busca foi citada. Os itens do corpus DigiBrain marcados como pista na nota do sistema hedônico não foram usados.
+- **A frase de comparação com o Creatures** não aparece no documento; ela segue na seção 7 de `docs/DEFINICOES_V2.md`, como citação do pedido
+  original. A troca é a decisão F10, do coordenador.
+- **Interpretação da validação "A6"** citada na tarefa (restrição 5): lida como a decisão A6 da arquitetura (a pergunta maior adotada), que
+  não depende do vício; a V8 do roadmap (o genoma já modula a sensibilidade ao reforço) foi usada como o único precedente de vulnerabilidade
+  por genoma no código.
+
 ## 2026-10-01 — V2, BANCADA: interpretações do orquestrador dos braços
 
 Tarefa `docs/TAREFA_V2_BANCADA.md`. Sem run de pesquisa; só as sementes dos testes.
