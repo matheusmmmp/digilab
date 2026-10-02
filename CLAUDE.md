@@ -1324,7 +1324,7 @@ motivos, regeneráveis por replay dos `.jsonl`). **Validação (4101…4505) fei
   controle sem lobos aprende mais e cuida pior. Os alvos e o ponto ficam como estão (nada se ajusta olhando a validação); a revisão
   das validações iniciais é decisão do Matheus.
 
-## V2, A1 — a bola, primeiro objeto do mundo com consequência (2026-10-01, `docs/TAREFA_V2_A1_BOLA_IMPL.md`, `docs/PLANO_ANALISE_V2_A1.md`) — CALIBRAÇÃO NÃO FECHOU
+## V2, A1 — a bola, primeiro objeto do mundo com consequência (2026-10-01, `docs/TAREFA_V2_A1_BOLA_IMPL.md`, `docs/PLANO_ANALISE_V2_A1.md`) — VALIDAÇÃO: 1a-PET PASSA, CUIDADO CONTROLADO FALHA
 
 Nó N2 de `docs/ARQUITETURA_V2_VALIDACAO.md`; desenho `docs/V2_A1_BOLA_DESENHO.md` (opção A, aprovado no #113). **Sem aprendizado**: a bola
 entra pelo instinto, atrás de chave; a regra `bola_no_cenario` dos lobos é do chat B (A1 + L1). Números de `artifacts_v2_a1/calibracao/`
@@ -1352,5 +1352,9 @@ ficam fora do git, regeneráveis).
     elogios e broncas (elogios 87,6 → 58,8 no atencioso), não cuidado. Relapso: 1 bola em 5 vidas (nas visitas ele sempre tem cuidado a fazer).
   - Acoplado só cuidado (D4): 78–100 interações, privação 0; a variante sem carinho sai igual (o atencioso não acaricia).
     Sensibilidade `bolas_por_dia` 2 e 8: Δp +0,222 e +0,269, privação +0,019 nas duas.
-- **Validação (7101…7505): PR seguinte**, uma vez, no ponto de `experiments/configs/v2_a1/validacao.json`. Interpretações em
-  `docs/REGISTRO_DESVIOS.md`.
+- **Validação (7101…7505, uma vez; `artifacts_v2_a1/validacao/`, relatório `docs/RESULTADO_V2_A1.md`):** repete a calibração.
+  **1a-pet PASSA**: Δp **+0,310 [+0,245; +0,375]** (bola que o instinto não vê: +0,036 [−0,025; +0,107]). **Cuidado controlado
+  FALHA**: privação +0,017 [+0,009; +0,028], mortes 0; de novo só o aleatório (0,266 → 0,333; 0,334 sem o pet ver a bola). Humor
+  −0,024 [−0,042; −0,008]: a bola tira elogios e carinhos. Nos coerentes a bola desloca o ensino (atencioso: elogios 93,0 → 61,4,
+  broncas 46,0 → 20,0). Resultado registrado; a V2 segue (decisão de 2026-10-01). Decisões B1–B3 para o Matheus no relatório.
+  Interpretações em `docs/REGISTRO_DESVIOS.md`.
