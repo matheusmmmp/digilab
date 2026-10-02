@@ -1,0 +1,213 @@
+{
+  "custo_gargalo": {
+    "custo_gargalo_g3t_atencioso_lobos_menos_controle": {
+      "ic_inferior": 0.17648809523809522,
+      "ic_superior": 0.42232142857142857,
+      "media": 0.3142857142857142,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "4101": 0.27529761904761896,
+        "4202": 0.4464285714285715,
+        "4303": 0.3735119047619047,
+        "4404": 0.42261904761904756,
+        "4505": 0.05357142857142855
+      }
+    },
+    "g4_aprendido_lobos_menos_controle": {
+      "ic_inferior": -0.13545386904761905,
+      "ic_superior": -0.04899553571428569,
+      "media": -0.10119047619047619,
+      "modularidade_compra_legibilidade": false,
+      "n": 5,
+      "nivel": 0.95,
+      "por_semente": {
+        "4101": -0.11495535714285712,
+        "4202": -0.14378720238095238,
+        "4303": -0.13095238095238093,
+        "4404": -0.11737351190476189,
+        "4505": 0.0011160714285714524
+      }
+    }
+  },
+  "divergencia_controle": {
+    "ic_inferior": 0.09417674556831537,
+    "ic_superior": 0.13204537873211192,
+    "media": 0.11311106215021365,
+    "n": 5,
+    "nivel": 0.95,
+    "por_semente": {
+      "4101": 0.0896083077884133,
+      "4202": 0.14305432198287915,
+      "4303": 0.09374333363815826,
+      "4404": 0.13496890235318382,
+      "4505": 0.1041804449884337
+    }
+  },
+  "gates": {
+    "G3": {
+      "ic_inferior": 0.026184943983962306,
+      "ic_superior": 0.062109952941117874,
+      "media": 0.04101448657080153,
+      "minimo_ic": 0.02,
+      "minimo_media": 0.1,
+      "passa": false
+    },
+    "G4": {
+      "fracao_aprendido_com_fator": 0.18214285714285713,
+      "fracao_aprendido_decidiu": 0.20338541666666668,
+      "fracao_bruta_com_fator": 0.7026041666666667,
+      "ic": {
+        "ic_inferior": 0.14486607142857144,
+        "ic_superior": 0.2357142857142857,
+        "media": 0.18214285714285716,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "minimo": 0.5,
+      "passa": false
+    },
+    "G5": {
+      "b": {
+        "n_sementes": 1,
+        "passa": null,
+        "resultado": "insuficiente"
+      },
+      "c": {
+        "delta": {
+          "ic_inferior": -0.010011073031923709,
+          "ic_superior": 0.024607543101701313,
+          "media": 0.009890594228469074,
+          "n": 5,
+          "nivel": 0.95,
+          "por_semente": {
+            "4101": 0.013272115531233168,
+            "4202": 0.012765931096992445,
+            "4303": 0.03233322296009365,
+            "4404": 0.01803320045934465,
+            "4505": -0.026951498905318547
+          }
+        },
+        "passa": false
+      },
+      "nota": "desenho da arena v1: sem morte e sem lesao por construcao; G5(a) = G3. (b): braco de educacao; (c): acoplado",
+      "passa": false,
+      "passa_a": false
+    },
+    "G6": {
+      "maximo_razao": 1.5,
+      "passa": false,
+      "passa_a": true,
+      "passa_b": false,
+      "razao_14_7": 1.4498700174528143,
+      "vidas_com_peso_no_teto": 12
+    }
+  },
+  "norma_de_reacao": {
+    "acerto_ultimos_7": {
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": -0.10937499999999996,
+          "ic_superior": -0.08124999999999995,
+          "media": -0.09546130952380949,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -0.44493059194891094,
+          "ic_superior": 4.556982852128572,
+          "media": 2.0560261300898306,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.21130952380952378,
+          "ic_superior": 0.25825892857142857,
+          "media": 0.23831845238095237,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -3.7590035465747045,
+          "ic_superior": 4.6853542309051885,
+          "media": 0.5571778527988717,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.12336309523809522,
+          "ic_superior": 0.16294642857142863,
+          "media": 0.14285714285714285,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.12720137475472906,
+          "ic_superior": 5.353353402152339,
+          "media": 2.6132039828887024,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    },
+    "jsd_vs_instinto": {
+      "cuidado_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.0030249407407518256,
+          "ic_superior": 0.004502651613709934,
+          "media": 0.003731420595669573,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": -0.41638541407373814,
+          "ic_superior": 0.32049386247258776,
+          "media": 0.05263212133643704,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_cuidado": {
+        "delta_alpha": {
+          "ic_inferior": 0.020923501996476197,
+          "ic_superior": 0.0263398774565545,
+          "media": 0.023633081655510722,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.9390355010867193,
+          "ic_superior": 4.850436013567532,
+          "media": 2.8947357573271257,
+          "n": 5,
+          "nivel": 0.95
+        }
+      },
+      "ensino_menos_instinto": {
+        "delta_alpha": {
+          "ic_inferior": 0.024306304972080604,
+          "ic_superior": 0.03042269953027999,
+          "media": 0.027364502251180294,
+          "n": 5,
+          "nivel": 0.95
+        },
+        "delta_beta": {
+          "ic_inferior": 0.7882707732991301,
+          "ic_superior": 5.106464984027996,
+          "media": 2.9473678786635626,
+          "n": 5,
+          "nivel": 0.95
+        }
+      }
+    }
+  },
+  "ponto": {
+    "passo": 512,
+    "teto": 1024
+  },
+  "segundos_total": 314.7085547000024
+}
