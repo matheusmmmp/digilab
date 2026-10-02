@@ -674,3 +674,30 @@ def tabela_braco_condicao(valores: Mapping[tuple[str, str], Sequence[float]], re
     celulas = {b: {c: bootstrap_ic([float(v) for v in valores[(b, c)]], reamostragens, semente, nivel) for c in condicoes}
                for b in bracos}
     return {"bracos": bracos, "condicoes": condicoes, "celulas": celulas}
+
+# ------------------------------------------------------------ V2, A1: a bola (docs/PLANO_ANALISE_V2_A1.md, secao 2)
+
+
+def resposta_a_bola(decisoes: Sequence[tuple[int, bool, str, str]], acao: str = "brincar",
+                    regras: Sequence[str] = ("tempo_livre", "bola_no_cenario")) -> dict:
+    """1a-pet: `decisoes` = (tick, bola presente, regra do instinto, acao do pet). Nas decisoes de tempo livre (as unicas em
+    que a bola pode pesar), p(acao | bola presente) e p(acao | bola ausente), e a diferenca. None quando um lado nao tem decisao."""
+    com = [a for _, b, r, a in decisoes if b and r in regras]
+    sem = [a for _, b, r, a in decisoes if not b and r in regras]
+    p_com = sum(a == acao for a in com) / len(com) if com else None
+    p_sem = sum(a == acao for a in sem) / len(sem) if sem else None
+    return {"n_decisoes": len(decisoes), "n_com_bola": sum(1 for _, b, _, _ in decisoes if b),
+            "n_livre_com_bola": len(com), "n_livre_sem_bola": len(sem), "p_com_bola": p_com, "p_sem_bola": p_sem,
+            "delta": (p_com - p_sem) if p_com is not None and p_sem is not None else None}
+
+
+def privacao_nas_decisoes(decisoes: Sequence[tuple[int, float, float, float, float]], limiar: float) -> dict:
+    """Cuidado controlado (G5 descritivo): `decisoes` = (tick, fome, higiene, energia, humor) no tick de cada decisao.
+    Fracao das decisoes em privacao (min(fome, higiene, energia) < limiar), humor e energia medios."""
+    if not decisoes:
+        raise ValueError("sem decisoes")
+    n = len(decisoes)
+    return {"n_decisoes": n,
+            "fracao_privacao": sum(1 for _, f, h, e, _ in decisoes if min(f, h, e) < limiar) / n,
+            "humor_medio": sum(hu for *_, hu in decisoes) / n,
+            "energia_media": sum(e for _, _, _, e, _ in decisoes) / n}

@@ -1198,3 +1198,23 @@ class ConfigLobos:
 
 CONFIG_LOBOS = ConfigLobos()
 CONFIG_LOBOS_APRENDIZ = ConfigLobos(aprendizado_ligado=True)      # L1: o aprendiz da V2 com o lobo de decisao aprendendo
+
+
+@dataclass(frozen=True)
+class ConfigBola:
+    """V2, A1 (docs/V2_A1_BOLA_DESENHO.md, opcao A; plano docs/PLANO_ANALISE_V2_A1.md): a bola, primeiro objeto do mundo com
+    consequencia. O dono poe (`por_bola`) e tira (`tirar_bola`); o pet a percebe como a entrada `bola` da Observacao; `brincar`
+    com bola no cenario e brincar COM a bola (humor + ganho, a bola some); a bola some sozinha no prazo. Nenhuma rng. Tudo
+    PROPOSTO, sem fonte (protocol.PARAMETROS_BOLA_A1); duracao, ganho e w_bola vieram da calibracao (plano, secao 4;
+    artifacts_v2_a1/calibracao/resultado.json: a calibracao NAO fechou, o ponto e o de maior limite inferior do Delta p).
+    Desligada: o MotorAmbiente e o MotorEducacao byte a byte, e `por_bola` no log levanta erro."""
+
+    ligada: bool = False
+    duracao_min: int = 120                   # a bola fica no cenario por tantos minutos, se ninguem a usar ou tirar (calibrado)
+    ganho_humor_bola: float = 0.15           # humor a mais ao brincar com a bola, alem do efeito do brincar de sempre (calibrado)
+    w_bola: float = 6.0                      # peso a mais de brincar na regra de tempo livre do instinto, com bola (calibrado)
+    bolas_por_dia: int = 4                   # dos donos sinteticos coerentes (ambiente.DonoComBola), nao do motor
+
+
+CONFIG_BOLA = ConfigBola()
+CONFIG_BOLA_LIGADA = ConfigBola(ligada=True)

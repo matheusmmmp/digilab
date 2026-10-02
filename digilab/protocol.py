@@ -576,7 +576,8 @@ def _valor_config(nome: str) -> Any:
                   "ConfigHeranca": _config.CONFIG_HERANCA, "ConfigEquilibrio": _config.CONFIG_EQUILIBRIO,
                   "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING,
                   "ConfigConfianca": _config.CONFIG_CONFIANCA,
-                  "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO}
+                  "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO,
+                  "ConfigBola": _config.CONFIG_BOLA}
     return getattr(instancias[classe], campo)
 
 
@@ -609,6 +610,34 @@ def validar_parametros_vinculo_b() -> None:
 
 def vinculo_b_nao_referendados() -> list[str]:
     return educacao_nao_referendados(PARAMETROS_VINCULO_B)
+
+
+# V2, A1: a bola (docs/V2_A1_BOLA_DESENHO.md; plano docs/PLANO_ANALISE_V2_A1.md): registro a parte, como o da confianca e o do
+# vinculo B; nenhum hash de protocolo cobre a ConfigBola. Nenhum valor referendado; duracao, ganho e w_bola sao calibrados.
+_FONTES_BOLA_A1 = {
+    "ConfigBola.ligada": (_D, "chave desligada por padrao, como ConfigConfianca.ligada (desligada: MotorEducacao byte a byte)"),
+    "ConfigBola.duracao_min": (_P, "sem fonte; calibrado no plano (secao 4), grade {30, 60, 120}"),
+    "ConfigBola.ganho_humor_bola": (_P, "sem fonte; calibrado no plano (secao 4), grade {0,05; 0,15; 0,30}"),
+    "ConfigBola.w_bola": (_P, "sem fonte; calibrado no plano (secao 4), grade {1, 3, 6}; em unidades dos pesos do tempo livre"),
+    "ConfigBola.bolas_por_dia": (_P, "sem fonte; regra dos donos sinteticos coerentes, sensibilidade {2, 8} no ponto escolhido"),
+}
+PARAMETROS_BOLA_A1: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_BOLA_A1.items()}
+
+
+def validar_parametros_bola() -> None:
+    """Todo campo da ConfigBola tem status e fonte, e o valor registrado bate com config.py."""
+    esperados = {f"ConfigBola.{f.name}" for f in fields(_config.CONFIG_BOLA)}
+    if set(PARAMETROS_BOLA_A1) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(PARAMETROS_BOLA_A1))}; "
+                         f"registro sem parametro: {sorted(set(PARAMETROS_BOLA_A1) - esperados)}")
+    for n, c in PARAMETROS_BOLA_A1.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def bola_nao_referendados() -> list[str]:
+    return educacao_nao_referendados(PARAMETROS_BOLA_A1)
 
 
 def validar_parametros_educacao(params: dict[str, Campo] | None = None) -> None:

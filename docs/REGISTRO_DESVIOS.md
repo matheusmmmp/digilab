@@ -1580,3 +1580,35 @@ Tarefa `docs/TAREFA_V2_BANCADA.md`. Sem run de pesquisa; só as sementes dos tes
   (`PoliticaDoBraco.sinais_entregues`); os que o dono deu ficam ao lado (`sinais_do_dono`). No P0 o dono elogia e repreende e nada chega.
 - **Só o cérebro `lobos`**: a tarefa deixa fora "qualquer cérebro além dos lobos"; o controle sem lobos (`camada_unica`), que a seção 6
   pede em todos os braços, entra quando a comparação de cérebros (N11) for tarefa.
+
+## 2026-10-01 — V2, A1: a bola sem aprendizado (`docs/TAREFA_V2_A1_BOLA_IMPL.md`, `docs/PLANO_ANALISE_V2_A1.md`)
+
+Plano commitado antes de qualquer run (primeiro commit do branch `v2-a1-bola-impl`). Interpretações do desenho e da calibração:
+- **A bola entra pelo instinto, não pelos lobos.** A tarefa proíbe mexer em `policies/lobos.py`; a resposta à bola vive em
+  `ambiente.PoliticaInstintoBola`, uma subclasse que soma `w_bola × bola` em `brincar` no tempo livre. Para isso o `PoliticaInstinto`
+  ganhou o gancho `_pesos_tempo_livre` (extração: os mesmos literais, na mesma ordem; a canônica e o G2 da L0 passam).
+- **`Observacao.bola` é um campo com padrão 0,0**, não uma entrada de `Estado.vetor`: o vetor e as features do bandit não mudam, e só o
+  `MotorAmbiente` injeta o valor (um embrulho da política, como o `_PoliticaObservada`). `de_estado` não o preenche.
+- **Pôr e tirar a bola não são contato** (não zeram o tempo sem cuidado, não passam pelo vínculo, pela política nem pela janela da
+  educação) e contam 1 interação do orçamento. O `_n_eventos` conta o evento, para os refs dos motivos seguirem alinhados ao log.
+- **O instinto puro não roda no `MotorPersonalidade`** (o embrulho repassa `receber_acao_dono`): `PoliticaInstintoBola` tem o gancho
+  vazio. É ela, desligada, o controle do G2(b) contra o `MotorComFeedback` com o `PoliticaInstinto`.
+- **G2(a) com uma vida da V3 simulada no teste**, não com os logs de `artifacts_educacao/vidas` (fora do git): a vida `atencioso@70001`
+  da V3 por 3 dias (educação, lesões e sparring), rejogada no `MotorEducacao` e no `MotorAmbiente` desligado.
+- **Δp por semente = média dos donos com Δp definido.** O relapso quase não põe a bola (1 bola em 5 vidas): `relapso-bola@6404` não tem
+  decisão de tempo livre com bola e fica de fora daquela semente (listado em `resultado.json`, `vidas_sem_delta`). O plano dizia "média
+  dos 4 donos"; com a medida indefinida não há o que somar.
+- **A calibração não fechou**, e nada foi ajustado: em todos os 27 pontos a privação sobe com a bola (+0,016 a +0,025), então o ponto
+  saiu da regra de reserva da seção 4 (maior limite inferior de Δp): duração 120, ganho 0,15, `w_bola` 6. **A causa é o dono aleatório**
+  (`pet.json` e `sembola.json`, por dono): ele sorteia `por_bola` entre 7 ações, e com o orçamento fixo cada bola tira uma ação ao acaso,
+  inclusive alimentar e limpar; a privação dele sobe de 0,355 para 0,433, igual com a bola que o pet não vê (0,427). Não é o brincar do pet.
+  Leitura: **a bola não toca a cadeia da saúde pelo pet, mas toca pelo orçamento do dono.** O critério "cuidado controlado" do plano
+  compara braços com o mesmo orçamento e, assim, mede também essa troca. Caminhos possíveis, **não aplicados** (são decisão do Matheus):
+  a bola fora do orçamento, o aleatório sem `por_bola` no sorteio, ou o critério só nos donos que não deslocam cuidado.
+- **Nos donos coerentes a bola compete com o ensino, não com o cuidado:** o atencioso põe 56 bolas por vida e dá menos elogios e broncas
+  (87,6 → 58,8 e 45,8 → 20,4). É um custo que a pergunta 1a-dono (A1 + L1) vai encontrar: com orçamento fixo, cada bola é um sinal a menos.
+- **Meta da calibração:** o sha256 do `config.py` gravado em `artifacts_v2_a1/calibracao/meta.json` é o de antes de os padrões da
+  `ConfigBola` virarem o ponto escolhido; a calibração passa cada ponto explicitamente e não lê os padrões.
+- **Teste ajustado:** `tests/test_educacao.py::test_acoes_novas_nao_mexem_nas_listas_antigas` exigia as ações de educação como as três
+  **últimas** do enum. Com `POR_BOLA` e `TIRAR_BOLA` depois delas, o teste confere o que ele protege: as ações de educação nas mesmas
+  posições de sempre (12 a 14) e, depois delas, só as da bola.

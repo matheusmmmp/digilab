@@ -30,6 +30,9 @@ artifacts_*/
 !artifacts_v2_vinculo_novo/
 
 !artifacts_v2_l1/
+!artifacts_v2_a1/
+# V2, A1: as vidas dos 27 pontos da grade de calibracao sao regeneraveis (o resumo de cada ponto fica em varredura.jsonl)
+artifacts_v2_a1/calibracao/grade/
 # V2, L1: os politica.json das vidas (motivos por decisao) pesam ~600 MB e sao regeneraveis por replay do .jsonl
 artifacts_v2_l1/**/vidas/*.politica.json
 artifacts_voz/**/log_*.txt

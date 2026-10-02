@@ -1355,3 +1355,34 @@ o N5 chegarem. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   arquivo do repositório (`SementeSemPlano`).
 - **Fumaça** (`experiments/configs/bancada/fumaca.json`, NÃO canônica, `--saida <pasta>`): 80 vidas em ~26 s; sem artefato no repositório.
 - **Não mudou:** `engine.py` (sha256 igual), `lobos.py`, `run_v2_l1.py`, o bandit, runs da v1, a web.
+
+## V2, A1 — a bola, primeiro objeto do mundo com consequência (2026-10-01, `docs/TAREFA_V2_A1_BOLA_IMPL.md`, `docs/PLANO_ANALISE_V2_A1.md`) — CALIBRAÇÃO NÃO FECHOU
+
+Nó N2 de `docs/ARQUITETURA_V2_VALIDACAO.md`; desenho `docs/V2_A1_BOLA_DESENHO.md` (opção A, aprovado no #113). **Sem aprendizado**: a bola
+entra pelo instinto, atrás de chave; a regra `bola_no_cenario` dos lobos é do chat B (A1 + L1). Números de `artifacts_v2_a1/calibracao/`
+(`resultado.json`, `varredura.jsonl`, `pet.json`, `sembola.json`, `so_cuidado.json`; sementes 6101…6505; as vidas dos 27 pontos da grade
+ficam fora do git, regeneráveis).
+- **Código.** `digilab/ambiente.py`: `MotorAmbiente` (subclasse do `MotorEducacao`; a bola `{tick_posta, prazo}` fora do `Estado`; pôr e
+  tirar não são contato; `brincar` com bola no cenário = humor + `ganho_humor_bola` e a bola some; expira no prazo; **nenhuma rng**),
+  `PoliticaInstintoBola` (no tempo livre `brincar` ganha `w_bola × bola`, mesma chamada de `rng.choices`; regra `bola_no_cenario`),
+  `reproduzir_ambiente`, `DonoComBola`. `AcaoUsuario.POR_BOLA`/`TIRAR_BOLA` no fim do enum (`ACOES_BOLA`; `ACOES_V1` e `AcaoPet`
+  intactos); `Observacao.bola` (campo com padrão 0,0; só o `MotorAmbiente` injeta); `PoliticaInstinto._pesos_tempo_livre` (extração, os
+  mesmos literais na mesma ordem); `ConfigBola` (`ligada` False; registro `protocol.PARAMETROS_BOLA_A1`, fora de todo hash, nenhum
+  referendado); `metrics.resposta_a_bola`, `privacao_nas_decisoes`; `experiments/run_v2_a1.py`, `configs/v2_a1/`. `engine.py`, bandit,
+  `policies/lobos.py` e web intactos.
+- **G1 e G2 passam** (`tests/test_ambiente.py`, 26 testes): replay bit a bit; desligado = `MotorEducacao` numa vida da V3 com lutas;
+  desligado com o instinto da bola = `MotorComFeedback` com o `PoliticaInstinto` (4 donos × 3 sementes); ligado sem bola no log =
+  desligado. O orquestrador confere o replay de toda vida.
+- **Calibração (27 pontos, 5 min): não fechou.** Δp cresce com `w_bola` (+0,02 a +0,26); a privação sobe com a bola **em todos os
+  pontos** (+0,016 a +0,025), então nenhum passa a regra. Ponto escolhido pela regra de reserva (maior limite inferior de Δp):
+  **duração 120 min, ganho 0,15, `w_bola` 6** (agora os padrões da `ConfigBola`).
+  - **1a-pet passa na calibração:** Δp = p(brincar | bola) − p(brincar | sem bola) no tempo livre **+0,260 [+0,216; +0,317]**; com a
+    bola que o instinto não vê, +0,025 [−0,061; +0,121]. p(brincar | bola) 0,607.
+  - **Cuidado controlado falha:** privação bola − sem bola +0,019 [+0,006; +0,032]; mortes 0; humor −0,008 [−0,020; +0,006].
+    **Causa: o dono aleatório**, que sorteia `por_bola` entre as ações e, com o orçamento fixo, alimenta e limpa menos (privação 0,355 →
+    0,433; igual sem o pet ver a bola, 0,427). Atencioso e incoerente: privação 0 nos dois braços, e a bola (56 por vida) desloca
+    elogios e broncas (elogios 87,6 → 58,8 no atencioso), não cuidado. Relapso: 1 bola em 5 vidas (nas visitas ele sempre tem cuidado a fazer).
+  - Acoplado só cuidado (D4): 78–100 interações, privação 0; a variante sem carinho sai igual (o atencioso não acaricia).
+    Sensibilidade `bolas_por_dia` 2 e 8: Δp +0,222 e +0,269, privação +0,019 nas duas.
+- **Validação (7101…7505): PR seguinte**, uma vez, no ponto de `experiments/configs/v2_a1/validacao.json`. Interpretações em
+  `docs/REGISTRO_DESVIOS.md`.
