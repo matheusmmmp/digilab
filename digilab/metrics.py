@@ -619,3 +619,58 @@ def norma_de_reacao(y: Mapping[str, Mapping[str, Mapping[str, float]]], condicao
                "beta": celulas[condicao_a][g]["beta"] - celulas[condicao_b][g]["beta"]} for g in ovos}
     return {"ambientes": ambientes, "ovos": ovos, "z": z, "celulas": celulas, "medias": medias,
             "diferenca_por_ovo": dif, "condicoes": [condicao_a, condicao_b]}
+
+
+# ------------------------------------------------------------ V2, bancada: a pergunta maior
+# docs/TAREFA_V2_BANCADA.md, docs/ARQUITETURA_V2_VALIDACAO.md (secao 6): "vantagem adaptativa" = desempenho no proprio
+# ambiente (nunca a forca na arena); a plasticidade tem custo (deriva ao prior, tempo ate aprender). Biblioteca padrao.
+
+
+def desempenho_no_ambiente(amostras: Sequence[tuple[bool, float]]) -> dict:
+    """Desempenho no proprio ambiente a partir de amostras do estado do pet em instantes igualmente espacados (a bancada
+    amostra em cada decisao, a cada `Config.intervalo_decisao_ticks`). Cada amostra = (em_privacao, saude), com
+    `em_privacao` dado por `Estado.em_privacao` (a regra mora no estado, nao aqui). Devolve a fracao do tempo FORA de
+    privacao e a saude media."""
+    if not amostras:
+        raise ValueError("vida sem amostras de estado")
+    n = len(amostras)
+    fora = 0
+    saude = 0.0
+    for em_privacao, s in amostras:
+        if type(em_privacao) is not bool:
+            raise TypeError(f"em_privacao precisa ser bool: {em_privacao!r}")
+        if not 0.0 <= s <= 1.0:
+            raise ValueError(f"saude fora de [0, 1]: {s!r}")
+        fora += not em_privacao
+        saude = saude + s
+    return {"n": n, "fracao_fora_de_privacao": fora / n, "saude_media": saude / n}
+
+
+def custo_da_plasticidade(deriva_por_dia: Sequence[float], acerto_por_dia: Sequence[float],
+                          sinais_acumulados_por_dia: Sequence[int], piso: float) -> dict:
+    """Custo da plasticidade de uma vida. `deriva_por_dia[d]` = JSD (bits) entre a politica no fim do dia d + 1 e a do
+    prior herdado, nas mesmas sondas; o tempo ate aprender e o dia (e os sinais) em que o acerto na tarefa chega a metade
+    do caminho entre `piso` (o acerto do prior na mesma vida) e o maximo da curva, pela `eficiencia_amostral`."""
+    if not deriva_por_dia:
+        raise ValueError("serie de deriva vazia")
+    if any(d < 0.0 for d in deriva_por_dia):
+        raise ValueError("deriva negativa: JSD e >= 0")
+    return {"deriva_por_dia": list(deriva_por_dia), "deriva_final": deriva_por_dia[-1], "deriva_maxima": max(deriva_por_dia),
+            "tempo_ate_metade": eficiencia_amostral(acerto_por_dia, sinais_acumulados_por_dia, piso)}
+
+
+def tabela_braco_condicao(valores: Mapping[tuple[str, str], Sequence[float]], reamostragens: int, semente: int,
+                          nivel: float) -> dict:
+    """Tabela braco x condicao de uma medida: `valores[(braco, condicao)]` = um valor por unidade (vida). Por celula: n,
+    media e IC percentil por bootstrap sobre as unidades (`bootstrap_ic`). A grade precisa ser completa (todo braco em
+    toda condicao) e toda celula precisa de pelo menos 2 unidades: falha alto, nunca deixa celula vazia."""
+    if not valores:
+        raise ValueError("tabela sem celulas")
+    bracos = sorted({b for b, _ in valores})
+    condicoes = sorted({c for _, c in valores})
+    faltam = [(b, c) for b in bracos for c in condicoes if (b, c) not in valores]
+    if faltam:
+        raise ValueError(f"grade braco x condicao incompleta: faltam {faltam}")
+    celulas = {b: {c: bootstrap_ic([float(v) for v in valores[(b, c)]], reamostragens, semente, nivel) for c in condicoes}
+               for b in bracos}
+    return {"bracos": bracos, "condicoes": condicoes, "celulas": celulas}
