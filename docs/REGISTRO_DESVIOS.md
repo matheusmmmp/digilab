@@ -1615,3 +1615,17 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-a1-bola-imp
 - **Validação (7101…7505, uma vez, no ponto da calibração):** 1a-pet passa (+0,310 [+0,245; +0,375]); cuidado controlado falha
   (+0,017 [+0,009; +0,028]) pelo mesmo mecanismo da calibração (o aleatório, 0,266 → 0,333). Nada mudou por causa dela; resultado em
   `docs/RESULTADO_V2_A1.md`, com as decisões B1–B3 para o Matheus. Pela decisão de 2026-10-01 a V2 segue.
+
+## 2026-10-01 — Fim da rodada 3: decisões da bola (B1–B3) e das frutas (F1–F11)
+
+O Matheus seguiu as recomendações:
+- **Bola** (`docs/RESULTADO_V2_A1.md`):
+  - B1: tirar `por_bola` do sorteio do dono aleatório nas runs seguintes com a bola;
+  - B2: a bola fica fora do orçamento na A1 + L1;
+  - B3: aceitar que o relapso quase não põe a bola.
+  - O resultado da validação da A1 não muda.
+- **Frutas** (`docs/DEFINICOES_FRUTAS_V2.md`): F1–F11 como recomendadas.
+  - F8 (vício no produto) e F11 (ler *Creation*) ficam para depois.
+  - F4: a neofobia é um gene próprio.
+  - F10 aplicada: a frase do pedido original em `docs/DEFINICOES_V2.md`, seção 7, foi reescrita.
+- Marco em `docs/V2_RODADA_3.md`. Tarefas da rodada 4: N3 (B), N4 (A), plano do experimento maior (C) e bancada de mundos (D).

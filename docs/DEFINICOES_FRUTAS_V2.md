@@ -292,6 +292,8 @@ dependente (nenhum item, stat, medalha ou atalho ligado a dar a fruta que vicia)
 
 ## 5. Decisões que só o Matheus pode tomar
 
+**Decididas pelo Matheus em 2026-10-01: todas como recomendadas** (F1–F7, F9 e F10 sim; F8 e F11 não por ora; F4 = gene próprio).
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | F1 | Gostar e querer como **dois registros por fruta** (`avaliacao`, `incentivo`), e o vício como dinâmica entre eles, não um terceiro registro | Sim | Com um escalar só, o vício não tem como aparecer (não há o que desacoplar) e a taxa de escolha passa a valer como gosto, que ela não mede |

@@ -162,7 +162,7 @@ igualdade exata no que é dele. Registrado como **critério do projeto, sem benc
 
 ## 7. Frutas, gosto hedônico e vício (pedido do Matheus, 2026-10-01) — planejamento, não desenho
 
-O Matheus quer **frutas diferentes**, uma **variável de gosto hedônico** com preferências do pet e a possibilidade de **vício, como no Creatures**.
+O Matheus quer **frutas diferentes**, uma **variável de gosto hedônico** com preferências do pet e a possibilidade de **vício, a partir da literatura de sensibilização de incentivo** (frase reescrita pela decisão F10 de `docs/DEFINICOES_FRUTAS_V2.md`, 2026-10-01).
 Aqui fica só o que isso pede da pesquisa; o desenho é dele.
 
 **O que a literatura sustenta.**
