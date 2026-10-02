@@ -77,6 +77,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
+| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P3 feedback do dono; P1/P2/P2e falham alto até o N3/N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`) (seção "V2, BANCADA" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
 | `digilab/metrics.py` | taxa de vitória, Bradley-Terry (erro padrão projetado em soma-zero), JSD com números aleatórios comuns, bootstrap, `efeito_do_treino` (ablação) |
@@ -1323,3 +1324,34 @@ motivos, regeneráveis por replay dos `.jsonl`). **Validação (4101…4505) fei
   negativo para H1 com este aprendiz: o ensino chega (G3-T, Δα), mas o instinto decide 80% das decisões e o teto 1·S limita o resto; o
   controle sem lobos aprende mais e cuida pior. Os alvos e o ponto ficam como estão (nada se ajusta olhando a validação); a revisão
   das validações iniciais é decisão do Matheus.
+
+## V2, BANCADA — o orquestrador dos braços da pergunta maior (2026-10-01, `docs/TAREFA_V2_BANCADA.md`) — GATES PASSAM
+
+Infraestrutura, não pesquisa: nenhuma run com faixa reservada, nenhum número de resultado. `experiments/bancada_v2.py` monta toda vida dos
+braços da pergunta maior (`docs/ARQUITETURA_V2_VALIDACAO.md`, seção 6) do mesmo jeito, para P0–P3 continuarem comparáveis quando o N3 e
+o N5 chegarem. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Vida = (genoma, mundo, dono, braço, semente)** (`EspecVida`, `Bancada.vida`): rngs de ambiente e de política do motor pela semente
+  (engine intocado); a do dono derivada de (semente, nome do dono), igual em todos os braços; genoma `None` = `MotorComFeedback` (como a
+  L1), um inteiro g = temperamento de g no `MotorPersonalidade`, separado da semente do ambiente. Mundo: só `padrao`; os outros levantam
+  `NotImplementedError` (N4 e a rodada 4).
+- **Fonte do sinal como campo do braço** (`BRACOS`, `PoliticaDoBraco`): o cérebro é sempre `PoliticaLobos` com o mesmo prior e a mesma
+  `ConfigLobos` (`CONFIG_LOBOS_APRENDIZ`, passo 512, teto 1024); só muda o que passa por `receber_acao_dono`. `dono` (P3) repassa tudo:
+  a vida é byte a byte a da L1. `nenhuma` (P0) não repassa nada e usa o aprendiz com o aprendizado desligado (o prior fixo), porque um
+  aprendiz ligado sem sinal ainda aprende: o chamado expira por dentro (`Aprendiz._expirar`) e vira sinal negativo. `consequencia`
+  (P1) e `informacao` (P2 certa, P2e errada) levantam `NotImplementedError` com o nó (N3, N5). Só o cérebro `lobos` (outros: N11).
+- **Modo acoplado** (`Bancada.acoplar`, filtros `nenhum`, `sem_sinais`, `sem_sinais_sem_carinho`): o registro de uma vida, sem as ações
+  do filtro, rejogado com o cérebro de outro braço (malha aberta); generaliza `log_so_cuidado`/`vidas_acopladas` de `run_v2_l1.py`, que
+  ficam como estão.
+- **Medidas** (só `digilab/metrics.py`): `desempenho_no_ambiente` (tempo fora de privação pela regra `Estado.em_privacao` e saúde média,
+  amostrados em cada decisão, a cada 15 ticks), o acerto na tarefa do dono (`acerto_na_tarefa`, igual ao `curva_tarefa` da L1),
+  `custo_da_plasticidade` (JSD ao prior herdado no fim de cada dia e o tempo até a metade do caminho pela `eficiencia_amostral`, com o
+  piso no acerto do P0 da mesma célula; conta só os sinais que chegaram ao aprendiz) e `tabela_braco_condicao` (bootstrap por célula,
+  grade completa ou erro). `rodar` grava vidas, `medidas.json`, `tabelas.json` (por dono e medida) e `meta.json`.
+- **Gates** (`tests/test_bancada_v2.py`, 31 testes, ~16 s; sementes 101…505): **P0 = instinto byte a byte** pela bancada (os G2 da L0:
+  4 donos × 5 sementes nos dois motores, mais as 7 regras com o orçamento baixo); **o acoplado reproduz** (no próprio braço sem filtro é a
+  vida de origem; o P3 no próprio registro sem os sinais é o "só cuidado" da L1, com e sem carinho; o P0 no registro do P3 sem os sinais
+  tem como log o da origem com os sinais retirados, evento a evento, e é a vida do instinto nesse registro); **G1**: toda vida e todo
+  acoplado rejogados do texto do log bit a bit, e a divergência falha alto. Sementes fora de 101…505 exigem o campo `plano` com um
+  arquivo do repositório (`SementeSemPlano`).
+- **Fumaça** (`experiments/configs/bancada/fumaca.json`, NÃO canônica, `--saida <pasta>`): 80 vidas em ~26 s; sem artefato no repositório.
+- **Não mudou:** `engine.py` (sha256 igual), `lobos.py`, `run_v2_l1.py`, o bandit, runs da v1, a web.
