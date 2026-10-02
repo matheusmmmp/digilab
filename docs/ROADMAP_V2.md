@@ -72,6 +72,7 @@ a v1 já prevê fraco. Isto troca a regra de parada da revisão 1 e precisa de d
 | R6.4 | H-R2/H-R4 canais e genoma | N4, R6.1 | canais separados × escalar somado; sensibilidade por genoma com experiência acoplada | aprendizado desligado = vidas idênticas entre genomas |
 | R7 | **N11 cérebros** | R6.1 | DigiBrain A (C3-like), B (CfC/A2C, ponto flutuante) e C (Fly-like), **só no Python**, com ablação das peças | `docs/research/digibrain/synthesis/brain_comparison.md` |
 | R8 | **marco da fase 1** | R6–R7 | `docs/LEITURA_CONSOLIDADA_V2_FASE1.md` e a **escolha do DigiBrain do produto** | — |
+| R8.1 | **decisão de produto: tirar elogiar e repreender** (Matheus, 2026-10-01: adiada para cá) | R6 (P1 × P3), R8 | decidir se o pet do produto aprende só pela consequência. Se sim, redesenhar o que depende dos botões: vínculo B (a coerência agrupa o feedback), disciplina das travessuras, mentira repreendida, catálogo do comando pelo chat; versão de pet própria | P1 ≥ P3 no experimento maior |
 | W | **web** | R8 | porte do DigiBrain escolhido (pets v11), com gabarito Python → web | paridade |
 | F2 | **humanos** | R8, ética, arte | gêmeos: o dono humano informa; reconhecimento e preferência | plano próprio |
 | F3 | **genoma** | F2 | genoma com variância herdável (fisiologia, prior, sensibilidade por canal) | plano próprio; E1 falhou com 4,9% |
