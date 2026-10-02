@@ -43,6 +43,10 @@ class AcaoUsuario(str, Enum):
     PETISCO = "petisco"
     LEVAR_AO_BANHEIRO = "levar_ao_banheiro"
     TRATAR_LESAO = "tratar_lesao"
+    # V2, A1 (docs/V2_A1_BOLA_DESENHO.md): a bola no cenario. So o MotorAmbiente (digilab/ambiente.py) sabe aplicar; nos
+    # motores anteriores levantam erro. No fim do enum, como as de educacao: nada que dependa da ordem muda.
+    POR_BOLA = "por_bola"
+    TIRAR_BOLA = "tirar_bola"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -51,6 +55,7 @@ ACOES_V1 = (AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, Acao
             AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER)
 ACOES_TREINO = tuple(a for a in AcaoUsuario if a.value.startswith("treinar_"))
 ACOES_EDUCACAO = (AcaoUsuario.PETISCO, AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO)
+ACOES_BOLA = (AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA)
 
 
 def exercicio_de(acao: AcaoUsuario) -> str:

@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from digilab.config import CONFIG_EDUCACAO, CONFIG_LESOES  # noqa: E402
 from digilab.educacao import MotorEducacao, fabricas_educacao  # noqa: E402
-from digilab.events import ACOES_EDUCACAO, ACOES_TREINO, ACOES_V1, AcaoUsuario  # noqa: E402
+from digilab.events import ACOES_BOLA, ACOES_EDUCACAO, ACOES_TREINO, ACOES_V1, AcaoUsuario  # noqa: E402
 from digilab.evolucao import ovo  # noqa: E402
 from digilab.protocol import (PARAMETROS_EDUCACAO_V1, Campo, Status, hash_parametros_educacao,  # noqa: E402
                               validar_parametros_educacao)
@@ -30,7 +30,9 @@ def test_acoes_novas_nao_mexem_nas_listas_antigas():
     assert [a.value for a in ACOES_V1] == ["alimentar", "limpar", "brincar", "acariciar", "elogiar", "repreender"]
     assert all(a.value.startswith("treinar_") for a in ACOES_TREINO) and len(ACOES_TREINO) == 6
     assert set(ACOES_EDUCACAO).isdisjoint(ACOES_V1) and set(ACOES_EDUCACAO).isdisjoint(ACOES_TREINO)
-    assert list(AcaoUsuario)[-3:] == list(ACOES_EDUCACAO)      # no fim do enum
+    # nas mesmas posicoes de quando entraram no fim do enum (12 a 14); depois delas so as da bola (V2, A1), tambem no fim
+    assert list(AcaoUsuario)[12:15] == list(ACOES_EDUCACAO)
+    assert list(AcaoUsuario)[15:] == list(ACOES_BOLA)
 
 
 @pytest.mark.parametrize("braco", ["exigente", "aleatorio", "atencioso"])

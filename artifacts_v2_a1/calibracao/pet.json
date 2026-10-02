@@ -1,0 +1,1528 @@
+{
+ "bola": {
+  "aleatorio-bola@6101": {
+   "acoes_dono": {
+    "acariciar": 26,
+    "alimentar": 27,
+    "brincar": 34,
+    "elogiar": 33,
+    "limpar": 28,
+    "por_bola": 29,
+    "repreender": 47
+   },
+   "bola": {
+    "decisoes_com_bola": 167,
+    "expiradas": 16,
+    "ignoradas": 157,
+    "postas": 26,
+    "renovadas": 3,
+    "tiradas": 0,
+    "usadas": 10
+   },
+   "humor_final": 0.6299999999999885,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6018086557540506,
+    "fracao_privacao": 0.47172619047619047,
+    "humor_medio": 0.5089899553571365,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.24299719887955185,
+    "n_com_bola": 167,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 17,
+    "n_livre_sem_bola": 252,
+    "p_com_bola": 0.5882352941176471,
+    "p_sem_bola": 0.34523809523809523
+   },
+   "saude_final": 0.591500000000045
+  },
+  "aleatorio-bola@6202": {
+   "acoes_dono": {
+    "acariciar": 37,
+    "alimentar": 28,
+    "brincar": 32,
+    "elogiar": 38,
+    "limpar": 34,
+    "por_bola": 26,
+    "repreender": 29
+   },
+   "bola": {
+    "decisoes_com_bola": 155,
+    "expiradas": 14,
+    "ignoradas": 145,
+    "postas": 24,
+    "renovadas": 2,
+    "tiradas": 0,
+    "usadas": 10
+   },
+   "humor_final": 0.49749999999998584,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.585901537698455,
+    "fracao_privacao": 0.31398809523809523,
+    "humor_medio": 0.6194549851190372,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.1715547146010722,
+    "n_com_bola": 155,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 21,
+    "n_livre_sem_bola": 302,
+    "p_com_bola": 0.47619047619047616,
+    "p_sem_bola": 0.304635761589404
+   },
+   "saude_final": 1.0
+  },
+  "aleatorio-bola@6303": {
+   "acoes_dono": {
+    "acariciar": 28,
+    "alimentar": 35,
+    "brincar": 47,
+    "elogiar": 26,
+    "limpar": 25,
+    "por_bola": 27,
+    "repreender": 36
+   },
+   "bola": {
+    "decisoes_com_bola": 160,
+    "expiradas": 16,
+    "ignoradas": 151,
+    "postas": 25,
+    "renovadas": 2,
+    "tiradas": 0,
+    "usadas": 9
+   },
+   "humor_final": 0.8624999999999968,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6087109375000805,
+    "fracao_privacao": 0.5401785714285714,
+    "humor_medio": 0.6322488839285656,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.4848484848484849,
+    "n_com_bola": 160,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 11,
+    "n_livre_sem_bola": 255,
+    "p_com_bola": 0.8181818181818182,
+    "p_sem_bola": 0.3333333333333333
+   },
+   "saude_final": 1.0
+  },
+  "aleatorio-bola@6404": {
+   "acoes_dono": {
+    "acariciar": 30,
+    "alimentar": 34,
+    "brincar": 32,
+    "elogiar": 33,
+    "limpar": 25,
+    "por_bola": 35,
+    "repreender": 35
+   },
+   "bola": {
+    "decisoes_com_bola": 187,
+    "expiradas": 15,
+    "ignoradas": 173,
+    "postas": 29,
+    "renovadas": 6,
+    "tiradas": 0,
+    "usadas": 14
+   },
+   "humor_final": 0.0,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.5873257688492499,
+    "fracao_privacao": 0.42931547619047616,
+    "humor_medio": 0.6331101190476105,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.36666666666666664,
+    "n_com_bola": 187,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 20,
+    "n_livre_sem_bola": 297,
+    "p_com_bola": 0.7,
+    "p_sem_bola": 0.3333333333333333
+   },
+   "saude_final": 0.0
+  },
+  "aleatorio-bola@6505": {
+   "acoes_dono": {
+    "acariciar": 30,
+    "alimentar": 32,
+    "brincar": 27,
+    "elogiar": 33,
+    "limpar": 33,
+    "por_bola": 34,
+    "repreender": 35
+   },
+   "bola": {
+    "decisoes_com_bola": 204,
+    "expiradas": 20,
+    "ignoradas": 193,
+    "postas": 31,
+    "renovadas": 3,
+    "tiradas": 0,
+    "usadas": 11
+   },
+   "humor_final": 0.5274999999999951,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6042751736111769,
+    "fracao_privacao": 0.40848214285714285,
+    "humor_medio": 0.634118303571422,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.34756600660066006,
+    "n_com_bola": 204,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 16,
+    "n_livre_sem_bola": 303,
+    "p_com_bola": 0.6875,
+    "p_sem_bola": 0.33993399339933994
+   },
+   "saude_final": 0.11500000000000064
+  },
+  "atencioso-bola@6101": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "brincar": 1,
+    "elogiar": 56,
+    "limpar": 51,
+    "por_bola": 56,
+    "repreender": 23
+   },
+   "bola": {
+    "decisoes_com_bola": 98,
+    "expiradas": 0,
+    "ignoradas": 42,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 56
+   },
+   "humor_final": 0.9199999999999948,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6047408234127631,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9207738095238072,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.19862155388471175,
+    "n_com_bola": 98,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 98,
+    "n_livre_sem_bola": 684,
+    "p_com_bola": 0.5714285714285714,
+    "p_sem_bola": 0.37280701754385964
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bola@6202": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 65,
+    "limpar": 49,
+    "por_bola": 56,
+    "repreender": 17
+   },
+   "bola": {
+    "decisoes_com_bola": 108,
+    "expiradas": 1,
+    "ignoradas": 53,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 55
+   },
+   "humor_final": 0.9299999999999948,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6056380208334061,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9284374999999978,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.2114148563989911,
+    "n_com_bola": 108,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 102,
+    "n_livre_sem_bola": 723,
+    "p_com_bola": 0.5392156862745098,
+    "p_sem_bola": 0.3278008298755187
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bola@6303": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 65,
+    "limpar": 41,
+    "por_bola": 56,
+    "repreender": 25
+   },
+   "bola": {
+    "decisoes_com_bola": 91,
+    "expiradas": 0,
+    "ignoradas": 35,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 56
+   },
+   "humor_final": 0.9374999999999986,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6084257192460922,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9267819940476171,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.27544127260841145,
+    "n_com_bola": 91,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 91,
+    "n_livre_sem_bola": 706,
+    "p_com_bola": 0.6153846153846154,
+    "p_sem_bola": 0.33994334277620397
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bola@6404": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 58,
+    "limpar": 54,
+    "por_bola": 56,
+    "repreender": 19
+   },
+   "bola": {
+    "decisoes_com_bola": 102,
+    "expiradas": 1,
+    "ignoradas": 47,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 55
+   },
+   "humor_final": 0.8874999999999974,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6024975198413322,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9256156994047599,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.22921728770516214,
+    "n_com_bola": 102,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 91,
+    "n_livre_sem_bola": 701,
+    "p_com_bola": 0.6043956043956044,
+    "p_sem_bola": 0.3751783166904422
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bola@6505": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 50,
+    "limpar": 63,
+    "por_bola": 56,
+    "repreender": 18
+   },
+   "bola": {
+    "decisoes_com_bola": 95,
+    "expiradas": 1,
+    "ignoradas": 40,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 55
+   },
+   "humor_final": 0.9024999999999945,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6067168898810118,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9170126488095214,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.2460902255639098,
+    "n_com_bola": 95,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 95,
+    "n_livre_sem_bola": 700,
+    "p_com_bola": 0.5789473684210527,
+    "p_sem_bola": 0.33285714285714285
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bola@6101": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 35,
+    "limpar": 50,
+    "por_bola": 56,
+    "repreender": 46
+   },
+   "bola": {
+    "decisoes_com_bola": 108,
+    "expiradas": 2,
+    "ignoradas": 54,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 54
+   },
+   "humor_final": 0.5824999999999957,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.602193080357195,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.912470238095236,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.23328631875881523,
+    "n_com_bola": 108,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 90,
+    "n_livre_sem_bola": 709,
+    "p_com_bola": 0.6,
+    "p_sem_bola": 0.36671368124118475
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bola@6202": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 35,
+    "limpar": 51,
+    "por_bola": 56,
+    "repreender": 45
+   },
+   "bola": {
+    "decisoes_com_bola": 89,
+    "expiradas": 0,
+    "ignoradas": 33,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 56
+   },
+   "humor_final": 0.9174999999999951,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6028862847222908,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.8924516369047583,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.3049277688603531,
+    "n_com_bola": 89,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 89,
+    "n_livre_sem_bola": 700,
+    "p_com_bola": 0.6292134831460674,
+    "p_sem_bola": 0.3242857142857143
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bola@6303": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 47,
+    "limpar": 44,
+    "por_bola": 56,
+    "repreender": 40
+   },
+   "bola": {
+    "decisoes_com_bola": 93,
+    "expiradas": 0,
+    "ignoradas": 37,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 56
+   },
+   "humor_final": 0.7674999999999974,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.603372395833391,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9070833333333309,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.2559416678203886,
+    "n_com_bola": 93,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 93,
+    "n_livre_sem_bola": 699,
+    "p_com_bola": 0.6021505376344086,
+    "p_sem_bola": 0.34620886981402005
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bola@6404": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 39,
+    "limpar": 55,
+    "por_bola": 56,
+    "repreender": 37
+   },
+   "bola": {
+    "decisoes_com_bola": 101,
+    "expiradas": 1,
+    "ignoradas": 46,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 55
+   },
+   "humor_final": 0.8499999999999965,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6016263640873609,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9092745535714263,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.2326938449240608,
+    "n_com_bola": 101,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 90,
+    "n_livre_sem_bola": 695,
+    "p_com_bola": 0.6111111111111112,
+    "p_sem_bola": 0.37841726618705035
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bola@6505": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 34,
+    "limpar": 66,
+    "por_bola": 56,
+    "repreender": 31
+   },
+   "bola": {
+    "decisoes_com_bola": 100,
+    "expiradas": 1,
+    "ignoradas": 45,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 55
+   },
+   "humor_final": 0.8049999999999959,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6045690724206929,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.8990457589285686,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.2054149085794656,
+    "n_com_bola": 100,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 100,
+    "n_livre_sem_bola": 711,
+    "p_com_bola": 0.55,
+    "p_sem_bola": 0.34458509142053445
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bola@6101": {
+   "acoes_dono": {
+    "acariciar": 55,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 22,
+    "limpar": 42,
+    "por_bola": 2,
+    "repreender": 19
+   },
+   "bola": {
+    "decisoes_com_bola": 10,
+    "expiradas": 1,
+    "ignoradas": 9,
+    "postas": 2,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.9749999999999994,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6026860119048415,
+    "fracao_privacao": 0.06770833333333333,
+    "humor_medio": 0.7586011904761842,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.1329479768786127,
+    "n_com_bola": 10,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 2,
+    "n_livre_sem_bola": 346,
+    "p_com_bola": 0.5,
+    "p_sem_bola": 0.3670520231213873
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bola@6202": {
+   "acoes_dono": {
+    "acariciar": 56,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 34,
+    "limpar": 42,
+    "por_bola": 1,
+    "repreender": 7
+   },
+   "bola": {
+    "decisoes_com_bola": 2,
+    "expiradas": 0,
+    "ignoradas": 1,
+    "postas": 1,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.8374999999999962,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6148635912699175,
+    "fracao_privacao": 0.08556547619047619,
+    "humor_medio": 0.7879985119047549,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.15131578947368424,
+    "n_com_bola": 2,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 2,
+    "n_livre_sem_bola": 304,
+    "p_com_bola": 0.5,
+    "p_sem_bola": 0.34868421052631576
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bola@6303": {
+   "acoes_dono": {
+    "acariciar": 55,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 25,
+    "limpar": 42,
+    "por_bola": 1,
+    "repreender": 17
+   },
+   "bola": {
+    "decisoes_com_bola": 3,
+    "expiradas": 0,
+    "ignoradas": 2,
+    "postas": 1,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.6474999999999835,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6151289682540513,
+    "fracao_privacao": 0.09672619047619048,
+    "humor_medio": 0.6804296874999916,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.0228310502283105,
+    "n_com_bola": 3,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 3,
+    "n_livre_sem_bola": 292,
+    "p_com_bola": 0.3333333333333333,
+    "p_sem_bola": 0.3561643835616438
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bola@6404": {
+   "acoes_dono": {
+    "acariciar": 58,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 23,
+    "limpar": 42,
+    "repreender": 17
+   },
+   "bola": {
+    "decisoes_com_bola": 0,
+    "expiradas": 0,
+    "ignoradas": 0,
+    "postas": 0,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 0
+   },
+   "humor_final": 0.7599999999999942,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.616675347222297,
+    "fracao_privacao": 0.03125,
+    "humor_medio": 0.8304650297618996,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": null,
+    "n_com_bola": 0,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 0,
+    "n_livre_sem_bola": 417,
+    "p_com_bola": null,
+    "p_sem_bola": 0.38369304556354916
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bola@6505": {
+   "acoes_dono": {
+    "acariciar": 57,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 25,
+    "limpar": 42,
+    "por_bola": 1,
+    "repreender": 15
+   },
+   "bola": {
+    "decisoes_com_bola": 1,
+    "expiradas": 0,
+    "ignoradas": 0,
+    "postas": 1,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.42749999999998645,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6020715525794303,
+    "fracao_privacao": 0.1644345238095238,
+    "humor_medio": 0.6818601190476126,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.6638176638176638,
+    "n_com_bola": 1,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 1,
+    "n_livre_sem_bola": 351,
+    "p_com_bola": 1.0,
+    "p_sem_bola": 0.33618233618233617
+   },
+   "saude_final": 0.8815000000000213
+  }
+ },
+ "bolacega": {
+  "aleatorio-bolacega@6101": {
+   "acoes_dono": {
+    "acariciar": 26,
+    "alimentar": 27,
+    "brincar": 34,
+    "elogiar": 33,
+    "limpar": 28,
+    "por_bola": 29,
+    "repreender": 47
+   },
+   "bola": {
+    "decisoes_com_bola": 163,
+    "expiradas": 16,
+    "ignoradas": 153,
+    "postas": 26,
+    "renovadas": 3,
+    "tiradas": 0,
+    "usadas": 10
+   },
+   "humor_final": 0.6299999999999885,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.5986427331350002,
+    "fracao_privacao": 0.41517857142857145,
+    "humor_medio": 0.5058630952380911,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.15964371360054813,
+    "n_com_bola": 163,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 21,
+    "n_livre_sem_bola": 278,
+    "p_com_bola": 0.47619047619047616,
+    "p_sem_bola": 0.31654676258992803
+   },
+   "saude_final": 0.5930000000000448
+  },
+  "aleatorio-bolacega@6202": {
+   "acoes_dono": {
+    "acariciar": 37,
+    "alimentar": 28,
+    "brincar": 32,
+    "elogiar": 38,
+    "limpar": 34,
+    "por_bola": 26,
+    "repreender": 29
+   },
+   "bola": {
+    "decisoes_com_bola": 163,
+    "expiradas": 17,
+    "ignoradas": 157,
+    "postas": 23,
+    "renovadas": 3,
+    "tiradas": 0,
+    "usadas": 6
+   },
+   "humor_final": 0.49749999999998584,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.596589781746085,
+    "fracao_privacao": 0.31994047619047616,
+    "humor_medio": 0.6001153273809455,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.0248447204968944,
+    "n_com_bola": 163,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 23,
+    "n_livre_sem_bola": 287,
+    "p_com_bola": 0.2608695652173913,
+    "p_sem_bola": 0.2857142857142857
+   },
+   "saude_final": 0.8845000000000127
+  },
+  "aleatorio-bolacega@6303": {
+   "acoes_dono": {
+    "acariciar": 28,
+    "alimentar": 35,
+    "brincar": 47,
+    "elogiar": 26,
+    "limpar": 25,
+    "por_bola": 27,
+    "repreender": 36
+   },
+   "bola": {
+    "decisoes_com_bola": 189,
+    "expiradas": 20,
+    "ignoradas": 184,
+    "postas": 25,
+    "renovadas": 2,
+    "tiradas": 0,
+    "usadas": 5
+   },
+   "humor_final": 0.7524999999999697,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6034058779762562,
+    "fracao_privacao": 0.5394345238095238,
+    "humor_medio": 0.6047544642857074,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.174916573971079,
+    "n_com_bola": 189,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 31,
+    "n_livre_sem_bola": 232,
+    "p_com_bola": 0.16129032258064516,
+    "p_sem_bola": 0.33620689655172414
+   },
+   "saude_final": 1.0
+  },
+  "aleatorio-bolacega@6404": {
+   "acoes_dono": {
+    "acariciar": 30,
+    "alimentar": 34,
+    "brincar": 32,
+    "elogiar": 33,
+    "limpar": 25,
+    "por_bola": 35,
+    "repreender": 35
+   },
+   "bola": {
+    "decisoes_com_bola": 208,
+    "expiradas": 17,
+    "ignoradas": 196,
+    "postas": 29,
+    "renovadas": 6,
+    "tiradas": 0,
+    "usadas": 12
+   },
+   "humor_final": 0.0,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.5927610367063931,
+    "fracao_privacao": 0.46577380952380953,
+    "humor_medio": 0.6080040922618954,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.100625843661799,
+    "n_com_bola": 208,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 29,
+    "n_livre_sem_bola": 281,
+    "p_com_bola": 0.41379310344827586,
+    "p_sem_bola": 0.31316725978647686
+   },
+   "saude_final": 0.0
+  },
+  "aleatorio-bolacega@6505": {
+   "acoes_dono": {
+    "acariciar": 30,
+    "alimentar": 32,
+    "brincar": 27,
+    "elogiar": 33,
+    "limpar": 33,
+    "por_bola": 34,
+    "repreender": 35
+   },
+   "bola": {
+    "decisoes_com_bola": 228,
+    "expiradas": 20,
+    "ignoradas": 217,
+    "postas": 31,
+    "renovadas": 3,
+    "tiradas": 0,
+    "usadas": 11
+   },
+   "humor_final": 0.5174999999999977,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6079706101191207,
+    "fracao_privacao": 0.39657738095238093,
+    "humor_medio": 0.5376878720238034,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.052587905818898495,
+    "n_com_bola": 228,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 31,
+    "n_livre_sem_bola": 311,
+    "p_com_bola": 0.3548387096774194,
+    "p_sem_bola": 0.3022508038585209
+   },
+   "saude_final": 0.11500000000000064
+  },
+  "atencioso-bolacega@6101": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 58,
+    "limpar": 50,
+    "por_bola": 56,
+    "repreender": 23
+   },
+   "bola": {
+    "decisoes_com_bola": 163,
+    "expiradas": 4,
+    "ignoradas": 111,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 52
+   },
+   "humor_final": 0.9874999999999997,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6058327132937034,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.929867931547617,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.03411543970787018,
+    "n_com_bola": 163,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 146,
+    "n_livre_sem_bola": 679,
+    "p_com_bola": 0.3561643835616438,
+    "p_sem_bola": 0.390279823269514
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bolacega@6202": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "brincar": 1,
+    "elogiar": 60,
+    "limpar": 47,
+    "por_bola": 56,
+    "repreender": 23
+   },
+   "bola": {
+    "decisoes_com_bola": 149,
+    "expiradas": 2,
+    "ignoradas": 95,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 54
+   },
+   "humor_final": 0.7874999999999882,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6057750496032343,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9094921874999974,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.060348753985295045,
+    "n_com_bola": 149,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 141,
+    "n_livre_sem_bola": 654,
+    "p_com_bola": 0.3829787234042553,
+    "p_sem_bola": 0.32262996941896027
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bolacega@6303": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 69,
+    "limpar": 41,
+    "por_bola": 56,
+    "repreender": 21
+   },
+   "bola": {
+    "decisoes_com_bola": 191,
+    "expiradas": 7,
+    "ignoradas": 142,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 49
+   },
+   "humor_final": 0.9874999999999997,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6075589037699055,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9151785714285688,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.025803280060246014,
+    "n_com_bola": 191,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 152,
+    "n_livre_sem_bola": 629,
+    "p_com_bola": 0.3223684210526316,
+    "p_sem_bola": 0.3481717011128776
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bolacega@6404": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 58,
+    "limpar": 56,
+    "por_bola": 56,
+    "repreender": 17
+   },
+   "bola": {
+    "decisoes_com_bola": 172,
+    "expiradas": 5,
+    "ignoradas": 121,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 51
+   },
+   "humor_final": 0.8574999999999963,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6063733878968881,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9265215773809504,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.04100558306784846,
+    "n_com_bola": 172,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 147,
+    "n_livre_sem_bola": 647,
+    "p_com_bola": 0.3469387755102041,
+    "p_sem_bola": 0.38794435857805254
+   },
+   "saude_final": 1.0
+  },
+  "atencioso-bolacega@6505": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 54,
+    "limpar": 65,
+    "por_bola": 56,
+    "repreender": 12
+   },
+   "bola": {
+    "decisoes_com_bola": 141,
+    "expiradas": 0,
+    "ignoradas": 85,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 56
+   },
+   "humor_final": 0.6774999999999824,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.5984126984127474,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.91656808035714,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.0854058306744176,
+    "n_com_bola": 141,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 137,
+    "n_livre_sem_bola": 668,
+    "p_com_bola": 0.40875912408759124,
+    "p_sem_bola": 0.32335329341317365
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bolacega@6101": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 35,
+    "limpar": 51,
+    "por_bola": 56,
+    "repreender": 45
+   },
+   "bola": {
+    "decisoes_com_bola": 144,
+    "expiradas": 1,
+    "ignoradas": 89,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 55
+   },
+   "humor_final": 0.7674999999999974,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6072600446429088,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.922524181547617,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.027025567936425687,
+    "n_com_bola": 144,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 136,
+    "n_livre_sem_bola": 681,
+    "p_com_bola": 0.40441176470588236,
+    "p_sem_bola": 0.37738619676945667
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bolacega@6202": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 36,
+    "limpar": 49,
+    "por_bola": 56,
+    "repreender": 46
+   },
+   "bola": {
+    "decisoes_com_bola": 171,
+    "expiradas": 5,
+    "ignoradas": 120,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 51
+   },
+   "humor_final": 0.7524999999999968,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.5975892857143491,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9062109374999975,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.00876290588059253,
+    "n_com_bola": 171,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 163,
+    "n_livre_sem_bola": 656,
+    "p_com_bola": 0.3128834355828221,
+    "p_sem_bola": 0.32164634146341464
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bolacega@6303": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "brincar": 1,
+    "elogiar": 47,
+    "limpar": 44,
+    "por_bola": 56,
+    "repreender": 39
+   },
+   "bola": {
+    "decisoes_com_bola": 199,
+    "expiradas": 8,
+    "ignoradas": 151,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 48
+   },
+   "humor_final": 0.8274999999999962,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6026054067460942,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.8931640624999966,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.033539919795843975,
+    "n_com_bola": 199,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 156,
+    "n_livre_sem_bola": 633,
+    "p_com_bola": 0.3076923076923077,
+    "p_sem_bola": 0.3412322274881517
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bolacega@6404": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "brincar": 1,
+    "elogiar": 39,
+    "limpar": 53,
+    "por_bola": 56,
+    "repreender": 38
+   },
+   "bola": {
+    "decisoes_com_bola": 178,
+    "expiradas": 6,
+    "ignoradas": 128,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 50
+   },
+   "humor_final": 0.8849999999999971,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6025421626984837,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9009635416666643,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.055634338327475996,
+    "n_com_bola": 178,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 147,
+    "n_livre_sem_bola": 662,
+    "p_com_bola": 0.3401360544217687,
+    "p_sem_bola": 0.3957703927492447
+   },
+   "saude_final": 1.0
+  },
+  "incoerente-bolacega@6505": {
+   "acoes_dono": {
+    "alimentar": 37,
+    "elogiar": 34,
+    "limpar": 66,
+    "por_bola": 56,
+    "repreender": 31
+   },
+   "bola": {
+    "decisoes_com_bola": 165,
+    "expiradas": 3,
+    "ignoradas": 112,
+    "postas": 56,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 53
+   },
+   "humor_final": 0.9749999999999994,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6085658482143499,
+    "fracao_privacao": 0.0,
+    "humor_medio": 0.9012741815476158,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.002023267577137111,
+    "n_com_bola": 165,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 159,
+    "n_livre_sem_bola": 659,
+    "p_com_bola": 0.3333333333333333,
+    "p_sem_bola": 0.3353566009104704
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bolacega@6101": {
+   "acoes_dono": {
+    "acariciar": 55,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 22,
+    "limpar": 42,
+    "por_bola": 2,
+    "repreender": 19
+   },
+   "bola": {
+    "decisoes_com_bola": 10,
+    "expiradas": 1,
+    "ignoradas": 9,
+    "postas": 2,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.9749999999999994,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6026860119048415,
+    "fracao_privacao": 0.06770833333333333,
+    "humor_medio": 0.7586011904761842,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.1329479768786127,
+    "n_com_bola": 10,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 2,
+    "n_livre_sem_bola": 346,
+    "p_com_bola": 0.5,
+    "p_sem_bola": 0.3670520231213873
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bolacega@6202": {
+   "acoes_dono": {
+    "acariciar": 56,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 33,
+    "limpar": 42,
+    "por_bola": 1,
+    "repreender": 8
+   },
+   "bola": {
+    "decisoes_com_bola": 6,
+    "expiradas": 0,
+    "ignoradas": 5,
+    "postas": 1,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.9574999999999951,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6145653521826159,
+    "fracao_privacao": 0.08556547619047619,
+    "humor_medio": 0.7810100446428501,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.17346938775510204,
+    "n_com_bola": 6,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 6,
+    "n_livre_sem_bola": 294,
+    "p_com_bola": 0.16666666666666666,
+    "p_sem_bola": 0.3401360544217687
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bolacega@6303": {
+   "acoes_dono": {
+    "acariciar": 55,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 30,
+    "limpar": 42,
+    "por_bola": 1,
+    "repreender": 12
+   },
+   "bola": {
+    "decisoes_com_bola": 7,
+    "expiradas": 0,
+    "ignoradas": 6,
+    "postas": 1,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.8424999999999818,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6086997767857889,
+    "fracao_privacao": 0.10342261904761904,
+    "humor_medio": 0.7158296130952319,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": -0.21500238891543239,
+    "n_com_bola": 7,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 7,
+    "n_livre_sem_bola": 299,
+    "p_com_bola": 0.14285714285714285,
+    "p_sem_bola": 0.35785953177257523
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bolacega@6404": {
+   "acoes_dono": {
+    "acariciar": 58,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 23,
+    "limpar": 42,
+    "repreender": 17
+   },
+   "bola": {
+    "decisoes_com_bola": 0,
+    "expiradas": 0,
+    "ignoradas": 0,
+    "postas": 0,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 0
+   },
+   "humor_final": 0.7599999999999942,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.616675347222297,
+    "fracao_privacao": 0.03125,
+    "humor_medio": 0.8304650297618996,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": null,
+    "n_com_bola": 0,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 0,
+    "n_livre_sem_bola": 417,
+    "p_com_bola": null,
+    "p_sem_bola": 0.38369304556354916
+   },
+   "saude_final": 1.0
+  },
+  "relapso-bolacega@6505": {
+   "acoes_dono": {
+    "acariciar": 57,
+    "alimentar": 42,
+    "brincar": 42,
+    "elogiar": 25,
+    "limpar": 42,
+    "por_bola": 1,
+    "repreender": 15
+   },
+   "bola": {
+    "decisoes_com_bola": 1,
+    "expiradas": 0,
+    "ignoradas": 0,
+    "postas": 1,
+    "renovadas": 0,
+    "tiradas": 0,
+    "usadas": 1
+   },
+   "humor_final": 0.42749999999998645,
+   "interacoes": 224,
+   "morte": null,
+   "privacao": {
+    "energia_media": 0.6020715525794303,
+    "fracao_privacao": 0.1644345238095238,
+    "humor_medio": 0.6818601190476126,
+    "n_decisoes": 1344
+   },
+   "resposta": {
+    "delta": 0.6638176638176638,
+    "n_com_bola": 1,
+    "n_decisoes": 1344,
+    "n_livre_com_bola": 1,
+    "n_livre_sem_bola": 351,
+    "p_com_bola": 1.0,
+    "p_sem_bola": 0.33618233618233617
+   },
+   "saude_final": 0.8815000000000213
+  }
+ }
+}

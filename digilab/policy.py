@@ -29,6 +29,9 @@ class Observacao:
     vetor_estado: tuple[float, ...]
     ticks_desde_cuidado: int
     total_cuidados: int
+    # V2, A1: ha bola no cenario (1.0) ou nao (0.0). Campo com padrao: `de_estado` (o motor da v1) nunca o preenche; so o
+    # MotorAmbiente (digilab/ambiente.py) o injeta antes de `agir`. O bandit e as sondas nao o leem.
+    bola: float = 0.0
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":
@@ -116,14 +119,19 @@ class PoliticaInstinto:
 
         # Tempo livre: mistura ponderada, nunca uniforme.
         self._ultima_regra = "tempo_livre"
-        pesos = {
+        pesos = self._pesos_tempo_livre(energia, humor, obs)
+        acoes = list(pesos)
+        return rng.choices(acoes, weights=[pesos[a] for a in acoes], k=1)[0]
+
+    def _pesos_tempo_livre(self, energia: float, humor: float, obs: Observacao) -> dict:
+        """Pesos da mistura do tempo livre: os literais de sempre, na mesma ordem (a canonica nao muda). Gancho da V2, A1:
+        a subclasse com a bola (ambiente.PoliticaInstintoBola) soma o termo dela em brincar; aqui `obs` nao e lido."""
+        return {
             AcaoPet.OCIOSO: 3.0,
             AcaoPet.EXPLORAR: 2.0 + 2.0 * energia,
             AcaoPet.BRINCAR: 1.0 + 3.0 * humor,
             AcaoPet.CHAMAR_ATENCAO: 1.0,
         }
-        acoes = list(pesos)
-        return rng.choices(acoes, weights=[pesos[a] for a in acoes], k=1)[0]
 
     def observar(self, transicao: Transicao) -> None:
         return None
