@@ -50,7 +50,11 @@ elogios 93,0 → 61,4 e broncas 46,0 → 20,0 no atencioso; 72,2 → 44,0 e 66,0
 3. **Para a 1a-dono (A1 + L1)** isso importa mais que a privação: com o orçamento fixo, o dono coerente que põe bolas dá cerca de 35% menos
    sinais de ensino. Um efeito da bola sobre o ensino terá de se separar dessa perda de sinais.
 
-## Decisões para o Matheus (nenhuma aplicada)
+## Decisões para o Matheus
+
+**Decididas pelo Matheus em 2026-10-01 (recomendação do coordenador):** B1 = (c), tirar `por_bola` do sorteio do dono aleatório nas
+runs seguintes com a bola (o teste volta a medir o pet, não o orçamento do dono); B2 = a bola **fora** do orçamento na A1 + L1 (não
+tira sinais do ensino); B3 = aceitar (é a regra do dono relapso). O resultado desta validação fica como está.
 
 | # | decisão | opções |
 |---|---|---|
