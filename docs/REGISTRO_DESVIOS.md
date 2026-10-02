@@ -1612,3 +1612,6 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-a1-bola-imp
 - **Teste ajustado:** `tests/test_educacao.py::test_acoes_novas_nao_mexem_nas_listas_antigas` exigia as ações de educação como as três
   **últimas** do enum. Com `POR_BOLA` e `TIRAR_BOLA` depois delas, o teste confere o que ele protege: as ações de educação nas mesmas
   posições de sempre (12 a 14) e, depois delas, só as da bola.
+- **Validação (7101…7505, uma vez, no ponto da calibração):** 1a-pet passa (+0,310 [+0,245; +0,375]); cuidado controlado falha
+  (+0,017 [+0,009; +0,028]) pelo mesmo mecanismo da calibração (o aleatório, 0,266 → 0,333). Nada mudou por causa dela; resultado em
+  `docs/RESULTADO_V2_A1.md`, com as decisões B1–B3 para o Matheus. Pela decisão de 2026-10-01 a V2 segue.
