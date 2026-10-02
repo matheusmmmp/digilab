@@ -1,0 +1,16 @@
+{
+  "descricao": "Fumaca da bancada da V2 (docs/TAREFA_V2_BANCADA.md). NAO canonica: so as sementes dos testes, sem plano de analise; serve para conferir o encanamento (vidas, replay do disco, acoplados, medidas, tabelas), nunca como resultado.",
+  "bracos": ["P0", "P3"],
+  "donos": ["atencioso", "relapso", "aleatorio", "incoerente"],
+  "sementes": [101, 202, 303, 404, 505],
+  "genomas": [null],
+  "mundos": ["padrao"],
+  "dias": 3,
+  "orcamento": 48,
+  "sonda": {"estados": 50, "amostras": 50, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [
+    {"origem": "P3", "destino": "P0", "filtro": "sem_sinais"},
+    {"origem": "P3", "destino": "P3", "filtro": "sem_sinais"}
+  ]
+}
