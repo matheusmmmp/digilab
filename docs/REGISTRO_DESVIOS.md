@@ -1855,3 +1855,14 @@ Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes 
   com dados sintéticos, como a tarefa pede.
 - **Teste ajustado:** `tests/test_frutas.py::test_enum_cresce_no_fim_e_a_v1_nao_ve` confere as ofertas nas posições 17 a 19 (antes, "as três
   últimas"); as ações de informação vêm depois delas.
+
+## 2026-10-04 — Fim da rodada 5: decisões N5-1 a N5-8 e tarefas da rodada 6
+
+- O Matheus aprovou N5-1 a N5-8 do `docs/PLANO_ANALISE_V2_N5.md`, como recomendadas.
+- Correção do coordenador: o calendário de ofertas igual entre braços é o `CalendarioFrutas` da bancada (#144), não o `OfertasFrutas` do N4.
+- Ponto aberto que vira a primeira tarefa da rodada 6: a bancada ainda cria os lobos sem ver o mundo.
+- Revisão do aprendiz:
+  - passa de RESERVADA para ABERTA na rodada 6;
+  - roda depois do N5-CEREBRO e da BANCADA-N5;
+  - usa a faixa própria 18101…18505, só de calibração.
+- Marco em `docs/V2_RODADA_5.md`.

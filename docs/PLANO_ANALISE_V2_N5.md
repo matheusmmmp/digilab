@@ -203,6 +203,9 @@ não, informar sobre outra coisa que não fruta, a web, humanos.
 
 ## 13. Decisões que só o Matheus pode tomar
 
+**Decididas pelo Matheus em 2026-10-04: todas como recomendadas (N5-1 a N5-8).** Correção do coordenador na mesma data: o calendário
+de ofertas igual entre braços é o `CalendarioFrutas` da bancada (#144), não o `OfertasFrutas` do N4, que depende do sono do pet.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | N5-1 | Confiança de partida `w0_info` > 0, calibrada na grade {S/4, S/2, 3S/4} pela regra da seção 8, com 0 como referência | Sim | Com 0, a informação não age antes de o mundo validar e o P2e não piora: a predição 4(a) do experimento maior não fica testável; acima do teto, o P2e nunca se recupera por construção |
