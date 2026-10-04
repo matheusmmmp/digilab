@@ -792,3 +792,61 @@ def saciedade_especifica_n1(consumos: Sequence[tuple[float, float, float, float]
     quedas = [(p - a) / r for a, p, r, _ in consumos if r > 0.0]
     return {"n": len(consumos), "intercepto": b[0], "beta_pref": b[1], "beta_recente": b[2], "beta_fome": b[3],
             "queda_por_unidade": (sum(quedas) / len(quedas)) if quedas else None, "n_com_recente": len(quedas)}
+
+
+# ------------------------------------------------------------ V2, bancada do N5: eficiencia sobre a taxa da fruta ruim
+# docs/PLANO_ANALISE_V2_N5.md, secao 5 (e o experimento maior, predicao 3): consumos ate a metade do caminho, com censura a direita.
+
+
+def consumos_ate_metade(taxa_por_dia: Sequence[float | None], consumos_por_dia: Sequence[int], taxa_p0: float | None) -> dict:
+    """Consumos de fruta ate o fim do primeiro dia em que a `taxa_fruta_ruim` DO DIA chega a metade do caminho entre a do P0 da mesma
+    unidade (`taxa_p0`) e 0, pela `eficiencia_amostral` (acerto = 1 - taxa, piso = 1 - taxa_p0, maximo = 1). Dia sem consumo (taxa None)
+    nunca chega. Se nunca chega, conta o total de consumos da vida e marca `censurado` (censura a direita, plano do N5). Sem taxa do
+    P0 (o P0 nao comeu fruta) nao ha caminho: devolve `sem_referencia`."""
+    if len(taxa_por_dia) != len(consumos_por_dia) or not taxa_por_dia:
+        raise ValueError("taxa por dia e consumos por dia com tamanhos diferentes ou vazios")
+    if any(c < 0 for c in consumos_por_dia):
+        raise ValueError("consumo negativo")
+    total = sum(consumos_por_dia)
+    if taxa_p0 is None:
+        return {"sem_referencia": True, "alvo": None, "dia": None, "consumos": None, "censurado": None, "total": total}
+    if not 0.0 <= taxa_p0 <= 1.0:
+        raise ValueError(f"taxa do P0 fora de [0, 1]: {taxa_p0!r}")
+    acerto = [float("-inf") if t is None else 1.0 - t for t in taxa_por_dia]
+    acumulados, soma = [], 0
+    for c in consumos_por_dia:
+        soma += c
+        acumulados.append(soma)
+    e = eficiencia_amostral(acerto, acumulados, 1.0 - taxa_p0, maximo=1.0)
+    chegou = e["dia"] is not None
+    return {"sem_referencia": False, "alvo": 1.0 - e["alvo"], "dia": e["dia"], "consumos": e["sinais"] if chegou else total,
+            "censurado": not chegou, "total": total}
+
+
+def tabela_braco_condicao_parcial(valores: Mapping[tuple[str, str], Sequence[float | None]], reamostragens: int, semente: int,
+                                  nivel: float) -> dict:
+    """A `tabela_braco_condicao` para medidas que podem faltar numa vida (None: a taxa de uma janela sem consumo). A grade tem de ser
+    completa; por celula: quantas vidas tem valor e quantas nao, e o IC por bootstrap so com 2 ou mais valores (senao a media, se houver
+    uma, e `ic` None com o motivo). Nada some sem ser contado."""
+    if not valores:
+        raise ValueError("tabela sem celulas")
+    bracos = sorted({b for b, _ in valores})
+    condicoes = sorted({c for _, c in valores})
+    faltam = [(b, c) for b in bracos for c in condicoes if (b, c) not in valores]
+    if faltam:
+        raise ValueError(f"grade braco x condicao incompleta: faltam {faltam}")
+    celulas: dict[str, dict] = {}
+    for b in bracos:
+        celulas[b] = {}
+        for c in condicoes:
+            todos = list(valores[(b, c)])
+            com = [float(v) for v in todos if v is not None]
+            cel = {"n": len(com), "sem_valor": len(todos) - len(com)}
+            if len(com) >= 2:
+                cel["ic"] = bootstrap_ic(com, reamostragens, semente, nivel)
+            else:
+                cel["ic"] = None
+                cel["media"] = com[0] if com else None
+                cel["motivo"] = "menos de 2 vidas com valor"
+            celulas[b][c] = cel
+    return {"bracos": bracos, "condicoes": condicoes, "celulas": celulas}
