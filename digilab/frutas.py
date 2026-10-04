@@ -18,6 +18,9 @@ docs/DEFINICOES_FRUTAS_V2.md (F1-F11) e docs/PLANO_ANALISE_V2_N4.md (registrado 
                          Registros derivados (F1): incentivo, avaliacao, consumo_recente, primeiro_contato e as linhas `oferta` e
                          `consumo`; o replay reconstroi tudo. Nomes so de comportamento ou medida (F2).
                          Desligada (padrao): nenhuma rng, nenhum registro, nenhuma chave nova no estado(): o MotorAmbiente byte a byte.
+                         Ganchos dos lobos (LOBOS-MUNDO, docs/TAREFA_V2_LOBOS_MUNDO.md): se a politica tem `escolher_fruta`, a
+                         sub-decisao passa por ela (mesmo u; None = a de sempre); depois de comer, `fruta_comida` (o sinal E2 do P1).
+                         O instinto nao tem nenhum dos dois: a vida dele nao muda.
   OfertasFrutas          o cronograma das ofertas (B1, B2): nos horarios fixos, com o pet acordado, o proximo conjunto da rotacao.
   simular_vida_frutas    simular_vida com as ofertas FORA do orcamento: o canal conta as acoes do dono de sempre; as ofertas vao direto.
 """
@@ -186,8 +189,17 @@ class MotorFrutas(MotorAmbiente):
         if acao is AcaoPet.COMER:
             u = self._rng_fruta.random()                       # sempre: numeros comuns entre bracos
             if presentes:
-                escolhida = self._escolher(presentes, u)
+                # LOBOS-MUNDO: a politica que tem a sub-decisao (lobos) escolhe com o mesmo u; senao (ou None), a de sempre
+                escolher = getattr(self.politica, "escolher_fruta", None)
+                escolhida = escolher(list(presentes), dict(incentivos), u) if escolher is not None else None
+                if escolhida is None:
+                    escolhida = self._escolher(presentes, u)
+                elif escolhida not in presentes:
+                    raise RuntimeError(f"a politica escolheu {escolhida!r}, fora do cenario {presentes}")
                 self._comer(escolhida, tick)
+                aviso = getattr(self.politica, "fruta_comida", None)   # E2: o sinal do P1 ve o estado depois de comer
+                if aviso is not None:
+                    aviso(escolhida, Observacao.de_estado(self._estado))
             else:
                 self.contagem_frutas["comer_sem_fruta"] += 1
         if presentes:

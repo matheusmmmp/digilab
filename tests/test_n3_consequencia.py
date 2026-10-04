@@ -45,7 +45,8 @@ def _transicao(acao: AcaoPet, **kw) -> Transicao:
 
 def test_parametros_e_engine():
     validar_parametros_consequencia()
-    assert all(s == "PROPOSTO" for s, _ in PARAMETROS_CONSEQUENCIA_N3.values())
+    # os do N3 seguem PROPOSTOS; humor_na_fruta e a E2 (DECIDIDA pelo Matheus, LOBOS-MUNDO)
+    assert all(s == "PROPOSTO" for n, (s, _) in PARAMETROS_CONSEQUENCIA_N3.items() if n != "humor_na_fruta")
     assert CONFIG_CONSEQUENCIA.drives == (0, 1, 2)
     assert sha256_engine() == ENGINE_SHA256_V0
 

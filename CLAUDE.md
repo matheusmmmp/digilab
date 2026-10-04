@@ -75,7 +75,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/donos.py` | donos sintéticos: atencioso, relapso, aleatório (controle crítico), incoerente |
 | `digilab/treino.py` | `CanalDeInteracao` impõe orçamento exato; `MotorComFeedback` (subclasse, só sobrescreve `_aplicar_acao_usuario`); `reproduzir_com_feedback`; `simular_vida` |
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
-| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
+| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P3 feedback do dono; P2/P2e falham alto até o N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2) e `bola_a1` e o contrato das condições casado/descasado/mutável (seções "V2, BANCADA", "V2, N3" e "V2, BANCADA-MUNDOS" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
@@ -1501,3 +1501,34 @@ sementes 10101…10505; as vidas dos 18 pontos da grade ficam fora do git, regen
   [−0,008; 0,000], mortes 0 e 0. Descritivos: custo do descasado no humor −0,023 [−0,030; −0,014]; a fruta que faz mal em 39% dos
   consumos; as frutas alimentam (privação −0,011 [−0,021; −0,003]). Resultado registrado; a V2 segue. Decisões N1–N4 no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, LOBOS-MUNDO — os lobos veem a bola e as frutas e escolhem a fruta; E2 no sinal do P1 (2026-10-04, `docs/TAREFA_V2_LOBOS_MUNDO.md`) — GATES PASSAM
+
+Infraestrutura do aprendiz, sem run de pesquisa nem número de resultado; só as sementes dos testes (11, 22, 33). Achado 1 da rodada 4
+(`docs/V2_RODADA_4.md`): sem isto o P1, o P2 e o P3 ficam cegos ao descasado. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Como liga:** `PoliticaLobos(cfg, cfg_lobos, cfg_bola=None, cfg_frutas=None)`. Os lobos veem o mundo só com a chave dele ligada (como o
+  instinto). Sem nenhuma (o padrão), nada muda: as formas, as vidas e o estado interno de antes, byte a byte (teste).
+- **Percepção:** mais duas entradas no fim, `bola` e `fruta` (o que o `MotorAmbiente`/`MotorFrutas` já injetam na `Observacao`): 12.
+- **Impulsos:** a sonda roda o `PoliticaInstintoFrutas` (a bola mais as frutas), então `bola_no_cenario` e `fruta_no_cenario` são regras
+  dos lobos (9). Prior delas = o do tempo livre, com `w_bola` na entrada `bola` de brincar e, na das frutas, comer com `w_fruta` na entrada
+  `fruta`, no fim dos candidatos como no instinto. O coeficiente vezes S tem de ser inteiro (6,0 × 1024 é), senão falha alto.
+- **Sub-decisão da fruta:** um peso inteiro por fruta, prior S; peso da fruta = (w/S) × incentivo; o sorteio é o de
+  `MotorFrutas._escolher` passo a passo, com o mesmo u da `rng_fruta`. O motor pergunta por `escolher_fruta` (gancho em `frutas.py`; sem ele,
+  ou com `None`, a escolha de sempre; fruta fora do cenário falha alto). Com o aprendizado ligado ela entra no registro da decisão de comer
+  e aprende com o mesmo sinal, pela mesma regra da L1 (a entrada de cada fruta é o incentivo dela; piso no coeficiente). Pesos: 9 × 7 × 12
+  + 3 = 759, abaixo de mil.
+- **E2** (`ConfigConsequencia.humor_na_fruta`, DECIDIDO): na fonte consequência, comer com fruta no cenário adia o crédito até o motor
+  avisar `fruta_comida` (o segundo gancho em `frutas.py`, logo depois de comer); o sinal é `sinal_homeostatico_fruta`: os drives do N3
+  mais o humor, com "depois" = o estado logo depois de comer (nutrição e efeito no humor aplicados). Fruta que faz mal dá sinal negativo
+  pelo humor; as outras ações seguem com o `sinal_homeostatico` do N3, sem o humor. A bancada passa o `cfg_consequencia` dela (o mesmo
+  ganho) a `observar_consequencia`; nas fontes dono e nenhuma o aviso não faz nada.
+- **Gates** (`tests/test_lobos_mundo.py`, 37 testes, ~4 s): **G2 passa**: lobos desligados = `PoliticaInstintoBola` no mundo da bola
+  (4 donos × 3 sementes) e = `PoliticaInstintoFrutas` no das frutas (descasado e iguais, 4 donos × 3 sementes), com a bola e as frutas
+  juntas, byte a byte em estado, ações, log, rngs, `resumo_frutas` (escolhas, consumos, incentivos) e `rng_fruta`; a sub-decisão no prior
+  = `_escolher` em 2000 sorteios; aprendiz ligado com ganho 0 = instinto. **G1 passa**: replay bit a bit, estado interno incluído, com o
+  dono (L1) e no P1 com a E2. **E2**: fruta ruim → sinal negativo pelo humor, e o comer e a fruta desaprendem; nas 7 ações o humor sozinho
+  dá sinal 0. A L0, a L1, o N3 e a bancada passam como antes (suíte inteira).
+- **Fora:** a bancada ainda não monta os lobos que veem o mundo (`politica()` segue cega; os mundos das frutas na bancada são do chat D,
+  `docs/TAREFA_V2_BANCADA_FRUTAS.md`). O `motivo_lobos` (expressão) não cita as regras novas: como no instinto da bola, fica para quem
+  ligar a expressão no mundo.
+- **Não mudou:** `engine.py`, `AcaoPet`, o bandit, `ambiente.py`, a web; a L1 e o N3 nos mundos de antes, byte a byte.
