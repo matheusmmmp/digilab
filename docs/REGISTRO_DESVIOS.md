@@ -1659,3 +1659,7 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`,
   saciedade deveria pôr a preferência (ou usar a queda `preferencia_inata − avaliacao`).
 - **O genoma é o mesmo para os quatro donos de uma semente** (sai da semente do motor). Por isso a neofobia de uma semente pesa em todos os
   donos dela: com 0,96 o primeiro contato vem no 3º ao 8º dia. A variação entre sementes do p(comer) (0,05 a 0,30) é sobretudo isso.
+- **Validação (11101…11505, uma vez, no ponto da calibração):** G-F7 passa; **G-SEP falha** pela (ii) (+0,110 [−0,007; +0,213], pouca
+  amostra de escolhas entre frutas); **G-SSE falha** pelo β_fome (−0,070 [−0,159; −0,014]), pela regressão sem a preferência inata (a
+  avaliação não lê a fome: código e teste). Nada mudou por causa dela; resultado em `docs/RESULTADO_V2_N4.md`, com as decisões N1–N4.
+  Pela decisão de 2026-10-01 a V2 segue.

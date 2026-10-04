@@ -1394,7 +1394,7 @@ ficam fora do git, regeneráveis).
   broncas 46,0 → 20,0). Resultado registrado; a V2 segue (decisão de 2026-10-01). Decisões B1–B3 para o Matheus no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
 
-## V2, N4 — frutas no mundo, sem aprendizado de política (2026-10-04, `docs/TAREFA_V2_N4_FRUTAS.md`, `docs/PLANO_ANALISE_V2_N4.md`) — CALIBRAÇÃO NÃO FECHOU
+## V2, N4 — frutas no mundo, sem aprendizado de política (2026-10-04, `docs/TAREFA_V2_N4_FRUTAS.md`, `docs/PLANO_ANALISE_V2_N4.md`) — VALIDAÇÃO: G-F7 PASSA, G-SEP E G-SSE FALHAM
 
 Nó N4 do `docs/ROADMAP_V2.md` (a condição **descasado** da pergunta maior), com as definições F1–F11 de `docs/DEFINICOES_FRUTAS_V2.md` e as
 decisões da bola B1 e B2. **O aprendiz da política fica desligado**: a fruta entra pelo instinto, atrás de chave; a regra das frutas nos
@@ -1427,5 +1427,10 @@ sementes 10101…10505; as vidas dos 18 pontos da grade ficam fora do git, regen
     [−0,018; +0,002]. Sem aprendizado pela consequência (N3) nada o afasta dela, como esperado.
   - **A neofobia segura o comer:** o genoma é o mesmo para os quatro donos de uma semente; com neofobia 0,96 (semente 10101) o primeiro
     contato com uma fruta vem no 3º ao 8º dia e p(comer) fica em 0,05, contra 0,30 na semente de neofobia baixa.
-- **Validação (11101…11505): PR seguinte**, uma vez, no ponto de `experiments/configs/v2_n4/validacao.json`. Interpretações em
-  `docs/REGISTRO_DESVIOS.md`.
+- **Validação (11101…11505, uma vez; `artifacts_v2_n4/validacao/`, relatório `docs/RESULTADO_V2_N4.md`):** **G-SEP FALHA** pela (ii):
+  (i) +0,094 [+0,049; +0,136] passa, (ii) +0,110 [−0,007; +0,213] falha por 0,007 (4 a 24 escolhas entre frutas por vida). **G-SSE
+  FALHA** pelo β_fome −0,070 [−0,159; −0,014] (β_recente −0,778 [−0,901; −0,635] passa): a avaliação não lê a fome (código e teste);
+  a regressão do plano não tem a preferência inata e o β_fome capta a diferença de preferência entre frutas. **G-F7 PASSA**: −0,004
+  [−0,008; 0,000], mortes 0 e 0. Descritivos: custo do descasado no humor −0,023 [−0,030; −0,014]; a fruta que faz mal em 39% dos
+  consumos; as frutas alimentam (privação −0,011 [−0,021; −0,003]). Resultado registrado; a V2 segue. Decisões N1–N4 no relatório.
+  Interpretações em `docs/REGISTRO_DESVIOS.md`.
