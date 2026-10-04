@@ -1645,3 +1645,6 @@ Tarefa `docs/TAREFA_V2_PLANO_EXPERIMENTO_MAIOR.md`; entrega `docs/PLANO_ANALISE_
 - **Unidades derivadas das sementes reservadas (decisão E3).** As faixas 14101…14505 e 15101…15505 têm 5 sementes cada; o plano deriva as
   unidades de cada uma (`derivar_semente("experimento-maior", base, k)`) e fixa o número delas no adendo antes da validação, pela variância
   da calibração, como a análise de poder da v1 (`artifacts_poder/`).
+- **Decisões E1–E8 aprovadas pelo Matheus como recomendadas (2026-10-04).** Em particular, E2: o sinal do P1 inclui o humor vindo do
+  consumo de fruta no experimento maior, e a F6 não muda. Isso vira contrato para o N3 (chat B): o componente de humor da fruta, declarado e
+  desligado sem frutas. O texto da tarefa do N3 é do coordenador e não foi editado aqui.

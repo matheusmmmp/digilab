@@ -3,7 +3,7 @@
 Status: **registrado antes de qualquer dado** (2026-10-04). Tarefa `docs/TAREFA_V2_PLANO_EXPERIMENTO_MAIOR.md`; etapa R6.1 do
 `docs/ROADMAP_V2.md`. **Só papel:** nenhuma run, nenhum código. A run só acontece depois de N3 (P1), N4 (frutas), N5 (P2, P2e) e da
 bancada de mundos estarem na `main`, e depois do adendo da seção 7.3. Todo número citado aponta o artefato; os que não têm artefato estão
-marcados PROPOSTO ou ficam como decisão do Matheus (seção 11).
+marcados PROPOSTO. **Decisões E1–E8 aprovadas pelo Matheus como recomendadas em 2026-10-04** (seção 11).
 
 **A pergunta** (`docs/PLANO_V2_PESQUISA.md`, seção 2, DECIDIDA em 2026-10-01):
 
@@ -55,7 +55,7 @@ mutável dependem das frutas (N4) e ficam aqui como **contrato** que o N4 e a ba
 | condição | o que o mundo faz | quem constrói |
 |---|---|---|
 | **casado** | o mundo para o qual o prior foi feito: o mundo padrão (`padrao`) | bancada (já existe) |
-| **casado com frutas** (proposto como o casado principal, decisão E1) | frutas no cenário, e **a fruta de maior preferência inata do pet tem o efeito bom** | N4 + bancada de mundos |
+| **casado com frutas** (o casado principal, decisão E1) | frutas no cenário, e **a fruta de maior preferência inata do pet tem o efeito bom** | N4 + bancada de mundos |
 | **descasado** | frutas no cenário, e **a fruta de maior preferência inata do pet tem o efeito ruim** (por genoma: o descasado é relativo à preferência de cada pet, F5) | N4 + bancada de mundos |
 | **mutável** | começa casado com frutas; **no meio da vida o efeito das frutas troca** (a boa vira ruim e vice-versa) | N4 + bancada de mundos |
 
@@ -91,9 +91,11 @@ Cada item é conferido por teste no PR que o entrega; sem ele, a calibração n�
 - **A tarefa do N3** tira o humor do sinal do P1 ("por ser o canal da bola e o do efeito ruim das frutas").
 - Juntas, as duas fazem o P1 **cego ao efeito da fruta**: no descasado ele não teria como aprender, e a predição 2 falharia por construção,
   não por resultado.
-- **Recomendação:** no experimento maior, o sinal do P1 inclui o humor quando a mudança vem de comer uma fruta (o canal em que o mundo
-  descasado age). O N3 sozinho, sem frutas, continua como a tarefa dele define. A alternativa é o efeito ruim nutricional (a fruta ruim
-  alimenta menos), que o sinal do N3 já vê, mas que encosta na cadeia da fome que a F6 quis evitar. A escolha é do Matheus (E2).
+- **Decidido (E2, Matheus, 2026-10-04):** no experimento maior, o sinal do P1 inclui o humor quando a mudança vem de comer uma fruta (o
+  canal em que o mundo descasado age). O N3 sozinho, sem frutas, continua como a tarefa dele define. A F6 não muda: o efeito ruim segue no
+  humor, fora da cadeia privação → saúde → morte. A alternativa descartada era o efeito ruim nutricional.
+- **Consequência para o N3 (chat B):** o sinal de consequência precisa aceitar o humor vindo do consumo de fruta como componente
+  declarado, desligado sem frutas, para o contrato K2 valer quando o N4 e o N3 se juntarem. É ajuste de contrato, não de desenho do N3.
 
 ## 4. Medidas
 
@@ -150,7 +152,8 @@ de relevância da seção 6.3.
 - **"Se a vida for longa":** a curva diária P0 − P1 é reportada inteira. Se a predição não confirma, mas a diferença ainda cresce nos últimos
   dias (inclinação dos dias 11 a 14 com IC acima de 0), o resultado é **inconclusivo por duração**, não refutado. Uma vida mais longa seria
   um adendo novo, nunca uma troca depois da validação (decisão E5).
-- **Requisito:** só é teste de verdade com o K2 (seção 3.1). Sem ele, a predição fica registrada como **não testável** e não é reportada como
+- **Requisito:** só é teste de verdade com o K2 (seção 3.1; decidido em E2). Se o K2 não estiver na `main` na hora da run, a predição fica
+  registrada como **não testável** e não é reportada como
   refutada.
 
 ### Predição 3 — P2 chega lá com menos consequências que P1
@@ -218,8 +221,8 @@ Se só (a) vale, o resultado é reportado como **ensino misturado com cuidado**.
 - **Regra (registrada agora, aplicada na calibração):** Δ = **metade da distância** entre a `taxa_fruta_ruim` do P0 no descasado e o melhor
   valor possível (0), medida na calibração. É a mesma convenção de "metade do caminho" do G3-T e da `eficiencia_amostral`.
 - O valor numérico de Δ entra no adendo da seção 7.3, antes da validação, e não muda depois.
-- É uma margem de relevância, não de ruído: ela não depende da variância vista na calibração. A alternativa (um Δ fixo, escolhido sem dado)
-  é a decisão E4.
+- É uma margem de relevância, não de ruído: ela não depende da variância vista na calibração. **Decidido (E4, 2026-10-04):** esta regra, e
+  não um Δ fixo escolhido sem dado.
 
 ## 7. Tamanho da amostra
 
@@ -263,7 +266,7 @@ as unidades, e qualquer ajuste de calibração do aprendiz (nenhum previsto). A 
 
 ### 8.1 Unidades a partir das sementes reservadas
 
-Cinco sementes não dão as unidades que a seção 7 pede. Proposta (decisão E3): cada semente reservada é uma **base**, e as unidades são
+Cinco sementes não dão as unidades que a seção 7 pede. **Decidido (E3, 2026-10-04):** cada semente reservada é uma **base**, e as unidades são
 derivadas dela, sem tocar em nenhuma outra faixa:
 
 - semente da unidade k da base b = `protocol.derivar_semente("experimento-maior", b, k)`, para k = 0, 1, …, K − 1;
@@ -297,9 +300,12 @@ lido na calibração para decidir algo além disso**; os contrastes da calibraç
 Vício (N9), memória (N6), arbitragem (N7), canais separados × escalar (H-R2), genoma evoluindo (fase 3), a comparação de cérebros (N11), a
 web, humanos. Qualquer código.
 
-## 11. Decisões que só o Matheus pode tomar
+## 11. Decisões do Matheus
 
-| # | decisão | recomendação | custo de errar |
+**Todas aprovadas como recomendadas em 2026-10-04** ("segue o recomendado"). A tabela fica como registro do que foi decidido e do
+custo que cada escolha evita.
+
+| # | decisão | escolhido | custo de errar |
 |---|---|---|---|
 | E1 | O casado principal é o **casado com frutas** (a fruta de maior preferência inata tem o efeito bom), com o mundo padrão como referência; a tarefa fixava o padrão | Casado com frutas como principal | Com o padrão, casado × descasado mistura "ter frutas" com "o mundo contradiz o prior", e a predição 1 mede a presença de frutas |
 | E2 | Resolver o conflito F6 × N3: o sinal do P1 inclui o humor quando a mudança vem de comer fruta, **ou** o efeito ruim passa a ser nutricional | Humor no sinal do P1 só para a fruta, no experimento maior | Sem nenhum dos dois, o P1 não vê o efeito da fruta e a predição 2 falha por construção, não por resultado |
