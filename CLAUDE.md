@@ -77,7 +77,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
-| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P3 feedback do dono; P1/P2/P2e falham alto até o N3/N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`) (seção "V2, BANCADA" no fim) |
+| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P3 feedback do dono; P1/P2/P2e falham alto até o N3/N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2) e `bola_a1` e o contrato das condições casado/descasado/mutável (seções "V2, BANCADA" e "V2, BANCADA-MUNDOS" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
 | `digilab/metrics.py` | taxa de vitória, Bradley-Terry (erro padrão projetado em soma-zero), JSD com números aleatórios comuns, bootstrap, `efeito_do_treino` (ablação) |
@@ -1393,3 +1393,33 @@ ficam fora do git, regeneráveis).
   −0,024 [−0,042; −0,008]: a bola tira elogios e carinhos. Nos coerentes a bola desloca o ensino (atencioso: elogios 93,0 → 61,4,
   broncas 46,0 → 20,0). Resultado registrado; a V2 segue (decisão de 2026-10-01). Decisões B1–B3 para o Matheus no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, BANCADA-MUNDOS — o mundo da bola e o contrato das condições (2026-10-04, `docs/TAREFA_V2_BANCADA_MUNDOS.md`) — GATES PASSAM
+
+Infraestrutura, sem run de pesquisa nem número de resultado; só as sementes dos testes. O campo **mundo** da bancada
+(`experiments/bancada_v2.py`) monta as condições da pergunta maior. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Mundos** (`MUNDOS`, `mundo_de`): `padrao` (o de sempre); **`bola`**, a bola da A1 (`MotorAmbiente`, `CONFIG_BOLA_LIGADA`, obediência,
+  educação e lesões desligadas, espécie brasa, temperamento neutro ou do genoma) com as decisões de 2026-10-01: **B1**, os donos são os
+  da v1 e o aleatório não sorteia `por_bola` (nem põe bola por outra regra); **B2**, a bola entra por uma regra do mundo **fora do
+  orçamento** (`RegraBola` + `simular_vida_mundo`: a regra dos coerentes do `DonoComBola` sem o limite do passo; o relapso só nas visitas,
+  B3); e **`bola_a1`**, a bola exatamente como a A1 rodou (`DonoComBola`, o aleatório sorteando, a bola no orçamento), só para reproduzir a
+  A1. `ambiente.py` e os donos da A1 não mudaram.
+- **Contrato das condições** (`CONDICOES`): `casado` existe (os três mundos de hoje o realizam); `descasado` e `mutavel` levantam
+  `NotImplementedError` com o que precisam do N4 (a preferência inata por fruta no genoma, o efeito real de cada fruta contrário a ela,
+  com o efeito ruim no humor; no mutável, a troca do efeito num tick, gravada no registro). A tabela braço × condição usa a coluna
+  `condicao/mundo` (hoje `casado/padrao`, `casado/bola`): dois mundos da mesma condição nunca dividem uma célula.
+- **Cérebros:** `lobos` (todos os braços) e **`instinto`**, só no P0: no mundo da bola é o `PoliticaInstintoBola`, a predisposição
+  herdada que vê a bola. Os lobos ainda não veem a bola (a regra `bola_no_cenario` deles é do chat B): no mundo da bola o P0 com lobos é
+  o braço "bolacega" da A1.
+- **Acoplado com mundo:** o registro é rejogado no mesmo mundo, e os **eventos do mundo** (`EVENTOS_DO_MUNDO`: pôr e tirar a bola; as
+  ofertas de fruta entram aqui no N4) nunca saem; um filtro que os tirasse falha alto. O "só cuidado" da A1, que tirava a bola, fica em
+  `run_v2_a1.py`. Medidas no mundo da bola: `metrics.resposta_a_bola` e a contagem da bola, ao lado das de sempre; `interacoes` conta só
+  as ações do dono, `eventos_mundo` as da bola.
+- **Gates** (`tests/test_bancada_mundos.py`, 22 testes, ~20 s): **`bola_a1` = a vida da A1 byte a byte** (4 donos × 2 sementes; com o
+  instinto é o braço "bola", com os lobos o "bolacega"); **B1 e B2**: em 4 donos × 5 sementes o aleatório nunca põe bola, o orçamento é
+  só de ações do dono e a bola vem por fora (o aleatório no mundo da bola tem o log, as ações e as rngs do mundo padrão; o laço do mundo
+  sem eventos é o `simular_vida`); **G1** de toda vida e acoplado nos mundos novos; **acoplado com mundo** reproduz a vida de origem no
+  próprio braço e, no P0 sem os sinais, guarda toda bola no mesmo tick e é o instinto cego à bola nesse registro.
+  `tests/test_bancada_v2.py` segue passando (a coluna da tabela virou `casado/padrao`).
+- **Fumaça** (`experiments/configs/bancada/fumaca.json`, NÃO canônica, agora com `padrao` e `bola`): 160 vidas em ~52 s; sem artefato.
+- **Não mudou:** `engine.py`, `lobos.py`, `ambiente.py`, os donos e as runs da A1, `run_v2_l1.py`, a web.
