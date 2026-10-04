@@ -1,8 +1,8 @@
 # TAREFA V2 — REVISAO-APRENDIZ (2026-10-04, para a rodada 6)
 
 Coordenador: chat "Principais jogos Digimon com diálogo". Worker: chat B (é dono de `lobos.py`). Worktree e branch:
-`v2-revisao-aprendiz`. Status: **RESERVADA**. Começa depois do LOBOS-MUNDO (`docs/TAREFA_V2_LOBOS_MUNDO.md`) na `main` e **antes** da
-calibração do experimento maior.
+`v2-revisao-aprendiz`. Status: **ABERTA na rodada 6**, depois do N5-CEREBRO (`docs/TAREFA_V2_N5_CEREBRO.md`) e da BANCADA-N5 (os lobos vendo o
+mundo na bancada); **antes** da calibração do N5 e do experimento maior.
 
 ## 1. Pergunta
 
@@ -28,7 +28,7 @@ O computador não é o gargalo: as runs da V2 levam minutos em CPU.
 ## 3. Experimento
 
 - Plano de análise `docs/PLANO_ANALISE_V2_REVISAO_APRENDIZ.md` commitado antes de qualquer run.
-- **Só sementes de calibração** (as do experimento maior, 14101…14505, ou uma faixa nova reservada pelo coordenador). Isto é um
+- **Só sementes de calibração: 18101…18505** (faixa própria, reservada em 2026-10-04, para não gastar a calibração do experimento maior). Isto é um
   diagnóstico para escolher o ponto do experimento maior, não uma validação.
 - Medidas: fração de decisões em que o aprendido decide; vidas com peso no teto; G6; desempenho no ambiente; tudo por braço (P1, P3) no
   mundo das frutas (casado e descasado).
