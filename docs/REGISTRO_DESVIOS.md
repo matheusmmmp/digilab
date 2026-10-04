@@ -1629,3 +1629,22 @@ O Matheus seguiu as recomendações:
   - F4: a neofobia é um gene próprio.
   - F10 aplicada: a frase do pedido original em `docs/DEFINICOES_V2.md`, seção 7, foi reescrita.
 - Marco em `docs/V2_RODADA_3.md`. Tarefas da rodada 4: N3 (B), N4 (A), plano do experimento maior (C) e bancada de mundos (D).
+
+## 2026-10-04 — PLANO-EXPERIMENTO-MAIOR: plano no papel; duas interpretações e um conflito encontrado
+
+Tarefa `docs/TAREFA_V2_PLANO_EXPERIMENTO_MAIOR.md`; entrega `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` e o prompt 11 do Claude Science
+(`D:\Trab\digilab\docs\digibrain\integration\11_PROMPT_CLAUDE_SCIENCE_PLASTICIDADE.md`, fora do repositório). Nenhuma run, nenhum código.
+- **Conflito F6 × N3 (decisão E2 do plano).** A F6 põe o efeito ruim das frutas no humor; a tarefa do N3 tira o humor do sinal do P1. Juntas,
+  deixam o P1 cego ao efeito da fruta, e a predição "P1 vence P0 no descasado" falharia por construção. O plano registra a predição como
+  **não testável** enquanto o contrato K2 não for cumprido e leva a escolha ao Matheus.
+- **Casado com frutas (decisão E1).** A tarefa fixa o casado como o mundo padrão. O plano mantém o padrão como referência e propõe como casado
+  principal o mundo com as mesmas ofertas de fruta e o efeito bom na fruta preferida, para que casado × descasado difira só no desencontro.
+- **Medida primária nova.** Como o efeito das frutas fica no humor, o tempo fora de privação e a saúde não mudam com a escolha de fruta. A
+  primária é a `taxa_fruta_ruim` (contrato K8, a implementar uma vez em `metrics.py`); as medidas da bancada ficam como secundárias e
+  como controle do canal de cuidado.
+- **Unidades derivadas das sementes reservadas (decisão E3).** As faixas 14101…14505 e 15101…15505 têm 5 sementes cada; o plano deriva as
+  unidades de cada uma (`derivar_semente("experimento-maior", base, k)`) e fixa o número delas no adendo antes da validação, pela variância
+  da calibração, como a análise de poder da v1 (`artifacts_poder/`).
+- **Decisões E1–E8 aprovadas pelo Matheus como recomendadas (2026-10-04).** Em particular, E2: o sinal do P1 inclui o humor vindo do
+  consumo de fruta no experimento maior, e a F6 não muda. Isso vira contrato para o N3 (chat B): o componente de humor da fruta, declarado e
+  desligado sem frutas. O texto da tarefa do N3 é do coordenador e não foi editado aqui.
