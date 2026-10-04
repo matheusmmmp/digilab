@@ -1282,3 +1282,19 @@ class ConfigFrutas:
 
 CONFIG_FRUTAS = ConfigFrutas()
 CONFIG_FRUTAS_LIGADA = ConfigFrutas(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigInformacao:
+    """V2, N5, lado do mundo (docs/TAREFA_V2_N5_MUNDO.md): o dono informa sobre uma fruta ("faz bem" ou "faz mal"). A informacao nao e
+    cuidado nem reforco: nao mexe no estado, nao passa pelo aprendiz como sinal e fica fora do orcamento (o canal das ofertas, B2). Ela so
+    fica disponivel para a percepcao (`Observacao.info_frutas`) por uma janela. Exige ConfigFrutas.ligada. Tudo PROPOSTO, sem fonte
+    (protocol.PARAMETROS_INFORMACAO_N5); o desenho fino e o plano sao do chat C (docs/TAREFA_V2_N5_PLANO.md).
+    Desligada: nada muda (a vida das frutas byte a byte), e uma informacao no log levanta erro."""
+
+    ligada: bool = False
+    janela_min: int = 240                    # quanto tempo uma informacao vale para a percepcao, desde o evento (renovar reinicia)
+
+
+CONFIG_INFORMACAO = ConfigInformacao()
+CONFIG_INFORMACAO_LIGADA = ConfigInformacao(ligada=True)

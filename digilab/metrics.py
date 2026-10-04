@@ -773,3 +773,22 @@ def taxa_fruta_ruim(consumos: Sequence[tuple[int, float]], janelas: Mapping[str,
         ruins = sum(e < 0.0 for e in sel)
         out[nome] = {"inicio": ini, "fim": fim, "n": len(sel), "ruins": ruins, "taxa": ruins / len(sel) if sel else None}
     return out
+
+
+def saciedade_especifica_n1(consumos: Sequence[tuple[float, float, float, float]]) -> dict:
+    """N1 (decisao do Matheus, rodada 4; docs/RESULTADO_V2_N4.md): a saciedade sensorio-especifica COM o termo da preferencia inata.
+    `consumos` = (avaliacao registrada, preferencia inata daquela fruta, consumo recente dela antes, fome antes). Minimos quadrados de
+    avaliacao ~ 1 + preferencia + recente + fome. A queda especifica e beta_recente (< 0); beta_fome ~ 0 se a fome nao entra; beta_pref
+    ~ 1 se a avaliacao parte da preferencia. Sem o termo da preferencia (saciedade_especifica), a diferenca de preferencia entre frutas
+    vaza para os outros coeficientes. Ao lado, a queda media por unidade de consumo recente, (preferencia - avaliacao) / recente, nos
+    consumos com recente > 0. Falha alto com menos de 5 consumos ou sistema singular."""
+    if len(consumos) < 5:
+        raise ValueError(f"saciedade_especifica_n1 precisa de pelo menos 5 consumos, recebeu {len(consumos)}")
+    X = [(1.0, p, r, f) for _, p, r, f in consumos]
+    y = [a for a, _, _, _ in consumos]
+    XtX = [[sum(x[i] * x[j] for x in X) for j in range(4)] for i in range(4)]
+    Xty = [sum(x[i] * yi for x, yi in zip(X, y)) for i in range(4)]
+    b = _resolver(XtX, Xty)
+    quedas = [(p - a) / r for a, p, r, _ in consumos if r > 0.0]
+    return {"n": len(consumos), "intercepto": b[0], "beta_pref": b[1], "beta_recente": b[2], "beta_fome": b[3],
+            "queda_por_unidade": (sum(quedas) / len(quedas)) if quedas else None, "n_com_recente": len(quedas)}

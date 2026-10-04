@@ -66,7 +66,8 @@ def test_parametros_registrados_e_nenhum_referendado():
 
 
 def test_enum_cresce_no_fim_e_a_v1_nao_ve():
-    assert list(AcaoUsuario)[-3:] == list(ACOES_FRUTAS) and list(AcaoUsuario)[-5:-3] == list(ACOES_BOLA)
+    # nas posicoes de quando entraram no fim do enum (17 a 19); depois delas so as de informacao (V2, N5)
+    assert list(AcaoUsuario)[17:20] == list(ACOES_FRUTAS) and list(AcaoUsuario)[15:17] == list(ACOES_BOLA)
     assert len(ACOES_V1) == 6 and not set(ACOES_FRUTAS) & set(ACOES_V1)
     assert tuple(ACOES_BANDIT) == tuple(AcaoPet) and len(AcaoPet) == 7
 

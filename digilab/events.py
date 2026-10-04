@@ -52,6 +52,15 @@ class AcaoUsuario(str, Enum):
     OFERECER_FRUTA_A = "oferecer_fruta_a"
     OFERECER_FRUTA_B = "oferecer_fruta_b"
     OFERECER_FRUTA_C = "oferecer_fruta_c"
+    # V2, N5 (docs/TAREFA_V2_N5_MUNDO.md; nomes definidos no docs/PLANO_ANALISE_V2_N5.md, PR #142): o dono INFORMA sobre uma fruta ("faz bem" ou
+    # "faz mal"). O conteudo e o que o dono diz; se esta certo ou errado e decidido pelo braco (P2, P2e), nao pelo evento. Nao e cuidado
+    # nem reforco: so o MotorFrutas com ConfigInformacao.ligada aceita; nos motores anteriores levantam erro. No fim do enum.
+    INFORMAR_FRUTA_A_BEM = "informar_fruta_a_bem"
+    INFORMAR_FRUTA_A_MAL = "informar_fruta_a_mal"
+    INFORMAR_FRUTA_B_BEM = "informar_fruta_b_bem"
+    INFORMAR_FRUTA_B_MAL = "informar_fruta_b_mal"
+    INFORMAR_FRUTA_C_BEM = "informar_fruta_c_bem"
+    INFORMAR_FRUTA_C_MAL = "informar_fruta_c_mal"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -69,6 +78,24 @@ def fruta_de(acao: AcaoUsuario) -> str:
     if acao not in ACOES_FRUTAS:
         raise ValueError(f"acao nao e oferta de fruta: {acao}")
     return acao.value[len("oferecer_fruta_"):]
+
+
+CONTEUDOS_INFORMACAO = ("bem", "mal")
+ACOES_INFORMACAO = tuple(AcaoUsuario(f"informar_fruta_{f}_{c}") for f in FRUTAS for c in CONTEUDOS_INFORMACAO)
+
+
+def informacao_de(acao: AcaoUsuario) -> tuple[str, str]:
+    """(fruta, conteudo) de uma acao de informar; conteudo em CONTEUDOS_INFORMACAO"""
+    if acao not in ACOES_INFORMACAO:
+        raise ValueError(f"acao nao e informacao: {acao}")
+    _, _, fruta, conteudo = acao.value.split("_")
+    return fruta, conteudo
+
+
+def informar(fruta: str, conteudo: str) -> AcaoUsuario:
+    if fruta not in FRUTAS or conteudo not in CONTEUDOS_INFORMACAO:
+        raise ValueError(f"informacao invalida: {fruta!r}, {conteudo!r}")
+    return AcaoUsuario(f"informar_fruta_{fruta}_{conteudo}")
 
 
 def oferta_de(fruta: str) -> AcaoUsuario:
