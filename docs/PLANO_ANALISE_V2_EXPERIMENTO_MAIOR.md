@@ -68,6 +68,14 @@ qualquer braço, vê as mesmas frutas nos mesmos ticks (como a bola da 1a-pet, q
 estado, os braços teriam exposições diferentes e o contraste mediria exposição. As ofertas ficam fora do orçamento e fora do sorteio do
 dono aleatório (decisões B1 e B2 da bola, adotadas para as frutas no N4).
 
+### 2.1 Fator a considerar: variedade de frutas (PROPOSTO, Matheus 2026-10-04)
+
+Depois do diagnóstico de gargalos (o gargalo é o aprendiz e a densidade de consequências, não o número de objetos), o Matheus pediu para
+considerar a **variedade de frutas** como fator: por exemplo, 2 × 6 tipos de fruta, com gostos e efeitos diferentes, dentro do mesmo
+mundo das frutas (nenhum objeto novo). Pergunta: mais escolhas com consequência aumentam a vantagem de aprender sobre o herdado?
+**Não entra nas predições registradas acima.** Se for adotado, entra por **adendo registrado antes da calibração**, com predição própria,
+o custo em unidades (o fator multiplica as células) e a decisão do Matheus. Até lá, o experimento roda com o número de frutas do N4.
+
 ## 3. Contratos que precisam estar na `main` antes da calibração
 
 Cada item é conferido por teste no PR que o entrega; sem ele, a calibração não começa.

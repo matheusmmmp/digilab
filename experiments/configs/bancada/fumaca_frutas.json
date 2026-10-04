@@ -1,0 +1,12 @@
+{
+  "descricao": "Fumaca dos mundos das frutas da bancada (docs/TAREFA_V2_BANCADA_FRUTAS.md). NAO canonica: unidades derivadas das sementes dos testes, sem plano de analise; confere o encanamento (as tres condicoes, P0, P1 e P3, o acoplado, a taxa_fruta_ruim por janela), nunca como resultado.",
+  "bracos": ["P0", "P1", "P3"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1},
+  "mundos": ["padrao", "casado_frutas", "descasado", "mutavel"],
+  "dias": 4,
+  "orcamento": 64,
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P3", "destino": "P0", "filtro": "sem_sinais"}]
+}

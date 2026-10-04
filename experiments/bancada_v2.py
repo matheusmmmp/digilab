@@ -15,8 +15,16 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
                       (RegraBola: a regra dos coerentes do DonoComBola sem o limite do passo; o relapso so nas visitas, B3).
              bola_a1  a bola exatamente como a A1 rodou (DonoComBola: o aleatorio sorteia por_bola e a bola gasta orcamento);
                       so para reproduzir a A1 (gate), nao para runs novas.
-             Cada mundo realiza uma CONDICAO da pergunta maior (CONDICOES): hoje todos sao "casado"; "descasado" e "mutavel"
-             levantam NotImplementedError com o que precisam do N4 (frutas).
+             casado_frutas, descasado, mutavel   os mundos das frutas (N4, MotorFrutas; docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md,
+                      secao 2, E1): as mesmas ofertas nos tres, por um calendario que sai da semente (CalendarioFrutas: horarios
+                      fixos, a rotacao do N4 com o inicio derivado da semente, sem olhar o estado do pet nem o braco), fora do
+                      orcamento e fora do sorteio do dono aleatorio (B1, B2). Muda so o efeito no humor (F6), pelo genoma das frutas:
+                      no casado a fruta de maior preferencia inata faz bem e a de menor faz mal; no descasado, o contrario; a do
+                      meio e neutra nos dois (efeitos_da_condicao: o descasado e o casado com o sinal trocado). O mutavel comeca
+                      casado e troca para o descasado na metade da vida (tick_troca); a troca fica no registro derivado do motor
+                      (MotorFrutasMundo.troca) e o replay a refaz.
+             Cada mundo realiza uma CONDICAO da pergunta maior (CONDICOES): casado (padrao, bola, bola_a1, casado_frutas),
+             descasado e mutavel.
     dono     um dono sintetico; a rng do dono deriva de (semente, nome do dono), igual em todos os bracos e mundos.
     braco    P0..P3: o MESMO cerebro (PoliticaLobos, mesmo prior, mesma ConfigLobos); so a FONTE do sinal muda.
     semente  a do motor: rng de ambiente = semente, rng de politica = semente + 1_000_003 (engine.py, intocado).
@@ -43,8 +51,14 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   a bola, PoliticaInstintoBola, porque os lobos ainda nao veem a bola: a regra bola_no_cenario deles e do chat B).
 
   medidas (todas de digilab/metrics.py; nenhuma conta aqui): desempenho no proprio ambiente (tempo fora de privacao e saude
-  media, amostrados em cada decisao; acerto na tarefa do dono, `acerto_na_tarefa`), custo da plasticidade (deriva ao prior
-  por dia e tempo ate a metade do caminho, `custo_da_plasticidade`) e a tabela braco x condicao (`tabela_braco_condicao`).
+  media, amostrados em cada decisao; humor medio, `privacao_nas_decisoes`; acerto na tarefa do dono, `acerto_na_tarefa`), custo
+  da plasticidade (deriva ao prior por dia e tempo ate a metade do caminho, `custo_da_plasticidade`), nos mundos das frutas a
+  `taxa_fruta_ruim` por janela (inicio, final, antes e depois da troca, e por dia) e a tabela braco x condicao.
+
+  unidades derivadas (E3 do plano do experimento maior, secao 8.1): de cada semente reservada (base b) saem K unidades,
+  semente = derivar_semente("experimento-maior", b, k) e genoma = derivar_semente("experimento-maior-genoma", b, k)
+  (unidades_derivadas; o campo "unidades" da config). FAIXAS_RESERVADAS lista as faixas reservadas ou usadas; o teste confere
+  que nenhuma unidade cai nelas.
 
 Toda vida e rejogada do disco e comparada bit a bit (G1): divergencia levanta erro e para tudo. engine.py e lobos.py nao
 mudam. Sementes: so as dos testes (101...505) sem plano; qualquer outra exige o plano de analise registrado (campo "plano").
@@ -67,13 +81,16 @@ sys.path.insert(0, str(RAIZ))
 
 from digilab.ambiente import (DonoComBola, MotorAmbiente, PoliticaInstintoBola, _PoliticaComBola,  # noqa: E402
                               reproduzir_ambiente)
-from digilab.config import (CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO,  # noqa: E402
-                            TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigLobos)
+from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_FRUTAS_LIGADA,  # noqa: E402
+                            CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigFrutas,
+                            ConfigLobos)
 from digilab.donos import Visao, criar_dono, cuidados_necessarios, julgar_acao  # noqa: E402
-from digilab.events import ACOES_BOLA, AcaoPet, AcaoUsuario, LogDeEventos  # noqa: E402
+from digilab.events import ACOES_BOLA, ACOES_FRUTAS, FRUTAS, AcaoPet, AcaoUsuario, LogDeEventos, oferta_de  # noqa: E402
 from digilab.evolucao import politica_no_tick  # noqa: E402
+from digilab.frutas import MotorFrutas, PoliticaInstintoFrutas, _PoliticaComFrutas  # noqa: E402
 from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho_no_ambiente,  # noqa: E402
-                             distribuicoes_de_acao, estados_sonda, jsd_media, resposta_a_bola, tabela_braco_condicao)
+                             distribuicoes_de_acao, estados_sonda, jsd_media, privacao_nas_decisoes, resposta_a_bola,
+                             tabela_braco_condicao, taxa_fruta_ruim)
 from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
@@ -92,7 +109,7 @@ FILTROS = {"nenhum": frozenset(), "sem_sinais": SINAIS,
            "sem_sinais_sem_carinho": SINAIS | {AcaoUsuario.ACARICIAR.value}}
 # os eventos do MUNDO no log: acoes do dono que poem coisas no cenario. O acoplado nunca os tira (as ofertas de fruta do N4 entram
 # aqui quando existirem). Os filtros so tiram o que o dono ENSINA ou o carinho.
-EVENTOS_DO_MUNDO = frozenset(a.value for a in ACOES_BOLA)
+EVENTOS_DO_MUNDO = frozenset(a.value for a in ACOES_BOLA + ACOES_FRUTAS)
 assert not any(f & EVENTOS_DO_MUNDO for f in FILTROS.values()), "um filtro nao pode tirar eventos do mundo"
 
 
@@ -110,14 +127,10 @@ class Condicao:
 CONDICOES = {
     "casado": Condicao("casado", "o mundo e aquele para o qual o prior foi feito: nada nele contradiz a predisposicao herdada"),
     "descasado": Condicao(
-        "descasado", "o mundo contradiz o prior: a fruta preferida de nascenca faz mal",
-        "do N4 (docs/DEFINICOES_FRUTAS_V2.md): a preferencia inata por fruta no genoma (F5, gene proprio com rng propria), o "
-        "efeito real de cada fruta no corpo separado do gosto, com efeito ruim no humor e fora de em_privacao (F6), e as frutas "
-        "do mundo com o efeito CONTRARIO a preferencia inata; as ofertas sao eventos do mundo (EVENTOS_DO_MUNDO)", "N4"),
+        "descasado", "o mundo contradiz o prior: a fruta preferida de nascenca faz mal (e a menos preferida faz bem)"),
     "mutavel": Condicao(
-        "mutavel", "o mundo muda no meio da vida",
-        "do N4: o mesmo que o descasado e mais a TROCA do efeito das frutas num tick da vida; a troca tem de estar no registro "
-        "(como evento do mundo ou como parametro gravado da vida), para o replay e o acoplado reproduzirem", "N4"),
+        "mutavel", "o mundo muda no meio da vida: comeca casado e o efeito das frutas troca na metade (a boa vira ruim e "
+        "vice-versa); a troca fica no registro derivado e o replay a refaz"),
 }
 
 
@@ -126,12 +139,21 @@ class Mundo:
     nome: str
     condicao: str                    # a condicao da pergunta maior que este mundo realiza
     bola: str | None = None          # None: sem bola; "b1b2": a bola das decisoes B1/B2; "a1": a bola como a A1 rodou
+    frutas: bool = False             # os mundos das frutas (MotorFrutasMundo); o efeito sai da condicao
+
+    @property
+    def ambiente(self) -> bool:
+        """roda no MotorAmbiente (bola) ou numa subclasse dele (frutas)"""
+        return self.bola is not None or self.frutas
 
 
 MUNDOS = {
     "padrao": Mundo("padrao", "casado"),
     "bola": Mundo("bola", "casado", "b1b2"),
     "bola_a1": Mundo("bola_a1", "casado", "a1"),
+    "casado_frutas": Mundo("casado_frutas", "casado", frutas=True),
+    "descasado": Mundo("descasado", "descasado", frutas=True),
+    "mutavel": Mundo("mutavel", "mutavel", frutas=True),
 }
 
 
@@ -140,14 +162,147 @@ def mundo_de(nome: str) -> Mundo:
         c = CONDICOES[nome]
         raise NotImplementedError(f"condicao {nome!r} ({c.descricao}): precisa {c.precisa}")
     if nome not in MUNDOS:
-        raise NotImplementedError(f"mundo {nome!r}: so {sorted(MUNDOS)}; descasado e mutavel chegam com o N4 (frutas)")
+        raise NotImplementedError(f"mundo {nome!r}: so {sorted(MUNDOS)}")
     m = MUNDOS[nome]
     if CONDICOES[m.condicao].precisa:          # pragma: no cover - um mundo registrado so realiza condicao que ja existe
         raise NotImplementedError(m.condicao)
     return m
-MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "acerto_total", "deriva_final")
-CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "genomas", "mundos", "dias", "orcamento", "sonda",
-                 "bootstrap", "acoplados", "consequencia"}
+MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
+CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
+                 "sonda", "bootstrap", "acoplados", "consequencia"}
+
+
+# ------------------------------------------------------------------ as frutas na bancada
+
+
+def efeitos_da_condicao(genoma, cf: ConfigFrutas, condicao: str) -> dict:
+    """O efeito no humor de cada fruta (F6: o ruim no humor, fora de em_privacao). Casado: a de maior preferencia inata faz bem
+    (-efeito_humor_ruim) e a de menor faz mal (efeito_humor_ruim); descasado: o mesmo com o sinal trocado; a do meio fica com o
+    efeito neutro nos dois. Assim casado e descasado diferem SO no sinal, e os dois tem uma fruta boa e uma ruim."""
+    if cf.efeito_humor_ruim >= 0.0:
+        raise ValueError("efeito_humor_ruim precisa ser negativo")
+    pref = genoma.preferencia_inata
+    maior = genoma.fruta_preferida()
+    menor = min(FRUTAS, key=lambda f: (pref[f], FRUTAS.index(f)))
+    if maior == menor:
+        raise ValueError("preferencias inatas iguais: sem fruta preferida nem rejeitada")
+    ruim, bom = cf.efeito_humor_ruim, -cf.efeito_humor_ruim
+    if condicao == "casado":
+        alto, baixo = bom, ruim
+    elif condicao == "descasado":
+        alto, baixo = ruim, bom
+    else:
+        raise ValueError(f"efeitos so de casado ou descasado, nao {condicao!r}")
+    return {f: (alto if f == maior else baixo if f == menor else cf.efeito_humor_neutro) for f in FRUTAS}
+
+
+class MotorFrutasMundo(MotorFrutas):
+    """O MotorFrutas (digilab/frutas.py, que nao muda) com o efeito de cada fruta dado pela CONDICAO do mundo da bancada, no
+    lugar do `ConfigFrutas.mundo` do N4. No mutavel o efeito comeca casado e troca para o descasado na primeira decisao em ou
+    depois de `tick_troca` (as decisoes caem a cada 15 ticks, entao com tick_troca multiplo de 15 a troca e no tick exato); a
+    troca fica em `self.troca` (registro derivado: tick e os efeitos antes e depois) e em cada consumo (o efeito aplicado).
+    Nenhuma rng a mais; o replay pelo log refaz tudo."""
+
+    def __init__(self, *a, condicao: str, tick_troca: int | None = None, **kw) -> None:
+        super().__init__(*a, **kw)
+        if not self.cf.ligada:
+            raise ValueError("os mundos das frutas pedem ConfigFrutas.ligada")
+        if condicao == "mutavel":
+            if tick_troca is None or tick_troca <= 0:
+                raise ValueError("o mutavel precisa de tick_troca > 0")
+            inicial = "casado"
+        elif condicao in ("casado", "descasado"):
+            if tick_troca is not None:
+                raise ValueError(f"so o mutavel troca, nao {condicao!r}")
+            inicial = condicao
+        else:
+            raise ValueError(f"condicao das frutas desconhecida: {condicao!r}")
+        self.condicao = condicao
+        self.tick_troca = tick_troca
+        self._efeitos = {c: efeitos_da_condicao(self.genoma, self.cf, c) for c in ("casado", "descasado")}
+        self.efeito_vigente = inicial
+        self.efeito_humor = dict(self._efeitos[inicial])
+        self.troca: dict | None = None
+
+    def _frutas_na_proxima_decisao(self) -> float:
+        t = self._estado.tick
+        if self.condicao == "mutavel" and self.troca is None and t >= self.tick_troca:
+            antes = dict(self.efeito_humor)
+            self.efeito_vigente = "descasado"
+            self.efeito_humor = dict(self._efeitos["descasado"])
+            self.troca = {"tick": t, "tick_troca": self.tick_troca, "de": "casado", "para": "descasado",
+                          "efeito_antes": antes, "efeito_depois": dict(self.efeito_humor)}
+        return super()._frutas_na_proxima_decisao()
+
+    def resumo_mundo(self) -> dict:
+        return {"condicao": self.condicao, "tick_troca": self.tick_troca, "efeito_vigente": self.efeito_vigente,
+                "efeitos": {c: dict(e) for c, e in self._efeitos.items()}, "troca": self.troca}
+
+
+class CalendarioFrutas:
+    """As ofertas de fruta do experimento maior (plano, secao 2; K5): saem da SEMENTE, nao do estado do pet nem do braco, entao o
+    mesmo pet ve as mesmas frutas nos mesmos ticks em qualquer braco e condicao. Nos horarios fixos do N4
+    (`ConfigFrutas.horarios_oferta`), todo dia, o proximo conjunto da `rotacao_ofertas`, comecando no indice
+    derivar_semente("calendario-frutas", semente) % len(rotacao). Diferente do OfertasFrutas do N4, oferece com o pet dormindo
+    tambem (a fruta fica no cenario ate o prazo): olhar o sono faria a oferta depender do estado. Regra do mundo da bancada:
+    fora do orcamento e fora do sorteio do dono aleatorio (B1, B2), igual para todo dono."""
+
+    def __init__(self, semente: int, cf: ConfigFrutas) -> None:
+        self.cf = cf
+        self.k = derivar_semente("calendario-frutas", semente) % len(cf.rotacao_ofertas)
+
+    def decidir(self, visao: Visao, acoes_do_dono: list) -> list[AcaoUsuario]:
+        if visao.estado["tick"] % TICKS_POR_DIA not in self.cf.horarios_oferta:
+            return []
+        conjunto = self.cf.rotacao_ofertas[self.k % len(self.cf.rotacao_ofertas)]
+        self.k += 1
+        return [oferta_de(f) for f in conjunto]
+
+
+# ------------------------------------------------------------------ unidades derivadas (E3)
+
+BASES_EXPERIMENTO_MAIOR = {"calibracao": (14101, 14202, 14303, 14404, 14505),
+                           "validacao": (15101, 15202, 15303, 15404, 15505)}
+# faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
+FAIXAS_RESERVADAS = (
+    (101, 1010, "testes (101...505) e ovos da personalidade (101...1010)"),
+    (1101, 1505, "baterias do combate V2 (configs bateria_*)"),
+    (2101, 2505, "validacao do combate V2"),
+    (3101, 3505, "calibracao: V2.1, L1, vinculo B"),
+    (4101, 4505, "validacao: V2.1, V21D, equilibrio, L1"),
+    (5101, 5505, "validacao do vinculo B"),
+    (6101, 6505, "A1, calibracao"), (7101, 7505, "A1, validacao"),
+    (8101, 8505, "N3, calibracao"), (9101, 9505, "N3, validacao"),
+    (10101, 10505, "N4, calibracao"), (11101, 11505, "N4, validacao"),
+    (12101, 12505, "N5, calibracao (reservada)"), (13101, 13505, "N5, validacao (reservada)"),
+    (14101, 14505, "experimento maior, bases da calibracao"), (15101, 15505, "experimento maior, bases da validacao"),
+    (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
+    (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
+    (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
+)
+
+
+def unidades_derivadas(bases, k_por_base: int) -> list[dict]:
+    """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente("experimento-maior", b, k) e
+    genoma derivar_semente("experimento-maior-genoma", b, k), k = 0..K-1. Falha alto com K < 1, base repetida ou colisao."""
+    if k_por_base < 1:
+        raise ValueError("K precisa ser >= 1")
+    bases = list(bases)
+    if len(set(bases)) != len(bases):
+        raise ValueError(f"base repetida: {bases}")
+    out = [{"base": b, "k": k, "semente": derivar_semente("experimento-maior", b, k),
+            "genoma": derivar_semente("experimento-maior-genoma", b, k)} for b in bases for k in range(k_por_base)]
+    valores = [u["semente"] for u in out] + [u["genoma"] for u in out]
+    if len(set(valores)) != len(valores):
+        raise ValueError("colisao entre sementes e genomas derivados")
+    return out
+
+
+def na_faixa_reservada(valor: int) -> str | None:
+    for lo, hi, fonte in FAIXAS_RESERVADAS:
+        if lo <= valor <= hi:
+            return fonte
+    return None
 
 
 class ReplayDivergiu(RuntimeError):
@@ -209,7 +364,7 @@ class PoliticaDoBraco:
         if self.braco.fonte == "consequencia":
             f_S = sinal_homeostatico(transicao, self.cerebro.cl.escala, self.cfg_consequencia)
             self.consequencias += f_S != 0
-            self.cerebro.observar_consequencia(transicao, f_S)
+            self.cerebro.observar_consequencia(transicao, f_S, self.cfg_consequencia)   # o mesmo ganho no sinal da fruta (E2)
         else:
             self.cerebro.observar(transicao)
 
@@ -316,7 +471,12 @@ def resumo_motor(motor) -> tuple:
         extra = (motor._rng_obediencia.getstate(), [r.para_dict() for r in motor.recusas],
                  [d.para_dict() for d in motor.desejos], motor.vinculo.para_dict())
     if isinstance(motor, MotorAmbiente):
-        extra = extra + (motor.resumo_bola(), dict(motor.contagem), motor.morte)
+        bola = motor.resumo_bola() if motor.cb.ligada else {"ligada": False, "contagem": dict(motor.contagem_bola)}
+        extra = extra + (bola, dict(motor.contagem), motor.morte)
+    if isinstance(motor, MotorFrutas):
+        extra = extra + (motor.resumo_frutas(),)
+    if isinstance(motor, MotorFrutasMundo):
+        extra = extra + (motor.resumo_mundo(),)
     return (motor.log.para_jsonl(), motor.estado(), motor.acoes_recentes(10**9), motor._rng_politica.getstate(),
             motor._rng_ambiente.getstate(), *extra)
 
@@ -332,6 +492,7 @@ class Bancada:
     cfg_lobos: ConfigLobos = CONFIG_LOBOS_APRENDIZ    # o aprendiz de todos os bracos (o P0 o usa com o aprendizado desligado)
     cfg_bola: ConfigBola = CONFIG_BOLA_LIGADA          # a bola dos mundos da bola (padroes calibrados na A1)
     cfg_consequencia: ConfigConsequencia = CONFIG_CONSEQUENCIA    # o sinal do P1 (N3)
+    cfg_frutas: ConfigFrutas = CONFIG_FRUTAS_LIGADA    # as frutas dos mundos das frutas (padroes calibrados no N4)
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -340,6 +501,27 @@ class Bancada:
             raise ValueError("cfg_lobos e a do aprendiz (aprendizado ligado); o P0 desliga por conta propria")
         if not self.cfg_bola.ligada:
             raise ValueError("cfg_bola e a dos mundos da bola: ligada (o mundo padrao nao usa bola)")
+        if not self.cfg_frutas.ligada:
+            raise ValueError("cfg_frutas e a dos mundos das frutas: ligada")
+
+    @property
+    def tick_troca(self) -> int:
+        """o mutavel troca na metade da vida (no fim do dia dias // 2: dia 7 numa vida de 14; plano, secao 4.3)"""
+        if self.dias < 2:
+            raise ValueError("o mutavel precisa de pelo menos 2 dias")
+        return (self.dias // 2) * TICKS_POR_DIA
+
+    def janelas_frutas(self, condicao: str) -> dict:
+        """as janelas da taxa_fruta_ruim (plano, secao 4.3): inicio e final (as duas metades da vida), antes e depois da troca no
+        mutavel, e uma por dia (a curva)"""
+        metade, fim = (self.dias // 2) * TICKS_POR_DIA, self.dias * TICKS_POR_DIA
+        j = {"inicio": (0, metade), "final": (metade, fim)}
+        if condicao == "mutavel":
+            j["antes_da_troca"] = (0, self.tick_troca)
+            j["depois_da_troca"] = (self.tick_troca, fim)
+        for d in range(self.dias):
+            j[f"dia_{d + 1}"] = (d * TICKS_POR_DIA, (d + 1) * TICKS_POR_DIA)
+        return j
 
     # ------------------------------------------------------------- fabricas
 
@@ -351,6 +533,8 @@ class Bancada:
         if espec.cerebro == "instinto":
             if b.fonte != "nenhuma":
                 raise ValueError(f"cerebro instinto so no P0 (nao aprende): braco {b.rotulo}")
+            if mundo.frutas:
+                return PoliticaDoBraco(PoliticaInstintoFrutas(cfg, CONFIG_BOLA, self.cfg_frutas), b)
             if mundo.bola is not None:
                 return PoliticaDoBraco(PoliticaInstintoBola(cfg, self.cfg_bola), b)
             return PoliticaDoBraco(PoliticaInstinto(cfg), b)
@@ -362,6 +546,15 @@ class Bancada:
 
     def fabrica_motor(self, espec: EspecVida):
         mundo = mundo_de(espec.mundo)
+        if mundo.frutas:
+            # o desenho do N4 (plano, secao 3): MotorFrutas, obediencia, educacao, lesoes e bola desligadas, especie brasa; o genoma
+            # das frutas (preferencia inata, neofobia) sai do genoma da vida, ou da semente sem genoma (o padrao do MotorFrutas)
+            temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
+            cf, condicao = self.cfg_frutas, mundo.condicao
+            troca = self.tick_troca if condicao == "mutavel" else None
+            return lambda politica, cfg, semente: MotorFrutasMundo(
+                politica, cfg, semente, temperamento, "brasa", obediencia_desligada=True, cfg_bola=CONFIG_BOLA, cfg_frutas=cf,
+                semente_genoma=espec.genoma, condicao=condicao, tick_troca=troca)
         if mundo.bola is not None:
             # o desenho da A1 (plano, secao 3): MotorAmbiente, obediencia, educacao e lesoes desligadas, especie brasa
             temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
@@ -388,6 +581,10 @@ class Bancada:
             motor = simular_vida_mundo(criar_dono(espec.dono), RegraBola(espec.dono, self.cfg_bola),
                                        self.politica(espec, CONFIG_PADRAO), espec.semente, self.dias, self.orcamento,
                                        espec.dono, fm)
+        elif mundo.frutas:
+            motor = simular_vida_mundo(criar_dono(espec.dono), CalendarioFrutas(espec.semente, self.cfg_frutas),
+                                       self.politica(espec, CONFIG_PADRAO), espec.semente, self.dias, self.orcamento,
+                                       espec.dono, fm)
         else:
             motor = simular_vida(rotulo, criar_dono(espec.dono), self.politica(espec, CONFIG_PADRAO), espec.semente,
                                  self.dias, self.orcamento, rotulo_dono=espec.dono, fabrica_motor=fm).motor
@@ -401,7 +598,7 @@ class Bancada:
 
     def rejogar(self, log: LogDeEventos, espec: EspecVida):
         fp, fm = self.fabrica_politica(espec), self.fabrica_motor(espec)
-        if mundo_de(espec.mundo).bola is not None:
+        if mundo_de(espec.mundo).ambiente:
             return reproduzir_ambiente(log, fp, semente=espec.semente, fabrica_motor=fm)
         return reproduzir_com_feedback(log, fp, semente=espec.semente, fabrica_motor=fm)
 
@@ -453,7 +650,14 @@ class Bancada:
             tick = CONFIG_PADRAO.intervalo_decisao_ticks
             bola = {"resposta": resposta_a_bola([(k * tick, b, r, a) for k, (b, r, a) in enumerate(reg.bola)]),
                     "contagem": dict(m.contagem_bola)}
+        frutas = None
+        if isinstance(m, MotorFrutasMundo):
+            consumos = [(c["tick"], c["efeito_humor"]) for c in m.consumos]
+            frutas = {"taxa_fruta_ruim": taxa_fruta_ruim(consumos, self.janelas_frutas(m.condicao)),
+                      "consumos": len(consumos), "contagem": dict(m.contagem_frutas), "mundo": m.resumo_mundo(),
+                      "genoma": m.genoma.para_dict()}
         desempenho = desempenho_no_ambiente(reg.amostras)
+        humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
         sinais = []
         for d in tarefa["dias"]:
@@ -466,7 +670,7 @@ class Bancada:
                 "cerebro": vida.espec.cerebro, "dono": vida.espec.dono, "semente": vida.espec.semente,
                 "genoma": vida.espec.genoma, "mundo": vida.espec.mundo, "condicao": vida.espec.condicao,
                 "origem": vida.origem, "filtro": vida.filtro, "interacoes": vida.interacoes,
-                "eventos_mundo": vida.eventos_mundo, "bola": bola,
+                "eventos_mundo": vida.eventos_mundo, "bola": bola, "frutas": frutas, "humor_medio": humor,
                 **desempenho, "acerto_total": tarefa["acerto_total"], "acerto_por_dia": tarefa["acerto"],
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
@@ -491,7 +695,9 @@ def do_braco(politica) -> PoliticaDoBraco:
     """A PoliticaDoBraco dentro dos embrulhos dos motores (bola, personalidade)."""
     p = politica
     while not isinstance(p, PoliticaDoBraco):
-        if isinstance(p, _PoliticaComBola):
+        if isinstance(p, _PoliticaComFrutas):
+            p = p._pf
+        elif isinstance(p, _PoliticaComBola):
             p = p._pb
         elif isinstance(p, _PoliticaObservada):
             p = p._p
@@ -576,6 +782,7 @@ class _Registro:
         self.sinais_na_decisao: list[int] = []
         self.sinais_do_dono = 0
         self.bola: list[tuple[bool, str, str]] = []      # (bola no cenario, regra do instinto/impulso, acao), por decisao
+        self.vetores: list[tuple] = []                     # (indice, fome, higiene, energia, humor), por decisao
 
     @property
     def sinais(self) -> int:
@@ -589,6 +796,7 @@ class _Registro:
         self.amostras.append((Estado(fome=v[0], higiene=v[1], energia=v[2]).em_privacao(CONFIG_PADRAO), v[4]))
         self.sinais_na_decisao.append(self.interna.sinais_entregues)
         self.bola.append((obs.bola > 0.0, self.interna.ultima_regra, acao.value))
+        self.vetores.append((len(self.vetores), v[0], v[1], v[2], v[3]))
         return acao
 
     def observar(self, transicao) -> None:
@@ -630,10 +838,22 @@ def _sha(caminho: Path) -> str:
 
 
 def validar_config(cfg: dict) -> dict:
-    faltam = {"bracos", "donos", "sementes", "dias", "orcamento", "sonda", "bootstrap"} - set(cfg)
+    faltam = {"bracos", "donos", "dias", "orcamento", "sonda", "bootstrap"} - set(cfg)
     sobram = set(cfg) - CHAVES_CONFIG
     if faltam or sobram:
         raise ValueError(f"config: faltam {sorted(faltam)}, sobram {sorted(sobram)}")
+    if ("sementes" in cfg) == ("unidades" in cfg):
+        raise ValueError("config: ou 'sementes' (x 'genomas') ou 'unidades' (bases x K derivadas), um dos dois")
+    if "unidades" in cfg:
+        u = cfg["unidades"]
+        if set(u) != {"bases", "k"} or "genomas" in cfg:
+            raise ValueError(f"unidades fora do formato {{'bases': [...], 'k': K}} (sem 'genomas'): {u}")
+        unidades_derivadas(u["bases"], int(u["k"]))
+        fora = sorted(set(u["bases"]) - SEMENTES_TESTE)
+        if fora:
+            plano = cfg.get("plano")
+            if not plano or not (RAIZ / plano).is_file():
+                raise SementeSemPlano(f"bases {fora} fora das dos testes: precisa do plano de analise registrado (campo 'plano')")
     for b in cfg["bracos"]:
         braco_de(b)
     for m in cfg.get("mundos", ["padrao"]):
@@ -645,7 +865,7 @@ def validar_config(cfg: dict) -> dict:
         if a["origem"] not in cfg["bracos"]:
             raise ValueError(f"acoplado de um braco que nao roda: {a['origem']}")
     genomas = [g for g in cfg.get("genomas", [None]) if g is not None]
-    fora = sorted((set(cfg["sementes"]) | set(genomas)) - SEMENTES_TESTE)
+    fora = sorted((set(cfg.get("sementes", [])) | set(genomas)) - SEMENTES_TESTE)
     if fora:
         plano = cfg.get("plano")
         if not plano or not (RAIZ / plano).is_file():
@@ -669,9 +889,15 @@ def rodar(cfg: dict, pasta: Path) -> dict:
         bancada.conferir_replay(v, (dir_vidas / f"{v.nome}.jsonl").read_text(encoding="utf-8"))
         vidas[v.nome] = v
 
-    for g, mundo, dono, braco, s in product(cfg.get("genomas", [None]), cfg.get("mundos", ["padrao"]), cfg["donos"],
-                                            cfg["bracos"], cfg["sementes"]):
-        guardar(bancada.vida(EspecVida(dono, braco, int(s), g, mundo)))
+    if "unidades" in cfg:
+        unidades = unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]))
+        pares = [(u["genoma"], u["semente"]) for u in unidades]
+    else:
+        unidades = []
+        pares = [(g, int(s)) for g in cfg.get("genomas", [None]) for s in cfg["sementes"]]
+    da_unidade = {(u["genoma"], u["semente"]): {"base": u["base"], "k": u["k"]} for u in unidades}
+    for (g, s), mundo, dono, braco in product(pares, cfg.get("mundos", ["padrao"]), cfg["donos"], cfg["bracos"]):
+        guardar(bancada.vida(EspecVida(dono, braco, s, g, mundo)))
     origens = list(vidas.values())
     for a in cfg.get("acoplados", []):
         for v in origens:
@@ -686,6 +912,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     for nome, v in sorted(vidas.items()):
         if nome not in medidas:
             medidas[nome] = bancada.medir(v, cfg["sonda"], piso.get(v.espec.celula))
+    for nome, v in vidas.items():
+        medidas[nome]["unidade"] = da_unidade.get((v.espec.genoma, v.espec.semente))
     tabelas = tabelas_braco_condicao(medidas, cfg["bootstrap"])
     _gravar(pasta / "medidas.json", _dump(medidas))
     _gravar(pasta / "tabelas.json", _dump(tabelas))
@@ -694,8 +922,10 @@ def rodar(cfg: dict, pasta: Path) -> dict:
 
 
 def tabelas_braco_condicao(medidas: dict, boot: dict) -> dict:
-    """Por dono e medida: tabela braco x condicao, unidade = vida (semente x genoma). A coluna e "condicao/mundo" (hoje
-    "casado/padrao" e "casado/bola"): dois mundos da mesma condicao nunca se misturam numa celula."""
+    """Por dono e medida: tabela braco x condicao, unidade = vida (semente x genoma). A coluna e "condicao/mundo"
+    ("casado/padrao", "casado/casado_frutas", "descasado/descasado", "mutavel/mutavel"...): dois mundos da mesma condicao nunca se
+    misturam numa celula. A taxa_fruta_ruim fica nas medidas por vida (pode ser None sem consumo; a tabela dela e do
+    orquestrador do experimento maior)."""
     out = {}
     for dono in sorted({m["dono"] for m in medidas.values()}):
         out[dono] = {}

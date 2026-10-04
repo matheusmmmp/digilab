@@ -73,8 +73,8 @@ def test_fontes_que_ainda_nao_existem_falham_alto_com_o_no(braco, no):
 
 
 def test_mundo_cerebro_braco_e_filtro_desconhecidos_falham_alto():
-    with pytest.raises(NotImplementedError, match="N4"):
-        BANCADA.vida(bv.EspecVida("atencioso", "P0", 101, mundo="descasado"))
+    with pytest.raises(NotImplementedError):
+        BANCADA.vida(bv.EspecVida("atencioso", "P0", 101, mundo="lago"))
     with pytest.raises(KeyError, match="N11"):
         BANCADA.vida(bv.EspecVida("atencioso", "P0", 101, cerebro="camada_unica"))
     with pytest.raises(KeyError):

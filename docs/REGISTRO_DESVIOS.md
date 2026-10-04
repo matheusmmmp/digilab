@@ -1750,6 +1750,90 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`,
   - O N6 e o N7 passam para a rodada 6.
 - Marco em `docs/V2_RODADA_4.md`.
 
+## 2026-10-04 — Gargalo do aprendiz: revisão reservada e variedade de frutas como fator a considerar
+
+O Matheus perguntou se o gargalo é ter poucos objetos (bola, frutas) ou o computador. Pela leitura das rodadas 3 e 4, o gargalo é o
+aprendiz e a densidade de consequências que ele recebe:
+- o instinto decide cerca de 80% das decisões na L1;
+- os pesos ficam no teto em 12 de 20 vidas na L1 e em 20 de 20 no N3;
+- o sinal só vê o efeito imediato da ação;
+- a exposição é baixa: p(comer | fruta) 0,208;
+- os lobos ainda não veem o mundo novo.
+
+O computador não é o gargalo. Decisão do Matheus:
+- tarefa `docs/TAREFA_V2_REVISAO_APRENDIZ.md` (rodada 6, chat B, só calibração), que vira a linha R6.0 do `docs/ROADMAP_V2.md`;
+- variedade de frutas como fator a considerar no experimento maior (`docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, seção 2.1). Ela fica
+  fora das predições registradas e só entra por adendo antes da calibração.
+
+## 2026-10-04 — N5-PLANO: plano do dono informante no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_N5_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N5.md`. Nenhuma run, nenhum código.
+- **Nomes combinados com o chat A** (PR #140): o plano adota sem troca os nomes que ele implementou (evento `INFORMAR_FRUTA_<A|B|C>_<BEM|MAL>`,
+  `Observacao.info_frutas`, `ConfigInformacao.janela_min`, `DonoInformante` com `certo` e `errado`, `MotorFrutas.informacoes`) e acrescenta
+  um nome: o modo **`acoplado`** do informante (mesmo multiconjunto de fruta e conteúdo do `certo`, em ticks sorteados por rng própria).
+- **Confiança de partida maior que zero.** A tarefa pede a informação "nunca como reforço"; o plano a põe como entrada da sub-decisão da fruta
+  com peso inicial positivo (calibrado), e o peso só muda pela consequência. Com peso inicial zero a informação não teria efeito antes de o
+  mundo validá-la, e o P2e não poderia piorar no começo (predição 4(a) do experimento maior). A grade fica abaixo do teto dos pesos, para o
+  mundo poder levar o peso a cruzar o zero.
+- **Só o mundo descasado.** O casado com frutas e o mutável ficam para o experimento maior (decisão N5-5 do plano).
+- **Leituras registradas antes** para dois riscos já vistos nos artefatos: pouca fruta comida (N4) e pesos no teto (N3, L1).
+
+## 2026-10-04 — V2, BANCADA-FRUTAS: interpretações dos mundos das frutas e das unidades derivadas
+
+Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes dos testes.
+- **Uma fruta boa e uma ruim em cada condição.** O plano (seção 2) pede o casado com "a fruta de maior preferência inata com o efeito bom"
+  e o mutável trocando "a boa vira ruim e vice-versa"; a medida primária (`taxa_fruta_ruim`) precisa de uma fruta ruim também no casado
+  (predição 1). Com o descasado do N4 (a preferida faz mal, as outras neutras), o casado com o sinal trocado não teria fruta ruim. A
+  regra adotada: casado = a de maior preferência faz bem e a de menor faz mal; descasado = o contrário; a do meio neutra nos dois. O
+  efeito bom é o ruim com o sinal trocado (−`efeito_humor_ruim`), sem número novo. Por isso o descasado da bancada **não é** o do N4: a
+  fruta menos preferida faz bem aqui, e era neutra lá. Se o Matheus preferir outra regra, ela muda só `efeitos_da_condicao`.
+- **O calendário das ofertas ignora o sono.** O `OfertasFrutas` do N4 só oferece com o pet acordado; com isso a oferta depende do estado
+  do pet, e dois braços (ou duas condições, porque o efeito no humor muda o comportamento) teriam ofertas diferentes. O plano (seção 2,
+  K5) pede o calendário pela semente, igual em todos os braços. O `CalendarioFrutas` oferece nos mesmos horários todo dia, com o pet
+  acordado ou não (a fruta fica até o prazo), e começa a rotação num índice derivado da semente. Por isso as vidas da bancada não são as
+  do N4 byte a byte; o teste mostra que, com o mesmo efeito, o `MotorFrutasMundo` é o `MotorFrutas`.
+- **A troca do mutável é registro derivado, não evento do log.** Pôr um evento novo no log pediria mudar `events.py` e os replays (de
+  `frutas.py`, do chat A), fora desta tarefa. A troca é determinada pelo mundo (`mutavel`) e pela duração da vida (metade, no fim do dia
+  `dias // 2`), fica em `MotorFrutasMundo.troca` e no efeito de cada consumo, e o replay pelo log a refaz (teste). O contrato do #137
+  aceitava "evento do mundo ou parâmetro gravado da vida".
+- **Metade da vida.** O plano fixa a troca no fim do dia 7 numa vida de 14; a regra geral da bancada é o fim do dia `dias // 2`, para os
+  testes curtos usarem a mesma lógica. As janelas `inicio` e `final` seguem a mesma divisão.
+- **A taxa fica fora das tabelas.** A `taxa_fruta_ruim` sai `None` numa janela sem consumo (os lobos, que ainda não veem as frutas, não
+  comem nenhuma nos testes curtos); a tabela braço × condição exige um número por vida. A tabela dela fica para o orquestrador do
+  experimento maior, que decide o tratamento das vidas sem consumo (o plano já trata a censura na predição 3).
+- **`FAIXAS_RESERVADAS` é conservadora:** cada faixa vira um intervalo fechado do menor ao maior número citado (por exemplo, 80001…82004
+  para a linhagem), e as sementes de fala, voz e comando de 2026-09/10 viram um intervalo só. As unidades derivadas são números de 64 bits
+  (`derivar_semente`), muito acima de todas; o teste confere de qualquer jeito, também contra toda semente das configs.
+
+## 2026-10-04 — LOBOS-MUNDO (chat B, `docs/TAREFA_V2_LOBOS_MUNDO.md`)
+
+- **Os lobos veem o mundo só com `cfg_bola`/`cfg_frutas` ligadas, sem parâmetro novo na `ConfigLobos`.** Assim a L0, a L1, o N3 e a bancada
+  ficam com as formas de antes (10 entradas, 7 regras, 490 pesos) e o estado interno idêntico; com o mundo, 12 entradas, 9 regras e 759
+  pesos. As duas regras do mundo existem sempre que um dos dois está ligado (a que nunca dispara fica no prior).
+- **Prior das regras do mundo = o do tempo livre mais o termo do mundo.** As duas regras só disparam no lugar do tempo livre, então o
+  aprendizado de `bola_no_cenario` e `fruta_no_cenario` é separado do do tempo livre: o que o pet aprende com a bola não vaza para quando
+  não há bola. Com a bola e a fruta juntas a regra é `fruta_no_cenario` (como no instinto) e o brincar dela tem o termo da bola.
+- **A sub-decisão da fruta aprende pela mesma regra da L1, com uma entrada por fruta (o incentivo).** É o gradiente de log p(f*) da
+  escolha proporcional; o piso vale no coeficiente (w/S), não no peso, porque o incentivo pode ser zero. Ela é creditada junto com a
+  decisão de comer (o mesmo sinal, no mesmo registro), inclusive por elogio e bronca na fonte dono.
+- **E2 como variante declarada do sinal** (`sinal_homeostatico_fruta`): o humor entra nos drives quando a ação foi comer uma fruta, e o
+  "depois" passa a ser o estado logo depois de comer. Sem isso a fruta não apareceria no sinal: o motor come a fruta depois de a engine
+  medir a transição, e o N3 só via `observacao_seguinte`. Por isso, no mundo das frutas, o comer com fruta também conta a nutrição dela
+  (com `humor_na_fruta = False` fica só a fome). A variação do humor medida é a da decisão inteira (o efeito do comer de sempre e o da
+  fruta), não só a da fruta. Nas outras ações, e sem frutas, o sinal é o do N3, byte a byte.
+- **O crédito do comer com fruta fica pendente** entre `observar_consequencia` e `fruta_comida` (mesmo `_decisao_observada`). A pendência
+  é decidida por `obs.fruta > 0`, que vale se e só se há fruta no cenário (o incentivo é sempre positivo: preferência ≥ `pref_min` e
+  neofobia < 1). Um pendente sem aviso falha alto na decisão seguinte.
+- **Ganchos em `frutas.py` (arquivo do chat A):** `escolher_fruta` e `fruta_comida`, por `getattr` na política; o instinto não tem nenhum
+  dos dois e a vida dele não muda (os 31 testes das frutas passam). **Uma linha em `experiments/bancada_v2.py` (do chat D):** o
+  `PoliticaDoBraco` passa o `cfg_consequencia` a `observar_consequencia`, para o sinal da fruta usar o mesmo ganho.
+- **`PARAMETROS_CONSEQUENCIA_N3` ganhou `humor_na_fruta` (DECIDIDO, E2)**; o teste do registro do N3 passou a excluí-lo do "todos
+  PROPOSTOS".
+- **Não feito aqui:** a bancada montar os lobos que veem o mundo (chat D) e o `motivo_lobos` citar as regras novas.
+- **Para o chat D:** o contador `PoliticaDoBraco.consequencias` conta o sinal do N3 (`f_S != 0`); no comer com fruta o
+  sinal creditado é o da E2, contado no cérebro em `recompensas["consequencia_fruta"]`. Quem medir consequências no mundo
+  das frutas deve somar as duas fontes (ou contar os consumos, como a predição 3 do plano do experimento maior).
+
 ## 2026-10-04 — V2, N5 (lado do mundo): a informação do dono e a medida N1 (`docs/TAREFA_V2_N5_MUNDO.md`)
 
 - **Nomes combinados com o chat C.** O `docs/PLANO_ANALISE_V2_N5.md` (PR #142) usa, sem troca, `informar_fruta_<f>_<bem|mal>`,
