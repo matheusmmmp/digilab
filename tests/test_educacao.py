@@ -32,7 +32,7 @@ def test_acoes_novas_nao_mexem_nas_listas_antigas():
     assert set(ACOES_EDUCACAO).isdisjoint(ACOES_V1) and set(ACOES_EDUCACAO).isdisjoint(ACOES_TREINO)
     # nas mesmas posicoes de quando entraram no fim do enum (12 a 14); depois delas so as da bola (V2, A1), tambem no fim
     assert list(AcaoUsuario)[12:15] == list(ACOES_EDUCACAO)
-    assert list(AcaoUsuario)[15:] == list(ACOES_BOLA)
+    assert list(AcaoUsuario)[15:17] == list(ACOES_BOLA)
 
 
 @pytest.mark.parametrize("braco", ["exigente", "aleatorio", "atencioso"])

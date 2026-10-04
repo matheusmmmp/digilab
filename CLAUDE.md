@@ -1393,3 +1393,39 @@ ficam fora do git, regeneráveis).
   −0,024 [−0,042; −0,008]: a bola tira elogios e carinhos. Nos coerentes a bola desloca o ensino (atencioso: elogios 93,0 → 61,4,
   broncas 46,0 → 20,0). Resultado registrado; a V2 segue (decisão de 2026-10-01). Decisões B1–B3 para o Matheus no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, N4 — frutas no mundo, sem aprendizado de política (2026-10-04, `docs/TAREFA_V2_N4_FRUTAS.md`, `docs/PLANO_ANALISE_V2_N4.md`) — CALIBRAÇÃO NÃO FECHOU
+
+Nó N4 do `docs/ROADMAP_V2.md` (a condição **descasado** da pergunta maior), com as definições F1–F11 de `docs/DEFINICOES_FRUTAS_V2.md` e as
+decisões da bola B1 e B2. **O aprendiz da política fica desligado**: a fruta entra pelo instinto, atrás de chave; a regra das frutas nos
+lobos é do chat B. Números de `artifacts_v2_n4/calibracao/` (`resultado.json`, `varredura.jsonl`, `vidas.json`, `so_cuidado.json`;
+sementes 10101…10505; as vidas dos 18 pontos da grade ficam fora do git, regeneráveis).
+- **Código.** `digilab/frutas.py`: `MotorFrutas` (subclasse do `MotorAmbiente`, que não muda; frutas `{fruta: prazo}` fora do `Estado`;
+  oferecer não é contato), `PoliticaInstintoFrutas` (no tempo livre `comer` entra como candidato com peso `w_fruta × fruta`, a mesma
+  chamada de `rng.choices`; regra `fruta_no_cenario`), a **sub-decisão de comer** (o pet escolhe a fruta proporcional ao **incentivo**,
+  na `rng_fruta`, uma chamada em toda decisão `comer`), os **dois registros** por fruta (`incentivo`, `avaliacao`; F1), a **saciedade
+  específica** (a avaliação de uma fruta cai com o consumo recente dela, sem a fome), o **genoma** (`neofobia`, `preferencia_inata`, rng
+  `frutas-ovo`, fora do `Temperamento`; F4, F5), o efeito no corpo separado do gosto (nutrição igual em todas; no mundo **descasado** a
+  preferida de nascença tem efeito ruim no **humor**, F6), `OfertasFrutas` (cronograma igual para os quatro donos, 9h/12h/15h/18h, rotação
+  de 7 conjuntos, 4 com duas frutas ou mais) e `simular_vida_frutas` (ofertas **fora do orçamento** e do sorteio do aleatório: B1, B2).
+  `AcaoUsuario.OFERECER_FRUTA_A/B/C` no fim do enum (`ACOES_FRUTAS`, `FRUTAS`, `fruta_de`, `oferta_de`); `Observacao.fruta` (padrão 0,0);
+  `ConfigFrutas` (`ligada` False; registro `protocol.PARAMETROS_FRUTAS_N4`, nenhum referendado); `metrics.comer_por_incentivo`,
+  `escolha_por_incentivo`, `saciedade_especifica`; `experiments/run_v2_n4.py`, `configs/v2_n4/`. `engine.py`, `AcaoPet`, bandit,
+  `lobos.py`, `ambiente.py`, `heranca.py` e web intactos.
+- **G1 e G2 passam** (`tests/test_frutas.py`, 31 testes): replay bit a bit; desligado = `MotorEducacao` numa vida da V3 com lutas;
+  desligado com o instinto das frutas = `MotorComFeedback` com o `PoliticaInstinto`; ligado sem oferta = desligado; a vida da validação da
+  A1 com a bola, rejogada pelo `MotorFrutas` com as frutas desligadas, sai igual à do `MotorAmbiente`.
+- **Calibração (18 pontos, 4 min): não fechou.** Nenhum ponto chega à faixa de p(comer | fruta no cenário) [0,30; 0,80] (máximo 0,19,
+  com `w_fruta` 6) e o G-SEP(ii) falha em 15 dos 18. Ponto pela regra de reserva (maior limite inferior do G-SEP(i)): **`w_fruta` 6,
+  `k_saciedade` 1,0, duração 120** (agora os padrões da `ConfigFrutas`).
+  - **G-SEP(i) passa** (a escolha de comer não é função só da fome): p(comer | incentivo alto) − p(comer | baixo), mesma faixa de fome,
+    **+0,079 [+0,040; +0,140]**; **G-SEP(ii) falha** (qual fruta): +0,121 [−0,060; +0,304], com 0 a 27 escolhas entre duas frutas ou mais
+    por vida. **G-SSE passa**: β_recente −0,769 [−0,873; −0,689], β_fome −0,024 [−0,113; +0,047]. **G-F7 passa**: saúde frutas −
+    acoplado +0,014 [−0,004; +0,033], mortes 0 e 0.
+  - **Canal de cuidado:** frutas − sem frutas na privação −0,003 [−0,007; +0,002], humor −0,003, saúde +0,005 (ICs contêm 0).
+  - **Descasado:** o pet come a fruta que faz mal em 43% dos consumos [36%; 53%] (três frutas); humor descasado − iguais −0,009
+    [−0,018; +0,002]. Sem aprendizado pela consequência (N3) nada o afasta dela, como esperado.
+  - **A neofobia segura o comer:** o genoma é o mesmo para os quatro donos de uma semente; com neofobia 0,96 (semente 10101) o primeiro
+    contato com uma fruta vem no 3º ao 8º dia e p(comer) fica em 0,05, contra 0,30 na semente de neofobia baixa.
+- **Validação (11101…11505): PR seguinte**, uma vez, no ponto de `experiments/configs/v2_n4/validacao.json`. Interpretações em
+  `docs/REGISTRO_DESVIOS.md`.

@@ -577,7 +577,7 @@ def _valor_config(nome: str) -> Any:
                   "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING,
                   "ConfigConfianca": _config.CONFIG_CONFIANCA,
                   "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO,
-                  "ConfigBola": _config.CONFIG_BOLA}
+                  "ConfigBola": _config.CONFIG_BOLA, "ConfigFrutas": _config.CONFIG_FRUTAS}
     return getattr(instancias[classe], campo)
 
 
@@ -915,3 +915,42 @@ def educacao_nao_referendados(params: dict[str, Campo] | None = None) -> list[st
 def confianca_nao_referendados() -> list[str]:
     """M1: os numeros da confianca vieram depois do referendo de 2026-09-29; nenhum esta referendado."""
     return educacao_nao_referendados(PARAMETROS_CONFIANCA_M1)
+
+
+# V2, N4: as frutas (docs/DEFINICOES_FRUTAS_V2.md; plano docs/PLANO_ANALISE_V2_N4.md): registro a parte, como o da bola; nenhum hash de
+# protocolo cobre a ConfigFrutas. Nenhum valor referendado; duracao_min, w_fruta e k_saciedade sao calibrados.
+_FONTES_FRUTAS_N4 = {
+    "ConfigFrutas.ligada": (_D, "chave desligada por padrao, como ConfigBola.ligada (desligada: MotorAmbiente byte a byte)"),
+    "ConfigFrutas.duracao_min": (_P, "sem fonte; calibrado no plano (secao 4), grade {60, 120}"),
+    "ConfigFrutas.w_fruta": (_P, "sem fonte; calibrado no plano (secao 4), grade {1, 3, 6}; em unidades dos pesos do tempo livre"),
+    "ConfigFrutas.k_saciedade": (_P, "sem fonte; calibrado no plano (secao 4), grade {0,2; 0,5; 1,0}; a forma (queda pelo consumo recente "
+                                     "da fruta, sem a fome) e a de Rolls, Rolls e Rowe 1983 (DEFINICOES_FRUTAS_V2, 2.3), nao o numero"),
+    "ConfigFrutas.meia_vida_recente": (_P, "sem fonte; 4 h"),
+    "ConfigFrutas.taxa_incentivo": (_P, "sem fonte"),
+    "ConfigFrutas.nutricao": (_P, "sem fonte; o dobro do comer de sempre (efeito_da_acao_do_pet, 0,05)"),
+    "ConfigFrutas.efeito_humor_ruim": (_P, "sem fonte; no humor, fora de Estado.em_privacao (F6); da ordem do custo de repreender (0,12)"),
+    "ConfigFrutas.efeito_humor_neutro": (_P, "sem fonte"),
+    "ConfigFrutas.mundo": (_D, "descasado no braco principal; iguais = a variante de efeito igual (F7)"),
+    "ConfigFrutas.neofobia_max": (_P, "sem fonte; a neofobia e traco (Pliner e Hobden 1992), o intervalo nao"),
+    "ConfigFrutas.pref_min": (_P, "sem fonte"),
+    "ConfigFrutas.pref_max": (_P, "sem fonte"),
+    "ConfigFrutas.horarios_oferta": (_P, "sem fonte; quatro ofertas por dia, de dia"),
+    "ConfigFrutas.rotacao_ofertas": (_P, "sem fonte; 4 de 7 ofertas com pelo menos duas frutas (F3)"),
+}
+PARAMETROS_FRUTAS_N4: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_FRUTAS_N4.items()}
+
+
+def validar_parametros_frutas() -> None:
+    """Todo campo da ConfigFrutas tem status e fonte, e o valor registrado bate com config.py."""
+    esperados = {f"ConfigFrutas.{f.name}" for f in fields(_config.CONFIG_FRUTAS)}
+    if set(PARAMETROS_FRUTAS_N4) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(PARAMETROS_FRUTAS_N4))}; "
+                         f"registro sem parametro: {sorted(set(PARAMETROS_FRUTAS_N4) - esperados)}")
+    for n, c in PARAMETROS_FRUTAS_N4.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def frutas_nao_referendados() -> list[str]:
+    return educacao_nao_referendados(PARAMETROS_FRUTAS_N4)

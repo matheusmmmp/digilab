@@ -57,7 +57,8 @@ def test_parametros_registrados_e_nenhum_referendado():
 
 
 def test_enum_do_dono_cresce_no_fim_e_a_v1_nao_ve():
-    assert list(AcaoUsuario)[-2:] == [AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA]
+    # nas posicoes de quando entraram no fim do enum (15 e 16); depois delas so as ofertas de fruta (V2, N4)
+    assert list(AcaoUsuario)[15:17] == [AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA]
     assert len(ACOES_V1) == 6 and AcaoUsuario.POR_BOLA not in ACOES_V1
     assert tuple(ACOES_BANDIT) == tuple(AcaoPet) and len(AcaoPet) == 7      # o bandit usa AcaoPet, que nao mudou
 
