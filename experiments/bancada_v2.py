@@ -364,7 +364,7 @@ class PoliticaDoBraco:
         if self.braco.fonte == "consequencia":
             f_S = sinal_homeostatico(transicao, self.cerebro.cl.escala, self.cfg_consequencia)
             self.consequencias += f_S != 0
-            self.cerebro.observar_consequencia(transicao, f_S)
+            self.cerebro.observar_consequencia(transicao, f_S, self.cfg_consequencia)   # o mesmo ganho no sinal da fruta (E2)
         else:
             self.cerebro.observar(transicao)
 

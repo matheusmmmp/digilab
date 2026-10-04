@@ -1213,11 +1213,16 @@ class ConfigConsequencia:
                       bola e do efeito ruim das frutas, F6); saude fora (nao muda pela acao em si).
     ganho   PROPOSTO  escala do sinal (inteiro); o unico parametro calibrado do N3 (grade {4, 8, 16, 32, 64}, sementes
                       8101...8505).
+    humor_na_fruta  DECIDIDO  E2 (Matheus, 2026-10-04; PLANO_ANALISE_V2_EXPERIMENTO_MAIOR, secao 3.1): quando a acao foi
+                      comer uma fruta, o humor entra nos drives e o "depois" e o estado logo depois de comer
+                      (lobos.sinal_homeostatico_fruta, docs/TAREFA_V2_LOBOS_MUNDO.md). Nas outras acoes, e sem frutas,
+                      nada muda: o sinal do N3 de sempre.
     """
 
     drives: tuple = (0, 1, 2)
     ganho: int = 4                     # calibrado em 8101...8505 (a calibracao NAO fechou: nenhum ganho passou G6; regra de
                                        # reserva da secao 6: menos vidas com peso no teto); artifacts_v2_n3/calibracao/escolha.json
+    humor_na_fruta: bool = True        # E2: o humor no sinal do P1 so quando a mudanca vem de comer fruta
 
 
 CONFIG_CONSEQUENCIA = ConfigConsequencia()

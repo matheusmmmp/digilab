@@ -1804,3 +1804,32 @@ Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes 
 - **`FAIXAS_RESERVADAS` é conservadora:** cada faixa vira um intervalo fechado do menor ao maior número citado (por exemplo, 80001…82004
   para a linhagem), e as sementes de fala, voz e comando de 2026-09/10 viram um intervalo só. As unidades derivadas são números de 64 bits
   (`derivar_semente`), muito acima de todas; o teste confere de qualquer jeito, também contra toda semente das configs.
+
+## 2026-10-04 — LOBOS-MUNDO (chat B, `docs/TAREFA_V2_LOBOS_MUNDO.md`)
+
+- **Os lobos veem o mundo só com `cfg_bola`/`cfg_frutas` ligadas, sem parâmetro novo na `ConfigLobos`.** Assim a L0, a L1, o N3 e a bancada
+  ficam com as formas de antes (10 entradas, 7 regras, 490 pesos) e o estado interno idêntico; com o mundo, 12 entradas, 9 regras e 759
+  pesos. As duas regras do mundo existem sempre que um dos dois está ligado (a que nunca dispara fica no prior).
+- **Prior das regras do mundo = o do tempo livre mais o termo do mundo.** As duas regras só disparam no lugar do tempo livre, então o
+  aprendizado de `bola_no_cenario` e `fruta_no_cenario` é separado do do tempo livre: o que o pet aprende com a bola não vaza para quando
+  não há bola. Com a bola e a fruta juntas a regra é `fruta_no_cenario` (como no instinto) e o brincar dela tem o termo da bola.
+- **A sub-decisão da fruta aprende pela mesma regra da L1, com uma entrada por fruta (o incentivo).** É o gradiente de log p(f*) da
+  escolha proporcional; o piso vale no coeficiente (w/S), não no peso, porque o incentivo pode ser zero. Ela é creditada junto com a
+  decisão de comer (o mesmo sinal, no mesmo registro), inclusive por elogio e bronca na fonte dono.
+- **E2 como variante declarada do sinal** (`sinal_homeostatico_fruta`): o humor entra nos drives quando a ação foi comer uma fruta, e o
+  "depois" passa a ser o estado logo depois de comer. Sem isso a fruta não apareceria no sinal: o motor come a fruta depois de a engine
+  medir a transição, e o N3 só via `observacao_seguinte`. Por isso, no mundo das frutas, o comer com fruta também conta a nutrição dela
+  (com `humor_na_fruta = False` fica só a fome). A variação do humor medida é a da decisão inteira (o efeito do comer de sempre e o da
+  fruta), não só a da fruta. Nas outras ações, e sem frutas, o sinal é o do N3, byte a byte.
+- **O crédito do comer com fruta fica pendente** entre `observar_consequencia` e `fruta_comida` (mesmo `_decisao_observada`). A pendência
+  é decidida por `obs.fruta > 0`, que vale se e só se há fruta no cenário (o incentivo é sempre positivo: preferência ≥ `pref_min` e
+  neofobia < 1). Um pendente sem aviso falha alto na decisão seguinte.
+- **Ganchos em `frutas.py` (arquivo do chat A):** `escolher_fruta` e `fruta_comida`, por `getattr` na política; o instinto não tem nenhum
+  dos dois e a vida dele não muda (os 31 testes das frutas passam). **Uma linha em `experiments/bancada_v2.py` (do chat D):** o
+  `PoliticaDoBraco` passa o `cfg_consequencia` a `observar_consequencia`, para o sinal da fruta usar o mesmo ganho.
+- **`PARAMETROS_CONSEQUENCIA_N3` ganhou `humor_na_fruta` (DECIDIDO, E2)**; o teste do registro do N3 passou a excluí-lo do "todos
+  PROPOSTOS".
+- **Não feito aqui:** a bancada montar os lobos que veem o mundo (chat D) e o `motivo_lobos` citar as regras novas.
+- **Para o chat D:** o contador `PoliticaDoBraco.consequencias` conta o sinal do N3 (`f_S != 0`); no comer com fruta o
+  sinal creditado é o da E2, contado no cérebro em `recompensas["consequencia_fruta"]`. Quem medir consequências no mundo
+  das frutas deve somar as duas fontes (ou contar os consumos, como a predição 3 do plano do experimento maior).
