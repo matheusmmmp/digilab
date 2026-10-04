@@ -577,7 +577,8 @@ def _valor_config(nome: str) -> Any:
                   "ConfigDuracoes": _config.CONFIG_DURACOES, "ConfigSparring": _config.CONFIG_SPARRING,
                   "ConfigConfianca": _config.CONFIG_CONFIANCA,
                   "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO,
-                  "ConfigBola": _config.CONFIG_BOLA, "ConfigFrutas": _config.CONFIG_FRUTAS}
+                  "ConfigBola": _config.CONFIG_BOLA, "ConfigFrutas": _config.CONFIG_FRUTAS,
+                  "ConfigInformacao": _config.CONFIG_INFORMACAO}
     return getattr(instancias[classe], campo)
 
 
@@ -954,3 +955,28 @@ def validar_parametros_frutas() -> None:
 
 def frutas_nao_referendados() -> list[str]:
     return educacao_nao_referendados(PARAMETROS_FRUTAS_N4)
+
+
+# V2, N5 (lado do mundo): a informacao do dono (docs/TAREFA_V2_N5_MUNDO.md): registro a parte; nenhum hash a cobre; nada referendado.
+_FONTES_INFORMACAO_N5 = {
+    "ConfigInformacao.ligada": (_D, "chave desligada por padrao, como ConfigFrutas.ligada (desligada: a vida das frutas byte a byte)"),
+    "ConfigInformacao.janela_min": (_P, "sem fonte; 4 h, o dobro do prazo de uma fruta no cenario (ConfigFrutas.duracao_min, 120); "
+                                        "o plano do N5 (chat C) fixa o valor"),
+}
+PARAMETROS_INFORMACAO_N5: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_INFORMACAO_N5.items()}
+
+
+def validar_parametros_informacao() -> None:
+    """Todo campo da ConfigInformacao tem status e fonte, e o valor registrado bate com config.py."""
+    esperados = {f"ConfigInformacao.{f.name}" for f in fields(_config.CONFIG_INFORMACAO)}
+    if set(PARAMETROS_INFORMACAO_N5) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(PARAMETROS_INFORMACAO_N5))}; "
+                         f"registro sem parametro: {sorted(set(PARAMETROS_INFORMACAO_N5) - esperados)}")
+    for n, c in PARAMETROS_INFORMACAO_N5.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def informacao_nao_referendados() -> list[str]:
+    return educacao_nao_referendados(PARAMETROS_INFORMACAO_N5)

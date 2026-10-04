@@ -1749,3 +1749,24 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`,
   - O D faz os mundos das frutas na bancada.
   - O N6 e o N7 passam para a rodada 6.
 - Marco em `docs/V2_RODADA_4.md`.
+
+## 2026-10-04 — V2, N5 (lado do mundo): a informação do dono e a medida N1 (`docs/TAREFA_V2_N5_MUNDO.md`)
+
+- **Nomes combinados com o chat C, provisórios.** O `docs/PLANO_ANALISE_V2_N5.md` ainda não existe; o chat C confirmou por mensagem que o
+  plano vai usar `informar_fruta_<f>_<bem|mal>`, `ACOES_INFORMACAO`, `Observacao.info_frutas`, `ConfigInformacao.janela_min`,
+  `DonoInformante` (modos `certo` e `errado`) e `MotorFrutas.informacoes`, e que confere com os contratos K3, K4/E7 e K5/B2 do plano do
+  experimento maior. A janela de 240 min é PROPOSTA; o plano pode mudar o valor sem mudar os nomes.
+- **Desvio do texto da validação V6 do `docs/ROADMAP_V2.md`** ("a informação entra por um gancho do motor; a `Observacao` não muda"): a
+  informação entra num campo novo da `Observacao` (`info_frutas`, com padrão), injetado só pelo `MotorFrutas`, como a `bola` e a `fruta`
+  já entraram. Motivo: a tarefa dos lobos do chat B (`docs/TAREFA_V2_LOBOS_MUNDO.md`) liga ao lobo de percepção "o que o
+  `MotorAmbiente`/`MotorFrutas` já injeta na `Observacao`"; assim a percepção do mundo fica num canal só. O espírito da V6 se mantém: a
+  informação não é reforço (não passa por `receber_acao_dono`), `de_estado`, o bandit e o `engine.py` não mudam, e o G2 vale.
+- **A janela vive no motor** (registro derivado), não no aprendiz: o aprendiz só vê o valor vigente a cada decisão.
+- **Conteúdo binário com a fruta neutra = "bem"** (aceito pelo chat C): no mundo descasado só a preferida tem efeito ruim; dizer "faz bem"
+  da neutra é a leitura binária de "não faz mal".
+- **O informante informa logo depois de cada oferta**, sobre cada fruta oferecida: o calendário das ofertas não depende do braço, então
+  P2 e P2e informam nos mesmos ticks (K3). O modo acoplado (a mesma quantidade em momentos sorteados) fica para o plano do chat C.
+- **A medida N1 é nova e a antiga fica**: `saciedade_especifica` continua, para o N4 reproduzir; a N1 vale para o próximo plano. Testada só
+  com dados sintéticos, como a tarefa pede.
+- **Teste ajustado:** `tests/test_frutas.py::test_enum_cresce_no_fim_e_a_v1_nao_ve` confere as ofertas nas posições 17 a 19 (antes, "as três
+  últimas"); as ações de informação vêm depois delas.

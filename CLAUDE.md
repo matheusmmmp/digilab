@@ -1501,3 +1501,28 @@ sementes 10101…10505; as vidas dos 18 pontos da grade ficam fora do git, regen
   [−0,008; 0,000], mortes 0 e 0. Descritivos: custo do descasado no humor −0,023 [−0,030; −0,014]; a fruta que faz mal em 39% dos
   consumos; as frutas alimentam (privação −0,011 [−0,021; −0,003]). Resultado registrado; a V2 segue. Decisões N1–N4 no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, N5 — lado do mundo: o dono informa e a medida N1 da saciedade (2026-10-04, `docs/TAREFA_V2_N5_MUNDO.md`) — GATES PASSAM
+
+Infraestrutura, sem run de pesquisa e sem faixa reservada. O desenho fino e o plano do N5 são do chat C (`docs/TAREFA_V2_N5_PLANO.md`);
+**os nomes dos eventos foram combinados com ele** e ficam PROVISÓRIOS até o `docs/PLANO_ANALISE_V2_N5.md`. A percepção da informação pelos
+lobos é do chat B (rodada 6). Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Evento:** `AcaoUsuario.INFORMAR_FRUTA_<A|B|C>_<BEM|MAL>` no fim do enum (`ACOES_INFORMACAO`, `informacao_de`, `informar`). O conteúdo
+  é o que o dono diz; certo ou errado é decidido pelo braço. Só o `MotorFrutas` com `ConfigInformacao.ligada` (exige as frutas) aceita.
+- **Informar não é cuidado nem reforço** (D-A): não mexe no estado, não conta como contato, não passa por `receber_acao_dono` e fica
+  **fora do orçamento**, pelo canal das ofertas (B2). Fica vigente por `janela_min` (240, PROPOSTO) para a **percepção**:
+  `Observacao.info_frutas` (+1 bem, −1 mal, 0 nenhuma, na ordem de `FRUTAS`), injetada pelo motor antes de cada decisão; informar de novo
+  renova, o contrário troca. Registro derivado `MotorFrutas.informacoes`. O instinto não lê a informação.
+- **`DonoInformante`** (sintético): informa sobre cada fruta oferecida logo depois da oferta, conhecendo o efeito real (E7); modo `certo`
+  (P2) diz o efeito real, `errado` (P2e) o contrário, nos mesmos ticks; conteúdo binário ("mal" se o efeito no humor é negativo, senão
+  "bem"). `simular_vida_frutas(..., informante=)`. O modo acoplado fica para o plano do C.
+- **N1:** `metrics.saciedade_especifica_n1`: `avaliacao ~ 1 + preferência + recente + fome`, mais a queda média por unidade de consumo
+  recente. A medida antiga (`saciedade_especifica`) fica, para reproduzir o N4.
+- **Gates** (`tests/test_informacao.py`, 24 testes): **G1** replay bit a bit com informações (4 donos × 2 modos × 3 sementes); **G2** sem
+  informação no log = a vida das frutas byte a byte (chave desligada ou ligada sem informante), e a vida `atencioso-frutas@11101` da
+  validação do N4, rejogada do disco com o código novo, dá as medidas gravadas em `artifacts_v2_n4/validacao/vidas.json`; **o evento não
+  muda a vida nem o orçamento** (com o instinto, a vida com o informante e sem ele têm o mesmo estado, ações e rngs; o canal fecha os
+  mesmos 48) e **não chega ao aprendiz** (espião no `receber_acao_dono`); a janela, a renovação e a troca; **N1** recupera, em dados
+  sintéticos com a preferência andando junto com a fome, a queda conhecida (β_recente = −k, β_fome = 0, β_pref = 1), onde a medida antiga
+  põe a culpa na fome (|β_fome| > 0,1). Nenhuma releitura dos dados gravados.
+- **Não mudou:** `engine.py`, `AcaoPet`, `lobos.py`, `ambiente.py`, o bandit, as vidas da bola e das frutas com o evento desligado, a web.

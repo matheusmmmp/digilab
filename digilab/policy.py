@@ -35,6 +35,9 @@ class Observacao:
     # V2, N4: o maior incentivo entre as frutas no cenario (0.0 sem fruta). Mesmo regime da `bola`: so o MotorFrutas
     # (digilab/frutas.py) injeta; `de_estado`, o bandit e as sondas nao o leem.
     fruta: float = 0.0
+    # V2, N5: a informacao do dono vigente sobre cada fruta, na ordem de events.FRUTAS: +1 "faz bem", -1 "faz mal", 0 nenhuma. So o
+    # MotorFrutas com ConfigInformacao.ligada injeta; o instinto, o bandit e as sondas nao leem (os lobos, rodada 6).
+    info_frutas: tuple = (0.0, 0.0, 0.0)
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":
