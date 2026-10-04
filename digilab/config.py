@@ -1241,3 +1241,39 @@ class ConfigBola:
 
 CONFIG_BOLA = ConfigBola()
 CONFIG_BOLA_LIGADA = ConfigBola(ligada=True)
+
+
+def _rotacao_ofertas() -> tuple:
+    """o conjunto de frutas de cada oferta, em rotacao (4 de 7 com pelo menos duas frutas ao mesmo tempo; F3)"""
+    return (("a",), ("b", "c"), ("a", "b", "c"), ("c",), ("a", "b"), ("b",), ("a", "c"))
+
+
+@dataclass(frozen=True)
+class ConfigFrutas:
+    """V2, N4 (docs/DEFINICOES_FRUTAS_V2.md, F1-F11; plano docs/PLANO_ANALISE_V2_N4.md): frutas no mundo, sem aprendizado de
+    politica. O dono oferece (fora do orcamento e fora do sorteio do aleatorio, B1 e B2); o pet escolhe ao `comer`, pelo incentivo;
+    dois registros por fruta (incentivo antes, avaliacao depois); a avaliacao cai com o consumo recente DAQUELA fruta, sem a fome;
+    neofobia e preferencia inata no genoma (rng propria); efeito no corpo separado do gosto, o ruim no humor. Tudo PROPOSTO, sem
+    fonte (protocol.PARAMETROS_FRUTAS_N4); duracao_min, w_fruta e k_saciedade vieram da calibracao (plano, secao 4;
+    artifacts_v2_n4/calibracao/resultado.json: a calibracao NAO fechou, o ponto e o de maior limite inferior do G-SEP(i)).
+    Desligada: o MotorFrutas e o MotorAmbiente byte a byte, e uma oferta no log levanta erro."""
+
+    ligada: bool = False
+    duracao_min: int = 120                   # a fruta fica no cenario por tantos minutos, se nao for comida (calibrado)
+    w_fruta: float = 6.0                     # peso de comer no tempo livre com fruta, x o maior incentivo no cenario (calibrado)
+    k_saciedade: float = 1.0                 # queda da avaliacao por unidade de consumo recente daquela fruta (calibrado)
+    meia_vida_recente: int = 16              # decisoes (16 x 15 min = 4 h) para o consumo recente cair a metade
+    taxa_incentivo: float = 0.3              # incentivo += taxa x (avaliacao - incentivo), so no consumo
+    nutricao: float = 0.10                   # fome a mais por fruta comida, alem do comer de sempre; igual em todas
+    efeito_humor_ruim: float = -0.10         # mundo descasado: a fruta de maior preferencia inata faz mal (no humor, F6)
+    efeito_humor_neutro: float = 0.0         # as outras frutas (e todas, no mundo "iguais")
+    mundo: str = "descasado"                 # "descasado" | "iguais" (variante de efeito igual, F7)
+    neofobia_max: float = 1.0                # genoma: neofobia ~ U[0, neofobia_max]
+    pref_min: float = 0.2                    # genoma: preferencia inata ~ U[pref_min, pref_max] por fruta
+    pref_max: float = 1.0
+    horarios_oferta: tuple = (540, 720, 900, 1080)   # 9h, 12h, 15h e 18h: passos do dono em que ha oferta, com o pet acordado
+    rotacao_ofertas: tuple = field(default_factory=_rotacao_ofertas)
+
+
+CONFIG_FRUTAS = ConfigFrutas()
+CONFIG_FRUTAS_LIGADA = ConfigFrutas(ligada=True)

@@ -1701,3 +1701,33 @@ Tarefa `docs/TAREFA_V2_BANCADA_MUNDOS.md`. Sem run de pesquisa; só as sementes 
   pede reproduzir o registro "sem perder os eventos do mundo", e as definições das frutas (F7) pedem o acoplado "com as mesmas ofertas".
   O da A1 continua lá, como estava.
 - **Condição na tabela:** a coluna passou de `mundo` para `condicao/mundo`, para os três mundos casados não se misturarem numa célula.
+
+## 2026-10-04 — V2, N4: frutas no mundo, sem aprendizado de política (`docs/TAREFA_V2_N4_FRUTAS.md`, `docs/PLANO_ANALISE_V2_N4.md`)
+
+Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`, `2dea550`). Interpretações do desenho e da calibração:
+- **Módulo próprio em vez de editar o `ambiente.py`.** A tarefa pede "estender o `MotorAmbiente`"; o `MotorFrutas` é uma subclasse em
+  `digilab/frutas.py`, e o `ambiente.py` não muda (o chat D pode mexer nele pelo mundo da bola).
+- **A escolha entre frutas lê o incentivo, com uma regra fixa** (proporcional, na `rng_fruta`). As definições pedem que a escolha seja
+  da política; com o aprendiz desligado e `lobos.py` fora desta tarefa, a política só decide **se** come (o instinto, com `comer` no tempo
+  livre pesado pelo maior incentivo), e o **qual** é a sub-decisão do motor pelo incentivo, que é o registro do "querer" (F1).
+- **O incentivo só muda no consumo** (na direção da avaliação); a definição 1.3 diz "em `oferta` e `consumo`", mas ignorar uma fruta não
+  tem avaliação a seguir. O efeito no corpo não entra no incentivo: seria aprender pela consequência (N3).
+- **A avaliação parte da preferência inata** (é o "ponto de partida" da definição 2.4) e só é medida no consumo.
+- **Ofertas por cronograma igual para os quatro donos**, fora do orçamento e do sorteio do aleatório (B1, B2): a exposição às frutas só
+  difere entre donos pelo sono do pet. As ofertas vão direto ao motor, sem passar pelo `CanalDeInteracao` (`simular_vida_frutas`).
+- **A herança dos genes das frutas não entra**: os filhos não estão nesta run, e mudar o `Genitor` mexeria no evento `origem` de todos os
+  filhos. Fica para quando a linhagem usar frutas.
+- **Teste ajustado:** `tests/test_ambiente.py::test_enum_do_dono_cresce_no_fim_e_a_v1_nao_ve` exigia a bola como as duas últimas ações do
+  enum; com as ofertas depois dela, confere a bola nas mesmas posições (15 e 16). `tests/test_educacao.py` idem (educação 12 a 14, bola 15
+  e 16).
+- **A calibração não fechou**, e nada foi ajustado. (a) **A faixa de p(comer | fruta) [0,30; 0,80] ficou fora do alcance da grade:** o
+  peso de `comer` é `w_fruta ×` o maior incentivo, que é no máximo a preferência inata e cai com a neofobia, contra os pesos do tempo livre
+  que somam de 7 a 12; com `w_fruta` 6 o p(comer) médio é 0,19. (b) **O G-SEP(ii) tem pouca amostra:** de 0 a 27 escolhas entre duas
+  frutas ou mais por vida, e a semente de neofobia alta quase não come. O ponto saiu da regra de reserva da seção 4.
+- **A regressão do G-SSE não tem o termo da preferência inata** (o plano fixou `avaliacao ~ 1 + recente + fome`). Nos pontos com poucos
+  consumos isso dá β_recente absurdos (−27 com `w_fruta` 1, quando o consumo recente quase nunca passa de 0; +2,4 com `w_fruta` 3 e
+  `k_saciedade` 0,2, porque as frutas de preferência alta são as mais comidas e acumulam consumo recente). No ponto escolhido, com 593
+  consumos e 205 com consumo recente acima de 0,05, o β sai −0,77 [−0,87; −0,69]. A regressão fica como o plano diz; a próxima medida da
+  saciedade deveria pôr a preferência (ou usar a queda `preferencia_inata − avaliacao`).
+- **O genoma é o mesmo para os quatro donos de uma semente** (sai da semente do motor). Por isso a neofobia de uma semente pesa em todos os
+  donos dela: com 0,96 o primeiro contato vem no 3º ao 8º dia. A variação entre sementes do p(comer) (0,05 a 0,30) é sobretudo isso.

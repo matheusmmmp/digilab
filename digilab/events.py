@@ -47,6 +47,11 @@ class AcaoUsuario(str, Enum):
     # motores anteriores levantam erro. No fim do enum, como as de educacao: nada que dependa da ordem muda.
     POR_BOLA = "por_bola"
     TIRAR_BOLA = "tirar_bola"
+    # V2, N4 (docs/DEFINICOES_FRUTAS_V2.md, F3): o dono oferece uma fruta (um botao por fruta). So o MotorFrutas
+    # (digilab/frutas.py) sabe aplicar; nos motores anteriores levantam erro. No fim do enum, como a bola.
+    OFERECER_FRUTA_A = "oferecer_fruta_a"
+    OFERECER_FRUTA_B = "oferecer_fruta_b"
+    OFERECER_FRUTA_C = "oferecer_fruta_c"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -56,6 +61,20 @@ ACOES_V1 = (AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, Acao
 ACOES_TREINO = tuple(a for a in AcaoUsuario if a.value.startswith("treinar_"))
 ACOES_EDUCACAO = (AcaoUsuario.PETISCO, AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO)
 ACOES_BOLA = (AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA)
+ACOES_FRUTAS = (AcaoUsuario.OFERECER_FRUTA_A, AcaoUsuario.OFERECER_FRUTA_B, AcaoUsuario.OFERECER_FRUTA_C)
+FRUTAS = ("a", "b", "c")
+
+
+def fruta_de(acao: AcaoUsuario) -> str:
+    if acao not in ACOES_FRUTAS:
+        raise ValueError(f"acao nao e oferta de fruta: {acao}")
+    return acao.value[len("oferecer_fruta_"):]
+
+
+def oferta_de(fruta: str) -> AcaoUsuario:
+    if fruta not in FRUTAS:
+        raise ValueError(f"fruta desconhecida: {fruta!r}")
+    return AcaoUsuario(f"oferecer_fruta_{fruta}")
 
 
 def exercicio_de(acao: AcaoUsuario) -> str:

@@ -701,3 +701,55 @@ def privacao_nas_decisoes(decisoes: Sequence[tuple[int, float, float, float, flo
             "fracao_privacao": sum(1 for _, f, h, e, _ in decisoes if min(f, h, e) < limiar) / n,
             "humor_medio": sum(hu for *_, hu in decisoes) / n,
             "energia_media": sum(e for _, _, _, e, _ in decisoes) / n}
+
+
+# ------------------------------------------------------------ V2, N4: as frutas (docs/PLANO_ANALISE_V2_N4.md, secao 2)
+
+
+def comer_por_incentivo(decisoes: Sequence[tuple[str, bool, float, str]],
+                        regras: Sequence[str] = ("tempo_livre", "fruta_no_cenario")) -> dict:
+    """G-SEP (i): `decisoes` = (regra do instinto, ha fruta no cenario, maior incentivo visto, acao). Nas decisoes de tempo livre com
+    fruta, p(comer | incentivo >= mediana) - p(comer | incentivo < mediana). A mediana e a da propria lista. None se um lado vazio."""
+    xs = [(x, a == "comer") for r, presente, x, a in decisoes if presente and r in regras]
+    if not xs:
+        return {"n": 0, "mediana": None, "p_alto": None, "p_baixo": None, "delta": None, "p_comer": None}
+    ordenados = sorted(x for x, _ in xs)
+    n = len(ordenados)
+    mediana = ordenados[n // 2] if n % 2 else 0.5 * (ordenados[n // 2 - 1] + ordenados[n // 2])
+    alto = [c for x, c in xs if x >= mediana]
+    baixo = [c for x, c in xs if x < mediana]
+    p_alto = sum(alto) / len(alto) if alto else None
+    p_baixo = sum(baixo) / len(baixo) if baixo else None
+    return {"n": n, "mediana": mediana, "p_alto": p_alto, "p_baixo": p_baixo, "p_comer": sum(c for _, c in xs) / n,
+            "delta": (p_alto - p_baixo) if p_alto is not None and p_baixo is not None else None}
+
+
+def escolha_por_incentivo(ofertas: Sequence[tuple[Sequence[str], Mapping[str, float], str | None]]) -> dict:
+    """G-SEP (ii): `ofertas` = (frutas no cenario, incentivo de cada uma antes da escolha, fruta escolhida ou None). Nas escolhas com
+    pelo menos duas frutas, a fracao em que a escolhida e uma das de maior incentivo, menos a esperada sem incentivo (media de 1/n)."""
+    casos = [(list(p), inc, e) for p, inc, e in ofertas if e is not None and len(p) >= 2]
+    if not casos:
+        return {"n": 0, "acerto": None, "acaso": None, "delta": None}
+    acertos = 0
+    acaso = 0.0
+    for p, inc, e in casos:
+        if e not in p:
+            raise ValueError(f"fruta escolhida {e!r} fora do cenario {p}")
+        topo = max(inc[f] for f in p)
+        acertos += inc[e] == topo
+        acaso += 1.0 / len(p)
+    n = len(casos)
+    return {"n": n, "acerto": acertos / n, "acaso": acaso / n, "delta": acertos / n - acaso / n}
+
+
+def saciedade_especifica(consumos: Sequence[tuple[float, float, float]]) -> dict:
+    """G-SSE: `consumos` = (avaliacao registrada, consumo recente daquela fruta antes, fome antes). Minimos quadrados de
+    avaliacao ~ 1 + recente + fome. Falha alto com menos de 4 consumos ou sistema singular."""
+    if len(consumos) < 4:
+        raise ValueError(f"saciedade_especifica precisa de pelo menos 4 consumos, recebeu {len(consumos)}")
+    X = [(1.0, r, f) for _, r, f in consumos]
+    y = [a for a, _, _ in consumos]
+    XtX = [[sum(x[i] * x[j] for x in X) for j in range(3)] for i in range(3)]
+    Xty = [sum(x[i] * yi for x, yi in zip(X, y)) for i in range(3)]
+    b = _resolver(XtX, Xty)
+    return {"n": len(consumos), "intercepto": b[0], "beta_recente": b[1], "beta_fome": b[2]}

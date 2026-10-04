@@ -32,6 +32,9 @@ class Observacao:
     # V2, A1: ha bola no cenario (1.0) ou nao (0.0). Campo com padrao: `de_estado` (o motor da v1) nunca o preenche; so o
     # MotorAmbiente (digilab/ambiente.py) o injeta antes de `agir`. O bandit e as sondas nao o leem.
     bola: float = 0.0
+    # V2, N4: o maior incentivo entre as frutas no cenario (0.0 sem fruta). Mesmo regime da `bola`: so o MotorFrutas
+    # (digilab/frutas.py) injeta; `de_estado`, o bandit e as sondas nao o leem.
+    fruta: float = 0.0
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":
