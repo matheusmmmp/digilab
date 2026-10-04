@@ -1735,3 +1735,17 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`,
   amostra de escolhas entre frutas); **G-SSE falha** pelo β_fome (−0,070 [−0,159; −0,014]), pela regressão sem a preferência inata (a
   avaliação não lê a fome: código e teste). Nada mudou por causa dela; resultado em `docs/RESULTADO_V2_N4.md`, com as decisões N1–N4.
   Pela decisão de 2026-10-01 a V2 segue.
+
+## 2026-10-04 — Fim da rodada 4: decisões N1–N4 e mudança na prévia da rodada 5
+
+- **Decisões do Matheus nas frutas, como recomendadas** (`docs/RESULTADO_V2_N4.md`):
+  - N1: trocar a medida da saciedade no próximo plano, sem releitura pós hoc;
+  - N2: ampliar a grade de `w_fruta` na calibração do experimento maior;
+  - N3: manter a nutrição;
+  - N4: herança dos genes das frutas na fase 3.
+- **Rodada 5 muda em relação à prévia** de `docs/V2_RODADA_4_PROMPTS.md`. Os lobos ainda não veem a bola nem as frutas, então o N5 e o
+  experimento maior precisam antes de um aprendiz que veja o mundo (`docs/TAREFA_V2_LOBOS_MUNDO.md`, chat B, com a E2).
+  - O N5 se divide em mundo (chat A) e plano (chat C).
+  - O D faz os mundos das frutas na bancada.
+  - O N6 e o N7 passam para a rodada 6.
+- Marco em `docs/V2_RODADA_4.md`.

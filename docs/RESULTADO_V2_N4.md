@@ -54,7 +54,15 @@ incentivos parecidos a escolha fica perto do acaso. O efeito é do tamanho esper
 3. **O mundo descasado já cobra seu preço** sem aprendizado: o pet come a fruta que faz mal em quase 40% dos consumos e o humor cai.
    Nada o afasta dela, porque o incentivo segue o gosto e não o efeito. É a linha de base para o N3 (aprender pela consequência).
 
-## Decisões para o Matheus (nenhuma aplicada)
+## Decisões para o Matheus
+
+**Decididas pelo Matheus em 2026-10-04 (recomendação do coordenador):**
+- **N1 = (a):** a falha do G-SSE fica como falha da medida. O próximo plano troca a regressão (com o termo da preferência inata, ou medindo
+  a queda da avaliação por fruta). Nada de releitura pós hoc agora.
+- **N2:** ampliar a grade de `w_fruta` na calibração do experimento maior, porque o P1 precisa de exposição à fruta para aprender
+  (p(comer | fruta) foi 0,208).
+- **N3:** manter a nutrição. O acoplado com as mesmas ofertas já controla isso, e zerar mudaria o mundo de novo.
+- **N4:** a herança dos genes das frutas fica para quando a linhagem usar frutas (fase 3).
 
 | # | decisão | opções |
 |---|---|---|
