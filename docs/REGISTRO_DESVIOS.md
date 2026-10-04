@@ -1765,3 +1765,15 @@ O computador não é o gargalo. Decisão do Matheus:
 - variedade de frutas como fator a considerar no experimento maior (`docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, seção 2.1). Ela fica
   fora das predições registradas e só entra por adendo antes da calibração.
 
+## 2026-10-04 — N5-PLANO: plano do dono informante no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_N5_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N5.md`. Nenhuma run, nenhum código.
+- **Nomes combinados com o chat A** (PR #140): o plano adota sem troca os nomes que ele implementou (evento `INFORMAR_FRUTA_<A|B|C>_<BEM|MAL>`,
+  `Observacao.info_frutas`, `ConfigInformacao.janela_min`, `DonoInformante` com `certo` e `errado`, `MotorFrutas.informacoes`) e acrescenta
+  um nome: o modo **`acoplado`** do informante (mesmo multiconjunto de fruta e conteúdo do `certo`, em ticks sorteados por rng própria).
+- **Confiança de partida maior que zero.** A tarefa pede a informação "nunca como reforço"; o plano a põe como entrada da sub-decisão da fruta
+  com peso inicial positivo (calibrado), e o peso só muda pela consequência. Com peso inicial zero a informação não teria efeito antes de o
+  mundo validá-la, e o P2e não poderia piorar no começo (predição 4(a) do experimento maior). A grade fica abaixo do teto dos pesos, para o
+  mundo poder levar o peso a cruzar o zero.
+- **Só o mundo descasado.** O casado com frutas e o mutável ficam para o experimento maior (decisão N5-5 do plano).
+- **Leituras registradas antes** para dois riscos já vistos nos artefatos: pouca fruta comida (N4) e pesos no teto (N3, L1).
