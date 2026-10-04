@@ -1629,3 +1629,26 @@ O Matheus seguiu as recomendações:
   - F4: a neofobia é um gene próprio.
   - F10 aplicada: a frase do pedido original em `docs/DEFINICOES_V2.md`, seção 7, foi reescrita.
 - Marco em `docs/V2_RODADA_3.md`. Tarefas da rodada 4: N3 (B), N4 (A), plano do experimento maior (C) e bancada de mundos (D).
+
+## 2026-10-04 — V2, N3: a consequência da própria ação como sinal (`docs/TAREFA_V2_N3_CONSEQUENCIA.md`, `docs/PLANO_ANALISE_V2_N3.md`)
+
+Interpretações do desenho, registradas com o plano (antes da calibração).
+- **Janela de crédito imediata.** O sinal de uma decisão é `observacao → observacao_seguinte` dessa decisão, que o motor mede logo
+  depois do efeito da ação do pet e antes do tempo e do dono (validação V2 do roadmap). Consequência: o sono dá sinal zero (a energia
+  só sobe nos ticks seguintes), e brincar e explorar dão sinal negativo (gastam energia; o humor que sobem está fora). O sono é regra
+  determinística e nunca aprende, então o zero não muda nada. A consequência atrasada (o intervalo até a próxima decisão) fica
+  declarada e não rodada: ela mistura o cuidado do dono.
+- **Forma do drive em inteiros, sem raiz.** D = Σ(S − arred(h·S))² sobre fome, higiene e energia, com ponto de ajuste 1,0. É a família de
+  Keramati e Gutkin com expoente 2 e sem a raiz: mantém a priorização (reduzir um déficit maior vale mais) e fica exato em inteiros.
+  A escolha dos expoentes é do projeto, não da referência.
+- **Sem o canal do chamado no P1.** O crédito do chamado (atendido ou ignorado) depende do dono; o P1 não o recebe. O gancho novo
+  (`Aprendiz.observar_consequencia`) não passa pelo relógio de cuidado nem pelos pendentes. A regra de atualização é a mesma da L1
+  (`atualizar_pesos` via `_aplicar_sinal`); teste: o mesmo f_S pela via do dono dá os mesmos pesos.
+- **Só o ganho calibra.** Passo, teto e piso são os da L1 (o mesmo aprendiz); o ganho é a escala do sinal da fonte, não uma regra nova.
+- **Cuidado controlado = acoplado P1 ← P0 sem filtro.** Na vida fechada o dono reage ao pet; o P1 no registro do P0 recebe o mesmo
+  cuidado nos mesmos ticks. O "só cuidado" da L1 (P3 ← P3 sem sinais) entra como a referência H0 de sempre.
+- **"Sem mortes novas" por construção.** No mundo `padrao` da bancada (`MotorComFeedback`) não há lesão nem morte; o gate fica
+  registrado como satisfeito por construção, e a saúde média é relatada.
+- **G6 só pelo teto, como a tarefa pede.** A razão da deriva (dia 14 / dia 7) é relatada sem gate.
+- **Calibração (2026-10-04, `artifacts_v2_n3/calibracao/`): não fechou.** Nenhum ganho passa o G6 (18–20 vidas no teto em todos); a regra
+  de reserva escolheu o ganho 4 (menos vidas no teto). Nada foi reajustado; o ganho vai ao config da validação e à `ConfigConsequencia`.

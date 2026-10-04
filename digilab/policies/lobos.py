@@ -64,7 +64,7 @@ from bisect import bisect_right
 from dataclasses import fields
 from itertools import accumulate
 
-from ..config import CONFIG_LOBOS, CONFIG_PADRAO, Config, ConfigLobos
+from ..config import CONFIG_CONSEQUENCIA, CONFIG_LOBOS, CONFIG_PADRAO, Config, ConfigConsequencia, ConfigLobos
 from ..events import AcaoPet, AcaoUsuario
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
@@ -95,6 +95,11 @@ PARAMETROS_LOBOS_L1: dict[str, tuple[str, str]] = {
     "recompensa_repreensao": ("PROPOSTO", "= ConfigBandit.recompensa_repreensao"),
 }
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1}
+# V2, N3: o sinal da consequencia (ConfigConsequencia, config.py). Todos PROPOSTOS, nenhum referendado.
+PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
+    "drives": ("PROPOSTO", "fome, higiene e energia (PLANO_ANALISE_V2_N3, secao 3); humor fora pela F6"),
+    "ganho": ("PROPOSTO", "sem fonte; calibrado nas sementes 8101...8505 (PLANO_ANALISE_V2_N3, secao 6)"),
+}
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -465,6 +470,21 @@ class Aprendiz:
                 vivos.append((tick_pedido, registro))
         self._pendentes = vivos
 
+    def observar_consequencia(self, transicao: Transicao, f_S: int) -> None:
+        """V2, N3: credita `f_S` (a consequencia da propria acao, calculada fora: `sinal_homeostatico`) a decisao observada,
+        pela mesma regra de atualizacao da L1. Fonte sem dono: nao passa pelo relogio de cuidado nem pelos chamados pendentes
+        (o credito do chamado depende do dono). Com o aprendizado desligado so conta a decisao (a vida e a do P0)."""
+        self.memoria.decisao()
+        if not self._aprende:
+            return
+        registro = self._registro_decisao
+        if registro is None or registro["acao"] is not transicao.acao:
+            raise RuntimeError("registro da decisao nao corresponde a acao observada")
+        self._ultima = registro
+        self._n_recompensas["consequencia"] = self._n_recompensas.get("consequencia", 0) + 1
+        if f_S != 0:
+            self._aplicar_sinal(registro, f_S)
+
     def _aplicar_sinal(self, registro: dict, f_S: int) -> None:
         g = registro["regra"]
         self._cortes_teto += atualizar_pesos(self._pesos[g], self._prior[g], registro, f_S, self.cl.passo, self.cl.teto,
@@ -556,6 +576,37 @@ class PoliticaLobos(Aprendiz):
         self._ultima_regra = regra
         self._registrar(regra, candidatos, acao, x, pesos, contrib, u)
         return acao
+
+
+def deficit_homeostatico(vetor_estado: tuple, drives: tuple, S: int) -> int:
+    """D(h) = soma_i (S - arred(h_i * S))**2 sobre os drives (indices em Estado.vetor), ponto de ajuste 1.0. Inteiro."""
+    d = 0
+    for i in drives:
+        h = vetor_estado[i]
+        if not 0.0 <= h <= 1.0:
+            raise ValueError(f"drive {i} fora de [0, 1]: {h!r}")
+        falta = S - arred(h * S)
+        d += falta * falta
+    return d
+
+
+def sinal_homeostatico(transicao: Transicao, S: int, cfg: ConfigConsequencia | None = None) -> int:
+    """V2, N3: f_S = div_arred(ganho * (D(antes) - D(depois)), S), com antes/depois = observacao -> observacao_seguinte da
+    mesma decisao (janela imediata). Positivo quando a propria acao reduziu o deficit (Keramati e Gutkin,
+    10.7554/elife.04811). Inteiro; nada do dono entra."""
+    cfg = cfg or CONFIG_CONSEQUENCIA
+    if type(cfg.ganho) is not int or cfg.ganho < 0:
+        raise ValueError(f"ganho precisa ser inteiro >= 0: {cfg.ganho!r}")
+    antes = deficit_homeostatico(transicao.observacao.vetor_estado, cfg.drives, S)
+    depois = deficit_homeostatico(transicao.observacao_seguinte.vetor_estado, cfg.drives, S)
+    return div_arred(cfg.ganho * (antes - depois), S)
+
+
+def validar_parametros_consequencia(cfg: ConfigConsequencia | None = None) -> None:
+    campos = {f.name for f in fields(cfg or CONFIG_CONSEQUENCIA)}
+    if campos != set(PARAMETROS_CONSEQUENCIA_N3):
+        raise ValueError(f"sem registro: {sorted(campos - set(PARAMETROS_CONSEQUENCIA_N3))}; "
+                         f"registro sem campo: {sorted(set(PARAMETROS_CONSEQUENCIA_N3) - campos)}")
 
 
 def validar_parametros_lobos(cfg: ConfigLobos | None = None) -> None:
