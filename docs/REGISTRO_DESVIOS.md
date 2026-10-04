@@ -1749,3 +1749,19 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`,
   - O D faz os mundos das frutas na bancada.
   - O N6 e o N7 passam para a rodada 6.
 - Marco em `docs/V2_RODADA_4.md`.
+
+## 2026-10-04 — Gargalo do aprendiz: revisão reservada e variedade de frutas como fator a considerar
+
+O Matheus perguntou se o gargalo é ter poucos objetos (bola, frutas) ou o computador. Pela leitura das rodadas 3 e 4, o gargalo é o
+aprendiz e a densidade de consequências que ele recebe:
+- o instinto decide cerca de 80% das decisões na L1;
+- os pesos ficam no teto em 12 de 20 vidas na L1 e em 20 de 20 no N3;
+- o sinal só vê o efeito imediato da ação;
+- a exposição é baixa: p(comer | fruta) 0,208;
+- os lobos ainda não veem o mundo novo.
+
+O computador não é o gargalo. Decisão do Matheus:
+- tarefa `docs/TAREFA_V2_REVISAO_APRENDIZ.md` (rodada 6, chat B, só calibração), que vira a linha R6.0 do `docs/ROADMAP_V2.md`;
+- variedade de frutas como fator a considerar no experimento maior (`docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, seção 2.1). Ela fica
+  fora das predições registradas e só entra por adendo antes da calibração.
+
