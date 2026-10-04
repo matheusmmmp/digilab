@@ -753,3 +753,23 @@ def saciedade_especifica(consumos: Sequence[tuple[float, float, float]]) -> dict
     Xty = [sum(x[i] * yi for x, yi in zip(X, y)) for i in range(3)]
     b = _resolver(XtX, Xty)
     return {"n": len(consumos), "intercepto": b[0], "beta_recente": b[1], "beta_fome": b[2]}
+
+
+# ------------------------------------------------------------ V2, bancada das frutas: a predicao do experimento maior
+# docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md, secao 4.1 e 4.3: a medida primaria e a fracao dos consumos de fruta em que o pet
+# comeu a fruta que, NAQUELE momento, tinha o efeito ruim (no mutavel a fruta ruim troca no meio da vida).
+
+
+def taxa_fruta_ruim(consumos: Sequence[tuple[int, float]], janelas: Mapping[str, tuple[int, int]]) -> dict:
+    """`consumos` = (tick, efeito no humor aplicado naquele consumo); ruim = efeito < 0 (o efeito vigente no consumo, entao a troca
+    do mutavel ja esta dentro dele). `janelas` = nome -> [inicio, fim) em ticks. Por janela: n consumos, quantos ruins e a taxa;
+    taxa None quando a janela nao tem consumo (o pet nao comeu fruta ali: nao e zero)."""
+    for nome, (ini, fim) in janelas.items():
+        if not (isinstance(ini, int) and isinstance(fim, int)) or ini < 0 or fim <= ini:
+            raise ValueError(f"janela {nome!r} invalida: [{ini}, {fim})")
+    out = {}
+    for nome, (ini, fim) in janelas.items():
+        sel = [e for t, e in consumos if ini <= t < fim]
+        ruins = sum(e < 0.0 for e in sel)
+        out[nome] = {"inicio": ini, "fim": fim, "n": len(sel), "ruins": ruins, "taxa": ruins / len(sel) if sel else None}
+    return out

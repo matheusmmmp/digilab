@@ -1777,3 +1777,30 @@ Tarefa `docs/TAREFA_V2_N5_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N5.md`. Nenh
   mundo poder levar o peso a cruzar o zero.
 - **Só o mundo descasado.** O casado com frutas e o mutável ficam para o experimento maior (decisão N5-5 do plano).
 - **Leituras registradas antes** para dois riscos já vistos nos artefatos: pouca fruta comida (N4) e pesos no teto (N3, L1).
+
+## 2026-10-04 — V2, BANCADA-FRUTAS: interpretações dos mundos das frutas e das unidades derivadas
+
+Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes dos testes.
+- **Uma fruta boa e uma ruim em cada condição.** O plano (seção 2) pede o casado com "a fruta de maior preferência inata com o efeito bom"
+  e o mutável trocando "a boa vira ruim e vice-versa"; a medida primária (`taxa_fruta_ruim`) precisa de uma fruta ruim também no casado
+  (predição 1). Com o descasado do N4 (a preferida faz mal, as outras neutras), o casado com o sinal trocado não teria fruta ruim. A
+  regra adotada: casado = a de maior preferência faz bem e a de menor faz mal; descasado = o contrário; a do meio neutra nos dois. O
+  efeito bom é o ruim com o sinal trocado (−`efeito_humor_ruim`), sem número novo. Por isso o descasado da bancada **não é** o do N4: a
+  fruta menos preferida faz bem aqui, e era neutra lá. Se o Matheus preferir outra regra, ela muda só `efeitos_da_condicao`.
+- **O calendário das ofertas ignora o sono.** O `OfertasFrutas` do N4 só oferece com o pet acordado; com isso a oferta depende do estado
+  do pet, e dois braços (ou duas condições, porque o efeito no humor muda o comportamento) teriam ofertas diferentes. O plano (seção 2,
+  K5) pede o calendário pela semente, igual em todos os braços. O `CalendarioFrutas` oferece nos mesmos horários todo dia, com o pet
+  acordado ou não (a fruta fica até o prazo), e começa a rotação num índice derivado da semente. Por isso as vidas da bancada não são as
+  do N4 byte a byte; o teste mostra que, com o mesmo efeito, o `MotorFrutasMundo` é o `MotorFrutas`.
+- **A troca do mutável é registro derivado, não evento do log.** Pôr um evento novo no log pediria mudar `events.py` e os replays (de
+  `frutas.py`, do chat A), fora desta tarefa. A troca é determinada pelo mundo (`mutavel`) e pela duração da vida (metade, no fim do dia
+  `dias // 2`), fica em `MotorFrutasMundo.troca` e no efeito de cada consumo, e o replay pelo log a refaz (teste). O contrato do #137
+  aceitava "evento do mundo ou parâmetro gravado da vida".
+- **Metade da vida.** O plano fixa a troca no fim do dia 7 numa vida de 14; a regra geral da bancada é o fim do dia `dias // 2`, para os
+  testes curtos usarem a mesma lógica. As janelas `inicio` e `final` seguem a mesma divisão.
+- **A taxa fica fora das tabelas.** A `taxa_fruta_ruim` sai `None` numa janela sem consumo (os lobos, que ainda não veem as frutas, não
+  comem nenhuma nos testes curtos); a tabela braço × condição exige um número por vida. A tabela dela fica para o orquestrador do
+  experimento maior, que decide o tratamento das vidas sem consumo (o plano já trata a censura na predição 3).
+- **`FAIXAS_RESERVADAS` é conservadora:** cada faixa vira um intervalo fechado do menor ao maior número citado (por exemplo, 80001…82004
+  para a linhagem), e as sementes de fala, voz e comando de 2026-09/10 viram um intervalo só. As unidades derivadas são números de 64 bits
+  (`derivar_semente`), muito acima de todas; o teste confere de qualquer jeito, também contra toda semente das configs.

@@ -39,22 +39,19 @@ def _bolas(log) -> list[int]:
 
 
 def test_contrato_das_condicoes():
+    """Desde a BANCADA-FRUTAS as tres condicoes existem (os mundos das frutas); o contrato e: todo mundo realiza uma condicao
+    e nenhuma condicao espera no. Os mundos das frutas estao em tests/test_bancada_frutas.py."""
     assert set(bv.CONDICOES) == {"casado", "descasado", "mutavel"}
-    assert bv.CONDICOES["casado"].precisa == "" and bv.CONDICOES["casado"].no == ""
-    for nome, chave in (("descasado", "preferencia inata"), ("mutavel", "TROCA")):
-        c = bv.CONDICOES[nome]
-        assert c.no == "N4" and chave in c.precisa and "N4" in c.precisa
-        with pytest.raises(NotImplementedError, match=chave):
-            bv.mundo_de(nome)
-        with pytest.raises(NotImplementedError, match="N4"):
-            BANCADA.vida(bv.EspecVida("atencioso", "P0", 101, mundo=nome))
-    assert {m: bv.MUNDOS[m].condicao for m in bv.MUNDOS} == {"padrao": "casado", "bola": "casado", "bola_a1": "casado"}
+    assert all(c.precisa == "" and c.no == "" for c in bv.CONDICOES.values())
+    assert {m: bv.MUNDOS[m].condicao for m in bv.MUNDOS} == {
+        "padrao": "casado", "bola": "casado", "bola_a1": "casado", "casado_frutas": "casado", "descasado": "descasado",
+        "mutavel": "mutavel"}
     assert bv.EspecVida("atencioso", "P0", 101, mundo="bola").condicao == "casado"
     with pytest.raises(NotImplementedError):
         bv.mundo_de("lago")
-    with pytest.raises(NotImplementedError, match="preferencia inata"):
+    with pytest.raises(NotImplementedError):
         bv.validar_config({"bracos": ["P0"], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
-                           "sonda": SONDA, "bootstrap": {}, "mundos": ["descasado"]})
+                           "sonda": SONDA, "bootstrap": {}, "mundos": ["lago"]})
 
 
 def test_configuracoes_invalidas_falham_alto():
