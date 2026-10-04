@@ -1150,6 +1150,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: mecânicas de Dwarf Fortress → V2** (`docs/futuro/dwarf_fortress.md`, Matheus, 2026-10-01): contexto das peças (slots 8+8,
   memória nuclear, faceta × valor, duas prioridades, estresse em duas escalas) para o planejamento da V2; a v1 não recebe nada. O
   desenho (`docs/futuro/proposta_df.md`) só depois do gatilho da tarefa, junto com a fase 1b do plano da V2. DF é pista, não evidência.
+- **IDEIA: decodificador de conceitos do DigiBrain** (`docs/futuro/decodificador_conceitos.md`, Matheus, 2026-10-04): os lobos
+  decidem numericamente; uma camada lê o estado interno e extrai conceitos com incerteza; só então a LLM fala. Estende o motivo e a
+  honestidade do fator; precedentes já publicados (CBM, Discover-then-Name, M-CBM): não alegar novidade. Não autoriza implementação.
 - **IDEIA: aura do herói** (`docs/futuro/aura_do_heroi.md`, Matheus, 2026-10-03): retrato da lista de gambits de um pet que lutou
   muito, vendido na loja como item de 2 lutas que empresta esse conhecimento a outro pet. Depende de loja e moeda (ainda ideia);
   divide a peça técnica com o PvP com ghost. Não autoriza implementação.
