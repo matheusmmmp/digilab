@@ -379,7 +379,9 @@ class DonoInformante:
     """N5: o dono que informa sobre cada fruta oferecida, logo depois da oferta (os mesmos ticks em todos os modos: o calendario de
     ofertas nao depende do braco). Ele conhece o efeito real de cada fruta no humor (E7). Conteudo binario: "mal" se o efeito real e
     negativo, "bem" caso contrario (fruta neutra = "bem"). Modo `certo` (P2) diz o efeito real; `errado` (P2e), o contrario.
-    Nomes PROVISORIOS ate o plano do N5 (chat C), que tambem fixa o modo acoplado (a mesma quantidade em momentos sorteados)."""
+    Nomes definidos no docs/PLANO_ANALISE_V2_N5.md (PR #142). O terceiro modo, `acoplado` (secao 4.2 do plano: o mesmo multiconjunto
+    de (fruta, conteudo verdadeiro) do modo certo da unidade, em ticks sorteados uniformemente na vida pela rng
+    derivar_semente("informacao-acoplada", semente), fora do orcamento), fica para a implementacao do N5 na rodada 6."""
 
     MODOS = ("certo", "errado")
 

@@ -1752,10 +1752,11 @@ Plano commitado antes de qualquer run (primeiro commit do branch `v2-n4-frutas`,
 
 ## 2026-10-04 — V2, N5 (lado do mundo): a informação do dono e a medida N1 (`docs/TAREFA_V2_N5_MUNDO.md`)
 
-- **Nomes combinados com o chat C, provisórios.** O `docs/PLANO_ANALISE_V2_N5.md` ainda não existe; o chat C confirmou por mensagem que o
-  plano vai usar `informar_fruta_<f>_<bem|mal>`, `ACOES_INFORMACAO`, `Observacao.info_frutas`, `ConfigInformacao.janela_min`,
-  `DonoInformante` (modos `certo` e `errado`) e `MotorFrutas.informacoes`, e que confere com os contratos K3, K4/E7 e K5/B2 do plano do
-  experimento maior. A janela de 240 min é PROPOSTA; o plano pode mudar o valor sem mudar os nomes.
+- **Nomes combinados com o chat C.** O `docs/PLANO_ANALISE_V2_N5.md` (PR #142) usa, sem troca, `informar_fruta_<f>_<bem|mal>`,
+  `ACOES_INFORMACAO`, `Observacao.info_frutas`, `ConfigInformacao.janela_min`, `DonoInformante` (modos `certo` e `errado`),
+  `MotorFrutas.informacoes`, `decisoes_com_informacao` e `metrics.saciedade_especifica_n1`, e confere com os contratos K3, K4/E7 e K5/B2
+  do plano do experimento maior. A janela de 240 min é PROPOSTA (o plano não a calibra). O plano define também o terceiro modo do
+  informante, `acoplado` (seção 4.2), que fica para a implementação do N5 na rodada 6.
 - **Desvio do texto da validação V6 do `docs/ROADMAP_V2.md`** ("a informação entra por um gancho do motor; a `Observacao` não muda"): a
   informação entra num campo novo da `Observacao` (`info_frutas`, com padrão), injetado só pelo `MotorFrutas`, como a `bola` e a `fruta`
   já entraram. Motivo: a tarefa dos lobos do chat B (`docs/TAREFA_V2_LOBOS_MUNDO.md`) liga ao lobo de percepção "o que o

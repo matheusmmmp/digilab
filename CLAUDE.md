@@ -1505,7 +1505,7 @@ sementes 10101…10505; as vidas dos 18 pontos da grade ficam fora do git, regen
 ## V2, N5 — lado do mundo: o dono informa e a medida N1 da saciedade (2026-10-04, `docs/TAREFA_V2_N5_MUNDO.md`) — GATES PASSAM
 
 Infraestrutura, sem run de pesquisa e sem faixa reservada. O desenho fino e o plano do N5 são do chat C (`docs/TAREFA_V2_N5_PLANO.md`);
-**os nomes dos eventos foram combinados com ele** e ficam PROVISÓRIOS até o `docs/PLANO_ANALISE_V2_N5.md`. A percepção da informação pelos
+**os nomes dos eventos foram combinados com ele** e o `docs/PLANO_ANALISE_V2_N5.md` (PR #142) os usa sem troca. A percepção da informação pelos
 lobos é do chat B (rodada 6). Interpretações em `docs/REGISTRO_DESVIOS.md`.
 - **Evento:** `AcaoUsuario.INFORMAR_FRUTA_<A|B|C>_<BEM|MAL>` no fim do enum (`ACOES_INFORMACAO`, `informacao_de`, `informar`). O conteúdo
   é o que o dono diz; certo ou errado é decidido pelo braço. Só o `MotorFrutas` com `ConfigInformacao.ligada` (exige as frutas) aceita.
