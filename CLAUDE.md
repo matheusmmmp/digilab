@@ -77,7 +77,8 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
-| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P3 feedback do dono; P1/P2/P2e falham alto até o N3/N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`) (seção "V2, BANCADA" no fim) |
+| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P3 feedback do dono; P2/P2e falham alto até o N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`) (seção "V2, BANCADA" no fim) |
+| `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
 | `digilab/metrics.py` | taxa de vitória, Bradley-Terry (erro padrão projetado em soma-zero), JSD com números aleatórios comuns, bootstrap, `efeito_do_treino` (ablação) |
@@ -1393,3 +1394,33 @@ ficam fora do git, regeneráveis).
   −0,024 [−0,042; −0,008]: a bola tira elogios e carinhos. Nos coerentes a bola desloca o ensino (atencioso: elogios 93,0 → 61,4,
   broncas 46,0 → 20,0). Resultado registrado; a V2 segue (decisão de 2026-10-01). Decisões B1–B3 para o Matheus no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, N3 — a consequência da própria ação como sinal, braço P1 (2026-10-04, `docs/TAREFA_V2_N3_CONSEQUENCIA.md`, `docs/PLANO_ANALISE_V2_N3.md`) — CALIBRAÇÃO FEITA, NÃO FECHOU
+
+Nó N3 de `docs/ROADMAP_V2.md`; braço P1 da pergunta maior. Plano registrado antes de qualquer run (primeiro commit do branch), com a
+janela de crédito decidida. Números de `artifacts_v2_n3/calibracao/` (sementes 8101…8505; `escolha.json`, `varredura.jsonl`,
+`ganho<g>/resultado.json` e, da bancada, `ganho<g>/{medidas,tabelas,meta}.json` e `vidas/*.jsonl`; os `vidas/*.politica.json` ficam fora
+do git, ~700 MB, regeneráveis por replay). Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O sinal.** `lobos.sinal_homeostatico`: D = Σ(S − arred(h·S))² sobre fome, higiene e energia (ponto de ajuste 1,0; humor e saúde fora),
+  f_S = div_arred(ganho · (D_antes − D_depois), S), em inteiros (Keramati e Gutkin, `10.7554/elife.04811`; expoente 2 sem raiz, escolha
+  do projeto). **Janela imediata**: `observacao → observacao_seguinte` da mesma decisão, medida pelo motor antes do tempo e do dono:
+  comer dá sinal positivo, brincar e explorar negativo (gastam energia), o resto zero. A consequência atrasada fica declarada, sem run.
+- **O código.** `Aprendiz.observar_consequencia` (o gancho: credita f_S à decisão pela mesma `atualizar_pesos` da L1, sem relógio de
+  cuidado nem chamados pendentes); `PoliticaDoBraco` com a fonte `consequencia` (nada do dono chega: nem sinal nem chamado);
+  `Bancada.cfg_consequencia` e a chave `consequencia` do config da bancada; `ConfigConsequencia` (drives, ganho; PROPOSTOS,
+  `lobos.PARAMETROS_CONSEQUENCIA_N3`); `experiments/run_v2_n3.py` monta os gates a partir das medidas da bancada. `engine.py`, `AcaoPet`,
+  o bandit, a L0 e a L1 (o P3 continua byte a byte) e a web intactos. Testes: `tests/test_n3_consequencia.py` (G2: o P1 com ganho 0 ou
+  com o aprendizado desligado é o P0 byte a byte, 4 donos × 5 sementes; G1; o sinal por ação; o mesmo f_S pela via do dono dá os mesmos
+  pesos; nada do dono chega ao P1; o acoplado P1 ← P0 recebe o mesmo cuidado nos mesmos ticks).
+- **Calibração (grade do ganho {4, 8, 16, 32, 64}, 38 min): não fechou.** Nenhum ganho passa o G6: 18 a 20 das 20 vidas prendem peso no
+  teto (1·S, o da L1) em todos os pontos, porque o sinal tem sempre o mesmo sentido (brincar e explorar sempre gastam energia). Pela regra
+  de reserva da seção 6 (menos vidas no teto), o escolhido é o **ganho 4** (agora o padrão da `ConfigConsequencia`).
+- **No ganho 4 (calibração, não validação):** **G-P1 PASSA**: privação P0 − P1 **+0,0051 [+0,0008; +0,0091]**; vem toda do dono aleatório
+  (+0,021 [+0,005; +0,034]); atencioso e incoerente sem privação nos dois braços; relapso −0,0001. **Sem mortes novas** (por construção:
+  o mundo `padrao` não tem morte); saúde P1 − P0 +0,0046 [+0,0017; +0,0075]. **G6 FALHA** (18 vidas no teto; razão da deriva 1,68).
+  Com o mesmo cuidado (acoplado P1 ← P0) a redução é a mesma, +0,0051 [+0,0003; +0,0092]: o efeito é das ações do próprio pet, não de um
+  cuidado diferente do dono. Os outros ganhos também reduzem a privação (+0,006 a +0,011; o 32 com IC cruzando zero).
+- **O que o P1 aprende** (a previsão do plano): na fome moderada come 91% das vezes (P0 47%); no tempo livre troca brincar e explorar
+  (35% e 28% → 10% e 15%) por ocioso e chamar (28% e 9% → 48% e 27%). O acerto na tarefa do dono **cai** (0,58 → 0,43): o dono elogia
+  brincar e explorar com energia, e o P1 aprendeu a evitá-los. G4 do aprendido 0,188 [0,179; 0,196] (bruto 0,671).
+- A validação (9101…9505, uma vez) fica no PR 2 (`experiments/configs/v2_n3/validacao.json`).

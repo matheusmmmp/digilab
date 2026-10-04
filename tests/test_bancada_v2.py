@@ -63,7 +63,7 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
     assert bv.BRACOS["P2"].informacao == "certa" and bv.BRACOS["P2e"].informacao == "errada"
 
 
-@pytest.mark.parametrize("braco,no", [("P1", "N3"), ("P2", "N5"), ("P2e", "N5")])
+@pytest.mark.parametrize("braco,no", [("P2", "N5"), ("P2e", "N5")])                # o P1 chegou no N3
 def test_fontes_que_ainda_nao_existem_falham_alto_com_o_no(braco, no):
     with pytest.raises(NotImplementedError, match=no):
         BANCADA.vida(bv.EspecVida("atencioso", braco, 101))

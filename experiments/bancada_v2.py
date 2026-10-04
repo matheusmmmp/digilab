@@ -17,7 +17,10 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
     nenhuma       P0   so a predisposicao herdada: o aprendiz com o aprendizado DESLIGADO (o prior fixo). Nada do dono chega
                        a ele. Entregar "sinal nenhum" a um aprendiz ligado nao e P0: o credito do chamado expira por dentro
                        (Aprendiz._expirar) e vira sinal negativo do dono ausente.
-    consequencia  P1   chega no N3 (NotImplementedError ate la).
+    consequencia  P1   (N3, docs/PLANO_ANALISE_V2_N3.md) a consequencia da propria acao: em `observar`, o sinal
+                       `lobos.sinal_homeostatico` da transicao (reducao do deficit de fome, higiene e energia, janela
+                       imediata) entra na mesma regra de atualizacao da L1 (`Aprendiz.observar_consequencia`). Nada do
+                       dono chega ao aprendiz (nem o credito do chamado).
     informacao    P2   (certa) e P2e (errada): chegam no N5 (NotImplementedError ate la).
     dono          P3   o feedback explicito (COACH): toda acao do dono chega ao aprendiz pelo gancho receber_acao_dono,
                        exatamente como na L1 (a vida e byte a byte a da L1: teste).
@@ -48,7 +51,8 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import CONFIG_DONOS, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, TICKS_POR_DIA, ConfigLobos  # noqa: E402
+from digilab.config import (CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, TICKS_POR_DIA,  # noqa: E402
+                            ConfigConsequencia, ConfigLobos)
 from digilab.donos import criar_dono, julgar_acao  # noqa: E402
 from digilab.events import AcaoPet, AcaoUsuario, LogDeEventos  # noqa: E402
 from digilab.evolucao import politica_no_tick  # noqa: E402
@@ -56,6 +60,7 @@ from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho
                              distribuicoes_de_acao, estados_sonda, jsd_media, tabela_braco_condicao)
 from digilab.obediencia import MotorPersonalidade  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
+from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, sha256_engine  # noqa: E402
 from digilab.state import Estado  # noqa: E402
 from digilab.temperamento import sortear as sortear_temperamento  # noqa: E402
@@ -70,7 +75,7 @@ FILTROS = {"nenhum": frozenset(), "sem_sinais": SINAIS,
            "sem_sinais_sem_carinho": SINAIS | {AcaoUsuario.ACARICIAR.value}}
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "genomas", "mundos", "dias", "orcamento", "sonda",
-                 "bootstrap", "acoplados"}
+                 "bootstrap", "acoplados", "consequencia"}
 
 
 class ReplayDivergiu(RuntimeError):
@@ -99,7 +104,7 @@ BRACOS = {
     "P2e": Braco("P2e", "informacao", "N5", "errada"),
     "P3": Braco("P3", "dono", "N1"),
 }
-FONTES_IMPLEMENTADAS = ("nenhuma", "dono")
+FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia")
 
 
 def braco_de(rotulo: str) -> Braco:
@@ -113,26 +118,34 @@ def braco_de(rotulo: str) -> Braco:
 
 class PoliticaDoBraco:
     """O cerebro do braco com a fonte do sinal na frente dele. Decide, observa e serializa pelo cerebro; o que muda entre os
-    bracos e so o que passa por `receber_acao_dono`: na fonte "dono" tudo, na "nenhuma" nada. Nao consome rng nem muda a
-    ordem de nada: a vida do P3 e byte a byte a da L1 e a do P0 a do instinto (testes)."""
+    bracos e so de onde vem o sinal: na fonte "dono" tudo o que passa por `receber_acao_dono`, na "nenhuma" nada, na
+    "consequencia" so o sinal da propria acao, calculado em `observar` (o dono nao chega). Nao consome rng nem muda a ordem de
+    nada: a vida do P3 e byte a byte a da L1 e a do P0 a do instinto (testes)."""
 
-    def __init__(self, cerebro, braco: Braco) -> None:
+    def __init__(self, cerebro, braco: Braco, cfg_consequencia: ConfigConsequencia | None = None) -> None:
         self.cerebro = cerebro
         self.braco = braco
         self.nome = cerebro.nome
+        self.cfg_consequencia = cfg_consequencia or CONFIG_CONSEQUENCIA
         self.sinais_entregues = 0        # elogios e broncas que chegaram ao aprendiz (a eficiencia amostral conta estes)
+        self.consequencias = 0           # P1: decisoes com sinal de consequencia != 0
 
     def agir(self, obs, rng):
         return self.cerebro.agir(obs, rng)
 
     def observar(self, transicao) -> None:
-        self.cerebro.observar(transicao)
+        if self.braco.fonte == "consequencia":
+            f_S = sinal_homeostatico(transicao, self.cerebro.cl.escala, self.cfg_consequencia)
+            self.consequencias += f_S != 0
+            self.cerebro.observar_consequencia(transicao, f_S)
+        else:
+            self.cerebro.observar(transicao)
 
     def receber_acao_dono(self, acao: AcaoUsuario, tick: int) -> None:
         if self.braco.fonte == "dono":
             self.sinais_entregues += acao.value in SINAIS
             self.cerebro.receber_acao_dono(acao, tick)
-        elif self.braco.fonte != "nenhuma":          # pragma: no cover - braco_de ja barra
+        elif self.braco.fonte not in ("nenhuma", "consequencia"):   # pragma: no cover - braco_de ja barra
             raise NotImplementedError(self.braco.fonte)
 
     def estado_interno(self) -> dict:
@@ -218,6 +231,7 @@ class Bancada:
     dias: int
     orcamento: int
     cfg_lobos: ConfigLobos = CONFIG_LOBOS_APRENDIZ    # o aprendiz de todos os bracos (o P0 o usa com o aprendizado desligado)
+    cfg_consequencia: ConfigConsequencia = CONFIG_CONSEQUENCIA    # o sinal do P1 (N3)
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -232,7 +246,7 @@ class Bancada:
             raise KeyError(f"cerebro {espec.cerebro!r}: so {CEREBROS} (outros cerebros sao a comparacao do N11)")
         b = braco_de(espec.braco)
         cl = self.cfg_lobos if b.fonte != "nenhuma" else replace(self.cfg_lobos, aprendizado_ligado=False)
-        return PoliticaDoBraco(PoliticaLobos(cfg, cl), b)
+        return PoliticaDoBraco(PoliticaLobos(cfg, cl), b, self.cfg_consequencia)
 
     def fabrica_politica(self, espec: EspecVida):
         return lambda cfg=None: self.politica(espec, cfg)
@@ -429,7 +443,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     """Vidas de todos os bracos x donos x sementes (x genomas x mundos), gravadas e rejogadas do disco; os acoplados; as
     medidas por vida e as tabelas braco x condicao por dono e medida."""
     validar_config(cfg)
-    bancada = Bancada(int(cfg["dias"]), int(cfg["orcamento"]))
+    cc = CONFIG_CONSEQUENCIA if "consequencia" not in cfg else replace(CONFIG_CONSEQUENCIA, **cfg["consequencia"])
+    bancada = Bancada(int(cfg["dias"]), int(cfg["orcamento"]), cfg_consequencia=cc)
     dir_vidas = pasta / "vidas"
     vidas: dict[str, VidaBancada] = {}
 

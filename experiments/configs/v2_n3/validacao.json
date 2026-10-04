@@ -1,0 +1,7 @@
+{
+  "descricao": "V2, N3 (docs/PLANO_ANALISE_V2_N3.md, secao 7): validacao UNICA no ganho escolhido pela calibracao (artifacts_v2_n3/calibracao/escolha.json: ganho 4; a calibracao NAO fechou: nenhum ganho passou G6).",
+  "conjunto": "validacao",
+  "sementes": [9101, 9202, 9303, 9404, 9505],
+  "saida": "artifacts_v2_n3/validacao",
+  "ganho": 4
+}
