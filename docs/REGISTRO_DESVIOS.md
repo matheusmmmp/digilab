@@ -1630,6 +1630,51 @@ O Matheus seguiu as recomendações:
   - F10 aplicada: a frase do pedido original em `docs/DEFINICOES_V2.md`, seção 7, foi reescrita.
 - Marco em `docs/V2_RODADA_3.md`. Tarefas da rodada 4: N3 (B), N4 (A), plano do experimento maior (C) e bancada de mundos (D).
 
+## 2026-10-04 — PLANO-EXPERIMENTO-MAIOR: plano no papel; duas interpretações e um conflito encontrado
+
+Tarefa `docs/TAREFA_V2_PLANO_EXPERIMENTO_MAIOR.md`; entrega `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` e o prompt 11 do Claude Science
+(`D:\Trab\digilab\docs\digibrain\integration\11_PROMPT_CLAUDE_SCIENCE_PLASTICIDADE.md`, fora do repositório). Nenhuma run, nenhum código.
+- **Conflito F6 × N3 (decisão E2 do plano).** A F6 põe o efeito ruim das frutas no humor; a tarefa do N3 tira o humor do sinal do P1. Juntas,
+  deixam o P1 cego ao efeito da fruta, e a predição "P1 vence P0 no descasado" falharia por construção. O plano registra a predição como
+  **não testável** enquanto o contrato K2 não for cumprido e leva a escolha ao Matheus.
+- **Casado com frutas (decisão E1).** A tarefa fixa o casado como o mundo padrão. O plano mantém o padrão como referência e propõe como casado
+  principal o mundo com as mesmas ofertas de fruta e o efeito bom na fruta preferida, para que casado × descasado difira só no desencontro.
+- **Medida primária nova.** Como o efeito das frutas fica no humor, o tempo fora de privação e a saúde não mudam com a escolha de fruta. A
+  primária é a `taxa_fruta_ruim` (contrato K8, a implementar uma vez em `metrics.py`); as medidas da bancada ficam como secundárias e
+  como controle do canal de cuidado.
+- **Unidades derivadas das sementes reservadas (decisão E3).** As faixas 14101…14505 e 15101…15505 têm 5 sementes cada; o plano deriva as
+  unidades de cada uma (`derivar_semente("experimento-maior", base, k)`) e fixa o número delas no adendo antes da validação, pela variância
+  da calibração, como a análise de poder da v1 (`artifacts_poder/`).
+- **Decisões E1–E8 aprovadas pelo Matheus como recomendadas (2026-10-04).** Em particular, E2: o sinal do P1 inclui o humor vindo do
+  consumo de fruta no experimento maior, e a F6 não muda. Isso vira contrato para o N3 (chat B): o componente de humor da fruta, declarado e
+  desligado sem frutas. O texto da tarefa do N3 é do coordenador e não foi editado aqui.
+
+## 2026-10-04 — V2, N3: a consequência da própria ação como sinal (`docs/TAREFA_V2_N3_CONSEQUENCIA.md`, `docs/PLANO_ANALISE_V2_N3.md`)
+
+Interpretações do desenho, registradas com o plano (antes da calibração).
+- **Janela de crédito imediata.** O sinal de uma decisão é `observacao → observacao_seguinte` dessa decisão, que o motor mede logo
+  depois do efeito da ação do pet e antes do tempo e do dono (validação V2 do roadmap). Consequência: o sono dá sinal zero (a energia
+  só sobe nos ticks seguintes), e brincar e explorar dão sinal negativo (gastam energia; o humor que sobem está fora). O sono é regra
+  determinística e nunca aprende, então o zero não muda nada. A consequência atrasada (o intervalo até a próxima decisão) fica
+  declarada e não rodada: ela mistura o cuidado do dono.
+- **Forma do drive em inteiros, sem raiz.** D = Σ(S − arred(h·S))² sobre fome, higiene e energia, com ponto de ajuste 1,0. É a família de
+  Keramati e Gutkin com expoente 2 e sem a raiz: mantém a priorização (reduzir um déficit maior vale mais) e fica exato em inteiros.
+  A escolha dos expoentes é do projeto, não da referência.
+- **Sem o canal do chamado no P1.** O crédito do chamado (atendido ou ignorado) depende do dono; o P1 não o recebe. O gancho novo
+  (`Aprendiz.observar_consequencia`) não passa pelo relógio de cuidado nem pelos pendentes. A regra de atualização é a mesma da L1
+  (`atualizar_pesos` via `_aplicar_sinal`); teste: o mesmo f_S pela via do dono dá os mesmos pesos.
+- **Só o ganho calibra.** Passo, teto e piso são os da L1 (o mesmo aprendiz); o ganho é a escala do sinal da fonte, não uma regra nova.
+- **Cuidado controlado = acoplado P1 ← P0 sem filtro.** Na vida fechada o dono reage ao pet; o P1 no registro do P0 recebe o mesmo
+  cuidado nos mesmos ticks. O "só cuidado" da L1 (P3 ← P3 sem sinais) entra como a referência H0 de sempre.
+- **"Sem mortes novas" por construção.** No mundo `padrao` da bancada (`MotorComFeedback`) não há lesão nem morte; o gate fica
+  registrado como satisfeito por construção, e a saúde média é relatada.
+- **G6 só pelo teto, como a tarefa pede.** A razão da deriva (dia 14 / dia 7) é relatada sem gate.
+- **Calibração (2026-10-04, `artifacts_v2_n3/calibracao/`): não fechou.** Nenhum ganho passa o G6 (18–20 vidas no teto em todos); a regra
+  de reserva escolheu o ganho 4 (menos vidas no teto). Nada foi reajustado; o ganho vai ao config da validação e à `ConfigConsequencia`.
+- **Validação (2026-10-04, `artifacts_v2_n3/validacao/`): rodada uma vez, no ganho 4, sem reajuste.** O G-P1 passava na calibração
+  (+0,0051 [+0,0008; +0,0091]) e falha na validação (+0,0008 [−0,0067; +0,0077]); o G6 falha nas duas. Registrado; o ganho, a
+  janela e o teto ficam como estão. Relatório em `docs/RESULTADO_V2_N3.md`.
+
 ## 2026-10-04 — V2, BANCADA-MUNDOS: interpretações do mundo da bola e das condições
 
 Tarefa `docs/TAREFA_V2_BANCADA_MUNDOS.md`. Sem run de pesquisa; só as sementes dos testes.

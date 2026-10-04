@@ -1201,6 +1201,29 @@ CONFIG_LOBOS_APRENDIZ = ConfigLobos(aprendizado_ligado=True)      # L1: o aprend
 
 
 @dataclass(frozen=True)
+class ConfigConsequencia:
+    """V2, N3 (docs/PLANO_ANALISE_V2_N3.md, secao 3): o sinal do braco P1, a reducao do deficit homeostatico pela propria
+    acao (Keramati e Gutkin, 10.7554/elife.04811). Em inteiros na escala S do aprendiz:
+        D(h) = soma_i (S - arred(h_i * S))**2  sobre os drives;  f_S = div_arred(ganho * (D(antes) - D(depois)), S)
+    Janela de credito IMEDIATA: antes/depois = observacao -> observacao_seguinte da mesma decisao (engine._avancar mede a
+    transicao logo depois do efeito da acao do pet, antes do tempo e do dono). Todos os campos PROPOSTOS (registro em
+    lobos.PARAMETROS_CONSEQUENCIA_N3); fora de qualquer hash de protocolo.
+
+    drives  PROPOSTO  indices em Estado.vetor: fome (0), higiene (1), energia (2), ponto de ajuste 1.0. Humor fora (canal da
+                      bola e do efeito ruim das frutas, F6); saude fora (nao muda pela acao em si).
+    ganho   PROPOSTO  escala do sinal (inteiro); o unico parametro calibrado do N3 (grade {4, 8, 16, 32, 64}, sementes
+                      8101...8505).
+    """
+
+    drives: tuple = (0, 1, 2)
+    ganho: int = 4                     # calibrado em 8101...8505 (a calibracao NAO fechou: nenhum ganho passou G6; regra de
+                                       # reserva da secao 6: menos vidas com peso no teto); artifacts_v2_n3/calibracao/escolha.json
+
+
+CONFIG_CONSEQUENCIA = ConfigConsequencia()
+
+
+@dataclass(frozen=True)
 class ConfigBola:
     """V2, A1 (docs/V2_A1_BOLA_DESENHO.md, opcao A; plano docs/PLANO_ANALISE_V2_A1.md): a bola, primeiro objeto do mundo com
     consequencia. O dono poe (`por_bola`) e tira (`tirar_bola`); o pet a percebe como a entrada `bola` da Observacao; `brincar`
