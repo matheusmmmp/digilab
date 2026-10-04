@@ -1153,6 +1153,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: decodificador de conceitos do DigiBrain** (`docs/futuro/decodificador_conceitos.md`, Matheus, 2026-10-04): os lobos
   decidem numericamente; uma camada lê o estado interno e extrai conceitos com incerteza; só então a LLM fala. Estende o motivo e a
   honestidade do fator; precedentes já publicados (CBM, Discover-then-Name, M-CBM): não alegar novidade. Não autoriza implementação.
+- **IDEIA: escada de cognição social** (`docs/futuro/cognicao_social.md`, Matheus, 2026-10-04): dois pets trocando informação com
+  fonte e confiança, podendo chegar a reputação, normas, tradição e convenção simbólica; os degraus altos são pergunta, não feature.
+  Separa herdado, vivido e aprendido de outros. Primeiro passo possível: pet sintético informante no N5. Não autoriza implementação.
 - **IDEIA: aura do herói** (`docs/futuro/aura_do_heroi.md`, Matheus, 2026-10-03): retrato da lista de gambits de um pet que lutou
   muito, vendido na loja como item de 2 lutas que empresta esse conhecimento a outro pet. Depende de loja e moeda (ainda ideia);
   divide a peça técnica com o PvP com ghost. Não autoriza implementação.
