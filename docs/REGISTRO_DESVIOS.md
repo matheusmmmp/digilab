@@ -1866,3 +1866,28 @@ Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes 
   - roda depois do N5-CEREBRO e da BANCADA-N5;
   - usa a faixa própria 18101…18505, só de calibração.
 - Marco em `docs/V2_RODADA_5.md`.
+
+## 2026-10-04 — V2, N5-ACOPLADO: informante acoplado e motivo das regras novas dos lobos (`docs/TAREFA_V2_N5_ACOPLADO.md`)
+
+- **O acoplado recebe o multiconjunto de quem o monta.** O P2 da unidade usa o `CalendarioFrutas` da bancada, e o `digilab/` não importa
+  `experiments/`; o `DonoInformante.acoplado` recebe as frutas do P2 (ou o informante certo de uma vida P2 já jogada, `acoplado_de`) e a
+  semente da unidade. O conteúdo vem do efeito real, então o multiconjunto (fruta, conteúdo) é o do P2.
+- **Sorteio dos ticks:** um passo do dono por item, uniforme entre os `dias × 1440 / passo` passos da vida, com reposição (dois itens
+  podem cair no mesmo passo); o multiconjunto é ordenado (ordem de `FRUTAS`) antes do sorteio, para a ordem de entrada não mudar a agenda.
+  O plano diz "ticks sorteados uniformemente na vida"; o passo do dono é o único momento em que o informante age.
+- **Interface nova `acoes_do_passo`**, chamada em todo passo do dono (antes, o informante só era chamado quando havia oferta). Para
+  certo e errado é o `acoes` de sempre com a mesma lista; o gabarito gravado **antes** da mudança (24 vidas) prova o byte a byte.
+- **Achados no motivo, corrigidos:** (1) o `motivo_instinto` levantava erro em `bola_no_cenario` e `fruta_no_cenario` (o
+  `PoliticaInstintoFrutas` é subclasse do `PoliticaInstinto`, e o `PoliticaComMotivo` caía no ramo do instinto); (2) o ramo aprendido do
+  `motivo_lobos` só lia as 10 entradas de sempre e ignorava `bola` e `fruta`; (3) o `PoliticaComMotivo` não repassava `escolher_fruta` nem
+  `fruta_comida`, então a vida embrulhada mudava com os lobos que veem as frutas (a escolha caía no motor e o E2 não chegava ao aprendiz).
+- **O fator da fruta ocupa o segundo lugar** (o `Motivo` aceita no máximo 2): na decisão de comer com fruta, o primeiro fator é o da
+  decisão (regra ou aprendido) e o segundo, se houver, é o da escolha da fruta.
+- **Os incentivos vêm pelo gancho:** o registro dos lobos (`motivos[-1]["fruta"]`) guarda presentes, pesos, u e escolhida, mas não os
+  incentivos; o `PoliticaComMotivo._escolher_fruta` os recebe na chamada e refaz o motivo. Chamar `motivo_lobos` com o registro da fruta e
+  sem os incentivos falha alto. `lobos.py` não mudou.
+- **Honestidade por contrafactual com o mesmo u:** a bola só é fator se brincar sem o termo da bola (1 + 3·humor) não sairia; a fruta só é
+  fator se, sem comer como candidato, a ação seria outra; a escolha da fruta é `incentivo_fruta` quando o incentivo puro dá a mesma fruta,
+  senão `escolha_aprendida_fruta`. Com o aprendizado desligado o peso é o prior S e a escolha é sempre do incentivo (teste).
+- **Teste ajustado:** `tests/test_informacao.py::test_informante_certo_e_errado_nos_mesmos_ticks_com_conteudo_oposto` exigia que o modo
+  `acoplado` não existisse; agora confere um modo desconhecido e o acoplado montado sem o construtor (os dois falham alto).

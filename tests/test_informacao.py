@@ -201,7 +201,9 @@ def test_informante_certo_e_errado_nos_mesmos_ticks_com_conteudo_oposto():
     assert [inf.conteudo(f) for f in FRUTAS] == ["mal", "bem", "bem"]
     assert [DonoInformante("errado", inf.efeito_humor).conteudo(f) for f in FRUTAS] == ["bem", "mal", "mal"]
     with pytest.raises(ValueError):
-        DonoInformante("acoplado", inf.efeito_humor)
+        DonoInformante("sorteado", inf.efeito_humor)
+    with pytest.raises(ValueError):           # N5-ACOPLADO: o acoplado existe, mas so pelo construtor `acoplado`
+        DonoInformante("acoplado", inf.efeito_humor).acoes_do_passo(15, [])
 
 
 # ------------------------------------------------------------------ N1
