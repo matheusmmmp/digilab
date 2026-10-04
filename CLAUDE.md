@@ -1395,7 +1395,7 @@ ficam fora do git, regeneráveis).
   broncas 46,0 → 20,0). Resultado registrado; a V2 segue (decisão de 2026-10-01). Decisões B1–B3 para o Matheus no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
 
-## V2, N3 — a consequência da própria ação como sinal, braço P1 (2026-10-04, `docs/TAREFA_V2_N3_CONSEQUENCIA.md`, `docs/PLANO_ANALISE_V2_N3.md`) — CALIBRAÇÃO FEITA, NÃO FECHOU
+## V2, N3 — a consequência da própria ação como sinal, braço P1 (2026-10-04, `docs/TAREFA_V2_N3_CONSEQUENCIA.md`, `docs/PLANO_ANALISE_V2_N3.md`) — VALIDAÇÃO FEITA: G-P1 E G6 FALHAM (resultado negativo registrado)
 
 Nó N3 de `docs/ROADMAP_V2.md`; braço P1 da pergunta maior. Plano registrado antes de qualquer run (primeiro commit do branch), com a
 janela de crédito decidida. Números de `artifacts_v2_n3/calibracao/` (sementes 8101…8505; `escolha.json`, `varredura.jsonl`,
@@ -1423,4 +1423,10 @@ do git, ~700 MB, regeneráveis por replay). Interpretações em `docs/REGISTRO_D
 - **O que o P1 aprende** (a previsão do plano): na fome moderada come 91% das vezes (P0 47%); no tempo livre troca brincar e explorar
   (35% e 28% → 10% e 15%) por ocioso e chamar (28% e 9% → 48% e 27%). O acerto na tarefa do dono **cai** (0,58 → 0,43): o dono elogia
   brincar e explorar com energia, e o P1 aprendeu a evitá-los. G4 do aprendido 0,188 [0,179; 0,196] (bruto 0,671).
-- A validação (9101…9505, uma vez) fica no PR 2 (`experiments/configs/v2_n3/validacao.json`).
+- **Validação (sementes 9101…9505, ganho 4, uma vez, 7 min; `artifacts_v2_n3/validacao/`, relatório `docs/RESULTADO_V2_N3.md`):**
+  **G-P1 FALHA**: privação P0 − P1 **+0,0008 [−0,0067; +0,0077]** (por semente de −0,013 a +0,011; aleatório −0,002, relapso +0,005;
+  atencioso e incoerente sem privação); com o mesmo cuidado (P1 ← P0) +0,0007 [−0,0067; +0,0073]. **G6 FALHA** (20 de 20 vidas no teto;
+  razão 1,78). Sem mortes novas por construção; saúde P1 − P0 +0,003 [−0,005; +0,010]. O P1 aprende o mesmo que na calibração (come 94%
+  na fome moderada; ocioso 47% e chamar 27% no tempo livre) e o acerto na tarefa do dono cai (0,593 → 0,444). **Leitura:** resultado
+  negativo para o P1 no mundo `padrao`: a consequência imediata ensina a comer e a poupar energia, mas a privação depende do cuidado do
+  dono, e a redução da calibração não se repetiu. Nada foi reajustado; a V2 segue (decisão de 2026-10-01).

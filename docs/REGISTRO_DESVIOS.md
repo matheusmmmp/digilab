@@ -1671,3 +1671,6 @@ Interpretações do desenho, registradas com o plano (antes da calibração).
 - **G6 só pelo teto, como a tarefa pede.** A razão da deriva (dia 14 / dia 7) é relatada sem gate.
 - **Calibração (2026-10-04, `artifacts_v2_n3/calibracao/`): não fechou.** Nenhum ganho passa o G6 (18–20 vidas no teto em todos); a regra
   de reserva escolheu o ganho 4 (menos vidas no teto). Nada foi reajustado; o ganho vai ao config da validação e à `ConfigConsequencia`.
+- **Validação (2026-10-04, `artifacts_v2_n3/validacao/`): rodada uma vez, no ganho 4, sem reajuste.** O G-P1 passava na calibração
+  (+0,0051 [+0,0008; +0,0091]) e falha na validação (+0,0008 [−0,0067; +0,0077]); o G6 falha nas duas. Registrado; o ganho, a
+  janela e o teto ficam como estão. Relatório em `docs/RESULTADO_V2_N3.md`.
