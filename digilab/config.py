@@ -1189,6 +1189,11 @@ class ConfigLobos:
     recompensa_pedido_ignorado: float = -0.5  # PROPOSTO: = ConfigBandit.recompensa_pedido_ignorado
     recompensa_elogio: float = 1.0           # PROPOSTO: = ConfigBandit.recompensa_elogio
     recompensa_repreensao: float = -1.0      # PROPOSTO: = ConfigBandit.recompensa_repreensao
+    # --- N5 (docs/TAREFA_V2_N5_CEREBRO.md, docs/PLANO_ANALISE_V2_N5.md, decisoes N5-1 a N5-3) ---
+    # Confianca de partida no que o dono informa: o peso inteiro, compartilhado entre as frutas, da entrada `info` (+1 bem, -1 mal,
+    # 0 nada) na sub-decisao da fruta. 0 = entrada desligada (sem termo e sem aprendizado: a vida de hoje, byte a byte). A grade
+    # {S/4, S/2, 3S/4} e calibrada no N5 (sementes 12101...12505), abaixo do teto, para o peso poder cruzar o zero.
+    w0_info: int = 0                         # PROPOSTO: N5-1
 
     @property
     def escala(self) -> int:
