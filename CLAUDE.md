@@ -77,7 +77,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
-| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P3 feedback do dono; P2/P2e falham alto até o N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2) e `bola_a1` e o contrato das condições casado/descasado/mutável (seções "V2, BANCADA", "V2, N3" e "V2, BANCADA-MUNDOS" no fim) |
+| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P3 feedback do dono; P2/P2e falham alto até o N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`), as condições casado/descasado/mutável e as unidades derivadas do experimento maior (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS" e "V2, BANCADA-FRUTAS" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
@@ -1501,3 +1501,38 @@ sementes 10101…10505; as vidas dos 18 pontos da grade ficam fora do git, regen
   [−0,008; 0,000], mortes 0 e 0. Descritivos: custo do descasado no humor −0,023 [−0,030; −0,014]; a fruta que faz mal em 39% dos
   consumos; as frutas alimentam (privação −0,011 [−0,021; −0,003]). Resultado registrado; a V2 segue. Decisões N1–N4 no relatório.
   Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, BANCADA-FRUTAS — os mundos das frutas e as unidades derivadas (2026-10-04, `docs/TAREFA_V2_BANCADA_FRUTAS.md`) — GATES PASSAM
+
+Infraestrutura, sem run de pesquisa nem número de resultado; só as sementes dos testes. Cumpre o contrato das condições do #137 e as
+seções 2, 4.1 e 8.1 de `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` (E1, E3). Só `experiments/bancada_v2.py` e `digilab/metrics.py`
+mudaram; `frutas.py`, `ambiente.py`, `lobos.py` e `engine.py` não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Mundos das frutas** (`casado_frutas`, `descasado`, `mutavel`; condições `casado`, `descasado`, `mutavel`, que agora existem as três):
+  `MotorFrutasMundo` (subclasse do `MotorFrutas`) com obediência, educação, lesões e bola desligadas, espécie brasa e o genoma das frutas
+  do genoma da vida (ou da semente). **As mesmas ofertas nos três mundos e em todos os braços:** `CalendarioFrutas`, nos horários do N4,
+  todo dia, a rotação do N4 começando num índice derivado da semente, sem olhar o estado do pet (oferece com ele dormindo; a fruta fica
+  até o prazo), fora do orçamento e do sorteio do aleatório (B1, B2, pelo canal do mundo de `simular_vida_mundo`).
+- **O efeito por condição** (`efeitos_da_condicao`; F6: no humor): no casado a fruta de **maior** preferência inata faz bem
+  (−`efeito_humor_ruim`) e a de **menor** faz mal (`efeito_humor_ruim`); no descasado, o contrário; a do meio fica neutra. Casado e
+  descasado diferem **só no sinal**, e os dois têm uma fruta boa e uma ruim. O **mutável** começa casado e troca para o descasado na
+  metade da vida (`Bancada.tick_troca` = fim do dia `dias // 2`: dia 7 numa vida de 14); a troca fica em `MotorFrutasMundo.troca`
+  (tick e os efeitos antes e depois) e no efeito de cada consumo, e o replay a refaz.
+- **Medida da predição:** `metrics.taxa_fruta_ruim` (fração dos consumos com o efeito vigente negativo, por janela) nas medidas da
+  bancada, com as janelas `inicio`, `final`, `antes_da_troca` e `depois_da_troca` (só no mutável) e uma por dia; `None` quando a janela
+  não tem consumo. `humor_medio` (`metrics.privacao_nas_decisoes`) entrou nas medidas e na tabela de todos os mundos.
+- **Unidades derivadas (E3):** `unidades_derivadas(bases, K)`: semente = `derivar_semente("experimento-maior", b, k)` e genoma =
+  `derivar_semente("experimento-maior-genoma", b, k)`, k = 0…K−1; o campo `unidades` da config (`{"bases", "k"}`, no lugar de `sementes`;
+  bases fora das dos testes pedem o `plano`). `BASES_EXPERIMENTO_MAIOR` (14101…14505, 15101…15505) e `FAIXAS_RESERVADAS` (as faixas do
+  repositório, com a fonte).
+- **Cérebros:** o `instinto` (só P0) nos mundos das frutas é o `PoliticaInstintoFrutas`, que vê as frutas. **Os lobos ainda não veem
+  as frutas** (a regra é do chat B, `docs/TAREFA_V2_LOBOS_MUNDO.md`): o P0 com lobos é o instinto sem o candidato da fruta e, nos testes
+  curtos, não come fruta nenhuma. P1 e P3 rodam, mas cegos às frutas até lá.
+- **Gates** (`tests/test_bancada_frutas.py`, 17 testes, ~25 s): **as mesmas ofertas, só o sinal muda** (4 donos × 2 sementes, sem e com
+  genoma: as ofertas são iguais nos três mundos, nos cérebros e nos braços; os efeitos de casado e descasado são opostos fruta a fruta);
+  **a troca do mutável** está no registro no tick previsto, antes dela o mutável é o casado (eventos e consumos), depois os consumos têm o
+  efeito do descasado, e o replay a refaz; **G1** de toda vida e acoplado (P0, P1, P3; com e sem genoma); **acoplado guarda as ofertas**;
+  **unidades derivadas** seguem a regra, não colidem entre si nem entre calibração e validação, nem com as faixas reservadas, nem com
+  nenhuma semente das configs de `experiments/configs/`. O `MotorFrutasMundo` com o efeito dado ao `MotorFrutas` é a mesma vida (só o
+  efeito muda). `tests/test_bancada_mundos.py` e `tests/test_bancada_v2.py` seguem passando (o contrato agora tem as três condições).
+- **Fumaça** (`experiments/configs/bancada/fumaca_frutas.json`, NÃO canônica: unidades derivadas das sementes dos testes, `padrao` e os
+  três mundos das frutas, P0, P1 e P3): 80 vidas em ~32 s; sem artefato.
