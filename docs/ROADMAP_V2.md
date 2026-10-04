@@ -66,6 +66,7 @@ a v1 já prevê fraco. Isto troca a regra de parada da revisão 1 e precisa de d
 | R4.1 | **N3** (P1) | L1 mesclada, bancada | sinal = redução do déficit pela **própria ação** (V2); janela de crédito decidida no plano | aprende a reduzir déficit melhor que o instinto; G6; sem mortes novas |
 | R4.2 | **N4 frutas** | definições aprovadas, V5 | frutas como sub-decisão de comer; gostar e querer em dois registros; nutrição separada; neofobia do ovo | G1, G2; os dois registros se separam; critério ensino × cuidado |
 | R5.1 | **N5** (P2, P2e) | N3, N4 | evento "o dono informa" no motor da V2, entra pela percepção (V6), nunca como reforço | informação × acoplada × sem; G5; P2e se recupera |
+| R6.0 | **revisão do aprendiz** (Matheus, 2026-10-04) | LOBOS-MUNDO | teto dos pesos, janela de crédito e exposição, uma alavanca por vez, só em sementes de calibração; escolhe o ponto do experimento maior (`docs/TAREFA_V2_REVISAO_APRENDIZ.md`) | diagnóstico, sem gate |
 | R6.1 | **experimento maior** | N3, N4, N5, L1 | P0, P1, P2, P2e, P3 × casado/descasado/mutável, com o mesmo aprendiz | as predições registradas antes (`ARQUITETURA_V2_VALIDACAO.md`, seção 6) |
 | R6.2 | N6 memória | N5 | quatro marcos (registrado, codificado, recuperado, causal) | controle de recência e embaralhado |
 | R6.3 | N7 arbitragem | L1 | duas prioridades | G5 |
