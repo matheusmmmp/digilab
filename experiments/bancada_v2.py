@@ -6,9 +6,17 @@ A pergunta maior (docs/ARQUITETURA_V2_VALIDACAO.md, secao 6) compara fontes de p
 V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizacao). A bancada fixa isso em codigo:
 
   vida = (genoma, mundo, dono, braco, semente)
-    genoma   None = sem genoma (MotorComFeedback, como a L1); um inteiro g = temperamento sorteado de g no
-             MotorPersonalidade (a semente do genoma separada da do ambiente, como no E1 da linhagem).
-    mundo    so "padrao" existe; os outros (casado, descasado, mutavel) chegam com as frutas (N4) e a rodada 4.
+    genoma   None = sem genoma (temperamento neutro); um inteiro g = temperamento sorteado de g (a semente do genoma separada
+             da do ambiente, como no E1 da linhagem). No mundo padrao: MotorComFeedback sem genoma (como a L1) e
+             MotorPersonalidade com genoma; nos mundos da bola, sempre o MotorAmbiente da A1 (obediencia desligada).
+    mundo    padrao   o motor de sempre, sem objeto nenhum.
+             bola     a bola da A1 (MotorAmbiente, ConfigBola ligada) com as decisoes B1 e B2 de 2026-10-01: os donos sao os
+                      da v1 (o aleatorio NAO sorteia por_bola) e a bola entra por uma regra do mundo FORA do orcamento
+                      (RegraBola: a regra dos coerentes do DonoComBola sem o limite do passo; o relapso so nas visitas, B3).
+             bola_a1  a bola exatamente como a A1 rodou (DonoComBola: o aleatorio sorteia por_bola e a bola gasta orcamento);
+                      so para reproduzir a A1 (gate), nao para runs novas.
+             Cada mundo realiza uma CONDICAO da pergunta maior (CONDICOES): hoje todos sao "casado"; "descasado" e "mutavel"
+             levantam NotImplementedError com o que precisam do N4 (frutas).
     dono     um dono sintetico; a rng do dono deriva de (semente, nome do dono), igual em todos os bracos e mundos.
     braco    P0..P3: o MESMO cerebro (PoliticaLobos, mesmo prior, mesma ConfigLobos); so a FONTE do sinal muda.
     semente  a do motor: rng de ambiente = semente, rng de politica = semente + 1_000_003 (engine.py, intocado).
@@ -26,8 +34,13 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
                        exatamente como na L1 (a vida e byte a byte a da L1: teste).
 
   modo acoplado (malha aberta; generaliza log_so_cuidado/vidas_acopladas de run_v2_l1.py): o registro de eventos de uma vida,
-  com um filtro (nenhum, sem_sinais, sem_sinais_sem_carinho), e rejogado com o cerebro de outro braco. O motor acoplado guarda
-  o log filtrado: o registro dele e o da origem com os eventos retirados, evento a evento.
+  com um filtro (nenhum, sem_sinais, sem_sinais_sem_carinho), e rejogado com o cerebro de outro braco, no MESMO mundo. O motor
+  acoplado guarda o log filtrado: o registro dele e o da origem com os eventos retirados, evento a evento. Os eventos do mundo
+  (por/tirar a bola; as ofertas de fruta do N4) nunca saem: nenhum filtro pode retira-los (o "so cuidado" da A1, que tirava a
+  bola, e outra coisa e fica em run_v2_a1.py).
+
+  cerebros: lobos (o aprendiz, todos os bracos) e instinto (a referencia herdada, so no P0: no mundo da bola e o instinto que ve
+  a bola, PoliticaInstintoBola, porque os lobos ainda nao veem a bola: a regra bola_no_cenario deles e do chat B).
 
   medidas (todas de digilab/metrics.py; nenhuma conta aqui): desempenho no proprio ambiente (tempo fora de privacao e saude
   media, amostrados em cada decisao; acerto na tarefa do dono, `acerto_na_tarefa`), custo da plasticidade (deriva ao prior
@@ -43,6 +56,7 @@ import argparse
 import hashlib
 import json
 import platform
+import random
 import sys
 from dataclasses import dataclass, replace
 from itertools import product
@@ -51,28 +65,86 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import (CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, TICKS_POR_DIA,  # noqa: E402
-                            ConfigConsequencia, ConfigLobos)
-from digilab.donos import criar_dono, julgar_acao  # noqa: E402
-from digilab.events import AcaoPet, AcaoUsuario, LogDeEventos  # noqa: E402
+from digilab.ambiente import (DonoComBola, MotorAmbiente, PoliticaInstintoBola, _PoliticaComBola,  # noqa: E402
+                              reproduzir_ambiente)
+from digilab.config import (CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO,  # noqa: E402
+                            TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigLobos)
+from digilab.donos import Visao, criar_dono, cuidados_necessarios, julgar_acao  # noqa: E402
+from digilab.events import ACOES_BOLA, AcaoPet, AcaoUsuario, LogDeEventos  # noqa: E402
 from digilab.evolucao import politica_no_tick  # noqa: E402
 from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho_no_ambiente,  # noqa: E402
-                             distribuicoes_de_acao, estados_sonda, jsd_media, tabela_braco_condicao)
-from digilab.obediencia import MotorPersonalidade  # noqa: E402
+                             distribuicoes_de_acao, estados_sonda, jsd_media, resposta_a_bola, tabela_braco_condicao)
+from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
-from digilab.protocol import ENGINE_SHA256_V0, sha256_engine  # noqa: E402
+from digilab.policy import PoliticaInstinto  # noqa: E402
+from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
 from digilab.state import Estado  # noqa: E402
+from digilab.temperamento import NEUTRO  # noqa: E402
 from digilab.temperamento import sortear as sortear_temperamento  # noqa: E402
-from digilab.treino import MotorComFeedback, reproduzir_com_feedback, simular_vida  # noqa: E402
+from digilab.treino import CanalDeInteracao, MotorComFeedback, reproduzir_com_feedback, simular_vida  # noqa: E402
 
 ACOES = tuple(a.value for a in AcaoPet)
 SINAIS = frozenset({AcaoUsuario.ELOGIAR.value, AcaoUsuario.REPREENDER.value})
 SEMENTES_TESTE = frozenset({101, 202, 303, 404, 505})
-MUNDOS = ("padrao",)
-CEREBROS = ("lobos",)
+CEREBROS = ("lobos", "instinto")
 FILTROS = {"nenhum": frozenset(), "sem_sinais": SINAIS,
            "sem_sinais_sem_carinho": SINAIS | {AcaoUsuario.ACARICIAR.value}}
+# os eventos do MUNDO no log: acoes do dono que poem coisas no cenario. O acoplado nunca os tira (as ofertas de fruta do N4 entram
+# aqui quando existirem). Os filtros so tiram o que o dono ENSINA ou o carinho.
+EVENTOS_DO_MUNDO = frozenset(a.value for a in ACOES_BOLA)
+assert not any(f & EVENTOS_DO_MUNDO for f in FILTROS.values()), "um filtro nao pode tirar eventos do mundo"
+
+
+@dataclass(frozen=True)
+class Condicao:
+    """Uma condicao da pergunta maior (docs/ARQUITETURA_V2_VALIDACAO.md, secao 6, item 2): a relacao entre o mundo e a
+    predisposicao herdada. `precisa` = o que falta (e de qual no) para a condicao existir; vazio quando ja existe."""
+
+    nome: str
+    descricao: str
+    precisa: str = ""
+    no: str = ""
+
+
+CONDICOES = {
+    "casado": Condicao("casado", "o mundo e aquele para o qual o prior foi feito: nada nele contradiz a predisposicao herdada"),
+    "descasado": Condicao(
+        "descasado", "o mundo contradiz o prior: a fruta preferida de nascenca faz mal",
+        "do N4 (docs/DEFINICOES_FRUTAS_V2.md): a preferencia inata por fruta no genoma (F5, gene proprio com rng propria), o "
+        "efeito real de cada fruta no corpo separado do gosto, com efeito ruim no humor e fora de em_privacao (F6), e as frutas "
+        "do mundo com o efeito CONTRARIO a preferencia inata; as ofertas sao eventos do mundo (EVENTOS_DO_MUNDO)", "N4"),
+    "mutavel": Condicao(
+        "mutavel", "o mundo muda no meio da vida",
+        "do N4: o mesmo que o descasado e mais a TROCA do efeito das frutas num tick da vida; a troca tem de estar no registro "
+        "(como evento do mundo ou como parametro gravado da vida), para o replay e o acoplado reproduzirem", "N4"),
+}
+
+
+@dataclass(frozen=True)
+class Mundo:
+    nome: str
+    condicao: str                    # a condicao da pergunta maior que este mundo realiza
+    bola: str | None = None          # None: sem bola; "b1b2": a bola das decisoes B1/B2; "a1": a bola como a A1 rodou
+
+
+MUNDOS = {
+    "padrao": Mundo("padrao", "casado"),
+    "bola": Mundo("bola", "casado", "b1b2"),
+    "bola_a1": Mundo("bola_a1", "casado", "a1"),
+}
+
+
+def mundo_de(nome: str) -> Mundo:
+    if nome in CONDICOES and CONDICOES[nome].precisa:
+        c = CONDICOES[nome]
+        raise NotImplementedError(f"condicao {nome!r} ({c.descricao}): precisa {c.precisa}")
+    if nome not in MUNDOS:
+        raise NotImplementedError(f"mundo {nome!r}: so {sorted(MUNDOS)}; descasado e mutavel chegam com o N4 (frutas)")
+    m = MUNDOS[nome]
+    if CONDICOES[m.condicao].precisa:          # pragma: no cover - um mundo registrado so realiza condicao que ja existe
+        raise NotImplementedError(m.condicao)
+    return m
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "genomas", "mundos", "dias", "orcamento", "sonda",
                  "bootstrap", "acoplados", "consequencia"}
@@ -174,19 +246,24 @@ class EspecVida:
     def nome(self) -> str:
         m = "" if self.mundo == "padrao" else f"~{self.mundo}"
         g = "" if self.genoma is None else f"~g{self.genoma}"
-        return f"{self.dono}-{self.braco}{m}{g}@{self.semente}"
+        c = "" if self.cerebro == "lobos" else f"~{self.cerebro}"
+        return f"{self.dono}-{self.braco}{c}{m}{g}@{self.semente}"
 
     @property
     def celula(self) -> tuple:
         """O que define o par de vidas que se comparam entre bracos: tudo menos o braco."""
-        return (self.dono, self.semente, self.genoma, self.mundo)
+        return (self.dono, self.semente, self.genoma, self.mundo, self.cerebro)
+
+    @property
+    def condicao(self) -> str:
+        return mundo_de(self.mundo).condicao
 
 
 @dataclass
 class VidaBancada:
     espec: EspecVida
     motor: MotorComFeedback
-    interacoes: int
+    interacoes: int                  # acoes do dono no log, fora os eventos do mundo
     origem: str | None = None        # so no modo acoplado: o nome da vida de origem, o braco dela e o filtro
     origem_braco: str | None = None
     filtro: str | None = None
@@ -194,9 +271,14 @@ class VidaBancada:
     @property
     def rotulo_braco(self) -> str:
         """O braco na tabela: "P3", ou "P0<P3:sem_sinais" para o P0 acoplado ao registro do P3 sem os sinais."""
+        b = self.espec.braco if self.espec.cerebro == "lobos" else f"{self.espec.braco}~{self.espec.cerebro}"
         if self.origem is None:
-            return self.espec.braco
-        return f"{self.espec.braco}<{self.origem_braco}:{self.filtro}"
+            return b
+        return f"{b}<{self.origem_braco}:{self.filtro}"
+
+    @property
+    def eventos_mundo(self) -> int:
+        return contar_acoes(self.motor.log)[1]
 
     @property
     def nome(self) -> str:
@@ -207,8 +289,23 @@ class VidaBancada:
 
 
 def filtrar_log(log: LogDeEventos, retirar: frozenset) -> LogDeEventos:
-    """O mesmo log sem as acoes do dono em `retirar` (valores de AcaoUsuario); avancos e as outras acoes nos mesmos ticks."""
+    """O mesmo log sem as acoes do dono em `retirar` (valores de AcaoUsuario); avancos, eventos do mundo e as outras acoes nos
+    mesmos ticks. Tirar um evento do mundo falha alto: o acoplado reproduz o mundo da origem."""
+    if retirar & EVENTOS_DO_MUNDO:
+        raise ValueError(f"o filtro tiraria eventos do mundo: {sorted(retirar & EVENTOS_DO_MUNDO)}")
     return LogDeEventos([e for e in log if not (e.tipo == "acao_usuario" and str(e.valor) in retirar)])
+
+
+def contar_acoes(log: LogDeEventos) -> tuple[int, int]:
+    """(acoes do dono fora os eventos do mundo, eventos do mundo)."""
+    dono = mundo = 0
+    for e in log:
+        if e.tipo == "acao_usuario":
+            if str(e.valor) in EVENTOS_DO_MUNDO:
+                mundo += 1
+            else:
+                dono += 1
+    return dono, mundo
 
 
 def resumo_motor(motor) -> tuple:
@@ -218,6 +315,8 @@ def resumo_motor(motor) -> tuple:
     if isinstance(motor, MotorPersonalidade):
         extra = (motor._rng_obediencia.getstate(), [r.para_dict() for r in motor.recusas],
                  [d.para_dict() for d in motor.desejos], motor.vinculo.para_dict())
+    if isinstance(motor, MotorAmbiente):
+        extra = extra + (motor.resumo_bola(), dict(motor.contagem), motor.morte)
     return (motor.log.para_jsonl(), motor.estado(), motor.acoes_recentes(10**9), motor._rng_politica.getstate(),
             motor._rng_ambiente.getstate(), *extra)
 
@@ -231,6 +330,7 @@ class Bancada:
     dias: int
     orcamento: int
     cfg_lobos: ConfigLobos = CONFIG_LOBOS_APRENDIZ    # o aprendiz de todos os bracos (o P0 o usa com o aprendizado desligado)
+    cfg_bola: ConfigBola = CONFIG_BOLA_LIGADA          # a bola dos mundos da bola (padroes calibrados na A1)
     cfg_consequencia: ConfigConsequencia = CONFIG_CONSEQUENCIA    # o sinal do P1 (N3)
 
     def __post_init__(self) -> None:
@@ -238,6 +338,8 @@ class Bancada:
             raise ValueError("dias e orcamento precisam ser positivos")
         if not self.cfg_lobos.aprendizado_ligado:
             raise ValueError("cfg_lobos e a do aprendiz (aprendizado ligado); o P0 desliga por conta propria")
+        if not self.cfg_bola.ligada:
+            raise ValueError("cfg_bola e a dos mundos da bola: ligada (o mundo padrao nao usa bola)")
 
     # ------------------------------------------------------------- fabricas
 
@@ -245,17 +347,27 @@ class Bancada:
         if espec.cerebro not in CEREBROS:
             raise KeyError(f"cerebro {espec.cerebro!r}: so {CEREBROS} (outros cerebros sao a comparacao do N11)")
         b = braco_de(espec.braco)
+        mundo = mundo_de(espec.mundo)
+        if espec.cerebro == "instinto":
+            if b.fonte != "nenhuma":
+                raise ValueError(f"cerebro instinto so no P0 (nao aprende): braco {b.rotulo}")
+            if mundo.bola is not None:
+                return PoliticaDoBraco(PoliticaInstintoBola(cfg, self.cfg_bola), b)
+            return PoliticaDoBraco(PoliticaInstinto(cfg), b)
         cl = self.cfg_lobos if b.fonte != "nenhuma" else replace(self.cfg_lobos, aprendizado_ligado=False)
         return PoliticaDoBraco(PoliticaLobos(cfg, cl), b, self.cfg_consequencia)
 
     def fabrica_politica(self, espec: EspecVida):
         return lambda cfg=None: self.politica(espec, cfg)
 
-    @staticmethod
-    def fabrica_motor(espec: EspecVida):
-        if espec.mundo not in MUNDOS:
-            raise NotImplementedError(f"mundo {espec.mundo!r}: so {MUNDOS}; casado, descasado e mutavel chegam com o N4 "
-                                      "(frutas) e a rodada 4")
+    def fabrica_motor(self, espec: EspecVida):
+        mundo = mundo_de(espec.mundo)
+        if mundo.bola is not None:
+            # o desenho da A1 (plano, secao 3): MotorAmbiente, obediencia, educacao e lesoes desligadas, especie brasa
+            temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
+            cb = self.cfg_bola
+            return lambda politica, cfg, semente: MotorAmbiente(politica, cfg, semente, temperamento, "brasa",
+                                                                obediencia_desligada=True, cfg_bola=cb)
         if espec.genoma is None:
             return lambda politica, cfg, semente: MotorComFeedback(politica=politica, cfg=cfg, semente=semente)
         temperamento = sortear_temperamento(espec.genoma)
@@ -264,18 +376,34 @@ class Bancada:
     # ------------------------------------------------------------- vidas
 
     def vida(self, espec: EspecVida) -> VidaBancada:
+        mundo = mundo_de(espec.mundo)
         fm = self.fabrica_motor(espec)
-        v = simular_vida(f"{espec.dono}-{espec.braco}", criar_dono(espec.dono), self.politica(espec, CONFIG_PADRAO),
-                         espec.semente, self.dias, self.orcamento, rotulo_dono=espec.dono, fabrica_motor=fm)
-        if v.interacoes != self.orcamento:
-            raise RuntimeError(f"{espec.nome}: {v.interacoes} interacoes, orcamento {self.orcamento}")
-        vida = VidaBancada(espec, v.motor, v.interacoes)
+        rotulo = f"{espec.dono}-{espec.braco}"
+        if mundo.bola == "a1":
+            # como a A1 rodou: o dono embrulhado poe a bola DENTRO do orcamento; o aleatorio sorteia por_bola
+            v = simular_vida(rotulo, DonoComBola(espec.dono, self.cfg_bola), self.politica(espec, CONFIG_PADRAO),
+                             espec.semente, self.dias, self.orcamento, rotulo_dono=espec.dono, fabrica_motor=fm)
+            motor = v.motor
+        elif mundo.bola == "b1b2":
+            motor = simular_vida_mundo(criar_dono(espec.dono), RegraBola(espec.dono, self.cfg_bola),
+                                       self.politica(espec, CONFIG_PADRAO), espec.semente, self.dias, self.orcamento,
+                                       espec.dono, fm)
+        else:
+            motor = simular_vida(rotulo, criar_dono(espec.dono), self.politica(espec, CONFIG_PADRAO), espec.semente,
+                                 self.dias, self.orcamento, rotulo_dono=espec.dono, fabrica_motor=fm).motor
+        dono, eventos_mundo = contar_acoes(motor.log)
+        orcamento_gasto = dono + (eventos_mundo if mundo.bola == "a1" else 0)
+        if orcamento_gasto != self.orcamento:
+            raise RuntimeError(f"{espec.nome}: {orcamento_gasto} interacoes no orcamento, orcamento {self.orcamento}")
+        vida = VidaBancada(espec, motor, dono)
         self.conferir_replay(vida)
         return vida
 
     def rejogar(self, log: LogDeEventos, espec: EspecVida):
-        return reproduzir_com_feedback(log, self.fabrica_politica(espec), semente=espec.semente,
-                                       fabrica_motor=self.fabrica_motor(espec))
+        fp, fm = self.fabrica_politica(espec), self.fabrica_motor(espec)
+        if mundo_de(espec.mundo).bola is not None:
+            return reproduzir_ambiente(log, fp, semente=espec.semente, fabrica_motor=fm)
+        return reproduzir_com_feedback(log, fp, semente=espec.semente, fabrica_motor=fm)
 
     def acoplar(self, origem: VidaBancada, braco: str, filtro: str) -> VidaBancada:
         """Modo acoplado (malha aberta): o registro da vida de origem, sem as acoes do filtro, rejogado com o cerebro de outro
@@ -287,8 +415,8 @@ class Bancada:
         log = filtrar_log(origem.motor.log, FILTROS[filtro])
         espec = replace(origem.espec, braco=braco)
         m = self.rejogar(log, espec)
-        vida = VidaBancada(espec, m, sum(1 for e in log if e.tipo == "acao_usuario"), origem=origem.nome,
-                           origem_braco=origem.espec.braco, filtro=filtro)
+        vida = VidaBancada(espec, m, contar_acoes(log)[0], origem=origem.nome, origem_braco=origem.rotulo_braco,
+                           filtro=filtro)
         self.conferir_replay(vida)
         return vida
 
@@ -320,6 +448,11 @@ class Bancada:
         if resumo_motor(m) != resumo_motor(vida.motor) or _interno(m) != _interno(vida.motor):
             raise ReplayDivergiu(f"{vida.nome}: o replay de medicao mudou a vida")
         reg = regs[0]
+        bola = None
+        if isinstance(m, MotorAmbiente):
+            tick = CONFIG_PADRAO.intervalo_decisao_ticks
+            bola = {"resposta": resposta_a_bola([(k * tick, b, r, a) for k, (b, r, a) in enumerate(reg.bola)]),
+                    "contagem": dict(m.contagem_bola)}
         desempenho = desempenho_no_ambiente(reg.amostras)
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
         sinais = []
@@ -330,8 +463,10 @@ class Bancada:
         custo = custo_da_plasticidade(deriva, tarefa["acerto"], sinais,
                                       tarefa["acerto_total"] if piso is None else piso)
         return {"vida": vida.nome, "braco": vida.rotulo_braco, "fonte": braco_de(vida.espec.braco).fonte,
-                "dono": vida.espec.dono, "semente": vida.espec.semente, "genoma": vida.espec.genoma,
-                "mundo": vida.espec.mundo, "origem": vida.origem, "filtro": vida.filtro, "interacoes": vida.interacoes,
+                "cerebro": vida.espec.cerebro, "dono": vida.espec.dono, "semente": vida.espec.semente,
+                "genoma": vida.espec.genoma, "mundo": vida.espec.mundo, "condicao": vida.espec.condicao,
+                "origem": vida.origem, "filtro": vida.filtro, "interacoes": vida.interacoes,
+                "eventos_mundo": vida.eventos_mundo, "bola": bola,
                 **desempenho, "acerto_total": tarefa["acerto_total"], "acerto_por_dia": tarefa["acerto"],
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
@@ -346,9 +481,85 @@ class Bancada:
         log = vida.motor.log
         serie = []
         for d in range(1, self.dias + 1):
-            pol = politica_no_tick(log, fab, vida.espec.semente, d * TICKS_POR_DIA, fm)
+            # a sonda le o cerebro do braco direto: o embrulho da bola mexeria no motor e poria a bola nos estados da sonda
+            pol = do_braco(politica_no_tick(log, fab, vida.espec.semente, d * TICKS_POR_DIA, fm))
             serie.append(jsd_media(distribuicoes_de_acao(pol, estados, sonda["amostras"], sonda["semente"]), d_prior))
         return serie
+
+
+def do_braco(politica) -> PoliticaDoBraco:
+    """A PoliticaDoBraco dentro dos embrulhos dos motores (bola, personalidade)."""
+    p = politica
+    while not isinstance(p, PoliticaDoBraco):
+        if isinstance(p, _PoliticaComBola):
+            p = p._pb
+        elif isinstance(p, _PoliticaObservada):
+            p = p._p
+        else:
+            raise TypeError(f"politica sem PoliticaDoBraco dentro: {type(p).__name__}")
+    return p
+
+
+# ------------------------------------------------------------------ o mundo da bola com B1 e B2
+
+
+class RegraBola:
+    """Decisoes B1 e B2 (2026-10-01, docs/RESULTADO_V2_A1.md): quem poe a bola e uma regra do MUNDO, fora do orcamento do dono.
+    A regra dos coerentes da A1 (DonoComBola), sem a condicao do limite do passo (a bola nao gasta orcamento): atencioso e
+    incoerente poem com o pet acordado, fora da noite, sem cuidado pendente, sem bola no cenario e no maximo `bolas_por_dia`
+    por dia; o relapso so nos passos em que ele mesmo agiu (as visitas; B3: aceito como e). O aleatorio NAO poe bola (B1: o
+    `por_bola` sai do sorteio dele, e ele nao tem outra regra). Le a visao de ANTES das acoes do dono do passo, como a A1."""
+
+    def __init__(self, dono: str, cfg_bola: ConfigBola, cfg_donos=None, cfg=None) -> None:
+        self.dono = dono
+        self.cb = cfg_bola
+        self.cd = cfg_donos or CONFIG_DONOS
+        self.cfg = cfg or CONFIG_PADRAO
+        self._dia = -1
+        self._bolas_hoje = 0
+
+    def decidir(self, visao: Visao, acoes_do_dono: list) -> list[AcaoUsuario]:
+        if self.dono == "aleatorio":
+            return []
+        e = visao.estado
+        dia = e["tick"] // TICKS_POR_DIA
+        if dia != self._dia:
+            self._dia, self._bolas_hoje = dia, 0
+        if self.dono == "relapso" and not acoes_do_dono:
+            return []
+        if (self._bolas_hoje < self.cb.bolas_por_dia and not e["dormindo"] and not self.cfg.e_noite(e["tick_do_dia"])
+                and e.get("bola") is None and not cuidados_necessarios(e, self.cd)):
+            self._bolas_hoje += 1
+            return [AcaoUsuario.POR_BOLA]
+        return []
+
+
+def simular_vida_mundo(dono, regra_mundo, politica, semente: int, dias: int, orcamento: int, rotulo_dono: str,
+                       fabrica_motor):
+    """treino.simular_vida com um canal do MUNDO fora do orcamento (B2): a cada passo o dono age pelo CanalDeInteracao (o
+    orcamento exato de sempre) e depois a regra do mundo poe o que pos, direto no motor (entra no log, nao no canal). O dono
+    nao ve os eventos do mundo no gasto do orcamento. Mesma rng do dono que simular_vida (derivada de semente e rotulo_dono)."""
+    cfg, cd = CONFIG_PADRAO, CONFIG_DONOS
+    total_ticks = dias * TICKS_POR_DIA
+    if total_ticks % cd.passo_ticks != 0:
+        raise ValueError("duracao nao e multipla do passo do dono")
+    passos = total_ticks // cd.passo_ticks
+    motor = fabrica_motor(politica, cfg, semente)
+    rng_dono = random.Random(derivar_semente("dono", semente, rotulo_dono))
+    canal = CanalDeInteracao(motor, orcamento, cd.max_interacoes_por_passo)
+    for passo in range(passos):
+        motor.avancar(cd.passo_ticks)
+        minimo, maximo = canal.limites(passo, passos)
+        visao = Visao(estado=motor.estado(), passo=passo, passos_totais=passos, orcamento=orcamento, gasto=canal.gasto,
+                      minimo_obrigatorio=minimo, maximo_permitido=maximo)
+        acoes = dono.decidir(visao, rng_dono)
+        canal.aplicar(acoes, passo, passos)
+        for evento in regra_mundo.decidir(visao, acoes):
+            if evento.value not in EVENTOS_DO_MUNDO:
+                raise ValueError(f"a regra do mundo so poe eventos do mundo, nao {evento.value!r}")
+            motor.observar(evento)
+    canal.fechar()
+    return motor
 
 
 class _Registro:
@@ -364,6 +575,7 @@ class _Registro:
         self.amostras: list[tuple[bool, float]] = []
         self.sinais_na_decisao: list[int] = []
         self.sinais_do_dono = 0
+        self.bola: list[tuple[bool, str, str]] = []      # (bola no cenario, regra do instinto/impulso, acao), por decisao
 
     @property
     def sinais(self) -> int:
@@ -376,6 +588,7 @@ class _Registro:
         self.decisoes.append((obs.ticks_desde_cuidado + self._tick_ultimo_cuidado, estado, acao.value))
         self.amostras.append((Estado(fome=v[0], higiene=v[1], energia=v[2]).em_privacao(CONFIG_PADRAO), v[4]))
         self.sinais_na_decisao.append(self.interna.sinais_entregues)
+        self.bola.append((obs.bola > 0.0, self.interna.ultima_regra, acao.value))
         return acao
 
     def observar(self, transicao) -> None:
@@ -423,6 +636,8 @@ def validar_config(cfg: dict) -> dict:
         raise ValueError(f"config: faltam {sorted(faltam)}, sobram {sorted(sobram)}")
     for b in cfg["bracos"]:
         braco_de(b)
+    for m in cfg.get("mundos", ["padrao"]):
+        mundo_de(m)
     for a in cfg.get("acoplados", []):
         if set(a) != {"origem", "destino", "filtro"} or a["filtro"] not in FILTROS:
             raise ValueError(f"acoplado fora do formato: {a}")
@@ -479,7 +694,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
 
 
 def tabelas_braco_condicao(medidas: dict, boot: dict) -> dict:
-    """Por dono e medida: tabela braco x condicao (mundo), unidade = vida (semente x genoma)."""
+    """Por dono e medida: tabela braco x condicao, unidade = vida (semente x genoma). A coluna e "condicao/mundo" (hoje
+    "casado/padrao" e "casado/bola"): dois mundos da mesma condicao nunca se misturam numa celula."""
     out = {}
     for dono in sorted({m["dono"] for m in medidas.values()}):
         out[dono] = {}
@@ -487,7 +703,7 @@ def tabelas_braco_condicao(medidas: dict, boot: dict) -> dict:
             valores: dict[tuple[str, str], list[float]] = {}
             for m in medidas.values():
                 if m["dono"] == dono:
-                    valores.setdefault((m["braco"], m["mundo"]), []).append(m[medida])
+                    valores.setdefault((m["braco"], f"{m['condicao']}/{m['mundo']}"), []).append(m[medida])
             out[dono][medida] = tabela_braco_condicao(valores, boot["reamostragens"], boot["semente"], boot["nivel"])
     return out
 

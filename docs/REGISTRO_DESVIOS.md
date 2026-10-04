@@ -1674,3 +1674,30 @@ Interpretações do desenho, registradas com o plano (antes da calibração).
 - **Validação (2026-10-04, `artifacts_v2_n3/validacao/`): rodada uma vez, no ganho 4, sem reajuste.** O G-P1 passava na calibração
   (+0,0051 [+0,0008; +0,0091]) e falha na validação (+0,0008 [−0,0067; +0,0077]); o G6 falha nas duas. Registrado; o ganho, a
   janela e o teto ficam como estão. Relatório em `docs/RESULTADO_V2_N3.md`.
+
+## 2026-10-04 — V2, BANCADA-MUNDOS: interpretações do mundo da bola e das condições
+
+Tarefa `docs/TAREFA_V2_BANCADA_MUNDOS.md`. Sem run de pesquisa; só as sementes dos testes.
+- **B1 sob B2: o aleatório não põe bola.** A decisão B1 é "tirar `por_bola` do sorteio do dono aleatório"; a única regra dele para a bola
+  era o sorteio, então no mundo `bola` ele nunca põe bola. Dar a ele a regra dos coerentes (agora que a bola não gasta orçamento) seria
+  regra nova de dono: fica para o Matheus, se quiser exposição à bola no braço do aleatório. Consequência: o aleatório no mundo `bola` tem
+  o mesmo registro do mundo padrão (teste).
+- **B2: a bola sai do orçamento por um canal do mundo.** `simular_vida_mundo` é o `simular_vida` com um passo a mais: depois das ações do
+  dono pelo `CanalDeInteracao` (orçamento exato, como sempre), a `RegraBola` põe a bola direto no motor (entra no log, não no canal). A
+  regra é a dos coerentes do `DonoComBola` (pet acordado, fora da noite, sem cuidado pendente, sem bola, `bolas_por_dia`) lida na visão de
+  antes das ações do passo, como na A1, **sem** a condição "ainda cabe no máximo do passo", que só existia porque a bola gastava
+  orçamento. O relapso continua pondo só nas visitas (B3: aceito). O laço fica na bancada, não em `ambiente.py` (o chat A estende
+  `ambiente.py` no N4); as ofertas de fruta fora do orçamento (que o N4 também pede) podem usar o mesmo canal.
+- **`bola_a1` é um mundo à parte**, com o `DonoComBola` como está: é o que reproduz a A1 byte a byte (gate). Runs novas usam `bola`.
+- **O cérebro `instinto` entrou, só no P0.** A tarefa da bancada deixava fora "qualquer cérebro além dos lobos", mas o gate desta tarefa
+  pede reproduzir a vida da A1, que foi vivida pelo instinto que vê a bola (`PoliticaInstintoBola`). Os lobos ainda não veem a bola (a
+  regra é do chat B), então o P0 com lobos reproduz o braço "bolacega" da A1, e o P0 com o instinto, o braço "bola". O instinto não
+  aprende: em outro braço falha alto.
+- **O mundo da bola usa o motor da A1 também sem genoma** (`MotorAmbiente`, obediência desligada, temperamento neutro), enquanto o mundo
+  padrão sem genoma usa o `MotorComFeedback`, como a L1. Com genoma, o padrão usa o `MotorPersonalidade` (obediência ligada) e a bola o
+  `MotorAmbiente` (obediência desligada, o desenho da A1). Comparar braços dentro de um mundo não é afetado; comparar o mesmo braço entre
+  `padrao` e `bola` com genoma mistura a obediência com a bola.
+- **O acoplado não tira eventos do mundo**, ao contrário do "só cuidado" da A1 (`run_v2_a1.log_so_cuidado`, que tirava a bola): a tarefa
+  pede reproduzir o registro "sem perder os eventos do mundo", e as definições das frutas (F7) pedem o acoplado "com as mesmas ofertas".
+  O da A1 continua lá, como estava.
+- **Condição na tabela:** a coluna passou de `mundo` para `condicao/mundo`, para os três mundos casados não se misturarem numa célula.

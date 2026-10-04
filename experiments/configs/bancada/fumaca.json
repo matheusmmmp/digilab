@@ -4,7 +4,7 @@
   "donos": ["atencioso", "relapso", "aleatorio", "incoerente"],
   "sementes": [101, 202, 303, 404, 505],
   "genomas": [null],
-  "mundos": ["padrao"],
+  "mundos": ["padrao", "bola"],
   "dias": 3,
   "orcamento": 48,
   "sonda": {"estados": 50, "amostras": 50, "semente": 101},

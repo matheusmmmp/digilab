@@ -307,7 +307,8 @@ def test_rodar_grava_rejoga_do_disco_e_monta_as_tabelas(tmp_path):
     t = json.loads((tmp_path / "tabelas.json").read_text(encoding="utf-8"))
     assert set(t) == {"atencioso", "aleatorio"} and set(t["atencioso"]) == set(bv.MEDIDAS_TABELA)
     assert t["atencioso"]["acerto_total"]["bracos"] == ["P0", "P0<P3:sem_sinais", "P3", "P3<P3:sem_sinais"]
-    assert t["atencioso"]["deriva_final"]["celulas"]["P0"]["padrao"]["media"] == 0.0
+    assert t["atencioso"]["deriva_final"]["condicoes"] == ["casado/padrao"]
+    assert t["atencioso"]["deriva_final"]["celulas"]["P0"]["casado/padrao"]["media"] == 0.0
     med = json.loads((tmp_path / "medidas.json").read_text(encoding="utf-8"))
     for nome, m in med.items():
         if m["braco"] != "P0":
