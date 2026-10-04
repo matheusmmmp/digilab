@@ -1,0 +1,45 @@
+{
+  "cfg": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 20261004
+    },
+    "conjunto": "calibracao",
+    "descricao": "V2, N3 (docs/PLANO_ANALISE_V2_N3.md, secao 6): grade do ganho do sinal de consequencia nas sementes de calibracao; P0, P1, P3, acoplados P1<-P0 e P3<-P3 sem sinais.",
+    "dias": 14,
+    "grade_ganho": [
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "orcamento": 224,
+    "saida": "artifacts_v2_n3/calibracao",
+    "sementes": [
+      8101,
+      8202,
+      8303,
+      8404,
+      8505
+    ],
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    }
+  },
+  "config": "experiments\\configs\\v2_n3\\calibracao.json",
+  "config_sha256": "df4b07e835c068fbafff856a1cdfb618a559f9d0d32ddd7be7dc333e7fcfc498",
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0",
+  "sha256": {
+    "digilab/config.py": "e2794006c36508f42f47a68dd01b5c15c965303b6b03543b1fbaa28128ada2a4",
+    "digilab/metrics.py": "2b6f913f6950571a79dd364654e733bca3a7fe943c29f86d159ea5f1bd6540e5",
+    "digilab/policies/lobos.py": "bf4391d31185eab6736acc392bc111a24aa3f6379908807472432de71177bd04",
+    "experiments/bancada_v2.py": "c2c2713f4fdba7fd2ba7bba6c7c0e26bf006dcda4bf9f5821e421ef60ba9af9d",
+    "experiments/run_v2_n3.py": "18b1439a249e7c4308fe5560622cf020533224b28257623482c45ca33645ee71"
+  }
+}

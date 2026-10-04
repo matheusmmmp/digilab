@@ -63,7 +63,7 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
     assert bv.BRACOS["P2"].informacao == "certa" and bv.BRACOS["P2e"].informacao == "errada"
 
 
-@pytest.mark.parametrize("braco,no", [("P1", "N3"), ("P2", "N5"), ("P2e", "N5")])
+@pytest.mark.parametrize("braco,no", [("P2", "N5"), ("P2e", "N5")])                # o P1 chegou no N3
 def test_fontes_que_ainda_nao_existem_falham_alto_com_o_no(braco, no):
     with pytest.raises(NotImplementedError, match=no):
         BANCADA.vida(bv.EspecVida("atencioso", braco, 101))
@@ -307,7 +307,8 @@ def test_rodar_grava_rejoga_do_disco_e_monta_as_tabelas(tmp_path):
     t = json.loads((tmp_path / "tabelas.json").read_text(encoding="utf-8"))
     assert set(t) == {"atencioso", "aleatorio"} and set(t["atencioso"]) == set(bv.MEDIDAS_TABELA)
     assert t["atencioso"]["acerto_total"]["bracos"] == ["P0", "P0<P3:sem_sinais", "P3", "P3<P3:sem_sinais"]
-    assert t["atencioso"]["deriva_final"]["celulas"]["P0"]["padrao"]["media"] == 0.0
+    assert t["atencioso"]["deriva_final"]["condicoes"] == ["casado/padrao"]
+    assert t["atencioso"]["deriva_final"]["celulas"]["P0"]["casado/padrao"]["media"] == 0.0
     med = json.loads((tmp_path / "medidas.json").read_text(encoding="utf-8"))
     for nome, m in med.items():
         if m["braco"] != "P0":
