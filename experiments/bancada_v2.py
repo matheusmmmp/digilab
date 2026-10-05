@@ -185,7 +185,7 @@ def mundo_de(nome: str) -> Mundo:
     return m
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
-                 "sonda", "bootstrap", "acoplados", "consequencia"}
+                 "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas"}
 
 
 # ------------------------------------------------------------------ as frutas na bancada
@@ -1048,12 +1048,24 @@ def validar_config(cfg: dict) -> dict:
     return cfg
 
 
+def bancada_da_config(cfg: dict) -> Bancada:
+    """A Bancada da config: os padroes, e o que as chaves "consequencia", "lobos" (sobre o CONFIG_LOBOS_APRENDIZ) e "frutas" (sobre o
+    CONFIG_FRUTAS_LIGADA; listas do JSON viram tuplas) trocam. Sem essas chaves, a bancada de sempre (REVISAO-APRENDIZ)."""
+    cc = CONFIG_CONSEQUENCIA if "consequencia" not in cfg else replace(CONFIG_CONSEQUENCIA, **cfg["consequencia"])
+    kw = {"cfg_consequencia": cc}
+    if "lobos" in cfg:
+        kw["cfg_lobos"] = replace(CONFIG_LOBOS_APRENDIZ, **cfg["lobos"])
+    if "frutas" in cfg:
+        tupla = lambda v: tuple(tupla(x) for x in v) if isinstance(v, list) else v  # noqa: E731
+        kw["cfg_frutas"] = replace(CONFIG_FRUTAS_LIGADA, **{k: tupla(v) for k, v in cfg["frutas"].items()})
+    return Bancada(int(cfg["dias"]), int(cfg["orcamento"]), **kw)
+
+
 def rodar(cfg: dict, pasta: Path) -> dict:
     """Vidas de todos os bracos x donos x sementes (x genomas x mundos), gravadas e rejogadas do disco; os acoplados; as
     medidas por vida e as tabelas braco x condicao por dono e medida."""
     validar_config(cfg)
-    cc = CONFIG_CONSEQUENCIA if "consequencia" not in cfg else replace(CONFIG_CONSEQUENCIA, **cfg["consequencia"])
-    bancada = Bancada(int(cfg["dias"]), int(cfg["orcamento"]), cfg_consequencia=cc)
+    bancada = bancada_da_config(cfg)
     dir_vidas = pasta / "vidas"
     vidas: dict[str, VidaBancada] = {}
 

@@ -115,7 +115,11 @@ PARAMETROS_LOBOS_L1: dict[str, tuple[str, str]] = {
 PARAMETROS_LOBOS_N5: dict[str, tuple[str, str]] = {
     "w0_info": ("PROPOSTO", "N5-1 (PLANO_ANALISE_V2_N5, secao 3): 0 desliga; grade {S/4, S/2, 3S/4} calibrada no N5"),
 }
-PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5}
+PARAMETROS_LOBOS_REVISAO: dict[str, tuple[str, str]] = {
+    "traco_decisoes": ("PROPOSTO", "REVISAO-APRENDIZ: a janela de credito (0 = a de hoje); grade em PLANO_ANALISE_V2_REVISAO_APRENDIZ"),
+    "traco_fator": ("PROPOSTO", "REVISAO-APRENDIZ: lambda do traco na escala S; grade em PLANO_ANALISE_V2_REVISAO_APRENDIZ"),
+}
+PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO}
 # V2, N3: o sinal da consequencia (ConfigConsequencia, config.py). Todos PROPOSTOS, nenhum referendado.
 PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
     "drives": ("PROPOSTO", "fome, higiene e energia (PLANO_ANALISE_V2_N3, secao 3); humor fora pela F6"),
@@ -382,14 +386,17 @@ class Aprendiz:
         if self._aprende:
             if self.cl.passo <= 0 or self.cl.teto <= 0 or self.cl.piso_peso <= 0 or self.cl.janela_latencia_ticks <= 0:
                 raise ValueError("passo, teto, piso_peso e janela_latencia_ticks precisam ser positivos")
-            for nome in ("passo", "teto", "piso_peso", "janela_latencia_ticks"):
+            for nome in ("passo", "teto", "piso_peso", "janela_latencia_ticks", "traco_decisoes", "traco_fator"):
                 if type(getattr(self.cl, nome)) is not int:
                     raise TypeError(f"ConfigLobos.{nome} precisa ser inteiro")
+            if self.cl.traco_decisoes < 0 or (self.cl.traco_decisoes > 0 and not 0 < self.cl.traco_fator < self._escala):
+                raise ValueError("traco_decisoes >= 0 e, com traco, 0 < traco_fator < S")
         self._piso = self.cl.piso_peso / self._escala
         self._tick_ultimo_cuidado = 0
         self._tick_ultima_decisao = -1
         self._registro_decisao: dict | None = None
         self._ultima: dict | None = None              # registro da ultima decisao (para elogio/bronca)
+        self._traco: list[dict] = []                  # REVISAO: as ultimas decisoes observadas (so com traco_decisoes > 0)
         self._pendentes: list[tuple[int, dict]] = []  # chamados pendentes: (tick, registro)
         self._n_recompensas = {"elogio": 0, "repreensao": 0, "latencia": 0, "ignorado": 0}
         self._n_atualizacoes = 0
@@ -497,6 +504,7 @@ class Aprendiz:
         if registro is None or registro["acao"] is not transicao.acao:
             raise RuntimeError("registro da decisao nao corresponde a acao observada")
         self._ultima = registro
+        self._guardar_no_traco(registro)
         if transicao.acao is AcaoPet.CHAMAR_ATENCAO:
             self._pendentes.append((tick, registro))
 
@@ -514,10 +522,10 @@ class Aprendiz:
             if self._ultima is None:
                 return                                   # feedback antes da primeira decisao nao tem a quem creditar
             if acao is AcaoUsuario.ELOGIAR:
-                self._aplicar_sinal(self._ultima, arred(self.cl.recompensa_elogio * S))
+                self._creditar(self._ultima, arred(self.cl.recompensa_elogio * S), self._anteriores(self._ultima))
                 self._n_recompensas["elogio"] += 1
             else:
-                self._aplicar_sinal(self._ultima, arred(self.cl.recompensa_repreensao * S))
+                self._creditar(self._ultima, arred(self.cl.recompensa_repreensao * S), self._anteriores(self._ultima))
                 self._n_recompensas["repreensao"] += 1
         elif acao in CUIDADOS:
             janela = self.cl.janela_latencia_ticks
@@ -555,12 +563,14 @@ class Aprendiz:
         if registro is None or registro["acao"] is not transicao.acao:
             raise RuntimeError("registro da decisao nao corresponde a acao observada")
         self._ultima = registro
+        self._guardar_no_traco(registro)
+        anteriores = self._anteriores(registro)
         self._n_recompensas["consequencia"] = self._n_recompensas.get("consequencia", 0) + 1
         if self._fruta_na_decisao and transicao.acao is AcaoPet.COMER:
-            self._consequencia_pendente = (registro, transicao, cfg_consequencia or CONFIG_CONSEQUENCIA)
+            self._consequencia_pendente = (registro, transicao, cfg_consequencia or CONFIG_CONSEQUENCIA, anteriores)
             return
         if f_S != 0:
-            self._aplicar_sinal(registro, f_S, consequencia=True)
+            self._creditar(registro, f_S, anteriores, consequencia=True)
 
     def fruta_comida(self, fruta: str, obs_depois: Observacao) -> None:
         """Gancho do MotorFrutas, logo depois de o pet comer `fruta` (`obs_depois` = o estado depois de comer). So credita na
@@ -569,14 +579,43 @@ class Aprendiz:
         pendente, self._consequencia_pendente = self._consequencia_pendente, None
         if pendente is None:
             return
-        registro, transicao, cc = pendente
+        registro, transicao, cc, anteriores = pendente
         sub = registro.get("fruta")
         if sub is None or sub["acao"] != fruta:
             raise RuntimeError(f"E2: fruta comida {fruta!r} nao e a da sub-decisao registrada")
         self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
         f_S = sinal_homeostatico_fruta(transicao.observacao, obs_depois, self._escala, cc)
         if f_S != 0:
-            self._aplicar_sinal(registro, f_S, consequencia=True)
+            self._creditar(registro, f_S, anteriores, consequencia=True)
+
+    # ------------------------------------------------------------- REVISAO: o traco de elegibilidade (janela de credito)
+
+    def _guardar_no_traco(self, registro: dict) -> None:
+        K = self.cl.traco_decisoes
+        if K:
+            self._traco.append(registro)
+            del self._traco[:-(K + 1)]
+
+    def _anteriores(self, registro: dict) -> list[dict]:
+        """As decisoes observadas antes de `registro`, da mais recente para a mais antiga, ate traco_decisoes (vazio sem traco)."""
+        K = self.cl.traco_decisoes
+        if not K:
+            return []
+        for i in range(len(self._traco) - 1, -1, -1):
+            if self._traco[i] is registro:
+                return self._traco[max(0, i - K):i][::-1]
+        raise RuntimeError("registro fora do traco")
+
+    def _creditar(self, registro: dict, f_S: int, anteriores: list[dict], consequencia: bool = False) -> None:
+        """f_S na decisao e, pelo traco, div_arred(f_S * lambda**k, S**k) na k-esima anterior. Sem traco: _aplicar_sinal, so."""
+        self._aplicar_sinal(registro, f_S, consequencia)
+        S, lam = self._escala, self.cl.traco_fator
+        for k, r in enumerate(anteriores, 1):
+            g = div_arred(f_S * lam ** k, S ** k)
+            if g == 0:
+                break                                     # |f_S| lambda^k / S^k so diminui com k
+            self._aplicar_sinal(r, g, consequencia)
+            self._n_recompensas["traco"] = self._n_recompensas.get("traco", 0) + 1
 
     def _aplicar_sinal(self, registro: dict, f_S: int, consequencia: bool = False) -> None:
         """Aplica f_S ao registro pela regra da L1. N5: o peso da informacao so muda pela consequencia (`consequencia`), nunca
