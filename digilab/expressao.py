@@ -61,6 +61,15 @@ FATORES: dict[str, dict[str, str]] = {
              "adulto": "por causa da hora do dia"},
     "tempo_sem_cuidado": {"marcador": "sem cuidado", "bebe": "", "crianca": "[:sem cuidado:]",
                           "adolescente": "sem cuidado...", "adulto": "porque fiquei muito tempo sem cuidado"},
+    # mundo (V2, N5-ACOPLADO): as regras da bola e da fruta e a sub-decisao da fruta. So conduta, nunca sensacao (F2 das frutas)
+    "bola": {"marcador": "bola", "bebe": "", "crianca": "[:bola:]", "adolescente": "bola...",
+             "adulto": "porque a bola estava ali"},
+    "fruta": {"marcador": "fruta à vista", "bebe": "", "crianca": "[:fruta à vista:]", "adolescente": "fruta à vista...",
+              "adulto": "porque havia fruta à vista"},
+    "incentivo_fruta": {"marcador": "a que eu mais procuro", "bebe": "", "crianca": "[:a que eu mais procuro:]",
+                        "adolescente": "a que eu mais procuro...", "adulto": "porque é a que eu mais procuro"},
+    "escolha_aprendida_fruta": {"marcador": "aprendi a escolher", "bebe": "", "crianca": "[:aprendi a escolher:]",
+                                "adolescente": "aprendi a escolher...", "adulto": "porque aprendi a escolher essa"},
     # memoria (Parte B)
     "latencia_fome": {"marcador": "demorou com a comida", "bebe": "", "crianca": "[:demorou com a comida:]",
                       "adolescente": "demorou com a comida...",

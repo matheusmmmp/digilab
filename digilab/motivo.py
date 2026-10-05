@@ -36,7 +36,7 @@ from .events import AcaoPet, AcaoUsuario, LogDeEventos
 from .memoria import FATORES_MEMORIA
 from .memoria_espacos import FATORES_ESPACOS
 from .policy import Observacao, Politica, PoliticaInstinto, Transicao
-from .policies.lobos import ENTRADAS as ENTRADAS_LOBOS, sortear as sortear_lobos
+from .policies.lobos import ENTRADAS as ENTRADAS_LOBOS, ENTRADAS_MUNDO, REGRAS_MUNDO, sortear as sortear_lobos
 
 ORIGENS = ("vida", "combate")
 
@@ -45,10 +45,15 @@ FATOR_DA_FEATURE = (
     "habito", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo",
     "hora", "hora", "tempo_sem_cuidado",
 )
-FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS
+# V2, N5-ACOPLADO: as regras do mundo (bola, fruta) e a sub-decisao da fruta (o incentivo ou o aprendido decidiu qual)
+FATORES_MUNDO = ("bola", "fruta", "incentivo_fruta", "escolha_aprendida_fruta")
+FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS + FATORES_MUNDO
 # nome do fator por entrada da percepcao da PoliticaLobos (policies/lobos.ENTRADAS): os mesmos nomes do bandit
 FATOR_DA_ENTRADA_LOBOS = ("habito", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora",
                           "tempo_sem_cuidado")
+# as entradas do mundo (lobos.ENTRADAS_MUNDO), no fim da percepcao quando os lobos veem a bola e as frutas
+FATOR_DA_ENTRADA_MUNDO = ("bola", "fruta")
+_FATOR_POR_ENTRADA = dict(zip(ENTRADAS_LOBOS + ENTRADAS_MUNDO, FATOR_DA_ENTRADA_LOBOS + FATOR_DA_ENTRADA_MUNDO))
 
 # regra do instinto -> fatores (variaveis da condicao que disparou)
 _FATORES_INSTINTO = {
@@ -147,8 +152,27 @@ def motivo_bandit(decisao: dict, tick: int, ref_ultimo_cuidado: int | None,
 
 
 def motivo_instinto(regra: str, obs: Observacao, acao: AcaoPet, tick: int, ref_ultimo_cuidado: int | None,
-                    cfg_instinto=None) -> Motivo:
+                    cfg_instinto=None, termo_mundo: float = 0.0) -> Motivo:
+    """`termo_mundo` (so nas regras do mundo): o peso que a bola deu a brincar (w_bola x bola) ou a fruta deu a comer
+    (w_fruta x fruta), para a intensidade. Honestidade: a fruta e fator quando o pet comeu, porque sem fruta comer nem e candidato
+    no tempo livre (mudou a escolha com certeza); a bola nunca e fator aqui, porque brincar ja era candidato e o instinto nao guarda
+    o sorteio para saber se a bola mudou a escolha."""
     fome, higiene, energia, humor, *_ = obs.vetor_estado
+    if regra in REGRAS_MUNDO:
+        if termo_mundo <= 0.0:
+            raise ValueError(f"regra do mundo {regra!r} sem o peso do termo do mundo")
+        pesos = {AcaoPet.OCIOSO: 3.0, AcaoPet.EXPLORAR: 2.0 + 2.0 * energia,
+                 AcaoPet.BRINCAR: 1.0 + 3.0 * humor, AcaoPet.CHAMAR_ATENCAO: 1.0}
+        if regra == "bola_no_cenario":
+            pesos[AcaoPet.BRINCAR] = pesos[AcaoPet.BRINCAR] + termo_mundo
+            fatores = ()
+        else:
+            pesos[AcaoPet.COMER] = termo_mundo
+            fatores = ("fruta",) if acao is AcaoPet.COMER else ()
+        total = 0.0
+        for p in pesos.values():
+            total += p
+        return Motivo("vida", acao.value, fatores, (), pesos[acao] / total, False, tick=tick)
     if regra == "pedido_necessidade":
         fatores = tuple(n for n, v in (("fome", fome), ("higiene", higiene)) if v < 0.25)
         intensidade = 1.0
@@ -169,8 +193,74 @@ def motivo_instinto(regra: str, obs: Observacao, acao: AcaoPet, tick: int, ref_u
     return Motivo("vida", acao.value, fatores, refs, intensidade, False, tick=tick)
 
 
+def _escolha_proporcional(presentes: list[str], pesos: list[float], u: float) -> str | None:
+    """a conta de MotorFrutas._escolher / PoliticaLobos.escolher_fruta, passo a passo; None se todos os pesos sao zero"""
+    total = 0.0
+    for p in pesos:
+        total += p
+    if total <= 0.0:
+        return None
+    alvo = u * total
+    acc = 0.0
+    for f, p in zip(presentes, pesos):
+        acc += p
+        if alvo < acc:
+            return f
+    return presentes[-1]
+
+
+def motivo_fruta(reg_fruta: dict, incentivos: dict) -> tuple[str | None, str]:
+    """(fator, lobo) da sub-decisao da fruta. O prior escolhe proporcional ao incentivo (coeficiente S); com o mesmo u, se o prior
+    daria a mesma fruta, quem decidiu foi o incentivo (fator `incentivo_fruta`, lobo impulsos); senao o peso aprendido da fruta
+    mudou a escolha (fator `escolha_aprendida_fruta`, lobo decisao). Incentivos todos zero: sorteio uniforme, sem fator."""
+    presentes = list(reg_fruta["presentes"])
+    if set(incentivos) != set(presentes):
+        raise ValueError(f"incentivos {sorted(incentivos)} nao sao os das frutas no cenario {presentes}")
+    prior = _escolha_proporcional(presentes, [incentivos[f] for f in presentes], reg_fruta["u"])
+    if prior is None:
+        return None, "impulsos"
+    if prior == reg_fruta["escolhida"]:
+        return "incentivo_fruta", "impulsos"
+    return "escolha_aprendida_fruta", "decisao"
+
+
+def _motivo_regra_mundo(registro: dict, acao: AcaoPet, tick: int) -> Motivo:
+    """O impulso decidiu numa regra do mundo. O termo do mundo vira fator so se, sem ele e com o mesmo u, a acao seria outra:
+    bola_no_cenario sem a bola = o tempo livre (brincar com 1 + 3 x humor); fruta_no_cenario sem a fruta = comer com peso zero."""
+    candidatos = list(registro["candidatos"])
+    prior = registro["contribuicoes"]["impulsos"]
+    contra = dict(prior)
+    if registro["regra"] == "bola_no_cenario":
+        contra[AcaoPet.BRINCAR.value] = 1.0 + 3.0 * registro["percepcao"]["humor"]
+        termo = "bola"
+    else:
+        contra[AcaoPet.COMER.value] = 0.0
+        termo = "fruta"
+    sem = candidatos[sortear_lobos([contra[a] for a in candidatos], registro["u"])]
+    fatores = (termo,) if sem != registro["acao"] else ()
+    total = 0.0
+    for a in candidatos:
+        total += prior[a]
+    return Motivo("vida", acao.value, fatores, (), min(1.0, max(0.0, prior[registro["acao"]] / total)), False, tick=tick)
+
+
 def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
-                 cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> tuple[Motivo, dict]:
+                 cfg: ConfigExpressao = CONFIG_EXPRESSAO, incentivos: dict | None = None) -> tuple[Motivo, dict]:
+    m, diag = _motivo_lobos_decisao(registro, tick, ref_ultimo_cuidado, cfg)
+    if "fruta" not in registro:
+        return m, diag
+    # a sub-decisao da fruta (so com os lobos vendo as frutas): o fator dela entra no lugar do segundo fator da decisao de comer
+    if incentivos is None:
+        raise ValueError("registro com a sub-decisao da fruta sem os incentivos (o PoliticaComMotivo os recebe do motor)")
+    fator, lobo = motivo_fruta(registro["fruta"], incentivos)
+    fatores = (m.fatores[:1] + (fator,)) if fator else m.fatores
+    refs = m.evento_ref if "tempo_sem_cuidado" in fatores else ()
+    diag = {**diag, "fruta": {"lobo": lobo, "fator": fator, "escolhida": registro["fruta"]["escolhida"]}}
+    return Motivo("vida", m.acao, fatores, refs, m.intensidade, m.exploracao, tick=m.tick), diag
+
+
+def _motivo_lobos_decisao(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
+                          cfg: ConfigExpressao = CONFIG_EXPRESSAO) -> tuple[Motivo, dict]:
     """(Motivo, diagnostico) da PoliticaLobos. Funcao pura do registro da decisao (`ultimo_motivo`).
 
     O impulso decidiu quando a regra tem um candidato so, ou quando o sorteio com os pesos do PRIOR e o mesmo
@@ -191,6 +281,9 @@ def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
         intensidade = registro["pesos"][registro["acao"]] / sum(registro["pesos"][a] for a in candidatos)
         m = Motivo("vida", acao.value, (), (), min(1.0, max(0.0, intensidade)), False, tick=tick)
         return m, {"valor_decidiu": False, "fator_formula_literal": None, "lobo": "prior"}
+    if impulso_decidiu and registro["regra"] in REGRAS_MUNDO:
+        return _motivo_regra_mundo(registro, acao, tick), {"valor_decidiu": False, "fator_formula_literal": None,
+                                                           "lobo": "impulsos"}
     if impulso_decidiu:
         p = registro["percepcao"]
         obs = Observacao(vetor_estado=(p["fome"], p["higiene"], p["energia"], p["humor"], p["saude"], p["sujeira"],
@@ -201,8 +294,12 @@ def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
     if aprendido is None:
         raise RuntimeError("o lobo de decisao decidiu sem registro do termo aprendido")
     outras = [b for b in candidatos if b != registro["acao"]]
+    # nomes pela ordem da percepcao do registro: as 10 de sempre e, com os lobos vendo o mundo, `bola` e `fruta` no fim
+    nomes = [_FATOR_POR_ENTRADA[k] for k in registro["percepcao"]]
+    if len(nomes) != len(aprendido[registro["acao"]]):
+        raise ValueError(f"percepcao com {len(nomes)} entradas e termo aprendido com {len(aprendido[registro['acao']])}")
     contrib: dict[str, float] = {}
-    for j, nome in enumerate(FATOR_DA_ENTRADA_LOBOS):
+    for j, nome in enumerate(nomes):
         media = sum(aprendido[b][j] for b in outras) / len(outras)
         contrib[nome] = contrib.get(nome, 0.0) + (aprendido[registro["acao"]][j] - media)
     positivos = sorted(((c, n) for n, c in contrib.items() if c >= cfg.limiar_motivo), reverse=True)
@@ -233,6 +330,12 @@ class PoliticaComMotivo:
         self.motivos: list[Motivo] = []
         self.diagnosticos: list[dict] = []
         self.humores: list[float] = []   # humor observado em cada decisao (emote do bebe)
+        self._ref_na_decisao: int | None = None
+        # ganchos do MotorFrutas (LOBOS-MUNDO): repassados so se a politica embrulhada os tem, para o embrulho nao mudar a vida
+        if hasattr(interna, "escolher_fruta"):
+            self.escolher_fruta = self._escolher_fruta
+        if hasattr(interna, "fruta_comida"):
+            self.fruta_comida = interna.fruta_comida
 
     def _indice_do_ordinal(self, k: int) -> int | None:
         return None if self._indices_dono is None else self._indices_dono[k - 1]
@@ -245,8 +348,15 @@ class PoliticaComMotivo:
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
         acao = self.interna.agir(obs, rng)
         tick = obs.ticks_desde_cuidado + self._tick_ultimo_cuidado
+        self._ref_na_decisao = self._ref_cuidado()
         if isinstance(self.interna, PoliticaInstinto):
-            m = motivo_instinto(self.interna.ultima_regra, obs, acao, tick, self._ref_cuidado())
+            regra = self.interna.ultima_regra
+            termo = 0.0
+            if regra == "bola_no_cenario":
+                termo = self.interna.cb.w_bola * obs.bola
+            elif regra == "fruta_no_cenario":
+                termo = self.interna.cf.w_fruta * obs.fruta
+            m = motivo_instinto(regra, obs, acao, tick, self._ref_cuidado(), termo_mundo=termo)
             diag = {"valor_decidiu": None, "fator_formula_literal": None}
         elif hasattr(self.interna, "ultimo_motivo"):
             reg = self.interna.ultimo_motivo
@@ -267,6 +377,19 @@ class PoliticaComMotivo:
 
     def observar(self, transicao: Transicao) -> None:
         self.interna.observar(transicao)
+
+    def _escolher_fruta(self, presentes: list[str], incentivos: dict, u: float) -> str | None:
+        """Repassa a sub-decisao da fruta e refaz o motivo da decisao de comer com ela (os incentivos so chegam por aqui)."""
+        escolhida = self.interna.escolher_fruta(presentes, incentivos, u)
+        if escolhida is None:
+            return None
+        reg = getattr(self.interna, "ultimo_motivo", None)
+        if reg is None or "fruta" not in reg or not self.motivos or reg["acao"] != AcaoPet.COMER.value:
+            raise RuntimeError("sub-decisao da fruta sem a decisao de comer registrada")
+        m, diag = motivo_lobos(reg, self.motivos[-1].tick, self._ref_na_decisao, self.cfg, incentivos=dict(incentivos))
+        self.motivos[-1] = m
+        self.diagnosticos[-1] = diag
+        return escolhida
 
     def receber_acao_dono(self, acao: AcaoUsuario, tick: int) -> None:
         self._tick_ultimo_cuidado = tick

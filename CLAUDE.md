@@ -1665,3 +1665,34 @@ Só `lobos.py` e `config.py` mudaram. Interpretações em `docs/REGISTRO_DESVIOS
 - **Para a bancada (chat D):** basta o `cfg_lobos` com `w0_info` e o `MotorFrutas` com `ConfigInformacao` ligada; nenhuma mudança no
   `PoliticaLobos` além disso.
 - **Não mudou:** `engine.py`, `AcaoPet`, o bandit, a L0, a L1, o N3, os lobos sem informação (byte a byte), `frutas.py`, a web.
+
+## V2, N5-ACOPLADO — o informante acoplado (P2a) e o motivo das regras novas dos lobos (2026-10-04, `docs/TAREFA_V2_N5_ACOPLADO.md`) — GATES PASSAM
+
+Infraestrutura, sem run e sem faixa reservada; só as sementes dos testes (11, 22, 33). Decisão N5-4 (`docs/V2_RODADA_5.md`) e seção 4.2 de
+`docs/PLANO_ANALISE_V2_N5.md`. Só `frutas.py`, `motivo.py` e `expressao.py` mudaram; `engine.py`, `lobos.py`, a bancada e a web não.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Acoplado** (`DonoInformante.acoplado(efeito, frutas_do_p2, semente, dias)` ou `acoplado_de(p2, semente, dias)`): o mesmo multiconjunto
+  de frutas sobre as quais o P2 (modo certo) da mesma unidade informou, com o conteúdo **verdadeiro**, em ticks sorteados uniformemente
+  entre os passos do dono da vida (um sorteio por item, multiconjunto ordenado antes) pela rng própria
+  `derivar_semente("informacao-acoplada", semente)`, toda consumida na construção: não toca a rng de ambiente, de política, da fruta, do
+  dono nem o `random` global. Fora do orçamento, como os outros modos. O digilab não importa a bancada: quem monta o P2a passa o
+  multiconjunto (a bancada, do chat D, com o `CalendarioFrutas`).
+- **Interface da vida:** `simular_vida_frutas` chama `informante.acoes_do_passo(tick, ofertadas)` em todo passo do dono: certo e errado
+  respondem às ofertas do passo (o `acoes` de sempre), o acoplado devolve o que a agenda marcou. `acoes` no acoplado e o acoplado sem o
+  construtor falham alto; `pendentes()` = o que ainda não saiu (0 no fim da vida).
+- **Motivo das regras novas** (`motivo_lobos`, e `motivo_instinto` para o instinto da bola e das frutas): `bola_no_cenario` e
+  `fruta_no_cenario` com a regra de honestidade de sempre: a bola (fator `bola`) ou a fruta (`fruta`) só vira fator se, com o mesmo u e
+  sem o termo dela (brincar = 1 + 3·humor; comer fora), a ação seria outra. No ramo aprendido as entradas `bola` e `fruta` dos lobos que
+  veem o mundo viram fatores pelo nome. **A escolha da fruta** é o segundo fator da decisão de comer: `incentivo_fruta` quando o sorteio
+  com o incentivo puro e o mesmo u dá a mesma fruta, `escolha_aprendida_fruta` quando o peso aprendido mudou a fruta; os incentivos vêm
+  pelo gancho `escolher_fruta` (o registro dos lobos não os guarda). Textos com marcador único na `expressao.FATORES`, cobertura conferida
+  na carga; nada de vocabulário de sensação (F2).
+- **`PoliticaComMotivo` repassa os ganchos das frutas** (`escolher_fruta`, `fruta_comida`): antes, embrulhar os lobos que veem as frutas
+  mudava a vida (a escolha caía no `_escolher` do motor e o E2 sumia).
+- **Gates** (`tests/test_n5_acoplado.py`, 17 testes, ~3 s): **certo e errado byte a byte** contra `tests/gabaritos/n5_informante_certo_errado.json`
+  (24 vidas, gravado com o código da main antes da mudança); **acoplado** com o mesmo multiconjunto (fruta, conteúdo) do P2, conteúdo
+  verdadeiro, ticks diferentes, nada pendente, determinístico; **a rng do acoplado não mexe nas outras** (com o instinto, a vida com o
+  acoplado e a sem informante têm o mesmo estado, ações e rngs, a da fruta incluída); **G1** com o acoplado; **motivo**: lobos que veem
+  as frutas embrulhados, com o aprendizado desligado e ligado, a vida igual à sem embrulho, fatores ⊆ `FATORES_VIDA` e ≤ 2, `fruta` e
+  `incentivo_fruta` citados (sem aprendizado, nunca `escolha_aprendida_fruta`); a bola citada no mundo da bola; o instinto das frutas
+  embrulhado sem erro.
