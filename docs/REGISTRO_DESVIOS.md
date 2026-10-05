@@ -2133,6 +2133,24 @@ Tarefa `docs/TAREFA_V2_LEITURA_PARCIAL.md`; entrega `docs/LEITURA_PARCIAL_V2_FAS
   - `docs/TAREFA_V2_CEREBRO_N6_N7.md` (B, etapa C1);
   - `docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md` (C, etapa K1).
 
+## 2026-10-05 — K1: plano da calibração conjunta e adendo de tamanho de amostra; interpretações
+
+Tarefa `docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md`; entrega `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`. Nenhuma run, nenhum código.
+- **A regra de calibração do N5 (N5-1) lia uma predição primária.** Ela escolhia o `w0_info` pelo contraste P2e − P1 na janela inicial,
+  que é a predição 4(a) do experimento maior, dentro da família de Holm. Com a calibração conjunta nas mesmas bases do experimento, o
+  plano propõe trocá-la (decisão K-3) por uma verificação de manipulação: a fração das escolhas de fruta com informação vigente decididas
+  pela informação (sonda contrafactual), com o mesmo piso de 0,069 da memória (N6-10).
+- **A seção 8.2 do experimento maior** ("nada do aprendiz se calibra aqui") foi escrita antes da revisão 3 do roadmap; a calibração que
+  era de cada nó passou para o K1. As predições e a estatística não mudam.
+- **P0 com tudo desligado** (decisão K-1): a memória, a informação, o pedido e os canais só nos braços que aprendem, para o P0 seguir
+  sendo o instinto byte a byte (contrato K1).
+- **A grade do ganho do P1 sobe ({4, 8, 16})** porque no T3 com ganho 4 a deriva ainda cresce no fim da vida (razão 14/7 de 2,92 e 2,64,
+  `artifacts_v2_revisao/calibracao/T3/resultado.json`).
+- **Os blocos N6 e N7 usam as unidades do experimento maior**, não as derivações próprias dos planos deles (`"n6"`, `"n7"`), para o
+  pareamento atravessar os blocos.
+- **O controle de capacidade sem lobos (E6) fica fora**: a bancada não tem o `camada_unica` (é do N11).
+- **O custo** foi estimado pela revisão do aprendiz (~5,5 s por vida: 1 h 50 min para 1200 vidas); é estimativa, não medida desta run.
+
 ## 2026-10-05 — V2, N7-MUNDO: o pedido "deixe a fruta X" e o dono que pede (`docs/TAREFA_V2_N7_MUNDO.md`)
 
 - **`config.py` e `protocol.py` também mudaram**, fora da lista da tarefa ("só `events.py`, `frutas.py`/`ambiente.py`, `policy.py`"): os
