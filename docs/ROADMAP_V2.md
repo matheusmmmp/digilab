@@ -87,10 +87,14 @@ aprendiz achou assim que a decisão de comer não via a fruta). **O que sai:** c
 | rodada | A | B | C | D |
 |---|---|---|---|---|
 | 8 | N7-MUNDO (em curso) | **C1**: N6 e N7 no cérebro | K1: plano da calibração conjunta | BANCADA-N6-N7 (em curso) |
-| 9 | C5: cérebro C (Fly-like) | C4: canais de reforço | revisão do K1 e do adendo | C5: cérebro B (CfC/A2C) |
-| 10 | — | K2: calibração conjunta | — | calibração dos cérebros B e C |
-| 11 | — | V1: validação única | leitura | K3/V2: comparação |
-| 12 | W (depois do M6) | — | leitura consolidada | — |
+| 9 | K4: o dono do P3 julga a fruta | C4: canais de reforço | plano da comparação A × B × C (K3/V2) | BANCADA-LIGA: N6 e N7 ligados na bancada |
+| 10 | C5: cérebro C (Fly-like) | K2: calibração conjunta (depois do PR do D) | — | K4 e canais na bancada, depois C5: cérebro B (CfC/A2C) |
+| 11 | — | V1: validação única | leitura | calibração dos cérebros B e C |
+| 12 | — | — | leitura | K3/V2: comparação |
+| 13 | W (depois do M6) | — | leitura consolidada | — |
+
+Rodada 9 (2026-10-05): K-1 a K-11 aprovadas como recomendado; o K4 (K-11) e a ligação da bancada vieram antes dos cérebros B e C,
+porque a K2 depende dos dois. Os cérebros B e C passam para a rodada 10.
 
 Regras de sempre: uma worktree por frente, um PR, merge só pelo Matheus, só o chat B mexe em `lobos.py`.
 

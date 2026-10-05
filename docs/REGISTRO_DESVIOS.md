@@ -2233,3 +2233,14 @@ mecanismo; nenhuma run com faixa reservada. A calibração e a validação do N5
 - **Dois testes de contrato mudaram:** `test_bancada_mundos.py::test_contrato_das_condicoes` (as condições agora incluem `iguais` e o
   mundo `iguais_frutas`) e `test_bancada_v2.py::test_engine_intocado_e_bracos_com_fonte_e_no` (a tabela dos braços inclui os do N6 e do N7,
   com fonte e nó). Nenhum braço ou mundo antigo mudou.
+
+## 2026-10-05 — Rodada 9: K-1 a K-11 aprovadas; o K4 e a bancada antes dos cérebros B e C
+
+- O Matheus aprovou as decisões K-1 a K-11 de `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`, todas como recomendado.
+- A divisão da rodada 9 do roadmap mudou: o chat A faz o K4 (o dono do P3 julga a fruta) e o chat D liga o N6 e o N7 na bancada.
+  - Motivo: a K2 precisa dos dois.
+  - Os cérebros B e C passam para a rodada 10.
+  - O chat C escreve o plano da comparação A × B × C no lugar da revisão do K1, que já foi decidida.
+- Notas de superado:
+  - `docs/LEITURA_PARCIAL_V2_FASE1.md` ganha a seção 6, que marca as decisões LP como substituídas;
+  - `docs/PLANO_V2_PESQUISA.md` ganha a nota da fase 1.

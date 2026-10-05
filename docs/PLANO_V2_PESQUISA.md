@@ -91,6 +91,11 @@ corpus em português (F0-CORPUS), comando com o estilo da espécie (#115), leitu
 
 ### Fase 1 — a pergunta maior, no Python
 
+> **Atualização (2026-10-05, revisão 3 do roadmap, M10):** os nós da fase 1 passam a ter só gates de **mecanismo** (G1, chave
+> desligada = vida de antes byte a byte, testes de comportamento). O cérebro A montado (N5, N6, N7 e canais) é calibrado **uma vez**
+> (`docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`, 14101…14505) e validado **uma vez** no experimento maior com ablações (15101…15505). As
+> validações por nó feitas antes (L1, A1, N3, N4) ficam como histórico. O texto abaixo descreve o desenho original.
+
 Etapas (ordem e workers no `ROADMAP_V2.md`):
 1. **Aprendiz:** L0 (aprendizado desligado = instinto byte a byte, **feito**); L1, feedback explícito (P3: calibração feita, #119;
    validação em curso).

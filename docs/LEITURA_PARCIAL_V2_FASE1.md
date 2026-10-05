@@ -191,3 +191,9 @@ predisposições herdadas?
 | LP-6 | alvos e gates das refeitas | os de antes, sem relaxar | relaxar depois de ver os dados vicia o teste |
 | LP-7 | artefatos | pastas novas (`artifacts_v2_a1_b/`, `artifacts_v2_l1_t3/`); os antigos ficam como estão | sobrescrever apaga o registro do que falhou e por quê |
 | LP-8 | quem roda | A1-B com o chat D (bancada); L1-T3 com o chat B (aprendiz) | com a frente errada, alguém mexe em arquivo que não é dele (`docs/V2_TRABALHO_PARALELO.md`) |
+
+## 6. Nota posterior (2026-10-05): decisões LP substituídas
+
+As decisões LP-1 a LP-7 acima **não serão executadas**. O Matheus decidiu, no mesmo dia, montar o cérebro inteiro, calibrar uma vez e
+validar uma vez (`docs/ROADMAP_V2.md`, revisão 3, M10 e M11). As validações L1, A1, N3 e N4 ficam como histórico. As faixas propostas
+aqui (23101…27505) não foram usadas e ficam livres. A leitura das seções 1 a 4 continua valendo como registro do que se sabia.
