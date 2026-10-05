@@ -1958,3 +1958,13 @@ Tarefa `docs/TAREFA_V2_N6_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N6.md`. Nenh
 - **Faixas propostas** 19101…19505 (calibração) e 20101…20505 (validação), conferidas contra `FAIXAS_RESERVADAS`, o roadmap e a busca no
   repositório. As `FAIXAS_RESERVADAS` da bancada não listam hoje o N11 (16101…17505) nem a revisão do aprendiz (18101…18505); fica para
   quem implementar.
+
+## 2026-10-04 — Rodada 6: merges e decisões N6-1 a N6-10
+
+- Mesclados #148 (bancada com os lobos vendo o mundo e os braços P2, P2e, P2a), #147 (entrada `info` dos lobos), #149 (informante
+  acoplado e motivo das regras novas, com a correção do `PoliticaComMotivo`) e #146 (plano do N6). Suíte completa depois dos merges de
+  código: 876 passados, 1 pulado.
+- O Matheus aprovou N6-1 a N6-10 do `docs/PLANO_ANALISE_V2_N6.md`, como recomendadas. Faixas do N6 fechadas: 19101…19505 e 20101…20505.
+- Liberada a revisão do aprendiz (`docs/TAREFA_V2_REVISAO_APRENDIZ.md`, chat B, 18101…18505).
+- Pendência de código para o chat D: incluir 18101…18505, 19101…19505 e 20101…20505 em `FAIXAS_RESERVADAS` da bancada.
+

@@ -425,6 +425,9 @@ A pergunta fica para depois do N6 e do motivo das regras novas (chat A, `docs/TA
 
 ## 16. Decisões que só o Matheus pode tomar
 
+**Decididas pelo Matheus em 2026-10-04: todas como recomendadas (N6-1 a N6-10).** Faixas fechadas pelo coordenador: N6 calibração
+19101…19505, validação 20101…20505 (não colidem com a revisão do aprendiz, 18101…18505).
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | N6-1 | onde a memória entra | só na sub-decisão da fruta, como a informação do N5 | em comer ou não, a memória muda quanto o pet come, entra no canal de cuidado e o G5 deixa de ser satisfazível por desenho |
