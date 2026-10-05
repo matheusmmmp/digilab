@@ -2067,3 +2067,10 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
   só mudaria por um efeito colateral da injeção (ordem das chamadas no motor), que o gabarito pega.
 - **O teste da presença usa o instinto das frutas por baixo de um espião** (que só anota a `Observacao` e delega), porque nenhuma
   política de hoje lê o campo.
+
+## 2026-10-05 — N7: decisões N7-1 a N7-10 aprovadas como recomendadas
+
+- O Matheus aprovou N7-1 a N7-10 de `docs/PLANO_ANALISE_V2_N7.md` como recomendadas ("segue o recomendado"); o plano registra isso no
+  status e na seção 15. Nenhum número, gate ou faixa mudou.
+- Com a N7-9, as faixas 21101…21505 (calibração) e 22101…22505 (validação) ficam pedidas ao coordenador; entram nas `FAIXAS_RESERVADAS`
+  quando ele as fechar.
