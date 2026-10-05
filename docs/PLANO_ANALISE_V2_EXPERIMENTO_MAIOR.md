@@ -323,3 +323,17 @@ custo que cada escolha evita.
 | E6 | O controle de capacidade sem lobos entra como secundário só no P1 e no P3 | Sim | Em todos os braços dobra o custo da run sem mudar nenhuma predição; em nenhum, a comparação de cérebros (N11) perde a referência |
 | E7 | Dono principal = atencioso, com o mesmo conhecimento do efeito real nos três braços com dono (K4) | Sim | Se o P3 não julgar a fruta, P2 × P3 compara canal e conhecimento juntos, e a predição 5 mede só que o P3 não sabe das frutas |
 | E8 | Correção de Holm sobre os seis contrastes primários; equivalência da predição 5 fora da família | Sim | Sem correção, com seis testes, uma confirmação por acaso fica provável; com Bonferroni, o poder cai à toa |
+
+## Adendo 1 (2026-10-05, antes de qualquer dado): calibração conjunta e ablações
+
+Decisão do Matheus (`docs/ROADMAP_V2.md`, revisão 3, M10): o cérebro A é montado inteiro (N5, N6, N7 e canais, cada um atrás de
+chave) e calibrado **uma vez**, nas sementes 14101…14505; a validação é **uma só**, nas 15101…15505. Efeitos neste plano:
+
+- As predições 1–5 e a estatística (seção 6) não mudam.
+- **Ablações:** além dos braços P0–P3, cada peça entra como contraste "sistema completo × sistema sem a peça" (N5, N6, N7, canais),
+  com a medida da peça no plano dela (`PLANO_ANALISE_V2_N5.md`, `_N6.md`, `_N7.md`). Esses contrastes são **secundários** e ficam
+  **fora** da família de Holm das predições primárias (E8).
+- As faixas próprias do N5 (12101…13505), do N6 (19101…20505) e do N7 (21101…22505) não são usadas.
+- O plano da calibração conjunta (quais parâmetros, em que grade, com que regra de escolha, e o N do adendo de tamanho de amostra)
+  é a tarefa K1 (`docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md`) e entra antes de qualquer run.
+
