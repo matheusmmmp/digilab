@@ -1989,3 +1989,13 @@ Tarefa `docs/TAREFA_V2_N6_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N6.md`. Nenh
   não previa.
 - **Vidas no git só da base** (120 `.jsonl`, ~10 MB). Os pontos T, J e X são regeneráveis pela config; o resumo de cada um fica em
   `resultado.json` e `medidas.json`.
+
+## 2026-10-05 — Fim da rodada 6: decisões R1–R4 e tarefas da rodada 7
+
+- O Matheus aprovou R1–R4 da revisão do aprendiz (`docs/RESULTADO_V2_REVISAO_APRENDIZ.md`), como recomendadas:
+  - R1: o ponto de partida das calibrações é o T3 (teto 16·S);
+  - R2: a decisão de comer passa a ver qual fruta está no cenário (tarefa dividida entre o chat A, no mundo, e o chat B, no cérebro);
+  - R3: o traço de elegibilidade fica desligado;
+  - R4: a exposição fica como está.
+- A N5-2 continua: a informação do dono só entra na escolha de qual fruta.
+- Marco em `docs/V2_RODADA_6.md`.
