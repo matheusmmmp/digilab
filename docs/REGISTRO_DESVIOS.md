@@ -1938,3 +1938,23 @@ Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes 
   senão `escolha_aprendida_fruta`. Com o aprendizado desligado o peso é o prior S e a escolha é sempre do incentivo (teste).
 - **Teste ajustado:** `tests/test_informacao.py::test_informante_certo_e_errado_nos_mesmos_ticks_com_conteudo_oposto` exigia que o modo
   `acoplado` não existisse; agora confere um modo desconhecido e o acoplado montado sem o construtor (os dois falham alto).
+
+## 2026-10-04 — N6-PLANO: plano da memória de episódios no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_N6_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N6.md`. Nenhuma run, nenhum código.
+- **O número de 6,9% está em outro arquivo.** A tarefa aponta `artifacts_v1_memoria_espacos/metrics.json`, mas a fração de motivos que
+  citam memória está no `espacos.json` da mesma pasta (`fracao_motivos_citam_memoria_total` 0,0692; `por_braco` de 0,0625 a 0,0778). O
+  plano cita o `espacos.json`.
+- **A comparação com a v1 muda de denominador.** Na v1 a memória entrava em toda decisão; no N6 ela só age nas sub-decisões com duas
+  frutas ou mais (decisão N6-1 do plano). Sobre todos os motivos o N6 fica abaixo de 6,9% por construção (no máximo ~1,8% com 24 escolhas
+  em 14 dias). O gate G-CITA compara as decisões em que a memória pode agir nos dois casos; a fração sobre todos os motivos é só descritiva.
+- **Memória sem aprendizado do lobo de decisão.** Os braços de memória rodam sobre o P0 (pesos no prior), para a memória ser a única
+  plasticidade. Com o P1, o peso `w_f` já guarda a associação, e a diferença não separaria episódio de associação (secundário descritivo).
+- **"Estado atual igual" em dois níveis:** na decisão, pela sonda contrafactual (a mesma escolha refeita com a contribuição da memória
+  zerada, com o mesmo `u`); na vida, pelos acoplados no registro do braço relevante (`M0<MR`, `MT<MR`, `ME<MR`: mesmo cuidado, mesmas
+  ofertas, mesmo genoma).
+- **Espaços sem `exp`.** A ativação da v1 decai por `exp`; os lobos não usam função transcendental (paridade com a web). No N6 o
+  esquecimento vem só da regra dos espaços; relembrar fica desligado (candidato da L2 pela D7).
+- **Faixas propostas** 19101…19505 (calibração) e 20101…20505 (validação), conferidas contra `FAIXAS_RESERVADAS`, o roadmap e a busca no
+  repositório. As `FAIXAS_RESERVADAS` da bancada não listam hoje o N11 (16101…17505) nem a revisão do aprendiz (18101…18505); fica para
+  quem implementar.
