@@ -59,17 +59,17 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
     assert sha256_engine() == ENGINE_SHA256_V0
     assert {b: (x.fonte, x.no) for b, x in bv.BRACOS.items()} == {
         "P0": ("nenhuma", "N0"), "P1": ("consequencia", "N3"), "P2": ("informacao", "N5"), "P2e": ("informacao", "N5"),
-        "P3": ("dono", "N1")}
-    assert bv.BRACOS["P2"].informacao == "certa" and bv.BRACOS["P2e"].informacao == "errada"
+        "P2a": ("informacao", "N5"), "P3": ("dono", "N1")}
+    assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
 
-@pytest.mark.parametrize("braco,no", [("P2", "N5"), ("P2e", "N5")])                # o P1 chegou no N3
-def test_fontes_que_ainda_nao_existem_falham_alto_com_o_no(braco, no):
-    with pytest.raises(NotImplementedError, match=no):
-        BANCADA.vida(bv.EspecVida("atencioso", braco, 101))
-    with pytest.raises(NotImplementedError, match=no):
-        bv.validar_config({"bracos": [braco], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
-                           "sonda": SONDA, "bootstrap": {}})
+@pytest.mark.parametrize("braco", ["P2", "P2e", "P2a"])                       # o P1 chegou no N3, a informacao na BANCADA-N5
+def test_a_informacao_so_existe_num_mundo_das_frutas(braco):
+    for mundo in ("padrao", "bola"):
+        with pytest.raises(ValueError, match="mundo das frutas"):
+            BANCADA.vida(bv.EspecVida("atencioso", braco, 101, mundo=mundo))
+    bv.validar_config({"bracos": [braco], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
+                       "sonda": SONDA, "bootstrap": {}, "mundos": ["descasado"]})
 
 
 def test_mundo_cerebro_braco_e_filtro_desconhecidos_falham_alto():
