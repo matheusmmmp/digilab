@@ -2068,6 +2068,22 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
 - **O teste da presença usa o instinto das frutas por baixo de um espião** (que só anota a `Observacao` e delega), porque nenhuma
   política de hoje lê o campo.
 
+## 2026-10-05 — N7: decisões N7-1 a N7-10 aprovadas como recomendadas
+
+- O Matheus aprovou N7-1 a N7-10 de `docs/PLANO_ANALISE_V2_N7.md` como recomendadas ("segue o recomendado"); o plano registra isso no
+  status e na seção 15. Nenhum número, gate ou faixa mudou.
+- Com a N7-9, as faixas 21101…21505 (calibração) e 22101…22505 (validação) ficam pedidas ao coordenador; entram nas `FAIXAS_RESERVADAS`
+  quando ele as fechar.
+
+## 2026-10-05 — N7-1 a N7-10 aprovadas; tarefas paralelas da rodada 7
+
+- O Matheus aprovou N7-1 a N7-10 do `docs/PLANO_ANALISE_V2_N7.md`, como recomendadas. Faixas do N7: 21101…21505 e 22101…22505.
+- A FRUTA-NO-CENARIO parte A foi mesclada (#154), e o chat B segue com a parte B e o N5.
+- Enquanto isso, os outros chats recebem tarefas paralelas que não mexem no `lobos.py`:
+  - A: N7-MUNDO, o lado do mundo do pedido do dono;
+  - D: BANCADA-N6-N7;
+  - C: LEITURA-PARCIAL, com a lista das validações a refazer.
+
 ## 2026-10-05 — V2, FRUTA-NO-CENARIO, parte B (chat B, `docs/TAREFA_V2_FRUTA_NO_CENARIO.md`)
 
 - **Montada sobre o branch da parte A.** O pedido era começar quando a parte A (#154) estivesse na `main`. Quando o Matheus avisou, o
