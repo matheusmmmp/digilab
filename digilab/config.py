@@ -1194,6 +1194,12 @@ class ConfigLobos:
     # 0 nada) na sub-decisao da fruta. 0 = entrada desligada (sem termo e sem aprendizado: a vida de hoje, byte a byte). A grade
     # {S/4, S/2, 3S/4} e calibrada no N5 (sementes 12101...12505), abaixo do teto, para o peso poder cruzar o zero.
     w0_info: int = 0                         # PROPOSTO: N5-1
+    # --- REVISAO-APRENDIZ (docs/TAREFA_V2_REVISAO_APRENDIZ.md, docs/PLANO_ANALISE_V2_REVISAO_APRENDIZ.md): a janela de credito ---
+    # Traco de elegibilidade curto, em inteiros: o sinal f_S creditado a uma decisao (consequencia, elogio ou bronca) tambem chega as
+    # `traco_decisoes` decisoes anteriores, a k-esima com div_arred(f_S * traco_fator**k, S**k) (traco_fator na escala S, < S). O
+    # credito do chamado (latencia, ignorado) fica preso ao chamado. 0 = sem traco: o credito de hoje, byte a byte.
+    traco_decisoes: int = 0                  # PROPOSTO: alavanca da revisao (grade no plano)
+    traco_fator: int = 0                     # PROPOSTO: lambda x S do traco (so com traco_decisoes > 0)
 
     @property
     def escala(self) -> int:
