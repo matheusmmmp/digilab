@@ -1799,3 +1799,33 @@ dos testes. Só `lobos.py` mudou (e dois testes de outras frentes, abaixo). Inte
   com o estado interno sem as chaves da parte B; as vidas do P1, P2, P2e e P2a mudam por desenho. `tests/test_lobos_mundo.py`: a contagem de
   pesos (+3).
 - **Não mudou:** `engine.py`, `AcaoPet`, o bandit, `frutas.py`, a bancada, a web; os lobos sem frutas e o P0/P3 nas frutas, byte a byte.
+
+## V2, N7-MUNDO — o pedido "deixe a fruta X" e o dono que pede (2026-10-05, `docs/TAREFA_V2_N7_MUNDO.md`, `docs/PLANO_ANALISE_V2_N7.md`) — GATES PASSAM
+
+Lado do mundo do N7 (pré-requisito R4 do plano; decisões N7-1, N7-6, N7-7 e N7-8). Infraestrutura, sem run de pesquisa nem faixa reservada;
+só as sementes dos testes (11, 22, 33). Mudaram `events.py` (fim do enum), `frutas.py`, `policy.py` (o campo), `config.py` (`ConfigPedido`)
+e `protocol.py` (o registro dela); `engine.py`, `AcaoPet`, `lobos.py` (a entrada `pedido` é do chat B), `ambiente.py`, a bancada (chat D) e
+a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Evento:** `AcaoUsuario.PEDIR_DEIXAR_FRUTA_<A|B|C>` no fim do enum (`ACOES_PEDIDO`, `pedido_de`, `pedir_deixar`), separado da informação
+  do N5: é a vontade do dono, sem valor de verdade. Só o `MotorFrutas` com `ConfigPedido.ligada` (exige as frutas) aceita; sem a chave,
+  `PedidoSemChave`.
+- **O pedido não é cuidado nem reforço:** não mexe no estado, não conta como contato, não passa por `receber_acao_dono` e fica **fora do
+  orçamento**, pelo canal das ofertas (B2). Fica vigente por `ConfigPedido.janela_min` (240, PROPOSTO, a mesma da informação) para a
+  **percepção** `Observacao.pedido_frutas` (−1 na fruta com pedido vigente, 0 nas outras, na ordem de `FRUTAS`; padrão neutro), injetada
+  antes de cada decisão; pedir de novo renova. Registros derivados: `MotorFrutas.pedidos`, `decisoes_com_pedido` e **`desobediencias`** (o
+  pet comeu uma fruta que tinha −1 na percepção daquela decisão). Com a chave, `estado()` ganha `pedido` e `desobediencias` (a contagem).
+- **`DonoPedinte`:** a fruta X sorteada uma vez por vida por `derivar_semente("pedido-fruta", semente)`, uniforme entre as frutas e sem
+  olhar a preferência inata (N7-6); pede "deixe X" logo depois de cada oferta que tem X, só nos dias 1…`dias_pedido` (10, PROPOSTO) e nada
+  depois (a extinção, N7-7). Com `bronca=True` (só o P3+ped, N7-8), uma `repreender` por desobediência no primeiro passo do dono depois
+  dela, também fora do orçamento (a bronca chega ao aprendiz, como deve). `simular_vida_frutas(..., pedinte=)` chama
+  `pedinte.acoes(motor.estado(), ofertadas)` depois das ofertas e do informante; `Vida.pedidos` e `Vida.broncas`.
+- **Gates** (`tests/test_n7_pedido.py`, 24 testes, ~6 s): **G2**, 48 vidas (instinto e lobos aprendendo, com e sem o informante; 4 donos;
+  3 sementes) iguais a `tests/gabaritos/n7_vidas_de_hoje.json`, gravado com o código da main **antes** da mudança (commit próprio), e a
+  chave ligada sem pedido = a desligada; **o pedido não altera o estado nem o orçamento** (com o instinto, a vida com o pedinte e sem ele têm
+  o mesmo estado, ações, rngs e consumos, o log só ganha os pedidos e o canal fecha os mesmos 48; o evento não muda o `Estado`); **não chega
+  ao aprendiz** (espião); a **percepção** decisão a decisão; **as fases** (vida de 14 dias: pedido no mesmo tick de toda oferta de X até o
+  fim do dia 10, nenhum depois) e **o sorteio** (600 sementes: uniforme, independente da preferida, o `random` global intacto); **a bronca**
+  só com a chave, uma por desobediência, no primeiro passo depois; **G1** com pedidos, broncas e o informante; os erros de uso.
+- **Para os chats B e D:** a entrada `pedido` dos lobos lê `obs.pedido_frutas`; a bancada monta o P0+ped, P1+ped e P3+ped com
+  `DonoPedinte.da_semente(semente, CONFIG_PEDIDO_LIGADA, bronca=...)` (as ações saem de `acoes(estado, ofertadas)`), põe os pedidos (e só
+  eles) no que fica fora do orçamento e tira os pedidos e as broncas no `sem_ensino` (plano 4.2).

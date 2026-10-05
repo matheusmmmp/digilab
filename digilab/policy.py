@@ -42,6 +42,9 @@ class Observacao:
     # ausente): as mesmas frutas que a sub-decisao de comer considera. So o MotorFrutas com as frutas ligadas injeta; ninguem le ainda
     # (a decisao de comer dos lobos que le e a parte B). `fruta` continua o maior incentivo entre elas.
     frutas_cenario: tuple = (0.0, 0.0, 0.0)
+    # V2, N7: o pedido do dono vigente, na ordem de events.FRUTAS: -1 na fruta que o dono pediu para deixar, 0 nas outras. So o MotorFrutas
+    # com ConfigPedido.ligada injeta; ninguem le ainda (a entrada `pedido` dos lobos e do chat B).
+    pedido_frutas: tuple = (0.0, 0.0, 0.0)
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":
