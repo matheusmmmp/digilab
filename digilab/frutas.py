@@ -32,7 +32,9 @@ V2, N5, lado do mundo (docs/TAREFA_V2_N5_MUNDO.md; com ConfigInformacao.ligada, 
                          informacao vigente, na ordem de FRUTAS). Informar de novo renova; o conteudo contrario troca o valor.
                          Registro derivado `informacoes` (tick, fruta, conteudo, prazo). Desligada: nada disso existe.
   DonoInformante         o dono sintetico que informa logo depois de cada oferta, sobre cada fruta oferecida, com o efeito real (E7):
-                         modo `certo` (P2) diz o efeito real, modo `errado` (P2e) o contrario, nos mesmos ticks e na mesma frequencia.
+                         modo `certo` (P2) diz o efeito real, modo `errado` (P2e) o contrario, nos mesmos ticks e na mesma frequencia;
+                         modo `acoplado` (P2a, N5-4): o mesmo multiconjunto de frutas do P2 da unidade, com o conteudo verdadeiro, em
+                         ticks sorteados uniformemente na vida pela rng propria `informacao-acoplada` (nao toca nenhuma outra rng).
 """
 
 from __future__ import annotations
@@ -391,11 +393,17 @@ class DonoInformante:
     """N5: o dono que informa sobre cada fruta oferecida, logo depois da oferta (os mesmos ticks em todos os modos: o calendario de
     ofertas nao depende do braco). Ele conhece o efeito real de cada fruta no humor (E7). Conteudo binario: "mal" se o efeito real e
     negativo, "bem" caso contrario (fruta neutra = "bem"). Modo `certo` (P2) diz o efeito real; `errado` (P2e), o contrario.
-    Nomes definidos no docs/PLANO_ANALISE_V2_N5.md (PR #142). O terceiro modo, `acoplado` (secao 4.2 do plano: o mesmo multiconjunto
-    de (fruta, conteudo verdadeiro) do modo certo da unidade, em ticks sorteados uniformemente na vida pela rng
-    derivar_semente("informacao-acoplada", semente), fora do orcamento), fica para a implementacao do N5 na rodada 6."""
+    Nomes definidos no docs/PLANO_ANALISE_V2_N5.md (PR #142).
 
-    MODOS = ("certo", "errado")
+    Modo `acoplado` (P2a; plano do N5, secao 4.2; decisao N5-4): o mesmo multiconjunto de (fruta, conteudo) que o modo certo da
+    unidade produziu, com o conteudo VERDADEIRO, em ticks sorteados uniformemente ao longo da vida (um passo do dono, sem reposicao
+    de ordem: cada item sorteia o seu) pela rng propria derivar_semente("informacao-acoplada", semente), toda consumida na
+    construcao, antes da vida: nao toca a rng de ambiente, de politica, da fruta nem a do dono. A ordem em que as frutas chegam nao
+    importa (o multiconjunto e ordenado antes do sorteio). So a contingencia com a oferta some. Fora do orcamento, como os outros.
+    A vida chama `acoes_do_passo(tick, ofertadas)` em todo passo do dono: certo e errado respondem as ofertas do passo; o acoplado
+    devolve o que a agenda marcou para aquele tick."""
+
+    MODOS = ("certo", "errado", "acoplado")
 
     def __init__(self, modo: str, efeito_humor: dict) -> None:
         if modo not in self.MODOS:
@@ -405,6 +413,41 @@ class DonoInformante:
         self.modo = modo
         self.efeito_humor = dict(efeito_humor)
         self.feitas: list[tuple[int, str, str]] = []
+        self.agenda: dict[int, list[str]] = {}         # so o acoplado: tick -> frutas a informar
+        if modo == "acoplado":
+            self._construido = False                   # so pelo construtor `acoplado`, com o multiconjunto e a rng
+
+    @classmethod
+    def acoplado(cls, efeito_humor: dict, frutas_do_p2: list[str], semente: int, dias: int,
+                 passo_ticks: int | None = None) -> "DonoInformante":
+        """O P2a da unidade: `frutas_do_p2` e o multiconjunto das frutas sobre as quais o P2 (modo certo) da MESMA unidade informou;
+        `semente` e a da unidade (a rng e derivar_semente("informacao-acoplada", semente)); `dias` e a duracao da vida."""
+        passo = passo_ticks or CONFIG_DONOS.passo_ticks
+        total = dias * TICKS_POR_DIA
+        if total % passo != 0 or total <= 0:
+            raise ValueError(f"duracao {dias} dias nao e multipla do passo do dono {passo}")
+        fora = [f for f in frutas_do_p2 if f not in FRUTAS]
+        if fora:
+            raise ValueError(f"frutas desconhecidas no multiconjunto do P2: {fora}")
+        d = cls("acoplado", efeito_humor)
+        rng = random.Random(derivar_semente("informacao-acoplada", semente))
+        passos = total // passo
+        for f in sorted(frutas_do_p2, key=FRUTAS.index):
+            tick = (rng.randrange(passos) + 1) * passo        # o tick em que o dono age depois do passo sorteado
+            d.agenda.setdefault(tick, []).append(f)
+        d._construido = True
+        return d
+
+    @classmethod
+    def acoplado_de(cls, p2: "DonoInformante", semente: int, dias: int, passo_ticks: int | None = None) -> "DonoInformante":
+        """O P2a a partir do informante certo de uma vida P2 ja jogada (o multiconjunto sai das informacoes que ele fez)."""
+        if p2.modo != "certo":
+            raise ValueError(f"o acoplado copia o P2 (modo certo), nao o modo {p2.modo!r}")
+        return cls.acoplado(p2.efeito_humor, [f for _, f, _ in p2.feitas], semente, dias, passo_ticks)
+
+    def pendentes(self) -> int:
+        """quantas informacoes da agenda do acoplado ainda nao sairam (0 no fim de uma vida inteira)"""
+        return sum(len(v) for v in self.agenda.values())
 
     @classmethod
     def do_genoma(cls, modo: str, semente_genoma: int, cf: ConfigFrutas) -> "DonoInformante":
@@ -413,13 +456,29 @@ class DonoInformante:
 
     def conteudo(self, fruta: str) -> str:
         real = "mal" if self.efeito_humor[fruta] < 0.0 else "bem"
-        if self.modo == "certo":
+        if self.modo in ("certo", "acoplado"):                # o acoplado diz a verdade (N5-4)
             return real
         return "bem" if real == "mal" else "mal"
 
     def acoes(self, tick: int, ofertadas: list[str]) -> list[AcaoUsuario]:
+        """certo e errado: uma informacao por fruta oferecida neste passo"""
+        if self.modo == "acoplado":
+            raise ValueError("o acoplado nao responde a ofertas: use acoes_do_passo")
         out = []
         for f in ofertadas:
+            c = self.conteudo(f)
+            self.feitas.append((tick, f, c))
+            out.append(informar(f, c))
+        return out
+
+    def acoes_do_passo(self, tick: int, ofertadas: list[str]) -> list[AcaoUsuario]:
+        """o que o dono informa neste passo: certo e errado, sobre as ofertas do passo; acoplado, o que a agenda marcou"""
+        if self.modo != "acoplado":
+            return self.acoes(tick, ofertadas)
+        if not self._construido:
+            raise ValueError("informante acoplado sem agenda: construa com DonoInformante.acoplado")
+        out = []
+        for f in self.agenda.pop(tick, []):
             c = self.conteudo(f)
             self.feitas.append((tick, f, c))
             out.append(informar(f, c))
@@ -448,15 +507,15 @@ def simular_vida_frutas(braco: str, dono, politica, semente: int, dias: int, orc
         visao = Visao(estado=motor.estado(), passo=passo, passos_totais=passos, orcamento=orcamento, gasto=canal.gasto,
                       minimo_obrigatorio=minimo, maximo_permitido=maximo)
         canal.aplicar(dono.decidir(visao, rng_dono), passo, passos)
-        if ofertas is not None:
-            feitas = ofertas.acoes(motor.estado())
-            for a in feitas:
+        feitas = ofertas.acoes(motor.estado()) if ofertas is not None else []
+        for a in feitas:
+            motor.observar(a)
+            n_ofertas += 1
+        if informante is not None:
+            # N5: fora do orcamento, pelo canal das ofertas (B2); certo/errado respondem as ofertas, o acoplado segue a agenda
+            for a in informante.acoes_do_passo(motor._estado.tick, [fruta_de(x) for x in feitas]):
                 motor.observar(a)
-                n_ofertas += 1
-            if informante is not None and feitas:
-                for a in informante.acoes(motor._estado.tick, [fruta_de(x) for x in feitas]):
-                    motor.observar(a)                  # N5: fora do orcamento, pelo canal das ofertas (B2)
-                    n_informacoes += 1
+                n_informacoes += 1
     canal.fechar()
     v = Vida(braco=braco, semente_coorte=semente, motor=motor, interacoes=canal.gasto)
     v.ofertas = n_ofertas

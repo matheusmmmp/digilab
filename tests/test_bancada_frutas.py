@@ -16,7 +16,7 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 import bancada_v2 as bv  # noqa: E402
-from digilab.config import CONFIG_BOLA, CONFIG_FRUTAS_LIGADA, TICKS_POR_DIA  # noqa: E402
+from digilab.config import CONFIG_BOLA, CONFIG_FRUTAS_LIGADA, CONFIG_INFORMACAO_LIGADA, TICKS_POR_DIA  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import ACOES_FRUTAS, ACOES_V1, FRUTAS, LogDeEventos  # noqa: E402
 from digilab.frutas import GenomaFrutas, MotorFrutas, PoliticaInstintoFrutas, genoma_frutas  # noqa: E402
@@ -97,16 +97,15 @@ def test_ofertas_fora_do_orcamento_e_do_sorteio_do_aleatorio():
     assert len(inicios) > 1
 
 
-def test_p0_lobos_e_o_instinto_que_nao_ve_as_frutas():
-    """Os lobos ainda nao veem as frutas (a regra e do chat B): no mundo das frutas o P0 com lobos e o instinto sem o candidato
-    da fruta (w_fruta = 0), no mesmo motor e com as mesmas ofertas."""
-    cega = replace(CONFIG_FRUTAS_LIGADA, w_fruta=0.0)
+def test_p0_lobos_e_o_instinto_que_ve_as_frutas():
+    """Desde a BANCADA-N5 os lobos veem as frutas (LOBOS-MUNDO): no mundo das frutas o P0 com lobos e o instinto das frutas, no
+    mesmo motor e com as mesmas ofertas (o gate de fato fica em tests/test_bancada_n5.py)."""
     for s in (101, 404):
         for mundo in MUNDOS_FRUTAS:
             espec = bv.EspecVida("atencioso", "P0", s, mundo=mundo)
             lob = BANCADA.vida(espec)
             ref = bv.simular_vida_mundo(criar_dono("atencioso"), bv.CalendarioFrutas(s, CONFIG_FRUTAS_LIGADA),
-                                        PoliticaInstintoFrutas(None, CONFIG_BOLA, cega), s, DIAS, ORC, "atencioso",
+                                        PoliticaInstintoFrutas(None, CONFIG_BOLA, CONFIG_FRUTAS_LIGADA), s, DIAS, ORC, "atencioso",
                                         BANCADA.fabrica_motor(espec))
             assert bv.resumo_motor(lob.motor)[:5] == bv.resumo_motor(ref)[:5]
 
@@ -119,7 +118,7 @@ def test_o_motor_do_mundo_so_muda_o_efeito():
 
         def fm(politica, cfg, semente):
             m = MotorFrutas(politica, cfg, semente, NEUTRO, "brasa", obediencia_desligada=True, cfg_bola=CONFIG_BOLA,
-                            cfg_frutas=CONFIG_FRUTAS_LIGADA)
+                            cfg_frutas=CONFIG_FRUTAS_LIGADA, cfg_informacao=CONFIG_INFORMACAO_LIGADA)
             m.efeito_humor = dict(v.motor.efeito_humor)
             return m
 
@@ -213,8 +212,10 @@ def test_medir_nos_mundos_das_frutas():
         assert f["taxa_fruta_ruim"]["inicio"]["ruins"] + f["taxa_fruta_ruim"]["final"]["ruins"] == ruins
         assert 0.0 <= m["humor_medio"] <= 1.0 and m["condicao"] == bv.MUNDOS[mundo].condicao
         assert BANCADA.medir(v, SONDA) == m                                  # medir nao muda a vida
-    lob = BANCADA.medir(_vida("atencioso", "P0", 404, "descasado", "lobos"), SONDA)
-    assert lob["frutas"]["consumos"] == 0 and lob["frutas"]["taxa_fruta_ruim"]["final"]["taxa"] is None
+    lob = BANCADA.medir(_vida("atencioso", "P0", 404, "descasado", "lobos"), SONDA)        # os lobos veem as frutas: comem
+    ins = BANCADA.medir(_vida("atencioso", "P0", 404, "descasado", "instinto"), SONDA)
+    assert lob["frutas"]["consumos"] == ins["frutas"]["consumos"] > 0
+    assert lob["frutas"]["taxa_fruta_ruim"] == ins["frutas"]["taxa_fruta_ruim"]
     assert BANCADA.medir(_vida("atencioso", "P0", 404, "padrao", "lobos"), SONDA)["frutas"] is None
 
 

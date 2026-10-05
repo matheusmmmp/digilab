@@ -67,11 +67,12 @@ def test_configuracoes_invalidas_falham_alto():
 
 @pytest.mark.parametrize("dono", DONOS)
 def test_bola_a1_e_a_vida_da_a1_byte_a_byte(dono):
-    """bola_a1 com o instinto que ve a bola = braco "bola" da A1; com os lobos (que ainda nao veem a bola) = braco "bolacega"."""
+    """bola_a1 = braco "bola" da A1, com o instinto que ve a bola e, desde a BANCADA-N5, tambem com os lobos (que veem a bola,
+    LOBOS-MUNDO); o "bolacega" da A1 e o instinto com w_bola = 0, sem cerebro na bancada."""
     from run_v2_a1 import _dono, _fabricas
 
     for s in (101, 303):
-        for braco_a1, cerebro in (("bola", "instinto"), ("bolacega", "lobos")):
+        for braco_a1, cerebro in (("bola", "instinto"), ("bola", "lobos")):
             fp, fm = _fabricas(braco_a1, CONFIG_BOLA_LIGADA)
             a1 = simular_vida(f"{dono}-{braco_a1}", _dono(braco_a1, dono, CONFIG_BOLA_LIGADA), fp(), s, DIAS, ORC,
                               rotulo_dono=dono, fabrica_motor=fm)
@@ -176,7 +177,7 @@ def test_acoplado_no_proprio_braco_reproduz_a_vida_no_mundo(mundo):
 
 def test_acoplado_nao_perde_os_eventos_do_mundo():
     """P3 no mundo da bola acoplado ao P0 sem os sinais: o log e o da origem sem elogios e broncas, com toda bola no mesmo
-    tick, e a vida e a do instinto (que nao ve a bola) nesse registro, no mesmo mundo."""
+    tick, e a vida e a do instinto que ve a bola nesse registro, no mesmo mundo (os lobos veem a bola desde a BANCADA-N5)."""
     for dono, s in (("atencioso", 101), ("incoerente", 505)):
         origem = BANCADA.vida(bv.EspecVida(dono, "P3", s, mundo="bola"))
         assert _bolas(origem.motor.log)
@@ -184,8 +185,8 @@ def test_acoplado_nao_perde_os_eventos_do_mundo():
         assert _bolas(a.motor.log) == _bolas(origem.motor.log) and a.eventos_mundo == origem.eventos_mundo
         assert a.motor.log.para_jsonl() == bv.filtrar_log(origem.motor.log, bv.SINAIS).para_jsonl()
         assert not any(e.tipo == "acao_usuario" and str(e.valor) in bv.SINAIS for e in a.motor.log)
-        cega = replace(CONFIG_BOLA_LIGADA, w_bola=0.0)
-        fp, fm = fabricas_ambiente(cfg_bola=CONFIG_BOLA_LIGADA, politica_fabrica=lambda cfg=None: PoliticaInstintoBola(cfg, cega))
+        fp, fm = fabricas_ambiente(cfg_bola=CONFIG_BOLA_LIGADA,
+                                   politica_fabrica=lambda cfg=None: PoliticaInstintoBola(cfg, CONFIG_BOLA_LIGADA))
         ref = reproduzir_ambiente(a.motor.log, fp, semente=s, fabrica_motor=fm)
         assert bv.resumo_motor(ref) == bv.resumo_motor(a.motor)
         assert a.rotulo_braco == "P0<P3:sem_sinais" and a.interacoes < origem.interacoes
@@ -213,7 +214,7 @@ def test_medir_no_mundo_da_bola():
     assert mi["deriva_final"] == ml["deriva_final"] == 0.0                # o P0 nao deriva, com ou sem a bola na sonda
     assert m3["custo_da_plasticidade"]["deriva_maxima"] > 0.0
     assert BANCADA.medir(p3, SONDA, piso=ml["acerto_total"]) == m3       # medir nao muda a vida
-    # os lobos ainda nao tem a regra da bola; o instinto que ve a bola usa a regra bola_no_cenario
+    # desde a BANCADA-N5 os lobos veem a bola: os dois usam a regra bola_no_cenario quando ha bola no tempo livre
     reg = []
 
     def fab(cfg=None):
@@ -222,7 +223,8 @@ def test_medir_no_mundo_da_bola():
         return r
 
     reproduzir_ambiente(lob.motor.log, fab, semente=303, fabrica_motor=BANCADA.fabrica_motor(lob.espec))
-    assert {r for _, r, _ in reg[0].bola} <= set(REGRAS) and any(b for b, _, _ in reg[0].bola)
+    assert "bola_no_cenario" in {r for _, r, _ in reg[0].bola} and any(b for b, _, _ in reg[0].bola)
+    assert {r for _, r, _ in reg[0].bola} <= set(REGRAS) | {"bola_no_cenario", "fruta_no_cenario"}
     reg.clear()
 
     def fab_i(cfg=None):
