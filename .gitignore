@@ -70,6 +70,7 @@ artifacts_educacao_v3c/vidas/
 artifacts_linhagem/natureza_criacao_v21d/*/partidas_*.json
 artifacts_linhagem/natureza_criacao_v21d/*/vidas/
 !artifacts_v2_revisao/
+!artifacts_v2_k4/
 # V2, REVISAO-APRENDIZ: os politica.json das vidas (motivos por decisao) sao regeneraveis por replay do .jsonl
 artifacts_v2_revisao/**/vidas/*.politica.json
 # os pontos T, J e X: vidas regeneraveis pela config (o resumo de cada um fica em resultado.json e medidas.json)
