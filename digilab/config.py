@@ -1200,6 +1200,20 @@ class ConfigLobos:
     # credito do chamado (latencia, ignorado) fica preso ao chamado. 0 = sem traco: o credito de hoje, byte a byte.
     traco_decisoes: int = 0                  # PROPOSTO: alavanca da revisao (grade no plano)
     traco_fator: int = 0                     # PROPOSTO: lambda x S do traco (so com traco_decisoes > 0)
+    # --- N6, memoria de episodios (docs/PLANO_ANALISE_V2_N6.md, N6-1 a N6-10; docs/TAREFA_V2_CEREBRO_N6_N7.md) ---
+    # Episodios de consumo de fruta (a fruta e a valencia do humor) nos espacos da v1 (ConfigMemoriaEspacos: 4 + 2, 12 h), sem
+    # decaimento e sem relembrar (N6-4). Entram so na escolha de qual fruta (N6-1): m_f = div_arred(ganho x valencia_f, S), com
+    # ganho < S. Desligada (o padrao): nada existe (a vida e o estado interno de hoje). Ligada com ganho 0: o M0 do plano (registra
+    # e codifica, contribuicao zero).
+    memoria_ligada: bool = False             # PROPOSTO: N6, chave
+    memoria_ganho: int = 0                   # PROPOSTO: N6-10, grade {S/4, S/2, 3S/4} calibrada no N6 (19101...19505)
+    memoria_modo: str = "relevante"          # PROPOSTO: "relevante" (MR), "recencia" (MT) ou "embaralhada" (ME), secao 4.1
+    memoria_janela_recencia_ticks: int = 240  # PROPOSTO: N6-5, a janela do braco "recencia"
+    memoria_permutacao: tuple = ()           # o desarranjo pi de FRUTAS do braco "embaralhada" (lobos.desarranjo_n6(semente), N6-6)
+    # --- N7, arbitragem (docs/PLANO_ANALISE_V2_N7.md, N7-1 a N7-10) ---
+    # Confianca de partida no pedido do dono ("deixe a fruta X"): o peso inteiro, compartilhado, da entrada `pedido` na decisao de comer
+    # (fome_moderada, fruta_no_cenario) e na escolha da fruta. 0 = entrada desligada (a vida de hoje, byte a byte).
+    w0_pedido: int = 0                       # PROPOSTO: N7-4, grade {S/4, S/2, 3S/4} calibrada no N7 (21101...21505)
 
     @property
     def escala(self) -> int:
@@ -1309,3 +1323,19 @@ class ConfigInformacao:
 
 CONFIG_INFORMACAO = ConfigInformacao()
 CONFIG_INFORMACAO_LIGADA = ConfigInformacao(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigPedido:
+    """V2, N7, lado do mundo (docs/TAREFA_V2_N7_MUNDO.md; docs/PLANO_ANALISE_V2_N7.md, secao 2): o dono pede \"deixe a fruta X\". O pedido
+    nao e cuidado nem reforco: nao mexe no estado, nao passa pelo aprendiz como sinal e fica fora do orcamento (o canal das ofertas, B2).
+    Ele so fica disponivel para a percepcao (`Observacao.pedido_frutas`) por uma janela. Exige ConfigFrutas.ligada. Tudo PROPOSTO
+    (protocol.PARAMETROS_PEDIDO_N7). Desligada: nada muda (a vida das frutas byte a byte), e um pedido no log levanta erro."""
+
+    ligada: bool = False
+    janela_min: int = 240                    # quanto tempo um pedido vale para a percepcao, desde o evento (pedir de novo renova)
+    dias_pedido: int = 10                    # o DonoPedinte so pede nos dias 1..dias_pedido; depois e a extincao (N7-7)
+
+
+CONFIG_PEDIDO = ConfigPedido()
+CONFIG_PEDIDO_LIGADA = ConfigPedido(ligada=True)

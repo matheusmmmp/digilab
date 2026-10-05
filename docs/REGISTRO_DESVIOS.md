@@ -2133,6 +2133,78 @@ Tarefa `docs/TAREFA_V2_LEITURA_PARCIAL.md`; entrega `docs/LEITURA_PARCIAL_V2_FAS
   - `docs/TAREFA_V2_CEREBRO_N6_N7.md` (B, etapa C1);
   - `docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md` (C, etapa K1).
 
+## 2026-10-05 — K1: plano da calibração conjunta e adendo de tamanho de amostra; interpretações
+
+Tarefa `docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md`; entrega `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`. Nenhuma run, nenhum código.
+- **A regra de calibração do N5 (N5-1) lia uma predição primária.** Ela escolhia o `w0_info` pelo contraste P2e − P1 na janela inicial,
+  que é a predição 4(a) do experimento maior, dentro da família de Holm. Com a calibração conjunta nas mesmas bases do experimento, o
+  plano propõe trocá-la (decisão K-3) por uma verificação de manipulação: a fração das escolhas de fruta com informação vigente decididas
+  pela informação (sonda contrafactual), com o mesmo piso de 0,069 da memória (N6-10).
+- **A seção 8.2 do experimento maior** ("nada do aprendiz se calibra aqui") foi escrita antes da revisão 3 do roadmap; a calibração que
+  era de cada nó passou para o K1. As predições e a estatística não mudam.
+- **P0 com tudo desligado** (decisão K-1): a memória, a informação, o pedido e os canais só nos braços que aprendem, para o P0 seguir
+  sendo o instinto byte a byte (contrato K1).
+- **A grade do ganho do P1 sobe ({4, 8, 16})** porque no T3 com ganho 4 a deriva ainda cresce no fim da vida (razão 14/7 de 2,92 e 2,64,
+  `artifacts_v2_revisao/calibracao/T3/resultado.json`).
+- **Os blocos N6 e N7 usam as unidades do experimento maior**, não as derivações próprias dos planos deles (`"n6"`, `"n7"`), para o
+  pareamento atravessar os blocos.
+- **O controle de capacidade sem lobos (E6) fica fora**: a bancada não tem o `camada_unica` (é do N11).
+- **O custo** foi estimado pela revisão do aprendiz (~5,5 s por vida: 1 h 50 min para 1200 vidas); é estimativa, não medida desta run.
+
+## 2026-10-05 — V2, N7-MUNDO: o pedido "deixe a fruta X" e o dono que pede (`docs/TAREFA_V2_N7_MUNDO.md`)
+
+- **`config.py` e `protocol.py` também mudaram**, fora da lista da tarefa ("só `events.py`, `frutas.py`/`ambiente.py`, `policy.py`"): os
+  números novos (`janela_min`, `dias_pedido`) e a chave têm de ficar em `config.py` (regra do projeto), na `ConfigPedido` que o plano nomeia,
+  e todo parâmetro novo tem registro de status e fonte (`protocol.PARAMETROS_PEDIDO_N7`, como a informação do N5). Nenhum hash cobre esse
+  registro. `ambiente.py` não precisou mudar.
+- **`dias_pedido` virou parâmetro** (10, PROPOSTO), em vez de um 10 fixo no `DonoPedinte`: é a fase da decisão N7-7.
+- **A desobediência é medida na percepção da decisão:** o motor marca o consumo de uma fruta que tinha −1 em `pedido_frutas` na decisão em
+  que o pet comeu (não no tick do consumo depois do avanço). Assim "comer X com pedido vigente" é o mesmo pedido que o aprendiz viu.
+- **A bronca lê o motor pelo `estado()`:** o `DonoPedinte` recebe o `estado()` do motor (como a regra do mundo da bancada recebe a `Visao`) e
+  dá uma `repreender` por desobediência nova desde o passo anterior. Sem a chave no motor, `estado()` não tem `desobediencias` e o dono que
+  pede falha alto (`KeyError`). A bronca vem antes dos pedidos do passo.
+- **"Primeiro passo do dono depois do consumo":** a decisão do tick d acontece no avanço que começa depois do passo do dono em d, então a
+  bronca sai no passo seguinte: 0 < t − d ≤ 15 (teste).
+- **A bronca é uma `repreender` comum**, fora do orçamento: conta como contato e passa por `receber_acao_dono` (é o dono que mexe no P3+ped).
+  Quem mede o crédito dela (risco 3 do plano) é a análise do N7.
+- **O G2 é um gabarito gravado antes da mudança** (48 vidas, num commit só com ele) e, para a bancada, as 168 vidas de
+  `tests/test_frutas_cenario.py`, que seguem passando.
+- **Sorteio da fruta:** `FRUTAS[rng.randrange(3)]` com a rng `pedido-fruta`, só pela semente da unidade (não pelo genoma), como pede o
+  plano; o teste confere em 600 sementes que a fruta pedida coincide com a preferida de nascença em cerca de 1/3 delas.
+- **A bancada ainda não conhece o pedido** (chat D): `contar_acoes` contaria um pedido como interação do dono e o `sem_ensino` não o tira.
+  Isso fica para quem montar os braços com pedido; nenhuma vida de hoje tem pedido.
+- **Teste ajustado:** `tests/test_informacao.py::test_parametros_registrados_e_enum_no_fim` conferia as informações como "as seis últimas"
+  do enum; agora confere as posições 20 a 25 (o pedido vem depois delas), como já se fez com as ofertas.
+
+## 2026-10-05 — CEREBRO-N6-N7: memória de episódios e arbitragem do pedido nos lobos; interpretações
+
+Tarefa `docs/TAREFA_V2_CEREBRO_N6_N7.md` (etapa C1), planos `docs/PLANO_ANALISE_V2_N6.md` e `docs/PLANO_ANALISE_V2_N7.md`. Só testes de
+mecanismo; nenhuma run com faixa reservada. A calibração e a validação do N5 não rodaram (nota `a810d03` fica como registro).
+- **O campo do pedido não está na main.** O chat A (`docs/TAREFA_V2_N7_MUNDO.md`) tem o branch `v2-n7-mundo` com
+  `Observacao.pedido_frutas` (−1 na fruta pedida, 0 nas outras, na ordem de `FRUTAS`), o mesmo nome da seção 2 do plano do N7. Os lobos o
+  leem por `getattr(obs, "pedido_frutas", ())`: sem o campo, nenhum pedido. Os testes injetam o campo por uma subclasse da `Observacao`.
+  Quando o branch do A entrar, nada aqui muda; com `w0_pedido` 0 o campo nem é lido.
+- **Memória e pedido só nos lobos que veem as frutas.** Os episódios são de consumo de fruta e o pedido é sobre fruta; nos lobos sem
+  `cfg_frutas`, ligar as chaves não cria nada (e a memória exige `efeito_humor_ruim` ≠ 0, porque a valência é medida nele).
+- **M0 = memória ligada com ganho 0**: guarda os episódios e as sondas, mas m_f = 0; as decisões são as do P0 (teste). O estado interno do
+  M0 difere do P0 só pelas chaves da memória.
+- **A valência usa o humor da decisão e o humor logo depois de comer** (o par antes/depois da E2): é o que o `fruta_comida` já recebe.
+  Tudo o que o humor mudou entre os dois entra, não só o efeito da fruta (o `MotorFrutas` aplica a nutrição na fome e o efeito no humor).
+- **O tick da memória vem da hora da observação** (`vetor_estado[7]`), com o dia virando quando a hora volta: a política não vê o tick
+  do motor. Numa vida decisões chegam a cada 15 min, então nenhum dia é pulado.
+- **A memória age só na escolha da fruta**, como manda o plano (ganho g < S somado ao coeficiente da fruta). A decisão de comer não lê a
+  memória; com uma fruta só no cenário a memória não muda nada (a sonda conta só as escolhas com duas frutas ou mais).
+- **Recuperação:** o episódio mais forte da fruta da pista nos dois prazos; empate, o mais recente. No embaralhado a pista f recupera o de
+  π(f); na recência só valem os de idade ≤ 240 min.
+- **O peso do pedido aprende com o sinal de qualquer fonte** (a consequência no P1, o dono no P3), como a seção 3 do plano do N7 descreve
+  a confiança no pedido; diferente da informação do N5, que só a consequência mexe.
+- **O piso vale no comer e na fruta quando o termo do pedido está ativo**, com o aprendizado ligado ou não, como na informação do N5: o
+  pedido pode levar o peso abaixo de zero.
+- **A sonda do pedido só é gravada quando p ≠ 0 numa regra de `REGRAS_PEDIDO`**: nas outras decisões não há o que contrafazer.
+- **O braço ME depende da bancada:** a permutação é passada pela config (`memoria_permutacao`), porque a política não conhece a semente da
+  vida; o chat D monta `desarranjo_n6(semente)` por vida. Permutação fora do modo embaralhado, ou que não seja um desarranjo de `FRUTAS`,
+  é recusada.
+
 ## 2026-10-05 — V2, BANCADA-N6-N7: o mundo iguais_frutas, os braços do N6 e do N7 e as medidas (`docs/TAREFA_V2_BANCADA_N6_N7.md`)
 
 - **`iguais` é uma condição nova da bancada**, fora da pergunta maior (casado, descasado, mutável). Ela só existe para o N7 (N7-5), com o
