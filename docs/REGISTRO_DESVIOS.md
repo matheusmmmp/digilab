@@ -2115,3 +2115,20 @@ Tarefa `docs/TAREFA_V2_LEITURA_PARCIAL.md`; entrega `docs/LEITURA_PARCIAL_V2_FAS
 - **O N4 e o 1a-pet da A1 ficam valendo** sem refazer: nenhuma das cinco mudanças altera a vida do P0 (testes de byte a byte citados).
 - **Faixas propostas** 23101…23505 (A1-B), 24101…24505 (L1-T3), 25101…25505 (N3-T3, opcional) e 27101…27505 (N4-N1, opcional); a
   26xxx foi pulada porque 26505 aparece como tick num gabarito da web.
+
+## 2026-10-05 — Estratégia nova da V2: montar tudo, calibrar junto, validar uma vez (decisão do Matheus, M10)
+
+- O Matheus apontou que calibrar e validar nó a nó gasta trabalho que as peças seguintes invalidam. A L1 e o N3 são exemplos: foram
+  validados antes do teto 16·S, da E2 e do cérebro vendo o mundo. Decisão: **montar o cérebro inteiro com testes de mecanismo,
+  calibrar uma vez, validar uma vez**, com cada peça como braço de ablação.
+- `docs/ROADMAP_V2.md` passa à revisão 3.
+- `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` ganha o adendo 1, antes de qualquer dado: as ablações ficam como contrastes
+  secundários, fora da família de Holm.
+- A calibração e a validação do N5 não rodam. O chat B já tinha parado (nota `a810d03`, branch `v2-n5-calibracao`, nenhum número), e a
+  faixa 13101…13505 ficou intacta.
+- As faixas próprias do N5, do N6 e do N7 ficam sem uso.
+- As decisões LP-1 a LP-3 de `docs/LEITURA_PARCIAL_V2_FASE1.md` (refazer A1, L1, N3) ficam substituídas pela M11: as validações já
+  feitas viram histórico.
+- Tarefas novas:
+  - `docs/TAREFA_V2_CEREBRO_N6_N7.md` (B, etapa C1);
+  - `docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md` (C, etapa K1).
