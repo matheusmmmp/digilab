@@ -334,8 +334,6 @@ nunca comer X. É a regra E4 do experimento maior.
 custo que cada escolha evita.
 
 | # | decisão | escolhido | custo de errar |
-
-| # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | N7-1 | o que é o pedido | "deixe a fruta X", evento novo e fora do orçamento, separado da informação do N5 | usar a informação do N5 mistura "o dono quer" com "o mundo é assim", e a consequência validaria o pedido como se fosse verdade |
 | N7-2 | onde entra | decisão de comer (`fome_moderada`, `fruta_no_cenario`) e escolha da fruta, com um peso compartilhado | só na escolha da fruta não há conflito com a necessidade; em todas as regras, o pedido passaria por cima da fome urgente |
