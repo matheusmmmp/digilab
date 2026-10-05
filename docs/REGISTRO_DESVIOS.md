@@ -1867,6 +1867,53 @@ Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes 
   - usa a faixa própria 18101…18505, só de calibração.
 - Marco em `docs/V2_RODADA_5.md`.
 
+## 2026-10-04 — V2, BANCADA-N5: os lobos vendo o mundo e a fonte informacao (`docs/TAREFA_V2_BANCADA_N5.md`)
+
+- **P2a implementado na bancada.** O plano (seção 4.2, N5-4) pede o modo `acoplado` do `DonoInformante`, que não está na `main` (nenhum PR
+  nem branch dele). Para não mexer em `frutas.py`, a bancada implementa a regra do plano em `InformanteAcoplado`: o multiconjunto do P2
+  (o `CalendarioFrutas` passo a passo, com o conteúdo verdadeiro no tick original) em passos do dono sorteados pela rng
+  `derivar_semente("informacao-acoplada", semente)`, um `randrange(passos)` por item na ordem do calendário. **Para o coordenador:**
+  quando o chat A fizer o modo `acoplado`, ele tem de dar estes mesmos eventos (há teste da regra em `tests/test_bancada_n5.py`), ou a
+  bancada passa a usar o dele e este sai.
+- **O informante usa os efeitos reais da condição da bancada** (`efeitos_da_condicao`), não o efeito do N4 que o `DonoInformante` calcula
+  sozinho; no mutável, os de antes da troca até o `tick_troca` e os de depois a partir dele (`InformanteDoMundo`, dois `DonoInformante`).
+- **A `ConfigInformacao` fica ligada em todo braço dos mundos das frutas**, inclusive P0, P1 e P3: sem informação no log o motor é o mesmo
+  (G2 do N5-MUNDO), e assim o acoplado pode rejogar o registro de um braço de informação com o cérebro de outro.
+- **A informação não é evento do mundo** (não está em `EVENTOS_DO_MUNDO`): os filtros do acoplado podem tirá-la (`sem_informacao`,
+  `sem_ensino`), e o "só cuidado" do P2 é o registro sem sinais e sem informações. Fica fora do orçamento (`FORA_DO_ORCAMENTO`) e não conta
+  como interação do dono.
+- **P2 hoje vive como o P1.** Os lobos ainda não leem `info_frutas` (N5-CEREBRO, chat B); até lá P2, P2e e P2a têm as mesmas ações e
+  consumos do P1 (na fumaça, iguais vida a vida). O gate "P2 sem informação = P1" é testado com o braço de informação **sem informante**
+  (nenhum evento de informar no registro), que continua valendo depois que os lobos lerem a informação. Um teste de que P2 e P2e diferem
+  ainda não existe: fica para depois do N5-CEREBRO.
+- **`consumos_ate_metade`:** a referência é a taxa de fruta ruim **total** do P0 da mesma célula (dono, mundo, unidade); o alvo é metade
+  dela, e a curva é a taxa por dia (dia sem consumo conta como não alcançado). No P0 a referência é a própria taxa. Sem P0 na célula,
+  `sem_referencia`. Nunca chegar dá os consumos totais com `censurado: True` (censura à direita, plano do N5).
+- **Tabela parcial:** as medidas do N5 têm `None` em vidas sem consumo na janela; `tabela_braco_condicao_parcial` exige a grade completa e
+  conta as vidas sem valor por célula, com IC só a partir de dois valores. As medidas de sempre seguem na `tabela_braco_condicao`.
+- **No mutável, um item do P2a levado para o outro lado da troca deixa de ser verdadeiro**: o conteúdo é o verdadeiro no tick original (o
+  mesmo multiconjunto do P2), como o plano manda.
+- **Testes antigos mudaram porque os lobos agora veem o mundo:** o `bola_a1` com lobos é o braço "bola" da A1 (antes "bolacega"); o acoplado
+  P3 → P0 no mundo da bola é o instinto que vê a bola; o P0 com lobos nas frutas come fruta (antes 0 consumos); P2/P2e fora das frutas
+  levantam `ValueError` (antes `NotImplementedError`).
+
+## 2026-10-04 — N5-CEREBRO (chat B, `docs/TAREFA_V2_N5_CEREBRO.md`)
+
+- **`w0_info = 0` desliga a entrada `info`, em vez de começar o peso em zero e deixá-lo aprender.** A tarefa pede que, com w0 = 0, a vida
+  seja a de hoje byte a byte; com um peso em zero que aprende, a primeira fruta informada comida com sinal ≠ 0 já mudaria a vida do P2
+  em relação ao P1. O plano (seção 8) usa w0 = 0 como referência descritiva, fora da escolha: com a entrada desligada essa referência é
+  o P1. Se o Matheus quiser a variante "parte de zero e aprende", é um campo a mais, sem mudar o resto.
+- **Piso no peso efetivo da fruta informada, mesmo com o aprendizado desligado.** Com o "mal", (w_f/S)·incentivo − (w_info/S) pode ser
+  negativo (incentivo 0,5 e w0 S/2 dá zero); o piso do aprendiz (`piso_peso`/S = 1/16) evita peso não positivo no sorteio. Só vale na
+  fruta com informação vigente; nas outras o peso é o de hoje (por isso a vida sem informação não muda).
+- **O peso da informação aprende pela mesma regra da L1, somada sobre as frutas candidatas**, porque é um parâmetro só presente em
+  todos os pesos efetivos (o gradiente de log p(f*) em relação a ele é a soma). Cortado em w0 ± teto (o teto da `ConfigLobos`): com w0 na
+  grade, abaixo do teto, o zero fica ao alcance (seção 3 do plano). O corte conta em `cortes_teto` e `pesos_no_teto`.
+- **"Nunca pelo dono" vale só para o peso da informação.** Os pesos de cada fruta seguem aprendendo também com elogio e bronca no P3,
+  como desde o LOBOS-MUNDO; a tarefa só restringe o peso da `info`.
+- **Sem mudança em `frutas.py` nem na bancada:** a informação chega pela `Observacao` que o `MotorFrutas` já injeta (#140), e a lida é
+  guardada no `agir` da mesma decisão em que a fruta é escolhida.
+
 ## 2026-10-04 — V2, N5-ACOPLADO: informante acoplado e motivo das regras novas dos lobos (`docs/TAREFA_V2_N5_ACOPLADO.md`)
 
 - **O acoplado recebe o multiconjunto de quem o monta.** O P2 da unidade usa o `CalendarioFrutas` da bancada, e o `digilab/` não importa

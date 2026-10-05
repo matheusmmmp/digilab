@@ -75,9 +75,9 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/donos.py` | donos sintéticos: atencioso, relapso, aleatório (controle crítico), incoerente |
 | `digilab/treino.py` | `CanalDeInteracao` impõe orçamento exato; `MotorComFeedback` (subclasse, só sobrescreve `_aplicar_acao_usuario`); `reproduzir_com_feedback`; `simular_vida` |
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
-| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim) |
+| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
-| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P3 feedback do dono; P2/P2e falham alto até o N5) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`), as condições casado/descasado/mutável e as unidades derivadas do experimento maior (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS" e "V2, BANCADA-FRUTAS" no fim) |
+| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`), as condições casado/descasado/mutável e as unidades derivadas do experimento maior; desde a BANCADA-N5 os lobos veem a bola e as frutas (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS" e "V2, BANCADA-N5" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
@@ -1598,6 +1598,73 @@ lobos é do chat B (rodada 6). Interpretações em `docs/REGISTRO_DESVIOS.md`.
   sintéticos com a preferência andando junto com a fome, a queda conhecida (β_recente = −k, β_fome = 0, β_pref = 1), onde a medida antiga
   põe a culpa na fome (|β_fome| > 0,1). Nenhuma releitura dos dados gravados.
 - **Não mudou:** `engine.py`, `AcaoPet`, `lobos.py`, `ambiente.py`, o bandit, as vidas da bola e das frutas com o evento desligado, a web.
+
+## V2, BANCADA-N5 — os lobos vendo o mundo e a fonte informacao (P2, P2e, P2a) (2026-10-04, `docs/TAREFA_V2_BANCADA_N5.md`) — GATES PASSAM
+
+Infraestrutura, sem run de pesquisa nem número de resultado; só as sementes dos testes. Primeira tarefa da rodada 6 (`docs/V2_RODADA_5.md`),
+com o plano do N5 (`docs/PLANO_ANALISE_V2_N5.md`, decisões N5-1 a N5-8) e o `CalendarioFrutas` (correção do coordenador). Só
+`experiments/bancada_v2.py` e `digilab/metrics.py` mudaram; `lobos.py`, `frutas.py`, `ambiente.py` e `engine.py` não. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Os lobos veem o mundo na bancada:** `Bancada.politica()` passa `cfg_bola` no mundo da bola (`bola`, `bola_a1`) e `cfg_frutas` nos três
+  mundos das frutas (`PoliticaLobos(cfg, cfg_lobos, cfg_bola=, cfg_frutas=)`, LOBOS-MUNDO). No `padrao` nada muda. Com isso o P0 com lobos
+  é o instinto que vê o mundo byte a byte (`PoliticaInstintoBola`, `PoliticaInstintoFrutas`), o `bola_a1` com lobos é o braço "bola" da A1
+  (antes o "bolacega") e o P1 come fruta e credita a E2 (`recompensas["consequencia_fruta"]`).
+- **A fonte `informacao`** (`FONTES_IMPLEMENTADAS`; braços P2 certa, P2e errada e o novo **P2a acoplada**): o cérebro aprende pela
+  consequência como o P1 (`APRENDE_PELA_CONSEQUENCIA`), nada do dono chega como sinal, e a informação entra pelo canal do mundo
+  (`RegraFrutasComInformante`: as ofertas do `CalendarioFrutas` e, logo depois, o que o informante diz; fora do orçamento, B2). Só existe nos
+  mundos das frutas (fora deles `ValueError`); a `ConfigInformacao` fica ligada em todo braço das frutas (`Bancada.cfg_informacao`).
+  - **P2 e P2e** (`InformanteDoMundo`): dois `DonoInformante` (`certo`, `errado`) com os **efeitos reais da condição da bancada**
+    (`Bancada.efeitos_reais`); no mutável, os de antes até o `tick_troca` e os de depois a partir dele. Informam nos mesmos ticks, com
+    conteúdo oposto.
+  - **P2a** (`InformanteAcoplado`, plano 4.2, N5-4): o mesmo multiconjunto de (fruta, conteúdo verdadeiro no tick original) que o P2 da
+    unidade recebe, em passos do dono sorteados pela rng `derivar_semente("informacao-acoplada", semente)` (um `randrange` por item, na
+    ordem do calendário). O modo `acoplado` do `DonoInformante` não está na `main`; a bancada implementa a regra do plano, e o chat A deve
+    dar os mesmos eventos (ou reusar este).
+- **Contagem e filtros:** informar não conta como interação do dono (`contar_acoes`); `contar_informacoes` e `VidaBancada.informacoes`;
+  `FORA_DO_ORCAMENTO` = eventos do mundo + informações. Filtros novos do acoplado: `sem_informacao`, `sem_ensino` (sinais + informações) e
+  `sem_ensino_sem_carinho`. A informação não é evento do mundo: o só cuidado pode tirá-la.
+- **Medidas do N5** (só nos mundos das frutas): `metrics.consumos_ate_metade` (consumos até a taxa de fruta ruim cair à metade da do P0 da
+  mesma célula, pela `eficiencia_amostral`; nunca chega = censurado à direita; o P0 usa a própria taxa total) e
+  `metrics.tabela_braco_condicao_parcial` (grade completa, conta as vidas sem valor por célula). As tabelas ganham `taxa_fruta_ruim_inicio`,
+  `taxa_fruta_ruim_final` e `consumos_ate_metade`; as medidas, `informacoes` e `decisoes_com_informacao`.
+- **Gates** (`tests/test_bancada_n5.py`, 22 testes, ~40 s): **P0 lobos = P0 instinto byte a byte** na bola, no `bola_a1` e nos três mundos
+  das frutas (4 donos × 2 sementes, sem e com genoma), e o `padrao` igual a antes; **G1** de toda vida e acoplado (P2, P2e, P2a; `sem_ensino`;
+  P2 → P1 sem filtro); **sem informação no log, P2 = P1 byte a byte** (P2, P2e e P2a sem informante, em três mundos e donos);
+  **P2 e P2e informam nos mesmos ticks**, com conteúdo oposto e o do P2 verdadeiro no tick (também no mutável, dos dois
+  lados da troca); o **P2a** tem o mesmo multiconjunto em outros ticks e segue a regra do plano; **espião**: nenhum `informar_*` chega a
+  `receber_acao_dono` e o cérebro não tem recompensa do dono. Testes antigos atualizados para os lobos que veem o mundo
+  (`test_bancada_mundos`, `test_bancada_frutas`, `test_bancada_v2`).
+- **Até o N5-CEREBRO (chat B):** os lobos ainda não leem `Observacao.info_frutas`, então hoje P2, P2e e P2a vivem como o P1 (mesmas ações e
+  consumos; só o registro tem as informações). Por isso o G2 é testado pelo braço sem informante, que vale também depois que eles lerem.
+- **Fumaça** (`experiments/configs/bancada/fumaca_n5.json`, NÃO canônica: descasado, atencioso, P0, P1, P2, P2e, P2a e os acoplados
+  `sem_ensino`): 35 vidas em ~16 s; sem artefato.
+
+## V2, N5-CEREBRO — a entrada `info` dos lobos (2026-10-04, `docs/TAREFA_V2_N5_CEREBRO.md`, `docs/PLANO_ANALISE_V2_N5.md`) — GATES PASSAM
+
+Infraestrutura do aprendiz para o N5, sem run de pesquisa; só as sementes dos testes (11, 22, 33). Decisões N5-1 a N5-3 do plano.
+Só `lobos.py` e `config.py` mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A entrada:** `Observacao.info_frutas` (+1 bem, −1 mal, 0 nada; o `MotorFrutas` injeta com `ConfigInformacao.ligada`) entra **só na
+  sub-decisão da fruta** (N5-2): peso da fruta f = (w_f/S) × incentivo_f + (w_info/S) × info_f, com **um peso `w_info` compartilhado**
+  entre as frutas (N5-3). A fruta com informação vigente tem o piso (`piso_peso`/S) no peso efetivo, com o aprendizado ligado ou não,
+  porque o "mal" pode levar o peso abaixo de zero; sem informação vigente a fruta tem o peso de hoje.
+- **Confiança de partida:** `ConfigLobos.w0_info` (PROPOSTO, N5-1; `lobos.PARAMETROS_LOBOS_N5`), inteiro na escala S. **0 (o padrão)
+  desliga a entrada**: sem termo e sem peso (a vida de hoje, byte a byte, com ou sem informação no registro). A grade {S/4, S/2, 3S/4}
+  é a da calibração do N5 (rodada 7). Com w0 > 0 o peso existe só nos lobos que veem as frutas (`peso_info`, `peso_info_prior` no
+  estado interno; um peso a mais, 760).
+- **Aprendizado:** a regra da L1 no peso compartilhado (`lobos.atualizar_info`: a soma, sobre as frutas, de I_f (S·1[f=f*] − P_f)/W_f,
+  com I_f = ±S ou 0), cortada em w0 ± teto. **Só a consequência mexe nele** (`_aplicar_sinal(..., consequencia=True)` em
+  `observar_consequencia` e `fruta_comida`, o sinal do P1 com a E2); elogio, bronca, latência e chamado ignorado não mexem (os pesos de
+  cada fruta continuam aprendendo com o dono, como no LOBOS-MUNDO).
+- **Gates** (`tests/test_lobos_n5.py`, 17 testes, ~10 s): **G1** replay bit a bit (P1 e P3, informante certo e errado, w0 S/2);
+  **w0 = 0 com informação** = a vida sem informação (estado, ações, rngs, consumos e pesos; lobos desligados e P1); **sem informação no
+  registro** com w0 na grade (chave desligada ou ligada sem informante) = a vida de w0 = 0 byte a byte, log incluído; **com o aprendizado
+  desligado a escolha pende na medida do w0** (p("mal") cai de 0,5 a ~0,06 de 0 a S/2, na conta exata; numa vida, o informante errado faz o
+  pet comer mais a fruta ruim que o certo); **espião**: no P1 o peso da informação muda e todo sinal é da consequência; no P3 nenhum sinal
+  do dono mexe nele em decisões com informação; um elogio depois de uma escolha informada muda o peso da fruta e não o da informação;
+  fruta informada "bem" que derruba o humor baixa o peso, informada "mal" o sobe.
+- **Para a bancada (chat D):** basta o `cfg_lobos` com `w0_info` e o `MotorFrutas` com `ConfigInformacao` ligada; nenhuma mudança no
+  `PoliticaLobos` além disso.
+- **Não mudou:** `engine.py`, `AcaoPet`, o bandit, a L0, a L1, o N3, os lobos sem informação (byte a byte), `frutas.py`, a web.
 
 ## V2, N5-ACOPLADO — o informante acoplado (P2a) e o motivo das regras novas dos lobos (2026-10-04, `docs/TAREFA_V2_N5_ACOPLADO.md`) — GATES PASSAM
 
