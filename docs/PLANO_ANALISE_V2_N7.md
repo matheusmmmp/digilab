@@ -330,6 +330,9 @@ nunca comer X. É a regra E4 do experimento maior.
 
 ## 15. Decisões que só o Matheus pode tomar
 
+**Decididas pelo Matheus em 2026-10-05: todas como recomendadas (N7-1 a N7-10).** Faixas fechadas: N7 calibração 21101…21505,
+validação 22101…22505.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | N7-1 | o que é o pedido | "deixe a fruta X", evento novo e fora do orçamento, separado da informação do N5 | usar a informação do N5 mistura "o dono quer" com "o mundo é assim", e a consequência validaria o pedido como se fosse verdade |

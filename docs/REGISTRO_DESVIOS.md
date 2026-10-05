@@ -2067,3 +2067,12 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
   só mudaria por um efeito colateral da injeção (ordem das chamadas no motor), que o gabarito pega.
 - **O teste da presença usa o instinto das frutas por baixo de um espião** (que só anota a `Observacao` e delega), porque nenhuma
   política de hoje lê o campo.
+
+## 2026-10-05 — N7-1 a N7-10 aprovadas; tarefas paralelas da rodada 7
+
+- O Matheus aprovou N7-1 a N7-10 do `docs/PLANO_ANALISE_V2_N7.md`, como recomendadas. Faixas do N7: 21101…21505 e 22101…22505.
+- A FRUTA-NO-CENARIO parte A foi mesclada (#154), e o chat B segue com a parte B e o N5.
+- Enquanto isso, os outros chats recebem tarefas paralelas que não mexem no `lobos.py`:
+  - A: N7-MUNDO, o lado do mundo do pedido do dono;
+  - D: BANCADA-N6-N7;
+  - C: LEITURA-PARCIAL, com a lista das validações a refazer.
