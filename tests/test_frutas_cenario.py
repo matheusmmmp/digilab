@@ -65,14 +65,40 @@ def gerar_gabarito() -> dict:
 # ------------------------------------------------------------------ G2: nenhuma vida de hoje muda
 
 
+def _sem_parte_b(estado: dict) -> dict:
+    """O estado interno dos lobos sem o que a parte B (chat B, FRUTA-NO-CENARIO) acrescentou: os pesos de presenca da decisao de comer
+    (no prior, 0) e a entrada `presenca` dos registros de decisao. Com o prior, o resto do estado e o de antes."""
+    e = json.loads(json.dumps(estado, default=repr))
+    if "pesos_comer_fruta" in e:
+        assert set(e["pesos_comer_fruta"].values()) == {0}, "pesos de presenca fora do prior num braco que nao aprende pela consequencia"
+        del e["pesos_comer_fruta"], e["pesos_comer_fruta_prior"]
+        e["parametros_aprendidos"] -= len(FRUTAS)
+    ap = e.get("aprendizado") or {}
+    for r in [ap.get("ultima")] + [x[1] for x in ap.get("pendentes", [])] + [ap.get("consequencia_pendente")]:
+        if isinstance(r, dict):
+            r.pop("presenca", None)
+    return e
+
+
 def test_g2_vidas_de_hoje_byte_a_byte():
     """168 vidas da bancada (P0 lobos e instinto, P1, P2, P2e, P2a, P3; 3 mundos das frutas; 4 donos; 2 sementes), gravadas antes do
-    campo novo. Os lobos daqui veem a bola e as frutas, o P1 tem a E2 e o P2/P2e/P2a a informacao do dono."""
+    campo novo. Os lobos daqui veem a bola e as frutas, o P1 tem a E2 e o P2/P2e/P2a a informacao do dono.
+    Desde a parte B (a decisao de comer le a fruta presente e aprende pela consequencia), as vidas de P1, P2, P2e e P2a mudam por
+    desenho e ficam fora; P0 e P3 (que nao aprendem pela consequencia) seguem byte a byte, com o estado interno sem o que a parte B
+    acrescentou (`_sem_parte_b`)."""
     gab = json.loads(GABARITO.read_text(encoding="utf-8"))
     casos = dict(_casos())
     assert set(gab) == set(casos) and len(gab) == 168
+    conferidas = 0
     for chave, espec in casos.items():
-        assert _impressao(BANCADA.vida(espec).motor) == gab[chave], chave
+        if espec.braco not in ("P0", "P3"):
+            continue
+        motor = BANCADA.vida(espec).motor
+        imp = _impressao(motor)
+        imp["politica"] = _sha(json.dumps(_sem_parte_b(motor.politica.estado_interno()), sort_keys=True, default=repr))
+        assert imp == gab[chave], chave
+        conferidas += 1
+    assert conferidas == 72
 
 
 def test_padrao_e_de_estado_nao_preenchem():

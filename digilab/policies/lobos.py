@@ -66,6 +66,10 @@ LOBOS-MUNDO (docs/TAREFA_V2_LOBOS_MUNDO.md, 2026-10-04): com `cfg_bola` e/ou `cf
   - E2: na fonte "consequencia", comer com fruta no cenario adia o credito ate o motor avisar `fruta_comida`; o sinal entao e
     `sinal_homeostatico_fruta` (drives + humor, depois = logo depois de comer). As outras acoes seguem com o sinal do N3.
 Sem `cfg_bola`/`cfg_frutas` ligadas (o padrao), nada disso existe: as formas, as vidas e o estado interno de antes, byte a byte.
+FRUTA-NO-CENARIO, parte B (docs/TAREFA_V2_FRUTA_NO_CENARIO.md; decisao R2): na regra `fruta_no_cenario`, o peso de COMER soma
+(w_f / S) x presenca_f das frutas no cenario (Observacao.frutas_cenario), um peso por fruta, prior 0 (o instinto das frutas byte a byte
+com o aprendizado desligado). Esses pesos so aprendem pela consequencia (atualizar_comer_fruta, a regra da L1); o dono nao mexe neles.
+A informacao do dono continua so na escolha de qual fruta.
 
 Sem funcoes transcendentais (nada de math): paridade com a web quando o L1 for portado.
 """
@@ -360,7 +364,7 @@ class Aprendiz:
     entradas: tuple = ENTRADAS          # nomes das entradas da percepcao (LOBOS-MUNDO: mais bola e fruta, por instancia)
 
     def __init__(self, cfg: Config | None, cfg_lobos: ConfigLobos | None, prior: dict,
-                 prior_fruta: dict | None = None) -> None:
+                 prior_fruta: dict | None = None, prior_comer_fruta: dict | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cl = cfg_lobos or CONFIG_LOBOS
         if self.cl.bits_ponto_fixo < 1:
@@ -377,6 +381,11 @@ class Aprendiz:
         self._prior_info: int | None = None
         self._peso_info: int | None = None
         self._info_na_decisao: tuple = ()             # Observacao.info_frutas da ultima decisao (na ordem de FRUTAS)
+        # FRUTA-NO-CENARIO (parte B): um peso por fruta presente na decisao de COMER da regra fruta_no_cenario (prior 0; vazio fora
+        # do mundo das frutas: nada muda)
+        self._prior_comer_fruta = dict(prior_comer_fruta or {})
+        self._pesos_comer_fruta = dict(self._prior_comer_fruta)
+        self._presenca_na_decisao: tuple = ()         # Observacao.frutas_cenario da ultima decisao (na ordem de FRUTAS)
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -414,10 +423,11 @@ class Aprendiz:
 
     def n_pesos(self) -> int:
         return (sum(len(v) for acoes in self._pesos.values() for v in acoes.values()) + len(self._pesos_fruta)
-                + (self._peso_info is not None))
+                + (self._peso_info is not None) + len(self._pesos_comer_fruta))
 
     def pesos_mudaram(self) -> bool:
-        return self._pesos != self._prior or self._pesos_fruta != self._prior_fruta or self._peso_info != self._prior_info
+        return (self._pesos != self._prior or self._pesos_fruta != self._prior_fruta or self._peso_info != self._prior_info
+                or self._pesos_comer_fruta != self._prior_comer_fruta)
 
     def _desvios(self):
         """|w - w0| de cada peso: a tabela da decisao e, no mundo das frutas, a sub-decisao da fruta."""
@@ -429,6 +439,8 @@ class Aprendiz:
             yield abs(w - self._prior_fruta[f])
         if self._peso_info is not None:
             yield abs(self._peso_info - self._prior_info)
+        for f, w in self._pesos_comer_fruta.items():
+            yield abs(w - self._prior_comer_fruta[f])
 
     def desvio_maximo(self) -> int:
         """max |w - w0| sobre todos os pesos (o quanto o aprendizado se afastou do prior)."""
@@ -452,6 +464,13 @@ class Aprendiz:
             "decisao": {a: ativacao([w - w0 for w, w0 in zip(pesos[a], prior[a])], x, self._escala) for a in candidatos},
             "memoria_emocao": self.memoria.contribuicao(candidatos),
         }
+        if grupo == REGRAS_MUNDO[1] and self._pesos_comer_fruta and AcaoPet.COMER in candidatos:
+            # FRUTA-NO-CENARIO: comer na regra das frutas soma (w_f / S) x presenca_f das frutas no cenario; no prior (w_f = 0) o termo
+            # e 0.0 exato e o peso efetivo e o do instinto, byte a byte
+            termo = 0.0
+            for f, presente in zip(FRUTAS, self._presenca_na_decisao or (0.0,) * len(FRUTAS)):
+                termo = termo + (self._pesos_comer_fruta[f] / self._escala) * presente
+            c["decisao"][AcaoPet.COMER] = c["decisao"][AcaoPet.COMER] + termo
         soma = {a: c["impulsos"][a] + c["decisao"][a] + c["memoria_emocao"][a] for a in candidatos}
         if self._aprende:
             c["piso"] = {a: (self._piso - soma[a] if soma[a] < self._piso else 0.0) for a in candidatos}
@@ -632,6 +651,9 @@ class Aprendiz:
                                              self._escala)
                 self._peso_info = novo
                 self._cortes_teto += corte
+        if consequencia and "presenca" in registro:
+            self._cortes_teto += atualizar_comer_fruta(self._pesos_comer_fruta, self._prior_comer_fruta, registro, f_S,
+                                                       self.cl.passo, self.cl.teto, self._escala)
         self._n_atualizacoes += 1
 
     # ------------------------------------------------------------- serializacao
@@ -648,6 +670,8 @@ class Aprendiz:
                               "W": dict(s["W"])}
                 if "I" in s:
                     d["fruta"]["I"] = dict(s["I"])
+            if "presenca" in r:
+                d["presenca"] = dict(r["presenca"])
             return d
         d = {
             "passo": self.cl.passo, "teto": self.cl.teto, "piso_peso": self.cl.piso_peso,
@@ -682,6 +706,9 @@ class Aprendiz:
         if self._peso_info is not None:           # N5, so com w0_info != 0: o peso compartilhado da informacao
             d["peso_info"] = self._peso_info
             d["peso_info_prior"] = self._prior_info
+        if self._prior_comer_fruta:               # FRUTA-NO-CENARIO, so no mundo das frutas: comer le a fruta presente
+            d["pesos_comer_fruta"] = dict(self._pesos_comer_fruta)
+            d["pesos_comer_fruta_prior"] = dict(self._prior_comer_fruta)
         return d
 
 
@@ -712,9 +739,10 @@ class PoliticaLobos(Aprendiz):
             cf = cfg_frutas if self._ve_frutas else replace(cfg_frutas or CONFIG_FRUTAS, ligada=False)
             prior = self._tabela_prior(cl.escala, REGRAS + REGRAS_MUNDO, self.entradas, self._prior_mundo(cb, cf))
             prior_fruta = {f: cl.escala for f in FRUTAS} if self._ve_frutas else None
+            prior_comer = {f: 0 for f in FRUTAS} if self._ve_frutas else None
         else:
-            prior, prior_fruta = self._tabela_prior(cl.escala), None
-        super().__init__(cfg, cl, prior, prior_fruta)
+            prior, prior_fruta, prior_comer = self._tabela_prior(cl.escala), None, None
+        super().__init__(cfg, cl, prior, prior_fruta, prior_comer)
         self._instinto = PoliticaInstintoFrutas(self.cfg, cb, cf) if self._ve_mundo else PoliticaInstinto(self.cfg)
         self._ultima_regra: str | None = None
         # N5 (N5-1 a N5-3): a entrada `info` da sub-decisao da fruta, com um peso so; w0_info 0 = desligada (a vida de hoje)
@@ -781,6 +809,7 @@ class PoliticaLobos(Aprendiz):
             raise RuntimeError("E2: o comer com fruta da decisao anterior ficou sem fruta_comida")
         x = self.percepcao(obs)
         regra, candidatos = impulsos(self._instinto, obs)
+        self._presenca_na_decisao = obs.frutas_cenario
         contrib, pesos = self._pesos_efetivos(regra, candidatos, x)
         if len(candidatos) == 1:
             u, acao = None, candidatos[0]
@@ -791,6 +820,9 @@ class PoliticaLobos(Aprendiz):
         self._fruta_na_decisao = self._ve_frutas and obs.fruta > 0.0
         self._info_na_decisao = obs.info_frutas
         self._registrar(regra, candidatos, acao, x, pesos, contrib, u)
+        if (self._aprende and self._pesos_comer_fruta and regra == REGRAS_MUNDO[1] and AcaoPet.COMER in candidatos):
+            # FRUTA-NO-CENARIO: a entrada de cada fruta (presenca x S) para o credito da decisao de comer (so pela consequencia)
+            self._registro_decisao["presenca"] = {f: arred(p * self._escala) for f, p in zip(FRUTAS, obs.frutas_cenario)}
         return acao
 
     def escolher_fruta(self, presentes: list[str], incentivos: dict, u: float) -> str | None:
@@ -851,6 +883,30 @@ class PoliticaLobos(Aprendiz):
             if info is not None:
                 registro["fruta"]["I"] = {f: arred(info[f] * S) for f in presentes}
         return escolhida
+
+
+def atualizar_comer_fruta(pesos: dict, prior: dict, registro: dict, f_S: int, passo: int, teto: int, S: int) -> int:
+    """FRUTA-NO-CENARIO: a regra da L1 nos pesos de presenca da decisao de COMER (regra fruta_no_cenario). O peso efetivo de comer tem
+    o termo (w_f / S) x presenca_f, entao dw_f = arred(f_S * passo * X_f * (S*1[a*=comer] - P_comer) / (S*S*W_comer)), com
+    X_f = arred(presenca_f * S), cortado em prior +- teto. Comer uma fruta ruim sozinha (sinal negativo) baixa o peso dela; deixar de
+    comer nao mexe (o sinal de nao comer nao fala da fruta). Devolve quantos cortes no teto."""
+    fator = (S if registro["acao"] is AcaoPet.COMER else 0) - registro["P"][AcaoPet.COMER]
+    cortes = 0
+    if fator == 0:
+        return 0
+    for f, X in registro["presenca"].items():
+        if X == 0:
+            continue
+        delta = div_arred(f_S * passo * X * fator, S * S * registro["W"][AcaoPet.COMER])
+        if delta == 0:
+            continue
+        novo = pesos[f] + delta
+        if novo > prior[f] + teto:
+            novo, cortes = prior[f] + teto, cortes + 1
+        elif novo < prior[f] - teto:
+            novo, cortes = prior[f] - teto, cortes + 1
+        pesos[f] = novo
+    return cortes
 
 
 def atualizar_info(w: int, w0: int, sub: dict, f_S: int, passo: int, teto: int, S: int) -> tuple[int, int]:

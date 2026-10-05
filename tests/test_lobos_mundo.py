@@ -86,7 +86,7 @@ def test_com_mundo_entradas_regras_e_prior():
     p = PoliticaLobos(CONFIG_PADRAO, CONFIG_LOBOS, CB, CF)
     e = p.estado_interno()
     assert e["entradas"] == list(ENTRADAS + ENTRADAS_MUNDO) and tuple(e["pesos"]) == REGRAS + REGRAS_MUNDO
-    assert e["parametros_aprendidos"] == 9 * 7 * 12 + len(FRUTAS) < CONFIG_LOBOS.maximo_pesos
+    assert e["parametros_aprendidos"] == 9 * 7 * 12 + 2 * len(FRUTAS) < CONFIG_LOBOS.maximo_pesos   # + presenca (FRUTA-NO-CENARIO)
     assert e["pesos_fruta"] == {f: S for f in FRUTAS}
     j = {n: i for i, n in enumerate(e["entradas"])}
     livre = e["pesos"]["tempo_livre"]

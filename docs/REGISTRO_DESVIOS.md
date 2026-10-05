@@ -2083,3 +2083,22 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
   - A: N7-MUNDO, o lado do mundo do pedido do dono;
   - D: BANCADA-N6-N7;
   - C: LEITURA-PARCIAL, com a lista das validações a refazer.
+
+## 2026-10-05 — V2, FRUTA-NO-CENARIO, parte B (chat B, `docs/TAREFA_V2_FRUTA_NO_CENARIO.md`)
+
+- **Montada sobre o branch da parte A.** O pedido era começar quando a parte A (#154) estivesse na `main`. Quando o Matheus avisou, o
+  #154 ainda estava aberto (o que entrou foi o #155). O branch `v2-comer-ve-fruta` partiu da `main` com o `v2-fruta-no-cenario-mundo`
+  mesclado (conflito só nas seções do fim do `CLAUDE.md` e deste registro; ficaram as duas). O PR depende do #154: mesclar a parte A antes.
+- **Um termo somado, não uma entrada na percepção.** "Uma entrada por fruta presente na decisão de comer" virou três pesos só para comer
+  na regra `fruta_no_cenario`. Na percepção, as três entradas iriam a todas as regras e ações (189 pesos) e aprenderiam também pelo dono, e a
+  tarefa pede que aprendam só pela consequência.
+- **Prior 0, somado ao peso do instinto.** O instinto pesa comer por `w_fruta × fruta` (o maior incentivo), que não se escreve como soma
+  sobre as frutas; com prior 0 o termo novo é 0,0 exato e o resto fica como está.
+- **Os pesos de presença sobem para todas as frutas na vida.** Comer dá sinal positivo pela nutrição (a fome entra no sinal da E2), então o
+  que a E2 ensina é a diferença entre as frutas, e a decisão é relativa. O teste da bancada confere que a ruim fica abaixo das outras; o
+  teste unitário, com o pet saciado, confere que só a ruim desce.
+- **Só a regra das frutas.** Na `fome_moderada` o pet também come a fruta que estiver no cenário, e a decisão de comer lá não lê a fruta. A
+  tarefa fala da regra `fruta_no_cenario`; a outra fica como está.
+- **Teste da parte A ajustado** (`tests/test_frutas_cenario.py`, chat A): o gabarito foi gravado antes das duas partes. O P0 e o P3 seguem
+  byte a byte, com o estado interno normalizado (sem os pesos de presença, no prior, e sem a `presenca` dos registros). As vidas que aprendem
+  pela consequência (P1, P2, P2e, P2a) mudam por desenho e ficam fora.
