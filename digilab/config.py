@@ -1323,3 +1323,19 @@ class ConfigInformacao:
 
 CONFIG_INFORMACAO = ConfigInformacao()
 CONFIG_INFORMACAO_LIGADA = ConfigInformacao(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigPedido:
+    """V2, N7, lado do mundo (docs/TAREFA_V2_N7_MUNDO.md; docs/PLANO_ANALISE_V2_N7.md, secao 2): o dono pede \"deixe a fruta X\". O pedido
+    nao e cuidado nem reforco: nao mexe no estado, nao passa pelo aprendiz como sinal e fica fora do orcamento (o canal das ofertas, B2).
+    Ele so fica disponivel para a percepcao (`Observacao.pedido_frutas`) por uma janela. Exige ConfigFrutas.ligada. Tudo PROPOSTO
+    (protocol.PARAMETROS_PEDIDO_N7). Desligada: nada muda (a vida das frutas byte a byte), e um pedido no log levanta erro."""
+
+    ligada: bool = False
+    janela_min: int = 240                    # quanto tempo um pedido vale para a percepcao, desde o evento (pedir de novo renova)
+    dias_pedido: int = 10                    # o DonoPedinte so pede nos dias 1..dias_pedido; depois e a extincao (N7-7)
+
+
+CONFIG_PEDIDO = ConfigPedido()
+CONFIG_PEDIDO_LIGADA = ConfigPedido(ligada=True)
