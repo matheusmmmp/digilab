@@ -75,7 +75,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/donos.py` | donos sintéticos: atencioso, relapso, aleatório (controle crítico), incoerente |
 | `digilab/treino.py` | `CanalDeInteracao` impõe orçamento exato; `MotorComFeedback` (subclasse, só sobrescreve `_aplicar_acao_usuario`); `reproduzir_com_feedback`; `simular_vida` |
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
-| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim); **FRUTA-NO-CENARIO B**: a decisão de comer lê a fruta presente (seção "V2, FRUTA-NO-CENARIO, parte B" no fim) |
+| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim); **FRUTA-NO-CENARIO B**: a decisão de comer lê a fruta presente (seção "V2, FRUTA-NO-CENARIO, parte B" no fim); **CEREBRO-N6-N7**: a memória de episódios das frutas (N6) e o pedido do dono na decisão de comer e na escolha da fruta (N7), atrás de chaves (seção "V2, CEREBRO-N6-N7" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`), as condições casado/descasado/mutável e as unidades derivadas do experimento maior; desde a BANCADA-N5 os lobos veem a bola e as frutas (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS" e "V2, BANCADA-N5" no fim) |
 | `experiments/run_v2_experimento_maior.py`, `experiments/configs/v2_experimento_maior/` | **V2, BANCADA-EXPERIMENTO**: o orquestrador do experimento maior (P0, P1, P2, P2e, P3 × `casado_frutas`, `descasado`, `mutavel` pela bancada, o "só cuidado" acoplado, os seis contrastes primários com Holm, a equivalência da predição 5 e as leituras por predição); o ponto nomeado do aprendiz na bancada (`ponto`: `L1` padrão, `T3` para o N5 e o experimento maior) (seção "V2, BANCADA-EXPERIMENTO" no fim) |
@@ -1799,3 +1799,40 @@ dos testes. Só `lobos.py` mudou (e dois testes de outras frentes, abaixo). Inte
   com o estado interno sem as chaves da parte B; as vidas do P1, P2, P2e e P2a mudam por desenho. `tests/test_lobos_mundo.py`: a contagem de
   pesos (+3).
 - **Não mudou:** `engine.py`, `AcaoPet`, o bandit, `frutas.py`, a bancada, a web; os lobos sem frutas e o P0/P3 nas frutas, byte a byte.
+
+## V2, CEREBRO-N6-N7 — memória de episódios (N6) e arbitragem do pedido (N7) nos lobos (2026-10-05, `docs/TAREFA_V2_CEREBRO_N6_N7.md`) — GATES PASSAM
+
+Etapa C1 do `docs/ROADMAP_V2.md` (revisão 3: montar tudo, calibrar junto, validar uma vez). Só testes de mecanismo, nenhuma run com faixa
+reservada; só as sementes dos testes (11, 22, 33, 101, 202). Planos `docs/PLANO_ANALISE_V2_N6.md` e `docs/PLANO_ANALISE_V2_N7.md`. Só
+`lobos.py` e `config.py` mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Chaves** (`ConfigLobos`, PROPOSTOS, `lobos.PARAMETROS_LOBOS_N6_N7`): `memoria_ligada` (False), `memoria_ganho` (0), `memoria_modo`
+  (`relevante`, `recencia`, `embaralhada`), `memoria_janela_recencia_ticks` (240), `memoria_permutacao` (vazia) e `w0_pedido` (0). Com os
+  padrões nada existe: a vida e o estado interno de hoje, byte a byte.
+- **N6, a memória** (`MemoriaEpisodios`, só nos lobos que veem as frutas): todo consumo de fruta, em qualquer fonte, vira um episódio
+  {tick, fruta, valência, intensidade}, com valência = arred(Δhumor / |`efeito_humor_ruim`| × S) cortada em [−S, S] (o humor da decisão e o
+  logo depois de comer). Espaços da v1 (`CONFIG_MEMORIA_ESPACOS`: 4 no curto por 12 h, 2 no longo), a mesma regra de desempate, sem
+  decaimento contínuo e sem relembrar. O tick vem da hora da observação (o dia vira quando a hora volta). **Age só na escolha da fruta**:
+  cada fruta presente é uma pista, e o episódio recuperado (o mais forte; empate, o mais recente) soma m_f = div_arred(ganho × valência, S)
+  ao peso dela. Modos: `relevante` (MR), `recencia` (MT, só episódios de até 240 min) e `embaralhada` (ME: a pista f recupera o episódio
+  de π(f), π o desarranjo da vida, `lobos.desarranjo_n6(semente)`, rng `derivar_semente("n6-embaralha", semente)`). Ganho 0 com a memória
+  ligada = o M0 (guarda, não age). **Sonda contrafactual** (com duas frutas ou mais): a mesma escolha com m = 0 e o mesmo u, no motivo
+  (`sonda_memoria`) e nas contagens (`estado_interno()["memoria"]["sondas"]`); só lê.
+- **N7, o pedido** (`Observacao.pedido_frutas`, −1 na fruta com pedido vigente, na ordem de `FRUTAS`; o campo é do chat A,
+  `docs/TAREFA_V2_N7_MUNDO.md`, branch `v2-n7-mundo`, ainda fora da main; os lobos o leem por `getattr`, com padrão nenhum pedido): com
+  `w0_pedido` ≠ 0 nos lobos que veem as frutas, p = −1 quando toda fruta no cenário tem pedido vigente (senão 0), e comer ganha
+  (w_pedido / S) × p **só nas regras `fome_moderada` e `fruta_no_cenario`** (`REGRAS_PEDIDO`), com o piso; as urgentes não leem o pedido.
+  Na escolha da fruta, (w_pedido / S) × pedido_f na forma da informação do N5, com o piso. Um peso compartilhado, iniciado em `w0_pedido`;
+  aprende pela regra da L1 (`lobos.atualizar_pedido`, cortado em w0 ± teto) com o sinal de qualquer fonte (a consequência e o dono).
+  **Sonda "quem decidiu"** (no motivo, `pedido`): a ação com o mesmo u e sem o termo, e se o pedido mudou a decisão.
+- **Gates** (`tests/test_cerebro_n6_n7.py`, 26 testes, ~25 s): **G2**, chaves desligadas = a vida de hoje: 192 vidas (pontos L1 e T3 com
+  `w0_info` S/2; padrão, bola e os três mundos das frutas; P0 a P3; 2 donos; 2 sementes) iguais a
+  `tests/gabaritos/cerebro_n6_n7_vidas_de_hoje.json` (sha256 do resumo do motor e do estado interno), gravado com o código da main antes da
+  mudança (`tests/gabarito_cerebro_n6_n7.py`, commit próprio); **G1** com memória e pedido, estado interno incluído; **memória**: um
+  episódio ruim recente com X baixa p(X) só com a memória ligada, na medida do ganho (conta exata); a sonda reproduz a decisão sem memória;
+  recência e embaralhado; a regra dos espaços; o relógio que vira o dia; o M0 é o P0 nas decisões e codifica todo consumo; **arbitragem**:
+  G-URG (sono, necessidade, abandono iguais com pedido vigente), a fome moderada pesa na medida do `w0_pedido`, o pedido na escolha da
+  fruta, o peso aprende pelo dono e pela consequência, sem o campo nada muda.
+- **Para a bancada (chat D):** o braço ME precisa de `memoria_permutacao = desarranjo_n6(semente)` por vida (fora disso, recusado); os
+  outros braços só trocam as chaves por cima do ponto (`cfg_lobos_do_ponto`).
+- **Não mudou:** `engine.py`, `AcaoPet`, o bandit, `frutas.py`, a bancada, a web. A calibração e a validação do N5 não rodaram (nota
+  `a810d03`, branch `v2-n5-calibracao`, como registro).
