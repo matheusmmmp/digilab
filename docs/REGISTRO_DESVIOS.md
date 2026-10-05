@@ -2102,3 +2102,29 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
 - **Teste da parte A ajustado** (`tests/test_frutas_cenario.py`, chat A): o gabarito foi gravado antes das duas partes. O P0 e o P3 seguem
   byte a byte, com o estado interno normalizado (sem os pesos de presença, no prior, e sem a `presenca` dos registros). As vidas que aprendem
   pela consequência (P1, P2, P2e, P2a) mudam por desenho e ficam fora.
+
+## 2026-10-05 — V2, BANCADA-N6-N7: o mundo iguais_frutas, os braços do N6 e do N7 e as medidas (`docs/TAREFA_V2_BANCADA_N6_N7.md`)
+
+- **`iguais` é uma condição nova da bancada**, fora da pergunta maior (casado, descasado, mutável). Ela só existe para o N7 (N7-5), com o
+  efeito do mundo "iguais" do N4 (`efeito_humor_neutro` em todas). A coluna da tabela é `iguais/iguais_frutas`.
+- **No `iguais_frutas` não há fruta ruim:** a `taxa_fruta_ruim` sai 0 e os `consumos_ate_metade` saem `sem_referencia` (sem caminho até a
+  metade), em vez de um número sem sentido. O informante (P2, P2e) segue o efeito real: "bem" de toda fruta no P2, "mal" no P2e.
+- **Todos os braços do N6 falham alto, inclusive o M0.** O M0 decide como o P0, mas registra e codifica os episódios (marcos 1 e 2), e
+  isso é o lobo de memória do chat B. Rodar um M0 sem memória seria rodar o P0 com outro nome.
+- **Os braços do N7 falham alto com o nó** até o pedido existir dos dois lados (o mundo, chat A; a entrada `pedido` dos lobos, chat B). O
+  P3 sem pedido do N7 é o P3 de sempre e já roda.
+- **A trava é uma tabela só** (`NOS_PENDENTES`): o braço se resolve quando a entrada sai (teste). O que ainda falta ligar quando as peças
+  chegarem está na seção da BANCADA-N6-N7 no `CLAUDE.md`: a política, a regra do mundo do pedido, o `sem_ensino` com os pedidos e os
+  pedidos fora do orçamento.
+- **Filtros do N7 pendentes** (`sem_pedido`, `sem_ensino_sem_pedido`): nomes escolhidos aqui; o plano só diz que o "só cuidado" do P3+ped tira
+  pedidos, broncas e sinais (as broncas são `repreender`, já nos sinais). O `filtro_de` falha alto com o nó; o acoplar passou a usá-lo.
+- **O desarranjo do ME já existe** (N6-6) porque não depende do cérebro: um dos dois ciclos de {a, b, c} por `derivar_semente("n6-embaralha",
+  semente)`.
+- **Unidades derivadas com prefixo:** os planos do N6 e do N7 usam `derivar_semente("n6"|"n7", b, k)` e `"…-genoma"`. A função ganhou o
+  prefixo, com o do experimento maior como padrão (as unidades de antes não mudam).
+- **Medidas pelo que o cérebro vai registrar:** as funções recebem registros simples (a sub-decisão com a escolha e a escolha da sonda
+  contrafactual; a decisão de conflito com "comeu" e "comeria sem o pedido"). A sonda em si (refazer a escolha com o termo zerado e o
+  mesmo u) é do cérebro (chat B), como o motivo das regras novas. A G-URG conta, fora das zonas de conflito, toda decisão em que o pedido
+  mudou o resultado.
+- **A fração de X conta só ofertas com X e outra fruta** (plano do N7, seção 6): com X sozinha, deixar X não é escolha entre frutas, e ela
+  entra na deferência (a decisão de comer).

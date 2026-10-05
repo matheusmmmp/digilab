@@ -68,6 +68,11 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   (unidades_derivadas; o campo "unidades" da config). FAIXAS_RESERVADAS lista as faixas reservadas ou usadas; o teste confere
   que nenhuma unidade cai nelas.
 
+  N6 e N7 (BANCADA-N6-N7; docs/PLANO_ANALISE_V2_N6.md e docs/PLANO_ANALISE_V2_N7.md): o mundo iguais_frutas (condicao "iguais": as
+  tres frutas com o efeito neutro, N7-5), os bracos de memoria M0, MR, MT, ME (N6) e os do pedido P0+ped, P1+ped, P3+ped (N7), que
+  falham alto com o no enquanto a memoria (chat B) e o pedido (chats A e B) nao estao na main (NOS_PENDENTES), o desarranjo do ME por
+  rng propria (desarranjo_n6, N6-6) e as unidades derivadas com prefixo ("n6", "n7"; o padrao continua "experimento-maior").
+
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
   CONFIG_LOBOS_APRENDIZ: passo 512, teto 1024), entao as runs antigas nao mudam. O "T3" (teto 16*S = 16384, o resto igual: sem traco)
@@ -160,6 +165,10 @@ CONDICOES = {
     "mutavel": Condicao(
         "mutavel", "o mundo muda no meio da vida: comeca casado e o efeito das frutas troca na metade (a boa vira ruim e "
         "vice-versa); a troca fica no registro derivado e o replay a refaz"),
+    # N7-5 (docs/PLANO_ANALISE_V2_N7.md, secao 4.3): fora da pergunta maior, o mundo da arbitragem
+    "iguais": Condicao(
+        "iguais", "as tres frutas com o mesmo efeito (neutro no humor) e a mesma nutricao: escolher uma fruta nao tem consequencia "
+        "propria, so a da fome (o mundo \"iguais\" do N4 na bancada)"),
 }
 
 
@@ -183,6 +192,7 @@ MUNDOS = {
     "casado_frutas": Mundo("casado_frutas", "casado", frutas=True),
     "descasado": Mundo("descasado", "descasado", frutas=True),
     "mutavel": Mundo("mutavel", "mutavel", frutas=True),
+    "iguais_frutas": Mundo("iguais_frutas", "iguais", frutas=True),
 }
 
 
@@ -208,6 +218,8 @@ def efeitos_da_condicao(genoma, cf: ConfigFrutas, condicao: str) -> dict:
     """O efeito no humor de cada fruta (F6: o ruim no humor, fora de em_privacao). Casado: a de maior preferencia inata faz bem
     (-efeito_humor_ruim) e a de menor faz mal (efeito_humor_ruim); descasado: o mesmo com o sinal trocado; a do meio fica com o
     efeito neutro nos dois. Assim casado e descasado diferem SO no sinal, e os dois tem uma fruta boa e uma ruim."""
+    if condicao == "iguais":                       # N7-5: todas com o efeito neutro, como o mundo "iguais" do N4
+        return {f: cf.efeito_humor_neutro for f in FRUTAS}
     if cf.efeito_humor_ruim >= 0.0:
         raise ValueError("efeito_humor_ruim precisa ser negativo")
     pref = genoma.preferencia_inata
@@ -221,7 +233,7 @@ def efeitos_da_condicao(genoma, cf: ConfigFrutas, condicao: str) -> dict:
     elif condicao == "descasado":
         alto, baixo = ruim, bom
     else:
-        raise ValueError(f"efeitos so de casado ou descasado, nao {condicao!r}")
+        raise ValueError(f"efeitos so de casado, descasado ou iguais, nao {condicao!r}")
     return {f: (alto if f == maior else baixo if f == menor else cf.efeito_humor_neutro) for f in FRUTAS}
 
 
@@ -240,7 +252,7 @@ class MotorFrutasMundo(MotorFrutas):
             if tick_troca is None or tick_troca <= 0:
                 raise ValueError("o mutavel precisa de tick_troca > 0")
             inicial = "casado"
-        elif condicao in ("casado", "descasado"):
+        elif condicao in ("casado", "descasado", "iguais"):
             if tick_troca is not None:
                 raise ValueError(f"so o mutavel troca, nao {condicao!r}")
             inicial = condicao
@@ -248,7 +260,8 @@ class MotorFrutasMundo(MotorFrutas):
             raise ValueError(f"condicao das frutas desconhecida: {condicao!r}")
         self.condicao = condicao
         self.tick_troca = tick_troca
-        self._efeitos = {c: efeitos_da_condicao(self.genoma, self.cf, c) for c in ("casado", "descasado")}
+        conds = ("iguais",) if condicao == "iguais" else ("casado", "descasado")
+        self._efeitos = {c: efeitos_da_condicao(self.genoma, self.cf, c) for c in conds}
         self.efeito_vigente = inicial
         self.efeito_humor = dict(self._efeitos[inicial])
         self.troca: dict | None = None
@@ -292,6 +305,11 @@ class CalendarioFrutas:
 
 BASES_EXPERIMENTO_MAIOR = {"calibracao": (14101, 14202, 14303, 14404, 14505),
                            "validacao": (15101, 15202, 15303, 15404, 15505)}
+BASES_N6 = {"calibracao": (19101, 19202, 19303, 19404, 19505), "validacao": (20101, 20202, 20303, 20404, 20505)}
+BASES_N7 = {"calibracao": (21101, 21202, 21303, 21404, 21505), "validacao": (22101, 22202, 22303, 22404, 22505)}
+# o prefixo das unidades derivadas de cada plano (regra E3): semente derivar_semente(prefixo, b, k), genoma
+# derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2)
+PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7")
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
 FAIXAS_RESERVADAS = (
     (101, 1010, "testes (101...505) e ovos da personalidade (101...1010)"),
@@ -308,22 +326,26 @@ FAIXAS_RESERVADAS = (
     (16101, 16505, "N11 cerebros, calibracao (ROADMAP_V2, secao 6)"), (17101, 17505, "N11 cerebros, validacao (ROADMAP_V2, secao 6)"),
     (18101, 18505, "revisao do aprendiz, so calibracao (V2_RODADA_5)"),
     (19101, 19505, "N6, calibracao (PLANO_ANALISE_V2_N6, N6-9)"), (20101, 20505, "N6, validacao (PLANO_ANALISE_V2_N6, N6-9)"),
+    (21101, 21505, "N7, calibracao (PLANO_ANALISE_V2_N7, secao 12.1)"), (22101, 22505, "N7, validacao (PLANO_ANALISE_V2_N7, secao 12.1)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
 )
 
 
-def unidades_derivadas(bases, k_por_base: int) -> list[dict]:
-    """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente("experimento-maior", b, k) e
-    genoma derivar_semente("experimento-maior-genoma", b, k), k = 0..K-1. Falha alto com K < 1, base repetida ou colisao."""
+def unidades_derivadas(bases, k_por_base: int, prefixo: str = "experimento-maior") -> list[dict]:
+    """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente(prefixo, b, k) e genoma
+    derivar_semente(prefixo + "-genoma", b, k), k = 0..K-1; o prefixo e o do plano (PREFIXOS_UNIDADES: "experimento-maior", o
+    padrao; "n6"; "n7"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
+    if prefixo not in PREFIXOS_UNIDADES:
+        raise ValueError(f"prefixo das unidades {prefixo!r}: so {PREFIXOS_UNIDADES}")
     if k_por_base < 1:
         raise ValueError("K precisa ser >= 1")
     bases = list(bases)
     if len(set(bases)) != len(bases):
         raise ValueError(f"base repetida: {bases}")
-    out = [{"base": b, "k": k, "semente": derivar_semente("experimento-maior", b, k),
-            "genoma": derivar_semente("experimento-maior-genoma", b, k)} for b in bases for k in range(k_por_base)]
+    out = [{"base": b, "k": k, "semente": derivar_semente(prefixo, b, k),
+            "genoma": derivar_semente(f"{prefixo}-genoma", b, k)} for b in bases for k in range(k_por_base)]
     valores = [u["semente"] for u in out] + [u["genoma"] for u in out]
     if len(set(valores)) != len(valores):
         raise ValueError("colisao entre sementes e genomas derivados")
@@ -354,6 +376,8 @@ class Braco:
     fonte: str                       # nenhuma | consequencia | informacao | dono
     no: str                          # o no do roadmap que liga a fonte
     informacao: str | None = None    # P2: "certa"; P2e: "errada"
+    memoria: str | None = None       # N6: nenhuma | relevante | recencia | embaralhada (o lobo memoria_emocao, chat B)
+    pedido: bool = False             # N7: o dono pede "deixe a fruta X" (o mundo do chat A e a entrada `pedido` do chat B)
 
 
 BRACOS = {
@@ -363,8 +387,27 @@ BRACOS = {
     "P2e": Braco("P2e", "informacao", "N5", "errada"),
     "P2a": Braco("P2a", "informacao", "N5", "acoplada"),
     "P3": Braco("P3", "dono", "N1"),
+    # N6 (docs/PLANO_ANALISE_V2_N6.md, secao 4.1): o aprendizado do lobo de decisao desligado (N6-2), a memoria e a unica plasticidade
+    "M0": Braco("M0", "nenhuma", "N6", memoria="nenhuma"),
+    "MR": Braco("MR", "nenhuma", "N6", memoria="relevante"),
+    "MT": Braco("MT", "nenhuma", "N6", memoria="recencia"),
+    "ME": Braco("ME", "nenhuma", "N6", memoria="embaralhada"),
+    # N7 (docs/PLANO_ANALISE_V2_N7.md, secao 4.1): o pedido "deixe X"; o P3+ped com a bronca da desobediencia (N7-8)
+    "P0+ped": Braco("P0+ped", "nenhuma", "N7", pedido=True),
+    "P1+ped": Braco("P1+ped", "consequencia", "N7", pedido=True),
+    "P3+ped": Braco("P3+ped", "dono", "N7", pedido=True),
 }
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
+# o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai
+# daqui quando a peca estiver na main (e os testes de tests/test_bancada_n6_n7.py dizem o que conferir entao).
+NOS_PENDENTES = {
+    "memoria": "N6: a memoria de episodios no lobo memoria_emocao (registrar, codificar, recuperar, a contribuicao m_f na escolha da "
+               "fruta e a sonda contrafactual) e do chat B (docs/PLANO_ANALISE_V2_N6.md, secoes 2.1 e 2.2)",
+    "pedido": "N7: o pedido do dono (evento, Observacao, DonoPedinte e a bronca do P3+ped) e do chat A (docs/TAREFA_V2_N7_MUNDO.md) e "
+              "a entrada `pedido` dos lobos (w_pedido, w0_pedido) do chat B (docs/PLANO_ANALISE_V2_N7.md, secao 3)",
+}
+# filtros do acoplado que dependem de eventos que ainda nao existem (o "so cuidado" do N7 tira os pedidos; plano do N7, secao 4.2)
+FILTROS_PENDENTES = {"sem_pedido": "pedido", "sem_ensino_sem_pedido": "pedido"}
 APRENDE_PELA_CONSEQUENCIA = ("consequencia", "informacao")   # o P2 e o P1 com a informacao na percepcao (plano do N5, secao 3)
 
 
@@ -374,7 +417,29 @@ def braco_de(rotulo: str) -> Braco:
     b = BRACOS[rotulo]
     if b.fonte not in FONTES_IMPLEMENTADAS:
         raise NotImplementedError(f"braco {b.rotulo}: a fonte {b.fonte!r} chega no {b.no} (docs/ROADMAP_V2.md)")
+    for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido)):
+        if presente and peca in NOS_PENDENTES:
+            raise NotImplementedError(f"braco {b.rotulo}: {NOS_PENDENTES[peca]}")
     return b
+
+
+def filtro_de(nome: str) -> frozenset:
+    """O conjunto de acoes que o filtro do acoplado tira; um filtro que depende de evento que ainda nao existe falha alto com o no."""
+    if nome in FILTROS_PENDENTES and FILTROS_PENDENTES[nome] in NOS_PENDENTES:
+        raise NotImplementedError(f"filtro {nome!r}: {NOS_PENDENTES[FILTROS_PENDENTES[nome]]}")
+    if nome not in FILTROS:
+        raise KeyError(f"filtro desconhecido {nome!r}: {sorted(FILTROS)}")
+    return FILTROS[nome]
+
+
+def desarranjo_n6(semente: int) -> dict:
+    """N6-6 (plano do N6, secao 4.1): a permutacao pi do ME, um desarranjo de FRUTAS (nenhuma fruta em si mesma), sorteado uma vez por
+    vida pela rng propria derivar_semente("n6-embaralha", semente). Com tres frutas ha dois, um por sentido do ciclo. Nao toca outra rng."""
+    rng = random.Random(derivar_semente("n6-embaralha", semente))
+    passo = 1 + rng.randrange(len(FRUTAS) - 1) if len(FRUTAS) == 3 else None
+    if passo is None:                       # pragma: no cover - o mundo das frutas tem tres frutas (FRUTAS)
+        raise ValueError("desarranjo_n6 escrito para tres frutas")
+    return {f: FRUTAS[(i + passo) % len(FRUTAS)] for i, f in enumerate(FRUTAS)}
 
 
 class PoliticaDoBraco:
@@ -688,7 +753,7 @@ class Bancada:
             raise KeyError(f"filtro desconhecido {filtro!r}: {sorted(FILTROS)}")
         if origem.origem is not None:
             raise ValueError("acoplar uma vida ja acoplada nao e suportado: acople a partir da vida de origem")
-        log = filtrar_log(origem.motor.log, FILTROS[filtro])
+        log = filtrar_log(origem.motor.log, filtro_de(filtro))
         espec = replace(origem.espec, braco=braco)
         m = self.rejogar(log, espec)
         vida = VidaBancada(espec, m, contar_acoes(log)[0], origem=origem.nome, origem_braco=origem.rotulo_braco,
@@ -736,6 +801,8 @@ class Bancada:
             dias = [taxas[f"dia_{d + 1}"] for d in range(self.dias)]
             if taxa_p0 is None and vida.espec.braco == "P0" and vida.origem is None:
                 taxa_p0 = taxas["total"]["taxa"]                    # o P0 e a propria referencia
+            if m.condicao == "iguais":
+                taxa_p0 = None                                      # sem fruta ruim, sem caminho ate a metade (sem_referencia)
             frutas = {"taxa_fruta_ruim": taxas, "consumos": len(consumos), "contagem": dict(m.contagem_frutas),
                       "mundo": m.resumo_mundo(), "genoma": m.genoma.para_dict(),
                       "consumos_ate_metade": consumos_ate_metade([x["taxa"] for x in dias], [x["n"] for x in dias], taxa_p0),
@@ -1036,9 +1103,9 @@ def validar_config(cfg: dict) -> dict:
         raise ValueError("config: ou 'sementes' (x 'genomas') ou 'unidades' (bases x K derivadas), um dos dois")
     if "unidades" in cfg:
         u = cfg["unidades"]
-        if set(u) != {"bases", "k"} or "genomas" in cfg:
-            raise ValueError(f"unidades fora do formato {{'bases': [...], 'k': K}} (sem 'genomas'): {u}")
-        unidades_derivadas(u["bases"], int(u["k"]))
+        if not {"bases", "k"} <= set(u) <= {"bases", "k", "prefixo"} or "genomas" in cfg:
+            raise ValueError(f"unidades fora do formato {{'bases': [...], 'k': K, 'prefixo'?}} (sem 'genomas'): {u}")
+        unidades_derivadas(u["bases"], int(u["k"]), u.get("prefixo", "experimento-maior"))
         fora = sorted(set(u["bases"]) - SEMENTES_TESTE)
         if fora:
             plano = cfg.get("plano")
@@ -1051,8 +1118,12 @@ def validar_config(cfg: dict) -> dict:
     for m in cfg.get("mundos", ["padrao"]):
         mundo_de(m)
     for a in cfg.get("acoplados", []):
-        if set(a) != {"origem", "destino", "filtro"} or a["filtro"] not in FILTROS:
+        if set(a) != {"origem", "destino", "filtro"}:
             raise ValueError(f"acoplado fora do formato: {a}")
+        try:
+            filtro_de(a["filtro"])
+        except KeyError as e:
+            raise ValueError(f"acoplado fora do formato: {a}") from e
         braco_de(a["destino"])
         if a["origem"] not in cfg["bracos"]:
             raise ValueError(f"acoplado de um braco que nao roda: {a['origem']}")
@@ -1103,7 +1174,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
         vidas[v.nome] = v
 
     if "unidades" in cfg:
-        unidades = unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]))
+        unidades = unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]),
+                                      cfg["unidades"].get("prefixo", "experimento-maior"))
         pares = [(u["genoma"], u["semente"]) for u in unidades]
     else:
         unidades = []

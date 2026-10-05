@@ -987,3 +987,109 @@ def tamanho_amostra(desvio_d: float, delta: float, alfa: float, poder: float, mu
     z = NormalDist().inv_cdf
     n = math.ceil(((z(1.0 - alfa) + z(poder)) * desvio_d / delta) ** 2)
     return max(multiplo, -(-n // multiplo) * multiplo)
+
+
+# ------------------------------------------------------------ V2, N6: a memoria de episodios (docs/PLANO_ANALISE_V2_N6.md, secoes 6 e 8)
+
+
+def memoria_nas_subdecisoes(subdecisoes: Sequence[tuple[int, str, str, int]], total_decisoes: int) -> dict:
+    """A memoria na escolha da fruta. `subdecisoes` = uma por sub-decisao da fruta: (frutas no cenario, escolha, escolha da sonda
+    contrafactual com m_f = 0 e o mesmo u, episodios recuperados). Sobre as sub-decisoes com 2 frutas ou mais (as unicas em que a
+    memoria pode agir; N6-7): a fracao decidida pela memoria (escolha diferente da sonda; G-CITA) e a cobertura (com pelo menos um
+    episodio recuperado). Sobre TODAS as decisoes do pet (`total_decisoes`, o denominador da v1): a fracao de motivos que citam a
+    memoria (so descritiva: por construcao fica abaixo da da v1, secao 8). E os episodios decisivos (H-MEM-02): das sub-decisoes com
+    recuperacao, quantas mudaram. Fracao None sem denominador."""
+    if total_decisoes < 0:
+        raise ValueError("total de decisoes negativo")
+    duas = [s for s in subdecisoes if s[0] >= 2]
+    for n, escolha, sem, rec in subdecisoes:
+        if n < 1 or rec < 0 or not escolha or not sem:
+            raise ValueError(f"sub-decisao invalida: {(n, escolha, sem, rec)}")
+        if n == 1 and escolha != sem:
+            raise ValueError("com uma fruta so a memoria nao muda a escolha")
+    mudou = sum(1 for _, e, s, _ in duas if e != s)
+    com_rec = [x for x in duas if x[3] > 0]
+    if mudou > total_decisoes:
+        raise ValueError("mais escolhas mudadas que decisoes")
+    frac = lambda a, b: (a / b) if b else None  # noqa: E731
+    return {"subdecisoes": len(subdecisoes), "subdecisoes_2_mais": len(duas), "mudou": mudou,
+            "fracao_decidida": frac(mudou, len(duas)), "com_recuperacao": len(com_rec),
+            "cobertura": frac(len(com_rec), len(duas)),
+            "decisivas_entre_recuperadas": frac(sum(1 for _, e, s, _ in com_rec if e != s), len(com_rec)),
+            "total_decisoes": total_decisoes, "fracao_motivos_total": frac(mudou, total_decisoes)}
+
+
+def ocupacao_espacos_frutas(instantes: Sequence[tuple[Sequence[str], Sequence[str]]], frutas: Sequence[str]) -> dict:
+    """Ocupacao dos espacos da memoria (como experiments/memoria_espacos.py): `instantes` = (frutas no curto prazo, frutas no longo
+    prazo) a cada decisao. Media de espacos ocupados em cada prazo, e por fruta a fracao do tempo na memoria (qualquer prazo) e no
+    longo prazo (risco 2 do plano: a fruta ruim no longo prazo)."""
+    if not instantes:
+        raise ValueError("ocupacao sem instantes")
+    n = len(instantes)
+    for curto, longo in instantes:
+        if any(f not in frutas for f in list(curto) + list(longo)):
+            raise ValueError(f"fruta fora de {list(frutas)}")
+        if len(set(curto)) != len(curto) or len(set(longo)) != len(longo):
+            raise ValueError("no maximo um episodio por fruta em cada prazo")
+    return {"curto_medio": sum(len(c) for c, _ in instantes) / n, "longo_medio": sum(len(l) for _, l in instantes) / n,
+            "na_memoria": {f: sum(1 for c, l in instantes if f in c or f in l) / n for f in frutas},
+            "no_longo": {f: sum(1 for _, l in instantes if f in l) / n for f in frutas}, "instantes": n}
+
+
+# ------------------------------------------------------------ V2, N7: a arbitragem (docs/PLANO_ANALISE_V2_N7.md, secao 6)
+
+ZONAS_CONFLITO = ("fome_moderada", "fruta_no_cenario")       # onde `comer` e candidato e a necessidade nao e urgente (secao 3)
+
+
+def quem_decidiu_conflito(comeu: bool, comeria_sem_pedido: bool) -> str:
+    """Numa decisao de conflito: "pedido" quando o pet nao comeu e, com o mesmo u e o termo do pedido zerado, teria comido;
+    "necessidade" quando comeu (a necessidade ou o gosto venceu); "ninguem" quando nao comeria de qualquer jeito."""
+    if comeu:
+        return "necessidade"
+    return "pedido" if comeria_sem_pedido else "ninguem"
+
+
+def deferencia_ao_pedido(decisoes: Sequence[tuple[int, str, bool, bool, bool]], janelas: Mapping[str, tuple[int, int]]) -> dict:
+    """`decisoes` = (tick, regra, conflito, comeu, comeria_sem_pedido) por decisao do pet. Conflito = regra numa ZONAS_CONFLITO com
+    toda fruta do cenario com pedido vigente. Por zona e janela ([inicio, fim) em ticks): conflitos, quantos o pedido decidiu e a
+    deferencia (fracao; None sem conflito), mais o total por janela. G-URG: as decisoes FORA das zonas (as regras urgentes: sono,
+    pedido_necessidade, abandono) em que o pedido mudou a decisao contam como violacao (tem de ser 0)."""
+    out: dict = {"por_janela": {}, "violacoes_urgentes": 0, "conflitos": 0}
+    for tick, regra, conflito, comeu, sem in decisoes:
+        if conflito and regra not in ZONAS_CONFLITO:
+            raise ValueError(f"conflito fora das zonas {ZONAS_CONFLITO}: {regra!r}")
+        if regra not in ZONAS_CONFLITO and not comeu and sem:
+            out["violacoes_urgentes"] += 1
+    for nome, (ini, fim) in janelas.items():
+        cel = {}
+        for zona in ZONAS_CONFLITO + ("total",):
+            sel = [d for d in decisoes if d[2] and ini <= d[0] < fim and (zona == "total" or d[1] == zona)]
+            pelo_pedido = sum(1 for d in sel if quem_decidiu_conflito(d[3], d[4]) == "pedido")
+            cel[zona] = {"conflitos": len(sel), "pelo_pedido": pelo_pedido,
+                         "pela_necessidade": sum(1 for d in sel if d[3]), "deferencia": (pelo_pedido / len(sel)) if sel else None}
+        out["por_janela"][nome] = cel
+    out["conflitos"] = sum(1 for d in decisoes if d[2])
+    return out
+
+
+def fracao_da_fruta(consumos: Sequence[tuple[int, str, Sequence[str]]], fruta: str, janelas: Mapping[str, tuple[int, int]]) -> dict:
+    """A fracao de X (secao 6): `consumos` = (tick, fruta comida, frutas no cenario). Por janela, entre os consumos em ofertas com
+    `fruta` E outra fruta no cenario, a fracao em que o pet comeu `fruta`; n e taxa None sem consumo (a unidade fica fora daquele
+    contraste, com o numero reportado)."""
+    for _, f, presentes in consumos:
+        if f not in presentes:
+            raise ValueError(f"comeu {f!r} fora do cenario {list(presentes)}")
+    out = {}
+    for nome, (ini, fim) in janelas.items():
+        sel = [f for t, f, p in consumos if ini <= t < fim and fruta in p and len(set(p)) >= 2]
+        x = sum(1 for f in sel if f == fruta)
+        out[nome] = {"inicio": ini, "fim": fim, "n": len(sel), "de_x": x, "taxa": (x / len(sel)) if sel else None}
+    return out
+
+
+def dia_cruza_zero(serie_por_dia: Sequence[float]) -> int | None:
+    """O primeiro dia (1, 2, ...) em que a serie (w_pedido no fim de cada dia, que parte de w0 > 0) fica <= 0; None se nunca."""
+    for d, v in enumerate(serie_por_dia):
+        if v <= 0:
+            return d + 1
+    return None
