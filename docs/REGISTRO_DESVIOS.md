@@ -2313,3 +2313,41 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
 - **Canais e traço não andam juntos** (falha alto): o traço espalha o sinal às decisões anteriores com arredondamento próprio, e o total
   por decisão deixaria de ser o do escalar. O T3, o ponto da calibração conjunta, não tem traço (R1).
 - **Só o sinal da consequência:** elogio, bronca, latência e chamado ignorado (o dono) seguem escalares.
+
+## 2026-10-05 — V2, BANCADA-LIGA-N6-N7: a memória e o pedido ligados na bancada (`docs/TAREFA_V2_BANCADA_LIGA_N6_N7.md`)
+
+- **As chaves do N6 e do N7 pertencem ao braço.** `cfg_lobos_do_braco` liga a memória só nos M0–ME e o `w0_pedido` só nos braços com pedido,
+  e devolve as chaves ao padrão nos outros. Assim a mesma config (com `memoria_ganho` e `w0_pedido`) roda todos os braços sem mudar os
+  antigos (teste contra o gabarito). O ganho dos MR, MT e ME vem da config; ganho 0 é aceito (é o M0 com outro nome), como o `w0_pedido` 0,
+  que o plano do N7 roda como referência.
+- **O M0 tem ganho 0 sempre**, mesmo com ganho na config (N6-2/N6-3: guarda e não age).
+- **O ME usa o desarranjo dos lobos** (`lobos.desarranjo_n6`, tupla na ordem de `FRUTAS`); o `desarranjo_n6` da bancada (o dicionário do
+  #165) confere que é o mesmo e falha alto se não for.
+- **A bronca só no P3+ped**, identificado como o braço com pedido e fonte dono (N7-8); no P0+ped e no P1+ped o pedinte não repreende.
+- **A chave do pedido só no motor dos braços com pedido.** Com ela o `estado()` do motor ganha `pedido` e `desobediencias`, o que mudaria o
+  resumo das vidas antigas. Consequência: acoplar o registro de um braço com pedido a um braço sem pedido **sem tirar os pedidos** falha alto
+  (`PedidoSemChave`); os acoplados do plano (`sem_ensino`, `sem_pedido`) tiram.
+- **As broncas no orçamento.** São `repreender` no registro, iguais às do dono no tipo; a vida conta as broncas pela regra do mundo e as
+  desconta da conta do dono (`VidaBancada.broncas`). No acoplado, as broncas da origem ficam só quando o filtro não tira `repreender`; o
+  `sem_ensino` tira (com todos os sinais do dono, como o plano manda).
+- **`sem_pedido` não tira as broncas.** Ele é o controle do P0+ped (o P0 no registro do P0+ped sem os pedidos), que não tem bronca e mantém os
+  sinais do dono. `sem_ensino_sem_pedido` ficou como o `sem_ensino` (o nome do plano, seção 4.2).
+- **O tick da decisão** nas medidas é k × `intervalo_decisao_ticks` (o motivo dos lobos não guarda o tick), como a medida da bola já fazia.
+- **A ocupação dos espaços** é lida do `_memoria` do cérebro depois de cada decisão (atributo interno, só leitura). O estado interno no fim
+  da vida não dá a ocupação ao longo do tempo, e chamar `estado_interno()` a cada decisão copiaria todos os motivos.
+- **Os marcos 1 e 2** saem como verificação exata (a sequência de frutas dos episódios = a dos consumos); o tick do episódio é o do relógio
+  do cérebro, e não é comparado aqui.
+- **Janelas do N7 com vida curta:** inicial = dias 1 até a metade da fase de pedido, final = até `dias_pedido`, extinção = depois, todas
+  cortadas no fim da vida (na fumaça de 4 dias, só a inicial tem decisões).
+- **G-URG nas medidas:** o cérebro só grava a sonda do pedido nas regras `fome_moderada` e `fruta_no_cenario`, então as violações das regras
+  urgentes saem 0 por construção. O gate de verdade do G-URG é o do CEREBRO-N6-N7 (sono, necessidade e abandono iguais com pedido vigente).
+- **O `w_pedido` por dia** é refeito por replay até o fim de cada dia (como a deriva), só nos braços que aprendem; no P0+ped é constante.
+- **Gabarito:** o comentário do `tests/gabarito_bancada_liga.py` dizia `w0_pedido` no ponto T3, mas o gabarito foi gravado só com `w0_info`
+  S/2. Corrigido o comentário; os dados não mudaram.
+- **Testes antigos:** `test_bancada_n6_n7.py` (os braços agora rodam; a trava do `NOS_PENDENTES` segue testada com uma entrada posta pelo
+  teste) e `test_bancada_n5.py::test_filtros_da_informacao` (o `sem_ensino` tira também os pedidos).
+- **Quatro testes do chat B mudaram** (`tests/test_cerebro_n6_n7.py`): eles punham a memória (`memoria_ligada`) e o `w0_pedido` direto na
+  `cfg_lobos` da bancada, no P0 e no P1, porque os braços do N6 e do N7 ainda não rodavam. Com as chaves pertencendo ao braço, o teste do
+  M0 = P0 usa o braço M0 (só o estado da memória e o rótulo do braço diferem), o da memória que age usa o MR, e o "sem o campo do pedido nada
+  muda" passa a dizer que num braço sem pedido o `w0_pedido` da config não chega ao cérebro (e no P1+ped chega). A intenção de cada um ficou;
+  a alternativa (deixar a config ligar a memória e o pedido em P0, P1 e P3) faria um braço mudar sem o nome dizer.

@@ -69,9 +69,11 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   que nenhuma unidade cai nelas.
 
   N6 e N7 (BANCADA-N6-N7; docs/PLANO_ANALISE_V2_N6.md e docs/PLANO_ANALISE_V2_N7.md): o mundo iguais_frutas (condicao "iguais": as
-  tres frutas com o efeito neutro, N7-5), os bracos de memoria M0, MR, MT, ME (N6) e os do pedido P0+ped, P1+ped, P3+ped (N7), que
-  falham alto com o no enquanto a memoria (chat B) e o pedido (chats A e B) nao estao na main (NOS_PENDENTES), o desarranjo do ME por
-  rng propria (desarranjo_n6, N6-6) e as unidades derivadas com prefixo ("n6", "n7"; o padrao continua "experimento-maior").
+  tres frutas com o efeito neutro, N7-5), os bracos de memoria M0, MR, MT, ME (N6) e os do pedido P0+ped, P1+ped, P3+ped (N7), o
+  desarranjo do ME por rng propria (desarranjo_n6, N6-6) e as unidades derivadas com prefixo ("n6", "n7"; o padrao continua
+  "experimento-maior"). Desde a BANCADA-LIGA-N6-N7 os bracos rodam: a memoria e o pedido do cerebro (CEREBRO-N6-N7) por cima do ponto,
+  o DonoPedinte (N7-MUNDO) pelo canal do mundo, os pedidos e as broncas do pedido fora do orcamento, o "so cuidado" sem eles, e as
+  medidas dos dois planos lidas das sondas que o cerebro grava no motivo.
 
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
@@ -100,18 +102,22 @@ sys.path.insert(0, str(RAIZ))
 from digilab.ambiente import (DonoComBola, MotorAmbiente, PoliticaInstintoBola, _PoliticaComBola,  # noqa: E402
                               reproduzir_ambiente)
 from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_FRUTAS_LIGADA,  # noqa: E402
-                            CONFIG_INFORMACAO_LIGADA, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, TICKS_POR_DIA, ConfigBola,
-                            ConfigConsequencia, ConfigFrutas, ConfigInformacao, ConfigLobos)
+                            CONFIG_INFORMACAO_LIGADA, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, CONFIG_PEDIDO_LIGADA, TICKS_POR_DIA,
+                            ConfigBola, ConfigConsequencia, ConfigFrutas, ConfigInformacao, ConfigLobos, ConfigPedido)
 from digilab.donos import Visao, criar_dono, cuidados_necessarios, julgar_acao  # noqa: E402
-from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_INFORMACAO, FRUTAS, AcaoPet, AcaoUsuario, LogDeEventos,  # noqa: E402
-                            fruta_de, informar, oferta_de)
+from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_INFORMACAO, ACOES_PEDIDO, FRUTAS, AcaoPet, AcaoUsuario,  # noqa: E402
+                            LogDeEventos, fruta_de, informar, oferta_de)
 from digilab.evolucao import politica_no_tick  # noqa: E402
-from digilab.frutas import DonoInformante, MotorFrutas, PoliticaInstintoFrutas, _PoliticaComFrutas, genoma_frutas  # noqa: E402
+from digilab.frutas import (DonoInformante, DonoPedinte, MotorFrutas, PoliticaInstintoFrutas, _PoliticaComFrutas,  # noqa: E402
+                            genoma_frutas)
 from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho_no_ambiente,  # noqa: E402
                              consumos_ate_metade, distribuicoes_de_acao, estados_sonda, jsd_media, privacao_nas_decisoes,
-                             resposta_a_bola, tabela_braco_condicao, tabela_braco_condicao_parcial, taxa_fruta_ruim)
+                             resposta_a_bola, tabela_braco_condicao, tabela_braco_condicao_parcial, taxa_fruta_ruim,
+                             ZONAS_CONFLITO, deferencia_ao_pedido, dia_cruza_zero, fracao_da_fruta, memoria_nas_subdecisoes,
+                             ocupacao_espacos_frutas)
 from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
+from digilab.policies.lobos import desarranjo_n6 as desarranjo_dos_lobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
@@ -133,17 +139,21 @@ PONTO_PADRAO = "L1"                             # sem o campo "ponto": as runs a
 PONTO_N5_EXPERIMENTO = "T3"                     # o ponto de partida do N5 e do experimento maior (R1)
 CEREBROS = ("lobos", "instinto")
 INFORMACOES = frozenset(a.value for a in ACOES_INFORMACAO)
+PEDIDOS = frozenset(a.value for a in ACOES_PEDIDO)        # N7: "deixe a fruta X" (o pedido do dono, N7-MUNDO)
 FILTROS = {"nenhum": frozenset(), "sem_sinais": SINAIS,
            "sem_sinais_sem_carinho": SINAIS | {AcaoUsuario.ACARICIAR.value},
-           # N5 (plano, secao 4): o "so cuidado" do P2 tira os sinais de ensino E a informacao; as ofertas ficam
-           "sem_informacao": INFORMACOES, "sem_ensino": SINAIS | INFORMACOES,
-           "sem_ensino_sem_carinho": SINAIS | INFORMACOES | {AcaoUsuario.ACARICIAR.value}}
+           # N5 (plano, secao 4): o "so cuidado" do P2 tira os sinais de ensino E a informacao; as ofertas ficam. N7 (plano, secao 4.2):
+           # o "so cuidado" do P3+ped tira tambem os pedidos; as broncas do pedido sao `repreender` e saem com os sinais
+           "sem_informacao": INFORMACOES, "sem_ensino": SINAIS | INFORMACOES | PEDIDOS,
+           "sem_ensino_sem_carinho": SINAIS | INFORMACOES | PEDIDOS | {AcaoUsuario.ACARICIAR.value},
+           # N7: o controle do P0+ped (o P0 no registro dele sem os pedidos; os sinais do dono ficam) e o nome do plano para o so cuidado
+           "sem_pedido": PEDIDOS, "sem_ensino_sem_pedido": SINAIS | INFORMACOES | PEDIDOS}
 # os eventos do MUNDO no log: acoes do dono que poem coisas no cenario. O acoplado nunca os tira (as ofertas de fruta do N4 entram
 # aqui quando existirem). Os filtros so tiram o que o dono ENSINA ou o carinho.
 EVENTOS_DO_MUNDO = frozenset(a.value for a in ACOES_BOLA + ACOES_FRUTAS)
 # o que entra pelo canal do mundo, fora do orcamento do dono: os eventos do mundo e a informacao do dono (B2; plano do N5, secao 2).
 # A informacao NAO e evento do mundo: o "so cuidado" a tira (FILTROS); o mundo (bola, ofertas) nunca sai.
-FORA_DO_ORCAMENTO = EVENTOS_DO_MUNDO | INFORMACOES
+FORA_DO_ORCAMENTO = EVENTOS_DO_MUNDO | INFORMACOES | PEDIDOS     # N7: os pedidos tambem (B2); as broncas do pedido, pela regra
 assert not any(f & EVENTOS_DO_MUNDO for f in FILTROS.values()), "um filtro nao pode tirar eventos do mundo"
 
 
@@ -400,14 +410,14 @@ BRACOS = {
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai
 # daqui quando a peca estiver na main (e os testes de tests/test_bancada_n6_n7.py dizem o que conferir entao).
-NOS_PENDENTES = {
-    "memoria": "N6: a memoria de episodios no lobo memoria_emocao (registrar, codificar, recuperar, a contribuicao m_f na escolha da "
-               "fruta e a sonda contrafactual) e do chat B (docs/PLANO_ANALISE_V2_N6.md, secoes 2.1 e 2.2)",
-    "pedido": "N7: o pedido do dono (evento, Observacao, DonoPedinte e a bronca do P3+ped) e do chat A (docs/TAREFA_V2_N7_MUNDO.md) e "
-              "a entrada `pedido` dos lobos (w_pedido, w0_pedido) do chat B (docs/PLANO_ANALISE_V2_N7.md, secao 3)",
-}
-# filtros do acoplado que dependem de eventos que ainda nao existem (o "so cuidado" do N7 tira os pedidos; plano do N7, secao 4.2)
-FILTROS_PENDENTES = {"sem_pedido": "pedido", "sem_ensino_sem_pedido": "pedido"}
+# Vazio desde a BANCADA-LIGA-N6-N7: a memoria (CEREBRO-N6-N7, #167) e o pedido (N7-MUNDO, #166) estao na main. Fica a tabela para a
+# proxima peca de outro chat (o K4 e os canais, rodada 10).
+NOS_PENDENTES: dict = {}
+# filtros do acoplado que dependem de eventos que ainda nao existem (nenhum hoje)
+FILTROS_PENDENTES: dict = {}
+# a memoria de cada braco do N6 no cerebro: o M0 guarda e nao age (ganho 0, N6-2/N6-3); o ME com o desarranjo da vida (N6-6)
+MODO_MEMORIA = {"nenhuma": "relevante", "relevante": "relevante", "recencia": "recencia", "embaralhada": "embaralhada"}
+CONFIG_LOBOS_PADRAO = ConfigLobos()
 APRENDE_PELA_CONSEQUENCIA = ("consequencia", "informacao")   # o P2 e o P1 com a informacao na percepcao (plano do N5, secao 3)
 
 
@@ -439,7 +449,25 @@ def desarranjo_n6(semente: int) -> dict:
     passo = 1 + rng.randrange(len(FRUTAS) - 1) if len(FRUTAS) == 3 else None
     if passo is None:                       # pragma: no cover - o mundo das frutas tem tres frutas (FRUTAS)
         raise ValueError("desarranjo_n6 escrito para tres frutas")
-    return {f: FRUTAS[(i + passo) % len(FRUTAS)] for i, f in enumerate(FRUTAS)}
+    pi = {f: FRUTAS[(i + passo) % len(FRUTAS)] for i, f in enumerate(FRUTAS)}
+    if tuple(pi[f] for f in FRUTAS) != desarranjo_dos_lobos(semente):     # o mesmo pi que os lobos usam (CEREBRO-N6-N7)
+        raise RuntimeError("desarranjo_n6 da bancada difere do dos lobos")
+    return pi
+
+
+def cfg_lobos_do_braco(cl: ConfigLobos, b: Braco, semente: int) -> ConfigLobos:
+    """As chaves do N6 e do N7 que o braco liga por cima do aprendiz do ponto (CEREBRO-N6-N7): memoria so nos bracos de memoria (o M0
+    com ganho 0; o MT na recencia; o ME com o desarranjo da vida), o pedido so nos bracos com pedido (w0_pedido da config). Nos outros
+    bracos as chaves voltam ao padrao (desligadas): a vida de hoje, byte a byte, seja qual for a config."""
+    if b.memoria is None:
+        cl = replace(cl, memoria_ligada=False, memoria_ganho=0, memoria_modo=CONFIG_LOBOS_PADRAO.memoria_modo, memoria_permutacao=())
+    else:
+        modo = MODO_MEMORIA[b.memoria]
+        cl = replace(cl, memoria_ligada=True, memoria_modo=modo, memoria_ganho=0 if b.memoria == "nenhuma" else cl.memoria_ganho,
+                     memoria_permutacao=desarranjo_dos_lobos(semente) if modo == "embaralhada" else ())
+    if not b.pedido:
+        cl = replace(cl, w0_pedido=0)
+    return cl
 
 
 class PoliticaDoBraco:
@@ -522,6 +550,7 @@ class VidaBancada:
     origem: str | None = None        # so no modo acoplado: o nome da vida de origem, o braco dela e o filtro
     origem_braco: str | None = None
     filtro: str | None = None
+    broncas: int = 0                 # N7: as broncas do pedido no registro (repreender pelo canal do mundo, fora do orcamento)
 
     @property
     def rotulo_braco(self) -> str:
@@ -538,6 +567,10 @@ class VidaBancada:
     @property
     def informacoes(self) -> int:
         return contar_informacoes(self.motor.log)
+
+    @property
+    def pedidos(self) -> int:
+        return contar_pedidos(self.motor.log)
 
     @property
     def nome(self) -> str:
@@ -563,9 +596,13 @@ def contar_acoes(log: LogDeEventos) -> tuple[int, int]:
         if e.tipo == "acao_usuario":
             if str(e.valor) in EVENTOS_DO_MUNDO:
                 mundo += 1
-            elif str(e.valor) not in INFORMACOES:
+            elif str(e.valor) not in INFORMACOES and str(e.valor) not in PEDIDOS:
                 dono += 1
     return dono, mundo
+
+
+def contar_pedidos(log: LogDeEventos) -> int:
+    return sum(1 for e in log if e.tipo == "acao_usuario" and str(e.valor) in PEDIDOS)
 
 
 def contar_informacoes(log: LogDeEventos) -> int:
@@ -603,6 +640,7 @@ class Bancada:
     cfg_consequencia: ConfigConsequencia = CONFIG_CONSEQUENCIA    # o sinal do P1 (N3)
     cfg_frutas: ConfigFrutas = CONFIG_FRUTAS_LIGADA    # as frutas dos mundos das frutas (padroes calibrados no N4)
     cfg_informacao: ConfigInformacao = CONFIG_INFORMACAO_LIGADA   # o canal da informacao, ligado em todo mundo das frutas (N5)
+    cfg_pedido: ConfigPedido = CONFIG_PEDIDO_LIGADA      # N7: o pedido, ligado so no motor dos bracos com pedido
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -615,6 +653,8 @@ class Bancada:
             raise ValueError("cfg_frutas e a dos mundos das frutas: ligada")
         if not self.cfg_informacao.ligada:
             raise ValueError("cfg_informacao e a dos mundos das frutas: ligada (sem informante, nada muda na vida)")
+        if not self.cfg_pedido.ligada:
+            raise ValueError("cfg_pedido e a dos bracos com pedido: ligada")
 
     @property
     def tick_troca(self) -> int:
@@ -644,15 +684,18 @@ class Bancada:
         mundo = mundo_de(espec.mundo)
         if b.fonte == "informacao" and not mundo.frutas:
             raise ValueError(f"braco {b.rotulo}: a informacao e sobre as frutas; precisa de um mundo das frutas, nao {espec.mundo!r}")
+        if (b.memoria is not None or b.pedido) and not mundo.frutas:
+            raise ValueError(f"braco {b.rotulo}: a memoria e o pedido sao das frutas; precisa de um mundo das frutas, nao {espec.mundo!r}")
         if espec.cerebro == "instinto":
-            if b.fonte != "nenhuma":
-                raise ValueError(f"cerebro instinto so no P0 (nao aprende): braco {b.rotulo}")
+            if b.fonte != "nenhuma" or b.memoria is not None or b.pedido:
+                raise ValueError(f"cerebro instinto so no P0 (nao aprende, nao lembra, nao le o pedido): braco {b.rotulo}")
             if mundo.frutas:
                 return PoliticaDoBraco(PoliticaInstintoFrutas(cfg, CONFIG_BOLA, self.cfg_frutas), b)
             if mundo.bola is not None:
                 return PoliticaDoBraco(PoliticaInstintoBola(cfg, self.cfg_bola), b)
             return PoliticaDoBraco(PoliticaInstinto(cfg), b)
         cl = self.cfg_lobos if b.fonte != "nenhuma" else replace(self.cfg_lobos, aprendizado_ligado=False)
+        cl = cfg_lobos_do_braco(cl, b, espec.semente)
         # LOBOS-MUNDO (#141): os lobos veem o mundo em que vivem; no padrao, nenhuma chave (as formas de antes)
         cb = self.cfg_bola if mundo.bola is not None else None
         cf = self.cfg_frutas if mundo.frutas else None
@@ -669,9 +712,12 @@ class Bancada:
             temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
             cf, ci, condicao = self.cfg_frutas, self.cfg_informacao, mundo.condicao
             troca = self.tick_troca if condicao == "mutavel" else None
+            # N7: a chave do pedido so no motor dos bracos com pedido (com ela o estado() ganha pedido e desobediencias; nos outros, o
+            # motor de hoje, e um pedido no registro falha alto)
+            cp = self.cfg_pedido if braco_de(espec.braco).pedido else None
             return lambda politica, cfg, semente: MotorFrutasMundo(
                 politica, cfg, semente, temperamento, "brasa", obediencia_desligada=True, cfg_bola=CONFIG_BOLA, cfg_frutas=cf,
-                semente_genoma=espec.genoma, condicao=condicao, tick_troca=troca, cfg_informacao=ci)
+                semente_genoma=espec.genoma, condicao=condicao, tick_troca=troca, cfg_informacao=ci, cfg_pedido=cp)
         if mundo.bola is not None:
             # o desenho da A1 (plano, secao 3): MotorAmbiente, obediencia, educacao e lesoes desligadas, especie brasa
             temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
@@ -689,6 +735,7 @@ class Bancada:
         mundo = mundo_de(espec.mundo)
         fm = self.fabrica_motor(espec)
         rotulo = f"{espec.dono}-{espec.braco}"
+        broncas = 0                              # N7: as broncas do pedido (so no P3+ped), que vem pelo canal do mundo
         if mundo.bola == "a1":
             # como a A1 rodou: o dono embrulhado poe a bola DENTRO do orcamento; o aleatorio sorteia por_bola
             v = simular_vida(rotulo, DonoComBola(espec.dono, self.cfg_bola), self.politica(espec, CONFIG_PADRAO),
@@ -700,18 +747,23 @@ class Bancada:
                                        espec.dono, fm)
         elif mundo.frutas:
             regra = CalendarioFrutas(espec.semente, self.cfg_frutas)
-            if braco_de(espec.braco).fonte == "informacao":
+            b = braco_de(espec.braco)
+            if b.fonte == "informacao":
                 regra = RegraFrutasComInformante(regra, self.informante(espec))
+            if b.pedido:
+                regra = RegraFrutasComPedinte(regra, self.pedinte(espec))
             motor = simular_vida_mundo(criar_dono(espec.dono), regra, self.politica(espec, CONFIG_PADRAO), espec.semente,
                                        self.dias, self.orcamento, espec.dono, fm)
+            broncas = len(regra.pedinte.broncas) if b.pedido else 0
         else:
             motor = simular_vida(rotulo, criar_dono(espec.dono), self.politica(espec, CONFIG_PADRAO), espec.semente,
                                  self.dias, self.orcamento, rotulo_dono=espec.dono, fabrica_motor=fm).motor
         dono, eventos_mundo = contar_acoes(motor.log)
+        dono -= broncas                          # N7: a bronca do pedido e `repreender` no log, mas veio pelo canal do mundo
         orcamento_gasto = dono + (eventos_mundo if mundo.bola == "a1" else 0)
         if orcamento_gasto != self.orcamento:
             raise RuntimeError(f"{espec.nome}: {orcamento_gasto} interacoes no orcamento, orcamento {self.orcamento}")
-        vida = VidaBancada(espec, motor, dono)
+        vida = VidaBancada(espec, motor, dono, broncas=broncas)
         self.conferir_replay(vida)
         return vida
 
@@ -740,6 +792,13 @@ class Bancada:
         modo = {"certa": "certo", "errada": "errado"}[b.informacao]
         return InformanteDoMundo(modo, ef, troca)
 
+    def pedinte(self, espec: EspecVida) -> DonoPedinte:
+        """N7: o dono que pede da unidade (a fruta X pela semente, N7-6), com a bronca da desobediencia so no P3+ped (fonte dono, N7-8)."""
+        b = braco_de(espec.braco)
+        if not b.pedido:
+            raise ValueError(f"braco {b.rotulo} nao tem pedido")
+        return DonoPedinte.da_semente(espec.semente, self.cfg_pedido, bronca=b.fonte == "dono")
+
     def rejogar(self, log: LogDeEventos, espec: EspecVida):
         fp, fm = self.fabrica_politica(espec), self.fabrica_motor(espec)
         if mundo_de(espec.mundo).ambiente:
@@ -749,15 +808,16 @@ class Bancada:
     def acoplar(self, origem: VidaBancada, braco: str, filtro: str) -> VidaBancada:
         """Modo acoplado (malha aberta): o registro da vida de origem, sem as acoes do filtro, rejogado com o cerebro de outro
         braco (ou do mesmo). Os eventos sao os da origem nos mesmos ticks; so o cerebro (e o que ele faz deles) muda."""
-        if filtro not in FILTROS:
-            raise KeyError(f"filtro desconhecido {filtro!r}: {sorted(FILTROS)}")
+        retirar = filtro_de(filtro)
         if origem.origem is not None:
             raise ValueError("acoplar uma vida ja acoplada nao e suportado: acople a partir da vida de origem")
-        log = filtrar_log(origem.motor.log, filtro_de(filtro))
+        log = filtrar_log(origem.motor.log, retirar)
         espec = replace(origem.espec, braco=braco)
         m = self.rejogar(log, espec)
-        vida = VidaBancada(espec, m, contar_acoes(log)[0], origem=origem.nome, origem_braco=origem.rotulo_braco,
-                           filtro=filtro)
+        # as broncas do pedido (repreender pelo canal do mundo) ficam no registro so se o filtro nao tira os sinais
+        broncas = 0 if AcaoUsuario.REPREENDER.value in retirar else origem.broncas
+        vida = VidaBancada(espec, m, contar_acoes(log)[0] - broncas, origem=origem.nome, origem_braco=origem.rotulo_braco,
+                           filtro=filtro, broncas=broncas)
         self.conferir_replay(vida)
         return vida
 
@@ -808,6 +868,8 @@ class Bancada:
                       "consumos_ate_metade": consumos_ate_metade([x["taxa"] for x in dias], [x["n"] for x in dias], taxa_p0),
                       "informacoes": [dict(i) for i in m.informacoes],
                       "decisoes_com_informacao": m.decisoes_com_informacao}
+        n6 = self.medidas_n6(vida, m, reg) if isinstance(m, MotorFrutasMundo) else None
+        n7 = self.medidas_n7(vida, m, reg) if isinstance(m, MotorFrutasMundo) else None
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
@@ -823,11 +885,88 @@ class Bancada:
                 "genoma": vida.espec.genoma, "mundo": vida.espec.mundo, "condicao": vida.espec.condicao,
                 "origem": vida.origem, "filtro": vida.filtro, "interacoes": vida.interacoes,
                 "eventos_mundo": vida.eventos_mundo, "informacoes": vida.informacoes, "bola": bola, "frutas": frutas,
+                "pedidos": vida.pedidos, "broncas": vida.broncas, "n6": n6, "n7": n7,
                 "humor_medio": humor,
                 **desempenho, "acerto_total": tarefa["acerto_total"], "acerto_por_dia": tarefa["acerto"],
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
                 "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo}
+
+    def medidas_n6(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
+        """N6 (plano, secoes 6 e 7), nos bracos de memoria: as sub-decisoes da fruta com a sonda contrafactual que o cerebro grava no
+        motivo (`fruta.sonda_memoria`: a escolha com m = 0 e o mesmo u), a fracao decidida pela memoria (G-CITA), a cobertura, a
+        ocupacao dos espacos por decisao e as verificacoes exatas dos marcos 1 e 2 (todo consumo virou um episodio da mesma fruta, na
+        mesma ordem). Fora dos bracos de memoria, None."""
+        if braco_de(vida.espec.braco).memoria is None:
+            return None
+        cerebro = reg.interna.cerebro
+        interno = cerebro.estado_interno()
+        subs = []
+        for mot in cerebro.motivos:
+            fr = mot.get("fruta")
+            if fr is None:
+                continue
+            mem = fr.get("memoria_emocao")
+            if mem is None:
+                raise RuntimeError(f"{vida.nome}: sub-decisao sem o registro da memoria com a memoria ligada")
+            sonda = fr.get("sonda_memoria")
+            if (sonda is None) != (len(fr["presentes"]) < 2):
+                raise RuntimeError(f"{vida.nome}: a sonda da memoria tem de existir so com duas frutas ou mais")
+            recuperados = sum(1 for v in mem.values() if v["episodio"] is not None)
+            subs.append((len(fr["presentes"]), fr["escolhida"], sonda["escolha_sem_memoria"] if sonda else fr["escolhida"],
+                         recuperados))
+        r = memoria_nas_subdecisoes(subs, len(cerebro.motivos))
+        contagem = interno["memoria"]["sondas"]
+        if (r["subdecisoes_2_mais"], r["mudou"]) != (contagem["subdecisoes_2mais"], contagem["mudou"]):
+            raise RuntimeError(f"{vida.nome}: as sondas do motivo e as contagens do cerebro divergem")
+        episodios = interno["memoria"]["episodios"]
+        consumos = motor.consumos
+        return {**r, "modo": interno["memoria"]["modo"], "ganho": interno["memoria"]["ganho"],
+                "ocupacao": ocupacao_espacos_frutas(reg.espacos, FRUTAS),
+                "marcos": {"consumos": len(consumos), "episodios": len(episodios),
+                           "episodio_por_consumo": [e["fruta"] for e in episodios] == [c["fruta"] for c in consumos],
+                           "contagem": dict(interno["memoria"]["contagem"])}}
+
+    def medidas_n7(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
+        """N7 (plano, secao 6), nos bracos com pedido e nos acoplados a um deles: a fruta X da unidade, as decisoes de conflito com a sonda
+        "quem decidiu" que o cerebro grava no motivo (`pedido.acao_sem_pedido`: a acao com o mesmo u e sem o termo), a deferencia por zona
+        e janela (dias 1..metade e metade..dias_pedido do pedido; a extincao depois), as violacoes das regras urgentes (G-URG), a fracao
+        de X nas ofertas com X e outra fruta, as desobediencias, e a trajetoria diaria de w_pedido com o dia em que cruza o zero. A decisao
+        k cai no tick k x intervalo_decisao_ticks. Fora disso, None."""
+        de_pedido = braco_de(vida.espec.braco).pedido or (vida.origem_braco is not None and
+                                                          BRACOS.get(vida.origem_braco.split("<")[0], BRACOS["P0"]).pedido)
+        if not de_pedido:
+            return None
+        cerebro = reg.interna.cerebro
+        passo = CONFIG_PADRAO.intervalo_decisao_ticks
+        T, cp = TICKS_POR_DIA, self.cfg_pedido
+        fim, fim_pedidos = self.dias * T, min(cp.dias_pedido, self.dias) * T
+        metade = min(cp.dias_pedido // 2, self.dias) * T
+        janelas = {"inicial": (0, metade), "final": (metade, fim_pedidos), "extincao": (fim_pedidos, fim)}
+        decisoes, consumos = [], []
+        for k, mot in enumerate(cerebro.motivos):
+            ped = mot.get("pedido")
+            if ped is not None:
+                decisoes.append((k * passo, mot["regra"], mot["regra"] in ZONAS_CONFLITO and ped["p"] == -1.0,
+                                 mot["acao"] == AcaoPet.COMER.value, ped["acao_sem_pedido"] == AcaoPet.COMER.value))
+            fr = mot.get("fruta")
+            if fr is not None:
+                consumos.append((k * passo, fr["escolhida"], fr["presentes"]))
+        x = DonoPedinte.sortear_fruta(vida.espec.semente)
+        estado = motor.estado()
+        serie = None
+        interno = cerebro.estado_interno()
+        if "peso_pedido" in interno:
+            if interno["aprendizado_ligado"]:
+                fab, fm = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec)
+                serie = [do_braco(politica_no_tick(vida.motor.log, fab, vida.espec.semente, d * T, fm)).cerebro
+                         .estado_interno()["peso_pedido"] for d in range(1, self.dias + 1)]
+            else:
+                serie = [interno["peso_pedido"]] * self.dias
+        return {"fruta_x": x, "janelas": janelas, "deferencia": deferencia_ao_pedido(decisoes, janelas),
+                "fracao_x": fracao_da_fruta(consumos, x, janelas), "desobediencias": estado.get("desobediencias"),
+                "pedidos": vida.pedidos, "broncas": vida.broncas, "w_pedido_por_dia": serie,
+                "dia_w_pedido_cruza_zero": dia_cruza_zero(serie) if serie else None}
 
     def deriva(self, vida: VidaBancada, sonda: dict) -> list[float]:
         """JSD (bits) entre a politica no fim de cada dia e a do prior herdado (o P0 da mesma vida), nas mesmas sondas."""
@@ -968,6 +1107,22 @@ class RegraFrutasComInformante:
         return ofertas + self.informante.acoes(visao.estado["tick"], [fruta_de(o) for o in ofertas])
 
 
+class RegraFrutasComPedinte:
+    """N7: o canal do mundo das frutas com o dono que pede (DonoPedinte, N7-MUNDO): o que a regra de dentro poe (as ofertas e, no P2, a
+    informacao) e, logo depois, as acoes do pedinte com o estado do passo e as frutas oferecidas: a bronca da desobediencia (so no P3+ped)
+    e o pedido "deixe X". Tudo fora do orcamento (B2), como no simular_vida_frutas."""
+
+    def __init__(self, regra, pedinte: DonoPedinte) -> None:
+        self.regra = regra
+        self.pedinte = pedinte
+        self.extras_fora_do_orcamento = frozenset({AcaoUsuario.REPREENDER.value}) if pedinte.bronca else frozenset()
+
+    def decidir(self, visao: Visao, acoes_do_dono: list) -> list[AcaoUsuario]:
+        eventos = self.regra.decidir(visao, acoes_do_dono)
+        ofertadas = [fruta_de(e) for e in eventos if e in ACOES_FRUTAS]
+        return eventos + self.pedinte.acoes(visao.estado, ofertadas)
+
+
 class _Espiao:
     """So nos testes: embrulha a politica do braco e anota tudo o que chega por `receber_acao_dono` (o gate "a informacao nunca chega
     ao aprendiz como sinal")."""
@@ -1017,9 +1172,10 @@ def simular_vida_mundo(dono, regra_mundo, politica, semente: int, dias: int, orc
                       minimo_obrigatorio=minimo, maximo_permitido=maximo)
         acoes = dono.decidir(visao, rng_dono)
         canal.aplicar(acoes, passo, passos)
+        permitidos = FORA_DO_ORCAMENTO | getattr(regra_mundo, "extras_fora_do_orcamento", frozenset())
         for evento in regra_mundo.decidir(visao, acoes):
-            if evento.value not in FORA_DO_ORCAMENTO:
-                raise ValueError(f"a regra do mundo so poe eventos do mundo ou informacao, nao {evento.value!r}")
+            if evento.value not in permitidos:
+                raise ValueError(f"a regra do mundo so poe eventos do mundo, informacao ou pedido, nao {evento.value!r}")
             motor.observar(evento)
     canal.fechar()
     return motor
@@ -1040,6 +1196,7 @@ class _Registro:
         self.sinais_do_dono = 0
         self.bola: list[tuple[bool, str, str]] = []      # (bola no cenario, regra do instinto/impulso, acao), por decisao
         self.vetores: list[tuple] = []                     # (indice, fome, higiene, energia, humor), por decisao
+        self.espacos: list[tuple] = []                     # N6: (frutas no curto, frutas no longo prazo) depois de cada decisao
 
     @property
     def sinais(self) -> int:
@@ -1054,6 +1211,9 @@ class _Registro:
         self.sinais_na_decisao.append(self.interna.sinais_entregues)
         self.bola.append((obs.bola > 0.0, self.interna.ultima_regra, acao.value))
         self.vetores.append((len(self.vetores), v[0], v[1], v[2], v[3]))
+        mem = getattr(self.interna.cerebro, "_memoria", None)   # N6, so le: a memoria dos lobos depois de promover (o que a decisao viu)
+        if mem is not None:
+            self.espacos.append((tuple(e["fruta"] for e in mem.curto), tuple(e["fruta"] for e in mem.longo)))
         return acao
 
     def observar(self, transicao) -> None:

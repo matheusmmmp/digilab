@@ -206,14 +206,17 @@ def _bancada(**kw) -> bv.Bancada:
 def test_m0_e_o_p0_nas_decisoes_e_codifica_todo_consumo(semente):
     espec = bv.EspecVida("atencioso", "P0", semente, None, "descasado")
     p0 = bv.Bancada(4, 64).vida(espec).motor
-    m0 = _bancada(memoria_ligada=True).vida(espec).motor
+    # desde a BANCADA-LIGA-N6-N7 a memoria e do braco: o M0 (memoria ligada, ganho 0) no lugar do P0 com a chave na config
+    m0 = bv.Bancada(4, 64).vida(replace(espec, braco="M0")).motor
     assert bv.resumo_motor(m0) == bv.resumo_motor(p0)
     e0, em = p0.politica.estado_interno(), m0.politica.estado_interno()
     for m in em["motivos"]:                                           # so o estado do lobo de memoria difere (G2 do plano)
         if "fruta" in m:
             m["fruta"].pop("memoria_emocao", None)
             m["fruta"].pop("sonda_memoria", None)
-    assert {k: v for k, v in em.items() if k != "memoria"} == e0
+    # so o estado do lobo de memoria e o rotulo do braco (M0 x P0) diferem
+    assert {k: v for k, v in em.items() if k not in ("memoria", "bancada")} == {k: v for k, v in e0.items() if k != "bancada"}
+    assert (em["bancada"]["braco"], e0["bancada"]["braco"]) == ("M0", "P0")
     eps = em["memoria"]["episodios"]
     assert [(e["tick"], e["fruta"]) for e in eps] == [(c["tick"], c["fruta"]) for c in m0.consumos] and eps
     for e, c in zip(eps, m0.consumos):                                # o sinal da valencia segue o efeito no humor
@@ -221,10 +224,10 @@ def test_m0_e_o_p0_nas_decisoes_e_codifica_todo_consumo(semente):
 
 
 def test_mr_pela_bancada_g1_e_a_memoria_age():
-    b = _bancada(memoria_ligada=True, memoria_ganho=S // 2)
+    b = _bancada(memoria_ganho=S // 2)                                     # o ganho da config; o braco MR liga a memoria
     mudou = 0
     for s in (101, 202, 303):
-        v = b.vida(bv.EspecVida("atencioso", "P0", s, None, "descasado"))   # a bancada rejoga do texto do log (G1, estado interno)
+        v = b.vida(bv.EspecVida("atencioso", "MR", s, None, "descasado"))   # a bancada rejoga do texto do log (G1, estado interno)
         mudou += v.motor.politica.estado_interno()["memoria"]["sondas"]["mudou"]
     assert mudou > 0
 
@@ -303,13 +306,16 @@ def test_peso_do_pedido_aprende_pelo_dono_e_pela_consequencia():
 
 
 def test_sem_o_campo_do_pedido_no_mundo_nada_muda():
-    """Hoje a Observacao da main nao tem `pedido_frutas` (o lado do mundo e do chat A): os lobos com w0_pedido > 0 vivem como hoje."""
+    """Sem pedido no mundo nada muda. Desde a BANCADA-LIGA-N6-N7 o pedido e do braco: num braco sem pedido (o P1) o w0_pedido da
+    config nao chega ao cerebro (a vida e o estado interno de hoje); no P1+ped chega."""
     for s in (101, 202):
         espec = bv.EspecVida("atencioso", "P1", s, None, "descasado")
         hoje = bv.Bancada(4, 64).vida(espec).motor
         com = _bancada(w0_pedido=S // 2).vida(espec).motor
         assert bv.resumo_motor(com) == bv.resumo_motor(hoje)
-        assert com.politica.estado_interno()["peso_pedido"] == S // 2
+        assert "peso_pedido" not in com.politica.estado_interno()
+        ped = _bancada(w0_pedido=S // 2).politica(replace(espec, braco="P1+ped")).cerebro
+        assert ped.estado_interno()["peso_pedido"] == S // 2
 
 
 def test_determinismo_com_memoria_e_pedido():
