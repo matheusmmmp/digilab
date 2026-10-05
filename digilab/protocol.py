@@ -578,7 +578,8 @@ def _valor_config(nome: str) -> Any:
                   "ConfigConfianca": _config.CONFIG_CONFIANCA,
                   "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO,
                   "ConfigBola": _config.CONFIG_BOLA, "ConfigFrutas": _config.CONFIG_FRUTAS,
-                  "ConfigInformacao": _config.CONFIG_INFORMACAO, "ConfigPedido": _config.CONFIG_PEDIDO}
+                  "ConfigInformacao": _config.CONFIG_INFORMACAO, "ConfigPedido": _config.CONFIG_PEDIDO,
+                  "ConfigJulgamentoFruta": _config.CONFIG_JULGAMENTO_FRUTA}
     return getattr(instancias[classe], campo)
 
 
@@ -1006,3 +1007,28 @@ def validar_parametros_pedido() -> None:
 
 def pedido_nao_referendados() -> list[str]:
     return educacao_nao_referendados(PARAMETROS_PEDIDO_N7)
+
+
+# V2, K4: o dono do P3 julga a fruta (docs/TAREFA_V2_K4_DONO_JULGA_FRUTA.md): registro a parte; nenhum hash a cobre; nada referendado.
+_FONTES_JULGAMENTO_K4 = {
+    "ConfigJulgamentoFruta.ligada": (_D, "chave desligada por padrao (desligada: a vida das frutas byte a byte)"),
+    "ConfigJulgamentoFruta.no_orcamento": (_P, "sem fonte; a tarefa K4 pede o julgamento no orcamento, como o resto do feedback "
+                                               "do P3; a alternativa (fora do orcamento) fica atras desta opcao para o Matheus"),
+}
+PARAMETROS_JULGAMENTO_K4: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_JULGAMENTO_K4.items()}
+
+
+def validar_parametros_julgamento() -> None:
+    """Todo campo da ConfigJulgamentoFruta tem status e fonte, e o valor registrado bate com config.py."""
+    esperados = {f"ConfigJulgamentoFruta.{f.name}" for f in fields(_config.CONFIG_JULGAMENTO_FRUTA)}
+    if set(PARAMETROS_JULGAMENTO_K4) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(PARAMETROS_JULGAMENTO_K4))}; "
+                         f"registro sem parametro: {sorted(set(PARAMETROS_JULGAMENTO_K4) - esperados)}")
+    for n, c in PARAMETROS_JULGAMENTO_K4.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def julgamento_nao_referendados() -> list[str]:
+    return educacao_nao_referendados(PARAMETROS_JULGAMENTO_K4)
