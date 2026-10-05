@@ -2128,3 +2128,6 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
   mudou o resultado.
 - **A fração de X conta só ofertas com X e outra fruta** (plano do N7, seção 6): com X sozinha, deixar X não é escolha entre frutas, e ela
   entra na deferência (a decisão de comer).
+- **Dois testes de contrato mudaram:** `test_bancada_mundos.py::test_contrato_das_condicoes` (as condições agora incluem `iguais` e o
+  mundo `iguais_frutas`) e `test_bancada_v2.py::test_engine_intocado_e_bracos_com_fonte_e_no` (a tabela dos braços inclui os do N6 e do N7,
+  com fonte e nó). Nenhum braço ou mundo antigo mudou.

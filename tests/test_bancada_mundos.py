@@ -40,12 +40,13 @@ def _bolas(log) -> list[int]:
 
 def test_contrato_das_condicoes():
     """Desde a BANCADA-FRUTAS as tres condicoes existem (os mundos das frutas); o contrato e: todo mundo realiza uma condicao
-    e nenhuma condicao espera no. Os mundos das frutas estao em tests/test_bancada_frutas.py."""
-    assert set(bv.CONDICOES) == {"casado", "descasado", "mutavel"}
+    e nenhuma condicao espera no. Os mundos das frutas estao em tests/test_bancada_frutas.py. Desde a BANCADA-N6-N7 ha tambem a
+    condicao "iguais" (o mundo iguais_frutas do N7, fora da pergunta maior; tests/test_bancada_n6_n7.py)."""
+    assert set(bv.CONDICOES) == {"casado", "descasado", "mutavel", "iguais"}
     assert all(c.precisa == "" and c.no == "" for c in bv.CONDICOES.values())
     assert {m: bv.MUNDOS[m].condicao for m in bv.MUNDOS} == {
         "padrao": "casado", "bola": "casado", "bola_a1": "casado", "casado_frutas": "casado", "descasado": "descasado",
-        "mutavel": "mutavel"}
+        "mutavel": "mutavel", "iguais_frutas": "iguais"}
     assert bv.EspecVida("atencioso", "P0", 101, mundo="bola").condicao == "casado"
     with pytest.raises(NotImplementedError):
         bv.mundo_de("lago")
