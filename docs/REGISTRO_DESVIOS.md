@@ -2103,6 +2103,36 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
   byte a byte, com o estado interno normalizado (sem os pesos de presença, no prior, e sem a `presenca` dos registros). As vidas que aprendem
   pela consequência (P1, P2, P2e, P2a) mudam por desenho e ficam fora.
 
+## 2026-10-05 — LEITURA-PARCIAL: a fase 1 até aqui e as validações a refazer; interpretações
+
+Tarefa `docs/TAREFA_V2_LEITURA_PARCIAL.md`; entrega `docs/LEITURA_PARCIAL_V2_FASE1.md`. Nenhuma run, nenhum código.
+- **Nenhum dado gravado foi relido com medida nova.** O G-SSE do N4 com a medida N1 fica como validação nova opcional (LP-4), não como
+  reanálise das vidas de 11101…11505.
+- **As refeitas são só validação**, no ponto já fixado (o T3 da revisão; o ponto da A1), com os gates e alvos de antes; as validações
+  antigas e os artefatos delas ficam como estão.
+- **A A1 é refeita pelo B1/B2, não pelo teto:** a A1 não tem aprendizado, e o P0 com lobos é o instinto byte a byte; o que mudou e toca a
+  falha dela é o aleatório pôr bola dentro do orçamento.
+- **O N4 e o 1a-pet da A1 ficam valendo** sem refazer: nenhuma das cinco mudanças altera a vida do P0 (testes de byte a byte citados).
+- **Faixas propostas** 23101…23505 (A1-B), 24101…24505 (L1-T3), 25101…25505 (N3-T3, opcional) e 27101…27505 (N4-N1, opcional); a
+  26xxx foi pulada porque 26505 aparece como tick num gabarito da web.
+
+## 2026-10-05 — Estratégia nova da V2: montar tudo, calibrar junto, validar uma vez (decisão do Matheus, M10)
+
+- O Matheus apontou que calibrar e validar nó a nó gasta trabalho que as peças seguintes invalidam. A L1 e o N3 são exemplos: foram
+  validados antes do teto 16·S, da E2 e do cérebro vendo o mundo. Decisão: **montar o cérebro inteiro com testes de mecanismo,
+  calibrar uma vez, validar uma vez**, com cada peça como braço de ablação.
+- `docs/ROADMAP_V2.md` passa à revisão 3.
+- `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` ganha o adendo 1, antes de qualquer dado: as ablações ficam como contrastes
+  secundários, fora da família de Holm.
+- A calibração e a validação do N5 não rodam. O chat B já tinha parado (nota `a810d03`, branch `v2-n5-calibracao`, nenhum número), e a
+  faixa 13101…13505 ficou intacta.
+- As faixas próprias do N5, do N6 e do N7 ficam sem uso.
+- As decisões LP-1 a LP-3 de `docs/LEITURA_PARCIAL_V2_FASE1.md` (refazer A1, L1, N3) ficam substituídas pela M11: as validações já
+  feitas viram histórico.
+- Tarefas novas:
+  - `docs/TAREFA_V2_CEREBRO_N6_N7.md` (B, etapa C1);
+  - `docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md` (C, etapa K1).
+
 ## 2026-10-05 — V2, N7-MUNDO: o pedido "deixe a fruta X" e o dono que pede (`docs/TAREFA_V2_N7_MUNDO.md`)
 
 - **`config.py` e `protocol.py` também mudaram**, fora da lista da tarefa ("só `events.py`, `frutas.py`/`ambiente.py`, `policy.py`"): os

@@ -1,6 +1,6 @@
-# ROADMAP — Digilab V2 até a fase de experimentos completa (revisão 2)
+# ROADMAP — Digilab V2 até a fase de experimentos completa (revisão 3)
 
-Status: **PROPOSTO** (coordenador, 2026-10-01). A revisão 1 deste arquivo ordenava o plano da V2 em torno de uma pergunta
+Status: **PROPOSTO** (coordenador, 2026-10-01; **revisão 3 em 2026-10-05**, estratégia "montar tudo, calibrar junto, validar uma vez", aprovada pelo Matheus). A revisão 1 deste arquivo ordenava o plano da V2 em torno de uma pergunta
 sobre o dono. Ela foi trocada por três decisões e propostas do Matheus, todas de 2026-10-01:
 - a **pergunta maior**;
 - a **arquitetura** com o dono informante;
@@ -18,8 +18,10 @@ Os números valem pelo artefato apontado. Nenhuma etapa roda sem tarefa e plano 
 
 - **Pesquisa no Python, produto na web.** Todos os experimentos e a comparação entre cérebros rodam no Python. A web roda **um**
   DigiBrain, o escolhido no fim da fase 1, numa versão de pet própria. Só ele precisa de porte e paridade.
-- **Uma peça nova por vez.** Cada peça passa sozinha antes de entrar junto com outra. O "só cuidado" acoplado e o controle
-  de capacidade entram em todo experimento.
+- **Uma peça nova por vez na construção; medir tudo junto** (revisão 3). Cada peça entra atrás de uma chave, com testes de
+  mecanismo (G1, e chave desligada = vida de antes byte a byte), sem calibração nem validação própria. O sistema montado é
+  calibrado uma vez e validado uma vez, com cada peça como braço de ablação (ligada × desligada). O "só cuidado" acoplado e o
+  controle de capacidade entram em todo experimento.
 
 "Experimentos completos" = fase 1 (Python, a pergunta maior e a comparação de cérebros), fase 2 (humanos) e fase 3
 (genoma), com resultado registrado, positivo ou negativo.
@@ -40,90 +42,83 @@ Os números valem pelo artefato apontado. Nenhuma etapa roda sem tarefa e plano 
 **Conclusão:** a arquitetura é implementável **sem tocar no `engine.py`**, reaproveitando o aprendiz da L1. Os dois
 bloqueios reais são V5 (ações novas) e V7 (mundo pobre em eventos). Os dois se resolvem com as frutas como sub-decisão.
 
-## 3. O caminho
+## 3. A estratégia (revisão 3, 2026-10-05)
+
+**Por que mudou.** Até a rodada 7 cada nó era calibrado e validado sozinho. Isso gastou validações que o desenho seguinte
+invalidou: a L1 foi validada com teto 1·S, e a revisão do aprendiz trocou para 16·S; o N3 foi validado sem o humor no sinal (E2) e
+com o cérebro cego às frutas. Os parâmetros que sobram (teto, ganho, confiança na informação, confiança no pedido, ganho da
+memória) disputam a mesma decisão: calibrados um a um, com peças ainda faltando, o alvo se mexe. Decisão do Matheus: **montar
+tudo, calibrar junto, validar uma vez.**
 
 ```
-RODADA 3            RODADA 4               RODADA 5                RODADA 6                 RODADA 7–8            FASE 2   FASE 3
-──────────          ──────────             ──────────              ──────────               ──────────            ──────   ──────
-L1 calib+valid ──┐
-bancada P0–P3 ───┼─► N3 consequência ──┬─► N5 dono informante ──► EXPERIMENTO MAIOR ────► N11 cérebros ──┐
-bola (A1) ───────┤   (P1, bola+drives) │   (P2, P2e)                P0–P3 × casado/        A × B × C        ├─► marco F1 ─► humanos ─► genoma
-frutas: defs ────┴─► frutas (N4) ──────┘                            descasado/mutável      (só Python)      │   (escolhe o
-                                                                    ──► N6 memória, N7 arbitragem ───────────┘    DigiBrain da web)
+CONSTRUÇÃO (só testes de mecanismo)          CALIBRAÇÃO CONJUNTA         VALIDAÇÃO ÚNICA                    ESCOLHA        PRODUTO
+─────────────────────────────────            ───────────────────         ───────────────                    ───────        ───────
+cérebro A (lobos): N5 ✔, N6, N7, canais  ─┐
+mundo: frutas ✔, informação ✔, pedido     ├─► uma faixa, todos os ───► experimento maior                ─┐
+bancada: braços P0–P3, N6, N7, ablações  ─┘   parâmetros juntos         + ablações (N5, N6, N7, canais)   │
+cérebros B (CfC/A2C) e C (Fly-like)  ───────► calibração dos três, ──► comparação A × B × C ───────────────┴─► M6 ───► v11
+                                              mesmo orçamento
 ```
 
-Se a L1 falhar na validação, o resultado negativo é registrado. A pergunta maior **não para**: a L1 é só o braço P3, que
-a v1 já prevê fraco. Isto troca a regra de parada da revisão 1 e precisa de decisão do Matheus (M4).
+**O que se mantém:** diagnósticos rápidos só com sementes de calibração quando uma peça levanta dúvida de desenho (a revisão do
+aprendiz achou assim que a decisão de comer não via a fruta). **O que sai:** calibração e validação por nó. As validações já feitas
+(L1, A1, N3, N4) ficam como histórico; não são refeitas uma a uma, porque a validação única cobre o cérebro novo
+(`docs/LEITURA_PARCIAL_V2_FASE1.md`, decisões LP, ficam substituídas por esta revisão).
 
 ## 4. Etapas
 
-| etapa | nó | depende de | entrega | gate (PROPOSTO) |
+| etapa | o quê | quem | gate |
+|---|---|---|---|
+| C1 | **cérebro A completo**: memória (N6) e arbitragem (N7) no `lobos.py`, atrás de chaves | B | mecanismo: G1; chave desligada = vida de antes byte a byte |
+| C2 | **mundo do pedido** (N7) | A | mecanismo |
+| C3 | **bancada**: braços do N6 e do N7, mundo `iguais_frutas`, braços de ablação | D | mecanismo |
+| C4 | **canais de reforço** (H-R2) no cérebro A, atrás de chave | B | mecanismo |
+| C5 | **cérebros B e C** sob o mesmo protocolo e a mesma bancada (`docs/research/digibrain/synthesis/brain_comparison.md`) | A e D, depois de C2/C3 | mecanismo; o B só no Python |
+| K1 | **plano da calibração conjunta + adendo do experimento maior** (ablações, N) | C | revisão do Matheus |
+| K2 | **calibração conjunta** do cérebro A montado, numa faixa só | B | regra registrada no plano |
+| V1 | **validação única**: experimento maior + ablações | B (com D) | as predições registradas antes + um contraste por peça |
+| K3/V2 | **comparação A × B × C**, cada um calibrado com o mesmo orçamento, depois uma validação | D | `brain_comparison.md` |
+| M6 | leitura consolidada da fase 1 e escolha do DigiBrain da web | coordenador + Matheus | — |
+| W | porte do escolhido (pets v11) | A | paridade Python/web |
+| F2, F3 | humanos; genoma | — | planos próprios |
+
+## 5. Divisão dos workers (próximas rodadas)
+
+| rodada | A | B | C | D |
 |---|---|---|---|---|
-| R3.1 | **L1** (P3) | referendo G3–G6 | calibração (PR 1) e validação (PR 2) | G3–G6, G3-T, G4 do aprendido |
-| R3.2 | **bancada** | nada (infra) | um orquestrador dos braços P0–P3 sobre o mesmo aprendiz: troca só a fonte do sinal; modo acoplado; métricas da pergunta maior (desempenho no ambiente, eficiência, deriva, custo da plasticidade) em `metrics.py`; **sem mecânica nova** | P0 = instinto byte a byte; acoplado reproduz o registro |
-| R3.3 | **A1 bola** | aprovação do #113 | `MotorAmbiente` com a bola, chave desligada; sub-decisão de brincar | G1, G2; 1a-pet com acoplado |
-| R3.4 | **frutas: definições** | busca V1–V6 no repo | `docs/DEFINICOES_FRUTAS_V2.md`: necessidade, gosto, efeito, vício; os 7 itens da literatura; campos do log; critério ensino × cuidado | revisão do Matheus |
-| R4.1 | **N3** (P1) | L1 mesclada, bancada | sinal = redução do déficit pela **própria ação** (V2); janela de crédito decidida no plano | aprende a reduzir déficit melhor que o instinto; G6; sem mortes novas |
-| R4.2 | **N4 frutas** | definições aprovadas, V5 | frutas como sub-decisão de comer; gostar e querer em dois registros; nutrição separada; neofobia do ovo | G1, G2; os dois registros se separam; critério ensino × cuidado |
-| R5.1 | **N5** (P2, P2e) | N3, N4 | evento "o dono informa" no motor da V2, entra pela percepção (V6), nunca como reforço | informação × acoplada × sem; G5; P2e se recupera |
-| R6.0 | **revisão do aprendiz** (Matheus, 2026-10-04) | LOBOS-MUNDO | teto dos pesos, janela de crédito e exposição, uma alavanca por vez, só em sementes de calibração; escolhe o ponto do experimento maior (`docs/TAREFA_V2_REVISAO_APRENDIZ.md`) | diagnóstico, sem gate |
-| R6.1 | **experimento maior** | N3, N4, N5, L1 | P0, P1, P2, P2e, P3 × casado/descasado/mutável, com o mesmo aprendiz | as predições registradas antes (`ARQUITETURA_V2_VALIDACAO.md`, seção 6) |
-| R6.2 | N6 memória | N5 | quatro marcos (registrado, codificado, recuperado, causal) | controle de recência e embaralhado |
-| R6.3 | N7 arbitragem | L1 | duas prioridades | G5 |
-| R6.4 | H-R2/H-R4 canais e genoma | N4, R6.1 | canais separados × escalar somado; sensibilidade por genoma com experiência acoplada | aprendizado desligado = vidas idênticas entre genomas |
-| R7 | **N11 cérebros** | R6.1 | DigiBrain A (C3-like), B (CfC/A2C, ponto flutuante) e C (Fly-like), **só no Python**, com ablação das peças | `docs/research/digibrain/synthesis/brain_comparison.md` |
-| R8 | **marco da fase 1** | R6–R7 | `docs/LEITURA_CONSOLIDADA_V2_FASE1.md` e a **escolha do DigiBrain do produto** | — |
-| R8.1 | **decisão de produto: tirar elogiar e repreender** (Matheus, 2026-10-01: adiada para cá) | R6 (P1 × P3), R8 | decidir se o pet do produto aprende só pela consequência. Se sim, redesenhar o que depende dos botões: vínculo B (a coerência agrupa o feedback), disciplina das travessuras, mentira repreendida, catálogo do comando pelo chat; versão de pet própria | P1 ≥ P3 no experimento maior |
-| W | **web** | R8 | porte do DigiBrain escolhido (pets v11), com gabarito Python → web | paridade |
-| F2 | **humanos** | R8, ética, arte | gêmeos: o dono humano informa; reconhecimento e preferência | plano próprio |
-| F3 | **genoma** | F2 | genoma com variância herdável (fisiologia, prior, sensibilidade por canal) | plano próprio; E1 falhou com 4,9% |
+| 8 | N7-MUNDO (em curso) | **C1**: N6 e N7 no cérebro | K1: plano da calibração conjunta | BANCADA-N6-N7 (em curso) |
+| 9 | C5: cérebro C (Fly-like) | C4: canais de reforço | revisão do K1 e do adendo | C5: cérebro B (CfC/A2C) |
+| 10 | — | K2: calibração conjunta | — | calibração dos cérebros B e C |
+| 11 | — | V1: validação única | leitura | K3/V2: comparação |
+| 12 | W (depois do M6) | — | leitura consolidada | — |
 
-Fora da fase de experimentos: corpo 2D, luta dentro do cérebro, memória nuclear e estresse (D7), vício antes das frutas sem vício.
+Regras de sempre: uma worktree por frente, um PR, merge só pelo Matheus, só o chat B mexe em `lobos.py`.
 
-## 5. Divisão dos workers
+## 6. Reservas
 
-Mesmo esquema da rodada 1 (`docs/V2_TRABALHO_PARALELO.md`): uma worktree por frente, um PR, merge só pelo Matheus. Quatro
-chats; o B continua no aprendiz; o D sai da fila da GPU (a pesquisa da fase 1 é toda CPU).
-
-| rodada | chat A | chat B | chat C | chat D | coordenador |
-|---|---|---|---|---|---|
-| **3** | A1 bola (implementação) | L1 calibração → validação | frutas: definições (doc) | **bancada** (infra P0–P3, acoplado, métricas) | conflitos de #114/#115; `V2_RODADA_2.md`; prompts de verificação ao Claude Science |
-| **4** | N4 frutas (implementação) | N3 consequência | revisão bibliográfica da decomposição da plasticidade (via Claude Science) + plano de análise do experimento maior | bancada: modos casado/descasado/mutável | reservas de sementes e versões |
-| **5** | apoio ao N5 (eventos de informação no motor da V2) | N5 dono informante | N6 memória (plano) | N7 arbitragem | — |
-| **6** | experimento maior: validação única | H-R2/H-R4 canais | N6 implementação | — | leitura do experimento maior |
-| **7** | DigiBrain A | DigiBrain B (CfC/A2C, Python) | DigiBrain C | harness N11 + ablações | — |
-| **8** | — | — | — | — | marco da fase 1; escolha do DigiBrain da web |
-
-Regras que valem para todos: um nó por PR; o plano de análise vai no **primeiro** commit, antes de qualquer run; calibração e
-validação em PRs separados; a frente que mexe em `lobos.py` é sempre a do B (os outros só usam a interface `Aprendiz`), para
-não haver dois PRs no mesmo arquivo.
-
-## 6. Reservas (PROPOSTAS; o coordenador fecha na tarefa de cada um)
-
-| o quê | calibração | validação |
-|---|---|---|
-| L1 | 3101…3505 | 4101…4505 (uma vez) |
-| A1 bola | 6101…6505 | 7101…7505 |
-| N3 | 8101…8505 | 9101…9505 |
-| N4 frutas | 10101…10505 | 11101…11505 |
-| N5 | 12101…12505 | 13101…13505 |
-| experimento maior | 14101…14505 | 15101…15505 |
-| N11 cérebros | 16101…16505 | 17101…17505 |
+| o quê | calibração | validação | estado |
+|---|---|---|---|
+| L1 | 3101…3505 | 4101…4505 | usadas (histórico) |
+| A1 bola | 6101…6505 | 7101…7505 | usadas (histórico) |
+| N3 | 8101…8505 | 9101…9505 | usadas (histórico) |
+| N4 frutas | 10101…10505 | 11101…11505 | usadas (histórico) |
+| N5 | 12101…12505 | 13101…13505 | **não usadas**; ficam reservadas, sem uso previsto |
+| experimento maior (calibração conjunta + validação única) | 14101…14505 | 15101…15505 | reservadas |
+| N11 cérebros | 16101…16505 | 17101…17505 | reservadas |
+| revisão do aprendiz | 18101…18505 | — | usada (diagnóstico) |
+| N6 | 19101…19505 | 20101…20505 | **não usadas**; o N6 entra como ablação do experimento maior |
+| N7 | 21101…21505 | 22101…22505 | **não usadas**; o N7 entra como ablação do experimento maior |
 
 Já usadas, não reutilizar: vínculo B 5101…5505; comando com estilo 20261501/1601/1701.
-Versões de pet na web: v10 vínculo B (#114); **v11 = o DigiBrain escolhido** (antes "lobos na web"); v12 bola, se a bola for
-para o produto. Frutas e vício só ganham versão se forem para o produto.
+Versões de pet na web: v10 vínculo B; **v11 = o DigiBrain escolhido**; bola, frutas e vício só ganham versão se forem para o produto.
 
 ## 7. Decisões que só o Matheus pode tomar
 
-| # | decisão | recomendação | custo de errar |
-|---|---|---|---|
-| M1 | Referendar G3–G6 com D1–D4 | **substituído (2026-10-01):** a validação da L1 roda com os alvos do plano rev. 2 como estão, sem bloquear | — |
-| M2 | Aprovar o desenho da bola (#113) | aprovar | ação nova do pet quebraria a v1 (V5) |
-| M3 | Adotar a pergunta maior e a arquitetura (A1, A6 de `ARQUITETURA_V2_VALIDACAO.md`) | **DECIDIDO pelo Matheus (2026-10-01):** adotadas; `PLANO_V2_PESQUISA.md` revisão 2 | — |
-| M4 | Falha da L1 não para a V2 (é só o braço P3) | **DECIDIDO pelo Matheus (2026-10-01)**, e ampliado: nenhuma validação que falhe agora bloqueia a V2; o escopo futuro vai pedir revisão de todas | — |
-| M5 | Frutas como sub-decisão de comer (V5) | sim | ações novas quebram a reprodução da v1 |
-| M6 | O chat D deixa a fila da GPU e faz a bancada | sim | sem a bancada, cada nó monta o próprio orquestrador e P1–P3 deixam de ser comparáveis |
-| M7 | Reservas de sementes da seção 6 | aprovar | reusar validação vicia o teste |
-| M8 | v11 passa a ser o DigiBrain escolhido | sim | portar a L1 antes de saber se ela é o cérebro do produto é trabalho jogado fora |
-| M9 | Comitê de ética e arte para a fase 2 | submeter quando o experimento maior passar | coletar sem aprovação invalida os dados |
+| # | decisão | estado |
+|---|---|---|
+| M1–M4, M6, M8 | ver revisão 2 | decididas |
+| M5 | frutas como sub-decisão de comer | decidida (N4) |
+| M7 | reservas | atualizadas na seção 6 |
+| M9 | comitê de ética e arte para a fase 2 | aberta: submeter depois da validação única |
+| M10 | **montar tudo, calibrar junto, validar uma vez** (revisão 3) | **DECIDIDA pelo Matheus em 2026-10-05** |
+| M11 | as validações já feitas viram histórico; nada de revalidar nó a nó (substitui LP-1 a LP-3 da leitura parcial) | decidida junto com M10 |
