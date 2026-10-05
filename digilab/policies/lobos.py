@@ -140,7 +140,17 @@ PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
     "drives": ("PROPOSTO", "fome, higiene e energia (PLANO_ANALISE_V2_N3, secao 3); humor fora pela F6"),
     "ganho": ("PROPOSTO", "sem fonte; calibrado nas sementes 8101...8505 (PLANO_ANALISE_V2_N3, secao 6)"),
     "humor_na_fruta": ("DECIDIDO", "E2, Matheus, 2026-10-04 (PLANO_ANALISE_V2_EXPERIMENTO_MAIOR, secao 3.1)"),
+    "canais_ligados": ("PROPOSTO", "CANAIS-REFORCO (H-R2; K-6 de PLANO_CALIBRACAO_CONJUNTA_V2): o mesmo total de sinal, por canal"),
 }
+# CANAIS-REFORCO (H-R2): o nome de cada canal pelo indice do drive em Estado.vetor, e o grupo de pesos que cada canal credita.
+#   corpo: a tabela do lobo de decisao (a regra; as entradas sao o estado do corpo)
+#   fruta: os pesos que leem a identidade da fruta (a escolha da fruta, a informacao do N5, o pedido do N7, a presenca da FRUTA-NO-
+#          CENARIO). A nutricao e igual em todas as frutas (F6), entao o que distingue uma fruta da outra chega pelo humor.
+# Uma rota so por canal: nenhum canal e creditado duas vezes, e o total creditado na decisao e o escalar (contrato K-6). Trocar a
+# rota e desenho novo (adendo 2 do plano da calibracao), nao parametro.
+CANAL_DO_DRIVE = {0: "fome", 1: "higiene", 2: "energia", INDICE_HUMOR: "humor"}
+ROTA_CANAIS = {"fome": "corpo", "higiene": "corpo", "energia": "corpo", "humor": "fruta"}
+ALVOS_CANAIS = ("corpo", "fruta")
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -523,6 +533,7 @@ class Aprendiz:
         self._n_recompensas = {"elogio": 0, "repreensao": 0, "latencia": 0, "ignorado": 0}
         self._n_atualizacoes = 0
         self._cortes_teto = 0
+        self._canais: dict | None = None              # CANAIS-REFORCO: totais por canal e por alvo (so depois do 1o credito por canal)
 
     # ------------------------------------------------------------- leitura
 
@@ -719,10 +730,16 @@ class Aprendiz:
         self._guardar_no_traco(registro)
         anteriores = self._anteriores(registro)
         self._n_recompensas["consequencia"] = self._n_recompensas.get("consequencia", 0) + 1
+        cc = cfg_consequencia or CONFIG_CONSEQUENCIA
+        if cc.canais_ligados and self.cl.traco_decisoes:
+            raise ValueError("CANAIS-REFORCO: os canais nao andam com o traco (traco_decisoes > 0); o T3 nao tem traco (R1)")
         if self._fruta_na_decisao and transicao.acao is AcaoPet.COMER:
-            self._consequencia_pendente = (registro, transicao, cfg_consequencia or CONFIG_CONSEQUENCIA, anteriores)
+            self._consequencia_pendente = (registro, transicao, cc, anteriores)
             return
-        if f_S != 0:
+        if cc.canais_ligados:
+            canais = sinal_homeostatico_canais(transicao, self._escala, cc)
+            self._creditar_canais(registro, canais, f_S)
+        elif f_S != 0:
             self._creditar(registro, f_S, anteriores, consequencia=True)
 
     def fruta_comida(self, fruta: str, obs_depois: Observacao) -> None:
@@ -746,8 +763,47 @@ class Aprendiz:
             raise RuntimeError(f"E2: fruta comida {fruta!r} nao e a da sub-decisao registrada")
         self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
         f_S = sinal_homeostatico_fruta(transicao.observacao, obs_depois, self._escala, cc)
-        if f_S != 0:
+        if cc.canais_ligados:
+            canais = sinal_homeostatico_fruta_canais(transicao.observacao, obs_depois, self._escala, cc)
+            self._creditar_canais(registro, canais, f_S)
+        elif f_S != 0:
             self._creditar(registro, f_S, anteriores, consequencia=True)
+
+    # ------------------------------------------------------------- CANAIS-REFORCO: o mesmo sinal, separado por canal (H-R2)
+
+    def _sensibilidade_canal(self, canal: str) -> int:
+        """Ponto de entrada da H-R4 (o genoma modulando a sensibilidade a cada canal), SEM USO: devolve S (sensibilidade 1) para
+        todo canal. Uma sensibilidade diferente de S mudaria o total de sinal e quebraria o contrato K-6; entra so com o desenho da
+        H-R4 (docs/research/digibrain/mechanisms/reinforcement.md)."""
+        if canal not in ROTA_CANAIS:
+            raise KeyError(f"canal desconhecido: {canal!r}")
+        return self._escala
+
+    def _creditar_canais(self, registro: dict, canais: dict, f_S: int) -> None:
+        """Contrato K-6: a soma dos canais e o escalar `f_S` da mesma decisao (falha alto se nao for). Cada canal vai ao seu grupo
+        de pesos (ROTA_CANAIS); o que chega a cada grupo e a soma dos canais dele, aplicada pela regra da L1 (_aplicar_sinal)."""
+        S = self._escala
+        total = 0
+        alvos = {a: 0 for a in ALVOS_CANAIS}
+        for canal, f in canais.items():
+            sens = self._sensibilidade_canal(canal)
+            if sens != S:                                 # pragma: no cover - a H-R4 ainda nao existe
+                raise NotImplementedError("H-R4: sensibilidade por canal")
+            total += f
+            alvos[ROTA_CANAIS[canal]] += f
+        if total != f_S:
+            raise RuntimeError(f"CANAIS-REFORCO: soma dos canais {total} != escalar {f_S} (contrato K-6)")
+        if alvos["fruta"] != 0 and not ("fruta" in registro or "presenca" in registro or "pedido" in registro):
+            raise RuntimeError("CANAIS-REFORCO: canal da fruta sem peso que leia a fruta nesta decisao")
+        if self._canais is None:
+            self._canais = {"creditos": 0, "por_canal": {c: 0 for c in ROTA_CANAIS}, "por_alvo": {a: 0 for a in ALVOS_CANAIS}}
+        self._canais["creditos"] += 1
+        for canal, f in canais.items():
+            self._canais["por_canal"][canal] += f
+        for a, f in alvos.items():
+            self._canais["por_alvo"][a] += f
+        if any(alvos.values()):
+            self._aplicar_sinal(registro, f_S, consequencia=True, alvos=alvos)
 
     # ------------------------------------------------------------- REVISAO: o traco de elegibilidade (janela de credito)
 
@@ -778,29 +834,35 @@ class Aprendiz:
             self._aplicar_sinal(r, g, consequencia)
             self._n_recompensas["traco"] = self._n_recompensas.get("traco", 0) + 1
 
-    def _aplicar_sinal(self, registro: dict, f_S: int, consequencia: bool = False) -> None:
+    def _aplicar_sinal(self, registro: dict, f_S: int, consequencia: bool = False, alvos: dict | None = None) -> None:
         """Aplica f_S ao registro pela regra da L1. N5: o peso da informacao so muda pela consequencia (`consequencia`), nunca
-        pelo dono (elogio, bronca, latencia ou chamado ignorado)."""
+        pelo dono (elogio, bronca, latencia ou chamado ignorado).
+
+        CANAIS-REFORCO: com `alvos` ({"corpo": f, "fruta": f}, a soma dos canais de cada grupo, ROTA_CANAIS), a tabela da regra
+        recebe o do corpo e os pesos que leem a fruta (escolha, informacao, pedido, presenca) o da fruta. Sem `alvos`, o escalar
+        f_S em todos, como sempre."""
+        f_corpo = f_S if alvos is None else alvos["corpo"]
+        f_fruta = f_S if alvos is None else alvos["fruta"]
         g = registro["regra"]
-        self._cortes_teto += atualizar_pesos(self._pesos[g], self._prior[g], registro, f_S, self.cl.passo, self.cl.teto,
+        self._cortes_teto += atualizar_pesos(self._pesos[g], self._prior[g], registro, f_corpo, self.cl.passo, self.cl.teto,
                                              self._escala)
         sub = registro.get("fruta")
         if sub is not None:
-            self._cortes_teto += atualizar_fruta(self._pesos_fruta, self._prior_fruta, sub, f_S, self.cl.passo, self.cl.teto,
+            self._cortes_teto += atualizar_fruta(self._pesos_fruta, self._prior_fruta, sub, f_fruta, self.cl.passo, self.cl.teto,
                                                  self._escala)
             if consequencia and "I" in sub:
-                novo, corte = atualizar_info(self._peso_info, self._prior_info, sub, f_S, self.cl.passo, self.cl.teto,
+                novo, corte = atualizar_info(self._peso_info, self._prior_info, sub, f_fruta, self.cl.passo, self.cl.teto,
                                              self._escala)
                 self._peso_info = novo
                 self._cortes_teto += corte
         if self._peso_pedido is not None and ("pedido" in registro or (sub is not None and "Pd" in sub)):
             # N7: o peso do pedido aprende com qualquer fonte que o braco tenha (P1: a consequencia; P3: o dono); P0 nao aprende
-            novo, corte = atualizar_pedido(self._peso_pedido, self._prior_pedido, registro, f_S, self.cl.passo, self.cl.teto,
+            novo, corte = atualizar_pedido(self._peso_pedido, self._prior_pedido, registro, f_fruta, self.cl.passo, self.cl.teto,
                                            self._escala)
             self._peso_pedido = novo
             self._cortes_teto += corte
         if consequencia and "presenca" in registro:
-            self._cortes_teto += atualizar_comer_fruta(self._pesos_comer_fruta, self._prior_comer_fruta, registro, f_S,
+            self._cortes_teto += atualizar_comer_fruta(self._pesos_comer_fruta, self._prior_comer_fruta, registro, f_fruta,
                                                        self.cl.passo, self.cl.teto, self._escala)
         self._n_atualizacoes += 1
 
@@ -866,6 +928,9 @@ class Aprendiz:
         if self._peso_pedido is not None:         # N7, so com w0_pedido != 0
             d["peso_pedido"] = self._peso_pedido
             d["peso_pedido_prior"] = self._prior_pedido
+        if self._canais is not None:              # CANAIS-REFORCO, so depois do 1o credito por canal
+            d["canais"] = {"creditos": self._canais["creditos"], "por_canal": dict(self._canais["por_canal"]),
+                           "por_alvo": dict(self._canais["por_alvo"])}
         return d
 
 
@@ -1237,12 +1302,54 @@ def sinal_homeostatico_fruta(antes: Observacao, depois: Observacao, S: int, cfg:
     cfg = cfg or CONFIG_CONSEQUENCIA
     if type(cfg.ganho) is not int or cfg.ganho < 0:
         raise ValueError(f"ganho precisa ser inteiro >= 0: {cfg.ganho!r}")
-    drives = tuple(cfg.drives)
-    if cfg.humor_na_fruta and INDICE_HUMOR not in drives:
-        drives = drives + (INDICE_HUMOR,)
+    drives = _drives_fruta(cfg)
     d_antes = deficit_homeostatico(antes.vetor_estado, drives, S)
     d_depois = deficit_homeostatico(depois.vetor_estado, drives, S)
     return div_arred(cfg.ganho * (d_antes - d_depois), S)
+
+
+def _drives_fruta(cfg: ConfigConsequencia) -> tuple:
+    """Os drives da E2: os do N3 e, com `humor_na_fruta`, o humor no fim."""
+    drives = tuple(cfg.drives)
+    if cfg.humor_na_fruta and INDICE_HUMOR not in drives:
+        drives = drives + (INDICE_HUMOR,)
+    return drives
+
+
+def sinal_por_canal(antes: tuple, depois: tuple, drives: tuple, ganho: int, S: int) -> dict[str, int]:
+    """CANAIS-REFORCO (H-R2, contrato K-6): o escalar div_arred(ganho * (D(antes) - D(depois)), S) separado por canal, um por drive,
+    na ordem de `drives`. Delta_i = falta_i(antes)**2 - falta_i(depois)**2 (D e a soma deles). A parte de cada canal sai por
+    arredondamento telescopico sobre as somas parciais:
+        f_i = div_arred(ganho * (Delta_1 + ... + Delta_i), S) - div_arred(ganho * (Delta_1 + ... + Delta_(i-1)), S)
+    entao a soma dos f_i e exatamente div_arred(ganho * soma Delta, S), o escalar, em inteiros (a soma telescopa). Cada f_i difere de
+    div_arred(ganho * Delta_i, S) em no maximo 1 (o resto vai ao canal em que a soma parcial cruza o meio)."""
+    if type(ganho) is not int or ganho < 0:
+        raise ValueError(f"ganho precisa ser inteiro >= 0: {ganho!r}")
+    canais: dict[str, int] = {}
+    acumulado, anterior = 0, 0
+    for i in drives:
+        if i not in CANAL_DO_DRIVE:
+            raise ValueError(f"drive {i} sem canal (CANAL_DO_DRIVE)")
+        delta = deficit_homeostatico(antes, (i,), S) - deficit_homeostatico(depois, (i,), S)
+        acumulado += delta
+        parcial = div_arred(ganho * acumulado, S)
+        canais[CANAL_DO_DRIVE[i]] = parcial - anterior
+        anterior = parcial
+    return canais
+
+
+def sinal_homeostatico_canais(transicao: Transicao, S: int, cfg: ConfigConsequencia | None = None) -> dict[str, int]:
+    """`sinal_homeostatico` separado por canal (sinal_por_canal): a soma dos canais e o escalar."""
+    cfg = cfg or CONFIG_CONSEQUENCIA
+    return sinal_por_canal(transicao.observacao.vetor_estado, transicao.observacao_seguinte.vetor_estado, tuple(cfg.drives),
+                           cfg.ganho, S)
+
+
+def sinal_homeostatico_fruta_canais(antes: Observacao, depois: Observacao, S: int,
+                                    cfg: ConfigConsequencia | None = None) -> dict[str, int]:
+    """`sinal_homeostatico_fruta` separado por canal (sinal_por_canal, os drives da E2): a soma dos canais e o escalar."""
+    cfg = cfg or CONFIG_CONSEQUENCIA
+    return sinal_por_canal(antes.vetor_estado, depois.vetor_estado, _drives_fruta(cfg), cfg.ganho, S)
 
 
 def validar_parametros_consequencia(cfg: ConfigConsequencia | None = None) -> None:

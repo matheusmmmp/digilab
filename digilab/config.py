@@ -1242,12 +1242,16 @@ class ConfigConsequencia:
                       comer uma fruta, o humor entra nos drives e o "depois" e o estado logo depois de comer
                       (lobos.sinal_homeostatico_fruta, docs/TAREFA_V2_LOBOS_MUNDO.md). Nas outras acoes, e sem frutas,
                       nada muda: o sinal do N3 de sempre.
+    canais_ligados  PROPOSTO  CANAIS-REFORCO (docs/TAREFA_V2_CANAIS_REFORCO.md; H-R2; K-6): o mesmo sinal separado por canal (fome,
+                      higiene, energia e humor), cada canal creditado ao seu grupo de pesos (lobos.ROTA_CANAIS). A soma dos canais
+                      e o escalar, em inteiros, decisao a decisao. False: o escalar de sempre, byte a byte.
     """
 
     drives: tuple = (0, 1, 2)
     ganho: int = 4                     # calibrado em 8101...8505 (a calibracao NAO fechou: nenhum ganho passou G6; regra de
                                        # reserva da secao 6: menos vidas com peso no teto); artifacts_v2_n3/calibracao/escolha.json
     humor_na_fruta: bool = True        # E2: o humor no sinal do P1 so quando a mudanca vem de comer fruta
+    canais_ligados: bool = False       # CANAIS-REFORCO: o mesmo total de sinal, separado por canal (H-R2, K-6)
 
 
 CONFIG_CONSEQUENCIA = ConfigConsequencia()

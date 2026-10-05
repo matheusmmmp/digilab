@@ -75,7 +75,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/donos.py` | donos sintéticos: atencioso, relapso, aleatório (controle crítico), incoerente |
 | `digilab/treino.py` | `CanalDeInteracao` impõe orçamento exato; `MotorComFeedback` (subclasse, só sobrescreve `_aplicar_acao_usuario`); `reproduzir_com_feedback`; `simular_vida` |
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
-| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim); **FRUTA-NO-CENARIO B**: a decisão de comer lê a fruta presente (seção "V2, FRUTA-NO-CENARIO, parte B" no fim); **CEREBRO-N6-N7**: a memória de episódios das frutas (N6) e o pedido do dono na decisão de comer e na escolha da fruta (N7), atrás de chaves (seção "V2, CEREBRO-N6-N7" no fim) |
+| `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim); **FRUTA-NO-CENARIO B**: a decisão de comer lê a fruta presente (seção "V2, FRUTA-NO-CENARIO, parte B" no fim); **CEREBRO-N6-N7**: a memória de episódios das frutas (N6) e o pedido do dono na decisão de comer e na escolha da fruta (N7), atrás de chaves (seção "V2, CEREBRO-N6-N7" no fim); **CANAIS-REFORCO**: o sinal da consequência separado por canal, com o mesmo total do escalar, `ConfigConsequencia.canais_ligados` (seção "V2, CANAIS-REFORCO" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`, `iguais_frutas`), as condições casado/descasado/mutável/iguais e as unidades derivadas (prefixos do experimento maior, do N6 e do N7); desde a BANCADA-N5 os lobos veem a bola e as frutas; os braços do N6 (M0, MR, MT, ME) e do N7 (P0+ped, P1+ped, P3+ped) declarados, falhando alto com o nó até a memória e o pedido existirem (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS", "V2, BANCADA-N5" e "V2, BANCADA-N6-N7" no fim) |
 | `experiments/run_v2_experimento_maior.py`, `experiments/configs/v2_experimento_maior/` | **V2, BANCADA-EXPERIMENTO**: o orquestrador do experimento maior (P0, P1, P2, P2e, P3 × `casado_frutas`, `descasado`, `mutavel` pela bancada, o "só cuidado" acoplado, os seis contrastes primários com Holm, a equivalência da predição 5 e as leituras por predição); o ponto nomeado do aprendiz na bancada (`ponto`: `L1` padrão, `T3` para o N5 e o experimento maior) (seção "V2, BANCADA-EXPERIMENTO" no fim) |
@@ -1895,3 +1895,34 @@ e `docs/PLANO_ANALISE_V2_N7.md` (N7-1 a N7-10). Só `experiments/bancada_v2.py` 
   resposta conhecida** em dados sintéticos; o prefixo das unidades sem colisão entre planos e fases.
 - **Quando a memória e o pedido chegarem:** tirar a entrada do `NOS_PENDENTES`, ligar a memória/o pedido em `Bancada.politica` e a regra do
   mundo do pedido em `Bancada.vida`, estender o `sem_ensino` aos pedidos (plano do N7, 4.2) e pôr os pedidos em `FORA_DO_ORCAMENTO`.
+
+## V2, CANAIS-REFORCO — o sinal da consequência separado por canal, com o mesmo total (2026-10-05, `docs/TAREFA_V2_CANAIS_REFORCO.md`) — GATES PASSAM
+
+Etapa C4 do `docs/ROADMAP_V2.md` (revisão 3); hipótese H-R2 de `docs/research/digibrain/mechanisms/reinforcement.md`; decisão K-6 de
+`docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`. Só constrói os canais, para a ablação "canais × escalar" da validação única. Só testes de mecanismo,
+só as sementes dos testes (11, 101, 202). Só `lobos.py` e `config.py` mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Chave:** `ConfigConsequencia.canais_ligados` (False, PROPOSTO, `lobos.PARAMETROS_CONSEQUENCIA_N3`). Desligada, o escalar de sempre,
+  byte a byte. Nenhum outro parâmetro novo; a rota de cada canal é constante do código (`lobos.ROTA_CANAIS`).
+- **Os canais:** um por drive do sinal (`lobos.CANAL_DO_DRIVE`): fome, higiene e energia (o N3) e, quando o pet come fruta com a E2, o
+  humor. Δ_i = falta_i(antes)² − falta_i(depois)² (D é a soma deles). **Contrato K-6, mesmo total:** a parte de cada canal sai por
+  arredondamento telescópico sobre as somas parciais, f_i = div_arred(g·(Δ_1 + … + Δ_i), S) − div_arred(g·(Δ_1 + … + Δ_(i−1)), S), então a
+  soma dos canais é exatamente o escalar div_arred(g·ΣΔ, S), em inteiros (`lobos.sinal_por_canal`); cada canal fica a no máximo 1 da sua
+  conta isolada. O aprendiz confere a soma contra o escalar em toda decisão e falha alto se diferir (`Aprendiz._creditar_canais`).
+- **O que cada canal credita** (`ROTA_CANAIS`, uma rota por canal, nenhum canal creditado duas vezes): fome, higiene e energia → **corpo**,
+  a tabela do lobo de decisão (a regra); humor → **fruta**, os pesos que leem a identidade da fruta (a escolha da fruta, a informação do
+  N5, o pedido do N7 e a presença da FRUTA-NO-CENARIO). No escalar, f_S vai a todos eles. A nutrição é igual em todas as frutas (F6), então
+  o que distingue as frutas chega pelo humor.
+- **Ponto de entrada da H-R4** (`Aprendiz._sensibilidade_canal`): devolve S para todo canal, sem uso; uma sensibilidade diferente quebraria
+  o total e entra só com o desenho da H-R4. **Fora:** os canais não andam com o traço (`traco_decisoes` > 0 falha alto; o T3 não tem traço);
+  o sinal do dono (P3) continua escalar.
+- **Gates** (`tests/test_canais_reforco.py`, 20 testes, ~90 s): **G2**, canais desligados = a vida de hoje: 192 vidas (pontos L1 e T3 com
+  `w0_info` S/2; padrão, bola e os três mundos das frutas; P0 a P3; 2 donos; 2 sementes) iguais a
+  `tests/gabaritos/canais_reforco_vidas_de_hoje.json`, gravado com o código da main antes da mudança (`tests/gabarito_canais_reforco.py`,
+  commit próprio); **total igual ao escalar** em 3000 pares de estados por ganho (0, 1, 4, 16, 64) e decisão a decisão em vidas do P1 e do
+  P2 (descasado, mutável, casado, padrão; L1 e T3); **conta exata**: uma fruta que mata a fome e piora o humor (fome 0,4 → 0,7, humor 0,8 →
+  0,7, ganho 4) dá fome +1104 e humor −204 (escalar +900); pelos canais o comer recebe +1104 e a fruta escolhida desce, pelo escalar os dois
+  recebem +900 e a fruta sobe; **G1** com os canais, pelo texto do log; o P0 e o P3 não mudam com os canais ligados; o P1 muda.
+- **Para a bancada (chat D):** `"consequencia": {"canais_ligados": true}` na config (`bancada_da_config`), ou
+  `Bancada(..., cfg_consequencia=replace(CONFIG_CONSEQUENCIA, canais_ligados=True))`. A `PoliticaDoBraco` já passa a `ConfigConsequencia` a
+  `observar_consequencia`; nada mais muda na bancada. Os canais só agem nos braços que aprendem pela consequência (P1, P2, P2e, P2a e, quando a bancada o montar, o P1+ped).
+- **Não mudou:** `engine.py`, `AcaoPet`, o mundo, a bancada, o bandit, a web.
