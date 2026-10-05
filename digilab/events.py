@@ -61,6 +61,12 @@ class AcaoUsuario(str, Enum):
     INFORMAR_FRUTA_B_MAL = "informar_fruta_b_mal"
     INFORMAR_FRUTA_C_BEM = "informar_fruta_c_bem"
     INFORMAR_FRUTA_C_MAL = "informar_fruta_c_mal"
+    # V2, N7 (docs/PLANO_ANALISE_V2_N7.md, decisao N7-1): o dono PEDE "deixe a fruta X". E a vontade do dono, sem valor de verdade, e nao
+    # a informacao do N5. Nao e cuidado nem reforco: so o MotorFrutas com ConfigPedido.ligada aceita; nos motores anteriores levantam
+    # erro. No fim do enum.
+    PEDIR_DEIXAR_FRUTA_A = "pedir_deixar_fruta_a"
+    PEDIR_DEIXAR_FRUTA_B = "pedir_deixar_fruta_b"
+    PEDIR_DEIXAR_FRUTA_C = "pedir_deixar_fruta_c"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -96,6 +102,22 @@ def informar(fruta: str, conteudo: str) -> AcaoUsuario:
     if fruta not in FRUTAS or conteudo not in CONTEUDOS_INFORMACAO:
         raise ValueError(f"informacao invalida: {fruta!r}, {conteudo!r}")
     return AcaoUsuario(f"informar_fruta_{fruta}_{conteudo}")
+
+
+ACOES_PEDIDO = tuple(AcaoUsuario(f"pedir_deixar_fruta_{f}") for f in FRUTAS)
+
+
+def pedido_de(acao: AcaoUsuario) -> str:
+    """a fruta de um pedido \"deixe a fruta X\" (N7)"""
+    if acao not in ACOES_PEDIDO:
+        raise ValueError(f"acao nao e pedido: {acao}")
+    return acao.value[len("pedir_deixar_fruta_"):]
+
+
+def pedir_deixar(fruta: str) -> AcaoUsuario:
+    if fruta not in FRUTAS:
+        raise ValueError(f"fruta desconhecida: {fruta!r}")
+    return AcaoUsuario(f"pedir_deixar_fruta_{fruta}")
 
 
 def oferta_de(fruta: str) -> AcaoUsuario:

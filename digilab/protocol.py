@@ -578,7 +578,7 @@ def _valor_config(nome: str) -> Any:
                   "ConfigConfianca": _config.CONFIG_CONFIANCA,
                   "ConfigVinculoSituacao": _config.CONFIG_VINCULO_SITUACAO,
                   "ConfigBola": _config.CONFIG_BOLA, "ConfigFrutas": _config.CONFIG_FRUTAS,
-                  "ConfigInformacao": _config.CONFIG_INFORMACAO}
+                  "ConfigInformacao": _config.CONFIG_INFORMACAO, "ConfigPedido": _config.CONFIG_PEDIDO}
     return getattr(instancias[classe], campo)
 
 
@@ -980,3 +980,29 @@ def validar_parametros_informacao() -> None:
 
 def informacao_nao_referendados() -> list[str]:
     return educacao_nao_referendados(PARAMETROS_INFORMACAO_N5)
+
+
+# V2, N7 (lado do mundo): o pedido do dono (docs/TAREFA_V2_N7_MUNDO.md, docs/PLANO_ANALISE_V2_N7.md): registro a parte; nenhum hash a
+# cobre; nada referendado.
+_FONTES_PEDIDO_N7 = {
+    "ConfigPedido.ligada": (_D, "chave desligada por padrao, como ConfigInformacao.ligada (desligada: a vida das frutas byte a byte)"),
+    "ConfigPedido.janela_min": (_P, "sem fonte; a mesma da informacao do N5 (ConfigInformacao.janela_min, 240), plano do N7 secao 2"),
+    "ConfigPedido.dias_pedido": (_P, "sem fonte; pedidos nos dias 1-10 e extincao nos dias 11-14 de uma vida de 14 dias (decisao N7-7)"),
+}
+PARAMETROS_PEDIDO_N7: dict[str, Campo] = {
+    n: Campo(_valor_config(n), st, fonte) for n, (st, fonte) in _FONTES_PEDIDO_N7.items()}
+
+
+def validar_parametros_pedido() -> None:
+    """Todo campo da ConfigPedido tem status e fonte, e o valor registrado bate com config.py."""
+    esperados = {f"ConfigPedido.{f.name}" for f in fields(_config.CONFIG_PEDIDO)}
+    if set(PARAMETROS_PEDIDO_N7) != esperados:
+        raise ValueError(f"parametros sem registro: {sorted(esperados - set(PARAMETROS_PEDIDO_N7))}; "
+                         f"registro sem parametro: {sorted(set(PARAMETROS_PEDIDO_N7) - esperados)}")
+    for n, c in PARAMETROS_PEDIDO_N7.items():
+        if c.valor != _valor_config(n):
+            raise ValueError(f"{n}: protocolo diz {c.valor!r}, config.py diz {_valor_config(n)!r}")
+
+
+def pedido_nao_referendados() -> list[str]:
+    return educacao_nao_referendados(PARAMETROS_PEDIDO_N7)

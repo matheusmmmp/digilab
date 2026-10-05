@@ -2102,3 +2102,28 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
 - **Teste da parte A ajustado** (`tests/test_frutas_cenario.py`, chat A): o gabarito foi gravado antes das duas partes. O P0 e o P3 seguem
   byte a byte, com o estado interno normalizado (sem os pesos de presença, no prior, e sem a `presenca` dos registros). As vidas que aprendem
   pela consequência (P1, P2, P2e, P2a) mudam por desenho e ficam fora.
+
+## 2026-10-05 — V2, N7-MUNDO: o pedido "deixe a fruta X" e o dono que pede (`docs/TAREFA_V2_N7_MUNDO.md`)
+
+- **`config.py` e `protocol.py` também mudaram**, fora da lista da tarefa ("só `events.py`, `frutas.py`/`ambiente.py`, `policy.py`"): os
+  números novos (`janela_min`, `dias_pedido`) e a chave têm de ficar em `config.py` (regra do projeto), na `ConfigPedido` que o plano nomeia,
+  e todo parâmetro novo tem registro de status e fonte (`protocol.PARAMETROS_PEDIDO_N7`, como a informação do N5). Nenhum hash cobre esse
+  registro. `ambiente.py` não precisou mudar.
+- **`dias_pedido` virou parâmetro** (10, PROPOSTO), em vez de um 10 fixo no `DonoPedinte`: é a fase da decisão N7-7.
+- **A desobediência é medida na percepção da decisão:** o motor marca o consumo de uma fruta que tinha −1 em `pedido_frutas` na decisão em
+  que o pet comeu (não no tick do consumo depois do avanço). Assim "comer X com pedido vigente" é o mesmo pedido que o aprendiz viu.
+- **A bronca lê o motor pelo `estado()`:** o `DonoPedinte` recebe o `estado()` do motor (como a regra do mundo da bancada recebe a `Visao`) e
+  dá uma `repreender` por desobediência nova desde o passo anterior. Sem a chave no motor, `estado()` não tem `desobediencias` e o dono que
+  pede falha alto (`KeyError`). A bronca vem antes dos pedidos do passo.
+- **"Primeiro passo do dono depois do consumo":** a decisão do tick d acontece no avanço que começa depois do passo do dono em d, então a
+  bronca sai no passo seguinte: 0 < t − d ≤ 15 (teste).
+- **A bronca é uma `repreender` comum**, fora do orçamento: conta como contato e passa por `receber_acao_dono` (é o dono que mexe no P3+ped).
+  Quem mede o crédito dela (risco 3 do plano) é a análise do N7.
+- **O G2 é um gabarito gravado antes da mudança** (48 vidas, num commit só com ele) e, para a bancada, as 168 vidas de
+  `tests/test_frutas_cenario.py`, que seguem passando.
+- **Sorteio da fruta:** `FRUTAS[rng.randrange(3)]` com a rng `pedido-fruta`, só pela semente da unidade (não pelo genoma), como pede o
+  plano; o teste confere em 600 sementes que a fruta pedida coincide com a preferida de nascença em cerca de 1/3 delas.
+- **A bancada ainda não conhece o pedido** (chat D): `contar_acoes` contaria um pedido como interação do dono e o `sem_ensino` não o tira.
+  Isso fica para quem montar os braços com pedido; nenhuma vida de hoje tem pedido.
+- **Teste ajustado:** `tests/test_informacao.py::test_parametros_registrados_e_enum_no_fim` conferia as informações como "as seis últimas"
+  do enum; agora confere as posições 20 a 25 (o pedido vem depois delas), como já se fez com as ofertas.

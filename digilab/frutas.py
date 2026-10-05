@@ -36,6 +36,17 @@ V2, N5, lado do mundo (docs/TAREFA_V2_N5_MUNDO.md; com ConfigInformacao.ligada, 
                          modo `certo` (P2) diz o efeito real, modo `errado` (P2e) o contrario, nos mesmos ticks e na mesma frequencia;
                          modo `acoplado` (P2a, N5-4): o mesmo multiconjunto de frutas do P2 da unidade, com o conteudo verdadeiro, em
                          ticks sorteados uniformemente na vida pela rng propria `informacao-acoplada` (nao toca nenhuma outra rng).
+
+V2, N7, lado do mundo (docs/TAREFA_V2_N7_MUNDO.md, docs/PLANO_ANALISE_V2_N7.md; com ConfigPedido.ligada, que exige as frutas):
+  pedir_deixar           o dono pede "deixe a fruta X" (`pedir_deixar_fruta_<f>`, no fim de AcaoUsuario; N7-1): a vontade do dono, sem
+                         valor de verdade, separada da informacao do N5. Como a informacao, NAO e cuidado nem reforco: nao mexe no
+                         estado, nao conta como contato, nao passa por `receber_acao_dono` e fica fora do orcamento. Fica vigente por
+                         `janela_min` para a PERCEPCAO: antes de cada decisao o motor injeta `obs.pedido_frutas` (-1 na fruta com pedido
+                         vigente, 0 nas outras). Registros derivados `pedidos` e `desobediencias` (o pet comeu uma fruta com pedido
+                         vigente na decisao). Desligada: nada disso existe.
+  DonoPedinte            a fruta X sorteada por vida (rng propria `pedido-fruta`, N7-6); pede logo depois de cada oferta que tem X nos
+                         dias 1..dias_pedido (extincao depois, N7-7); com `bronca` (so o P3+ped, N7-8), `repreender` no primeiro passo
+                         do dono depois de cada desobediencia, fora do orcamento.
 """
 
 from __future__ import annotations
@@ -45,11 +56,11 @@ from dataclasses import dataclass, replace
 from typing import Callable
 
 from .ambiente import MotorAmbiente, PoliticaInstintoBola, reproduzir_ambiente
-from .config import (CONFIG_BOLA, CONFIG_DONOS, CONFIG_FRUTAS, CONFIG_INFORMACAO, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigBola,
-                     ConfigDonos, ConfigFrutas, ConfigInformacao)
+from .config import (CONFIG_BOLA, CONFIG_DONOS, CONFIG_FRUTAS, CONFIG_INFORMACAO, CONFIG_PADRAO, CONFIG_PEDIDO, TICKS_POR_DIA, Config,
+                     ConfigBola, ConfigDonos, ConfigFrutas, ConfigInformacao, ConfigPedido)
 from .donos import Visao
-from .events import (ACOES_FRUTAS, ACOES_INFORMACAO, FRUTAS, AcaoPet, AcaoUsuario, LogDeEventos, fruta_de, informacao_de, informar,
-                     oferta_de)
+from .events import (ACOES_FRUTAS, ACOES_INFORMACAO, ACOES_PEDIDO, FRUTAS, AcaoPet, AcaoUsuario, LogDeEventos, fruta_de, informacao_de,
+                     informar, oferta_de, pedido_de, pedir_deixar)
 from .policy import Observacao
 from .protocol import derivar_semente
 from .temperamento import NEUTRO, Temperamento
@@ -64,6 +75,10 @@ class FrutasSemChave(RuntimeError):
 
 class InformacaoSemChave(RuntimeError):
     """Informacao do dono num motor com ConfigInformacao.ligada = False."""
+
+
+class PedidoSemChave(RuntimeError):
+    """Pedido do dono num motor com ConfigPedido.ligada = False."""
 
 
 @dataclass(frozen=True)
@@ -138,6 +153,8 @@ class _PoliticaComFrutas:
         obs = replace(obs, fruta=self._motor._frutas_na_proxima_decisao(), frutas_cenario=self._motor._presenca_na_decisao())
         if self._motor.ci.ligada:
             obs = replace(obs, info_frutas=self._motor._informacao_na_proxima_decisao())
+        if self._motor.cp.ligada:
+            obs = replace(obs, pedido_frutas=self._motor._pedido_na_proxima_decisao())
         return self._pf.agir(obs, rng)
 
     def observar(self, transicao) -> None:
@@ -157,12 +174,21 @@ class MotorFrutas(MotorAmbiente):
     def __init__(self, politica=None, cfg=None, semente: int = 42, temperamento: Temperamento = NEUTRO,
                  especie: str = "brasa", obediencia_desligada: bool = False, cfg_bola: ConfigBola | None = None,
                  cfg_frutas: ConfigFrutas | None = None, semente_genoma: int | None = None,
-                 cfg_informacao: ConfigInformacao | None = None, **kw) -> None:
+                 cfg_informacao: ConfigInformacao | None = None, cfg_pedido: ConfigPedido | None = None, **kw) -> None:
         super().__init__(politica, cfg, semente, temperamento, especie, obediencia_desligada, cfg_bola, **kw)
         self.cf = cfg_frutas or CONFIG_FRUTAS
         self.ci = cfg_informacao or CONFIG_INFORMACAO
+        self.cp = cfg_pedido or CONFIG_PEDIDO
         if self.ci.ligada and not self.cf.ligada:
             raise ValueError("ConfigInformacao ligada exige ConfigFrutas ligada (a informacao e sobre as frutas)")
+        if self.cp.ligada and not self.cf.ligada:
+            raise ValueError("ConfigPedido ligada exige ConfigFrutas ligada (o pedido e sobre as frutas)")
+        if self.cp.ligada:
+            self.pedido: dict[str, int] = {}                  # fruta -> prazo do pedido vigente
+            self.pedidos: list[dict] = []
+            self.desobediencias: list[dict] = []              # o pet comeu uma fruta com pedido vigente na decisao
+            self.decisoes_com_pedido = 0
+            self._pedido_na_decisao: tuple[float, ...] = (0.0,) * len(FRUTAS)
         if self.ci.ligada:
             self.informacao: dict[str, tuple[float, int]] = {}      # fruta -> (valor, prazo)
             self.informacoes: list[dict] = []
@@ -225,6 +251,22 @@ class MotorFrutas(MotorAmbiente):
             self.decisoes_com_informacao += 1
         return v
 
+    def pedido_vigente(self) -> tuple[float, ...]:
+        """N7: (-1 com pedido vigente, 0 sem) por fruta, na ordem de FRUTAS, no tick atual"""
+        t = self._estado.tick
+        return tuple(-1.0 if f in self.pedido and t < self.pedido[f] else 0.0 for f in FRUTAS)
+
+    def _pedido_na_proxima_decisao(self) -> tuple[float, ...]:
+        """Chamado pelo embrulho logo antes de `agir`: o pedido vencido sai e o pet ve o vigente (guardado para a desobediencia)."""
+        t = self._estado.tick
+        for f in [f for f in FRUTAS if f in self.pedido and t >= self.pedido[f]]:
+            del self.pedido[f]
+        v = self.pedido_vigente()
+        if any(x != 0.0 for x in v):
+            self.decisoes_com_pedido += 1
+        self._pedido_na_decisao = v
+        return v
+
     def _decisao_observada(self, transicao) -> None:
         super()._decisao_observada(transicao)
         if not self.cf.ligada:
@@ -245,6 +287,8 @@ class MotorFrutas(MotorAmbiente):
                 elif escolhida not in presentes:
                     raise RuntimeError(f"a politica escolheu {escolhida!r}, fora do cenario {presentes}")
                 self._comer(escolhida, tick)
+                if self.cp.ligada and self._pedido_na_decisao[FRUTAS.index(escolhida)] < 0.0:
+                    self.desobediencias.append({"tick": tick, "fruta": escolhida})     # N7: so registro; a bronca e do dono
                 aviso = getattr(self.politica, "fruta_comida", None)   # E2: o sinal do P1 ve o estado depois de comer
                 if aviso is not None:
                     aviso(escolhida, Observacao.de_estado(self._estado))
@@ -299,6 +343,9 @@ class MotorFrutas(MotorAmbiente):
         if acao in ACOES_INFORMACAO:
             self._informar(acao)
             return
+        if acao in ACOES_PEDIDO:
+            self._pedir(acao)
+            return
         if acao not in ACOES_FRUTAS:
             super()._aplicar_acao_usuario(acao)
             return
@@ -330,6 +377,20 @@ class MotorFrutas(MotorAmbiente):
         self.informacao[fruta] = (1.0 if conteudo == "bem" else -1.0, prazo)
         self.informacoes.append({"tick": tick, "fruta": fruta, "conteudo": conteudo, "prazo": prazo})
 
+    def _pedir(self, acao: AcaoUsuario) -> None:
+        """N7: so registra o pedido para a percepcao. Nao mexe no estado, nao e contato, nao chega ao aprendiz como sinal."""
+        if not self.cp.ligada:
+            raise PedidoSemChave(f"{acao.value} com ConfigPedido.ligada = False")
+        tick = self._estado.tick
+        if self.cl.ligada:
+            self._conferir_morte(tick)
+            self._vivo()
+        self._n_eventos += 1                      # e um evento do log, mas NAO e contato nem reforco
+        fruta = pedido_de(acao)
+        prazo = tick + self.cp.janela_min
+        self.pedido[fruta] = prazo
+        self.pedidos.append({"tick": tick, "fruta": fruta, "prazo": prazo})
+
     def estado(self) -> dict:
         d = super().estado()
         if not self.cf.ligada:
@@ -337,6 +398,9 @@ class MotorFrutas(MotorAmbiente):
         d["frutas"] = {f: self.cenario[f] - self._estado.tick for f in self.frutas_no_cenario()}
         if self.ci.ligada:
             d["informacao"] = dict(zip(FRUTAS, self.informacao_vigente()))
+        if self.cp.ligada:
+            d["pedido"] = dict(zip(FRUTAS, self.pedido_vigente()))
+            d["desobediencias"] = len(self.desobediencias)    # o DonoPedinte do P3+ped le daqui para dar a bronca
         return d
 
     def resumo_frutas(self) -> dict:
@@ -348,7 +412,9 @@ class MotorFrutas(MotorAmbiente):
                 "ofertas": [dict(o) for o in self.ofertas], "consumos": [dict(c) for c in self.consumos],
                 "rng_fruta": self._rng_fruta.getstate()[1][-1],
                 **({"informacoes": [dict(i) for i in self.informacoes], "decisoes_com_informacao": self.decisoes_com_informacao}
-                   if self.ci.ligada else {})}
+                   if self.ci.ligada else {}),
+                **({"pedidos": [dict(p) for p in self.pedidos], "desobediencias": [dict(d) for d in self.desobediencias],
+                    "decisoes_com_pedido": self.decisoes_com_pedido} if self.cp.ligada else {})}
 
 
 def reproduzir_frutas(log: LogDeEventos, politica_fabrica: Callable, cfg=None, semente: int = 42,
@@ -490,11 +556,64 @@ class DonoInformante:
         return out
 
 
+class DonoPedinte:
+    """N7 (docs/PLANO_ANALISE_V2_N7.md, secoes 2 e 4.1): o dono que pede \"deixe a fruta X\".
+
+    - A fruta X e sorteada uma vez por vida pela rng propria derivar_semente(\"pedido-fruta\", semente), uniforme entre as frutas e sem
+      olhar a preferencia inata (N7-6); a rng e toda consumida na construcao e nao toca nenhuma outra.
+    - Logo depois de cada oferta que tem X, nos dias 1..dias_pedido, pede \"deixe X\"; depois, a extincao: nenhum pedido (N7-7). As
+      ofertas nao dependem do braco, entao o pedido sai nos mesmos ticks em todos os bracos da unidade.
+    - Com `bronca` (so o braco P3+ped, N7-8): no primeiro passo do dono depois de o pet comer uma fruta com pedido vigente na decisao
+      (o motor conta em `estado()[\"desobediencias\"]`), uma `repreender` por desobediencia.
+    Tudo fora do orcamento, pelo canal das ofertas (B2). A vida chama `acoes(estado, ofertadas)` em todo passo do dono, com o estado()
+    do motor depois do avanco; a bronca vem antes dos pedidos do passo."""
+
+    def __init__(self, fruta: str, cfg_pedido: ConfigPedido | None = None, bronca: bool = False) -> None:
+        if fruta not in FRUTAS:
+            raise ValueError(f"fruta desconhecida: {fruta!r}")
+        self.fruta = fruta
+        self.cp = cfg_pedido or CONFIG_PEDIDO
+        self.bronca = bronca
+        self.fim_pedidos = self.cp.dias_pedido * TICKS_POR_DIA       # primeiro tick da extincao
+        self.feitas: list[tuple[int, str]] = []                    # (tick, fruta) de cada pedido
+        self.broncas: list[int] = []                               # tick de cada bronca
+        self._desobediencias_vistas = 0
+
+    @staticmethod
+    def sortear_fruta(semente: int) -> str:
+        rng = random.Random(derivar_semente("pedido-fruta", semente))
+        return FRUTAS[rng.randrange(len(FRUTAS))]
+
+    @classmethod
+    def da_semente(cls, semente: int, cfg_pedido: ConfigPedido | None = None, bronca: bool = False) -> "DonoPedinte":
+        """o dono que pede da unidade: a fruta X sorteada pela semente da unidade"""
+        return cls(cls.sortear_fruta(semente), cfg_pedido, bronca)
+
+    def acoes(self, estado: dict, ofertadas: list[str]) -> list[AcaoUsuario]:
+        tick = estado["tick"]
+        out: list[AcaoUsuario] = []
+        total = estado["desobediencias"]          # sem ConfigPedido ligada no motor: KeyError (falha alto)
+        novas = total - self._desobediencias_vistas
+        if novas < 0:
+            raise RuntimeError(f"desobediencias voltaram atras: {self._desobediencias_vistas} -> {total}")
+        self._desobediencias_vistas = total
+        if self.bronca:
+            for _ in range(novas):
+                out.append(AcaoUsuario.REPREENDER)
+                self.broncas.append(tick)
+        if tick < self.fim_pedidos and self.fruta in ofertadas:
+            out.append(pedir_deixar(self.fruta))
+            self.feitas.append((tick, self.fruta))
+        return out
+
+
 def simular_vida_frutas(braco: str, dono, politica, semente: int, dias: int, orcamento: int, fabrica_motor: Callable,
                         ofertas: OfertasFrutas | None, cfg: Config | None = None, cfg_donos: ConfigDonos | None = None,
-                        rotulo_dono: str | None = None, informante: DonoInformante | None = None) -> Vida:
+                        rotulo_dono: str | None = None, informante: DonoInformante | None = None,
+                        pedinte: DonoPedinte | None = None) -> Vida:
     """treino.simular_vida com as ofertas de fruta FORA do orcamento: o canal impoe as acoes do dono de sempre; depois delas, as
-    ofertas do cronograma vao direto ao motor (entram no log como acao_usuario, sem contar no canal). A rng do dono e a de sempre."""
+    ofertas do cronograma vao direto ao motor (entram no log como acao_usuario, sem contar no canal). A rng do dono e a de sempre.
+    O informante (N5) e o pedinte (N7) agem depois das ofertas do passo, tambem fora do orcamento."""
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     total = dias * TICKS_POR_DIA
@@ -506,6 +625,8 @@ def simular_vida_frutas(braco: str, dono, politica, semente: int, dias: int, orc
     canal = CanalDeInteracao(motor, orcamento, cfg_donos.max_interacoes_por_passo)
     n_ofertas = 0
     n_informacoes = 0
+    n_pedidos = 0
+    n_broncas = 0
     for passo in range(passos):
         motor.avancar(cfg_donos.passo_ticks)
         minimo, maximo = canal.limites(passo, passos)
@@ -521,8 +642,18 @@ def simular_vida_frutas(braco: str, dono, politica, semente: int, dias: int, orc
             for a in informante.acoes_do_passo(motor._estado.tick, [fruta_de(x) for x in feitas]):
                 motor.observar(a)
                 n_informacoes += 1
+        if pedinte is not None:
+            # N7: fora do orcamento, pelo canal das ofertas (B2): a bronca do P3+ped e os pedidos sobre as ofertas do passo
+            for a in pedinte.acoes(motor.estado(), [fruta_de(x) for x in feitas]):
+                motor.observar(a)
+                if a is AcaoUsuario.REPREENDER:
+                    n_broncas += 1
+                else:
+                    n_pedidos += 1
     canal.fechar()
     v = Vida(braco=braco, semente_coorte=semente, motor=motor, interacoes=canal.gasto)
     v.ofertas = n_ofertas
     v.informacoes = n_informacoes
+    v.pedidos = n_pedidos
+    v.broncas = n_broncas
     return v

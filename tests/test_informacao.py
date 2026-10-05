@@ -60,7 +60,8 @@ def _motor(ci=CI, s: int = 5) -> MotorFrutas:
 def test_parametros_registrados_e_enum_no_fim():
     validar_parametros_informacao()
     assert informacao_nao_referendados() == ["ConfigInformacao.janela_min"] and CONFIG_INFORMACAO.ligada is False
-    assert list(AcaoUsuario)[-6:] == list(ACOES_INFORMACAO) and list(AcaoUsuario)[17:20] == list(ACOES_FRUTAS)
+    # posicoes fixas: as informacoes nas 20 a 25 (depois delas vem o pedido do N7)
+    assert list(AcaoUsuario)[20:26] == list(ACOES_INFORMACAO) and list(AcaoUsuario)[17:20] == list(ACOES_FRUTAS)
     assert [informacao_de(a) for a in ACOES_INFORMACAO] == [(f, c) for f in FRUTAS for c in ("bem", "mal")]
     assert informar("b", "mal") is AcaoUsuario.INFORMAR_FRUTA_B_MAL
     with pytest.raises(ValueError):
