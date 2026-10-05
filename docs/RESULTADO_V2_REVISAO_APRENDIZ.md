@@ -78,6 +78,10 @@ hoc da base mostram por quê (`pos_hoc_pesos_fruta.json`, `pos_hoc_oferta_unica.
 
 ## 5. Decisões para o Matheus
 
+**Decididas pelo Matheus em 2026-10-05: todas como recomendadas (R1–R4).** R1 = T3 (teto 16·S) como ponto de partida das
+calibrações; R2 vira tarefa da rodada 7, dividida entre o chat A (o mundo diz qual fruta está no cenário) e o chat B (a decisão de comer
+lê isso). A N5-2 continua valendo: a informação do dono só entra na escolha de qual fruta.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | R1 | Ponto da calibração do N5 e do experimento maior | **T3 (teto 16·S), pela regra registrada**; o T2 (4·S) é a alternativa de teto finito, com quase o mesmo efeito | Com o teto de hoje, metade ou mais das vidas fica no teto e o "limitado pelo teto" do N5 continua; o teto não muda o P1 nas frutas |
