@@ -2287,3 +2287,29 @@ B e C ainda não existem.
   `experiments/medir_k4_orcamento.py`, com a medida do orçamento e a receita do P3 com julgamento pela bancada sem mudar `bancada_v2.py`.
 - **Fora do orçamento na bancada** pede o chat D: o `simular_vida_mundo` só aceita da regra do mundo os eventos de `FORA_DO_ORCAMENTO`, e
   elogio e bronca não estão lá (nem devem estar para os outros braços).
+
+## 2026-10-05 — CANAIS-REFORCO: o sinal da consequência por canal, com o mesmo total; interpretações
+
+Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/digibrain/mechanisms/reinforcement.md`, decisão K-6 de
+`docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`. Só testes de mecanismo; nenhuma run com faixa reservada.
+- **"Mesmo total de sinal" = a soma inteira dos canais é o escalar da mesma decisão.** Arredondar cada canal sozinho
+  (div_arred(g·Δ_i, S)) não fecha a soma; o arredondamento telescópico sobre as somas parciais fecha sempre, e cada canal fica a no máximo
+  1 da conta isolada. A ordem dos canais é a dos drives (fome, higiene, energia, humor); o resto de arredondamento vai ao canal em que a
+  soma parcial cruza o meio. O aprendiz confere a soma contra o escalar que a bancada calculou e falha alto se diferir.
+- **"Cada um com o próprio peso de crédito" = cada canal credita o seu grupo de pesos**, não um multiplicador por canal: um multiplicador
+  mudaria o total (é a sensibilidade da H-R4, que fica para depois, com o ponto de entrada nomeado e sem uso).
+- **A rota é por grupo de pesos, uma por canal:** o corpo (fome, higiene, energia) → a tabela da regra; o humor → os pesos que leem a fruta
+  (escolha, informação, pedido, presença). No escalar o mesmo f_S vai a todos esses grupos ao mesmo tempo; nos canais cada grupo recebe só a
+  soma dos canais dele, e nenhum canal é creditado em dois grupos. A rota é constante do código: outra rota é desenho novo e, pela K-6,
+  entraria por adendo 2 do plano da calibração, varrida com o ganho. **Nenhum parâmetro novo além da chave.**
+- **A presença (FRUTA-NO-CENARIO) vai com a fruta, não com o corpo:** o peso de presença de uma fruta lê qual fruta está no cenário; o que
+  separa uma fruta da outra é o efeito no humor (a nutrição é igual em todas, F6). Consequência: pelos canais, deixar de comer com fruta no
+  cenário não mexe na presença (o humor não muda), e comer a fruta ruim sozinha baixa a presença dela mesmo quando a fome melhora.
+- **A informação (N5) e o pedido (N7) vão com a fruta:** os dois leem a identidade da fruta. O pedido do N7 aprende também com o dono (P3),
+  que continua escalar; os canais só mudam o que vem da consequência.
+- **Decisão com total zero e canais não zero:** fome +k e energia −k, por exemplo, somam 0. O escalar não credita nada; pelos canais o
+  corpo também recebe 0 (os dois são do corpo). Só quando os canais de grupos diferentes se cancelam um grupo recebe +k e o outro −k, com
+  total 0: é o caso que a H-R2 quer separar, e fica dentro do contrato.
+- **Canais e traço não andam juntos** (falha alto): o traço espalha o sinal às decisões anteriores com arredondamento próprio, e o total
+  por decisão deixaria de ser o do escalar. O T3, o ponto da calibração conjunta, não tem traço (R1).
+- **Só o sinal da consequência:** elogio, bronca, latência e chamado ignorado (o dono) seguem escalares.
