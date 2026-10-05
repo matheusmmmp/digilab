@@ -1339,3 +1339,20 @@ class ConfigPedido:
 
 CONFIG_PEDIDO = ConfigPedido()
 CONFIG_PEDIDO_LIGADA = ConfigPedido(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigJulgamentoFruta:
+    """V2, K4 (docs/TAREFA_V2_K4_DONO_JULGA_FRUTA.md; contrato K4 e decisao E7 do experimento maior; decisao K-11): o dono do P3 julga
+    cada consumo de fruta pelo efeito real vigente (elogia a boa, repreende a ruim, nada com a neutra), no primeiro passo depois do
+    consumo. `ligada` faz o MotorFrutas expor os consumos em estado()[\"consumos_frutas\"] (o que o dono ve). `no_orcamento`: o
+    julgamento usa elogiar/repreender DENTRO do orcamento, como o resto do feedback do P3 (a escolha registrada); False = fora do
+    orcamento, pelo canal do mundo, como as informacoes (a alternativa, atras da opcao, para o Matheus decidir). Tudo PROPOSTO
+    (protocol.PARAMETROS_JULGAMENTO_K4). Desligada: nada muda."""
+
+    ligada: bool = False
+    no_orcamento: bool = True
+
+
+CONFIG_JULGAMENTO_FRUTA = ConfigJulgamentoFruta()
+CONFIG_JULGAMENTO_FRUTA_LIGADA = ConfigJulgamentoFruta(ligada=True)

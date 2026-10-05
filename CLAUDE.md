@@ -1895,3 +1895,40 @@ e `docs/PLANO_ANALISE_V2_N7.md` (N7-1 a N7-10). Só `experiments/bancada_v2.py` 
   resposta conhecida** em dados sintéticos; o prefixo das unidades sem colisão entre planos e fases.
 - **Quando a memória e o pedido chegarem:** tirar a entrada do `NOS_PENDENTES`, ligar a memória/o pedido em `Bancada.politica` e a regra do
   mundo do pedido em `Bancada.vida`, estender o `sem_ensino` aos pedidos (plano do N7, 4.2) e pôr os pedidos em `FORA_DO_ORCAMENTO`.
+
+## V2, K4-DONO-JULGA-FRUTA — o dono do P3 julga a fruta pelo efeito real (2026-10-05, `docs/TAREFA_V2_K4_DONO_JULGA_FRUTA.md`) — GATES PASSAM
+
+Contrato K4 e decisão E7 de `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` (seção 1) e decisão K-11 de `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`.
+Infraestrutura, sem run de pesquisa nem faixa reservada; só as sementes dos testes. Mudaram `frutas.py`, `config.py`
+(`ConfigJulgamentoFruta`) e `protocol.py` (o registro dela), mais `experiments/medir_k4_orcamento.py` (a medida e a receita da bancada);
+`engine.py`, `AcaoPet`, `lobos.py`, `bancada_v2.py` (o chat D liga na rodada 10), os donos de `donos.py` e a web não. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **O conhecimento** (`JulgadorFruta`): o efeito real de cada fruta, o mesmo que o informante do P2 recebe (`Bancada.efeitos_reais`:
+  antes e, no mutável, depois de `tick_troca`, a mesma regra do `InformanteDoMundo`); fora da bancada, `JulgadorFruta.do_genoma` (o mesmo
+  do `DonoInformante.do_genoma`). Cada consumo é julgado pelo efeito vigente no tick dele: > 0 elogia (a fruta boa), < 0 repreende (a
+  ruim, o "mal" do P2), 0 (a neutra) nada.
+- **O momento e o crédito:** o primeiro passo do dono depois do consumo. O motor só expõe os consumos com a chave
+  (`ConfigJulgamentoFruta.ligada` → `estado()["consumos_frutas"]`). Com uma decisão a cada 15 ticks, a decisão anterior ao julgamento é
+  sempre a de comer a fruta julgada, então a janela da v1 (elogio e bronca na última decisão) credita exatamente o consumo (teste). O
+  sinal chega pelo `receber_acao_dono` de sempre.
+- **Orçamento (a escolha registrada: `no_orcamento=True`, o padrão):** `DonoJulgaFruta(base, julgador)` põe os julgamentos novos na frente
+  das ações do passo, até o máximo do passo, e o dono embrulhado (o atencioso) decide com o que sobra; o canal fecha o mesmo orçamento.
+  Medida (`python experiments/medir_k4_orcamento.py` → `artifacts_v2_k4/orcamento.json`; P3 atencioso, ponto T3, 14 dias, orçamento 224,
+  sementes 101…505, só mecanismo): o julgamento gasta em média 32,8 (casado), 39,6 (descasado) e 29,8 (mutável) ações por vida, e o
+  feedback da tarefa cai de 151,4 para 124,0, de 150,8 para 119,4 e de 150,6 para 126,6. O cuidado de necessidade (alimentar, limpar,
+  brincar) também cai de 72,6 para 67,2, 73,2 para 65,0 e 73,4 para 67,6, mas **não por falta de vaga** (em nenhum passo o julgamento
+  tomou a vaga de um cuidado; nada descartado): elogiado pela fruta boa, o pet come mais fruta e precisa de menos comida do dono.
+  **A alternativa** (`no_orcamento=False`): o julgador entra por `simular_vida_frutas(..., julgador=)`, logo depois das ações do dono do
+  passo e fora do orçamento, como as informações do P2; a tarefa fica intacta. Decisão do Matheus.
+- **Gates** (`tests/test_k4_dono_julga_fruta.py`, 14 testes, ~50 s): **a vida de hoje byte a byte**: 168 vidas (a bancada nos três mundos
+  das frutas, P0 a P3, 4 donos, sementes 101 e 202; o `simular_vida_frutas` com instinto e lobos, sem nada, com o informante e com o dono
+  que pede) iguais a `tests/gabaritos/k4_vidas_de_hoje.json`, gravado antes da mudança num commit próprio; a chave ligada com o dono de
+  sempre = a vida da bancada; **o julgamento segue o efeito real vigente** (o efeito que o motor aplicou em cada consumo, dos dois lados
+  da troca do mutável), um por consumo, no passo seguinte, abrindo as ações daquele passo no log; o crédito vai à decisão de comer;
+  **o P2 e o P3 da mesma unidade conhecem o mesmo efeito** (os mesmos efeitos e a mesma troca, e o P3 repreende o que o P2 diz que faz
+  mal); **G1** pelo replay e pelo `Bancada.rejogar`; o descarte no passo cheio; a alternativa fora do orçamento; os erros de uso.
+- **Para o chat D:** `experiments/medir_k4_orcamento.py` tem a receita: `julgador_da_vida` (o conhecimento pelos efeitos reais da
+  bancada), `fabrica_motor_com_julgamento` (a `fabrica_motor` das frutas com `cfg_julgamento`) e `vida_p3_com_julgamento` (o
+  `DonoJulgaFruta` em volta do dono do P3, no `simular_vida_mundo`). Fora do orçamento, a regra do mundo teria de aceitar elogio e
+  bronca (hoje o `simular_vida_mundo` só aceita os eventos de `FORA_DO_ORCAMENTO`). O acoplado `sem_ensino` do P3 já tira esses
+  julgamentos (são `elogiar`/`repreender`). Depois de ligar, o `K4_DONO_JULGA_FRUTA` do orquestrador do experimento maior vira `True`.
