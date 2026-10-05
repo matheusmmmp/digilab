@@ -286,6 +286,11 @@ ele é o escolhido por omissão, e o relatório diz isso.
 
 ## 11. Decisões do Matheus
 
+**DECIDIDAS em 2026-10-05: C-1 a C-10, todas como recomendado** (rodada 10 do `docs/ROADMAP_V2.md`).
+
+- As faixas 28101…28505 e 29101…29505 ficam reservadas.
+- As faixas do N11 (16101…17505) ficam substituídas.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | C-1 | o herdado é comum aos três (o instinto como prior, cada cérebro aprende por cima; desligado = instinto byte a byte) | sim | priors diferentes misturam "aprende melhor" com "nasceu melhor", e o P0 deixa de ser um só |

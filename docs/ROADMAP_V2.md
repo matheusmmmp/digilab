@@ -88,7 +88,7 @@ aprendiz achou assim que a decisão de comer não via a fruta). **O que sai:** c
 |---|---|---|---|---|
 | 8 | N7-MUNDO (em curso) | **C1**: N6 e N7 no cérebro | K1: plano da calibração conjunta | BANCADA-N6-N7 (em curso) |
 | 9 | K4: o dono do P3 julga a fruta | C4: canais de reforço | plano da comparação A × B × C (K3/V2) | BANCADA-LIGA: N6 e N7 ligados na bancada |
-| 10 | C5: cérebro C (Fly-like) | K2: calibração conjunta (depois do PR do D) | — | K4 e canais na bancada, depois C5: cérebro B (CfC/A2C) |
+| 10 | C5: cérebro C (Fly-like) | K2: calibração conjunta (o orquestrador já; a run depois do PR do D) | — | K4 e canais na bancada, depois C5: cérebro B (CfC/A2C) |
 | 11 | — | V1: validação única | leitura | calibração dos cérebros B e C |
 | 12 | — | — | leitura | K3/V2: comparação |
 | 13 | W (depois do M6) | — | leitura consolidada | — |
@@ -108,7 +108,8 @@ Regras de sempre: uma worktree por frente, um PR, merge só pelo Matheus, só o 
 | N4 frutas | 10101…10505 | 11101…11505 | usadas (histórico) |
 | N5 | 12101…12505 | 13101…13505 | **não usadas**; ficam reservadas, sem uso previsto |
 | experimento maior (calibração conjunta + validação única) | 14101…14505 | 15101…15505 | reservadas |
-| N11 cérebros | 16101…16505 | 17101…17505 | reservadas |
+| N11 cérebros | 16101…16505 | 17101…17505 | **substituídas** pela comparação dos cérebros (C-8); sem uso |
+| comparação A × B × C (K3/V2) | 28101…28505 | 29101…29505 | reservadas (C-8, 2026-10-05) |
 | revisão do aprendiz | 18101…18505 | — | usada (diagnóstico) |
 | N6 | 19101…19505 | 20101…20505 | **não usadas**; o N6 entra como ablação do experimento maior |
 | N7 | 21101…21505 | 22101…22505 | **não usadas**; o N7 entra como ablação do experimento maior |
@@ -126,3 +127,5 @@ Versões de pet na web: v10 vínculo B; **v11 = o DigiBrain escolhido**; bola, f
 | M9 | comitê de ética e arte para a fase 2 | aberta: submeter depois da validação única |
 | M10 | **montar tudo, calibrar junto, validar uma vez** (revisão 3) | **DECIDIDA pelo Matheus em 2026-10-05** |
 | M11 | as validações já feitas viram histórico; nada de revalidar nó a nó (substitui LP-1 a LP-3 da leitura parcial) | decidida junto com M10 |
+
+Rodada 10 (2026-10-05): o Matheus decidiu que o julgamento da fruta do K4 fica **fora do orçamento**, como a informação do P2, e aprovou as decisões C-1 a C-10 do plano da comparação dos cérebros.

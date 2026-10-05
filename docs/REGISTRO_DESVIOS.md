@@ -2314,6 +2314,18 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   por decisão deixaria de ser o do escalar. O T3, o ponto da calibração conjunta, não tem traço (R1).
 - **Só o sinal da consequência:** elogio, bronca, latência e chamado ignorado (o dono) seguem escalares.
 
+## 2026-10-05 — Rodada 10: o K4 fora do orçamento; C-1 a C-10 aprovadas
+
+- **O julgamento da fruta do dono do P3 fica fora do orçamento.** Era a recomendação do #170; o padrão do PR era dentro do orçamento.
+  - A medida que embasou a decisão está em `artifacts_v2_k4/orcamento.json`.
+  - Com isso, P2 e P3 diferem só no canal, com o mesmo gasto.
+  - A bancada liga o K4 assim na rodada 10 (`docs/TAREFA_V2_BANCADA_K4_CANAIS.md`).
+- **As decisões C-1 a C-10 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md` foram aprovadas como recomendado.**
+  - As faixas 28101…28505 e 29101…29505 ficam reservadas.
+  - As faixas do N11 (16101…17505) ficam substituídas, sem uso.
+- **Os cérebros B e C** vão para o chat D (depois da bancada) e para o chat A.
+- **A K2** fica com o chat B: ele escreve o orquestrador agora e roda depois do PR do D.
+
 ## 2026-10-05 — V2, BANCADA-LIGA-N6-N7: a memória e o pedido ligados na bancada (`docs/TAREFA_V2_BANCADA_LIGA_N6_N7.md`)
 
 - **As chaves do N6 e do N7 pertencem ao braço.** `cfg_lobos_do_braco` liga a memória só nos M0–ME e o `w0_pedido` só nos braços com pedido,
