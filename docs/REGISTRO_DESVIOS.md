@@ -2244,3 +2244,19 @@ mecanismo; nenhuma run com faixa reservada. A calibração e a validação do N5
 - Notas de superado:
   - `docs/LEITURA_PARCIAL_V2_FASE1.md` ganha a seção 6, que marca as decisões LP como substituídas;
   - `docs/PLANO_V2_PESQUISA.md` ganha a nota da fase 1.
+
+## 2026-10-05 — K3/V2: plano da comparação A × B × C no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_PLANO_COMPARACAO_CEREBROS.md`; entrega `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`. Nenhuma run, nenhum código;
+B e C ainda não existem.
+- **O herdado é comum aos três** (decisão C-1): o instinto entra como prior em todos, e cada cérebro aprende por cima; desligado = instinto
+  byte a byte. Sem isso, "aprende melhor" se mistura com "nasceu melhor", e o P0 deixa de ser um só.
+- **A comparação é uma família própria**, com quatro contrastes bilaterais (B − A e C − A, P1, descasado e mutável); as predições do
+  experimento maior ficam com o A e com a família delas.
+- **Os blocos N6 e N7 ficam fora**: são mecanismos do A; exigi-los de B e C imporia a arquitetura do A.
+- **As faixas do N11 (16101…17505) não são usadas**: a tarefa pede faixas novas fora da seção 6 do roadmap. O plano propõe 28101…28505 e
+  29101…29505 e pede ao coordenador marcar as do N11 como substituídas. As faixas 23101…27505, propostas pela leitura parcial e superadas
+  pela M11, também ficaram de fora, para não confundir.
+- **CfC, NCP, FlyWire e NORNBRAIN** entram só como pista (CORPUS ou software não revisado): nenhum deles está na tabela verificada do
+  projeto. As fontes do *Creatures* citadas são as VERIFICADA da tabela e descrevem só a família de origem do A.
+- **Legibilidade** é medida pela fração decidida pelo aprendido; compreensão humana fica para a fase 2 (Anderson et al. 2019).
