@@ -1,0 +1,30 @@
+{
+  "descricao": "Fumaca do orquestrador do experimento maior (docs/TAREFA_V2_BANCADA_EXPERIMENTO.md). NAO canonica: so as sementes dos testes, vida curta, sem plano de analise; confere o encanamento (P0, P1, P2, P2e, P3 x casado_frutas, descasado, mutavel no ponto T3 com w0_info = S/2 (um ponto da grade do N5, so para a informacao agir), o so cuidado acoplado, os contrastes com Holm, a equivalencia e as leituras por predicao), nunca como resultado.",
+  "unidades": {
+    "bases": [
+      101,
+      202,
+      303,
+      404,
+      505
+    ],
+    "k": 1
+  },
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "lobos": {
+    "w0_info": 512
+  },
+  "sonda": {
+    "estados": 30,
+    "amostras": 30,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 2000,
+    "semente": 101,
+    "nivel": 0.95
+  },
+  "referencia_padrao": true
+}

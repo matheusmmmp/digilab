@@ -2000,6 +2000,62 @@ Tarefa `docs/TAREFA_V2_N6_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N6.md`. Nenh
 - A N5-2 continua: a informação do dono só entra na escolha de qual fruta.
 - Marco em `docs/V2_RODADA_6.md`.
 
+## 2026-10-05 — N7-PLANO: plano da arbitragem (necessidade × pedido do dono) no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenhuma run, nenhum código.
+- **"Pedido do dono" é um evento novo, não a informação do N5.** A tarefa admite "o pedido (ou a informação)". O plano escolhe o pedido
+  ("deixe a fruta X") porque a informação é uma afirmação sobre o mundo, que a consequência valida, e o N5 a pôs só na escolha da fruta
+  (N5-2), onde não há conflito com a necessidade. Os nomes (`PEDIR_DEIXAR_FRUTA_<A|B|C>`, `Observacao.pedido_frutas`, `ConfigPedido`,
+  `DonoPedinte`) são propostas a combinar com o chat A.
+- **A arbitragem é a das regras que já existem.** As regras urgentes do instinto (sono, fome ou higiene abaixo de 0,25, abandono) vêm
+  antes e não leem o pedido; o pedido pesa só onde `comer` é candidato e a necessidade não é urgente. Nenhuma curva de urgência nova
+  (decisão N7-3).
+- **Mundo `iguais_frutas`, que a bancada ainda não tem.** Sem efeito próprio de fruta, obedecer ou desobedecer só custa a fome; no
+  descasado a consequência da fruta premiaria ou puniria a obediência.
+- **A marca se mede numa fase de extinção.** Com a janela de 240 min e a fruta ficando 120 min, X nunca aparece sem pedido vigente; por
+  isso os pedidos param no dia 10 e a marca é a fração de X nos dias 11–14.
+- **A ressalva literal da D7** ("inspirada no Dwarf Fortress; o análogo citado é inspiração declarada, não validação") está no topo do
+  plano. Rossi et al. e Fróes e Gudwin entram só como pista do corpus.
+- **Faixas propostas** 21101…21505 e 22101…22505, fora das reservadas, de 18101…20505 e do N11; nenhuma base aparece no repositório
+  fora dos artefatos.
+
+## 2026-10-05 — V2, BANCADA-EXPERIMENTO: faixas, o ponto T3 e o orquestrador do experimento maior (`docs/TAREFA_V2_BANCADA_EXPERIMENTO.md`)
+
+- **Faixa do N11 também entrou.** A tarefa pede 18101…18505, 19101…19505 e 20101…20505; o N11 (16101…16505 e 17101…17505, seção 6 do
+  `docs/ROADMAP_V2.md`) faltava nas `FAIXAS_RESERVADAS` desde a BANCADA-FRUTAS (o `PLANO_ANALISE_V2_N6.md` registrou). Acrescentado com a
+  fonte; as unidades derivadas continuam fora de todas.
+- **O T3 é só o teto.** `PONTOS_APRENDIZ["T3"]` = teto 16·S sobre o `CONFIG_LOBOS_APRENDIZ` (passo 512, sem traço), como o T3 da revisão.
+  O resto do "ponto recomendado" da revisão (ganho 4, E2, `w_fruta` 6, 4 ofertas por dia) já é o padrão da `ConfigConsequencia` e da
+  `ConfigFrutas`. O `w0_info` do N5 **não** faz parte do ponto: é calibrado no N5 (grade {S/4, S/2, 3S/4}) e entra pela chave `lobos`,
+  por cima do ponto. Sem o campo `ponto`, o `L1`: nenhuma run antiga muda.
+- **"Só cuidado" do experimento:** o mesmo braço no próprio registro com o filtro `sem_ensino` (sem elogio, bronca e informação; as ofertas
+  e o cuidado ficam), para P2, P2e e P3. No P3 isso é o "sem sinais" de sempre (ele não recebe informação).
+- **O controle de capacidade sem lobos (E6) não roda.** A bancada só tem os cérebros `lobos` e `instinto`; pôr o `camada_unica` nela é do
+  N11. É secundário e descritivo, e nenhuma predição depende dele; fica para quando a bancada tiver o cérebro.
+- **Referência do mundo padrão só com P0, P1 e P3:** P2 e P2e não existem fora das frutas (BANCADA-N5). Só descritiva (E1).
+- **Δ usa a janela final** do P0 no descasado (a janela das predições 1, 2, 4b e 5), média das unidades com consumo. Se o P0 nunca come
+  a fruta ruim, Δ = 0 e a equivalência não pode confirmar; com Δ indefinido (nenhum consumo) as leituras não refutam por equivalência.
+- **p unilateral do bootstrap = fração das médias reamostradas ≤ 0** (o zero conta como lado oposto: conservador). Com menos de 2 sementes
+  com valor não há p; no Holm, p ausente conta como 1, para a família não encolher.
+- **Predição 2 com uma condição confirmando e a outra refutando: refuta.** O plano diz "refuta: em qualquer das duas" e "confirma
+  parcialmente: só uma das duas"; na colisão, o refuta vence. **Inconclusivo por duração** vale no lugar de refuta ou inconclusivo quando
+  uma condição que não confirmou ainda tem a inclinação de P0 − P1, nos 4 últimos dias (11 a 14 numa vida de 14), com IC 95% acima de 0;
+  a inclinação é por unidade (mínimos quadrados sobre os dias com consumo nos dois braços), com bootstrap sobre as sementes.
+- **Predição 4, "refuta a recuperação":** só quando (a) foi confirmada por Holm; sem a piora, o resto é inconclusivo. O dia do cruzamento é
+  o primeiro dia em que a média do P2e fica ≤ à do P0, depois de um dia acima.
+- **Predição 5 sem o K4.** O dono do P3 não julga a escolha de fruta (`donos.julgar_acao` não olha a fruta); o contrato K4 (E7) não está na
+  `main` e não é desta tarefa (não mexo nos donos nem em `frutas.py`). O plano só dá "não testável" para o K2; para o K4 a predição 5 sai
+  calculada, com `k4: false` e o aviso de que mede só que o P3 não sabe das frutas. **Para o coordenador:** decidir quem entrega o K4 e se,
+  sem ele, a predição 5 vira "não testável".
+- **Separação do cuidado (5.1):** (a) braço − só cuidado na direção do contraste, IC 95% acima de 0; (b) "sem diferença" = IC 95% contendo 0
+  na saúde média e no tempo fora de privação. Nos mundos das frutas não há morte (lesões desligadas), então mortes não entram.
+- **N por contraste:** a fórmula da seção 7.2 com α/6 (o passo mais exigente do Holm), poder 0,8, múltiplo de 5. A conferência por
+  simulação com bootstrap das unidades fica para o adendo da seção 7.3 (é ele que fixa o N).
+- **Modos:** pelas bases. Calibração e validação pedem o campo `plano` igual a este plano (não basta um arquivo qualquer do repositório,
+  como na bancada), as unidades derivadas e a vida de 14 dias (E5); a validação exige o Δ do adendo e a calibração recusa um Δ dado.
+- **A fumaça liga `w0_info` = S/2** (um ponto da grade do N5) só para a informação agir e o encanamento de P2/P2e ser exercitado; não é
+  escolha do valor, que é do N5.
+
 ## 2026-10-05 — V2, FRUTA-NO-CENARIO, parte A: `Observacao.frutas_cenario` (`docs/TAREFA_V2_FRUTA_NO_CENARIO.md`)
 
 - **Valores binários (1,0 ou 0,0) e padrão `(0,0, 0,0, 0,0)`**, como o `info_frutas`: a tarefa pede "a presença de cada fruta". O

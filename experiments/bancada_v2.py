@@ -68,6 +68,11 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   (unidades_derivadas; o campo "unidades" da config). FAIXAS_RESERVADAS lista as faixas reservadas ou usadas; o teste confere
   que nenhuma unidade cai nelas.
 
+  ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
+  escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
+  CONFIG_LOBOS_APRENDIZ: passo 512, teto 1024), entao as runs antigas nao mudam. O "T3" (teto 16*S = 16384, o resto igual: sem traco)
+  e o ponto de partida do N5 e do experimento maior (PONTO_N5_EXPERIMENTO).
+
 Toda vida e rejogada do disco e comparada bit a bit (G1): divergencia levanta erro e para tudo. engine.py e lobos.py nao
 mudam. Sementes: so as dos testes (101...505) sem plano; qualquer outra exige o plano de analise registrado (campo "plano").
 """
@@ -113,6 +118,14 @@ from digilab.treino import CanalDeInteracao, MotorComFeedback, reproduzir_com_fe
 ACOES = tuple(a.value for a in AcaoPet)
 SINAIS = frozenset({AcaoUsuario.ELOGIAR.value, AcaoUsuario.REPREENDER.value})
 SEMENTES_TESTE = frozenset({101, 202, 303, 404, 505})
+# pontos nomeados do aprendiz: campos trocados sobre o CONFIG_LOBOS_APRENDIZ (decisao R1, 2026-10-05). Um ponto novo entra aqui, com a
+# fonte; os de antes nao mudam.
+PONTOS_APRENDIZ = {
+    "L1": {},                                   # passo 512, teto 1024 = 1*S: o ponto calibrado da L1 (o padrao de sempre)
+    "T3": {"teto": 16 * 2 ** CONFIG_LOBOS_APRENDIZ.bits_ponto_fixo},   # R1: teto 16*S, sem traco (REVISAO_APRENDIZ, secao 3)
+}
+PONTO_PADRAO = "L1"                             # sem o campo "ponto": as runs antigas, byte a byte
+PONTO_N5_EXPERIMENTO = "T3"                     # o ponto de partida do N5 e do experimento maior (R1)
 CEREBROS = ("lobos", "instinto")
 INFORMACOES = frozenset(a.value for a in ACOES_INFORMACAO)
 FILTROS = {"nenhum": frozenset(), "sem_sinais": SINAIS,
@@ -185,7 +198,7 @@ def mundo_de(nome: str) -> Mundo:
     return m
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
-                 "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas"}
+                 "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto"}
 
 
 # ------------------------------------------------------------------ as frutas na bancada
@@ -292,6 +305,9 @@ FAIXAS_RESERVADAS = (
     (10101, 10505, "N4, calibracao"), (11101, 11505, "N4, validacao"),
     (12101, 12505, "N5, calibracao (reservada)"), (13101, 13505, "N5, validacao (reservada)"),
     (14101, 14505, "experimento maior, bases da calibracao"), (15101, 15505, "experimento maior, bases da validacao"),
+    (16101, 16505, "N11 cerebros, calibracao (ROADMAP_V2, secao 6)"), (17101, 17505, "N11 cerebros, validacao (ROADMAP_V2, secao 6)"),
+    (18101, 18505, "revisao do aprendiz, so calibracao (V2_RODADA_5)"),
+    (19101, 19505, "N6, calibracao (PLANO_ANALISE_V2_N6, N6-9)"), (20101, 20505, "N6, validacao (PLANO_ANALISE_V2_N6, N6-9)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
@@ -1028,6 +1044,8 @@ def validar_config(cfg: dict) -> dict:
             plano = cfg.get("plano")
             if not plano or not (RAIZ / plano).is_file():
                 raise SementeSemPlano(f"bases {fora} fora das dos testes: precisa do plano de analise registrado (campo 'plano')")
+    if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
+        raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
     for b in cfg["bracos"]:
         braco_de(b)
     for m in cfg.get("mundos", ["padrao"]):
@@ -1048,13 +1066,22 @@ def validar_config(cfg: dict) -> dict:
     return cfg
 
 
+def cfg_lobos_do_ponto(ponto: str = PONTO_PADRAO, troca: dict | None = None) -> ConfigLobos:
+    """O aprendiz de um ponto nomeado (PONTOS_APRENDIZ), com os campos de `troca` por cima. Ponto desconhecido falha alto."""
+    if ponto not in PONTOS_APRENDIZ:
+        raise ValueError(f"ponto do aprendiz {ponto!r}: so {sorted(PONTOS_APRENDIZ)}")
+    base = replace(CONFIG_LOBOS_APRENDIZ, **PONTOS_APRENDIZ[ponto])
+    return replace(base, **troca) if troca else base
+
+
 def bancada_da_config(cfg: dict) -> Bancada:
-    """A Bancada da config: os padroes, e o que as chaves "consequencia", "lobos" (sobre o CONFIG_LOBOS_APRENDIZ) e "frutas" (sobre o
-    CONFIG_FRUTAS_LIGADA; listas do JSON viram tuplas) trocam. Sem essas chaves, a bancada de sempre (REVISAO-APRENDIZ)."""
+    """A Bancada da config: os padroes, e o que as chaves "consequencia", "ponto" e "lobos" (o ponto nomeado, e por cima dele os campos
+    da chave "lobos"; sem "ponto", o L1 = CONFIG_LOBOS_APRENDIZ) e "frutas" (sobre o CONFIG_FRUTAS_LIGADA; listas do JSON viram tuplas)
+    trocam. Sem essas chaves, a bancada de sempre (REVISAO-APRENDIZ)."""
     cc = CONFIG_CONSEQUENCIA if "consequencia" not in cfg else replace(CONFIG_CONSEQUENCIA, **cfg["consequencia"])
     kw = {"cfg_consequencia": cc}
-    if "lobos" in cfg:
-        kw["cfg_lobos"] = replace(CONFIG_LOBOS_APRENDIZ, **cfg["lobos"])
+    if "lobos" in cfg or "ponto" in cfg:
+        kw["cfg_lobos"] = cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos"))
     if "frutas" in cfg:
         tupla = lambda v: tuple(tupla(x) for x in v) if isinstance(v, list) else v  # noqa: E731
         kw["cfg_frutas"] = replace(CONFIG_FRUTAS_LIGADA, **{k: tupla(v) for k, v in cfg["frutas"].items()})
@@ -1144,7 +1171,9 @@ MEDIDAS_FRUTAS = {
 def meta(cfg: dict) -> dict:
     if sha256_engine() != ENGINE_SHA256_V0:
         raise RuntimeError("engine.py mudou")
-    return {"config": cfg, "python": platform.python_version(), "plataforma": platform.platform(),
+    return {"config": cfg, "ponto": cfg.get("ponto", PONTO_PADRAO),
+            "cfg_lobos": cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos")).__dict__,
+            "python": platform.python_version(), "plataforma": platform.platform(),
             "engine_sha256": sha256_engine(), "lobos_sha256": _sha(RAIZ / "digilab" / "policies" / "lobos.py"),
             "config_sha256": _sha(RAIZ / "digilab" / "config.py"), "bancada_sha256": _sha(Path(__file__)),
             "metrics_sha256": _sha(RAIZ / "digilab" / "metrics.py")}
