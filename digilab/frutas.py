@@ -9,7 +9,8 @@ docs/DEFINICOES_FRUTAS_V2.md (F1-F11) e docs/PLANO_ANALISE_V2_N4.md (registrado 
                          como candidato com peso `w_fruta x fruta` (o maior incentivo no cenario); a regra se chama `fruta_no_cenario`.
                          A mesma chamada de rng.choices; as regras de necessidade vem antes, como sempre.
   MotorFrutas            subclasse do MotorAmbiente. Frutas no cenario {fruta: prazo} fora do Estado; oferecer poe (ou renova) e NAO e
-                         contato. Antes de cada decisao o consumo recente decai, as frutas vencidas saem e o motor injeta `obs.fruta`.
+                         contato. Antes de cada decisao o consumo recente decai, as frutas vencidas saem e o motor injeta `obs.fruta`
+                         e `obs.frutas_cenario` (a presenca de cada fruta, na ordem de FRUTAS; FRUTA-NO-CENARIO, parte A).
                          Se a politica escolheu `comer`: um sorteio na `rng_fruta` (sempre, haja fruta ou nao: numeros comuns); com
                          fruta, o pet escolhe uma com probabilidade proporcional ao incentivo e come (sub-decisao de comer, F3):
                            avaliacao = max(0, preferencia_inata - k_saciedade x consumo_recente_antes)   (a fome nao entra)
@@ -125,7 +126,7 @@ class PoliticaInstintoFrutas(PoliticaInstintoBola):
 
 
 class _PoliticaComFrutas:
-    """Embrulho do MotorFrutas: antes de cada decisao prepara as frutas e injeta `obs.fruta`; delega o resto."""
+    """Embrulho do MotorFrutas: antes de cada decisao prepara as frutas e injeta `obs.fruta` e `obs.frutas_cenario`; delega o resto."""
 
     def __init__(self, politica, motor: "MotorFrutas") -> None:
         self._pf = politica
@@ -134,7 +135,7 @@ class _PoliticaComFrutas:
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
         if not self._motor.cf.ligada:
             return self._pf.agir(obs, rng)
-        obs = replace(obs, fruta=self._motor._frutas_na_proxima_decisao())
+        obs = replace(obs, fruta=self._motor._frutas_na_proxima_decisao(), frutas_cenario=self._motor._presenca_na_decisao())
         if self._motor.ci.ligada:
             obs = replace(obs, info_frutas=self._motor._informacao_na_proxima_decisao())
         return self._pf.agir(obs, rng)
@@ -204,6 +205,10 @@ class MotorFrutas(MotorAmbiente):
         self._na_decisao = self.frutas_no_cenario()
         self._visto_na_decisao = max((self.incentivo[f] for f in self._na_decisao), default=0.0)
         return self._visto_na_decisao
+
+    def _presenca_na_decisao(self) -> tuple[float, ...]:
+        """FRUTA-NO-CENARIO: 1.0 para cada fruta que a decisao ve (as de `_na_decisao`, ja sem as vencidas), na ordem de FRUTAS"""
+        return tuple(1.0 if f in self._na_decisao else 0.0 for f in FRUTAS)
 
     def informacao_vigente(self) -> tuple[float, ...]:
         """(+1 bem, -1 mal, 0 nenhuma) por fruta, na ordem de FRUTAS, no tick atual"""

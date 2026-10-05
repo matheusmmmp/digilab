@@ -38,6 +38,10 @@ class Observacao:
     # V2, N5: a informacao do dono vigente sobre cada fruta, na ordem de events.FRUTAS: +1 "faz bem", -1 "faz mal", 0 nenhuma. So o
     # MotorFrutas com ConfigInformacao.ligada injeta; o instinto, o bandit e as sondas nao leem (os lobos, rodada 6).
     info_frutas: tuple = (0.0, 0.0, 0.0)
+    # V2, FRUTA-NO-CENARIO (parte A, decisao R2): a presenca de cada fruta no cenario, na ordem de events.FRUTAS (1.0 presente, 0.0
+    # ausente): as mesmas frutas que a sub-decisao de comer considera. So o MotorFrutas com as frutas ligadas injeta; ninguem le ainda
+    # (a decisao de comer dos lobos que le e a parte B). `fruta` continua o maior incentivo entre elas.
+    frutas_cenario: tuple = (0.0, 0.0, 0.0)
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":

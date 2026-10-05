@@ -2055,3 +2055,15 @@ Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenh
   como na bancada), as unidades derivadas e a vida de 14 dias (E5); a validação exige o Δ do adendo e a calibração recusa um Δ dado.
 - **A fumaça liga `w0_info` = S/2** (um ponto da grade do N5) só para a informação agir e o encanamento de P2/P2e ser exercitado; não é
   escolha do valor, que é do N5.
+
+## 2026-10-05 — V2, FRUTA-NO-CENARIO, parte A: `Observacao.frutas_cenario` (`docs/TAREFA_V2_FRUTA_NO_CENARIO.md`)
+
+- **Valores binários (1,0 ou 0,0) e padrão `(0,0, 0,0, 0,0)`**, como o `info_frutas`: a tarefa pede "a presença de cada fruta". O
+  incentivo de cada fruta não entra no campo (a parte B decide como pesar; o `MotorFrutas` já guarda os incentivos).
+- **A presença é a da decisão:** o campo sai de `_na_decisao`, a lista que o motor monta logo antes de `agir` (frutas vencidas já fora) e
+  que a sub-decisão de comer usa depois. Com isso a percepção e a escolha da fruta veem sempre as mesmas frutas (teste decisão a decisão).
+- **O G2 é um gabarito gravado antes da mudança**, pela bancada (os braços P0 a P3 nos três mundos das frutas, com os lobos que veem o
+  mundo, a E2 e a informação), e não uma comparação entre dois códigos no mesmo processo: o campo é aditivo e ninguém o lê, então a vida
+  só mudaria por um efeito colateral da injeção (ordem das chamadas no motor), que o gabarito pega.
+- **O teste da presença usa o instinto das frutas por baixo de um espião** (que só anota a `Observacao` e delega), porque nenhuma
+  política de hoje lê o campo.
