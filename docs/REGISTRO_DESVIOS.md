@@ -2277,3 +2277,8 @@ mecanismo; nenhuma run com faixa reservada. A calibração e a validação do N5
   S/2. Corrigido o comentário; os dados não mudaram.
 - **Testes antigos:** `test_bancada_n6_n7.py` (os braços agora rodam; a trava do `NOS_PENDENTES` segue testada com uma entrada posta pelo
   teste) e `test_bancada_n5.py::test_filtros_da_informacao` (o `sem_ensino` tira também os pedidos).
+- **Quatro testes do chat B mudaram** (`tests/test_cerebro_n6_n7.py`): eles punham a memória (`memoria_ligada`) e o `w0_pedido` direto na
+  `cfg_lobos` da bancada, no P0 e no P1, porque os braços do N6 e do N7 ainda não rodavam. Com as chaves pertencendo ao braço, o teste do
+  M0 = P0 usa o braço M0 (só o estado da memória e o rótulo do braço diferem), o da memória que age usa o MR, e o "sem o campo do pedido nada
+  muda" passa a dizer que num braço sem pedido o `w0_pedido` da config não chega ao cérebro (e no P1+ped chega). A intenção de cada um ficou;
+  a alternativa (deixar a config ligar a memória e o pedido em P0, P1 e P3) faria um braço mudar sem o nome dizer.
