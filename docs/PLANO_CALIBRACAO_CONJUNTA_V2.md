@@ -281,6 +281,9 @@ do estimador vinha das partidas (`artifacts_poder/variancia.json`). Na L1, o bra
 
 ## 9. Decisões do Matheus
 
+**DECIDIDAS em 2026-10-05: K-1 a K-11 todas como recomendado** (rodada 9, `docs/ROADMAP_V2.md`). O K4 entra antes da K2 (tarefa
+`docs/TAREFA_V2_K4_DONO_JULGA_FRUTA.md`); o limite de 12 h da validação vale.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | K-1 | o que fica ligado no P0 | nada: o P0 é o instinto byte a byte; memória, informação, pedido e canais só nos braços que aprendem | com a memória no P0, ele deixa de ser "herdado sem aprender" e todo contraste com o P0 mede outra coisa |
