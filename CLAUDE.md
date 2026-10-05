@@ -78,6 +78,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`), as condições casado/descasado/mutável e as unidades derivadas do experimento maior; desde a BANCADA-N5 os lobos veem a bola e as frutas (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS" e "V2, BANCADA-N5" no fim) |
+| `experiments/run_revisao_aprendiz.py`, `experiments/configs/v2_revisao/` | **V2, REVISAO-APRENDIZ**: diagnóstico do aprendiz (teto, janela de crédito com o traço `ConfigLobos.traco_decisoes`/`traco_fator`, exposição), uma alavanca por vez, pela bancada (chaves `lobos` e `frutas` da config) → `artifacts_v2_revisao/` (seção "V2, REVISAO-APRENDIZ" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
 | `digilab/arena.py` | 5 ações em ciclo (cada uma vence 2, perde 2); stats = afinidades soma-zero dos traços; disposição herdada da política; arena nunca chama `observar()` |
@@ -1696,3 +1697,32 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   as frutas embrulhados, com o aprendizado desligado e ligado, a vida igual à sem embrulho, fatores ⊆ `FATORES_VIDA` e ≤ 2, `fruta` e
   `incentivo_fruta` citados (sem aprendizado, nunca `escolha_aprendida_fruta`); a bola citada no mundo da bola; o instinto das frutas
   embrulhado sem erro.
+
+## V2, REVISAO-APRENDIZ — teto, janela de crédito ou exposição? (2026-10-04, `docs/TAREFA_V2_REVISAO_APRENDIZ.md`, `docs/PLANO_ANALISE_V2_REVISAO_APRENDIZ.md`) — DIAGNÓSTICO FEITO
+
+Diagnóstico só com sementes de calibração (bases 18101…18505, K = 4: 20 unidades), sem gate. Plano no primeiro commit, antes da run.
+Números de `artifacts_v2_revisao/calibracao/` (`<ponto>/resultado.json`, `avaliacao.json`, `diagnostico.json`, `recomendacao.json`;
+vidas só da base no git, os outros pontos regeneráveis); relatório `docs/RESULTADO_V2_REVISAO_APRENDIZ.md`. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Código.** `ConfigLobos.traco_decisoes`/`traco_fator` (PROPOSTOS; 0 = o crédito de hoje, byte a byte): traço de elegibilidade em
+  inteiros, em que o sinal (consequência, elogio, bronca) chega às K decisões anteriores com `div_arred(f·λ^k, S^k)`, e o chamado fica
+  preso ao chamado (`Aprendiz._creditar`). `bancada_v2.bancada_da_config` lê as chaves `lobos` e `frutas` da config (sem elas, a bancada de
+  sempre). `experiments/run_revisao_aprendiz.py` faz as seções 4–7 do plano; o motivo é rejogado no motor das frutas. Testes
+  `tests/test_revisao_aprendiz.py` (10).
+- **Desenho:** P0/P1/P3, `casado_frutas` e `descasado`, atencioso, 14 dias; base = passo 512, teto 1·S, ganho 4, E2, `w_fruta` 6,
+  4 ofertas/dia; uma alavanca por ponto: teto 2·S, 4·S e 16·S; traço (2, S/2), (4, 3S/4), (8, 7S/8); `w_fruta` 12, 24 e 8 ofertas/dia.
+- **Base:** no descasado o P1 come menos a fruta ruim que o P0 (G_ap **+0,109 [+0,050; +0,182]**); no casado, mais (−0,062
+  [−0,110; −0,018]). O aprendido decide em 0,257 das decisões do P1 e 0,247 do P3. Vidas no teto: P1 20/20 e P3 17/20 no descasado. O P3
+  quase não come fruta (p 0,06). A privação e a saúde não mudam em nenhum ponto: o atencioso nunca deixa o pet em privação.
+- **Teto:** no P1 nada muda (Δ M1 e Δ G_ap 0,000, com as vidas no teto caindo a 0). No P3 o aprendido decide mais (T3 +0,039 [+0,008;
+  +0,079]) e acerta menos a tarefa (−0,026 [−0,055; −0,001]). **Janela:** piora o G_ap do P1 (J3 −0,027 [−0,041; −0,014]), o M1 e o
+  acerto do P3 (J3 −0,124). **Exposição:** os consumos sobem (8 ofertas: +63,5), mas o G_ap não (`w_fruta` 24: −0,064 [−0,106;
+  −0,024]), porque o P0 também passa a comer mais.
+- **Pelas regras registradas:** o teto segura (pelo P3), a janela e a exposição não. **Ponto recomendado para a calibração do N5 e do
+  experimento maior: teto 16·S (16384)**, o resto na base; o T2 (4·S) dá quase o mesmo com teto finito.
+- **Pós hoc (fora do plano):** o P1 aprende qual fruta evitar (peso da ruim ~90, com 17 de 20 vidas em 0; a boa ~1700), mas a escolha só
+  age com duas frutas ou mais no cenário. Nelas o P1 come a ruim 29% das vezes, contra 44% do P0. Com uma fruta só, que é 55% dos
+  consumos dele, come o que houver. **O gargalo é a decisão de comer não saber qual fruta está no cenário** (a entrada `fruta` é o
+  maior incentivo), não as três alavancas. Decisões R1–R4 para o Matheus no relatório.
+- **Não mudou:** `engine.py`, `AcaoPet`, o bandit, `frutas.py`, a web; com os campos novos no padrão, a L0, a L1, o N3, o N5 e a
+  bancada byte a byte.

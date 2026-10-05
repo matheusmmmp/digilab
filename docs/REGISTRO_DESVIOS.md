@@ -1968,3 +1968,24 @@ Tarefa `docs/TAREFA_V2_N6_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N6.md`. Nenh
 - Liberada a revisão do aprendiz (`docs/TAREFA_V2_REVISAO_APRENDIZ.md`, chat B, 18101…18505).
 - Pendência de código para o chat D: incluir 18101…18505, 19101…19505 e 20101…20505 em `FAIXAS_RESERVADAS` da bancada.
 
+## 2026-10-04 — REVISAO-APRENDIZ (chat B, `docs/TAREFA_V2_REVISAO_APRENDIZ.md`)
+
+- **O traço de elegibilidade no lugar da "consequência atrasada" do N3.** O plano do N3 declarava medir os drives até a decisão seguinte,
+  o que põe o cuidado do dono no sinal. O traço não muda o que o sinal mede, só a quem ele chega (as K decisões anteriores, com λ^k).
+  Vale para a consequência e para elogio e bronca, como no COACH. Latência e chamado ignorado ficam presos ao chamado.
+- **Uma linha de mudança na bancada (do chat D):** `rodar` passa a montar a `Bancada` por `bancada_da_config`, que lê `consequencia` (como
+  antes), `lobos` e `frutas`. Sem as chaves novas, a bancada de sempre (teste).
+- **O motivo rejogado no motor das frutas.** `motivo.motivos_de_vida` rejoga no `MotorComFeedback`, sem as frutas. O orquestrador da
+  revisão rejoga com o motor da bancada e confere a vida: log, estado, ações, rngs, consumos e incentivos. Não confere o `resumo_frutas`
+  inteiro, porque o registro das ofertas guarda a `regra` da política, que o `PoliticaComMotivo` não repassa (sai `None`). Isso é para o
+  chat A, se quiser o campo igual.
+- **Unidades contadas sozinhas no bootstrap**, sem agrupar por base (o plano diz isso; o agrupamento é do N5 e do experimento maior).
+- **A trava "piora o cuidado de si" não informou nada:** com o atencioso, a privação é 0 e a saúde não muda em nenhuma vida, em nenhum
+  ponto. Ficou registrado no relatório.
+- **A regra escolheu o teto pelo P3.** No P1 o teto não muda nada nas frutas; no P3 o aprendido decide mais e o acerto na tarefa cai. Pelo
+  risco 2 do plano, o relatório compara T3 com T2.
+- **Duas análises pós hoc, declaradas** (`pos_hoc_pesos_fruta.json`, `pos_hoc_oferta_unica.json`): os pesos da escolha da fruta no fim da
+  vida e os consumos por número de frutas no cenário. Daí sai a decisão R2 (a decisão de comer não sabe qual fruta está lá), que o plano
+  não previa.
+- **Vidas no git só da base** (120 `.jsonl`, ~10 MB). Os pontos T, J e X são regeneráveis pela config; o resumo de cada um fica em
+  `resultado.json` e `medidas.json`.
