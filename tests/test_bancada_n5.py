@@ -190,7 +190,7 @@ def test_g1_e_acoplado_com_a_informacao():
 
 
 def test_filtros_da_informacao():
-    assert bv.FILTROS["sem_informacao"] == bv.INFORMACOES and bv.FILTROS["sem_ensino"] == bv.SINAIS | bv.INFORMACOES
+    assert bv.FILTROS["sem_informacao"] == bv.INFORMACOES and bv.FILTROS["sem_ensino"] == bv.SINAIS | bv.INFORMACOES | bv.PEDIDOS
     assert not any(f & bv.EVENTOS_DO_MUNDO for f in bv.FILTROS.values())
     assert bv.INFORMACOES <= bv.FORA_DO_ORCAMENTO and not bv.INFORMACOES & bv.EVENTOS_DO_MUNDO
 

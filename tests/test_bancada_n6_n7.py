@@ -126,51 +126,53 @@ def test_iguais_frutas_na_tabela(tmp_path):
     assert t["consumos_ate_metade"]["celulas"]["P1"]["iguais/iguais_frutas"]["sem_valor"] == 2
 
 
-# ------------------------------------------------------------------ os bracos do N6 e do N7 falham alto com o no
+# ------------------------------------------------------------------ os bracos do N6 e do N7 (desde a BANCADA-LIGA-N6-N7 eles rodam)
 
 
 @pytest.mark.parametrize("braco,no", [("M0", "N6"), ("MR", "N6"), ("MT", "N6"), ("ME", "N6"),
                                       ("P0+ped", "N7"), ("P1+ped", "N7"), ("P3+ped", "N7")])
-def test_bracos_que_dependem_do_cerebro_falham_alto_com_o_no(braco, no):
+def test_bracos_do_n6_e_do_n7_rodam_e_a_trava_falha_alto_com_o_no(braco, no, monkeypatch):
+    """A memoria e o pedido estao na main (#166, #167): os bracos se resolvem, na config e na vida. A trava continua sendo uma
+    tabela so (NOS_PENDENTES): com a entrada de volta, o braco falha alto com o no (tests/test_bancada_liga_n6_n7.py roda os bracos)."""
     b = bv.BRACOS[braco]
-    assert b.no == no
+    assert b.no == no and bv.braco_de(braco) is b and not bv.NOS_PENDENTES
+    cfg = {"bracos": ["P0", braco], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16, "sonda": SONDA,
+           "bootstrap": {}, "mundos": ["iguais_frutas" if no == "N7" else "descasado"]}
+    bv.validar_config(cfg)
+    peca = "pedido" if no == "N7" else "memoria"
+    monkeypatch.setattr(bv, "NOS_PENDENTES", {peca: f"{no}: peca de outro chat"})
     with pytest.raises(NotImplementedError, match=no):
         bv.braco_de(braco)
-    with pytest.raises(NotImplementedError, match=no):
-        BANCADA.vida(bv.EspecVida("atencioso", braco, 101, None, "iguais_frutas" if no == "N7" else "descasado"))
-    cfg = {"bracos": ["P0", braco], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16, "sonda": SONDA,
-           "bootstrap": {}, "mundos": ["descasado"]}
     with pytest.raises(NotImplementedError, match=no):
         bv.validar_config(cfg)
 
 
-def test_os_bracos_seguem_o_plano(monkeypatch):
+def test_os_bracos_seguem_o_plano():
     """Os campos dos bracos dizem o que o plano diz: N6 sem aprendizado do lobo de decisao (fonte nenhuma) e uma memoria por braco;
-    N7 com o pedido e a fonte do braco de origem. A UNICA trava e o NOS_PENDENTES: sem a entrada, o braco se resolve."""
+    N7 com o pedido e a fonte do braco de origem."""
     mem = {b: bv.BRACOS[b].memoria for b in ("M0", "MR", "MT", "ME")}
     assert mem == {"M0": "nenhuma", "MR": "relevante", "MT": "recencia", "ME": "embaralhada"}
     assert all(bv.BRACOS[b].fonte == "nenhuma" for b in mem)
     assert {b: bv.BRACOS[b].fonte for b in ("P0+ped", "P1+ped", "P3+ped")} == {"P0+ped": "nenhuma", "P1+ped": "consequencia",
                                                                                  "P3+ped": "dono"}
     assert all(bv.BRACOS[b].pedido for b in ("P0+ped", "P1+ped", "P3+ped")) and not bv.BRACOS["P3"].pedido
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {"pedido": bv.NOS_PENDENTES["pedido"]})
-    assert bv.braco_de("MR").memoria == "relevante"
-    with pytest.raises(NotImplementedError):
-        bv.braco_de("P0+ped")
 
 
-def test_filtros_do_pedido_falham_alto():
-    with pytest.raises(NotImplementedError, match="N7"):
-        bv.filtro_de("sem_pedido")
+def test_filtros_do_pedido(monkeypatch):
+    assert bv.filtro_de("sem_pedido") == bv.PEDIDOS and bv.PEDIDOS
+    assert bv.filtro_de("sem_ensino_sem_pedido") == bv.FILTROS["sem_ensino"] == bv.SINAIS | bv.INFORMACOES | bv.PEDIDOS
     with pytest.raises(KeyError):
         bv.filtro_de("nao_existe")
-    assert bv.filtro_de("sem_ensino") == bv.FILTROS["sem_ensino"]
     cfg = {"bracos": ["P3"], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16, "sonda": SONDA, "bootstrap": {},
            "mundos": ["iguais_frutas"], "acoplados": [{"origem": "P3", "destino": "P0", "filtro": "sem_ensino_sem_pedido"}]}
-    with pytest.raises(NotImplementedError, match="N7"):
-        bv.validar_config(cfg)
+    bv.validar_config(cfg)
     with pytest.raises(ValueError):
         bv.validar_config({**cfg, "acoplados": [{"origem": "P3", "destino": "P0", "filtro": "nao_existe"}]})
+    # a trava dos filtros continua: um filtro pendente falha alto com o no
+    monkeypatch.setattr(bv, "NOS_PENDENTES", {"pedido": "N7: peca de outro chat"})
+    monkeypatch.setattr(bv, "FILTROS_PENDENTES", {"sem_pedido": "pedido"})
+    with pytest.raises(NotImplementedError, match="N7"):
+        bv.filtro_de("sem_pedido")
 
 
 def test_desarranjo_do_me():

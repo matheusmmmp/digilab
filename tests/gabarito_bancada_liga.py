@@ -22,7 +22,7 @@ DONOS = ("atencioso", "aleatorio")
 SEMENTES = ((101, None), (202, 202))     # so dos testes
 MUNDOS_SIMPLES = ("padrao", "bola")
 MUNDOS_FRUTAS = ("casado_frutas", "descasado", "mutavel", "iguais_frutas")
-# a de sempre (ponto L1) e o T3 com a informacao e o pedido no cerebro (w0_info, w0_pedido S/2: nos bracos sem pedido nao age)
+# a de sempre (ponto L1) e o T3 com a informacao no cerebro (w0_info S/2), como no gabarito do CEREBRO-N6-N7
 BANCADAS = {"L1": bv.Bancada(4, 64), "T3": bv.Bancada(4, 64, cfg_lobos=bv.cfg_lobos_do_ponto("T3", {"w0_info": 512}))}
 
 

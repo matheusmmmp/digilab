@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca do bloco N7 na bancada (docs/TAREFA_V2_BANCADA_LIGA_N6_N7.md). NAO canonica: unidades derivadas das sementes dos testes, vida curta (so a fase de pedido), w0_pedido S/2 so para o pedido agir (a grade e da calibracao conjunta); confere o encanamento (P0, P0+ped, P1+ped, P3+ped e P3 no iguais_frutas no ponto T3, o so cuidado P0<P3+ped:sem_ensino, o controle P0<P0+ped:sem_pedido, as medidas do N7), nunca como resultado.",
+  "bracos": ["P0", "P0+ped", "P1+ped", "P3+ped", "P3"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1, "prefixo": "n7"},
+  "mundos": ["iguais_frutas"],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "lobos": {"w0_pedido": 512},
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P3+ped", "destino": "P0", "filtro": "sem_ensino"},
+                {"origem": "P0+ped", "destino": "P0", "filtro": "sem_pedido"}]
+}

@@ -1,0 +1,15 @@
+{
+  "descricao": "Fumaca do bloco N6 na bancada (docs/TAREFA_V2_BANCADA_LIGA_N6_N7.md). NAO canonica: unidades derivadas das sementes dos testes, vida curta, ganho da memoria S/2 so para a memoria agir (o ganho e calibrado na calibracao conjunta); confere o encanamento (P0 e M0, MR, MT, ME no descasado no ponto T3, os acoplados M0<MR, MT<MR, ME<MR, as medidas do N6), nunca como resultado.",
+  "bracos": ["P0", "M0", "MR", "MT", "ME"],
+  "donos": ["atencioso"],
+  "unidades": {"bases": [101, 202, 303, 404, 505], "k": 1, "prefixo": "n6"},
+  "mundos": ["descasado"],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "lobos": {"memoria_ganho": 512},
+  "sonda": {"estados": 30, "amostras": 30, "semente": 101},
+  "bootstrap": {"reamostragens": 2000, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "MR", "destino": "M0", "filtro": "nenhum"}, {"origem": "MR", "destino": "MT", "filtro": "nenhum"},
+                {"origem": "MR", "destino": "ME", "filtro": "nenhum"}]
+}
