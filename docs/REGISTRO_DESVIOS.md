@@ -2000,6 +2000,25 @@ Tarefa `docs/TAREFA_V2_N6_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N6.md`. Nenh
 - A N5-2 continua: a informação do dono só entra na escolha de qual fruta.
 - Marco em `docs/V2_RODADA_6.md`.
 
+## 2026-10-05 — N7-PLANO: plano da arbitragem (necessidade × pedido do dono) no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_N7_PLANO.md`; entrega `docs/PLANO_ANALISE_V2_N7.md`. Nenhuma run, nenhum código.
+- **"Pedido do dono" é um evento novo, não a informação do N5.** A tarefa admite "o pedido (ou a informação)". O plano escolhe o pedido
+  ("deixe a fruta X") porque a informação é uma afirmação sobre o mundo, que a consequência valida, e o N5 a pôs só na escolha da fruta
+  (N5-2), onde não há conflito com a necessidade. Os nomes (`PEDIR_DEIXAR_FRUTA_<A|B|C>`, `Observacao.pedido_frutas`, `ConfigPedido`,
+  `DonoPedinte`) são propostas a combinar com o chat A.
+- **A arbitragem é a das regras que já existem.** As regras urgentes do instinto (sono, fome ou higiene abaixo de 0,25, abandono) vêm
+  antes e não leem o pedido; o pedido pesa só onde `comer` é candidato e a necessidade não é urgente. Nenhuma curva de urgência nova
+  (decisão N7-3).
+- **Mundo `iguais_frutas`, que a bancada ainda não tem.** Sem efeito próprio de fruta, obedecer ou desobedecer só custa a fome; no
+  descasado a consequência da fruta premiaria ou puniria a obediência.
+- **A marca se mede numa fase de extinção.** Com a janela de 240 min e a fruta ficando 120 min, X nunca aparece sem pedido vigente; por
+  isso os pedidos param no dia 10 e a marca é a fração de X nos dias 11–14.
+- **A ressalva literal da D7** ("inspirada no Dwarf Fortress; o análogo citado é inspiração declarada, não validação") está no topo do
+  plano. Rossi et al. e Fróes e Gudwin entram só como pista do corpus.
+- **Faixas propostas** 21101…21505 e 22101…22505, fora das reservadas, de 18101…20505 e do N11; nenhuma base aparece no repositório
+  fora dos artefatos.
+
 ## 2026-10-05 — V2, BANCADA-EXPERIMENTO: faixas, o ponto T3 e o orquestrador do experimento maior (`docs/TAREFA_V2_BANCADA_EXPERIMENTO.md`)
 
 - **Faixa do N11 também entrou.** A tarefa pede 18101…18505, 19101…19505 e 20101…20505; o N11 (16101…16505 e 17101…17505, seção 6 do
