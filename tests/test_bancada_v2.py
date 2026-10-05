@@ -59,7 +59,10 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
     assert sha256_engine() == ENGINE_SHA256_V0
     assert {b: (x.fonte, x.no) for b, x in bv.BRACOS.items()} == {
         "P0": ("nenhuma", "N0"), "P1": ("consequencia", "N3"), "P2": ("informacao", "N5"), "P2e": ("informacao", "N5"),
-        "P2a": ("informacao", "N5"), "P3": ("dono", "N1")}
+        "P2a": ("informacao", "N5"), "P3": ("dono", "N1"),
+        # BANCADA-N6-N7: declarados, falham alto com o no ate a memoria e o pedido existirem (tests/test_bancada_n6_n7.py)
+        "M0": ("nenhuma", "N6"), "MR": ("nenhuma", "N6"), "MT": ("nenhuma", "N6"), "ME": ("nenhuma", "N6"),
+        "P0+ped": ("nenhuma", "N7"), "P1+ped": ("consequencia", "N7"), "P3+ped": ("dono", "N7")}
     assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
 
