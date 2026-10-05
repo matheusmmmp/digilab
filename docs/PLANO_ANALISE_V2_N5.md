@@ -216,3 +216,56 @@ de ofertas igual entre braços é o `CalendarioFrutas` da bancada (#144), não o
 | N5-6 | Família de Holm = {G-EF, G-PIORA, G-REC}; G5 bilateral fora da família | Sim | Sem correção, uma das três passa por acaso com probabilidade alta; com G5 dentro, um teste de "não diferença" entra numa família de testes de diferença |
 | N5-7 | Leituras "inconclusivo por exposição" (G-EF com mais da metade censurada) e "limitado pelo teto" (G-REC com `w_info` preso) registradas antes | Sim | Sem elas, um resultado negativo vindo de pouca fruta comida ou do teto seria lido como "a informação não ajuda" ou "o mundo não corrige" |
 | N5-8 | A janela de 240 min fica como está (PROPOSTO), sem calibrar | Sim | Calibrar a janela junto com o `w0_info` dobra a grade e mistura duas alavancas na mesma escolha |
+
+## Adendo 1 — antes da calibração (2026-10-05, chat B)
+
+Registrado **antes de qualquer run** do N5. Não muda nada das seções 1–13; fixa o que elas deixavam para a implementação (R4) e as duas
+decisões da rodada 6 (`docs/RESULTADO_V2_REVISAO_APRENDIZ.md`, R1 e R2).
+
+**A1.1 — O aprendiz.** O ponto **T3** da revisão (decisão R1): `ponto` = `"T3"` da bancada, teto 16·S = 16384, o resto no ponto da L1
+(passo 512), ganho 4, E2 ligada, sem traço. Com a decisão **R2** (`docs/TAREFA_V2_FRUTA_NO_CENARIO.md`, partes A e B, PRs #154 e #157): na
+regra `fruta_no_cenario` a decisão de comer lê a fruta presente (um peso por fruta, prior 0, que só aprende pela consequência). A
+informação do dono continua só na escolha de qual fruta (N5-2), com o peso compartilhado `w_info` (N5-3) que só a consequência mexe.
+
+**A1.2 — Quando roda.** Pela seção 1, só depois de R2 na `main` (#154 e #157). O código da run é o da `main` nesse momento; o `meta.json`
+grava o commit e o sha256 de `lobos.py`, `frutas.py`, `bancada_v2.py`, `metrics.py` e do orquestrador.
+
+**A1.3 — Unidades (seção 10).** Semente da unidade k da base b = `derivar_semente("n5", b, k)`, genoma = `derivar_semente("n5-genoma", b,
+k)`, pela bancada (`unidades` com `"rotulo": "n5"`; sem o rótulo, o de sempre, `"experimento-maior"`). Calibração: bases 12101…12505,
+**K = 4** (20 unidades; a calibração do experimento maior ainda não fixou o K, seção 10). Validação: bases 13101…13505, K do adendo 2.
+
+**A1.4 — Desenho da run.** Mundo `descasado`, dono atencioso, 14 dias, orçamento 224, `CalendarioFrutas` (as ofertas iguais em todos os
+braços). Braços P0, P1, P2, P2e, P2a e o "só cuidado" acoplado do P2 e do P2e (filtro `sem_ensino`: sem sinais e sem a informação, com as
+ofertas e o cuidado; seção 4). Na calibração, a grade inteira de `w0_info` ∈ {0, 256, 512, 768} (0 = referência, P2 = P1 por construção),
+uma run da bancada por valor.
+
+**A1.5 — Medidas (seção 5), como saem do código.**
+- `taxa_fruta_ruim` inicial (dias 1–7) e final (dias 8–14): as janelas `inicio` e `final` da bancada (`metrics.taxa_fruta_ruim`); vida sem
+  consumo na janela fica fora daquele contraste, e o número de unidades usadas é relatado.
+- Consumos até a metade do caminho: `metrics.consumos_ate_metade` da bancada, com a taxa total do P0 da mesma unidade; censura à direita
+  como na seção 5 (a fração censurada por braço é relatada; N5-7).
+- Trajetória de `w_info`: o peso no fim de cada dia, lido por um replay da vida com um espião somente leitura (o motor confere que a vida
+  é a mesma); o dia em que o P2e cruza o zero = o primeiro dia que termina com `w_info` < 0. "Limitado pelo teto" (N5-7): `w_info` em
+  `w0_info − teto` em algum fim de dia.
+- Decisões com informação: `MotorFrutas.decisoes_com_informacao`. Saúde, fora de privação e humor: os da bancada. Mortes: o mundo das frutas
+  da bancada não tem lesão (0 por construção; relatado). G4 do aprendido: `motivo_lobos` num replay no motor das frutas; G6: vidas com
+  peso no teto e a razão da deriva dia 14 / dia 7.
+
+**A1.6 — Estatística (seção 7).** Contrastes pareados por unidade, orientados para a predição, com as unidades de uma base juntas no
+bootstrap (`metrics.contraste_pareado`, grupos = bases; 10 000 reamostragens, semente 4242, os do `PROTOCOLO_ARENA_V1`); o p unilateral é
+a fração das médias reamostradas ≤ 0. Holm (`metrics.holm`) sobre {G-EF, G-PIORA, G-REC}, α = 0,05. G5: IC 95% bilateral dos mesmos
+contrastes pareados (P2 − P1 e P2e − P1, saúde média e fração fora de privação).
+
+**A1.7 — Escolha do `w0_info` (seção 8), sem mudança:** o menor `w0_info` com o IC 95% de P2e − P1 na taxa inicial inteiro acima de 0;
+empate ou nenhum: o de maior limite inferior desse IC, e "a calibração não fechou".
+
+**A1.8 — Δ e o tamanho da validação (seções 6 e 10).**
+- Δ = metade da `taxa_fruta_ruim` final média do P0 na calibração (a distância entre o P0 e 0, pela metade).
+- O G-EF não está na escala da taxa: para ele, **Δ_EF = metade dos consumos até a metade do caminho do P1**, médios na calibração (a mesma
+  regra da "metade"). Registrado agora, antes de qualquer dado.
+- N por contraste = `metrics.tamanho_amostra(σ_d, Δ, α = 0,05/3, poder 0,8, múltiplo 5)`, com σ_d o desvio das diferenças por unidade no
+  `w0_info` escolhido; o N da validação = o maior dos três, **com teto de 200 unidades** (K = 40 por base; o custo da run, ~7 vidas de
+  ~5 s por unidade). Conferência por simulação: reamostrar, com reposição, N diferenças da calibração deslocadas para média Δ (2 000
+  repetições, semente 4242) e contar quantas passam o teste unilateral no limiar α/3; o poder simulado é relatado. Se o teto de 200 deixar
+  algum contraste abaixo de 0,8 de poder, o adendo 2 diz isso e a validação roda com 200.
+- K da validação = N / 5, no adendo 2, commitado antes da run.
