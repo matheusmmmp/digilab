@@ -269,3 +269,11 @@ empate ou nenhum: o de maior limite inferior desse IC, e "a calibração não fe
   repetições, semente 4242) e contar quantas passam o teste unilateral no limiar α/3; o poder simulado é relatado. Se o teto de 200 deixar
   algum contraste abaixo de 0,8 de poder, o adendo 2 diz isso e a validação roda com 200.
 - K da validação = N / 5, no adendo 2, commitado antes da run.
+
+## Nota — calibração interrompida (2026-10-05, chat B)
+
+Por ordem do coordenador (os próximos passos são o N6 e o N7 no cérebro), a calibração foi **parada durante o primeiro ponto da grade**
+(`w0_info` = 0, a referência), antes de qualquer medida: não há `resultado.json`, `escolha.json` nem número algum. As vidas parciais que
+chegaram ao disco (`artifacts_v2_n5/calibracao/w0_0/vidas/`) ficam fora do git e não são diagnóstico. A faixa de validação **13101…13505
+não foi usada**. A da calibração (12101…12505) teve só vidas do ponto de referência simuladas, sem leitura; quando o N5 voltar, o adendo
+seguinte decide se ela é refeita do zero (o código, a config e o adendo 1 ficam no branch `v2-n5-calibracao`).
