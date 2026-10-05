@@ -1762,3 +1762,19 @@ Infraestrutura, sem run com faixa reservada: só fumaça nas sementes dos testes
   T3 com `w0_info` S/2): 120 vidas das frutas + 15 do padrão em ~1 min; sem artefato.
 - **Fora:** o controle de capacidade sem lobos (E6, secundário no P1 e no P3) não roda: a bancada só tem os cérebros `lobos` e `instinto`
   (o `camada_unica` na bancada é do N11). A conferência do N por simulação fica para o adendo.
+
+## V2, FRUTA-NO-CENARIO, parte A — o mundo diz qual fruta está no cenário (2026-10-05, `docs/TAREFA_V2_FRUTA_NO_CENARIO.md`) — GATES PASSAM
+
+Decisão R2 (`docs/RESULTADO_V2_REVISAO_APRENDIZ.md`, `docs/V2_RODADA_6.md`). Infraestrutura, sem run; só as sementes dos testes. Só
+`policy.py` (o campo) e `frutas.py` (a injeção) mudaram; `lobos.py` e a bancada não (a decisão de comer que lê o campo é a parte B, do
+chat B). Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Campo:** `Observacao.frutas_cenario`, a presença de cada fruta na ordem de `events.FRUTAS` (1,0 presente, 0,0 ausente), padrão
+  `(0,0, 0,0, 0,0)`. Só o `MotorFrutas` com as frutas ligadas injeta, logo antes de `agir`, junto com `fruta` e `info_frutas`
+  (`_presenca_na_decisao`): são as frutas de `_na_decisao`, já sem as vencidas, as mesmas que a sub-decisão de comer considera. `de_estado`,
+  o instinto, os lobos de hoje e o bandit não o leem; `Observacao.fruta` continua o maior incentivo.
+- **Gates** (`tests/test_frutas_cenario.py`, 8 testes, ~20 s): **G2**, nenhuma vida de hoje muda: 168 vidas da bancada (P0 com lobos e com
+  instinto, P1, P2, P2e, P2a e P3; os três mundos das frutas; 4 donos; sementes 101 e 202) iguais a `tests/gabaritos/frutas_cenario_vidas_de_hoje.json`,
+  gravado com o código da main **antes** do campo (sha256 do log, do estado final, das ações, das rngs de ambiente, política e fruta, do
+  `resumo_frutas` e do estado interno da política); **a presença certa a cada decisão** (um espião na política: o campo é igual aos
+  `presentes` do registro de ofertas, decisão a decisão, e `fruta` é o maior incentivo entre eles; há decisões com duas frutas ou mais);
+  frutas desligadas não preenchem; **G1** com o campo e o informante.
