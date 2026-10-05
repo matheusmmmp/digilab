@@ -2245,6 +2245,75 @@ mecanismo; nenhuma run com faixa reservada. A calibração e a validação do N5
   - `docs/LEITURA_PARCIAL_V2_FASE1.md` ganha a seção 6, que marca as decisões LP como substituídas;
   - `docs/PLANO_V2_PESQUISA.md` ganha a nota da fase 1.
 
+## 2026-10-05 — K3/V2: plano da comparação A × B × C no papel; interpretações
+
+Tarefa `docs/TAREFA_V2_PLANO_COMPARACAO_CEREBROS.md`; entrega `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`. Nenhuma run, nenhum código;
+B e C ainda não existem.
+- **O herdado é comum aos três** (decisão C-1): o instinto entra como prior em todos, e cada cérebro aprende por cima; desligado = instinto
+  byte a byte. Sem isso, "aprende melhor" se mistura com "nasceu melhor", e o P0 deixa de ser um só.
+- **A comparação é uma família própria**, com quatro contrastes bilaterais (B − A e C − A, P1, descasado e mutável); as predições do
+  experimento maior ficam com o A e com a família delas.
+- **Os blocos N6 e N7 ficam fora**: são mecanismos do A; exigi-los de B e C imporia a arquitetura do A.
+- **As faixas do N11 (16101…17505) não são usadas**: a tarefa pede faixas novas fora da seção 6 do roadmap. O plano propõe 28101…28505 e
+  29101…29505 e pede ao coordenador marcar as do N11 como substituídas. As faixas 23101…27505, propostas pela leitura parcial e superadas
+  pela M11, também ficaram de fora, para não confundir.
+- **CfC, NCP, FlyWire e NORNBRAIN** entram só como pista (CORPUS ou software não revisado): nenhum deles está na tabela verificada do
+  projeto. As fontes do *Creatures* citadas são as VERIFICADA da tabela e descrevem só a família de origem do A.
+- **Legibilidade** é medida pela fração decidida pelo aprendido; compreensão humana fica para a fase 2 (Anderson et al. 2019).
+
+## 2026-10-05 — V2, K4-DONO-JULGA-FRUTA: o dono do P3 julga a fruta (`docs/TAREFA_V2_K4_DONO_JULGA_FRUTA.md`)
+
+- **Orçamento: escolhi o julgamento no orçamento** (`ConfigJulgamentoFruta.no_orcamento = True`, o padrão), como a tarefa pede; a
+  alternativa, fora do orçamento, fica atrás da opção. **Quanto tira da tarefa** (`artifacts_v2_k4/orcamento.json`; P3 atencioso, ponto
+  T3, 14 dias, orçamento 224, sementes 101…505, só mecanismo): o feedback da tarefa cai de 151,4 para 124,0 (casado), de 150,8 para 119,4
+  (descasado) e de 150,6 para 126,6 (mutável), cerca de um sexto a um quinto. O atencioso só dá feedback quando está atrasado no ritmo do
+  orçamento, e o julgamento gasta esse ritmo antes.
+- **O cuidado de necessidade também cai** (alimentar, limpar e brincar: 72,6 → 67,2, 73,2 → 65,0, 73,4 → 67,6), mas não por falta de vaga:
+  numa conferência à parte, em nenhum passo o julgamento tomou a vaga de um cuidado desejado (o máximo do passo é 6) e nada foi descartado.
+  O pet elogiado pela fruta boa come mais fruta (ex.: 39 → 70 consumos no descasado, semente 202) e fica menos com fome; o atencioso
+  alimenta menos porque precisa menos. O G5 do experimento maior (saúde e privação contra o "só cuidado") é o que confere se isso pesa.
+- **Recomendação para o Matheus:** fora do orçamento. Motivos: a informação do P2 já é fora do orçamento, então P2 × P3 compararia o
+  canal com o mesmo gasto; e no orçamento a tarefa do P3 perde um sexto do feedback, o que mistura o K4 com menos ensino da tarefa no P3.
+  Contra: fora do orçamento o P3 recebe mais sinal que antes. Fica como decisão.
+- **Neutra = 0, ruim = efeito < 0:** a mesma divisão do P2 (`DonoInformante`: "mal" se o efeito é negativo). O P3 repreende exatamente o
+  que o P2 diz que faz mal (teste); a diferença é que o P2 diz "bem" da neutra e o P3 não diz nada dela, como a tarefa pede.
+- **O dono vê os consumos pelo `estado()`**, e só com a chave (`consumos_frutas`). Sem ela o `estado()` é o de hoje e o dono que julga
+  falha alto (`KeyError`). O julgamento é do dono (o motor não sabe do julgamento).
+- **O crédito é exato:** a decisão cai a cada 15 ticks e o dono age a cada 15, então a decisão anterior ao julgamento é sempre a de comer
+  a fruta julgada (teste). Se outro feedback da tarefa sair no mesmo passo, ele credita a mesma decisão (a janela da v1).
+- **O descarte:** se os julgamentos de um passo passarem do máximo do passo, os que sobram vão para `julgador.descartados` e não voltam.
+  Na medida, nenhum.
+- **Arquivos fora da lista da tarefa:** `config.py` e `protocol.py` (a chave e o registro de status e fonte, como o pedido do N7), e
+  `experiments/medir_k4_orcamento.py`, com a medida do orçamento e a receita do P3 com julgamento pela bancada sem mudar `bancada_v2.py`.
+- **Fora do orçamento na bancada** pede o chat D: o `simular_vida_mundo` só aceita da regra do mundo os eventos de `FORA_DO_ORCAMENTO`, e
+  elogio e bronca não estão lá (nem devem estar para os outros braços).
+
+## 2026-10-05 — CANAIS-REFORCO: o sinal da consequência por canal, com o mesmo total; interpretações
+
+Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/digibrain/mechanisms/reinforcement.md`, decisão K-6 de
+`docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`. Só testes de mecanismo; nenhuma run com faixa reservada.
+- **"Mesmo total de sinal" = a soma inteira dos canais é o escalar da mesma decisão.** Arredondar cada canal sozinho
+  (div_arred(g·Δ_i, S)) não fecha a soma; o arredondamento telescópico sobre as somas parciais fecha sempre, e cada canal fica a no máximo
+  1 da conta isolada. A ordem dos canais é a dos drives (fome, higiene, energia, humor); o resto de arredondamento vai ao canal em que a
+  soma parcial cruza o meio. O aprendiz confere a soma contra o escalar que a bancada calculou e falha alto se diferir.
+- **"Cada um com o próprio peso de crédito" = cada canal credita o seu grupo de pesos**, não um multiplicador por canal: um multiplicador
+  mudaria o total (é a sensibilidade da H-R4, que fica para depois, com o ponto de entrada nomeado e sem uso).
+- **A rota é por grupo de pesos, uma por canal:** o corpo (fome, higiene, energia) → a tabela da regra; o humor → os pesos que leem a fruta
+  (escolha, informação, pedido, presença). No escalar o mesmo f_S vai a todos esses grupos ao mesmo tempo; nos canais cada grupo recebe só a
+  soma dos canais dele, e nenhum canal é creditado em dois grupos. A rota é constante do código: outra rota é desenho novo e, pela K-6,
+  entraria por adendo 2 do plano da calibração, varrida com o ganho. **Nenhum parâmetro novo além da chave.**
+- **A presença (FRUTA-NO-CENARIO) vai com a fruta, não com o corpo:** o peso de presença de uma fruta lê qual fruta está no cenário; o que
+  separa uma fruta da outra é o efeito no humor (a nutrição é igual em todas, F6). Consequência: pelos canais, deixar de comer com fruta no
+  cenário não mexe na presença (o humor não muda), e comer a fruta ruim sozinha baixa a presença dela mesmo quando a fome melhora.
+- **A informação (N5) e o pedido (N7) vão com a fruta:** os dois leem a identidade da fruta. O pedido do N7 aprende também com o dono (P3),
+  que continua escalar; os canais só mudam o que vem da consequência.
+- **Decisão com total zero e canais não zero:** fome +k e energia −k, por exemplo, somam 0. O escalar não credita nada; pelos canais o
+  corpo também recebe 0 (os dois são do corpo). Só quando os canais de grupos diferentes se cancelam um grupo recebe +k e o outro −k, com
+  total 0: é o caso que a H-R2 quer separar, e fica dentro do contrato.
+- **Canais e traço não andam juntos** (falha alto): o traço espalha o sinal às decisões anteriores com arredondamento próprio, e o total
+  por decisão deixaria de ser o do escalar. O T3, o ponto da calibração conjunta, não tem traço (R1).
+- **Só o sinal da consequência:** elogio, bronca, latência e chamado ignorado (o dono) seguem escalares.
+
 ## 2026-10-05 — V2, BANCADA-LIGA-N6-N7: a memória e o pedido ligados na bancada (`docs/TAREFA_V2_BANCADA_LIGA_N6_N7.md`)
 
 - **As chaves do N6 e do N7 pertencem ao braço.** `cfg_lobos_do_braco` liga a memória só nos M0–ME e o `w0_pedido` só nos braços com pedido,
