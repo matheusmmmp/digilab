@@ -78,6 +78,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`), as condições casado/descasado/mutável e as unidades derivadas do experimento maior; desde a BANCADA-N5 os lobos veem a bola e as frutas (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS" e "V2, BANCADA-N5" no fim) |
+| `experiments/run_v2_experimento_maior.py`, `experiments/configs/v2_experimento_maior/` | **V2, BANCADA-EXPERIMENTO**: o orquestrador do experimento maior (P0, P1, P2, P2e, P3 × `casado_frutas`, `descasado`, `mutavel` pela bancada, o "só cuidado" acoplado, os seis contrastes primários com Holm, a equivalência da predição 5 e as leituras por predição); o ponto nomeado do aprendiz na bancada (`ponto`: `L1` padrão, `T3` para o N5 e o experimento maior) (seção "V2, BANCADA-EXPERIMENTO" no fim) |
 | `experiments/run_revisao_aprendiz.py`, `experiments/configs/v2_revisao/` | **V2, REVISAO-APRENDIZ**: diagnóstico do aprendiz (teto, janela de crédito com o traço `ConfigLobos.traco_decisoes`/`traco_fator`, exposição), uma alavanca por vez, pela bancada (chaves `lobos` e `frutas` da config) → `artifacts_v2_revisao/` (seção "V2, REVISAO-APRENDIZ" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
@@ -1726,3 +1727,38 @@ vidas só da base no git, os outros pontos regeneráveis); relatório `docs/RESU
   maior incentivo), não as três alavancas. Decisões R1–R4 para o Matheus no relatório.
 - **Não mudou:** `engine.py`, `AcaoPet`, o bandit, `frutas.py`, a web; com os campos novos no padrão, a L0, a L1, o N3, o N5 e a
   bancada byte a byte.
+
+## V2, BANCADA-EXPERIMENTO — faixas, o ponto T3 e o orquestrador do experimento maior (2026-10-05, `docs/TAREFA_V2_BANCADA_EXPERIMENTO.md`) — GATES PASSAM
+
+Infraestrutura, sem run com faixa reservada: só fumaça nas sementes dos testes. Rodada 7 (`docs/V2_RODADA_6.md`), plano
+`docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` (seções 5 e 6) e decisão R1 (`docs/RESULTADO_V2_REVISAO_APRENDIZ.md`). Só `experiments/` e
+`digilab/metrics.py` mudaram; `engine.py`, `lobos.py`, `frutas.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Faixas reservadas** (`bancada_v2.FAIXAS_RESERVADAS`): mais 18101…18505 (revisão do aprendiz), 19101…19505 e 20101…20505 (N6) e o N11
+  (16101…16505, 17101…17505, do `docs/ROADMAP_V2.md`, que o plano do N6 apontou como faltando).
+- **Ponto do aprendiz** (`PONTOS_APRENDIZ`, `cfg_lobos_do_ponto`, campo `ponto` da config da bancada): `L1` (o `CONFIG_LOBOS_APRENDIZ`, passo
+  512, teto 1024) é o padrão, então as runs antigas não mudam; `T3` = teto 16·S (16384), o resto igual, sem traço (R1);
+  `PONTO_N5_EXPERIMENTO = "T3"`. A chave `lobos` troca campos por cima do ponto (o `w0_info` do N5, por exemplo). O T3 nomeado é o mesmo
+  aprendiz do T3 da revisão (teste). O `meta.json` da bancada grava o ponto e o aprendiz efetivo.
+- **Orquestrador** (`experiments/run_v2_experimento_maior.py`): P0, P1, P2, P2e e P3 × `casado_frutas`, `descasado` e `mutavel` com o
+  atencioso, mais o "só cuidado" acoplado de P2, P2e e P3 (filtro `sem_ensino`: sem sinais e sem a informação, com as ofertas), e a
+  referência do mundo padrão (P0, P1, P3, só descritiva). Pela seção 6: contrastes pareados por unidade, orientados para a predição,
+  bootstrap reamostrando as sementes (`metrics.contraste_pareado`: IC 95% e 90%, p unilateral, teste t pareado como conferência);
+  **Holm** sobre os seis primários (`metrics.holm`); a **equivalência** da predição 5 fora da família (`metrics.dentro_da_margem`); Δ pela
+  regra da seção 6.3 na calibração e do adendo na validação; σ_d e N por contraste (`metrics.tamanho_amostra`). As **leituras**: confirma,
+  refuta, inconclusivo, inconclusivo por duração (a inclinação de P0 − P1 nos 4 últimos dias), confirma parcialmente e não testável (sem o
+  K2); a separação do cuidado (5.1); o dia em que o P2e cruza o P0. Grava `frutas/` e `padrao/` (a bancada), `contrastes.json`,
+  `curvas.json`, `resumo.json` e `meta.json`.
+- **Modos pelas sementes:** `fumaca` (101…505), `calibracao` (bases 14101…14505) e `validacao` (15101…15505). Calibração e validação pedem
+  `plano` = este plano, as unidades derivadas e 14 dias; a validação exige o Δ do adendo e a calibração o recusa. Misturar faixas ou usar
+  a de outro experimento falha alto.
+- **Contratos:** o K2 (o humor da fruta no sinal do P1, E2) é lido da config; o **K4** (o dono do P3 julga a fruta pelo efeito real) **não
+  está na main**: `K4_DONO_JULGA_FRUTA = False`, e a predição 5 sai com o aviso de que mede só que o P3 não sabe das frutas.
+- **Gates** (`tests/test_experimento_maior.py`, 12 testes, ~25 s): **G1** de toda vida da fumaça, rejogada de novo do arquivo; **contrastes
+  e Holm em dados sintéticos com resposta conhecida** (a t de Student da tabela, o exemplo clássico do Holm, o Holm que para na segunda,
+  o bootstrap que reamostra as sementes juntas, o N da fórmula; medidas sintéticas em que tudo confirma, em que 1, 2 e 5 refutam, o
+  "não testável" sem K2 e o "inconclusivo por duração" no lugar do refuta); **a fumaça recusa sementes de validação sem plano** (e com
+  outro plano, misturadas, de outra faixa, sem Δ, com vida curta). A fumaça põe `w0_info` = S/2 só para a informação agir.
+- **Fumaça** (`experiments/configs/v2_experimento_maior/fumaca.json`, NÃO canônica: 5 unidades derivadas das sementes dos testes, 4 dias,
+  T3 com `w0_info` S/2): 120 vidas das frutas + 15 do padrão em ~1 min; sem artefato.
+- **Fora:** o controle de capacidade sem lobos (E6, secundário no P1 e no P3) não roda: a bancada só tem os cérebros `lobos` e `instinto`
+  (o `camada_unica` na bancada é do N11). A conferência do N por simulação fica para o adendo.

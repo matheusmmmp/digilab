@@ -850,3 +850,140 @@ def tabela_braco_condicao_parcial(valores: Mapping[tuple[str, str], Sequence[flo
                 cel["motivo"] = "menos de 2 vidas com valor"
             celulas[b][c] = cel
     return {"bracos": bracos, "condicoes": condicoes, "celulas": celulas}
+
+
+# ------------------------------------------------------------ V2, experimento maior: contrastes pareados, Holm, equivalencia
+# docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md, secoes 5, 6 e 7. O contraste e orientado por quem chama: positivo = o que a predicao diz.
+
+
+def _medias_bootstrap_agrupadas(grupos: Sequence[Sequence[float]], reamostragens: int, semente: int) -> list[float]:
+    """Medias reamostradas, sorteando os GRUPOS (a unidade de ambiente, a semente) com reposicao e todos os valores de cada grupo
+    juntos (secao 6.2). Com um valor por grupo, sao as mesmas medias do `bootstrap_ic` (mesma rng, mesma ordem de soma)."""
+    rng = random.Random(derivar_semente("bootstrap", semente))
+    k = len(grupos)
+    medias = []
+    for _ in range(reamostragens):
+        vals: list[float] = []
+        for _ in range(k):
+            vals.extend(grupos[rng.randrange(k)])
+        medias.append(sum(vals) / len(vals))
+    return sorted(medias)
+
+
+def _percentis(medias_ordenadas: Sequence[float], nivel: float) -> tuple[float, float]:
+    r = len(medias_ordenadas)
+    alfa = (1.0 - nivel) / 2.0
+    return (medias_ordenadas[int(math.floor(alfa * (r - 1)))], medias_ordenadas[int(math.ceil((1.0 - alfa) * (r - 1)))])
+
+
+def _beta_cf(a: float, b: float, x: float) -> float:
+    """Fracao continuada da beta incompleta (Lentz modificado)."""
+    pequeno = 1e-300
+    c, d = 1.0, 1.0 - (a + b) * x / (a + 1.0)
+    d = 1.0 / (d if abs(d) > pequeno else pequeno)
+    h = d
+    for m in range(1, 400):
+        m2 = 2 * m
+        for num in (m * (b - m) * x / ((a + m2 - 1.0) * (a + m2)), -(a + m) * (a + b + m) * x / ((a + m2) * (a + m2 + 1.0))):
+            d = 1.0 + num * d
+            d = 1.0 / (d if abs(d) > pequeno else pequeno)
+            c = 1.0 + num / c
+            c = c if abs(c) > pequeno else pequeno
+            h *= d * c
+        if abs(d * c - 1.0) < 1e-15:
+            return h
+    raise ArithmeticError("beta incompleta nao convergiu")
+
+
+def beta_incompleta(a: float, b: float, x: float) -> float:
+    """I_x(a, b), a beta incompleta regularizada."""
+    if not 0.0 <= x <= 1.0:
+        raise ValueError(f"x fora de [0, 1]: {x!r}")
+    if x in (0.0, 1.0):
+        return x
+    ln = math.lgamma(a + b) - math.lgamma(a) - math.lgamma(b) + a * math.log(x) + b * math.log1p(-x)
+    if x < (a + 1.0) / (a + b + 2.0):
+        return math.exp(ln) * _beta_cf(a, b, x) / a
+    return 1.0 - math.exp(ln) * _beta_cf(b, a, 1.0 - x) / b
+
+
+def t_unilateral(t: float, gl: int) -> float:
+    """P(T >= t) para a t de Student com gl graus de liberdade."""
+    if gl < 1:
+        raise ValueError("gl < 1")
+    cauda = 0.5 * beta_incompleta(gl / 2.0, 0.5, gl / (gl + t * t))
+    return cauda if t >= 0 else 1.0 - cauda
+
+
+def contraste_pareado(grupos: Mapping[object, Sequence[float]], reamostragens: int, semente: int) -> dict:
+    """Contraste pareado por unidade (secao 6), ja orientado: positivo = a direcao predita. `grupos` = {semente: [diferencas das
+    unidades daquela semente]}. Devolve a media, os ICs percentis de 95% e 90% (a mesma reamostragem), o p unilateral do bootstrap
+    (a fracao das medias reamostradas <= 0, o lado oposto) e, como conferencia, o teste t pareado unilateral sobre as unidades.
+    Com menos de 2 grupos nao ha bootstrap: os ICs e o p ficam None, com o motivo."""
+    gs = [list(map(float, v)) for _, v in sorted(grupos.items(), key=lambda kv: repr(kv[0])) if len(v)]
+    valores = [x for g in gs for x in g]
+    out: dict = {"n": len(valores), "n_grupos": len(gs), "media": (sum(valores) / len(valores)) if valores else None,
+                 "ic95": None, "ic90": None, "p_unilateral": None, "t_pareado": None, "motivo": None}
+    if len(gs) < 2:
+        out["motivo"] = "menos de 2 grupos com valor"
+        return out
+    medias = _medias_bootstrap_agrupadas(gs, reamostragens, semente)
+    for chave, nivel in (("ic95", 0.95), ("ic90", 0.90)):
+        lo, hi = _percentis(medias, nivel)
+        out[chave] = {"ic_inferior": lo, "ic_superior": hi, "nivel": nivel}
+    out["p_unilateral"] = sum(1 for m in medias if m <= 0.0) / reamostragens
+    n = len(valores)
+    media = out["media"]
+    var = sum((x - media) ** 2 for x in valores) / (n - 1)
+    if var > 0.0:
+        t = media / math.sqrt(var / n)
+        out["t_pareado"] = {"t": t, "gl": n - 1, "p_unilateral": t_unilateral(t, n - 1)}
+    return out
+
+
+def holm(p: Mapping[str, float | None], alfa: float) -> dict:
+    """Correcao de Holm (passo a passo descendente) sobre a familia inteira. p None (o contraste nao teve teste) conta como 1: a
+    familia nao encolhe. Por hipotese: o p, a ordem, o limiar alfa/(m - i), se rejeita e o p ajustado."""
+    if not p:
+        raise ValueError("familia vazia")
+    if not 0.0 < alfa < 1.0:
+        raise ValueError(f"alfa fora de (0, 1): {alfa!r}")
+    m = len(p)
+    ordem = sorted(p, key=lambda k: (1.0 if p[k] is None else p[k], k))
+    out, parou, ajustado = {}, False, 0.0
+    for i, k in enumerate(ordem):
+        pk = 1.0 if p[k] is None else float(p[k])
+        limiar = alfa / (m - i)
+        rejeita = not parou and pk <= limiar
+        parou = parou or not rejeita
+        ajustado = max(ajustado, min(1.0, (m - i) * pk))
+        out[k] = {"p": p[k], "ordem": i + 1, "limiar": limiar, "rejeita": rejeita, "p_ajustado": ajustado}
+    return out
+
+
+def dentro_da_margem(ic: Mapping[str, float] | None, delta: float | None) -> bool:
+    """O IC inteiro dentro de (-delta, +delta) (equivalencia por dois testes unilaterais, pelo IC de 90%)."""
+    if ic is None or delta is None:
+        return False
+    return -delta < ic["ic_inferior"] and ic["ic_superior"] < delta
+
+
+def inclinacao_mmq(xs: Sequence[float], ys: Sequence[float]) -> float:
+    """Inclinacao de minimos quadrados de y em x (pelo menos 2 x distintos)."""
+    if len(xs) != len(ys) or len(xs) < 2:
+        raise ValueError("inclinacao precisa de 2 pontos ou mais")
+    mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
+    sxx = sum((x - mx) ** 2 for x in xs)
+    if sxx == 0.0:
+        raise ValueError("x todos iguais")
+    return sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx
+
+
+def tamanho_amostra(desvio_d: float, delta: float, alfa: float, poder: float, multiplo: int = 1) -> int:
+    """N = ((z_{1-alfa} + z_poder) * sigma_d / delta)^2, unilateral (secao 7.2), arredondado para cima ao multiplo."""
+    if delta <= 0.0 or desvio_d < 0.0 or not 0.0 < alfa < 1.0 or not 0.0 < poder < 1.0 or multiplo < 1:
+        raise ValueError("tamanho_amostra: delta > 0, desvio >= 0, alfa e poder em (0, 1), multiplo >= 1")
+    from statistics import NormalDist
+    z = NormalDist().inv_cdf
+    n = math.ceil(((z(1.0 - alfa) + z(poder)) * desvio_d / delta) ** 2)
+    return max(multiplo, -(-n // multiplo) * multiplo)
