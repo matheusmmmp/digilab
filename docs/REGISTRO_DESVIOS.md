@@ -1896,3 +1896,20 @@ Tarefa `docs/TAREFA_V2_BANCADA_FRUTAS.md`. Sem run de pesquisa; só as sementes 
 - **Testes antigos mudaram porque os lobos agora veem o mundo:** o `bola_a1` com lobos é o braço "bola" da A1 (antes "bolacega"); o acoplado
   P3 → P0 no mundo da bola é o instinto que vê a bola; o P0 com lobos nas frutas come fruta (antes 0 consumos); P2/P2e fora das frutas
   levantam `ValueError` (antes `NotImplementedError`).
+
+## 2026-10-04 — N5-CEREBRO (chat B, `docs/TAREFA_V2_N5_CEREBRO.md`)
+
+- **`w0_info = 0` desliga a entrada `info`, em vez de começar o peso em zero e deixá-lo aprender.** A tarefa pede que, com w0 = 0, a vida
+  seja a de hoje byte a byte; com um peso em zero que aprende, a primeira fruta informada comida com sinal ≠ 0 já mudaria a vida do P2
+  em relação ao P1. O plano (seção 8) usa w0 = 0 como referência descritiva, fora da escolha: com a entrada desligada essa referência é
+  o P1. Se o Matheus quiser a variante "parte de zero e aprende", é um campo a mais, sem mudar o resto.
+- **Piso no peso efetivo da fruta informada, mesmo com o aprendizado desligado.** Com o "mal", (w_f/S)·incentivo − (w_info/S) pode ser
+  negativo (incentivo 0,5 e w0 S/2 dá zero); o piso do aprendiz (`piso_peso`/S = 1/16) evita peso não positivo no sorteio. Só vale na
+  fruta com informação vigente; nas outras o peso é o de hoje (por isso a vida sem informação não muda).
+- **O peso da informação aprende pela mesma regra da L1, somada sobre as frutas candidatas**, porque é um parâmetro só presente em
+  todos os pesos efetivos (o gradiente de log p(f*) em relação a ele é a soma). Cortado em w0 ± teto (o teto da `ConfigLobos`): com w0 na
+  grade, abaixo do teto, o zero fica ao alcance (seção 3 do plano). O corte conta em `cortes_teto` e `pesos_no_teto`.
+- **"Nunca pelo dono" vale só para o peso da informação.** Os pesos de cada fruta seguem aprendendo também com elogio e bronca no P3,
+  como desde o LOBOS-MUNDO; a tarefa só restringe o peso da `info`.
+- **Sem mudança em `frutas.py` nem na bancada:** a informação chega pela `Observacao` que o `MotorFrutas` já injeta (#140), e a lida é
+  guardada no `agir` da mesma decisão em que a fruta é escolhida.
