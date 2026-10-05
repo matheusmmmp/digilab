@@ -314,7 +314,10 @@ FAIXAS_RESERVADAS = (
 )
 
 
-def unidades_derivadas(bases, k_por_base: int) -> list[dict]:
+ROTULO_UNIDADES = "experimento-maior"            # o rotulo das unidades derivadas do experimento maior (E3); o N5 usa "n5" (secao 10)
+
+
+def unidades_derivadas(bases, k_por_base: int, rotulo: str = ROTULO_UNIDADES) -> list[dict]:
     """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente("experimento-maior", b, k) e
     genoma derivar_semente("experimento-maior-genoma", b, k), k = 0..K-1. Falha alto com K < 1, base repetida ou colisao."""
     if k_por_base < 1:
@@ -322,8 +325,10 @@ def unidades_derivadas(bases, k_por_base: int) -> list[dict]:
     bases = list(bases)
     if len(set(bases)) != len(bases):
         raise ValueError(f"base repetida: {bases}")
-    out = [{"base": b, "k": k, "semente": derivar_semente("experimento-maior", b, k),
-            "genoma": derivar_semente("experimento-maior-genoma", b, k)} for b in bases for k in range(k_por_base)]
+    if not rotulo:
+        raise ValueError("rotulo das unidades vazio")
+    out = [{"base": b, "k": k, "semente": derivar_semente(rotulo, b, k),
+            "genoma": derivar_semente(f"{rotulo}-genoma", b, k)} for b in bases for k in range(k_por_base)]
     valores = [u["semente"] for u in out] + [u["genoma"] for u in out]
     if len(set(valores)) != len(valores):
         raise ValueError("colisao entre sementes e genomas derivados")
@@ -1036,9 +1041,9 @@ def validar_config(cfg: dict) -> dict:
         raise ValueError("config: ou 'sementes' (x 'genomas') ou 'unidades' (bases x K derivadas), um dos dois")
     if "unidades" in cfg:
         u = cfg["unidades"]
-        if set(u) != {"bases", "k"} or "genomas" in cfg:
-            raise ValueError(f"unidades fora do formato {{'bases': [...], 'k': K}} (sem 'genomas'): {u}")
-        unidades_derivadas(u["bases"], int(u["k"]))
+        if not {"bases", "k"} <= set(u) <= {"bases", "k", "rotulo"} or "genomas" in cfg:
+            raise ValueError(f"unidades fora do formato {{'bases': [...], 'k': K, 'rotulo'?: ...}} (sem 'genomas'): {u}")
+        unidades_derivadas(u["bases"], int(u["k"]), u.get("rotulo", ROTULO_UNIDADES))
         fora = sorted(set(u["bases"]) - SEMENTES_TESTE)
         if fora:
             plano = cfg.get("plano")
@@ -1103,7 +1108,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
         vidas[v.nome] = v
 
     if "unidades" in cfg:
-        unidades = unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]))
+        unidades = unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]),
+                                      cfg["unidades"].get("rotulo", ROTULO_UNIDADES))
         pares = [(u["genoma"], u["semente"]) for u in unidades]
     else:
         unidades = []

@@ -1,0 +1,11 @@
+{
+  "descricao": "V2, N5 (docs/PLANO_ANALISE_V2_N5.md, secao 8 e adendo 1): grade do w0_info no ponto T3, descasado, atencioso, P0/P1/P2/P2e/P2a e o so cuidado do P2 e do P2e, unidades derivadas (rotulo n5) das bases de calibracao.",
+  "conjunto": "calibracao",
+  "bases": [12101, 12202, 12303, 12404, 12505],
+  "k": 4,
+  "saida": "artifacts_v2_n5/calibracao",
+  "dias": 14,
+  "orcamento": 224,
+  "sonda": {"estados": 64, "amostras": 200, "semente": 9001},
+  "grade_w0": [0, 256, 512, 768]
+}
