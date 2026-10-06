@@ -219,12 +219,12 @@ def test_g1_toda_vida_e_acoplado_na_completa():
 
 
 def test_rodar_na_completa_com_as_medidas_da_memoria(tmp_path):
-    cfg = {"bracos": list(PRINCIPAIS), "donos": ["atencioso"], "sementes": [101], "mundos": ["descasado"], "dias": 2, "orcamento": 32,
+    cfg = {"bracos": list(PRINCIPAIS), "donos": ["atencioso"], "sementes": [101, 202], "mundos": ["descasado"], "dias": 2, "orcamento": 32,
            "ponto": "T3", "lobos": PECAS, "julgamento_fruta": True, "montagem": "completa",
            "sonda": {"estados": 5, "amostras": 5, "semente": 101}, "bootstrap": {"reamostragens": 200, "semente": 101, "nivel": 0.95},
            "acoplados": [{"origem": "P3", "destino": "P0", "filtro": "sem_ensino"}]}
     r = bv.rodar(cfg, tmp_path)
-    assert len(r["vidas"]) == 6 + 1
+    assert len(r["vidas"]) == 2 * (6 + 1)
     med = json.loads((tmp_path / "medidas.json").read_text(encoding="utf-8"))
     # as medidas da memoria (N6) saem nos bracos que a montagem liga; no P0 e no acoplado para o P0, nao
     assert {m["braco"] for m in med.values() if m["n6"] is not None} == {"P1", "P2", "P2e", "P2a", "P3"}
