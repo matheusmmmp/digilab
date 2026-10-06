@@ -42,17 +42,40 @@ def test_tamanho_com_o_delta_na_escala_da_medida():
     assert um["por_contraste"]["p1"] == dois["por_contraste"]["p1"]
     assert dois["por_contraste"]["p3_consumos"]["delta"] == 17.5
     assert dois["por_contraste"]["p3_consumos"]["n"] < um["por_contraste"]["p3_consumos"]["n"]
+    assert um["regra"] == "formula" and "n_simulado" not in um["por_contraste"]["p1"]     # sem simulacao: a conta da K2, como antes
+
+
+def test_n_pelo_poder_simulado_reproduz_o_adendo_2():
+    """Adendo 2: das 20 unidades do piloto da K2, o N pela simulacao e 30 (o p3 manda, com poder 0,862), e a formula dava 25."""
+    piloto = json.loads((RAIZ / "artifacts_v2_calibracao_conjunta/D/resultado.json").read_text(encoding="utf-8"))["primarios_piloto"]
+    t = em.tamanhos(piloto, ADENDO["delta"], 0.05, 0.8, {"p3_consumos": ADENDO["delta_p3_consumos"]},
+                    {"semente": VALIDACAO["bootstrap"]["semente"], "replicas": em.REPLICAS_PODER}, ADENDO["N"])
+    assert t["regra"] == "simulacao (adendo 2)" and t["n_validacao"] == ADENDO["N"] == 30 and t["sem_n_simulado"] == []
+    assert t["n_validacao_formula"] == 25
+    for nome, c in t["por_contraste"].items():
+        assert c["poder_simulado_no_n_da_run"] == ADENDO["primarios"][nome]["poder_simulado_N30"]
+        assert c["poder_no_n_simulado"] >= 0.8 and c["n_simulado"] <= 30
+    assert t["por_contraste"]["p3_consumos"]["n_simulado"] == 30
+
+
+def test_n_simulado_sem_poder_ate_o_teto():
+    t = em.tamanhos({"p": {"valores": {"1": [1.0, -1.0, 2.0, -2.0]}}}, 0.01, 0.05, 0.8, None, {"semente": 1, "replicas": 20}, 4)
+    assert t["n_validacao"] is None and t["sem_n_simulado"] == ["p"] and "motivo_simulado" in t["por_contraste"]["p"]
 
 
 def test_fumaca_com_os_blocos(tmp_path):
     cfg = {**FUMACA, "blocos": True, "delta_p3": 17.5, "delta_n6": 0.19, "delta_n7": 0.2, "dias": 4, "orcamento": 64,
            "unidades": {"bases": [101, 202], "k": 1}, "lobos": {"memoria_ganho": 512, "w0_info": 256, "w0_pedido": 256},
-           "sonda": {"estados": 8, "amostras": 8, "semente": 101}, "bootstrap": {"reamostragens": 200, "semente": 101, "nivel": 0.95}}
+           "sonda": {"estados": 8, "amostras": 8, "semente": 101}, "bootstrap": {"reamostragens": 200, "semente": 101, "nivel": 0.95},
+           "replicas_poder": 20}
     r = em.rodar(cfg, tmp_path)
     v = r["resumo"]["vidas"]
     assert v["frutas"] + v["padrao"] + v["blocos"] == 44 * 2          # os 44 por unidade da secao 4
     b = json.loads((tmp_path / "blocos.json").read_text(encoding="utf-8"))
     assert set(b) == {"n6", "n7", "ablacoes", "n5_descritivo"}
+    tam = json.loads((tmp_path / "resumo.json").read_text(encoding="utf-8"))["tamanho_amostra"]
+    assert tam["regra"] == "simulacao (adendo 2)" and tam["n_da_run"] == 2
+    assert {"n_simulado", "poder_simulado_no_n_da_run"} <= set(tam["por_contraste"]["p3_consumos"])
     assert set(b["n6"]["contrastes"]) == {"G-CAUSAL", "G-REC", "G-EMB"} and set(b["n7"]["contrastes"]) == {"G-EROSAO", "G-MARCA", "G-MARCA-E"}
     assert b["n6"]["G-M1_G-M2"]["passa"] and b["n7"]["G-URG"]["passa"]
     assert set(b["ablacoes"]) == {"memoria_descasado", "memoria_mutavel", "canais_descasado", "canais_mutavel"}

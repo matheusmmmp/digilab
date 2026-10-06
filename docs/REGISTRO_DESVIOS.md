@@ -2582,6 +2582,16 @@ Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, q
 - **Ablações:** a peça tirada menos o P1 completo, na taxa final no descasado e depois da troca no mutável. São descritivas, fora de
   qualquer Holm, com IC 95% e o p unilateral.
 - **N5, descritivo:** P2a − P2 no descasado, nos consumos até a metade e na taxa no início e no final.
+- **O N pelo poder simulado (adendo 2):** o `tamanhos` do orquestrador ganhou a simulação. Por contraste, ele dá o menor N (múltiplo de
+  5, até 200) com poder simulado ≥ 0,8 em α/6, e o poder simulado no N da run. O N da validação passa a ser o maior N simulado; o da
+  fórmula fica ao lado (`n_validacao_formula`).
+  - A conta é a da K2: bootstrap das unidades centradas no Δ, teste t unilateral, 2000 réplicas, a mesma rng. A função passou da K2 para
+    o orquestrador do experimento maior, e a K2 a chama de lá.
+  - Das 20 unidades do piloto da K2, a simulação dá **N = 30**, com o p3 a 0,862 no N 30, os números do `adendo_opcao_a.json` (teste). A
+    fórmula dava 25: três primários, que ela punha em 5, pedem 10 pela simulação.
+  - Na validação, o `resumo.json` grava o poder simulado de cada primário no N 30, a partir das unidades da própria validação. É
+    descritivo e não muda nenhuma leitura.
+  - Sem a simulação, a K2 chama o `tamanhos` como antes: só a fórmula.
 - **Uma run nas sementes de validação começou e foi parada** (2026-10-06, das 09:49 às 10:12, commit `1140fc9`). Ela foi lançada pela ordem
   "rode a validação" do Matheus, antes da tarefa V1, que manda esperar o sinal verde do coordenador por causa dos adendos do
   `docs/PREDICOES_V2.md`. Foi parada assim que a tarefa chegou.

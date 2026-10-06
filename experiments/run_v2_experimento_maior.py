@@ -28,6 +28,7 @@ import argparse
 import json
 import math
 import platform
+import random
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -39,8 +40,8 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import bancada_v2 as bv  # noqa: E402
 from digilab.config import CONFIG_CONSEQUENCIA  # noqa: E402
 from digilab.metrics import (contraste_pareado, dentro_da_margem, holm, inclinacao_mmq,  # noqa: E402
-                             tamanho_amostra)
-from digilab.protocol import PROTOCOLO_ARENA_V1  # noqa: E402
+                             t_unilateral, tamanho_amostra)
+from digilab.protocol import PROTOCOLO_ARENA_V1, derivar_semente  # noqa: E402
 
 PLANO = "docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md"
 BRACOS = ("P0", "P1", "P2", "P2e", "P3")
@@ -53,10 +54,15 @@ DIAS_PLANO = 14                                     # E5
 DIAS_INCLINACAO = 4                                 # "dias 11 a 14" numa vida de 14: os 4 ultimos dias (predicao 2)
 CHAVES = {"descricao", "plano", "unidades", "sementes", "genomas", "dias", "orcamento", "ponto", "lobos", "consequencia",
           "frutas", "sonda", "bootstrap", "delta", "alfa", "poder", "donos", "referencia_padrao", "blocos", "delta_p3", "delta_n6",
-          "delta_n7"}
+          "delta_n7", "replicas_poder"}
 # Adendo 2 (2026-10-06, opcao A): cada contraste com o delta na escala da sua medida; o p3 e medido em consumos
 CONTRASTE_EM_CONSUMOS = "p3_consumos"
 LIMIAR_CITA = 0.069                                 # G-CITA (plano do N6, secao 7)
+# Adendo 2: o N vem da simulacao de poder (o maior N simulado com poder >= 0,8 entre os seis primarios), nao da formula. As
+# replicas sao as da K2 (secao 5.3.3 do plano da calibracao conjunta); a busca anda de 5 em 5 ate o teto, que fica bem acima
+# das 12 h da K-10 (~80 unidades).
+REPLICAS_PODER = 2000
+N_MAX_SIMULADO = 200
 BOOTSTRAP_PADRAO = {"reamostragens": PROTOCOLO_ARENA_V1.bootstrap_reamostragens.valor,
                     "semente": PROTOCOLO_ARENA_V1.bootstrap_semente.valor, "nivel": PROTOCOLO_ARENA_V1.nivel_confianca.valor}
 # Contrato K4 (secao 1, E7): o dono do P3 julga a escolha de fruta pelo efeito real (JulgadorFruta, #170), ligado na bancada pela
@@ -273,22 +279,76 @@ def inclinacao_final(idx, unidades, mundo: str, dias: int, boot: dict) -> dict:
     return {"dias": janela, **r, "sem_valor": sem, "cresce": cresce}
 
 
-def tamanhos(contrastes: dict, delta: float | None, alfa: float, poder: float, delta_por: dict | None = None) -> dict:
+def poder_simulado(difs: list[float], delta: float, n: int, alfa: float, replicas: int, semente: int) -> float | None:
+    """Secao 5.3.3 do plano da calibracao conjunta: bootstrap das unidades, centradas no delta (a alternativa), N por replica, teste t
+    pareado unilateral. A mesma conta (e a mesma rng) que a K2 usou no adendo."""
+    if len(difs) < 2 or not delta or delta <= 0 or not n or n < 2:
+        return None
+    media = sum(difs) / len(difs)
+    centradas = [d - media + delta for d in difs]
+    rng = random.Random(derivar_semente("k2-poder", semente))
+    rej = 0
+    for _ in range(replicas):
+        ys = [centradas[rng.randrange(len(centradas))] for _ in range(n)]
+        m = sum(ys) / n
+        var = sum((y - m) ** 2 for y in ys) / (n - 1)
+        if var == 0.0:
+            rej += m > 0
+            continue
+        rej += t_unilateral(m / math.sqrt(var / n), n - 1) <= alfa
+    return rej / replicas
+
+
+def n_simulado(difs: list[float], delta: float, alfa: float, poder: float, replicas: int, semente: int,
+               multiplo: int = 5, n_max: int = N_MAX_SIMULADO) -> dict:
+    """Adendo 2: o menor N (multiplo de 5) com poder simulado >= poder; sem chegar ate n_max, None com o motivo."""
+    for n in range(multiplo, n_max + 1, multiplo):
+        p = poder_simulado(difs, delta, n, alfa, replicas, semente)
+        if p is None:
+            return {"n": None, "poder": None, "motivo": "menos de 2 unidades com valor ou delta <= 0"}
+        if p >= poder:
+            return {"n": n, "poder": p}
+    return {"n": None, "poder": None, "motivo": f"poder simulado abaixo de {poder} ate N = {n_max}"}
+
+
+def tamanhos(contrastes: dict, delta: float | None, alfa: float, poder: float, delta_por: dict | None = None,
+             simulacao: dict | None = None, n_da_run: int | None = None) -> dict:
     """Secao 7.2: sigma_d e N por contraste primario (alfa / 6, o passo mais exigente de Holm), e o N da validacao = o maior, ao
-    multiplo de 5. Sem delta > 0 ou sem 2 unidades, None com o motivo. A conferencia por simulacao fica para o adendo."""
-    out, ns = {}, []
+    multiplo de 5. Sem delta > 0 ou sem 2 unidades, None com o motivo.
+    Com `simulacao` ({"semente", "replicas"}), o adendo 2: por contraste o N simulado (o menor com poder >= poder) e, com `n_da_run`, o
+    poder simulado no N desta run; o N da validacao passa a ser o maior N simulado ("regra": "simulacao"), e o da formula fica ao lado.
+    Sem `simulacao` (a K2), so a formula, como antes."""
+    out, ns, ns_sim, falta_sim = {}, [], [], []
+    alfa_passo = alfa / len(contrastes)
     for nome, c in contrastes.items():
         vs = [x for g in c["valores"].values() for x in g]
         dl = (delta_por or {}).get(nome, delta)            # adendo 2: o delta na escala da medida (o p3 em consumos)
         if len(vs) < 2 or not dl:
             out[nome] = {"sigma_d": None, "n": None, "motivo": "menos de 2 unidades com valor ou delta <= 0"}
+            falta_sim.append(nome)
             continue
         m = sum(vs) / len(vs)
         sigma = math.sqrt(sum((x - m) ** 2 for x in vs) / (len(vs) - 1))
-        n = tamanho_amostra(sigma, dl, alfa / len(contrastes), poder, 5)
+        n = tamanho_amostra(sigma, dl, alfa_passo, poder, 5)
         out[nome] = {"sigma_d": sigma, "n": n, "delta": dl}
         ns.append(n)
-    return {"por_contraste": out, "n_validacao": max(ns) if ns else None, "alfa_passo": alfa / len(contrastes), "poder": poder}
+        if simulacao is not None:
+            sim = n_simulado(vs, dl, alfa_passo, poder, simulacao["replicas"], simulacao["semente"])
+            out[nome]["n_simulado"], out[nome]["poder_no_n_simulado"] = sim["n"], sim["poder"]
+            if sim["n"] is None:
+                out[nome]["motivo_simulado"] = sim["motivo"]
+                falta_sim.append(nome)
+            else:
+                ns_sim.append(sim["n"])
+            if n_da_run is not None:
+                out[nome]["poder_simulado_no_n_da_run"] = poder_simulado(vs, dl, n_da_run, alfa_passo, simulacao["replicas"],
+                                                                         simulacao["semente"])
+    r = {"por_contraste": out, "n_validacao": max(ns) if ns else None, "alfa_passo": alfa_passo, "poder": poder, "regra": "formula"}
+    if simulacao is not None:
+        r.update({"regra": "simulacao (adendo 2)", "n_validacao_formula": r["n_validacao"], "simulacao": dict(simulacao),
+                  "n_validacao": None if (falta_sim or not ns_sim) else max(ns_sim), "sem_n_simulado": falta_sim,
+                  "n_da_run": n_da_run})
+    return r
 
 
 # ------------------------------------------------------------------ leituras (secao 5)
@@ -431,7 +491,9 @@ def analisar(medidas: dict, unidades: list[dict], cfg: dict, modo: str, k2: bool
             "delta": regra, "alfa": alfa, "primarios": primarios, "equivalencia": eq, "secundarios": secundarios,
             "separacao_do_cuidado": cuidado, "curvas": cv, "predicoes": predicoes,
             "tamanho_amostra": tamanhos(primarios, delta, alfa, poder,
-                                        {CONTRASTE_EM_CONSUMOS: cfg["delta_p3"]} if cfg.get("delta_p3") is not None else None)}
+                                        {CONTRASTE_EM_CONSUMOS: cfg["delta_p3"]} if cfg.get("delta_p3") is not None else None,
+                                        {"semente": boot["semente"], "replicas": int(cfg.get("replicas_poder", REPLICAS_PODER))},
+                                        len(unidades))}
 
 
 # ------------------------------------------------------------------ os blocos (secao 4 do plano da calibracao conjunta)
