@@ -2388,6 +2388,48 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   K-7 cobrem só o P1. A K2 precisa de braços nomeados para o cérebro A montado (P1c já é o P1 completo) ou de uma decisão sobre isso.
 - **Testes ajustados:** `tests/test_bancada_v2.py::test_engine_intocado_e_bracos_com_fonte_e_no` (a tabela dos braços inclui as ablações). `tests/test_experimento_maior.py` passa a esperar `K4_dono_julga_fruta = True` e confere, na fumaça, o
   orçamento do P3 e o só cuidado sem julgamentos.
+
+## 2026-10-05 — V2, CEREBRO-C: o DigiBrain C, Fly-like (`docs/TAREFA_V2_CEREBRO_C.md`)
+
+- **`config.py` também mudou** (a `ConfigCerebroC`): os parâmetros ficam em `config.py` pela regra do projeto. O registro de status fica no
+  próprio `cerebro_c.py` (`PARAMETROS_CEREBRO_C`), como o do A fica no `lobos.py`.
+- **A ligação na bancada ficou fora de `bancada_v2.py`:** `experiments/cerebro_c_bancada.py` estende a `Bancada` por subclasse só para os
+  testes e como receita para o chat D. Não combinei por mensagem com o chat D (as mensagens entre sessões expiram); a receita vai no PR.
+- **O que é "inspirado na Drosophila" aqui:** circuitos por classe de estímulo (corpo, social, objeto), células binárias esparsas
+  (faixas e conjunções fixas, o papel das "Kenyon cells"), compartimentos apetitivo e aversivo separados, plasticidade de três fatores
+  (célula ativa × ação executada × sinal do canal) e a expressão da memória apetitiva de comer pela fome. Nada disso diz algo da mosca
+  (problema 4 de `brain_comparison.md`). O mundo não tem ameaça: o circuito de ameaça não existe (risco 1 do plano).
+- **Os canais do C são a arquitetura**, sempre ligados; a `ConfigConsequencia.canais_ligados` (a chave do A) não muda o C. O total por
+  decisão é o escalar da bancada, conferido em toda decisão (falha alto se não), então o contrato K-6 vale também no C.
+- **As faixas de necessidade usam os limiares do instinto** (0,25 urgente; 0,5 o pedido do dono). Os cortes são estrutura (quantas
+  células existem), não parâmetros livres; mudar a estrutura muda a capacidade e pede um PR.
+- **O gate de fome só no apetitivo de comer:** a memória aversiva se expressa sempre (não comer uma fruta que fez mal não depende da fome).
+  As outras ações não têm gate.
+- **Capacidade:** conto toda sinapse de saída declarada, inclusive as de ações que nunca são candidatas daquela célula, como o A conta os
+  756 pesos da tabela inteira. As células e o prior não contam (herdados).
+- **A resposta inata à informação (`w0_info`) é parâmetro livre do C**, como o `w0_info` do A na K-3; com 0, a informação só pesa pelo
+  que o C aprendeu nas células `info_bem`/`info_mal`.
+- **Fora (decisão C-2):** a memória de episódios (N6) e o pedido (N7). A `BancadaComC` recusa os braços deles.
+
+## 2026-10-05 — V2, BANCADA-MONTAGEM: a chave `montagem` da bancada (`docs/TAREFA_V2_BANCADA_MONTAGEM.md`)
+
+- **A tabela vai pela fonte do braço**, não pelo nome: nenhuma (P0), consequência (P1), informação (P2, P2e, P2a) e dono (P3). Assim os
+  braços dos blocos e as ablações recebem as peças da fonte deles sem uma linha própria; o que o braço fixa (a memória do N6 e das ablações,
+  os canais das ablações) vence. É o que garante as ablações: o `P1c-mem` e o `P1c-can` diferem do P1 montado em exatamente uma peça (teste
+  pelo `braco_montado` e pelas vidas).
+- **`w0_pedido` "só onde há pedido":** fica nos braços com pedido (o motor deles é o único com a `ConfigPedido` e o pedinte). Os P1 a P3 do
+  bloco principal não têm pedido no mundo, então o `w0_pedido` deles é 0. Nos +ped a montagem não muda o pedido (já era assim).
+- **`w0_info` só nos P2:** na completa os outros braços zeram o `w0_info` da config, também os do N6 e o P0+ped. Na simples continua como
+  antes (o `w0_info` da config em todo braço, o que punha o peso da informação no estado interno do P1 e do P3 sem informante).
+- **A memória só nos mundos das frutas:** a bancada recusa memória fixa fora deles; a montada simplesmente não liga no padrão e na bola (o
+  cérebro também não a teria). Os canais ficam ligados no P1 de todo mundo.
+- **O P0 é o instinto pela vida (resumo do motor)**, não pelo estado interno: o P0 com lobos tem o estado interno dos lobos. O gate confere
+  também que esse estado é o do P0 de uma config sem as peças.
+- **As medidas do N6 seguem o braço montado:** na completa o bloco `n6` aparece no P1 a P3 dos mundos das frutas (antes só no N6 e nas
+  ablações), lido das mesmas sondas.
+- **O gabarito da simples** cobre três bancadas pela config (L1; T3 com `w0_info`, `memoria_ganho` e `w0_pedido` S/2; e o mesmo com os
+  canais e o K4), o dono aleatório só na L1 para o teste caber na suíte; sem a chave confere as 120 primeiras vidas.
+- **Teste de outra frente ajustado:** `tests/test_experimento_maior.py` passa a esperar `"montagem": "completa"` nos contratos do resumo.
 ## 2026-10-05 — K2-CALIBRACAO-CONJUNTA: interpretações do plano, registradas antes da run
 
 Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11). Orquestrador
@@ -2441,6 +2483,6 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
   de validação não foram tocadas.
 - **K4:** a chave `julgamento_fruta` da bancada fica ligada em toda config da K2 (age só nos braços com fonte dono nos mundos das frutas;
   no `iguais_frutas` não há fruta não neutra, então não há julgamento no bloco N7).
-- **Blocos N6 e N7:** os braços dos planos deles, como estão na bancada (o MR com o aprendizado desligado; o P1+ped e o P3+ped sem
-  memória). A referência do mundo padrão usa o P0, o P1 e o P3 simples: a bancada recusa braço com memória fora das frutas, e sem frutas
-  a memória não guardaria nada.
+- **Blocos N6 e N7, na montagem completa:** o MR fixa a própria memória (com o aprendizado do lobo de decisão desligado, N6-2), e o M0, o
+  MT e o ME são os acoplados dele. No bloco N7 a montagem liga a memória no P1+ped (com canais) e no P3+ped, como nos outros braços com a
+  mesma fonte; o P0+ped fica sem nada. A referência do mundo padrão usa o P0, o P1 e o P3: sem frutas a montagem não liga a memória.

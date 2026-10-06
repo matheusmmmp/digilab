@@ -81,6 +81,13 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   (VidaBancada.julgamentos) e saem com o sem_ensino. Os canais (#169) seguem a chave "consequencia" da config, e um braco pode fixa-los
   (Braco.canais): as ablacoes da K-7 sao o P1c (P1 completo: memoria e canais), o P1c-mem (sem memoria, g = 0) e o P1c-can (escalar).
 
+  montagem (BANCADA-MONTAGEM; decisao do Matheus de 2026-10-05, opcao 1; PLANO_CALIBRACAO_CONJUNTA_V2, secao 1): a chave "montagem" da
+  config. "simples" (o padrao, e sem a chave) e a bancada de antes, byte a byte. "completa" monta o cerebro A da secao 1 em cada braco,
+  pela fonte (MONTAGEM_COMPLETA): o P0 sem nada; P1, P2, P2e, P2a e P3 com a memoria relevante (ganho g da config, so nos mundos das
+  frutas); canais ligados nos que aprendem pela consequencia (P1, P2*) e desligados no P3; w0_info da config so nos P2*; w0_pedido da
+  config so nos bracos com pedido. O que o braco fixa (a memoria do N6 e das ablacoes, os canais das ablacoes) vence a montagem, entao o
+  P1c e o P1 completo e o P1c-mem e o P1c-can sao o P1 completo menos uma peca.
+
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
   CONFIG_LOBOS_APRENDIZ: passo 512, teto 1024), entao as runs antigas nao mudam. O "T3" (teto 16*S = 16384, o resto igual: sem traco)
@@ -225,7 +232,7 @@ def mundo_de(nome: str) -> Mundo:
     return m
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
-                 "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta"}
+                 "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta", "montagem"}
 # K4 fora do orcamento (decisao do Matheus, 2026-10-05): a chave liga o motor e a regra do mundo; o julgamento usa elogiar/repreender
 CONFIG_JULGAMENTO_FORA = ConfigJulgamentoFruta(ligada=True, no_orcamento=False)
 JULGAMENTOS = frozenset({AcaoUsuario.ELOGIAR.value, AcaoUsuario.REPREENDER.value})
@@ -474,10 +481,41 @@ def desarranjo_n6(semente: int) -> dict:
     return pi
 
 
-def cfg_lobos_do_braco(cl: ConfigLobos, b: Braco, semente: int) -> ConfigLobos:
+# BANCADA-MONTAGEM: as pecas do cerebro A montado que cada fonte liga (PLANO_CALIBRACAO_CONJUNTA_V2, secao 1). memoria: o modo
+# (com o ganho g da config); canais: os da consequencia; info: o w0_info da config. O pedido segue o braco (so onde ha pedido).
+MONTAGENS = ("simples", "completa")
+MONTAGEM_PADRAO = "simples"
+MONTAGEM_COMPLETA = {
+    "nenhuma": {"memoria": None, "canais": False, "info": False},           # P0 (K-1): o instinto, nada ligado
+    "consequencia": {"memoria": "relevante", "canais": True, "info": False},  # P1
+    "informacao": {"memoria": "relevante", "canais": True, "info": True},     # P2, P2e, P2a
+    "dono": {"memoria": "relevante", "canais": False, "info": False},         # P3: o sinal e o dono, sem canais
+}
+
+
+def braco_montado(b: Braco, montagem: str, frutas: bool) -> Braco:
+    """O braco com as pecas da montagem. "simples": o proprio braco. "completa": a memoria e os canais da fonte (MONTAGEM_COMPLETA)
+    onde o braco nao os fixa; a memoria so nos mundos das frutas (fora deles o cerebro nao a tem). O que o braco fixa vence: o N6 (M0 a
+    ME) e as ablacoes da K-7 (P1c-mem sem memoria, P1c-can sem canais) ficam o que sao, por cima da montagem."""
+    if montagem not in MONTAGENS:
+        raise ValueError(f"montagem {montagem!r}: so {MONTAGENS}")
+    if montagem == "simples":
+        return b
+    pecas = MONTAGEM_COMPLETA[b.fonte]
+    memoria = b.memoria if b.memoria is not None else (pecas["memoria"] if frutas else None)
+    canais = b.canais if b.canais is not None else pecas["canais"]
+    return replace(b, memoria=memoria, canais=canais)
+
+
+def cfg_lobos_do_braco(cl: ConfigLobos, b: Braco, semente: int, montagem: str = MONTAGEM_PADRAO) -> ConfigLobos:
     """As chaves do N6 e do N7 que o braco liga por cima do aprendiz do ponto (CEREBRO-N6-N7): memoria so nos bracos de memoria (o M0
     com ganho 0; o MT na recencia; o ME com o desarranjo da vida), o pedido so nos bracos com pedido (w0_pedido da config). Nos outros
-    bracos as chaves voltam ao padrao (desligadas): a vida de hoje, byte a byte, seja qual for a config."""
+    bracos as chaves voltam ao padrao (desligadas): a vida de hoje, byte a byte, seja qual for a config. Na montagem completa o braco
+    chega ja montado (braco_montado) e o w0_info da config fica so nos bracos com fonte informacao (os P2)."""
+    if montagem not in MONTAGENS:
+        raise ValueError(f"montagem {montagem!r}: so {MONTAGENS}")
+    if montagem == "completa" and not MONTAGEM_COMPLETA[b.fonte]["info"]:
+        cl = replace(cl, w0_info=0)
     if b.memoria is None:
         cl = replace(cl, memoria_ligada=False, memoria_ganho=0, memoria_modo=CONFIG_LOBOS_PADRAO.memoria_modo, memoria_permutacao=())
     else:
@@ -662,6 +700,7 @@ class Bancada:
     cfg_informacao: ConfigInformacao = CONFIG_INFORMACAO_LIGADA   # o canal da informacao, ligado em todo mundo das frutas (N5)
     cfg_pedido: ConfigPedido = CONFIG_PEDIDO_LIGADA      # N7: o pedido, ligado so no motor dos bracos com pedido
     julgamento_fruta: bool = False                       # K4: o dono dos bracos com fonte dono julga a fruta, fora do orcamento
+    montagem: str = MONTAGEM_PADRAO                      # BANCADA-MONTAGEM: "simples" (a de antes) ou "completa" (o cerebro A da secao 1)
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -676,6 +715,12 @@ class Bancada:
             raise ValueError("cfg_informacao e a dos mundos das frutas: ligada (sem informante, nada muda na vida)")
         if not self.cfg_pedido.ligada:
             raise ValueError("cfg_pedido e a dos bracos com pedido: ligada")
+        if self.montagem not in MONTAGENS:
+            raise ValueError(f"montagem {self.montagem!r}: so {MONTAGENS}")
+
+    def braco(self, espec: EspecVida) -> Braco:
+        """O braco da vida com as pecas da montagem da bancada (braco_montado)."""
+        return braco_montado(braco_de(espec.braco), self.montagem, mundo_de(espec.mundo).frutas)
 
     @property
     def tick_troca(self) -> int:
@@ -715,8 +760,9 @@ class Bancada:
             if mundo.bola is not None:
                 return PoliticaDoBraco(PoliticaInstintoBola(cfg, self.cfg_bola), b)
             return PoliticaDoBraco(PoliticaInstinto(cfg), b)
+        b = self.braco(espec)       # a montagem (BANCADA-MONTAGEM); na simples, o proprio braco
         cl = self.cfg_lobos if b.fonte != "nenhuma" else replace(self.cfg_lobos, aprendizado_ligado=False)
-        cl = cfg_lobos_do_braco(cl, b, espec.semente)
+        cl = cfg_lobos_do_braco(cl, b, espec.semente, self.montagem)
         # LOBOS-MUNDO (#141): os lobos veem o mundo em que vivem; no padrao, nenhuma chave (as formas de antes)
         cb = self.cfg_bola if mundo.bola is not None else None
         cf = self.cfg_frutas if mundo.frutas else None
@@ -944,7 +990,7 @@ class Bancada:
         motivo (`fruta.sonda_memoria`: a escolha com m = 0 e o mesmo u), a fracao decidida pela memoria (G-CITA), a cobertura, a
         ocupacao dos espacos por decisao e as verificacoes exatas dos marcos 1 e 2 (todo consumo virou um episodio da mesma fruta, na
         mesma ordem). Fora dos bracos de memoria, None."""
-        if braco_de(vida.espec.braco).memoria is None:
+        if self.braco(vida.espec).memoria is None:      # na montagem completa, tambem P1 a P3 nos mundos das frutas
             return None
         cerebro = reg.interna.cerebro
         interno = cerebro.estado_interno()
@@ -1341,6 +1387,8 @@ def validar_config(cfg: dict) -> dict:
                 raise SementeSemPlano(f"bases {fora} fora das dos testes: precisa do plano de analise registrado (campo 'plano')")
     if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
         raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
+    if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
+        raise ValueError(f"montagem {cfg['montagem']!r}: so {MONTAGENS}")
     for b in cfg["bracos"]:
         braco_de(b)
     for m in cfg.get("mundos", ["padrao"]):
@@ -1383,6 +1431,8 @@ def bancada_da_config(cfg: dict) -> Bancada:
         kw["cfg_lobos"] = cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos"))
     if cfg.get("julgamento_fruta"):
         kw["julgamento_fruta"] = True
+    if "montagem" in cfg:
+        kw["montagem"] = cfg["montagem"]
     if "frutas" in cfg:
         tupla = lambda v: tuple(tupla(x) for x in v) if isinstance(v, list) else v  # noqa: E731
         kw["cfg_frutas"] = replace(CONFIG_FRUTAS_LIGADA, **{k: tupla(v) for k, v in cfg["frutas"].items()})

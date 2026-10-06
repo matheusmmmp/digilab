@@ -1226,6 +1226,43 @@ CONFIG_LOBOS_APRENDIZ = ConfigLobos(aprendizado_ligado=True)      # L1: o aprend
 
 
 @dataclass(frozen=True)
+class ConfigCerebroC:
+    """V2, CEREBRO-C (docs/TAREFA_V2_CEREBRO_C.md; contrato da secao 1 de docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md): o DigiBrain C,
+    Fly-like (policies/cerebro_c.py). Registro de status e fonte em cerebro_c.PARAMETROS_CEREBRO_C; tudo PROPOSTO, fora de todo hash.
+
+    Os campos do credito do dono (janela, recompensas) e o ponto fixo sao os mesmos do A (ConfigLobos): a fonte do sinal e comum. Os
+    cortes das faixas sao a ESTRUTURA dos circuitos (quantos Kenyon cells existem), nao parametros livres: os de necessidade sao os
+    limiares do proprio instinto (0,25 = necessidade urgente; 0,5 = o pedido do dono). Os livres do adendo de calibracao sao passo,
+    teto e w0_info (PR do CEREBRO-C)."""
+
+    aprendizado_ligado: bool = False
+    bits_ponto_fixo: int = 10                # S = 2**bits, como o A
+    escala_ticks_desde_cuidado: float = 480.0   # o mesmo do A (a percepcao do prior e a faixa social)
+    maximo_pesos: int = 1000                 # o teto do plano da V2, como o A
+    passo: int = 64                          # PROPOSTO, livre (adendo): S/16; o quanto uma sinapse muda por sinal de 1*S
+    teto: int = 4096                         # PROPOSTO, livre (adendo): 4*S; o maximo de cada compartimento (0 <= w <= teto)
+    piso_peso: int = 64                      # o mesmo do A: S/16, peso efetivo minimo dos candidatos com o aprendizado ligado
+    janela_latencia_ticks: int = 120         # o mesmo do A (janela de credito da v1)
+    recompensa_pedido_ignorado: float = -0.5   # o mesmo do A
+    recompensa_elogio: float = 1.0           # o mesmo do A
+    recompensa_repreensao: float = -1.0      # o mesmo do A
+    w0_info: int = 0                         # PROPOSTO, livre (adendo): resposta inata ao que o dono informa na escolha da fruta; 0 = so a aprendida
+    cortes_necessidade: tuple = (0.25, 0.5)  # faixas de fome, higiene, energia e humor (os limiares do instinto)
+    cortes_binarios: tuple = (0.5,)          # faixas de saude e sujeira
+    cortes_hora: tuple = (0.25, 0.5, 0.75)   # quatro faixas do dia (madrugada, manha, tarde, noite)
+    cortes_sem_cuidado: tuple = (0.25, 0.5)  # faixas de min(1, ticks sem cuidado / escala) (o circuito social)
+
+    @property
+    def escala(self) -> int:
+        """S = 2**bits: a unidade 1.0 dos pesos em ponto fixo."""
+        return 1 << self.bits_ponto_fixo
+
+
+CONFIG_CEREBRO_C = ConfigCerebroC()
+CONFIG_CEREBRO_C_APRENDIZ = ConfigCerebroC(aprendizado_ligado=True)
+
+
+@dataclass(frozen=True)
 class ConfigConsequencia:
     """V2, N3 (docs/PLANO_ANALISE_V2_N3.md, secao 3): o sinal do braco P1, a reducao do deficit homeostatico pela propria
     acao (Keramati e Gutkin, 10.7554/elife.04811). Em inteiros na escala S do aprendiz:

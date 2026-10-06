@@ -59,6 +59,9 @@ BOOTSTRAP_PADRAO = {"reamostragens": PROTOCOLO_ARENA_V1.bootstrap_reamostragens.
 # BANCADA-K4-CANAIS (chave "julgamento_fruta", fora do orcamento, decisao do Matheus de 2026-10-05). Com False, a predicao 5 sairia com o
 # aviso de que mede so que o P3 nao sabe das frutas.
 K4_DONO_JULGA_FRUTA = True
+# BANCADA-MONTAGEM (decisao do Matheus de 2026-10-05, opcao 1): o cerebro A montado da secao 1 do PLANO_CALIBRACAO_CONJUNTA_V2 em cada
+# braco (chave "montagem" da bancada): memoria em P1 a P3, canais em P1 e P2, w0_info so nos P2, o P0 o instinto. Vale na K2 e na validacao.
+MONTAGEM = "completa"
 
 
 @dataclass(frozen=True)
@@ -139,7 +142,8 @@ def config_da_bancada(cfg: dict, bracos, mundos, acoplados) -> dict:
                                "sonda") if k in cfg}
     out.update({"descricao": f"experimento maior: {cfg.get('descricao', '')}", "bracos": list(bracos), "mundos": list(mundos),
                 "donos": cfg.get("donos", [DONO_PRINCIPAL]), "acoplados": acoplados, "ponto": cfg.get("ponto", bv.PONTO_N5_EXPERIMENTO),
-                "bootstrap": cfg.get("bootstrap", BOOTSTRAP_PADRAO), "julgamento_fruta": K4_DONO_JULGA_FRUTA})
+                "bootstrap": cfg.get("bootstrap", BOOTSTRAP_PADRAO), "julgamento_fruta": K4_DONO_JULGA_FRUTA,
+                "montagem": MONTAGEM})
     return out
 
 
@@ -431,7 +435,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     a = analisar(r["medidas"], unidades, cfg, modo, k2)
     resumo = {"modo": a["modo"], "status": a["status"], "delta": a["delta"], "alfa": a["alfa"],
               "predicoes": a["predicoes"], "tamanho_amostra": a["tamanho_amostra"],
-              "contratos": {"K2_humor_da_fruta_no_P1": k2, "K4_dono_julga_fruta": K4_DONO_JULGA_FRUTA},
+              "contratos": {"K2_humor_da_fruta_no_P1": k2, "K4_dono_julga_fruta": K4_DONO_JULGA_FRUTA,
+                            "montagem": MONTAGEM},
               "vidas": {"frutas": len(r["vidas"]), "padrao": len(padrao["vidas"]) if padrao else 0},
               "unidades": len(unidades)}
     contrastes = {k: a[k] for k in ("primarios", "equivalencia", "secundarios", "separacao_do_cuidado")}
