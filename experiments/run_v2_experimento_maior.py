@@ -16,7 +16,7 @@ padrao, P0, P1 e P3, so descritiva; E1), contrastes.json, curvas.json, resumo.js
 pela bancada (G1).
 
 Modos, pelas sementes: "fumaca" (so as sementes dos testes, 101...505; nao canonica), "calibracao" (bases 14101...14505; delta medido
-na propria run) e "validacao" (bases 15101...15505; delta do adendo, obrigatorio). Os dois ultimos pedem o campo "plano" com este
+na propria run) e "validacao" (bases 30101...30505, adendo 4.1; delta do adendo, obrigatorio). Os dois ultimos pedem o campo "plano" com este
 plano, as unidades derivadas e a vida de 14 dias (E5). Nesta tarefa so a fumaca roda.
 
 Uso:  python experiments/run_v2_experimento_maior.py --config experiments/configs/v2_experimento_maior/fumaca.json --saida <pasta>
@@ -38,7 +38,8 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 import bancada_v2 as bv  # noqa: E402
-from digilab.config import CONFIG_CONSEQUENCIA  # noqa: E402
+from digilab.config import CONFIG_CONSEQUENCIA, CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
+from digilab.events import AcaoUsuario  # noqa: E402
 from digilab.metrics import (consumos_ate_metade, contraste_pareado, dentro_da_margem, holm, inclinacao_mmq,  # noqa: E402
                              t_unilateral, tamanho_amostra)
 from digilab.protocol import PROTOCOLO_ARENA_V1, derivar_semente  # noqa: E402
@@ -182,6 +183,18 @@ APOIO_TEORICO = {
     "4": "SEM APOIO DIRETO",
     "5": "CONTESTADA (Ho et al. 2017, 10.1016/j.cognition.2017.03.006): mantida como registrada (P-5)",
 }
+# Adendo 4.2 (L-1 a L-4, docs/referencias/E2_SINTESE_PISTAS_P7.md): so a leitura; nenhum teste nem regra de decisao muda.
+LEITURA_L3_LIMIAR = ("L-3: o limiar tambem e forma possivel da curva (abaixo de uma duracao minima aprender nao rende; Liedtke e Fromhage "
+                     "2019). Com tres duracoes, um limiar abaixo de 7 dias aparece como crescente ou plato, e um entre 7 e 14 dias como um "
+                     "degrau no passo a. A regra registrada (forma_da_curva) nao muda; a leitura nomeia o limiar antes de escolher.")
+COMPONENTES_DA_MUDANCA = {      # predicao 2: que componente da mudanca cada condicao manipula (Dunlap e Stephens 2009)
+    "descasado": "experiencia confiavel (o efeito de cada fruta e fixo) e melhor acao estavel dentro da vida; o que muda e entre o "
+                 "mundo de origem do prior e o mundo da vida",
+    "mutavel": "a melhor acao troca uma vez, no meio da vida, num momento fixo (fim do dia dias // 2)",
+}
+LEITURA_VALOR_EFICIENCIA = ("no mutavel, o contraste primario mede o valor do aprendizado (P0 - P1); a eficiencia (a distancia do P1 ao "
+                            "otimo, a taxa da fruta ruim 0, depois da troca) e outra coisa e nao se le como falha (Eliassen et al. 2009, "
+                            "resumo; o texto completo e o L-1)")
 # Adendo 3, secao 3.2 (P-3): o mutavel sem precedente teorico direto
 LIMITACAO_MUTAVEL = ("os modelos disponiveis tratam mudanca entre geracoes, nao dentro da vida (Kozielska e Weissing 2024, "
                      "10.1371/journal.pcbi.1011840): no mutavel o resultado descreve o que este motor faz; o teste nao muda")
@@ -534,6 +547,12 @@ def analisar(medidas: dict, unidades: list[dict], cfg: dict, modo: str, k2: bool
         p["cuidado"] = {n: {b: x["leitura"] for b, x in cuidado[n].items()} for n in p["contrastes"] if n in cuidado}
         p["apoio_teorico"] = APOIO_TEORICO[k]                        # adendo 3: so a leitura, a regra de decisao nao muda
     predicoes["2"]["limitacao_mutavel"] = LIMITACAO_MUTAVEL
+    predicoes["2"]["componentes_da_mudanca"] = COMPONENTES_DA_MUDANCA                 # adendo 4.2
+    predicoes["2"]["mutavel_valor_e_eficiencia"] = {
+        "valor": {"contraste": "p2_mutavel", "d": "P0 - P1", "media": primarios["p2_mutavel"]["media"]},
+        "eficiencia": {"medida": "taxa da fruta ruim do P1 depois da troca (distancia ao otimo 0)",
+                       **_media_ic(idx, unidades, "mutavel", _taxa("depois_da_troca"), "P1", boot)},
+        "leitura": LEITURA_VALOR_EFICIENCIA}
     return {"modo": modo, "status": "resultado" if modo == "validacao" else "piloto, nao resultado",
             "delta": regra, "alfa": alfa, "primarios": primarios, "equivalencia": eq, "secundarios": secundarios,
             "separacao_do_cuidado": cuidado, "curvas": cv, "predicoes": predicoes,
@@ -694,6 +713,7 @@ def analisar_duracoes(idx_por_dias: dict, unidades: list[dict], cfg: dict) -> di
     out["mutavel"]["confusao_declarada"] = ("a troca acontece no fim do dia dias // 2 (Bancada.tick_troca): mudar a duracao muda o "
                                             "momento da troca, e a janela depois_da_troca muda junto (adendo 3, secao 3.1)")
     out["leitura"] = "descritiva, fora da familia de Holm (adendo 3, secao 3.1)"
+    out["leitura_limiar"] = LEITURA_L3_LIMIAR                                         # adendo 4.2, L-3
     return out
 
 
@@ -803,6 +823,65 @@ def rodar_blocos(cfg: dict, pasta: Path, unidades: list[dict], principal: dict) 
     return {"runs": runs, "analise": a, "vidas": sum(len(r["vidas"]) for r in runs.values())}
 
 
+def serie_no_fim_de_cada_dia(log, fabrica, semente: int, dias: int, fabrica_motor, ler) -> list:
+    """ler(politica) no fim de cada dia (ticks d x TICKS_POR_DIA, d = 1..dias), num replay so do log: o mesmo estado que
+    evolucao.politica_no_tick daria em cada tick (os eventos antes dele, o avanco que o atravessa cortado nele), sem rejogar a vida uma
+    vez por dia. O teste confere contra o politica_no_tick dia a dia."""
+    motor = fabrica_motor(fabrica(CONFIG_PADRAO), CONFIG_PADRAO, semente)
+    fins = [d * TICKS_POR_DIA for d in range(1, dias + 1)]
+    out = []
+    for e in log:
+        while fins and e.tick >= fins[0]:
+            out.append(ler(motor.politica))
+            fins.pop(0)
+        if e.tipo == "avanco":
+            t, resto = e.tick, int(e.valor)
+            while fins and t < fins[0] < t + resto:
+                motor._avancar(fins[0] - t)
+                resto -= fins[0] - t
+                t = fins[0]
+                out.append(ler(motor.politica))
+                fins.pop(0)
+            motor._avancar(resto)
+        elif e.tipo == "acao_usuario":
+            motor._aplicar_acao_usuario(AcaoUsuario(e.valor))
+        else:
+            raise ValueError(f"tipo de evento desconhecido no log: {e.tipo!r}")
+    while fins:
+        out.append(ler(motor.politica))
+        fins.pop(0)
+    return out
+
+
+def trajetoria_w_info_p2e(cfg: dict, principal: dict, unidades: list[dict], dias: int, mundo: str = "descasado") -> dict:
+    """Adendo 4.2, L-4 (e a medida do plano do N5, secao 6): o w_info do P2e no fim de cada dia, o dia em que cruza o zero e a fracao de
+    unidades em que cruza, e a fracao com o peso no limite de baixo (w0 - teto: recuperacao limitada pelo teto). Descritivo, ao lado do dia
+    em que o P2e cruza o P0."""
+    bancada = bv.bancada_da_config(config_da_bancada(cfg, BRACOS, MUNDOS, []))
+    vidas = {(v.espec.genoma, v.espec.semente): v for v in principal["vidas"].values()
+             if v.espec.braco == "P2e" and v.espec.mundo == mundo and v.origem is None and v.espec.dono == DONO_PRINCIPAL}
+    por_unidade, cruza, no_limite = {}, 0, 0
+    w0 = teto = None
+    for u in unidades:
+        v = vidas[(u["genoma"], u["semente"])]
+        cer = lambda p: bv.do_braco(p).cerebro  # noqa: E731
+        serie = serie_no_fim_de_cada_dia(v.motor.log, bancada.fabrica_politica(v.espec), v.espec.semente, dias,
+                                         bancada.fabrica_motor(v.espec), lambda p: cer(p).estado_interno()["peso_info"])
+        final = cer(v.motor.politica).estado_interno()
+        if serie[-1] != final["peso_info"]:
+            raise ValueError(f"{v.nome}: o w_info do fim do ultimo dia ({serie[-1]}) != o da vida ({final['peso_info']})")
+        w0, teto = final["peso_info_prior"], cer(v.motor.politica).cl.teto
+        dia = next((d + 1 for d, x in enumerate(serie) if x <= 0), None)
+        cruza += dia is not None
+        no_limite += min(serie) <= w0 - teto
+        por_unidade[f"{u['genoma']}@{u['semente']}"] = {"w_info_por_dia": serie, "dia_cruza_zero": dia}
+    n = len(unidades)
+    media = [sum(x["w_info_por_dia"][d] for x in por_unidade.values()) / n for d in range(dias)]
+    return {"braco": "P2e", "mundo": mundo, "w0": w0, "limite_de_baixo": None if w0 is None else w0 - teto,
+            "media_por_dia": media, "fracao_cruza_zero": cruza / n, "fracao_no_limite": no_limite / n,
+            "por_unidade": por_unidade, "leitura": "descritivo (adendo 4.2, L-4): separa 'nao refutou' de 'refutou devagar'"}
+
+
 def rodar_duracoes(cfg: dict, pasta: Path, unidades: list[dict], principal: dict) -> dict:
     """Adendo 3, secao 3.1: P0 e P1 no descasado e no mutavel com a duracao menor e a maior (as mesmas interacoes por dia), cada uma numa
     run da bancada nas mesmas unidades; a de 14 dias e o bloco principal."""
@@ -849,6 +928,11 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     blocos = rodar_blocos(cfg, pasta, unidades, r) if cfg.get("blocos") else None
     if blocos is not None:
         bv._gravar(pasta / "blocos.json", bv._dump(blocos["analise"]))
+    w_info = trajetoria_w_info_p2e(cfg, r, unidades, int(cfg["dias"])) if cfg.get("lobos", {}).get("w0_info") else None
+    if w_info is not None:
+        bv._gravar(pasta / "w_info_p2e.json", bv._dump(w_info))
+        a["predicoes"]["4"]["w_info_P2e"] = {k: w_info[k] for k in ("media_por_dia", "fracao_cruza_zero", "fracao_no_limite",
+                                                                    "w0", "limite_de_baixo", "leitura")}
     duracoes = rodar_duracoes(cfg, pasta, unidades, r) if cfg.get("duracoes") else None
     if duracoes is not None:
         bv._gravar(pasta / "duracoes.json", bv._dump(duracoes["analise"]))
@@ -867,7 +951,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
                   "n7_holm": {g: c["holm"]["rejeita"] for g, c in blocos["analise"]["n7"]["contrastes"].items()},
                   "n7_G-ARB": blocos["analise"]["n7"]["G-ARB"]["passa"], "n7_G-URG": blocos["analise"]["n7"]["G-URG"]["passa"]},
               "duracoes": None if duracoes is None else {
-                  m: {k: f["forma"] for k, f in duracoes["analise"][m]["forma"].items()} for m in JANELA_DA_PREDICAO_2},
+                  **{m: {k: f["forma"] for k, f in duracoes["analise"][m]["forma"].items()} for m in JANELA_DA_PREDICAO_2},
+                  "leitura_limiar": LEITURA_L3_LIMIAR},
               "unidades": len(unidades)}
     contrastes = {k: a[k] for k in ("primarios", "equivalencia", "secundarios", "separacao_do_cuidado")}
     bv._gravar(pasta / "contrastes.json", bv._dump(contrastes))

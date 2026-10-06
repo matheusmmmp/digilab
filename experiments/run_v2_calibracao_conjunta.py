@@ -1,6 +1,6 @@
 """V2, K2: a calibracao conjunta do cerebro A (docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md; plano docs/PLANO_CALIBRACAO_CONJUNTA_V2.md, decisoes
 K-1 a K-11). Pela bancada (experiments/bancada_v2.py), nas unidades derivadas das bases 14101...14505 (K = 4) ou, na fumaca, nas sementes
-dos testes. As validacoes (15101...15505) nunca: o modo vem das sementes e recusa o resto.
+dos testes. As validacoes (30101...30505; a 15101...15505 queimada) nunca: o modo vem das sementes e recusa o resto.
 
 Etapas (secao 3 do plano), cada uma com a regra de escolha registrada e a de reserva:
     A1  g (ganho da memoria)       MR, descasado, aprendizado desligado    menor g com IC95 inferior da fracao decidida pela memoria > 0,069
@@ -109,7 +109,7 @@ def modo_e_unidades(cfg: dict) -> tuple[str, list[dict]]:
         modo = "calibracao"
     else:
         raise bv.SementeSemPlano(f"sementes {sorted(bases)}: so as dos testes (fumaca) ou exatamente as bases de calibracao {sorted(cal)}, "
-                                 "derivadas (K2); a validacao 15101...15505 nunca")
+                                 "derivadas (K2); a validacao 30101...30505 nunca")
     if modo == "calibracao":
         if cfg.get("plano") != PLANO or not (RAIZ / PLANO).is_file():
             raise bv.SementeSemPlano(f"calibracao: precisa do campo 'plano' = {PLANO!r}")

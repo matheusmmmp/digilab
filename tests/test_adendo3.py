@@ -113,11 +113,19 @@ def test_fumaca_com_o_bloco_de_duracoes(tmp_path):
         assert all(f["forma"] in ("crescente", "otimo_interior", "decrescente", "plato", "indeterminado")
                    for f in d[mundo]["forma"].values())
     assert "confusao_declarada" in d["mutavel"]
-    assert set(r["resumo"]["duracoes"]) == {"descasado", "mutavel"}
+    assert set(r["resumo"]["duracoes"]) == {"descasado", "mutavel", "leitura_limiar"}
     # o apoio teorico e a limitacao do mutavel ficam na leitura, sem mudar a regra
     pred = r["resumo"]["predicoes"]
     assert {k: p["apoio_teorico"] for k, p in pred.items()} == em.APOIO_TEORICO
     assert pred["2"]["limitacao_mutavel"] == em.LIMITACAO_MUTAVEL and "Kozielska" in em.LIMITACAO_MUTAVEL
+    # adendo 4.2: o limiar na leitura das duracoes, os componentes e valor x eficiencia no mutavel, o w_info do P2e
+    assert d["leitura_limiar"] == em.LEITURA_L3_LIMIAR == r["resumo"]["duracoes"]["leitura_limiar"]
+    assert pred["2"]["componentes_da_mudanca"] == em.COMPONENTES_DA_MUDANCA
+    ve = pred["2"]["mutavel_valor_e_eficiencia"]
+    assert ve["valor"]["contraste"] == "p2_mutavel" and ve["eficiencia"]["braco"] == "P1" and ve["eficiencia"]["mundo"] == "mutavel"
+    w = json.loads((tmp_path / "w_info_p2e.json").read_text(encoding="utf-8"))
+    assert len(w["media_por_dia"]) == 4 and len(w["por_unidade"]) == 3 and 0.0 <= w["fracao_cruza_zero"] <= 1.0
+    assert w["w0"] == FUMACA["lobos"]["w0_info"] and pred["4"]["w_info_P2e"]["media_por_dia"] == w["media_por_dia"]
     for dias in (2, 6):                                              # toda vida gravada e rejogada do disco (G1, pela bancada)
         pasta = tmp_path / "duracoes" / f"dias_{dias}"
         assert len(list((pasta / "vidas").glob("*.jsonl"))) == 12
