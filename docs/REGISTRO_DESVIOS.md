@@ -2410,3 +2410,23 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
 - **A resposta inata à informação (`w0_info`) é parâmetro livre do C**, como o `w0_info` do A na K-3; com 0, a informação só pesa pelo
   que o C aprendeu nas células `info_bem`/`info_mal`.
 - **Fora (decisão C-2):** a memória de episódios (N6) e o pedido (N7). A `BancadaComC` recusa os braços deles.
+
+## 2026-10-05 — V2, BANCADA-MONTAGEM: a chave `montagem` da bancada (`docs/TAREFA_V2_BANCADA_MONTAGEM.md`)
+
+- **A tabela vai pela fonte do braço**, não pelo nome: nenhuma (P0), consequência (P1), informação (P2, P2e, P2a) e dono (P3). Assim os
+  braços dos blocos e as ablações recebem as peças da fonte deles sem uma linha própria; o que o braço fixa (a memória do N6 e das ablações,
+  os canais das ablações) vence. É o que garante as ablações: o `P1c-mem` e o `P1c-can` diferem do P1 montado em exatamente uma peça (teste
+  pelo `braco_montado` e pelas vidas).
+- **`w0_pedido` "só onde há pedido":** fica nos braços com pedido (o motor deles é o único com a `ConfigPedido` e o pedinte). Os P1 a P3 do
+  bloco principal não têm pedido no mundo, então o `w0_pedido` deles é 0. Nos +ped a montagem não muda o pedido (já era assim).
+- **`w0_info` só nos P2:** na completa os outros braços zeram o `w0_info` da config, também os do N6 e o P0+ped. Na simples continua como
+  antes (o `w0_info` da config em todo braço, o que punha o peso da informação no estado interno do P1 e do P3 sem informante).
+- **A memória só nos mundos das frutas:** a bancada recusa memória fixa fora deles; a montada simplesmente não liga no padrão e na bola (o
+  cérebro também não a teria). Os canais ficam ligados no P1 de todo mundo.
+- **O P0 é o instinto pela vida (resumo do motor)**, não pelo estado interno: o P0 com lobos tem o estado interno dos lobos. O gate confere
+  também que esse estado é o do P0 de uma config sem as peças.
+- **As medidas do N6 seguem o braço montado:** na completa o bloco `n6` aparece no P1 a P3 dos mundos das frutas (antes só no N6 e nas
+  ablações), lido das mesmas sondas.
+- **O gabarito da simples** cobre três bancadas pela config (L1; T3 com `w0_info`, `memoria_ganho` e `w0_pedido` S/2; e o mesmo com os
+  canais e o K4), o dono aleatório só na L1 para o teste caber na suíte; sem a chave confere as 120 primeiras vidas.
+- **Teste de outra frente ajustado:** `tests/test_experimento_maior.py` passa a esperar `"montagem": "completa"` nos contratos do resumo.

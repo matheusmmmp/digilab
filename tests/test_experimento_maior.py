@@ -338,7 +338,7 @@ def test_fumaca_do_experimento_maior(tmp_path):
     assert resumo["modo"] == "fumaca" and resumo["status"].startswith("piloto")
     assert set(resumo["predicoes"]) == {"1", "2", "3", "4", "5"}
     assert all(p["leitura"] in LEITURAS for p in resumo["predicoes"].values())
-    assert resumo["contratos"] == {"K2_humor_da_fruta_no_P1": True, "K4_dono_julga_fruta": True}
+    assert resumo["contratos"] == {"K2_humor_da_fruta_no_P1": True, "K4_dono_julga_fruta": True, "montagem": "completa"}
     # o P3 julga a fruta fora do orcamento: o dono gasta o orcamento inteiro e o so cuidado tira os julgamentos
     p3 = [v for n, v in r["frutas"]["vidas"].items() if v.espec.braco == "P3" and v.origem is None]
     assert p3 and all(v.interacoes == 64 for v in p3) and sum(v.julgamentos for v in p3) > 0

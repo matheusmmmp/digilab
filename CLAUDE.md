@@ -77,7 +77,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/bandit.py` | Thompson sampling linear; prior = distribuição exata da `PoliticaInstinto` via sonda de rng + Gumbel-max. **Congelado desde a V2** (2026-10-01): só reproduz a v1 |
 | `digilab/policies/lobos.py` | **V2, L0**: `PoliticaLobos`, o aprendiz da V2 com lobos nomeados (percepção, memória e emoção, impulsos, decisão); pesos inteiros em ponto fixo iniciados no prior do instinto, aprendizado desligado (`ConfigLobos`); vida byte a byte igual à do instinto (seção "V2, L0" no fim); **LOBOS-MUNDO**: com `cfg_bola`/`cfg_frutas` ligadas vê a bola e as frutas e escolhe a fruta; E2 no sinal do P1 (seção "V2, LOBOS-MUNDO" no fim); **N5-CEREBRO**: a entrada `info` (o que o dono informa) na escolha da fruta, um peso compartilhado, `ConfigLobos.w0_info` (seção "V2, N5-CEREBRO" no fim); **FRUTA-NO-CENARIO B**: a decisão de comer lê a fruta presente (seção "V2, FRUTA-NO-CENARIO, parte B" no fim); **CEREBRO-N6-N7**: a memória de episódios das frutas (N6) e o pedido do dono na decisão de comer e na escolha da fruta (N7), atrás de chaves (seção "V2, CEREBRO-N6-N7" no fim); **CANAIS-REFORCO**: o sinal da consequência separado por canal, com o mesmo total do escalar, `ConfigConsequencia.canais_ligados` (seção "V2, CANAIS-REFORCO" no fim) |
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
-| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`, `iguais_frutas`), as condições casado/descasado/mutável/iguais e as unidades derivadas (prefixos do experimento maior, do N6 e do N7); desde a BANCADA-N5 os lobos veem a bola e as frutas; os braços do N6 (M0, MR, MT, ME) e do N7 (P0+ped, P1+ped, P3+ped), ligados à memória e ao pedido desde a BANCADA-LIGA-N6-N7; o K4 fora do orçamento (chave `julgamento_fruta`), os canais por braço e as ablações da K-7 (P1c, P1c-mem, P1c-can) desde a BANCADA-K4-CANAIS (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS", "V2, BANCADA-N5", "V2, BANCADA-N6-N7", "V2, BANCADA-LIGA-N6-N7" e "V2, BANCADA-K4-CANAIS" no fim) |
+| `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`, `iguais_frutas`), as condições casado/descasado/mutável/iguais e as unidades derivadas (prefixos do experimento maior, do N6 e do N7); desde a BANCADA-N5 os lobos veem a bola e as frutas; os braços do N6 (M0, MR, MT, ME) e do N7 (P0+ped, P1+ped, P3+ped), ligados à memória e ao pedido desde a BANCADA-LIGA-N6-N7; o K4 fora do orçamento (chave `julgamento_fruta`), os canais por braço e as ablações da K-7 (P1c, P1c-mem, P1c-can) desde a BANCADA-K4-CANAIS; a chave `montagem` (`"completa"`: o cérebro A da seção 1 do plano da calibração conjunta em cada braço) desde a BANCADA-MONTAGEM (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS", "V2, BANCADA-N5", "V2, BANCADA-N6-N7", "V2, BANCADA-LIGA-N6-N7", "V2, BANCADA-K4-CANAIS" e "V2, BANCADA-MONTAGEM" no fim) |
 | `experiments/run_v2_experimento_maior.py`, `experiments/configs/v2_experimento_maior/` | **V2, BANCADA-EXPERIMENTO**: o orquestrador do experimento maior (P0, P1, P2, P2e, P3 × `casado_frutas`, `descasado`, `mutavel` pela bancada, o "só cuidado" acoplado, os seis contrastes primários com Holm, a equivalência da predição 5 e as leituras por predição); o ponto nomeado do aprendiz na bancada (`ponto`: `L1` padrão, `T3` para o N5 e o experimento maior) (seção "V2, BANCADA-EXPERIMENTO" no fim) |
 | `experiments/run_revisao_aprendiz.py`, `experiments/configs/v2_revisao/` | **V2, REVISAO-APRENDIZ**: diagnóstico do aprendiz (teto, janela de crédito com o traço `ConfigLobos.traco_decisoes`/`traco_fator`, exposição), uma alavanca por vez, pela bancada (chaves `lobos` e `frutas` da config) → `artifacts_v2_revisao/` (seção "V2, REVISAO-APRENDIZ" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
@@ -2072,3 +2072,45 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
 - **Para o chat D:** `experiments/cerebro_c_bancada.py` (`BancadaComC`) é a receita: `CEREBROS` ganha `cerebro_c` e, em `Bancada.politica`,
   `PoliticaDoBraco(PoliticaCerebroC(cfg, cc, cb, cf), braco, cfg_consequencia)`, com o aprendizado desligado no P0. O resto da bancada
   (motor, replay, medidas) lê os ganchos e o estado interno pelos mesmos nomes.
+
+## V2, BANCADA-MONTAGEM — a chave `montagem` da bancada: o cérebro A montado em cada braço (2026-10-05, `docs/TAREFA_V2_BANCADA_MONTAGEM.md`) — GATES PASSAM
+
+Pré-requisito da run da calibração conjunta (K2, chat B). Decisão do Matheus (2026-10-05, opção 1). Infraestrutura, sem run de pesquisa nem
+faixa reservada; só as sementes dos testes. Só `experiments/` mudou (a bancada e o orquestrador do experimento maior); `engine.py`,
+`lobos.py`, `frutas.py`, `cerebro_c.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave:** `"montagem"` na config da bancada (`Bancada.montagem`, `MONTAGENS`). **`"simples"`** é o padrão (e o que vale sem a chave):
+  a bancada de antes, byte a byte. **`"completa"`** monta em cada braço o cérebro A da seção 1 do `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`,
+  pela fonte do braço (`MONTAGEM_COMPLETA`, `braco_montado`, `Bancada.braco`):
+
+  | braço (fonte) | memória | canais | `w0_info` | `w0_pedido` |
+  |---|---|---|---|---|
+  | P0 (nenhuma) | — | desligados | 0 | 0 |
+  | P1 (consequência) | relevante, ganho `g` | ligados | 0 | só com pedido |
+  | P2, P2e, P2a (informação) | relevante, ganho `g` | ligados | o da config | só com pedido |
+  | P3 (dono) | relevante, ganho `g` | desligados | 0 | só com pedido |
+
+  `g`, `w0_info` e `w0_pedido` vêm da chave `"lobos"` da config (o que a K2 varre). A memória só existe nos mundos das frutas (fora deles o
+  cérebro não a tem); os canais valem em todo mundo. O `w0_pedido` fica nos braços com pedido (P0+ped, P1+ped, P3+ped: "só age onde há
+  pedido", o bloco N7); nos braços principais o motor não tem pedido e ele é 0.
+- **O que o braço fixa vence a montagem:** o N6 (M0 a ME) e as ablações da K-7 ficam o que são. Por isso, na completa, **o `P1c` é o P1**
+  (só o rótulo muda), **o `P1c-mem` é o P1 completo com g = 0** e **o `P1c-can` é o P1 completo sem os canais**. O P1+ped e o P3+ped ganham
+  as peças do P1 e do P3 mais o pedido; o P0+ped e o N6 são os de antes sem o `w0_info`.
+- **Na simples, o de antes:** o `w0_info` da config vale em todo braço (com ele, o P1 e o P3 têm o peso da informação no estado interno) e
+  nenhum braço principal tem memória ou canais fixos. É o motivo da completa.
+- **Medidas:** as do N6 (`n6` no `medidas.json`) saem em todo braço com memória montada (P1 a P3 na completa).
+- **Experimento maior:** `MONTAGEM = "completa"` em `run_v2_experimento_maior.py`; `config_da_bancada` passa `"montagem": "completa"` e o
+  `resumo.json` grava em `contratos`. O orquestrador da K2 (chat B, `v2-k2-calibracao-conjunta`) usa a mesma chave, com o mesmo valor, nas
+  configs da K2 e da validação.
+- **Gates** (`tests/test_bancada_montagem.py`, 17 testes, ~8 min): **simples e sem chave byte a byte** — as 516 vidas de
+  `tests/gabaritos/bancada_montagem_vidas_de_hoje.json` (P0 a P3, P2e, P2a, os do N6, do N7 e da K-7; os quatro mundos das frutas e o
+  padrão; L1, T3 com as peças na config, e T3 com as peças, os canais e o K4; os acoplados; as bancadas pela config), gravado com o código da
+  main **antes** (`tests/gabarito_bancada_montagem.py`, commit próprio), com `"montagem": "simples"`, e as 120 primeiras de novo sem a chave;
+  **na completa o P0 é o instinto byte a byte** (resumo do motor, nos quatro mundos das frutas e no padrão, com as peças, os canais e o K4
+  na config) e o estado interno é o do P0 sem as peças; **cada braço com exatamente as peças da tabela no estado interno** (memória e ganho,
+  canais, `peso_info`, `peso_pedido`), com os canais da config ligados ou não; **o P3 sem canais e o `w0_info` só nos P2** em todo mundo; o
+  padrão sem as peças das frutas; **as ablações são o P1 completo menos uma peça** (o P1c = o P1 byte a byte; o P1c-mem = o P1 de uma config
+  com g = 0; o P1c-can = o P1 com os canais desligados); o N6 e o P0+ped = os de antes sem o `w0_info`; **G1** de 82 vidas e 57 acoplados na
+  completa; `rodar` com a completa (o bloco `n6` nos P1 a P3); o experimento maior usa a completa.
+- **Fumaça** (`experiments/configs/bancada/fumaca_montagem.json`, NÃO canônica, sem artefato: P0, P1, P2, P2e, P2a, P3 e as duas ablações
+  nos três mundos das frutas, o só cuidado do P2 e do P3; T3, K4, g, `w0_info` e `w0_pedido` S/2): 150 vidas rejogadas bit a bit em ~4 min.
+- **Fora:** o cérebro C (`experiments/cerebro_c_bancada.py`) não lê a montagem: ela é do cérebro A.
