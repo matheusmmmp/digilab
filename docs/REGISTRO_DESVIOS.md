@@ -2430,3 +2430,30 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
 - **O gabarito da simples** cobre três bancadas pela config (L1; T3 com `w0_info`, `memoria_ganho` e `w0_pedido` S/2; e o mesmo com os
   canais e o K4), o dono aleatório só na L1 para o teste caber na suíte; sem a chave confere as 120 primeiras vidas.
 - **Teste de outra frente ajustado:** `tests/test_experimento_maior.py` passa a esperar `"montagem": "completa"` nos contratos do resumo.
+
+## 2026-10-06 — V2, CEREBRO-B: o DigiBrain B, CfC + ator-crítico + elegibilidade (`docs/TAREFA_V2_CEREBRO_B.md`)
+
+- **`config.py` também mudou** (a `ConfigCerebroB`), pela regra do projeto; o registro de status fica no `cerebro_b.py`
+  (`PARAMETROS_CEREBRO_B`), como no A e no C.
+- **A ligação na bancada ficou fora de `bancada_v2.py`:** `experiments/cerebro_b_bancada.py` (`BancadaComB`), a mesma receita do C.
+- **O herdado entra multiplicando:** o peso do candidato é o do instinto vezes exp(z), isto é, log w = log w_instinto + z, como o plano
+  descreve (seção 1.1). Não tirei o logaritmo do instinto: multiplicar por exp(0) = 1,0 devolve o mesmo float, o que fecha o byte a byte
+  sem mexer na conta do instinto.
+- **O que é "CfC" aqui:** a forma fechada h = σ(−F·dt)·G + (1 − σ(−F·dt))·K com F, G, K de uma camada (tanh) sobre (x, h anterior). Não é
+  o CfC com a cabeça NCP nem o NORNBRAIN; é a família, no tamanho do contrato (9 ocultos). dt = 1 por decisão (as decisões são a cada 15
+  ticks; o relógio não muda o dt).
+- **O gradiente é truncado em um passo:** a célula é retropropagada só até o estado oculto anterior, que fica como dado. O que leva o
+  crédito para trás no tempo é o traço de elegibilidade (λ). Retropropagar pela vida inteira custaria guardar todos os estados e mudaria o
+  custo por decisão; fica registrado como escolha.
+- **O traço é um só, para o ator inteiro** (célula e cabeças). Elogio, bronca, consequência e a E2 creditam pelo traço (a decisão mais
+  recente com peso 1 e as anteriores decaídas por λ). O chamado credita a decisão do chamado pelo gradiente dela, porque quando a latência
+  chega o traço já andou várias decisões.
+- **O crítico é linear no estado oculto, sem desconto (γ = 0):** δ = r − V(h). Os sinais da bancada são imediatos (a consequência e o
+  julgamento do dono são da própria decisão); a parte do futuro fica com o traço. É a forma mais simples que cabe nos 4 parâmetros livres.
+- **Os logits aprendidos são cortados em ±20** (`limite_logit`, estrutura, contra estouro do exp); o gradiente não vê o corte.
+- **A informação do N5 só na escolha da fruta**, como no A (N5-2): θ_info × info_f no logit da fruta, inato em `w0_info` (livre do adendo,
+  em unidades de logit, não na escala S do A).
+- **Capacidade:** conto todo parâmetro do ator (a célula inteira, as cabeças) e do crítico; o estado oculto, o traço e o prior não contam
+  (contrato 1.3). 759 = 0,995 × 763.
+- **Fora (decisão C-2):** a memória de episódios (N6) e o pedido (N7); o B tem a memória recorrente própria. A `BancadaComB` recusa os
+  braços deles.

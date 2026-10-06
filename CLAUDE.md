@@ -2114,3 +2114,44 @@ faixa reservada; só as sementes dos testes. Só `experiments/` mudou (a bancada
 - **Fumaça** (`experiments/configs/bancada/fumaca_montagem.json`, NÃO canônica, sem artefato: P0, P1, P2, P2e, P2a, P3 e as duas ablações
   nos três mundos das frutas, o só cuidado do P2 e do P3; T3, K4, g, `w0_info` e `w0_pedido` S/2): 150 vidas rejogadas bit a bit em ~4 min.
 - **Fora:** o cérebro C (`experiments/cerebro_c_bancada.py`) não lê a montagem: ela é do cérebro A.
+
+## V2, CEREBRO-B — o DigiBrain B, CfC + ator-crítico + elegibilidade (2026-10-06, `docs/TAREFA_V2_CEREBRO_B.md`) — GATES PASSAM
+
+Etapa C5 do `docs/ROADMAP_V2.md`; contrato da seção 1 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md` (C-1 a C-10); família do NORNBRAIN
+em `docs/research/digibrain/synthesis/brain_comparison.md`. **Sem calibração e sem run**; só as sementes dos testes. Mudaram
+`digilab/policies/cerebro_b.py` (novo), `digilab/config.py` (`ConfigCerebroB`) e `experiments/cerebro_b_bancada.py` (novo); `lobos.py`,
+`cerebro_c.py` e `bancada_v2.py` não. "Inspirado em" fala do nosso cérebro, não do NORNBRAIN (CORPUS). Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **O herdado (C-1):** a regra do instinto e os candidatos (`lobos.impulsos`) e o peso de cada um (o prior do A). O B aprende por cima:
+  w_a = w_instinto(a) × exp(z_a), com o logit aprendido z iniciado em zero (exp(0) = 1 exato: no começo, e sempre com o aprendizado
+  desligado, o instinto byte a byte).
+- **A célula CfC** (ponto flutuante, `math.exp`/`tanh`): entrada x (as 9 do A sem o viés, bola, fruta e a presença de cada fruta: 14) e o
+  estado oculto anterior; F, G, K = tanh(W v + b); s = σ(−F·dt); h = s·G + (1 − s)·K; 9 ocultos. Os pesos da célula começam sorteados por
+  uma rng própria e fixa (herdada, igual em todo pet); as cabeças e o crítico, em zero. O estado oculto é a memória do B (C-2).
+- **Ator, fruta e crítico:** z = A h + b nos candidatos; a escolha da fruta pesa incentivo × exp(q_f), q_f = F_f·h + b_f + θ_info·info_f
+  (θ_info começa em `w0_info`; com 0, a escolha do `MotorFrutas` byte a byte); V(h) = C·h + c0.
+- **O crédito:** o gradiente do log da escolha (ação e, comendo com duas frutas ou mais, a fruta) em todos os parâmetros do ator, a
+  célula por retropropagação de um passo; traço e ← λe + g a cada decisão; a cada sinal r, δ = r − V(h da decisão), ator += taxa_ator·δ·e,
+  crítico += taxa_critico·δ·h. Sinais das fontes da bancada: consequência r = f_S/S (o escalar da bancada, conferido; a E2 pela
+  `fruta_comida`); dono com a janela da v1 do A (elogio e bronca pelo traço; o chamado pelo gradiente da decisão dele).
+- **Sonda do aprendido** (contrato 1.1): `motivos[-1]["sonda"]` (a ação com z = 0 e o mesmo u) e `["fruta"]["sonda"]` (sem o aprendido;
+  sem a informação).
+- **Capacidade (C-3):** 759 parâmetros (célula 3 × (9 × 23 + 9) = 648; ator 7 × 10 = 70; fruta 3 × 10 + 1 = 31; crítico 10), **0,995×**
+  os 763 do A no ponto da K2.
+- **Parâmetros:** `ConfigCerebroB` (registro `cerebro_b.PARAMETROS_CEREBRO_B`, todos PROPOSTOS). Livres para o adendo: `taxa_ator`,
+  `taxa_critico`, `lambda_elegibilidade` e `w0_info`; estrutura: `n_ocultos`, `delta_t`, `semente_pesos`, `escala_inicial`,
+  `limite_logit`; o ponto fixo do prior, a percepção e o crédito do dono são os do A.
+- **Gates** (`tests/test_cerebro_b.py`, 26 testes, ~1,5 min): **aprendizado desligado = instinto byte a byte e = o P0 dos lobos** (pela
+  bancada: os quatro mundos das frutas e a bola, 4 donos × 2 sementes; o padrão; P1 e P3 desligados = o P0 do instinto; 3000 observações
+  decisão a decisão, ação e rng); com o aprendizado ligado e nada aprendido, ainda o instinto; **G1** (P0, P1, P2, P2e, P2a, P3 e os
+  acoplados só cuidado, do texto do log, estado interno incluído: pesos, oculto, traço, motivos); **capacidade na faixa**; **a sonda
+  reproduz a decisão de um gêmeo com a parte aprendida zerada** (decisão e fruta, mais a fruta sem a informação); **aprende com a
+  consequência, conta exata do primeiro passo** (a fruta que derruba o humor 0,8 → 0,7: r = −204/1024, δ = r, b_comer = taxa·δ·(1 − p),
+  os outros candidatos taxa·δ·(−p), o viés do crítico taxa_critico·δ) e **a tendência** (p(comer | só a fruta) cai se ela faz mal e sobe
+  se faz bem); a informação inata e a aprendida na escolha da fruta; o dono pelo traço; o chamado pela latência; a memória recorrente; o P0
+  não aprende, P1/P2/P3 aprendem, cada um só pela própria fonte; N6 e N7 recusados (C-2).
+- **Custo:** ~1,6 s por vida de 14 dias com o replay conferido (o A, ~2,4 s; medição informal nesta máquina, sem artefato).
+- **Para a bancada:** `experiments/cerebro_b_bancada.py` (`BancadaComB`), a mesma receita do C: `CEREBROS` ganha `cerebro_b` e, em
+  `Bancada.politica`, `PoliticaDoBraco(PoliticaCerebroB(cfg, cfg_b, cb, cf), braco, cfg_consequencia)`, com o aprendizado desligado no P0.
+- **O adendo de calibração** (4 parâmetros, 10 pontos de 12, ~660 vidas, regras de estabilidade e de manipulação) está no corpo do PR,
+  para o coordenador conferir antes de qualquer run.
