@@ -1,0 +1,1742 @@
+[
+ {
+  "aprendido_decidiu": 24,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00016776156468541997,
+  "deriva_meio": 6.794374769093618e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 540614926002289733,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 43,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 14155974451992448055,
+  "unidade": {
+   "base": 28101,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g540614926002289733@14155974451992448055"
+ },
+ {
+  "aprendido_decidiu": 28,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00013626341973655359,
+  "deriva_meio": 8.101252682323272e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 540614926002289733,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 44,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 14155974451992448055,
+  "unidade": {
+   "base": 28101,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g540614926002289733@14155974451992448055"
+ },
+ {
+  "aprendido_decidiu": 28,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00023728917112702172,
+  "deriva_meio": 6.794374769093618e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 540614926002289733,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 43,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 14155974451992448055,
+  "unidade": {
+   "base": 28101,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g540614926002289733@14155974451992448055"
+ },
+ {
+  "aprendido_decidiu": 29,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002770240671122691,
+  "deriva_meio": 4.3977822387440715e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 3535767751194960189,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 51,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 12240141204751227454,
+  "unidade": {
+   "base": 28101,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g3535767751194960189@12240141204751227454"
+ },
+ {
+  "aprendido_decidiu": 33,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00018136945215275314,
+  "deriva_meio": 6.416748406918716e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 3535767751194960189,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 48,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 12240141204751227454,
+  "unidade": {
+   "base": 28101,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g3535767751194960189@12240141204751227454"
+ },
+ {
+  "aprendido_decidiu": 26,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00024967429640679675,
+  "deriva_meio": 4.3977822387440715e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 3535767751194960189,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 49,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 12240141204751227454,
+  "unidade": {
+   "base": 28101,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g3535767751194960189@12240141204751227454"
+ },
+ {
+  "aprendido_decidiu": 33,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00023679571926948597,
+  "deriva_meio": 9.599824813516693e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 9448255062921845448,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 26,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 4819014035915719784,
+  "unidade": {
+   "base": 28101,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g9448255062921845448@4819014035915719784"
+ },
+ {
+  "aprendido_decidiu": 25,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002651268455743233,
+  "deriva_meio": 0.00010036143502026358,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 9448255062921845448,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 22,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 4819014035915719784,
+  "unidade": {
+   "base": 28101,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g9448255062921845448@4819014035915719784"
+ },
+ {
+  "aprendido_decidiu": 35,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001941478297030165,
+  "deriva_meio": 9.599824813516693e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 9448255062921845448,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 28,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 4819014035915719784,
+  "unidade": {
+   "base": 28101,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g9448255062921845448@4819014035915719784"
+ },
+ {
+  "aprendido_decidiu": 42,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00028423573624877547,
+  "deriva_meio": 7.353356313935562e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 12511130918565516463,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 57,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 210224738453594515,
+  "unidade": {
+   "base": 28101,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g12511130918565516463@210224738453594515"
+ },
+ {
+  "aprendido_decidiu": 35,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.000262823407039655,
+  "deriva_meio": 9.81647606956895e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 12511130918565516463,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 53,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 210224738453594515,
+  "unidade": {
+   "base": 28101,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g12511130918565516463@210224738453594515"
+ },
+ {
+  "aprendido_decidiu": 47,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002963534293459607,
+  "deriva_meio": 7.353356313935562e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 12511130918565516463,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 55,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 210224738453594515,
+  "unidade": {
+   "base": 28101,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g12511130918565516463@210224738453594515"
+ },
+ {
+  "aprendido_decidiu": 37,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002280002445613654,
+  "deriva_meio": 5.456487206156005e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 15004644946213801952,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 61,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 13822935355696912650,
+  "unidade": {
+   "base": 28202,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g15004644946213801952@13822935355696912650"
+ },
+ {
+  "aprendido_decidiu": 36,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.000316473749880031,
+  "deriva_meio": 0.00012120810407133259,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 15004644946213801952,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 61,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 13822935355696912650,
+  "unidade": {
+   "base": 28202,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g15004644946213801952@13822935355696912650"
+ },
+ {
+  "aprendido_decidiu": 26,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001783670653277706,
+  "deriva_meio": 5.456487206156005e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 15004644946213801952,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 64,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 13822935355696912650,
+  "unidade": {
+   "base": 28202,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g15004644946213801952@13822935355696912650"
+ },
+ {
+  "aprendido_decidiu": 18,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 9.798824364872913e-05,
+  "deriva_meio": 4.1717248162922145e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 7625832981571383968,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 56,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6773016818731232651,
+  "unidade": {
+   "base": 28202,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g7625832981571383968@6773016818731232651"
+ },
+ {
+  "aprendido_decidiu": 23,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00013917878593978315,
+  "deriva_meio": 4.4078185588494666e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 7625832981571383968,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 60,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6773016818731232651,
+  "unidade": {
+   "base": 28202,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g7625832981571383968@6773016818731232651"
+ },
+ {
+  "aprendido_decidiu": 23,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001465163267613163,
+  "deriva_meio": 4.1717248162922145e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 7625832981571383968,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 56,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6773016818731232651,
+  "unidade": {
+   "base": 28202,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g7625832981571383968@6773016818731232651"
+ },
+ {
+  "aprendido_decidiu": 34,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002488500153611329,
+  "deriva_meio": 7.43168020852178e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 2413848696904814690,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 48,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 12028144294286172512,
+  "unidade": {
+   "base": 28202,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g2413848696904814690@12028144294286172512"
+ },
+ {
+  "aprendido_decidiu": 23,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00019183043424929265,
+  "deriva_meio": 8.153823070514644e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 2413848696904814690,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 47,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 12028144294286172512,
+  "unidade": {
+   "base": 28202,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g2413848696904814690@12028144294286172512"
+ },
+ {
+  "aprendido_decidiu": 27,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002019249386236262,
+  "deriva_meio": 7.43168020852178e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 2413848696904814690,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 46,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 12028144294286172512,
+  "unidade": {
+   "base": 28202,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g2413848696904814690@12028144294286172512"
+ },
+ {
+  "aprendido_decidiu": 35,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0003084928174900733,
+  "deriva_meio": 7.859563921200131e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 3227385282435117682,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 54,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 17017545390334385746,
+  "unidade": {
+   "base": 28202,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g3227385282435117682@17017545390334385746"
+ },
+ {
+  "aprendido_decidiu": 30,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00023352575529961235,
+  "deriva_meio": 7.65138733802832e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 3227385282435117682,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 54,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 17017545390334385746,
+  "unidade": {
+   "base": 28202,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g3227385282435117682@17017545390334385746"
+ },
+ {
+  "aprendido_decidiu": 32,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00022822465519442683,
+  "deriva_meio": 7.859563921200131e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 3227385282435117682,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 55,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 17017545390334385746,
+  "unidade": {
+   "base": 28202,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g3227385282435117682@17017545390334385746"
+ },
+ {
+  "aprendido_decidiu": 35,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00017567475745934816,
+  "deriva_meio": 7.471223920115861e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11106862116827891785,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 49,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6599336110051169892,
+  "unidade": {
+   "base": 28303,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g11106862116827891785@6599336110051169892"
+ },
+ {
+  "aprendido_decidiu": 33,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00023480221931009392,
+  "deriva_meio": 7.556122482072774e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11106862116827891785,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 53,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6599336110051169892,
+  "unidade": {
+   "base": 28303,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g11106862116827891785@6599336110051169892"
+ },
+ {
+  "aprendido_decidiu": 36,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00017767374738521903,
+  "deriva_meio": 7.471223920115861e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11106862116827891785,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 54,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6599336110051169892,
+  "unidade": {
+   "base": 28303,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g11106862116827891785@6599336110051169892"
+ },
+ {
+  "aprendido_decidiu": 34,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0003336325910716694,
+  "deriva_meio": 0.00011174916690492665,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 16547049188623401466,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 55,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 2904740315273149079,
+  "unidade": {
+   "base": 28303,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g16547049188623401466@2904740315273149079"
+ },
+ {
+  "aprendido_decidiu": 31,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00025474077026367266,
+  "deriva_meio": 7.870811887083052e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 16547049188623401466,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 64,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 2904740315273149079,
+  "unidade": {
+   "base": 28303,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g16547049188623401466@2904740315273149079"
+ },
+ {
+  "aprendido_decidiu": 51,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00030486624185673347,
+  "deriva_meio": 0.00011174916690492665,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 16547049188623401466,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 55,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 2904740315273149079,
+  "unidade": {
+   "base": 28303,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g16547049188623401466@2904740315273149079"
+ },
+ {
+  "aprendido_decidiu": 47,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002015176748080642,
+  "deriva_meio": 8.033636835686134e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6669099954877564859,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 57,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 15744784155682929884,
+  "unidade": {
+   "base": 28303,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g6669099954877564859@15744784155682929884"
+ },
+ {
+  "aprendido_decidiu": 33,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00016799211611779312,
+  "deriva_meio": 7.563383013701566e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6669099954877564859,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 61,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 15744784155682929884,
+  "unidade": {
+   "base": 28303,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g6669099954877564859@15744784155682929884"
+ },
+ {
+  "aprendido_decidiu": 39,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00018800651508554984,
+  "deriva_meio": 8.033636835686134e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6669099954877564859,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 55,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 15744784155682929884,
+  "unidade": {
+   "base": 28303,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g6669099954877564859@15744784155682929884"
+ },
+ {
+  "aprendido_decidiu": 21,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001337260803391673,
+  "deriva_meio": 4.002251867407659e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11224442187448915171,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 52,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 11349152343098615714,
+  "unidade": {
+   "base": 28303,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g11224442187448915171@11349152343098615714"
+ },
+ {
+  "aprendido_decidiu": 20,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00012253165366960756,
+  "deriva_meio": 6.183997288885355e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11224442187448915171,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 56,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 11349152343098615714,
+  "unidade": {
+   "base": 28303,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g11224442187448915171@11349152343098615714"
+ },
+ {
+  "aprendido_decidiu": 20,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00013018953783919843,
+  "deriva_meio": 4.002251867407659e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11224442187448915171,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 52,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 11349152343098615714,
+  "unidade": {
+   "base": 28303,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g11224442187448915171@11349152343098615714"
+ },
+ {
+  "aprendido_decidiu": 40,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002993852738457018,
+  "deriva_meio": 0.00011849697811067321,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6719596777364470023,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 46,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6264262120173222741,
+  "unidade": {
+   "base": 28404,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g6719596777364470023@6264262120173222741"
+ },
+ {
+  "aprendido_decidiu": 37,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00027395774165785825,
+  "deriva_meio": 0.0001121697608698043,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6719596777364470023,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 54,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6264262120173222741,
+  "unidade": {
+   "base": 28404,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g6719596777364470023@6264262120173222741"
+ },
+ {
+  "aprendido_decidiu": 40,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00030598209715790634,
+  "deriva_meio": 0.00011849697811067321,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6719596777364470023,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 47,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6264262120173222741,
+  "unidade": {
+   "base": 28404,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g6719596777364470023@6264262120173222741"
+ },
+ {
+  "aprendido_decidiu": 27,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001448850957104847,
+  "deriva_meio": 5.8145106160288507e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 17868446032725352230,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 49,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 1321498237604468441,
+  "unidade": {
+   "base": 28404,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g17868446032725352230@1321498237604468441"
+ },
+ {
+  "aprendido_decidiu": 34,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002491770959392708,
+  "deriva_meio": 7.867233960407988e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 17868446032725352230,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 53,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 1321498237604468441,
+  "unidade": {
+   "base": 28404,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g17868446032725352230@1321498237604468441"
+ },
+ {
+  "aprendido_decidiu": 31,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00015974086379343583,
+  "deriva_meio": 5.8145106160288507e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 17868446032725352230,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 50,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 1321498237604468441,
+  "unidade": {
+   "base": 28404,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g17868446032725352230@1321498237604468441"
+ },
+ {
+  "aprendido_decidiu": 46,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00032098684138502756,
+  "deriva_meio": 0.0001259257627566025,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 7440427446598975326,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 41,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 16245931030435283368,
+  "unidade": {
+   "base": 28404,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g7440427446598975326@16245931030435283368"
+ },
+ {
+  "aprendido_decidiu": 34,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002734622192303095,
+  "deriva_meio": 8.771620329970877e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 7440427446598975326,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 42,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 16245931030435283368,
+  "unidade": {
+   "base": 28404,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g7440427446598975326@16245931030435283368"
+ },
+ {
+  "aprendido_decidiu": 43,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0003214141177985256,
+  "deriva_meio": 0.0001259257627566025,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 7440427446598975326,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 41,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 16245931030435283368,
+  "unidade": {
+   "base": 28404,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g7440427446598975326@16245931030435283368"
+ },
+ {
+  "aprendido_decidiu": 33,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002004369915423271,
+  "deriva_meio": 5.157242240985063e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11696918830839655483,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 47,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 2386976548279837209,
+  "unidade": {
+   "base": 28404,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g11696918830839655483@2386976548279837209"
+ },
+ {
+  "aprendido_decidiu": 23,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00020311577016183423,
+  "deriva_meio": 5.9586998660323174e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11696918830839655483,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 48,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 2386976548279837209,
+  "unidade": {
+   "base": 28404,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g11696918830839655483@2386976548279837209"
+ },
+ {
+  "aprendido_decidiu": 33,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.000173276878681328,
+  "deriva_meio": 5.157242240985063e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 11696918830839655483,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 45,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 2386976548279837209,
+  "unidade": {
+   "base": 28404,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g11696918830839655483@2386976548279837209"
+ },
+ {
+  "aprendido_decidiu": 27,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00013644135156859968,
+  "deriva_meio": 8.12143671801116e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 1432071467702086694,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 58,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 18219177572971686565,
+  "unidade": {
+   "base": 28505,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g1432071467702086694@18219177572971686565"
+ },
+ {
+  "aprendido_decidiu": 39,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001791970124374343,
+  "deriva_meio": 8.646496158493932e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 1432071467702086694,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 58,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 18219177572971686565,
+  "unidade": {
+   "base": 28505,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g1432071467702086694@18219177572971686565"
+ },
+ {
+  "aprendido_decidiu": 28,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00018391645717845544,
+  "deriva_meio": 8.12143671801116e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 1432071467702086694,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 56,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 18219177572971686565,
+  "unidade": {
+   "base": 28505,
+   "k": 0
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g1432071467702086694@18219177572971686565"
+ },
+ {
+  "aprendido_decidiu": 35,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00026620579476785086,
+  "deriva_meio": 6.829940344602728e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 8969272573787987883,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 49,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 3923321772405417760,
+  "unidade": {
+   "base": 28505,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g8969272573787987883@3923321772405417760"
+ },
+ {
+  "aprendido_decidiu": 32,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002284556788578531,
+  "deriva_meio": 7.875004166991451e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 8969272573787987883,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 52,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 3923321772405417760,
+  "unidade": {
+   "base": 28505,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g8969272573787987883@3923321772405417760"
+ },
+ {
+  "aprendido_decidiu": 37,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0002724288253399765,
+  "deriva_meio": 6.829940344602728e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 8969272573787987883,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 48,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 3923321772405417760,
+  "unidade": {
+   "base": 28505,
+   "k": 1
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g8969272573787987883@3923321772405417760"
+ },
+ {
+  "aprendido_decidiu": 39,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00019230161942554013,
+  "deriva_meio": 5.800386312888151e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6439227015813212205,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 57,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6342074412972073103,
+  "unidade": {
+   "base": 28505,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g6439227015813212205@6342074412972073103"
+ },
+ {
+  "aprendido_decidiu": 29,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00022128950688383162,
+  "deriva_meio": 6.969416185846591e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6439227015813212205,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 55,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6342074412972073103,
+  "unidade": {
+   "base": 28505,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g6439227015813212205@6342074412972073103"
+ },
+ {
+  "aprendido_decidiu": 35,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.0001742457416867185,
+  "deriva_meio": 5.800386312888151e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 6439227015813212205,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 56,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 6342074412972073103,
+  "unidade": {
+   "base": 28505,
+   "k": 2
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g6439227015813212205@6342074412972073103"
+ },
+ {
+  "aprendido_decidiu": 28,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00016618069105147352,
+  "deriva_meio": 8.101252682323272e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 2113563265150131784,
+  "info_decidiu": 0,
+  "mundo": "casado_frutas",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 57,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 11321570901639581968,
+  "unidade": {
+   "base": 28505,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~casado_frutas~g2113563265150131784@11321570901639581968"
+ },
+ {
+  "aprendido_decidiu": 31,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00023950057109632916,
+  "deriva_meio": 8.092186330979613e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 2113563265150131784,
+  "info_decidiu": 0,
+  "mundo": "descasado",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 60,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 11321570901639581968,
+  "unidade": {
+   "base": 28505,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~descasado~g2113563265150131784@11321570901639581968"
+ },
+ {
+  "aprendido_decidiu": 31,
+  "cortes_limite": 0,
+  "decisoes": 1344,
+  "deriva_fim": 0.00019141690944022823,
+  "deriva_meio": 8.101252682323272e-05,
+  "dias_deriva": [
+   7,
+   14
+  ],
+  "escolhas_fruta_info": 0,
+  "genoma": 2113563265150131784,
+  "info_decidiu": 0,
+  "mundo": "mutavel",
+  "recompensas": {
+   "consequencia": 1344,
+   "consequencia_fruta": 58,
+   "elogio": 0,
+   "ignorado": 0,
+   "latencia": 0,
+   "repreensao": 0
+  },
+  "semente": 11321570901639581968,
+  "unidade": {
+   "base": 28505,
+   "k": 3
+  },
+  "vida": "atencioso-P1~cerebro_b~mutavel~g2113563265150131784@11321570901639581968"
+ }
+]

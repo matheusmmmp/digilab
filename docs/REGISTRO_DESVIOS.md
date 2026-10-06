@@ -2602,6 +2602,28 @@ Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, q
   - Se as sementes 15101…15505 continuam valendo para a validação única é decisão do coordenador e do Matheus. Nenhum número delas foi
     visto, então nada pôde puxar uma escolha.
 
+
+## 2026-10-06 — V2, CALIBRACAO-CEREBRO-B: a calibração do cérebro B (`docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`)
+
+- **O B mudou antes da run** (`cerebro_b.py`, arquivo do próprio cérebro): o estado oculto e o traço passam a andar só quando a decisão é
+  observada (`observar`/`observar_consequencia`). A sonda da deriva (`metrics.distribuicoes_de_acao`) sorteia várias decisões no mesmo
+  estado de fim de dia; antes, cada uma movia a memória recorrente do B, e a distribuição medida dependia da ordem das sondas. Nas vidas
+  é o mesmo (toda decisão é observada antes da próxima); no motor das frutas a escolha da fruta vem depois do `observar`, e o gradiente
+  dela entra no traço já andado, como antes. Teste novo: a sonda não move a memória.
+- **A deriva só no meio e no fim da vida** (dias 7 e 14 na calibração; `dias // 2` e `dias` na fumaça), não em todo dia: são os dias que a
+  regra de estabilidade (a razão 14/7 da K2) e o piloto (o dia 14) leem. A conta da deriva é a da `Bancada.deriva`, com o prior de cada
+  mundo guardado.
+- **A regra de manipulação pela régua da K-3:** limite inferior do IC 95% > 0,069, sobre as escolhas com duas frutas ou mais e informação
+  vigente (a sonda `fruta.sonda.info_decidiu` do B), a vida inteira e as três condições juntas por unidade (o adendo do B não tem a janela
+  de dias 1–7 da etapa C do A). O "passa de 0,069" do adendo foi lido como o limite inferior, como na K-3.
+- **O "logit no limite" de uma vida:** alguma decisão real (ou escolha de fruta) com um logit aprendido cortado em ±20 (`cortes_limite` do
+  estado interno). Nenhuma vida chegou lá.
+- **O piloto reaproveita** as 60 vidas do P1 no ponto escolhido (rodadas na B-C; o `w0_info` não age no P1); IC por unidade, as três
+  condições juntas. O P2 no ponto escolhido sai como descritivo.
+- **Empates** de razão: o menor valor da grade, como na K2. Uma razão sem deriva no dia 7 conta como infinita.
+- **Resultado registrado sem reajuste:** o B não fecha pelo "não aprende"; a observação de que a regra de estabilidade empurra a cadeia ao
+  ponto de menor aprendizado fica como descritivo, para o coordenador e o Matheus.
+
 ## 2026-10-06 — V2, CALIBRACAO-CEREBRO-C: a calibração do cérebro C (`docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`, adendo 1.2)
 
 - **O prefixo das unidades fica no orquestrador.** A bancada só aceita os prefixos dos planos dela (`PREFIXOS_UNIDADES`), e ela não muda

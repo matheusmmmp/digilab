@@ -1,0 +1,38 @@
+  taxa_ator0.01_taxa_critico0.03_lambda_elegibilidade0.8_w0_info0 P1: 60 vidas (60 no total, 136 s)
+  taxa_ator0.03_taxa_critico0.03_lambda_elegibilidade0.8_w0_info0 P1: 60 vidas (120 no total, 272 s)
+  taxa_ator0.1_taxa_critico0.03_lambda_elegibilidade0.8_w0_info0 P1: 60 vidas (180 no total, 409 s)
+B-A: taxa_ator = 0.01 (fechou: True)
+  taxa_ator0.01_taxa_critico0.01_lambda_elegibilidade0.8_w0_info0 P1: 60 vidas (240 no total, 545 s)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.8_w0_info0 P1: 60 vidas (300 no total, 681 s)
+B-B: taxa_critico = 0.1 (fechou: True)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.5_w0_info0 P1: 60 vidas (360 no total, 818 s)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.95_w0_info0 P1: 60 vidas (420 no total, 954 s)
+B-C: lambda_elegibilidade = 0.95 (fechou: True)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.95_w0_info0 P2: 60 vidas (480 no total, 1090 s)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.95_w0_info0.5 P2: 60 vidas (540 no total, 1224 s)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.95_w0_info1 P2: 60 vidas (600 no total, 1359 s)
+  taxa_ator0.01_taxa_critico0.1_lambda_elegibilidade0.95_w0_info2 P2: 60 vidas (660 no total, 1493 s)
+B-D: w0_info = 0.5 (fechou: True)
+{
+ "fecharam": {
+  "B-A": true,
+  "B-B": true,
+  "B-C": true,
+  "B-D": true
+ },
+ "fechou_o_cerebro": false,
+ "nao_aprende": true,
+ "ponto": {
+  "lambda_elegibilidade": 0.95,
+  "taxa_ator": 0.01,
+  "taxa_critico": 0.1,
+  "w0_info": 0.5
+ }
+}
+
+660 vidas em 1493 s
+
+real	24m53.309s
+user	0m0.015s
+sys	0m0.000s
+rc=0

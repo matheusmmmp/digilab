@@ -336,8 +336,9 @@ BASES_N6 = {"calibracao": (19101, 19202, 19303, 19404, 19505), "validacao": (201
 BASES_N7 = {"calibracao": (21101, 21202, 21303, 21404, 21505), "validacao": (22101, 22202, 22303, 22404, 22505)}
 BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validacao": (29101, 29202, 29303, 29404, 29505)}
 # o prefixo das unidades derivadas de cada plano (regra E3): semente derivar_semente(prefixo, b, k), genoma
-# derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2)
-PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7")
+# derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2; o da comparacao dos cerebros,
+# PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2)
+PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros")
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
 FAIXAS_RESERVADAS = (
     (101, 1010, "testes (101...505) e ovos da personalidade (101...1010)"),
