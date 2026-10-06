@@ -55,6 +55,11 @@ V2, K4 (docs/TAREFA_V2_K4_DONO_JULGA_FRUTA.md; contrato K4 e E7 do experimento m
   DonoJulgaFruta         embrulha um dono (o atencioso) e poe os julgamentos novos na frente das acoes do passo, DENTRO do orcamento
                          (no_orcamento, o padrao): o dono embrulhado decide com o que sobra. Fora do orcamento (a alternativa), o
                          julgador entra por `simular_vida_frutas(..., julgador=)`, logo depois das acoes do dono do passo.
+
+V2, P2D-P3I, parte A (docs/TAREFA_V2_P2D_P3I.md; adendo 3, secao 3.3, do plano do experimento maior):
+  JulgadorFruta(saida=)  "feedback" (o padrao: o K4 de hoje, elogio e bronca) ou "informacao" (os bracos P2d e P3i): o mesmo
+                         conhecimento e o mesmo momento, mas o julgamento sai como informar_fruta_<f>_<bem|mal> sobre a fruta
+                         consumida (a neutra tambem, "bem"), so fora do orcamento e com o canal da informacao ligado no motor.
 """
 
 from __future__ import annotations
@@ -630,10 +635,19 @@ class JulgadorFruta:
     pelo efeito vigente no tick do consumo: > 0 elogia (a fruta boa), < 0 repreende (a ruim: o "mal" do P2), 0 nada (a neutra).
     `acoes(estado)` le os consumos novos desde a ultima chamada em estado()["consumos_frutas"] (o motor so expoe com a chave; sem ela,
     KeyError: falha alto) e devolve um feedback por consumo julgado. `julgados` guarda (tick do consumo, fruta, sinal, tick do
-    julgamento) de todo consumo, inclusive os neutros (sinal 0)."""
+    julgamento) de todo consumo, inclusive os neutros (sinal 0).
+
+    P2D-P3I (docs/TAREFA_V2_P2D_P3I.md, parte A; adendo 3, secao 3.3, do plano do experimento maior): `saida` escolhe o que o julgamento
+    emite. "feedback" (o padrao, o K4 de hoje): elogio e bronca, nada na neutra. "informacao" (os bracos P2d e P3i): no mesmo momento e
+    com o mesmo conhecimento, `informar_fruta_<f>_<bem|mal>` sobre a fruta consumida, uma por consumo, a neutra incluida; o conteudo e o
+    do DonoInformante ("mal" se o efeito vigente e negativo, senao "bem"). Como toda informacao, nao e reforco (o motor nao a passa a
+    `receber_acao_dono`) e precisa do canal da informacao ligado no motor; so fora do orcamento. `informadas` guarda (tick do
+    julgamento, fruta, conteudo, tick do consumo)."""
+
+    SAIDAS = ("feedback", "informacao")
 
     def __init__(self, efeitos_antes: dict, efeitos_depois: dict | None = None, tick_troca: int | None = None,
-                 cfg_julgamento: ConfigJulgamentoFruta | None = None) -> None:
+                 cfg_julgamento: ConfigJulgamentoFruta | None = None, saida: str = "feedback") -> None:
         for ef in (efeitos_antes, efeitos_depois):
             if ef is not None and set(ef) != set(FRUTAS):
                 raise ValueError(f"o julgador precisa do efeito de todas as frutas: {sorted(ef)}")
@@ -643,15 +657,21 @@ class JulgadorFruta:
         self.efeitos_depois = dict(efeitos_depois) if efeitos_depois is not None else None
         self.tick_troca = tick_troca
         self.cj = cfg_julgamento or CONFIG_JULGAMENTO_FRUTA
+        if saida not in self.SAIDAS:
+            raise ValueError(f"saida do julgador desconhecida: {saida!r} (so {self.SAIDAS})")
+        if saida == "informacao" and self.cj.no_orcamento:
+            raise ValueError("o julgamento como informacao e fora do orcamento: ConfigJulgamentoFruta(no_orcamento=False)")
+        self.saida = saida
+        self.informadas: list[tuple[int, str, str, int]] = []     # so na saida "informacao"
         self.julgados: list[tuple[int, str, int, int]] = []
         self.descartados: list[tuple[int, str, int, int]] = []    # so no orcamento: julgamentos que nao couberam no passo
         self._vistos = 0
 
     @classmethod
-    def do_genoma(cls, semente_genoma: int, cf: ConfigFrutas,
-                  cfg_julgamento: ConfigJulgamentoFruta | None = None) -> "JulgadorFruta":
+    def do_genoma(cls, semente_genoma: int, cf: ConfigFrutas, cfg_julgamento: ConfigJulgamentoFruta | None = None,
+                  saida: str = "feedback") -> "JulgadorFruta":
         """fora da bancada: o efeito real do MotorFrutas deste genoma (o mesmo que DonoInformante.do_genoma usa)"""
-        return cls(efeitos_humor(genoma_frutas(semente_genoma, cf), cf), cfg_julgamento=cfg_julgamento)
+        return cls(efeitos_humor(genoma_frutas(semente_genoma, cf), cf), cfg_julgamento=cfg_julgamento, saida=saida)
 
     def efeito_vigente(self, fruta: str, tick: int) -> float:
         ef = self.efeitos_depois if self.efeitos_depois is not None and tick >= self.tick_troca else self.efeitos_antes
@@ -660,6 +680,10 @@ class JulgadorFruta:
     def sinal(self, fruta: str, tick: int) -> int:
         e = self.efeito_vigente(fruta, tick)
         return 1 if e > 0.0 else -1 if e < 0.0 else 0
+
+    def conteudo(self, fruta: str, tick: int) -> str:
+        """a saida "informacao": o que o DonoInformante (modo certo) diria do efeito vigente; a neutra sai como bem"""
+        return "mal" if self.efeito_vigente(fruta, tick) < 0.0 else "bem"
 
     def acoes(self, estado: dict) -> list[AcaoUsuario]:
         consumos = estado["consumos_frutas"]
@@ -670,7 +694,11 @@ class JulgadorFruta:
         for tick_consumo, fruta in novos:
             s = self.sinal(fruta, tick_consumo)
             self.julgados.append((tick_consumo, fruta, s, estado["tick"]))
-            if s != 0:
+            if self.saida == "informacao":
+                c = self.conteudo(fruta, tick_consumo)
+                self.informadas.append((estado["tick"], fruta, c, tick_consumo))
+                out.append(informar(fruta, c))
+            elif s != 0:
                 out.append(AcaoUsuario.ELOGIAR if s > 0 else AcaoUsuario.REPREENDER)
         return out
 
@@ -682,8 +710,9 @@ class DonoJulgaFruta:
     o que o julgamento gastou. O que nao coube no passo fica em `julgador.descartados` (nao volta depois)."""
 
     def __init__(self, base, julgador: JulgadorFruta) -> None:
-        if not julgador.cj.no_orcamento:
-            raise ValueError("julgamento fora do orcamento: use simular_vida_frutas(..., julgador=), nao o DonoJulgaFruta")
+        if not julgador.cj.no_orcamento or julgador.saida != "feedback":
+            raise ValueError("julgamento fora do orcamento (ou como informacao): use simular_vida_frutas(..., julgador=), nao o "
+                             "DonoJulgaFruta")
         self.base = base
         self.julgador = julgador
         self.nome = base.nome
@@ -732,9 +761,12 @@ def simular_vida_frutas(braco: str, dono, politica, semente: int, dias: int, orc
                       minimo_obrigatorio=minimo, maximo_permitido=maximo)
         canal.aplicar(dono.decidir(visao, rng_dono), passo, passos)
         if julgador is not None:
-            for a in julgador.acoes(motor.estado()):          # K4 fora do orcamento (a alternativa)
+            for a in julgador.acoes(motor.estado()):          # K4 fora do orcamento (a alternativa); P2d/P3i: como informacao
                 motor.observar(a)
-                n_julgamentos += 1
+                if julgador.saida == "informacao":
+                    n_informacoes += 1
+                else:
+                    n_julgamentos += 1
         feitas = ofertas.acoes(motor.estado()) if ofertas is not None else []
         for a in feitas:
             motor.observar(a)
