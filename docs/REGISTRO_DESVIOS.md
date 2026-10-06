@@ -2386,5 +2386,5 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
 - **Ponto aberto para o coordenador:** a tabela da seção 1 do plano da calibração conjunta põe memória em P1, P2 e P3 e canais em P1 e P2 no
   bloco principal. Na bancada as chaves são do braço (desde a BANCADA-LIGA-N6-N7), e os P1, P2 e P3 de hoje não têm memória; os braços da
   K-7 cobrem só o P1. A K2 precisa de braços nomeados para o cérebro A montado (P1c já é o P1 completo) ou de uma decisão sobre isso.
-- **Teste de outra frente ajustado:** `tests/test_experimento_maior.py` passa a esperar `K4_dono_julga_fruta = True` e confere, na fumaça, o
+- **Testes ajustados:** `tests/test_bancada_v2.py::test_engine_intocado_e_bracos_com_fonte_e_no` (a tabela dos braços inclui as ablações). `tests/test_experimento_maior.py` passa a esperar `K4_dono_julga_fruta = True` e confere, na fumaça, o
   orçamento do P3 e o só cuidado sem julgamentos.
