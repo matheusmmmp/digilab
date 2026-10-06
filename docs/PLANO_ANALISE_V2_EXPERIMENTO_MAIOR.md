@@ -420,3 +420,22 @@ A validação espera esses braços.
 
 **3.4 Literatura (P-7).** A próxima passada (as pistas de prioridade 1 da síntese) é feita antes da **leitura** dos resultados, não antes
 da run. Ela não muda o desenho.
+
+## Adendo 4 (2026-10-06, antes da validação): faixa de validação nova e leitura da literatura P-7
+
+**4.1 Faixa de validação nova: 30101…30505** (bases 30101, 30202, 30303, 30404, 30505). Substitui a 15101…15505.
+- **Por quê:** antes da tarefa da validação chegar, uma run foi disparada nas sementes 15101…15505 (2026-10-06, das 09:47 às 10:12;
+  relato no PR #183 e no #189). Ela foi parada, nada foi lido além da contagem de arquivos, e tudo foi apagado.
+- **Decisão do Matheus:** trocar a faixa. Não há indício de leitura, mas a troca não custa tempo de máquina e tira a dúvida.
+- **A faixa 15101…15505 fica queimada:** continua reservada e não pode ser usada para nada.
+- **O que não muda:** as unidades derivadas (`derivar_semente("experimento-maior", b, k)`, K = 6), o N, o Δ e o resto.
+- **Faixa livre:** conferido em 2026-10-06 que nenhuma referência a ela existe no repositório.
+
+**4.2 Leitura, pela segunda passada de literatura** (`docs/referencias/E2_SINTESE_PISTAS_P7.md`, decisões L-1 a L-4, aprovadas). Nada
+aqui muda teste nem regra de decisão.
+- **L-3:** na leitura do bloco de durações, o **limiar** entra como forma possível da curva, ao lado de crescente, platô e ótimo interior.
+  A regra registrada pelo worker B não muda.
+- **L-4:** a trajetória do `w_info` do P2e vai reportada como descritivo, ao lado do dia em que o P2e cruza o P0.
+- **Predição 2:** o relatório diz que componente da mudança cada condição manipula. No mutável, valor (P0 − P1) e eficiência são lidos
+  separados.
+- **L-1:** antes da leitura dos resultados, buscar o texto completo do Eliassen et al. 2009 (`10.1086/605370`). Isso não segura a run.
