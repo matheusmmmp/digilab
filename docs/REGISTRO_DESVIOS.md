@@ -2430,6 +2430,43 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
 - **O gabarito da simples** cobre três bancadas pela config (L1; T3 com `w0_info`, `memoria_ganho` e `w0_pedido` S/2; e o mesmo com os
   canais e o K4), o dono aleatório só na L1 para o teste caber na suíte; sem a chave confere as 120 primeiras vidas.
 - **Teste de outra frente ajustado:** `tests/test_experimento_maior.py` passa a esperar `"montagem": "completa"` nos contratos do resumo.
+
+## 2026-10-06 — V2, CEREBRO-B: o DigiBrain B, CfC + ator-crítico + elegibilidade (`docs/TAREFA_V2_CEREBRO_B.md`)
+
+- **`config.py` também mudou** (a `ConfigCerebroB`), pela regra do projeto; o registro de status fica no `cerebro_b.py`
+  (`PARAMETROS_CEREBRO_B`), como no A e no C.
+- **A ligação na bancada ficou fora de `bancada_v2.py`:** `experiments/cerebro_b_bancada.py` (`BancadaComB`), a mesma receita do C.
+- **O herdado entra multiplicando:** o peso do candidato é o do instinto vezes exp(z), isto é, log w = log w_instinto + z, como o plano
+  descreve (seção 1.1). Não tirei o logaritmo do instinto: multiplicar por exp(0) = 1,0 devolve o mesmo float, o que fecha o byte a byte
+  sem mexer na conta do instinto.
+- **O que é "CfC" aqui:** a forma fechada h = σ(−F·dt)·G + (1 − σ(−F·dt))·K com F, G, K de uma camada (tanh) sobre (x, h anterior). Não é
+  o CfC com a cabeça NCP nem o NORNBRAIN; é a família, no tamanho do contrato (9 ocultos). dt = 1 por decisão (as decisões são a cada 15
+  ticks; o relógio não muda o dt).
+- **O gradiente é truncado em um passo:** a célula é retropropagada só até o estado oculto anterior, que fica como dado. O que leva o
+  crédito para trás no tempo é o traço de elegibilidade (λ). Retropropagar pela vida inteira custaria guardar todos os estados e mudaria o
+  custo por decisão; fica registrado como escolha.
+- **O traço é um só, para o ator inteiro** (célula e cabeças). Elogio, bronca, consequência e a E2 creditam pelo traço (a decisão mais
+  recente com peso 1 e as anteriores decaídas por λ). O chamado credita a decisão do chamado pelo gradiente dela, porque quando a latência
+  chega o traço já andou várias decisões.
+- **O crítico é linear no estado oculto, sem desconto (γ = 0):** δ = r − V(h). Os sinais da bancada são imediatos (a consequência e o
+  julgamento do dono são da própria decisão); a parte do futuro fica com o traço. É a forma mais simples que cabe nos 4 parâmetros livres.
+- **Os logits aprendidos são cortados em ±20** (`limite_logit`, estrutura, contra estouro do exp); o gradiente não vê o corte.
+- **A informação do N5 só na escolha da fruta**, como no A (N5-2): θ_info × info_f no logit da fruta, inato em `w0_info` (livre do adendo,
+  em unidades de logit, não na escala S do A).
+- **Capacidade:** conto todo parâmetro do ator (a célula inteira, as cabeças) e do crítico; o estado oculto, o traço e o prior não contam
+  (contrato 1.3). 759 = 0,995 × 763.
+- **Fora (decisão C-2):** a memória de episódios (N6) e o pedido (N7); o B tem a memória recorrente própria. A `BancadaComB` recusa os
+  braços deles.
+
+## 2026-10-06 — Adendos de calibração dos cérebros B e C registrados no plano da comparação
+
+- Os adendos estavam só no corpo dos PRs #179 (B) e #176 (C). A seção 1.4 do plano pede um adendo ao documento, commitado antes de
+  qualquer run. O coordenador os copiou sem mudar o conteúdo para o adendo 1 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`.
+- Conferidos contra a seção 1.4:
+  - B: 4 parâmetros livres, 10 pontos de grade e ~660 vidas;
+  - C: 3 parâmetros livres, 9 pontos e 480 a 540 vidas.
+- Falta conferir o teto de vidas (as vidas da K2 do A) no artefato da K2, antes de calibrar B ou C.
+
 ## 2026-10-05 — K2-CALIBRACAO-CONJUNTA: interpretações do plano, registradas antes da run
 
 Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11). Orquestrador
@@ -2501,10 +2538,22 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
   conferência por simulação está no adendo ao lado do N da fórmula, como o plano pede, sem trocar o N.
 - **O poder dos secundários** no `adendo.json` usa o N de 191.815 e precisa ser refeito com o N que o Matheus decidir.
 
+## 2026-10-06 — Rodada 11: opção A da K2 (N 30, Δ do P3 em consumos); a validação espera os adendos das predições
+
+- **A opção A foi aprovada pelo Matheus** e está registrada como adendo 2 de `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`.
+  - Ela corrige a escala do Δ do P3, que estava em taxa e passa a consumos.
+  - O N passa a vir da simulação de poder.
+  - Números em `artifacts_v2_calibracao_conjunta/adendo_opcao_a.json`.
+- **A ordem da rodada 11 mudou.** A run da validação única espera os adendos de `docs/PREDICOES_V2.md`, entre eles a medida em pelo
+  menos três durações de vida. Esse documento depende de uma síntese de literatura que ainda não está no disco.
+- **A calibração dos cérebros vai para quem os construiu:** a do B para o chat D e a do C para o chat A.
+  - Sementes 28101…28505, K = 4.
+  - Adendos já conferidos (adendo 1 do plano da comparação).
+  - Teto de vidas conferido: o A gastou 1260 na K2, contadas nos logs de vida de `artifacts_v2_calibracao_conjunta/`.
 ## 2026-10-06 — Validação única do experimento maior (V1): interpretações, registradas antes da run
 
-O adendo 2 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` (opção A do Matheus, 2026-10-06) foi commitado antes deste registro e de qualquer
-vida da validação. Orquestrador: `experiments/run_v2_experimento_maior.py`, com a chave nova `"blocos": true`. Config:
+Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, que está no `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`
+(#182; o que este branch tinha escrito com o mesmo conteúdo saiu na fusão com a main). Orquestrador: `experiments/run_v2_experimento_maior.py`, com a chave nova `"blocos": true`. Config:
 `experiments/configs/v2_experimento_maior/validacao.json`, com 30 unidades derivadas das bases 15101…15505 (K = 6).
 - **Os blocos** (seção 4 do plano da calibração conjunta) rodam em runs próprias da bancada, nas mesmas unidades:
   - o P2a nos três mundos;
@@ -2533,3 +2582,12 @@ vida da validação. Orquestrador: `experiments/run_v2_experimento_maior.py`, co
 - **Ablações:** a peça tirada menos o P1 completo, na taxa final no descasado e depois da troca no mutável. São descritivas, fora de
   qualquer Holm, com IC 95% e o p unilateral.
 - **N5, descritivo:** P2a − P2 no descasado, nos consumos até a metade e na taxa no início e no final.
+- **Uma run nas sementes de validação começou e foi parada** (2026-10-06, das 09:49 às 10:12, commit `1140fc9`). Ela foi lançada pela ordem
+  "rode a validação" do Matheus, antes da tarefa V1, que manda esperar o sinal verde do coordenador por causa dos adendos do
+  `docs/PREDICOES_V2.md`. Foi parada assim que a tarefa chegou.
+  - O que ela gerou: só as vidas do bloco principal (720: 30 unidades × 24, os logs e os estados internos). Os blocos ainda não tinham
+    rodado e as medidas ainda não tinham sido calculadas: nenhum `medidas.json`, `contrastes.json`, `resumo.json` ou `blocos.json` existia.
+  - **Nada foi lido** (só a contagem de arquivos) e tudo foi apagado.
+  - Uma primeira tentativa às 09:47 (20 arquivos) foi parada em segundos pelo mesmo motivo de execução e também apagada sem leitura.
+  - Se as sementes 15101…15505 continuam valendo para a validação única é decisão do coordenador e do Matheus. Nenhum número delas foi
+    visto, então nada pôde puxar uma escolha.

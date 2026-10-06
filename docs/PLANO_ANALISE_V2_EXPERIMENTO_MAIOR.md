@@ -337,56 +337,39 @@ chave) e calibrado **uma vez**, nas sementes 14101…14505; a validação é **u
 - O plano da calibração conjunta (quais parâmetros, em que grade, com que regra de escolha, e o N do adendo de tamanho de amostra)
   é a tarefa K1 (`docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md`) e entra antes de qualquer run.
 
-## Adendo 2 (2026-10-06, depois da calibração e antes da validação): o tamanho da amostra (seção 7.3)
+## Adendo 2 (2026-10-06, antes da validação): o N e o Δ do P3 na escala da medida (opção A)
 
-A calibração conjunta (K2) rodou uma vez nas sementes 14101…14505, K = 4, 20 unidades (`docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md`,
-`artifacts_v2_calibracao_conjunta/`). **Decisão do Matheus (2026-10-06): opção A.** Este adendo é commitado antes de qualquer vida da
-validação, e nada dele muda depois de ver a validação.
+Decisão do Matheus (2026-10-06), sobre o resultado da calibração conjunta (`docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md`, PR #181).
 
-**O aprendiz** (cérebro A montado, `"montagem": "completa"`, ponto T3, K4 ligado):
+**O problema.** A seção 5.3 do `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` aplicava a todos os primários o Δ da regra 6.3, que está em
+**taxa**: 0,199 (`artifacts_v2_calibracao_conjunta/adendo.json`). Mas o contraste `p3_consumos` se mede em **consumos**. Com esse Δ, o N
+saía 191.815 unidades, cerca de 28.760 h. O erro é de escala do plano, não de variância.
 
-| parâmetro | valor | etapa e regra | fechou? |
-|---|---|---|---|
-| `g` (ganho da memória) | 512 (S/2) | A1: menor `g` com IC 95% inferior da fração decidida pela memória > 0,069 | sim |
-| `w0_pedido` | 256 (S/4) | A2: reserva (nenhum conflito na `fome_moderada` em nenhum ponto) | não |
-| ganho do P1 | 4 | B: reserva (todo ganho com vida no teto; o de menos vidas no teto) | não |
-| `w0_info` | 256 (S/4) | C: menor `w0_info` com IC 95% inferior da fração decidida pela informação > 0,069 | sim |
+**O que muda (opção A).** Os números vêm de `artifacts_v2_calibracao_conjunta/adendo_opcao_a.json` e foram calculados das 20 unidades da
+calibração.
 
-**Δ por contraste (opção A).** A regra da seção 6.3 vale como está para as medidas em taxa: **Δ = 0,1986** (metade da `taxa_fruta_ruim`
-final do P0 no descasado na calibração, 0,3973). O `p3_consumos` é medido em consumos e recebe um Δ na escala dele, pela mesma
-convenção de "metade": **Δ_p3 = 17,5 consumos**, a metade dos consumos até a metade do P1 no descasado na calibração (média 35,0; 3 de 20
-vidas censuradas). Os Δ dos blocos, pelas regras dos planos deles: **Δ_N6 = 0,1935** e **Δ_N7 = 0,2023**.
+- **O Δ de cada primário fica na escala da sua medida.** O do P3 passa a ser 17,5 consumos, pela mesma convenção de "metade": metade dos
+  consumos do P1 no descasado (35,0). Os outros cinco primários ficam com o Δ 0,199 de antes.
+- **O N vem da simulação de poder, não da fórmula.** É o maior N simulado que dá poder ≥ 0,8 entre os seis primários. Na calibração, a
+  fórmula normal era otimista no piso de 5 unidades, onde o poder simulado de três primários ficou entre 0,73 e 0,77.
+- **N = 30 unidades** (K = 6 por base, nas bases 15101…15505), cerca de 4,5 h. Fica abaixo do teto de 12 h (K-10).
 
-**O N (opção A): o maior N com poder simulado ≥ 0,8** (bootstrap das 20 unidades centradas no Δ, teste t pareado unilateral, α/6, 2000
-réplicas), em passos de 5. A fórmula da seção 7.2 continua reportada, mas no N pequeno ela é otimista e não é ela que decide.
+**Poder simulado com N = 30:**
+- **primários:** p1_casado, p2_descasado, p2_mutavel, p4a_piora e p4b_recupera com 1,0; p3_consumos com 0,862;
+- **secundários com pouco poder** (abaixo de 0,5, lidos como subpotenciados, pela seção 5.3): G-MARCA (0,34) e G-MARCA-E (0,38), do N7;
+- os demais secundários (N6, G-EROSAO e as ablações) ficam com poder 1,0.
 
-| contraste | σ_d | Δ | N (fórmula) | N (simulação) | poder com N = 30 (simulado) |
-|---|---|---|---|---|---|
-| p1_casado | 0,061 | 0,199 | 5 | 5 | 1,00 |
-| p2_descasado | 0,092 | 0,199 | 5 | 10 | 1,00 |
-| p2_mutavel | 0,097 | 0,199 | 5 | 10 | 1,00 |
-| p3_consumos | 26,9 | 17,5 | 25 | **30** | 0,86 |
-| p4a_piora | 0,035 | 0,199 | 5 | 5 | 1,00 |
-| p4b_recupera | 0,095 | 0,199 | 5 | 10 | 1,00 |
+**Fica igual:**
+- as predições 1 a 5;
+- os seis contrastes primários e o Holm;
+- a equivalência da predição 5;
+- a regra de decisão;
+- o ponto do cérebro A: `g` S/2, `w0_pedido` S/4, ganho 4 e `w0_info` S/4 (`artifacts_v2_calibracao_conjunta/escolha.json`).
 
-- **N da validação = 30 unidades**, K = 6 por base, bases 15101, 15202, 15303, 15404 e 15505 (`unidades_derivadas`, prefixo
-  `experimento-maior` da regra E3).
-- **Tempo estimado:** 44 vidas por unidade × 30 × 12,3 s ≈ **4,5 h**, dentro do teto de 12 h (K-10).
-- **A equivalência da predição 5** (IC 90% dentro de ±Δ) pede N 5 pela fórmula: cabe no N escolhido.
+**Registrado ao lado, sem mudar regra:**
+- **`w0_pedido`** não fechou na calibração (nenhum conflito na `fome_moderada`) e ficou pela reserva. O bloco N7 pode sair pouco testado.
+- **O ganho do P1** também não fechou: todo ponto teve vida no teto, e a razão da deriva foi 2,72. O aprendizado ainda não assentou aos
+  14 dias, o que reforça o risco "inconclusivo por duração" da predição 2.
 
-**Poder dos secundários com N = 30** (aproximação normal; α/3 nas famílias do N6 e do N7, α = 0,05 nas ablações):
-
-| contraste | família | poder |
-|---|---|---|
-| G-CAUSAL, G-REC, G-EMB | N6 | 1,00 |
-| G-EROSAO | N7 | 1,00 |
-| **G-MARCA** | N7 | **0,34 (subpotenciado)** |
-| **G-MARCA-E** | N7 | **0,38 (subpotenciado)** |
-| ablações da memória e dos canais (descasado e mutável) | ablações | 1,00 |
-
-Um resultado nulo de um contraste subpotenciado não refuta nada (seção 5.3.5 do plano da calibração).
-
-**O que roda na validação:** os 44 por unidade da seção 4 do plano da calibração conjunta.
-- O "só cuidado" acoplado é o de sempre deste plano: o próprio braço no registro sem o ensino (`P2<P2:sem_ensino`, `P2e<P2e:sem_ensino`,
-  `P3<P3:sem_ensino`), como o orquestrador e a seção 5.1 o leem. A tabela da seção 4 do plano da calibração escrevia `P0<P2:sem_ensino`.
-- O resto do plano não muda.
+**O que fica em aberto antes da run.** Os adendos de literatura (`docs/PREDICOES_V2.md`, em preparação) podem acrescentar a medida em
+pelo menos três durações de vida. A validação **não roda** até eles serem registrados ou dispensados pelo Matheus.
