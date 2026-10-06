@@ -1,0 +1,1892 @@
+{
+ "T3k_completa|atencioso-M0~descasado@101": {
+  "interacoes": 64,
+  "politica": "2ec917d2559706d7ce0bf2f9f01e464a4076936b0cc67d025851fb42e791e7fc",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_completa|atencioso-M0~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "57869944027297e45b114dc30c0328ec5ef72ac0639099f4e16c1a2882ef8f6f",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_completa|atencioso-M0~mutavel@101": {
+  "interacoes": 64,
+  "politica": "75661dc7b6ded16e758ed016c05fa0cb055d41dc871fe463527884b58279f02c",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_completa|atencioso-M0~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "1c6dced1c8b5c9ca46b28c3bf7a0003f9939cce3e226f6b9f108b11b9fc5802b",
+  "resumo": "ee52123cad33f1a64c1f5c7a6a0858ea0b7baba713a69b5560a6de56b8db8c87"
+ },
+ "T3k_completa|atencioso-ME~descasado@101": {
+  "interacoes": 64,
+  "politica": "7cbd4de02f71de83db3ef5e6b8cfe42db902adfaa1cb9b1d082e8a4cb4c26ff6",
+  "resumo": "6732db50569a2b750127ed3b4e1c549fe9a1ce021a114e9b53c64a43a2972a9b"
+ },
+ "T3k_completa|atencioso-ME~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "0717777544ecbf2f526acd2bdeb6e80a3edaca89509438e42c70383c053d47d3",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_completa|atencioso-ME~mutavel@101": {
+  "interacoes": 64,
+  "politica": "0f1f8057cd3b91dd3d3044e795728d1e684c37dbe66c2dc1657212f05bf7728f",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_completa|atencioso-ME~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "e52a7903fa985ac92d9f7d1b17b6654c11d11ee8146d206cb8b559bc26bea564",
+  "resumo": "7e6b334f785bf6500d6dacf29af25d39303536da30a343a4919de82024b089d2"
+ },
+ "T3k_completa|atencioso-MR~descasado@101": {
+  "interacoes": 64,
+  "politica": "48d846b970d1ad8048a41abab57aa3138993d308c13faa96c1aa19c2ce726c7c",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_completa|atencioso-MR~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "dbaf96e116813075e9513edeb078185077cdbbbf035054dfe6503b44c94107c5",
+  "resumo": "3f2ab8c9c6e03ac35d568b017780183d381e37d77dc7a1b941ff252d6642e16d"
+ },
+ "T3k_completa|atencioso-MR~mutavel@101": {
+  "interacoes": 64,
+  "politica": "70114a82d2a553aad14f551afa655a9fbdff825f42e9516c23e21e3d98a019b8",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_completa|atencioso-MR~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "3e74ed111711d05c81322c28a33ea25c90082cd33f42de5ae4ea7d8b850c45c8",
+  "resumo": "492586bc3c3042bbedcdf8adb7e2bb4d49250c7484364a735c0208cdeed35016"
+ },
+ "T3k_completa|atencioso-MT~descasado@101": {
+  "interacoes": 64,
+  "politica": "582f879ff9aec94ec2f5dae622390126563f3193827f374fb52bc69c28fe6be0",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_completa|atencioso-MT~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "ac036cd802689cc430b6933dbe7eb4ff1537346e66bdd3c2854d212482051638",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_completa|atencioso-MT~mutavel@101": {
+  "interacoes": 64,
+  "politica": "ab56fd81e7da39eda13dbe1047e59603ba59477aa20ba40868d76512bf9b9baf",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_completa|atencioso-MT~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "0197653041eb725cb3637374f34e398f958d4cd04100f08ba43ce66f8064b787",
+  "resumo": "ee52123cad33f1a64c1f5c7a6a0858ea0b7baba713a69b5560a6de56b8db8c87"
+ },
+ "T3k_completa|atencioso-P0+ped~descasado@101": {
+  "interacoes": 64,
+  "politica": "e3b2381a9f2ee13cdae6ab10111bc52be82c4ff05c0867e3a8e2384a69894466",
+  "resumo": "d0fd968e432b4211eacc37b0a3e81344ad611274596c062876313ec06c4ad5b3"
+ },
+ "T3k_completa|atencioso-P0+ped~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "63688d7e7a783c503d391d6f7b8f98abfe06f5eb9474aa41682ca3c6f2f1a889",
+  "resumo": "c3ade6b97aeccb9883f958b4a5b6bbcfbf3e300f90e7d1f9c9b275f586ac9499"
+ },
+ "T3k_completa|atencioso-P0+ped~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "aad2b48ba2f2b324a8f9e45da5d4f90018b407b74358540d4ee9937f61b80c3b",
+  "resumo": "b8b81cb96f064706ef1fbce27ca641ab6ca1374846ded86479127af7e9d16527"
+ },
+ "T3k_completa|atencioso-P0+ped~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "d6a26ae2289f33397cbcf7eed13eaffe1ab6550f3fe5a86d9d372fcec29216cc",
+  "resumo": "4c81fe1cc1f7d4ee9bfc3bfd03abc737db7a23106fdd2eb62ea5173b00dc44ee"
+ },
+ "T3k_completa|atencioso-P0@101": {
+  "interacoes": 64,
+  "politica": "6ec59ffde1a216a8fa1a33c6dc81355c880c23bc341d80b8f11a70d198c9c76f",
+  "resumo": "709436b4a76ca3c3f041c0df5f62ef990f1bba4e0fe5c49d2166a2bdca91d83d"
+ },
+ "T3k_completa|atencioso-P0~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "3c031777ea41ae49ec8875d6aa55fd59e8b123a8b74f2fdcd1f3c77c6552deb2",
+  "resumo": "1d3f1515b0886001d0bc0199b044150f5e4b4b060311c47f37a04ed68ecea4e7"
+ },
+ "T3k_completa|atencioso-P0~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "7a103211d47bf8c684ab6a3fe3548394fa27b1e75ad7338867ef51e685c0ce3c",
+  "resumo": "23cfacbecc7e2bf060b4d0cadd69879cb0387c357722c31d4357d3ab6ba94ca3"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~casado_frutas@101": {
+  "interacoes": 15,
+  "politica": "da5c41253da3c93f5f0db375e87adc6f814af0039a9127801c07b67ff2341058",
+  "resumo": "6e95673a3e022dc10a59715030bd29fb12f9a2efc33af3f72bf78b74d118243e"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~casado_frutas~g202@202": {
+  "interacoes": 21,
+  "politica": "3f44f804bf7a858de2e3bb0841aecc4ca7705541997a98bc5cdb4ec42ef9028c",
+  "resumo": "6bc22050f30ea7d6d1319334fbde74e2e9faea92411b1e1d52f71066352f26dd"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~descasado@101": {
+  "interacoes": 16,
+  "politica": "cc01fdc5c0e49d7508cdecd4252ccc65bd8965291847c086aa6a35a9809b71d1",
+  "resumo": "4dd72518cdbcaf468354aa8fd91185f858790972fe41f0caa685eec2449fdbd1"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~descasado~g202@202": {
+  "interacoes": 19,
+  "politica": "7d1b64f7a75f86785a4f55ba0d2578b95a330dba8dfe864d5cf4cc1088e0f946",
+  "resumo": "e30d0d4cdaa8539fe20d696dca723925b04fdada55caeed6866c2a58bd60422e"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~iguais_frutas@101": {
+  "interacoes": 18,
+  "politica": "b4b87b2e822d413747f070f109e10e35f3eafe16063a436a78bdb8edca0cf149",
+  "resumo": "ed5a311895fd488044e95386e0948016aa6affb6965d46b8cb4649306ba727a3"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 24,
+  "politica": "c8a7182e20d77517f0b3022d5af3d390ce8807a3f8dea558905c2c5e9b1015de",
+  "resumo": "5392811273ec8c8b0ded31e15546e7cdeb8c9897d2fb71ebd479564005a28529"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~mutavel@101": {
+  "interacoes": 16,
+  "politica": "6418bf63a47c7d4d7d77f3cff2a43a746423afff3fb06a6c727195e6362381b1",
+  "resumo": "b9ed65859e0293ca2f719236c18183cf80e8451cc324dedb9ef6af3b03b7fa74"
+ },
+ "T3k_completa|atencioso-P0~de-P2-sem_ensino~mutavel~g202@202": {
+  "interacoes": 19,
+  "politica": "a044695dbd0d47e37ecac113efe0151680243a3693a711051ee900e7b4d2a11e",
+  "resumo": "2668fe9b826d68c9660211575b0b0baef0695899ea9c3d709a4f678858a336f1"
+ },
+ "T3k_completa|atencioso-P0~de-P3+ped-sem_ensino~descasado@101": {
+  "interacoes": 22,
+  "politica": "0e58d614bb5a58b7fe3d82a324a7c1627a8f4bc3e4bd1bf1fc6e259645e7fb1a",
+  "resumo": "62faadba0329d5e0f66425c99a52dcfe93da420dfe86cfa77fe030cdb71534d1"
+ },
+ "T3k_completa|atencioso-P0~de-P3+ped-sem_ensino~descasado~g202@202": {
+  "interacoes": 21,
+  "politica": "a329fcd91cf7822eb29210f0a796486c0faf35a50cd25f20c48447c1af928724",
+  "resumo": "e0ac0bfa67962eec5e0542728f0c802280fd6b5aa9bf17299792ecfdccb64f13"
+ },
+ "T3k_completa|atencioso-P0~de-P3+ped-sem_ensino~iguais_frutas@101": {
+  "interacoes": 17,
+  "politica": "00164c0fda78d98c25da3a163cf14933b065d4737ef93ffe4fa4b81f5480af6a",
+  "resumo": "4f952b6aea6868ce11412c548ccf40140c736fb83bc88be7e5a69997064e8fbd"
+ },
+ "T3k_completa|atencioso-P0~de-P3+ped-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 20,
+  "politica": "111c7c4cfcae3728f6a5b96185e9bdd4786227c67d782794c3752239f935f27a",
+  "resumo": "31ac8bfe1f0a089808763761f866f2784cd43b4e4848cb0002fe7d11136b0a72"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~casado_frutas@101": {
+  "interacoes": 18,
+  "politica": "eb8f138b98138c5c3bdab50cd051dbb345673a9cb2ad64d496d9494fde0f6339",
+  "resumo": "79de2de16418428163c1945439d278956546b7e0cb3e141261b42a30bd8fa297"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~casado_frutas~g202@202": {
+  "interacoes": 20,
+  "politica": "bf0b27826b44b8c8925e5688ae19207daaf1f3e1e8c715c20d6f27d3a61badae",
+  "resumo": "cdeae2286bb7b0847f67f9094215d0414e312b9dca1e4d13370e368b1770b27a"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~descasado@101": {
+  "interacoes": 17,
+  "politica": "225d9e63e5fa453c854a786fc6d9649c1443962594dcd282f2233d0f308647c5",
+  "resumo": "2fb2a967cb4f587109b68da94728e562255cff2866bd9c62a99f7b1d8cc0c7ea"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~descasado~g202@202": {
+  "interacoes": 21,
+  "politica": "9c203dc74f26d52fb4375631970ab72b4b0a52d4b1431f5df69797010da1b81f",
+  "resumo": "9f9b8c143639080c2e25bc8cd7b6100f9d69474a402351a9a63744fe559e7364"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~iguais_frutas@101": {
+  "interacoes": 18,
+  "politica": "5f762d4b7ed47b0208f05a8c32910c2e47310e061f8612e4bb9ac62e4cb8176f",
+  "resumo": "bbe1dff5e415fe0b895aa6718807ee1f2ab9175f1af9c8d4c1b75210ae8cafe2"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 21,
+  "politica": "665698cb915c77da0a32c0207cb4588f7785139c8788343e20240dc38e1d0b73",
+  "resumo": "e8141be2afbed52c5fbe3e192217317cec5c91ae59a56fe2f831203ef42cb521"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~mutavel@101": {
+  "interacoes": 17,
+  "politica": "b529a1b1265942a8c4f8ce84a03a885ec1bd92d85b18945deb5d9c89ccb8301a",
+  "resumo": "1db9db7b03e62ea8eb72a7325e322aa0a41572bce2e59f5486bc3bca9d4908b7"
+ },
+ "T3k_completa|atencioso-P0~de-P3-sem_ensino~mutavel~g202@202": {
+  "interacoes": 20,
+  "politica": "0a0c6cea6f3cb58951f0439f1847aa7efb06063e1ec6d88901ef0e1a157cca84",
+  "resumo": "81299fb9123661e9826a360dfd06e1144ea6765330799013e000ebda1dc21ece"
+ },
+ "T3k_completa|atencioso-P0~descasado@101": {
+  "interacoes": 64,
+  "politica": "24553dcefeadad6bc6e372f032e434c428ea52cbbc5ed33c7e172a7225bc10da",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_completa|atencioso-P0~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "3205fed32cc1ab27de24b9411d96b2795441db8fa8a224a3ab54e8f935fa0605",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_completa|atencioso-P0~g202@202": {
+  "interacoes": 64,
+  "politica": "898487689d79bd4140a23b16df35ebc3d0500e2bdfbcf68b312286b1e4606763",
+  "resumo": "ae2e03a56116e144ff32e78255ca2ab26d782d64107073cdf0b434784ea6577a"
+ },
+ "T3k_completa|atencioso-P0~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "24bfb90f6af748f3c209f08bd22cd4718d6611a5ed456f40dccc41817606fa18",
+  "resumo": "2ac69edac31e72846cb2a053f55f0c233533c9ed8cdbadc76c62cca3cc04b9e6"
+ },
+ "T3k_completa|atencioso-P0~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "a40ca8d6745957e5241c2e6d9bd4168a1a8392ec378b2480ffe4899dfea0edf7",
+  "resumo": "bdf8af7f10581f08b4b5a74c20ac217d9564ac20ad02a5a5c2ffbf30801d3d47"
+ },
+ "T3k_completa|atencioso-P0~mutavel@101": {
+  "interacoes": 64,
+  "politica": "a688df69725912cd25ca5260e62b1a73cd63f0dd4a22872f852f927ab63b0cf4",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_completa|atencioso-P0~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "3c009e3f8d248fbaa5f044cd58abdfc926c31c3c6033341fec613e5a8520b6e6",
+  "resumo": "ee52123cad33f1a64c1f5c7a6a0858ea0b7baba713a69b5560a6de56b8db8c87"
+ },
+ "T3k_completa|atencioso-P1+ped~descasado@101": {
+  "interacoes": 64,
+  "politica": "6ee36da7f3e7aadf26aea3be1a1a45345297cb3503d4651cf9416e977123dcd9",
+  "resumo": "5199649afdc2ee7990f3334939fc20b09320c235c16c328bf862d1d31cec5e5d"
+ },
+ "T3k_completa|atencioso-P1+ped~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "1512b17a67dc867e59ca9f6659565d0d35daece7a61104dc55c560be5c4ca62f",
+  "resumo": "94a8ad2f3ce0abe74f7a9d2b6f4ed6da9ad4095d6e9dc66d7fdce93c65d7eed8"
+ },
+ "T3k_completa|atencioso-P1+ped~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "163b84a868080b27b61f18e2ed6b304cf0db87d25b5975f8ba4beaa56509ff00",
+  "resumo": "31797292e07483ef36175688f456650bf9868dd455897bc63cd7f3cc222452b8"
+ },
+ "T3k_completa|atencioso-P1+ped~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "44ee9063eb8af03c5c4115f49ab3e45647d41caa8a9ccddae133da507352d989",
+  "resumo": "0a37c58cf32ea5aee983a537f32b35763b2576ac3d72a2185c044362423a7bac"
+ },
+ "T3k_completa|atencioso-P1@101": {
+  "interacoes": 64,
+  "politica": "d4e13779af2f93c8232450fdb37784ae18126a1342b14fb4e2645c54d0fc049c",
+  "resumo": "e2e5c37afa51b4250c2ee9c4f6ba5e24cde1a7a6c635607a0c891917bfd07552"
+ },
+ "T3k_completa|atencioso-P1c-can~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "dc5270adafcb756e25ecd327b73e4639808f274fee7322c4d8546da671c179d8",
+  "resumo": "d696f00143e16f704266f941417c6ac960380754565808e1dfceff1d2778c8cc"
+ },
+ "T3k_completa|atencioso-P1c-can~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "dd4ec2a81602cbdf597b9af2de56c2318126d7526d51fc05758d7a10cd73a71b",
+  "resumo": "bfc8289b8bfd847838c899ad45a76bece3262e99ffea4a895db8efe492b54c67"
+ },
+ "T3k_completa|atencioso-P1c-can~descasado@101": {
+  "interacoes": 64,
+  "politica": "c21de5f007556f78c8436d973a6b34e5a3cc5d799bce1d9fcfd103125eedbb87",
+  "resumo": "b14d9e6260cfb8d7418da05feb50e637a28343476ca86e69ce106d09b34bfd75"
+ },
+ "T3k_completa|atencioso-P1c-can~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "8eda03c6473d320a27dd1649ccfb4ce6c9c5613989e3b29d68a02d2d2dd6c531",
+  "resumo": "bc1e5911f8c7ac8539c1e1438e60679a4c4efc81cee748e17fcff72f8ccf8014"
+ },
+ "T3k_completa|atencioso-P1c-can~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "50e3b40df96e6b8b6ffc1935d45ce176e4d4da067e92e97051c62c2fe661f580",
+  "resumo": "88fe1b9b3b5677b23cc2504534070296eb418f824cce2ff32dd1f9c1ca2991ec"
+ },
+ "T3k_completa|atencioso-P1c-can~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "74c424e9f1e8df1de492cacc6b8d663495d95c5e5b0fc531a5753956af2cbc9d",
+  "resumo": "2679bc9393ccb8faf10886976240ced741570ea1f2492748c6880a290134661a"
+ },
+ "T3k_completa|atencioso-P1c-can~mutavel@101": {
+  "interacoes": 64,
+  "politica": "f64e995ea762d117784a4df3b0110ba7e621e3a08e3f32177e07f60560a6e214",
+  "resumo": "34d43a38639dcca2a074219a8a78c36a030ce1912271aec0236a8712c5bf3dbc"
+ },
+ "T3k_completa|atencioso-P1c-can~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "f974b90120ce6baae5665e29396ac55c039ab40772c663e69cfb7ff676d12d30",
+  "resumo": "50ea60e25b31f3f3a297a48f1b1b847a8a9ad49c6cb88f9ef55bbb6b7233bb79"
+ },
+ "T3k_completa|atencioso-P1c-mem~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "bbd04fa5d05a5b15d9186f2244f28ebb9e6edd66900e1c2df96259e0685de98f",
+  "resumo": "f583ada132f259424f5d435e5ce3c386ed0fe4935101aa0f822531b0ed4e151e"
+ },
+ "T3k_completa|atencioso-P1c-mem~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "8ed8b28c5b0f404f8d2b1536fbe2ce45c7e9b00bbc4fd8349cdd8b9c30bb9803",
+  "resumo": "8b2f9c876fb2b448307d6f5723ebb7b6d3081bdd120d89c323ef9d15fa2e1e25"
+ },
+ "T3k_completa|atencioso-P1c-mem~descasado@101": {
+  "interacoes": 64,
+  "politica": "ef58f37257f8d604207ed34df783e75d82d07e5722a96efbdf52da43683c9b4a",
+  "resumo": "637284948bc909dbaf2b87fd951012e6b01843b261cb9add2646646d2464340d"
+ },
+ "T3k_completa|atencioso-P1c-mem~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "809b872abc666ffccc205a01a3a5f87aae08060850bd35f873ef79c5a9c5d56e",
+  "resumo": "8b257b4fe0181ba2d39e094d6e93aa28a90f104f96c637a1411f644b9d3fe5b8"
+ },
+ "T3k_completa|atencioso-P1c-mem~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "55d3ce2b5211b1f54763d34b21dd7d492c3ef02bb9a36dd24e83af2379ec1c57",
+  "resumo": "f2eabec071ce332942c22e83474db21491af698cd1349baf7bc9ac334e30cb8c"
+ },
+ "T3k_completa|atencioso-P1c-mem~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "8afcd86ba1c33fac315c781282e62adbc493aee0c91b61d4730bce43a0f6d24a",
+  "resumo": "c22c9f09d509d9c686dd6093efa47fcae56e72fd0fc5b446f76ccfe967745621"
+ },
+ "T3k_completa|atencioso-P1c-mem~mutavel@101": {
+  "interacoes": 64,
+  "politica": "a0ad5a3de8192d30a22210f2947354d1927a89b0826518fe5dd74d078236ecd4",
+  "resumo": "3419ed54fa2fd8cc2d6ac7523fa2023649245d80eecf716b13956ba6d6817d70"
+ },
+ "T3k_completa|atencioso-P1c-mem~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "c98257876b7e83eb492196dc56880f56a77d87b8fb90b2b3752a14e39e24efd8",
+  "resumo": "83bc23d56af6432b9dd8d32ffb96df0dfbfe43bf9367feb48b7ccee0c8466afe"
+ },
+ "T3k_completa|atencioso-P1c~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "f3fb5adfd897d095488d65400226c2b401ab34cd3751e3cdd9c1b30ed1a0ce20",
+  "resumo": "f583ada132f259424f5d435e5ce3c386ed0fe4935101aa0f822531b0ed4e151e"
+ },
+ "T3k_completa|atencioso-P1c~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "89d9b02b2e623af8418a632df8c9376088b90b733ad9eba25291892b45e4bc07",
+  "resumo": "8b2f9c876fb2b448307d6f5723ebb7b6d3081bdd120d89c323ef9d15fa2e1e25"
+ },
+ "T3k_completa|atencioso-P1c~descasado@101": {
+  "interacoes": 64,
+  "politica": "def8b75ce61dd2cec3d82fc932c415fc27c30e8ebac4ec34a82e8cabbc5cf04a",
+  "resumo": "0d1c02a2b0ceb58aba3a3c1dab394b01da717df0c5cbb20e7ab17423430ed4e7"
+ },
+ "T3k_completa|atencioso-P1c~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "0633dc894527f91a7182645fb9ebd1b1390e1d08f0eb818386219faf0a2f9973",
+  "resumo": "bc1e5911f8c7ac8539c1e1438e60679a4c4efc81cee748e17fcff72f8ccf8014"
+ },
+ "T3k_completa|atencioso-P1c~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "251f0025040cfbe7b666b5c03577c60f7f4ec92ae3b7add28473b0225c6011ab",
+  "resumo": "f2eabec071ce332942c22e83474db21491af698cd1349baf7bc9ac334e30cb8c"
+ },
+ "T3k_completa|atencioso-P1c~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "3f8b28fef31e7042407d34c0362895189c390a709f36ea3010d3abadcc2102fc",
+  "resumo": "c22c9f09d509d9c686dd6093efa47fcae56e72fd0fc5b446f76ccfe967745621"
+ },
+ "T3k_completa|atencioso-P1c~mutavel@101": {
+  "interacoes": 64,
+  "politica": "a8aaa146833aa9a389d8214fe3a2e233dcfa59e8133381fb3211a8e5f0f2ecb9",
+  "resumo": "3419ed54fa2fd8cc2d6ac7523fa2023649245d80eecf716b13956ba6d6817d70"
+ },
+ "T3k_completa|atencioso-P1c~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "74807c03a6dd9eca74a7a62cbf9edde0fe4d77bd8c02c463cda09c216c60e853",
+  "resumo": "83bc23d56af6432b9dd8d32ffb96df0dfbfe43bf9367feb48b7ccee0c8466afe"
+ },
+ "T3k_completa|atencioso-P1~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "83e8f5a04b746eea2e03911bd82c52d852c02059970fdb548eb5900c1021e553",
+  "resumo": "f583ada132f259424f5d435e5ce3c386ed0fe4935101aa0f822531b0ed4e151e"
+ },
+ "T3k_completa|atencioso-P1~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "5ece7d28b424338b7d0d7cf9d24cc991778c5910b94d778248bc8071051f55f3",
+  "resumo": "8b2f9c876fb2b448307d6f5723ebb7b6d3081bdd120d89c323ef9d15fa2e1e25"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~casado_frutas@101": {
+  "interacoes": 18,
+  "politica": "5ee43616aab1bef7080dc783a225d875071f3e85160be4d9df5326bfd13ece8a",
+  "resumo": "001fe2a5adea655abc4c267911aaef18e3dd92ad653d5b7103e99779aefd61da"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~casado_frutas~g202@202": {
+  "interacoes": 20,
+  "politica": "4adaf851aac9a117288420e0834dd6affe835255fd3ae78df2ff80af1ab2e60e",
+  "resumo": "f7e29adab60e3450d133bae126f7edf7a89a4ba9d47832e74617bc72065f5f43"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~descasado@101": {
+  "interacoes": 17,
+  "politica": "0abdfcac9b7c35ab997b0fe4d4cabff516ed7a00e44c0bdf54905fa881224619",
+  "resumo": "ed1ae1d80aaac6d173d63fe67ae97a36c9fbd5eefd9420a57c1fbcbb4da24e4e"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~descasado~g202@202": {
+  "interacoes": 21,
+  "politica": "a81a8e6fabaac01661870a8bada500f93eb4b60370cb60209c5f7eed3928dcd5",
+  "resumo": "fa560bc836f82c6aebcdcdfc109be1b13bbf56bbf407b6918a53cc5d22e175af"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~iguais_frutas@101": {
+  "interacoes": 18,
+  "politica": "803b5a04e23fa0a7499ec47aaef4d1a587698c2a355f86ed9dd2fb3e24bd8fa6",
+  "resumo": "7f84e484b8f267d50c67106131abe4c36f07cd90463f1cb0481ee9d5d5a793ce"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~iguais_frutas~g202@202": {
+  "interacoes": 21,
+  "politica": "c308efc8c6110165f5f8483ac34a7ccb0616066284747de1f5c0b01dca79d479",
+  "resumo": "176ac436b2dd3df0f1f265b887ba13975aea90a6f8ef65cddc0ca88c8715f4db"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~mutavel@101": {
+  "interacoes": 17,
+  "politica": "c9abc94770ed4d18185ab4d7503e29b6bca9b5d9b43d58b3d5ee07336688e70a",
+  "resumo": "fa77fb337b745567da6a721a99ffe8f44eab04feb85c6e03c00163911022a9d2"
+ },
+ "T3k_completa|atencioso-P1~de-P3-sem_sinais~mutavel~g202@202": {
+  "interacoes": 20,
+  "politica": "3750753b487b42df55a92a250095a7de7ea2758ed1b44cb659366806516f0102",
+  "resumo": "9c71db6f7e9c183dc345a9a634d6e63cd5a42c581f9b2739e8cf3e50883b9a38"
+ },
+ "T3k_completa|atencioso-P1~descasado@101": {
+  "interacoes": 64,
+  "politica": "388830c84e82b8b278919f2b21e62ad1a34d356add8f3885bbc829bfb75f2f9c",
+  "resumo": "0d1c02a2b0ceb58aba3a3c1dab394b01da717df0c5cbb20e7ab17423430ed4e7"
+ },
+ "T3k_completa|atencioso-P1~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "2d12ce5cdc4bec4d7d11620aa39c26b662468bb7eb7ed79f45ba5e9b3c3640bd",
+  "resumo": "bc1e5911f8c7ac8539c1e1438e60679a4c4efc81cee748e17fcff72f8ccf8014"
+ },
+ "T3k_completa|atencioso-P1~g202@202": {
+  "interacoes": 64,
+  "politica": "d9b2fd25806ea9fcb76660761868d4c8f3f3a4c8c2cb2c3b151d50e24d86b54d",
+  "resumo": "a4deb0aa92a40d085a4de9241b2a369663637285cf4cb280d3880bdc789095ff"
+ },
+ "T3k_completa|atencioso-P1~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "86d0242c7547e9ebcbcb238a667b844a3702826d12fd4545f3b2d0aeb807410f",
+  "resumo": "f2eabec071ce332942c22e83474db21491af698cd1349baf7bc9ac334e30cb8c"
+ },
+ "T3k_completa|atencioso-P1~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "f5d979d2911002ef8ea332115ad576efb384f8a22cc4d4867165c93cc4a5529a",
+  "resumo": "c22c9f09d509d9c686dd6093efa47fcae56e72fd0fc5b446f76ccfe967745621"
+ },
+ "T3k_completa|atencioso-P1~mutavel@101": {
+  "interacoes": 64,
+  "politica": "683f39c2e198ce940908ea2d9dc5ea48faec4ad968ae0c16a5e2f25e8f6dfc52",
+  "resumo": "3419ed54fa2fd8cc2d6ac7523fa2023649245d80eecf716b13956ba6d6817d70"
+ },
+ "T3k_completa|atencioso-P1~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "0b2ff34e926359e056c9d994b8ff151f7edb4b0b6bafcd811274912ef986c658",
+  "resumo": "83bc23d56af6432b9dd8d32ffb96df0dfbfe43bf9367feb48b7ccee0c8466afe"
+ },
+ "T3k_completa|atencioso-P2a~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "58277e87e3d685c3445593ce9acbc209b52256b62aea3190ed6d49ea7e606774",
+  "resumo": "80e531d650d927d485dba703f28c609ed942afc4359a313e7331b57a09d47c3e"
+ },
+ "T3k_completa|atencioso-P2a~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "9f42281f389de60f21dc7cfb36576db13390c58d065cf2a2f575d033387cbdd3",
+  "resumo": "58252ed440a1f2df2e139babedeea7c2e04291942566fc24a1d7f36221392031"
+ },
+ "T3k_completa|atencioso-P2a~descasado@101": {
+  "interacoes": 64,
+  "politica": "7c039d873c34f2495267ebd9aa46bef0fc1e4fbc4458a24fd7a19d4f05e72813",
+  "resumo": "6bbf6d7acb1e1560d7f39fafc4d266f366532f72e718272e7708e30f3dee4288"
+ },
+ "T3k_completa|atencioso-P2a~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "81f39e7ec9ad23f7ec1aef366874ba6ecb4641ea51ff979a2f6aabc8686f5296",
+  "resumo": "c2cfd809f326fc7684928d07520e19eb66defa980de13fe0b1725217fda71566"
+ },
+ "T3k_completa|atencioso-P2a~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "a5f90c8e9e952e4a889f6a0dbfdac4160d147b7b8f21349c42ceb14ab11f1d17",
+  "resumo": "f9cddea584ec3e3c4d363ab7bb74d0146c6ae0b55cc87504681954f76af94d72"
+ },
+ "T3k_completa|atencioso-P2a~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "b6ea26103f3d1f87696baf5a0af039f94e023b4708a66fcbdc669151b5de67c4",
+  "resumo": "428aec40f23a0a1c15f874bedf87d495fbc247015d1e0b7c664d299329cd9f08"
+ },
+ "T3k_completa|atencioso-P2a~mutavel@101": {
+  "interacoes": 64,
+  "politica": "f6cdc754b608b8305c0d4c672ba2363eb0a9e1bb98de67f3718ba39fb46ecfd4",
+  "resumo": "9b015b3eabcd6313aad50c25ab3454bac2be67cd32c275b9f572400e89571560"
+ },
+ "T3k_completa|atencioso-P2a~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "aeb2ff246b384088c98a95d09aa195e6295f8f2358f88c7c4135ef00f20024ed",
+  "resumo": "9bf71529a50ed68dbe6a7b3b94b68f3026e94b6442855c5c28fe777b19ede6fd"
+ },
+ "T3k_completa|atencioso-P2e~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "103d53d3cbcc66daf3e17a1c1d0c91009abdaad7cb1356a4de7376a80e65edb4",
+  "resumo": "b643f323acf36d1a928db8fcc0cca3b8a9c2a36dc70374ec66ba1622a610a67f"
+ },
+ "T3k_completa|atencioso-P2e~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "7141f9747e010084809a5ab94de6e7e793fbd62dd329d97dc5fad9237e462dfb",
+  "resumo": "3d9776dbc2c2083193963ece589760c5e8a15deb2b85f2159955869c282e10cb"
+ },
+ "T3k_completa|atencioso-P2e~descasado@101": {
+  "interacoes": 64,
+  "politica": "72a53ff148b6f64c7f080d47f3cea4df1f07619b3cf2fe05c0b92586def65e51",
+  "resumo": "9a73a551224b153a165ede6fbad4e58106d4b0dc5dc38a8c22e1d0b83119985a"
+ },
+ "T3k_completa|atencioso-P2e~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "58148ae81e885884c0bb4bbd70a8a4877570ffe3beb54a395b04b0d43af501cd",
+  "resumo": "56d94fd0af3e37b52cb8e3ac5b772aa40d1d52db99f8493f562cdc094cade119"
+ },
+ "T3k_completa|atencioso-P2e~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "29e4cb5a044cf08ac88737e7f96ceecccfe15e6415bc2f4e18a42358ea2cd094",
+  "resumo": "f84dc7a7b69ef4918afd94349fbd83561523f36f4cc767f9e9171a41c05d970d"
+ },
+ "T3k_completa|atencioso-P2e~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "e801af87131f21ba92ecb8926fdedd58f130b93926557f254cd27d6465c659f3",
+  "resumo": "04f7c2ef406733ddeea0e0072cc5da956fcf0190a5e68025de1e3f919e5984e5"
+ },
+ "T3k_completa|atencioso-P2e~mutavel@101": {
+  "interacoes": 64,
+  "politica": "f9b8ce03573525779fc42ef8b3e521332e0221a7e34d6ae6a1d3a82548ed4e39",
+  "resumo": "9bb4507b5d5e21f56ed5837730a09b47c3b6e94c0faf3af51d95c3190cd4b410"
+ },
+ "T3k_completa|atencioso-P2e~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "4009c991c078b8ca181489be10b958c6670f11e09418878a6abb58b12fce9f3b",
+  "resumo": "181dff25a73d36851ca4d66bf4ea08dc50580a52e1bce81eaecdcc15a289e528"
+ },
+ "T3k_completa|atencioso-P2~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "a8c23d3ebf1f1cd29cd9dd4e25740c1a047ee5c87110607670d917a5047a9be0",
+  "resumo": "66b95a942cf134ef5ae27796ce5a300a78fc8d7f52acb646910c8e9e11d0944d"
+ },
+ "T3k_completa|atencioso-P2~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "0b7a9d5d9ececf7f403a9a4e21e26ef97e1963ee891cd915ba7b8e7ac75e1e53",
+  "resumo": "58a86879df8e14ae03513f29d2cc9ef09e4dad64bf0197de20e724f5ac5f8200"
+ },
+ "T3k_completa|atencioso-P2~descasado@101": {
+  "interacoes": 64,
+  "politica": "4cf21a18b8fadca4111347a084a83511b73e7ab16f5cd83f177ddb913d88e0b7",
+  "resumo": "934e60f6c3e5a36f6f1155ee9b4f4dd3bf0e3ccf81eb4ec9d7122da5b6f45ab3"
+ },
+ "T3k_completa|atencioso-P2~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "6ab8399ae9b62f234102d69bcadaea87e8415ee811908e06e83a94f5e9181ab8",
+  "resumo": "e71756ec0c65663472bfedf6adde8fa64832f17db3144c03063d911eaddc0986"
+ },
+ "T3k_completa|atencioso-P2~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "7c200ff06e93473ed925c3a4d5019c209874d1cb690060470043156c7c266d92",
+  "resumo": "6cb1821573de4cc95f48717314402ba51e24c91e61524a1559d07651132ba546"
+ },
+ "T3k_completa|atencioso-P2~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "ffab1168bccad50c9a64fc52992f5aa0b770cfff25f1a20aa2bdebb53778a9b9",
+  "resumo": "c957dafd4873d43bb40ffc5e29f74439ff82bd889464df32f9feecba9bb0fc05"
+ },
+ "T3k_completa|atencioso-P2~mutavel@101": {
+  "interacoes": 64,
+  "politica": "1af4d42b2c03ab2f3ec9edff039dd59793ab5defd97e46d20a7a037e67c56e91",
+  "resumo": "65d26d855386e1ee8235a43d7c65f77e206da294e1aa9738bf84e6d2ffb04656"
+ },
+ "T3k_completa|atencioso-P2~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "ae277abd20522cad94583ab99f9879826313d29d90aa8597ed8e13be4695c7f2",
+  "resumo": "130dc640b98d9140d48863b4a79114885241ec4cdf3c28705f01ca0cf6889cb3"
+ },
+ "T3k_completa|atencioso-P3+ped~de-P3+ped-nenhum~descasado@101": {
+  "interacoes": 64,
+  "politica": "6b788fea9e255f22bda4cb24150a1c030b4d1878f7e862fd5666c0a58d3f8a6d",
+  "resumo": "8490f89e4a75e88d8c74297d5176f35f76f8d6237c9c48203ca5a28569c0e575"
+ },
+ "T3k_completa|atencioso-P3+ped~de-P3+ped-nenhum~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "f5d8b2f6453e103b5b29f5da5f717d3ff90407786f677570e4636c268e7e94fb",
+  "resumo": "0d4522cbb44300139a56af22f560177c5e023cf6908f1b6a5fce83e3b85b7da6"
+ },
+ "T3k_completa|atencioso-P3+ped~de-P3+ped-nenhum~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "1c1616fcb605d0206ced98a94fea1ab0dc8632808cc97796c2ffc065d1e24e3c",
+  "resumo": "f6f4765701821b9d810632b61b4374f1e25402fcb06a3ff49a736f42b6177ba6"
+ },
+ "T3k_completa|atencioso-P3+ped~de-P3+ped-nenhum~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "85e903bfd0e613ccb0545867dc3ed9fa5b0254c047f1c7251ccd23a9fb78eed7",
+  "resumo": "9e5ae69f7c90fc8e2b4dc42f62535661d4ffddfb0b18b20b6019d35ccb6a56d1"
+ },
+ "T3k_completa|atencioso-P3+ped~descasado@101": {
+  "interacoes": 64,
+  "politica": "6b788fea9e255f22bda4cb24150a1c030b4d1878f7e862fd5666c0a58d3f8a6d",
+  "resumo": "8490f89e4a75e88d8c74297d5176f35f76f8d6237c9c48203ca5a28569c0e575"
+ },
+ "T3k_completa|atencioso-P3+ped~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "f5d8b2f6453e103b5b29f5da5f717d3ff90407786f677570e4636c268e7e94fb",
+  "resumo": "0d4522cbb44300139a56af22f560177c5e023cf6908f1b6a5fce83e3b85b7da6"
+ },
+ "T3k_completa|atencioso-P3+ped~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "1c1616fcb605d0206ced98a94fea1ab0dc8632808cc97796c2ffc065d1e24e3c",
+  "resumo": "f6f4765701821b9d810632b61b4374f1e25402fcb06a3ff49a736f42b6177ba6"
+ },
+ "T3k_completa|atencioso-P3+ped~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "85e903bfd0e613ccb0545867dc3ed9fa5b0254c047f1c7251ccd23a9fb78eed7",
+  "resumo": "9e5ae69f7c90fc8e2b4dc42f62535661d4ffddfb0b18b20b6019d35ccb6a56d1"
+ },
+ "T3k_completa|atencioso-P3@101": {
+  "interacoes": 64,
+  "politica": "a223e332f6b6521a62cfc9e1b4ef65a0bde6793121257b4310c2186ea4aeaf0d",
+  "resumo": "98bfb95028792d12f2459956c389fa31869224c42d181e48a1e313b39277e707"
+ },
+ "T3k_completa|atencioso-P3~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "4858da9eb85480336bb2380834677a6dcaac411fc4be4ceb2b19a622134d1ffc",
+  "resumo": "10771b4c23167d336a8ad31fd21a6125e5a9a743865c4de8a22cc39633a5a107"
+ },
+ "T3k_completa|atencioso-P3~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "cb809a8421f99adeeddb3a4f77f7c0e71af07557a9705e89e3ed5171a41e1ee5",
+  "resumo": "7c79bbb8e9d1006ced73b49d701ed876d64d3553b32ee0356f2e8933fa245cde"
+ },
+ "T3k_completa|atencioso-P3~descasado@101": {
+  "interacoes": 64,
+  "politica": "f0f6ca5ff065589c88c866220612da87fd346289d5aef7c6bdd5232f0e8df3cf",
+  "resumo": "4f094d4251553e2ea93e333cf8f44d677afd54f823ae2e56ec43f3ac485f7879"
+ },
+ "T3k_completa|atencioso-P3~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "5f6ce0b7e3a565f66750a24edd953bb6e350e8936541d95ad72613ab96e22348",
+  "resumo": "0ee71596492a4576042489615f928fea81fd2bfa4508cd317483649c8d16c8bb"
+ },
+ "T3k_completa|atencioso-P3~g202@202": {
+  "interacoes": 64,
+  "politica": "a5fdf2f5bc8c0b22439ca4c954e71783a8a57095e3b9387d00ade41960857695",
+  "resumo": "fe6a3a86af30e2b36b2054e50f8d9d1fdcf9ffc3d0c0eb492835faf0553984b2"
+ },
+ "T3k_completa|atencioso-P3~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "24a1cdc67d4969e34afe8c7fb9afb8ff8d0fcf511d9813509a765d8bb8c750ea",
+  "resumo": "e2fed6221b0c6a5964c4835943749a63773d75a6467c4bca866e6a25033254bf"
+ },
+ "T3k_completa|atencioso-P3~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "4450d853690bbb2dc4f1466ad32a31a61f0cfe5416eef25fc56808d329f446eb",
+  "resumo": "62e772da3111e08fb4d1fa9d8a57c937877d31fa54c27cd8a96c2de4684b8d92"
+ },
+ "T3k_completa|atencioso-P3~mutavel@101": {
+  "interacoes": 64,
+  "politica": "b600e0870cc5b89a28f9b5c4959086748111ecb6ae316e87fa03131cbbfc902f",
+  "resumo": "72b2edb0a48207daeb78e51a7bc70b7511ae5c24b7ba77d35557759a4d5cc1fa"
+ },
+ "T3k_completa|atencioso-P3~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "39507abc64693fa9a3934792d79f0ecfc74096ece86f270b29d33182790d221d",
+  "resumo": "d039448eb97dfdc514b3fabbbde848ff50144b6ab910fd898c1cfbce81fa7fae"
+ },
+ "T3k_simples|aleatorio-P0@101": {
+  "interacoes": 64,
+  "politica": "4f3beca92308c2da243e6716c3f4c5cde63b63f6e6258d475ea8c13c0563364b",
+  "resumo": "9da7941959964d9393ad43bddf65f2799f5016ac8a7c071e7976822fce48869c"
+ },
+ "T3k_simples|aleatorio-P0~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "2b1fddede8ac26b7010cb38e996bfcd633a6ed36e2fbcafe2c4939fdb97102a1",
+  "resumo": "0c8ece466937ff4bb2994998cadd0e837ca3596cc801bd58054e20c12310f293"
+ },
+ "T3k_simples|aleatorio-P0~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "ca7715b5e155a6da80f7413334277994ba5b5ac2d325acb8f6b48015bce4d3f0",
+  "resumo": "5b13a647d383d0148ac8faefeabe2b500522903cebe9b9a0914ca17a1f201cf5"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~casado_frutas@101": {
+  "interacoes": 48,
+  "politica": "196376ac5245c69233f0882fafb847d1274c8bee23bf2153e3ecea1348d1c6a5",
+  "resumo": "3d54cbc839f7fc069e46f647fef115d15915ca9849aee348ff367e77698bf670"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~casado_frutas~g202@202": {
+  "interacoes": 43,
+  "politica": "9c9b8133d4522b8b172827b39e0aa549d4d01fb81d66f7c3f4306ad0df17b3f2",
+  "resumo": "ced657fb0e95b289f684122a30901368a9f8189828ab323a628f6498416b22c4"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~descasado@101": {
+  "interacoes": 48,
+  "politica": "fe6ba72debcb7bcd7b6b46ccb7ec485688174a734fe097b2d804aa2a0575e936",
+  "resumo": "81d22b1465070cdda145135ba52ae9d83013310da03152c632bde9f1ba907dbd"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~descasado~g202@202": {
+  "interacoes": 43,
+  "politica": "9c1f3b928923c7125e88ffa199ea458c9784ce8c20a648f208506fb0812a8420",
+  "resumo": "5acea02e0b2bb20d495f4accb8202e2b3f5e0956189c22175df2a0440ca478a8"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~iguais_frutas@101": {
+  "interacoes": 48,
+  "politica": "e36a0b82a7045347baec4d2689f2442033e067b86b833506f072b0de81157f40",
+  "resumo": "44d54c4283bda6e53673f5d78b575bbe9304ab65ab972a2b403f389e68d93d41"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 43,
+  "politica": "7b79f77dbc6b5b59dd72663d6fa8a04c64e06682b8320b311d81ebdc69c1aac4",
+  "resumo": "8bd28aa4b1dc5e173217640b0ea960bb3ef6b345ee535619ac7bf83b220f41c0"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~mutavel@101": {
+  "interacoes": 48,
+  "politica": "fee05c511b10f3e64453a7f333fa19bf70809d8b956c5a732d9ea033701f68d3",
+  "resumo": "28dc2adfb83273c8616b017854858ad9eab10b025e5e6796e4978214029d452f"
+ },
+ "T3k_simples|aleatorio-P0~de-P2-sem_ensino~mutavel~g202@202": {
+  "interacoes": 43,
+  "politica": "babd16ede41436902f2f21dd90a506c115692dd3bca2f28deafaa2feff847894",
+  "resumo": "761b191d32c88e7fd23c9c0bd2db8258d2fe84e4efe170be3e80165d08a65b3f"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~casado_frutas@101": {
+  "interacoes": 48,
+  "politica": "196376ac5245c69233f0882fafb847d1274c8bee23bf2153e3ecea1348d1c6a5",
+  "resumo": "3d54cbc839f7fc069e46f647fef115d15915ca9849aee348ff367e77698bf670"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~casado_frutas~g202@202": {
+  "interacoes": 43,
+  "politica": "9c9b8133d4522b8b172827b39e0aa549d4d01fb81d66f7c3f4306ad0df17b3f2",
+  "resumo": "ced657fb0e95b289f684122a30901368a9f8189828ab323a628f6498416b22c4"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~descasado@101": {
+  "interacoes": 48,
+  "politica": "fe6ba72debcb7bcd7b6b46ccb7ec485688174a734fe097b2d804aa2a0575e936",
+  "resumo": "81d22b1465070cdda145135ba52ae9d83013310da03152c632bde9f1ba907dbd"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~descasado~g202@202": {
+  "interacoes": 43,
+  "politica": "9c1f3b928923c7125e88ffa199ea458c9784ce8c20a648f208506fb0812a8420",
+  "resumo": "5acea02e0b2bb20d495f4accb8202e2b3f5e0956189c22175df2a0440ca478a8"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~iguais_frutas@101": {
+  "interacoes": 48,
+  "politica": "e36a0b82a7045347baec4d2689f2442033e067b86b833506f072b0de81157f40",
+  "resumo": "44d54c4283bda6e53673f5d78b575bbe9304ab65ab972a2b403f389e68d93d41"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 43,
+  "politica": "7b79f77dbc6b5b59dd72663d6fa8a04c64e06682b8320b311d81ebdc69c1aac4",
+  "resumo": "8bd28aa4b1dc5e173217640b0ea960bb3ef6b345ee535619ac7bf83b220f41c0"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~mutavel@101": {
+  "interacoes": 48,
+  "politica": "fee05c511b10f3e64453a7f333fa19bf70809d8b956c5a732d9ea033701f68d3",
+  "resumo": "28dc2adfb83273c8616b017854858ad9eab10b025e5e6796e4978214029d452f"
+ },
+ "T3k_simples|aleatorio-P0~de-P3-sem_ensino~mutavel~g202@202": {
+  "interacoes": 43,
+  "politica": "babd16ede41436902f2f21dd90a506c115692dd3bca2f28deafaa2feff847894",
+  "resumo": "761b191d32c88e7fd23c9c0bd2db8258d2fe84e4efe170be3e80165d08a65b3f"
+ },
+ "T3k_simples|aleatorio-P0~descasado@101": {
+  "interacoes": 64,
+  "politica": "7ad60b32abf60191420e604d4081bce33507c740a9865e508b950d8a68e4bdad",
+  "resumo": "92f6afa3e9c41407f3e00151d04817751e7a092f6e610333e45452f2a2658200"
+ },
+ "T3k_simples|aleatorio-P0~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "198a1f577f48e3a517f56f786c6812e7fc8534f16d58a0a1755d3febbb83aece",
+  "resumo": "d75e4a89438eeac56dca57c99d05f428976e5cc585d9b8a7b8258505f44a4b12"
+ },
+ "T3k_simples|aleatorio-P0~g202@202": {
+  "interacoes": 64,
+  "politica": "ccc56538206ad90f86ccf013e0d2dc727b6949e8eb06207781ee3501dc9cb3e2",
+  "resumo": "1f0b7fd3ed6290928e53a7477dfc3fdb2b81eb4f5a352acf38c74d83bf79938b"
+ },
+ "T3k_simples|aleatorio-P0~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "df15a93e918c3ce53f5eb13621b665f67cea923020e7a99d0fad5557ff26b372",
+  "resumo": "ffc88fb4622e6c7663b5fa43f7ec857f8daa8b2d8db647e25b74cfddb5d12073"
+ },
+ "T3k_simples|aleatorio-P0~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "fe14109ab5e56f08eeee2cba111b492d3584940057b69fdd50935cfbbec71a7b",
+  "resumo": "ef212a4b3f68a75ed9739f8db894c5087d7a0154807cadcd983e72092784b27f"
+ },
+ "T3k_simples|aleatorio-P0~mutavel@101": {
+  "interacoes": 64,
+  "politica": "1abf39d0a97748a527a622618aa22b0299af2c35d970e57e5fe240cd0c895460",
+  "resumo": "a239cd2dcdb4bb8a716e9e078a89c4f478cbc8be1ca7d71a493d984b09e612b7"
+ },
+ "T3k_simples|aleatorio-P0~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "8fe8335b9ee65a954933039a09c0d7585247edea44b5374af9dca3160c9506bf",
+  "resumo": "78fdcb116d9618874c7717a425c8dda6cf98f888cc399ebf846abe2478a3f45e"
+ },
+ "T3k_simples|aleatorio-P1@101": {
+  "interacoes": 64,
+  "politica": "317470cc71225152d6504fa10471359acb588b806e2827904b47a5e6908e6b15",
+  "resumo": "9ca54f1e469cb1738c9a83f0534663fc9556b4d7dd4f7ca1ad31ce836b44848e"
+ },
+ "T3k_simples|aleatorio-P1c-can~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "319ecfb8dea756ced3adedf3aa1dbc87cd60f3a289f6ba3387d03d171bcf721c",
+  "resumo": "39a0f4fe51a81e5a70cd3dc207f313fce297e6158eb21ee74c1d85d3e56d2e1a"
+ },
+ "T3k_simples|aleatorio-P1c-can~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "e2d5f8d1d00de4fede2b5a7d05956bbe751fc12a9dc654e2445e4be082327323",
+  "resumo": "998bde68b633309517211679097d8c49d56b5ed8fba25111e622b43b852a18cf"
+ },
+ "T3k_simples|aleatorio-P1c-can~descasado@101": {
+  "interacoes": 64,
+  "politica": "69605a5187e76ac7db2c2861ea6f5788735d81c7be52836bdd115674785de201",
+  "resumo": "7c604fa111607fc6afe017e2708e45de3bc5f2eddbb208e94b0ad08970230926"
+ },
+ "T3k_simples|aleatorio-P1c-can~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "9ae47bb473f8a4833e2cc6efcabc0176f8070c5816e281e8ca332e98d9d75dc8",
+  "resumo": "ab7918bd9e2b0c34f606355bfd0ab3e3d53323f2f5e0426c276bcd6305eaae8f"
+ },
+ "T3k_simples|aleatorio-P1c-can~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "5bb3a71a9e93832a96056acceaacde590b24eaa5ade9a7882d73ea89f829253b",
+  "resumo": "ef97c092ca3496ce3db86f0a7cb5cebb60f6973df67b3573981d9aba62559483"
+ },
+ "T3k_simples|aleatorio-P1c-can~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "1bb8f16d470c5c8617534087584702587d1a49435a7f5bdc33a2f0c6787d6d91",
+  "resumo": "0a9e071bfa66253cb1589f718ce0c16d4e875888cd052aee05125ff70616d6bb"
+ },
+ "T3k_simples|aleatorio-P1c-can~mutavel@101": {
+  "interacoes": 64,
+  "politica": "5d72fc44e0a42fef12b2d34a8a2ef4b513634c3ce6937eef801db30c5887c34f",
+  "resumo": "d02731a1f0f5536f0531c4095c2d58f8fe720de14ee708cceb82d38b935caed2"
+ },
+ "T3k_simples|aleatorio-P1c-can~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "34987b23becd4e378f0884b8c928c29e3dfe1f79b8f9ec87161dd5e834bea3a5",
+  "resumo": "c5947e3b0c941f0b7a19ff2ba456ee5217ebb85ff5a45a1a598b4408ae30ed06"
+ },
+ "T3k_simples|aleatorio-P1c-mem~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "6aca2ea081fc58c068aae8f88237f33ecc2e12d09086a24bf9637354b854b2b7",
+  "resumo": "7a9bacbb5b54b326d1f09672788bf6fcd5fb0f29ba249b999041d85f7f776be9"
+ },
+ "T3k_simples|aleatorio-P1c-mem~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "005c5e0f1e095268e98ac3409045b8b166adec35640a2b769788ab8b3f996e30",
+  "resumo": "998bde68b633309517211679097d8c49d56b5ed8fba25111e622b43b852a18cf"
+ },
+ "T3k_simples|aleatorio-P1c-mem~descasado@101": {
+  "interacoes": 64,
+  "politica": "b5e90314f1ce6ca741cb78e4c070a0db3664cfbabc1f66fd30c247576b638658",
+  "resumo": "2977f8424f335d9db24128de51aeeb84379169c547cc53009b7893af433fc796"
+ },
+ "T3k_simples|aleatorio-P1c-mem~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "71faf7dcfd4ea8e52cca152201696bcc61a7ec06cf99b466bf1769b67e4b5c07",
+  "resumo": "a8cad7dcaf4a42916beead55113b577d39df129f5776a4f151c838be59eaa544"
+ },
+ "T3k_simples|aleatorio-P1c-mem~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "4c4effb3eabe4f49fb2fae6b5b1ca1db2161301b48be4c7da9184f0c7c538b13",
+  "resumo": "ef97c092ca3496ce3db86f0a7cb5cebb60f6973df67b3573981d9aba62559483"
+ },
+ "T3k_simples|aleatorio-P1c-mem~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "f7f07ce0c106881fdf94c0140b9d7efb27473aed6e38b22d03d3f741469d4ad9",
+  "resumo": "0a9e071bfa66253cb1589f718ce0c16d4e875888cd052aee05125ff70616d6bb"
+ },
+ "T3k_simples|aleatorio-P1c-mem~mutavel@101": {
+  "interacoes": 64,
+  "politica": "9cf94bd0bd238002c6cb8432d3250f98b4b3638117ab879bf9210c7cb2b7f4c6",
+  "resumo": "f4d4abc15576a85bea467d67a0f093f5b58901eaf941620c214ba32a06c341b8"
+ },
+ "T3k_simples|aleatorio-P1c-mem~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "7b00c6183bc13fdd52cadc9bb789a7780d8d9c433909dd4d568a50a5fa508c61",
+  "resumo": "c5947e3b0c941f0b7a19ff2ba456ee5217ebb85ff5a45a1a598b4408ae30ed06"
+ },
+ "T3k_simples|aleatorio-P1c~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "13d3e39e3f161f37bd78de8146e38eceb7a56f2fcac503fd6667cb6e7108db3f",
+  "resumo": "aba4e73719ca6500878049d83024ab1489635aab4d9fc4f024d16bcee0d1660b"
+ },
+ "T3k_simples|aleatorio-P1c~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "0df0171981fdfb8a4101f28df252db5fa1a59861348a6ee6e5473094fdb40248",
+  "resumo": "998bde68b633309517211679097d8c49d56b5ed8fba25111e622b43b852a18cf"
+ },
+ "T3k_simples|aleatorio-P1c~descasado@101": {
+  "interacoes": 64,
+  "politica": "48d120e32b0f809e7cdd70d627ad3f0159cde2d2e1d7d762706993d630f77998",
+  "resumo": "2977f8424f335d9db24128de51aeeb84379169c547cc53009b7893af433fc796"
+ },
+ "T3k_simples|aleatorio-P1c~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "7a57d0e5e1985878564a1806ab9d7126e708e0096817a19e94585aa565443647",
+  "resumo": "ab7918bd9e2b0c34f606355bfd0ab3e3d53323f2f5e0426c276bcd6305eaae8f"
+ },
+ "T3k_simples|aleatorio-P1c~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "e58bd727174f21e7384396a2718f60478c1002d44422665af23ce12c96226d8f",
+  "resumo": "ef97c092ca3496ce3db86f0a7cb5cebb60f6973df67b3573981d9aba62559483"
+ },
+ "T3k_simples|aleatorio-P1c~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "a91b871e94c87d7c7eb5b573798e009898a5754dc743b3c7207e87df3e3b3628",
+  "resumo": "0a9e071bfa66253cb1589f718ce0c16d4e875888cd052aee05125ff70616d6bb"
+ },
+ "T3k_simples|aleatorio-P1c~mutavel@101": {
+  "interacoes": 64,
+  "politica": "d7fa2ddf96b2174f18ceea1552e08ee32ea2049a9ac0d32e1f22a1e44f14a3a9",
+  "resumo": "52fed46b9344a50985d2158d66ec52991fa3da045798c1dbe0ebd2d01d09777d"
+ },
+ "T3k_simples|aleatorio-P1c~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "2a3711ae0b6ef6e4320d230d5d05a796598ebaa9750929a2c7e08dc3429c13b8",
+  "resumo": "c5947e3b0c941f0b7a19ff2ba456ee5217ebb85ff5a45a1a598b4408ae30ed06"
+ },
+ "T3k_simples|aleatorio-P1~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "242db0f4557ce6c2896593c4324b4d5cd0f47b3da0180c082c730541463ab06d",
+  "resumo": "32e58efa4b1685bab16cd80c72be5f5856a404fedb094120f0c5286750f60a6a"
+ },
+ "T3k_simples|aleatorio-P1~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "3aa40d69d59adb8fc1b49505076521791b8a6c10b147e28554bfcc9c567c4524",
+  "resumo": "998bde68b633309517211679097d8c49d56b5ed8fba25111e622b43b852a18cf"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~casado_frutas@101": {
+  "interacoes": 48,
+  "politica": "f173da2fdc29aca78d16db98d99fa7656a3098eb222e909ecef208b4eb4f77dc",
+  "resumo": "58012253fcff40c856271734d2f8e63103ed95673e02f06fcd3beb42ce533978"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~casado_frutas~g202@202": {
+  "interacoes": 43,
+  "politica": "bd3769aca184936330df0139017fade3c7d88f83dc3e359adf7a3b594686c52d",
+  "resumo": "31371b8c945758c2c0cf36c5c75f94d3d1b6384a200c8fe42d53a218d243d4f4"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~descasado@101": {
+  "interacoes": 48,
+  "politica": "70960ddeafc8ad6df03e778b6a832d2df810ca38f8ab36074f4220e1d9119dd6",
+  "resumo": "7a4948205e937da404cad33951209177dbee80c1efbb1ea153ab9ac54397d17b"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~descasado~g202@202": {
+  "interacoes": 43,
+  "politica": "b567b38fec13cd458bd99f124d46884cd6c155e4af6aa647c81c5bf35aa4d887",
+  "resumo": "7b3c1384ac3ae5c5d187ddc0dfd79526f4e533756915ae92997d0f05d6227443"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~iguais_frutas@101": {
+  "interacoes": 48,
+  "politica": "906567d9014f8535dc09516d84f8349c8c4adbf8962adb252db241ed7b088363",
+  "resumo": "36e64041aa8e3ba80cf24f408ad67915c2d8cc52a6c481a2be454745294594ca"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~iguais_frutas~g202@202": {
+  "interacoes": 43,
+  "politica": "46556d55bfb7556c5b5e42601bc71f74931d23cde70f75fa11876b8e2945e711",
+  "resumo": "45db659438428b8caa7b6b6c3bb9c15c905deedec1a7d39e75f89e880632983c"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~mutavel@101": {
+  "interacoes": 48,
+  "politica": "b2ea1aa155a19bed5f7188b0a53f9d0d93763ec1fa1da48d17ed4af0d1dfd361",
+  "resumo": "3ea494a5c9f4fde64af01bc4d23e64c103e1f7831e407a6b3b83499ba8930b5e"
+ },
+ "T3k_simples|aleatorio-P1~de-P3-sem_sinais~mutavel~g202@202": {
+  "interacoes": 43,
+  "politica": "1fbbb4a96ba6898af9711ec0ac3aba034d2bb9129c4b232546cf3c712f87c624",
+  "resumo": "ae4b2c46b8287a8f3e15f20f3bc7c92146d5001aa4622f50a68dd64cb75b623f"
+ },
+ "T3k_simples|aleatorio-P1~descasado@101": {
+  "interacoes": 64,
+  "politica": "128701a36e698ed1738d629678d5b5529a5bcc63bb9588ae53678a3a89b9c628",
+  "resumo": "7c604fa111607fc6afe017e2708e45de3bc5f2eddbb208e94b0ad08970230926"
+ },
+ "T3k_simples|aleatorio-P1~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "9f01d57b8be2d69fab69b9985dedcd2b5e379a3392b790693ae39f36ed70f595",
+  "resumo": "a8cad7dcaf4a42916beead55113b577d39df129f5776a4f151c838be59eaa544"
+ },
+ "T3k_simples|aleatorio-P1~g202@202": {
+  "interacoes": 64,
+  "politica": "76431eb50a36eae4a6eb41c78349547438cff7ca69ad0a954c6eb295ca0f73bb",
+  "resumo": "2799506ef4521d0b9364ac4a6a48ed8f737f400e7fbb5bf2cd4bce24b99f5fef"
+ },
+ "T3k_simples|aleatorio-P1~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "da0518467a3f0d646c7c334217d0dda9f486807b9d75d6a39648b8f908f412f5",
+  "resumo": "ef97c092ca3496ce3db86f0a7cb5cebb60f6973df67b3573981d9aba62559483"
+ },
+ "T3k_simples|aleatorio-P1~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "7949f84f8f64accc72f26f35af7db5a5bd0ffd9018bbc12e1090719905bc1a69",
+  "resumo": "0a9e071bfa66253cb1589f718ce0c16d4e875888cd052aee05125ff70616d6bb"
+ },
+ "T3k_simples|aleatorio-P1~mutavel@101": {
+  "interacoes": 64,
+  "politica": "c197236fd55f3dee8c02c5d7630cfd509a03e02309c2aea618d55aeecf547486",
+  "resumo": "f4d4abc15576a85bea467d67a0f093f5b58901eaf941620c214ba32a06c341b8"
+ },
+ "T3k_simples|aleatorio-P1~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "f11193c51197b792186cd11f268f80b8cb3de697df18d7c392ee44bbb7581713",
+  "resumo": "c5947e3b0c941f0b7a19ff2ba456ee5217ebb85ff5a45a1a598b4408ae30ed06"
+ },
+ "T3k_simples|aleatorio-P2a~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "730f7b3fdb7b1941c70ad87096aed34fb4f84e0f5ec83259c1d681ea9f952167",
+  "resumo": "ce8b41461b3d3888a10cdb99b9dde22845daa99d16baae95a773c5aba14e2404"
+ },
+ "T3k_simples|aleatorio-P2a~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "e668e8576febcb0c299c25182e0640de48ebb57dda79e73df8b240d68f7ecea0",
+  "resumo": "1c113cd36149d51441e1aee84fbe26e1f1795007a043891cff20e55713026e42"
+ },
+ "T3k_simples|aleatorio-P2a~descasado@101": {
+  "interacoes": 64,
+  "politica": "02514ec339f457d1588bae98990a8a1c8fe7b18f80d0eb870b061bc838067a8a",
+  "resumo": "94ee9899a800142343526da606e24943aab24745c3cb232b64ec001ae5f46ccd"
+ },
+ "T3k_simples|aleatorio-P2a~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "b5a12ea892dad24b67e5fda5e207ebb9515bd0003239cd8506f6a670557a08fc",
+  "resumo": "6f49174f1b2fe82a10683e7c16b3264bcac2f556b49298bd8817ae3800b9b448"
+ },
+ "T3k_simples|aleatorio-P2a~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "ec9223145e5a96f2a6d7a74db556956c3af652be553c66685ec4d1723ad8700e",
+  "resumo": "11702becc0560ffd0e094e8a4339114639466bd11e6ada2eb03b3a4b95e9b9ec"
+ },
+ "T3k_simples|aleatorio-P2a~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "107f758b66ce1d7013bdb3569b04e5e73e8840256732449718946f3d9283a9c9",
+  "resumo": "788ad204a0201278251d5e4eb744d24ee3aa3de1f372a676c43e8bec1b168c48"
+ },
+ "T3k_simples|aleatorio-P2a~mutavel@101": {
+  "interacoes": 64,
+  "politica": "25dacc811da35a6f1fc78d73bf4fc93dc812699d34284f1c875f1ac5d365ebf1",
+  "resumo": "6fad7d45ef11eadbe7b8bfba5c64d587bb6c9407996dd0e2628efb4e82bb47ce"
+ },
+ "T3k_simples|aleatorio-P2a~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "2a6246379a8c08ed806b63440db5002aefaf108227f7f09d0f81c4e2c803241d",
+  "resumo": "aba7f84fa3a5e596c9c8b251e87f9ca7713552ce8cea31fb380e83d5aea9affe"
+ },
+ "T3k_simples|aleatorio-P2e~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "92c8cbf0896187891b888407ac4dff47457855750ba8400d9b9356ab7acfbe5b",
+  "resumo": "94a467d2671b677329e37d0796a557c7dd3b84059728fbf18e9a8e8f0a58b100"
+ },
+ "T3k_simples|aleatorio-P2e~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "e87d3bd5046772028de5fdb0d36a6e3cc21e2f5b0c7c3bd5aeaffc7d54cd21d5",
+  "resumo": "f05e2ae3635b97d77807ed7be6fb61cf53c7aa7afb94ed3b3f2a35cba22e0eec"
+ },
+ "T3k_simples|aleatorio-P2e~descasado@101": {
+  "interacoes": 64,
+  "politica": "58702de30c79c13c203474904f5c2446300302e1f0660b023eba7fc67b632868",
+  "resumo": "e763ac9430454e55bedcf2e6ff8b643c8a6c692884361ae155b9f9f4f3f14692"
+ },
+ "T3k_simples|aleatorio-P2e~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "7cda9fba0518a77fa15905a58565b5396db58e803d5d7d74341b0f4e388ccb3b",
+  "resumo": "21be1c3f99887cf03d1f1e4f01facd9fdb9bfa1b42e3c2c52ceb3f7bf5fae217"
+ },
+ "T3k_simples|aleatorio-P2e~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "937d3dbeb6c0c0fe067b22b6407d291f20bbc2d4f446284ad9ee4a24cb7a7247",
+  "resumo": "c8f38ed70220fe9d864bf9197afc3320cbe60161ad495d75f9a84b80d3566417"
+ },
+ "T3k_simples|aleatorio-P2e~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "7180912cca8b168a109cf8691ccb76930ee796c28b0f391c3fb457b4d9ed984f",
+  "resumo": "ccff7ae70bf9a63af8b1022193c74e92835d4acff5186b2ab10ebcacb8db8ef0"
+ },
+ "T3k_simples|aleatorio-P2e~mutavel@101": {
+  "interacoes": 64,
+  "politica": "6680360e945cd06d31c19e10c5f20f11f8e457444666749279fbdeaa1c39e419",
+  "resumo": "aef8ce16f5a6a02a956e3e71a95b72c61a8e76b1b9bea25a75f0a65a2e68e0b0"
+ },
+ "T3k_simples|aleatorio-P2e~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "52e2b9950f17e19c7939c87eaf8ac74b5e4ee18e1d97dcc55b52393ebc424e4b",
+  "resumo": "7ec38670fc1c3e2a18d06dac4e316713bd390ff17a5649ad1f4da2448704d766"
+ },
+ "T3k_simples|aleatorio-P2~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "fe8ff5d733a833df61e242aa55cb905ea61cffd29a4f7af1e0f08f403af7f245",
+  "resumo": "a782eeafa077eee30bcfbf0b2ac7d5a6118bff3b4aef1d4fcbf8e38fa9cf9aa2"
+ },
+ "T3k_simples|aleatorio-P2~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "65500e627b406f7621b4940584859bcdf3c613090197d11e9ae8eca849c1a272",
+  "resumo": "e7133fddf8b63d3bfd1dd20ce3e7c58ff611279d39ac79d19a5bee2b67085aae"
+ },
+ "T3k_simples|aleatorio-P2~descasado@101": {
+  "interacoes": 64,
+  "politica": "261080045cbf6f3de2c5a97ccd8f9fd5bf104d291c7c86e59a1c98be0e9cc1b7",
+  "resumo": "7d701f83981edded8075bf088c127c58a531618a3f2b1dea78cffe7aabb2c020"
+ },
+ "T3k_simples|aleatorio-P2~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "09775aac829967a4b6d2adfb467d5f4f6659f61906d4bfdef36274b569a2d9db",
+  "resumo": "a2a075479e3d2e6a0fae658b2f6b90820372c184edaf0e022ede8f24f8b3733e"
+ },
+ "T3k_simples|aleatorio-P2~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "430efe7615f8beb411e37094918e5d50e371a206867a2db145b35d12c31cef2d",
+  "resumo": "d1f9cb9aa151c9372f50dd246bf347278f71cd1518b775bab1a31f8042808b76"
+ },
+ "T3k_simples|aleatorio-P2~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "6cefac99060d7a93084d11b14df50e5cbef5166acc3c99ab5f4af6bf868384e9",
+  "resumo": "b84e964ee1b4b04c58eb0f9d802fd2fe4c49d485c2c805b291179b7d88f3f7bf"
+ },
+ "T3k_simples|aleatorio-P2~mutavel@101": {
+  "interacoes": 64,
+  "politica": "7573d98d54fd3b5e2719abb60f1cb61855b44078e5054dca727b9db53fc281de",
+  "resumo": "dd8bebe081b828b4ea8e12983c820ce60a788a8d21c82c460b82ebb0cc7ee100"
+ },
+ "T3k_simples|aleatorio-P2~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "b7c50cd07e1caedf7fbd205d1096029ed170500c9dea94749720de82af13d47f",
+  "resumo": "7a8089b63f32092b00801add6843a340693d354dcee3862e9a3038e59d3b0423"
+ },
+ "T3k_simples|aleatorio-P3@101": {
+  "interacoes": 64,
+  "politica": "8945a0834915cd2e4b401ef088d30b79f006300acacf80df751ff5475b802791",
+  "resumo": "4aeb8b0cf69da3f93cfd8b55305651f6d3343a91a60496d5d645b3a7f53ef1b3"
+ },
+ "T3k_simples|aleatorio-P3~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "58a05a2ec21ac07253ec85c722c74c998517f63d20b2d92b890a7865a789c0cf",
+  "resumo": "bffec26169b31501e3f3d01525998a7e5290118cc666fedc42afb06329da4f92"
+ },
+ "T3k_simples|aleatorio-P3~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "1cf61686cdd2aed335f10d33693777a834ad23f4d3c69cbe57923f49c3b585e3",
+  "resumo": "57a9a4d818f7752eabc1bd3eafc3fa003135359785b18547bdf919a4ed8bb8ec"
+ },
+ "T3k_simples|aleatorio-P3~descasado@101": {
+  "interacoes": 64,
+  "politica": "55c55c5297e4e46d32ce401899068167cf4e5e09a1a4d395ddce15151ffe384a",
+  "resumo": "a410375c59da6d9a77e68a0b50506d3f56a6430bc451f1dc638d9ebdc06d7fd1"
+ },
+ "T3k_simples|aleatorio-P3~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "2b4e6de6c0a0930a81a4e9cf9e0ab32cb561d824ffcc2c6b4dd4342e123a9f6d",
+  "resumo": "679348b6646583e7ec1904047aebb09d596f93b4fbd74e5761d778a3def183a3"
+ },
+ "T3k_simples|aleatorio-P3~g202@202": {
+  "interacoes": 64,
+  "politica": "32d303f61476e3028ed0a543d999f2c78e9ff0494b849ec9cdb88d267f05a443",
+  "resumo": "852b41a1c48da19d1596eefed1a58fb3ebba6556ab717577675c729560b6ead1"
+ },
+ "T3k_simples|aleatorio-P3~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "ed76521baee421dfb3accd06ecf509d16e38879a92e28bb1aa3b242569cf6dcc",
+  "resumo": "a489c38861e5abe875ab3c09fdd57a059155acbd21e53b03b9740314c2aa46b1"
+ },
+ "T3k_simples|aleatorio-P3~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "54494fd3494a0a9c6f2cfa9ae509623c42023c918c831570b0b47d3640dfb538",
+  "resumo": "4ba2ab6cd3db38460fae853dcaf55c1e266d321f52f17f744e2fa3029b3a5648"
+ },
+ "T3k_simples|aleatorio-P3~mutavel@101": {
+  "interacoes": 64,
+  "politica": "57f767fc143d7bc4beeb3979b6747e93618132c77790f78068d22ddee8e6fa82",
+  "resumo": "a7135615ca1fdc64b49dd20f3e7d3514a86b60bba70e3f1ffb029c21e7163337"
+ },
+ "T3k_simples|aleatorio-P3~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "8921125a52694eaaff9c8715a0ab15e93fe008087c002251272079b20d64559a",
+  "resumo": "0d8a50ded93381e9378d05001dad270057d372b8e212fae74800e95976f51d13"
+ },
+ "T3k_simples|atencioso-M0~descasado@101": {
+  "interacoes": 64,
+  "politica": "73dcb6e48621e15c7998d589a1c7c7f86a2f74f5ecaa122c8cdcc763d405dc96",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_simples|atencioso-M0~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "5595042df1e1c5a5a6c56459b194f394572de6ecb90b279e198dbd50c5d9fa65",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_simples|atencioso-M0~mutavel@101": {
+  "interacoes": 64,
+  "politica": "ff26d7b3d67e95f0bc44e8d5917357a934239519a02b840694d6ebf712884447",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_simples|atencioso-M0~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "c887c4d0ce7fa44a566a6ad9b45d00be6f507138970ade1d7af356f2b393b736",
+  "resumo": "ee52123cad33f1a64c1f5c7a6a0858ea0b7baba713a69b5560a6de56b8db8c87"
+ },
+ "T3k_simples|atencioso-ME~descasado@101": {
+  "interacoes": 64,
+  "politica": "d7bf6a1a0c69573a1ee5ddb27069f4e3303a8a913b9d10f8f3696ebeabeb2a19",
+  "resumo": "6732db50569a2b750127ed3b4e1c549fe9a1ce021a114e9b53c64a43a2972a9b"
+ },
+ "T3k_simples|atencioso-ME~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "873318a6303afef1b7092a0b13504d4bbbe4a109b7ad156845f5b8ff09b83e7e",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_simples|atencioso-ME~mutavel@101": {
+  "interacoes": 64,
+  "politica": "5d8520972a845a9b4d36722077149635f4ebde8d5efdd85c353e6b6f1fdea7e9",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_simples|atencioso-ME~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "3a95bb2186703ce3bd1ada34729329fa233754370b03d7b34c2891d1f5400247",
+  "resumo": "7e6b334f785bf6500d6dacf29af25d39303536da30a343a4919de82024b089d2"
+ },
+ "T3k_simples|atencioso-MR~descasado@101": {
+  "interacoes": 64,
+  "politica": "71205ccde1e0b0de9895d9e0c30dc290145856dfd68f228614a90be60488a5b9",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_simples|atencioso-MR~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "6d9cb388b4339ebb89807af38e0e77df16183243befc083b903de7fc441caa45",
+  "resumo": "3f2ab8c9c6e03ac35d568b017780183d381e37d77dc7a1b941ff252d6642e16d"
+ },
+ "T3k_simples|atencioso-MR~mutavel@101": {
+  "interacoes": 64,
+  "politica": "8486674e8038d440cee7d2f94525625a7ba57b39d4f52850706486ccdef0fa11",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_simples|atencioso-MR~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "7819b951f13f87d6e50d1bc10e06be536a766294e69dda0f1f027449d220f29c",
+  "resumo": "492586bc3c3042bbedcdf8adb7e2bb4d49250c7484364a735c0208cdeed35016"
+ },
+ "T3k_simples|atencioso-MT~descasado@101": {
+  "interacoes": 64,
+  "politica": "1cd5fe87e6d86825495f1defe0cb2e27515a5c920dbce47dd4bb40bcf0e685bd",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_simples|atencioso-MT~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "7f9cbb00761822da14d3134b745e8c61c55ae9cbf49cec15bf04117fcf33da83",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_simples|atencioso-MT~mutavel@101": {
+  "interacoes": 64,
+  "politica": "059efe55bdc9322b4d1637cab0fbf45e51d9f6d470b317d6f0798a6e8899d1b6",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_simples|atencioso-MT~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "063f83fb9d456033a286dc334e8c391e12795b8357e724b2aa2dd6e1ca2b2f43",
+  "resumo": "ee52123cad33f1a64c1f5c7a6a0858ea0b7baba713a69b5560a6de56b8db8c87"
+ },
+ "T3k_simples|atencioso-P0+ped~descasado@101": {
+  "interacoes": 64,
+  "politica": "c9857f2fb9811cbd9da1ae39bcd0cab6a06b10d367ae844b121919e1d56eb7eb",
+  "resumo": "d0fd968e432b4211eacc37b0a3e81344ad611274596c062876313ec06c4ad5b3"
+ },
+ "T3k_simples|atencioso-P0+ped~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "1220ca90b21c9cbf577464f1bbbdf018f79933fcf98f4bef2a6bd475ca014421",
+  "resumo": "c3ade6b97aeccb9883f958b4a5b6bbcfbf3e300f90e7d1f9c9b275f586ac9499"
+ },
+ "T3k_simples|atencioso-P0+ped~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "5b0612371c62031cda31f5140ccf137ee33ae7288d66e068e0992d79657c236a",
+  "resumo": "b8b81cb96f064706ef1fbce27ca641ab6ca1374846ded86479127af7e9d16527"
+ },
+ "T3k_simples|atencioso-P0+ped~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "6bcc5f7e496cd00d0b0f6001982b9f3eb40012b971f158a16be65a45a63b4b5a",
+  "resumo": "4c81fe1cc1f7d4ee9bfc3bfd03abc737db7a23106fdd2eb62ea5173b00dc44ee"
+ },
+ "T3k_simples|atencioso-P0@101": {
+  "interacoes": 64,
+  "politica": "6ec59ffde1a216a8fa1a33c6dc81355c880c23bc341d80b8f11a70d198c9c76f",
+  "resumo": "709436b4a76ca3c3f041c0df5f62ef990f1bba4e0fe5c49d2166a2bdca91d83d"
+ },
+ "T3k_simples|atencioso-P0~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "3dd91a8c762ec40a23fc45253817475f3fc46a614e6f89934c8a40a7419fd7ae",
+  "resumo": "1d3f1515b0886001d0bc0199b044150f5e4b4b060311c47f37a04ed68ecea4e7"
+ },
+ "T3k_simples|atencioso-P0~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "44ea6da2250ebfeeb191f6cdb2b014ad871cb13dde62aa46967406d3064b7228",
+  "resumo": "23cfacbecc7e2bf060b4d0cadd69879cb0387c357722c31d4357d3ab6ba94ca3"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~casado_frutas@101": {
+  "interacoes": 16,
+  "politica": "defe174d0c062f15f32d0fefcb6fb9201f75b830a36f58948ae65ce2b00d3d9d",
+  "resumo": "d016e728e3a89f9755e5f119510220ceb4441d27c92367f8a7fa23d98409a70a"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~casado_frutas~g202@202": {
+  "interacoes": 22,
+  "politica": "09f5e67df9d55b32d9e7304bb601fcf74d6c22ea86d40179defa85bb484476f5",
+  "resumo": "fedb6e288b8279d14b920d97f21755d6c1e3f9f68b261fd864e1fa59057db722"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~descasado@101": {
+  "interacoes": 16,
+  "politica": "5910813095d1efb08639914acf69cafd7c77f851a605adf8c93c333c24fd8898",
+  "resumo": "4dd72518cdbcaf468354aa8fd91185f858790972fe41f0caa685eec2449fdbd1"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~descasado~g202@202": {
+  "interacoes": 19,
+  "politica": "9190e92a913bed78a481fcbc845c218c2ffac3937ecc49b47c362bf8c502b086",
+  "resumo": "215db0e1e6ff87eb9c89f3a580f89a7ea4ae766a6d10681a470e9df903b5db05"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~iguais_frutas@101": {
+  "interacoes": 17,
+  "politica": "a9fdbdc2634bced54612f3ea1652a9ff40e4834ab7a87e7b77c9d8f0b7eb0c51",
+  "resumo": "2d17e6024383d53fca5648b298e444fd8d4dd87fef6477e88aa12f2a537db343"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 24,
+  "politica": "67ec6f0411ced314433bf239c7537cd568c0b694a3795a25767033440edfe3ad",
+  "resumo": "179d27e06b2aad135801e40d573d42075a37b76264885b4ae67768596144a4b1"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~mutavel@101": {
+  "interacoes": 19,
+  "politica": "e68a20154148e992abbf9a773171a4553a3bf0182598a3a1fc24c05afab090ed",
+  "resumo": "d4e2c2863122febe9ad477caa032d302153cd7ca8a353e582c3ffbe705d53771"
+ },
+ "T3k_simples|atencioso-P0~de-P2-sem_ensino~mutavel~g202@202": {
+  "interacoes": 21,
+  "politica": "5939500fc262196fef2603ef6e34892c9b3d6d64c3096b864906d17b63767eca",
+  "resumo": "c66fb7993a4498414db7d43604ce6426e1d3716f3a0c7a0a9a5d2e98618a79f3"
+ },
+ "T3k_simples|atencioso-P0~de-P3+ped-sem_ensino~descasado@101": {
+  "interacoes": 22,
+  "politica": "47ceaa180bdef2e1ca6ef165cbfd483f57967a2b289a79d8833bbbd0c5c315b8",
+  "resumo": "62faadba0329d5e0f66425c99a52dcfe93da420dfe86cfa77fe030cdb71534d1"
+ },
+ "T3k_simples|atencioso-P0~de-P3+ped-sem_ensino~descasado~g202@202": {
+  "interacoes": 19,
+  "politica": "a9e79e9e9e2b7123d2551976190e3a9311faa8daee6057fadd4b4ef5ea9b4396",
+  "resumo": "0c849df476953c0c65be5d250080bf1a6106c82e5363e707784205e13a834981"
+ },
+ "T3k_simples|atencioso-P0~de-P3+ped-sem_ensino~iguais_frutas@101": {
+  "interacoes": 17,
+  "politica": "9a233a1d7a705e4a66f8012fc408f03b832d5490a4c4cb5dcb16f2d5af2f984a",
+  "resumo": "4f952b6aea6868ce11412c548ccf40140c736fb83bc88be7e5a69997064e8fbd"
+ },
+ "T3k_simples|atencioso-P0~de-P3+ped-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 20,
+  "politica": "cc0bf1eb87dae08bd4b9388c03520eb25b224180cd9303794886c54c8384396b",
+  "resumo": "31ac8bfe1f0a089808763761f866f2784cd43b4e4848cb0002fe7d11136b0a72"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~casado_frutas@101": {
+  "interacoes": 18,
+  "politica": "455262e62d33fde57e3bb4fa6c40d41e23b8b0b10a64899ce6b944fb5127f514",
+  "resumo": "79de2de16418428163c1945439d278956546b7e0cb3e141261b42a30bd8fa297"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~casado_frutas~g202@202": {
+  "interacoes": 20,
+  "politica": "7edaae52ccb8c31dcfa083e37a8cadd15ee786b197a4c3172b50b65aaaff389a",
+  "resumo": "cdeae2286bb7b0847f67f9094215d0414e312b9dca1e4d13370e368b1770b27a"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~descasado@101": {
+  "interacoes": 16,
+  "politica": "2bab328e1dc5b44dd493c7c7bd44fab5137a3e21dfc8f5ec6a404894ecca191b",
+  "resumo": "b66352727b724e387dda0863db0601fee9bf6cfd77b851ec591dc79b4a8d37a6"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~descasado~g202@202": {
+  "interacoes": 19,
+  "politica": "cc7c3d6789373e9efd5d1aa74236c8c28560902ecfa3e289ee237e1ac9b54bb1",
+  "resumo": "2b21fa9f4e8221bfb9e8e8c29fcc11e33ea5d5b4fd83562bf1165ec42a7819db"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~iguais_frutas@101": {
+  "interacoes": 18,
+  "politica": "99c3e40410856ceec03b51b531e3dd39432cc676af1c76a4ce632f4eb521e7b0",
+  "resumo": "bbe1dff5e415fe0b895aa6718807ee1f2ab9175f1af9c8d4c1b75210ae8cafe2"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~iguais_frutas~g202@202": {
+  "interacoes": 21,
+  "politica": "9a4512217978f6445b7b92015fe076f277cc18d0c985e48adbebc03de9e3416c",
+  "resumo": "e8141be2afbed52c5fbe3e192217317cec5c91ae59a56fe2f831203ef42cb521"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~mutavel@101": {
+  "interacoes": 17,
+  "politica": "f3273846a530e89b7cd23009b993ed8d9b340cc8271e862c04d43a17f941e060",
+  "resumo": "1db9db7b03e62ea8eb72a7325e322aa0a41572bce2e59f5486bc3bca9d4908b7"
+ },
+ "T3k_simples|atencioso-P0~de-P3-sem_ensino~mutavel~g202@202": {
+  "interacoes": 20,
+  "politica": "9cd782f2c26800270e34e66a59a5216b15c24938575b0d6d051e8013a15ae24f",
+  "resumo": "81299fb9123661e9826a360dfd06e1144ea6765330799013e000ebda1dc21ece"
+ },
+ "T3k_simples|atencioso-P0~descasado@101": {
+  "interacoes": 64,
+  "politica": "0a9644498dfa28cb9abc158d79ef225ae956de22f525738294c9a94823815099",
+  "resumo": "1467fb2f571caaf2d0b7eb49f794d85bf4eed577f8656563ae2173be6ddb9a02"
+ },
+ "T3k_simples|atencioso-P0~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "819acf147fe69176a7150f3e071a88b99da9d5bcafde939f815e3ae7a56f59fc",
+  "resumo": "bc0498532ec3a2661699156e5722a2b1beef5e57a0e65baaa7018a2ef0363ef8"
+ },
+ "T3k_simples|atencioso-P0~g202@202": {
+  "interacoes": 64,
+  "politica": "898487689d79bd4140a23b16df35ebc3d0500e2bdfbcf68b312286b1e4606763",
+  "resumo": "ae2e03a56116e144ff32e78255ca2ab26d782d64107073cdf0b434784ea6577a"
+ },
+ "T3k_simples|atencioso-P0~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "41dcd95309d055f2a9126bd1e75c618b3f369fd5d2b2d215ab99c08c39facd38",
+  "resumo": "2ac69edac31e72846cb2a053f55f0c233533c9ed8cdbadc76c62cca3cc04b9e6"
+ },
+ "T3k_simples|atencioso-P0~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "210ea8442832af48e8fef2accf3f939435891a6a91ce2095ba38285ffb888e00",
+  "resumo": "bdf8af7f10581f08b4b5a74c20ac217d9564ac20ad02a5a5c2ffbf30801d3d47"
+ },
+ "T3k_simples|atencioso-P0~mutavel@101": {
+  "interacoes": 64,
+  "politica": "8dde05382c873e0e6324e4c34d004c9124abe4e9ca696f7304d8b9866d67da86",
+  "resumo": "3a65bf38231f21644245ed03f6d0b682c62691c57a1cf08b2f981991acf547bd"
+ },
+ "T3k_simples|atencioso-P0~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "8a2f334ff700c5a5b67f5959674c11bedf644ed751e651f3914cf665ec6fd5c6",
+  "resumo": "ee52123cad33f1a64c1f5c7a6a0858ea0b7baba713a69b5560a6de56b8db8c87"
+ },
+ "T3k_simples|atencioso-P1+ped~descasado@101": {
+  "interacoes": 64,
+  "politica": "3c563ddabed74fbd3597a31471810940beaeb27b0f44c6df65312e2f41a99714",
+  "resumo": "21bd1af2a0d29ddc1f3b93b8eb995e7dd10e2e01f82d71d0497a995d0c7fcbc6"
+ },
+ "T3k_simples|atencioso-P1+ped~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "6cc9e751014b84655617bea23a7e4da0c25d442a5a1aeb68e0d39eff115584cf",
+  "resumo": "ef204dc0a6fe1b3717ad1ed57d1f5b573facd674e9117dbf8867108ac143bfc7"
+ },
+ "T3k_simples|atencioso-P1+ped~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "e81e1505b8742837e227964687f6c5a2f6c4ba81397183bdfdfba9625e7e987f",
+  "resumo": "1d1d16fc8adda9c89a212d373036b86511f98c71afa2233548ffb3a215478f48"
+ },
+ "T3k_simples|atencioso-P1+ped~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "9a3ea08a61de2b9999a399d5261efd472f4b49c6d257e3792b16f37ee547e554",
+  "resumo": "c9a7fea6934ea27daf07be433433a5984f4ac70a3de6f31779a58066bf869b93"
+ },
+ "T3k_simples|atencioso-P1@101": {
+  "interacoes": 64,
+  "politica": "0ba35457d6062b6893b45627a4c7d1757dd32e3bf6a1f6416bbe4e57920375e7",
+  "resumo": "e2e5c37afa51b4250c2ee9c4f6ba5e24cde1a7a6c635607a0c891917bfd07552"
+ },
+ "T3k_simples|atencioso-P1c-can~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "adfb0fcd28392bf18e507b8ea3115f1e1dd4c3d8939d4b9d8b50e9093ca14acc",
+  "resumo": "d696f00143e16f704266f941417c6ac960380754565808e1dfceff1d2778c8cc"
+ },
+ "T3k_simples|atencioso-P1c-can~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "046207f7c79c91ac86fa85b52d3d861c6cb3736b594ed0d8a65523bde7305ded",
+  "resumo": "bfc8289b8bfd847838c899ad45a76bece3262e99ffea4a895db8efe492b54c67"
+ },
+ "T3k_simples|atencioso-P1c-can~descasado@101": {
+  "interacoes": 64,
+  "politica": "019cd95477cb465633a0c1d73c208b9cb9335d83d3f69f9ac072184bb912526a",
+  "resumo": "b14d9e6260cfb8d7418da05feb50e637a28343476ca86e69ce106d09b34bfd75"
+ },
+ "T3k_simples|atencioso-P1c-can~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "4df97d2281e2988cdc64c693db71d618c3064c271c3e02147cc25ace1471a02b",
+  "resumo": "bc1e5911f8c7ac8539c1e1438e60679a4c4efc81cee748e17fcff72f8ccf8014"
+ },
+ "T3k_simples|atencioso-P1c-can~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "98c29d7e527244b3fb5f8d77d55e5afdcb198b80ad39a793246ef2e3e6086725",
+  "resumo": "88fe1b9b3b5677b23cc2504534070296eb418f824cce2ff32dd1f9c1ca2991ec"
+ },
+ "T3k_simples|atencioso-P1c-can~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "9e00c0c7c379d5b53a406a895aeb19383d70e03171ec92c64c187bb9a3e75613",
+  "resumo": "2679bc9393ccb8faf10886976240ced741570ea1f2492748c6880a290134661a"
+ },
+ "T3k_simples|atencioso-P1c-can~mutavel@101": {
+  "interacoes": 64,
+  "politica": "205abc620f156e6c5c81dfac627a263db43fce83fb7a8f7617f3c4134b69598f",
+  "resumo": "34d43a38639dcca2a074219a8a78c36a030ce1912271aec0236a8712c5bf3dbc"
+ },
+ "T3k_simples|atencioso-P1c-can~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "b11908bd2f34d271f64a60ea4989316d4ee62bf9f545ede25cb71db892a99a56",
+  "resumo": "50ea60e25b31f3f3a297a48f1b1b847a8a9ad49c6cb88f9ef55bbb6b7233bb79"
+ },
+ "T3k_simples|atencioso-P1c-mem~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "457fcb21903fa4eda9346d89c8d33131a8d2f376d2db745d688304f5d9eb852a",
+  "resumo": "f583ada132f259424f5d435e5ce3c386ed0fe4935101aa0f822531b0ed4e151e"
+ },
+ "T3k_simples|atencioso-P1c-mem~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "faa9e7bb5ef135adbbe27074248daa135897e79bdecd8cc942c8714f4e701d54",
+  "resumo": "8b2f9c876fb2b448307d6f5723ebb7b6d3081bdd120d89c323ef9d15fa2e1e25"
+ },
+ "T3k_simples|atencioso-P1c-mem~descasado@101": {
+  "interacoes": 64,
+  "politica": "6a22c0be6315d8c12c453824020c33ed7a01fdc48a8b3ad8fa16c1ecc9f74675",
+  "resumo": "637284948bc909dbaf2b87fd951012e6b01843b261cb9add2646646d2464340d"
+ },
+ "T3k_simples|atencioso-P1c-mem~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "8fa1b794c0cfbc6c112863d6fc303bd082952eaf7fff3ceb9cc3201a30860c8d",
+  "resumo": "8b257b4fe0181ba2d39e094d6e93aa28a90f104f96c637a1411f644b9d3fe5b8"
+ },
+ "T3k_simples|atencioso-P1c-mem~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "7e9f486581e4cecb1541a44c405fc4794397de8800e49fbc3f75ff03828d3bd3",
+  "resumo": "f2eabec071ce332942c22e83474db21491af698cd1349baf7bc9ac334e30cb8c"
+ },
+ "T3k_simples|atencioso-P1c-mem~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "ffc14fbd6ff64d1583d3ba8978edc2a90ac49e013711d1c634f4a74d9f2a6fd5",
+  "resumo": "c22c9f09d509d9c686dd6093efa47fcae56e72fd0fc5b446f76ccfe967745621"
+ },
+ "T3k_simples|atencioso-P1c-mem~mutavel@101": {
+  "interacoes": 64,
+  "politica": "d6c84cab9eb3fa904eb7d76307e18f6ba394e497c78f8a7e3a68efea3a8e63e1",
+  "resumo": "3419ed54fa2fd8cc2d6ac7523fa2023649245d80eecf716b13956ba6d6817d70"
+ },
+ "T3k_simples|atencioso-P1c-mem~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "6ce1c47900afb634cbfc3ad0e9b39e2505932957630e61092002de068027a3cb",
+  "resumo": "83bc23d56af6432b9dd8d32ffb96df0dfbfe43bf9367feb48b7ccee0c8466afe"
+ },
+ "T3k_simples|atencioso-P1c~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "31be9c343227f9cbe688ab1a98f9f35af6c135ee6061d6c85f111c19775a8829",
+  "resumo": "f583ada132f259424f5d435e5ce3c386ed0fe4935101aa0f822531b0ed4e151e"
+ },
+ "T3k_simples|atencioso-P1c~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "9fdac1a0263c1819c5424a521fc20028c4ea38045a45762b63e2b029957b0db4",
+  "resumo": "8b2f9c876fb2b448307d6f5723ebb7b6d3081bdd120d89c323ef9d15fa2e1e25"
+ },
+ "T3k_simples|atencioso-P1c~descasado@101": {
+  "interacoes": 64,
+  "politica": "26b43915561d8c244701f389921fd651fc317a16be07be8ed82d36b0559965f2",
+  "resumo": "0d1c02a2b0ceb58aba3a3c1dab394b01da717df0c5cbb20e7ab17423430ed4e7"
+ },
+ "T3k_simples|atencioso-P1c~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "6eb5a68d0ad21c6f40ce8355edd279415a710deee948048a0c22dcf5667a722a",
+  "resumo": "bc1e5911f8c7ac8539c1e1438e60679a4c4efc81cee748e17fcff72f8ccf8014"
+ },
+ "T3k_simples|atencioso-P1c~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "617f7f1f5d0e9bdf86f6bf9972ee18c4777e316f8107a9a37371578315fb3280",
+  "resumo": "f2eabec071ce332942c22e83474db21491af698cd1349baf7bc9ac334e30cb8c"
+ },
+ "T3k_simples|atencioso-P1c~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "fff532d035e8ca6b7ef44423e2c7a33dfd8e6b9ad060ba67ca66c8945d57811b",
+  "resumo": "c22c9f09d509d9c686dd6093efa47fcae56e72fd0fc5b446f76ccfe967745621"
+ },
+ "T3k_simples|atencioso-P1c~mutavel@101": {
+  "interacoes": 64,
+  "politica": "2be652095c3394a7113483fafc992c90a10eb48e78b18cd2948c75977b0f72c2",
+  "resumo": "3419ed54fa2fd8cc2d6ac7523fa2023649245d80eecf716b13956ba6d6817d70"
+ },
+ "T3k_simples|atencioso-P1c~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "8211d7240b5dcdcc40aa462a175e5ceddd19a0756e43278f2532c005dc4ff21f",
+  "resumo": "83bc23d56af6432b9dd8d32ffb96df0dfbfe43bf9367feb48b7ccee0c8466afe"
+ },
+ "T3k_simples|atencioso-P1~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "57f5d203981d60113a0438df8551e447e346e0878ef39a99878b7f55e05315bb",
+  "resumo": "d696f00143e16f704266f941417c6ac960380754565808e1dfceff1d2778c8cc"
+ },
+ "T3k_simples|atencioso-P1~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "89d009dad46512e7fc7b6519315994c6e75ea14eae05a0ec04a5cbbc441683ec",
+  "resumo": "8b2f9c876fb2b448307d6f5723ebb7b6d3081bdd120d89c323ef9d15fa2e1e25"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~casado_frutas@101": {
+  "interacoes": 18,
+  "politica": "580926aa1e5a277df13aca35a36e37cec018291feac55aef7f288998c5685792",
+  "resumo": "001fe2a5adea655abc4c267911aaef18e3dd92ad653d5b7103e99779aefd61da"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~casado_frutas~g202@202": {
+  "interacoes": 20,
+  "politica": "be7d9b61f5337d6c4741f1c22d2ef1951a4571e0cf159a088395069c8bd783b4",
+  "resumo": "e9c9f239f5c73a95eedd3b9b78efcd5de1eae1da23745fce5332d95722fa34cd"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~descasado@101": {
+  "interacoes": 16,
+  "politica": "57529904788b032d8f2d938937f76066e6bb8a9bf4a5268ecd9f524e431c5745",
+  "resumo": "922b4ba374a5333ce495bf898383b72858999046548bdfa9984b026ad33c425d"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~descasado~g202@202": {
+  "interacoes": 19,
+  "politica": "1a87e678241d84422645f3ffac394d74cb76380f5b179f0c71124e6c71dc0220",
+  "resumo": "1bae4edd3425801ba59013e25d63e58b0be7fbedad5d15f8126ce04d1f57ec1d"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~iguais_frutas@101": {
+  "interacoes": 18,
+  "politica": "2dd40035287060f68ad0b23c76f201a86c116eb6fa0d0a5fade91ad8769e9505",
+  "resumo": "7f84e484b8f267d50c67106131abe4c36f07cd90463f1cb0481ee9d5d5a793ce"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~iguais_frutas~g202@202": {
+  "interacoes": 21,
+  "politica": "dc612e7f6e05502781ef164b38018b086aa9c00d9e229350afcf33cfbcb63b59",
+  "resumo": "2d46fa515fc2b3bba0b4a8ccbb5d54b38d753233aecd3123517d3b8568e3f6e1"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~mutavel@101": {
+  "interacoes": 17,
+  "politica": "fd014cfb47757b63802b4d8911ce9f8f88116c1676a0cd3b4d372418e39dca07",
+  "resumo": "e40fc3ebb04b8a21c525f96f8c88914f06b9b9601c77449b04e47dcc2721d311"
+ },
+ "T3k_simples|atencioso-P1~de-P3-sem_sinais~mutavel~g202@202": {
+  "interacoes": 20,
+  "politica": "7c9fb832b01fd93aaae00c29adb71894c8129e412b0f015928a913b1c4b28cb5",
+  "resumo": "9c71db6f7e9c183dc345a9a634d6e63cd5a42c581f9b2739e8cf3e50883b9a38"
+ },
+ "T3k_simples|atencioso-P1~descasado@101": {
+  "interacoes": 64,
+  "politica": "c2d4ec73e4e4d8a9e1e7d4fc08ee587ffdc6f19f909db851552aaeec42198107",
+  "resumo": "390f7b6a6f7390908e90ac5b0bb87e43ccdaa2e97e725823c9a5edb98c219c16"
+ },
+ "T3k_simples|atencioso-P1~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "aea1151bc11dee3e2bf5610a680a10efe12477b6c343f38d678441f741c388e5",
+  "resumo": "ac2cab716d49152c471d7dab1fba31fd2753253525b7268df9514a26957db1b5"
+ },
+ "T3k_simples|atencioso-P1~g202@202": {
+  "interacoes": 64,
+  "politica": "e6bf0dfbc7496bb492f41357464ecadf304ba22a7b26d542be780be9aa8df775",
+  "resumo": "a4deb0aa92a40d085a4de9241b2a369663637285cf4cb280d3880bdc789095ff"
+ },
+ "T3k_simples|atencioso-P1~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "33e2bdbf28f75ef9fe3d9492096c2d5c730763293921902347c12eb2424d22d3",
+  "resumo": "88fe1b9b3b5677b23cc2504534070296eb418f824cce2ff32dd1f9c1ca2991ec"
+ },
+ "T3k_simples|atencioso-P1~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "dfe49d3d73fba085a7a1953c2615252c9f715049714b1a0373d6a30602521871",
+  "resumo": "2679bc9393ccb8faf10886976240ced741570ea1f2492748c6880a290134661a"
+ },
+ "T3k_simples|atencioso-P1~mutavel@101": {
+  "interacoes": 64,
+  "politica": "ed4266c310fd589f3c13d6e81372b133d74b6a457b7c8876240408a145f6038e",
+  "resumo": "a65574a33af7e359cf26ba9d03477f1a6bef01b08584ed363451f1d60a743772"
+ },
+ "T3k_simples|atencioso-P1~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "7dfa192875177a257f395255b43872ef58a0221cb51ae3685b9ac074ec49aeae",
+  "resumo": "50ea60e25b31f3f3a297a48f1b1b847a8a9ad49c6cb88f9ef55bbb6b7233bb79"
+ },
+ "T3k_simples|atencioso-P2a~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "88dfc154ee045ec2fb3a19f74af5a880d3871b086446ce1e65e836f6f2a07d0f",
+  "resumo": "2d21e7af862e09a920eee5e8d3f5a38d45aa05b4d36d67b726cabaa178e23472"
+ },
+ "T3k_simples|atencioso-P2a~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "cdcd273bf4d1fa4607158f53afe1e7db0e1e9358a2da50428a27cb2c53092922",
+  "resumo": "668798ccdf1097c2220e3e23eab81bce97227d2afa6efff1e851ccd0bfe5f3bc"
+ },
+ "T3k_simples|atencioso-P2a~descasado@101": {
+  "interacoes": 64,
+  "politica": "560eef3573e865ddc3e077c2ff2fec3560bfe929576e82dcad6d97ead1c0850b",
+  "resumo": "0ee41ed0d5f6ba1677a184d308272ff68a34fdd25dace4326cb3800f10810f8f"
+ },
+ "T3k_simples|atencioso-P2a~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "c9a60d87db847e2ed73941d771a0876eebf23c9376420236550f3ba6d4cd6602",
+  "resumo": "c2cfd809f326fc7684928d07520e19eb66defa980de13fe0b1725217fda71566"
+ },
+ "T3k_simples|atencioso-P2a~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "9ea169277dc6e3f00ff34f471e929b28c5cdb92bf22fc5666a66249d5674c096",
+  "resumo": "34fb8d0c44414681048cb8625914413b210bb3c5d2cf4c404034632ec5b2f342"
+ },
+ "T3k_simples|atencioso-P2a~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "c2f541aaa2cfd2a2c1c75befdef1b596f2e2c37294db8aac3b18d6396f92e7e5",
+  "resumo": "9e45abc1587f6fb36ee523a34ed4b6768e4b559a268573bf07cdfb92dd049f13"
+ },
+ "T3k_simples|atencioso-P2a~mutavel@101": {
+  "interacoes": 64,
+  "politica": "558f2d860cd2ed08fab66995d39d8318c9d1e7f686c5e65c61bc59db299b34a2",
+  "resumo": "6fa81260b21a6bc426b4a92c95b565e39eb22a6108cbd4e5ab4d880bdc219190"
+ },
+ "T3k_simples|atencioso-P2a~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "c7dde16c1596a43626d3dd0f497320217f4ee946fdf59eecaef2a7bdcf5a7179",
+  "resumo": "4ab64bc2353f1a5be7883fe969f1ad02adb70c76ed55eed46649963c2911bc75"
+ },
+ "T3k_simples|atencioso-P2e~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "8e2f97dcfd7821af56889bf120135032ab38271ff399ba3c6afc98349422da92",
+  "resumo": "4a87907504c7826efad142edfa29c293707f620affc5acf1d79d3e061ec97726"
+ },
+ "T3k_simples|atencioso-P2e~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "58662928322ccb7b9529bfb0ffc0ca0ce987ec53781cff69b1882f52defe1cb6",
+  "resumo": "0817cf1a63434838403c33cc6e28ac61b43148acb222b66f59f7fa57b66abd10"
+ },
+ "T3k_simples|atencioso-P2e~descasado@101": {
+  "interacoes": 64,
+  "politica": "42d46384c53a16afcb6e92f22688b4c932809a013359c2fdb236ee6df30d1e81",
+  "resumo": "7c06050b9dffd8b348e7754f5c78aa4c413e5fd2b02501f3a1f9e1d3dcf3d31b"
+ },
+ "T3k_simples|atencioso-P2e~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "c0d1f853654d817d1c0eaf42f601eb16a04a6115c4762815ab7fbe789fbd7a9c",
+  "resumo": "56d356fb7e745ecd9d264af6246f90066dc89ea3fa17a2dca30d7e89d4172593"
+ },
+ "T3k_simples|atencioso-P2e~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "6e419201c58478dbdcbb6ff295d1b322caaae2bfe265d651ea211fbcc1fc6336",
+  "resumo": "e04776c39498f77409b4651cbbc0bd4e5b75d189f7c7967494713e3a4fdeb4e9"
+ },
+ "T3k_simples|atencioso-P2e~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "8a895dd1391120e2e8cd11c0920286889b8026144975cca92ac84a444d5123af",
+  "resumo": "80a7e34a13ec640f370bea812a50b14e38174c975f735116c2d20d70def52afd"
+ },
+ "T3k_simples|atencioso-P2e~mutavel@101": {
+  "interacoes": 64,
+  "politica": "2dd08493466e5cc784defab60d6c1e915aa3e9657c219f80a79b6a75335d4d0c",
+  "resumo": "c117c3c07b988328cc929e382de6147b3c2490c54d3a8908cfebe4f657d44909"
+ },
+ "T3k_simples|atencioso-P2e~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "09ac43d99866960abd1d9ad4cecbe4dae4d2bc3b98ca49b34cde994365e01fd1",
+  "resumo": "06421d3fcc8d85bddccabc6800517bdb194c0d3dd63f88f6da0003ba28879f84"
+ },
+ "T3k_simples|atencioso-P2~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "0f16620bb233d416c1888850bb35139997f82628a8f13ecfa796e374ce510db9",
+  "resumo": "c2dcfebf845f0631517fa1bf034018fce8f9d50c459dc8f6247b13fdcee1db31"
+ },
+ "T3k_simples|atencioso-P2~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "c3f14b569c54b798bbb523e2cdbfb0d4319cce23be288b75f2831a93964fb8e6",
+  "resumo": "e1ab216fc7c28dc4bfbec0ce890769544dfd512474b2043ec6811449d3c462bc"
+ },
+ "T3k_simples|atencioso-P2~descasado@101": {
+  "interacoes": 64,
+  "politica": "1cb05aec29bb525005bd23c61e8b4e68d0d9cfb34fa06d47f8d46fdd1f392ac9",
+  "resumo": "0b794b974c6dd8d10c589c2c17502c2c7f53efa15ef05f39effc4e3bef34de4d"
+ },
+ "T3k_simples|atencioso-P2~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "e6c0aaf55f3a80c1d29e8eb026451202c0dfa122006ae8878c29a7b2af455631",
+  "resumo": "26d46fec8c3fc237ed477bb12feb7ec8cc699db1285b1194fbca6697f569736e"
+ },
+ "T3k_simples|atencioso-P2~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "150b84b5b76831e034694eac1766cb41107b577baae32780bdb66d34988f5da3",
+  "resumo": "99d371dab71932a7664d5036fcc0328d2f3643fa2a18748561bf82447688734e"
+ },
+ "T3k_simples|atencioso-P2~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "97d8f134e909095fdc0a71155d3eb564e5d5d6177f6779b74768945c70553d5b",
+  "resumo": "4b55249d06f1590ae7a8c9ffb4ffc9358155466df2a8ff4226bf9cca33430874"
+ },
+ "T3k_simples|atencioso-P2~mutavel@101": {
+  "interacoes": 64,
+  "politica": "6bf41ae6b9dd071b088f982fe585bae8c0aa97950e131e4fe1b3c11eedd75b99",
+  "resumo": "7d513c0072994ba06aeedb11bd7f72935745bcd5739f0ca02b73fb511e5660af"
+ },
+ "T3k_simples|atencioso-P2~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "81e2173bc8178e61b2d3c2b2cebcf07f7c7f4e417caf9f880179b76a7e14cbbb",
+  "resumo": "df2bdfb16b31a38b8c4d3830ad90c9edd9285d2311bfbeef9cb772328e5a41fe"
+ },
+ "T3k_simples|atencioso-P3+ped~de-P3+ped-nenhum~descasado@101": {
+  "interacoes": 64,
+  "politica": "1ae512e5d01ad2c8ebcd957f36e67f00023c544143fc7aafb561af54d46a48ae",
+  "resumo": "8490f89e4a75e88d8c74297d5176f35f76f8d6237c9c48203ca5a28569c0e575"
+ },
+ "T3k_simples|atencioso-P3+ped~de-P3+ped-nenhum~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "b1ab48086be2ab4585ff77e61691c1736d45713f4f9ef7ed46a48df8f7809ced",
+  "resumo": "59b794dabebde0e7c25b57ff3320daad9eb94e7e265ddf2a460a19a3f2b417a7"
+ },
+ "T3k_simples|atencioso-P3+ped~de-P3+ped-nenhum~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "f51862d50afb8299fdc9ce79bbde743195f48cf25e34c1d7374ab6c1e9862d04",
+  "resumo": "f6f4765701821b9d810632b61b4374f1e25402fcb06a3ff49a736f42b6177ba6"
+ },
+ "T3k_simples|atencioso-P3+ped~de-P3+ped-nenhum~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "e93f0eab32d9aff729ed8f92fe65001e11d237b031a477adf2eefe87594023bd",
+  "resumo": "9e5ae69f7c90fc8e2b4dc42f62535661d4ffddfb0b18b20b6019d35ccb6a56d1"
+ },
+ "T3k_simples|atencioso-P3+ped~descasado@101": {
+  "interacoes": 64,
+  "politica": "1ae512e5d01ad2c8ebcd957f36e67f00023c544143fc7aafb561af54d46a48ae",
+  "resumo": "8490f89e4a75e88d8c74297d5176f35f76f8d6237c9c48203ca5a28569c0e575"
+ },
+ "T3k_simples|atencioso-P3+ped~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "b1ab48086be2ab4585ff77e61691c1736d45713f4f9ef7ed46a48df8f7809ced",
+  "resumo": "59b794dabebde0e7c25b57ff3320daad9eb94e7e265ddf2a460a19a3f2b417a7"
+ },
+ "T3k_simples|atencioso-P3+ped~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "f51862d50afb8299fdc9ce79bbde743195f48cf25e34c1d7374ab6c1e9862d04",
+  "resumo": "f6f4765701821b9d810632b61b4374f1e25402fcb06a3ff49a736f42b6177ba6"
+ },
+ "T3k_simples|atencioso-P3+ped~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "e93f0eab32d9aff729ed8f92fe65001e11d237b031a477adf2eefe87594023bd",
+  "resumo": "9e5ae69f7c90fc8e2b4dc42f62535661d4ffddfb0b18b20b6019d35ccb6a56d1"
+ },
+ "T3k_simples|atencioso-P3@101": {
+  "interacoes": 64,
+  "politica": "a223e332f6b6521a62cfc9e1b4ef65a0bde6793121257b4310c2186ea4aeaf0d",
+  "resumo": "98bfb95028792d12f2459956c389fa31869224c42d181e48a1e313b39277e707"
+ },
+ "T3k_simples|atencioso-P3~casado_frutas@101": {
+  "interacoes": 64,
+  "politica": "72ec2a43e5c247167579056be359fab0f5c2ed8870b66456dab070a114924205",
+  "resumo": "198c7aa42e92c5560c917cace47531c942140378275f180554c8db91ed2dd550"
+ },
+ "T3k_simples|atencioso-P3~casado_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "79e73dc750d695e9c07247766ef691b9b204a949f5ad4894d3f0caacdc88b84d",
+  "resumo": "cabf4c7522d9c5cbf0da6dba68ad71bb94e1d1fe7a47b9376844c8a7d454f923"
+ },
+ "T3k_simples|atencioso-P3~descasado@101": {
+  "interacoes": 64,
+  "politica": "ffc16617f6118124b863e4193fe04d902c20b2e70458f4723ead6dd3b22dcdda",
+  "resumo": "1de3940bd778d433e35a2f2c676eb21f699721bb79095ce3ba865062b1b919d8"
+ },
+ "T3k_simples|atencioso-P3~descasado~g202@202": {
+  "interacoes": 64,
+  "politica": "023066bab719e314f28be8ad37afb3fa9eefe57fb2818f4e9204ec58a344a649",
+  "resumo": "541d751de75b8ed73c991283fbf973d8b462d1bafdf470977caeea1c20b1a53a"
+ },
+ "T3k_simples|atencioso-P3~g202@202": {
+  "interacoes": 64,
+  "politica": "a5fdf2f5bc8c0b22439ca4c954e71783a8a57095e3b9387d00ade41960857695",
+  "resumo": "fe6a3a86af30e2b36b2054e50f8d9d1fdcf9ffc3d0c0eb492835faf0553984b2"
+ },
+ "T3k_simples|atencioso-P3~iguais_frutas@101": {
+  "interacoes": 64,
+  "politica": "3325ec10954b7ce05a26d645ec78117deebaa79f3258d26eb9fa834887afe1a1",
+  "resumo": "e2fed6221b0c6a5964c4835943749a63773d75a6467c4bca866e6a25033254bf"
+ },
+ "T3k_simples|atencioso-P3~iguais_frutas~g202@202": {
+  "interacoes": 64,
+  "politica": "4b96974097ab1717c0f6caf61115e70021e788b2aa69c1f5d7092e8dce526bea",
+  "resumo": "62e772da3111e08fb4d1fa9d8a57c937877d31fa54c27cd8a96c2de4684b8d92"
+ },
+ "T3k_simples|atencioso-P3~mutavel@101": {
+  "interacoes": 64,
+  "politica": "cfc8d38d007593e933eec1610b55bbf4819bef53fff3163364b3103f50b71afe",
+  "resumo": "72b2edb0a48207daeb78e51a7bc70b7511ae5c24b7ba77d35557759a4d5cc1fa"
+ },
+ "T3k_simples|atencioso-P3~mutavel~g202@202": {
+  "interacoes": 64,
+  "politica": "2aabb7d0afc1ed8efdf89a44581e32eb9157c239b8641e8115979517bfaa99d0",
+  "resumo": "ecc02241367c72f025e4b91e8decdc22c3c91974a75ccb0976528f009b96e306"
+ }
+}

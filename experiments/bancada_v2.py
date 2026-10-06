@@ -88,6 +88,12 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   config so nos bracos com pedido. O que o braco fixa (a memoria do N6 e das ablacoes, os canais das ablacoes) vence a montagem, entao o
   P1c e o P1 completo e o P1c-mem e o P1c-can sao o P1 completo menos uma peca.
 
+  P2d e P3i (P2D-P3I, parte D; adendo 3, secao 3.3, do plano do experimento maior): o P2d e o P2 com a informacao depois do consumo (o
+  JulgadorFruta da parte A com saida="informacao", no primeiro passo do dono depois de cada consumo, no lugar do informante da oferta);
+  o P3i e o P3 com o julgamento do K4 saindo como informacao (a mesma saida), e na montagem completa com o w0_info da config. O
+  conhecimento e o mesmo do P2 e do K4 (os efeitos reais da bancada, com a troca do mutavel); as informacoes ficam fora do orcamento,
+  contam em `informacoes` e saem no sem_ensino; o multiconjunto (fruta, conteudo) vai por vida nas medidas.
+
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
   CONFIG_LOBOS_APRENDIZ: passo 512, teto 1024), entao as runs antigas nao mudam. O "T3" (teto 16*S = 16384, o resto igual: sem traco)
@@ -125,7 +131,7 @@ from digilab.evolucao import politica_no_tick  # noqa: E402
 from digilab.frutas import (DonoInformante, DonoPedinte, JulgadorFruta, MotorFrutas, PoliticaInstintoFrutas,  # noqa: E402
                             _PoliticaComFrutas, genoma_frutas)
 from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho_no_ambiente,  # noqa: E402
-                             consumos_ate_metade, distribuicoes_de_acao, estados_sonda, jsd_media, privacao_nas_decisoes,
+                             consumos_ate_metade, distribuicoes_de_acao, estados_sonda, jsd_media, multiconjunto_informacoes, privacao_nas_decisoes,
                              resposta_a_bola, tabela_braco_condicao, tabela_braco_condicao_parcial, taxa_fruta_ruim,
                              ZONAS_CONFLITO, deferencia_ao_pedido, dia_cruza_zero, fracao_da_fruta, memoria_nas_subdecisoes,
                              ocupacao_espacos_frutas)
@@ -415,6 +421,7 @@ class Braco:
     memoria: str | None = None       # N6: nenhuma | relevante | recencia | embaralhada (o lobo memoria_emocao, chat B)
     pedido: bool = False             # N7: o dono pede "deixe a fruta X" (o mundo do chat A e a entrada `pedido` do chat B)
     canais: bool | None = None       # canais da consequencia (#169): None segue a config; True/False fixa (as ablacoes da K-7)
+    julgamento: str | None = None    # P3i: "informacao" = o julgamento do K4 sai como informacao (JulgadorFruta saida="informacao")
 
 
 BRACOS = {
@@ -437,6 +444,9 @@ BRACOS = {
     "P1c": Braco("P1c", "consequencia", "K-7", memoria="relevante", canais=True),
     "P1c-mem": Braco("P1c-mem", "consequencia", "K-7", memoria="nenhuma", canais=True),     # sem memoria: g = 0
     "P1c-can": Braco("P1c-can", "consequencia", "K-7", memoria="relevante", canais=False),  # escalar: sem canais
+    # adendo 3, secao 3.3, do plano do experimento maior (P2D-P3I): o momento (P2 x P2d) e a interpretacao (P3 x P3i)
+    "P2d": Braco("P2d", "informacao", "adendo-3", "depois"),          # a informacao depois do consumo, no lugar da da oferta
+    "P3i": Braco("P3i", "dono", "adendo-3", julgamento="informacao"),  # o julgamento do K4 como informacao
 }
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai
@@ -498,6 +508,12 @@ MONTAGEM_COMPLETA = {
 }
 
 
+def recebe_informacao(b: Braco) -> bool:
+    """O braco recebe informacao do dono? Os de fonte informacao (P2, P2e, P2a, P2d) e o P3i (o julgamento como informacao): na
+    montagem completa so eles ficam com o w0_info da config."""
+    return MONTAGEM_COMPLETA[b.fonte]["info"] or b.julgamento == "informacao"
+
+
 def braco_montado(b: Braco, montagem: str, frutas: bool) -> Braco:
     """O braco com as pecas da montagem. "simples": o proprio braco. "completa": a memoria e os canais da fonte (MONTAGEM_COMPLETA)
     onde o braco nao os fixa; a memoria so nos mundos das frutas (fora deles o cerebro nao a tem). O que o braco fixa vence: o N6 (M0 a
@@ -519,7 +535,7 @@ def cfg_lobos_do_braco(cl: ConfigLobos, b: Braco, semente: int, montagem: str = 
     chega ja montado (braco_montado) e o w0_info da config fica so nos bracos com fonte informacao (os P2)."""
     if montagem not in MONTAGENS:
         raise ValueError(f"montagem {montagem!r}: so {MONTAGENS}")
-    if montagem == "completa" and not MONTAGEM_COMPLETA[b.fonte]["info"]:
+    if montagem == "completa" and not recebe_informacao(b):
         cl = replace(cl, w0_info=0)
     if b.memoria is None:
         cl = replace(cl, memoria_ligada=False, memoria_ganho=0, memoria_modo=CONFIG_LOBOS_PADRAO.memoria_modo, memoria_permutacao=())
@@ -828,14 +844,15 @@ class Bancada:
             b = braco_de(espec.braco)
             julga = RegraFrutasComJulgador(regra, self.julgador(espec)) if self.julga_fruta(espec) else None
             regra = julga or regra
-            if b.fonte == "informacao":
+            if b.fonte == "informacao" and b.informacao != "depois":     # o P2d nao tem o informante da oferta: o julgador e o dele
                 regra = RegraFrutasComInformante(regra, self.informante(espec))
             if b.pedido:
                 regra = RegraFrutasComPedinte(regra, self.pedinte(espec))
             motor = simular_vida_mundo(criar_dono(espec.dono), regra, self.politica(espec, CONFIG_PADRAO), espec.semente,
                                        self.dias, self.orcamento, espec.dono, fm)
             broncas = len(regra.pedinte.broncas) if b.pedido else 0
-            julgamentos = julga.feitos if julga is not None else 0
+            # so o julgamento como feedback (elogiar/repreender) e julgamento; como informacao, conta em `informacoes` (o log)
+            julgamentos = julga.feitos if julga is not None and julga.julgador.saida == "feedback" else 0
         else:
             motor = simular_vida(rotulo, criar_dono(espec.dono), self.politica(espec, CONFIG_PADRAO), espec.semente,
                                  self.dias, self.orcamento, rotulo_dono=espec.dono, fabrica_motor=fm).motor
@@ -870,21 +887,33 @@ class Bancada:
         troca = self.tick_troca if ef["depois"] is not None else None
         if b.informacao == "acoplada":
             return InformanteAcoplado(espec.semente, self.dias, self.cfg_frutas, ef, troca)
+        if b.informacao == "depois":
+            raise ValueError(f"braco {b.rotulo}: a informacao dele e o julgador com saida informacao (Bancada.julgador), nao um informante")
         modo = {"certa": "certo", "errada": "errado"}[b.informacao]
         return InformanteDoMundo(modo, ef, troca)
 
     def julga_fruta(self, espec: EspecVida) -> bool:
-        """K4: o dono desta vida julga a fruta? So com a chave, nos mundos das frutas e nos bracos com fonte dono (o P3)."""
-        return self.julgamento_fruta and mundo_de(espec.mundo).frutas and braco_de(espec.braco).fonte == "dono"
+        """K4: o dono desta vida julga a fruta? Nos mundos das frutas: os bracos com fonte dono (o P3, o P3i, o P3+ped) com a chave
+        julgamento_fruta; o P2d sempre (o julgador com saida "informacao" e o informante dele, P2D-P3I)."""
+        if not mundo_de(espec.mundo).frutas:
+            return False
+        b = braco_de(espec.braco)
+        return b.informacao == "depois" or (self.julgamento_fruta and b.fonte == "dono")
+
+    def saida_julgamento(self, espec: EspecVida) -> str:
+        """A saida do JulgadorFruta da vida: "informacao" no P2d e no P3i (P2D-P3I, parte A), "feedback" (o K4) nos outros."""
+        b = braco_de(espec.braco)
+        return "informacao" if (b.informacao == "depois" or b.julgamento == "informacao") else "feedback"
 
     def julgador(self, espec: EspecVida) -> JulgadorFruta:
         """K4 (contrato K4, E7): o conhecimento do dono do P3 sao os efeitos reais da bancada, os mesmos que o informante do P2 recebe
         (e a troca do mutavel); o julgamento sai fora do orcamento (CONFIG_JULGAMENTO_FORA)."""
         if not self.julga_fruta(espec):
-            raise ValueError(f"{espec.nome}: sem julgamento da fruta (chave julgamento_fruta, mundo das frutas, braco com fonte dono)")
+            raise ValueError(f"{espec.nome}: sem julgamento da fruta (chave julgamento_fruta, mundo das frutas, braco com fonte dono "
+                             "ou o P2d)")
         ef = self.efeitos_reais(espec)
         troca = self.tick_troca if ef["depois"] is not None else None
-        return JulgadorFruta(ef["antes"], ef["depois"], troca, CONFIG_JULGAMENTO_FORA)
+        return JulgadorFruta(ef["antes"], ef["depois"], troca, CONFIG_JULGAMENTO_FORA, saida=self.saida_julgamento(espec))
 
     def pedinte(self, espec: EspecVida) -> DonoPedinte:
         """N7: o dono que pede da unidade (a fruta X pela semente, N7-6), com a bronca da desobediencia so no P3+ped (fonte dono, N7-8)."""
@@ -965,6 +994,7 @@ class Bancada:
                       "mundo": m.resumo_mundo(), "genoma": m.genoma.para_dict(),
                       "consumos_ate_metade": consumos_ate_metade([x["taxa"] for x in dias], [x["n"] for x in dias], taxa_p0),
                       "informacoes": [dict(i) for i in m.informacoes],
+                      "multiconjunto_informacoes": multiconjunto_informacoes(m.informacoes),
                       "decisoes_com_informacao": m.decisoes_com_informacao}
         n6 = self.medidas_n6(vida, m, reg) if isinstance(m, MotorFrutasMundo) else None
         n7 = self.medidas_n7(vida, m, reg) if isinstance(m, MotorFrutasMundo) else None
@@ -1203,7 +1233,9 @@ class RegraFrutasComJulgador:
         self.regra = regra
         self.julgador = julgador
         self.feitos = 0
-        self.extras_fora_do_orcamento = JULGAMENTOS | getattr(regra, "extras_fora_do_orcamento", frozenset())
+        # o feedback (elogiar/repreender) so entra fora do orcamento por esta regra; a informacao ja e FORA_DO_ORCAMENTO (P2d, P3i)
+        proprios = JULGAMENTOS if julgador.saida == "feedback" else frozenset()
+        self.extras_fora_do_orcamento = proprios | getattr(regra, "extras_fora_do_orcamento", frozenset())
 
     def decidir(self, visao: Visao, acoes_do_dono: list) -> list[AcaoUsuario]:
         julg = self.julgador.acoes(visao.estado)

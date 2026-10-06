@@ -1093,3 +1093,13 @@ def dia_cruza_zero(serie_por_dia: Sequence[float]) -> int | None:
         if v <= 0:
             return d + 1
     return None
+
+
+def multiconjunto_informacoes(informacoes: Sequence[Mapping]) -> dict[str, int]:
+    """P2D-P3I (adendo 3, secao 3.3): o multiconjunto (fruta, conteudo) das informacoes de uma vida, {"<fruta>/<conteudo>": n}, em ordem.
+    Le o registro do motor das frutas (`MotorFrutas.informacoes`: dicts com "fruta" e "conteudo")."""
+    cont: dict[str, int] = {}
+    for i in informacoes:
+        k = f"{i['fruta']}/{i['conteudo']}"
+        cont[k] = cont.get(k, 0) + 1
+    return dict(sorted(cont.items()))

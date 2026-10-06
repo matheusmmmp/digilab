@@ -2765,6 +2765,31 @@ rodou nas sementes 15101…15505. Interpretações, registradas antes da run:
   - **L-2:** o status do Ackley e Littman atualizado no CSV de `docs/referencias/` e na skill de literatura;
   - **L-3 e L-4:** entram como leitura no adendo 4.
 
+## 2026-10-06 — V2, P2D-P3I, parte D: os braços P2d e P3i na bancada (`docs/TAREFA_V2_P2D_P3I.md`)
+
+- **O P2d julga sempre nos mundos das frutas**, sem depender da chave `julgamento_fruta`: o julgador com saída informação é o informante
+  dele (o que o P2 tem pela oferta). O P3i segue a chave, como o P3 (com ela desligada o P3i é o P3, gate).
+- **Um campo novo no braço** (`Braco.julgamento`, só no P3i) e um valor novo de `Braco.informacao` (`"depois"`, só no P2d), em vez de
+  braços tratados pelo nome. Pedir `Bancada.informante` do P2d falha alto: o informante dele é o julgador.
+- **Contagem:** as informações do P2d e do P3i são informações (contam em `informacoes`, saem no `sem_ensino`), não julgamentos: o
+  `VidaBancada.julgamentos` só conta o julgamento como feedback. A `RegraFrutasComJulgador` só põe `elogiar`/`repreender` em
+  `extras_fora_do_orcamento` quando a saída é o feedback; com a saída informação, os eventos já são `FORA_DO_ORCAMENTO`.
+- **O multiconjunto por vida** fica em `frutas.multiconjunto_informacoes` das medidas, pela função nova `metrics.multiconjunto_informacoes`
+  (sobre o registro `MotorFrutas.informacoes`). O orquestrador do adendo 3 (`run_v2_experimento_maior.multiconjunto_informacoes`) não foi
+  tocado: lê o mesmo registro e dá o mesmo resultado (teste).
+- **"P3 e P3i com os mesmos ticks de julgamento"**, lido como a mesma regra de tempo: as vidas do P3 e do P3i divergem depois do primeiro
+  julgamento (o elogio e a bronca ensinam o P3; a informação não ensina o P3i, só entra na percepção), então os ticks da vida inteira não
+  podem ser os mesmos. O gate confere que os dois julgam pelo mesmo conhecimento (o mesmo `JulgadorFruta`, só a saída muda) e, em cada
+  vida, no primeiro passo do dono depois de cada consumo: o P3 os não neutros, o P3i todos.
+- **"O P2d sem informante = o P1 completo" e "o P3i com o julgamento desligado = o P3"**: o log, as decisões e tudo o que é aprendido são
+  iguais; na montagem completa o estado interno difere só no que o `w0_info` põe nele (o peso da informação, que não anda sem
+  informação, a contagem dos parâmetros e a informação vigente, zero, no motivo da escolha da fruta). O gate compara o estado interno
+  sem essas chaves, por sha256.
+- **Testes lentos ao falhar:** na primeira rodada os dois gates acima compararam o texto inteiro do estado interno, falharam pelas chaves
+  da informação, e o pytest levou 34 min montando o diff de ~60 mil caracteres. Agora a comparação é por sha256; o arquivo roda em ~2,5 min.
+- **Teste de outra frente ajustado:** `tests/test_bancada_v2.py` (a tabela de contrato dos braços) ganhou o P2d e o P3i. O
+  `tests/test_adendo3.py::test_p2d_p3i_falha_alto_...` passa a ser pulado (ele mesmo se pula quando os braços existem).
+
 ## 2026-10-06 — V2, V1-LIGAR: a faixa de validação nova e a leitura do adendo 4 (`docs/TAREFA_V2_V1_LIGAR.md`)
 
 Tarefa `docs/TAREFA_V2_V1_LIGAR.md`; adendo 4 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`. Só fumaça nas sementes dos testes; nada rodou
