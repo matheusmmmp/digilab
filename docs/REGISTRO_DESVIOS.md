@@ -2363,3 +2363,25 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   M0 = P0 usa o braço M0 (só o estado da memória e o rótulo do braço diferem), o da memória que age usa o MR, e o "sem o campo do pedido nada
   muda" passa a dizer que num braço sem pedido o `w0_pedido` da config não chega ao cérebro (e no P1+ped chega). A intenção de cada um ficou;
   a alternativa (deixar a config ligar a memória e o pedido em P0, P1 e P3) faria um braço mudar sem o nome dizer.
+
+## 2026-10-05 — V2, CEREBRO-C: o DigiBrain C, Fly-like (`docs/TAREFA_V2_CEREBRO_C.md`)
+
+- **`config.py` também mudou** (a `ConfigCerebroC`): os parâmetros ficam em `config.py` pela regra do projeto. O registro de status fica no
+  próprio `cerebro_c.py` (`PARAMETROS_CEREBRO_C`), como o do A fica no `lobos.py`.
+- **A ligação na bancada ficou fora de `bancada_v2.py`:** `experiments/cerebro_c_bancada.py` estende a `Bancada` por subclasse só para os
+  testes e como receita para o chat D. Não combinei por mensagem com o chat D (as mensagens entre sessões expiram); a receita vai no PR.
+- **O que é "inspirado na Drosophila" aqui:** circuitos por classe de estímulo (corpo, social, objeto), células binárias esparsas
+  (faixas e conjunções fixas, o papel das "Kenyon cells"), compartimentos apetitivo e aversivo separados, plasticidade de três fatores
+  (célula ativa × ação executada × sinal do canal) e a expressão da memória apetitiva de comer pela fome. Nada disso diz algo da mosca
+  (problema 4 de `brain_comparison.md`). O mundo não tem ameaça: o circuito de ameaça não existe (risco 1 do plano).
+- **Os canais do C são a arquitetura**, sempre ligados; a `ConfigConsequencia.canais_ligados` (a chave do A) não muda o C. O total por
+  decisão é o escalar da bancada, conferido em toda decisão (falha alto se não), então o contrato K-6 vale também no C.
+- **As faixas de necessidade usam os limiares do instinto** (0,25 urgente; 0,5 o pedido do dono). Os cortes são estrutura (quantas
+  células existem), não parâmetros livres; mudar a estrutura muda a capacidade e pede um PR.
+- **O gate de fome só no apetitivo de comer:** a memória aversiva se expressa sempre (não comer uma fruta que fez mal não depende da fome).
+  As outras ações não têm gate.
+- **Capacidade:** conto toda sinapse de saída declarada, inclusive as de ações que nunca são candidatas daquela célula, como o A conta os
+  756 pesos da tabela inteira. As células e o prior não contam (herdados).
+- **A resposta inata à informação (`w0_info`) é parâmetro livre do C**, como o `w0_info` do A na K-3; com 0, a informação só pesa pelo
+  que o C aprendeu nas células `info_bem`/`info_mal`.
+- **Fora (decisão C-2):** a memória de episódios (N6) e o pedido (N7). A `BancadaComC` recusa os braços deles.

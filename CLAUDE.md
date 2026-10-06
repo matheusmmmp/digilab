@@ -2002,3 +2002,40 @@ sem run de pesquisa nem faixa reservada; só as sementes dos testes. Só `experi
   do pedido; 35 vidas em ~27 s), unidades com os prefixos `n6` e `n7`, ganho e `w0_pedido` S/2 só para as peças agirem.
 - **Fora:** as tabelas braço × condição não ganharam as medidas do N6 e do N7 (ficam no `medidas.json`; o orquestrador da calibração
   conjunta lê de lá); o K4 e os canais são a rodada 10.
+
+## V2, CEREBRO-C — o DigiBrain C, Fly-like (2026-10-05, `docs/TAREFA_V2_CEREBRO_C.md`) — GATES PASSAM
+
+Etapa C5 do `docs/ROADMAP_V2.md`; contrato da seção 1 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md` (C-1 a C-10); família "Fly-like" de
+`docs/research/digibrain/synthesis/brain_comparison.md`. **Sem calibração e sem run**; só as sementes dos testes. Mudaram
+`digilab/policies/cerebro_c.py` (novo), `digilab/config.py` (`ConfigCerebroC`) e `experiments/cerebro_c_bancada.py` (novo); **`lobos.py` e
+`bancada_v2.py` não** (o C só importa funções públicas do A e a sonda do instinto). "Inspirado em" fala do nosso cérebro, não da mosca.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O herdado (C-1):** a regra do instinto e os candidatos (`lobos.impulsos`) e o prior do A (`PoliticaLobos._tabela_prior`, a mesma
+  ativação em ponto fixo). O C aprende por cima: peso efetivo = instinto + aprendido / S (+ o piso, só com o aprendizado ligado).
+- **Circuitos por classe de estímulo**, com células binárias esparsas, fixas e herdadas (faixas e conjunções): **corpo** (fome, higiene,
+  energia, humor, saúde, sujeira, dormindo, hora: 22), **social** (o tempo sem cuidado e a conjunção com a hora: 15) e **objeto** (bola,
+  cada fruta, fome × fruta, energia × bola: 16). Na escolha da fruta, a identidade de cada fruta e o que o dono informou dela (bem, mal: 5).
+- **Saída e competição:** cada célula ativa tem, por ação, um compartimento **apetitivo** e um **aversivo** (0 ≤ w ≤ teto); L_a = soma de
+  apetitivo − aversivo nas células ativas; os comportamentos competem pelo sorteio proporcional de sempre. **Memória dependente de
+  estado:** o apetitivo de comer só se expressa na medida da fome (gate = S − arred(fome × S)).
+- **Canais de reforço paralelos** (no C, a arquitetura; no A, a chave `canais_ligados`): a consequência por drive
+  (`lobos.sinal_homeostatico_canais`/`_fruta_canais`; a soma é o escalar da bancada, conferida em toda decisão): fome, higiene e energia
+  vão ao corpo e ao social; o humor (a E2) vai ao objeto e à escolha da fruta; o dono (janela da v1 do A) vai a todos.
+- **Plasticidade local:** só as sinapses das células ativas, para a ação executada, no compartimento do sinal: += div_arred(passo × |f|, S),
+  cortado no teto. Nada depende da probabilidade da política (diferente da regra do A). Decisão com um candidato só não aprende.
+- **Sonda do aprendido** (contrato 1.1): `motivos[-1]["sonda"]` (a ação com o aprendido zerado e o mesmo u) e, na fruta,
+  `["fruta"]["sonda"]` (sem o aprendido; sem a informação).
+- **Capacidade (C-3):** 752 parâmetros aprendíveis (53 células × 7 ações × 2 compartimentos + 5 × 2), **0,986×** os 763 do A no ponto da K2.
+- **Parâmetros:** `ConfigCerebroC` (registro em `cerebro_c.PARAMETROS_CEREBRO_C`, todos PROPOSTOS). Livres para o adendo: `passo`, `teto`
+  e `w0_info`; os do crédito do dono são os do A; os cortes das faixas são estrutura (os limiares do instinto).
+- **Gates** (`tests/test_cerebro_c.py`, 23 testes, ~20 s): **aprendizado desligado = instinto byte a byte** (pela bancada: P0 no padrão, na
+  bola e nos quatro mundos das frutas, 4 donos × 2 sementes; P1 e P3 desligados = o P0 do instinto; 3000 observações aleatórias decisão a
+  decisão, ação e rng); **G1** (P0, P1, P2, P2e, P2a, P3 e o acoplado só cuidado, do texto do log, estado interno incluído); **capacidade
+  na faixa**; **a sonda reproduz a decisão de um gêmeo zerado** com o mesmo u (decisão e fruta); **aprende com a consequência, conta
+  exata**: a fruta que derruba o humor 0,8 → 0,7 dá o canal humor −204, cada uma das duas células do objeto ganha 13 no aversivo de comer e
+  o peso de comer com ela sozinha cai exatamente 26/1024, sem mexer na outra fruta; a memória apetitiva só se expressa com fome; a
+  informação "mal" que fez mal passa a pesar contra qualquer fruta informada "mal"; o dono chega aos três circuitos; os canais somam o
+  escalar (falha alto se não); N6 e N7 recusados (C-2).
+- **Para o chat D:** `experiments/cerebro_c_bancada.py` (`BancadaComC`) é a receita: `CEREBROS` ganha `cerebro_c` e, em `Bancada.politica`,
+  `PoliticaDoBraco(PoliticaCerebroC(cfg, cc, cb, cf), braco, cfg_consequencia)`, com o aprendizado desligado no P0. O resto da bancada
+  (motor, replay, medidas) lê os ganchos e o estado interno pelos mesmos nomes.
