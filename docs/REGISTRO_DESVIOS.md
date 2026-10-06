@@ -2616,6 +2616,22 @@ Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, q
   (`artifacts_v2_comparacao_cerebros/calibracao_B/`). Um olhar do B num ponto em que ele aprende só pode entrar como **descritivo**, nunca
   na escolha.
 
+## 2026-10-06 — Adendo 3 do experimento maior: a literatura antes da validação (P-1 a P-7)
+
+- **De onde vem.** Saiu de uma revisão de literatura do Claude Science, salva em `docs/referencias/E_SINTESE_VALOR_APRENDIZADO.md`, lida
+  em `docs/PREDICOES_V2.md`. O Matheus aprovou P-1 a P-7.
+- **O que entra no desenho:**
+  - o bloco de três durações, secundário;
+  - o mutável como limitação declarada;
+  - os braços P2d e P3i;
+  - a passada de literatura antes da leitura.
+- **Correção antes de qualquer código.** A primeira versão propunha só o P3i, como isolador do momento. Ele não isola, porque o P2 aprende
+  pela consequência e o P3, pelo dono. Ficaram duas variantes:
+  - o P2d isola o momento;
+  - o P3i isola a interpretação.
+- **O que não muda:** as predições 1 a 5, os primários, o Holm, o N e o Δ.
+- **A validação** espera os braços novos e o bloco de durações.
+
 
 ## 2026-10-06 — V2, CALIBRACAO-CEREBRO-B: a calibração do cérebro B (`docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`)
 

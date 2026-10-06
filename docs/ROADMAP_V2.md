@@ -131,3 +131,11 @@ Versões de pet na web: v10 vínculo B; **v11 = o DigiBrain escolhido**; bola, f
 Rodada 10 (2026-10-05): o Matheus decidiu que o julgamento da fruta do K4 fica **fora do orçamento**, como a informação do P2, e aprovou as decisões C-1 a C-10 do plano da comparação dos cérebros.
 
 Rodada 11 (2026-10-06): o Matheus aprovou a opção A da K2 (adendo 2 do experimento maior: N 30, o Δ do P3 em consumos). Cada cérebro é calibrado por quem o construiu. A validação única espera os adendos de `docs/PREDICOES_V2.md`.
+
+Rodada 12 (2026-10-06): a literatura entrou antes da validação (adendo 3 do experimento maior, `docs/PREDICOES_V2.md`).
+- **Construção:**
+  - os braços P2d e P3i: o mundo com o chat A e a bancada com o chat D;
+  - o bloco de durações e os braços secundários no orquestrador da validação, com o chat B.
+- **Validação única (V1):** roda depois disso, com o sinal verde do coordenador.
+- **Leitura:** a passada de literatura P-7 fica com o chat C, antes da leitura.
+- **Comparação dos cérebros:** fica entre A e C. O B "não fecha" (decisão de 2026-10-06).

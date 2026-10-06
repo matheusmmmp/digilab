@@ -373,3 +373,50 @@ calibração.
 
 **O que fica em aberto antes da run.** Os adendos de literatura (`docs/PREDICOES_V2.md`, em preparação) podem acrescentar a medida em
 pelo menos três durações de vida. A validação **não roda** até eles serem registrados ou dispensados pelo Matheus.
+
+## Adendo 3 (2026-10-06, antes da validação): o que a literatura muda no desenho
+
+Fonte: `docs/PREDICOES_V2.md`, que se apoia na síntese `docs/referencias/E_SINTESE_VALOR_APRENDIZADO.md`. O Matheus aprovou as decisões
+P-1 a P-7 em 2026-10-06. **Nada aqui muda as predições 1 a 5, os seis contrastes primários, o Holm, o N nem o Δ** (adendo 2).
+
+**Apoio teórico das predições** (só para a leitura):
+
+| predição | apoio |
+|---|---|
+| 1 | APOIADA |
+| 2 | APOIADA COM RESSALVA (a relação com a duração da vida não é monotônica) |
+| 3 | APOIADA (pela informação filtrada, não pela economia de tentativas) |
+| 4 | SEM APOIO DIRETO |
+| 5 | CONTESTADA (Ho et al. 2017, `10.1016/j.cognition.2017.03.006`): mantida como registrada (P-5) |
+
+**3.1 Bloco de durações (adendo (a), P-1, P-2).** É secundário e descritivo, fora da família de Holm.
+- **Braços:** P0 e P1. **Mundos:** descasado e mutável. **Unidades:** as da validação.
+- **Durações:**
+  - a principal, de 14 dias, sem mudança;
+  - mais duas: **7 dias** e a maior entre **28 e 21 dias** que couber, junto com o resto da validação, no teto de 12 h (K-10).
+- **O custo** é calculado pelo worker B a partir do tempo por vida da calibração conjunta, antes da run. Se nem 21 dias couber, o
+  Matheus decide.
+- **Leitura:** a forma da curva por braço e mundo (crescente, platô ou ótimo interior), com IC por bootstrap das unidades.
+- **No mutável,** a troca acompanha a duração (`Bancada.tick_troca` = fim do dia `dias // 2`). Essa confusão vai declarada.
+
+**3.2 O mutável sem precedente teórico direto (adendo (b), P-3).** Os modelos disponíveis tratam mudança entre gerações, não dentro da
+vida (Kozielska e Weissing 2024, `10.1371/journal.pcbi.1011840`). No mutável, o resultado é descrição do que este motor faz. O teste não
+muda; a limitação vai no relatório.
+
+**3.3 Os braços P2d e P3i (P-4, P-6).** Secundários, fora da família de Holm, no descasado e no mutável, nas mesmas unidades da validação.
+A validação espera esses braços.
+- **P2d:** o P2 com a informação dada **depois** do consumo, no primeiro passo do dono, e só sobre a fruta consumida.
+  - **Contraste** P2 × P2d: o **momento**.
+- **P3i:** o P3 com o julgamento da fruta como **informação**: o evento `informar_fruta_*` na percepção, com o `w0_info` do ponto da K2,
+  no lugar de elogio e bronca.
+  - **Contraste** P3 × P3i: a **interpretação**.
+  - No P3i o `w_info` não aprende, porque só a consequência o ajusta. Fica declarado.
+- **Declarado:**
+  - P2d × P3i não entra em contraste nenhum (difere na fonte do aprendizado);
+  - o número e o multiconjunto das informações vão reportados por braço.
+- **Contrastes secundários** (IC 95% por bootstrap das unidades, sem Holm):
+  - P2 − P2d e P3 − P3i na `taxa_fruta_ruim` final, no descasado e no mutável;
+  - os consumos até a metade, no descasado.
+
+**3.4 Literatura (P-7).** A próxima passada (as pistas de prioridade 1 da síntese) é feita antes da **leitura** dos resultados, não antes
+da run. Ela não muda o desenho.
