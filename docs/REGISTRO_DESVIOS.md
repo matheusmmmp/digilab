@@ -2715,3 +2715,40 @@ no desenho (congelado até a validação).
 - **Ackley e Littman:** existência confirmada em duas listas de referências revisadas por pares (Kozielska e Weissing 2024; Nolfi e
   Floreano 1999), com o ano divergente (1992 e 1991); o texto não foi lido. A mudança de status na skill e no CSV fica para o Matheus
   (decisão L-2); nada foi editado na skill.
+
+## 2026-10-06 — V2, V1-ADENDO3: o orquestrador da validação com o adendo 3 (`docs/TAREFA_V2_V1_ADENDO3.md`)
+
+Tarefa `docs/TAREFA_V2_V1_ADENDO3.md`; adendo 3 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`. Só fumaça nas sementes dos testes; nada
+rodou nas sementes 15101…15505. Interpretações, registradas antes da run:
+- **O custo e a duração maior: 28 dias** (`experiments/custo_adendo3.py` → `artifacts_v2_v1_adendo3/custo.json`).
+  - O tempo por vida de 14 dias é o da calibração conjunta, 12,27 s (o piloto de 880 vidas, a mesma composição de 44 por unidade).
+  - A razão entre durações foi medida nas sementes dos testes (bases 101 e 202, P0 e P1, descasado e mutável, pela bancada inteira): 7
+    dias custam 0,42 × os 14, 21 dias 1,71 × e 28 dias 2,57 ×. O custo cresce um pouco mais que a duração.
+  - O P2d e o P3i contam como vidas de 14 dias (4 por unidade).
+  - Total: 4,91 h sem o bloco de durações; 6,13 h com 28 dias e 5,78 h com 21. O 28 cabe no teto de 12 h e fica.
+- **As vidas de outra duração têm as mesmas interações por dia** (16): orçamento 112 com 7 dias e 448 com 28. O adendo não diz; manter o
+  dono igual por dia é o que deixa só a duração mudar.
+- **A medida do bloco de durações é a da predição 2:** a `taxa_fruta_ruim` na janela `final` no descasado e `depois_da_troca` no mutável.
+  As janelas acompanham a duração (a segunda metade da vida), e a troca do mutável também.
+- **A forma da curva tem regra escrita antes da run, só descritiva** (`forma_da_curva`). Os dois passos pareados por unidade são a =
+  y(14) − y(7) e b = y(D) − y(14), com o valor orientado (taxa menor = melhor; ganho P0 − P1 maior = melhor). As formas:
+  - crescente: IC 95% de b acima de 0;
+  - ótimo interior: a acima de 0 e b abaixo de 0;
+  - decrescente: b abaixo de 0 sem a acima de 0;
+  - platô: IC 90% de b dentro de ±Δ (o Δ 0,1986 do adendo 2);
+  - indeterminado: o resto.
+
+  Sai para o P0, o P1 e o ganho P0 − P1, por mundo.
+- **O P2d e o P3i:** a validação pede `"p2d_p3i": true`, e o orquestrador falha alto antes de qualquer vida enquanto a bancada não tem os
+  dois braços (`docs/TAREFA_V2_P2D_P3I.md`, chat D). Depois do merge desse PR, este branch se atualiza e os liga.
+  - Os contrastes são P2 − P2d e P3 − P3i na taxa `final` (descasado e mutável) e nos consumos até a metade (descasado), com IC 95% e sem
+    Holm.
+  - O número e o multiconjunto das informações por braço vêm do registro do motor nas medidas da bancada.
+- **Correção do #183: a referência do P0 nos blocos.** Os blocos rodam sem o P0 na mesma run da bancada, e lá os consumos até a metade
+  saem sem referência. O descritivo do N5 (P2a − P2) teria saído sem nenhum valor.
+  - Agora a conta é refeita das taxas por dia gravadas, com a referência do P0 da unidade no bloco principal (`consumos_com_referencia`).
+  - Um teste confere que dá o mesmo número que a vida daria rodando com o P0. Nas vidas do principal, a conta tem de bater com o valor
+    gravado, ou falha alto.
+  - Vale para o P2a e para o P2d e o P3i.
+- **O apoio teórico de cada predição e a limitação do mutável** vão na leitura do `resumo.json`, como texto fixo (`APOIO_TEORICO`,
+  `LIMITACAO_MUTAVEL`); a regra de decisão não muda.

@@ -39,7 +39,7 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 
 import bancada_v2 as bv  # noqa: E402
 from digilab.config import CONFIG_CONSEQUENCIA  # noqa: E402
-from digilab.metrics import (contraste_pareado, dentro_da_margem, holm, inclinacao_mmq,  # noqa: E402
+from digilab.metrics import (consumos_ate_metade, contraste_pareado, dentro_da_margem, holm, inclinacao_mmq,  # noqa: E402
                              t_unilateral, tamanho_amostra)
 from digilab.protocol import PROTOCOLO_ARENA_V1, derivar_semente  # noqa: E402
 
@@ -54,7 +54,7 @@ DIAS_PLANO = 14                                     # E5
 DIAS_INCLINACAO = 4                                 # "dias 11 a 14" numa vida de 14: os 4 ultimos dias (predicao 2)
 CHAVES = {"descricao", "plano", "unidades", "sementes", "genomas", "dias", "orcamento", "ponto", "lobos", "consequencia",
           "frutas", "sonda", "bootstrap", "delta", "alfa", "poder", "donos", "referencia_padrao", "blocos", "delta_p3", "delta_n6",
-          "delta_n7", "replicas_poder"}
+          "delta_n7", "replicas_poder", "duracoes", "p2d_p3i"}
 # Adendo 2 (2026-10-06, opcao A): cada contraste com o delta na escala da sua medida; o p3 e medido em consumos
 CONTRASTE_EM_CONSUMOS = "p3_consumos"
 LIMIAR_CITA = 0.069                                 # G-CITA (plano do N6, secao 7)
@@ -146,10 +146,55 @@ def modo_e_unidades(cfg: dict) -> tuple[str, list[dict]]:
                       if not isinstance(cfg.get(k), (int, float))]
             if faltam:
                 raise ValueError(f"validacao: {faltam} vem do adendo 2, numeros obrigatorios")
+            # adendo 3: o bloco de duracoes (3.1) e os bracos P2d e P3i (3.3) entram na validacao
+            d3 = cfg.get("duracoes")
+            if not isinstance(d3, dict) or d3.get("menor") != DURACAO_MENOR or d3.get("maior") not in DURACOES_MAIORES:
+                raise ValueError(f"validacao: o adendo 3 pede 'duracoes' = {{'menor': {DURACAO_MENOR}, 'maior': uma de "
+                                 f"{list(DURACOES_MAIORES)}}} (a maior pelo custo, experiments/custo_adendo3.py)")
+            if cfg.get("p2d_p3i") is not True:
+                raise ValueError("validacao: o adendo 3 (secao 3.3) espera os bracos P2d e P3i ('p2d_p3i': true)")
+    if cfg.get("duracoes") is not None:
+        d3 = cfg["duracoes"]
+        if set(d3) != {"menor", "maior"} or not (0 < int(d3["menor"]) < int(cfg["dias"]) < int(d3["maior"])):
+            raise ValueError(f"duracoes {d3!r}: {{'menor', 'maior'}} com menor < dias ({cfg['dias']}) < maior")
+        for d in (d3["menor"], d3["maior"]):
+            dias_e_orcamento(cfg, int(d))
     donos = cfg.get("donos", [DONO_PRINCIPAL])
     if DONO_PRINCIPAL not in donos:
         raise ValueError(f"o dono principal ({DONO_PRINCIPAL}) tem de rodar")
     return modo, unidades
+
+
+# Adendo 3 (2026-10-06), secao 3.1: o bloco de duracoes, secundario e descritivo, fora do Holm. P0 e P1 no descasado e no mutavel, nas
+# unidades da validacao, com 7 dias e a maior entre 28 e 21 que couber nas 12 h (experiments/custo_adendo3.py), alem dos 14 de sempre.
+BLOCO_DURACOES = (("P0", "P1"), ("descasado", "mutavel"))
+DURACAO_MENOR = 7
+DURACOES_MAIORES = (28, 21)
+JANELA_DA_PREDICAO_2 = {"descasado": "final", "mutavel": "depois_da_troca"}      # as janelas do p2_descasado e do p2_mutavel
+# Adendo 3, secao 3.3: o P2d (a informacao depois do consumo) e o P3i (o julgamento como informacao), secundarios, fora do Holm. Os
+# bracos chegam pelo PR da bancada (docs/TAREFA_V2_P2D_P3I.md); ate la, "p2d_p3i": true falha alto.
+BLOCO_P2D_P3I = (("P2d", "P3i"), ("descasado", "mutavel"))
+# Adendo 3: o apoio teorico de cada predicao (docs/PREDICOES_V2.md), para a leitura; a regra de decisao nao muda (P-5)
+APOIO_TEORICO = {
+    "1": "APOIADA",
+    "2": "APOIADA COM RESSALVA (a relacao com a duracao da vida nao e monotonica)",
+    "3": "APOIADA (pela informacao filtrada, nao pela economia de tentativas)",
+    "4": "SEM APOIO DIRETO",
+    "5": "CONTESTADA (Ho et al. 2017, 10.1016/j.cognition.2017.03.006): mantida como registrada (P-5)",
+}
+# Adendo 3, secao 3.2 (P-3): o mutavel sem precedente teorico direto
+LIMITACAO_MUTAVEL = ("os modelos disponiveis tratam mudanca entre geracoes, nao dentro da vida (Kozielska e Weissing 2024, "
+                     "10.1371/journal.pcbi.1011840): no mutavel o resultado descreve o que este motor faz; o teste nao muda")
+PARES_P2D_P3I = (("P2", "P2d"), ("P3", "P3i"))
+
+
+def dias_e_orcamento(cfg: dict, dias: int) -> dict:
+    """A vida de outra duracao com as mesmas interacoes por dia (o orcamento da config e de cfg["dias"] dias): o bloco de duracoes muda
+    so a duracao. Orcamento por dia nao inteiro falha alto."""
+    por_dia, resto = divmod(int(cfg["orcamento"]), int(cfg["dias"]))
+    if resto:
+        raise ValueError(f"orcamento {cfg['orcamento']} em {cfg['dias']} dias nao e inteiro por dia")
+    return {"dias": int(dias), "orcamento": por_dia * int(dias)}
 
 
 def config_da_bancada(cfg: dict, bracos, mundos, acoplados) -> dict:
@@ -485,8 +530,10 @@ def analisar(medidas: dict, unidades: list[dict], cfg: dict, modo: str, k2: bool
               **({} if K4_DONO_JULGA_FRUTA else {"aviso": "K4 fora da main: o dono do P3 nao julga a fruta; a predicao 5 mede so que "
                                                            "o P3 nao sabe das frutas (E7)"})},
     }
-    for p in predicoes.values():
+    for k, p in predicoes.items():
         p["cuidado"] = {n: {b: x["leitura"] for b, x in cuidado[n].items()} for n in p["contrastes"] if n in cuidado}
+        p["apoio_teorico"] = APOIO_TEORICO[k]                        # adendo 3: so a leitura, a regra de decisao nao muda
+    predicoes["2"]["limitacao_mutavel"] = LIMITACAO_MUTAVEL
     return {"modo": modo, "status": "resultado" if modo == "validacao" else "piloto, nao resultado",
             "delta": regra, "alfa": alfa, "primarios": primarios, "equivalencia": eq, "secundarios": secundarios,
             "separacao_do_cuidado": cuidado, "curvas": cv, "predicoes": predicoes,
@@ -559,6 +606,132 @@ def _arb(m):
     return (sum(por[j]["total"]["pelo_pedido"] for j in ("inicial", "final")) / conf) if conf else None
 
 
+def consumos_com_referencia(m: dict, taxa_p0: float | None):
+    """Os consumos ate a metade de uma vida com a referencia do P0 da mesma unidade e mundo, do bloco principal. Os blocos rodam sem o P0
+    na mesma run da bancada, e la a medida sai sem referencia; aqui ela sai das taxas por dia gravadas (a mesma conta da bancada). Quando a
+    vida ja tem a medida com referencia (o bloco principal), a conta tem de dar o mesmo numero."""
+    t = m["frutas"]["taxa_fruta_ruim"]
+    dias = sorted((int(k.split("_")[1]), v) for k, v in t.items() if k.startswith("dia_"))
+    r = consumos_ate_metade([v["taxa"] for _, v in dias], [v["n"] for _, v in dias], taxa_p0)
+    gravada = m["frutas"]["consumos_ate_metade"]
+    if not gravada["sem_referencia"] and gravada["consumos"] != r["consumos"]:
+        raise ValueError(f"{m['vida']}: consumos ate a metade {r['consumos']} != o gravado {gravada['consumos']}")
+    return r["consumos"]
+
+
+def _cp_consumos(idx, unidades, mundo, mais, menos, boot) -> dict:
+    """mais - menos nos consumos ate a metade, os dois com a referencia do P0 da unidade no bloco principal."""
+    grupos, falta = {}, 0
+    for u in unidades:
+        ku = (u["genoma"], u["semente"])
+        p0 = idx[("P0", mundo, ku)]["frutas"]["taxa_fruta_ruim"]["total"]["taxa"]
+        a, b = (consumos_com_referencia(idx[(x, mundo, ku)], p0) for x in (mais, menos))
+        if a is None or b is None:
+            falta += 1
+            continue
+        grupos.setdefault(u["semente"], []).append(a - b)
+    return {"d": f"{mais} - {menos}", "mundo": mundo, "referencia": "P0 do bloco principal",
+            **contraste_pareado(grupos, boot["reamostragens"], boot["semente"]), "sem_valor": falta}
+
+
+def forma_da_curva(por_duracao: dict, sinal: float, delta: float | None, boot: dict) -> dict:
+    """Adendo 3, secao 3.1: a forma da curva por unidade em tres duracoes (d1 < d2 < d3), com o valor orientado (sinal * valor: maior =
+    melhor). Os dois passos pareados por unidade, a = y(d2) - y(d1) e b = y(d3) - y(d2), com o IC do bootstrap das sementes. A regra,
+    escrita antes da run e so descritiva:
+      crescente: IC 95% de b acima de 0 (ainda melhora na maior duracao);
+      otimo_interior: IC 95% de a acima de 0 e de b abaixo de 0;
+      decrescente: IC 95% de b abaixo de 0 sem a acima de 0;
+      plato: IC 90% de b dentro de (-delta, +delta);
+      indeterminado: o resto.
+    `por_duracao` = {dias: {(genoma, semente): valor ou None}}; unidade sem valor em alguma duracao nao entra (contada)."""
+    d1, d2, d3 = sorted(por_duracao)
+    passos = {"a": {}, "b": {}}
+    falta = 0
+    for ku in por_duracao[d1]:
+        vs = [por_duracao[d][ku] for d in (d1, d2, d3)]
+        if any(v is None for v in vs):
+            falta += 1
+            continue
+        y1, y2, y3 = (sinal * v for v in vs)
+        passos["a"].setdefault(ku[1], []).append(y2 - y1)
+        passos["b"].setdefault(ku[1], []).append(y3 - y2)
+    r = {k: contraste_pareado(g, boot["reamostragens"], boot["semente"]) for k, g in passos.items()}
+    a95, b95, b90 = r["a"]["ic95"], r["b"]["ic95"], r["b"]["ic90"]
+    if b95 is not None and b95["ic_inferior"] > 0.0:
+        forma = "crescente"
+    elif b95 is not None and b95["ic_superior"] < 0.0:
+        forma = "otimo_interior" if (a95 is not None and a95["ic_inferior"] > 0.0) else "decrescente"
+    elif dentro_da_margem(b90, delta):
+        forma = "plato"
+    else:
+        forma = "indeterminado"
+    return {"duracoes": [d1, d2, d3], "sinal": sinal, "delta": delta, "passo_a": r["a"], "passo_b": r["b"], "forma": forma,
+            "sem_valor": falta}
+
+
+def analisar_duracoes(idx_por_dias: dict, unidades: list[dict], cfg: dict) -> dict:
+    """Adendo 3, secao 3.1, secundario e descritivo, fora do Holm: por mundo, a taxa da fruta ruim do P0 e do P1 (na janela da predicao
+    2) e o ganho do aprendizado P0 - P1 em cada duracao, com o IC do bootstrap das unidades, e a forma da curva de cada um. No mutavel a
+    troca acompanha a duracao (fim do dia dias // 2): a leitura dele fica separada e essa confusao vai declarada."""
+    boot = cfg.get("bootstrap", BOOTSTRAP_PADRAO)
+    delta = cfg.get("delta")
+    out = {}
+    for mundo, janela in JANELA_DA_PREDICAO_2.items():
+        f = _taxa(janela)
+        serie = {}
+        vals = {"P0": {}, "P1": {}, "ganho": {}}
+        for d, idx in sorted(idx_por_dias.items()):
+            serie[str(d)] = {b: _media_ic(idx, unidades, mundo, f, b, boot) for b in BLOCO_DURACOES[0]}
+            serie[str(d)]["ganho_P0_menos_P1"] = _cp(idx, unidades, mundo, f, "P0", "P1", boot)
+            for b in BLOCO_DURACOES[0]:
+                vals[b][d] = {(u["genoma"], u["semente"]): f(idx[(b, mundo, (u["genoma"], u["semente"]))]) for u in unidades}
+            vals["ganho"][d] = {k: (None if vals["P0"][d][k] is None or vals["P1"][d][k] is None else
+                                    vals["P0"][d][k] - vals["P1"][d][k]) for k in vals["P0"][d]}
+        out[mundo] = {"janela": janela, "por_duracao": serie,
+                      "forma": {"P0": forma_da_curva(vals["P0"], -1.0, delta, boot),          # taxa menor = melhor
+                                "P1": forma_da_curva(vals["P1"], -1.0, delta, boot),
+                                "ganho_P0_menos_P1": forma_da_curva(vals["ganho"], 1.0, delta, boot)}}
+    out["mutavel"]["confusao_declarada"] = ("a troca acontece no fim do dia dias // 2 (Bancada.tick_troca): mudar a duracao muda o "
+                                            "momento da troca, e a janela depois_da_troca muda junto (adendo 3, secao 3.1)")
+    out["leitura"] = "descritiva, fora da familia de Holm (adendo 3, secao 3.1)"
+    return out
+
+
+def multiconjunto_informacoes(m: dict) -> dict:
+    """{fruta/conteudo: n} das informacoes da vida (o registro do motor, nas medidas da bancada)."""
+    cont: dict = {}
+    for i in m["frutas"]["informacoes"]:
+        k = f"{i['fruta']}/{i['conteudo']}"
+        cont[k] = cont.get(k, 0) + 1
+    return dict(sorted(cont.items()))
+
+
+def analisar_p2d_p3i(idx: dict, unidades: list[dict], cfg: dict) -> dict:
+    """Adendo 3, secao 3.3, secundario, sem Holm: P2 - P2d (o momento) e P3 - P3i (a interpretacao) na taxa da fruta ruim final, no
+    descasado e no mutavel, e nos consumos ate a metade no descasado (referencia: o P0 do bloco principal); o numero e o multiconjunto das
+    informacoes por braco. P2d x P3i nao entra em contraste nenhum (diferem na fonte do aprendizado)."""
+    boot = cfg.get("bootstrap", BOOTSTRAP_PADRAO)
+    contr = {}
+    for mais, menos in PARES_P2D_P3I:
+        for mundo in BLOCO_P2D_P3I[1]:
+            contr[f"{mais}-{menos}_taxa_final_{mundo}"] = _cp(idx, unidades, mundo, _taxa("final"), mais, menos, boot)
+        contr[f"{mais}-{menos}_consumos_ate_metade_descasado"] = _cp_consumos(idx, unidades, "descasado", mais, menos, boot)
+    info = {}
+    for b in ("P2", "P2d", "P3", "P3i"):
+        for mundo in BLOCO_P2D_P3I[1]:
+            ms = [idx[(b, mundo, (u["genoma"], u["semente"]))] for u in unidades]
+            total: dict = {}
+            for m in ms:
+                for k, n in multiconjunto_informacoes(m).items():
+                    total[k] = total.get(k, 0) + n
+            info[f"{b}/{mundo}"] = {"informacoes": sum(m["informacoes"] for m in ms),
+                                    "por_vida_media": sum(m["informacoes"] for m in ms) / len(ms),
+                                    "multiconjunto": dict(sorted(total.items()))}
+    return {"contrastes": contr, "informacoes": info, "leitura": "secundario, sem Holm (adendo 3, secao 3.3)",
+            "declarado": ["P2d x P3i nao entra em contraste (diferem na fonte do aprendizado)",
+                          "no P3i o w_info nao aprende: so a consequencia o ajusta"]}
+
+
 def analisar_blocos(idx: dict, fx: dict, unidades: list[dict], cfg: dict) -> dict:
     """Os contrastes secundarios dos blocos (fora do Holm primario, E8), cada familia com o Holm dela e os gates dos planos do N6 e do N7;
     as ablacoes da K-7 e o descritivo do N5. `idx` = indice das medidas (rotulo, mundo, unidade); `fx` = a fracao de X na extincao por vida
@@ -610,8 +783,7 @@ def analisar_blocos(idx: dict, fx: dict, unidades: list[dict], cfg: dict) -> dic
             ab[f"{peca}_{mundo}"] = {**_cp(idx, unidades, mundo, _taxa(janela), braco, "P1", boot), "janela": janela}
     out["ablacoes"] = ab
     # N5, descritivo: a informacao em momentos sorteados (P2a) - na hora (P2), no descasado
-    cons = lambda m: m["frutas"]["consumos_ate_metade"]["consumos"]  # noqa: E731
-    out["n5_descritivo"] = {"consumos_ate_metade": _cp(idx, unidades, "descasado", cons, "P2a", "P2", boot),
+    out["n5_descritivo"] = {"consumos_ate_metade": _cp_consumos(idx, unidades, "descasado", "P2a", "P2", boot),
                             "taxa_inicio": _cp(idx, unidades, "descasado", _taxa("inicio"), "P2a", "P2", boot),
                             "taxa_final": _cp(idx, unidades, "descasado", _taxa("final"), "P2a", "P2", boot)}
     return out
@@ -631,8 +803,41 @@ def rodar_blocos(cfg: dict, pasta: Path, unidades: list[dict], principal: dict) 
     return {"runs": runs, "analise": a, "vidas": sum(len(r["vidas"]) for r in runs.values())}
 
 
+def rodar_duracoes(cfg: dict, pasta: Path, unidades: list[dict], principal: dict) -> dict:
+    """Adendo 3, secao 3.1: P0 e P1 no descasado e no mutavel com a duracao menor e a maior (as mesmas interacoes por dia), cada uma numa
+    run da bancada nas mesmas unidades; a de 14 dias e o bloco principal."""
+    d3 = cfg["duracoes"]
+    runs = {}
+    for d in (int(d3["menor"]), int(d3["maior"])):
+        cb = config_da_bancada({**cfg, **dias_e_orcamento(cfg, d)}, BLOCO_DURACOES[0], BLOCO_DURACOES[1], [])
+        runs[d] = bv.rodar(cb, pasta / "duracoes" / f"dias_{d}")
+    idx_por_dias = {int(cfg["dias"]): indice(principal["medidas"]), **{d: indice(r["medidas"]) for d, r in runs.items()}}
+    return {"runs": runs, "analise": analisar_duracoes(idx_por_dias, unidades, cfg),
+            "vidas": sum(len(r["vidas"]) for r in runs.values())}
+
+
+def bracos_p2d_p3i_faltando() -> list[str]:
+    """Os bracos do adendo 3.3 que a bancada ainda nao tem (vazio quando o PR da bancada do P2d e do P3i estiver na main)."""
+    return [b for b in BLOCO_P2D_P3I[0] if b not in bv.BRACOS]
+
+
+def rodar_p2d_p3i(cfg: dict, pasta: Path, unidades: list[dict], principal: dict) -> dict:
+    """Adendo 3, secao 3.3: o P2d e o P3i no descasado e no mutavel, numa run da bancada nas mesmas unidades; o P2, o P3 e o P0 de
+    referencia vem do bloco principal."""
+    faltam = bracos_p2d_p3i_faltando()
+    if faltam:
+        raise NotImplementedError(f"bracos {faltam}: chegam pelo PR da bancada do P2d e do P3i (docs/TAREFA_V2_P2D_P3I.md); ate la a "
+                                  f"validacao do adendo 3 nao roda")
+    r = bv.rodar(config_da_bancada(cfg, BLOCO_P2D_P3I[0], BLOCO_P2D_P3I[1], []), pasta / "p2d_p3i")
+    idx = indice({**principal["medidas"], **r["medidas"]})
+    return {"run": r, "analise": analisar_p2d_p3i(idx, unidades, cfg), "vidas": len(r["vidas"])}
+
+
 def rodar(cfg: dict, pasta: Path) -> dict:
     modo, unidades = modo_e_unidades(cfg)
+    if cfg.get("p2d_p3i") and bracos_p2d_p3i_faltando():          # antes de qualquer vida: nao gastar horas para falhar no fim
+        raise NotImplementedError(f"bracos {bracos_p2d_p3i_faltando()}: chegam pelo PR da bancada do P2d e do P3i "
+                                  f"(docs/TAREFA_V2_P2D_P3I.md); ate la a validacao do adendo 3 nao roda")
     acoplados = [{"origem": b, "destino": b, "filtro": FILTRO_SO_CUIDADO} for b in COM_DONO]
     cb = config_da_bancada(cfg, BRACOS, MUNDOS, acoplados)
     r = bv.rodar(cb, pasta / "frutas")
@@ -644,16 +849,25 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     blocos = rodar_blocos(cfg, pasta, unidades, r) if cfg.get("blocos") else None
     if blocos is not None:
         bv._gravar(pasta / "blocos.json", bv._dump(blocos["analise"]))
+    duracoes = rodar_duracoes(cfg, pasta, unidades, r) if cfg.get("duracoes") else None
+    if duracoes is not None:
+        bv._gravar(pasta / "duracoes.json", bv._dump(duracoes["analise"]))
+    p2d_p3i = rodar_p2d_p3i(cfg, pasta, unidades, r) if cfg.get("p2d_p3i") else None
+    if p2d_p3i is not None:
+        bv._gravar(pasta / "p2d_p3i.json", bv._dump(p2d_p3i["analise"]))
     resumo = {"modo": a["modo"], "status": a["status"], "delta": a["delta"], "alfa": a["alfa"],
               "predicoes": a["predicoes"], "tamanho_amostra": a["tamanho_amostra"],
               "contratos": {"K2_humor_da_fruta_no_P1": k2, "K4_dono_julga_fruta": K4_DONO_JULGA_FRUTA,
                             "montagem": MONTAGEM},
               "vidas": {"frutas": len(r["vidas"]), "padrao": len(padrao["vidas"]) if padrao else 0,
-                        "blocos": blocos["vidas"] if blocos else 0},
+                        "blocos": blocos["vidas"] if blocos else 0, "duracoes": duracoes["vidas"] if duracoes else 0,
+                        "p2d_p3i": p2d_p3i["vidas"] if p2d_p3i else 0},
               "blocos": None if blocos is None else {
                   "n6": blocos["analise"]["n6"]["leitura"],
                   "n7_holm": {g: c["holm"]["rejeita"] for g, c in blocos["analise"]["n7"]["contrastes"].items()},
                   "n7_G-ARB": blocos["analise"]["n7"]["G-ARB"]["passa"], "n7_G-URG": blocos["analise"]["n7"]["G-URG"]["passa"]},
+              "duracoes": None if duracoes is None else {
+                  m: {k: f["forma"] for k, f in duracoes["analise"][m]["forma"].items()} for m in JANELA_DA_PREDICAO_2},
               "unidades": len(unidades)}
     contrastes = {k: a[k] for k in ("primarios", "equivalencia", "secundarios", "separacao_do_cuidado")}
     bv._gravar(pasta / "contrastes.json", bv._dump(contrastes))
@@ -661,7 +875,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     bv._gravar(pasta / "resumo.json", bv._dump(resumo))
     bv._gravar(pasta / "meta.json", bv._dump({"config": cfg, "modo": modo, "plano": PLANO, "plano_sha256": bv._sha(RAIZ / PLANO),
                                                "orquestrador_sha256": bv._sha(Path(__file__)), "python": platform.python_version()}))
-    return {"modo": modo, "unidades": unidades, "frutas": r, "padrao": padrao, "analise": a, "resumo": resumo, "blocos": blocos}
+    return {"modo": modo, "unidades": unidades, "frutas": r, "padrao": padrao, "analise": a, "resumo": resumo, "blocos": blocos,
+            "duracoes": duracoes, "p2d_p3i": p2d_p3i}
 
 
 def main(argv=None) -> int:
