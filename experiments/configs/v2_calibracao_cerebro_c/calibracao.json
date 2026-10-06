@@ -1,0 +1,10 @@
+{
+  "descricao": "Calibracao do cerebro C (Fly-like): etapas C-A (passo), C-B (teto) e C-C (w0_info) do adendo 1.2 e o piloto do 'nao aprende' (secao 7), unidades derivadas das bases 28101...28505 com K = 4 (prefixo comparacao-cerebros, 20 unidades), 14 dias, o dono atencioso, o ganho da K2 do A.",
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "unidades": {"bases": [28101, 28202, 28303, 28404, 28505], "k": 4},
+  "dias": 14,
+  "orcamento": 224,
+  "sonda": {"estados": 64, "amostras": 200, "semente": 9001},
+  "bootstrap": {"reamostragens": 10000, "semente": 4242, "nivel": 0.95},
+  "saida": "artifacts_v2_comparacao_cerebros/calibracao_C"
+}

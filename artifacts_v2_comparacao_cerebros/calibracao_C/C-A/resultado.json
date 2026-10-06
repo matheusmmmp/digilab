@@ -1,0 +1,305 @@
+{
+ "escolhido": 128,
+ "etapa": "C-A",
+ "fechou": true,
+ "fixos": {
+  "teto": 4096,
+  "w0_info": 0
+ },
+ "medida": "vidas com compartimento no teto; razao da deriva dia 14 / dia 7, media das tres condicoes",
+ "onde": "P1, casado_frutas + descasado + mutavel",
+ "parametro": "passo",
+ "pontos": {
+  "32": {
+   "ponto": {
+    "passo": 32,
+    "teto": 4096,
+    "w0_info": 0
+   },
+   "por_condicao": {
+    "casado_frutas": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 3.063465517329233,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    },
+    "descasado": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 2.990232382112606,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    },
+    "mutavel": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 2.9373996112353646,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    }
+   },
+   "razao_juntas_descritiva": 2.99706593571364,
+   "razao_media": 2.9970325035590677,
+   "segundos": 343.30993450000005,
+   "vidas": 60,
+   "vidas_no_teto": 0
+  },
+  "64": {
+   "ponto": {
+    "passo": 64,
+    "teto": 4096,
+    "w0_info": 0
+   },
+   "por_condicao": {
+    "casado_frutas": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 1.891825019539921,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    },
+    "descasado": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 1.8963176601499716,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    },
+    "mutavel": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 1.8846830724860304,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    }
+   },
+   "razao_juntas_descritiva": 1.8909837093975328,
+   "razao_media": 1.8909419173919744,
+   "segundos": 344.3976309999998,
+   "vidas": 60,
+   "vidas_no_teto": 0
+  },
+  "128": {
+   "ponto": {
+    "passo": 128,
+    "teto": 4096,
+    "w0_info": 0
+   },
+   "por_condicao": {
+    "casado_frutas": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 1.6560343384545737,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    },
+    "descasado": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 1.5771971612719653,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    },
+    "mutavel": {
+     "pesos_no_teto": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "razao_deriva": 1.61004760695791,
+     "vidas": 20,
+     "vidas_no_teto": 0
+    }
+   },
+   "razao_juntas_descritiva": 1.614222549558448,
+   "razao_media": 1.6144263688948162,
+   "segundos": 344.61617599999954,
+   "vidas": 60,
+   "vidas_no_teto": 0
+  }
+ },
+ "regra": "sem vida no teto, menor razao da deriva; empate, menor valor",
+ "sem_teto": [
+  32,
+  64,
+  128
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "cerebro_fecha": true,
+ "fecharam": {
+  "C-A": true,
+  "C-B": true,
+  "C-C": true
+ },
+ "nao_aprende": false,
+ "ponto": {
+  "ganho": 4,
+  "passo": 128,
+  "teto": 4096,
+  "w0_info": 256
+ }
+}

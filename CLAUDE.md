@@ -2220,3 +2220,18 @@ relatório `docs/RESULTADO_V2_CALIBRACAO_CEREBRO_B.md`. Interpretações em `doc
   0,01; a deriva no dia 14 é positiva (4,3 × 10⁻⁵ bit). Pela seção 7, o B sai da escolha M6 com esse motivo.
 - **Descritivo:** a regra de estabilidade empurrou a cadeia para o ponto em que o B menos aprende; com a taxa do ator 0,1 o aprendido
   decidiria 20% das decisões. Nada foi recalibrado olhando o piloto.
+
+## V2, CALIBRACAO-CEREBRO-C — a calibração do cérebro C (2026-10-06, `docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`) — O C FECHA
+
+Rodada 11; grades e regras do adendo 1.2 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`. Uma run nas bases 28101…28505 (K = 4, prefixo
+`comparacao-cerebros`, 20 unidades), atencioso, 14 dias, o ganho da K2 do A (4); 540 vidas (teto 1260), 1 h (teto 4× a K2). Números de
+`artifacts_v2_comparacao_cerebros/calibracao_C/`; relatório `docs/RESULTADO_V2_CALIBRACAO_CEREBRO_C.md`. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Código:** `experiments/run_v2_calibracao_cerebro_c.py`, que liga o C pela `BancadaComC` (a bancada e o `cerebro_c.py` não mudaram),
+  e `experiments/configs/v2_calibracao_cerebro_c/` (calibração e fumaça). Testes: `tests/test_calibracao_cerebro_c.py`, 12.
+- **Ponto: passo 128, teto 4096, `w0_info` 256.** As três etapas fecharam:
+  - C-A: nenhuma vida no teto; razão da deriva 3,00, 1,89 e **1,61** (a ponta da grade);
+  - C-B: o teto S prende as 60 vidas; 4S e 16S empatam e fica o menor;
+  - C-C: fração decidida pela informação 0,202 [0,164; 0,242] no 256 (0,019 com `w0_info` 0).
+- **Piloto, o "não aprende" (seção 7): não dispara.** Deriva no dia 14 0,0222 [0,0218; 0,0227]; a parte aprendida muda 0,324 das
+  decisões. O C entra no M6.
