@@ -226,7 +226,7 @@ def test_analise_sintetica_tudo_confirma():
     assert a["primarios"]["p1_casado"]["media"] == pytest.approx(0.30)
     # o P2 e o P2e diferem do proprio so cuidado (igual ao P1) e a saude e a mesma: ensino
     assert a["separacao_do_cuidado"]["p3_consumos"]["P2"]["leitura"] == "ensino"
-    assert a["predicoes"]["5"]["k4"] is False and "aviso" in a["predicoes"]["5"]
+    assert a["predicoes"]["5"]["k4"] is True and "aviso" not in a["predicoes"]["5"]      # o K4 na bancada (BANCADA-K4-CANAIS)
     assert a["tamanho_amostra"]["n_validacao"] % 5 == 0
 
 
@@ -338,7 +338,12 @@ def test_fumaca_do_experimento_maior(tmp_path):
     assert resumo["modo"] == "fumaca" and resumo["status"].startswith("piloto")
     assert set(resumo["predicoes"]) == {"1", "2", "3", "4", "5"}
     assert all(p["leitura"] in LEITURAS for p in resumo["predicoes"].values())
-    assert resumo["contratos"] == {"K2_humor_da_fruta_no_P1": True, "K4_dono_julga_fruta": False}
+    assert resumo["contratos"] == {"K2_humor_da_fruta_no_P1": True, "K4_dono_julga_fruta": True}
+    # o P3 julga a fruta fora do orcamento: o dono gasta o orcamento inteiro e o so cuidado tira os julgamentos
+    p3 = [v for n, v in r["frutas"]["vidas"].items() if v.espec.braco == "P3" and v.origem is None]
+    assert p3 and all(v.interacoes == 64 for v in p3) and sum(v.julgamentos for v in p3) > 0
+    aco = [v for v in r["frutas"]["vidas"].values() if v.origem is not None and v.origem_braco == "P3"]
+    assert aco and all(v.julgamentos == 0 for v in aco)
     c = json.loads((tmp_path / "contrastes.json").read_text(encoding="utf-8"))
     assert set(c["primarios"]) == {x.nome for x in em.PRIMARIOS}
     assert sorted(x["holm"]["ordem"] for x in c["primarios"].values()) == list(range(1, 7))
