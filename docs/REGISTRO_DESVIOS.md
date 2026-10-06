@@ -2363,3 +2363,47 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   M0 = P0 usa o braço M0 (só o estado da memória e o rótulo do braço diferem), o da memória que age usa o MR, e o "sem o campo do pedido nada
   muda" passa a dizer que num braço sem pedido o `w0_pedido` da config não chega ao cérebro (e no P1+ped chega). A intenção de cada um ficou;
   a alternativa (deixar a config ligar a memória e o pedido em P0, P1 e P3) faria um braço mudar sem o nome dizer.
+
+## 2026-10-05 — K2-CALIBRACAO-CONJUNTA: interpretações do plano, registradas antes da run
+
+Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11). Orquestrador
+`experiments/run_v2_calibracao_conjunta.py`. **Escrito e commitado antes de qualquer vida das sementes 14101…14505.**
+- **Pasta:** `artifacts_v2_calibracao_conjunta/{A1,A2,B,C,D}/`, como a tarefa pede (a seção 7 do plano dizia
+  `artifacts_v2_experimento_maior/calibracao/`). As vidas (`vidas/`) ficam fora do git: são regeneráveis da config e do código.
+- **IC das regras (A1, A2, C):** bootstrap percentil 95% (`metrics.bootstrap_ic`, reamostragens, semente e nível do `PROTOCOLO_ARENA_V1`)
+  sobre as unidades com valor, unidade = vida (o mesmo das regras da revisão do aprendiz). Unidade sem denominador (nenhuma sub-decisão
+  elegível, nenhum conflito) fica fora e é contada (`sem_valor`). "Limite inferior > limiar" é estrito.
+- **Reserva das regras A1, A2 e C:** o ponto de maior limite inferior; empate, o menor valor; nenhum ponto com IC, o menor valor.
+- **A2:** a deferência na `fome_moderada` nos dias 1…`dias_pedido` (as janelas "inicial" e "final" do bloco N7 somadas, isto é, o G-ARB do
+  plano do N7 restrito à zona), por unidade = decididas pelo pedido / conflitos. O P0 sem pedido no `iguais_frutas` roda como referência
+  descritiva (a 4ª vida por unidade da tabela 5.2) e não entra na regra.
+- **B, a razão da deriva:** por condição, a média da deriva no fim do dia 14 sobre a média no fim do dia 7 (a conta de
+  `run_revisao_aprendiz.celulas`); a razão do ganho é a média das três condições. "Vida no teto" = vida do P1 com algum peso em `|w − w0| =
+  teto` (`pesos_no_teto() > 0`).
+- **B, regra de reserva (o plano não a escreve):** se todo ganho tem vida no teto, o de menos vidas no teto, depois a menor razão, depois o
+  menor ganho (a regra de reserva do N3, seção 6 do plano dele).
+- **C, a sonda da informação:** `PoliticaLobos.escolha_sem_info` (nova, só lê: não muda peso, motivo, registro nem contagem; os gabaritos
+  byte a byte das frentes do cérebro passam) refaz a escolha da fruta com o mesmo u e o termo da informação zerado. O orquestrador rejoga
+  cada vida do P2 com um embrulho que a chama antes de cada `escolher_fruta` e confere que a vida e o estado interno saem iguais.
+  **Elegíveis:** as sub-decisões com duas frutas ou mais e informação vigente em pelo menos uma fruta presente, nos dias 1–7 (a decisão
+  k no tick k × 15). As duas frutas ou mais vêm da A1, para "a mesma régua" das duas entradas: com uma fruta só nenhuma entrada muda a escolha.
+- **D, as ablações (K-7):** "P1 sem memória" = o braço P1 da bancada sem a chave da memória, com o resto do ponto; "P1 escalar" = o P1
+  completo com `canais_ligados` False, numa config de bancada à parte. Os dois no `descasado` e no `mutavel`.
+- **D, os Δ dos blocos:** Δ_N6 = metade da `taxa_fruta_ruim` final do `M0<MR` (plano do N6, seção 7); Δ_N7 = metade da fração de X na
+  extinção do `P0<P3+ped:sem_ensino` (plano do N7, seção 7). A fração de X é calculada dos motivos de toda vida do bloco N7, com ou sem
+  pedido (o P3 sem pedido não tem o bloco `n7` nas medidas da bancada e o G-MARCA-E precisa dele). O poder do G-EROSAO (deferência) é dado
+  com o Δ_N7, que o plano do N7 define pela fração de X: é o único Δ do bloco.
+- **D, o N e o poder:** N por contraste primário pela fórmula da seção 5.3 (α/6, poder 0,8, múltiplo de 5; `run_v2_experimento_maior.tamanhos`).
+  A conferência por simulação reamostra as diferenças das 20 unidades **centradas no Δ** (a alternativa), N por réplica, teste t pareado
+  unilateral a α/6, 2000 réplicas; fica no adendo ao lado do N da fórmula, que não é trocado por ela. A equivalência da predição 5 leva o N
+  da mesma fórmula com α = 0,05 (IC 90%). Os secundários: poder pela aproximação normal com o N escolhido, α/3 nas famílias do N6 e do N7
+  (o passo mais exigente de Holm de cada uma) e α = 0,05 nas ablações; abaixo de 0,5, subpotenciado.
+- **D, o tempo da validação:** 44 vidas por unidade × N × os segundos por vida medidos na própria etapa D (vida, replay do disco e medidas,
+  como a validação vai rodar). Acima de 12 h (K-10), a run para e o PR pergunta ao Matheus.
+- **D, os contratos K1–K9 em vida real:** K1, o P0 de cada unidade e condição contra o instinto das frutas, byte a byte; K3, P2 e P2e com as
+  mesmas (tick, fruta) e conteúdo oposto; K5 e K7, as mesmas ofertas em todo braço e acoplado da unidade e do mundo; K6, casado e descasado
+  com efeitos opostos fruta a fruta por genoma; K8, um registro de consumo por consumo contado; K2 e K4 pela config e pelo orquestrador do
+  experimento maior; K9 pela bancada (toda vida rejogada do disco).
+- **Os braços "completos" (seção 1):** a memória nos braços P1–P3 e as ablações nomeadas vêm do PR do chat D (BANCADA-K4-CANAIS). O
+  orquestrador lê os nomes de uma tabela só (`BRACO_COMPLETO`) e **recusa a calibração** enquanto a bancada não ligar a memória no P1 ou o
+  K4 não estiver na main (`pecas_pendentes`). Se o PR do D mudar algum desses pontos, a mudança entra aqui num commit antes da run.

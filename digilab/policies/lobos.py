@@ -1097,9 +1097,11 @@ class PoliticaLobos(Aprendiz):
             self._registro_decisao["presenca"] = {f: arred(p * self._escala) for f, p in zip(FRUTAS, obs.frutas_cenario)}
         return acao
 
-    def _pesos_das_frutas(self, presentes: list[str], incentivos: dict, memoria: dict | None) -> tuple[list, dict | None, dict | None]:
+    def _pesos_das_frutas(self, presentes: list[str], incentivos: dict, memoria: dict | None,
+                          sem_info: bool = False) -> tuple[list, dict | None, dict | None]:
         """Os pesos da sub-decisao: ((w_f + m_f) / S) x incentivo_f (m_f = a contribuicao da memoria, N6; o piso no coeficiente so com o
-        aprendizado ligado), mais o termo da informacao (N5) e o do pedido (N7), cada um com o piso na fruta em que vale."""
+        aprendizado ligado), mais o termo da informacao (N5) e o do pedido (N7), cada um com o piso na fruta em que vale. `sem_info`: o
+        termo da informacao zerado (a sonda da K2, `escolha_sem_info`)."""
         S = self._escala
         coef = {}
         for f in presentes:
@@ -1112,7 +1114,7 @@ class PoliticaLobos(Aprendiz):
             coef[f] = c
         pesos = [coef[f] * incentivos[f] for f in presentes]
         info = None
-        if self._peso_info is not None:
+        if self._peso_info is not None and not sem_info:
             # N5: + (w_info / S) x info_f, so nas frutas com informacao vigente (sem ela o peso e o de hoje, byte a byte); a
             # informacao pode levar o peso abaixo de zero, entao a fruta informada tem o piso (com o aprendizado ligado ou nao)
             info = {f: self._info_na_decisao[FRUTAS.index(f)] for f in presentes}
@@ -1132,6 +1134,31 @@ class PoliticaLobos(Aprendiz):
                     pesos[i] = p if p >= self._piso else self._piso
         return pesos, info, pedido
 
+    def _memoria_das_frutas(self, presentes: list[str]) -> dict | None:
+        """N6: o episodio recuperado de cada fruta presente (a pista) e a contribuicao m_f = div_arred(ganho x valencia, S); None sem a
+        memoria. So le (recuperar nao muda os espacos)."""
+        if self._memoria is None:
+            return None
+        S = self._escala
+        memoria = {}
+        for f in presentes:
+            ep = self._memoria.recuperar(f, self._tick_na_decisao, self.cl.memoria_modo,
+                                         self.cl.memoria_janela_recencia_ticks, self._permutacao)
+            m = div_arred(self.cl.memoria_ganho * ep["valencia"], S) if ep is not None else 0
+            memoria[f] = {"episodio": dict(ep) if ep is not None else None, "m": m}
+        return memoria
+
+    def escolha_sem_info(self, presentes: list[str], incentivos: dict, u: float) -> tuple[str | None, bool]:
+        """Sonda da K2 (docs/PLANO_CALIBRACAO_CONJUNTA_V2.md, secao 3.4): a escolha da fruta que `escolher_fruta` faria com o mesmo u e o
+        termo da informacao zerado, e se alguma fruta presente tem informacao vigente. Chame ANTES de `escolher_fruta` da mesma
+        sub-decisao. So le: nao mexe em peso, motivo, registro nem contagem (a vida e o estado interno nao mudam). Sem ver as frutas, ou
+        sem o peso da informacao (w0_info 0), (None, False)."""
+        if not self._ve_frutas or self._peso_info is None:
+            return None, False
+        vigente = any(self._info_na_decisao[FRUTAS.index(f)] != 0.0 for f in presentes)
+        pesos = self._pesos_das_frutas(presentes, incentivos, self._memoria_das_frutas(presentes), sem_info=True)[0]
+        return _sortear_frutas(presentes, pesos, u), vigente
+
     def escolher_fruta(self, presentes: list[str], incentivos: dict, u: float) -> str | None:
         """Gancho do MotorFrutas: a sub-decisao de comer (qual fruta), pelo lobo de decisao. Peso de cada fruta = (w_f / S) x
         incentivo_f (com o piso no coeficiente, so com o aprendizado ligado), e o sorteio de MotorFrutas._escolher passo a passo,
@@ -1144,14 +1171,7 @@ class PoliticaLobos(Aprendiz):
         if not self._ve_frutas:
             return None
         S = self._escala
-        memoria = None
-        if self._memoria is not None:
-            memoria = {}
-            for f in presentes:
-                ep = self._memoria.recuperar(f, self._tick_na_decisao, self.cl.memoria_modo,
-                                             self.cl.memoria_janela_recencia_ticks, self._permutacao)
-                m = div_arred(self.cl.memoria_ganho * ep["valencia"], S) if ep is not None else 0
-                memoria[f] = {"episodio": dict(ep) if ep is not None else None, "m": m}
+        memoria = self._memoria_das_frutas(presentes)
         pesos, info, pedido = self._pesos_das_frutas(presentes, incentivos, memoria)
         escolhida = _sortear_frutas(presentes, pesos, u)
         sonda = None

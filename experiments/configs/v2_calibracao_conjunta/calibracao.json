@@ -1,0 +1,29 @@
+{
+  "descricao": "Calibracao conjunta do cerebro A (etapa K2): etapas A1, A2, B, C e D do plano, unidades derivadas das bases 14101...14505 com K = 4 (20 unidades), 14 dias, o dono atencioso, o ponto T3.",
+  "plano": "docs/PLANO_CALIBRACAO_CONJUNTA_V2.md",
+  "unidades": {
+    "bases": [
+      14101,
+      14202,
+      14303,
+      14404,
+      14505
+    ],
+    "k": 4
+  },
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "sonda": {
+    "estados": 64,
+    "amostras": 200,
+    "semente": 9001
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "canais": true,
+  "saida": "artifacts_v2_calibracao_conjunta"
+}
