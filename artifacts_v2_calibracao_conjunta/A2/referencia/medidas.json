@@ -1,0 +1,5562 @@
+{
+  "atencioso-P0~iguais_frutas~g10518686938732163204@10101955909342070729": {
+    "acerto_por_dia": [
+      0.5520833333333334,
+      0.6041666666666666,
+      0.53125,
+      0.53125,
+      0.5833333333333334,
+      0.53125,
+      0.53125,
+      0.5729166666666666,
+      0.5520833333333334,
+      0.5625,
+      0.5729166666666666,
+      0.5416666666666666,
+      0.5833333333333334,
+      0.625
+    ],
+    "acerto_total": 0.5625,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 639,
+        "p_com_bola": null,
+        "p_sem_bola": 0.29890453834115804
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.59375,
+        "dia": 1,
+        "maximo": 0.625,
+        "piso": 0.5625,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 50,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 50
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 50,
+        "decisoes_com_fruta": 343,
+        "expiradas": 46,
+        "ignoradas": 293,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "b",
+        "neofobia": 0.2084762360711775,
+        "preferencia_inata": {
+          "a": 0.40538515293142724,
+          "b": 0.7523637212204932,
+          "c": 0.2895984850385281
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 22,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 28,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 50,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 10518686938732163204,
+    "humor_medio": 0.8805580357142822,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 10101955909342070729,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 156,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14303,
+      "k": 0
+    },
+    "vida": "atencioso-P0~iguais_frutas~g10518686938732163204@10101955909342070729"
+  },
+  "atencioso-P0~iguais_frutas~g1121703774619661245@10460511506996584222": {
+    "acerto_por_dia": [
+      0.5625,
+      0.5208333333333334,
+      0.5,
+      0.5625,
+      0.5729166666666666,
+      0.6458333333333334,
+      0.5833333333333334,
+      0.5,
+      0.53125,
+      0.625,
+      0.5625,
+      0.5729166666666666,
+      0.6145833333333334,
+      0.5729166666666666
+    ],
+    "acerto_total": 0.5662202380952381,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 603,
+        "p_com_bola": null,
+        "p_sem_bola": 0.32669983416252074
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6060267857142858,
+        "dia": 5,
+        "maximo": 0.6458333333333334,
+        "piso": 0.5662202380952381,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 30,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 30
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 30,
+        "decisoes_com_fruta": 391,
+        "expiradas": 66,
+        "ignoradas": 361,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "b",
+        "neofobia": 0.7729086808808548,
+        "preferencia_inata": {
+          "a": 0.20083423040011825,
+          "b": 0.7303218171409669,
+          "c": 0.22182775029849122
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 22,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 8,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 30,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 1121703774619661245,
+    "humor_medio": 0.9200799851190459,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 10460511506996584222,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 151,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14101,
+      "k": 1
+    },
+    "vida": "atencioso-P0~iguais_frutas~g1121703774619661245@10460511506996584222"
+  },
+  "atencioso-P0~iguais_frutas~g12428659232104669816@14853373353548090392": {
+    "acerto_por_dia": [
+      0.6041666666666666,
+      0.5520833333333334,
+      0.6041666666666666,
+      0.53125,
+      0.59375,
+      0.59375,
+      0.53125,
+      0.53125,
+      0.6458333333333334,
+      0.5520833333333334,
+      0.53125,
+      0.5729166666666666,
+      0.53125,
+      0.5625
+    ],
+    "acerto_total": 0.5669642857142857,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 635,
+        "p_com_bola": null,
+        "p_sem_bola": 0.33858267716535434
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6063988095238095,
+        "dia": 8,
+        "maximo": 0.6458333333333334,
+        "piso": 0.5669642857142857,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 52,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 52
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 52,
+        "decisoes_com_fruta": 354,
+        "expiradas": 44,
+        "ignoradas": 302,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.49162236870497467,
+        "preferencia_inata": {
+          "a": 0.5234339150559079,
+          "b": 0.4687062606853502,
+          "c": 0.6871739915396633
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 31,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 21,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 52,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 12428659232104669816,
+    "humor_medio": 0.8986402529761878,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 14853373353548090392,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 160,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14101,
+      "k": 3
+    },
+    "vida": "atencioso-P0~iguais_frutas~g12428659232104669816@14853373353548090392"
+  },
+  "atencioso-P0~iguais_frutas~g12462364457998988362@2603329410910182095": {
+    "acerto_por_dia": [
+      0.5729166666666666,
+      0.5104166666666666,
+      0.5104166666666666,
+      0.5,
+      0.59375,
+      0.59375,
+      0.5833333333333334,
+      0.5729166666666666,
+      0.4791666666666667,
+      0.5520833333333334,
+      0.5625,
+      0.5520833333333334,
+      0.5520833333333334,
+      0.6145833333333334
+    ],
+    "acerto_total": 0.5535714285714286,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 648,
+        "p_com_bola": null,
+        "p_sem_bola": 0.30246913580246915
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5840773809523809,
+        "dia": 4,
+        "maximo": 0.6145833333333334,
+        "piso": 0.5535714285714286,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 48,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 48
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 48,
+        "decisoes_com_fruta": 342,
+        "expiradas": 48,
+        "ignoradas": 294,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "a",
+        "neofobia": 0.016776162756666158,
+        "preferencia_inata": {
+          "a": 0.7198510372275262,
+          "b": 0.3612596072553719,
+          "c": 0.5642495270884528
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 24,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 24,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 48,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 12462364457998988362,
+    "humor_medio": 0.8960565476190451,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 2603329410910182095,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 153,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14202,
+      "k": 1
+    },
+    "vida": "atencioso-P0~iguais_frutas~g12462364457998988362@2603329410910182095"
+  },
+  "atencioso-P0~iguais_frutas~g14339184148880993810@16208613122624954777": {
+    "acerto_por_dia": [
+      0.59375,
+      0.59375,
+      0.6145833333333334,
+      0.5729166666666666,
+      0.53125,
+      0.5729166666666666,
+      0.59375,
+      0.53125,
+      0.5625,
+      0.6041666666666666,
+      0.5416666666666666,
+      0.5208333333333334,
+      0.625,
+      0.5416666666666666
+    ],
+    "acerto_total": 0.5714285714285714,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 625,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3376
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5982142857142857,
+        "dia": 2,
+        "maximo": 0.625,
+        "piso": 0.5714285714285714,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 44,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 44
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 44,
+        "decisoes_com_fruta": 370,
+        "expiradas": 52,
+        "ignoradas": 326,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "a",
+        "neofobia": 0.9080163489761661,
+        "preferencia_inata": {
+          "a": 0.898547363024423,
+          "b": 0.6111780522468964,
+          "c": 0.6339241251957796
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 23,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 21,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 44,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 14339184148880993810,
+    "humor_medio": 0.9053794642857118,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 16208613122624954777,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 152,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14505,
+      "k": 2
+    },
+    "vida": "atencioso-P0~iguais_frutas~g14339184148880993810@16208613122624954777"
+  },
+  "atencioso-P0~iguais_frutas~g15001984904456502186@9421974934025611567": {
+    "acerto_por_dia": [
+      0.5416666666666666,
+      0.5416666666666666,
+      0.5729166666666666,
+      0.5625,
+      0.6145833333333334,
+      0.5520833333333334,
+      0.625,
+      0.5520833333333334,
+      0.5,
+      0.5104166666666666,
+      0.5,
+      0.5729166666666666,
+      0.5520833333333334,
+      0.6145833333333334
+    ],
+    "acerto_total": 0.5580357142857143,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 618,
+        "p_com_bola": null,
+        "p_sem_bola": 0.32038834951456313
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5915178571428572,
+        "dia": 4,
+        "maximo": 0.625,
+        "piso": 0.5580357142857143,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 47,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 47
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 47,
+        "decisoes_com_fruta": 378,
+        "expiradas": 49,
+        "ignoradas": 331,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.8075408130729451,
+        "preferencia_inata": {
+          "a": 0.5399372955811336,
+          "b": 0.629085049715012,
+          "c": 0.9672480248067217
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 28,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 19,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 47,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 15001984904456502186,
+    "humor_medio": 0.882217261904759,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 9421974934025611567,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 155,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14505,
+      "k": 3
+    },
+    "vida": "atencioso-P0~iguais_frutas~g15001984904456502186@9421974934025611567"
+  },
+  "atencioso-P0~iguais_frutas~g15199776154585284719@6819504089437492712": {
+    "acerto_por_dia": [
+      0.6458333333333334,
+      0.6041666666666666,
+      0.5729166666666666,
+      0.5520833333333334,
+      0.6354166666666666,
+      0.5625,
+      0.5208333333333334,
+      0.5625,
+      0.5833333333333334,
+      0.6145833333333334,
+      0.5833333333333334,
+      0.5416666666666666,
+      0.59375,
+      0.5208333333333334
+    ],
+    "acerto_total": 0.578125,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 563,
+        "p_com_bola": null,
+        "p_sem_bola": 0.33570159857904086
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6119791666666667,
+        "dia": 0,
+        "maximo": 0.6458333333333334,
+        "piso": 0.578125,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 18,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 18
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 18,
+        "decisoes_com_fruta": 430,
+        "expiradas": 78,
+        "ignoradas": 412,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.9582002919857348,
+        "preferencia_inata": {
+          "a": 0.6636824361344674,
+          "b": 0.24524459059218398,
+          "c": 0.9402164224417588
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 14,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 18,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 15199776154585284719,
+    "humor_medio": 0.9104110863095219,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 6819504089437492712,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 143,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14101,
+      "k": 0
+    },
+    "vida": "atencioso-P0~iguais_frutas~g15199776154585284719@6819504089437492712"
+  },
+  "atencioso-P0~iguais_frutas~g15223010787228446749@13822977252118713682": {
+    "acerto_por_dia": [
+      0.5104166666666666,
+      0.53125,
+      0.59375,
+      0.5416666666666666,
+      0.5833333333333334,
+      0.46875,
+      0.5208333333333334,
+      0.6145833333333334,
+      0.5416666666666666,
+      0.5833333333333334,
+      0.5104166666666666,
+      0.5729166666666666,
+      0.5833333333333334,
+      0.5833333333333334
+    ],
+    "acerto_total": 0.5528273809523809,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 641,
+        "p_com_bola": null,
+        "p_sem_bola": 0.31825273010920435
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5837053571428572,
+        "dia": 2,
+        "maximo": 0.6145833333333334,
+        "piso": 0.5528273809523809,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 57,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 57
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 57,
+        "decisoes_com_fruta": 341,
+        "expiradas": 39,
+        "ignoradas": 284,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "a",
+        "neofobia": 0.1520518854381555,
+        "preferencia_inata": {
+          "a": 0.9328692290104952,
+          "b": 0.3428000394104638,
+          "c": 0.566063976453544
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 7,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 30,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 27,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 57,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 15223010787228446749,
+    "humor_medio": 0.9064174107142836,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 13822977252118713682,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 156,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14404,
+      "k": 2
+    },
+    "vida": "atencioso-P0~iguais_frutas~g15223010787228446749@13822977252118713682"
+  },
+  "atencioso-P0~iguais_frutas~g15388582210740939190@1273865290516669737": {
+    "acerto_por_dia": [
+      0.625,
+      0.5520833333333334,
+      0.53125,
+      0.4895833333333333,
+      0.5520833333333334,
+      0.5416666666666666,
+      0.5833333333333334,
+      0.5520833333333334,
+      0.5520833333333334,
+      0.5625,
+      0.6145833333333334,
+      0.5,
+      0.53125,
+      0.5625
+    ],
+    "acerto_total": 0.5535714285714286,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 653,
+        "p_com_bola": null,
+        "p_sem_bola": 0.29096477794793263
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5892857142857143,
+        "dia": 0,
+        "maximo": 0.625,
+        "piso": 0.5535714285714286,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 55,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 55
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 55,
+        "decisoes_com_fruta": 346,
+        "expiradas": 41,
+        "ignoradas": 291,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.42729170495792335,
+        "preferencia_inata": {
+          "a": 0.6278143244513863,
+          "b": 0.5924372120946632,
+          "c": 0.7868815024777807
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 25,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 30,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 55,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 15388582210740939190,
+    "humor_medio": 0.8951953124999974,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 1273865290516669737,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 156,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14303,
+      "k": 2
+    },
+    "vida": "atencioso-P0~iguais_frutas~g15388582210740939190@1273865290516669737"
+  },
+  "atencioso-P0~iguais_frutas~g16180031979908315079@4420236314737761816": {
+    "acerto_por_dia": [
+      0.5729166666666666,
+      0.5625,
+      0.6354166666666666,
+      0.6145833333333334,
+      0.53125,
+      0.5625,
+      0.5729166666666666,
+      0.6041666666666666,
+      0.5520833333333334,
+      0.5208333333333334,
+      0.5520833333333334,
+      0.5625,
+      0.5416666666666666,
+      0.5520833333333334
+    ],
+    "acerto_total": 0.5669642857142857,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 593,
+        "p_com_bola": null,
+        "p_sem_bola": 0.33895446880269814
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6011904761904762,
+        "dia": 2,
+        "maximo": 0.6354166666666666,
+        "piso": 0.5669642857142857,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 33,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 33
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 33,
+        "decisoes_com_fruta": 395,
+        "expiradas": 63,
+        "ignoradas": 362,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "a",
+        "neofobia": 0.83402893353925,
+        "preferencia_inata": {
+          "a": 0.5926781807421733,
+          "b": 0.32485921257410644,
+          "c": 0.45775687464616266
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 21,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 12,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 33,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 16180031979908315079,
+    "humor_medio": 0.9029315476190453,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 4420236314737761816,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 142,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14404,
+      "k": 0
+    },
+    "vida": "atencioso-P0~iguais_frutas~g16180031979908315079@4420236314737761816"
+  },
+  "atencioso-P0~iguais_frutas~g16589618528432543182@12110876146880259580": {
+    "acerto_por_dia": [
+      0.6041666666666666,
+      0.65625,
+      0.625,
+      0.5520833333333334,
+      0.5520833333333334,
+      0.5208333333333334,
+      0.5625,
+      0.5416666666666666,
+      0.5208333333333334,
+      0.6145833333333334,
+      0.5625,
+      0.5,
+      0.5520833333333334,
+      0.5520833333333334
+    ],
+    "acerto_total": 0.5654761904761905,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 623,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3258426966292135
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6108630952380952,
+        "dia": 1,
+        "maximo": 0.65625,
+        "piso": 0.5654761904761905,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 42,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 42
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 42,
+        "decisoes_com_fruta": 367,
+        "expiradas": 54,
+        "ignoradas": 325,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "b",
+        "neofobia": 0.8914589954841045,
+        "preferencia_inata": {
+          "a": 0.7078839681749842,
+          "b": 0.7544997332874741,
+          "c": 0.433456942121995
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 0,
+          "ruins": 0,
+          "taxa": null
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 30,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 12,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 42,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 16589618528432543182,
+    "humor_medio": 0.9049367559523789,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 12110876146880259580,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 160,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14404,
+      "k": 3
+    },
+    "vida": "atencioso-P0~iguais_frutas~g16589618528432543182@12110876146880259580"
+  },
+  "atencioso-P0~iguais_frutas~g16840784970240318047@258191285641497908": {
+    "acerto_por_dia": [
+      0.53125,
+      0.5520833333333334,
+      0.5104166666666666,
+      0.5833333333333334,
+      0.53125,
+      0.5208333333333334,
+      0.4583333333333333,
+      0.59375,
+      0.6145833333333334,
+      0.6041666666666666,
+      0.5208333333333334,
+      0.6041666666666666,
+      0.5,
+      0.5208333333333334
+    ],
+    "acerto_total": 0.5461309523809523,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 636,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3270440251572327
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5803571428571428,
+        "dia": 3,
+        "maximo": 0.6145833333333334,
+        "piso": 0.5461309523809523,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 56,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 56
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 56,
+        "decisoes_com_fruta": 347,
+        "expiradas": 40,
+        "ignoradas": 291,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.008369325281684104,
+        "preferencia_inata": {
+          "a": 0.5967063948822064,
+          "b": 0.4573454582991343,
+          "c": 0.9700081021982268
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 28,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 28,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 56,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 16840784970240318047,
+    "humor_medio": 0.8951990327380929,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 258191285641497908,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 152,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14202,
+      "k": 3
+    },
+    "vida": "atencioso-P0~iguais_frutas~g16840784970240318047@258191285641497908"
+  },
+  "atencioso-P0~iguais_frutas~g220288947907590784@3720570843249611662": {
+    "acerto_por_dia": [
+      0.5520833333333334,
+      0.6145833333333334,
+      0.625,
+      0.4895833333333333,
+      0.6041666666666666,
+      0.5625,
+      0.4895833333333333,
+      0.5833333333333334,
+      0.4791666666666667,
+      0.5625,
+      0.5833333333333334,
+      0.5520833333333334,
+      0.59375,
+      0.5625
+    ],
+    "acerto_total": 0.5610119047619048,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 647,
+        "p_com_bola": null,
+        "p_sem_bola": 0.35857805255023184
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5930059523809523,
+        "dia": 1,
+        "maximo": 0.625,
+        "piso": 0.5610119047619048,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 61,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 61
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 61,
+        "decisoes_com_fruta": 332,
+        "expiradas": 35,
+        "ignoradas": 271,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "a",
+        "neofobia": 0.3138490065430102,
+        "preferencia_inata": {
+          "a": 0.7359136411006697,
+          "b": 0.6867178980770575,
+          "c": 0.7181989102848529
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 7,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 29,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 32,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 61,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 220288947907590784,
+    "humor_medio": 0.8976376488095215,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 3720570843249611662,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 151,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14202,
+      "k": 0
+    },
+    "vida": "atencioso-P0~iguais_frutas~g220288947907590784@3720570843249611662"
+  },
+  "atencioso-P0~iguais_frutas~g3125061664857864628@7174587029069363388": {
+    "acerto_por_dia": [
+      0.5104166666666666,
+      0.625,
+      0.5625,
+      0.5416666666666666,
+      0.5520833333333334,
+      0.6041666666666666,
+      0.6354166666666666,
+      0.5208333333333334,
+      0.5625,
+      0.6145833333333334,
+      0.5833333333333334,
+      0.5416666666666666,
+      0.5729166666666666,
+      0.5833333333333334
+    ],
+    "acerto_total": 0.5721726190476191,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 636,
+        "p_com_bola": null,
+        "p_sem_bola": 0.31761006289308175
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6037946428571428,
+        "dia": 1,
+        "maximo": 0.6354166666666666,
+        "piso": 0.5721726190476191,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 54,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 54
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 54,
+        "decisoes_com_fruta": 343,
+        "expiradas": 42,
+        "ignoradas": 289,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "b",
+        "neofobia": 0.34539102892583584,
+        "preferencia_inata": {
+          "a": 0.6426129039235451,
+          "b": 0.8263100975941473,
+          "c": 0.41762731968424716
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 27,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 27,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 54,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 3125061664857864628,
+    "humor_medio": 0.9107384672619028,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 7174587029069363388,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 153,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14404,
+      "k": 1
+    },
+    "vida": "atencioso-P0~iguais_frutas~g3125061664857864628@7174587029069363388"
+  },
+  "atencioso-P0~iguais_frutas~g3595114705274687544@8110651490130717997": {
+    "acerto_por_dia": [
+      0.5729166666666666,
+      0.5833333333333334,
+      0.6041666666666666,
+      0.5729166666666666,
+      0.65625,
+      0.5833333333333334,
+      0.5,
+      0.53125,
+      0.6145833333333334,
+      0.5104166666666666,
+      0.5625,
+      0.6041666666666666,
+      0.5833333333333334,
+      0.59375
+    ],
+    "acerto_total": 0.5766369047619048,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 606,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3547854785478548
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6164434523809523,
+        "dia": 4,
+        "maximo": 0.65625,
+        "piso": 0.5766369047619048,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 44,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 44
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 44,
+        "decisoes_com_fruta": 379,
+        "expiradas": 52,
+        "ignoradas": 335,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "b",
+        "neofobia": 0.3026263821487206,
+        "preferencia_inata": {
+          "a": 0.41985154420554294,
+          "b": 0.7557500150238885,
+          "c": 0.427914533844141
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 22,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 22,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 44,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 3595114705274687544,
+    "humor_medio": 0.916333705357141,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 8110651490130717997,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 160,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14505,
+      "k": 0
+    },
+    "vida": "atencioso-P0~iguais_frutas~g3595114705274687544@8110651490130717997"
+  },
+  "atencioso-P0~iguais_frutas~g499655918078709858@4993167198240307941": {
+    "acerto_por_dia": [
+      0.5208333333333334,
+      0.53125,
+      0.6458333333333334,
+      0.5833333333333334,
+      0.5729166666666666,
+      0.6041666666666666,
+      0.5520833333333334,
+      0.59375,
+      0.53125,
+      0.4791666666666667,
+      0.5625,
+      0.5729166666666666,
+      0.625,
+      0.59375
+    ],
+    "acerto_total": 0.5691964285714286,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 611,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3142389525368249
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6075148809523809,
+        "dia": 2,
+        "maximo": 0.6458333333333334,
+        "piso": 0.5691964285714286,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 38,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 38
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 38,
+        "decisoes_com_fruta": 377,
+        "expiradas": 58,
+        "ignoradas": 339,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.28262825830255944,
+        "preferencia_inata": {
+          "a": 0.5078677143554864,
+          "b": 0.5203492433991005,
+          "c": 0.5875136577451713
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 17,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 21,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 38,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 499655918078709858,
+    "humor_medio": 0.8892113095238069,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 4993167198240307941,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 156,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14303,
+      "k": 3
+    },
+    "vida": "atencioso-P0~iguais_frutas~g499655918078709858@4993167198240307941"
+  },
+  "atencioso-P0~iguais_frutas~g5123555597040126801@17828265786052404779": {
+    "acerto_por_dia": [
+      0.5729166666666666,
+      0.59375,
+      0.5729166666666666,
+      0.625,
+      0.5104166666666666,
+      0.5520833333333334,
+      0.5833333333333334,
+      0.5729166666666666,
+      0.5416666666666666,
+      0.5,
+      0.5208333333333334,
+      0.5625,
+      0.5625,
+      0.5729166666666666
+    ],
+    "acerto_total": 0.5602678571428571,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 652,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3588957055214724
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5926339285714286,
+        "dia": 1,
+        "maximo": 0.625,
+        "piso": 0.5602678571428571,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 50,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 50
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 50,
+        "decisoes_com_fruta": 347,
+        "expiradas": 46,
+        "ignoradas": 297,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "b",
+        "neofobia": 0.8454544596720651,
+        "preferencia_inata": {
+          "a": 0.8752399004716205,
+          "b": 0.9931114538737511,
+          "c": 0.4861975300817074
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 31,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 19,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 50,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 5123555597040126801,
+    "humor_medio": 0.9157775297619031,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 17828265786052404779,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 161,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14303,
+      "k": 1
+    },
+    "vida": "atencioso-P0~iguais_frutas~g5123555597040126801@17828265786052404779"
+  },
+  "atencioso-P0~iguais_frutas~g5402057051827805956@6763068571702515481": {
+    "acerto_por_dia": [
+      0.5625,
+      0.5729166666666666,
+      0.5208333333333334,
+      0.5625,
+      0.625,
+      0.5208333333333334,
+      0.5,
+      0.5208333333333334,
+      0.5729166666666666,
+      0.5833333333333334,
+      0.5520833333333334,
+      0.5625,
+      0.53125,
+      0.5520833333333334
+    ],
+    "acerto_total": 0.5528273809523809,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 610,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3377049180327869
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5889136904761905,
+        "dia": 4,
+        "maximo": 0.625,
+        "piso": 0.5528273809523809,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 47,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 47
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 47,
+        "decisoes_com_fruta": 382,
+        "expiradas": 49,
+        "ignoradas": 335,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.013642806472005886,
+        "preferencia_inata": {
+          "a": 0.44391511342192935,
+          "b": 0.31918693782481383,
+          "c": 0.9572072202470037
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 1,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 20,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 27,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 47,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 5402057051827805956,
+    "humor_medio": 0.8846856398809496,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 6763068571702515481,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 154,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14202,
+      "k": 2
+    },
+    "vida": "atencioso-P0~iguais_frutas~g5402057051827805956@6763068571702515481"
+  },
+  "atencioso-P0~iguais_frutas~g6107305875929104735@791068372274281997": {
+    "acerto_por_dia": [
+      0.5208333333333334,
+      0.5833333333333334,
+      0.59375,
+      0.5625,
+      0.5833333333333334,
+      0.5729166666666666,
+      0.5,
+      0.5104166666666666,
+      0.6145833333333334,
+      0.5416666666666666,
+      0.5833333333333334,
+      0.5833333333333334,
+      0.5833333333333334,
+      0.53125
+    ],
+    "acerto_total": 0.5617559523809523,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 684,
+        "p_com_bola": null,
+        "p_sem_bola": 0.34502923976608185
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.5881696428571428,
+        "dia": 2,
+        "maximo": 0.6145833333333334,
+        "piso": 0.5617559523809523,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 67,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 67
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 67,
+        "decisoes_com_fruta": 299,
+        "expiradas": 29,
+        "ignoradas": 232,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "c",
+        "neofobia": 0.5896085184149185,
+        "preferencia_inata": {
+          "a": 0.821116072031423,
+          "b": 0.8364195406369206,
+          "c": 0.8696848079644388
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 7,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 6,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 34,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 33,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 67,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 6107305875929104735,
+    "humor_medio": 0.9073865327380931,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 791068372274281997,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 162,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14505,
+      "k": 1
+    },
+    "vida": "atencioso-P0~iguais_frutas~g6107305875929104735@791068372274281997"
+  },
+  "atencioso-P0~iguais_frutas~g940412731089627366@10272552838740187386": {
+    "acerto_por_dia": [
+      0.59375,
+      0.5416666666666666,
+      0.53125,
+      0.5625,
+      0.5416666666666666,
+      0.59375,
+      0.6458333333333334,
+      0.59375,
+      0.59375,
+      0.5625,
+      0.5625,
+      0.53125,
+      0.5625,
+      0.5520833333333334
+    ],
+    "acerto_total": 0.5691964285714286,
+    "bola": {
+      "contagem": {
+        "decisoes_com_bola": 0,
+        "expiradas": 0,
+        "ignoradas": 0,
+        "postas": 0,
+        "renovadas": 0,
+        "tiradas": 0,
+        "usadas": 0
+      },
+      "resposta": {
+        "delta": null,
+        "n_com_bola": 0,
+        "n_decisoes": 1344,
+        "n_livre_com_bola": 0,
+        "n_livre_sem_bola": 648,
+        "p_com_bola": null,
+        "p_sem_bola": 0.3395061728395062
+      }
+    },
+    "braco": "P0",
+    "broncas": 0,
+    "cerebro": "lobos",
+    "condicao": "iguais",
+    "custo_da_plasticidade": {
+      "deriva_final": 0.0,
+      "deriva_maxima": 0.0,
+      "deriva_por_dia": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "tempo_ate_metade": {
+        "alvo": 0.6075148809523809,
+        "dia": 6,
+        "maximo": 0.6458333333333334,
+        "piso": 0.5691964285714286,
+        "sinais": 0
+      }
+    },
+    "deriva_final": 0.0,
+    "dono": "atencioso",
+    "eventos_mundo": 96,
+    "filtro": null,
+    "fonte": "nenhuma",
+    "fracao_fora_de_privacao": 1.0,
+    "frutas": {
+      "consumos": 53,
+      "consumos_ate_metade": {
+        "alvo": null,
+        "censurado": null,
+        "consumos": null,
+        "dia": null,
+        "sem_referencia": true,
+        "total": 53
+      },
+      "contagem": {
+        "comer_sem_fruta": 0,
+        "comidas": 53,
+        "decisoes_com_fruta": 350,
+        "expiradas": 43,
+        "ignoradas": 297,
+        "oferecidas": 96,
+        "renovadas": 0
+      },
+      "decisoes_com_informacao": 0,
+      "genoma": {
+        "fruta_preferida": "a",
+        "neofobia": 0.07563762304404897,
+        "preferencia_inata": {
+          "a": 0.8315228256593878,
+          "b": 0.30178242079072987,
+          "c": 0.5957718699089662
+        }
+      },
+      "informacoes": [],
+      "mundo": {
+        "condicao": "iguais",
+        "efeito_vigente": "iguais",
+        "efeitos": {
+          "iguais": {
+            "a": 0.0,
+            "b": 0.0,
+            "c": 0.0
+          }
+        },
+        "tick_troca": null,
+        "troca": null
+      },
+      "taxa_fruta_ruim": {
+        "dia_1": {
+          "fim": 1440,
+          "inicio": 0,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_10": {
+          "fim": 14400,
+          "inicio": 12960,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_11": {
+          "fim": 15840,
+          "inicio": 14400,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_12": {
+          "fim": 17280,
+          "inicio": 15840,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_13": {
+          "fim": 18720,
+          "inicio": 17280,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_14": {
+          "fim": 20160,
+          "inicio": 18720,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_2": {
+          "fim": 2880,
+          "inicio": 1440,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_3": {
+          "fim": 4320,
+          "inicio": 2880,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_4": {
+          "fim": 5760,
+          "inicio": 4320,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_5": {
+          "fim": 7200,
+          "inicio": 5760,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_6": {
+          "fim": 8640,
+          "inicio": 7200,
+          "n": 3,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_7": {
+          "fim": 10080,
+          "inicio": 8640,
+          "n": 2,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_8": {
+          "fim": 11520,
+          "inicio": 10080,
+          "n": 4,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "dia_9": {
+          "fim": 12960,
+          "inicio": 11520,
+          "n": 5,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "final": {
+          "fim": 20160,
+          "inicio": 10080,
+          "n": 29,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "inicio": {
+          "fim": 10080,
+          "inicio": 0,
+          "n": 24,
+          "ruins": 0,
+          "taxa": 0.0
+        },
+        "total": {
+          "fim": 20160,
+          "inicio": 0,
+          "n": 53,
+          "ruins": 0,
+          "taxa": 0.0
+        }
+      }
+    },
+    "genoma": 940412731089627366,
+    "humor_medio": 0.907280505952379,
+    "informacoes": 0,
+    "interacoes": 224,
+    "julgamentos": 0,
+    "mundo": "iguais_frutas",
+    "n": 1344,
+    "n6": null,
+    "n7": null,
+    "origem": null,
+    "pedidos": 0,
+    "saude_media": 1.0,
+    "semente": 10272552838740187386,
+    "sinais_acumulados": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sinais_do_dono": 155,
+    "sinais_total": 0,
+    "teto_total": 1.0,
+    "unidade": {
+      "base": 14101,
+      "k": 2
+    },
+    "vida": "atencioso-P0~iguais_frutas~g940412731089627366@10272552838740187386"
+  }
+}

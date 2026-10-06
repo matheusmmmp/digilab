@@ -2486,3 +2486,17 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
 - **Blocos N6 e N7, na montagem completa:** o MR fixa a própria memória (com o aprendizado do lobo de decisão desligado, N6-2), e o M0, o
   MT e o ME são os acoplados dele. No bloco N7 a montagem liga a memória no P1+ped (com canais) e no P3+ped, como nos outros braços com a
   mesma fonte; o P0+ped fica sem nada. A referência do mundo padrão usa o P0, o P1 e o P3: sem frutas a montagem não liga a memória.
+
+## 2026-10-06 — K2-CALIBRACAO-CONJUNTA: o que a run mostrou (depois da run)
+
+- **A run única** foi feita no commit `5f288d6`, com a montagem completa do #178, e terminou sem erro (4 h 12 min). A suíte inteira rodou ao
+  mesmo tempo, então os 12,3 s por vida da estimativa da validação são pessimistas.
+- **A2 sem conflitos:** a deferência na `fome_moderada` ficou sem denominador nas 20 unidades e nos três pontos. Valeu a reserva registrada
+  (o menor valor). Por que não houve conflito não foi investigado.
+- **B na reserva:** todo ganho teve vida do P1 no teto (4: 2; 8: 10; 16: 33). A reserva registrada antes da run escolheu o 4.
+- **A escala do Δ no p3:** a seção 5.3 do plano aplica o Δ da regra 6.3 (taxa) aos seis primários, mas o `p3_consumos` é medido em
+  consumos. O N dele (191.815) é artefato de escala, não de variância. O orquestrador seguiu o plano como está. As alternativas
+  (`alternativas_n.json`) foram calculadas depois, das mesmas 20 unidades, só como tamanho de amostra: nenhum parâmetro mudou por elas.
+- **O N pequeno nos outros cinco:** no piso de 5 unidades a fórmula normal é otimista (poder simulado de 0,73 a 0,77 em três). A
+  conferência por simulação está no adendo ao lado do N da fórmula, como o plano pede, sem trocar o N.
+- **O poder dos secundários** no `adendo.json` usa o N de 191.815 e precisa ser refeito com o N que o Matheus decidir.

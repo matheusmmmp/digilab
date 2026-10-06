@@ -79,6 +79,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `digilab/policies/camada_unica.py`, `experiments/run_v2_l1.py`, `experiments/configs/v2_l1/` | **V2, L1**: o lobo de decisão aprende (feedback como vantagem, inteiros; `ConfigLobos.aprendizado_ligado`), o controle de capacidade equivalente sem lobos (`PoliticaCamadaUnica`), e o orquestrador da calibração/validação (G3, G3-T, G4, G5, G6, acoplado, norma de reação, educação) → `artifacts_v2_l1/` (seção "V2, L1" no fim) |
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`, `iguais_frutas`), as condições casado/descasado/mutável/iguais e as unidades derivadas (prefixos do experimento maior, do N6 e do N7); desde a BANCADA-N5 os lobos veem a bola e as frutas; os braços do N6 (M0, MR, MT, ME) e do N7 (P0+ped, P1+ped, P3+ped), ligados à memória e ao pedido desde a BANCADA-LIGA-N6-N7; o K4 fora do orçamento (chave `julgamento_fruta`), os canais por braço e as ablações da K-7 (P1c, P1c-mem, P1c-can) desde a BANCADA-K4-CANAIS; a chave `montagem` (`"completa"`: o cérebro A da seção 1 do plano da calibração conjunta em cada braço) desde a BANCADA-MONTAGEM (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS", "V2, BANCADA-N5", "V2, BANCADA-N6-N7", "V2, BANCADA-LIGA-N6-N7", "V2, BANCADA-K4-CANAIS" e "V2, BANCADA-MONTAGEM" no fim) |
 | `experiments/run_v2_experimento_maior.py`, `experiments/configs/v2_experimento_maior/` | **V2, BANCADA-EXPERIMENTO**: o orquestrador do experimento maior (P0, P1, P2, P2e, P3 × `casado_frutas`, `descasado`, `mutavel` pela bancada, o "só cuidado" acoplado, os seis contrastes primários com Holm, a equivalência da predição 5 e as leituras por predição); o ponto nomeado do aprendiz na bancada (`ponto`: `L1` padrão, `T3` para o N5 e o experimento maior) (seção "V2, BANCADA-EXPERIMENTO" no fim) |
+| `experiments/run_v2_calibracao_conjunta.py`, `experiments/configs/v2_calibracao_conjunta/` | **V2, K2**: a calibração conjunta do cérebro A (etapas A1, A2, B, C e D do `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`, montagem completa da bancada, o adendo de tamanho de amostra) → `artifacts_v2_calibracao_conjunta/`, `docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md` (seção "V2, K2-CALIBRACAO-CONJUNTA" no fim) |
 | `experiments/run_revisao_aprendiz.py`, `experiments/configs/v2_revisao/` | **V2, REVISAO-APRENDIZ**: diagnóstico do aprendiz (teto, janela de crédito com o traço `ConfigLobos.traco_decisoes`/`traco_fator`, exposição), uma alavanca por vez, pela bancada (chaves `lobos` e `frutas` da config) → `artifacts_v2_revisao/` (seção "V2, REVISAO-APRENDIZ" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
@@ -2114,3 +2115,21 @@ faixa reservada; só as sementes dos testes. Só `experiments/` mudou (a bancada
 - **Fumaça** (`experiments/configs/bancada/fumaca_montagem.json`, NÃO canônica, sem artefato: P0, P1, P2, P2e, P2a, P3 e as duas ablações
   nos três mundos das frutas, o só cuidado do P2 e do P3; T3, K4, g, `w0_info` e `w0_pedido` S/2): 150 vidas rejogadas bit a bit em ~4 min.
 - **Fora:** o cérebro C (`experiments/cerebro_c_bancada.py`) não lê a montagem: ela é do cérebro A.
+
+## V2, K2-CALIBRACAO-CONJUNTA — a calibração conjunta do cérebro A (2026-10-06, `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`) — RUN FEITA; N DA VALIDAÇÃO ACIMA DO TETO, DECISÃO PENDENTE
+
+Plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11). Uma run, nas sementes de calibração 14101…14505 (K = 4, 20 unidades), 14
+dias, atencioso, ponto T3, `"montagem": "completa"` (#178) e o K4 ligado; 4 h 12 min. Números de `artifacts_v2_calibracao_conjunta/`;
+relatório `docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Código:**
+  - `experiments/run_v2_calibracao_conjunta.py`: as cinco etapas pela bancada, cada uma com a regra de escolha do plano e a de reserva;
+    nenhuma regra lê a `taxa_fruta_ruim` nem um contraste entre braços;
+  - recusa a validação e recusa a calibração sem as peças da bancada (`pecas_pendentes`);
+  - `PoliticaLobos.escolha_sem_info`: a sonda da etapa C, só leitura;
+  - testes: `tests/test_calibracao_conjunta.py`, 11.
+- **Ponto:** `g` = S/2 (A1 fechou), `w0_pedido` = S/4 (A2 não fechou: nenhum conflito na `fome_moderada`), ganho 4 (B não fechou: todo
+  ganho com vida no teto; a reserva escolhe o 4, razão da deriva 2,72), `w0_info` = S/4 (C fechou).
+- **Piloto:** contratos K1–K9 passam; Δ 0,199 (N6 0,194; N7 0,202); 12,3 s por vida.
+- **N da validação: 191.815 (~28.760 h), acima do teto de 12 h.** O `p3_consumos` é medido em consumos e recebe o Δ de taxa. Os outros
+  cinco ficam no piso de 5, com poder simulado entre 0,73 e 0,77 em três deles. Alternativas em `alternativas_n.json`; a recomendada (Δ do
+  p3 na escala dele e N pela simulação) dá N 30, ~4,5 h. A validação não roda sem decisão do Matheus (seção 5.3.6).

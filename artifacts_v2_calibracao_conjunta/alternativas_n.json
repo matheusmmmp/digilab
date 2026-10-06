@@ -1,0 +1,36 @@
+{
+ "horas_com_n_maior_simulado": 4.4980842910416685,
+ "n_maior_sem_p3_simulado": 10,
+ "n_maior_simulado": 30,
+ "p1_casado": {
+  "n_formula": 5,
+  "n_simulado_min": 5
+ },
+ "p2_descasado": {
+  "n_formula": 5,
+  "n_simulado_min": 10
+ },
+ "p2_mutavel": {
+  "n_formula": 5,
+  "n_simulado_min": 10
+ },
+ "p3_consumos": {
+  "n_formula": 25,
+  "n_simulado_min": 30
+ },
+ "p3_delta_consumos": {
+  "P1_censurados": 3,
+  "P1_consumos_medio": 35.0,
+  "delta": 17.5,
+  "n_P1": 20,
+  "n_formula": 25
+ },
+ "p4a_piora": {
+  "n_formula": 5,
+  "n_simulado_min": 5
+ },
+ "p4b_recupera": {
+  "n_formula": 5,
+  "n_simulado_min": 10
+ }
+}
