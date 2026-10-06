@@ -89,6 +89,4 @@ artifacts_v2_revisao/calibracao/combinado/vidas/
 artifacts_v2_calibracao_conjunta/**/vidas/
 !artifacts_v2_comparacao_cerebros/
 # V2, comparacao dos cerebros: as vidas das calibracoes de B e C sao regeneraveis da config e do codigo (medidas e resultados ficam)
-
-# V2, CALIBRACAO-CEREBRO-C: as vidas da calibracao dos cerebros sao regeneraveis da config e do codigo (medidas e resultados ficam)
 artifacts_v2_comparacao_cerebros/**/vidas/
