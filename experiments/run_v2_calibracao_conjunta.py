@@ -19,7 +19,6 @@ import argparse
 import json
 import math
 import platform
-import random
 import sys
 import time
 from dataclasses import replace
@@ -36,8 +35,7 @@ from digilab.ambiente import reproduzir_ambiente  # noqa: E402
 from digilab.config import CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.frutas import DonoPedinte  # noqa: E402
-from digilab.metrics import bootstrap_ic, fracao_da_fruta, t_unilateral, tamanho_amostra  # noqa: E402
-from digilab.protocol import derivar_semente  # noqa: E402
+from digilab.metrics import bootstrap_ic, fracao_da_fruta, tamanho_amostra  # noqa: E402
 
 PLANO = "docs/PLANO_CALIBRACAO_CONJUNTA_V2.md"
 SAIDA_PADRAO = "artifacts_v2_calibracao_conjunta"
@@ -390,23 +388,9 @@ def poder_formula(sigma: float, delta: float, n: int, alfa: float) -> float | No
     return z.cdf(math.sqrt(n) * delta / sigma - z.inv_cdf(1.0 - alfa))
 
 
-def poder_simulado(difs: list[float], delta: float, n: int, alfa: float, replicas: int, semente: int) -> float | None:
-    """Secao 5.3.3: bootstrap das unidades do piloto, centradas no delta (a alternativa), N por replica, teste t pareado unilateral."""
-    if len(difs) < 2 or not delta or delta <= 0 or not n or n < 2:
-        return None
-    media = sum(difs) / len(difs)
-    centradas = [d - media + delta for d in difs]
-    rng = random.Random(derivar_semente("k2-poder", semente))
-    rej = 0
-    for _ in range(replicas):
-        ys = [centradas[rng.randrange(len(centradas))] for _ in range(n)]
-        m = sum(ys) / n
-        var = sum((y - m) ** 2 for y in ys) / (n - 1)
-        if var == 0.0:
-            rej += m > 0
-            continue
-        rej += t_unilateral(m / math.sqrt(var / n), n - 1) <= alfa
-    return rej / replicas
+# A conta do poder simulado mora no orquestrador do experimento maior desde a V1-VALIDACAO-UNICA (o adendo 2 tira o N dela); a mesma
+# funcao, a mesma rng: a K2 reproduz.
+poder_simulado = em.poder_simulado
 
 
 def _logico(rotulo: str) -> str:

@@ -26,5 +26,6 @@
     "semente": 101,
     "nivel": 0.95
   },
-  "referencia_padrao": true
+  "referencia_padrao": true,
+  "replicas_poder": 100
 }
