@@ -380,10 +380,26 @@ def test_o_estado_oculto_e_memoria_recorrente():
     a.agir(_obs((1.0, 0.0, 0.0)), _Rng(0.5))
     b.agir(_obs((0.0, 1.0, 0.0), estado=replace(E, fome=0.3)), _Rng(0.5))
     c.agir(_obs((1.0, 0.0, 0.0)), _Rng(0.5))
-    for x in (a, b, c):
-        x._registro_decisao = None
+    for x, est in ((a, E), (b, replace(E, fome=0.3)), (c, E)):
+        r = x._registro_decisao
+        x.observar(Transicao(Observacao.de_estado(est), r["acao"], Observacao.de_estado(est)))
         x.agir(_obs((0.0, 0.0, 1.0)), _Rng(0.5))
+        depois = replace(E, tick=E.tick + 15)
+        x.observar(Transicao(Observacao.de_estado(depois), x._registro_decisao["acao"], Observacao.de_estado(depois)))
     assert a._h == c._h and a._h != b._h
+
+
+def test_a_sonda_nao_anda_a_memoria():
+    """Varias decisoes sem observar (a sonda da deriva) respondem todas com a memoria do fim do dia: o estado oculto e o traco so andam
+    com a decisao observada."""
+    c = _cerebro(_vida("atencioso", "P1", 202, "descasado"))
+    h, e = list(c._h), list(c._traco)
+    obs = _obs((1.0, 1.0, 0.0))
+    pesos = []
+    for _ in range(5):
+        c.agir(obs, _Rng(0.5))
+        pesos.append(c.motivos[-1]["pesos"])
+    assert c._h == h and c._traco == e and all(p == pesos[0] for p in pesos)
 
 
 # ------------------------------------------------------------------ pela bancada: o B aprende nas vidas

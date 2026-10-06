@@ -36,6 +36,10 @@ criterio 3 do M6 cobra o porte; aqui so a pesquisa).
     dono (P3), com a janela da v1 do A: elogio e bronca na ultima decisao (pelo traco); o chamado atendido paga 1 - L / janela e o
       expirado recompensa_pedido_ignorado, na decisao do chamado, so pelo gradiente DELA (o traco ja andou).
   Uma decisao com um candidato so tem gradiente zero (nada a escolher), como no A; o traco ainda leva o sinal as anteriores.
+  A MEMORIA E O TRACO SO ANDAM COM A DECISAO OBSERVADA: `agir` calcula o estado oculto novo e o gradiente e os guarda no registro; eles
+  entram no cerebro (h, e <- lambda e + g) quando o motor observa a decisao (`observar`/`observar_consequencia`). Numa vida e o mesmo
+  (toda decisao e observada antes da proxima); numa sonda (`metrics.distribuicoes_de_acao`, varios `agir` sem observar) o B responde
+  sempre com a memoria do fim do dia, como o A, cujo `agir` nao muda nada do que ele aprendeu.
 
   SONDA DO APRENDIDO (contrato 1.1): toda decisao guarda a acao que sairia com a parte aprendida zerada (z = 0) e o mesmo u
   (`motivos[-1]["sonda"]`), e a escolha da fruta, a fruta com q = theta_info inato x info (sem o aprendido) e a fruta sem a informacao
@@ -205,6 +209,7 @@ class PoliticaCerebroB:
         self._n_recompensas: dict[str, int] = {"elogio": 0, "repreensao": 0, "latencia": 0, "ignorado": 0}
         self._n_atualizacoes = 0
         self._soma_delta = 0.0
+        self._cortes_limite = 0                         # decisoes reais com um logit aprendido cortado em +-limite_logit
 
     # ------------------------------------------------------------- leitura
 
@@ -312,7 +317,6 @@ class PoliticaCerebroB:
         z = {a: 0.0 for a in candidatos}
         if self._aprende:
             cel = self._celula(self.entrada_celula(obs) + self._h)
-            self._h = cel["h"]
             z = {a: self._logit(a, cel["h"]) for a in candidatos}
             pesos = {a: inst[a] * math.exp(z[a]) for a in candidatos}
         else:
@@ -337,10 +341,11 @@ class PoliticaCerebroB:
             grad = [0.0] * self._L.n_ator
             if len(candidatos) > 1:
                 self._gradiente_acao(cel, candidatos, acao, p, grad)
-            lam = self.cl.lambda_elegibilidade
-            self._traco = [lam * e + g for e, g in zip(self._traco, grad)]
             valor = self._valor(cel["h"])
-            self._registro_decisao = {"regra": regra, "candidatos": candidatos, "acao": acao, "cel": cel, "grad": grad, "n": len(self.motivos)}
+            lim = self.cl.limite_logit
+            no_limite = any(abs(z[a]) == lim for a in candidatos)
+            self._registro_decisao = {"regra": regra, "candidatos": candidatos, "acao": acao, "cel": cel, "grad": grad, "n": len(self.motivos),
+                                      "no_limite": no_limite}
         else:
             self._registro_decisao = None
         self.motivos.append({
@@ -352,6 +357,13 @@ class PoliticaCerebroB:
             "sonda": {"acao_sem_aprendido": sem.value, "aprendido_decidiu": sem is not acao},
         })
         return acao
+
+    def _comprometer(self, registro: dict) -> None:
+        """A decisao foi observada: o estado oculto dela vira a memoria do B, o traco anda (e <- lambda e + g) e o corte no limite conta."""
+        self._h = registro["cel"]["h"]
+        lam = self.cl.lambda_elegibilidade
+        self._traco = [lam * e + g for e, g in zip(self._traco, registro["grad"])]
+        self._cortes_limite += registro["no_limite"]
 
     def _gradiente_acao(self, cel: dict, candidatos: tuple, acao: AcaoPet, p: dict, grad: list[float]) -> None:
         """d log p(acao) / d theta: dz_a = 1[a = acao] - p_a nos candidatos; a cabeca e, por h, a celula."""
@@ -408,6 +420,8 @@ class PoliticaCerebroB:
         h = registro["cel"]["h"] if (self._aprende and registro is not None) else None
         L = self._L
         q = self._q_frutas(presentes, h, self._theta[L.info], self._aprende)
+        if self._aprende and any(abs(v) == self.cl.limite_logit for v in q.values()):
+            self._cortes_limite += 1
         pesos = self._pesos_de(presentes, incentivos, q)
         escolhida = _sortear_frutas(presentes, pesos, u)
         q0 = self._q_frutas(presentes, None, self._theta0[L.info], False)
@@ -462,6 +476,7 @@ class PoliticaCerebroB:
         registro = self._registro_decisao
         if registro is None or registro["acao"] is not transicao.acao:
             raise RuntimeError("registro da decisao nao corresponde a acao observada")
+        self._comprometer(registro)
         self._ultima = registro
         if transicao.acao is AcaoPet.CHAMAR_ATENCAO:
             self._pendentes.append((tick, registro))
@@ -513,6 +528,7 @@ class PoliticaCerebroB:
         registro = self._registro_decisao
         if registro is None or registro["acao"] is not transicao.acao:
             raise RuntimeError("registro da decisao nao corresponde a acao observada")
+        self._comprometer(registro)
         self._ultima = registro
         cc = cfg_consequencia or CONFIG_CONSEQUENCIA
         self._n_recompensas["consequencia"] = self._n_recompensas.get("consequencia", 0) + 1
@@ -589,6 +605,7 @@ class PoliticaCerebroB:
                 "taxa_ator": self.cl.taxa_ator, "taxa_critico": self.cl.taxa_critico,
                 "lambda_elegibilidade": self.cl.lambda_elegibilidade, "w0_info": self.cl.w0_info,
                 "n_atualizacoes": self._n_atualizacoes, "soma_delta": self._soma_delta, "recompensas": dict(self._n_recompensas),
+                "cortes_limite": self._cortes_limite,
                 "tick_ultimo_cuidado": self._tick_ultimo_cuidado, "tick_ultima_decisao": self._tick_ultima_decisao,
                 "pendentes": [[t, registro_dict(r)] for t, r in self._pendentes],
                 "ultima": registro_dict(self._ultima),
