@@ -2752,3 +2752,15 @@ rodou nas sementes 15101…15505. Interpretações, registradas antes da run:
   - Vale para o P2a e para o P2d e o P3i.
 - **O apoio teórico de cada predição e a limitação do mutável** vão na leitura do `resumo.json`, como texto fixo (`APOIO_TEORICO`,
   `LIMITACAO_MUTAVEL`); a regra de decisão não muda.
+
+## 2026-10-06 — Faixa de validação trocada para 30101…30505; decisões L-1 a L-4
+
+- **A run indevida.** Uma run foi disparada nas sementes de validação 15101…15505 antes de a tarefa chegar (das 09:47 às 10:12; PRs #183 e
+  #189). Ela foi parada, apagada e nada foi lido.
+- **A troca.** Decisão do Matheus: trocar a faixa para 30101…30505 (adendo 4 do experimento maior). A 15101…15505 fica queimada e
+  reservada. A troca no código (`BASES_EXPERIMENTO_MAIOR`, a config da validação e os testes) é do chat B, junto com a ligação do P2d e do
+  P3i.
+- **L-1 a L-4** (`docs/referencias/E2_SINTESE_PISTAS_P7.md`) aprovadas como recomendado:
+  - **L-1:** o texto completo do Eliassen fica pendente, para antes da leitura;
+  - **L-2:** o status do Ackley e Littman atualizado no CSV de `docs/referencias/` e na skill de literatura;
+  - **L-3 e L-4:** entram como leitura no adendo 4.
