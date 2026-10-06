@@ -2817,3 +2817,16 @@ na faixa nova nem na antiga.
   - Rejogar uma vez por dia custaria cerca de 7,5 vidas por vida do P2e: perto de 46 min a mais na validação (30 vidas × 7,5 × 12,27 s).
 - **O P2d e o P3i:** o PR da bancada do chat D (`docs/TAREFA_V2_P2D_P3I.md`, parte D) ainda não existe. A validação continua pedindo
   `"p2d_p3i": true` e falha alto antes de qualquer vida até lá. Depois do merge dele, este branch se atualiza e confere na fumaça.
+
+## 2026-10-06 — V2, VALIDACAO-UNICA: a run da validação única do experimento maior (registro antes da run)
+
+Sinal verde do coordenador, autorizado pelo Matheus, depois do #191 e do #192 (main `2660170`). Plano
+`docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, adendos 1 a 4.
+- **Fumaça antes da run:** a config da validação, trocando só as unidades (bases 101 e 202, K = 1), o bootstrap (200 reamostragens) e as
+  réplicas do poder (100). Gerou e rejogou do disco 112 vidas, sem falhar, em 15 min:
+  - frutas 48, padrão 6, blocos 34;
+  - durações 16, P2d e P3i 8.
+
+  As leituras da fumaça não são resultado e não foram usadas para nada.
+- **A run:** uma vez, `experiments/configs/v2_experimento_maior/validacao.json` sem mudança (bases 30101…30505, K = 6, N = 30), saída em
+  `artifacts_v2_validacao_unica/`, do commit deste registro. Nada se ajusta olhando o resultado.
