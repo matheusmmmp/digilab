@@ -64,7 +64,9 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
         "M0": ("nenhuma", "N6"), "MR": ("nenhuma", "N6"), "MT": ("nenhuma", "N6"), "ME": ("nenhuma", "N6"),
         "P0+ped": ("nenhuma", "N7"), "P1+ped": ("consequencia", "N7"), "P3+ped": ("dono", "N7"),
         # BANCADA-K4-CANAIS: as ablacoes da K-7 (tests/test_bancada_k4_canais.py)
-        "P1c": ("consequencia", "K-7"), "P1c-mem": ("consequencia", "K-7"), "P1c-can": ("consequencia", "K-7")}
+        "P1c": ("consequencia", "K-7"), "P1c-mem": ("consequencia", "K-7"), "P1c-can": ("consequencia", "K-7"),
+        # P2D-P3I, parte D: o momento e a interpretacao do adendo 3 (tests/test_bancada_p2d_p3i.py)
+        "P2d": ("informacao", "adendo-3"), "P3i": ("dono", "adendo-3")}
     assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
 
