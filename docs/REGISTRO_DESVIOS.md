@@ -2550,3 +2550,32 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
   - Sementes 28101…28505, K = 4.
   - Adendos já conferidos (adendo 1 do plano da comparação).
   - Teto de vidas conferido: o A gastou 1260 na K2, contadas nos logs de vida de `artifacts_v2_calibracao_conjunta/`.
+
+## 2026-10-06 — V2, CALIBRACAO-CEREBRO-C: a calibração do cérebro C (`docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`, adendo 1.2)
+
+- **O prefixo das unidades fica no orquestrador.** A bancada só aceita os prefixos dos planos dela (`PREFIXOS_UNIDADES`), e ela não muda
+  nesta tarefa. Por isso `run_v2_calibracao_cerebro_c.unidades_comparacao` aplica a mesma regra E3 com `comparacao-cerebros`:
+  `derivar_semente(prefixo, b, k)` e `prefixo + "-genoma"`. A função falha alto com colisão ou com um valor numa faixa reservada. O teste
+  confere que as unidades não colidem com as da validação da comparação nem com as do experimento maior.
+- **A ligação do C é a `BancadaComC`** (`experiments/cerebro_c_bancada.py`), com um laço próprio: o `bv.rodar` só monta os lobos.
+  - Cada vida é gravada, rejogada do disco (`Bancada.conferir_replay`) e medida por `Bancada.medir`, cujo replay também confere.
+  - O `*.politica.json` (o estado interno, enorme) não é gravado: o replay já compara o estado interno inteiro.
+  - As vidas ficam fora do git, como na K2.
+- **K-4, "nas três condições juntas":** li como a regra da K2 (plano da calibração conjunta, seção 3.3), ou seja, a razão da deriva de
+  cada condição e a média das três. A razão com as 60 vidas numa conta só fica no resultado, só descritiva. Empate, o menor valor (no
+  adendo isso não está escrito para o caso sem teto); foi o que decidiu a C-B (4S e 16S com as mesmas vidas).
+- **K-3, como a medi:**
+  - O "passa de 0,069" é o limite inferior do IC 95%, como na K-3 do plano da calibração conjunta (seção 3.4).
+  - Contam as sub-decisões com duas frutas ou mais e informação vigente nos dias 1–7.
+  - As três condições são as do adendo (a K2 usava só o descasado), juntas por unidade: decididas somadas sobre elegíveis somadas,
+    bootstrap sobre as 20 sementes.
+  - A reserva é a do texto do adendo ("o de maior fração"), não a da K2 ("o de maior limite inferior"). Ela não foi usada: os três
+    pontos passaram.
+- **A C-B reusa as vidas do 4S da C-A,** como o adendo conta ("120 novas"): é o mesmo ponto, e as vidas seriam as mesmas byte a byte.
+- **O piloto do "não aprende" reusa as 60 vidas do P1 no ponto escolhido** (as da C-B no teto escolhido). O `w0_info` não age no P1, que
+  não tem informante, então essas vidas são as do ponto final. A unidade é a semente, com as três condições juntas.
+- **O ganho comum vem de `artifacts_v2_calibracao_conjunta/escolha.json` (4).** A montagem e a chave `canais_ligados` são do A; o C não
+  as lê (no C os canais são a arquitetura).
+- **O teto de vidas (1260) é contado antes de rodar:** 540 previstas e 540 gastas. Um `Contador` também falha alto se a run passar dele.
+- **O passo escolhido é a ponta da grade (S/8).** A razão da deriva cai com o passo (3,00, 1,89, 1,61), e com 1,61 a deriva ainda cresce
+  na segunda semana. A K-4 não pede razão máxima, então a escolha fica, e a grade não foi estendida.

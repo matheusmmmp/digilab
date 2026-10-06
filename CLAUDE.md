@@ -2174,3 +2174,18 @@ relatório `docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md`. Interpretações em `docs
 - **N da validação: 191.815 (~28.760 h), acima do teto de 12 h.** O `p3_consumos` é medido em consumos e recebe o Δ de taxa. Os outros
   cinco ficam no piso de 5, com poder simulado entre 0,73 e 0,77 em três deles. Alternativas em `alternativas_n.json`; a recomendada (Δ do
   p3 na escala dele e N pela simulação) dá N 30, ~4,5 h. A validação não roda sem decisão do Matheus (seção 5.3.6).
+
+## V2, CALIBRACAO-CEREBRO-C — a calibração do cérebro C (2026-10-06, `docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`) — O C FECHA
+
+Rodada 11; grades e regras do adendo 1.2 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`. Uma run nas bases 28101…28505 (K = 4, prefixo
+`comparacao-cerebros`, 20 unidades), atencioso, 14 dias, o ganho da K2 do A (4); 540 vidas (teto 1260), 1 h (teto 4× a K2). Números de
+`artifacts_v2_comparacao_cerebros/calibracao_C/`; relatório `docs/RESULTADO_V2_CALIBRACAO_CEREBRO_C.md`. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Código:** `experiments/run_v2_calibracao_cerebro_c.py`, que liga o C pela `BancadaComC` (a bancada e o `cerebro_c.py` não mudaram),
+  e `experiments/configs/v2_calibracao_cerebro_c/` (calibração e fumaça). Testes: `tests/test_calibracao_cerebro_c.py`, 12.
+- **Ponto: passo 128, teto 4096, `w0_info` 256.** As três etapas fecharam:
+  - C-A: nenhuma vida no teto; razão da deriva 3,00, 1,89 e **1,61** (a ponta da grade);
+  - C-B: o teto S prende as 60 vidas; 4S e 16S empatam e fica o menor;
+  - C-C: fração decidida pela informação 0,202 [0,164; 0,242] no 256 (0,019 com `w0_info` 0).
+- **Piloto, o "não aprende" (seção 7): não dispara.** Deriva no dia 14 0,0222 [0,0218; 0,0227]; a parte aprendida muda 0,324 das
+  decisões. O C entra no M6.
