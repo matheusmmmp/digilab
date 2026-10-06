@@ -2602,6 +2602,20 @@ Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, q
   - Se as sementes 15101…15505 continuam valendo para a validação única é decisão do coordenador e do Matheus. Nenhum número delas foi
     visto, então nada pôde puxar uma escolha.
 
+## 2026-10-06 — Decisão do Matheus: o cérebro B "não fecha", aceito sem recalibrar
+
+- **O resultado.** A calibração do cérebro B (PR #184, `docs/RESULTADO_V2_CALIBRACAO_CEREBRO_B.md`) fechou as quatro regras, mas o piloto
+  dispara o critério "não aprende" da seção 7 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`. A parte aprendida muda 0,0077
+  [0,0065; 0,0089] das decisões, contra o limite de 0,01.
+- **A decisão (2026-10-06): fica como está.**
+  - O B sai da escolha do M6 com esse motivo registrado (C-7).
+  - Ele não é recalibrado e a regra não muda. A regra de estabilidade (K-4) foi escrita antes dos dados e é a mesma do cérebro A.
+    Trocá-la depois de ver o resultado seria ajustar a regra para o B passar.
+- **Limitação declarada da comparação.** A regra de estabilidade empurrou a cadeia para o ponto em que o B menos aprende. A fração das
+  decisões decidida pelo aprendido no P1 foi 0,203 com a taxa do ator em 0,1 e de 0,024 a 0,008 com 0,01
+  (`artifacts_v2_comparacao_cerebros/calibracao_B/`). Um olhar do B num ponto em que ele aprende só pode entrar como **descritivo**, nunca
+  na escolha.
+
 
 ## 2026-10-06 — V2, CALIBRACAO-CEREBRO-B: a calibração do cérebro B (`docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`)
 
