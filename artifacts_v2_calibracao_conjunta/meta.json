@@ -1,0 +1,44 @@
+{
+ "config": {
+  "bootstrap": {
+   "nivel": 0.95,
+   "reamostragens": 10000,
+   "semente": 4242
+  },
+  "canais": true,
+  "descricao": "Calibracao conjunta do cerebro A (etapa K2): etapas A1, A2, B, C e D do plano, unidades derivadas das bases 14101...14505 com K = 4 (20 unidades), 14 dias, o dono atencioso, o ponto T3.",
+  "dias": 14,
+  "orcamento": 224,
+  "plano": "docs/PLANO_CALIBRACAO_CONJUNTA_V2.md",
+  "ponto": "T3",
+  "saida": "artifacts_v2_calibracao_conjunta",
+  "sonda": {
+   "amostras": 200,
+   "estados": 64,
+   "semente": 9001
+  },
+  "unidades": {
+   "bases": [
+    14101,
+    14202,
+    14303,
+    14404,
+    14505
+   ],
+   "k": 4
+  }
+ },
+ "modo": "calibracao",
+ "orquestrador_sha256": "d67d1444d2677d8ff51b060cf49abd17db08320109c6f712525d661a6c1d5cc8",
+ "plano": "docs/PLANO_CALIBRACAO_CONJUNTA_V2.md",
+ "plano_sha256": "6c71fa57446077017cf9db5048438a6c82ba3af3583f938c7c686f29fc22293d",
+ "plataforma": "Windows-11-10.0.26200-SP0",
+ "ponto": {
+  "g": 512,
+  "ganho": 4,
+  "w0_info": 256,
+  "w0_pedido": 256
+ },
+ "python": "3.13.0",
+ "segundos": 15093.241626800009
+}

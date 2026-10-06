@@ -2467,3 +2467,73 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   - C: 3 parâmetros livres, 9 pontos e 480 a 540 vidas.
 - Falta conferir o teto de vidas (as vidas da K2 do A) no artefato da K2, antes de calibrar B ou C.
 
+## 2026-10-05 — K2-CALIBRACAO-CONJUNTA: interpretações do plano, registradas antes da run
+
+Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` (K-1 a K-11). Orquestrador
+`experiments/run_v2_calibracao_conjunta.py`. **Escrito e commitado antes de qualquer vida das sementes 14101…14505.**
+- **Pasta:** `artifacts_v2_calibracao_conjunta/{A1,A2,B,C,D}/`, como a tarefa pede (a seção 7 do plano dizia
+  `artifacts_v2_experimento_maior/calibracao/`). As vidas (`vidas/`) ficam fora do git: são regeneráveis da config e do código.
+- **IC das regras (A1, A2, C):** bootstrap percentil 95% (`metrics.bootstrap_ic`, reamostragens, semente e nível do `PROTOCOLO_ARENA_V1`)
+  sobre as unidades com valor, unidade = vida (o mesmo das regras da revisão do aprendiz). Unidade sem denominador (nenhuma sub-decisão
+  elegível, nenhum conflito) fica fora e é contada (`sem_valor`). "Limite inferior > limiar" é estrito.
+- **Reserva das regras A1, A2 e C:** o ponto de maior limite inferior; empate, o menor valor; nenhum ponto com IC, o menor valor.
+- **A2:** a deferência na `fome_moderada` nos dias 1…`dias_pedido` (as janelas "inicial" e "final" do bloco N7 somadas, isto é, o G-ARB do
+  plano do N7 restrito à zona), por unidade = decididas pelo pedido / conflitos. O P0 sem pedido no `iguais_frutas` roda como referência
+  descritiva (a 4ª vida por unidade da tabela 5.2) e não entra na regra.
+- **B, a razão da deriva:** por condição, a média da deriva no fim do dia 14 sobre a média no fim do dia 7 (a conta de
+  `run_revisao_aprendiz.celulas`); a razão do ganho é a média das três condições. "Vida no teto" = vida do P1 com algum peso em `|w − w0| =
+  teto` (`pesos_no_teto() > 0`).
+- **B, regra de reserva (o plano não a escreve):** se todo ganho tem vida no teto, o de menos vidas no teto, depois a menor razão, depois o
+  menor ganho (a regra de reserva do N3, seção 6 do plano dele).
+- **C, a sonda da informação:** `PoliticaLobos.escolha_sem_info` (nova, só lê: não muda peso, motivo, registro nem contagem; os gabaritos
+  byte a byte das frentes do cérebro passam) refaz a escolha da fruta com o mesmo u e o termo da informação zerado. O orquestrador rejoga
+  cada vida do P2 com um embrulho que a chama antes de cada `escolher_fruta` e confere que a vida e o estado interno saem iguais.
+  **Elegíveis:** as sub-decisões com duas frutas ou mais e informação vigente em pelo menos uma fruta presente, nos dias 1–7 (a decisão
+  k no tick k × 15). As duas frutas ou mais vêm da A1, para "a mesma régua" das duas entradas: com uma fruta só nenhuma entrada muda a escolha.
+- **D, as ablações (K-7):** "P1 sem memória" = o braço P1 da bancada sem a chave da memória, com o resto do ponto; "P1 escalar" = o P1
+  completo com `canais_ligados` False, numa config de bancada à parte. Os dois no `descasado` e no `mutavel`.
+- **D, os Δ dos blocos:** Δ_N6 = metade da `taxa_fruta_ruim` final do `M0<MR` (plano do N6, seção 7); Δ_N7 = metade da fração de X na
+  extinção do `P0<P3+ped:sem_ensino` (plano do N7, seção 7). A fração de X é calculada dos motivos de toda vida do bloco N7, com ou sem
+  pedido (o P3 sem pedido não tem o bloco `n7` nas medidas da bancada e o G-MARCA-E precisa dele). O poder do G-EROSAO (deferência) é dado
+  com o Δ_N7, que o plano do N7 define pela fração de X: é o único Δ do bloco.
+- **D, o N e o poder:** N por contraste primário pela fórmula da seção 5.3 (α/6, poder 0,8, múltiplo de 5; `run_v2_experimento_maior.tamanhos`).
+  A conferência por simulação reamostra as diferenças das 20 unidades **centradas no Δ** (a alternativa), N por réplica, teste t pareado
+  unilateral a α/6, 2000 réplicas; fica no adendo ao lado do N da fórmula, que não é trocado por ela. A equivalência da predição 5 leva o N
+  da mesma fórmula com α = 0,05 (IC 90%). Os secundários: poder pela aproximação normal com o N escolhido, α/3 nas famílias do N6 e do N7
+  (o passo mais exigente de Holm de cada uma) e α = 0,05 nas ablações; abaixo de 0,5, subpotenciado.
+- **D, o tempo da validação:** 44 vidas por unidade × N × os segundos por vida medidos na própria etapa D (vida, replay do disco e medidas,
+  como a validação vai rodar). Acima de 12 h (K-10), a run para e o PR pergunta ao Matheus.
+- **D, os contratos K1–K9 em vida real:** K1, o P0 de cada unidade e condição contra o instinto das frutas, byte a byte; K3, P2 e P2e com as
+  mesmas (tick, fruta) e conteúdo oposto; K5 e K7, as mesmas ofertas em todo braço e acoplado da unidade e do mundo; K6, casado e descasado
+  com efeitos opostos fruta a fruta por genoma; K8, um registro de consumo por consumo contado; K2 e K4 pela config e pelo orquestrador do
+  experimento maior; K9 pela bancada (toda vida rejogada do disco).
+- **Os braços "completos" (seção 1): pela montagem da bancada** (decisão do Matheus de 2026-10-05, opção 1,
+  `docs/TAREFA_V2_BANCADA_MONTAGEM.md`). Os braços continuam P0 a P3, e toda config de bancada da K2 leva `"montagem": "completa"`, que
+  liga em cada um as peças da tabela da seção 1 com os valores da config (o `g`, o `w0_info`, o `w0_pedido`). As ablações da K-7 são o
+  `P1c-mem` e o `P1c-can` da bancada (o P1 completo menos uma peça). O orquestrador recusa a calibração enquanto a bancada não tiver a chave
+  ou um braço P1–P3 não tiver a memória (`pecas_pendentes`). Os braços `P2c`, `P2ec`, `P2ac` e `P3c` que esta tarefa tinha acrescentado à
+  bancada antes da decisão saíram do branch.
+- **Uma run começou e foi interrompida antes do fim** (2026-10-05), com os braços próprios desta tarefa, antes da decisão da opção 1: por
+  ordem do Matheus, a run da K2 passa a esperar o PR da BANCADA-MONTAGEM. A run parou durante as etapas A2 e B. **Nenhum resultado dela foi
+  lido**: nem `resultado.json`, nem medidas, nem escolha. As vidas foram apagadas (a worktree da run foi removida). A run que vale é a única
+  feita depois do merge da BANCADA-MONTAGEM, nas mesmas sementes de calibração. Por isso a regra "uma vez" se aplica a ela, e as sementes
+  de validação não foram tocadas.
+- **K4:** a chave `julgamento_fruta` da bancada fica ligada em toda config da K2 (age só nos braços com fonte dono nos mundos das frutas;
+  no `iguais_frutas` não há fruta não neutra, então não há julgamento no bloco N7).
+- **Blocos N6 e N7, na montagem completa:** o MR fixa a própria memória (com o aprendizado do lobo de decisão desligado, N6-2), e o M0, o
+  MT e o ME são os acoplados dele. No bloco N7 a montagem liga a memória no P1+ped (com canais) e no P3+ped, como nos outros braços com a
+  mesma fonte; o P0+ped fica sem nada. A referência do mundo padrão usa o P0, o P1 e o P3: sem frutas a montagem não liga a memória.
+
+## 2026-10-06 — K2-CALIBRACAO-CONJUNTA: o que a run mostrou (depois da run)
+
+- **A run única** foi feita no commit `5f288d6`, com a montagem completa do #178, e terminou sem erro (4 h 12 min). A suíte inteira rodou ao
+  mesmo tempo, então os 12,3 s por vida da estimativa da validação são pessimistas.
+- **A2 sem conflitos:** a deferência na `fome_moderada` ficou sem denominador nas 20 unidades e nos três pontos. Valeu a reserva registrada
+  (o menor valor). Por que não houve conflito não foi investigado.
+- **B na reserva:** todo ganho teve vida do P1 no teto (4: 2; 8: 10; 16: 33). A reserva registrada antes da run escolheu o 4.
+- **A escala do Δ no p3:** a seção 5.3 do plano aplica o Δ da regra 6.3 (taxa) aos seis primários, mas o `p3_consumos` é medido em
+  consumos. O N dele (191.815) é artefato de escala, não de variância. O orquestrador seguiu o plano como está. As alternativas
+  (`alternativas_n.json`) foram calculadas depois, das mesmas 20 unidades, só como tamanho de amostra: nenhum parâmetro mudou por elas.
+- **O N pequeno nos outros cinco:** no piso de 5 unidades a fórmula normal é otimista (poder simulado de 0,73 a 0,77 em três). A
+  conferência por simulação está no adendo ao lado do N da fórmula, como o plano pede, sem trocar o N.
+- **O poder dos secundários** no `adendo.json` usa o N de 191.815 e precisa ser refeito com o N que o Matheus decidir.

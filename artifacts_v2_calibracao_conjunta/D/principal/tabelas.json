@@ -1,0 +1,2144 @@
+{
+  "atencioso": {
+    "acerto_total": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.5572916666666667,
+            "ic_superior": 0.5643973214285715,
+            "media": 0.5608630952380953,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.5556919642857143,
+            "ic_superior": 0.5650297619047618,
+            "media": 0.5603050595238095,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.5588169642857144,
+            "ic_superior": 0.5659970238095238,
+            "media": 0.5623511904761905,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.5189360119047619,
+            "ic_superior": 0.5475446428571429,
+            "media": 0.5328125,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.5373511904761905,
+            "ic_superior": 0.5520833333333333,
+            "media": 0.5450148809523809,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.5205357142857143,
+            "ic_superior": 0.5477678571428571,
+            "media": 0.5334077380952381,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.5221354166666667,
+            "ic_superior": 0.5478050595238095,
+            "media": 0.5341889880952382,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.5348958333333333,
+            "ic_superior": 0.558296130952381,
+            "media": 0.5464657738095238,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.520796130952381,
+            "ic_superior": 0.5424479166666667,
+            "media": 0.53125,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.4633184523809524,
+            "ic_superior": 0.5006696428571429,
+            "media": 0.48125,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.46156994047619043,
+            "ic_superior": 0.49694940476190474,
+            "media": 0.47868303571428567,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.45703125,
+            "ic_superior": 0.4921502976190476,
+            "media": 0.47466517857142854,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.3594122023809524,
+            "ic_superior": 0.3704985119047619,
+            "media": 0.3652157738095238,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.3594122023809524,
+            "ic_superior": 0.3703869047619047,
+            "media": 0.3650669642857143,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.3587797619047619,
+            "ic_superior": 0.368266369047619,
+            "media": 0.3634672619047619,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.35691964285714284,
+            "ic_superior": 0.3689360119047619,
+            "media": 0.36305803571428574,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.36305803571428574,
+            "ic_superior": 0.3703869047619047,
+            "media": 0.3665550595238095,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.3581845238095238,
+            "ic_superior": 0.3697172619047619,
+            "media": 0.36409970238095235,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.3597842261904762,
+            "ic_superior": 0.37001488095238094,
+            "media": 0.36517857142857146,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.3611607142857143,
+            "ic_superior": 0.3703497023809524,
+            "media": 0.36573660714285716,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.3593377976190476,
+            "ic_superior": 0.3683407738095238,
+            "media": 0.36380208333333336,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.35970982142857144,
+            "ic_superior": 0.3718005952380953,
+            "media": 0.36569940476190477,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.3595610119047619,
+            "ic_superior": 0.36622023809523807,
+            "media": 0.36283482142857143,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.35926339285714287,
+            "ic_superior": 0.3697172619047619,
+            "media": 0.3644345238095238,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6050967261904762,
+            "ic_superior": 0.6744047619047618,
+            "media": 0.643154761904762,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6592633928571429,
+            "ic_superior": 0.6833333333333333,
+            "media": 0.6719494047619048,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6087797619047619,
+            "ic_superior": 0.6780505952380953,
+            "media": 0.6472470238095238,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "consumos_ate_metade": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 8.0,
+              "ic_superior": 23.6,
+              "media": 15.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 16.85,
+              "ic_superior": 34.1,
+              "media": 25.2,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 7.45,
+              "ic_superior": 22.55,
+              "media": 14.3,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 5.2,
+              "ic_superior": 13.0,
+              "media": 8.8,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 7.2,
+              "ic_superior": 17.2,
+              "media": 11.9,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 5.3,
+              "ic_superior": 15.1,
+              "media": 9.7,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 6.0,
+              "ic_superior": 15.45,
+              "media": 10.45,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 8.0,
+              "ic_superior": 19.2,
+              "media": 13.2,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 5.95,
+              "ic_superior": 15.8,
+              "media": 10.5,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 3.85,
+              "ic_superior": 10.3,
+              "media": 6.7,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 5.9,
+              "ic_superior": 15.55,
+              "media": 10.3,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 3.85,
+              "ic_superior": 12.2,
+              "media": 7.35,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 17.75,
+              "ic_superior": 45.85,
+              "media": 31.25,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 23.35,
+              "ic_superior": 47.35,
+              "media": 35.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 16.75,
+              "ic_superior": 41.65,
+              "media": 28.65,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 12.3,
+              "ic_superior": 37.8,
+              "media": 24.2,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 12.45,
+              "ic_superior": 35.35,
+              "media": 23.0,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 10.5,
+              "ic_superior": 32.65,
+              "media": 20.45,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 20.65,
+              "ic_superior": 49.65,
+              "media": 34.7,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 19.95,
+              "ic_superior": 40.3,
+              "media": 29.8,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 19.7,
+              "ic_superior": 41.9,
+              "media": 30.35,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 25.0,
+              "ic_superior": 51.55,
+              "media": 37.95,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 16.95,
+              "ic_superior": 39.35,
+              "media": 27.35,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 24.55,
+              "ic_superior": 50.05,
+              "media": 36.85,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 6.3,
+              "ic_superior": 16.75,
+              "media": 10.9,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 7.55,
+              "ic_superior": 15.9,
+              "media": 11.55,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 5.45,
+              "ic_superior": 15.35,
+              "media": 9.55,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "deriva_final": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.034083787738918334,
+            "ic_superior": 0.036666724870250675,
+            "media": 0.03544244630300725,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.03343453009413949,
+            "ic_superior": 0.036135409163156794,
+            "media": 0.034797004873739615,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.03444033128460712,
+            "ic_superior": 0.036743472139998526,
+            "media": 0.03563151890790546,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.03472875420460978,
+            "ic_superior": 0.03722525265319325,
+            "media": 0.036113647367353195,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.03545464932110364,
+            "ic_superior": 0.037461321331033595,
+            "media": 0.03657209656284213,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.03327381690433427,
+            "ic_superior": 0.03601260385715354,
+            "media": 0.03468968969158876,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.033840249488503255,
+            "ic_superior": 0.03668441387173098,
+            "media": 0.03530026871179041,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.03468556787563161,
+            "ic_superior": 0.03687426432099356,
+            "media": 0.035852439474626754,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.035144012212601675,
+            "ic_superior": 0.03717676011387809,
+            "media": 0.03622449253110754,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.03429671741231347,
+            "ic_superior": 0.036807543953272064,
+            "media": 0.03563432507699666,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.0348988887715577,
+            "ic_superior": 0.03722600969390238,
+            "media": 0.03616104337660596,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.03465377660915282,
+            "ic_superior": 0.03676766416522374,
+            "media": 0.03575762143417938,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.024918010914413275,
+            "ic_superior": 0.03241968838804481,
+            "media": 0.02846332994846625,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.02095840504178976,
+            "ic_superior": 0.027626102928734925,
+            "media": 0.0240518345536907,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.025448960738006038,
+            "ic_superior": 0.03340518476914948,
+            "media": 0.029186398888090596,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "fracao_fora_de_privacao": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.9998883928571429,
+            "ic_superior": 1.0,
+            "media": 0.9999627976190476,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9154761904761906,
+            "ic_superior": 0.9511532738095237,
+            "media": 0.9340029761904761,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.9105654761904761,
+            "ic_superior": 0.9381696428571429,
+            "media": 0.9251488095238095,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.9199032738095237,
+            "ic_superior": 0.9556547619047618,
+            "media": 0.9386904761904763,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9095610119047619,
+            "ic_superior": 0.9461309523809524,
+            "media": 0.9290550595238095,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.8943080357142857,
+            "ic_superior": 0.9385416666666666,
+            "media": 0.9168526785714286,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.9177827380952381,
+            "ic_superior": 0.9519345238095237,
+            "media": 0.9354166666666666,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.8814360119047618,
+            "ic_superior": 0.9469122023809524,
+            "media": 0.9162202380952381,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.8797619047619047,
+            "ic_superior": 0.9465029761904763,
+            "media": 0.9151785714285714,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.89296875,
+            "ic_superior": 0.9503348214285714,
+            "media": 0.9228422619047618,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9998883928571429,
+            "ic_superior": 1.0,
+            "media": 0.9999627976190476,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9998883928571429,
+            "ic_superior": 1.0,
+            "media": 0.9999627976190476,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9998883928571429,
+            "ic_superior": 1.0,
+            "media": 0.9999627976190476,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9998883928571429,
+            "ic_superior": 1.0,
+            "media": 0.9999627976190476,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.9998883928571429,
+            "ic_superior": 1.0,
+            "media": 0.9999627976190476,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "humor_medio": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.8904948846726166,
+            "ic_superior": 0.902909970238093,
+            "media": 0.8967702752976168,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.8856112351190448,
+            "ic_superior": 0.8982383742559501,
+            "media": 0.8921465773809498,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.8858368675595212,
+            "ic_superior": 0.8968685825892834,
+            "media": 0.8912031249999975,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6292926897321389,
+            "ic_superior": 0.7199086681547575,
+            "media": 0.6727544642857101,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6479493117559478,
+            "ic_superior": 0.7159245721726145,
+            "media": 0.6807957589285669,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6241083519345199,
+            "ic_superior": 0.7154113653273761,
+            "media": 0.6685254836309482,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6442461867559478,
+            "ic_superior": 0.7159656808035664,
+            "media": 0.6780458519345194,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6385757998511861,
+            "ic_superior": 0.7270226934523745,
+            "media": 0.6829652157738042,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6372864583333298,
+            "ic_superior": 0.717894345238091,
+            "media": 0.6764013206845194,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.3183986235118996,
+            "ic_superior": 0.5054379650297555,
+            "media": 0.4084332217261847,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.31551162574404285,
+            "ic_superior": 0.5243476562499925,
+            "media": 0.4175476190476129,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.28472200520832797,
+            "ic_superior": 0.4796757812499958,
+            "media": 0.37770991443451896,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6746960565475486,
+            "ic_superior": 0.6910190662201809,
+            "media": 0.6832071242558907,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6727899925594513,
+            "ic_superior": 0.6912999441963696,
+            "media": 0.6822615327380317,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6738092447915924,
+            "ic_superior": 0.6896487165177974,
+            "media": 0.6819569382439816,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6749636346725535,
+            "ic_superior": 0.6911573660713695,
+            "media": 0.6836982886904136,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6693892299106473,
+            "ic_superior": 0.6838769531249401,
+            "media": 0.6769919084820774,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6749688430058786,
+            "ic_superior": 0.6908486793154163,
+            "media": 0.6835464099701726,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6762730654761218,
+            "ic_superior": 0.6923204985118474,
+            "media": 0.6846594122023187,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6703342633927887,
+            "ic_superior": 0.6829120163689876,
+            "media": 0.6770263206844584,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6765527343749265,
+            "ic_superior": 0.6907040550594626,
+            "media": 0.684053571428506,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.6763912760416033,
+            "ic_superior": 0.6916178385416092,
+            "media": 0.6842992001487487,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.6648595610118362,
+            "ic_superior": 0.6802650669642245,
+            "media": 0.6724543340773176,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.6726003534225485,
+            "ic_superior": 0.6918119419642286,
+            "media": 0.6823916480654116,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.860764880952374,
+            "ic_superior": 0.9085702194940456,
+            "media": 0.8870217633928531,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.8990709635416645,
+            "ic_superior": 0.9117845052083314,
+            "media": 0.9056986607142837,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.8574015997023741,
+            "ic_superior": 0.9052999441964266,
+            "media": 0.8840275297619005,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "saude_media": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9618056113591313,
+            "ic_superior": 0.9841200272817477,
+            "media": 0.9737575024801617,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.9622195932539723,
+            "ic_superior": 0.9772595672123041,
+            "media": 0.9699983940972254,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.9629001798115121,
+            "ic_superior": 0.9855825644841287,
+            "media": 0.975075173611114,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9434921254960382,
+            "ic_superior": 0.9822870535714305,
+            "media": 0.9668895833333371,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.9423826326884989,
+            "ic_superior": 0.9753654513888916,
+            "media": 0.9605528893849252,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.9502799045138944,
+            "ic_superior": 0.9839867745535733,
+            "media": 0.9698335813492097,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic_inferior": 0.9425671688988162,
+            "ic_superior": 0.9823675533234146,
+            "media": 0.9646690166170675,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 0.9381380518353234,
+            "ic_superior": 0.9797253906250019,
+            "media": 0.9609853360615119,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 0.9543089533730209,
+            "ic_superior": 0.9839216579861129,
+            "media": 0.9703876922123049,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "descasado/descasado": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "mutavel/mutavel": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "taxa_fruta_ruim_final": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.2511033388452928,
+              "ic_superior": 0.3018164878599661,
+              "media": 0.2774203491700743,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.36059685106584255,
+              "ic_superior": 0.43830180101264754,
+              "media": 0.3972537141095122,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.3586578180096468,
+              "ic_superior": 0.43668270662514264,
+              "media": 0.39662523879253253,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.26223492391199266,
+              "ic_superior": 0.3126656666027464,
+              "media": 0.28797784695524936,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.36575473919663115,
+              "ic_superior": 0.41998069764597795,
+              "media": 0.39183974738378186,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.3724138014925182,
+              "ic_superior": 0.43272526187303173,
+              "media": 0.40413114515363696,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.2661333612992652,
+              "ic_superior": 0.31184323406062536,
+              "media": 0.2888485937318889,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.3702980907980908,
+              "ic_superior": 0.4168490859326691,
+              "media": 0.3944204124350301,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.37285454196341294,
+              "ic_superior": 0.41129944767875803,
+              "media": 0.39167355566764633,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.22142378003833113,
+              "ic_superior": 0.31529904306220097,
+              "media": 0.26885637668145407,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.3641477330718817,
+              "ic_superior": 0.46230264188855524,
+              "media": 0.41087953476691863,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.35101063655874193,
+              "ic_superior": 0.42539642890649076,
+              "media": 0.38651041408226094,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.31183516563957353,
+              "ic_superior": 0.3233155358745337,
+              "media": 0.3174110463983811,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.3260604761833857,
+              "ic_superior": 0.33889038903580215,
+              "media": 0.33244978664015157,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.32384223086797037,
+              "ic_superior": 0.3463626732541827,
+              "media": 0.3348455429174955,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.31256018033457056,
+              "ic_superior": 0.3267856384663598,
+              "media": 0.3196574497780472,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.31452603073353574,
+              "ic_superior": 0.33582692624173294,
+              "media": 0.32476892415624203,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.3143128761512561,
+              "ic_superior": 0.33539435089515945,
+              "media": 0.3249630663644494,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.30622113997114,
+              "ic_superior": 0.32101031074868286,
+              "media": 0.31313915412752624,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.31384992281770024,
+              "ic_superior": 0.3318076212692911,
+              "media": 0.3229490393374067,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.3256917982209323,
+              "ic_superior": 0.34465301974448315,
+              "media": 0.3345409879539293,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.3077314385368838,
+              "ic_superior": 0.3249219643606629,
+              "media": 0.31651716817367725,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.32788212318931326,
+              "ic_superior": 0.3433131114202164,
+              "media": 0.3356171828451046,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.32260414034423646,
+              "ic_superior": 0.3424811678405284,
+              "media": 0.33271707064666134,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.21616863703949407,
+              "ic_superior": 0.2926734498114401,
+              "media": 0.2578771981373742,
+              "n": 19,
+              "nivel": 0.95
+            },
+            "n": 19,
+            "sem_valor": 1
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.26775627914466393,
+              "ic_superior": 0.35832478504892296,
+              "media": 0.3151244181643456,
+              "n": 19,
+              "nivel": 0.95
+            },
+            "n": 19,
+            "sem_valor": 1
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.3320183712701906,
+              "ic_superior": 0.5066849144739666,
+              "media": 0.41352680690181326,
+              "n": 19,
+              "nivel": 0.95
+            },
+            "n": 19,
+            "sem_valor": 1
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    },
+    "taxa_fruta_ruim_inicio": {
+      "bracos": [
+        "P0",
+        "P0<P2:sem_ensino",
+        "P0<P2e:sem_ensino",
+        "P0<P3:sem_ensino",
+        "P1",
+        "P2",
+        "P2a",
+        "P2e",
+        "P3"
+      ],
+      "celulas": {
+        "P0": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.2493373892116179,
+              "ic_superior": 0.395614878864256,
+              "media": 0.3095692442439274,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.3509383088170073,
+              "ic_superior": 0.4921746693975396,
+              "media": 0.41967372752016796,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.2493373892116179,
+              "ic_superior": 0.395614878864256,
+              "media": 0.3095692442439274,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P2:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.21893767499905606,
+              "ic_superior": 0.31616704374057314,
+              "media": 0.2680015890262054,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.39394708361813624,
+              "ic_superior": 0.4999229608111187,
+              "media": 0.4463108054226475,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.21893767499905606,
+              "ic_superior": 0.31616704374057314,
+              "media": 0.2680015890262054,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P2e:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.23509458270487685,
+              "ic_superior": 0.3125297619047619,
+              "media": 0.27417958593693886,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.3976794705122878,
+              "ic_superior": 0.4747759606234839,
+              "media": 0.4349647458664487,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.23509458270487685,
+              "ic_superior": 0.3125297619047619,
+              "media": 0.27417958593693886,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P0<P3:sem_ensino": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.18674025250112208,
+              "ic_superior": 0.291867935985583,
+              "media": 0.23943875284987817,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.315733384262796,
+              "ic_superior": 0.47286582698347407,
+              "media": 0.39682925605526226,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.18674025250112208,
+              "ic_superior": 0.291867935985583,
+              "media": 0.23943875284987817,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P1": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.2754987177268694,
+              "ic_superior": 0.30748746007918093,
+              "media": 0.29198758883192844,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.3338200381258457,
+              "ic_superior": 0.37013831929176355,
+              "media": 0.35202281863996526,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.2754987177268694,
+              "ic_superior": 0.30748746007918093,
+              "media": 0.29198758883192844,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.2511140269326121,
+              "ic_superior": 0.28736606941627224,
+              "media": 0.26918529108764067,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.30842280996099997,
+              "ic_superior": 0.3401475302510853,
+              "media": 0.3235814136711429,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.2511140269326121,
+              "ic_superior": 0.28736606941627224,
+              "media": 0.26918529108764067,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2a": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.27374819912586157,
+              "ic_superior": 0.3037151030926364,
+              "media": 0.28899971753145487,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.33173350268404717,
+              "ic_superior": 0.36658857013399127,
+              "media": 0.349362034241596,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.2810155252049083,
+              "ic_superior": 0.30415357009456145,
+              "media": 0.29245601706765123,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P2e": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.28153414147497935,
+              "ic_superior": 0.3115877270579744,
+              "media": 0.29667152258807095,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.322300713229381,
+              "ic_superior": 0.35007748476763756,
+              "media": 0.33623981853458534,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.28153414147497935,
+              "ic_superior": 0.3115877270579744,
+              "media": 0.29667152258807095,
+              "n": 20,
+              "nivel": 0.95
+            },
+            "n": 20,
+            "sem_valor": 0
+          }
+        },
+        "P3": {
+          "casado/casado_frutas": {
+            "ic": {
+              "ic_inferior": 0.24660449297686407,
+              "ic_superior": 0.39462999778789254,
+              "media": 0.3052591049890078,
+              "n": 19,
+              "nivel": 0.95
+            },
+            "n": 19,
+            "sem_valor": 1
+          },
+          "descasado/descasado": {
+            "ic": {
+              "ic_inferior": 0.38365757732305356,
+              "ic_superior": 0.6515493524780159,
+              "media": 0.5110698192777696,
+              "n": 19,
+              "nivel": 0.95
+            },
+            "n": 19,
+            "sem_valor": 1
+          },
+          "mutavel/mutavel": {
+            "ic": {
+              "ic_inferior": 0.24660449297686407,
+              "ic_superior": 0.39462999778789254,
+              "media": 0.3052591049890078,
+              "n": 19,
+              "nivel": 0.95
+            },
+            "n": 19,
+            "sem_valor": 1
+          }
+        }
+      },
+      "condicoes": [
+        "casado/casado_frutas",
+        "descasado/descasado",
+        "mutavel/mutavel"
+      ]
+    }
+  }
+}

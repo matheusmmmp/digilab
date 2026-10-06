@@ -1,0 +1,485 @@
+{
+ "escolhido": 256,
+ "etapa": "C",
+ "fechou": true,
+ "limiar": 0.069,
+ "medida": "fracao das sub-decisoes com duas frutas ou mais e informacao vigente decididas pela informacao (sonda)",
+ "onde": "P2 completo, descasado, dias 1-7",
+ "parametro": "w0_info",
+ "passam": [
+  256,
+  512,
+  768
+ ],
+ "pontos": {
+  "256": {
+   "ic": {
+    "ic_inferior": 0.14586361737677528,
+    "ic_superior": 0.2594355066588039,
+    "media": 0.20026887070617722,
+    "n": 20,
+    "nivel": 0.95,
+    "sem_valor": 0
+   },
+   "segundos": 397.9614137999888,
+   "sondas": {
+    "atencioso-P2~descasado~g10518686938732163204@10101955909342070729": {
+     "decididas": 4,
+     "elegiveis": 19,
+     "fracao": 0.21052631578947367,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g1121703774619661245@10460511506996584222": {
+     "decididas": 7,
+     "elegiveis": 12,
+     "fracao": 0.5833333333333334,
+     "subdecisoes": 66
+    },
+    "atencioso-P2~descasado~g12428659232104669816@14853373353548090392": {
+     "decididas": 1,
+     "elegiveis": 12,
+     "fracao": 0.08333333333333333,
+     "subdecisoes": 70
+    },
+    "atencioso-P2~descasado~g12462364457998988362@2603329410910182095": {
+     "decididas": 1,
+     "elegiveis": 17,
+     "fracao": 0.058823529411764705,
+     "subdecisoes": 76
+    },
+    "atencioso-P2~descasado~g14339184148880993810@16208613122624954777": {
+     "decididas": 3,
+     "elegiveis": 15,
+     "fracao": 0.2,
+     "subdecisoes": 77
+    },
+    "atencioso-P2~descasado~g15001984904456502186@9421974934025611567": {
+     "decididas": 1,
+     "elegiveis": 16,
+     "fracao": 0.0625,
+     "subdecisoes": 69
+    },
+    "atencioso-P2~descasado~g15199776154585284719@6819504089437492712": {
+     "decididas": 2,
+     "elegiveis": 15,
+     "fracao": 0.13333333333333333,
+     "subdecisoes": 65
+    },
+    "atencioso-P2~descasado~g15223010787228446749@13822977252118713682": {
+     "decididas": 3,
+     "elegiveis": 15,
+     "fracao": 0.2,
+     "subdecisoes": 73
+    },
+    "atencioso-P2~descasado~g15388582210740939190@1273865290516669737": {
+     "decididas": 5,
+     "elegiveis": 15,
+     "fracao": 0.3333333333333333,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g16180031979908315079@4420236314737761816": {
+     "decididas": 4,
+     "elegiveis": 14,
+     "fracao": 0.2857142857142857,
+     "subdecisoes": 72
+    },
+    "atencioso-P2~descasado~g16589618528432543182@12110876146880259580": {
+     "decididas": 2,
+     "elegiveis": 7,
+     "fracao": 0.2857142857142857,
+     "subdecisoes": 60
+    },
+    "atencioso-P2~descasado~g16840784970240318047@258191285641497908": {
+     "decididas": 2,
+     "elegiveis": 16,
+     "fracao": 0.125,
+     "subdecisoes": 72
+    },
+    "atencioso-P2~descasado~g220288947907590784@3720570843249611662": {
+     "decididas": 1,
+     "elegiveis": 18,
+     "fracao": 0.05555555555555555,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g3125061664857864628@7174587029069363388": {
+     "decididas": 0,
+     "elegiveis": 14,
+     "fracao": 0.0,
+     "subdecisoes": 71
+    },
+    "atencioso-P2~descasado~g3595114705274687544@8110651490130717997": {
+     "decididas": 6,
+     "elegiveis": 19,
+     "fracao": 0.3157894736842105,
+     "subdecisoes": 81
+    },
+    "atencioso-P2~descasado~g499655918078709858@4993167198240307941": {
+     "decididas": 3,
+     "elegiveis": 14,
+     "fracao": 0.21428571428571427,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g5123555597040126801@17828265786052404779": {
+     "decididas": 5,
+     "elegiveis": 16,
+     "fracao": 0.3125,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g5402057051827805956@6763068571702515481": {
+     "decididas": 2,
+     "elegiveis": 16,
+     "fracao": 0.125,
+     "subdecisoes": 74
+    },
+    "atencioso-P2~descasado~g6107305875929104735@791068372274281997": {
+     "decididas": 5,
+     "elegiveis": 18,
+     "fracao": 0.2777777777777778,
+     "subdecisoes": 85
+    },
+    "atencioso-P2~descasado~g940412731089627366@10272552838740187386": {
+     "decididas": 2,
+     "elegiveis": 14,
+     "fracao": 0.14285714285714285,
+     "subdecisoes": 73
+    }
+   },
+   "valores": [
+    0.21052631578947367,
+    0.5833333333333334,
+    0.08333333333333333,
+    0.058823529411764705,
+    0.2,
+    0.0625,
+    0.13333333333333333,
+    0.2,
+    0.3333333333333333,
+    0.2857142857142857,
+    0.2857142857142857,
+    0.125,
+    0.05555555555555555,
+    0.0,
+    0.3157894736842105,
+    0.21428571428571427,
+    0.3125,
+    0.125,
+    0.2777777777777778,
+    0.14285714285714285
+   ],
+   "vidas": 20
+  },
+  "512": {
+   "ic": {
+    "ic_inferior": 0.18926581158779301,
+    "ic_superior": 0.33036340852130325,
+    "media": 0.25703941225613053,
+    "n": 20,
+    "nivel": 0.95,
+    "sem_valor": 0
+   },
+   "segundos": 399.38591529999394,
+   "sondas": {
+    "atencioso-P2~descasado~g10518686938732163204@10101955909342070729": {
+     "decididas": 4,
+     "elegiveis": 19,
+     "fracao": 0.21052631578947367,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g1121703774619661245@10460511506996584222": {
+     "decididas": 7,
+     "elegiveis": 12,
+     "fracao": 0.5833333333333334,
+     "subdecisoes": 66
+    },
+    "atencioso-P2~descasado~g12428659232104669816@14853373353548090392": {
+     "decididas": 1,
+     "elegiveis": 12,
+     "fracao": 0.08333333333333333,
+     "subdecisoes": 70
+    },
+    "atencioso-P2~descasado~g12462364457998988362@2603329410910182095": {
+     "decididas": 2,
+     "elegiveis": 17,
+     "fracao": 0.11764705882352941,
+     "subdecisoes": 76
+    },
+    "atencioso-P2~descasado~g14339184148880993810@16208613122624954777": {
+     "decididas": 3,
+     "elegiveis": 15,
+     "fracao": 0.2,
+     "subdecisoes": 77
+    },
+    "atencioso-P2~descasado~g15001984904456502186@9421974934025611567": {
+     "decididas": 1,
+     "elegiveis": 16,
+     "fracao": 0.0625,
+     "subdecisoes": 69
+    },
+    "atencioso-P2~descasado~g15199776154585284719@6819504089437492712": {
+     "decididas": 2,
+     "elegiveis": 15,
+     "fracao": 0.13333333333333333,
+     "subdecisoes": 65
+    },
+    "atencioso-P2~descasado~g15223010787228446749@13822977252118713682": {
+     "decididas": 3,
+     "elegiveis": 15,
+     "fracao": 0.2,
+     "subdecisoes": 73
+    },
+    "atencioso-P2~descasado~g15388582210740939190@1273865290516669737": {
+     "decididas": 6,
+     "elegiveis": 15,
+     "fracao": 0.4,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g16180031979908315079@4420236314737761816": {
+     "decididas": 5,
+     "elegiveis": 15,
+     "fracao": 0.3333333333333333,
+     "subdecisoes": 73
+    },
+    "atencioso-P2~descasado~g16589618528432543182@12110876146880259580": {
+     "decididas": 4,
+     "elegiveis": 6,
+     "fracao": 0.6666666666666666,
+     "subdecisoes": 56
+    },
+    "atencioso-P2~descasado~g16840784970240318047@258191285641497908": {
+     "decididas": 3,
+     "elegiveis": 16,
+     "fracao": 0.1875,
+     "subdecisoes": 72
+    },
+    "atencioso-P2~descasado~g220288947907590784@3720570843249611662": {
+     "decididas": 1,
+     "elegiveis": 18,
+     "fracao": 0.05555555555555555,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g3125061664857864628@7174587029069363388": {
+     "decididas": 1,
+     "elegiveis": 14,
+     "fracao": 0.07142857142857142,
+     "subdecisoes": 72
+    },
+    "atencioso-P2~descasado~g3595114705274687544@8110651490130717997": {
+     "decididas": 6,
+     "elegiveis": 19,
+     "fracao": 0.3157894736842105,
+     "subdecisoes": 81
+    },
+    "atencioso-P2~descasado~g499655918078709858@4993167198240307941": {
+     "decididas": 3,
+     "elegiveis": 14,
+     "fracao": 0.21428571428571427,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g5123555597040126801@17828265786052404779": {
+     "decididas": 5,
+     "elegiveis": 16,
+     "fracao": 0.3125,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g5402057051827805956@6763068571702515481": {
+     "decididas": 5,
+     "elegiveis": 18,
+     "fracao": 0.2777777777777778,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g6107305875929104735@791068372274281997": {
+     "decididas": 5,
+     "elegiveis": 18,
+     "fracao": 0.2777777777777778,
+     "subdecisoes": 85
+    },
+    "atencioso-P2~descasado~g940412731089627366@10272552838740187386": {
+     "decididas": 7,
+     "elegiveis": 16,
+     "fracao": 0.4375,
+     "subdecisoes": 78
+    }
+   },
+   "valores": [
+    0.21052631578947367,
+    0.5833333333333334,
+    0.08333333333333333,
+    0.11764705882352941,
+    0.2,
+    0.0625,
+    0.13333333333333333,
+    0.2,
+    0.4,
+    0.3333333333333333,
+    0.6666666666666666,
+    0.1875,
+    0.05555555555555555,
+    0.07142857142857142,
+    0.3157894736842105,
+    0.21428571428571427,
+    0.3125,
+    0.2777777777777778,
+    0.2777777777777778,
+    0.4375
+   ],
+   "vidas": 20
+  },
+  "768": {
+   "ic": {
+    "ic_inferior": 0.20353084415584416,
+    "ic_superior": 0.3501403603706235,
+    "media": 0.2751614218255085,
+    "n": 20,
+    "nivel": 0.95,
+    "sem_valor": 0
+   },
+   "segundos": 292.95835319999605,
+   "sondas": {
+    "atencioso-P2~descasado~g10518686938732163204@10101955909342070729": {
+     "decididas": 4,
+     "elegiveis": 19,
+     "fracao": 0.21052631578947367,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g1121703774619661245@10460511506996584222": {
+     "decididas": 5,
+     "elegiveis": 11,
+     "fracao": 0.45454545454545453,
+     "subdecisoes": 68
+    },
+    "atencioso-P2~descasado~g12428659232104669816@14853373353548090392": {
+     "decididas": 1,
+     "elegiveis": 12,
+     "fracao": 0.08333333333333333,
+     "subdecisoes": 70
+    },
+    "atencioso-P2~descasado~g12462364457998988362@2603329410910182095": {
+     "decididas": 2,
+     "elegiveis": 17,
+     "fracao": 0.11764705882352941,
+     "subdecisoes": 76
+    },
+    "atencioso-P2~descasado~g14339184148880993810@16208613122624954777": {
+     "decididas": 3,
+     "elegiveis": 15,
+     "fracao": 0.2,
+     "subdecisoes": 77
+    },
+    "atencioso-P2~descasado~g15001984904456502186@9421974934025611567": {
+     "decididas": 1,
+     "elegiveis": 16,
+     "fracao": 0.0625,
+     "subdecisoes": 69
+    },
+    "atencioso-P2~descasado~g15199776154585284719@6819504089437492712": {
+     "decididas": 2,
+     "elegiveis": 15,
+     "fracao": 0.13333333333333333,
+     "subdecisoes": 65
+    },
+    "atencioso-P2~descasado~g15223010787228446749@13822977252118713682": {
+     "decididas": 3,
+     "elegiveis": 15,
+     "fracao": 0.2,
+     "subdecisoes": 73
+    },
+    "atencioso-P2~descasado~g15388582210740939190@1273865290516669737": {
+     "decididas": 6,
+     "elegiveis": 15,
+     "fracao": 0.4,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g16180031979908315079@4420236314737761816": {
+     "decididas": 5,
+     "elegiveis": 15,
+     "fracao": 0.3333333333333333,
+     "subdecisoes": 73
+    },
+    "atencioso-P2~descasado~g16589618528432543182@12110876146880259580": {
+     "decididas": 4,
+     "elegiveis": 6,
+     "fracao": 0.6666666666666666,
+     "subdecisoes": 56
+    },
+    "atencioso-P2~descasado~g16840784970240318047@258191285641497908": {
+     "decididas": 3,
+     "elegiveis": 16,
+     "fracao": 0.1875,
+     "subdecisoes": 72
+    },
+    "atencioso-P2~descasado~g220288947907590784@3720570843249611662": {
+     "decididas": 2,
+     "elegiveis": 18,
+     "fracao": 0.1111111111111111,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g3125061664857864628@7174587029069363388": {
+     "decididas": 1,
+     "elegiveis": 14,
+     "fracao": 0.07142857142857142,
+     "subdecisoes": 72
+    },
+    "atencioso-P2~descasado~g3595114705274687544@8110651490130717997": {
+     "decididas": 9,
+     "elegiveis": 19,
+     "fracao": 0.47368421052631576,
+     "subdecisoes": 81
+    },
+    "atencioso-P2~descasado~g499655918078709858@4993167198240307941": {
+     "decididas": 3,
+     "elegiveis": 14,
+     "fracao": 0.21428571428571427,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g5123555597040126801@17828265786052404779": {
+     "decididas": 5,
+     "elegiveis": 16,
+     "fracao": 0.3125,
+     "subdecisoes": 78
+    },
+    "atencioso-P2~descasado~g5402057051827805956@6763068571702515481": {
+     "decididas": 10,
+     "elegiveis": 18,
+     "fracao": 0.5555555555555556,
+     "subdecisoes": 83
+    },
+    "atencioso-P2~descasado~g6107305875929104735@791068372274281997": {
+     "decididas": 5,
+     "elegiveis": 18,
+     "fracao": 0.2777777777777778,
+     "subdecisoes": 85
+    },
+    "atencioso-P2~descasado~g940412731089627366@10272552838740187386": {
+     "decididas": 7,
+     "elegiveis": 16,
+     "fracao": 0.4375,
+     "subdecisoes": 78
+    }
+   },
+   "valores": [
+    0.21052631578947367,
+    0.45454545454545453,
+    0.08333333333333333,
+    0.11764705882352941,
+    0.2,
+    0.0625,
+    0.13333333333333333,
+    0.2,
+    0.4,
+    0.3333333333333333,
+    0.6666666666666666,
+    0.1875,
+    0.1111111111111111,
+    0.07142857142857142,
+    0.47368421052631576,
+    0.21428571428571427,
+    0.3125,
+    0.5555555555555556,
+    0.2777777777777778,
+    0.4375
+   ],
+   "vidas": 20
+  }
+ },
+ "regra": "menor valor com IC95 inferior > 0.069"
+}

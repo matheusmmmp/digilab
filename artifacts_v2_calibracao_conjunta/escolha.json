@@ -1,0 +1,14 @@
+{
+ "fecharam": {
+  "A1": true,
+  "A2": false,
+  "B": false,
+  "C": true
+ },
+ "ponto": {
+  "g": 512,
+  "ganho": 4,
+  "w0_info": 256,
+  "w0_pedido": 256
+ }
+}
