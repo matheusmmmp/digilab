@@ -89,7 +89,7 @@ aprendiz achou assim que a decisão de comer não via a fruta). **O que sai:** c
 | 8 | N7-MUNDO (em curso) | **C1**: N6 e N7 no cérebro | K1: plano da calibração conjunta | BANCADA-N6-N7 (em curso) |
 | 9 | K4: o dono do P3 julga a fruta | C4: canais de reforço | plano da comparação A × B × C (K3/V2) | BANCADA-LIGA: N6 e N7 ligados na bancada |
 | 10 | C5: cérebro C (Fly-like) | K2: calibração conjunta (o orquestrador já; a run depois do PR do D) | — | K4 e canais na bancada, depois C5: cérebro B (CfC/A2C) |
-| 11 | — | V1: validação única | leitura | calibração dos cérebros B e C |
+| 11 | calibração do cérebro C | V1: validação única (orquestrador já; a run depois dos adendos das predições) | — | calibração do cérebro B |
 | 12 | — | — | leitura | K3/V2: comparação |
 | 13 | W (depois do M6) | — | leitura consolidada | — |
 
@@ -129,3 +129,5 @@ Versões de pet na web: v10 vínculo B; **v11 = o DigiBrain escolhido**; bola, f
 | M11 | as validações já feitas viram histórico; nada de revalidar nó a nó (substitui LP-1 a LP-3 da leitura parcial) | decidida junto com M10 |
 
 Rodada 10 (2026-10-05): o Matheus decidiu que o julgamento da fruta do K4 fica **fora do orçamento**, como a informação do P2, e aprovou as decisões C-1 a C-10 do plano da comparação dos cérebros.
+
+Rodada 11 (2026-10-06): o Matheus aprovou a opção A da K2 (adendo 2 do experimento maior: N 30, o Δ do P3 em consumos). Cada cérebro é calibrado por quem o construiu. A validação única espera os adendos de `docs/PREDICOES_V2.md`.

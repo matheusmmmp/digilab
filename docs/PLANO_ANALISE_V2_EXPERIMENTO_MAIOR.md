@@ -337,3 +337,39 @@ chave) e calibrado **uma vez**, nas sementes 14101…14505; a validação é **u
 - O plano da calibração conjunta (quais parâmetros, em que grade, com que regra de escolha, e o N do adendo de tamanho de amostra)
   é a tarefa K1 (`docs/TAREFA_V2_PLANO_CALIBRACAO_CONJUNTA.md`) e entra antes de qualquer run.
 
+## Adendo 2 (2026-10-06, antes da validação): o N e o Δ do P3 na escala da medida (opção A)
+
+Decisão do Matheus (2026-10-06), sobre o resultado da calibração conjunta (`docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md`, PR #181).
+
+**O problema.** A seção 5.3 do `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md` aplicava a todos os primários o Δ da regra 6.3, que está em
+**taxa**: 0,199 (`artifacts_v2_calibracao_conjunta/adendo.json`). Mas o contraste `p3_consumos` se mede em **consumos**. Com esse Δ, o N
+saía 191.815 unidades, cerca de 28.760 h. O erro é de escala do plano, não de variância.
+
+**O que muda (opção A).** Os números vêm de `artifacts_v2_calibracao_conjunta/adendo_opcao_a.json` e foram calculados das 20 unidades da
+calibração.
+
+- **O Δ de cada primário fica na escala da sua medida.** O do P3 passa a ser 17,5 consumos, pela mesma convenção de "metade": metade dos
+  consumos do P1 no descasado (35,0). Os outros cinco primários ficam com o Δ 0,199 de antes.
+- **O N vem da simulação de poder, não da fórmula.** É o maior N simulado que dá poder ≥ 0,8 entre os seis primários. Na calibração, a
+  fórmula normal era otimista no piso de 5 unidades, onde o poder simulado de três primários ficou entre 0,73 e 0,77.
+- **N = 30 unidades** (K = 6 por base, nas bases 15101…15505), cerca de 4,5 h. Fica abaixo do teto de 12 h (K-10).
+
+**Poder simulado com N = 30:**
+- **primários:** p1_casado, p2_descasado, p2_mutavel, p4a_piora e p4b_recupera com 1,0; p3_consumos com 0,862;
+- **secundários com pouco poder** (abaixo de 0,5, lidos como subpotenciados, pela seção 5.3): G-MARCA (0,34) e G-MARCA-E (0,38), do N7;
+- os demais secundários (N6, G-EROSAO e as ablações) ficam com poder 1,0.
+
+**Fica igual:**
+- as predições 1 a 5;
+- os seis contrastes primários e o Holm;
+- a equivalência da predição 5;
+- a regra de decisão;
+- o ponto do cérebro A: `g` S/2, `w0_pedido` S/4, ganho 4 e `w0_info` S/4 (`artifacts_v2_calibracao_conjunta/escolha.json`).
+
+**Registrado ao lado, sem mudar regra:**
+- **`w0_pedido`** não fechou na calibração (nenhum conflito na `fome_moderada`) e ficou pela reserva. O bloco N7 pode sair pouco testado.
+- **O ganho do P1** também não fechou: todo ponto teve vida no teto, e a razão da deriva foi 2,72. O aprendizado ainda não assentou aos
+  14 dias, o que reforça o risco "inconclusivo por duração" da predição 2.
+
+**O que fica em aberto antes da run.** Os adendos de literatura (`docs/PREDICOES_V2.md`, em preparação) podem acrescentar a medida em
+pelo menos três durações de vida. A validação **não roda** até eles serem registrados ou dispensados pelo Matheus.

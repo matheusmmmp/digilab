@@ -2537,3 +2537,16 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
 - **O N pequeno nos outros cinco:** no piso de 5 unidades a fórmula normal é otimista (poder simulado de 0,73 a 0,77 em três). A
   conferência por simulação está no adendo ao lado do N da fórmula, como o plano pede, sem trocar o N.
 - **O poder dos secundários** no `adendo.json` usa o N de 191.815 e precisa ser refeito com o N que o Matheus decidir.
+
+## 2026-10-06 — Rodada 11: opção A da K2 (N 30, Δ do P3 em consumos); a validação espera os adendos das predições
+
+- **A opção A foi aprovada pelo Matheus** e está registrada como adendo 2 de `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`.
+  - Ela corrige a escala do Δ do P3, que estava em taxa e passa a consumos.
+  - O N passa a vir da simulação de poder.
+  - Números em `artifacts_v2_calibracao_conjunta/adendo_opcao_a.json`.
+- **A ordem da rodada 11 mudou.** A run da validação única espera os adendos de `docs/PREDICOES_V2.md`, entre eles a medida em pelo
+  menos três durações de vida. Esse documento depende de uma síntese de literatura que ainda não está no disco.
+- **A calibração dos cérebros vai para quem os construiu:** a do B para o chat D e a do C para o chat A.
+  - Sementes 28101…28505, K = 4.
+  - Adendos já conferidos (adendo 1 do plano da comparação).
+  - Teto de vidas conferido: o A gastou 1260 na K2, contadas nos logs de vida de `artifacts_v2_calibracao_conjunta/`.
