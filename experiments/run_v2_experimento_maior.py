@@ -52,7 +52,11 @@ BRACOS_PADRAO = ("P0", "P1", "P3")                  # a referencia do mundo padr
 DIAS_PLANO = 14                                     # E5
 DIAS_INCLINACAO = 4                                 # "dias 11 a 14" numa vida de 14: os 4 ultimos dias (predicao 2)
 CHAVES = {"descricao", "plano", "unidades", "sementes", "genomas", "dias", "orcamento", "ponto", "lobos", "consequencia",
-          "frutas", "sonda", "bootstrap", "delta", "alfa", "poder", "donos", "referencia_padrao"}
+          "frutas", "sonda", "bootstrap", "delta", "alfa", "poder", "donos", "referencia_padrao", "blocos", "delta_p3", "delta_n6",
+          "delta_n7"}
+# Adendo 2 (2026-10-06, opcao A): cada contraste com o delta na escala da sua medida; o p3 e medido em consumos
+CONTRASTE_EM_CONSUMOS = "p3_consumos"
+LIMIAR_CITA = 0.069                                 # G-CITA (plano do N6, secao 7)
 BOOTSTRAP_PADRAO = {"reamostragens": PROTOCOLO_ARENA_V1.bootstrap_reamostragens.valor,
                     "semente": PROTOCOLO_ARENA_V1.bootstrap_semente.valor, "nivel": PROTOCOLO_ARENA_V1.nivel_confianca.valor}
 # Contrato K4 (secao 1, E7): o dono do P3 julga a escolha de fruta pelo efeito real (JulgadorFruta, #170), ligado na bancada pela
@@ -131,6 +135,11 @@ def modo_e_unidades(cfg: dict) -> tuple[str, list[dict]]:
             raise ValueError("validacao: o delta vem do adendo (secao 7.3), numero obrigatorio")
         if modo == "calibracao" and cfg.get("delta") is not None:
             raise ValueError("calibracao: o delta e medido na propria calibracao (secao 6.3), nao dado")
+        if modo == "validacao":
+            faltam = [k for k in ("delta_p3",) + (("delta_n6", "delta_n7") if cfg.get("blocos") else ())
+                      if not isinstance(cfg.get(k), (int, float))]
+            if faltam:
+                raise ValueError(f"validacao: {faltam} vem do adendo 2, numeros obrigatorios")
     donos = cfg.get("donos", [DONO_PRINCIPAL])
     if DONO_PRINCIPAL not in donos:
         raise ValueError(f"o dono principal ({DONO_PRINCIPAL}) tem de rodar")
@@ -264,19 +273,20 @@ def inclinacao_final(idx, unidades, mundo: str, dias: int, boot: dict) -> dict:
     return {"dias": janela, **r, "sem_valor": sem, "cresce": cresce}
 
 
-def tamanhos(contrastes: dict, delta: float | None, alfa: float, poder: float) -> dict:
+def tamanhos(contrastes: dict, delta: float | None, alfa: float, poder: float, delta_por: dict | None = None) -> dict:
     """Secao 7.2: sigma_d e N por contraste primario (alfa / 6, o passo mais exigente de Holm), e o N da validacao = o maior, ao
     multiplo de 5. Sem delta > 0 ou sem 2 unidades, None com o motivo. A conferencia por simulacao fica para o adendo."""
     out, ns = {}, []
     for nome, c in contrastes.items():
         vs = [x for g in c["valores"].values() for x in g]
-        if len(vs) < 2 or not delta:
+        dl = (delta_por or {}).get(nome, delta)            # adendo 2: o delta na escala da medida (o p3 em consumos)
+        if len(vs) < 2 or not dl:
             out[nome] = {"sigma_d": None, "n": None, "motivo": "menos de 2 unidades com valor ou delta <= 0"}
             continue
         m = sum(vs) / len(vs)
         sigma = math.sqrt(sum((x - m) ** 2 for x in vs) / (len(vs) - 1))
-        n = tamanho_amostra(sigma, delta, alfa / len(contrastes), poder, 5)
-        out[nome] = {"sigma_d": sigma, "n": n}
+        n = tamanho_amostra(sigma, dl, alfa / len(contrastes), poder, 5)
+        out[nome] = {"sigma_d": sigma, "n": n, "delta": dl}
         ns.append(n)
     return {"por_contraste": out, "n_validacao": max(ns) if ns else None, "alfa_passo": alfa / len(contrastes), "poder": poder}
 
@@ -420,7 +430,143 @@ def analisar(medidas: dict, unidades: list[dict], cfg: dict, modo: str, k2: bool
     return {"modo": modo, "status": "resultado" if modo == "validacao" else "piloto, nao resultado",
             "delta": regra, "alfa": alfa, "primarios": primarios, "equivalencia": eq, "secundarios": secundarios,
             "separacao_do_cuidado": cuidado, "curvas": cv, "predicoes": predicoes,
-            "tamanho_amostra": tamanhos(primarios, delta, alfa, poder)}
+            "tamanho_amostra": tamanhos(primarios, delta, alfa, poder,
+                                        {CONTRASTE_EM_CONSUMOS: cfg["delta_p3"]} if cfg.get("delta_p3") is not None else None)}
+
+
+# ------------------------------------------------------------------ os blocos (secao 4 do plano da calibracao conjunta)
+# Os blocos dos 44 por unidade (com o bloco principal e a referencia): rodam com "blocos": true, cada um numa run propria da bancada, nas
+# mesmas unidades. bracos, mundos, acoplados.
+BLOCOS = {
+    "p2a": (("P2a",), MUNDOS, ()),
+    "ablacoes": (("P1c-mem", "P1c-can"), ("descasado", "mutavel"), ()),
+    "n6": (("MR",), ("descasado",), tuple({"origem": "MR", "destino": d, "filtro": "nenhum"} for d in ("M0", "MT", "ME"))),
+    "n7": (("P0", "P0+ped", "P1+ped", "P3+ped", "P3"), ("iguais_frutas",),
+           ({"origem": "P3+ped", "destino": "P0", "filtro": FILTRO_SO_CUIDADO},)),
+}
+
+
+def _cp(idx, unidades, mundo, f, mais, menos, boot) -> dict:
+    """Contraste pareado mais - menos por unidade com a medida f(medidas) (None = sem valor, contado)."""
+    grupos, falta = {}, 0
+    for u in unidades:
+        ku = (u["genoma"], u["semente"])
+        a, b = f(idx[(mais, mundo, ku)]), f(idx[(menos, mundo, ku)])
+        if a is None or b is None:
+            falta += 1
+            continue
+        grupos.setdefault(u["semente"], []).append(a - b)
+    return {"d": f"{mais} - {menos}", "mundo": mundo, **contraste_pareado(grupos, boot["reamostragens"], boot["semente"]),
+            "sem_valor": falta}
+
+
+def _media_ic(idx, unidades, mundo, f, braco, boot) -> dict:
+    """A media de uma medida por unidade, com o IC do bootstrap (a mesma reamostragem dos contrastes)."""
+    grupos, falta = {}, 0
+    for u in unidades:
+        v = f(idx[(braco, mundo, (u["genoma"], u["semente"]))])
+        if v is None:
+            falta += 1
+            continue
+        grupos.setdefault(u["semente"], []).append(v)
+    return {"braco": braco, "mundo": mundo, **contraste_pareado(grupos, boot["reamostragens"], boot["semente"]), "sem_valor": falta}
+
+
+def _g5(idx, unidades, mundo, a, b, boot) -> dict:
+    """G5: saude media e tempo fora de privacao, a - b, IC 95% contendo 0 (sem mortes nos mundos das frutas: lesoes desligadas)."""
+    out = {}
+    for med in ("saude_media", "fracao_fora_de_privacao"):
+        r = _cp(idx, unidades, mundo, lambda m, med=med: m[med], a, b, boot)
+        ic = r["ic95"]
+        out[med] = {**r, "contem_zero": ic is None or ic["ic_inferior"] <= 0.0 <= ic["ic_superior"]}
+    return {"passa": all(x["contem_zero"] for x in out.values()), "medidas": out}
+
+
+def _taxa(janela):
+    return lambda m: m["frutas"]["taxa_fruta_ruim"][janela]["taxa"]
+
+
+def _ic_inferior_acima(r: dict, limiar: float) -> bool:
+    return r["ic95"] is not None and r["ic95"]["ic_inferior"] > limiar
+
+
+def _arb(m):
+    """G-ARB: a deferencia do P0+ped nas decisoes de conflito dos dias 1-10 (janelas inicial e final, todas as zonas)."""
+    por = m["n7"]["deferencia"]["por_janela"]
+    conf = sum(por[j]["total"]["conflitos"] for j in ("inicial", "final"))
+    return (sum(por[j]["total"]["pelo_pedido"] for j in ("inicial", "final")) / conf) if conf else None
+
+
+def analisar_blocos(idx: dict, fx: dict, unidades: list[dict], cfg: dict) -> dict:
+    """Os contrastes secundarios dos blocos (fora do Holm primario, E8), cada familia com o Holm dela e os gates dos planos do N6 e do N7;
+    as ablacoes da K-7 e o descritivo do N5. `idx` = indice das medidas (rotulo, mundo, unidade); `fx` = a fracao de X na extincao por vida
+    do bloco N7, no mesmo indice ({"fx": ...})."""
+    boot = cfg.get("bootstrap", BOOTSTRAP_PADRAO)
+    alfa = float(cfg.get("alfa", 0.05))
+    d6, d7 = cfg.get("delta_n6"), cfg.get("delta_n7")
+    out: dict = {}
+    # N6 (plano do N6, secao 7)
+    fam6 = {"G-CAUSAL": "M0<MR:nenhum", "G-REC": "MT<MR:nenhum", "G-EMB": "ME<MR:nenhum"}
+    c6 = {g: _cp(idx, unidades, "descasado", _taxa("final"), aco, "MR", boot) for g, aco in fam6.items()}
+    h6 = holm({g: c["p_unilateral"] for g, c in c6.items()}, alfa)
+    cita = _media_ic(idx, unidades, "descasado", lambda m: m["n6"]["fracao_decidida"], "MR", boot)
+    marcos = [m["n6"]["marcos"] for (b, mu, _), m in idx.items()
+              if mu == "descasado" and m.get("n6") and b.split("<")[0] in ("MR", "M0", "MT", "ME")]
+    gm = bool(marcos) and all(x["episodio_por_consumo"] and x["consumos"] == x["episodios"] for x in marcos)
+    g5_6 = _g5(idx, unidades, "descasado", "MR", "P0", boot)
+    eq6 = dentro_da_margem(c6["G-CAUSAL"]["ic90"], d6)
+    passam6 = all(h6[g]["rejeita"] for g in fam6)
+    cita_ok = _ic_inferior_acima(cita, LIMIAR_CITA)
+    out["n6"] = {"contrastes": {g: {**c, "holm": h6[g]} for g, c in c6.items()},
+                 "G-CITA": {**cita, "limiar": LIMIAR_CITA, "passa": cita_ok},
+                 "G-M1_G-M2": {"passa": gm, "vidas": len(marcos)}, "G-M3": "nao medido pela bancada (REGISTRO_DESVIOS)", "G5": g5_6,
+                 "delta": d6, "equivalencia_G-CAUSAL": eq6,
+                 "leitura": ("confirma" if gm and cita_ok and passam6 and g5_6["passa"] else
+                             "refuta" if gm and eq6 else "inconclusivo")}
+    # N7 (plano do N7, secao 7)
+    aco7 = f"P0<P3+ped:{FILTRO_SO_CUIDADO}"
+    fxf = lambda m: m["fx"]  # noqa: E731
+    deff = lambda m: m["n7"]["deferencia"]["por_janela"]["final"]["total"]["deferencia"]  # noqa: E731
+    c7 = {"G-EROSAO": _cp(idx, unidades, "iguais_frutas", deff, "P0+ped", "P1+ped", boot),
+          "G-MARCA": _cp(fx, unidades, "iguais_frutas", fxf, aco7, "P3+ped", boot),
+          "G-MARCA-E": _cp(fx, unidades, "iguais_frutas", fxf, "P3", "P3+ped", boot)}
+    h7 = holm({g: c["p_unilateral"] for g, c in c7.items()}, alfa)
+    g_arb = _media_ic(idx, unidades, "iguais_frutas", _arb, "P0+ped", boot)
+    urg = sum(m["n7"]["deferencia"]["violacoes_urgentes"] for (b, mu, _), m in idx.items()
+              if mu == "iguais_frutas" and b in ("P0+ped", "P1+ped", "P3+ped"))
+    g5_7 = {"P0+ped - P0": _g5(idx, unidades, "iguais_frutas", "P0+ped", "P0", boot),
+            "P3+ped - so cuidado": _g5(idx, unidades, "iguais_frutas", "P3+ped", aco7, boot)}
+    out["n7"] = {"contrastes": {g: {**c, "holm": h7[g]} for g, c in c7.items()},
+                 "G-ARB": {**g_arb, "passa": _ic_inferior_acima(g_arb, 0.0)}, "G-URG": {"violacoes": urg, "passa": urg == 0},
+                 "G5": {**g5_7, "passa": all(x["passa"] for x in g5_7.values())}, "delta": d7,
+                 "equivalencia_G-MARCA": dentro_da_margem(c7["G-MARCA"]["ic90"], d7),
+                 "subpotenciados": ["G-MARCA", "G-MARCA-E"]}
+    # as ablacoes da K-7: o P1 completo menos a peca - o P1 completo (positivo = a peca baixa a taxa da fruta ruim)
+    ab = {}
+    for peca, braco in (("memoria", "P1c-mem"), ("canais", "P1c-can")):
+        for mundo, janela in (("descasado", "final"), ("mutavel", "depois_da_troca")):
+            ab[f"{peca}_{mundo}"] = {**_cp(idx, unidades, mundo, _taxa(janela), braco, "P1", boot), "janela": janela}
+    out["ablacoes"] = ab
+    # N5, descritivo: a informacao em momentos sorteados (P2a) - na hora (P2), no descasado
+    cons = lambda m: m["frutas"]["consumos_ate_metade"]["consumos"]  # noqa: E731
+    out["n5_descritivo"] = {"consumos_ate_metade": _cp(idx, unidades, "descasado", cons, "P2a", "P2", boot),
+                            "taxa_inicio": _cp(idx, unidades, "descasado", _taxa("inicio"), "P2a", "P2", boot),
+                            "taxa_final": _cp(idx, unidades, "descasado", _taxa("final"), "P2a", "P2", boot)}
+    return out
+
+
+def rodar_blocos(cfg: dict, pasta: Path, unidades: list[dict], principal: dict) -> dict:
+    """Roda os blocos (BLOCOS), cada um numa run da bancada nas mesmas unidades, e analisa com as medidas do bloco principal."""
+    import run_v2_calibracao_conjunta as k2       # a fracao de X na extincao de toda vida do bloco N7 (com ou sem pedido)
+    runs = {nome: bv.rodar(config_da_bancada(cfg, bracos, mundos, list(acoplados)), pasta / "blocos" / nome)
+            for nome, (bracos, mundos, acoplados) in BLOCOS.items()}
+    medidas = dict(principal["medidas"])
+    for r in runs.values():
+        medidas.update(r["medidas"])
+    idx = indice(medidas)
+    fx = k2.fracao_x_por_vida(bv.bancada_da_config(config_da_bancada(cfg, BLOCOS["n7"][0], BLOCOS["n7"][1], [])), runs["n7"])
+    a = analisar_blocos(idx, fx, unidades, cfg)
+    return {"runs": runs, "analise": a, "vidas": sum(len(r["vidas"]) for r in runs.values())}
 
 
 def rodar(cfg: dict, pasta: Path) -> dict:
@@ -433,11 +579,19 @@ def rodar(cfg: dict, pasta: Path) -> dict:
         padrao = bv.rodar(config_da_bancada(cfg, BRACOS_PADRAO, ("padrao",), []), pasta / "padrao")
     k2 = bv.bancada_da_config(cb).cfg_consequencia.humor_na_fruta
     a = analisar(r["medidas"], unidades, cfg, modo, k2)
+    blocos = rodar_blocos(cfg, pasta, unidades, r) if cfg.get("blocos") else None
+    if blocos is not None:
+        bv._gravar(pasta / "blocos.json", bv._dump(blocos["analise"]))
     resumo = {"modo": a["modo"], "status": a["status"], "delta": a["delta"], "alfa": a["alfa"],
               "predicoes": a["predicoes"], "tamanho_amostra": a["tamanho_amostra"],
               "contratos": {"K2_humor_da_fruta_no_P1": k2, "K4_dono_julga_fruta": K4_DONO_JULGA_FRUTA,
                             "montagem": MONTAGEM},
-              "vidas": {"frutas": len(r["vidas"]), "padrao": len(padrao["vidas"]) if padrao else 0},
+              "vidas": {"frutas": len(r["vidas"]), "padrao": len(padrao["vidas"]) if padrao else 0,
+                        "blocos": blocos["vidas"] if blocos else 0},
+              "blocos": None if blocos is None else {
+                  "n6": blocos["analise"]["n6"]["leitura"],
+                  "n7_holm": {g: c["holm"]["rejeita"] for g, c in blocos["analise"]["n7"]["contrastes"].items()},
+                  "n7_G-ARB": blocos["analise"]["n7"]["G-ARB"]["passa"], "n7_G-URG": blocos["analise"]["n7"]["G-URG"]["passa"]},
               "unidades": len(unidades)}
     contrastes = {k: a[k] for k in ("primarios", "equivalencia", "secundarios", "separacao_do_cuidado")}
     bv._gravar(pasta / "contrastes.json", bv._dump(contrastes))
@@ -445,7 +599,7 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     bv._gravar(pasta / "resumo.json", bv._dump(resumo))
     bv._gravar(pasta / "meta.json", bv._dump({"config": cfg, "modo": modo, "plano": PLANO, "plano_sha256": bv._sha(RAIZ / PLANO),
                                                "orquestrador_sha256": bv._sha(Path(__file__)), "python": platform.python_version()}))
-    return {"modo": modo, "unidades": unidades, "frutas": r, "padrao": padrao, "analise": a, "resumo": resumo}
+    return {"modo": modo, "unidades": unidades, "frutas": r, "padrao": padrao, "analise": a, "resumo": resumo, "blocos": blocos}
 
 
 def main(argv=None) -> int:

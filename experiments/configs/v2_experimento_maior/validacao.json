@@ -1,0 +1,42 @@
+{
+  "descricao": "Validacao unica do experimento maior (V1), uma vez, com o adendo 2 (opcao A, 2026-10-06): o cerebro A montado no ponto da calibracao conjunta, os blocos e as ablacoes da secao 4 do plano da calibracao conjunta, N = 30 (K = 6 por base).",
+  "plano": "docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md",
+  "unidades": {
+    "bases": [
+      15101,
+      15202,
+      15303,
+      15404,
+      15505
+    ],
+    "k": 6
+  },
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 64,
+    "amostras": 200,
+    "semente": 9001
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "delta": 0.1986268570547561,
+  "delta_p3": 17.5,
+  "delta_n6": 0.19351650222105618,
+  "delta_n7": 0.20229166666666668,
+  "blocos": true,
+  "referencia_padrao": true
+}
