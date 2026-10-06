@@ -303,3 +303,81 @@ ele é o escolhido por omissão, e o relatório diz isso.
 | C-8 | faixas | 28101…28505 (calibração de B e C e piloto) e 29101…29505 (validação); as do N11 (16101…17505) marcadas como substituídas | usar as do N11 contraria a tarefa; reusar qualquer faixa vicia o teste (M7) |
 | C-9 | ablação fatorial | fora deste plano; a comparação escolhe um cérebro, não atribui efeito a peça | fazê-la agora multiplica os cérebros (o "Frankenstein" que o corpus desaconselha) antes de saber se B e C fecham |
 | C-10 | adendo de calibração de B e C | obrigatório antes de calibrar, conferido pelo coordenador contra a seção 1.4 | sem ele, o orçamento vira o que cada implementador achar que precisa |
+
+## Adendo 1 (2026-10-06, antes de qualquer run): calibração dos cérebros B e C
+
+Registrado pelo coordenador, que copiou os adendos dos PRs [#179](https://github.com/matheusmmmp/digilab/pull/179) (B) e
+[#176](https://github.com/matheusmmmp/digilab/pull/176) (C) sem mudar o conteúdo. Pela seção 1.4, os dois foram **conferidos pelo
+coordenador** em 2026-10-06:
+
+| | parâmetros livres (≤ 4) | pontos de grade (≤ 12, em cadeia) | vidas | regras |
+|---|---|---|---|---|
+| B | 4 | 10 | ~660 | estabilidade (K-4) e manipulação (K-3) |
+| C | 3 | 9 | 480 a 540 | estabilidade (K-4) e manipulação (K-3) |
+
+Nos dois, nenhuma regra de escolha usa contraste entre braços nem entre cérebros, nem a `taxa_fruta_ruim`.
+
+**Condição pendente:** o teto de vidas de cada cérebro é o número de vidas que o A gastar na K2, contado no artefato da K2. Antes de
+calibrar B ou C, o coordenador confere esse número em `artifacts_v2_calibracao_conjunta/`. Se um dos dois passar do teto, a grade dele
+encolhe por um adendo novo, antes da run.
+
+### 1.1 Adendo do cérebro B (do #179)
+
+**Parâmetros livres: 4 de 4** — `taxa_ator`, `taxa_critico`, `lambda_elegibilidade` e `w0_info`.
+- Fixos e iguais aos do A: o ponto fixo do prior (S = 1024), a percepção, a janela de crédito e as recompensas do dono.
+- O ganho do sinal da consequência é o da K2 do A, porque a fonte do sinal é comum (C-1).
+- São estrutura, não parâmetros: `n_ocultos` (que dá a capacidade), `delta_t`, `semente_pesos`, `escala_inicial` e `limite_logit`.
+
+**Unidades:** 28101…28505, K = 4 por base (20 unidades), prefixo `comparacao-cerebros`. Atencioso, 14 dias, o ponto do A da K2 para tudo que é comum.
+
+**Grades, em cadeia (sem grade cruzada): 10 pontos distintos de 12.**
+
+| etapa | parâmetro | grade | fixo | vidas | regra |
+|---|---|---|---|---|---|
+| B-A | `taxa_ator` | {0,01; 0,03; 0,1} | crítico 0,03, λ 0,8, w0_info 0 | P1 × {casado_frutas, descasado, mutável} × 20 = 60 por ponto → 180 | estabilidade (abaixo) |
+| B-B | `taxa_critico` | {0,01; 0,03; 0,1} | o ator da B-A | 120 novas (o 0,03 já rodou) | a mesma |
+| B-C | `lambda_elegibilidade` | {0,5; 0,8; 0,95} | ator e crítico escolhidos | 120 novas (o 0,8 já rodou) | a mesma |
+| B-D | `w0_info` | {0,5; 1,0; 2,0} (logit) | os três escolhidos | P2 × 3 condições × 20 = 60 por ponto → 180, mais 60 do w0_info 0 como referência descritiva | manipulação (abaixo) |
+
+- **Regra de estabilidade** (a K-4 do A, com o limite do logit no lugar do teto):
+  - entre os pontos em que nenhuma vida tem logit aprendido no limite (|z| = 20), o de menor razão da deriva (JSD ao instinto, dia 14 / dia 7), nas três condições juntas;
+  - se nenhum escapar do limite, o de menos vidas no limite; o desempate é pela menor razão.
+- **Regra de manipulação (K-3):** o menor `w0_info` em que a fração das escolhas de fruta com duas frutas ou mais decididas pela informação (`fruta.sonda.info_decidiu`) passa de 0,069. Se nenhum passar, o de maior fração.
+
+**Total:** ~660 vidas, abaixo do teto da seção 1.4. O teto são as vidas que o A gastar na K2; a K1 estima ~1260.
+
+**Regras e limites:**
+- Nenhuma regra usa contraste entre braços nem entre cérebros, nem a `taxa_fruta_ruim`.
+- O "não aprende" (seção 7) se confere no piloto.
+- **Tempo:** ~1,6 s por vida, abaixo do custo do A; fica abaixo de 4× o tempo da K2 do A.
+- **Artefato:** `artifacts_v2_comparacao_cerebros/calibracao_B/`.
+- **Risco 2 do plano:** um ator-crítico costuma pedir muitas amostras. No mundo das frutas há 4 a 24 escolhas com duas frutas ou mais por vida, então o "não aprende" pode disparar. O B fica pronto para isso; a regra é a da seção 7.
+
+### 1.2 Adendo do cérebro C (do #176)
+
+**Parâmetros livres: 3 de 4** — `passo`, `teto` e `w0_info`.
+- Fixos e iguais aos do A: o ponto fixo (S = 1024), o piso (S/16), a janela de crédito e as recompensas do dono.
+- O **ganho** do sinal da consequência é o escolhido para o A na K2: a fonte do sinal é comum (C-1, seção 1.1), então o C não o calibra.
+- Os cortes das faixas são estrutura (os limiares do instinto), não parâmetros.
+
+**Unidades:** as da calibração dos cérebros, 28101…28505, K = 4 por base (20 unidades), prefixo `comparacao-cerebros`. Atencioso, 14 dias, ponto do A da K2 para tudo que é comum.
+
+**Grades, em cadeia (sem grade cruzada): 9 pontos de 12.**
+
+| etapa | parâmetro | grade | fixo | vidas | regra de escolha |
+|---|---|---|---|---|---|
+| C-A | `passo` | {S/32, S/16, S/8} = {32, 64, 128} | teto 4S, w0_info 0 | P1 × {casado_frutas, descasado, mutável} × 20 = 60 por ponto → 180 | a da K-4 (abaixo) |
+| C-B | `teto` | {S, 4S, 16S} = {1024, 4096, 16384} | o passo da C-A | 120 novas (o 4S já rodou na C-A) | a mesma |
+| C-C | `w0_info` | {S/4, S/2, 3S/4} = {256, 512, 768} | passo e teto escolhidos | P2 × 3 condições × 20 = 60 por ponto → 180, mais 60 do w0_info 0 como referência descritiva | a da K-3 (abaixo) |
+
+- **Regra da K-4 (estabilidade):** entre os pontos em que nenhuma vida tem compartimento no teto, o de menor razão da deriva (JSD ao instinto, dia 14 / dia 7), nas três condições juntas. Se nenhum ponto escapar do teto, o de menos vidas no teto; desempate pela menor razão.
+- **Regra da K-3 (manipulação):** o menor `w0_info` em que a fração das escolhas de fruta (com duas frutas ou mais) decididas pela informação passa de 0,069. A medida é a sonda `info_decidiu`. Se nenhum passar, o de maior fração.
+
+**Total:** 480 a 540 vidas, abaixo do teto da seção 1.4. O teto são as vidas que o A gastar na K2, contadas no artefato da K2; a K1 estima cerca de 1260.
+
+**Regras e limites:**
+- Nenhuma regra usa contraste entre braços nem entre cérebros, nem a `taxa_fruta_ruim`.
+- O "não aprende" (seção 7) se confere no piloto, não aqui.
+- **Tempo:** por vida, o C custa o mesmo que o A (~0,4 s por vida de 14 dias com o replay conferido, medição informal nesta máquina, sem artefato). Fica abaixo de 4× o tempo da K2 do A.
+- **Artefato:** `artifacts_v2_comparacao_cerebros/calibracao_C/`.
+

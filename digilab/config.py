@@ -1263,6 +1263,45 @@ CONFIG_CEREBRO_C_APRENDIZ = ConfigCerebroC(aprendizado_ligado=True)
 
 
 @dataclass(frozen=True)
+class ConfigCerebroB:
+    """V2, CEREBRO-B (docs/TAREFA_V2_CEREBRO_B.md; contrato da secao 1 de docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md): o DigiBrain B,
+    CfC + ator-critico + elegibilidade (policies/cerebro_b.py), em ponto flutuante. Registro de status e fonte em
+    cerebro_b.PARAMETROS_CEREBRO_B; tudo PROPOSTO, fora de todo hash.
+
+    O ponto fixo (so para o prior herdado, o mesmo do A), a percepcao e o credito do dono (janela, recompensas) sao os do A: o herdado e a
+    fonte do sinal sao comuns (C-1). n_ocultos, delta_t, semente_pesos, escala_inicial e limite_logit sao a ESTRUTURA da rede (o tamanho
+    que da a capacidade do contrato 1.3 e a inicializacao fixa, herdada). Os livres do adendo de calibracao sao taxa_ator, taxa_critico,
+    lambda_elegibilidade e w0_info (PR do CEREBRO-B)."""
+
+    aprendizado_ligado: bool = False
+    bits_ponto_fixo: int = 10                # S = 2**bits, como o A (o prior do instinto e o sinal da consequencia em inteiros)
+    escala_ticks_desde_cuidado: float = 480.0   # o mesmo do A (a percepcao)
+    maximo_pesos: int = 1000                 # o teto do plano da V2, como o A
+    n_ocultos: int = 9                       # estrutura: neuronios da celula CfC (a capacidade do contrato 1.3, 759 parametros)
+    delta_t: float = 1.0                     # estrutura: o tempo da celula entre duas decisoes (as decisoes sao a cada 15 ticks)
+    semente_pesos: int = 1                   # estrutura: a rng PROPRIA da inicializacao da celula (herdada, igual em todo pet)
+    escala_inicial: float = 1.0              # estrutura: pesos da celula iniciados em U(-r, r), r = escala_inicial / sqrt(entradas + ocultos)
+    limite_logit: float = 20.0               # estrutura: os logits aprendidos ficam em [-limite, +limite] (exp sem estouro)
+    taxa_ator: float = 0.05                  # PROPOSTO, livre (adendo): o passo do ator (celula, cabeca das acoes, cabeca da fruta)
+    taxa_critico: float = 0.05               # PROPOSTO, livre (adendo): o passo do critico
+    lambda_elegibilidade: float = 0.8        # PROPOSTO, livre (adendo): o decaimento do traco de elegibilidade por decisao
+    w0_info: float = 0.0                     # PROPOSTO, livre (adendo): logit inato do que o dono informa na escolha da fruta (0 = so o aprendido)
+    janela_latencia_ticks: int = 120         # o mesmo do A (janela de credito da v1)
+    recompensa_pedido_ignorado: float = -0.5   # o mesmo do A
+    recompensa_elogio: float = 1.0           # o mesmo do A
+    recompensa_repreensao: float = -1.0      # o mesmo do A
+
+    @property
+    def escala(self) -> int:
+        """S = 2**bits: a unidade 1.0 do prior em ponto fixo e do sinal da consequencia."""
+        return 1 << self.bits_ponto_fixo
+
+
+CONFIG_CEREBRO_B = ConfigCerebroB()
+CONFIG_CEREBRO_B_APRENDIZ = ConfigCerebroB(aprendizado_ligado=True)
+
+
+@dataclass(frozen=True)
 class ConfigConsequencia:
     """V2, N3 (docs/PLANO_ANALISE_V2_N3.md, secao 3): o sinal do braco P1, a reducao do deficit homeostatico pela propria
     acao (Keramati e Gutkin, 10.7554/elife.04811). Em inteiros na escala S do aprendiz:
