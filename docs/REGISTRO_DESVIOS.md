@@ -2364,6 +2364,31 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   muda" passa a dizer que num braço sem pedido o `w0_pedido` da config não chega ao cérebro (e no P1+ped chega). A intenção de cada um ficou;
   a alternativa (deixar a config ligar a memória e o pedido em P0, P1 e P3) faria um braço mudar sem o nome dizer.
 
+## 2026-10-05 — V2, BANCADA-K4-CANAIS: o K4 fora do orçamento, os canais por braço e as ablações da K-7 (`docs/TAREFA_V2_BANCADA_K4_CANAIS.md`)
+
+- **O K4 é uma chave da bancada** (`julgamento_fruta`, desligada por padrão), não um braço novo: com ela o P3 julga a fruta, e "o P3 sem o
+  julgamento" segue sendo o P3 de hoje (gabarito). Vale para todo braço com fonte dono nos mundos das frutas, então também para o P3+ped
+  (o dono que pede também sabe o efeito real); fora das frutas a chave não faz nada.
+- **Ordem no passo:** o julgamento vem primeiro na regra do mundo (logo depois das ações do dono, com o estado do passo), antes das ofertas,
+  da informação e do pedido, a mesma ordem do `simular_vida_frutas` do #170.
+- **Contagem:** os julgamentos são `elogiar`/`repreender` no registro, iguais em tipo ao feedback do dono; a vida conta pela regra
+  (`RegraFrutasComJulgador.feitos`) e desconta da conta do dono, como as broncas do pedido. No acoplado, os julgamentos (e as broncas) da
+  origem ficam só se o filtro não tira nenhum dos dois sinais; um filtro que tirasse só um falha alto (hoje nenhum faz isso).
+- **O motor dos braços com o K4 expõe os consumos** (`estado()["consumos_frutas"]`): o resumo dessas vidas difere do P3 de hoje por isso
+  também, além dos julgamentos. O replay usa a mesma fábrica, então o G1 vale.
+- **Os nomes das ablações** (`P1c`, `P1c-mem`, `P1c-can`) são escolha desta tarefa. O "P1 completo" segue a tabela da seção 1 do plano
+  (memória com o ganho da config e canais ligados). O "sem memória" é a memória ligada com ganho 0 (o "g = 0" literal do plano: guarda e não
+  age, como o M0), não a memória desligada; nas decisões é o mesmo.
+- **Os canais fixos do braço vencem a config**: com `canais_ligados` na config, o `P1c-can` continua escalar. Os braços sem canal fixo (todos
+  os de antes) seguem a config, como no #169.
+- **Faixas da C-8:** 28101…28505 e 29101…29505 reservadas; as do N11 continuam na tabela, com a fonte marcando que foram substituídas, para
+  nenhuma run usá-las por engano.
+- **Ponto aberto para o coordenador:** a tabela da seção 1 do plano da calibração conjunta põe memória em P1, P2 e P3 e canais em P1 e P2 no
+  bloco principal. Na bancada as chaves são do braço (desde a BANCADA-LIGA-N6-N7), e os P1, P2 e P3 de hoje não têm memória; os braços da
+  K-7 cobrem só o P1. A K2 precisa de braços nomeados para o cérebro A montado (P1c já é o P1 completo) ou de uma decisão sobre isso.
+- **Testes ajustados:** `tests/test_bancada_v2.py::test_engine_intocado_e_bracos_com_fonte_e_no` (a tabela dos braços inclui as ablações). `tests/test_experimento_maior.py` passa a esperar `K4_dono_julga_fruta = True` e confere, na fumaça, o
+  orçamento do P3 e o só cuidado sem julgamentos.
+
 ## 2026-10-05 — V2, CEREBRO-C: o DigiBrain C, Fly-like (`docs/TAREFA_V2_CEREBRO_C.md`)
 
 - **`config.py` também mudou** (a `ConfigCerebroC`): os parâmetros ficam em `config.py` pela regra do projeto. O registro de status fica no

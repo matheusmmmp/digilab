@@ -55,9 +55,10 @@ CHAVES = {"descricao", "plano", "unidades", "sementes", "genomas", "dias", "orca
           "frutas", "sonda", "bootstrap", "delta", "alfa", "poder", "donos", "referencia_padrao"}
 BOOTSTRAP_PADRAO = {"reamostragens": PROTOCOLO_ARENA_V1.bootstrap_reamostragens.valor,
                     "semente": PROTOCOLO_ARENA_V1.bootstrap_semente.valor, "nivel": PROTOCOLO_ARENA_V1.nivel_confianca.valor}
-# Contrato K4 (secao 1, E7): o dono do P3 julga a escolha de fruta pelo efeito real. NAO esta na main (donos.julgar_acao nao olha a
-# fruta); enquanto for False, a predicao 5 sai com o aviso de que mede so que o P3 nao sabe das frutas.
-K4_DONO_JULGA_FRUTA = False
+# Contrato K4 (secao 1, E7): o dono do P3 julga a escolha de fruta pelo efeito real (JulgadorFruta, #170), ligado na bancada pela
+# BANCADA-K4-CANAIS (chave "julgamento_fruta", fora do orcamento, decisao do Matheus de 2026-10-05). Com False, a predicao 5 sairia com o
+# aviso de que mede so que o P3 nao sabe das frutas.
+K4_DONO_JULGA_FRUTA = True
 
 
 @dataclass(frozen=True)
@@ -138,7 +139,7 @@ def config_da_bancada(cfg: dict, bracos, mundos, acoplados) -> dict:
                                "sonda") if k in cfg}
     out.update({"descricao": f"experimento maior: {cfg.get('descricao', '')}", "bracos": list(bracos), "mundos": list(mundos),
                 "donos": cfg.get("donos", [DONO_PRINCIPAL]), "acoplados": acoplados, "ponto": cfg.get("ponto", bv.PONTO_N5_EXPERIMENTO),
-                "bootstrap": cfg.get("bootstrap", BOOTSTRAP_PADRAO)})
+                "bootstrap": cfg.get("bootstrap", BOOTSTRAP_PADRAO), "julgamento_fruta": K4_DONO_JULGA_FRUTA})
     return out
 
 
