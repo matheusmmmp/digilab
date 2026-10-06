@@ -370,7 +370,7 @@ réplicas), em passos de 5. A fórmula da seção 7.2 continua reportada, mas no
 | p4b_recupera | 0,095 | 0,199 | 5 | 10 | 1,00 |
 
 - **N da validação = 30 unidades**, K = 6 por base, bases 15101, 15202, 15303, 15404 e 15505 (`unidades_derivadas`, prefixo
-  `experiment-maior` da regra E3).
+  `experimento-maior` da regra E3).
 - **Tempo estimado:** 44 vidas por unidade × 30 × 12,3 s ≈ **4,5 h**, dentro do teto de 12 h (K-10).
 - **A equivalência da predição 5** (IC 90% dentro de ±Δ) pede N 5 pela fórmula: cabe no N escolhido.
 
