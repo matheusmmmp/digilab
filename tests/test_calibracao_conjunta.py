@@ -26,6 +26,8 @@ from digilab.policy import Observacao, Transicao  # noqa: E402
 from digilab.state import Estado  # noqa: E402
 
 S = CONFIG_LOBOS.escala
+SEM_MONTAGEM = pytest.mark.skipif("montagem" not in bv.CHAVES_CONFIG,
+                                  reason="a bancada ainda nao tem a chave 'montagem' (BANCADA-MONTAGEM, chat D)")
 FUMACA = json.loads((RAIZ / "experiments/configs/v2_calibracao_conjunta/fumaca.json").read_text(encoding="utf-8"))
 CALIBRACAO = json.loads((RAIZ / "experiments/configs/v2_calibracao_conjunta/calibracao.json").read_text(encoding="utf-8"))
 
@@ -162,6 +164,7 @@ def test_escolha_sem_info_so_le_e_bate_com_a_escolha_sem_informacao():
 # ------------------------------------------------------------------ fumaca das cinco etapas
 
 
+@SEM_MONTAGEM
 def test_fumaca_das_cinco_etapas(tmp_path):
     cfg = {**FUMACA, "dias": 2, "orcamento": 32, "sonda": {"estados": 8, "amostras": 8, "semente": 101},
            "bootstrap": {"reamostragens": 200, "semente": 101, "nivel": 0.95},
@@ -192,9 +195,11 @@ def test_fumaca_das_cinco_etapas(tmp_path):
 # ------------------------------------------------------------------ os bracos completos do cerebro A (K-1) na bancada
 
 
+@SEM_MONTAGEM
 def test_bracos_completos_do_cerebro_a():
-    b = bv.bancada_da_config({"dias": 2, "orcamento": 16, "ponto": "T3", "lobos": {"memoria_ganho": S // 2, "w0_info": S // 2},
-                              "consequencia": {"canais_ligados": False}, "julgamento_fruta": True})
+    """A tabela da secao 1 (K-1) na montagem completa: memoria com o g em P1-P3, canais em P1 e P2 (nao no P3), w0_info so nos P2."""
+    b = bv.bancada_da_config({"dias": 2, "orcamento": 16, "ponto": "T3", "montagem": "completa", "julgamento_fruta": True,
+                              "lobos": {"memoria_ganho": S // 2, "w0_info": S // 2}, "consequencia": {"canais_ligados": False}})
     for logico, rotulo in k2.BRACO_COMPLETO.items():
         pol = b.politica(bv.EspecVida("atencioso", rotulo, 101, None, "descasado"))
         c = pol.cerebro
@@ -202,7 +207,6 @@ def test_bracos_completos_do_cerebro_a():
             assert c._memoria is None and not c._aprende
             continue
         assert c._memoria is not None and c.cl.memoria_ganho == S // 2 and c._aprende
-        assert bv.BRACOS[rotulo].fonte == bv.BRACOS[logico].fonte and bv.BRACOS[rotulo].informacao == bv.BRACOS[logico].informacao
-        # os canais ficam fixos ligados nos que aprendem pela consequencia, mesmo com a config desligada
         assert pol.cfg_consequencia.canais_ligados == (logico != "P3")
+        assert (c._peso_info is not None) == logico.startswith("P2")
     assert k2.pecas_pendentes({"canais": True}) == []

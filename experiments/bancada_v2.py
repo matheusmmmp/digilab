@@ -425,13 +425,6 @@ BRACOS = {
     "P1c": Braco("P1c", "consequencia", "K-7", memoria="relevante", canais=True),
     "P1c-mem": Braco("P1c-mem", "consequencia", "K-7", memoria="nenhuma", canais=True),     # sem memoria: g = 0
     "P1c-can": Braco("P1c-can", "consequencia", "K-7", memoria="relevante", canais=False),  # escalar: sem canais
-    # K-1 (PLANO_CALIBRACAO_CONJUNTA_V2, secao 1; K2-CALIBRACAO-CONJUNTA): o cerebro A montado nos outros bracos do bloco principal,
-    # como o P1c: memoria relevante com o ganho da config em P2, P2e, P2a e P3; canais nos que aprendem pela consequencia (P2, P2e,
-    # P2a); o P3 aprende pelo dono (escalar), entao os canais nao se aplicam e ficam com a config. O P0 continua sem nada (K-1).
-    "P2c": Braco("P2c", "informacao", "K-1", "certa", memoria="relevante", canais=True),
-    "P2ec": Braco("P2ec", "informacao", "K-1", "errada", memoria="relevante", canais=True),
-    "P2ac": Braco("P2ac", "informacao", "K-1", "acoplada", memoria="relevante", canais=True),
-    "P3c": Braco("P3c", "dono", "K-1", memoria="relevante"),
 }
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai

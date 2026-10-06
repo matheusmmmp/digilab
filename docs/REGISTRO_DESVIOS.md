@@ -2428,12 +2428,17 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
   mesmas (tick, fruta) e conteúdo oposto; K5 e K7, as mesmas ofertas em todo braço e acoplado da unidade e do mundo; K6, casado e descasado
   com efeitos opostos fruta a fruta por genoma; K8, um registro de consumo por consumo contado; K2 e K4 pela config e pelo orquestrador do
   experimento maior; K9 pela bancada (toda vida rejogada do disco).
-- **Os braços "completos" (seção 1), depois do #175 (BANCADA-K4-CANAIS):** o chat D nomeou o P1 completo (`P1c`) e as ablações da K-7
-  (`P1c-mem`, g = 0; `P1c-can`, escalar) e deixou em aberto os outros braços do cérebro A montado. A tabela da seção 1 (K-1, decidida)
-  já diz o que eles são, então esta tarefa os acrescenta à bancada com o mesmo padrão do `P1c`, sem mudar nenhum braço de antes:
-  `P2c`, `P2ec` e `P2ac` (memória relevante e canais fixos ligados, informação certa, errada e acoplada) e `P3c` (memória relevante; os
-  canais não se aplicam, porque o P3 aprende pelo dono). O orquestrador usa `BRACO_COMPLETO` = {P0, P1c, P2c, P2ec, P2ac, P3c} e recusa a
-  calibração se algum deles não tiver a memória (`pecas_pendentes`).
+- **Os braços "completos" (seção 1): pela montagem da bancada** (decisão do Matheus de 2026-10-05, opção 1,
+  `docs/TAREFA_V2_BANCADA_MONTAGEM.md`). Os braços continuam P0 a P3, e toda config de bancada da K2 leva `"montagem": "completa"`, que
+  liga em cada um as peças da tabela da seção 1 com os valores da config (o `g`, o `w0_info`, o `w0_pedido`). As ablações da K-7 são o
+  `P1c-mem` e o `P1c-can` da bancada (o P1 completo menos uma peça). O orquestrador recusa a calibração enquanto a bancada não tiver a chave
+  ou um braço P1–P3 não tiver a memória (`pecas_pendentes`). Os braços `P2c`, `P2ec`, `P2ac` e `P3c` que esta tarefa tinha acrescentado à
+  bancada antes da decisão saíram do branch.
+- **Uma run começou e foi interrompida antes do fim** (2026-10-05), com os braços próprios desta tarefa, antes da decisão da opção 1: por
+  ordem do Matheus, a run da K2 passa a esperar o PR da BANCADA-MONTAGEM. A run parou durante as etapas A2 e B. **Nenhum resultado dela foi
+  lido**: nem `resultado.json`, nem medidas, nem escolha. As vidas foram apagadas (a worktree da run foi removida). A run que vale é a única
+  feita depois do merge da BANCADA-MONTAGEM, nas mesmas sementes de calibração. Por isso a regra "uma vez" se aplica a ela, e as sementes
+  de validação não foram tocadas.
 - **K4:** a chave `julgamento_fruta` da bancada fica ligada em toda config da K2 (age só nos braços com fonte dono nos mundos das frutas;
   no `iguais_frutas` não há fruta não neutra, então não há julgamento no bloco N7).
 - **Blocos N6 e N7:** os braços dos planos deles, como estão na bancada (o MR com o aprendizado desligado; o P1+ped e o P3+ped sem

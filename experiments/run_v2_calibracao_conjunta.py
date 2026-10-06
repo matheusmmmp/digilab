@@ -62,10 +62,12 @@ CHAVES = {"descricao", "plano", "unidades", "sementes", "genomas", "dias", "orca
 ETAPAS = ("A1", "A2", "B", "C", "D")
 
 # ------------------------------------------------------------------ os bracos do cerebro A montado (secao 1)
-# O braco "completo" de cada fonte na bancada: o P1c (BANCADA-K4-CANAIS) e o P2c, P2ec, P2ac e P3c (esta tarefa), que ligam por cima do
-# ponto T3 a memoria (o g da config), os canais nos que aprendem pela consequencia, e a informacao (w0_info) e o pedido (w0_pedido) onde
-# eles existem. O P0 fica com tudo desligado (K-1). As ablacoes da K-7 sao o P1c-mem (g = 0) e o P1c-can (escalar), da bancada.
-BRACO_COMPLETO = {"P0": "P0", "P1": "P1c", "P2": "P2c", "P2e": "P2ec", "P2a": "P2ac", "P3": "P3c"}
+# Decisao do Matheus (2026-10-05, opcao 1; docs/TAREFA_V2_BANCADA_MONTAGEM.md): os bracos continuam P0 a P3, e a chave da bancada
+# "montagem": "completa" liga em cada um as pecas da tabela da secao 1 (memoria com o g da config em P1-P3; canais em P1 e P2; w0_info so
+# nos P2; w0_pedido onde ha pedido); o P0 fica com nada (K-1). As ablacoes da K-7 sao o P1c-mem (g = 0) e o P1c-can (escalar), o P1
+# completo menos uma peca. A tabela abaixo fica para o caso de um braco completo ter outro nome.
+MONTAGEM = "completa"
+BRACO_COMPLETO = {"P0": "P0", "P1": "P1", "P2": "P2", "P2e": "P2e", "P2a": "P2a", "P3": "P3"}
 ABLACAO = {"memoria": "P1c-mem", "canais": "P1c-can"}
 FILTRO_SO_CUIDADO = "sem_ensino"
 
@@ -139,7 +141,12 @@ def grades(cfg: dict) -> dict:
 def pecas_pendentes(cfg: dict) -> list[str]:
     """O que a calibracao precisa da bancada e ainda nao esta na main (PR do chat D, BANCADA-K4-CANAIS). Vazio = pode rodar."""
     faltam = []
-    b = bv.bancada_da_config({"dias": 2, "orcamento": 8, "ponto": "T3", "lobos": {"memoria_ganho": S // 2}})
+    if "montagem" not in bv.CHAVES_CONFIG:
+        faltam.append("chave 'montagem' na bancada (BANCADA-MONTAGEM, chat D; opcao 1 de 2026-10-05)")
+        if not em.K4_DONO_JULGA_FRUTA:
+            faltam.append("K4 na bancada (K-11)")
+        return faltam
+    b = bv.bancada_da_config({"dias": 2, "orcamento": 8, "ponto": "T3", "lobos": {"memoria_ganho": S // 2}, "montagem": MONTAGEM})
     for logico in ("P1", "P2", "P2e", "P2a", "P3"):
         if BRACO_COMPLETO[logico] not in bv.BRACOS:
             faltam.append(f"braco completo {BRACO_COMPLETO[logico]} na bancada (K-1)")
@@ -161,7 +168,7 @@ def config_bancada(cfg: dict, nome: str, bracos, mundos, lobos: dict, consequenc
     cb = {"descricao": f"K2 {nome}: {cfg.get('descricao', '')}", "bracos": list(bracos), "mundos": list(mundos), "donos": [DONO],
           "dias": cfg["dias"], "orcamento": cfg["orcamento"], "sonda": cfg["sonda"], "bootstrap": cfg["bootstrap"],
           "ponto": cfg.get("ponto", bv.PONTO_N5_EXPERIMENTO), "lobos": dict(lobos), "acoplados": list(acoplados),
-          "julgamento_fruta": em.K4_DONO_JULGA_FRUTA}
+          "julgamento_fruta": em.K4_DONO_JULGA_FRUTA, "montagem": MONTAGEM}
     for k in ("plano", "unidades", "sementes", "genomas"):
         if k in cfg:
             cb[k] = cfg[k]

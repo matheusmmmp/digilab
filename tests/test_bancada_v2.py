@@ -64,9 +64,7 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
         "M0": ("nenhuma", "N6"), "MR": ("nenhuma", "N6"), "MT": ("nenhuma", "N6"), "ME": ("nenhuma", "N6"),
         "P0+ped": ("nenhuma", "N7"), "P1+ped": ("consequencia", "N7"), "P3+ped": ("dono", "N7"),
         # BANCADA-K4-CANAIS: as ablacoes da K-7 (tests/test_bancada_k4_canais.py)
-        "P1c": ("consequencia", "K-7"), "P1c-mem": ("consequencia", "K-7"), "P1c-can": ("consequencia", "K-7"),
-        # K2-CALIBRACAO-CONJUNTA: o cerebro A montado nos outros bracos do bloco principal (K-1)
-        "P2c": ("informacao", "K-1"), "P2ec": ("informacao", "K-1"), "P2ac": ("informacao", "K-1"), "P3c": ("dono", "K-1")}
+        "P1c": ("consequencia", "K-7"), "P1c-mem": ("consequencia", "K-7"), "P1c-can": ("consequencia", "K-7")}
     assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
 
