@@ -1,0 +1,47 @@
+{
+ "braco": "P1",
+ "deriva_dia14": {
+  "ic_inferior": 3.4973858743863785e-05,
+  "ic_superior": 5.089244640820383e-05,
+  "media": 4.302149965873438e-05,
+  "n": 20,
+  "nivel": 0.95,
+  "sem_valor": 0
+ },
+ "descritivo_P2": {
+  "deriva_dia14": {
+   "ic_inferior": 3.609664300788309e-05,
+   "ic_superior": 5.406300244808739e-05,
+   "media": 4.50175651238722e-05,
+   "n": 20,
+   "nivel": 0.95,
+   "sem_valor": 0
+  },
+  "fracao_aprendido_decidiu": {
+   "ic_inferior": 0.006398809523809524,
+   "ic_superior": 0.008717757936507937,
+   "media": 0.007527281746031745,
+   "n": 20,
+   "nivel": 0.95,
+   "sem_valor": 0
+  }
+ },
+ "fracao_aprendido_decidiu": {
+  "ic_inferior": 0.006473214285714285,
+  "ic_superior": 0.008940972222222222,
+  "media": 0.007663690476190475,
+  "n": 20,
+  "nivel": 0.95,
+  "sem_valor": 0
+ },
+ "motivos": [
+  "o aprendido muda a escolha em menos de 1% das decisoes (limite superior do IC 95%)"
+ ],
+ "nao_aprende": true,
+ "ponto": {
+  "lambda_elegibilidade": 0.95,
+  "taxa_ator": 0.01,
+  "taxa_critico": 0.1,
+  "w0_info": 0.5
+ }
+}

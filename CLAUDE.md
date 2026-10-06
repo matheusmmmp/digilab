@@ -80,6 +80,7 @@ tempo). A vida é reconstruída reprocessando o log.
 | `experiments/bancada_v2.py`, `experiments/configs/bancada/` | **V2, BANCADA**: o orquestrador dos braços da pergunta maior (P0 só herdado, P1 consequência desde o N3, P2/P2e/P2a informação desde a BANCADA-N5, só nos mundos das frutas, P3 feedback do dono) sobre o mesmo aprendiz, a vida = (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas (`metrics.desempenho_no_ambiente`, `custo_da_plasticidade`, `tabela_braco_condicao`); mundos `padrao`, `bola` (B1/B2), `bola_a1` e os das frutas (`casado_frutas`, `descasado`, `mutavel`, `iguais_frutas`), as condições casado/descasado/mutável/iguais e as unidades derivadas (prefixos do experimento maior, do N6 e do N7); desde a BANCADA-N5 os lobos veem a bola e as frutas; os braços do N6 (M0, MR, MT, ME) e do N7 (P0+ped, P1+ped, P3+ped), ligados à memória e ao pedido desde a BANCADA-LIGA-N6-N7; o K4 fora do orçamento (chave `julgamento_fruta`), os canais por braço e as ablações da K-7 (P1c, P1c-mem, P1c-can) desde a BANCADA-K4-CANAIS; a chave `montagem` (`"completa"`: o cérebro A da seção 1 do plano da calibração conjunta em cada braço) desde a BANCADA-MONTAGEM (seções "V2, BANCADA", "V2, N3", "V2, BANCADA-MUNDOS", "V2, BANCADA-FRUTAS", "V2, BANCADA-N5", "V2, BANCADA-N6-N7", "V2, BANCADA-LIGA-N6-N7", "V2, BANCADA-K4-CANAIS" e "V2, BANCADA-MONTAGEM" no fim) |
 | `experiments/run_v2_experimento_maior.py`, `experiments/configs/v2_experimento_maior/` | **V2, BANCADA-EXPERIMENTO**: o orquestrador do experimento maior (P0, P1, P2, P2e, P3 × `casado_frutas`, `descasado`, `mutavel` pela bancada, o "só cuidado" acoplado, os seis contrastes primários com Holm, a equivalência da predição 5 e as leituras por predição); o ponto nomeado do aprendiz na bancada (`ponto`: `L1` padrão, `T3` para o N5 e o experimento maior); os blocos da seção 4 do plano da calibração conjunta (`"blocos": true`), o Δ de cada contraste na escala da medida e o N pelo poder simulado (adendo 2), e a config da validação única (seções "V2, BANCADA-EXPERIMENTO" e "V2, V1-VALIDACAO-UNICA" no fim) |
 | `experiments/run_v2_calibracao_conjunta.py`, `experiments/configs/v2_calibracao_conjunta/` | **V2, K2**: a calibração conjunta do cérebro A (etapas A1, A2, B, C e D do `docs/PLANO_CALIBRACAO_CONJUNTA_V2.md`, montagem completa da bancada, o adendo de tamanho de amostra) → `artifacts_v2_calibracao_conjunta/`, `docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md` (seção "V2, K2-CALIBRACAO-CONJUNTA" no fim) |
+| `experiments/run_v2_calibracao_cerebro_b.py`, `experiments/configs/v2_comparacao_cerebros/` | **V2, CALIBRACAO-CEREBRO-B**: a calibração do cérebro B pelo adendo 1.1 do plano da comparação dos cérebros (etapas B-A a B-D em cadeia e o piloto do "não aprende") → `artifacts_v2_comparacao_cerebros/calibracao_B/`, `docs/RESULTADO_V2_CALIBRACAO_CEREBRO_B.md` (seção "V2, CALIBRACAO-CEREBRO-B" no fim) |
 | `experiments/run_revisao_aprendiz.py`, `experiments/configs/v2_revisao/` | **V2, REVISAO-APRENDIZ**: diagnóstico do aprendiz (teto, janela de crédito com o traço `ConfigLobos.traco_decisoes`/`traco_fator`, exposição), uma alavanca por vez, pela bancada (chaves `lobos` e `frutas` da config) → `artifacts_v2_revisao/` (seção "V2, REVISAO-APRENDIZ" no fim) |
 | `experiments/run_v2_n3.py`, `experiments/configs/v2_n3/` | **V2, N3**: a fonte `consequencia` (P1: redução do déficit de fome, higiene e energia pela própria ação, `lobos.sinal_homeostatico`, `ConfigConsequencia`) e os gates do N3 → `artifacts_v2_n3/` (seção "V2, N3" no fim) |
 | `digilab/tracos.py` | camada 3 mínima |
@@ -2198,3 +2199,24 @@ durações de vida). Plano `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, adendos
   `resumo.json`). Os da K2 e do experimento maior seguem passando.
 - **Para rodar** (depois do sinal verde): `python experiments/run_v2_experimento_maior.py --config experiments/configs/v2_experimento_maior/validacao.json --saida artifacts_v2_validacao_unica`,
   ~4,5 h pela estimativa da K2 (o bloco principal e os blocos; a K2 mediu 12,3 s por vida). Resultado depois em `docs/RESULTADO_V2_VALIDACAO_UNICA.md`.
+
+## V2, CALIBRACAO-CEREBRO-B — a calibração do cérebro B (2026-10-06, `docs/TAREFA_V2_CALIBRACAO_CEREBROS_B_C.md`) — RUN FEITA; O B NÃO FECHA ("não aprende")
+
+Rodada 11; plano `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, adendo 1.1 (conferido pelo coordenador). Uma run, sementes de calibração
+28101…28505 (K = 4, 20 unidades, prefixo `comparacao-cerebros`), 14 dias, atencioso, as peças comuns no ponto da K2 do A (ganho 4, T3, K4,
+montagem completa); **660 vidas em 25 min** (tetos: 1260 vidas e 4 × a K2 do A). Números de `artifacts_v2_comparacao_cerebros/calibracao_B/`;
+relatório `docs/RESULTADO_V2_CALIBRACAO_CEREBRO_B.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Código:**
+  - `experiments/run_v2_calibracao_cerebro_b.py`: as etapas B-A a B-D em cadeia pela `BancadaComB`, com as grades e as regras do adendo
+    (estabilidade: nenhuma vida com logit no limite e menor razão da deriva; manipulação: o menor `w0_info` com IC95 inferior > 0,069),
+    o reaproveitamento dos pontos já rodados, o teto de vidas contado antes da run e o de tempo; o piloto do "não aprende" (seção 7) nas
+    vidas do P1 no ponto escolhido; nenhuma regra lê a `taxa_fruta_ruim` nem contraste entre braços ou cérebros; recusa a validação;
+  - `cerebro_b.py`: o estado oculto e o traço só andam com a decisão observada (a sonda da deriva não move a memória) e a contagem dos
+    logits no limite; `bancada_v2.PREFIXOS_UNIDADES` ganhou `comparacao-cerebros` (seção 6.2 do plano);
+  - testes: `tests/test_calibracao_cerebro_b.py` (13) e um novo em `tests/test_cerebro_b.py`.
+- **Ponto:** `taxa_ator` 0,01, `taxa_critico` 0,1, `lambda_elegibilidade` 0,95, `w0_info` 0,5; as quatro regras fecham (nenhuma vida no
+  limite do logit; razão da deriva 2,15 no escolhido; a informação decide 0,154 [0,130; 0,180] das escolhas de fruta com informação).
+- **Piloto: o B não aprende.** No P1, a parte aprendida muda a escolha em 0,0077 [0,0065; 0,0089] das decisões, limite superior abaixo de
+  0,01; a deriva no dia 14 é positiva (4,3 × 10⁻⁵ bit). Pela seção 7, o B sai da escolha M6 com esse motivo.
+- **Descritivo:** a regra de estabilidade empurrou a cadeia para o ponto em que o B menos aprende; com a taxa do ator 0,1 o aprendido
+  decidiria 20% das decisões. Nada foi recalibrado olhando o piloto.
