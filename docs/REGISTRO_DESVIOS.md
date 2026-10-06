@@ -2457,3 +2457,13 @@ Tarefa `docs/TAREFA_V2_CANAIS_REFORCO.md` (etapa C4), H-R2 de `docs/research/dig
   (contrato 1.3). 759 = 0,995 × 763.
 - **Fora (decisão C-2):** a memória de episódios (N6) e o pedido (N7); o B tem a memória recorrente própria. A `BancadaComB` recusa os
   braços deles.
+
+## 2026-10-06 — Adendos de calibração dos cérebros B e C registrados no plano da comparação
+
+- Os adendos estavam só no corpo dos PRs #179 (B) e #176 (C). A seção 1.4 do plano pede um adendo ao documento, commitado antes de
+  qualquer run. O coordenador os copiou sem mudar o conteúdo para o adendo 1 de `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`.
+- Conferidos contra a seção 1.4:
+  - B: 4 parâmetros livres, 10 pontos de grade e ~660 vidas;
+  - C: 3 parâmetros livres, 9 pontos e 480 a 540 vidas.
+- Falta conferir o teto de vidas (as vidas da K2 do A) no artefato da K2, antes de calibrar B ou C.
+
