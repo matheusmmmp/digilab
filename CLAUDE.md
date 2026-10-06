@@ -2236,6 +2236,29 @@ Rodada 11; grades e regras do adendo 1.2 de `docs/PLANO_ANALISE_V2_COMPARACAO_CE
 - **Piloto, o "não aprende" (seção 7): não dispara.** Deriva no dia 14 0,0222 [0,0218; 0,0227]; a parte aprendida muda 0,324 das
   decisões. O C entra no M6.
 
+## V2, P2D-P3I, parte A — o julgamento da fruta como informação (2026-10-06, `docs/TAREFA_V2_P2D_P3I.md`) — GATES PASSAM
+
+Rodada 12; adendo 3, seção 3.3, de `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`, e `docs/PREDICOES_V2.md`. Infraestrutura, sem run e sem
+faixa reservada; só as sementes dos testes. Só `frutas.py` mudou (`config.py`, `lobos.py`, a bancada e a web não). A parte D (os braços na
+bancada) é do chat D. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **`JulgadorFruta(..., saida=)`:** `"feedback"` (o padrão, o K4 de hoje: elogio e bronca) ou `"informacao"` (P2d e P3i).
+  - Usa o mesmo conhecimento (os efeitos reais, com a troca do mutável) e o mesmo momento (o primeiro passo do dono depois do consumo).
+  - Emite `informar_fruta_<f>_<bem|mal>` sobre a fruta consumida, uma por consumo, a neutra incluída ("bem", como o `DonoInformante`).
+  - Só fora do orçamento, e só com o canal da informação ligado no motor.
+  - `informadas` guarda (tick do julgamento, fruta, conteúdo, tick do consumo).
+  - No `simular_vida_frutas`, essas informações contam em `informacoes`.
+- **Gates** (`tests/test_p2d_p3i_mundo.py`, 14 testes, ~30 s):
+  - **a saída `feedback` é a vida de hoje byte a byte:** as 144 vidas de `tests/gabaritos/p2d_p3i_vidas_de_hoje.json` (a bancada com o
+    K4, montagem simples e completa; o `simular_vida_frutas` com o julgador fora do orçamento, com e sem o canal da informação), gravado
+    antes num commit próprio (`tests/gabarito_p2d_p3i.py`);
+  - **uma informação por consumo** no passo seguinte, com o conteúdo do efeito que o motor aplicou, nos três mundos e dos dois lados da
+    troca do mutável, no P2 e no P3; o orçamento do dono fecha igual;
+  - **a neutra sai como "bem"**;
+  - **não chega ao aprendiz** (espião no `receber_acao_dono`), mas entra na percepção;
+  - o conteúdo é o do informante do P2 da unidade;
+  - **G1**;
+  - os erros de uso.
+
 ## V2, V1-ADENDO3 — o orquestrador da validação com o adendo 3 (2026-10-06, `docs/TAREFA_V2_V1_ADENDO3.md`) — PRONTO, NÃO RODADO; ESPERA O P2D/P3I
 
 Adendo 3 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md` no orquestrador do experimento maior. Só fumaça nas sementes dos testes. **A run
