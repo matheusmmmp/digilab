@@ -331,7 +331,7 @@ class CalendarioFrutas:
 # ------------------------------------------------------------------ unidades derivadas (E3)
 
 BASES_EXPERIMENTO_MAIOR = {"calibracao": (14101, 14202, 14303, 14404, 14505),
-                           "validacao": (15101, 15202, 15303, 15404, 15505)}
+                           "validacao": (30101, 30202, 30303, 30404, 30505)}   # adendo 4.1: a 15101...15505 ficou queimada
 BASES_N6 = {"calibracao": (19101, 19202, 19303, 19404, 19505), "validacao": (20101, 20202, 20303, 20404, 20505)}
 BASES_N7 = {"calibracao": (21101, 21202, 21303, 21404, 21505), "validacao": (22101, 22202, 22303, 22404, 22505)}
 BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validacao": (29101, 29202, 29303, 29404, 29505)}
@@ -339,6 +339,8 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2; o da comparacao dos cerebros,
 # PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros")
+# faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
+FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),)
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
 FAIXAS_RESERVADAS = (
     (101, 1010, "testes (101...505) e ovos da personalidade (101...1010)"),
@@ -351,7 +353,8 @@ FAIXAS_RESERVADAS = (
     (8101, 8505, "N3, calibracao"), (9101, 9505, "N3, validacao"),
     (10101, 10505, "N4, calibracao"), (11101, 11505, "N4, validacao"),
     (12101, 12505, "N5, calibracao (reservada)"), (13101, 13505, "N5, validacao (reservada)"),
-    (14101, 14505, "experimento maior, bases da calibracao"), (15101, 15505, "experimento maior, bases da validacao"),
+    (14101, 14505, "experimento maior, bases da calibracao"),
+    (15101, 15505, "QUEIMADA: experimento maior, a validacao antiga (adendo 4.1; run indevida parada em 2026-10-06, PR #183); nao usar"),
     (16101, 16505, "N11 cerebros, calibracao (ROADMAP_V2, secao 6; substituida pela C-8, nao usar)"),
     (17101, 17505, "N11 cerebros, validacao (ROADMAP_V2, secao 6; substituida pela C-8, nao usar)"),
     (18101, 18505, "revisao do aprendiz, so calibracao (V2_RODADA_5)"),
@@ -359,6 +362,7 @@ FAIXAS_RESERVADAS = (
     (21101, 21505, "N7, calibracao (PLANO_ANALISE_V2_N7, secao 12.1)"), (22101, 22505, "N7, validacao (PLANO_ANALISE_V2_N7, secao 12.1)"),
     (28101, 28505, "comparacao dos cerebros: calibracao de B e C e piloto (PLANO_ANALISE_V2_COMPARACAO_CEREBROS, C-8)"),
     (29101, 29505, "comparacao dos cerebros: validacao de A, B e C (PLANO_ANALISE_V2_COMPARACAO_CEREBROS, C-8)"),
+    (30101, 30505, "experimento maior, bases da validacao (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
@@ -1405,6 +1409,11 @@ def validar_config(cfg: dict) -> dict:
         if a["origem"] not in cfg["bracos"]:
             raise ValueError(f"acoplado de um braco que nao roda: {a['origem']}")
     genomas = [g for g in cfg.get("genomas", [None]) if g is not None]
+    usadas = set(cfg.get("sementes", [])) | set(genomas) | set(cfg.get("unidades", {}).get("bases", []))
+    for ini, fim, motivo in FAIXAS_QUEIMADAS:
+        queimadas = sorted(x for x in usadas if ini <= x <= fim)
+        if queimadas:
+            raise SementeSemPlano(f"sementes/bases {queimadas} na faixa queimada {ini}...{fim} ({motivo}): nao usar para nada")
     fora = sorted((set(cfg.get("sementes", [])) | set(genomas)) - SEMENTES_TESTE)
     if fora:
         plano = cfg.get("plano")

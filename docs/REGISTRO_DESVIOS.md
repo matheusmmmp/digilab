@@ -2764,3 +2764,31 @@ rodou nas sementes 15101…15505. Interpretações, registradas antes da run:
   - **L-1:** o texto completo do Eliassen fica pendente, para antes da leitura;
   - **L-2:** o status do Ackley e Littman atualizado no CSV de `docs/referencias/` e na skill de literatura;
   - **L-3 e L-4:** entram como leitura no adendo 4.
+
+## 2026-10-06 — V2, V1-LIGAR: a faixa de validação nova e a leitura do adendo 4 (`docs/TAREFA_V2_V1_LIGAR.md`)
+
+Tarefa `docs/TAREFA_V2_V1_LIGAR.md`; adendo 4 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`. Só fumaça nas sementes dos testes; nada rodou
+na faixa nova nem na antiga.
+- **A faixa nova (4.1):**
+  - `BASES_EXPERIMENTO_MAIOR["validacao"]` é 30101…30505, na bancada, na config da validação e nos testes; a regra das unidades não muda.
+  - A 30101…30505 entra em `FAIXAS_RESERVADAS`. A 15101…15505 continua lá, marcada como **QUEIMADA**, com a fonte (#183).
+- **A faixa queimada é recusada em toda a bancada, mesmo com o campo `plano`** (`bancada_v2.FAIXAS_QUEIMADAS`, conferida no
+  `validar_config`: bases, sementes e genomas). O adendo diz "não pode ser usada para nada"; antes, com um plano qualquer, a bancada
+  aceitava a faixa. O orquestrador do experimento maior já a recusava, por ela não ser mais a faixa da validação.
+- **A leitura do 4.2**, só texto e medidas descritivas; nenhum teste nem regra de decisão muda:
+  - **L-3:** o limiar entra como forma possível na leitura do bloco de durações (`leitura_limiar` em `duracoes.json` e no resumo). A regra
+    `forma_da_curva` do #189 fica igual.
+  - **Predição 2:**
+    - os componentes da mudança de cada condição (`componentes_da_mudanca`);
+    - no mutável, valor e eficiência lidos separados (`mutavel_valor_e_eficiencia`). O valor é o p2_mutavel (P0 − P1). A eficiência é a
+      taxa da fruta ruim do P1 depois da troca, com IC: a distância ao ótimo 0.
+  - **L-4:** a trajetória do `w_info` do P2e no descasado (`w_info_p2e.json` e a predição 4 no resumo). São o peso no fim de cada dia, o
+    dia em que cruza o zero, a fração de unidades que cruza e a fração com o peso no limite de baixo (w0 − teto, a leitura "limitada pelo
+    teto" do plano do N5).
+- **Como a trajetória é medida:** um replay só por vida (`serie_no_fim_de_cada_dia`), que lê o peso no fim de cada dia e corta o avanço que
+  atravessa a meia-noite, como o `politica_no_tick`.
+  - Um teste confere a série, dia a dia, contra o `politica_no_tick` (o replay até cada dia, o que a bancada usa para o `w_pedido`).
+  - O orquestrador confere o último dia contra o peso da vida e falha alto se diferir.
+  - Rejogar uma vez por dia custaria cerca de 7,5 vidas por vida do P2e: perto de 46 min a mais na validação (30 vidas × 7,5 × 12,27 s).
+- **O P2d e o P3i:** o PR da bancada do chat D (`docs/TAREFA_V2_P2D_P3I.md`, parte D) ainda não existe. A validação continua pedindo
+  `"p2d_p3i": true` e falha alto antes de qualquer vida até lá. Depois do merge dele, este branch se atualiza e confere na fumaça.

@@ -1,13 +1,13 @@
 {
-  "descricao": "Validacao unica do experimento maior (V1), uma vez, com o adendo 2 (opcao A, 2026-10-06): o cerebro A montado no ponto da calibracao conjunta, os blocos e as ablacoes da secao 4 do plano da calibracao conjunta, N = 30 (K = 6 por base). Adendo 3 (2026-10-06): o bloco de duracoes (7 e 28 dias, pelo custo em artifacts_v2_v1_adendo3/custo.json) e os bracos P2d e P3i, secundarios.",
+  "descricao": "Validacao unica do experimento maior (V1), uma vez, com o adendo 2 (opcao A, 2026-10-06): o cerebro A montado no ponto da calibracao conjunta, os blocos e as ablacoes da secao 4 do plano da calibracao conjunta, N = 30 (K = 6 por base). Adendo 3 (2026-10-06): o bloco de duracoes (7 e 28 dias, pelo custo em artifacts_v2_v1_adendo3/custo.json) e os bracos P2d e P3i, secundarios. Adendo 4 (2026-10-06): a faixa de validacao passa a 30101...30505 (a 15101...15505 ficou queimada).",
   "plano": "docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md",
   "unidades": {
     "bases": [
-      15101,
-      15202,
-      15303,
-      15404,
-      15505
+      30101,
+      30202,
+      30303,
+      30404,
+      30505
     ],
     "k": 6
   },

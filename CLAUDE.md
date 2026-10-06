@@ -2281,3 +2281,17 @@ nas sementes 15101…15505 espera o PR da bancada do P2d e do P3i (chat D) e o s
   regra.
 - **Testes:** `tests/test_adendo3.py` (a forma em dados com resposta conhecida, o orçamento por dia, a config, o custo refeito do artefato,
   a falha antecipada do P2d/P3i, a referência do P0, a fumaça com o bloco de durações).
+
+## V2, V1-LIGAR — a faixa de validação nova e a leitura do adendo 4 (2026-10-06, `docs/TAREFA_V2_V1_LIGAR.md`) — PRONTO, NÃO RODADO; O P2D/P3I ESPERA A BANCADA
+
+Adendo 4 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`. Só fumaça nas sementes dos testes. **A run espera o PR da bancada do P2d e do P3i
+(chat D) e o sinal verde do coordenador.** Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Faixa de validação: bases 30101…30505** (adendo 4.1; `bancada_v2.BASES_EXPERIMENTO_MAIOR`, a config da validação). A 15101…15505 fica
+  **queimada** (`FAIXAS_QUEIMADAS`): a bancada recusa essas bases e sementes mesmo com plano.
+- **A leitura do 4.2 no `resumo.json`:**
+  - o limiar na leitura das durações (L-3);
+  - os componentes da mudança e o valor separado da eficiência no mutável (predição 2);
+  - a trajetória diária do `w_info` do P2e (L-4; `w_info_p2e.json`, num replay só por vida, conferido contra o `politica_no_tick`).
+- **Testes:**
+  - `tests/test_adendo4.py`: a faixa nova, a queimada recusada, a trajetória dia a dia;
+  - a fumaça do bloco de durações em `tests/test_adendo3.py`, que agora confere também a leitura do 4.2.

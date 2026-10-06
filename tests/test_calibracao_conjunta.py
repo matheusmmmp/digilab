@@ -1,5 +1,5 @@
 """V2, K2 (docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md; plano docs/PLANO_CALIBRACAO_CONJUNTA_V2.md): o orquestrador da calibracao conjunta.
-So as sementes dos testes. As regras de escolha em dados sinteticos com a resposta conhecida; os modos (a validacao 15101...15505 nunca);
+So as sementes dos testes. As regras de escolha em dados sinteticos com a resposta conhecida; os modos (a validacao 30101...30505 nunca);
 a sonda da informacao (so le); o poder por simulacao contra a formula; e uma fumaca das cinco etapas, com o replay do disco.
 """
 from __future__ import annotations
