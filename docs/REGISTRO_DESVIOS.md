@@ -2682,3 +2682,21 @@ Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, q
 - **O teto de vidas (1260) é contado antes de rodar:** 540 previstas e 540 gastas. Um `Contador` também falha alto se a run passar dele.
 - **O passo escolhido é a ponta da grade (S/8).** A razão da deriva cai com o passo (3,00, 1,89, 1,61), e com 1,61 a deriva ainda cresce
   na segunda semana. A K-4 não pede razão máxima, então a escolha fica, e a grade não foi estendida.
+
+## 2026-10-06 — V2, P2D-P3I, parte A: o julgamento da fruta como informação (`docs/TAREFA_V2_P2D_P3I.md`, seção 2)
+
+- **Um modo do `JulgadorFruta`, não um informante novo.** O P2d e o P3i precisam do mesmo conhecimento e do mesmo momento do K4: o efeito
+  real vigente (a troca do mutável incluída), avaliado no primeiro passo do dono depois do consumo. O julgador já faz isso. Por isso a
+  saída virou um parâmetro (`saida="feedback"`, o padrão, ou `"informacao"`). O mesmo objeto serve aos dois braços: no P3i fica ao lado do
+  dono (fonte `dono`); no P2d, sem o informante da oferta (fonte `informacao`).
+- **O parâmetro fica no construtor, não na `ConfigJulgamentoFruta`.** Um campo novo na config pediria mexer no registro
+  `protocol.PARAMETROS_JULGAMENTO_K4`, e a tarefa limita a mudança a `frutas.py` e `config.py`. Também não é um número a calibrar: é a
+  escolha do braço. `config.py` não mudou.
+- **A neutra também é informada, como "bem".** Confirmo a leitura da tarefa: o conteúdo segue o do `DonoInformante` do P2 ("mal" se o
+  efeito vigente é negativo, senão "bem"). Então, no P3i, os consumos da fruta do meio ganham uma informação, e o K4 de hoje não daria
+  sinal nenhum para eles. No P2d isso mantém o conteúdo do P2.
+- **Só fora do orçamento.** A saída `"informacao"` exige `ConfigJulgamentoFruta(no_orcamento=False)`; o `DonoJulgaFruta` (o K4 no
+  orçamento) recusa um julgador assim. No motor, a informação precisa do canal ligado (`ConfigInformacao`); sem ele, o primeiro
+  `informar_*` falha alto (`InformacaoSemChave`).
+- **Contagem no `simular_vida_frutas`:** as informações do julgador contam em `Vida.informacoes`, não em `julgamentos_fora`.
+- **Nenhuma run.** Só as sementes dos testes (11, 22, 101, 202).
