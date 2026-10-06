@@ -62,11 +62,11 @@ CHAVES = {"descricao", "plano", "unidades", "sementes", "genomas", "dias", "orca
 ETAPAS = ("A1", "A2", "B", "C", "D")
 
 # ------------------------------------------------------------------ os bracos do cerebro A montado (secao 1)
-# O braco "completo" de cada fonte e o braco da bancada que liga, por cima do ponto T3, a memoria (g), a informacao (w0_info, so o P2 a
-# recebe), o pedido (w0_pedido, so onde ha pedido) e os canais. A memoria nos bracos P1-P3 e as ablacoes da K-7 vem do PR do chat D
-# (docs/TAREFA_V2_BANCADA_K4_CANAIS.md); ate la a bancada so liga a memoria nos bracos do N6, e `pecas_pendentes` recusa a calibracao.
-BRACO_COMPLETO = {"P0": "P0", "P1": "P1", "P2": "P2", "P2e": "P2e", "P2a": "P2a", "P3": "P3"}
-BRACO_SEM_MEMORIA = "P1"          # a ablacao "P1 sem memoria" (g = 0): o P1 da bancada sem a chave da memoria
+# O braco "completo" de cada fonte na bancada: o P1c (BANCADA-K4-CANAIS) e o P2c, P2ec, P2ac e P3c (esta tarefa), que ligam por cima do
+# ponto T3 a memoria (o g da config), os canais nos que aprendem pela consequencia, e a informacao (w0_info) e o pedido (w0_pedido) onde
+# eles existem. O P0 fica com tudo desligado (K-1). As ablacoes da K-7 sao o P1c-mem (g = 0) e o P1c-can (escalar), da bancada.
+BRACO_COMPLETO = {"P0": "P0", "P1": "P1c", "P2": "P2c", "P2e": "P2ec", "P2a": "P2ac", "P3": "P3c"}
+ABLACAO = {"memoria": "P1c-mem", "canais": "P1c-can"}
 FILTRO_SO_CUIDADO = "sem_ensino"
 
 
@@ -140,9 +140,13 @@ def pecas_pendentes(cfg: dict) -> list[str]:
     """O que a calibracao precisa da bancada e ainda nao esta na main (PR do chat D, BANCADA-K4-CANAIS). Vazio = pode rodar."""
     faltam = []
     b = bv.bancada_da_config({"dias": 2, "orcamento": 8, "ponto": "T3", "lobos": {"memoria_ganho": S // 2}})
-    p1 = bv.do_braco(b.politica(bv.EspecVida(DONO, BRACO_COMPLETO["P1"], 101, None, "descasado"))).cerebro
-    if p1._memoria is None:
-        faltam.append("memoria nos bracos completos P1-P3 (K-1; BANCADA-K4-CANAIS, chat D)")
+    for logico in ("P1", "P2", "P2e", "P2a", "P3"):
+        if BRACO_COMPLETO[logico] not in bv.BRACOS:
+            faltam.append(f"braco completo {BRACO_COMPLETO[logico]} na bancada (K-1)")
+            continue
+        c = bv.do_braco(b.politica(bv.EspecVida(DONO, BRACO_COMPLETO[logico], 101, None, "descasado"))).cerebro
+        if c._memoria is None:
+            faltam.append(f"memoria no braco completo {BRACO_COMPLETO[logico]} (K-1)")
     if not em.K4_DONO_JULGA_FRUTA:
         faltam.append("K4 na bancada: o dono do P3 julga a fruta (K-11; BANCADA-K4-CANAIS, chat D)")
     if cfg.get("canais", True):
@@ -156,7 +160,8 @@ def config_bancada(cfg: dict, nome: str, bracos, mundos, lobos: dict, consequenc
                    acoplados=()) -> dict:
     cb = {"descricao": f"K2 {nome}: {cfg.get('descricao', '')}", "bracos": list(bracos), "mundos": list(mundos), "donos": [DONO],
           "dias": cfg["dias"], "orcamento": cfg["orcamento"], "sonda": cfg["sonda"], "bootstrap": cfg["bootstrap"],
-          "ponto": cfg.get("ponto", bv.PONTO_N5_EXPERIMENTO), "lobos": dict(lobos), "acoplados": list(acoplados)}
+          "ponto": cfg.get("ponto", bv.PONTO_N5_EXPERIMENTO), "lobos": dict(lobos), "acoplados": list(acoplados),
+          "julgamento_fruta": em.K4_DONO_JULGA_FRUTA}
     for k in ("plano", "unidades", "sementes", "genomas"):
         if k in cfg:
             cb[k] = cfg[k]
@@ -536,19 +541,21 @@ def etapa_d(cfg: dict, saida: Path, unidades: list[dict], escolhidos: dict, cana
     principal = config_bancada(cfg, "D principal", [bc[b] for b in ("P0", "P1", "P2", "P2e", "P2a", "P3")], CONDICOES, lobos, cons,
                                [{"origem": bc[b], "destino": "P0", "filtro": FILTRO_SO_CUIDADO} for b in ("P2", "P2e", "P3")])
     runs["principal"] = rodar_bancada(principal, saida / "D" / "principal")
-    runs["sem_memoria"] = rodar_bancada(config_bancada(cfg, "D ablacao P1 sem memoria", [BRACO_SEM_MEMORIA], ("descasado", "mutavel"),
+    runs["sem_memoria"] = rodar_bancada(config_bancada(cfg, "D ablacao P1 sem memoria", [ABLACAO["memoria"]], ("descasado", "mutavel"),
                                                        lobos, cons), saida / "D" / "ablacao_sem_memoria")
     runs["escalar"] = None
     if canais:
-        runs["escalar"] = rodar_bancada(config_bancada(cfg, "D ablacao P1 escalar", [bc["P1"]], ("descasado", "mutavel"), lobos,
-                                                       {"ganho": ganho, "canais_ligados": False}), saida / "D" / "ablacao_escalar")
+        runs["escalar"] = rodar_bancada(config_bancada(cfg, "D ablacao P1 escalar", [ABLACAO["canais"]], ("descasado", "mutavel"), lobos,
+                                                       cons), saida / "D" / "ablacao_escalar")
     runs["n6"] = rodar_bancada(config_bancada(cfg, "D bloco N6", ["MR"], ["descasado"], {"memoria_ganho": g}, None,
                                               [{"origem": "MR", "destino": d, "filtro": "nenhum"} for d in ("M0", "MT", "ME")]),
                                saida / "D" / "bloco_n6")
     runs["n7"] = rodar_bancada(config_bancada(cfg, "D bloco N7", ["P0", "P0+ped", "P1+ped", "P3+ped", "P3"], ["iguais_frutas"], lobos,
                                               cons, [{"origem": "P3+ped", "destino": "P0", "filtro": FILTRO_SO_CUIDADO}]),
                                saida / "D" / "bloco_n7")
-    runs["padrao"] = rodar_bancada(config_bancada(cfg, "D referencia padrao", [bc[b] for b in ("P0", "P1", "P3")], ["padrao"], lobos, cons),
+    # a referencia do mundo padrao (descritiva) com os bracos simples: sem frutas a memoria nao tem o que guardar (a bancada recusa
+    # braco com memoria fora das frutas); os canais seguem a config
+    runs["padrao"] = rodar_bancada(config_bancada(cfg, "D referencia padrao", ["P0", "P1", "P3"], ["padrao"], lobos, cons),
                                    saida / "D" / "referencia_padrao")
     segundos = time.perf_counter() - t0
     n_vidas = sum(len(r["vidas"]) for r in runs.values() if r is not None)
@@ -597,7 +604,7 @@ def etapa_d(cfg: dict, saida: Path, unidades: list[dict], escolhidos: dict, cana
     sec["G-MARCA-E"] = secundario(fx_7, unidades, "G-MARCA-E", "N7", "iguais_frutas", fracao_x_extincao, "P3", "P3+ped", delta_n7, a3,
                                   n_val)
     # as ablacoes da K-7 no P1 (descasado: final; mutavel: depois da troca)
-    for nome_ab, run_ab, rot in (("memoria", runs["sem_memoria"], BRACO_SEM_MEMORIA), ("canais", runs["escalar"], bc["P1"])):
+    for nome_ab, run_ab in (("memoria", runs["sem_memoria"]), ("canais", runs["escalar"])):
         for mundo, janela in (("descasado", "final"), ("mutavel", "depois_da_troca")):
             chave = f"ablacao_{nome_ab}_{mundo}"
             if run_ab is None:

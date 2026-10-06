@@ -187,3 +187,22 @@ def test_fumaca_das_cinco_etapas(tmp_path):
     # as vidas da bancada foram gravadas e rejogadas do disco (G1); o log no disco e o da vida
     vidas = list((tmp_path / "D" / "principal" / "vidas").glob("*.jsonl"))
     assert len(vidas) == 2 * (18 + 9)
+
+
+# ------------------------------------------------------------------ os bracos completos do cerebro A (K-1) na bancada
+
+
+def test_bracos_completos_do_cerebro_a():
+    b = bv.bancada_da_config({"dias": 2, "orcamento": 16, "ponto": "T3", "lobos": {"memoria_ganho": S // 2, "w0_info": S // 2},
+                              "consequencia": {"canais_ligados": False}, "julgamento_fruta": True})
+    for logico, rotulo in k2.BRACO_COMPLETO.items():
+        pol = b.politica(bv.EspecVida("atencioso", rotulo, 101, None, "descasado"))
+        c = pol.cerebro
+        if logico == "P0":
+            assert c._memoria is None and not c._aprende
+            continue
+        assert c._memoria is not None and c.cl.memoria_ganho == S // 2 and c._aprende
+        assert bv.BRACOS[rotulo].fonte == bv.BRACOS[logico].fonte and bv.BRACOS[rotulo].informacao == bv.BRACOS[logico].informacao
+        # os canais ficam fixos ligados nos que aprendem pela consequencia, mesmo com a config desligada
+        assert pol.cfg_consequencia.canais_ligados == (logico != "P3")
+    assert k2.pecas_pendentes({"canais": True}) == []

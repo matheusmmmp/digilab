@@ -2428,6 +2428,14 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
   mesmas (tick, fruta) e conteúdo oposto; K5 e K7, as mesmas ofertas em todo braço e acoplado da unidade e do mundo; K6, casado e descasado
   com efeitos opostos fruta a fruta por genoma; K8, um registro de consumo por consumo contado; K2 e K4 pela config e pelo orquestrador do
   experimento maior; K9 pela bancada (toda vida rejogada do disco).
-- **Os braços "completos" (seção 1):** a memória nos braços P1–P3 e as ablações nomeadas vêm do PR do chat D (BANCADA-K4-CANAIS). O
-  orquestrador lê os nomes de uma tabela só (`BRACO_COMPLETO`) e **recusa a calibração** enquanto a bancada não ligar a memória no P1 ou o
-  K4 não estiver na main (`pecas_pendentes`). Se o PR do D mudar algum desses pontos, a mudança entra aqui num commit antes da run.
+- **Os braços "completos" (seção 1), depois do #175 (BANCADA-K4-CANAIS):** o chat D nomeou o P1 completo (`P1c`) e as ablações da K-7
+  (`P1c-mem`, g = 0; `P1c-can`, escalar) e deixou em aberto os outros braços do cérebro A montado. A tabela da seção 1 (K-1, decidida)
+  já diz o que eles são, então esta tarefa os acrescenta à bancada com o mesmo padrão do `P1c`, sem mudar nenhum braço de antes:
+  `P2c`, `P2ec` e `P2ac` (memória relevante e canais fixos ligados, informação certa, errada e acoplada) e `P3c` (memória relevante; os
+  canais não se aplicam, porque o P3 aprende pelo dono). O orquestrador usa `BRACO_COMPLETO` = {P0, P1c, P2c, P2ec, P2ac, P3c} e recusa a
+  calibração se algum deles não tiver a memória (`pecas_pendentes`).
+- **K4:** a chave `julgamento_fruta` da bancada fica ligada em toda config da K2 (age só nos braços com fonte dono nos mundos das frutas;
+  no `iguais_frutas` não há fruta não neutra, então não há julgamento no bloco N7).
+- **Blocos N6 e N7:** os braços dos planos deles, como estão na bancada (o MR com o aprendizado desligado; o P1+ped e o P3+ped sem
+  memória). A referência do mundo padrão usa o P0, o P1 e o P3 simples: a bancada recusa braço com memória fora das frutas, e sem frutas
+  a memória não guardaria nada.
