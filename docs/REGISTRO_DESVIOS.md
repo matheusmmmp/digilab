@@ -2550,3 +2550,54 @@ Tarefa `docs/TAREFA_V2_K2_CALIBRACAO_CONJUNTA.md`; plano `docs/PLANO_CALIBRACAO_
   - Sementes 28101…28505, K = 4.
   - Adendos já conferidos (adendo 1 do plano da comparação).
   - Teto de vidas conferido: o A gastou 1260 na K2, contadas nos logs de vida de `artifacts_v2_calibracao_conjunta/`.
+## 2026-10-06 — Validação única do experimento maior (V1): interpretações, registradas antes da run
+
+Tarefa `docs/TAREFA_V2_V1_VALIDACAO_UNICA.md`. Vale o adendo 2 do coordenador, que está no `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`
+(#182; o que este branch tinha escrito com o mesmo conteúdo saiu na fusão com a main). Orquestrador: `experiments/run_v2_experimento_maior.py`, com a chave nova `"blocos": true`. Config:
+`experiments/configs/v2_experimento_maior/validacao.json`, com 30 unidades derivadas das bases 15101…15505 (K = 6).
+- **Os blocos** (seção 4 do plano da calibração conjunta) rodam em runs próprias da bancada, nas mesmas unidades:
+  - o P2a nos três mundos;
+  - as ablações `P1c-mem` e `P1c-can` no descasado e no mutável;
+  - o bloco N6: o MR, e o M0, o MT e o ME acoplados a ele;
+  - o bloco N7: P0, P0+ped, P1+ped, P3+ped e P3, mais o só cuidado do P3+ped.
+
+  Com o bloco principal e a referência do padrão, são os 44 por unidade (teste). O bloco principal é o de antes, intocado.
+- **O "só cuidado" acoplado** é o próprio braço no registro sem o ensino (`P2<P2:sem_ensino`), como a seção 5.1 deste plano e o
+  orquestrador o leem. A tabela da seção 4 do plano da calibração escrevia `P0<P2:sem_ensino`, e o piloto da K2 rodou assim.
+- **Cada contraste com o Δ na sua escala:** 0,1986 nas taxas e 17,5 consumos no p3. O p3 não se lê por equivalência, então o Δ dele só
+  entra no tamanho de amostra.
+- **Bloco N6:**
+  - G-CAUSAL, G-REC e G-EMB são o acoplado menos o MR na `taxa_fruta_ruim` final, com Holm de três (α = 0,05) e equivalência pelo Δ_N6;
+  - G-CITA é a média da fração decidida pela memória no MR, com IC 95% inferior > 0,069;
+  - G5 é MR − P0 no descasado, em saúde e privação (o M0 em malha fechada é o P0 do principal);
+  - G-M1 e G-M2 pelos marcos das medidas `n6`;
+  - **G-M3 não é medido pela bancada** e fica registrado assim.
+- **Bloco N7:**
+  - G-EROSAO é a deferência total na janela "final" (dias 6–10), P0+ped − P1+ped;
+  - G-MARCA e G-MARCA-E usam a fração de X na extinção, tirada dos motivos de toda vida do bloco, com Holm de três e equivalência do
+    G-MARCA pelo Δ_N7;
+  - G-ARB é a deferência total dos dias 1–10 do P0+ped, com IC inferior > 0;
+  - G-URG conta as violações nos braços com pedido (tem de ser 0);
+  - G5: P0+ped − P0 e P3+ped − o só cuidado dele.
+- **Ablações:** a peça tirada menos o P1 completo, na taxa final no descasado e depois da troca no mutável. São descritivas, fora de
+  qualquer Holm, com IC 95% e o p unilateral.
+- **N5, descritivo:** P2a − P2 no descasado, nos consumos até a metade e na taxa no início e no final.
+- **O N pelo poder simulado (adendo 2):** o `tamanhos` do orquestrador ganhou a simulação. Por contraste, ele dá o menor N (múltiplo de
+  5, até 200) com poder simulado ≥ 0,8 em α/6, e o poder simulado no N da run. O N da validação passa a ser o maior N simulado; o da
+  fórmula fica ao lado (`n_validacao_formula`).
+  - A conta é a da K2: bootstrap das unidades centradas no Δ, teste t unilateral, 2000 réplicas, a mesma rng. A função passou da K2 para
+    o orquestrador do experimento maior, e a K2 a chama de lá.
+  - Das 20 unidades do piloto da K2, a simulação dá **N = 30**, com o p3 a 0,862 no N 30, os números do `adendo_opcao_a.json` (teste). A
+    fórmula dava 25: três primários, que ela punha em 5, pedem 10 pela simulação.
+  - Na validação, o `resumo.json` grava o poder simulado de cada primário no N 30, a partir das unidades da própria validação. É
+    descritivo e não muda nenhuma leitura.
+  - Sem a simulação, a K2 chama o `tamanhos` como antes: só a fórmula.
+- **Uma run nas sementes de validação começou e foi parada** (2026-10-06, das 09:49 às 10:12, commit `1140fc9`). Ela foi lançada pela ordem
+  "rode a validação" do Matheus, antes da tarefa V1, que manda esperar o sinal verde do coordenador por causa dos adendos do
+  `docs/PREDICOES_V2.md`. Foi parada assim que a tarefa chegou.
+  - O que ela gerou: só as vidas do bloco principal (720: 30 unidades × 24, os logs e os estados internos). Os blocos ainda não tinham
+    rodado e as medidas ainda não tinham sido calculadas: nenhum `medidas.json`, `contrastes.json`, `resumo.json` ou `blocos.json` existia.
+  - **Nada foi lido** (só a contagem de arquivos) e tudo foi apagado.
+  - Uma primeira tentativa às 09:47 (20 arquivos) foi parada em segundos pelo mesmo motivo de execução e também apagada sem leitura.
+  - Se as sementes 15101…15505 continuam valendo para a validação única é decisão do coordenador e do Matheus. Nenhum número delas foi
+    visto, então nada pôde puxar uma escolha.

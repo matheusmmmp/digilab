@@ -301,7 +301,7 @@ def test_a_fumaca_recusa_sementes_de_validacao_sem_plano(tmp_path):
     com_plano = dict(unidades={"bases": val, "k": 2}, plano=em.PLANO, dias=14)
     with pytest.raises(ValueError):                                                         # validacao sem o delta do adendo
         em.modo_e_unidades(_cfg(**com_plano))
-    assert em.modo_e_unidades(_cfg(**com_plano, delta=0.12))[0] == "validacao"
+    assert em.modo_e_unidades(_cfg(**com_plano, delta=0.12, delta_p3=17.5))[0] == "validacao"   # adendo 2: o delta do p3 tambem
     with pytest.raises(ValueError):                                                         # a vida e de 14 dias (E5)
         em.modo_e_unidades(_cfg(**{**com_plano, "dias": 10}, delta=0.12))
     cal = dict(unidades={"bases": list(bv.BASES_EXPERIMENTO_MAIOR["calibracao"]), "k": 1}, plano=em.PLANO, dias=14)
