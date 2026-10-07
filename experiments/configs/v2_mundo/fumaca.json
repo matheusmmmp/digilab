@@ -1,6 +1,6 @@
 {
-  "descricao": "Fumaca do mundo fisico na bancada (W-BANCADA-MUNDO, docs/TAREFA_V2_MUNDO_FISICO.md, secao 9, etapa 4). NAO canonica: unidades derivadas das sementes dos testes com o prefixo do plano, sem plano de analise; confere o encanamento (o MotorMundo pela bancada, os dois layouts, o dono so com o cuidado em cada lugar, o acoplado e as medidas do PLANO_ANALISE_V2_MUNDO_FISICO), nunca como resultado. Os lobos ainda nao veem o mundo, e o P0z e o instinto do mundo esperam a etapa 3 (NOS_PENDENTES).",
-  "bracos": ["P0", "P1", "P3"],
+  "descricao": "Fumaca do mundo fisico na bancada (W-BANCADA-MUNDO, docs/TAREFA_V2_MUNDO_FISICO.md, secao 9, etapa 4). NAO canonica: unidades derivadas das sementes dos testes com o prefixo do plano, sem plano de analise; confere o encanamento (o MotorMundo pela bancada, os dois layouts, o dono so com o cuidado em cada lugar, o acoplado e as medidas do PLANO_ANALISE_V2_MUNDO_FISICO), nunca como resultado. Desde a W-LIGA-MUNDO os lobos veem o mundo e o P0z (o instinto do mundo sem explorar) roda, com os acoplados P0^ac e P1^ac do registro dele.",
+  "bracos": ["P0", "P0z", "P1", "P3"],
   "donos": ["atencioso", "aleatorio"],
   "unidades": {"bases": [101, 202], "k": 1, "prefixo": "mundo"},
   "mundos": ["fisico", "fisico_afastado"],
@@ -11,5 +11,7 @@
   "montagem": "completa",
   "sonda": {"estados": 10, "amostras": 10, "semente": 101},
   "bootstrap": {"reamostragens": 200, "semente": 101, "nivel": 0.95},
-  "acoplados": [{"origem": "P0", "destino": "P1", "filtro": "nenhum"}]
+  "acoplados": [{"origem": "P0", "destino": "P1", "filtro": "nenhum"},
+                {"origem": "P0z", "destino": "P0", "filtro": "nenhum"},
+                {"origem": "P0z", "destino": "P1", "filtro": "nenhum"}]
 }

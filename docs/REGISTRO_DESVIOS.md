@@ -3514,3 +3514,23 @@ Tarefa `docs/TAREFA_V2_MUNDO_FISICO.md`, seções 8 e 9; plano `docs/PLANO_ANALI
   - tirar a entrada do `NOS_PENDENTES`;
   - montar o braço como o P1-c com a chave ligada;
   - acrescentar o gate "chave desligada = o P1-c byte a byte".
+
+## 2026-10-07 — W-LIGA-MUNDO (rodada 18, worker D): o instinto do mundo ligado na bancada
+
+- **O P0z é sempre o instinto do mundo** (`PoliticaInstintoMundo(..., sem_explorar=True)`), seja qual for o cérebro da config.
+  - Motivo: a sonda dos lobos é o instinto do mundo sem o modo (`lobos.py` não tem `sem_explorar`, e a tarefa não o pede).
+  - Pelo plano, o P0z é o controle da premissa, não um aprendiz.
+  - O rótulo da vida segue o cérebro da espécie (`P0z` com lobos, `P0z~instinto` com o instinto), mas as duas vidas são iguais byte a
+    byte (teste).
+- **As chaves de hoje desligadas no mundo físico:** a bancada passa a `ConfigBola` e a `ConfigFrutas` dela com `ligada=False`
+  (`Bancada.pesos_do_mundo`).
+  - Elas só dão os pesos `w_bola` e `w_fruta`.
+  - O `MotorMundo` e o `PoliticaLobos` com `cfg_mundo` exigem as duas desligadas: o mundo substitui o cenário do N4 e da A1.
+  - O instinto do mundo usa só os dois pesos.
+- **O alvo dos lobos é o padrão do motor:** o `escolher_alvo` devolve None (o cérebro A aprende quando agir, não para onde ir). Um alvo
+  aprendido só entra por adendo, com desenho próprio.
+- **O instinto do mundo recusa o que aprende, lembra ou lê o pedido:** um braço com fonte, memória ou pedido e cérebro `instinto` no mundo
+  físico dá `ValueError`, como o instinto dos outros mundos.
+- **A checagem morta saiu:** a de `validar_config`, que recusava a run com plano no mundo físico enquanto o nó existia.
+- **O que a fumaça mostra** (sementes dos testes; não é resultado): o P0z não explora. O tempo livre que iria ao explorar vai ao ocioso,
+  como no `instinto_mundo.py`.

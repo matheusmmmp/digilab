@@ -100,9 +100,10 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   config): a celula e dono x lugar. O dono e o DonoComLugar (o alimentar vira deixar_comida no lugar) e fica so com o cuidado (PMF-3): o
   filtro sem_ensino aplicado ao vivo (CanalSemEnsino: o elogio e a bronca gastam o orcamento do dono como sempre, mas nao chegam ao motor;
   contados em VidaBancada.retirados). O replay e o reproduzir_mundo; as medidas do plano saem de `metrics` (D_FE, privacao, visitas e as
-  inclinacoes da A1.8, taxa no abandono, permanencia media). O P0z (o P0 sem explorar) e o cerebro "instinto" no mundo fisico dependem da
-  PoliticaInstintoMundo (etapa 3, do B) e falham alto com o no (NOS_PENDENTES); os lobos rodam no mundo, cegos a ele ate a etapa 3, e uma
-  run com plano no mundo fisico tambem falha alto ate la.
+  inclinacoes da A1.8, taxa no abandono, permanencia media). Desde a W-LIGA-MUNDO (a etapa 3 do B na main, #232): o cerebro "instinto"
+  no mundo fisico e a PoliticaInstintoMundo; o P0z (o P0 sem explorar, controle da premissa e fonte dos acoplados P0^ac e P1^ac) e o
+  instinto do mundo no modo `sem_explorar`, em qualquer cerebro da config (os lobos nao tem o modo); os lobos veem o mundo pela chave dele
+  (`PoliticaLobos(..., cfg_mundo=)`, com os pesos w_bola e w_fruta da bancada), e o P0 com lobos e o instinto do mundo byte a byte.
 
   dominancia de um drive no sinal (W-DOMINANCIA, rodada 18; PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.2 a A2.5): em cada decisao, a
   contribuicao de cada drive do sinal, c_d = falta_d,antes^2 - falta_d,depois^2 (w_d = 1, D-4), e a parcela p_d = |c_d| / soma|c|
@@ -147,6 +148,7 @@ from digilab.donos import Visao, criar_dono, cuidados_necessarios, julgar_acao  
 from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_INFORMACAO, ACOES_PEDIDO, FRUTAS, AcaoPet, AcaoUsuario,  # noqa: E402
                             LogDeEventos, fruta_de, informar, oferta_de)
 from digilab.evolucao import politica_no_tick  # noqa: E402
+from digilab.instinto_mundo import PoliticaInstintoMundo  # noqa: E402
 from digilab.frutas import (DonoInformante, DonoPedinte, JulgadorFruta, MotorFrutas, PoliticaInstintoFrutas,  # noqa: E402
                             _PoliticaComFrutas, genoma_frutas)
 from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho_no_ambiente,  # noqa: E402
@@ -499,9 +501,7 @@ FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # Vazio desde a BANCADA-LIGA-N6-N7: a memoria (CEREBRO-N6-N7, #167) e o pedido (N7-MUNDO, #166) estao na main. Fica a tabela para a
 # proxima peca de outro chat (o K4 e os canais, rodada 10).
 NOS_PENDENTES: dict = {
-    # W-BANCADA-MUNDO (rodada 17): o instinto do mundo (a fome urgente com comida vista ou cheiro, o tempo livre com o que ve, o modo
-    # sem_explorar) e os ganchos dos cerebros no mundo. Sem ele: o P0z, o cerebro "instinto" no mundo fisico e as runs com plano nele
-    "instinto_mundo": "a PoliticaInstintoMundo e os ganchos dos cerebros no mundo (TAREFA_V2_MUNDO_FISICO, secao 9, etapa 3, do B)",
+    # o "instinto_mundo" (W-BANCADA-MUNDO) saiu na W-LIGA-MUNDO: a PoliticaInstintoMundo e os ganchos dos cerebros estao na main (#232)
     # W-DOMINANCIA (rodada 18): o peso pela janela recente no sinal do cerebro A. Sem a chave: o braco P1-cw
     "pesos_janela": "a chave pesos_janela da ConfigConsequencia no cerebro A (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4, do B)",
 }
@@ -851,9 +851,15 @@ class Bancada:
             raise ValueError(f"braco {b.rotulo}: a memoria e o pedido sao das frutas; precisa de um mundo das frutas, nao {espec.mundo!r}")
         if b.instinto_mundo is not None and mundo.fisico is None:
             raise ValueError(f"braco {b.rotulo}: o instinto do mundo e do mundo fisico, nao {espec.mundo!r}")
-        if mundo.fisico is not None and espec.cerebro == "instinto":
-            # o instinto que ve o mundo (fome urgente, tempo livre com o que ve) e a PoliticaInstintoMundo do B; ligar aqui quando entrar
-            raise NotImplementedError(f"cerebro instinto no mundo fisico: {NOS_PENDENTES.get('instinto_mundo', 'ligar a etapa 3')}")
+        if mundo.fisico is not None and (espec.cerebro == "instinto" or b.instinto_mundo is not None):
+            # o instinto que ve o mundo (instinto_mundo, #232), com os pesos w_bola e w_fruta da bancada (as chaves de hoje desligadas: o
+            # mundo substitui o cenario do N4 e da A1). O P0z e ele no modo sem_explorar, em qualquer cerebro: os lobos nao tem o modo
+            if b.fonte != "nenhuma" or b.memoria is not None or b.pedido:
+                raise ValueError(f"o instinto do mundo so no P0 e no P0z (nao aprende, nao lembra, nao le o pedido): braco {b.rotulo}")
+            if b.instinto_mundo not in (None, "sem_explorar"):
+                raise ValueError(f"braco {b.rotulo}: modo do instinto do mundo {b.instinto_mundo!r}")
+            cb, cf = self.pesos_do_mundo()
+            return PoliticaDoBraco(PoliticaInstintoMundo(cfg, cb, cf, sem_explorar=b.instinto_mundo == "sem_explorar"), b)
         if espec.cerebro == "instinto":
             if b.fonte != "nenhuma" or b.memoria is not None or b.pedido:
                 raise ValueError(f"cerebro instinto so no P0 (nao aprende, nao lembra, nao le o pedido): braco {b.rotulo}")
@@ -865,12 +871,21 @@ class Bancada:
         b = self.braco(espec)       # a montagem (BANCADA-MONTAGEM); na simples, o proprio braco
         cl = self.cfg_lobos if b.fonte != "nenhuma" else replace(self.cfg_lobos, aprendizado_ligado=False)
         cl = cfg_lobos_do_braco(cl, b, espec.semente, self.montagem)
-        # LOBOS-MUNDO (#141): os lobos veem o mundo em que vivem; no padrao, nenhuma chave (as formas de antes)
+        # LOBOS-MUNDO (#141): os lobos veem o mundo em que vivem; no padrao, nenhuma chave (as formas de antes). No mundo fisico, a
+        # chave dele (MUNDO-CEREBROS, #232), com os pesos da bancada nas chaves de hoje desligadas
         cb = self.cfg_bola if mundo.bola is not None else None
         cf = self.cfg_frutas if mundo.frutas else None
+        cm = None
+        if mundo.fisico is not None:
+            (cb, cf), cm = self.pesos_do_mundo(), self.cfg_mundo_de(mundo)
         # canais (#169): o braco que os fixa (as ablacoes da K-7) manda; os outros seguem a config
         cc = self.cfg_consequencia if b.canais is None else replace(self.cfg_consequencia, canais_ligados=b.canais)
-        return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf), b, cc)
+        return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm), b, cc)
+
+    def pesos_do_mundo(self) -> tuple[ConfigBola, ConfigFrutas]:
+        """A ConfigBola e a ConfigFrutas da bancada com a chave desligada: no mundo fisico elas so dao os pesos w_bola e w_fruta ao instinto
+        do mundo e ao prior dos lobos (o MotorMundo exige as duas desligadas)."""
+        return replace(self.cfg_bola, ligada=False), replace(self.cfg_frutas, ligada=False)
 
     def fabrica_politica(self, espec: EspecVida):
         return lambda cfg=None: self.politica(espec, cfg)
@@ -1719,9 +1734,6 @@ def validar_config(cfg: dict) -> dict:
         queimadas = sorted(x for x in usadas if ini <= x <= fim)
         if queimadas:
             raise SementeSemPlano(f"sementes/bases {queimadas} na faixa queimada {ini}...{fim} ({motivo}): nao usar para nada")
-    if fisicos and "instinto_mundo" in NOS_PENDENTES and usadas - SEMENTES_TESTE:
-        # os bracos do plano (o P0 e o P1 no prior do instinto do mundo, o P0z) esperam a etapa 3: so as sementes dos testes ate la
-        raise NotImplementedError(f"run com plano no mundo fisico: {NOS_PENDENTES['instinto_mundo']}")
     fora = sorted((set(cfg.get("sementes", [])) | set(genomas)) - SEMENTES_TESTE)
     if fora:
         plano = cfg.get("plano")
