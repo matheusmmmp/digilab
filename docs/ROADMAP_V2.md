@@ -139,3 +139,8 @@ Rodada 12 (2026-10-06): a literatura entrou antes da validação (adendo 3 do ex
 - **Validação única (V1):** roda depois disso, com o sinal verde do coordenador.
 - **Leitura:** a passada de literatura P-7 fica com o chat C, antes da leitura.
 - **Comparação dos cérebros:** fica entre A e C. O B "não fecha" (decisão de 2026-10-06).
+
+Rodada 13 (2026-10-06): a validação única foi feita (PR #193; o controle "só cuidado" ficou como limitação declarada, PR #194).
+- **Comparação dos cérebros:** a K3/V2 fica entre A e C, porque o B não fecha (`docs/TAREFA_V2_COMPARACAO_A_C.md`, chat D).
+- **Leitura:** a da validação única fica com o chat C (`docs/TAREFA_V2_LEITURA_VALIDACAO.md`).
+- **Depois:** a leitura consolidada da fase 1 e o M6.
