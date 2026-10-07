@@ -1,6 +1,7 @@
 # Plano de análise — V2: o P1 com o corpo e os drives novos
 
-Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. Tarefa: `docs/TAREFA_V2_CORPO_DRIVES.md` (#209), com as CD-1 a
+Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **PCD-1 a PCD-7 DECIDIDAS pelo Matheus em 2026-10-07, todas
+pela recomendação** (seção 12). Tarefa: `docs/TAREFA_V2_CORPO_DRIVES.md` (#209), com as CD-1 a
 CD-10 DECIDIDAS (#210). É o plano que a seção 13 da tarefa pede.
 
 **Regras deste plano:**
@@ -367,6 +368,8 @@ colisão das unidades passa a cobrir o prefixo `"corpo"`.
 - **A recusa:** a run se recusa a rodar se a pasta de saída já existe.
 
 ## 12. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-07: PCD-1 a PCD-7, todas como recomendado** (a coluna "recomendação" é o que vale).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
