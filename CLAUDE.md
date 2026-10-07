@@ -1162,7 +1162,8 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   Separa herdado, vivido e aprendido de outros. Primeiro passo possível: pet sintético informante no N5. Não autoriza implementação.
 - **DECIDIDO: o pet do produto aprende sozinho, sem elogiar e repreender** (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, Matheus,
   2026-10-07; era o R8.1): os botões saem dos pets novos (v1–v10 iguais); o pet aprende pela consequência, como o reforço químico do
-  Creatures 3; acariciar fica, o tapa não entra. Antes de ligar: drives que recompensem brincar e o contato (senão o pet fica parado).
+  Creatures 3; acariciar fica e o tapa entra como
+  desaprovação, os dois como estímulos no corpo. Antes de ligar: drives que recompensem brincar e o contato (senão o pet fica parado).
   O plano do porte (#201) precisa inverter a seção 1.2 e a D-W1.
 - **IDEIA: aura do herói** (`docs/futuro/aura_do_heroi.md`, Matheus, 2026-10-03): retrato da lista de gambits de um pet que lutou
   muito, vendido na loja como item de 2 lutas que empresta esse conhecimento a outro pet. Depende de loja e moeda (ainda ideia);
