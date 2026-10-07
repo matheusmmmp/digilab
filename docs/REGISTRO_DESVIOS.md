@@ -2905,3 +2905,17 @@ nova (os números são os de `artifacts_v2_validacao_unica/`, conferidos no comm
   o PDF do editor com 403). Fica só pelo resumo.
 - **A worktree desta tarefa só tem `docs/`** (checkout parcial, configurado só nela): o disco D: estava cheio (cerca de 200 MB livres) e o
   checkout completo falhou. O branch e o PR não mudam por isso; os números foram lidos pelo `git show` dos artefatos versionados.
+
+## 2026-10-07 — Leitura da validação (V-1 a V-6) aprovada; escolha do cérebro da web (M6) adiada para depois do descritivo do platô
+
+- **V-1 a V-6** de `docs/LEITURA_V2_VALIDACAO_UNICA.md` foram aprovadas como recomendado:
+  - **V-1:** as predições 1 e 2 são "confirma na direção, abaixo da margem de relevância";
+  - **V-2:** o controle de cuidado em malha fechada vira pergunta nova;
+  - **V-3:** o descritivo do platô de 1/3 (Q-1);
+  - **V-4:** Q-1 primeiro, depois Q-3 e o controle;
+  - **V-5:** o L-1 fecha como "sem acesso aberto; só resumo";
+  - **V-6:** a leitura consolidada leva só o que os dados sustentam.
+- **A comparação A × C** (`docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`, PR #197) recomenda o C pela ordem do M6. O desempenho empata, e a
+  legibilidade é do C. Mas no P3, o braço do produto, o C generaliza a bronca e o A aprende qual fruta evitar.
+- **Decisão do Matheus (2026-10-07):** o M6 só fecha depois do descritivo do platô (`docs/TAREFA_V2_DESCRITIVO_PLATO.md`). Se os dois
+  cérebros só apagam a preferência inata, a vantagem do C em legibilidade pesa menos que a fraqueza dele no P3.

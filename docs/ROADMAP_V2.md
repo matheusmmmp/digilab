@@ -144,3 +144,7 @@ Rodada 13 (2026-10-06): a validação única foi feita (PR #193; o controle "só
 - **Comparação dos cérebros:** a K3/V2 fica entre A e C, porque o B não fecha (`docs/TAREFA_V2_COMPARACAO_A_C.md`, chat D).
 - **Leitura:** a da validação única fica com o chat C (`docs/TAREFA_V2_LEITURA_VALIDACAO.md`).
 - **Depois:** a leitura consolidada da fase 1 e o M6.
+
+Rodada 14 (2026-10-07): a comparação A × C (#197) e a leitura da validação (#196) entraram.
+- **M6 adiado:** espera o descritivo do platô de 1/3 (Q-1, `docs/TAREFA_V2_DESCRITIVO_PLATO.md`, chat D).
+- **Depois:** o M6, a leitura consolidada da fase 1 e as perguntas novas (Q-3 e o controle de cuidado em malha fechada).
