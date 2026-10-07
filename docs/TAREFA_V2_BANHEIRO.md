@@ -1,6 +1,7 @@
 # Tarefa — V2: o banheiro, a necessidade no lugar certo e o limpador (W-TAREFA-BANHEIRO)
 
-Status: **PROPOSTO**, escrito pelo coordenador em 2026-10-07 a pedido do Matheus. **Só papel.** O código vem em etapas depois do mundo
+Status: **BN-1 a BN-6 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 10). Os números seguem PROPOSTOS. Escrito
+pelo coordenador em 2026-10-07 a pedido do Matheus. **Só papel.** O código vem em etapas depois do mundo
 físico e do corpo (seção 9). Os números são **PROPOSTOS, sem fonte**.
 
 **O pedido do Matheus (2026-10-07):**
@@ -210,6 +211,9 @@ consequência (P1, montagem completa):
 Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 
 ## 10. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-07: BN-1 a BN-6, todas como recomendado.** Pela BN-6, o carinho ganha o componente de **conforto**: um químico
+novo que cai devagar e sobe com o carinho, com receptor (PROPOSTO). O B o põe no `corpo.py` junto com a vontade, na etapa 2.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
