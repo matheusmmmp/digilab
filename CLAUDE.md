@@ -2517,3 +2517,19 @@ web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as falhas altas:** fora da grade, a sub-chave das etapas seguintes e o corpo com a chave desligada;
   - **o isolamento:** o AST sem motor e sem rng;
   - **a paridade:** o gabarito reproduz.
+
+## V2, W-MEDIDAS-R17 — as medidas do mundo físico, do corpo e do banheiro (2026-10-07, rodada 17, `docs/V2_RODADA_17.md`) — TESTADAS EM DADOS SINTÉTICOS
+
+Funções puras no fim de `digilab/metrics.py`, sobre listas simples de eventos. O motor do mundo e o corpo novo ainda não estão na `main`,
+então o docstring de cada função diz o que o motor precisa fornecer. Nenhuma run; nada mais mudou. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Comuns:** `janela_dias(primeiro, ultimo)` e `JANELA_8_14` (ticks [10080, 20160)); posições em subunidades (`SUBUNIDADES_POR_CELULA` 16).
+- **Mundo físico** (`PLANO_ANALISE_V2_MUNDO_FISICO`, seção 5.1 e adendo 1, A1.8):
+  - `deficit_fome_energia` (o `D_FE`, entrada (tick, fome, energia) por decisão);
+  - `visitas_manchas` (entrada: a trajetória (tick, x, y), uma por decisão, e os troncos), com `custo_viagem` e `taxa_recente` (as quedas);
+  - `inclinacao_permanencia` (G-PERM sobre o custo, G-OPORT sobre a taxa recente), `taxa_no_abandono` (a medida 2), `permanencia_media`
+    e `contraste_distancia` (G-DIST).
+- **Corpo** (`PLANO_ANALISE_V2_CORPO_DRIVES`, seção 5 e adendo 1): `tempo_livre_be` (`BE` e `OC`), `cuidado_preservado`, `drives_novos`,
+  `variedade_recente` (A1.2), `p_comer_so_fruta` e `inclinacao_generalizacao` (A1.1).
+- **Banheiro** (`PLANO_ANALISE_V2_BANHEIRO`, seções 4 e 8): `alivios_por_dia` (a fração no banheiro e os acidentes), `dia_do_criterio`
+  (com censura e T*), `alivios_ate_criterio` e `curva_sobrevivencia` (Kaplan–Meier e RMST).
+- **Testes:** `tests/test_medidas_r17.py`, 19, cada um com a resposta conhecida.
