@@ -2601,3 +2601,42 @@ então o docstring de cada função diz o que o motor precisa fornecer. Nenhuma 
 - **Banheiro** (`PLANO_ANALISE_V2_BANHEIRO`, seções 4 e 8): `alivios_por_dia` (a fração no banheiro e os acidentes), `dia_do_criterio`
   (com censura e T*), `alivios_ate_criterio` e `curva_sobrevivencia` (Kaplan–Meier e RMST).
 - **Testes:** `tests/test_medidas_r17.py`, 19, cada um com a resposta conhecida.
+
+## V2, MUNDO-CEREBROS — o instinto do mundo e os ganchos nos cérebros (2026-10-07, `docs/TAREFA_V2_MUNDO_FISICO.md`, etapa 3) — GATES PASSAM
+
+Rodada 17, etapa 3 do mundo físico (B). Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/instinto_mundo.py` (novo),
+`digilab/policies/lobos.py` (atrás de `cfg_mundo`) e `digilab/motivo.py`, mais `experiments/analisar_empates_cheiro.py`. `mundo.py`,
+`engine.py`, a bancada, os cérebros B e C e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **`PoliticaInstintoMundo`** (o P0 do plano), igual ao instinto de hoje fora de três pontos:
+  - **a fome urgente** (`pedido_necessidade`): com a fome abaixo de 0,25 e para onde ir comer (comida boa vista, ou cheiro com direção),
+    come; sem isso, chama. A higiene baixa continua chamando;
+  - **o tempo livre:** `comer` ganha `w_fruta` com comida boa vista e `brincar` ganha `w_bola` com a bola vista (os `w` do N4 e da A1, a
+    mesma chamada de `rng.choices`, as regras `fruta_no_cenario` e `bola_no_cenario`);
+  - **`sem_explorar`** (o P0z): o peso do explorar vai para o ocioso.
+  - Sem `obs.mundo`, é o `PoliticaInstinto` byte a byte.
+- **A regra que liga a percepção às entradas do cérebro A** (`instinto_mundo.entradas_mundo`): `bola` = 1 com a bola vista; `fruta` = 1
+  com comida boa vista (ração ou fruta madura). Com elas, o prior do A repete o instinto do mundo.
+- **O cérebro A no mundo:** `PoliticaLobos(cfg, cfg_lobos, cfg_mundo=CONFIG_MUNDO_LIGADA)`. Sem a chave, os lobos de hoje.
+  - A sonda roda o `PoliticaInstintoMundo`; o prior ganha `comer` na linha `pedido_necessidade`. 10 regras × 7 ações × 12 entradas, sem
+    as peças das frutas.
+  - **`escolher_alvo`** devolve None (o padrão do motor) e anota os candidatos no motivo. O alvo aprendido é de adendo.
+  - **`consequencia_mundo`:** na fonte consequência, o crédito de explorar, comer e brincar espera o gancho. A E2 só vale no comer que
+    comeu fruta; o resto usa o sinal do N3. Com canais e fruta que mexe no humor, falha alto (rota de adendo).
+- **`PoliticaComMotivo`** repassa os dois ganchos (só se a política os tem), pede o termo do mundo ao instinto do mundo e recusa o
+  `sem_explorar`.
+- **Gates** (`tests/test_mundo_cerebros.py`):
+  - os lobos com o mundo e o aprendizado desligado = o instinto do mundo byte a byte (4 donos × 3 lugares × 2 sementes; decisão a
+    decisão em 3000 observações); o P1 com ganho 0 = o P0;
+  - G1 do instinto (P0, P0z) e dos lobos (P0, P1 com e sem canais, P3), estado interno incluído;
+  - a fome urgente, o tempo livre e o `sem_explorar` em casos com resposta conhecida;
+  - o crédito no gancho, conta exata (E2 no comer de fruta; o f_S da transição no resto);
+  - a `PoliticaComMotivo` não muda a vida;
+  - G2 (chave desligada = as vidas de hoje): os gabaritos de sempre, na suíte.
+- **Os empates do cheiro** (`python experiments/analisar_empates_cheiro.py` → `artifacts_v2_mundo_cerebros/empates_cheiro.json`; só
+  geometria, mais as vidas do P0 nas sementes dos testes):
+  - com a fruta fora da visão e dentro do raio do cheiro, o máximo empata em 79% das posições (a ração, 58%);
+  - a ordem fixa erra o rumo em 27,8° em média e puxa sempre para o sentido horário (−18°); o comer pelo cheiro gasta 0,84 decisão a mais
+    que a reta;
+  - desempatar pelo cheiro a 2 células: 15,4° e 0,25 decisão; o limite de qualquer desempate (o rumo verdadeiro): 11,3° e 0,17;
+  - nas vidas, 41% das decisões com direção de cheiro saem de um empate, e o desempate a 2 células mudaria 16%.
+  - A recomendação (trocar no motor, A, antes da calibração do mundo) está no PR.

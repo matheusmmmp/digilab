@@ -3323,3 +3323,57 @@ As escolhas abaixo são de formato e de borda; nenhuma muda uma definição dos 
 - **O dia do critério** generaliza o horizonte como τ = D − seguidos + 2, que é o D − 1 do plano com 3 dias seguidos.
 - **Fica de fora, por não ser desta tarefa:** as faixas 37101…38505 e o prefixo `"banheiro"` na bancada (seção 10 do plano do banheiro, a
   etapa 5 da tarefa) e os descritivos da seção 5.3 do mundo e 5.4 do corpo, que a tarefa não listou.
+
+## 2026-10-07 — MUNDO-CEREBROS (mundo físico, etapa 3, worker B): o instinto do mundo, os ganchos nos lobos e os empates do cheiro
+
+Tarefa `docs/TAREFA_V2_MUNDO_FISICO.md`, seções 8 e 9; plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 3. Interpretações:
+- **A fome urgente vai "à comida vista ou ao cheiro":** lida como "há para onde ir comer", o mesmo que o motor ter um alvo padrão de
+  `comer`. Vale com comida boa vista, ou com cheiro **e direção**.
+  - Com cheiro > 0, sem direção e nada visto (um platô do cheiro inteiro), o padrão do motor não tem alvo. Pela letra (`cheiro > 0`), o pet
+    ficaria parado sem comer e sem chamar. Pela leitura adotada, chama.
+  - Nas vidas do P0 com as sementes dos testes, esse caso aparece em 133 de 16128 decisões e em 31 de 1185 decisões de fome urgente
+    acordado (`artifacts_v2_mundo_cerebros/empates_cheiro.json`, `vidas`).
+- **Fome e higiene abaixo de 0,25 juntas, com para onde ir:** o pet come. A fome ele resolve sozinho; a higiene, só chamando. A tarefa não
+  fala do caso.
+- **"Comida boa"** é ração ou fruta madura (nem a podre nem a bola), na fome urgente e no tempo livre.
+- **Os nomes das regras:** a fome urgente continua `pedido_necessidade`, como a tarefa a chama. O tempo livre com o que vê usa
+  `bola_no_cenario` e `fruta_no_cenario`, para o cérebro A usar as mesmas linhas do prior.
+- **A regra que liga a percepção às entradas do cérebro A** (`instinto_mundo.entradas_mundo`):
+  - `bola` = 1 com a bola vista;
+  - `fruta` = 1 com comida boa vista, **ração incluída**. Os dois são binários (o "w × 1" da tarefa).
+  - O nome da entrada ficou `fruta`, e o fator `fruta` da expressão diz "fruta à vista", o que é impreciso para a ração. O mundo ainda
+    não está no jogo; a expressão do mundo fica para quando estiver.
+- **O `sem_explorar` (P0z):** `explorar` sai da lista de candidatos, e o peso dele (2 + 2 × energia) vai para `ocioso`. Com peso 0 ele
+  seguiria candidato.
+- **Sem percepção** (`obs.mundo` None: um motor sem o mundo, ou a sonda de uma medida), o instinto do mundo é o `PoliticaInstinto`, e as
+  entradas do A são 0. Não é erro: é "nada visto".
+- **O cérebro A no mundo** (`PoliticaLobos(..., cfg_mundo=)`) não tem as peças que dependem do cenário das frutas: a sub-decisão da fruta,
+  a presença, a informação (N5), a memória (N6) e o pedido (N7).
+  - O motor do mundo não chama o `escolher_fruta`.
+  - Com a montagem completa, a memória (`memoria_ganho` 512 do ponto da validação) não existe no mundo, como já não existia no `padrao`.
+  - No prior, a linha `pedido_necessidade` ganha `comer` com viés 1, porque o único candidato da regra pode ser comer.
+  - Com `cfg_mundo` ligada, `cfg_bola` e `cfg_frutas` só dão os pesos e precisam estar desligadas, como no `MotorMundo`.
+- **O `escolher_alvo` dos lobos devolve None,** o padrão do motor. O P1 do plano aprende quando, não para onde (seção 3 do plano).
+  - O gancho anota os candidatos e o `u` no motivo; o `consequencia_mundo` anota o alvo, se chegou e o que comeu.
+  - Um alvo aprendido pede desenho próprio (pesos por tipo de alvo, prior igual ao padrão do motor) e entra por adendo.
+- **A consequência no mundo:** nas decisões de explorar, comer e brincar, o `observar_consequencia` deixa o crédito pendente e o
+  `consequencia_mundo` o credita.
+  - A E2 (o humor no sinal) vale só no **comer que comeu uma fruta**, como no N4.
+  - O "achou e comeu" do explorar usa o sinal do N3: o explorar tem +0,01 de humor próprio, que entraria no sinal. O plano diz que o sinal
+    do P1 não vê o humor.
+  - Com as frutas iguais do plano (PMF-7), a E2 dá o mesmo número do N3.
+  - O `fruta_comida` vem antes do gancho e não credita nada no mundo (sem pendente da E2), então não há crédito em dobro.
+- **Canais com fruta que mexe no humor, no mundo:** falha alto. O canal do humor vai aos pesos que leem a fruta, e o cérebro A do mundo não
+  os tem. Com as frutas iguais do plano, o canal do humor é sempre 0 e nada falha. A rota no mundo, se um dia houver fruta com efeito, é
+  decisão de adendo.
+- **Os cérebros B e C** não ganharam os ganchos: pelo plano, só o A vai para o mundo. Num motor do mundo eles ficam cegos à percepção,
+  como os lobos sem `cfg_mundo` (o G1 do `tests/test_mundo.py` usa os lobos cegos); não há trava.
+- **A `PoliticaComMotivo`:**
+  - repassa `escolher_alvo` e `consequencia_mundo`, só quando a política embrulhada os tem;
+  - recusa o `sem_explorar` (o P0z não é um pet do jogo);
+  - pede o termo do mundo ao instinto do mundo (`termo_mundo`).
+  - No motivo do instinto, `pedido_necessidade` com `comer` tem só o fator `fome`.
+  - Não repassa o `ultima_regra`: com ela por cima, o campo `regra` das `decisoes_mundo` sai None, como o `regra` das ofertas das frutas
+    (a mesma convenção do `experiments/run_revisao_aprendiz.py`). A vida é a mesma; o teste confere sem esse campo.
+- **Não mudou:** o padrão do `mundo.fabricas_mundo` (arquivo do A) continua o instinto da bola, cego à percepção. A bancada (etapa 4, D)
+  passa o `PoliticaInstintoMundo` e os lobos com `cfg_mundo`.

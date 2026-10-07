@@ -173,7 +173,11 @@ def motivo_instinto(regra: str, obs: Observacao, acao: AcaoPet, tick: int, ref_u
         for p in pesos.values():
             total += p
         return Motivo("vida", acao.value, fatores, (), pesos[acao] / total, False, tick=tick)
-    if regra == "pedido_necessidade":
+    if regra == "pedido_necessidade" and acao is AcaoPet.COMER:
+        # mundo fisico (instinto_mundo): com a fome urgente e para onde ir, o pet come; a causa e a fome (a higiene baixa nao o fez comer)
+        fatores = ("fome",)
+        intensidade = 1.0
+    elif regra == "pedido_necessidade":
         fatores = tuple(n for n, v in (("fome", fome), ("higiene", higiene)) if v < 0.25)
         intensidade = 1.0
     elif regra == "abandono":
@@ -336,6 +340,14 @@ class PoliticaComMotivo:
             self.escolher_fruta = self._escolher_fruta
         if hasattr(interna, "fruta_comida"):
             self.fruta_comida = interna.fruta_comida
+        # ganchos do MotorMundo (MUNDO-CEREBROS): o mesmo regime, so se a politica embrulhada os tem (sem eles, o padrao do motor)
+        if hasattr(interna, "escolher_alvo"):
+            self.escolher_alvo = interna.escolher_alvo
+        if hasattr(interna, "consequencia_mundo"):
+            self.consequencia_mundo = interna.consequencia_mundo
+        if getattr(interna, "sem_explorar", False):
+            # o P0z (plano do mundo, secao 3) e controle da premissa, nao um pet: o motivo do tempo livre usa os pesos literais
+            raise ValueError("PoliticaComMotivo nao cobre o instinto do mundo em sem_explorar (o P0z nao e um pet do jogo)")
 
     def _indice_do_ordinal(self, k: int) -> int | None:
         return None if self._indices_dono is None else self._indices_dono[k - 1]
@@ -352,7 +364,10 @@ class PoliticaComMotivo:
         if isinstance(self.interna, PoliticaInstinto):
             regra = self.interna.ultima_regra
             termo = 0.0
-            if regra == "bola_no_cenario":
+            termo_de = getattr(self.interna, "termo_mundo", None)    # o instinto do mundo fisico: o termo vem da percepcao nova
+            if termo_de is not None:
+                termo = termo_de(regra, obs)
+            elif regra == "bola_no_cenario":
                 termo = self.interna.cb.w_bola * obs.bola
             elif regra == "fruta_no_cenario":
                 termo = self.interna.cf.w_fruta * obs.fruta

@@ -95,3 +95,5 @@ artifacts_v2_comparacao_cerebros/**/vidas/
 # V2, validacao unica: as vidas e os estados internos sao regeneraveis da config e do codigo (medidas, contrastes e resumo ficam)
 !artifacts_v2_validacao_unica/
 artifacts_v2_validacao_unica/**/vidas/
+# V2, MUNDO-CEREBROS: a revisao dos empates do cheiro (so geometria e as vidas do P0 nas sementes dos testes)
+!artifacts_v2_mundo_cerebros/
