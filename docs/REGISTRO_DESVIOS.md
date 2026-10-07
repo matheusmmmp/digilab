@@ -3652,3 +3652,33 @@ Etapa 5 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md` (seções 9 a 11). Int
 - **Para o D:** a bancada não precisa de nada novo para o P1 com o corpo. A `PoliticaDoBraco` já passa o `f_S` (conferido), e o
   `__getattr__` dela leva o gancho ao cérebro. A conferência da dominância refaz o sinal pelo Estado: com os drives de hoje sai igual, mas com
   os drives novos ela tem de usar as parcelas que o cérebro guarda no motivo (`sinal_corpo.drives`).
+
+## 2026-10-07 — CORPO-GESTOS (worker A): a etapa 6 do corpo, a parte do motor
+
+- **Atrás das sub-chaves, com um corpo de teste.** A `ConfigCorpo` da `main` recusa `drives_novos` e `gestos` até o PR do B. O Gerente
+  autorizou entregar o lado do motor atrás da chave. Os testes trocam o `Corpo` por uma subclasse que implementa o contrato (só anota as
+  chamadas; o tapa não mexe em drive) e põem as sub-chaves por fora da validação, com `object.__setattr__`. Quando o corpo do B entrar,
+  os testes com a química de verdade são do B.
+- **O contrato dos ganchos** foi combinado com o B antes do código, por mensagem: os nomes `acao_dono(TAPA)`, `atividade`,
+  `estimulo_novidade`, `de_estado(..., com_mundo)` e `janela_novidade`, e as chaves dos receptores novos com os nomes da `PercepcaoCorpo`.
+- **O tapa e o carinho com `gestos` não passam pela cadeia de hoje.** O tapa não existe no `state.aplicar_acao_usuario`, e o carinho com
+  `gestos` não pode chegar ao `receber_acao_dono`. O `MotorCorpo` aplica os dois sozinho, refazendo o que as classes do meio fazem com
+  uma ação do dono:
+  - a janela da educação (só o `_expirar`: educação e lesões estão desligadas com o corpo);
+  - o índice do evento e o vínculo do `MotorPersonalidade`;
+  - o contato (`tick_ultimo_cuidado`, `total_cuidados`);
+  - o repasse ao cérebro, só do tapa.
+  - O teste confere que o índice anda um por evento do log e que o replay refaz o vínculo.
+- **O vínculo recebe o tapa como uma ação sem coerência.** O vínculo de hoje só pesa elogio e bronca na coerência. O tapa não entra nela,
+  e o carinho conta como sempre para o desejo. O vínculo da base nova (S-4) fica para quando ela entrar.
+- **A novidade.**
+  - **O que conta como visto:** o que o pet vê ao decidir e o que vê depois de cada decisão com alvo, no mesmo tick. O que ele já via ao
+    decidir não conta como achado do explorar.
+  - **O id:** a bola é o id 0, então a bola vista de novo depois da janela conta como novidade.
+  - **"Nas últimas 1440 ticks":** foi lido como `tick − visto < janela`; com `≥ janela`, o objeto é novo de novo.
+  - **O registro** só existe com `drives_novos` e o mundo físico.
+- **A atividade no mundo vem na consequência dele.** É o momento antes do `obs_depois`, para o `consequencia_mundo` já ver o tédio
+  reduzido. Fora do mundo, ela vem depois da bola e antes do `consequencia_corpo`.
+- **O "nada" do modo sem tapa gasta o orçamento.** O plano diz "o resto do dono e o orçamento ficam iguais". A bronca vira um
+  `SemGesto`, que conta no orçamento e não chega ao motor (como o `sem_ensino` ao vivo da bancada). Para isso, os canais e o
+  `simular_vida_gestos` são novos; o `treino.py` (com sha conferido) não mudou.
