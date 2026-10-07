@@ -50,7 +50,7 @@ def test_config_corpo_desligada_por_padrao_e_registrada():
     assert all(status in ("PROPOSTO", "DECIDIDO") for status, _ in PARAMETROS_CORPO.values())
 
 
-@pytest.mark.parametrize("chaves", [{"digestao": True}, {"digestao": True, "vida": True},
+@pytest.mark.parametrize("chaves", [{"digestao": True, "vida": True},
                                      {"digestao": True, "vida": True, "drives_novos": True},
                                      {"digestao": True, "vida": True, "drives_novos": True, "gestos": True}])
 def test_subchaves_das_proximas_etapas_falham_alto(chaves):
@@ -231,16 +231,22 @@ def test_um_tick_igual_ao_de_hoje_na_grade():
 
 # ------------------------------------------------------------------ G-HOJE (a): malha aberta
 
-def _malha_aberta(dono: str, semente: int) -> dict:
-    """Uma vida de hoje rejogada com as acoes do pet e do dono forcadas: o Estado de hoje (floats) e o corpo (inteiros) lado a lado."""
+def _malha_aberta(dono: str, semente: int, cc: ConfigCorpo = CC, conferir: bool = True) -> dict:
+    """Uma vida de hoje rejogada com as acoes do pet e do dono forcadas: o Estado de hoje (floats) e o corpo (inteiros) lado a lado.
+    Com a digestao na taxa C (etapa 3), o estomago fica vazio depois de toda operacao e a comida se conserva (digerida + descartada)."""
     motor = simular_vida(dono, criar_dono(dono), PoliticaInstinto(CFG), semente, DIAS, ORCAMENTO).motor
     acoes_pet = dict(motor._acoes_pet)
     rng = random.Random(semente)
     e = Estado()
-    corpo = Corpo.de_estado(e, CFG, CC)
+    corpo = Corpo.de_estado(e, CFG, cc)
     t = corpo.t
     erro = {d: 0.0 for d in DRIVES + ("saude",)}
     viradas = []
+    comida = 0
+
+    def estomago() -> None:
+        if cc.digestao and cc.taxa_digestao >= C:
+            assert corpo.q["alimento"] == 0, "na taxa C o estomago esvazia na hora"
 
     def confere(no_tick: bool) -> None:
         d = corpo.drives()
@@ -256,36 +262,47 @@ def _malha_aberta(dono: str, semente: int) -> dict:
                     a = acoes_pet[e.tick]
                     e = efeito_da_acao_do_pet(e, a, CFG, CFG.intervalo_decisao_ticks)
                     corpo.acao_pet(a)
+                    comida += -t.pet[a].get("fome", 0) if a is AcaoPet.COMER else 0
                     confere(False)
+                    estomago()
                 antes = e
                 e = avancar_um_tick(e, CFG, rng)
                 corpo.passo(antes)
                 confere(True)
-                for drive in DRIVES:
+                estomago()
+                for drive in DRIVES if conferir else ():
                     assert abs(corpo.drives()[drive] - getattr(e, drive)) <= TOL, (dono, semente, e.tick, drive)
                 limite = TOL + len(viradas) * (t.dano_privacao - t.dano_cura) / C
-                assert abs(corpo.drives()["saude"] - e.saude) <= limite, (dono, semente, e.tick)
+                assert not conferir or abs(corpo.drives()["saude"] - e.saude) <= limite, (dono, semente, e.tick)
         elif ev.tipo == "acao_usuario":
             a = AcaoUsuario(ev.valor)
             e = aplicar_acao_usuario(e, a, CFG, rng)
             corpo.acao_dono(a)
+            comida += -t.dono[a]["fome"] if a is AcaoUsuario.ALIMENTAR else 0
             confere(False)
+            estomago()
         else:
             raise ValueError(ev.tipo)
     assert e == motor._estado, "a malha aberta tem de reproduzir o Estado de hoje"
     assert rng.getstate() == motor._rng_ambiente.getstate(), "o corpo nao sorteia: a rng de ambiente e so a de hoje"
-    return {"erro": erro, "viradas": viradas, "limiar": t.limiar_privacao}
+    if cc.digestao:
+        assert corpo.digerido_total + corpo.descartado_total + corpo.q["alimento"] == comida, "a comida se conserva"
+    return {"erro": erro, "viradas": viradas, "limiar": t.limiar_privacao, "corpo": corpo, "comida": comida}
 
 
 @pytest.mark.parametrize("dono", DONOS)
 def test_g_hoje_a_malha_aberta(dono):
     for semente in SEMENTES:
         r = _malha_aberta(dono, semente)
-        assert all(r["erro"][d] <= TOL for d in DRIVES), r["erro"]
-        # toda virada do receptor de privacao e um quimico exatamente no limiar (o 0,15 de hoje): a grade inteira cai em cima dele, o
-        # float de hoje passa um pouco abaixo (secao 3)
-        for _, q in r["viradas"]:
-            assert any(q[n] == r["limiar"] for n in corpo_mod.QUIMICOS_DA_PRIVACAO), q
+        _confere_g_hoje(r)
+
+
+def _confere_g_hoje(r: dict) -> None:
+    assert all(r["erro"][d] <= TOL for d in DRIVES), r["erro"]
+    # toda virada do receptor de privacao e um quimico exatamente no limiar (o 0,15 de hoje): a grade inteira cai em cima dele, o
+    # float de hoje passa um pouco abaixo (secao 3)
+    for _, q in r["viradas"]:
+        assert any(q[n] == r["limiar"] for n in corpo_mod.QUIMICOS_DA_PRIVACAO), q
 
 
 def test_g_hoje_a_tem_viradas_so_onde_ha_privacao():
