@@ -68,7 +68,9 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
         # P2D-P3I, parte D: o momento e a interpretacao do adendo 3 (tests/test_bancada_p2d_p3i.py)
         "P2d": ("informacao", "adendo-3"), "P3i": ("dono", "adendo-3"),
         # W-BANCADA-MUNDO: o P0 sem explorar do mundo fisico, pendente do instinto do mundo (tests/test_bancada_mundo_fisico.py)
-        "P0z": ("nenhuma", "mundo-fisico")}
+        "P0z": ("nenhuma", "mundo-fisico"),
+        # W-DOMINANCIA: o P1 com o peso pela janela recente, pendente da chave pesos_janela (tests/test_dominancia.py)
+        "P1-cw": ("consequencia", "corpo-A2.4")}
     assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
 

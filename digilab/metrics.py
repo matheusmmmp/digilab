@@ -1436,3 +1436,103 @@ def curva_sobrevivencia(criterios: Sequence[Mapping]) -> dict:
     mediana = next((t for t, v in enumerate(s) if v <= 0.5), None)
     return {"n": n, "tau": tau, "s": s, "mediana": mediana, "fracao_censurada": sum(1 for c in criterios if c["censurado"]) / n,
             "rmst": sum(s[:tau])}
+
+
+# ------------------------------------------------------------ V2, adendo 2 do plano do corpo: a dominancia de um drive no sinal
+# (PLANO_ANALISE_V2_CORPO_DRIVES, A2.2 e A2.3; decisao D-4). So descritiva: fora do Holm e sem gate; o "domina" e regra de leitura.
+
+LIMIAR_LIDERA = 0.80             # A2.3: o drive lidera a decisao com p_d >= 0,80 (os outros juntos dao no maximo um quarto do que ele da)
+LIMIAR_DOMINA = 0.50             # A2.3: domina com o limite inferior do IC95 de f_d acima de 0,50
+
+
+def contribuicao_drives(faltas_antes: Mapping[str, int], faltas_depois: Mapping[str, int], pesos: Mapping[str, int] | None = None,
+                        escala: int = 1024) -> dict[str, int]:
+    """A2.2: c_d = w_d * (falta_d,antes^2 - falta_d,depois^2) por drive, em inteiros. As faltas sao inteiros na escala S (a mesma conta
+    do sinal e dos canais: falta = S - arred(h * S)); `pesos` e o w_d na escala S (S = peso 1, o de hoje; sem `pesos`, todos 1), e
+    c_d = div_arred(w_d * delta_d, S). Os mesmos drives nos dois lados, ou falha alto."""
+    if set(faltas_antes) != set(faltas_depois):
+        raise ValueError(f"drives diferentes antes e depois: {sorted(faltas_antes)} x {sorted(faltas_depois)}")
+    pesos = pesos or {}
+    out = {}
+    for d, a in faltas_antes.items():
+        b = faltas_depois[d]
+        if not (type(a) is int and type(b) is int) or not (0 <= a <= escala and 0 <= b <= escala):
+            raise ValueError(f"falta de {d!r} fora de inteiros em [0, {escala}]: {a!r}, {b!r}")
+        w = pesos.get(d, escala)
+        if type(w) is not int or w < 0:
+            raise ValueError(f"peso de {d!r} precisa ser inteiro >= 0: {w!r}")
+        delta = a * a - b * b
+        out[d] = delta if w == escala else _div_arred(w * delta, escala)
+    return out
+
+
+def _div_arred(n: int, d: int) -> int:
+    q, r = divmod(abs(n), d)
+    if 2 * r >= d:
+        q += 1
+    return q if n >= 0 else -q
+
+
+def parcelas_drives(c: Mapping[str, int]) -> dict[str, float] | None:
+    """A2.2: p_d = |c_d| / soma_e |c_e| (entre 0 e 1, soma 1). None quando nenhum drive mexeu (soma dos |c| = 0)."""
+    total = sum(abs(v) for v in c.values())
+    if total == 0:
+        return None
+    return {d: abs(v) / total for d, v in c.items()}
+
+
+def dominancia_decisoes(decisoes: Sequence[tuple[int, str, Mapping[str, int]]], janela: tuple[int, int] = JANELA_8_14,
+                        limiar: float = LIMIAR_LIDERA, regras_livres: Sequence[str] = REGRAS_TEMPO_LIVRE) -> dict:
+    """A2.2 e A2.3, numa vida: `decisoes` = (tick, regra do instinto, {drive: c_d}) por decisao, as contribuicoes com sinal. Contam as
+    decisoes da janela COM SINAL (D_antes != D_depois: soma dos c_d != 0), separadas em tempo livre (regras tempo_livre e
+    bola_no_cenario) e o resto. Por tipo: quantas, quantas cada drive lidera (p_d >= limiar), a fracao f_d = lideradas / n (None sem
+    decisao), as sem lider, a parcela agregada soma|c_d| / soma soma|c| e a contribuicao com sinal soma c_d. As contagens vao juntas
+    para a unidade somar as celulas (f_d da unidade = soma das lideradas / soma de n)."""
+    if limiar <= 0.5:
+        raise ValueError("o limiar de liderar precisa passar de 0,5 (um lider por decisao)")
+    ini, fim = _checar_janela(janela)
+    drives = sorted({d for _, _, c in decisoes for d in c})
+    tipos = {"tempo_livre": [], "resto": []}
+    for t, regra, c in decisoes:
+        if ini <= t < fim and sum(c.values()) != 0:
+            tipos["tempo_livre" if regra in regras_livres else "resto"].append(c)
+    out = {}
+    for tipo, cs in tipos.items():
+        lideradas = {d: 0 for d in drives}
+        abs_d = {d: 0 for d in drives}
+        sinal_d = {d: 0 for d in drives}
+        sem_lider = 0
+        for c in cs:
+            p = parcelas_drives(c)
+            lider = [d for d, v in p.items() if v >= limiar]
+            if lider:
+                lideradas[lider[0]] += 1           # com limiar > 0,5 so um drive pode liderar
+            else:
+                sem_lider += 1
+            for d, v in c.items():
+                abs_d[d] += abs(v)
+                sinal_d[d] += v
+        total = sum(abs_d.values())
+        n = len(cs)
+        out[tipo] = {"n": n, "lideradas": lideradas, "sem_lider": sem_lider,
+                     "f": {d: (lideradas[d] / n) if n else None for d in drives},
+                     "parcela": {d: (abs_d[d] / total) if total else None for d in drives},
+                     "soma_abs": abs_d, "contribuicao": sinal_d}
+    return out
+
+
+def leitura_dominancia(f_por_unidade: Mapping[str, Sequence[float | None]], reamostragens: int = 10_000, semente: int = 4242,
+                       nivel: float = 0.95, limiar: float = LIMIAR_DOMINA) -> dict:
+    """A2.3, a regra de leitura (fora do Holm): por drive, o IC (bootstrap sobre as unidades) de f_d, e "domina" se o limite inferior
+    passa de `limiar`. Unidade sem decisao de tempo livre com sinal (f None) fica fora, contada em `sem_valor`. Com menos de 2 unidades
+    com valor, sem IC e `domina` None, com o motivo. Nada some sem ser contado."""
+    out = {}
+    for d, fs in sorted(f_por_unidade.items()):
+        vals = [float(f) for f in fs if f is not None]
+        base = {"n": len(vals), "sem_valor": sum(1 for f in fs if f is None)}
+        if len(vals) < 2:
+            out[d] = {**base, "media": (vals[0] if vals else None), "ic": None, "domina": None, "motivo": "menos de 2 unidades com valor"}
+            continue
+        ic = bootstrap_ic(vals, reamostragens, semente, nivel)
+        out[d] = {**base, "media": ic["media"], "ic": ic, "domina": ic["ic_inferior"] > limiar, "motivo": None}
+    return out

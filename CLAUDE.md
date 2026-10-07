@@ -2739,3 +2739,34 @@ Rodada 17, etapa 3 do mundo físico (B). Infraestrutura, sem run; só as semente
   - desempatar pelo cheiro a 2 células: 15,4° e 0,25 decisão; o limite de qualquer desempate (o rumo verdadeiro): 11,3° e 0,17;
   - nas vidas, 41% das decisões com direção de cheiro saem de um empate, e o desempate a 2 células mudaria 16%.
   - A recomendação (trocar no motor, A, antes da calibração do mundo) está no PR.
+
+## V2, W-DOMINANCIA — a dominância de um drive no sinal e o braço P1-cw (2026-10-07, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, adendo 2) — GATES PASSAM
+
+Rodada 18. A parte do D no adendo 2 (A2.2 a A2.6; decisão D-4). Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram
+`digilab/metrics.py`, `experiments/bancada_v2.py` e a tabela de braços de `tests/test_bancada_v2.py`. `engine.py`, `lobos.py`, o corpo e a
+web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A medida** (`metrics.py`, só descritiva e fora do Holm):
+  - `contribuicao_drives`: c_d = w_d · (falta_antes² − falta_depois²), em inteiros na escala S;
+  - `parcelas_drives`: p_d = |c_d| / Σ|c|;
+  - `dominancia_decisoes`: por vida, as decisões com sinal, separadas em tempo livre e o resto. Sai quantas cada drive lidera
+    (p_d ≥ `LIMIAR_LIDERA`, 0,80), f_d, a parcela agregada e a contribuição com sinal;
+  - `leitura_dominancia`: a regra de leitura da A2.3. "Domina" quando o IC95 inferior de f_d (10.000 reamostragens, semente 4242) passa
+    de `LIMIAR_DOMINA` (0,50).
+- **Na bancada:**
+  - **o registro:** o `_Registro` anota, por decisão, o tick, a regra e o estado antes e depois da ação. Na fruta, o depois é o estado
+    logo depois de comer, com o humor (E2), pelo gancho `fruta_comida`;
+  - **por vida:** `Bancada.medidas_dominancia`, no bloco `dominancia` do `medidas.json`, na janela dos últimos sete dias e na vida toda;
+  - **por grupo:** `tabela_dominancia` grava o `dominancia.json`, por braço × condição × tipo de decisão, com f_d por unidade (os donos
+    somados) e a leitura.
+- **Os drives,** pelos nomes do corpo (`NOMES_DRIVES`): fome, desconforto e cansaço, os de `ConfigConsequencia.drives`, mais a tristeza
+  (o humor) na fruta com a E2. Os drives novos (tédio, solidão, estresse, dor) entram quando o corpo os tiver.
+- **`origem`:**
+  - nos braços que aprendem pela consequência, a medida é o sinal deles (`"sinal"`);
+  - nos outros (o P0, o P3), é a mesma conta como sonda (`"sonda"`).
+- **A conferência:** com os canais e o aprendizado ligados, a soma por canal dos sinais recalculados (`lobos.sinal_por_canal`) tem de
+  ser o total que o cérebro guardou; se não for, falha alto.
+- **O braço P1-cw** (`Braco.pesos_janela`, nó `corpo-A2.4`):
+  - está declarado e falha alto com o nó (`NOS_PENDENTES["pesos_janela"]`) até o B pôr a chave `pesos_janela` na `ConfigConsequencia`;
+  - ele também depende dos braços do corpo (P1-c), que a bancada ainda não tem.
+- **Testes:** `tests/test_dominancia.py`, 17 (~5 s). As funções são conferidas em dados sintéticos com a resposta conhecida; a conferência
+  com os canais em quatro mundos, e ela falha alto quando os dois lados diferem.

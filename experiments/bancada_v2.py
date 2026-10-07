@@ -104,6 +104,15 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   PoliticaInstintoMundo (etapa 3, do B) e falham alto com o no (NOS_PENDENTES); os lobos rodam no mundo, cegos a ele ate a etapa 3, e uma
   run com plano no mundo fisico tambem falha alto ate la.
 
+  dominancia de um drive no sinal (W-DOMINANCIA, rodada 18; PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.2 a A2.5): em cada decisao, a
+  contribuicao de cada drive do sinal, c_d = falta_d,antes^2 - falta_d,depois^2 (w_d = 1, D-4), e a parcela p_d = |c_d| / soma|c|
+  (metrics.contribuicao_drives e dominancia_decisoes), lidas do replay de medicao (_Registro: a transicao e, na fruta, o estado logo
+  depois de comer, como a E2). Nos bracos que aprendem pela consequencia e o sinal deles ("sinal"; com os canais ligados, conferido
+  contra os totais por canal do cerebro); nos outros, a mesma conta como sonda ("sonda", o P0 do plano). Por vida no medidas.json
+  (`dominancia`) e por braco x condicao x tipo de decisao no dominancia.json, com a leitura da A2.3 (lidera com p_d >= 0,80; domina
+  com o IC95 inferior de f_d acima de 0,50), fora do Holm. O braco P1-cw (o peso pela janela recente, A2.4) espera a chave
+  pesos_janela do cerebro A e falha alto com o no (NOS_PENDENTES).
+
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
   CONFIG_LOBOS_APRENDIZ: passo 512, teto 1024), entao as runs antigas nao mudam. O "T3" (teto 16*S = 16384, o resto igual: sem traco)
@@ -147,12 +156,14 @@ from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho
                              ocupacao_espacos_frutas)
 from digilab.metrics import (cuidado_preservado, deficit_fome_energia, inclinacao_permanencia, janela_dias,  # noqa: E402
                              permanencia_media, taxa_no_abandono, visitas_manchas)
+from digilab.metrics import contribuicao_drives, dominancia_decisoes, leitura_dominancia  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
 from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import desarranjo_n6 as desarranjo_dos_lobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
+from digilab.policies.lobos import INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
 from digilab.state import Estado  # noqa: E402
@@ -451,6 +462,7 @@ class Braco:
     canais: bool | None = None       # canais da consequencia (#169): None segue a config; True/False fixa (as ablacoes da K-7)
     julgamento: str | None = None    # P3i: "informacao" = o julgamento do K4 sai como informacao (JulgadorFruta saida="informacao")
     instinto_mundo: str | None = None   # P0z: o instinto do mundo num modo (PoliticaInstintoMundo, etapa 3 do B: "sem_explorar")
+    pesos_janela: bool = False       # P1-cw: o peso de cada drive pela falta recente (adendo 2 do plano do corpo, A2.4; chave do B)
 
 
 BRACOS = {
@@ -478,6 +490,8 @@ BRACOS = {
     "P3i": Braco("P3i", "dono", "adendo-3", julgamento="informacao"),  # o julgamento do K4 como informacao
     # mundo fisico (PLANO_ANALISE_V2_MUNDO_FISICO, secao 3 e adendo 1): o controle da premissa e a fonte dos acoplados P0^ac e P1^ac
     "P0z": Braco("P0z", "nenhuma", "mundo-fisico", instinto_mundo="sem_explorar"),
+    # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1 com o peso de cada drive pela janela recente
+    "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True),
 }
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai
@@ -488,12 +502,17 @@ NOS_PENDENTES: dict = {
     # W-BANCADA-MUNDO (rodada 17): o instinto do mundo (a fome urgente com comida vista ou cheiro, o tempo livre com o que ve, o modo
     # sem_explorar) e os ganchos dos cerebros no mundo. Sem ele: o P0z, o cerebro "instinto" no mundo fisico e as runs com plano nele
     "instinto_mundo": "a PoliticaInstintoMundo e os ganchos dos cerebros no mundo (TAREFA_V2_MUNDO_FISICO, secao 9, etapa 3, do B)",
+    # W-DOMINANCIA (rodada 18): o peso pela janela recente no sinal do cerebro A. Sem a chave: o braco P1-cw
+    "pesos_janela": "a chave pesos_janela da ConfigConsequencia no cerebro A (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4, do B)",
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem (nenhum hoje)
 FILTROS_PENDENTES: dict = {}
 # a memoria de cada braco do N6 no cerebro: o M0 guarda e nao age (ganho 0, N6-2/N6-3); o ME com o desarranjo da vida (N6-6)
 MODO_MEMORIA = {"nenhuma": "relevante", "relevante": "relevante", "recencia": "recencia", "embaralhada": "embaralhada"}
 CONFIG_LOBOS_PADRAO = ConfigLobos()
+# os drives do sinal pelos nomes do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, A2.2), pelos indices de Estado.vetor (os canais de
+# lobos.CANAL_DO_DRIVE: fome, higiene, energia, humor)
+NOMES_DRIVES = {0: "fome", 1: "desconforto", 2: "cansaco", INDICE_HUMOR: "tristeza"}
 APRENDE_PELA_CONSEQUENCIA = ("consequencia", "informacao")   # o P2 e o P1 com a informacao na percepcao (plano do N5, secao 3)
 
 
@@ -503,7 +522,8 @@ def braco_de(rotulo: str) -> Braco:
     b = BRACOS[rotulo]
     if b.fonte not in FONTES_IMPLEMENTADAS:
         raise NotImplementedError(f"braco {b.rotulo}: a fonte {b.fonte!r} chega no {b.no} (docs/ROADMAP_V2.md)")
-    for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None)):
+    for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None),
+                           ("pesos_janela", b.pesos_janela)):
         if presente and peca in NOS_PENDENTES:
             raise NotImplementedError(f"braco {b.rotulo}: {NOS_PENDENTES[peca]}")
     return b
@@ -1084,6 +1104,7 @@ class Bancada:
         n7 = self.medidas_n7(vida, m, reg) if isinstance(m, MotorFrutasMundo) else None
         extra_mundo = ({"lugar": vida.espec.lugar, "retirados": vida.retirados, "mundo_fisico": self.medidas_mundo(vida, m, reg)}
                        if fisico else {})
+        dominancia = self.medidas_dominancia(vida, reg)
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
@@ -1104,7 +1125,41 @@ class Bancada:
                 **desempenho, "acerto_total": tarefa["acerto_total"], "acerto_por_dia": tarefa["acerto"],
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
-                "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, **extra_mundo}
+                "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, **extra_mundo}
+
+    def medidas_dominancia(self, vida: VidaBancada, reg: "_Registro") -> dict:
+        """Adendo 2 do plano do corpo (A2.2), numa vida: por decisao observada, c_d = falta_d,antes^2 - falta_d,depois^2 por drive do
+        sinal (os de ConfigConsequencia.drives; na decisao que comeu fruta, mais o humor com a E2, e o depois e o estado logo depois de
+        comer), com as faltas na escala S do sinal (S - arred(h * S)) e w_d = 1 (D-4). Nos bracos que aprendem pela consequencia, e o
+        sinal deles ("sinal"); nos outros, a mesma conta como sonda ("sonda"). Com os canais ligados e o aprendizado ligado, a soma por
+        canal dos sinais recalculados daqui (lobos.sinal_por_canal, a mesma ordem dos drives) tem de ser o total que o cerebro guardou:
+        se nao for, falha alto. A janela e a dos ultimos sete dias (os dias 8 a 14 numa vida de 14), e a vida toda sai ao lado."""
+        b = self.braco(vida.espec)
+        cerebro = reg.interna.cerebro
+        cc = getattr(reg.interna, "cfg_consequencia", self.cfg_consequencia)
+        S = self.cfg_lobos.escala
+        acao_drives = tuple(cc.drives)
+        fruta_drives = acao_drives + ((INDICE_HUMOR,) if cc.humor_na_fruta and INDICE_HUMOR not in acao_drives else ())
+        falta = lambda v, ds: {NOMES_DRIVES[i]: S - arred(v[i] * S) for i in ds}  # noqa: E731
+        decisoes, por_canal = [], {}
+        for p in reg.passos_sinal:
+            ds = fruta_drives if p["fruta"] is not None else acao_drives
+            decisoes.append((p["tick"], p["regra"], contribuicao_drives(falta(p["antes"], ds), falta(p["depois"], ds), escala=S)))
+            for canal, f in sinal_por_canal(p["antes"], p["depois"], ds, cc.ganho, S).items():
+                por_canal[canal] = por_canal.get(canal, 0) + f
+        canais = getattr(cerebro, "_canais", None)
+        conferido = False
+        if b.fonte in APRENDE_PELA_CONSEQUENCIA and cc.canais_ligados and getattr(cerebro, "_aprende", False):
+            if canais is None or canais["creditos"] != len(reg.passos_sinal):
+                raise RuntimeError(f"{vida.nome}: o cerebro creditou {None if canais is None else canais['creditos']} decisoes, "
+                                   f"a medida viu {len(reg.passos_sinal)}")
+            if any(canais["por_canal"].get(c, 0) != v for c, v in por_canal.items()):
+                raise RuntimeError(f"{vida.nome}: o sinal por drive da medida e o dos canais do cerebro divergem")
+            conferido = True
+        janela = janela_dias(max(1, self.dias - 6), self.dias)
+        return {"origem": "sinal" if b.fonte in APRENDE_PELA_CONSEQUENCIA else "sonda", "conferido_com_canais": conferido,
+                "janela": list(janela), "na_janela": dominancia_decisoes(decisoes, janela),
+                "vida_toda": dominancia_decisoes(decisoes, (0, self.dias * TICKS_POR_DIA))}
 
     def medidas_mundo(self, vida: VidaBancada, motor: MotorMundo, reg: "_Registro") -> dict:
         """As medidas do PLANO_ANALISE_V2_MUNDO_FISICO (secao 5 e adendo 1, A1.8), todas de digilab/metrics.py, numa vida do mundo fisico.
@@ -1535,6 +1590,10 @@ class _Registro:
         self.vetores: list[tuple] = []                     # (indice, fome, higiene, energia, humor), por decisao
         self.espacos: list[tuple] = []                     # N6: (frutas no curto, frutas no longo prazo) depois de cada decisao
         self.acordado: list[bool] = []                     # mundo fisico: o pet acordado na decisao (as horas acordado da taxa media)
+        # adendo 2 do corpo: por decisao observada, o tick, a regra e o estado antes e depois da propria acao (na fruta, o depois e o
+        # estado logo depois de comer, o mesmo da E2)
+        self.passos_sinal: list[dict] = []
+        self._decisao: tuple | None = None
 
     @property
     def sinais(self) -> int:
@@ -1550,13 +1609,28 @@ class _Registro:
         self.bola.append((obs.bola > 0.0, self.interna.ultima_regra, acao.value))
         self.vetores.append((len(self.vetores), v[0], v[1], v[2], v[3]))
         self.acordado.append(v[6] == 0.0)
+        self._decisao = (self.decisoes[-1][0], self.interna.ultima_regra)
         mem = getattr(self.interna.cerebro, "_memoria", None)   # N6, so le: a memoria dos lobos depois de promover (o que a decisao viu)
         if mem is not None:
             self.espacos.append((tuple(e["fruta"] for e in mem.curto), tuple(e["fruta"] for e in mem.longo)))
         return acao
 
     def observar(self, transicao) -> None:
+        tick, regra = self._decisao
+        self.passos_sinal.append({"tick": tick, "regra": regra, "antes": transicao.observacao.vetor_estado,
+                                  "depois": transicao.observacao_seguinte.vetor_estado, "fruta": None})
         self.interna.observar(transicao)
+
+    def fruta_comida(self, fruta: str, obs_depois) -> None:
+        """O gancho da E2: a decisao de comer a fruta tem o sinal do estado logo depois de comer. So anota e repassa (o cerebro sem o
+        gancho, como o instinto, nao recebe nada, como antes)."""
+        ultimo = self.passos_sinal[-1]
+        if ultimo["fruta"] is not None:
+            raise RuntimeError("duas frutas comidas na mesma decisao")
+        ultimo["depois"], ultimo["fruta"] = obs_depois.vetor_estado, fruta
+        aviso = getattr(self.interna, "fruta_comida", None)
+        if aviso is not None:
+            aviso(fruta, obs_depois)
 
     def receber_acao_dono(self, acao, tick) -> None:
         self._tick_ultimo_cuidado = tick          # toda acao do dono zera o relogio de cuidado (state.aplicar_acao_usuario)
@@ -1731,6 +1805,7 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     tabelas = tabelas_braco_condicao(medidas, cfg["bootstrap"])
     _gravar(pasta / "medidas.json", _dump(medidas))
     _gravar(pasta / "tabelas.json", _dump(tabelas))
+    _gravar(pasta / "dominancia.json", _dump(tabela_dominancia(medidas)))
     _gravar(pasta / "meta.json", _dump(meta(cfg)))
     return {"vidas": vidas, "medidas": medidas, "tabelas": tabelas}
 
@@ -1765,6 +1840,42 @@ def tabelas_braco_condicao(medidas: dict, boot: dict) -> dict:
                 for m in fisicas:
                     valores.setdefault((m["braco"], _coluna(m)), []).append(f(m["mundo_fisico"]))
                 out[dono][medida] = tabela_braco_condicao_parcial(valores, boot["reamostragens"], boot["semente"], boot["nivel"])
+    return out
+
+
+def tabela_dominancia(medidas: dict) -> dict:
+    """Adendo 2 do plano do corpo (A2.2, A2.3, A2.6), na janela: por braco x condicao/mundo x tipo de decisao (tempo livre e o resto),
+    f_d por unidade (as celulas da unidade somadas: os donos e, no mundo fisico, os lugares; f_d = lideradas / decisoes com sinal), a
+    leitura (metrics.leitura_dominancia: o IC95 de f_d por bootstrap sobre as unidades, 10.000 reamostragens, semente 4242; "domina"
+    com o limite inferior acima de 0,50), a parcela agregada soma|c_d| / soma soma|c| e a contribuicao com sinal. Regra de leitura,
+    fora do Holm. `origem`: "sinal" nos bracos que aprendem pela consequencia, "sonda" nos outros (o P0)."""
+    grupos: dict = {}
+    for m in medidas.values():
+        dom = m.get("dominancia")
+        if dom is None:
+            continue
+        g = grupos.setdefault((m["braco"], f"{m['condicao']}/{m['mundo']}"), {"origem": dom["origem"], "unidades": {}})
+        if g["origem"] != dom["origem"]:
+            raise RuntimeError(f"{m['vida']}: origem da dominancia diferente no mesmo braco")
+        u = g["unidades"].setdefault((m["genoma"], m["semente"]), {})
+        for tipo, r in dom["na_janela"].items():
+            t = u.setdefault(tipo, {"n": 0, "lideradas": {}, "soma_abs": {}, "contribuicao": {}})
+            t["n"] += r["n"]
+            for chave in ("lideradas", "soma_abs", "contribuicao"):
+                for d, v in r[chave].items():
+                    t[chave][d] = t[chave].get(d, 0) + v
+    out: dict = {}
+    for (braco, coluna), g in sorted(grupos.items()):
+        cel = out.setdefault(braco, {}).setdefault(coluna, {"origem": g["origem"], "unidades": len(g["unidades"])})
+        for tipo in ("tempo_livre", "resto"):
+            us = [u[tipo] for _, u in sorted(g["unidades"].items(), key=lambda x: (str(x[0][0]), x[0][1])) if tipo in u]
+            drives = sorted({d for u in us for d in u["lideradas"]})
+            f = {d: [(u["lideradas"].get(d, 0) / u["n"]) if u["n"] else None for u in us] for d in drives}
+            soma = {d: sum(u["soma_abs"].get(d, 0) for u in us) for d in drives}
+            total = sum(soma.values())
+            cel[tipo] = {"decisoes": sum(u["n"] for u in us), "f_por_unidade": f, "leitura": leitura_dominancia(f),
+                         "parcela": {d: (soma[d] / total) if total else None for d in drives},
+                         "contribuicao": {d: sum(u["contribuicao"].get(d, 0) for u in us) for d in drives}}
     return out
 
 
