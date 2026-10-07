@@ -1151,6 +1151,11 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: interação do jogador e corpo do pet** (`docs/TODO_INTERACAO_CORPO.md`, Matheus, 2026-09-30): ambiente 2D manipulável ao estilo do
   Championship (comida, bola, obstáculo, áreas), para criar decisões do pet com consequência onde o dono importa. Não autoriza
   implementação; o próximo passo é escolher a interação mínima e o gate antes de ampliar o ambiente.
+- **DECIDIDO: mundo físico** (`docs/futuro/mundo_fisico.md`, Matheus, 2026-10-07): o jogador deixa a comida no lugar; ao explorar,
+  o pet acha comida (deixada ou caída da árvore) e a bola, que é objeto físico no mapa. Dá a explorar uma recompensa e resolve o pet
+  parado. Também DECIDIDO: mapa 2D contínuo com regiões como os cômodos do Creatures 3, vista inclinada do Animal Crossing,
+  comida por arrastar e soltar, Animal Crossing e Nintendogs como referências de desenho. PROPOSTO: o motor anda até o alvo que o cérebro escolhe, posições inteiras,
+  visão e cheiro; atividades do Creatures 3 e de outros jogos.
 - **IDEIA: mecânicas de Dwarf Fortress → V2** (`docs/futuro/dwarf_fortress.md`, Matheus, 2026-10-01): contexto das peças (slots 8+8,
   memória nuclear, faceta × valor, duas prioridades, estresse em duas escalas) para o planejamento da V2; a v1 não recebe nada. O
   desenho (`docs/futuro/proposta_df.md`) só depois do gatilho da tarefa, junto com a fase 1b do plano da V2. DF é pista, não evidência.
