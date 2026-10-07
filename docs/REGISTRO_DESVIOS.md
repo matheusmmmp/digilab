@@ -3050,3 +3050,27 @@ Só papel: `docs/TAREFA_V2_CORPO_DRIVES.md`. Nenhum código, nenhuma run.
   do Creatures 3 só vêm os conceitos.
 - **Donos de arquivo:** pelo pedido, o cérebro e o corpo ficam com o B (`digilab/corpo.py`, `lobos.py`), o motor com o A (`MotorCorpo`, o
   evento do tapa, o campo da `Observacao`, o TS da web) e a bancada com o D.
+
+## 2026-10-07 — W-PLANO-CORPO (worker C): o plano de análise do corpo e dos drives novos
+
+Só papel: `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`. Nenhuma run, nenhum código.
+
+- **O `recompensa_tapa` não se calibra.** O pedido incluía o `recompensa_tapa` (CD-10) na calibração. A CD-10, já decidida, fixa o valor no
+  da bronca, para o tapa continuar comparável com a bronca da pesquisa. O plano o deixa fixo e só o mede em ½× e 2× como sensibilidade
+  descritiva. Mudar o valor fica como decisão (PCD-6).
+- **A calibração conjunta roda só o P0-c.** A M10 pede uma calibração conjunta, não por nó, e a regra não pode olhar o primário. A grade
+  (multiplicadores das subidas e das reduções, e o peso dos drives novos no sinal) roda só no instinto com o corpo, que não aprende e decide
+  igual ao P0 com a química (CD-2, CD-7). O peso do sinal sai de uma sonda sobre essas vidas. As faixas da regra são PROPOSTAS, SEM FONTE.
+- **O acoplado.** O achado da validação única (o acoplado em malha aberta cuidou pior) é tratado assim:
+  - nenhum acoplado é comparado com malha fechada;
+  - os dois lados do contraste do cuidado fixo são acoplados à mesma fonte (o P0-q da célula);
+  - o cuidado preservado só se lê em malha fechada.
+- **A distribuição do tempo livre no G-HOJE (b).** A tarefa pede "a distribuição das ações no tempo livre". O gate usa a fração em brincar e
+  explorar, que tem a margem do efeito principal. As quatro ações saem uma a uma como descritivo.
+- **Donos.** O bloco G-HOJE usa os donos de sempre, para comparar com a vida de hoje. Os blocos do corpo e do tapa usam o `DonoComGestos`:
+  - o contraste primário roda no modo sem tapa nos dois lados, porque o tapa exige os drives novos;
+  - o P3 fica fora desses blocos, porque o pet do produto não tem botões.
+- **A curiosidade.** Ela exige o `MotorMundo` (CD-8). Um braço com ela só entra por adendo antes da calibração, se o mundo físico estiver na
+  `main`; senão, vira plano próprio.
+- **As faixas 33101…33505 e 34101…34505** foram conferidas fora de `FAIXAS_RESERVADAS` e sem uso no repositório nem nos branches remotos.
+  Notei que a 31101…32505 (mundo físico) ainda não está registrada em `FAIXAS_RESERVADAS`: é a etapa 4 da tarefa do mundo, do chat D.
