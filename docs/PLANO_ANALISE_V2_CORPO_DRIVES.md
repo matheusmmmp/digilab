@@ -380,3 +380,112 @@ colisão das unidades passa a cobrir o prefixo `"corpo"`.
 | PCD-5 | O bloco do tapa só no mundo `bola`, e os efeitos do tapa sem gate | **sim**: os efeitos no corpo são construídos pelas regras, e a decisão do tapa já foi tomada (S-2) | com gate: testa-se o que a regra garante. Nos dois mundos: dobra o custo sem pergunta nova |
 | PCD-6 | O `recompensa_tapa` | **fica no valor da bronca** (CD-10). A calibração só mede ½× e 2× como sensibilidade | mudar pelo resultado da calibração tira a comparação com a bronca da pesquisa, que a CD-10 quis manter |
 | PCD-7 | As faixas de sementes | **33101…33505** (calibração e piloto) e **34101…34505** (validação) | uma colisão tira o "novo" das unidades |
+
+## Adendo 1 (2026-10-07, antes de qualquer run): a DS-6 (a generalização do tapa) e a DS-4 (o tédio pela variedade)
+
+As duas foram decididas pelo Matheus em 2026-10-07 (`docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 9). Fontes:
+- a seção 6 das definições (a DS-6);
+- a seção 17 de `docs/TAREFA_V2_CORPO_DRIVES.md` (a DS-4).
+
+Nenhuma run foi feita. O adendo só acrescenta e ajusta. As predições PR-H a PR-5, os gates da seção 8, as margens e as PCD-1 a PCD-7 não
+mudam.
+
+### A1.1 A inclinação da generalização do tapa (DS-6, só descritiva)
+
+**A pergunta.** Quando o tapa pune uma fruta só, ele afasta o pet só dela ou de todas? É a quarta medida do tapa (definições, seção 6), ao
+lado do medo, do estresse e do vínculo. Ela diagnostica o achado 3: no cérebro C, a bronca numa fruta valeu para todas
+(`docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`).
+- **Rótulo:** SEM APOIO DIRETO.
+- Ghirlanda e Enquist 2003 e Dymond et al. 2015 só têm o título conferido e não sustentam o conteúdo.
+- Que um estímulo no corpo permita um gradiente não plano é leitura da revisão, SEM FONTE.
+
+**O bloco novo (G, generalização):**
+
+| braço | regime | mundo | dono |
+|---|---|---|---|
+| **P1-c-tapaX** | corpo | `iguais_frutas` | `DonoComGestos` sem tapa, mais o **tapa na fruta X**: um `tapa` no primeiro passo do dono depois de cada consumo de X, dentro do orçamento e contando como contato (CD-6) |
+| **P1-c-frutas** | corpo | `iguais_frutas` | `DonoComGestos` sem tapa |
+
+- **A fruta X:** sorteada uma vez por vida por `derivar_semente("tapa-fruta", semente)`, uniforme entre as três, sem olhar a preferência
+  inata. É a regra do N7-6 com outra rng.
+- **O mundo `iguais_frutas`:** as três frutas têm o mesmo efeito, então o único sinal aversivo ligado a uma fruta é o tapa.
+- **O cérebro:** o A da montagem completa, com a memória das frutas no ganho do ponto da K2.
+- **O sinal:** o tapa chega pelo sinal direto (CD-10). A dor, o susto e o estresse ficam no corpo (CD-9).
+- **O cérebro C** entra só se tiver os ganchos do corpo (tarefa, seção 11: "opcionais"). Sem eles, fica fora, com o registro.
+- **O custo:** 2 braços × 4 donos = **8 vidas por unidade** (o total vai de 104 a 112).
+
+**As medidas,** nos dias 8 a 14, por unidade e com IC por bootstrap:
+
+| medida | definição |
+|---|---|
+| queda de p(comer \| só f) | p(comer \| só a fruta f no cenário) no P1-c-frutas menos no P1-c-tapaX, para f = X e para cada f ≠ X |
+| queda do peso da escolha | o peso aprendido da escolha de f no fim da vida, no P1-c-frutas menos no P1-c-tapaX, para f = X e f ≠ X |
+| **inclinação** | (queda média nas não punidas) / (queda na punida), para cada uma das duas medidas acima. **0 é específico; 1 generaliza tudo.** Sai a inclinação, e não o valor numa fruta (definições, seção 6) |
+
+- **Sem gate e fora do Holm.**
+- **Quando a queda na punida não é positiva,** a inclinação sai "indefinida" naquela unidade e é contada à parte: o tapa não pegou nem na
+  fruta punida.
+
+### A1.2 O tédio pela variedade recente (DS-4)
+
+**A regra nova da tarefa (seção 17):**
+- o corpo guarda as últimas `janela_tedio` atividades: bola, brincar, explorar e dono brinca;
+- a redução da atividade a é `div_arred(base_a × (J − r_a), J)`, com r_a as repetições dela na janela antes desta;
+- **explorar passa a reduzir o tédio,** com a base −90000.
+
+**A decisão sobre a `janela_tedio`: fica fixa em 8, fora da grade.**
+
+**A regra (escrita agora):** um parâmetro só entra na grade da 6.1 se o objetivo da calibração conseguir identificá-lo separado dos outros.
+- O objetivo é a faixa dos drives no **P0-c**, e o P0 escolhe as atividades pela mistura fixa do instinto. A variedade dele não muda com
+  a janela.
+- No P0-c, a janela e o `m_reduz` mexem do mesmo jeito no tédio médio: os dois escalam a redução média por atividade. A faixa não separa um
+  do outro.
+- Calibrar a janela pelo efeito na variedade pediria olhar o P1, que a 6.2 proíbe (PCD-4).
+- Então a janela fica em 8 (o PROPOSTO da tarefa), e o `m_reduz` absorve a escala.
+
+**Sensibilidade (descritiva):** no ponto escolhido, o P0-c roda também com a janela em 4 e em 16. São 2 × 8 = 16 vidas por unidade, só na
+calibração. Sai a fração do tempo acordado com o tédio ≥ 0,75 em cada janela. Nada é escolhido por ela.
+
+**O que muda na grade (6.1):**
+- **o `m_reduz`** passa a multiplicar as bases da regra nova: bola −135000, brincar −45000, explorar −90000 e dono brinca −90000. Ele também
+  multiplica as do carinho, como antes;
+- **as subidas** não mudam (+450 por tick acordado).
+
+**O que muda na faixa (6.2):**
+- **a faixa do tédio continua [0,10; 0,50]** (a fração do tempo acordado com falta ≥ 0,75 no P0-c);
+- **com a regra nova, o tédio do P0-c deve ficar mais alto** que pela regra por tempo, porque o instinto repete atividades. SEM FONTE para
+  quanto: a calibração mede. Se a faixa só fechar no `m_reduz` = 2, a regra de escolha já resolve, porque não muda;
+- **nada mais muda** na regra de escolha, nem no passo 3 (o `w_novos`).
+
+**A conta de exemplo (seção 9 da tarefa), com a regra nova.** O pet brinca com a bola com o tédio em 0,75 e o cansaço em 0,20, ganho 4. A
+conta foi conferida em Python, com o `div_arred` da tarefa:
+
+| repetições da bola na janela antes desta (r) | redução do tédio | sinal f |
+|---|---|---|
+| 0 | 135000 | **+1440** (a conta da tarefa) |
+| 1 | 118125 | +1298 |
+| 4 | 67500 | +798 |
+| 7 | 16875 | +189 |
+| 8 | 0 | **−34** (só o cansaço, o de hoje) |
+
+Repetir a bola leva o sinal de brincar de volta ao N3. Alternar devolve a base.
+
+**O que muda no texto do plano:**
+- **o R-2** dizia "explorar continua sem drive que o pague". Com a DS-4, explorar reduz o tédio pela variedade, e a `BE` pode subir pelos
+  dois lados. As ações continuam saindo separadas (5.1);
+- **um descritivo novo (5.3):** a **variedade** das atividades de tempo livre do P1-c e do P0-c, como o número de atividades distintas na
+  janela, médio por decisão. Sem gate. Mostra se o pet que aprende varia mais que o instinto;
+- **a PR-5 e o G-TED** seguem iguais (o tédio médio).
+- **um risco novo, R-13:** com a variedade pagando, o pet pode aprender a alternar só por alternar. A `BE` subiria sem o pet "querer"
+  brincar. O descritivo da variedade e as ações separadas mostram isso, sem gate.
+
+### A1.3 O que fica igual
+
+Ficam como estão:
+- as sementes (33101…33505 e 34101…34505);
+- as margens e o N da seção 7;
+- os gates e a regra de decisão da seção 8;
+- as PCD-1 a PCD-7.
+
+O bloco G entra na validação e no piloto, este só para medir o custo. O custo da calibração sobe 16 vidas por unidade (a sensibilidade da
+janela), e o da validação, 8 vidas por unidade (o bloco G).

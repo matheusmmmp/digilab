@@ -3095,3 +3095,16 @@ Só papel: o adendo 1 de `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`. Nenhuma run, n
   descritiva. O A não estima a taxa média, então a medida 3 é lida pelo comportamento: a permanência contra a taxa recente do ambiente.
   O layout afastado custa 24 vidas por unidade e é o primeiro bloco a sair se o custo passar do teto. Ele depende de um segundo layout na
   `ConfigMundo` (chat A).
+
+## 2026-10-07 — W-ADENDO-DS6 (worker C): o adendo 1 do plano do corpo
+
+Só papel: o adendo 1 de `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md` (DS-6 e DS-4, decididas pelo Matheus em 2026-10-07). Nenhuma run, nenhum código.
+
+- **A generalização do tapa** entra como bloco descritivo novo, fora do Holm: o P1-c com tapa numa fruta X sorteada (rng `tapa-fruta`), no
+  `iguais_frutas`, contra o P1-c sem tapa. A medida é a inclinação, 0 específico e 1 generaliza tudo. São 8 vidas por unidade. O cérebro C
+  só entra se tiver os ganchos do corpo.
+- **A `janela_tedio` fica fixa em 8.** O objetivo da calibração (a faixa dos drives no P0-c) não separa a janela do `m_reduz`, e calibrar
+  pela variedade pediria olhar o P1 (PCD-4). A janela em 4 e em 16 sai só como sensibilidade descritiva.
+- **A conta de exemplo** com a bola repetida foi refeita em Python: +1440, +1298, +798, +189 e −34 para 0, 1, 4, 7 e 8 repetições.
+- **O R-2** do plano estava desatualizado pela DS-4: explorar passou a reduzir o tédio. Ficou corrigido no adendo, junto com o risco novo
+  R-13 (alternar só por alternar).
