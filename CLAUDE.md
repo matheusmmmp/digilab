@@ -2445,3 +2445,43 @@ do motor nem do app.
 - **No celular:** o mapa na tela inteira e a bandeja aberta embaixo. O arrasto da carne começa na bandeja; um dedo no mapa move a câmera,
   e dois dedos dão zoom.
 - **Registrada** em `docs/PENDENCIAS_PRANCHAS.md` como "não existe" no app. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, W-CORPO-QUIMICA — a química dos drives de hoje, sem órgão (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, etapa 1) — GATES PASSAM
+
+Rodada 17 (`docs/V2_RODADA_17.md`). Etapa 1 da seção 14 da tarefa do corpo (CD-1 a CD-10 decididas). Infraestrutura, sem run; só as
+sementes dos testes. Mudaram `digilab/corpo.py` (novo) e `digilab/config.py` (`ConfigCorpo` no fim). Motor, `engine.py`, `lobos.py` e a
+web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **`ConfigCorpo`** (desligada por padrão; registro `corpo.PARAMETROS_CORPO`):
+  - `ligada` liga a química dos drives de hoje;
+  - `digestao`, `vida`, `drives_novos` e `gestos` falham alto se ligadas (etapas 3, 4 e 6). Cada uma exige a anterior;
+  - C = 450000 (CD-1) e S = 1024;
+  - os efeitos da ação do pet já em C;
+  - as constantes de meia-vida (k 1497, 753 e 32).
+- **`Corpo`** (componente puro: sem motor, sem rng; só importa `config`, `events` e `state`):
+  - **os químicos:** `fome`, `desconforto`, `cansaco`, `tristeza` e `dano` guardam a falta em inteiros de [0, C]. O drive é
+    (C − q) / C;
+  - **as taxas** (`taxas_de`) saem de `Config` e da `ConfigCorpo`, cada uma conferida na grade de C;
+  - **o tick** (`passo(estado_antes)`) segue a ordem de `state.avancar_um_tick`, com o dano pelo receptor de privação (algum de fome,
+    desconforto e cansaço acima de C − 67500);
+  - **os estímulos de hoje:** `acao_dono` (as seis ações de `state.aplicar_acao_usuario`), `acao_pet`, `estimulo_bola` e
+    `estimulo_fruta`;
+  - **as leituras:** `drives`, `no_estado`, `falta` e `receptores`, estes na escala S;
+  - **os passos inteiros:** `k_meia_vida` (só para derivar), `passo_meia_vida` (com decremento mínimo de 1) e `div_arred`.
+- **Paridade:** `experiments/exportar_gabarito_corpo.py` → `tests/gabaritos/corpo_quimica_python.json`, com:
+  - as taxas;
+  - uma grade de casos;
+  - a meia-vida e o `div_arred`;
+  - 3 vidas em malha aberta, com o sha256.
+
+  Só inteiros: o TS da etapa 7 confere igual.
+- **Gates** (`tests/test_corpo_quimica.py`, 29 testes, ~3 s):
+  - **G-HOJE (a) em malha aberta:** 4 donos × 5 sementes × 3 dias, com as ações forçadas. Fome, higiene, energia e humor ficam a até 1e−9
+    do float de hoje em todo tick; a saúde, até 1e−9 mais as viradas de privação. Toda virada é um químico exatamente no limiar.
+    O `Estado` e a rng de ambiente de hoje são reproduzidos;
+  - **o exemplo do tick 660:** 0,25 exato em inteiros, contra 0,24999999999998737 no float;
+  - **as constantes:** a derivação dos k_h e a meia-vida efetiva; C é o menor que deixa as taxas inteiras;
+  - **as conversões na grade:** as ações do dono e do pet, a bola, a fruta e o tick;
+  - **os receptores:** na escala S, e o `div_arred` igual ao dos lobos;
+  - **as falhas altas:** fora da grade, a sub-chave das etapas seguintes e o corpo com a chave desligada;
+  - **o isolamento:** o AST sem motor e sem rng;
+  - **a paridade:** o gabarito reproduz.
