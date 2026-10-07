@@ -2913,3 +2913,58 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as contas exatas:** a conta da seção 9 (+1440 contra −34), as entradas novas pela regra da L1 e os canais;
   - **as entradas novas no prior** não mudam a decisão (3000 observações);
   - o G1, o embrulho e as falhas altas do gancho.
+
+## V2, W-BANCADA-CORPO — o corpo na bancada, etapa 8 (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seção 14) — GATES PASSAM
+
+Rodada 21. A etapa 8 do corpo: o que dá para rodar sem a etapa 6, e o resto declarado. Infraestrutura, sem run de pesquisa; só as sementes
+dos testes. Mudaram `experiments/bancada_v2.py`, a fumaça nova `experiments/configs/v2_corpo/fumaca.json`, os testes do P1-cw
+(`tests/test_bancada_pesos_janela.py`, `tests/test_dominancia.py`), a tabela de braços de `tests/test_bancada_v2.py` e o teste novo.
+`engine.py`, `corpo.py`, `motor_corpo.py`, `lobos.py`, `metrics.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O regime é um campo do braço** (`Braco.regime`), com os nomes do plano:
+  - **"hoje":** a chave do corpo desligada;
+  - **"química":** a `ConfigCorpo` da bancada (`CONFIG_CORPO_QUIMICA`: ligada, a digestão na taxa C e a Vida, sem os drives novos);
+  - **"corpo":** a química mais `drives_novos` e `gestos`.
+  - Com o regime, o motor é o `com_corpo(...)` do mundo, e o cérebro A recebe `cfg_corpo`. Os braços sem regime (os de antes) não mudam.
+  - **A chave `corpo` da config** troca os números da `ConfigCorpo` (por exemplo a `taxa_digestao`), nunca as sub-chaves.
+  - No `padrao` com genoma, os braços do plano usam o `MotorPersonalidade` com a obediência desligada nos dois regimes, como os mundos da
+    bola e das frutas.
+- **Os braços do plano** (`BRACOS`, seções 3.1 a 3.3 e adendos 1 e 2):
+  - **rodam:** o bloco G-HOJE (P0, P1 e P3 em "hoje" e em "química");
+  - **esperam a etapa 6 e falham alto com o nó** (`NOS_PENDENTES`):
+    - P0-q e P1-q (o `DonoComGestos`);
+    - P0-c e P1-c (os drives novos e os gestos);
+    - P0-c-tapa, P1-c-tapa e P1-c-tapaX (também o tapa);
+    - P1-c-frutas;
+    - o **P1-cw**, que passou a ser o P1-c com a `pesos_janela`, como o plano pede (A2.4);
+  - o filtro `sem_gestos` também espera o tapa.
+- **O corpo no mundo físico fica pendente** (`NOS_PENDENTES["corpo_mundo"]`): o `MotorCorpo` chama `consequencia_corpo` em toda decisão (#238),
+  e o `PoliticaLobos` com `cfg_corpo` recusa esse gancho em explorar, comer e brincar no mundo físico (#239). O regime "hoje" roda no mundo
+  físico.
+- **As medidas** (bloco `corpo` do `medidas.json`, nas vidas com o corpo ligado; seção 5 do plano, funções do #224), nos últimos sete dias:
+  - `BE` e `OC` (`tempo_livre_be`; a vida toda ao lado);
+  - o cuidado preservado (`cuidado_preservado`);
+  - os drives novos (`drives_novos`), indisponíveis com o nó até a etapa 6;
+  - o corpo no fim.
+- **A dominância pelos receptores:**
+  - com o corpo ligado, ela usa a conta do cérebro (`lobos.contribuicoes_corpo`), sobre os receptores da decisão e os de depois (o gancho
+    `consequencia_corpo`, anotado pelo `_Registro`);
+  - os w_d são os da `pesos_drives_corpo` e, com a `pesos_janela`, os da janela do motivo;
+  - nos braços que aprendem pela consequência, a conta é conferida contra o motivo (`sinal_corpo`) e contra os canais; se divergir, falha
+    alto.
+- **A deriva com o corpo:** as sondas ganham os receptores do próprio estado (`percepcao_da_sonda`, a conta do corpo), e o prior é o P0 do
+  mesmo regime.
+- **Gates** (`tests/test_bancada_corpo.py`):
+  - **o "hoje" é a vida de antes byte a byte** (P0, P1 e P3, sete mundos com o físico, duas montagens);
+  - **a química** liga o corpo no motor e no cérebro, passa o G1 e o acoplado, e o P1-química aprende pelo sinal do corpo;
+  - **a chave `corpo`** troca os números e não as sub-chaves;
+  - **as medidas e a dominância** batem com o motivo e os canais nos três braços, e falham alto quando a conta diverge;
+  - **o que espera a etapa 6, o filtro e o corpo no mundo físico** falham alto com o nó, e a trava é só a tabela;
+  - a config com o plano (bases 33101, prefixo `corpo`) valida;
+  - o `rodar` da fumaça.
+- **O mecanismo do P1-cw** (`tests/test_bancada_pesos_janela.py`) é conferido em dois braços de teste no lugar dele: o P1 com a chave e o
+  P1-química com a chave. Os dois passam o gate (chave desligada = a origem byte a byte), mudam a vida, passam o G1 e têm a janela refeita
+  por fora (pelo vetor e pelos receptores). A dominância confere com os pesos.
+- **Fumaça** (`experiments/configs/v2_corpo/fumaca.json`, NÃO canônica):
+  - o bloco G-HOJE nos mundos `bola` e `padrao`;
+  - os acoplados P1-química ← P0-química e P1-hoje ← P0-hoje;
+  - sem artefato.

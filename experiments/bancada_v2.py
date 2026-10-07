@@ -115,6 +115,16 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   `pesos_janela` da ConfigConsequencia ligada (#236, W-LIGA-PESOS-JANELA); nele o w_d da medida e o peso da janela que o cerebro usou
   na decisao (o motivo `pesos_janela`), e a conferencia com os canais recalcula o sinal com os mesmos pesos.
 
+  corpo (W-BANCADA-CORPO, etapa 8 da TAREFA_V2_CORPO_DRIVES; PLANO_ANALISE_V2_CORPO_DRIVES, secoes 2 a 5 e adendos 1 e 2): o regime do
+  corpo e um campo do braco (`Braco.regime`): "hoje" (a chave do corpo desligada), "quimica" (a `ConfigCorpo` da bancada: a quimica dos
+  drives de hoje, com a digestao na taxa C e a Vida, sem os drives novos) e "corpo" (a quimica mais `drives_novos` e `gestos`). Com o
+  regime, o motor e o `com_corpo(...)` do mundo e o cerebro A recebe `cfg_corpo` (o sinal pelos receptores, `sinal_corpo`). A chave
+  "corpo" da config troca os numeros da `ConfigCorpo` (nao as sub-chaves: elas sao do regime). Os bracos do bloco G-HOJE (P0, P1 e P3
+  em "hoje" e em "quimica") rodam; os do bloco do corpo, do tapa e da generalizacao, e o P1-cw (o P1-c com `pesos_janela`), esperam a
+  etapa 6 (os drives novos, os gestos e o `DonoComGestos`) e falham alto com o no (NOS_PENDENTES), como o filtro `sem_gestos`. Nos bracos
+  com corpo saem as medidas do plano (secao 5: `BE`/`OC`, o cuidado preservado e, quando houver receptores novos, os drives novos) e a
+  dominancia pelos receptores (a conta do cerebro: `lobos.contribuicoes_corpo`, conferida contra o motivo e os canais).
+
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
   CONFIG_LOBOS_APRENDIZ: passo 512, teto 1024), entao as runs antigas nao mudam. O "T3" (teto 16*S = 16384, o resto igual: sem traco)
@@ -145,6 +155,9 @@ from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA
                             CONFIG_INFORMACAO_LIGADA, CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO,
                             CONFIG_PEDIDO_LIGADA, LAYOUT_MUNDO_AFASTADO, TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigFrutas,
                             ConfigInformacao, ConfigJulgamentoFruta, ConfigLobos, ConfigMundo, ConfigPedido)
+from digilab.config import ConfigCorpo  # noqa: E402
+from digilab.corpo import div_arred as div_arred_corpo  # noqa: E402
+from digilab.motor_corpo import PercepcaoCorpo, com_corpo  # noqa: E402
 from digilab.donos import Visao, criar_dono, cuidados_necessarios, julgar_acao  # noqa: E402
 from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_INFORMACAO, ACOES_PEDIDO, FRUTAS, AcaoPet, AcaoUsuario,  # noqa: E402
                             LogDeEventos, fruta_de, informar, oferta_de)
@@ -160,12 +173,15 @@ from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho
 from digilab.metrics import (cuidado_preservado, deficit_fome_energia, inclinacao_permanencia, janela_dias,  # noqa: E402
                              permanencia_media, taxa_no_abandono, visitas_manchas)
 from digilab.metrics import contribuicao_drives, dominancia_decisoes, leitura_dominancia  # noqa: E402
+from digilab.metrics import drives_novos as medir_drives_novos, tempo_livre_be  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
 from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import desarranjo_n6 as desarranjo_dos_lobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
+from digilab.policies.lobos import (DRIVES_NOVOS_SINAL, RECEPTOR_DO_INDICE, RECEPTORES_NOVOS, contribuicoes_corpo,  # noqa: E402
+                                    sinal_corpo_canais)
 from digilab.policies.lobos import CANAL_DO_DRIVE, INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
@@ -273,7 +289,14 @@ def mundo_de(nome: str) -> Mundo:
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
                  "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta", "montagem",
-                 "lugares", "mundo"}
+                 "lugares", "mundo", "corpo"}
+# corpo (W-BANCADA-CORPO): a quimica da pergunta do plano (secao 1: "a quimica de hoje", CD-3): o corpo com a digestao na taxa C e a
+# Vida, sem os drives novos. O regime "corpo" liga por cima os drives novos e os gestos (etapa 6). A chave "corpo" da config troca os
+# numeros, nunca as sub-chaves
+CONFIG_CORPO_QUIMICA = ConfigCorpo(ligada=True, digestao=True, vida=True)
+REGIMES_CORPO = ("hoje", "quimica", "corpo")
+SUBCHAVES_CORPO = ("ligada", "digestao", "vida", "drives_novos", "gestos")
+GESTOS_DONO = ("sem_tapa", "tapa", "tapa_fruta")
 # K4 fora do orcamento (decisao do Matheus, 2026-10-05): a chave liga o motor e a regra do mundo; o julgamento usa elogiar/repreender
 CONFIG_JULGAMENTO_FORA = ConfigJulgamentoFruta(ligada=True, no_orcamento=False)
 JULGAMENTOS = frozenset({AcaoUsuario.ELOGIAR.value, AcaoUsuario.REPREENDER.value})
@@ -466,6 +489,8 @@ class Braco:
     julgamento: str | None = None    # P3i: "informacao" = o julgamento do K4 sai como informacao (JulgadorFruta saida="informacao")
     instinto_mundo: str | None = None   # P0z: o instinto do mundo num modo (PoliticaInstintoMundo, etapa 3 do B: "sem_explorar")
     pesos_janela: bool = False       # P1-cw: o peso de cada drive pela falta recente (adendo 2 do plano do corpo, A2.4; chave do B)
+    regime: str | None = None        # corpo: None = "hoje" (sem corpo), "quimica" ou "corpo" (PLANO_ANALISE_V2_CORPO_DRIVES, secao 1)
+    gestos: str | None = None        # corpo: o DonoComGestos (etapa 6 do A): "sem_tapa", "tapa" ou "tapa_fruta" (o tapa na fruta X, A1.1)
 
 
 BRACOS = {
@@ -493,8 +518,26 @@ BRACOS = {
     "P3i": Braco("P3i", "dono", "adendo-3", julgamento="informacao"),  # o julgamento do K4 como informacao
     # mundo fisico (PLANO_ANALISE_V2_MUNDO_FISICO, secao 3 e adendo 1): o controle da premissa e a fonte dos acoplados P0^ac e P1^ac
     "P0z": Braco("P0z", "nenhuma", "mundo-fisico", instinto_mundo="sem_explorar"),
-    # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1 com o peso de cada drive pela janela recente
-    "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True),
+    # corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 3): o bloco G-HOJE (a quimica contra hoje, malha fechada, os donos de sempre)
+    "P0-hoje": Braco("P0-hoje", "nenhuma", "corpo-3.1", regime="hoje"),
+    "P1-hoje": Braco("P1-hoje", "consequencia", "corpo-3.1", regime="hoje"),
+    "P3-hoje": Braco("P3-hoje", "dono", "corpo-3.1", regime="hoje"),
+    "P0-quimica": Braco("P0-quimica", "nenhuma", "corpo-3.1", regime="quimica"),
+    "P1-quimica": Braco("P1-quimica", "consequencia", "corpo-3.1", regime="quimica"),
+    "P3-quimica": Braco("P3-quimica", "dono", "corpo-3.1", regime="quimica"),
+    # o bloco do corpo (3.2), com o DonoComGestos sem tapa; os acoplados P1-q^ac e P1-c^ac saem do registro do P0-q (a config os pede)
+    "P0-q": Braco("P0-q", "nenhuma", "corpo-3.2", regime="quimica", gestos="sem_tapa"),
+    "P1-q": Braco("P1-q", "consequencia", "corpo-3.2", regime="quimica", gestos="sem_tapa"),
+    "P0-c": Braco("P0-c", "nenhuma", "corpo-3.2", regime="corpo", gestos="sem_tapa"),
+    "P1-c": Braco("P1-c", "consequencia", "corpo-3.2", regime="corpo", gestos="sem_tapa"),
+    # o bloco do tapa (3.3, so no mundo bola)
+    "P0-c-tapa": Braco("P0-c-tapa", "nenhuma", "corpo-3.3", regime="corpo", gestos="tapa"),
+    "P1-c-tapa": Braco("P1-c-tapa", "consequencia", "corpo-3.3", regime="corpo", gestos="tapa"),
+    # o bloco G, a generalizacao do tapa (adendo 1, A1.1, no iguais_frutas)
+    "P1-c-tapaX": Braco("P1-c-tapaX", "consequencia", "corpo-A1.1", regime="corpo", gestos="tapa_fruta"),
+    "P1-c-frutas": Braco("P1-c-frutas", "consequencia", "corpo-A1.1", regime="corpo", gestos="sem_tapa"),
+    # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1-c com o peso de cada drive pela janela recente
+    "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True, regime="corpo", gestos="sem_tapa"),
 }
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai
@@ -504,9 +547,17 @@ FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 NOS_PENDENTES: dict = {
     # o "instinto_mundo" (W-BANCADA-MUNDO) saiu na W-LIGA-MUNDO: a PoliticaInstintoMundo e os ganchos dos cerebros estao na main (#232)
     # o "pesos_janela" (W-DOMINANCIA) saiu na W-LIGA-PESOS-JANELA: a chave da ConfigConsequencia esta na main (#236)
+    # W-BANCADA-CORPO (rodada 21): o que espera a etapa 6 do corpo (TAREFA_V2_CORPO_DRIVES, secao 14, do A e do B)
+    "corpo": "os drives novos e os gestos no corpo (ConfigCorpo.drives_novos e gestos; TAREFA_V2_CORPO_DRIVES, etapa 6, do A e do B)",
+    "dono_gestos": "o DonoComGestos (TAREFA_V2_CORPO_DRIVES, secao 14, etapa 6, do A)",
+    "tapa": "o tapa (AcaoUsuario.TAPA, o repasse a PoliticaDoBraco e o sinal do tapa; TAREFA_V2_CORPO_DRIVES, secao 8, etapa 6)",
+    # o corpo no mundo fisico: o MotorCorpo chama consequencia_corpo em toda decisao (#238), e o PoliticaLobos com cfg_corpo o recusa
+    # em explorar, comer e brincar no mundo fisico (#239: la o credito e do consequencia_mundo). O contrato e do A e do B
+    "corpo_mundo": "o cerebro A com o corpo no mundo fisico: o MotorCorpo chama consequencia_corpo em toda decisao (#238) e o "
+                   "PoliticaLobos com cfg_corpo o recusa em explorar, comer e brincar (#239); o contrato dos dois ganchos e do A e do B",
 }
-# filtros do acoplado que dependem de eventos que ainda nao existem (nenhum hoje)
-FILTROS_PENDENTES: dict = {}
+# filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um
+FILTROS_PENDENTES: dict = {"sem_gestos": "tapa"}
 # a memoria de cada braco do N6 no cerebro: o M0 guarda e nao age (ganho 0, N6-2/N6-3); o ME com o desarranjo da vida (N6-6)
 MODO_MEMORIA = {"nenhuma": "relevante", "relevante": "relevante", "recencia": "recencia", "embaralhada": "embaralhada"}
 CONFIG_LOBOS_PADRAO = ConfigLobos()
@@ -522,8 +573,13 @@ def braco_de(rotulo: str) -> Braco:
     b = BRACOS[rotulo]
     if b.fonte not in FONTES_IMPLEMENTADAS:
         raise NotImplementedError(f"braco {b.rotulo}: a fonte {b.fonte!r} chega no {b.no} (docs/ROADMAP_V2.md)")
+    if b.regime is not None and b.regime not in REGIMES_CORPO:
+        raise ValueError(f"braco {b.rotulo}: regime {b.regime!r}, so {REGIMES_CORPO}")
+    if b.gestos is not None and (b.gestos not in GESTOS_DONO or b.regime in (None, "hoje")):
+        raise ValueError(f"braco {b.rotulo}: gestos {b.gestos!r} (so {GESTOS_DONO}, e so com o corpo)")
     for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None),
-                           ("pesos_janela", b.pesos_janela)):
+                           ("pesos_janela", b.pesos_janela), ("corpo", b.regime == "corpo"),
+                           ("dono_gestos", b.gestos is not None), ("tapa", b.gestos in ("tapa", "tapa_fruta"))):
         if presente and peca in NOS_PENDENTES:
             raise NotImplementedError(f"braco {b.rotulo}: {NOS_PENDENTES[peca]}")
     return b
@@ -789,6 +845,7 @@ class Bancada:
     julgamento_fruta: bool = False                       # K4: o dono dos bracos com fonte dono julga a fruta, fora do orcamento
     montagem: str = MONTAGEM_PADRAO                      # BANCADA-MONTAGEM: "simples" (a de antes) ou "completa" (o cerebro A da secao 1)
     cfg_mundo: ConfigMundo = CONFIG_MUNDO_LIGADA         # W-BANCADA-MUNDO: o mundo fisico (o layout afastado vem do mundo)
+    cfg_corpo: ConfigCorpo = CONFIG_CORPO_QUIMICA        # W-BANCADA-CORPO: o corpo do regime "quimica" (o "corpo" liga por cima)
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -799,6 +856,9 @@ class Bancada:
             raise ValueError("cfg_bola e a dos mundos da bola: ligada (o mundo padrao nao usa bola)")
         if not self.cfg_frutas.ligada:
             raise ValueError("cfg_frutas e a dos mundos das frutas: ligada")
+        if not (self.cfg_corpo.ligada and self.cfg_corpo.digestao and self.cfg_corpo.vida) or self.cfg_corpo.drives_novos \
+                or self.cfg_corpo.gestos:
+            raise ValueError("cfg_corpo e a da quimica (ligada, digestao e Vida, sem drives novos nem gestos); o regime do braco liga o resto")
         if not self.cfg_informacao.ligada:
             raise ValueError("cfg_informacao e a dos mundos das frutas: ligada (sem informante, nada muda na vida)")
         if not self.cfg_pedido.ligada:
@@ -882,7 +942,19 @@ class Bancada:
         cc = self.cfg_consequencia if b.canais is None else replace(self.cfg_consequencia, canais_ligados=b.canais)
         if b.pesos_janela:                  # P1-cw (A2.4, #236): o peso de cada drive pela falta recente; o resto do P1 igual
             cc = replace(cc, pesos_janela=True)
-        return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm), b, cc)
+        return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm, cfg_corpo=self.cfg_corpo_de(espec)), b, cc)
+
+    def cfg_corpo_de(self, espec: EspecVida) -> ConfigCorpo | None:
+        """A ConfigCorpo da vida pelo regime do braco: None em "hoje" (e nos bracos sem regime: a vida de antes); a da bancada em
+        "quimica"; a da bancada com `drives_novos` e `gestos` em "corpo" (a etapa 6: o braco ja falhou alto com o no antes daqui)."""
+        regime = braco_de(espec.braco).regime
+        if regime in (None, "hoje"):
+            return None
+        if mundo_de(espec.mundo).fisico is not None and "corpo_mundo" in NOS_PENDENTES:
+            raise NotImplementedError(f"{espec.nome}: {NOS_PENDENTES['corpo_mundo']}")
+        if regime == "quimica":
+            return replace(self.cfg_corpo, drives_novos=False, gestos=False)
+        return replace(self.cfg_corpo, drives_novos=True, gestos=True)
 
     def pesos_do_mundo(self) -> tuple[ConfigBola, ConfigFrutas]:
         """A ConfigBola e a ConfigFrutas da bancada com a chave desligada: no mundo fisico elas so dao os pesos w_bola e w_fruta ao instinto
@@ -894,14 +966,19 @@ class Bancada:
 
     def fabrica_motor(self, espec: EspecVida):
         mundo = mundo_de(espec.mundo)
+        # corpo (W-BANCADA-CORPO): o com_corpo(...) do motor do mundo, com a ConfigCorpo do regime; sem regime, o motor de antes
+        corpo = self.cfg_corpo_de(espec)
+        classe = (lambda base: base) if corpo is None else com_corpo  # noqa: E731
+        kc = {} if corpo is None else {"cfg_corpo": corpo}
         if mundo.fisico is not None:
             # o desenho do plano do mundo (secao 2): MotorMundo, obediencia, educacao, lesoes, frutas e bola de hoje desligadas, especie
             # brasa; o mundo "iguais" (PMF-7): as tres frutas com o efeito neutro no humor
             temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
             cm = self.cfg_mundo_de(mundo)
             efeito = efeitos_da_condicao(None, self.cfg_frutas, mundo.condicao)
-            return lambda politica, cfg, semente: MotorMundo(politica, cfg, semente, temperamento, "brasa", obediencia_desligada=True,
-                                                             semente_genoma=espec.genoma, cfg_mundo=cm, efeito_frutas=efeito)
+            return lambda politica, cfg, semente: classe(MotorMundo)(politica, cfg, semente, temperamento, "brasa",
+                                                                     obediencia_desligada=True, semente_genoma=espec.genoma,
+                                                                     cfg_mundo=cm, efeito_frutas=efeito, **kc)
         if mundo.frutas:
             # o desenho do N4 (plano, secao 3): MotorFrutas, obediencia, educacao, lesoes e bola desligadas, especie brasa; o genoma
             # das frutas (preferencia inata, neofobia) sai do genoma da vida, ou da semente sem genoma (o padrao do MotorFrutas)
@@ -913,19 +990,24 @@ class Bancada:
             cp = self.cfg_pedido if braco_de(espec.braco).pedido else None
             # K4: com o julgamento, o motor dos bracos com fonte dono expoe os consumos (estado()["consumos_frutas"]) para o julgador
             cj = CONFIG_JULGAMENTO_FORA if self.julga_fruta(espec) else None
-            return lambda politica, cfg, semente: MotorFrutasMundo(
+            return lambda politica, cfg, semente: classe(MotorFrutasMundo)(
                 politica, cfg, semente, temperamento, "brasa", obediencia_desligada=True, cfg_bola=CONFIG_BOLA, cfg_frutas=cf,
                 semente_genoma=espec.genoma, condicao=condicao, tick_troca=troca, cfg_informacao=ci, cfg_pedido=cp,
-                cfg_julgamento=cj)
+                cfg_julgamento=cj, **kc)
         if mundo.bola is not None:
             # o desenho da A1 (plano, secao 3): MotorAmbiente, obediencia, educacao e lesoes desligadas, especie brasa
             temperamento = NEUTRO if espec.genoma is None else sortear_temperamento(espec.genoma)
             cb = self.cfg_bola
-            return lambda politica, cfg, semente: MotorAmbiente(politica, cfg, semente, temperamento, "brasa",
-                                                                obediencia_desligada=True, cfg_bola=cb)
+            return lambda politica, cfg, semente: classe(MotorAmbiente)(politica, cfg, semente, temperamento, "brasa",
+                                                                        obediencia_desligada=True, cfg_bola=cb, **kc)
         if espec.genoma is None:
-            return lambda politica, cfg, semente: MotorComFeedback(politica=politica, cfg=cfg, semente=semente)
+            return lambda politica, cfg, semente: classe(MotorComFeedback)(politica=politica, cfg=cfg, semente=semente, **kc)
         temperamento = sortear_temperamento(espec.genoma)
+        if braco_de(espec.braco).regime is not None:
+            # corpo (W-BANCADA-CORPO): nos bracos do plano do corpo, hoje e quimica, a obediencia fica desligada no padrao com genoma,
+            # como nos mundos da bola e das frutas (o corpo a exige, secao 2): o par G-HOJE difere so na quimica
+            return lambda politica, cfg, semente: classe(MotorPersonalidade)(politica, cfg, semente, temperamento,
+                                                                             obediencia_desligada=True, **kc)
         return lambda politica, cfg, semente: MotorPersonalidade(politica, cfg, semente, temperamento)
 
     # ------------------------------------------------------------- vidas
@@ -1122,6 +1204,7 @@ class Bancada:
         extra_mundo = ({"lugar": vida.espec.lugar, "retirados": vida.retirados, "mundo_fisico": self.medidas_mundo(vida, m, reg)}
                        if fisico else {})
         dominancia = self.medidas_dominancia(vida, reg)
+        corpo = self.medidas_corpo(vida, m, reg)
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
@@ -1142,7 +1225,38 @@ class Bancada:
                 **desempenho, "acerto_total": tarefa["acerto_total"], "acerto_por_dia": tarefa["acerto"],
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
-                "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, **extra_mundo}
+                "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, "corpo": corpo,
+                **extra_mundo}
+
+    def medidas_corpo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
+        """As medidas do PLANO_ANALISE_V2_CORPO_DRIVES (secao 5), todas de metrics.py, nas vidas com o corpo ligado (None nas outras). A
+        janela e a dos ultimos sete dias (os dias 8 a 14 numa vida de 14), e a vida toda sai ao lado na `BE`:
+          - `BE` e `OC` (5.1): (tick, regra do instinto, acao) de cada decisao do replay de medicao;
+          - o cuidado preservado (5.2): (tick, em privacao, saude, fome) de cada decisao, a privacao pela Estado.em_privacao;
+          - os drives novos (5.3): a falta lida pelo receptor, na escala 0-1, de cada decisao, quando o corpo tem receptores novos;
+            sem eles (o regime "quimica"), sai indisponivel, com o no."""
+        cc = getattr(motor, "cc", None)
+        if cc is None or not cc.ligada:
+            return None
+        if len(reg.corpo) != len(reg.decisoes) or any(pc is None for pc in reg.corpo):
+            raise RuntimeError(f"{vida.nome}: o corpo ligado e decisao sem os receptores (Observacao.corpo)")
+        janela = janela_dias(max(1, self.dias - 6), self.dias)
+        fim = self.dias * TICKS_POR_DIA
+        ticks = [t for t, _, _ in reg.decisoes]
+        decs = [(t, regra, a) for (t, _, a), (_, regra, _) in zip(reg.decisoes, reg.bola)]
+        cuidado = [(t, p, sau, v[1]) for t, (p, sau), v in zip(ticks, reg.amostras, reg.vetores)]
+        S = self.cfg_lobos.escala
+        novos = [r for r in RECEPTORES_NOVOS if r in DRIVES_NOVOS_SINAL and getattr(reg.corpo[0], r) is not None]
+        if novos:
+            amostras = [(t, a, {r: getattr(pc, r) / S for r in novos}) for t, a, pc in zip(ticks, reg.acordado, reg.corpo)]
+            drives = {"disponivel": True, "janela": medir_drives_novos(amostras, janela),
+                      "vida_toda": medir_drives_novos(amostras, (0, fim))}
+        else:
+            drives = {"disponivel": False, "motivo": NOS_PENDENTES.get("corpo", "o corpo sem receptores novos")}
+        return {"regime": braco_de(vida.espec.braco).regime, "janela": list(janela),
+                "be": tempo_livre_be(decs, janela), "be_vida": tempo_livre_be(decs, (0, fim)),
+                "cuidado": cuidado_preservado(cuidado, janela), "drives_novos": drives,
+                "corpo_final": motor.corpo.para_dict()}
 
     def medidas_dominancia(self, vida: VidaBancada, reg: "_Registro") -> dict:
         """Adendo 2 do plano do corpo (A2.2), numa vida: por decisao observada, c_d = falta_d,antes^2 - falta_d,depois^2 por drive do
@@ -1155,6 +1269,8 @@ class Bancada:
         cerebro = reg.interna.cerebro
         cc = getattr(reg.interna, "cfg_consequencia", self.cfg_consequencia)
         S = self.cfg_lobos.escala
+        if reg.passos_sinal and reg.passos_sinal[0]["antes_corpo"] is not None:
+            return self._dominancia_pelo_corpo(vida, reg, b, cerebro, cc, S)
         acao_drives = tuple(cc.drives)
         fruta_drives = acao_drives + ((INDICE_HUMOR,) if cc.humor_na_fruta and INDICE_HUMOR not in acao_drives else ())
         falta = lambda v, ds: {NOMES_DRIVES[i]: S - arred(v[i] * S) for i in ds}  # noqa: E731
@@ -1189,6 +1305,54 @@ class Bancada:
         janela = janela_dias(max(1, self.dias - 6), self.dias)
         return {"origem": "sinal" if b.fonte in APRENDE_PELA_CONSEQUENCIA else "sonda", "conferido_com_canais": conferido,
                 "janela": list(janela), "na_janela": dominancia_decisoes(decisoes, janela),
+                "vida_toda": dominancia_decisoes(decisoes, (0, self.dias * TICKS_POR_DIA))}
+
+    def _dominancia_pelo_corpo(self, vida: VidaBancada, reg: "_Registro", b: Braco, cerebro, cc: ConfigConsequencia, S: int) -> dict:
+        """A dominancia (A2.2) com o corpo ligado: a conta do sinal pelo corpo (`lobos.contribuicoes_corpo`, secao 9 da tarefa), sobre
+        os receptores da decisao e os de depois dos estimulos da propria acao (o gancho `consequencia_corpo`), com os w_d inteiros da
+        `ConfigConsequencia.pesos_drives_corpo` e, com a `pesos_janela`, o peso da janela do motivo. Os drives: os do N3, o humor so no
+        comer de fruta (E2) e os novos que o corpo tiver (o susto fora), pelos nomes do corpo. Nos bracos que aprendem pela consequencia,
+        a contribuicao de cada decisao tem de ser a que o cerebro gravou no motivo (`sinal_corpo`) e, com os canais, a soma por canal a dos
+        canais dele: se nao for, falha alto."""
+        nomes = {"fome": "fome", "higiene": "desconforto", "energia": "cansaco", "humor": "tristeza"}
+        pd = dict(cc.pesos_drives_corpo)
+        aprende = (b.fonte in APRENDE_PELA_CONSEQUENCIA and getattr(cerebro, "_aprende", False)
+                   and getattr(cerebro, "_corpo", None) is not None)
+        decisoes, por_canal = [], {}
+        for p in reg.passos_sinal:
+            antes, depois = p["antes_corpo"], p["depois_corpo"]
+            if antes is None or depois is None:
+                raise RuntimeError(f"{vida.nome}: decisao {p['k']} sem os receptores de antes ou de depois (o gancho do corpo)")
+            drives = tuple(RECEPTOR_DO_INDICE[i] for i in cc.drives)
+            if p["fruta"] is not None and cc.humor_na_fruta and "humor" not in drives:
+                drives = drives + ("humor",)
+            drives = drives + tuple(r for r in RECEPTORES_NOVOS if r in DRIVES_NOVOS_SINAL and getattr(antes, r) is not None)
+            pesos = None
+            motivo = cerebro.motivos[p["k"]] if aprende else None
+            if aprende and cc.pesos_janela:
+                anotados = motivo.get("pesos_janela")
+                if anotados is None or not set(drives) <= set(anotados):
+                    raise RuntimeError(f"{vida.nome}: decisao {p['k']} sem os pesos da janela dos drives {drives} no motivo")
+                pesos = {d: anotados[d] for d in drives}
+            c = contribuicoes_corpo(antes, depois, drives, S, pd, pesos)
+            if aprende and motivo.get("sinal_corpo", {}).get("drives") != c:
+                raise RuntimeError(f"{vida.nome}: decisao {p['k']}: a contribuicao da medida e a do cerebro divergem")
+            decisoes.append((p["tick"], p["regra"], {nomes.get(d, d): v for d, v in c.items()}))
+            for canal, f in sinal_corpo_canais(antes, depois, drives, cc.ganho, S, pd, pesos).items():
+                por_canal[canal] = por_canal.get(canal, 0) + f
+        canais = getattr(cerebro, "_canais", None)
+        conferido = False
+        if aprende and cc.canais_ligados:
+            if canais is None or canais["creditos"] != len(reg.passos_sinal):
+                raise RuntimeError(f"{vida.nome}: o cerebro creditou {None if canais is None else canais['creditos']} decisoes, "
+                                   f"a medida viu {len(reg.passos_sinal)}")
+            if any(canais["por_canal"].get(c, 0) != v for c, v in por_canal.items()):
+                raise RuntimeError(f"{vida.nome}: o sinal por drive da medida e o dos canais do cerebro divergem")
+            conferido = True
+        janela = janela_dias(max(1, self.dias - 6), self.dias)
+        return {"origem": "sinal" if b.fonte in APRENDE_PELA_CONSEQUENCIA else "sonda", "conferido_com_canais": conferido,
+                "conferido_com_motivo": bool(aprende), "pelo_corpo": True, "janela": list(janela),
+                "na_janela": dominancia_decisoes(decisoes, janela),
                 "vida_toda": dominancia_decisoes(decisoes, (0, self.dias * TICKS_POR_DIA))}
 
     def medidas_mundo(self, vida: VidaBancada, motor: MotorMundo, reg: "_Registro") -> dict:
@@ -1305,7 +1469,13 @@ class Bancada:
     def deriva(self, vida: VidaBancada, sonda: dict) -> list[float]:
         """JSD (bits) entre a politica no fim de cada dia e a do prior herdado (o P0 da mesma vida), nas mesmas sondas."""
         estados = estados_sonda(sonda["estados"], sonda["semente"])
-        prior = self.politica(replace(vida.espec, braco="P0"), CONFIG_PADRAO)
+        # corpo: o prior e o P0 do mesmo regime, e as sondas ganham os receptores do proprio estado (o cerebro com o corpo os exige)
+        regime = braco_de(vida.espec.braco).regime
+        p0 = {"quimica": "P0-quimica", "corpo": "P0-c"}.get(regime, "P0")
+        corpo = self.cfg_corpo_de(vida.espec)
+        if corpo is not None:
+            estados = [replace(o, corpo=percepcao_da_sonda(o, corpo)) for o in estados]
+        prior = self.politica(replace(vida.espec, braco=p0), CONFIG_PADRAO)
         d_prior = distribuicoes_de_acao(prior, estados, sonda["amostras"], sonda["semente"])
         fab, fm = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec)
         log = vida.motor.log
@@ -1321,6 +1491,21 @@ class Bancada:
                 pol = do_braco(politica_no_tick(log, fab, vida.espec.semente, d * TICKS_POR_DIA, fm))
             serie.append(jsd_media(distribuicoes_de_acao(pol, estados, sonda["amostras"], sonda["semente"]), d_prior))
         return serie
+
+
+def percepcao_da_sonda(obs, cc: ConfigCorpo) -> PercepcaoCorpo:
+    """Os receptores de um estado sintetico da sonda (a deriva), com a conta do corpo: cada drive h vira o quimico q = arred((1 - h) C),
+    o ponto da grade de C mais perto, e o receptor e S - div_arred(q S, C), como o `Corpo.receptores`. So os drives de hoje: com os
+    drives novos a sonda nao tem de onde tirar o tedio, a solidao e o estresse (falha alto; e da etapa 6)."""
+    if cc.drives_novos or cc.gestos:
+        raise NotImplementedError(f"a sonda do corpo com os drives novos: {NOS_PENDENTES.get('corpo', 'a etapa 6')}")
+    C, S = cc.escala, cc.escala_receptor
+    v = obs.vetor_estado
+    leituras = {}
+    for i, nome in enumerate(("fome", "higiene", "energia", "humor", "saude")):
+        q = arred((1.0 - v[i]) * C)
+        leituras[nome] = S - div_arred_corpo(q * S, C)
+    return PercepcaoCorpo(**leituras)
 
 
 def do_braco(politica) -> PoliticaDoBraco:
@@ -1623,6 +1808,7 @@ class _Registro:
         # adendo 2 do corpo: por decisao observada, o tick, a regra e o estado antes e depois da propria acao (na fruta, o depois e o
         # estado logo depois de comer, o mesmo da E2)
         self.passos_sinal: list[dict] = []
+        self.corpo: list = []                              # corpo: a PercepcaoCorpo de cada decisao (None sem o corpo)
         self._decisao: tuple | None = None
 
     @property
@@ -1639,6 +1825,7 @@ class _Registro:
         self.bola.append((obs.bola > 0.0, self.interna.ultima_regra, acao.value))
         self.vetores.append((len(self.vetores), v[0], v[1], v[2], v[3]))
         self.acordado.append(v[6] == 0.0)
+        self.corpo.append(obs.corpo)                       # corpo: os receptores da decisao (None sem o corpo)
         self._decisao = (self.decisoes[-1][0], self.interna.ultima_regra)
         mem = getattr(self.interna.cerebro, "_memoria", None)   # N6, so le: a memoria dos lobos depois de promover (o que a decisao viu)
         if mem is not None:
@@ -1648,8 +1835,19 @@ class _Registro:
     def observar(self, transicao) -> None:
         tick, regra = self._decisao
         self.passos_sinal.append({"tick": tick, "regra": regra, "k": len(self.decisoes) - 1, "antes": transicao.observacao.vetor_estado,
-                                  "depois": transicao.observacao_seguinte.vetor_estado, "fruta": None})
+                                  "depois": transicao.observacao_seguinte.vetor_estado, "fruta": None,
+                                  "antes_corpo": transicao.observacao.corpo, "depois_corpo": None})
         self.interna.observar(transicao)
+
+    def consequencia_corpo(self, acao, ocorrido: dict, obs_depois) -> None:
+        """O gancho do MotorCorpo (uma chamada por decisao, logo depois dos estimulos da propria acao): so anota os receptores de
+        depois na decisao observada e repassa (o cerebro sem o gancho, como o instinto, nao recebe nada)."""
+        if not self.passos_sinal or self.passos_sinal[-1]["depois_corpo"] is not None:
+            raise RuntimeError("corpo: gancho de consequencia sem decisao observada (ou o segundo na mesma decisao)")
+        self.passos_sinal[-1]["depois_corpo"] = obs_depois.corpo
+        gancho = getattr(self.interna, "consequencia_corpo", None)
+        if gancho is not None:
+            gancho(acao, ocorrido, obs_depois)
 
     def fruta_comida(self, fruta: str, obs_depois) -> None:
         """O gancho da E2: a decisao de comer a fruta tem o sinal do estado logo depois de comer. So anota e repassa (o cerebro sem o
@@ -1723,6 +1921,14 @@ def validar_config(cfg: dict) -> dict:
     for m in cfg.get("mundos", ["padrao"]):
         mundo_de(m)
     fisicos = [m for m in cfg.get("mundos", ["padrao"]) if mundo_de(m).fisico is not None]
+    com_corpo_ = [b for b in cfg["bracos"] if BRACOS[b].regime in ("quimica", "corpo")]     # os bracos ja passaram pelo braco_de
+    if fisicos and com_corpo_ and "corpo_mundo" in NOS_PENDENTES:
+        raise NotImplementedError(f"bracos {com_corpo_} no mundo fisico: {NOS_PENDENTES['corpo_mundo']}")
+    if "corpo" in cfg:
+        if set(cfg["corpo"]) & set(SUBCHAVES_CORPO):
+            raise ValueError(f"'corpo' troca os numeros da ConfigCorpo, nao as sub-chaves {SUBCHAVES_CORPO}: o regime e do braco")
+        if not com_corpo_:
+            raise ValueError("'corpo' sem braco com corpo (regime quimica ou corpo)")
     if fisicos:
         lugares = cfg.get("lugares")
         if not lugares or len(set(lugares)) != len(lugares) or any(lg not in ESTILOS_LUGAR for lg in lugares):
@@ -1783,6 +1989,8 @@ def bancada_da_config(cfg: dict) -> Bancada:
         kw["cfg_frutas"] = replace(CONFIG_FRUTAS_LIGADA, **{k: tupla(v) for k, v in cfg["frutas"].items()})
     if "mundo" in cfg:
         kw["cfg_mundo"] = replace(CONFIG_MUNDO_LIGADA, **{k: tupla(v) for k, v in cfg["mundo"].items()})
+    if "corpo" in cfg:
+        kw["cfg_corpo"] = replace(CONFIG_CORPO_QUIMICA, **{k: tupla(v) for k, v in cfg["corpo"].items()})
     return Bancada(int(cfg["dias"]), int(cfg["orcamento"]), **kw)
 
 

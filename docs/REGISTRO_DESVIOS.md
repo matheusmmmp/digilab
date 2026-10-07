@@ -3652,3 +3652,32 @@ Etapa 5 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md` (seções 9 a 11). Int
 - **Para o D:** a bancada não precisa de nada novo para o P1 com o corpo. A `PoliticaDoBraco` já passa o `f_S` (conferido), e o
   `__getattr__` dela leva o gancho ao cérebro. A conferência da dominância refaz o sinal pelo Estado: com os drives de hoje sai igual, mas com
   os drives novos ela tem de usar as parcelas que o cérebro guarda no motivo (`sinal_corpo.drives`).
+
+## 2026-10-07 — W-BANCADA-CORPO (rodada 21, worker D): o corpo na bancada, etapa 8
+
+- **O P0-c e o P1-c não rodam ainda.** A mensagem do Gerente os listava entre os braços que "já dão para rodar", mas o plano define o regime
+  **corpo** como a química mais `drives_novos` e `gestos`, e as duas sub-chaves ainda falham alto na `ConfigCorpo` (etapa 6). Por isso eles
+  entram declarados e falhando alto com o nó (`NOS_PENDENTES["corpo"]`), como o P1-cw.
+- **O P0-q e o P1-q também esperam.** O plano os põe com o `DonoComGestos` no modo sem tapa (seção 2), e o `DonoComGestos` é do A, na etapa 6
+  (seção 14). Não o escrevi na bancada: "o resto do dono e o orçamento iguais" tem mais de uma leitura (o que fazer com a vaga do
+  `repreender` tirado), e a leitura é do A. Ficam com o nó `dono_gestos`.
+- **O que roda é o bloco G-HOJE** (seção 3.1): P0, P1 e P3 em "hoje" e em "química", com os donos de sempre. Os nomes dos braços são
+  `P0-hoje` e `P0-quimica` (sem acento no identificador).
+- **O P1-cw passou a ser o P1-c com a chave**, como o plano pede (A2.4) e como o #237 apontava. Com isso o P1-cw que rodava desde o #237 volta a
+  esperar a etapa 6. O mecanismo da bancada (a chave no cérebro, os pesos na dominância e a conferência) continua testado em dois braços de
+  teste postos no lugar dele: o P1 e o P1-química com a chave.
+- **O corpo no mundo físico fica pendente.** O `MotorCorpo` (#238) chama `consequencia_corpo` em toda decisão, e o `PoliticaLobos` com
+  `cfg_corpo` (#239) recusa o gancho em explorar, comer e brincar no mundo físico, porque lá o crédito é do `consequencia_mundo`. É contrato
+  entre o A e o B, e eu não mexi nos arquivos deles. O plano do corpo usa só os mundos `bola` e `padrao` (e o `iguais_frutas` no bloco G),
+  então nada do plano fica travado.
+- **No `padrao` com genoma** (as unidades derivadas têm genoma), os braços do plano usam o `MotorPersonalidade` com a obediência desligada nos
+  dois regimes. O corpo exige a obediência desligada (seção 2), e assim o par G-HOJE difere só na química, como nos mundos da bola e das
+  frutas. Os braços de antes (sem regime) não mudam.
+- **A química é a da `ConfigCorpo` da bancada**, com a digestão na taxa C e a Vida (seção 1 do plano). A chave `corpo` da config troca só os
+  números; as sub-chaves são do regime do braço.
+- **A dominância com o corpo** usa a conta do cérebro (`contribuicoes_corpo` sobre os receptores, com os w_d inteiros), e não a do vetor de
+  estado. Os nomes dos drives são os do corpo (fome, desconforto, cansaço e tristeza; os novos pelos próprios nomes).
+- **A deriva com o corpo:** a sonda tem estados sintéticos sem corpo. Os receptores saem do próprio estado pela conta do corpo (o ponto da
+  grade de C mais perto). O prior passa a ser o P0 do mesmo regime. Com os drives novos a sonda não tem de onde tirar o tédio, e falha alto
+  (é da etapa 6).
+- **As tabelas braço × condição não ganharam as medidas do corpo:** elas ficam no `medidas.json`, como as do N6 e do N7.

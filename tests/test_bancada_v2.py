@@ -69,7 +69,12 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
         "P2d": ("informacao", "adendo-3"), "P3i": ("dono", "adendo-3"),
         # W-BANCADA-MUNDO: o P0 sem explorar do mundo fisico, pendente do instinto do mundo (tests/test_bancada_mundo_fisico.py)
         "P0z": ("nenhuma", "mundo-fisico"),
-        # W-DOMINANCIA: o P1 com o peso pela janela recente (ligado na W-LIGA-PESOS-JANELA, tests/test_bancada_pesos_janela.py)
+        # W-BANCADA-CORPO: os bracos do plano do corpo (tests/test_bancada_corpo.py); o P1-cw e o P1-c com a pesos_janela
+        "P0-hoje": ("nenhuma", "corpo-3.1"), "P1-hoje": ("consequencia", "corpo-3.1"), "P3-hoje": ("dono", "corpo-3.1"),
+        "P0-quimica": ("nenhuma", "corpo-3.1"), "P1-quimica": ("consequencia", "corpo-3.1"), "P3-quimica": ("dono", "corpo-3.1"),
+        "P0-q": ("nenhuma", "corpo-3.2"), "P1-q": ("consequencia", "corpo-3.2"), "P0-c": ("nenhuma", "corpo-3.2"),
+        "P1-c": ("consequencia", "corpo-3.2"), "P0-c-tapa": ("nenhuma", "corpo-3.3"), "P1-c-tapa": ("consequencia", "corpo-3.3"),
+        "P1-c-tapaX": ("consequencia", "corpo-A1.1"), "P1-c-frutas": ("consequencia", "corpo-A1.1"),
         "P1-cw": ("consequencia", "corpo-A2.4")}
     assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
