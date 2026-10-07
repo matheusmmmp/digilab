@@ -1,0 +1,245 @@
+{
+  "contrastes": {
+    "P2-P2d_consumos_ate_metade_descasado": {
+      "d": "P2 - P2d",
+      "ic90": {
+        "ic_inferior": -21.551724137931036,
+        "ic_superior": -4.551724137931035,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -23.379310344827587,
+        "ic_superior": -3.0344827586206895,
+        "nivel": 0.95
+      },
+      "media": -12.827586206896552,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 29,
+      "n_grupos": 29,
+      "p_unilateral": 0.996,
+      "referencia": "P0 do bloco principal",
+      "sem_valor": 1,
+      "t_pareado": {
+        "gl": 28,
+        "p_unilateral": 0.9895434596750287,
+        "t": -2.4475424647502693
+      }
+    },
+    "P2-P2d_taxa_final_descasado": {
+      "d": "P2 - P2d",
+      "ic90": {
+        "ic_inferior": -0.004408455550485966,
+        "ic_superior": 0.009997050834489532,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.005804259830438025,
+        "ic_superior": 0.011446738139740969,
+        "nivel": 0.95
+      },
+      "media": 0.002771147779421542,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.2691,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.27044084417314834,
+        "t": 0.6187955793149869
+      }
+    },
+    "P2-P2d_taxa_final_mutavel": {
+      "d": "P2 - P2d",
+      "ic90": {
+        "ic_inferior": -0.009895958510432096,
+        "ic_superior": 0.0009220798073944677,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.010955642655092003,
+        "ic_superior": 0.0017980748471275066,
+        "nivel": 0.95
+      },
+      "media": -0.004357915511913672,
+      "motivo": null,
+      "mundo": "mutavel",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.9145,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.9018811285725015,
+        "t": -1.3228030015130448
+      }
+    },
+    "P3-P3i_consumos_ate_metade_descasado": {
+      "d": "P3 - P3i",
+      "ic90": {
+        "ic_inferior": -4.103448275862069,
+        "ic_superior": 3.0,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -4.862068965517241,
+        "ic_superior": 3.6206896551724137,
+        "nivel": 0.95
+      },
+      "media": -0.4827586206896552,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 29,
+      "n_grupos": 29,
+      "p_unilateral": 0.5919,
+      "referencia": "P0 do bloco principal",
+      "sem_valor": 1,
+      "t_pareado": {
+        "gl": 28,
+        "p_unilateral": 0.5860793369587223,
+        "t": -0.2195150267238912
+      }
+    },
+    "P3-P3i_taxa_final_descasado": {
+      "d": "P3 - P3i",
+      "ic90": {
+        "ic_inferior": -0.19949390933265743,
+        "ic_superior": -0.02053698889958139,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.21698406453042074,
+        "ic_superior": -0.0029875327362047766,
+        "nivel": 0.95
+      },
+      "media": -0.11049091804612726,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 26,
+      "n_grupos": 26,
+      "p_unilateral": 0.9784,
+      "sem_valor": 4,
+      "t_pareado": {
+        "gl": 25,
+        "p_unilateral": 0.9721420282573904,
+        "t": -2.006664764786189
+      }
+    },
+    "P3-P3i_taxa_final_mutavel": {
+      "d": "P3 - P3i",
+      "ic90": {
+        "ic_inferior": -0.16407677738564092,
+        "ic_superior": -0.026460848134014243,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.17835252843829977,
+        "ic_superior": -0.013845020720465399,
+        "nivel": 0.95
+      },
+      "media": -0.0938265968801436,
+      "motivo": null,
+      "mundo": "mutavel",
+      "n": 28,
+      "n_grupos": 28,
+      "p_unilateral": 0.9899,
+      "sem_valor": 2,
+      "t_pareado": {
+        "gl": 27,
+        "p_unilateral": 0.9803912230526155,
+        "t": -2.1670867917384546
+      }
+    }
+  },
+  "declarado": [
+    "P2d x P3i nao entra em contraste (diferem na fonte do aprendizado)",
+    "no P3i o w_info nao aprende: so a consequencia o ajusta"
+  ],
+  "informacoes": {
+    "P2/descasado": {
+      "informacoes": 2880,
+      "multiconjunto": {
+        "a/bem": 704,
+        "a/mal": 256,
+        "b/bem": 672,
+        "b/mal": 288,
+        "c/bem": 544,
+        "c/mal": 416
+      },
+      "por_vida_media": 96.0
+    },
+    "P2/mutavel": {
+      "informacoes": 2880,
+      "multiconjunto": {
+        "a/bem": 656,
+        "a/mal": 304,
+        "b/bem": 640,
+        "b/mal": 320,
+        "c/bem": 624,
+        "c/mal": 336
+      },
+      "por_vida_media": 96.0
+    },
+    "P2d/descasado": {
+      "informacoes": 2277,
+      "multiconjunto": {
+        "a/bem": 563,
+        "a/mal": 191,
+        "b/bem": 546,
+        "b/mal": 227,
+        "c/bem": 432,
+        "c/mal": 318
+      },
+      "por_vida_media": 75.9
+    },
+    "P2d/mutavel": {
+      "informacoes": 2240,
+      "multiconjunto": {
+        "a/bem": 527,
+        "a/mal": 206,
+        "b/bem": 528,
+        "b/mal": 235,
+        "c/bem": 484,
+        "c/mal": 260
+      },
+      "por_vida_media": 74.66666666666667
+    },
+    "P3/descasado": {
+      "informacoes": 0,
+      "multiconjunto": {},
+      "por_vida_media": 0.0
+    },
+    "P3/mutavel": {
+      "informacoes": 0,
+      "multiconjunto": {},
+      "por_vida_media": 0.0
+    },
+    "P3i/descasado": {
+      "informacoes": 881,
+      "multiconjunto": {
+        "a/bem": 193,
+        "a/mal": 83,
+        "b/bem": 201,
+        "b/mal": 127,
+        "c/bem": 137,
+        "c/mal": 140
+      },
+      "por_vida_media": 29.366666666666667
+    },
+    "P3i/mutavel": {
+      "informacoes": 906,
+      "multiconjunto": {
+        "a/bem": 228,
+        "a/mal": 72,
+        "b/bem": 217,
+        "b/mal": 98,
+        "c/bem": 185,
+        "c/mal": 106
+      },
+      "por_vida_media": 30.2
+    }
+  },
+  "leitura": "secundario, sem Holm (adendo 3, secao 3.3)"
+}

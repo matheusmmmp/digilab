@@ -2329,3 +2329,32 @@ Adendo 4 do `docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md`. Só fumaça nas sement
 - **Testes:**
   - `tests/test_adendo4.py`: a faixa nova, a queimada recusada, a trajetória dia a dia;
   - a fumaça do bloco de durações em `tests/test_adendo3.py`, que agora confere também a leitura do 4.2.
+
+## V2, VALIDACAO-UNICA — a validação única do experimento maior (2026-10-06, `docs/RESULTADO_V2_VALIDACAO_UNICA.md`) — FEITA
+
+Uma run nas bases 30101…30505 (N = 30, K = 6), config `experiments/configs/v2_experimento_maior/validacao.json` sem mudança, adendos 1 a 4;
+1680 vidas rejogadas do disco, 3 h 24 min. Números de `artifacts_v2_validacao_unica/` (as vidas fora do git). Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Predições** (Holm de seis):
+  - **1** confirma: o P1 come mais a fruta ruim que o P0 no casado, +0,078 [+0,048; +0,110];
+  - **2** confirma no descasado (+0,076) e no mutável (+0,102), sem inclinação final, então não é "por duração";
+  - **3** confirma pelo contraste (+11,4 consumos, p ajustado 0,03), **mas o P2 não difere do próprio só cuidado**: pela seção 5.1, o efeito
+    não conta como ensino;
+  - **4** inconclusiva: o P2e não piora no começo, e a recuperação (b) sozinha não basta;
+  - **5** confirma pela equivalência (IC 90% dentro de ±Δ), com o IC 95% do P3 − P0 abaixo de 0.
+- **Separação do cuidado:** em todo braço com dono, (a) e (b) falham; o só cuidado acoplado cuida pior que o original (malha aberta).
+- **Secundários:**
+  - **N6:** confirma (G-CAUSAL, G-REC e G-EMB com Holm; G-CITA 0,204).
+  - **N7:**
+    - G-EROSAO não rejeita;
+    - G-MARCA e G-MARCA-E subpotenciados, com só 6 unidades com valor;
+    - G-ARB e G-URG passam.
+  - **Ablações:** a memória ajuda só no mutável (+0,014); os canais, nada.
+  - **Durações:**
+    - descasado em platô (P0, P1 e ganho);
+    - no mutável o ganho decresce até 28 dias;
+    - não há degrau entre 7 e 14 dias.
+  - **P2d e P3i:**
+    - o P2d chega à metade 12,8 consumos antes do P2;
+    - o P3 come menos a fruta ruim que o P3i (−0,11 e −0,09).
+  - **`w_info` do P2e:** cruza o zero em 30 de 30 unidades, até o dia 5.

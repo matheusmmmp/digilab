@@ -1,0 +1,811 @@
+{
+  "descasado": {
+    "forma": {
+      "P0": {
+        "delta": 0.1986268570547561,
+        "duracoes": [
+          7,
+          14,
+          28
+        ],
+        "forma": "plato",
+        "passo_a": {
+          "ic90": {
+            "ic_inferior": -0.013123520504248677,
+            "ic_superior": 0.05002094144767231,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.01881755869202198,
+            "ic_superior": 0.056107952179595785,
+            "nivel": 0.95
+          },
+          "media": 0.01808449651640588,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.1661,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.18177446212925424,
+            "t": 0.923672276596859
+          }
+        },
+        "passo_b": {
+          "ic90": {
+            "ic_inferior": -0.03341071657424085,
+            "ic_superior": 0.010690086778316727,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.03838920934752992,
+            "ic_superior": 0.015299936391700356,
+            "nivel": 0.95
+          },
+          "media": -0.011389269635776507,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.8006,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.7917405027724728,
+            "t": -0.8246885347828212
+          }
+        },
+        "sem_valor": 1,
+        "sinal": -1.0
+      },
+      "P1": {
+        "delta": 0.1986268570547561,
+        "duracoes": [
+          7,
+          14,
+          28
+        ],
+        "forma": "plato",
+        "passo_a": {
+          "ic90": {
+            "ic_inferior": -0.019945631748882687,
+            "ic_superior": 0.008577519887157709,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.02253565413883276,
+            "ic_superior": 0.011354722235058798,
+            "nivel": 0.95
+          },
+          "media": -0.005658762462786164,
+          "motivo": null,
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.7384,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 0.734615971063008,
+            "t": -0.6344387128783788
+          }
+        },
+        "passo_b": {
+          "ic90": {
+            "ic_inferior": -0.008693327664381434,
+            "ic_superior": 0.005582935531991248,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.01009843069355041,
+            "ic_superior": 0.006849134938327284,
+            "nivel": 0.95
+          },
+          "media": -0.0015023266673690157,
+          "motivo": null,
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.6318,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 0.6301569567494392,
+            "t": -0.33546910841356553
+          }
+        },
+        "sem_valor": 0,
+        "sinal": -1.0
+      },
+      "ganho_P0_menos_P1": {
+        "delta": 0.1986268570547561,
+        "duracoes": [
+          7,
+          14,
+          28
+        ],
+        "forma": "plato",
+        "passo_a": {
+          "ic90": {
+            "ic_inferior": -0.0533071039520389,
+            "ic_superior": 0.006864439761495853,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.0590105369341907,
+            "ic_superior": 0.012794874903644102,
+            "nivel": 0.95
+          },
+          "media": -0.022938888469413055,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.8962,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.8857935771730818,
+            "t": -1.2314089172709821
+          }
+        },
+        "passo_b": {
+          "ic90": {
+            "ic_inferior": -0.015839640825389183,
+            "ic_superior": 0.03427936846128789,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.021088621804756933,
+            "ic_superior": 0.03975624891781827,
+            "nivel": 0.95
+          },
+          "media": 0.009294232582987734,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.2714,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.27903044106428987,
+            "t": 0.5928181802023554
+          }
+        },
+        "sem_valor": 1,
+        "sinal": 1.0
+      }
+    },
+    "janela": "final",
+    "por_duracao": {
+      "14": {
+        "P0": {
+          "braco": "P0",
+          "ic90": {
+            "ic_inferior": 0.38046467787570215,
+            "ic_superior": 0.42400321530996543,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.3766781881569796,
+            "ic_superior": 0.42830119174379955,
+            "nivel": 0.95
+          },
+          "media": 0.40203861385838596,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 4.539587553332523e-23,
+            "t": 29.840767648699565
+          }
+        },
+        "P1": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.32077480344071385,
+            "ic_superior": 0.3317013615507479,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.31975293827003054,
+            "ic_superior": 0.3327577608916236,
+            "nivel": 0.95
+          },
+          "media": 0.3263567233289393,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 4.014561225836457e-38,
+            "t": 95.71058098672248
+          }
+        },
+        "ganho_P0_menos_P1": {
+          "d": "P0 - P1",
+          "ic90": {
+            "ic_inferior": 0.0540305361727232,
+            "ic_superior": 0.09831848066360441,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.049960064186813445,
+            "ic_superior": 0.10308974853447221,
+            "nivel": 0.95
+          },
+          "media": 0.07592246328821889,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 3.185840355827727e-06,
+            "t": 5.538963688702771
+          }
+        }
+      },
+      "28": {
+        "P0": {
+          "braco": "P0",
+          "ic90": {
+            "ic_inferior": 0.39669228231245407,
+            "ic_superior": 0.4306662276018012,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.3936058385157743,
+            "ic_superior": 0.43412718930088706,
+            "nivel": 0.95
+          },
+          "media": 0.41342788349416243,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 1.8585113216776168e-26,
+            "t": 39.68295555809596
+          }
+        },
+        "P1": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.32356247865402044,
+            "ic_superior": 0.33217502346867833,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.3227739211598762,
+            "ic_superior": 0.3329377861751698,
+            "nivel": 0.95
+          },
+          "media": 0.32785904999630827,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 3.227345402445876e-41,
+            "t": 122.44331007044217
+          }
+        },
+        "ganho_P0_menos_P1": {
+          "d": "P0 - P1",
+          "ic90": {
+            "ic_inferior": 0.06728772956308403,
+            "ic_superior": 0.10337838339870876,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.0640521166681701,
+            "ic_superior": 0.10712833855053575,
+            "nivel": 0.95
+          },
+          "media": 0.08521669587120663,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 1.0578136474834444e-08,
+            "t": 7.712071318289513
+          }
+        }
+      },
+      "7": {
+        "P0": {
+          "braco": "P0",
+          "ic90": {
+            "ic_inferior": 0.3912642096465626,
+            "ic_superior": 0.45028138697002795,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.3856926068012862,
+            "ic_superior": 0.4555118881450685,
+            "nivel": 0.95
+          },
+          "media": 0.4201231103747918,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 5.948267410381865e-20,
+            "t": 22.856749716858694
+          }
+        },
+        "P1": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.30774122284190936,
+            "ic_superior": 0.33331877013570377,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.30515831519950515,
+            "ic_superior": 0.33575066674151344,
+            "nivel": 0.95
+          },
+          "media": 0.32069796086615304,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 2.8280220453670364e-27,
+            "t": 40.16205189227157
+          }
+        },
+        "ganho_P0_menos_P1": {
+          "d": "P0 - P1",
+          "ic90": {
+            "ic_inferior": 0.07066148062814204,
+            "ic_superior": 0.12779227857995362,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.06542995978986577,
+            "ic_superior": 0.1340390145244955,
+            "nivel": 0.95
+          },
+          "media": 0.09886135175763194,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 2.9151354057929883e-06,
+            "t": 5.571626976052483
+          }
+        }
+      }
+    }
+  },
+  "leitura": "descritiva, fora da familia de Holm (adendo 3, secao 3.1)",
+  "leitura_limiar": "L-3: o limiar tambem e forma possivel da curva (abaixo de uma duracao minima aprender nao rende; Liedtke e Fromhage 2019). Com tres duracoes, um limiar abaixo de 7 dias aparece como crescente ou plato, e um entre 7 e 14 dias como um degrau no passo a. A regra registrada (forma_da_curva) nao muda; a leitura nomeia o limiar antes de escolher.",
+  "mutavel": {
+    "confusao_declarada": "a troca acontece no fim do dia dias // 2 (Bancada.tick_troca): mudar a duracao muda o momento da troca, e a janela depois_da_troca muda junto (adendo 3, secao 3.1)",
+    "forma": {
+      "P0": {
+        "delta": 0.1986268570547561,
+        "duracoes": [
+          7,
+          14,
+          28
+        ],
+        "forma": "crescente",
+        "passo_a": {
+          "ic90": {
+            "ic_inferior": -0.0385183568754247,
+            "ic_superior": 0.03307106609200095,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.0459355708601882,
+            "ic_superior": 0.039639430384748035,
+            "nivel": 0.95
+          },
+          "media": -0.0030716836593207564,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.5607,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.5541304687771031,
+            "t": -0.1373474542425777
+          }
+        },
+        "passo_b": {
+          "ic90": {
+            "ic_inferior": 0.007044864361488702,
+            "ic_superior": 0.052954817400431335,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.003097723439678166,
+            "ic_superior": 0.057267767437437785,
+            "nivel": 0.95
+          },
+          "media": 0.02998187536988625,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0144,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.021463819585669033,
+            "t": 2.12081073368942
+          }
+        },
+        "sem_valor": 1,
+        "sinal": -1.0
+      },
+      "P1": {
+        "delta": 0.1986268570547561,
+        "duracoes": [
+          7,
+          14,
+          28
+        ],
+        "forma": "plato",
+        "passo_a": {
+          "ic90": {
+            "ic_inferior": -0.02296965039400443,
+            "ic_superior": 0.0019356932882023928,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.025269133213568364,
+            "ic_superior": 0.004382322153690876,
+            "nivel": 0.95
+          },
+          "media": -0.010388235534285034,
+          "motivo": null,
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.9175,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 0.9066034189011252,
+            "t": -1.3521045504347895
+          }
+        },
+        "passo_b": {
+          "ic90": {
+            "ic_inferior": -0.004751666379030822,
+            "ic_superior": 0.009283115486075199,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.00604111899953073,
+            "ic_superior": 0.010588725541723172,
+            "nivel": 0.95
+          },
+          "media": 0.002395344156244006,
+          "motivo": null,
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.2796,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 0.29319675820577945,
+            "t": 0.5502029158914064
+          }
+        },
+        "sem_valor": 0,
+        "sinal": -1.0
+      },
+      "ganho_P0_menos_P1": {
+        "delta": 0.1986268570547561,
+        "duracoes": [
+          7,
+          14,
+          28
+        ],
+        "forma": "decrescente",
+        "passo_a": {
+          "ic90": {
+            "ic_inferior": -0.04265877050920459,
+            "ic_superior": 0.02865318385769307,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.050082696904738835,
+            "ic_superior": 0.03525753873953552,
+            "nivel": 0.95
+          },
+          "media": -0.006629834813973059,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.6203,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.6167163250119705,
+            "t": -0.29976919724930523
+          }
+        },
+        "passo_b": {
+          "ic90": {
+            "ic_inferior": -0.05211221114023266,
+            "ic_superior": -0.00510361110864197,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": -0.05650446691468849,
+            "ic_superior": -0.0012483699047556116,
+            "nivel": 0.95
+          },
+          "media": -0.028548865218703843,
+          "motivo": null,
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.9801,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 0.9712510947780327,
+            "t": -1.9809361387573396
+          }
+        },
+        "sem_valor": 1,
+        "sinal": 1.0
+      }
+    },
+    "janela": "depois_da_troca",
+    "por_duracao": {
+      "14": {
+        "P0": {
+          "braco": "P0",
+          "ic90": {
+            "ic_inferior": 0.40969017496901466,
+            "ic_superior": 0.4525852988321865,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.40573501058148187,
+            "ic_superior": 0.4570424934890268,
+            "nivel": 0.95
+          },
+          "media": 0.43031484605781567,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 4.327109026235938e-24,
+            "t": 32.530042181051144
+          }
+        },
+        "P1": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.3234896384721904,
+            "ic_superior": 0.3360953517292145,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.3222087440309838,
+            "ic_superior": 0.3372897409936548,
+            "nivel": 0.95
+          },
+          "media": 0.3298500685119344,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 1.8659206644714175e-36,
+            "t": 83.80437182391414
+          }
+        },
+        "ganho_P0_menos_P1": {
+          "d": "P0 - P1",
+          "ic90": {
+            "ic_inferior": 0.08063020639540955,
+            "ic_superior": 0.12424920583204647,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.0768363194059262,
+            "ic_superior": 0.12874546823348618,
+            "nivel": 0.95
+          },
+          "media": 0.10162982220534438,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 1.7040699970933473e-08,
+            "t": 7.5227192695692535
+          }
+        }
+      },
+      "28": {
+        "P0": {
+          "braco": "P0",
+          "ic90": {
+            "ic_inferior": 0.38497167281180533,
+            "ic_superior": 0.4168797236025918,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.38212025080619477,
+            "ic_superior": 0.4201365098343856,
+            "nivel": 0.95
+          },
+          "media": 0.40033297068792945,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 1.0466339861375864e-26,
+            "t": 40.51911432741366
+          }
+        },
+        "P1": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.3234399172686272,
+            "ic_superior": 0.3313566846136177,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.32264846685096876,
+            "ic_superior": 0.3321512339417938,
+            "nivel": 0.95
+          },
+          "media": 0.3274547243556904,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 2.6428231040734616e-42,
+            "t": 133.49793887494351
+          }
+        },
+        "ganho_P0_menos_P1": {
+          "d": "P0 - P1",
+          "ic90": {
+            "ic_inferior": 0.05815285681360463,
+            "ic_superior": 0.08940679132155098,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.05569364672738075,
+            "ic_superior": 0.09321888983879521,
+            "nivel": 0.95
+          },
+          "media": 0.07308095698664054,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 1.6016319918867428e-08,
+            "t": 7.5472388765557445
+          }
+        }
+      },
+      "7": {
+        "P0": {
+          "braco": "P0",
+          "ic90": {
+            "ic_inferior": 0.3906207382880811,
+            "ic_superior": 0.464503859662395,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.38301627319455867,
+            "ic_superior": 0.4719314355857539,
+            "nivel": 0.95
+          },
+          "media": 0.4272431623984949,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 1.3881484616148558e-17,
+            "t": 18.57925609409492
+          }
+        },
+        "P1": {
+          "braco": "P1",
+          "ic90": {
+            "ic_inferior": 0.3074661130013802,
+            "ic_superior": 0.33124033280649245,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.30546751074513895,
+            "ic_superior": 0.3339498891575214,
+            "nivel": 0.95
+          },
+          "media": 0.31946183297764935,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 0.0,
+          "sem_valor": 0,
+          "t_pareado": {
+            "gl": 29,
+            "p_unilateral": 3.0394326958642643e-28,
+            "t": 43.426692707845795
+          }
+        },
+        "ganho_P0_menos_P1": {
+          "d": "P0 - P1",
+          "ic90": {
+            "ic_inferior": 0.07291190622907892,
+            "ic_superior": 0.14449499949732034,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.06618975495586725,
+            "ic_superior": 0.15130800467902042,
+            "nivel": 0.95
+          },
+          "media": 0.10825965701931745,
+          "motivo": null,
+          "mundo": "mutavel",
+          "n": 29,
+          "n_grupos": 29,
+          "p_unilateral": 0.0,
+          "sem_valor": 1,
+          "t_pareado": {
+            "gl": 28,
+            "p_unilateral": 2.0240734318619423e-05,
+            "t": 4.861681109137281
+          }
+        }
+      }
+    }
+  }
+}
