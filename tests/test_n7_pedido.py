@@ -339,7 +339,7 @@ def test_falha_alto_fora_do_contrato():
 
 def test_enum_cresce_no_fim_e_parametros_registrados():
     todos = list(AcaoUsuario)
-    assert todos[-3:] == list(ACOES_PEDIDO) and [pedido_de(a) for a in ACOES_PEDIDO] == list(FRUTAS)
+    assert todos[26:29] == list(ACOES_PEDIDO) and [pedido_de(a) for a in ACOES_PEDIDO] == list(FRUTAS)
     assert todos.index(ACOES_INFORMACAO[0]) == 20 and todos.index(ACOES_FRUTAS[0]) == 17     # as de antes nao andaram
     validar_parametros_pedido()
     assert pedido_nao_referendados() == ["ConfigPedido.janela_min", "ConfigPedido.dias_pedido"]

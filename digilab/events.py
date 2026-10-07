@@ -67,6 +67,9 @@ class AcaoUsuario(str, Enum):
     PEDIR_DEIXAR_FRUTA_A = "pedir_deixar_fruta_a"
     PEDIR_DEIXAR_FRUTA_B = "pedir_deixar_fruta_b"
     PEDIR_DEIXAR_FRUTA_C = "pedir_deixar_fruta_c"
+    # V2, corpo, etapa 6 (docs/TAREFA_V2_CORPO_DRIVES.md, secao 8): o tapa, a desaprovacao com corpo (dor, susto, estresse) e o sinal da
+    # bronca. So o MotorCorpo com ConfigCorpo.gestos aceita; nos motores de hoje (e no reproduzir de hoje) levanta erro. No fim do enum.
+    TAPA = "tapa"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -77,6 +80,7 @@ ACOES_TREINO = tuple(a for a in AcaoUsuario if a.value.startswith("treinar_"))
 ACOES_EDUCACAO = (AcaoUsuario.PETISCO, AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO)
 ACOES_BOLA = (AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA)
 ACOES_FRUTAS = (AcaoUsuario.OFERECER_FRUTA_A, AcaoUsuario.OFERECER_FRUTA_B, AcaoUsuario.OFERECER_FRUTA_C)
+ACOES_CORPO = (AcaoUsuario.TAPA,)
 FRUTAS = ("a", "b", "c")
 
 

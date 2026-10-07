@@ -32,6 +32,14 @@ Ligado (secao 2), os cinco drives do Estado (fome, higiene, energia, humor, saud
     gancho vive como hoje. Com o mundo fisico, o `consequencia_mundo` (so nas decisoes de explorar, comer e brincar, como hoje) vem antes
     dele, ja com os estimulos aplicados e o `obs.corpo`;
   - com o orgao 2 (a Vida), o estagio pelos receptores da Vida e conferido contra o de hoje (treino_stats.estagio_no_tick) a cada tick.
+Etapa 6, a parte do motor (secoes 7 e 8; o contrato dos ganchos combinado com o B, dono da quimica nova):
+  - `gestos`: o tapa (`AcaoUsuario.TAPA`) e o carinho viram so o estimulo do corpo (`Corpo.acao_dono`), contam como contato e gastam o
+    orcamento (CD-6). O tapa vai ao cerebro por `receber_acao_dono` (o sinal direto) e nao chama o `mudanca_no_corpo` (CD-9); o
+    carinho nao e repassado, e o cerebro o ve so pelo `mudanca_no_corpo(obs_antes, obs_depois)`. Sem `gestos`, o tapa falha alto
+    (GestoSemChave) e o carinho e o de hoje;
+  - `drives_novos`: `Corpo.atividade(nome)` (o tedio pela variedade, secao 17) uma vez por decisao de brincar ("bola" ou "brincar") ou
+    explorar, depois dos estimulos da acao; com o mundo fisico, o registro do que o pet viu e quando, os `vistos_novos` no `ocorrido`
+    do mundo e `Corpo.estimulo_novidade(n)` no explorar (a curiosidade, CD-8; o corpo nasce com `com_mundo`).
 Com educacao, lesoes, obediencia ou uma acao de treino, falha alto (secao 2): lesao como dano de orgao e da etapa 1b. O corpo nao sorteia
 nada e o cerebro nao recebe o objeto do corpo: so os receptores (G-RECEPTOR).
 """
@@ -44,10 +52,11 @@ from .config import CONFIG_CORPO, ConfigCorpo
 from .corpo import DRIVE_DO_QUIMICO, Corpo
 from .educacao import MotorEducacao
 from .engine import Motor
-from .events import ACOES_TREINO, AcaoPet, AcaoUsuario
+from .events import ACOES_CORPO, ACOES_TREINO, AcaoPet, AcaoUsuario
 from .obediencia import MotorPersonalidade
 from .policy import Observacao, Transicao, efeito_da_acao_do_pet
 from .state import avancar_um_tick
+from .treino import PoliticaTreinavel
 from .treino_stats import estagio_no_tick
 
 DRIVES = ("fome", "higiene", "energia", "humor", "saude")
@@ -55,6 +64,10 @@ DRIVES = ("fome", "higiene", "energia", "humor", "saude")
 
 class ForaDoCorpo(RuntimeError):
     """G-BYPASS: com o corpo ligado, um drive do Estado mudou por fora da quimica."""
+
+
+class GestoSemChave(ValueError):
+    """O tapa (secao 8) num MotorCorpo sem ConfigCorpo.gestos."""
 
 
 @dataclass(frozen=True)
@@ -86,10 +99,17 @@ class MotorCorpo:
         self._recusar_o_que_o_corpo_nao_cobre()
         treino = getattr(self, "treino", None)
         self._cfg_evo = treino.cfg_evo if treino is not None else None
-        self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo)
+        if self.cc.drives_novos:                      # etapa 6: a curiosidade so existe com o mundo fisico (CD-8)
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado())
+        else:
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo)
         self._estado = self.corpo.no_estado(self._estado)
         self._estimulos: list[tuple] = []             # os estimulos da decisao em curso (para o `ocorrido`)
         self.consequencias = 0                        # quantas vezes o gancho `consequencia_corpo` foi chamado
+        self.mudancas = 0                             # quantas vezes o gancho `mudanca_no_corpo` foi chamado (o carinho, com `gestos`)
+        # etapa 6, secao 7: o registro do que o pet viu e quando (o id do objeto -> o ultimo tick em que o viu), so com os drives novos
+        # e o mundo fisico; derivado (o replay o refaz)
+        self._vistos_em: dict[int, int] | None = {} if (self.cc.drives_novos and self._mundo_ligado()) else None
 
     def _recusar_o_que_o_corpo_nao_cobre(self) -> None:
         """Secao 2: o corpo vale nos motores dos mundos da pesquisa, sem educacao, lesoes nem obediencia. As classes do meio so podem
@@ -188,6 +208,8 @@ class MotorCorpo:
             self.corpo.estimulo_bola(self.cb.ganho_humor_bola)
             self._estimulos.append(("bola",))
         self._sincronizar()
+        if self.cc.drives_novos and not self._mundo_ligado():      # com o mundo, a atividade vem na consequencia dele
+            self._atividade(acao, bola)
         gancho = getattr(self.politica, "consequencia_corpo", None)
         if gancho is not None:
             ocorrido = {"acao": acao.value, "estimulos": list(self._estimulos)}
@@ -219,8 +241,51 @@ class MotorCorpo:
         if bola:
             self.corpo.estimulo_bola(cmf.ganho_humor_bola)
             self._estimulos.append(("bola",))
+        if self._vistos_em is not None:
+            self._novidade(acao, ocorrido)
+        if self.cc.drives_novos:
+            self._atividade(acao, bola)
         self._sincronizar()
         return ocorrido
+
+    # ------------------------------------------------------------ etapa 6: os drives novos (secao 7)
+    def _atividade(self, acao: AcaoPet, bola: bool) -> None:
+        """O tedio pela variedade (secao 17, DS-4): avisa ao corpo a atividade da propria acao, depois dos estimulos dela. O dono
+        brincar o corpo ja sabe pelo `acao_dono(BRINCAR)`."""
+        if acao is AcaoPet.BRINCAR:
+            nome = "bola" if bola else "brincar"
+        elif acao is AcaoPet.EXPLORAR:
+            nome = "explorar"
+        else:
+            return
+        self.corpo.atividade(nome)
+        self._estimulos.append(("atividade", nome))
+
+    def _registrar_vistos(self, vistos, tick: int) -> None:
+        for v in vistos:
+            self._vistos_em[v[0]] = tick
+
+    def _novidade(self, acao: AcaoPet, ocorrido: dict) -> None:
+        """Secao 7: uma novidade e um objeto dos `vistos` (comida ou bola: o resto e cenario) que o pet nao viu nas ultimas
+        `janela_novidade` ticks, achado numa decisao de explorar (na percepcao depois de andar). O que ele ja via ao decidir nao conta.
+        `ocorrido["vistos_novos"]` = [[id, tipo], ...] em toda decisao com alvo (vazio fora do explorar); o corpo recebe a contagem."""
+        tick = self._estado.tick
+        vistos = self._perceber(tick).vistos
+        novos = []
+        if acao is AcaoPet.EXPLORAR:
+            janela = self.cc.janela_novidade
+            novos = [[v[0], v[1]] for v in vistos if v[0] not in self._vistos_em or tick - self._vistos_em[v[0]] >= janela]
+            self.corpo.estimulo_novidade(len(novos))
+            self._estimulos.append(("novidade", len(novos)))
+        ocorrido["vistos_novos"] = novos
+        self._registrar_vistos(vistos, tick)
+
+    def _antes_da_decisao(self):
+        """o MotorMundo, antes de cada decisao: o que o pet ve ao decidir entra no registro de novidade"""
+        p = super()._antes_da_decisao()
+        if self._ligado() and self._vistos_em is not None:
+            self._registrar_vistos(p.vistos, self._estado.tick)
+        return p
 
     def _observacao_depois_mundo(self) -> Observacao:
         """o `obs_depois` do mundo com o `obs.corpo` (os receptores ja com os estimulos da propria acao)"""
@@ -248,6 +313,11 @@ class MotorCorpo:
             return super()._aplicar_acao_usuario(acao)
         if acao in ACOES_TREINO:
             raise ValueError(f"{acao.value} com o corpo: o treino nao tem estimulo no corpo (secao 2)")
+        if acao in ACOES_CORPO and not self.cc.gestos:
+            raise GestoSemChave(f"{acao.value} sem ConfigCorpo.gestos (secao 8)")
+        if acao in ACOES_CORPO or (acao is AcaoUsuario.ACARICIAR and self.cc.gestos):
+            self._gesto(acao)
+            return
         self._conferir_sincronia(f"antes de {acao.value}")
         super()._aplicar_acao_usuario(acao)
         deltas = self.corpo.t.dono.get(acao, {})
@@ -255,6 +325,39 @@ class MotorCorpo:
         if deltas:
             self.corpo.acao_dono(acao)
         self._sincronizar()
+
+    # ------------------------------------------------------------ etapa 6: os gestos (secao 8)
+    def _observacao_gesto(self) -> Observacao:
+        obs = self._observacao()
+        return replace(obs, mundo=self._perceber(self._estado.tick)) if self._mundo_ligado() else obs
+
+    def _gesto(self, acao: AcaoUsuario) -> None:
+        """O tapa e, com `gestos`, o carinho (secao 8). Os dois contam como contato e gastam o orcamento (CD-6), como toda acao do dono;
+        o efeito e so o do corpo (`acao_dono`), e o Estado e a leitura. O tapa e repassado ao cerebro por `receber_acao_dono` (o sinal
+        direto) e nao chama o `mudanca_no_corpo` (CD-9). O carinho NAO e repassado: o cerebro o ve so pelo corpo, no
+        `mudanca_no_corpo(obs_antes, obs_depois)`, que nao diz que gesto foi. Os efeitos das classes do meio, na ordem delas: a janela
+        da educacao (desligada: so expira), o indice do evento e o vinculo do MotorPersonalidade."""
+        tick = self._estado.tick
+        self._conferir_sincronia(f"antes de {acao.value}")
+        if isinstance(self, MotorEducacao):
+            self._expirar(tick)
+        ref = None
+        if isinstance(self, MotorPersonalidade):
+            ref = self._n_eventos
+            self._n_eventos += 1
+        antes = self._observacao_gesto() if acao is AcaoUsuario.ACARICIAR else None
+        self._estado = replace(self._estado, tick_ultimo_cuidado=tick, total_cuidados=self._estado.total_cuidados + 1)
+        self.corpo.acao_dono(acao)
+        self._sincronizar()
+        if acao is AcaoUsuario.TAPA and isinstance(self.politica, PoliticaTreinavel):
+            self.politica.receber_acao_dono(acao, tick)
+        if isinstance(self, MotorPersonalidade):
+            self._depois_do_dono(acao, tick, ref)
+        if acao is AcaoUsuario.ACARICIAR:
+            gancho = getattr(self.politica, "mudanca_no_corpo", None)
+            if gancho is not None:
+                gancho(antes, self._observacao_gesto())
+                self.mudancas += 1
 
     def estado(self) -> dict:
         d = super().estado()

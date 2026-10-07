@@ -773,9 +773,11 @@ class CanalMundo(CanalDeInteracao):
 
 
 def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orcamento: int, fabrica_motor: Callable,
-                       cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, rotulo_dono: str | None = None) -> Vida:
+                       cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, rotulo_dono: str | None = None,
+                       canal_classe: type | None = None) -> Vida:
     """treino.simular_vida com o CanalMundo: o dono (embrulhado pelo DonoComLugar) deixa a comida e a bola pelos gestos do mundo, que
-    gastam o orcamento. A rng do dono e a de sempre (`dono`, semente, rotulo)."""
+    gastam o orcamento. A rng do dono e a de sempre (`dono`, semente, rotulo). `canal_classe` troca o canal (o CanalMundoComGestos de
+    digilab/gestos.py, com o DonoComGestos); o padrao e o CanalMundo."""
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     total = dias * TICKS_POR_DIA
@@ -786,7 +788,7 @@ def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orca
     if not isinstance(motor, MotorMundo) or not motor.cmf.ligada:
         raise ValueError("simular_vida_mundo precisa do MotorMundo com o mundo ligado")
     rng_dono = random.Random(derivar_semente("dono", semente, rotulo_dono or braco))
-    canal = CanalMundo(motor, orcamento, cfg_donos.max_interacoes_por_passo)
+    canal = (canal_classe or CanalMundo)(motor, orcamento, cfg_donos.max_interacoes_por_passo)
     for passo in range(passos):
         motor.avancar(cfg_donos.passo_ticks)
         minimo, maximo = canal.limites(passo, passos)
