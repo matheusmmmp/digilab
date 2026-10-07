@@ -1,0 +1,12 @@
+{
+  "descricao": "Fumaca do orquestrador da comparacao A x C. NAO canonica: so as sementes dos testes, vida curta, sondas e bootstrap curtos; confere o encanamento (vidas, acoplados, mesma experiencia, analise, M6, tamanho), nunca como resultado.",
+  "plano": "docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md",
+  "unidades": {"bases": [101, 202, 303], "k": 1, "prefixo": "comparacao-cerebros"},
+  "dias": 4,
+  "orcamento": 64,
+  "sonda": {"estados": 10, "amostras": 20, "semente": 101},
+  "bootstrap": {"reamostragens": 300, "semente": 101, "nivel": 0.95},
+  "delta": 0.1986268570547561,
+  "simulacao": {"semente": 101, "replicas": 200},
+  "saida": "artifacts_fumaca/v2_comparacao_ac"
+}
