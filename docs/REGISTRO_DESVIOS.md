@@ -3323,3 +3323,48 @@ As escolhas abaixo são de formato e de borda; nenhuma muda uma definição dos 
 - **O dia do critério** generaliza o horizonte como τ = D − seguidos + 2, que é o D − 1 do plano com 3 dias seguidos.
 - **Fica de fora, por não ser desta tarefa:** as faixas 37101…38505 e o prefixo `"banheiro"` na bancada (seção 10 do plano do banheiro, a
   etapa 5 da tarefa) e os descritivos da seção 5.3 do mundo e 5.4 do corpo, que a tarefa não listou.
+
+## 2026-10-07 — W-CORPO-MOTOR (worker A, rodada 17): o corpo no motor, etapa 2
+
+Etapa 2 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md`. Sem run; só as sementes dos testes.
+
+- **O `MotorCorpo` é um mixin.** Ele vai na frente de cada motor de hoje por `com_corpo(base)`: `MotorComFeedback`, `MotorAmbiente` e
+  `MotorFrutasMundo` (este, da bancada). Um motor só não caberia: o `MotorComFeedback` do mundo `padrao` não está na cadeia do
+  `MotorAmbiente`.
+- **O laço do tick é refeito no mixin** (seção 2, o caminho recomendado). Os efeitos por avanço das classes do meio ficam: o contador de
+  eventos do `MotorPersonalidade` e a morte do `MotorEducacao`.
+  - Uma classe nova na cadeia que sobrescreva `_avancar` falha alto, porque o laço não a refaria.
+  - O `state.avancar_um_tick` continua sendo chamado para o tick e para a sujeira (a mesma rng, na mesma ordem); os drives float que ele
+    calcula são trocados pela leitura.
+- **Os escritores de hoje viram estímulo assim:**
+  - a ação do dono: o `_aplicar_acao_usuario` de baixo roda inteiro (sujeira, sono, contato, vínculo, cérebro), e depois os drives vêm do
+    `Corpo.acao_dono`;
+  - a fruta: o `_comer` do `MotorFrutas` é sobrescrito, então o estímulo entra antes do gancho `fruta_comida` da E2. O cérebro vê a
+    fruta já na grade;
+  - a bola: ela escreve o humor dentro do `observar`, então o estímulo entra logo depois.
+- **O G-BYPASS confere em dois lugares:**
+  - no começo de cada tick e antes de cada ação do dono, o `Estado` tem de ser a leitura da química, exato;
+  - depois de cada escritor de hoje, só os drives do estímulo podem ter mudado. A conferência vem antes do estímulo: depois dele o float
+    de baixo e a leitura podem diferir no último bit (0,8775000000000001 × 0,8775 com a bola), e a leitura é o que vale.
+- **O que falha alto com o corpo** (seção 2):
+  - a obediência ligada, a educação e as lesões;
+  - uma ação de treino: o "treino ligado" da tarefa, porque o motor de treino está sempre na cadeia;
+  - o petisco e qualquer outro escritor sem estímulo, pelo G-BYPASS;
+  - **o mundo físico ligado**: o andar, as comidas do mapa e o MF-2 ainda não têm estímulo no corpo. O custo de andar vira um inteiro
+    exato de C: 1/6000 × 450000 = 75 por subunidade, então não precisa de arredondamento. Falta o estímulo no `corpo.py` (do B) e a
+    ligação aqui.
+- **A Vida:** com o órgão 2 e um motor com estágio, o estágio pelos receptores da Vida é conferido contra o de hoje
+  (`treino_stats.estagio_no_tick`, com a `cfg_evo` do `TreinoPet`) a cada tick, e falha alto se diferir. O estágio do motor continua o de
+  hoje; a Vida não o substitui nesta etapa.
+- **O gancho `consequencia_corpo`:**
+  - é uma chamada por decisão, logo depois dos estímulos da própria ação e antes do tempo e do dono;
+  - o `ocorrido` traz a ação e a lista de estímulos, `("pet", ação)`, `("bola",)` e `("fruta", f)`;
+  - o `obs_depois` traz o `obs.corpo`.
+- **A `PercepcaoCorpo`** fica em `digilab/motor_corpo.py`, para nenhum cérebro precisar de `digilab/corpo.py` (G-RECEPTOR). Os campos dos
+  drives novos e dos gestos ficam `None` até a etapa 6.
+- **Achado para o G-HOJE (b) do plano.** Em malha fechada a vida com o corpo diverge cedo, e não só pelos limiares da seção 3:
+  - os pesos do tempo livre são contínuos nos drives (`1 + 3·humor`, por exemplo), e uma diferença no último bit muda o sorteio quando o
+    `u` cai perto da fronteira;
+  - na medida informal (instinto, 4 donos × 5 sementes, 3 dias, sem artefato) divergem 18 de 20 vidas no `padrao`, 19 na `bola` e 17
+    nas frutas, a maioria entre a decisão 24 e a 30 (de 288).
+  - O G-HOJE (b) é pela distribuição, como o plano já diz. Esperar vidas iguais em malha fechada não vale nem para o dono atencioso.

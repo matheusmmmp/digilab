@@ -49,6 +49,10 @@ class Observacao:
     # regiao, os objetos vistos, o cheiro e a direcao dele, o alvo pendente. So o MotorMundo com ConfigMundo.ligada injeta; `de_estado`,
     # o bandit e as sondas nao o leem. Com o mundo, `bola`, `fruta`, `frutas_cenario`, `info_frutas` e `pedido_frutas` ficam no padrao.
     mundo: "PercepcaoMundo | None" = None  # noqa: F821
+    # V2, corpo (docs/TAREFA_V2_CORPO_DRIVES.md, secao 10): a `PercepcaoCorpo` (digilab/motor_corpo.py), os receptores na escala S do
+    # cerebro. So o MotorCorpo com ConfigCorpo.ligada injeta; `de_estado`, o bandit e as sondas nao o leem. Os campos de sempre
+    # (`vetor_estado`) seguem o Estado, que com o corpo ligado e a leitura da quimica.
+    corpo: "PercepcaoCorpo | None" = None  # noqa: F821
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":

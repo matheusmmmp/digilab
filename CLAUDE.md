@@ -2601,3 +2601,33 @@ então o docstring de cada função diz o que o motor precisa fornecer. Nenhuma 
 - **Banheiro** (`PLANO_ANALISE_V2_BANHEIRO`, seções 4 e 8): `alivios_por_dia` (a fração no banheiro e os acidentes), `dia_do_criterio`
   (com censura e T*), `alivios_ate_criterio` e `curva_sobrevivencia` (Kaplan–Meier e RMST).
 - **Testes:** `tests/test_medidas_r17.py`, 19, cada um com a resposta conhecida.
+
+## V2, W-CORPO-MOTOR — o corpo por baixo dos drives, no motor (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, etapa 2) — GATES PASSAM
+
+Rodada 17. Etapa 2 da seção 14: o `Corpo` do B (química, digestão e Vida) por baixo dos drives do `Estado`. Sem run; só as sementes dos
+testes. Mudaram `digilab/motor_corpo.py` (novo) e o campo `Observacao.corpo` (com padrão None). `engine.py`, `corpo.py` e as classes do
+meio não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **`MotorCorpo`:**
+  - é um mixin por `com_corpo(base)`: `com_corpo(MotorComFeedback)`, `com_corpo(MotorAmbiente)` e `com_corpo(MotorFrutasMundo)`;
+  - a chave é `cfg_corpo` (`ConfigCorpo`, com as sub-chaves `digestao` e `vida`);
+  - desligado, é o motor de baixo byte a byte.
+- **Ligado:**
+  - os cinco drives do `Estado` são a leitura da química, a cada tick e depois de cada estímulo. O laço do tick é refeito no mixin, com o
+    `Corpo.passo` (o tick e a sujeira de hoje, na mesma rng);
+  - os escritores de hoje viram estímulo: a ação do dono, a ação do pet, a bola e a fruta (antes do gancho `fruta_comida`);
+  - **G-BYPASS:** um drive mudado por fora do corpo falha alto;
+  - a percepção vai em `Observacao.corpo` (`PercepcaoCorpo`, os receptores na escala S);
+  - o gancho `consequencia_corpo(acao, ocorrido, obs_depois)` é chamado uma vez por decisão;
+  - com a Vida, o estágio é conferido contra o de hoje a cada tick.
+  - Educação, lesões, obediência, treino e **o mundo físico ligado** falham alto; o andar e as comidas do mapa ainda não têm estímulo no
+    corpo.
+- **Gates** (`tests/test_corpo.py`, 28, ~1 min):
+  - **G2:** as 156 vidas de `corpo_vidas_de_hoje.json` com o `MotorCorpo` desligado na frente dos três motores;
+  - **G-HOJE (a):** malha aberta contra o motor de hoje, tick a tick, nos três mundos, com a química sozinha e com os dois órgãos. Os
+    drives ficam a até 1e−9, a saúde a até 1e−9 mais as viradas no limiar, e sujeira, sono, rngs e estágio são iguais. O sinal do N3 sai
+    igual em ≥ 99% das decisões;
+  - **G-BYPASS** e **G-RECEPTOR**;
+  - **G-ENGINE:** `engine.py` e as classes do meio sem mudança;
+  - **o gancho e o G1:** o gancho é chamado uma vez por decisão e já vê tudo aplicado; o replay é bit a bit com o corpo.
+- **Achado:** em malha fechada, 17 a 19 de 20 vidas por mundo divergem cedo, porque os pesos do tempo livre são contínuos nos drives. O
+  G-HOJE (b) tem de ser pela distribuição.
