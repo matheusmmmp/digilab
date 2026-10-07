@@ -2919,3 +2919,24 @@ nova (os números são os de `artifacts_v2_validacao_unica/`, conferidos no comm
   legibilidade é do C. Mas no P3, o braço do produto, o C generaliza a bronca e o A aprende qual fruta evitar.
 - **Decisão do Matheus (2026-10-07):** o M6 só fecha depois do descritivo do platô (`docs/TAREFA_V2_DESCRITIVO_PLATO.md`). Se os dois
   cérebros só apagam a preferência inata, a vantagem do C em legibilidade pesa menos que a fraqueza dele no P3.
+
+## 2026-10-07 — Descritivo do platô de ~1/3 (DESCRITIVO-PLATO, rodada 14): interpretações
+
+Tarefa `docs/TAREFA_V2_DESCRITIVO_PLATO.md` (V-3, Q-1). **Pós hoc descritivo:** nenhuma leitura registrada muda. Relatório:
+`docs/DESCRITIVO_V2_PLATO.md`.
+
+- **"Regeneradas por replay":** cada vida foi refeita pela bancada a partir da espec (config, unidade, braço, condição), que é
+  determinística. Depois foi rejogada do próprio log, bit a bit (G1), e conferida contra o `medidas.json` gravado: interações, consumos,
+  contagem das frutas e a taxa da fruta ruim em toda janela. As vidas gravadas não estavam no git.
+- **Os bracos:**
+  - P0, P1, P2 e P3, como pede a tarefa, mais o P2e, que custa pouco e mostra a informação errada;
+  - os só cuidado ficaram de fora.
+- **A classe da fruta é pelo efeito vigente no tick:** no mutável muda na troca, e a classe dos pesos no fim é a do último tick. A regra
+  foi conferida contra o efeito aplicado em cada consumo.
+- **"Comer com uma fruta só"** é p(comer) bruto em toda decisão com uma fruta no cenário, sem controle de fome nem de regra.
+- **"Herdado" na escolha:** a probabilidade da ruim pelo incentivo do genoma (o sorteio do instinto), calculada com os incentivos que o
+  motor grava em cada oferta.
+- **Pesos do C:**
+  - para comer, a soma das células do objeto daquela fruta (presença e fome × presença), na ação comer;
+  - para a escolha, a célula de identidade.
+- **O que pode virar plano** (não aberto): a decisão de comer com uma fruta só aprende pouco o efeito da fruta.

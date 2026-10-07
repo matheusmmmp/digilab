@@ -2387,3 +2387,28 @@ git); relatório `docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`. Interpretações em
 - **O que pesa contra** (secundário, fora da regra): no P3, o C generaliza a bronca do dono para toda fruta e come 9 a 17 frutas por
   vida, contra 38 a 46 do A; no descasado e no mutável o A come muito menos a fruta ruim (C − A ~+0,20). No P3 a legibilidade também é do
   A. O C deriva menos (razão 1,57 × 2,43). A escolha é do Matheus.
+
+## V2, DESCRITIVO-PLATO — o platô de ~1/3: apagar a preferência ou aprender qual fruta faz mal? (2026-10-07, `docs/TAREFA_V2_DESCRITIVO_PLATO.md`) — PÓS HOC DESCRITIVO
+
+Decisão V-3, pergunta Q-1 de `docs/LEITURA_V2_VALIDACAO_UNICA.md`. **Sem run nova, sem gate e sem mudar leitura registrada.** Números de
+`artifacts_v2_descritivo_plato/`; relatório `docs/DESCRITIVO_V2_PLATO.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Código:** `experiments/descritivo_plato.py`.
+  - Regenera as vidas fechadas (P0, P1, P2, P2e e P3, nas três condições) da validação única (30101…30505, A, 450 vidas) e da comparação
+    (29101…29505, A e C, 135 vidas).
+  - Rejoga cada uma do próprio log e confere contra as medidas gravadas; uma divergência falharia alto, e nenhuma divergiu.
+  - Lê o que o motor já registra (ofertas e consumos), com a fruta classificada pelo efeito vigente no tick.
+  - Testes: `tests/test_descritivo_plato.py` (10).
+  - Nada mais mudou.
+- **Cérebro A (P1, P2, P2e): misto.**
+  - **Na escolha entre frutas, aprende qual faz mal:** come a ruim em 2% a 11% das vezes, contra ~46% do acaso e 29% a 65% do herdado.
+    O peso da escolha da ruim fica muito abaixo do das outras.
+  - **Com uma fruta só, come o que houver:** a ruim tanto quanto as outras ou mais (+0,08 a +0,15 no descasado e no mutável, onde ela é a
+    preferida inata). O termo de presença na decisão de comer aprende pouco (−270 a −370 em S).
+  - **O ~1/3 é a soma dos dois:** com a nutrição, o aprendiz come muito mais fruta (24 → 42 por vida).
+  - **P3:** a bronca derruba o peso da escolha da ruim, mas o dono não mexe na decisão de comer, e depois da troca do mutável o P3 não
+    reaprende.
+- **Cérebro C** (5 unidades):
+  - **P1:** a escolha fica perto do herdado (descasado 0,56, herdado 0,61), embora os pesos mostrem a aversão aprendida. O ~1/3 dele vem
+    mais de comer de tudo.
+  - **P2e:** segue a informação errada (a ruim em 0,77–0,83; o A fica em 0,02–0,04).
+  - **P3:** quase não come.
