@@ -144,6 +144,8 @@ PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
     "ganho": ("PROPOSTO", "sem fonte; calibrado nas sementes 8101...8505 (PLANO_ANALISE_V2_N3, secao 6)"),
     "humor_na_fruta": ("DECIDIDO", "E2, Matheus, 2026-10-04 (PLANO_ANALISE_V2_EXPERIMENTO_MAIOR, secao 3.1)"),
     "canais_ligados": ("PROPOSTO", "CANAIS-REFORCO (H-R2; K-6 de PLANO_CALIBRACAO_CONJUNTA_V2): o mesmo total de sinal, por canal"),
+    "pesos_janela": ("PROPOSTO", "PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4 (o braco P1-cw; PCD-8): o peso pela falta recente"),
+    "janela_pesos": ("PROPOSTO", "A2.4: J = 32 decisoes (8 h), sem fonte"),
 }
 # CANAIS-REFORCO (H-R2): o nome de cada canal pelo indice do drive em Estado.vetor, e o grupo de pesos que cada canal credita.
 #   corpo: a tabela do lobo de decisao (a regra; as entradas sao o estado do corpo)
@@ -496,7 +498,9 @@ class Aprendiz:
         self._fruta_na_decisao = False                # a ultima decisao viu fruta no cenario (obs.fruta > 0)
         self._consequencia_pendente: tuple | None = None  # E2: (registro, transicao, cfg) do comer com fruta, ate fruta_comida
         self._ve_mundo_fisico = False                 # MUNDO-CEREBROS: so a PoliticaLobos com ConfigMundo ligada
-        self._consequencia_mundo_pendente: tuple | None = None   # (registro, transicao, cfg, anteriores, f_S), ate consequencia_mundo
+        self._consequencia_mundo_pendente: tuple | None = None   # (registro, transicao, cfg, anteriores, f_S, pesos), ate consequencia_mundo
+        self._janela_faltas: list[dict] = []          # A2.4 (pesos_janela): as faltas das ultimas J decisoes, na escala S
+        self._pesos_da_e2: dict | None = None         # A2.4: os pesos da decisao com o comer de fruta pendente (E2)
         # N5: o peso compartilhado da entrada `info` na sub-decisao da fruta (None = entrada desligada: w0_info 0 ou sem frutas)
         self._prior_info: int | None = None
         self._peso_info: int | None = None
@@ -722,7 +726,12 @@ class Aprendiz:
 
         E2 (LOBOS-MUNDO): comer com fruta no cenario NAO credita aqui. O motor come a fruta depois desta chamada
         (MotorFrutas._decisao_observada), entao o credito fica pendente ate `fruta_comida`, que calcula o sinal da fruta com
-        `cfg_consequencia` (o mesmo ganho de `f_S`). Sem fruta na decisao (e sem frutas no mundo), o N3 de sempre."""
+        `cfg_consequencia` (o mesmo ganho de `f_S`). Sem fruta na decisao (e sem frutas no mundo), o N3 de sempre.
+
+        A2.4 (`ConfigConsequencia.pesos_janela`, o braco P1-cw): o sinal passa a ser calculado aqui, com o peso de cada drive pela falta
+        media dele nas ultimas J decisoes (`pesos_da_janela`). O `f_S` recebido tem de ser o `sinal_homeostatico` da transicao (confere e
+        falha alto); os mesmos pesos valem no antes e no depois, na E2 e no mundo, e a janela anda depois da decisao. Os pesos ficam no
+        motivo da decisao (`pesos_janela`, por canal)."""
         self.memoria.decisao()
         if not self._aprende:
             return
@@ -738,15 +747,28 @@ class Aprendiz:
         cc = cfg_consequencia or CONFIG_CONSEQUENCIA
         if cc.canais_ligados and self.cl.traco_decisoes:
             raise ValueError("CANAIS-REFORCO: os canais nao andam com o traco (traco_decisoes > 0); o T3 nao tem traco (R1)")
+        pesos = None
+        if cc.pesos_janela:
+            S = self._escala
+            if f_S != sinal_homeostatico(transicao, S, cc):
+                raise RuntimeError("pesos_janela: o f_S recebido nao e o sinal_homeostatico da transicao")
+            drives = _drives_fruta(cc)                # os do N3 e, com a E2, o humor
+            pesos = pesos_da_janela(self._janela_faltas, drives, S)
+            f_S = sinal_homeostatico(transicao, S, cc, pesos)
+            self._janela_faltas.append(faltas_da_observacao(transicao.observacao, drives, S))   # a janela anda depois da decisao
+            del self._janela_faltas[:-cc.janela_pesos]
+            if self.motivos:
+                self.motivos[-1]["pesos_janela"] = {CANAL_DO_DRIVE[i]: w for i, w in pesos.items()}
         if self._ve_mundo_fisico and transicao.acao in ACOES_COM_ALVO_MUNDO:
             # MUNDO-CEREBROS: no mundo fisico comer pode so andar, e o que comeu so o motor sabe; o credito espera o consequencia_mundo
-            self._consequencia_mundo_pendente = (registro, transicao, cc, anteriores, f_S)
+            self._consequencia_mundo_pendente = (registro, transicao, cc, anteriores, f_S, pesos)
             return
         if self._fruta_na_decisao and transicao.acao is AcaoPet.COMER:
             self._consequencia_pendente = (registro, transicao, cc, anteriores)
+            self._pesos_da_e2 = pesos
             return
         if cc.canais_ligados:
-            canais = sinal_homeostatico_canais(transicao, self._escala, cc)
+            canais = sinal_homeostatico_canais(transicao, self._escala, cc, pesos)
             self._creditar_canais(registro, canais, f_S)
         elif f_S != 0:
             self._creditar(registro, f_S, anteriores, consequencia=True)
@@ -767,13 +789,14 @@ class Aprendiz:
         if pendente is None:
             return
         registro, transicao, cc, anteriores = pendente
+        pesos, self._pesos_da_e2 = self._pesos_da_e2, None
         sub = registro.get("fruta")
         if sub is None or sub["acao"] != fruta:
             raise RuntimeError(f"E2: fruta comida {fruta!r} nao e a da sub-decisao registrada")
         self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
-        f_S = sinal_homeostatico_fruta(transicao.observacao, obs_depois, self._escala, cc)
+        f_S = sinal_homeostatico_fruta(transicao.observacao, obs_depois, self._escala, cc, pesos)
         if cc.canais_ligados:
-            canais = sinal_homeostatico_fruta_canais(transicao.observacao, obs_depois, self._escala, cc)
+            canais = sinal_homeostatico_fruta_canais(transicao.observacao, obs_depois, self._escala, cc, pesos)
             self._creditar_canais(registro, canais, f_S)
         elif f_S != 0:
             self._creditar(registro, f_S, anteriores, consequencia=True)
@@ -802,7 +825,7 @@ class Aprendiz:
         pendente, self._consequencia_mundo_pendente = self._consequencia_mundo_pendente, None
         if pendente is None:
             return
-        registro, transicao, cc, anteriores, f_S = pendente
+        registro, transicao, cc, anteriores, f_S, pesos = pendente
         if transicao.acao is not acao or ocorrido["acao"] != acao.value:
             raise RuntimeError(f"consequencia_mundo de {acao.value} para a decisao pendente de {transicao.acao.value}")
         if transicao.observacao_seguinte.vetor_estado != obs_depois.vetor_estado:
@@ -811,11 +834,11 @@ class Aprendiz:
         S = self._escala
         if acao is AcaoPet.COMER and comeu is not None and comeu["tipo"] in FRUTAS:
             self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
-            f = sinal_homeostatico_fruta(transicao.observacao, obs_depois, S, cc)
-            canais = sinal_homeostatico_fruta_canais(transicao.observacao, obs_depois, S, cc) if cc.canais_ligados else None
+            f = sinal_homeostatico_fruta(transicao.observacao, obs_depois, S, cc, pesos)
+            canais = sinal_homeostatico_fruta_canais(transicao.observacao, obs_depois, S, cc, pesos) if cc.canais_ligados else None
         else:
             f = f_S
-            canais = sinal_homeostatico_canais(transicao, S, cc) if cc.canais_ligados else None
+            canais = sinal_homeostatico_canais(transicao, S, cc, pesos) if cc.canais_ligados else None
         if canais is not None:
             self._creditar_canais(registro, canais, f)
         elif f != 0:
@@ -952,6 +975,8 @@ class Aprendiz:
             d["consequencia_pendente"] = registro_dict(self._consequencia_pendente[0])
         if self._consequencia_mundo_pendente is not None:   # MUNDO-CEREBROS: so entre observar_consequencia e consequencia_mundo
             d["consequencia_mundo_pendente"] = registro_dict(self._consequencia_mundo_pendente[0])
+        if self._janela_faltas:                         # A2.4, so com pesos_janela
+            d["janela_pesos"] = [{CANAL_DO_DRIVE[i]: v for i, v in f.items()} for f in self._janela_faltas]
         return d
 
     def estado_interno(self) -> dict:
@@ -1404,19 +1429,67 @@ def deficit_homeostatico(vetor_estado: tuple, drives: tuple, S: int) -> int:
     return d
 
 
-def sinal_homeostatico(transicao: Transicao, S: int, cfg: ConfigConsequencia | None = None) -> int:
+def delta_ponderado(antes: tuple, depois: tuple, i: int, S: int, pesos: dict | None) -> int:
+    """falta_i(antes)**2 - falta_i(depois)**2 do drive i, com o peso dele na escala S (A2.4): div_arred(w_i * delta, S). Sem `pesos`, ou
+    com w_i = S (o peso de hoje), o delta inteiro, sem divisao."""
+    delta = deficit_homeostatico(antes, (i,), S) - deficit_homeostatico(depois, (i,), S)
+    if pesos is None:
+        return delta
+    w = pesos[i]
+    if type(w) is not int or not 0 <= w <= S:
+        raise ValueError(f"peso do drive {i} fora de inteiros em [0, {S}]: {w!r}")
+    return delta if w == S else div_arred(w * delta, S)
+
+
+def _sinal_ponderado(antes: tuple, depois: tuple, drives: tuple, ganho: int, S: int, pesos: dict) -> int:
+    """div_arred(ganho * soma_i delta_ponderado_i, S). Com todo peso S, a conta sem pesos (a soma de inteiros e exata)."""
+    total = 0
+    for i in drives:
+        total += delta_ponderado(antes, depois, i, S, pesos)
+    return div_arred(ganho * total, S)
+
+
+def pesos_da_janela(faltas: list[dict], drives: tuple, S: int) -> dict[int, int]:
+    """A2.4 (o braco P1-cw): o peso de cada drive pela falta media dele na janela (as faltas das ultimas J decisoes, na escala S, uma
+    entrada por decisao): m_d = div_arred(soma, n) (0 com a janela vazia) e w_d = max(div_arred(S, 4), S - div_arred(3 * m_d, 4)). O
+    w_d fixo dos drives de hoje e S (peso 1), entao div_arred(S * w_d,janela, S) = w_d,janela."""
+    n = len(faltas)
+    pesos = {}
+    for i in drives:
+        m = div_arred(sum(f[i] for f in faltas), n) if n else 0
+        pesos[i] = max(div_arred(S, 4), S - div_arred(3 * m, 4))
+    return pesos
+
+
+def faltas_da_observacao(obs: Observacao, drives: tuple, S: int) -> dict[int, int]:
+    """A falta de cada drive na escala S, a mesma conta do sinal: S - arred(h * S)."""
+    out = {}
+    for i in drives:
+        h = obs.vetor_estado[i]
+        if not 0.0 <= h <= 1.0:
+            raise ValueError(f"drive {i} fora de [0, 1]: {h!r}")
+        out[i] = S - arred(h * S)
+    return out
+
+
+def sinal_homeostatico(transicao: Transicao, S: int, cfg: ConfigConsequencia | None = None, pesos: dict | None = None) -> int:
     """V2, N3: f_S = div_arred(ganho * (D(antes) - D(depois)), S), com antes/depois = observacao -> observacao_seguinte da
     mesma decisao (janela imediata). Positivo quando a propria acao reduziu o deficit (Keramati e Gutkin,
-    10.7554/elife.04811). Inteiro; nada do dono entra."""
+    10.7554/elife.04811). Inteiro; nada do dono entra. Com `pesos` (A2.4, drive -> w na escala S), cada drive entra com o seu peso
+    (delta_ponderado); sem eles, a conta de sempre."""
     cfg = cfg or CONFIG_CONSEQUENCIA
     if type(cfg.ganho) is not int or cfg.ganho < 0:
         raise ValueError(f"ganho precisa ser inteiro >= 0: {cfg.ganho!r}")
+    if pesos is not None:
+        return _sinal_ponderado(transicao.observacao.vetor_estado, transicao.observacao_seguinte.vetor_estado, tuple(cfg.drives),
+                                cfg.ganho, S, pesos)
     antes = deficit_homeostatico(transicao.observacao.vetor_estado, cfg.drives, S)
     depois = deficit_homeostatico(transicao.observacao_seguinte.vetor_estado, cfg.drives, S)
     return div_arred(cfg.ganho * (antes - depois), S)
 
 
-def sinal_homeostatico_fruta(antes: Observacao, depois: Observacao, S: int, cfg: ConfigConsequencia | None = None) -> int:
+def sinal_homeostatico_fruta(antes: Observacao, depois: Observacao, S: int, cfg: ConfigConsequencia | None = None,
+                             pesos: dict | None = None) -> int:
     """E2 (LOBOS-MUNDO), a variante documentada de `sinal_homeostatico` para quando a acao foi comer uma fruta: antes = a
     observacao da decisao; depois = o estado logo depois de comer (nutricao e efeito no humor ja aplicados); com
     `humor_na_fruta`, o humor (INDICE_HUMOR) entra nos drives. Fruta que faz mal ao humor da sinal negativo por ele. Sem
@@ -1425,6 +1498,8 @@ def sinal_homeostatico_fruta(antes: Observacao, depois: Observacao, S: int, cfg:
     if type(cfg.ganho) is not int or cfg.ganho < 0:
         raise ValueError(f"ganho precisa ser inteiro >= 0: {cfg.ganho!r}")
     drives = _drives_fruta(cfg)
+    if pesos is not None:
+        return _sinal_ponderado(antes.vetor_estado, depois.vetor_estado, drives, cfg.ganho, S, pesos)
     d_antes = deficit_homeostatico(antes.vetor_estado, drives, S)
     d_depois = deficit_homeostatico(depois.vetor_estado, drives, S)
     return div_arred(cfg.ganho * (d_antes - d_depois), S)
@@ -1438,13 +1513,14 @@ def _drives_fruta(cfg: ConfigConsequencia) -> tuple:
     return drives
 
 
-def sinal_por_canal(antes: tuple, depois: tuple, drives: tuple, ganho: int, S: int) -> dict[str, int]:
+def sinal_por_canal(antes: tuple, depois: tuple, drives: tuple, ganho: int, S: int, pesos: dict | None = None) -> dict[str, int]:
     """CANAIS-REFORCO (H-R2, contrato K-6): o escalar div_arred(ganho * (D(antes) - D(depois)), S) separado por canal, um por drive,
     na ordem de `drives`. Delta_i = falta_i(antes)**2 - falta_i(depois)**2 (D e a soma deles). A parte de cada canal sai por
     arredondamento telescopico sobre as somas parciais:
         f_i = div_arred(ganho * (Delta_1 + ... + Delta_i), S) - div_arred(ganho * (Delta_1 + ... + Delta_(i-1)), S)
     entao a soma dos f_i e exatamente div_arred(ganho * soma Delta, S), o escalar, em inteiros (a soma telescopa). Cada f_i difere de
-    div_arred(ganho * Delta_i, S) em no maximo 1 (o resto vai ao canal em que a soma parcial cruza o meio)."""
+    div_arred(ganho * Delta_i, S) em no maximo 1 (o resto vai ao canal em que a soma parcial cruza o meio). Com `pesos` (A2.4), Delta_i e
+    o delta ponderado, e a soma e o escalar ponderado."""
     if type(ganho) is not int or ganho < 0:
         raise ValueError(f"ganho precisa ser inteiro >= 0: {ganho!r}")
     canais: dict[str, int] = {}
@@ -1452,26 +1528,26 @@ def sinal_por_canal(antes: tuple, depois: tuple, drives: tuple, ganho: int, S: i
     for i in drives:
         if i not in CANAL_DO_DRIVE:
             raise ValueError(f"drive {i} sem canal (CANAL_DO_DRIVE)")
-        delta = deficit_homeostatico(antes, (i,), S) - deficit_homeostatico(depois, (i,), S)
-        acumulado += delta
+        acumulado += delta_ponderado(antes, depois, i, S, pesos)
         parcial = div_arred(ganho * acumulado, S)
         canais[CANAL_DO_DRIVE[i]] = parcial - anterior
         anterior = parcial
     return canais
 
 
-def sinal_homeostatico_canais(transicao: Transicao, S: int, cfg: ConfigConsequencia | None = None) -> dict[str, int]:
+def sinal_homeostatico_canais(transicao: Transicao, S: int, cfg: ConfigConsequencia | None = None,
+                              pesos: dict | None = None) -> dict[str, int]:
     """`sinal_homeostatico` separado por canal (sinal_por_canal): a soma dos canais e o escalar."""
     cfg = cfg or CONFIG_CONSEQUENCIA
     return sinal_por_canal(transicao.observacao.vetor_estado, transicao.observacao_seguinte.vetor_estado, tuple(cfg.drives),
-                           cfg.ganho, S)
+                           cfg.ganho, S, pesos)
 
 
 def sinal_homeostatico_fruta_canais(antes: Observacao, depois: Observacao, S: int,
-                                    cfg: ConfigConsequencia | None = None) -> dict[str, int]:
+                                    cfg: ConfigConsequencia | None = None, pesos: dict | None = None) -> dict[str, int]:
     """`sinal_homeostatico_fruta` separado por canal (sinal_por_canal, os drives da E2): a soma dos canais e o escalar."""
     cfg = cfg or CONFIG_CONSEQUENCIA
-    return sinal_por_canal(antes.vetor_estado, depois.vetor_estado, _drives_fruta(cfg), cfg.ganho, S)
+    return sinal_por_canal(antes.vetor_estado, depois.vetor_estado, _drives_fruta(cfg), cfg.ganho, S, pesos)
 
 
 def validar_parametros_consequencia(cfg: ConfigConsequencia | None = None) -> None:

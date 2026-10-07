@@ -4,7 +4,7 @@ So inteiros: a paridade e exata. O TS (etapa 7, do A) refaz cada caso e cada vid
 
     python experiments/exportar_gabarito_corpo.py      # grava tests/gabaritos/corpo_quimica_python.json
 
-O conteudo (versao 2):
+O conteudo (versao 3):
 - `taxas`: os numeros de hoje na escala C, ja inteiros (secao 4);
 - `casos`: a quimica base, numa grade de estados com cada operacao (o tick, as acoes do dono e do pet, a bola, a fruta), o estado depois,
   o receptor de privacao e os receptores na escala S;
@@ -14,7 +14,10 @@ O conteudo (versao 2):
 - `digestao` (orgao 1, secao 5): a mesma grade e as mesmas vidas com a digestao na taxa C (o estomago no fim de q), e o digerido de cada
   operacao; `digestao_lenta`: a grade com uma taxa menor, so para a paridade da reacao (nao e um valor da pesquisa);
 - `vida` (orgao 2, secao 6): os limiares de estagio nas duracoes de hoje, uma grade de Vidas em volta dos limiares (o passo e o estagio
-  antes e depois) e as mesmas vidas com a digestao e a Vida (os ticks em que o estagio muda).
+  antes e depois) e as mesmas vidas com a digestao e a Vida (os ticks em que o estagio muda);
+- `mundo` (versao 3, CORPO-MUNDO): os estimulos do mundo fisico na mesma grade de estados, sem e com a digestao: a acao do pet com a
+  MF-2 (`pet_mundo`), o andar (`andar`, deslocamento em subunidades e o custo da ConfigMundo) e as comidas do mapa (`consumo`: tipo,
+  situacao e o efeito da fruta no humor). As secoes da versao 2 nao mudaram.
 """
 from __future__ import annotations
 
@@ -27,7 +30,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, ConfigCorpo  # noqa: E402
+from digilab.config import CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, ConfigCorpo  # noqa: E402
 from digilab.corpo import (Corpo, div_arred, limiares_estagio, passo_meia_vida, quimicos_de, taxas_de,  # noqa: E402
                            ticks_de_estagio)
 from digilab.donos import criar_dono  # noqa: E402
@@ -82,18 +85,37 @@ def _aplicar(c: Corpo, op: list) -> None:
         c.estimulo_bola(op[1])
     elif op[0] == "fruta":
         c.estimulo_fruta(op[1], op[2])
+    elif op[0] == "pet_mundo":
+        c.acao_pet(AcaoPet(op[1]), com_mundo=True)
+    elif op[0] == "andar":
+        c.estimulo_andar(op[1], op[2])
+    elif op[0] == "consumo":
+        c.estimulo_consumo_mundo(op[1], op[2], CONFIG_MUNDO_LIGADA, op[3])
     else:
         raise ValueError(f"operacao desconhecida: {op!r}")
 
 
-def casos(cc: ConfigCorpo) -> list[dict]:
+def _ops_de_hoje() -> list[list]:
+    ops = [["passo", dormindo, sujeira, tick] for dormindo in (0, 1) for sujeira in (0, 3) for tick in (600, 1400)]
+    ops += [["dono", a.value] for a in ACOES_DONO] + [["pet", a.value] for a in AcaoPet]
+    return ops + [["bola", 0.15], ["fruta", 0.10, -0.10], ["fruta", 0.10, 0.10], ["fruta", 0.10, 0.0]]
+
+
+def _ops_do_mundo() -> list[list]:
+    """os estimulos do mundo fisico (versao 3): a MF-2, o andar e as comidas do mapa, com os numeros da ConfigMundo"""
+    cm = CONFIG_MUNDO_LIGADA
+    ops = [["pet_mundo", a.value] for a in AcaoPet]
+    ops += [["andar", d, cm.custo_energia_por_subunidade] for d in (0, 1, 37, 60, 128, 6000)]
+    ops += [["consumo", "racao", "madura", 0.0], ["consumo", "racao", "podre", 0.0]]
+    ops += [["consumo", f, sit, ef] for f in ("a", "b") for sit in ("madura", "podre") for ef in (-0.10, 0.0, 0.10)]
+    return ops
+
+
+def casos(cc: ConfigCorpo, ops: list[list] | None = None) -> list[dict]:
     rng = random.Random(SEMENTE_CASOS)
     out = []
     for q in _estados(rng, cc):
-        ops = [["passo", dormindo, sujeira, tick] for dormindo in (0, 1) for sujeira in (0, 3) for tick in (600, 1400)]
-        ops += [["dono", a.value] for a in ACOES_DONO] + [["pet", a.value] for a in AcaoPet]
-        ops += [["bola", 0.15], ["fruta", 0.10, -0.10], ["fruta", 0.10, 0.10], ["fruta", 0.10, 0.0]]
-        for op in ops:
+        for op in (ops if ops is not None else _ops_de_hoje()):
             c = _corpo(q, cc)
             _aplicar(c, op)
             rec = c.receptores()
@@ -195,7 +217,7 @@ def gabarito() -> dict:
     taxas["dono"] = {a.value: d for a, d in t.dono.items()}
     taxas["pet"] = {a.value: d for a, d in t.pet.items()}
     return {
-        "versao": 2,
+        "versao": 3,
         "quimicos": list(quimicos_de(CC)),
         "escala": CC.escala,
         "escala_receptor": CC.escala_receptor,
@@ -214,6 +236,10 @@ def gabarito() -> dict:
                  "ticks_de_estagio": {n: list(ticks_de_estagio(e)) for n, e in DURACOES.items()},
                  "limiares": {n: list(limiares_estagio(CC_VIDA, e)) for n, e in DURACOES.items()},
                  "casos": casos_vida(), "vidas": [vida_malha_aberta(d, s, CC_VIDA) for d, s in VIDAS]},
+        "mundo": {"custo_andar_por_subunidade": CONFIG_MUNDO_LIGADA.custo_energia_por_subunidade,
+                  "nutricao_fruta": CONFIG_MUNDO_LIGADA.nutricao_fruta, "efeito_podre": CONFIG_MUNDO_LIGADA.efeito_podre,
+                  "casos": casos(CC, _ops_do_mundo()),
+                  "digestao": {"quimicos": list(quimicos_de(CC_DIGESTAO)), "casos": casos(CC_DIGESTAO, _ops_do_mundo())}},
     }
 
 
