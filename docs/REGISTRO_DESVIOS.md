@@ -3011,3 +3011,35 @@ Proposta em `docs/futuro/mundo_fisico.md`, 2.3 e 2.6. As pranchas estão em `doc
   profundidade, e sprite só aceita inteiro; a regra de escala do pet no mapa fica para a tarefa da web.
 - **O gerador** das duas pranchas (projeção do protótipo, saída em SVG estático) ficou fora do repositório: as pranchas são o artefato,
   como as do canvas.
+
+## 2026-10-07 — Tarefa do corpo e dos drives (W-TAREFA-CORPO, rodada 16): interpretações
+
+Só papel: `docs/TAREFA_V2_CORPO_DRIVES.md`. Nenhum código, nenhuma run.
+
+- **A solidão entra.** O pedido diz "e da solidão, se a seção 5 pedir". A seção 5 do #203 pede drives que recompensem brincar, explorar
+  **e o contato** e nomeia a solidão. O estresse entra junto, porque o pedido diz que acariciar reduz o estresse.
+- **"Um órgão por vez" (E-9):**
+  - a química dos drives de hoje entra sem órgão: são produções por tick e estímulos;
+  - os dois órgãos da E-10 são a digestão e a Vida, cada um com sub-chave e PR próprios;
+  - os drives novos são químicos sem órgão.
+  - Força vital, dano e cura dos órgãos ficam para a 1b, como no `ego_existencia.md`.
+- **O G-HOJE não pode ser byte a byte em malha fechada.** Os limiares de hoje caem sobre a grade inteira (a fome chega a 0,25 exato no
+  tick 660), enquanto o float de hoje passa um pouco abaixo (0,24999999999998737; conferido no Python). Uma decisão vira e a vida segue
+  outra. Por isso o gate tem duas partes:
+  - em malha aberta, por tick, com números desta tarefa;
+  - em malha fechada, pela distribuição, com a margem do plano.
+
+  É o "dentro da tolerância do plano" do pedido.
+- **C = 450000** é o mínimo múltiplo comum dos denominadores das taxas de hoje. Com ele, todo número de hoje vira inteiro exato, e a
+  paridade com o TS é exata. É a decisão CD-1.
+- **O tapa e o carinho chegam ao cérebro só pelos receptores.**
+  - O crédito à última decisão (a janela da v1) é a leitura de "o reforço sai do mesmo ciclo da consequência" (#203, seção 4).
+  - Restringir o crédito aos gestos da mão, sem o cuidado do dono, segue o N3 e fica como decisão CD-4.
+- **O medo da mão** é um receptor do susto sobre a taxa do carinho: o conceito do manual de "um receptor controla a taxa de uma reação".
+  O pedido o põe como efeito medido; a medida está na seção 8 e o mecanismo mínimo é a decisão CD-5.
+- **O vínculo** depende da S-4 (tarefa própria). Até ela entrar, a medida sai "não disponível".
+- **O instinto não lê os drives novos** (CD-2): o P0 fica o de hoje, e o que muda o comportamento é o aprendizado pelo corpo.
+- **Os números dos drives novos** (taxas, estímulos, meias-vidas, pesos do sinal) são PROPOSTOS, sem fonte. O plano os calibra. Do manual
+  do Creatures 3 só vêm os conceitos.
+- **Donos de arquivo:** pelo pedido, o cérebro e o corpo ficam com o B (`digilab/corpo.py`, `lobos.py`), o motor com o A (`MotorCorpo`, o
+  evento do tapa, o campo da `Observacao`, o TS da web) e a bancada com o D.
