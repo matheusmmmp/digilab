@@ -3323,3 +3323,16 @@ As escolhas abaixo são de formato e de borda; nenhuma muda uma definição dos 
 - **O dia do critério** generaliza o horizonte como τ = D − seguidos + 2, que é o D − 1 do plano com 3 dias seguidos.
 - **Fica de fora, por não ser desta tarefa:** as faixas 37101…38505 e o prefixo `"banheiro"` na bancada (seção 10 do plano do banheiro, a
   etapa 5 da tarefa) e os descritivos da seção 5.3 do mundo e 5.4 do corpo, que a tarefa não listou.
+
+## 2026-10-07 — W-ADENDO-CORPO-D4 (worker C): o adendo 2 do plano do corpo, a dominância de um drive
+
+Só papel: o adendo 2 de `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md` (D-4 de `docs/DEFINICOES_CORPO_V2.md`). Nenhuma run, nenhum código.
+
+- **A parcela de cada drive usa o valor absoluto da contribuição.** Brincar reduz o tédio e aumenta o cansaço; com o sinal, a soma pode
+  ficar perto de 0 e a fração explodir. A contribuição com o sinal sai ao lado.
+- **"Domina" é por decisão e por maioria:** o drive lidera uma decisão com parcela ≥ 0,80, e domina se lidera mais da metade das
+  decisões de tempo livre (limite inferior do IC95 acima de 0,50), no P1-c do mundo `bola`. É normal um drive liderar uma decisão,
+  porque cada ação mexe em poucos drives; o que não é normal é um só liderar a maioria. Os limiares são PROPOSTOS, SEM FONTE.
+- **O braço P1-cw (peso pela janela recente, J = 32, piso de um quarto) roda sempre na validação,** como descritivo qualificado.
+  Assim o desenho não depende de dado do P1 (PCD-4). São 8 vidas por unidade a mais.
+- **As citações:** Keramati e Gutkin 2014 e Roijers et al. 2013 só pelo resumo. Hulme et al. 2019 não é citado.
