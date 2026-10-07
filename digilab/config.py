@@ -1327,6 +1327,9 @@ class ConfigConsequencia:
                       (saciado na janela: S, o peso de hoje; em falta total: S/4). O peso fica fixo dentro da decisao (o mesmo no antes
                       e no depois) e a janela anda depois dela. False: o sinal de sempre, byte a byte (lobos.sinal_homeostatico).
     janela_pesos  PROPOSTO  A2.4: J, o tamanho da janela em decisoes (32: 8 h a uma decisao a cada 15 min).
+    pesos_drives_corpo  PROPOSTO  corpo, etapa 5 (docs/TAREFA_V2_CORPO_DRIVES.md, secao 9): os pesos inteiros w_d do sinal pelo corpo,
+                      D = soma_d w_d * falta_d**2 sobre os receptores (lobos.sinal_corpo), um por drive do sinal, pelo nome do
+                      receptor. Todos 1 (o sinal de hoje); o plano do corpo pode calibra-los. So valem com a chave do corpo no cerebro.
     """
 
     drives: tuple = (0, 1, 2)
@@ -1336,10 +1339,19 @@ class ConfigConsequencia:
     canais_ligados: bool = False       # CANAIS-REFORCO: o mesmo total de sinal, separado por canal (H-R2, K-6)
     pesos_janela: bool = False         # corpo, A2.4 (P1-cw): o peso de cada drive pela falta recente dele
     janela_pesos: int = 32             # A2.4: J decisoes
+    # corpo, etapa 5: w_d do sinal pelo corpo, por receptor (os de hoje e os drives novos da secao 9; o susto fica fora do sinal)
+    pesos_drives_corpo: tuple = (("fome", 1), ("higiene", 1), ("energia", 1), ("humor", 1), ("tedio", 1), ("curiosidade", 1),
+                                 ("solidao", 1), ("estresse", 1), ("dor", 1))
 
     def __post_init__(self) -> None:
         if type(self.janela_pesos) is not int or self.janela_pesos <= 0:
             raise ValueError(f"ConfigConsequencia.janela_pesos precisa ser inteiro positivo: {self.janela_pesos!r}")
+        nomes = [par[0] for par in self.pesos_drives_corpo]
+        if len(set(nomes)) != len(nomes):
+            raise ValueError(f"ConfigConsequencia.pesos_drives_corpo com drive repetido: {nomes}")
+        for nome, w in self.pesos_drives_corpo:
+            if type(nome) is not str or type(w) is not int or w < 0:
+                raise ValueError(f"ConfigConsequencia.pesos_drives_corpo: (nome, inteiro >= 0), veio {(nome, w)!r}")
 
 
 CONFIG_CONSEQUENCIA = ConfigConsequencia()

@@ -2827,3 +2827,29 @@ Pedido do Gerente depois da etapa 3 do mundo. Infraestrutura, sem run; só as se
   - desligada, o sinal e a vida de hoje.
 - **Testes:** `tests/test_pesos_janela.py`. A conta exata do peso e do sinal (a fome 0,4 → 0,7 com peso de um quarto dá 276 no lugar de
   1104); a janela refeita por fora decisão a decisão numa vida; a E2 e os canais nas frutas; o mundo físico; o G1.
+
+## V2, CORPO-CEREBRO — o cérebro A no corpo, etapa 5 (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`) — GATES PASSAM
+
+Etapa 5 da seção 14 (seções 9 a 11). Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás da
+chave), `digilab/motivo.py` (o embrulho) e a `ConfigConsequencia`. `engine.py`, `corpo.py`, `motor_corpo.py`, a bancada e a web não.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave:** `PoliticaLobos(..., cfg_corpo=ConfigCorpo)`, ligada. Sem ela, o cérebro de hoje, inclusive num `MotorCorpo`.
+- **`lobos.sinal_corpo`** sobre os receptores:
+  - D = Σ w_d · falta_d², com a falta = S − leitura nos drives de hoje e a leitura nos novos, e f = div_arred(ganho · ΔD, S);
+  - os drives: os do N3, o humor só no comer de fruta (E2) e os drives novos que o corpo tiver (o susto fora);
+  - `w_d` em `ConfigConsequencia.pesos_drives_corpo`, todos 1; compõe com a `pesos_janela` (A2.4), que passa a ler os receptores.
+- **O gancho:** o crédito espera `consequencia_corpo`, ou `consequencia_mundo` no mundo físico (explorar, comer e brincar), uma chamada por
+  decisão em toda fonte, conferida (falha alto). O `f_S` da transição é conferido e não creditado.
+- **As entradas novas:** as leituras dos receptores novos, só nas regras de tempo livre, um peso por (regra, ação, receptor), prior 0.
+  Nas frutas, 763 → 868 pesos; com o mundo físico, +126.
+- **Os canais novos:** um por drive novo, todos ao corpo, na mesma soma telescópica.
+- **O embrulho:** o `PoliticaComMotivo` repassa `consequencia_corpo` e `mudanca_no_corpo`. Uma entrada nova aprendida que pese na decisão
+  faz o motivo falhar alto (sem fator na expressão até a etapa 6).
+- **Gates** (`tests/test_corpo_cerebros.py`, 42):
+  - **G-HOJE (a) do sinal, malha aberta:** iguais 20.736 de 20.736 decisões, nos 3 mundos, com a química sozinha e com os dois órgãos;
+  - **malha fechada:** o P1 com a chave do corpo e o P1 de hoje, no mesmo motor com o corpo, são a mesma vida byte a byte (padrão, bola e
+    frutas; escalar, canais e janela);
+  - **mundo físico:** as chamadas de uma vida do P1 rejogadas num cérebro com o corpo dão as mesmas decisões e os mesmos pesos;
+  - **as contas exatas:** a conta da seção 9 (+1440 contra −34), as entradas novas pela regra da L1 e os canais;
+  - **as entradas novas no prior** não mudam a decisão (3000 observações);
+  - o G1, o embrulho e as falhas altas do gancho.
