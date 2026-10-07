@@ -553,6 +553,7 @@ class Aprendiz:
         self._x_corpo: list[float] = []               # as leituras dos receptores novos na ultima decisao, divididas por S
         self._acao_sem_gancho: AcaoPet | None = None  # a decisao observada que ainda espera o gancho do corpo (uma chamada por decisao)
         self._corpo_pendente: dict | None = None      # o credito pela consequencia, ate o gancho do corpo (ou do mundo)
+        self._mundo_creditou: AcaoPet | None = None   # com o mundo fisico: o consequencia_mundo ja creditou esta decisao
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -900,9 +901,14 @@ class Aprendiz:
                 "deslocamento": ocorrido["deslocamento"], "comeu": None if comeu is None else comeu["tipo"],
                 "como": None if comeu is None else comeu["como"], "brincou_com_bola": ocorrido["brincou_com_bola"]})
         if self._corpo is not None:
-            # CORPO com o mundo fisico (secao 9): o corpo ja aplicou os estimulos do `ocorrido`; o sinal e o do corpo, sobre o obs_depois.
-            # A E2 so no comer que comeu fruta, como sem o corpo
-            self._gancho_recebido(acao, ocorrido["acao"])
+            # CORPO com o mundo fisico (secao 9; o arranjo do MotorCorpo do #238): o corpo ja aplicou os estimulos do `ocorrido`, e o sinal e
+            # o do corpo, sobre o obs_depois. A E2 so no comer que comeu fruta, como sem o corpo. Este gancho credita, e o
+            # `consequencia_corpo` que vem logo depois, na mesma decisao, so fecha a decisao
+            if self._acao_sem_gancho is not acao or ocorrido["acao"] != acao.value:
+                raise RuntimeError(f"corpo: consequencia_mundo de {acao.value} sem a decisao observada de {acao.value}")
+            if self._mundo_creditou is not None:
+                raise RuntimeError("corpo: segunda consequencia_mundo na mesma decisao")
+            self._mundo_creditou = acao
             comeu = ocorrido["comeu"]
             fruta = comeu["tipo"] if acao is AcaoPet.COMER and comeu is not None and comeu["tipo"] in FRUTAS else None
             self._creditar_corpo(fruta, obs_depois)
@@ -937,12 +943,19 @@ class Aprendiz:
         no cerebro, nada (o cerebro vive como hoje, com o sinal do N3 da transicao). Com ela, credita o `sinal_corpo` pendente (so na
         fonte consequencia) e confere que e a decisao observada (uma chamada por decisao, falha alto).
 
-        Com o mundo fisico, explorar, comer e brincar sao creditados no `consequencia_mundo` (o `ocorrido` dele diz o que o pet comeu); as
-        outras acoes (o MotorMundo nao chama o gancho do mundo nelas) podem vir por aqui. Uma chamada por decisao, de um dos dois."""
+        Com o mundo fisico (o arranjo do MotorCorpo, #238): explorar, comer e brincar sao creditados no `consequencia_mundo`, que vem antes
+        na mesma decisao (o `ocorrido` dele diz o que o pet comeu); este gancho vem sempre, uma vez por decisao, e nessas tres acoes so
+        fecha a decisao (sem o `consequencia_mundo` antes, falha alto). Nas outras acoes, credita aqui."""
         if self._corpo is None:
             return
+        mundo, self._mundo_creditou = self._mundo_creditou, None
         if self._ve_mundo_fisico and acao in ACOES_COM_ALVO_MUNDO:
-            raise RuntimeError(f"corpo com o mundo fisico: {acao.value} e creditado no consequencia_mundo (secao 9)")
+            if mundo is not acao:
+                raise RuntimeError(f"corpo com o mundo fisico: {acao.value} sem o consequencia_mundo antes do consequencia_corpo")
+            self._gancho_recebido(acao, ocorrido["acao"])
+            return
+        if mundo is not None:
+            raise RuntimeError(f"corpo: consequencia_mundo numa decisao de {acao.value}")
         self._gancho_recebido(acao, ocorrido["acao"])
         frutas = [e[1] for e in ocorrido["estimulos"] if e[0] == "fruta"]
         if len(frutas) > 1:
