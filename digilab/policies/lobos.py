@@ -82,7 +82,7 @@ from dataclasses import fields, replace
 from itertools import accumulate
 
 from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LOBOS, CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO,
-                      TICKS_POR_DIA, Config, ConfigBola, ConfigConsequencia, ConfigFrutas, ConfigLobos)
+                      TICKS_POR_DIA, Config, ConfigBola, ConfigConsequencia, ConfigFrutas, ConfigLobos, ConfigMundo)
 from ..events import FRUTAS, AcaoPet, AcaoUsuario
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
@@ -98,6 +98,9 @@ N_ENTRADAS = len(ENTRADAS)
 # LOBOS-MUNDO: as regras do instinto do mundo (ambiente.REGRA_BOLA, frutas.REGRA_FRUTA) e as entradas que o motor injeta
 REGRAS_MUNDO = ("bola_no_cenario", "fruta_no_cenario")
 ENTRADAS_MUNDO = ("bola", "fruta")
+# MUNDO-CEREBROS (docs/TAREFA_V2_MUNDO_FISICO.md, secao 9): as acoes com alvo do MotorMundo (mundo.ACOES_COM_ALVO, conferido por teste);
+# no mundo fisico a consequencia delas chega pelo gancho `consequencia_mundo`
+ACOES_COM_ALVO_MUNDO = (AcaoPet.EXPLORAR, AcaoPet.COMER, AcaoPet.BRINCAR)
 INDICE_HUMOR = 3                  # humor em Estado.vetor (ordem congelada em state.py); E2
 
 # Status de cada parametro da ConfigLobos (config.py). Todos PROPOSTOS, sem fonte, nenhum referendado.
@@ -492,6 +495,8 @@ class Aprendiz:
         self._pesos_fruta = dict(self._prior_fruta)
         self._fruta_na_decisao = False                # a ultima decisao viu fruta no cenario (obs.fruta > 0)
         self._consequencia_pendente: tuple | None = None  # E2: (registro, transicao, cfg) do comer com fruta, ate fruta_comida
+        self._ve_mundo_fisico = False                 # MUNDO-CEREBROS: so a PoliticaLobos com ConfigMundo ligada
+        self._consequencia_mundo_pendente: tuple | None = None   # (registro, transicao, cfg, anteriores, f_S), ate consequencia_mundo
         # N5: o peso compartilhado da entrada `info` na sub-decisao da fruta (None = entrada desligada: w0_info 0 ou sem frutas)
         self._prior_info: int | None = None
         self._peso_info: int | None = None
@@ -733,6 +738,10 @@ class Aprendiz:
         cc = cfg_consequencia or CONFIG_CONSEQUENCIA
         if cc.canais_ligados and self.cl.traco_decisoes:
             raise ValueError("CANAIS-REFORCO: os canais nao andam com o traco (traco_decisoes > 0); o T3 nao tem traco (R1)")
+        if self._ve_mundo_fisico and transicao.acao in ACOES_COM_ALVO_MUNDO:
+            # MUNDO-CEREBROS: no mundo fisico comer pode so andar, e o que comeu so o motor sabe; o credito espera o consequencia_mundo
+            self._consequencia_mundo_pendente = (registro, transicao, cc, anteriores, f_S)
+            return
         if self._fruta_na_decisao and transicao.acao is AcaoPet.COMER:
             self._consequencia_pendente = (registro, transicao, cc, anteriores)
             return
@@ -768,6 +777,49 @@ class Aprendiz:
             self._creditar_canais(registro, canais, f_S)
         elif f_S != 0:
             self._creditar(registro, f_S, anteriores, consequencia=True)
+
+    def consequencia_mundo(self, acao: AcaoPet, ocorrido: dict, obs_depois: Observacao) -> None:
+        """Gancho do MotorMundo (docs/TAREFA_V2_MUNDO_FISICO.md, secao 8), uma vez por decisao de explorar, comer ou brincar, depois do
+        `observar` e do `fruta_comida`, com tudo aplicado (andou, comeu, brincou). Sem o mundo (a chave do cerebro, `cfg_mundo`), nada.
+
+        Anota o que aconteceu no motivo da decisao (o alvo, se chegou, o que comeu). Na fonte consequencia, credita o sinal que o
+        `observar_consequencia` deixou pendente, pela mesma regra de sempre (escalar ou canais):
+        - comer que comeu uma fruta: a E2, `sinal_homeostatico_fruta` (o humor entra nos drives), antes = a observacao da decisao,
+          depois = `obs_depois`;
+        - o resto (andar, brincar, comer racao, comer sem comida, o "achou e comeu" do explorar): o `f_S` que veio com a transicao
+          (o `sinal_homeostatico` do N3, sem o humor). A E2 fica so no comer, como no N4: o explorar tem +0,01 de humor proprio, que o
+          sinal do P1 nao ve (F6).
+        Nas outras fontes (dono, nenhuma) nao ha pendente e nada e creditado."""
+        if not self._ve_mundo_fisico:
+            return
+        if self.motivos:
+            alvo = ocorrido["alvo"]
+            comeu = ocorrido["comeu"]
+            self.motivos[-1].setdefault("mundo", {}).update({
+                "alvo": None if alvo is None else alvo["tipo"], "chegou": ocorrido["chegou"],
+                "deslocamento": ocorrido["deslocamento"], "comeu": None if comeu is None else comeu["tipo"],
+                "como": None if comeu is None else comeu["como"], "brincou_com_bola": ocorrido["brincou_com_bola"]})
+        pendente, self._consequencia_mundo_pendente = self._consequencia_mundo_pendente, None
+        if pendente is None:
+            return
+        registro, transicao, cc, anteriores, f_S = pendente
+        if transicao.acao is not acao or ocorrido["acao"] != acao.value:
+            raise RuntimeError(f"consequencia_mundo de {acao.value} para a decisao pendente de {transicao.acao.value}")
+        if transicao.observacao_seguinte.vetor_estado != obs_depois.vetor_estado:
+            raise RuntimeError("consequencia_mundo com um obs_depois diferente da observacao seguinte da transicao")
+        comeu = ocorrido["comeu"]
+        S = self._escala
+        if acao is AcaoPet.COMER and comeu is not None and comeu["tipo"] in FRUTAS:
+            self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
+            f = sinal_homeostatico_fruta(transicao.observacao, obs_depois, S, cc)
+            canais = sinal_homeostatico_fruta_canais(transicao.observacao, obs_depois, S, cc) if cc.canais_ligados else None
+        else:
+            f = f_S
+            canais = sinal_homeostatico_canais(transicao, S, cc) if cc.canais_ligados else None
+        if canais is not None:
+            self._creditar_canais(registro, canais, f)
+        elif f != 0:
+            self._creditar(registro, f, anteriores, consequencia=True)
 
     # ------------------------------------------------------------- CANAIS-REFORCO: o mesmo sinal, separado por canal (H-R2)
 
@@ -898,6 +950,8 @@ class Aprendiz:
         }
         if self._consequencia_pendente is not None:     # E2: so entre observar_consequencia e fruta_comida
             d["consequencia_pendente"] = registro_dict(self._consequencia_pendente[0])
+        if self._consequencia_mundo_pendente is not None:   # MUNDO-CEREBROS: so entre observar_consequencia e consequencia_mundo
+            d["consequencia_mundo_pendente"] = registro_dict(self._consequencia_mundo_pendente[0])
         return d
 
     def estado_interno(self) -> dict:
@@ -945,13 +999,34 @@ class PoliticaLobos(Aprendiz):
     nome = "lobos"
 
     def __init__(self, cfg: Config | None = None, cfg_lobos: ConfigLobos | None = None,
-                 cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None) -> None:
+                 cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None,
+                 cfg_mundo: ConfigMundo | None = None) -> None:
         cl = cfg_lobos or CONFIG_LOBOS
         # LOBOS-MUNDO: so ve o mundo com a chave dele ligada (como o instinto); sem nenhuma, as formas de antes
         self._ve_bola = cfg_bola is not None and cfg_bola.ligada
         self._ve_frutas = cfg_frutas is not None and cfg_frutas.ligada
         self._ve_mundo = self._ve_bola or self._ve_frutas
-        if self._ve_mundo:
+        # MUNDO-CEREBROS: com a ConfigMundo ligada, o cerebro A ve o mundo fisico pela percepcao nova (Observacao.mundo), pela regra
+        # de instinto_mundo.entradas_mundo; o instinto da sonda e o PoliticaInstintoMundo. O mundo substitui o cenario do N4 e da A1:
+        # cfg_bola e cfg_frutas so dao os pesos (w_bola, w_fruta) e precisam estar desligadas, como no MotorMundo
+        fisico = cfg_mundo is not None and cfg_mundo.ligada
+        if fisico:
+            if self._ve_mundo:
+                raise ValueError("o mundo fisico substitui o cenario do N4 e da A1: cfg_bola e cfg_frutas desligadas com cfg_mundo ligada")
+            from ..instinto_mundo import PoliticaInstintoMundo, REGRA_FOME_URGENTE
+            from ..ambiente import REGRA_BOLA
+            from ..frutas import REGRA_FRUTA
+            if (REGRA_BOLA, REGRA_FRUTA) != REGRAS_MUNDO:
+                raise RuntimeError(f"regras do mundo mudaram: {(REGRA_BOLA, REGRA_FRUTA)}")
+            self.entradas = ENTRADAS + ENTRADAS_MUNDO
+            cb = replace(cfg_bola or CONFIG_BOLA, ligada=True)        # so para o prior ter os termos do mundo (os pesos)
+            cf = replace(cfg_frutas or CONFIG_FRUTAS, ligada=True)
+            extra = self._prior_mundo(cb, cf)
+            # a fome urgente com para onde ir come (instinto_mundo): o unico candidato da regra pode ser comer
+            extra[REGRA_FOME_URGENTE] = {**PRIOR_INSTINTO[REGRA_FOME_URGENTE], AcaoPet.COMER: {"vies": 1}}
+            prior = self._tabela_prior(cl.escala, REGRAS + REGRAS_MUNDO, self.entradas, extra)
+            prior_fruta = prior_comer = None              # sem a sub-decisao da fruta: o mundo nao chama o escolher_fruta
+        elif self._ve_mundo:
             from ..frutas import PoliticaInstintoFrutas, REGRA_FRUTA   # importacao tardia: frutas importa o motor inteiro
             from ..ambiente import REGRA_BOLA
             if (REGRA_BOLA, REGRA_FRUTA) != REGRAS_MUNDO:
@@ -965,7 +1040,13 @@ class PoliticaLobos(Aprendiz):
         else:
             prior, prior_fruta, prior_comer = self._tabela_prior(cl.escala), None, None
         super().__init__(cfg, cl, prior, prior_fruta, prior_comer)
-        self._instinto = PoliticaInstintoFrutas(self.cfg, cb, cf) if self._ve_mundo else PoliticaInstinto(self.cfg)
+        if fisico:
+            from ..instinto_mundo import entradas_mundo
+            self._ve_mundo = self._ve_mundo_fisico = True
+            self._entradas_mundo = entradas_mundo
+            self._instinto = PoliticaInstintoMundo(self.cfg, cfg_bola, cfg_frutas)
+        else:
+            self._instinto = PoliticaInstintoFrutas(self.cfg, cb, cf) if self._ve_mundo else PoliticaInstinto(self.cfg)
         self._ultima_regra: str | None = None
         # N5 (N5-1 a N5-3): a entrada `info` da sub-decisao da fruta, com um peso so; w0_info 0 = desligada (a vida de hoje)
         w0 = cl.w0_info
@@ -1048,15 +1129,36 @@ class PoliticaLobos(Aprendiz):
     def ve_mundo(self) -> bool:
         return self._ve_mundo
 
+    @property
+    def ve_mundo_fisico(self) -> bool:
+        return self._ve_mundo_fisico
+
+    def escolher_alvo(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
+        """Gancho do MotorMundo (docs/TAREFA_V2_MUNDO_FISICO.md, secao 5): o alvo de explorar, comer ou brincar. Devolve None, o padrao
+        do motor: o cerebro A aprende QUANDO explorar, comer e brincar, nao PARA ONDE (plano do mundo, secao 3; um alvo aprendido entra
+        so por adendo, com desenho proprio). Com o mundo, anota os candidatos e o u no motivo da decisao (o `consequencia_mundo` anota
+        o alvo que o motor escolheu). So le: nao mexe em peso nem em rng."""
+        if self._ve_mundo_fisico and self.motivos:
+            self.motivos[-1]["mundo"] = {"candidatos": [a.tipo for a in candidatos], "u": u}
+        return None
+
     def percepcao(self, obs: Observacao) -> list[float]:
         x = super().percepcao(obs)
-        if self._ve_mundo:
+        if self._ve_mundo_fisico:
+            # MUNDO-CEREBROS: as entradas `bola` e `fruta` vem da percepcao do mundo fisico, pela regra de instinto_mundo.entradas_mundo;
+            # os campos de hoje ficam no padrao no mundo (o MotorMundo nao os injeta)
+            if obs.bola != 0.0 or obs.fruta != 0.0:
+                raise RuntimeError("observacao com a bola ou a fruta do cenario do N4/A1 num cerebro do mundo fisico")
+            x.extend(self._entradas_mundo(obs.mundo))
+        elif self._ve_mundo:
             x.extend((obs.bola, obs.fruta))
         return x
 
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
         if self._consequencia_pendente is not None:
             raise RuntimeError("E2: o comer com fruta da decisao anterior ficou sem fruta_comida")
+        if self._consequencia_mundo_pendente is not None:
+            raise RuntimeError("mundo fisico: a decisao anterior ficou sem consequencia_mundo")
         x = self.percepcao(obs)
         regra, candidatos = impulsos(self._instinto, obs)
         self._presenca_na_decisao = obs.frutas_cenario
