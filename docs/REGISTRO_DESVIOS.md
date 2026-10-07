@@ -3074,3 +3074,13 @@ Só papel: `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`. Nenhuma run, nenhum código.
   `main`; senão, vira plano próprio.
 - **As faixas 33101…33505 e 34101…34505** foram conferidas fora de `FAIXAS_RESERVADAS` e sem uso no repositório nem nos branches remotos.
   Notei que a 31101…32505 (mundo físico) ainda não está registrada em `FAIXAS_RESERVADAS`: é a etapa 4 da tarefa do mundo, do chat D.
+
+## 2026-10-07 — W-FAIXAS-R17 (rodada 17, worker D): as faixas e os prefixos do mundo físico e do corpo
+
+- **Nenhum desvio.** As quatro faixas e os dois prefixos são os dos planos, sem mudança.
+- **A fase na fonte.** A faixa de calibração de cada plano leva "calibracao" na fonte, e o teste confere que cada base cai na faixa da sua
+  fase (a fonte é o que `na_faixa_reservada` devolve).
+- **O K do teste de colisão** é 40 por base, acima do que os planos pedem, para folga. Os planos de antes entram com as bases que já estão
+  na bancada (`BASES_EXPERIMENTO_MAIOR`, `BASES_N6`, `BASES_N7`, `BASES_COMPARACAO`); as bases dos dois planos novos ficam só no teste,
+  porque a tarefa não pede constantes novas na bancada.
+- **Resolve a pendência** anotada em W-PLANO-CORPO: a 31101…32505 (mundo físico) agora está em `FAIXAS_RESERVADAS`.

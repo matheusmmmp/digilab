@@ -2445,3 +2445,14 @@ do motor nem do app.
 - **No celular:** o mapa na tela inteira e a bandeja aberta embaixo. O arrasto da carne começa na bandeja; um dedo no mapa move a câmera,
   e dois dedos dão zoom.
 - **Registrada** em `docs/PENDENCIAS_PRANCHAS.md` como "não existe" no app. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, W-FAIXAS-R17 — as faixas e os prefixos do mundo físico e do corpo (2026-10-07, rodada 17, `docs/V2_RODADA_17.md`)
+
+- **`FAIXAS_RESERVADAS`** (`experiments/bancada_v2.py`) ganha quatro faixas, cada uma com a fonte:
+  - mundo físico (`PLANO_ANALISE_V2_MUNDO_FISICO`, seção 11): 31101…31505 (calibração e piloto do N) e 32101…32505 (validação);
+  - corpo e drives (`PLANO_ANALISE_V2_CORPO_DRIVES`, seção 10): 33101…33505 (calibração e piloto) e 34101…34505 (validação).
+- **`PREFIXOS_UNIDADES`** ganha `"mundo"` e `"corpo"` (seção 4 de cada plano).
+- **`tests/test_faixas_r17.py`** confere:
+  - que as faixas novas não colidem com as de antes, com as queimadas nem com as sementes das configs;
+  - que as unidades dos seis prefixos (K = 40, as duas fases) não colidem entre si e as novas ficam fora das faixas, das configs e das
+    sementes dos testes.
