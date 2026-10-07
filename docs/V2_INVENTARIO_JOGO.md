@@ -122,6 +122,7 @@ da web em que entrou (`VERSAO_PET`, `web/app/motor/constantes.ts`); "Py" = só P
 | Aura do herói (retrato da lista de gambits emprestado por 2 lutas) | `docs/futuro/aura_do_heroi.md` | IDEIA | — | — |
 | Decodificador de conceitos do DigiBrain (estado interno → conceitos com incerteza → fala) | `docs/futuro/decodificador_conceitos.md` | IDEIA | — | — |
 | Escada de cognição social (informação com fonte → reputação → normas → tradição → convenção simbólica) | `docs/futuro/cognicao_social.md` | IDEIA | — | — |
+| Ego do pet: automodelo com corpo, aprendido por uma rede, e indagação sobre a própria existência (objetivo decidido, como PROPOSTO) | `docs/futuro/ego_existencia.md` | IDEIA | — | — |
 
 **Suíte de testes** (só para confirmar que nada mudou nesta tarefa): `python -m pytest tests/ -q` na worktree `v2-f0-inventario`
 (Windows, Python 3.13, 2026-10-01): **571 passaram, 1 pulado**, 6 min 38 s; 48 arquivos em `tests/` (o `CLAUDE.md` ainda diz 290; seção 5).

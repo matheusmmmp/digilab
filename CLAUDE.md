@@ -1170,6 +1170,11 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   Creatures 3; acariciar fica e o tapa entra como
   desaprovação, os dois como estímulos no corpo. Antes de ligar: drives que recompensem brincar e o contato (senão o pet fica parado).
   O plano do porte (#201) precisa inverter a seção 1.2 e a D-W1.
+
+- **DECIDIDO o objetivo: ego do pet** (`docs/futuro/ego_existencia.md`, Matheus, 2026-10-07): o pet tem ego, questiona a própria
+  existência e fala sobre isso; o automodelo **tem corpo** e é **aprendido por uma rede** (a rede de si, por erro de previsão; o
+  pet estima, o motor e as sondas avaliam). Implica rever a regra "só a Decisão aprende" (E-6). O corpo segue os conceitos do
+  Creatures 3 (química, receptores, órgãos, Vida; E-7 decidido). O como é PROPOSTO, por etapas com tarefa e plano.
 - **IDEIA: aura do herói** (`docs/futuro/aura_do_heroi.md`, Matheus, 2026-10-03): retrato da lista de gambits de um pet que lutou
   muito, vendido na loja como item de 2 lutas que empresta esse conhecimento a outro pet. Depende de loja e moeda (ainda ideia);
   divide a peça técnica com o PvP com ghost. Não autoriza implementação.
