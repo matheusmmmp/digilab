@@ -8,7 +8,9 @@ Status (2026-10-07):
   - a **bola é um objeto físico no mapa**, pode ser encontrada nos passeios, e o pet brinca com ela;
   - o mapa é **2D e contínuo**, com regiões que passam uma para a outra como os cômodos do Creatures 3, e **não áreas fechadas**;
   - o jogador deixa a comida **arrastando e soltando** (drag and drop) no ponto do mapa 2D que quiser;
-  - **Animal Crossing** e **Nintendogs** são as referências de desenho do mapa e dos passeios (seção 3).
+  - **Animal Crossing** e **Nintendogs** são as referências de desenho do mapa e dos passeios (seção 3);
+  - a tela usa a **vista inclinada** do Animal Crossing: câmera acima e à frente do chão, objetos de pé, o fundo menor que a frente
+    (protótipo visual em `docs/futuro/mundo_fisico_vistas.html`).
 - **PROPOSTO:** o resto do desenho, neste documento. Não autoriza código: entra com tarefa e plano de análise, como sempre.
 
 Parte de duas ideias já registradas: o ambiente manipulável de `docs/TODO_INTERACAO_CORPO.md` (IDEIA de 2026-09-30) e o corpo do Creatures 3
@@ -31,9 +33,8 @@ pergunta clássica de exploração contra aproveitamento, no próprio pet.
 
 ### 2.1 O mapa (DECIDIDO: 2D contínuo, sem áreas fechadas)
 
-**Um mapa 2D contínuo, visto de cima, com regiões que passam uma para a outra.** O pet anda por qualquer ponto; as regiões têm nome e cara
-própria, como os cômodos do Creatures 3, mas não têm porta nem parede entre elas. A vista de cima é a do Animal Crossing (a alternativa,
-a vista de lado do Creatures 3, é a decisão M-2). Por exemplo:
+**Um mapa 2D contínuo com regiões que passam uma para a outra.** O pet anda por qualquer ponto; as regiões têm nome e cara própria, como
+os cômodos do Creatures 3, mas não têm porta nem parede entre elas. Por exemplo:
 
 | região | o que tem |
 |---|---|
@@ -100,6 +101,15 @@ fome (a decisão S-3 de `docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`).
 comida mais próxima que ele vê ou cheira. O jogador vê no mapa onde deixou a comida.
 
 ### 2.6 Na tela
+
+**Vista inclinada (DECIDIDO, M-2).** Como no Animal Crossing: a câmera fica acima e à frente do chão, olhando inclinada. O fundo do mapa
+aparece menor e mais alto, com o horizonte ao fundo; árvores, pet, ninho, comida e bola ficam de pé, cada um com sombra no chão, e o que
+está mais perto da câmera é desenhado por cima. A fruta caindo e a bola quicando mostram a altura acima da sombra. O protótipo
+`docs/futuro/mundo_fisico_vistas.html` mostra esta vista ao lado da vista de lado do Creatures 3, que foi descartada.
+
+**A vista é só desenho.** O motor continua num plano 2D de posições inteiras; a projeção inclinada é feita só na web. Quando o jogador
+solta a comida na tela, a web converte o ponto da tela para o ponto do chão antes de gerar o evento `deixar_comida(tipo, x, y)`. A
+pesquisa no Python não depende da vista.
 
 - **Desktop:** o mapa ocupa a área principal, com a câmera seguindo o pet; a bandeja de comida e a bola ficam na lateral, para arrastar.
 - **Celular (390 px):** o mapa na tela inteira, arrastável com o dedo; a bandeja abre embaixo. Arrastar a comida e arrastar o mapa precisam
@@ -196,7 +206,7 @@ Rancher e Pokémon nunca são citados como precedente.
 | # | decisão | estado ou recomendação |
 |---|---|---|
 | M-1 | Áreas discretas ou mapa 2D contínuo | **DECIDIDO: mapa 2D contínuo**, com regiões que passam uma para a outra como os cômodos do Creatures 3 (2026-10-07) |
-| M-2 | Vista de cima (Animal Crossing) ou de lado (Creatures 3) | de cima: a bola rola em duas direções, e soltar comida num ponto do chão fica natural; a vista de lado traz chão, gravidade e elevadores |
+| M-2 | Vista inclinada (Animal Crossing) ou de lado (Creatures 3) | **DECIDIDO: vista inclinada**, como no Animal Crossing (2026-10-07, seção 2.6; protótipo em `mundo_fisico_vistas.html`) |
 | M-3 | Como o jogador deixa a comida | **DECIDIDO: arrastar e soltar** em qualquer ponto do mapa, substituindo o "alimentar" nos pets novos; os pets v1 a v10 seguem iguais (2026-10-07) |
 | M-4 | Quantas regiões no começo | quatro (casa, jardim, campo, mata) |
 | M-5 | A ordem da seção 6 | como está |
