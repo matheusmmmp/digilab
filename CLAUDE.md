@@ -2851,3 +2851,39 @@ Rodada 18. A chave `pesos_janela` do B (#236) na `main`. Infraestrutura, sem run
     igual ao motivo). Algum peso cai abaixo de S, e todos ficam entre S/4 e S;
   - **a dominância** confere com os canais nos três mundos. Com o sinal recalculado sem os pesos, ela falha alto.
 - **Fumaça do corpo:** não existe ainda em `experiments/configs/`, então o P1-cw não entrou em nenhuma.
+
+## V2, MUNDO-CORPO — o MotorMundo no MotorCorpo (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seções 2, 9 e 12) — GATES PASSAM
+
+Pedido do Gerente depois do #236 (os estímulos do mundo no `corpo.py`) e do #235 (o instinto do mundo na bancada). Infraestrutura, sem run;
+só as sementes dos testes. Mudaram `digilab/motor_corpo.py` e `digilab/mundo.py` (um gancho, mesma conta), mais o teste antigo que esperava
+a falha. `engine.py`, `corpo.py`, os cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A trava saiu:** `com_corpo(MotorMundo)` com o mundo ligado roda.
+- **Os estímulos, na ordem do Gerente:**
+  1. **a MF-2:** `Corpo.acao_pet(acao, com_mundo=True)`, na decisão;
+  2. **o andar:** `estimulo_andar(deslocamento, custo_energia_por_subunidade)`;
+  3. **a comida do mapa** (o comer e o achou e comeu): `estimulo_consumo_mundo(tipo, situacao, cmf, efeito_frutas[tipo])`;
+  4. **a bola:** `estimulo_bola(ganho_humor_bola)`.
+  - Os três últimos vêm do `MotorCorpo._consequencia`, que envolve a do `MotorMundo`.
+  - **G-BYPASS:** só a energia (o andar), a fome e o humor (a comida) e o humor (a bola) podem mudar no float de baixo; fora disso, falha
+    alto.
+  - Depois, o Estado volta a ser a leitura do corpo, e os estímulos entram no `ocorrido` do `consequencia_corpo` (`("andar", d)`,
+    `("comida", tipo, situacao)`, `("bola",)`).
+- **Os ganchos:**
+  - o `obs_depois` do mundo sai de `MotorMundo._observacao_depois_mundo`, e o `MotorCorpo` põe o `obs.corpo` por cima. O
+    `consequencia_mundo` recebe os receptores já com os estímulos da própria ação, só nas decisões de explorar, comer e brincar, como hoje;
+  - o `consequencia_corpo` continua com uma chamada por decisão, sempre, depois do `consequencia_mundo`.
+- **Gates** (`tests/test_corpo_no_mundo.py`, 11 testes, ~1 min):
+  - **G2:** as 144 vidas do mundo físico de hoje, pela bancada, iguais a `tests/gabaritos/corpo_mundo_vidas_de_hoje.json` byte a byte, com o
+    `MotorCorpo` desligado na frente do `MotorMundo` e sem ele. O gabarito foi gravado antes, de um snapshot de origin/main
+    (`tests/gabarito_corpo_mundo.py`, commit próprio);
+  - **G-HOJE (a) no mundo físico:** malha aberta contra o `MotorMundo` de hoje, tick a tick, em 4 donos × 3 lugares × 2 sementes, com a
+    química sozinha e com os dois órgãos. Os drives ficam a até 7e−14, e as 5 viradas de privação são todas um químico exatamente no
+    limiar. A posição, as comidas, os consumos, as quedas, a bola e as rngs do mundo saem iguais. O sinal do N3 sai igual em 6912 de 6912
+    decisões;
+  - **a conta exata:** o cansaço sobe 75 por subunidade andada; a ração tira 202500 da fome, a fruta 67500, a podre põe 45000 de tristeza
+    e a bola tira 67500;
+  - **a MF-2:** o comer sem comida não mexe na fome do corpo;
+  - **os ganchos, o bypass no mundo e o G1** (instinto do mundo e lobos aprendendo, estado interno e registro do mundo incluídos);
+  - **a bancada monta o mundo físico com o corpo:** sem mudar a bancada, com o `MotorMundo` dela trocado pelo com corpo. P0 (lobos e
+    instinto), P0z, P1 e P3 rodam nos dois layouts, e o G1 da bancada passa.
+- **Para o D:** a chave do corpo na bancada (o `cfg_corpo` na fábrica do mundo físico) fica com ele.
