@@ -1479,3 +1479,111 @@ class ConfigCorpo:
 
 CONFIG_CORPO = ConfigCorpo()
 CONFIG_CORPO_LIGADA = ConfigCorpo(ligada=True)
+
+
+# =====================================================================
+# V2, o mundo fisico minimo (docs/TAREFA_V2_MUNDO_FISICO.md, etapa 2; MF-1 a MF-4 decididas em 2026-10-07). Motor em
+# digilab/mundo.py. Desligado por padrao: o MotorFrutas byte a byte. Todos os numeros sao PROPOSTOS, SEM FONTE (tarefa, secao 3);
+# os que o plano calibra (`mult_queda`, plano secao 6) saem da calibracao do mundo. Posicoes do layout em CELULAS; o motor usa
+# subunidades (celula x `sub`), com o objeto no centro da celula.
+
+
+@dataclass(frozen=True)
+class LayoutMundo:
+    """A disposicao fixa do mapa (M-4): as regioes sao faixas de x (celulas, inclusivas), sem parede; as arvores sao
+    (id, x, y, fruta), com a fruta fixa por arvore. Iguais em toda vida, no Python e na web."""
+
+    nome: str
+    regioes: tuple = (("casa", 0, 15), ("jardim", 16, 33), ("campo", 34, 47), ("mata", 48, 63))
+    ninho: tuple = (4, 15)
+    comedouro: tuple = (10, 15)
+    bola_inicio: tuple = (40, 15)
+    # o prototipo docs/futuro/mundo_fisico_vistas.html tem 2 + 4 arvores (10 px por celula); a tarefa pede 3 + 6: as do prototipo
+    # ficam onde estao, e entram J3, M5 e M6
+    arvores: tuple = (("J1", 22, 6, "a"), ("J2", 29, 20, "b"), ("J3", 19, 14, "c"),
+                      ("M1", 53, 4, "a"), ("M2", 60, 15, "b"), ("M3", 50, 23, "c"),
+                      ("M4", 62, 26, "a"), ("M5", 56, 10, "b"), ("M6", 55, 19, "c"))
+
+
+LAYOUT_MUNDO_PADRAO = LayoutMundo("padrao")
+
+
+def layout_afastado(base: LayoutMundo, altura: int = 30) -> LayoutMundo:
+    """O layout do G-DIST (plano, adendo 1, A1.8): cada tronco a duas vezes a distancia do centro da regiao dele, cortado para
+    dentro dela. Nada mais muda. Centro da regiao = ((x0 + x1 + 1) // 2, altura // 2), em celulas."""
+    arvores = []
+    for ident, x, y, fruta in base.arvores:
+        _, x0, x1 = next(r for r in base.regioes if r[1] <= x <= r[2])
+        cx, cy = (x0 + x1 + 1) // 2, altura // 2
+        arvores.append((ident, min(x1, max(x0, cx + 2 * (x - cx))), min(altura - 1, max(0, cy + 2 * (y - cy))), fruta))
+    return replace(base, nome="afastado", arvores=tuple(arvores))
+
+
+LAYOUT_MUNDO_AFASTADO = layout_afastado(LAYOUT_MUNDO_PADRAO)
+
+
+@dataclass(frozen=True)
+class ConfigMundo:
+    ligada: bool = False
+    layout: LayoutMundo = LAYOUT_MUNDO_PADRAO
+    # o mapa (secao 3): 64 x 30 celulas de 16 subunidades; posicoes inteiras em subunidades
+    celulas_x: int = 64
+    celulas_y: int = 30
+    sub: int = 16
+    # o deslocamento (secao 5): alcance de uma decisao = velocidade x intervalo_decisao_ticks
+    velocidade: int = 4                          # subunidades por tick (60 por decisao: ~3 h da casa ao fundo da mata)
+    custo_energia_por_subunidade: float = 1.0 / 6000.0   # 60 subunidades = 0,01 de energia, alem do efeito da acao
+    raio_pegar_celulas: int = 1
+    # a percepcao (secao 7)
+    raio_visao_celulas: int = 6
+    max_vistos: int = 8
+    cheiro_racao: int = 64                       # A da racao
+    cheiro_fruta: int = 32                       # A da fruta
+    raio_cheiro_celulas: int = 24                # R
+    # os alvos (secao 5)
+    limiar_cheiro_explorar: int = 16
+    passo_cheiro_celulas: int = 8                # o alvo `cheiro`: 8 celulas na direcao do cheiro
+    vagar_min_celulas: int = 4
+    vagar_max_celulas: int = 12
+    fome_max_comer_achado: float = 0.85          # MF-1
+    # as comidas (secao 5)
+    nutricao_fruta: float = 0.15                 # os 0,05 do comer mais os 0,10 do N4 (a racao usa Config.ganho_alimentar)
+    efeito_podre: float = -0.10                  # igual ao ConfigFrutas.efeito_humor_ruim
+    ganho_humor_bola: float = 0.15               # igual ao ConfigBola.ganho_humor_bola (A1)
+    # as arvores (secao 6): um passo do mundo a cada `passo_mundo_ticks`
+    passo_mundo_ticks: int = 15
+    p_queda_jardim: float = 1.0 / 96.0
+    p_queda_mata: float = 2.0 / 96.0
+    mult_queda: float = 1.0                      # o m da calibracao do mundo (plano, secao 6), em {1/2, 1, 2}
+    frutas_por_queda_min: int = 1
+    frutas_por_queda_max: int = 3
+    raio_queda_celulas: int = 2
+    max_frutas_por_arvore: int = 4
+    recarga_min: int = 720
+    # apodrecer (secao 6)
+    maduro_fruta_min: int = 720
+    maduro_racao_min: int = 1440
+    prazo_podre_min: int = 720
+    # a bola rola (secao 6): distancia em celulas (no campo, x mult_bola_campo), `atrito` subunidades por tick ate parar
+    bola_min_celulas: int = 3
+    bola_max_celulas: int = 10
+    mult_bola_campo: int = 2
+    atrito: int = 8
+    # o DonoComLugar (secao 4)
+    perto_max_celulas: int = 2
+    longe_min_celulas: int = 20
+    longe_max_celulas: int = 30
+    # o que o motor registra para as medidas do plano (adendo 1, A1.8): a mancha de uma arvore
+    raio_mancha_celulas: int = 3
+
+    def __post_init__(self) -> None:
+        if self.celulas_x * self.sub != 1024 or self.celulas_y * self.sub != 480:
+            raise ValueError("o mapa da tarefa e 64 x 30 celulas de 16 subunidades (secao 3)")
+        if self.velocidade <= 0 or self.atrito <= 0:
+            raise ValueError("velocidade e atrito precisam ser positivos")
+        if self.mult_queda <= 0.0:
+            raise ValueError(f"mult_queda precisa ser positivo: {self.mult_queda}")
+
+
+CONFIG_MUNDO = ConfigMundo()
+CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)

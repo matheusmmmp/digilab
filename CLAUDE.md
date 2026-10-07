@@ -2517,3 +2517,42 @@ web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as falhas altas:** fora da grade, a sub-chave das etapas seguintes e o corpo com a chave desligada;
   - **o isolamento:** o AST sem motor e sem rng;
   - **a paridade:** o gabarito reproduz.
+
+## V2, W-MUNDO-FISICO — o motor do mundo físico, etapa 2 (2026-10-07, `docs/TAREFA_V2_MUNDO_FISICO.md`) — GATES PASSAM
+
+Rodada 17, passo 2 do A. As seções 2 a 8 da tarefa (MF-1 a MF-4 decididas), sem run e só com as sementes dos testes. O instinto e os
+cérebros no mundo são a etapa 3 (B); a web, a etapa 5; a bancada, a etapa 4 (D).
+- **O que mudou:**
+  - `digilab/mundo.py`, arquivo novo;
+  - a `ConfigMundo`, o `LayoutMundo` e os layouts padrão e afastado, no fim de `config.py`;
+  - os eventos `deixar_comida` e `deixar_bola`, como funções novas em `events.py`;
+  - o campo `Observacao.mundo`, com padrão None.
+  - `engine.py`, `ambiente.py`, `frutas.py`, os cérebros, a bancada e a web não mudaram.
+- **`MotorMundo`:**
+  - é subclasse do `MotorFrutas`. Desligado, não tem rng, registro, chave em `estado()` nem embrulho;
+  - ligado, substitui o cenário do N4 e da A1: frutas e bola ligadas, educação e lesões levantam erro, e `alimentar`, `oferecer_fruta_*`,
+    `por_bola` e `tirar_bola` também;
+  - o mapa tem 64 × 30 células de 16 subunidades, com posições inteiras, distância por `isqrt` e direções pela tabela inteira `DIR16`;
+  - as árvores, a comida que amadurece, apodrece e some, e a bola que rola usam os fluxos `mundo-arvores`, `mundo-bola` e
+    `mundo-sujeira`, nunca a `_rng_ambiente` nem a rng do pet (MF-4);
+  - o alvo de explorar, comer e brincar sai do gancho `escolher_alvo` ou do padrão do motor, com um `u` da rng `alvo` sorteado sempre;
+  - o pet anda de uma vez na decisão e paga energia pela distância. Explorar tem o "achou e comeu" (MF-1), e comer sem comida não dá
+    fome (MF-2);
+  - a percepção vai em `Observacao.mundo` (`PercepcaoMundo`, com a posição: MF-3);
+  - a consequência chega ao cérebro com tudo aplicado, mais os ganchos `fruta_comida` e `consequencia_mundo`.
+- **Peças para a bancada:**
+  - `deixar_comida` conta como contato e `deixar_bola` não;
+  - `reproduzir_mundo`, `fabricas_mundo` e `DonoComLugar` (comedouro, perto, longe, com a rng `dono-lugar` sem o braço);
+  - `CanalMundo` e `simular_vida_mundo`.
+- **Registros para as medidas do plano** (A1.8): `decisoes_mundo`, `regioes`, `visitas` às manchas, `quedas`, `consumos_mundo`,
+  `deixadas` e `sumidas`. O replay refaz todos.
+- **Gates** (`tests/test_mundo.py`, ~22 s):
+  - **G1:** replay bit a bit com o instinto, um cérebro aleatório que escolhe alvos e os lobos aprendendo, para 4 donos, 3 lugares e 2
+    sementes;
+  - **G2:** as 96 vidas de `mundo_vidas_de_hoje.json`, com o `MotorMundo` desligado no lugar do motor da bola e das frutas;
+  - **G-ENGINE:** o sha256 de `engine.py`, `ambiente.py` e `frutas.py`;
+  - **G-MEC:** os mecanismos;
+  - **G-NUMS:** as mesmas quedas em qualquer cérebro e dono;
+  - **G-V1-V10:** a suíte de sempre passa.
+- Uma vida de 14 dias leva ~0,3 s, e o replay outros ~0,3 s. Interpretações e os números PROPOSTOS escolhidos aqui estão em
+  `docs/REGISTRO_DESVIOS.md`.

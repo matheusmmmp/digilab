@@ -200,6 +200,58 @@ def fala(tick: int, gatilho: str) -> Evento:
     return Evento(tick=tick, tipo="fala", valor=gatilho)
 
 
+# V2, mundo fisico (docs/TAREFA_V2_MUNDO_FISICO.md, secao 4): o dono deixa a comida ou a bola num ponto do mapa. Tipos novos do log,
+# como a `luta`: so o `reproduzir_mundo` (digilab/mundo.py) os entende; os replays de antes levantam erro. A posicao ja vem na grade
+# (inteiros em subunidades, dentro do mapa: 0 <= x < 1024, 0 <= y < 480); fora disso, nao inteira ou tipo desconhecido levanta erro.
+TIPOS_COMIDA_MUNDO = ("racao", "a", "b", "c")
+LARGURA_MUNDO = 1024
+ALTURA_MUNDO = 480
+
+
+def _posicao_mundo(x, y) -> tuple[int, int]:
+    if type(x) is not int or type(y) is not int:
+        raise ValueError(f"posicao do mundo nao inteira: ({x!r}, {y!r})")
+    if not (0 <= x < LARGURA_MUNDO and 0 <= y < ALTURA_MUNDO):
+        raise ValueError(f"posicao fora do mapa: ({x}, {y})")
+    return x, y
+
+
+def deixar_comida(tick: int, tipo: str, x: int, y: int) -> Evento:
+    if tipo not in TIPOS_COMIDA_MUNDO:
+        raise ValueError(f"tipo de comida desconhecido: {tipo!r}")
+    x, y = _posicao_mundo(x, y)
+    return Evento(tick=tick, tipo="deixar_comida", valor=f"{tipo}|{x}|{y}")
+
+
+def deixar_bola(tick: int, x: int, y: int) -> Evento:
+    x, y = _posicao_mundo(x, y)
+    return Evento(tick=tick, tipo="deixar_bola", valor=f"{x}|{y}")
+
+
+def _inteiro_do_log(texto: str) -> int:
+    if not texto.isdigit():
+        raise ValueError(f"inteiro malformado no log: {texto!r}")
+    return int(texto)
+
+
+def ler_deixar_comida(evento: Evento) -> tuple[str, int, int]:
+    if evento.tipo != "deixar_comida":
+        raise ValueError(f"evento nao e deixar_comida: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 3 or partes[0] not in TIPOS_COMIDA_MUNDO:
+        raise ValueError(f"deixar_comida malformado: {evento.valor!r}")
+    return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]))
+
+
+def ler_deixar_bola(evento: Evento) -> tuple[int, int]:
+    if evento.tipo != "deixar_bola":
+        raise ValueError(f"evento nao e deixar_bola: {evento.tipo!r}")
+    partes = str(evento.valor).split("|")
+    if len(partes) != 2:
+        raise ValueError(f"deixar_bola malformado: {evento.valor!r}")
+    return _posicao_mundo(_inteiro_do_log(partes[0]), _inteiro_do_log(partes[1]))
+
+
 def ler_luta(evento: Evento) -> tuple[str, int]:
     if evento.tipo != "luta":
         raise ValueError(f"evento nao e luta: {evento.tipo!r}")

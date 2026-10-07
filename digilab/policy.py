@@ -45,6 +45,10 @@ class Observacao:
     # V2, N7: o pedido do dono vigente, na ordem de events.FRUTAS: -1 na fruta que o dono pediu para deixar, 0 nas outras. So o MotorFrutas
     # com ConfigPedido.ligada injeta; ninguem le ainda (a entrada `pedido` dos lobos e do chat B).
     pedido_frutas: tuple = (0.0, 0.0, 0.0)
+    # V2, mundo fisico (docs/TAREFA_V2_MUNDO_FISICO.md, secao 7): a `PercepcaoMundo` (digilab/mundo.py) da decisao: a propria posicao, a
+    # regiao, os objetos vistos, o cheiro e a direcao dele, o alvo pendente. So o MotorMundo com ConfigMundo.ligada injeta; `de_estado`,
+    # o bandit e as sondas nao o leem. Com o mundo, `bola`, `fruta`, `frutas_cenario`, `info_frutas` e `pedido_frutas` ficam no padrao.
+    mundo: "PercepcaoMundo | None" = None  # noqa: F821
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":

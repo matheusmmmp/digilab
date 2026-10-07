@@ -3208,3 +3208,53 @@ de `config.py`, o exportador e os testes. Motor, `engine.py`, `lobos.py` e a web
   etapa decai por meia-vida; elas servem à etapa 6.
 - **O registro dos parâmetros** fica em `corpo.PARAMETROS_CORPO`, como o dos lobos, conferido contra os campos da `ConfigCorpo`, e não em
   `protocol.py`: nenhuma run de protocolo usa o corpo.
+
+## 2026-10-07 — W-MUNDO-FISICO (worker A, rodada 17): o motor do mundo físico, etapa 2
+
+Etapa 2 da seção 9 de `docs/TAREFA_V2_MUNDO_FISICO.md` (MF-1 a MF-4 decididas). Sem run; só as sementes dos testes.
+
+- **Números que a tarefa não deu** (PROPOSTOS, SEM FONTE, escolhidos aqui):
+  - a velocidade, 4 subunidades por tick, dá 60 por decisão, ~3 h da casa ao fundo da mata;
+  - o custo de energia, 1/6000 por subunidade, faz uma decisão andando inteira custar 0,01, menos que o −0,015 do explorar;
+  - o `atrito`, 8 subunidades por tick;
+  - o `limiar_cheiro_explorar`, 16;
+  - o passo do mundo, 15 min, o da tarefa.
+- **O layout:** as 2 árvores do jardim e as 4 da mata do protótipo ficam onde estão (10 px por célula). Entram J3, M5 e M6 para chegar às
+  3 + 6 da tarefa. As frutas a, b e c se alternam pelas árvores.
+- **O layout afastado** do G-DIST (plano, adendo 1, A1.8) entrou como `LAYOUT_MUNDO_AFASTADO`:
+  - centro da região = ((x0 + x1 + 1) // 2, 15), em células;
+  - o tronco vai a 2 × a distância, cortado para dentro da região e do mapa.
+- **Interpretações da seção 6:**
+  - **a fruta cai** num ponto a uma direção entre 16 e uma distância uniforme de 0 a 2 células do tronco;
+  - **o limite de 4 no chão** conta as frutas daquela árvore maduras ou podres no passo da queda. Todo sorteio acontece mesmo quando o
+    excesso não cai;
+  - **"perde `atrito` subunidades por tick até parar"** virou: a distância que falta cai `atrito` por tick. A bola anda a velocidade
+    constante até o ponto final, e a posição num tick é interpolada em inteiros. O ponto final é sorteado e cortado ao mapa na hora do
+    chute.
+- **O DonoComLugar:**
+  - "perto" é uma direção entre 16 e uma distância uniforme de 0 a 2 células;
+  - "longe" é uma direção entre 16 e uma distância uniforme de 20 a 30 células, cortada ao mapa, então perto da borda fica mais perto;
+  - o comedouro não sorteia.
+- **O contato do `deixar_comida`** passa pelo `_contato` do `MotorEducacao` com `alimentar`. O vínculo e o `receber_acao_dono` do cérebro
+  recebem `alimentar`, como hoje, sem a obediência: a recusa não existe no mundo.
+- **O mundo exige educação e lesões desligadas.** É o desenho do plano (seção 2, morte desligada). Os eventos `luta`, `origem`, `fala` e
+  `decisao_externa` levantam erro no `reproduzir_mundo`.
+- **A ordem dos ganchos numa decisão de explorar, comer ou brincar:**
+  1. o mundo aplica tudo, inclusive desfazer o +0,05 do comer (MF-2);
+  2. o cérebro observa a transição, com a observação seguinte refeita;
+  3. vem o `fruta_comida` (E2), se comeu fruta, madura ou podre;
+  4. por último, o `consequencia_mundo`.
+- **O cheiro empata muito em inteiros.** Com A = 32 e R = 24 células, andar 1 célula muda o cheiro de uma fruta em no máximo ~1,3. A
+  direção medida a 1 célula empata com frequência, e no empate vence a ordem fixa. Exemplo: com uma fruta a 90 ao norte, N e NE dão 25
+  cada, e o pet vai para NE. Fica como a tarefa manda. Os números do cheiro são PROPOSTOS; vale olhar antes da calibração do mundo.
+- **Registros para as medidas do plano** (adendo 1, A1.8; as medidas são do D). O motor não calcula as medidas, só registra:
+  - **`decisoes_mundo`**, por decisão:
+    - posição antes e depois, e a região;
+    - o alvo e se chegou;
+    - o deslocamento e a energia gasta;
+    - o que comeu e se brincou com a bola;
+    - as manchas em que o pet está;
+  - **`regioes`**: as chegadas e saídas de região;
+  - **`visitas`**: a mancha de 3 células de cada árvore, com a chegada, a saída e as decisões tomadas de dentro;
+  - **`quedas`**: as sorteadas, os pontos e as colocadas, do fluxo que não depende do pet;
+  - **`consumos_mundo`, `deixadas` e `sumidas`**.
