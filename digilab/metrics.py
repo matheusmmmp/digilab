@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from typing import Iterable, Mapping, Sequence
 
 from .arena import ResultadoPartida
-from .config import CONFIG_METRICAS, ConfigMetricas
+from .config import CONFIG_METRICAS, TICKS_POR_DIA, ConfigMetricas
 from .events import AcaoPet
 from .policy import Observacao, Politica
 from .protocol import derivar_semente
@@ -1103,3 +1103,336 @@ def multiconjunto_informacoes(informacoes: Sequence[Mapping]) -> dict[str, int]:
         k = f"{i['fruta']}/{i['conteudo']}"
         cont[k] = cont.get(k, 0) + 1
     return dict(sorted(cont.items()))
+
+
+# ------------------------------------------------------------ V2, rodada 17: as medidas do mundo fisico, do corpo e do banheiro
+# (W-MEDIDAS-R17, docs/V2_RODADA_17.md). Funcoes puras sobre listas simples de eventos. O motor do mundo e o corpo novo ainda nao estao
+# na main: cada docstring diz o que o motor precisa fornecer. Posicoes em subunidades, 16 por celula (docs/TAREFA_V2_MUNDO_FISICO.md,
+# secao 3); 1 tick = 1 minuto.
+
+SUBUNIDADES_POR_CELULA = 16
+REGRAS_TEMPO_LIVRE = ("tempo_livre", "bola_no_cenario")
+ATIVIDADES_TEDIO = ("bola", "brincar", "explorar", "dono_brinca")     # as que o corpo guarda na janela do tedio (corpo, adendo 1, A1.2)
+
+
+def janela_dias(primeiro: int, ultimo: int) -> tuple[int, int]:
+    """Os dias `primeiro` a `ultimo` (1 = o dia do nascimento; os dois entram) como [inicio, fim) em ticks."""
+    if primeiro < 1 or ultimo < primeiro:
+        raise ValueError(f"dias invalidos: {primeiro} a {ultimo}")
+    return (primeiro - 1) * TICKS_POR_DIA, ultimo * TICKS_POR_DIA
+
+
+JANELA_8_14 = janela_dias(8, 14)          # a janela das medidas dos tres planos
+
+
+def _checar_janela(janela: tuple[int, int]) -> tuple[int, int]:
+    ini, fim = janela
+    if not (isinstance(ini, int) and isinstance(fim, int)) or ini < 0 or fim <= ini:
+        raise ValueError(f"janela invalida: [{ini}, {fim})")
+    return ini, fim
+
+
+def _escala01(nome: str, v: float) -> float:
+    if not 0.0 <= v <= 1.0:
+        raise ValueError(f"{nome} fora de [0, 1]: {v!r}")
+    return v
+
+
+# --- o mundo fisico (docs/PLANO_ANALISE_V2_MUNDO_FISICO.md)
+
+
+def deficit_fome_energia(decisoes: Sequence[tuple[int, float, float]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """D_FE, a primaria (secao 5.1; no adendo 1, P0 - P1 em malha fechada): a media, nas decisoes da janela, de
+    ((1 - fome) + (1 - energia)) / 2. O motor fornece, por decisao do pet, (tick, fome, energia) no estado em que ele decide (o da
+    `Observacao`), na escala 0-1. A vida toda (o descritivo) e a mesma conta com `janela_dias(1, 14)`. Falha alto sem decisao na
+    janela."""
+    ini, fim = _checar_janela(janela)
+    sel = [(_escala01("fome", f), _escala01("energia", e)) for t, f, e in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("D_FE sem decisao na janela")
+    return {"n": len(sel), "d_fe": sum((2.0 - f - e) / 2.0 for f, e in sel) / len(sel)}
+
+
+def custo_viagem(arvores: Mapping[str, tuple[int, int]]) -> dict[str, float]:
+    """A1.8: o custo de viagem de cada arvore, a distancia do tronco dela ao tronco da arvore mais proxima, em celulas:
+    isqrt(dx^2 + dy^2) em subunidades, dividido por 16. `arvores` = id -> (x, y) do tronco em subunidades, do layout da `ConfigMundo`
+    (convertido de celulas como o motor converte). E fixo pelo layout."""
+    if len(arvores) < 2:
+        raise ValueError("custo de viagem precisa de 2 arvores ou mais")
+    out = {}
+    for a, (xa, ya) in arvores.items():
+        d = min(math.isqrt((xa - xb) ** 2 + (ya - yb) ** 2) for b, (xb, yb) in arvores.items() if b != a)
+        out[a] = d / SUBUNIDADES_POR_CELULA
+    return out
+
+
+def taxa_recente(quedas: Sequence[int], tick: int, horas: int = 24) -> float | None:
+    """As frutas caidas por hora nas `horas` antes de `tick`, [tick - horas*60, tick). `quedas` = o tick de cada queda de fruta, de todas
+    as arvores (o fluxo `mundo-arvores`, que nao depende do pet). None quando a janela comeca antes do nascimento."""
+    if tick - horas * 60 < 0:
+        return None
+    return sum(1 for q in quedas if tick - horas * 60 <= q < tick) / horas
+
+
+def visitas_manchas(trajetoria: Sequence[tuple[int, int, int]], arvores: Mapping[str, tuple[int, int]], tick_fim: int,
+                    janela: tuple[int, int] = JANELA_8_14, quedas: Sequence[int] | None = None, raio_celulas: int = 3) -> list[dict]:
+    """As visitas as manchas (A1.8). O motor fornece:
+    - `trajetoria`: (tick, x, y), uma entrada por decisao do pet, mesmo sem deslocamento, em ordem de tick: a posicao depois do
+      deslocamento daquela decisao, que vale de `tick` ate a entrada seguinte (o motor anda de uma vez, na decisao; tarefa, secao 5).
+      A primeira e o nascimento, no ninho;
+    - `arvores`: id -> (x, y) do tronco, em subunidades; `tick_fim`: o fim da vida;
+    - `quedas` (opcional): os ticks das quedas de fruta, para a `taxa_recente` de cada visita.
+
+    Mancha = a ate `raio_celulas` do tronco, isqrt(dx^2 + dy^2) <= raio_celulas * 16. Cada arvore tem as suas visitas, e manchas que se
+    sobrepoem contam uma visita em cada. Visita = de `inicio` (o tick da primeira entrada dentro) ate `fim` (o da primeira entrada fora
+    depois dela); `permanencia` = fim - inicio, em minutos. `decisoes_dentro` = as entradas da visita depois da primeira, mais a de
+    saida: todas foram tomadas com o pet na mancha. Contam as visitas com `inicio` na janela e ao menos uma decisao dentro. A que nao
+    termina ate `tick_fim` sai `censurada`, com fim = tick_fim, e fica fora das inclinacoes (contada)."""
+    ini, fim_j = _checar_janela(janela)
+    ticks = [t for t, _, _ in trajetoria]
+    if any(b <= a for a, b in zip(ticks, ticks[1:])):
+        raise ValueError("trajetoria fora de ordem ou com tick repetido")
+    if ticks and tick_fim < ticks[-1]:
+        raise ValueError("tick_fim antes da ultima entrada da trajetoria")
+    raio = raio_celulas * SUBUNIDADES_POR_CELULA
+    custo = custo_viagem(arvores) if len(arvores) >= 2 else {a: None for a in arvores}
+    out = []
+    for a, (xa, ya) in sorted(arvores.items()):
+        dentro = [math.isqrt((x - xa) ** 2 + (y - ya) ** 2) <= raio for _, x, y in trajetoria]
+        i = 0
+        while i < len(trajetoria):
+            if not dentro[i]:
+                i += 1
+                continue
+            j = i
+            while j + 1 < len(trajetoria) and dentro[j + 1]:
+                j += 1
+            saiu = j + 1 < len(trajetoria)
+            inicio = trajetoria[i][0]
+            fim = trajetoria[j + 1][0] if saiu else tick_fim
+            n_dentro = (j - i) + (1 if saiu else 0)
+            if ini <= inicio < fim_j and n_dentro >= 1:
+                v = {"arvore": a, "inicio": inicio, "fim": fim, "permanencia": fim - inicio, "censurada": not saiu,
+                     "decisoes_dentro": n_dentro, "custo_viagem": custo[a]}
+                if quedas is not None:
+                    v["taxa_recente"] = taxa_recente(quedas, inicio)
+                out.append(v)
+            i = j + 1
+    out.sort(key=lambda v: (v["inicio"], v["arvore"]))
+    return out
+
+
+def inclinacao_permanencia(visitas: Sequence[Mapping], sobre: str) -> dict:
+    """A inclinacao (minimos quadrados) da permanencia sobre `sobre`, nas visitas nao censuradas com valor:
+    - "custo_viagem": a medida 1 (G-PERM, inclinacao do P1 - a do P0);
+    - "taxa_recente": a medida 3 (G-OPORT; quem aprende o custo de oportunidade sai antes depois de dias ricos: inclinacao < 0).
+    As visitas da unidade (as 12 celulas de um braco) entram juntas: e so concatenar as listas. `inclinacao` None, com o motivo, sem 2
+    valores distintos de x. Nada some sem ser contado."""
+    if sobre not in ("custo_viagem", "taxa_recente"):
+        raise ValueError(f"inclinacao sobre {sobre!r}")
+    usadas = [(v[sobre], v["permanencia"]) for v in visitas if not v["censurada"] and v.get(sobre) is not None]
+    base = {"n": len(usadas), "censuradas": sum(1 for v in visitas if v["censurada"]),
+            "sem_valor": sum(1 for v in visitas if not v["censurada"] and v.get(sobre) is None)}
+    if len({x for x, _ in usadas}) < 2:
+        return {**base, "inclinacao": None, "motivo": "menos de 2 valores distintos"}
+    return {**base, "inclinacao": inclinacao_mmq([x for x, _ in usadas], [y for _, y in usadas]), "motivo": None}
+
+
+def taxa_no_abandono(visitas: Sequence[Mapping], ganhos: Sequence[tuple[int, float]], horas_acordado: float,
+                     minutos: int = 30) -> dict:
+    """Medida 2 (A1.8, so descritiva): por visita nao censurada, a taxa de ganho nos `minutos` antes de sair, [fim - minutos, fim), por
+    hora, dividida pela taxa media da vida (a soma dos ganhos por hora acordado). O motor fornece `ganhos` = (tick, fome ganha) por
+    consumo, o aumento da fome pelo que o pet comeu, na escala 0-1, e as horas acordado da vida. Por vida (a media e a da vida); para
+    a unidade, concatenar as `razoes`. `media_vida` None (e nenhuma razao) sem ganho na vida."""
+    if horas_acordado <= 0.0:
+        raise ValueError("horas acordado <= 0")
+    total = sum(g for _, g in ganhos)
+    media = total / horas_acordado if total > 0.0 else None
+    validas = [v for v in visitas if not v["censurada"]]
+    razoes = [] if media is None else [
+        (sum(g for t, g in ganhos if v["fim"] - minutos <= t < v["fim"]) / (minutos / 60.0)) / media for v in validas]
+    return {"n": len(razoes), "media_vida": media, "razoes": razoes,
+            "razao_media": (sum(razoes) / len(razoes)) if razoes else None}
+
+
+def permanencia_media(visitas: Sequence[Mapping]) -> float | None:
+    """A permanencia media (minutos) das visitas nao censuradas; None sem visita."""
+    p = [v["permanencia"] for v in visitas if not v["censurada"]]
+    return (sum(p) / len(p)) if p else None
+
+
+def contraste_distancia(p1_afastado: float | None, p1_padrao: float | None, p0_afastado: float | None,
+                        p0_padrao: float | None) -> float | None:
+    """G-DIST (A1.8), por unidade: [P1(afastado) - P1(padrao)] - [P0(afastado) - P0(padrao)] na permanencia media. None se falta um."""
+    if None in (p1_afastado, p1_padrao, p0_afastado, p0_padrao):
+        return None
+    return (p1_afastado - p1_padrao) - (p0_afastado - p0_padrao)
+
+
+# --- o corpo e os drives (docs/PLANO_ANALISE_V2_CORPO_DRIVES.md)
+
+
+def tempo_livre_be(decisoes: Sequence[tuple[int, str, str]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """`BE`, a primaria (secao 5.1), e `OC` ao lado. O motor fornece (tick, regra do instinto, acao) por decisao. Nas decisoes de tempo
+    livre da janela (regras `tempo_livre` e `bola_no_cenario`): BE = fracao em brincar ou explorar; OC = em ocioso ou chamar_atencao; e
+    a fracao de cada acao (descritivo). None sem decisao de tempo livre."""
+    ini, fim = _checar_janela(janela)
+    sel = [a for t, r, a in decisoes if ini <= t < fim and r in REGRAS_TEMPO_LIVRE]
+    if not sel:
+        return {"n": 0, "be": None, "oc": None, "por_acao": {}}
+    n = len(sel)
+    cont: dict[str, int] = {}
+    for a in sel:
+        cont[a] = cont.get(a, 0) + 1
+    return {"n": n, "be": (cont.get("brincar", 0) + cont.get("explorar", 0)) / n,
+            "oc": (cont.get("ocioso", 0) + cont.get("chamar_atencao", 0)) / n,
+            "por_acao": {a: c / n for a, c in sorted(cont.items())}}
+
+
+def cuidado_preservado(decisoes: Sequence[tuple[int, bool, float, float]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """O cuidado preservado (secao 5.2). O motor fornece (tick, em privacao, saude, fome) por decisao: a privacao e a
+    `Estado.em_privacao` (a definicao do N3), avaliada no motor. Privacao = a fracao das decisoes da janela em privacao
+    (1 - fracao_fora_de_privacao); saude e fome medias (a fome, so descritiva). Falha alto sem decisao na janela."""
+    ini, fim = _checar_janela(janela)
+    sel = [(p, _escala01("saude", s), _escala01("fome", f)) for t, p, s, f in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("cuidado sem decisao na janela")
+    n = len(sel)
+    return {"n": n, "privacao": sum(1 for p, _, _ in sel if p) / n, "saude_media": sum(s for _, s, _ in sel) / n,
+            "fome_media": sum(f for _, _, f in sel) / n}
+
+
+def drives_novos(amostras: Sequence[tuple[int, bool, Mapping[str, float]]], janela: tuple[int, int] = JANELA_8_14,
+                 limiar: float = 0.75) -> dict:
+    """Os drives novos (secao 5.3; o tedio medio e a PR-5). O motor fornece, por decisao, (tick, acordado, {drive: falta}) com a falta
+    lida pelo receptor, na escala 0-1 (tedio, solidao, estresse). Por drive: a media nas decisoes da janela e a fracao das decisoes
+    acordado com a falta >= `limiar` (o ">= 0,75" do adendo 1). A fracao e None sem decisao acordado."""
+    ini, fim = _checar_janela(janela)
+    sel = [(a, d) for t, a, d in amostras if ini <= t < fim]
+    if not sel:
+        raise ValueError("drives sem decisao na janela")
+    nomes = sorted({k for _, d in sel for k in d})
+    if any(set(d) != set(nomes) for _, d in sel):
+        raise ValueError("os drives mudam entre as amostras")
+    acordado = [d for a, d in sel if a]
+    out = {}
+    for k in nomes:
+        out[k] = {"media": sum(_escala01(k, d[k]) for _, d in sel) / len(sel),
+                  "fracao_acima": (sum(1 for d in acordado if d[k] >= limiar) / len(acordado)) if acordado else None}
+    return {"n": len(sel), "n_acordado": len(acordado), "drives": out}
+
+
+def variedade_recente(atividades: Sequence[tuple[int, str]], ticks_decisao: Sequence[int], janela_tedio: int = 8,
+                      janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """A variedade (adendo 1, A1.2, descritivo): em cada decisao de tempo livre da janela, quantas atividades distintas ha entre as
+    ultimas `janela_tedio` antes dela; a media. O motor fornece `atividades` = (tick, atividade), as que o corpo guarda na janela do
+    tedio (bola, brincar, explorar, dono_brinca), na ordem em que entram, e os ticks das decisoes de tempo livre. "Antes" e estrito:
+    a atividade da propria decisao nao conta. Com menos de `janela_tedio` atividades ate ali, contam as que houver. None sem decisao."""
+    if janela_tedio < 1:
+        raise ValueError("janela do tedio < 1")
+    ini, fim = _checar_janela(janela)
+    if any(a not in ATIVIDADES_TEDIO for _, a in atividades):
+        raise ValueError(f"atividade fora de {ATIVIDADES_TEDIO}")
+    ts = [t for t, _ in atividades]
+    if any(b < a for a, b in zip(ts, ts[1:])):
+        raise ValueError("atividades fora de ordem")
+    valores = []
+    for td in ticks_decisao:
+        if ini <= td < fim:
+            antes = [a for t, a in atividades if t < td][-janela_tedio:]
+            valores.append(len(set(antes)))
+    return {"n": len(valores), "media": (sum(valores) / len(valores)) if valores else None}
+
+
+def p_comer_so_fruta(decisoes: Sequence[tuple[int, Sequence[str], bool]], frutas: Sequence[str],
+                     janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """A1.1: por fruta f, p(comer | so f no cenario), nas decisoes da janela com exatamente a fruta f no cenario. O motor fornece
+    (tick, frutas no cenario, comeu) por decisao. `p` None sem decisao com so f."""
+    ini, fim = _checar_janela(janela)
+    out = {}
+    for f in frutas:
+        sel = [c for t, p, c in decisoes if ini <= t < fim and set(p) == {f}]
+        out[f] = {"n": len(sel), "p": (sum(sel) / len(sel)) if sel else None}
+    return out
+
+
+def inclinacao_generalizacao(sem_tapa: Mapping[str, float | None], com_tapa: Mapping[str, float | None], punida: str) -> dict:
+    """A inclinacao da generalizacao do tapa (adendo 1, A1.1, so descritiva), numa unidade. A queda de f = sem_tapa[f] - com_tapa[f]
+    (o P1-c-frutas menos o P1-c-tapaX), em p(comer | so f) ou no peso aprendido da escolha de f no fim da vida. Inclinacao = (queda
+    media nas nao punidas) / (queda na punida): 0 e especifico; 1 generaliza tudo. Sai `indefinida` quando a queda na punida nao e
+    positiva ou falta: o tapa nao pegou nem na fruta punida, e a unidade e contada a parte. Fruta nao punida sem valor num dos lados
+    fica fora da media, contada em `faltam`."""
+    if punida not in sem_tapa or set(sem_tapa) != set(com_tapa):
+        raise ValueError("as frutas dos dois lados diferem ou a punida nao esta nelas")
+    queda = {f: (None if sem_tapa[f] is None or com_tapa[f] is None else sem_tapa[f] - com_tapa[f]) for f in sorted(sem_tapa)}
+    outras = [q for f, q in queda.items() if f != punida and q is not None]
+    faltam = sum(1 for f, q in queda.items() if f != punida and q is None)
+    qp = queda[punida]
+    if qp is None or qp <= 0.0 or not outras:
+        motivo = ("falta a punida" if qp is None else "queda na punida nao positiva" if qp <= 0.0 else "nenhuma nao punida com valor")
+        return {"queda": queda, "faltam": faltam, "indefinida": True, "motivo": motivo, "inclinacao": None}
+    return {"queda": queda, "faltam": faltam, "indefinida": False, "motivo": None, "inclinacao": (sum(outras) / len(outras)) / qp}
+
+
+# --- o banheiro (docs/PLANO_ANALISE_V2_BANHEIRO.md)
+
+
+def alivios_por_dia(alivios: Sequence[tuple[int, bool, bool]], dias: int) -> list[dict]:
+    """A fracao diaria no banheiro e os acidentes (secao 8). O motor fornece (tick, dentro do banheiro, urgente) por `aliviar`: urgente =
+    pela regra urgente (a vontade acima de 0,90, alvo `aqui`), o acidente. Por dia 1..dias: n, quantos no banheiro, a fracao (None sem
+    alivio), os urgentes e a fracao deles. Falha alto com alivio depois do ultimo dia."""
+    if dias < 1:
+        raise ValueError("dias < 1")
+    out = [{"dia": d + 1, "n": 0, "no_banheiro": 0, "urgentes": 0} for d in range(dias)]
+    for t, dentro, urgente in alivios:
+        d = t // TICKS_POR_DIA
+        if t < 0 or d >= dias:
+            raise ValueError(f"alivio no tick {t} fora dos {dias} dias")
+        out[d]["n"] += 1
+        out[d]["no_banheiro"] += bool(dentro)
+        out[d]["urgentes"] += bool(urgente)
+    for o in out:
+        o["fracao"] = (o["no_banheiro"] / o["n"]) if o["n"] else None
+        o["fracao_urgentes"] = (o["urgentes"] / o["n"]) if o["n"] else None
+    return out
+
+
+def dia_do_criterio(fracoes: Sequence[float | None], limiar: float = 0.80, seguidos: int = 3) -> dict:
+    """A primaria (secao 4, BN-4): o primeiro dia d (1, 2, ...) em que a fracao no banheiro e >= `limiar` em d e nos `seguidos` - 1 dias
+    seguintes. Dia sem alivio (None) nao e acerto nem erro: quebra a sequencia. `fracoes` = a fracao de cada dia da vida (D dias,
+    `alivios_por_dia`). Censurado quando nenhum d <= D - seguidos + 1 chega. O horizonte tau = D - seguidos + 2 (com 3 seguidos, o
+    D - 1 do plano) e T* = min(T, tau): T, ou tau se censurado (a media restrita, RMST, e a media de T*)."""
+    if seguidos < 1 or len(fracoes) < seguidos:
+        raise ValueError("vida mais curta que a sequencia do criterio")
+    D = len(fracoes)
+    ok = [f is not None and f >= limiar for f in fracoes]
+    tau = D - seguidos + 2
+    for d in range(D - seguidos + 1):
+        if all(ok[d:d + seguidos]):
+            return {"dia": d + 1, "censurado": False, "tau": tau, "t_estrela": d + 1}
+    return {"dia": None, "censurado": True, "tau": tau, "t_estrela": tau}
+
+
+def alivios_ate_criterio(por_dia: Sequence[Mapping], dia: int | None) -> int:
+    """Os alivios do nascimento ate o fim do dia do criterio (secao 8); censurado (`dia` None), o total da vida. `por_dia` e o
+    `alivios_por_dia`."""
+    if dia is not None and not 1 <= dia <= len(por_dia):
+        raise ValueError(f"dia do criterio fora da vida: {dia}")
+    return sum(o["n"] for o in (por_dia if dia is None else por_dia[:dia]))
+
+
+def curva_sobrevivencia(criterios: Sequence[Mapping]) -> dict:
+    """O descritivo da secao 4, num braco: a curva de Kaplan-Meier dos `dia_do_criterio` das vidas (o mesmo horizonte). Com a censura so
+    administrativa, no fim, igual em todas, a curva e a fracao que ainda nao chegou: S(t) = P(T > t), t = 0..tau. A mediana e o menor
+    t com S(t) <= 0,5 (None se mais da metade e censurada); a RMST = soma de S(t) para t < tau = a media de T*."""
+    if not criterios:
+        raise ValueError("curva sem vidas")
+    taus = {c["tau"] for c in criterios}
+    if len(taus) != 1:
+        raise ValueError("horizontes diferentes")
+    tau = taus.pop()
+    n = len(criterios)
+    s = [sum(1 for c in criterios if c["censurado"] or c["dia"] > t) / n for t in range(tau + 1)]
+    mediana = next((t for t, v in enumerate(s) if v <= 0.5), None)
+    return {"n": n, "tau": tau, "s": s, "mediana": mediana, "fracao_censurada": sum(1 for c in criterios if c["censurado"]) / n,
+            "rmst": sum(s[:tau])}

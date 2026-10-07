@@ -3298,3 +3298,28 @@ testes. Motor, `engine.py`, `lobos.py` e a web não mudaram. Só as sementes dos
   - a Vida, com os limiares nas duas durações, a grade em volta deles e as vidas com os ticks de estágio.
 
   As partes da etapa 1 não mudaram.
+
+## 2026-10-07 — W-MEDIDAS-R17 (rodada 17, worker D): as medidas do mundo físico, do corpo e do banheiro
+
+As escolhas abaixo são de formato e de borda; nenhuma muda uma definição dos planos.
+- **A trajetória é uma entrada por decisão,** mesmo sem deslocamento: a posição depois do passo daquela decisão, que vale até a seguinte
+  (o motor anda de uma vez, na decisão). Com isso:
+  - a visita vai do tick da primeira entrada dentro da mancha ao da primeira fora;
+  - "ao menos uma decisão dentro" conta as entradas da visita depois da primeira, mais a de saída. Só uma visita que começa na última
+    decisão da vida fica com zero;
+  - a visita entra na janela pelo tick de início.
+- **Manchas que se sobrepõem** contam uma visita em cada árvore. O plano não diz; a alternativa (uma visita por posição) pediria uma regra
+  de desempate.
+- **A mancha** é `isqrt(dx² + dy²) ≤ 3 × 16` em subunidades, e o custo de viagem é a mesma distância dividida por 16 (em células, com
+  fração). Os troncos entram em subunidades, convertidos do layout pelo motor.
+- **A visita censurada** (não termina até o fim da vida) fica fora das inclinações, da taxa no abandono e da permanência média, contada à
+  parte.
+- **A taxa recente** é `None` quando as 24 h começam antes do nascimento (não acontece nos dias 8 a 14).
+- **A taxa no abandono** usa os ganhos em [fim − 30, fim): o consumo no tick da saída não conta.
+- **Os drives:** a média entra com todas as decisões da janela; a fração acima de 0,75 só com as acordado e com `≥` (o "≥ 0,75" do adendo).
+- **A variedade** conta as atividades estritamente antes da decisão, e com menos de 8 na janela, as que houver.
+- **A inclinação da generalização:** uma fruta não punida sem valor num dos lados fica fora da média, contada em `faltam`; sem nenhuma
+  não punida com valor, a unidade sai "indefinida", como quando a queda na punida não é positiva.
+- **O dia do critério** generaliza o horizonte como τ = D − seguidos + 2, que é o D − 1 do plano com 3 dias seguidos.
+- **Fica de fora, por não ser desta tarefa:** as faixas 37101…38505 e o prefixo `"banheiro"` na bancada (seção 10 do plano do banheiro, a
+  etapa 5 da tarefa) e os descritivos da seção 5.3 do mundo e 5.4 do corpo, que a tarefa não listou.
