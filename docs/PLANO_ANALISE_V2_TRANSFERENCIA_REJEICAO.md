@@ -1,6 +1,7 @@
 # Plano de análise — V2: a transferência da rejeição da escolha para o item único (DS-3)
 
-Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. Decisão DS-3 do Matheus (2026-10-07,
+Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **TR-1 a TR-4 DECIDIDAS pelo Matheus em 2026-10-07, todas pela
+recomendação** (seção 9). Decisão DS-3 do Matheus (2026-10-07,
 `docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 3): rodar o teste de transferência **antes** de qualquer mudança no aprendiz para o
 achado 1.
 
@@ -174,6 +175,8 @@ O D registra as duas faixas, com a fonte deste plano, e o prefixo de unidades `"
 | R-7 | **Generalizar para outros cérebros** | o plano é só do A. O C e o B entram por adendo |
 
 ## 9. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-07: TR-1 a TR-4, todas como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
