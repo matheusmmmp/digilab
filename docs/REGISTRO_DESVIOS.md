@@ -3137,3 +3137,13 @@ Só papel: `docs/PLANO_ANALISE_V2_BANHEIRO.md` (etapa 0 de `docs/TAREFA_V2_BANHE
 - **A calibração do conforto (BN-6) é uma conta sem vida:** o menor aumento que passa o G-CAR. A da vontade e do desconforto roda só no
   P0-B00. As faixas (2 a 5 alívios por dia, acidentes ≤ 25%) são PROPOSTAS, SEM FONTE.
 - **As faixas 37101…37505 e 38101…38505** foram conferidas livres na `main` e em todos os branches remotos.
+
+## 2026-10-07 — W-FAIXAS-R17 (rodada 17, worker D): as faixas e os prefixos do mundo físico e do corpo
+
+- **Nenhum desvio.** As quatro faixas e os dois prefixos são os dos planos, sem mudança.
+- **A fase na fonte.** A faixa de calibração de cada plano leva "calibracao" na fonte, e o teste confere que cada base cai na faixa da sua
+  fase (a fonte é o que `na_faixa_reservada` devolve).
+- **O K do teste de colisão** é 40 por base, acima do que os planos pedem, para folga. Os planos de antes entram com as bases que já estão
+  na bancada (`BASES_EXPERIMENTO_MAIOR`, `BASES_N6`, `BASES_N7`, `BASES_COMPARACAO`); as bases dos dois planos novos ficam só no teste,
+  porque a tarefa não pede constantes novas na bancada.
+- **Resolve a pendência** anotada em W-PLANO-CORPO: a 31101…32505 (mundo físico) agora está em `FAIXAS_RESERVADAS`.
