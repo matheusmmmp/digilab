@@ -1,0 +1,4912 @@
+{
+ "conferido_contra": "artifacts_v2_validacao_unica/frutas/medidas.json",
+ "fonte": "experiments/configs/v2_experimento_maior/validacao.json",
+ "rotulo": "POS HOC DESCRITIVO (V-3, Q-1): sem gate, sem run nova, nao muda nenhuma leitura registrada",
+ "tabelas": {
+  "A/P0/casado_frutas": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 22.1,
+     "ic_superior": 26.8,
+     "media": 24.633333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4432451647968889,
+      "ic_superior": 0.45232165663200147,
+      "media": 0.4476911020014468,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "decisoes": 290,
+     "herdado": {
+      "ic_inferior": 0.26191962444531747,
+      "ic_superior": 0.3254964443963586,
+      "media": 0.2945862177895761,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.17882979089875642,
+      "ic_superior": 0.3076017851879921,
+      "media": 0.24338898649243476,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.2698396431155052,
+      "ic_superior": -0.1389081863219794,
+      "media": -0.20430211550901206,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.10606737982241221,
+      "ic_superior": 0.006398386258447595,
+      "media": -0.05119723129714137,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.39910566334104564,
+      "ic_superior": 0.4711215864439341,
+      "media": 0.4341688402354404,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "neutra": {
+      "ic_inferior": 0.2956285034469533,
+      "ic_superior": 0.3569024191665857,
+      "media": 0.3264184326473522,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.20620139301504942,
+      "ic_superior": 0.2715802161969022,
+      "media": 0.23941272711720746,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.1271319403182839,
+     "ic_superior": -0.06175311713643111,
+     "media": -0.09392060621612586,
+     "n": 29,
+     "nivel": 0.95,
+     "sem_valor": 1
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.16053137878615936,
+      "ic_superior": 0.21943483117117946,
+      "media": 0.18967009755121375,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.10480580886763816,
+      "ic_superior": 0.16973273896120392,
+      "media": 0.13641530426197437,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 710,
+      "neutra": 956,
+      "ruim": 1205
+     },
+     "ruim": {
+      "ic_inferior": 0.08182500821875284,
+      "ic_superior": 0.14932449297845493,
+      "media": 0.11420413277049687,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.08240369904766368,
+      "ic_superior": -0.01335334146878271,
+      "media": -0.04883856813609718,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 20.8,
+     "ic_superior": 25.766666666666666,
+     "media": 23.466666666666665,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.441106881624123,
+      "ic_superior": 0.4492952449849001,
+      "media": 0.4453763350315074,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "decisoes": 284,
+     "herdado": {
+      "ic_inferior": 0.24853962597687013,
+      "ic_superior": 0.3151135374977063,
+      "media": 0.28352992893655854,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.2509006319351147,
+      "ic_superior": 0.38884659401900784,
+      "media": 0.32147833009901977,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.1944935332866367,
+      "ic_superior": -0.05674064122339985,
+      "media": -0.12389800493248768,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.01360950480814869,
+      "ic_superior": 0.08697514017794925,
+      "media": 0.037948401162461246,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.39495077010734564,
+      "ic_superior": 0.47231129212434736,
+      "media": 0.43118249698170674,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "neutra": {
+      "ic_inferior": 0.27939692856898896,
+      "ic_superior": 0.3474878138436559,
+      "media": 0.31429784316884396,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.213041470642208,
+      "ic_superior": 0.29269051921999645,
+      "media": 0.2545196598494493,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.12029186269112532,
+     "ic_superior": -0.0406428141133369,
+     "media": -0.078813673483884,
+     "n": 29,
+     "nivel": 0.95,
+     "sem_valor": 1
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.13074267898755046,
+      "ic_superior": 0.20210973475466226,
+      "media": 0.16524489220226718,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0931995633832097,
+      "ic_superior": 0.14604994324959758,
+      "media": 0.11939806518553257,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 799,
+      "neutra": 1017,
+      "ruim": 1174
+     },
+     "ruim": {
+      "ic_inferior": 0.06611944799501897,
+      "ic_superior": 0.12271432882096933,
+      "media": 0.09235204835070028,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.08619173491525166,
+      "ic_superior": -0.012153101237058326,
+      "media": -0.04996943034319959,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P0/descasado": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 21.766666666666666,
+     "ic_superior": 26.566666666666666,
+     "media": 24.333333333333332,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45052453931764275,
+      "ic_superior": 0.4602722628584697,
+      "media": 0.45517469439883235,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "decisoes": 281,
+     "herdado": {
+      "ic_inferior": 0.5715879278170491,
+      "ic_superior": 0.6245273942544631,
+      "media": 0.597644320263055,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.4673408966512415,
+      "ic_superior": 0.5990272179927353,
+      "media": 0.5344815146539285,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": 0.014926357167736496,
+      "ic_superior": 0.14184227330779056,
+      "media": 0.07930682025509614,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.12407421479991508,
+      "ic_superior": -0.001857784708978313,
+      "media": -0.06316280560912654,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.22673620951305704,
+      "ic_superior": 0.2890179716050664,
+      "media": 0.25976955299920507,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "neutra": {
+      "ic_inferior": 0.3070614012670318,
+      "ic_superior": 0.36983641439460024,
+      "media": 0.338191833142409,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.376513708705685,
+      "ic_superior": 0.42803636188442834,
+      "media": 0.40203861385838596,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": 0.04318037537235175,
+     "ic_superior": 0.09470302855109505,
+     "media": 0.06870528052505262,
+     "n": 29,
+     "nivel": 0.95,
+     "sem_valor": 1
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.07982485641806922,
+      "ic_superior": 0.12348821496545369,
+      "media": 0.10113653485225983,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.10867157761417627,
+      "ic_superior": 0.1808988857634029,
+      "media": 0.1435422018364457,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 1153,
+      "neutra": 912,
+      "ruim": 760
+     },
+     "ruim": {
+      "ic_inferior": 0.1689454520124448,
+      "ic_superior": 0.23441006982268364,
+      "media": 0.20012176819582703,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.04242024302388424,
+      "ic_superior": 0.11950717827935457,
+      "media": 0.07778239985147427,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 19.733333333333334,
+     "ic_superior": 24.966666666666665,
+     "media": 22.533333333333335,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4378207360965981,
+      "ic_superior": 0.4511320097526994,
+      "media": 0.4449092733575492,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "decisoes": 274,
+     "herdado": {
+      "ic_inferior": 0.5651807868402154,
+      "ic_superior": 0.6385870909741961,
+      "media": 0.6000496600472488,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.5086741802259044,
+      "ic_superior": 0.6284482758620689,
+      "media": 0.5664328009155595,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": 0.06501156889087925,
+      "ic_superior": 0.1825896485379244,
+      "media": 0.12152352755801032,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.07968389854904154,
+      "ic_superior": 0.01289330294886265,
+      "media": -0.03361685913168924,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.2290332700975714,
+      "ic_superior": 0.2983237292471471,
+      "media": 0.26448293678321694,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "neutra": {
+      "ic_inferior": 0.2909112561889368,
+      "ic_superior": 0.35373975362773163,
+      "media": 0.32317044126328737,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.3779427933232927,
+      "ic_superior": 0.4497874674372504,
+      "media": 0.41234662195349564,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": 0.0446094599899594,
+     "ic_superior": 0.1164541341039171,
+     "media": 0.07901328862016235,
+     "n": 29,
+     "nivel": 0.95,
+     "sem_valor": 1
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.06228224512712596,
+      "ic_superior": 0.11909362402366569,
+      "media": 0.08878566309147055,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.100431736000488,
+      "ic_superior": 0.15796145092662695,
+      "media": 0.12917382570211394,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 1119,
+      "neutra": 947,
+      "ruim": 818
+     },
+     "ruim": {
+      "ic_inferior": 0.1283672404361062,
+      "ic_superior": 0.18186004217765336,
+      "media": 0.15448756607355088,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.01728417603913391,
+      "ic_superior": 0.07510968363349595,
+      "media": 0.04550782167675864,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P0/mutavel": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 21.633333333333333,
+     "ic_superior": 26.633333333333333,
+     "media": 24.333333333333332,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4489737274220033,
+      "ic_superior": 0.45760042958318814,
+      "media": 0.45327266922094506,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "decisoes": 278,
+     "herdado": {
+      "ic_inferior": 0.5729967193371197,
+      "ic_superior": 0.6286744473263299,
+      "media": 0.6011262990046361,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.5426693038762004,
+      "ic_superior": 0.6600238841618152,
+      "media": 0.6022179927352341,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": 0.0879225340432237,
+      "ic_superior": 0.2074376772652635,
+      "media": 0.14894532351428907,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.05514567075585681,
+      "ic_superior": 0.05488702855830853,
+      "media": 0.0010916937305979737,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.22318399282673312,
+      "ic_superior": 0.27256550284063386,
+      "media": 0.24796038523617334,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "neutra": {
+      "ic_inferior": 0.29609324620400806,
+      "ic_superior": 0.34771057971970865,
+      "media": 0.32172476870601097,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.4055279967144626,
+      "ic_superior": 0.4564661813962705,
+      "media": 0.43031484605781567,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": 0.07219466338112933,
+     "ic_superior": 0.12313284806293719,
+     "media": 0.0969815127244824,
+     "n": 29,
+     "nivel": 0.95,
+     "sem_valor": 1
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.08912066732323294,
+      "ic_superior": 0.15662928680651877,
+      "media": 0.12048213860338354,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.10318703487910805,
+      "ic_superior": 0.18830906613107423,
+      "media": 0.1436014022563504,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 1109,
+      "neutra": 938,
+      "ruim": 711
+     },
+     "ruim": {
+      "ic_inferior": 0.18261285286269474,
+      "ic_superior": 0.2455043922082605,
+      "media": 0.2149561294115457,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.04886188617938704,
+      "ic_superior": 0.11757933031996975,
+      "media": 0.08291435898167873,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 20.8,
+     "ic_superior": 25.766666666666666,
+     "media": 23.466666666666665,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.441106881624123,
+      "ic_superior": 0.4492952449849001,
+      "media": 0.4453763350315074,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "decisoes": 284,
+     "herdado": {
+      "ic_inferior": 0.24853962597687013,
+      "ic_superior": 0.3151135374977063,
+      "media": 0.28352992893655854,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.2509006319351147,
+      "ic_superior": 0.38884659401900784,
+      "media": 0.32147833009901977,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.1944935332866367,
+      "ic_superior": -0.05674064122339985,
+      "media": -0.12389800493248768,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.01360950480814869,
+      "ic_superior": 0.08697514017794925,
+      "media": 0.037948401162461246,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.39495077010734564,
+      "ic_superior": 0.47231129212434736,
+      "media": 0.43118249698170674,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "neutra": {
+      "ic_inferior": 0.27939692856898896,
+      "ic_superior": 0.3474878138436559,
+      "media": 0.31429784316884396,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     },
+     "ruim": {
+      "ic_inferior": 0.213041470642208,
+      "ic_superior": 0.29269051921999645,
+      "media": 0.2545196598494493,
+      "n": 29,
+      "nivel": 0.95,
+      "sem_valor": 1
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.12029186269112532,
+     "ic_superior": -0.0406428141133369,
+     "media": -0.078813673483884,
+     "n": 29,
+     "nivel": 0.95,
+     "sem_valor": 1
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.13074267898755046,
+      "ic_superior": 0.20210973475466226,
+      "media": 0.16524489220226718,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0931995633832097,
+      "ic_superior": 0.14604994324959758,
+      "media": 0.11939806518553257,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 799,
+      "neutra": 1017,
+      "ruim": 1174
+     },
+     "ruim": {
+      "ic_inferior": 0.06611944799501897,
+      "ic_superior": 0.12271432882096933,
+      "media": 0.09235204835070028,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.08619173491525166,
+      "ic_superior": -0.012153101237058326,
+      "media": -0.04996943034319959,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P1/casado_frutas": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 41.0,
+     "ic_superior": 42.766666666666666,
+     "media": 41.9,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45590751840751836,
+      "ic_superior": 0.4589479039479039,
+      "media": 0.4574022274022274,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 426,
+     "herdado": {
+      "ic_inferior": 0.26446526380268115,
+      "ic_superior": 0.3198079318565634,
+      "media": 0.2931880441988296,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.023907203907203908,
+      "ic_superior": 0.05502899877899878,
+      "media": 0.039433760683760685,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.43333314833314834,
+      "ic_superior": -0.40232582232582226,
+      "media": -0.41796846671846666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.2825810845129855,
+      "ic_superior": -0.22326429629766906,
+      "media": -0.2537542835150689,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33774551754527254,
+      "ic_superior": 0.35269847242068636,
+      "media": 0.3450865156207791,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3278914453861845,
+      "ic_superior": 0.3447433299335343,
+      "media": 0.3363736283708412,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3102765947467156,
+      "ic_superior": 0.3262364332605523,
+      "media": 0.31853985600837975,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.023056738586617716,
+     "ic_superior": -0.0070969000727810405,
+     "media": -0.014793477324953614,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.37658509218106745,
+      "ic_superior": 0.5294926830994943,
+      "media": 0.4521229776415535,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.4330951815069462,
+      "ic_superior": 0.5776633562515915,
+      "media": 0.5047673089437795,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 363,
+      "neutra": 443,
+      "ruim": 789
+     },
+     "ruim": {
+      "ic_inferior": 0.46542485013594276,
+      "ic_superior": 0.5719750736005201,
+      "media": 0.5181222401335537,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.034709403129586064,
+      "ic_superior": 0.11819539569544704,
+      "media": 0.03967709684088713,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 31.166666666666668,
+     "ic_superior": 34.0,
+     "media": 32.63333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45300397133730463,
+      "ic_superior": 0.45793977627310956,
+      "media": 0.45545762879096213,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 348,
+     "herdado": {
+      "ic_inferior": 0.2913033246785765,
+      "ic_superior": 0.3409628385040994,
+      "media": 0.316133453945114,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.1333851333851334,
+      "ic_superior": 0.19144022644022646,
+      "media": 0.16183779183779184,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.3219609402942736,
+      "ic_superior": -0.2640509798843132,
+      "media": -0.29361983695317023,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.187532900879485,
+      "ic_superior": -0.12233155868696345,
+      "media": -0.15429566210732218,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3544213734752105,
+      "ic_superior": 0.38458868245632954,
+      "media": 0.3693692538030746,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.32065488111345164,
+      "ic_superior": 0.3527821527801762,
+      "media": 0.3363628549819225,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.27942429300130667,
+      "ic_superior": 0.3091172731477182,
+      "media": 0.2942678912150029,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.053909040332026634,
+     "ic_superior": -0.02421606018561512,
+     "media": -0.039065442118330386,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.2076591636942195,
+      "ic_superior": 0.2733652141644469,
+      "media": 0.24033324662085997,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2051403685588946,
+      "ic_superior": 0.2666934346396674,
+      "media": 0.2345500353469347,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 568,
+      "neutra": 759,
+      "ruim": 1085
+     },
+     "ruim": {
+      "ic_inferior": 0.19953057228174503,
+      "ic_superior": 0.2568479929079089,
+      "media": 0.22621025882602228,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04639678424578386,
+      "ic_superior": 0.026953560922964453,
+      "media": -0.011231382157875076,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 160.6,
+      "ic_superior": 195.66666666666666,
+      "media": 177.7,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 14.333333333333334,
+      "ic_superior": 52.766666666666666,
+      "media": 35.233333333333334,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -295.6333333333333,
+      "ic_superior": -227.83333333333334,
+      "media": -261.03333333333336,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 248.83333333333334,
+      "ic_superior": 313.6666666666667,
+      "media": 281.5,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -257.23333333333335,
+      "ic_superior": -134.0,
+      "media": -194.83333333333334,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -2149.4333333333334,
+      "ic_superior": -958.6,
+      "media": -1485.2333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -400.18333333333334,
+     "ic_superior": -334.1333333333333,
+     "media": -367.5,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -2211.9166666666665,
+     "ic_superior": -983.3,
+     "media": -1528.5666666666666,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P1/descasado": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 41.63333333333333,
+     "ic_superior": 43.36666666666667,
+     "media": 42.5,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4539112739112739,
+      "ic_superior": 0.45715488215488215,
+      "media": 0.4555544455544455,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 433,
+     "herdado": {
+      "ic_inferior": 0.6135680531537621,
+      "ic_superior": 0.6732788901954364,
+      "media": 0.6436306203317159,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.07949855699855699,
+      "ic_superior": 0.1346649184149184,
+      "media": 0.10694971694971694,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.3761693399193399,
+      "ic_superior": -0.3206877844377844,
+      "media": -0.3486047286047286,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.5738239659401062,
+      "ic_superior": -0.5009392488236183,
+      "media": -0.536680903381999,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33140692433301905,
+      "ic_superior": 0.344627731471718,
+      "media": 0.33810444665057127,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.32803401008075367,
+      "ic_superior": 0.3422463105387469,
+      "media": 0.33553883002048945,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.31977171474412797,
+      "ic_superior": 0.3326706162499789,
+      "media": 0.3263567233289393,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.013561618589205368,
+     "ic_superior": -0.0006627170833544526,
+     "media": -0.006976610004394072,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.38384208693299116,
+      "ic_superior": 0.5203998857752727,
+      "media": 0.44984113177895346,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.39835110168510807,
+      "ic_superior": 0.5417646040272459,
+      "media": 0.4695416290542373,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 460,
+      "neutra": 432,
+      "ruim": 673
+     },
+     "ruim": {
+      "ic_inferior": 0.5329799508226967,
+      "ic_superior": 0.6542095472688536,
+      "media": 0.5926485935262692,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.059534262051436145,
+      "ic_superior": 0.21098348611184203,
+      "media": 0.13295721310967384,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 32.6,
+     "ic_superior": 35.4,
+     "media": 34.03333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.44993494160160824,
+      "ic_superior": 0.4559312909312909,
+      "media": 0.45290536623869954,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 355,
+     "herdado": {
+      "ic_inferior": 0.5858873244059719,
+      "ic_superior": 0.6429289623182763,
+      "media": 0.6143480159648023,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.23534021534021535,
+      "ic_superior": 0.31003903503903507,
+      "media": 0.2718518056018056,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.21786010286010285,
+      "ic_superior": -0.142592114675448,
+      "media": -0.18105356063689396,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.37356014214171906,
+      "ic_superior": -0.3096147856853255,
+      "media": -0.3424962103629967,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3138902196916903,
+      "ic_superior": 0.3443708085754232,
+      "media": 0.32900445685834684,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3290131825986615,
+      "ic_superior": 0.35537022143085256,
+      "media": 0.3420516387664281,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3152262866677166,
+      "ic_superior": 0.34321089245645947,
+      "media": 0.32894390437522514,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.018107046665616636,
+     "ic_superior": 0.009877559123126111,
+     "media": -0.004389428958108193,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.18679871665808348,
+      "ic_superior": 0.26479321924731963,
+      "media": 0.22339541630944063,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2242870300218592,
+      "ic_superior": 0.2943564130896432,
+      "media": 0.25805881301264466,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 780,
+      "neutra": 692,
+      "ruim": 835
+     },
+     "ruim": {
+      "ic_inferior": 0.2673666740550741,
+      "ic_superior": 0.333460935098762,
+      "media": 0.3002095147422915,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.011774259603519131,
+      "ic_superior": 0.105972068218164,
+      "media": 0.05948240008124888,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 206.96666666666667,
+      "ic_superior": 275.1333333333333,
+      "media": 240.36666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 19.633333333333333,
+      "ic_superior": 54.833333333333336,
+      "media": 36.9,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -168.0,
+      "ic_superior": -136.46666666666667,
+      "media": -151.86666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 417.0,
+      "ic_superior": 484.6666666666667,
+      "media": 450.1333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -271.1333333333333,
+      "ic_superior": -94.96666666666667,
+      "media": -182.16666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -8148.5,
+      "ic_superior": -5679.866666666667,
+      "media": -6915.3,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -317.6666666666667,
+     "ic_superior": -264.01666666666665,
+     "media": -290.5,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -8313.983333333334,
+     "ic_superior": -5778.116666666667,
+     "media": -7049.283333333334,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P1/mutavel": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 41.46666666666667,
+     "ic_superior": 43.233333333333334,
+     "media": 42.36666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45379934879934875,
+      "ic_superior": 0.45746031746031746,
+      "media": 0.455574888074888,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 424,
+     "herdado": {
+      "ic_inferior": 0.6021296919410511,
+      "ic_superior": 0.6616299179029173,
+      "media": 0.6316045852218776,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.20827228327228328,
+      "ic_superior": 0.2794154456654457,
+      "media": 0.24371031746031743,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.24802350427350423,
+      "ic_superior": -0.17561965811965807,
+      "media": -0.21186457061457056,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.4199507142362741,
+      "ic_superior": -0.3566259755073878,
+      "media": -0.38789426776156016,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3260925178191942,
+      "ic_superior": 0.3391498658722881,
+      "media": 0.33269185186205336,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.33077018053478635,
+      "ic_superior": 0.34371001905176607,
+      "media": 0.33745807962601226,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3222361235085963,
+      "ic_superior": 0.33740079262767864,
+      "media": 0.3298500685119344,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.011097209824736996,
+     "ic_superior": 0.004067459294345303,
+     "media": -0.0034832648213989127,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.37131146269109416,
+      "ic_superior": 0.5212984437863627,
+      "media": 0.4422402445776093,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3540593259891506,
+      "ic_superior": 0.4852231875534698,
+      "media": 0.4184605989258926,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 544,
+      "neutra": 516,
+      "ruim": 649
+     },
+     "ruim": {
+      "ic_inferior": 0.47161412024940785,
+      "ic_superior": 0.6081379905460212,
+      "media": 0.5390806809964341,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.027059195179195247,
+      "ic_superior": 0.18796818727541836,
+      "media": 0.10873025924468321,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 31.166666666666668,
+     "ic_superior": 34.0,
+     "media": 32.63333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45300397133730463,
+      "ic_superior": 0.45793977627310956,
+      "media": 0.45545762879096213,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 348,
+     "herdado": {
+      "ic_inferior": 0.2913033246785765,
+      "ic_superior": 0.3409628385040994,
+      "media": 0.316133453945114,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.1333851333851334,
+      "ic_superior": 0.19144022644022646,
+      "media": 0.16183779183779184,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.3219609402942736,
+      "ic_superior": -0.2640509798843132,
+      "media": -0.29361983695317023,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.187532900879485,
+      "ic_superior": -0.12233155868696345,
+      "media": -0.15429566210732218,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3544213734752105,
+      "ic_superior": 0.38458868245632954,
+      "media": 0.3693692538030746,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.32065488111345164,
+      "ic_superior": 0.3527821527801762,
+      "media": 0.3363628549819225,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.27942429300130667,
+      "ic_superior": 0.3091172731477182,
+      "media": 0.2942678912150029,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.053909040332026634,
+     "ic_superior": -0.02421606018561512,
+     "media": -0.039065442118330386,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.2076591636942195,
+      "ic_superior": 0.2733652141644469,
+      "media": 0.24033324662085997,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2051403685588946,
+      "ic_superior": 0.2666934346396674,
+      "media": 0.2345500353469347,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 568,
+      "neutra": 759,
+      "ruim": 1085
+     },
+     "ruim": {
+      "ic_inferior": 0.19953057228174503,
+      "ic_superior": 0.2568479929079089,
+      "media": 0.22621025882602228,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04639678424578386,
+      "ic_superior": 0.026953560922964453,
+      "media": -0.011231382157875076,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": -44.53333333333333,
+      "ic_superior": 10.2,
+      "media": -16.033333333333335,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -4.2,
+      "ic_superior": 35.03333333333333,
+      "media": 16.966666666666665,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -7.966666666666667,
+      "ic_superior": 29.133333333333333,
+      "media": 11.033333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 119.36666666666666,
+      "ic_superior": 272.1,
+      "media": 197.46666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -208.33333333333334,
+      "ic_superior": -46.266666666666666,
+      "media": -127.8,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -5058.766666666666,
+      "ic_superior": -3190.366666666667,
+      "media": -4101.033333333334,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -15.383333333333333,
+     "ic_superior": 37.1,
+     "media": 10.566666666666666,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -5123.383333333333,
+     "ic_superior": -3196.15,
+     "media": -4135.866666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P2/casado_frutas": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 41.7,
+     "ic_superior": 43.43333333333333,
+     "media": 42.56666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4558241758241758,
+      "ic_superior": 0.459549247049247,
+      "media": 0.45764346764346764,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 436,
+     "herdado": {
+      "ic_inferior": 0.25923064512213545,
+      "ic_superior": 0.3187719157987692,
+      "media": 0.2894687372336054,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.01974206349206349,
+      "ic_superior": 0.04871031746031746,
+      "media": 0.03357142857142857,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4384996947496947,
+      "ic_superior": -0.40878459503459497,
+      "media": -0.424072039072039,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.28750118559214677,
+      "ic_superior": -0.2233298253989192,
+      "media": -0.2558973086621768,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33556313029885293,
+      "ic_superior": 0.34646301658302736,
+      "media": 0.3408059045830339,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.33024312566689495,
+      "ic_superior": 0.34399966801808757,
+      "media": 0.3369964399429725,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.31511819627964355,
+      "ic_superior": 0.3285865780718305,
+      "media": 0.32219765547399365,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.01821513705368975,
+     "ic_superior": -0.004746755261502835,
+     "media": -0.011135677859339665,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.44170621045621045,
+      "ic_superior": 0.5913391700891701,
+      "media": 0.511554094054094,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3890856228394928,
+      "ic_superior": 0.5235715700421583,
+      "media": 0.4549587793241044,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 358,
+      "neutra": 429,
+      "ruim": 836
+     },
+     "ruim": {
+      "ic_inferior": 0.4522502875133031,
+      "ic_superior": 0.5607576639328667,
+      "media": 0.5041516940037741,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04265084537874021,
+      "ic_superior": 0.08397436930055804,
+      "media": 0.020895257314674853,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 31.566666666666666,
+     "ic_superior": 34.6,
+     "media": 33.166666666666664,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45238751988751985,
+      "ic_superior": 0.4578527953527953,
+      "media": 0.4551019659352992,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 355,
+     "herdado": {
+      "ic_inferior": 0.28458723416201165,
+      "ic_superior": 0.33740022761542016,
+      "media": 0.31106264240347886,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.03930476930476931,
+      "ic_superior": 0.08083065083065083,
+      "media": 0.05909072409072409,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4160499685499685,
+      "ic_superior": -0.37395477978811315,
+      "media": -0.39601124184457515,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.2884268586479346,
+      "ic_superior": -0.21627279404768318,
+      "media": -0.2519719183127548,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3493592784579627,
+      "ic_superior": 0.37717987586741536,
+      "media": 0.3630266942107508,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.34111539388212214,
+      "ic_superior": 0.3712261387341366,
+      "media": 0.35622522214354496,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.26811915892893123,
+      "ic_superior": 0.29367264032120965,
+      "media": 0.28074808364570425,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.06521417440440208,
+     "ic_superior": -0.039660693012123625,
+     "media": -0.05258524968762908,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.2153275694034208,
+      "ic_superior": 0.2788684068769208,
+      "media": 0.24683704005259732,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2091653977758031,
+      "ic_superior": 0.29167017479842644,
+      "media": 0.24838720560774935,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 572,
+      "neutra": 666,
+      "ruim": 1140
+     },
+     "ruim": {
+      "ic_inferior": 0.2134113377828354,
+      "ic_superior": 0.2654241944504428,
+      "media": 0.23844359898929846,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04463719862085442,
+      "ic_superior": 0.0264640558960828,
+      "media": -0.009168523840874878,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 158.3,
+      "ic_superior": 187.66666666666666,
+      "media": 172.86666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 34.13333333333333,
+      "ic_superior": 55.266666666666666,
+      "media": 44.733333333333334,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -293.3,
+      "ic_superior": -226.66666666666666,
+      "media": -257.56666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 108.2,
+      "ic_superior": 147.43333333333334,
+      "media": 127.66666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -90.33333333333333,
+      "ic_superior": -35.766666666666666,
+      "media": -62.266666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -835.2333333333333,
+      "ic_superior": -489.8,
+      "media": -656.3,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -400.8666666666667,
+     "ic_superior": -334.85,
+     "media": -366.3666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -869.5333333333333,
+     "ic_superior": -520.3333333333334,
+     "media": -689.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P2/descasado": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 41.13333333333333,
+     "ic_superior": 42.8,
+     "media": 42.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4549473674473674,
+      "ic_superior": 0.45826062826062824,
+      "media": 0.45658045658045654,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 429,
+     "herdado": {
+      "ic_inferior": 0.6143337105675443,
+      "ic_superior": 0.6775217147808923,
+      "media": 0.6459487715809226,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.020584554334554337,
+      "ic_superior": 0.04538614163614164,
+      "media": 0.032835775335775336,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4369623432123432,
+      "ic_superior": -0.41039099789099787,
+      "media": -0.42374468124468123,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.6503996265628023,
+      "ic_superior": -0.5764257420962576,
+      "media": -0.6131129962451473,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33221539069194467,
+      "ic_superior": 0.34365610702820004,
+      "media": 0.3378340949535872,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3338136315984332,
+      "ic_superior": 0.3445384128250991,
+      "media": 0.3392112162218927,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.31684713644583185,
+      "ic_superior": 0.32909417823885506,
+      "media": 0.32295468882452016,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.016486196887501463,
+     "ic_superior": -0.004239155094478264,
+     "media": -0.010378644508813187,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.3791269841269841,
+      "ic_superior": 0.521413308913309,
+      "media": 0.44650488400488403,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.4254588394062078,
+      "ic_superior": 0.559466486672369,
+      "media": 0.4888474356740611,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 382,
+      "neutra": 407,
+      "ruim": 761
+     },
+     "ruim": {
+      "ic_inferior": 0.4955036300464933,
+      "ic_superior": 0.6043664529919468,
+      "media": 0.5492428365590772,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.01363282983753268,
+      "ic_superior": 0.15136709885775496,
+      "media": 0.08156667671960463,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 32.266666666666666,
+     "ic_superior": 35.9,
+     "media": 34.166666666666664,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4512201687201687,
+      "ic_superior": 0.4558773633773633,
+      "media": 0.45359964109964107,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 368,
+     "herdado": {
+      "ic_inferior": 0.5900919797017586,
+      "ic_superior": 0.6414060708456497,
+      "media": 0.6154785129331728,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.038956598956598955,
+      "ic_superior": 0.07095904095904096,
+      "media": 0.055144207644207646,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.41467809967809965,
+      "ic_superior": -0.38248556998556993,
+      "media": -0.39845543345543344,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.5878709114477086,
+      "ic_superior": -0.5331307656073602,
+      "media": -0.5603343052889651,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.331945974341791,
+      "ic_superior": 0.36204802555431337,
+      "media": 0.34706483211760636,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3405658883724457,
+      "ic_superior": 0.3645323549226311,
+      "media": 0.3528174726712435,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.2867673477157517,
+      "ic_superior": 0.31288210968154956,
+      "media": 0.30011769521115017,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.046565985617581594,
+     "ic_superior": -0.020451223651783725,
+     "media": -0.033215638122183165,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.18649836201955577,
+      "ic_superior": 0.2539392765981952,
+      "media": 0.21975154441569433,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.21030260182559032,
+      "ic_superior": 0.2932926252419553,
+      "media": 0.24973485820309504,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 655,
+      "neutra": 624,
+      "ruim": 1061
+     },
+     "ruim": {
+      "ic_inferior": 0.25328838537167747,
+      "ic_superior": 0.30945622437344,
+      "media": 0.2805865821777142,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.004528648001023095,
+      "ic_superior": 0.08493932732818997,
+      "media": 0.04584338086831947,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 221.76666666666668,
+      "ic_superior": 283.0,
+      "media": 251.43333333333334,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 49.733333333333334,
+      "ic_superior": 77.76666666666667,
+      "media": 62.833333333333336,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -128.4,
+      "ic_superior": -103.43333333333334,
+      "media": -116.03333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 69.3,
+      "ic_superior": 104.5,
+      "media": 85.86666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -111.73333333333333,
+      "ic_superior": -63.93333333333333,
+      "media": -85.86666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -1793.7333333333333,
+      "ic_superior": -1197.4,
+      "media": -1486.8666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -301.03333333333336,
+     "ic_superior": -246.76666666666668,
+     "media": -273.1666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -1798.1666666666667,
+     "ic_superior": -1192.5333333333333,
+     "media": -1486.8666666666666,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P2/mutavel": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 40.86666666666667,
+     "ic_superior": 42.666666666666664,
+     "media": 41.766666666666666,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45638278388278386,
+      "ic_superior": 0.46042790542790535,
+      "media": 0.4583732008732008,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 418,
+     "herdado": {
+      "ic_inferior": 0.6164051948900238,
+      "ic_superior": 0.6777824713320012,
+      "media": 0.6473529588126823,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.01767857142857143,
+      "ic_superior": 0.05339285714285714,
+      "media": 0.03448412698412698,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.441460298960299,
+      "ic_superior": -0.40460053835053833,
+      "media": -0.4238890738890738,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.6502939706194815,
+      "ic_superior": -0.5749495343016274,
+      "media": -0.6128688318285553,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33465634635960895,
+      "ic_superior": 0.34660348018471027,
+      "media": 0.340821350919881,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.32847385484084296,
+      "ic_superior": 0.34376660734226416,
+      "media": 0.3360766264353084,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3165210767879663,
+      "ic_superior": 0.3290604685762254,
+      "media": 0.32310202264481064,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.016812256545366954,
+     "ic_superior": -0.004272864757107921,
+     "media": -0.010231310688522696,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.3847900891565921,
+      "ic_superior": 0.5233579552915937,
+      "media": 0.45108613568147155,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3731144876583361,
+      "ic_superior": 0.49948355006320416,
+      "media": 0.43434915428942217,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 427,
+      "neutra": 429,
+      "ruim": 761
+     },
+     "ruim": {
+      "ic_inferior": 0.4947304678015406,
+      "ic_superior": 0.6107364919652072,
+      "media": 0.5523865396616638,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.037570750791294155,
+      "ic_superior": 0.18089778277797078,
+      "media": 0.10966889467621704,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 31.566666666666666,
+     "ic_superior": 34.6,
+     "media": 33.166666666666664,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45238751988751985,
+      "ic_superior": 0.4578527953527953,
+      "media": 0.4551019659352992,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 355,
+     "herdado": {
+      "ic_inferior": 0.28458723416201165,
+      "ic_superior": 0.33740022761542016,
+      "media": 0.31106264240347886,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.03930476930476931,
+      "ic_superior": 0.08083065083065083,
+      "media": 0.05909072409072409,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4160499685499685,
+      "ic_superior": -0.37395477978811315,
+      "media": -0.39601124184457515,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.2884268586479346,
+      "ic_superior": -0.21627279404768318,
+      "media": -0.2519719183127548,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3493592784579627,
+      "ic_superior": 0.37717987586741536,
+      "media": 0.3630266942107508,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.34111539388212214,
+      "ic_superior": 0.3712261387341366,
+      "media": 0.35622522214354496,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.26811915892893123,
+      "ic_superior": 0.29367264032120965,
+      "media": 0.28074808364570425,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.06521417440440208,
+     "ic_superior": -0.039660693012123625,
+     "media": -0.05258524968762908,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.2153275694034208,
+      "ic_superior": 0.2788684068769208,
+      "media": 0.24683704005259732,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2091653977758031,
+      "ic_superior": 0.29167017479842644,
+      "media": 0.24838720560774935,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 572,
+      "neutra": 666,
+      "ruim": 1140
+     },
+     "ruim": {
+      "ic_inferior": 0.2134113377828354,
+      "ic_superior": 0.2654241944504428,
+      "media": 0.23844359898929846,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04463719862085442,
+      "ic_superior": 0.0264640558960828,
+      "media": -0.009168523840874878,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": -28.933333333333334,
+      "ic_superior": 22.6,
+      "media": -2.8,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 34.2,
+      "ic_superior": 54.53333333333333,
+      "media": 44.36666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 23.533333333333335,
+      "ic_superior": 54.96666666666667,
+      "media": 38.9,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": -384.46666666666664,
+      "ic_superior": -125.33333333333333,
+      "media": -243.8,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -79.93333333333334,
+      "ic_superior": -31.6,
+      "media": -54.53333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -1105.2,
+      "ic_superior": -444.23333333333335,
+      "media": -744.3666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -4.916666666666667,
+     "ic_superior": 40.78333333333333,
+     "media": 18.116666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -982.5666666666667,
+     "ic_superior": -267.98333333333335,
+     "media": -595.2,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P2e/casado_frutas": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 40.733333333333334,
+     "ic_superior": 42.53333333333333,
+     "media": 41.63333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4560490435490435,
+      "ic_superior": 0.45946072446072445,
+      "media": 0.45768925518925513,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 420,
+     "herdado": {
+      "ic_inferior": 0.26095417728518194,
+      "ic_superior": 0.31400256746964317,
+      "media": 0.28820526427758897,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.011452991452991453,
+      "ic_superior": 0.038400488400488396,
+      "media": 0.023882783882783882,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4470563695563695,
+      "ic_superior": -0.41869556369556366,
+      "media": -0.43380647130647126,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.29316856131355185,
+      "ic_superior": -0.23427900157597595,
+      "media": -0.2643224803948051,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3281899579937756,
+      "ic_superior": 0.3431161546726666,
+      "media": 0.33592392939620985,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3380785039367865,
+      "ic_superior": 0.3499586397615326,
+      "media": 0.34392235434517615,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3129587299357207,
+      "ic_superior": 0.3273677761284114,
+      "media": 0.320153716258614,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.020374603397612583,
+     "ic_superior": -0.005965557204921908,
+     "media": -0.013179617074719284,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.40151142104083276,
+      "ic_superior": 0.5642131017131018,
+      "media": 0.4796211404121621,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.44719375897007474,
+      "ic_superior": 0.6029700390768503,
+      "media": 0.5227654941664229,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 389,
+      "neutra": 399,
+      "ruim": 817
+     },
+     "ruim": {
+      "ic_inferior": 0.45897792453181424,
+      "ic_superior": 0.5601961174939929,
+      "media": 0.5082287514936142,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.0722479710785091,
+      "ic_superior": 0.08658901513122573,
+      "media": 0.0070354342043216795,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 32.333333333333336,
+     "ic_superior": 35.333333333333336,
+     "media": 33.86666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4511942070275403,
+      "ic_superior": 0.45650460650460645,
+      "media": 0.4538851272184605,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 361,
+     "herdado": {
+      "ic_inferior": 0.28182260910732265,
+      "ic_superior": 0.33927481814582894,
+      "media": 0.31078474339350426,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.16976014726014726,
+      "ic_superior": 0.22796018796018794,
+      "media": 0.19823630073630075,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.2847129722129722,
+      "ic_superior": -0.22573577656910987,
+      "media": -0.2556488264821598,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.1494032407368315,
+      "ic_superior": -0.07700597369780895,
+      "media": -0.11254844265720351,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.34325932937749387,
+      "ic_superior": 0.37267057363525014,
+      "media": 0.3574787489122215,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3197831919817333,
+      "ic_superior": 0.3529952347835594,
+      "media": 0.33662432709690526,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.29276773758618396,
+      "ic_superior": 0.3196386385665626,
+      "media": 0.30589692399087326,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.04056559574714934,
+     "ic_superior": -0.013694694766770717,
+     "media": -0.027436409342460045,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.21306397225962442,
+      "ic_superior": 0.2794019360163525,
+      "media": 0.24571274872399967,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2115902214854935,
+      "ic_superior": 0.26930922885996994,
+      "media": 0.2404332111055702,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 628,
+      "neutra": 712,
+      "ruim": 1082
+     },
+     "ruim": {
+      "ic_inferior": 0.21004589364577247,
+      "ic_superior": 0.2571753039323243,
+      "media": 0.2317903711909785,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04264562114907639,
+      "ic_superior": 0.023846242560627937,
+      "media": -0.011282608723806431,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 141.13333333333333,
+      "ic_superior": 183.56666666666666,
+      "media": 163.06666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -2.966666666666667,
+      "ic_superior": 31.9,
+      "media": 15.6,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -321.5,
+      "ic_superior": -252.7,
+      "media": -284.6,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 159.26666666666668,
+      "ic_superior": 215.23333333333332,
+      "media": 187.56666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -89.0,
+      "ic_superior": -8.266666666666667,
+      "media": -48.3,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -806.5666666666667,
+      "ic_superior": -409.6333333333333,
+      "media": -588.2333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -410.76666666666665,
+     "ic_superior": -339.65,
+     "media": -373.93333333333334,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -881.15,
+     "ic_superior": -475.18333333333334,
+     "media": -657.8666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P2e/descasado": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 41.666666666666664,
+     "ic_superior": 43.3,
+     "media": 42.46666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45560337810337803,
+      "ic_superior": 0.4590974765974766,
+      "media": 0.45724358974358975,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 432,
+     "herdado": {
+      "ic_inferior": 0.6200122303192181,
+      "ic_superior": 0.6846156259586224,
+      "media": 0.6521239065243611,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.008888888888888889,
+      "ic_superior": 0.034206349206349206,
+      "media": 0.020595238095238097,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.44888227513227513,
+      "ic_superior": -0.4228912291412291,
+      "media": -0.4366483516483516,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.6693529515771622,
+      "ic_superior": -0.5935344758053712,
+      "media": -0.631528668429123,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33348404793668546,
+      "ic_superior": 0.3449809325309143,
+      "media": 0.33920295785768445,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3346565596589252,
+      "ic_superior": 0.3466557871126937,
+      "media": 0.34063481959182956,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.31298398441382,
+      "ic_superior": 0.3270060397861776,
+      "media": 0.320162222550486,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.020349348919513288,
+     "ic_superior": -0.00632729354715571,
+     "media": -0.013171110782847337,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.3886582139661289,
+      "ic_superior": 0.5206441107911696,
+      "media": 0.4514393851488346,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.42465240412608835,
+      "ic_superior": 0.5717628667628668,
+      "media": 0.4966922624159466,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 411,
+      "neutra": 376,
+      "ruim": 756
+     },
+     "ruim": {
+      "ic_inferior": 0.5082921453650471,
+      "ic_superior": 0.6461150567163153,
+      "media": 0.5755326964206249,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.007394242786366962,
+      "ic_superior": 0.19650645992789703,
+      "media": 0.10146687263823423,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 32.7,
+     "ic_superior": 35.3,
+     "media": 34.03333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45096727346727344,
+      "ic_superior": 0.45606726606726605,
+      "media": 0.453508436008436,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 352,
+     "herdado": {
+      "ic_inferior": 0.5818892303563203,
+      "ic_superior": 0.6406760150663283,
+      "media": 0.6113219434435326,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.21207181707181708,
+      "ic_superior": 0.28801476301476303,
+      "media": 0.2500217375217375,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.24199050949050943,
+      "ic_superior": -0.16469474969474968,
+      "media": -0.20348669848669845,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.40903379380281907,
+      "ic_superior": -0.31161330559325684,
+      "media": -0.36130020592179507,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.32316607831234506,
+      "ic_superior": 0.3464639721992039,
+      "media": 0.3350794060419041,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.32244144756231125,
+      "ic_superior": 0.3484089861955662,
+      "media": 0.33549830840296696,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3161243999537207,
+      "ic_superior": 0.3430554269971605,
+      "media": 0.3294222855551289,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.017208933379612625,
+     "ic_superior": 0.009722093663827182,
+     "media": -0.003911047778204366,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.18769305008306233,
+      "ic_superior": 0.27138163582328345,
+      "media": 0.22576028734848233,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.21835782185515204,
+      "ic_superior": 0.3056147334962214,
+      "media": 0.2582917744847344,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 753,
+      "neutra": 694,
+      "ruim": 883
+     },
+     "ruim": {
+      "ic_inferior": 0.2643924286340639,
+      "ic_superior": 0.33512256897903314,
+      "media": 0.29793090595037963,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.0006227816988410999,
+      "ic_superior": 0.1106665168478464,
+      "media": 0.05590487503377128,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 197.76666666666668,
+      "ic_superior": 275.0,
+      "media": 236.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 23.433333333333334,
+      "ic_superior": 53.9,
+      "media": 38.2,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -158.56666666666666,
+      "ic_superior": -125.26666666666667,
+      "media": -141.6,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 120.33333333333333,
+      "ic_superior": 174.06666666666666,
+      "media": 146.06666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -92.16666666666667,
+      "ic_superior": -30.533333333333335,
+      "media": -60.1,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -1709.8666666666666,
+      "ic_superior": -1068.4666666666667,
+      "media": -1379.3333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": -303.76666666666665,
+     "ic_superior": -254.28333333333333,
+     "media": -278.7,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -1758.9833333333333,
+     "ic_superior": -1107.5333333333333,
+     "media": -1422.3166666666666,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P2e/mutavel": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 40.733333333333334,
+     "ic_superior": 42.46666666666667,
+     "media": 41.6,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45525058275058267,
+      "ic_superior": 0.4589311614311614,
+      "media": 0.457038332038332,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 422,
+     "herdado": {
+      "ic_inferior": 0.6053929784520359,
+      "ic_superior": 0.6631379116745103,
+      "media": 0.6342548015757549,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.02317307692307692,
+      "ic_superior": 0.0552991452991453,
+      "media": 0.03870726495726496,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4344607244607244,
+      "ic_superior": -0.40093864468864465,
+      "media": -0.41833106708106704,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.6300002718916338,
+      "ic_superior": -0.5625930517073585,
+      "media": -0.5955475366184899,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.33113312356543095,
+      "ic_superior": 0.3456831548604137,
+      "media": 0.33828066107040755,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3337189550057851,
+      "ic_superior": 0.34860403869479306,
+      "media": 0.34126312012902527,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.3105861679471256,
+      "ic_superior": 0.33064836262760783,
+      "media": 0.3204562188005672,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.022747165386207673,
+     "ic_superior": -0.002684970705725485,
+     "media": -0.012877114532766116,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.34717302033478503,
+      "ic_superior": 0.46478690097885145,
+      "media": 0.4031761840956888,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3811145337577226,
+      "ic_superior": 0.5272197736903619,
+      "media": 0.44952281407389766,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 470,
+      "neutra": 397,
+      "ruim": 728
+     },
+     "ruim": {
+      "ic_inferior": 0.5075894323638308,
+      "ic_superior": 0.6380063451888395,
+      "media": 0.571328016710359,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.06624691561759297,
+      "ic_superior": 0.22634852008522757,
+      "media": 0.14497851762556588,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 32.333333333333336,
+     "ic_superior": 35.333333333333336,
+     "media": 33.86666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4511942070275403,
+      "ic_superior": 0.45650460650460645,
+      "media": 0.4538851272184605,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "decisoes": 361,
+     "herdado": {
+      "ic_inferior": 0.28182260910732265,
+      "ic_superior": 0.33927481814582894,
+      "media": 0.31078474339350426,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.16976014726014726,
+      "ic_superior": 0.22796018796018794,
+      "media": 0.19823630073630075,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.2847129722129722,
+      "ic_superior": -0.22573577656910987,
+      "media": -0.2556488264821598,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.1494032407368315,
+      "ic_superior": -0.07700597369780895,
+      "media": -0.11254844265720351,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.34325932937749387,
+      "ic_superior": 0.37267057363525014,
+      "media": 0.3574787489122215,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.3197831919817333,
+      "ic_superior": 0.3529952347835594,
+      "media": 0.33662432709690526,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.29276773758618396,
+      "ic_superior": 0.3196386385665626,
+      "media": 0.30589692399087326,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.04056559574714934,
+     "ic_superior": -0.013694694766770717,
+     "media": -0.027436409342460045,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.21306397225962442,
+      "ic_superior": 0.2794019360163525,
+      "media": 0.24571274872399967,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.2115902214854935,
+      "ic_superior": 0.26930922885996994,
+      "media": 0.2404332111055702,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 628,
+      "neutra": 712,
+      "ruim": 1082
+     },
+     "ruim": {
+      "ic_inferior": 0.21004589364577247,
+      "ic_superior": 0.2571753039323243,
+      "media": 0.2317903711909785,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.04264562114907639,
+      "ic_superior": 0.023846242560627937,
+      "media": -0.011282608723806431,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": -48.333333333333336,
+      "ic_superior": 6.833333333333333,
+      "media": -19.9,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -3.6,
+      "ic_superior": 33.5,
+      "media": 15.7,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 6.633333333333334,
+      "ic_superior": 43.6,
+      "media": 25.766666666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": -372.3,
+      "ic_superior": -121.3,
+      "media": -233.13333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": -91.36666666666666,
+      "ic_superior": -6.5,
+      "media": -47.9,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -1078.4,
+      "ic_superior": -450.23333333333335,
+      "media": -746.7666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 2.4166666666666665,
+     "ic_superior": 53.86666666666667,
+     "media": 27.866666666666667,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -947.9,
+     "ic_superior": -294.76666666666665,
+     "media": -606.25,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P3/casado_frutas": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 20.3,
+     "ic_superior": 29.1,
+     "media": 24.933333333333334,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.45380201808773235,
+      "ic_superior": 0.46554767983339407,
+      "media": 0.4592779905279905,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "decisoes": 288,
+     "herdado": {
+      "ic_inferior": 0.3083037564693269,
+      "ic_superior": 0.3933324558905255,
+      "media": 0.34807828132526425,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.050946474160759876,
+      "ic_superior": 0.23091571127285412,
+      "media": 0.12804090750519323,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.4053303839018124,
+      "ic_superior": -0.23294483294483292,
+      "media": -0.3312370830227973,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.3009133832310753,
+      "ic_superior": -0.1261240790246974,
+      "media": -0.22003737382007107,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.2999186663865777,
+      "ic_superior": 0.3956026002985527,
+      "media": 0.3518619128486887,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "neutra": {
+      "ic_inferior": 0.296029371328001,
+      "ic_superior": 0.41459377984092205,
+      "media": 0.3501783410104586,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.23113730483138736,
+      "ic_superior": 0.3821562526592316,
+      "media": 0.2979597461408527,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.10219602850194595,
+     "ic_superior": 0.04882291932589833,
+     "media": -0.03537358719248062,
+     "n": 28,
+     "nivel": 0.95,
+     "sem_valor": 2
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.14340506301186023,
+      "ic_superior": 0.2570454824610835,
+      "media": 0.19795540241669576,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.1449926973424416,
+      "ic_superior": 0.24791658524163063,
+      "media": 0.19435951598895046,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 615,
+      "neutra": 760,
+      "ruim": 1121
+     },
+     "ruim": {
+      "ic_inferior": 0.12594481293357093,
+      "ic_superior": 0.23918986342366594,
+      "media": 0.1801921569917234,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.06931478297554804,
+      "ic_superior": 0.03203669008087427,
+      "media": -0.01596530221109973,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 17.833333333333332,
+     "ic_superior": 25.5,
+     "media": 21.9,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4464980492758271,
+      "ic_superior": 0.45917698556587444,
+      "media": 0.45248645387534275,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "decisoes": 259,
+     "herdado": {
+      "ic_inferior": 0.28877000407870335,
+      "ic_superior": 0.3506891953888414,
+      "media": 0.32037858676238123,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim": {
+      "ic_inferior": 0.09319117096894874,
+      "ic_superior": 0.2747545664212331,
+      "media": 0.16892109947665504,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.356002468039505,
+      "ic_superior": -0.18269307852641184,
+      "media": -0.2835653543986877,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.21771427133209806,
+      "ic_superior": -0.06133003306262825,
+      "media": -0.15145748728572622,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3055038274088054,
+      "ic_superior": 0.4079379208490388,
+      "media": 0.3599396185880637,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "neutra": {
+      "ic_inferior": 0.29098929627462233,
+      "ic_superior": 0.3803602266286995,
+      "media": 0.3362252136888477,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.23982733441986412,
+      "ic_superior": 0.38748125563858327,
+      "media": 0.3038351677230885,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.0935059989134692,
+     "ic_superior": 0.05414792230524991,
+     "media": -0.02949816561024481,
+     "n": 28,
+     "nivel": 0.95,
+     "sem_valor": 2
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.10743899075381898,
+      "ic_superior": 0.20132320651858676,
+      "media": 0.1516144920129083,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.14120679349308768,
+      "ic_superior": 0.2563146294827816,
+      "media": 0.195293597337973,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 710,
+      "neutra": 728,
+      "ruim": 1171
+     },
+     "ruim": {
+      "ic_inferior": 0.09183475046963427,
+      "ic_superior": 0.15577250484270608,
+      "media": 0.12270434239916532,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.08692880518250767,
+      "ic_superior": -0.015946135424043478,
+      "media": -0.05074970227627534,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 575.7,
+      "ic_superior": 786.0333333333333,
+      "media": 684.7666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 139.86666666666667,
+      "ic_superior": 1260.2333333333333,
+      "media": 685.3666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -9164.733333333334,
+      "ic_superior": -4941.166666666667,
+      "media": -7011.266666666666,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -9987.983333333334,
+     "ic_superior": -5459.016666666666,
+     "media": -7696.333333333333,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P3/descasado": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 17.766666666666666,
+     "ic_superior": 28.166666666666668,
+     "media": 23.033333333333335,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4467851037851037,
+      "ic_superior": 0.4582423132423132,
+      "media": 0.45228749028749027,
+      "n": 25,
+      "nivel": 0.95,
+      "sem_valor": 5
+     },
+     "decisoes": 254,
+     "herdado": {
+      "ic_inferior": 0.5895076616562015,
+      "ic_superior": 0.6712474571095389,
+      "media": 0.6292161090768702,
+      "n": 25,
+      "nivel": 0.95,
+      "sem_valor": 5
+     },
+     "ruim": {
+      "ic_inferior": 0.09077089577089577,
+      "ic_superior": 0.29914085914085914,
+      "media": 0.18195082695082695,
+      "n": 25,
+      "nivel": 0.95,
+      "sem_valor": 5
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.36041114441114436,
+      "ic_superior": -0.15247041847041845,
+      "media": -0.27033666333666334,
+      "n": 25,
+      "nivel": 0.95,
+      "sem_valor": 5
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.5290679060179051,
+      "ic_superior": -0.34814711172353496,
+      "media": -0.4472652821260432,
+      "n": 25,
+      "nivel": 0.95,
+      "sem_valor": 5
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.24919153026912344,
+      "ic_superior": 0.3506667200854446,
+      "media": 0.30466725112945964,
+      "n": 26,
+      "nivel": 0.95,
+      "sem_valor": 4
+     },
+     "neutra": {
+      "ic_inferior": 0.3149656833542384,
+      "ic_superior": 0.44009775241460525,
+      "media": 0.3701954221637089,
+      "n": 26,
+      "nivel": 0.95,
+      "sem_valor": 4
+     },
+     "ruim": {
+      "ic_inferior": 0.26652568881806815,
+      "ic_superior": 0.39954001321761695,
+      "media": 0.32513732670683143,
+      "n": 26,
+      "nivel": 0.95,
+      "sem_valor": 4
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.06680764451526518,
+     "ic_superior": 0.06620667988428364,
+     "media": -0.008196006626501872,
+     "n": 26,
+     "nivel": 0.95,
+     "sem_valor": 4
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.11378044529965782,
+      "ic_superior": 0.2763475544062574,
+      "media": 0.18976244090671804,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.12532096327623862,
+      "ic_superior": 0.25577582262655,
+      "media": 0.1864350951005398,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 735,
+      "neutra": 765,
+      "ruim": 965
+     },
+     "ruim": {
+      "ic_inferior": 0.15071579319456113,
+      "ic_superior": 0.2905452962565777,
+      "media": 0.21768426472250518,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.018927238177015186,
+      "ic_superior": 0.07590197439049258,
+      "media": 0.02958549671887628,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 13.7,
+     "ic_superior": 22.4,
+     "media": 18.033333333333335,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.42749578463864174,
+      "ic_superior": 0.45376556314056316,
+      "media": 0.4418408146086717,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "decisoes": 215,
+     "herdado": {
+      "ic_inferior": 0.553758595308868,
+      "ic_superior": 0.6274325712399015,
+      "media": 0.5904330972867404,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.20845473970473968,
+      "ic_superior": 0.46703118310261166,
+      "media": 0.32799402977974407,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.2392125896590182,
+      "ic_superior": 0.03358166304594879,
+      "media": -0.11384678482892766,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.38426082429019565,
+      "ic_superior": -0.12271795581865222,
+      "media": -0.2624390675069963,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.20485804981628714,
+      "ic_superior": 0.2958183364508349,
+      "media": 0.2523643955278983,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "neutra": {
+      "ic_inferior": 0.2759178679743196,
+      "ic_superior": 0.3758307882706432,
+      "media": 0.32652862433798713,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.35446099614370147,
+      "ic_superior": 0.5032398472209396,
+      "media": 0.42110698013411463,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": 0.02112766281036817,
+     "ic_superior": 0.16990651388760636,
+     "media": 0.08777364680078133,
+     "n": 28,
+     "nivel": 0.95,
+     "sem_valor": 2
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.04716762462522859,
+      "ic_superior": 0.12498791176252001,
+      "media": 0.08292067664983234,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.08297824717663066,
+      "ic_superior": 0.16982930148608905,
+      "media": 0.12449620573194066,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 876,
+      "neutra": 810,
+      "ruim": 992
+     },
+     "ruim": {
+      "ic_inferior": 0.10763779822935558,
+      "ic_superior": 0.18485697669629247,
+      "media": 0.14525998832699813,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": 0.01359234711172935,
+      "ic_superior": 0.07065734910447967,
+      "media": 0.04155154713611163,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": 739.6333333333333,
+      "ic_superior": 1082.4333333333334,
+      "media": 914.8666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 193.0,
+      "ic_superior": 918.0,
+      "media": 537.5,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -12471.4,
+      "ic_superior": -7927.933333333333,
+      "media": -10246.633333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -13353.383333333333,
+     "ic_superior": -8497.566666666668,
+     "media": -10972.816666666668,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  },
+  "A/P3/mutavel": {
+   "final": {
+    "consumos": {
+     "ic_inferior": 17.4,
+     "ic_superior": 27.5,
+     "media": 22.6,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.42738989405656064,
+      "ic_superior": 0.4510351102943695,
+      "media": 0.43991334454297415,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "decisoes": 242,
+     "herdado": {
+      "ic_inferior": 0.5416794763592003,
+      "ic_superior": 0.6205859836567766,
+      "media": 0.5797772790821255,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim": {
+      "ic_inferior": 0.43227204893871557,
+      "ic_superior": 0.6171166282277393,
+      "media": 0.5261848234070456,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.01302966580744356,
+      "ic_superior": 0.1828924504850431,
+      "media": 0.08627147886407148,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.14156658519588378,
+      "ic_superior": 0.03426949916266925,
+      "media": -0.05359245567507994,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.1959484971970604,
+      "ic_superior": 0.3397328277051087,
+      "media": 0.2625198622501819,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "neutra": {
+      "ic_inferior": 0.2923570718624215,
+      "ic_superior": 0.4160057853356119,
+      "media": 0.3499799481158542,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.3196108142664246,
+      "ic_superior": 0.461007966665255,
+      "media": 0.3875001896339638,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.013722519066908686,
+     "ic_superior": 0.12767463333192172,
+     "media": 0.05416685630063052,
+     "n": 28,
+     "nivel": 0.95,
+     "sem_valor": 2
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.11539067254584495,
+      "ic_superior": 0.2201852836667188,
+      "media": 0.16692441438049455,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.12182762203769477,
+      "ic_superior": 0.23912923794644225,
+      "media": 0.17873644427249324,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 904,
+      "neutra": 757,
+      "ruim": 751
+     },
+     "ruim": {
+      "ic_inferior": 0.14740888437882346,
+      "ic_superior": 0.28928443092529776,
+      "media": 0.21464311231626385,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.005084187026922708,
+      "ic_superior": 0.09662869871305074,
+      "media": 0.041812682989769936,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "inicio": {
+    "consumos": {
+     "ic_inferior": 17.833333333333332,
+     "ic_superior": 25.5,
+     "media": 21.9,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha_varias": {
+     "acaso": {
+      "ic_inferior": 0.4464980492758271,
+      "ic_superior": 0.45917698556587444,
+      "media": 0.45248645387534275,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "decisoes": 259,
+     "herdado": {
+      "ic_inferior": 0.28877000407870335,
+      "ic_superior": 0.3506891953888414,
+      "media": 0.32037858676238123,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim": {
+      "ic_inferior": 0.09319117096894874,
+      "ic_superior": 0.2747545664212331,
+      "media": 0.16892109947665504,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim_menos_acaso": {
+      "ic_inferior": -0.356002468039505,
+      "ic_superior": -0.18269307852641184,
+      "media": -0.2835653543986877,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     },
+     "ruim_menos_herdado": {
+      "ic_inferior": -0.21771427133209806,
+      "ic_superior": -0.06133003306262825,
+      "media": -0.15145748728572622,
+      "n": 27,
+      "nivel": 0.95,
+      "sem_valor": 3
+     }
+    },
+    "fracao": {
+     "boa": {
+      "ic_inferior": 0.3055038274088054,
+      "ic_superior": 0.4079379208490388,
+      "media": 0.3599396185880637,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "neutra": {
+      "ic_inferior": 0.29098929627462233,
+      "ic_superior": 0.3803602266286995,
+      "media": 0.3362252136888477,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     },
+     "ruim": {
+      "ic_inferior": 0.23982733441986412,
+      "ic_superior": 0.38748125563858327,
+      "media": 0.3038351677230885,
+      "n": 28,
+      "nivel": 0.95,
+      "sem_valor": 2
+     }
+    },
+    "fracao_ruim_menos_terco": {
+     "ic_inferior": -0.0935059989134692,
+     "ic_superior": 0.05414792230524991,
+     "media": -0.02949816561024481,
+     "n": 28,
+     "nivel": 0.95,
+     "sem_valor": 2
+    },
+    "uma_so": {
+     "boa": {
+      "ic_inferior": 0.10743899075381898,
+      "ic_superior": 0.20132320651858676,
+      "media": 0.1516144920129083,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.14120679349308768,
+      "ic_superior": 0.2563146294827816,
+      "media": 0.195293597337973,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ofertas": {
+      "boa": 710,
+      "neutra": 728,
+      "ruim": 1171
+     },
+     "ruim": {
+      "ic_inferior": 0.09183475046963427,
+      "ic_superior": 0.15577250484270608,
+      "media": 0.12270434239916532,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim_menos_outras": {
+      "ic_inferior": -0.08692880518250767,
+      "ic_superior": -0.015946135424043478,
+      "media": -0.05074970227627534,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim": {
+    "comer_presenca": {
+     "boa": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": 0.0,
+      "ic_superior": 0.0,
+      "media": 0.0,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    },
+    "escolha": {
+     "boa": {
+      "ic_inferior": -1549.3,
+      "ic_superior": 946.0333333333333,
+      "media": -261.6333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "neutra": {
+      "ic_inferior": 109.4,
+      "ic_superior": 455.1,
+      "media": 264.8666666666667,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     },
+     "ruim": {
+      "ic_inferior": -3256.7,
+      "ic_superior": -809.3666666666667,
+      "media": -1907.0333333333333,
+      "n": 30,
+      "nivel": 0.95,
+      "sem_valor": 0
+     }
+    }
+   },
+   "pesos_no_fim_ruim_menos_outras": {
+    "comer_presenca": {
+     "ic_inferior": 0.0,
+     "ic_superior": 0.0,
+     "media": 0.0,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    },
+    "escolha": {
+     "ic_inferior": -3576.9,
+     "ic_superior": -441.3,
+     "media": -1908.65,
+     "n": 30,
+     "nivel": 0.95,
+     "sem_valor": 0
+    }
+   },
+   "unidades": 30
+  }
+ }
+}
