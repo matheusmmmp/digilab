@@ -2940,3 +2940,20 @@ Tarefa `docs/TAREFA_V2_DESCRITIVO_PLATO.md` (V-3, Q-1). **Pós hoc descritivo:**
   - para comer, a soma das células do objeto daquela fruta (presença e fome × presença), na ação comer;
   - para a escolha, a célula de identidade.
 - **O que pode virar plano** (não aberto): a decisão de comer com uma fruta só aprende pouco o efeito da fruta.
+
+## 2026-10-07 — M6: o cérebro A é o DigiBrain da web (fora da ordem registrada, por evidência descritiva posterior)
+
+- **O que a regra registrada dava.** Pela ordem do M6 (`docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, seção 5) e pelo resultado da
+  comparação (`docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`, #197), o escolhido seria o **C**. O desempenho no P1 empatou, e a legibilidade
+  deu C 0,327 contra A 0,262.
+- **A decisão do Matheus (2026-10-07): o cérebro A.** O motivo é o descritivo pós hoc do platô (`docs/DESCRITIVO_V2_PLATO.md`, #199):
+  - com duas frutas ou mais, o A aprende qual fruta evitar: escolhe a ruim de 2% a 11% das vezes, contra 29% a 65% do herdado;
+  - o A resiste à informação errada: no P2e escolhe a ruim de 2% a 4% das vezes, e o C de 77% a 83%;
+  - o C fica perto do herdado no comportamento;
+  - no P3, o braço do dono e do produto, o C quase não come e o A aprende a evitar a ruim.
+- **Por que é declarado assim.** O empate no passo 1 escondia uma diferença que a medida primária (a taxa final, com o platô de 1/3) não
+  via. Decidir assim desvia da regra. A evidência é pós hoc e de poucas unidades no C (5), e fica declarada desse jeito:
+  **"pela regra seria o C; escolhido o A por evidência descritiva posterior"**.
+- **Limite conhecido do A:** a decisão de comer não aprende o efeito de uma fruta quando ela está sozinha. É a origem do platô e fica como
+  pergunta para um plano próprio (Q-8).
+- **Próximo:** o plano do porte para a web, pets v11 (`docs/TAREFA_V2_W_PLANO_PORTE.md`, chat A).

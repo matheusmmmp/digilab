@@ -148,3 +148,12 @@ Rodada 13 (2026-10-06): a validação única foi feita (PR #193; o controle "só
 Rodada 14 (2026-10-07): a comparação A × C (#197) e a leitura da validação (#196) entraram.
 - **M6 adiado:** espera o descritivo do platô de 1/3 (Q-1, `docs/TAREFA_V2_DESCRITIVO_PLATO.md`, chat D).
 - **Depois:** o M6, a leitura consolidada da fase 1 e as perguntas novas (Q-3 e o controle de cuidado em malha fechada).
+
+Rodada 15 (2026-10-07): **M6 decidido.** O DigiBrain da web é o cérebro A, os lobos. Pela regra seria o C; o A foi escolhido por evidência
+descritiva posterior (`docs/DESCRITIVO_V2_PLATO.md`, `REGISTRO_DESVIOS`).
+- **W:** começa pelo plano do porte, pets v11 (`docs/TAREFA_V2_W_PLANO_PORTE.md`, chat A).
+- **Perguntas abertas:**
+  - Q-8: a decisão de comer aprender o efeito da fruta sozinha (o gargalo do platô);
+  - Q-3: recompensa contra informação, com o `w_info` aprendendo;
+  - o controle de cuidado em malha fechada.
+- **Falta:** a leitura consolidada da fase 1.
