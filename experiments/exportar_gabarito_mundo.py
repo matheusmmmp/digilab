@@ -72,7 +72,8 @@ class MotorMundoGravado(MotorMundo):
     def _consequencia(self, acao):
         op, self._op, self._cands = self._op, None, None
         op.update(acao=acao.value, estado=_estado(self._estado), regra=getattr(self._pm_cerebro(), "ultima_regra", None),
-                  com_gancho=getattr(self._pm_cerebro(), "escolher_alvo", None) is not None)
+                  com_gancho=getattr(self._pm_cerebro(), "escolher_alvo", None) is not None
+                  and not hasattr(self._pm_cerebro(), "ve_mundo_fisico"))  # o gancho que escolhe alvo (o TS o imita); o dos lobos devolve None
         ocorrido = super()._consequencia(acao)
         op.update(candidatos=self._cands, ocorrido=ocorrido, depois=_estado(self._estado),
                   percepcao_depois=_percepcao(self._perceber(self._estado.tick)))
