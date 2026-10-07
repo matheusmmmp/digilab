@@ -4,7 +4,7 @@ So inteiros: a paridade e exata. O TS (etapa 7, do A) refaz cada caso e cada vid
 
     python experiments/exportar_gabarito_corpo.py      # grava tests/gabaritos/corpo_quimica_python.json
 
-O conteudo (versao 3):
+O conteudo (versao 4):
 - `taxas`: os numeros de hoje na escala C, ja inteiros (secao 4);
 - `casos`: a quimica base, numa grade de estados com cada operacao (o tick, as acoes do dono e do pet, a bola, a fruta), o estado depois,
   o receptor de privacao e os receptores na escala S;
@@ -18,6 +18,11 @@ O conteudo (versao 3):
 - `mundo` (versao 3, CORPO-MUNDO): os estimulos do mundo fisico na mesma grade de estados, sem e com a digestao: a acao do pet com a
   MF-2 (`pet_mundo`), o andar (`andar`, deslocamento em subunidades e o custo da ConfigMundo) e as comidas do mapa (`consumo`: tipo,
   situacao e o efeito da fruta no humor). As secoes da versao 2 nao mudaram.
+- `etapa6` (versao 4, CORPO-DRIVES): os drives novos e os gestos (secoes 7, 8 e 17), com a quimica, a digestao, a Vida e o mundo fisico
+  (a curiosidade existe): os numeros da ConfigCorpo, uma grade de estados (os 13 quimicos e a janela do tedio) com cada operacao (o
+  tick acordado e dormindo, o dono brincar, o carinho, o tapa, as quatro atividades e a novidade), o estado e a janela depois e os
+  receptores; e uma sequencia longa de operacoes sorteadas num corpo so, com o sha256 de q e da janela depois de cada uma. O tapa vai
+  como a acao do dono "tapa". As secoes da versao 3 nao mudaram.
 """
 from __future__ import annotations
 
@@ -30,8 +35,9 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, ConfigCorpo  # noqa: E402
-from digilab.corpo import (Corpo, div_arred, limiares_estagio, passo_meia_vida, quimicos_de, taxas_de,  # noqa: E402
+from digilab.config import (CONFIG_CORPO_DRIVES, CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA,  # noqa: E402
+                            CONFIG_PADRAO, ConfigCorpo)
+from digilab.corpo import (ATIVIDADES, Corpo, div_arred, limiares_estagio, passo_meia_vida, quimicos_de, taxas_de,  # noqa: E402
                            ticks_de_estagio)
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
@@ -211,13 +217,95 @@ def vida_malha_aberta(dono: str, semente: int, cc: ConfigCorpo = CC) -> dict:
     return out
 
 
+# ------------------------------------------------------------------ etapa 6 (versao 4)
+
+CC_E6 = CONFIG_CORPO_DRIVES
+CAMPOS_E6 = ("tedio_sobe", "curiosidade_sobe", "solidao_sobe", "estresse_limiar", "estresse_divisor", "janela_tedio", "tedio_bola",
+             "tedio_brincar", "tedio_explorar", "tedio_dono", "curiosidade_novidade", "curiosidade_max_novidades", "carinho_solidao",
+             "carinho_estresse", "tapa_dor", "tapa_susto", "tapa_estresse", "medo_da_mao", "k_meia_vida_estresse", "k_meia_vida_dor",
+             "k_meia_vida_susto")
+RECEPTORES_E6 = ("fome", "higiene", "energia", "humor", "saude", "tedio", "curiosidade", "solidao", "estresse", "dor", "susto")
+
+
+class _Tapa:
+    """o AcaoUsuario.TAPA do A (etapa 6): o corpo o le pelo valor"""
+    value = "tapa"
+
+
+def _corpo_e6(q: list[int], janela: list[str]) -> Corpo:
+    c = Corpo(dict(zip(quimicos_de(CC_E6, True), q)), CONFIG_PADRAO, CC_E6, com_mundo=True)
+    c.janela_tedio = list(janela)
+    return c
+
+
+def _aplicar_e6(c: Corpo, op: list) -> None:
+    if op[0] == "dono" and op[1] == "tapa":
+        c.acao_dono(_Tapa())
+    elif op[0] == "atividade":
+        c.atividade(op[1])
+    elif op[0] == "novidade":
+        c.estimulo_novidade(op[1])
+    else:
+        _aplicar(c, op)
+
+
+def _ops_e6() -> list[list]:
+    ops = [["passo", dormindo, sujeira, tick] for dormindo in (0, 1) for sujeira in (0, 2) for tick in (600, 1400)]
+    ops += [["dono", "brincar"], ["dono", "acariciar"], ["dono", "tapa"]]
+    return ops + [["atividade", a] for a in ATIVIDADES] + [["novidade", n] for n in (0, 1, 2, 5)]
+
+
+def _estados_e6(rng: random.Random) -> list[tuple[list[int], list[str]]]:
+    C = CC_E6.escala
+    n = len(quimicos_de(CC_E6, True))
+    L = CC_E6.estresse_limiar
+    fixos = [[0] * n, [C] * n, [L + 1] * 3 + [0] * (n - 3), [0] * 7 + [L, 0, L + 1000, 0, 90000, C // 2]]
+    estados = [(q, []) for q in fixos]
+    for _ in range(20):
+        q = [rng.randrange(C + 1) for _ in range(n)]
+        janela = [rng.choice(ATIVIDADES) for _ in range(rng.randrange(CC_E6.janela_tedio + 1))]
+        estados.append((q, janela))
+    return estados
+
+
+def _caso_e6(c: Corpo) -> dict:
+    rec = c.receptores()
+    return {"q_depois": _q(c), "janela_depois": list(c.janela_tedio), "receptores": [rec[r] for r in RECEPTORES_E6]}
+
+
+def etapa6() -> dict:
+    rng = random.Random(SEMENTE_CASOS + 6)
+    casos_e6 = []
+    for q, janela in _estados_e6(rng):
+        for op in _ops_e6():
+            c = _corpo_e6(q, janela)
+            _aplicar_e6(c, op)
+            casos_e6.append({"q": q, "janela": janela, "op": op, **_caso_e6(c)})
+    # a sequencia: um corpo so, do nascimento, 3000 operacoes sorteadas (o tick com o sono e a sujeira, e os estimulos)
+    c = Corpo.de_estado(Estado(), CONFIG_PADRAO, CC_E6, com_mundo=True)
+    ops, h = [], hashlib.sha256()
+    tick = 0
+    for _ in range(3000):
+        if rng.random() < 0.7:
+            op = ["passo", int(rng.random() < 0.3), rng.randrange(4), tick]
+            tick += 1
+        else:
+            op = rng.choice(_ops_e6()[8:])
+        _aplicar_e6(c, op)
+        ops.append(op)
+        h.update(json.dumps([_q(c), c.janela_tedio], separators=(",", ":")).encode())
+    return {"quimicos": list(quimicos_de(CC_E6, True)), "config": {k: getattr(CC_E6, k) for k in CAMPOS_E6},
+            "receptores": list(RECEPTORES_E6), "casos": casos_e6,
+            "sequencia": {"ops": ops, "sha256": h.hexdigest(), "q_final": _q(c), "janela_final": list(c.janela_tedio)}}
+
+
 def gabarito() -> dict:
     t = taxas_de(CONFIG_PADRAO, CC)
     taxas = {k: v for k, v in vars(t).items() if k not in ("dono", "pet")}
     taxas["dono"] = {a.value: d for a, d in t.dono.items()}
     taxas["pet"] = {a.value: d for a, d in t.pet.items()}
     return {
-        "versao": 3,
+        "versao": 4,
         "quimicos": list(quimicos_de(CC)),
         "escala": CC.escala,
         "escala_receptor": CC.escala_receptor,
@@ -240,6 +328,7 @@ def gabarito() -> dict:
                   "nutricao_fruta": CONFIG_MUNDO_LIGADA.nutricao_fruta, "efeito_podre": CONFIG_MUNDO_LIGADA.efeito_podre,
                   "casos": casos(CC, _ops_do_mundo()),
                   "digestao": {"quimicos": list(quimicos_de(CC_DIGESTAO)), "casos": casos(CC_DIGESTAO, _ops_do_mundo())}},
+        "etapa6": etapa6(),
     }
 
 
