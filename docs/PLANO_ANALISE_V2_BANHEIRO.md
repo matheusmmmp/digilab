@@ -1,6 +1,7 @@
 # Plano de análise — V2: o banheiro, o carinho e o limpador (W-PLANO-BANHEIRO)
 
-Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. Tarefa: `docs/TAREFA_V2_BANHEIRO.md` (#219), com BN-1 a BN-6
+Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **PB-1 a PB-5 DECIDIDAS pelo Matheus em 2026-10-07, todas pela
+recomendação** (seção 12). Tarefa: `docs/TAREFA_V2_BANHEIRO.md` (#219), com BN-1 a BN-6
 DECIDIDAS. É a etapa 0 da tarefa.
 
 **Regras deste plano:**
@@ -213,6 +214,8 @@ Se nenhuma passa, ficam 28 dias e o poder sai declarado.
 - **A recusa:** a run se recusa a rodar se a pasta de saída já existe.
 
 ## 12. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-07: PB-1 a PB-5, todas como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
