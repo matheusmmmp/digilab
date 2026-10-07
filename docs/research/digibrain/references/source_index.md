@@ -51,6 +51,26 @@ fora do git, `v1/docs/referencias/v3_referencias_verificadas.csv`). **CORPUS** =
 | Sakabe et al. 2025 | `10.1016/j.cogsys.2025.101397` | codificação de episódios | `episodic_memory.md` |
 | Pontes et al. 2020; Fortuna 2022 | `10.1086/706252`; `10.1098/rsos.220852` | evolução de aprendizado; plasticidade digital | `genome_plasticity.md` |
 
+## PISTAS da neurociência do automodelo (metadados conferidos no Crossref em 2026-10-07; texto não lido)
+
+| fonte | id | pista para | arquivos |
+|---|---|---|---|
+| Blakemore, Wolpert e Frith 1998 | `10.1038/2870` | cópia eferente e cancelamento da sensação da própria ação | `self_model.md` |
+| Haggard 2017 | `10.1038/nrn.2017.14` | senso de agência | `self_model.md` |
+| Craig 2002 | `10.1038/nrn894` | interocepção | `self_model.md` |
+| Seth 2013 | `10.1016/j.tics.2013.09.007` | inferência interoceptiva e eu corporificado | `self_model.md` |
+| Barrett e Simmons 2015 | `10.1038/nrn3950` | previsões interoceptivas | `self_model.md` |
+| Damasio e Carvalho 2013 | `10.1038/nrn3403` | sentimentos e homeostase | `self_model.md` |
+| Gallagher 2000 | `10.1016/s1364-6613(99)01417-5` | eu mínimo e eu narrativo | `self_model.md` |
+| Graziano e Webb 2015 | `10.3389/fpsyg.2015.00500` | esquema de atenção | `self_model.md` |
+| Daw, Niv e Dayan 2005 | `10.1038/nn1560` | arbitragem modelo × hábito | `self_model.md` |
+| Behrens et al. 2018 | `10.1016/j.neuron.2018.10.002` | mapa cognitivo | `self_model.md` |
+| Hart 1988 | `10.1016/s0149-7634(88)80004-6` | comportamento de doença | `self_model.md` |
+| Dantzer et al. 2008 | `10.1038/nrn2297` | inflamação e comportamento de doença | `self_model.md` |
+| Friston 2010 | `10.1038/nrn2787` | energia livre (moldura) | `self_model.md` |
+
+Wolpert, Ghahramani e Jordan 1995 (`10.1126/science.7569931`) é pista do mesmo tipo, registrada no `docs/futuro/ego_existencia.md`.
+
 ## NÃO VERIFICADAS EM FONTE PRIMÁRIA / NÃO LOCALIZADAS
 
 - Mecanismo de vício do Creatures: sem fonte primária. Creatures Wiki: pista de fã.
