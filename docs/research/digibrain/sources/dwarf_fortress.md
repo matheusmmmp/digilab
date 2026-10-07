@@ -30,3 +30,12 @@ evento, emoção atual e persistência da memória mudam juntas.
   decide nada**: é episódio armazenado e narrado, não causal.
 - Decisão D7 (`docs/DEFINICOES_V2.md`): na V2, espaços só como regra de engenharia; relembrar (L2) e duas prioridades (L3)
   como candidatas; memória nuclear e estresse adiados (abrem outro canal de cuidado).
+
+
+## Revisão de 2026-10-07 (pedido do Matheus)
+
+- **Adams 2021** segue VERIFICADA (Crossref conferido de novo: capítulo de livro, `10.1515/9783839453452-007`).
+- **Fonte nova a ler:** Short e Adams (orgs.), *Procedural Storytelling in Game Design*, CRC Press, 2019, `10.1201/9780429488337`
+  (livro, metadados conferidos no Crossref em 2026-10-07; conteúdo não lido). Tem capítulos de Tarn Adams, o autor do Dwarf Fortress.
+- **Para os detalhes de mecânica,** a fonte primária possível são os **arquivos de dados do próprio jogo** (as "raws", texto distribuído com
+  ele), como o manual do Creatures 3: documentação de produto. A wiki da comunidade continua NÃO VERIFICADA EM FONTE PRIMÁRIA.

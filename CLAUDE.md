@@ -1165,6 +1165,16 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: escada de cognição social** (`docs/futuro/cognicao_social.md`, Matheus, 2026-10-04): dois pets trocando informação com
   fonte e confiança, podendo chegar a reputação, normas, tradição e convenção simbólica; os degraus altos são pergunta, não feature.
   Separa herdado, vivido e aprendido de outros. Primeiro passo possível: pet sintético informante no N5. Não autoriza implementação.
+- **DECIDIDO: o pet do produto aprende sozinho, sem elogiar e repreender** (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, Matheus,
+  2026-10-07; era o R8.1): os botões saem dos pets novos (v1–v10 iguais); o pet aprende pela consequência, como o reforço químico do
+  Creatures 3; acariciar fica e o tapa entra como
+  desaprovação, os dois como estímulos no corpo. Antes de ligar: drives que recompensem brincar e o contato (senão o pet fica parado).
+  O plano do porte (#201) precisa inverter a seção 1.2 e a D-W1.
+
+- **DECIDIDO o objetivo: ego do pet** (`docs/futuro/ego_existencia.md`, Matheus, 2026-10-07): o pet tem ego, questiona a própria
+  existência e fala sobre isso; o automodelo **tem corpo** e é **aprendido por uma rede** (a rede de si, por erro de previsão; o
+  pet estima, o motor e as sondas avaliam). Implica rever a regra "só a Decisão aprende" (E-6). O corpo segue os conceitos do
+  Creatures 3 (química, receptores, órgãos, Vida; E-7 decidido). O como é PROPOSTO, por etapas com tarefa e plano.
 - **IDEIA: aura do herói** (`docs/futuro/aura_do_heroi.md`, Matheus, 2026-10-03): retrato da lista de gambits de um pet que lutou
   muito, vendido na loja como item de 2 lutas que empresta esse conhecimento a outro pet. Depende de loja e moeda (ainda ideia);
   divide a peça técnica com o PvP com ghost. Não autoriza implementação.

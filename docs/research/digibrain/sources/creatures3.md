@@ -34,3 +34,18 @@ um módulo. É a família de origem do **DigiBrain A (C3-like)** em `synthesis/b
   substrato herdado de aprendido; no E1 explicou 4,9% da variância (`artifacts_linhagem/natureza_criacao/`).
 - Precedente da revisão: Creatures é o único sistema em que criação e seleção pelo usuário aconteceram juntas e em
   escala, mas o registro é descritivo, não fatorial (`literatura-digilab`).
+
+
+## Revisão de 2026-10-07 (pedido do Matheus)
+
+- **Manual lido.** O *Creatures 3 Genetics Kit Manual* (Creature Labs, distribuído oficialmente na Steam) foi lido em 2026-10-07. Os
+  conceitos do corpo estão resumidos em `docs/futuro/ego_existencia.md`, seção 2.1: químicos com meia-vida, reações, receptores,
+  emissores, estímulos, órgãos com força vital, ATP, drives como químicos, o químico da Vida e os sete estágios, e o genoma. Continua
+  documentação de produto (CORPUS), não demonstração revisada por pares.
+- **Reforço.** O manual descreve os químicos **Recompensa** ("usado pelo cérebro para reforçar ações boas"), **Punição** ("para desencorajar
+  ações ruins") e **Decepção** (quando o pet tenta uma ação que não é permitida). Pela análise dos arquivos do jogo feita no NORNBRAIN
+  (pista), o ciclo é automático: ações disparam estímulos, estímulos mudam químicos, químicos mudam drives, e daí saem a recompensa e a
+  punição. Acariciar e dar um tapa com a mão do jogador são estímulos como os outros (os estímulos 1 e 3 da tabela de estímulos), que
+  passam pelo mesmo corpo. Base da decisão `docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`.
+- **Status que não muda:** as fontes verificadas continuam sendo Grand, Cliff e Malhotra 1997, Grand e Cliff 1998 e Cliff e Grand 1999. O
+  livro de Grand 2001 continua com conteúdo não lido. O vício segue sem fonte primária.
