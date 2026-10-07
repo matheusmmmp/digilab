@@ -3258,3 +3258,43 @@ Etapa 2 da seção 9 de `docs/TAREFA_V2_MUNDO_FISICO.md` (MF-1 a MF-4 decididas)
   - **`visitas`**: a mancha de 3 células de cada árvore, com a chegada, a saída e as decisões tomadas de dentro;
   - **`quedas`**: as sorteadas, os pontos e as colocadas, do fluxo que não depende do pet;
   - **`consumos_mundo`, `deixadas` e `sumidas`**.
+
+## 2026-10-07 — Os órgãos 1 e 2 do corpo: a digestão e a Vida (W-CORPO-DIGESTAO, rodada 17, etapas 3 e 4): interpretações
+
+Tarefa `docs/TAREFA_V2_CORPO_DRIVES.md`, seções 5, 6 e 14 (CD-1 a CD-10 decididas). Só `digilab/corpo.py`, a `ConfigCorpo`, o exportador e os
+testes. Motor, `engine.py`, `lobos.py` e a web não mudaram. Só as sementes dos testes.
+
+- **O que sobra no estômago quando a fome chega a 0 é descartado.** A seção 5 dá a reação `t = min(alimento, fome, taxa)`, mas não diz o
+  que acontece com o resto.
+  - Hoje a fome é cortada em 1 e o excesso da comida se perde; o descarte reproduz esse corte.
+  - Sem ele, a comida a mais ficaria no estômago e seguraria a fome depois, mudando os drives de hoje na taxa C (o G-HOJE falharia).
+  - Com a digestão lenta, o descarte também vale: o pet saciado não aproveita o que sobra.
+  - É uma decisão de desenho, registrada aqui. O total descartado fica exposto (`descartado_total`).
+- **A taxa é por tick, e a comida é digerida na hora em que entra,** com o que resta da taxa naquele tick. Na taxa C isso é o "tudo no
+  mesmo tick" da CD-3: a fome lida depois do alimentar é a de hoje, também na decisão que vem logo depois, no mesmo tick.
+  - Se a comida esperasse o próximo tick, a decisão logo depois do alimentar veria a fome de antes, e o G-HOJE falharia.
+  - **O limite de C por tick só morde se a fome subir dentro do próprio tick depois de zerar** (por exemplo, três refeições, o brincar do
+    dono e uma quarta refeição no mesmo passo). Nas vidas do G-HOJE isso não acontece: o estômago fica vazio depois de toda operação, e a
+    química com a digestão é a da etapa 1, químico a químico (testes).
+- **O que é comida:** a ração do alimentar, o comer do pet e a nutrição da fruta. O custo de fome do brincar do dono não é comida; ele
+  continua mexendo direto na fome. O efeito da fruta no humor vai direto à tristeza, não pelo estômago.
+- **O digerido do tick** (`digerido_no_tick`) é o do último tick fechado, ingestões e passo juntos. É o que a vontade do banheiro vai ler
+  (`docs/TAREFA_V2_BANHEIRO.md`, seção 3).
+- **v = 11** = C // (28 × 1440): a Vida dura a vida mais longa da pesquisa, os 28 dias do bloco de durações do adendo 3. A seção 6 diz que
+  o v "sai da duração máxima de vida da pesquisa"; a leitura foi essa.
+- **Os ticks de estágio de hoje** são os de `treino_stats.estagio_no_tick`, com a `ConfigEvolucaoPesquisa` do motor (a de hoje e a
+  canônica da `ConfigDuracoes`). O `Corpo` recebe a `cfg_evo`.
+  - O teste confere tick a tick, nas três durações, do nascimento até depois do fim da Vida.
+  - Nos motores com estágio (o `MotorTreino` e o `MotorEducacao`), os ticks das transições gravadas no motor batem com os cruzamentos da
+    Vida.
+  - O motor só troca de estágio num checkpoint. Os ticks de estágio (180, 900, 1980; 360, 1800, 3960) caem em decisões, então batem
+    exatos.
+- **A Vida não mata:** em 0, fica em 0, e o estágio fica adulto. Um limiar que não fica acima de 0 (a Vida acabaria antes do estágio)
+  falha alto ao montar o corpo.
+- **Sem receptor para o cérebro:** nem o `alimento` nem a `vida` entram nos `receptores()`. O `estagio()` é do motor.
+- **O gabarito da paridade** (`tests/gabaritos/corpo_quimica_python.json`, versão 2) ganhou:
+  - a digestão na taxa C;
+  - a grade com uma taxa lenta (1000), que é só para a paridade da reação, não um valor de pesquisa;
+  - a Vida, com os limiares nas duas durações, a grade em volta deles e as vidas com os ticks de estágio.
+
+  As partes da etapa 1 não mudaram.

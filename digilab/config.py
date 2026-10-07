@@ -1441,9 +1441,11 @@ CONFIG_JULGAMENTO_FRUTA_LIGADA = ConfigJulgamentoFruta(ligada=True)
 @dataclass(frozen=True)
 class ConfigCorpo:
     """V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md; CD-1 a CD-10 decididas). A quimica guarda a
-    FALTA de cada drive em inteiros de [0, escala]; o drive de hoje e a leitura (escala - q) / escala. Etapa 1 (W-CORPO-QUIMICA): so a
-    quimica dos drives de hoje, sem orgao (`ligada`); as sub-chaves das etapas seguintes falham alto se ligadas. Cada sub-chave exige a
-    anterior (E-9, um orgao por vez). Desligada: nada existe (a vida de hoje byte a byte). Status em corpo.PARAMETROS_CORPO."""
+    FALTA de cada drive em inteiros de [0, escala]; o drive de hoje e a leitura (escala - q) / escala. Etapa 1 (W-CORPO-QUIMICA): a
+    quimica dos drives de hoje, sem orgao (`ligada`). Etapas 3 e 4 (W-CORPO-DIGESTAO): o orgao 1, a digestao (`digestao`), e o orgao 2, a
+    Vida (`vida`). As sub-chaves das
+    etapas seguintes falham alto se ligadas. Cada sub-chave exige a anterior (E-9, um orgao por vez). Desligada: nada existe (a vida de
+    hoje byte a byte). Status em corpo.PARAMETROS_CORPO."""
 
     ligada: bool = False
     digestao: bool = False                   # etapa 3, orgao 1 (secao 5)
@@ -1464,6 +1466,12 @@ class ConfigCorpo:
     k_meia_vida_susto: int = 1497            # h = 30 (secao 8)
     k_meia_vida_dor: int = 753               # h = 60 (secao 8)
     k_meia_vida_estresse: int = 32           # h = 1440 (secao 7)
+    # orgao 1, a digestao (secao 5): quanto `alimento` passa para a fome por tick. C = tudo no mesmo tick (CD-3, a fome de hoje); uma
+    # taxa menor e a digestao lenta, PROPOSTA, que so entra com o plano
+    taxa_digestao: int = 450000
+    # orgao 2, a Vida (secao 6): quanto a Vida cai por tick. C // (28 dias x 1440) = 11: a Vida dura a vida mais longa da pesquisa (os 28
+    # dias do bloco de duracoes do adendo 3) e nao muda nada nesta etapa
+    vida_decaimento: int = 11
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
@@ -1471,10 +1479,14 @@ class ConfigCorpo:
         for (anterior, ligou_antes), (nome, ligou) in zip(ordem, ordem[1:]):
             if ligou and not ligou_antes:
                 raise ValueError(f"ConfigCorpo.{nome} exige ConfigCorpo.{anterior} (E-9: um orgao por vez)")
-        pendentes = [nome for nome, ligou in ordem[1:] if ligou]
+        pendentes = [nome for nome, ligou in ordem[3:] if ligou]
         if pendentes:
-            raise NotImplementedError(f"ConfigCorpo: {pendentes} ainda nao existem (W-CORPO-QUIMICA e so a etapa 1; "
+            raise NotImplementedError(f"ConfigCorpo: {pendentes} ainda nao existem (W-CORPO-DIGESTAO vai ate a etapa 4; "
                                       "docs/TAREFA_V2_CORPO_DRIVES.md, secao 14)")
+        if self.taxa_digestao <= 0:
+            raise ValueError(f"ConfigCorpo.taxa_digestao tem de ser positiva: {self.taxa_digestao}")
+        if self.vida_decaimento <= 0:
+            raise ValueError(f"ConfigCorpo.vida_decaimento tem de ser positivo: {self.vida_decaimento}")
 
 
 CONFIG_CORPO = ConfigCorpo()

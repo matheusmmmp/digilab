@@ -1,6 +1,6 @@
-"""O corpo do Creatures 3 por baixo dos drives (V2, W-CORPO-QUIMICA; docs/TAREFA_V2_CORPO_DRIVES.md, etapa 1 da secao 14).
+"""O corpo do Creatures 3 por baixo dos drives (V2, W-CORPO-QUIMICA e W-CORPO-DIGESTAO; docs/TAREFA_V2_CORPO_DRIVES.md, secao 14).
 
-Etapa 1: so a quimica dos drives de hoje, sem orgao (secao 4). Cinco quimicos guardam a FALTA de cada drive, em inteiros de [0, C]:
+Etapa 1: a quimica dos drives de hoje, sem orgao (secao 4). Cinco quimicos guardam a FALTA de cada drive, em inteiros de [0, C]:
 
     fome         -> fome      (o drive lido e (C - q) / C)
     desconforto  -> higiene
@@ -10,6 +10,16 @@ Etapa 1: so a quimica dos drives de hoje, sem orgao (secao 4). Cinco quimicos gu
 
 Os numeros sao os de hoje, convertidos para a escala C = 450000 (CD-1): o mmc dos denominadores das taxas de hoje, entao toda taxa e
 todo efeito de hoje viram inteiros exatos. A conversao confere isso ao montar as taxas e falha alto se um numero sair da grade.
+
+Etapa 3, o orgao 1 (secao 5, sub-chave `digestao`): a comida (a racao, o comer, a nutricao da fruta) entra como o quimico `alimento`, e
+a reacao da digestao tira `alimento` e a mesma quantidade de `fome`, ate `taxa_digestao` por tick. Na taxa C (CD-3) tudo passa no mesmo
+tick, e a fome lida e a de hoje. O que sobra no estomago quando a fome chega a 0 e descartado: e o corte de hoje (a fome nao passa de 1).
+O corpo expoe quanto digeriu em cada tick (a vontade do banheiro, docs/TAREFA_V2_BANHEIRO.md, secao 3, sobe com ele).
+
+Etapa 4, o orgao 2 (secao 6, sub-chave `vida`): o quimico `vida` comeca em C ao nascer e decai `vida_decaimento` por tick. Receptores sobre
+a Vida mudam o estagio nos limiares C - v x tick_do_estagio, com os ticks de estagio de hoje (as duracoes da ConfigEvolucaoPesquisa, as
+mesmas de treino_stats.estagio_no_tick): o estagio pela Vida e o de hoje, tick a tick. A Vida nao mata nesta etapa (em 0, fica em 0) e
+nao tem receptor para o cerebro.
 
 Componente puro: nao e motor, nao sorteia (nenhuma rng), nao le o cerebro. A sujeira e o sono continuam estados do `Estado` (o motor
 sorteia a sujeira como hoje); o corpo so os le. Quem liga o corpo ao motor e o A (etapa 2, `MotorCorpo`).
@@ -23,20 +33,30 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo
+from .config import CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo, ConfigEvolucaoPesquisa
 from .events import AcaoPet, AcaoUsuario
 from .state import Estado
 
 QUIMICOS = ("fome", "desconforto", "cansaco", "tristeza", "dano")
 DRIVE_DO_QUIMICO = {"fome": "fome", "desconforto": "higiene", "cansaco": "energia", "tristeza": "humor", "dano": "saude"}
 QUIMICOS_DA_PRIVACAO = ("fome", "desconforto", "cansaco")       # Estado.em_privacao: fome, higiene e energia (humor nao conta)
+ORGAO_DIGESTAO = ("alimento",)                                    # sem receptor para o cerebro (secao 5)
+ORGAO_VIDA = ("vida",)                                            # sem receptor para o cerebro (secao 6)
+ESTAGIOS = ("bebe", "crianca", "adolescente", "adulto")           # os de treino_stats.estagio_no_tick, na ordem
+
+
+def quimicos_de(cc: ConfigCorpo) -> tuple[str, ...]:
+    """Os quimicos que o corpo tem com estas chaves: os cinco de hoje e os de cada orgao ligado."""
+    return QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ())
+
+
 TOLERANCIA_GRADE = 1e-6                                           # quanto um numero de hoje x C pode fugir de um inteiro (so erro de float)
 
 # Status dos campos da ConfigCorpo (conferido por teste). Todos PROPOSTOS, nenhum referendado.
 PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "ligada": ("PROPOSTO", "TAREFA_V2_CORPO_DRIVES, secao 2: a quimica dos drives de hoje (etapa 1)"),
-    "digestao": ("PROPOSTO", "secao 5, etapa 3 (orgao 1); falha alto nesta etapa"),
-    "vida": ("PROPOSTO", "secao 6, etapa 4 (orgao 2); falha alto nesta etapa"),
+    "digestao": ("PROPOSTO", "secao 5, etapa 3 (orgao 1, W-CORPO-DIGESTAO)"),
+    "vida": ("PROPOSTO", "secao 6, etapa 4 (orgao 2, W-CORPO-DIGESTAO)"),
     "drives_novos": ("PROPOSTO", "secao 7, etapa 6; falha alto nesta etapa"),
     "gestos": ("PROPOSTO", "secao 8, etapa 6; falha alto nesta etapa"),
     "escala": ("DECIDIDO", "CD-1: C = 450000, o mmc dos denominadores das taxas de hoje (#210)"),
@@ -50,6 +70,8 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "k_meia_vida_susto": ("PROPOSTO", "secao 8: meia-vida 30, sem fonte; k pela regra da secao 3"),
     "k_meia_vida_dor": ("PROPOSTO", "secao 8: meia-vida 60, sem fonte; k pela regra da secao 3"),
     "k_meia_vida_estresse": ("PROPOSTO", "secao 7: meia-vida 1440, sem fonte; k pela regra da secao 3"),
+    "taxa_digestao": ("DECIDIDO", "CD-3: C, tudo no mesmo tick (a fome de hoje); a digestao lenta so com o plano (#210)"),
+    "vida_decaimento": ("PROPOSTO", "secao 6: C // (28 dias x 1440), a vida mais longa da pesquisa (o bloco de duracoes do adendo 3)"),
 }
 
 
@@ -150,32 +172,68 @@ def taxas_de(cfg: Config, cc: ConfigCorpo) -> TaxasCorpo:
     )
 
 
+# ------------------------------------------------------------------ orgao 2: os limiares da Vida
+
+def ticks_de_estagio(cfg_evo: ConfigEvolucaoPesquisa) -> tuple[int, int, int]:
+    """Os ticks em que o estagio de hoje muda (treino_stats.estagio_no_tick): fim do bebe, da crianca e do adolescente."""
+    t1 = cfg_evo.dur_bebe_min
+    t2 = t1 + cfg_evo.dur_crianca_min
+    return t1, t2, t2 + cfg_evo.dur_adolescente_min
+
+
+def limiares_estagio(cc: ConfigCorpo, cfg_evo: ConfigEvolucaoPesquisa) -> tuple[int, ...]:
+    """Os limiares dos receptores de estagio: C - v x T para cada tick de estagio T. Um limiar que nao fica acima de 0 falha alto: a Vida
+    acabaria antes do estagio e o receptor nunca o veria."""
+    lim = tuple(cc.escala - cc.vida_decaimento * t for t in ticks_de_estagio(cfg_evo))
+    if any(x <= 0 for x in lim):
+        raise ValueError(f"a Vida acaba antes de um estagio: limiares {lim} (v = {cc.vida_decaimento}, ticks {ticks_de_estagio(cfg_evo)})")
+    return lim
+
+
 # ------------------------------------------------------------------ o corpo
 
 class Corpo:
-    """A quimica dos drives de hoje. `q` guarda a falta de cada quimico em [0, C]. Nao sorteia; a sujeira e o sono vem do Estado."""
+    """A quimica dos drives de hoje e os orgaos ligados. `q` guarda cada quimico em [0, C] (a falta, nos de hoje). Nao sorteia; a sujeira
+    e o sono vem do Estado."""
 
-    def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None) -> None:
+    def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
+                 cfg_evo: ConfigEvolucaoPesquisa | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
+        self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
         if not self.cc.ligada:
             raise ValueError("Corpo com ConfigCorpo desligada: com a chave desligada o corpo nao existe")
-        if set(q) != set(QUIMICOS):
-            raise ValueError(f"quimicos do corpo: esperava {QUIMICOS}, veio {sorted(q)}")
+        self.quimicos = quimicos_de(self.cc)
+        if set(q) != set(self.quimicos):
+            raise ValueError(f"quimicos do corpo: esperava {self.quimicos}, veio {sorted(q)}")
         for nome, v in q.items():
             if not isinstance(v, int) or isinstance(v, bool) or not 0 <= v <= self.cc.escala:
                 raise ValueError(f"concentracao de {nome} fora de [0, {self.cc.escala}] ou nao inteira: {v!r}")
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
-        self.q = {nome: q[nome] for nome in QUIMICOS}
+        self.q = {nome: q[nome] for nome in self.quimicos}
+        # orgao 1: o que passou do estomago para a fome (no tick corrente, no ultimo tick fechado e no total) e o que se descartou
+        self.digerido_tick = 0
+        self.digerido_no_tick = 0
+        self.digerido_total = 0
+        self.descartado_total = 0
+        # orgao 2: os limiares dos receptores de estagio sobre a Vida
+        self.limiares_estagio = limiares_estagio(self.cc, self.cfg_evo) if self.cc.vida else ()
 
     @classmethod
-    def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None) -> Corpo:
-        """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C."""
-        C = (cc or ConfigCorpo(ligada=True)).escala
+    def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
+                  cfg_evo: ConfigEvolucaoPesquisa | None = None) -> Corpo:
+        """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
+        Estado (C no nascimento)."""
+        cc = cc or ConfigCorpo(ligada=True)
+        C = cc.escala
         q = {nome: na_grade(1.0 - getattr(estado, drive), C, f"Estado.{drive}") for nome, drive in DRIVE_DO_QUIMICO.items()}
-        return cls(q, cfg, cc)
+        if cc.digestao:
+            q["alimento"] = 0                    # o Estado de hoje nao tem estomago: comeca vazio
+        if cc.vida:
+            q["vida"] = max(0, C - cc.vida_decaimento * estado.tick)
+        return cls(q, cfg, cc, cfg_evo)
 
     # ---------------------------------------------------------- estimulos
 
@@ -183,16 +241,26 @@ class Corpo:
         for nome, d in deltas.items():
             self.q[nome] = min(self.C, max(0, self.q[nome] + d))
 
+    def _efeito(self, deltas: dict[str, int], comida: bool) -> None:
+        """Os deltas de uma acao; com a digestao, o que a comida tira da fome vai para o estomago."""
+        if comida and self.cc.digestao:
+            self._somar({k: v for k, v in deltas.items() if k != "fome"})
+            self._ingerir(-deltas["fome"])
+        else:
+            self._somar(deltas)
+
     def acao_dono(self, acao: AcaoUsuario) -> None:
         """O efeito de state.aplicar_acao_usuario nos drives. A sujeira (limpar, e o sorteio do alimentar) e o sono (o brincar acorda)
-        continuam no Estado, com o motor. Acao fora das seis de hoje falha alto: as outras sao estimulos proprios ou de outra etapa."""
+        continuam no Estado, com o motor. Acao fora das seis de hoje falha alto: as outras sao estimulos proprios ou de outra etapa.
+        A racao (alimentar) e comida; o custo de fome do brincar do dono nao."""
         if acao not in self.t.dono:
             raise ValueError(f"acao do dono sem estimulo no corpo nesta etapa: {acao.value}")
-        self._somar(self.t.dono[acao])
+        self._efeito(self.t.dono[acao], acao is AcaoUsuario.ALIMENTAR)
 
     def acao_pet(self, acao: AcaoPet) -> None:
-        """O efeito de policy.efeito_da_acao_do_pet nos drives, na decisao, antes do tick. O sono (dormir) fica no Estado."""
-        self._somar(self.t.pet[acao])
+        """O efeito de policy.efeito_da_acao_do_pet nos drives, na decisao, antes do tick. O sono (dormir) fica no Estado. O comer e
+        comida."""
+        self._efeito(self.t.pet[acao], acao is AcaoPet.COMER)
 
     def estimulo_bola(self, ganho_humor: float) -> None:
         """Brincar com a bola no cenario (MotorAmbiente, A1): humor + ganho_humor_bola."""
@@ -200,8 +268,30 @@ class Corpo:
 
     def estimulo_fruta(self, nutricao: float, efeito_humor: float) -> None:
         """Comer uma fruta (MotorFrutas, N4): fome + nutricao e humor + o efeito da fruta (E2). Sem a digestao (etapa 3), direto na fome."""
-        self._somar({"fome": -na_grade(nutricao, self.C, "nutricao"),
-                     "tristeza": -na_grade(efeito_humor, self.C, "efeito_humor")})
+        self._efeito({"fome": -na_grade(nutricao, self.C, "nutricao"),
+                      "tristeza": -na_grade(efeito_humor, self.C, "efeito_humor")}, True)
+
+    # ---------------------------------------------------------- orgao 1: a digestao
+
+    def _ingerir(self, quantidade: int) -> None:
+        """A comida vai ao estomago (cortado em C) e a digestao anda na hora, com o que resta da taxa do tick."""
+        if quantidade < 0:
+            raise ValueError(f"comida negativa: {quantidade}")
+        self.q["alimento"] = min(self.C, self.q["alimento"] + quantidade)
+        self._digerir()
+
+    def _digerir(self) -> None:
+        """A reacao da secao 5: t = min(alimento, fome, o que resta de taxa_digestao no tick); tira t do alimento e da fome. Com a fome em
+        0 e comida no estomago, o resto e descartado (o corte de hoje: a fome nao passa de 1)."""
+        t = min(self.q["alimento"], self.q["fome"], self.cc.taxa_digestao - self.digerido_tick)
+        if t > 0:
+            self.q["alimento"] -= t
+            self.q["fome"] -= t
+            self.digerido_tick += t
+            self.digerido_total += t
+        if self.q["fome"] == 0 and self.q["alimento"] > 0:
+            self.descartado_total += self.q["alimento"]
+            self.q["alimento"] = 0
 
     # ---------------------------------------------------------- o tick
 
@@ -213,6 +303,8 @@ class Corpo:
         """Um tick, na ordem de state.avancar_um_tick. `antes` e o Estado no comeco do tick: a sujeira, o sono e a hora vem dele.
         1) fome, desconforto, tristeza e cansaco; 2) o motor sorteia a sujeira (fora daqui); 3) o corte; 4) o dano pelo receptor."""
         t = self.t
+        if self.cc.digestao:
+            self._digerir()                       # o que ficou no estomago, com o que resta da taxa deste tick
         cansaco = t.cansaco_dormindo if antes.dormindo else (
             t.cansaco_noite if self.cfg.e_noite(antes.tick % TICKS_POR_DIA) else t.cansaco_acordado)
         self._somar({
@@ -222,6 +314,11 @@ class Corpo:
             "cansaco": cansaco,
         })
         self._somar({"dano": t.dano_privacao if self.em_privacao() else t.dano_cura})
+        if self.cc.digestao:
+            self.digerido_no_tick = self.digerido_tick          # o tick fechou: a taxa volta inteira no proximo
+            self.digerido_tick = 0
+        if self.cc.vida:
+            self.q["vida"] = max(0, self.q["vida"] - self.cc.vida_decaimento)   # nao mata: em 0, fica em 0
 
     # ---------------------------------------------------------- leituras
 
@@ -241,5 +338,18 @@ class Corpo:
         """O que o pet sente dos drives de hoje, na escala S: o drive lido, S - falta (secao 10). Nesta etapa todos tem receptor."""
         return {DRIVE_DO_QUIMICO[nome]: self.S - self.falta(nome) for nome in QUIMICOS}
 
+    def estagio(self) -> str:
+        """Os receptores de estagio sobre a Vida (so com o orgao 2): o estagio e o numero de limiares que a Vida ja cruzou. Com a Vida
+        em C - v x tick, cruzar C - v x T e o mesmo que tick >= T: o estagio de hoje, exato. Nao vai ao cerebro."""
+        if not self.cc.vida:
+            raise ValueError("estagio pela Vida sem o orgao 2 (ConfigCorpo.vida desligada)")
+        return ESTAGIOS[sum(1 for limiar in self.limiares_estagio if self.q["vida"] <= limiar)]
+
     def para_dict(self) -> dict:
-        return {"q": dict(self.q)}
+        d = {"q": dict(self.q)}
+        if self.cc.digestao:
+            d["digestao"] = {"digerido_no_tick": self.digerido_no_tick, "digerido_total": self.digerido_total,
+                             "descartado_total": self.descartado_total}
+        if self.cc.vida:
+            d["estagio"] = self.estagio()
+        return d
