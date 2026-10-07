@@ -204,10 +204,17 @@ flexibilidade de um robô. É um estudo, num robô.
 
 ## Decisões que só o Matheus pode tomar
 
+**D-1 a D-7: DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** ("faz o merge e segue as recomendações").
+- D-1 e D-2: a quarta passada do Claude Science (`docs/TAREFA_V2_CLAUDE_SCIENCE_LITERATURA_4.md`).
+- D-3: a seção 18 da `docs/TAREFA_V2_CORPO_DRIVES.md`.
+- D-4: a medida de dominância vai a um adendo do plano do corpo (chat C) e às medidas da bancada (chat D).
+- D-5 e D-6: só ordem, sem tarefa agora.
+- D-7: regra para o plano do automodelo, quando ele existir.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | D-1 | Ler o PDF de Dittrich & Speroni di Fenizio 2007 (e o de Lones et al. 2018) antes de citá-los, ou seguir sem eles | **ler antes.** Até lá, o critério "fechado e automantido" fica como desenho nosso, sem citação | citar sem ler põe na boca do artigo algo que ele talvez não diga; não citar só custa a atribuição |
-| D-2 | Pedir a leitura do texto completo de Grand, Cliff e Malhotra 1997 para confirmar receptores, emissores, meias-vidas e drives como químicos | **sim**, numa próxima passada do Claude Science | sem isso, "nosso corpo segue o Creatures" fica sustentado só por duas frases de resumo e pelo manual |
+| D-2 | Pedir a leitura do texto completo de Grand, Cliff e Malhotra 1997 para confirmar receptores, emissores, meias-vidas e drives como químicos | **sim**, numa próxima passada do Claude Science (DECIDIDO) | sem isso, "nosso corpo segue o Creatures" fica sustentado só por duas frases de resumo e pelo manual |
 | D-3 | Adotar o grafo de reações como artefato validado antes da run (seção 2), antes da etapa 6 | **sim**, como tarefa curta do B junto com a etapa 6 | sem ele, um laço de ganho ≥ 1 ou um químico sem sumidouro aparece só na run, e a calibração tenta compensar um defeito de estrutura |
 | D-4 | Manter os `w_d` fixos e medir a dominância (seção 3), em vez de pôr peso dinâmico já | **manter fixos e medir** | peso dinâmico sem medida é mais um parâmetro livre; se a dominância existir e não for medida, o corpo vira um drive só |
 | D-5 | Abrir a frente dos órgãos com dano, cura e morte (seção 5) agora ou depois dos drives novos | **depois** dos drives novos, do banheiro e do mundo na bancada, com plano próprio e as quatro medidas | abrir agora mistura três mecânicas novas na mesma run, e um "aprendeu a evitar" não se separa de "morreram os que não evitavam" |

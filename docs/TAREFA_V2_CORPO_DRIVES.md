@@ -530,3 +530,36 @@ tradução para a regra abaixo é nossa, e os números são PROPOSTOS, **sem fon
 - a PR-5 (o tédio médio) segue igual.
 
 **Donos de arquivo:** B, em `corpo.py` (a janela e a regra), e A, no motor (avisar a atividade ao corpo).
+
+## 18. O grafo de reações validado antes da run (D-3, 2026-10-07)
+
+Decisão D-3 de `docs/DEFINICOES_CORPO_V2.md`, tomada pelo Matheus pela recomendação. **Vale antes da etapa 6** (drives novos e gestos),
+que é o primeiro ponto em que o corpo ganha laços: o estresse lê os outros drives, e o carinho reduz o estresse e a solidão.
+
+**Dono:** B, em `corpo.py` (ou num módulo dele ao lado), com `tests/test_corpo_grafo.py`. Entra no mesmo PR da etapa 6 ou num PR curto
+antes dela.
+
+**O artefato.** O grafo do corpo é declarado como dado, uma tabela única no código. Cada entrada tem:
+- os químicos;
+- as reações, com os químicos que consomem e os que produzem;
+- os emissores, com o que os dispara;
+- os receptores, com o que leem;
+- as meias-vidas;
+- os tetos com descarte.
+
+O `Corpo` usa essa tabela, e a checagem lê a mesma tabela. Assim não existem duas listas que podem divergir.
+
+**As checagens estáticas**, que rodam em teste e na carga do `Corpo` com qualquer sub-chave ligada e falham alto:
+1. **Sumidouro:** todo químico tem pelo menos um caminho de consumo, seja uma reação que o gasta, uma meia-vida ou um teto com descarte.
+2. **Laço de ganho:** no grafo receptor → emissor, nenhum ciclo pode ter produto de ganhos ≥ 1, contado em inteiros. Um ciclo assim é
+   recusado.
+3. **Fechado:** nenhuma reação produz químico fora da tabela.
+4. **Automantido:** nenhum químico consumido fica sem reposição ou sem teto declarado.
+
+**O relato:** a checagem lista, sem recusar, os pares acoplados com meias-vidas na mesma ordem. É o risco de oscilação.
+
+**Na run:** a bancada conta os ticks no teto, por químico. É medida, não gate.
+
+O critério "fechado e automantido" é **desenho nosso**. A literatura que a sessão citou para ele ainda não foi lida (D-1).
+
+**Gate:** com as sub-chaves de hoje (química, digestão, Vida), a checagem passa e as vidas não mudam (G2).
