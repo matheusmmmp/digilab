@@ -2841,3 +2841,16 @@ Sinal verde do coordenador, autorizado pelo Matheus, depois do #191 e do #192 (m
 - **Os descritivos não mudam nada:** o poder simulado no N da run e o N que a simulação daria nestes dados (35) ficam como descrição. O N
   da run é o do adendo 2.
 - **As vidas** (3 GB) ficam fora do git (`.gitignore`); os resultados, as medidas e os metas (~15 MB) entram.
+
+## 2026-10-06 — Validação única: o controle "só cuidado" fica como limitação declarada
+
+- **O problema.** Na validação única (PR #193, `docs/RESULTADO_V2_VALIDACAO_UNICA.md`), a separação do cuidado (seção 5.1 do plano) falha
+  nos braços com dono:
+  - **condição (a):** P2, P2e e P3 não diferem do próprio só cuidado;
+  - **condição (b):** o só cuidado acoplado cuida pior que o original, porque rejoga o cuidado em malha aberta, sem reagir ao pet.
+- **Decisão do Matheus (2026-10-06): o resultado fica como está, com a limitação declarada.**
+  - As predições 3 e 5 confirmam pelo contraste. Pelo critério registrado, não contam como ensino.
+  - O controle acoplado em malha aberta pode não ser o controle certo nesta montagem.
+  - Nada é refeito nestas sementes. Um controle melhor do cuidado (em malha fechada, ou pareado de outro jeito) fica para uma pergunta
+    nova, com plano próprio.
+- **Pendente antes da leitura final:** o texto completo do Eliassen et al. 2009 (L-1).
