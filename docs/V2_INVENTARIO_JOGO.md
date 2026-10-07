@@ -117,6 +117,7 @@ da web em que entrou (`VERSAO_PET`, `web/app/motor/constantes.ts`); "Py" = só P
 | Plano da V2 (aprendiz com lobos; ambiente mínimo) | `docs/PLANO_V2_PESQUISA.md` (PR #102) | ESPECIFICADO / PROPOSTO | gates G1–G6 PROPOSTOS | — |
 | Interação do jogador e corpo do pet | `docs/TODO_INTERACAO_CORPO.md` | IDEIA | — | — |
 | Mundo físico: mapa 2D contínuo, comida por arrastar e soltar, passeios que acham frutas e a bola (objetivo decidido, desenho PROPOSTO) | `docs/futuro/mundo_fisico.md` | IDEIA | — | — |
+| Convivência no mundo físico (dois pets no mesmo mapa; a escada social no mapa) | `docs/futuro/convivencia_mundo_fisico.md` | IDEIA | — | — |
 | Dwarf Fortress → V2 (slots, memória nuclear, faceta × valor, duas prioridades, estresse) | `docs/futuro/dwarf_fortress.md` | IDEIA / contexto | — | — |
 | Combate 1×1 em tempo real; PvP com ghost | `CLAUDE.md` (stand-by); `TODO_INTERACAO_CORPO.md` | IDEIA | — | — |
 | Aura do herói (retrato da lista de gambits emprestado por 2 lutas) | `docs/futuro/aura_do_heroi.md` | IDEIA | — | — |

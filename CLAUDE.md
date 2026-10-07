@@ -1165,6 +1165,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: escada de cognição social** (`docs/futuro/cognicao_social.md`, Matheus, 2026-10-04): dois pets trocando informação com
   fonte e confiança, podendo chegar a reputação, normas, tradição e convenção simbólica; os degraus altos são pergunta, não feature.
   Separa herdado, vivido e aprendido de outros. Primeiro passo possível: pet sintético informante no N5. Não autoriza implementação.
+- **IDEIA: convivência no mundo físico** (`docs/futuro/convivencia_mundo_fisico.md`, Matheus, 2026-10-07): dois pets no mesmo mapa,
+  vendo um ao outro, disputando a fruta e brincando com a bola; a escada social no mapa. Pede mundo compartilhado, regra de conflito no
+  tick e replay do grupo (mudança de motor). Primeiro passo recomendado: parceiro sintético no mapa, sem motor de grupo. Não autoriza
+  implementação.
 - **DECIDIDO: o pet do produto aprende sozinho, sem elogiar e repreender** (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, Matheus,
   2026-10-07; era o R8.1): os botões saem dos pets novos (v1–v10 iguais); o pet aprende pela consequência, como o reforço químico do
   Creatures 3; acariciar fica e o tapa entra como
