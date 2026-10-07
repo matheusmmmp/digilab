@@ -2412,3 +2412,25 @@ Decisão V-3, pergunta Q-1 de `docs/LEITURA_V2_VALIDACAO_UNICA.md`. **Sem run no
     mais de comer de tudo.
   - **P2e:** segue a informação errada (a ruim em 0,77–0,83; o A fica em 0,02–0,04).
   - **P3:** quase não come.
+
+## V2, W-PLANO-PORTE — o plano do porte do cérebro A para a web, pets v11 (2026-10-07, `docs/TAREFA_V2_W_PLANO_PORTE.md`) — SÓ PAPEL
+
+Etapa W do `docs/ROADMAP_V2.md`, depois do M6 (o A é o DigiBrain da web). Documento: `docs/PLANO_PORTE_V2_WEB.md`. **Nenhum código.**
+- **v11 = v10 + o A:** o núcleo dos lobos e o aprendizado da L1 pelo dono, no ponto da K2 (T3), em inteiros; a consequência portada com
+  paridade, mas desligada até um plano medir dono + consequência juntos (D-W1). Os v1–v10 e as assinaturas não mudam; o registro e o save
+  também não.
+- **Esperam:** frutas, bola, memória de episódios, pedido, informação, K4 e canais (o jogo não tem o mundo das frutas; D-W6 recomenda não
+  levá-lo agora). O gargalo da fruta sozinha (Q-8) fica como limite.
+- **Paridade:** o cérebro com as mesmas entradas, pelos fluxos exportados do Python, com tolerância zero (`===`): constantes, decisão,
+  atualização, vidas em fluxo e motivo. Mais o G1 do app e os v1–v10 intactos. Uma vida inteira não sai igual nos dois lados (mulberry32 ×
+  Mersenne Twister).
+- **O bandit faz mais que decidir:** temperamento, memória por espaços, vontade e caráter. O plano diz o que cada um vira (D-W3, D-W4,
+  D-W5, D-W7).
+- **Ordem:**
+  - W1, gabaritos Python (chat B);
+  - W2 e W3, núcleo e pets v11 (chat A);
+  - W4, motivo e fala (chat A);
+  - W5, medida do caráter e da forma (chat A);
+  - W6, tela (chat A ou D);
+  - W7, ligar (coordenador e Matheus).
+- **Decisões do Matheus:** D-W1 a D-W7, com recomendação e custo de errar.
