@@ -256,6 +256,10 @@ lido.
 | Gottlieb et al. 2013, *Trends in Cognitive Sciences* | `10.1016/j.tics.2013.09.001` | pista | busca de informação e curiosidade |
 | Oudeyer e Kaplan 2007 | `10.3389/neuro.12.006.2007` | VERIFICADA | tipologia da motivação intrínseca |
 
+**Neurociência.** As ideias da neurociência que podem orientar a rede de si (modelo direto e cópia eferente, senso de agência,
+interocepção, eu mínimo e narrativo, arbitragem modelo × hábito) estão ligadas a cada peça em
+`docs/research/digibrain/mechanisms/self_model.md`, com as hipóteses H-SELF-01 a H-SELF-06.
+
 **Limite de alegação.** Automodelos corporais aprendidos por redes, modelos diretos do corpo e agentes que buscam informação sobre si já
 estão publicados. Nada aqui pode ser dito como novo. O que talvez seja contribuição, só depois de busca própria: um pet que aprende um
 modelo do próprio corpo e da própria autoria durante a vida, com as estimativas calibradas contra a verdade do motor e das sondas.
