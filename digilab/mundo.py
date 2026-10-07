@@ -208,7 +208,7 @@ class _PoliticaComMundo:
     def observar(self, transicao: Transicao) -> None:
         m = self._motor
         ocorrido = m._consequencia(transicao.acao)
-        obs_depois = replace(Observacao.de_estado(m._estado), mundo=m._perceber(m._estado.tick))
+        obs_depois = m._observacao_depois_mundo()
         self._pm.observar(Transicao(observacao=m._obs_decisao, acao=transicao.acao, observacao_seguinte=obs_depois,
                                     recompensa=transicao.recompensa))
         comeu = ocorrido["comeu"] if ocorrido is not None else None
@@ -380,6 +380,10 @@ class MotorMundo(MotorFrutas):
         cheiro, direcao = direcao_do_cheiro(x, y, self._fontes_de_cheiro(tick), self.cmf)
         pend = self._pendente["alvo"].tipo if self._pendente is not None else None
         return PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), cheiro, direcao, pend)
+
+    def _observacao_depois_mundo(self) -> Observacao:
+        """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
+        return replace(Observacao.de_estado(self._estado), mundo=self._perceber(self._estado.tick))
 
     def _antes_da_decisao(self) -> PercepcaoMundo:
         """Chamado pelo embrulho logo antes de `agir`: o mundo anda ate o tick e o pet percebe."""

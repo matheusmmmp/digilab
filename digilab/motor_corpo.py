@@ -18,12 +18,19 @@ Ligado (secao 2), os cinco drives do Estado (fome, higiene, energia, humor, saud
       a acao do pet (policy.efeito_da_acao_do_pet)           -> Corpo.acao_pet (o efeito float so deixa o dormindo)
       a bola do MotorAmbiente (brincar com a bola)           -> Corpo.estimulo_bola
       a fruta do MotorFrutas (nutricao e o efeito no humor)  -> Corpo.estimulo_fruta, antes do gancho `fruta_comida`
-    O gasto de energia do mundo fisico ainda nao tem estimulo no corpo: o corpo com o mundo ligado falha alto (relato do PR);
+      a consequencia do mundo fisico (MotorMundo._consequencia), nesta ordem:
+        o comer sem comida (MF-2)                            -> Corpo.acao_pet(acao, com_mundo=True), na decisao
+        o andar                                              -> Corpo.estimulo_andar(deslocamento, custo por subunidade)
+        a comida do mapa (comer ou achar)                    -> Corpo.estimulo_consumo_mundo(tipo, situacao, ConfigMundo, efeito)
+        a bola do mundo                                      -> Corpo.estimulo_bola(ganho_humor_bola)
+      e so depois o mundo chama `consequencia_mundo(acao, ocorrido, obs_depois)`, com o `obs.corpo` (secao 9);
   - G-BYPASS: um drive mudado por fora do corpo falha alto. Entre os passos, o Estado tem de ser a leitura; num estimulo, so os drives
     que ele mexe podem mudar no float de baixo;
   - a percepcao: antes de cada decisao, `Observacao.corpo` = `PercepcaoCorpo`, os receptores na escala S (secao 10);
-  - o gancho `consequencia_corpo(acao, ocorrido, obs_depois)` (secao 9, sem o mundo fisico): uma chamada por decisao, sempre, logo
-    depois dos estimulos da propria acao (o pet, a bola, a fruta) e antes do tempo e do dono; quem nao tem o gancho vive como hoje;
+  - o gancho `consequencia_corpo(acao, ocorrido, obs_depois)` (secao 9): uma chamada por decisao, sempre, logo depois dos estimulos da
+    propria acao (o pet, a bola, a fruta e, com o mundo fisico, o andar e a comida do mapa) e antes do tempo e do dono; quem nao tem o
+    gancho vive como hoje. Com o mundo fisico, o `consequencia_mundo` (so nas decisoes de explorar, comer e brincar, como hoje) vem antes
+    dele, ja com os estimulos aplicados e o `obs.corpo`;
   - com o orgao 2 (a Vida), o estagio pelos receptores da Vida e conferido contra o de hoje (treino_stats.estagio_no_tick) a cada tick.
 Com educacao, lesoes, obediencia ou uma acao de treino, falha alto (secao 2): lesao como dano de orgao e da etapa 1b. O corpo nao sorteia
 nada e o cerebro nao recebe o objeto do corpo: so os receptores (G-RECEPTOR).
@@ -91,10 +98,6 @@ class MotorCorpo:
             raise ValueError("o corpo exige a obediencia desligada (secao 2)")
         if isinstance(self, MotorEducacao) and (self.ce.ligada or self.cl.ligada):
             raise ValueError("o corpo exige educacao e lesoes desligadas (secao 2; lesao como dano de orgao e da etapa 1b)")
-        cmf = getattr(self, "cmf", None)
-        if cmf is not None and cmf.ligada:
-            raise NotImplementedError("o corpo com o mundo fisico ligado: o andar, as comidas do mapa e o MF-2 ainda nao tem estimulo "
-                                      "no corpo (relato da etapa 2)")
         conhecidos = {MotorCorpo, MotorEducacao, MotorPersonalidade, Motor}
         estranhos = [c.__name__ for c in type(self).__mro__ if "_avancar" in vars(c) and c not in conhecidos]
         if estranhos:
@@ -103,6 +106,10 @@ class MotorCorpo:
     # ------------------------------------------------------------ leituras
     def _ligado(self) -> bool:
         return self.cc.ligada
+
+    def _mundo_ligado(self) -> bool:
+        cmf = getattr(self, "cmf", None)
+        return cmf is not None and cmf.ligada
 
     def percepcao_corpo(self) -> PercepcaoCorpo:
         return PercepcaoCorpo(**self.corpo.receptores())
@@ -165,7 +172,7 @@ class MotorCorpo:
         self._acao_atual = acao
         # o float de hoje so deixa o dormindo; os drives vem do corpo
         e = efeito_da_acao_do_pet(self._estado, acao, self.cfg, intervalo)
-        self.corpo.acao_pet(acao)
+        self.corpo.acao_pet(acao, com_mundo=self._mundo_ligado())      # MF-2: com o mundo, o comer so da fome com comida do mapa
         self._estado = self.corpo.no_estado(e)
         self._estimulos = [("pet", acao.value)]
         self._acoes_pet.append((self._estado.tick, acao))
@@ -186,6 +193,39 @@ class MotorCorpo:
             ocorrido = {"acao": acao.value, "estimulos": list(self._estimulos)}
             gancho(acao, ocorrido, self._observacao())
             self.consequencias += 1
+
+    # ------------------------------------------------------------ o mundo fisico (MotorMundo), como estimulo
+    def _consequencia(self, acao: AcaoPet):
+        """A consequencia do MotorMundo escreve energia (o andar), fome e humor (a comida do mapa) e humor (a bola) em float: vira os
+        estimulos do mundo, antes de o mundo montar o `obs_depois` e chamar o cerebro e o `consequencia_mundo` (secao 9). O MF-2 ja
+        veio na decisao (o `acao_pet` com o mundo nao da fome ao comer; o float de baixo volta a fome de antes, o mesmo numero)."""
+        if not self._ligado():
+            return super()._consequencia(acao)
+        self._conferir_sincronia("antes da consequencia do mundo")
+        ocorrido = super()._consequencia(acao)
+        if ocorrido is None:
+            self._conferir_estimulo("mundo, acao sem alvo", set())
+            return None
+        comeu, bola = ocorrido["comeu"], ocorrido["brincou_com_bola"]
+        permitidos = {"energia"} | ({"fome", "humor"} if comeu is not None else set()) | ({"humor"} if bola else set())
+        self._conferir_estimulo("mundo", permitidos)
+        cmf = self.cmf
+        self.corpo.estimulo_andar(ocorrido["deslocamento"], cmf.custo_energia_por_subunidade)
+        self._estimulos.append(("andar", ocorrido["deslocamento"]))
+        if comeu is not None:
+            tipo = comeu["tipo"]
+            self.corpo.estimulo_consumo_mundo(tipo, comeu["situacao"], cmf, self.efeito_frutas.get(tipo, 0.0))
+            self._estimulos.append(("comida", tipo, comeu["situacao"]))
+        if bola:
+            self.corpo.estimulo_bola(cmf.ganho_humor_bola)
+            self._estimulos.append(("bola",))
+        self._sincronizar()
+        return ocorrido
+
+    def _observacao_depois_mundo(self) -> Observacao:
+        """o `obs_depois` do mundo com o `obs.corpo` (os receptores ja com os estimulos da propria acao)"""
+        obs = super()._observacao_depois_mundo()
+        return replace(obs, corpo=self.percepcao_corpo()) if self._ligado() else obs
 
     def _bolas_usadas(self) -> int:
         contagem = getattr(self, "contagem_bola", None)

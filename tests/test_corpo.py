@@ -311,8 +311,9 @@ def test_o_que_o_corpo_nao_cobre_falha_alto():
     with pytest.raises(ValueError):
         com_corpo(MotorAmbiente)(_fp_bola(CFG), CFG, 101, obediencia_desligada=True, cfg_corpo=SO_QUIMICA,
                                  cfg_educacao=replace(CONFIG_EDUCACAO, ligada=True))
-    with pytest.raises(NotImplementedError):
-        com_corpo(MotorMundo)(_fp_bola(CFG), CFG, 101, obediencia_desligada=True, cfg_mundo=CONFIG_MUNDO_LIGADA, cfg_corpo=SO_QUIMICA)
+    # o mundo fisico ligado nao falha mais (os estimulos do mundo: tests/test_corpo_no_mundo.py)
+    assert com_corpo(MotorMundo)(_fp_bola(CFG), CFG, 101, obediencia_desligada=True, cfg_mundo=CONFIG_MUNDO_LIGADA,
+                                 cfg_corpo=SO_QUIMICA).corpo is not None
     m = _motor("bola")
     with pytest.raises(ValueError):
         m.observar(AcaoUsuario.TREINAR_CORRIDA)
