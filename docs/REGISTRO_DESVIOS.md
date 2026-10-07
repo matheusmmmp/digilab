@@ -2957,3 +2957,30 @@ Tarefa `docs/TAREFA_V2_DESCRITIVO_PLATO.md` (V-3, Q-1). **Pós hoc descritivo:**
 - **Limite conhecido do A:** a decisão de comer não aprende o efeito de uma fruta quando ela está sozinha. É a origem do platô e fica como
   pergunta para um plano próprio (Q-8).
 - **Próximo:** o plano do porte para a web, pets v11 (`docs/TAREFA_V2_W_PLANO_PORTE.md`, chat A).
+
+## 2026-10-07 — Prancha do mapa do mundo físico (W-PRANCHA-MAPA, rodada 16): interpretações
+
+Proposta em `docs/futuro/mundo_fisico.md`, 2.3 e 2.6. As pranchas estão em `docs/estilo_up/pranchas/` (placeholders) e em
+`Assets/Pranchas_UP/` (sprites, fora do repositório). Só prancha.
+
+- **Onde o mapa fica na navegação:** desenhei com o destino **Pet** ativo e o título "Mapa", marcado como "proposta". O mapa pode
+  substituir o palco do Pet ou virar um destino próprio. É decisão do Matheus, e a prancha não a toma.
+- **"Tela inteira" no celular:** o mapa ocupa a tela toda, por trás do cartão do pet e da bandeja, e a barra de navegação fica. Desenhei
+  como página, não como tela cheia (a luta é tela cheia).
+- **Gestos que não se confundem:**
+  - arrastar que começa num item da bandeja solta comida ou bola;
+  - um dedo no mapa move a câmera, que deixa de seguir o pet, e o botão do alvo volta a segui-lo;
+  - dois dedos aproximam e afastam.
+  - O cartão da bandeja diz isso em três linhas.
+- **"Comida solta aqui":**
+  - o ponto no chão com dois anéis amarelos (a cor de destaque, uma por tela) e a plaquinha;
+  - o aviso "Carne solta no campo", com **Desfazer**;
+  - o caminho tracejado que o pet vai fazer.
+  - O Desfazer é proposta: a comida solta vira um evento `deixar_comida(tipo, x, y)` no registro, e desfazer pediria um evento de retirar
+    ou uma janela antes de gravar. Fica para a tarefa do motor.
+- **Arte:** chão, árvores, ninho, comedouro, frutas, carne e bola são desenho vetorial de placeholder, no traço do protótipo. O guia pede
+  pixel art. Fica registrado como asset pendente em `docs/PENDENCIAS_PRANCHAS.md`.
+- **Na cópia com sprites,** o pet é o sprite do jogo em 2× (escala inteira), sem encolher com a profundidade. A vista pede escala pela
+  profundidade, e sprite só aceita inteiro; a regra de escala do pet no mapa fica para a tarefa da web.
+- **O gerador** das duas pranchas (projeção do protótipo, saída em SVG estático) ficou fora do repositório: as pranchas são o artefato,
+  como as do canvas.
