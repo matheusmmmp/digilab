@@ -3410,3 +3410,28 @@ Etapa 2 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md`. Sem run; só as semen
     passar a chave do mundo aos lobos; e acrescentar o gate "P0 com lobos = o instinto do mundo byte a byte", como nos outros mundos.
 - **Não entram aqui:** o orquestrador do plano (os contrastes P0 − P1, P0^ac − P1^ac, o Holm, a calibração do `m` e o N) e os descritivos
   da seção 5.3, que não têm função em `metrics.py`.
+
+## 2026-10-07 — W-DOMINANCIA (rodada 18, worker D): a dominância de um drive no sinal e o braço P1-cw
+
+- **Só os drives de hoje.** A bancada não tem ainda os braços do corpo (P1-c, P1-q, P0-c, P0-q, P1-c-tapa, P1-c-tapaX, P1-c-frutas), e
+  os drives novos (tédio, solidão, estresse, dor) falham alto no corpo. Por isso a medida roda sobre os braços que existem (P0 a P3 e os
+  outros), nos mundos de hoje, com os drives do sinal de hoje. Os nomes já são os do corpo:
+  - fome (a fome);
+  - desconforto (a higiene);
+  - cansaço (a energia);
+  - tristeza (o humor, só na fruta com a E2).
+- **Os cortes do plano sem os braços do corpo.** Por braço, por condição e por tipo de decisão saem para os braços que existem. Quando os
+  braços do corpo entrarem, os rótulos deles caem nos mesmos cortes, sem mudar a medida.
+- **As faltas** saem do vetor de estado, com a conta do sinal (S − arred(h · S)). Com o corpo ligado, esse vetor já é a leitura da
+  química. Os receptores dos drives novos (`Observacao.corpo`) entram junto com eles.
+- **"Com sinal"** segue o plano: D_antes ≠ D_depois, isto é, Σc_d ≠ 0. Uma decisão em que dois drives se cancelam exatamente fica fora,
+  mesmo com Σ|c| > 0.
+- **A unidade** soma as células dela (os donos e, no mundo físico, os lugares): f_d = lideradas / decisões com sinal, com as contagens
+  somadas. Não é a média das frações por célula. Unidade sem decisão de tempo livre com sinal fica fora da leitura, contada em `sem_valor`.
+- **O IC da leitura** usa os 10.000 e a semente 4242 do plano, e não o `bootstrap` da config da bancada.
+- **O que a fumaça mostra (sementes dos testes; não é resultado):** no corpo de hoje, o cansaço lidera toda decisão de tempo livre com
+  sinal. Na janela imediata, brincar e explorar só mexem na energia. É o que o plano espera do P1-q (a referência).
+- **O P1-cw** espera a chave do B (`pesos_janela`, A2.4) e os braços do corpo. Quando entrarem:
+  - tirar a entrada do `NOS_PENDENTES`;
+  - montar o braço como o P1-c com a chave ligada;
+  - acrescentar o gate "chave desligada = o P1-c byte a byte".
