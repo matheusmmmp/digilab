@@ -3410,3 +3410,28 @@ Etapa 2 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md`. Sem run; só as semen
     passar a chave do mundo aos lobos; e acrescentar o gate "P0 com lobos = o instinto do mundo byte a byte", como nos outros mundos.
 - **Não entram aqui:** o orquestrador do plano (os contrastes P0 − P1, P0^ac − P1^ac, o Holm, a calibração do `m` e o N) e os descritivos
   da seção 5.3, que não têm função em `metrics.py`.
+
+## 2026-10-07 — W-MUNDO-WEB (rodada 17, worker A): o motor do mundo físico em TypeScript, etapa 5
+
+- **O caminho.** A tarefa (seção 9) cita `web/app/src/motor/mundo.ts` e a paridade em `web/app/src/motor/__tests__/`. No app, o motor
+  fica em `web/app/motor/` (sem DOM, conferido por `motor_sem_dom.test.mjs` e pelo `tsconfig.json` só com a lib ES) e os testes em
+  `web/app/test/`. O Gerente pediu para conferir o caminho certo; ficou `web/app/motor/mundo.ts` e `web/app/test/mundo.test.ts`.
+- **Um RNG próprio.** O `motor/rng.ts` do jogo (`mulberry32` com `hashSemente` FNV) não dá os números do Python. O G-PAR pede os
+  sorteios das árvores e da bola iguais, então o `mundo.ts` traz o sha256 do `derivar_semente` e o Mersenne Twister do CPython, com a
+  semeadura por `init_by_array` de um int e os sorteios de `random.py`. Os nomes são `RandomPy` e `derivarSemente`, para não confundir
+  com o `criarRng` e o `hashSemente` do jogo.
+- **O que a paridade rejoga.** O mundo é um componente. O traço gravado no Python traz:
+  - os gestos do dono;
+  - por decisão: o tick, a fome antes (o MF-2), a ação, o estado depois do efeito de sempre da ação (o engine), a regra e, nas vidas com
+    gancho, o cérebro que escolhe.
+  - O TS refaz todo o resto e confere campo a campo. O engine, a política e o dono não são portados aqui.
+- **Uma vida a mais que o G-PAR pede (4, não 3).** As três primeiras não tinham rolagem da bola, `deixar_bola` nem consumo da podre:
+  - o dono sintético não deixa bola;
+  - o pet não chega à bola do campo em 3 dias;
+  - o instinto nunca escolhe a podre.
+  - A 4ª é o cérebro aleatório com um embrulho só do gabarito (`DonoComBolaPerto`), que a cada 4 passos troca a última ação do passo
+    por deixar a bola perto do pet, então o orçamento fecha igual. Tem 13 rolagens, 13 bolas deixadas e duas podres comidas.
+- **O 3.0.** O Python recusa uma posição float, mesmo inteira (`type(x) is not int`). No JS, 3.0 e 3 são o mesmo número, então o TS
+  aceita, com o mesmo texto no log. O gabarito marca os casos com float (`"float": true`) e o teste confere que a única diferença é essa.
+- **O `-0`.** O `divArred` do TS devolvia `-0` para uma divisão negativa que arredonda a zero. Ficou `0`, como no Python. O `-0` não
+  mudava posição nenhuma, mas o teste compara com `Object.is`.
