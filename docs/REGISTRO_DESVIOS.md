@@ -2957,3 +2957,18 @@ Tarefa `docs/TAREFA_V2_DESCRITIVO_PLATO.md` (V-3, Q-1). **Pós hoc descritivo:**
 - **Limite conhecido do A:** a decisão de comer não aprende o efeito de uma fruta quando ela está sozinha. É a origem do platô e fica como
   pergunta para um plano próprio (Q-8).
 - **Próximo:** o plano do porte para a web, pets v11 (`docs/TAREFA_V2_W_PLANO_PORTE.md`, chat A).
+
+## 2026-10-07 — V2, W-PLANO-PORTE: escolhas do plano do porte do A para a web (`docs/PLANO_PORTE_V2_WEB.md`)
+
+Só papel; nada aqui muda código ou leitura registrada.
+- **A consequência entra no porte, mas desligada.** A tarefa a lista no que "entra agora". O plano a porta com paridade, atrás de uma chave,
+  e recomenda desligá-la nos v11 (D-W1). Dois motivos:
+  - a pesquisa nunca rodou dono e consequência no mesmo cérebro;
+  - no mundo `padrao` o P1 falhou e derrubou o acerto da tarefa do dono.
+- **A paridade é do cérebro, não da vida.** Com o mulberry32 na web e o Mersenne Twister no Python, uma vida inteira não sai igual. Por
+  isso os gates comparam o cérebro com as mesmas entradas (fluxos exportados), com tolerância zero, porque o núcleo do A é inteiro e sem
+  função transcendental.
+- **O que o bandit da web fazia além de decidir** (temperamento, memória por espaços, vontade, caráter) não tem par no A da pesquisa.
+  O plano não inventa cérebro novo para cobrir isso: cada peça vira uma decisão do Matheus (D-W3, D-W4, D-W5, D-W7), com recomendação.
+- **O ponto T3 no mundo `padrao` com o dono nunca rodou** (a K2 foi nos mundos das frutas). Fica como risco R3 e decisão D-W2, com a medida
+  do W5 antes de ligar.
