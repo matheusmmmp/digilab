@@ -50,8 +50,7 @@ def test_config_corpo_desligada_por_padrao_e_registrada():
     assert all(status in ("PROPOSTO", "DECIDIDO") for status, _ in PARAMETROS_CORPO.values())
 
 
-@pytest.mark.parametrize("chaves", [{"digestao": True, "vida": True},
-                                     {"digestao": True, "vida": True, "drives_novos": True},
+@pytest.mark.parametrize("chaves", [{"digestao": True, "vida": True, "drives_novos": True},
                                      {"digestao": True, "vida": True, "drives_novos": True, "gestos": True}])
 def test_subchaves_das_proximas_etapas_falham_alto(chaves):
     with pytest.raises(NotImplementedError):

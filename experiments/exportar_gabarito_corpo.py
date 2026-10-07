@@ -12,7 +12,9 @@ O conteudo (versao 2):
 - `vidas`: 3 vidas de hoje em malha aberta (as acoes do pet e do dono forcadas, a sujeira e o sono lidos do Estado de hoje). A entrada de
   cada tick e um caractere (sono e sujeira), os eventos vao antes do tick em que acontecem, e o sha256 cobre q depois de cada operacao;
 - `digestao` (orgao 1, secao 5): a mesma grade e as mesmas vidas com a digestao na taxa C (o estomago no fim de q), e o digerido de cada
-  operacao; `digestao_lenta`: a grade com uma taxa menor, so para a paridade da reacao (nao e um valor da pesquisa).
+  operacao; `digestao_lenta`: a grade com uma taxa menor, so para a paridade da reacao (nao e um valor da pesquisa);
+- `vida` (orgao 2, secao 6): os limiares de estagio nas duracoes de hoje, uma grade de Vidas em volta dos limiares (o passo e o estagio
+  antes e depois) e as mesmas vidas com a digestao e a Vida (os ticks em que o estagio muda).
 """
 from __future__ import annotations
 
@@ -25,8 +27,9 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import CONFIG_PADRAO, ConfigCorpo  # noqa: E402
-from digilab.corpo import Corpo, div_arred, passo_meia_vida, quimicos_de, taxas_de  # noqa: E402
+from digilab.config import CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, ConfigCorpo  # noqa: E402
+from digilab.corpo import (Corpo, div_arred, limiares_estagio, passo_meia_vida, quimicos_de, taxas_de,  # noqa: E402
+                           ticks_de_estagio)
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.policy import PoliticaInstinto, efeito_da_acao_do_pet  # noqa: E402
@@ -38,6 +41,8 @@ CC = ConfigCorpo(ligada=True)
 CC_DIGESTAO = ConfigCorpo(ligada=True, digestao=True)
 TAXA_LENTA = 1000                        # so para a paridade da reacao com a taxa mordendo (nao e valor de pesquisa)
 CC_DIGESTAO_LENTA = ConfigCorpo(ligada=True, digestao=True, taxa_digestao=TAXA_LENTA)
+CC_VIDA = ConfigCorpo(ligada=True, digestao=True, vida=True)
+DURACOES = {"pesquisa": CONFIG_EVOLUCAO_PESQUISA, "canonica": CONFIG_DURACOES.cfg_evo("canonica")}
 SEMENTE_CASOS = 20261007                 # so para sortear a grade de estados do gabarito (nao e semente de vida)
 VIDAS = (("aleatorio", 101), ("relapso", 303), ("atencioso", 202))   # sementes dos testes
 DIAS = 3
@@ -102,6 +107,23 @@ def casos(cc: ConfigCorpo) -> list[dict]:
     return out
 
 
+def casos_vida() -> list[dict]:
+    """A Vida em volta de cada limiar de estagio (e no fim): um passo, com o estagio antes e depois, nas duas duracoes."""
+    C, v = CC_VIDA.escala, CC_VIDA.vida_decaimento
+    out = []
+    for nome, cfg_evo in DURACOES.items():
+        vidas = {C, v, v - 1, 1, 0}
+        for lim in limiares_estagio(CC_VIDA, cfg_evo):
+            vidas |= {lim - 1, lim, lim + 1, lim + v, lim + v - 1}
+        for vida in sorted(vidas):
+            c = Corpo({"fome": 90000, "desconforto": 0, "cansaco": 45000, "tristeza": 135000, "dano": 0, "alimento": 0, "vida": vida},
+                      CONFIG_PADRAO, CC_VIDA, cfg_evo)
+            antes = c.estagio()
+            c.passo(Estado(tick=600))
+            out.append({"duracao": nome, "vida": vida, "estagio": antes, "vida_depois": c.q["vida"], "estagio_depois": c.estagio()})
+    return out
+
+
 def meia_vida() -> list[list[int]]:
     ks = (CC.k_meia_vida_susto, CC.k_meia_vida_dor, CC.k_meia_vida_estresse)
     qs = (0, 1, 2, 100, 1023, 1024, 65535, 65536, 225000, CC.escala)
@@ -123,6 +145,7 @@ def vida_malha_aberta(dono: str, semente: int, cc: ConfigCorpo = CC) -> dict:
     c = Corpo.de_estado(e, cfg, cc)
     q0 = _q(c)
     ticks, eventos, pontos = [], [], []
+    estagios = [[0, c.estagio()]] if cc.vida else []
     h = hashlib.sha256()
 
     def marca() -> None:
@@ -142,6 +165,8 @@ def vida_malha_aberta(dono: str, semente: int, cc: ConfigCorpo = CC) -> dict:
                 e = avancar_um_tick(e, cfg, rng)
                 c.passo(antes)
                 marca()
+                if cc.vida and c.estagio() != estagios[-1][1]:
+                    estagios.append([len(ticks), c.estagio()])
                 if len(ticks) % 60 == 0:
                     pontos.append([len(ticks), _q(c)])
         elif ev.tipo == "acao_usuario":
@@ -159,6 +184,8 @@ def vida_malha_aberta(dono: str, semente: int, cc: ConfigCorpo = CC) -> dict:
     if cc.digestao:
         out["digerido_total"] = c.digerido_total
         out["descartado_total"] = c.descartado_total
+    if cc.vida:
+        out["estagios"] = estagios
     return out
 
 
@@ -183,6 +210,10 @@ def gabarito() -> dict:
                      "casos": casos(CC_DIGESTAO), "vidas": [vida_malha_aberta(d, s, CC_DIGESTAO) for d, s in VIDAS]},
         "digestao_lenta": {"quimicos": list(quimicos_de(CC_DIGESTAO_LENTA)), "taxa_digestao": TAXA_LENTA,
                            "casos": casos(CC_DIGESTAO_LENTA)},
+        "vida": {"quimicos": list(quimicos_de(CC_VIDA)), "vida_decaimento": CC_VIDA.vida_decaimento,
+                 "ticks_de_estagio": {n: list(ticks_de_estagio(e)) for n, e in DURACOES.items()},
+                 "limiares": {n: list(limiares_estagio(CC_VIDA, e)) for n, e in DURACOES.items()},
+                 "casos": casos_vida(), "vidas": [vida_malha_aberta(d, s, CC_VIDA) for d, s in VIDAS]},
     }
 
 

@@ -2517,3 +2517,32 @@ web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as falhas altas:** fora da grade, a sub-chave das etapas seguintes e o corpo com a chave desligada;
   - **o isolamento:** o AST sem motor e sem rng;
   - **a paridade:** o gabarito reproduz.
+
+## V2, W-CORPO-DIGESTAO — os órgãos 1 e 2 do corpo: a digestão e a Vida (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, etapas 3 e 4) — GATES PASSAM
+
+Rodada 17. Etapas 3 e 4 da seção 14, um commit cada (o órgão 1 primeiro). Infraestrutura, sem run; só as sementes dos testes. Mudaram
+`digilab/corpo.py` e a `ConfigCorpo`; motor, `engine.py`, `lobos.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Órgão 1, a digestão** (sub-chave `digestao`; `ConfigCorpo.taxa_digestao` = C, CD-3):
+  - **o estômago:** a ração, o comer e a nutrição da fruta vão ao químico `alimento`;
+  - **a reação:** `t = min(alimento, fome, o que resta da taxa no tick)` roda na hora da ingestão e no começo de cada tick;
+  - **o excesso:** com a fome em 0, o resto é descartado (o corte de hoje);
+  - **o exposto:** `digerido_no_tick` (para a vontade do banheiro), `digerido_total` e `descartado_total`;
+  - **sem receptor** para o cérebro.
+- **Órgão 2, a Vida** (sub-chave `vida`; `ConfigCorpo.vida_decaimento` = 11 = C // (28 × 1440)):
+  - **o relógio:** `vida` começa em C e decai v por tick; o `de_estado` usa o tick do `Estado`;
+  - **os receptores de estágio:** `estagio()`, nos limiares C − v × T, com os ticks de `treino_stats.estagio_no_tick` da `cfg_evo` do
+    corpo;
+  - **sem morte:** a Vida não mata;
+  - **sem receptor** para o cérebro.
+- **As outras sub-chaves:** `drives_novos` e `gestos` continuam falhando alto.
+- **Paridade:** o gabarito `tests/gabaritos/corpo_quimica_python.json` passa à versão 2, com a digestão (na taxa C e numa taxa lenta só
+  para a paridade) e a Vida (limiares, grade e vidas com os ticks de estágio).
+- **Gates:**
+  - **`tests/test_corpo_digestao.py`:**
+    - o G-HOJE (a) de novo, com a digestão na taxa C, em 4 donos × 5 sementes;
+    - a química igual à da etapa 1, químico a químico;
+    - a composição da seção 5, a reação com a taxa lenta, o descarte e a conservação da comida.
+  - **`tests/test_corpo_vida.py`:**
+    - o estágio pela Vida igual ao de hoje tick a tick, nas três durações, até depois do fim da Vida;
+    - os ticks das transições do `MotorEducacao` (teste e canônica) e do `MotorTreino` iguais aos cruzamentos da Vida;
+    - o G-HOJE (a) com os dois órgãos.
