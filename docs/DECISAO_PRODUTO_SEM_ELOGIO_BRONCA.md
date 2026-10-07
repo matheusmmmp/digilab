@@ -40,9 +40,13 @@ A leitura para o Digilab: **o jogador age sobre o corpo e o mundo do pet, e o c�
   internas.
 - **Acariciar fica**, como gesto físico: no corpo, o carinho reduz um drive (estresse, solidão) e o reforço sai daí.
 - **O tapa entra, como gesto de desaprovação** (DECIDIDO pelo Matheus, 2026-10-07, S-2), do jeito do Creatures 3: é um estímulo no corpo,
-  e não uma nota direta ao cérebro.
-  - **Diferença do repreender que sai:** o repreender era um sinal −1 entregue direto ao aprendiz. O tapa muda químicos do corpo (dor leve,
-    susto, estresse), e o reforço negativo sai do mesmo ciclo da consequência.
+  e também um sinal direto ao cérebro (revisão do Matheus, 2026-10-07, abaixo).
+  - **Revisão do Matheus (2026-10-07):** o tapa **também manda um sinal direto ao cérebro**, além de mudar o corpo. O sinal é creditado à
+    última decisão pela janela da v1, como a bronca, com o valor de `ConfigLobos.recompensa_tapa` (PROPOSTO igual ao da bronca) e em toda
+    fonte que aprende. A dor, o susto e o estresse que o tapa causa ficam no corpo e não viram um segundo sinal na hora (sem dupla
+    contagem). Detalhes em `docs/TAREFA_V2_CORPO_DRIVES.md`, seção 8, CD-9 e CD-10.
+  - **Diferença do repreender que sai:** o repreender era só o sinal −1 entregue direto ao aprendiz. O tapa leva o mesmo sinal e, a mais,
+    muda químicos do corpo (dor leve, susto, estresse).
   - **Mais possibilidades, pelo corpo:** como o tapa passa pelo corpo, ele também tem efeitos além do aprendizado. O pet pode ganhar medo da
     mão, o estresse pode subir com tapas repetidos, o vínculo pode cair, e a cena pode virar uma memória marcante. São consequências que o
     jogador vê, e não só um número que muda por dentro.
@@ -96,6 +100,6 @@ O `docs/PLANO_PORTE_V2_WEB.md` (PR #201, aberto) foi escrito antes desta decisã
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | S-1 | Os pets v1 a v10 continuam com os botões? | sim, só os pets novos ficam sem; os antigos seguem iguais | tirar dos antigos muda o jogo deles no meio da vida |
-| S-2 | O tapa do Creatures 3 entra? | **DECIDIDO: sim, como desaprovação pelo corpo** (2026-10-07, seção 4) | — |
+| S-2 | O tapa do Creatures 3 entra? | **DECIDIDO: sim, como desaprovação pelo corpo e com sinal direto ao cérebro** (2026-10-07, seção 4; o sinal direto é a revisão do mesmo dia) | — |
 | S-3 | A consequência liga no v11 antes do corpo do Creatures 3? | não: primeiro os drives que recompensam brincar e o contato (seção 5) | um pet que aprende a ficar parado |
 | S-4 | A base nova do vínculo | o desejo atendido e o cuidado no tempo certo, numa tarefa própria | o vínculo B fica sem a coerência e perde o sentido |
