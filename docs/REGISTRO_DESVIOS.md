@@ -3074,3 +3074,24 @@ Só papel: `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`. Nenhuma run, nenhum código.
   `main`; senão, vira plano próprio.
 - **As faixas 33101…33505 e 34101…34505** foram conferidas fora de `FAIXAS_RESERVADAS` e sem uso no repositório nem nos branches remotos.
   Notei que a 31101…32505 (mundo físico) ainda não está registrada em `FAIXAS_RESERVADAS`: é a etapa 4 da tarefa do mundo, do chat D.
+
+## 2026-10-07 — W-ADENDO-PMF2 (rodada 17, worker C): o adendo 1 do plano do mundo físico
+
+Só papel: o adendo 1 de `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`. Nenhuma run, nenhum código.
+
+- **A PMF-2 decidida no #212 (P0 − P1ac) é revista por adendo, antes de qualquer run.** O motivo é o achado da validação única: o acoplado
+  em malha aberta cuidou pior que o original. O primário proposto é P0 − P1 em malha fechada. A PMF-2 de antes vale até o Matheus decidir a
+  PMF-2r.
+- **A fonte dos acoplados é o P0z,** e não um dos dois lados. O P0 no próprio registro é ele mesmo byte a byte e não teria a desvantagem da
+  malha aberta. O P0z já roda em toda célula. Declarado: o cuidado dele foi gerado para um pet que não explora.
+- **Vidas por unidade:** 60, contra 48 (+25%). O P1ac sai; entram o P0^ac e o P1^ac.
+- **As referências da revisão P2:**
+  - Church (1964), `10.1037/h0042733`: só metadados;
+  - Kimmel e Terrant (1968), `10.3758/BF03209860`: só a página 1 de 4.
+
+  Nenhuma está nas tabelas de `docs/referencias/*.csv`; as duas são citadas no nível que a revisão leu. O tamanho do viés e o custo em vidas
+  do acoplado recíproco ficam SEM FONTE.
+- **DS-5 no mesmo adendo (A1.8):** as medidas 1 e 3 de forrageio e a previsão da distância entram no Holm; a medida 2 entra só como
+  descritiva. O A não estima a taxa média, então a medida 3 é lida pelo comportamento: a permanência contra a taxa recente do ambiente.
+  O layout afastado custa 24 vidas por unidade e é o primeiro bloco a sair se o custo passar do teto. Ele depende de um segundo layout na
+  `ConfigMundo` (chat A).
