@@ -121,6 +121,39 @@ a regra da L1 com o sinal da consequência (P1) e, com os gestos, a mudança no 
 **O risco do carinho.** Pela tarefa do corpo, o carinho reduz a `solidao` e o `estresse`. Com a solidão baixa, ele quase não dá sinal: o
 efeito depende do estado do pet. O plano mede a solidão no momento de cada carinho (seção 7).
 
+## 5b. Requisito de desenho: o carinho pesa mais que o limpador
+
+**O Matheus decidiu (2026-10-07):** o carinho do jogador deve ensinar **mais** que a consequência do limpador no corpo. O limpador
+ajuda, mas o gesto do dono é o que mais conta.
+
+**A conta, com os números PROPOSTOS** (o sinal do corpo da `TAREFA_V2_CORPO_DRIVES.md`, seção 9, ganho 4, S = 1024). O B confere a conta
+na etapa 2.
+
+| caso | o que muda no corpo | sinal aproximado |
+|---|---|---|
+| limpador (desconforto em 0,30) | evita +22500 de desconforto | ~130 |
+| carinho, solidão em 0,5 | solidão 0,5 → 0,1 | ~980 |
+| carinho, solidão em 0,2 | solidão 0,2 → 0 | ~160 |
+
+O carinho vale de 1 a 7 vezes o limpador, conforme a solidão. **O risco:** com carinho a cada alívio, a solidão fica baixa e o carinho
+perde força justamente quando é frequente.
+
+**A regra:**
+- **G-CAR**, um gate novo de mecanismo: nos estados de referência, o sinal do carinho depois do banheiro é pelo menos **3 vezes** o sinal
+  do limpador (PROPOSTO). Os estados são a solidão em 0,2, 0,5 e 0,8, com o desconforto em 0,3. Se falhar no estado de solidão 0,2, vale a
+  decisão BN-6.
+- **No plano:** a predição de que B0C chega ao critério antes de BL0 é **por desenho**. O teste mede **quantos dias** cada braço leva, e
+  não quem ganha. O plano declara isso, e o resultado de "o carinho venceu" não conta como achado.
+- **A medida que acompanha:** o sinal de cada carinho e de cada alívio com o limpador, por dia, para ver se o carinho perde força com o uso.
+
+**BN-6: como manter o carinho mais forte com a solidão baixa?**
+- **(a) Recomendado: um componente do carinho que não depende da solidão.** O carinho também reduz o `estresse` (−90000, já na tarefa do
+  corpo) e um químico novo de **conforto**, de meia-vida curta, que cai devagar e sobe com o carinho (PROPOSTO). O sinal do carinho deixa de
+  depender só de uma necessidade que ele mesmo sacia.
+- **(b) Aumentar só o efeito na solidão.** Mais simples, mas o carinho continua perdendo força quando é frequente.
+- **(c) Aceitar o enfraquecimento.** É realista (um pet muito acariciado valoriza menos o carinho), mas o carinho pode empatar com o
+  limpador.
+
 ## 6. O desenho do teste (para o plano)
 
 **Quatro braços, 2 × 2**, todos com o mesmo dono de cuidado (o atencioso, com o `DonoComLugar` do mundo) e o cérebro A no ponto da K2, fonte
@@ -157,6 +190,7 @@ consequência (P1, montagem completa):
 | **G-MEC** | a vontade sobe e cai como a seção 3; o limpador recolhe só no banheiro; o objeto dá o desconforto da região; o `limpar` recolhe; o urgente alivia `aqui`; o alvo `banheiro` leva o pet até lá ou alivia onde parou |
 | **G-CRED** | o carinho do `DonoCarinhoBanheiro` é creditado à decisão de `aliviar`, como no K4 |
 | **G-CONS** | com limpador, o sinal imediato do `aliviar` no banheiro é maior que fora; sem limpador, igual |
+| **G-CAR** | nos estados de referência, o sinal do carinho depois do banheiro é pelo menos 3 vezes o do limpador (seção 5b) |
 | **G-PAR** | paridade Python × TS da vontade, do objeto, do limpador e do alvo |
 | **G-ENGINE** | `engine.py` com o sha256 de antes |
 
@@ -183,4 +217,5 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 | BN-2 | O carinho fora do orçamento do dono | **sim**, como o K4 | dentro: o braço com carinho tira cuidado do pet e mistura os dois efeitos |
 | BN-3 | O desenho 2 × 2 (carinho × limpador) | **sim** | só o carinho: não se sabe se a consequência no corpo bastaria |
 | BN-4 | O critério de "aprendeu": 0,80 por 3 dias seguidos | **sim**, PROPOSTO; o plano pode ajustar antes da run | critério frouxo: aprende por acaso; rígido: quase todos censurados |
+| BN-6 | Como manter o carinho mais forte que o limpador com a solidão baixa (seção 5b) | **(a)**: um componente de conforto no carinho, que não depende da solidão | (b) ou (c): o carinho frequente empata com o limpador, contra o que o Matheus pediu |
 | BN-5 | O limpador no produto como compra na loja, quando a loja existir | **sim**, registrado como IDEIA para o produto | — |
