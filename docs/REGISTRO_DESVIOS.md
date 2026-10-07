@@ -3652,3 +3652,18 @@ Etapa 5 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md` (seções 9 a 11). Int
 - **Para o D:** a bancada não precisa de nada novo para o P1 com o corpo. A `PoliticaDoBraco` já passa o `f_S` (conferido), e o
   `__getattr__` dela leva o gancho ao cérebro. A conferência da dominância refaz o sinal pelo Estado: com os drives de hoje sai igual, mas com
   os drives novos ela tem de usar as parcelas que o cérebro guarda no motivo (`sinal_corpo.drives`).
+
+## 2026-10-07 — W-DOIS-PETS (worker C): o desenho e a tarefa da frente "dois pets"
+
+Só papel: `docs/futuro/dois_pets.md` e `docs/TAREFA_V2_DOIS_PETS.md`. Nenhuma run, nenhum código. Decisão do Matheus (2026-10-07): dois
+pets de verdade no mesmo mundo, e não o pet sintético informante.
+
+- **O primeiro passo recomendado antes** (CV-1 da `docs/futuro/convivencia_mundo_fisico.md`, o parceiro sintético; a seção 11 da
+  `docs/futuro/cognicao_social.md`, o pet sintético informante) fica substituído pela decisão do Matheus.
+- **O cérebro A não escolhe alvo hoje** (`escolher_alvo` devolve None). Sem o alvo aprendido, ele nunca seguiria o outro, e o degrau 1
+  não teria o que medir. O desenho pede o alvo aprendido (o adendo que o plano do mundo deixou para depois) como parte da etapa 4, com um
+  prior pequeno nas classes que o padrão não usa (PROPOSTO, SEM FONTE).
+- **A ordem no tick por sorteio de um fluxo do mundo,** e não "quem está mais perto". Esta exigiria decidir em duas fases e mudaria o
+  laço do `MotorMundo` e a ordem de hoje entre a consequência e o tick.
+- **Literatura:** nenhuma referência sustenta o desenho. As pistas da cognição social e da convivência continuam pistas e não são
+  citadas pelo conteúdo.
