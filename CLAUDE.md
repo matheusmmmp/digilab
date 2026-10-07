@@ -1161,8 +1161,9 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   fonte e confiança, podendo chegar a reputação, normas, tradição e convenção simbólica; os degraus altos são pergunta, não feature.
   Separa herdado, vivido e aprendido de outros. Primeiro passo possível: pet sintético informante no N5. Não autoriza implementação.
 - **DECIDIDO o objetivo: ego do pet** (`docs/futuro/ego_existencia.md`, Matheus, 2026-10-07): o pet tem ego, questiona a própria
-  existência e fala sobre isso. Ego = origem, autoria (herdado × aprendido × pedido, pelas sondas), continuidade e relação; as cinco
-  perguntas têm antecedente real no jogo. O como é PROPOSTO, por etapas com tarefa e plano; decisões E-1 a E-5 pendentes.
+  existência e fala sobre isso; o automodelo **tem corpo** e é **aprendido por uma rede** (a rede de si, por erro de previsão; o
+  pet estima, o motor e as sondas avaliam). Implica rever a regra "só a Decisão aprende" (E-6). Corpo recomendado: o alcance da
+  fruta (E-7). O como é PROPOSTO, por etapas com tarefa e plano.
 - **IDEIA: aura do herói** (`docs/futuro/aura_do_heroi.md`, Matheus, 2026-10-03): retrato da lista de gambits de um pet que lutou
   muito, vendido na loja como item de 2 lutas que empresta esse conhecimento a outro pet. Depende de loja e moeda (ainda ideia);
   divide a peça técnica com o PvP com ghost. Não autoriza implementação.
