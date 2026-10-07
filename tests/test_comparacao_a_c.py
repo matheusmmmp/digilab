@@ -181,10 +181,11 @@ def test_tabela_m6_de_cima_para_baixo():
 
 def test_leitura_dos_contrastes():
     c = {"media": -0.05, "ic95": {"ic_inferior": -0.1, "ic_superior": -0.01}, "ic90": {"ic_inferior": -0.09, "ic_superior": -0.02}}
-    assert ac.leitura(c, True, 0.2) == "C melhor"
-    assert ac.leitura(c, False, 0.2) == "empate"           # nao passa no Holm, IC 90% dentro de +-delta
+    assert ac.leitura(c, True, 0.2) == "empate"            # secao 4: dentro da margem e empate, mesmo passando no Holm
+    assert ac.leitura(c, False, 0.2) == "empate"
+    assert ac.leitura(c, True, 0.05) == "C melhor"         # fora da margem e passando no Holm
     assert ac.leitura(c, False, 0.05) == "inconclusivo"
-    assert ac.leitura(c, None, 0.2) == "C melhor"          # secundario: o IC 95% inteiro de um lado (descritivo)
+    assert ac.leitura(c, None, 0.05) == "C melhor"         # secundario: o IC 95% inteiro de um lado (descritivo)
 
 
 # ------------------------------------------------------------------ modos
@@ -231,3 +232,17 @@ def test_fumaca_de_ponta_a_ponta(tmp_path):
     assert len(list((tmp_path / "vidas").glob("*.jsonl"))) == 2 * 47
     meta = json.loads((tmp_path / "meta.json").read_text(encoding="utf-8"))
     assert meta["ponto_c"] == ac.ponto_c() and meta["config_bancada_a"]["montagem"] == "completa"
+
+
+def test_config_da_validacao_e_a_do_adendo_2():
+    """O N do adendo 2 (5, K = 1) sai do piloto gravado e e o da config da validacao; as unidades sao as da tabela do adendo."""
+    val = json.loads((RAIZ / "experiments/configs/v2_comparacao_cerebros/validacao_ac.json").read_text(encoding="utf-8"))
+    piloto = json.loads((RAIZ / "artifacts_v2_comparacao_cerebros/piloto/resumo.json").read_text(encoding="utf-8"))
+    assert piloto["tamanho_amostra"]["n_validacao"] == 5 * val["unidades"]["k"] == 5
+    modo, unidades = ac.modo_e_unidades(val)
+    assert modo == "validacao" and val["adendo"] == 2
+    plano = (RAIZ / ac.PLANO).read_text(encoding="utf-8")
+    for u in unidades:
+        assert f"| {u['base']} | {u['semente']} | {u['genoma']} |" in plano
+    assert {k: v for k, v in val.items() if k not in ("descricao", "adendo", "unidades", "saida", "simulacao")} == \
+        {k: v for k, v in PILOTO.items() if k not in ("descricao", "adendo", "unidades", "saida", "simulacao")}

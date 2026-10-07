@@ -347,18 +347,19 @@ def contraste_c_menos_a(idx: dict, unidades: list[dict], braco: str, mundo: str,
 
 
 def leitura(c: dict, rejeita: bool | None, delta: float | None) -> str:
-    """C melhor, A melhor, empate (IC 90% dentro de +-delta) ou inconclusivo. Com Holm (primarios), a diferenca so conta se rejeitada;
-    sem Holm (secundarios), pelo IC 95% inteiro de um lado (descritivo)."""
+    """Secao 4: empate quando o IC 90% fica dentro de (-delta, +delta) (a margem de relevancia, antes do teste); fora dela, C melhor ou A
+    melhor quando a diferenca passa (com Holm nos primarios; sem Holm, nos secundarios, pelo IC 95% inteiro de um lado, descritivo);
+    senao, inconclusivo."""
     if c["media"] is None:
         return "sem valor"
+    if dentro_da_margem(c["ic90"], delta):
+        return "empate"
     if rejeita is None:
         lado = c["ic95"] is not None and (c["ic95"]["ic_superior"] < 0.0 or c["ic95"]["ic_inferior"] > 0.0)
     else:
         lado = rejeita
     if lado:
         return "C melhor" if c["media"] < 0.0 else "A melhor"
-    if dentro_da_margem(c["ic90"], delta):
-        return "empate"
     return "inconclusivo"
 
 
@@ -508,7 +509,7 @@ def conferencia_calibracao_c(idx: dict, unidades: list[dict], boot: dict, dias: 
     tem de dar os numeros gravados em calibracao_C/piloto.json, com o mesmo bootstrap."""
     gravado = _ler(PILOTO_C)
     der, frac = [], []
-    for u in unidades:
+    for u in sorted(unidades, key=lambda x: x["semente"]):          # a ordem da calibracao (_por_unidade: por semente)
         ms = [idx[("C:P1", mu, _unidade(u))] for mu in MUNDOS]
         der.append(sum(m["custo_da_plasticidade"]["deriva_por_dia"][dias - 1] for m in ms) / len(ms))
         frac.append(sum(m["legibilidade"]["aprendido_decidiu"] for m in ms) / sum(m["legibilidade"]["decisoes"] for m in ms))
@@ -634,20 +635,27 @@ def vidas_por_unidade() -> int:
     return len(MUNDOS) * (1 + len(CEREBROS) * (len(BRACOS) + len(COM_DONO))) + len(MESMA_EXPERIENCIA)
 
 
-def rodar(cfg: dict, pasta: Path | None = None, log=print) -> dict:
+def rodar(cfg: dict, pasta: Path | None = None, log=print, reanalisar: bool = False) -> dict:
+    """As vidas e a analise. Com `reanalisar`, a analise de novo sobre o medidas.json gravado na pasta (sem rodar vida; o tempo e o da
+    run gravada no resumo); na validacao, so a analise, nunca as vidas de novo."""
     modo, unidades = modo_e_unidades(cfg)
     pasta = Path(pasta or cfg["saida"])
-    if modo == "validacao" and (pasta / "resumo.json").exists():
-        raise ValidacaoJaFeita(f"{pasta}: a validacao ja rodou (secao 8: uma vez)")
     bancada = bancada_da_config(cfg)
-    r = rodar_vidas(cfg, bancada, unidades, pasta, log)
+    if reanalisar:
+        r = {"medidas": json.loads((pasta / "medidas.json").read_text(encoding="utf-8")),
+             "segundos": json.loads((pasta / "resumo.json").read_text(encoding="utf-8"))["segundos"]}
+    else:
+        if modo == "validacao" and (pasta / "resumo.json").exists():
+            raise ValidacaoJaFeita(f"{pasta}: a validacao ja rodou (secao 8: uma vez)")
+        r = rodar_vidas(cfg, bancada, unidades, pasta, log)
     a = analisar(r["medidas"], unidades, cfg, modo)
     seg_unidade = r["segundos"] / len(unidades)
     a["tempo"] = {"segundos": r["segundos"], "vidas": len(r["medidas"]), "vidas_por_unidade": vidas_por_unidade(),
                   "segundos_por_unidade": seg_unidade}
     if "tamanho_amostra" in a and a["tamanho_amostra"]["n_validacao"]:
         a["tempo"]["horas_validacao_estimadas"] = seg_unidade * a["tamanho_amostra"]["n_validacao"] / 3600.0
-    _gravar(pasta / "medidas.json", _dump(r["medidas"]))
+    if not reanalisar:
+        _gravar(pasta / "medidas.json", _dump(r["medidas"]))
     _gravar(pasta / "analise.json", _dump(a))
     resumo = {"modo": modo, "unidades": len(unidades), "vidas": len(r["medidas"]), "segundos": r["segundos"],
               "primarios": {k: {x: c[x] for x in ("d", "media", "ic95", "ic90", "p_bilateral", "leitura", "leitura_m6")}
@@ -673,9 +681,10 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="comparacao dos cerebros A x C (docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md)")
     ap.add_argument("--config", required=True)
     ap.add_argument("--saida")
+    ap.add_argument("--reanalisar", action="store_true", help="so a analise, sobre o medidas.json gravado")
     a = ap.parse_args(argv)
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8"))
-    r = rodar(cfg, Path(a.saida) if a.saida else None, log=lambda s: print(s, flush=True))
+    r = rodar(cfg, Path(a.saida) if a.saida else None, log=lambda s: print(s, flush=True), reanalisar=a.reanalisar)
     print(_dump(r["resumo"]["primarios"]))
     print("M6:", _dump(r["resumo"]["m6"]))
     if r["resumo"].get("tamanho_amostra"):
