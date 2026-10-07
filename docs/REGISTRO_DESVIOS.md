@@ -3147,3 +3147,29 @@ Só papel: `docs/PLANO_ANALISE_V2_BANHEIRO.md` (etapa 0 de `docs/TAREFA_V2_BANHE
   na bancada (`BASES_EXPERIMENTO_MAIOR`, `BASES_N6`, `BASES_N7`, `BASES_COMPARACAO`); as bases dos dois planos novos ficam só no teste,
   porque a tarefa não pede constantes novas na bancada.
 - **Resolve a pendência** anotada em W-PLANO-CORPO: a 31101…32505 (mundo físico) agora está em `FAIXAS_RESERVADAS`.
+
+## 2026-10-07 — W-GABARITOS (worker A, rodada 17): as vidas de hoje do mundo físico e do corpo
+
+Só o passo 1 do A (`docs/V2_RODADA_17.md`): dois gabaritos gravados com o código da main, num commit próprio, antes de qualquer mudança do
+mundo ou do corpo, e um teste que os confere. Nenhum código do motor mudou.
+
+- **Sementes:** só 101 e 202, das dos testes. A tarefa diz "só as sementes dos testes (101…505)"; as cinco dobrariam o tempo do teste
+  (~31 s hoje) sem cobrir motor ou caminho novo.
+- **Genoma no gabarito do mundo:** a semente 101 vai sem genoma e a 202 com o genoma 202. No `padrao` isso troca o motor: 101 roda no
+  `MotorComFeedback`, 202 no `MotorPersonalidade`. Assim o G2 do mundo cobre os dois motores do mundo padrão.
+- **Genoma no gabarito do corpo:** nenhuma vida tem genoma. A seção 2 da tarefa do corpo recusa o `MotorPersonalidade`, e com genoma o
+  `padrao` cairia nele. Os três motores que o corpo vai tocar saem no gabarito: `MotorComFeedback` (padrão), `MotorAmbiente` (bola) e
+  `MotorFrutasMundo` (descasado, mutável, iguais_frutas). O teste confere os três.
+- **Montagem "simples":**
+  - no gabarito do mundo, é a bancada padrão (ponto L1), a vida de hoje sem nada ligado;
+  - no do corpo, é o ponto T3 com as peças da K2 na config, porque o corpo vai rodar no ponto da validação.
+  - A "completa" é a mesma nos dois: T3, K4, canais e a montagem completa.
+- **P2 e o só cuidado:**
+  - o P2 só existe nos mundos das frutas, então o gabarito do corpo o tem só lá;
+  - o só cuidado (`P0 <- P3`, `sem_ensino`) entra só no do corpo, na completa e nos mundos das frutas, onde a tarefa do corpo o usa;
+  - o do mundo não pede o acoplado.
+- **O que fica igual:** sha256 do log, do estado final, do `estado()` do motor, das ações, das rngs (política, ambiente e, quando o motor
+  tem, fruta e obediência), do que o mundo registra (frutas e bola) e do estado interno da política, mais o número de interações.
+- **A auditoria da seção 2 do corpo** vai no corpo do PR. Um achado entra aqui: os efeitos das ações do pet
+  (`policy.efeito_da_acao_do_pet`: brincar, explorar, comer, emburrar) são literais no código, não parâmetros de `config.py`. Fica como
+  achado, sem mudança: tirar os literais é tarefa do B.
