@@ -21,6 +21,11 @@ a Vida mudam o estagio nos limiares C - v x tick_do_estagio, com os ticks de est
 mesmas de treino_stats.estagio_no_tick): o estagio pela Vida e o de hoje, tick a tick. A Vida nao mata nesta etapa (em 0, fica em 0) e
 nao tem receptor para o cerebro.
 
+Os estimulos do mundo fisico (digilab/mundo.py; para o A ligar o MotorMundo no MotorCorpo): o andar (`estimulo_andar`, o custo de hoje,
+1/6000 de energia por subunidade, e 75 em C), as comidas do mapa (`estimulo_consumo_mundo`: a racao deixada, a fruta madura e a podre,
+com os numeros da ConfigMundo) e a MF-2 (`acao_pet(..., com_mundo=True)`: no mundo, comer nao da fome por si; a comida vem do mapa). A
+sujeira depois da racao continua sorteada pelo mundo (o fluxo `mundo-sujeira`), no Estado.
+
 Componente puro: nao e motor, nao sorteia (nenhuma rng), nao le o cerebro. A sujeira e o sono continuam estados do `Estado` (o motor
 sorteia a sujeira como hoje); o corpo so os le. Quem liga o corpo ao motor e o A (etapa 2, `MotorCorpo`).
 
@@ -33,8 +38,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo, ConfigEvolucaoPesquisa
-from .events import AcaoPet, AcaoUsuario
+from .config import CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo, ConfigEvolucaoPesquisa, ConfigMundo
+from .events import FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
 
 QUIMICOS = ("fome", "desconforto", "cansaco", "tristeza", "dano")
@@ -257,9 +262,12 @@ class Corpo:
             raise ValueError(f"acao do dono sem estimulo no corpo nesta etapa: {acao.value}")
         self._efeito(self.t.dono[acao], acao is AcaoUsuario.ALIMENTAR)
 
-    def acao_pet(self, acao: AcaoPet) -> None:
+    def acao_pet(self, acao: AcaoPet, com_mundo: bool = False) -> None:
         """O efeito de policy.efeito_da_acao_do_pet nos drives, na decisao, antes do tick. O sono (dormir) fica no Estado. O comer e
-        comida."""
+        comida. Com o mundo fisico (MF-2): comer nao da fome por si (o mundo desfaz o +0,05 antes de qualquer cerebro ver); a comida vem do
+        mapa, pelo `estimulo_consumo_mundo`."""
+        if com_mundo and acao is AcaoPet.COMER:
+            return
         self._efeito(self.t.pet[acao], acao is AcaoPet.COMER)
 
     def estimulo_bola(self, ganho_humor: float) -> None:
@@ -270,6 +278,35 @@ class Corpo:
         """Comer uma fruta (MotorFrutas, N4): fome + nutricao e humor + o efeito da fruta (E2). Sem a digestao (etapa 3), direto na fome."""
         self._efeito({"fome": -na_grade(nutricao, self.C, "nutricao"),
                       "tristeza": -na_grade(efeito_humor, self.C, "efeito_humor")}, True)
+
+    # ---------------------------------------------------------- o mundo fisico
+    def estimulo_andar(self, deslocamento: int, custo_por_subunidade: float) -> None:
+        """O andar do mundo fisico (mundo.MotorMundo._consequencia): energia - custo x deslocamento, alem do efeito da acao. O custo de hoje
+        (1/6000 por subunidade) e 75 em C; um custo fora da grade falha alto. `deslocamento` em subunidades, inteiro >= 0."""
+        if type(deslocamento) is not int or deslocamento < 0:
+            raise ValueError(f"deslocamento precisa ser inteiro >= 0: {deslocamento!r}")
+        k = na_grade(custo_por_subunidade, self.C, "custo_energia_por_subunidade")
+        if deslocamento:
+            self._somar({"cansaco": k * deslocamento})
+
+    def estimulo_consumo_mundo(self, tipo: str, situacao: str, cfg_mundo: ConfigMundo, efeito_fruta: float = 0.0) -> None:
+        """Comer uma comida do mapa (mundo.MotorMundo._comer_mundo), pelo `comer` ou pelo "achou e comeu" do explorar:
+        - racao madura: fome + ganho_alimentar (a mesma racao do alimentar de hoje; comida, com a digestao);
+        - fruta madura: fome + nutricao_fruta e humor + o efeito da fruta (`efeito_fruta`, o do mundo; 0 nas frutas iguais);
+        - podre (racao ou fruta): humor + efeito_podre, sem fome.
+        Tipo ou situacao fora disso falha alto."""
+        if tipo not in TIPOS_COMIDA_MUNDO:
+            raise ValueError(f"comida do mundo desconhecida: {tipo!r}")
+        if situacao == "podre":
+            self._somar({"tristeza": -na_grade(cfg_mundo.efeito_podre, self.C, "efeito_podre")})
+        elif situacao != "madura":
+            raise ValueError(f"situacao da comida desconhecida: {situacao!r}")
+        elif tipo == "racao":
+            self._efeito(self.t.dono[AcaoUsuario.ALIMENTAR], True)
+        elif tipo in FRUTAS:
+            self.estimulo_fruta(cfg_mundo.nutricao_fruta, efeito_fruta)
+        else:                                                      # pragma: no cover - TIPOS_COMIDA_MUNDO = racao + FRUTAS
+            raise ValueError(f"comida sem estimulo: {tipo!r}")
 
     # ---------------------------------------------------------- orgao 1: a digestao
 

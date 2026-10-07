@@ -3514,3 +3514,42 @@ Tarefa `docs/TAREFA_V2_MUNDO_FISICO.md`, seções 8 e 9; plano `docs/PLANO_ANALI
   - tirar a entrada do `NOS_PENDENTES`;
   - montar o braço como o P1-c com a chave ligada;
   - acrescentar o gate "chave desligada = o P1-c byte a byte".
+
+## 2026-10-07 — CORPO-MUNDO e PESOS-JANELA (worker B): os estímulos do mundo físico no corpo e a chave `pesos_janela` do cérebro A
+
+Pedido do Gerente depois da etapa 3 do mundo (#232). Interpretações:
+- **Os estímulos do mundo no `corpo.py`** são métodos do `Corpo`, para o A chamar quando ligar o `MotorMundo` no `MotorCorpo`. O corpo
+  recebe os números da `ConfigMundo` como argumento e não conhece o motor.
+  - **O andar** (`estimulo_andar(deslocamento, custo)`): cansaço + 75 por subunidade (1/6000 × 450000, exato). Um custo fora da grade de C
+    falha alto.
+  - **As comidas do mapa** (`estimulo_consumo_mundo(tipo, situacao, cfg_mundo, efeito_fruta)`):
+    - a ração madura é a ração do alimentar (−202500 de fome, como comida, pela digestão);
+    - a fruta madura é o `estimulo_fruta` de sempre, com a `nutricao_fruta` do mundo (67500) e o efeito da fruta;
+    - a podre, de ração ou de fruta, só mexe no humor (`efeito_podre`, +45000 de tristeza) e não põe comida no estômago.
+  - **A MF-2** (`acao_pet(..., com_mundo=True)`): no mundo, comer não dá fome por si. É o mesmo que o mundo desfazer o +0,05 antes de
+    qualquer cérebro ver; a fome vem só da comida do mapa.
+  - **A bola do mundo** usa o `estimulo_bola` de sempre, com o `ganho_humor_bola` da `ConfigMundo` (0,15, o mesmo da A1).
+  - **A sujeira depois da ração** continua sorteada pelo mundo (o fluxo `mundo-sujeira`), no `Estado`.
+- **A ordem** dos estímulos de uma decisão não importa para os drives. Químicos diferentes comutam. No mesmo químico (o cansaço do efeito
+  da ação e do andar; a tristeza do brincar e da bola) os cortes são do mesmo lado e também comutam.
+- **O G-HOJE** contra o float de hoje do `mundo.py` vem em duas partes:
+  - uma grade de estados com cada comida, pelo próprio `MotorMundo._comer_mundo`;
+  - vidas do mundo, decisão a decisão: o `Estado` na decisão, a ação com a MF-2, o andar, o que comeu e a bola, contra o `Estado` depois da
+    consequência. As vidas usam `mult_queda` 2 (mais frutas no chão) e um instinto que vai à comida podre, para cobrir todos os
+    estímulos. O motor do corpo com o mundo é do A.
+- **O gabarito da paridade** (`tests/gabaritos/corpo_quimica_python.json`) foi à versão 3: entrou a seção `mundo`, com os estímulos do
+  mundo na mesma grade de estados, sem e com a digestão. As seções da versão 2 saem idênticas.
+- **A `pesos_janela`** (`ConfigConsequencia`, adendo 2, A2.4):
+  - **as faltas da janela** são as da observação de cada decisão, pela conta do sinal (S − arred(h × S)). Ainda não vêm do receptor do
+    corpo, porque o cérebro A no corpo é a etapa 5;
+  - **toda decisão observada entra na janela**, dormindo ou acordado. O "32, 8 h acordado" do plano foi lido como 32 decisões de 15 min;
+  - **os drives da janela** são os do N3 e o humor (o da E2);
+  - **o peso fixo** dos drives de hoje é S (peso 1), então o peso efetivo é o da janela. O `max` com o piso de um quarto é redundante
+    (m ≤ S), mas fica como o plano escreve;
+  - **a janela anda depois da decisão:** o peso é o das J decisões anteriores, e a falta da decisão entra depois;
+  - **o sinal com os pesos é calculado no cérebro.** O `f_S` que a bancada passa tem de ser o `sinal_homeostatico` sem pesos da transição;
+    se não for, falha alto. Os mesmos pesos valem na E2 (`fruta_comida`), no mundo físico (`consequencia_mundo`) e nos canais;
+  - **os pesos de cada decisão ficam no motivo** (`pesos_janela`, por canal). A conferência da dominância do D refaz os canais sem pesos e
+    vai divergir no P1-cw; o D tem de passar esses pesos ao `sinal_por_canal`;
+  - **os pesos da E2 pendente** ficam num atributo à parte, para a tupla do pendente não mudar (um teste dos canais a monta à mão);
+  - **o P1-c** (o P1 do corpo) ainda não existe, então a chave vale em qualquer P1.

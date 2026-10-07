@@ -1321,6 +1321,12 @@ class ConfigConsequencia:
     canais_ligados  PROPOSTO  CANAIS-REFORCO (docs/TAREFA_V2_CANAIS_REFORCO.md; H-R2; K-6): o mesmo sinal separado por canal (fome,
                       higiene, energia e humor), cada canal creditado ao seu grupo de pesos (lobos.ROTA_CANAIS). A soma dos canais
                       e o escalar, em inteiros, decisao a decisao. False: o escalar de sempre, byte a byte.
+    pesos_janela  PROPOSTO  corpo, adendo 2, A2.4 (docs/PLANO_ANALISE_V2_CORPO_DRIVES.md; o braco P1-cw): o peso de cada drive no sinal
+                      depende da falta media dele nas ultimas `janela_pesos` decisoes, m_d, na escala S:
+                          w_d = max(div_arred(S, 4), S - div_arred(3 * m_d, 4))
+                      (saciado na janela: S, o peso de hoje; em falta total: S/4). O peso fica fixo dentro da decisao (o mesmo no antes
+                      e no depois) e a janela anda depois dela. False: o sinal de sempre, byte a byte (lobos.sinal_homeostatico).
+    janela_pesos  PROPOSTO  A2.4: J, o tamanho da janela em decisoes (32: 8 h a uma decisao a cada 15 min).
     """
 
     drives: tuple = (0, 1, 2)
@@ -1328,6 +1334,12 @@ class ConfigConsequencia:
                                        # reserva da secao 6: menos vidas com peso no teto); artifacts_v2_n3/calibracao/escolha.json
     humor_na_fruta: bool = True        # E2: o humor no sinal do P1 so quando a mudanca vem de comer fruta
     canais_ligados: bool = False       # CANAIS-REFORCO: o mesmo total de sinal, separado por canal (H-R2, K-6)
+    pesos_janela: bool = False         # corpo, A2.4 (P1-cw): o peso de cada drive pela falta recente dele
+    janela_pesos: int = 32             # A2.4: J decisoes
+
+    def __post_init__(self) -> None:
+        if type(self.janela_pesos) is not int or self.janela_pesos <= 0:
+            raise ValueError(f"ConfigConsequencia.janela_pesos precisa ser inteiro positivo: {self.janela_pesos!r}")
 
 
 CONFIG_CONSEQUENCIA = ConfigConsequencia()

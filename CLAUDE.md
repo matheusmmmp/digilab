@@ -2770,3 +2770,26 @@ web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - ele também depende dos braços do corpo (P1-c), que a bancada ainda não tem.
 - **Testes:** `tests/test_dominancia.py`, 17 (~5 s). As funções são conferidas em dados sintéticos com a resposta conhecida; a conferência
   com os canais em quatro mundos, e ela falha alto quando os dois lados diferem.
+
+## V2, CORPO-MUNDO e PESOS-JANELA — os estímulos do mundo físico no corpo e o peso pela janela no cérebro A (2026-10-07) — GATES PASSAM
+
+Pedido do Gerente depois da etapa 3 do mundo. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/corpo.py`,
+`digilab/policies/lobos.py` (atrás da chave), a `ConfigConsequencia`, o exportador e o gabarito da paridade do corpo. `engine.py`,
+`mundo.py`, o motor do corpo, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Os estímulos do mundo no `Corpo`** (para o A ligar o `MotorMundo` no `MotorCorpo`):
+  - `estimulo_andar`: cansaço + 75 por subunidade;
+  - `estimulo_consumo_mundo`: a ração madura (a do alimentar), a fruta madura (67500 e o efeito dela) e a podre (só o humor);
+  - `acao_pet(..., com_mundo=True)`: a MF-2, comer sem comida não dá fome;
+  - a bola do mundo é o `estimulo_bola` de sempre.
+- **G-HOJE contra o float do `mundo.py`** (`tests/test_corpo_mundo.py`): a grade de cada comida pelo `_comer_mundo` do mundo e vidas
+  decisão a decisão (os drives a até 1e−9, com e sem a digestão, todos os estímulos cobertos).
+- **O gabarito da paridade** do corpo foi à versão 3 (a seção `mundo`); as seções de antes saem idênticas.
+- **`ConfigConsequencia.pesos_janela`** (A2.4, o braço P1-cw; desligada por padrão) e `janela_pesos` (J = 32):
+  - o peso de cada drive é `max(div_arred(S, 4), S − div_arred(3 · m_d, 4))`, com m_d a falta média nas J decisões anteriores;
+  - é o mesmo no antes e no depois, e a janela anda depois da decisão;
+  - o sinal com os pesos é calculado no cérebro (`sinal_homeostatico(..., pesos)`, e as variantes da E2 e dos canais), na E2 e no
+    `consequencia_mundo`;
+  - os pesos ficam no motivo de cada decisão;
+  - desligada, o sinal e a vida de hoje.
+- **Testes:** `tests/test_pesos_janela.py`. A conta exata do peso e do sinal (a fome 0,4 → 0,7 com peso de um quarto dá 276 no lugar de
+  1104); a janela refeita por fora decisão a decisão numa vida; a E2 e os canais nas frutas; o mundo físico; o G1.
