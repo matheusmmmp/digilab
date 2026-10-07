@@ -3032,9 +3032,16 @@ Só papel: `docs/TAREFA_V2_CORPO_DRIVES.md`. Nenhum código, nenhuma run.
   É o "dentro da tolerância do plano" do pedido.
 - **C = 450000** é o mínimo múltiplo comum dos denominadores das taxas de hoje. Com ele, todo número de hoje vira inteiro exato, e a
   paridade com o TS é exata. É a decisão CD-1.
-- **O tapa e o carinho chegam ao cérebro só pelos receptores.**
+- **O carinho chega ao cérebro só pelos receptores.**
   - O crédito à última decisão (a janela da v1) é a leitura de "o reforço sai do mesmo ciclo da consequência" (#203, seção 4).
-  - Restringir o crédito aos gestos da mão, sem o cuidado do dono, segue o N3 e fica como decisão CD-4.
+  - Restringir o crédito ao carinho, sem o cuidado do dono, segue o N3 e fica como decisão CD-4.
+- **Revisão do Matheus (2026-10-07, no PR #209): o tapa também manda sinal direto ao cérebro.** A primeira versão seguia a S-2 e o #203,
+  seção 4 ("não uma nota direta ao cérebro"); a revisão muda isso.
+  - O tapa passa por `receber_acao_dono` e é creditado como a bronca, com `ConfigLobos.recompensa_tapa`.
+  - Ele chega em toda fonte que aprende, para que o pet do produto, que aprende pela consequência, também o receba.
+  - Ele continua sendo estímulo no corpo.
+  - Não soma a mudança no corpo como segundo sinal (CD-9). O valor e o alcance do sinal são a CD-10.
+  - O registro da decisão (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, seções 4 e 8) não foi editado aqui: fica para o coordenador.
 - **O medo da mão** é um receptor do susto sobre a taxa do carinho: o conceito do manual de "um receptor controla a taxa de uma reação".
   O pedido o põe como efeito medido; a medida está na seção 8 e o mecanismo mínimo é a decisão CD-5.
 - **O vínculo** depende da S-4 (tarefa própria). Até ela entrar, a medida sai "não disponível".

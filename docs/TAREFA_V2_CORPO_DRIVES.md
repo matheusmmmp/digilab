@@ -20,6 +20,12 @@ próprio, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, commitado antes de qualquer r
 - **E-9:** a química entra por baixo dos drives de hoje, um órgão por vez.
 - **E-10:** o tamanho é o mínimo que reproduz os drives de hoje, mais a digestão e a Vida.
 
+**Revisto pelo Matheus (2026-10-07, depois da primeira versão desta tarefa): o tapa também manda sinal direto ao cérebro** (seção 8).
+- Isso muda a S-2 e o #203, seção 4, que diziam "um estímulo no corpo, e não uma nota direta ao cérebro".
+- O tapa continua sendo estímulo no corpo (dor, susto, estresse). Agora ele é estímulo **e** sinal.
+- O carinho segue só pelo corpo.
+- O registro da decisão (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, seções 4 e 8) fica para o coordenador atualizar.
+
 **Vale para qualquer cérebro.** O porte do v11 está pausado (`docs/V2_RODADA_16.md`, seção 6): o Matheus quer um pet que planeja, e o
 corpo é o que esse cérebro vai precisar prever. O corpo expõe receptores e ganchos (seções 10 e 11); um cérebro que não os lê vive como hoje.
 
@@ -37,7 +43,7 @@ pet a ficar parado? Isto é: brincar, explorar e o contato passam a render sinal
   - **curiosidade**, que explorar e achar coisa nova reduz;
   - **solidão**, que acariciar reduz. A seção 5 do #203 pede a solidão ("o contato"), então ela entra;
   - **estresse**, que se acumula com drives altos e que acariciar reduz;
-- o **carinho e o tapa** como estímulos no corpo, com a dor leve e o susto (seção 8);
+- o **carinho e o tapa** como estímulos no corpo, com a dor leve e o susto, e o **sinal direto do tapa ao cérebro** (seção 8);
 - o **sinal da consequência** tirado da redução dos drives pelo corpo, com os canais por drive como opção (seção 9);
 - os **receptores**: o pet sente só por eles (seção 10).
 
@@ -209,7 +215,7 @@ dá só os conceitos: drives como químicos e estresse que se acumula com drives
   - O P0 continua o instinto de hoje, e o que muda o comportamento é o aprendizado pelo sinal (seção 9).
   - Sem isso, um P0 diferente mudaria a referência de todos os contrastes.
 
-## 8. O carinho e o tapa no corpo
+## 8. O carinho e o tapa no corpo, e o sinal do tapa
 
 **Acariciar** (`AcaoUsuario.ACARICIAR`, de hoje) vira estímulo:
 - `solidao` −180000;
@@ -226,17 +232,34 @@ Regras do tapa:
 - **O tapa gasta uma interação do orçamento e conta como contato**, como o repreender de hoje (CD-6).
 - **`dor` e `susto` têm receptor.**
 
-**Nenhum dos dois é sinal ao cérebro.**
-- O motor **não** repassa `acariciar` nem `tapa` por `receber_acao_dono` nos pets com `gestos` ligado (espião no G-MEC).
-- O cérebro vê só o que os receptores mostram, antes e depois do gesto, pelo gancho `mudanca_no_corpo(obs_antes, obs_depois)`. O gancho
+**O carinho chega ao cérebro só pelo corpo.**
+- O motor **não** repassa `acariciar` por `receber_acao_dono` nos pets com `gestos` ligado (espião no G-MEC).
+- O cérebro vê só o que os receptores mostram, antes e depois do carinho, pelo gancho `mudanca_no_corpo(obs_antes, obs_depois)`. O gancho
   não diz que gesto foi.
 - **Crédito** (CD-4): o cérebro calcula o sinal pelo corpo (seção 9) e o credita à última decisão, pela janela da v1 (a do elogio e da
   bronca).
-- **Só os gestos da mão são creditados assim.** Alimentar, limpar e o dono brincar mudam o corpo, mas não viram sinal de aprendizado, como
-  no N3: a consequência é da própria ação do pet.
+- **Do cuidado, só o carinho é creditado assim.** Alimentar, limpar e o dono brincar mudam o corpo, mas não viram sinal de aprendizado,
+  como no N3: a consequência é da própria ação do pet.
 
-**Diferença do repreender.** O repreender entregava −1 ao aprendiz. O tapa sobe dor e estresse, e o sinal negativo sai do mesmo cálculo
-da consequência: depende do corpo naquela hora.
+**O tapa manda sinal direto ao cérebro** (revisão do Matheus, 2026-10-07):
+- **O caminho:** o motor repassa o `tapa` por `receber_acao_dono`. O cérebro o credita à última decisão pela janela da v1, como a bronca.
+- **O valor:** `f = arred(recompensa_tapa · S)`, com `ConfigLobos.recompensa_tapa` (PROPOSTO: o mesmo valor da `recompensa_repreensao`;
+  CD-10).
+- **Em toda fonte que aprende** (CD-10): o sinal chega ao P1, ao P2 e ao P3 e às variantes deles, e não só à fonte dono, porque o tapa é o
+  gesto que o pet do produto, que aprende pela consequência, vai receber.
+  - No P0 nada aprende.
+  - A `PoliticaDoBraco` deixa passar o tapa nas fontes que hoje bloqueiam o dono (dono do arquivo: o D). O resto do dono continua
+    bloqueado como hoje.
+- **Escalar:** como o sinal do dono, os canais não o dividem.
+- **Sem dupla contagem** (CD-9): o tapa não chama o `mudanca_no_corpo`. A mudança no corpo que ele causa não é creditada de novo.
+  - A dor, o susto e o estresse ficam no corpo.
+  - A dor e o estresse pesam nas decisões seguintes pelo D da própria ação (seção 9).
+
+**Diferença do repreender.** O sinal é o mesmo da bronca. O que o tapa tem a mais é o corpo:
+- a dor, o susto e o estresse;
+- o medo da mão e o estresse acumulado, que o jogador vê.
+
+O repreender fica nos pets antigos e na fonte dono (S-1); o tapa chega também ao pet que aprende pela consequência.
 
 **O medo da mão** (CD-5). O receptor do `susto` controla a taxa da reação do carinho, o conceito do manual: com susto, o carinho alivia
 menos. O efeito do carinho na solidão e no estresse é multiplicado por `(C − q_susto) / C`, em inteiros. Com o parâmetro em 0, a variante
@@ -266,7 +289,8 @@ sem medo.
 **As janelas de crédito:**
 - **a própria ação** é a janela imediata do N3: o "antes" é a decisão, e o "depois" vem logo depois dos estímulos da ação (andar, comer,
   brincar, achar), antes do tempo e do dono. A consequência atrasada (o tédio que volta a subir) segue declarada e sem crédito;
-- **o gesto da mão** é a seção 8: o "antes" e o "depois" são do gesto, creditados à última decisão.
+- **o carinho** é a seção 8: o "antes" e o "depois" são do carinho, creditados à última decisão;
+- **o tapa** não entra nesta conta: ele manda o sinal direto da seção 8, na mesma janela.
 
 **Os ganchos:**
 - **com o mundo físico:** o corpo aplica os estímulos do `ocorrido` antes de o mundo chamar `consequencia_mundo(acao, ocorrido,
@@ -319,12 +343,14 @@ sem medo.
 **A interface:**
 - `obs.corpo`, os receptores;
 - `consequencia_mundo` ou `consequencia_corpo`, a própria ação;
-- `mudanca_no_corpo`, o gesto.
+- `mudanca_no_corpo`, o carinho;
+- `receber_acao_dono` com o `tapa`, o sinal direto.
 
 Um cérebro sem esses ganchos vive como hoje: o instinto e o P0 não mudam.
 
 **O cérebro A** (dono: o B):
 - **O sinal:** `lobos.sinal_corpo` substitui o `sinal_homeostatico` com a chave.
+- **O tapa:** o `Aprendiz` trata o `tapa` como a bronca, com `recompensa_tapa`, em toda fonte que aprende.
 - **As entradas novas:** as leituras dos drives novos entram como entradas da percepção, **só nas regras de tempo livre** (`tempo_livre`,
   `bola_no_cenario`, `fruta_no_cenario`), com prior 0.
   - No prior, a vida é a de hoje.
@@ -367,7 +393,9 @@ Um cérebro sem esses ganchos vive como hoje: o instinto e o P0 não mudam.
 - brincar com a bola reduz o tédio, e sem bola reduz menos;
 - explorar com novidade reduz a curiosidade, e rever o mesmo objeto dentro da janela não reduz;
 - acariciar reduz a solidão e o estresse;
-- o tapa sobe a dor, o susto e o estresse, e nunca passa por `receber_acao_dono`;
+- o tapa sobe a dor, o susto e o estresse; passa uma vez por `receber_acao_dono`; credita `recompensa_tapa` à última decisão em toda fonte
+  que aprende (P1, P2, P3) e em nenhuma no P0; e não chama o `mudanca_no_corpo`;
+- o carinho nunca passa por `receber_acao_dono`;
 - o susto corta o efeito do carinho na medida;
 - a meia-vida chega à metade no prazo (±1 tick);
 - a digestão na taxa C é instantânea;
@@ -386,7 +414,7 @@ antes de se medir o efeito.
 **O teste de mecanismo (G-RISCO),** em estados controlados, com os números PROPOSTOS:
 - com o tédio alto e a energia alta, o sinal de brincar com a bola é positivo (a conta da seção 9: +1440);
 - com a curiosidade alta, explorar e achar uma novidade dá sinal positivo; explorar sem achar nada dá o sinal de hoje (só o cansaço);
-- com a solidão alta, o carinho dá sinal positivo à última decisão; o tapa, negativo;
+- com a solidão alta, o carinho dá sinal positivo à última decisão; o tapa dá o sinal direto, negativo, à última decisão;
 - **numa vida curta do P1 com o corpo** (sementes dos testes, 4 dias, mundo da bola): p(brincar | tédio > 0,5, bola vista) no fim é maior
   que no começo. Só a direção, sem IC e sem gate de efeito.
 
@@ -415,9 +443,9 @@ o escreve. O que esta tarefa pede ao plano:
 | 3. órgão 1, digestão | **B** | `corpo.py`, `config.py` | a seção 5; G-HOJE (a) de novo |
 | 4. órgão 2, Vida | **B** | `corpo.py`, `config.py` | a seção 6; G-HOJE (a) de novo |
 | 5. o cérebro A no corpo | **B** | `lobos.py`, `motivo.py` (o embrulho), `tests/test_corpo_cerebros.py` | `sinal_corpo`, as entradas novas, os canais novos; G-HOJE (a) do sinal |
-| 6. os drives novos e os gestos | **B** (química e cérebro) e **A** (motor) | B: `corpo.py`, `lobos.py`. A: `AcaoUsuario.TAPA` em `events.py` (fim do enum), `mudanca_no_corpo`, os `vistos_novos` do mundo, o `DonoComGestos` | as seções 7 a 9; G-MEC, G-RISCO |
+| 6. os drives novos e os gestos | **B** (química e cérebro) e **A** (motor) | B: `corpo.py`, `lobos.py` (com `recompensa_tapa`). A: `AcaoUsuario.TAPA` em `events.py` (fim do enum), o repasse do tapa, `mudanca_no_corpo`, os `vistos_novos` do mundo, o `DonoComGestos` | as seções 7 a 9; G-MEC, G-RISCO |
 | 7. a web (motor) | **A** | `web/app/motor/corpo.ts`, a paridade em `web/app/motor/__tests__/` | o corpo em TS e o G-PAR; nenhuma tela e nenhuma versão de pet |
-| 8. a bancada | **D** | `experiments/bancada_v2.py`, `digilab/metrics.py`, `experiments/configs/v2_corpo/` | a chave `corpo` na config, o filtro `sem_gestos` do acoplado, as medidas das seções 8 e 13, as faixas do plano |
+| 8. a bancada | **D** | `experiments/bancada_v2.py`, `digilab/metrics.py`, `experiments/configs/v2_corpo/` | a chave `corpo` na config, o tapa passando pela `PoliticaDoBraco` em toda fonte que aprende, o filtro `sem_gestos` do acoplado, as medidas das seções 8 e 13, as faixas do plano |
 
 **Ordem:** 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 e 8 em paralelo. Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 - O **órgão 1** só entra depois da química base passar o G-HOJE (a).
@@ -434,7 +462,7 @@ o escreve. O que esta tarefa pede ao plano:
 | peça | pesquisa (Python) | produto (web) |
 |---|---|---|
 | química, digestão, Vida, drives novos | atrás da `ConfigCorpo`, nas runs do plano | **pausado** com o porte do v11: entra numa versão de pet nova quando o produto voltar (S-1: os v1 a v10 ficam iguais, com os botões) |
-| carinho e tapa no corpo | o `DonoComGestos` nos braços do plano | o gesto na tela, que deve ler como desaprovação, não como violência (#203, seção 4); a tela é tarefa própria |
+| carinho e tapa no corpo; o sinal direto do tapa | o `DonoComGestos` nos braços do plano | o gesto na tela, que deve ler como desaprovação, não como violência (#203, seção 4); a tela é tarefa própria |
 | sinal pelo corpo | o P1 e os braços que aprendem pela consequência | o aprendizado do pet novo (S-3), só depois do plano |
 | receptores | a entrada dos cérebros | a mesma regra; o que a tela mostra ao jogador é outra coisa (o jogador pode ver o motor) |
 | o corpo em TypeScript | o G-PAR desta tarefa | o mesmo motor, sem tela até o produto voltar |
@@ -442,15 +470,17 @@ o escreve. O que esta tarefa pede ao plano:
 
 ## 16. Decisões abertas
 
-S-1, S-3, S-4, E-9 e E-10 estão decididos. Fica aberto:
+S-1, S-3, S-4, E-9 e E-10 estão decididos. Fica aberto (CD-9 e CD-10 vêm da revisão do tapa):
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | CD-1 | A escala da concentração | **C = 450000**, o mínimo múltiplo comum das taxas de hoje: todo número de hoje vira inteiro exato | uma potência de 2 pede acumuladores de resto em toda taxa: mais código e mais risco na paridade |
 | CD-2 | O instinto (o P0) lê os drives novos? | **não**: os drives novos agem pelo sinal e pelas entradas do aprendiz; o P0 continua o instinto de hoje | lendo, o P0 muda e todo contraste muda de referência; e não se separa o que vem do corpo do que vem do aprendizado |
 | CD-3 | A digestão entra na taxa C (instantânea) | **sim** no gate; a digestão lenta fica atrás do parâmetro, para o plano | lenta desde já: os drives de hoje mudam e o G-HOJE perde o sentido |
-| CD-4 | Só os gestos da mão viram sinal à última decisão; o cuidado do dono (alimentar, limpar, brincar) não | **sim**, como no N3 | creditar o cuidado ensina "o que eu fazia antes de comer é bom" (superstição) e mistura cuidado com ensino na medida; no Creatures toda redução reforça, e essa é a alternativa |
+| CD-4 | O carinho vira sinal pelo corpo à última decisão; o cuidado do dono (alimentar, limpar, brincar) não | **sim**, como no N3 | creditar o cuidado ensina "o que eu fazia antes de comer é bom" (superstição) e mistura cuidado com ensino na medida; no Creatures toda redução reforça, e essa é a alternativa |
 | CD-5 | O medo da mão como receptor do susto sobre a taxa do carinho | **sim**, com o parâmetro podendo ser 0 (a variante sem medo) | sem ele, o "medo da mão" só pode aparecer como aprendizado, e o #203 o descreve como efeito do corpo |
 | CD-6 | O tapa gasta orçamento e conta como contato | **sim**, como o repreender de hoje | fora do orçamento, o dono que bate ganha interações de graça e os braços deixam de ser comparáveis |
 | CD-7 | O estresse muda outra função (saúde, obediência) nesta tarefa | **não**: só é medido e entra no sinal; os efeitos ficam para a 1b | ligado já: o efeito do tapa no cuidado fica confundido com o mecanismo novo |
 | CD-8 | A curiosidade exige o mundo físico | **sim**; sem ele, falha alto | sem o mundo, explorar não acha nada, e uma curiosidade que só sobe vira um castigo constante no sinal |
+| CD-9 | O tapa credita só o sinal direto, sem somar a mudança que ele causa no corpo | **sim**: a dor e o estresse ficam no corpo e pesam depois | somando, o tapa pune duas vezes, e a força dele passa a depender do corpo de um jeito que nenhum número controla |
+| CD-10 | O valor e o alcance do sinal do tapa | **o valor da bronca** (`recompensa_tapa` = `recompensa_repreensao`), **em toda fonte que aprende** | só na fonte dono: o pet do produto, que aprende pela consequência, não aprenderia nada com o tapa; com outro valor, o tapa deixa de ser comparável com a bronca da pesquisa |
