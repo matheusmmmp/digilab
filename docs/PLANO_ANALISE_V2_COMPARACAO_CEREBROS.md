@@ -381,3 +381,121 @@ encolhe por um adendo novo, antes da run.
 - **Tempo:** por vida, o C custa o mesmo que o A (~0,4 s por vida de 14 dias com o replay conferido, medição informal nesta máquina, sem artefato). Fica abaixo de 4× o tempo da K2 do A.
 - **Artefato:** `artifacts_v2_comparacao_cerebros/calibracao_C/`.
 
+
+---
+
+## Adendo 2 (2026-10-07, antes da validação): a comparação A × C, a família de dois e o tamanho da amostra
+
+Registrado pelo worker D (tarefa `docs/TAREFA_V2_COMPARACAO_A_C.md`, rodada 13), **depois do piloto e antes de qualquer vida da validação**.
+
+- **Piloto:** `artifacts_v2_comparacao_cerebros/piloto/` (`resumo.json`, `analise.json`, `medidas.json`, `meta.json`, `run.log`); as
+  vidas ficam fora do git.
+- **Orquestrador:** `experiments/run_v2_comparacao_cerebros.py`.
+- **Config:** `experiments/configs/v2_comparacao_cerebros/piloto_ac.json`.
+
+### 2.1 O B sai; o que muda na família (interpretação registrada)
+
+- **O B não fecha** pelo motivo "não aprende" (seção 7): no piloto da calibração dele, a parte aprendida muda 0,0077 [0,0065; 0,0089]
+  das decisões do P1 (`docs/RESULTADO_V2_CALIBRACAO_CEREBRO_B.md`; decisão de 2026-10-06 no `REGISTRO_DESVIOS`). O B não roda.
+- **Família primária: CC-1 e CC-2.**
+  - O que medem: C − A no P1, na `taxa_fruta_ruim` final do descasado e na de depois da troca do mutável.
+  - O teste: **Holm de dois**, bilateral, α = 0,05 (passos 0,025 e 0,05).
+  - O p bilateral é o do bootstrap das unidades: 2 × a menor cauda das médias reamostradas.
+- **CB-1 e CB-2: não testáveis**, porque o B não fecha.
+- **Empate** (seção 4 e passo 1 do M6): o IC 90% fica dentro de (−Δ, +Δ).
+  - A margem vem antes do teste: uma diferença que passa no Holm, mas fica dentro da margem, é empate.
+  - Fora da margem, a leitura é "C melhor" ou "A melhor" só com o Holm; sem ele, é inconclusivo.
+  - No passo 1 do M6, inconclusivo conta como empate ("a diferença não passa no Holm").
+- **Δ = 0,1986268570547561**, o do adendo 2 do experimento maior (`experiments/configs/v2_experimento_maior/validacao.json`).
+- **Secundários** (seção 4, sem o B), descritivos, sem Holm, com a leitura pelo IC 95%:
+  - C − A em P1, P2, P2e e P3 nas três condições, fora as duas primárias, cada condição na janela da primária (final no casado e no
+    descasado, depois da troca no mutável);
+  - os consumos até a metade, no descasado.
+- **Descritivos com IC:**
+  - a legibilidade;
+  - a deriva (P1, dia a dia, e a razão 14/7);
+  - o custo (CPU por decisão, bytes de log por dia, estado interno sem os motivos, parâmetros aprendíveis);
+  - a divergência acoplada (o C no registro do P1 do A, JSD por dia);
+  - o canal de cuidado (cada braço com dono menos o próprio só cuidado);
+  - as predições do experimento maior, por cérebro.
+
+### 2.2 Os pontos e as regras que os escolheram
+
+| cérebro | ponto | de onde | regras |
+|---|---|---|---|
+| A | T3, `g` 512, `w0_info` 256, `w0_pedido` 256, ganho 4; canais ligados, K4, montagem completa | `artifacts_v2_calibracao_conjunta/escolha.json` | K2: A1 (`g`) e C (`w0_info`) fecharam; A2 (`w0_pedido`) e B (ganho) ficaram na reserva (`docs/RESULTADO_V2_CALIBRACAO_CONJUNTA.md`) |
+| C | passo 128, teto 4096, `w0_info` 256; o ganho do A (4) | `artifacts_v2_comparacao_cerebros/calibracao_C/escolha.json` | adendo 1.2: C-A e C-B pela estabilidade (K-4), C-C pela manipulação (K-3); as três fecharam (`docs/RESULTADO_V2_CALIBRACAO_CEREBRO_C.md`) |
+
+- **O mundo é o mesmo para os dois, incluído o K4** (o dono do P3 julga a fruta).
+- **O C não lê a montagem nem a chave dos canais.** As peças da montagem são do A; no C, os canais são a arquitetura.
+- **As vidas do C da calibração ficaram fora do git; o piloto as refez.** Com o mesmo bootstrap, o "não aprende" do C no P1 sai igual ao
+  gravado em `calibracao_C/piloto.json`: deriva no dia 14 de 0,02224 e fração decidida pelo aprendido de 0,32447, médias e ICs idênticos.
+
+### 2.3 O piloto (unidades de 28101…28505, K = 4, 20 unidades)
+
+- **O desenho é o da validação inteira**, por unidade e condição:
+  - o P0 comum;
+  - A e C em P1, P2, P2e e P3;
+  - o só cuidado `sem_ensino` de P2, P2e e P3, de cada cérebro;
+  - o C no registro do P1 do A, no descasado e no mutável.
+- **47 vidas por unidade, 940 no total**, todas rejogadas do disco bit a bit.
+- **Tempo:** 1 h 30 (270 s por unidade).
+- Nada se escolheu aqui.
+
+| contraste | média C − A | IC 95% | IC 90% | σ²_d | σ_d |
+|---|---|---|---|---|---|
+| CC-1 (descasado, final) | +0,0124 | [−0,0021; +0,0272] | [+0,0001; +0,0248] | 0,001204 | 0,0347 |
+| CC-2 (mutável, depois da troca) | +0,0334 | [+0,0181; +0,0489] | [+0,0206; +0,0463] | 0,001304 | 0,0361 |
+
+### 2.4 O N e as unidades
+
+- **Fórmula** (seção 6.3, bilateral, α' = α / 2 = 0,025, o passo mais exigente do Holm de dois):
+  - N = ((z₀,₉₈₇₅ + z₀,₈) σ_d / Δ)² = ((2,2414 + 0,8416) σ_d / 0,1986)²;
+  - CC-1 dá 0,29 e CC-2 dá 0,31; os dois arredondam para cima, ao múltiplo de 5, para **5**.
+- **Conferência por simulação:** bootstrap das unidades centradas em Δ, teste t no mesmo α' / 2, 2000 réplicas, semente 4242. Dá N = 5,
+  com poder 1,0 nos dois contrastes.
+- **N da validação = 5** (o maior entre a fórmula e a simulação, ao múltiplo de 5); **K = 1**.
+- **Unidades:** `derivar_semente("comparacao-cerebros", b, 0)` e `derivar_semente("comparacao-cerebros-genoma", b, 0)`:
+
+| base | semente | genoma |
+|---|---|---|
+| 29101 | 1813325358624552102 | 18352371978552326836 |
+| 29202 | 10104299035107049184 | 12056934342943575927 |
+| 29303 | 4250120258739622145 | 2369633733587340594 |
+| 29404 | 3781795229716141642 | 2042150382593049627 |
+| 29505 | 3036763020792814318 | 411338248574605006 |
+
+- **Tempo estimado:** 5 × 270 s ≈ **23 min**, 235 vidas, sem os braços do B; abaixo do teto de 12 h.
+
+### 2.5 O que o N = 5 implica (registrado antes, sem mudar a regra)
+
+- **O passo 1 do M6 quase só pode sair empate.** Com Δ = 0,199 e σ_d ≈ 0,035, uma diferença só sai da margem se |C − A| passar de
+  ~0,17. O piloto mediu 0,01 e 0,03.
+- **O M6 tende a se decidir no passo 2, a legibilidade, em 5 unidades.** No piloto: A 0,255 [0,249; 0,263], C 0,323 [0,318; 0,329],
+  C − A +0,068 [+0,062; +0,074].
+- **Os secundários e os descritivos ficam com 5 unidades:** ICs largos, só leitura.
+- **O N não cresce:** o tamanho sai da família primária (seção 6.3), e nada se ajusta olhando os dados.
+
+### 2.6 Medidas (interpretações registradas)
+
+- **Legibilidade (passo 2 do M6):** a fração das decisões do P1 no descasado em que a **sonda do aprendido** muda a escolha (contrato
+  1.1: a escolha com a parte aprendida zerada e o mesmo `u`). A regra é a mesma nos dois cérebros:
+  - **no A**, a sonda é o sorteio com os pesos do lobo de impulsos (o prior), conferido decisão a decisão contra o `motivo_lobos`;
+  - **no C**, é a sonda gravada no motivo;
+  - **"com motivo honesto":** o C não tem a expressão do motivo (o fator), então fica o próprio teste da sonda. A fração do A com fator
+    (o G4 da L1) sai ao lado, só descritiva.
+- **Custo (passo 4):**
+  - CPU por decisão, pelo tempo de `Bancada.vida` (sem o replay e sem as medidas) sobre as decisões, e bytes de log por dia;
+  - média por unidade das vidas fechadas (P1 a P3, nas três condições);
+  - empate abaixo de 20% nas duas medidas; a máquina fica no `meta.json`.
+- **Porte (passo 3):** os dois cérebros têm pesos inteiros e nenhuma função transcendental (nenhum `math` no `lobos.py` nem no
+  `cerebro_c.py`): empate.
+- **A leitura segue a seção 4 e o M6: a margem antes do teste.** Na primeira versão do orquestrador, o Holm vinha antes da margem; a
+  correção foi feita no piloto, antes deste adendo, para seguir o texto do plano.
+
+### 2.7 A validação
+
+- **Uma vez,** com `experiments/configs/v2_comparacao_cerebros/validacao_ac.json` e saída em `artifacts_v2_comparacao_cerebros/validacao/`.
+  O orquestrador recusa rodar de novo se a pasta já tem o `resumo.json`.
+- **Refazer só por erro de execução,** com sementes novas registradas antes.
+- **Faixas que não toca:** a do experimento maior (30101…30505) e a queimada (15101…15505).

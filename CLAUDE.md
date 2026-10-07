@@ -2358,3 +2358,32 @@ Uma run nas bases 30101…30505 (N = 30, K = 6), config `experiments/configs/v2_
     - o P2d chega à metade 12,8 consumos antes do P2;
     - o P3 come menos a fruta ruim que o P3i (−0,11 e −0,09).
   - **`w_info` do P2e:** cruza o zero em 30 de 30 unidades, até o dia 5.
+
+## V2, COMPARACAO-A-C — a comparação dos cérebros A × C (2026-10-07, `docs/TAREFA_V2_COMPARACAO_A_C.md`) — FEITA; PELO M6, O C (POR POUCO)
+
+Rodada 13. Plano `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, seções 2 a 8 e adendos 1 e 2 (o 2 commitado depois do piloto e antes da
+validação). O B não rodou (não fecha: "não aprende"). Números de `artifacts_v2_comparacao_cerebros/{piloto,validacao}/` (as vidas fora do
+git); relatório `docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Código:**
+  - `experiments/run_v2_comparacao_cerebros.py`: a `BancadaAC` é a bancada do experimento maior (montagem completa, K4, canais) com o C a
+    mais; a montagem não vale para o C. Os pontos são lidos dos artefatos da K2 e da calibração do C;
+  - por unidade e condição: o P0 comum; A e C em P1, P2, P2e e P3; o só cuidado `sem_ensino`; o C no registro do P1 do A (descasado e
+    mutável), com a JSD por dia;
+  - legibilidade pela sonda do aprendido nos dois cérebros (no A, o sorteio com o prior e o mesmo `u`, conferido contra o `motivo_lobos`);
+  - custo: µs por decisão, bytes de log por dia, estado sem os motivos;
+  - a família CC-1/CC-2 com Holm de dois, os secundários, as predições por cérebro e a tabela do M6;
+  - o N do adendo (fórmula e simulação, α/2); a validação recusa rodar de novo; `--reanalisar` refaz a análise sobre o `medidas.json`;
+  - `lobos.py`, `cerebro_c.py` e a bancada não mudaram.
+  - Configs `experiments/configs/v2_comparacao_cerebros/{fumaca,piloto,validacao}_ac.json`; testes `tests/test_comparacao_a_c.py` (20).
+- **Piloto** (28101…28505, K = 4, 940 vidas, 1 h 30): σ_d 0,035 (CC-1) e 0,036 (CC-2) contra Δ 0,1986. **N = 5, K = 1**, ~23 min. As
+  vidas do C refeitas dão o "não aprende" da calibração dele, idêntico.
+- **Validação** (29101…29505, uma vez, 235 vidas, 22 min):
+  - **CC-1** C − A +0,016 [−0,017; +0,046] e **CC-2** +0,036 [−0,009; +0,078]: **empate nos dois** (dentro de ±Δ, nenhum passa no
+    Holm). O sinal é do A nas duas runs.
+  - **Legibilidade** (P1 descasado): A 0,262, C 0,327, C − A +0,065 [+0,057; +0,072]: **o C vence o passo 2** (limiar 0,05).
+  - **Porte:** empate; os dois têm pesos inteiros e nenhuma função transcendental.
+  - **Custo:** empate (CPU −4,3%, log −0,3%).
+  - **Recomendação pelo M6: o C.**
+- **O que pesa contra** (secundário, fora da regra): no P3, o C generaliza a bronca do dono para toda fruta e come 9 a 17 frutas por
+  vida, contra 38 a 46 do A; no descasado e no mutável o A come muito menos a fruta ruim (C − A ~+0,20). No P3 a legibilidade também é do
+  A. O C deriva menos (razão 1,57 × 2,43). A escolha é do Matheus.

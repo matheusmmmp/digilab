@@ -2855,6 +2855,42 @@ Sinal verde do coordenador, autorizado pelo Matheus, depois do #191 e do #192 (m
     nova, com plano próprio.
 - **Pendente antes da leitura final:** o texto completo do Eliassen et al. 2009 (L-1).
 
+## 2026-10-07 — Comparação A × C (COMPARACAO-A-C, rodada 13): interpretações, o piloto, o adendo 2 e a validação
+
+Tarefa `docs/TAREFA_V2_COMPARACAO_A_C.md`; plano `docs/PLANO_ANALISE_V2_COMPARACAO_CEREBROS.md`, adendo 2. Resultado em
+`docs/RESULTADO_V2_COMPARACAO_CEREBROS.md`.
+
+- **O B fora da família:**
+  - família de dois (CC-1, CC-2), Holm bilateral, α = 0,05; CB-1 e CB-2 não testáveis;
+  - o N com α/2 (o passo mais exigente);
+  - o p bilateral do bootstrap: 2 × a menor cauda das médias reamostradas.
+- **A margem antes do teste.**
+  - A primeira versão do orquestrador lia "C melhor/A melhor" pelo Holm antes de olhar o IC 90%.
+  - A seção 4 e o passo 1 do M6 dizem que dentro de ±Δ é empate. A leitura foi corrigida no piloto, refeita pelo `--reanalisar` sobre as
+    medidas gravadas, antes do adendo 2.
+  - Nada mudou nas vidas.
+- **O reaproveitamento das vidas do C:** elas ficaram fora do git, numa worktree já apagada.
+  - O piloto as refez e conferiu contra `calibracao_C/piloto.json`: médias e ICs idênticos.
+  - A primeira conferência deu diferente só nos ICs, porque as unidades estavam em outra ordem no bootstrap. Com a ordem da calibração
+    (por semente), sai igual.
+- **O mundo do C é o do A, incluído o K4** (o dono do P3 julga a fruta).
+  - O C não lê a montagem nem a chave dos canais.
+  - No P1 a vida do C é a da calibração dele (teste).
+- **Legibilidade:**
+  - a mesma regra nos dois, a sonda do aprendido (contrato 1.1);
+  - "com motivo honesto" fica como o próprio teste da sonda, porque o C não tem a expressão do fator;
+  - o G4 com fator do A sai só descritivo.
+- **Custo:** o tempo de `Bancada.vida` por decisão (sem o replay e as medidas) e os bytes de log por dia, média por unidade das vidas
+  fechadas. A validação rodou com a máquina livre: a suíte só rodou depois.
+- **O N do adendo:** o maior entre a fórmula e o N simulado, ao múltiplo de 5. Deu N = 5 (K = 1): o piso, porque σ_d ≈ 0,035 contra
+  Δ = 0,199. O que isso implica (o M6 decide no passo 2, ICs largos nos secundários) foi registrado no adendo 2.5, antes da validação.
+- **Validação:** uma vez (`validacao_ac.json`, do commit `dcda45f`), 235 vidas, sem erro, 22 min. Nada se ajustou olhando o resultado.
+- **Fora da regra, para o Matheus:**
+  - no P3 o C generaliza a bronca do dono para toda fruta e come pouca fruta;
+  - o A aprende qual evitar.
+  - A seção 4 põe o P3 nos secundários, então isso não muda a recomendação do M6 (o C); fica no relatório como a "alternativa
+    registrada" da seção 5.
+
 ## 2026-10-06 — LEITURA-VALIDACAO: a leitura da validação única; interpretações
 
 Tarefa `docs/TAREFA_V2_LEITURA_VALIDACAO.md`; entrega `docs/LEITURA_V2_VALIDACAO_UNICA.md`. Nenhuma run, nenhum código, nenhuma estatística
