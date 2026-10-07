@@ -268,6 +268,8 @@ passa a esperar o `consequencia_mundo`.
 
 ## 11. Decisões do Matheus
 
+**DECIDIDAS em 2026-10-07: MF-1 a MF-4, todas como recomendado** (Matheus, na abertura da rodada 17, `docs/V2_RODADA_17.md`).
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | MF-1 | No explorar, o pet come a comida que acha ao chegar ("achou e comeu")? | **sim**, com a fome abaixo de `fome_max_comer_achado` (0,85). Sem isso, com a janela imediata, o ganho de achar comida vai para o comer da decisão seguinte, e o explorar só registra o gasto | sem: o P1 não tem como ligar explorar à comida, e o teste mede o crédito, não o mundo. Com: comer e explorar se sobrepõem um pouco |
