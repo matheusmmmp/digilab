@@ -1,6 +1,6 @@
 # Tarefa — V2: o mundo físico mínimo (W-TAREFA-MUNDO, rodada 16)
 
-Status (2026-10-07): **PROPOSTO**. Só papel. Esta tarefa não autoriza run; o plano de análise é `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`,
+Status (2026-10-07): **PROPOSTO**. **MF-1 a MF-4 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 11). Só papel. Esta tarefa não autoriza run; o plano de análise é `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`,
 commitado junto, antes de qualquer run.
 
 Parte de `docs/futuro/mundo_fisico.md`:
@@ -268,7 +268,7 @@ passa a esperar o `consequencia_mundo`.
 
 ## 11. Decisões do Matheus
 
-**DECIDIDAS em 2026-10-07: MF-1 a MF-4, todas como recomendado** (Matheus, na abertura da rodada 17, `docs/V2_RODADA_17.md`).
+**DECIDIDAS em 2026-10-07: MF-1 a MF-4, todas como recomendado** (a coluna "recomendação" é o que vale).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

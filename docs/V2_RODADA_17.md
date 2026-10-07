@@ -5,11 +5,11 @@ Aberta em 2026-10-07 pelo coordenador, por decisão do Matheus ("segue com a rec
 ## 1. O que já está decidido
 
 - **As tarefas:**
-  - `docs/TAREFA_V2_MUNDO_FISICO.md` (#206), com MF-1 a MF-4 DECIDIDAS por este PR, todas como recomendado;
+  - `docs/TAREFA_V2_MUNDO_FISICO.md` (#206), com MF-1 a MF-4 decididas no #212;
   - `docs/TAREFA_V2_CORPO_DRIVES.md` (#209), com CD-1 a CD-10 decididas no #210;
   - o plano do corpo, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md` (#211), com PCD-1 a PCD-7 decididas.
-- **Ficam abertas:** as decisões do plano do mundo, PMF-1 a PMF-7 (seção 4). Elas só pesam na etapa 4 do mundo (a bancada), que vem por
-  último.
+- o plano do mundo, `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, com PMF-1 a PMF-7 decididas no #212. O coordenador pede a revisão da PMF-2
+  por adendo (seção 4); ela só pesa na etapa 4 do mundo (a bancada), que vem por último.
 - **Sementes:**
   - mundo: 31101…31505 para calibração e 32101…32505 para validação;
   - corpo: 33101…33505 para calibração e 34101…34505 para validação.
@@ -67,16 +67,16 @@ no fim: o conflito entre o A e o B se resolve por acréscimo.
 > pedir unidades derivadas. O teste de faixas confere que nenhuma colide com as de antes nem com as configs de `experiments/configs/`. Nada
 > mais. Entregue um PR e pare; o relato vai no corpo do PR.
 
-## 4. Decisão aberta: PMF-2, o contraste primário do mundo
+## 4. Pedido de adendo: PMF-2, o contraste primário do mundo
 
-O plano do mundo (#206) usa como primário **P0 − P1ac**: o P1 acoplado em malha aberta ao cuidado do P0. A validação única mostrou que o
+O plano do mundo (#206, PMF-2 decidida no #212) usa como primário **P0 − P1ac**: o P1 acoplado em malha aberta ao cuidado do P0. A validação única mostrou que o
 acoplado em malha aberta cuida pior que o original, porque o cuidado gravado não reage ao pet que o recebe. Comparar um P0 em malha fechada
 com um P1 acoplado pode pôr no contraste a desvantagem do acoplado, e não o efeito do mundo.
 
 A segunda revisão de literatura (`docs/referencias/F_REVISAO_V2_SEIS_PERGUNTAS.md`, P2) sustenta o risco (Church 1964; Kimmel e Terrant
 1968, página 1). Ela também registra que a magnitude da objeção é contestada.
 
-**Recomendação:** revisar o PMF-2 por adendo, antes da calibração, como o plano do corpo fez (PCD-3). Duas formas:
+**Recomendação:** a PMF-2 está decidida; o coordenador recomenda revê-la por adendo, antes da calibração, como o plano do corpo fez (PCD-3). Duas formas:
 - **o primário em malha fechada** (P0 − P1, com o mesmo dono reagindo), mais o par acoplado à mesma fonte como secundário;
 - **o acoplado recíproco** da revisão, com dois canais dentro do mesmo pet.
 

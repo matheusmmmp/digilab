@@ -1,6 +1,7 @@
 # Plano de análise — V2: o P1 no mundo físico mínimo
 
-Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. Tarefa: `docs/TAREFA_V2_MUNDO_FISICO.md`. Nenhum número deste plano
+Status (2026-10-07): **PROPOSTO**, registrado **antes de qualquer run**. **PMF-1 a PMF-7 DECIDIDAS pelo Matheus em 2026-10-07, todas
+pela recomendação** (seção 13). Tarefa: `docs/TAREFA_V2_MUNDO_FISICO.md`. Nenhum número deste plano
 saiu de run no mundo físico; os que vêm de antes citam o artefato.
 
 **Regras deste plano:**
@@ -249,6 +250,8 @@ unidades derivadas passa a cobrir o prefixo `"mundo"`.
 - **A recusa:** a run se recusa a rodar se a pasta de saída já existe.
 
 ## 13. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-07: PMF-1 a PMF-7, todas como recomendado** (a coluna "recomendação" é o que vale).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
