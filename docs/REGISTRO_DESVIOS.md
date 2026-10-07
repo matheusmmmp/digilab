@@ -3091,3 +3091,7 @@ Só papel: o adendo 1 de `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`. Nenhuma run, n
 
   Nenhuma está nas tabelas de `docs/referencias/*.csv`; as duas são citadas no nível que a revisão leu. O tamanho do viés e o custo em vidas
   do acoplado recíproco ficam SEM FONTE.
+- **DS-5 no mesmo adendo (A1.8):** as medidas 1 e 3 de forrageio e a previsão da distância entram no Holm; a medida 2 entra só como
+  descritiva. O A não estima a taxa média, então a medida 3 é lida pelo comportamento: a permanência contra a taxa recente do ambiente.
+  O layout afastado custa 24 vidas por unidade e é o primeiro bloco a sair se o custo passar do teto. Ele depende de um segundo layout na
+  `ConfigMundo` (chat A).

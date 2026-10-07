@@ -327,7 +327,8 @@ As predições da seção 1 passam a ser estas. A PR-0 (a premissa) não muda.
 | PR-2r | com o mesmo cuidado, o P1 tem déficit menor que o P0 | **P0^ac − P1^ac** em `D_FE` | **G-MF2r**, limite inferior do IC95 > 0 | secundária (Holm) |
 | PR-3r | com o dono reagindo, o P1 tem privação menor (a medida do N3) | **P0 − P1** em privação | **G-MF3r**, limite inferior do IC95 > 0 | secundária (Holm) |
 
-- **O Holm** cobre {G-MF2r, G-MF3r}, com α = 0,05. O G-MF1r é único e não entra.
+- **O Holm** cobre {G-MF2r, G-MF3r} e as medidas de forrageio da A1.8 (G-PERM, G-OPORT e G-DIST), com α = 0,05. O G-MF1r é único e
+  não entra.
 - **As categorias do G-MF1r** são as da seção 8, sem mudança: ganha (com o rótulo "abaixo de Δ"), perde, equivalente e inconclusivo, nessa
   ordem.
 
@@ -344,7 +345,7 @@ As predições da seção 1 passam a ser estas. A PR-0 (a premissa) não muda.
   - abaixo de 0,5, o gate é lido como subpotenciado.
 - **A variância esperada pode subir.** Em malha fechada, o dono reage a cada pet, e as diferenças P0 − P1 carregam também a variação do
   cuidado. Isso pode pedir um K maior que o do desenho antigo. SEM FONTE para o tamanho: o piloto mede.
-- **O custo** sobe 25% por unidade (60 vidas contra 48). Ele entra no adendo do N com o tempo medido, e o teto de tempo do Matheus continua
+- **O custo** sobe 25% por unidade (60 vidas contra 48), e o bloco do layout afastado da A1.8 soma mais 24 (84). Ele entra no adendo do N com o tempo medido, e o teto de tempo do Matheus continua
   valendo (R-10).
 
 ### A1.5 A regra de decisão nova
@@ -383,6 +384,52 @@ acoplado ao estímulo do parceiro. Cada um é o controle acoplado do outro, num 
 
 **Quando valeria:** se o G-MF1r e o G-MF2r divergirem (a segunda linha de A1.5) e a pergunta "quanto é o dono reagindo" virar o centro. Aí
 entra por plano próprio.
+
+### A1.8 As medidas de forrageio (DS-5, decidida pelo Matheus em 2026-10-07)
+
+Fonte: `docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 5. A DS-5 já foi decidida: as medidas 1 e 3 entram como secundárias, e a 2 só como
+descritiva. **O motivo é separar forragear de seguir o cheiro:** a medida primária (`D_FE`) diz se explorar compensou, mas não diz como.
+
+**As definições comuns** (PROPOSTAS, SEM FONTE para os números):
+- **mancha:** a área a até 3 células do tronco de uma árvore;
+- **visita:** do primeiro tick do pet dentro da mancha até o primeiro tick fora dela. Contam só as visitas dos dias 8 a 14 com ao menos uma
+  decisão dentro;
+- **permanência:** a duração da visita, em minutos;
+- **custo de viagem da árvore:** a distância, em células (`isqrt`), do tronco dela ao tronco da árvore mais próxima. Ele é fixo pelo layout.
+
+**O que entra e onde:**
+
+| medida | definição no mundo | contraste (por unidade, braços em malha fechada) | gate | onde |
+|---|---|---|---|---|
+| **1. permanência × custo de viagem** (Hayden, Pearson e Platt 2011, `10.1038/nn.2856`, resumo: com viagens mais longas, o limiar de abandono da mancha sobe) | a inclinação (mínimos quadrados) da permanência sobre o custo de viagem, nas visitas da unidade | inclinação do P1 − inclinação do P0 | **G-PERM:** limite inferior do IC95 > 0 | **dentro do Holm** |
+| **3. custo de oportunidade aprendido** (Constantino e Daw 2015, `10.3758/s13415-015-0350-y`: o custo de oportunidade do tempo é aprendido) | o A não tem uma estimativa explícita da taxa média, então a medida é **pelo comportamento**: a inclinação da permanência sobre a **taxa recente do ambiente** (as frutas caídas por hora nas 24 h antes da visita, contadas do fluxo `mundo-arvores`, que não depende do pet). Quem aprende o custo de oportunidade sai antes depois de dias ricos | inclinação do P1 − inclinação do P0 | **G-OPORT:** limite superior do IC95 < 0 | **dentro do Holm** |
+| **2. a taxa no abandono contra a média** | a taxa de ganho (a fome ganha com comida) nos 30 min antes de sair da mancha, dividida pela taxa média da vida (o ganho por hora acordado). SEM APOIO DIRETO: é a forma do teorema, e Charnov 1976 só tem os metadados conferidos | a razão por braço e a diferença P1 − P0, com IC | — | **fora do Holm, só descritiva** |
+| **previsão da distância** | o mesmo mundo com o **layout afastado**: os troncos de cada região a duas vezes a distância do centro da região, cortados para dentro dela. Nada mais muda: as mesmas `p_queda`, as mesmas regiões, a casa e o `m` da calibração | [P1(afastado) − P1(padrão)] − [P0(afastado) − P0(padrão)] na permanência média | **G-DIST:** limite inferior do IC95 > 0 | **dentro do Holm** |
+
+**O contraste é a diferença de inclinações** com o P0, e não a inclinação do P1 sozinha:
+- o P0 usa os alvos padrão, que seguem o cheiro, e o layout pode criar uma inclinação mecânica nele;
+- o que o P1 aprende fica na diferença.
+
+**A previsão da distância é leitura nossa.** É a direção que Hayden et al. descrevem em macacos, numa tarefa de manchas. Ligar o padrão ao
+teorema do valor marginal também é leitura nossa: Charnov não é citado pelo conteúdo. Se o P1 não muda a permanência com o afastamento, ele
+segue o cheiro e não forrageia (definições, seção 5).
+
+**O limite do cérebro A.** O P1 deste plano usa os alvos padrão do motor (seção 3): ele aprende **quando** explorar, e não **para onde**.
+- As medidas 1, 2 e 3 só podem mostrar a decisão de ficar ou sair, pela escolha entre explorar e as outras ações.
+- Um cérebro com o gancho `escolher_alvo` entraria por outro adendo.
+
+**O Holm passa a cobrir** {G-MF2r, G-MF3r, G-PERM, G-OPORT, G-DIST}, com α = 0,05. O G-MF1r continua único.
+- O poder de cada um no N escolhido sai no adendo do N, só como relato.
+- Abaixo de 0,5, o gate é lido como subpotenciado.
+- O N continua o do G-MF1r (A1.4).
+
+**O bloco do layout afastado:** P0 e P1, em malha fechada, nas 12 células, dá **24 vidas por unidade a mais** (84 no total, contra 60).
+- **A dependência:** ele precisa de um segundo layout na `ConfigMundo` (dono: o A, etapa 2 da tarefa do mundo). Sem ele, o G-DIST sai como
+  "não rodado", e o Holm fica com quatro gates.
+- **O teto de tempo:** se o custo medido no piloto passar do teto de tempo do Matheus, **este bloco é o primeiro a sair**, decidido aqui,
+  antes do piloto. O Holm, então, fica com quatro gates.
+
+**A seção 9 (o tempo de desistência)** continua como descritivo. A medida 1 a complementa, mas não a substitui.
 
 ### A1.7 A decisão do Matheus
 
