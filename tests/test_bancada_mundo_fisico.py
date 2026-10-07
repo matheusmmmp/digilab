@@ -4,7 +4,8 @@ secao 9, etapa 4; docs/PLANO_ANALISE_V2_MUNDO_FISICO.md).
 O que se confere:
 - as faixas do banheiro (PLANO_ANALISE_V2_BANHEIRO, secao 10) e o prefixo "banheiro", sem colisao, como no test_faixas_r17;
 - os mundos `fisico` e `fisico_afastado` no MotorMundo, com o lugar do dono como fator da celula;
-- o P0z, o cerebro "instinto" no mundo fisico e as runs com plano nele falham alto com o no (o instinto do mundo, etapa 3 do B);
+- o P0z, o cerebro "instinto" no mundo fisico e as runs com plano nele resolvem desde a W-LIGA-MUNDO (o gate do P0 com lobos = o
+  instinto do mundo fica em tests/test_bancada_liga_mundo.py);
 - o dono so com o cuidado (PMF-3): o sem_ensino ao vivo, o orcamento fechando com os sinais retirados;
 - G1 de toda vida e acoplado; as quedas iguais entre os bracos (G-NUMS);
 - as medidas do plano, de metrics.py, em vidas reais, com as visitas conferidas contra as do motor.
@@ -137,29 +138,28 @@ def test_o_motor_e_o_mundo_do_plano():
     assert m.obediencia_desligada
 
 
-# ------------------------------------------------------------------ 3. o que espera o instinto do mundo falha alto com o no
+# ------------------------------------------------------------------ 3. o instinto do mundo ligado (W-LIGA-MUNDO)
 
 
-def test_p0z_e_o_instinto_do_mundo_falham_alto_com_o_no(monkeypatch):
-    assert bv.BRACOS["P0z"].instinto_mundo == "sem_explorar" and "instinto_mundo" in bv.NOS_PENDENTES
-    with pytest.raises(NotImplementedError, match="etapa 3"):
-        bv.braco_de("P0z")
-    with pytest.raises(NotImplementedError, match="etapa 3"):
-        bv.validar_config(_cfg(bracos=["P0", "P0z"]))
-    with pytest.raises(NotImplementedError, match="etapa 3"):          # os acoplados P0^ac e P1^ac sao do registro do P0z
-        bv.validar_config(_cfg(bracos=["P0z"], acoplados=[{"origem": "P0z", "destino": "P1", "filtro": "nenhum"}]))
-    b = bv.Bancada(1, 16)
-    with pytest.raises(NotImplementedError, match="etapa 3"):
-        b.politica(bv.EspecVida("atencioso", "P0", 101, None, "fisico", "instinto", "perto"))
-    with pytest.raises(NotImplementedError, match="etapa 3"):          # run com plano no mundo fisico
-        com_plano = _cfg(unidades={"bases": [31101], "k": 1, "prefixo": "mundo"}, plano="docs/PLANO_ANALISE_V2_MUNDO_FISICO.md")
-        del com_plano["sementes"]
-        bv.validar_config(com_plano)
-    # a trava e so a tabela: sem a entrada, o P0z se resolve (e fora do mundo fisico nao existe)
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {})
+def test_p0z_e_o_instinto_do_mundo_resolvem():
+    assert bv.BRACOS["P0z"].instinto_mundo == "sem_explorar" and "instinto_mundo" not in bv.NOS_PENDENTES
     assert bv.braco_de("P0z") is bv.BRACOS["P0z"]
-    with pytest.raises(ValueError, match="mundo fisico"):
+    bv.validar_config(_cfg(bracos=["P0", "P0z"]))
+    bv.validar_config(_cfg(bracos=["P0z", "P0", "P1"], acoplados=[{"origem": "P0z", "destino": "P0", "filtro": "nenhum"},
+                                                                    {"origem": "P0z", "destino": "P1", "filtro": "nenhum"}]))
+    com_plano = _cfg(unidades={"bases": [31101], "k": 1, "prefixo": "mundo"}, plano="docs/PLANO_ANALISE_V2_MUNDO_FISICO.md")
+    del com_plano["sementes"]
+    bv.validar_config(com_plano)                                        # a run com plano no mundo fisico nao espera mais o no
+    b = bv.Bancada(1, 16)
+    for cerebro in ("instinto", "lobos"):                               # o P0z e o instinto do mundo sem explorar em qualquer cerebro
+        pz = b.politica(bv.EspecVida("atencioso", "P0z", 101, None, "fisico", cerebro, "perto")).cerebro
+        assert type(pz).__name__ == "PoliticaInstintoMundo" and pz.sem_explorar
+    p0 = b.politica(bv.EspecVida("atencioso", "P0", 101, None, "fisico", "instinto", "perto")).cerebro
+    assert type(p0).__name__ == "PoliticaInstintoMundo" and not p0.sem_explorar
+    with pytest.raises(ValueError, match="mundo fisico"):              # fora do mundo fisico o P0z nao existe
         b.politica(bv.EspecVida("atencioso", "P0z", 101))
+    with pytest.raises(ValueError, match="instinto do mundo so no P0"):
+        b.politica(bv.EspecVida("atencioso", "P1", 101, None, "fisico", "instinto", "perto"))
 
 
 def test_o_lugar_so_existe_no_mundo_fisico():
@@ -281,9 +281,10 @@ def test_rodar_a_fumaca_do_mundo(tmp_path):
     cfg = json.loads((RAIZ / "experiments" / "configs" / "v2_mundo" / "fumaca.json").read_text(encoding="utf-8"))
     cfg.update(dias=2, orcamento=32, donos=["relapso"])                 # 2 unidades: o bootstrap da tabela pede pelo menos duas
     r = bv.rodar(cfg, tmp_path)
-    n_vidas = 2 * 2 * 3 * 3                                              # 2 unidades x 2 mundos x 3 lugares x 3 bracos
-    assert len(r["vidas"]) == n_vidas + n_vidas // 3                     # mais o acoplado P1<P0 de cada vida do P0
+    n_vidas = 2 * 2 * 3 * 4                                              # 2 unidades x 2 mundos x 3 lugares x 4 bracos (P0z incluso)
+    assert len(r["vidas"]) == n_vidas + 3 * (n_vidas // 4)               # mais P1<P0, P0<P0z e P1<P0z de cada celula
     t = r["tabelas"]["relapso"]
+    assert {"P0z", "P0<P0z:nenhum", "P1<P0z:nenhum"} <= set(t["d_fe"]["bracos"])
     assert {"d_fe", "privacao_janela", "permanencia_media", "fracao_fora_de_privacao"} <= set(t)
     meta = json.loads((tmp_path / "meta.json").read_text(encoding="utf-8"))
     assert meta["mundo_sha256"] and meta["config"]["lugares"] == ["comedouro", "perto", "longe"]

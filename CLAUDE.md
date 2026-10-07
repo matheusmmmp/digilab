@@ -2770,3 +2770,37 @@ web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - ele também depende dos braços do corpo (P1-c), que a bancada ainda não tem.
 - **Testes:** `tests/test_dominancia.py`, 17 (~5 s). As funções são conferidas em dados sintéticos com a resposta conhecida; a conferência
   com os canais em quatro mundos, e ela falha alto quando os dois lados diferem.
+
+## V2, W-LIGA-MUNDO — o instinto do mundo ligado na bancada (2026-10-07, `docs/TAREFA_V2_MUNDO_FISICO.md`, etapa 3) — GATES PASSAM
+
+Rodada 18. Os quatro passos listados no #231, com a etapa 3 do B (#232) na `main`. Infraestrutura, sem run de pesquisa; só as sementes
+dos testes. Mudaram `experiments/bancada_v2.py`, a fumaça `experiments/configs/v2_mundo/fumaca.json`, o
+`tests/test_bancada_mundo_fisico.py` (a seção 3 e a contagem da fumaça) e o teste novo. `engine.py`, `mundo.py`, `instinto_mundo.py`,
+`lobos.py`, `metrics.py` e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Sem o `NOS_PENDENTES["instinto_mundo"]`:**
+  - a entrada saiu, e a checagem da run com plano em `validar_config` também;
+  - fica só a `pesos_janela` (o P1-cw).
+- **O cérebro `instinto` no mundo físico** é a `PoliticaInstintoMundo`, só no P0 e no P0z.
+- **O P0z** é a `PoliticaInstintoMundo` com `sem_explorar=True`, **em qualquer cérebro da config**, porque os lobos não têm o modo.
+  - O rótulo segue o cérebro da espécie (`P0z` ou `P0z~instinto`), mas a vida é a mesma (teste).
+  - Fora do mundo físico, o P0z continua um `ValueError`.
+- **Os lobos no mundo físico:** `PoliticaLobos(..., cfg_mundo=self.cfg_mundo_de(mundo))`.
+  - `Bancada.pesos_do_mundo()` dá a `ConfigBola` e a `ConfigFrutas` da bancada com a chave desligada. Elas só levam os pesos `w_bola` e
+    `w_fruta` ao instinto do mundo e ao prior dos lobos, e o `MotorMundo` e os lobos exigem as duas desligadas.
+  - O `escolher_alvo` dos lobos devolve None, o alvo padrão do motor: o cérebro A aprende **quando** agir, não **para onde** ir.
+- **Gates** (`tests/test_bancada_liga_mundo.py`, ~2 min):
+  - **o P0 com lobos é o instinto do mundo byte a byte** (o `resumo_motor`: log, estado, ações, rngs e o registro do mundo). Vale nos
+    dois layouts, 4 donos × 3 lugares × 2 sementes, nas montagens simples e completa;
+  - **os lobos veem o mundo:** a regra `fruta_no_cenario` dispara, e o gancho do alvo anota os candidatos;
+  - **o P0z:**
+    - nenhuma ação explorar;
+    - a mesma vida com os dois cérebros;
+    - G1;
+    - o P0 explora na mesma semente;
+  - **os acoplados P0^ac (P0 ← P0z) e P1^ac (P1 ← P0z):** os mesmos gestos do dono nos mesmos ticks e lugares, e G1;
+  - **o P1 aprende pela consequência no mundo**, e a dominância sai com `origem` `"sinal"`;
+  - a config com plano (bases 31101, prefixo `mundo`) valida.
+- **Fumaça** (`experiments/configs/v2_mundo/fumaca.json`, NÃO canônica):
+  - os braços P0, P0z, P1 e P3;
+  - os acoplados P1 ← P0, P0 ← P0z e P1 ← P0z;
+  - sem artefato.
