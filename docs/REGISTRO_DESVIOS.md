@@ -3573,3 +3573,24 @@ Pedido do Gerente depois da etapa 3 do mundo (#232). Interpretações:
     vai divergir no P1-cw; o D tem de passar esses pesos ao `sinal_por_canal`;
   - **os pesos da E2 pendente** ficam num atributo à parte, para a tupla do pendente não mudar (um teste dos canais a monta à mão);
   - **o P1-c** (o P1 do corpo) ainda não existe, então a chave vale em qualquer P1.
+
+## 2026-10-07 — MUNDO-CORPO (worker A): o MotorMundo no MotorCorpo
+
+- **A MF-2 vai na decisão, não na consequência.** O Gerente listou o `acao_pet(acao, com_mundo=True)` como o primeiro passo da consequência
+  do mundo. No `MotorCorpo`, o efeito da ação do pet já entra logo depois do `agir`, antes do `observar`, e entre os dois nada acontece.
+  Deixei o `acao_pet` ali, com `com_mundo` ligado quando o mundo está ligado. O efeito no corpo é o mesmo, e o comer não dá fome.
+- **O float de baixo volta a fome de antes, e é o mesmo número.** O `MotorMundo` desfaz o +0,05 do comer pondo a fome da decisão de volta.
+  Com o corpo, o `Estado` já é a leitura sem o +0,05, então a fome de antes é a mesma leitura e o `G-BYPASS` não acusa nada.
+- **Os dois ganchos.** A seção 9 diz que, com o mundo físico, o corpo alimenta o `consequencia_mundo`, e sem ele o motor chama o
+  `consequencia_corpo`, "uma chamada por decisão, sempre". O `consequencia_mundo` de hoje só é chamado nas decisões de explorar, comer e
+  brincar. Ficou assim:
+  - o `consequencia_mundo`, como hoje, com o `obs.corpo` e os estímulos aplicados;
+  - o `consequencia_corpo`, como no #230, uma vez por decisão, com os estímulos do mundo no `ocorrido`.
+  - **Para a etapa 5 do corpo (o cérebro A no corpo, do B):** o cérebro tem de creditar por um dos dois, para não contar a mesma decisão
+    duas vezes.
+- **O gancho no `mundo.py`.** O `obs_depois` era montado dentro do embrulho do mundo, sem como pôr o corpo. Agora sai de
+  `MotorMundo._observacao_depois_mundo`, que faz a mesma conta. O G2 confere as 144 vidas de antes.
+- **O gabarito do G2 foi gravado de um snapshot.** O código já estava mudado na worktree, então o `tests/gabarito_corpo_mundo.py` rodou num
+  `git archive` de origin/main (dc3ad90), num commit próprio antes do código.
+- **A bancada não mudou.** O teste dela troca o `MotorMundo` da bancada pelo com corpo (monkeypatch). A chave do corpo na config da bancada
+  é do D.
