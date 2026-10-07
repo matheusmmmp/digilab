@@ -3122,3 +3122,18 @@ Só papel: `docs/PLANO_ANALISE_V2_TRANSFERENCIA_REJEICAO.md`. Nenhuma run, nenhu
   do A é o da K2. As sementes 35101…35505 são piloto, e a 36101…36505 é a validação; as duas foram conferidas livres.
 - **O limiar de fome baixa (0,70)** é PROPOSTO, SEM FONTE. Ele só pode ser trocado no adendo, pelas sondas perdidas no piloto, sem olhar o
   índice.
+
+## 2026-10-07 — W-PLANO-BANHEIRO (worker C): o plano de análise do banheiro
+
+Só papel: `docs/PLANO_ANALISE_V2_BANHEIRO.md` (etapa 0 de `docs/TAREFA_V2_BANHEIRO.md`). Nenhuma run, nenhum código.
+
+- **A medida primária é a média restrita (RMST) do dia até o critério, até o fim da vida, e não a mediana de Kaplan–Meier.** A censura
+  é só administrativa e igual para todas as vidas. Assim a RMST é exatamente a média de min(T, τ), pareada por unidade. A mediana
+  ficaria indefinida com mais da metade censurada.
+- **Testa-se só se o carinho e o limpador ensinam** (B00 − B0C e B00 − BL0, com Holm). A ordem B0C antes de BL0 é requisito de desenho
+  (G-CAR, seção 5b da tarefa) e sai só relatada.
+- **A duração sai do piloto de 28 dias, cortado em 14 e 21.** O critério do dia d só depende dos dias até d + 2, e o orçamento por dia é
+  o mesmo. A margem `Δ_B` é metade da distância P0 − P1 no B0C.
+- **A calibração do conforto (BN-6) é uma conta sem vida:** o menor aumento que passa o G-CAR. A da vontade e do desconforto roda só no
+  P0-B00. As faixas (2 a 5 alívios por dia, acidentes ≤ 25%) são PROPOSTAS, SEM FONTE.
+- **As faixas 37101…37505 e 38101…38505** foram conferidas livres na `main` e em todos os branches remotos.
