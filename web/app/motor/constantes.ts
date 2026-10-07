@@ -324,3 +324,60 @@ export const DESLOC_CARATER: Record<"adolescente" | "adulto", Carater> = {
   adolescente: { atento: -0.0264, impetuoso: -0.0088, paciente: 0.0990, resistente: 0.0536 },
   adulto: { atento: -0.0500, impetuoso: 0.0625, paciente: 0.1875, resistente: -0.0875 },
 };
+
+/* V2, o mundo fisico minimo (docs/TAREFA_V2_MUNDO_FISICO.md, etapa 5): espelho de ConfigMundo e dos layouts de digilab/config.py.
+   O motor do mundo e motor/mundo.ts; a paridade (test/mundo.test.ts) confere estes numeros contra o gabarito do Python. Posicoes do
+   layout em celulas; regioes por faixa de x (inclusivas). Todos PROPOSTOS, sem fonte, como no Python. */
+export interface LayoutMundo {
+  nome: string;
+  regioes: readonly (readonly [string, number, number])[];
+  ninho: readonly [number, number];
+  comedouro: readonly [number, number];
+  bola_inicio: readonly [number, number];
+  arvores: readonly (readonly [string, number, number, string])[];
+}
+export const LAYOUT_MUNDO_PADRAO: LayoutMundo = {
+  nome: "padrao",
+  regioes: [["casa", 0, 15], ["jardim", 16, 33], ["campo", 34, 47], ["mata", 48, 63]],
+  ninho: [4, 15], comedouro: [10, 15], bola_inicio: [40, 15],
+  arvores: [["J1", 22, 6, "a"], ["J2", 29, 20, "b"], ["J3", 19, 14, "c"],
+            ["M1", 53, 4, "a"], ["M2", 60, 15, "b"], ["M3", 50, 23, "c"],
+            ["M4", 62, 26, "a"], ["M5", 56, 10, "b"], ["M6", 55, 19, "c"]],
+};
+/** o layout do G-DIST (config.layout_afastado): cada tronco a duas vezes a distancia do centro da regiao, cortado para dentro dela */
+export function layoutAfastado(base: LayoutMundo, altura = 30): LayoutMundo {
+  const arvores = base.arvores.map(([id, x, y, fruta]) => {
+    const r = base.regioes.find(([, x0, x1]) => x0 <= x && x <= x1);
+    if (!r) throw new Error(`arvore ${id} fora de toda regiao`);
+    const [, x0, x1] = r;
+    const cx = Math.floor((x0 + x1 + 1) / 2), cy = Math.floor(altura / 2);
+    return [id, Math.min(x1, Math.max(x0, cx + 2 * (x - cx))), Math.min(altura - 1, Math.max(0, cy + 2 * (y - cy))), fruta] as const;
+  });
+  return { ...base, nome: "afastado", arvores };
+}
+export const LAYOUT_MUNDO_AFASTADO: LayoutMundo = layoutAfastado(LAYOUT_MUNDO_PADRAO);
+export interface ConfigMundo {
+  ligada: boolean; layout: LayoutMundo; celulas_x: number; celulas_y: number; sub: number;
+  velocidade: number; custo_energia_por_subunidade: number; raio_pegar_celulas: number;
+  raio_visao_celulas: number; max_vistos: number; cheiro_racao: number; cheiro_fruta: number; raio_cheiro_celulas: number;
+  limiar_cheiro_explorar: number; passo_cheiro_celulas: number; vagar_min_celulas: number; vagar_max_celulas: number;
+  fome_max_comer_achado: number; nutricao_fruta: number; efeito_podre: number; ganho_humor_bola: number;
+  passo_mundo_ticks: number; p_queda_jardim: number; p_queda_mata: number; mult_queda: number;
+  frutas_por_queda_min: number; frutas_por_queda_max: number; raio_queda_celulas: number; max_frutas_por_arvore: number; recarga_min: number;
+  maduro_fruta_min: number; maduro_racao_min: number; prazo_podre_min: number;
+  bola_min_celulas: number; bola_max_celulas: number; mult_bola_campo: number; atrito: number;
+  perto_max_celulas: number; longe_min_celulas: number; longe_max_celulas: number; raio_mancha_celulas: number;
+}
+/* os nomes em snake_case de proposito: o espelho campo a campo da ConfigMundo do Python, conferido pelo nome */
+export const CMU: ConfigMundo = {
+  ligada: true, layout: LAYOUT_MUNDO_PADRAO, celulas_x: 64, celulas_y: 30, sub: 16,
+  velocidade: 4, custo_energia_por_subunidade: 1 / 6000, raio_pegar_celulas: 1,
+  raio_visao_celulas: 6, max_vistos: 8, cheiro_racao: 64, cheiro_fruta: 32, raio_cheiro_celulas: 24,
+  limiar_cheiro_explorar: 16, passo_cheiro_celulas: 8, vagar_min_celulas: 4, vagar_max_celulas: 12,
+  fome_max_comer_achado: .85, nutricao_fruta: .15, efeito_podre: -.10, ganho_humor_bola: .15,
+  passo_mundo_ticks: 15, p_queda_jardim: 1 / 96, p_queda_mata: 2 / 96, mult_queda: 1,
+  frutas_por_queda_min: 1, frutas_por_queda_max: 3, raio_queda_celulas: 2, max_frutas_por_arvore: 4, recarga_min: 720,
+  maduro_fruta_min: 720, maduro_racao_min: 1440, prazo_podre_min: 720,
+  bola_min_celulas: 3, bola_max_celulas: 10, mult_bola_campo: 2, atrito: 8,
+  perto_max_celulas: 2, longe_min_celulas: 20, longe_max_celulas: 30, raio_mancha_celulas: 3,
+};

@@ -2662,3 +2662,41 @@ testes antigos (a tabela de braços, a de condições e o `NOS_PENDENTES`). `eng
 - **O que roda hoje:** os lobos (P0, P1, P3) no mundo, cegos a ele até a etapa 3, e o acoplado P1 ← P0 (o encanamento do P1^ac).
 - **Testes:** `tests/test_bancada_mundo_fisico.py`, 15 (~30 s). **Fumaça** (`experiments/configs/v2_mundo/fumaca.json`, NÃO canônica):
   96 vidas rejogadas bit a bit em ~1,5 min; sem artefato.
+
+## V2, W-MUNDO-WEB — o motor do mundo físico em TypeScript (2026-10-07, `docs/TAREFA_V2_MUNDO_FISICO.md`, etapa 5) — G-PAR PASSA
+
+Rodada 17, etapa 5 da seção 9 da tarefa: só o motor e a paridade. Não entram tela nem versão de pet nova. Mudaram `web/app/motor/mundo.ts`
+(novo), o `motor/index.ts` (exporta o mundo), `motor/constantes.ts` (a `ConfigMundo` e os layouts no fim),
+`experiments/exportar_gabarito_mundo.py` (novo) e o gabarito `web/app/test/gabaritos/mundo_python.json`. `digilab/`, o app, os pets e os
+gabaritos de antes não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Caminho:** o motor do app fica em `web/app/motor/` (sem DOM) e os testes em `web/app/test/`. Por isso os arquivos são
+  `web/app/motor/mundo.ts` e `web/app/test/mundo.test.ts`, e não o `web/app/src/motor/` que a tarefa citava.
+- **`motor/mundo.ts`** é o porte de `digilab/mundo.py`, com os registros nos nomes do Python:
+  - a conta inteira (`divArred`, `distancia`, `noMapa`, `deslocar`, `passoAte`, `regiaoDe`, `cheiroEm`, `direcaoDoCheiro`, `DIR16`);
+  - os eventos `deixar_comida` e `deixar_bola` (`{tick, tipo, valor}`, com a mesma validação);
+  - a classe `Mundo`: as árvores, a comida que amadurece, apodrece e some, a bola que rola, a percepção, os candidatos, o alvo padrão e
+    a consequência de andar, comer e brincar, com o MF-1 e o MF-2.
+- **O mundo é um componente:** recebe o estado do pet (fome, energia, humor, sujeira) depois do efeito da ação e devolve o estado
+  depois. O engine, a política e o dono ficam com quem o usa.
+- **Os sorteios do Python, número a número:** cada fluxo é um `random.Random` semeado por `derivar_semente`. O arquivo traz:
+  - o sha256 (puro, com o próprio UTF-8);
+  - o `derivarSemente` (bigint);
+  - o `RandomPy`: o Mersenne Twister do CPython com o `init_by_array` e `random`, `getrandbits`, `randrange` e `randint`.
+  - O `mulberry32` do jogo não entra.
+- **Gabarito** (`python experiments/exportar_gabarito_mundo.py`):
+  - a config;
+  - a grade: as sequências do `random.Random` de 8 sementes de 0 a 64 bits, as derivações, 400 casos de cada conta, 150 de cheiro e
+    direção e os eventos válidos e inválidos;
+  - **4 vidas inteiras de 3 dias** (instinto; um cérebro que escolhe qualquer alvo, inclusive a podre e um ponto; os lobos aprendendo no
+    layout afastado com o dobro de quedas; o cérebro aleatório com o dono que deixa a bola perto). Cada uma tem o traço por decisão, o
+    resumo do mundo e os próximos sorteios de cada fluxo.
+  - `tests/test_gabarito_mundo_web.py` confere que o arquivo está em dia com o Python.
+- **G-PAR** (`web/app/test/mundo.test.ts`, 18 testes, < 1 s):
+  - a config, os layouts e os números do estado são os do Python, campo a campo;
+  - as sequências, o `derivar_semente`, as contas e os eventos saem iguais;
+  - as 4 vidas são rejogadas decisão a decisão: percepção, candidatos, ocorrido (o `u`, o alvo, o deslocamento, a energia gasta, o
+    consumo, a rolagem), o estado e a percepção depois, o resumo do mundo e os 6 próximos sorteios dos 4 fluxos saem iguais.
+  - Os floats são comparados com igualdade exata.
+  - Uma mutação no efeito da podre faz a vida 4 falhar.
+- **A única diferença**, da língua: o Python recusa `deixar_bola(9, 3.0, 4)` (`type(x) is not int`), e no JS 3.0 é o mesmo número que 3. O TS
+  aceita, com o mesmo texto no log (`"3|4"`); o teste a declara.
