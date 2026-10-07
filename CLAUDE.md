@@ -2827,3 +2827,27 @@ Pedido do Gerente depois da etapa 3 do mundo. Infraestrutura, sem run; só as se
   - desligada, o sinal e a vida de hoje.
 - **Testes:** `tests/test_pesos_janela.py`. A conta exata do peso e do sinal (a fome 0,4 → 0,7 com peso de um quarto dá 276 no lugar de
   1104); a janela refeita por fora decisão a decisão numa vida; a E2 e os canais nas frutas; o mundo físico; o G1.
+
+## V2, W-LIGA-PESOS-JANELA — o braço P1-cw ligado na bancada (2026-10-07, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, adendo 2, A2.4) — GATES PASSAM
+
+Rodada 18. A chave `pesos_janela` do B (#236) na `main`. Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram
+`experiments/bancada_v2.py`, o teste do P1-cw em `tests/test_dominancia.py`, um comentário de `tests/test_bancada_v2.py` e o teste novo.
+`engine.py`, `lobos.py`, o corpo e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O `NOS_PENDENTES` ficou vazio:** a entrada `pesos_janela` saiu.
+- **O P1-cw** é o P1 com `ConfigConsequencia.pesos_janela` ligada (`Bancada.politica`; J = `janela_pesos`, 32). O resto vem do P1, inclusive as
+  peças da montagem completa e os canais da config.
+- **A dominância do P1-cw** (A2.2: c_d = w_d · Δ_d):
+  - o w_d é o peso da janela que o cérebro usou na decisão, lido do motivo (`pesos_janela`);
+  - na decisão sem fruta entram só os drives do N3, porque o cérebro pesa também o humor em toda decisão;
+  - a conferência com os canais recalcula o sinal com os mesmos pesos (`sinal_por_canal(..., pesos)`);
+  - uma decisão sem os pesos no motivo falha alto;
+  - o `_Registro` anota o índice da decisão (`k`) em cada passo.
+- **Gates** (`tests/test_bancada_pesos_janela.py`):
+  - **com a chave desligada, o P1-cw é o P1 byte a byte** (o `resumo_motor` e o estado interno, fora o rótulo do braço). Os braços do corpo
+    (P1-c) ainda não existem na bancada, então o gate é contra o P1. Vale em `padrao`, `bola`, `descasado`, `mutavel`, `fisico` e
+    `fisico_afastado`, com 2 donos × 2 sementes, nas montagens simples e completa, com os canais;
+  - **ligada:** a chave chega ao cérebro, a vida muda em todo mundo e passa o G1;
+  - **o peso pela falta média:** a janela é refeita por fora, decisão a decisão (`pesos_da_janela` das faltas das J decisões anteriores,
+    igual ao motivo). Algum peso cai abaixo de S, e todos ficam entre S/4 e S;
+  - **a dominância** confere com os canais nos três mundos. Com o sinal recalculado sem os pesos, ela falha alto.
+- **Fumaça do corpo:** não existe ainda em `experiments/configs/`, então o P1-cw não entrou em nenhuma.

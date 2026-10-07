@@ -111,8 +111,9 @@ V1 do docs/ROADMAP_V2.md: a L1 separa de onde vem o sinal da regra de atualizaca
   depois de comer, como a E2). Nos bracos que aprendem pela consequencia e o sinal deles ("sinal"; com os canais ligados, conferido
   contra os totais por canal do cerebro); nos outros, a mesma conta como sonda ("sonda", o P0 do plano). Por vida no medidas.json
   (`dominancia`) e por braco x condicao x tipo de decisao no dominancia.json, com a leitura da A2.3 (lidera com p_d >= 0,80; domina
-  com o IC95 inferior de f_d acima de 0,50), fora do Holm. O braco P1-cw (o peso pela janela recente, A2.4) espera a chave
-  pesos_janela do cerebro A e falha alto com o no (NOS_PENDENTES).
+  com o IC95 inferior de f_d acima de 0,50), fora do Holm. O braco P1-cw (o peso pela janela recente, A2.4) e o P1 com a chave
+  `pesos_janela` da ConfigConsequencia ligada (#236, W-LIGA-PESOS-JANELA); nele o w_d da medida e o peso da janela que o cerebro usou
+  na decisao (o motivo `pesos_janela`), e a conferencia com os canais recalcula o sinal com os mesmos pesos.
 
   ponto do aprendiz (BANCADA-EXPERIMENTO; decisao R1 de 2026-10-05, docs/RESULTADO_V2_REVISAO_APRENDIZ.md): o campo "ponto" da config
   escolhe um ponto nomeado de PONTOS_APRENDIZ, e a chave "lobos" troca campos por cima dele. Sem "ponto", o "L1" (o
@@ -165,7 +166,7 @@ from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import desarranjo_n6 as desarranjo_dos_lobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
-from digilab.policies.lobos import INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
+from digilab.policies.lobos import CANAL_DO_DRIVE, INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
 from digilab.state import Estado  # noqa: E402
@@ -502,8 +503,7 @@ FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # proxima peca de outro chat (o K4 e os canais, rodada 10).
 NOS_PENDENTES: dict = {
     # o "instinto_mundo" (W-BANCADA-MUNDO) saiu na W-LIGA-MUNDO: a PoliticaInstintoMundo e os ganchos dos cerebros estao na main (#232)
-    # W-DOMINANCIA (rodada 18): o peso pela janela recente no sinal do cerebro A. Sem a chave: o braco P1-cw
-    "pesos_janela": "a chave pesos_janela da ConfigConsequencia no cerebro A (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4, do B)",
+    # o "pesos_janela" (W-DOMINANCIA) saiu na W-LIGA-PESOS-JANELA: a chave da ConfigConsequencia esta na main (#236)
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem (nenhum hoje)
 FILTROS_PENDENTES: dict = {}
@@ -880,6 +880,8 @@ class Bancada:
             (cb, cf), cm = self.pesos_do_mundo(), self.cfg_mundo_de(mundo)
         # canais (#169): o braco que os fixa (as ablacoes da K-7) manda; os outros seguem a config
         cc = self.cfg_consequencia if b.canais is None else replace(self.cfg_consequencia, canais_ligados=b.canais)
+        if b.pesos_janela:                  # P1-cw (A2.4, #236): o peso de cada drive pela falta recente; o resto do P1 igual
+            cc = replace(cc, pesos_janela=True)
         return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm), b, cc)
 
     def pesos_do_mundo(self) -> tuple[ConfigBola, ConfigFrutas]:
@@ -1156,11 +1158,24 @@ class Bancada:
         acao_drives = tuple(cc.drives)
         fruta_drives = acao_drives + ((INDICE_HUMOR,) if cc.humor_na_fruta and INDICE_HUMOR not in acao_drives else ())
         falta = lambda v, ds: {NOMES_DRIVES[i]: S - arred(v[i] * S) for i in ds}  # noqa: E731
+        janela = cc.pesos_janela and getattr(cerebro, "_aprende", False)
+        indice_do_canal = {c: i for i, c in CANAL_DO_DRIVE.items()}
         decisoes, por_canal = [], {}
         for p in reg.passos_sinal:
             ds = fruta_drives if p["fruta"] is not None else acao_drives
-            decisoes.append((p["tick"], p["regra"], contribuicao_drives(falta(p["antes"], ds), falta(p["depois"], ds), escala=S)))
-            for canal, f in sinal_por_canal(p["antes"], p["depois"], ds, cc.ganho, S).items():
+            pesos = None
+            if janela:                  # P1-cw (A2.4): os pesos que o cerebro usou nesta decisao, o mesmo no antes e no depois
+                anotados = cerebro.motivos[p["k"]].get("pesos_janela")
+                if anotados is None:
+                    raise RuntimeError(f"{vida.nome}: decisao {p['k']} sem os pesos da janela no motivo")
+                pesos = {indice_do_canal[c]: w for c, w in anotados.items()}
+                if not set(ds) <= set(pesos):      # o cerebro pesa os drives da E2 em toda decisao; a acao so usa os do N3
+                    raise RuntimeError(f"{vida.nome}: os pesos da janela {sorted(pesos)} nao cobrem os drives do sinal {sorted(ds)}")
+                pesos = {i: pesos[i] for i in ds}
+            w_d = None if pesos is None else {NOMES_DRIVES[i]: w for i, w in pesos.items()}
+            decisoes.append((p["tick"], p["regra"],
+                             contribuicao_drives(falta(p["antes"], ds), falta(p["depois"], ds), w_d, escala=S)))
+            for canal, f in sinal_por_canal(p["antes"], p["depois"], ds, cc.ganho, S, pesos).items():
                 por_canal[canal] = por_canal.get(canal, 0) + f
         canais = getattr(cerebro, "_canais", None)
         conferido = False
@@ -1632,7 +1647,7 @@ class _Registro:
 
     def observar(self, transicao) -> None:
         tick, regra = self._decisao
-        self.passos_sinal.append({"tick": tick, "regra": regra, "antes": transicao.observacao.vetor_estado,
+        self.passos_sinal.append({"tick": tick, "regra": regra, "k": len(self.decisoes) - 1, "antes": transicao.observacao.vetor_estado,
                                   "depois": transicao.observacao_seguinte.vetor_estado, "fruta": None})
         self.interna.observar(transicao)
 
