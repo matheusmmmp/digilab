@@ -69,7 +69,7 @@ fingir resolvê-la.
 - **Cognição social** (`docs/futuro/cognicao_social.md`). Os relatos de outros pets entram no ego pelas mesmas regras de fonte; a autoimagem
   social (orgulho, reputação) fica para depois dela.
 - **Web.** É mecânica de jogo: vai para a web numa versão de pet própria, com o número reservado pelo coordenador (hoje `VERSAO_PET = 10`
-  no motor da web). As medidas de pesquisa rodam no Python, com o cérebro escolhido.
+  no motor da web). As medidas de pesquisa rodam no Python, com o cérebro A (M6 decidido em 2026-10-07).
 
 ## 5. Medidas (PROPOSTO, sem número)
 
@@ -98,7 +98,7 @@ fingir resolvê-la.
 
 | etapa | entrega | avança quando |
 |---|---|---|
-| 0 | auditoria no cérebro escolhido (A ou C): onde ficam a sonda do aprendido, a do pedido, a memória e o vínculo; Python e web | pontos de integração confirmados |
+| 0 | auditoria no cérebro A: onde ficam a sonda do aprendido, a do pedido, a memória e o vínculo; Python e web | pontos de integração confirmados |
 | 1 | ego em observação: origem, autoria e continuidade calculadas e registradas, sem mudar escolha nem fala | autoria calibrada contra a sonda; nenhum acesso privilegiado |
 | 2 | as cinco perguntas como objetos, com frases-modelo, sem LLM | toda pergunta com lastro; cuidado preservado |
 | 3 | diálogo pelo Conversar: o dono responde, a resposta vira relato com autor | relato distinto de observação no registro |
@@ -109,7 +109,7 @@ fingir resolvê-la.
 |---|---|---|---|
 | E-1 | Introspecção: o pet pode consultar a diferença entre os próprios pesos e o prior | sim, declarada como acesso ao próprio cérebro | sem ela, a pergunta de origem não tem resposta honesta |
 | E-2 | Falar de si como sub-decisão de `chamar_atencao` | sim | ação nova quebra a reprodução da v1 |
-| E-3 | Cérebro: A ou C | o que for escolhido para o produto; os dois têm sonda | auditar o cérebro errado |
+| E-3 | Cérebro | **já decidido: o A** (M6, 2026-10-07, "pela regra seria o C; escolhido o A por evidência descritiva posterior"). O A tem as três peças que o ego usa: a sonda do aprendido, a memória de episódios (N6) e a sonda do pedido (N7); o C recusa o N6 e o N7 | — |
 | E-4 | Voz própria: o narrador antigo vira fala marcada, e o "eu" passa a vir do ego | sim | o pet afirmaria sobre si o que não pode saber |
 | E-5 | Guarda ética da seção 6 como regra do jogo | sim, antes da etapa 2 | perguntas existenciais virando pressão sobre o jogador |
 
