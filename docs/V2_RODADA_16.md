@@ -143,6 +143,16 @@ exemplo.
 
 ## 4. Decisões que o Matheus ainda tem de tomar
 
+**DECIDIDAS em 2026-10-07: M-4, M-5, S-1, S-3, S-4, E-9 e E-10, todas como recomendado** (abaixo).
+
+**O que isso fixa:**
+- **Regiões:** quatro no começo.
+- **Ordem:** a da seção 6.
+- **Botões:** só os pets novos ficam sem.
+- **Consequência:** só liga depois dos drives.
+- **Vínculo:** passa a se apoiar no desejo atendido e no cuidado no tempo certo, numa tarefa própria.
+- **Química:** entra por baixo dos drives, um órgão por vez, no tamanho mínimo.
+
 | # | decisão | recomendação do documento | fonte |
 |---|---|---|---|
 | M-4 | Quantas regiões no começo | **quatro:** casa, jardim, campo, mata | `docs/futuro/mundo_fisico.md`, seção 8 |
@@ -164,3 +174,14 @@ As outras decisões abertas do #202 (E-2, E-4, E-5, E-6, E-8) não bloqueiam est
 - O `engine.py` está congelado; o mundo entra por subclasse do motor.
 - Todo número sai de um artefato, e nenhuma alegação de novidade é feita.
 - Os merges são só do Matheus, e o relato de cada worker vai no corpo do PR.
+
+## 6. Nota: o porte do v11 está pausado
+
+Em 2026-10-07 o Matheus decidiu que quer um pet que **planeja**, com modelo do mundo e simulação de consequências. **O porte do A para a
+web (v11) ficou pausado** até esse cérebro existir: o jogo fica nos pets v10, e o #201 fica como registro.
+
+**Consequências para esta rodada:**
+- **W-REV-PORTE:** a revisão do #201 só atualiza o registro. Ela não destrava código. Fica para o Matheus confirmar se ainda quer fazê-la.
+- **W-TAREFA-MUNDO e W-TAREFA-CORPO:** valem para a pesquisa no Python, qualquer que seja o cérebro. O mundo e o corpo são o que um
+  cérebro que planeja precisa prever.
+- **W-PRANCHA-MAPA:** vale para o produto, quando ele voltar a andar.
