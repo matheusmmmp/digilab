@@ -3652,3 +3652,63 @@ Etapa 5 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md` (seções 9 a 11). Int
 - **Para o D:** a bancada não precisa de nada novo para o P1 com o corpo. A `PoliticaDoBraco` já passa o `f_S` (conferido), e o
   `__getattr__` dela leva o gancho ao cérebro. A conferência da dominância refaz o sinal pelo Estado: com os drives de hoje sai igual, mas com
   os drives novos ela tem de usar as parcelas que o cérebro guarda no motivo (`sinal_corpo.drives`).
+
+## 2026-10-07 — CORPO-DRIVES (worker B): o grafo do corpo (seção 18) e a etapa 6, química e cérebro
+
+Pedido do Gerente depois do #239. Seções 7, 8, 17 e 18 de `docs/TAREFA_V2_CORPO_DRIVES.md`; o motor da etapa 6 é do A, em paralelo.
+Interpretações:
+- **A combinação #238 + #239 falhava alto.** O `MotorCorpo` com o mundo físico chama o `consequencia_mundo` e depois o
+  `consequencia_corpo` na mesma decisão, e o cérebro com `cfg_corpo` esperava um só. O cérebro passou ao arranjo do motor:
+  - o `consequencia_mundo` credita explorar, comer e brincar;
+  - o `consequencia_corpo` vem sempre e fecha a decisão.
+  - O G1 dessa combinação entrou.
+- **O grafo (seção 18)** fica em `digilab/corpo_grafo.py` (dados e checagens, só biblioteca padrão), e a tabela é montada por
+  `corpo.grafo_do_corpo`.
+  - **O `Corpo` usa a tabela:** a lista e a ordem dos químicos, os receptores, as meias-vidas, os emissores do tick em três fases e as
+    quantidades dos estímulos novos.
+  - **A tabela não substitui tudo:** os estímulos de hoje (as ações do dono e do pet) seguem pelas taxas (`TaxasCorpo`), de onde a
+    tabela é montada. É o mesmo objeto, então não há duas listas. O `MotorCorpo` do A lê `t.dono` para o G-BYPASS.
+  - **O tick em fases:**
+    - fase 1: os drives de hoje, a Vida e as subidas dos drives novos, somados por químico e cortados uma vez;
+    - fase 2: o dano pela privação e o estresse pelos drives acima do limiar, sobre os valores da fase 1;
+    - depois, as meias-vidas.
+    - Com as sub-chaves de hoje, a química sai igual: os testes do corpo, os G-HOJE e os gabaritos passam sem mudança.
+  - **O "consumo"** de um químico conta a reação que o gasta, o emissor que o reduz (os estímulos), a meia-vida e o teto com descarte.
+    Todo químico tem teto C com descarte (o corte de hoje), então a checagem 1 nunca falha na tabela de verdade. O relato lista os
+    químicos cujo único sumidouro é o teto (hoje, nenhum).
+  - **O ganho de uma aresta receptor → emissor** é por unidade, em fração inteira:
+    - o estresse lê os drives com 1/256;
+    - o medo da mão (o susto cortando o carinho) entra como influência positiva do susto no estresse e na solidão, com base/C;
+    - o degrau da privação no dano conta como ganho 1, para que um laço por ele seja recusado.
+    - Hoje o grafo é acíclico.
+  - **"Na mesma ordem"** quer dizer a maior meia-vida do par menor que 10 vezes a menor. São acoplados os pares com aresta, ou mexidos
+    pelo mesmo emissor ou pela mesma reação. Hoje sai só (dor, susto), os dois emitidos pelo tapa.
+- **Os drives novos e os gestos**, com o contrato combinado com o A:
+  - **o tédio:** `atividade(nome)` com "bola", "brincar" ou "explorar", vinda do motor uma vez por decisão; o "dono_brinca" fica dentro de
+    `acao_dono(BRINCAR)`. O `acao_pet(BRINCAR)` não reduz o tédio sozinho;
+  - **a curiosidade:** só existe com `Corpo(..., com_mundo=True)`, que o motor passa no mundo físico (CD-8). O `estimulo_novidade(n)`
+    recebe a contagem crua de novidades, e o limite de 2 fica no corpo;
+  - **o carinho na solidão e no estresse:** vale com `drives_novos`; o medo da mão, só com `gestos` (sem susto o fator é 1);
+  - **o tapa:** o corpo o reconhece pelo valor `"tapa"` (o enum é do A). Sem `gestos`, falha alto;
+  - **as subidas** param dormindo; o estresse lê os drives novos que existirem;
+  - **o estresse** recebe a meia-vida no mesmo tick em que é emitido (fase 2 e depois as meias-vidas).
+  - **As calibrações `m_sobe` e `m_reduz`** do plano trocam os campos da `ConfigCorpo`. A metade de 225 não é inteira: o arredondamento
+    fica com quem monta a grade (o D).
+- **O cérebro:**
+  - **`recompensa_tapa`** (`ConfigLobos`, PROPOSTO, o valor da bronca pela CD-10): o tapa, reconhecido pelo valor, é creditado à última
+    decisão pela janela da v1, escalar, em todo cérebro que aprende. Que fonte o recebe é da `PoliticaDoBraco` (o D);
+  - **`mudanca_no_corpo`:** o carinho credita o `sinal_corpo` dos receptores antes e depois (os drives do N3 e os novos, sem o humor) à
+    última decisão, escalar, com o ganho da última `ConfigConsequencia` vista. Com o aprendizado desligado, nada. Um cérebro que aprende
+    sem a chave do corpo falha alto;
+  - **o carinho é cuidado:** ele não passa por `receber_acao_dono`, mas zera o `ticks_desde_cuidado`. Por isso o gancho acerta o relógio
+    do cuidado (o instante é o `ticks_desde_cuidado` do `obs_antes`) e paga os chamados pendentes, como hoje. O embrulho também anda o
+    relógio e o índice dos eventos do dono. Sem isso, a decisão seguinte acusaria o relógio inconsistente.
+- **O G-RISCO da vida curta:**
+  - **com os números PROPOSTOS** (`m_sobe`, `m_reduz`) = (1, 1), o tédio do P1 no mundo da bola nunca passa de ~0,3: o pet explora e
+    brinca o bastante para mantê-lo baixo. A condição "tédio > 0,5" da seção 13 fica vazia;
+  - **o teste usa o ponto (2, ½) da grade 6.1 do plano**, em que o estado aparece (tédio > 0,5 em ~26% das decisões);
+  - **a direção vale, por pouco:** p(brincar | tédio > 0,5, bola vista) foi de 4/7 = 0,57 nos dias 1 e 2 a 23/38 = 0,61 nos dias 3 e
+    4, juntando as 8 sementes dos testes;
+  - **a vida usa um motor de teste** que só avisa a atividade ao corpo, pelo contrato. Ele sai quando o motor do A estiver na `main`.
+- **O motivo:** uma entrada nova aprendida que pese numa decisão segue sem fator na expressão, e o `motivo_lobos` falha alto. Com os
+  drives novos ligados isso já pode acontecer numa vida embrulhada; fica para a tarefa da expressão.

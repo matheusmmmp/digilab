@@ -787,8 +787,10 @@ def test_embrulho_repassa_os_ganchos_do_corpo_e_nao_muda_a_vida():
 
     p = ComCarinho(CFG)
     e = PoliticaComMotivo(p)
-    e.mudanca_no_corpo("a", "b")
+    antes, depois = obs_de(ticks=40), obs_de(ticks=0)
+    e.mudanca_no_corpo(antes, depois)
     e.consequencia_corpo(AcaoPet.OCIOSO, {}, None)
-    assert p.mudancas == [("a", "b")] and p.ganchos == [AcaoPet.OCIOSO]
+    assert p.mudancas == [(antes, depois)] and p.ganchos == [AcaoPet.OCIOSO]
+    assert e._tick_ultimo_cuidado == 40 and e._n_dono == 1          # o carinho e acao do dono no log: o relogio e o indice andam
     assert not hasattr(PoliticaComMotivo(PoliticaInstinto(CFG)), "consequencia_corpo")
     assert not hasattr(PoliticaComMotivo(PoliticaInstinto(CFG)), "mudanca_no_corpo")
