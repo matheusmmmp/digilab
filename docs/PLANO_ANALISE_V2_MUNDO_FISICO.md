@@ -265,8 +265,8 @@ unidades derivadas passa a cobrir o prefixo `"mundo"`.
 
 ## Adendo 1 (2026-10-07, antes de qualquer run): a PMF-2 revisada, o primário em malha fechada
 
-Pedido do coordenador na rodada 17 (`docs/V2_RODADA_17.md`, seção 4). **Status: PROPOSTO.** A PMF-2 decidida no #212 vale até o Matheus
-decidir a PMF-2r (A1.7). Nenhuma run foi feita, então nada aqui foi escolhido olhando dado do mundo físico.
+Pedido do coordenador na rodada 17 (`docs/V2_RODADA_17.md`, seção 4). **Status: PMF-2r DECIDIDA pelo Matheus em 2026-10-07, pela
+recomendação** (A1.7): o primário passa a P0 − P1 em malha fechada, e a PMF-2 do #212 fica substituída. Nenhuma run foi feita, então nada aqui foi escolhido olhando dado do mundo físico.
 
 ### A1.1 Por que revisar
 
@@ -432,6 +432,8 @@ segue o cheiro e não forrageia (definições, seção 5).
 **A seção 9 (o tempo de desistência)** continua como descritivo. A medida 1 a complementa, mas não a substitui.
 
 ### A1.7 A decisão do Matheus
+
+**DECIDIDA em 2026-10-07: PMF-2r, como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
