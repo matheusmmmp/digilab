@@ -2854,3 +2854,18 @@ Sinal verde do coordenador, autorizado pelo Matheus, depois do #191 e do #192 (m
   - Nada é refeito nestas sementes. Um controle melhor do cuidado (em malha fechada, ou pareado de outro jeito) fica para uma pergunta
     nova, com plano próprio.
 - **Pendente antes da leitura final:** o texto completo do Eliassen et al. 2009 (L-1).
+
+## 2026-10-06 — LEITURA-VALIDACAO: a leitura da validação única; interpretações
+
+Tarefa `docs/TAREFA_V2_LEITURA_VALIDACAO.md`; entrega `docs/LEITURA_V2_VALIDACAO_UNICA.md`. Nenhuma run, nenhum código, nenhuma estatística
+nova (os números são os de `artifacts_v2_validacao_unica/`, conferidos no commit `4dd962d`).
+- **As regras das predições 1 e 2 se sobrepõem.** O contraste é positivo pelo teste (o "confirma") e o IC 90% fica inteiro dentro de ±Δ
+  (um dos "refuta" registrados). O plano não diz qual vale quando os dois acontecem; o orquestrador gravou "confirma". A leitura propõe
+  "confirma na direção, abaixo da margem de relevância" e deixa o rótulo para o Matheus (V-1). Nada foi recalculado.
+- **Os braços que aprendem terminam perto de 1/3 da fruta ruim em todo mundo** (P1, P2, P2e e o só cuidado do P2; `frutas/tabelas.json`),
+  o que seria comer as três frutas por igual. Isso é compatível com o aprendiz apagar a preferência inata; não foi testado. Fica como
+  pergunta (Q-1, V-3), não como conclusão.
+- **L-1:** o Eliassen et al. 2009 não tem acesso aberto (Unpaywall, Semantic Scholar, OpenAlex, o repositório NVA da Noruega sem arquivo, e
+  o PDF do editor com 403). Fica só pelo resumo.
+- **A worktree desta tarefa só tem `docs/`** (checkout parcial, configurado só nela): o disco D: estava cheio (cerca de 200 MB livres) e o
+  checkout completo falhou. O branch e o PR não mudam por isso; os números foram lidos pelo `git show` dos artefatos versionados.
