@@ -2427,3 +2427,21 @@ Decisão V-3, pergunta Q-1 de `docs/LEITURA_V2_VALIDACAO_UNICA.md`. **Sem run no
     mais de comer de tudo.
   - **P2e:** segue a informação errada (a ruim em 0,77–0,83; o A fica em 0,02–0,04).
   - **P3:** quase não come.
+
+## V2, W-PRANCHA-MAPA — a prancha do mapa do mundo físico (2026-10-07, rodada 16, `docs/V2_RODADA_16.md`) — SÓ PRANCHA
+
+Proposta de `docs/futuro/mundo_fisico.md` (seções 2.3 e 2.6), seguindo o protótipo `docs/futuro/mundo_fisico_vistas.html`. Nenhum código
+do motor nem do app.
+- **Pranchas:** `docs/estilo_up/pranchas/MapaDesktop.html` (1280×720) e `Mapa390.html` (390×844), com placeholders originais e os tokens e
+  componentes de `docs/estilo_up/dl-up.css`. A cópia com os sprites fica em `Assets/Pranchas_UP/`, fora do repositório, listada no
+  `index.html` de lá.
+- **O que mostram:**
+  - a vista inclinada (a projeção do protótipo);
+  - as quatro regiões (M-4): casa com o ninho e o comedouro, jardim, campo e mata;
+  - as árvores com frutas caídas e uma caindo, a comida deixada no comedouro, a bola quicando e o pet de pé com sombra;
+  - o estado "comida solta aqui" depois do drop, com o aviso e **Desfazer**.
+- **No desktop:** a câmera segue o pet, com botões de seguir, aproximar e afastar; a bandeja e a bola ficam na lateral, com o mapa de cima
+  e o card "Agora".
+- **No celular:** o mapa na tela inteira e a bandeja aberta embaixo. O arrasto da carne começa na bandeja; um dedo no mapa move a câmera,
+  e dois dedos dão zoom.
+- **Registrada** em `docs/PENDENCIAS_PRANCHAS.md` como "não existe" no app. Interpretações em `docs/REGISTRO_DESVIOS.md`.

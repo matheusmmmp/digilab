@@ -110,6 +110,15 @@ Legenda: **existe** = tela e ações existem e foram comparadas; **parcial** = a
 | OffRemoto | existe no servidor | — | — |
 | OffEstados, OffJogando, OffSincronizando, OffConflito | proposta | sincronização entre aparelhos | servidor + save |
 
+## Mundo físico (proposta, `docs/futuro/mundo_fisico.md`)
+
+Prancha nova de 2026-10-07 (W-PRANCHA-MAPA, rodada 16). A versão com placeholders originais está em `docs/estilo_up/pranchas/`; a cópia
+com os sprites, em `Assets/Pranchas_UP/`, fora do repositório.
+
+| prancha | estado | falta | precisa |
+|---|---|---|---|
+| MapaDesktop, Mapa390 | não existe | o mapa inteiro, em vista inclinada:<br>• as quatro regiões (casa com o ninho e o comedouro, jardim, campo e mata);<br>• árvores com frutas caídas, a fruta caindo, a comida deixada, a bola quicando e o pet de pé com sombra;<br>• a câmera que segue o pet, com o botão para voltar a segui-lo, mais aproximar e afastar;<br>• a bandeja para arrastar (fruta, carne, bola): na lateral no desktop e embaixo no celular;<br>• o estado "comida solta aqui", com o aviso e **Desfazer**;<br>• no desktop, o mapa de cima ("onde ele está") e o card "Agora" | mundo físico no motor (posições inteiras, evento `deixar_comida(tipo, x, y)`, árvores, bola como objeto) e na web (projeção inclinada, conversão da tela para o chão); arte do mapa em pixel art (árvores, chão, ninho, comedouro), que hoje é desenho de placeholder; onde fica na navegação (decisão) |
+
 ## Barra de navegação e casca (DIRETRIZES_REPLICAR seções 6 e 7)
 
 Celular (abaixo de 900 px): barra de baixo com Pet, Crescer, Lutar e Diário; **Conversar** e **Configurações** no
