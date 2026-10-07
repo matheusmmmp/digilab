@@ -468,9 +468,14 @@ o escreve. O que esta tarefa pede ao plano:
 | o corpo em TypeScript | o G-PAR desta tarefa | o mesmo motor, sem tela até o produto voltar |
 | medo, estresse, vínculo | medidos pela bancada | consequências que o jogador vê, depois da S-4 e da tela |
 
-## 16. Decisões abertas
+## 16. Decisões
 
-S-1, S-3, S-4, E-9 e E-10 estão decididos. Fica aberto (CD-9 e CD-10 vêm da revisão do tapa):
+S-1, S-3, S-4, E-9 e E-10 estão decididos. **CD-1 a CD-10: DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (CD-9 e CD-10
+vêm da revisão do tapa).
+
+**Pendente, fora desta tarefa:** a variante **P0c, "instinto do corpo"** (o P0 lendo os drives novos por regras fixas simples), anotada na
+conversa sobre a CD-2. Ela não entra no P0 da bancada; pode entrar como braço extra num plano futuro ou só no pet do produto, depois da
+validação. Sem decisão por ora.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
