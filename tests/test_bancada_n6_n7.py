@@ -135,7 +135,7 @@ def test_bracos_do_n6_e_do_n7_rodam_e_a_trava_falha_alto_com_o_no(braco, no, mon
     """A memoria e o pedido estao na main (#166, #167): os bracos se resolvem, na config e na vida. A trava continua sendo uma
     tabela so (NOS_PENDENTES): com a entrada de volta, o braco falha alto com o no (tests/test_bancada_liga_n6_n7.py roda os bracos)."""
     b = bv.BRACOS[braco]
-    assert b.no == no and bv.braco_de(braco) is b and not bv.NOS_PENDENTES
+    assert b.no == no and bv.braco_de(braco) is b and not {"memoria", "pedido"} & set(bv.NOS_PENDENTES)   # W-BANCADA-MUNDO: o do mundo
     cfg = {"bracos": ["P0", braco], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16, "sonda": SONDA,
            "bootstrap": {}, "mundos": ["iguais_frutas" if no == "N7" else "descasado"]}
     bv.validar_config(cfg)

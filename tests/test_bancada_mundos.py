@@ -46,7 +46,9 @@ def test_contrato_das_condicoes():
     assert all(c.precisa == "" and c.no == "" for c in bv.CONDICOES.values())
     assert {m: bv.MUNDOS[m].condicao for m in bv.MUNDOS} == {
         "padrao": "casado", "bola": "casado", "bola_a1": "casado", "casado_frutas": "casado", "descasado": "descasado",
-        "mutavel": "mutavel", "iguais_frutas": "iguais"}
+        "mutavel": "mutavel", "iguais_frutas": "iguais",
+        # W-BANCADA-MUNDO: o mundo fisico (PMF-7, o mundo "iguais") e o layout afastado (tests/test_bancada_mundo_fisico.py)
+        "fisico": "iguais", "fisico_afastado": "iguais"}
     assert bv.EspecVida("atencioso", "P0", 101, mundo="bola").condicao == "casado"
     with pytest.raises(NotImplementedError):
         bv.mundo_de("lago")

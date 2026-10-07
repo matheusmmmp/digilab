@@ -3381,3 +3381,32 @@ Etapa 2 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md`. Sem run; só as semen
   - na medida informal (instinto, 4 donos × 5 sementes, 3 dias, sem artefato) divergem 18 de 20 vidas no `padrao`, 19 na `bola` e 17
     nas frutas, a maioria entre a decisão 24 e a 30 (de 288).
   - O G-HOJE (b) é pela distribuição, como o plano já diz. Esperar vidas iguais em malha fechada não vale nem para o dono atencioso.
+
+## 2026-10-07 — W-BANCADA-MUNDO (rodada 17, worker D): as faixas do banheiro e o mundo físico na bancada
+
+- **O dono "só com o cuidado" (PMF-3) em malha fechada.** O plano diz "o filtro `sem_ensino` de hoje, sem elogiar nem repreender", e o
+  `sem_ensino` de hoje é um filtro de registro. Aqui ele é aplicado ao vivo: o dono sintético decide como sempre e o elogio e a bronca
+  gastam o orçamento dele, mas não chegam ao motor (`CanalSemEnsino`, contados em `retirados`). Assim:
+  - o ritmo do dono e o resto do cuidado são os de sempre;
+  - o registro de cada vida já é o "só cuidado", e o acoplado com o filtro `nenhum` (A1.2) é o do plano;
+  - o pet recebe menos contatos que no orçamento cheio (como no só cuidado da L1).
+  - **A alternativa** é trocar o sinal por um carinho (o mesmo contato, sem ensino). Ela muda o cuidado e não é o filtro de hoje. Fica
+    registrada para o Matheus.
+- **O lugar é um campo da vida** (`EspecVida.lugar`), não um mundo. O plano o trata como fator do cuidado cruzado com o dono, e o layout
+  afastado como outro mundo. O nome da vida só ganha o lugar no mundo físico; as vidas de antes não mudam de nome.
+- **A condição do mundo físico é `iguais`** (PMF-7), com o efeito das frutas do `efeitos_da_condicao` (o neutro, 0,0).
+- **A janela das medidas** é a dos últimos sete dias (`janela_dias(dias − 6, dias)`): os dias 8 a 14 numa vida de 14, como o plano. Numa vida
+  mais curta (fumaça e testes), é a vida toda.
+- **As quedas da taxa recente** são as `sorteadas` de cada queda, não as `colocadas`: as que cabem no chão dependem do pet, e a medida do
+  plano é "do fluxo `mundo-arvores`, que não depende do pet".
+- **As horas acordado** da taxa média saem das decisões com o pet acordado × 15 min.
+- **A trajetória** é o `decisoes_mundo` (uma entrada por decisão, com a posição depois do passo), mais o nascimento no ninho se a primeira
+  decisão não for no tick 0. As visitas recontadas pela métrica batem com as que o motor registrou; a bancada confere em toda medição.
+- **O que fica pendente da etapa 3 (B):**
+  - o P0z;
+  - o cérebro `instinto` no mundo físico;
+  - as runs com plano: os braços P0 e P1 do plano partem do prior do instinto do mundo, e os lobos de hoje são cegos ao mundo.
+  - **Quando a etapa 3 entrar:** tirar a entrada do `NOS_PENDENTES`; ligar o `PoliticaInstintoMundo` no cérebro `instinto` e no P0z;
+    passar a chave do mundo aos lobos; e acrescentar o gate "P0 com lobos = o instinto do mundo byte a byte", como nos outros mundos.
+- **Não entram aqui:** o orquestrador do plano (os contrastes P0 − P1, P0^ac − P1^ac, o Holm, a calibração do `m` e o N) e os descritivos
+  da seção 5.3, que não têm função em `metrics.py`.
