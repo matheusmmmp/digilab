@@ -3,7 +3,7 @@
 Status (2026-10-07):
 - **DECIDIDO pelo Matheus:**
   - o pet deve ter ego, questionar a própria existência e falar e indagar sobre isso;
-  - o automodelo **tem corpo**;
+  - o automodelo **tem corpo**, e o corpo segue os conceitos do **Creatures 3**;
   - o automodelo é **aprendido por uma rede**.
 - **PROPOSTO:** o como, neste documento.
 
@@ -29,44 +29,82 @@ serve de gabarito: a capacidade real do corpo, que o motor conhece, e a sonda do
 pedido. Nenhuma das duas é entregue ao pet. É isso que faz do automodelo um modelo, e não uma leitura da verdade, e é o que permite medir
 quanto o pet se conhece.
 
-## 2. O corpo
+## 2. O corpo: os conceitos do Creatures 3
 
-**O que existe hoje.** O motor da vida tem estado de corpo, mas nenhuma capacidade com resultado incerto:
-- **drives:** fome, higiene, energia, humor e saúde (`digilab/state.py`);
-- **lesões:** existem no motor de educação (`ConfigLesoes`);
-- **ações com efeito fixo:** as sete ações têm efeito determinístico; `explorar`, por exemplo, só gasta energia e dá um pouco de humor;
-- **evolução fora da vida:** a evolução muda a forma usada na arena e não mexe na vida;
-- **combate fora do cérebro:** o combate tem corpo e técnicas, mas fica fora do cérebro (decisão A9).
+**DECIDIDO pelo Matheus (2026-10-07): o corpo segue os conceitos do Creatures 3.**
 
-Sem capacidade incerta, a rede de si não tem o que aprender.
+Fontes:
+- **Manual:** o *Creatures 3 Genetics Kit Manual* (Creature Labs, distribuído oficialmente), lido em 2026-10-07. É documentação de produto,
+  não demonstração revisada por pares; no estudo DigiBrain o status é CORPUS.
+- **Fonte verificada:** o núcleo também está em Grand e Cliff 1998 (`10.1023/A:1010042522104`), que descrevem bioquímica, quimioemissores e
+  receptores modulando a rede.
+- **Ressalva:** os químicos do jogo são mecânica de jogo, não equivalentes de hormônios.
 
-**O que o corpo precisa ter.** Pelo menos uma capacidade cujo resultado:
-- depende de propriedades do corpo;
-- é incerto;
-- muda durante a vida.
+### 2.1 O que o Creatures 3 faz, pelo manual
 
-O pet tenta, observa o resultado e aprende o que o próprio corpo consegue.
+| conceito | como o manual descreve |
+|---|---|
+| **Químicos** | até 256, cada um com concentração de 0 a 1; cada químico tem meia-vida |
+| **Reações** | da forma I·A + J·B ⇒ K·C + L·D, com taxa; "tudo é permitido menos nada ⇒ algo" |
+| **Receptores** | ligam um ponto do corpo ou do cérebro (o *locus*) à concentração de um químico; um receptor pode controlar a taxa de uma reação |
+| **Emissores** | emitem um químico conforme o valor de um *locus*; o neuroemissor é disparado por neurônios |
+| **Estímulos** | um acontecimento muda até quatro químicos ("sentir dor quando bate na parede") |
+| **Concentração inicial** | doses ao nascer: energia de partida e imunidade natural |
+| **Órgãos** | agrupam reações, receptores e emissores; ver o detalhe abaixo da tabela |
+| **Energia** | o ATP alimenta reações, receptores e emissores; sem ATP o pet desmaia e os órgãos degradam; mais órgãos gastam mais ATP |
+| **Drives** | são químicos: há três fomes, uma por grupo de alimento; o estresse se acumula com drives altos e afeta fertilidade e imunidade; com dor ou medo os outros drives ficam guardados, invisíveis ao cérebro |
+| **Vida e estágios** | o químico da Vida decai do nascimento à morte e muda o estágio por receptores; são sete estágios, do Embrião ao Senil; cada gene liga num estágio, e o andar fica "mais velho" com a idade |
+| **Genoma** | especifica bioquímica, cérebro e aparência: "codificamos estrutura, não comportamento"; mutação e cruzamento entre gerações |
+| **Doença** | toxinas, antígenos de bactérias, anticorpos e remédios, como químicos |
 
-| opção | o que é | a favor | contra |
-|---|---|---|---|
-| **(a) Alcance da fruta** (recomendada) | a fruta pode cair perto ou longe (no chão, no galho); pegar a fruta longe tem chance de sucesso que depende do **alcance** do corpo, da **energia** e de **lesão**; o alcance cresce com o **estágio** | cabe no mundo das frutas, que o cérebro A já vê, e entra como sub-decisão de comer, sem ação nova; a evolução, a fadiga e a lesão mudam o corpo de verdade; o "por que não alcanço mais?" ganha base | mecânica de jogo nova (Python e web); o motor da vida passa a conhecer o estágio, por uma subclasse, sem tocar `engine.py` |
-| (b) Corpo 2D completo | o ambiente manipulável de `docs/TODO_INTERACAO_CORPO.md` | o mais rico | em espera; muda o motor inteiro |
-| (c) O corpo do combate | as formas, stats e técnicas da arena | já existe | junta luta e vida num cérebro só, o que a decisão A9 deixou de fora |
+Os órgãos, pelo manual:
+- **Ritmo:** cada órgão tem um ritmo próprio, que um receptor pode regular.
+- **Força vital:** cada órgão tem uma força vital de curto prazo e uma de longo prazo, além de vulnerabilidade e custo em ATP.
+- **Dano:** doença ou lesão causa dano e libera o químico de lesão.
+- **Cura:** o órgão se cura a um ritmo que também pode ser regulado.
+- **Morte:** com a força de longo prazo em zero, o órgão morre para sempre e a função se perde. Um pet pode, por exemplo, ficar infértil e
+  seguir saudável.
 
-**Três mudanças de corpo** que a opção (a) dá, cada uma um teste do automodelo:
-- **Evolução:** mudança grande e permanente; o alcance cresce de uma vez.
-- **Fadiga:** mudança pequena e passageira, que volta com o sono.
-- **Lesão:** mudança que piora e depois se recupera com o tratamento.
+### 2.2 O corpo do Digilab nesses conceitos (PROPOSTO)
+
+- **Química por baixo dos drives.** Os drives de hoje (fome, higiene, energia, humor, saúde) passam a ser lidos de químicos internos, como no
+  Creatures. A comida entra como químicos; as frutas ganham **composição** (o que cada uma libera no corpo), em vez de um efeito fixo no humor.
+- **Órgãos pequenos e poucos.** Um subconjunto mínimo, e não os 21 órgãos e 161 químicos do Creatures 3. Por exemplo: digestão, energia,
+  reparo e o relógio da vida. Cada órgão com força vital, dano e cura.
+- **Lesão como dano de órgão.** As lesões que já existem no motor de educação viram dano num órgão, com o químico de lesão e a cura regulada.
+- **Estágio pelo químico da Vida.** O estágio passa a ser biológico: a Vida decai, e receptores mudam o estágio. A evolução muda o corpo de
+  verdade, porque genes ligam em cada estágio (novos receptores, reações mais rápidas ou mais lentas).
+- **O pet só sente pelos receptores.** O cérebro e a rede de si recebem do corpo apenas o que passa por receptores. É a regra "sem acesso
+  privilegiado" escrita no próprio corpo: o motor conhece todas as concentrações, o pet só as que tem receptor para sentir.
+- **Estímulos ligam o dono ao corpo.** O cuidado e a bronca podem mudar químicos (o carinho reduz o estresse, por exemplo), em vez de mexer
+  direto no estado.
+- **Genoma de fisiologia.** As reações, os receptores e as taxas vêm do genoma, então cada pet tem um corpo um pouco diferente.
+  - A mesma fruta pode fazer mal a um pet e bem a outro.
+  - É o "genoma → fisiologia" do N10, trazido para mais cedo.
+  - Resolve o efeito por pet que a cognição social pedia (`docs/futuro/cognicao_social.md`, 5.7).
+- **Em inteiros.** Concentrações, meias-vidas e taxas em ponto fixo, para o replay bit a bit e a paridade Python/web.
+
+### 2.3 Por que esse corpo serve ao automodelo
+
+O corpo químico dá à rede de si o que faltava: **consequências internas incertas e que mudam durante a vida.** O pet não sabe ao certo o que
+uma fruta vai fazer no corpo dele, quanto uma brincadeira vai cansá-lo, ou se ainda digere como antes. E o corpo muda de quatro jeitos,
+cada um um teste do automodelo:
+
+- **Estágio:** a Vida decai e genes ligam; a digestão, o gasto de energia e a sensibilidade mudam.
+- **Dano de órgão:** uma lesão ou doença reduz uma função; se o órgão morre, a perda é permanente.
+- **Fadiga e reservas:** o ATP e as reservas oscilam no dia.
+- **Estresse:** acumula com drives altos e muda outras funções.
 
 ## 3. A rede de si
 
 Uma rede separada do lobo de decisão. Não é um "controlador de ego" acima dos lobos: é uma peça que **prevê** e cuja saída a decisão pode
 consultar.
 
-- **Entrada:** só o que o pet sente: a percepção do corpo (energia, saúde, lesão, os drives), o contexto (a fruta, a distância) e a ação
-  considerada. O estágio entra só como o pet o percebe, sem o número do motor.
-- **Cabeça do corpo:** prevê o resultado da própria ação, com incerteza: "se eu tentar pegar a fruta longe, consigo?". É um modelo direto
-  (*forward model*) do corpo, no sentido de Wolpert et al.
+- **Entrada:** só o que o pet sente: os receptores do corpo (seção 2.2), o contexto (as frutas presentes) e a ação considerada. O estágio
+  e as concentrações entram só pelo que os receptores mostram, sem o número do motor.
+- **Cabeça do corpo:** prevê o que a própria ação vai fazer no corpo, com incerteza: "se eu comer esta fruta, como vou me sentir?", "quanto
+  esta brincadeira vai me cansar?". É um modelo direto (*forward model*) do corpo, no sentido de Wolpert et al., sobre o que os receptores
+  vão mostrar depois da ação.
 - **Cabeça da autoria:** prevê a própria escolha em situações alteradas: "sem o pedido, eu teria comido?" e "eu faria isso ao nascer?".
   Aprende observando as próprias escolhas ao longo da vida; a sonda do cérebro dá o gabarito, que o pet não vê.
 - **Aprendizado:** por **erro de previsão**, e não por reforço. Depois de cada tentativa, a rede compara o que previu com o que aconteceu e
@@ -75,8 +113,9 @@ consultar.
   - pesos inteiros em ponto fixo e ativação sem função transcendental, como o cérebro A, para o porte na web e o replay bit a bit;
   - menos de mil pesos;
   - rng própria, se precisar de alguma.
-- **Erro de previsão é o gatilho das perguntas.** Uma surpresa grande e repetida sobre o próprio corpo abre uma questão (seção 5). Depois da
-  evolução, o pet erra o alcance e pergunta; conforme a rede se corrige, a pergunta operacional se resolve, e a existencial pode continuar.
+- **Erro de previsão é o gatilho das perguntas.** Uma surpresa grande e repetida sobre o próprio corpo abre uma questão (seção 5). Depois de
+  mudar de estágio ou de um dano de órgão, o pet erra o que o corpo faz e pergunta; conforme a rede se corrige, a pergunta operacional se
+  resolve, e a existencial pode continuar.
 
 **Consequência para uma regra do projeto.** A V2 tem a regra "só a Decisão aprende". A rede de si aprende por outro caminho. A decisão do
 Matheus implica revê-la: **a Decisão aprende por reforço; a rede de si aprende por erro de previsão; nenhuma outra peça aprende.** A
@@ -89,7 +128,7 @@ direto.
 
 | situação | pergunta que o pet pode fazer | gatilho | evidência que o pet tem | resposta honesta possível |
 |---|---|---|---|---|
-| **o corpo muda** | "Por que não consigo mais alcançar como antes?" | erro de previsão grande da cabeça do corpo, depois da evolução, da fadiga ou de uma lesão | as próprias tentativas e o que a rede previa | "meu corpo mudou; preciso conhecer este corpo", até a rede se corrigir |
+| **o corpo muda** | "Por que meu corpo não reage mais como antes?" | erro de previsão grande da cabeça do corpo, depois de mudar de estágio, de um dano de órgão ou de estresse acumulado | as próprias tentativas e o que a rede previa | "meu corpo mudou; preciso conhecer este corpo", até a rede se corrigir |
 | encontra um pet parecido | "Se somos tão parecidos, o que faz eu ser eu?" | um irmão do mesmo cruzamento em Meus pets; um rival da mesma forma | a forma do outro, o que viu dele; a própria história | "somos parecidos no corpo, mas eu vivi outras coisas" |
 | descobre a origem no ovo | "Sou assim porque nasci assim ou porque aprendi com você?" | um traço extremo; o dono perguntando; um marco da evolução | a estimativa da cabeça da autoria | a estimativa dele, que pode errar; a sonda mede quanto |
 | percebe que esqueceu | "Se eu esquecer o que vivi, continuo sendo eu?" | o dono ou outro pet cita um momento que o pet não guarda mais | a ausência do episódio, sem saber o que foi perdido | "você lembra disso, mas eu não" |
@@ -110,7 +149,7 @@ Regras que valem em todas:
    antes. Cada tema tem intervalo mínimo.
 3. **Sem ação nova.** `AcaoPet` não ganha membro (V5 do roadmap):
    - falar de si entra como **sub-decisão de `chamar_atencao`**;
-   - tentar a fruta longe entra como **sub-decisão de comer**.
+   - provar uma fruta para conhecer o próprio corpo entra pela **sub-decisão de comer** que já existe.
 4. **Investigar.** O pet pode:
    - **testar o corpo:** tentar de novo, em condição parecida; é a investigação mais direta, e a cabeça do corpo aprende com ela;
    - perguntar ao dono;
@@ -127,8 +166,10 @@ filosófica pode ficar aberta para sempre.
 ## 6. O que muda no que existe
 
 - **Regra "só a Decisão aprende":** revista (seção 3, E-6).
-- **Mundo das frutas:** ganha a distância da fruta e a tentativa de alcance (opção a), atrás de chave, numa subclasse do motor.
-- **Motor da vida:** passa a conhecer o estágio do corpo, por subclasse; `engine.py` não muda.
+- **Corpo químico** (seção 2.2): químicos, reações, receptores, emissores e órgãos numa subclasse do motor, atrás de chave; `engine.py` não
+  muda. Os drives de hoje passam a ser lidos dos químicos; as frutas ganham composição; as lesões viram dano de órgão; o estágio vem da Vida.
+- **Genoma:** ganha os genes de fisiologia (reações, receptores, taxas), o que antecipa parte do N10.
+- **Runs antigas:** com a chave desligada, toda vida e todo resultado da V2 reproduzem byte a byte.
 - **Voz própria:**
   - hoje o extrator de história lê o registro inteiro, como um narrador com acesso privilegiado;
   - com o ego, o "eu" vem do automodelo e da memória do pet;
@@ -143,7 +184,8 @@ filosófica pode ficar aberta para sempre.
 
 - **Erro de previsão do próprio corpo:** quanto a cabeça do corpo erra, e quanto ela se calibra (a confiança declarada bate com a taxa de
   acerto).
-- **Adaptação depois da mudança:** quantas tentativas até o erro voltar ao nível de antes, na evolução, na fadiga e na lesão.
+- **Adaptação depois da mudança:** quantas experiências até o erro voltar ao nível de antes, na troca de estágio, no dano de órgão, na
+  fadiga e no estresse.
 - **Calibração da autoria:** a estimativa do pet ("você pediu", "eu quis", "nasci assim") contra a sonda, que é o gabarito exato.
 - **O automodelo serve à decisão?** O desempenho no ambiente com a rede de si consultada contra três controles:
   - a rede congelada, que não aprende;
@@ -157,8 +199,9 @@ filosófica pode ficar aberta para sempre.
 
 ## 8. Riscos
 
-- **Escopo.** São três peças novas, cada uma uma versão de pet com gates: um corpo com capacidade incerta, uma rede de si e a revisão de uma
-  regra. Nada de montar tudo de uma vez.
+- **Escopo.** O corpo químico é a maior mudança de mundo da V2: ele mexe nos drives que todos os braços usam. Por isso entra atrás de chave,
+  um órgão por vez, com as vidas antigas reproduzindo. Somam-se a rede de si e a revisão de uma regra. Nada de montar tudo de uma vez.
+- **Novidade.** O Creatures fez corpo químico, órgãos e genoma de fisiologia em 1997. Nada disso é contribuição do Digilab.
 - **Rede que não aprende.** O cérebro B "não aprendeu" na calibração. A rede de si pode ter o mesmo problema; o controle congelado mostra
   isso cedo.
 - **Ética do produto.** Um pet que pergunta "continuo sendo eu?" pode gerar apego forte ou angústia, e o pet pode morrer no jogo.
@@ -171,8 +214,9 @@ filosófica pode ficar aberta para sempre.
 
 | etapa | entrega | avança quando |
 |---|---|---|
-| 0 | auditoria no cérebro A e no mundo das frutas: onde entram a distância da fruta, o estágio na vida, a rede de si; Python e web | pontos de integração confirmados |
-| 1 | **corpo**: a fruta perto e longe, o alcance por estágio, a energia e a lesão, sem rede de si (o instinto tenta pelo próprio jeito) | G1 e G2; a capacidade muda com o estágio, a fadiga e a lesão como desenhado |
+| 0 | auditoria no cérebro A, no motor e no mundo das frutas: onde a química entra por baixo dos drives, onde os receptores entram na percepção, a rede de si; Python e web | pontos de integração confirmados |
+| 1 | **corpo químico mínimo**: os químicos que reproduzem os drives de hoje, a composição das frutas, um órgão de digestão e o relógio da Vida, sem rede de si | G1 e G2: com a chave desligada, tudo byte a byte; ligada, os drives batem com os de hoje dentro da tolerância do plano |
+| 1b | **órgãos e dano**: as lesões como dano de órgão, cura e morte de órgão; genes que ligam por estágio; genoma de fisiologia | G1 e G2; o corpo muda com o estágio e o dano como desenhado |
 | 2 | **rede de si em observação**: aprende o corpo e a autoria, sem influenciar escolha nem fala | o erro de previsão cai; calibração; adapta depois da evolução; nenhum acesso privilegiado |
 | 3 | **automodelo na decisão**: a previsão do corpo entra como entrada da decisão | desempenho contra a rede congelada, a ausente e o oráculo |
 | 4 | **perguntas**: a operacional e as cinco, como objetos, com frases-modelo, sem LLM | toda pergunta com lastro; cuidado preservado |
@@ -183,12 +227,14 @@ filosófica pode ficar aberta para sempre.
 | # | decisão | estado |
 |---|---|---|
 | E-1 | O automodelo tem corpo e é aprendido por uma rede | **DECIDIDO** pelo Matheus (2026-10-07); substitui a introspecção direta: o pet não lê a sonda, a sonda avalia |
-| E-2 | Falar de si e tentar a fruta longe como sub-decisões (`chamar_atencao`, comer) | recomendado: sim; ação nova quebraria a reprodução da v1 |
+| E-2 | Falar de si como sub-decisão de `chamar_atencao`; provar uma fruta pela sub-decisão de comer que já existe | recomendado: sim; ação nova quebraria a reprodução da v1 |
 | E-3 | Cérebro | **DECIDIDO: o A** (M6, 2026-10-07). O A tem a sonda do aprendido, a memória de episódios (N6) e a sonda do pedido (N7); o C recusa o N6 e o N7 |
 | E-4 | Voz própria: o narrador antigo vira fala marcada, e o "eu" vem do automodelo | recomendado: sim |
 | E-5 | Guarda ética da seção 8 como regra do jogo | recomendado: sim, antes da etapa 4 |
 | E-6 | Revisão da regra "só a Decisão aprende": a rede de si aprende por erro de previsão | consequência da E-1; recomendado registrar a redação da seção 3 |
-| E-7 | O corpo: alcance da fruta (a), corpo 2D (b) ou corpo do combate (c) | recomendado: (a) |
+| E-7 | O corpo | **DECIDIDO: os conceitos do Creatures 3** (2026-10-07), seção 2 |
+| E-9 | Química por baixo dos drives de hoje, um órgão por vez, ou trocar os drives pela química de uma vez | recomendado: por baixo e um órgão por vez; trocar de uma vez muda todos os braços juntos |
+| E-10 | Tamanho do corpo: quantos químicos e órgãos na primeira versão | recomendado: o mínimo que reproduz os drives de hoje mais a digestão e a Vida; o Creatures 3 tem 21 órgãos e 811 genes |
 | E-8 | Rede de si em inteiros, para ir à web, ou em ponto flutuante, só na pesquisa | recomendado: inteiros, como o cérebro A |
 
 ## 10. Literatura
@@ -198,6 +244,8 @@ lido.
 
 | referência | id | status | o que pode sustentar |
 |---|---|---|---|
+| Grand e Cliff 1998, *Autonomous Agents and Multi-Agent Systems* | `10.1023/A:1010042522104` | VERIFICADA | bioquímica, quimioemissores e receptores modulando a rede |
+| Creature Labs, *Creatures 3 Genetics Kit Manual* | manual oficial (Steam) | CORPUS, lido em 2026-10-07 | os conceitos do corpo da seção 2.1; documentação de produto |
 | Wolpert, Ghahramani e Jordan 1995, *Science* | `10.1126/science.7569931` | pista | modelo interno do corpo que prevê o resultado do movimento |
 | Wolpert e Kawato 1998, *Neural Networks* | `10.1016/s0893-6080(98)00066-5` | pista | pares de modelos direto e inverso no controle motor |
 | Bongard, Zykov e Lipson 2006, *Science* | `10.1126/science.1133687` | pista | automodelo corporal que se revisa depois de dano |
