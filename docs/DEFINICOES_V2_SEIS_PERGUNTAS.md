@@ -1,6 +1,7 @@
 # DEFINIÇÕES DA V2: o que a segunda revisão de literatura sustenta para as seis perguntas
 
-Status: **PROPOSTO**, escrito pelo coordenador em 2026-10-07 a pedido do Matheus. **Só texto:** não muda código, config nem decisão
+Status: **DS-1 a DS-6 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 9). Escrito pelo coordenador em
+2026-10-07 a pedido do Matheus. **Só texto:** não muda código, config nem decisão
 tomada, e não autoriza run. As decisões ficam na seção 9.
 
 **Fonte única:** `docs/referencias/F_REVISAO_V2_SEIS_PERGUNTAS.md` (a revisão do Claude Science, prompt #208), lida inteira, com
@@ -230,6 +231,14 @@ Hoje ela não está especificada.
   código, cobertura estreita, declarada na revisão).
 
 ## 9. Decisões que só o Matheus pode tomar
+
+**DECIDIDAS em 2026-10-07: DS-1 a DS-6, todas como recomendado.** Onde cada uma vai:
+- **DS-1:** a medida do caminho E ("o pet que pensa"), quando ele tiver plano;
+- **DS-2:** IDEIA registrada aqui;
+- **DS-3:** plano curto do chat C;
+- **DS-4:** revisão da tarefa do corpo (`docs/TAREFA_V2_CORPO_DRIVES.md`, seção 17);
+- **DS-5:** o adendo do plano do mundo, junto com a PMF-2;
+- **DS-6:** adendo do plano do corpo, pelo chat C.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
