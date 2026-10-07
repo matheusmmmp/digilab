@@ -3108,3 +3108,17 @@ Só papel: o adendo 1 de `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md` (DS-6 e DS-4, d
 - **A conta de exemplo** com a bola repetida foi refeita em Python: +1440, +1298, +798, +189 e −34 para 0, 1, 4, 7 e 8 repetições.
 - **O R-2** do plano estava desatualizado pela DS-4: explorar passou a reduzir o tédio. Ficou corrigido no adendo, junto com o risco novo
   R-13 (alternar só por alternar).
+
+## 2026-10-07 — W-PLANO-TRANSFERENCIA (worker C, DS-3): o plano do teste de transferência da rejeição
+
+Só papel: `docs/PLANO_ANALISE_V2_TRANSFERENCIA_REJEICAO.md`. Nenhuma run, nenhum código.
+
+- **As vidas que já existem não respondem ao teste limpo.** O calendário oferece cada fruta sozinha desde o dia 1, então a transferência
+  se mistura com a reexperiência, e a fome na oferta não é controlada. O plano pede run nova; o descritivo por faixa de fome nessas vidas
+  fica como parte 0, só ordem de grandeza.
+- **As sondas olham o estado** (a fome), de propósito, ao contrário do `CalendarioFrutas`, que só olha a semente. A diferença está
+  declarada (R-3).
+- **A margem `Δ_T`** é medida na própria run: metade da aversão aprendida na escolha, nos dias 6 a 10. Não há calibração, porque o ponto
+  do A é o da K2. As sementes 35101…35505 são piloto, e a 36101…36505 é a validação; as duas foram conferidas livres.
+- **O limiar de fome baixa (0,70)** é PROPOSTO, SEM FONTE. Ele só pode ser trocado no adendo, pelas sondas perdidas no piloto, sem olhar o
+  índice.
