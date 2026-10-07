@@ -2445,3 +2445,24 @@ do motor nem do app.
 - **No celular:** o mapa na tela inteira e a bandeja aberta embaixo. O arrasto da carne começa na bandeja; um dedo no mapa move a câmera,
   e dois dedos dão zoom.
 - **Registrada** em `docs/PENDENCIAS_PRANCHAS.md` como "não existe" no app. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+## V2, W-GABARITOS — as vidas de hoje do mundo físico e do corpo (2026-10-07, rodada 17, `docs/V2_RODADA_17.md`) — GABARITOS GRAVADOS
+
+Passo 1 do A, antes de qualquer mudança do mundo físico (`docs/TAREFA_V2_MUNDO_FISICO.md`, seções 9 e 10) ou do corpo
+(`docs/TAREFA_V2_CORPO_DRIVES.md`, seção 12, G2). Nenhum código do motor mudou; só as sementes dos testes. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Mundo** (`tests/gabarito_mundo.py` → `tests/gabaritos/mundo_vidas_de_hoje.json`, 96 vidas):
+  - P0, P1 e P3, nos mundos `padrao`, `bola`, `descasado` e `iguais_frutas`;
+  - atencioso e aleatório, nas sementes 101 (sem genoma) e 202 (genoma 202: no `padrao`, o `MotorPersonalidade`);
+  - na bancada simples (L1) e na completa (T3 com as peças da K2, K4 e canais).
+- **Corpo** (`tests/gabarito_corpo.py` → `tests/gabaritos/corpo_vidas_de_hoje.json`, 156 vidas):
+  - os três motores que o corpo vai tocar: `MotorComFeedback`, `MotorAmbiente` e `MotorFrutasMundo`;
+  - P0 a P3 (o P2 só nos mundos das frutas), nos mundos `padrao`, `bola`, `descasado`, `mutavel` e `iguais_frutas`;
+  - as montagens simples (T3 com as peças da K2) e completa;
+  - o só cuidado do P3 (`sem_ensino`) na completa;
+  - sementes 101 e 202, sem genoma.
+- **O que se confere:** sha256 do log, do estado final, do `estado()`, das ações, das rngs, do registro do mundo e do estado interno da
+  política.
+- **Teste:** `tests/test_gabaritos_mundo_corpo.py`, 6 testes, ~31 s. Os dois gabaritos são conferidos byte a byte contra o código atual, e
+  o teste verifica a cobertura (motores, mundos, braços, montagens) e as sementes.
+- **Regravar só com o código de antes.** Depois da mudança do mundo ou do corpo, estas vidas têm de sair iguais com a chave desligada.
