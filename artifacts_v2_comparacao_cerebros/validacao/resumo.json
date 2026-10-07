@@ -1,0 +1,86 @@
+{
+ "conferencia_calibracao_c_iguais": null,
+ "legibilidade": {
+  "A": 0.2623511904761905,
+  "C": 0.32723214285714286
+ },
+ "m6": [
+  {
+   "A": "fecha (K2)",
+   "B": "nao fecha: nao aprende (piloto da calibracao B)",
+   "C": "fecha (calibracao C, piloto: aprende)",
+   "criterio": "admissao",
+   "passo": 0,
+   "resultado": "A e C seguem"
+  },
+  {
+   "CC-1": "empate",
+   "CC-2": "empate",
+   "criterio": "desempenho (CC-1, CC-2)",
+   "passo": 1,
+   "resultado": "empate"
+  },
+  {
+   "A": 0.2623511904761905,
+   "C": 0.32723214285714286,
+   "c_menos_a": 0.06488095238095239,
+   "criterio": "legibilidade (P1 descasado)",
+   "passo": 2,
+   "resultado": "C vence"
+  },
+  {
+   "recomendacao": "C"
+  }
+ ],
+ "modo": "validacao",
+ "primarios": {
+  "CC-1": {
+   "d": "C:P1 - A:P1",
+   "holm_rejeita": false,
+   "ic90": {
+    "ic_inferior": -0.010508962082149487,
+    "ic_superior": 0.04152377640265933,
+    "nivel": 0.9
+   },
+   "ic95": {
+    "ic_inferior": -0.017187554807253834,
+    "ic_superior": 0.045910679468785645,
+    "nivel": 0.95
+   },
+   "leitura": "empate",
+   "leitura_m6": "empate",
+   "media": 0.015740074379592593,
+   "p_ajustado": 0.3442,
+   "p_bilateral": 0.3442
+  },
+  "CC-2": {
+   "d": "C:P1 - A:P1",
+   "holm_rejeita": false,
+   "ic90": {
+    "ic_inferior": 0.004184704184704191,
+    "ic_superior": 0.0667873642873643,
+    "nivel": 0.9
+   },
+   "ic95": {
+    "ic_inferior": -0.00877901377901379,
+    "ic_superior": 0.07758838383838386,
+    "nivel": 0.95
+   },
+   "leitura": "empate",
+   "leitura_m6": "empate",
+   "media": 0.03596304971304972,
+   "p_ajustado": 0.1588,
+   "p_bilateral": 0.0794
+  }
+ },
+ "segundos": 1320.3642176000067,
+ "tamanho_amostra": null,
+ "tempo": {
+  "segundos": 1320.3642176000067,
+  "segundos_por_unidade": 264.07284352000136,
+  "vidas": 235,
+  "vidas_por_unidade": 47
+ },
+ "unidades": 5,
+ "vidas": 235
+}
