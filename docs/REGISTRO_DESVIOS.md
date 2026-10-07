@@ -3173,3 +3173,38 @@ mundo ou do corpo, e um teste que os confere. Nenhum código do motor mudou.
 - **A auditoria da seção 2 do corpo** vai no corpo do PR. Um achado entra aqui: os efeitos das ações do pet
   (`policy.efeito_da_acao_do_pet`: brincar, explorar, comer, emburrar) são literais no código, não parâmetros de `config.py`. Fica como
   achado, sem mudança: tirar os literais é tarefa do B.
+
+## 2026-10-07 — A química dos drives de hoje (W-CORPO-QUIMICA, rodada 17, etapa 1 do corpo): interpretações
+
+Tarefa `docs/TAREFA_V2_CORPO_DRIVES.md` (CD-1 a CD-10 decididas), etapa 1 da seção 14. Só `digilab/corpo.py` (novo), `ConfigCorpo` no fim
+de `config.py`, o exportador e os testes. Motor, `engine.py`, `lobos.py` e a web não mudaram. Só as sementes dos testes.
+
+- **O corpo não sorteia.** O `Corpo.passo(antes)` lê do `Estado` do começo do tick a sujeira, o sono e a hora. O sorteio da sujeira
+  continua com o motor, na mesma posição de hoje. Ele não muda a química do tick: o desconforto usa a sujeira de antes.
+- **Os literais do efeito da ação do pet** (`policy.efeito_da_acao_do_pet`: 0,02, 0,015, 0,01, 0,05, 0,01) viraram campos inteiros da
+  `ConfigCorpo` (pela regra "parâmetros em `config.py`"). Um teste confere cada um contra a função de hoje, numa grade de estados. O humor
+  do brincar do pet vem de `Config.humor_por_tick_brincando × intervalo_decisao_ticks`, não de um literal.
+- **As conversões conferem a grade.** Todo número de hoje vezes C tem de cair num inteiro (até 1e−6, só erro de float), senão falha alto.
+  O acariciar (`ganho_elogiar × 0,6` = 0,06000000000000001 em float) vira 27000. Um teste confere que tirar qualquer fator primo de C tira
+  algum número de hoje da grade: 450000 é o menor.
+- **A bola e a fruta** recebem o número de hoje (`ganho_humor_bola`, `nutricao`, o efeito da condição) e o convertem com a mesma
+  conferência, sem importar `ConfigBola` nem `ConfigFrutas`. Sem a digestão (etapa 3), a nutrição da fruta vai direto à fome.
+- **O G-HOJE (a)** é a seção 12 sem o estágio e sem o sinal do N3. O estágio é a Vida (etapa 4) e o sinal é o cérebro (etapa 5), e
+  nenhum dos dois existe nesta etapa.
+  - A malha aberta reproduz o `Estado` de hoje e a rng de ambiente (conferido no teste).
+  - A fome, a higiene, a energia e o humor ficam a até 1e−9 do float de hoje em todo tick.
+  - A saúde fica a até 1e−9 mais as viradas de privação.
+  - Toda virada é um químico exatamente no limiar de 0,15, o caso que a seção 3 previa.
+  - As viradas só aparecem nas vidas do relapso e do aleatório; o atencioso e o incoerente não chegam perto da privação.
+- **O gabarito da paridade** vai para `tests/gabaritos/corpo_quimica_python.json`, não para `web/app/test/gabaritos/`: a web estava fora
+  desta tarefa. O TS (etapa 7, do A) lê de lá ou o copia. Ele traz:
+  - as taxas;
+  - uma grade de casos com cada operação;
+  - os passos de meia-vida e de `div_arred`;
+  - três vidas em malha aberta, com a entrada de cada tick num caractere e o sha256 das concentrações depois de cada operação.
+
+  Um teste confere que o arquivo é o que o exportador gera hoje.
+- **As constantes das meias-vidas** (k 1497, 753 e 32) já ficam na `ConfigCorpo`, com a derivação conferida por teste. Nenhum químico desta
+  etapa decai por meia-vida; elas servem à etapa 6.
+- **O registro dos parâmetros** fica em `corpo.PARAMETROS_CORPO`, como o dos lobos, conferido contra os campos da `ConfigCorpo`, e não em
+  `protocol.py`: nenhuma run de protocolo usa o corpo.

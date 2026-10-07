@@ -1436,3 +1436,46 @@ class ConfigJulgamentoFruta:
 
 CONFIG_JULGAMENTO_FRUTA = ConfigJulgamentoFruta()
 CONFIG_JULGAMENTO_FRUTA_LIGADA = ConfigJulgamentoFruta(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigCorpo:
+    """V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md; CD-1 a CD-10 decididas). A quimica guarda a
+    FALTA de cada drive em inteiros de [0, escala]; o drive de hoje e a leitura (escala - q) / escala. Etapa 1 (W-CORPO-QUIMICA): so a
+    quimica dos drives de hoje, sem orgao (`ligada`); as sub-chaves das etapas seguintes falham alto se ligadas. Cada sub-chave exige a
+    anterior (E-9, um orgao por vez). Desligada: nada existe (a vida de hoje byte a byte). Status em corpo.PARAMETROS_CORPO."""
+
+    ligada: bool = False
+    digestao: bool = False                   # etapa 3, orgao 1 (secao 5)
+    vida: bool = False                       # etapa 4, orgao 2 (secao 6)
+    drives_novos: bool = False               # etapa 6 (secao 7)
+    gestos: bool = False                     # etapa 6 (secao 8)
+    escala: int = 450000                     # C (CD-1): o mmc dos denominadores das taxas de hoje; todo numero de hoje vira inteiro
+    escala_receptor: int = 1024              # S: a escala do cerebro A (2**ConfigLobos.bits_ponto_fixo); receptor = div_arred(q * S, C)
+    bits_meia_vida: int = 16                 # k_h = arred(2**bits * (1 - 2**(-1/h))) (secao 3)
+    # os efeitos da acao do pet: os literais de policy.efeito_da_acao_do_pet, ja na escala C, com o sinal da FALTA (o brincar do pet no
+    # humor vem de Config.humor_por_tick_brincando * intervalo_decisao_ticks, nao daqui)
+    pet_brincar_cansaco: int = 9000          # energia -0,02
+    pet_explorar_cansaco: int = 6750         # energia -0,015
+    pet_explorar_tristeza: int = -4500       # humor +0,01
+    pet_comer_fome: int = -22500             # fome +0,05
+    pet_emburrar_tristeza: int = 4500        # humor -0,01
+    # as constantes das meias-vidas da secao 3, para os quimicos novos (etapa 6): ficam aqui como inteiros; nenhum tick as deriva
+    k_meia_vida_susto: int = 1497            # h = 30 (secao 8)
+    k_meia_vida_dor: int = 753               # h = 60 (secao 8)
+    k_meia_vida_estresse: int = 32           # h = 1440 (secao 7)
+
+    def __post_init__(self) -> None:
+        ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
+                 ("drives_novos", self.drives_novos), ("gestos", self.gestos))
+        for (anterior, ligou_antes), (nome, ligou) in zip(ordem, ordem[1:]):
+            if ligou and not ligou_antes:
+                raise ValueError(f"ConfigCorpo.{nome} exige ConfigCorpo.{anterior} (E-9: um orgao por vez)")
+        pendentes = [nome for nome, ligou in ordem[1:] if ligou]
+        if pendentes:
+            raise NotImplementedError(f"ConfigCorpo: {pendentes} ainda nao existem (W-CORPO-QUIMICA e so a etapa 1; "
+                                      "docs/TAREFA_V2_CORPO_DRIVES.md, secao 14)")
+
+
+CONFIG_CORPO = ConfigCorpo()
+CONFIG_CORPO_LIGADA = ConfigCorpo(ligada=True)
