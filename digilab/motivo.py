@@ -297,6 +297,11 @@ def _motivo_lobos_decisao(registro: dict, tick: int, ref_ultimo_cuidado: int | N
     aprendido = registro["aprendido"]
     if aprendido is None:
         raise RuntimeError("o lobo de decisao decidiu sem registro do termo aprendido")
+    corpo = registro.get("aprendido_corpo")
+    if corpo is not None and any(v != 0.0 for termos_a in corpo.values() for v in termos_a):
+        # CORPO: as entradas novas (tedio, solidao...) aprendidas pesaram na decisao e nao tem fator nem texto na expressao; citar so as
+        # entradas de hoje esconderia a causa. O motivo delas e da etapa 6 (os drives novos) ou da tarefa da expressao
+        raise NotImplementedError("motivo com as entradas novas do corpo aprendidas: sem fator na expressao (etapa 6)")
     outras = [b for b in candidatos if b != registro["acao"]]
     # nomes pela ordem da percepcao do registro: as 10 de sempre e, com os lobos vendo o mundo, `bola` e `fruta` no fim
     nomes = [_FATOR_POR_ENTRADA[k] for k in registro["percepcao"]]
@@ -345,6 +350,12 @@ class PoliticaComMotivo:
             self.escolher_alvo = interna.escolher_alvo
         if hasattr(interna, "consequencia_mundo"):
             self.consequencia_mundo = interna.consequencia_mundo
+        # ganchos do MotorCorpo (CORPO, docs/TAREFA_V2_CORPO_DRIVES.md, secao 11): o mesmo regime. A licao do N5-ACOPLADO: um gancho nao
+        # repassado muda a vida (com a chave do corpo, o cerebro falha alto na decisao seguinte)
+        if hasattr(interna, "consequencia_corpo"):
+            self.consequencia_corpo = interna.consequencia_corpo
+        if hasattr(interna, "mudanca_no_corpo"):
+            self.mudanca_no_corpo = interna.mudanca_no_corpo
         if getattr(interna, "sem_explorar", False):
             # o P0z (plano do mundo, secao 3) e controle da premissa, nao um pet: o motivo do tempo livre usa os pesos literais
             raise ValueError("PoliticaComMotivo nao cobre o instinto do mundo em sem_explorar (o P0z nao e um pet do jogo)")

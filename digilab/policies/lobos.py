@@ -71,6 +71,22 @@ FRUTA-NO-CENARIO, parte B (docs/TAREFA_V2_FRUTA_NO_CENARIO.md; decisao R2): na r
 com o aprendizado desligado). Esses pesos so aprendem pela consequencia (atualizar_comer_fruta, a regra da L1); o dono nao mexe neles.
 A informacao do dono continua so na escolha de qual fruta.
 
+CORPO, etapa 5 (docs/TAREFA_V2_CORPO_DRIVES.md, secoes 9 a 11): com `cfg_corpo` LIGADA o cerebro A le os receptores do corpo
+(Observacao.corpo, a PercepcaoCorpo do motor, pelo nome dos campos; o cerebro nunca importa o corpo, G-RECEPTOR):
+  - o sinal: `sinal_corpo`, D = soma_d w_d * falta_d**2 sobre os receptores (falta = S - leitura nos drives de hoje; a propria leitura
+    nos drives novos), no lugar do `sinal_homeostatico`. Os drives: os do N3, o humor so no comer de fruta (E2) e os drives novos que o
+    corpo tiver (tedio, curiosidade, solidao, estresse, dor; o susto fica fora). Com os drives de hoje e w_d = 1 o numero e o do N3;
+  - o gancho: na fonte consequencia o credito espera `consequencia_corpo` (sem o mundo fisico) ou `consequencia_mundo` (com ele), uma
+    chamada por decisao, com o `obs_depois` que ja tem os estimulos da acao (a Transicao do engine nao os tem). O `f_S` que chega em
+    `observar_consequencia` tem de ser o do N3 da transicao (conferido) e nao e creditado;
+  - as entradas novas: as leituras dos receptores novos (na escala S, divididas por S) entram so nas regras de tempo livre
+    (REGRAS_ENTRADAS_CORPO), num peso por (regra, acao, receptor), prior 0: no prior a vida e a de hoje. Aprendem pela regra da L1, com o
+    canal do corpo;
+  - os canais novos: um por drive novo, com a mesma soma telescopica (o total e o escalar, conferido em toda decisao), todos ao corpo
+    (ROTA_CANAIS_CORPO); o humor da fruta continua indo a fruta.
+Sem `cfg_corpo` (ou desligada) nada disso existe, e o gancho `consequencia_corpo` nao faz nada: o cerebro vive como hoje, inclusive
+num motor com o corpo.
+
 Sem funcoes transcendentais (nada de math): paridade com a web quando o L1 for portado.
 """
 
@@ -82,7 +98,7 @@ from dataclasses import fields, replace
 from itertools import accumulate
 
 from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LOBOS, CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO,
-                      TICKS_POR_DIA, Config, ConfigBola, ConfigConsequencia, ConfigFrutas, ConfigLobos, ConfigMundo)
+                      TICKS_POR_DIA, Config, ConfigBola, ConfigConsequencia, ConfigCorpo, ConfigFrutas, ConfigLobos, ConfigMundo)
 from ..events import FRUTAS, AcaoPet, AcaoUsuario
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
@@ -146,6 +162,7 @@ PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
     "canais_ligados": ("PROPOSTO", "CANAIS-REFORCO (H-R2; K-6 de PLANO_CALIBRACAO_CONJUNTA_V2): o mesmo total de sinal, por canal"),
     "pesos_janela": ("PROPOSTO", "PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4 (o braco P1-cw; PCD-8): o peso pela falta recente"),
     "janela_pesos": ("PROPOSTO", "A2.4: J = 32 decisoes (8 h), sem fonte"),
+    "pesos_drives_corpo": ("PROPOSTO", "TAREFA_V2_CORPO_DRIVES, secao 9: w_d inteiros, todos 1, sem fonte; o plano do corpo calibra"),
 }
 # CANAIS-REFORCO (H-R2): o nome de cada canal pelo indice do drive em Estado.vetor, e o grupo de pesos que cada canal credita.
 #   corpo: a tabela do lobo de decisao (a regra; as entradas sao o estado do corpo)
@@ -156,6 +173,14 @@ PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
 CANAL_DO_DRIVE = {0: "fome", 1: "higiene", 2: "energia", INDICE_HUMOR: "humor"}
 ROTA_CANAIS = {"fome": "corpo", "higiene": "corpo", "energia": "corpo", "humor": "fruta"}
 ALVOS_CANAIS = ("corpo", "fruta")
+# CORPO, etapa 5: os receptores pelo nome dos campos da PercepcaoCorpo (motor_corpo.py; o cerebro nao importa o motor nem o corpo).
+RECEPTORES_HOJE = ("fome", "higiene", "energia", "humor", "saude")          # leitura = S - falta, na ordem de Estado.vetor
+RECEPTOR_DO_INDICE = dict(enumerate(RECEPTORES_HOJE))
+RECEPTORES_NOVOS = ("tedio", "curiosidade", "solidao", "estresse", "dor", "susto")   # leitura = a falta (dor e susto: a concentracao)
+DRIVES_NOVOS_SINAL = ("tedio", "curiosidade", "solidao", "estresse", "dor")         # secao 9: o susto fica fora do sinal
+REGRAS_ENTRADAS_CORPO = ("tempo_livre", "bola_no_cenario", "fruta_no_cenario")     # secao 11: so nas regras de tempo livre
+# os canais novos (secao 9): um por drive novo, todos ao corpo (a tabela do lobo de decisao); o humor da fruta continua na fruta
+ROTA_CANAIS_CORPO = {d: "corpo" for d in DRIVES_NOVOS_SINAL}
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -518,6 +543,16 @@ class Aprendiz:
         self._prior_pedido: int | None = None
         self._peso_pedido: int | None = None
         self._pedido_na_decisao: tuple = ()           # Observacao.pedido_frutas da ultima decisao (N7; -1 = pedido vigente)
+        # CORPO (etapa 5): so a PoliticaLobos com ConfigCorpo ligada. As entradas novas sao uma tabela a parte, so nas regras de tempo
+        # livre: regra -> acao -> um peso por receptor novo (prior 0; vazia sem drives novos: nada muda)
+        self._corpo: ConfigCorpo | None = None
+        self._receptores_novos: tuple = ()
+        self._canais_novos: tuple = ()                # os drives novos do sinal que o corpo tem (canais e drives do sinal)
+        self._prior_corpo: dict = {}
+        self._pesos_corpo: dict = {}
+        self._x_corpo: list[float] = []               # as leituras dos receptores novos na ultima decisao, divididas por S
+        self._acao_sem_gancho: AcaoPet | None = None  # a decisao observada que ainda espera o gancho do corpo (uma chamada por decisao)
+        self._corpo_pendente: dict | None = None      # o credito pela consequencia, ate o gancho do corpo (ou do mundo)
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -556,11 +591,13 @@ class Aprendiz:
 
     def n_pesos(self) -> int:
         return (sum(len(v) for acoes in self._pesos.values() for v in acoes.values()) + len(self._pesos_fruta)
-                + (self._peso_info is not None) + len(self._pesos_comer_fruta) + (self._peso_pedido is not None))
+                + (self._peso_info is not None) + len(self._pesos_comer_fruta) + (self._peso_pedido is not None)
+                + sum(len(v) for acoes in self._pesos_corpo.values() for v in acoes.values()))
 
     def pesos_mudaram(self) -> bool:
         return (self._pesos != self._prior or self._pesos_fruta != self._prior_fruta or self._peso_info != self._prior_info
-                or self._pesos_comer_fruta != self._prior_comer_fruta or self._peso_pedido != self._prior_pedido)
+                or self._pesos_comer_fruta != self._prior_comer_fruta or self._peso_pedido != self._prior_pedido
+                or self._pesos_corpo != self._prior_corpo)
 
     def _desvios(self):
         """|w - w0| de cada peso: a tabela da decisao e, no mundo das frutas, a sub-decisao da fruta."""
@@ -576,6 +613,10 @@ class Aprendiz:
             yield abs(w - self._prior_comer_fruta[f])
         if self._peso_pedido is not None:
             yield abs(self._peso_pedido - self._prior_pedido)
+        for g in self._pesos_corpo:
+            for a in self._pesos_corpo[g]:
+                for w, w0 in zip(self._pesos_corpo[g][a], self._prior_corpo[g][a]):
+                    yield abs(w - w0)
 
     def desvio_maximo(self) -> int:
         """max |w - w0| sobre todos os pesos (o quanto o aprendizado se afastou do prior)."""
@@ -615,6 +656,11 @@ class Aprendiz:
             for f, presente in zip(FRUTAS, self._presenca_na_decisao or (0.0,) * len(FRUTAS)):
                 termo = termo + (self._pesos_comer_fruta[f] / self._escala) * presente
             c["decisao"][AcaoPet.COMER] = c["decisao"][AcaoPet.COMER] + termo
+        if grupo in self._pesos_corpo:
+            # CORPO: as entradas novas (receptores novos / S) nas regras de tempo livre, um peso por (regra, acao, receptor), prior 0
+            tabela = self._pesos_corpo[grupo]
+            for a in candidatos:
+                c["decisao"][a] = c["decisao"][a] + ativacao(tabela[a], self._x_corpo, self._escala)
         com_pedido = False
         if (self._peso_pedido is not None and not sem_pedido and grupo in REGRAS_PEDIDO and AcaoPet.COMER in candidatos):
             # N7: comer ganha (w_pedido / S) x p, com p = -1 quando toda fruta no cenario tem pedido vigente. As regras urgentes
@@ -663,8 +709,20 @@ class Aprendiz:
 
     # ------------------------------------------------------------- credito (janela da v1)
 
+    def _esperar_gancho_corpo(self, transicao: Transicao) -> None:
+        """CORPO: cada decisao observada espera UM gancho do corpo (consequencia_corpo, ou consequencia_mundo no mundo fisico) antes da
+        proxima. Sem o corpo, nada."""
+        if self._corpo is None:
+            return
+        if self._acao_sem_gancho is not None:
+            raise RuntimeError(f"corpo: a decisao anterior ({self._acao_sem_gancho.value}) ficou sem o gancho de consequencia")
+        if transicao.observacao.corpo is None or transicao.observacao_seguinte.corpo is None:
+            raise RuntimeError("corpo: transicao sem Observacao.corpo (o cerebro com a chave do corpo precisa do MotorCorpo)")
+        self._acao_sem_gancho = transicao.acao
+
     def observar(self, transicao: Transicao) -> None:
         self.memoria.decisao()
+        self._esperar_gancho_corpo(transicao)
         if not self._aprende:
             return
         obs = transicao.observacao
@@ -731,8 +789,14 @@ class Aprendiz:
         A2.4 (`ConfigConsequencia.pesos_janela`, o braco P1-cw): o sinal passa a ser calculado aqui, com o peso de cada drive pela falta
         media dele nas ultimas J decisoes (`pesos_da_janela`). O `f_S` recebido tem de ser o `sinal_homeostatico` da transicao (confere e
         falha alto); os mesmos pesos valem no antes e no depois, na E2 e no mundo, e a janela anda depois da decisao. Os pesos ficam no
-        motivo da decisao (`pesos_janela`, por canal)."""
+        motivo da decisao (`pesos_janela`, por canal).
+
+        CORPO (etapa 5): com a chave do corpo o credito espera o gancho (consequencia_corpo, ou consequencia_mundo no mundo fisico), que
+        calcula `sinal_corpo` sobre os receptores, antes = esta decisao, depois = o `obs_depois` do gancho. O `f_S` que chega aqui e o do
+        N3 sobre a transicao do engine (sem os estimulos dos motores filhos): conferido, e nao creditado. Com `pesos_janela`, as faltas da
+        janela vem dos receptores."""
         self.memoria.decisao()
+        self._esperar_gancho_corpo(transicao)
         if not self._aprende:
             return
         if self._consequencia_pendente is not None:
@@ -747,6 +811,9 @@ class Aprendiz:
         cc = cfg_consequencia or CONFIG_CONSEQUENCIA
         if cc.canais_ligados and self.cl.traco_decisoes:
             raise ValueError("CANAIS-REFORCO: os canais nao andam com o traco (traco_decisoes > 0); o T3 nao tem traco (R1)")
+        if self._corpo is not None:
+            self._pendurar_no_corpo(registro, transicao, f_S, cc, anteriores)
+            return
         pesos = None
         if cc.pesos_janela:
             S = self._escala
@@ -785,6 +852,16 @@ class Aprendiz:
             dh = obs_depois.vetor_estado[INDICE_HUMOR] - self._humor_na_decisao
             v = arred(dh / self._efeito_humor_ruim * S)
             self._memoria.codificar(self._tick_na_decisao, fruta, max(-S, min(S, v)))
+        if self._corpo is not None:
+            # CORPO: o credito e no gancho do corpo; aqui so se anota a fruta comida (o humor entra no sinal dela, E2). No mundo fisico a
+            # fruta vem do `ocorrido` do consequencia_mundo
+            p = self._corpo_pendente
+            if p is not None and not self._ve_mundo_fisico:
+                sub = p["registro"].get("fruta")
+                if p["fruta"] is not None or sub is None or sub["acao"] != fruta:
+                    raise RuntimeError(f"corpo: fruta comida {fruta!r} nao e a da sub-decisao registrada (ou veio duas vezes)")
+                p["fruta"] = fruta
+            return
         pendente, self._consequencia_pendente = self._consequencia_pendente, None
         if pendente is None:
             return
@@ -822,6 +899,14 @@ class Aprendiz:
                 "alvo": None if alvo is None else alvo["tipo"], "chegou": ocorrido["chegou"],
                 "deslocamento": ocorrido["deslocamento"], "comeu": None if comeu is None else comeu["tipo"],
                 "como": None if comeu is None else comeu["como"], "brincou_com_bola": ocorrido["brincou_com_bola"]})
+        if self._corpo is not None:
+            # CORPO com o mundo fisico (secao 9): o corpo ja aplicou os estimulos do `ocorrido`; o sinal e o do corpo, sobre o obs_depois.
+            # A E2 so no comer que comeu fruta, como sem o corpo
+            self._gancho_recebido(acao, ocorrido["acao"])
+            comeu = ocorrido["comeu"]
+            fruta = comeu["tipo"] if acao is AcaoPet.COMER and comeu is not None and comeu["tipo"] in FRUTAS else None
+            self._creditar_corpo(fruta, obs_depois)
+            return
         pendente, self._consequencia_mundo_pendente = self._consequencia_mundo_pendente, None
         if pendente is None:
             return
@@ -844,13 +929,93 @@ class Aprendiz:
         elif f != 0:
             self._creditar(registro, f, anteriores, consequencia=True)
 
+    # ------------------------------------------------------------- CORPO (etapa 5): o sinal pelos receptores, no gancho do corpo
+
+    def consequencia_corpo(self, acao: AcaoPet, ocorrido: dict, obs_depois: Observacao) -> None:
+        """Gancho do MotorCorpo sem o mundo fisico (docs/TAREFA_V2_CORPO_DRIVES.md, secao 9): uma vez por decisao, logo depois dos
+        estimulos da propria acao (o pet, a bola, a fruta) e antes do tempo e do dono; `obs_depois.corpo` ja os tem. Sem a chave do corpo
+        no cerebro, nada (o cerebro vive como hoje, com o sinal do N3 da transicao). Com ela, credita o `sinal_corpo` pendente (so na
+        fonte consequencia) e confere que e a decisao observada (uma chamada por decisao, falha alto).
+
+        Com o mundo fisico, explorar, comer e brincar sao creditados no `consequencia_mundo` (o `ocorrido` dele diz o que o pet comeu); as
+        outras acoes (o MotorMundo nao chama o gancho do mundo nelas) podem vir por aqui. Uma chamada por decisao, de um dos dois."""
+        if self._corpo is None:
+            return
+        if self._ve_mundo_fisico and acao in ACOES_COM_ALVO_MUNDO:
+            raise RuntimeError(f"corpo com o mundo fisico: {acao.value} e creditado no consequencia_mundo (secao 9)")
+        self._gancho_recebido(acao, ocorrido["acao"])
+        frutas = [e[1] for e in ocorrido["estimulos"] if e[0] == "fruta"]
+        if len(frutas) > 1:
+            raise RuntimeError(f"corpo: duas frutas numa decisao {frutas}")
+        fruta = frutas[0] if frutas else None
+        p = self._corpo_pendente
+        if p is not None and p["fruta"] != fruta:
+            raise RuntimeError(f"corpo: o estimulo da fruta ({fruta!r}) nao e a fruta_comida da decisao ({p['fruta']!r})")
+        self._creditar_corpo(fruta, obs_depois)
+
+    def _gancho_recebido(self, acao: AcaoPet, valor: str) -> None:
+        esperada, self._acao_sem_gancho = self._acao_sem_gancho, None
+        if esperada is None:
+            raise RuntimeError("corpo: gancho de consequencia sem decisao observada (ou a segunda chamada na mesma decisao)")
+        if esperada is not acao or valor != acao.value:
+            raise RuntimeError(f"corpo: gancho de {acao.value} ({valor}) para a decisao observada de {esperada.value}")
+
+    def _drives_corpo(self, cc: ConfigConsequencia, com_humor: bool) -> tuple:
+        """Os drives do sinal pelo corpo, pelo nome do receptor: os do N3 (cc.drives), o humor so com `com_humor` e a E2, e os drives
+        novos que o corpo tem (secao 9; o susto fica fora)."""
+        drives = tuple(RECEPTOR_DO_INDICE[i] for i in cc.drives)
+        if com_humor and cc.humor_na_fruta and "humor" not in drives:
+            drives = drives + ("humor",)
+        return drives + self._canais_novos
+
+    def _pendurar_no_corpo(self, registro: dict, transicao: Transicao, f_S: int, cc: ConfigConsequencia, anteriores: list) -> None:
+        """observar_consequencia com a chave do corpo: confere o f_S do N3, faz os pesos da janela (A2.4, sobre os receptores) e deixa o
+        credito para o gancho."""
+        S = self._escala
+        if f_S != sinal_homeostatico(transicao, S, cc):
+            raise RuntimeError("corpo: o f_S recebido nao e o sinal_homeostatico da transicao")
+        pesos = None
+        if cc.pesos_janela:
+            drives = self._drives_corpo(cc, True)          # os do N3, o humor (E2) e os novos
+            pesos = pesos_da_janela(self._janela_faltas, drives, S)
+            self._janela_faltas.append(faltas_corpo(transicao.observacao.corpo, drives, S))   # a janela anda depois da decisao
+            del self._janela_faltas[:-cc.janela_pesos]
+            if self.motivos:
+                self.motivos[-1]["pesos_janela"] = dict(pesos)
+        self._corpo_pendente = {"registro": registro, "transicao": transicao, "cc": cc, "anteriores": anteriores, "pesos": pesos,
+                                "fruta": None}
+
+    def _creditar_corpo(self, fruta: str | None, obs_depois: Observacao) -> None:
+        """O credito da decisao pendente pelo corpo: antes = a percepcao da decisao, depois = `obs_depois.corpo`; a E2 (o humor) so com a
+        fruta comida. Escalar ou canais, como sempre; a conta fica no motivo da decisao (`sinal_corpo`). Sem pendente (o P0, o P3), nada."""
+        p, self._corpo_pendente = self._corpo_pendente, None
+        if p is None:
+            return
+        if obs_depois.corpo is None:
+            raise RuntimeError("corpo: obs_depois sem Observacao.corpo")
+        S = self._escala
+        registro, transicao, cc, anteriores, pesos = p["registro"], p["transicao"], p["cc"], p["anteriores"], p["pesos"]
+        drives = self._drives_corpo(cc, fruta is not None)
+        pd = dict(cc.pesos_drives_corpo)
+        antes, depois = transicao.observacao.corpo, obs_depois.corpo
+        contrib = contribuicoes_corpo(antes, depois, drives, S, pd, pesos)
+        f = sinal_corpo(antes, depois, drives, cc.ganho, S, pd, pesos)
+        if fruta is not None:
+            self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
+        if self.motivos:
+            self.motivos[-1]["sinal_corpo"] = {"f": f, "drives": dict(contrib)}
+        if cc.canais_ligados:
+            self._creditar_canais(registro, sinal_corpo_canais(antes, depois, drives, cc.ganho, S, pd, pesos), f)
+        elif f != 0:
+            self._creditar(registro, f, anteriores, consequencia=True)
+
     # ------------------------------------------------------------- CANAIS-REFORCO: o mesmo sinal, separado por canal (H-R2)
 
     def _sensibilidade_canal(self, canal: str) -> int:
         """Ponto de entrada da H-R4 (o genoma modulando a sensibilidade a cada canal), SEM USO: devolve S (sensibilidade 1) para
         todo canal. Uma sensibilidade diferente de S mudaria o total de sinal e quebraria o contrato K-6; entra so com o desenho da
         H-R4 (docs/research/digibrain/mechanisms/reinforcement.md)."""
-        if canal not in ROTA_CANAIS:
+        if canal not in ROTA_CANAIS and canal not in self._canais_novos:
             raise KeyError(f"canal desconhecido: {canal!r}")
         return self._escala
 
@@ -865,13 +1030,14 @@ class Aprendiz:
             if sens != S:                                 # pragma: no cover - a H-R4 ainda nao existe
                 raise NotImplementedError("H-R4: sensibilidade por canal")
             total += f
-            alvos[ROTA_CANAIS[canal]] += f
+            alvos[ROTA_CANAIS[canal] if canal in ROTA_CANAIS else ROTA_CANAIS_CORPO[canal]] += f
         if total != f_S:
             raise RuntimeError(f"CANAIS-REFORCO: soma dos canais {total} != escalar {f_S} (contrato K-6)")
         if alvos["fruta"] != 0 and not ("fruta" in registro or "presenca" in registro or "pedido" in registro):
             raise RuntimeError("CANAIS-REFORCO: canal da fruta sem peso que leia a fruta nesta decisao")
         if self._canais is None:
-            self._canais = {"creditos": 0, "por_canal": {c: 0 for c in ROTA_CANAIS}, "por_alvo": {a: 0 for a in ALVOS_CANAIS}}
+            self._canais = {"creditos": 0, "por_canal": {c: 0 for c in tuple(ROTA_CANAIS) + self._canais_novos},
+                            "por_alvo": {a: 0 for a in ALVOS_CANAIS}}
         self._canais["creditos"] += 1
         for canal, f in canais.items():
             self._canais["por_canal"][canal] += f
@@ -921,6 +1087,10 @@ class Aprendiz:
         g = registro["regra"]
         self._cortes_teto += atualizar_pesos(self._pesos[g], self._prior[g], registro, f_corpo, self.cl.passo, self.cl.teto,
                                              self._escala)
+        if "corpo" in registro:
+            # CORPO: as entradas novas da regra (as leituras dos receptores novos, X = a leitura) pela mesma regra, com o canal do corpo
+            self._cortes_teto += atualizar_pesos(self._pesos_corpo[g], self._prior_corpo[g], {**registro, "X": registro["corpo"]["X"]},
+                                                 f_corpo, self.cl.passo, self.cl.teto, self._escala)
         sub = registro.get("fruta")
         if sub is not None:
             self._cortes_teto += atualizar_fruta(self._pesos_fruta, self._prior_fruta, sub, f_fruta, self.cl.passo, self.cl.teto,
@@ -961,6 +1131,8 @@ class Aprendiz:
                 d["pedido"] = dict(r["pedido"])
             if "fruta" in r and "Pd" in r["fruta"]:
                 d["fruta"]["Pd"] = dict(r["fruta"]["Pd"])
+            if "corpo" in r:
+                d["corpo"] = {"X": list(r["corpo"]["X"])}
             return d
         d = {
             "passo": self.cl.passo, "teto": self.cl.teto, "piso_peso": self.cl.piso_peso,
@@ -975,8 +1147,11 @@ class Aprendiz:
             d["consequencia_pendente"] = registro_dict(self._consequencia_pendente[0])
         if self._consequencia_mundo_pendente is not None:   # MUNDO-CEREBROS: so entre observar_consequencia e consequencia_mundo
             d["consequencia_mundo_pendente"] = registro_dict(self._consequencia_mundo_pendente[0])
-        if self._janela_faltas:                         # A2.4, so com pesos_janela
-            d["janela_pesos"] = [{CANAL_DO_DRIVE[i]: v for i, v in f.items()} for f in self._janela_faltas]
+        if self._janela_faltas:                         # A2.4, so com pesos_janela (com o corpo, ja pelo nome do receptor)
+            d["janela_pesos"] = [{(i if isinstance(i, str) else CANAL_DO_DRIVE[i]): v for i, v in f.items()}
+                                 for f in self._janela_faltas]
+        if self._corpo_pendente is not None:            # CORPO: so entre observar_consequencia e o gancho
+            d["corpo_pendente"] = registro_dict(self._corpo_pendente["registro"])
         return d
 
     def estado_interno(self) -> dict:
@@ -1007,6 +1182,10 @@ class Aprendiz:
         if self._peso_pedido is not None:         # N7, so com w0_pedido != 0
             d["peso_pedido"] = self._peso_pedido
             d["peso_pedido_prior"] = self._prior_pedido
+        if self._corpo is not None:               # CORPO, so com a chave do corpo no cerebro
+            d["corpo"] = {"receptores_novos": list(self._receptores_novos), "canais_novos": list(self._canais_novos)}
+            if self._pesos_corpo:
+                d["pesos_corpo"] = {g: {a.value: list(v) for a, v in acoes.items()} for g, acoes in self._pesos_corpo.items()}
         if self._canais is not None:              # CANAIS-REFORCO, so depois do 1o credito por canal
             d["canais"] = {"creditos": self._canais["creditos"], "por_canal": dict(self._canais["por_canal"]),
                            "por_alvo": dict(self._canais["por_alvo"])}
@@ -1025,7 +1204,7 @@ class PoliticaLobos(Aprendiz):
 
     def __init__(self, cfg: Config | None = None, cfg_lobos: ConfigLobos | None = None,
                  cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None,
-                 cfg_mundo: ConfigMundo | None = None) -> None:
+                 cfg_mundo: ConfigMundo | None = None, cfg_corpo: ConfigCorpo | None = None) -> None:
         cl = cfg_lobos or CONFIG_LOBOS
         # LOBOS-MUNDO: so ve o mundo com a chave dele ligada (como o instinto); sem nenhuma, as formas de antes
         self._ve_bola = cfg_bola is not None and cfg_bola.ligada
@@ -1109,6 +1288,24 @@ class PoliticaLobos(Aprendiz):
             self._prior_pedido = self._peso_pedido = cl.w0_pedido
             if self.n_pesos() >= cl.maximo_pesos:
                 raise ValueError(f"{self.n_pesos()} pesos, teto {cl.maximo_pesos}")
+        # CORPO (etapa 5): com a chave do corpo, o sinal pelos receptores, as entradas novas e os canais novos
+        if cfg_corpo is not None and cfg_corpo.ligada:
+            if cfg_corpo.escala_receptor != cl.escala:
+                raise ValueError(f"receptores na escala {cfg_corpo.escala_receptor}, cerebro na escala {cl.escala}: tem de ser a mesma S")
+            self._corpo = cfg_corpo
+            self._receptores_novos = receptores_novos(cfg_corpo, fisico)
+            self._canais_novos = tuple(d for d in DRIVES_NOVOS_SINAL if d in self._receptores_novos)
+            if self._receptores_novos:
+                n = len(self._receptores_novos)
+                self._prior_corpo = {r: {a: [0] * n for a in ACOES} for r in REGRAS_ENTRADAS_CORPO if r in self._prior}
+                self._pesos_corpo = {r: {a: list(v) for a, v in acoes.items()} for r, acoes in self._prior_corpo.items()}
+                if self.n_pesos() >= cl.maximo_pesos:
+                    raise ValueError(f"{self.n_pesos()} pesos, teto {cl.maximo_pesos}")
+
+    @property
+    def tem_corpo(self) -> bool:
+        """O cerebro le o corpo (a chave do corpo ligada)."""
+        return self._corpo is not None
 
     @staticmethod
     def _prior_mundo(cb: ConfigBola, cf: ConfigFrutas) -> dict[str, dict[AcaoPet, dict[str, float]]]:
@@ -1184,6 +1381,13 @@ class PoliticaLobos(Aprendiz):
             raise RuntimeError("E2: o comer com fruta da decisao anterior ficou sem fruta_comida")
         if self._consequencia_mundo_pendente is not None:
             raise RuntimeError("mundo fisico: a decisao anterior ficou sem consequencia_mundo")
+        if self._corpo is not None:
+            if self._acao_sem_gancho is not None or self._corpo_pendente is not None:
+                raise RuntimeError("corpo: a decisao anterior ficou sem o gancho de consequencia")
+            if obs.corpo is None:
+                raise RuntimeError("corpo: Observacao sem o campo corpo (o cerebro com a chave do corpo precisa do MotorCorpo)")
+            S = self._escala
+            self._x_corpo = [leitura_receptor(obs.corpo, r, S) / S for r in self._receptores_novos]
         x = self.percepcao(obs)
         regra, candidatos = impulsos(self._instinto, obs)
         self._presenca_na_decisao = obs.frutas_cenario
@@ -1209,6 +1413,14 @@ class PoliticaLobos(Aprendiz):
         self._fruta_na_decisao = self._ve_frutas and obs.fruta > 0.0
         self._info_na_decisao = obs.info_frutas
         self._registrar(regra, candidatos, acao, x, pesos, contrib, u)
+        if self._pesos_corpo:
+            S = self._escala
+            self.motivos[-1]["percepcao_corpo"] = dict(zip(self._receptores_novos, self._x_corpo))
+            if regra in self._pesos_corpo:
+                tabela = self._pesos_corpo[regra]
+                if self._aprende:
+                    self.motivos[-1]["aprendido_corpo"] = {a.value: termos(tabela[a], self._x_corpo, S) for a in candidatos}
+                    self._registro_decisao["corpo"] = {"X": [arred(v * S) for v in self._x_corpo]}
         if self._peso_pedido is not None and regra in REGRAS_PEDIDO and AcaoPet.COMER in candidatos:
             p = self._p_pedido()
             if p != 0.0:
@@ -1548,6 +1760,100 @@ def sinal_homeostatico_fruta_canais(antes: Observacao, depois: Observacao, S: in
     """`sinal_homeostatico_fruta` separado por canal (sinal_por_canal, os drives da E2): a soma dos canais e o escalar."""
     cfg = cfg or CONFIG_CONSEQUENCIA
     return sinal_por_canal(antes.vetor_estado, depois.vetor_estado, _drives_fruta(cfg), cfg.ganho, S, pesos)
+
+
+# ------------------------------------------------------------------ CORPO (etapa 5): o sinal pelos receptores
+
+
+def receptores_novos(cc: ConfigCorpo, mundo_fisico: bool) -> tuple[str, ...]:
+    """Os receptores novos que o corpo tem com estas chaves (secao 10), na ordem de RECEPTORES_NOVOS: tedio, solidao e estresse com
+    `drives_novos`, a curiosidade so com o mundo fisico tambem (CD-8), dor e susto com `gestos`. Sem eles, nenhum."""
+    tem = set()
+    if cc.drives_novos:
+        tem |= {"tedio", "solidao", "estresse"} | ({"curiosidade"} if mundo_fisico else set())
+    if cc.gestos:
+        tem |= {"dor", "susto"}
+    return tuple(r for r in RECEPTORES_NOVOS if r in tem)
+
+
+def leitura_receptor(pc, nome: str, S: int) -> int:
+    """A leitura do receptor `nome` da PercepcaoCorpo (inteiro em [0, S]); um receptor que nao existe (None) ou fora da escala falha
+    alto."""
+    v = getattr(pc, nome)
+    if v is None:
+        raise RuntimeError(f"corpo: o receptor {nome!r} nao existe nesta Observacao.corpo")
+    if type(v) is not int or not 0 <= v <= S:
+        raise ValueError(f"corpo: receptor {nome!r} fora de inteiros em [0, {S}]: {v!r}")
+    return v
+
+
+def falta_receptor(pc, nome: str, S: int) -> int:
+    """A falta na escala S: S - leitura nos drives de hoje (o receptor le o drive), a propria leitura nos novos (o receptor le a falta,
+    ou a concentracao na dor e no susto)."""
+    v = leitura_receptor(pc, nome, S)
+    if nome in RECEPTORES_HOJE:
+        return S - v
+    if nome in RECEPTORES_NOVOS:
+        return v
+    raise KeyError(f"receptor desconhecido: {nome!r}")
+
+
+def faltas_corpo(pc, drives: tuple, S: int) -> dict[str, int]:
+    """A falta de cada drive (pelo nome do receptor), na escala S: a janela da A2.4 com o corpo."""
+    return {d: falta_receptor(pc, d, S) for d in drives}
+
+
+def contribuicoes_corpo(antes, depois, drives: tuple, S: int, pesos_drives: dict | None = None,
+                        pesos_janela: dict | None = None) -> dict[str, int]:
+    """c_d = w_d * delta_d por drive, delta_d = falta_d(antes)**2 - falta_d(depois)**2 sobre os receptores (secao 9). Com `pesos_janela`
+    (A2.4, na escala S), delta_d e ponderado como em `delta_ponderado`: div_arred(w * delta, S) quando w != S. `pesos_drives` sao os
+    inteiros w_d (ConfigConsequencia.pesos_drives_corpo); sem eles, todos 1. Um drive sem peso falha alto."""
+    c = {}
+    for d in drives:
+        fa, fd = falta_receptor(antes, d, S), falta_receptor(depois, d, S)
+        delta = fa * fa - fd * fd
+        if pesos_janela is not None:
+            w = pesos_janela[d]
+            if type(w) is not int or not 0 <= w <= S:
+                raise ValueError(f"peso da janela do drive {d!r} fora de inteiros em [0, {S}]: {w!r}")
+            if w != S:
+                delta = div_arred(w * delta, S)
+        wd = 1 if pesos_drives is None else pesos_drives[d]
+        if type(wd) is not int or wd < 0:
+            raise ValueError(f"w_d do drive {d!r} precisa ser inteiro >= 0: {wd!r}")
+        c[d] = wd * delta
+    return c
+
+
+def sinal_corpo(antes, depois, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None,
+                pesos_janela: dict | None = None) -> int:
+    """V2, corpo (secao 9): f_S = div_arred(ganho * (D(antes) - D(depois)), S), com D = soma_d w_d * falta_d**2 sobre os receptores
+    (`antes` e `depois` sao PercepcaoCorpo). Com os drives de hoje e w_d = 1, o numero do N3 (`sinal_homeostatico`) sobre o mesmo
+    estado: o receptor e S - div_arred(q * S, C), e S - arred(h * S) do drive lido da o mesmo inteiro. Inteiro."""
+    if type(ganho) is not int or ganho < 0:
+        raise ValueError(f"ganho precisa ser inteiro >= 0: {ganho!r}")
+    total = 0
+    for c in contribuicoes_corpo(antes, depois, drives, S, pesos_drives, pesos_janela).values():
+        total += c
+    return div_arred(ganho * total, S)
+
+
+def sinal_corpo_canais(antes, depois, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None,
+                       pesos_janela: dict | None = None) -> dict[str, int]:
+    """`sinal_corpo` separado por canal, um por drive, na ordem de `drives`, com a soma telescopica de `sinal_por_canal`: a soma dos
+    canais e exatamente o escalar (contrato K-6)."""
+    if type(ganho) is not int or ganho < 0:
+        raise ValueError(f"ganho precisa ser inteiro >= 0: {ganho!r}")
+    canais: dict[str, int] = {}
+    acumulado, anterior = 0, 0
+    for d, c in contribuicoes_corpo(antes, depois, drives, S, pesos_drives, pesos_janela).items():
+        if d not in ROTA_CANAIS and d not in ROTA_CANAIS_CORPO:
+            raise ValueError(f"drive {d!r} sem canal")
+        acumulado += c
+        parcial = div_arred(ganho * acumulado, S)
+        canais[d] = parcial - anterior
+        anterior = parcial
+    return canais
 
 
 def validar_parametros_consequencia(cfg: ConfigConsequencia | None = None) -> None:

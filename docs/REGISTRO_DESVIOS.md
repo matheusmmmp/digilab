@@ -3606,3 +3606,49 @@ Pedido do Gerente depois da etapa 3 do mundo (#232). Interpretações:
   `git archive` de origin/main (dc3ad90), num commit próprio antes do código.
 - **A bancada não mudou.** O teste dela troca o `MotorMundo` da bancada pelo com corpo (monkeypatch). A chave do corpo na config da bancada
   é do D.
+
+## 2026-10-07 — CORPO, etapa 5 (worker B): o cérebro A no corpo
+
+Etapa 5 da seção 14 de `docs/TAREFA_V2_CORPO_DRIVES.md` (seções 9 a 11). Interpretações:
+- **A chave do corpo no cérebro** é `PoliticaLobos(..., cfg_corpo=ConfigCorpo)`, ligada. Sem ela, o cérebro de hoje, inclusive num
+  `MotorCorpo`: o gancho `consequencia_corpo` existe e não faz nada, e o sinal continua o do N3 da transição.
+- **Os receptores** são lidos pelo nome dos campos da `PercepcaoCorpo`; o cérebro não importa o `motor_corpo.py` nem o `corpo.py`
+  (G-RECEPTOR). Nos drives de hoje a falta é S − leitura. Nos drives novos a leitura já é a falta (a concentração, na dor e no susto).
+- **Os pesos `w_d` do sinal** ficam em `ConfigConsequencia.pesos_drives_corpo`, por nome de receptor, todos 1 (PROPOSTOS). Ficam ali porque o
+  sinal é do cérebro, como o ganho e a `pesos_janela`. Com a janela da A2.4, a parcela de cada drive é a de hoje
+  (`div_arred(w_janela × Δ, S)` quando o peso não é S), multiplicada pelo `w_d`.
+- **O sinal pelo corpo é o número do N3** nos drives de hoje, com os `w_d` em 1. O receptor é S − div_arred(q × S, C), e S − arred(h × S) do
+  drive lido dá o mesmo inteiro: q × S / C = q × 64 / 28125 nunca fica a menos de 1/56250 de um meio, e o erro do float é de 1e−13.
+  - **Medido:** o G-HOJE (a) do sinal deu iguais 20.736 de 20.736 decisões (3 mundos × 2 chaves × 4 donos × 3 sementes, 3 dias), contra
+    o motor de hoje em malha aberta; a folga do gate não foi usada.
+- **O gancho:** com a chave, o `observar_consequencia` confere que o `f_S` recebido é o `sinal_homeostatico` da transição (a bancada o
+  passa) e não o credita. O crédito vai no gancho, com antes = a percepção da decisão e depois = o `obs_depois` do gancho.
+  - **Uma chamada por decisão**, em toda fonte (o P0 e o P3 também): a falta do gancho, a segunda chamada e o gancho de outra ação falham
+    alto.
+  - **Com o mundo físico:** explorar, comer e brincar são creditados no `consequencia_mundo`, que diz o que o pet comeu. As outras ações
+    podem vir pelo `consequencia_corpo`, porque o `MotorMundo` não chama o gancho do mundo nelas. Explorar, comer ou brincar pelo
+    `consequencia_corpo` no mundo falha alto. **Contrato para o A**, que liga o mundo físico no corpo em paralelo.
+  - **A E2 com o corpo:** sem o mundo, a fruta vem do `fruta_comida` (só anotada ali) e é conferida contra o estímulo `("fruta", f)` do
+    `ocorrido`. No mundo, ela vem do `ocorrido["comeu"]`, só no comer (o "achou e comeu" do explorar fica sem a E2, como hoje).
+- **As entradas novas:**
+  - são uma tabela à parte, regra → ação → um peso por receptor novo, nas regras de tempo livre **que o cérebro tem** (no mundo `padrao`,
+    só o `tempo_livre`);
+  - cobrem as 7 ações, como a tabela de sempre. O prior é 0, e a entrada é a leitura dividida por S;
+  - **o susto entra como entrada** (são as 6 da seção 11), mas fica fora do sinal;
+  - aprendem pela regra da L1 com o sinal do canal do corpo. O dono também as move, porque são entradas da tabela da regra;
+  - **as contas:** nas frutas, o ponto da K2 (763 pesos) vai a 868, com 5 entradas (sem o mundo físico não há curiosidade). Com o mundo
+    físico são +126, as 3 × 7 × 6 da seção 11. Os "~890" da tarefa somavam os 126 aos 763 da K2;
+  - **o motivo:** uma entrada nova aprendida que pese numa decisão do lobo de decisão não tem fator nem texto na expressão. O
+    `motivo_lobos` falha alto (`NotImplementedError`) em vez de citar só as entradas de hoje e esconder a causa. Fica para a etapa 6 ou
+    para a tarefa da expressão.
+- **Os canais novos:** um por drive novo, todos ao corpo (`ROTA_CANAIS_CORPO`), na mesma soma telescópica. O total é o escalar, conferido em
+  toda decisão. O `por_canal` do estado interno só ganha as chaves dos drives novos que o corpo tem: sem drives novos, o estado interno
+  dos canais é o de hoje.
+- **A `pesos_janela` com o corpo:** as faltas da janela vêm dos receptores, pelo nome, nos drives do N3, no humor (a E2) e nos drives novos.
+- **Os testes das entradas novas fabricam a chave da etapa 6.** A `ConfigCorpo` ainda recusa `drives_novos` e `gestos`, então o teste monta a
+  config campo a campo e usa percepções feitas à mão. Nenhum motor produz essas percepções ainda.
+- **O `mudanca_no_corpo`** (o carinho) é só repassado pelo embrulho. O cérebro A o implementa na etapa 6, com o tapa e o
+  `recompensa_tapa`.
+- **Para o D:** a bancada não precisa de nada novo para o P1 com o corpo. A `PoliticaDoBraco` já passa o `f_S` (conferido), e o
+  `__getattr__` dela leva o gancho ao cérebro. A conferência da dominância refaz o sinal pelo Estado: com os drives de hoje sai igual, mas com
+  os drives novos ela tem de usar as parcelas que o cérebro guarda no motivo (`sinal_corpo.drives`).
