@@ -92,3 +92,6 @@ artifacts_v2_calibracao_conjunta/**/vidas/
 artifacts_v2_comparacao_cerebros/**/vidas/
 # o custo da validacao com o adendo 3 (V1-ADENDO3); as vidas da run, quando vier, ficam fora
 !artifacts_v2_v1_adendo3/
+# V2, validacao unica: as vidas e os estados internos sao regeneraveis da config e do codigo (medidas, contrastes e resumo ficam)
+!artifacts_v2_validacao_unica/
+artifacts_v2_validacao_unica/**/vidas/

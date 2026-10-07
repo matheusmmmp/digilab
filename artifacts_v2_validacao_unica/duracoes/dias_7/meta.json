@@ -1,0 +1,82 @@
+{
+  "bancada_sha256": "4d9b5961cf357a6261c2db6bb0812cbcd443efefa1b18dce1242976e640161d8",
+  "cfg_lobos": {
+    "aprendizado_ligado": true,
+    "bits_ponto_fixo": 10,
+    "escala_ticks_desde_cuidado": 480.0,
+    "janela_latencia_ticks": 120,
+    "maximo_pesos": 1000,
+    "memoria_ganho": 512,
+    "memoria_janela_recencia_ticks": 240,
+    "memoria_ligada": false,
+    "memoria_modo": "relevante",
+    "memoria_permutacao": [],
+    "passo": 512,
+    "piso_peso": 64,
+    "recompensa_elogio": 1.0,
+    "recompensa_pedido_ignorado": -0.5,
+    "recompensa_repreensao": -1.0,
+    "teto": 16384,
+    "traco_decisoes": 0,
+    "traco_fator": 0,
+    "w0_info": 256,
+    "w0_pedido": 256
+  },
+  "config": {
+    "acoplados": [],
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "bracos": [
+      "P0",
+      "P1"
+    ],
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "descricao": "experimento maior: Validacao unica do experimento maior (V1), uma vez, com o adendo 2 (opcao A, 2026-10-06): o cerebro A montado no ponto da calibracao conjunta, os blocos e as ablacoes da secao 4 do plano da calibracao conjunta, N = 30 (K = 6 por base). Adendo 3 (2026-10-06): o bloco de duracoes (7 e 28 dias, pelo custo em artifacts_v2_v1_adendo3/custo.json) e os bracos P2d e P3i, secundarios. Adendo 4 (2026-10-06): a faixa de validacao passa a 30101...30505 (a 15101...15505 ficou queimada).",
+    "dias": 7,
+    "donos": [
+      "atencioso"
+    ],
+    "julgamento_fruta": true,
+    "lobos": {
+      "memoria_ganho": 512,
+      "w0_info": 256,
+      "w0_pedido": 256
+    },
+    "montagem": "completa",
+    "mundos": [
+      "descasado",
+      "mutavel"
+    ],
+    "orcamento": 112,
+    "plano": "docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md",
+    "ponto": "T3",
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    },
+    "unidades": {
+      "bases": [
+        30101,
+        30202,
+        30303,
+        30404,
+        30505
+      ],
+      "k": 6
+    }
+  },
+  "config_sha256": "a83010e3bea60b1796f5af814d6dfce75af8252f38c4b380381fdc6f14369a9c",
+  "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+  "lobos_sha256": "94e78011c72d44d779711998114f2fc6413460f37f25fb8912361d99aafb73ab",
+  "metrics_sha256": "f62cdda5a72e0bdf555d2ac925d8cac433bb416c114f67674bae2fa1451c09d1",
+  "plataforma": "Windows-11-10.0.26200-SP0",
+  "ponto": "T3",
+  "python": "3.13.0"
+}

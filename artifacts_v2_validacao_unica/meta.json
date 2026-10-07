@@ -1,0 +1,54 @@
+{
+  "config": {
+    "blocos": true,
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "delta": 0.1986268570547561,
+    "delta_n6": 0.19351650222105618,
+    "delta_n7": 0.20229166666666668,
+    "delta_p3": 17.5,
+    "descricao": "Validacao unica do experimento maior (V1), uma vez, com o adendo 2 (opcao A, 2026-10-06): o cerebro A montado no ponto da calibracao conjunta, os blocos e as ablacoes da secao 4 do plano da calibracao conjunta, N = 30 (K = 6 por base). Adendo 3 (2026-10-06): o bloco de duracoes (7 e 28 dias, pelo custo em artifacts_v2_v1_adendo3/custo.json) e os bracos P2d e P3i, secundarios. Adendo 4 (2026-10-06): a faixa de validacao passa a 30101...30505 (a 15101...15505 ficou queimada).",
+    "dias": 14,
+    "duracoes": {
+      "maior": 28,
+      "menor": 7
+    },
+    "lobos": {
+      "memoria_ganho": 512,
+      "w0_info": 256,
+      "w0_pedido": 256
+    },
+    "orcamento": 224,
+    "p2d_p3i": true,
+    "plano": "docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md",
+    "ponto": "T3",
+    "referencia_padrao": true,
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    },
+    "unidades": {
+      "bases": [
+        30101,
+        30202,
+        30303,
+        30404,
+        30505
+      ],
+      "k": 6
+    }
+  },
+  "modo": "validacao",
+  "orquestrador_sha256": "4d5c4b63cfd79974ddad535aab571f6ebb0d61c703c794ebc6d5685f319a9b43",
+  "plano": "docs/PLANO_ANALISE_V2_EXPERIMENTO_MAIOR.md",
+  "plano_sha256": "080388f84336f780c5d1f12ef41ddfe9ad6507a11d783eb6474c9c56cee0566f",
+  "python": "3.13.0"
+}

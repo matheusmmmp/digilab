@@ -1,0 +1,615 @@
+{
+  "ablacoes": {
+    "canais_descasado": {
+      "d": "P1c-can - P1",
+      "ic90": {
+        "ic_inferior": -0.011818350962713855,
+        "ic_superior": 0.0026947979462642545,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.013230137787548701,
+        "ic_superior": 0.004079309642006836,
+        "nivel": 0.95
+      },
+      "janela": "final",
+      "media": -0.0045600258826313895,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.8474,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.8458031027637126,
+        "t": -1.0368078903203903
+      }
+    },
+    "canais_mutavel": {
+      "d": "P1c-can - P1",
+      "ic90": {
+        "ic_inferior": -0.009041579448303085,
+        "ic_superior": 0.005862747621738736,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.010388677633793498,
+        "ic_superior": 0.007297695137037655,
+        "nivel": 0.95
+      },
+      "janela": "depois_da_troca",
+      "media": -0.001545061822733492,
+      "motivo": null,
+      "mundo": "mutavel",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.6315,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.6293348960551213,
+        "t": -0.33326717871093287
+      }
+    },
+    "memoria_descasado": {
+      "d": "P1c-mem - P1",
+      "ic90": {
+        "ic_inferior": -0.010037826441709467,
+        "ic_superior": 0.00607699499357463,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.01133032645873269,
+        "ic_superior": 0.007836585260875143,
+        "nivel": 0.95
+      },
+      "janela": "final",
+      "media": -0.0023564645993017644,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.7005,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.6774716332037936,
+        "t": -0.4654911389936211
+      }
+    },
+    "memoria_mutavel": {
+      "d": "P1c-mem - P1",
+      "ic90": {
+        "ic_inferior": 0.005246881586115724,
+        "ic_superior": 0.022121460502061742,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.0035809319141436886,
+        "ic_superior": 0.0234895784141689,
+        "nivel": 0.95
+      },
+      "janela": "depois_da_troca",
+      "media": 0.013797693214954042,
+      "motivo": null,
+      "mundo": "mutavel",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.0041,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.006698167837596082,
+        "t": 2.6339881849244224
+      }
+    }
+  },
+  "n5_descritivo": {
+    "consumos_ate_metade": {
+      "d": "P2a - P2",
+      "ic90": {
+        "ic_inferior": 0.2413793103448276,
+        "ic_superior": 12.137931034482758,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.8620689655172413,
+        "ic_superior": 13.137931034482758,
+        "nivel": 0.95
+      },
+      "media": 6.241379310344827,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 29,
+      "n_grupos": 29,
+      "p_unilateral": 0.0422,
+      "referencia": "P0 do bloco principal",
+      "sem_valor": 1,
+      "t_pareado": {
+        "gl": 28,
+        "p_unilateral": 0.04982825147704921,
+        "t": 1.702941606924249
+      }
+    },
+    "taxa_final": {
+      "d": "P2a - P2",
+      "ic90": {
+        "ic_inferior": -0.01703050777550959,
+        "ic_superior": 0.0014378166564410395,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.018880302582879458,
+        "ic_superior": 0.0032934886555814353,
+        "nivel": 0.95
+      },
+      "media": -0.007814941615836828,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.9176,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.9107633302097775,
+        "t": -1.3788864002618968
+      }
+    },
+    "taxa_inicio": {
+      "d": "P2a - P2",
+      "ic90": {
+        "ic_inferior": 0.009793443102686343,
+        "ic_superior": 0.027833762976537727,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.00824796887696553,
+        "ic_superior": 0.029886048103004305,
+        "nivel": 0.95
+      },
+      "media": 0.018694845332702718,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.0003,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.0012966699206641839,
+        "t": 3.2960310245145434
+      }
+    }
+  },
+  "n6": {
+    "G-CITA": {
+      "braco": "MR",
+      "ic90": {
+        "ic_inferior": 0.17780905076096604,
+        "ic_superior": 0.22968784769825426,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.17304969077539561,
+        "ic_superior": 0.235049840274112,
+        "nivel": 0.95
+      },
+      "limiar": 0.069,
+      "media": 0.20353747082221965,
+      "motivo": null,
+      "mundo": "descasado",
+      "n": 29,
+      "n_grupos": 29,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "sem_valor": 1,
+      "t_pareado": {
+        "gl": 28,
+        "p_unilateral": 3.3188256309380235e-13,
+        "t": 12.416103194388112
+      }
+    },
+    "G-M1_G-M2": {
+      "passa": true,
+      "vidas": 120
+    },
+    "G-M3": "nao medido pela bancada (REGISTRO_DESVIOS)",
+    "G5": {
+      "medidas": {
+        "fracao_fora_de_privacao": {
+          "contem_zero": true,
+          "d": "MR - P0",
+          "ic90": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "nivel": 0.95
+          },
+          "media": 0.0,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 1.0,
+          "sem_valor": 0,
+          "t_pareado": null
+        },
+        "saude_media": {
+          "contem_zero": true,
+          "d": "MR - P0",
+          "ic90": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "nivel": 0.9
+          },
+          "ic95": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "nivel": 0.95
+          },
+          "media": 0.0,
+          "motivo": null,
+          "mundo": "descasado",
+          "n": 30,
+          "n_grupos": 30,
+          "p_unilateral": 1.0,
+          "sem_valor": 0,
+          "t_pareado": null
+        }
+      },
+      "passa": true
+    },
+    "contrastes": {
+      "G-CAUSAL": {
+        "d": "M0<MR:nenhum - MR",
+        "holm": {
+          "limiar": 0.05,
+          "ordem": 3,
+          "p": 0.0013,
+          "p_ajustado": 0.0013,
+          "rejeita": true
+        },
+        "ic90": {
+          "ic_inferior": 0.011870956432993367,
+          "ic_superior": 0.04424344888689011,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.009170220177648337,
+          "ic_superior": 0.04752996817538719,
+          "nivel": 0.95
+        },
+        "media": 0.02798494980955851,
+        "motivo": null,
+        "mundo": "descasado",
+        "n": 29,
+        "n_grupos": 29,
+        "p_unilateral": 0.0013,
+        "sem_valor": 1,
+        "t_pareado": {
+          "gl": 28,
+          "p_unilateral": 0.004358457205701704,
+          "t": 2.820331098519387
+        }
+      },
+      "G-EMB": {
+        "d": "ME<MR:nenhum - MR",
+        "holm": {
+          "limiar": 0.016666666666666666,
+          "ordem": 1,
+          "p": 0.0,
+          "p_ajustado": 0.0,
+          "rejeita": true
+        },
+        "ic90": {
+          "ic_inferior": 0.03500761322726511,
+          "ic_superior": 0.07106380362589397,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.031605089222899,
+          "ic_superior": 0.07448932816349142,
+          "nivel": 0.95
+        },
+        "media": 0.05281938473060593,
+        "motivo": null,
+        "mundo": "descasado",
+        "n": 29,
+        "n_grupos": 29,
+        "p_unilateral": 0.0,
+        "sem_valor": 1,
+        "t_pareado": {
+          "gl": 28,
+          "p_unilateral": 2.8745667052384283e-05,
+          "t": 4.733330343889492
+        }
+      },
+      "G-REC": {
+        "d": "MT<MR:nenhum - MR",
+        "holm": {
+          "limiar": 0.025,
+          "ordem": 2,
+          "p": 0.0003,
+          "p_ajustado": 0.0006,
+          "rejeita": true
+        },
+        "ic90": {
+          "ic_inferior": 0.013852887431924511,
+          "ic_superior": 0.041971688260335364,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 0.011346943382676616,
+          "ic_superior": 0.044428777186944754,
+          "nivel": 0.95
+        },
+        "media": 0.02747615389120506,
+        "motivo": null,
+        "mundo": "descasado",
+        "n": 29,
+        "n_grupos": 29,
+        "p_unilateral": 0.0003,
+        "sem_valor": 1,
+        "t_pareado": {
+          "gl": 28,
+          "p_unilateral": 0.0018582968040334882,
+          "t": 3.165349545948394
+        }
+      }
+    },
+    "delta": 0.19351650222105618,
+    "equivalencia_G-CAUSAL": true,
+    "leitura": "confirma"
+  },
+  "n7": {
+    "G-ARB": {
+      "braco": "P0+ped",
+      "ic90": {
+        "ic_inferior": 0.009722154217690456,
+        "ic_superior": 0.022121009726275054,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 0.00882961919769187,
+        "ic_superior": 0.023464753200982635,
+        "nivel": 0.95
+      },
+      "media": 0.015554645317169834,
+      "motivo": null,
+      "mundo": "iguais_frutas",
+      "n": 30,
+      "n_grupos": 30,
+      "p_unilateral": 0.0,
+      "passa": true,
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 29,
+        "p_unilateral": 0.00016787923933480142,
+        "t": 4.064431603562541
+      }
+    },
+    "G-URG": {
+      "passa": true,
+      "violacoes": 0
+    },
+    "G5": {
+      "P0+ped - P0": {
+        "medidas": {
+          "fracao_fora_de_privacao": {
+            "contem_zero": true,
+            "d": "P0+ped - P0",
+            "ic90": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "mundo": "iguais_frutas",
+            "n": 30,
+            "n_grupos": 30,
+            "p_unilateral": 1.0,
+            "sem_valor": 0,
+            "t_pareado": null
+          },
+          "saude_media": {
+            "contem_zero": true,
+            "d": "P0+ped - P0",
+            "ic90": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.0,
+              "ic_superior": 0.0,
+              "nivel": 0.95
+            },
+            "media": 0.0,
+            "motivo": null,
+            "mundo": "iguais_frutas",
+            "n": 30,
+            "n_grupos": 30,
+            "p_unilateral": 1.0,
+            "sem_valor": 0,
+            "t_pareado": null
+          }
+        },
+        "passa": true
+      },
+      "P3+ped - so cuidado": {
+        "medidas": {
+          "fracao_fora_de_privacao": {
+            "contem_zero": false,
+            "d": "P3+ped - P0<P3+ped:sem_ensino",
+            "ic90": {
+              "ic_inferior": 0.0027281746031746048,
+              "ic_superior": 0.008060515873015888,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.0023313492063492093,
+              "ic_superior": 0.008680555555555561,
+              "nivel": 0.95
+            },
+            "media": 0.00530753968253969,
+            "motivo": null,
+            "mundo": "iguais_frutas",
+            "n": 30,
+            "n_grupos": 30,
+            "p_unilateral": 0.0,
+            "sem_valor": 0,
+            "t_pareado": {
+              "gl": 29,
+              "p_unilateral": 0.0016880365531536847,
+              "t": 3.1932572692075474
+            }
+          },
+          "saude_media": {
+            "contem_zero": false,
+            "d": "P3+ped - P0<P3+ped:sem_ensino",
+            "ic90": {
+              "ic_inferior": 0.0002971230158730428,
+              "ic_superior": 0.0010300967261904252,
+              "nivel": 0.9
+            },
+            "ic95": {
+              "ic_inferior": 0.00024609374999999084,
+              "ic_superior": 0.001111532738095141,
+              "nivel": 0.95
+            },
+            "media": 0.0006490203373015572,
+            "motivo": null,
+            "mundo": "iguais_frutas",
+            "n": 30,
+            "n_grupos": 30,
+            "p_unilateral": 0.0,
+            "sem_valor": 0,
+            "t_pareado": {
+              "gl": 29,
+              "p_unilateral": 0.003930813657091712,
+              "t": 2.8554029612028944
+            }
+          }
+        },
+        "passa": false
+      },
+      "passa": false
+    },
+    "contrastes": {
+      "G-EROSAO": {
+        "d": "P0+ped - P1+ped",
+        "holm": {
+          "limiar": 0.05,
+          "ordem": 3,
+          "p": 0.57,
+          "p_ajustado": 0.5775,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": -0.013418702805884216,
+          "ic_superior": 0.012198231568509665,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.015744601544826434,
+          "ic_superior": 0.014671340340638045,
+          "nivel": 0.95
+        },
+        "media": -0.0011834278585461818,
+        "motivo": null,
+        "mundo": "iguais_frutas",
+        "n": 30,
+        "n_grupos": 30,
+        "p_unilateral": 0.57,
+        "sem_valor": 0,
+        "t_pareado": {
+          "gl": 29,
+          "p_unilateral": 0.5597230585806074,
+          "t": -0.15159778850567823
+        }
+      },
+      "G-MARCA": {
+        "d": "P0<P3+ped:sem_ensino - P3+ped",
+        "holm": {
+          "limiar": 0.016666666666666666,
+          "ordem": 1,
+          "p": 0.1925,
+          "p_ajustado": 0.5775,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": -0.22222222222222224,
+          "ic_superior": 0.625,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.3194444444444445,
+          "ic_superior": 0.6805555555555555,
+          "nivel": 0.95
+        },
+        "media": 0.23611111111111108,
+        "motivo": null,
+        "mundo": "iguais_frutas",
+        "n": 6,
+        "n_grupos": 6,
+        "p_unilateral": 0.1925,
+        "sem_valor": 24,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.2231605159020053,
+          "t": 0.8261777496804643
+        }
+      },
+      "G-MARCA-E": {
+        "d": "P3 - P3+ped",
+        "holm": {
+          "limiar": 0.025,
+          "ordem": 2,
+          "p": 0.2672,
+          "p_ajustado": 0.5775,
+          "rejeita": false
+        },
+        "ic90": {
+          "ic_inferior": -0.2777777777777778,
+          "ic_superior": 0.47222222222222227,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.3611111111111111,
+          "ic_superior": 0.513888888888889,
+          "nivel": 0.95
+        },
+        "media": 0.13888888888888887,
+        "motivo": null,
+        "mundo": "iguais_frutas",
+        "n": 6,
+        "n_grupos": 6,
+        "p_unilateral": 0.2672,
+        "sem_valor": 24,
+        "t_pareado": {
+          "gl": 5,
+          "p_unilateral": 0.301009357441927,
+          "t": 0.5562426993624808
+        }
+      }
+    },
+    "delta": 0.20229166666666668,
+    "equivalencia_G-MARCA": false,
+    "subpotenciados": [
+      "G-MARCA",
+      "G-MARCA-E"
+    ]
+  }
+}

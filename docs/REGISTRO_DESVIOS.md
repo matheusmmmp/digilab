@@ -2830,3 +2830,14 @@ Sinal verde do coordenador, autorizado pelo Matheus, depois do #191 e do #192 (m
   As leituras da fumaça não são resultado e não foram usadas para nada.
 - **A run:** uma vez, `experiments/configs/v2_experimento_maior/validacao.json` sem mudança (bases 30101…30505, K = 6, N = 30), saída em
   `artifacts_v2_validacao_unica/`, do commit deste registro. Nada se ajusta olhando o resultado.
+- **A run (depois):** 2026-10-06, das 19:58 às 23:22 (3 h 24 min), do commit `f1c32ab`, 1680 vidas rejogadas do disco, sem erro. A
+  estimativa de 6,2 h vinha do tempo por vida da K2, medido com a suíte rodando junto; aqui a máquina estava livre. Resultado em
+  `docs/RESULTADO_V2_VALIDACAO_UNICA.md`. Nada foi ajustado olhando o resultado.
+- **O que a leitura registra ao lado da regra do orquestrador:** a leitura de cada predição no `resumo.json` é a da seção 5 e não junta a
+  separação do cuidado (5.1). O relatório põe as duas lado a lado.
+  - Nas predições 3, 4 e 5 o braço com dono não difere do próprio só cuidado (a condição (a) falha), e o cuidado do acoplado é pior (a (b)
+    falha).
+  - Pela seção 5.1, o efeito da predição 3 não conta como ensino.
+- **Os descritivos não mudam nada:** o poder simulado no N da run e o N que a simulação daria nestes dados (35) ficam como descrição. O N
+  da run é o do adendo 2.
+- **As vidas** (3 GB) ficam fora do git (`.gitignore`); os resultados, as medidas e os metas (~15 MB) entram.
