@@ -2601,3 +2601,34 @@ então o docstring de cada função diz o que o motor precisa fornecer. Nenhuma 
 - **Banheiro** (`PLANO_ANALISE_V2_BANHEIRO`, seções 4 e 8): `alivios_por_dia` (a fração no banheiro e os acidentes), `dia_do_criterio`
   (com censura e T*), `alivios_ate_criterio` e `curva_sobrevivencia` (Kaplan–Meier e RMST).
 - **Testes:** `tests/test_medidas_r17.py`, 19, cada um com a resposta conhecida.
+
+## V2, W-BANCADA-MUNDO — as faixas do banheiro e o mundo físico na bancada (2026-10-07, `docs/TAREFA_V2_MUNDO_FISICO.md`, etapa 4) — GATES PASSAM
+
+Rodada 17. Infraestrutura, sem run de pesquisa; só as sementes dos testes. Só `experiments/` mudou (a bancada e `configs/v2_mundo/`) e três
+testes antigos (a tabela de braços, a de condições e o `NOS_PENDENTES`). `engine.py`, `mundo.py`, `metrics.py`, os cérebros e a web não. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **Banheiro:** as faixas 37101…37505 (calibração e piloto) e 38101…38505 (validação) em `FAIXAS_RESERVADAS`, com a fonte
+  (`PLANO_ANALISE_V2_BANHEIRO`, seção 10), e o prefixo `"banheiro"` em `PREFIXOS_UNIDADES`.
+- **Os mundos `fisico` e `fisico_afastado`:** o `MotorMundo` da main, condição `iguais` (PMF-7); o afastado troca só o layout
+  (`LAYOUT_MUNDO_AFASTADO`, o G-DIST da A1.8). A chave `"mundo"` da config troca campos da `ConfigMundo` (o `mult_queda` da calibração).
+- **O lugar** (comedouro, perto, longe; PMF-4) é um fator da vida: `EspecVida.lugar` e a chave `"lugares"`, obrigatória com o mundo
+  físico e proibida fora dele. A célula é dono × lugar, e a coluna da tabela vira `condicao/mundo/lugar`.
+- **O dono só com o cuidado (PMF-3):** o `DonoComLugar` (o `alimentar` vira `deixar_comida` no lugar) com o filtro `sem_ensino` aplicado
+  ao vivo (`CanalSemEnsino`, `simular_vida_fisico`). O elogio e a bronca gastam o orçamento do dono como sempre, mas não chegam ao motor
+  nem ao log; ficam contados em `VidaBancada.retirados`. Os gestos do mundo entram na contagem (`contar_gestos_mundo`).
+- **O replay** é o `reproduzir_mundo`: no G1 de toda vida e acoplado, na medição e na deriva (com o mesmo corte por tick). O
+  `resumo_motor` ganha o `resumo_mundo_fisico()`.
+- **As medidas do plano** (`Bancada.medidas_mundo`, bloco `mundo_fisico` no `medidas.json`), todas de `metrics.py`, nos últimos sete dias
+  (os dias 8 a 14 numa vida de 14):
+  - o `D_FE` (e o da vida toda) e o cuidado preservado;
+  - as visitas às manchas, recontadas da trajetória do motor e conferidas contra as `visitas` dele (uma diferença falha alto);
+  - as inclinações da permanência sobre o custo de viagem e sobre a taxa recente (G-PERM, G-OPORT), a taxa no abandono e a permanência
+    média (G-DIST, entre os dois layouts).
+  - Nas tabelas: `d_fe`, `privacao_janela` e `permanencia_media`.
+- **Pendente do instinto do mundo** (`NOS_PENDENTES["instinto_mundo"]`, a etapa 3 do B), falhando alto com o nó:
+  - o braço **P0z** (o P0 `sem_explorar`), e com ele os acoplados P0^ac e P1^ac, que saem do registro dele;
+  - o cérebro `instinto` no mundo físico;
+  - qualquer config do mundo físico com sementes fora das dos testes.
+- **O que roda hoje:** os lobos (P0, P1, P3) no mundo, cegos a ele até a etapa 3, e o acoplado P1 ← P0 (o encanamento do P1^ac).
+- **Testes:** `tests/test_bancada_mundo_fisico.py`, 15 (~30 s). **Fumaça** (`experiments/configs/v2_mundo/fumaca.json`, NÃO canônica):
+  96 vidas rejogadas bit a bit em ~1,5 min; sem artefato.
