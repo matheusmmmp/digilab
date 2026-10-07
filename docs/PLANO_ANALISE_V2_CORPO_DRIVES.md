@@ -489,3 +489,153 @@ Ficam como estão:
 
 O bloco G entra na validação e no piloto, este só para medir o custo. O custo da calibração sobe 16 vidas por unidade (a sensibilidade da
 janela), e o da validação, 8 vidas por unidade (o bloco G).
+
+## Adendo 2 (2026-10-07, antes de qualquer run): a dominância de um drive no sinal (D-4)
+
+Decisão D-4 de `docs/DEFINICOES_CORPO_V2.md` (seção 3, #227 e #228): os `w_d` ficam fixos em 1, e o risco de um drive dominar o sinal é
+**medido antes** de pôr qualquer peso dinâmico.
+
+**Status:** PROPOSTO. Nenhuma run foi feita. Este adendo não muda:
+- as predições PR-H a PR-5 nem os gates da seção 8;
+- as margens nem o N;
+- as sementes;
+- as PCD-1 a PCD-7 nem o adendo 1.
+
+**O que se cita, e em que nível:**
+- **Keramati e Gutkin 2014** (`10.7554/eLife.04811`), só pelo resumo: a recompensa é a redução da distância do estado interno ao ponto de
+  ajuste.
+- **Roijers et al. 2013** (`10.1613/jair.3987`), só pelo resumo: converter vários objetivos num escalar pode ser impossível, inviável ou
+  indesejável, conforme a função de escalarização.
+- **Nada mais sustenta o que segue.** Os limiares e a janela são PROPOSTOS, SEM FONTE.
+
+### A2.1 Por que medir, e não presumir
+
+O sinal (tarefa do corpo, seção 9) é `D = Σ w_d · falta_d²`, com o `w_d` de cada drive (1 nos de hoje, `w_novos` nos novos, pela 6.2).
+- O efeito marginal de cada drive é `2 · w_d · falta_d`: ele cresce com a própria falta. Então um drive saciado já pesa menos, mesmo com os
+  pesos fixos. A leitura é nossa, das definições, seção 3.
+- O que a forma quadrática não garante é o equilíbrio na vida: um drive que fica em falta alta a vida toda (o tédio de um pet que não
+  brinca, por exemplo) pode tomar quase todo o sinal. Aí o aprendiz otimiza um drive só.
+- **A D-4 decidiu medir isso antes de pôr um peso dinâmico,** que seria mais um parâmetro livre.
+
+**A diferença para a 6.2, passo 3.** Lá o `w_novos` é escolhido pela parcela do **grupo** dos drives novos no sinal, nas vidas do P0-c.
+Aqui a medida é **por drive**, por decisão, nas vidas de todos os braços, e o P1 entra. A 6.2 não muda.
+
+### A2.2 A medida
+
+**Em cada decisão com sinal**, isto é, com `D_antes ≠ D_depois` na janela da própria ação (seção 9 da tarefa):
+- a contribuição de cada drive é `c_d = w_d · (falta_d,antes² − falta_d,depois²)`, em inteiros na escala S (a mesma conta dos canais);
+- **a parcela do drive** é `p_d = |c_d| / Σ_e |c_e|`.
+
+**Por que o valor absoluto.** Numa mesma ação, um drive pode subir e outro descer: brincar reduz o tédio e aumenta o cansaço. Com o sinal,
+a soma `D_antes − D_depois` pode ficar perto de 0 e a fração explodir. Com o valor absoluto, `p_d` fica entre 0 e 1 e soma 1 por decisão.
+A contribuição com o sinal (`c_d`) também sai, ao lado.
+
+**Os drives:** os que estão no sinal da decisão.
+- `fome`, `desconforto` e `cansaco` sempre;
+- `tedio`, `solidao`, `estresse` e `dor` com os drives novos;
+- `tristeza` só no consumo de fruta (bloco G).
+
+**Os cortes:**
+- **por braço:** P1-c, P1-q, P1-c-tapa, P1-c-tapaX e P1-c-frutas;
+- **por condição:** mundo `bola` e `padrao`;
+- **por tipo de decisão:**
+  - **tempo livre** (regras `tempo_livre` e `bola_no_cenario`): onde o aprendiz escolhe entre vários candidatos;
+  - **o resto** (as regras urgentes e a fome moderada): relatado à parte;
+- nos dias 8 a 14, como as outras medidas, e na vida toda como descritivo.
+
+**A mesma conta como sonda no P0-c e no P0-q.**
+- O P0 não aprende, mas o sinal pode ser recalculado sobre os receptores antes e depois de cada ação, como na 6.2, passo 3.
+- Ele mostra a dominância **que o corpo traz**, sem o comportamento aprendido. A diferença P1 − P0 mostra a que o aprendizado acrescenta (um
+  pet que aprende a brincar mais muda as faltas).
+
+**A referência de hoje:** o P1-q (a química sem drives novos) dá a dominância entre fome, desconforto e cansaço. É o pet do N3, para
+comparar.
+
+### A2.3 O critério de "domina" (escrito agora)
+
+**Por decisão:** o drive d **lidera** a decisão se `p_d ≥ 0,80`, isto é, se os outros juntos dão no máximo um quarto do que ele dá.
+
+**Por unidade:** `f_d` é a fração das decisões de tempo livre com sinal em que d lidera, nos dias 8 a 14.
+
+**Na condição:** o drive d **domina** se o limite inferior do IC95 de `f_d` (bootstrap sobre as unidades, 10.000 reamostragens, semente
+4242) passa de **0,50**. Ou seja: com confiança, um drive só responde por mais da metade das decisões de tempo livre.
+
+**A justificativa** (SEM FONTE; é a leitura do desenho):
+- **Por que olhar a decisão inteira.** Cada ação mexe em poucos drives: comer na fome, brincar no tédio e no cansaço. Então é normal um
+  drive liderar uma decisão. Isso não é dominância. Num corpo equilibrado, drives diferentes lideram decisões diferentes, conforme a ação, e
+  nenhum passa da metade.
+- **Por que 0,50.** Com cinco a sete drives no sinal, um passar da metade das decisões de tempo livre quer dizer que o aprendiz, ali,
+  aprende quase só por ele.
+- **Por que 0,80.** Liderar exige que o drive valha quatro vezes o resto da decisão. Um corte de 0,50 contaria decisões divididas entre
+  dois drives.
+- **O critério vale no P1-c, no mundo `bola`,** o braço e a condição do primário. Nos outros braços e no `padrao`, a mesma conta sai como
+  descritivo.
+
+**Fixos antes da run:** os dois limiares (0,80 e 0,50) e a regra do IC. Não mudam no piloto.
+
+### A2.4 Se dominar: o braço P1-cw (peso pela janela recente)
+
+**O braço:** P1-cw, o P1-c com o peso de cada drive dependendo da falta recente dele. É braço do plano, não um ajuste: roda sempre na
+validação (A2.5) e não muda o P1-c.
+- **A janela:** as últimas `J` decisões (PROPOSTO: 32, 8 h acordado). Nela, `m_d` é a média da `falta_d` lida pelo receptor, na escala S,
+  em inteiros (`div_arred`).
+- **O peso:** `w_d,janela = max(div_arred(S, 4), S − div_arred(3 · m_d, 4))`, multiplicado pelo `w_d` fixo (`div_arred(w_d · w_d,janela,
+  S)`):
+  - com o drive sempre saciado na janela (`m_d` = 0), o peso é o de hoje;
+  - com o drive sempre em falta total (`m_d` = S), cai a um quarto;
+  - o piso de um quarto impede que um drive suma do sinal.
+- **O peso fica fixo dentro da decisão:** o mesmo `w_d,janela` entra no `D_antes` e no `D_depois`, e o sinal continua uma diferença. A
+  janela anda depois da decisão.
+- **As urgências não se perdem.** Um drive em falta alta tem o peso reduzido no aprendizado. Mas as regras urgentes do instinto (fome ou
+  higiene abaixo de 0,25, exaustão) decidem por um candidato só, e não passam pelo aprendizado. O risco R-1 continua medido pela privação.
+- **O que precisa existir:**
+  - no cérebro A (B): uma chave em `ConfigConsequencia`, por exemplo `pesos_janela`, desligada por padrão; desligada, é o P1-c byte a byte;
+  - na bancada (D): o braço P1-cw.
+
+### A2.5 O lugar no desenho
+
+**A medida de dominância é só descritiva:** fora do Holm e sem gate. O critério da A2.3 é uma **regra de leitura**, escrita antes, e não
+um teste do plano.
+
+**O braço P1-cw:** na validação, nas mesmas 8 células do P1-c (4 donos × 2 mundos), modo sem tapa. São **8 vidas por unidade** a mais (o
+total vai a 120 com o bloco G do adendo 1). Roda sempre, para o desenho não depender de dado.
+- **Com dominância no P1-c (A2.3):** os contrastes P1-cw − P1-c em `BE`, privação e saúde, no mundo `bola`, saem com IC95 como
+  **descritivo qualificado**: a resposta à pergunta "o peso pela janela desfaz a dominância sem piorar o cuidado?". Não entram no Holm.
+- **Sem dominância:** os mesmos contrastes saem só como descritivo, com a nota "sem dominância a corrigir".
+- **No piloto,** o P1-cw roda só para medir o custo.
+
+**O que muda na leitura das predições:**
+
+| caso | leitura |
+|---|---|
+| **G-PARADO ganha, sem dominância** | a leitura da seção 8 vale como está: o corpo tira o pet do parado com o sinal repartido entre os drives |
+| **G-PARADO ganha, com o tédio dominando** | o pet sai do parado porque aprende **quase só pelo tédio**. A leitura fica qualificada: o corpo funciona como um drive só, e o P1-cw diz se o equilíbrio volta sem perder a `BE` |
+| **G-CUIDADO falha, com tédio ou solidão dominando** | é o mecanismo do R-1 (o pet que só brinca), agora identificado no sinal. Fica registrado ao lado da leitura da seção 8 |
+| **G-PARADO empata ou perde, com o cansaço dominando** | o pet continua parado porque o gasto de energia de brincar e explorar ainda pesa mais que o tédio no sinal. Isso aponta para o `w_novos` da 6.2, e não para o aprendiz |
+| **a dominância aparece no P0-c (a sonda) e não no P1-c** | ela vem do corpo, e o aprendizado a desfaz. O inverso (só no P1-c) quer dizer que o comportamento aprendido a criou |
+
+**A dominância também entra nos riscos:**
+- o **R-1** (o pet que só brinca) ganha a medida de mecanismo;
+- **R-14 (novo):** o peso pela janela pode criar oscilação (o drive em falta perde peso, sobe mais, perde mais peso). O piso de um quarto
+  limita isso, e a fração de dias com `f_d` acima de 0,50 no P1-cw sai como descritivo.
+
+### A2.6 Donos de arquivo e artefatos
+
+| peça | dono | o quê |
+|---|---|---|
+| `c_d` e `p_d` por decisão | **D** (`digilab/metrics.py`, a bancada) | lidos do registro do sinal do cérebro (os canais já separam por drive) ou recalculados dos receptores antes e depois. Os dois têm de bater (teste) |
+| a sonda no P0 | **D** | a mesma conta sobre as vidas do P0-c e do P0-q |
+| `pesos_janela` | **B** (`lobos.py`, a `ConfigConsequencia`) | o peso da A2.4, desligado por padrão; desligado, o P1-c byte a byte (G2) |
+| o braço P1-cw | **D** | na bancada e nas configs da validação |
+
+**As saídas:** `dominancia.json`, ao lado do `resultado.json` da validação e do piloto, com:
+- `f_d` por drive, braço, mundo e tipo de decisão;
+- a parcela agregada `Σ|c_d| / ΣΣ|c|`;
+- a sonda do P0;
+- a leitura pela A2.3.
+
+### A2.7 Decisão do Matheus
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PCD-8 | O critério de dominância e o braço P1-cw | **o critério da A2.3** (lidera com `p_d` ≥ 0,80; domina com o IC95 inferior de `f_d` acima de 0,50, no P1-c do mundo `bola`), **e o P1-cw sempre na validação**, como descritivo qualificado | **critério frouxo:** acha dominância onde há só ações que mexem em poucos drives. **Rígido:** não vê o tédio tomar o sinal. **O P1-cw só se dominar no piloto:** o desenho passaria a depender do dado do P1, que a PCD-4 evita. **Sem o P1-cw:** com dominância, não há como saber se o peso pela janela resolve |
