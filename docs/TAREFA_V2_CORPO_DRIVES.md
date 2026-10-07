@@ -197,7 +197,7 @@ dá só os conceitos: drives como químicos e estresse que se acumula com drives
 
 | químico | sobe | o que reduz | meia-vida | receptor |
 |---|---|---|---|---|
-| `tedio` | +450 por tick acordado (cheio em ~17 h) | pet brinca com a bola −135000; pet brinca sem bola −45000; dono brinca −90000 | — | sim |
+| `tedio` | +450 por tick acordado (cheio em ~17 h) | **revisado pela DS-4 (seção 17):** a redução depende da variedade recente. Bases: pet brinca com a bola −135000; pet brinca sem bola −45000; pet explora −90000; dono brinca −90000 | — | sim |
 | `curiosidade` (só com o mundo físico) | +300 por tick acordado (cheia em 25 h) | explorar e achar coisa nova: −90000 por novidade, até 2 por decisão | — | sim |
 | `solidao` | +225 por tick acordado (cheia em ~33 h) | acariciar −180000 (seção 8) | — | sim |
 | `estresse` | `div_arred(Σ max(0, q_d − 337500), 256)` por tick, sobre `fome`, `desconforto`, `cansaco`, `tedio`, `curiosidade`, `solidao` e `dor` | acariciar −90000; a meia-vida | 1440 | sim |
@@ -489,3 +489,44 @@ validação. Sem decisão por ora.
 | CD-8 | A curiosidade exige o mundo físico | **sim**; sem ele, falha alto | sem o mundo, explorar não acha nada, e uma curiosidade que só sobe vira um castigo constante no sinal |
 | CD-9 | O tapa credita só o sinal direto, sem somar a mudança que ele causa no corpo | **sim**: a dor e o estresse ficam no corpo e pesam depois | somando, o tapa pune duas vezes, e a força dele passa a depender do corpo de um jeito que nenhum número controla |
 | CD-10 | O valor e o alcance do sinal do tapa | **o valor da bronca** (`recompensa_tapa` = `recompensa_repreensao`), **em toda fonte que aprende** | só na fonte dono: o pet do produto, que aprende pela consequência, não aprenderia nada com o tapa; com outro valor, o tapa deixa de ser comparável com a bronca da pesquisa |
+
+## 17. Revisão DS-4: o tédio pela variedade recente (2026-10-07)
+
+**Decisão do Matheus (DS-4, `docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 4):** o tédio passa a medir a falta de variedade, e não só o tempo
+acordado. A revisão de literatura (`docs/referencias/F_REVISAO_V2_SEIS_PERGUNTAS.md`, P4) aponta o tédio como aversão à monotonia (Burn
+2017, `10.1016/j.anbehav.2017.06.006`, resumo). Com o tédio só por tempo, o pet pode se contentar em repetir a mesma brincadeira. A
+tradução para a regra abaixo é nossa, e os números são PROPOSTOS, **sem fonte**.
+
+**Vale a partir da etapa 6** (drives novos). A química base, os órgãos e as etapas 0 a 5 não mudam.
+
+**A regra, em inteiros:**
+- **A janela.** O corpo guarda as últimas `janela_tedio` atividades (PROPOSTO: 8). As atividades são:
+  - `bola`: o pet brinca com a bola;
+  - `brincar`: o pet brinca sem bola;
+  - `explorar`: o pet explora;
+  - `dono_brinca`: o dono brinca.
+
+  Só elas reduzem o tédio e entram na janela. Ocioso, chamar, comer e dormir não entram nem reduzem.
+- **A subida.** +450 por tick acordado, como na seção 7.
+- **A redução da atividade a.** `div_arred(base_a × (J − r_a), J)`, onde:
+  - J é `janela_tedio`;
+  - r_a é o número de vezes que a aparece na janela **antes** desta;
+  - a base é a da tabela da seção 7.
+
+  Depois da redução, a atividade entra na janela, e a mais antiga sai.
+- **O efeito.** Repetir a mesma atividade J vezes seguidas zera a redução dela. Alternar devolve a base inteira.
+- **Explorar entra** com a base −90000 (PROPOSTO): sem isso, explorar não varia nada.
+- **A curiosidade** (CD-8) não muda: ela cai pela novidade achada, que é outra coisa.
+
+**Gates novos e mudados:**
+- **G-MEC:** brincar com a bola duas vezes seguidas reduz menos o tédio que brincar com a bola e depois explorar. Com a janela vazia, a
+  primeira redução é a base.
+- **G-HOJE:** inalterado (o tédio não existe hoje).
+- **A conta de exemplo da seção 9:** continua valendo para a primeira brincadeira com a janela sem bola. Com a bola repetida, o sinal cai.
+
+**Para o plano** (`docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`):
+- o `m_reduz` multiplica as bases;
+- a `janela_tedio` entra na grade da calibração, ou fica fixa em 8: decisão do chat C no adendo da DS-6;
+- a PR-5 (o tédio médio) segue igual.
+
+**Donos de arquivo:** B, em `corpo.py` (a janela e a regra), e A, no motor (avisar a atividade ao corpo).
