@@ -3573,3 +3573,15 @@ Pedido do Gerente depois da etapa 3 do mundo (#232). Interpretações:
     vai divergir no P1-cw; o D tem de passar esses pesos ao `sinal_por_canal`;
   - **os pesos da E2 pendente** ficam num atributo à parte, para a tupla do pendente não mudar (um teste dos canais a monta à mão);
   - **o P1-c** (o P1 do corpo) ainda não existe, então a chave vale em qualquer P1.
+
+## 2026-10-07 — W-LIGA-PESOS-JANELA (rodada 18, worker D): o braço P1-cw ligado
+
+- **O gate é contra o P1, não o P1-c.** A tarefa pede "o P1-c com a chave desligada sai byte a byte", mas a bancada ainda não tem os braços
+  do corpo. Hoje o P1-cw é o P1 com a chave `pesos_janela`, então o gate é "P1-cw com a chave desligada = P1". Quando o P1-c entrar, o
+  P1-cw passa a ser o P1-c com a chave, e o gate troca de referência.
+- **O estado interno difere só no rótulo do braço** (`"braco": "P1-cw"` × `"P1"`, que a `PoliticaDoBraco` põe nele). O teste compara com o
+  rótulo normalizado.
+- **O w_d da dominância no P1-cw.** A A2.2 define c_d = w_d · Δ_d, e a A2.4 multiplica o w_d pelo peso da janela. A medida lê o peso que o
+  cérebro usou na decisão (o motivo `pesos_janela`), e não o recalcula. O cérebro calcula os pesos dos drives da E2 (com o humor) em toda
+  decisão; na decisão sem fruta, a medida usa só os do N3, como o sinal.
+- **Fumaça do corpo:** a tarefa pede o P1-cw nela "se já existir", e não existe.

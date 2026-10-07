@@ -5,7 +5,7 @@ O que se confere:
 - as funcoes de metrics.py em dados sinteticos com a resposta conhecida (c_d, p_d, lidera, f_d, a leitura "domina");
 - na bancada: a medida de toda vida, o sinal recalculado batendo com os canais do cerebro, a sonda nos bracos que nao aprendem pela
   consequencia, a fruta com a tristeza (E2), o dominancia.json por braco x condicao x tipo;
-- o P1-cw declarado e falhando alto com o no ate a chave pesos_janela existir.
+- o P1-cw declarado (ligado desde a W-LIGA-PESOS-JANELA).
 So as sementes dos testes.
 """
 from __future__ import annotations
@@ -172,13 +172,10 @@ def test_rodar_grava_o_dominancia_json(tmp_path):
 # ------------------------------------------------------------------ o P1-cw
 
 
-def test_p1_cw_declarado_e_falhando_alto_com_o_no(monkeypatch):
+def test_p1_cw_declarado_e_ligado():
+    """Desde a W-LIGA-PESOS-JANELA o P1-cw roda (a chave pesos_janela do #236); tests/test_bancada_pesos_janela.py confere o braco."""
     b = bv.BRACOS["P1-cw"]
-    assert (b.fonte, b.no, b.pesos_janela) == ("consequencia", "corpo-A2.4", True) and "pesos_janela" in bv.NOS_PENDENTES
-    with pytest.raises(NotImplementedError, match="pesos_janela"):
-        bv.braco_de("P1-cw")
-    with pytest.raises(NotImplementedError, match="pesos_janela"):
-        bv.validar_config({"bracos": ["P1", "P1-cw"], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
-                           "sonda": SONDA, "bootstrap": {}, "mundos": ["bola"]})
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {})
+    assert (b.fonte, b.no, b.pesos_janela) == ("consequencia", "corpo-A2.4", True) and not bv.NOS_PENDENTES
     assert bv.braco_de("P1-cw") is b
+    bv.validar_config({"bracos": ["P1", "P1-cw"], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
+                       "sonda": SONDA, "bootstrap": {}, "mundos": ["bola"]})
