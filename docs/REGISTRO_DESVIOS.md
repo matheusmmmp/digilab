@@ -2957,3 +2957,30 @@ Tarefa `docs/TAREFA_V2_DESCRITIVO_PLATO.md` (V-3, Q-1). **Pós hoc descritivo:**
 - **Limite conhecido do A:** a decisão de comer não aprende o efeito de uma fruta quando ela está sozinha. É a origem do platô e fica como
   pergunta para um plano próprio (Q-8).
 - **Próximo:** o plano do porte para a web, pets v11 (`docs/TAREFA_V2_W_PLANO_PORTE.md`, chat A).
+
+## 2026-10-07 — W-TAREFA-MUNDO (rodada 16, worker C): a tarefa e o plano do mundo físico mínimo
+
+Só papel: `docs/TAREFA_V2_MUNDO_FISICO.md` e `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`. Nenhuma run, nenhum código.
+
+- **"Todo sorteio do mundo vem da rng de ambiente".** Lido como o lado do ambiente, em fluxos próprios por `derivar_semente`
+  (`mundo-arvores`, `mundo-bola`, `mundo-sujeira`), e **não** o `_rng_ambiente` do `engine.py`. Sortear no do engine faria o comportamento
+  do cérebro mudar o clima, e os braços deixariam de ser comparáveis. Fica como a decisão MF-4 da tarefa, com essa recomendação.
+- **Coisas que a tarefa acrescenta ao pedido** (cada uma justificada no texto):
+  - o evento `deixar_bola(x, y)`, ao lado do `deixar_comida`, pela seção 2.3 do `mundo_fisico.md`;
+  - desfazer o `+0,05` do comer sem comida (MF-2). Sem isso, comer parado cobre 4 vezes a fome perdida numa decisão, e nenhuma busca
+    compensa;
+  - o "achou e comeu" no explorar (MF-1), para a consequência imediata poder ligar explorar à comida;
+  - o gancho `consequencia_mundo`, para qualquer cérebro ver o estado depois de andar e comer;
+  - o braço de controle P0z (`sem_explorar`), para conferir a premissa "explorar compensa" antes de ler o P1.
+- **A calibração do plano é só do mundo, e não do cérebro.** O M10 (sem calibração por nó) vale: o P1 roda no ponto da validação única. A
+  calibração escolhe só o multiplicador das quedas das árvores, e só com o P0 e o P0z. O piloto do P1 serve só para o N.
+- **M-4 e M-5.** O prompt da rodada (`docs/V2_RODADA_16.md`, 3.2) pedia as duas no fim, com recomendação, mas elas já foram decididas em
+  2026-10-07 (seção 4 do mesmo documento). Os dois documentos as tratam como decididas e não as reabrem.
+- **Charnov 1976** (`10.1016/0040-5809(76)90040-x`). Os metadados foram conferidos no Crossref em 2026-10-07: título, autor, revista
+  Theoretical Population Biology 9(2), páginas 129–136 e data de abril de 1976. O resumo não foi lido, e a referência **não** foi posta
+  nas tabelas de `docs/referencias/`. Entra como PISTA e só num descritivo sem gate.
+- **Donos de arquivo.** Os três que o prompt deu valem: mundo com o A, bancada com o D, web com o A. Dois foram acrescentados:
+  - o instinto do mundo (`PoliticaInstintoMundo`, a fome urgente) fica com o B, como cérebro;
+  - o campo novo da `Observacao` fica com o A, como parte do mundo.
+- **Os números do mundo** (mapa, raios, velocidade, custos, prazos) são PROPOSTOS, sem fonte. O layout segue as proporções do protótipo
+  `mundo_fisico_vistas.html`.
