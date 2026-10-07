@@ -343,8 +343,9 @@ BASES_N7 = {"calibracao": (21101, 21202, 21303, 21404, 21505), "validacao": (221
 BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validacao": (29101, 29202, 29303, 29404, 29505)}
 # o prefixo das unidades derivadas de cada plano (regra E3): semente derivar_semente(prefixo, b, k), genoma
 # derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2; o da comparacao dos cerebros,
-# PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2)
-PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros")
+# PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2; o do mundo fisico, PLANO_ANALISE_V2_MUNDO_FISICO, secao 4; o do corpo,
+# PLANO_ANALISE_V2_CORPO_DRIVES, secao 4)
+PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),)
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
@@ -369,6 +370,10 @@ FAIXAS_RESERVADAS = (
     (28101, 28505, "comparacao dos cerebros: calibracao de B e C e piloto (PLANO_ANALISE_V2_COMPARACAO_CEREBROS, C-8)"),
     (29101, 29505, "comparacao dos cerebros: validacao de A, B e C (PLANO_ANALISE_V2_COMPARACAO_CEREBROS, C-8)"),
     (30101, 30505, "experimento maior, bases da validacao (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)"),
+    (31101, 31505, "mundo fisico, calibracao e piloto do N (PLANO_ANALISE_V2_MUNDO_FISICO, secao 11, PMF-6)"),
+    (32101, 32505, "mundo fisico, validacao (PLANO_ANALISE_V2_MUNDO_FISICO, secao 11, PMF-6)"),
+    (33101, 33505, "corpo e drives, calibracao e piloto (PLANO_ANALISE_V2_CORPO_DRIVES, secao 10, PCD-7)"),
+    (34101, 34505, "corpo e drives, validacao (PLANO_ANALISE_V2_CORPO_DRIVES, secao 10, PCD-7)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
@@ -378,7 +383,7 @@ FAIXAS_RESERVADAS = (
 def unidades_derivadas(bases, k_por_base: int, prefixo: str = "experimento-maior") -> list[dict]:
     """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente(prefixo, b, k) e genoma
     derivar_semente(prefixo + "-genoma", b, k), k = 0..K-1; o prefixo e o do plano (PREFIXOS_UNIDADES: "experimento-maior", o
-    padrao; "n6"; "n7"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
+    padrao; "n6"; "n7"; "comparacao-cerebros"; "mundo"; "corpo"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
     if prefixo not in PREFIXOS_UNIDADES:
         raise ValueError(f"prefixo das unidades {prefixo!r}: so {PREFIXOS_UNIDADES}")
     if k_por_base < 1:
