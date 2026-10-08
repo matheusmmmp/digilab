@@ -4136,3 +4136,26 @@ e na tarefa. Nenhuma run, nenhum código.
 - **Uma decisão nova:** a N-1 (a cabeça da autoria fica no Digicorpo), porque o Digicorpo foi definido como modelo corporal e a rede de si
   tem também a autoria.
 - **Base:** o branch sai do `v2-olfato-audicao` (#258), porque usa as seções da DP-13 e da DP-14. O #258 entra antes.
+
+## 2026-10-08 — W-METABOLISMO (worker C): a tarefa do Metabolismo energético e o adendo 3 do plano do corpo
+
+- **`docs/TAREFA_V2_METABOLISMO.md`:** o desenho, as etapas e os gates; ME-1 a ME-7 para o Matheus.
+- **O adendo 3 de `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`:** o metabolismo no bloco do corpo e o passo 0 da calibração. Ele é PROPOSTO e
+  depende das ME: se uma decisão sair diferente da recomendação, o adendo é refeito antes de qualquer run.
+- **Conferido no código (`origin/main`, `b25f6c2`):**
+  - não há químico de energia;
+  - a digestão consome `alimento` e `fome` e, com o banheiro, produz `vontade`;
+  - o cansaço tem emissores acordado, à noite e dormindo, e as atividades e o andar;
+  - o cérebro com o corpo e o banheiro tem 998 pesos (`tests/test_banheiro_cerebros.py`, linha 198), e cada receptor novo custa 24.
+- **Uma mudança de leitura:** a tarefa do corpo deixava "o ATP como químico próprio" fora, porque o cansaço fazia esse papel. A tarefa nova
+  não cria um ATP. Ela põe o combustível por baixo do cansaço, que fica como está (ME-1).
+- **O grafo precisa de duas coisas** que hoje não tem: as reações com limiar e o gatilho "abaixo". O desenho fica com o B.
+- **Os números novos são todos PROPOSTOS, SEM FONTE:**
+  - o gasto basal de 375 e 187;
+  - os limiares C/4, C/2 e 3C/4;
+  - as taxas de 375;
+  - a falta de +500;
+  - o começo em C/2 e C/4;
+  - a faixa [0,05; 0,30] do passo 0.
+- **O Creatures** (a mitocôndria e o fígado, citados pelo Gerente) é só pista, não conferida. Não há alegação de novidade.
+- **A base é a `main`**, independente do #258 e do #259. A tarefa cita a seção 8.1 do glossário, que está no #259.
