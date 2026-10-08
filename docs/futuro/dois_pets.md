@@ -5,6 +5,7 @@ Status (2026-10-07):
   recomendado em `docs/futuro/convivencia_mundo_fisico.md` (CV-1) e na `docs/futuro/cognicao_social.md` (seção 11).
 - **DP-1 a DP-10 DECIDIDAS pelo Matheus em 2026-10-07** (seção 14): oito pela recomendação; a DP-4 (os sentidos) e a DP-7 (os donos)
   com mudança. A DP-11 e a DP-12, que saem da DP-4, foram DECIDIDAS pela recomendação em 2026-10-07.
+- **ABERTAS (2026-10-08):** a DP-13 (o órgão do olfato) e a DP-14 (o órgão do ouvido), pedidas pelo Matheus (seção 5.6).
 - **PROPOSTO:** o como, neste documento.
 
 A tarefa é `docs/TAREFA_V2_DOIS_PETS.md`. Um plano de análise vem depois, antes de qualquer run.
@@ -204,6 +205,89 @@ próprio pet não entram.
 - o que o outro comeu e não foi visto nem ouvido, e o efeito da fruta no corpo dele;
 - qualquer cheiro que não saia de um emissor declarado no grafo do corpo.
 
+### 5.6 O órgão do olfato e o do ouvido (DP-13 e DP-14, abertas)
+
+**O pedido do Matheus (2026-10-08):** o cheiro passa a ser um **órgão** do corpo.
+- **Hoje** o pet recebe pronta a intensidade e a direção do cheiro: `mundo.cheiro_em` e `mundo.direcao_do_cheiro`, em `PercepcaoMundo.cheiro`
+  e `direcao_cheiro`.
+- **O motor também usa essa direção:** para montar o candidato `cheiro` dos alvos de comer e de explorar (`MotorMundo._alvo_cheiro`).
+- **Com o órgão,** o pet lê só a intensidade **no lugar onde está**, por um receptor com limiar, adaptação e saturação. A direção ele
+  descobre andando e comparando.
+- **A pergunta irmã para a audição** é a DP-14, com o mesmo desenho.
+
+**O que a biologia sustenta** (revisão `docs/referencias/H_REVISAO_OLFATO_AUDICAO.md`, seção 7; só resumos):
+- **A adaptação acontece no próprio receptor:** há duas formas rápidas e uma persistente nos neurônios olfativos de vertebrados (Zufall e
+  Leinders-Zufall 2000).
+- **Uma narina basta:** na larva da drosófila, um só neurônio olfativo funcional basta para a quimiotaxia, e a entrada dos dois lados
+  melhora a precisão (Louis et al. 2008).
+- **Ratos usam as duas narinas** (Rajan, Clement e Bhalla 2006): a diferença de intensidade e de tempo entre elas dá a direção, e a amostra
+  dos dois lados foi essencial para localizar o cheiro.
+- **O som também precisa de cálculo:** o espaço do som não está representado na cóclea, e a localização sai da comparação entre os dois
+  ouvidos (Grothe, Pecka e McAlpine 2010).
+
+O desenho abaixo é nosso: os números são PROPOSTOS, SEM FONTE.
+
+**O receptor do olfato** (no grafo do corpo, seção 18 da tarefa do corpo; tudo em inteiros, por canal: a comida, e no 1b cada pet):
+
+| peça | conta | o que faz |
+|---|---|---|
+| o estímulo | `I` = a intensidade no ponto da narina (a mesma `cheiro_em`, só no ponto, sem direção) | é a física: o que chega ao nariz |
+| a adaptação | um químico do órgão, `a ← a + div_arred((I − a) · k_adapt, S)` a cada tick | segue o estímulo devagar: um cheiro constante deixa de ser sentido |
+| o limiar | `e = max(0, I − a − limiar)` | abaixo dele, nada |
+| a saturação | `r = div_arred(S · e, e + K_meia)`, em [0, S) | um cheiro forte não cresce sem fim; é o receptor lido pelo cérebro |
+
+A adaptação é um químico do corpo, com a meia-vida no grafo. O estímulo vem do mundo, e o órgão não emite nada, então a checagem de laço
+do grafo não muda.
+
+**As opções:**
+- **(a) uma narina:** um receptor `olfato`, o `r` no centro do pet. O pet compara o `r` de agora com o da decisão anterior: se subiu,
+  continua na mesma direção; se caiu, troca de direção. A comparação no tempo é do cérebro e do instinto, não do órgão.
+- **(b) duas narinas:** dois receptores, `olfato_esq` e `olfato_dir`, cada um com a sua adaptação. As narinas ficam a ±`afastamento_narinas`
+  subunidades da posição, de lado em relação à **direção do último passo** do pet (a propriocepção do próprio movimento).
+  - **O que a diferença diz:** `esq − dir` dá uma pista de esquerda ou direita, e não de frente ou trás.
+  - **Quando ela some:** com o gradiente fraco, a diferença cai no limiar. Por isso é pista, e não direção entregue.
+- **(c) manter a leitura pronta:** a intensidade e a direção em 8, como hoje.
+
+**O que muda no mundo com o órgão ligado:**
+- **A percepção:** `PercepcaoMundo.direcao_cheiro` sai (fica 0) e o `cheiro` dá lugar aos receptores do corpo (`obs.corpo`).
+- **O candidato `cheiro`:** deixa de existir. No lugar dele, dois candidatos que só usam o que o pet sente:
+  - `cheiro_seguir`: um passo na direção do último passo;
+  - `cheiro_virar`: com (a), a direção sorteada no fluxo `alvo`; com (b), 45° para o lado da narina mais forte.
+- **O alvo padrão do motor e o instinto do mundo:** passam a escolher entre esses dois pela regra da opção. Com (a), é a leitura subiu
+  ou caiu; com (b), é a diferença entre as narinas.
+- **A comida vista:** continua vista. O órgão muda só o que vem pelo cheiro.
+
+**As chaves:** `ConfigOlfato`, desligada por padrão.
+- **`ligada`:** desligada, a vida de hoje byte a byte (G2).
+- **`narinas`:** 1 ou 2.
+- **As sub-chaves separadas:**
+  - **`outro_pet`:** o cheiro do outro e o rastro, no degrau 1b (etapa 8);
+  - **`comida`:** o cheiro da comida, no mundo físico de um pet só.
+
+  Ligar só a `outro_pet` não muda o cheiro da comida, e vice-versa.
+
+**A medida:** o braço "órgão × leitura pronta" entra na bancada, com o mesmo cérebro e o mesmo mundo. O contraste e a margem são de um
+adendo de plano (do plano do mundo físico, para a comida; do plano dos dois pets, adendo 2, para o outro pet), antes de qualquer run.
+Nenhuma validação em curso muda: a chave fica desligada nela.
+
+**O ouvido (DP-14), o mesmo desenho:**
+- **O estímulo:** a intensidade de cada som no ponto do ouvido, `A × (R − d) // R`, como no 5.4.
+- **O receptor:** com limiar, adaptação e saturação, um canal por tipo de som. A adaptação é a habituação a um som que se repete; entre
+  os sons, ela decai.
+- **As opções:**
+  - **(a) um ouvido:** o pet ouve o tipo e a intensidade. A distância se confunde com a força, e não há direção;
+  - **(b) dois ouvidos:** a diferença entre eles dá uma pista de esquerda ou direita;
+  - **(c) manter** `(id, som, direção em 8, distância)`.
+- **Quem emitiu:** com um outro pet só (o degrau 1b), o `id` é trivial e fica. Com três pets ou mais, ele vira uma decisão própria.
+
+**Os gates do órgão:**
+- **G2:** a chave desligada é a vida de hoje byte a byte;
+- **G-ORGAO-MEC:** a conta exata do limiar, da adaptação (um cheiro constante cai a 0 na meia-vida declarada) e da saturação;
+- **G-SEM-DIRECAO:** com a chave, nenhuma direção do mundo chega à percepção nem ao alvo padrão, conferido por AST e por espião;
+- **o grafo:** as checagens da seção 18 do corpo passam com os químicos de adaptação;
+- **G1:** o replay refaz a adaptação;
+- **G-PAR:** a paridade do órgão em TS, quando o mundo e o corpo forem para a web.
+
 ## 6. A interação mínima: os degraus 1 e 2
 
 **O degrau 1, sem sinal: competir e observar.**
@@ -398,3 +482,5 @@ novidade: aprendizado social, forrageio em grupo e comunicação entre agentes a
 | DP-10 | A ordem com o resto | **DECIDIDA:** o motor em paralelo com o corpo; o cérebro depois da etapa 6 do corpo; a bancada depois; as runs depois da validação do mundo físico e do plano. Com a DP-7, o segundo dono entra depois da validação do degrau 1 (seção 12) | — |
 | **DP-11** | Quais sentidos no primeiro degrau | **DECIDIDA:** **visão e toque no degrau 1; audição e cheiro (rastro e cheiro próprio) no degrau 1b**, depois de o 1 ter resposta, cada um medido como acréscimo | **tudo no degrau 1:** se o B aprende, não se sabe por qual canal, e a primeira medida fica mais cara (quatro receptores a calibrar). **Visão só, sem toque:** a disputa acontece do mesmo jeito, e o pet perde a única pista física dela. **Audição e cheiro só no degrau 3:** atrasa canais baratos, que não dependem do corpo |
 | **DP-12** | O cheiro de estado (estresse, medo) | **DECIDIDA:** **no degrau 3, com a solidão e a aglomeração (CV-5)**, por um emissor externo declarado no grafo do corpo, com o laço entre os dois corpos na checagem de ganho | **no degrau 1 ou 1b:** um canal emocional entre corpos entra antes de se saber se a observação funciona, e o "aprendido de outros" passa a misturar contágio com informação. **Sem passar pelo grafo:** o cheiro vira leitura direta do estado do outro, que a regra proíbe |
+| **DP-13** | O órgão do olfato (seção 5.6) | **ABERTA. Recomendação: (b) duas narinas**, atrás da `ConfigOlfato` desligada (G2 = a vida de hoje), com a sub-chave `outro_pet` no degrau 1b e a `comida` à parte; a (a), uma narina, é o mesmo código com `narinas` = 1 e entra como braço descritivo; o braço "órgão × leitura pronta" vai à bancada, com adendo de plano antes da run | **(c), manter a leitura pronta:** o pet continua recebendo a direção que o corpo não calcula, e a pergunta "o pet acha o cheiro sozinho" fica sem medida. **(a) só:** a comparação no tempo funciona (uma narina basta na larva da drosófila), mas fica mais lenta e mais exposta ao ruído do gradiente. **Ligado por padrão:** muda o cheiro da comida no mundo físico e invalida a calibração e a validação em curso |
+| **DP-14** | O órgão do ouvido (seção 5.6) | **ABERTA. Recomendação: (b) dois ouvidos**, com o mesmo desenho e a mesma chave (sub-chave `ouvido` na `ConfigOlfato`, ou uma `ConfigOuvido` irmã), desligada; o `id` de quem emitiu fica enquanto houver um outro pet só | **(c), manter:** o pet recebe a direção e a distância de graça. **(a) só:** a distância se confunde com a força do som, e o pet ouve sem saber de onde |

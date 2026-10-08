@@ -195,6 +195,8 @@ rede.
 | os três mecanismos hormonais e a ablação no basal (seção 4) | **IDEIA** | este documento |
 | órgãos com força vital, dano, cura, dor e morte (seção 5) | **IDEIA**, SEM FONTE | este documento |
 | o automodelo que prevê os receptores (seção 6) | **IDEIA** (objetivo DECIDIDO, E-1; o como é PROPOSTO) | `docs/futuro/ego_existencia.md` e este documento |
+| o órgão do olfato: receptor com limiar, adaptação e saturação, só a intensidade local, uma ou duas narinas (DP-13) | **IDEIA**, decisão aberta | `docs/futuro/dois_pets.md`, seção 5.6; `docs/TAREFA_V2_DOIS_PETS.md`, etapa 8b |
+| o órgão do ouvido, o mesmo desenho (DP-14) | **IDEIA**, decisão aberta | idem |
 
 **Um apoio que já existe:** o conforto do carinho (BN-6) é o item que a literatura lida mais apoia. Lewis e Cañamero 2016
 (`10.1177/1059712316666331`, resumo) mostram que um prazer não ligado à satisfação de uma necessidade melhorou a viabilidade e a

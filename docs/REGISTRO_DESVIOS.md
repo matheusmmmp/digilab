@@ -4096,3 +4096,27 @@ e na tarefa. Nenhuma run, nenhum código.
   pets é a dos ids, nunca a ordem do código.
 - **Fica para outras etapas.** A troca do `efeito_frutas` no dia K ("B + Aemb") e o efeito por tipo de árvore são da etapa 5 (o D). Até lá
   o grupo exige o mesmo `efeito_frutas` em todos os pets e falha alto se diferir. A visão, o toque e a disputa são a etapa 3.
+
+## 2026-10-08 — W-OLFATO-AUDICAO (worker C): RS-1 a RS-7 decididas; revisão curta de olfato e audição
+
+- **RS-1 a RS-7** marcadas como DECIDIDAS (pela recomendação) em `docs/TAREFA_V2_REDE_DE_SI.md` (status e seção 8) e no status de
+  `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`. As PRS-1 a PRS-5 do plano seguem abertas: o pedido citou só as RS.
+- **`docs/referencias/H_REVISAO_OLFATO_AUDICAO.md`**: revisão curta, sem CSV próprio (a tabela de referências fica na seção 7 do arquivo,
+  com o status de cada uma). Os DOIs foram resolvidos no Crossref nesta sessão.
+- **O que ficou como pista ou sem fonte:**
+  - os campos de cheiro do Creatures (o Creatures Wiki e o código do openc2e, commit `6a4396c`); a fonte primária não os descreve;
+  - o SimAnt (só verbetes);
+  - o artigo de 2003 de Tom Leonard sobre o sistema sensorial do Thief, que não foi obtido (cita-se só o postmortem de 1999).
+- **Leitura por ferramenta:** o postmortem do Thief e a página do Unreal foram lidos por uma ferramenta que resume a página. Os trechos citados
+  são os que ela devolveu, sem conferência no texto bruto. O capítulo do Splinter Cell e o PolyWorld foram lidos no texto.
+- **Sem número novo:** a revisão não propõe parâmetro; as três decisões (OA-1 a OA-3) são de desenho.
+- **Acréscimo do mesmo dia (pedido do Gerente):** a DP-13 (o órgão do olfato) e a DP-14 (o órgão do ouvido), ABERTAS:
+  - **onde:** `docs/futuro/dois_pets.md`, seção 5.6, no status e na seção 14; a etapa 8b da `docs/TAREFA_V2_DOIS_PETS.md`; duas linhas na
+    seção 7 de `docs/DEFINICOES_CORPO_V2.md`;
+  - **a revisão** ganhou a seção 7 ("órgãos e anatomia no estado da arte") e as referências 20 a 29, e as seções foram renumeradas (decisões
+    6, anatomia 7, referências 8);
+  - **o Dwarf Fortress** entra só como pista (o verbete do wiki sobre as partes do corpo); o capítulo do Adams (2019) é sobre narrativa e
+    não descreve o corpo;
+  - **a conta do receptor** (limiar, adaptação por um químico, saturação por meia-saturação), as narinas pela direção do último passo e os
+    candidatos `cheiro_seguir` e `cheiro_virar` são desenho nosso, PROPOSTO, SEM FONTE. A biologia lida (resumos) sustenta só que a
+    adaptação existe no receptor, que uma narina basta e que duas ajudam.
