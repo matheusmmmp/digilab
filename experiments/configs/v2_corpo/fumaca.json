@@ -1,0 +1,16 @@
+{
+  "descricao": "Fumaca do corpo na bancada (W-BANCADA-CORPO, docs/TAREFA_V2_CORPO_DRIVES.md, secao 14, etapa 8; docs/PLANO_ANALISE_V2_CORPO_DRIVES.md). NAO canonica: unidades derivadas das sementes dos testes com o prefixo do plano, sem plano de analise; confere o encanamento (o bloco G-HOJE: P0, P1 e P3 em 'hoje' e em 'quimica', o corpo por baixo dos drives no motor e o cerebro A com cfg_corpo, as medidas da secao 5 e a dominancia pelos receptores), nunca como resultado. Os bracos do corpo, do tapa e da generalizacao, e o P1-cw, esperam a etapa 6 (NOS_PENDENTES).",
+  "bracos": ["P0-hoje", "P1-hoje", "P3-hoje", "P0-quimica", "P1-quimica", "P3-quimica"],
+  "donos": ["atencioso", "aleatorio"],
+  "unidades": {"bases": [101, 202], "k": 1, "prefixo": "corpo"},
+  "mundos": ["bola", "padrao"],
+  "dias": 4,
+  "orcamento": 64,
+  "ponto": "T3",
+  "montagem": "completa",
+  "consequencia": {"canais_ligados": true},
+  "sonda": {"estados": 10, "amostras": 10, "semente": 101},
+  "bootstrap": {"reamostragens": 200, "semente": 101, "nivel": 0.95},
+  "acoplados": [{"origem": "P0-quimica", "destino": "P1-quimica", "filtro": "nenhum"},
+                {"origem": "P0-hoje", "destino": "P1-hoje", "filtro": "nenhum"}]
+}
