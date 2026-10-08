@@ -65,7 +65,8 @@ PLANO = (("P0-q", "bola"), ("P1-q", "bola"), ("P0-c", "bola"), ("P1-c", "bola"),
 
 
 def test_os_nos_do_corpo_sairam():
-    assert bv.NOS_PENDENTES == {} and bv.FILTROS_PENDENTES == {}
+    # desde a W-BANCADA-BANHEIRO a tabela tem o no do banheiro (a etapa 3 do A); os do corpo continuam fora
+    assert set(bv.NOS_PENDENTES) == {"banheiro"} and bv.FILTROS_PENDENTES == {}
     for braco, _ in PLANO:
         assert bv.braco_de(braco) is bv.BRACOS[braco]
 

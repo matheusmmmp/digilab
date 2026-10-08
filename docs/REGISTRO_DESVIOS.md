@@ -3983,3 +3983,29 @@ e na tarefa. Nenhuma run, nenhum código.
   (`comidas`, `arvores`, `bola_mundo`, `quedas`, `sumidas`, `rolagens`, `bolas_deixadas`, `comedouro`, `_rng_arvores`, `_rng_bola`,
   `_prox_id`, `_passo_mundo`, `situacao`, `bola_em`, `_prazo_maduro`, `_nova_comida`, `_atualizar_mundo`, `_fontes_de_cheiro`) viraram
   propriedades e métodos que leem do `Mundo`. Ninguém fora do `mundo.py` atribui a eles (conferido).
+
+## 2026-10-08 — W-BANCADA-BANHEIRO (worker D): as faixas dos dois pets e a bancada do banheiro, só o que já dá
+
+- **Os nomes dos braços.** O plano chama os braços de B00, B0C, BL0 e BLC e fala do P0 e do P1 em cada um ("P1-B0C", "P0-B00"). Na bancada
+  o braço já leva a fonte do sinal, então são oito: `P0-B00` … `P1-BLC`. A tabela da bancada agrupa por esse rótulo.
+- **O dono do banheiro fica com o A.** A tarefa põe o `DonoCarinhoBanheiro` "sobre o `DonoComGestos`", e o plano diz "o atencioso, com o
+  `DonoComLugar`, sem bronca nem tapa". No mundo físico o dono de hoje já fica só com o cuidado (o `CanalSemEnsino`, PMF-3). Como o elogio
+  desse dono vira carinho ou some, isso é decisão do A na etapa 3. Por isso o braço do banheiro não tem `gestos`, e a composição do dono
+  fica no nó.
+- **Uma segunda trava, declarada.** Além do nó na tabela, o `fabrica_motor` dos braços do banheiro falha alto. O nome da chave do banheiro
+  no motor (o `MotorMundo` com a chave ou uma subclasse do `MotorCorpo`, "como o A decidir") ainda não existe. Montar um motor sem ela
+  daria um corpo com a vontade e nenhum lugar para aliviar. O teste "a trava é só a tabela" para nesse ponto: sem a tabela, o braço, a
+  config, o corpo, a chave e o cérebro se montam.
+- **O contrato do motor** que a `Bancada.medidas_banheiro` lê é uma proposta para a etapa 3. A ligação fica para quando o A puser o motor:
+  - **o campo:** `motor.alivios`, um dict por `aliviar`;
+  - **as chaves:** `tick` (o da decisão), `dentro`, `urgente`, `alvo`, `distancia` (ao banheiro, na decisão, em subunidades) e
+    `recolhido` (o limpador);
+  - **as medidas:** a fração, os acidentes, o "chegou tarde" e o sinal do limpador saem dele;
+  - **se o A escolher outra forma**, ajusta-se a leitura, e as funções puras não mudam.
+- **O sinal do carinho e do limpador** usa a conta do cérebro (`lobos.sinal_corpo`) com os drives da dominância: os do N3 e os novos que o
+  corpo tem, sem o susto, mas com a vontade e o conforto. É o mesmo conjunto que o `mudanca_no_corpo` credita fora da fruta. No P0, que não
+  aprende, é a mesma conta, como sonda.
+- **O cuidado preservado do banheiro** é a vida toda, não os dias 8 a 14 do plano do corpo. O plano do banheiro pede "a privação e a saúde
+  em cada braço", sem janela.
+- **O `_Registro` anota cada carinho** com o tick que o relógio dele calcula (o `ticks_desde_cuidado` do `obs_antes`). O teste confere que
+  esse tick é o do `acariciar` no log, nos mundos `bola` e `padrao`.
