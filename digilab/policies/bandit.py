@@ -36,10 +36,10 @@ import random
 from dataclasses import dataclass
 
 from ..config import CONFIG_BANDIT, CONFIG_PADRAO, Config, ConfigBandit
-from ..events import AcaoPet, AcaoUsuario
+from ..events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
-ACOES = tuple(AcaoPet)
+ACOES = ACOES_PET_HOJE
 # petisco e levar ao banheiro (educacao-v1) atendem como cuidado: ceder com petisco a um chamado REFORCA o
 # chamar_atencao
 CUIDADOS_QUE_ATENDEM = frozenset(

@@ -10,9 +10,9 @@ from __future__ import annotations
 from typing import Iterable
 
 from .config import CONFIG_TRACOS, ConfigTracos
-from .events import AcaoPet
+from .events import ACOES_PET_HOJE, AcaoPet
 
-ORDEM_TRACOS = tuple(AcaoPet)
+ORDEM_TRACOS = ACOES_PET_HOJE
 
 
 def tracos_de_acoes(acoes: Iterable[AcaoPet], cfg: ConfigTracos | None = None) -> tuple[float, ...]:

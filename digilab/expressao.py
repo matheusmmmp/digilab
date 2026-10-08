@@ -23,7 +23,7 @@ from dataclasses import dataclass, replace
 
 from .combate_v2.gambits import CATALOGO
 from .config import CONFIG_EXPRESSAO, ConfigExpressao
-from .events import AcaoPet
+from .events import ACOES_PET_HOJE
 from .motivo import FATORES_VIDA, Motivo, nome_base
 
 ESTAGIOS = ("bebe", "crianca", "adolescente", "adulto")
@@ -325,7 +325,7 @@ def validar_tabelas(fatores_obrigatorios=None) -> None:
         for n2, e2 in FATORES.items():
             if n1 != n2 and any(m1 in e2[est] for est in ("crianca", "adolescente", "adulto")):
                 raise TabelaIncompleta(f"marcador de {n1!r} aparece no texto de {n2!r}")
-    faltam_vida = sorted(set(a.value for a in AcaoPet) - set(ACOES_VIDA))
+    faltam_vida = sorted(set(a.value for a in ACOES_PET_HOJE) - set(ACOES_VIDA))
     from .combate_v2.regras import Acao
     from .combate_v2.v21.regras import Acao as AcaoV21
 
@@ -545,7 +545,7 @@ def validar_tabelas_personalidade() -> None:
     for tipo, e in DESEJO_TIPO.items():
         if any(e["marcador"] not in e[est] for est in ("crianca", "adolescente", "adulto")):
             raise TabelaIncompleta(f"desejo {tipo!r}: texto sem o marcador")
-    alvos = {a.value for a in AcaoPet} | {alvo for _, alvo in NECESSIDADES.values()}
+    alvos = {a.value for a in ACOES_PET_HOJE} | {alvo for _, alvo in NECESSIDADES.values()}
     if alvos - set(ALVOS_DESEJO):
         raise TabelaIncompleta(f"alvos de desejo sem texto: {sorted(alvos - set(ALVOS_DESEJO))}")
     # nenhum marcador (fator, tom ou tipo de desejo) pode aparecer em texto que nao o cita

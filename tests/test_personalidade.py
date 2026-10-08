@@ -16,7 +16,7 @@ sys.path.insert(0, str(RAIZ))
 from digilab.config import CONFIG_DESEJO, CONFIG_OBEDIENCIA  # noqa: E402
 from digilab.desejo import Desejo, desejo_de  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.events import AcaoPet, AcaoUsuario as U  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario as U  # noqa: E402
 from digilab.expressao import expressar, validar_tabelas  # noqa: E402
 from digilab.metrics import cumprimento_desejo, decomposicao_ovo_braco, fracao_tempo_vontade  # noqa: E402
 from digilab.obediencia import MotorPersonalidade, PoliticaBanditPersonalidade, conflito, termos_obediencia  # noqa: E402
@@ -186,7 +186,7 @@ def test_desejo_na_expressao_distingue_tipo_da_crianca_em_diante_e_so_cita_o_cal
     from digilab.expressao import ALVOS_DESEJO, DESEJO_TIPO, ESTAGIOS, expressar_desejo, marcadores_citados
 
     for tipo in ("necessidade", "vontade"):
-        alvos = [a for _, a in NECESSIDADES.values()] if tipo == "necessidade" else [a.value for a in AcaoPet]
+        alvos = [a for _, a in NECESSIDADES.values()] if tipo == "necessidade" else [a.value for a in ACOES_PET_HOJE]
         for alvo in alvos:
             d = Desejo(3, tipo, alvo, 0.5)
             bebe = expressar_desejo(d, "bebe").conteudo
@@ -201,4 +201,4 @@ def test_desejo_na_expressao_distingue_tipo_da_crianca_em_diante_e_so_cita_o_cal
                     assert citados == {nome}, c        # so a necessidade que passou do limiar
                 else:
                     assert citados == set(), c         # vontade: nenhuma causa inventada
-    assert set(ALVOS_DESEJO) >= {a.value for a in AcaoPet}
+    assert set(ALVOS_DESEJO) >= {a.value for a in ACOES_PET_HOJE}

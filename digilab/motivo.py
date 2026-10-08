@@ -370,6 +370,9 @@ class PoliticaComMotivo:
 
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
         acao = self.interna.agir(obs, rng)
+        if acao is AcaoPet.ALIVIAR:
+            # o banheiro (TAREFA_V2_BANHEIRO): o aliviar, a regra urgente e a vontade nao tem fator nem texto na expressao ainda
+            raise NotImplementedError("motivo do aliviar: sem fator nem texto na expressao (o banheiro, tarefa da expressao)")
         tick = obs.ticks_desde_cuidado + self._tick_ultimo_cuidado
         self._ref_na_decisao = self._ref_cuidado()
         if isinstance(self.interna, PoliticaInstinto):

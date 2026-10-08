@@ -27,6 +27,12 @@ O conteudo (versao 5):
   relato de `corpo_grafo.checar` em cada combinacao de sub-chaves, com e sem o mundo fisico, e sem o medo da mao), `de_estado` (o corpo
   que nasce de tres Estados em cada combinacao: q, receptores, drives e para_dict) e `etapa6_mundo` (os estimulos do mundo fisico no
   corpo da etapa 6, na grade de estados da etapa 6, com a digestao e os drives lidos). As secoes da versao 4 nao mudaram.
+
+- `banheiro` (versao 5, docs/TAREFA_V2_BANHEIRO.md, etapa 2): a vontade e o conforto (secao 3 e BN-6), com a etapa 6 inteira e o mundo
+  fisico: os numeros da ConfigCorpo, uma grade de estados (os 15 quimicos, a janela do tedio e o resto da vontade) com cada operacao (o
+  tick acordado e dormindo com 0 a 4 necessidades na regiao, a racao, o comer, a fruta e a racao do mapa, que passam pela digestao, o
+  carinho com e sem susto, o aliviar e a necessidade no chao), o estado, a janela e o resto depois e os receptores; e uma sequencia longa
+  de operacoes sorteadas num corpo so, com o sha256 de q, da janela e do resto depois de cada uma. As secoes da versao 4 nao mudaram.
 """
 from __future__ import annotations
 
@@ -40,13 +46,13 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import (CONFIG_CORPO_DRIVES, CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA,  # noqa: E402
+from digilab.config import (CONFIG_CORPO_BANHEIRO, CONFIG_CORPO_DRIVES, CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA,  # noqa: E402
                             CONFIG_PADRAO, ConfigCorpo)
 from digilab.corpo import (ATIVIDADES, Corpo, div_arred, grafo_do_corpo, limiares_estagio, passo_meia_vida, quimicos_de,  # noqa: E402
                            taxas_de, ticks_de_estagio)
 from digilab.corpo_grafo import Grafo, checar  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.policy import PoliticaInstinto, efeito_da_acao_do_pet  # noqa: E402
 from digilab.state import Estado, aplicar_acao_usuario, avancar_um_tick  # noqa: E402
 from digilab.treino import simular_vida  # noqa: E402
@@ -109,14 +115,14 @@ def _aplicar(c: Corpo, op: list) -> None:
 
 def _ops_de_hoje() -> list[list]:
     ops = [["passo", dormindo, sujeira, tick] for dormindo in (0, 1) for sujeira in (0, 3) for tick in (600, 1400)]
-    ops += [["dono", a.value] for a in ACOES_DONO] + [["pet", a.value] for a in AcaoPet]
+    ops += [["dono", a.value] for a in ACOES_DONO] + [["pet", a.value] for a in ACOES_PET_HOJE]
     return ops + [["bola", 0.15], ["fruta", 0.10, -0.10], ["fruta", 0.10, 0.10], ["fruta", 0.10, 0.0]]
 
 
 def _ops_do_mundo() -> list[list]:
     """os estimulos do mundo fisico (versao 3): a MF-2, o andar e as comidas do mapa, com os numeros da ConfigMundo"""
     cm = CONFIG_MUNDO_LIGADA
-    ops = [["pet_mundo", a.value] for a in AcaoPet]
+    ops = [["pet_mundo", a.value] for a in ACOES_PET_HOJE]
     ops += [["andar", d, cm.custo_energia_por_subunidade] for d in (0, 1, 37, 60, 128, 6000)]
     ops += [["consumo", "racao", "madura", 0.0], ["consumo", "racao", "podre", 0.0]]
     ops += [["consumo", f, sit, ef] for f in ("a", "b") for sit in ("madura", "podre") for ef in (-0.10, 0.0, 0.10)]
@@ -362,6 +368,83 @@ def etapa6_mundo() -> dict:
                             "digerido": c.digerido_total, "digerido_no_tick": c.digerido_no_tick, "descartado": c.descartado_total})
     return {"quimicos": list(quimicos_de(CC_E6, True)), "casos": casos_m}
 
+CC_B = CONFIG_CORPO_BANHEIRO
+CAMPOS_B = ("vontade_sobe", "vontade_digestao_num", "vontade_digestao_den", "vontade_limiar", "vontade_desconforto",
+            "necessidade_desconforto", "necessidade_regiao", "necessidade_max_regiao", "conforto_carinho", "k_meia_vida_conforto")
+RECEPTORES_B = RECEPTORES_E6 + ("vontade", "conforto")
+
+
+def _corpo_b(q: list[int], janela: list[str], resto: int) -> Corpo:
+    c = Corpo(dict(zip(quimicos_de(CC_B, True), q)), CONFIG_PADRAO, CC_B, com_mundo=True)
+    c.janela_tedio = list(janela)
+    c.resto_vontade = resto
+    return c
+
+
+def _aplicar_b(c: Corpo, op: list) -> None:
+    if op[0] == "passo_nec":
+        c.passo(Estado(tick=op[3], dormindo=bool(op[1]), sujeira=op[2]), necessidades=op[4])
+    elif op[0] == "aliviar":
+        c.estimulo_aliviar()
+    elif op[0] == "necessidade":
+        c.estimulo_necessidade()
+    else:
+        _aplicar_e6(c, op)
+
+
+def _ops_b() -> list[list]:
+    ops = [["passo_nec", dormindo, 0, tick, n] for dormindo in (0, 1) for tick in (600, 1400) for n in (0, 1, 4)]
+    ops += [["dono", "alimentar"], ["dono", "acariciar"], ["dono", "tapa"], ["pet", "comer"], ["fruta", 0.15, -0.1],
+            ["consumo", "racao", "madura", 0.0], ["aliviar"], ["necessidade"]]
+    return ops
+
+
+def _estados_b(rng: random.Random) -> list[tuple[list[int], list[str], int]]:
+    C = CC_B.escala
+    n = len(quimicos_de(CC_B, True))
+    i_v = quimicos_de(CC_B, True).index("vontade")
+    L = CC_B.vontade_limiar
+    fixos = [[0] * n, [C] * n]
+    for v in (L - CC_B.vontade_sobe, L - CC_B.vontade_sobe + 1, L, L + 1):
+        q = [0] * n
+        q[0] = C // 2
+        q[i_v] = v
+        fixos.append(q)
+    estados = [(q, [], 0) for q in fixos]
+    for _ in range(16):
+        q = [rng.randrange(C + 1) for _ in range(n)]
+        janela = [rng.choice(ATIVIDADES) for _ in range(rng.randrange(CC_B.janela_tedio + 1))]
+        estados.append((q, janela, rng.randrange(CC_B.vontade_digestao_den)))
+    return estados
+
+
+def banheiro() -> dict:
+    rng = random.Random(SEMENTE_CASOS + 7)
+    casos_b = []
+    for q, janela, resto in _estados_b(rng):
+        for op in _ops_b():
+            c = _corpo_b(q, janela, resto)
+            _aplicar_b(c, op)
+            rec = c.receptores()
+            casos_b.append({"q": q, "janela": janela, "resto": resto, "op": op, "q_depois": _q(c), "janela_depois": list(c.janela_tedio),
+                            "resto_depois": c.resto_vontade, "receptores": [rec[r] for r in RECEPTORES_B]})
+    c = Corpo.de_estado(Estado(), CONFIG_PADRAO, CC_B, com_mundo=True)
+    ops, h = [], hashlib.sha256()
+    tick = 0
+    for _ in range(3000):
+        if rng.random() < 0.75:
+            op = ["passo_nec", int(rng.random() < 0.3), rng.randrange(3), tick, rng.choice((0, 0, 0, 1, 2, 5))]
+            tick += 1
+        else:
+            op = rng.choice(_ops_b()[12:] + [["atividade", a] for a in ATIVIDADES])
+        _aplicar_b(c, op)
+        ops.append(op)
+        h.update(json.dumps([_q(c), c.janela_tedio, c.resto_vontade], separators=(",", ":")).encode())
+    return {"quimicos": list(quimicos_de(CC_B, True)), "config": {k: getattr(CC_B, k) for k in CAMPOS_E6 + CAMPOS_B},
+            "receptores": list(RECEPTORES_B), "receptores_falta_invertida": ["conforto"], "casos": casos_b,
+            "sequencia": {"ops": ops, "sha256": h.hexdigest(), "q_final": _q(c), "janela_final": list(c.janela_tedio),
+                          "resto_final": c.resto_vontade}}
+
 
 def gabarito() -> dict:
     t = taxas_de(CONFIG_PADRAO, CC)
@@ -397,6 +480,7 @@ def gabarito() -> dict:
         "grafo": grafos(),
         "de_estado": de_estado(),
         "etapa6_mundo": etapa6_mundo(),
+        "banheiro": banheiro(),
     }
 
 

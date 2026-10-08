@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from digilab import AcaoPet, Observacao, Politica, PoliticaInstinto  # noqa: E402
+from digilab.events import ACOES_PET_HOJE  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policies.bandit import distribuicao_instinto  # noqa: E402
@@ -36,7 +37,7 @@ def test_prior_por_sonda_bate_com_amostragem_do_instinto():
         rng = random.Random(0)
         n = 20000
         cont = Counter(inst.agir(obs, rng) for _ in range(n))
-        for a in AcaoPet:
+        for a in ACOES_PET_HOJE:
             assert abs(cont[a] / n - exata[a]) < 0.015, (obs, a)
 
 

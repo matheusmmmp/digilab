@@ -24,7 +24,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-GATILHOS_TICK = ("tick", "acordado", "dormindo", "noite_acordado", "dia_acordado", "sujeira", "privacao", "sem_privacao", "limiar")
+GATILHOS_TICK = ("tick", "acordado", "dormindo", "noite_acordado", "dia_acordado", "sujeira", "privacao", "sem_privacao", "limiar",
+                 "necessidades", "acima")      # banheiro: por necessidade na regiao (fase 1); um quimico acima do limiar (fase 2)
 GATILHOS = GATILHOS_TICK + ("estimulo",)
 LEITURAS_RECEPTOR = ("drive", "falta")       # drive: S - div_arred(q S, C) (os drives de hoje); falta: div_arred(q S, C)
 ORDEM_MEIA_VIDA = 10                         # "na mesma ordem": a maior meia-vida do par e menor que 10 vezes a menor
@@ -139,6 +140,8 @@ def _forma(g: Grafo) -> None:
             raise GrafoInvalido(f"{e.nome}: efeitos {e.efeitos!r}")
         if e.gatilho == "limiar" and not (e.le and e.divisor > 1):
             raise GrafoInvalido(f"{e.nome}: o gatilho limiar precisa de leituras e de divisor > 1")
+        if e.gatilho == "acima" and not (len(e.le) == 1 and e.divisor == 1 and e.fase == 2):
+            raise GrafoInvalido(f"{e.nome}: o gatilho acima le um quimico so, sem divisor, na fase 2")
         for le in e.le:
             if type(le.num) is not int or type(le.den) is not int or le.num < 0 or le.den <= 0 or le.sinal not in (1, -1):
                 raise GrafoInvalido(f"{e.nome}: leitura {le!r}")

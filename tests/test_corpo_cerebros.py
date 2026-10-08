@@ -32,7 +32,7 @@ from digilab.config import (CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_FRUT
 from digilab.corpo import Corpo, div_arred  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.educacao import reproduzir_educacao  # noqa: E402
-from digilab.events import FRUTAS, AcaoPet, AcaoUsuario  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.frutas import MotorFrutas, OfertasFrutas, PoliticaInstintoFrutas, simular_vida_frutas  # noqa: E402
 from digilab.motivo import PoliticaComMotivo  # noqa: E402
 from digilab.motor_corpo import PercepcaoCorpo, com_corpo  # noqa: E402
@@ -240,7 +240,9 @@ def test_receptores_novos_pelas_chaves():
     assert lb.receptores_novos(_cc_futura(ligada=True, drives_novos=True), False) == ("tedio", "solidao", "estresse")
     assert lb.receptores_novos(_cc_futura(ligada=True, drives_novos=True), True) == ("tedio", "curiosidade", "solidao", "estresse")
     assert lb.receptores_novos(_cc_futura(ligada=True, gestos=True), True) == ("dor", "susto")
-    assert lb.receptores_novos(TODOS_NOVOS, True) == lb.RECEPTORES_NOVOS
+    assert lb.receptores_novos(TODOS_NOVOS, True) == lb.RECEPTORES_NOVOS[:6]
+    # o banheiro (TAREFA_V2_BANHEIRO): a vontade e o conforto no fim
+    assert lb.receptores_novos(_cc_futura(ligada=True, drives_novos=True, gestos=True, banheiro=True), True) == lb.RECEPTORES_NOVOS
 
 
 def test_pesos_novos_so_nas_regras_de_tempo_livre():
@@ -256,7 +258,7 @@ def test_pesos_novos_so_nas_regras_de_tempo_livre():
         com = PoliticaLobos(CFG, k2, cfg_corpo=TODOS_NOVOS, **kw)
         ei = com.estado_interno()
         assert set(ei["pesos_corpo"]) == set(regras)
-        assert com.n_pesos() - sem.n_pesos() == len(regras) * len(AcaoPet) * n
+        assert com.n_pesos() - sem.n_pesos() == len(regras) * len(ACOES_PET_HOJE) * n
         assert all(w == 0 for g in ei["pesos_corpo"].values() for v in g.values() for w in v)
         assert com.n_pesos() < k2.maximo_pesos
     frutas = PoliticaLobos(CFG, k2, cfg_frutas=CONFIG_FRUTAS_LIGADA, cfg_corpo=TODOS_NOVOS)

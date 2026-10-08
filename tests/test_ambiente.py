@@ -24,7 +24,7 @@ from digilab.ambiente import (REGRA_BOLA, BolaSemChave, DonoComBola, MotorAmbien
 from digilab.config import CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_EDUCACAO_LIGADA, CONFIG_LESOES_LIGADA, CONFIG_PADRAO  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.educacao import MotorEducacao, reproduzir_educacao  # noqa: E402
-from digilab.events import ACOES_V1, AcaoPet, AcaoUsuario, LogDeEventos, acao_usuario, avanco  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, ACOES_V1, AcaoPet, AcaoUsuario, LogDeEventos, acao_usuario, avanco  # noqa: E402
 from digilab.metrics import privacao_nas_decisoes, resposta_a_bola  # noqa: E402
 from digilab.policies.bandit import ACOES as ACOES_BANDIT  # noqa: E402
 from digilab.policy import Observacao, PoliticaInstinto  # noqa: E402
@@ -60,7 +60,7 @@ def test_enum_do_dono_cresce_no_fim_e_a_v1_nao_ve():
     # nas posicoes de quando entraram no fim do enum (15 e 16); depois delas so as ofertas de fruta (V2, N4)
     assert list(AcaoUsuario)[15:17] == [AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA]
     assert len(ACOES_V1) == 6 and AcaoUsuario.POR_BOLA not in ACOES_V1
-    assert tuple(ACOES_BANDIT) == tuple(AcaoPet) and len(AcaoPet) == 7      # o bandit usa AcaoPet, que nao mudou
+    assert tuple(ACOES_BANDIT) == ACOES_PET_HOJE and len(ACOES_PET_HOJE) == 7      # o bandit usa AcaoPet, que nao mudou
 
 
 def test_observacao_da_v1_nao_tem_bola():

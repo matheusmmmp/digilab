@@ -387,7 +387,7 @@ export const CMU: ConfigMundo = {
    motor/corpo.ts. Aqui e o padrao: desligado (o corpo so existe com `ligada`); corpo.configCorpo troca campos e confere as
    sub-chaves. Os numeros das secoes 7, 8 e 17 sao PROPOSTOS, sem fonte, como no Python. */
 export interface ConfigCorpo {
-  ligada: boolean; digestao: boolean; vida: boolean; drives_novos: boolean; gestos: boolean;
+  ligada: boolean; digestao: boolean; vida: boolean; drives_novos: boolean; gestos: boolean; banheiro: boolean;
   escala: number; escala_receptor: number; bits_meia_vida: number;
   pet_brincar_cansaco: number; pet_explorar_cansaco: number; pet_explorar_tristeza: number; pet_comer_fome: number;
   pet_emburrar_tristeza: number;
@@ -397,9 +397,13 @@ export interface ConfigCorpo {
   janela_tedio: number; tedio_bola: number; tedio_brincar: number; tedio_explorar: number; tedio_dono: number;
   curiosidade_novidade: number; curiosidade_max_novidades: number; janela_novidade: number;
   carinho_solidao: number; carinho_estresse: number; tapa_dor: number; tapa_susto: number; tapa_estresse: number; medo_da_mao: number;
+  /* o banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 3 e BN-6): so o espelho dos numeros; a quimica em TS e a etapa 4 do banheiro */
+  vontade_sobe: number; vontade_digestao_num: number; vontade_digestao_den: number; vontade_limiar: number; vontade_desconforto: number;
+  necessidade_desconforto: number; necessidade_regiao: number; necessidade_max_regiao: number; conforto_carinho: number;
+  k_meia_vida_conforto: number;
 }
 export const CCO: ConfigCorpo = {
-  ligada: false, digestao: false, vida: false, drives_novos: false, gestos: false,
+  ligada: false, digestao: false, vida: false, drives_novos: false, gestos: false, banheiro: false,
   escala: 450000, escala_receptor: 1024, bits_meia_vida: 16,
   pet_brincar_cansaco: 9000, pet_explorar_cansaco: 6750, pet_explorar_tristeza: -4500, pet_comer_fome: -22500,
   pet_emburrar_tristeza: 4500,
@@ -409,6 +413,9 @@ export const CCO: ConfigCorpo = {
   janela_tedio: 8, tedio_bola: 135000, tedio_brincar: 45000, tedio_explorar: 90000, tedio_dono: 90000,
   curiosidade_novidade: 90000, curiosidade_max_novidades: 2, janela_novidade: 1440,
   carinho_solidao: 180000, carinho_estresse: 90000, tapa_dor: 90000, tapa_susto: 180000, tapa_estresse: 45000, medo_da_mao: 1,
+  vontade_sobe: 150, vontade_digestao_num: 1, vontade_digestao_den: 3, vontade_limiar: 337500, vontade_desconforto: 150,
+  necessidade_desconforto: 22500, necessidade_regiao: 100, necessidade_max_regiao: 3, conforto_carinho: 45000,
+  k_meia_vida_conforto: 753,
 };
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */
