@@ -4031,3 +4031,25 @@ e na tarefa. Nenhuma run, nenhum código.
   em cada braço", sem janela.
 - **O `_Registro` anota cada carinho** com o tick que o relógio dele calcula (o `ticks_desde_cuidado` do `obs_antes`). O teste confere que
   esse tick é o do `acariciar` no log, nos mundos `bola` e `padrao`.
+
+## 2026-10-08 — DOIS-PETS, etapa 4, primeira metade (worker B): o alvo aprendido no cérebro A
+
+- **"No prior, o P0 com lobos é o instinto do mundo byte a byte"** foi lido com o P0 de sempre, o aprendiz com o aprendizado desligado.
+  Com a chave ligada, ele usa o padrão do motor (o gancho devolve None).
+  - **O porquê:** o desenho pede um peso pequeno nas classes que o padrão não usa (o herdado que faz o pet tentar `seguir`). Com ele, um
+    sorteio às vezes cai fora do padrão, e nenhum cérebro que sorteia com esse peso repete o instinto byte a byte.
+  - **O que a tabela da tarefa dizia:** "com a chave e sem o grupo, a vida de hoje". O Gerente pediu o G2 com a chave desligada, que é o
+    que foi feito. Com a chave ligada, o P1 explora as outras classes desde o começo.
+- **O peso efetivo:** a classe do padrão recebe 1 + w / S, e as outras w / S, todas com w = `w0_alvo` (S/16) no começo. O padrão é a
+  função `mundo.alvo_padrao_de`, a mesma conta que o motor usa (o método do motor passou a chamá-la). Assim o "prior é o padrão" vale
+  em qualquer estado, e o peso aprendido não precisa saber a prioridade do motor (continuar, depois cheiro forte, depois vagar).
+- **Um peso por (regra, ação, classe), não só por (regra, classe):** na mesma regra, o comer e o explorar têm classes de nome igual
+  (`cheiro`, `continuar`) que levam a lugares de natureza diferente. Separar pela ação custa poucos pesos (36).
+- **A comida boa e a podre são classes separadas** pela percepção: o padrão nunca vai à podre, e o pet pode aprender a evitá-la ou não.
+- **O representante de cada classe** é o primeiro candidato dela na ordem do motor (a comida boa mais próxima, o primeiro cheiro). É o
+  mesmo candidato que o padrão escolheria naquela classe; o cérebro confere e falha alto se não for.
+- **Sem alvo padrão** (comer sem nada visto e sem cheiro; brincar sem bola), o gancho devolve None, como hoje: o cérebro não inventa
+  um lugar.
+- **O sinal que ensina o alvo** é o da decisão inteira (todos os canais, com os canais ligados): o lugar mexe na energia (o andar) e na
+  comida (a fome e o humor). Só a consequência ensina; o dono e o carinho não.
+- **O teto:** com o corpo e o banheiro (998 pesos), a chave estoura os 1000 e falha alto. Pela PDP-1 o corpo fica desligado no degrau 1.

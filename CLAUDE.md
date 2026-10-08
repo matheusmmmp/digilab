@@ -3268,3 +3268,35 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as medidas:** em dados com a resposta conhecida; a tabela por braço; o contrato do motor conferido;
   - **o registro** anota cada carinho no tick do `acariciar`.
 - **Fora:** os contrastes do plano (G-CARINHO e G-LIMPADOR, com Holm) são do orquestrador; a run só depois das etapas 3 e 4 do banheiro.
+
+## V2, DOIS-PETS, etapa 4, primeira metade — o alvo aprendido no cérebro A (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`) — GATES PASSAM
+
+A parte da etapa 4 que não depende da percepção social (`docs/futuro/dois_pets.md`, seção 8, DP-8). Infraestrutura, sem run; só as
+sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás da chave), a `ConfigLobos` e `digilab/mundo.py` (o alvo padrão virou uma
+função pura, a mesma conta). `engine.py`, o corpo, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave:** `ConfigLobos.alvo_aprendido` (desligada) e `w0_alvo` (S/16, PROPOSTO, SEM FONTE; registro
+  `lobos.PARAMETROS_LOBOS_DOIS_PETS`). Só no mundo físico; sem ele, falha alto.
+- **As classes** (`lobos.CLASSES_ALVO`):
+  - comer: `comida`, `comida_podre`, `cheiro`, `continuar`;
+  - explorar: `cheiro`, `vagar`, `casa`, `continuar`, e o lugar de `seguir` e `onde_comeu`, que o motor oferece a partir da etapa 3 do A;
+  - brincar: `bola`, `continuar`.
+- **Um peso por (regra, ação, classe)**, nas regras em que a ação com alvo é candidata (`lobos.REGRAS_ALVO`): **36 pesos**, 792 no
+  mundo físico sem o corpo. Com o corpo e o banheiro (998), falha alto pelo teto.
+- **A escolha** (`PoliticaLobos._alvo_aprendido`):
+  - cada classe presente tem um representante, o primeiro candidato dela na ordem do motor;
+  - o peso efetivo é max(0, w) / S, mais 1 na classe do alvo padrão do motor (`mundo.alvo_padrao_de`, o herdado);
+  - o sorteio é o de sempre, com u / 2^16;
+  - sem alvo padrão, None, como hoje.
+- **O aprendizado:** só pela consequência (o crédito do `consequencia_mundo`, ou do corpo no mundo físico), pela regra da sub-decisão da
+  fruta (X = S), com o sinal inteiro da decisão. O dono (elogio, bronca, carinho) não mexe no alvo.
+- **O P0 usa o padrão do motor:** com o aprendizado desligado, o gancho devolve None, e o P0 com lobos continua o instinto do mundo
+  byte a byte.
+- **Gates** (`tests/test_alvo_aprendido.py`, 12):
+  - **G2:** com a chave desligada, o gancho devolve None (e os gabaritos do mundo, na suíte);
+  - **o P0 com a chave é o instinto do mundo byte a byte** (2 donos × 3 lugares × 2 sementes);
+  - **G1 do P1 com a chave:** rejogado do log, estado interno incluído; ele aprende e tenta classes fora do padrão;
+  - **a conta exata** pela consequência; o dono não ensina o alvo;
+  - a comida podre como classe própria, e as classes da etapa 3 já aceitas;
+  - o motor usa a mesma função pura do alvo padrão (espião), e as falhas altas.
+- **Fica para a etapa 3 do A na `main`:** as entradas sociais (visão e toque), o modelo dos outros (só registrado) e o gate "também com
+  o outro à vista".

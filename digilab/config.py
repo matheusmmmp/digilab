@@ -1217,6 +1217,12 @@ class ConfigLobos:
     # --- corpo, etapa 6 (docs/TAREFA_V2_CORPO_DRIVES.md, secao 8; CD-9, CD-10) ---
     # O sinal direto do tapa, creditado a ultima decisao pela janela da v1, como a bronca, em toda fonte que aprende
     recompensa_tapa: float = -1.0            # PROPOSTO: o valor da recompensa_repreensao (CD-10)
+    # --- dois pets, etapa 4 (docs/TAREFA_V2_DOIS_PETS.md; docs/futuro/dois_pets.md, secao 8, DP-8) ---
+    # O alvo aprendido no mundo fisico: o cerebro escolhe a CLASSE do candidato (comida, cheiro, vagar, casa, continuar, bola, e
+    # seguir e onde_comeu quando o motor os tiver). O peso efetivo de uma classe e 1 se ela e a do padrao do motor, mais w / S; o w de
+    # toda classe comeca em w0_alvo (o peso pequeno das outras). Desligado: o padrao do motor (a vida de hoje, byte a byte)
+    alvo_aprendido: bool = False             # PROPOSTO: a chave
+    w0_alvo: int = 64                        # PROPOSTO, SEM FONTE: S/16, o peso pequeno de partida de cada classe
 
     @property
     def escala(self) -> int:
