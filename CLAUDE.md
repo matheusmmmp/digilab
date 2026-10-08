@@ -3230,3 +3230,41 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **G1 com o `Mundo`:** o replay refaz o resumo do mundo, nos dois layouts, sem e com o corpo.
 - **Fora:** o `Grupo` (N motores sobre um `Mundo`, a vez sorteada, o registro do grupo) é a etapa 2, no PR seguinte. O `mundo.ts` não mudou
   (etapa 9).
+
+## V2, W-BANCADA-BANHEIRO — as faixas dos dois pets e a bancada do banheiro, só o que já dá (2026-10-08, `docs/TAREFA_V2_BANHEIRO.md`, etapa 5) — GATES PASSAM
+
+Rodada 25. Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, dois testes antigos (a
+tabela de braços e o nó do corpo) e o teste novo. `engine.py`, `mundo.py`, `corpo.py`, `lobos.py`, `metrics.py` e a web não.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **As faixas dos dois pets (PDP-6)** em `FAIXAS_RESERVADAS`, com a fonte (`PLANO_ANALISE_V2_DOIS_PETS`, seção 8):
+  - 39101…39505: calibração do K e piloto;
+  - 40101…40505: validação;
+  - 41101…41505 e 42101…42505: os adendos previstos (o degrau 1b e os dois donos).
+  - O prefixo `"dois_pets"` entrou em `PREFIXOS_UNIDADES`.
+- **Os braços do banheiro** (`PLANO_ANALISE_V2_BANHEIRO`, seções 1 a 3): o 2 × 2 (limpador × carinho depois do banheiro) no P0 e no P1,
+  `P0-B00` … `P1-BLC`, nó `banheiro`. O campo novo é `Braco.banheiro`, e `BRACOS_BANHEIRO` dá o limpador e o carinho de cada um.
+- **Falham alto com o nó** `NOS_PENDENTES["banheiro"]`: o banheiro no `MotorMundo` (a área, a necessidade como objeto, o limpador, o
+  `limpar` que recolhe, o `aliviar` com alvo) e o `DonoCarinhoBanheiro` são da etapa 3, do A.
+- **Já montado, atrás do nó:**
+  - o corpo com os gestos e a sub-chave `banheiro` (`cfg_corpo_de`);
+  - a `ConfigBanheiro` ligada, com o limpador do braço (`cfg_banheiro_de`);
+  - o cérebro A com `cfg_banheiro` (o P0 com o aprendizado desligado), ou a `PoliticaInstintoBanheiro` no cérebro `instinto`;
+  - o banheiro só no mundo físico, na vida e na config.
+  - **A fiação do motor e do dono espera a etapa 3:** o `fabrica_motor` dos braços do banheiro falha alto com o nó, mesmo sem a tabela.
+- **As medidas** (seções 4 e 8 do plano, pelas funções do #224):
+  - `medidas_banheiro_de` dá a fração diária e os acidentes (`alivios_por_dia`), o dia do critério com a censura e T*
+    (`dia_do_criterio`), os alívios até o critério e o cuidado preservado;
+  - também dá, por dia: os carinhos (a solidão antes e o sinal pelo corpo), o sinal do alívio recolhido pelo limpador e o peso do alvo
+    `banheiro` contra o de `aqui`;
+  - e o "chegou tarde" (R-2).
+  - `tabela_banheiro` dá a curva de Kaplan–Meier e a RMST por braço (`banheiro.json` no `rodar`).
+  - `Bancada.medidas_banheiro` lê o contrato do motor (`motor.alivios`, um dict por `aliviar` com `tick`, `dentro`, `urgente`, `alvo`,
+    `distancia` e `recolhido`), conferido e falhando alto. O resto vem do registro de medição e do cérebro no fim de cada dia.
+  - O `_Registro` agora anota cada carinho (o tick e os receptores antes e depois).
+- **Gates** (`tests/test_bancada_banheiro.py`, 21 testes, ~2 s):
+  - **as faixas:** com a fonte, disjuntas, fora das queimadas e das configs; as unidades dos oito prefixos sem colisão entre planos e
+    fases; a config com o prefixo pede o plano;
+  - **os braços:** declarados como o plano pede; falham alto com o nó; a trava é só a tabela;
+  - **as medidas:** em dados com a resposta conhecida; a tabela por braço; o contrato do motor conferido;
+  - **o registro** anota cada carinho no tick do `acariciar`.
+- **Fora:** os contrastes do plano (G-CARINHO e G-LIMPADOR, com Holm) são do orquestrador; a run só depois das etapas 3 e 4 do banheiro.

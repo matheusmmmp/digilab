@@ -169,6 +169,8 @@ from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_PET_HOJE, ACOES_INFO
                             LogDeEventos, fruta_de, informar, oferta_de)
 from digilab.evolucao import politica_no_tick  # noqa: E402
 from digilab.instinto_mundo import PoliticaInstintoMundo  # noqa: E402
+from digilab.instinto_banheiro import PoliticaInstintoBanheiro  # noqa: E402
+from digilab.config import CONFIG_BANHEIRO_LIGADA, ConfigBanheiro  # noqa: E402
 from digilab.frutas import (DonoInformante, DonoPedinte, JulgadorFruta, MotorFrutas, PoliticaInstintoFrutas,  # noqa: E402
                             _PoliticaComFrutas, genoma_frutas)
 from digilab.metrics import (acerto_na_tarefa, custo_da_plasticidade, desempenho_no_ambiente,  # noqa: E402
@@ -180,6 +182,7 @@ from digilab.metrics import (cuidado_preservado, deficit_fome_energia, inclinaca
                              permanencia_media, taxa_no_abandono, visitas_manchas)
 from digilab.metrics import contribuicao_drives, dominancia_decisoes, leitura_dominancia  # noqa: E402
 from digilab.metrics import drives_novos as medir_drives_novos, tempo_livre_be  # noqa: E402
+from digilab.metrics import alivios_ate_criterio, alivios_por_dia, curva_sobrevivencia, dia_do_criterio  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
 from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
@@ -187,7 +190,7 @@ from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import desarranjo_n6 as desarranjo_dos_lobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
 from digilab.policies.lobos import (DRIVES_NOVOS_SINAL, RECEPTOR_DO_INDICE, RECEPTORES_NOVOS, contribuicoes_corpo,  # noqa: E402
-                                    sinal_corpo_canais)
+                                    sinal_corpo, sinal_corpo_canais)
 from digilab.policies.lobos import CANAL_DO_DRIVE, INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
@@ -414,7 +417,7 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2; o da comparacao dos cerebros,
 # PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2; o do mundo fisico, PLANO_ANALISE_V2_MUNDO_FISICO, secao 4; o do corpo,
 # PLANO_ANALISE_V2_CORPO_DRIVES, secao 4; o do banheiro, PLANO_ANALISE_V2_BANHEIRO, secao 3)
-PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro")
+PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),)
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
@@ -445,6 +448,10 @@ FAIXAS_RESERVADAS = (
     (34101, 34505, "corpo e drives, validacao (PLANO_ANALISE_V2_CORPO_DRIVES, secao 10, PCD-7)"),
     (37101, 37505, "banheiro, calibracao e piloto (PLANO_ANALISE_V2_BANHEIRO, secao 10)"),
     (38101, 38505, "banheiro, validacao (PLANO_ANALISE_V2_BANHEIRO, secao 10)"),
+    (39101, 39505, "dois pets, calibracao do K e piloto (PLANO_ANALISE_V2_DOIS_PETS, secao 8, PDP-6)"),
+    (40101, 40505, "dois pets, validacao (PLANO_ANALISE_V2_DOIS_PETS, secao 8, PDP-6)"),
+    (41101, 41505, "dois pets, adendo do degrau 1b, prevista (PLANO_ANALISE_V2_DOIS_PETS, secoes 8 e 10, PDP-6)"),
+    (42101, 42505, "dois pets, adendo dos dois donos, prevista (PLANO_ANALISE_V2_DOIS_PETS, secoes 8 e 10, PDP-6)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
@@ -454,7 +461,7 @@ FAIXAS_RESERVADAS = (
 def unidades_derivadas(bases, k_por_base: int, prefixo: str = "experimento-maior") -> list[dict]:
     """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente(prefixo, b, k) e genoma
     derivar_semente(prefixo + "-genoma", b, k), k = 0..K-1; o prefixo e o do plano (PREFIXOS_UNIDADES: "experimento-maior", o
-    padrao; "n6"; "n7"; "comparacao-cerebros"; "mundo"; "corpo"; "banheiro"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
+    padrao; "n6"; "n7"; "comparacao-cerebros"; "mundo"; "corpo"; "banheiro"; "dois_pets"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
     if prefixo not in PREFIXOS_UNIDADES:
         raise ValueError(f"prefixo das unidades {prefixo!r}: so {PREFIXOS_UNIDADES}")
     if k_por_base < 1:
@@ -502,6 +509,7 @@ class Braco:
     pesos_janela: bool = False       # P1-cw: o peso de cada drive pela falta recente (adendo 2 do plano do corpo, A2.4; chave do B)
     regime: str | None = None        # corpo: None = "hoje" (sem corpo), "quimica" ou "corpo" (PLANO_ANALISE_V2_CORPO_DRIVES, secao 1)
     gestos: str | None = None        # corpo: o DonoComGestos (etapa 6 do A): "sem_tapa", "tapa" ou "tapa_fruta" (o tapa na fruta X, A1.1)
+    banheiro: str | None = None      # banheiro: o braco do 2 x 2 (limpador x carinho depois do banheiro): "B00", "B0C", "BL0" ou "BLC"
 
 
 BRACOS = {
@@ -549,7 +557,13 @@ BRACOS = {
     "P1-c-frutas": Braco("P1-c-frutas", "consequencia", "corpo-A1.1", regime="corpo", gestos="sem_tapa"),
     # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1-c com o peso de cada drive pela janela recente
     "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True, regime="corpo", gestos="sem_tapa"),
+    # banheiro (PLANO_ANALISE_V2_BANHEIRO, secoes 1 a 3): os quatro bracos do 2 x 2 (limpador x carinho depois do banheiro), com o cerebro A
+    # no P1 (o aprendiz, fonte consequencia) e no P0 (o instinto, a referencia), no corpo com os gestos e o banheiro; o mundo fisico
+    **{f"{c}-{b}": Braco(f"{c}-{b}", fonte, "banheiro", regime="corpo", banheiro=b)
+       for c, fonte in (("P0", "nenhuma"), ("P1", "consequencia")) for b in ("B00", "B0C", "BL0", "BLC")},
 }
+# o 2 x 2 do banheiro: o braco -> (limpador, carinho depois do banheiro)
+BRACOS_BANHEIRO = {"B00": (False, False), "B0C": (False, True), "BL0": (True, False), "BLC": (True, True)}
 FONTES_IMPLEMENTADAS = ("nenhuma", "dono", "consequencia", "informacao")
 # o que os bracos do N6 e do N7 esperam de outros chats; um braco que depende de uma peca daqui falha alto com o no. A entrada sai
 # daqui quando a peca estiver na main (e os testes de tests/test_bancada_n6_n7.py dizem o que conferir entao).
@@ -561,6 +575,9 @@ NOS_PENDENTES: dict = {
     # o "corpo", o "dono_gestos" e o "tapa" (W-BANCADA-CORPO) sairam na W-LIGA-GESTOS: a etapa 6 do corpo esta na main (o motor e o
     # DonoComGestos do A, #245; a quimica dos drives novos e dos gestos e o cerebro do B, #247). O "corpo_mundo" saiu junto: o #247 passou
     # o cerebro ao arranjo do MotorCorpo no mundo fisico (o consequencia_mundo credita, o consequencia_corpo fecha a decisao), com o G1
+    # W-BANCADA-BANHEIRO: o que espera a etapa 3 do banheiro (TAREFA_V2_BANHEIRO, secao 9, do A)
+    "banheiro": "o banheiro no MotorMundo (a area na casa, a necessidade como objeto, o limpador, o limpar que recolhe, o aliviar com "
+                "alvo) e o DonoCarinhoBanheiro (TAREFA_V2_BANHEIRO, secoes 3 a 5, etapa 3, do A)",
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -584,11 +601,16 @@ def braco_de(rotulo: str) -> Braco:
         raise ValueError(f"braco {b.rotulo}: regime {b.regime!r}, so {REGIMES_CORPO}")
     if b.gestos is not None and (b.gestos not in GESTOS_DONO or b.regime in (None, "hoje")):
         raise ValueError(f"braco {b.rotulo}: gestos {b.gestos!r} (so {GESTOS_DONO}, e so com o corpo)")
+    if b.banheiro is not None and (b.banheiro not in BRACOS_BANHEIRO or b.regime != "corpo" or b.gestos is not None
+                                   or b.fonte not in ("nenhuma", "consequencia")):
+        raise ValueError(f"braco {b.rotulo}: banheiro {b.banheiro!r} (so {sorted(BRACOS_BANHEIRO)}, no corpo, sem os gestos de dono e "
+                         "so no P0 ou no P1)")
     if b.gestos in ("tapa", "tapa_fruta") and b.regime != "corpo":
         raise ValueError(f"braco {b.rotulo}: o tapa so existe com `gestos` no corpo (regime \"corpo\"), nao {b.regime!r}")
     for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None),
                            ("pesos_janela", b.pesos_janela), ("corpo", b.regime == "corpo"),
-                           ("dono_gestos", b.gestos is not None), ("tapa", b.gestos in ("tapa", "tapa_fruta"))):
+                           ("dono_gestos", b.gestos is not None), ("tapa", b.gestos in ("tapa", "tapa_fruta")),
+                           ("banheiro", b.banheiro is not None)):
         if presente and peca in NOS_PENDENTES:
             raise NotImplementedError(f"braco {b.rotulo}: {NOS_PENDENTES[peca]}")
     return b
@@ -945,6 +967,8 @@ class Bancada:
             if b.instinto_mundo not in (None, "sem_explorar"):
                 raise ValueError(f"braco {b.rotulo}: modo do instinto do mundo {b.instinto_mundo!r}")
             cb, cf = self.pesos_do_mundo()
+            if b.banheiro is not None:          # banheiro: o instinto do alivio, sobre o do mundo (o P0 do 2 x 2 com o cerebro instinto)
+                return PoliticaDoBraco(PoliticaInstintoBanheiro(cfg, self.cfg_banheiro_de(espec), self.cfg_corpo_de(espec), cb, cf), b)
             return PoliticaDoBraco(PoliticaInstintoMundo(cfg, cb, cf, sem_explorar=b.instinto_mundo == "sem_explorar"), b)
         if espec.cerebro == "instinto":
             if b.fonte != "nenhuma" or b.memoria is not None or b.pedido:
@@ -968,7 +992,8 @@ class Bancada:
         cc = self.cfg_consequencia if b.canais is None else replace(self.cfg_consequencia, canais_ligados=b.canais)
         if b.pesos_janela:                  # P1-cw (A2.4, #236): o peso de cada drive pela falta recente; o resto do P1 igual
             cc = replace(cc, pesos_janela=True)
-        return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm, cfg_corpo=self.cfg_corpo_de(espec)), b, cc)
+        return PoliticaDoBraco(PoliticaLobos(cfg, cl, cfg_bola=cb, cfg_frutas=cf, cfg_mundo=cm, cfg_corpo=self.cfg_corpo_de(espec),
+                                             cfg_banheiro=self.cfg_banheiro_de(espec)), b, cc)
 
     def cfg_corpo_de(self, espec: EspecVida) -> ConfigCorpo | None:
         """A ConfigCorpo da vida pelo regime do braco: None em "hoje" (e nos bracos sem regime: a vida de antes); a da bancada em
@@ -978,7 +1003,18 @@ class Bancada:
             return None
         if regime == "quimica":
             return replace(self.cfg_corpo, drives_novos=False, gestos=False)
-        return replace(self.cfg_corpo, drives_novos=True, gestos=True)
+        # banheiro: o corpo com os gestos e a sub-chave banheiro (a vontade e o conforto, TAREFA_V2_BANHEIRO, secao 3 e BN-6)
+        return replace(self.cfg_corpo, drives_novos=True, gestos=True, banheiro=braco_de(espec.braco).banheiro is not None)
+
+    def cfg_banheiro_de(self, espec: EspecVida) -> ConfigBanheiro | None:
+        """A ConfigBanheiro da vida: None fora dos bracos do banheiro; nos quatro do 2 x 2, a ligada, com o limpador do braco (BL0 e BLC).
+        O carinho depois do banheiro e do dono (o DonoCarinhoBanheiro), nao da chave."""
+        b = braco_de(espec.braco)
+        if b.banheiro is None:
+            return None
+        if mundo_de(espec.mundo).fisico is None:
+            raise ValueError(f"braco {b.rotulo}: o banheiro e do mundo fisico, nao {espec.mundo!r}")
+        return replace(CONFIG_BANHEIRO_LIGADA, limpador=BRACOS_BANHEIRO[b.banheiro][0])
 
     def pesos_do_mundo(self) -> tuple[ConfigBola, ConfigFrutas]:
         """A ConfigBola e a ConfigFrutas da bancada com a chave desligada: no mundo fisico elas so dao os pesos w_bola e w_fruta ao instinto
@@ -990,6 +1026,11 @@ class Bancada:
 
     def fabrica_motor(self, espec: EspecVida):
         mundo = mundo_de(espec.mundo)
+        if braco_de(espec.braco).banheiro is not None:
+            # o motor do banheiro (a chave no MotorMundo, o objeto, o limpador) e o dono que acaricia sao da etapa 3 do A: a fiacao entra
+            # aqui quando eles estiverem na main (o braco ja falha alto com o no no braco_de; isto so trava quem esvazia a tabela)
+            raise NotImplementedError(f"{espec.nome}: a fiacao do motor e do dono do banheiro espera a etapa 3 do A "
+                                      f"({NOS_PENDENTES.get('banheiro', 'TAREFA_V2_BANHEIRO, etapa 3')})")
         # corpo (W-BANCADA-CORPO): o com_corpo(...) do motor do mundo, com a ConfigCorpo do regime; sem regime, o motor de antes
         corpo = self.cfg_corpo_de(espec)
         classe = (lambda base: base) if corpo is None else com_corpo  # noqa: E731
@@ -1257,6 +1298,7 @@ class Bancada:
                        if fisico else {})
         dominancia = self.medidas_dominancia(vida, reg)
         corpo = self.medidas_corpo(vida, m, reg)
+        banheiro = self.medidas_banheiro(vida, m, reg) if braco_de(vida.espec.braco).banheiro is not None else None
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
@@ -1277,7 +1319,7 @@ class Bancada:
                 **desempenho, "acerto_total": tarefa["acerto_total"], "acerto_por_dia": tarefa["acerto"],
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
-                "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, "corpo": corpo,
+                "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, "corpo": corpo, "banheiro": banheiro,
                 **extra_mundo}
 
     def medidas_corpo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
@@ -1406,6 +1448,44 @@ class Bancada:
                 "conferido_com_motivo": bool(aprende), "pelo_corpo": True, "janela": list(janela),
                 "na_janela": dominancia_decisoes(decisoes, janela),
                 "vida_toda": dominancia_decisoes(decisoes, (0, self.dias * TICKS_POR_DIA))}
+
+    def medidas_banheiro(self, vida: VidaBancada, motor, reg: "_Registro") -> dict:
+        """As medidas do PLANO_ANALISE_V2_BANHEIRO (secoes 4 e 8) numa vida do 2 x 2, pela `medidas_banheiro_de`. Le:
+          - do motor (o contrato da etapa 3 do A, conferido aqui): `motor.alivios`, um dict por `aliviar`, com `tick` (o da decisao),
+            `dentro` (terminou dentro do banheiro), `urgente` (a regra urgente, o acidente), `alvo` ("banheiro" ou "aqui"),
+            `distancia` (do pet ao banheiro na decisao, em subunidades) e `recolhido` (o limpador recolheu a necessidade);
+          - do replay de medicao (_Registro): os carinhos (`mudanca_no_corpo`: o tick, a solidao antes e o sinal pelo corpo, a conta do
+            cerebro) e a transicao de cada decisao (o sinal do alivio recolhido pelo limpador, a mesma conta) e o cuidado de cada decisao;
+          - do cerebro no fim de cada dia (o replay do mundo cortado no dia): os pesos do alvo `banheiro` e `aqui`."""
+        alivios = getattr(motor, "alivios", None)
+        if alivios is None:
+            raise NotImplementedError(f"{vida.nome}: o motor sem os alivios ({NOS_PENDENTES.get('banheiro', 'a etapa 3 do banheiro')})")
+        chaves = {"tick", "dentro", "urgente", "alvo", "distancia", "recolhido"}
+        if any(set(a) != chaves for a in alivios):
+            raise RuntimeError(f"{vida.nome}: alivio fora do contrato {sorted(chaves)}")
+        cc = getattr(reg.interna, "cfg_consequencia", self.cfg_consequencia)
+        S = self.cfg_lobos.escala
+        pd = dict(cc.pesos_drives_corpo)
+        # os drives do sinal pelo corpo, como na dominancia: os do N3 e os novos que o corpo tem (o susto fora); a conta do cerebro
+        drives = lambda r: tuple(RECEPTOR_DO_INDICE[i] for i in cc.drives) + tuple(  # noqa: E731
+            x for x in RECEPTORES_NOVOS if x in DRIVES_NOVOS_SINAL and getattr(r, x) is not None)
+        sinal = lambda antes, depois: sinal_corpo(antes, depois, drives(antes), cc.ganho, S, pd)  # noqa: E731
+        carinhos = [(t, antes.solidao / S, sinal(antes, depois)) for t, antes, depois in reg.carinhos]
+        por_tick = {p["tick"]: p for p in reg.passos_sinal}
+        limpador = []
+        for a in alivios:
+            if a["recolhido"]:
+                p = por_tick.get(a["tick"])
+                if p is None or p["antes_corpo"] is None or p["depois_corpo"] is None:
+                    raise RuntimeError(f"{vida.nome}: alivio recolhido no tick {a['tick']} sem a decisao e os receptores dela")
+                limpador.append((a["tick"], sinal(p["antes_corpo"], p["depois_corpo"])))
+        ticks = [t for t, _, _ in reg.decisoes]
+        cuidado = [(t, p, sau, v[1]) for t, (p, sau), v in zip(ticks, reg.amostras, reg.vetores)]
+        fab, fm, T = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec), TICKS_POR_DIA
+        pesos = [do_braco(reproduzir_mundo(vida.motor.log, fab, semente=vida.espec.semente, fabrica_motor=fm, ate_tick=d * T).politica)
+                 .cerebro.estado_interno()["pesos_alvo"] for d in range(1, self.dias + 1)]
+        return medidas_banheiro_de([(a["tick"], a["dentro"], a["urgente"]) for a in alivios], self.dias, carinhos, limpador, pesos,
+                                   cuidado, [(a["tick"], a["alvo"], a["dentro"], a["distancia"]) for a in alivios if not a["urgente"]])
 
     def medidas_mundo(self, vida: VidaBancada, motor: MotorMundo, reg: "_Registro") -> dict:
         """As medidas do PLANO_ANALISE_V2_MUNDO_FISICO (secao 5 e adendo 1, A1.8), todas de digilab/metrics.py, numa vida do mundo fisico.
@@ -1553,6 +1633,67 @@ def receptores_novos_de(cc: ConfigCorpo, com_mundo: bool = False) -> tuple[str, 
     nenhum na quimica; tedio, solidao e estresse com `drives_novos`; dor e susto com `gestos`; a curiosidade so com o mundo fisico (CD-8)."""
     nomes = set(Corpo.de_estado(Estado(), CONFIG_PADRAO, cc, com_mundo=com_mundo).receptores())
     return tuple(r for r in RECEPTORES_NOVOS if r in nomes)
+
+
+def medidas_banheiro_de(alivios, dias: int, carinhos=(), limpador=(), pesos_alvo=None, cuidado=(), escolhas=()) -> dict:
+    """As medidas do PLANO_ANALISE_V2_BANHEIRO numa vida, das funcoes do #224 (`metrics`). As entradas, sem o motor:
+      - `alivios`: (tick, dentro do banheiro, urgente) por `aliviar`;
+      - `carinhos`: (tick, solidao antes na escala 0-1, sinal pelo corpo) por carinho depois do banheiro;
+      - `limpador`: (tick, sinal pelo corpo) por alivio recolhido pelo limpador;
+      - `pesos_alvo`: os pesos do alvo no fim de cada dia, {"banheiro": w, "aqui": w} (um por dia, ou None);
+      - `cuidado`: (tick, em privacao, saude, fome) por decisao;
+      - `escolhas`: (tick, alvo, terminou dentro, distancia) por `aliviar` decidido (sem o urgente), para o "chegou tarde" (R-2).
+    Sai: a fracao diaria e os acidentes (`alivios_por_dia`); o dia do criterio com a censura e T* (`dia_do_criterio`, BN-4: 0,80 em tres
+    dias seguidos); os alivios ate o criterio; os acidentes na vida; o cuidado preservado na vida (`cuidado_preservado`); o carinho e o
+    limpador por dia (quantos, a solidao media no carinho, o sinal medio: R-3); o peso do alvo por dia (banheiro - aqui); o chegou tarde
+    (a fracao das escolhas de `banheiro` que terminam fora, e a distancia media delas)."""
+    T = TICKS_POR_DIA
+    por_dia = alivios_por_dia(alivios, dias)
+    criterio = dia_do_criterio([o["fracao"] for o in por_dia])
+    n = sum(o["n"] for o in por_dia)
+    urgentes = sum(o["urgentes"] for o in por_dia)
+
+    def diario(itens, campos):
+        out = [{"dia": d + 1, "n": 0, **{c: None for c in campos}} for d in range(dias)]
+        soma = [[0.0] * len(campos) for _ in range(dias)]
+        for item in itens:
+            d = item[0] // T
+            if not 0 <= d < dias:
+                raise ValueError(f"tick {item[0]} fora dos {dias} dias")
+            out[d]["n"] += 1
+            for i, v in enumerate(item[1:]):
+                soma[d][i] += v
+        for o, s in zip(out, soma):
+            if o["n"]:
+                o.update({c: v / o["n"] for c, v in zip(campos, s)})
+        return out
+
+    if pesos_alvo is not None and len(pesos_alvo) != dias:
+        raise ValueError(f"pesos do alvo: {len(pesos_alvo)} dias, a vida tem {dias}")
+    banheiro_escolhido = [(t, dentro, dist) for t, alvo, dentro, dist in escolhas if alvo == "banheiro"]
+    tarde = [x for x in banheiro_escolhido if not x[1]]
+    return {"por_dia": por_dia, "criterio": criterio, "alivios_ate_criterio": alivios_ate_criterio(por_dia, criterio["dia"]),
+            "alivios": n, "acidentes": {"n": urgentes, "fracao": urgentes / n if n else None},
+            "cuidado": cuidado_preservado(cuidado, (0, dias * T)) if cuidado else None,
+            "carinho": {"n": len(carinhos), "por_dia": diario(carinhos, ("solidao_media", "sinal_medio"))},
+            "limpador": {"n": len(limpador), "por_dia": diario(limpador, ("sinal_medio",))},
+            "peso_alvo_por_dia": None if pesos_alvo is None else [
+                {"banheiro": p["banheiro"], "aqui": p["aqui"], "banheiro_menos_aqui": p["banheiro"] - p["aqui"]} for p in pesos_alvo],
+            "chegou_tarde": {"escolhas_banheiro": len(banheiro_escolhido), "fora": len(tarde),
+                             "fracao": len(tarde) / len(banheiro_escolhido) if banheiro_escolhido else None,
+                             "distancia_media": (sum(d for _, _, d in banheiro_escolhido) / len(banheiro_escolhido)
+                                                 if banheiro_escolhido else None)}}
+
+
+def tabela_banheiro(medidas: dict) -> dict:
+    """Por braco do 2 x 2 (o rotulo, P0 ou P1), o descritivo da secao 4: a curva de Kaplan-Meier do dia do criterio (`curva_sobrevivencia`:
+    a mediana quando existe, a fracao censurada e a RMST, a media de T*), sobre as vidas daquele braco. Os contrastes pareados (G-CARINHO,
+    G-LIMPADOR) sao do orquestrador do plano."""
+    por_braco: dict = {}
+    for m in medidas.values():
+        if m.get("banheiro") is not None and m["origem"] is None:
+            por_braco.setdefault(m["braco"], []).append(m["banheiro"]["criterio"])
+    return {b: curva_sobrevivencia(cs) for b, cs in sorted(por_braco.items())}
 
 
 def percepcao_da_sonda(obs, cc: ConfigCorpo, rng: random.Random | None = None, com_mundo: bool = False) -> PercepcaoCorpo:
@@ -1925,6 +2066,7 @@ class _Registro:
         # estado logo depois de comer, o mesmo da E2)
         self.passos_sinal: list[dict] = []
         self.corpo: list = []                              # corpo: a PercepcaoCorpo de cada decisao (None sem o corpo)
+        self.carinhos: list = []                           # gestos: (tick, PercepcaoCorpo antes, depois) de cada carinho pelo corpo
         self._decisao: tuple | None = None
 
     @property
@@ -1983,8 +2125,10 @@ class _Registro:
 
     def mudanca_no_corpo(self, obs_antes, obs_depois) -> None:
         """O carinho com `gestos` (o MotorCorpo nao o passa por `receber_acao_dono`): e contato e zera o relogio de cuidado no instante
-        dele, o `ticks_desde_cuidado` do `obs_antes` (a conta do cerebro). So acerta o relogio e repassa."""
+        dele, o `ticks_desde_cuidado` do `obs_antes` (a conta do cerebro). So acerta o relogio, anota os receptores (as medidas do carinho
+        do banheiro) e repassa."""
         self._tick_ultimo_cuidado += obs_antes.ticks_desde_cuidado
+        self.carinhos.append((self._tick_ultimo_cuidado, obs_antes.corpo, obs_depois.corpo))
         self.interna.mudanca_no_corpo(obs_antes, obs_depois)
 
     def estado_interno(self) -> dict:
@@ -2049,6 +2193,9 @@ def validar_config(cfg: dict) -> dict:
     if com_gestos and sem_gestos_:
         raise ValueError(f"bracos com os gestos do dono {com_gestos} nos mundos {sem_gestos_}: os gestos ficam fora do mundo fisico e do "
                          "bola_a1")
+    banheiro = [b for b in cfg["bracos"] if BRACOS[b].banheiro is not None]
+    if banheiro and any(mundo_de(m).fisico is None for m in cfg.get("mundos", ["padrao"])):
+        raise ValueError(f"bracos {banheiro}: o banheiro so no mundo fisico")
     tapa_x = [b for b in cfg["bracos"] if BRACOS[b].gestos == "tapa_fruta"]
     if tapa_x and any(not mundo_de(m).frutas for m in cfg.get("mundos", ["padrao"])):
         raise ValueError(f"bracos {tapa_x}: o tapa na fruta X so nos mundos das frutas")
@@ -2169,6 +2316,8 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     _gravar(pasta / "medidas.json", _dump(medidas))
     _gravar(pasta / "tabelas.json", _dump(tabelas))
     _gravar(pasta / "dominancia.json", _dump(tabela_dominancia(medidas)))
+    if any(m.get("banheiro") is not None for m in medidas.values()):
+        _gravar(pasta / "banheiro.json", _dump(tabela_banheiro(medidas)))
     _gravar(pasta / "meta.json", _dump(meta(cfg)))
     return {"vidas": vidas, "medidas": medidas, "tabelas": tabelas}
 
