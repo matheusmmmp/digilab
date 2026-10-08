@@ -9,8 +9,8 @@ G-RISCO, em estados controlados, com os numeros PROPOSTOS:
 G-MEC do cerebro: o tapa credita `recompensa_tapa` a ultima decisao em quem aprende e em nada no P0; o carinho e cuidado (acerta o relogio
 e paga os chamados); e o G1 com os drives novos e os gestos.
 
-O motor da etapa 6 (o tapa no log, o aviso da atividade ao corpo, o `mudanca_no_corpo`) e do A, em paralelo. A vida curta usa um motor de
-teste (`_MotorComAtividade`) que so avisa a atividade ao corpo, como o contrato combinado; ele sai quando o motor do A estiver na main.
+O motor da etapa 6 (o tapa no log, o aviso da atividade ao corpo, o `mudanca_no_corpo`) e do A (CORPO-GESTOS): a vida curta usa o
+MotorCorpo do mundo da bola, `com_corpo(MotorAmbiente)`, que avisa a atividade ao corpo uma vez por decisao.
 """
 from __future__ import annotations
 
@@ -173,28 +173,6 @@ def test_tapa_nao_mexe_no_p0_e_o_carinho_e_cuidado():
 
 
 # ================================================================== G-RISCO, a vida curta do P1 com o corpo
-class _MotorComAtividade(com_corpo(MotorAmbiente)):
-    """O MotorCorpo do mundo da bola com o aviso da atividade ao corpo (o contrato com o A, etapa 6): depois dos estimulos da propria
-    acao e antes do `consequencia_corpo`, "bola" (brincou e usou a bola), "brincar" ou "explorar". So o teste usa; sai com o motor do A."""
-
-    def _decidir(self, intervalo, produzidas) -> None:
-        self._avisar = True
-        try:
-            super()._decidir(intervalo, produzidas)
-        finally:
-            self._avisar = False
-
-    def _sincronizar(self) -> None:
-        if getattr(self, "_avisar", False) and self._estimulos and self._estimulos[0][0] == "pet":
-            self._avisar = False
-            acao = self._estimulos[0][1]
-            if acao == "brincar":
-                self.corpo.atividade("bola" if ("bola",) in self._estimulos else "brincar")
-            elif acao == "explorar":
-                self.corpo.atividade("explorar")
-        super()._sincronizar()
-
-
 def _vida_bola(semente: int, dono: str = "atencioso", dias: int = 4, cc: ConfigCorpo = NOVOS):
     pols = []
 
@@ -203,7 +181,7 @@ def _vida_bola(semente: int, dono: str = "atencioso", dias: int = 4, cc: ConfigC
         pols.append(c)
         return bv.PoliticaDoBraco(c, bv.braco_de("P1"), CC)
 
-    fm = lambda p, cfg, s: _MotorComAtividade(p, cfg, s, obediencia_desligada=True, cfg_bola=CONFIG_BOLA_LIGADA, cfg_corpo=cc)  # noqa: E731
+    fm = lambda p, cfg, s: com_corpo(MotorAmbiente)(p, cfg, s, obediencia_desligada=True, cfg_bola=CONFIG_BOLA_LIGADA, cfg_corpo=cc)  # noqa: E731
     v = simular_vida(dono, DonoComBola(dono, CONFIG_BOLA_LIGADA), fp(CFG), semente, dias, 16 * dias, fabrica_motor=fm, rotulo_dono=dono)
     return v.motor, pols[-1], fp, fm
 
@@ -226,8 +204,8 @@ def test_risco_vida_curta_do_p1_aprende_a_brincar_com_tedio_e_bola():
                 contagem[fase][0] += mt["acao"] == "brincar"
                 contagem[fase][1] += 1
         assert any(v != [0] * len(v) for g in lob.estado_interno()["pesos_corpo"].values() for v in g.values())
-    p = {fase: b / n for fase, (b, n) in contagem.items()}
     assert contagem["comeco"][1] >= 3 and contagem["fim"][1] >= 3, contagem
+    p = {fase: b / n for fase, (b, n) in contagem.items()}
     assert p["fim"] > p["comeco"], (p, contagem)
 
 

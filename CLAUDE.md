@@ -3018,3 +3018,50 @@ dos testes. Mudaram `experiments/bancada_v2.py`, a fumaça nova `experiments/con
   - o bloco G-HOJE nos mundos `bola` e `padrao`;
   - os acoplados P1-química ← P0-química e P1-hoje ← P0-hoje;
   - sem artefato.
+
+## V2, CORPO-GESTOS — a etapa 6 do corpo, a parte do motor (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seções 7, 8 e 14) — GATES PASSAM
+
+Etapa 6 da seção 14, o lado do A. A química dos drives novos e dos gestos, o sinal do tapa e o grafo validado (seção 18) são do B, em
+paralelo. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/events.py` (o fim do enum), `digilab/motor_corpo.py`,
+`digilab/mundo.py` (o canal do `simular_vida_mundo`), `digilab/gestos.py` (novo) e o teste do enum do N7. `engine.py`, `corpo.py`,
+`lobos.py`, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O contrato com o B**, combinado antes do código. O motor chama, no `Corpo`:
+  - `acao_dono(TAPA)`: dor, susto e estresse; nenhum drive do Estado muda;
+  - `acao_dono(ACARICIAR)`: solidão e estresse com o medo da mão, dentro do corpo;
+  - `atividade(nome)`: o tédio pela variedade (DS-4), com `"bola"`, `"brincar"` ou `"explorar"`;
+  - `estimulo_novidade(n)`: a curiosidade, com a contagem crua;
+  - `de_estado(..., com_mundo)`: a curiosidade só existe com o mundo físico (CD-8);
+  - e lê `ConfigCorpo.janela_novidade`.
+- **Sobre o corpo real do B (#247):** os testes usam um espião do `Corpo` real, que só anota as chamadas do motor, com as sub-chaves de
+  verdade (cada uma exige a anterior: `drives_novos` precisa da digestão e da Vida, e `gestos` precisa de `drives_novos`).
+- **`AcaoUsuario.TAPA = "tapa"`** no fim do enum, com `ACOES_CORPO`. Nos motores de hoje e no `reproduzir` de hoje, o tapa falha alto; no
+  `MotorCorpo` sem `gestos`, falha alto com `GestoSemChave`.
+- **Os gestos (`gestos`):** o tapa e o carinho viram só o estímulo do corpo e contam como contato (CD-6), com os efeitos das classes do
+  meio na ordem delas (a janela da educação, o índice do evento e o vínculo do `MotorPersonalidade`).
+  - **o tapa** vai ao cérebro por `receber_acao_dono`, o sinal direto, e não chama o `mudanca_no_corpo` (CD-9);
+  - **o carinho** não é repassado: o cérebro o vê só pelo `mudanca_no_corpo(obs_antes, obs_depois)`, com o `obs.corpo` (e o `obs.mundo`
+    no mundo físico). O gancho não diz que gesto foi.
+- **Os drives novos (`drives_novos`):**
+  - `atividade` uma vez por decisão de brincar ou explorar, depois dos estímulos da ação. No mundo físico ela vem na consequência dele,
+    antes do `obs_depois`;
+  - **no mundo físico, a novidade:** o motor guarda o que o pet viu e quando, ao decidir e depois de cada decisão com alvo. Uma novidade
+    é um objeto dos `vistos` não visto nas últimas `janela_novidade` ticks, achado ao explorar. O `ocorrido` do mundo ganha
+    `vistos_novos` (`[[id, tipo], ...]`, vazio fora do explorar), e o corpo recebe a contagem;
+  - sem `drives_novos`, o `ocorrido` do mundo é o de hoje.
+- **`digilab/gestos.py`:**
+  - **`DonoComGestos(base, modo)`:** o `elogiar` vira `acariciar`, e o `repreender` vira `tapa` (modo `"tapa"`) ou `SemGesto` (modo
+    `"sem_tapa"`). O `SemGesto` gasta a interação do orçamento sem chegar ao motor, então o orçamento fica igual;
+  - **os canais:** `CanalComGestos` e `CanalMundoComGestos`;
+  - **as vidas:** `simular_vida_gestos`, e o `mundo.simular_vida_mundo(..., canal_classe=)`.
+- **Gates** (`tests/test_corpo_gestos.py`, 22 testes, ~5 s):
+  - **G2:** a suíte confere os gabaritos de sempre com o corpo desligado (`test_corpo`, `test_corpo_no_mundo`, `test_mundo` e os demais);
+  - o enum, o tapa sem a chave e o carinho de hoje sem `gestos`;
+  - o tapa e o carinho nos mundos `padrao`, `bola` e `mundo`: o repasse, o gancho, o contato e o orçamento. O tapa não muda drive;
+  - o vínculo e o índice do evento no `MotorPersonalidade`;
+  - o `DonoComGestos` nos 4 donos e nos dois modos, com o orçamento inteiro;
+  - a atividade por decisão; os `vistos_novos` e a novidade refeitos por fora, com a janela de 1440 e de 60;
+  - **G1** com os gestos e os drives novos, nos três mundos e nos dois modos.
+- **O `test_corpo_risco` do B:** a vida curta passou a usar o `com_corpo(MotorAmbiente)`. O motor de teste dele avisava a atividade de novo, por
+  cima do meu, e o tédio caía em dobro (o `ZeroDivisionError`). A contagem saiu igual à dele: 4/7 → 23/38.
+- **Para o D:** na bancada, o `cfg_corpo` com as sub-chaves, o tapa passando pela `PoliticaDoBraco`, o `SemGesto` nos canais dela e o
+  filtro `sem_gestos` do acoplado ficam com ele.
