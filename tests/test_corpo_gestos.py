@@ -1,11 +1,9 @@
 """V2, corpo, etapa 6, a parte do motor (docs/TAREFA_V2_CORPO_DRIVES.md, secoes 7, 8 e 14; o contrato dos ganchos combinado com o B).
 
 O tapa (`AcaoUsuario.TAPA`, no fim do enum), o repasse dele ao cerebro, o carinho pelo corpo (`mudanca_no_corpo`), o tedio pela atividade,
-os `vistos_novos` do mundo para a curiosidade e o `DonoComGestos`. A quimica dos drives novos e dos gestos e do B: ate ela entrar, a
-`ConfigCorpo` recusa `drives_novos` e `gestos`, e aqui o lado do motor roda com um corpo de teste (`CorpoDeTeste`) que implementa o contrato
-(`acao_dono(TAPA)`, `atividade`, `estimulo_novidade`, `de_estado(..., com_mundo)`), com as sub-chaves postas por fora da validacao.
-O G2 (desligado, as vidas de hoje byte a byte) e o dos gabaritos de sempre, que a suite confere (test_corpo, test_corpo_no_mundo,
-test_mundo e os demais); aqui ficam o enum, o tapa sem a chave e o G1 com os gestos. So as sementes dos testes.
+os `vistos_novos` do mundo para a curiosidade e o `DonoComGestos`. O corpo e o real (o do B, #247), por um espiao (`CorpoEspiao`) que so
+anota as chamadas do motor. O G2 (desligado, as vidas de hoje byte a byte) e o dos gabaritos de sempre, que a suite confere (test_corpo,
+test_corpo_no_mundo, test_mundo e os demais); aqui ficam o enum, o tapa sem a chave e o G1 com os gestos. So as sementes dos testes.
 """
 from __future__ import annotations
 
@@ -21,8 +19,8 @@ sys.path.insert(0, str(RAIZ))
 
 from digilab import motor_corpo  # noqa: E402
 from digilab.ambiente import DonoComBola, MotorAmbiente, PoliticaInstintoBola  # noqa: E402
-from digilab.config import (CONFIG_BOLA_LIGADA, CONFIG_FRUTAS_LIGADA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO,  # noqa: E402
-                            ConfigCorpo)
+from digilab.config import (CONFIG_BOLA_LIGADA, CONFIG_CORPO_DRIVES, CONFIG_FRUTAS_LIGADA, CONFIG_MUNDO_LIGADA,  # noqa: E402
+                            CONFIG_PADRAO, ConfigCorpo)
 from digilab.corpo import Corpo  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.educacao import reproduzir_educacao  # noqa: E402
@@ -44,48 +42,35 @@ ORC = 16 * DIAS
 
 
 # ================================================================== o corpo de teste (o contrato com o B)
-class CorpoDeTeste(Corpo):
-    """O Corpo de hoje com a API da etapa 6 do contrato: o tapa (nenhum drive do Estado muda), a atividade, a novidade e o `com_mundo`.
-    So anota as chamadas: a quimica nova e do B."""
+class CorpoEspiao(Corpo):
+    """O Corpo real (o do B, etapa 6) que so anota as chamadas do motor: os gestos, a atividade e a novidade. Nada muda na quimica."""
 
-    ATIVIDADES = ("bola", "brincar", "explorar")
-
-    @classmethod
-    def de_estado(cls, estado, cfg=None, cc=None, cfg_evo=None, com_mundo=False):
-        c = super().de_estado(estado, cfg, cc, cfg_evo)
-        c.com_mundo = com_mundo
-        c.chamadas = []
-        return c
+    def __init__(self, *a, **kw) -> None:
+        super().__init__(*a, **kw)
+        self.chamadas = []
 
     def acao_dono(self, acao):
         self.chamadas.append(("dono", acao.value))
-        if acao is AcaoUsuario.TAPA:
-            return                                                # dor, susto e estresse: quimicos do B, fora do Estado
         super().acao_dono(acao)
 
     def atividade(self, nome):
-        if nome not in self.ATIVIDADES:
-            raise ValueError(nome)
         self.chamadas.append(("atividade", nome))
+        super().atividade(nome)
 
     def estimulo_novidade(self, n):
-        if not self.com_mundo:
-            raise ValueError("curiosidade sem o mundo fisico (CD-8)")
         self.chamadas.append(("novidade", n))
+        super().estimulo_novidade(n)
 
 
-def _cc(gestos=True, drives_novos=True, janela=1440, **kw) -> ConfigCorpo:
-    """a ConfigCorpo com as sub-chaves da etapa 6 postas por fora da validacao (a do B ainda as recusa)"""
-    cc = ConfigCorpo(ligada=True, **kw)
-    object.__setattr__(cc, "gestos", gestos)
-    object.__setattr__(cc, "drives_novos", drives_novos)
-    object.__setattr__(cc, "janela_novidade", janela)
-    return cc
+# as sub-chaves da etapa 6: cada uma exige a anterior (digestao -> vida -> drives_novos -> gestos)
+NOVOS = ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True)
+GESTOS = CONFIG_CORPO_DRIVES
+ORGAOS = ConfigCorpo(ligada=True, digestao=True, vida=True)
 
 
 @pytest.fixture
 def corpo_de_teste(monkeypatch):
-    monkeypatch.setattr(motor_corpo, "Corpo", CorpoDeTeste)
+    monkeypatch.setattr(motor_corpo, "Corpo", CorpoEspiao)
 
 
 # ================================================================== os cerebros espioes
@@ -228,7 +213,7 @@ def test_sem_gestos_o_carinho_e_o_de_hoje_repassado_e_sem_mudanca_no_corpo():
 # ================================================================== o tapa e o carinho com gestos
 @pytest.mark.parametrize("mundo", ["padrao", "bola", "mundo"])
 def test_tapa_e_carinho_com_gestos(corpo_de_teste, mundo):
-    cc = _cc(drives_novos=False)
+    cc = GESTOS
     v, _, _ = {"padrao": _vida_padrao, "bola": _vida_bola, "mundo": _vida_mundo}[mundo](cc, "tapa", "aleatorio")
     m = v.motor
     c = _cerebro(m)
@@ -255,7 +240,7 @@ def test_tapa_e_carinho_com_gestos(corpo_de_teste, mundo):
 
 
 def test_o_tapa_nao_muda_drive_e_conta_como_contato(corpo_de_teste):
-    cc = _cc(drives_novos=False)
+    cc = GESTOS
     m = com_corpo(MotorComFeedback)(EspiaoPadrao(CFG), CFG, 101, cfg_corpo=cc)
     m.avancar(100)
     antes = m._estado
@@ -270,7 +255,7 @@ def test_o_tapa_nao_muda_drive_e_conta_como_contato(corpo_de_teste):
 def test_gestos_no_motor_da_personalidade_contam_no_indice_e_no_vinculo(corpo_de_teste):
     """nas frutas (MotorPersonalidade no meio): o indice dos eventos anda com o tapa e o carinho (um por evento do log) e o vinculo os
     recebe"""
-    cc = _cc(drives_novos=False)
+    cc = GESTOS
     fm = _fm_frutas(cc)
     v = simular_vida_frutas("atencioso", DonoComGestos(criar_dono("atencioso"), "tapa"), EspiaoFrutas(CFG), 101, DIAS, ORC, fm,
                             OfertasFrutas(CONFIG_FRUTAS_LIGADA), rotulo_dono="atencioso")
@@ -283,7 +268,7 @@ def test_gestos_no_motor_da_personalidade_contam_no_indice_e_no_vinculo(corpo_de
 # ================================================================== o DonoComGestos
 @pytest.mark.parametrize("dono", ["atencioso", "relapso", "aleatorio", "incoerente"])
 def test_dono_com_gestos_mesma_rng_e_mesmo_orcamento(corpo_de_teste, dono):
-    cc = _cc(drives_novos=False)
+    cc = GESTOS
     hoje = simular_vida(dono, criar_dono(dono), PoliticaInstinto(CFG), 101, DIAS, ORC, rotulo_dono=dono,
                         fabrica_motor=_fm_padrao(ConfigCorpo(ligada=True)))
     base = _acoes_log(hoje.motor)
@@ -330,7 +315,7 @@ def test_canal_com_gestos_conta_o_sem_gesto_e_recusa_o_desconhecido():
 # ================================================================== os drives novos: a atividade e a novidade
 @pytest.mark.parametrize("mundo", ["padrao", "bola"])
 def test_atividade_uma_por_decisao_de_brincar_ou_explorar(corpo_de_teste, mundo):
-    cc = _cc(gestos=False)
+    cc = NOVOS
     v, _, _ = {"padrao": _vida_padrao, "bola": _vida_bola}[mundo](cc, "sem_tapa")
     m = v.motor
     c = _cerebro(m)
@@ -340,7 +325,7 @@ def test_atividade_uma_por_decisao_de_brincar_ou_explorar(corpo_de_teste, mundo)
             esperadas.append("bola" if ("bola",) in oc["estimulos"] else "brincar")
         elif acao is AcaoPet.EXPLORAR:
             esperadas.append("explorar")
-    assert [x for k, x in m.corpo.chamadas if k == "atividade"] == esperadas and esperadas
+    assert [x for k, x in m.corpo.chamadas if k == "atividade" and x != "dono_brinca"] == esperadas and esperadas
     if mundo == "bola":
         assert "bola" in esperadas
     assert not any(k == "novidade" for k, _ in m.corpo.chamadas) and m.corpo.com_mundo is False
@@ -366,7 +351,7 @@ class _MundoAnotado(com_corpo(MotorMundo)):
 
 @pytest.mark.parametrize("janela", [1440, 60])
 def test_vistos_novos_e_a_novidade_refeitos_por_fora(corpo_de_teste, janela):
-    cc = _cc(gestos=False, janela=janela)
+    cc = replace(NOVOS, janela_novidade=janela)
     vistos_algum = 0
     for semente in (101, 202, 303):
         fm = lambda p, cfg, s: _MundoAnotado(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc)  # noqa: E731
@@ -401,7 +386,7 @@ def test_vistos_novos_e_a_novidade_refeitos_por_fora(corpo_de_teste, janela):
 
 
 def test_sem_drives_novos_o_ocorrido_do_mundo_e_o_de_hoje(corpo_de_teste):
-    v, _, _ = _vida_mundo(_cc(drives_novos=False), "tapa")
+    v, _, _ = _vida_mundo(ORGAOS, "sem_tapa")
     c = _cerebro(v.motor)
     assert c.mundo and all("vistos_novos" not in oc for _, oc, _ in c.mundo)
     assert not any(k in ("atividade", "novidade") for k, _ in v.motor.corpo.chamadas)
@@ -417,7 +402,7 @@ def _resumo(m) -> str:
 
 @pytest.mark.parametrize("modo", ["tapa", "sem_tapa"])
 def test_g1_replay_bit_a_bit_com_gestos(corpo_de_teste, modo):
-    cc = _cc()
+    cc = GESTOS
     v, fp, fm = _vida_padrao(cc, modo)
     r = reproduzir_com_feedback(LogDeEventos.de_jsonl(v.motor.log.para_jsonl()), fp, CFG, 101, fabrica_motor=fm)
     assert _resumo(r) == _resumo(v.motor)
