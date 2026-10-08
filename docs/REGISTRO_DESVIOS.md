@@ -3983,3 +3983,25 @@ e na tarefa. Nenhuma run, nenhum código.
   (`comidas`, `arvores`, `bola_mundo`, `quedas`, `sumidas`, `rolagens`, `bolas_deixadas`, `comedouro`, `_rng_arvores`, `_rng_bola`,
   `_prox_id`, `_passo_mundo`, `situacao`, `bola_em`, `_prazo_maduro`, `_nova_comida`, `_atualizar_mundo`, `_fontes_de_cheiro`) viraram
   propriedades e métodos que leem do `Mundo`. Ninguém fora do `mundo.py` atribui a eles (conferido).
+
+## 2026-10-08 — W-REDE-DE-SI (worker C): a tarefa e o plano da rede de si; PDP-1 a PDP-6 decididas
+
+- **PDP-1 a PDP-6** marcadas como DECIDIDAS (pela recomendação) em `docs/PLANO_ANALISE_V2_DOIS_PETS.md`, no status e na seção 12.
+- **A rede é uma chave que observa, não um braço.** Pelo G-OBS a vida com a rede é a mesma, então cada braço do plano é uma vida só, e a
+  calibração do `passo` rejoga a mesma vida em cada ponto da grade.
+- **A mudança do corpo vem desenhada (RS-3).** A troca de estágio de hoje não muda o corpo, e o dano de órgão espera a 1b. Por isso o plano
+  usa a digestão lenta a partir do fim do dia 7, uma troca da `taxa_digestao` num tick gravada no registro. Ela muda o motor do corpo
+  (etapa 2b, do A); a tarefa dizia antes que o motor não mudava, e isso foi corrigido no mesmo PR.
+- **A autoria "ao nascer" é a sonda do aprendido** (a ação com o aprendido zerado e o mesmo u): o pet ao nascer é o herdado. É uma
+  definição deste plano (R-6), não uma medida dada.
+- **A margem segue a convenção de "metade"** com um oráculo que só a bancada roda (o mesmo LMS com os químicos como entrada). O oráculo
+  nunca existe no pet.
+- **Números novos, todos PROPOSTOS e SEM FONTE:**
+  - os horizontes {1, 4, 16};
+  - a grade do `passo`;
+  - a grade da taxa lenta e o limiar S/16;
+  - a distância mínima S/128;
+  - o `Δ_BSS` 0,1;
+  - o mínimo de 20 eventos da autoria.
+- **As faixas** 43101…43505 e 44101…44505 (prefixo `rede_de_si`) foram conferidas fora de `FAIXAS_RESERVADAS`, da `FAIXAS_QUEIMADAS` e das
+  faixas propostas e ainda não registradas (35101…36505 e 39101…42505). Nenhuma das três está em `FAIXAS_RESERVADAS` hoje.
