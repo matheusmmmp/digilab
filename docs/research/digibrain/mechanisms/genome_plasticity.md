@@ -35,5 +35,8 @@ aprendido? É a pergunta maior do estudo vista pelo lado do genoma (`README.md`)
 | H-GEN-01 | o genoma modula a sensibilidade por canal de reforço (`reinforcement.md`, H-R4) | aprendizado desligado = vidas idênticas entre genomas; experiência acoplada = divergência por genoma |
 | H-GEN-02 | o genoma define a fisiologia (taxas dos drives) e o cérebro inicial (prior) | fase 3; depois de H-GEN-01 |
 
+O desenho proposto para a H-GEN-02 por espécie (corpo-base comum, perfil herdável em quatro camadas, o perfil como alteração do grafo
+do corpo) está em `docs/futuro/fisiologia_especies.md`.
+
 Confundidores: variância inicial do genoma, exposição desigual, efeito de geração, estado herdado por acidente. Tudo aqui é
 fase 3 (`docs/ROADMAP_V2.md`), exceto H-GEN-01, que pode rodar na fase 1 sem evolução (genomas fixados por desenho).
