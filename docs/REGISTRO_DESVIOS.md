@@ -4110,3 +4110,13 @@ e na tarefa. Nenhuma run, nenhum código.
 - **Leitura por ferramenta:** o postmortem do Thief e a página do Unreal foram lidos por uma ferramenta que resume a página. Os trechos citados
   são os que ela devolveu, sem conferência no texto bruto. O capítulo do Splinter Cell e o PolyWorld foram lidos no texto.
 - **Sem número novo:** a revisão não propõe parâmetro; as três decisões (OA-1 a OA-3) são de desenho.
+- **Acréscimo do mesmo dia (pedido do Gerente):** a DP-13 (o órgão do olfato) e a DP-14 (o órgão do ouvido), ABERTAS:
+  - **onde:** `docs/futuro/dois_pets.md`, seção 5.6, no status e na seção 14; a etapa 8b da `docs/TAREFA_V2_DOIS_PETS.md`; duas linhas na
+    seção 7 de `docs/DEFINICOES_CORPO_V2.md`;
+  - **a revisão** ganhou a seção 7 ("órgãos e anatomia no estado da arte") e as referências 20 a 29, e as seções foram renumeradas (decisões
+    6, anatomia 7, referências 8);
+  - **o Dwarf Fortress** entra só como pista (o verbete do wiki sobre as partes do corpo); o capítulo do Adams (2019) é sobre narrativa e
+    não descreve o corpo;
+  - **a conta do receptor** (limiar, adaptação por um químico, saturação por meia-saturação), as narinas pela direção do último passo e os
+    candidatos `cheiro_seguir` e `cheiro_virar` são desenho nosso, PROPOSTO, SEM FONTE. A biologia lida (resumos) sustenta só que a
+    adaptação existe no receptor, que uma narina basta e que duas ajudam.

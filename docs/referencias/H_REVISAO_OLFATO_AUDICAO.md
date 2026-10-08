@@ -190,7 +190,43 @@ Documentação oficial da Epic (cinza, lida em 2026-10-08).
 | OA-2 | Quem calcula a direção do cheiro e do som | **o mundo, como hoje**, declarado como pré-processamento | pelo pet (amostra em pontos, como no NetLogo): mais fiel ao corpo, mas muda o cheiro da comida também e pede outro G2. Fica para uma pergunta sobre seguir gradiente |
 | OA-3 | Som em linha reta ou pelo caminho | **linha reta**, enquanto o mapa não tiver parede nem porta (M-1) | pelo caminho sem obstáculo: o mesmo resultado, com mais código. Se entrarem obstáculos, a distância pelo caminho (Splinter Cell) é o desenho registrado |
 
-## 7. Referências
+## 7. Órgãos e anatomia no estado da arte
+
+Acrescentada no mesmo dia, a pedido do Gerente, para a DP-13 e a DP-14 (`docs/futuro/dois_pets.md`, seção 5.6). A pergunta é que órgãos e
+sentidos cada sistema modela, e como.
+
+| sistema | órgãos e sentidos modelados | como | fonte e status |
+|---|---|---|---|
+| **Creatures** | bioquímica, hormônios, desenvolvimento por estágios; visão; olfato pelos CA | os hormônios modulam a rede neural e o desenvolvimento (resumos). Os órgãos com força vital, dano e morte e o olfato pelo pé são detalhe de fã (revisão G, P1; seção 3.1 aqui). A audição de palavras fica SEM FONTE | itens 1 e 2 (VERIFICADA, resumo) para a bioquímica; itens 3 e 4 (pista) para o olfato |
+| **Dwarf Fortress** | corpo em partes ligadas umas às outras, com tecidos; partes com função de **ver, ouvir, cheirar, respirar**, centro nervoso e do pensamento | cada parte declara a função por uma marca nos dados do jogo. Sem toda parte de ver, a criatura não vê; sem as de respirar, sufoca. A marca de cheirar **não tem função conhecida**, segundo o próprio wiki | item 20 (Dwarf Fortress Wiki, pista); item 21 (Adams 2019, resumo) é sobre narrativa emergente e **não** descreve o corpo |
+| **Framsticks** | corpo 3D de bastões e juntas, músculos; receptores de **toque, equilíbrio e cheiro** | o cheiro detecta fontes de energia, e o outro organismo "cheira como energia" | itens 12 a 14 (VERIFICADA; o site oficial, cinza) |
+| **Sims (1994)** | morfologia e sistema neural evoluídos juntos | um grafo dirigido descreve o corpo e o circuito neural (resumo). Os sensores não estão no resumo: SEM FONTE | item 22 (VERIFICADA, resumo) |
+| **PolyWorld** | visão; energia interna; tamanho, força e velocidade como fisiologia nos genes; um emissor de luz no próprio corpo | a visão é desenhada do ponto de vista do organismo; não há cheiro nem audição | item 15 (VERIFICADA sem DOI, texto lido) |
+| **Robôs de Cañamero e colegas** | variáveis fisiológicas internas sob homeostase; hormônios que regulam os **próprios receptores** | o prazer, ligado ou não a uma necessidade, melhora a viabilidade e a flexibilidade (Lewis e Cañamero 2016). Num modelo epigenético, a concentração do hormônio regula o receptor dele, num robô Koala, em seis ambientes (Lones, Lewis e Cañamero 2018) | itens 23 e 24 (VERIFICADA, resumo) |
+| **Bongard, Zykov e Lipson (2006)** | automodelo da própria morfologia | o robô infere a própria estrutura pelas relações entre atuação e sensação | item 25 (VERIFICADA, resumo; revisão G) |
+| **Unreal, Thief, Splinter Cell** | sentidos como componentes (ver, ouvir, tato), **sem anatomia** | o sentido é um teste do mundo (raio, ângulo, raios até partes do corpo do alvo) | itens 9 a 11 |
+
+**A biologia que sustenta o desenho do órgão** (só os resumos):
+- **A adaptação no próprio receptor:** nos neurônios olfativos de vertebrados há duas formas rápidas e uma persistente de adaptação, com
+  cursos de tempo diferentes (Zufall e Leinders-Zufall 2000, item 26).
+- **Uma narina basta, duas ajudam:** na larva da drosófila, um só neurônio olfativo funcional basta para a quimiotaxia, e a entrada dos dois
+  lados aumenta a precisão pela relação sinal-ruído (Louis et al. 2008, item 27).
+- **O olfato estéreo:** ratos localizam o cheiro em uma ou duas fungadas. A amostra dos dois lados foi essencial, com a diferença de
+  intensidade e de tempo entre as narinas como pista de direção (Rajan, Clement e Bhalla 2006, item 28).
+- **A localização do som é calculada:** o espaço do som não está representado na membrana basilar da cóclea, e a localização depende da
+  comparação entre os dois ouvidos (Grothe, Pecka e McAlpine 2010, item 29).
+
+**O que se tira para o digilab:**
+- **Nenhum dos sistemas de jogo e de vida artificial lidos** modela o olfato com limiar, adaptação e saturação no receptor:
+  - no Dwarf Fortress (pista) o nariz existe e não tem função conhecida;
+  - no Framsticks o cheiro é um receptor de energia, sem fórmula localizada;
+  - no Creatures (pista) o cheiro é o valor da sala.
+- **O mais perto é o robô de Lones, Lewis e Cañamero,** com um receptor que se regula. Mas é um receptor de hormônio, não de cheiro.
+- **A adaptação, o limiar e a saturação da DP-13** vêm da biologia (itens 26 a 28), e não de um sistema de agentes. A forma exata (a conta
+  em inteiros, a meia-vida, a meia-saturação) é desenho nosso: SEM FONTE.
+- **Nenhuma alegação de novidade.** É resultado de uma busca curta, em que a ausência é evidência fraca.
+
+## 8. Referências
 
 | # | referência | tipo | status | DOI / onde | quanto foi lido | o que sustenta aqui |
 |---|---|---|---|---|---|---|
@@ -213,7 +249,18 @@ Documentação oficial da Epic (cinza, lida em 2026-10-08).
 | 17 | Beer e Gallagher (1992). Evolving Dynamical Neural Networks for Adaptive Behavior. Adaptive Behavior 1(1), 91-122 | par | VERIFICADA | `10.1177/105971239200100105` | resumo | um controlador de quimiotaxia evoluído |
 | 18 | Webb, B. (1995). Using robots to model animals: a cricket test. Robotics and Autonomous Systems 16, 117-134 | par | VERIFICADA | `10.1016/0921-8890(95)00044-5` | só título | só que existe um robô modelo do grilo; o mecanismo fica SEM FONTE |
 | 19 | Ishida, Wada e Matsukura (2012). Chemical Sensing in Robotic Applications: A Review. IEEE Sensors J. 12(11), 3163-3173 | par | VERIFICADA | `10.1109/JSEN.2012.2208740` | resumo | robôs que seguem trilhas químicas, rastreiam plumas e mapeiam substâncias |
+| 20 | Dwarf Fortress Wiki, verbete "DF2014:Body token" | cinza (fã) | NÃO VERIFICADA EM FONTE PRIMÁRIA | dwarffortresswiki.org | página lida | **pista:** as partes do corpo com função de ver, ouvir, cheirar, respirar; a de cheirar sem função conhecida |
+| 21 | Adams, T. (2019). Emergent Narrative in Dwarf Fortress. In *Procedural Storytelling in Game Design* | cinza (capítulo do autor do jogo) | VERIFICADA | `10.1201/9780429488337-15` | resumo | só a narrativa emergente; **não** descreve o corpo |
+| 22 | Sims, K. (1994). Evolving virtual creatures. SIGGRAPH '94, 15-22 | par | VERIFICADA | `10.1145/192161.192167` | resumo | morfologia e sistema neural gerados juntos por um grafo dirigido |
+| 23 | Lewis e Cañamero (2016). Hedonic quality or reward? Adaptive Behavior | par | VERIFICADA | `10.1177/1059712316666331` | resumo | o prazer, ligado ou não a uma necessidade, melhora a viabilidade e a flexibilidade de um robô |
+| 24 | Lones, Lewis e Cañamero (2018). A Hormone-Driven Epigenetic Mechanism for Adaptation in Autonomous Robots. IEEE TCDS 10(2) | par | VERIFICADA | `10.1109/TCDS.2017.2775620` | resumo | a concentração de um hormônio regula o próprio receptor; robô Koala em seis ambientes |
+| 25 | Bongard, Zykov e Lipson (2006). Resilient Machines Through Continuous Self-Modeling. Science 314 | par | VERIFICADA | `10.1126/science.1133687` | resumo (revisão G) | o automodelo da própria morfologia |
+| 26 | Zufall e Leinders-Zufall (2000). The Cellular and Molecular Basis of Odor Adaptation. Chemical Senses 25(4), 473-481 | par | VERIFICADA | `10.1093/chemse/25.4.473` | resumo | duas formas rápidas e uma persistente de adaptação no receptor olfativo |
+| 27 | Louis, Huber, Benton, Sakmar e Vosshall (2008). Bilateral olfactory sensory input enhances chemotaxis behavior. Nature Neuroscience 11, 187-199 (online em 2007) | par | VERIFICADA | `10.1038/nn2031` | resumo (Europe PMC) | um neurônio olfativo basta para a quimiotaxia; os dois lados aumentam a precisão |
+| 28 | Rajan, Clement e Bhalla (2006). Rats Smell in Stereo. Science 311, 666-670 | par | VERIFICADA | `10.1126/science.1122096` | resumo | a diferença de intensidade e de tempo entre as narinas como pista de direção |
+| 29 | Grothe, Pecka e McAlpine (2010). Mechanisms of Sound Localization in Mammals. Physiological Reviews 90, 983-1012 | par | VERIFICADA | `10.1152/physrev.00026.2009` | resumo | o espaço do som não está na cóclea; a localização é binaural |
 
 **Conferidos e não usados:**
 - Deneubourg et al. (1990), `10.1007/BF01417909`, e Russell (1999), `10.1142/4042`: sem resumo obtido;
-- Dorigo e Gambardella (1997), `10.1109/4235.585892`: redundante com o item 6.
+- Dorigo e Gambardella (1997), `10.1109/4235.585892`: redundante com o item 6;
+- Berg e Brown (1972), `10.1038/239500a0` (a quimiotaxia da *E. coli*): sem resumo obtido.
