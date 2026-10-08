@@ -1724,3 +1724,35 @@ class ConfigBanheiro:
 
 CONFIG_BANHEIRO = ConfigBanheiro()
 CONFIG_BANHEIRO_LIGADA = ConfigBanheiro(ligada=True)
+
+
+# =====================================================================
+# V2, dois pets de verdade no mesmo mundo (docs/TAREFA_V2_DOIS_PETS.md, etapa 2; desenho docs/futuro/dois_pets.md, secoes 2 a 4, DP-1 a
+# DP-3 e DP-7). O grupo: N motores sobre um Mundo (digilab/grupo.py). Desligado por padrao: sem o grupo nada muda (o MotorMundo de um
+# pet e dono do proprio Mundo). Os rotulos das sementes (`mundo-ordem`, `segundo-pet`) sao constantes do grupo.py, como os do mundo.
+
+
+@dataclass(frozen=True)
+class ConfigGrupo:
+    """O grupo de pets no mundo fisico. Os pets sao `ids`, na ordem dos identificadores (a vez no tick e sorteada, nunca a ordem do codigo);
+    o primeiro usa a semente do grupo (sozinho no mapa, e a vida de hoje dessa semente), o segundo `derivar_semente("segundo-pet", s)`.
+    `orcamento_por_dia`: as interacoes do dono por dia vivido, POR PET (DP-7, a validacao inicial com um dono so). Um pet entra num
+    inicio de dia do mundo (multiplo de TICKS_POR_DIA), para a hora do dia ser a mesma no relogio dele e no do mundo."""
+
+    ligada: bool = False
+    ids: tuple = ("A", "B")                  # DP-1: dois pets; o desenho do grupo aceita N, a pesquisa usa dois
+    orcamento_por_dia: int = 16              # DP-7: 16 interacoes por dia para cada pet (o orcamento de hoje)
+
+    def __post_init__(self) -> None:
+        if not self.ids or len(set(self.ids)) != len(self.ids) or any(type(i) is not str or not i for i in self.ids):
+            raise ValueError(f"ConfigGrupo.ids precisa de nomes distintos e nao vazios: {self.ids!r}")
+        if len(self.ids) > 2:
+            raise ValueError("ConfigGrupo.ids: so dois pets nesta etapa (a semente de um terceiro nao esta no desenho)")
+        if list(self.ids) != sorted(self.ids):
+            raise ValueError(f"ConfigGrupo.ids em ordem (a lista dos pets e ordenada pelo identificador): {self.ids!r}")
+        if type(self.orcamento_por_dia) is not int or self.orcamento_por_dia <= 0:
+            raise ValueError(f"ConfigGrupo.orcamento_por_dia tem de ser inteiro positivo: {self.orcamento_por_dia!r}")
+
+
+CONFIG_GRUPO = ConfigGrupo()
+CONFIG_GRUPO_LIGADA = ConfigGrupo(ligada=True)

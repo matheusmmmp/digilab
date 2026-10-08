@@ -56,6 +56,7 @@ from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import ConfigDonos
 from .donos import Visao
+from .engine import Motor
 from .events import (ACOES_BOLA, ACOES_FRUTAS, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario, LogDeEventos, ler_deixar_bola,
                      ler_deixar_comida)
 from .events import deixar_bola as evento_deixar_bola
@@ -452,12 +453,13 @@ class MotorMundo(MotorFrutas):
     a percepcao da decisao, os fluxos `alvo` e `mundo-sujeira` e os registros do pet (consumos, decisoes, regioes, visitas, comidas
     deixadas pelo dono)."""
 
-    def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, **kw) -> None:
+    def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
+                 entrada_mundo: int = 0, **kw) -> None:
         super().__init__(*a, **kw)
         self.cmf = cfg_mundo or CONFIG_MUNDO
         if not self.cmf.ligada:
-            if efeito_frutas is not None:
-                raise ValueError("efeito_frutas so existe com o mundo ligado")
+            if efeito_frutas is not None or mundo is not None or entrada_mundo:
+                raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -473,7 +475,20 @@ class MotorMundo(MotorFrutas):
         self._raio_visao = cm.raio_visao_celulas * sub
         self._raio_mancha = cm.raio_mancha_celulas * sub
         semente = self.semente
-        self.mundo = Mundo(cm, semente)               # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+        if mundo is None:
+            if entrada_mundo:
+                raise ValueError("entrada_mundo so com um Mundo dado (o do grupo)")
+            self.mundo = Mundo(cm, semente)           # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+        else:                                         # no grupo (digilab/grupo.py): o mundo e de todos, e o pet entra num tick dele
+            if not isinstance(mundo, Mundo) or mundo.cmf != cm:
+                raise ValueError("o Mundo dado tem de ser um Mundo com a mesma ConfigMundo do motor")
+            if type(entrada_mundo) is not int or entrada_mundo < 0 or entrada_mundo % TICKS_POR_DIA:
+                raise ValueError(f"entrada_mundo tem de ser um inicio de dia do mundo (multiplo de {TICKS_POR_DIA}): {entrada_mundo!r}")
+            self.mundo = mundo
+        # o relogio do pet (o Estado, o log, o corpo) comeca em 0 na entrada; o do mundo e o do pet mais a entrada. Os metodos do motor
+        # recebem o tick do pet; o Mundo e os registros do mundo fisico usam o do mundo. Com a entrada no inicio do dia, a hora do dia
+        # e a mesma nos dois relogios.
+        self.entrada_mundo = entrada_mundo
         self._rng_sujeira = random.Random(derivar_semente("mundo-sujeira", semente))
         self._rng_alvo = random.Random(derivar_semente("alvo", semente))
         self.pet = self.mundo.ninho
@@ -539,30 +554,34 @@ class MotorMundo(MotorFrutas):
     def _passo_mundo(self) -> int:
         return self.mundo.passo_mundo
 
+    def _tm(self, tick: int) -> int:
+        """o tick do pet no relogio do mundo"""
+        return tick + self.entrada_mundo
+
     def _prazo_maduro(self, tipo: str) -> int:
         return self.mundo.prazo_maduro(tipo)
 
     def situacao(self, comida: dict, tick: int) -> str | None:
-        return self.mundo.situacao(comida, tick)
+        return self.mundo.situacao(comida, self._tm(tick))
 
     def bola_em(self, tick: int) -> tuple[int, int]:
-        return self.mundo.bola_em(tick)
+        return self.mundo.bola_em(self._tm(tick))
 
     def _nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
-        return self.mundo.nova_comida(tipo, x, y, tick, origem)
+        return self.mundo.nova_comida(tipo, x, y, self._tm(tick), origem)
 
     def _atualizar_mundo(self, tick: int) -> None:
-        self.mundo.atualizar(tick)
+        self.mundo.atualizar(self._tm(tick))
 
     def _fontes_de_cheiro(self, tick: int) -> list[tuple[int, int, int]]:
-        return self.mundo.fontes_de_cheiro(tick)
+        return self.mundo.fontes_de_cheiro(self._tm(tick))
 
     # ------------------------------------------------------------ percepcao
     def _perceber(self, tick: int) -> PercepcaoMundo:
         """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
         x, y = self.pet
         pend = self._pendente["alvo"].tipo if self._pendente is not None else None
-        return self.mundo.perceber(x, y, tick, pend)
+        return self.mundo.perceber(x, y, self._tm(tick), pend)
 
     def _observacao_depois_mundo(self) -> Observacao:
         """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
@@ -571,7 +590,7 @@ class MotorMundo(MotorFrutas):
     def _antes_da_decisao(self) -> PercepcaoMundo:
         """Chamado pelo embrulho logo antes de `agir`: o mundo anda ate o tick (uma vez por tick) e o pet percebe."""
         t = self._estado.tick
-        self.mundo.atualizar(t)
+        self.mundo.atualizar(self._tm(t))
         self._percepcao = self._perceber(t)
         self._fome_antes = self._estado.fome
         return self._percepcao
@@ -590,7 +609,7 @@ class MotorMundo(MotorFrutas):
             c = self.mundo.comidas.get(velho.id)
             return None if c is None else Alvo("continuar", c["x"], c["y"], velho.id, "comida")
         if velho.tipo == "bola":
-            bx, by = self.mundo.bola_em(self._estado.tick)
+            bx, by = self.mundo.bola_em(self._tm(self._estado.tick))
             return Alvo("continuar", bx, by, ID_BOLA, "bola")
         return Alvo("continuar", velho.x, velho.y, None, velho.tipo)
 
@@ -635,6 +654,7 @@ class MotorMundo(MotorFrutas):
     # ------------------------------------------------------------ a consequencia
     def _comer_mundo(self, ident: int, como: str, tick: int) -> dict:
         c = self.mundo.retirar_comida(ident)
+        tick = self._tm(tick)                               # o registro do consumo e do mundo: o relogio do mundo
         sit = self.mundo.situacao(c, tick)
         e = self._estado
         fome, humor, sujeira = e.fome, e.humor, e.sujeira
@@ -655,7 +675,7 @@ class MotorMundo(MotorFrutas):
         return reg
 
     def _rolar_bola(self, tick: int) -> None:
-        self.mundo.rolar_bola(tick)
+        self.mundo.rolar_bola(self._tm(tick))
 
     def _consequencia(self, acao: AcaoPet) -> dict | None:
         """Chamado pelo embrulho em `observar`, antes do cerebro: anda, come, brinca, desfaz o +0,05 do comer (MF-2) e registra."""
@@ -689,7 +709,7 @@ class MotorMundo(MotorFrutas):
             if chegou and acao is AcaoPet.COMER and alvo.objeto() == "comida":
                 comeu = self._comer_mundo(alvo.id, "comer", tick)
             elif chegou and acao is AcaoPet.EXPLORAR and self._estado.fome < self.cmf.fome_max_comer_achado:
-                perto = self.mundo.maduras_perto(x1, y1, tick, self._raio_pegar)
+                perto = self.mundo.maduras_perto(x1, y1, self._tm(tick), self._raio_pegar)
                 if perto:
                     comeu = self._comer_mundo(perto[0][2], "achou", tick)
             elif chegou and acao is AcaoPet.BRINCAR and alvo.objeto() == "bola":
@@ -715,6 +735,7 @@ class MotorMundo(MotorFrutas):
 
     def _registrar_decisao(self, tick: int, acao: AcaoPet, antes: tuple, regiao_antes: int, alvo: Alvo | None,
                            ocorrido: dict | None) -> None:
+        tick = self._tm(tick)                               # os registros do mundo fisico: o relogio do mundo
         x1, y1 = self.pet
         regiao = regiao_de(x1, self.cmf)
         for v in self._manchas_abertas.values():               # as decisoes tomadas de dentro da mancha
@@ -763,15 +784,15 @@ class MotorMundo(MotorFrutas):
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
         tick = self._estado.tick
-        c = self.mundo.deixar_comida(tipo, x, y, tick)
-        self.deixadas.append({"tick": tick, "id": c["id"], "tipo": tipo, "x": x, "y": y, "pet": self.pet})
+        c = self.mundo.deixar_comida(tipo, x, y, self._tm(tick))
+        self.deixadas.append({"tick": self._tm(tick), "id": c["id"], "tipo": tipo, "x": x, "y": y, "pet": self.pet})
         # contato, como o alimentar de hoje: zera o tempo sem cuidado, soma um cuidado, vinculo e politica recebem `alimentar`
         self._contato(AcaoUsuario.ALIMENTAR, tick)
 
     def _aplicar_deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
-        self.mundo.deixar_bola(x, y, self._estado.tick)
+        self.mundo.deixar_bola(x, y, self._tm(self._estado.tick))
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o por_bola de hoje)
 
     # ------------------------------------------------------------ leitura
@@ -779,7 +800,7 @@ class MotorMundo(MotorFrutas):
         d = super().estado()
         if not self.cmf.ligada:
             return d                             # desligado: o estado() do MotorFrutas, sem chave nova
-        t = self._estado.tick
+        t = self._tm(self._estado.tick)
         d["mundo"] = {"pet": self.pet, "regiao": self.cmf.layout.regioes[regiao_de(self.pet[0], self.cmf)][0],
                       "bola": self.mundo.bola_em(t),
                       "comidas": sum(1 for c in self.mundo.comidas.values() if self.mundo.situacao(c, t) is not None)}
@@ -798,6 +819,20 @@ class MotorMundo(MotorFrutas):
                 "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
                 "regioes": self.regioes, "visitas": self.visitas,
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()]}
+
+    # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
+    # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
+    # eventos; o MotorEducacao confere a morte no fim) em volta do laco de n ticks do engine. O grupo intercala os ticks dos pets, entao
+    # chama as tres partes separadas: `_abrir_avanco`, `_um_tick` n vezes e `_fechar_avanco`. Com um pet, e o `_avancar(n)` byte a byte
+    # (o G2 do grupo); tests/test_grupo.py confere que nenhuma classe da cadeia tem outro `_avancar`.
+    def _abrir_avanco(self) -> None:
+        self._n_eventos += 1                     # o MotorPersonalidade._avancar
+
+    def _um_tick(self) -> None:
+        Motor._avancar(self, 1)                  # o laco do engine, um tick (decide se for a hora, e anda o tick)
+
+    def _fechar_avanco(self) -> None:
+        self._conferir_morte(self._estado.tick)  # o MotorEducacao._avancar (com as lesoes desligadas, nada)
 
 
 # ================================================================== replay

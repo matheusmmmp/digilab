@@ -4053,3 +4053,46 @@ e na tarefa. Nenhuma run, nenhum código.
 - **O sinal que ensina o alvo** é o da decisão inteira (todos os canais, com os canais ligados): o lugar mexe na energia (o andar) e na
   comida (a fome e o humor). Só a consequência ensina; o dono e o carinho não.
 - **O teto:** com o corpo e o banheiro (998 pesos), a chave estoura os 1000 e falha alto. Pela PDP-1 o corpo fica desligado no degrau 1.
+
+## 2026-10-08 — DOIS-PETS, etapa 2 (worker A): o `Grupo`
+
+- **O branch é `v2-dois-pets-grupo`**, pelo mesmo motivo da etapa 1: o `v2-dois-pets` é o branch do desenho (#244).
+- **Sem gabarito novo.** O G2 desta etapa usa o gabarito da etapa 0 (`tests/gabaritos/dois_pets_vidas_de_hoje.json`, já na `main`) e
+  compara o grupo com um pet ao `simular_vida_mundo` de hoje, rodado no mesmo teste. Nenhuma vida de hoje mudou.
+- **O laço partido, sem mexer no `engine.py`.** Para os ticks andarem intercalados, o grupo não chama o `_avancar(n)` de cada motor. Ele
+  chama três partes do `MotorMundo`:
+  - `_abrir_avanco`, o que o `MotorPersonalidade._avancar` faz por chamada (o índice do evento de avanço);
+  - `_um_tick` n vezes: o laço do `engine.Motor._avancar` com um tick, ou o `_laco(1)` do `MotorCorpo` (o `motor_corpo.py` ganhou só esse
+    método);
+  - `_fechar_avanco`, o que o `MotorEducacao._avancar` faz no fim (a morte conferida; com as lesões desligadas, nada).
+  - Com um pet, é o `_avancar(n)` byte a byte (o G2). Um teste confere que as classes da cadeia com `_avancar` são as de hoje.
+- **A ordem dentro do tick.** Os pets que decidem agem na ordem sorteada, e os que não decidem andam o tick deles depois, na ordem dos ids.
+  Um pet que não decide no tick só anda o próprio estado (a sujeira, o sono, a fome), sem tocar no mundo, então o lugar dele na ordem não
+  muda nada. Com os dois pets entrando em inícios de dia, eles decidem sempre nos mesmos ticks (de 15 em 15).
+- **O relógio do pet e o do mundo.** O desenho não diz como um pet entra depois do tick 0. Escolhi:
+  - o relógio do pet começa em 0 na entrada: o `Estado`, o log do motor, o corpo, a Vida, os estágios e o que o dono vê. O pet que entra
+    no dia K é um recém-nascido, como o B do plano;
+  - o `Mundo` e os registros do mundo físico do pet (consumos, decisões, regiões, visitas, comidas deixadas) usam o relógio do mundo, para
+    as medidas dos dois pets ficarem na mesma régua;
+  - a memória da novidade do corpo (`_vistos_em`) é do pet, no relógio dele (a janela é uma diferença de ticks, então tanto faz);
+  - a entrada só num início de dia do mundo, para a hora do dia ser a mesma nos dois relógios (o plano usa K dias inteiros).
+- **O registro guarda, além do destino, o pet do evento.** O `destino` diz o que muda (`grupo`, `mundo`, `pet:<id>`), e o `pet` diz de
+  quem é o orçamento e o contato. Deixar a comida tem destino `mundo`, mas conta como contato do pet do dono que a deixou (o
+  `deixar_comida` de hoje). A entrada é um evento do grupo, com o id no valor. A `origem` é `dono` (um dono para todos, DP-7); a etapa 7
+  troca para `dono:<id>`.
+- **O replay confere o registro refeito, e o G1 confere o resto.** O registro só guarda o que entra (as decisões dos pets saem do
+  replay). Por isso o "registro refeito igual ao lido" pega o evento mal roteado, fora do tick ou de pet que não entrou. A vida refeita
+  bit a bit (os pets, o mundo, as vezes sorteadas, as rngs) é o G1, pelo `Grupo.resumo`.
+- **As vezes sorteadas não entram no registro.** Elas saem do fluxo `mundo-ordem` e do tick, e o replay as refaz; ficam em `Grupo.ordens`
+  para o relato e os testes.
+- **O dono no `simular_grupo`.** É o `simular_vida_mundo` com um dono por pet, decidindo depois do passo do grupo, na ordem dos ids, cada
+  um só pelo que vê do pet dele. A rng `dono` é a de hoje com a semente do pet. O `DonoComLugar` (a rng `dono-lugar`) é montado por quem
+  chama, com a semente do pet. O orçamento é o `orcamento_por_dia` vezes os dias vividos, e o índice do passo conta da entrada. O pet sem
+  dono (`dono=None`) existe para o parceiro passivo do G-NUMS-GRUPO.
+- **O "primeiro evento físico do B" do G-NUMS-GRUPO** é o primeiro tick (do mundo) em que o B come, brinca com a bola, ou o dono dele deixa
+  algo no mapa. Até ele, o rastro do A (decisões, consumos, regiões) é o do A sozinho, com qualquer cérebro do B. Nesta etapa os pets não
+  se veem, então é só pelo mundo que um muda o outro.
+- **A `ConfigGrupo` aceita no máximo dois pets e os ids em ordem.** A semente de um terceiro não está no desenho (seção 2), e a lista dos
+  pets é a dos ids, nunca a ordem do código.
+- **Fica para outras etapas.** A troca do `efeito_frutas` no dia K ("B + Aemb") e o efeito por tipo de árvore são da etapa 5 (o D). Até lá
+  o grupo exige o mesmo `efeito_frutas` em todos os pets e falha alto se diferir. A visão, o toque e a disputa são a etapa 3.
