@@ -1173,6 +1173,10 @@ Evolução (`--forcar` para passar por cima e perder as edições).
   (olfato primeiro); uma fruta amarga ajuda o órgão a se curar. Perguntas: o pet percebe a perda, descobre o remédio (com atraso e
   placebo) e passa a descoberta a outro pet (observação, sinal, entrega entre irmãos). Depende dos órgãos do corpo e da convivência.
   Não autoriza implementação.
+- **IDEIA: fisiologia por espécie** (`docs/futuro/fisiologia_especies.md`, Matheus, 2026-10-08): um corpo-base comum e um perfil
+  herdável por linhagem, em quatro camadas (órgãos presentes, configuração dos órgãos comuns, predisposições inatas; o aprendido fica
+  com o indivíduo), como o Creatures 3 faz entre Norns, Ettins e Grendels. Rótulo ("aquático", "blindado") só com efeito no mundo.
+  O perfil seria uma alteração declarada do grafo do corpo. Não autoriza implementação nem mexe no combate.
 - **DECIDIDO: o pet do produto aprende sozinho, sem elogiar e repreender** (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, Matheus,
   2026-10-07; era o R8.1): os botões saem dos pets novos (v1–v10 iguais); o pet aprende pela consequência, como o reforço químico do
   Creatures 3; acariciar fica e o tapa entra como
