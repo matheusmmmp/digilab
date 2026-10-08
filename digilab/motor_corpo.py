@@ -40,6 +40,10 @@ Etapa 6, a parte do motor (secoes 7 e 8; o contrato dos ganchos combinado com o 
   - `drives_novos`: `Corpo.atividade(nome)` (o tedio pela variedade, secao 17) uma vez por decisao de brincar ("bola" ou "brincar") ou
     explorar, depois dos estimulos da acao; com o mundo fisico, o registro do que o pet viu e quando, os `vistos_novos` no `ocorrido`
     do mundo e `Corpo.estimulo_novidade(n)` no explorar (a curiosidade, CD-8; o corpo nasce com `com_mundo`).
+O banheiro (docs/TAREFA_V2_BANHEIRO.md, secoes 2 a 4, etapa 3): com a ConfigBanheiro ligada no MotorMundo, o corpo tem de ter a
+sub-chave `banheiro` (e vice-versa: a vontade sem o banheiro no mapa nao teria como cair; falha alto). O `aliviar` do mundo vira o
+`Corpo.estimulo_aliviar` (a vontade a zero) e, quando a necessidade fica no chao, o `Corpo.estimulo_necessidade` (o cheiro), depois do
+andar; a cada tick, `Corpo.passo(..., necessidades=n)` com as necessidades na zona do pet (`MotorMundo.necessidades_na_zona`).
 Com educacao, lesoes, obediencia ou uma acao de treino, falha alto (secao 2): lesao como dano de orgao e da etapa 1b. O corpo nao sorteia
 nada e o cerebro nao recebe o objeto do corpo: so os receptores (G-RECEPTOR).
 """
@@ -96,6 +100,10 @@ class MotorCorpo:
     def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
+        banheiro = self._banheiro_ligado()
+        if banheiro != (self.cc.ligada and self.cc.banheiro):
+            raise ValueError("o banheiro no mapa (ConfigBanheiro.ligada) e a vontade no corpo (ConfigCorpo.banheiro) vao juntos "
+                             f"(TAREFA_V2_BANHEIRO, secao 2): mapa {banheiro}, corpo {self.cc.ligada and self.cc.banheiro}")
         if not self.cc.ligada:
             return                                   # desligado: o motor de baixo, byte a byte
         self._recusar_o_que_o_corpo_nao_cobre()
@@ -132,6 +140,10 @@ class MotorCorpo:
     def _mundo_ligado(self) -> bool:
         cmf = getattr(self, "cmf", None)
         return cmf is not None and cmf.ligada
+
+    def _banheiro_ligado(self) -> bool:
+        cbh = getattr(self, "cbh", None)
+        return self._mundo_ligado() and cbh is not None and cbh.ligada
 
     def percepcao_corpo(self) -> PercepcaoCorpo:
         return PercepcaoCorpo(**self.corpo.receptores())
@@ -187,7 +199,10 @@ class MotorCorpo:
             if self._estado.tick >= self._proxima_decisao:
                 self._decidir(intervalo, produzidas)
             antes = self._estado
-            self.corpo.passo(antes)
+            if self.cc.banheiro:
+                self.corpo.passo(antes, necessidades=self.necessidades_na_zona())   # o banheiro: as necessidades na zona do pet
+            else:
+                self.corpo.passo(antes)
             # o tick e a sujeira de hoje (a mesma rng, na mesma ordem); os drives float dele sao trocados pela leitura
             self._estado = self.corpo.no_estado(avancar_um_tick(antes, self.cfg, self._rng_ambiente))
             if self.cc.vida and self._cfg_evo is not None:
@@ -251,6 +266,14 @@ class MotorCorpo:
         if bola:
             self.corpo.estimulo_bola(cmf.ganho_humor_bola)
             self._estimulos.append(("bola",))
+        alivio = ocorrido.get("alivio")
+        if alivio is not None:
+            # o banheiro (secao 3): a vontade a zero e, se a necessidade ficou no chao (sem o limpador, ou fora do banheiro), o cheiro
+            self.corpo.estimulo_aliviar()
+            self._estimulos.append(("aliviar", alivio["dentro"]))
+            if not alivio["recolhido"]:
+                self.corpo.estimulo_necessidade()
+                self._estimulos.append(("necessidade",))
         if self._vistos_em is not None:
             self._novidade(acao, ocorrido)
         if self.cc.drives_novos:
