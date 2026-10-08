@@ -1,7 +1,8 @@
 # Plano de análise — V2: a rede de si em observação (etapa 2 do ego)
 
 Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 4 de `docs/TAREFA_V2_REDE_DE_SI.md`. As decisões da
-tarefa (RS-1 a RS-7) e as deste plano (PRS-1 a PRS-5, seção 12) são do Matheus.
+tarefa (RS-1 a RS-7) foram **DECIDIDAS pelo Matheus em 2026-10-08, todas pela recomendação**. As deste plano (PRS-1 a PRS-5,
+seção 12) seguem abertas.
 
 **Regras deste plano:**
 - Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.

@@ -1,8 +1,8 @@
 # TAREFA V2 — REDE DE SI: o automodelo em observação (etapa 2 do ego) (2026-10-08)
 
 Coordenador: Gerente. Workers: B (a rede e o embrulho), D (a bancada e as medidas), A (a troca da digestão e, se o G-OBS pedir, o motor) e C (o plano).
-Worktree e branch de cada etapa: `v2-rede-de-si-<etapa>`. Status: **ABERTA, PROPOSTA.** As decisões RS-1 a RS-7 (seção 8) são do
-Matheus.
+Worktree e branch de cada etapa: `v2-rede-de-si-<etapa>`. Status: **ABERTA.** **RS-1 a RS-7 DECIDIDAS pelo Matheus em 2026-10-08, todas pela
+recomendação** (seção 8).
 
 **O que já está decidido:**
 - **E-1:** o automodelo tem corpo e é aprendido por uma rede. O pet não lê a sonda; a sonda avalia;
@@ -110,6 +110,8 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 - **A web.**
 
 ## 8. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-08: RS-1 a RS-7, todas como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
