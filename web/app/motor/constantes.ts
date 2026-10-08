@@ -381,3 +381,35 @@ export const CMU: ConfigMundo = {
   bola_min_celulas: 3, bola_max_celulas: 10, mult_bola_campo: 2, atrito: 8,
   perto_max_celulas: 2, longe_min_celulas: 20, longe_max_celulas: 30, raio_mancha_celulas: 3,
 };
+
+/* V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md, etapa 7): espelho da ConfigCorpo de
+   digilab/config.py, campo a campo (snake_case de proposito, conferido pelo nome contra o gabarito do Python). O motor do corpo e
+   motor/corpo.ts. Aqui e o padrao: desligado (o corpo so existe com `ligada`); corpo.configCorpo troca campos e confere as
+   sub-chaves. Os numeros das secoes 7, 8 e 17 sao PROPOSTOS, sem fonte, como no Python. */
+export interface ConfigCorpo {
+  ligada: boolean; digestao: boolean; vida: boolean; drives_novos: boolean; gestos: boolean;
+  escala: number; escala_receptor: number; bits_meia_vida: number;
+  pet_brincar_cansaco: number; pet_explorar_cansaco: number; pet_explorar_tristeza: number; pet_comer_fome: number;
+  pet_emburrar_tristeza: number;
+  k_meia_vida_susto: number; k_meia_vida_dor: number; k_meia_vida_estresse: number;
+  taxa_digestao: number; vida_decaimento: number;
+  tedio_sobe: number; curiosidade_sobe: number; solidao_sobe: number; estresse_limiar: number; estresse_divisor: number;
+  janela_tedio: number; tedio_bola: number; tedio_brincar: number; tedio_explorar: number; tedio_dono: number;
+  curiosidade_novidade: number; curiosidade_max_novidades: number; janela_novidade: number;
+  carinho_solidao: number; carinho_estresse: number; tapa_dor: number; tapa_susto: number; tapa_estresse: number; medo_da_mao: number;
+}
+export const CCO: ConfigCorpo = {
+  ligada: false, digestao: false, vida: false, drives_novos: false, gestos: false,
+  escala: 450000, escala_receptor: 1024, bits_meia_vida: 16,
+  pet_brincar_cansaco: 9000, pet_explorar_cansaco: 6750, pet_explorar_tristeza: -4500, pet_comer_fome: -22500,
+  pet_emburrar_tristeza: 4500,
+  k_meia_vida_susto: 1497, k_meia_vida_dor: 753, k_meia_vida_estresse: 32,
+  taxa_digestao: 450000, vida_decaimento: 11,
+  tedio_sobe: 450, curiosidade_sobe: 300, solidao_sobe: 225, estresse_limiar: 337500, estresse_divisor: 256,
+  janela_tedio: 8, tedio_bola: 135000, tedio_brincar: 45000, tedio_explorar: 90000, tedio_dono: 90000,
+  curiosidade_novidade: 90000, curiosidade_max_novidades: 2, janela_novidade: 1440,
+  carinho_solidao: 180000, carinho_estresse: 90000, tapa_dor: 90000, tapa_susto: 180000, tapa_estresse: 45000, medo_da_mao: 1,
+};
+/* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
+   Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */
+export const LIMIAR_PRIVACAO = .15;

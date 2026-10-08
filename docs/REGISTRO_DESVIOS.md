@@ -3789,3 +3789,28 @@ Interpretações:
 - **O "nada" do modo sem tapa gasta o orçamento.** O plano diz "o resto do dono e o orçamento ficam iguais". A bronca vira um
   `SemGesto`, que conta no orçamento e não chega ao motor (como o `sem_ensino` ao vivo da bancada). Para isso, os canais e o
   `simular_vida_gestos` são novos; o `treino.py` (com sha conferido) não mudou.
+
+## 2026-10-07 — CORPO-WEB (worker A): o corpo em TypeScript, etapa 7
+
+- **A web lê o gabarito do Python no lugar dele.** O `web/app/test/corpo.test.ts` lê `tests/gabaritos/corpo_quimica_python.json` (o arquivo
+  que a tarefa cita), sem uma cópia em `web/app/test/gabaritos/`. É o primeiro teste da web que lê fora de `web/app/`. Assim não há cópia de
+  1,7 MB para envelhecer, e o `tests/test_corpo_quimica.py` já confere que o arquivo está em dia com o Python.
+- **O gabarito foi à versão 5, com quatro seções novas** (`config`, `grafo`, `de_estado`, `etapa6_mundo`). Faltavam:
+  - a config inteira para o espelho da web;
+  - o grafo, que a tarefa pede no TS e que nenhuma seção tinha;
+  - o corpo que nasce de um Estado em cada combinação de sub-chaves;
+  - os estímulos do mundo físico com o corpo da etapa 6 (com a curiosidade e a digestão).
+  - As seções da versão 4 saem idênticas, conferidas chave a chave contra o arquivo da `main`.
+- **A `Config` de hoje é o `C` da web.** No Python, `taxas_de(cfg, cc)` recebe a `Config`; no TS, `taxasDe(cc)` lê o espelho `C` (a web
+  tem uma Config só). O teste confere as taxas contra o gabarito. O `limiar_privacao` (0,15) não está no `C`, e o `estado.ts` usa o mesmo
+  literal. Ele entrou como `LIMIAR_PRIVACAO` em `constantes.ts`, fora do `C`, porque o `C` é conferido folha a folha contra o HTML antigo
+  (`test/constantes.test.mjs`), que não o tem.
+- **A `cfg_evo` virou `duracoes`** (bebê, criança, adolescente, em minutos). O padrão é o `DUR_EVO` (a `CONFIG_EVOLUCAO_PESQUISA`), e a
+  canônica é o `DUR_CLASSICA`; os ticks e os limiares das duas são conferidos.
+- **Os nomes exportados** levam um sufixo onde o `index.ts` poderia colidir (`QUIMICOS_HOJE`, `ESTAGIOS_CORPO`, `NOVOS_CORPO`,
+  `GESTOS_CORPO`, `ATIVIDADES_TEDIO`, `checarGrafo`, `ciclosDoGrafo`). O `divArred` é o de `motor/mundo.ts`.
+- **As mensagens de erro** têm as mesmas palavras-chave do Python ("nao fechado", "sem sumidouro", "automantido", "ganho >= 1",
+  "repetido"...), não o mesmo texto: o Python imprime tuplas com `repr`. O teste confere pela checagem que falha.
+- **A `kMeiaVida`** usa o `**` do JS. Ela só deriva as constantes, que ficam como inteiros na config, e o tick nunca a chama. O teste confere
+  que 30, 60 e 1440 dão os k da config.
+- **O corpo ainda não está no motor do jogo:** nenhum `Motor`, tela ou versão de pet o usa, como a tarefa pede.
