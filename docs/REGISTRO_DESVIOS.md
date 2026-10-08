@@ -4096,3 +4096,43 @@ e na tarefa. Nenhuma run, nenhum código.
   pets é a dos ids, nunca a ordem do código.
 - **Fica para outras etapas.** A troca do `efeito_frutas` no dia K ("B + Aemb") e o efeito por tipo de árvore são da etapa 5 (o D). Até lá
   o grupo exige o mesmo `efeito_frutas` em todos os pets e falha alto se diferir. A visão, o toque e a disputa são a etapa 3.
+
+## 2026-10-08 — DOIS-PETS, etapa 3 (worker A): visão, toque e disputa
+
+- **O branch é `v2-dois-pets-social`**, pelo mesmo motivo das etapas 1 e 2 (o `v2-dois-pets` é o do desenho, #244).
+- **A disputa, com a vez sorteada.** O desenho diz "os dois tinham como alvo a mesma comida nesse tick, e só um comeu" e "o segundo chega
+  e não acha". Com a ordem de hoje, o segundo decide depois de o primeiro agir e já não vê a comida comida, então não a escolheria. Por
+  isso a disputa conta também o alvo que o perdedor **trazia** da decisão anterior (o pendente, que vira o `continuar`): ele ia para a
+  comida, o outro a comeu, e o alvo dele sumiu. O alcance de uma decisão (60 subunidades) é menor que o raio da visão (96), então isso
+  acontece quando os dois vão atrás da mesma comida longe. Na fumaça (uma vida de 3 dias, semente 101, dois pets que comem tudo o que
+  veem), não saiu nenhuma disputa. Em cenários montados (a comida a 80 subunidades dos dois), saiu uma em cada uma das 4 sementes,
+  sempre com o primeiro na vez ganhando. A frequência é medida, não regra.
+- **A disputa fica registrada com ou sem contato**, com o campo `contato`. O tipo `disputa_*` do toque só vale com o contato, como na
+  seção 5.2.
+- **O toque é avaliado em todo tick com decisão de algum pet** e dois pets presentes, depois de todos andarem o tick. Com os dois entrando
+  em inícios de dia, eles decidem sempre juntos.
+- **O pet percebe o último toque, com a idade.** O desenho fala em "um contato por par e por tick" (o registro). O receptor guarda o último
+  contato com cada outro, com a idade em ticks, e o `onde_comeu` também tem a idade. Nada expira: é o cérebro (o B, etapa 4) que decide
+  quanto pesa o que é velho.
+- **A percepção social existe sempre que há outro pet presente**, mesmo fora da vista (`outros` vazio). Sozinho no grupo, ou fora dele, é
+  None. Saber que há outro pet no mapa não é estado interno dele.
+- **O ponto de `onde_comeu`** é o da comida comida. O consumo é visto quando o comedor (já no lugar, depois de andar) está no raio da visão
+  do observador, no momento.
+- **O `seguir` vai ao lugar onde o outro foi visto** na decisão. O `continuar` dele leva a esse ponto, não ao outro onde ele estiver
+  depois.
+- **"Os candidatos sociais só no explorar com o outro visto":** o `seguir` exige o outro visto agora; o `onde_comeu` exige só a memória
+  do consumo visto (ir onde se viu comer não depende de ver o outro agora). Os dois entram depois dos candidatos de hoje, e o padrão do
+  motor nunca os escolhe: com eles a mais, o alvo do instinto e o do P0 com lobos não mudam.
+- **O `encostar`:** quem seguiu o outro neste tick (o `seguir` ou o `continuar` dele) e terminou na célula dele ou numa vizinha sente
+  `encostou`; o outro, `encostaram`. Se os dois seguiram, os dois sentem `encostou`.
+- **A ação visível** é a `_acao_atual` do outro, a da última decisão dele. Dentro do tick, depende da vez: se o outro veio antes, é a deste
+  tick.
+- **`ConfigGrupo.raio_toque_celulas`** (1, PROPOSTO, SEM FONTE): o número da seção 5.2, agora em `config.py`.
+- **G-RECEPTOR-SOCIAL, "nenhum cérebro importa o motor nem o mundo".** Desde o #255 os lobos importam o `alvo_padrao_de` do `mundo.py`,
+  uma função pura da percepção. O teste lê o gate como: nenhum cérebro importa o `grupo` nem o `engine`, e do `mundo` só funções e tipos
+  puros, nunca o `Mundo`, o `MotorMundo`, o `Grupo` ou o `Motor`.
+- **O `obs.social` também vai na observação seguinte** da decisão e na do gesto do `MotorCorpo` (o carinho e o tapa), para o cérebro ver
+  a mesma coisa nos ganchos.
+- **O G-NUMS-GRUPO da etapa 2 mudou o que compara.** Com um B passivo, a vida do A é igual à do A sozinho, mas os lobos anotam no motivo os
+  candidatos do alvo, e agora há o `seguir` (o A vê o B). O teste compara tudo menos a política e confere o estado interno sem essa
+  anotação.
