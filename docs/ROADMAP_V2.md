@@ -157,3 +157,28 @@ descritiva posterior (`docs/DESCRITIVO_V2_PLATO.md`, `REGISTRO_DESVIOS`).
   - Q-3: recompensa contra informação, com o `w_info` aprendendo;
   - o controle de cuidado em malha fechada.
 - **Falta:** a leitura consolidada da fase 1.
+
+Rodadas 16 a 18 (2026-10-07): o mundo físico e o corpo químico em código (A, B, D), com as definições do corpo e as decisões D-1 a D-7
+(`docs/DEFINICOES_CORPO_V2.md`). O roadmap previsto segue; os pedidos novos do Matheus entram como marcos na seção 8.
+
+## 8. Marcos da jornada: os pedidos do Matheus (registrados em 2026-10-07)
+
+O roadmap das seções 4 e 5 segue como está. Os pedidos abaixo são marcos da jornada: cada um vira tarefa e plano próprios quando chegar
+a vez, e nenhum roda sem plano de análise registrado antes. A ordem é a de dependência, não a de importância.
+
+| marco | o pedido | estado | depende de | onde |
+|---|---|---|---|---|
+| J1 | **mundo físico**: o pet explora um mapa, acha comida e bola; o dono deixa a comida no lugar | código na main (motor, instinto, cérebros, corpo, bancada, TS); a calibração 31101… espera o sinal verde | — | `docs/futuro/mundo_fisico.md`, `docs/TAREFA_V2_MUNDO_FISICO.md` |
+| J2 | **corpo químico do Creatures 3**: drives como químicos, digestão, Vida, receptores | etapas 1 a 5 na main; etapa 6 (drives novos, carinho e tapa) em curso; depois o TS (7) e a bancada (8) | — | `docs/TAREFA_V2_CORPO_DRIVES.md`, `docs/DEFINICOES_CORPO_V2.md` |
+| J3 | **sem elogiar e repreender**: o pet aprende pela consequência; carinho fica, o tapa entra como desaprovação | decidido; entra com os gestos (J2, etapa 6) e numa versão de pet nova quando o produto voltar | J2 | `docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md` |
+| J4 | **banheiro**: o pet aprende a fazer as necessidades no lugar certo; o carinho pesa mais que o limpador | especificado (BN-1 a BN-6); faixas reservadas | J1, J2 (etapa 6) | `docs/TAREFA_V2_BANHEIRO.md`, `docs/PLANO_ANALISE_V2_BANHEIRO.md` |
+| J5 | **o pet que pensa**: planeja, prevê consequências ("se eu fizer X, acontece Y"), em vez de instinto com reforço por cima | pergunta de pesquisa nova; o porte do cérebro A para a web (v11, #201) fica pausado até ela | J2 (o modelo do mundo usa o corpo) | memória do projeto; tarefa e plano a escrever |
+| J6 | **ego do pet**: automodelo com corpo, aprendido por uma rede (rede de si), e indagação sobre a própria existência | objetivo decidido (E-1, E-3, E-7); etapas 2 a 6 por fazer | J2; a etapa 3 encosta no J5 | `docs/futuro/ego_existencia.md` |
+| J6a | **pet livre × pet condicionado**: o pet pensa livremente; as frases-modelo só existem num braço condicionado, para registrar e comparar | decidido (E-11) | J6 (etapa 4) | `docs/futuro/ego_existencia.md`, seções 4 e 7 |
+| J7 | **dois pets de verdade** no mesmo mundo, cada um com cérebro e corpo; não um pet sintético | desenho e tarefa com o chat C | J1; o modelo dos outros no cérebro A | `docs/futuro/dois_pets.md`, `docs/TAREFA_V2_DOIS_PETS.md` (a escrever) |
+| J8 | **escada de cognição social**: informação, reputação, normas, tradição; os degraus altos são pergunta, não feature | ideia | J7; tradição e convenção também da fase 3 (genoma e gerações) | `docs/futuro/cognicao_social.md` |
+| J9 | **ego social**: orgulho, reputação, comparação com outros pets | ideia | J6 e J8 | `docs/futuro/ego_existencia.md`, etapa 7 |
+| J10 | **órgãos com dano, cura e morte; hormônios** | adiados (D-5, D-6); SEM FONTE primária | J2 fechado | `docs/DEFINICOES_CORPO_V2.md` |
+
+**Regras que valem para todos os marcos:** chave desligada = a vida de hoje byte a byte; nenhum número sem artefato; nenhuma alegação de
+novidade; nos degraus altos (J8, J9) e nas perguntas do ego (J6), nada de rótulo nem conteúdo escrito à mão no pet livre.

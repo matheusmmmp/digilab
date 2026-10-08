@@ -44,8 +44,8 @@ def test_vida_dura_a_vida_mais_longa_da_pesquisa():
 def test_subchaves_da_vida():
     with pytest.raises(ValueError, match="exige"):
         ConfigCorpo(ligada=True, vida=True)                    # a Vida e o orgao 2: exige o 1
-    with pytest.raises(NotImplementedError):
-        ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True)
+    with pytest.raises(ValueError, match="exige"):
+        ConfigCorpo(ligada=True, digestao=True, drives_novos=True)   # os drives novos exigem a Vida (E-9)
     with pytest.raises(ValueError, match="positivo"):
         ConfigCorpo(ligada=True, digestao=True, vida=True, vida_decaimento=0)
     corpo = Corpo.de_estado(Estado(), CFG, ConfigCorpo(ligada=True, digestao=True))

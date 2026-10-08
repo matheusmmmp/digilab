@@ -150,8 +150,12 @@ PARAMETROS_LOBOS_N6_N7: dict[str, tuple[str, str]] = {
     "memoria_permutacao": ("PROPOSTO", "N6-6: desarranjo de FRUTAS por vida, rng propria (desarranjo_n6)"),
     "w0_pedido": ("PROPOSTO", "N7-4 (PLANO_ANALISE_V2_N7, secao 3): 0 desliga; grade {S/4, S/2, 3S/4} calibrada no N7"),
 }
+PARAMETROS_LOBOS_CORPO: dict[str, tuple[str, str]] = {
+    "recompensa_tapa": ("PROPOSTO", "CD-10 (TAREFA_V2_CORPO_DRIVES, secao 16): o valor da recompensa_repreensao, em toda fonte que "
+                                    "aprende"),
+}
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
-                    **PARAMETROS_LOBOS_N6_N7}
+                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO}
 MODOS_MEMORIA = ("relevante", "recencia", "embaralhada")
 REGRAS_PEDIDO = ("fome_moderada", "fruta_no_cenario")   # N7-2 e N7-3: so onde comer e candidato e a necessidade nao e urgente
 # V2, N3: o sinal da consequencia (ConfigConsequencia, config.py). Todos PROPOSTOS, nenhum referendado.
@@ -181,6 +185,7 @@ DRIVES_NOVOS_SINAL = ("tedio", "curiosidade", "solidao", "estresse", "dor")     
 REGRAS_ENTRADAS_CORPO = ("tempo_livre", "bola_no_cenario", "fruta_no_cenario")     # secao 11: so nas regras de tempo livre
 # os canais novos (secao 9): um por drive novo, todos ao corpo (a tabela do lobo de decisao); o humor da fruta continua na fruta
 ROTA_CANAIS_CORPO = {d: "corpo" for d in DRIVES_NOVOS_SINAL}
+VALOR_TAPA = "tapa"                 # AcaoUsuario.TAPA (o enum e do A, etapa 6): o cerebro o le pelo valor
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -553,6 +558,8 @@ class Aprendiz:
         self._x_corpo: list[float] = []               # as leituras dos receptores novos na ultima decisao, divididas por S
         self._acao_sem_gancho: AcaoPet | None = None  # a decisao observada que ainda espera o gancho do corpo (uma chamada por decisao)
         self._corpo_pendente: dict | None = None      # o credito pela consequencia, ate o gancho do corpo (ou do mundo)
+        self._mundo_creditou: AcaoPet | None = None   # com o mundo fisico: o consequencia_mundo ja creditou esta decisao
+        self._cc_corpo: ConfigConsequencia | None = None  # a ConfigConsequencia da ultima decisao creditada pelo corpo (o ganho do carinho)
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -758,13 +765,54 @@ class Aprendiz:
             else:
                 self._creditar(self._ultima, arred(self.cl.recompensa_repreensao * S), self._anteriores(self._ultima))
                 self._n_recompensas["repreensao"] += 1
+        elif acao.value == VALOR_TAPA:
+            # corpo, etapa 6 (secao 8; CD-9, CD-10): o tapa manda o sinal direto, o valor da bronca, a ultima decisao, pela janela da v1;
+            # escalar (os canais nao o dividem). A dor, o susto e o estresse que ele causa ficam no corpo e nao sao creditados aqui
+            if self._ultima is None:
+                return
+            self._creditar(self._ultima, arred(self.cl.recompensa_tapa * S), self._anteriores(self._ultima))
+            self._n_recompensas["tapa"] = self._n_recompensas.get("tapa", 0) + 1
         elif acao in CUIDADOS:
-            janela = self.cl.janela_latencia_ticks
-            for tick_pedido, registro in self._pendentes:
-                self._aplicar_sinal(registro, S - div_arred((tick - tick_pedido) * S, janela))
-                self._n_recompensas["latencia"] += 1
-            self._pendentes = []
+            self._pagar_chamados(tick)
         # outras acoes do dono (treino etc.) nao creditam nada: so a memoria as conta
+
+    def _pagar_chamados(self, tick: int) -> None:
+        """O primeiro cuidado dentro da janela paga os chamados pendentes: S - div_arred(L S, janela), L a latencia."""
+        S = self._escala
+        janela = self.cl.janela_latencia_ticks
+        for tick_pedido, registro in self._pendentes:
+            self._aplicar_sinal(registro, S - div_arred((tick - tick_pedido) * S, janela))
+            self._n_recompensas["latencia"] += 1
+        self._pendentes = []
+
+    def mudanca_no_corpo(self, obs_antes: Observacao, obs_depois: Observacao) -> None:
+        """Gancho do MotorCorpo com `gestos` (secao 8; CD-4): o carinho chega ao cerebro so pelo corpo, sem dizer que gesto foi. O cerebro
+        calcula o `sinal_corpo` dos receptores antes e depois do carinho (os drives do sinal: os do N3 e os novos; o humor nao, como fora
+        da fruta) e o credita a ultima decisao pela janela da v1, escalar, como o elogio. O carinho e cuidado: acerta o relogio do cuidado
+        (o carinho zera o `ticks_desde_cuidado`; o instante dele e o `ticks_desde_cuidado` do `obs_antes`) e paga os chamados pendentes,
+        como hoje. Com o aprendizado desligado, so a memoria o conta. Um cerebro que aprende sem a chave do corpo falha alto: sem os
+        receptores nao ha sinal."""
+        tick = self._tick_ultimo_cuidado + obs_antes.ticks_desde_cuidado
+        self.memoria.acao_dono(AcaoUsuario.ACARICIAR, tick)
+        if not self._aprende:
+            return
+        if self._corpo is None:
+            raise RuntimeError("mudanca_no_corpo num cerebro que aprende sem a chave do corpo (cfg_corpo)")
+        if obs_antes.corpo is None or obs_depois.corpo is None:
+            raise RuntimeError("mudanca_no_corpo sem Observacao.corpo")
+        if obs_depois.ticks_desde_cuidado != 0:
+            raise RuntimeError("mudanca_no_corpo: o carinho e contato e zera o ticks_desde_cuidado")
+        self._tick_ultimo_cuidado = tick
+        self._expirar(tick)
+        self._pagar_chamados(tick)
+        if self._ultima is None:
+            return
+        cc = self._cc_corpo or CONFIG_CONSEQUENCIA
+        S = self._escala
+        f = sinal_corpo(obs_antes.corpo, obs_depois.corpo, self._drives_corpo(cc, False), cc.ganho, S, dict(cc.pesos_drives_corpo))
+        self._n_recompensas["carinho"] = self._n_recompensas.get("carinho", 0) + 1
+        if f != 0:
+            self._creditar(self._ultima, f, self._anteriores(self._ultima))
 
     def _expirar(self, tick: int) -> None:
         janela = self.cl.janela_latencia_ticks
@@ -900,9 +948,14 @@ class Aprendiz:
                 "deslocamento": ocorrido["deslocamento"], "comeu": None if comeu is None else comeu["tipo"],
                 "como": None if comeu is None else comeu["como"], "brincou_com_bola": ocorrido["brincou_com_bola"]})
         if self._corpo is not None:
-            # CORPO com o mundo fisico (secao 9): o corpo ja aplicou os estimulos do `ocorrido`; o sinal e o do corpo, sobre o obs_depois.
-            # A E2 so no comer que comeu fruta, como sem o corpo
-            self._gancho_recebido(acao, ocorrido["acao"])
+            # CORPO com o mundo fisico (secao 9; o arranjo do MotorCorpo do #238): o corpo ja aplicou os estimulos do `ocorrido`, e o sinal e
+            # o do corpo, sobre o obs_depois. A E2 so no comer que comeu fruta, como sem o corpo. Este gancho credita, e o
+            # `consequencia_corpo` que vem logo depois, na mesma decisao, so fecha a decisao
+            if self._acao_sem_gancho is not acao or ocorrido["acao"] != acao.value:
+                raise RuntimeError(f"corpo: consequencia_mundo de {acao.value} sem a decisao observada de {acao.value}")
+            if self._mundo_creditou is not None:
+                raise RuntimeError("corpo: segunda consequencia_mundo na mesma decisao")
+            self._mundo_creditou = acao
             comeu = ocorrido["comeu"]
             fruta = comeu["tipo"] if acao is AcaoPet.COMER and comeu is not None and comeu["tipo"] in FRUTAS else None
             self._creditar_corpo(fruta, obs_depois)
@@ -937,12 +990,19 @@ class Aprendiz:
         no cerebro, nada (o cerebro vive como hoje, com o sinal do N3 da transicao). Com ela, credita o `sinal_corpo` pendente (so na
         fonte consequencia) e confere que e a decisao observada (uma chamada por decisao, falha alto).
 
-        Com o mundo fisico, explorar, comer e brincar sao creditados no `consequencia_mundo` (o `ocorrido` dele diz o que o pet comeu); as
-        outras acoes (o MotorMundo nao chama o gancho do mundo nelas) podem vir por aqui. Uma chamada por decisao, de um dos dois."""
+        Com o mundo fisico (o arranjo do MotorCorpo, #238): explorar, comer e brincar sao creditados no `consequencia_mundo`, que vem antes
+        na mesma decisao (o `ocorrido` dele diz o que o pet comeu); este gancho vem sempre, uma vez por decisao, e nessas tres acoes so
+        fecha a decisao (sem o `consequencia_mundo` antes, falha alto). Nas outras acoes, credita aqui."""
         if self._corpo is None:
             return
+        mundo, self._mundo_creditou = self._mundo_creditou, None
         if self._ve_mundo_fisico and acao in ACOES_COM_ALVO_MUNDO:
-            raise RuntimeError(f"corpo com o mundo fisico: {acao.value} e creditado no consequencia_mundo (secao 9)")
+            if mundo is not acao:
+                raise RuntimeError(f"corpo com o mundo fisico: {acao.value} sem o consequencia_mundo antes do consequencia_corpo")
+            self._gancho_recebido(acao, ocorrido["acao"])
+            return
+        if mundo is not None:
+            raise RuntimeError(f"corpo: consequencia_mundo numa decisao de {acao.value}")
         self._gancho_recebido(acao, ocorrido["acao"])
         frutas = [e[1] for e in ocorrido["estimulos"] if e[0] == "fruta"]
         if len(frutas) > 1:
@@ -974,6 +1034,7 @@ class Aprendiz:
         S = self._escala
         if f_S != sinal_homeostatico(transicao, S, cc):
             raise RuntimeError("corpo: o f_S recebido nao e o sinal_homeostatico da transicao")
+        self._cc_corpo = cc
         pesos = None
         if cc.pesos_janela:
             drives = self._drives_corpo(cc, True)          # os do N3, o humor (E2) e os novos

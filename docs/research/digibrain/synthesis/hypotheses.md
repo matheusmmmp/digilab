@@ -42,6 +42,12 @@ explícito); eixo de ambiente casado × descasado × mutável. Desenho: `docs/AR
 | H-TEACH-001 | aprender por consequência sem elogio/bronca | = braço P1 | N3 | PROPOSTO |
 | H-TEACH-002 | informação do dono como incerta, validada pela consequência | = braços P2/P2e | N5 | PROPOSTO |
 | H-BRAIN-01 | DigiBrains A × B × C, mesmo mundo e mesmas sementes | `brain_comparison.md` | marco da fase 1 | IDEIA |
+| H-SELF-01 | rede de si prevê os receptores depois da própria ação e se readapta | `self_model.md` | etapa 2 do ego; corpo com órgãos | IDEIA |
+| H-SELF-02 | autoria pela comparação previsto × observado | `self_model.md` | H-SELF-01 | IDEIA |
+| H-SELF-03 | previsão do corpo na decisão (alostase) reduz privação | `self_model.md` | H-SELF-01 | IDEIA |
+| H-SELF-04 | emoção pelo corpo mais coerente que a tabela da v1 | `self_model.md` | H-SELF-01 | IDEIA |
+| H-SELF-05 | planejador arbitrado pela incerteza vence o hábito no mutável | `self_model.md` | H-SELF-01; o pet que pensa | IDEIA |
+| H-SELF-06 | doença nos impulsos encurta o tempo para perceber | `self_model.md` | H-SELF-01; doença de órgão | IDEIA |
 
 ## Fechadas (não reabrir)
 

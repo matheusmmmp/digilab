@@ -1214,6 +1214,9 @@ class ConfigLobos:
     # Confianca de partida no pedido do dono ("deixe a fruta X"): o peso inteiro, compartilhado, da entrada `pedido` na decisao de comer
     # (fome_moderada, fruta_no_cenario) e na escolha da fruta. 0 = entrada desligada (a vida de hoje, byte a byte).
     w0_pedido: int = 0                       # PROPOSTO: N7-4, grade {S/4, S/2, 3S/4} calibrada no N7 (21101...21505)
+    # --- corpo, etapa 6 (docs/TAREFA_V2_CORPO_DRIVES.md, secao 8; CD-9, CD-10) ---
+    # O sinal direto do tapa, creditado a ultima decisao pela janela da v1, como a bronca, em toda fonte que aprende
+    recompensa_tapa: float = -1.0            # PROPOSTO: o valor da recompensa_repreensao (CD-10)
 
     @property
     def escala(self) -> int:
@@ -1467,9 +1470,13 @@ class ConfigCorpo:
     """V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md; CD-1 a CD-10 decididas). A quimica guarda a
     FALTA de cada drive em inteiros de [0, escala]; o drive de hoje e a leitura (escala - q) / escala. Etapa 1 (W-CORPO-QUIMICA): a
     quimica dos drives de hoje, sem orgao (`ligada`). Etapas 3 e 4 (W-CORPO-DIGESTAO): o orgao 1, a digestao (`digestao`), e o orgao 2, a
-    Vida (`vida`). As sub-chaves das
-    etapas seguintes falham alto se ligadas. Cada sub-chave exige a anterior (E-9, um orgao por vez). Desligada: nada existe (a vida de
-    hoje byte a byte). Status em corpo.PARAMETROS_CORPO."""
+    Vida (`vida`). Etapa 6 (CORPO-DRIVES): os drives novos (`drives_novos`: tedio pela variedade, DS-4; curiosidade, so com o mundo
+    fisico; solidao; estresse) e os gestos (`gestos`: o tapa, a dor, o susto e o medo da mao no carinho). Cada sub-chave exige a
+    anterior (E-9, um orgao por vez). Desligada: nada existe (a vida de hoje byte a byte). O grafo do corpo e uma tabela unica,
+    validada na carga (digilab/corpo_grafo.py, secao 18). Status em corpo.PARAMETROS_CORPO.
+
+    Os numeros das secoes 7, 8 e 17 sao PROPOSTOS, sem fonte. O plano do corpo calibra as subidas (`m_sobe`: tedio_sobe, solidao_sobe e
+    o estresse_divisor) e as reducoes (`m_reduz`: as bases do tedio e o carinho) trocando estes campos."""
 
     ligada: bool = False
     digestao: bool = False                   # etapa 3, orgao 1 (secao 5)
@@ -1496,6 +1503,27 @@ class ConfigCorpo:
     # orgao 2, a Vida (secao 6): quanto a Vida cai por tick. C // (28 dias x 1440) = 11: a Vida dura a vida mais longa da pesquisa (os 28
     # dias do bloco de duracoes do adendo 3) e nao muda nada nesta etapa
     vida_decaimento: int = 11
+    # etapa 6, os drives novos (secao 7; DS-4, secao 17). Sobem por tick acordado; dormindo, tedio, curiosidade e solidao nao sobem
+    tedio_sobe: int = 450                    # cheio em ~17 h
+    curiosidade_sobe: int = 300              # cheia em 25 h (so com o mundo fisico, CD-8)
+    solidao_sobe: int = 225                  # cheia em ~33 h
+    estresse_limiar: int = 337500            # 0,75 de falta: o estresse acumula com os drives acima disto
+    estresse_divisor: int = 256              # estresse += div_arred(soma max(0, q_d - limiar), divisor) por tick
+    janela_tedio: int = 8                    # DS-4: as ultimas J atividades (fixa em 8 pelo adendo 1, A1.2)
+    tedio_bola: int = 135000                 # a base da reducao de cada atividade (DS-4)
+    tedio_brincar: int = 45000
+    tedio_explorar: int = 90000
+    tedio_dono: int = 90000
+    curiosidade_novidade: int = 90000        # por novidade achada ao explorar
+    curiosidade_max_novidades: int = 2       # ate 2 por decisao
+    janela_novidade: int = 1440              # um objeto e novidade se o pet nao o viu nestes ticks (o registro e do motor)
+    carinho_solidao: int = 180000            # acariciar (secao 8), com o medo da mao
+    carinho_estresse: int = 90000
+    # etapa 6, os gestos (secao 8)
+    tapa_dor: int = 90000
+    tapa_susto: int = 180000
+    tapa_estresse: int = 45000
+    medo_da_mao: int = 1                     # CD-5: o carinho na solidao e no estresse vezes (C - medo_da_mao * q_susto) / C; 0 = sem medo
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
@@ -1503,18 +1531,24 @@ class ConfigCorpo:
         for (anterior, ligou_antes), (nome, ligou) in zip(ordem, ordem[1:]):
             if ligou and not ligou_antes:
                 raise ValueError(f"ConfigCorpo.{nome} exige ConfigCorpo.{anterior} (E-9: um orgao por vez)")
-        pendentes = [nome for nome, ligou in ordem[3:] if ligou]
-        if pendentes:
-            raise NotImplementedError(f"ConfigCorpo: {pendentes} ainda nao existem (W-CORPO-DIGESTAO vai ate a etapa 4; "
-                                      "docs/TAREFA_V2_CORPO_DRIVES.md, secao 14)")
         if self.taxa_digestao <= 0:
             raise ValueError(f"ConfigCorpo.taxa_digestao tem de ser positiva: {self.taxa_digestao}")
         if self.vida_decaimento <= 0:
             raise ValueError(f"ConfigCorpo.vida_decaimento tem de ser positivo: {self.vida_decaimento}")
+        positivos = ("tedio_sobe", "curiosidade_sobe", "solidao_sobe", "estresse_limiar", "estresse_divisor", "janela_tedio",
+                     "tedio_bola", "tedio_brincar", "tedio_explorar", "tedio_dono", "curiosidade_novidade", "curiosidade_max_novidades",
+                     "janela_novidade", "carinho_solidao", "carinho_estresse", "tapa_dor", "tapa_susto", "tapa_estresse")
+        for nome in positivos:
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro positivo: {v!r}")
+        if self.medo_da_mao not in (0, 1) or type(self.medo_da_mao) is not int:
+            raise ValueError(f"ConfigCorpo.medo_da_mao e 0 (sem medo) ou 1: {self.medo_da_mao!r}")
 
 
 CONFIG_CORPO = ConfigCorpo()
 CONFIG_CORPO_LIGADA = ConfigCorpo(ligada=True)
+CONFIG_CORPO_DRIVES = ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True, gestos=True)   # a etapa 6 inteira
 
 
 # =====================================================================

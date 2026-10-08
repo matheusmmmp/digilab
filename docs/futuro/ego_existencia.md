@@ -123,6 +123,12 @@ revisão fica registrada (E-6).
 
 ## 4. As perguntas e o que as sustenta
 
+**Decisão E-11 (Matheus, 2026-10-07): o pet pensa livremente; esta tabela é gabarito, não conteúdo do pet.** As perguntas abaixo
+**não** entram no pet livre: nele não há catálogo de perguntas nem frase pronta. A questão nasce só da discrepância (o erro de previsão
+da rede de si) e da experiência (seção 5), e a fala descreve só essa questão. As frases desta tabela viram as **frases-modelo** de um
+**braço condicionado**, em que elas são implantadas de propósito, para registrar como pensa um pet com esse tipo de frase já implantada
+e comparar com o pet livre (seção 7). O pet do produto é o livre.
+
 As cinco situações do Matheus têm antecedente real no jogo de hoje. O corpo acrescenta uma sexta, a operacional, que é o gatilho mais
 direto.
 
@@ -192,6 +198,12 @@ filosófica pode ficar aberta para sempre.
   - a rede ausente;
   - o **oráculo**: a capacidade real dada de graça, que é o teto.
 - **Perguntas com lastro:** toda pergunta aponta a discrepância e a evidência que a dispararam; contar as sem lastro e as repetidas.
+- **Livre × condicionado (E-11):** os mesmos genomas, mundos e donos em dois braços, o **livre** (sem catálogo; o pet do produto) e o
+  **condicionado** (as frases-modelo da seção 4 implantadas). Registrar as questões e as falas dos dois e comparar:
+  - que questões surgem no livre sem nenhuma frase pronta, e quantas tocam os temas da seção 4;
+  - quanto do que o condicionado diz tem lastro numa discrepância real, e quanto só repete a frase implantada;
+  - se a frase implantada muda o comportamento (investigar, chamar o dono) e o cuidado.
+  - A comparação é descritiva até haver plano de análise registrado antes da run. Nenhuma frase do braço condicionado vai ao pet livre.
 - **Fala fiel:** nada além das evidências; nada de dor, medo de morrer ou consciência inventados.
 - **Cuidado preservado:** investigar não pode piorar a privação nem a saúde.
 - **Controle de exposição:** o mesmo pet recebendo as mesmas tentativas e respostas sem tê-las escolhido, pelo modo acoplado da bancada.
@@ -219,9 +231,9 @@ filosófica pode ficar aberta para sempre.
 | 1b | **órgãos e dano**: as lesões como dano de órgão, cura e morte de órgão; genes que ligam por estágio; genoma de fisiologia | G1 e G2; o corpo muda com o estágio e o dano como desenhado |
 | 2 | **rede de si em observação**: aprende o corpo e a autoria, sem influenciar escolha nem fala | o erro de previsão cai; calibração; adapta depois da evolução; nenhum acesso privilegiado |
 | 3 | **automodelo na decisão**: a previsão do corpo entra como entrada da decisão | desempenho contra a rede congelada, a ausente e o oráculo |
-| 4 | **perguntas**: a operacional e as cinco, como objetos, com frases-modelo, sem LLM | toda pergunta com lastro; cuidado preservado |
+| 4 | **perguntas**: a questão como objeto, nascida só da discrepância, sem catálogo (pet livre); o braço condicionado com as frases-modelo da seção 4 implantadas, só para comparar (E-11) | toda pergunta com lastro; cuidado preservado; o registro do livre e do condicionado lado a lado |
 | 5 | **diálogo** pelo Conversar: o dono responde, a resposta vira relato com autor | relato distinto de observação no registro |
-| 6 | **fala por LLM** sobre as mesmas intenções, comparada às frases-modelo | fala fiel; nada inventado |
+| 6 | **fala por LLM** sobre as mesmas intenções; as frases-modelo servem de gabarito do braço condicionado, não de molde da fala livre | fala fiel; nada inventado |
 | 7 | **ego social**: orgulho, reputação, comparação com outros pets | depois da cognição social; autorização própria |
 
 | # | decisão | estado |
@@ -236,6 +248,7 @@ filosófica pode ficar aberta para sempre.
 | E-9 | Química por baixo dos drives de hoje, um órgão por vez, ou trocar os drives pela química de uma vez | recomendado: por baixo e um órgão por vez; trocar de uma vez muda todos os braços juntos |
 | E-10 | Tamanho do corpo: quantos químicos e órgãos na primeira versão | recomendado: o mínimo que reproduz os drives de hoje mais a digestão e a Vida; o Creatures 3 tem 21 órgãos e 811 genes |
 | E-8 | Rede de si em inteiros, para ir à web, ou em ponto flutuante, só na pesquisa | recomendado: inteiros, como o cérebro A |
+| E-11 | As perguntas da seção 4: conteúdo do pet ou gabarito | **DECIDIDO** pelo Matheus (2026-10-07): o pet pensa livremente, sem catálogo de perguntas nem frase pronta; as frases-modelo da seção 4 só existem num **braço condicionado**, implantadas de propósito, para registrar e comparar com o livre |
 
 ## 10. Literatura
 
@@ -255,6 +268,10 @@ lido.
 | Metzinger 2007, *Scholarpedia* | `10.4249/scholarpedia.4174` | pista | conceito de modelo de si; não é protocolo nem prova de subjetividade |
 | Gottlieb et al. 2013, *Trends in Cognitive Sciences* | `10.1016/j.tics.2013.09.001` | pista | busca de informação e curiosidade |
 | Oudeyer e Kaplan 2007 | `10.3389/neuro.12.006.2007` | VERIFICADA | tipologia da motivação intrínseca |
+
+**Neurociência.** As ideias da neurociência que podem orientar a rede de si (modelo direto e cópia eferente, senso de agência,
+interocepção, eu mínimo e narrativo, arbitragem modelo × hábito) estão ligadas a cada peça em
+`docs/research/digibrain/mechanisms/self_model.md`, com as hipóteses H-SELF-01 a H-SELF-06.
 
 **Limite de alegação.** Automodelos corporais aprendidos por redes, modelos diretos do corpo e agentes que buscam informação sobre si já
 estão publicados. Nada aqui pode ser dito como novo. O que talvez seja contribuição, só depois de busca própria: um pet que aprende um

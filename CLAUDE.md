@@ -1165,6 +1165,14 @@ Evolução (`--forcar` para passar por cima e perder as edições).
 - **IDEIA: escada de cognição social** (`docs/futuro/cognicao_social.md`, Matheus, 2026-10-04): dois pets trocando informação com
   fonte e confiança, podendo chegar a reputação, normas, tradição e convenção simbólica; os degraus altos são pergunta, não feature.
   Separa herdado, vivido e aprendido de outros. Primeiro passo possível: pet sintético informante no N5. Não autoriza implementação.
+- **IDEIA: convivência no mundo físico** (`docs/futuro/convivencia_mundo_fisico.md`, Matheus, 2026-10-07): dois pets no mesmo mapa,
+  vendo um ao outro, disputando a fruta e brincando com a bola; a escada social no mapa. Pede mundo compartilhado, regra de conflito no
+  tick e replay do grupo (mudança de motor). Primeiro passo recomendado: parceiro sintético no mapa, sem motor de grupo. Não autoriza
+  implementação.
+- **IDEIA: doença de órgão e fruta-remédio** (`docs/futuro/doenca_remedio.md`, Matheus, 2026-10-07): uma doença tira um sentido
+  (olfato primeiro); uma fruta amarga ajuda o órgão a se curar. Perguntas: o pet percebe a perda, descobre o remédio (com atraso e
+  placebo) e passa a descoberta a outro pet (observação, sinal, entrega entre irmãos). Depende dos órgãos do corpo e da convivência.
+  Não autoriza implementação.
 - **DECIDIDO: o pet do produto aprende sozinho, sem elogiar e repreender** (`docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md`, Matheus,
   2026-10-07; era o R8.1): os botões saem dos pets novos (v1–v10 iguais); o pet aprende pela consequência, como o reforço químico do
   Creatures 3; acariciar fica e o tapa entra como
@@ -2913,6 +2921,103 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as contas exatas:** a conta da seção 9 (+1440 contra −34), as entradas novas pela regra da L1 e os canais;
   - **as entradas novas no prior** não mudam a decisão (3000 observações);
   - o G1, o embrulho e as falhas altas do gancho.
+
+## V2, CORPO-DRIVES — o grafo do corpo e a etapa 6 (química e cérebro) (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seções 7, 8, 17 e 18) — GATES PASSAM
+
+Infraestrutura, sem run; só as sementes dos testes. Mudaram:
+- `digilab/corpo.py`;
+- `digilab/corpo_grafo.py` (novo);
+- a `ConfigCorpo` e a `ConfigLobos.recompensa_tapa`;
+- `digilab/policies/lobos.py` e `digilab/motivo.py`;
+- o exportador e o gabarito da paridade do corpo (versão 4).
+
+`engine.py`, `motor_corpo.py`, `mundo.py`, a bancada e a web não mudaram. O motor da etapa 6 é do A. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **A combinação #238 + #239:** o cérebro com `cfg_corpo` no `MotorCorpo` com o mundo físico falhava alto, porque o motor chama os dois
+  ganchos na mesma decisão. Agora o `consequencia_mundo` credita, e o `consequencia_corpo` fecha a decisão. Entrou o G1.
+- **O grafo (seção 18):** `corpo.grafo_do_corpo` monta a tabela única (químicos, reações, emissores, receptores, meias-vidas, tetos), e o
+  `Corpo` a usa (tick em fases, receptores, meias-vidas) e a confere na carga. As checagens de `corpo_grafo.checar` falham alto:
+  - fechado;
+  - sumidouro;
+  - automantido;
+  - laço de ganho ≥ 1.
+  - O relato traz os pares com meias-vidas na mesma ordem (hoje, dor e susto). As vidas de hoje não mudam (G2).
+- **Os drives novos** (`drives_novos`):
+  - o tédio pela variedade (DS-4, `atividade`);
+  - a curiosidade (só com `com_mundo`, `estimulo_novidade`);
+  - a solidão;
+  - o estresse (o limiar 0,75, o divisor 256, a meia-vida 1440).
+- **Os gestos** (`gestos`):
+  - o tapa (dor, susto, estresse);
+  - as meias-vidas da dor (60) e do susto (30);
+  - o medo da mão no carinho (CD-5).
+- **O cérebro A:**
+  - o tapa credita `recompensa_tapa` à última decisão, em quem aprende;
+  - o `mudanca_no_corpo` credita o carinho pelo corpo, acerta o relógio do cuidado e paga os chamados;
+  - o embrulho anda o relógio.
+- **Gates:**
+  - `tests/test_corpo_grafo.py`: as checagens passam em toda combinação de sub-chaves e falham alto nas tabelas feitas para falhar, e o
+    `Corpo` usa a tabela;
+  - `tests/test_corpo_drives.py`: o G-MEC do corpo;
+  - `tests/test_corpo_risco.py`: o G-RISCO e o G-MEC do cérebro, o tapa e o carinho na última decisão e o G1 com os drives novos;
+  - `tests/test_corpo_cerebros.py`: o G1 do cérebro com o corpo no mundo físico.
+- **Achado:** com os números PROPOSTOS o tédio do P1 no mundo da bola não passa de ~0,3. A vida curta do G-RISCO roda no ponto (2, ½) da
+  grade do plano, e a direção vale por pouco (0,57 → 0,61).
+
+## V2, W-BANCADA-CORPO — o corpo na bancada, etapa 8 (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seção 14) — GATES PASSAM
+
+Rodada 21. A etapa 8 do corpo: o que dá para rodar sem a etapa 6, e o resto declarado. Infraestrutura, sem run de pesquisa; só as sementes
+dos testes. Mudaram `experiments/bancada_v2.py`, a fumaça nova `experiments/configs/v2_corpo/fumaca.json`, os testes do P1-cw
+(`tests/test_bancada_pesos_janela.py`, `tests/test_dominancia.py`), a tabela de braços de `tests/test_bancada_v2.py` e o teste novo.
+`engine.py`, `corpo.py`, `motor_corpo.py`, `lobos.py`, `metrics.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O regime é um campo do braço** (`Braco.regime`), com os nomes do plano:
+  - **"hoje":** a chave do corpo desligada;
+  - **"química":** a `ConfigCorpo` da bancada (`CONFIG_CORPO_QUIMICA`: ligada, a digestão na taxa C e a Vida, sem os drives novos);
+  - **"corpo":** a química mais `drives_novos` e `gestos`.
+  - Com o regime, o motor é o `com_corpo(...)` do mundo, e o cérebro A recebe `cfg_corpo`. Os braços sem regime (os de antes) não mudam.
+  - **A chave `corpo` da config** troca os números da `ConfigCorpo` (por exemplo a `taxa_digestao`), nunca as sub-chaves.
+  - No `padrao` com genoma, os braços do plano usam o `MotorPersonalidade` com a obediência desligada nos dois regimes, como os mundos da
+    bola e das frutas.
+- **Os braços do plano** (`BRACOS`, seções 3.1 a 3.3 e adendos 1 e 2):
+  - **rodam:** o bloco G-HOJE (P0, P1 e P3 em "hoje" e em "química");
+  - **esperam a etapa 6 e falham alto com o nó** (`NOS_PENDENTES`):
+    - P0-q e P1-q (o `DonoComGestos`);
+    - P0-c e P1-c (os drives novos e os gestos);
+    - P0-c-tapa, P1-c-tapa e P1-c-tapaX (também o tapa);
+    - P1-c-frutas;
+    - o **P1-cw**, que passou a ser o P1-c com a `pesos_janela`, como o plano pede (A2.4);
+  - o filtro `sem_gestos` também espera o tapa.
+- **O corpo no mundo físico fica pendente** (`NOS_PENDENTES["corpo_mundo"]`): o `MotorCorpo` chama `consequencia_corpo` em toda decisão (#238),
+  e o `PoliticaLobos` com `cfg_corpo` recusa esse gancho em explorar, comer e brincar no mundo físico (#239). O regime "hoje" roda no mundo
+  físico.
+- **As medidas** (bloco `corpo` do `medidas.json`, nas vidas com o corpo ligado; seção 5 do plano, funções do #224), nos últimos sete dias:
+  - `BE` e `OC` (`tempo_livre_be`; a vida toda ao lado);
+  - o cuidado preservado (`cuidado_preservado`);
+  - os drives novos (`drives_novos`), indisponíveis com o nó até a etapa 6;
+  - o corpo no fim.
+- **A dominância pelos receptores:**
+  - com o corpo ligado, ela usa a conta do cérebro (`lobos.contribuicoes_corpo`), sobre os receptores da decisão e os de depois (o gancho
+    `consequencia_corpo`, anotado pelo `_Registro`);
+  - os w_d são os da `pesos_drives_corpo` e, com a `pesos_janela`, os da janela do motivo;
+  - nos braços que aprendem pela consequência, a conta é conferida contra o motivo (`sinal_corpo`) e contra os canais; se divergir, falha
+    alto.
+- **A deriva com o corpo:** as sondas ganham os receptores do próprio estado (`percepcao_da_sonda`, a conta do corpo), e o prior é o P0 do
+  mesmo regime.
+- **Gates** (`tests/test_bancada_corpo.py`):
+  - **o "hoje" é a vida de antes byte a byte** (P0, P1 e P3, sete mundos com o físico, duas montagens);
+  - **a química** liga o corpo no motor e no cérebro, passa o G1 e o acoplado, e o P1-química aprende pelo sinal do corpo;
+  - **a chave `corpo`** troca os números e não as sub-chaves;
+  - **as medidas e a dominância** batem com o motivo e os canais nos três braços, e falham alto quando a conta diverge;
+  - **o que espera a etapa 6, o filtro e o corpo no mundo físico** falham alto com o nó, e a trava é só a tabela;
+  - a config com o plano (bases 33101, prefixo `corpo`) valida;
+  - o `rodar` da fumaça.
+- **O mecanismo do P1-cw** (`tests/test_bancada_pesos_janela.py`) é conferido em dois braços de teste no lugar dele: o P1 com a chave e o
+  P1-química com a chave. Os dois passam o gate (chave desligada = a origem byte a byte), mudam a vida, passam o G1 e têm a janela refeita
+  por fora (pelo vetor e pelos receptores). A dominância confere com os pesos.
+- **Fumaça** (`experiments/configs/v2_corpo/fumaca.json`, NÃO canônica):
+  - o bloco G-HOJE nos mundos `bola` e `padrao`;
+  - os acoplados P1-química ← P0-química e P1-hoje ← P0-hoje;
+  - sem artefato.
 
 ## V2, CORPO-GESTOS — a etapa 6 do corpo, a parte do motor (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seções 7, 8 e 14) — GATES PASSAM; ATRÁS DAS SUB-CHAVES
 
