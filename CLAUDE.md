@@ -3501,3 +3501,43 @@ sementes dos testes. Mudaram `digilab/mundo.py`, `digilab/grupo.py`, o campo `Ob
   `seguir` a mais (o A vê o B); o teste confere o estado interno sem essa anotação.
 - **Fora:** a audição e o cheiro (o degrau 1b, etapa 8); as entradas sociais e o modelo dos outros no cérebro A (a segunda metade da
   etapa 4, o B); a bancada do grupo (etapa 5, o D); o grupo em TypeScript (etapa 9).
+
+## V2, DOIS-PETS, etapa 4, segunda metade — as entradas sociais e o modelo dos outros no cérebro A (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`) — GATES PASSAM
+
+A parte da etapa 4 que dependia da percepção social do #263 (`docs/futuro/dois_pets.md`, seção 8, DP-8). Infraestrutura, sem run; só as
+sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás das chaves), a `ConfigLobos` e uma checagem em `digilab/motivo.py`.
+`engine.py`, o mundo, o grupo, o corpo, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **As chaves** (`ConfigLobos`, PROPOSTAS; registro `lobos.PARAMETROS_LOBOS_DOIS_PETS`): `entradas_sociais` e `modelo_outros` (desligadas,
+  só no mundo físico; fora dele falham alto), `janela_social_ticks` (240, o "recente") e `fator_familiaridade` (S/64).
+- **As entradas sociais** (`lobos.ENTRADAS_SOCIAIS`, `lobos.entradas_sociais`), 15, todas 0 ou 1, só do que `Observacao.social` traz:
+  - `outro_a_vista`;
+  - `viu_comer`: viu algum outro comer há no máximo a janela;
+  - `acao_<a>`: a ação visível do outro mais perto, um-quente sobre as 8 do `AcaoPet`;
+  - `toque_<tipo>`: o tipo do último contato na janela, um-quente sobre os 5 tipos (`mundo.TIPOS_TOQUE`, conferido na carga).
+  - Sem o grupo, ou sozinho nele, todas 0.
+- **No cérebro:** nas regras de tempo livre (`tempo_livre`, `bola_no_cenario`, `fruta_no_cenario`), um peso por (regra, ação, entrada),
+  **prior 0**, só nas ações que o instinto propõe em cada regra (4, 4 e 5): um candidato fora delas falha alto. O termo vai ao lobo de
+  decisão; aprende pela regra da L1, com o canal do corpo, de toda fonte que ensina a tabela da regra. O outro pet não manda sinal.
+- **Os pesos (PDP-1, o degrau 1 sem o corpo):** 951 com as entradas sociais e **987 com o alvo aprendido**. Com o corpo dos drives novos
+  passa de mil e falha alto.
+- **O modelo dos outros** (`lobos.ModeloOutros`), **só registrado** (`estado_interno()["modelo_outros"]`), por pet conhecido:
+  - **familiaridade:** a média móvel do outro à vista, em inteiros, a cada decisão;
+  - **confiança na comida:** as idas a `onde_comeu` dele que chegaram e, delas, as que acharam comida boa (comeu, ou comida boa à vista
+    na chegada);
+  - **afinidade:** `divididas` (o pet comeu e viu o outro comer no mesmo intervalo entre decisões, sem disputa) e `perdidas` (cada toque
+    novo de `disputa_perdeu`), com o saldo. Confiança e afinidade nunca se somam, e nada tem rótulo.
+  - Os eventos são identificados pelo tick no relógio do pet (a hora do dia, como o do N6) menos a idade: o mesmo evento conta uma vez.
+- **O motivo:** um termo social aprendido que pese na decisão faz o `motivo_lobos` falhar alto, como as entradas do corpo (sem fator na
+  expressão).
+- **Gates** (`tests/test_entradas_sociais.py`, 29):
+  - **G2:** com as chaves e um pet só no grupo, a vida de hoje (o resumo do grupo e os pesos de sempre); os sociais ficam em zero;
+  - **no prior, o P0 com lobos (alvo aprendido e as duas chaves) é o instinto do mundo byte a byte, com o outro à vista** (sementes 101 e
+    202);
+  - **G1:** o replay do registro do grupo refaz os dois cérebros bit a bit, com o B entrando no dia 0 e no dia 1;
+  - **a conta exata:** o termo no peso efetivo e um passo da regra nos pesos sociais;
+  - **o modelo dos outros não muda a decisão:** a vida com ele e sem ele é a mesma (3 sementes); pela AST, só o `agir` (antes de decidir),
+    o `consequencia_mundo` e a serialização o tocam;
+  - **as contas do modelo:** em casos montados e numa vida, onde as idas e os acertos batem com o registro do motor (`idas_onde_comeu`) e a
+    familiaridade é refeita da percepção.
+- **Fica para depois:** a bancada do grupo (etapa 5, D), que tem de repassar o `consequencia_mundo` ao cérebro para o modelo contar as
+  idas; a audição e o cheiro como entradas (etapa 8); o modelo decidindo (degrau 3).
