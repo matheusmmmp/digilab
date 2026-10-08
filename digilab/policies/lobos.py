@@ -98,11 +98,12 @@ from dataclasses import fields, replace
 from itertools import accumulate
 
 from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LOBOS, CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO,
-                      TICKS_POR_DIA, Config, ConfigBola, ConfigConsequencia, ConfigCorpo, ConfigFrutas, ConfigLobos, ConfigMundo)
-from ..events import FRUTAS, AcaoPet, AcaoUsuario
+                      TICKS_POR_DIA, Config, ConfigBanheiro, ConfigBola, ConfigConsequencia, ConfigCorpo, ConfigFrutas, ConfigLobos,
+                      ConfigMundo)
+from ..events import ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
-ACOES = tuple(AcaoPet)
+ACOES = ACOES_PET_HOJE                   # as sete de sempre; o ALIVIAR (banheiro) so nas tabelas do cerebro com a chave
 LOBOS = ("percepcao", "memoria_emocao", "impulsos", "decisao")
 # as regras do instinto, na ordem em que ele as testa (policy.py: ultima_regra)
 REGRAS = ("sono_exaustao", "sono_continuar", "sono_noite", "pedido_necessidade", "abandono",
@@ -180,12 +181,21 @@ ALVOS_CANAIS = ("corpo", "fruta")
 # CORPO, etapa 5: os receptores pelo nome dos campos da PercepcaoCorpo (motor_corpo.py; o cerebro nao importa o motor nem o corpo).
 RECEPTORES_HOJE = ("fome", "higiene", "energia", "humor", "saude")          # leitura = S - falta, na ordem de Estado.vetor
 RECEPTOR_DO_INDICE = dict(enumerate(RECEPTORES_HOJE))
-RECEPTORES_NOVOS = ("tedio", "curiosidade", "solidao", "estresse", "dor", "susto")   # leitura = a falta (dor e susto: a concentracao)
-DRIVES_NOVOS_SINAL = ("tedio", "curiosidade", "solidao", "estresse", "dor")         # secao 9: o susto fica fora do sinal
+RECEPTORES_NOVOS = ("tedio", "curiosidade", "solidao", "estresse", "dor", "susto",   # leitura = a falta (dor e susto: a concentracao)
+                    "vontade", "conforto")                                         # banheiro: a concentracao (a vontade, o conforto)
+DRIVES_NOVOS_SINAL = ("tedio", "curiosidade", "solidao", "estresse", "dor",         # secao 9: o susto fica fora do sinal
+                      "vontade", "conforto")                                       # banheiro (secao 3 e BN-6)
+# BN-6: o receptor do conforto le a concentracao; a falta do drive e a falta de conforto, S - leitura (o carinho a reduz)
+RECEPTORES_FALTA_INVERTIDA = ("conforto",)
 REGRAS_ENTRADAS_CORPO = ("tempo_livre", "bola_no_cenario", "fruta_no_cenario")     # secao 11: so nas regras de tempo livre
 # os canais novos (secao 9): um por drive novo, todos ao corpo (a tabela do lobo de decisao); o humor da fruta continua na fruta
 ROTA_CANAIS_CORPO = {d: "corpo" for d in DRIVES_NOVOS_SINAL}
 VALOR_TAPA = "tapa"                 # AcaoUsuario.TAPA (o enum e do A, etapa 6): o cerebro o le pelo valor
+# o banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 4): a regra urgente do instinto do alivio (instinto_banheiro.REGRA_ALIVIO_URGENTE,
+# conferido na carga) e os alvos do `aliviar`. O ALIVIAR so entra nas tabelas das regras em que ele e candidato: as de tempo livre e a
+# urgente (so ele); nas outras regras, as sete acoes de sempre
+REGRA_ALIVIO_URGENTE = "alivio_urgente"
+ALVOS_ALIVIO = ("banheiro", "aqui")
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -560,6 +570,13 @@ class Aprendiz:
         self._corpo_pendente: dict | None = None      # o credito pela consequencia, ate o gancho do corpo (ou do mundo)
         self._mundo_creditou: AcaoPet | None = None   # com o mundo fisico: o consequencia_mundo ja creditou esta decisao
         self._cc_corpo: ConfigConsequencia | None = None  # a ConfigConsequencia da ultima decisao creditada pelo corpo (o ganho do carinho)
+        # o banheiro (TAREFA_V2_BANHEIRO, secao 4): o prior da vontade no `aliviar` (nas entradas do corpo, termo de impulsos) e os pesos
+        # do alvo do `aliviar` (um por alvo, `banheiro` e `aqui`); vazios sem a chave: nada muda
+        self._banheiro: ConfigBanheiro | None = None
+        # as acoes com alvo no mundo fisico, cuja consequencia chega pelo consequencia_mundo (com o banheiro, mais o aliviar)
+        self._acoes_com_alvo: tuple = ACOES_COM_ALVO_MUNDO
+        self._prior_alvo: dict = {}
+        self._pesos_alvo: dict = {}
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -599,12 +616,12 @@ class Aprendiz:
     def n_pesos(self) -> int:
         return (sum(len(v) for acoes in self._pesos.values() for v in acoes.values()) + len(self._pesos_fruta)
                 + (self._peso_info is not None) + len(self._pesos_comer_fruta) + (self._peso_pedido is not None)
-                + sum(len(v) for acoes in self._pesos_corpo.values() for v in acoes.values()))
+                + sum(len(v) for acoes in self._pesos_corpo.values() for v in acoes.values()) + len(self._pesos_alvo))
 
     def pesos_mudaram(self) -> bool:
         return (self._pesos != self._prior or self._pesos_fruta != self._prior_fruta or self._peso_info != self._prior_info
                 or self._pesos_comer_fruta != self._prior_comer_fruta or self._peso_pedido != self._prior_pedido
-                or self._pesos_corpo != self._prior_corpo)
+                or self._pesos_corpo != self._prior_corpo or self._pesos_alvo != self._prior_alvo)
 
     def _desvios(self):
         """|w - w0| de cada peso: a tabela da decisao e, no mundo das frutas, a sub-decisao da fruta."""
@@ -624,6 +641,8 @@ class Aprendiz:
             for a in self._pesos_corpo[g]:
                 for w, w0 in zip(self._pesos_corpo[g][a], self._prior_corpo[g][a]):
                     yield abs(w - w0)
+        for t, w in self._pesos_alvo.items():
+            yield abs(w - self._prior_alvo[t])
 
     def desvio_maximo(self) -> int:
         """max |w - w0| sobre todos os pesos (o quanto o aprendizado se afastou do prior)."""
@@ -666,8 +685,18 @@ class Aprendiz:
         if grupo in self._pesos_corpo:
             # CORPO: as entradas novas (receptores novos / S) nas regras de tempo livre, um peso por (regra, acao, receptor), prior 0
             tabela = self._pesos_corpo[grupo]
-            for a in candidatos:
-                c["decisao"][a] = c["decisao"][a] + ativacao(tabela[a], self._x_corpo, self._escala)
+            if self._banheiro is None:
+                for a in candidatos:
+                    c["decisao"][a] = c["decisao"][a] + ativacao(tabela[a], self._x_corpo, self._escala)
+            else:
+                # banheiro: o prior das entradas do corpo deixa de ser zero (w_vontade na vontade do `aliviar`, o termo do instinto do
+                # alivio): o prior vai a impulsos e o aprendido (w - w0) a decisao. Nas outras acoes o prior e 0 e o termo de impulsos e
+                # 0.0 exato
+                prior_c = self._prior_corpo[grupo]
+                for a in candidatos:
+                    c["impulsos"][a] = c["impulsos"][a] + ativacao(prior_c[a], self._x_corpo, self._escala)
+                    c["decisao"][a] = c["decisao"][a] + ativacao([w - w0 for w, w0 in zip(tabela[a], prior_c[a])], self._x_corpo,
+                                                                 self._escala)
         com_pedido = False
         if (self._peso_pedido is not None and not sem_pedido and grupo in REGRAS_PEDIDO and AcaoPet.COMER in candidatos):
             # N7: comer ganha (w_pedido / S) x p, com p = -1 quando toda fruta no cenario tem pedido vigente. As regras urgentes
@@ -874,7 +903,7 @@ class Aprendiz:
             del self._janela_faltas[:-cc.janela_pesos]
             if self.motivos:
                 self.motivos[-1]["pesos_janela"] = {CANAL_DO_DRIVE[i]: w for i, w in pesos.items()}
-        if self._ve_mundo_fisico and transicao.acao in ACOES_COM_ALVO_MUNDO:
+        if self._ve_mundo_fisico and transicao.acao in self._acoes_com_alvo:
             # MUNDO-CEREBROS: no mundo fisico comer pode so andar, e o que comeu so o motor sabe; o credito espera o consequencia_mundo
             self._consequencia_mundo_pendente = (registro, transicao, cc, anteriores, f_S, pesos)
             return
@@ -992,11 +1021,12 @@ class Aprendiz:
 
         Com o mundo fisico (o arranjo do MotorCorpo, #238): explorar, comer e brincar sao creditados no `consequencia_mundo`, que vem antes
         na mesma decisao (o `ocorrido` dele diz o que o pet comeu); este gancho vem sempre, uma vez por decisao, e nessas tres acoes so
-        fecha a decisao (sem o `consequencia_mundo` antes, falha alto). Nas outras acoes, credita aqui."""
+        fecha a decisao (sem o `consequencia_mundo` antes, falha alto). Nas outras acoes, credita aqui. Com o banheiro, o aliviar (que
+        tem alvo) vai com as tres."""
         if self._corpo is None:
             return
         mundo, self._mundo_creditou = self._mundo_creditou, None
-        if self._ve_mundo_fisico and acao in ACOES_COM_ALVO_MUNDO:
+        if self._ve_mundo_fisico and acao in self._acoes_com_alvo:
             if mundo is not acao:
                 raise RuntimeError(f"corpo com o mundo fisico: {acao.value} sem o consequencia_mundo antes do consequencia_corpo")
             self._gancho_recebido(acao, ocorrido["acao"])
@@ -1152,6 +1182,10 @@ class Aprendiz:
             # CORPO: as entradas novas da regra (as leituras dos receptores novos, X = a leitura) pela mesma regra, com o canal do corpo
             self._cortes_teto += atualizar_pesos(self._pesos_corpo[g], self._prior_corpo[g], {**registro, "X": registro["corpo"]["X"]},
                                                  f_corpo, self.cl.passo, self.cl.teto, self._escala)
+        if "alvo" in registro:
+            # banheiro: o alvo do `aliviar` pela regra da sub-decisao da fruta (um peso por alvo, X = S), com o canal do corpo
+            self._cortes_teto += atualizar_fruta(self._pesos_alvo, self._prior_alvo, registro["alvo"], f_corpo, self.cl.passo,
+                                                 self.cl.teto, self._escala)
         sub = registro.get("fruta")
         if sub is not None:
             self._cortes_teto += atualizar_fruta(self._pesos_fruta, self._prior_fruta, sub, f_fruta, self.cl.passo, self.cl.teto,
@@ -1194,6 +1228,10 @@ class Aprendiz:
                 d["fruta"]["Pd"] = dict(r["fruta"]["Pd"])
             if "corpo" in r:
                 d["corpo"] = {"X": list(r["corpo"]["X"])}
+            if "alvo" in r:
+                s = r["alvo"]
+                d["alvo"] = {"candidatos": list(s["candidatos"]), "acao": s["acao"], "X": dict(s["X"]), "P": dict(s["P"]),
+                             "W": dict(s["W"])}
             return d
         d = {
             "passo": self.cl.passo, "teto": self.cl.teto, "piso_peso": self.cl.piso_peso,
@@ -1247,6 +1285,10 @@ class Aprendiz:
             d["corpo"] = {"receptores_novos": list(self._receptores_novos), "canais_novos": list(self._canais_novos)}
             if self._pesos_corpo:
                 d["pesos_corpo"] = {g: {a.value: list(v) for a, v in acoes.items()} for g, acoes in self._pesos_corpo.items()}
+            if self._banheiro is not None:          # banheiro: o prior das entradas do corpo e os pesos do alvo
+                d["pesos_corpo_prior"] = {g: {a.value: list(v) for a, v in acoes.items()} for g, acoes in self._prior_corpo.items()}
+                d["pesos_alvo"] = dict(self._pesos_alvo)
+                d["pesos_alvo_prior"] = dict(self._prior_alvo)
         if self._canais is not None:              # CANAIS-REFORCO, so depois do 1o credito por canal
             d["canais"] = {"creditos": self._canais["creditos"], "por_canal": dict(self._canais["por_canal"]),
                            "por_alvo": dict(self._canais["por_alvo"])}
@@ -1265,8 +1307,17 @@ class PoliticaLobos(Aprendiz):
 
     def __init__(self, cfg: Config | None = None, cfg_lobos: ConfigLobos | None = None,
                  cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None,
-                 cfg_mundo: ConfigMundo | None = None, cfg_corpo: ConfigCorpo | None = None) -> None:
+                 cfg_mundo: ConfigMundo | None = None, cfg_corpo: ConfigCorpo | None = None,
+                 cfg_banheiro: ConfigBanheiro | None = None) -> None:
         cl = cfg_lobos or CONFIG_LOBOS
+        # o banheiro (TAREFA_V2_BANHEIRO, secoes 2 e 4): exige o mundo fisico e o corpo com a sub-chave banheiro; o corpo com a vontade
+        # exige a chave do banheiro no cerebro (sem ela o pet teria a vontade e nenhuma acao para alivia-la)
+        banheiro = cfg_banheiro is not None and cfg_banheiro.ligada
+        corpo_banheiro = cfg_corpo is not None and cfg_corpo.ligada and cfg_corpo.banheiro
+        if banheiro != corpo_banheiro:
+            raise ValueError("banheiro: a ConfigBanheiro ligada no cerebro e a sub-chave banheiro do corpo vao juntas")
+        if banheiro and not (cfg_mundo is not None and cfg_mundo.ligada):
+            raise ValueError("banheiro sem o mundo fisico (ConfigMundo ligada)")
         # LOBOS-MUNDO: so ve o mundo com a chave dele ligada (como o instinto); sem nenhuma, as formas de antes
         self._ve_bola = cfg_bola is not None and cfg_bola.ligada
         self._ve_frutas = cfg_frutas is not None and cfg_frutas.ligada
@@ -1289,7 +1340,19 @@ class PoliticaLobos(Aprendiz):
             extra = self._prior_mundo(cb, cf)
             # a fome urgente com para onde ir come (instinto_mundo): o unico candidato da regra pode ser comer
             extra[REGRA_FOME_URGENTE] = {**PRIOR_INSTINTO[REGRA_FOME_URGENTE], AcaoPet.COMER: {"vies": 1}}
-            prior = self._tabela_prior(cl.escala, REGRAS + REGRAS_MUNDO, self.entradas, extra)
+            if banheiro:
+                # o banheiro: a regra urgente (so o aliviar) e o aliviar nas regras de tempo livre, com a linha das entradas de hoje
+                # em zero (o termo dele vem da vontade, nas entradas do corpo)
+                from ..instinto_banheiro import REGRA_ALIVIO_URGENTE as REGRA_URG, ALVOS_ALIVIO as ALVOS
+                if (REGRA_URG, ALVOS) != (REGRA_ALIVIO_URGENTE, ALVOS_ALIVIO):
+                    raise RuntimeError(f"regra ou alvos do banheiro mudaram: {REGRA_URG}, {ALVOS}")
+                extra[REGRA_ALIVIO_URGENTE] = {AcaoPet.ALIVIAR: {"vies": 1}}
+                acoes_por_regra = {r: ACOES + (AcaoPet.ALIVIAR,) for r in REGRAS_ENTRADAS_CORPO}
+                acoes_por_regra[REGRA_ALIVIO_URGENTE] = (AcaoPet.ALIVIAR,)
+                prior = self._tabela_prior(cl.escala, REGRAS + REGRAS_MUNDO + (REGRA_ALIVIO_URGENTE,), self.entradas, extra,
+                                           acoes_por_regra)
+            else:
+                prior = self._tabela_prior(cl.escala, REGRAS + REGRAS_MUNDO, self.entradas, extra)
             prior_fruta = prior_comer = None              # sem a sub-decisao da fruta: o mundo nao chama o escolher_fruta
         elif self._ve_mundo:
             from ..frutas import PoliticaInstintoFrutas, REGRA_FRUTA   # importacao tardia: frutas importa o motor inteiro
@@ -1309,7 +1372,11 @@ class PoliticaLobos(Aprendiz):
             from ..instinto_mundo import entradas_mundo
             self._ve_mundo = self._ve_mundo_fisico = True
             self._entradas_mundo = entradas_mundo
-            self._instinto = PoliticaInstintoMundo(self.cfg, cfg_bola, cfg_frutas)
+            if banheiro:
+                from ..instinto_banheiro import PoliticaInstintoBanheiro
+                self._instinto = PoliticaInstintoBanheiro(self.cfg, cfg_banheiro, cfg_corpo, cfg_bola, cfg_frutas)
+            else:
+                self._instinto = PoliticaInstintoMundo(self.cfg, cfg_bola, cfg_frutas)
         else:
             self._instinto = PoliticaInstintoFrutas(self.cfg, cb, cf) if self._ve_mundo else PoliticaInstinto(self.cfg)
         self._ultima_regra: str | None = None
@@ -1358,7 +1425,16 @@ class PoliticaLobos(Aprendiz):
             self._canais_novos = tuple(d for d in DRIVES_NOVOS_SINAL if d in self._receptores_novos)
             if self._receptores_novos:
                 n = len(self._receptores_novos)
-                self._prior_corpo = {r: {a: [0] * n for a in ACOES} for r in REGRAS_ENTRADAS_CORPO if r in self._prior}
+                self._prior_corpo = {r: {a: [0] * n for a in self._prior[r]} for r in REGRAS_ENTRADAS_CORPO if r in self._prior}
+                if banheiro:
+                    # o termo do instinto do alivio, w_vontade x vontade, e o prior do aliviar na entrada da vontade
+                    i = self._receptores_novos.index("vontade")
+                    for acoes in self._prior_corpo.values():
+                        acoes[AcaoPet.ALIVIAR][i] = _inteiro_exato(cfg_banheiro.w_vontade, cl.escala)
+                    self._banheiro = cfg_banheiro
+                    self._acoes_com_alvo = ACOES_COM_ALVO_MUNDO + (AcaoPet.ALIVIAR,)
+                    self._prior_alvo = {"banheiro": cfg_banheiro.w_banheiro_0, "aqui": cfg_banheiro.w_aqui_0}
+                    self._pesos_alvo = dict(self._prior_alvo)
                 self._pesos_corpo = {r: {a: list(v) for a, v in acoes.items()} for r, acoes in self._prior_corpo.items()}
                 if self.n_pesos() >= cl.maximo_pesos:
                     raise ValueError(f"{self.n_pesos()} pesos, teto {cl.maximo_pesos}")
@@ -1385,12 +1461,14 @@ class PoliticaLobos(Aprendiz):
 
     @staticmethod
     def _tabela_prior(escala: int, regras: tuple = REGRAS, entradas: tuple = ENTRADAS,
-                      extra: dict | None = None) -> dict[str, dict[AcaoPet, list[int]]]:
+                      extra: dict | None = None, acoes_por_regra: dict | None = None) -> dict[str, dict[AcaoPet, list[int]]]:
+        """A tabela do prior, regra -> acao -> um inteiro por entrada. Cada regra tem as sete acoes de sempre (ACOES), salvo as de
+        `acoes_por_regra` (o banheiro: o aliviar so onde e candidato)."""
         fonte = {**PRIOR_INSTINTO, **(extra or {})}
         tabela = {}
         for regra in regras:
             por_acao = {}
-            for a in ACOES:
+            for a in (acoes_por_regra or {}).get(regra, ACOES):
                 coefs = fonte[regra].get(a, {})
                 desconhecidas = set(coefs) - set(entradas)
                 if desconhecidas:
@@ -1420,10 +1498,48 @@ class PoliticaLobos(Aprendiz):
         """Gancho do MotorMundo (docs/TAREFA_V2_MUNDO_FISICO.md, secao 5): o alvo de explorar, comer ou brincar. Devolve None, o padrao
         do motor: o cerebro A aprende QUANDO explorar, comer e brincar, nao PARA ONDE (plano do mundo, secao 3; um alvo aprendido entra
         so por adendo, com desenho proprio). Com o mundo, anota os candidatos e o u no motivo da decisao (o `consequencia_mundo` anota
-        o alvo que o motor escolheu). So le: nao mexe em peso nem em rng."""
+        o alvo que o motor escolheu). So le: nao mexe em peso nem em rng.
+
+        O banheiro (TAREFA_V2_BANHEIRO, secao 4): no `aliviar` o alvo e aprendido. Os candidatos sao um `banheiro` e um `aqui`; o peso
+        efetivo de cada um e w / S (com o piso, se aprende), sorteado com u / 2^16 (a conta do instinto do alivio: no prior, o mesmo alvo).
+        Na regra urgente, `aqui` (o acidente), sem registro. Com o aprendizado ligado, a escolha entra no registro da decisao e aprende
+        pela regra da sub-decisao da fruta, com o sinal da decisao (a consequencia e o carinho, pelo corpo)."""
+        if acao is AcaoPet.ALIVIAR:
+            return self._alvo_do_alivio(candidatos, u)
         if self._ve_mundo_fisico and self.motivos:
             self.motivos[-1]["mundo"] = {"candidatos": [a.tipo for a in candidatos], "u": u}
         return None
+
+    def _alvo_do_alivio(self, candidatos: list, u: int):
+        if self._banheiro is None:
+            raise RuntimeError("alvo do aliviar num cerebro sem o banheiro")
+        from ..instinto_banheiro import sortear_alvo, tipos_do_alivio
+        tipos = tipos_do_alivio(candidatos)
+        if self._ultima_regra == REGRA_ALIVIO_URGENTE:
+            k = tipos.index("aqui")
+            if self.motivos:
+                self.motivos[-1]["alvo_alivio"] = {"candidatos": tipos, "u": u, "alvo": "aqui", "urgente": True}
+            return candidatos[k]
+        S = self._escala
+        if self._aprende:
+            pesos = [max(self._pesos_alvo[t], self.cl.piso_peso) / S for t in tipos]
+        else:
+            pesos = [self._pesos_alvo[t] / S for t in tipos]
+        k = sortear_alvo(pesos, u)
+        if self.motivos:
+            self.motivos[-1]["alvo_alivio"] = {"candidatos": tipos, "u": u, "alvo": tipos[k], "pesos": dict(zip(tipos, pesos)),
+                                               "urgente": False}
+        if self._aprende:
+            if self._registro_decisao is None or self._registro_decisao["acao"] is not AcaoPet.ALIVIAR:
+                raise RuntimeError("alvo do aliviar sem a decisao de aliviar registrada")
+            total = 0.0
+            for p in pesos:
+                total = total + p
+            self._registro_decisao["alvo"] = {
+                "candidatos": tipos, "acao": tipos[k], "X": {t: S for t in tipos},
+                "P": {t: arred(p / total * S) for t, p in zip(tipos, pesos)},
+                "W": {t: max(1, arred(p * S)) for t, p in zip(tipos, pesos)}}
+        return candidatos[k]
 
     def percepcao(self, obs: Observacao) -> list[float]:
         x = super().percepcao(obs)
@@ -1480,7 +1596,12 @@ class PoliticaLobos(Aprendiz):
             if regra in self._pesos_corpo:
                 tabela = self._pesos_corpo[regra]
                 if self._aprende:
-                    self.motivos[-1]["aprendido_corpo"] = {a.value: termos(tabela[a], self._x_corpo, S) for a in candidatos}
+                    if self._banheiro is None:
+                        self.motivos[-1]["aprendido_corpo"] = {a.value: termos(tabela[a], self._x_corpo, S) for a in candidatos}
+                    else:
+                        prior_c = self._prior_corpo[regra]
+                        self.motivos[-1]["aprendido_corpo"] = {
+                            a.value: termos([w - w0 for w, w0 in zip(tabela[a], prior_c[a])], self._x_corpo, S) for a in candidatos}
                     self._registro_decisao["corpo"] = {"X": [arred(v * S) for v in self._x_corpo]}
         if self._peso_pedido is not None and regra in REGRAS_PEDIDO and AcaoPet.COMER in candidatos:
             p = self._p_pedido()
@@ -1828,12 +1949,15 @@ def sinal_homeostatico_fruta_canais(antes: Observacao, depois: Observacao, S: in
 
 def receptores_novos(cc: ConfigCorpo, mundo_fisico: bool) -> tuple[str, ...]:
     """Os receptores novos que o corpo tem com estas chaves (secao 10), na ordem de RECEPTORES_NOVOS: tedio, solidao e estresse com
-    `drives_novos`, a curiosidade so com o mundo fisico tambem (CD-8), dor e susto com `gestos`. Sem eles, nenhum."""
+    `drives_novos`, a curiosidade so com o mundo fisico tambem (CD-8), dor e susto com `gestos`, a vontade e o conforto com o
+    `banheiro`. Sem eles, nenhum."""
     tem = set()
     if cc.drives_novos:
         tem |= {"tedio", "solidao", "estresse"} | ({"curiosidade"} if mundo_fisico else set())
     if cc.gestos:
         tem |= {"dor", "susto"}
+    if cc.banheiro:
+        tem |= {"vontade", "conforto"}
     return tuple(r for r in RECEPTORES_NOVOS if r in tem)
 
 
@@ -1850,9 +1974,10 @@ def leitura_receptor(pc, nome: str, S: int) -> int:
 
 def falta_receptor(pc, nome: str, S: int) -> int:
     """A falta na escala S: S - leitura nos drives de hoje (o receptor le o drive), a propria leitura nos novos (o receptor le a falta,
-    ou a concentracao na dor e no susto)."""
+    ou a concentracao na dor, no susto e na vontade), e S - leitura no conforto (BN-6: o receptor le o conforto; a falta e a de
+    conforto)."""
     v = leitura_receptor(pc, nome, S)
-    if nome in RECEPTORES_HOJE:
+    if nome in RECEPTORES_HOJE or nome in RECEPTORES_FALTA_INVERTIDA:
         return S - v
     if nome in RECEPTORES_NOVOS:
         return v

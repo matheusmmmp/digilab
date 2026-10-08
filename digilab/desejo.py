@@ -15,7 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .config import CONFIG_DESEJO, ConfigDesejo
-from .events import AcaoPet
+from .events import ACOES_PET_HOJE
 from .policy import Observacao
 
 TIPOS = ("necessidade", "vontade")
@@ -59,7 +59,7 @@ def desejo_de(obs: Observacao, politica, tick: int, cfg: ConfigDesejo | None = N
     if bracos is None:
         return None                               # politica sem posterior (instinto): sem vontade
     x = politica._features(obs)
-    medias = sorted(((sum(t * xi for t, xi in zip(bracos[a].theta(), x)), -i, a) for i, a in enumerate(AcaoPet)),
+    medias = sorted(((sum(t * xi for t, xi in zip(bracos[a].theta(), x)), -i, a) for i, a in enumerate(ACOES_PET_HOJE)),
                     reverse=True)
     (m1, _, a1), (m2, _, _) = medias[0], medias[1]
     margem = m1 - m2

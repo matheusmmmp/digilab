@@ -36,7 +36,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from .config import CONFIG_ARENA, ConfigArena
-from .events import AcaoPet
+from .events import ACOES_PET_HOJE, AcaoPet
 from .policy import Observacao, Politica
 from .protocol import derivar_semente
 from .tracos import ORDEM_TRACOS
@@ -61,7 +61,7 @@ def vence(a: AcaoCombate, b: AcaoCombate) -> bool:
 
 def mapa_pet_combate(cfg: ConfigArena) -> dict[AcaoPet, AcaoCombate]:
     mapa = {AcaoPet(p): AcaoCombate(c) for p, c in cfg.mapa_pet_combate}
-    faltando = set(AcaoPet) - set(mapa)
+    faltando = set(ACOES_PET_HOJE) - set(mapa)
     if faltando:
         raise ValueError(f"mapa de combate sem as acoes de pet: {sorted(a.value for a in faltando)}")
     inalcancaveis = set(AcaoCombate) - set(mapa.values())

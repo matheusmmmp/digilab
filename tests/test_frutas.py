@@ -25,7 +25,7 @@ from digilab.config import (CONFIG_BOLA, CONFIG_EDUCACAO_LIGADA, CONFIG_FRUTAS, 
                             CONFIG_LESOES_LIGADA, CONFIG_PADRAO, ConfigBola)
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.educacao import MotorEducacao, reproduzir_educacao  # noqa: E402
-from digilab.events import ACOES_BOLA, ACOES_FRUTAS, ACOES_V1, FRUTAS, AcaoPet, AcaoUsuario, LogDeEventos, oferta_de  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, ACOES_BOLA, ACOES_FRUTAS, ACOES_V1, FRUTAS, AcaoPet, AcaoUsuario, LogDeEventos, oferta_de  # noqa: E402
 from digilab.frutas import (REGRA_FRUTA, FrutasSemChave, MotorFrutas, OfertasFrutas, PoliticaInstintoFrutas,  # noqa: E402
                             efeitos_humor, fabricas_frutas, genoma_frutas, reproduzir_frutas, simular_vida_frutas)
 from digilab.metrics import comer_por_incentivo, escolha_por_incentivo, saciedade_especifica  # noqa: E402
@@ -69,7 +69,7 @@ def test_enum_cresce_no_fim_e_a_v1_nao_ve():
     # nas posicoes de quando entraram no fim do enum (17 a 19); depois delas so as de informacao (V2, N5)
     assert list(AcaoUsuario)[17:20] == list(ACOES_FRUTAS) and list(AcaoUsuario)[15:17] == list(ACOES_BOLA)
     assert len(ACOES_V1) == 6 and not set(ACOES_FRUTAS) & set(ACOES_V1)
-    assert tuple(ACOES_BANDIT) == tuple(AcaoPet) and len(AcaoPet) == 7
+    assert tuple(ACOES_BANDIT) == ACOES_PET_HOJE and len(ACOES_PET_HOJE) == 7
 
 
 def test_genoma_rng_propria_e_fora_do_temperamento():

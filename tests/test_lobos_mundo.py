@@ -26,7 +26,7 @@ from digilab.ambiente import DonoComBola, MotorAmbiente, fabricas_ambiente, repr
 from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_FRUTAS_LIGADA,  # noqa: E402
                             CONFIG_LOBOS, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, ConfigConsequencia)
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.events import FRUTAS, AcaoPet, LogDeEventos  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, FRUTAS, AcaoPet, LogDeEventos  # noqa: E402
 from digilab.frutas import (MotorFrutas, OfertasFrutas, PoliticaInstintoFrutas, fabricas_frutas, reproduzir_frutas,  # noqa: E402
                             simular_vida_frutas)
 from digilab.policies.lobos import (ENTRADAS, ENTRADAS_MUNDO, INDICE_HUMOR, PARAMETROS_CONSEQUENCIA_N3, REGRAS,  # noqa: E402
@@ -237,7 +237,7 @@ def test_e2_fruta_ruim_da_sinal_negativo_pelo_humor():
     assert sinal_homeostatico_fruta(com_fome, nutre, S, cc) > sinal_homeostatico_fruta(com_fome, nutre_ruim, S, cc)
 
 
-@pytest.mark.parametrize("acao", list(AcaoPet))
+@pytest.mark.parametrize("acao", list(ACOES_PET_HOJE))
 def test_e2_as_outras_acoes_ignoram_o_humor(acao):
     cc = ConfigConsequencia(ganho=16)
     t = Transicao(_obs(fome=0.6, humor=0.8), acao, _obs(fome=0.6, humor=0.3))

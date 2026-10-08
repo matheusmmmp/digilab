@@ -23,7 +23,7 @@ sys.path.insert(0, str(RAIZ))
 
 from digilab.config import CONFIG_PADRAO, CONFIG_VINCULO, CONFIG_VINCULO_B_LIGADA, CONFIG_VINCULO_SITUACAO, TICKS_POR_DIA  # noqa: E402
 from digilab.desejo import Desejo  # noqa: E402
-from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.policy import Observacao  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
 from digilab.vinculo import Vinculo  # noqa: E402
@@ -31,7 +31,7 @@ from digilab.vinculo import Vinculo  # noqa: E402
 SAIDA = RAIZ / "web" / "app" / "test" / "gabaritos" / "vinculo_python.json"
 SEMENTE = 20261001
 N_PASSOS = 1500
-ACOES_PET = [a.value for a in AcaoPet]
+ACOES_PET = [a.value for a in ACOES_PET_HOJE]
 CUIDADOS = ["alimentar", "limpar", "brincar", "acariciar", "petisco", "levar_ao_banheiro", "tratar_lesao"]
 FEEDBACK = ["elogiar", "repreender"]
 VONTADES = ["comer", "brincar", "chamar_atencao", "explorar", "dormir"]

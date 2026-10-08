@@ -41,7 +41,7 @@ from digilab.config import (CONFIG_DONOS, CONFIG_EDUCACAO_LIGADA, CONFIG_LESOES_
 from digilab.donos import criar_dono, julgar_acao  # noqa: E402
 from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
 from digilab.educacao import fabricas_educacao, reproduzir_educacao  # noqa: E402
-from digilab.events import AcaoPet, AcaoUsuario, LogDeEventos  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, AcaoUsuario, LogDeEventos  # noqa: E402
 from digilab.evolucao import ovo, politica_no_tick  # noqa: E402
 from digilab.metrics import (acerto_na_tarefa, bootstrap_ic, distribuicoes_de_acao, divergencia_politicas,  # noqa: E402
                              eficiencia_amostral, estados_sonda, jsd_media, norma_de_reacao)
@@ -58,7 +58,7 @@ SEMENTES_CALIBRACAO = (3101, 3202, 3303, 3404, 3505)
 SEMENTES_VALIDACAO = (4101, 4202, 4303, 4404, 4505)
 DONOS = ("atencioso", "relapso", "aleatorio", "incoerente")
 COERENTES = ("atencioso", "relapso")          # os dois que aplicam a regra de feedback coerente (plano, secao 4)
-ACOES = tuple(a.value for a in AcaoPet)
+ACOES = tuple(a.value for a in ACOES_PET_HOJE)
 SINAIS = frozenset({AcaoUsuario.ELOGIAR.value, AcaoUsuario.REPREENDER.value})
 CHAVES_CONFIG = {"descricao", "conjunto", "sementes", "saida", "grade", "ponto", "educacao", "dias", "orcamento", "sonda",
                  "bootstrap", "gates", "dias_deriva", "n_ambientes"}

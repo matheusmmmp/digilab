@@ -144,6 +144,18 @@ class AcaoPet(str, Enum):
     CHAMAR_ATENCAO = "chamar_atencao"
     EXPLORAR = "explorar"
     EMBURRAR = "emburrar"
+    # V2, banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 4; BN-1): fazer as necessidades, no fim do enum e so com a chave do banheiro. As
+    # iteracoes de hoje (bandit, metricas, tracos, arena, desejo, lobos sem banheiro) usam ACOES_PET_HOJE, as sete de sempre
+    ALIVIAR = "aliviar"
+
+
+# as sete acoes do pet de sempre, na ordem do enum: quem itera sobre as acoes do pet (bandit, metricas, tracos, arena, desejo, o cerebro A
+# sem o banheiro) usa esta tupla, e a vida de hoje nao muda com o membro novo
+ACOES_PET_HOJE = (AcaoPet.OCIOSO, AcaoPet.DORMIR, AcaoPet.COMER, AcaoPet.BRINCAR, AcaoPet.CHAMAR_ATENCAO, AcaoPet.EXPLORAR,
+                  AcaoPet.EMBURRAR)
+ACOES_PET_BANHEIRO = (AcaoPet.ALIVIAR,)
+if ACOES_PET_HOJE + ACOES_PET_BANHEIRO != tuple(AcaoPet):      # pragma: no cover - conferido na carga
+    raise RuntimeError("AcaoPet mudou: ACOES_PET_HOJE e ACOES_PET_BANHEIRO tem de cobrir o enum, na ordem")
 
 
 @dataclass(frozen=True)
