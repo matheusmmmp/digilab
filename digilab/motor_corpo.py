@@ -171,6 +171,14 @@ class MotorCorpo:
             self._conferir_morte(self._estado.tick)    # o MotorEducacao._avancar: a morte conferida no fim do avanco
         return produzidas
 
+    def _um_tick(self) -> None:
+        """Um tick do laco, para o grupo (digilab/grupo.py) intercalar os pets; o `_abrir_avanco` e o `_fechar_avanco` do MotorMundo
+        fazem o resto do `_avancar` acima (o indice do evento e a morte)."""
+        if not self._ligado():
+            super()._um_tick()
+            return
+        self._laco(1)
+
     def _laco(self, ticks: int) -> list[tuple[int, AcaoPet]]:
         produzidas: list[tuple[int, AcaoPet]] = []
         intervalo = self.cfg.intervalo_decisao_ticks
