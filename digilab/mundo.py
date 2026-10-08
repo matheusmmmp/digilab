@@ -43,6 +43,23 @@ cerebro observa a transicao com a observacao seguinte ja com tudo aplicado.
 O que o motor registra para as medidas do plano (adendo 1, A1.8; as medidas sao do D): a posicao e a regiao a cada decisao
 (`decisoes_mundo`), as trocas de regiao (`regioes`), as visitas as manchas das arvores com chegada e saida (`visitas`), as quedas
 (`quedas`, do fluxo que nao depende do pet), os consumos (`consumos_mundo`), as comidas deixadas e as que sumiram.
+
+O banheiro (docs/TAREFA_V2_BANHEIRO.md, secoes 2 a 5, etapa 3; BN-1 a BN-6 decididas em 2026-10-07): `cfg_banheiro` (ConfigBanheiro)
+liga, e exige o corpo com a sub-chave `banheiro` na frente (com_corpo(MotorMundo), digilab/motor_corpo.py: a vontade e o conforto sao do
+corpo). Desligado, nada muda (nenhuma rng, nenhum registro, nenhuma chave em estado()). Ligado:
+- o banheiro e um retangulo de celulas da casa (`ConfigBanheiro.celulas_x`, `celulas_y`), sem parede;
+- `aliviar` (AcaoPet.ALIVIAR) e uma acao com alvo: o motor sorteia o u da rng `alvo` e oferece dois candidatos, `banheiro` (o ponto do
+  banheiro mais perto do pet) e `aqui` (onde o pet esta); sem o gancho do cerebro, `aqui`. O pet anda ate o alvo, com o custo de energia
+  da distancia, e alivia onde parou (o banheiro alem do alcance de uma decisao: chegou tarde, alivia no caminho). Com a vontade acima de
+  `limiar_urgente` (a regra urgente do instinto), o alvo tem de ser `aqui` (falha alto);
+- a necessidade e um objeto do `Mundo` (fora da percepcao `vistos`: o pet a sente pelo corpo), deixada onde o pet aliviou. O limpador
+  (`ConfigBanheiro.limpador`) a recolhe na hora quando o alivio termina dentro do banheiro; fora dele, nada. O corpo recebe o
+  `estimulo_aliviar` (a vontade a zero) e, quando a necessidade fica no chao, o `estimulo_necessidade` (o cheiro imediato);
+- a zona da necessidade e o banheiro (dentro do retangulo) ou a regiao de sempre (fora dele): a cada tick o corpo recebe quantas
+  necessidades estao na zona do pet (`passo(..., necessidades=n)`). O `limpar` do dono recolhe as da zona do pet;
+- o registro `alivios` (um dict por aliviar: tick do mundo, dentro, urgente, alvo, distancia ao banheiro na decisao, recolhido; o contrato
+  da bancada, experiments/bancada_v2.py) e as `recolhas` do limpar. O `DonoCarinhoBanheiro` acaricia no primeiro passo do dono depois
+  de cada alivio dentro do banheiro, fora do orcamento (`simular_vida_mundo(..., carinho=)`).
 """
 
 from __future__ import annotations
@@ -54,7 +71,7 @@ from typing import Callable
 
 from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
-from .config import ConfigDonos
+from .config import CONFIG_BANHEIRO, ConfigBanheiro, ConfigDonos
 from .donos import Visao
 from .engine import Motor
 from .events import (ACOES_BOLA, ACOES_FRUTAS, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario, LogDeEventos, ler_deixar_bola,
@@ -80,6 +97,10 @@ GESTOS_PROIBIDOS = (AcaoUsuario.ALIMENTAR,) + ACOES_BOLA + ACOES_FRUTAS
 
 class MundoSemChave(RuntimeError):
     """Gesto do mundo (`deixar_*`) num motor com ConfigMundo.ligada = False."""
+
+
+class BanheiroSemMundo(ValueError):
+    """O banheiro (ConfigBanheiro ligada) sem o mundo fisico ligado, ou sem o corpo com a sub-chave banheiro na frente."""
 
 
 class GestoForaDoMundo(ValueError):
@@ -132,6 +153,37 @@ def regiao_de(x: int, cm: ConfigMundo) -> int:
         if x0 <= celula <= x1:
             return i
     raise ValueError(f"x fora de toda regiao: {x}")
+
+
+ZONA_BANHEIRO = -1                     # a zona da necessidade dentro do banheiro (fora dele, o indice da regiao)
+
+
+def faixa_do_banheiro(cbh: ConfigBanheiro, cm: ConfigMundo) -> tuple[int, int, int, int]:
+    """O retangulo do banheiro em subunidades, inclusivo: (x0, x1, y0, y1). Fora do mapa, ou fora da casa, falha alto."""
+    (cx0, cx1), (cy0, cy1) = cbh.celulas_x, cbh.celulas_y
+    if cx1 >= cm.celulas_x or cy1 >= cm.celulas_y:
+        raise ValueError(f"banheiro fora do mapa: x {cbh.celulas_x}, y {cbh.celulas_y}")
+    casa = cm.layout.regioes[0]
+    if casa[0] != "casa" or not casa[1] <= cx0 <= cx1 <= casa[2]:
+        raise ValueError(f"o banheiro tem de ficar dentro da casa {casa}: x {cbh.celulas_x}")
+    sub = cm.sub
+    return cx0 * sub, (cx1 + 1) * sub - 1, cy0 * sub, (cy1 + 1) * sub - 1
+
+
+def no_banheiro(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) -> bool:
+    x0, x1, y0, y1 = faixa_do_banheiro(cbh, cm)
+    return x0 <= x <= x1 and y0 <= y <= y1
+
+
+def ponto_do_banheiro(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) -> tuple[int, int]:
+    """O ponto do banheiro mais perto de (x, y): a posicao cortada para dentro do retangulo (dentro dele, a propria posicao)."""
+    x0, x1, y0, y1 = faixa_do_banheiro(cbh, cm)
+    return min(x1, max(x0, x)), min(y1, max(y0, y))
+
+
+def zona_da_necessidade(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) -> int:
+    """A zona em que a necessidade incomoda (secao 3): o banheiro (ZONA_BANHEIRO) dentro do retangulo, a regiao de sempre fora dele."""
+    return ZONA_BANHEIRO if no_banheiro(x, y, cbh, cm) else regiao_de(x, cm)
 
 
 def cheiro_em(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> int:
@@ -307,6 +359,34 @@ class Mundo:
         self.sumidas: list[dict] = []
         self.bolas_deixadas: list[dict] = []
         self.rolagens: list[dict] = []
+        # o banheiro (TAREFA_V2_BANHEIRO, secao 3): as necessidades no chao, so depois de `ligar_necessidades` (um motor com o banheiro);
+        # sem ele, None e nada muda (nem o resumo). Um contador proprio: os ids das comidas nao mudam com o banheiro
+        self.necessidades: dict[int, dict] | None = None
+        self.prox_necessidade = 1
+        self.recolhidas: list[dict] = []
+
+    # ------------------------------------------------------------ o banheiro
+    def ligar_necessidades(self) -> None:
+        """Chamado pelo motor com o banheiro (todos os pets do mundo com ele chamam; a segunda vez nao faz nada)."""
+        if self.necessidades is None:
+            self.necessidades = {}
+
+    def deixar_necessidade(self, x: int, y: int, tick: int) -> dict:
+        """A necessidade que fica no chao, onde o pet aliviou (o limpador nao a recolheu)."""
+        if self.necessidades is None:
+            raise BanheiroSemMundo("necessidade num Mundo sem o banheiro ligado")
+        if no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"necessidade fora do mapa: ({x}, {y})")
+        n = {"id": self.prox_necessidade, "x": x, "y": y, "tick": tick}
+        self.prox_necessidade += 1
+        self.necessidades[n["id"]] = n
+        return n
+
+    def recolher_necessidades(self, ids: list[int], tick: int, como: str) -> None:
+        """As necessidades `ids` saem do chao (o `limpar` do dono); a que nao esta no chao falha alto (KeyError)."""
+        for i in ids:
+            n = self.necessidades.pop(i)
+            self.recolhidas.append({**n, "recolhida_em": tick, "como": como})
 
     # ------------------------------------------------------------ a comida e a bola no tempo
     def prazo_maduro(self, tipo: str) -> int:
@@ -442,7 +522,10 @@ class Mundo:
         return {"bola": dict(self.bola), "comidas": [dict(c) for c in self.comidas.values()], "prox_id": self.prox_id,
                 "passo_mundo": self.passo_mundo, "tick_atualizado": self.tick_atualizado, "arvores": [dict(a) for a in self.arvores],
                 "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
-                "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens}
+                "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
+                **({} if self.necessidades is None else {
+                    "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
+                    "recolhidas": self.recolhidas})}
 
 
 # ================================================================== o motor
@@ -454,12 +537,15 @@ class MotorMundo(MotorFrutas):
     deixadas pelo dono)."""
 
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
-                 entrada_mundo: int = 0, **kw) -> None:
+                 entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cmf = cfg_mundo or CONFIG_MUNDO
+        self.cbh = cfg_banheiro or CONFIG_BANHEIRO
         if not self.cmf.ligada:
             if efeito_frutas is not None or mundo is not None or entrada_mundo:
                 raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
+            if self.cbh.ligada:
+                raise BanheiroSemMundo("o banheiro exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -503,6 +589,16 @@ class MotorMundo(MotorFrutas):
         self.decisoes_mundo: list[dict] = []
         self.regioes: list[dict] = []
         self.visitas: list[dict] = []
+        if self.cbh.ligada:
+            # o banheiro (secao 2): exige o corpo na frente (a vontade e do corpo); o MotorCorpo confere a sub-chave `banheiro`
+            from .motor_corpo import MotorCorpo
+            if not isinstance(self, MotorCorpo):
+                raise BanheiroSemMundo("o banheiro exige o corpo na frente do motor (com_corpo(MotorMundo)) com a sub-chave banheiro")
+            faixa_do_banheiro(self.cbh, cm)                # o retangulo no mapa e dentro da casa (falha alto)
+            self.mundo.ligar_necessidades()
+            self.alivios: list[dict] = []              # o contrato da bancada: tick, dentro, urgente, alvo, distancia, recolhido
+            self.recolhas: list[dict] = []             # o limpar do dono: tick, zona, ids recolhidos
+            self.alivios_dentro = 0
         self.politica = _PoliticaComMundo(self.politica, self)
 
     # ------------------------------------------------------------ o que e do mundo (lido do Mundo)
@@ -630,6 +726,9 @@ class MotorMundo(MotorFrutas):
             cands.append(Alvo("casa", *self.mundo.comedouro))
         elif acao is AcaoPet.BRINCAR:
             cands += [Alvo("bola", p.x + dx, p.y + dy, i) for i, tipo, dx, dy, _ in p.vistos if tipo == "bola"]
+        elif acao is AcaoPet.ALIVIAR and self.cbh.ligada:
+            # o banheiro (secao 4): o ponto do banheiro mais perto e onde o pet esta; sem `continuar` (o pet alivia onde parou)
+            return [Alvo("banheiro", *ponto_do_banheiro(p.x, p.y, self.cbh, cm)), Alvo("aqui", p.x, p.y)]
         else:
             raise ValueError(f"acao sem alvo: {acao}")
         cont = self._continuar(acao)
@@ -639,7 +738,9 @@ class MotorMundo(MotorFrutas):
 
     def alvo_padrao(self, acao: AcaoPet, cands: list[Alvo]) -> Alvo | None:
         """o que o instinto usa (secao 5). Nunca escolhe comida podre. A conta e a `alvo_padrao_de` (o cerebro a usa para saber a classe
-        do padrao, no alvo aprendido)."""
+        do padrao, no alvo aprendido). No `aliviar` (o banheiro), `aqui`: alivia onde esta."""
+        if acao is AcaoPet.ALIVIAR:
+            return next(a for a in cands if a.tipo == "aqui")
         return alvo_padrao_de(acao, cands, self._percepcao, self.cmf)
 
     def _validar_alvo(self, acao: AcaoPet, alvo: Alvo, cands: list[Alvo]) -> None:
@@ -724,10 +825,64 @@ class MotorMundo(MotorFrutas):
             ocorrido = {"acao": acao.value, "u": u, "alvo": None if alvo is None else alvo.para_dict(), "de": (x0, y0),
                         "para": (x1, y1), "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia,
                         "chegou": chegou, "comeu": comeu, "brincou_com_bola": bola}
+        elif acao is AcaoPet.ALIVIAR:
+            alvo, ocorrido = self._aliviar(tick, x0, y0)
         else:
             self._pendente = None
         self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
         return ocorrido
+
+    def _aliviar(self, tick: int, x0: int, y0: int) -> tuple[Alvo, dict]:
+        """O `aliviar` (secoes 3 e 4): o alvo (`banheiro` ou `aqui`, pelo gancho do cerebro com o u da rng `alvo`; sem gancho, `aqui`),
+        o andar ate ele com o custo de energia, e o alivio onde o pet parou. Dentro do banheiro com o limpador, a necessidade e recolhida na
+        hora; senao ela fica no chao (um objeto do Mundo). A vontade e o cheiro sao estimulos do corpo (o MotorCorpo, pelo `ocorrido`)."""
+        cbh, cm = self.cbh, self.cmf
+        if not cbh.ligada:
+            raise BanheiroSemMundo("aliviar sem o banheiro (ConfigBanheiro.ligada)")
+        u = self._rng_alvo.randrange(1 << 16)                   # como nas outras acoes com alvo: numeros comuns
+        cands = self.candidatos(AcaoPet.ALIVIAR, u)
+        escolher = getattr(self._pm_cerebro(), "escolher_alvo", None)
+        alvo = escolher(AcaoPet.ALIVIAR, list(cands), self._percepcao, u) if escolher is not None else None
+        if alvo is None:
+            alvo = self.alvo_padrao(AcaoPet.ALIVIAR, cands)
+        else:
+            self._validar_alvo(AcaoPet.ALIVIAR, alvo, cands)
+        corpo = self._obs_decisao.corpo if self._obs_decisao is not None else None
+        if corpo is None or corpo.vontade is None:
+            raise BanheiroSemMundo("aliviar sem o receptor da vontade na observacao da decisao (o corpo com a sub-chave banheiro)")
+        S = self.cc.escala_receptor                               # o receptor na escala S do corpo
+        urgente = corpo.vontade / S > cbh.limiar_urgente          # a regra urgente do instinto (o acidente): o alvo e `aqui`
+        if urgente and alvo.tipo != "aqui":
+            raise RuntimeError(f"aliviar urgente (vontade {corpo.vontade}/{S}) com o alvo {alvo.tipo!r}: a regra urgente alivia aqui")
+        bx, by = ponto_do_banheiro(x0, y0, cbh, cm)
+        dist_banheiro = distancia(bx - x0, by - y0)
+        x1, y1 = passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, cm)
+        desloc = distancia(x1 - x0, y1 - y0)
+        self.pet = (x1, y1)
+        e = self._estado
+        energia_antes = e.energia
+        if desloc:
+            self._estado = replace(e, energia=max(0.0, e.energia - cm.custo_energia_por_subunidade * desloc))
+        self._pendente = None
+        dentro = no_banheiro(x1, y1, cbh, cm)
+        recolhido = dentro and cbh.limpador
+        tm = self._tm(tick)
+        necessidade = None if recolhido else self.mundo.deixar_necessidade(x1, y1, tm)["id"]
+        self.alivios.append({"tick": tm, "dentro": dentro, "urgente": urgente, "alvo": alvo.tipo, "distancia": dist_banheiro,
+                             "recolhido": recolhido})
+        self.alivios_dentro += dentro
+        ocorrido = {"acao": AcaoPet.ALIVIAR.value, "u": u, "alvo": alvo.para_dict(), "de": (x0, y0), "para": (x1, y1),
+                    "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia, "chegou": (x1, y1) == (alvo.x, alvo.y),
+                    "comeu": None, "brincou_com_bola": False,
+                    "alivio": {"dentro": dentro, "urgente": urgente, "recolhido": recolhido, "necessidade": necessidade,
+                               "distancia": dist_banheiro}}
+        return alvo, ocorrido
+
+    def necessidades_na_zona(self) -> int:
+        """Quantas necessidades estao no chao na zona do pet (o banheiro, ou a regiao fora dele): o que o corpo recebe a cada tick."""
+        cbh, cm = self.cbh, self.cmf
+        z = zona_da_necessidade(*self.pet, cbh, cm)
+        return sum(1 for n in self.mundo.necessidades.values() if zona_da_necessidade(n["x"], n["y"], cbh, cm) == z)
 
     def _pm_cerebro(self):
         """o que esta embaixo do embrulho do mundo (os ganchos do cerebro passam pelos embrulhos de baixo)"""
@@ -765,6 +920,14 @@ class MotorMundo(MotorFrutas):
         if self.cmf.ligada and acao in GESTOS_PROIBIDOS:
             raise GestoForaDoMundo(f"{acao.value} numa vida com o mundo: use deixar_comida/deixar_bola")
         super()._aplicar_acao_usuario(acao)
+        if acao is AcaoUsuario.LIMPAR and self.cmf.ligada and self.cbh.ligada:
+            # o banheiro (secao 3): o limpar de hoje passa a recolher as necessidades da zona do pet (o efeito no corpo e o de sempre)
+            cbh, cm = self.cbh, self.cmf
+            z = zona_da_necessidade(*self.pet, cbh, cm)
+            ids = [n["id"] for n in self.mundo.necessidades.values() if zona_da_necessidade(n["x"], n["y"], cbh, cm) == z]
+            tm = self._tm(self._estado.tick)
+            self.mundo.recolher_necessidades(ids, tm, "limpar")
+            self.recolhas.append({"tick": tm, "zona": z, "ids": ids})
 
     def deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
@@ -804,6 +967,9 @@ class MotorMundo(MotorFrutas):
         d["mundo"] = {"pet": self.pet, "regiao": self.cmf.layout.regioes[regiao_de(self.pet[0], self.cmf)][0],
                       "bola": self.mundo.bola_em(t),
                       "comidas": sum(1 for c in self.mundo.comidas.values() if self.mundo.situacao(c, t) is not None)}
+        if self.cbh.ligada:
+            d["banheiro"] = {"alivios": len(self.alivios), "alivios_dentro": self.alivios_dentro,
+                             "necessidades": len(self.mundo.necessidades), "na_zona": self.necessidades_na_zona()}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
@@ -818,7 +984,10 @@ class MotorMundo(MotorFrutas):
                 "quedas": m.quedas, "consumos": self.consumos_mundo, "sumidas": m.sumidas, "deixadas": self.deixadas,
                 "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
                 "regioes": self.regioes, "visitas": self.visitas,
-                "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()]}
+                "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
+                **({} if not self.cbh.ligada else {
+                    "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
+                    "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas})}
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
@@ -935,6 +1104,33 @@ class DonoComLugar:
         return saida
 
 
+class DonoCarinhoBanheiro:
+    """O dono que acaricia depois do banheiro (secao 5): depois de cada `aliviar` DENTRO do banheiro, um `acariciar` no primeiro passo
+    do dono depois do alivio (o momento do K4), fora do orcamento (BN-2), pelo canal do mundo do `simular_vida_mundo(..., carinho=)`.
+    Fora do banheiro, nada (nem bronca nem tapa). Le so o que o motor mostra no estado() (`banheiro.alivios_dentro`). Com uma decisao a
+    cada 15 ticks e o passo do dono de 15, a ultima decisao antes do carinho e o `aliviar`: o cerebro o recebe pelo corpo (CD-4) e o credita
+    a ela (G-CRED). Os ticks dos carinhos ficam em `ticks`."""
+
+    def __init__(self) -> None:
+        self.vistos = 0
+        self.ticks: list[int] = []
+
+    @property
+    def feitos(self) -> int:
+        return len(self.ticks)
+
+    def acoes(self, estado: dict) -> list[AcaoUsuario]:
+        b = estado.get("banheiro")
+        if b is None:
+            raise BanheiroSemMundo("o DonoCarinhoBanheiro precisa do estado() do MotorMundo com o banheiro (chave `banheiro`)")
+        novos = b["alivios_dentro"] - self.vistos
+        if novos < 0:
+            raise RuntimeError(f"alivios dentro do banheiro voltaram: {b['alivios_dentro']} < {self.vistos}")
+        self.vistos = b["alivios_dentro"]
+        self.ticks += [estado["tick"]] * novos
+        return [AcaoUsuario.ACARICIAR] * novos
+
+
 class CanalMundo(CanalDeInteracao):
     """O CanalDeInteracao com os gestos do mundo: `DeixarComida` e `DeixarBola` gastam orcamento como qualquer acao do dono."""
 
@@ -964,10 +1160,11 @@ class CanalMundo(CanalDeInteracao):
 
 def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orcamento: int, fabrica_motor: Callable,
                        cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, rotulo_dono: str | None = None,
-                       canal_classe: type | None = None) -> Vida:
+                       canal_classe: type | None = None, carinho: DonoCarinhoBanheiro | None = None) -> Vida:
     """treino.simular_vida com o CanalMundo: o dono (embrulhado pelo DonoComLugar) deixa a comida e a bola pelos gestos do mundo, que
     gastam o orcamento. A rng do dono e a de sempre (`dono`, semente, rotulo). `canal_classe` troca o canal (o CanalMundoComGestos de
-    digilab/gestos.py, com o DonoComGestos); o padrao e o CanalMundo."""
+    digilab/gestos.py, com o DonoComGestos); o padrao e o CanalMundo. `carinho` (o DonoCarinhoBanheiro): os carinhos depois do banheiro,
+    logo depois das acoes do dono no passo e fora do orcamento (BN-2; o `interacoes` da Vida nao os conta)."""
     cfg = cfg or CONFIG_PADRAO
     cfg_donos = cfg_donos or CONFIG_DONOS
     total = dias * TICKS_POR_DIA
@@ -985,5 +1182,8 @@ def simular_vida_mundo(braco: str, dono, politica, semente: int, dias: int, orca
         visao = Visao(estado=motor.estado(), passo=passo, passos_totais=passos, orcamento=orcamento, gasto=canal.gasto,
                       minimo_obrigatorio=minimo, maximo_permitido=maximo)
         canal.aplicar(dono.decidir(visao, rng_dono), passo, passos)
+        if carinho is not None:
+            for acao in carinho.acoes(motor.estado()):
+                motor.observar(acao)
     canal.fechar()
     return Vida(braco=braco, semente_coorte=semente, motor=motor, interacoes=canal.gasto)

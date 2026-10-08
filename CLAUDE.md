@@ -3368,3 +3368,42 @@ bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
 - **Fora:** a visão, o toque e a disputa entre os pets são a etapa 3 (o PR seguinte); nesta etapa um pet só muda o mundo do outro pelo
   que faz fisicamente. A troca do `efeito_frutas` no dia K ("B + Aemb") e o efeito por tipo de árvore são da etapa 5 (o D): hoje o grupo
   exige o mesmo `efeito_frutas` em todos os pets. O `mundo.ts` não mudou (etapa 9).
+
+## V2, BANHEIRO, etapa 3 — o banheiro no mapa, a necessidade, o limpador, o `limpar` e o `DonoCarinhoBanheiro` (2026-10-08, `docs/TAREFA_V2_BANHEIRO.md`) — GATES PASSAM
+
+Seções 2 a 5 e 8 da tarefa, o lado do motor (A). Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/mundo.py`,
+`digilab/motor_corpo.py`, a `ConfigBanheiro` (a área), o registro `PARAMETROS_BANHEIRO` e uma linha de `digilab/donos.py`. `engine.py`,
+`corpo.py`, os cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave:** `MotorMundo(..., cfg_banheiro=ConfigBanheiro)`, só com o mundo ligado e com o corpo com a sub-chave `banheiro` na frente
+  (`com_corpo(MotorMundo)`); o corpo com a sub-chave exige o banheiro no mapa. Falta de uma das duas falha alto (`BanheiroSemMundo`).
+  Desligada, nada muda: nenhuma rng, nenhum registro, nenhuma chave em `estado()`, nada no resumo do `Mundo`.
+- **O banheiro:** um retângulo de células da casa, `ConfigBanheiro.celulas_x` (0 a 3) e `celulas_y` (0 a 5), PROPOSTOS; funções puras
+  `faixa_do_banheiro`, `no_banheiro`, `ponto_do_banheiro` e `zona_da_necessidade` (o banheiro é uma zona própria, `ZONA_BANHEIRO`).
+- **O `aliviar` com alvo:** o motor sorteia o u da rng `alvo` e oferece `banheiro` (o ponto mais perto) e `aqui`; sem o gancho do cérebro,
+  `aqui`. O pet anda até o alvo (o alcance e o custo de energia de sempre) e alivia onde parou (chegou tarde). Urgente (a vontade da
+  observação acima de `limiar_urgente`) com o alvo `banheiro` falha alto.
+- **A necessidade** é um objeto do `Mundo` (contador próprio; fora dos `vistos`). O limpador a recolhe na hora dentro do banheiro; fora,
+  ela fica. O `limpar` do dono recolhe as da zona do pet.
+- **No corpo** (`MotorCorpo`): o aliviar vira `estimulo_aliviar` e, quando a necessidade fica, `estimulo_necessidade`, depois do andar; a
+  cada tick, `passo(..., necessidades=n)` com as necessidades na zona do pet (`MotorMundo.necessidades_na_zona`).
+- **Os registros:** `motor.alivios` no contrato da bancada (`tick` do mundo, `dentro`, `urgente`, `alvo`, `distancia` ao banheiro na
+  decisão, `recolhido`), `motor.recolhas` (o limpar) e `Mundo.recolhidas`; `estado()["banheiro"]` (alívios, dentro, necessidades no chão,
+  na zona) e o resumo do mundo físico, só com a chave.
+- **`DonoCarinhoBanheiro`:** um `acariciar` no primeiro passo do dono depois de cada alívio dentro do banheiro, fora do orçamento, por
+  `simular_vida_mundo(..., carinho=)`. O dono sintético não julga o `aliviar` (`julgar_acao` devolve 0).
+- **Gates** (`tests/test_banheiro_mundo.py`, 30 testes, ~6 s):
+  - **G2:** a chave explícita desligada é a vida de hoje; os gabaritos de sempre (banheiro, dois pets, corpo no mundo, mundo) na suíte;
+  - **as chaves** vão juntas e falham alto;
+  - **G-MEC:** a vontade a zero e o cheiro; o limpador só no banheiro; o desconforto pela zona (o banheiro à parte, até 3); o `limpar` da
+    zona; o urgente alivia aqui; o alvo `banheiro` leva o pet até lá ou alivia no caminho; sem gancho, `aqui`;
+  - **G-CONS:** com o limpador, o sinal pelo corpo do aliviar dentro é maior que fora; sem ele, igual;
+  - **G-CRED:** cada carinho no passo seguinte a um alívio dentro, creditado à decisão de aliviar, fora do orçamento;
+  - **G1:** o replay bit a bit com o instinto e com os lobos aprendendo (P1), com e sem o limpador, com o carinho, nos dois layouts, e no
+    grupo de dois pets (as necessidades são do mundo de todos);
+  - as quedas iguais com e sem o banheiro; os `alivios` no contrato da bancada (`medidas_banheiro_de`).
+- **Achado (fumaça descritiva, sementes dos testes):** com o banheiro nas células 0 a 3 e 0 a 5, o pet alivia a 185–260 subunidades dele
+  (mediana) e o alcance de uma decisão é 60: em 5 vidas de 7 dias, 1 alívio dentro no P0 e 0 no P1 (que escolheu o `banheiro` 12 vezes).
+  O 2 × 2 do plano quase não teria carinho nem limpador para medir. Fica para o Matheus e o plano.
+- **Para o D (destravar `NOS_PENDENTES["banheiro"]`):** a fábrica dos braços do banheiro é o `com_corpo(MotorMundo)` com o `cfg_corpo_de`
+  e o `cfg_banheiro_de` que a bancada já monta; o `simular_vida_fisico` passa `carinho=DonoCarinhoBanheiro()` nos braços com carinho
+  (B0C, BLC) depois das ações do dono do passo; o `medidas_banheiro` já lê o `motor.alivios` deste contrato.

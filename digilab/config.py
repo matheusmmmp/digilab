@@ -1701,7 +1701,9 @@ class ConfigBanheiro:
     limiar_urgente     vontade acima disto: alivia ja, com o alvo `aqui` (o acidente; a regra urgente, que nao se aprende)
     limiar_moderada    vontade acima disto: `aliviar` entra no tempo livre
     w_banheiro_0       o peso herdado do alvo `banheiro`, inteiro na escala S (S/4: o pet nasce preferindo `aqui` 4 a 1)
-    w_aqui_0           o peso herdado do alvo `aqui` (S)"""
+    w_aqui_0           o peso herdado do alvo `aqui` (S)
+    celulas_x          o banheiro no mapa (secao 3): as colunas de celulas, inclusivas, dentro da casa (0 a 3)
+    celulas_y          as linhas de celulas, inclusivas (0 a 5): longe do ninho (4, 15) e do comedouro (10, 15)"""
 
     ligada: bool = False
     limpador: bool = False
@@ -1710,6 +1712,8 @@ class ConfigBanheiro:
     limiar_moderada: float = 0.50
     w_banheiro_0: int = 256
     w_aqui_0: int = 1024
+    celulas_x: tuple = (0, 3)
+    celulas_y: tuple = (0, 5)
 
     def __post_init__(self) -> None:
         if self.w_vontade < 0.0:
@@ -1720,6 +1724,10 @@ class ConfigBanheiro:
             v = getattr(self, nome)
             if type(v) is not int or v <= 0:
                 raise ValueError(f"ConfigBanheiro.{nome} tem de ser inteiro positivo: {v!r}")
+        for nome in ("celulas_x", "celulas_y"):
+            v = getattr(self, nome)
+            if (type(v) is not tuple or len(v) != 2 or any(type(c) is not int for c in v) or not 0 <= v[0] <= v[1]):
+                raise ValueError(f"ConfigBanheiro.{nome} tem de ser (inicio, fim) inteiros, 0 <= inicio <= fim: {v!r}")
 
 
 CONFIG_BANHEIRO = ConfigBanheiro()

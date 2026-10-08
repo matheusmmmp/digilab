@@ -4159,3 +4159,41 @@ e na tarefa. Nenhuma run, nenhum código.
   - a faixa [0,05; 0,30] do passo 0.
 - **O Creatures** (a mitocôndria e o fígado, citados pelo Gerente) é só pista, não conferida. Não há alegação de novidade.
 - **A base é a `main`**, independente do #258 e do #259. A tarefa cita a seção 8.1 do glossário, que está no #259.
+
+## 2026-10-08 — BANHEIRO, etapa 3 (worker A): o banheiro no mapa, a necessidade, o limpador, o limpar e o `DonoCarinhoBanheiro`
+
+- **O branch é `v2-banheiro-mundo`,** de `origin/main` (`1e2d382`). Sem run de pesquisa; só as sementes dos testes (101…505).
+- **O retângulo do banheiro fica na `ConfigBanheiro` (`celulas_x`, `celulas_y`), não no `LayoutMundo`.** A tarefa (seção 3) o põe no
+  `ConfigMundo.layout`. Fora do layout, o mundo de hoje e o gabarito da paridade web (o G-PAR confere o layout campo a campo) não mudam,
+  e o banheiro é o mesmo nos dois layouts. Os valores são os da tarefa: as células x 0 a 3 e y 0 a 5, dentro da casa. Os dois campos
+  entram no registro `PARAMETROS_BANHEIRO`, PROPOSTOS, sem fonte.
+- **A zona da necessidade:** o banheiro é uma zona própria dentro da casa. A seção 3 diz "na mesma região do pet", e as regiões são
+  faixas de x (o banheiro fica dentro da casa). Pela frase da tarefa "o pet passa menos tempo no banheiro que na casa", a necessidade
+  deixada no banheiro só incomoda o pet que está no banheiro, e a deixada fora incomoda na região de sempre. O `limpar` recolhe as da
+  zona do pet. As regiões dos registros do mundo não mudam.
+- **As necessidades são objetos do `Mundo`** (o de todos, com dois pets), com um contador próprio: os ids das comidas e as quedas são os
+  mesmos com e sem o banheiro (teste). Não entram nos `vistos` da percepção: o pet as sente pelo corpo (o cheiro e o desconforto da
+  zona). Não somem sozinhas; só o `limpar` as recolhe.
+- **O limpador** não chega a pôr o objeto no chão quando o alívio termina dentro do banheiro: o registro diz `recolhido`, e o corpo
+  não recebe o `estimulo_necessidade`.
+- **A urgência é decidida no motor** pela vontade da observação da decisão (o receptor acima de `limiar_urgente`), a mesma conta da
+  regra urgente do instinto. Aliviar urgente com o alvo `banheiro` falha alto.
+- **O alvo do `aliviar`:** os candidatos são `banheiro` (o ponto do banheiro mais perto, a posição cortada para dentro do retângulo) e
+  `aqui`. Sem o gancho do cérebro, `aqui`. O aliviar não deixa alvo pendente: o pet alivia onde parou. `chegou` no registro da decisão
+  é o pet no ponto do alvo, exatamente.
+- **Os registros do banheiro estão no relógio do mundo**, como os outros registros do mundo físico. Com um pet só, é o relógio do pet.
+- **As chaves vão juntas:** a `ConfigBanheiro` ligada exige o corpo com a sub-chave `banheiro` na frente do `MotorMundo`, e o corpo com
+  a sub-chave exige o banheiro no mapa. Sem isso, a vontade subiria sem ter como cair.
+- **O dono sintético não julga o `aliviar`:** o `julgar_acao` (`donos.py`) falhava alto com a ação nova, e o atencioso com o
+  `DonoComLugar` julga a ação atual a cada passo. Agora devolve 0 ("nada a dizer"). A seção 5 diz que não há bronca nem tapa neste
+  teste. Nas vidas de hoje o aliviar não existe, e nada muda (os gabaritos).
+- **O `DonoCarinhoBanheiro` não embrulha o `DonoComGestos`.** A tarefa o descreve como embrulho, mas o carinho fica fora do orçamento
+  (BN-2), e o mundo físico usa o dono só com o cuidado (PMF-3), sem o `DonoComGestos`. Ele é uma regra à parte, como o julgador do K4
+  fora do orçamento: lê o `estado()["banheiro"]`, e o `simular_vida_mundo(..., carinho=)` aplica os carinhos logo depois das ações do
+  dono do passo. Os carinhos são `acariciar` no log, e o replay os refaz como qualquer ação do dono.
+- **Achado da fumaça (descritivo, sementes dos testes):** com o banheiro nas células 0 a 3 e 0 a 5 e o alcance de 60 subunidades por
+  decisão, o pet quase nunca termina o alívio dentro dele. Em 5 vidas de 7 dias, com o atencioso no comedouro, foram 37 a 38 alívios por
+  braço. O P0 terminou 1 dentro, e o P1 nenhum, embora tenha escolhido o alvo `banheiro` 12 vezes. A distância mediana ao banheiro no
+  alívio foi de 185 (P0) e 260 (P1) subunidades: o pet passa o dia no comedouro, a ~150 do banheiro. Com isso, o carinho e o limpador
+  quase não acontecem, e o 2 × 2 do plano não teria o que medir. O desenho (o "chegou tarde" da seção 4, o lugar do banheiro) é do
+  Matheus e do plano; nada foi mudado aqui.

@@ -98,6 +98,10 @@ def julgar_acao(estado: dict, cfg: ConfigDonos) -> int:
         return 1 if estado["fome"] < cfg.limiar_alimentar else 0
     if acao is AcaoPet.OCIOSO:
         return 0
+    if acao is AcaoPet.ALIVIAR:
+        # o banheiro (TAREFA_V2_BANHEIRO, secao 5): o dono de cuidado nao julga onde o pet alivia (nem bronca nem elogio); o carinho
+        # depois do banheiro e do DonoCarinhoBanheiro, fora do orcamento. Nas vidas de hoje o aliviar nao existe: nada muda
+        return 0
     raise ValueError(f"acao do pet sem regra de julgamento: {acao}")  # pragma: no cover
 
 
