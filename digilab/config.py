@@ -1764,3 +1764,48 @@ class ConfigGrupo:
 
 CONFIG_GRUPO = ConfigGrupo()
 CONFIG_GRUPO_LIGADA = ConfigGrupo(ligada=True)
+
+
+# =====================================================================
+# V2, a rede de si (docs/TAREFA_V2_REDE_DE_SI.md, etapas 1 e 2; RS-1 a RS-7 pela recomendacao): o automodelo em observacao. A rede
+# (digilab/rede_de_si.py) preve os receptores do corpo a n decisoes e estima a propria escolha, so olhando; nao muda a vida. Desligada por
+# padrao. Todos PROPOSTOS, sem fonte; status em rede_de_si.PARAMETROS_REDE_DE_SI.
+
+
+@dataclass(frozen=True)
+class ConfigRedeDeSi:
+    """ligada         a rede (o embrulho `PoliticaComRede` exige a chave)
+    escala          S: a escala dos receptores e dos pesos (a do cerebro A e do corpo)
+    passo           o passo do LMS em inteiros (o plano calibra na grade {S/64, S/16, S/4})
+    teto            |w - w0| <= teto, por peso
+    horizontes      os n da cabeca do corpo, em decisoes (RS-1: 15 min, 1 h, 4 h)
+    faixas_idade    os limites das faixas de idade, em decisoes vividas (1, 3 e 7 dias de 96 decisoes): 4 faixas
+    fator_erro      o erro recente e uma media em inteiros: e += div_arred((|erro| - e) x fator, S)
+    maximo_pesos    as duas cabecas somam menos que isto"""
+
+    ligada: bool = False
+    escala: int = 1024
+    passo: int = 64
+    teto: int = 4096
+    horizontes: tuple = (1, 4, 16)
+    faixas_idade: tuple = (96, 288, 672)
+    fator_erro: int = 64
+    maximo_pesos: int = 1000
+
+    def __post_init__(self) -> None:
+        for nome in ("escala", "teto", "fator_erro", "maximo_pesos"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigRedeDeSi.{nome} tem de ser inteiro positivo: {v!r}")
+        if type(self.passo) is not int or self.passo < 0:
+            raise ValueError(f"ConfigRedeDeSi.passo tem de ser inteiro >= 0: {self.passo!r}")
+        if self.fator_erro > self.escala:
+            raise ValueError("ConfigRedeDeSi.fator_erro passa de S")
+        for nome in ("horizontes", "faixas_idade"):
+            v = tuple(getattr(self, nome))
+            if not v or any(type(x) is not int or x <= 0 for x in v) or list(v) != sorted(set(v)):
+                raise ValueError(f"ConfigRedeDeSi.{nome}: inteiros positivos, crescentes e sem repeticao: {v!r}")
+
+
+CONFIG_REDE_DE_SI = ConfigRedeDeSi()
+CONFIG_REDE_DE_SI_LIGADA = ConfigRedeDeSi(ligada=True)

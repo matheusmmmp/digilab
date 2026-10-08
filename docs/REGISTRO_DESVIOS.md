@@ -4197,3 +4197,21 @@ e na tarefa. Nenhuma run, nenhum código.
   alívio foi de 185 (P0) e 260 (P1) subunidades: o pet passa o dia no comedouro, a ~150 do banheiro. Com isso, o carinho e o limpador
   quase não acontecem, e o 2 × 2 do plano não teria o que medir. O desenho (o "chegou tarde" da seção 4, o lugar do banheiro) é do
   Matheus e do plano; nada foi mudado aqui.
+
+## 2026-10-08 — REDE-DE-SI, etapas 0, 1 e 2 (worker B): o automodelo em observação
+
+- **O branch:** o nome `v2-rede-de-si` já era o do documento da tarefa (#254, na `main`). O código foi para `v2-rede-de-si-etapas012`.
+- **O gabarito da etapa 0 tem o P1+ped sem o corpo** (o P1+ped-c é da etapa 3). Com a rede, essas 8 vidas falham alto: a rede lê os
+  receptores e precisa do corpo. O G-OBS é das 32 vidas com corpo.
+- **O layout sai da primeira observação:** os receptores são os campos não nulos da `PercepcaoCorpo`, na ordem dela. Um receptor a mais
+  ou a menos depois falha alto. Assim a rede não precisa do corpo nem do cérebro para saber quantos receptores há.
+- **O contexto em três entradas** (a bola, a comida boa e o pedido vigente, 0 ou S), e não a presença de cada fruta e o pedido de cada
+  fruta. É o que cabe nos mil pesos com o mundo físico. A contrafactual "sem o pedido" zera a entrada do pedido.
+- **A ação em um-quente sobre as oito do enum** (com o `aliviar`), para o layout não depender da chave do banheiro.
+- **A cabeça do corpo vê todos os receptores** (a dinâmica entre eles), mas não a idade; a idade fica só na autoria, onde a contrafactual
+  "ao nascer" a usa.
+- **A ordem numa decisão:** primeiro as previsões de n decisões atrás recebem a leitura de agora (o LMS, o erro recente e a surpresa);
+  depois a autoria estima e aprende com a ação; por último a cabeça do corpo prevê, já com os pesos atualizados.
+- **A autoria dá a saída por ação em [0, S]**, sem normalizar. A normalização sobre os candidatos (para o Brier do plano) fica com a
+  bancada, que conhece os candidatos.
+- **Os números PROPOSTOS:** `passo` S/16 (o meio da grade do plano), `teto` 4 S, faixas de idade de 1, 3 e 7 dias, `fator_erro` S/16.
