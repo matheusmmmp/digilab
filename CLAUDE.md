@@ -3361,3 +3361,41 @@ bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
 - **Fora:** a visão, o toque e a disputa entre os pets são a etapa 3 (o PR seguinte); nesta etapa um pet só muda o mundo do outro pelo
   que faz fisicamente. A troca do `efeito_frutas` no dia K ("B + Aemb") e o efeito por tipo de árvore são da etapa 5 (o D): hoje o grupo
   exige o mesmo `efeito_frutas` em todos os pets. O `mundo.ts` não mudou (etapa 9).
+
+## V2, REDE-DE-SI, etapas 0, 1 e 2 — o automodelo em observação (2026-10-08, `docs/TAREFA_V2_REDE_DE_SI.md`) — GATES PASSAM
+
+Etapa 2 do ego (`docs/futuro/ego_existencia.md`), com RS-1 a RS-7 pela recomendação. Infraestrutura, sem run de pesquisa; só as sementes dos
+testes. Mudaram `digilab/rede_de_si.py` (novo) e a `ConfigRedeDeSi` no fim de `config.py`. `engine.py`, o `AcaoPet`, o cérebro, o corpo,
+o motor, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A regra de quem aprende (E-6, RS-7):** a Decisão aprende por reforço, a rede de si por erro de previsão, e nenhuma outra peça aprende.
+  A regra antiga ("só a Decisão aprende") fica revista por esta.
+- **Etapa 0, num commit próprio, antes da rede:** `tests/gabarito_rede_de_si.py` → `tests/gabaritos/rede_de_si_vidas_de_hoje.json`, 40
+  vidas: o P1-c, o P0-c e o P1-c-tapa na bola; o P1-c e o P1+ped (ainda sem o corpo) no `iguais_frutas`; montagens simples e completa
+  (T3); o atencioso e o aleatório; sementes 101 e 202.
+- **A rede (`RedeDeSi`, etapa 1):**
+  - **as entradas:** só os receptores da `PercepcaoCorpo` (todos os presentes, na ordem dos campos), a ação escolhida, o contexto da
+    observação (a bola, a comida boa e o pedido vigente, 0 ou S, também pelos `vistos` do mundo físico) e a idade em faixas pelas decisões
+    vividas (limites 96, 288 e 672). Nada de químico, `Estado`, pesos do cérebro, regra do instinto ou sonda;
+  - **a cabeça do corpo:** por horizonte (1, 4 e 16 decisões, RS-1) e receptor, `corte(div_arred(Σ w x, S), 0, S)`. O prior é a
+    persistência (RS-2). O LMS em inteiros chega quando a leitura real chega, cortado em w0 ± teto;
+  - **a cabeça da autoria:** por ação, a mesma forma, com o alvo um-quente da ação escolhida, aprendido na hora. O prior é uniforme
+    (S / 8). As contrafactuais "sem o pedido" (pedido = 0) e "ao nascer" (a primeira faixa) são a mesma conta;
+  - **o erro exposto (E-11, sem leitor):** por receptor e horizonte, o erro absoluto recente (uma média em inteiros) e a surpresa;
+  - **os registros:** por decisão, as leituras, as previsões, a autoria e as duas contrafactuais, e a surpresa (para a bancada, etapa 3);
+  - **os números:** `passo` S/16, `teto` 4 S, `fator_erro` S/16 (PROPOSTOS; registro `rede_de_si.PARAMETROS_REDE_DE_SI`). **804 pesos** com
+    o corpo da bola e das frutas (10 receptores) e 911 com a curiosidade do mundo físico. Com o banheiro no mundo físico (13 receptores),
+    passa de mil e falha alto.
+- **O embrulho (`PoliticaComRede`, etapa 2):** entrega à rede a observação e a ação depois que o cérebro escolheu, e repassa todo o resto
+  ao cérebro por `__getattr__` (o que existe nele existe no embrulho, e o que não existe também não).
+- **Gates** (`tests/test_rede_de_si.py`, 61):
+  - **G-INT:** pela AST, nenhuma constante float, nenhuma divisão `/`, nenhum `math`, `random`, `float` ou `round`;
+  - **G-PESOS:** a contagem e o teto que falha alto;
+  - **a conta exata** de um passo do LMS (corpo e autoria); **com `passo` 0, a persistência para sempre**;
+  - as contrafactuais e o erro exposto em contas exatas; o contexto do mundo físico e das frutas;
+  - **G-OBS:** as 32 vidas com corpo da etapa 0 saem byte a byte com a rede observando (log, estado, `estado()`, ações, rngs, registro do
+    mundo e o estado interno do cérebro); as 8 sem corpo falham alto;
+  - **G-RECEPTOR:** a rede só importa `config` e `events`; um químico sem receptor (o `alimento`, a `vida`) não muda a percepção; o
+    `Estado`, o relógio do cuidado e a informação do dono não mudam a rede;
+  - **G1-REDE:** o replay refaz o estado da rede bit a bit.
+- **Fica para a etapa 3 (D):** a chave `rede_de_si` da bancada, a rede congelada e o oráculo por replay, os braços P1-c-lenta e P1+ped-c, as
+  medidas e as faixas. A troca da digestão (2b) é do A.
