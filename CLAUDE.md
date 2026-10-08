@@ -3445,3 +3445,59 @@ o motor, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **G1-REDE:** o replay refaz o estado da rede bit a bit.
 - **Fica para a etapa 3 (D):** a chave `rede_de_si` da bancada, a rede congelada e o oráculo por replay, os braços P1-c-lenta e P1+ped-c, as
   medidas e as faixas. A troca da digestão (2b) é do A.
+
+## V2, DOIS-PETS, etapa 3 — visão, toque e disputa, o degrau 1 (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`) — GATES PASSAM
+
+A etapa 3 do motor dos dois pets (desenho `docs/futuro/dois_pets.md`, seções 3, 5 e 6; DP-4 e DP-11). Infraestrutura, sem run; só as
+sementes dos testes. Mudaram `digilab/mundo.py`, `digilab/grupo.py`, o campo `Observacao.social` em `digilab/policy.py`, a
+`ConfigGrupo.raio_toque_celulas`, uma linha de `digilab/motor_corpo.py` (o `obs.social` na observação do gesto) e o G-NUMS-GRUPO de
+`tests/test_grupo.py`. `engine.py`, o `AcaoPet`, os cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **`Observacao.social`** (padrão None): a `PercepcaoSocial` (`mundo.py`), que o `MotorMundo` injeta só dentro de um `Grupo` com outro pet
+  presente. Sem o grupo, ou sozinho nele, fica None, e a vida é a de hoje. Os três campos, só com o que é físico:
+  - `outros`: `(id, dx, dy, d, acao_visivel)` dos pets no raio da visão do mundo, em ordem de d e de id. A ação visível é a da última
+    decisão do outro (a deste tick, se ele veio antes na vez);
+  - `onde_comeu`: `(id, x, y, idade)` do último ponto em que este pet **viu** cada outro comer (o comedor dentro do raio, no momento do
+    consumo), com a idade em ticks;
+  - `toque`: `(id, tipo, direcao, idade)` do último contato com cada outro.
+- **A visão e o toque são do grupo** (`Grupo.perceber_social`, `Grupo.viu_comer`), por funções puras do `mundo.py` (`perceber_social`,
+  `em_contato`, `direcao_vizinha`, `tipos_do_contato`) que só recebem posição, ação visível, consumo visto e contato. Nunca o estado
+  interno do outro.
+- **O toque (5.2):** no fim de cada tick com decisão, com dois pets ou mais, depois da vez sorteada: contato com as células a até
+  `raio_toque_celulas` (1) em Chebyshev, um por par e por tick. O tipo sai do que aconteceu: `disputa_ganhou`/`disputa_perdeu`, depois
+  `encostou`/`encostaram` (quem seguiu o outro neste tick), depois `esbarrou`. A direção é a da tabela do cheiro (1 a 8), 0 na mesma
+  célula. O toque não mexe no corpo (degrau 3).
+- **A disputa:** a comida que um comeu neste tick e que o outro tinha como alvo neste tick, ou trazia da decisão anterior. O primeiro na
+  vez come; o segundo não acha (o alvo some, e o comer sem comida não dá fome, MF-2). Fica registrada com ou sem contato.
+- **Os candidatos do explorar** (seção 6), depois dos de hoje: `seguir` (onde está cada outro visto) e `onde_comeu` (cada ponto da
+  memória do consumo visto). O padrão do motor e o instinto nunca os escolhem; o `continuar` deles leva ao ponto antigo.
+- **Os registros** (derivados; o replay refaz; no `Grupo.resumo`, que o G1 compara):
+  - no grupo: `contatos` (os tipos, as direções e as células) e `disputas` (o vencedor, se ele veio primeiro na vez, a distância de cada
+    um à comida, se o perdedor decidiu no tick e se houve contato);
+  - em cada motor (`resumo_social`): os consumos vistos (`vistos_comer`), as idas a `onde_comeu` (chegou, comeu, comidas boas à vista na
+    chegada), o tempo à vista (`a_vista`, decisões com cada outro visto) e as decisões no grupo.
+- **Gates** (`tests/test_grupo_social.py`, 27 testes, ~3 s):
+  - **G-RECEPTOR-SOCIAL:** a `PercepcaoSocial` só tem os três campos, com números e nomes; nenhum cérebro importa o grupo, o engine ou um
+    motor (só as funções puras do mundo); mudar a fome, o humor, os pesos, a memória e o toque do B, no mesmo lugar e fazendo o mesmo, não
+    muda o que o A percebe, e mudar a posição ou a ação muda;
+  - **G-SENTIDOS (visão e toque):**
+    - o toque nos casos da seção 5.2 (disputa, encostar, esbarrar), o contato na mesma célula ou na vizinha e nenhum a duas células,
+      também numa vida tick a tick, e a direção;
+    - a visão só no raio, em ordem, com a ação da última decisão do outro, conferida decisão a decisão pela vez sorteada;
+    - o consumo visto só com o comedor no raio, no momento;
+  - **G-MEC-SOCIAL:**
+    - a disputa em 4 sementes: o primeiro na vez come, e o outro não come e não acha;
+    - o `onde_comeu` só depois de um consumo visto, no ponto da memória;
+    - os candidatos sociais só no explorar, o `seguir` só com o outro visto e no lugar dele, depois dos de hoje;
+    - o padrão do motor nunca os escolhe;
+    - as idas e o tempo à vista registrados;
+  - **G2:** sem o grupo, ou com um pet só nele, o `obs.social` é None e não há candidato a mais; com o B entrando no dia 1, o A só tem a
+    percepção social depois disso. Os gabaritos de sempre passam na suíte (o grupo com um pet, as 276 vidas da etapa 0, o mundo e o
+    corpo);
+  - **G1-GRUPO com os sentidos:** o replay do registro refaz o grupo bit a bit (contatos, disputas e registros sociais incluídos), com os
+    cérebros que seguem, que vão onde viram comer, que comem tudo, e com os lobos do alvo aprendido;
+  - **os lobos no grupo:** com o alvo aprendido (#255), eles escolhem o `seguir`; no prior, o P0 com lobos é o instinto do mundo byte a
+    byte, com os dois pets se vendo e se tocando.
+- **O G-NUMS-GRUPO da etapa 2:** com um B passivo, a vida do A segue igual à do A sozinho. Os lobos agora anotam no motivo o candidato
+  `seguir` a mais (o A vê o B); o teste confere o estado interno sem essa anotação.
+- **Fora:** a audição e o cheiro (o degrau 1b, etapa 8); as entradas sociais e o modelo dos outros no cérebro A (a segunda metade da
+  etapa 4, o B); a bancada do grupo (etapa 5, o D); o grupo em TypeScript (etapa 9).

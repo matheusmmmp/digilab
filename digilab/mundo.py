@@ -229,7 +229,8 @@ class PercepcaoMundo:
 @dataclass(frozen=True)
 class Alvo:
     """Um candidato a alvo (secao 5). tipo: `comida` (id), `bola` (id 0), `cheiro`, `vagar`, `casa`, `continuar` (de = o tipo do alvo
-    antigo) ou `ponto` (so o cerebro, no explorar: um lugar lembrado)."""
+    antigo) ou `ponto` (so o cerebro, no explorar: um lugar lembrado). No grupo, o explorar tem tambem `seguir` (onde o outro esta, visto)
+    e `onde_comeu` (onde se viu o outro comer), que o padrao do motor nunca escolhe (dois pets, secao 6)."""
 
     tipo: str
     x: int
@@ -271,6 +272,82 @@ def alvo_padrao_de(acao: AcaoPet, cands: list[Alvo], p: PercepcaoMundo, cmf: Con
     return next((a for a in cands if a.tipo == "bola"), None)
 
 
+# ================================================================== os sentidos sobre o outro (dois pets, etapa 3; degrau 1)
+# docs/futuro/dois_pets.md, secao 5 (DP-4, DP-11): a visao (5.1) e o toque (5.2). Nenhum sentido le o estado interno do outro: as funcoes
+# abaixo so recebem o que e fisico (a posicao, a acao que se ve de fora, o consumo visto, o contato). O grupo (digilab/grupo.py) as chama.
+CANDIDATOS_SOCIAIS = ("seguir", "onde_comeu")      # os candidatos do explorar que so existem com o outro (secao 6)
+TIPOS_TOQUE = ("disputa_ganhou", "disputa_perdeu", "encostou", "encostaram", "esbarrou")
+
+
+@dataclass(frozen=True)
+class PercepcaoSocial:
+    """Secao 5. Sem campo de estado interno do outro (G-RECEPTOR-SOCIAL).
+    - `outros`: (id, dx, dy, d, acao_visivel) dos pets a ate o raio da visao do mundo, em ordem de d e de id; `acao_visivel` e a acao
+      que o outro escolheu na ultima decisao dele (o que se ve de fora);
+    - `onde_comeu`: (id, x, y, idade) do ultimo ponto em que este pet VIU cada outro comer (dentro do raio, no momento do consumo), com a
+      idade em ticks; em ordem de id; nada de quem nunca foi visto comendo;
+    - `toque`: (id, tipo, direcao, idade) do ultimo contato com cada outro (tipo em TIPOS_TOQUE; direcao 1 a 8 na tabela do cheiro, 0 na
+      mesma celula); em ordem de id."""
+
+    outros: tuple
+    onde_comeu: tuple
+    toque: tuple
+
+
+def celula_de(x: int, y: int, cm: ConfigMundo) -> tuple[int, int]:
+    return x // cm.sub, y // cm.sub
+
+
+def direcao_vizinha(dcx: int, dcy: int) -> int:
+    """a direcao de uma celula vizinha na tabela do cheiro (1 a 8 = L, NE, N, NO, O, SO, S, SE; y cresce para o sul), 0 na mesma celula"""
+    if max(abs(dcx), abs(dcy)) > 1:
+        raise ValueError(f"celula nao vizinha: ({dcx}, {dcy})")
+    if dcx == 0 and dcy == 0:
+        return 0
+    for k in range(8):
+        cx, cy = DIR16[2 * k]
+        if (cx > 0) - (cx < 0) == dcx and (cy > 0) - (cy < 0) == dcy:
+            return k + 1
+    raise AssertionError("tabela das direcoes incompleta")      # as 8 vizinhas estao todas na tabela
+
+
+def em_contato(a: tuple[int, int], b: tuple[int, int], cm: ConfigMundo, raio_celulas: int) -> bool:
+    """secao 5.2: as celulas a no maximo `raio_celulas` em Chebyshev (a mesma celula ou a vizinha, com 1)"""
+    (ax, ay), (bx, by) = celula_de(*a, cm), celula_de(*b, cm)
+    return max(abs(ax - bx), abs(ay - by)) <= raio_celulas
+
+
+def perceber_social(x: int, y: int, tick: int, outros: list[tuple], viu_comer: dict, toques: dict, raio_visao: int) -> PercepcaoSocial:
+    """Pura: o que um pet em (x, y) percebe dos outros agora. `outros` = (id, x, y, acao_visivel), so o fisico; `viu_comer` = {id: (x, y,
+    tick)} e `toques` = {id: (tipo, direcao, tick)}, a memoria do proprio pet; `tick` e o do mundo."""
+    vistos = []
+    for ident, ox, oy, acao in outros:
+        dx, dy = ox - x, oy - y
+        d = distancia(dx, dy)
+        if d <= raio_visao:
+            vistos.append((ident, dx, dy, d, acao))
+    vistos.sort(key=lambda v: (v[3], v[0]))
+    comeu = tuple((i, cx, cy, tick - t) for i, (cx, cy, t) in sorted(viu_comer.items()))
+    toque = tuple((i, tipo, direcao, tick - t) for i, (tipo, direcao, t) in sorted(toques.items()))
+    return PercepcaoSocial(tuple(vistos), comeu, toque)
+
+
+def tipos_do_contato(a: str, b: str, disputa: dict | None, seguiu: dict) -> dict[str, str]:
+    """secao 5.2: o tipo do contato para cada um, pelo que aconteceu no tick (nunca por intencao). `disputa` = {"vencedor", "perdedor"} ou
+    None; `seguiu` = {id: o id do pet que ele seguiu neste tick, ou None}. A disputa vence o encostar, que vence o esbarrar."""
+    if disputa is not None:
+        return {disputa["vencedor"]: "disputa_ganhou", disputa["perdedor"]: "disputa_perdeu"}
+    tipos = {}
+    for eu, outro in ((a, b), (b, a)):
+        if seguiu.get(eu) == outro:
+            tipos[eu] = "encostou"
+        elif seguiu.get(outro) == eu:
+            tipos[eu] = "encostaram"
+        else:
+            tipos[eu] = "esbarrou"
+    return tipos
+
+
 # ================================================================== o embrulho da politica
 class _PoliticaComMundo:
     """Embrulho do MotorMundo (so com a chave): antes de `agir` avanca o mundo e injeta `obs.mundo`; em `observar` aplica a consequencia
@@ -281,7 +358,7 @@ class _PoliticaComMundo:
         self._motor = motor
 
     def agir(self, obs: Observacao, rng: random.Random) -> AcaoPet:
-        obs = replace(obs, mundo=self._motor._antes_da_decisao())
+        obs = replace(obs, mundo=self._motor._antes_da_decisao(), social=self._motor._social)
         self._motor._obs_decisao = obs
         return self._pm.agir(obs, rng)
 
@@ -599,6 +676,21 @@ class MotorMundo(MotorFrutas):
             self.alivios: list[dict] = []              # o contrato da bancada: tick, dentro, urgente, alvo, distancia, recolhido
             self.recolhas: list[dict] = []             # o limpar do dono: tick, zona, ids recolhidos
             self.alivios_dentro = 0
+
+        # dois pets, etapa 3: o grupo e o id do pet nele (o Grupo poe na entrada); fora do grupo, nada disto e usado e a vida e a de hoje
+        self._grupo = None
+        self.ident: str | None = None
+        self._social: PercepcaoSocial | None = None     # a percepcao social da decisao (None sozinho)
+        self._cands_sociais: dict[Alvo, str] = {}       # o candidato social da decisao -> o id do outro
+        self._pendente_antes: dict | None = None        # o alvo pendente com que a decisao comecou (a disputa)
+        self._tick_social: dict | None = None           # o que o grupo le no fim do tick (partida, alvo, quem seguiu, o que comeu)
+        self._viu_comer: dict[str, tuple] = {}          # a memoria da visao: {id: (x, y, tick)} do ultimo consumo visto de cada outro
+        self._toques: dict[str, tuple] = {}             # a memoria do toque: {id: (tipo, direcao, tick)} do ultimo contato com cada outro
+        # os registros sociais do pet (as medidas; derivados, o replay refaz)
+        self.vistos_comer: list[dict] = []
+        self.idas_onde_comeu: list[dict] = []
+        self.a_vista: dict[str, int] = {}               # decisoes com cada outro a vista
+        self.decisoes_no_grupo = 0                      # decisoes com outro pet presente
         self.politica = _PoliticaComMundo(self.politica, self)
 
     # ------------------------------------------------------------ o que e do mundo (lido do Mundo)
@@ -681,7 +773,11 @@ class MotorMundo(MotorFrutas):
 
     def _observacao_depois_mundo(self) -> Observacao:
         """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
-        return replace(Observacao.de_estado(self._estado), mundo=self._perceber(self._estado.tick))
+        return replace(Observacao.de_estado(self._estado), mundo=self._perceber(self._estado.tick), social=self.percepcao_social())
+
+    def percepcao_social(self) -> "PercepcaoSocial | None":
+        """o que o pet percebe dos outros agora (None fora do grupo, ou sozinho nele)"""
+        return None if self._grupo is None else self._grupo.perceber_social(self.ident)
 
     def _antes_da_decisao(self) -> PercepcaoMundo:
         """Chamado pelo embrulho logo antes de `agir`: o mundo anda ate o tick (uma vez por tick) e o pet percebe."""
@@ -689,6 +785,14 @@ class MotorMundo(MotorFrutas):
         self.mundo.atualizar(self._tm(t))
         self._percepcao = self._perceber(t)
         self._fome_antes = self._estado.fome
+        if self._grupo is not None:
+            self._social = self.percepcao_social()
+            self._pendente_antes = self._pendente
+            self._cands_sociais = {}
+            if self._social is not None:
+                self.decisoes_no_grupo += 1
+                for ident, *_ in self._social.outros:
+                    self.a_vista[ident] = self.a_vista.get(ident, 0) + 1
         return self._percepcao
 
     # ------------------------------------------------------------ os alvos
@@ -734,6 +838,22 @@ class MotorMundo(MotorFrutas):
         cont = self._continuar(acao)
         if cont is not None:
             cands.append(cont)
+        if acao is AcaoPet.EXPLORAR and self._social is not None:
+            cands += self._candidatos_sociais(p)
+        return cands
+
+    def _candidatos_sociais(self, p: PercepcaoMundo) -> list[Alvo]:
+        """dois pets, secao 6: `seguir` cada outro visto (onde ele esta) e `onde_comeu` de cada outro que este pet viu comer, depois dos
+        de hoje. O padrao do motor nunca os escolhe; so o cerebro."""
+        cands = []
+        for ident, dx, dy, _, _ in self._social.outros:
+            a = Alvo("seguir", p.x + dx, p.y + dy)
+            self._cands_sociais[a] = ident
+            cands.append(a)
+        for ident, x, y, _ in self._social.onde_comeu:
+            a = Alvo("onde_comeu", x, y)
+            self._cands_sociais[a] = ident
+            cands.append(a)
         return cands
 
     def alvo_padrao(self, acao: AcaoPet, cands: list[Alvo]) -> Alvo | None:
@@ -773,6 +893,9 @@ class MotorMundo(MotorFrutas):
                "situacao": sit, "como": como, "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome,
                "humor_depois": humor}
         self.consumos_mundo.append(reg)
+        if self._grupo is not None:                          # dois pets: o consumo e visto pelos outros e lido pela disputa
+            self._tick_social["comeu"] = {"id": c["id"], "tipo": c["tipo"], "x": c["x"], "y": c["y"], "situacao": sit}
+            self._grupo.viu_comer(self.ident, c["x"], c["y"])
         return reg
 
     def _rolar_bola(self, tick: int) -> None:
@@ -795,6 +918,9 @@ class MotorMundo(MotorFrutas):
             else:
                 self._validar_alvo(acao, alvo, cands)
             x1, y1 = (x0, y0) if alvo is None else passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, self.cmf)
+            if self._grupo is not None:
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
+                                     "social": self._id_social(alvo), "comeu": None}
             desloc = distancia(x1 - x0, y1 - y0)
             self.pet = (x1, y1)
             e = self._estado
@@ -817,9 +943,13 @@ class MotorMundo(MotorFrutas):
                 self._estado = replace(self._estado, humor=min(1.0, self._estado.humor + self.cmf.ganho_humor_bola))
                 self._rolar_bola(tick)
                 bola = True
+            if self._grupo is not None and self._id_social(alvo) is not None:
+                self._registrar_social(alvo, chegou, comeu, x1, y1, tick)
             if alvo is not None and not chegou:
                 base = alvo if alvo.tipo != "continuar" else Alvo(alvo.de, alvo.x, alvo.y, alvo.id)
                 self._pendente = {"acao": acao, "alvo": base}
+                if self._grupo is not None and self._id_social(alvo) is not None:
+                    self._pendente["social"] = self._id_social(alvo)
             else:
                 self._pendente = None
             ocorrido = {"acao": acao.value, "u": u, "alvo": None if alvo is None else alvo.para_dict(), "de": (x0, y0),
@@ -829,6 +959,9 @@ class MotorMundo(MotorFrutas):
             alvo, ocorrido = self._aliviar(tick, x0, y0)
         else:
             self._pendente = None
+            if self._grupo is not None:
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": None, "pendente_antes": self._pendente_antes,
+                                     "social": None, "comeu": None}
         self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
         return ocorrido
 
@@ -883,6 +1016,28 @@ class MotorMundo(MotorFrutas):
         cbh, cm = self.cbh, self.cmf
         z = zona_da_necessidade(*self.pet, cbh, cm)
         return sum(1 for n in self.mundo.necessidades.values() if zona_da_necessidade(n["x"], n["y"], cbh, cm) == z)
+
+    def _id_social(self, alvo: Alvo | None) -> str | None:
+        """o id do outro de um alvo social (seguir, onde_comeu, ou o continuar deles), ou None"""
+        if alvo is None:
+            return None
+        if alvo.tipo in CANDIDATOS_SOCIAIS:
+            return self._cands_sociais[alvo]
+        if alvo.tipo == "continuar" and alvo.de in CANDIDATOS_SOCIAIS:
+            return self._pendente_antes["social"]
+        return None
+
+    def _registrar_social(self, alvo: Alvo, chegou: bool, comeu: dict | None, x1: int, y1: int, tick: int) -> None:
+        """a ida a `onde_comeu` (a confianca da secao 8 sai daqui): chegou, comeu, e quantas comidas boas estavam a vista na chegada"""
+        classe = alvo.de if alvo.tipo == "continuar" else alvo.tipo
+        if classe != "onde_comeu":
+            return
+        tm = self._tm(tick)
+        boas = len(self.mundo.maduras_perto(x1, y1, tm, self._raio_visao)) if chegou else None
+        self.idas_onde_comeu.append({"tick": tm, "outro": self._id_social(alvo), "x": alvo.x, "y": alvo.y,
+                                     "continuacao": alvo.tipo == "continuar", "chegou": chegou,
+                                     "comeu": None if comeu is None else {k: comeu[k] for k in ("id", "tipo", "situacao", "como")},
+                                     "boas_a_vista": boas})
 
     def _pm_cerebro(self):
         """o que esta embaixo do embrulho do mundo (os ganchos do cerebro passam pelos embrulhos de baixo)"""
@@ -994,6 +1149,11 @@ class MotorMundo(MotorFrutas):
     # eventos; o MotorEducacao confere a morte no fim) em volta do laco de n ticks do engine. O grupo intercala os ticks dos pets, entao
     # chama as tres partes separadas: `_abrir_avanco`, `_um_tick` n vezes e `_fechar_avanco`. Com um pet, e o `_avancar(n)` byte a byte
     # (o G2 do grupo); tests/test_grupo.py confere que nenhuma classe da cadeia tem outro `_avancar`.
+    def resumo_social(self) -> dict:
+        """os registros sociais do pet (so no grupo; o G1 do grupo compara)"""
+        return {"viu_comer": self._viu_comer, "toques": self._toques, "vistos_comer": self.vistos_comer,
+                "idas_onde_comeu": self.idas_onde_comeu, "a_vista": self.a_vista, "decisoes_no_grupo": self.decisoes_no_grupo}
+
     def _abrir_avanco(self) -> None:
         self._n_eventos += 1                     # o MotorPersonalidade._avancar
 

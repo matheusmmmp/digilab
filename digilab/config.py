@@ -1750,6 +1750,7 @@ class ConfigGrupo:
     ligada: bool = False
     ids: tuple = ("A", "B")                  # DP-1: dois pets; o desenho do grupo aceita N, a pesquisa usa dois
     orcamento_por_dia: int = 16              # DP-7: 16 interacoes por dia para cada pet (o orcamento de hoje)
+    raio_toque_celulas: int = 1              # dois pets, secao 5.2: o contato com as celulas a ate 1 em Chebyshev (a mesma ou a vizinha)
 
     def __post_init__(self) -> None:
         if not self.ids or len(set(self.ids)) != len(self.ids) or any(type(i) is not str or not i for i in self.ids):
@@ -1760,6 +1761,8 @@ class ConfigGrupo:
             raise ValueError(f"ConfigGrupo.ids em ordem (a lista dos pets e ordenada pelo identificador): {self.ids!r}")
         if type(self.orcamento_por_dia) is not int or self.orcamento_por_dia <= 0:
             raise ValueError(f"ConfigGrupo.orcamento_por_dia tem de ser inteiro positivo: {self.orcamento_por_dia!r}")
+        if type(self.raio_toque_celulas) is not int or self.raio_toque_celulas < 0:
+            raise ValueError(f"ConfigGrupo.raio_toque_celulas tem de ser inteiro nao negativo: {self.raio_toque_celulas!r}")
 
 
 CONFIG_GRUPO = ConfigGrupo()

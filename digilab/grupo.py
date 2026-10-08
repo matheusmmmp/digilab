@@ -30,8 +30,15 @@ registro refeito diferir do lido.
 O dono (DP-7, a validacao inicial): um dono sintetico para todos, com o orcamento por pet (ConfigGrupo.orcamento_por_dia por dia vivido) e
 as rngs de cada pet; ele decide o cuidado de cada pet so pelo que ve daquele pet (`simular_grupo`, `PetNoGrupo`).
 
-So biblioteca padrao. Nenhum sentido sobre o outro nesta etapa (visao, toque e disputa sao a etapa 3): com dois pets, um so muda o mundo
-do outro pelo que faz fisicamente (a comida que comeu some, a bola que chutou rola).
+Os sentidos sobre o outro (etapa 3; desenho, secao 5; DP-11, degrau 1): a visao e o toque. O grupo monta a `PercepcaoSocial` de cada
+pet so com o que e fisico (a posicao dos outros, a acao que se ve de fora, o consumo visto, o contato) e a poe no `obs.social`; nunca o
+estado interno do outro. O toque e uma conta do grupo no fim de cada tick com decisao, depois de os pets agirem na vez sorteada: ha contato
+com as celulas a ate `ConfigGrupo.raio_toque_celulas` em Chebyshev, e o tipo (disputa, encostar, esbarrar) sai do que aconteceu no tick. A
+disputa e a comida que um comeu e o outro tinha como alvo (neste tick, ou o alvo que ele trazia da decisao anterior): o primeiro na vez
+come, o segundo nao acha (MF-2). Os registros (`contatos`, `disputas` e, em cada motor, os consumos vistos, as idas a `onde_comeu` e o
+tempo a vista) sao derivados: nada disso entra no registro do grupo, o replay refaz. O toque nao mexe no corpo (degrau 3).
+
+So biblioteca padrao.
 """
 
 from __future__ import annotations
@@ -46,7 +53,8 @@ from .donos import Visao
 from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
-from .mundo import CanalMundo, MotorMundo, Mundo
+from .mundo import (CANDIDATOS_SOCIAIS, CanalMundo, MotorMundo, Mundo, PercepcaoSocial, celula_de, direcao_vizinha, distancia,
+                    em_contato, perceber_social, tipos_do_contato)
 from .protocol import derivar_semente
 
 ROTULO_ORDEM = "mundo-ordem"                 # o fluxo da vez no tick (DP-2)
@@ -166,6 +174,8 @@ class Grupo:
         self._rng_ordem: random.Random | None = None     # so com dois pets decidindo no mesmo tick
         self.interacoes: dict[str, int] = {}     # o gasto do dono de cada pet (simular_grupo)
         self.ordens: list[dict] = []             # {tick, decidem, ordem}: as vezes sorteadas (derivadas; o replay refaz)
+        self.contatos: list[dict] = []           # o toque (secao 5.2): um por par e por tick com decisao, com o tipo de cada um
+        self.disputas: list[dict] = []           # a comida que um comeu e o outro tinha como alvo: quem ganhou, a vez, as distancias
         self.registro = RegistroGrupo({"versao": VERSAO_REGISTRO, "semente": semente, "ids": list(self.cg.ids),
                                        "layout": cfg_mundo.layout.nome, "pets": {}})
 
@@ -189,6 +199,7 @@ class Grupo:
                 raise ValueError(f"efeito_frutas diferente entre os pets: {outro.efeito_frutas} x {motor.efeito_frutas}")
         if motor._estado.tick != 0 or len(motor.log):
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
+        motor._grupo, motor.ident = self, ident
         self.motores[ident] = motor
         self.registro.cabecalho["pets"][ident] = {"semente": self.sementes[ident], "entrada": self.tick, "cerebro": cerebro, "dono": dono}
         self.registro.anexar(EventoGrupo(self.tick, "entrada", ident, DESTINO_GRUPO, ident))
@@ -221,6 +232,8 @@ class Grupo:
             ordem = self._sortear(decidem) if len(decidem) >= 2 else decidem
             for i in ordem + [i for i in presentes if i not in decidem]:
                 self.motores[i]._um_tick()
+            if decidem and len(presentes) >= 2:
+                self._toque_e_disputa(presentes, ordem)
             self.tick += 1
         for i in presentes:
             m = self.motores[i]
@@ -239,6 +252,88 @@ class Grupo:
             ordem[k], ordem[j] = ordem[j], ordem[k]
         self.ordens.append({"tick": self.tick, "decidem": list(decidem), "ordem": list(ordem)})
         return ordem
+
+    # ------------------------------------------------------------ os sentidos sobre o outro (etapa 3)
+    def perceber_social(self, ident: str) -> PercepcaoSocial | None:
+        """A visao e o toque do pet `ident` agora (secoes 5.1 e 5.2), so do que e fisico: a posicao e a acao visivel de cada outro presente
+        e a memoria do proprio pet (o consumo visto, o ultimo contato). None com o pet sozinho no grupo."""
+        outros = [i for i in self.ids_presentes() if i != ident]
+        if not outros:
+            return None
+        m = self.motores[ident]
+        fisico = [(i, *self.motores[i].pet, self.motores[i]._acao_atual.value) for i in outros]
+        return perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao)
+
+    def viu_comer(self, quem: str, x: int, y: int) -> None:
+        """o pet `quem` comeu a comida de (x, y) agora: cada outro que o tem a vista (dentro do raio, neste momento) guarda o ponto"""
+        mq = self.motores[quem]
+        for i in self.ids_presentes():
+            if i == quem:
+                continue
+            m = self.motores[i]
+            d = distancia(mq.pet[0] - m.pet[0], mq.pet[1] - m.pet[1])
+            if d <= m._raio_visao:
+                m._viu_comer[quem] = (x, y, self.tick)
+                m.vistos_comer.append({"tick": self.tick, "outro": quem, "x": x, "y": y, "d": d})
+
+    def _no_tick(self, m: MotorMundo) -> dict | None:
+        ts = m._tick_social
+        return ts if ts is not None and ts["tick"] == self.tick else None
+
+    def _toque_e_disputa(self, presentes: list[str], ordem: list[str]) -> None:
+        """o fim de um tick com decisao (secao 5.2): por par, a disputa (registrada com ou sem contato) e o contato com o tipo de cada um"""
+        cmf = self.mundo.cmf
+        for k, a in enumerate(presentes):
+            for b in presentes[k + 1:]:
+                ma, mb = self.motores[a], self.motores[b]
+                disputa = self._disputa(a, b) or self._disputa(b, a)
+                contato = em_contato(ma.pet, mb.pet, cmf, self.cg.raio_toque_celulas)
+                if disputa is not None:
+                    disputa["contato"] = contato
+                    self.disputas.append(disputa)
+                if not contato:
+                    continue
+                seguiu = {i: self._seguiu(self.motores[i]) for i in (a, b)}
+                tipos = tipos_do_contato(a, b, disputa, seguiu)
+                (ax, ay), (bx, by) = celula_de(*ma.pet, cmf), celula_de(*mb.pet, cmf)
+                sinal = lambda v: (v > 0) - (v < 0)  # noqa: E731
+                direcoes = {a: direcao_vizinha(sinal(bx - ax), sinal(by - ay)), b: direcao_vizinha(sinal(ax - bx), sinal(ay - by))}
+                for eu, outro in ((a, b), (b, a)):
+                    self.motores[eu]._toques[outro] = (tipos[eu], direcoes[eu], self.tick)
+                self.contatos.append({"tick": self.tick, "pets": [a, b], "tipos": tipos, "direcoes": direcoes,
+                                      "celulas": {a: [ax, ay], b: [bx, by]}, "decidem": list(ordem)})
+
+    def _seguiu(self, m: MotorMundo) -> str | None:
+        """o id do pet que `m` seguiu neste tick (o candidato `seguir`, ou o continuar dele), ou None"""
+        ts = self._no_tick(m)
+        if ts is None or ts["alvo"] is None:
+            return None
+        alvo = ts["alvo"]
+        classe = alvo.de if alvo.tipo == "continuar" else alvo.tipo
+        return ts["social"] if classe == "seguir" else None
+
+    def _disputa(self, vencedor: str, perdedor: str) -> dict | None:
+        """o `vencedor` comeu neste tick a comida que o `perdedor` tinha como alvo neste tick, ou trazia como alvo pendente"""
+        mv, mp = self.motores[vencedor], self.motores[perdedor]
+        tv = self._no_tick(mv)
+        if tv is None or tv["comeu"] is None:
+            return None
+        c = tv["comeu"]
+        tp = self._no_tick(mp)
+        alvos = []
+        if tp is not None:
+            alvos += [tp["alvo"]] + ([tp["pendente_antes"]["alvo"]] if tp["pendente_antes"] is not None else [])
+        elif mp._pendente is not None:
+            alvos.append(mp._pendente["alvo"])
+        if not any(a is not None and a.objeto() == "comida" and a.id == c["id"] for a in alvos):
+            return None
+        de_v = tv["de"]
+        de_p = tp["de"] if tp is not None else mp.pet
+        vez = self.ordens[-1]["ordem"] if self.ordens and self.ordens[-1]["tick"] == self.tick else None
+        return {"tick": self.tick, "comida": c["id"], "tipo": c["tipo"], "situacao": c["situacao"], "vencedor": vencedor,
+                "perdedor": perdedor, "vencedor_primeiro": None if vez is None else vez.index(vencedor) < vez.index(perdedor),
+                "d_vencedor": distancia(c["x"] - de_v[0], c["y"] - de_v[1]), "d_perdedor": distancia(c["x"] - de_p[0], c["y"] - de_p[1]),
+                "perdedor_decidiu": tp is not None}
 
     # ------------------------------------------------------------ o dono (DP-7: o orcamento e o contato sao de um pet)
     def acao_dono(self, ident: str, acao: AcaoUsuario) -> None:
@@ -263,13 +358,15 @@ class Grupo:
         """o mundo, as vezes sorteadas e o que cada pet guarda (o G1 do grupo compara isto bit a bit)"""
         return {"tick": self.tick, "mundo": self.mundo.resumo(), "ordens": self.ordens,
                 "rng_ordem": None if self._rng_ordem is None else self._rng_ordem.getstate(),
+                "contatos": self.contatos, "disputas": self.disputas,
                 "pets": {i: _resumo_do_pet(m) for i, m in self.motores.items()}}
 
 
 def _resumo_do_pet(m: MotorMundo) -> dict:
     return {"estado": repr(m._estado), "estado_motor": m.estado(), "acoes": m.acoes_recentes(10 ** 9),
             "rngs": [m._rng_politica.getstate(), m._rng_ambiente.getstate()], "fisico": m.resumo_mundo_fisico(),
-            "politica": m.politica.estado_interno(), "log": m.log.para_jsonl(), "entrada": m.entrada_mundo}
+            "politica": m.politica.estado_interno(), "log": m.log.para_jsonl(), "entrada": m.entrada_mundo,
+            "social": m.resumo_social()}
 
 
 class PetNoGrupo:

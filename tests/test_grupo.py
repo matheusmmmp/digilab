@@ -352,10 +352,24 @@ def test_g_nums_um_b_passivo_deixa_o_a_igual_ao_a_sozinho(entrada_b, cerebro_a):
     for s in (101, 202):
         so_a = simular_grupo(CM, s, [pet("A", 0, s, cerebro_a)], DIAS)
         com_b = simular_grupo(CM, s, [pet("A", 0, s, cerebro_a), pet("B", entrada_b, s, "passivo", dono=None)], DIAS)
-        assert gdp.impressao(com_b.motores["A"], com_b.interacoes["A"]) == gdp.impressao(so_a.motores["A"], so_a.interacoes["A"])
+        ia, ib = gdp.impressao(so_a.motores["A"], so_a.interacoes["A"]), gdp.impressao(com_b.motores["A"], com_b.interacoes["A"])
+        # desde a etapa 3 o A ve o B: a vida e a mesma, e os lobos so anotam no motivo os candidatos sociais a mais (seguir), que o
+        # padrao do motor nunca escolhe
+        assert {k: v for k, v in ia.items() if k != "politica"} == {k: v for k, v in ib.items() if k != "politica"}
+        ea, eb = so_a.motores["A"].politica.estado_interno(), com_b.motores["A"].politica.estado_interno()
+        assert _texto(_sem_candidatos_sociais(eb)) == _texto(ea)
         assert _texto(com_b.mundo.resumo()) == _texto(so_a.mundo.resumo())
         mb = com_b.motores["B"]
         assert com_b.ordens and not mb.consumos_mundo and {a for _, a in mb.acoes_recentes(10 ** 9)} <= {AcaoPet.OCIOSO, AcaoPet.DORMIR}
+
+
+def _sem_candidatos_sociais(estado: dict) -> dict:
+    """o estado interno dos lobos sem os candidatos sociais anotados no motivo do alvo"""
+    estado = json.loads(_texto(estado))
+    for m in estado.get("motivos", []):
+        if isinstance(m.get("mundo"), dict) and "candidatos" in m["mundo"]:
+            m["mundo"]["candidatos"] = [c for c in m["mundo"]["candidatos"] if c not in ("seguir", "onde_comeu")]
+    return estado
 
 
 def _primeiro_evento_fisico(g: Grupo, ident: str) -> int:
