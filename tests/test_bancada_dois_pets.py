@@ -10,9 +10,11 @@ O que se confere:
 - a fabrica do grupo pelo simular_grupo: o G1 de todo grupo (do texto do registro, e o replay que falha alto), o pet sozinho do grupo e a
   vida de hoje da bancada byte a byte, as mesmas vezes sorteadas nos bracos com os dois pets, as mesmas quedas em todo braco, o chao do dia
   K igual no B so e no B + Aing, a troca do A embaralhado no dia K, o orcamento por pet e o cuidado so (PMF-3);
-- as medidas que ja tem dado no registro do grupo (a R por janela com o efeito vigente, o D_FE, o alvo aprendido por dia, a vez no tick);
-- o que espera a etapa 3 do A (a visao, o toque e a disputa) falha alto com o no `sentidos_grupo`, e os canais no mundo dos dois pets com o
-  no `canais_fruta_mundo`; a trava e so a tabela.
+- as medidas que ja tem dado no registro do grupo (a R por janela com o efeito vigente, o D_FE, o alvo aprendido por dia, a vez no tick)
+  e as sociais da etapa 3 do A, #263 (o uso do seguir e do onde_comeu, o que o pet viu comer, a disputa, o toque, o tempo a vista),
+  conferidas contra os registros do grupo e dos motores;
+- o que espera o cerebro (as entradas sociais e o modelo dos outros, a segunda metade da etapa 4 do B) falha alto com o no `cerebro_social`,
+  e os canais no mundo dos dois pets com o no `canais_fruta_mundo`; a trava e so a tabela.
 So as sementes dos testes.
 """
 from __future__ import annotations
@@ -343,7 +345,7 @@ def test_as_medidas_saem_do_registro_do_grupo(braco):
     v = _grupo(braco)
     m = bc.medir_grupo(v)
     assert m["braco"] == braco and m["ruim"] == bv.tipo_ruim(101) and m["ordens"] == len(v.grupo.ordens)
-    assert m["sociais"]["pendente"] == "sentidos_grupo"
+    assert set(m["sociais"]) == set(v.grupo.motores) and m["modelo_dos_outros"]["pendente"] == "cerebro_social"
     for i, p in m["pets"].items():
         mt = v.grupo.motores[i]
         ini = mt.entrada_mundo
@@ -357,15 +359,11 @@ def test_as_medidas_saem_do_registro_do_grupo(braco):
         assert sum(p["consumos"].values()) == len(mt.consumos_mundo)
         assert p["d_fe"]["vida"]["n"] == len(mt.decisoes_mundo) and 0.0 <= p["d_fe"]["primeiros_7"]["d_fe"] <= 1.0
         assert p["vez"] == vez_no_grupo(v.grupo.ordens, i)
-        # o alvo aprendido no fim de cada dia (so o P1); as classes sociais ficam no prior ate a etapa 3 oferecer os candidatos
+        # o alvo aprendido no fim de cada dia (o P1 aprende, com as classes seguir e onde_comeu; o P0 fica no prior)
         assert len(p["pesos_alvo_por_dia"]) == p["dias_vividos"]
         if p["braco"] == "P1":
-            prior = mt.politica.estado_interno()["pesos_alvo_mundo_prior"]
             assert p["pesos_alvo_por_dia"][-1] == mt.politica.estado_interno()["pesos_alvo_mundo"]
-            for chave, tabela in p["pesos_alvo_por_dia"][-1].items():
-                for classe in ("seguir", "onde_comeu"):
-                    if classe in tabela:
-                        assert tabela[classe] == prior[chave][classe]
+            assert "seguir" in p["pesos_alvo_por_dia"][-1]["tempo_livre:explorar"]
         else:                                               # o P0: o prior todos os dias
             prior = mt.politica.estado_interno()["pesos_alvo_mundo_prior"]
             assert p["pesos_alvo_por_dia"] == [prior] * p["dias_vividos"]
@@ -395,14 +393,61 @@ def test_a_r_do_a_embaralhado_usa_o_efeito_de_cada_lado_da_troca(monkeypatch):
     assert (taxa["depois_k"]["n"], taxa["depois_k"]["ruins"]) == (3, 2)  # depois, o ruim verdadeiro
 
 
-# ------------------------------------------------------------------ 5. o que espera a etapa 3 do A, e os canais
+# ------------------------------------------------------------------ 5. as medidas sociais (etapa 3 do A), o que espera o B e os canais
 
 
-def test_as_medidas_sociais_falham_alto_com_o_no():
+def _conferir_sociais(v, sociais: dict) -> None:
+    """As medidas sociais contra os registros do grupo e dos motores, contadas por fora."""
+    g = v.grupo
+    ruim = bv.tipo_ruim(v.espec.semente)
+    for i, m in g.motores.items():
+        so = sociais[i]
+        exp = [d for d in m.decisoes_mundo if d["acao"] == "explorar"]
+        assert sum(u["explorar"] for u in so["uso_candidatos"]) == len(exp)
+        for c in ("seguir", "onde_comeu"):
+            assert sum(u[c] for u in so["uso_candidatos"]) == sum(1 for d in exp if d["alvo"] == c)
+        for u in so["uso_candidatos"]:
+            assert u["fracao_seguir"] == (u["seguir"] / u["explorar"] if u["explorar"] else None)
+        assert so["vistos_comer"]["n"] == len(m.vistos_comer) == sum(so["vistos_comer"]["por_tipo"].values())
+        comidos = {c["tick"]: c for o, mo in g.motores.items() if o != i for c in mo.consumos_mundo}
+        assert so["vistos_comer"]["ruins_maduros"] == sum(1 for x in m.vistos_comer if comidos[x["tick"]]["tipo"] == ruim
+                                                          and comidos[x["tick"]]["situacao"] == "madura")
+        minhas = [d for d in g.disputas if i in (d["vencedor"], d["perdedor"])]
+        assert so["disputas"]["n"] == len(minhas) and so["disputas"]["ganhou"] == sum(d["vencedor"] == i for d in minhas)
+        for x, d in zip(so["disputas"]["lista"], minhas):
+            assert (x["d_eu"], x["d_outro"]) == ((d["d_vencedor"], d["d_perdedor"]) if x["ganhou"] else (d["d_perdedor"], d["d_vencedor"]))
+        toques = [c["tipos"][i] for c in g.contatos if i in c["pets"]]
+        assert sum(n for t in so["toque_por_dia"] for k, n in t.items() if k != "dia") == len(toques)
+        assert so["a_vista"] == dict(m.resumo_social()["a_vista"]) and so["idas_onde_comeu"]["n"] == len(m.idas_onde_comeu)
+
+
+@pytest.mark.parametrize("braco", sorted(bv.BRACOS_GRUPO))
+def test_as_medidas_sociais_saem_dos_registros(braco):
+    v = _grupo(braco)
+    sociais = _bancada().medidas_sociais(v)
+    _conferir_sociais(v, sociais)
+    if len(v.grupo.motores) == 1:                            # sozinho: nada social
+        so = next(iter(sociais.values()))
+        assert so["vistos_comer"]["n"] == so["disputas"]["n"] == 0 and so["a_vista"] == {}
+    else:                                                    # com os dois: eles se veem e se tocam
+        assert all(so["a_vista"] and so["vistos_comer"]["n"] for so in sociais.values()) and v.grupo.contatos
+
+
+def test_a_disputa_e_o_uso_dos_candidatos_sociais():
+    """Numa vida com disputa (B + Aing, semente 303): o vencedor e o perdedor, as distancias de cada um e o uso do seguir e do onde_comeu."""
+    v = _grupo("B+Aing", 303)
+    sociais = _bancada().medidas_sociais(v)
+    _conferir_sociais(v, sociais)
+    assert len(v.grupo.disputas) == 1 and sum(so["disputas"]["n"] for so in sociais.values()) == 2
+    assert sum(so["disputas"]["ganhou"] for so in sociais.values()) == 1
+    assert sum(u["seguir"] + u["onde_comeu"] for so in sociais.values() for u in so["uso_candidatos"]) > 0
+
+
+def test_o_modelo_dos_outros_falha_alto_com_o_no():
     v = _grupo("B+Ainf")
-    with pytest.raises(NotImplementedError, match="etapa 3"):
-        _bancada().medidas_sociais(v)
-    assert "visao, o toque e a disputa" in bv.NOS_PENDENTES["sentidos_grupo"]
+    with pytest.raises(NotImplementedError, match="modelo dos outros"):
+        _bancada().modelo_dos_outros(v)
+    assert "sentidos_grupo" not in bv.NOS_PENDENTES and "segunda metade" in bv.NOS_PENDENTES["cerebro_social"]
 
 
 def _cfg_plano(**troca) -> dict:
@@ -412,7 +457,7 @@ def _cfg_plano(**troca) -> dict:
 
 def test_a_run_do_plano_falha_alto_com_o_no():
     cfg = {k: v for k, v in _cfg_plano().items() if k != "sementes"}
-    with pytest.raises(NotImplementedError, match="visao, o toque e a disputa"):
+    with pytest.raises(NotImplementedError, match="entradas sociais"):
         bv.validar_config_grupo(cfg)
     sem_plano = {k: v for k, v in cfg.items() if k != "plano"}
     with pytest.raises(bv.SementeSemPlano):
@@ -420,12 +465,12 @@ def test_a_run_do_plano_falha_alto_com_o_no():
     bv.validar_config_grupo({**CFG, "sementes": [101, 202]})                    # as sementes dos testes rodam
 
 
-def test_a_trava_dos_sentidos_e_so_a_tabela(monkeypatch):
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "sentidos_grupo"})
+def test_a_trava_do_cerebro_social_e_so_a_tabela(monkeypatch):
+    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "cerebro_social"})
     cfg = {k: v for k, v in _cfg_plano().items() if k != "sementes"}
     bv.validar_config_grupo(cfg)
-    with pytest.raises(NotImplementedError, match="entra com a etapa 3"):      # a segunda trava: o motor ainda nao registra
-        _bancada().medidas_sociais(_grupo("B+Ainf"))
+    with pytest.raises(NotImplementedError, match="entra com a segunda metade"):   # a segunda trava: o cerebro ainda nao o tem
+        _bancada().modelo_dos_outros(_grupo("B+Ainf"))
 
 
 @pytest.mark.parametrize("troca", [{"montagem": "completa"}, {"consequencia": {"ganho": 4, "canais_ligados": True}}])
@@ -441,14 +486,15 @@ def test_os_canais_falham_alto_com_o_no(troca):
 
 
 def test_a_trava_dos_canais_e_so_a_tabela_e_guarda_uma_falha_real(monkeypatch):
-    """Sem a entrada `canais_fruta_mundo`, o grupo com a montagem completa monta, e o cerebro do mundo fisico falha alto quando o B come a
-    fruta que mexe no humor (CANAIS-REFORCO): o no guarda uma falha real, do B, e nao so uma escolha da bancada."""
+    """Sem a entrada `canais_fruta_mundo`, o grupo com a montagem completa monta, e o cerebro do mundo fisico falha alto quando o pet come
+    a fruta que mexe no humor (CANAIS-REFORCO): o no guarda uma falha real, do B, e nao so uma escolha da bancada. Com um pet so (o A so,
+    semente 505), sem nada social no caminho: a falha e do canal do humor, nao do grupo."""
     monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "canais_fruta_mundo"})
     bv.validar_config_grupo({**CFG, "montagem": "completa"})
     bc = _bancada(montagem="completa")
     assert len(bc.pets_do_grupo(bv.EspecGrupo("B+Aing", 101, 1))) == 2
     with pytest.raises(RuntimeError, match="CANAIS-REFORCO"):
-        bc.grupo(bv.EspecGrupo("B+Aing", 101, 1))
+        bc.grupo(bv.EspecGrupo("A-so", 505, 0))
 
 
 # ------------------------------------------------------------------ 6. a config e o rodar

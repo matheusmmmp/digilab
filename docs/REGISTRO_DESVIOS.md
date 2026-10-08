@@ -4287,3 +4287,16 @@ e na tarefa. Nenhuma run, nenhum código.
   neutro, como o mundo físico sem genoma. Fica para o adendo do plano.
 - **O orçamento.** O grupo usa o orçamento por dia vivido (`orcamento // dias` da bancada, 16), e o dono de cada pet gasta tudo. O elogio
   e a bronca do atencioso gastam o orçamento e não chegam ao pet (PMF-3), contados em `retirados`.
+- **Depois do rebase na main com o #263 e o #265 (pedido do Gerente):**
+  - **o nó `sentidos_grupo` saiu e ficou o `cerebro_social`.** A etapa 3 do A trouxe a visão, o toque e a disputa, e as medidas sociais
+    saem dos registros dela. O cérebro do plano (seção 2) tem também as entradas sociais e o modelo dos outros, da segunda metade da etapa 4
+    (do B), que não estão na `main`. Por isso a run com as sementes do plano e o modelo dos outros continuam falhando alto, agora com esse nó;
+  - **o que o pet viu comer, por tipo:** o `vistos_comer` do #263 não tem o tipo. A medida junta cada consumo visto ao consumo do outro no
+    mesmo tick (um pet come no máximo uma vez por tick); sem esse consumo, falha alto;
+  - **a falha real dos canais** passou a ser mostrada no `A-so` com a semente 505: um pet só, sem nada social no caminho. A trajetória do
+    `B+Aing` na 101 mudou com a etapa 3;
+  - **o banheiro destravado** como o A anotou no #265. O cérebro `instinto` (o `PoliticaInstintoBanheiro`) não tem pesos do alvo: a medida
+    sai sem eles (`peso_alvo_por_dia` None), em vez de falhar;
+  - **o banheiro maior só nos testes.** Com o banheiro do #265 (células 0 a 3 e 0 a 5), nas vidas curtas dos testes não há alívio dentro
+    (o achado do A). Os testes trocam a `CONFIG_BANHEIRO_LIGADA` da bancada por uma área maior, só para exercitar o carinho e o limpador. A
+    bancada não tem chave para a área: é decisão do plano.

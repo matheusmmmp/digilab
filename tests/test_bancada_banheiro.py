@@ -141,24 +141,17 @@ def test_os_bracos_do_banheiro_declarados_como_o_plano_pede():
     assert bv.BRACOS_BANHEIRO == {"B00": (False, False), "B0C": (False, True), "BL0": (True, False), "BLC": (True, True)}
 
 
-@pytest.mark.parametrize("braco", BANHEIRO)
-def test_o_banheiro_falha_alto_com_o_no(braco):
-    assert "etapa 3" in bv.NOS_PENDENTES["banheiro"] and "DonoCarinhoBanheiro" in bv.NOS_PENDENTES["banheiro"]
-    with pytest.raises(NotImplementedError, match="DonoCarinhoBanheiro"):
-        bv.braco_de(braco)
-    with pytest.raises(NotImplementedError, match="DonoCarinhoBanheiro"):
-        bv.validar_config(_cfg(bracos=[braco]))
-    with pytest.raises(NotImplementedError, match="DonoCarinhoBanheiro"):
-        bv.Bancada(2, 32).vida(bv.EspecVida("atencioso", braco, 101, None, "fisico", lugar="comedouro"))
-
-
-def test_a_trava_e_so_a_tabela(monkeypatch):
-    """Sem a entrada, os bracos se resolvem e o cerebro se monta; a vida para na fiacao do motor e do dono, que espera a etapa 3."""
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {})
-    b = bv.Bancada(2, 32)
+def test_o_no_do_banheiro_saiu():
+    """W-BANCADA-DOIS-PETS: a etapa 3 do banheiro (#265) esta na main; o no saiu e os bracos se resolvem."""
+    assert "banheiro" not in bv.NOS_PENDENTES
     for braco in BANHEIRO:
         assert bv.braco_de(braco) is bv.BRACOS[braco]
         bv.validar_config(_cfg(bracos=[braco]))
+
+
+def test_a_montagem_dos_bracos_do_banheiro():
+    b = bv.Bancada(2, 32)
+    for braco in BANHEIRO:
         e = bv.EspecVida("atencioso", braco, 101, None, "fisico", lugar="comedouro")
         cc = b.cfg_corpo_de(e)
         assert cc.drives_novos and cc.gestos and cc.banheiro
@@ -167,8 +160,8 @@ def test_a_trava_e_so_a_tabela(monkeypatch):
         pol = b.politica(e)
         assert isinstance(pol.cerebro, PoliticaLobos) and pol.cerebro._banheiro == cb
         assert pol.cerebro._aprende == braco.startswith("P1")
-        with pytest.raises(NotImplementedError, match="etapa 3"):
-            b.vida(e)
+        motor = b.fabrica_motor(e)(pol, bv.CONFIG_PADRAO, 101)
+        assert isinstance(motor, bv.MotorMundo) and motor.cmf.ligada and motor.cbh == cb
     inst = b.politica(bv.EspecVida("atencioso", "P0-B00", 101, None, "fisico", "instinto", lugar="comedouro"))
     assert isinstance(inst.cerebro, PoliticaInstintoBanheiro)
     with pytest.raises(ValueError, match="mundo fisico"):
@@ -177,6 +170,60 @@ def test_a_trava_e_so_a_tabela(monkeypatch):
         b.cfg_banheiro_de(bv.EspecVida("atencioso", "P1-BLC", 101, None, "bola"))
     assert b.cfg_banheiro_de(bv.EspecVida("atencioso", "P1-c", 101, None, "bola")) is None
     assert not b.cfg_corpo_de(bv.EspecVida("atencioso", "P1-c", 101, None, "bola")).banheiro      # os bracos do corpo, sem banheiro
+
+
+@pytest.fixture
+def banheiro_grande(monkeypatch):
+    """So para exercitar o carinho e o limpador nas vidas curtas dos testes: o banheiro cobrindo a casa e o jardim (o PROPOSTO, nas celulas
+    0 a 3 e 0 a 5, quase nao recebe alivio dentro: o achado do #265)."""
+    monkeypatch.setattr(bv, "CONFIG_BANHEIRO_LIGADA", bv.replace(bv.CONFIG_BANHEIRO_LIGADA, celulas_x=(0, 15), celulas_y=(0, 15)))
+
+
+_VIDAS: dict = {}
+
+
+def _vida_banheiro(braco: str, cerebro: str = "lobos", s: int = 101):
+    chave = (braco, cerebro, s, bv.CONFIG_BANHEIRO_LIGADA.celulas_x)
+    if chave not in _VIDAS:
+        _VIDAS[chave] = bv.Bancada(3, 48).vida(bv.EspecVida("atencioso", braco, s, None, "fisico", cerebro, lugar="comedouro"))
+    return _VIDAS[chave]
+
+
+@pytest.mark.parametrize("braco", BANHEIRO)
+def test_os_bracos_do_banheiro_rodam_e_medem(braco, banheiro_grande):
+    """Com a etapa 3 do A: o motor com o banheiro e o corpo com a sub-chave, o carinho depois do banheiro so nos bracos com carinho (fora
+    do orcamento), o limpador so nos bracos com limpador; o G1 (na vida) e as medidas do plano pelo contrato do motor."""
+    v = _vida_banheiro(braco)
+    limpador, carinho = bv.BRACOS_BANHEIRO[braco[3:]]
+    alivios = v.motor.alivios
+    dentro = sum(a["dentro"] for a in alivios)
+    assert alivios and dentro                                # o banheiro grande recebe alivios dentro
+    assert v.carinhos == (dentro if carinho else 0)
+    assert sum(a["recolhido"] for a in alivios) == (dentro if limpador else 0)
+    acariciar = sum(1 for e in v.motor.log if e.tipo == "acao_usuario" and e.valor == "acariciar")
+    assert v.interacoes + v.retirados == 48 and acariciar >= v.carinhos
+    m = bv.Bancada(3, 48).medir(v, SONDA)
+    bh = m["banheiro"]
+    assert bh["alivios"] == len(alivios) and len(bh["por_dia"]) == 3 and len(bh["peso_alvo_por_dia"]) == 3
+
+
+def test_o_carinho_e_o_limpador_chegam_as_medidas(banheiro_grande):
+    """Os carinhos do banheiro chegam ao cerebro pelo corpo (o _Registro os anota no mudanca_no_corpo, com o sinal), e o alivio recolhido
+    pelo limpador tem o sinal da decisao de aliviar."""
+    b = bv.Bancada(3, 48)
+    v = _vida_banheiro("P1-BLC")
+    m = b.medir(v, SONDA)["banheiro"]
+    acariciar = sum(1 for e in v.motor.log if e.tipo == "acao_usuario" and e.valor == "acariciar")
+    assert v.carinhos and m["carinho"]["n"] == acariciar >= v.carinhos
+    assert m["limpador"]["n"] == sum(a["recolhido"] for a in v.motor.alivios) > 0
+    sem = _vida_banheiro("P1-B00")
+    assert sem.carinhos == 0 and b.medir(sem, SONDA)["banheiro"]["limpador"]["n"] == 0
+
+
+def test_o_instinto_do_alivio_mede_sem_os_pesos_do_alvo(banheiro_grande):
+    v = _vida_banheiro("P0-BLC", "instinto")
+    m = bv.Bancada(3, 48).medir(v, SONDA)
+    assert m["banheiro"]["peso_alvo_por_dia"] is None and m["banheiro"]["alivios"] == len(v.motor.alivios)
 
 
 def test_o_banheiro_so_no_corpo_e_no_p0_ou_no_p1(monkeypatch):
