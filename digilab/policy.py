@@ -53,6 +53,10 @@ class Observacao:
     # cerebro. So o MotorCorpo com ConfigCorpo.ligada injeta; `de_estado`, o bandit e as sondas nao o leem. Os campos de sempre
     # (`vetor_estado`) seguem o Estado, que com o corpo ligado e a leitura da quimica.
     corpo: "PercepcaoCorpo | None" = None  # noqa: F821
+    # V2, dois pets, etapa 3 (docs/TAREFA_V2_DOIS_PETS.md; docs/futuro/dois_pets.md, secao 5): a `PercepcaoSocial` (digilab/mundo.py), a
+    # visao e o toque sobre os outros pets. So o MotorMundo dentro de um Grupo com outro pet presente injeta; sem o grupo, ou com um pet
+    # so, fica None. Nunca le o estado interno do outro: so a posicao, a acao visivel, o consumo visto e o contato.
+    social: "PercepcaoSocial | None" = None  # noqa: F821
 
     @staticmethod
     def de_estado(estado: Estado) -> "Observacao":

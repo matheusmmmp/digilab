@@ -339,7 +339,7 @@ class MotorCorpo:
     # ------------------------------------------------------------ etapa 6: os gestos (secao 8)
     def _observacao_gesto(self) -> Observacao:
         obs = self._observacao()
-        return replace(obs, mundo=self._perceber(self._estado.tick)) if self._mundo_ligado() else obs
+        return replace(obs, mundo=self._perceber(self._estado.tick), social=self.percepcao_social()) if self._mundo_ligado() else obs
 
     def _gesto(self, acao: AcaoUsuario) -> None:
         """O tapa e, com `gestos`, o carinho (secao 8). Os dois contam como contato e gastam o orcamento (CD-6), como toda acao do dono;
