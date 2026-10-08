@@ -4120,3 +4120,19 @@ e na tarefa. Nenhuma run, nenhum código.
   - **a conta do receptor** (limiar, adaptação por um químico, saturação por meia-saturação), as narinas pela direção do último passo e os
     candidatos `cheiro_seguir` e `cheiro_virar` são desenho nosso, PROPOSTO, SEM FONTE. A biologia lida (resumos) sustenta só que a
     adaptação existe no receptor, que uma narina basta e que duas ajudam.
+
+## 2026-10-08 — W-NOMES-ORGAOS (worker C): os nomes dos sistemas do corpo
+
+- **O glossário** está em `docs/DEFINICOES_CORPO_V2.md`, seção 8 nova: o nome de trabalho, o que é hoje no código e o estado. Os nomes
+  vêm do Matheus (2026-10-08), pelo Gerente. A seção 8.1 lista seis sistemas como IDEIA, cada um com a condição de entrada.
+- **Os nomes novos foram aplicados** à seção 7 de `DEFINICOES_CORPO_V2`, à seção 5 de `docs/futuro/dois_pets.md` (a tabela dos sentidos e os
+  títulos 5.1 a 5.6), a `docs/futuro/ego_existencia.md`, a `docs/TAREFA_V2_REDE_DE_SI.md` e a três linhas do `docs/ROADMAP_V2.md`.
+- **Nada do código foi renomeado:** identificadores, eventos, campos do registro, chaves, arquivos e o prefixo `rede_de_si` ficam. O
+  glossário faz a ponte.
+- **As redações de decisões já tomadas não mudaram:** a E-6 e a E-8 de `ego_existencia.md` e a RS-7 da tarefa. As notas no topo dos dois
+  arquivos dizem isso.
+- **Conferido no código** (`corpo.py`, 2026-10-08), para o Metabolismo energético da seção 8.1: não há químico de energia; o `cansaco`
+  sobe por emissores e cai dormindo. A observação é do Gerente.
+- **Uma decisão nova:** a N-1 (a cabeça da autoria fica no Digicorpo), porque o Digicorpo foi definido como modelo corporal e a rede de si
+  tem também a autoria.
+- **Base:** o branch sai do `v2-olfato-audicao` (#258), porque usa as seções da DP-13 e da DP-14. O #258 entra antes.
