@@ -1536,3 +1536,18 @@ def leitura_dominancia(f_por_unidade: Mapping[str, Sequence[float | None]], ream
         ic = bootstrap_ic(vals, reamostragens, semente, nivel)
         out[d] = {**base, "media": ic["media"], "ic": ic, "domina": ic["ic_inferior"] > limiar, "motivo": None}
     return out
+
+
+# ================================================================== dois pets (PLANO_ANALISE_V2_DOIS_PETS, secoes 4 e 9)
+def vez_no_grupo(ordens: Sequence[Mapping], ident: str, janela: tuple[int, int] | None = None) -> dict:
+    """A sorte da ordem no tick (R-5, so descritiva): das vezes sorteadas do grupo (`Grupo.ordens`: {tick, decidem, ordem}, um item por
+    tick com dois pets ou mais decidindo), em quantas o pet `ident` decidiu junto e em quantas foi o primeiro. `janela` = [inicio, fim)
+    em ticks do mundo (None: todas). Fracao None sem tick junto (nao e zero)."""
+    if janela is not None:
+        _checar_janela(janela)
+    sel = [o for o in ordens if ident in o["decidem"] and (janela is None or janela[0] <= o["tick"] < janela[1])]
+    for o in sel:
+        if sorted(o["ordem"]) != sorted(o["decidem"]):
+            raise ValueError(f"ordem que nao e uma permutacao de quem decide: {o}")
+    primeiro = sum(1 for o in sel if o["ordem"][0] == ident)
+    return {"juntos": len(sel), "primeiro": primeiro, "fracao_primeiro": primeiro / len(sel) if sel else None}

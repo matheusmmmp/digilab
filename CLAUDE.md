@@ -3501,3 +3501,49 @@ sementes dos testes. Mudaram `digilab/mundo.py`, `digilab/grupo.py`, o campo `Ob
   `seguir` a mais (o A vê o B); o teste confere o estado interno sem essa anotação.
 - **Fora:** a audição e o cheiro (o degrau 1b, etapa 8); as entradas sociais e o modelo dos outros no cérebro A (a segunda metade da
   etapa 4, o B); a bancada do grupo (etapa 5, o D); o grupo em TypeScript (etapa 9).
+
+## V2, W-BANCADA-DOIS-PETS — as faixas da rede de si e a bancada do grupo, só o que já dá (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`, etapa 5) — GATES PASSAM
+
+Rodada 26, com o `Grupo` do #257 e o alvo aprendido do #255 na `main`. Infraestrutura, sem run de pesquisa; só as sementes dos testes.
+Mudaram `experiments/bancada_v2.py`, `digilab/metrics.py` (`vez_no_grupo`), a fumaça nova `experiments/configs/v2_dois_pets/fumaca.json`, o
+teste do `NOS_PENDENTES` em `tests/test_bancada_liga_gestos.py` e o teste novo. `engine.py`, `grupo.py`, `mundo.py`, `lobos.py` e a web
+não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **As faixas da rede de si (RS-6)** em `FAIXAS_RESERVADAS`, com a fonte (`PLANO_ANALISE_V2_REDE_DE_SI`, seção 8): 43101…43505
+  (calibração e piloto) e 44101…44505 (validação). O prefixo `"rede_de_si"` entrou em `PREFIXOS_UNIDADES` (o plano o pede ao D).
+- **O mundo da unidade** (plano, seções 2 e 3): `tipo_ruim(s)` (uniforme, rng `dois-pets-ruim`), `efeito_dois_pets` (o ruim com o
+  `efeito_humor_ruim`, os outros neutros) e `desarranjo_dois_pets(s)` (rng `dois-pets-embaralha`, como o `desarranjo_n6`).
+- **O A embaralhado** é o `MotorMundoTroca` (subclasse do `MotorMundo`, só no grupo): o efeito desarranjado nos K dias e o verdadeiro a
+  partir do dia K, trocado no fim do avanço que chega ao tick (um avanço que passasse falha alto). Na entrada do B os dois já têm o efeito
+  verdadeiro, como o `Grupo` confere; a troca fica em `troca`, e o replay a refaz.
+- **Os braços** (`BRACOS_GRUPO`, `EspecGrupo`): `B-so`, `B+Ainf`, `B+Aemb`, `B+Aing` e o `A-so` da calibração do K (o A informativo
+  sozinho). O B é sempre P1 e entra no dia K; o A é P1 no tick 0 (informativo, embaralhado) ou P0 junto com o B (ingênuo). O grupo vive
+  K + `dias` (o `A-so`, os `dias`). Sem genoma (temperamento neutro).
+- **A fábrica do grupo** (`Bancada.grupo`): o `simular_grupo` do #257, com um dono para todos (o atencioso, `DonoComLugar` no lugar da
+  config, com a semente de cada pet), o orçamento por dia vivido de cada pet (`orcamento // dias`) e só o cuidado (o `CanalSemEnsino` ao
+  vivo, PMF-3). O cérebro é o da bancada (ponto, montagem) com o **alvo aprendido** ligado (`bancada_grupo`). O G1 é conferido em todo
+  grupo (`conferir_replay_grupo`: o registro do texto, o `resumo()` do grupo, a troca e a projeção de cada pet).
+- **As medidas que já têm dado** (`Bancada.medir_grupo`, do replay de medição conferido):
+  - a R de cada pet pela `taxa_fruta_ruim` sobre os consumos de fruta madura, com o efeito vigente do tipo no tick: no B, os 7 primeiros
+    dias (a primária), a vida toda e por dia; no A, por dia, até o dia K e depois;
+  - o D_FE e a privação (7 primeiros dias e vida toda);
+  - os pesos do alvo aprendido no fim de cada dia;
+  - a vez no tick (`metrics.vez_no_grupo`, R-5) e o chão no dia K (`chao_na_entrada`, R-3: o registro rejogado até a entrada do B);
+  - os consumos por tipo, situação e como, o gasto do dono e os sinais retirados.
+- **Atrás de `NOS_PENDENTES`, falhando alto:**
+  - `sentidos_grupo` (a visão, o toque e a disputa da etapa 3 do A; as entradas sociais e o modelo dos outros da etapa 4 do B): trava as
+    medidas sociais (`Bancada.medidas_sociais`) e a run com as sementes do plano (`validar_config_grupo`). Sem a tabela, a segunda trava:
+    o motor ainda não registra o social;
+  - `canais_fruta_mundo`: com os canais (a montagem completa liga no P1), comer a fruta que mexe no humor falha alto no cérebro do mundo
+    físico (CANAIS-REFORCO, a "rota de adendo" do MUNDO-CEREBROS). Trava a config e o grupo; sem a tabela, o cérebro falha (teste).
+- **Gates** (`tests/test_bancada_dois_pets.py`, 50 testes, ~6 s):
+  - as faixas e o prefixo (disjuntas, fora das queimadas e das configs; as unidades dos nove prefixos sem colisão);
+  - o tipo ruim, o desarranjo e o efeito; os braços como o plano pede;
+  - **o G1 de todo grupo** (cinco braços × duas sementes) e o replay que falha alto;
+  - **o pet sozinho do grupo é a vida de hoje** da bancada (o `simular_vida_fisico`) byte a byte, com a mesma semente, braço, dono, lugar e
+    efeito (o "B só" do plano não é a vida de hoje, seção 3);
+  - **as mesmas vezes sorteadas** nos três braços com os dois pets (e a mesma rng da ordem); as mesmas quedas em todo braço; o chão do
+    dia K igual no B só e no B + Aing;
+  - a troca do A embaralhado; o orçamento por pet e o cuidado só; o cérebro com o alvo aprendido;
+  - as medidas, com a R do embaralhado conferida de cada lado da troca;
+  - os nós e as travas; a config e o `rodar_grupo` (`main` com `"tipo": "grupo"`).
+- **Fumaça** (`experiments/configs/v2_dois_pets/fumaca.json`, NÃO canônica): os cinco braços, K = 1, 2 dias; sem artefato.

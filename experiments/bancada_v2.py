@@ -161,6 +161,8 @@ from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA
                             CONFIG_PEDIDO_LIGADA, LAYOUT_MUNDO_AFASTADO, TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigFrutas,
                             ConfigInformacao, ConfigJulgamentoFruta, ConfigLobos, ConfigMundo, ConfigPedido)
 from digilab.config import ConfigCorpo  # noqa: E402
+from digilab.config import CONFIG_GRUPO_LIGADA, ConfigGrupo  # noqa: E402
+from digilab.grupo import Grupo, PetDoGrupo, RegistroGrupo, reproduzir_grupo, sementes_do_grupo, simular_grupo  # noqa: E402
 from digilab.corpo import Corpo, div_arred as div_arred_corpo  # noqa: E402
 from digilab.gestos import CanalComGestos, DonoComGestos, simular_vida_gestos  # noqa: E402
 from digilab.motor_corpo import PercepcaoCorpo, com_corpo  # noqa: E402
@@ -183,6 +185,7 @@ from digilab.metrics import (cuidado_preservado, deficit_fome_energia, inclinaca
 from digilab.metrics import contribuicao_drives, dominancia_decisoes, leitura_dominancia  # noqa: E402
 from digilab.metrics import drives_novos as medir_drives_novos, tempo_livre_be  # noqa: E402
 from digilab.metrics import alivios_ate_criterio, alivios_por_dia, curva_sobrevivencia, dia_do_criterio  # noqa: E402
+from digilab.metrics import vez_no_grupo  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
 from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
@@ -416,8 +419,9 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # o prefixo das unidades derivadas de cada plano (regra E3): semente derivar_semente(prefixo, b, k), genoma
 # derivar_semente(prefixo + "-genoma", b, k) (plano do N6, secao 12.2; plano do N7, secao 12.2; o da comparacao dos cerebros,
 # PLANO_ANALISE_V2_COMPARACAO_CEREBROS, secao 6.2; o do mundo fisico, PLANO_ANALISE_V2_MUNDO_FISICO, secao 4; o do corpo,
-# PLANO_ANALISE_V2_CORPO_DRIVES, secao 4; o do banheiro, PLANO_ANALISE_V2_BANHEIRO, secao 3)
-PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets")
+# PLANO_ANALISE_V2_CORPO_DRIVES, secao 4; o do banheiro, PLANO_ANALISE_V2_BANHEIRO, secao 3; o dos dois pets, PLANO_ANALISE_V2_DOIS_PETS,
+# secao 8; o da rede de si, PLANO_ANALISE_V2_REDE_DE_SI, secao 8)
+PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),)
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
@@ -452,6 +456,8 @@ FAIXAS_RESERVADAS = (
     (40101, 40505, "dois pets, validacao (PLANO_ANALISE_V2_DOIS_PETS, secao 8, PDP-6)"),
     (41101, 41505, "dois pets, adendo do degrau 1b, prevista (PLANO_ANALISE_V2_DOIS_PETS, secoes 8 e 10, PDP-6)"),
     (42101, 42505, "dois pets, adendo dos dois donos, prevista (PLANO_ANALISE_V2_DOIS_PETS, secoes 8 e 10, PDP-6)"),
+    (43101, 43505, "rede de si, calibracao e piloto (PLANO_ANALISE_V2_REDE_DE_SI, secao 8, RS-6)"),
+    (44101, 44505, "rede de si, validacao (PLANO_ANALISE_V2_REDE_DE_SI, secao 8, RS-6)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
@@ -461,7 +467,7 @@ FAIXAS_RESERVADAS = (
 def unidades_derivadas(bases, k_por_base: int, prefixo: str = "experimento-maior") -> list[dict]:
     """E3 (plano do experimento maior, secao 8.1): a unidade k da base b tem semente derivar_semente(prefixo, b, k) e genoma
     derivar_semente(prefixo + "-genoma", b, k), k = 0..K-1; o prefixo e o do plano (PREFIXOS_UNIDADES: "experimento-maior", o
-    padrao; "n6"; "n7"; "comparacao-cerebros"; "mundo"; "corpo"; "banheiro"; "dois_pets"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
+    padrao; "n6"; "n7"; "comparacao-cerebros"; "mundo"; "corpo"; "banheiro"; "dois_pets"; "rede_de_si"). Falha alto com K < 1, base repetida, prefixo desconhecido ou colisao."""
     if prefixo not in PREFIXOS_UNIDADES:
         raise ValueError(f"prefixo das unidades {prefixo!r}: so {PREFIXOS_UNIDADES}")
     if k_por_base < 1:
@@ -578,6 +584,18 @@ NOS_PENDENTES: dict = {
     # W-BANCADA-BANHEIRO: o que espera a etapa 3 do banheiro (TAREFA_V2_BANHEIRO, secao 9, do A)
     "banheiro": "o banheiro no MotorMundo (a area na casa, a necessidade como objeto, o limpador, o limpar que recolhe, o aliviar com "
                 "alvo) e o DonoCarinhoBanheiro (TAREFA_V2_BANHEIRO, secoes 3 a 5, etapa 3, do A)",
+    # dois pets (TAREFA_V2_DOIS_PETS, etapa 5, do D): o que o grupo espera da etapa 3 (do A) e da segunda metade da etapa 4 (do B). Trava
+    # as medidas sociais (Bancada.medidas_sociais) e a run com as sementes do plano (validar_config_grupo); os bracos e a fabrica rodam
+    "sentidos_grupo": "a visao, o toque e a disputa entre os pets (a PercepcaoSocial em Observacao.social, os candidatos seguir e "
+                      "onde_comeu no explorar, a disputa pela MF-2 e os registros de disputas, contatos, idas a onde_comeu e tempo a "
+                      "vista; TAREFA_V2_DOIS_PETS, etapa 3, do A) e as entradas sociais e o modelo dos outros no cerebro A (etapa 4, a "
+                      "segunda metade, do B)",
+    # dois pets: com os canais (a montagem completa do P1, o ponto da K2), comer a fruta que mexe no humor falha alto no cerebro do mundo
+    # fisico (CANAIS-REFORCO: o canal do humor vai a fruta, e o cerebro do mundo fisico nao tem peso que leia a fruta; MUNDO-CEREBROS, a
+    # "rota de adendo"). No mundo fisico de hoje (iguais) o humor da fruta e 0 e nada falha; no dos dois pets um tipo faz mal
+    "canais_fruta_mundo": "a rota do canal do humor (a fruta) no cerebro A do mundo fisico: com os canais ligados, comer a fruta que "
+                          "mexe no humor falha alto (CANAIS-REFORCO, MUNDO-CEREBROS: rota de adendo, do B); ou a decisao de rodar o "
+                          "plano dos dois pets com os canais desligados (do coordenador)",
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -1627,6 +1645,231 @@ class Bancada:
             serie.append(jsd_media(distribuicoes_de_acao(pol, estados, sonda["amostras"], sonda["semente"]), d_prior))
         return serie
 
+    # ------------------------------------------------------------- dois pets: o grupo (TAREFA_V2_DOIS_PETS, etapa 5)
+
+
+    def bancada_grupo(self) -> "Bancada":
+        """O cerebro A do plano (secao 2): o do ponto e da montagem da bancada, com o alvo aprendido (etapa 4, #255; o P0 com o aprendizado
+        desligado fica no alvo padrao do motor). As entradas sociais esperam a etapa 3 (NOS_PENDENTES["sentidos_grupo"])."""
+        return replace(self, cfg_lobos=replace(self.cfg_lobos, alvo_aprendido=True))
+
+
+    def canais_no_pet(self, espec: EspecVida) -> bool:
+        """Os canais da consequencia chegam ao cerebro deste pet? So nas fontes que aprendem pela consequencia, com os canais do braco
+        montado (a montagem completa os liga no P1) ou, sem eles fixos, os da config."""
+        b = self.braco(espec)
+        if b.fonte not in APRENDE_PELA_CONSEQUENCIA:
+            return False
+        return self.cfg_consequencia.canais_ligados if b.canais is None else b.canais
+
+    def orcamento_por_dia(self) -> int:
+        if self.orcamento % self.dias:
+            raise ValueError(f"o grupo tem orcamento por dia vivido: {self.orcamento} interacoes em {self.dias} dias nao divide")
+        return self.orcamento // self.dias
+
+
+    def dias_do_grupo(self, eg: EspecGrupo) -> int:
+        """O grupo vive K + `dias` (o B vive os `dias` da bancada depois do dia K); o "A-so", os `dias`."""
+        return eg.k + self.dias if BRACOS_GRUPO[eg.braco].b else self.dias
+
+
+    def espec_do_pet(self, eg: EspecGrupo, ident: str) -> EspecVida:
+        braco = dict((i, b) for i, b, _ in _entradas(eg))[ident]
+        semente = sementes_do_grupo(eg.semente, CONFIG_GRUPO_LIGADA.ids)[ident]
+        return EspecVida(eg.dono, braco, semente, None, eg.mundo, lugar=eg.lugar)
+
+
+    def efeitos_do_grupo(self, eg: EspecGrupo) -> dict:
+        """O efeito verdadeiro (o tipo ruim da unidade) e, no A embaralhado, o desarranjado dos K dias."""
+        ruim = tipo_ruim(eg.semente)
+        out = {"ruim": ruim, "verdadeiro": efeito_dois_pets(ruim, self.cfg_frutas)}
+        if BRACOS_GRUPO[eg.braco].companheiro == "embaralhado":
+            pi = desarranjo_dois_pets(eg.semente)
+            out.update({"pi": pi, "ruim_embaralhado": pi[ruim], "embaralhado": efeito_dois_pets(pi[ruim], self.cfg_frutas)})
+        return out
+
+
+    def fabrica_motor_do_grupo(self, eg: EspecGrupo, ident: str):
+        """A fabrica do motor de um pet do grupo, no formato do Grupo.entrar (`mundo=`, `entrada_mundo=`): o MotorMundo do plano do mundo
+        (obediencia, educacao, lesoes, frutas e bola de hoje desligadas, especie brasa, temperamento neutro), com o efeito das frutas da unidade;
+        o A embaralhado, o MotorMundoTroca. Sem `mundo`, o MotorMundo dono do proprio Mundo (a vida de hoje, para o gate do pet sozinho)."""
+        cm = self.cfg_mundo_de(mundo_de(eg.mundo))
+        ef = self.efeitos_do_grupo(eg)
+        embaralha = ident == "A" and BRACOS_GRUPO[eg.braco].companheiro == "embaralhado"
+        tick_troca = eg.k * TICKS_POR_DIA
+
+        def fabrica(politica, cfg, semente, mundo=None, entrada_mundo=0):
+            kw = dict(obediencia_desligada=True, semente_genoma=None, cfg_mundo=cm, mundo=mundo, entrada_mundo=entrada_mundo)
+            if embaralha:
+                return MotorMundoTroca(politica, cfg, semente, NEUTRO, "brasa", efeito_frutas=ef["embaralhado"], tick_troca=tick_troca,
+                                       efeito_depois=ef["verdadeiro"], **kw)
+            return MotorMundo(politica, cfg, semente, NEUTRO, "brasa", efeito_frutas=ef["verdadeiro"], **kw)
+        return fabrica
+
+
+    def pets_do_grupo(self, eg: EspecGrupo, envolver=None) -> list[PetDoGrupo]:
+        """Os PetDoGrupo do `simular_grupo`: a politica do braco de cada pet pela bancada (o cerebro A com o alvo aprendido), a fabrica do
+        motor e o dono, um por pet (o DonoComLugar sobre o dono da v1, com a semente do pet: as rngs `dono` e `dono-lugar` sao dele).
+        `envolver(ident, politica)` embrulha a politica (o _RegistroGrupo do replay de medicao)."""
+        _validar_espec_grupo(eg)
+        bg_ = self.bancada_grupo()
+        cm = self.cfg_mundo_de(mundo_de(eg.mundo))
+        pets = []
+        for ident, braco, entrada in _entradas(eg):
+            espec = self.espec_do_pet(eg, ident)
+            if self.canais_no_pet(espec) and "canais_fruta_mundo" in NOS_PENDENTES:
+                raise NotImplementedError(f"{eg.nome}, pet {ident} ({braco}) com os canais: {NOS_PENDENTES['canais_fruta_mundo']}")
+
+            def fp(cfg=None, e=espec, i=ident):
+                p = bg_.politica(e, cfg)
+                return p if envolver is None else envolver(i, p)
+            dono = DonoComLugar(criar_dono(eg.dono), eg.lugar, espec.semente, eg.dono, cm)
+            pets.append(PetDoGrupo(ident, entrada, fp, self.fabrica_motor_do_grupo(eg, ident), dono, eg.dono,
+                                   cerebro=f"{espec.cerebro}/{braco}"))
+        return pets
+
+
+    def cfg_grupo(self) -> ConfigGrupo:
+        return replace(CONFIG_GRUPO_LIGADA, orcamento_por_dia=self.orcamento_por_dia())
+
+
+    def grupo(self, eg: EspecGrupo) -> VidaGrupo:
+        """O grupo da celula (DP-7, a validacao inicial), pelo `simular_grupo`: um dono para todos, decidindo por pet, com o orcamento por dia
+        vivido de cada um e so com o cuidado (o CanalSemEnsino ao vivo, PMF-3). O G1 do grupo e conferido antes de devolver."""
+        _validar_espec_grupo(eg)
+        canais: list = []
+
+        class _Canal(CanalSemEnsino):
+            def __init__(s, *a, **kw) -> None:
+                super().__init__(*a, **kw)
+                canais.append(s)
+
+        g = simular_grupo(self.cfg_mundo_de(mundo_de(eg.mundo)), eg.semente, self.pets_do_grupo(eg), self.dias_do_grupo(eg),
+                          cfg_grupo=self.cfg_grupo(), cfg=CONFIG_PADRAO, canal_classe=_Canal)
+        retirados = {c.motor.ident: c.retirados for c in canais}
+        if set(retirados) != set(g.motores):
+            raise RuntimeError(f"{eg.nome}: canais {sorted(retirados)} para os pets {sorted(g.motores)}")
+        vida = VidaGrupo(eg, g, dict(g.interacoes), retirados)
+        self.conferir_replay_grupo(vida)
+        return vida
+
+
+    def rejogar_grupo(self, registro: RegistroGrupo, eg: EspecGrupo, envolver=None) -> Grupo:
+        fabricas = {p.ident: (p.politica_fabrica, p.fabrica_motor) for p in self.pets_do_grupo(eg, envolver)}
+        return reproduzir_grupo(registro, fabricas, self.cfg_mundo_de(mundo_de(eg.mundo)), self.cfg_grupo(), CONFIG_PADRAO)
+
+
+    def conferir_replay_grupo(self, vida: VidaGrupo, texto: str | None = None) -> None:
+        """G1 do grupo: rejoga o registro do grupo a partir do texto (do disco, se vier) e compara tudo bit a bit (o mundo, as vezes
+        sorteadas, a rng da ordem e cada pet: log, estado, acoes, rngs, registros do mundo fisico, estado interno da politica)."""
+        proprio = vida.grupo.registro.para_jsonl()
+        texto = proprio if texto is None else texto
+        if texto != proprio:
+            raise ReplayDivergiu(f"{vida.nome}: o registro do disco nao e o do grupo")
+        r = self.rejogar_grupo(RegistroGrupo.de_jsonl(texto), vida.espec)
+        if _resumo_grupo(r) != _resumo_grupo(vida.grupo):
+            raise ReplayDivergiu(f"{vida.nome}: o grupo diverge no replay")
+
+
+    def chao_na_entrada(self, vida: VidaGrupo, ident: str = "B") -> dict:
+        """O chao do mundo quando o pet `ident` entra (R-3, so descritivo; o B no dia K): o registro do grupo rejogado ate logo antes da entrada
+        dele, com o mundo atualizado ate o tick (a atualizacao e idempotente e so le o tick e o fluxo das arvores). Conta as comidas por tipo e
+        situacao."""
+        reg = vida.grupo.registro
+        idx = [k for k, e in enumerate(reg.eventos) if e.tipo == "entrada" and e.valor == ident]
+        if len(idx) != 1:
+            raise ValueError(f"{vida.nome}: o pet {ident!r} nao entrou uma vez no registro")
+        antes = reg.eventos[:idx[0]]
+        entrados = [e.valor for e in antes if e.tipo == "entrada"]
+        cab = {**reg.cabecalho, "pets": {i: dict(reg.cabecalho["pets"][i]) for i in entrados}}
+        fabricas = {p.ident: (p.politica_fabrica, p.fabrica_motor) for p in self.pets_do_grupo(vida.espec) if p.ident in entrados}
+        g = reproduzir_grupo(RegistroGrupo(cab, list(antes)), fabricas, self.cfg_mundo_de(mundo_de(vida.espec.mundo)), self.cfg_grupo(),
+                             CONFIG_PADRAO)
+        g.mundo.atualizar(g.tick)
+        contagem: dict = {}
+        for c in g.mundo.comidas.values():
+            chave = f"{c['tipo']}/{g.mundo.situacao(c, g.tick)}"
+            contagem[chave] = contagem.get(chave, 0) + 1
+        return {"tick": g.tick, "comidas": dict(sorted(contagem.items()))}
+
+
+    def medidas_sociais(self, vida: VidaGrupo) -> dict:
+        """Os descritivos da secao 4 que dependem dos sentidos (o uso dos candidatos sociais, o que o B viu, a disputa, o toque e o modelo dos
+        outros). Falham alto com o no enquanto a visao, o toque e a disputa (etapa 3, do A) nao estiverem na main; sem a entrada na tabela, a
+        leitura dos registros sociais entra com a etapa 3 (a segunda trava: o motor ainda nao os registra)."""
+        if "sentidos_grupo" in NOS_PENDENTES:
+            raise NotImplementedError(f"{vida.nome}: {NOS_PENDENTES['sentidos_grupo']}")
+        raise NotImplementedError(f"{vida.nome}: a leitura dos registros sociais (disputas, contatos, idas a onde_comeu, tempo a vista, o "
+                                  "modelo dos outros) entra com a etapa 3 do A")
+
+
+    def medir_grupo(self, vida: VidaGrupo) -> dict:
+        """As medidas da secao 4 que ja tem dado no registro do grupo, do replay de medicao (conferido bit a bit contra o grupo):
+          - a R de cada pet (`metrics.taxa_fruta_ruim` sobre os consumos de fruta madura, com o efeito vigente do tipo no tick): no B, os 7
+            primeiros dias (a primaria, PDP-2), a vida toda e um por dia; no A, um por dia, ate o dia K e depois (o A embaralhado pelo efeito
+            de cada lado da troca);
+          - o custo de ter companhia: o D_FE e a privacao (`deficit_fome_energia`, `cuidado_preservado`) nos 7 primeiros dias e na vida toda;
+          - o alvo aprendido: os pesos por classe no fim de cada dia (o "o que o B aprendeu" que ja existe; as classes sociais ficam no prior
+            ate a etapa 3 oferecer os candidatos);
+          - a sorte da ordem (R-5, `vez_no_grupo`) e o chao no dia K (R-3);
+          - os consumos por tipo, situacao e como (achou ou foi comer), o gasto do dono e os sinais retirados (PMF-3).
+        As medidas sociais esperam a etapa 3 (`medidas_sociais`, falhando alto): aqui saem como pendentes, com o no."""
+        eg = vida.espec
+        regs: dict = {}
+
+        def envolver(ident, politica):
+            regs[ident] = _RegistroGrupo(politica)
+            return regs[ident]
+
+        r = self.rejogar_grupo(vida.grupo.registro, eg, envolver)
+        if _resumo_grupo(r) != _resumo_grupo(vida.grupo):
+            raise ReplayDivergiu(f"{vida.nome}: o replay de medicao mudou o grupo")
+        ef = self.efeitos_do_grupo(eg)
+        fim_grupo = self.dias_do_grupo(eg) * TICKS_POR_DIA
+        dia_k = eg.k * TICKS_POR_DIA
+        pets = {}
+        for ident, m in r.motores.items():
+            reg = regs[ident]
+            reg.fim()
+            decs = m.decisoes_mundo
+            if len(decs) != len(reg.vetores):
+                raise RuntimeError(f"{vida.nome}/{ident}: {len(decs)} decisoes no mundo e {len(reg.vetores)} no replay de medicao")
+            intervalo = CONFIG_PADRAO.intervalo_decisao_ticks
+            ticks = [d["tick"] for d in decs]
+            if ticks != [m.entrada_mundo + k * intervalo for k in range(len(ticks))]:
+                raise RuntimeError(f"{vida.nome}/{ident}: decisoes fora da grade do pet")
+            entrada = m.entrada_mundo
+            dias_vividos = (fim_grupo - entrada) // TICKS_POR_DIA
+            efeito_no_tick = m.efeito_no_tick if isinstance(m, MotorMundoTroca) else (lambda t: ef["verdadeiro"])  # noqa: E731
+            frutas = [(c["tick"], efeito_no_tick(c["tick"])[c["tipo"]]) for c in m.consumos_mundo
+                      if c["tipo"] in FRUTAS and c["situacao"] == "madura"]
+            vida_j = (entrada, fim_grupo)
+            primeiros = (entrada, entrada + min(JANELA_PRIMARIA_DIAS, dias_vividos) * TICKS_POR_DIA)
+            janelas = {"vida": vida_j, "primeiros_7": primeiros}
+            if entrada < dia_k:                                   # o A que vive os K dias antes do B
+                janelas.update({"ate_k": (entrada, dia_k), "depois_k": (dia_k, fim_grupo)})
+            for d in range(dias_vividos):
+                janelas[f"dia_{d + 1}"] = (entrada + d * TICKS_POR_DIA, entrada + (d + 1) * TICKS_POR_DIA)
+            fe = [(t, v[1], v[3]) for t, v in zip(ticks, reg.vetores)]
+            cuidado = [(t, p, s, v[1]) for t, (p, s), v in zip(ticks, reg.amostras, reg.vetores)]
+            consumos: dict = {}
+            for c in m.consumos_mundo:
+                chave = f"{c['tipo']}/{c['situacao']}/{c['como']}"
+                consumos[chave] = consumos.get(chave, 0) + 1
+            pets[ident] = {"braco": dict((i, b) for i, b, _ in _entradas(eg))[ident], "semente": m.semente, "entrada": entrada,
+                           "dias_vividos": dias_vividos, "taxa_fruta_ruim": taxa_fruta_ruim(frutas, janelas),
+                           "d_fe": {"primeiros_7": deficit_fome_energia(fe, primeiros), "vida": deficit_fome_energia(fe, vida_j)},
+                           "cuidado": {"primeiros_7": cuidado_preservado(cuidado, primeiros), "vida": cuidado_preservado(cuidado, vida_j)},
+                           "pesos_alvo_por_dia": reg.pesos_alvo_dia, "vez": vez_no_grupo(r.ordens, ident),
+                           "consumos": dict(sorted(consumos.items())), "consumos_fruta_madura": len(frutas),
+                           "interacoes": vida.interacoes.get(ident), "retirados": vida.retirados.get(ident),
+                           "troca": getattr(m, "troca", None)}
+        b = BRACOS_GRUPO[eg.braco]
+        return {"grupo": vida.nome, "braco": eg.braco, "companheiro": b.companheiro, "semente": eg.semente, "k": eg.k, "dono": eg.dono,
+                "lugar": eg.lugar, "mundo": eg.mundo, "ruim": ef["ruim"], "ruim_embaralhado": ef.get("ruim_embaralhado"),
+                "ordens": len(r.ordens), "pets": pets, "chao_no_dia_k": self.chao_na_entrada(vida) if b.b else None,
+                "sociais": {"pendente": "sentidos_grupo", "motivo": NOS_PENDENTES.get("sentidos_grupo")}}
+
 
 def receptores_novos_de(cc: ConfigCorpo, com_mundo: bool = False) -> tuple[str, ...]:
     """Os receptores novos que o corpo desta ConfigCorpo tem (os da tabela do grafo, `Corpo.receptores`), na ordem de RECEPTORES_NOVOS:
@@ -2420,12 +2663,276 @@ def meta(cfg: dict) -> dict:
             "metrics_sha256": _sha(RAIZ / "digilab" / "metrics.py"), "mundo_sha256": _sha(RAIZ / "digilab" / "mundo.py")}
 
 
+# ================================================================== dois pets: a bancada do grupo (TAREFA_V2_DOIS_PETS, etapa 5)
+# PLANO_ANALISE_V2_DOIS_PETS, secoes 2 a 4: o grupo como celula, com um dono (o atencioso, so com o cuidado, PMF-3) e o orcamento por pet
+# (DP-7, a validacao inicial), pelo `simular_grupo` do #257. O cerebro e o A do ponto e da montagem da bancada, com o alvo aprendido (#255).
+# A visao, o toque e a disputa entre os pets (etapa 3, do A) e as entradas sociais do cerebro (etapa 4, a segunda metade, do B) ainda nao
+# estao na main: os pets so se afetam pelo que fazem no mundo (a comida que um come o outro nao acha). O que depende deles falha alto com o
+# no `sentidos_grupo` do NOS_PENDENTES: as medidas sociais e qualquer run com as sementes do plano.
+
+ROTULO_RUIM = "dois-pets-ruim"               # o tipo que faz mal na unidade (plano, secao 2)
+ROTULO_EMBARALHA = "dois-pets-embaralha"     # o desarranjo do A embaralhado (plano, secao 3)
+DECISOES_POR_DIA = TICKS_POR_DIA // CONFIG_PADRAO.intervalo_decisao_ticks
+if DECISOES_POR_DIA * CONFIG_PADRAO.intervalo_decisao_ticks != TICKS_POR_DIA:   # pragma: no cover - 1440 / 15
+    raise RuntimeError("o dia nao e multiplo do intervalo de decisao")
+BRACO_DO_B = "P1"                            # todo B e P1 (plano, secao 3)
+JANELA_PRIMARIA_DIAS = 7                     # a R_B nos 7 primeiros dias do B (PDP-2)
+
+
+def tipo_ruim(semente: int) -> str:
+    """O tipo de fruta que faz mal na unidade (plano, secao 2): uniforme entre as tres, pela rng propria derivar_semente("dois-pets-ruim",
+    s), um sorteio. Nao toca outra rng."""
+    return FRUTAS[random.Random(derivar_semente(ROTULO_RUIM, semente)).randrange(len(FRUTAS))]
+
+
+def desarranjo_dois_pets(semente: int) -> dict:
+    """O desarranjo pi do A embaralhado (plano, secao 3), como o desarranjo_n6: um dos dois ciclos de {a, b, c}, pela rng propria
+    derivar_semente("dois-pets-embaralha", s). Nenhuma fruta em si mesma."""
+    if len(FRUTAS) != 3:                     # pragma: no cover - o mundo tem tres tipos de fruta
+        raise ValueError("desarranjo_dois_pets escrito para tres frutas")
+    passo = 1 + random.Random(derivar_semente(ROTULO_EMBARALHA, semente)).randrange(len(FRUTAS) - 1)
+    return {f: FRUTAS[(i + passo) % len(FRUTAS)] for i, f in enumerate(FRUTAS)}
+
+
+def efeito_dois_pets(ruim: str, cf: ConfigFrutas) -> dict:
+    """O efeito de cada tipo de fruta (plano, secao 2): o ruim com o `efeito_humor_ruim`, os outros dois neutros (`efeito_humor_neutro`).
+    Cada tipo tem arvores no jardim e na mata (LAYOUT_MUNDO_PADRAO)."""
+    if ruim not in FRUTAS:
+        raise ValueError(f"tipo ruim {ruim!r}: so {FRUTAS}")
+    return {f: (cf.efeito_humor_ruim if f == ruim else cf.efeito_humor_neutro) for f in FRUTAS}
+
+
+class MotorMundoTroca(MotorMundo):
+    """O MotorMundo do A embaralhado (plano, secao 3): nos K dias o efeito das frutas e o desarranjado (o tipo pi(ruim) faz mal) e, no dia
+    K, o mundo passa ao efeito verdadeiro. So no grupo: a troca vem no fim do avanco que chega ao tick do mundo `tick_troca` (o grupo avanca
+    em passos do dono, e o dia e multiplo do passo), entao nenhum tick do mundo >= tick_troca roda com o efeito de antes; um avanco que
+    passasse do tick falha alto. Na entrada do B (o mesmo tick) os dois ja tem o efeito verdadeiro, como o Grupo confere. A troca fica no
+    registro derivado (`troca`) e o replay a refaz pela mesma fabrica."""
+
+    def __init__(self, *a, tick_troca: int, efeito_depois: dict, **kw) -> None:
+        super().__init__(*a, **kw)
+        if not self.cmf.ligada or self.mundo is None or kw.get("mundo") is None:
+            raise ValueError("o A embaralhado so existe no grupo (o MotorMundo ligado sobre o Mundo do grupo)")
+        if type(tick_troca) is not int or tick_troca <= self.entrada_mundo or tick_troca % TICKS_POR_DIA:
+            raise ValueError(f"a troca e num inicio de dia do mundo depois da entrada do pet: {tick_troca!r}")
+        if set(efeito_depois) != set(FRUTAS):
+            raise ValueError(f"efeito_depois precisa de {FRUTAS}: {sorted(efeito_depois)}")
+        self.tick_troca = tick_troca
+        self.efeito_antes = dict(self.efeito_frutas)
+        self.efeito_depois = dict(efeito_depois)
+        self.troca: dict | None = None
+
+    def efeito_no_tick(self, tick_mundo: int) -> dict:
+        return self.efeito_antes if tick_mundo < self.tick_troca else self.efeito_depois
+
+    def _fechar_avanco(self) -> None:
+        super()._fechar_avanco()
+        agora = self.entrada_mundo + self._estado.tick
+        if self.troca is None and agora >= self.tick_troca:
+            if agora != self.tick_troca:
+                raise RuntimeError(f"o avanco passou da troca do efeito (tick {self.tick_troca}, agora {agora})")
+            self.efeito_frutas = dict(self.efeito_depois)
+            self.troca = {"tick": agora, "antes": dict(self.efeito_antes), "depois": dict(self.efeito_depois)}
+
+
+@dataclass(frozen=True)
+class BracoGrupo:
+    """Um braco do plano dos dois pets (secao 3): o companheiro do B e quando ele entra. O B (P1) entra no dia K e vive os `dias` da
+    bancada; o A entra no tick 0 (informativo, embaralhado) ou junto com o B (ingenuo). O "A-so" e o da calibracao do K (secao 5): o A
+    informativo sozinho, sem B, os `dias` da bancada."""
+
+    rotulo: str
+    companheiro: str | None          # None (sem A), "informativo", "embaralhado" ou "ingenuo"
+    a: str | None                    # o braco do A na bancada: "P1" ou "P0"; None sem A
+    a_entra: str | None              # "inicio" (tick 0) ou "dia_k" (com o B); None sem A
+    b: bool = True                   # o B entra no dia K
+
+
+BRACOS_GRUPO = {
+    "B-so": BracoGrupo("B-so", None, None, None),
+    "B+Ainf": BracoGrupo("B+Ainf", "informativo", "P1", "inicio"),
+    "B+Aemb": BracoGrupo("B+Aemb", "embaralhado", "P1", "inicio"),
+    "B+Aing": BracoGrupo("B+Aing", "ingenuo", "P0", "dia_k"),
+    "A-so": BracoGrupo("A-so", "informativo", "P1", "inicio", b=False),
+}
+
+
+@dataclass(frozen=True)
+class EspecGrupo:
+    """Um grupo da bancada: o braco, a semente do grupo s (o mundo e o A; o B pela derivacao do segundo pet, `sementes_do_grupo`), o K, o
+    dono e o lugar dele (plano, secao 2: o atencioso, no comedouro). Sem genoma: o temperamento neutro, como o mundo fisico sem genoma."""
+
+    braco: str
+    semente: int
+    k: int
+    dono: str = "atencioso"
+    lugar: str = "comedouro"
+    mundo: str = "fisico"
+
+    @property
+    def nome(self) -> str:
+        m = "" if self.mundo == "fisico" else f"~{self.mundo}"
+        return f"{self.dono}-{self.braco}{m}~{self.lugar}~K{self.k}@{self.semente}"
+
+
+@dataclass
+class VidaGrupo:
+    espec: EspecGrupo
+    grupo: Grupo
+    interacoes: dict                 # por pet: o gasto do dono (o orcamento inteiro, conferido pelo canal)
+    retirados: dict                  # por pet: os sinais do dono que o filtro sem_ensino ao vivo nao deixou chegar (PMF-3)
+
+    @property
+    def nome(self) -> str:
+        return self.espec.nome
+
+
+class _RegistroGrupo(_Registro):
+    """O _Registro do replay de medicao do grupo, mais os pesos do alvo aprendido no fim de cada dia do pet (antes da primeira decisao do
+    dia seguinte; o do ultimo dia, `fim`). So le."""
+
+    def __init__(self, interna: PoliticaDoBraco) -> None:
+        super().__init__(interna)
+        self.pesos_alvo_dia: list = []
+
+    def pesos_alvo(self):
+        w = getattr(self.interna.cerebro, "_pesos_alvo_mundo", None)
+        return {k: dict(t) for k, t in w.items()} if w else None
+
+    def agir(self, obs, rng):
+        k = len(self.decisoes)
+        if k and k % DECISOES_POR_DIA == 0:
+            self.pesos_alvo_dia.append(self.pesos_alvo())
+        return super().agir(obs, rng)
+
+    def fim(self) -> None:
+        self.pesos_alvo_dia.append(self.pesos_alvo())
+
+
+def _validar_espec_grupo(eg: EspecGrupo) -> BracoGrupo:
+    if eg.braco not in BRACOS_GRUPO:
+        raise KeyError(f"braco do grupo desconhecido {eg.braco!r}: {sorted(BRACOS_GRUPO)}")
+    bg = BRACOS_GRUPO[eg.braco]
+    if mundo_de(eg.mundo).fisico is None:
+        raise ValueError(f"{eg.nome}: o grupo vive no mundo fisico, nao {eg.mundo!r}")
+    if eg.lugar not in ESTILOS_LUGAR:
+        raise ValueError(f"lugar {eg.lugar!r}: so {ESTILOS_LUGAR}")
+    if type(eg.k) is not int or eg.k < 0:
+        raise ValueError(f"K tem de ser inteiro >= 0: {eg.k!r}")
+    if not bg.b and eg.k != 0:
+        raise ValueError(f"{eg.braco}: sem B nao ha dia K (K = 0)")
+    if bg.a_entra == "inicio" and bg.b and eg.k < 1:
+        raise ValueError(f"{eg.braco}: o A vive K >= 1 dias sozinho antes do B")
+    return bg
+
+
+def _entradas(eg: EspecGrupo) -> list[tuple[str, str, int]]:
+    """(id, braco na bancada, tick do mundo da entrada) de cada pet do grupo, na ordem dos ids."""
+    bg = BRACOS_GRUPO[eg.braco]
+    dia_k = eg.k * TICKS_POR_DIA
+    out = []
+    if bg.a is not None:
+        out.append(("A", bg.a, 0 if bg.a_entra == "inicio" else dia_k))
+    if bg.b:
+        out.append(("B", BRACO_DO_B, dia_k))
+    return out
+
+
+def _resumo_grupo(g: Grupo) -> tuple:
+    """O resumo do Grupo, a troca do A embaralhado e a projecao de cada pet (o log de hoje do pet, igual ao do motor)."""
+    for i, m in g.motores.items():
+        if g.registro.projecao(i).para_jsonl() != m.log.para_jsonl():
+            raise ReplayDivergiu(f"a projecao do registro do grupo para {i} nao e o log do motor")
+    return (g.registro.para_jsonl(), g.resumo(), {i: getattr(m, "troca", None) for i, m in g.motores.items()})
+
+
+CHAVES_CONFIG_GRUPO = {"descricao", "plano", "tipo", "bracos", "sementes", "unidades", "k_dias", "dias", "orcamento_por_dia", "dono",
+                       "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo"}
+
+
+def validar_config_grupo(cfg: dict) -> dict:
+    """A config da bancada do grupo (`"tipo": "grupo"`). As unidades usam o prefixo `dois_pets`. Fora das sementes dos testes, a run e do
+    plano: pede o `plano` e falha alto com o no enquanto a visao, o toque e a disputa (etapa 3, do A) nao estiverem na main (sem eles o B
+    nao tem como aprender do A, e a pergunta do plano nao se faz)."""
+    faltam = {"tipo", "bracos", "k_dias", "dias", "orcamento_por_dia"} - set(cfg)
+    sobram = set(cfg) - CHAVES_CONFIG_GRUPO
+    if faltam or sobram:
+        raise ValueError(f"config do grupo: faltam {sorted(faltam)}, sobram {sorted(sobram)}")
+    if cfg["tipo"] != "grupo":
+        raise ValueError(f"config do grupo com tipo {cfg['tipo']!r}")
+    if ("sementes" in cfg) == ("unidades" in cfg):
+        raise ValueError("config do grupo: ou 'sementes' ou 'unidades' (bases x K derivadas), um dos dois")
+    bracos = list(cfg["bracos"])
+    if not bracos or len(set(bracos)) != len(bracos) or any(b not in BRACOS_GRUPO for b in bracos):
+        raise ValueError(f"bracos do grupo {bracos}: so {sorted(BRACOS_GRUPO)}, sem repetir")
+    if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
+        raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
+    if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
+        raise ValueError(f"montagem {cfg['montagem']!r}: so {MONTAGENS}")
+    if "mundo" in cfg:
+        replace(CONFIG_MUNDO_LIGADA, **cfg["mundo"])
+    for b in bracos:                             # o K, o dono e o lugar de cada braco
+        _validar_espec_grupo(EspecGrupo(b, 101, 0 if not BRACOS_GRUPO[b].b else int(cfg["k_dias"]), cfg.get("dono", "atencioso"),
+                                        cfg.get("lugar", "comedouro")))
+    criar_dono(cfg.get("dono", "atencioso"))
+    canais = cfg.get("montagem") == "completa" or cfg.get("consequencia", {}).get("canais_ligados", False)
+    if canais and "canais_fruta_mundo" in NOS_PENDENTES:
+        raise NotImplementedError(f"config do grupo com os canais (a montagem completa ou canais_ligados): {NOS_PENDENTES['canais_fruta_mundo']}")
+    if "unidades" in cfg:
+        u = cfg["unidades"]
+        if set(u) != {"bases", "k", "prefixo"} or u["prefixo"] != "dois_pets":
+            raise ValueError(f"unidades do grupo: {{'bases', 'k', 'prefixo': 'dois_pets'}}, nao {u}")
+        unidades_derivadas(u["bases"], int(u["k"]), u["prefixo"])
+        usadas = set(u["bases"])
+    else:
+        usadas = set(cfg["sementes"])
+    for ini, fim, motivo in FAIXAS_QUEIMADAS:
+        queimadas = sorted(x for x in usadas if ini <= x <= fim)
+        if queimadas:
+            raise SementeSemPlano(f"sementes/bases {queimadas} na faixa queimada {ini}...{fim} ({motivo}): nao usar para nada")
+    fora = sorted(usadas - SEMENTES_TESTE)
+    if fora:
+        plano = cfg.get("plano")
+        if not plano or not (RAIZ / plano).is_file():
+            raise SementeSemPlano(f"sementes/bases {fora} fora das dos testes: precisa do plano de analise registrado (campo 'plano')")
+        if "sentidos_grupo" in NOS_PENDENTES:
+            raise NotImplementedError(f"a run do plano dos dois pets: {NOS_PENDENTES['sentidos_grupo']}")
+    return cfg
+
+
+def rodar_grupo(cfg: dict, pasta: Path) -> dict:
+    """Os grupos de todos os bracos x unidades, gravados (o registro do grupo em JSONL) e rejogados do disco; as medidas por grupo."""
+    validar_config_grupo(cfg)
+    bancada = bancada_da_config({**cfg, "orcamento": int(cfg["orcamento_por_dia"]) * int(cfg["dias"])})
+    if "unidades" in cfg:
+        unidades = unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]), cfg["unidades"]["prefixo"])
+        sementes = [(u["semente"], {"base": u["base"], "k": u["k"]}) for u in unidades]
+    else:
+        sementes = [(int(s), None) for s in cfg["sementes"]]
+    grupos, medidas = {}, {}
+    for (s, unidade), braco in product(sementes, cfg["bracos"]):
+        k = int(cfg["k_dias"]) if BRACOS_GRUPO[braco].b else 0
+        v = bancada.grupo(EspecGrupo(braco, s, k, cfg.get("dono", "atencioso"), cfg.get("lugar", "comedouro")))
+        caminho = pasta / "grupos" / f"{v.nome}.jsonl"
+        _gravar(caminho, v.grupo.registro.para_jsonl())
+        bancada.conferir_replay_grupo(v, caminho.read_text(encoding="utf-8"))
+        grupos[v.nome] = v
+        medidas[v.nome] = {**bancada.medir_grupo(v), "unidade": unidade}
+    _gravar(pasta / "medidas.json", _dump(medidas))
+    _gravar(pasta / "meta.json", _dump({**meta(cfg), "grupo_sha256": _sha(RAIZ / "digilab" / "grupo.py")}))
+    return {"grupos": grupos, "medidas": medidas}
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="bancada da V2: bracos P0-P3 sobre o mesmo aprendiz (docs/TAREFA_V2_BANCADA.md)")
     ap.add_argument("--config", required=True)
     ap.add_argument("--saida", required=True, help="pasta de saida (vidas/, medidas.json, tabelas.json, meta.json)")
     a = ap.parse_args(argv)
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8"))
+    if cfg.get("tipo") == "grupo":                # dois pets (TAREFA_V2_DOIS_PETS, etapa 5)
+        r = rodar_grupo(cfg, Path(a.saida))
+        print(f"{len(r['grupos'])} grupos rejogados do disco bit a bit; medidas em {a.saida}")
+        return 0
     r = rodar(cfg, Path(a.saida))
     print(f"{len(r['vidas'])} vidas rejogadas do disco bit a bit; medidas e tabelas em {a.saida}")
     return 0
