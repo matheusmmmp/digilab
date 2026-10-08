@@ -1,7 +1,8 @@
 # Fisiologia por espécie: um corpo-base comum e um perfil herdável por linhagem
 
 Status: **IDEIA** (Matheus, 2026-10-08), registrada para a fase em que o genoma passar a gerar o corpo. **Não autoriza implementação**,
-não muda nenhum experimento e não marca nenhum módulo como existente. O que está aqui é a ideia e um desenho PROPOSTO para discutir.
+não muda nenhum experimento e não marca nenhum módulo como existente. O desenho é PROPOSTO; as decisões FE-1, FE-2, FE-4, FE-5 e FE-6
+foram tomadas pelo Matheus em 2026-10-08, seguindo as recomendações (seção 10). FE-3 segue aberta.
 
 ## 1. A ideia
 
@@ -139,11 +140,11 @@ skill `literatura-digilab`).
 
 ## 10. Decisões do Matheus
 
-| # | decisão | recomendação |
+| # | decisão | estado |
 |---|---|---|
-| FE-1 | O perfil é da espécie (brasão) ou da linha evolutiva (cada Digimon) | configurações e predisposições pela espécie; módulos que ligam por estágio na linha, na evolução |
-| FE-2 | O primeiro passo | a camada 2 no corpo de hoje, começando pelo olfato, sem órgão novo |
-| FE-3 | Que perfil vai para cada um dos quatro brasões | decisão sua; o sensorial é o único que o mundo de hoje já sustenta |
-| FE-4 | Variação individual dentro da espécie agora ou só na fase 3 | na fase 3, com plano próprio |
-| FE-5 | O perfil mexe nos stats de combate | não agora; o combate tem equilíbrio validado e só muda numa rodada de equilíbrio própria |
-| FE-6 | Regiões novas no mapa (água, desníveis) | só junto com o módulo que precisa delas |
+| FE-1 | O perfil é da espécie (brasão) ou da linha evolutiva (cada Digimon) | **DECIDIDO** (2026-10-08): configurações e predisposições pela espécie; módulos que ligam por estágio na linha, na evolução |
+| FE-2 | O primeiro passo | **DECIDIDO** (2026-10-08): a camada 2 no corpo de hoje, começando pelo olfato, sem órgão novo |
+| FE-3 | Que perfil vai para cada um dos quatro brasões | **aberta**: decisão do Matheus; o sensorial é o único que o mundo de hoje já sustenta |
+| FE-4 | Variação individual dentro da espécie agora ou só na fase 3 | **DECIDIDO** (2026-10-08): na fase 3, com plano próprio |
+| FE-5 | O perfil mexe nos stats de combate | **DECIDIDO** (2026-10-08): não agora; o combate tem equilíbrio validado e só muda numa rodada de equilíbrio própria |
+| FE-6 | Regiões novas no mapa (água, desníveis) | **DECIDIDO** (2026-10-08): só junto com o módulo que precisa delas |
