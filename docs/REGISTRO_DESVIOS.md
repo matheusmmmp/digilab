@@ -3759,10 +3759,13 @@ Interpretações:
 
 ## 2026-10-07 — CORPO-GESTOS (worker A): a etapa 6 do corpo, a parte do motor
 
-- **Atrás das sub-chaves, com um corpo de teste.** A `ConfigCorpo` da `main` recusa `drives_novos` e `gestos` até o PR do B. O Gerente
-  autorizou entregar o lado do motor atrás da chave. Os testes trocam o `Corpo` por uma subclasse que implementa o contrato (só anota as
-  chamadas; o tapa não mexe em drive) e põem as sub-chaves por fora da validação, com `object.__setattr__`. Quando o corpo do B entrar,
-  os testes com a química de verdade são do B.
+- **O corpo de teste saiu.** A primeira versão do PR rodava atrás das sub-chaves, com um corpo de teste, porque a `ConfigCorpo` ainda as
+  recusava. Com o #247 na `main`, os testes usam um espião do `Corpo` real, com as sub-chaves de verdade. Os 12 testes que falhavam na
+  árvore unida eram do stub: ele não conhecia a atividade `dono_brinca` e ligava `gestos` sem `drives_novos`. Não houve desacordo de
+  contrato.
+- **O `test_corpo_risco` do B** (a pedido dele) trocou o motor de teste pelo `com_corpo(MotorAmbiente)`. O motor de teste dele avisava a
+  atividade por cima do meu, que já a avisa, e o tédio caía em dobro, nunca passava de 0,5 e a contagem ficava vazia. A asserção do
+  tamanho da contagem agora vem antes da divisão.
 - **O contrato dos ganchos** foi combinado com o B antes do código, por mensagem: os nomes `acao_dono(TAPA)`, `atividade`,
   `estimulo_novidade`, `de_estado(..., com_mundo)` e `janela_novidade`, e as chaves dos receptores novos com os nomes da `PercepcaoCorpo`.
 - **O tapa e o carinho com `gestos` não passam pela cadeia de hoje.** O tapa não existe no `state.aplicar_acao_usuario`, e o carinho com
