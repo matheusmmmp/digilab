@@ -4,7 +4,7 @@ Status (2026-10-07):
 - **DECIDIDO pelo Matheus:** dois pets de verdade no mesmo mundo, e não um pet sintético informante. A decisão substitui o primeiro passo
   recomendado em `docs/futuro/convivencia_mundo_fisico.md` (CV-1) e na `docs/futuro/cognicao_social.md` (seção 11).
 - **DP-1 a DP-10 DECIDIDAS pelo Matheus em 2026-10-07** (seção 14): oito pela recomendação; a DP-4 (os sentidos) e a DP-7 (os donos)
-  com mudança. Ficam abertas a DP-11 e a DP-12, que saem da DP-4.
+  com mudança. A DP-11 e a DP-12, que saem da DP-4, foram DECIDIDAS pela recomendação em 2026-10-07.
 - **PROPOSTO:** o como, neste documento.
 
 A tarefa é `docs/TAREFA_V2_DOIS_PETS.md`. Um plano de análise vem depois, antes de qualquer run.
@@ -119,7 +119,7 @@ de fora entram.
 - **Sem o grupo, ou com um pet só,** o campo é `None`, e o mundo não guarda nada dos sentidos (nem rastro, nem som). É a vida de hoje,
   byte a byte (G2).
 
-**Quando cada sentido entra** (DP-11, aberta, seção 14; os números novos são PROPOSTOS, SEM FONTE):
+**Quando cada sentido entra** (DP-11 e DP-12, DECIDIDAS pela recomendação, seção 14; os números novos são PROPOSTOS, SEM FONTE):
 
 | sentido | o que lê | entra | por quê |
 |---|---|---|---|
@@ -382,7 +382,7 @@ novidade: aprendizado social, forrageio em grupo e comunicação entre agentes a
 - **com mudança:** DP-4 (os sentidos: toque, cheiro e audição, além da visão; seção 5) e DP-7 (donos separados como objetivo, validação
   inicial com um dono para os dois; seção 9).
 
-**Abertas:** DP-11 e DP-12, que saem da DP-4.
+**Também DECIDIDAS pela recomendação, em 2026-10-07:** DP-11 e DP-12, que saem da DP-4.
 
 | # | decisão | estado ou recomendação | custo de errar |
 |---|---|---|---|
@@ -396,5 +396,5 @@ novidade: aprendizado social, forrageio em grupo e comunicação entre agentes a
 | DP-8 | O cérebro A no degrau 1 | **DECIDIDA:** alvo aprendido e entradas sociais; o modelo dos outros só registrado até o degrau 3 | — |
 | DP-9 | O controle do primeiro degrau | **DECIDIDA:** o A embaralhado, mais o B só e o B com um A ingênuo | — |
 | DP-10 | A ordem com o resto | **DECIDIDA:** o motor em paralelo com o corpo; o cérebro depois da etapa 6 do corpo; a bancada depois; as runs depois da validação do mundo físico e do plano. Com a DP-7, o segundo dono entra depois da validação do degrau 1 (seção 12) | — |
-| **DP-11** | Quais sentidos no primeiro degrau | **visão e toque no degrau 1; audição e cheiro (rastro e cheiro próprio) no degrau 1b**, depois de o 1 ter resposta, cada um medido como acréscimo | **tudo no degrau 1:** se o B aprende, não se sabe por qual canal, e a primeira medida fica mais cara (quatro receptores a calibrar). **Visão só, sem toque:** a disputa acontece do mesmo jeito, e o pet perde a única pista física dela. **Audição e cheiro só no degrau 3:** atrasa canais baratos, que não dependem do corpo |
-| **DP-12** | O cheiro de estado (estresse, medo) | **no degrau 3, com a solidão e a aglomeração (CV-5)**, por um emissor externo declarado no grafo do corpo, com o laço entre os dois corpos na checagem de ganho | **no degrau 1 ou 1b:** um canal emocional entre corpos entra antes de se saber se a observação funciona, e o "aprendido de outros" passa a misturar contágio com informação. **Sem passar pelo grafo:** o cheiro vira leitura direta do estado do outro, que a regra proíbe |
+| **DP-11** | Quais sentidos no primeiro degrau | **DECIDIDA:** **visão e toque no degrau 1; audição e cheiro (rastro e cheiro próprio) no degrau 1b**, depois de o 1 ter resposta, cada um medido como acréscimo | **tudo no degrau 1:** se o B aprende, não se sabe por qual canal, e a primeira medida fica mais cara (quatro receptores a calibrar). **Visão só, sem toque:** a disputa acontece do mesmo jeito, e o pet perde a única pista física dela. **Audição e cheiro só no degrau 3:** atrasa canais baratos, que não dependem do corpo |
+| **DP-12** | O cheiro de estado (estresse, medo) | **DECIDIDA:** **no degrau 3, com a solidão e a aglomeração (CV-5)**, por um emissor externo declarado no grafo do corpo, com o laço entre os dois corpos na checagem de ganho | **no degrau 1 ou 1b:** um canal emocional entre corpos entra antes de se saber se a observação funciona, e o "aprendido de outros" passa a misturar contágio com informação. **Sem passar pelo grafo:** o cheiro vira leitura direta do estado do outro, que a regra proíbe |

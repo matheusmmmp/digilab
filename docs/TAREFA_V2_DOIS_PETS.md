@@ -6,7 +6,7 @@ Coordenador: Gerente. Workers: A (motor e web), B (cérebro e corpo), D (bancada
 **O que já está decidido** (pelo Matheus, em 2026-10-07):
 - dois pets de verdade no mesmo mundo;
 - DP-1 a DP-10, sendo a DP-4 (os sentidos) e a DP-7 (os donos) com mudança;
-- ficam abertas a DP-11 (quais sentidos no primeiro degrau) e a DP-12 (o cheiro de estado).
+- DP-11 (visão e toque no degrau 1; audição e cheiro no 1b) e DP-12 (o cheiro de estado no degrau 3), as duas pela recomendação.
 
 **O desenho:** `docs/futuro/dois_pets.md`. Esta tarefa põe em ordem, com dono e gate, o que o desenho propõe.
 
@@ -25,7 +25,7 @@ mesmo agente e com controles.
   - a etapa 6 do corpo (drives novos, gestos e o grafo de reações, #245);
   - a bancada do mundo físico;
   - o motor em TypeScript.
-- **A DP-11** decide se a audição e o cheiro entram no degrau 1 ou no 1b (a etapa 8 abaixo).
+- **A DP-11 (decidida):** a audição e o cheiro entram no degrau 1b (a etapa 8 abaixo).
 - **A validação do mundo físico** vem antes de qualquer run desta frente: ela dá a referência do pet sozinho.
 
 ## 3. Etapas e donos
@@ -58,7 +58,7 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 
 ## 4. Experimento e gate
 
-- **O plano:** `docs/PLANO_ANALISE_V2_DOIS_PETS.md` (etapa 6), commitado antes da run. A audição e o cheiro (etapa 8) e o segundo dono
+- **O plano:** `docs/PLANO_ANALISE_V2_DOIS_PETS.md` (etapa 6), commitado antes da run, com o lugar dos adendos das etapas 7 e 8 previsto. A audição e o cheiro (etapa 8) e o segundo dono
   (etapa 7) entram por adendo, também antes da run deles.
 - **As sementes:** faixas novas fora de `FAIXAS_RESERVADAS`, propostas pelo plano e registradas pelo D.
 - **A medida e o gate:** são do plano. O desenho só aponta o contraste primário (seção 11).

@@ -3876,3 +3876,18 @@ Só papel: `docs/futuro/dois_pets.md` e `docs/TAREFA_V2_DOIS_PETS.md`. Nenhuma r
 - **O que não entrou:** as medidas descritivas dos efeitos do tapa (plano, seção 5.4: medo da mão, estresse acumulado, o carinho depois do
   tapa). A tarefa as põe na etapa 8, mas o pedido do Gerente não as listou. Ficam para a próxima tarefa da bancada, sem gate.
 - **A fumaça do corpo** ganhou o bloco do corpo (P0-q, P1-q, P0-c e P1-c, e os acoplados P1-q^ac e P1-c^ac do P0-q).
+
+## 2026-10-08 — W-PLANO-DOIS-PETS (worker C): o plano do degrau 1 e as DP-11 e DP-12 decididas
+
+Só papel: `docs/PLANO_ANALISE_V2_DOIS_PETS.md` (a etapa 6 da tarefa), mais a marcação das DP-11 e DP-12 como decididas no desenho
+e na tarefa. Nenhuma run, nenhum código.
+
+- **O efeito por tipo de árvore** é um tipo ruim sorteado por unidade (`dois-pets-ruim`), e os outros dois são neutros. O desenho
+  falava em "o efeito da fruta por árvore"; no layout cada árvore tem um tipo fixo, então o efeito por tipo é o efeito por árvore.
+- **O B só** não é a "vida de hoje": é o B entrando no dia K de um mundo sem pet. É a referência certa para ele, porque o pet A é
+  quem tem a semente do grupo.
+- **O K se calibra só nos A sozinhos,** e uma run de 10 dias serve à grade inteira (a vida até o dia K é a mesma para todo K).
+- **A margem `Δ_S`** é metade da distância entre o B só e o A informativo: o que o B ganharia aprendendo metade do que o A sabe. O
+  corte de 0,05 para não rodar é PROPOSTO, SEM FONTE.
+- **As faixas:** 39101…40505 para este plano e 41101…42505 previstas para os adendos 2 (degrau 1b) e 3 (dois donos), todas conferidas
+  livres. A 35101…36505 (transferência) ainda não está em `FAIXAS_RESERVADAS`.
