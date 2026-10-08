@@ -122,15 +122,15 @@ de fora entram.
 
 **Quando cada sentido entra** (DP-11 e DP-12, DECIDIDAS pela recomendação, seção 14; os números novos são PROPOSTOS, SEM FONTE):
 
-| sentido | o que lê | entra | por quê |
+| sentido (nome de trabalho, `docs/DEFINICOES_CORPO_V2.md`, seção 8) | o que lê | entra | por quê |
 |---|---|---|---|
-| **visão** | posição, ação visível, onde o outro comeu | **degrau 1** | é o canal da observação (DP-5) |
-| **toque** | o contato na mesma célula ou na vizinha | **degrau 1** | o contato já acontece na disputa pela comida: é físico e sai de graça do mundo |
-| **audição** | os sons das ações e o chamado, com direção e distância | **degrau 1b**, depois de o 1 ter resposta | ouvir o outro comer fora da vista é um canal de informação a mais. Entrando depois, o quanto ele acrescenta é medido sozinho |
-| **cheiro** (rastro e cheiro próprio) | a intensidade e a direção do cheiro do outro e do rastro que ele deixou | **degrau 1b**, junto com a audição | o rastro é outro canal de "onde o outro foi" (deixar marca no mundo), e misturá-lo à visão no degrau 1 tira a leitura de qual canal ensinou |
-| **cheiro de estado** (estresse, medo) | um cheiro que o corpo do outro emite conforme um químico dele | **degrau 3**, com a solidão e a aglomeração (CV-5) | abre um canal emocional entre corpos, e o grafo do corpo passa a ter laço entre dois pets (seção 5.3) |
+| **Visão social** | posição, ação visível, onde o outro comeu | **degrau 1** | é o canal da observação (DP-5) |
+| **Tato social** | o contato na mesma célula ou na vizinha | **degrau 1** | o contato já acontece na disputa pela comida: é físico e sai de graça do mundo |
+| **Audição social** | os sons das ações e o chamado, com direção e distância | **degrau 1b**, depois de o 1 ter resposta | ouvir o outro comer fora da vista é um canal de informação a mais. Entrando depois, o quanto ele acrescenta é medido sozinho |
+| **Olfato social** (o rastro, sinal olfativo social, e o cheiro próprio) | a intensidade e a direção do cheiro do outro e do rastro que ele deixou | **degrau 1b**, junto com a audição | o rastro é outro canal de "onde o outro foi" (deixar marca no mundo), e misturá-lo à visão no degrau 1 tira a leitura de qual canal ensinou |
+| **Quimiossinal de estado** (o cheiro de estresse e de medo) | um cheiro que o corpo do outro emite conforme um químico dele | **degrau 3**, com a solidão e a aglomeração (CV-5) | abre um canal emocional entre corpos, e o grafo do corpo passa a ter laço entre dois pets (seção 5.3) |
 
-### 5.1 Visão (degrau 1)
+### 5.1 Visão social (degrau 1)
 
 | campo | o que é |
 |---|---|
@@ -140,7 +140,7 @@ de fora entram.
 
 O pet sabe **onde** o outro comeu e **o que** ele estava fazendo, porque viu. Não sabe se fez bem a ele.
 
-### 5.2 Toque (degrau 1)
+### 5.2 Tato social (degrau 1)
 
 **O que gera o evento de contato.** É uma conta do mundo, no fim de cada tick com decisão, depois de os pets agirem na ordem sorteada. Há
 contato quando os dois estão **na mesma célula ou em células vizinhas**: a distância de Chebyshev entre as células, `max(|cx_A − cx_B|,
@@ -158,13 +158,13 @@ célula. Um contato por par e por tick com decisão.
 
 **O que o toque não faz no degrau 1:** não mexe no corpo. O efeito do contato no corpo (a solidão, a aglomeração) é do degrau 3 (CV-5).
 
-### 5.3 Cheiro (degrau 1b; o de estado, no degrau 3)
+### 5.3 Olfato social (degrau 1b) e Quimiossinal de estado (degrau 3)
 
 **O cheiro próprio e o rastro.** Cada pet emite um cheiro na posição em que está e deixa um **rastro**: a cada decisão, uma marca na posição
 dele.
 - **As fontes** ficam no `Mundo` compartilhado, por pet: a posição atual, com a intensidade `A_pet`, e as marcas, até `max_marcas` por pet
   (as mais antigas saem). Cada marca perde intensidade em inteiros, `A_marca × (T − idade) // T`, e some com a idade `T`.
-- **A soma** é a mesma conta do cheiro da comida (`mundo.cheiro_em`, `A × (R − d) // R` com `d < R`), por outro pet, num canal separado do
+- **A soma** é a mesma conta do cheiro da comida, o Olfato alimentar (`mundo.cheiro_em`, `A × (R − d) // R` com `d < R`), por outro pet, num canal separado do
   da comida.
 - **O que o receptor lê:** por pet conhecido, a intensidade e a direção (`direcao_do_cheiro`, com a mesma ordem de desempate do cheiro da
   comida).
@@ -179,7 +179,7 @@ dele.
 - **As checagens da seção 18 do corpo** passam a ver os dois corpos no degrau 3: um laço receptor → emissor que passe pelo cheiro de um pet
   e volte pelo do outro entra na conta do "laço de ganho" (produto de ganhos < 1). No degrau 1b, sem leitura de químico, não há laço.
 
-### 5.4 Audição (degrau 1b)
+### 5.4 Audição social (degrau 1b)
 
 **O som não é mensagem.** É o barulho que uma ação faz. O vocabulário fechado (`COMIDA(lugar)`) continua sendo o degrau 2 (DP-6).
 
@@ -205,7 +205,7 @@ próprio pet não entram.
 - o que o outro comeu e não foi visto nem ouvido, e o efeito da fruta no corpo dele;
 - qualquer cheiro que não saia de um emissor declarado no grafo do corpo.
 
-### 5.6 O órgão do olfato e o do ouvido (DP-13 e DP-14, abertas)
+### 5.6 Os órgãos receptores do Olfato e da Audição (DP-13 e DP-14, abertas)
 
 **O pedido do Matheus (2026-10-08):** o cheiro passa a ser um **órgão** do corpo.
 - **Hoje** o pet recebe pronta a intensidade e a direção do cheiro: `mundo.cheiro_em` e `mundo.direcao_do_cheiro`, em `PercepcaoMundo.cheiro`
@@ -262,9 +262,9 @@ do grafo não muda.
 - **`narinas`:** 1 ou 2.
 - **As sub-chaves separadas:**
   - **`outro_pet`:** o cheiro do outro e o rastro, no degrau 1b (etapa 8);
-  - **`comida`:** o cheiro da comida, no mundo físico de um pet só.
+  - **`comida`:** o Olfato alimentar (o cheiro da comida), no mundo físico de um pet só.
 
-  Ligar só a `outro_pet` não muda o cheiro da comida, e vice-versa.
+  Ligar só a `outro_pet` (o Olfato social) não muda o Olfato alimentar, e vice-versa.
 
 **A medida:** o braço "órgão × leitura pronta" entra na bancada, com o mesmo cérebro e o mesmo mundo. O contraste e a margem são de um
 adendo de plano (do plano do mundo físico, para a comida; do plano dos dois pets, adendo 2, para o outro pet), antes de qualquer run.
@@ -437,7 +437,7 @@ orçamento por pet. O segundo dono entra depois, numa etapa própria (seção 12
 | as runs | a validação do mundo físico (a referência do pet só) e o plano | — |
 | o grupo em TypeScript (A) | o produto voltar (o v11 está pausado) | — |
 | a solidão e a aglomeração no corpo (degrau 3, CV-5) | o degrau 1 ter resposta | — |
-| o ego social (`ego_existencia.md`, etapa 7) | esta frente e a rede de si | — |
+| o ego social (`ego_existencia.md`, etapa 7) | esta frente e o Digicorpo (a rede de si) | — |
 
 ## 13. Riscos
 

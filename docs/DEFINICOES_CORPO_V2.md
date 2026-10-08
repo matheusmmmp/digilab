@@ -182,25 +182,75 @@ rede.
 
 | item | estado | onde |
 |---|---|---|
-| química dos drives de hoje (5 químicos, C = 450000, receptores na escala S) | **EXECUTADO** | W-CORPO-QUIMICA, `digilab/corpo.py`, `tests/test_corpo_quimica.py` |
-| órgão 1, digestão | **EXECUTADO** | W-CORPO-DIGESTAO (#225), `tests/test_corpo_digestao.py` |
-| órgão 2, Vida (relógio, estágio por receptor, sem morte) | **EXECUTADO** | #225, `tests/test_corpo_vida.py` |
+| **Sistema neuroquímico:** a química dos drives de hoje (5 químicos, C = 450000, receptores na escala S) | **EXECUTADO** | W-CORPO-QUIMICA, `digilab/corpo.py`, `tests/test_corpo_quimica.py` |
+| **Sistema digestivo e metabólico** (o órgão 1, a digestão) | **EXECUTADO** | W-CORPO-DIGESTAO (#225), `tests/test_corpo_digestao.py` |
+| **Relógio de desenvolvimento** (o órgão 2, a Vida: relógio, estágio por receptor, sem morte) | **EXECUTADO** | #225, `tests/test_corpo_vida.py` |
 | o corpo no motor (`MotorCorpo`, `consequencia_corpo`) | **ESPECIFICADO**, em curso (chat A, etapa 2) | `TAREFA_V2_CORPO_DRIVES.md`, seção 14 |
-| o sinal pelo corpo (quadrático, `w_d` = 1) e os receptores | **ESPECIFICADO** | seções 9 e 10 da tarefa do corpo |
-| drives novos (tédio pela variedade, curiosidade, solidão, estresse) | **ESPECIFICADO** | seções 7 e 17 (DS-4) |
-| carinho e tapa no corpo, sinal direto do tapa | **ESPECIFICADO** | seção 8, CD-4 a CD-10 |
-| a vontade, o banheiro e o conforto do carinho | **ESPECIFICADO** | `TAREFA_V2_BANHEIRO.md` (BN-1 a BN-6) |
+| o sinal pelo corpo (quadrático, `w_d` = 1) e os receptores do Sistema neuroquímico | **ESPECIFICADO** | seções 9 e 10 da tarefa do corpo |
+| drives novos do Sistema neuroquímico (tédio pela variedade, curiosidade, solidão, estresse) | **ESPECIFICADO** | seções 7 e 17 (DS-4) |
+| **Tato cutâneo:** carinho e tapa no corpo, sinal direto do tapa | **ESPECIFICADO** | seção 8, CD-4 a CD-10 |
+| **Sistema excretor** (a vontade, o `aliviar`, a necessidade no chão) e o conforto do carinho (efeito do Tato cutâneo sobre o Sistema neuroquímico) | **ESPECIFICADO** | `TAREFA_V2_BANHEIRO.md` (BN-1 a BN-6) |
 | a medida da dominância de um drive (seção 3) | **IDEIA** | este documento |
 | o validador estático do grafo de reações (seção 2) | **IDEIA** | este documento |
 | os três mecanismos hormonais e a ablação no basal (seção 4) | **IDEIA** | este documento |
 | órgãos com força vital, dano, cura, dor e morte (seção 5) | **IDEIA**, SEM FONTE | este documento |
-| o automodelo que prevê os receptores (seção 6) | **IDEIA** (objetivo DECIDIDO, E-1; o como é PROPOSTO) | `docs/futuro/ego_existencia.md` e este documento |
-| o órgão do olfato: receptor com limiar, adaptação e saturação, só a intensidade local, uma ou duas narinas (DP-13) | **IDEIA**, decisão aberta | `docs/futuro/dois_pets.md`, seção 5.6; `docs/TAREFA_V2_DOIS_PETS.md`, etapa 8b |
-| o órgão do ouvido, o mesmo desenho (DP-14) | **IDEIA**, decisão aberta | idem |
+| o automodelo que prevê os receptores, o **Digicorpo** (seção 6) | **IDEIA** (objetivo DECIDIDO, E-1; o como é PROPOSTO) | `docs/futuro/ego_existencia.md` e este documento |
+| o órgão receptor do **Olfato** (alimentar e social): receptor com limiar, adaptação e saturação, só a intensidade local, uma ou duas narinas (DP-13) | **IDEIA**, decisão aberta | `docs/futuro/dois_pets.md`, seção 5.6; `docs/TAREFA_V2_DOIS_PETS.md`, etapa 8b |
+| o órgão receptor da **Audição social**, o mesmo desenho (DP-14) | **IDEIA**, decisão aberta | idem |
+| os sistemas a acrescentar: Metabolismo energético, proprioceptivo, Termorregulação, nociceptivo e de reparo, imune e toxicológico, reprodutivo | **IDEIA**, cada um com a condição de entrada | seção 8.1 |
 
 **Um apoio que já existe:** o conforto do carinho (BN-6) é o item que a literatura lida mais apoia. Lewis e Cañamero 2016
 (`10.1177/1059712316666331`, resumo) mostram que um prazer não ligado à satisfação de uma necessidade melhorou a viabilidade e a
 flexibilidade de um robô. É um estudo, num robô.
+
+## 8. Nomes dos sistemas do corpo
+
+**Os nomes de trabalho** foram dados pelo Matheus em 2026-10-08. Eles valem nos documentos.
+
+**O código não muda:** identificadores, eventos, campos do registro, chaves de config, nomes de arquivo e prefixos de sementes continuam os
+de antes, porque mudá-los quebraria os gabaritos e o G2. Este glossário faz a ponte entre o nome do documento e o nome do código.
+
+**Os sistemas que existem ou estão desenhados:**
+
+| nome de trabalho | o que é hoje no código | estado |
+|---|---|---|
+| **Sistema neuroquímico** | a química dos drives: os químicos `fome`, `desconforto`, `cansaco`, `tristeza` e `dano` (`corpo.QUIMICOS`) e, com a etapa 6, `tedio`, `curiosidade`, `solidao`, `estresse`, os receptores na escala S e o grafo de reações (`corpo.grafo_do_corpo`) | **EXECUTADO** (a química e o grafo); os drives novos ESPECIFICADOS e em código na etapa 6 |
+| **Sistema digestivo e metabólico** | o órgão 1, a digestão: o químico `alimento`, a reação com a fome limitada por `taxa_digestao`, o descarte, `digerido_no_tick` (sub-chave `digestao`) | **EXECUTADO** |
+| **Relógio de desenvolvimento** | o órgão 2, a Vida: o químico `vida`, que decai e dá o estágio por receptor, sem morte (sub-chave `vida`) | **EXECUTADO** |
+| **Visão ambiental** | a visão do mundo físico: `PercepcaoMundo` (os objetos vistos a até 6 células, a região, a posição) | **EXECUTADO** |
+| **Olfato alimentar** | o cheiro da comida: `mundo.cheiro_em` e `direcao_do_cheiro`, em `PercepcaoMundo.cheiro` e `direcao_cheiro`; com a DP-13, o receptor com a sub-chave `comida` | a leitura pronta **EXECUTADA**; o órgão é IDEIA (DP-13 aberta) |
+| **Tato cutâneo** | o carinho e o tapa no corpo: `acao_dono(ACARICIAR)` e `acao_dono(TAPA)`, os químicos `dor` e `susto` e o medo da mão (sub-chave `gestos`) | **ESPECIFICADO**, em código na etapa 6 |
+| **Visão social** e **Tato social** | a visão e o toque do outro pet: `Observacao.social` (`PercepcaoSocial`, os campos `outros`, `onde_comeu` e `toque`) | **ESPECIFICADO** (`docs/futuro/dois_pets.md`, seções 5.1 e 5.2; etapa 3 da tarefa) |
+| **Audição social** e **Olfato social** | a audição e o cheiro do outro pet, no degrau 1b. **O rastro é um sinal olfativo social:** as marcas que o corpo emite no mundo por um emissor externo | **ESPECIFICADO** (seções 5.3 e 5.4; etapa 8) |
+| **Quimiossinal de estado** | o cheiro de estresse e de medo: um emissor externo que lê um químico do próprio corpo, com ganho declarado no grafo | **ESPECIFICADO** para o degrau 3 (DP-12) |
+| **Sistema excretor** | o banheiro: o químico `vontade`, a ação `aliviar` (`AcaoPet.ALIVIAR`), a necessidade no chão e o desconforto dela (`estimulo_necessidade`, o `passo(..., necessidades=n)`) (sub-chave `banheiro`) | **ESPECIFICADO**; etapa 2 em código (`TAREFA_V2_BANHEIRO.md`) |
+| **Digicorpo** | a rede de si: o modelo corporal que prevê os receptores (`digilab/rede_de_si.py`, `PoliticaComRede`, o prefixo `rede_de_si`) | **ESPECIFICADO** (`TAREFA_V2_REDE_DE_SI.md`; RS-1 a RS-7 decididas) |
+
+**Duas notas:**
+- **O conforto do carinho (BN-6)** é o químico `conforto`, que o carinho sobe. Ele é descrito como **efeito do Tato cutâneo sobre o
+  Sistema neuroquímico**, e não do Sistema excretor, embora tenha entrado com a tarefa do banheiro.
+- **O nariz e o ouvido da DP-13 e da DP-14** (`docs/futuro/dois_pets.md`, seção 5.6) são os **órgãos receptores** do Olfato (alimentar e
+  social) e da Audição social. Com a chave desligada, o Olfato alimentar segue sendo a leitura pronta de hoje.
+
+**A cabeça da autoria.** O Digicorpo é o modelo corporal. A rede de si da tarefa tem também a cabeça da autoria, que prevê a própria
+escolha. Neste documento, as duas cabeças ficam no Digicorpo, porque são o mesmo módulo e o mesmo aprendizado. Se a autoria pede nome
+próprio fica para o Matheus (N-1, nas decisões abaixo).
+
+### 8.1 Sistemas a acrescentar (IDEIA, nesta ordem)
+
+Cada um só entra quando a condição de entrada valer, com tarefa e gate próprios. Tudo é SEM FONTE, salvo onde a revisão conferir, e não há
+alegação de novidade: o Creatures modelou corpo químico e órgãos em 1997 (seção 1).
+
+| # | sistema | o que faria | condição de entrada | o que já existe |
+|---|---|---|---|---|
+| 1 | **Metabolismo energético** (conversão, armazenamento, mobilização) | a energia como químico: o alimento digerido vira reserva, e a reserva é mobilizada quando o corpo gasta | **avaliar antes** se entra como reações novas no grafo **sem duplicar o cansaço** | **A verificação do Gerente, conferida em `corpo.py` (2026-10-08):** não há químico de energia. A digestão consome `alimento` e `fome` (e, com o banheiro, produz `vontade`). O `cansaco` sobe por emissores (acordado de dia, acordado à noite, o andar) e cai dormindo. Não há conversão nem reserva |
+| 2 | **Sistema proprioceptivo** (postura, orientação, movimento) | o pet sente a própria posição e o próprio movimento | quando houver movimento corporal relevante | a direção do último passo, que a opção (b) da DP-13 usa para pôr as narinas |
+| 3 | **Termorregulação** | o calor e o frio do corpo | só se o mundo tiver temperatura | nada |
+| 4 | **Sistema nociceptivo e de reparo** | a dor, o dano e a cura do corpo como um sistema | unir à seção 5 (os órgãos com força vital, dano e cura), **depois da D-5** | os químicos `dano`, `dor` e `susto`; os emissores `dano_privacao` e `dano_cura`; o tapa |
+| 5 | **Sistema imune e toxicológico** | o corpo que reage a toxina ou a patógeno | depois de haver toxina ou patógeno no mundo | a comida podre (o efeito no humor) é o gancho |
+| 6 | **Sistema reprodutivo** | o ciclo reprodutivo no corpo | quando o ciclo de vida e a herança forem trabalhados | a herança da v4 no jogo, fora do corpo |
+
+**Os nomes da seção 7** são os deste glossário; a seção 7 os usa desde 2026-10-08.
 
 ---
 
@@ -222,3 +272,4 @@ flexibilidade de um robô. É um estudo, num robô.
 | D-5 | Abrir a frente dos órgãos com dano, cura e morte (seção 5) agora ou depois dos drives novos | **depois** dos drives novos, do banheiro e do mundo na bancada, com plano próprio e as quatro medidas | abrir agora mistura três mecânicas novas na mesma run, e um "aprendeu a evitar" não se separa de "morreram os que não evitavam" |
 | D-6 | Hormônios (seção 4): quando e qual mecanismo primeiro | **depois** dos órgãos, começando pelo H1 (ganho no receptor), sempre com a ablação no basal | ligar os três juntos torna o sistema opaco, e um hormônio morto fica no código como parâmetro sem efeito |
 | D-7 | O automodelo (seção 6) avaliado contra a persistência como linha de base obrigatória | **sim**, escrito no plano antes da run | sem a persistência, um modelo que copia o presente parece "saber de si" |
+| N-1 | A cabeça da autoria da rede de si: fica no Digicorpo ou ganha nome próprio (seção 8) | **fica no Digicorpo** enquanto as duas cabeças forem o mesmo módulo e o mesmo aprendizado | um nome próprio cedo demais separa nos documentos o que o código não separa, e o glossário passa a apontar dois nomes para um arquivo |

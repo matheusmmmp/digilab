@@ -1,4 +1,7 @@
-# TAREFA V2 — REDE DE SI: o automodelo em observação (etapa 2 do ego) (2026-10-08)
+# TAREFA V2 — DIGICORPO (a rede de si): o automodelo em observação (etapa 2 do ego) (2026-10-08)
+
+**Nome (2026-10-08):** a rede de si se chama **Digicorpo** (`docs/DEFINICOES_CORPO_V2.md`, seção 8). O código, o arquivo desta tarefa e
+o prefixo das sementes continuam `rede_de_si`. As decisões já registradas (E-6, RS-7) ficam com a redação delas.
 
 Coordenador: Gerente. Workers: B (a rede e o embrulho), D (a bancada e as medidas), A (a troca da digestão e, se o G-OBS pedir, o motor) e C (o plano).
 Worktree e branch de cada etapa: `v2-rede-de-si-<etapa>`. Status: **ABERTA.** **RS-1 a RS-7 DECIDIDAS pelo Matheus em 2026-10-08, todas pela
@@ -19,7 +22,7 @@ recomendação** (seção 8).
 
 ## 1. Pergunta
 
-**A rede de si aprende o próprio pet?**
+**O Digicorpo aprende o próprio pet?**
 - **O corpo:** ela prevê as leituras dos receptores do corpo, a n decisões, melhor que copiar o presente (a persistência) e que a média
   histórica.
 - **A mudança:** ela se adapta quando o corpo muda.
@@ -28,7 +31,7 @@ recomendação** (seção 8).
 
 **Tudo em observação:** a rede não influencia a escolha nem a fala. É o degrau 2 da seção 9 do ego. Entrar na decisão é a etapa 3.
 
-## 2. A rede (desenho, PROPOSTO)
+## 2. A rede do Digicorpo (desenho, PROPOSTO)
 
 **Onde fica.** Num módulo novo, `digilab/rede_de_si.py`, separado do cérebro. Ela observa por um **embrulho somente leitura** da política
 (`PoliticaComRede`, como o `PoliticaComMotivo`):

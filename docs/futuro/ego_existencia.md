@@ -1,5 +1,9 @@
 # Ego do pet — automodelo com corpo, aprendido por uma rede, e indagação sobre a própria existência
 
+**Nomes (2026-10-08):** a rede de si se chama **Digicorpo** (o modelo corporal), e os sistemas do corpo têm os nomes de
+`docs/DEFINICOES_CORPO_V2.md`, seção 8. Os nomes do código (`rede_de_si.py`, o prefixo `rede_de_si`) não mudam. As decisões já
+registradas (E-6, E-8) ficam com a redação delas.
+
 Status (2026-10-07):
 - **DECIDIDO pelo Matheus:**
   - o pet deve ter ego, questionar a própria existência e falar e indagar sobre isso;
@@ -18,8 +22,8 @@ subjetiva; o Digilab mede mecanismos.
 
 | parte | o que o pet mantém sobre si | de onde vem |
 |---|---|---|
-| **Corpo** | o que o meu corpo consegue fazer agora, e quanto tenho certeza | a **rede de si** (seção 3), treinada pela experiência do próprio corpo |
-| **Autoria** | quem decidiu cada coisa: eu aprendi, já nasci assim, ou alguém pediu | a **rede de si**, prevendo a própria escolha; a sonda do cérebro só avalia |
+| **Corpo** | o que o meu corpo consegue fazer agora, e quanto tenho certeza | o **Digicorpo**, a rede de si (seção 3), treinado pela experiência do próprio corpo |
+| **Autoria** | quem decidiu cada coisa: eu aprendi, já nasci assim, ou alguém pediu | o **Digicorpo**, prevendo a própria escolha; a sonda do cérebro só avalia |
 | **Origem** | "nasci de um ovo, com este jeito" | o temperamento do ovo e a herança (`digilab/temperamento.py`, `digilab/heranca.py`), contados ao pet ou observados por ele |
 | **Continuidade** | o que vivi, o que lembro e o que perdi | a memória de episódios (N6) e a memória por espaços (`digilab/memoria_espacos.py`) |
 | **Relação** | o dono, os irmãos, os outros pets | o vínculo, o cruzamento em Meus pets, os rivais |
@@ -70,11 +74,12 @@ Os órgãos, pelo manual:
 - **Química por baixo dos drives.** Os drives de hoje (fome, higiene, energia, humor, saúde) passam a ser lidos de químicos internos, como no
   Creatures. A comida entra como químicos; as frutas ganham **composição** (o que cada uma libera no corpo), em vez de um efeito fixo no humor.
 - **Órgãos pequenos e poucos.** Um subconjunto mínimo, e não os 21 órgãos e 161 químicos do Creatures 3. Por exemplo: digestão, energia,
-  reparo e o relógio da vida. Cada órgão com força vital, dano e cura.
+  reparo e o relógio da vida (o Sistema digestivo e metabólico, o Metabolismo energético, o Sistema nociceptivo e de reparo e o Relógio
+  de desenvolvimento, nos nomes de `docs/DEFINICOES_CORPO_V2.md`, seção 8). Cada órgão com força vital, dano e cura.
 - **Lesão como dano de órgão.** As lesões que já existem no motor de educação viram dano num órgão, com o químico de lesão e a cura regulada.
 - **Estágio pelo químico da Vida.** O estágio passa a ser biológico: a Vida decai, e receptores mudam o estágio. A evolução muda o corpo de
   verdade, porque genes ligam em cada estágio (novos receptores, reações mais rápidas ou mais lentas).
-- **O pet só sente pelos receptores.** O cérebro e a rede de si recebem do corpo apenas o que passa por receptores. É a regra "sem acesso
+- **O pet só sente pelos receptores.** O cérebro e o Digicorpo recebem do corpo apenas o que passa por receptores. É a regra "sem acesso
   privilegiado" escrita no próprio corpo: o motor conhece todas as concentrações, o pet só as que tem receptor para sentir.
 - **Estímulos ligam o dono ao corpo.** O cuidado e a bronca podem mudar químicos (o carinho reduz o estresse, por exemplo), em vez de mexer
   direto no estado.
@@ -86,7 +91,7 @@ Os órgãos, pelo manual:
 
 ### 2.3 Por que esse corpo serve ao automodelo
 
-O corpo químico dá à rede de si o que faltava: **consequências internas incertas e que mudam durante a vida.** O pet não sabe ao certo o que
+O corpo químico dá ao Digicorpo o que faltava: **consequências internas incertas e que mudam durante a vida.** O pet não sabe ao certo o que
 uma fruta vai fazer no corpo dele, quanto uma brincadeira vai cansá-lo, ou se ainda digere como antes. E o corpo muda de quatro jeitos,
 cada um um teste do automodelo:
 
@@ -95,7 +100,7 @@ cada um um teste do automodelo:
 - **Fadiga e reservas:** o ATP e as reservas oscilam no dia.
 - **Estresse:** acumula com drives altos e muda outras funções.
 
-## 3. A rede de si
+## 3. O Digicorpo (a rede de si)
 
 Uma rede separada do lobo de decisão. Não é um "controlador de ego" acima dos lobos: é uma peça que **prevê** e cuja saída a decisão pode
 consultar.
@@ -117,7 +122,7 @@ consultar.
   mudar de estágio ou de um dano de órgão, o pet erra o que o corpo faz e pergunta; conforme a rede se corrige, a pergunta operacional se
   resolve, e a existencial pode continuar.
 
-**Consequência para uma regra do projeto.** A V2 tem a regra "só a Decisão aprende". A rede de si aprende por outro caminho. A decisão do
+**Consequência para uma regra do projeto.** A V2 tem a regra "só a Decisão aprende". O Digicorpo aprende por outro caminho. A decisão do
 Matheus implica revê-la: **a Decisão aprende por reforço; a rede de si aprende por erro de previsão; nenhuma outra peça aprende.** A
 revisão fica registrada (E-6).
 
@@ -125,7 +130,7 @@ revisão fica registrada (E-6).
 
 **Decisão E-11 (Matheus, 2026-10-07): o pet pensa livremente; esta tabela é gabarito, não conteúdo do pet.** As perguntas abaixo
 **não** entram no pet livre: nele não há catálogo de perguntas nem frase pronta. A questão nasce só da discrepância (o erro de previsão
-da rede de si) e da experiência (seção 5), e a fala descreve só essa questão. As frases desta tabela viram as **frases-modelo** de um
+do Digicorpo) e da experiência (seção 5), e a fala descreve só essa questão. As frases desta tabela viram as **frases-modelo** de um
 **braço condicionado**, em que elas são implantadas de propósito, para registrar como pensa um pet com esse tipo de frase já implantada
 e comparar com o pet livre (seção 7). O pet do produto é o livre.
 
@@ -181,9 +186,9 @@ filosófica pode ficar aberta para sempre.
   - com o ego, o "eu" vem do automodelo e da memória do pet;
   - o narrador antigo continua como fala marcada.
 - **Motivo e honestidade do fator:** continuam valendo para o que o pet diz da decisão.
-- **Decodificador de conceitos** (`docs/futuro/decodificador_conceitos.md`): a rede de si é um dos estados que ele pode ler.
+- **Decodificador de conceitos** (`docs/futuro/decodificador_conceitos.md`): o Digicorpo é um dos estados que ele pode ler.
 - **Cognição social** (`docs/futuro/cognicao_social.md`): os relatos de outros pets entram pelas mesmas regras de fonte.
-- **Web:** é mecânica de jogo e vai para a web, numa versão de pet própria, depois do porte do cérebro A. A rede de si também precisa de
+- **Web:** é mecânica de jogo e vai para a web, numa versão de pet própria, depois do porte do cérebro A. O Digicorpo também precisa de
   paridade Python/web.
 
 ## 7. Medidas (PROPOSTO, sem número)
@@ -193,7 +198,7 @@ filosófica pode ficar aberta para sempre.
 - **Adaptação depois da mudança:** quantas experiências até o erro voltar ao nível de antes, na troca de estágio, no dano de órgão, na
   fadiga e no estresse.
 - **Calibração da autoria:** a estimativa do pet ("você pediu", "eu quis", "nasci assim") contra a sonda, que é o gabarito exato.
-- **O automodelo serve à decisão?** O desempenho no ambiente com a rede de si consultada contra três controles:
+- **O automodelo serve à decisão?** O desempenho no ambiente com o Digicorpo consultado contra três controles:
   - a rede congelada, que não aprende;
   - a rede ausente;
   - o **oráculo**: a capacidade real dada de graça, que é o teto.
@@ -212,9 +217,9 @@ filosófica pode ficar aberta para sempre.
 ## 8. Riscos
 
 - **Escopo.** O corpo químico é a maior mudança de mundo da V2: ele mexe nos drives que todos os braços usam. Por isso entra atrás de chave,
-  um órgão por vez, com as vidas antigas reproduzindo. Somam-se a rede de si e a revisão de uma regra. Nada de montar tudo de uma vez.
+  um órgão por vez, com as vidas antigas reproduzindo. Somam-se o Digicorpo e a revisão de uma regra. Nada de montar tudo de uma vez.
 - **Novidade.** O Creatures fez corpo químico, órgãos e genoma de fisiologia em 1997. Nada disso é contribuição do Digilab.
-- **Rede que não aprende.** O cérebro B "não aprendeu" na calibração. A rede de si pode ter o mesmo problema; o controle congelado mostra
+- **Rede que não aprende.** O cérebro B "não aprendeu" na calibração. O Digicorpo pode ter o mesmo problema; o controle congelado mostra
   isso cedo.
 - **Ética do produto.** Um pet que pergunta "continuo sendo eu?" pode gerar apego forte ou angústia, e o pet pode morrer no jogo.
   - Nenhuma fala sobre morte, abandono ou sofrimento como pressão sobre o jogador.
@@ -226,10 +231,10 @@ filosófica pode ficar aberta para sempre.
 
 | etapa | entrega | avança quando |
 |---|---|---|
-| 0 | auditoria no cérebro A, no motor e no mundo das frutas: onde a química entra por baixo dos drives, onde os receptores entram na percepção, a rede de si; Python e web | pontos de integração confirmados |
-| 1 | **corpo químico mínimo**: os químicos que reproduzem os drives de hoje, a composição das frutas, um órgão de digestão e o relógio da Vida, sem rede de si | G1 e G2: com a chave desligada, tudo byte a byte; ligada, os drives batem com os de hoje dentro da tolerância do plano |
+| 0 | auditoria no cérebro A, no motor e no mundo das frutas: onde a química entra por baixo dos drives, onde os receptores entram na percepção, o Digicorpo; Python e web | pontos de integração confirmados |
+| 1 | **corpo químico mínimo**: os químicos que reproduzem os drives de hoje, a composição das frutas, o Sistema digestivo e metabólico e o Relógio de desenvolvimento (a Vida), sem o Digicorpo | G1 e G2: com a chave desligada, tudo byte a byte; ligada, os drives batem com os de hoje dentro da tolerância do plano |
 | 1b | **órgãos e dano**: as lesões como dano de órgão, cura e morte de órgão; genes que ligam por estágio; genoma de fisiologia | G1 e G2; o corpo muda com o estágio e o dano como desenhado |
-| 2 | **rede de si em observação**: aprende o corpo e a autoria, sem influenciar escolha nem fala | o erro de previsão cai; calibração; adapta depois da evolução; nenhum acesso privilegiado |
+| 2 | **Digicorpo em observação** (a rede de si): aprende o corpo e a autoria, sem influenciar escolha nem fala | o erro de previsão cai; calibração; adapta depois da evolução; nenhum acesso privilegiado |
 | 3 | **automodelo na decisão**: a previsão do corpo entra como entrada da decisão | desempenho contra a rede congelada, a ausente e o oráculo |
 | 4 | **perguntas**: a questão como objeto, nascida só da discrepância, sem catálogo (pet livre); o braço condicionado com as frases-modelo da seção 4 implantadas, só para comparar (E-11) | toda pergunta com lastro; cuidado preservado; o registro do livre e do condicionado lado a lado |
 | 5 | **diálogo** pelo Conversar: o dono responde, a resposta vira relato com autor | relato distinto de observação no registro |
@@ -269,7 +274,7 @@ lido.
 | Gottlieb et al. 2013, *Trends in Cognitive Sciences* | `10.1016/j.tics.2013.09.001` | pista | busca de informação e curiosidade |
 | Oudeyer e Kaplan 2007 | `10.3389/neuro.12.006.2007` | VERIFICADA | tipologia da motivação intrínseca |
 
-**Neurociência.** As ideias da neurociência que podem orientar a rede de si (modelo direto e cópia eferente, senso de agência,
+**Neurociência.** As ideias da neurociência que podem orientar o Digicorpo (modelo direto e cópia eferente, senso de agência,
 interocepção, eu mínimo e narrativo, arbitragem modelo × hábito) estão ligadas a cada peça em
 `docs/research/digibrain/mechanisms/self_model.md`, com as hipóteses H-SELF-01 a H-SELF-06.
 
