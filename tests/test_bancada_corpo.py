@@ -6,10 +6,11 @@ O que se confere:
 - o regime "quimica": o com_corpo(...) do motor com a ConfigCorpo da bancada (ligada, digestao na taxa C e a Vida), o cerebro A com
   cfg_corpo, o G1 e o acoplado;
 - a chave "corpo" da config (os numeros, nunca as sub-chaves);
-- as medidas da secao 5 (BE/OC, o cuidado preservado, os drives novos indisponiveis sem a etapa 6) e a dominancia pelos receptores,
+- as medidas da secao 5 (BE/OC, o cuidado preservado, os drives novos indisponiveis na quimica) e a dominancia pelos receptores,
   conferida contra o motivo e os canais do cerebro, falhando alto quando divergem;
-- o que espera a etapa 6 falha alto com o no: os bracos do corpo, do tapa e da generalizacao, o P1-cw e o filtro sem_gestos; e o corpo
-  no mundo fisico, que espera o contrato dos ganchos do A e do B;
+- desde a W-LIGA-GESTOS (a etapa 6 na main), os bracos do corpo, do tapa e da generalizacao, o P1-cw e o filtro sem_gestos se resolvem, a
+  trava e so a tabela (com a entrada de volta, falham alto com o no), e o corpo roda no mundo fisico (tests/test_bancada_liga_gestos.py roda
+  os bracos e confere os gates);
 - a config com o plano e o prefixo do corpo, e o rodar da fumaca.
 So as sementes dos testes.
 """
@@ -36,8 +37,9 @@ CC_CANAIS = replace(CONFIG_CONSEQUENCIA, canais_ligados=True)
 MUNDOS_HOJE = (("padrao", None), ("bola", None), ("descasado", None), ("mutavel", None), ("iguais_frutas", None),
                ("fisico", "perto"), ("fisico_afastado", "longe"))
 MUNDOS_QUIMICA = ("padrao", "bola", "descasado", "mutavel", "iguais_frutas")
-PENDENTES = {"P0-q": "DonoComGestos", "P1-q": "DonoComGestos", "P0-c": "etapa 6", "P1-c": "etapa 6", "P0-c-tapa": "etapa 6",
-             "P1-c-tapa": "etapa 6", "P1-c-tapaX": "etapa 6", "P1-c-frutas": "etapa 6", "P1-cw": "etapa 6"}
+# os bracos que esperavam a etapa 6 ate a W-LIGA-GESTOS, e a peca de que cada um depende (com a entrada de volta, falha alto com o no)
+GESTOS = {"P0-q": "dono_gestos", "P1-q": "dono_gestos", "P0-c": "corpo", "P1-c": "corpo", "P0-c-tapa": "tapa", "P1-c-tapa": "tapa",
+          "P1-c-tapaX": "tapa", "P1-c-frutas": "corpo", "P1-cw": "corpo"}
 
 
 def _bancada(montagem="simples", dias=2, cc=CONFIG_CONSEQUENCIA, **kw):
@@ -148,7 +150,7 @@ def test_as_medidas_do_corpo(mundo):
         assert be["n"] > 0 and 0.0 <= be["be"] <= 1.0 and be["be"] + be["oc"] <= 1.0 + 1e-12
         assert abs(sum(be["por_acao"].values()) - 1.0) < 1e-12 and be == c["be_vida"]
         assert 0.0 <= c["cuidado"]["privacao"] <= 1.0 and c["cuidado"]["n"] == len(v.motor.politica.estado_interno()["motivos"])
-        assert c["drives_novos"] == {"disponivel": False, "motivo": bv.NOS_PENDENTES["corpo"]}
+        assert c["drives_novos"]["disponivel"] is False and "quimica" in c["drives_novos"]["motivo"]
         assert c["corpo_final"] == v.motor.estado()["corpo"]
         d = m["dominancia"]
         assert d["pelo_corpo"] and d["origem"] == origem
@@ -179,22 +181,19 @@ def test_a_dominancia_pelo_corpo_falha_alto_quando_diverge(monkeypatch):
         b.medir(v, SONDA)
 
 
-# ------------------------------------------------------------------ 4. o que espera a etapa 6 (e o contrato do mundo fisico)
+# ------------------------------------------------------------------ 4. a etapa 6 na main: os bracos se resolvem (W-LIGA-GESTOS)
 
 
-@pytest.mark.parametrize("braco", sorted(PENDENTES))
-def test_o_que_espera_a_etapa_6_falha_alto_com_o_no(braco):
-    with pytest.raises(NotImplementedError, match=PENDENTES[braco]):
-        bv.braco_de(braco)
-    with pytest.raises(NotImplementedError):
-        bv.validar_config(_cfg(bracos=[braco]))
-    with pytest.raises(NotImplementedError):
-        _bancada().vida(bv.EspecVida("atencioso", braco, 101, None, "bola"))
+@pytest.mark.parametrize("braco", sorted(GESTOS))
+def test_os_bracos_da_etapa_6_se_resolvem(braco):
+    assert bv.braco_de(braco) is bv.BRACOS[braco]
+    mundo = "iguais_frutas" if braco == "P1-c-tapaX" else "bola"
+    bv.validar_config(_cfg(bracos=[braco], mundos=[mundo]))
 
 
 def test_os_bracos_do_plano_estao_declarados_como_o_plano_pede():
     B = bv.BRACOS
-    assert {r: (B[r].regime, B[r].gestos) for r in PENDENTES} == {
+    assert {r: (B[r].regime, B[r].gestos) for r in GESTOS} == {
         "P0-q": ("quimica", "sem_tapa"), "P1-q": ("quimica", "sem_tapa"), "P0-c": ("corpo", "sem_tapa"), "P1-c": ("corpo", "sem_tapa"),
         "P0-c-tapa": ("corpo", "tapa"), "P1-c-tapa": ("corpo", "tapa"), "P1-c-tapaX": ("corpo", "tapa_fruta"),
         "P1-c-frutas": ("corpo", "sem_tapa"), "P1-cw": ("corpo", "sem_tapa")}
@@ -202,25 +201,31 @@ def test_os_bracos_do_plano_estao_declarados_como_o_plano_pede():
     assert B["P1-cw"] == replace(B["P1-c"], rotulo="P1-cw", no="corpo-A2.4", pesos_janela=True)
 
 
-def test_a_trava_e_so_a_tabela(monkeypatch):
-    """Sem as entradas, os bracos se resolvem. Desde a etapa 6 na main (#245, #247), a ConfigCorpo aceita as sub-chaves: o regime corpo
-    monta drives_novos e gestos (quem tira as entradas do NOS_PENDENTES e o D)."""
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {})
-    assert bv.braco_de("P1-c") is bv.BRACOS["P1-c"] and bv.braco_de("P1-q") is bv.BRACOS["P1-q"]
+@pytest.mark.parametrize("braco", sorted(GESTOS))
+def test_a_trava_e_so_a_tabela(monkeypatch, braco):
+    """Sem as entradas (desde a W-LIGA-GESTOS), os bracos se resolvem e o regime corpo monta drives_novos e gestos; com a entrada da
+    peca de volta, o braco falha alto com o no."""
     cc = _bancada().cfg_corpo_de(bv.EspecVida("atencioso", "P1-c", 101, None, "bola"))
     assert cc.drives_novos and cc.gestos
+    monkeypatch.setattr(bv, "NOS_PENDENTES", {GESTOS[braco]: "etapa 6 de volta"})
+    with pytest.raises(NotImplementedError, match="etapa 6 de volta"):
+        bv.braco_de(braco)
 
 
-def test_o_filtro_sem_gestos_falha_alto_com_o_no():
-    with pytest.raises(NotImplementedError, match="tapa"):
+def test_o_filtro_sem_gestos_tira_o_tapa_e_o_carinho(monkeypatch):
+    assert bv.filtro_de("sem_gestos") == frozenset({"tapa", "acariciar"})
+    monkeypatch.setattr(bv, "NOS_PENDENTES", {"tapa": "etapa 6 de volta"})
+    monkeypatch.setattr(bv, "FILTROS_PENDENTES", {"sem_gestos": "tapa"})
+    with pytest.raises(NotImplementedError, match="etapa 6 de volta"):
         bv.filtro_de("sem_gestos")
 
 
-def test_o_corpo_no_mundo_fisico_espera_o_contrato_dos_ganchos():
-    with pytest.raises(NotImplementedError, match="consequencia_corpo"):
-        bv.validar_config(_cfg(bracos=["P0-quimica"], mundos=["fisico"], lugares=["perto"]))
-    with pytest.raises(NotImplementedError, match="consequencia_corpo"):
-        _bancada().vida(bv.EspecVida("atencioso", "P1-quimica", 101, None, "fisico", lugar="perto"))
+def test_o_corpo_no_mundo_fisico_roda():
+    """O #247 resolveu o conflito entre o #238 e o #239 (o consequencia_mundo credita, o consequencia_corpo fecha a decisao): o regime
+    quimica roda no mundo fisico (tests/test_bancada_liga_gestos.py confere as medidas)."""
+    bv.validar_config(_cfg(bracos=["P0-quimica"], mundos=["fisico"], lugares=["perto"]))
+    v = _bancada().vida(bv.EspecVida("atencioso", "P1-quimica", 101, None, "fisico", lugar="perto"))     # com o G1
+    assert v.motor.cc.ligada and v.motor.cmf.ligada
     bv.validar_config(_cfg(bracos=["P0-hoje"], mundos=["fisico"], lugares=["perto"]))     # o "hoje" roda no mundo fisico
 
 
@@ -239,12 +244,14 @@ def test_rodar_a_fumaca_do_corpo(tmp_path):
     cfg = json.loads((RAIZ / "experiments" / "configs" / "v2_corpo" / "fumaca.json").read_text(encoding="utf-8"))
     cfg.update(dias=2, orcamento=32, donos=["relapso"])                 # 2 unidades: o bootstrap da tabela pede pelo menos duas
     r = bv.rodar(cfg, tmp_path)
-    n_vidas = 2 * 2 * 6                                                  # 2 unidades x 2 mundos x 6 bracos
-    assert len(r["vidas"]) == n_vidas + 2 * (n_vidas // 6)               # mais os dois acoplados de cada celula
+    n_vidas = 2 * 2 * 10                                                 # 2 unidades x 2 mundos x 10 bracos (G-HOJE e o bloco do corpo)
+    assert len(r["vidas"]) == n_vidas + 4 * (n_vidas // 10)              # mais os quatro acoplados de cada celula
     medidas = json.loads((tmp_path / "medidas.json").read_text(encoding="utf-8"))
     for m in medidas.values():
-        com_corpo = "quimica" in m["braco"].split("<")[0]
+        com_corpo = bv.BRACOS[m["braco"].split("<")[0]].regime in ("quimica", "corpo")
         assert (m["corpo"] is not None) == com_corpo, m["vida"]
         assert m["dominancia"].get("pelo_corpo", False) == com_corpo
+        if m["corpo"] is not None:
+            assert m["corpo"]["drives_novos"]["disponivel"] == (bv.BRACOS[m["braco"].split("<")[0]].regime == "corpo")
     dom = json.loads((tmp_path / "dominancia.json").read_text(encoding="utf-8"))
-    assert {"P1-quimica", "P1-hoje"} <= set(dom)
+    assert {"P1-quimica", "P1-hoje", "P1-q", "P1-c", "P1-c<P0-q:nenhum"} <= set(dom)
