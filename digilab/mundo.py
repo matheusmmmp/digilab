@@ -29,6 +29,12 @@ O mundo (secao 6, MF-4): as arvores (quedas, recarga, ate 4 frutas no chao por a
 bola que rola, cada sorteio num fluxo proprio por `derivar_semente` (`mundo-arvores`, `mundo-bola`, `mundo-sujeira`), nunca na
 `_rng_ambiente` do engine nem na rng do pet. As quedas nao dependem do pet: P0 e P1 da mesma semente veem as mesmas (G-NUMS).
 
+O mundo como componente (docs/TAREFA_V2_DOIS_PETS.md, etapa 1; docs/futuro/dois_pets.md, secao 2): a classe `Mundo` guarda o que e do
+mundo (arvores, comidas, bola, os fluxos `mundo-arvores` e `mundo-bola`, as quedas, as comidas que sumiram, as bolas deixadas e as
+rolagens) e nao sabe de pet. O `MotorMundo` ligado e dono do proprio `Mundo`, com a semente do pet, e guarda o que e do pet (posicao,
+alvo pendente, os fluxos `alvo` e `mundo-sujeira`, consumos, decisoes, regioes, visitas, comidas deixadas). A atualizacao do mundo e
+idempotente por tick. Com um pet, a vida e a de antes byte a byte (G2); dois motores sobre o mesmo `Mundo` sao a etapa 2 (o `Grupo`).
+
 A percepcao (secao 7, MF-3): `Observacao.mundo` = `PercepcaoMundo` (posicao, regiao, os objetos vistos a ate 6 celulas, o cheiro e a
 direcao dele, o alvo pendente). A consequencia (secao 8): depois de andar, comer e brincar, o gancho opcional `consequencia_mundo(acao,
 ocorrido, obs_depois)`, uma vez por decisao de explorar, comer ou brincar; o `fruta_comida` da E2 quando o pet come uma fruta; e o
@@ -231,37 +237,31 @@ class _PoliticaComMundo:
         return getattr(self._pm, nome)
 
 
-# ================================================================== o motor
-class MotorMundo(MotorFrutas):
-    def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, **kw) -> None:
-        super().__init__(*a, **kw)
-        self.cmf = cfg_mundo or CONFIG_MUNDO
-        if not self.cmf.ligada:
-            if efeito_frutas is not None:
-                raise ValueError("efeito_frutas so existe com o mundo ligado")
-            return                                     # desligado: o MotorFrutas byte a byte (nem embrulho)
-        if self.cf.ligada or self.cb.ligada:
-            raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
-        if self.ce.ligada or self.cl.ligada:
-            raise ValueError("o mundo minimo roda sem educacao e sem lesoes (a morte fica desligada, plano secao 2)")
-        efeito = {f: 0.0 for f in FRUTAS} if efeito_frutas is None else dict(efeito_frutas)
-        if set(efeito) != set(FRUTAS):
-            raise ValueError(f"efeito_frutas precisa de {FRUTAS}: {sorted(efeito)}")
-        self.efeito_frutas = efeito
-        cm, sub = self.cmf, self.cmf.sub
-        self._alcance = cm.velocidade * self.cfg.intervalo_decisao_ticks
-        self._raio_pegar = cm.raio_pegar_celulas * sub
-        self._raio_visao = cm.raio_visao_celulas * sub
-        self._raio_mancha = cm.raio_mancha_celulas * sub
-        semente = self.semente
-        self._rng_arvores = random.Random(derivar_semente("mundo-arvores", semente))
-        self._rng_bola = random.Random(derivar_semente("mundo-bola", semente))
-        self._rng_sujeira = random.Random(derivar_semente("mundo-sujeira", semente))
-        self._rng_alvo = random.Random(derivar_semente("alvo", semente))
-        self.pet = centro_da_celula(cm.layout.ninho, cm)
+# ================================================================== o mundo como componente (dois pets, etapa 1)
+class Mundo:
+    """O mundo fisico como componente (docs/futuro/dois_pets.md, secao 2; DP-1; docs/TAREFA_V2_DOIS_PETS.md, etapa 1): as arvores, as
+    comidas, a bola, os fluxos do mundo (`mundo-arvores`, `mundo-bola`) e os registros do mundo (as quedas, as comidas que sumiram, as
+    bolas deixadas e as rolagens). Nao sabe de pet: a posicao, o alvo pendente, a percepcao guardada, os fluxos do pet (`alvo`,
+    `mundo-sujeira`) e os registros do pet (consumos, decisoes, regioes, visitas, comidas deixadas pelo dono) ficam no MotorMundo de cada
+    pet. Com um pet, o MotorMundo e dono do proprio Mundo, com a semente do pet: a vida de hoje, byte a byte (G2). A forma e a do motor
+    em TS (web/app/motor/mundo.ts: o mundo recebe a posicao e o estado do pet), sem a parte do pet, para dois motores poderem apontar
+    para o mesmo Mundo (etapa 2).
+
+    A atualizacao (quedas, apodrecer, sumir) e idempotente por tick (`atualizar`): a segunda chamada no mesmo tick nao faz nada, e um tick
+    para tras falha alto. Com dois pets, quem decide primeiro no tick a dispara, e o resultado so le o tick e o fluxo `mundo-arvores`."""
+
+    def __init__(self, cfg_mundo: ConfigMundo, semente: int) -> None:
+        if not cfg_mundo.ligada:
+            raise MundoSemChave("o Mundo so existe com a ConfigMundo ligada")
+        cm = self.cmf = cfg_mundo
+        self.semente = semente
+        self.rng_arvores = random.Random(derivar_semente("mundo-arvores", semente))
+        self.rng_bola = random.Random(derivar_semente("mundo-bola", semente))
+        self.raio_visao = cm.raio_visao_celulas * cm.sub
+        self.ninho = centro_da_celula(cm.layout.ninho, cm)
         self.comedouro = centro_da_celula(cm.layout.comedouro, cm)
         bx, by = centro_da_celula(cm.layout.bola_inicio, cm)
-        self.bola_mundo = {"x0": bx, "y0": by, "x1": bx, "y1": by, "t0": 0, "d": 0}
+        self.bola = {"x0": bx, "y0": by, "x1": bx, "y1": by, "t0": 0, "d": 0}
         nomes = [r[0] for r in cm.layout.regioes]
         self.arvores: list[dict] = []
         for ident, x, y, fruta in cm.layout.arvores:
@@ -277,33 +277,23 @@ class MotorMundo(MotorFrutas):
                 raise ValueError(f"arvore {ident} fora do jardim e da mata: {nome}")
             self.arvores.append({"id": ident, "x": ax, "y": ay, "fruta": fruta, "regiao": nome, "p": p, "recarga_ate": 0})
         self.comidas: dict[int, dict] = {}
-        self._prox_id = ID_BOLA + 1
-        self._passo_mundo = 0
-        self._pendente: dict | None = None             # {"acao", "alvo"}: o alvo que ficou sem chegar
-        self._fome_antes = 0.0
-        self._percepcao: PercepcaoMundo | None = None
-        self._obs_decisao: Observacao | None = None
-        self._manchas_abertas: dict[str, dict] = {}
-        # os registros (derivados; o replay reconstroi tudo)
+        self.prox_id = ID_BOLA + 1
+        self.passo_mundo = 0
+        self.tick_atualizado: int | None = None          # o ultimo tick atualizado (a atualizacao e idempotente por tick)
+        # os registros do mundo (derivados; o replay reconstroi tudo)
         self.quedas: list[dict] = []
-        self.consumos_mundo: list[dict] = []
         self.sumidas: list[dict] = []
-        self.deixadas: list[dict] = []
         self.bolas_deixadas: list[dict] = []
         self.rolagens: list[dict] = []
-        self.decisoes_mundo: list[dict] = []
-        self.regioes: list[dict] = []
-        self.visitas: list[dict] = []
-        self.politica = _PoliticaComMundo(self.politica, self)
 
     # ------------------------------------------------------------ a comida e a bola no tempo
-    def _prazo_maduro(self, tipo: str) -> int:
+    def prazo_maduro(self, tipo: str) -> int:
         return self.cmf.maduro_racao_min if tipo == "racao" else self.cmf.maduro_fruta_min
 
     def situacao(self, comida: dict, tick: int) -> str | None:
         """`madura`, `podre`, ou None (sumiu), pela idade (secao 6)"""
         idade = tick - comida["tick_posta"]
-        m = self._prazo_maduro(comida["tipo"])
+        m = self.prazo_maduro(comida["tipo"])
         if idade < m:
             return "madura"
         if idade < m + self.cmf.prazo_podre_min:
@@ -312,32 +302,38 @@ class MotorMundo(MotorFrutas):
 
     def bola_em(self, tick: int) -> tuple[int, int]:
         """a bola anda `atrito` subunidades por tick ate parar no ponto final"""
-        b = self.bola_mundo
+        b = self.bola
         if b["d"] == 0 or tick >= b["t0"] + -(-b["d"] // self.cmf.atrito):
             return b["x1"], b["y1"]
         andou = self.cmf.atrito * (tick - b["t0"])
         return b["x0"] + div_arred((b["x1"] - b["x0"]) * andou, b["d"]), b["y0"] + div_arred((b["y1"] - b["y0"]) * andou, b["d"])
 
-    def _nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
-        c = {"id": self._prox_id, "tipo": tipo, "x": x, "y": y, "tick_posta": tick, "origem": origem}
-        self._prox_id += 1
+    def nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
+        c = {"id": self.prox_id, "tipo": tipo, "x": x, "y": y, "tick_posta": tick, "origem": origem}
+        self.prox_id += 1
         self.comidas[c["id"]] = c
         return c
 
     def _remover_sumidas(self, tick: int) -> None:
         for c in [c for c in self.comidas.values() if self.situacao(c, tick) is None]:
             del self.comidas[c["id"]]
-            fim = c["tick_posta"] + self._prazo_maduro(c["tipo"]) + self.cmf.prazo_podre_min
+            fim = c["tick_posta"] + self.prazo_maduro(c["tipo"]) + self.cmf.prazo_podre_min
             self.sumidas.append({**c, "sumiu_em": fim})
 
-    def _atualizar_mundo(self, tick: int) -> None:
+    def atualizar(self, tick: int) -> None:
         """os passos do mundo ate o tick (secao 6): em cada um, cada arvore fora da recarga sorteia a queda no fluxo `mundo-arvores`.
-        Os sorteios nao dependem do pet; so quantas frutas cabem no chao dependem (o excesso nao cai)."""
-        cm, rng = self.cmf, self._rng_arvores
+        Os sorteios nao dependem do pet; so quantas frutas cabem no chao dependem (o excesso nao cai). Idempotente por tick: no mesmo
+        tick nao faz nada (quem decide primeiro dispara), e um tick para tras falha alto."""
+        if self.tick_atualizado is not None:
+            if tick < self.tick_atualizado:
+                raise ValueError(f"o mundo nao volta no tempo: atualizado ate o tick {self.tick_atualizado}, pedido o {tick}")
+            if tick == self.tick_atualizado:
+                return
+        cm, rng = self.cmf, self.rng_arvores
         ate = tick // cm.passo_mundo_ticks
-        while self._passo_mundo < ate:
-            self._passo_mundo += 1
-            tk = self._passo_mundo * cm.passo_mundo_ticks
+        while self.passo_mundo < ate:
+            self.passo_mundo += 1
+            tk = self.passo_mundo * cm.passo_mundo_ticks
             for arv in self.arvores:
                 if tk < arv["recarga_ate"]:
                     continue
@@ -349,20 +345,20 @@ class MotorMundo(MotorFrutas):
                 no_chao = sum(1 for c in self.comidas.values()
                               if c["origem"] == arv["id"] and self.situacao(c, tk) is not None)
                 cabem = max(0, cm.max_frutas_por_arvore - no_chao)
-                ids = [self._nova_comida(arv["fruta"], x, y, tk, arv["id"])["id"] for x, y in pontos[:cabem]]
+                ids = [self.nova_comida(arv["fruta"], x, y, tk, arv["id"])["id"] for x, y in pontos[:cabem]]
                 self.quedas.append({"tick": tk, "arvore": arv["id"], "sorteadas": n, "pontos": pontos, "colocadas": ids})
                 arv["recarga_ate"] = tk + cm.recarga_min
         self._remover_sumidas(tick)
+        self.tick_atualizado = tick
 
     # ------------------------------------------------------------ percepcao
-    def _fontes_de_cheiro(self, tick: int) -> list[tuple[int, int, int]]:
+    def fontes_de_cheiro(self, tick: int) -> list[tuple[int, int, int]]:
         cm = self.cmf
         return [(c["x"], c["y"], cm.cheiro_racao if c["tipo"] == "racao" else cm.cheiro_fruta)
                 for c in self.comidas.values() if self.situacao(c, tick) == "madura"]
 
-    def _perceber(self, tick: int) -> PercepcaoMundo:
-        """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
-        x, y = self.pet
+    def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None) -> PercepcaoMundo:
+        """Pura (nao sorteia nem muda nada): o que um pet em (x, y) percebe agora (MF-3); `alvo_pendente` e o do pet."""
         vistos = []
         for c in self.comidas.values():
             sit = self.situacao(c, tick)
@@ -370,25 +366,191 @@ class MotorMundo(MotorFrutas):
                 continue
             dx, dy = c["x"] - x, c["y"] - y
             d = distancia(dx, dy)
-            if d <= self._raio_visao:
+            if d <= self.raio_visao:
                 vistos.append((c["id"], c["tipo"] if sit == "madura" else c["tipo"] + "_podre", dx, dy, d))
         bx, by = self.bola_em(tick)
         d = distancia(bx - x, by - y)
-        if d <= self._raio_visao:
+        if d <= self.raio_visao:
             vistos.append((ID_BOLA, "bola", bx - x, by - y, d))
         vistos.sort(key=lambda v: (v[4], v[1], v[0]))
-        cheiro, direcao = direcao_do_cheiro(x, y, self._fontes_de_cheiro(tick), self.cmf)
+        cheiro, direcao = direcao_do_cheiro(x, y, self.fontes_de_cheiro(tick), self.cmf)
+        return PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), cheiro, direcao, alvo_pendente)
+
+    def maduras_perto(self, x: int, y: int, tick: int, raio: int) -> list[tuple[int, str, int]]:
+        """as comidas maduras a ate `raio` de (x, y), em (distancia, tipo, id), da mais perto (o "achou e comeu" do explorar, MF-1)"""
+        perto = sorted((distancia(c["x"] - x, c["y"] - y), c["tipo"], c["id"]) for c in self.comidas.values()
+                       if self.situacao(c, tick) == "madura")
+        return [p for p in perto if p[0] <= raio]
+
+    # ------------------------------------------------------------ o que muda o mundo
+    def retirar_comida(self, ident: int) -> dict:
+        """a comida sai do chao (alguem a comeu); a que nao esta no chao falha alto (KeyError)"""
+        return self.comidas.pop(ident)
+
+    def rolar_bola(self, tick: int) -> dict:
+        """alguem brincou com a bola: ela rola do ponto em que esta, no fluxo `mundo-bola` (vai mais longe no campo)"""
+        cm = self.cmf
+        bx, by = self.bola_em(tick)
+        direcao = self.rng_bola.randrange(16)
+        celulas = self.rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
+        if cm.layout.regioes[regiao_de(bx, cm)][0] == "campo":
+            celulas *= cm.mult_bola_campo
+        x1, y1 = deslocar(bx, by, direcao, celulas * cm.sub, cm)
+        self.bola = {"x0": bx, "y0": by, "x1": x1, "y1": y1, "t0": tick, "d": distancia(x1 - bx, y1 - by)}
+        rolagem = {"tick": tick, "de": (bx, by), "para": (x1, y1), "direcao": direcao, "celulas": celulas}
+        self.rolagens.append(rolagem)
+        return rolagem
+
+    def deixar_comida(self, tipo: str, x: int, y: int, tick: int) -> dict:
+        """a comida que o dono deixa (origem `dono`); tipo desconhecido ou posicao fora do mapa falha alto"""
+        if tipo not in TIPOS_COMIDA_MUNDO or no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"deixar_comida invalido: {tipo!r} ({x}, {y})")
+        return self.nova_comida(tipo, x, y, tick, "dono")
+
+    def deixar_bola(self, x: int, y: int, tick: int) -> None:
+        """o dono poe a bola parada em (x, y); fora do mapa falha alto"""
+        if no_mapa(x, y, self.cmf) != (x, y):
+            raise ValueError(f"deixar_bola fora do mapa: ({x}, {y})")
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.bolas_deixadas.append({"tick": tick, "x": x, "y": y})
+
+    # ------------------------------------------------------------ leitura
+    def resumo(self) -> dict:
+        """tudo o que o mundo guarda (sem o que e do pet)"""
+        return {"bola": dict(self.bola), "comidas": [dict(c) for c in self.comidas.values()], "prox_id": self.prox_id,
+                "passo_mundo": self.passo_mundo, "tick_atualizado": self.tick_atualizado, "arvores": [dict(a) for a in self.arvores],
+                "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
+                "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens}
+
+
+# ================================================================== o motor
+class MotorMundo(MotorFrutas):
+    """O motor de um pet no mundo fisico. Ligado, e dono do proprio `Mundo` (`self.mundo`, com a semente do pet): o que e do mundo
+    (arvores, comidas, bola, quedas, sumidas, rolagens, bolas deixadas e os fluxos `mundo-arvores` e `mundo-bola`) mora nele, e os
+    atributos de antes (`comidas`, `arvores`, `bola_mundo`, `quedas`...) leem de la. O que e do pet fica aqui: a posicao, o alvo pendente,
+    a percepcao da decisao, os fluxos `alvo` e `mundo-sujeira` e os registros do pet (consumos, decisoes, regioes, visitas, comidas
+    deixadas pelo dono)."""
+
+    def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, **kw) -> None:
+        super().__init__(*a, **kw)
+        self.cmf = cfg_mundo or CONFIG_MUNDO
+        if not self.cmf.ligada:
+            if efeito_frutas is not None:
+                raise ValueError("efeito_frutas so existe com o mundo ligado")
+            return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
+        if self.cf.ligada or self.cb.ligada:
+            raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
+        if self.ce.ligada or self.cl.ligada:
+            raise ValueError("o mundo minimo roda sem educacao e sem lesoes (a morte fica desligada, plano secao 2)")
+        efeito = {f: 0.0 for f in FRUTAS} if efeito_frutas is None else dict(efeito_frutas)
+        if set(efeito) != set(FRUTAS):
+            raise ValueError(f"efeito_frutas precisa de {FRUTAS}: {sorted(efeito)}")
+        self.efeito_frutas = efeito
+        cm, sub = self.cmf, self.cmf.sub
+        self._alcance = cm.velocidade * self.cfg.intervalo_decisao_ticks
+        self._raio_pegar = cm.raio_pegar_celulas * sub
+        self._raio_visao = cm.raio_visao_celulas * sub
+        self._raio_mancha = cm.raio_mancha_celulas * sub
+        semente = self.semente
+        self.mundo = Mundo(cm, semente)               # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+        self._rng_sujeira = random.Random(derivar_semente("mundo-sujeira", semente))
+        self._rng_alvo = random.Random(derivar_semente("alvo", semente))
+        self.pet = self.mundo.ninho
+        self._pendente: dict | None = None             # {"acao", "alvo"}: o alvo que ficou sem chegar
+        self._fome_antes = 0.0
+        self._percepcao: PercepcaoMundo | None = None
+        self._obs_decisao: Observacao | None = None
+        self._manchas_abertas: dict[str, dict] = {}
+        # os registros do pet (derivados; o replay reconstroi tudo)
+        self.consumos_mundo: list[dict] = []
+        self.deixadas: list[dict] = []
+        self.decisoes_mundo: list[dict] = []
+        self.regioes: list[dict] = []
+        self.visitas: list[dict] = []
+        self.politica = _PoliticaComMundo(self.politica, self)
+
+    # ------------------------------------------------------------ o que e do mundo (lido do Mundo)
+    @property
+    def comidas(self) -> dict[int, dict]:
+        return self.mundo.comidas
+
+    @property
+    def arvores(self) -> list[dict]:
+        return self.mundo.arvores
+
+    @property
+    def bola_mundo(self) -> dict:
+        return self.mundo.bola
+
+    @property
+    def comedouro(self) -> tuple[int, int]:
+        return self.mundo.comedouro
+
+    @property
+    def quedas(self) -> list[dict]:
+        return self.mundo.quedas
+
+    @property
+    def sumidas(self) -> list[dict]:
+        return self.mundo.sumidas
+
+    @property
+    def rolagens(self) -> list[dict]:
+        return self.mundo.rolagens
+
+    @property
+    def bolas_deixadas(self) -> list[dict]:
+        return self.mundo.bolas_deixadas
+
+    @property
+    def _rng_arvores(self) -> random.Random:
+        return self.mundo.rng_arvores
+
+    @property
+    def _rng_bola(self) -> random.Random:
+        return self.mundo.rng_bola
+
+    @property
+    def _prox_id(self) -> int:
+        return self.mundo.prox_id
+
+    @property
+    def _passo_mundo(self) -> int:
+        return self.mundo.passo_mundo
+
+    def _prazo_maduro(self, tipo: str) -> int:
+        return self.mundo.prazo_maduro(tipo)
+
+    def situacao(self, comida: dict, tick: int) -> str | None:
+        return self.mundo.situacao(comida, tick)
+
+    def bola_em(self, tick: int) -> tuple[int, int]:
+        return self.mundo.bola_em(tick)
+
+    def _nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
+        return self.mundo.nova_comida(tipo, x, y, tick, origem)
+
+    def _atualizar_mundo(self, tick: int) -> None:
+        self.mundo.atualizar(tick)
+
+    def _fontes_de_cheiro(self, tick: int) -> list[tuple[int, int, int]]:
+        return self.mundo.fontes_de_cheiro(tick)
+
+    # ------------------------------------------------------------ percepcao
+    def _perceber(self, tick: int) -> PercepcaoMundo:
+        """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
+        x, y = self.pet
         pend = self._pendente["alvo"].tipo if self._pendente is not None else None
-        return PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), cheiro, direcao, pend)
+        return self.mundo.perceber(x, y, tick, pend)
 
     def _observacao_depois_mundo(self) -> Observacao:
         """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
         return replace(Observacao.de_estado(self._estado), mundo=self._perceber(self._estado.tick))
 
     def _antes_da_decisao(self) -> PercepcaoMundo:
-        """Chamado pelo embrulho logo antes de `agir`: o mundo anda ate o tick e o pet percebe."""
+        """Chamado pelo embrulho logo antes de `agir`: o mundo anda ate o tick (uma vez por tick) e o pet percebe."""
         t = self._estado.tick
-        self._atualizar_mundo(t)
+        self.mundo.atualizar(t)
         self._percepcao = self._perceber(t)
         self._fome_antes = self._estado.fome
         return self._percepcao
@@ -404,10 +566,10 @@ class MotorMundo(MotorFrutas):
             return None
         velho: Alvo = pend["alvo"]
         if velho.tipo == "comida":
-            c = self.comidas.get(velho.id)
+            c = self.mundo.comidas.get(velho.id)
             return None if c is None else Alvo("continuar", c["x"], c["y"], velho.id, "comida")
         if velho.tipo == "bola":
-            bx, by = self.bola_em(self._estado.tick)
+            bx, by = self.mundo.bola_em(self._estado.tick)
             return Alvo("continuar", bx, by, ID_BOLA, "bola")
         return Alvo("continuar", velho.x, velho.y, None, velho.tipo)
 
@@ -425,7 +587,7 @@ class MotorMundo(MotorFrutas):
             faixa = cm.vagar_max_celulas - cm.vagar_min_celulas + 1
             vx, vy = deslocar(p.x, p.y, u % 16, (cm.vagar_min_celulas + (u // 16) % faixa) * cm.sub, cm)
             cands.append(Alvo("vagar", vx, vy))
-            cands.append(Alvo("casa", *self.comedouro))
+            cands.append(Alvo("casa", *self.mundo.comedouro))
         elif acao is AcaoPet.BRINCAR:
             cands += [Alvo("bola", p.x + dx, p.y + dy, i) for i, tipo, dx, dy, _ in p.vistos if tipo == "bola"]
         else:
@@ -464,8 +626,8 @@ class MotorMundo(MotorFrutas):
 
     # ------------------------------------------------------------ a consequencia
     def _comer_mundo(self, ident: int, como: str, tick: int) -> dict:
-        c = self.comidas.pop(ident)
-        sit = self.situacao(c, tick)
+        c = self.mundo.retirar_comida(ident)
+        sit = self.mundo.situacao(c, tick)
         e = self._estado
         fome, humor, sujeira = e.fome, e.humor, e.sujeira
         if sit == "madura" and c["tipo"] == "racao":
@@ -485,15 +647,7 @@ class MotorMundo(MotorFrutas):
         return reg
 
     def _rolar_bola(self, tick: int) -> None:
-        cm = self.cmf
-        bx, by = self.bola_em(tick)
-        direcao = self._rng_bola.randrange(16)
-        celulas = self._rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
-        if self.cmf.layout.regioes[regiao_de(bx, cm)][0] == "campo":
-            celulas *= cm.mult_bola_campo
-        x1, y1 = deslocar(bx, by, direcao, celulas * cm.sub, cm)
-        self.bola_mundo = {"x0": bx, "y0": by, "x1": x1, "y1": y1, "t0": tick, "d": distancia(x1 - bx, y1 - by)}
-        self.rolagens.append({"tick": tick, "de": (bx, by), "para": (x1, y1), "direcao": direcao, "celulas": celulas})
+        self.mundo.rolar_bola(tick)
 
     def _consequencia(self, acao: AcaoPet) -> dict | None:
         """Chamado pelo embrulho em `observar`, antes do cerebro: anda, come, brinca, desfaz o +0,05 do comer (MF-2) e registra."""
@@ -527,9 +681,7 @@ class MotorMundo(MotorFrutas):
             if chegou and acao is AcaoPet.COMER and alvo.objeto() == "comida":
                 comeu = self._comer_mundo(alvo.id, "comer", tick)
             elif chegou and acao is AcaoPet.EXPLORAR and self._estado.fome < self.cmf.fome_max_comer_achado:
-                perto = sorted((distancia(c["x"] - x1, c["y"] - y1), c["tipo"], c["id"]) for c in self.comidas.values()
-                               if self.situacao(c, tick) == "madura")
-                perto = [p for p in perto if p[0] <= self._raio_pegar]
+                perto = self.mundo.maduras_perto(x1, y1, tick, self._raio_pegar)
                 if perto:
                     comeu = self._comer_mundo(perto[0][2], "achou", tick)
             elif chegou and acao is AcaoPet.BRINCAR and alvo.objeto() == "bola":
@@ -559,7 +711,7 @@ class MotorMundo(MotorFrutas):
         regiao = regiao_de(x1, self.cmf)
         for v in self._manchas_abertas.values():               # as decisoes tomadas de dentro da mancha
             v["decisoes"] += 1
-        dentro = {a["id"] for a in self.arvores if distancia(a["x"] - x1, a["y"] - y1) <= self._raio_mancha}
+        dentro = {a["id"] for a in self.mundo.arvores if distancia(a["x"] - x1, a["y"] - y1) <= self._raio_mancha}
         for ident in [i for i in self._manchas_abertas if i not in dentro]:
             v = self._manchas_abertas.pop(ident)
             v["saida"] = tick
@@ -602,10 +754,8 @@ class MotorMundo(MotorFrutas):
     def _aplicar_deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
-        if tipo not in TIPOS_COMIDA_MUNDO or no_mapa(x, y, self.cmf) != (x, y):
-            raise ValueError(f"deixar_comida invalido: {tipo!r} ({x}, {y})")
         tick = self._estado.tick
-        c = self._nova_comida(tipo, x, y, tick, "dono")
+        c = self.mundo.deixar_comida(tipo, x, y, tick)
         self.deixadas.append({"tick": tick, "id": c["id"], "tipo": tipo, "x": x, "y": y, "pet": self.pet})
         # contato, como o alimentar de hoje: zera o tempo sem cuidado, soma um cuidado, vinculo e politica recebem `alimentar`
         self._contato(AcaoUsuario.ALIMENTAR, tick)
@@ -613,12 +763,8 @@ class MotorMundo(MotorFrutas):
     def _aplicar_deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
-        if no_mapa(x, y, self.cmf) != (x, y):
-            raise ValueError(f"deixar_bola fora do mapa: ({x}, {y})")
-        tick = self._estado.tick
+        self.mundo.deixar_bola(x, y, self._estado.tick)
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o por_bola de hoje)
-        self.bola_mundo = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
-        self.bolas_deixadas.append({"tick": tick, "x": x, "y": y})
 
     # ------------------------------------------------------------ leitura
     def estado(self) -> dict:
@@ -627,20 +773,21 @@ class MotorMundo(MotorFrutas):
             return d                             # desligado: o estado() do MotorFrutas, sem chave nova
         t = self._estado.tick
         d["mundo"] = {"pet": self.pet, "regiao": self.cmf.layout.regioes[regiao_de(self.pet[0], self.cmf)][0],
-                      "bola": self.bola_em(t),
-                      "comidas": sum(1 for c in self.comidas.values() if self.situacao(c, t) is not None)}
+                      "bola": self.mundo.bola_em(t),
+                      "comidas": sum(1 for c in self.mundo.comidas.values() if self.mundo.situacao(c, t) is not None)}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
-        """tudo o que o mundo guarda (o G1 compara isto bit a bit)"""
-        return {"pet": self.pet, "bola": dict(self.bola_mundo), "comidas": [dict(c) for c in self.comidas.values()],
-                "prox_id": self._prox_id, "passo_mundo": self._passo_mundo,
-                "arvores": [dict(a) for a in self.arvores],
+        """tudo o que o mundo e o pet guardam (o G1 compara isto bit a bit); as mesmas chaves de antes da separacao do Mundo"""
+        m = self.mundo
+        return {"pet": self.pet, "bola": dict(m.bola), "comidas": [dict(c) for c in m.comidas.values()],
+                "prox_id": m.prox_id, "passo_mundo": m.passo_mundo,
+                "arvores": [dict(a) for a in m.arvores],
                 "pendente": None if self._pendente is None else {"acao": self._pendente["acao"].value,
                                                                  "alvo": self._pendente["alvo"].para_dict()},
-                "rngs": [r.getstate() for r in (self._rng_arvores, self._rng_bola, self._rng_sujeira, self._rng_alvo)],
-                "quedas": self.quedas, "consumos": self.consumos_mundo, "sumidas": self.sumidas, "deixadas": self.deixadas,
-                "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens, "decisoes": self.decisoes_mundo,
+                "rngs": [r.getstate() for r in (m.rng_arvores, m.rng_bola, self._rng_sujeira, self._rng_alvo)],
+                "quedas": m.quedas, "consumos": self.consumos_mundo, "sumidas": m.sumidas, "deixadas": self.deixadas,
+                "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
                 "regioes": self.regioes, "visitas": self.visitas,
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()]}
 

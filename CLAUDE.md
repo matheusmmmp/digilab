@@ -3195,3 +3195,38 @@ em `docs/REGISTRO_DESVIOS.md`.
   - **Os ganchos:** o `consequencia_mundo` e depois o `consequencia_corpo`.
   - **Os estímulos:** `estimulo_aliviar`, `estimulo_necessidade` e `passo(..., necessidades=n)`.
   - **O motivo do `aliviar`** ainda falha alto no `PoliticaComMotivo`: não há texto na expressão.
+
+## V2, DOIS-PETS, etapas 0 e 1 — o gabarito de hoje e o `Mundo` como componente (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`) — GATES PASSAM
+
+As duas primeiras etapas do motor da frente dos dois pets (desenho `docs/futuro/dois_pets.md`, seções 2 e 10). Infraestrutura, sem run; só
+as sementes dos testes. Mudaram `digilab/mundo.py` e os testes novos. `engine.py`, `motor_corpo.py`, os cérebros, a bancada e a web não.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Etapa 0, num commit próprio, antes de mudar o código:** `tests/gabarito_dois_pets.py` → `tests/gabaritos/dois_pets_vidas_de_hoje.json`,
+  276 vidas do mundo físico de hoje, com e sem o corpo, nos dois layouts:
+  - **pela bancada**, nos mundos `fisico` e `fisico_afastado`: o P0 com lobos e com o instinto do mundo, o P0z, e P0, P1 e P3 nos
+    regimes "hoje" e "química", 2 donos, os 3 lugares e 2 sementes; mais o P1 e o P3 na montagem completa;
+  - **direto pelo `simular_vida_mundo`**, o que a bancada não monta no mundo físico: o corpo inteiro da etapa 6 (com a curiosidade e a
+    novidade) e a bola deixada perto do pet, com o instinto do mundo e com os lobos aprendendo;
+  - a impressão inclui o `resumo_mundo_fisico` inteiro (as rngs do mundo) e o registro da novidade (`_vistos_em`).
+- **Etapa 1, a classe `Mundo`** (`digilab/mundo.py`): guarda o que é do mundo e não sabe de pet:
+  - as árvores, as comidas, a bola e os fluxos `mundo-arvores` e `mundo-bola`;
+  - os registros do mundo: as quedas, as comidas que sumiram, as bolas deixadas e as rolagens;
+  - a percepção (`perceber(x, y, tick, pendente)`), as comidas maduras perto, `retirar_comida`, `rolar_bola`, `deixar_comida`,
+    `deixar_bola` e o `resumo`.
+- **O `MotorMundo` ligado é dono do próprio `Mundo`** (`self.mundo`, com a semente do pet). Guarda o que é do pet: a posição, o alvo
+  pendente, a percepção da decisão, os fluxos `alvo` e `mundo-sujeira`, os consumos, as decisões, as regiões, as visitas e as comidas
+  deixadas pelo dono. Os atributos e métodos de antes (`comidas`, `arvores`, `bola_mundo`, `quedas`, `situacao`, `bola_em`,
+  `_nova_comida`...) leem do `Mundo`, e o `resumo_mundo_fisico` tem as mesmas chaves.
+- **A atualização é idempotente por tick** (`Mundo.atualizar`): a segunda chamada no mesmo tick não faz nada, e um tick para trás falha
+  alto. O resultado só lê o tick e o fluxo `mundo-arvores`.
+- **Gates** (`tests/test_mundo_componente.py`, 18 testes, ~45 s):
+  - **G2:** as 276 vidas da etapa 0, byte a byte; os gabaritos `mundo_vidas_de_hoje.json` (96) e `corpo_mundo_vidas_de_hoje.json` (144)
+    passam pelos testes de sempre, na suíte;
+  - **G-ENGINE:** o sha256 de sempre;
+  - **o componente:** o motor é dono do próprio `Mundo` (os mesmos objetos, os fluxos pela semente do pet), e o `Mundo` não guarda
+    nada do pet;
+  - **a idempotência:** duas chamadas no mesmo tick dão o mesmo resumo (as rngs incluídas), o tick para trás falha alto, e atualizar só
+    em alguns ticks dá as mesmas quedas e o mesmo chão que atualizar em todos;
+  - **G1 com o `Mundo`:** o replay refaz o resumo do mundo, nos dois layouts, sem e com o corpo.
+- **Fora:** o `Grupo` (N motores sobre um `Mundo`, a vez sorteada, o registro do grupo) é a etapa 2, no PR seguinte. O `mundo.ts` não mudou
+  (etapa 9).

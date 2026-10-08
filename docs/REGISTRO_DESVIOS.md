@@ -3963,3 +3963,23 @@ e na tarefa. Nenhuma run, nenhum código.
     sai byte a byte igual;
   - **o espelho `CCO` da web** (`web/app/motor/constantes.ts`) ganhou os campos do banheiro, com os mesmos valores: só o espelho, para o
     G-PAR "campo a campo". A química do banheiro em TS é a etapa 4 do banheiro (A).
+
+## 2026-10-08 — DOIS-PETS, etapas 0 e 1 (worker A): o gabarito de hoje e o `Mundo` como componente
+
+- **O branch é `v2-dois-pets-motor`**, não o `v2-dois-pets` da convenção da tarefa: esse nome já era o branch do desenho (o C, #244).
+- **O que é do mundo e o que é do pet.** O `mundo.ts` é um mundo de um pet só (guarda a posição, o alvo pendente e os registros do pet).
+  O `Mundo` do Python segue a divisão da seção 2 do desenho e da tabela dos fluxos:
+  - são do mundo as árvores, as comidas, a bola, os fluxos `mundo-arvores` e `mundo-bola` e os registros das quedas, das comidas que
+    sumiram, das bolas deixadas e das rolagens;
+  - são do pet a posição, o alvo pendente, os fluxos `alvo` e `mundo-sujeira`, os consumos, as decisões, as regiões, as visitas e as
+    comidas deixadas pelo dono (o registro guarda a posição do pet).
+  - Assim os dois motores da etapa 2 podem apontar para o mesmo `Mundo`. O `mundo.ts` fica como está até a etapa 9.
+- **A idempotência é explícita.** Antes, a segunda chamada no mesmo tick já não sorteava nada (o laço dos passos não andava) e não achava
+  o que remover. Agora o `Mundo` guarda o último tick atualizado: a segunda chamada volta sem fazer nada, e o tick para trás falha alto.
+  Com um pet, a guarda nunca dispara (as decisões andam de 15 em 15), e as vidas saem iguais.
+- **O `tick_atualizado` não entra no `resumo_mundo_fisico`**, que fica com as chaves de antes (o G2 compara o sha256 dele). Ele está no
+  `Mundo.resumo`, que o G1 novo confere.
+- **Os nomes de antes ficam.** Os atributos e métodos do `MotorMundo` que os testes, a bancada e o `analisar_empates_cheiro.py` usam
+  (`comidas`, `arvores`, `bola_mundo`, `quedas`, `sumidas`, `rolagens`, `bolas_deixadas`, `comedouro`, `_rng_arvores`, `_rng_bola`,
+  `_prox_id`, `_passo_mundo`, `situacao`, `bola_em`, `_prazo_maduro`, `_nova_comida`, `_atualizar_mundo`, `_fontes_de_cheiro`) viraram
+  propriedades e métodos que leem do `Mundo`. Ninguém fora do `mundo.py` atribui a eles (conferido).
