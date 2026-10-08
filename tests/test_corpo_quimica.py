@@ -338,3 +338,8 @@ def test_gabarito_da_paridade_reproduz():
     assert gab.ARQUIVO.read_text(encoding="utf-8") == gab.texto()
     g = json.loads(gab.texto())
     assert g["escala"] == C and len(g["vidas"]) == 3 and all(len(v["ticks"]) == DIAS * 1440 for v in g["vidas"])
+    # versao 5 (etapa 7, o corpo em TS): a config, o grafo em toda combinacao de sub-chaves, o corpo que nasce de um Estado e o mundo
+    # fisico no corpo da etapa 6; a web le este mesmo arquivo (web/app/test/corpo.test.ts)
+    assert g["versao"] == 5 and g["config"]["escala"] == C
+    assert len(g["grafo"]) == 2 * len(gab.CHAVES_V5) and len(g["de_estado"]) == 2 * len(gab.CHAVES_V5) * len(gab.ESTADOS_V5)
+    assert {c["op"][0] for c in g["etapa6_mundo"]["casos"]} == {"pet_mundo", "andar", "consumo"}

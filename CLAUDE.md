@@ -3065,3 +3065,37 @@ paralelo. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/
   cima do meu, e o tédio caía em dobro (o `ZeroDivisionError`). A contagem saiu igual à dele: 4/7 → 23/38.
 - **Para o D:** na bancada, o `cfg_corpo` com as sub-chaves, o tapa passando pela `PoliticaDoBraco`, o `SemGesto` nos canais dela e o
   filtro `sem_gestos` do acoplado ficam com ele.
+
+## V2, CORPO-WEB — o corpo em TypeScript, etapa 7 (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seção 14) — G-PAR PASSA
+
+Etapa 7 da seção 14: só o motor e a paridade, sem tela e sem versão de pet nova (como no mundo). Mudaram `web/app/motor/corpo.ts` (novo), o
+`motor/index.ts` (exporta o corpo), `motor/constantes.ts` (a `ConfigCorpo` no fim), o exportador e o gabarito do corpo (versão 5) e o teste
+dele em `tests/test_corpo_quimica.py`. `digilab/`, o app, os pets e os gabaritos da web não mudaram. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **`motor/corpo.ts`** é o porte de `digilab/corpo.py` e de `digilab/corpo_grafo.py`, com os nomes do Python nos registros:
+  - **a química e as taxas:** `configCorpo` (a `ConfigCorpo` com a checagem do `__post_init__`), `taxasDe` (a `Config` de hoje pelo espelho
+    `C`), `quimicosDe`, `naGrade`, `passoMeiaVida` e `kMeiaVida`; o `divArred` é o de `motor/mundo.ts`;
+  - **o grafo (seção 18):** `grafoDoCorpo` monta a tabela única e `checarGrafo` faz as quatro checagens (fechado, sumidouro,
+    automantido, laço de ganho ≥ 1, o produto em `BigInt`) e o relato, falhando alto com `GrafoInvalido`;
+  - **a classe `Corpo`:** o tick em fases pelos emissores da tabela, a digestão com o descarte, a Vida e o estágio, os drives novos (o
+    tédio pela janela, a curiosidade só com `comMundo`, a solidão, o estresse), os gestos (o tapa, a dor, o susto, o medo da mão no
+    carinho), os estímulos de hoje e os do mundo físico (a MF-2, o andar, as comidas do mapa) e as leituras (`receptores`, `drives`,
+    `estagio`, `paraDict`).
+  - O corpo não tem rng: a sujeira e o sono vêm do estado no começo do tick, como no Python.
+- **O gabarito, versão 5** (`python experiments/exportar_gabarito_corpo.py`), com quatro seções novas; as da versão 4 saem idênticas
+  (conferido):
+  - `config`: a `ConfigCorpo` padrão, campo a campo;
+  - `grafo`: a tabela e o relato do `checar` em 6 combinações de sub-chaves (com e sem o medo da mão), com e sem o mundo;
+  - `de_estado`: o corpo que nasce de 3 Estados em cada combinação;
+  - `etapa6_mundo`: os estímulos do mundo físico no corpo da etapa 6.
+- **G-PAR** (`web/app/test/corpo.test.ts`, 27 testes, ~1 s). A web lê o próprio `tests/gabaritos/corpo_quimica_python.json`, sem cópia:
+  - a config, as taxas, os químicos, os ticks de estágio e os limiares saem iguais;
+  - o `div_arred` e a meia-vida;
+  - o grafo: a tabela e o relato iguais nas 12 combinações, e as tabelas do `tests/test_corpo_grafo.py` falham alto pela mesma checagem;
+  - o corpo que nasce de um Estado (q, receptores, drives, `para_dict`);
+  - as grades de casos de cada etapa: a química, a digestão, a digestão lenta, a Vida, o mundo físico sem e com a digestão, a etapa 6 e o
+    mundo na etapa 6;
+  - as 9 vidas em malha aberta, com o sha256 de q depois de cada operação, os pontos, o digerido e os estágios;
+  - a sequência de 3000 operações da etapa 6, com o sha256 de q e da janela.
+  - Quatro mutações no `corpo.ts` (a meia-vida sem o mínimo de 1, o carinho sem o medo, a janela do tédio, a sujeira no tick) fazem o
+    teste falhar.

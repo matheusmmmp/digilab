@@ -29,3 +29,4 @@ export * from "./donos.ts";
 export * from "./historia.ts";
 export * from "./mentira.ts";
 export * from "./mundo.ts";
+export * from "./corpo.ts";

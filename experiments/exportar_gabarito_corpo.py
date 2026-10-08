@@ -4,7 +4,7 @@ So inteiros: a paridade e exata. O TS (etapa 7, do A) refaz cada caso e cada vid
 
     python experiments/exportar_gabarito_corpo.py      # grava tests/gabaritos/corpo_quimica_python.json
 
-O conteudo (versao 4):
+O conteudo (versao 5):
 - `taxas`: os numeros de hoje na escala C, ja inteiros (secao 4);
 - `casos`: a quimica base, numa grade de estados com cada operacao (o tick, as acoes do dono e do pet, a bola, a fruta), o estado depois,
   o receptor de privacao e os receptores na escala S;
@@ -23,6 +23,10 @@ O conteudo (versao 4):
   tick acordado e dormindo, o dono brincar, o carinho, o tapa, as quatro atividades e a novidade), o estado e a janela depois e os
   receptores; e uma sequencia longa de operacoes sorteadas num corpo so, com o sha256 de q e da janela depois de cada uma. O tapa vai
   como a acao do dono "tapa". As secoes da versao 3 nao mudaram.
+- versao 5 (etapa 7, o corpo em TS): `config` (a ConfigCorpo padrao, campo a campo, para o espelho da web), `grafo` (a tabela unica e o
+  relato de `corpo_grafo.checar` em cada combinacao de sub-chaves, com e sem o mundo fisico, e sem o medo da mao), `de_estado` (o corpo
+  que nasce de tres Estados em cada combinacao: q, receptores, drives e para_dict) e `etapa6_mundo` (os estimulos do mundo fisico no
+  corpo da etapa 6, na grade de estados da etapa 6, com a digestao e os drives lidos). As secoes da versao 4 nao mudaram.
 """
 from __future__ import annotations
 
@@ -30,6 +34,7 @@ import hashlib
 import json
 import random
 import sys
+from dataclasses import asdict
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -37,8 +42,9 @@ sys.path.insert(0, str(RAIZ))
 
 from digilab.config import (CONFIG_CORPO_DRIVES, CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA,  # noqa: E402
                             CONFIG_PADRAO, ConfigCorpo)
-from digilab.corpo import (ATIVIDADES, Corpo, div_arred, limiares_estagio, passo_meia_vida, quimicos_de, taxas_de,  # noqa: E402
-                           ticks_de_estagio)
+from digilab.corpo import (ATIVIDADES, Corpo, div_arred, grafo_do_corpo, limiares_estagio, passo_meia_vida, quimicos_de,  # noqa: E402
+                           taxas_de, ticks_de_estagio)
+from digilab.corpo_grafo import Grafo, checar  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.policy import PoliticaInstinto, efeito_da_acao_do_pet  # noqa: E402
@@ -299,13 +305,71 @@ def etapa6() -> dict:
             "sequencia": {"ops": ops, "sha256": h.hexdigest(), "q_final": _q(c), "janela_final": list(c.janela_tedio)}}
 
 
+# ------------------------------------------------------------------ versao 5 (etapa 7, o corpo em TS)
+
+CHAVES_V5 = {
+    "quimica": ConfigCorpo(ligada=True),
+    "digestao": ConfigCorpo(ligada=True, digestao=True),
+    "vida": ConfigCorpo(ligada=True, digestao=True, vida=True),
+    "novos": ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True),
+    "gestos": CC_E6,
+    "gestos_sem_medo": ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True, gestos=True, medo_da_mao=0),
+}
+SUB_CHAVES = ("ligada", "digestao", "vida", "drives_novos", "gestos", "medo_da_mao")
+ESTADOS_V5 = (Estado(), Estado(tick=5000, fome=0.5, higiene=0.25, energia=0.3, humor=0.9, saude=0.6),
+              Estado(tick=50000, fome=0.0, higiene=1.0, energia=0.0, humor=0.0, saude=0.0))
+
+
+def _tabela(g: Grafo) -> dict:
+    return {"quimicos": [[q.nome, q.teto, q.descarte, q.receptor, q.leitura, q.meia_vida, q.k_meia_vida] for q in g.quimicos],
+            "reacoes": [[r.nome, list(r.consome), list(r.produz), r.taxa] for r in g.reacoes],
+            "emissores": [{"nome": e.nome, "gatilho": e.gatilho, "fase": e.fase, "efeitos": [list(x) for x in e.efeitos],
+                           "le": [[le.quimico, le.num, le.den, le.sinal] for le in e.le], "limiar": e.limiar, "divisor": e.divisor,
+                           "variavel": e.variavel} for e in g.emissores]}
+
+
+def grafos() -> list[dict]:
+    out = []
+    for nome, cc in CHAVES_V5.items():
+        for com_mundo in (False, True):
+            g = grafo_do_corpo(CONFIG_PADRAO, cc, taxas_de(CONFIG_PADRAO, cc), com_mundo)
+            out.append({"chaves": nome, "com_mundo": com_mundo, "config": {k: getattr(cc, k) for k in SUB_CHAVES},
+                        "tabela": _tabela(g), "relato": checar(g)})
+    return out
+
+
+def de_estado() -> list[dict]:
+    out = []
+    for nome, cc in CHAVES_V5.items():
+        for com_mundo in (False, True):
+            for e in ESTADOS_V5:
+                c = Corpo.de_estado(e, CONFIG_PADRAO, cc, com_mundo=com_mundo)
+                out.append({"chaves": nome, "com_mundo": com_mundo, "config": {k: getattr(cc, k) for k in SUB_CHAVES},
+                            "estado": {k: getattr(e, k) for k in ("tick", "fome", "higiene", "energia", "humor", "saude")},
+                            "quimicos": list(c.quimicos), "q": _q(c), "receptores": c.receptores(), "drives": c.drives(),
+                            "para_dict": c.para_dict()})
+    return out
+
+
+def etapa6_mundo() -> dict:
+    rng = random.Random(SEMENTE_CASOS + 7)
+    casos_m = []
+    for q, janela in _estados_e6(rng):
+        for op in _ops_do_mundo():
+            c = _corpo_e6(q, janela)
+            _aplicar_e6(c, op)
+            casos_m.append({"q": q, "janela": janela, "op": op, **_caso_e6(c), "privacao": c.em_privacao(), "drives": c.drives(),
+                            "digerido": c.digerido_total, "digerido_no_tick": c.digerido_no_tick, "descartado": c.descartado_total})
+    return {"quimicos": list(quimicos_de(CC_E6, True)), "casos": casos_m}
+
+
 def gabarito() -> dict:
     t = taxas_de(CONFIG_PADRAO, CC)
     taxas = {k: v for k, v in vars(t).items() if k not in ("dono", "pet")}
     taxas["dono"] = {a.value: d for a, d in t.dono.items()}
     taxas["pet"] = {a.value: d for a, d in t.pet.items()}
     return {
-        "versao": 4,
+        "versao": 5,
         "quimicos": list(quimicos_de(CC)),
         "escala": CC.escala,
         "escala_receptor": CC.escala_receptor,
@@ -329,6 +393,10 @@ def gabarito() -> dict:
                   "casos": casos(CC, _ops_do_mundo()),
                   "digestao": {"quimicos": list(quimicos_de(CC_DIGESTAO)), "casos": casos(CC_DIGESTAO, _ops_do_mundo())}},
         "etapa6": etapa6(),
+        "config": asdict(ConfigCorpo()),
+        "grafo": grafos(),
+        "de_estado": de_estado(),
+        "etapa6_mundo": etapa6_mundo(),
     }
 
 
