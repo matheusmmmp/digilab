@@ -203,11 +203,12 @@ def test_os_bracos_do_plano_estao_declarados_como_o_plano_pede():
 
 
 def test_a_trava_e_so_a_tabela(monkeypatch):
-    """Sem as entradas, os bracos se resolvem; a sub-chave da etapa 6 ainda falha alto na ConfigCorpo (a etapa e do A e do B)."""
+    """Sem as entradas, os bracos se resolvem. Desde a etapa 6 na main (#245, #247), a ConfigCorpo aceita as sub-chaves: o regime corpo
+    monta drives_novos e gestos (quem tira as entradas do NOS_PENDENTES e o D)."""
     monkeypatch.setattr(bv, "NOS_PENDENTES", {})
     assert bv.braco_de("P1-c") is bv.BRACOS["P1-c"] and bv.braco_de("P1-q") is bv.BRACOS["P1-q"]
-    with pytest.raises(NotImplementedError):
-        _bancada().cfg_corpo_de(bv.EspecVida("atencioso", "P1-c", 101, None, "bola"))
+    cc = _bancada().cfg_corpo_de(bv.EspecVida("atencioso", "P1-c", 101, None, "bola"))
+    assert cc.drives_novos and cc.gestos
 
 
 def test_o_filtro_sem_gestos_falha_alto_com_o_no():
