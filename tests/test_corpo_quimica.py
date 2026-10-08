@@ -52,9 +52,10 @@ def test_config_corpo_desligada_por_padrao_e_registrada():
 
 @pytest.mark.parametrize("chaves", [{"digestao": True, "vida": True, "drives_novos": True},
                                      {"digestao": True, "vida": True, "drives_novos": True, "gestos": True}])
-def test_subchaves_das_proximas_etapas_falham_alto(chaves):
-    with pytest.raises(NotImplementedError):
-        ConfigCorpo(ligada=True, **chaves)
+def test_subchaves_da_etapa_6_existem(chaves):
+    """desde a etapa 6 (CORPO-DRIVES) os drives novos e os gestos existem, cada um exigindo o anterior (antes falhavam alto)"""
+    cc = ConfigCorpo(ligada=True, **chaves)
+    assert cc.drives_novos and cc.gestos == chaves.get("gestos", False)
 
 
 @pytest.mark.parametrize("chaves", [{"digestao": True}, {"ligada": True, "vida": True}, {"ligada": True, "digestao": True, "gestos": True}])
@@ -313,15 +314,22 @@ def test_g_hoje_a_tem_viradas_so_onde_ha_privacao():
 
 # ------------------------------------------------------------------ sem motor, sem rng
 
-def test_corpo_nao_importa_motor_nem_rng():
-    arvore = ast.parse((RAIZ / "digilab" / "corpo.py").read_text(encoding="utf-8"))
+def _importados(arquivo: str) -> set:
+    arvore = ast.parse((RAIZ / "digilab" / arquivo).read_text(encoding="utf-8"))
     importados = set()
     for no in ast.walk(arvore):
         if isinstance(no, ast.Import):
             importados |= {a.name for a in no.names}
         elif isinstance(no, ast.ImportFrom):
             importados.add(("." * no.level) + (no.module or ""))
-    assert importados <= {"__future__", "dataclasses", ".config", ".events", ".state"}, importados
+    return importados
+
+
+def test_corpo_nao_importa_motor_nem_rng():
+    # a etapa 6 trouxe o grafo da secao 18 num modulo ao lado (so dados e checagens, so biblioteca padrao)
+    importados = _importados("corpo.py")
+    assert importados <= {"__future__", "dataclasses", ".config", ".corpo_grafo", ".events", ".state"}, importados
+    assert _importados("corpo_grafo.py") <= {"__future__", "dataclasses"}
 
 
 # ------------------------------------------------------------------ o gabarito da paridade

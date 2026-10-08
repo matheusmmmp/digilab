@@ -355,7 +355,7 @@ class PoliticaComMotivo:
         if hasattr(interna, "consequencia_corpo"):
             self.consequencia_corpo = interna.consequencia_corpo
         if hasattr(interna, "mudanca_no_corpo"):
-            self.mudanca_no_corpo = interna.mudanca_no_corpo
+            self.mudanca_no_corpo = self._mudanca_no_corpo
         if getattr(interna, "sem_explorar", False):
             # o P0z (plano do mundo, secao 3) e controle da premissa, nao um pet: o motivo do tempo livre usa os pesos literais
             raise ValueError("PoliticaComMotivo nao cobre o instinto do mundo em sem_explorar (o P0z nao e um pet do jogo)")
@@ -416,6 +416,13 @@ class PoliticaComMotivo:
         self.motivos[-1] = m
         self.diagnosticos[-1] = diag
         return escolhida
+
+    def _mudanca_no_corpo(self, obs_antes: Observacao, obs_depois: Observacao) -> None:
+        """O carinho com `gestos` (secao 8) nao passa por `receber_acao_dono`, mas e uma acao do dono no log: o relogio do cuidado e o
+        indice dos eventos do dono andam aqui, e o gancho segue para a politica."""
+        self._tick_ultimo_cuidado = self._tick_ultimo_cuidado + obs_antes.ticks_desde_cuidado
+        self._n_dono += 1
+        self.interna.mudanca_no_corpo(obs_antes, obs_depois)
 
     def receber_acao_dono(self, acao: AcaoUsuario, tick: int) -> None:
         self._tick_ultimo_cuidado = tick

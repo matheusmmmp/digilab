@@ -2921,3 +2921,45 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **as contas exatas:** a conta da seção 9 (+1440 contra −34), as entradas novas pela regra da L1 e os canais;
   - **as entradas novas no prior** não mudam a decisão (3000 observações);
   - o G1, o embrulho e as falhas altas do gancho.
+
+## V2, CORPO-DRIVES — o grafo do corpo e a etapa 6 (química e cérebro) (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seções 7, 8, 17 e 18) — GATES PASSAM
+
+Infraestrutura, sem run; só as sementes dos testes. Mudaram:
+- `digilab/corpo.py`;
+- `digilab/corpo_grafo.py` (novo);
+- a `ConfigCorpo` e a `ConfigLobos.recompensa_tapa`;
+- `digilab/policies/lobos.py` e `digilab/motivo.py`;
+- o exportador e o gabarito da paridade do corpo (versão 4).
+
+`engine.py`, `motor_corpo.py`, `mundo.py`, a bancada e a web não mudaram. O motor da etapa 6 é do A. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **A combinação #238 + #239:** o cérebro com `cfg_corpo` no `MotorCorpo` com o mundo físico falhava alto, porque o motor chama os dois
+  ganchos na mesma decisão. Agora o `consequencia_mundo` credita, e o `consequencia_corpo` fecha a decisão. Entrou o G1.
+- **O grafo (seção 18):** `corpo.grafo_do_corpo` monta a tabela única (químicos, reações, emissores, receptores, meias-vidas, tetos), e o
+  `Corpo` a usa (tick em fases, receptores, meias-vidas) e a confere na carga. As checagens de `corpo_grafo.checar` falham alto:
+  - fechado;
+  - sumidouro;
+  - automantido;
+  - laço de ganho ≥ 1.
+  - O relato traz os pares com meias-vidas na mesma ordem (hoje, dor e susto). As vidas de hoje não mudam (G2).
+- **Os drives novos** (`drives_novos`):
+  - o tédio pela variedade (DS-4, `atividade`);
+  - a curiosidade (só com `com_mundo`, `estimulo_novidade`);
+  - a solidão;
+  - o estresse (o limiar 0,75, o divisor 256, a meia-vida 1440).
+- **Os gestos** (`gestos`):
+  - o tapa (dor, susto, estresse);
+  - as meias-vidas da dor (60) e do susto (30);
+  - o medo da mão no carinho (CD-5).
+- **O cérebro A:**
+  - o tapa credita `recompensa_tapa` à última decisão, em quem aprende;
+  - o `mudanca_no_corpo` credita o carinho pelo corpo, acerta o relógio do cuidado e paga os chamados;
+  - o embrulho anda o relógio.
+- **Gates:**
+  - `tests/test_corpo_grafo.py`: as checagens passam em toda combinação de sub-chaves e falham alto nas tabelas feitas para falhar, e o
+    `Corpo` usa a tabela;
+  - `tests/test_corpo_drives.py`: o G-MEC do corpo;
+  - `tests/test_corpo_risco.py`: o G-RISCO e o G-MEC do cérebro, o tapa e o carinho na última decisão e o G1 com os drives novos;
+  - `tests/test_corpo_cerebros.py`: o G1 do cérebro com o corpo no mundo físico.
+- **Achado:** com os números PROPOSTOS o tédio do P1 no mundo da bola não passa de ~0,3. A vida curta do G-RISCO roda no ponto (2, ½) da
+  grade do plano, e a direção vale por pouco (0,57 → 0,61).

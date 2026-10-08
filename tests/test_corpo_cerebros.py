@@ -36,7 +36,7 @@ from digilab.events import FRUTAS, AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.frutas import MotorFrutas, OfertasFrutas, PoliticaInstintoFrutas, simular_vida_frutas  # noqa: E402
 from digilab.motivo import PoliticaComMotivo  # noqa: E402
 from digilab.motor_corpo import PercepcaoCorpo, com_corpo  # noqa: E402
-from digilab.mundo import DonoComLugar, fabricas_mundo, simular_vida_mundo  # noqa: E402
+from digilab.mundo import DonoComLugar, MotorMundo, fabricas_mundo, reproduzir_mundo, simular_vida_mundo  # noqa: E402
 from digilab.policies import lobos as lb  # noqa: E402
 from digilab.policies.lobos import PoliticaLobos, _RngSonda  # noqa: E402
 from digilab.policy import Observacao, PoliticaInstinto, Transicao  # noqa: E402
@@ -628,8 +628,9 @@ class Gravador:
 @pytest.mark.parametrize("ccons", [CC, CC_JANELA], ids=["escalar", "janela"])
 def test_mundo_fisico_com_o_corpo_credita_no_gancho_do_mundo(ccons):
     """as chamadas de uma vida do P1 no mundo fisico, rejogadas num cerebro com a chave do corpo (a percepcao do corpo montada do
-    Estado): as mesmas decisoes e os mesmos pesos; explorar, comer e brincar creditados no consequencia_mundo, o resto no
-    consequencia_corpo, uma chamada por decisao. O motor do corpo com o mundo e do A (em paralelo)"""
+    Estado), no arranjo do MotorCorpo com o mundo (#238): o consequencia_mundo antes, nas decisoes de explorar, comer e brincar, e o
+    consequencia_corpo sempre, uma vez por decisao. As mesmas decisoes e os mesmos pesos; explorar, comer e brincar creditados no
+    consequencia_mundo, o resto no consequencia_corpo"""
     gravadores = []
 
     def fab(cfg=None):
@@ -664,18 +665,83 @@ def test_mundo_fisico_com_o_corpo_credita_no_gancho_do_mundo(ccons):
         else:
             _, acao, oc, depois = ch
             novo.consequencia_mundo(acao, oc, corpo_da_obs(depois))
+            novo.consequencia_corpo(acao, {"acao": acao.value, "estimulos": [("pet", acao.value)]}, corpo_da_obs(depois))
             ganchos["mundo"] += 1
+            ganchos["corpo"] += 1
             frutas += acao is AcaoPet.COMER and oc["comeu"] is not None and oc["comeu"]["tipo"] in FRUTAS
     ei_hoje, ei = g.c.estado_interno(), novo.estado_interno()
     assert frutas > 0 and ganchos["mundo"] > 0 and ganchos["corpo"] > 0
-    assert ganchos["mundo"] + ganchos["corpo"] == len(ei["motivos"])
+    assert ganchos["corpo"] == len(ei["motivos"]) > ganchos["mundo"]
     assert ei["pesos"] == ei_hoje["pesos"] and g.c.pesos_mudaram()
     assert ei["aprendizado"]["recompensas"] == ei_hoje["aprendizado"]["recompensas"]
     assert all("sinal_corpo" in m for m in ei["motivos"])
-    # no mundo, explorar, comer e brincar nao passam pelo consequencia_corpo
+    # no mundo, explorar, comer e brincar sem o consequencia_mundo antes do consequencia_corpo falham alto
     lob = PoliticaLobos(CFG, CL_T3, cfg_mundo=CM, cfg_corpo=SO_QUIMICA)
     with pytest.raises(RuntimeError, match="consequencia_mundo"):
         lob.consequencia_corpo(AcaoPet.COMER, {"acao": "comer", "estimulos": []}, corpo_da_obs(obs_de()))
+
+
+# ================================================================== o cerebro A com o corpo no MotorCorpo com o mundo fisico (#238 + #239)
+MotorMundoCorpo = com_corpo(MotorMundo)
+EFEITO_FRUTAS = {"a": -0.1, "b": 0.0, "c": 0.1}
+
+
+def _fabrica_mundo_corpo(cc_motor: ConfigCorpo, efeito=EFEITO_FRUTAS):
+    return lambda p, cfg, s: MotorMundoCorpo(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc_motor, efeito_frutas=efeito)
+
+
+def _fp_mundo(rotulo: str, ccons: ConfigConsequencia, cc_corpo: ConfigCorpo | None, pols: list | None = None):
+    def fp(cfg=None):
+        c = PoliticaLobos(cfg or CFG, CL_T3, cfg_mundo=CM, cfg_corpo=cc_corpo)
+        if pols is not None:
+            pols.append(c)
+        return bv.PoliticaDoBraco(c, bv.braco_de(rotulo), ccons)
+    return fp
+
+
+def _vida_mundo_corpo(fp, dono: str, lugar: str, semente: int, cc_motor: ConfigCorpo, dias: int = 3, efeito=EFEITO_FRUTAS):
+    fm = _fabrica_mundo_corpo(cc_motor, efeito)
+    v = simular_vida_mundo(dono, DonoComLugar(criar_dono(dono), lugar, semente, dono, CM), fp(CFG), semente, dias, 16 * dias, fm,
+                           rotulo_dono=dono)
+    return v.motor, fm
+
+
+def _resumo_mundo(m) -> str:
+    return json.dumps({"estado": m.estado(), "q": m.corpo.q, "bruto": repr(m._estado), "mundo": m.resumo_mundo_fisico(),
+                       "politica": m.politica.estado_interno(), "rng": [m._rng_ambiente.getstate(), m._rng_politica.getstate()],
+                       "acoes": m.acoes_recentes(10**9), "log": m.log.para_jsonl()}, sort_keys=True, default=repr)
+
+
+@pytest.mark.parametrize("cc", [SO_QUIMICA, COM_ORGAOS], ids=["quimica", "orgaos"])
+def test_g1_cerebro_com_o_corpo_no_motor_corpo_com_o_mundo(cc):
+    """o G1 que faltava (#238 e #239 entraram juntos): o cerebro A com `cfg_corpo` dentro do MotorCorpo com o mundo fisico ligado, P1
+    (escalar e canais) e P3, rejogado do log bit a bit, estado interno e registro do mundo incluidos. Com os canais, as frutas iguais (o
+    mundo `fisico` da bancada, PMF-7): uma fruta que mexe no humor nao tem rota de canal no mundo e falha alto, como sem o corpo"""
+    for rotulo, ccons, efeito in (("P1", CC, EFEITO_FRUTAS), ("P1", CC_CANAIS, None), ("P3", CC, EFEITO_FRUTAS)):
+        for dono, lugar in (("atencioso", "perto"), ("relapso", "longe"), ("aleatorio", "comedouro")):
+            fp = _fp_mundo(rotulo, ccons, cc)
+            m, fm = _vida_mundo_corpo(fp, dono, lugar, 202, cc, efeito=efeito)
+            assert m.consequencias == len(m.acoes_recentes(10**9)) > 0
+            r = reproduzir_mundo(m.log, fp, CFG, 202, fabrica_motor=fm)
+            assert _resumo_mundo(m) == _resumo_mundo(r), (rotulo, ccons.canais_ligados, dono, lugar)
+
+
+@pytest.mark.parametrize("ccons", [CC, CC_JANELA], ids=["escalar", "janela"])
+def test_p1_com_o_corpo_e_o_p1_de_hoje_no_motor_corpo_com_o_mundo(ccons):
+    """no MotorCorpo com o mundo fisico, sem drives novos e com w_d = 1: o P1 com a chave do corpo (creditado no consequencia_mundo e no
+    consequencia_corpo) vive a mesma vida do P1 de hoje (creditado no consequencia_mundo e na transicao); o estado interno so ganha a
+    conta do sinal no motivo e o bloco `corpo`"""
+    for dono, lugar in (("atencioso", "perto"), ("relapso", "longe")):
+        p_hoje, p_corpo = [], []
+        m_hoje, _ = _vida_mundo_corpo(_fp_mundo("P1", ccons, None, p_hoje), dono, lugar, 101, COM_ORGAOS, dias=4)
+        m_corpo, _ = _vida_mundo_corpo(_fp_mundo("P1", ccons, COM_ORGAOS, p_corpo), dono, lugar, 101, COM_ORGAOS, dias=4)
+        ei_hoje, ei_corpo = p_hoje[-1].estado_interno(), p_corpo[-1].estado_interno()
+        assert p_corpo[-1].pesos_mudaram()
+        assert _resumo(m_hoje, ei_hoje) == _resumo(m_corpo, _sem_chaves_do_corpo(ei_corpo)), (dono, lugar)
+        assert m_hoje.resumo_mundo_fisico() == m_corpo.resumo_mundo_fisico()
+        assert all("sinal_corpo" in m for m in ei_corpo["motivos"])
+        frutas = [c for c in m_corpo.consumos_mundo if c["como"] == "comer" and c["tipo"] in FRUTAS]
+        assert ei_corpo["aprendizado"]["recompensas"].get("consequencia_fruta", 0) == len(frutas)
 
 
 # ================================================================== o embrulho
@@ -721,8 +787,10 @@ def test_embrulho_repassa_os_ganchos_do_corpo_e_nao_muda_a_vida():
 
     p = ComCarinho(CFG)
     e = PoliticaComMotivo(p)
-    e.mudanca_no_corpo("a", "b")
+    antes, depois = obs_de(ticks=40), obs_de(ticks=0)
+    e.mudanca_no_corpo(antes, depois)
     e.consequencia_corpo(AcaoPet.OCIOSO, {}, None)
-    assert p.mudancas == [("a", "b")] and p.ganchos == [AcaoPet.OCIOSO]
+    assert p.mudancas == [(antes, depois)] and p.ganchos == [AcaoPet.OCIOSO]
+    assert e._tick_ultimo_cuidado == 40 and e._n_dono == 1          # o carinho e acao do dono no log: o relogio e o indice andam
     assert not hasattr(PoliticaComMotivo(PoliticaInstinto(CFG)), "consequencia_corpo")
     assert not hasattr(PoliticaComMotivo(PoliticaInstinto(CFG)), "mudanca_no_corpo")

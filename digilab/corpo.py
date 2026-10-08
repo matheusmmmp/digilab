@@ -26,6 +26,19 @@ Os estimulos do mundo fisico (digilab/mundo.py; para o A ligar o MotorMundo no M
 com os numeros da ConfigMundo) e a MF-2 (`acao_pet(..., com_mundo=True)`: no mundo, comer nao da fome por si; a comida vem do mapa). A
 sujeira depois da racao continua sorteada pelo mundo (o fluxo `mundo-sujeira`), no Estado.
 
+Etapa 6 (secoes 7, 8 e 17), os drives novos e os gestos:
+  - `drives_novos`: o tedio (+450 por tick acordado; a reducao pela variedade recente, DS-4: `atividade(nome)` com "bola", "brincar",
+    "explorar", e o "dono_brinca" dentro do `acao_dono(BRINCAR)`), a curiosidade (so com o mundo fisico, `com_mundo`, CD-8: +300 por
+    tick acordado, `estimulo_novidade(n)` tira 90000 por novidade, ate 2), a solidao (+225 por tick acordado; o carinho tira 180000) e o
+    estresse (por tick, div_arred(soma de max(0, q_d - 337500), 256) sobre os drives; meia-vida 1440; o carinho tira 90000);
+  - `gestos`: o tapa (`acao_dono` com o valor "tapa": dor +90000, susto +180000, estresse +45000), a dor (meia-vida 60) e o susto
+    (meia-vida 30), e o medo da mao (CD-5): o carinho na solidao e no estresse vezes (C - medo_da_mao x q_susto) / C.
+Os receptores novos leem a falta (a concentracao na dor e no susto), div_arred(q S, C). Nenhum drive do Estado muda por eles.
+
+O grafo (secao 18): `grafo_do_corpo` monta a tabela unica dos quimicos, reacoes, emissores, receptores, meias-vidas e tetos
+(digilab/corpo_grafo.py), e o `Corpo` a usa (a lista dos quimicos, os receptores, as meias-vidas, os emissores do tick por fase e as
+quantidades dos estimulos novos) e a confere na carga (`corpo_grafo.checar`, que falha alto).
+
 Componente puro: nao e motor, nao sorteia (nenhuma rng), nao le o cerebro. A sujeira e o sono continuam estados do `Estado` (o motor
 sorteia a sujeira como hoje); o corpo so os le. Quem liga o corpo ao motor e o A (etapa 2, `MotorCorpo`).
 
@@ -39,6 +52,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .config import CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo, ConfigEvolucaoPesquisa, ConfigMundo
+from .corpo_grafo import Emissor, Grafo, Leitura, Quimico, Reacao, checar
 from .events import FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
 
@@ -48,11 +62,19 @@ QUIMICOS_DA_PRIVACAO = ("fome", "desconforto", "cansaco")       # Estado.em_priv
 ORGAO_DIGESTAO = ("alimento",)                                    # sem receptor para o cerebro (secao 5)
 ORGAO_VIDA = ("vida",)                                            # sem receptor para o cerebro (secao 6)
 ESTAGIOS = ("bebe", "crianca", "adolescente", "adulto")           # os de treino_stats.estagio_no_tick, na ordem
+NOVOS = ("tedio", "curiosidade", "solidao", "estresse")           # etapa 6, drives_novos (a curiosidade so com o mundo fisico)
+GESTOS = ("dor", "susto")                                         # etapa 6, gestos
+DRIVES_DO_ESTRESSE = ("fome", "desconforto", "cansaco", "tedio", "curiosidade", "solidao", "dor")   # secao 7, os que o estresse le
+ATIVIDADES = ("bola", "brincar", "explorar", "dono_brinca")       # DS-4: as atividades que reduzem o tedio e entram na janela
+VALOR_TAPA = "tapa"                                               # AcaoUsuario.TAPA (o enum e do A, etapa 6): o corpo o le pelo valor
 
 
-def quimicos_de(cc: ConfigCorpo) -> tuple[str, ...]:
-    """Os quimicos que o corpo tem com estas chaves: os cinco de hoje e os de cada orgao ligado."""
-    return QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ())
+def quimicos_de(cc: ConfigCorpo, com_mundo: bool = False) -> tuple[str, ...]:
+    """Os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
+    mundo fisico)."""
+    novos = tuple(n for n in NOVOS if n != "curiosidade" or com_mundo) if cc.drives_novos else ()
+    return (QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ()) + novos
+            + (GESTOS if cc.gestos else ()))
 
 
 TOLERANCIA_GRADE = 1e-6                                           # quanto um numero de hoje x C pode fugir de um inteiro (so erro de float)
@@ -62,8 +84,8 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "ligada": ("PROPOSTO", "TAREFA_V2_CORPO_DRIVES, secao 2: a quimica dos drives de hoje (etapa 1)"),
     "digestao": ("PROPOSTO", "secao 5, etapa 3 (orgao 1, W-CORPO-DIGESTAO)"),
     "vida": ("PROPOSTO", "secao 6, etapa 4 (orgao 2, W-CORPO-DIGESTAO)"),
-    "drives_novos": ("PROPOSTO", "secao 7, etapa 6; falha alto nesta etapa"),
-    "gestos": ("PROPOSTO", "secao 8, etapa 6; falha alto nesta etapa"),
+    "drives_novos": ("PROPOSTO", "secao 7, etapa 6 (CORPO-DRIVES)"),
+    "gestos": ("PROPOSTO", "secao 8, etapa 6 (CORPO-DRIVES)"),
     "escala": ("DECIDIDO", "CD-1: C = 450000, o mmc dos denominadores das taxas de hoje (#210)"),
     "escala_receptor": ("PROPOSTO", "= S do cerebro A (2**ConfigLobos.bits_ponto_fixo), secao 3"),
     "bits_meia_vida": ("PROPOSTO", "secao 3: k_h na escala 2**16"),
@@ -77,6 +99,25 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "k_meia_vida_estresse": ("PROPOSTO", "secao 7: meia-vida 1440, sem fonte; k pela regra da secao 3"),
     "taxa_digestao": ("DECIDIDO", "CD-3: C, tudo no mesmo tick (a fome de hoje); a digestao lenta so com o plano (#210)"),
     "vida_decaimento": ("PROPOSTO", "secao 6: C // (28 dias x 1440), a vida mais longa da pesquisa (o bloco de duracoes do adendo 3)"),
+    "tedio_sobe": ("PROPOSTO", "secao 7: +450 por tick acordado, sem fonte; o plano calibra (m_sobe)"),
+    "curiosidade_sobe": ("PROPOSTO", "secao 7: +300 por tick acordado, sem fonte"),
+    "solidao_sobe": ("PROPOSTO", "secao 7: +225 por tick acordado, sem fonte; o plano calibra (m_sobe)"),
+    "estresse_limiar": ("PROPOSTO", "secao 7: 0,75 de falta, sem fonte; fixo no plano (6.1)"),
+    "estresse_divisor": ("PROPOSTO", "secao 7: 256, sem fonte; o plano calibra (m_sobe)"),
+    "janela_tedio": ("PROPOSTO", "secao 17 (DS-4): 8, sem fonte; fixa pelo adendo 1 do plano (A1.2)"),
+    "tedio_bola": ("PROPOSTO", "secao 17: -135000, sem fonte; o plano calibra (m_reduz)"),
+    "tedio_brincar": ("PROPOSTO", "secao 17: -45000, sem fonte; o plano calibra (m_reduz)"),
+    "tedio_explorar": ("PROPOSTO", "secao 17: -90000, sem fonte; o plano calibra (m_reduz)"),
+    "tedio_dono": ("PROPOSTO", "secao 17: -90000, sem fonte; o plano calibra (m_reduz)"),
+    "curiosidade_novidade": ("PROPOSTO", "secao 7: -90000 por novidade, sem fonte"),
+    "curiosidade_max_novidades": ("PROPOSTO", "secao 7: ate 2 por decisao, sem fonte"),
+    "janela_novidade": ("PROPOSTO", "secao 7: 1440 ticks, sem fonte (o registro do que o pet viu e do motor)"),
+    "carinho_solidao": ("PROPOSTO", "secao 8: -180000, sem fonte; o plano calibra (m_reduz)"),
+    "carinho_estresse": ("PROPOSTO", "secao 8: -90000, sem fonte; o plano calibra (m_reduz)"),
+    "tapa_dor": ("PROPOSTO", "secao 8: +90000, sem fonte; fixo no plano (6.1)"),
+    "tapa_susto": ("PROPOSTO", "secao 8: +180000, sem fonte; fixo no plano (6.1)"),
+    "tapa_estresse": ("PROPOSTO", "secao 8: +45000, sem fonte; fixo no plano (6.1)"),
+    "medo_da_mao": ("DECIDIDO", "CD-5: o susto corta o carinho; 0 e a variante sem medo"),
 }
 
 
@@ -177,6 +218,76 @@ def taxas_de(cfg: Config, cc: ConfigCorpo) -> TaxasCorpo:
     )
 
 
+# ------------------------------------------------------------------ o grafo (secao 18)
+
+MEIAS_VIDAS = {"estresse": ("k_meia_vida_estresse", 1440), "dor": ("k_meia_vida_dor", 60), "susto": ("k_meia_vida_susto", 30)}
+RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS}}     # o nome do receptor (o campo da PercepcaoCorpo)
+
+
+def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False) -> Grafo:
+    """A tabela unica do corpo com estas chaves (secao 18). Os numeros de hoje vem das taxas (`t`) e os da etapa 6 da ConfigCorpo; os
+    estimulos que vem de fora com quantidade variavel (a bola, a fruta, o andar, a comida podre) guardam so o sinal. Com a digestao, a
+    comida (a racao, o comer, a fruta) entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome."""
+    C = cc.escala
+    nomes = quimicos_de(cc, com_mundo)
+    quimicos = []
+    for n in nomes:
+        receptor = RECEPTOR_DE.get(n)
+        leitura = None if receptor is None else ("drive" if n in QUIMICOS else "falta")
+        h = MEIAS_VIDAS.get(n)
+        quimicos.append(Quimico(n, C, True, receptor, leitura, None if h is None else h[1],
+                                None if h is None else getattr(cc, h[0])))
+    reacoes = (Reacao("digestao", ("alimento", "fome"), (), cc.taxa_digestao),) if cc.digestao else ()
+
+    def comida(efeitos: dict) -> tuple:
+        if cc.digestao and efeitos.get("fome", 0) < 0:
+            efeitos = {**{k: v for k, v in efeitos.items() if k != "fome"}, "alimento": -efeitos["fome"]}
+        return tuple(efeitos.items())
+
+    em: list[Emissor] = [
+        Emissor("fome_tick", "tick", 1, (("fome", t.fome_por_tick),)),
+        Emissor("desconforto_tick", "tick", 1, (("desconforto", t.desconforto_por_tick),)),
+        Emissor("desconforto_sujeira", "sujeira", 1, (("desconforto", t.desconforto_por_sujeira),)),
+        Emissor("tristeza_tick", "tick", 1, (("tristeza", t.tristeza_por_tick),)),
+        Emissor("cansaco_dormindo", "dormindo", 1, (("cansaco", t.cansaco_dormindo),)),
+        Emissor("cansaco_noite", "noite_acordado", 1, (("cansaco", t.cansaco_noite),)),
+        Emissor("cansaco_dia", "dia_acordado", 1, (("cansaco", t.cansaco_acordado),)),
+    ]
+    if cc.vida:
+        em.append(Emissor("vida_tick", "tick", 1, (("vida", -cc.vida_decaimento),)))
+    sobe = {"tedio": cc.tedio_sobe, "curiosidade": cc.curiosidade_sobe, "solidao": cc.solidao_sobe}
+    em += [Emissor(f"{n}_sobe", "acordado", 1, ((n, sobe[n]),)) for n in NOVOS if n in sobe and n in nomes]
+    degrau = tuple(Leitura(n, 1, 1) for n in QUIMICOS_DA_PRIVACAO)     # um degrau: conta como ganho 1 se entrar num laco
+    em += [Emissor("dano_privacao", "privacao", 2, (("dano", t.dano_privacao),), degrau),
+           Emissor("dano_cura", "sem_privacao", 2, (("dano", t.dano_cura),))]
+    if "estresse" in nomes:
+        le = tuple(Leitura(n, 1, cc.estresse_divisor) for n in DRIVES_DO_ESTRESSE if n in nomes)
+        em.append(Emissor("estresse_drives", "limiar", 2, (("estresse", 1),), le, cc.estresse_limiar, cc.estresse_divisor, True))
+    # os estimulos (fase 0): os de hoje pelas taxas, os do mundo e os da etapa 6
+    for acao, efeitos in t.dono.items():
+        em.append(Emissor(f"dono:{acao.value}", "estimulo", 0, comida(efeitos) if acao is AcaoUsuario.ALIMENTAR else tuple(efeitos.items())))
+    for acao, efeitos in t.pet.items():
+        if efeitos:
+            em.append(Emissor(f"pet:{acao.value}", "estimulo", 0, comida(efeitos) if acao is AcaoPet.COMER else tuple(efeitos.items())))
+    em += [Emissor("bola", "estimulo", 0, (("tristeza", -1),), variavel=True),
+           Emissor("fruta", "estimulo", 0, comida({"fome": -1, "tristeza": -1}), variavel=True),
+           Emissor("fruta_ruim", "estimulo", 0, (("tristeza", 1),), variavel=True),
+           Emissor("andar", "estimulo", 0, (("cansaco", 1),), variavel=True),
+           Emissor("comida_podre", "estimulo", 0, (("tristeza", 1),), variavel=True)]
+    if cc.drives_novos:
+        bases = {"bola": cc.tedio_bola, "brincar": cc.tedio_brincar, "explorar": cc.tedio_explorar, "dono_brinca": cc.tedio_dono}
+        em += [Emissor(f"atividade:{a}", "estimulo", 0, (("tedio", -bases[a]),)) for a in ATIVIDADES]
+        if "curiosidade" in nomes:
+            em.append(Emissor("novidade", "estimulo", 0, (("curiosidade", -cc.curiosidade_novidade),)))
+        medo = (Leitura("susto", cc.carinho_solidao * cc.medo_da_mao, C, -1),) if cc.gestos else ()
+        em.append(Emissor("carinho_solidao", "estimulo", 0, (("solidao", -cc.carinho_solidao),), medo))
+        medo = (Leitura("susto", cc.carinho_estresse * cc.medo_da_mao, C, -1),) if cc.gestos else ()
+        em.append(Emissor("carinho_estresse", "estimulo", 0, (("estresse", -cc.carinho_estresse),), medo))
+    if cc.gestos:
+        em.append(Emissor("tapa", "estimulo", 0, (("dor", cc.tapa_dor), ("susto", cc.tapa_susto), ("estresse", cc.tapa_estresse))))
+    return Grafo(tuple(quimicos), reacoes, tuple(em))
+
+
 # ------------------------------------------------------------------ orgao 2: os limiares da Vida
 
 def ticks_de_estagio(cfg_evo: ConfigEvolucaoPesquisa) -> tuple[int, int, int]:
@@ -202,22 +313,30 @@ class Corpo:
     e o sono vem do Estado."""
 
     def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
-                 cfg_evo: ConfigEvolucaoPesquisa | None = None) -> None:
+                 cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
         if not self.cc.ligada:
             raise ValueError("Corpo com ConfigCorpo desligada: com a chave desligada o corpo nao existe")
-        self.quimicos = quimicos_de(self.cc)
-        if set(q) != set(self.quimicos):
-            raise ValueError(f"quimicos do corpo: esperava {self.quimicos}, veio {sorted(q)}")
-        for nome, v in q.items():
-            if not isinstance(v, int) or isinstance(v, bool) or not 0 <= v <= self.cc.escala:
-                raise ValueError(f"concentracao de {nome} fora de [0, {self.cc.escala}] ou nao inteira: {v!r}")
+        self.com_mundo = com_mundo
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
+        # secao 18: a tabela unica, conferida na carga (falha alto); a lista e a ordem dos quimicos saem dela
+        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo)
+        self.relato_grafo = checar(self.grafo)
+        self.quimicos = self.grafo.nomes
+        if self.quimicos != quimicos_de(self.cc, com_mundo):            # pragma: no cover - o grafo e montado de quimicos_de
+            raise RuntimeError("o grafo e a lista de quimicos divergem")
+        if set(q) != set(self.quimicos):
+            raise ValueError(f"quimicos do corpo: esperava {self.quimicos}, veio {sorted(q)}")
+        for nome, v in q.items():
+            teto = self.grafo.quimico(nome).teto
+            if not isinstance(v, int) or isinstance(v, bool) or not 0 <= v <= teto:
+                raise ValueError(f"concentracao de {nome} fora de [0, {teto}] ou nao inteira: {v!r}")
         self.q = {nome: q[nome] for nome in self.quimicos}
+        self.janela_tedio: list[str] = []                 # DS-4: as ultimas atividades (so com drives_novos)
         # orgao 1: o que passou do estomago para a fome (no tick corrente, no ultimo tick fechado e no total) e o que se descartou
         self.digerido_tick = 0
         self.digerido_no_tick = 0
@@ -228,9 +347,9 @@ class Corpo:
 
     @classmethod
     def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
-                  cfg_evo: ConfigEvolucaoPesquisa | None = None) -> Corpo:
+                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
-        Estado (C no nascimento)."""
+        Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
         C = cc.escala
         q = {nome: na_grade(1.0 - getattr(estado, drive), C, f"Estado.{drive}") for nome, drive in DRIVE_DO_QUIMICO.items()}
@@ -238,7 +357,9 @@ class Corpo:
             q["alimento"] = 0                    # o Estado de hoje nao tem estomago: comeca vazio
         if cc.vida:
             q["vida"] = max(0, C - cc.vida_decaimento * estado.tick)
-        return cls(q, cfg, cc, cfg_evo)
+        for nome in quimicos_de(cc, com_mundo):
+            q.setdefault(nome, 0)                          # os drives novos e os gestos: zero no nascimento
+        return cls(q, cfg, cc, cfg_evo, com_mundo)
 
     # ---------------------------------------------------------- estimulos
 
@@ -256,11 +377,64 @@ class Corpo:
 
     def acao_dono(self, acao: AcaoUsuario) -> None:
         """O efeito de state.aplicar_acao_usuario nos drives. A sujeira (limpar, e o sorteio do alimentar) e o sono (o brincar acorda)
-        continuam no Estado, com o motor. Acao fora das seis de hoje falha alto: as outras sao estimulos proprios ou de outra etapa.
-        A racao (alimentar) e comida; o custo de fome do brincar do dono nao."""
+        continuam no Estado, com o motor. Acao fora das seis de hoje (e do tapa) falha alto: as outras sao estimulos proprios ou de outra
+        etapa. A racao (alimentar) e comida; o custo de fome do brincar do dono nao.
+
+        Etapa 6: com `drives_novos`, o dono brincar e a atividade "dono_brinca" do tedio (DS-4) e o acariciar e o carinho (secao 8: a
+        solidao e o estresse, vezes o medo da mao com `gestos`). O tapa (o valor "tapa", AcaoUsuario.TAPA do A) so com `gestos`: dor,
+        susto e estresse; nenhum drive de hoje muda."""
+        if acao.value == VALOR_TAPA:
+            if not self.cc.gestos:
+                raise ValueError("tapa sem a sub-chave gestos (secao 8): so o MotorCorpo com gestos aceita")
+            self._estimulo("tapa")
+            return
         if acao not in self.t.dono:
             raise ValueError(f"acao do dono sem estimulo no corpo nesta etapa: {acao.value}")
         self._efeito(self.t.dono[acao], acao is AcaoUsuario.ALIMENTAR)
+        if self.cc.drives_novos:
+            if acao is AcaoUsuario.BRINCAR:
+                self.atividade("dono_brinca")
+            elif acao is AcaoUsuario.ACARICIAR:
+                self._carinho()
+
+    # ---------------------------------------------------------- etapa 6: os drives novos e os gestos
+
+    def _estimulo(self, nome: str) -> None:
+        """Um estimulo de quantidade fixa da tabela (o tapa)."""
+        self._somar(dict(self.grafo.emissor(nome).efeitos))
+
+    def _carinho(self) -> None:
+        """Secao 8: o carinho na solidao e no estresse, vezes (C - medo_da_mao x q_susto) / C com `gestos` (o medo da mao, CD-5); sem
+        `gestos`, inteiro. A tristeza (o 0,06 de hoje) ja veio no acao_dono."""
+        fator = self.C - self.cc.medo_da_mao * self.q["susto"] if self.cc.gestos else self.C
+        for nome in ("carinho_solidao", "carinho_estresse"):
+            self._somar({q: div_arred(d * fator, self.C) for q, d in self.grafo.emissor(nome).efeitos})
+
+    def atividade(self, nome: str) -> None:
+        """DS-4 (secao 17): a reducao do tedio pela atividade `nome` e div_arred(base x (J - r), J), com r as vezes que ela aparece na
+        janela das ultimas J atividades antes desta; depois ela entra na janela e a mais antiga sai. "bola", "brincar" e "explorar" vem do
+        motor, uma vez por decisao; "dono_brinca", do acao_dono(BRINCAR). So com `drives_novos`."""
+        if not self.cc.drives_novos:
+            raise ValueError("atividade do tedio sem a sub-chave drives_novos")
+        if nome not in ATIVIDADES:
+            raise ValueError(f"atividade desconhecida: {nome!r} (so {ATIVIDADES})")
+        base = -dict(self.grafo.emissor(f"atividade:{nome}").efeitos)["tedio"]
+        J = self.cc.janela_tedio
+        r = self.janela_tedio.count(nome)
+        self._somar({"tedio": -div_arred(base * (J - r), J)})
+        self.janela_tedio.append(nome)
+        del self.janela_tedio[:-J]
+
+    def estimulo_novidade(self, n: int) -> None:
+        """Secao 7: explorar e achar `n` objetos novos (os `vistos_novos` do motor) tira 90000 da curiosidade por novidade, ate 2. A
+        curiosidade so existe com o mundo fisico (CD-8): sem ela, falha alto."""
+        if "curiosidade" not in self.q:
+            raise ValueError("novidade sem a curiosidade: ela exige drives_novos e o mundo fisico (CD-8)")
+        if type(n) is not int or n < 0:
+            raise ValueError(f"numero de novidades precisa ser inteiro >= 0: {n!r}")
+        k = min(n, self.cc.curiosidade_max_novidades)
+        if k:
+            self._somar({q: d * k for q, d in self.grafo.emissor("novidade").efeitos})
 
     def acao_pet(self, acao: AcaoPet, com_mundo: bool = False) -> None:
         """O efeito de policy.efeito_da_acao_do_pet nos drives, na decisao, antes do tick. O sono (dormir) fica no Estado. O comer e
@@ -336,26 +510,59 @@ class Corpo:
         """O receptor de privacao: algum de fome, desconforto e cansaco acima de C - 0,15 C (Estado.em_privacao de hoje)."""
         return any(self.q[nome] > self.t.limiar_privacao for nome in QUIMICOS_DA_PRIVACAO)
 
+    def _dispara(self, e: Emissor, antes: Estado, noite: bool) -> bool:
+        g = e.gatilho
+        if g in ("tick", "sujeira"):
+            return True
+        if g == "acordado":
+            return not antes.dormindo
+        if g == "dormindo":
+            return bool(antes.dormindo)
+        if g == "noite_acordado":
+            return not antes.dormindo and noite
+        if g == "dia_acordado":
+            return not antes.dormindo and not noite
+        raise ValueError(f"gatilho {g!r} fora da fase 1")      # pragma: no cover - checado na tabela
+
     def passo(self, antes: Estado) -> None:
-        """Um tick, na ordem de state.avancar_um_tick. `antes` e o Estado no comeco do tick: a sujeira, o sono e a hora vem dele.
-        1) fome, desconforto, tristeza e cansaco; 2) o motor sorteia a sujeira (fora daqui); 3) o corte; 4) o dano pelo receptor."""
-        t = self.t
+        """Um tick, na ordem de state.avancar_um_tick, pelos emissores da tabela (secao 18). `antes` e o Estado no comeco do tick: a
+        sujeira, o sono e a hora vem dele. 0) a digestao; 1) a fase 1: fome, desconforto (o tick e a sujeira), tristeza, cansaco (dormindo,
+        noite ou dia), a Vida e as subidas dos drives novos, somados por quimico e cortados uma vez; 2) a fase 2, sobre os valores depois da
+        fase 1: o dano pelo receptor de privacao e o estresse pelos drives acima do limiar; 3) as meias-vidas. O motor sorteia a sujeira
+        (fora daqui)."""
         if self.cc.digestao:
             self._digerir()                       # o que ficou no estomago, com o que resta da taxa deste tick
-        cansaco = t.cansaco_dormindo if antes.dormindo else (
-            t.cansaco_noite if self.cfg.e_noite(antes.tick % TICKS_POR_DIA) else t.cansaco_acordado)
-        self._somar({
-            "fome": t.fome_por_tick,
-            "desconforto": t.desconforto_por_tick + t.desconforto_por_sujeira * antes.sujeira,
-            "tristeza": t.tristeza_por_tick,
-            "cansaco": cansaco,
-        })
-        self._somar({"dano": t.dano_privacao if self.em_privacao() else t.dano_cura})
+        noite = self.cfg.e_noite(antes.tick % TICKS_POR_DIA)
+        deltas: dict[str, int] = {}
+        for e in self.grafo.da_fase(1):
+            if self._dispara(e, antes, noite):
+                n = antes.sujeira if e.gatilho == "sujeira" else 1
+                for q, d in e.efeitos:
+                    deltas[q] = deltas.get(q, 0) + d * n
+        self._somar(deltas)
+        privacao = self.em_privacao()
+        deltas = {}
+        for e in self.grafo.da_fase(2):
+            if e.gatilho == "limiar":
+                soma = 0
+                for le in e.le:
+                    soma += max(0, self.q[le.quimico] - e.limiar)
+                v = div_arred(soma, e.divisor)
+            elif e.gatilho in ("privacao", "sem_privacao"):
+                v = 1 if privacao == (e.gatilho == "privacao") else 0
+            else:                                                     # pragma: no cover - checado na tabela
+                raise ValueError(f"gatilho {e.gatilho!r} fora da fase 2")
+            if v:
+                for q, d in e.efeitos:
+                    deltas[q] = deltas.get(q, 0) + d * v
+        self._somar(deltas)
+        bits = self.cc.bits_meia_vida
+        for qm in self.grafo.quimicos:
+            if qm.k_meia_vida is not None:
+                self.q[qm.nome] = passo_meia_vida(self.q[qm.nome], qm.k_meia_vida, bits)
         if self.cc.digestao:
             self.digerido_no_tick = self.digerido_tick          # o tick fechou: a taxa volta inteira no proximo
             self.digerido_tick = 0
-        if self.cc.vida:
-            self.q["vida"] = max(0, self.q["vida"] - self.cc.vida_decaimento)   # nao mata: em 0, fica em 0
 
     # ---------------------------------------------------------- leituras
 
@@ -372,8 +579,10 @@ class Corpo:
         return div_arred(self.q[nome] * self.S, self.C)
 
     def receptores(self) -> dict[str, int]:
-        """O que o pet sente dos drives de hoje, na escala S: o drive lido, S - falta (secao 10). Nesta etapa todos tem receptor."""
-        return {DRIVE_DO_QUIMICO[nome]: self.S - self.falta(nome) for nome in QUIMICOS}
+        """O que o pet sente, na escala S, pelos receptores da tabela (secao 10): os drives de hoje leem o drive, S - falta; os drives
+        novos leem a falta, e a dor e o susto a concentracao (a mesma conta, div_arred(q S, C)). Pelo nome do receptor."""
+        return {qm.receptor: (self.S - self.falta(qm.nome) if qm.leitura == "drive" else self.falta(qm.nome))
+                for qm in self.grafo.receptores()}
 
     def estagio(self) -> str:
         """Os receptores de estagio sobre a Vida (so com o orgao 2): o estagio e o numero de limiares que a Vida ja cruzou. Com a Vida
@@ -389,4 +598,6 @@ class Corpo:
                              "descartado_total": self.descartado_total}
         if self.cc.vida:
             d["estagio"] = self.estagio()
+        if self.cc.drives_novos:
+            d["janela_tedio"] = list(self.janela_tedio)
         return d
