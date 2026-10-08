@@ -25,7 +25,7 @@ from digilab.config import CONFIG_CORPO, CONFIG_PADRAO, ConfigCorpo, ConfigLobos
 from digilab.corpo import (DRIVE_DO_QUIMICO, PARAMETROS_CORPO, QUIMICOS, Corpo, div_arred, k_meia_vida, na_grade,  # noqa: E402
                            passo_meia_vida, taxas_de)
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.policies import lobos  # noqa: E402
 from digilab.policy import PoliticaInstinto, efeito_da_acao_do_pet  # noqa: E402
 from digilab.state import Estado, aplicar_acao_usuario, avancar_um_tick  # noqa: E402
@@ -198,7 +198,7 @@ def test_acoes_do_dono_e_do_pet_iguais_as_de_hoje_na_grade():
             corpo = Corpo.de_estado(e, CFG, CC)
             corpo.acao_dono(acao)
             _confere(corpo, aplicar_acao_usuario(e, acao, CFG, random.Random(0)))
-        for acao in AcaoPet:
+        for acao in ACOES_PET_HOJE:
             corpo = Corpo.de_estado(e, CFG, CC)
             corpo.acao_pet(acao)
             _confere(corpo, efeito_da_acao_do_pet(e, acao, CFG, CFG.intervalo_decisao_ticks))

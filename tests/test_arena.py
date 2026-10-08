@@ -10,6 +10,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from digilab import AcaoPet, PoliticaInstinto  # noqa: E402
+from digilab.events import ACOES_PET_HOJE  # noqa: E402
 from digilab.arena import (  # noqa: E402
     ORDEM_COMBATE,
     Lutador,
@@ -37,7 +38,7 @@ def test_nucleo_ciclico_sem_estrategia_dominante():
 
 def test_mapa_congelado_cobre_tudo():
     mapa = mapa_pet_combate(CONFIG_ARENA)
-    assert set(mapa) == set(AcaoPet)
+    assert set(mapa) == set(ACOES_PET_HOJE)
     assert set(mapa.values()) == set(ORDEM_COMBATE)
 
 
@@ -50,7 +51,7 @@ def test_stats_somam_zero_e_sao_deterministicos():
 
 def test_tracos_sao_lentos():
     t = tracos_de_acoes([AcaoPet.EMBURRAR] * 10)
-    assert t[list(AcaoPet).index(AcaoPet.EMBURRAR)] < 0.25
+    assert t[list(ACOES_PET_HOJE).index(AcaoPet.EMBURRAR)] < 0.25
 
 
 def test_historico_vazio_falha_alto():

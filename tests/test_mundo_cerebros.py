@@ -27,7 +27,7 @@ import bancada_v2 as bv  # noqa: E402
 from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_FRUTAS_LIGADA,  # noqa: E402
                             CONFIG_LOBOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO)
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.events import FRUTAS, AcaoPet  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, FRUTAS, AcaoPet  # noqa: E402
 from digilab.expressao import FATORES_VIDA  # noqa: E402
 from digilab.instinto_mundo import (PoliticaInstintoMundo, comida_boa_vista, entradas_mundo, para_onde_comer)  # noqa: E402
 from digilab.motivo import PoliticaComMotivo  # noqa: E402
@@ -255,7 +255,7 @@ def test_lobos_decisao_a_decisao_e_a_percepcao():
 def test_lobos_do_mundo_prior_e_chave():
     lob = PoliticaLobos(CONFIG_PADRAO, CONFIG_LOBOS, cfg_mundo=CM)
     assert lob.ve_mundo_fisico and lob.ve_mundo and lob.entradas == lb.ENTRADAS + lb.ENTRADAS_MUNDO
-    assert lob.n_pesos() == len(lb.REGRAS + lb.REGRAS_MUNDO) * len(AcaoPet) * len(lob.entradas)
+    assert lob.n_pesos() == len(lb.REGRAS + lb.REGRAS_MUNDO) * len(ACOES_PET_HOJE) * len(lob.entradas)
     ei = lob.estado_interno()
     assert "pesos_fruta" not in ei and "pesos_comer_fruta" not in ei
     assert ei["pesos_prior"]["pedido_necessidade"]["comer"][0] == S

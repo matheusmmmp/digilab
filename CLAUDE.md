@@ -3065,3 +3065,49 @@ paralelo. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/
   cima do meu, e o tédio caía em dobro (o `ZeroDivisionError`). A contagem saiu igual à dele: 4/7 → 23/38.
 - **Para o D:** na bancada, o `cfg_corpo` com as sub-chaves, o tapa passando pela `PoliticaDoBraco`, o `SemGesto` nos canais dela e o
   filtro `sem_gestos` do acoplado ficam com ele.
+
+## V2, BANHEIRO, etapa 2 — a vontade, o conforto, o `aliviar`, o instinto e o alvo (2026-10-07, `docs/TAREFA_V2_BANHEIRO.md`) — GATES PASSAM
+
+Etapa 2 da seção 9 (BN-1 a BN-6 decididas), o lado do corpo e do cérebro. Infraestrutura, sem run; só as sementes dos testes. O banheiro no
+mapa, a necessidade como objeto, o limpador, o `limpar` e o `DonoCarinhoBanheiro` são da etapa 3 (A); a web é a etapa 4; a bancada, a 5
+(D). `engine.py`, `motor_corpo.py` (só dois campos novos na `PercepcaoCorpo`), `mundo.py`, a bancada e a web não mudaram. Interpretações
+em `docs/REGISTRO_DESVIOS.md`.
+- **A etapa 1 não existia:** o gabarito das vidas de hoje (`tests/gabarito_banheiro.py` → `tests/gabaritos/banheiro_vidas_de_hoje.json`,
+  176 vidas) foi gravado antes de qualquer mudança, num commit próprio:
+  - pela bancada, os regimes "hoje" e "química" do corpo e o mundo físico;
+  - direto, a etapa 6 inteira com o `DonoComGestos` nos quatro mundos.
+- **`AcaoPet.ALIVIAR`** no fim do enum (BN-1). Toda iteração de hoje usa `events.ACOES_PET_HOJE` (as sete de sempre): o bandit, as
+  métricas, os traços, a arena, o desejo, a expressão, o cérebro A sem o banheiro, os exportadores e a bancada.
+- **O corpo** (`ConfigCorpo.banheiro`, sub-chave depois de `gestos`; `CONFIG_CORPO_BANHEIRO`):
+  - a `vontade` (concentração): +150 por tick acordado, mais 1/3 do alimento digerido (com o resto guardado), zerada por
+    `estimulo_aliviar`. Acima de 0,75, o desconforto sobe +150 por tick (o gatilho novo `acima` do grafo);
+  - a necessidade: `estimulo_necessidade` (+22500 de desconforto) e `passo(..., necessidades=n)` (+100 por tick por necessidade na
+    região, até 3);
+  - o `conforto` (BN-6): o carinho o sobe +45000 (com o medo da mão), meia-vida 60. O cérebro lê a falta de conforto, S − leitura;
+  - os receptores `vontade` e `conforto` (os campos novos da `PercepcaoCorpo`). O grafo passa as quatro checagens.
+- **`ConfigBanheiro`** (fim do `config.py`, desligada; registro `instinto_banheiro.PARAMETROS_BANHEIRO`): `ligada`, `limpador`,
+  `w_vontade` 4,0, `limiar_urgente` 0,90, `limiar_moderada` 0,50, `w_banheiro_0` S/4, `w_aqui_0` S.
+- **O instinto** (`digilab/instinto_banheiro.py`, `PoliticaInstintoBanheiro`, sobre o instinto do mundo):
+  - a regra `alivio_urgente`, sem sorteio, logo depois do sono;
+  - o `aliviar` no tempo livre com peso w_vontade × vontade;
+  - o alvo herdado pelo `escolher_alvo`: `banheiro` S/4 contra `aqui` S, com u / 2^16; na urgência, `aqui`.
+- **O cérebro A** (`PoliticaLobos(..., cfg_banheiro=)`, que exige o mundo físico e o corpo com o banheiro):
+  - o `aliviar` só nas tabelas em que é candidato (as três de tempo livre e a urgente): **998 pesos de 1000**;
+  - o prior da vontade no termo de impulsos;
+  - o alvo aprendido, um peso por alvo, pela regra da fruta e com o canal do corpo, pela consequência e pelo carinho;
+  - a vontade e o conforto nos drives do sinal.
+- **Gates** (`tests/test_banheiro_g2.py`, `tests/test_banheiro_corpo.py`, `tests/test_banheiro_cerebros.py`):
+  - **G2:** as 176 vidas de hoje byte a byte;
+  - **G-MEC do corpo;**
+  - **G-CONS:** com o limpador, o sinal do aliviar no banheiro é maior que fora; sem ele, igual;
+  - **G-CAR:** o carinho vale 940, 1759 e 2739 contra 132 do limpador (7 a 21 vezes). Sem o conforto, a solidão em 0,2 daria 164 e
+    falharia;
+  - **o cérebro no prior é o instinto byte a byte** (3000 observações, a decisão e o alvo);
+  - **o aprendizado do alvo em conta exata** (pela consequência e pelo carinho);
+  - **o G1 do cérebro pelas chamadas.**
+- **Paridade:** o gabarito do corpo foi à versão 5 (a seção `banheiro`). As seções da versão 4 saem idênticas.
+- **Para o A (etapa 3):** o `aliviar` é uma ação com alvo.
+  - **O alvo:** u da rng `alvo` e os dois candidatos (`banheiro` e `aqui`) no `escolher_alvo`.
+  - **Os ganchos:** o `consequencia_mundo` e depois o `consequencia_corpo`.
+  - **Os estímulos:** `estimulo_aliviar`, `estimulo_necessidade` e `passo(..., necessidades=n)`.
+  - **O motivo do `aliviar`** ainda falha alto no `PoliticaComMotivo`: não há texto na expressão.

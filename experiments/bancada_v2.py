@@ -159,7 +159,7 @@ from digilab.config import ConfigCorpo  # noqa: E402
 from digilab.corpo import div_arred as div_arred_corpo  # noqa: E402
 from digilab.motor_corpo import PercepcaoCorpo, com_corpo  # noqa: E402
 from digilab.donos import Visao, criar_dono, cuidados_necessarios, julgar_acao  # noqa: E402
-from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_INFORMACAO, ACOES_PEDIDO, FRUTAS, AcaoPet, AcaoUsuario,  # noqa: E402
+from digilab.events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_PET_HOJE, ACOES_INFORMACAO, ACOES_PEDIDO, FRUTAS, AcaoPet, AcaoUsuario,  # noqa: E402
                             LogDeEventos, fruta_de, informar, oferta_de)
 from digilab.evolucao import politica_no_tick  # noqa: E402
 from digilab.instinto_mundo import PoliticaInstintoMundo  # noqa: E402
@@ -191,7 +191,7 @@ from digilab.temperamento import sortear as sortear_temperamento  # noqa: E402
 from digilab.treino import (CanalDeInteracao, MotorComFeedback, OrcamentoExcedido, OrcamentoNaoConsumido,  # noqa: E402
                             reproduzir_com_feedback, simular_vida)
 
-ACOES = tuple(a.value for a in AcaoPet)
+ACOES = tuple(a.value for a in ACOES_PET_HOJE)
 SINAIS = frozenset({AcaoUsuario.ELOGIAR.value, AcaoUsuario.REPREENDER.value})
 SEMENTES_TESTE = frozenset({101, 202, 303, 404, 505})
 # pontos nomeados do aprendiz: campos trocados sobre o CONFIG_LOBOS_APRENDIZ (decisao R1, 2026-10-05). Um ponto novo entra aqui, com a

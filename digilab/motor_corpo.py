@@ -86,6 +86,8 @@ class PercepcaoCorpo:
     estresse: int | None = None
     dor: int | None = None
     susto: int | None = None
+    vontade: int | None = None            # o banheiro (TAREFA_V2_BANHEIRO, secao 3): a concentracao
+    conforto: int | None = None           # BN-6: a concentracao (o cerebro le a falta de conforto, S - leitura)
 
 
 class MotorCorpo:

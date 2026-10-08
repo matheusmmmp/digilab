@@ -1344,7 +1344,7 @@ class ConfigConsequencia:
     janela_pesos: int = 32             # A2.4: J decisoes
     # corpo, etapa 5: w_d do sinal pelo corpo, por receptor (os de hoje e os drives novos da secao 9; o susto fica fora do sinal)
     pesos_drives_corpo: tuple = (("fome", 1), ("higiene", 1), ("energia", 1), ("humor", 1), ("tedio", 1), ("curiosidade", 1),
-                                 ("solidao", 1), ("estresse", 1), ("dor", 1))
+                                 ("solidao", 1), ("estresse", 1), ("dor", 1), ("vontade", 1), ("conforto", 1))
 
     def __post_init__(self) -> None:
         if type(self.janela_pesos) is not int or self.janela_pesos <= 0:
@@ -1483,6 +1483,7 @@ class ConfigCorpo:
     vida: bool = False                       # etapa 4, orgao 2 (secao 6)
     drives_novos: bool = False               # etapa 6 (secao 7)
     gestos: bool = False                     # etapa 6 (secao 8)
+    banheiro: bool = False                   # o banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 3 e BN-6): a vontade e o conforto; exige gestos
     escala: int = 450000                     # C (CD-1): o mmc dos denominadores das taxas de hoje; todo numero de hoje vira inteiro
     escala_receptor: int = 1024              # S: a escala do cerebro A (2**ConfigLobos.bits_ponto_fixo); receptor = div_arred(q * S, C)
     bits_meia_vida: int = 16                 # k_h = arred(2**bits * (1 - 2**(-1/h))) (secao 3)
@@ -1524,10 +1525,22 @@ class ConfigCorpo:
     tapa_susto: int = 180000
     tapa_estresse: int = 45000
     medo_da_mao: int = 1                     # CD-5: o carinho na solidao e no estresse vezes (C - medo_da_mao * q_susto) / C; 0 = sem medo
+    # o banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 3; BN-6), sub-chave `banheiro`. A vontade e uma concentracao (o receptor le a
+    # concentracao, como a dor); o conforto tambem (o cerebro le a falta de conforto, S - leitura). PROPOSTOS, sem fonte
+    vontade_sobe: int = 150                  # por tick acordado: cheia em 50 h sem comer
+    vontade_digestao_num: int = 1            # a digestao poe na vontade num/den do alimento digerido (1/3), com o resto guardado
+    vontade_digestao_den: int = 3
+    vontade_limiar: int = 337500             # 0,75: acima disto o desconforto sobe vontade_desconforto por tick
+    vontade_desconforto: int = 150
+    necessidade_desconforto: int = 22500     # a necessidade deixada no chao: o "cheiro" imediato (o motor chama o estimulo)
+    necessidade_regiao: int = 100            # por tick, por necessidade na regiao do pet (o motor conta), ate necessidade_max_regiao
+    necessidade_max_regiao: int = 3
+    conforto_carinho: int = 45000            # BN-6: o carinho sobe o conforto (com o medo da mao); o menor da grade 6.1 do plano
+    k_meia_vida_conforto: int = 753          # h = 60 (a menor da grade 6.1 do plano): o conforto cai devagar entre os carinhos
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
-                 ("drives_novos", self.drives_novos), ("gestos", self.gestos))
+                 ("drives_novos", self.drives_novos), ("gestos", self.gestos), ("banheiro", self.banheiro))
         for (anterior, ligou_antes), (nome, ligou) in zip(ordem, ordem[1:]):
             if ligou and not ligou_antes:
                 raise ValueError(f"ConfigCorpo.{nome} exige ConfigCorpo.{anterior} (E-9: um orgao por vez)")
@@ -1537,18 +1550,25 @@ class ConfigCorpo:
             raise ValueError(f"ConfigCorpo.vida_decaimento tem de ser positivo: {self.vida_decaimento}")
         positivos = ("tedio_sobe", "curiosidade_sobe", "solidao_sobe", "estresse_limiar", "estresse_divisor", "janela_tedio",
                      "tedio_bola", "tedio_brincar", "tedio_explorar", "tedio_dono", "curiosidade_novidade", "curiosidade_max_novidades",
-                     "janela_novidade", "carinho_solidao", "carinho_estresse", "tapa_dor", "tapa_susto", "tapa_estresse")
+                     "janela_novidade", "carinho_solidao", "carinho_estresse", "tapa_dor", "tapa_susto", "tapa_estresse",
+                     "vontade_sobe", "vontade_digestao_num", "vontade_digestao_den", "vontade_limiar", "vontade_desconforto",
+                     "necessidade_desconforto", "necessidade_regiao", "necessidade_max_regiao", "conforto_carinho", "k_meia_vida_conforto")
         for nome in positivos:
             v = getattr(self, nome)
             if type(v) is not int or v <= 0:
                 raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro positivo: {v!r}")
         if self.medo_da_mao not in (0, 1) or type(self.medo_da_mao) is not int:
             raise ValueError(f"ConfigCorpo.medo_da_mao e 0 (sem medo) ou 1: {self.medo_da_mao!r}")
+        if self.vontade_digestao_num > self.vontade_digestao_den:
+            raise ValueError("ConfigCorpo.vontade_digestao_num / vontade_digestao_den passa de 1")
+        if self.banheiro and self.vontade_limiar >= self.escala:
+            raise ValueError(f"ConfigCorpo.vontade_limiar tem de ficar abaixo de C: {self.vontade_limiar}")
 
 
 CONFIG_CORPO = ConfigCorpo()
 CONFIG_CORPO_LIGADA = ConfigCorpo(ligada=True)
 CONFIG_CORPO_DRIVES = ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True, gestos=True)   # a etapa 6 inteira
+CONFIG_CORPO_BANHEIRO = replace(CONFIG_CORPO_DRIVES, banheiro=True)                                        # mais a vontade e o conforto
 
 
 # =====================================================================
@@ -1657,3 +1677,44 @@ class ConfigMundo:
 
 CONFIG_MUNDO = ConfigMundo()
 CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)
+
+
+# =====================================================================
+# V2, o banheiro (docs/TAREFA_V2_BANHEIRO.md; BN-1 a BN-6 decididas em 2026-10-07). Desligado por padrao: a vida de hoje byte a byte.
+# Exige o mundo fisico (ConfigMundo.ligada) e o corpo com a sub-chave `banheiro` (que exige os gestos); quem usa confere e falha alto.
+# A quimica (a vontade, o desconforto dela, o conforto do carinho) fica na ConfigCorpo; aqui, a chave, o limpador e o instinto do alivio
+# (digilab/instinto_banheiro.py). O banheiro no mapa, o objeto e o limpador no motor sao da etapa 3 (A). Todos PROPOSTOS, sem fonte;
+# status em instinto_banheiro.PARAMETROS_BANHEIRO.
+
+
+@dataclass(frozen=True)
+class ConfigBanheiro:
+    """ligada            o banheiro (a acao `aliviar`, a vontade no instinto, o alvo `banheiro`/`aqui`)
+    limpador           recolhe na hora a necessidade deixada no banheiro (secao 3; o motor, etapa 3)
+    w_vontade          no tempo livre, `aliviar` entra com peso w_vontade x vontade (secao 4; o plano calibra, m_w)
+    limiar_urgente     vontade acima disto: alivia ja, com o alvo `aqui` (o acidente; a regra urgente, que nao se aprende)
+    limiar_moderada    vontade acima disto: `aliviar` entra no tempo livre
+    w_banheiro_0       o peso herdado do alvo `banheiro`, inteiro na escala S (S/4: o pet nasce preferindo `aqui` 4 a 1)
+    w_aqui_0           o peso herdado do alvo `aqui` (S)"""
+
+    ligada: bool = False
+    limpador: bool = False
+    w_vontade: float = 4.0
+    limiar_urgente: float = 0.90
+    limiar_moderada: float = 0.50
+    w_banheiro_0: int = 256
+    w_aqui_0: int = 1024
+
+    def __post_init__(self) -> None:
+        if self.w_vontade < 0.0:
+            raise ValueError(f"ConfigBanheiro.w_vontade precisa ser >= 0: {self.w_vontade}")
+        if not 0.0 < self.limiar_moderada < self.limiar_urgente < 1.0:
+            raise ValueError(f"ConfigBanheiro: 0 < limiar_moderada < limiar_urgente < 1: {self.limiar_moderada}, {self.limiar_urgente}")
+        for nome in ("w_banheiro_0", "w_aqui_0"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigBanheiro.{nome} tem de ser inteiro positivo: {v!r}")
+
+
+CONFIG_BANHEIRO = ConfigBanheiro()
+CONFIG_BANHEIRO_LIGADA = ConfigBanheiro(ligada=True)

@@ -16,6 +16,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
 from digilab import AcaoPet, AcaoUsuario, Observacao, Politica, PoliticaInstinto  # noqa: E402
+from digilab.events import ACOES_PET_HOJE  # noqa: E402
 from digilab.config import CONFIG_LOBOS, CONFIG_LOBOS_APRENDIZ, ConfigLobos  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.obediencia import MotorPersonalidade  # noqa: E402
@@ -103,7 +104,7 @@ def test_so_stdlib_e_sem_funcoes_transcendentais():
 def test_pesos_sao_inteiros_iniciados_no_prior_e_abaixo_do_teto():
     p = PoliticaLobos()
     e = p.estado_interno()
-    assert e["parametros_aprendidos"] == p.n_pesos() == len(REGRAS) * len(AcaoPet) * len(ENTRADAS) == 490
+    assert e["parametros_aprendidos"] == p.n_pesos() == len(REGRAS) * len(ACOES_PET_HOJE) * len(ENTRADAS) == 490
     assert e["parametros_aprendidos"] < CONFIG_LOBOS.maximo_pesos
     for regra, por_acao in e["pesos"].items():
         for acao, pesos in por_acao.items():
@@ -311,7 +312,7 @@ def test_l1_elogio_sobe_a_escolhida_e_desce_as_outras_em_inteiros():
             else:
                 assert w1 <= w0 and (j != 0 or w1 < w0), (a, j)
             assert abs(w1 - w0) <= CONFIG_LOBOS_APRENDIZ.passo
-    for a in set(AcaoPet) - set(PRIOR_INSTINTO["tempo_livre"]):
+    for a in set(ACOES_PET_HOJE) - set(PRIOR_INSTINTO["tempo_livre"]):
         assert depois[a] == antes[a]                 # quem nao era candidato nao muda
     assert p.pesos_mudaram() and p.estado_interno()["aprendizado"]["n_atualizacoes"] == 1
 
@@ -373,7 +374,7 @@ def test_l1_teto_corta_e_conta():
         obs = Observacao(obs.vetor_estado, obs.ticks_desde_cuidado + 15, 3)
     assert p.desvio_maximo() == 100 and p.pesos_no_teto() > 0
     assert p.estado_interno()["aprendizado"]["cortes_teto"] > 0
-    for a in AcaoPet:
+    for a in ACOES_PET_HOJE:
         for w, w0 in zip(p._pesos["tempo_livre"][a], p._prior["tempo_livre"][a]):
             assert abs(w - w0) <= 100
 
@@ -483,7 +484,7 @@ def test_controle_sem_lobos_tem_a_mesma_capacidade_e_a_mesma_regra():
     # toda acao e candidata e o prior e o tempo livre + 1.0 nas acoes de regra
     acao = _decidir(c, obs)
     m = c.ultimo_motivo
-    assert set(m["candidatos"]) == {a.value for a in AcaoPet} and m["sem_impulsos"]
+    assert set(m["candidatos"]) == {a.value for a in ACOES_PET_HOJE} and m["sem_impulsos"]
     assert m["contribuicoes"]["impulsos"]["dormir"] == 1.0 and m["contribuicoes"]["impulsos"]["ocioso"] == 3.0
     c.receber_acao_dono(AcaoUsuario.ELOGIAR, 20)
     assert c.pesos_mudaram() and c.estado_interno()["aprendizado"]["n_atualizacoes"] == 1
@@ -545,7 +546,7 @@ def test_metricas_tarefa_e_norma_de_reacao():
     julgar = lambda e, a: julgar_acao({**e, "acao_atual": a}, CONFIG_DONOS)  # noqa: E731
     cansado = {"fome": 0.8, "higiene": 0.8, "energia": 0.1, "tick_do_dia": 600}
     decisoes = [(0, cansado, "dormir"), (15, cansado, "brincar"), (1440, cansado, "dormir"), (1455, cansado, "ocioso")]
-    c = acerto_na_tarefa(decisoes, julgar, [a.value for a in AcaoPet], 1440)
+    c = acerto_na_tarefa(decisoes, julgar, [a.value for a in ACOES_PET_HOJE], 1440)
     assert c["dias"] == [0, 1] and c["acerto"] == [0.5, 0.5] and c["teto"] == [1.0, 1.0] and c["acerto_total"] == 0.5
     e = eficiencia_amostral([0.2, 0.4, 0.6, 0.6], [3, 7, 12, 20], piso=0.2)
     assert e["alvo"] == 0.4 and e["dia"] == 1 and e["sinais"] == 7

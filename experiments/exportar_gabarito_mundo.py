@@ -28,7 +28,7 @@ sys.path.insert(0, str(RAIZ))
 from digilab.config import (CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, LAYOUT_MUNDO_AFASTADO,  # noqa: E402
                             LAYOUT_MUNDO_PADRAO)
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.events import AcaoPet, Evento, deixar_bola, deixar_comida, ler_deixar_bola, ler_deixar_comida  # noqa: E402
+from digilab.events import ACOES_PET_HOJE, AcaoPet, Evento, deixar_bola, deixar_comida, ler_deixar_bola, ler_deixar_comida  # noqa: E402
 from digilab.mundo import (DeixarBola, DonoComLugar, MotorMundo, cheiro_em, deslocar, direcao_do_cheiro, distancia, div_arred,  # noqa: E402
                            passo_ate, regiao_de, simular_vida_mundo)
 from digilab.policies.lobos import PoliticaLobos  # noqa: E402
@@ -96,7 +96,7 @@ class CerebroAleatorio(PoliticaInstintoBola):
 
     def agir(self, obs, rng):
         self._ultima_regra = "aleatoria"
-        return rng.choice(list(AcaoPet))
+        return rng.choice(list(ACOES_PET_HOJE))
 
     def escolher_alvo(self, acao, cands, perc, u):
         k = u % (len(cands) + 2)

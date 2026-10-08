@@ -19,11 +19,11 @@ from typing import Iterable, Mapping, Sequence
 
 from .arena import ResultadoPartida
 from .config import CONFIG_METRICAS, TICKS_POR_DIA, ConfigMetricas
-from .events import AcaoPet
+from .events import ACOES_PET_HOJE
 from .policy import Observacao, Politica
 from .protocol import derivar_semente
 
-ACOES = tuple(AcaoPet)
+ACOES = ACOES_PET_HOJE
 
 
 # ------------------------------------------------------------ vitoria

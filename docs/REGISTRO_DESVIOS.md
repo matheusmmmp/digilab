@@ -3789,3 +3789,67 @@ Interpretações:
 - **O "nada" do modo sem tapa gasta o orçamento.** O plano diz "o resto do dono e o orçamento ficam iguais". A bronca vira um
   `SemGesto`, que conta no orçamento e não chega ao motor (como o `sem_ensino` ao vivo da bancada). Para isso, os canais e o
   `simular_vida_gestos` são novos; o `treino.py` (com sha conferido) não mudou.
+
+## 2026-10-07 — BANHEIRO, etapa 2 (worker B): a vontade, o conforto, o `aliviar`, o instinto e o alvo
+
+- **A etapa 1 (os gabaritos, do A) não existia.** Gravei-a antes de mudar qualquer coisa, num commit próprio
+  (`tests/gabarito_banheiro.py` → `tests/gabaritos/banheiro_vidas_de_hoje.json`, 176 vidas, com o código de `origin/main` f2955f7).
+  - **Os braços do corpo com os drives novos e os gestos** (P0-c, P1-c, P*-c-tapa, P1-cw) ainda falham alto na bancada (o D os libera).
+    Por isso a etapa 6 inteira entrou por vidas diretas, com o `DonoComGestos` (com e sem tapa), nos quatro mundos. Pela bancada entram os
+    regimes "hoje" e "química" e o mundo físico.
+  - **Nas frutas, só o modo com tapa:** o canal de hoje do `simular_vida_frutas` não aceita o `SemGesto`.
+- **O `AcaoPet.ALIVIAR` no fim do enum (BN-1).** Toda iteração de hoje sobre o enum passou para a tupla explícita `ACOES_PET_HOJE` (as
+  sete de sempre, em `events.py`, conferida na carga):
+  - o bandit, as métricas, os traços, a arena, o desejo, a expressão e o cérebro A sem o banheiro;
+  - os exportadores de gabarito e a bancada;
+  - 17 usos nos testes.
+  - Sem isso, o membro novo mudaria as vidas de hoje (o bandit e os traços têm um braço por ação). O G2 confere.
+- **A vontade.**
+  - **Dormindo:** o "+150 por tick" para; o que vem da digestão continua, porque é do que o pet comeu (com a taxa C, ele come acordado).
+  - **A fração da digestão:** 1/3, com o resto da divisão guardado no corpo (`resto_vontade`). A soma ao longo da vida é exata.
+  - **"Acima de 0,75":** estritamente maior, lido depois da fase 1 do tick (um degrau, como o dano pela privação). É um gatilho novo do
+    grafo, `acima`.
+  - **O receptor** lê a concentração, como a dor.
+- **A necessidade na região** chega ao corpo pelo `passo(..., necessidades=n)`: o motor conta, e o corpo corta em 3. O objeto, o limpador e
+  o `limpar` são da etapa 3 (A).
+- **O conforto (BN-6).**
+  - **A forma:** um químico que guarda o conforto (a concentração). O receptor o lê; o cérebro lê a falta de conforto, S − leitura
+    (`RECEPTORES_FALTA_INVERTIDA`).
+  - **O medo da mão** vale também no conforto (o mesmo fator do carinho na solidão e no estresse).
+  - **Os números:** +45000 e meia-vida 60, o menor ponto da grade 6.1 do plano. É o que a regra da calibração do plano escolheria, porque
+    ele já passa o G-CAR nos três estados. A calibração do plano decide.
+- **O G-CAR** (sinal do carinho contra o do limpador, 132, ganho 4):
+
+  | solidão | só a solidão e o estresse (sem BN-6) | com o conforto | com o conforto ainda alto (45000) |
+  |---|---|---|---|
+  | 0,2 | 164 (1,2 vez, **falha**) | 940 (7,1 vezes) | 865 (6,6 vezes) |
+  | 0,5 | 983 | 1759 (13,3 vezes) | 1684 |
+  | 0,8 | 1964 | 2739 (20,8 vezes) | 2664 |
+
+- **A vontade e o conforto no sinal.** Os dois entram nos drives do sinal e nas entradas do corpo, com w_d = 1. Achado: o próprio
+  `aliviar` dá um sinal grande (a vontade de 0,75 a 0 vale +2304), muito maior que a diferença de lugar (132, o limpador). O pet deve
+  aprender a aliviar no tempo livre (o contrário do risco R-1 do plano), e o lugar só pelo desconforto e pelo carinho.
+- **O instinto do alívio.**
+  - **A regra urgente** vem depois das regras de sono e antes do pedido de necessidade. "Dormindo, não alivia" foi lido como "quando uma
+    regra de sono dispara".
+  - **No tempo livre,** o `aliviar` entra no fim, depois da fruta do mundo, e a regra continua a do tempo livre.
+- **O alvo.**
+  - **O sorteio:** proporcional, com u / 2^16 e na ordem dos candidatos que o motor passa. Instinto e cérebro usam a mesma conta.
+  - **Na urgência:** `aqui`, sem registro (não há o que aprender).
+  - **No cérebro A,** o alvo aprende pela regra da sub-decisão da fruta, com o canal do corpo e o piso. Aprende com a consequência e com o
+    carinho, que é creditado à última decisão.
+- **O `aliviar` nas tabelas do cérebro A, só onde é candidato:** as três regras de tempo livre e a urgente. Com ele em toda regra, o
+  cérebro do mundo físico passaria de 1000 pesos.
+  - **A conta:** 756 + 48 do aliviar + 192 das entradas do corpo + 2 do alvo = **998 de 1000**. Qualquer entrada a mais estoura o teto.
+  - **O prior da vontade** (w_vontade no aliviar) fica nas entradas do corpo e vai ao termo de impulsos. Só com o banheiro: sem ele, o
+    termo do corpo segue no de decisão, como antes.
+- **O contrato com o A (etapa 3), proposto.**
+  - **O `aliviar` é uma ação com alvo:** o motor sorteia u da rng `alvo` e passa dois `Alvo` (`banheiro` e `aqui`) ao `escolher_alvo`.
+  - **Os ganchos:** chama o `consequencia_mundo`, com as mesmas chaves do `ocorrido`, e depois o `consequencia_corpo`.
+  - **Os estímulos do corpo:** `estimulo_aliviar()` e `estimulo_necessidade()` (este fora do banheiro, ou sem o limpador), e o
+    `passo(..., necessidades=n)`.
+  - O `efeito_da_acao_do_pet` de hoje trata o `aliviar` como acordado e sem efeito, igual ao corpo.
+- **O motivo do `aliviar`** não tem fator nem texto na expressão. O `PoliticaComMotivo` falha alto nele, como nas entradas do corpo
+  aprendidas.
+- **Ainda sem G1 de vida inteira com o banheiro:** o motor é da etapa 3. O G1 do cérebro é pelas chamadas (as mesmas chamadas dão o mesmo
+  estado interno), e a decisão e o alvo são iguais aos do instinto em 3000 observações.

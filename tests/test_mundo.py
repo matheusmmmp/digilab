@@ -26,7 +26,7 @@ from digilab.config import (CONFIG_BOLA_LIGADA, CONFIG_EDUCACAO, CONFIG_FRUTAS_L
                             CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, LAYOUT_MUNDO_AFASTADO, LAYOUT_MUNDO_PADRAO, ConfigMundo)
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.educacao import reproduzir_educacao  # noqa: E402
-from digilab.events import (AcaoPet, AcaoUsuario, Evento, LogDeEventos, deixar_bola, deixar_comida,  # noqa: E402
+from digilab.events import (ACOES_PET_HOJE, AcaoPet, AcaoUsuario, Evento, LogDeEventos, deixar_bola, deixar_comida,  # noqa: E402
                             ler_deixar_bola, ler_deixar_comida)
 from digilab.frutas import MotorFrutas  # noqa: E402
 from digilab.mundo import (DIR16, ESTILOS_LUGAR, Alvo, DeixarComida, DonoComLugar, GestoForaDoMundo, MotorMundo,  # noqa: E402
@@ -88,7 +88,7 @@ def sempre(acao):
 
 
 def aleatoria(obs, rng):
-    return rng.choice(list(AcaoPet))
+    return rng.choice(list(ACOES_PET_HOJE))
 
 
 def alvo_aleatorio(acao, cands, perc, u):
