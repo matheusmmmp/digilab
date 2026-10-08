@@ -3,7 +3,9 @@
 Status (2026-10-07):
 - **DECIDIDO pelo Matheus:** dois pets de verdade no mesmo mundo, e não um pet sintético informante. A decisão substitui o primeiro passo
   recomendado em `docs/futuro/convivencia_mundo_fisico.md` (CV-1) e na `docs/futuro/cognicao_social.md` (seção 11).
-- **PROPOSTO:** o resto deste documento. As decisões abertas estão na seção 14, cada uma com recomendação e custo de errar.
+- **DP-1 a DP-10 DECIDIDAS pelo Matheus em 2026-10-07** (seção 14): oito pela recomendação; a DP-4 (os sentidos) e a DP-7 (os donos)
+  com mudança. Ficam abertas a DP-11 e a DP-12, que saem da DP-4.
+- **PROPOSTO:** o como, neste documento.
 
 A tarefa é `docs/TAREFA_V2_DOIS_PETS.md`. Um plano de análise vem depois, antes de qualquer run.
 
@@ -28,10 +30,10 @@ A tarefa é `docs/TAREFA_V2_DOIS_PETS.md`. Um plano de análise vem depois, ante
 | **motor** | um `MotorMundo` por vida, dono do mundo | um motor por pet, como hoje, sobre um **mundo compartilhado** (seção 2) |
 | **ordem** | um pet só, sem conflito | a vez de cada pet na decisão sorteada num fluxo do mundo (seção 3) |
 | **registro** | um log por vida | **um registro do grupo**, com o destino de cada evento (seção 4) |
-| **percepção** | o mapa, os objetos a até 6 células e o cheiro | mais **o outro à vista**: posição, ação visível e onde ele comeu (seção 5) |
+| **percepção** | o mapa, os objetos a até 6 células e o cheiro | mais **os sentidos sobre o outro**: visão e toque no degrau 1, audição e cheiro depois (seção 5) |
 | **interação** | nenhuma | **disputa pela comida** (quem pega primeiro) e **observação** (seção 6) |
 | **cérebro A** | o alvo padrão do motor | **alvo aprendido** e entradas sociais nas regras de tempo livre (seção 8) |
-| **dono** | um dono, um orçamento | **um dono com orçamento por pet** (seção 9) |
+| **dono** | um dono, um orçamento | **um dono com orçamento por pet** na validação inicial; **um dono por pet** como objetivo (seção 9) |
 | **bancada** | uma vida por célula | um **grupo** por célula, com o pet sozinho como referência (seção 11) |
 
 ## 2. O motor de N pets
@@ -93,21 +95,41 @@ fração das disputas que o primeiro ganhou e a distância de cada um) e não vi
 ## 4. O registro (event sourcing)
 
 **A proposta: um registro do grupo (DP-3).**
-- **O cabeçalho** diz a composição do grupo: as sementes, o cérebro e o dono de cada pet, a semente do mundo e o tick em que cada pet entrou.
+- **O cabeçalho** diz a composição do grupo: as sementes, o cérebro e o dono de cada pet (um dono para os dois ou um por pet, DP-7), a semente do mundo e o tick em que cada pet entrou.
   Um pet pode entrar depois: o "experiente" da seção 11 vive dias sozinho antes de o outro chegar.
 - **Os eventos** são os de hoje (o avanço do tempo e as ações e gestos do dono), cada um com o **destino**: `mundo` (o `deixar_comida`, o
-  `deixar_bola`) ou `pet:<id>` (o limpar, o acariciar, o tapa). O avanço é um só, do grupo.
+  `deixar_bola`) ou `pet:<id>` (o limpar, o acariciar, o tapa). Com dois donos, também a **origem** (`dono:<id>`). O avanço é um só, do
+  grupo.
 - **O replay** é o `reproduzir_grupo`: refaz o grupo do cabeçalho e rejoga os eventos no mesmo relógio, com a mesma ordem sorteada. O G1 do
   grupo confere bit a bit.
 - **A projeção:** o registro do grupo com um pet só, sem o destino, é o log de hoje evento a evento. É o que liga o G2 ao registro.
 
-**O que não entra no registro:** o que um pet faz, vê ou diz ao outro. Tudo isso sai do replay, como hoje sai a ação do pet. Só as causas
+**O que não entra no registro:** o que um pet faz, vê, ouve, cheira, toca ou diz ao outro. Tudo isso sai do replay, como hoje sai a ação do pet. Só as causas
 de fora entram.
 
-## 5. A percepção do outro
+## 5. Os sentidos sobre o outro (DP-4, DECIDIDA com mudança)
 
-Um campo novo e opcional, `Observacao.social` (`PercepcaoSocial | None = None`), como o `mundo` e o `corpo` entraram. Sem o grupo, ele fica
-`None`, e nenhum cérebro de hoje o lê.
+**A decisão do Matheus (2026-10-07):** o pet tem sentidos sobre o outro pet, como **toque, cheiro e audição**, além da visão.
+
+**A regra que vale para os quatro:**
+- **Nenhum acesso ao estado interno do outro.** Os sentidos só leem o que é **físico** (posição, contato, o som de uma ação) ou o que o
+  corpo do outro **emite** por um emissor declarado no grafo do corpo (`docs/TAREFA_V2_CORPO_DRIVES.md`, seção 18).
+- **Cada sentido entra como receptor** no campo novo e opcional `Observacao.social` (`PercepcaoSocial | None = None`), como o `mundo` e o
+  `corpo` entraram.
+- **Sem o grupo, ou com um pet só,** o campo é `None`, e o mundo não guarda nada dos sentidos (nem rastro, nem som). É a vida de hoje,
+  byte a byte (G2).
+
+**Quando cada sentido entra** (DP-11, aberta, seção 14; os números novos são PROPOSTOS, SEM FONTE):
+
+| sentido | o que lê | entra | por quê |
+|---|---|---|---|
+| **visão** | posição, ação visível, onde o outro comeu | **degrau 1** | é o canal da observação (DP-5) |
+| **toque** | o contato na mesma célula ou na vizinha | **degrau 1** | o contato já acontece na disputa pela comida: é físico e sai de graça do mundo |
+| **audição** | os sons das ações e o chamado, com direção e distância | **degrau 1b**, depois de o 1 ter resposta | ouvir o outro comer fora da vista é um canal de informação a mais. Entrando depois, o quanto ele acrescenta é medido sozinho |
+| **cheiro** (rastro e cheiro próprio) | a intensidade e a direção do cheiro do outro e do rastro que ele deixou | **degrau 1b**, junto com a audição | o rastro é outro canal de "onde o outro foi" (deixar marca no mundo), e misturá-lo à visão no degrau 1 tira a leitura de qual canal ensinou |
+| **cheiro de estado** (estresse, medo) | um cheiro que o corpo do outro emite conforme um químico dele | **degrau 3**, com a solidão e a aglomeração (CV-5) | abre um canal emocional entre corpos, e o grafo do corpo passa a ter laço entre dois pets (seção 5.3) |
+
+### 5.1 Visão (degrau 1)
 
 | campo | o que é |
 |---|---|
@@ -115,12 +137,72 @@ Um campo novo e opcional, `Observacao.social` (`PercepcaoSocial | None = None`),
 | `acao_visivel` | a ação que o outro escolheu na última decisão (comer, brincar, dormir, explorar, ocioso, chamar, emburrar). É o que se vê de fora |
 | `onde_comeu` | o último ponto em que este pet **viu** o outro comer (dentro do raio, no momento do consumo), com há quanto tempo. Nada, se nunca viu |
 
-**O que fica de fora** (G-RECEPTOR-SOCIAL):
-- o estado interno do outro: drives, receptores, pesos, memória e o alvo que ele escolheu;
-- **o que o outro comeu e não foi visto** e o efeito da fruta no corpo dele;
-- **o cheiro do outro:** fica para o degrau 3, com a solidão (CV-5).
-
 O pet sabe **onde** o outro comeu e **o que** ele estava fazendo, porque viu. Não sabe se fez bem a ele.
+
+### 5.2 Toque (degrau 1)
+
+**O que gera o evento de contato.** É uma conta do mundo, no fim de cada tick com decisão, depois de os pets agirem na ordem sorteada. Há
+contato quando os dois estão **na mesma célula ou em células vizinhas**: a distância de Chebyshev entre as células, `max(|cx_A − cx_B|,
+|cy_A − cy_B|)`, é no máximo 1, com a célula `(x // 16, y // 16)`.
+
+**O tipo do contato** sai do que aconteceu no tick, e não de uma intenção:
+- **disputa:** os dois tinham como alvo a mesma comida nesse tick, e só um comeu. O que comeu sente `disputa_ganhou`; o outro,
+  `disputa_perdeu` (a comida sumiu debaixo dele);
+- **encostar:** um dos dois tinha como alvo o candidato `seguir` e terminou vizinho do outro. Quem foi sente `encostou`, e o outro sente
+  `encostaram`;
+- **esbarrar:** qualquer outro contato.
+
+**O que o receptor lê:** `toque = (id do outro, tipo, direção)`, com a direção em 8 (a mesma tabela do cheiro da comida) ou 0 na mesma
+célula. Um contato por par e por tick com decisão.
+
+**O que o toque não faz no degrau 1:** não mexe no corpo. O efeito do contato no corpo (a solidão, a aglomeração) é do degrau 3 (CV-5).
+
+### 5.3 Cheiro (degrau 1b; o de estado, no degrau 3)
+
+**O cheiro próprio e o rastro.** Cada pet emite um cheiro na posição em que está e deixa um **rastro**: a cada decisão, uma marca na posição
+dele.
+- **As fontes** ficam no `Mundo` compartilhado, por pet: a posição atual, com a intensidade `A_pet`, e as marcas, até `max_marcas` por pet
+  (as mais antigas saem). Cada marca perde intensidade em inteiros, `A_marca × (T − idade) // T`, e some com a idade `T`.
+- **A soma** é a mesma conta do cheiro da comida (`mundo.cheiro_em`, `A × (R − d) // R` com `d < R`), por outro pet, num canal separado do
+  da comida.
+- **O que o receptor lê:** por pet conhecido, a intensidade e a direção (`direcao_do_cheiro`, com a mesma ordem de desempate do cheiro da
+  comida).
+- **Os números** (`A_pet`, `A_marca`, `R`, `T`, `max_marcas`) são PROPOSTOS, SEM FONTE, e o plano do degrau 1b os fixa.
+
+**Quem decide o que o corpo emite é o corpo.**
+- **O cheiro próprio e o rastro** são **emissores externos** declarados no grafo do corpo: um tipo novo de emissor, com destino `mundo`,
+  que não produz químico em corpo nenhum. O emissor do degrau 1b tem intensidade constante: não lê químico, então o cheiro não carrega
+  nada do estado.
+- **O cheiro de estado** (degrau 3) é um emissor externo cuja intensidade **lê um químico do próprio corpo** (o estresse, o susto), com o
+  ganho declarado no grafo. O outro pet lê só a intensidade do cheiro no mundo, nunca o químico.
+- **As checagens da seção 18 do corpo** passam a ver os dois corpos no degrau 3: um laço receptor → emissor que passe pelo cheiro de um pet
+  e volte pelo do outro entra na conta do "laço de ganho" (produto de ganhos < 1). No degrau 1b, sem leitura de químico, não há laço.
+
+### 5.4 Audição (degrau 1b)
+
+**O som não é mensagem.** É o barulho que uma ação faz. O vocabulário fechado (`COMIDA(lugar)`) continua sendo o degrau 2 (DP-6).
+
+**Os sons:** cada um é um evento do mundo, emitido na posição do pet na decisão em que ele age:
+
+| som | quando |
+|---|---|
+| `comendo` | o pet comeu (comer, ou o achou e comeu do explorar) |
+| `bola` | o pet brincou com a bola |
+| `chamado` | o pet escolheu `chamar_atencao` |
+| `emburrado` | o pet escolheu `emburrar` |
+
+**O alcance** é `R_som` (PROPOSTO: 16 células, além das 6 da visão), com a intensidade caindo pela mesma conta inteira do cheiro.
+
+**O que o receptor lê:** os sons ouvidos desde a decisão anterior, cada um `(id do emissor, som, direção em 8, distância)`. Os sons do
+próprio pet não entram.
+
+**O que fica de fora:** o som não diz o que o outro comeu nem se fez bem. Ouvir `comendo` diz só que ali alguém comeu.
+
+### 5.5 O que fica de fora (G-RECEPTOR-SOCIAL)
+
+- o estado interno do outro: drives, receptores, químicos, pesos, memória e o alvo que ele escolheu;
+- o que o outro comeu e não foi visto nem ouvido, e o efeito da fruta no corpo dele;
+- qualquer cheiro que não saia de um emissor declarado no grafo do corpo.
 
 ## 6. A interação mínima: os degraus 1 e 2
 
@@ -133,7 +215,7 @@ O pet sabe **onde** o outro comeu e **o que** ele estava fazendo, porque viu. N�
   regra escrita de imitação.
 
 **Aprender observando (5.2) já é o primeiro degrau medível, e é mais barato que a comunicação (DP-5).**
-- **O mais barato:** não pede ação nova, evento novo nem vocabulário; só a percepção da seção 5 e os dois candidatos.
+- **O mais barato:** não pede ação nova, evento novo nem vocabulário; só a visão e o toque da seção 5 e os dois candidatos.
 - **O mensurável:** a pergunta "B aprende algo que só A viveu?" já tem resposta no degrau 1 (seção 11).
 - **O que o separa da comunicação:** a observação passa pelo que o outro **faz**, e a mensagem pelo que ele **diz**. O degrau 2 só entra
   quando o 1 tiver resposta.
@@ -173,8 +255,8 @@ da própria ação atualiza o valor.
     ele, o pet nunca tentaria `seguir`;
   - **o aprendizado** é pela consequência da decisão, pela regra de sempre do cérebro (a da L1);
   - era o "alvo aprendido" de adendo que o plano do mundo deixou para depois (seção 3 dele);
-- **as entradas sociais:** "outro à vista", "viu o outro comer" (recente) e a ação visível do outro, nas regras de tempo livre, com prior 0
-  (no prior, a vida de hoje).
+- **as entradas sociais:** "outro à vista", "viu o outro comer" (recente), a ação visível do outro e o toque (o tipo do último contato),
+  nas regras de tempo livre, com prior 0 (no prior, a vida de hoje). A audição e o cheiro entram como entradas no degrau 1b, do mesmo jeito.
 
 **O modelo dos outros fica registrado, e não decide, até o degrau 3.** Por pet conhecido, três variáveis separadas
 (`cognicao_social.md`, seção 3):
@@ -191,17 +273,30 @@ da própria ação atualiza o valor.
 
 **Os cérebros B e C:** opcionais, como no corpo. A interface é a mesma: `obs.social`, o `escolher_alvo` e a consequência.
 
-## 9. O dono (DP-7)
+## 9. O dono (DP-7, DECIDIDA com mudança)
 
-**A proposta: um dono com orçamento por pet.**
+**A decisão do Matheus (2026-10-07):** o objetivo são **donos separados, um por pet**. A validação inicial é com **um dono para os dois**, com
+orçamento por pet. O segundo dono entra depois, numa etapa própria (seção 12), com gate próprio.
+
+**A validação inicial: um dono, orçamento por pet.**
 - **O dono** é o mesmo dono sintético (por exemplo, o atencioso), com **um orçamento de 16 interações por dia para cada pet** e a rng
   própria de cada pet (`dono`, `dono-lugar`, com o rótulo do pet).
 - **O cuidado dirigido** (limpar, acariciar) vai ao pet do orçamento.
 - **A comida** sai do orçamento do pet para quem o dono a solta, e cai no **mapa compartilhado**. O outro pode comer: é a competição. Onde
   o dono a solta (perto de quem, no comedouro) já é a variável do cuidado do mundo físico (PMF-4).
-- **Por quê:** é o jogo (CV-2: dois pets do mesmo jogador), e o orçamento por pet impede que um pet ganhe cuidado só por ter companhia.
+- **Por pet, sem decisão conjunta:** nesta fase, o dono decide o cuidado de cada pet só pelo que vê daquele pet, como se fossem dois donos
+  com a mesma política. Uma decisão que olhe os dois juntos (soltar a comida "entre os dois", por exemplo) fica fora, porque dois donos
+  separados não a reproduziriam.
 
-**Donos diferentes por pet** fica como alternativa: separa melhor o dono do companheiro, mas não é o caso do produto e dobra as células.
+**O objetivo: donos separados.**
+- **Cada pet tem o próprio dono,** com a própria política, o próprio orçamento e as próprias rngs (`dono`, `dono-lugar`, com o rótulo do
+  dono).
+- **No registro do grupo,** cada evento do dono leva a **origem** (`dono:<id>`) além do destino (seção 4).
+- **O gate da etapa (G-DONOS):** a vida com dois donos **de mesmo comportamento** (a mesma política, cada um com o rótulo de rng igual ao
+  do pet que o dono único usava) reproduz byte a byte a vida com um dono só. Só depois disso os dois donos podem diferir (um atencioso, um
+  relapso).
+- **O que se ganha:** o dono de um pet passa a ser separável do companheiro. É o desenho do produto que o Matheus quer, e as células de dois
+  donos diferentes entram por plano próprio.
 
 ## 10. Os gates
 
@@ -211,7 +306,9 @@ da própria ação atualiza o valor.
 | **G1-GRUPO** | o grupo inteiro, rejogado do registro, dá os mesmos estados, posições, objetos, ordens sorteadas e estados internos, bit a bit |
 | **G-ORDEM** | trocar a ordem em que o código guarda os motores não muda nada |
 | **G-NUMS-GRUPO** | trocar o cérebro de B não muda as rngs de A, as quedas, a ordem sorteada nem os sorteios do dono de A. Só muda o que passa pela interação física (a fruta que sumiu, a bola que rolou), e cada diferença do A é explicada por um evento do B |
-| **G-RECEPTOR-SOCIAL** | nenhum cérebro importa o motor nem o mundo; a `PercepcaoSocial` não tem campo de estado interno; mudar o estado interno do outro sem mudar o que ele faz não muda a percepção |
+| **G-RECEPTOR-SOCIAL** | nenhum cérebro importa o motor nem o mundo; a `PercepcaoSocial` não tem campo de estado interno; mudar o estado interno do outro sem mudar o que ele faz, onde está e o que o corpo dele emite não muda nenhum sentido |
+| **G-SENTIDOS** | o toque nos casos da seção 5.2 (disputa, encostar, esbarrar, nenhum contato a duas células); no degrau 1b, o rastro e o cheiro próprio na conta inteira do cheiro da comida e o som no alcance e na direção; no degrau 3, o cheiro de estado só por emissor do grafo, com a checagem de laço entre os dois corpos |
+| **G-DONOS** | na etapa do segundo dono: dois donos de mesmo comportamento reproduzem byte a byte a vida com um dono só (seção 9) |
 | **G-MEC-SOCIAL** | a disputa (o primeiro come, o segundo não acha), o `onde_comeu` só com o consumo à vista, os candidatos sociais só no explorar com o outro visto, o padrão do motor nunca os escolhendo |
 | **G-PAR** | o grupo em TypeScript, com os mesmos números, quando o produto voltar (o v11 está pausado) |
 | **G-ENGINE** | `engine.py` com o sha256 de sempre |
@@ -250,6 +347,9 @@ da própria ação atualiza o valor.
 | o alvo aprendido e as entradas sociais no A (B) | a etapa 6 do corpo (o B está nela) e a percepção social | a bancada do corpo (D) |
 | a bancada do grupo (D) | o cérebro | — |
 | o plano de análise (C) | o desenho e a tarefa | tudo; commitado antes de qualquer run |
+| a audição e o cheiro do degrau 1b (A; o emissor externo no grafo, B) | o degrau 1 ter resposta (DP-11) | — |
+| o segundo dono (A e D) | a validação do degrau 1 com um dono; o G-DONOS | a audição e o cheiro do 1b |
+| o cheiro de estado (B, no grafo; A, no mundo) | o degrau 3 (DP-12) | — |
 | as runs | a validação do mundo físico (a referência do pet só) e o plano | — |
 | o grupo em TypeScript (A) | o produto voltar (o v11 está pausado) | — |
 | a solidão e a aglomeração no corpo (degrau 3, CV-5) | o degrau 1 ter resposta | — |
@@ -267,6 +367,9 @@ da própria ação atualiza o valor.
 | R-6 | **Agressão** | fica fora (CV-3). A disputa é só quem pega primeiro |
 | R-7 | **O custo das runs:** um grupo é ao menos duas vidas, e o A experiente vive K dias a mais | o plano mede o custo no piloto e diz o teto |
 | R-8 | **A sorte da ordem pesa na disputa** | a ordem é medida (seção 3); o contraste primário tem a mesma distribuição de ordens nos dois braços |
+| R-9 | **Um sentido vazar o estado interno:** o cheiro de estado é, por desenho, uma função de um químico do outro | só por emissor declarado no grafo do corpo, com ganho declarado, e só no degrau 3 (DP-12) |
+| R-10 | **Muitos canais de uma vez:** com quatro sentidos, não se sabe qual ensinou | visão e toque no degrau 1; a audição e o cheiro entram depois, cada um medido como acréscimo (DP-11) |
+| R-11 | **O dono único que olha os dois:** uma decisão conjunta não teria par com dois donos | na validação inicial o dono decide por pet; o G-DONOS confere a passagem para dois |
 
 **Literatura.** Nenhuma referência sustenta este desenho: ele é de engenharia. As referências da `cognicao_social.md` (seção 9) e da
 `convivencia_mundo_fisico.md` (seção 7) que estão como **pista** continuam pista e não são citadas pelo conteúdo. Não há alegação de
@@ -274,15 +377,24 @@ novidade: aprendizado social, forrageio em grupo e comunicação entre agentes a
 
 ## 14. Decisões do Matheus
 
-| # | decisão | recomendação | custo de errar |
+**DECIDIDAS em 2026-10-07:**
+- **pela recomendação:** DP-1, DP-2, DP-3, DP-5, DP-6, DP-8, DP-9 e DP-10;
+- **com mudança:** DP-4 (os sentidos: toque, cheiro e audição, além da visão; seção 5) e DP-7 (donos separados como objetivo, validação
+  inicial com um dono para os dois; seção 9).
+
+**Abertas:** DP-11 e DP-12, que saem da DP-4.
+
+| # | decisão | estado ou recomendação | custo de errar |
 |---|---|---|---|
-| DP-1 | O motor de N pets | **um motor por pet sobre um `Mundo` compartilhado**, com um orquestrador. É a forma do TS, e o `engine.py` não muda | um motor com dois pets: refaz o laço do engine (congelado) e perde o pet de hoje como caso particular |
-| DP-2 | A ordem no tick | **a vez sorteada no fluxo `mundo-ordem`**, só com dois ou mais pets decidindo | "quem está mais perto": decidir em duas fases muda o laço e a ordem de hoje. Alternância fixa: viés sistemático para um dos pets |
-| DP-3 | O registro | **um registro do grupo**, com o destino de cada evento e o cabeçalho da composição | um log por pet mais o do mundo: o replay junta três arquivos, e a ordem entre eles vira mais uma fonte de erro |
-| DP-4 | A percepção do outro | **posição, ação visível e onde o viu comer**, dentro do raio de visão; sem cheiro do outro no degrau 1 | dar o estado interno ou o efeito no corpo do outro: acesso privilegiado, e o "aprendido de outros" vira leitura de memória |
-| DP-5 | O primeiro degrau | **aprender observando**, antes de qualquer mensagem | começar pela comunicação: pede ação, vocabulário e evento, sem saber se a observação já bastava |
-| DP-6 | A comunicação, quando entrar | **sub-decisão do `chamar_atencao`** com o outro como alvo e vocabulário fechado, sem membro no `AcaoPet` | uma ação nova: quebra a reprodução da v1 e muda o enum que a web lê |
-| DP-7 | O dono | **um dono com orçamento por pet**, rng por pet, comida no mapa compartilhado | donos diferentes: dobra as células e não é o jogo. Orçamento único: o pet com companhia perde cuidado |
-| DP-8 | O cérebro A no degrau 1 | **alvo aprendido e entradas sociais**; o modelo dos outros (familiaridade, confiança por atividade, afinidade) só registrado até o degrau 3 | o modelo dos outros decidindo já: mais pesos livres antes de saber se a observação funciona |
-| DP-9 | O controle do primeiro degrau | **o A embaralhado** (mesma presença, informação sem valor), mais o B só e o B com um A ingênuo | só o B só: confunde "aprendeu do outro" com "teve companhia" |
-| DP-10 | A ordem com o resto | **o motor (A) em paralelo com o corpo; o cérebro (B) depois da etapa 6 do corpo; a bancada (D) depois; as runs depois da validação do mundo físico e do plano** | esperar o corpo inteiro: atrasa sem motivo. Rodar antes da validação do mundo físico: o B só fica sem referência |
+| DP-1 | O motor de N pets | **DECIDIDA:** um motor por pet sobre um `Mundo` compartilhado, com um orquestrador | — |
+| DP-2 | A ordem no tick | **DECIDIDA:** a vez sorteada no fluxo `mundo-ordem`, só com dois ou mais pets decidindo | — |
+| DP-3 | O registro | **DECIDIDA:** um registro do grupo, com o destino (e, com dois donos, a origem) de cada evento e o cabeçalho da composição | — |
+| DP-4 | A percepção do outro | **DECIDIDA com mudança:** visão, toque, cheiro e audição, cada um como receptor, sem acesso ao estado interno; o cheiro de estado só por emissor declarado no grafo do corpo (seção 5) | — |
+| DP-5 | O primeiro degrau | **DECIDIDA:** aprender observando, antes de qualquer mensagem | — |
+| DP-6 | A comunicação, quando entrar | **DECIDIDA:** sub-decisão do `chamar_atencao`, com o outro como alvo e vocabulário fechado | — |
+| DP-7 | O dono | **DECIDIDA com mudança:** donos separados como objetivo; a validação inicial com um dono, orçamento por pet; o segundo dono numa etapa própria com o G-DONOS (seção 9) | — |
+| DP-8 | O cérebro A no degrau 1 | **DECIDIDA:** alvo aprendido e entradas sociais; o modelo dos outros só registrado até o degrau 3 | — |
+| DP-9 | O controle do primeiro degrau | **DECIDIDA:** o A embaralhado, mais o B só e o B com um A ingênuo | — |
+| DP-10 | A ordem com o resto | **DECIDIDA:** o motor em paralelo com o corpo; o cérebro depois da etapa 6 do corpo; a bancada depois; as runs depois da validação do mundo físico e do plano. Com a DP-7, o segundo dono entra depois da validação do degrau 1 (seção 12) | — |
+| **DP-11** | Quais sentidos no primeiro degrau | **visão e toque no degrau 1; audição e cheiro (rastro e cheiro próprio) no degrau 1b**, depois de o 1 ter resposta, cada um medido como acréscimo | **tudo no degrau 1:** se o B aprende, não se sabe por qual canal, e a primeira medida fica mais cara (quatro receptores a calibrar). **Visão só, sem toque:** a disputa acontece do mesmo jeito, e o pet perde a única pista física dela. **Audição e cheiro só no degrau 3:** atrasa canais baratos, que não dependem do corpo |
+| **DP-12** | O cheiro de estado (estresse, medo) | **no degrau 3, com a solidão e a aglomeração (CV-5)**, por um emissor externo declarado no grafo do corpo, com o laço entre os dois corpos na checagem de ganho | **no degrau 1 ou 1b:** um canal emocional entre corpos entra antes de se saber se a observação funciona, e o "aprendido de outros" passa a misturar contágio com informação. **Sem passar pelo grafo:** o cheiro vira leitura direta do estado do outro, que a regra proíbe |

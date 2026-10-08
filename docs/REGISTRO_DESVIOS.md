@@ -3789,3 +3789,22 @@ Interpretações:
 - **O "nada" do modo sem tapa gasta o orçamento.** O plano diz "o resto do dono e o orçamento ficam iguais". A bronca vira um
   `SemGesto`, que conta no orçamento e não chega ao motor (como o `sem_ensino` ao vivo da bancada). Para isso, os canais e o
   `simular_vida_gestos` são novos; o `treino.py` (com sha conferido) não mudou.
+
+## 2026-10-07 — W-DOIS-PETS-DP (worker C): as DP decididas no desenho e na tarefa dos dois pets
+
+Só papel: `docs/futuro/dois_pets.md` e `docs/TAREFA_V2_DOIS_PETS.md`. Nenhuma run, nenhum código.
+
+- **DP-4 com mudança (os sentidos):**
+  - o toque é uma conta do mundo: a distância de Chebyshev entre as células ≤ 1, com o tipo tirado do que aconteceu no tick (disputa,
+    encostar, esbarrar), e não de uma intenção;
+  - o cheiro e o rastro são emissores externos declarados no grafo do corpo, um tipo novo de emissor com destino `mundo`;
+  - o cheiro de estado é um emissor que lê um químico do próprio corpo, com ganho declarado, e a checagem de laço passa a ver os dois
+    corpos;
+  - o som é o barulho da ação, não mensagem.
+- **Duas decisões abertas novas** saem da DP-4: a DP-11 (visão e toque no degrau 1; audição e cheiro no 1b) e a DP-12 (o cheiro de
+  estado no degrau 3). A recomendação é medir cada canal como acréscimo, para o primeiro resultado dizer por qual canal o B aprendeu.
+- **DP-7 com mudança (os donos):** um dono para os dois na validação inicial, decidindo por pet e sem decisão conjunta, para que dois
+  donos de mesmo comportamento possam reproduzi-lo byte a byte (G-DONOS). O segundo dono é uma etapa própria (a 7), depois da validação
+  do degrau 1.
+- **A tabela de etapas foi renumerada:** a 7 é o segundo dono, a 8 é a audição e o cheiro, e a 9 é o TypeScript.
+- **Os números novos dos sentidos** (alcance do som, intensidades, idade do rastro) são PROPOSTOS, SEM FONTE; o plano do degrau 1b os fixa.
