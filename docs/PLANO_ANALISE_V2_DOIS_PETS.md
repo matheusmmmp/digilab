@@ -1,6 +1,7 @@
 # Plano de análise — V2: dois pets, o degrau 1 (o B aprende o que só o A viveu?)
 
-Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 6 de `docs/TAREFA_V2_DOIS_PETS.md`. O desenho é
+Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. **PDP-1 a PDP-6 DECIDIDAS pelo Matheus em 2026-10-08, todas pela
+recomendação** (seção 12). É a etapa 6 de `docs/TAREFA_V2_DOIS_PETS.md`. O desenho é
 `docs/futuro/dois_pets.md`, com DP-1 a DP-12 decididas.
 
 **Regras deste plano:**
@@ -198,6 +199,8 @@ conferido bit a bit (G1-GRUPO).
 - **A recusa:** a run se recusa a rodar se a pasta de saída já existe.
 
 ## 12. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-08: PDP-1 a PDP-6, todas como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
