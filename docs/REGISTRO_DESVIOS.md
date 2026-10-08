@@ -3940,3 +3940,11 @@ Só papel: `docs/futuro/dois_pets.md` e `docs/TAREFA_V2_DOIS_PETS.md`. Nenhuma r
   aprendidas.
 - **Ainda sem G1 de vida inteira com o banheiro:** o motor é da etapa 3. O G1 do cérebro é pelas chamadas (as mesmas chamadas dão o mesmo
   estado interno), e a decisão e o alvo são iguais aos do instinto em 3000 observações.
+- **A integração com a `main` (f8449ba: #248, #249, #250), feita pelo Gerente no `v2-banheiro-integra` e conferida aqui:**
+  - **o gabarito do corpo, versão 5:** as seções do A (`config`, `grafo`, `de_estado`, `etapa6_mundo`) e a minha (`banheiro`) juntas. O
+    arquivo é o que o exportador unido grava, byte a byte;
+  - **o gabarito do banheiro foi regravado** com o código de antes do banheiro (a `main` com o #250). Mudaram só as 16 vidas
+    `direto|*|P1|tapa|*`, porque o tapa agora chega ao P1 (CD-10, #250), o que é intencional. Regerado à parte numa worktree em f8449ba,
+    sai byte a byte igual;
+  - **o espelho `CCO` da web** (`web/app/motor/constantes.ts`) ganhou os campos do banheiro, com os mesmos valores: só o espelho, para o
+    G-PAR "campo a campo". A química do banheiro em TS é a etapa 4 do banheiro (A).
