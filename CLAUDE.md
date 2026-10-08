@@ -3230,3 +3230,64 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **G1 com o `Mundo`:** o replay refaz o resumo do mundo, nos dois layouts, sem e com o corpo.
 - **Fora:** o `Grupo` (N motores sobre um `Mundo`, a vez sorteada, o registro do grupo) é a etapa 2, no PR seguinte. O `mundo.ts` não mudou
   (etapa 9).
+
+## V2, DOIS-PETS, etapa 2 — o `Grupo`: N pets de verdade no mesmo `Mundo` (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`) — GATES PASSAM
+
+A etapa 2 do motor da frente dos dois pets (desenho `docs/futuro/dois_pets.md`, seções 2 a 4; DP-1 a DP-3 e DP-7). Infraestrutura, sem
+run; só as sementes dos testes. Mudaram `digilab/grupo.py` (novo), `digilab/mundo.py` (o `MotorMundo` aceita o `Mundo` do grupo e a
+entrada, e o laço partido), `digilab/motor_corpo.py` (o `_um_tick`) e a `ConfigGrupo` no fim de `config.py`. `engine.py`, os cérebros, a
+bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **`ConfigGrupo`** (`ligada` False; `CONFIG_GRUPO_LIGADA`): `ids` ("A", "B"; distintos, em ordem, no máximo dois) e `orcamento_por_dia`
+  (16, por pet; DP-7). Desligada, o `Grupo` falha alto (`GrupoSemChave`): o `MotorMundo` de um pet continua dono do próprio `Mundo`.
+- **As sementes (seção 2):** o mundo e o pet A usam a semente do grupo, s (o A sozinho é a vida de hoje de s); o B usa
+  `derivar_semente("segundo-pet", s)` (`sementes_do_grupo`). Os fluxos de cada pet (`alvo`, `mundo-sujeira`, `dono`, `dono-lugar`) saem
+  da semente dele.
+- **O `Grupo`** (`Grupo(cfg_mundo, semente)`): um `Mundo` e os motores dos pets presentes, num relógio só (`Grupo.tick`, o do mundo). Não
+  decide nada.
+  - **`entrar(id, politica, fabrica_motor, cerebro, dono)`:** só num início de dia do mundo. A fábrica recebe `mundo=` e `entrada_mundo=`,
+    e o motor é conferido (o `Mundo` do grupo, a semente, a entrada, o mesmo `efeito_frutas` dos outros, recém-nascido).
+  - **`avancar(n)`:** um evento de avanço do grupo; cada pet presente ganha o avanço no próprio log e os ticks andam intercalados. Em cada
+    tick, os pets que decidem agem na ordem sorteada e depois os outros andam o tick deles.
+  - **A vez (DP-2):** com dois ou mais pets decidindo no mesmo tick, um sorteio no fluxo `mundo-ordem` (`derivar_semente("mundo-ordem",
+    s)`), sobre a lista ordenada pelo id: o `random.shuffle` do CPython escrito com `randrange`. O primeiro age inteiro, e o segundo
+    percebe o mundo como ficou. Com um pet só não há sorteio, e o fluxo nem é criado. As vezes ficam em `Grupo.ordens` (derivadas).
+  - **O dono:** `acao_dono`, `deixar_comida` e `deixar_bola` por pet (o orçamento e o contato são do pet). O `PetNoGrupo` é a porta do
+    `CanalMundo` para um pet.
+- **O laço partido:** o `_avancar(n)` da cadeia do `MotorMundo` virou três partes, `_abrir_avanco` (o índice do evento do
+  `MotorPersonalidade`), `_um_tick` n vezes (o laço do engine, ou o `_laco(1)` do `MotorCorpo`) e `_fechar_avanco` (a morte conferida do
+  `MotorEducacao`). Um teste confere a MRO de `_avancar`, para uma classe nova na cadeia não passar despercebida.
+- **A entrada depois do tick 0** (o A vive K dias antes do B; "B só" e "B + Aing" do plano): o relógio do pet (o `Estado`, o log, o
+  corpo e a Vida) começa em 0 na entrada, com `MotorMundo.entrada_mundo` = o tick do mundo. O `Mundo` e os registros do mundo físico do
+  pet (consumos, decisões, regiões, visitas, comidas deixadas) usam o relógio do mundo. A hora do dia é a mesma nos dois. O mundo pode
+  passar dias sem pet: o `Grupo` só anda o relógio, e as quedas desses dias saem na primeira decisão (a atualização idempotente da etapa 1).
+- **O registro do grupo (DP-3, `RegistroGrupo`):**
+  - JSONL com o cabeçalho na primeira linha: a versão, a semente, os ids, o layout e, por pet, a semente, a entrada e os rótulos do
+    cérebro e do dono;
+  - os eventos no relógio do mundo, cada um com o `destino` (`grupo` para a entrada e o avanço; `mundo` para deixar a comida e a bola;
+    `pet:<id>` para as ações do dono), o `pet` (o do orçamento e do contato) e a `origem` (`dono`; `dono:<id>` na etapa 7);
+  - um avanço só, do grupo; o que os pets fazem não entra (sai do replay);
+  - `projecao(id)` é o log de hoje do pet, no relógio dele, igual ao log do motor (conferido).
+- **`reproduzir_grupo(registro, fabricas, cfg_mundo)`:** refaz o grupo do cabeçalho e rejoga os eventos no mesmo relógio, com o mesmo
+  sorteio. Falha alto com evento desconhecido, fora do tick, de pet que não entrou, com o cabeçalho de outra config ou com um registro
+  refeito diferente do lido.
+- **`simular_grupo(cfg_mundo, s, pets, dias)`** (DP-7, a validação inicial): o `simular_vida_mundo` do grupo. A cada passo do dono o grupo
+  anda o passo; depois, para cada pet presente na ordem dos ids, o dono decide pelo que vê daquele pet, com o orçamento dele (16 por dia
+  vivido) e a rng `dono` dele (`derivar_semente("dono", semente do pet, rótulo)`). Os pets (`PetDoGrupo`) entram no começo de um passo.
+  `dono=None` é o pet sem dono (o parceiro passivo dos testes).
+- **Gates** (`tests/test_grupo.py`, 35 testes, ~17 s):
+  - **G2 com um pet no grupo:** as 48 vidas diretas de `dois_pets_vidas_de_hoje.json` (o corpo inteiro da etapa 6 incluído) e o
+    `simular_vida_mundo` de hoje com os quatro donos, os três lugares, os dois cérebros e as duas sementes, byte a byte; o canal dos
+    gestos (o tapa e o carinho) também; nenhum sorteio com um pet; o grupo desligado recusa;
+  - **G1-GRUPO:** o replay do texto do registro refaz o grupo bit a bit (os pets, o mundo, as vezes e a rng da ordem), com o B entrando no
+    dia 0, 1 e 2, com o corpo e nos dois layouts; a projeção é o log de cada motor; e o replay falha alto com o registro errado;
+  - **G-ORDEM:** a ordem da lista dos pets e a ordem de entrada no código não mudam o grupo; o sorteio é o `random.shuffle` do CPython; um
+    sorteio só nos ticks com os dois pets decidindo;
+  - **G-NUMS-GRUPO:** um B passivo (só ocioso e dormir, sem dono) deixa o A e o mundo iguais aos do A sozinho; com um B que age (instinto,
+    lobos ou passivo), as quedas e as vezes sorteadas são as mesmas, e o rastro do A (decisões, consumos, regiões) é o do A sozinho até o
+    primeiro evento físico do B (ele come, brinca com a bola, ou o dono dele deixa algo), e muda depois;
+  - **a entrada tardia:** o relógio do B, a hora do dia, os registros no relógio do mundo e o orçamento por dia vivido; "B só" e "B + Aing"
+    com as quedas do grupo com o A;
+  - **a guarda da MRO** do `_avancar`.
+- **Fora:** a visão, o toque e a disputa entre os pets são a etapa 3 (o PR seguinte); nesta etapa um pet só muda o mundo do outro pelo
+  que faz fisicamente. A troca do `efeito_frutas` no dia K ("B + Aemb") e o efeito por tipo de árvore são da etapa 5 (o D): hoje o grupo
+  exige o mesmo `efeito_frutas` em todos os pets. O `mundo.ts` não mudou (etapa 9).
