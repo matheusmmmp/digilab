@@ -5,7 +5,7 @@ O que se confere:
 - as funcoes de metrics.py em dados sinteticos com a resposta conhecida (c_d, p_d, lidera, f_d, a leitura "domina");
 - na bancada: a medida de toda vida, o sinal recalculado batendo com os canais do cerebro, a sonda nos bracos que nao aprendem pela
   consequencia, a fruta com a tristeza (E2), o dominancia.json por braco x condicao x tipo;
-- o P1-cw declarado (o P1-c com a pesos_janela desde a W-BANCADA-CORPO; espera a etapa 6 do corpo).
+- o P1-cw declarado (o P1-c com a pesos_janela desde a W-BANCADA-CORPO; roda desde a W-LIGA-GESTOS).
 So as sementes dos testes.
 """
 from __future__ import annotations
@@ -173,13 +173,11 @@ def test_rodar_grava_o_dominancia_json(tmp_path):
 
 
 def test_p1_cw_declarado_como_o_p1_c_com_a_chave():
-    """Desde a W-BANCADA-CORPO o P1-cw e o P1-c (o corpo) com a pesos_janela, como o plano pede (A2.4): espera a etapa 6 do corpo
-    (NOS_PENDENTES["corpo"]); tests/test_bancada_pesos_janela.py confere o mecanismo num braco de teste sem o no."""
+    """Desde a W-BANCADA-CORPO o P1-cw e o P1-c (o corpo) com a pesos_janela, como o plano pede (A2.4); roda desde a W-LIGA-GESTOS
+    (a etapa 6 na main). tests/test_bancada_pesos_janela.py confere o P1-cw contra o P1-c."""
     b = bv.BRACOS["P1-cw"]
     assert (b.fonte, b.no, b.pesos_janela) == ("consequencia", "corpo-A2.4", True)
     assert b == bv.replace(bv.BRACOS["P1-c"], rotulo="P1-cw", no="corpo-A2.4", pesos_janela=True)
-    with pytest.raises(NotImplementedError, match="etapa 6"):
-        bv.braco_de("P1-cw")
-    with pytest.raises(NotImplementedError, match="etapa 6"):
-        bv.validar_config({"bracos": ["P1", "P1-cw"], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
-                           "sonda": SONDA, "bootstrap": {}, "mundos": ["bola"]})
+    assert bv.braco_de("P1-cw") is b
+    bv.validar_config({"bracos": ["P1", "P1-cw"], "donos": ["atencioso"], "sementes": [101], "dias": 1, "orcamento": 16,
+                       "sonda": SONDA, "bootstrap": {}, "mundos": ["bola"]})

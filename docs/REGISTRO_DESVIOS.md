@@ -3833,3 +3833,46 @@ Só papel: `docs/futuro/dois_pets.md` e `docs/TAREFA_V2_DOIS_PETS.md`. Nenhuma r
 - **A `kMeiaVida`** usa o `**` do JS. Ela só deriva as constantes, que ficam como inteiros na config, e o tick nunca a chama. O teste confere
   que 30, 60 e 1440 dão os k da config.
 - **O corpo ainda não está no motor do jogo:** nenhum `Motor`, tela ou versão de pet o usa, como a tarefa pede.
+
+## 2026-10-07 — W-LIGA-GESTOS (worker D): a etapa 6 do corpo ligada na bancada
+
+- **Os nós saíram:** `corpo`, `dono_gestos`, `tapa` e também o `corpo_mundo`. O #247 resolveu o conflito do #238 com o #239 (o
+  `consequencia_mundo` credita e o `consequencia_corpo` fecha a decisão). Conferido por teste: o regime química roda no mundo físico (P0, P1
+  e P3, nos dois layouts), com o G1, as medidas e a dominância pelo corpo conferida contra o motivo e os canais. O `FILTROS_PENDENTES`
+  ficou vazio.
+- **Em que braços o carinho chega ao cérebro (decisão pedida pelo Gerente):** nas fontes que aprendem (dono, consequência e informação),
+  como o tapa (CD-10). No P0, nada, nem a memória conta, como nada do dono chega ao P0. O carinho vem pelo `mudanca_no_corpo` (CD-4), que
+  a `PoliticaDoBraco` agora define e não deixa o `__getattr__` repassar ao P0.
+  - **No P1 o relógio do cuidado do cérebro fica atrás.** O cérebro do P1 não vê o resto do dono (o alimentar, o limpar). O tick que o
+    `mudanca_no_corpo` calcula (a base dele mais o `ticks_desde_cuidado`) fica antes do tick verdadeiro quando houve outro cuidado. Esse
+    tick só serve à memória e aos chamados pendentes, e o P1 não tem chamados (a fonte consequência não os registra). O crédito do carinho
+    vai à última decisão e não depende do tick.
+  - **O `_Registro` da medição** acerta o próprio relógio no carinho, que não passa pelo `receber_acao_dono`. Sem isso, os ticks das
+    decisões depois de um carinho sairiam errados.
+- **O tapa passa pela `PoliticaDoBraco` em toda fonte que aprende** (CD-10, tarefa, seção 14), inclusive a informação. O resto do dono
+  continua sem chegar às fontes consequência e informação. `sinais_entregues` e `sinais_do_dono` passam a contar o tapa (`SINAIS_DO_DONO`);
+  nos braços de antes nada muda, porque não há tapa.
+- **A bronca do modo sem tapa nos canais (aceita do relato do A):** os canais da bancada aceitam o `SemGesto`. O `simular_vida_mundo` da
+  bancada ganhou `canal_classe` (o `CanalComGestos` nos braços com gestos), e o mundo padrão usa o `simular_vida_gestos`. O `SemGesto` gasta
+  o orçamento e não chega ao log. Ele é contado em `VidaBancada.retirados`, o mesmo campo das broncas que o `sem_ensino` ao vivo tira no
+  mundo físico, e a conta do orçamento fecha (`dono + retirados = orçamento`). A contagem vem do `DonoComGestos.trocas`, que sai também em
+  `VidaBancada.gestos` e no bloco `corpo` das medidas.
+- **Os gestos ficam fora do mundo físico e do `bola_a1`**, falhando alto na vida e na config. O plano do corpo não os usa lá, e o mundo
+  físico tem o dono só com o cuidado (PMF-3). O `tapa` e o `tapa_fruta` exigem o regime corpo, porque o tapa só existe com `gestos`.
+- **O tapa na fruta X (A1.1)** é o `DonoTapaFruta`, no modelo do `DonoJulgaFruta`:
+  - os tapas dos consumos novos de X vêm primeiro no passo, até o máximo, e o dono embrulhado decide com a `Visao` do que sobra;
+  - o que não cabe vai a `descartados`, sem voltar depois;
+  - os consumos vêm do `estado()["consumos_frutas"]`, que o motor só expõe com a `ConfigJulgamentoFruta` ligada; ela não muda mais nada no
+    motor (o K4 confere a vida igual com a chave);
+  - a fruta X sai de `derivar_semente("tapa-fruta", semente)` pelo `randrange`, como o `DonoPedinte.sortear_fruta`;
+  - **"o primeiro passo do dono depois do consumo"** é o passo seguinte. Como o consumo cai numa decisão e o dono age antes da decisão do
+    mesmo tick, o tapa vem em `(t // 15 + 1) × 15`, conferido em vidas.
+- **A sonda da deriva com os receptores novos.** Os estados sintéticos não têm de onde tirar o tédio, a solidão, o estresse, a dor e o
+  susto. Cada um sai uniforme na grade [0, S], de uma rng própria da sonda (`derivar_semente("sonda-corpo", semente da sonda)`), um sorteio
+  por receptor e por estado, na ordem. É o que as outras entradas da sonda fazem (`estados_sonda` sorteia uniforme). Com zeros a deriva não
+  veria os pesos aprendidos dessas entradas. Os receptores saem do grafo do corpo (`receptores_novos_de`), com a curiosidade só no mundo
+  físico.
+- **O filtro `sem_gestos`** tira o tapa e o carinho, e nada mais.
+- **O que não entrou:** as medidas descritivas dos efeitos do tapa (plano, seção 5.4: medo da mão, estresse acumulado, o carinho depois do
+  tapa). A tarefa as põe na etapa 8, mas o pedido do Gerente não as listou. Ficam para a próxima tarefa da bancada, sem gate.
+- **A fumaça do corpo** ganhou o bloco do corpo (P0-q, P1-q, P0-c e P1-c, e os acoplados P1-q^ac e P1-c^ac do P0-q).

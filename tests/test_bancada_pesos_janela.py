@@ -1,11 +1,12 @@
 """V2, W-LIGA-PESOS-JANELA (rodada 18) e W-BANCADA-CORPO (rodada 21): o mecanismo do braco P1-cw na bancada, com a chave `pesos_janela`
 da ConfigConsequencia do cerebro A (#236; PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4).
 
-Desde a W-BANCADA-CORPO o P1-cw do plano e o P1-c (o regime "corpo") com a chave, e espera a etapa 6 (NOS_PENDENTES["corpo"]). O mecanismo
-da bancada (a chave chegando ao cerebro, os pesos da janela na dominancia e a conferencia com os canais) e conferido aqui em dois bracos de
-teste, postos no lugar do P1-cw so dentro do teste:
+Desde a W-BANCADA-CORPO o P1-cw do plano e o P1-c (o regime "corpo") com a chave; roda desde a W-LIGA-GESTOS (a etapa 6 na main). O
+mecanismo da bancada (a chave chegando ao cerebro, os pesos da janela na dominancia e a conferencia com os canais) e conferido em tres
+origens, cada uma com o P1-cw posto como ela com a chave (na terceira, o proprio P1-cw do plano):
 - o P1 com a chave (o P1-cw da W-LIGA-PESOS-JANELA): o sinal do N3 pelo vetor de estado;
-- o P1-quimica com a chave: o sinal pelo corpo (os receptores da quimica, `sinal_corpo`).
+- o P1-quimica com a chave: o sinal pelo corpo (os receptores da quimica, `sinal_corpo`);
+- o P1-c com a chave, o P1-cw do plano (o corpo com os drives novos e o DonoComGestos sem tapa): o P1-cw contra o P1-c.
 Em cada um: o gate (a chave desligada e o braco de origem byte a byte), a vida que muda com a chave e o G1, o peso pela falta media da
 janela refeito por fora decisao a decisao e a dominancia com esses pesos, conferida contra os canais do cerebro.
 So as sementes dos testes.
@@ -30,9 +31,10 @@ from digilab.treino import reproduzir_com_feedback  # noqa: E402
 
 SONDA = {"estados": 5, "amostras": 5, "semente": 101}
 MUNDOS = (("padrao", None), ("bola", None), ("descasado", None), ("mutavel", None), ("fisico", "perto"), ("fisico_afastado", "longe"))
-MUNDOS_CORPO = (("padrao", None), ("bola", None), ("descasado", None), ("mutavel", None))   # o corpo no mundo fisico espera A e B
+MUNDOS_CORPO = (("padrao", None), ("bola", None), ("descasado", None), ("mutavel", None), ("fisico", "perto"))   # o #247 no fisico
+MUNDOS_GESTOS = (("padrao", None), ("bola", None), ("descasado", None), ("iguais_frutas", None))   # os gestos ficam fora do fisico
 CC_CANAIS = replace(CONFIG_CONSEQUENCIA, canais_ligados=True)
-ORIGENS = {"P1": MUNDOS, "P1-quimica": MUNDOS_CORPO}
+ORIGENS = {"P1": MUNDOS, "P1-quimica": MUNDOS_CORPO, "P1-c": MUNDOS_GESTOS}
 
 
 def _bancada(montagem="simples", dias=2, cc=CONFIG_CONSEQUENCIA):
@@ -41,23 +43,21 @@ def _bancada(montagem="simples", dias=2, cc=CONFIG_CONSEQUENCIA):
 
 
 def _p1_cw_de(origem: str, monkeypatch, chave: bool = True) -> None:
-    """O P1-cw de teste: o braco `origem` com a chave pesos_janela, no lugar do P1-cw do plano (que espera a etapa 6)."""
+    """O P1-cw de teste: o braco `origem` com a chave pesos_janela (com `origem` P1-c e a chave ligada, o proprio P1-cw do plano)."""
     monkeypatch.setitem(bv.BRACOS, "P1-cw", replace(bv.BRACOS[origem], rotulo="P1-cw", no="corpo-A2.4", pesos_janela=chave))
 
 
-def test_o_p1_cw_do_plano_e_o_p1_c_com_a_chave_e_espera_a_etapa_6():
+def test_o_p1_cw_do_plano_e_o_p1_c_com_a_chave_e_roda():
     b = bv.BRACOS["P1-cw"]
-    assert b == replace(bv.BRACOS["P1-c"], rotulo="P1-cw", no="corpo-A2.4", pesos_janela=True)
-    with pytest.raises(NotImplementedError, match="etapa 6"):
-        bv.braco_de("P1-cw")
-    with pytest.raises(NotImplementedError, match="etapa 6"):
-        _bancada().vida(bv.EspecVida("atencioso", "P1-cw", 101, None, "bola"))
+    assert b == replace(bv.BRACOS["P1-c"], rotulo="P1-cw", no="corpo-A2.4", pesos_janela=True) and bv.braco_de("P1-cw") is b
+    v = _bancada().vida(bv.EspecVida("atencioso", "P1-cw", 101, None, "bola"))       # com o G1
+    assert bv.do_braco(v.motor.politica).cfg_consequencia.pesos_janela and v.motor.cc.drives_novos and v.motor.cc.gestos
 
 
 # ------------------------------------------------------------------ o gate: chave desligada = o braco de origem byte a byte
 
 
-@pytest.mark.parametrize("origem", ("P1", "P1-quimica"))
+@pytest.mark.parametrize("origem", ("P1", "P1-quimica", "P1-c"))
 @pytest.mark.parametrize("montagem", ("simples", "completa"))
 def test_p1_cw_com_a_chave_desligada_e_a_origem_byte_a_byte(monkeypatch, origem, montagem):
     _p1_cw_de(origem, monkeypatch, chave=False)
@@ -76,7 +76,7 @@ def test_p1_cw_com_a_chave_desligada_e_a_origem_byte_a_byte(monkeypatch, origem,
 # ------------------------------------------------------------------ ligada: a vida muda, G1, a chave chega ao cerebro
 
 
-@pytest.mark.parametrize("origem", ("P1", "P1-quimica"))
+@pytest.mark.parametrize("origem", ("P1", "P1-quimica", "P1-c"))
 @pytest.mark.parametrize("montagem", ("simples", "completa"))
 def test_p1_cw_ligado_muda_a_vida_e_passa_o_g1(monkeypatch, origem, montagem):
     _p1_cw_de(origem, monkeypatch)
@@ -131,21 +131,28 @@ def test_o_peso_e_o_da_falta_media_da_janela(monkeypatch, mundo, lugar):
     assert len(reg.passos_sinal) == len(cerebro.motivos) and abaixo > 0      # a falta recente baixou algum peso
 
 
+@pytest.mark.parametrize("origem", ("P1-quimica", "P1-c"))
 @pytest.mark.parametrize("mundo", ("padrao", "descasado"))
-def test_no_corpo_o_peso_e_o_da_falta_media_dos_receptores(monkeypatch, mundo):
-    _p1_cw_de("P1-quimica", monkeypatch)
+def test_no_corpo_o_peso_e_o_da_falta_media_dos_receptores(monkeypatch, mundo, origem):
+    _p1_cw_de(origem, monkeypatch)
     b = _bancada(dias=3)
     v = b.vida(bv.EspecVida("aleatorio", "P1-cw", 101, None, mundo))
     reg = _replay_com_registro(b, v)
     cerebro = reg.interna.cerebro
     S, J = cerebro._escala, CONFIG_CONSEQUENCIA.janela_pesos
-    drives = ("fome", "higiene", "energia", "humor")      # os do N3 e o humor (E2), pelos nomes dos receptores; sem drives novos
+    # os do N3 e o humor (E2), pelos nomes dos receptores; no P1-c, mais os drives novos do sinal (o susto fora)
+    drives = ("fome", "higiene", "energia", "humor")
+    if origem == "P1-c":
+        drives = drives + tuple(r for r in ("tedio", "solidao", "estresse", "dor") if r in cerebro.motivos[0]["pesos_janela"])
+        assert {"tedio", "solidao", "estresse"} <= set(drives)
+    novos = {"tedio", "solidao", "estresse", "dor"}
     faltas, abaixo = [], 0
     for p in reg.passos_sinal:
         esperado = pesos_da_janela(faltas[-J:], drives, S)
         assert cerebro.motivos[p["k"]]["pesos_janela"] == esperado, p["k"]
         abaixo += any(w < S for w in esperado.values())
-        faltas.append({d: S - getattr(p["antes_corpo"], d) for d in drives})      # a falta lida pelo receptor
+        # a falta lida pelo receptor: S - leitura nos drives de hoje, a propria leitura nos novos
+        faltas.append({d: getattr(p["antes_corpo"], d) if d in novos else S - getattr(p["antes_corpo"], d) for d in drives})
     assert len(reg.passos_sinal) == len(cerebro.motivos) and abaixo > 0
 
 
@@ -168,8 +175,9 @@ def test_a_dominancia_do_p1_cw_usa_os_pesos_e_confere_com_os_canais(monkeypatch)
         b.medir(vidas[0], SONDA)
 
 
-def test_no_corpo_a_dominancia_usa_os_pesos_dos_receptores(monkeypatch):
-    _p1_cw_de("P1-quimica", monkeypatch)
+@pytest.mark.parametrize("origem", ("P1-quimica", "P1-c"))
+def test_no_corpo_a_dominancia_usa_os_pesos_dos_receptores(monkeypatch, origem):
+    _p1_cw_de(origem, monkeypatch)
     b = _bancada(dias=3, cc=CC_CANAIS)
     vidas = []
     for mundo in ("bola", "descasado"):

@@ -3099,3 +3099,53 @@ dele em `tests/test_corpo_quimica.py`. `digilab/`, o app, os pets e os gabaritos
   - a sequência de 3000 operações da etapa 6, com o sha256 de q e da janela.
   - Quatro mutações no `corpo.ts` (a meia-vida sem o mínimo de 1, o carinho sem o medo, a janela do tédio, a sujeira no tick) fazem o
     teste falhar.
+
+## V2, W-LIGA-GESTOS — a etapa 6 do corpo ligada na bancada (2026-10-07, `docs/TAREFA_V2_CORPO_DRIVES.md`, seção 14, etapa 8) — GATES PASSAM
+
+Rodada 22, com o #245 (o motor dos gestos e o `DonoComGestos`, do A) e o #247 (a química dos drives novos e dos gestos e o cérebro, do B)
+na `main`. Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, a fumaça
+`experiments/configs/v2_corpo/fumaca.json`, três testes antigos e o teste novo. `engine.py`, `gestos.py`, `corpo.py`, `motor_corpo.py`,
+`lobos.py`, `metrics.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Sem nós pendentes:** saíram `corpo`, `dono_gestos`, `tapa` e o `corpo_mundo` (o #247 resolveu o mundo físico; conferido por teste). O
+  `NOS_PENDENTES` e o `FILTROS_PENDENTES` ficaram vazios.
+- **Rodam todos os braços do plano:**
+  - o bloco G-HOJE;
+  - o bloco do corpo: P0-q, P1-q, P0-c e P1-c;
+  - o bloco do tapa: P0-c-tapa e P1-c-tapa;
+  - o bloco G: P1-c-tapaX e P1-c-frutas;
+  - o P1-cw.
+- **O dono dos braços com gestos** é o `DonoComGestos(criar_dono(...), modo)`. No P1-c-tapaX ele vem ainda dentro do `DonoTapaFruta`: um
+  tapa por consumo da fruta X (`fruta_tapa`, rng `tapa-fruta`) no passo do dono seguinte, dentro do orçamento, no modelo do
+  `DonoJulgaFruta`.
+- **A bronca do modo sem tapa nos canais:** o `simular_vida_mundo` da bancada aceita `canal_classe` (o `CanalComGestos`), e o mundo padrão
+  usa o `simular_vida_gestos`. O `SemGesto` gasta o orçamento fora do log e é contado em `VidaBancada.retirados`. Os gestos ficam fora do
+  mundo físico e do `bola_a1` (falha alto).
+- **O tapa e o carinho no cérebro:**
+  - o tapa passa pela `PoliticaDoBraco` em toda fonte que aprende (CD-10);
+  - o carinho (`mudanca_no_corpo`, CD-4) chega nas mesmas fontes;
+  - no P0, nenhum dos dois;
+  - o `_Registro` acerta o relógio do cuidado no carinho.
+- **O filtro `sem_gestos`** do acoplado tira o tapa e o carinho.
+- **As medidas:** os drives novos (tédio, solidão, estresse e dor) saem disponíveis no bloco `corpo` dos braços do regime corpo, com os
+  gestos da vida. A sonda da deriva ganhou os receptores novos, uniformes em [0, S] pela rng `sonda-corpo` (`percepcao_da_sonda`,
+  `receptores_novos_de`).
+- **Gates** (`tests/test_bancada_liga_gestos.py`, 39 testes, ~40 s):
+  - **os braços do plano rodam e medem**, com o G1 de toda vida;
+  - **G-P0C:** o P0-c decide igual ao P0-q, decisão a decisão e com o mesmo log (4 donos × 2 sementes, em `bola`, `padrao` com e sem
+    genoma e `iguais_frutas`);
+  - **o P1-c-frutas é o P1-c byte a byte**, fora o rótulo;
+  - **o orçamento fecha com o `SemGesto`;** no P0, com o aleatório e o relapso, o tapa entra onde a bronca sumia;
+  - **o tapa e o carinho chegam ao P1 e não ao P0** (as contagens do cérebro e da memória), e o tapa chega também à fonte informação;
+  - **o tapa na fruta X:** a fruta é uniforme pela rng própria, e há um tapa por consumo de X no passo seguinte, com o descarte no passo
+    cheio;
+  - **os acoplados:** o filtro `sem_gestos`, e o P1-q^ac e o P1-c^ac do P0-q;
+  - **as medidas:** os drives novos na medida e os receptores novos na sonda;
+  - **o mundo físico:** o corpo roda nele, e os gestos falham alto lá;
+  - a config do plano com todos os braços;
+  - o replay do disco.
+- **Testes antigos:**
+  - `tests/test_bancada_pesos_janela.py`: o P1-cw contra o P1-c (a chave desligada sai byte a byte; ligada muda a vida, com o G1; a janela
+    é refeita por fora com os receptores novos; a dominância bate com os canais);
+  - `tests/test_bancada_corpo.py`: os braços se resolvem, a trava é só a tabela, e o corpo roda no mundo físico;
+  - `tests/test_dominancia.py`: o P1-cw.
+- **Não entrou:** as medidas descritivas dos efeitos do tapa (plano, seção 5.4).
