@@ -155,8 +155,12 @@ PARAMETROS_LOBOS_CORPO: dict[str, tuple[str, str]] = {
     "recompensa_tapa": ("PROPOSTO", "CD-10 (TAREFA_V2_CORPO_DRIVES, secao 16): o valor da recompensa_repreensao, em toda fonte que "
                                     "aprende"),
 }
+PARAMETROS_LOBOS_DOIS_PETS: dict[str, tuple[str, str]] = {
+    "alvo_aprendido": ("PROPOSTO", "TAREFA_V2_DOIS_PETS, etapa 4 (DP-8): a chave do alvo aprendido por classe de candidato"),
+    "w0_alvo": ("PROPOSTO", "dois_pets.md, secao 8: o peso pequeno das classes que o padrao nao usa (S/16), SEM FONTE"),
+}
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
-                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO}
+                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS}
 MODOS_MEMORIA = ("relevante", "recencia", "embaralhada")
 REGRAS_PEDIDO = ("fome_moderada", "fruta_no_cenario")   # N7-2 e N7-3: so onde comer e candidato e a necessidade nao e urgente
 # V2, N3: o sinal da consequencia (ConfigConsequencia, config.py). Todos PROPOSTOS, nenhum referendado.
@@ -196,6 +200,18 @@ VALOR_TAPA = "tapa"                 # AcaoUsuario.TAPA (o enum e do A, etapa 6):
 # urgente (so ele); nas outras regras, as sete acoes de sempre
 REGRA_ALIVIO_URGENTE = "alivio_urgente"
 ALVOS_ALIVIO = ("banheiro", "aqui")
+# dois pets, etapa 4 (docs/TAREFA_V2_DOIS_PETS.md; docs/futuro/dois_pets.md, secao 8, DP-8): o alvo aprendido no mundo fisico, por
+# CLASSE de candidato. As classes de cada acao com alvo, na ordem da tabela de pesos: as do MotorMundo de hoje (a comida separada em
+# boa e podre pela percepcao) e o lugar de `seguir` e `onde_comeu`, que o motor oferece no explorar a partir da etapa 3 do A
+CLASSES_ALVO = {AcaoPet.COMER: ("comida", "comida_podre", "cheiro", "continuar"),
+                AcaoPet.EXPLORAR: ("cheiro", "vagar", "casa", "continuar", "seguir", "onde_comeu"),
+                AcaoPet.BRINCAR: ("bola", "continuar")}
+# as regras em que cada acao com alvo e candidata no cerebro do mundo fisico (o prior do instinto do mundo): um peso por (regra, acao,
+# classe)
+REGRAS_ALVO = {"pedido_necessidade": (AcaoPet.COMER,), "fome_moderada": (AcaoPet.COMER,),
+               "tempo_livre": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR), "bola_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR),
+               "fruta_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR, AcaoPet.COMER)}
+ESCALA_U_ALVO = 1 << 16                # o u do alvo do MotorMundo: inteiro em [0, 2^16)
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -575,6 +591,10 @@ class Aprendiz:
         self._banheiro: ConfigBanheiro | None = None
         # as acoes com alvo no mundo fisico, cuja consequencia chega pelo consequencia_mundo (com o banheiro, mais o aliviar)
         self._acoes_com_alvo: tuple = ACOES_COM_ALVO_MUNDO
+        # dois pets, etapa 4: o alvo aprendido por classe (chave "regra:acao" -> classe -> peso); vazio sem a chave: nada muda
+        self._cfg_mundo: ConfigMundo | None = None
+        self._prior_alvo_mundo: dict = {}
+        self._pesos_alvo_mundo: dict = {}
         self._prior_alvo: dict = {}
         self._pesos_alvo: dict = {}
         n = self.n_pesos()
@@ -616,12 +636,14 @@ class Aprendiz:
     def n_pesos(self) -> int:
         return (sum(len(v) for acoes in self._pesos.values() for v in acoes.values()) + len(self._pesos_fruta)
                 + (self._peso_info is not None) + len(self._pesos_comer_fruta) + (self._peso_pedido is not None)
-                + sum(len(v) for acoes in self._pesos_corpo.values() for v in acoes.values()) + len(self._pesos_alvo))
+                + sum(len(v) for acoes in self._pesos_corpo.values() for v in acoes.values()) + len(self._pesos_alvo)
+                + sum(len(t) for t in self._pesos_alvo_mundo.values()))
 
     def pesos_mudaram(self) -> bool:
         return (self._pesos != self._prior or self._pesos_fruta != self._prior_fruta or self._peso_info != self._prior_info
                 or self._pesos_comer_fruta != self._prior_comer_fruta or self._peso_pedido != self._prior_pedido
-                or self._pesos_corpo != self._prior_corpo or self._pesos_alvo != self._prior_alvo)
+                or self._pesos_corpo != self._prior_corpo or self._pesos_alvo != self._prior_alvo
+                or self._pesos_alvo_mundo != self._prior_alvo_mundo)
 
     def _desvios(self):
         """|w - w0| de cada peso: a tabela da decisao e, no mundo das frutas, a sub-decisao da fruta."""
@@ -643,6 +665,9 @@ class Aprendiz:
                     yield abs(w - w0)
         for t, w in self._pesos_alvo.items():
             yield abs(w - self._prior_alvo[t])
+        for k, tabela in self._pesos_alvo_mundo.items():
+            for c, w in tabela.items():
+                yield abs(w - self._prior_alvo_mundo[k][c])
 
     def desvio_maximo(self) -> int:
         """max |w - w0| sobre todos os pesos (o quanto o aprendizado se afastou do prior)."""
@@ -1182,6 +1207,12 @@ class Aprendiz:
             # CORPO: as entradas novas da regra (as leituras dos receptores novos, X = a leitura) pela mesma regra, com o canal do corpo
             self._cortes_teto += atualizar_pesos(self._pesos_corpo[g], self._prior_corpo[g], {**registro, "X": registro["corpo"]["X"]},
                                                  f_corpo, self.cl.passo, self.cl.teto, self._escala)
+        if consequencia and "alvo_mundo" in registro:
+            # dois pets, etapa 4: a classe do alvo pela regra da sub-decisao da fruta (um peso por classe, X = S), so pela consequencia
+            # (o credito do consequencia_mundo, ou do corpo no mundo fisico), com o sinal inteiro da decisao (todos os canais)
+            sub = registro["alvo_mundo"]
+            self._cortes_teto += atualizar_fruta(self._pesos_alvo_mundo[sub["chave"]], self._prior_alvo_mundo[sub["chave"]], sub, f_S,
+                                                 self.cl.passo, self.cl.teto, self._escala)
         if "alvo" in registro:
             # banheiro: o alvo do `aliviar` pela regra da sub-decisao da fruta (um peso por alvo, X = S), com o canal do corpo
             self._cortes_teto += atualizar_fruta(self._pesos_alvo, self._prior_alvo, registro["alvo"], f_corpo, self.cl.passo,
@@ -1232,6 +1263,10 @@ class Aprendiz:
                 s = r["alvo"]
                 d["alvo"] = {"candidatos": list(s["candidatos"]), "acao": s["acao"], "X": dict(s["X"]), "P": dict(s["P"]),
                              "W": dict(s["W"])}
+            if "alvo_mundo" in r:
+                s = r["alvo_mundo"]
+                d["alvo_mundo"] = {"chave": s["chave"], "candidatos": list(s["candidatos"]), "acao": s["acao"], "X": dict(s["X"]),
+                                   "P": dict(s["P"]), "W": dict(s["W"])}
             return d
         d = {
             "passo": self.cl.passo, "teto": self.cl.teto, "piso_peso": self.cl.piso_peso,
@@ -1289,6 +1324,9 @@ class Aprendiz:
                 d["pesos_corpo_prior"] = {g: {a.value: list(v) for a, v in acoes.items()} for g, acoes in self._prior_corpo.items()}
                 d["pesos_alvo"] = dict(self._pesos_alvo)
                 d["pesos_alvo_prior"] = dict(self._prior_alvo)
+        if self._prior_alvo_mundo:                # dois pets, etapa 4, so com a chave do alvo aprendido
+            d["pesos_alvo_mundo"] = {k: dict(t) for k, t in self._pesos_alvo_mundo.items()}
+            d["pesos_alvo_mundo_prior"] = {k: dict(t) for k, t in self._prior_alvo_mundo.items()}
         if self._canais is not None:              # CANAIS-REFORCO, so depois do 1o credito por canal
             d["canais"] = {"creditos": self._canais["creditos"], "por_canal": dict(self._canais["por_canal"]),
                            "por_alvo": dict(self._canais["por_alvo"])}
@@ -1438,6 +1476,20 @@ class PoliticaLobos(Aprendiz):
                 self._pesos_corpo = {r: {a: list(v) for a, v in acoes.items()} for r, acoes in self._prior_corpo.items()}
                 if self.n_pesos() >= cl.maximo_pesos:
                     raise ValueError(f"{self.n_pesos()} pesos, teto {cl.maximo_pesos}")
+        # dois pets, etapa 4 (DP-8): o alvo aprendido por classe, so no mundo fisico; um peso por (regra, acao, classe), todos em w0_alvo
+        if type(cl.alvo_aprendido) is not bool:
+            raise TypeError(f"ConfigLobos.alvo_aprendido precisa ser bool: {cl.alvo_aprendido!r}")
+        if type(cl.w0_alvo) is not int or cl.w0_alvo < 0:
+            raise ValueError(f"ConfigLobos.w0_alvo precisa ser inteiro >= 0: {cl.w0_alvo!r}")
+        if cl.alvo_aprendido:
+            if not fisico:
+                raise ValueError("ConfigLobos.alvo_aprendido sem o mundo fisico (cfg_mundo ligada)")
+            self._cfg_mundo = cfg_mundo
+            self._prior_alvo_mundo = {f"{r}:{a.value}": {c: cl.w0_alvo for c in CLASSES_ALVO[a]}
+                                      for r, acoes in REGRAS_ALVO.items() if r in self._prior for a in acoes}
+            self._pesos_alvo_mundo = {k: dict(t) for k, t in self._prior_alvo_mundo.items()}
+            if self.n_pesos() >= cl.maximo_pesos:
+                raise ValueError(f"{self.n_pesos()} pesos com o alvo aprendido, teto {cl.maximo_pesos}")
 
     @property
     def tem_corpo(self) -> bool:
@@ -1508,7 +1560,57 @@ class PoliticaLobos(Aprendiz):
             return self._alvo_do_alivio(candidatos, u)
         if self._ve_mundo_fisico and self.motivos:
             self.motivos[-1]["mundo"] = {"candidatos": [a.tipo for a in candidatos], "u": u}
+        if self._prior_alvo_mundo and self._aprende:
+            return self._alvo_aprendido(acao, candidatos, percepcao, u)
         return None
+
+    def _alvo_aprendido(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
+        """Dois pets, etapa 4 (docs/futuro/dois_pets.md, secao 8, DP-8): a classe do alvo, aprendida. Cada classe presente tem um
+        representante (o primeiro candidato dela, na ordem do motor: a comida boa mais proxima, o primeiro cheiro...). O peso efetivo
+        de uma classe e max(0, w) / S, mais 1 se ela e a classe do alvo padrao do motor (`mundo.alvo_padrao_de`, o herdado); o sorteio
+        e o de sempre, com u / 2^16. Sem alvo padrao (nada para onde ir), None, como hoje. A escolha entra no registro da decisao e
+        aprende so pela consequencia (o credito do consequencia_mundo), pela regra da sub-decisao da fruta. So com o aprendizado
+        ligado: o P0 usa o padrao do motor (o instinto do mundo, byte a byte)."""
+        from ..mundo import alvo_padrao_de
+        if type(u) is not int or not 0 <= u < ESCALA_U_ALVO:
+            raise ValueError(f"u do alvo fora de inteiros em [0, 2^16): {u!r}")
+        chave = f"{self._ultima_regra}:{acao.value}"
+        if chave not in self._pesos_alvo_mundo:
+            raise RuntimeError(f"alvo aprendido: {acao.value} na regra {self._ultima_regra!r}, sem tabela de classes")
+        if self._registro_decisao is None or self._registro_decisao["acao"] is not acao:
+            raise RuntimeError("alvo aprendido sem a decisao registrada")
+        padrao = alvo_padrao_de(acao, candidatos, percepcao, self._cfg_mundo)
+        if padrao is None:
+            if self.motivos:
+                self.motivos[-1]["alvo_aprendido"] = {"classes": [], "padrao": None, "alvo": None}
+            return None
+        podres = {i for i, tipo, *_ in percepcao.vistos if tipo.endswith("_podre")}
+        classes, reps = [], []
+        for a in candidatos:
+            c = ("comida_podre" if a.id in podres else "comida") if a.tipo == "comida" else a.tipo
+            if c not in CLASSES_ALVO[acao]:
+                raise ValueError(f"alvo aprendido: classe {c!r} fora das de {acao.value} {CLASSES_ALVO[acao]}")
+            if c not in classes:
+                classes.append(c)
+                reps.append(a)
+        c_padrao = classes[reps.index(padrao)] if padrao in reps else None
+        if c_padrao is None:
+            raise RuntimeError(f"alvo aprendido: o padrao {padrao} nao e o representante da classe dele")
+        S = self._escala
+        tabela = self._pesos_alvo_mundo[chave]
+        pesos = [max(0, tabela[c]) / S + (1.0 if c == c_padrao else 0.0) for c in classes]
+        k = sortear(pesos, u / ESCALA_U_ALVO)
+        total = 0.0
+        for p in pesos:
+            total = total + p
+        self._registro_decisao["alvo_mundo"] = {
+            "chave": chave, "candidatos": tuple(classes), "acao": classes[k], "X": {c: S for c in classes},
+            "P": {c: arred(p / total * S) for c, p in zip(classes, pesos)},
+            "W": {c: max(1, arred(p * S)) for c, p in zip(classes, pesos)}}
+        if self.motivos:
+            self.motivos[-1]["alvo_aprendido"] = {"classes": list(classes), "padrao": c_padrao, "alvo": classes[k],
+                                                  "pesos": dict(zip(classes, pesos))}
+        return reps[k]
 
     def _alvo_do_alivio(self, candidatos: list, u: int):
         if self._banheiro is None:

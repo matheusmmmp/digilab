@@ -197,6 +197,27 @@ class Alvo:
         return {"tipo": self.tipo, "x": self.x, "y": self.y, "id": self.id, "de": self.de}
 
 
+def alvo_padrao_de(acao: AcaoPet, cands: list[Alvo], p: PercepcaoMundo, cmf: ConfigMundo) -> Alvo | None:
+    """O alvo padrao do motor (secao 5), em funcao pura da percepcao da decisao: o que o instinto usa e nunca a comida podre.
+    - comer: a comida boa vista mais proxima (os vistos ja vem em ordem de d, tipo e id), senao o cheiro;
+    - explorar: o continuar, senao o cheiro forte (acima de `limiar_cheiro_explorar`), senao o vagar;
+    - brincar: a bola vista."""
+    if acao is AcaoPet.COMER:
+        podres = {i for i, tipo, *_ in p.vistos if tipo.endswith("_podre")}
+        for a in cands:
+            if a.tipo == "comida" and a.id not in podres:
+                return a
+        return next((a for a in cands if a.tipo == "cheiro"), None)
+    if acao is AcaoPet.EXPLORAR:
+        cont = next((a for a in cands if a.tipo == "continuar"), None)
+        if cont is not None:
+            return cont
+        if p.direcao_cheiro and p.cheiro > cmf.limiar_cheiro_explorar:
+            return next(a for a in cands if a.tipo == "cheiro")
+        return next(a for a in cands if a.tipo == "vagar")
+    return next((a for a in cands if a.tipo == "bola"), None)
+
+
 # ================================================================== o embrulho da politica
 class _PoliticaComMundo:
     """Embrulho do MotorMundo (so com a chave): antes de `agir` avanca o mundo e injeta `obs.mundo`; em `observar` aplica a consequencia
@@ -598,22 +619,9 @@ class MotorMundo(MotorFrutas):
         return cands
 
     def alvo_padrao(self, acao: AcaoPet, cands: list[Alvo]) -> Alvo | None:
-        """o que o instinto usa (secao 5). Nunca escolhe comida podre."""
-        p = self._percepcao
-        if acao is AcaoPet.COMER:
-            podres = {i for i, tipo, *_ in p.vistos if tipo.endswith("_podre")}
-            for a in cands:                                  # os vistos ja vem em ordem de d, tipo, id
-                if a.tipo == "comida" and a.id not in podres:
-                    return a
-            return next((a for a in cands if a.tipo == "cheiro"), None)
-        if acao is AcaoPet.EXPLORAR:
-            cont = next((a for a in cands if a.tipo == "continuar"), None)
-            if cont is not None:
-                return cont
-            if p.direcao_cheiro and p.cheiro > self.cmf.limiar_cheiro_explorar:
-                return next(a for a in cands if a.tipo == "cheiro")
-            return next(a for a in cands if a.tipo == "vagar")
-        return next((a for a in cands if a.tipo == "bola"), None)
+        """o que o instinto usa (secao 5). Nunca escolhe comida podre. A conta e a `alvo_padrao_de` (o cerebro a usa para saber a classe
+        do padrao, no alvo aprendido)."""
+        return alvo_padrao_de(acao, cands, self._percepcao, self.cmf)
 
     def _validar_alvo(self, acao: AcaoPet, alvo: Alvo, cands: list[Alvo]) -> None:
         if alvo in cands:
