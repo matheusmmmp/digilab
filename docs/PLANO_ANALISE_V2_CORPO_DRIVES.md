@@ -639,3 +639,51 @@ total vai a 120 com o bloco G do adendo 1). Roda sempre, para o desenho não dep
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | PCD-8 | O critério de dominância e o braço P1-cw | **o critério da A2.3** (lidera com `p_d` ≥ 0,80; domina com o IC95 inferior de `f_d` acima de 0,50, no P1-c do mundo `bola`), **e o P1-cw sempre na validação**, como descritivo qualificado | **critério frouxo:** acha dominância onde há só ações que mexem em poucos drives. **Rígido:** não vê o tédio tomar o sinal. **O P1-cw só se dominar no piloto:** o desenho passaria a depender do dado do P1, que a PCD-4 evita. **Sem o P1-cw:** com dominância, não há como saber se o peso pela janela resolve |
+
+## Adendo 3 (2026-10-08, antes de qualquer run): o Metabolismo energético antes da calibração — PROPOSTO, depende das ME-1 a ME-7
+
+**A decisão do Matheus (2026-10-08):** o Metabolismo energético entra agora, e **a calibração deste plano (seção 6, sementes 33101…33505)
+só roda depois dele.** O desenho está em `docs/TAREFA_V2_METABOLISMO.md`. Este adendo segue as recomendações de lá (ME-1 a ME-7). Se
+alguma decisão sair diferente, o adendo é refeito antes de qualquer run.
+
+### A3.1 Onde o metabolismo entra
+
+- **O bloco G-HOJE (3.1) fica sem o metabolismo.** O regime "química" desse bloco é o de antes: o bloco mede a química dos drives contra
+  hoje, e o metabolismo é outra pergunta.
+- **O bloco do corpo (3.2), o do tapa (3.3) e os acoplados ganham o metabolismo em todos os braços,** pela ME-6: P0-q, P1-q, P0-c, P1-c,
+  P1-q^ac, P1-c^ac, P0-c-tapa, P1-c-tapa, P1-c-tapaX, P1-c-frutas e P1-cw.
+- **O G-P0C (seção 8) continua valendo:** o P0-q e o P0-c têm o mesmo metabolismo. O instinto não lê os químicos novos, e o combustível
+  depende só das ações e da comida, que são as mesmas. Se o G-P0C falhar com o metabolismo, a run para, como antes.
+- **A pergunta, os gates e as margens não mudam.** O metabolismo muda o mundo do bloco do corpo, não o contraste.
+
+### A3.2 O passo 0 da calibração (ME-7), antes da grade da 6.1
+
+- **O que roda:** só o P0-q, com o metabolismo, nas 20 unidades da calibração (bases 33101…33505, K = 4), nas 8 células.
+- **A grade:** o gasto (basal e das atividades sobre o combustível) × {½, 1, 2}, partindo dos PROPOSTOS da tarefa (375 por tick acordado,
+  187 dormindo). Uma run por ponto: 3 × 8 × 20 = **480 vidas**.
+- **A regra (escrita agora):**
+  - fica o ponto mais perto de 1 (pela |log₂|) em que a fração do tempo acordado com a falta de combustível (abaixo de C/4) cai em
+    **[0,05; 0,30]**, nas 8 células juntas;
+  - a faixa é PROPOSTA, SEM FONTE. A ideia é que a falta aconteça, mas não o tempo todo;
+  - **se nenhum ponto passa:** fica o de fração mais perto do centro da faixa, com o registro "não fechou".
+- **O que o passo 0 não lê:** o P1, os drives novos e qualquer contraste. Ele roda antes da grade da 6.1, e a grade roda com o gasto
+  escolhido fixo.
+- **O passo 0 entra no adendo 1 da 6.5,** junto do ponto da grade.
+
+### A3.3 O que sai a mais (descritivo)
+
+Por braço e célula:
+- a fração do tempo acordado com a falta;
+- o combustível e a reserva no fim de cada dia;
+- as vezes em que a falta disparou;
+- no P1-c, o tempo entre comer e brincar.
+
+Só relato. Nenhum gate novo.
+
+### A3.4 O custo
+
+O passo 0 soma 480 vidas às 1.440 da grade. O piloto e a validação não mudam de tamanho.
+
+### A3.5 Decisões
+
+São as ME-1 a ME-7 da tarefa. Este adendo não abre decisão nova.
