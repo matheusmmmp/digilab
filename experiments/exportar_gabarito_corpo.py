@@ -33,6 +33,13 @@ O conteudo (versao 5):
   tick acordado e dormindo com 0 a 4 necessidades na regiao, a racao, o comer, a fruta e a racao do mapa, que passam pela digestao, o
   carinho com e sem susto, o aliviar e a necessidade no chao), o estado, a janela e o resto depois e os receptores; e uma sequencia longa
   de operacoes sorteadas num corpo so, com o sha256 de q, da janela e do resto depois de cada uma. As secoes da versao 4 nao mudaram.
+- `metabolismo` (versao 5, como o banheiro; docs/TAREFA_V2_METABOLISMO.md, etapa 1): o combustivel e a reserva (secao 3), com a
+  etapa 6 inteira e o mundo fisico: os numeros da ConfigCorpo; o grafo (a tabela com as reacoes inteiras: fracoes, o quimico lido, o lado e o limiar; e o
+  relato) em quatro combinacoes; uma grade de estados (os 15 quimicos, a janela do tedio e o resto da conversao), com o combustivel e a
+  reserva em volta dos limiares, com cada operacao (o tick acordado e dormindo, as racoes e o comer que passam pela digestao, as
+  atividades e o andar), o estado, o resto e as contas depois; a mesma grade com a conversao 2/3 (o resto mordendo, so para a
+  paridade); e uma sequencia longa de operacoes sorteadas num corpo so, com o sha256 de q, da janela, do resto e das contas. As secoes
+  da versao 5 nao mudaram; a `config` ganhou os campos do metabolismo.
 """
 from __future__ import annotations
 
@@ -46,8 +53,10 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
-from digilab.config import (CONFIG_CORPO_BANHEIRO, CONFIG_CORPO_DRIVES, CONFIG_DURACOES, CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA,  # noqa: E402
-                            CONFIG_PADRAO, ConfigCorpo)
+from dataclasses import replace  # noqa: E402
+
+from digilab.config import (CONFIG_CORPO_BANHEIRO, CONFIG_CORPO_DRIVES, CONFIG_CORPO_METABOLISMO, CONFIG_DURACOES,  # noqa: E402
+                            CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, ConfigCorpo)
 from digilab.corpo import (ATIVIDADES, Corpo, div_arred, grafo_do_corpo, limiares_estagio, passo_meia_vida, quimicos_de,  # noqa: E402
                            taxas_de, ticks_de_estagio)
 from digilab.corpo_grafo import Grafo, checar  # noqa: E402
@@ -446,6 +455,104 @@ def banheiro() -> dict:
                           "resto_final": c.resto_vontade}}
 
 
+# ------------------------------------------------------------------ o metabolismo (versao 5, como o banheiro)
+
+CC_M = CONFIG_CORPO_METABOLISMO
+CC_M_FRACAO = replace(CC_M, conversao_num=2, conversao_den=3)      # so para a paridade do resto (nao e valor de pesquisa)
+CAMPOS_M = ("metabolismo", "combustivel_inicial", "reserva_inicial", "conversao_num", "conversao_den", "gasto_basal_acordado",
+            "gasto_basal_dormindo", "armazenar_limiar", "armazenar_taxa", "mobilizar_limiar", "mobilizar_taxa", "falta_limiar",
+            "falta_cansaco")
+CHAVES_M = {
+    "minimo": ConfigCorpo(ligada=True, digestao=True, metabolismo=True),
+    "etapa6": CC_M,
+    "banheiro": replace(CONFIG_CORPO_BANHEIRO, metabolismo=True),
+    "fracao": CC_M_FRACAO,
+}
+
+
+def _tabela_m(g: Grafo) -> dict:
+    t = _tabela(g)
+    t["reacoes"] = [[r.nome, list(r.consome), list(r.produz), r.taxa, [list(f) for f in r.fracoes], r.le, r.lado, r.limiar]
+                    for r in g.reacoes]
+    return t
+
+
+def _corpo_m(q: list[int], janela: list[str], resto: int, cc: ConfigCorpo) -> Corpo:
+    c = Corpo(dict(zip(quimicos_de(cc, True), q)), CONFIG_PADRAO, cc, com_mundo=True)
+    c.janela_tedio = list(janela)
+    c.resto_combustivel = resto
+    return c
+
+
+def _ops_m() -> list[list]:
+    cm = CONFIG_MUNDO_LIGADA
+    ops = [["passo", dormindo, 0, tick] for dormindo in (0, 1) for tick in (600, 1400)]
+    ops += [["dono", "alimentar"], ["dono", "brincar"], ["pet", "brincar"], ["pet", "explorar"], ["pet", "comer"], ["pet", "ocioso"],
+            ["pet_mundo", "comer"], ["andar", 0, cm.custo_energia_por_subunidade], ["andar", 37, cm.custo_energia_por_subunidade],
+            ["andar", 6000, cm.custo_energia_por_subunidade], ["consumo", "racao", "madura", 0.0], ["consumo", "a", "madura", -0.1],
+            ["fruta", 0.15, 0.0]]
+    return ops
+
+
+def _estados_m(rng: random.Random, cc: ConfigCorpo) -> list[tuple[list[int], list[str], int]]:
+    C = cc.escala
+    nomes = quimicos_de(cc, True)
+    n = len(nomes)
+    i_c, i_r, i_a = nomes.index("combustivel"), nomes.index("reserva"), nomes.index("alimento")
+    estados = [([0] * n, [], 0), ([C] * n, [], 0)]
+    for comb in (cc.falta_limiar - 1, cc.falta_limiar, cc.mobilizar_limiar - 1, cc.mobilizar_limiar, cc.armazenar_limiar,
+                 cc.armazenar_limiar + 1, cc.armazenar_limiar + 200, C - 100):
+        for res in (0, 100, C // 4, C - 50):
+            q = [C // 2] * 5 + [0] * (n - 5)
+            q[i_c], q[i_r], q[i_a] = comb, res, 0
+            estados.append((q, [], 0))
+    for _ in range(12):
+        q = [rng.randrange(C + 1) for _ in range(n)]
+        janela = [rng.choice(ATIVIDADES) for _ in range(rng.randrange(cc.janela_tedio + 1))]
+        estados.append((q, janela, rng.randrange(cc.conversao_den)))
+    return estados
+
+
+def _casos_m(cc: ConfigCorpo, rng: random.Random) -> list[dict]:
+    out = []
+    for q, janela, resto in _estados_m(rng, cc):
+        for op in _ops_m():
+            c = _corpo_m(q, janela, resto, cc)
+            _aplicar_e6(c, op)
+            out.append({"q": q, "janela": janela, "resto": resto, "op": op, "q_depois": _q(c), "janela_depois": list(c.janela_tedio),
+                        "resto_depois": c.resto_combustivel, "contas": dict(c.contas_metabolismo)})
+    return out
+
+
+def metabolismo() -> dict:
+    rng = random.Random(SEMENTE_CASOS + 8)
+    grafos_m = []
+    for nome, cc in CHAVES_M.items():
+        for com_mundo in (False, True):
+            g = grafo_do_corpo(CONFIG_PADRAO, cc, taxas_de(CONFIG_PADRAO, cc), com_mundo)
+            grafos_m.append({"chaves": nome, "com_mundo": com_mundo, "tabela": _tabela_m(g), "relato": checar(g)})
+    casos_m = _casos_m(CC_M, rng)
+    casos_f = _casos_m(CC_M_FRACAO, rng)
+    c = Corpo.de_estado(Estado(), CONFIG_PADRAO, CC_M, com_mundo=True)
+    ops, h = [], hashlib.sha256()
+    tick = 0
+    for _ in range(3000):
+        if rng.random() < 0.8:
+            op = ["passo", int(rng.random() < 0.3), rng.randrange(3), tick]
+            tick += 1
+        else:
+            op = rng.choice(_ops_m()[4:])
+        _aplicar_e6(c, op)
+        ops.append(op)
+        h.update(json.dumps([_q(c), c.janela_tedio, c.resto_combustivel, c.contas_metabolismo], sort_keys=True,
+                            separators=(",", ":")).encode())
+    return {"quimicos": list(quimicos_de(CC_M, True)), "config": {k: getattr(CC_M, k) for k in CAMPOS_M},
+            "config_fracao": {"conversao_num": CC_M_FRACAO.conversao_num, "conversao_den": CC_M_FRACAO.conversao_den},
+            "grafo": grafos_m, "casos": casos_m, "casos_fracao": casos_f,
+            "sequencia": {"ops": ops, "sha256": h.hexdigest(), "q_final": _q(c), "janela_final": list(c.janela_tedio),
+                          "resto_final": c.resto_combustivel, "contas_final": dict(c.contas_metabolismo)}}
+
+
 def gabarito() -> dict:
     t = taxas_de(CONFIG_PADRAO, CC)
     taxas = {k: v for k, v in vars(t).items() if k not in ("dono", "pet")}
@@ -481,6 +588,7 @@ def gabarito() -> dict:
         "de_estado": de_estado(),
         "etapa6_mundo": etapa6_mundo(),
         "banheiro": banheiro(),
+        "metabolismo": metabolismo(),
     }
 
 

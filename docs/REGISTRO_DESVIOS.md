@@ -4413,3 +4413,29 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
   porque o pet troca de ação no meio: em 5 das 5 idas do P0, ele come a fruta à vista (4) ou fica ocioso (1). Com os números de hoje, a
   continuação sozinha não leva o pet ao banheiro. O P1 escolhe o banheiro menos (12 alívios com esse alvo antes; 2 idas agora). A leitura
   provável é que o banheiro deixou de dar alívio na decisão que o escolhe e ficou só com o custo do andar.
+
+## 2026-10-11 — METABOLISMO, etapas 0 e 1 (worker B): o combustível e a reserva
+
+- **A conversão 1/1.** A tarefa deixa o rendimento sem número. Escolhi 1/1 pela razão dada lá: com o gasto basal igual à subida da fome,
+  comer o que a fome pede mantém o combustível. O resto fica guardado como o da vontade (`divmod`), e o teste usa 2/3 para morder.
+- **A ordem no tick:** a digestão (com a conversão), a fase 1 (com o basal), as transferências, a fase 2 (com a falta) e as meias-vidas.
+  As transferências vêm antes da fase 2: a falta vê o que a reserva devolveu no mesmo tick.
+- **A quantidade de cada transferência:** min(taxa, a distância ao limiar, o que há no químico de origem, o que cabe no de destino). Não
+  cruza o limiar nem descarta nada no teto da reserva. A tarefa só dava "até 375 por tick".
+- **O gasto que bate no zero** conta só o que de fato saiu. O teto do combustível descarta a conversão que passa de C, e o descarte entra
+  nas contas.
+- **O grafo.** A `Reacao` ganhou os campos e não um tipo novo: `fracoes` (a produção com fração; a vontade passou a sair da tabela, com a
+  mesma conta) e `le`/`lado`/`limiar` (a transferência).
+  - As checagens 2b e 3b são minhas e só mordem nas transferências. Uma 3b geral (todo químico que uma reação consome tem fonte) quebraria
+    o `test_automantido`, em que o teto desculpa a digestão.
+  - A tarefa pede que o combustível sem gasto e a reserva sem armazenamento falhem. Com as checagens de antes os dois passavam, porque o
+    teto conta como sumidouro e desculpa a falta de fonte.
+- **As arestas das transferências** entram no laço de ganho com ganho 1 (andam 1 por 1). As do metabolismo são negativas e não viram
+  aresta; um teste mostra que uma transferência "acima" que fecha um laço com um emissor de ganho 1 falha.
+- **O motor mudou numa linha** (a tarefa dizia que não mudaria): a conferência do estímulo do dono lia todo químico dos deltas como drive
+  e quebrava com o `combustivel`. Agora ignora o que não é drive.
+- **O G-HOJE-M "acima de C/4"** precisou do corpo cheio (combustível e reserva em C) e de vidas de 2 dias. Com os números PROPOSTOS, até
+  o corpo cheio entra em falta no dia 3 do atencioso. A condição é conferida em cada vida do teste; as vidas são o aleatório (202) e o
+  relapso (303), em que ela vale nos quatro mundos.
+- **O gabarito da paridade** ganhou a seção `metabolismo` sem subir a versão (como o banheiro). A `config` ganhou os campos novos, e o
+  espelho do TS também. O `configCorpo` do TS falha alto com o metabolismo ligado até a etapa 4.

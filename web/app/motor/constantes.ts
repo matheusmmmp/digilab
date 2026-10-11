@@ -401,6 +401,10 @@ export interface ConfigCorpo {
   vontade_sobe: number; vontade_digestao_num: number; vontade_digestao_den: number; vontade_limiar: number; vontade_desconforto: number;
   necessidade_desconforto: number; necessidade_regiao: number; necessidade_max_regiao: number; conforto_carinho: number;
   k_meia_vida_conforto: number;
+  /* o metabolismo (docs/TAREFA_V2_METABOLISMO.md, secao 3): so o espelho dos numeros; a quimica em TS e a etapa 4 do metabolismo */
+  metabolismo: boolean; combustivel_inicial: number; reserva_inicial: number; conversao_num: number; conversao_den: number;
+  gasto_basal_acordado: number; gasto_basal_dormindo: number; armazenar_limiar: number; armazenar_taxa: number;
+  mobilizar_limiar: number; mobilizar_taxa: number; falta_limiar: number; falta_cansaco: number;
 }
 export const CCO: ConfigCorpo = {
   ligada: false, digestao: false, vida: false, drives_novos: false, gestos: false, banheiro: false,
@@ -416,6 +420,9 @@ export const CCO: ConfigCorpo = {
   vontade_sobe: 150, vontade_digestao_num: 1, vontade_digestao_den: 3, vontade_limiar: 337500, vontade_desconforto: 150,
   necessidade_desconforto: 22500, necessidade_regiao: 100, necessidade_max_regiao: 3, conforto_carinho: 45000,
   k_meia_vida_conforto: 753,
+  metabolismo: false, combustivel_inicial: 225000, reserva_inicial: 112500, conversao_num: 1, conversao_den: 1,
+  gasto_basal_acordado: 375, gasto_basal_dormindo: 187, armazenar_limiar: 337500, armazenar_taxa: 375,
+  mobilizar_limiar: 225000, mobilizar_taxa: 375, falta_limiar: 112500, falta_cansaco: 500,
 };
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */

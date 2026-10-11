@@ -1556,6 +1556,22 @@ class ConfigCorpo:
     necessidade_max_regiao: int = 3
     conforto_carinho: int = 45000            # BN-6: o carinho sobe o conforto (com o medo da mao); o menor da grade 6.1 do plano
     k_meia_vida_conforto: int = 753          # h = 60 (a menor da grade 6.1 do plano): o conforto cai devagar entre os carinhos
+    # o metabolismo energetico (docs/TAREFA_V2_METABOLISMO.md, secao 3; ME-1 a ME-7 pela recomendacao, Matheus, 2026-10-11), sub-chave
+    # `metabolismo`, que exige a digestao. O combustivel e a reserva sao concentracoes, sem receptor (ME-2); a unica ponte para o pet e a
+    # falta, que sobe o cansaco (ME-1). Numeros PROPOSTOS, sem fonte; o passo 0 da calibracao do corpo escala o gasto (ME-7)
+    metabolismo: bool = False
+    combustivel_inicial: int = 225000        # C/2 ao nascer
+    reserva_inicial: int = 112500            # C/4 ao nascer
+    conversao_num: int = 1                   # a digestao poe no combustivel num/den do alimento digerido, com o resto guardado (como a
+    conversao_den: int = 1                   # vontade). 1/1: com o gasto basal igual a subida da fome, comer o que a fome pede o mantem
+    gasto_basal_acordado: int = 375          # por tick acordado (= a subida da fome)
+    gasto_basal_dormindo: int = 187          # por tick dormindo (a metade)
+    armazenar_limiar: int = 337500           # 3C/4: acima disto o combustivel vai a reserva...
+    armazenar_taxa: int = 375                # ...ate isto por tick
+    mobilizar_limiar: int = 225000           # C/2: abaixo disto a reserva volta ao combustivel...
+    mobilizar_taxa: int = 375                # ...ate isto por tick
+    falta_limiar: int = 112500               # C/4: abaixo disto, a falta de combustivel...
+    falta_cansaco: int = 500                 # ...sobe o cansaco isto por tick (o de um tick acordado de dia); a unica ponte (ME-1)
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
@@ -1582,12 +1598,29 @@ class ConfigCorpo:
             raise ValueError("ConfigCorpo.vontade_digestao_num / vontade_digestao_den passa de 1")
         if self.banheiro and self.vontade_limiar >= self.escala:
             raise ValueError(f"ConfigCorpo.vontade_limiar tem de ficar abaixo de C: {self.vontade_limiar}")
+        if type(self.metabolismo) is not bool:
+            raise TypeError(f"ConfigCorpo.metabolismo e bool: {self.metabolismo!r}")
+        if self.metabolismo and not self.digestao:
+            raise ValueError("ConfigCorpo.metabolismo exige ConfigCorpo.digestao (E-9: a comida digerida e o que vira combustivel)")
+        for nome in ("conversao_num", "conversao_den", "gasto_basal_acordado", "gasto_basal_dormindo", "armazenar_limiar",
+                     "armazenar_taxa", "mobilizar_limiar", "mobilizar_taxa", "falta_limiar", "falta_cansaco"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro positivo: {v!r}")
+        for nome in ("combustivel_inicial", "reserva_inicial"):
+            v = getattr(self, nome)
+            if type(v) is not int or (self.metabolismo and not 0 <= v <= self.escala):
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro em [0, C]: {v!r}")
+        if self.metabolismo and not self.falta_limiar < self.mobilizar_limiar < self.armazenar_limiar < self.escala:
+            raise ValueError("o metabolismo pede falta_limiar < mobilizar_limiar < armazenar_limiar < C: "
+                             f"{self.falta_limiar}, {self.mobilizar_limiar}, {self.armazenar_limiar}")
 
 
 CONFIG_CORPO = ConfigCorpo()
 CONFIG_CORPO_LIGADA = ConfigCorpo(ligada=True)
 CONFIG_CORPO_DRIVES = ConfigCorpo(ligada=True, digestao=True, vida=True, drives_novos=True, gestos=True)   # a etapa 6 inteira
 CONFIG_CORPO_BANHEIRO = replace(CONFIG_CORPO_DRIVES, banheiro=True)                                        # mais a vontade e o conforto
+CONFIG_CORPO_METABOLISMO = replace(CONFIG_CORPO_DRIVES, metabolismo=True)                                  # a etapa 6 com o metabolismo
 
 
 # =====================================================================
