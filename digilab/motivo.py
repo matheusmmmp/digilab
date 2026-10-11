@@ -302,6 +302,10 @@ def _motivo_lobos_decisao(registro: dict, tick: int, ref_ultimo_cuidado: int | N
         # CORPO: as entradas novas (tedio, solidao...) aprendidas pesaram na decisao e nao tem fator nem texto na expressao; citar so as
         # entradas de hoje esconderia a causa. O motivo delas e da etapa 6 (os drives novos) ou da tarefa da expressao
         raise NotImplementedError("motivo com as entradas novas do corpo aprendidas: sem fator na expressao (etapa 6)")
+    social = registro.get("aprendido_social")
+    if social is not None and any(v != 0.0 for termos_a in social.values() for v in termos_a):
+        # dois pets, etapa 4: as entradas sociais aprendidas pesaram na decisao e nao tem fator nem texto na expressao (como as do corpo)
+        raise NotImplementedError("motivo com as entradas sociais aprendidas: sem fator na expressao")
     outras = [b for b in candidatos if b != registro["acao"]]
     # nomes pela ordem da percepcao do registro: as 10 de sempre e, com os lobos vendo o mundo, `bola` e `fruta` no fim
     nomes = [_FATOR_POR_ENTRADA[k] for k in registro["percepcao"]]

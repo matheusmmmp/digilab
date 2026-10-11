@@ -1223,6 +1223,14 @@ class ConfigLobos:
     # toda classe comeca em w0_alvo (o peso pequeno das outras). Desligado: o padrao do motor (a vida de hoje, byte a byte)
     alvo_aprendido: bool = False             # PROPOSTO: a chave
     w0_alvo: int = 64                        # PROPOSTO, SEM FONTE: S/16, o peso pequeno de partida de cada classe
+    # --- dois pets, etapa 4, segunda metade (DP-8): as entradas sociais e o modelo dos outros ---
+    # As entradas sociais (outro a vista, viu o outro comer, a acao visivel do outro e o tipo do ultimo toque, lidas de Observacao.social)
+    # nas regras de tempo livre, um peso por (regra, acao, entrada), prior 0: no prior, a vida de hoje. O modelo dos outros
+    # (familiaridade, confianca na comida, afinidade) e so registrado: nunca entra na decisao (degrau 3). Os dois so no mundo fisico
+    entradas_sociais: bool = False           # PROPOSTO: a chave das entradas sociais
+    modelo_outros: bool = False              # PROPOSTO: a chave do modelo dos outros (so registrado)
+    janela_social_ticks: int = 240           # PROPOSTO, SEM FONTE propria: o "recente" do viu comer e do toque (a janela da informacao)
+    fator_familiaridade: int = 16            # PROPOSTO, SEM FONTE: S/64 por decisao, a media movel do tempo a vista (~16 h)
 
     @property
     def escala(self) -> int:

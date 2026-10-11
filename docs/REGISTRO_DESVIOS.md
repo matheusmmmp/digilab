@@ -4300,3 +4300,24 @@ e na tarefa. Nenhuma run, nenhum código.
   - **o banheiro maior só nos testes.** Com o banheiro do #265 (células 0 a 3 e 0 a 5), nas vidas curtas dos testes não há alívio dentro
     (o achado do A). Os testes trocam a `CONFIG_BANHEIRO_LIGADA` da bancada por uma área maior, só para exercitar o carinho e o limpador. A
     bancada não tem chave para a área: é decisão do plano.
+
+## 2026-10-08 — DOIS-PETS, etapa 4, segunda metade (worker B): as entradas sociais e o modelo dos outros
+
+- **O branch:** `v2-dois-pets-social` já existia (o do #263). O trabalho foi para `v2-dois-pets-etapa4b`.
+- **As entradas em 0 ou 1.** A visão vira "outro à vista" e a ação visível do mais perto, sem a distância nem a direção. O consumo visto e o
+  toque contam só na janela de 240 ticks (a da informação do N5), sem gradação pela idade.
+- **`outro_a_vista` é redundante** com a ação visível um-quente (com um outro à vista, uma ação vale 1). Fica porque a tarefa o lista; custa
+  13 pesos.
+- **A ação visível sobre as 8 do `AcaoPet`**, com o `aliviar`, para o layout não depender da chave do banheiro.
+- **As linhas da tabela social são só as ações que o instinto propõe** em cada regra de tempo livre (as de prior não nulo; com o
+  banheiro, mais o `aliviar`), e não as sete de sempre, como na tabela do corpo. Com as sete seriam 315 pesos, e o alvo aprendido passaria
+  de mil. Um candidato fora das linhas falha alto.
+- **Os sociais aprendem como as entradas do corpo:** pela regra da L1, com o canal do corpo, de toda fonte que ensina a tabela da regra (a
+  consequência e o dono). Nenhum sinal vem do outro pet.
+- **O modelo dos outros numa chave à parte** (`modelo_outros`), para o gate "não muda a decisão" comparar a vida com e sem ele.
+- **A confiança na comida** conta a ida a `onde_comeu` quando ela chega: uma ida direta, ou a continuação dela. O "achou comida boa" é ter
+  comido ou ter comida boa na percepção depois (os `vistos`, no máximo `max_vistos`). O id do outro sai do ponto do alvo na percepção
+  social da decisão, e um ponto sem exatamente um outro falha alto. Ir atrás de outra coisa abandona a ida sem contá-la.
+- **A afinidade** usa o intervalo entre duas decisões do pet: "dividida" quando o pet comeu na decisão anterior e viu o outro comer nesse
+  intervalo, sem toque de disputa novo; "perdida" é cada toque novo de `disputa_perdeu`. A `disputa_ganhou` não entra no saldo.
+- **O relógio dos eventos** é o da hora do dia, como o do N6, porque a percepção social só dá a idade.

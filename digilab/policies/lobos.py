@@ -158,6 +158,10 @@ PARAMETROS_LOBOS_CORPO: dict[str, tuple[str, str]] = {
 PARAMETROS_LOBOS_DOIS_PETS: dict[str, tuple[str, str]] = {
     "alvo_aprendido": ("PROPOSTO", "TAREFA_V2_DOIS_PETS, etapa 4 (DP-8): a chave do alvo aprendido por classe de candidato"),
     "w0_alvo": ("PROPOSTO", "dois_pets.md, secao 8: o peso pequeno das classes que o padrao nao usa (S/16), SEM FONTE"),
+    "entradas_sociais": ("PROPOSTO", "TAREFA_V2_DOIS_PETS, etapa 4 (DP-8): a chave das entradas sociais nas regras de tempo livre"),
+    "modelo_outros": ("PROPOSTO", "dois_pets.md, secao 8: o modelo dos outros, so registrado ate o degrau 3"),
+    "janela_social_ticks": ("PROPOSTO", "o 'recente' do viu comer e do toque: 240, a janela da informacao do N5, SEM FONTE propria"),
+    "fator_familiaridade": ("PROPOSTO", "dois_pets.md, secao 8: a familiaridade com decaimento, S/64 por decisao, SEM FONTE"),
 }
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
                     **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS}
@@ -212,6 +216,17 @@ REGRAS_ALVO = {"pedido_necessidade": (AcaoPet.COMER,), "fome_moderada": (AcaoPet
                "tempo_livre": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR), "bola_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR),
                "fruta_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR, AcaoPet.COMER)}
 ESCALA_U_ALVO = 1 << 16                # o u do alvo do MotorMundo: inteiro em [0, 2^16)
+# dois pets, etapa 4, segunda metade (DP-8): as entradas sociais, lidas de Observacao.social (mundo.PercepcaoSocial; o cerebro nao importa
+# o mundo: os tipos do toque sao conferidos contra mundo.TIPOS_TOQUE na carga). Todas 0 ou 1:
+#   outro_a_vista   algum outro no raio da visao
+#   viu_comer       viu algum outro comer ha no maximo `janela_social_ticks`
+#   acao_<a>        a acao visivel do outro mais perto (uma por acao do AcaoPet; com um outro a vista, exatamente uma vale 1)
+#   toque_<tipo>    o tipo do ultimo contato, se ha no maximo `janela_social_ticks` (o mais recente; empate pelo id)
+TIPOS_TOQUE_SOCIAL = ("disputa_ganhou", "disputa_perdeu", "encostou", "encostaram", "esbarrou")
+ACOES_VISIVEIS = tuple(a.value for a in AcaoPet)
+ENTRADAS_SOCIAIS = (("outro_a_vista", "viu_comer") + tuple(f"acao_{a}" for a in ACOES_VISIVEIS)
+                    + tuple(f"toque_{t}" for t in TIPOS_TOQUE_SOCIAL))
+TIPOS_COMIDA_BOA = ("racao",) + FRUTAS   # os tipos da percepcao do mundo que sao comida boa (sem `_podre`, sem a bola)
 
 # Prior do instinto em unidades de 1.0 (vira inteiro vezes S): regra -> acao -> entrada -> coeficiente.
 # So os candidatos de cada regra tem coeficiente; o resto da tabela e zero. Os numeros sao os literais de
@@ -531,6 +546,130 @@ def _sortear_frutas(presentes: list[str], pesos: list[float], u: float) -> str:
 # ------------------------------------------------------------------ a base: pesos inteiros + credito do L1
 
 
+def entradas_sociais(social, janela: int) -> list[float]:
+    """Dois pets, etapa 4 (DP-8): as entradas sociais (ENTRADAS_SOCIAIS), 0.0 ou 1.0, so do que `Observacao.social` traz (o que e fisico:
+    a posicao e a acao visivel, o consumo visto, o contato). Sem o campo (sozinho ou fora do grupo), todas 0.0."""
+    x = [0.0] * len(ENTRADAS_SOCIAIS)
+    if social is None:
+        return x
+    base_acao, base_toque = 2, 2 + len(ACOES_VISIVEIS)
+    if social.outros:
+        x[0] = 1.0
+        acao = social.outros[0][4]                     # o outro mais perto (os outros vem em ordem de d e de id)
+        if acao not in ACOES_VISIVEIS:
+            raise ValueError(f"acao visivel desconhecida: {acao!r}")
+        x[base_acao + ACOES_VISIVEIS.index(acao)] = 1.0
+    for _, _, _, idade in social.onde_comeu:
+        if idade < 0:
+            raise ValueError(f"consumo visto com idade negativa: {idade}")
+        if idade <= janela:
+            x[1] = 1.0
+    recentes = []
+    for ident, tipo, _, idade in social.toque:
+        if idade < 0 or tipo not in TIPOS_TOQUE_SOCIAL:
+            raise ValueError(f"toque invalido: {tipo!r}, idade {idade}")
+        if idade <= janela:
+            recentes.append((idade, ident, tipo))
+    if recentes:
+        x[base_toque + TIPOS_TOQUE_SOCIAL.index(min(recentes)[2])] = 1.0
+    return x
+
+
+class ModeloOutros:
+    """Dois pets, etapa 4 (docs/futuro/dois_pets.md, secao 8; cognicao_social.md, secao 3): o modelo dos outros, SO REGISTRADO. Nada daqui
+    entra na decisao (degrau 3, por adendo). Por pet conhecido, tres variaveis separadas, sem rotulo e sem soma entre elas:
+    - familiaridade: a media movel do outro a vista, em inteiros na escala S, a cada decisao: f += div_arred((S [visto] - f) x fator, S);
+    - confianca, por atividade (so `comida` no degrau 1): as idas a `onde_comeu` dele que chegaram (`idas`) e, delas, as que acharam
+      comida boa (`acertos`: o pet comeu, ou havia comida boa a vista na chegada);
+    - afinidade: `divididas` (o pet comeu e viu o outro comer no mesmo intervalo entre duas decisoes, sem disputa nele) contra `perdidas`
+      (cada toque novo de `disputa_perdeu`); o saldo e divididas - perdidas.
+    Os eventos (o consumo visto, o toque) sao identificados pelo tick deles no relogio do pet (a hora do dia, como o relogio do N6) menos
+    a idade: o mesmo evento visto em duas decisoes conta uma vez."""
+
+    def __init__(self, escala: int, fator: int) -> None:
+        self.S, self.fator = escala, fator
+        self.outros: dict[str, dict] = {}
+        self._dia, self._tdd_anterior = 0, -1
+        self._ultimo_comer: dict[str, tuple] = {}
+        self._ultimo_toque: dict[str, tuple] = {}
+        self._comeu_desde = False               # o pet comeu na consequencia da decisao anterior
+        self._ida: str | None = None            # a ida a `onde_comeu` em curso (o id do outro), ate chegar ou mudar de alvo
+
+    def _do(self, ident: str) -> dict:
+        if ident not in self.outros:
+            self.outros[ident] = {"familiaridade": 0, "confianca": {"comida": {"idas": 0, "acertos": 0}},
+                                  "afinidade": {"divididas": 0, "perdidas": 0}}
+        return self.outros[ident]
+
+    def _relogio(self, hora: float) -> int:
+        tdd = int(round(hora * TICKS_POR_DIA))
+        if tdd < self._tdd_anterior:
+            self._dia += 1
+        self._tdd_anterior = tdd
+        return self._dia * TICKS_POR_DIA + tdd
+
+    def decisao(self, social, hora: float) -> None:
+        """A cada decisao, antes de decidir (so le o `obs`): a familiaridade de todo outro conhecido e os eventos novos desde a anterior."""
+        t = self._relogio(hora)
+        vistos, novos_comer, novos_toque = set(), set(), {}
+        if social is not None:
+            vistos = {o[0] for o in social.outros}
+            for ident, x, y, idade in social.onde_comeu:
+                ev = (x, y, t - idade)
+                if self._ultimo_comer.get(ident) != ev:
+                    self._ultimo_comer[ident] = ev
+                    novos_comer.add(ident)
+            for ident, tipo, direcao, idade in social.toque:
+                ev = (tipo, direcao, t - idade)
+                if self._ultimo_toque.get(ident) != ev:
+                    self._ultimo_toque[ident] = ev
+                    novos_toque[ident] = tipo
+        for ident in sorted(set(self.outros) | vistos | novos_comer | set(novos_toque)):
+            o = self._do(ident)
+            o["familiaridade"] += div_arred(((self.S if ident in vistos else 0) - o["familiaridade"]) * self.fator, self.S)
+            toque = novos_toque.get(ident, "")
+            if toque == "disputa_perdeu":
+                o["afinidade"]["perdidas"] += 1
+            if self._comeu_desde and ident in novos_comer and not toque.startswith("disputa"):
+                o["afinidade"]["divididas"] += 1
+        self._comeu_desde = False
+
+    def consequencia(self, ocorrido: dict, obs_depois: Observacao, social) -> None:
+        """Do `consequencia_mundo` (explorar, comer, brincar, aliviar): o que o pet comeu e as idas a `onde_comeu`. `social` e a percepcao
+        social da decisao (o id do outro sai do ponto do alvo)."""
+        if ocorrido["comeu"] is not None:
+            self._comeu_desde = True
+        alvo = ocorrido["alvo"]
+        classe = None if alvo is None else (alvo["de"] if alvo["tipo"] == "continuar" else alvo["tipo"])
+        if classe != "onde_comeu":
+            self._ida = None
+            return
+        if alvo["tipo"] == "onde_comeu":
+            ids = [] if social is None else [i for i, x, y, _ in social.onde_comeu if (x, y) == (alvo["x"], alvo["y"])]
+            if len(ids) != 1:
+                raise RuntimeError(f"ida a onde_comeu em ({alvo['x']}, {alvo['y']}) sem um outro so naquele ponto: {ids}")
+            self._ida = ids[0]
+        elif self._ida is None:
+            raise RuntimeError("continuar de uma ida a onde_comeu sem a ida")
+        if ocorrido["chegou"]:
+            c = self._do(self._ida)["confianca"]["comida"]
+            c["idas"] += 1
+            if ocorrido["comeu"] is not None or any(tipo in TIPOS_COMIDA_BOA for _, tipo, *_ in obs_depois.mundo.vistos):
+                c["acertos"] += 1
+            self._ida = None
+
+    def para_dict(self) -> dict:
+        outros = {}
+        for ident, o in sorted(self.outros.items()):
+            c, a = o["confianca"]["comida"], o["afinidade"]
+            outros[ident] = {"familiaridade": o["familiaridade"],
+                             "confianca": {"comida": {**c, "fracao": div_arred(c["acertos"] * self.S, c["idas"]) if c["idas"] else None}},
+                             "afinidade": {**a, "saldo": a["divididas"] - a["perdidas"]}}
+        return {"outros": outros, "relogio": [self._dia, self._tdd_anterior], "ida": self._ida, "comeu_desde": self._comeu_desde,
+                "ultimo_comer": {i: list(v) for i, v in sorted(self._ultimo_comer.items())},
+                "ultimo_toque": {i: list(v) for i, v in sorted(self._ultimo_toque.items())}}
+
+
 class Aprendiz:
     """Base dos aprendizes da V2: tabela de pesos inteiros `_pesos[grupo][acao][entrada]` iniciada no prior
     `_prior`, e o credito do feedback do L1 (janela da v1). Quem herda define `agir` (que deixa em
@@ -597,6 +736,13 @@ class Aprendiz:
         self._pesos_alvo_mundo: dict = {}
         self._prior_alvo: dict = {}
         self._pesos_alvo: dict = {}
+        # dois pets, etapa 4, segunda metade: as entradas sociais (regra -> acao -> um peso por entrada social, prior 0; vazia sem a chave:
+        # nada muda) e o modelo dos outros (None sem a chave; so registrado)
+        self._prior_social: dict = {}
+        self._pesos_social: dict = {}
+        self._x_social: list[float] = []
+        self._modelo: ModeloOutros | None = None
+        self._social_na_decisao = None
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -637,13 +783,14 @@ class Aprendiz:
         return (sum(len(v) for acoes in self._pesos.values() for v in acoes.values()) + len(self._pesos_fruta)
                 + (self._peso_info is not None) + len(self._pesos_comer_fruta) + (self._peso_pedido is not None)
                 + sum(len(v) for acoes in self._pesos_corpo.values() for v in acoes.values()) + len(self._pesos_alvo)
-                + sum(len(t) for t in self._pesos_alvo_mundo.values()))
+                + sum(len(t) for t in self._pesos_alvo_mundo.values())
+                + sum(len(v) for acoes in self._pesos_social.values() for v in acoes.values()))
 
     def pesos_mudaram(self) -> bool:
         return (self._pesos != self._prior or self._pesos_fruta != self._prior_fruta or self._peso_info != self._prior_info
                 or self._pesos_comer_fruta != self._prior_comer_fruta or self._peso_pedido != self._prior_pedido
                 or self._pesos_corpo != self._prior_corpo or self._pesos_alvo != self._prior_alvo
-                or self._pesos_alvo_mundo != self._prior_alvo_mundo)
+                or self._pesos_alvo_mundo != self._prior_alvo_mundo or self._pesos_social != self._prior_social)
 
     def _desvios(self):
         """|w - w0| de cada peso: a tabela da decisao e, no mundo das frutas, a sub-decisao da fruta."""
@@ -668,6 +815,10 @@ class Aprendiz:
         for k, tabela in self._pesos_alvo_mundo.items():
             for c, w in tabela.items():
                 yield abs(w - self._prior_alvo_mundo[k][c])
+        for g in self._pesos_social:
+            for a in self._pesos_social[g]:
+                for w, w0 in zip(self._pesos_social[g][a], self._prior_social[g][a]):
+                    yield abs(w - w0)
 
     def desvio_maximo(self) -> int:
         """max |w - w0| sobre todos os pesos (o quanto o aprendizado se afastou do prior)."""
@@ -722,6 +873,14 @@ class Aprendiz:
                     c["impulsos"][a] = c["impulsos"][a] + ativacao(prior_c[a], self._x_corpo, self._escala)
                     c["decisao"][a] = c["decisao"][a] + ativacao([w - w0 for w, w0 in zip(tabela[a], prior_c[a])], self._x_corpo,
                                                                  self._escala)
+        if grupo in self._pesos_social:
+            # dois pets, etapa 4: as entradas sociais nas regras de tempo livre, um peso por (regra, acao, entrada), prior 0 (todo o termo e
+            # aprendido); no prior o termo e 0.0 exato e o peso efetivo e o do instinto, byte a byte
+            tabela = self._pesos_social[grupo]
+            for a in candidatos:
+                if a not in tabela:
+                    raise RuntimeError(f"entradas sociais: {a.value} candidato na regra {grupo!r} sem linha na tabela")
+                c["decisao"][a] = c["decisao"][a] + ativacao(tabela[a], self._x_social, self._escala)
         com_pedido = False
         if (self._peso_pedido is not None and not sem_pedido and grupo in REGRAS_PEDIDO and AcaoPet.COMER in candidatos):
             # N7: comer ganha (w_pedido / S) x p, com p = -1 quando toda fruta no cenario tem pedido vigente. As regras urgentes
@@ -1001,6 +1160,8 @@ class Aprendiz:
                 "alvo": None if alvo is None else alvo["tipo"], "chegou": ocorrido["chegou"],
                 "deslocamento": ocorrido["deslocamento"], "comeu": None if comeu is None else comeu["tipo"],
                 "como": None if comeu is None else comeu["como"], "brincou_com_bola": ocorrido["brincou_com_bola"]})
+        if self._modelo is not None:
+            self._modelo.consequencia(ocorrido, obs_depois, self._social_na_decisao)
         if self._corpo is not None:
             # CORPO com o mundo fisico (secao 9; o arranjo do MotorCorpo do #238): o corpo ja aplicou os estimulos do `ocorrido`, e o sinal e
             # o do corpo, sobre o obs_depois. A E2 so no comer que comeu fruta, como sem o corpo. Este gancho credita, e o
@@ -1207,6 +1368,11 @@ class Aprendiz:
             # CORPO: as entradas novas da regra (as leituras dos receptores novos, X = a leitura) pela mesma regra, com o canal do corpo
             self._cortes_teto += atualizar_pesos(self._pesos_corpo[g], self._prior_corpo[g], {**registro, "X": registro["corpo"]["X"]},
                                                  f_corpo, self.cl.passo, self.cl.teto, self._escala)
+        if "social" in registro:
+            # dois pets, etapa 4: as entradas sociais da regra (X = a entrada x S) pela mesma regra, com o canal do corpo, de toda fonte
+            # que ensina a tabela da regra (o outro pet nao manda sinal nenhum: o sinal e o da propria acao ou do dono)
+            self._cortes_teto += atualizar_pesos(self._pesos_social[g], self._prior_social[g], {**registro, "X": registro["social"]["X"]},
+                                                 f_corpo, self.cl.passo, self.cl.teto, self._escala)
         if consequencia and "alvo_mundo" in registro:
             # dois pets, etapa 4: a classe do alvo pela regra da sub-decisao da fruta (um peso por classe, X = S), so pela consequencia
             # (o credito do consequencia_mundo, ou do corpo no mundo fisico), com o sinal inteiro da decisao (todos os canais)
@@ -1259,6 +1425,8 @@ class Aprendiz:
                 d["fruta"]["Pd"] = dict(r["fruta"]["Pd"])
             if "corpo" in r:
                 d["corpo"] = {"X": list(r["corpo"]["X"])}
+            if "social" in r:
+                d["social"] = {"X": list(r["social"]["X"])}
             if "alvo" in r:
                 s = r["alvo"]
                 d["alvo"] = {"candidatos": list(s["candidatos"]), "acao": s["acao"], "X": dict(s["X"]), "P": dict(s["P"]),
@@ -1327,6 +1495,11 @@ class Aprendiz:
         if self._prior_alvo_mundo:                # dois pets, etapa 4, so com a chave do alvo aprendido
             d["pesos_alvo_mundo"] = {k: dict(t) for k, t in self._pesos_alvo_mundo.items()}
             d["pesos_alvo_mundo_prior"] = {k: dict(t) for k, t in self._prior_alvo_mundo.items()}
+        if self._prior_social:                    # dois pets, etapa 4, so com a chave das entradas sociais (o prior e 0)
+            d["entradas_sociais"] = list(ENTRADAS_SOCIAIS)
+            d["pesos_social"] = {g: {a.value: list(v) for a, v in acoes.items()} for g, acoes in self._pesos_social.items()}
+        if self._modelo is not None:              # dois pets, etapa 4, so com a chave do modelo dos outros (so registrado)
+            d["modelo_outros"] = self._modelo.para_dict()
         if self._canais is not None:              # CANAIS-REFORCO, so depois do 1o credito por canal
             d["canais"] = {"creditos": self._canais["creditos"], "por_canal": dict(self._canais["por_canal"]),
                            "por_alvo": dict(self._canais["por_alvo"])}
@@ -1490,6 +1663,30 @@ class PoliticaLobos(Aprendiz):
             self._pesos_alvo_mundo = {k: dict(t) for k, t in self._prior_alvo_mundo.items()}
             if self.n_pesos() >= cl.maximo_pesos:
                 raise ValueError(f"{self.n_pesos()} pesos com o alvo aprendido, teto {cl.maximo_pesos}")
+        # dois pets, etapa 4, segunda metade (DP-8): as entradas sociais e o modelo dos outros, so no mundo fisico
+        if type(cl.entradas_sociais) is not bool or type(cl.modelo_outros) is not bool:
+            raise TypeError("ConfigLobos.entradas_sociais e modelo_outros precisam ser bool")
+        if type(cl.janela_social_ticks) is not int or cl.janela_social_ticks <= 0:
+            raise ValueError(f"ConfigLobos.janela_social_ticks precisa ser inteiro positivo: {cl.janela_social_ticks!r}")
+        if type(cl.fator_familiaridade) is not int or not 0 < cl.fator_familiaridade <= cl.escala:
+            raise ValueError(f"ConfigLobos.fator_familiaridade precisa ser inteiro em (0, S]: {cl.fator_familiaridade!r}")
+        if cl.entradas_sociais or cl.modelo_outros:
+            if not fisico:
+                raise ValueError("ConfigLobos.entradas_sociais e modelo_outros sem o mundo fisico (cfg_mundo ligada)")
+            from ..mundo import TIPOS_TOQUE
+            if tuple(TIPOS_TOQUE) != TIPOS_TOQUE_SOCIAL:
+                raise RuntimeError(f"os tipos do toque mudaram: {TIPOS_TOQUE}")
+        if cl.entradas_sociais:
+            # as linhas: as acoes que o instinto pode propor em cada regra de tempo livre (as de prior nao nulo; com o banheiro, mais o
+            # aliviar). Um candidato fora delas falha alto na decisao
+            n = len(ENTRADAS_SOCIAIS)
+            self._prior_social = {r: {a: [0] * n for a, v in self._prior[r].items() if any(v) or a is AcaoPet.ALIVIAR}
+                                  for r in REGRAS_ENTRADAS_CORPO if r in self._prior}
+            self._pesos_social = {r: {a: list(v) for a, v in acoes.items()} for r, acoes in self._prior_social.items()}
+            if self.n_pesos() >= cl.maximo_pesos:
+                raise ValueError(f"{self.n_pesos()} pesos com as entradas sociais, teto {cl.maximo_pesos}")
+        if cl.modelo_outros:
+            self._modelo = ModeloOutros(cl.escala, cl.fator_familiaridade)
 
     @property
     def tem_corpo(self) -> bool:
@@ -1667,6 +1864,12 @@ class PoliticaLobos(Aprendiz):
                 raise RuntimeError("corpo: Observacao sem o campo corpo (o cerebro com a chave do corpo precisa do MotorCorpo)")
             S = self._escala
             self._x_corpo = [leitura_receptor(obs.corpo, r, S) / S for r in self._receptores_novos]
+        if self._prior_social:
+            self._x_social = entradas_sociais(obs.social, self.cl.janela_social_ticks)
+        if self._modelo is not None:
+            # o modelo dos outros: so le o obs e so registra (nao consome rng, nao entra em peso nenhum)
+            self._social_na_decisao = obs.social
+            self._modelo.decisao(obs.social, obs.vetor_estado[7])
         x = self.percepcao(obs)
         regra, candidatos = impulsos(self._instinto, obs)
         self._presenca_na_decisao = obs.frutas_cenario
@@ -1705,6 +1908,13 @@ class PoliticaLobos(Aprendiz):
                         self.motivos[-1]["aprendido_corpo"] = {
                             a.value: termos([w - w0 for w, w0 in zip(tabela[a], prior_c[a])], self._x_corpo, S) for a in candidatos}
                     self._registro_decisao["corpo"] = {"X": [arred(v * S) for v in self._x_corpo]}
+        if self._prior_social:
+            S = self._escala
+            self.motivos[-1]["percepcao_social"] = dict(zip(ENTRADAS_SOCIAIS, self._x_social))
+            if regra in self._pesos_social and self._aprende:
+                tabela = self._pesos_social[regra]
+                self.motivos[-1]["aprendido_social"] = {a.value: termos(tabela[a], self._x_social, S) for a in candidatos}
+                self._registro_decisao["social"] = {"X": [arred(v * S) for v in self._x_social]}
         if self._peso_pedido is not None and regra in REGRAS_PEDIDO and AcaoPet.COMER in candidatos:
             p = self._p_pedido()
             if p != 0.0:
