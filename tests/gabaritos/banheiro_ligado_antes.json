@@ -1,0 +1,573 @@
+{
+ "bancada|P0-B00~lobos|101": {
+  "alivios_antes": [
+   {
+    "alvo": "aqui",
+    "dentro": false,
+    "distancia": 193,
+    "recolhido": false,
+    "tick": 1275,
+    "urgente": false
+   }
+  ],
+  "decisao": [
+   2880,
+   [
+    271,
+    205
+   ],
+   218,
+   177,
+   "banheiro"
+  ],
+  "k": 192,
+  "prefixo": "89923f38f0fbfd6bb1d889fd8c13b2fc88770b7eaf96698d870732e713c9d46d"
+ },
+ "bancada|P0-B00~lobos|202": {
+  "alivios": 2,
+  "impressao": {
+   "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
+   "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
+   "estado_motor": "5e6edeb91146904614295b853007d412f68680ff0dbac568c6b7853365dd3e14",
+   "fisico": "53e4e43afa4596447c9cee4fb64fb6a7123009f7addee4e419830c037a6cf7af",
+   "interacoes": 36,
+   "log": "b393cbc87fa79c853e36adc57317d509cc843d2053c759bcfd4f9e8ca4341033",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "2ada3e61489524db1a0d7ed3a89822698e9cfc59be88e59b8496210e828901ab",
+   "rngs": "20a08fa346b6bb05df4b5191f4b103a5f068c58cbc9abdf58253fda950d1b136"
+  },
+  "k": null
+ },
+ "bancada|P0-B00~lobos|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1320,
+   [
+    127,
+    136
+   ],
+   76,
+   104,
+   "banheiro"
+  ],
+  "k": 88,
+  "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
+ },
+ "bancada|P0-B0C~instinto|101": {
+  "alivios_antes": [
+   {
+    "alvo": "aqui",
+    "dentro": false,
+    "distancia": 193,
+    "recolhido": false,
+    "tick": 1275,
+    "urgente": false
+   }
+  ],
+  "decisao": [
+   2880,
+   [
+    271,
+    205
+   ],
+   218,
+   177,
+   "banheiro"
+  ],
+  "k": 192,
+  "prefixo": "89923f38f0fbfd6bb1d889fd8c13b2fc88770b7eaf96698d870732e713c9d46d"
+ },
+ "bancada|P0-B0C~instinto|202": {
+  "alivios": 2,
+  "impressao": {
+   "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
+   "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
+   "estado_motor": "5e6edeb91146904614295b853007d412f68680ff0dbac568c6b7853365dd3e14",
+   "fisico": "53e4e43afa4596447c9cee4fb64fb6a7123009f7addee4e419830c037a6cf7af",
+   "interacoes": 36,
+   "log": "b393cbc87fa79c853e36adc57317d509cc843d2053c759bcfd4f9e8ca4341033",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "afa94d6124a31d2d490d0771db41ddeb054dab08848b1b232ce32a20fba700fa",
+   "rngs": "20a08fa346b6bb05df4b5191f4b103a5f068c58cbc9abdf58253fda950d1b136"
+  },
+  "k": null
+ },
+ "bancada|P0-B0C~instinto|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1320,
+   [
+    127,
+    136
+   ],
+   76,
+   104,
+   "banheiro"
+  ],
+  "k": 88,
+  "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
+ },
+ "bancada|P1-B00~lobos|101": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "79758fba8d77b56420ce6435af8c0c1ad6a0dc0ec4a188bd1cc7ca2d49b4ef91",
+   "estado": "0d23fa887fc62174db59d7e5f598728caa90907cca212867ab85780138ff2ac1",
+   "estado_motor": "f0dc13acf87b6788c0a5881ebccc70b814b1ec3afd0a89c631370a8a781c61d6",
+   "fisico": "2a31d3464c5c4ff36dc2d7f484dfe6be4cfeafdcb7e9f75de7b42da2e9553e28",
+   "interacoes": 33,
+   "log": "bf139b4872570723c3005cb92556c25587a49ee88af99a2689480e1dd0299d1e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "6bbab0e91047c3bfb03a79e51f91d7f701f10f86e3fac47c837e3910efcff287",
+   "rngs": "9dc322969bd699419239d46c6366129ec20378b280b9519add399bef10cc3fb9"
+  },
+  "k": null
+ },
+ "bancada|P1-B00~lobos|202": {
+  "alivios": 2,
+  "impressao": {
+   "acoes": "1249fd735522f7462bf1018fa9dc77b1a0ae5c3235eca32398da2fedccbd5bc8",
+   "estado": "c03e2375bf97bc0f2494f6e529cd9ecebdeb5ef3df2073875242af85a7757d7f",
+   "estado_motor": "c3e9358d8944c5e1fd28e404dc54315eb2356c476773020d8fbd43abc0e7cfe4",
+   "fisico": "f7dd18ab2998f45297a050c4ed574530c6fbde74d41e3fec55c3dd1cb64dc763",
+   "interacoes": 38,
+   "log": "6f13183af707e7f325de4f8cc20eb6c77026c51b998fd4ceafaea0f647b2a2e8",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "079a7a1a1f9108d780348e3c7047b2bfc72aafcfdb5b8985499df2a244b8cee1",
+   "rngs": "922cf2ac92197e6622e80d24cadc4062034e804d18faf78b2510bce63fa16867"
+  },
+  "k": null
+ },
+ "bancada|P1-B00~lobos|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1320,
+   [
+    127,
+    136
+   ],
+   76,
+   104,
+   "banheiro"
+  ],
+  "k": 88,
+  "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
+ },
+ "bancada|P1-BLC~lobos|101": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "79758fba8d77b56420ce6435af8c0c1ad6a0dc0ec4a188bd1cc7ca2d49b4ef91",
+   "estado": "0d23fa887fc62174db59d7e5f598728caa90907cca212867ab85780138ff2ac1",
+   "estado_motor": "f0dc13acf87b6788c0a5881ebccc70b814b1ec3afd0a89c631370a8a781c61d6",
+   "fisico": "2a31d3464c5c4ff36dc2d7f484dfe6be4cfeafdcb7e9f75de7b42da2e9553e28",
+   "interacoes": 33,
+   "log": "bf139b4872570723c3005cb92556c25587a49ee88af99a2689480e1dd0299d1e",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "b1019de4ff1e688d8b60b8b4b5e5df819c6b710b678caff94d7ab9e8fd457fba",
+   "rngs": "9dc322969bd699419239d46c6366129ec20378b280b9519add399bef10cc3fb9"
+  },
+  "k": null
+ },
+ "bancada|P1-BLC~lobos|202": {
+  "alivios": 2,
+  "impressao": {
+   "acoes": "1249fd735522f7462bf1018fa9dc77b1a0ae5c3235eca32398da2fedccbd5bc8",
+   "estado": "c03e2375bf97bc0f2494f6e529cd9ecebdeb5ef3df2073875242af85a7757d7f",
+   "estado_motor": "c3e9358d8944c5e1fd28e404dc54315eb2356c476773020d8fbd43abc0e7cfe4",
+   "fisico": "f7dd18ab2998f45297a050c4ed574530c6fbde74d41e3fec55c3dd1cb64dc763",
+   "interacoes": 38,
+   "log": "6f13183af707e7f325de4f8cc20eb6c77026c51b998fd4ceafaea0f647b2a2e8",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "a6424d528e79efb3b3dd7c3683d965469207bade56c3755d6208d4576ab31c15",
+   "rngs": "922cf2ac92197e6622e80d24cadc4062034e804d18faf78b2510bce63fa16867"
+  },
+  "k": null
+ },
+ "bancada|P1-BLC~lobos|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1320,
+   [
+    127,
+    136
+   ],
+   76,
+   104,
+   "banheiro"
+  ],
+  "k": 88,
+  "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
+ },
+ "direto|instinto|BL|101": {
+  "alivios": 2,
+  "impressao": {
+   "acoes": "c78c9bbf597935679fbf53049688db045f259a0547a12b3b6fdceadc2840f853",
+   "estado": "50d77b5e469081797944f27ea3f89fb07cc496527fd2505e5a8bb92b5c3950e8",
+   "estado_motor": "70b7ae721c0fde3994946a276ce23d94c11af04c8ab9a24767195a203a13ea0d",
+   "fisico": "5024983bd2414df6ae0d5e72bb5a9c9be12d14bf094263bbc9118827656130f2",
+   "interacoes": 48,
+   "log": "d65644f641ce4b90112863b5db1efc746f5d331e6cc58bd709885421f8086dac",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "64a955ce843f06017aff3c9d4bd5416d3a5507fd415ffc7e829e19d76911d1a0"
+  },
+  "k": null
+ },
+ "direto|instinto|BL|202": {
+  "alivios_antes": [
+   {
+    "alvo": "aqui",
+    "dentro": false,
+    "distancia": 346,
+    "recolhido": false,
+    "tick": 1470,
+    "urgente": false
+   }
+  ],
+  "decisao": [
+   2700,
+   [
+    113,
+    271
+   ],
+   97,
+   213,
+   "banheiro"
+  ],
+  "k": 180,
+  "prefixo": "aded5fb24d8030b84b26cc479cd9954d8f52a4e780d5388700063b143b8d67bc"
+ },
+ "direto|instinto|BL|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1440,
+   [
+    168,
+    248
+   ],
+   134,
+   198,
+   "banheiro"
+  ],
+  "k": 96,
+  "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
+ },
+ "direto|instinto|B|101": {
+  "alivios": 2,
+  "impressao": {
+   "acoes": "c78c9bbf597935679fbf53049688db045f259a0547a12b3b6fdceadc2840f853",
+   "estado": "50d77b5e469081797944f27ea3f89fb07cc496527fd2505e5a8bb92b5c3950e8",
+   "estado_motor": "70b7ae721c0fde3994946a276ce23d94c11af04c8ab9a24767195a203a13ea0d",
+   "fisico": "5024983bd2414df6ae0d5e72bb5a9c9be12d14bf094263bbc9118827656130f2",
+   "interacoes": 48,
+   "log": "d65644f641ce4b90112863b5db1efc746f5d331e6cc58bd709885421f8086dac",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "64a955ce843f06017aff3c9d4bd5416d3a5507fd415ffc7e829e19d76911d1a0"
+  },
+  "k": null
+ },
+ "direto|instinto|B|202": {
+  "alivios_antes": [
+   {
+    "alvo": "aqui",
+    "dentro": false,
+    "distancia": 346,
+    "recolhido": false,
+    "tick": 1470,
+    "urgente": false
+   }
+  ],
+  "decisao": [
+   2700,
+   [
+    113,
+    271
+   ],
+   97,
+   213,
+   "banheiro"
+  ],
+  "k": 180,
+  "prefixo": "aded5fb24d8030b84b26cc479cd9954d8f52a4e780d5388700063b143b8d67bc"
+ },
+ "direto|instinto|B|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1440,
+   [
+    168,
+    248
+   ],
+   134,
+   198,
+   "banheiro"
+  ],
+  "k": 96,
+  "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
+ },
+ "direto|instinto|perto|101": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "0092888a3628767f2bdc002d09b4ccb310e0021c982ea047832c89aaa5314703",
+   "estado": "f1e244b7e85da00f55f66197314f28689bde26176df8f4f38e0703fb25eb581c",
+   "estado_motor": "c6b8ab6da4a0e2f0398802a46d0bd8da1c3a6153e96840365f6c5f3231405979",
+   "fisico": "01b5923f61963b055a534b80718b6bb442829402c14c37cf74b6a0fd15b55cd9",
+   "interacoes": 48,
+   "log": "13f74b5b7218b9780f1b55eb64d6abd546a2a22e61f2ce66a129da8c494812ce",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "43490b087cbeda49065d34d0193ef7d50046b461c3fdf71c123506e475cf7134"
+  },
+  "k": null
+ },
+ "direto|instinto|perto|202": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "c60843667dd86618e437cddaa466c3b1ab2df10df25c394b66380e8526b9f4f1",
+   "estado": "055531c2e964afe85cbb4d5be7b107d5488dc888b424404ae0d33f382af5175e",
+   "estado_motor": "5fd1ba45d2421e7dbce0fcc90c70033ea83f316fe7bcfdaaca6809cd0059f8b9",
+   "fisico": "d73ef4bffa445ad6e6b48a03950c3102bd19b472843afe996dac6de52a77836a",
+   "interacoes": 48,
+   "log": "0051d04b11ff6e85fd28ad1c08be14b10bc4bab7687796d45c996df0c3a88a38",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "8e39435deab0ef4ea8e83a0f856bc0bc34cca53f7af899b949f4cdc818da2122"
+  },
+  "k": null
+ },
+ "direto|instinto|perto|303": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "ecb91d94d0507081ab03058c7665f65bdd11f038f631740009ed7674ce411993",
+   "estado": "232ef458ff9a40deefef35e3d916569579a6c1818fd9a717813f3daaee59e7a7",
+   "estado_motor": "93606ba4ac537914cdf1aff88c73d86d85681df180fbd9ffc43098fe8c0eeea1",
+   "fisico": "7adef85fbcd84e80d8c741c5c64059c63fdc04af8bff37a09d2d5a2a0d792fc3",
+   "interacoes": 48,
+   "log": "58e1dba9f53f895f49e7693f27e40ecb5f2cc8da01e1fc0563eec0632ad06866",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+   "rngs": "0e0600a6593d17457b32184fb56c8c4bc377d266322ea720b70c85510d5cb4a2"
+  },
+  "k": null
+ },
+ "direto|lobos|BL|101": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "8461fbb908dae74659230f90c4b57c8eb3744f95eabc944dd939088e95b138d6",
+   "estado": "1c0ddb2fca522d4351d529fd92bdf6a8966cf24c6cb17e46e9bffe25ced7f22a",
+   "estado_motor": "689e9c699a931febb533013a116fd54ffea7ac98513123d8e4f33e79cbe6be22",
+   "fisico": "9c1041aee0f994060ff518ba96700dd32afba98bf898a2f895e19295323d17ee",
+   "interacoes": 48,
+   "log": "1f8df5102912080a8812c29e6b4e2c34135f292acfcd637bdf57a444d18c8340",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "a144302c7cda7e0357e908bbb41992f67d4c36d3dd51aef95132ed1db69ce3c3",
+   "rngs": "d4b5191ce7f6a1e354c572020b5991391825531ff4abdd8b599fae3f3b9a22f6"
+  },
+  "k": null
+ },
+ "direto|lobos|BL|202": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "da761c272fb95a7ab088b5402024e7c6d1a138020a35748e16e99afc13706db5",
+   "estado": "a503b47d8c769b7d27fc75910d73a5c92561a0275b31889ab063088c03bd5a45",
+   "estado_motor": "a958d0ae171cef9c3b4fa48cc5e1023ef80e5b1f7f21cd764428cd9d5ffc04ec",
+   "fisico": "7ef35dce1008edbc0dfb3585a64451b3c830d32c99bab19a53536801dd7b2a56",
+   "interacoes": 48,
+   "log": "8aaf10dc64a024e405b47e50c96433a8e19831b3d614a901ce386b9aa992ec94",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "16e81f575cee99ce2e59f3cb2938c34e183ea8868d60d847ae49d136df3af084",
+   "rngs": "f4c36330fb141a7c78a5433d7b741e7a797e15892b934ba7a610287f25698ada"
+  },
+  "k": null
+ },
+ "direto|lobos|BL|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1440,
+   [
+    168,
+    248
+   ],
+   134,
+   198,
+   "banheiro"
+  ],
+  "k": 96,
+  "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
+ },
+ "direto|lobos|B|101": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "8461fbb908dae74659230f90c4b57c8eb3744f95eabc944dd939088e95b138d6",
+   "estado": "1c0ddb2fca522d4351d529fd92bdf6a8966cf24c6cb17e46e9bffe25ced7f22a",
+   "estado_motor": "689e9c699a931febb533013a116fd54ffea7ac98513123d8e4f33e79cbe6be22",
+   "fisico": "9c1041aee0f994060ff518ba96700dd32afba98bf898a2f895e19295323d17ee",
+   "interacoes": 48,
+   "log": "1f8df5102912080a8812c29e6b4e2c34135f292acfcd637bdf57a444d18c8340",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "a144302c7cda7e0357e908bbb41992f67d4c36d3dd51aef95132ed1db69ce3c3",
+   "rngs": "d4b5191ce7f6a1e354c572020b5991391825531ff4abdd8b599fae3f3b9a22f6"
+  },
+  "k": null
+ },
+ "direto|lobos|B|202": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "da761c272fb95a7ab088b5402024e7c6d1a138020a35748e16e99afc13706db5",
+   "estado": "a503b47d8c769b7d27fc75910d73a5c92561a0275b31889ab063088c03bd5a45",
+   "estado_motor": "a958d0ae171cef9c3b4fa48cc5e1023ef80e5b1f7f21cd764428cd9d5ffc04ec",
+   "fisico": "7ef35dce1008edbc0dfb3585a64451b3c830d32c99bab19a53536801dd7b2a56",
+   "interacoes": 48,
+   "log": "8aaf10dc64a024e405b47e50c96433a8e19831b3d614a901ce386b9aa992ec94",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "16e81f575cee99ce2e59f3cb2938c34e183ea8868d60d847ae49d136df3af084",
+   "rngs": "f4c36330fb141a7c78a5433d7b741e7a797e15892b934ba7a610287f25698ada"
+  },
+  "k": null
+ },
+ "direto|lobos|B|303": {
+  "alivios_antes": [],
+  "decisao": [
+   1440,
+   [
+    168,
+    248
+   ],
+   134,
+   198,
+   "banheiro"
+  ],
+  "k": 96,
+  "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
+ },
+ "direto|lobos|perto|101": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "ba2f9fa83a6e6211b02bad5982e92d6418e4caf1317154be0c557334a2fb8d86",
+   "estado": "dc87c64c66255168abd790c58335e0712021b599f5138df164178f62fb5a6415",
+   "estado_motor": "1f53f0b61232443310391e7b512e2b892a95d105984d34593d460837708eebf5",
+   "fisico": "7d51db2dde94bccf32b34ee1a3985342060d084fe9296a126c16e16f5a674976",
+   "interacoes": 48,
+   "log": "74cafc662f7c3283576e786af8fcb85ee04e0edfdca6d08718519d7eab761c9b",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "2fc6c87e807c2ccfcc762293d9834752105bee3eda82e5274932f028b938dfee",
+   "rngs": "4ed31ce42276db0c5007483363e212bb1275ed5de54210ba980c1b620ddc21be"
+  },
+  "k": null
+ },
+ "direto|lobos|perto|202": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "d694a8d0099a1b962cb638b6942bcc9b70c3932e6adb7b40ed7ec095a0a52065",
+   "estado": "131aae86628e3e417da998aa193f9a5af34aeebe4fcba534f50aa5c4794196e1",
+   "estado_motor": "9c5d92a3057e37d4ed9bee046915fc28a8e46a95505ad23e1fe3ebe5144c65dc",
+   "fisico": "557a46f61d804fe3b9bbdc86250a537b51177f51b28f4098b4994a98c3cc8ccc",
+   "interacoes": 48,
+   "log": "c0a8fc6b45b00133318f30232524292c761196176c08feb7021beea97974b0a1",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "737ac1f04e9d16feabb7dc2fe22aaa29f3db4d6fc84b66b77b96313e190746ef",
+   "rngs": "f8ef5b9ac1dc410204711a7cfa9ed17863efca105800d8674b171a0b17aa37a3"
+  },
+  "k": null
+ },
+ "direto|lobos|perto|303": {
+  "alivios": 3,
+  "impressao": {
+   "acoes": "94c6d0ff2cb9b96165b916330136457cac186bb393a01a7bbb47baba9245ab50",
+   "estado": "20933b1f7c691fbb43f8ccddc22ee150b29baffd24291c79af5dc6195e6cf07b",
+   "estado_motor": "529aec18cfcd0e115a7daa9f9e22273451a059281bfb28eaa4e85d5231e09b17",
+   "fisico": "13e2de4a3882c2524eba09137482cf364133c2f2d44ea1409293f880c178c863",
+   "interacoes": 48,
+   "log": "0db3e67f7553dd85dba59f3c254c2d94d5a6abc72314de99fbd90bbeda215667",
+   "motor": "MotorMundoCorpo",
+   "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+   "politica": "622d0e74c783d7bb238f84ae7e84fa453453a9e84d2e13ec40e297aec171e371",
+   "rngs": "db5c8741c3e3e8507aec2556410a31d4686215833e92eb19b6d0fe72ef1594af"
+  },
+  "k": null
+ },
+ "grupo|perto|303": {
+  "A": {
+   "alivios": 2,
+   "impressao": {
+    "acoes": "8d33ec236e24e41accfc26fcaa2d8a56930d551ef903cbadf507cd29aea54f4d",
+    "estado": "c810a3a401892994a441a6caef562bdc9d53c86ce7751a6bdc8d1328dbd8dae3",
+    "estado_motor": "638e120eee44489eb798f4a83996eb0d04ec51d160a286449b13eb932e6a3ee3",
+    "fisico": "c9768906b8c09ba594872358678f0348a7c7970f668c291bc492c61e53333e74",
+    "interacoes": null,
+    "log": "3de51aa41e776a51b8efb3ac0f2826395af320d0099014d20cfc866def69d57e",
+    "motor": "MotorMundoCorpo",
+    "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+    "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+    "rngs": "4e88ab7a76949f81bbc94d1da54c07f95408f403b471b6ebeb353dd08fc9e3d3"
+   },
+   "k": null
+  },
+  "B": {
+   "alivios": 1,
+   "impressao": {
+    "acoes": "b4820e2f5a228c6f8414805c601d3471ba2870d408e3696ff0874a5d36705f63",
+    "estado": "a99aaf3b87c7f5c19320c47134d8bc12db0bbb0eabb2dd1865c64313eb37eef8",
+    "estado_motor": "8992e46083a19f4c4a6bb328334bdf387763a2ac67b7d665b4dab299ee91e76a",
+    "fisico": "df9de00dabac934c4a59dabbb290c375450fcb89af8d3ad7fb49ae3b51bb4f0f",
+    "interacoes": null,
+    "log": "7fa769fc0f5aa7d96f5938171ea876016ab3e8097355f786c6b55fa572358ceb",
+    "motor": "MotorMundoCorpo",
+    "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+    "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+    "rngs": "701e7e8e89f1e697a7eb09d844f6b726220572b11c4deb17725e0c2efdbf1865"
+   },
+   "k": null
+  }
+ },
+ "grupo|perto|404": {
+  "A": {
+   "alivios": 1,
+   "impressao": {
+    "acoes": "96e4310b396d04a0bca26c77124a4ee4257c67507a5a3d563da048e87a38a9bf",
+    "estado": "c4b5c437f5ec59dc85edb257c093fb3f71ba3be1532bec3bc40a539d0c31628c",
+    "estado_motor": "bc9e531b0d982c3956f3540c4fd65debda4ffad580fe6d4791434e818299ea25",
+    "fisico": "c86a1cf03fa202ad6c69b6bde8a9c2397115189ecd24db4c31be685573c9fcd3",
+    "interacoes": null,
+    "log": "3eaf0cbcb2cdd3a6901f3eb157cffcca1b49eb2aefecd2688a7d04d62db53933",
+    "motor": "MotorMundoCorpo",
+    "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
+    "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
+    "rngs": "f9be479ca16802f9b3968ac138dce88fb1f3b1120be34a7aa75a5f4d31c8b9cd"
+   },
+   "k": null
+  },
+  "B": {
+   "alivios_antes": [],
+   "decisao": [
+    1230,
+    [
+     269,
+     205
+    ],
+    209,
+    205,
+    "banheiro"
+   ],
+   "k": 82,
+   "prefixo": "ab6140d66f1641cad94478636d51b1a32570bee2b3dffc0542d59b80affef5d2"
+  }
+ }
+}
