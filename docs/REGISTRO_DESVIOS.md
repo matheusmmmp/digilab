@@ -4255,3 +4255,48 @@ e na tarefa. Nenhuma run, nenhum código.
 - **O G-NUMS-GRUPO da etapa 2 mudou o que compara.** Com um B passivo, a vida do A é igual à do A sozinho, mas os lobos anotam no motivo os
   candidatos do alvo, e agora há o `seguir` (o A vê o B). O teste compara tudo menos a política e confere o estado interno sem essa
   anotação.
+
+## 2026-10-08 — W-BANCADA-DOIS-PETS (worker D): as faixas da rede de si e a bancada do grupo, só o que já dá
+
+- **O prefixo da rede de si.** O Gerente pediu as faixas (RS-6); o plano (seção 8) também pede ao D o prefixo `"rede_de_si"`, que entrou
+  em `PREFIXOS_UNIDADES`.
+- **O efeito por tipo e o desarranjo ficam na bancada.** O #257 deixou para a etapa 5 a troca do `efeito_frutas` no dia K e o efeito por
+  tipo. O efeito por tipo é só o `efeito_frutas` da fábrica do motor. A troca é uma subclasse da bancada (`MotorMundoTroca`), como o
+  `MotorFrutasMundo` do mutável: troca no `_fechar_avanco` do avanço que chega ao dia K, e falha alto se um avanço passar dele. Ela só
+  existe no grupo (o `_fechar_avanco` só é chamado pelo `Grupo`).
+- **A R conta só a fruta madura.** A `taxa_fruta_ruim` recebe o efeito de cada consumo. Na fruta podre o efeito é o `efeito_podre` (também
+  negativo), que não é o do tipo; contá-la como "ruim" misturaria a podridão com o tipo. Por isso a R usa só os consumos de fruta madura,
+  com o efeito vigente do tipo no tick (o desarranjado antes do dia K no A embaralhado). As podres saem na contagem dos consumos.
+- **O alvo aprendido é do cérebro do plano.** A seção 2 diz que o cérebro tem "o que a etapa 4 acrescenta (o alvo aprendido e as entradas
+  sociais)". O grupo liga o `alvo_aprendido` por cima do aprendiz da bancada (`bancada_grupo`); no P0, com o aprendizado desligado, o
+  alvo é o padrão do motor e os pesos ficam no prior. As entradas sociais esperam a etapa 3.
+- **Os braços rodam sem os sentidos; o que depende deles falha alto.** O Gerente pediu os braços e a fábrica. Sem a visão e o toque, o B
+  não tem como aprender do A, então a run do plano (sementes fora das dos testes) falha alto com o nó `sentidos_grupo`, e as medidas
+  sociais também. As que já têm dado saem.
+- **Os canais no mundo dos dois pets: um nó a mais (`canais_fruta_mundo`).** O plano pede o P1 no ponto da K2 com a montagem completa, que
+  liga os canais. No mundo dos dois pets um tipo de fruta mexe no humor, e o cérebro do mundo físico falha alto ao creditar o canal do
+  humor ("canal da fruta sem peso que leia a fruta nesta decisão"): é a "rota de adendo" do MUNDO-CEREBROS. No mundo físico de hoje
+  (iguais) isso nunca aparece. A bancada não escolhe: a config e o grupo com os canais falham alto com o nó, e um teste mostra que, sem a
+  tabela, a falha é do cérebro. Decidir entre rodar o plano sem os canais ou a rota nova é do coordenador e do B.
+- **O "B só" e a vida de hoje.** A tarefa pede "o B só é a vida de hoje com a mesma semente"; o plano (seção 3) diz que o B só não é a vida
+  de hoje (é o B, com a semente dele, entrando no dia K de um mundo sem ninguém). O gate ficou no que os dois dizem juntos: um pet sozinho
+  no grupo, com a semente do grupo, é a vida de hoje da bancada byte a byte. Do B só, conferem-se as quedas e o chão do dia K.
+- **As vezes sorteadas.** Com os dois pets, as vezes só começam no dia K e os pets decidem na mesma grade, então as vezes são as mesmas
+  nos três braços com dois pets (não só no Ainf e no Aemb, que têm a mesma composição). O teste confere os três.
+- **Sem genoma.** O prefixo dá a semente e o genoma de cada unidade, mas o plano não diz o genoma de cada pet. O grupo usa o temperamento
+  neutro, como o mundo físico sem genoma. Fica para o adendo do plano.
+- **O orçamento.** O grupo usa o orçamento por dia vivido (`orcamento // dias` da bancada, 16), e o dono de cada pet gasta tudo. O elogio
+  e a bronca do atencioso gastam o orçamento e não chegam ao pet (PMF-3), contados em `retirados`.
+- **Depois do rebase na main com o #263 e o #265 (pedido do Gerente):**
+  - **o nó `sentidos_grupo` saiu e ficou o `cerebro_social`.** A etapa 3 do A trouxe a visão, o toque e a disputa, e as medidas sociais
+    saem dos registros dela. O cérebro do plano (seção 2) tem também as entradas sociais e o modelo dos outros, da segunda metade da etapa 4
+    (do B), que não estão na `main`. Por isso a run com as sementes do plano e o modelo dos outros continuam falhando alto, agora com esse nó;
+  - **o que o pet viu comer, por tipo:** o `vistos_comer` do #263 não tem o tipo. A medida junta cada consumo visto ao consumo do outro no
+    mesmo tick (um pet come no máximo uma vez por tick); sem esse consumo, falha alto;
+  - **a falha real dos canais** passou a ser mostrada no `A-so` com a semente 505: um pet só, sem nada social no caminho. A trajetória do
+    `B+Aing` na 101 mudou com a etapa 3;
+  - **o banheiro destravado** como o A anotou no #265. O cérebro `instinto` (o `PoliticaInstintoBanheiro`) não tem pesos do alvo: a medida
+    sai sem eles (`peso_alvo_por_dia` None), em vez de falhar;
+  - **o banheiro maior só nos testes.** Com o banheiro do #265 (células 0 a 3 e 0 a 5), nas vidas curtas dos testes não há alívio dentro
+    (o achado do A). Os testes trocam a `CONFIG_BANHEIRO_LIGADA` da bancada por uma área maior, só para exercitar o carinho e o limpador. A
+    bancada não tem chave para a área: é decisão do plano.

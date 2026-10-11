@@ -3501,3 +3501,47 @@ sementes dos testes. Mudaram `digilab/mundo.py`, `digilab/grupo.py`, o campo `Ob
   `seguir` a mais (o A vê o B); o teste confere o estado interno sem essa anotação.
 - **Fora:** a audição e o cheiro (o degrau 1b, etapa 8); as entradas sociais e o modelo dos outros no cérebro A (a segunda metade da
   etapa 4, o B); a bancada do grupo (etapa 5, o D); o grupo em TypeScript (etapa 9).
+
+## V2, W-BANCADA-DOIS-PETS — as faixas da rede de si, a bancada do grupo e o banheiro destravado (2026-10-08, `docs/TAREFA_V2_DOIS_PETS.md`, etapa 5) — GATES PASSAM
+
+Rodada 26, com o `Grupo` do #257, o alvo aprendido do #255, a etapa 3 dos dois pets (#263: visão, toque e disputa) e a etapa 3 do banheiro
+(#265) na `main`. Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, `digilab/metrics.py`
+(`vez_no_grupo`), a fumaça nova `experiments/configs/v2_dois_pets/fumaca.json`, os testes do banheiro e do `NOS_PENDENTES` e o teste novo.
+`engine.py`, `grupo.py`, `mundo.py`, `lobos.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **As faixas da rede de si (RS-6)** em `FAIXAS_RESERVADAS`, com a fonte (`PLANO_ANALISE_V2_REDE_DE_SI`, seção 8): 43101…43505
+  (calibração e piloto) e 44101…44505 (validação). O prefixo `"rede_de_si"` entrou em `PREFIXOS_UNIDADES` (o plano o pede ao D).
+- **O banheiro destravado** (o nó `banheiro` saiu, com o #265): a fábrica dos braços do banheiro é o `com_corpo(MotorMundo)` com o
+  `cfg_banheiro_de`; nos braços com carinho (B0C, BLC) o `simular_vida_fisico` passa o `DonoCarinhoBanheiro`, fora do orçamento
+  (`VidaBancada.carinhos`); o `medidas_banheiro` lê o `motor.alivios` do #265 (no cérebro `instinto`, sem os pesos do alvo).
+- **O mundo da unidade** (plano, seções 2 e 3): `tipo_ruim(s)` (uniforme, rng `dois-pets-ruim`), `efeito_dois_pets` (o ruim com o
+  `efeito_humor_ruim`, os outros neutros) e `desarranjo_dois_pets(s)` (rng `dois-pets-embaralha`, como o `desarranjo_n6`).
+- **O A embaralhado** é o `MotorMundoTroca` (subclasse do `MotorMundo`, só no grupo): o efeito desarranjado nos K dias e o verdadeiro a
+  partir do dia K, trocado no fim do avanço que chega ao tick (um avanço que passasse falha alto). A troca fica em `troca`, e o replay a
+  refaz.
+- **Os braços** (`BRACOS_GRUPO`, `EspecGrupo`): `B-so`, `B+Ainf`, `B+Aemb`, `B+Aing` e o `A-so` da calibração do K. O B é sempre P1 e entra no
+  dia K; o A é P1 no tick 0 (informativo, embaralhado) ou P0 junto com o B (ingênuo). O grupo vive K + `dias` (o `A-so`, os `dias`). Sem
+  genoma (temperamento neutro).
+- **A fábrica do grupo** (`Bancada.grupo`): o `simular_grupo`, com um dono para todos (o atencioso, `DonoComLugar`, com a semente de cada
+  pet), o orçamento por dia vivido de cada pet e só o cuidado (o `CanalSemEnsino` ao vivo, PMF-3). O cérebro é o da bancada com o **alvo
+  aprendido** (`bancada_grupo`). O G1 é conferido em todo grupo (`conferir_replay_grupo`).
+- **As medidas** (`Bancada.medir_grupo`, do replay de medição conferido):
+  - a R de cada pet pela `taxa_fruta_ruim` (fruta madura, efeito vigente do tipo no tick): no B, os 7 primeiros dias, a vida toda e por
+    dia; no A, por dia, até o dia K e depois;
+  - o D_FE e a privação; os pesos do alvo aprendido no fim de cada dia; a vez no tick (R-5); o chão no dia K (R-3);
+  - **as sociais** (`Bancada.medidas_sociais`, dos registros do #263): o uso do `seguir` e do `onde_comeu` por dia, o que o pet viu comer
+    (por tipo, e quantos do tipo ruim), a disputa (quantas, quantas ganhou, as distâncias), o toque por tipo e dia, o tempo à vista e as
+    idas a `onde_comeu`.
+- **Atrás de `NOS_PENDENTES`, falhando alto:**
+  - `cerebro_social` (as entradas sociais e o modelo dos outros, a segunda metade da etapa 4, do B): trava o modelo dos outros
+    (`Bancada.modelo_dos_outros`) e a run com as sementes do plano (`validar_config_grupo`), porque o cérebro do plano os tem;
+  - `canais_fruta_mundo`: com os canais (a montagem completa liga no P1), comer a fruta que mexe no humor falha alto no cérebro do mundo
+    físico (CANAIS-REFORCO, a "rota de adendo" do MUNDO-CEREBROS). Trava a config e o grupo; sem a tabela o cérebro falha (teste: o `A-so`
+    na semente 505). Fica até o Matheus decidir.
+- **Gates:**
+  - `tests/test_bancada_dois_pets.py` (56): as faixas e o prefixo; o mundo da unidade e os braços; o G1 de todo grupo; **o pet sozinho do
+    grupo é a vida de hoje** da bancada byte a byte; as mesmas vezes sorteadas nos braços com dois pets; as mesmas quedas; o chão do dia K;
+    a troca; o orçamento e o cuidado só; o alvo aprendido; as medidas, e as sociais conferidas contra os registros (com uma disputa, no
+    B + Aing semente 303); os nós e as travas; a config e o `rodar_grupo`;
+  - `tests/test_bancada_banheiro.py`: os oito braços do banheiro rodam e medem (com o banheiro maior só no teste, para haver alívio dentro:
+    o carinho só no B0C e no BLC, o limpador só no BL0 e no BLC, o orçamento, as medidas), e o instinto do alívio mede sem os pesos.
+- **Fumaça** (`experiments/configs/v2_dois_pets/fumaca.json`, NÃO canônica): os cinco braços do grupo, K = 1, 2 dias; sem artefato.

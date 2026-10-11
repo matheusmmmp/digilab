@@ -1,0 +1,13 @@
+{
+  "descricao": "FUMACA, NAO canonica: a bancada do grupo dos dois pets (TAREFA_V2_DOIS_PETS, etapa 5) nas sementes dos testes, com os cinco bracos do plano (o B so, o B com o A informativo, embaralhado e ingenuo, e o A so da calibracao do K), K = 1 e vidas de 2 dias. Sem os sentidos entre os pets (etapa 3 do A) e sem os canais (o no canais_fruta_mundo): so confere o encanamento. Sem artefato no repositorio.",
+  "tipo": "grupo",
+  "bracos": ["B-so", "B+Ainf", "B+Aemb", "B+Aing", "A-so"],
+  "sementes": [101, 202],
+  "k_dias": 1,
+  "dias": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "consequencia": {"ganho": 4}
+}
