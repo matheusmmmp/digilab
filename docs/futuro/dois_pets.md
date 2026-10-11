@@ -5,7 +5,8 @@ Status (2026-10-07):
   recomendado em `docs/futuro/convivencia_mundo_fisico.md` (CV-1) e na `docs/futuro/cognicao_social.md` (seção 11).
 - **DP-1 a DP-10 DECIDIDAS pelo Matheus em 2026-10-07** (seção 14): oito pela recomendação; a DP-4 (os sentidos) e a DP-7 (os donos)
   com mudança. A DP-11 e a DP-12, que saem da DP-4, foram DECIDIDAS pela recomendação em 2026-10-07.
-- **ABERTAS (2026-10-08):** a DP-13 (o órgão do olfato) e a DP-14 (o órgão do ouvido), pedidas pelo Matheus (seção 5.6).
+- **DP-13 e DP-14 DECIDIDAS pelo Matheus em 2026-10-11, pela recomendação:** (b) duas narinas e (b) dois ouvidos, atrás de chave desligada
+  (seção 5.6).
 - **PROPOSTO:** o como, neste documento.
 
 A tarefa é `docs/TAREFA_V2_DOIS_PETS.md`. Um plano de análise vem depois, antes de qualquer run.
@@ -205,7 +206,7 @@ próprio pet não entram.
 - o que o outro comeu e não foi visto nem ouvido, e o efeito da fruta no corpo dele;
 - qualquer cheiro que não saia de um emissor declarado no grafo do corpo.
 
-### 5.6 Os órgãos receptores do Olfato e da Audição (DP-13 e DP-14, abertas)
+### 5.6 Os órgãos receptores do Olfato e da Audição (DP-13 e DP-14, DECIDIDAS em 2026-10-11)
 
 **O pedido do Matheus (2026-10-08):** o cheiro passa a ser um **órgão** do corpo.
 - **Hoje** o pet recebe pronta a intensidade e a direção do cheiro: `mundo.cheiro_em` e `mundo.direcao_do_cheiro`, em `PercepcaoMundo.cheiro`
@@ -482,5 +483,5 @@ novidade: aprendizado social, forrageio em grupo e comunicação entre agentes a
 | DP-10 | A ordem com o resto | **DECIDIDA:** o motor em paralelo com o corpo; o cérebro depois da etapa 6 do corpo; a bancada depois; as runs depois da validação do mundo físico e do plano. Com a DP-7, o segundo dono entra depois da validação do degrau 1 (seção 12) | — |
 | **DP-11** | Quais sentidos no primeiro degrau | **DECIDIDA:** **visão e toque no degrau 1; audição e cheiro (rastro e cheiro próprio) no degrau 1b**, depois de o 1 ter resposta, cada um medido como acréscimo | **tudo no degrau 1:** se o B aprende, não se sabe por qual canal, e a primeira medida fica mais cara (quatro receptores a calibrar). **Visão só, sem toque:** a disputa acontece do mesmo jeito, e o pet perde a única pista física dela. **Audição e cheiro só no degrau 3:** atrasa canais baratos, que não dependem do corpo |
 | **DP-12** | O cheiro de estado (estresse, medo) | **DECIDIDA:** **no degrau 3, com a solidão e a aglomeração (CV-5)**, por um emissor externo declarado no grafo do corpo, com o laço entre os dois corpos na checagem de ganho | **no degrau 1 ou 1b:** um canal emocional entre corpos entra antes de se saber se a observação funciona, e o "aprendido de outros" passa a misturar contágio com informação. **Sem passar pelo grafo:** o cheiro vira leitura direta do estado do outro, que a regra proíbe |
-| **DP-13** | O órgão do olfato (seção 5.6) | **ABERTA. Recomendação: (b) duas narinas**, atrás da `ConfigOlfato` desligada (G2 = a vida de hoje), com a sub-chave `outro_pet` no degrau 1b e a `comida` à parte; a (a), uma narina, é o mesmo código com `narinas` = 1 e entra como braço descritivo; o braço "órgão × leitura pronta" vai à bancada, com adendo de plano antes da run | **(c), manter a leitura pronta:** o pet continua recebendo a direção que o corpo não calcula, e a pergunta "o pet acha o cheiro sozinho" fica sem medida. **(a) só:** a comparação no tempo funciona (uma narina basta na larva da drosófila), mas fica mais lenta e mais exposta ao ruído do gradiente. **Ligado por padrão:** muda o cheiro da comida no mundo físico e invalida a calibração e a validação em curso |
-| **DP-14** | O órgão do ouvido (seção 5.6) | **ABERTA. Recomendação: (b) dois ouvidos**, com o mesmo desenho e a mesma chave (sub-chave `ouvido` na `ConfigOlfato`, ou uma `ConfigOuvido` irmã), desligada; o `id` de quem emitiu fica enquanto houver um outro pet só | **(c), manter:** o pet recebe a direção e a distância de graça. **(a) só:** a distância se confunde com a força do som, e o pet ouve sem saber de onde |
+| **DP-13** | O órgão do olfato (seção 5.6) | **DECIDIDA em 2026-10-11, pela recomendação: (b) duas narinas**, atrás da `ConfigOlfato` desligada (G2 = a vida de hoje), com a sub-chave `outro_pet` no degrau 1b e a `comida` à parte; a (a), uma narina, é o mesmo código com `narinas` = 1 e entra como braço descritivo; o braço "órgão × leitura pronta" vai à bancada, com adendo de plano antes da run | **(c), manter a leitura pronta:** o pet continua recebendo a direção que o corpo não calcula, e a pergunta "o pet acha o cheiro sozinho" fica sem medida. **(a) só:** a comparação no tempo funciona (uma narina basta na larva da drosófila), mas fica mais lenta e mais exposta ao ruído do gradiente. **Ligado por padrão:** muda o cheiro da comida no mundo físico e invalida a calibração e a validação em curso |
+| **DP-14** | O órgão do ouvido (seção 5.6) | **DECIDIDA em 2026-10-11, pela recomendação: (b) dois ouvidos**, com o mesmo desenho e a mesma chave (sub-chave `ouvido` na `ConfigOlfato`, ou uma `ConfigOuvido` irmã), desligada; o `id` de quem emitiu fica enquanto houver um outro pet só | **(c), manter:** o pet recebe a direção e a distância de graça. **(a) só:** a distância se confunde com a força do som, e o pet ouve sem saber de onde |

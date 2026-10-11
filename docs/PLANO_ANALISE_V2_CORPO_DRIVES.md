@@ -640,11 +640,12 @@ total vai a 120 com o bloco G do adendo 1). Roda sempre, para o desenho não dep
 |---|---|---|---|
 | PCD-8 | O critério de dominância e o braço P1-cw | **o critério da A2.3** (lidera com `p_d` ≥ 0,80; domina com o IC95 inferior de `f_d` acima de 0,50, no P1-c do mundo `bola`), **e o P1-cw sempre na validação**, como descritivo qualificado | **critério frouxo:** acha dominância onde há só ações que mexem em poucos drives. **Rígido:** não vê o tédio tomar o sinal. **O P1-cw só se dominar no piloto:** o desenho passaria a depender do dado do P1, que a PCD-4 evita. **Sem o P1-cw:** com dominância, não há como saber se o peso pela janela resolve |
 
-## Adendo 3 (2026-10-08, antes de qualquer run): o Metabolismo energético antes da calibração — PROPOSTO, depende das ME-1 a ME-7
+## Adendo 3 (2026-10-08, antes de qualquer run): o Metabolismo energético antes da calibração — ME-1 a ME-7 DECIDIDAS em 2026-10-11
 
 **A decisão do Matheus (2026-10-08):** o Metabolismo energético entra agora, e **a calibração deste plano (seção 6, sementes 33101…33505)
-só roda depois dele.** O desenho está em `docs/TAREFA_V2_METABOLISMO.md`. Este adendo segue as recomendações de lá (ME-1 a ME-7). Se
-alguma decisão sair diferente, o adendo é refeito antes de qualquer run.
+só roda depois dele.** O desenho está em `docs/TAREFA_V2_METABOLISMO.md`. Este adendo segue as recomendações de lá (ME-1 a ME-7), que o
+Matheus decidiu em 2026-10-11, todas pela recomendação. Conferido no mesmo dia: a A3.1 é a ME-6, a A3.2 é a ME-7, e o adendo não dá receptor
+novo ao cérebro (ME-2), não muda a fome (ME-5) nem o descarte do estômago (ME-4).
 
 ### A3.1 Onde o metabolismo entra
 

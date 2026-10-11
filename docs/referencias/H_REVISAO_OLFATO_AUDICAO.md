@@ -184,6 +184,10 @@ Documentação oficial da Epic (cinza, lida em 2026-10-08).
 
 ## 6. Decisões do Matheus
 
+**DECIDIDAS em 2026-10-11: OA-1 a OA-3, todas como recomendado** (o campo calculado, a direção pelo mundo, a linha reta). A DP-13 e a
+DP-14, decididas no mesmo dia (duas narinas, dois ouvidos), tiram a direção do mundo só com a chave do órgão ligada; com ela desligada,
+vale a OA-2.
+
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | OA-1 | Campo calculado ou difundido para o cheiro do 1b | **manter o campo calculado** (a soma das fontes, em inteiros), como o da comida | difundido: o valor por célula e a ordem da atualização entram no replay e na paridade TS, com custo por tick. O ganho seria o atraso e o acúmulo, que nenhuma pergunta do 1b pede |

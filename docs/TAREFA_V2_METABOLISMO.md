@@ -1,8 +1,8 @@
 # TAREFA V2 — METABOLISMO ENERGÉTICO: conversão, reserva e mobilização no corpo (2026-10-08)
 
 Coordenador: Gerente. Workers: **B** (o corpo e o grafo, depois do Digicorpo), **D** (o regime na bancada), **A** (o porte para a web,
-depois) e **C** (o adendo do plano do corpo). Worktree e branch de cada etapa: `v2-metabolismo-<etapa>`. Status: **ABERTA, PROPOSTA.** As
-decisões ME-1 a ME-7 (seção 9) são do Matheus.
+depois) e **C** (o adendo do plano do corpo). Worktree e branch de cada etapa: `v2-metabolismo-<etapa>`. Status: **ABERTA.** **ME-1 a ME-7
+DECIDIDAS pelo Matheus em 2026-10-11, todas pela recomendação** (seção 9).
 
 **O que já está decidido** (Matheus, 2026-10-08):
 - **o Metabolismo energético entra agora,** antes da calibração do corpo (as sementes 33101…33505 do
@@ -175,6 +175,8 @@ O B decide se isso vira um campo da `Reacao` ou um tipo novo, e declara no PR.
   em fonte primária (`docs/referencias/G_REVISAO_CORPO_QUIMICO.md`, P1), e nada aqui depende disso. Não há alegação de novidade.
 
 ## 9. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-11: ME-1 a ME-7, todas como recomendado.** O adendo 3 do plano do corpo segue as sete (conferido no mesmo dia).
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

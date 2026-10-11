@@ -2,7 +2,7 @@
 
 Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 4 de `docs/TAREFA_V2_REDE_DE_SI.md`. As decisões da
 tarefa (RS-1 a RS-7) foram **DECIDIDAS pelo Matheus em 2026-10-08, todas pela recomendação**. As deste plano (PRS-1 a PRS-5,
-seção 12) seguem abertas.
+seção 12) foram **DECIDIDAS em 2026-10-11, todas pela recomendação**.
 
 **Regras deste plano:**
 - Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.
@@ -244,6 +244,8 @@ Nenhum limiar de "surpresa demais" é fixado aqui: é da etapa 4, com plano pró
 - **A recusa:** a run se recusa a rodar se a pasta de saída já existe.
 
 ## 12. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-11: PRS-1 a PRS-5, todas como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

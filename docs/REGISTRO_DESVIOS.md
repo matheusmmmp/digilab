@@ -4321,3 +4321,31 @@ e na tarefa. Nenhuma run, nenhum código.
 - **A afinidade** usa o intervalo entre duas decisões do pet: "dividida" quando o pet comeu na decisão anterior e viu o outro comer nesse
   intervalo, sem toque de disputa novo; "perdida" é cada toque novo de `disputa_perdeu`. A `disputa_ganhou` não entra no saldo.
 - **O relógio dos eventos** é o da hora do dia, como o do N6, porque a percepção social só dá a idade.
+
+## 2026-10-11 — W-DECISOES-R27 (worker C): as decisões abertas marcadas pela recomendação; BN-7 e PDP-7
+
+O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as decisões abertas e dispensou o plano de artigo. Só papel.
+
+**Marcadas como DECIDIDAS, com a data:**
+- **a DP-13 e a DP-14** (duas narinas, dois ouvidos, atrás de chave desligada), em `docs/futuro/dois_pets.md` (status, seção 5.6 e seção 14),
+  na etapa 8b de `docs/TAREFA_V2_DOIS_PETS.md` e nas linhas dos órgãos de `docs/DEFINICOES_CORPO_V2.md`. Os órgãos passaram de IDEIA a
+  ESPECIFICADO;
+- **as OA-1 a OA-3** na revisão `docs/referencias/H_REVISAO_OLFATO_AUDICAO.md`, seção 6. A nota diz que a direção pelo mundo (OA-2) vale
+  com a chave do órgão desligada;
+- **a N-1** (a autoria fica no Digicorpo), em `DEFINICOES_CORPO_V2`;
+- **as PRS-1 a PRS-5** em `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`;
+- **as ME-1 a ME-7** em `docs/TAREFA_V2_METABOLISMO.md`, e o cabeçalho do adendo 3 de `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, que deixou
+  de ser condicional.
+  - **Conferido:** o adendo 3 segue as sete. A A3.1 é a ME-6; a A3.2 é a ME-7, com o gasto das atividades da ME-3. O adendo não dá
+    receptor novo (ME-2), não muda a fome (ME-5) nem o descarte do estômago (ME-4), e põe o combustível por baixo do cansaço (ME-1).
+
+**Duas decisões novas:**
+- **BN-7** (`docs/TAREFA_V2_BANHEIRO.md`, seção 4 e seção 10): o alvo `banheiro` continua por mais de uma decisão, como o `continuar`, e o
+  pet segura a vontade até chegar, salvo a regra urgente.
+  - **O motivo é o achado do #265:** o P0 aliviou 1 vez dentro em 37, e o P1, 0 em 38. Os números são de uma fumaça descritiva com as
+    sementes dos testes, relatada no corpo do #265; não há artefato no repositório.
+  - **Os donos:** o A no motor e o B no instinto e nos cérebros.
+- **PDP-7** (`docs/PLANO_ANALISE_V2_DOIS_PETS.md`, seções 2 e 12; a etapa 4c nova de `docs/TAREFA_V2_DOIS_PETS.md`): o B cria a rota do
+  canal do humor no cérebro do mundo físico, e o plano mantém a montagem completa com os canais.
+  - **O nó `canais_fruta_mundo` da bancada (#264)** segue pendente até a rota existir.
+  - **O nome da etapa:** é 4c, porque "4b" já é o nome do branch da segunda metade da etapa 4 (#266).
