@@ -13,8 +13,10 @@ O que se confere:
 - as medidas que ja tem dado no registro do grupo (a R por janela com o efeito vigente, o D_FE, o alvo aprendido por dia, a vez no tick)
   e as sociais da etapa 3 do A, #263 (o uso do seguir e do onde_comeu, o que o pet viu comer, a disputa, o toque, o tempo a vista),
   conferidas contra os registros do grupo e dos motores;
-- o que espera o cerebro (as entradas sociais e o modelo dos outros, a segunda metade da etapa 4 do B) falha alto com o no `cerebro_social`,
-  e os canais no mundo dos dois pets com o no `canais_fruta_mundo`; a trava e so a tabela.
+- o cerebro do plano com as entradas sociais e o modelo dos outros (#266): o repasse do consequencia_mundo pela PoliticaDoBraco, em toda
+  fonte; o modelo conta as idas e os acertos que o motor registra; o modelo nao muda a vida; o modelo por dia nas medidas;
+- a run do plano pede a montagem completa, e os canais no mundo dos dois pets falham alto com o no `canais_fruta_mundo` (a rota do humor
+  do B); a trava e so a tabela.
 So as sementes dos testes.
 """
 from __future__ import annotations
@@ -345,7 +347,7 @@ def test_as_medidas_saem_do_registro_do_grupo(braco):
     v = _grupo(braco)
     m = bc.medir_grupo(v)
     assert m["braco"] == braco and m["ruim"] == bv.tipo_ruim(101) and m["ordens"] == len(v.grupo.ordens)
-    assert set(m["sociais"]) == set(v.grupo.motores) and m["modelo_dos_outros"]["pendente"] == "cerebro_social"
+    assert set(m["sociais"]) == set(v.grupo.motores) and m["modelo_dos_outros"] == bc.modelo_dos_outros(v)
     for i, p in m["pets"].items():
         mt = v.grupo.motores[i]
         ini = mt.entrada_mundo
@@ -361,6 +363,8 @@ def test_as_medidas_saem_do_registro_do_grupo(braco):
         assert p["vez"] == vez_no_grupo(v.grupo.ordens, i)
         # o alvo aprendido no fim de cada dia (o P1 aprende, com as classes seguir e onde_comeu; o P0 fica no prior)
         assert len(p["pesos_alvo_por_dia"]) == p["dias_vividos"]
+        # o modelo dos outros no fim de cada dia; o do ultimo dia e o do fim da vida
+        assert len(p["modelo_outros_por_dia"]) == p["dias_vividos"] and p["modelo_outros_por_dia"][-1] == m["modelo_dos_outros"][i]
         if p["braco"] == "P1":
             assert p["pesos_alvo_por_dia"][-1] == mt.politica.estado_interno()["pesos_alvo_mundo"]
             assert "seguir" in p["pesos_alvo_por_dia"][-1]["tempo_livre:explorar"]
@@ -443,11 +447,73 @@ def test_a_disputa_e_o_uso_dos_candidatos_sociais():
     assert sum(u["seguir"] + u["onde_comeu"] for so in sociais.values() for u in so["uso_candidatos"]) > 0
 
 
-def test_o_modelo_dos_outros_falha_alto_com_o_no():
-    v = _grupo("B+Ainf")
-    with pytest.raises(NotImplementedError, match="modelo dos outros"):
-        _bancada().modelo_dos_outros(v)
-    assert "sentidos_grupo" not in bv.NOS_PENDENTES and "segunda metade" in bv.NOS_PENDENTES["cerebro_social"]
+def test_o_cerebro_do_grupo_tem_as_entradas_sociais_e_o_modelo():
+    """O cerebro do plano (secao 2) com o que a etapa 4 acrescenta (#255, #266): o alvo aprendido, as entradas sociais e o modelo dos
+    outros, nos dois pets e em toda fonte; os nos do cerebro sairam."""
+    assert "cerebro_social" not in bv.NOS_PENDENTES and "sentidos_grupo" not in bv.NOS_PENDENTES
+    v = _grupo("B+Aing")
+    for i, m in v.grupo.motores.items():
+        cl = m.politica.cerebro.cl if hasattr(m.politica, "cerebro") else m.politica._pm.cerebro.cl
+        assert cl.alvo_aprendido and cl.entradas_sociais and cl.modelo_outros
+        interno = m.politica.estado_interno()
+        assert "modelo_outros" in interno and set(interno["modelo_outros"]["outros"]) <= {"A", "B"} - {i}
+    # no grupo de um pet, o modelo nao conhece ninguem
+    assert _bancada().modelo_dos_outros(_grupo("A-so")) == {"A": {}}
+
+
+@pytest.mark.parametrize("braco", DOIS_PETS)
+@pytest.mark.parametrize("s", [101, 303, 404])
+def test_o_modelo_conta_as_idas_e_o_que_comeu_pela_bancada(braco, s):
+    """O repasse do consequencia_mundo pela PoliticaDoBraco, em toda fonte (o P0 do B + Aing tambem): as idas a onde_comeu e os acertos do
+    modelo sao as idas que chegaram no registro do motor, as que acharam comida boa (comeu ou boa a vista), por outro."""
+    v = _grupo(braco, s)
+    modelo = _bancada().modelo_dos_outros(v)
+    for i, m in v.grupo.motores.items():
+        for o in v.grupo.motores:
+            if o == i or o not in modelo[i]:
+                continue
+            idas = [d for d in m.idas_onde_comeu if d["chegou"] and d["outro"] == o]
+            conf = modelo[i][o]["confianca"]["comida"]
+            assert conf["idas"] == len(idas) and conf["acertos"] == sum(1 for d in idas if d["comeu"] or d["boas_a_vista"])
+
+
+def test_o_repasse_do_consequencia_mundo_e_explicito():
+    """A PoliticaDoBraco repassa o gancho ao cerebro em toda fonte, explicitamente; o cerebro sem o gancho (o instinto do mundo) nao recebe
+    nada; e sem o repasse o modelo nao conta as idas (o gancho e o que as conta)."""
+    assert "consequencia_mundo" in vars(bv.PoliticaDoBraco)
+    chamadas = []
+
+    class Cerebro:
+        nome = "espiao"
+
+        def consequencia_mundo(self, acao, ocorrido, obs_depois):
+            chamadas.append(acao)
+
+    for fonte in ("nenhuma", "consequencia", "dono"):
+        bv.PoliticaDoBraco(Cerebro(), bv.Braco("X", fonte, "teste")).consequencia_mundo("comer", {}, None)
+    assert chamadas == ["comer"] * 3
+
+    class SemGancho:
+        nome = "instinto"
+
+    bv.PoliticaDoBraco(SemGancho(), bv.Braco("X", "nenhuma", "teste")).consequencia_mundo("comer", {}, None)   # nada, sem erro
+
+
+def test_o_modelo_nao_muda_a_vida_do_grupo(monkeypatch):
+    """O modelo dos outros so registra (DP-8): o grupo sem ele e o mesmo grupo (o registro, o mundo, as vezes e cada pet), fora o modelo no
+    estado interno."""
+    v = _grupo("B+Ainf", 404)
+    original = bv.Bancada.bancada_grupo
+    monkeypatch.setattr(bv.Bancada, "bancada_grupo", lambda self: bv.replace(original(self), cfg_lobos=bv.replace(
+        original(self).cfg_lobos, modelo_outros=False)))
+    sem = _bancada().grupo(v.espec)
+    assert sem.grupo.registro.para_jsonl() == v.grupo.registro.para_jsonl()
+    for i in v.grupo.motores:
+        a, b = v.grupo.motores[i], sem.grupo.motores[i]
+        assert bv.resumo_motor(a) == bv.resumo_motor(b)
+        ia, ib = a.politica.estado_interno(), b.politica.estado_interno()
+        ia.pop("modelo_outros")
+        assert "modelo_outros" not in ib and ia == ib
 
 
 def _cfg_plano(**troca) -> dict:
@@ -455,22 +521,22 @@ def _cfg_plano(**troca) -> dict:
             "plano": "docs/PLANO_ANALISE_V2_DOIS_PETS.md", **{k: v for k, v in troca.items()}}
 
 
-def test_a_run_do_plano_falha_alto_com_o_no():
+def test_a_run_do_plano_pede_a_montagem_completa_e_falha_alto_com_os_canais():
     cfg = {k: v for k, v in _cfg_plano().items() if k != "sementes"}
-    with pytest.raises(NotImplementedError, match="entradas sociais"):
+    with pytest.raises(ValueError, match="montagem completa"):
         bv.validar_config_grupo(cfg)
+    with pytest.raises(NotImplementedError, match="canal do humor"):
+        bv.validar_config_grupo({**cfg, "montagem": "completa"})
     sem_plano = {k: v for k, v in cfg.items() if k != "plano"}
     with pytest.raises(bv.SementeSemPlano):
         bv.validar_config_grupo(sem_plano)
     bv.validar_config_grupo({**CFG, "sementes": [101, 202]})                    # as sementes dos testes rodam
 
 
-def test_a_trava_do_cerebro_social_e_so_a_tabela(monkeypatch):
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "cerebro_social"})
+def test_sem_o_no_dos_canais_a_run_do_plano_valida(monkeypatch):
+    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "canais_fruta_mundo"})
     cfg = {k: v for k, v in _cfg_plano().items() if k != "sementes"}
-    bv.validar_config_grupo(cfg)
-    with pytest.raises(NotImplementedError, match="entra com a segunda metade"):   # a segunda trava: o cerebro ainda nao o tem
-        _bancada().modelo_dos_outros(_grupo("B+Ainf"))
+    bv.validar_config_grupo({**cfg, "montagem": "completa"})
 
 
 @pytest.mark.parametrize("troca", [{"montagem": "completa"}, {"consequencia": {"ganho": 4, "canais_ligados": True}}])

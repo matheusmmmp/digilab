@@ -4321,3 +4321,19 @@ e na tarefa. Nenhuma run, nenhum código.
 - **A afinidade** usa o intervalo entre duas decisões do pet: "dividida" quando o pet comeu na decisão anterior e viu o outro comer nesse
   intervalo, sem toque de disputa novo; "perdida" é cada toque novo de `disputa_perdeu`. A `disputa_ganhou` não entra no saldo.
 - **O relógio dos eventos** é o da hora do dia, como o do N6, porque a percepção social só dá a idade.
+
+## 2026-10-11 — W-BANCADA-MODELO (worker D): as entradas sociais e o modelo dos outros na bancada do grupo
+
+- **O repasse do `consequencia_mundo` já acontecia.** A `PoliticaDoBraco` e o `_Registro` repassam por `__getattr__` tudo o que não
+  definem, então o gancho chegava ao cérebro em toda fonte, e o modelo contava as idas (conferido antes da mudança, em duas vidas: as idas que chegaram
+  batiam com o motor). O pedido do #266 virou um método explícito na `PoliticaDoBraco`, em toda fonte, com o teste do espião e o do
+  cérebro sem o gancho. O comportamento não mudou.
+- **O P0 também recebe o gancho.** No P0 nada é creditado (não há sinal pendente), mas o modelo dos outros conta: o A ingênuo do B + Aing
+  tem o modelo dele. O plano pede o modelo do B sobre o A; o do A sai junto, só registrado.
+- **A run do plano pede a montagem completa.** Com o `cerebro_social` fora, a única trava da run do plano seria o nó dos canais, e uma
+  config com a montagem simples passaria por baixo dela com um cérebro diferente do da seção 2 do plano. Por isso a config com as sementes
+  do plano exige a montagem completa, que liga os canais e cai no nó até a rota do humor do B.
+- **O modelo por dia** é lido do cérebro no replay de medição (o `para_dict` do modelo, sem o estado interno inteiro), no fim de cada dia
+  vivido, como os pesos do alvo. O do último dia é o do fim da vida (teste).
+- **O ME-6 fica para depois.** Quando o metabolismo do B entrar, o nó dos canais vai para o bloco do corpo, como o Gerente indicou; nada
+  disso entrou aqui.

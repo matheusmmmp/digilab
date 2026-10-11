@@ -584,13 +584,8 @@ NOS_PENDENTES: dict = {
     # o cerebro ao arranjo do MotorCorpo no mundo fisico (o consequencia_mundo credita, o consequencia_corpo fecha a decisao), com o G1
     # o "banheiro" (W-BANCADA-BANHEIRO) saiu na W-BANCADA-DOIS-PETS: a etapa 3 do banheiro esta na main (#265: o banheiro no MotorMundo,
     # a necessidade, o limpador, o limpar, o aliviar com alvo e o DonoCarinhoBanheiro)
-    # dois pets (TAREFA_V2_DOIS_PETS, etapa 5, do D). O "sentidos_grupo" (a visao, o toque e a disputa, etapa 3 do A) saiu com o #263: as
-    # medidas sociais saem do registro. Fica o que e do cerebro (a segunda metade da etapa 4, do B): trava o modelo dos outros
-    # (Bancada.modelo_dos_outros) e a run com as sementes do plano (validar_config_grupo), porque o cerebro do plano (secao 2) tem as
-    # entradas sociais; os bracos, a fabrica e as outras medidas rodam
-    "cerebro_social": "as entradas sociais (a visao e o toque) nas regras de tempo livre, com prior 0, e o modelo dos outros "
-                      "(familiaridade, confianca por atividade, afinidade; so registrado, DP-8) no cerebro A (TAREFA_V2_DOIS_PETS, etapa "
-                      "4, a segunda metade, do B)",
+    # dois pets (TAREFA_V2_DOIS_PETS, etapa 5, do D): o "sentidos_grupo" saiu com o #263 (a visao, o toque e a disputa) e o
+    # "cerebro_social" com o #266 (as entradas sociais e o modelo dos outros no cerebro A, ligados nos bracos do grupo)
     # dois pets: com os canais (a montagem completa do P1, o ponto da K2), comer a fruta que mexe no humor falha alto no cerebro do mundo
     # fisico (CANAIS-REFORCO: o canal do humor vai a fruta, e o cerebro do mundo fisico nao tem peso que leia a fruta; MUNDO-CEREBROS, a
     # "rota de adendo"). No mundo fisico de hoje (iguais) o humor da fruta e 0 e nada falha; no dos dois pets um tipo faz mal
@@ -756,6 +751,15 @@ class PoliticaDoBraco:
         if self.braco.fonte == "nenhuma":
             return
         self.cerebro.mudanca_no_corpo(obs_antes, obs_depois)
+
+    def consequencia_mundo(self, acao, ocorrido: dict, obs_depois) -> None:
+        """O gancho do MotorMundo (explorar, comer e brincar, com tudo aplicado), repassado ao cerebro EM TODA FONTE: o cerebro anota o
+        que aconteceu no motivo, o modelo dos outros (`modelo_outros`, dois pets, #266) conta as idas a `onde_comeu` e o que o pet comeu,
+        e so na fonte consequencia ha sinal pendente para creditar (o cerebro decide; no P0, nada e creditado). Explicito, para nao
+        depender do __getattr__; o cerebro sem o gancho (o instinto) nao recebe nada, como antes."""
+        gancho = getattr(self.cerebro, "consequencia_mundo", None)
+        if gancho is not None:
+            gancho(acao, ocorrido, obs_depois)
 
     def estado_interno(self) -> dict:
         return {**self.cerebro.estado_interno(), "bancada": {"braco": self.braco.rotulo, "fonte": self.braco.fonte}}
@@ -1657,9 +1661,10 @@ class Bancada:
 
 
     def bancada_grupo(self) -> "Bancada":
-        """O cerebro A do plano (secao 2): o do ponto e da montagem da bancada, com o alvo aprendido (etapa 4, #255; o P0 com o aprendizado
-        desligado fica no alvo padrao do motor). As entradas sociais esperam o B (NOS_PENDENTES["cerebro_social"])."""
-        return replace(self, cfg_lobos=replace(self.cfg_lobos, alvo_aprendido=True))
+        """O cerebro A do plano (secao 2): o do ponto e da montagem da bancada, com o que a etapa 4 acrescenta: o alvo aprendido (#255; o
+        P0 com o aprendizado desligado fica no alvo padrao do motor), as entradas sociais (prior 0) e o modelo dos outros (so registrado;
+        #266). No prior, o P0 e o instinto do mundo byte a byte, tambem com o outro a vista (o gate do #266)."""
+        return replace(self, cfg_lobos=replace(self.cfg_lobos, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True))
 
 
     def canais_no_pet(self, espec: EspecVida) -> bool:
@@ -1810,7 +1815,7 @@ class Bancada:
           - a disputa (`Grupo.disputas`): quantas, quantas o pet ganhou e, em cada uma, a distancia dele e a do outro a comida;
           - o toque (`Grupo.contatos`): os contatos por tipo (disputa, encostar, esbarrar), por dia vivido;
           - o tempo a vista (`a_vista`), as idas a `onde_comeu` (chegou, comeu) e as decisoes no grupo.
-        O modelo dos outros e do cerebro (Bancada.modelo_dos_outros, falhando alto com o no `cerebro_social`)."""
+        O modelo dos outros sai em `modelo_dos_outros`."""
         g = vida.grupo
         ruim = self.efeitos_do_grupo(vida.espec)["ruim"]
         fim = g.tick
@@ -1863,11 +1868,16 @@ class Bancada:
         return out
 
     def modelo_dos_outros(self, vida: VidaGrupo) -> dict:
-        """O modelo dos outros (familiaridade, confianca por atividade, afinidade; so registrado, DP-8): e do cerebro A, na segunda metade
-        da etapa 4 (do B). Falha alto com o no; sem a entrada na tabela, a leitura entra com o cerebro (a segunda trava)."""
-        if "cerebro_social" in NOS_PENDENTES:
-            raise NotImplementedError(f"{vida.nome}: {NOS_PENDENTES['cerebro_social']}")
-        raise NotImplementedError(f"{vida.nome}: a leitura do modelo dos outros entra com a segunda metade da etapa 4 do B")
+        """O modelo dos outros no fim da vida (plano, secao 4: a familiaridade, a confianca por atividade e a afinidade de cada pet sobre o
+        outro; so registradas, DP-8), por pet, como o cerebro o serializa (`estado_interno()["modelo_outros"]["outros"]`). O cerebro do
+        grupo sempre o tem (`bancada_grupo`): um cerebro sem ele falha alto. O por dia sai do replay de medicao (`medir_grupo`)."""
+        out = {}
+        for ident, m in vida.grupo.motores.items():
+            interno = m.politica.estado_interno()
+            if "modelo_outros" not in interno:
+                raise RuntimeError(f"{vida.nome}/{ident}: o cerebro sem o modelo dos outros (a chave modelo_outros)")
+            out[ident] = interno["modelo_outros"]["outros"]
+        return out
 
     def medir_grupo(self, vida: VidaGrupo) -> dict:
         """As medidas da secao 4 que ja tem dado no registro do grupo, do replay de medicao (conferido bit a bit contra o grupo):
@@ -1878,7 +1888,8 @@ class Bancada:
           - o alvo aprendido: os pesos por classe no fim de cada dia (o "o que o B aprendeu", com as classes `seguir` e `onde_comeu`);
           - a sorte da ordem (R-5, `vez_no_grupo`) e o chao no dia K (R-3);
           - os consumos por tipo, situacao e como (achou ou foi comer), o gasto do dono e os sinais retirados (PMF-3).
-        As medidas sociais (`medidas_sociais`, da etapa 3) saem ao lado; o modelo dos outros espera o cerebro (o no `cerebro_social`)."""
+        As medidas sociais (`medidas_sociais`, da etapa 3) e o modelo dos outros (`modelo_dos_outros`, no fim, e por dia em cada pet) saem
+    ao lado."""
         eg = vida.espec
         regs: dict = {}
 
@@ -1925,7 +1936,8 @@ class Bancada:
                            "dias_vividos": dias_vividos, "taxa_fruta_ruim": taxa_fruta_ruim(frutas, janelas),
                            "d_fe": {"primeiros_7": deficit_fome_energia(fe, primeiros), "vida": deficit_fome_energia(fe, vida_j)},
                            "cuidado": {"primeiros_7": cuidado_preservado(cuidado, primeiros), "vida": cuidado_preservado(cuidado, vida_j)},
-                           "pesos_alvo_por_dia": reg.pesos_alvo_dia, "vez": vez_no_grupo(r.ordens, ident),
+                           "pesos_alvo_por_dia": reg.pesos_alvo_dia, "modelo_outros_por_dia": reg.modelo_dia,
+                       "vez": vez_no_grupo(r.ordens, ident),
                            "consumos": dict(sorted(consumos.items())), "consumos_fruta_madura": len(frutas),
                            "interacoes": vida.interacoes.get(ident), "retirados": vida.retirados.get(ident),
                            "troca": getattr(m, "troca", None)}
@@ -1933,8 +1945,7 @@ class Bancada:
         return {"grupo": vida.nome, "braco": eg.braco, "companheiro": b.companheiro, "semente": eg.semente, "k": eg.k, "dono": eg.dono,
                 "lugar": eg.lugar, "mundo": eg.mundo, "ruim": ef["ruim"], "ruim_embaralhado": ef.get("ruim_embaralhado"),
                 "ordens": len(r.ordens), "pets": pets, "chao_no_dia_k": self.chao_na_entrada(vida) if b.b else None,
-                "sociais": self.medidas_sociais(vida),
-            "modelo_dos_outros": {"pendente": "cerebro_social", "motivo": NOS_PENDENTES.get("cerebro_social")}}
+                "sociais": self.medidas_sociais(vida), "modelo_dos_outros": self.modelo_dos_outros(vida)}
 
 
 def receptores_novos_de(cc: ConfigCorpo, com_mundo: bool = False) -> tuple[str, ...]:
@@ -2735,9 +2746,9 @@ def meta(cfg: dict) -> dict:
 # ================================================================== dois pets: a bancada do grupo (TAREFA_V2_DOIS_PETS, etapa 5)
 # PLANO_ANALISE_V2_DOIS_PETS, secoes 2 a 4: o grupo como celula, com um dono (o atencioso, so com o cuidado, PMF-3) e o orcamento por pet
 # (DP-7, a validacao inicial), pelo `simular_grupo` do #257. O cerebro e o A do ponto e da montagem da bancada, com o alvo aprendido (#255).
-# A visao, o toque e a disputa entre os pets (etapa 3, do A, #263) estao na main: as medidas sociais saem dos registros do grupo. As
-# entradas sociais e o modelo dos outros no cerebro (etapa 4, a segunda metade, do B) ainda nao: o que depende deles falha alto com o no
-# `cerebro_social` do NOS_PENDENTES (o modelo dos outros e qualquer run com as sementes do plano).
+# A visao, o toque e a disputa entre os pets (etapa 3, do A, #263) e as entradas sociais e o modelo dos outros no cerebro (etapa 4, a
+# segunda metade, do B, #266) estao na main: o cerebro do grupo os liga, e as medidas sociais e as do modelo saem dos registros. Os canais
+# da montagem completa esperam a rota do humor do B (o no `canais_fruta_mundo`).
 
 ROTULO_RUIM = "dois-pets-ruim"               # o tipo que faz mal na unidade (plano, secao 2)
 ROTULO_EMBARALHA = "dois-pets-embaralha"     # o desarranjo do A embaralhado (plano, secao 3)
@@ -2863,19 +2874,27 @@ class _RegistroGrupo(_Registro):
     def __init__(self, interna: PoliticaDoBraco) -> None:
         super().__init__(interna)
         self.pesos_alvo_dia: list = []
+        self.modelo_dia: list = []
 
     def pesos_alvo(self):
         w = getattr(self.interna.cerebro, "_pesos_alvo_mundo", None)
         return {k: dict(t) for k, t in w.items()} if w else None
 
+    def modelo(self):
+        """o modelo dos outros (so registrado, #266) como o cerebro o serializa: por outro, a familiaridade, a confianca e a afinidade"""
+        m = getattr(self.interna.cerebro, "_modelo", None)
+        return None if m is None else m.para_dict()["outros"]
+
     def agir(self, obs, rng):
         k = len(self.decisoes)
         if k and k % DECISOES_POR_DIA == 0:
             self.pesos_alvo_dia.append(self.pesos_alvo())
+            self.modelo_dia.append(self.modelo())
         return super().agir(obs, rng)
 
     def fim(self) -> None:
         self.pesos_alvo_dia.append(self.pesos_alvo())
+        self.modelo_dia.append(self.modelo())
 
 
 def _validar_espec_grupo(eg: EspecGrupo) -> BracoGrupo:
@@ -2921,8 +2940,8 @@ CHAVES_CONFIG_GRUPO = {"descricao", "plano", "tipo", "bracos", "sementes", "unid
 
 def validar_config_grupo(cfg: dict) -> dict:
     """A config da bancada do grupo (`"tipo": "grupo"`). As unidades usam o prefixo `dois_pets`. Fora das sementes dos testes, a run e do
-    plano: pede o `plano` e falha alto com o no enquanto as entradas sociais e o modelo dos outros (etapa 4, a segunda metade, do B) nao
-    estiverem na main (o cerebro do plano, secao 2, as tem)."""
+    plano: pede o `plano` e a montagem completa (o cerebro do plano, secao 2), que liga os canais e por isso falha alto com o no
+    `canais_fruta_mundo` ate a rota do humor do B."""
     faltam = {"tipo", "bracos", "k_dias", "dias", "orcamento_por_dia"} - set(cfg)
     sobram = set(cfg) - CHAVES_CONFIG_GRUPO
     if faltam or sobram:
@@ -2964,8 +2983,8 @@ def validar_config_grupo(cfg: dict) -> dict:
         plano = cfg.get("plano")
         if not plano or not (RAIZ / plano).is_file():
             raise SementeSemPlano(f"sementes/bases {fora} fora das dos testes: precisa do plano de analise registrado (campo 'plano')")
-        if "cerebro_social" in NOS_PENDENTES:
-            raise NotImplementedError(f"a run do plano dos dois pets: {NOS_PENDENTES['cerebro_social']}")
+        if cfg.get("montagem") != "completa":
+            raise ValueError("a run do plano dos dois pets usa o cerebro do plano (secao 2): a montagem completa")
     return cfg
 
 
