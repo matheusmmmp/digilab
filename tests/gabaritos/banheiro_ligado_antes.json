@@ -10,6 +10,7 @@
     "urgente": false
    }
   ],
+  "corte": 2880,
   "decisao": [
    2880,
    [
@@ -21,10 +22,12 @@
    "banheiro"
   ],
   "k": 192,
+  "n_prefixo": 192,
   "prefixo": "89923f38f0fbfd6bb1d889fd8c13b2fc88770b7eaf96698d870732e713c9d46d"
  },
  "bancada|P0-B00~lobos|202": {
   "alivios": 2,
+  "corte": null,
   "impressao": {
    "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
    "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
@@ -41,6 +44,7 @@
  },
  "bancada|P0-B00~lobos|303": {
   "alivios_antes": [],
+  "corte": 1320,
   "decisao": [
    1320,
    [
@@ -52,6 +56,7 @@
    "banheiro"
   ],
   "k": 88,
+  "n_prefixo": 88,
   "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
  },
  "bancada|P0-B0C~instinto|101": {
@@ -65,6 +70,7 @@
     "urgente": false
    }
   ],
+  "corte": 2880,
   "decisao": [
    2880,
    [
@@ -76,10 +82,12 @@
    "banheiro"
   ],
   "k": 192,
+  "n_prefixo": 192,
   "prefixo": "89923f38f0fbfd6bb1d889fd8c13b2fc88770b7eaf96698d870732e713c9d46d"
  },
  "bancada|P0-B0C~instinto|202": {
   "alivios": 2,
+  "corte": null,
   "impressao": {
    "acoes": "e2ac09ff83eb27377934449e795c434f76282b1c197c30f89f23ff065ec0d16f",
    "estado": "73bb130ebbaa8ce2fd5f62ceb021d6d03ee96e84dabd4454275aa7e20b5774e9",
@@ -96,6 +104,7 @@
  },
  "bancada|P0-B0C~instinto|303": {
   "alivios_antes": [],
+  "corte": 1320,
   "decisao": [
    1320,
    [
@@ -107,10 +116,12 @@
    "banheiro"
   ],
   "k": 88,
+  "n_prefixo": 88,
   "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
  },
  "bancada|P1-B00~lobos|101": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "79758fba8d77b56420ce6435af8c0c1ad6a0dc0ec4a188bd1cc7ca2d49b4ef91",
    "estado": "0d23fa887fc62174db59d7e5f598728caa90907cca212867ab85780138ff2ac1",
@@ -127,6 +138,7 @@
  },
  "bancada|P1-B00~lobos|202": {
   "alivios": 2,
+  "corte": null,
   "impressao": {
    "acoes": "1249fd735522f7462bf1018fa9dc77b1a0ae5c3235eca32398da2fedccbd5bc8",
    "estado": "c03e2375bf97bc0f2494f6e529cd9ecebdeb5ef3df2073875242af85a7757d7f",
@@ -143,6 +155,7 @@
  },
  "bancada|P1-B00~lobos|303": {
   "alivios_antes": [],
+  "corte": 1320,
   "decisao": [
    1320,
    [
@@ -154,10 +167,12 @@
    "banheiro"
   ],
   "k": 88,
+  "n_prefixo": 88,
   "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
  },
  "bancada|P1-BLC~lobos|101": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "79758fba8d77b56420ce6435af8c0c1ad6a0dc0ec4a188bd1cc7ca2d49b4ef91",
    "estado": "0d23fa887fc62174db59d7e5f598728caa90907cca212867ab85780138ff2ac1",
@@ -174,6 +189,7 @@
  },
  "bancada|P1-BLC~lobos|202": {
   "alivios": 2,
+  "corte": null,
   "impressao": {
    "acoes": "1249fd735522f7462bf1018fa9dc77b1a0ae5c3235eca32398da2fedccbd5bc8",
    "estado": "c03e2375bf97bc0f2494f6e529cd9ecebdeb5ef3df2073875242af85a7757d7f",
@@ -190,6 +206,7 @@
  },
  "bancada|P1-BLC~lobos|303": {
   "alivios_antes": [],
+  "corte": 1320,
   "decisao": [
    1320,
    [
@@ -201,10 +218,12 @@
    "banheiro"
   ],
   "k": 88,
+  "n_prefixo": 88,
   "prefixo": "ec84501bda539a1c70e4add592e9549d0c5d1c7477ac4b22b1d15502f3635683"
  },
  "direto|instinto|BL|101": {
   "alivios": 2,
+  "corte": null,
   "impressao": {
    "acoes": "c78c9bbf597935679fbf53049688db045f259a0547a12b3b6fdceadc2840f853",
    "estado": "50d77b5e469081797944f27ea3f89fb07cc496527fd2505e5a8bb92b5c3950e8",
@@ -230,6 +249,7 @@
     "urgente": false
    }
   ],
+  "corte": 2700,
   "decisao": [
    2700,
    [
@@ -241,10 +261,12 @@
    "banheiro"
   ],
   "k": 180,
+  "n_prefixo": 180,
   "prefixo": "aded5fb24d8030b84b26cc479cd9954d8f52a4e780d5388700063b143b8d67bc"
  },
  "direto|instinto|BL|303": {
   "alivios_antes": [],
+  "corte": 1440,
   "decisao": [
    1440,
    [
@@ -256,10 +278,12 @@
    "banheiro"
   ],
   "k": 96,
+  "n_prefixo": 96,
   "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
  },
  "direto|instinto|B|101": {
   "alivios": 2,
+  "corte": null,
   "impressao": {
    "acoes": "c78c9bbf597935679fbf53049688db045f259a0547a12b3b6fdceadc2840f853",
    "estado": "50d77b5e469081797944f27ea3f89fb07cc496527fd2505e5a8bb92b5c3950e8",
@@ -285,6 +309,7 @@
     "urgente": false
    }
   ],
+  "corte": 2700,
   "decisao": [
    2700,
    [
@@ -296,10 +321,12 @@
    "banheiro"
   ],
   "k": 180,
+  "n_prefixo": 180,
   "prefixo": "aded5fb24d8030b84b26cc479cd9954d8f52a4e780d5388700063b143b8d67bc"
  },
  "direto|instinto|B|303": {
   "alivios_antes": [],
+  "corte": 1440,
   "decisao": [
    1440,
    [
@@ -311,10 +338,12 @@
    "banheiro"
   ],
   "k": 96,
+  "n_prefixo": 96,
   "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
  },
  "direto|instinto|perto|101": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "0092888a3628767f2bdc002d09b4ccb310e0021c982ea047832c89aaa5314703",
    "estado": "f1e244b7e85da00f55f66197314f28689bde26176df8f4f38e0703fb25eb581c",
@@ -331,6 +360,7 @@
  },
  "direto|instinto|perto|202": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "c60843667dd86618e437cddaa466c3b1ab2df10df25c394b66380e8526b9f4f1",
    "estado": "055531c2e964afe85cbb4d5be7b107d5488dc888b424404ae0d33f382af5175e",
@@ -347,6 +377,7 @@
  },
  "direto|instinto|perto|303": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "ecb91d94d0507081ab03058c7665f65bdd11f038f631740009ed7674ce411993",
    "estado": "232ef458ff9a40deefef35e3d916569579a6c1818fd9a717813f3daaee59e7a7",
@@ -363,6 +394,7 @@
  },
  "direto|lobos|BL|101": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "8461fbb908dae74659230f90c4b57c8eb3744f95eabc944dd939088e95b138d6",
    "estado": "1c0ddb2fca522d4351d529fd92bdf6a8966cf24c6cb17e46e9bffe25ced7f22a",
@@ -379,6 +411,7 @@
  },
  "direto|lobos|BL|202": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "da761c272fb95a7ab088b5402024e7c6d1a138020a35748e16e99afc13706db5",
    "estado": "a503b47d8c769b7d27fc75910d73a5c92561a0275b31889ab063088c03bd5a45",
@@ -395,6 +428,7 @@
  },
  "direto|lobos|BL|303": {
   "alivios_antes": [],
+  "corte": 1440,
   "decisao": [
    1440,
    [
@@ -406,10 +440,12 @@
    "banheiro"
   ],
   "k": 96,
+  "n_prefixo": 96,
   "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
  },
  "direto|lobos|B|101": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "8461fbb908dae74659230f90c4b57c8eb3744f95eabc944dd939088e95b138d6",
    "estado": "1c0ddb2fca522d4351d529fd92bdf6a8966cf24c6cb17e46e9bffe25ced7f22a",
@@ -426,6 +462,7 @@
  },
  "direto|lobos|B|202": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "da761c272fb95a7ab088b5402024e7c6d1a138020a35748e16e99afc13706db5",
    "estado": "a503b47d8c769b7d27fc75910d73a5c92561a0275b31889ab063088c03bd5a45",
@@ -442,6 +479,7 @@
  },
  "direto|lobos|B|303": {
   "alivios_antes": [],
+  "corte": 1440,
   "decisao": [
    1440,
    [
@@ -453,10 +491,12 @@
    "banheiro"
   ],
   "k": 96,
+  "n_prefixo": 96,
   "prefixo": "4d962e93f3b78d72e9a479e445a35bbee50cdd525cdf6942756e98892ee2c85f"
  },
  "direto|lobos|perto|101": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "ba2f9fa83a6e6211b02bad5982e92d6418e4caf1317154be0c557334a2fb8d86",
    "estado": "dc87c64c66255168abd790c58335e0712021b599f5138df164178f62fb5a6415",
@@ -473,6 +513,7 @@
  },
  "direto|lobos|perto|202": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "d694a8d0099a1b962cb638b6942bcc9b70c3932e6adb7b40ed7ec095a0a52065",
    "estado": "131aae86628e3e417da998aa193f9a5af34aeebe4fcba534f50aa5c4794196e1",
@@ -489,6 +530,7 @@
  },
  "direto|lobos|perto|303": {
   "alivios": 3,
+  "corte": null,
   "impressao": {
    "acoes": "94c6d0ff2cb9b96165b916330136457cac186bb393a01a7bbb47baba9245ab50",
    "estado": "20933b1f7c691fbb43f8ccddc22ee150b29baffd24291c79af5dc6195e6cf07b",
@@ -506,6 +548,7 @@
  "grupo|perto|303": {
   "A": {
    "alivios": 2,
+   "corte": null,
    "impressao": {
     "acoes": "8d33ec236e24e41accfc26fcaa2d8a56930d551ef903cbadf507cd29aea54f4d",
     "estado": "c810a3a401892994a441a6caef562bdc9d53c86ce7751a6bdc8d1328dbd8dae3",
@@ -522,6 +565,7 @@
   },
   "B": {
    "alivios": 1,
+   "corte": null,
    "impressao": {
     "acoes": "b4820e2f5a228c6f8414805c601d3471ba2870d408e3696ff0874a5d36705f63",
     "estado": "a99aaf3b87c7f5c19320c47134d8bc12db0bbb0eabb2dd1865c64313eb37eef8",
@@ -539,23 +583,24 @@
  },
  "grupo|perto|404": {
   "A": {
-   "alivios": 1,
-   "impressao": {
-    "acoes": "96e4310b396d04a0bca26c77124a4ee4257c67507a5a3d563da048e87a38a9bf",
-    "estado": "c4b5c437f5ec59dc85edb257c093fb3f71ba3be1532bec3bc40a539d0c31628c",
-    "estado_motor": "bc9e531b0d982c3956f3540c4fd65debda4ffad580fe6d4791434e818299ea25",
-    "fisico": "c86a1cf03fa202ad6c69b6bde8a9c2397115189ecd24db4c31be685573c9fcd3",
-    "interacoes": null,
-    "log": "3eaf0cbcb2cdd3a6901f3eb157cffcca1b49eb2aefecd2688a7d04d62db53933",
-    "motor": "MotorMundoCorpo",
-    "mundo": "82086e7d4f877fee685e398a4933a6eb7a2eb4254fee6021116f82f66ec2366a",
-    "politica": "137c7befccfe56c765d3c45f18b5f908c3846431bcd1f9fdbe90c221930abf09",
-    "rngs": "f9be479ca16802f9b3968ac138dce88fb1f3b1120be34a7aa75a5f4d31c8b9cd"
-   },
-   "k": null
+   "alivios_antes": [
+    {
+     "alvo": "aqui",
+     "dentro": false,
+     "distancia": 126,
+     "recolhido": false,
+     "tick": 1200,
+     "urgente": false
+    }
+   ],
+   "corte": 1230,
+   "k": null,
+   "n_prefixo": 82,
+   "prefixo": "f9a2738e92e04fdbf6072a1928d8218411dd586f03ed38a97d89362918b52d0a"
   },
   "B": {
    "alivios_antes": [],
+   "corte": 1230,
    "decisao": [
     1230,
     [
@@ -567,6 +612,7 @@
     "banheiro"
    ],
    "k": 82,
+   "n_prefixo": 82,
    "prefixo": "ab6140d66f1641cad94478636d51b1a32570bee2b3dffc0542d59b80affef5d2"
   }
  }
