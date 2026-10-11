@@ -2,7 +2,7 @@
 
 Gates: G2 (a chave desligada e a vida de hoje: os gabaritos de sempre rodam na suite; aqui, a chave explicita desligada), G-MEC (a
 vontade sobe e cai; o limpador recolhe so no banheiro; o objeto da o desconforto da zona; o limpar recolhe; o urgente alivia aqui; o
-alvo banheiro leva o pet ate la ou alivia onde parou), G-CRED (o carinho do DonoCarinhoBanheiro e creditado a decisao de aliviar), G-CONS
+alvo banheiro leva o pet ate la ou segura a vontade; a continuacao em tests/test_banheiro_continuar.py), G-CRED (o carinho do DonoCarinhoBanheiro e creditado a decisao de aliviar), G-CONS
 (com limpador, o sinal do aliviar no banheiro e maior que fora; sem limpador, igual), G1 (replay bit a bit, com e sem o limpador, com o
 carinho, com o instinto e os lobos aprendendo, e no grupo) e o contrato da bancada (`motor.alivios`). So as sementes dos testes.
 """
@@ -279,7 +279,9 @@ def test_g_mec_o_urgente_alivia_aqui():
         m2.avancar(15)
 
 
-def test_g_mec_o_alvo_banheiro_leva_ate_la_ou_alivia_onde_parou():
+def test_g_mec_o_alvo_banheiro_leva_ate_la_ou_segura_a_vontade():
+    """ao alcance, alivia dentro; alem do alcance de uma decisao, anda o alcance e segura a vontade (a continuacao, 2026-10-11: antes
+    aliviava no caminho, em (140, 64))"""
     perto, _ = motor_roteiro([AcaoPet.ALIVIAR], "banheiro", pet=FORA_PERTO, vontade=300000)
     perto.avancar(15)
     a = perto.alivios[0]
@@ -287,13 +289,15 @@ def test_g_mec_o_alvo_banheiro_leva_ate_la_ou_alivia_onde_parou():
     longe, pol = motor_roteiro([AcaoPet.ALIVIAR], "banheiro", pet=FORA_LONGE, vontade=300000)
     e0 = longe.corpo.q["cansaco"]
     longe.avancar(15)
-    a = longe.alivios[0]
-    assert longe.pet == (200 - 60, 64) and not a["dentro"] and a["distancia"] == 137     # andou o alcance (60) e aliviou no caminho
+    assert longe.pet == (200 - 60, 64) and longe.alivios == []                            # andou o alcance (60) e nao aliviou
     assert not longe.decisoes_mundo[0]["chegou"] and longe.decisoes_mundo[0]["alvo"] == "banheiro"
     assert ("andar", 60) in pol.corpo[0][1]["estimulos"] and longe.corpo.q["cansaco"] > e0
-    assert [(n["x"], n["y"]) for n in longe.mundo.necessidades.values()] == [(140, 64)]
-    # o aliviar nao deixa alvo pendente (o pet alivia onde parou)
-    assert longe.resumo_mundo_fisico()["pendente"] is None
+    assert not any(e[0] in ("aliviar", "necessidade") for e in pol.corpo[0][1]["estimulos"]) and longe.mundo.necessidades == {}
+    assert longe.idas_banheiro == [{"tick": 0, "de": FORA_LONGE, "para": (140, 64), "distancia": 137, "restante": 77,
+                                    "continuacao": False}]
+    # o alvo do banheiro fica pendente, como o `continuar`
+    assert longe.resumo_mundo_fisico()["pendente"] == {"acao": "aliviar", "alvo": {"tipo": "banheiro", "x": 63, "y": 64, "id": None,
+                                                                                   "de": None}}
 
 
 def test_g_mec_sem_gancho_o_padrao_e_aqui():
