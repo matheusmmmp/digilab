@@ -1,6 +1,7 @@
 # Tarefa — V2: o banheiro, a necessidade no lugar certo e o limpador (W-TAREFA-BANHEIRO)
 
-Status: **BN-1 a BN-6 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 10). Os números seguem PROPOSTOS. Escrito
+Status: **BN-1 a BN-6 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 10). **BN-7 DECIDIDA em 2026-10-11**
+(o alvo `banheiro` continua até chegar; seção 4). Os números seguem PROPOSTOS. Escrito
 pelo coordenador em 2026-10-07 a pedido do Matheus. **Só papel.** O código vem em etapas depois do mundo
 físico e do corpo (seção 9). Os números são **PROPOSTOS, sem fonte**.
 
@@ -95,6 +96,11 @@ casa. **Com limpador, o banheiro é melhor já na hora.**
 **A sub-decisão de onde**, como as sub-decisões de alvo do mundo:
 - **alvo `banheiro`:** o motor leva o pet ao ponto mais próximo do banheiro, com o custo de energia da distância, e ele alivia lá. Se o
   banheiro estiver além do alcance de uma decisão, ele anda o que der e alivia **onde parou**: chegou tarde;
+  - **mudança da BN-7 (DECIDIDA em 2026-10-11):** o alvo `banheiro` **continua por mais de uma decisão**, como o `continuar` do mundo, e o pet
+    **segura a vontade até chegar**: no caminho não alivia, e alivia ao chegar ao banheiro. A exceção é a regra urgente: com a `vontade`
+    acima de 0,90 no caminho, ele alivia ali (o acidente). O "chegou tarde" acima só vale para a urgência. Motivo: na fumaça do #265, o pet
+    quase nunca chegava (o P0 aliviou 1 vez dentro em 37; o P1, 0 em 38), porque vive no comedouro a ~150 subunidades do banheiro e uma
+    decisão anda 60. Sem isso, o 2 × 2 quase não teria carinho nem limpador para medir;
 - **alvo `aqui`:** alivia onde está.
 
 **O instinto** (`PoliticaInstintoBanheiro`, subclasse; dono: o B):
@@ -212,7 +218,7 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 
 ## 10. Decisões do Matheus
 
-**DECIDIDAS em 2026-10-07: BN-1 a BN-6, todas como recomendado.** Pela BN-6, o carinho ganha o componente de **conforto**: um químico
+**DECIDIDAS em 2026-10-07: BN-1 a BN-6, todas como recomendado. DECIDIDA em 2026-10-11: BN-7, a do alvo que continua.** Pela BN-6, o carinho ganha o componente de **conforto**: um químico
 novo que cai devagar e sobe com o carinho, com receptor (PROPOSTO). O B o põe no `corpo.py` junto com a vontade, na etapa 2.
 
 | # | decisão | recomendação | custo de errar |
@@ -223,3 +229,4 @@ novo que cai devagar e sobe com o carinho, com receptor (PROPOSTO). O B o põe n
 | BN-4 | O critério de "aprendeu": 0,80 por 3 dias seguidos | **sim**, PROPOSTO; o plano pode ajustar antes da run | critério frouxo: aprende por acaso; rígido: quase todos censurados |
 | BN-6 | Como manter o carinho mais forte que o limpador com a solidão baixa (seção 5b) | **(a)**: um componente de conforto no carinho, que não depende da solidão | (b) ou (c): o carinho frequente empata com o limpador, contra o que o Matheus pediu |
 | BN-5 | O limpador no produto como compra na loja, quando a loja existir | **sim**, registrado como IDEIA para o produto | — |
+| BN-7 | O alvo `banheiro` continua por mais de uma decisão (como o `continuar`), segurando a vontade até chegar, salvo a regra urgente | **DECIDIDA em 2026-10-11** (o Matheus seguiu a recomendação do coordenador; pedida pelo achado do #265). Os donos: o A no motor (o alvo pendente do `aliviar` e o alívio só na chegada ou na urgência) e o B no instinto e nos cérebros (o candidato que continua o alvo `banheiro`) | sem ela: o pet alivia no caminho quase sempre, e o carinho e o limpador do 2 × 2 quase não aparecem. As outras saídas do #265 (o banheiro mais perto do pet, um alcance próprio do aliviar) mudariam o mapa ou o custo do andar |

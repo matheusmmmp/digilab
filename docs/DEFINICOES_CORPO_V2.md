@@ -195,8 +195,8 @@ rede.
 | os três mecanismos hormonais e a ablação no basal (seção 4) | **IDEIA** | este documento |
 | órgãos com força vital, dano, cura, dor e morte (seção 5) | **IDEIA**, SEM FONTE | este documento |
 | o automodelo que prevê os receptores, o **Digicorpo** (seção 6) | **IDEIA** (objetivo DECIDIDO, E-1; o como é PROPOSTO) | `docs/futuro/ego_existencia.md` e este documento |
-| o órgão receptor do **Olfato** (alimentar e social): receptor com limiar, adaptação e saturação, só a intensidade local, uma ou duas narinas (DP-13) | **IDEIA**, decisão aberta | `docs/futuro/dois_pets.md`, seção 5.6; `docs/TAREFA_V2_DOIS_PETS.md`, etapa 8b |
-| o órgão receptor da **Audição social**, o mesmo desenho (DP-14) | **IDEIA**, decisão aberta | idem |
+| o órgão receptor do **Olfato** (alimentar e social): receptor com limiar, adaptação e saturação, só a intensidade local, uma ou duas narinas (DP-13) | **ESPECIFICADO**: DP-13 DECIDIDA em 2026-10-11, duas narinas, atrás de chave desligada | `docs/futuro/dois_pets.md`, seção 5.6; `docs/TAREFA_V2_DOIS_PETS.md`, etapa 8b |
+| o órgão receptor da **Audição social**, o mesmo desenho (DP-14) | **ESPECIFICADO**: DP-14 DECIDIDA em 2026-10-11, dois ouvidos, atrás de chave desligada | idem |
 | os sistemas a acrescentar: Metabolismo energético, proprioceptivo, Termorregulação, nociceptivo e de reparo, imune e toxicológico, reprodutivo | **IDEIA**, cada um com a condição de entrada | seção 8.1 |
 
 **Um apoio que já existe:** o conforto do carinho (BN-6) é o item que a literatura lida mais apoia. Lewis e Cañamero 2016
@@ -218,7 +218,7 @@ de antes, porque mudá-los quebraria os gabaritos e o G2. Este glossário faz a 
 | **Sistema digestivo e metabólico** | o órgão 1, a digestão: o químico `alimento`, a reação com a fome limitada por `taxa_digestao`, o descarte, `digerido_no_tick` (sub-chave `digestao`) | **EXECUTADO** |
 | **Relógio de desenvolvimento** | o órgão 2, a Vida: o químico `vida`, que decai e dá o estágio por receptor, sem morte (sub-chave `vida`) | **EXECUTADO** |
 | **Visão ambiental** | a visão do mundo físico: `PercepcaoMundo` (os objetos vistos a até 6 células, a região, a posição) | **EXECUTADO** |
-| **Olfato alimentar** | o cheiro da comida: `mundo.cheiro_em` e `direcao_do_cheiro`, em `PercepcaoMundo.cheiro` e `direcao_cheiro`; com a DP-13, o receptor com a sub-chave `comida` | a leitura pronta **EXECUTADA**; o órgão é IDEIA (DP-13 aberta) |
+| **Olfato alimentar** | o cheiro da comida: `mundo.cheiro_em` e `direcao_do_cheiro`, em `PercepcaoMundo.cheiro` e `direcao_cheiro`; com a DP-13, o receptor com a sub-chave `comida` | a leitura pronta **EXECUTADA**; o órgão é ESPECIFICADO (DP-13 DECIDIDA em 2026-10-11: duas narinas, atrás de chave desligada) |
 | **Tato cutâneo** | o carinho e o tapa no corpo: `acao_dono(ACARICIAR)` e `acao_dono(TAPA)`, os químicos `dor` e `susto` e o medo da mão (sub-chave `gestos`) | **ESPECIFICADO**, em código na etapa 6 |
 | **Visão social** e **Tato social** | a visão e o toque do outro pet: `Observacao.social` (`PercepcaoSocial`, os campos `outros`, `onde_comeu` e `toque`) | **ESPECIFICADO** (`docs/futuro/dois_pets.md`, seções 5.1 e 5.2; etapa 3 da tarefa) |
 | **Audição social** e **Olfato social** | a audição e o cheiro do outro pet, no degrau 1b. **O rastro é um sinal olfativo social:** as marcas que o corpo emite no mundo por um emissor externo | **ESPECIFICADO** (seções 5.3 e 5.4; etapa 8) |
@@ -257,6 +257,7 @@ alegação de novidade: o Creatures modelou corpo químico e órgãos em 1997 (s
 ## Decisões que só o Matheus pode tomar
 
 **D-1 a D-7: DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** ("faz o merge e segue as recomendações").
+**N-1: DECIDIDA em 2026-10-11, pela recomendação:** a cabeça da autoria fica no Digicorpo.
 - D-1 e D-2: a quarta passada do Claude Science (`docs/TAREFA_V2_CLAUDE_SCIENCE_LITERATURA_4.md`).
 - D-3: a seção 18 da `docs/TAREFA_V2_CORPO_DRIVES.md`.
 - D-4: a medida de dominância vai a um adendo do plano do corpo (chat C) e às medidas da bancada (chat D).

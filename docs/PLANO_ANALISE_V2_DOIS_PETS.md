@@ -32,7 +32,7 @@ recomendação** (seção 12). É a etapa 6 de `docs/TAREFA_V2_DOIS_PETS.md`. O 
 | os números do mundo | os do adendo do plano do mundo físico (o `m` das quedas), sem recalibrar | `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 |
 | **o efeito da fruta** | **um tipo de fruta faz mal** (o efeito ruim no humor, `efeito_humor_ruim`), os outros dois são neutros. O tipo ruim é sorteado por unidade, `derivar_semente("dois-pets-ruim", s)`, uniforme entre `a`, `b` e `c`. Cada tipo tem árvores no jardim e na mata (`LAYOUT_MUNDO_PADRAO`) | PROPOSTO |
 | os sentidos | visão e toque (DP-11) | desenho, seções 5.1 e 5.2 |
-| o cérebro | o A no P1 (a consequência com a E2), no ponto da K2, com a montagem completa e com o que a etapa 4 acrescenta (o alvo aprendido e as entradas sociais), sem recalibrar (M10) | tarefa, etapa 4 |
+| o cérebro | o A no P1 (a consequência com a E2), no ponto da K2, com a montagem completa e com o que a etapa 4 acrescenta (o alvo aprendido e as entradas sociais), sem recalibrar (M10). **Os canais ficam (PDP-7, DECIDIDA em 2026-10-11):** o B cria a rota do canal do humor no cérebro do mundo físico | tarefa, etapas 4 e 4c; PDP-7 | tarefa, etapa 4 |
 | o corpo | desligado (PDP-1) | — |
 | o dono | um dono (o atencioso) com orçamento de 16 interações por dia **para cada pet**, decidindo por pet, só com o cuidado (PMF-3, sem elogiar nem repreender), com o `DonoComLugar` no comedouro | DP-7, validação inicial; PMF-3 e PMF-4 do mundo |
 | morte | desligada | — |
@@ -200,7 +200,7 @@ conferido bit a bit (G1-GRUPO).
 
 ## 12. Decisões do Matheus
 
-**DECIDIDAS em 2026-10-08: PDP-1 a PDP-6, todas como recomendado.**
+**DECIDIDAS em 2026-10-08: PDP-1 a PDP-6, todas como recomendado. DECIDIDA em 2026-10-11: PDP-7, os canais.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
@@ -210,3 +210,4 @@ conferido bit a bit (G1-GRUPO).
 | PDP-4 | O controle primário | **o A embaralhado** (DP-9), com o desarranjo dos tipos nos K dias e o mundo verdadeiro depois | o A ingênuo como controle primário: ele difere em competência e presença, e o contraste mistura isso com a informação |
 | PDP-5 | A margem | **metade da distância entre o B só e o A informativo** | uma margem fixa sem dado: larga demais (tudo equivalente) ou estreita demais (N acima do teto) |
 | PDP-6 | As faixas de sementes | **39101…39505** e **40101…40505**, mais 41101…41505 e 42101…42505 previstas para os adendos | uma colisão tira o "novo" das unidades |
+| PDP-7 | Os canais no mundo dos dois pets (o nó `canais_fruta_mundo`, #264) | **DECIDIDA em 2026-10-11: o B cria a rota do canal do humor no cérebro do mundo físico, e a montagem completa fica no plano, com os canais.** Hoje, no mundo dos dois pets, comer a fruta que mexe no humor com os canais ligados falha alto no cérebro do mundo físico (a "rota de adendo" do MUNDO-CEREBROS). Até a rota existir, o nó segue pendente e nenhuma run do plano roda | rodar sem os canais: o P1 dos dois pets deixaria de ser o cérebro A da K2 (a montagem completa), e o resultado não seria comparável com o resto da V2 |
