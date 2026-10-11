@@ -3585,3 +3585,31 @@ sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás das chaves), a 
     familiaridade é refeita da percepção.
 - **Fica para depois:** a bancada do grupo (etapa 5, D), que tem de repassar o `consequencia_mundo` ao cérebro para o modelo contar as
   idas; a audição e o cheiro como entradas (etapa 8); o modelo decidindo (degrau 3).
+
+## V2, W-BANCADA-MODELO — as entradas sociais e o modelo dos outros na bancada do grupo (2026-10-11, `docs/TAREFA_V2_DOIS_PETS.md`, etapa 5) — GATES PASSAM
+
+Rodada 27, com o #266 (as entradas sociais e o modelo dos outros no cérebro A, do B) na `main`. Infraestrutura, sem run de pesquisa; só as
+sementes dos testes. Mudaram `experiments/bancada_v2.py`, o teste do grupo e o do `NOS_PENDENTES`. `engine.py`, `grupo.py`, `mundo.py`,
+`lobos.py`, `metrics.py` e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O repasse do `consequencia_mundo`:** a `PoliticaDoBraco` o repassa explicitamente ao cérebro, em toda fonte (o P0 também). O cérebro
+  anota o motivo e o modelo dos outros conta as idas a `onde_comeu` e o que o pet comeu; só na fonte consequência há sinal pendente para
+  creditar. O cérebro sem o gancho (o instinto do mundo) não recebe nada. Antes o repasse já acontecia pelo `__getattr__`; agora é um
+  método da classe, testado.
+- **O cérebro do grupo** (`Bancada.bancada_grupo`): o da bancada com o alvo aprendido, as `entradas_sociais` e o `modelo_outros` (#266). No
+  prior, o P0 é o instinto do mundo byte a byte, também com o outro à vista.
+- **O nó `cerebro_social` saiu.** Fica só o `canais_fruta_mundo` (a rota do humor no cérebro, do B; o Matheus decidiu manter a montagem
+  completa).
+- **A run do plano** (`validar_config_grupo`, sementes fora das dos testes) agora pede a montagem completa (o cérebro da seção 2), e por isso
+  falha alto com o nó dos canais até o PR do B.
+- **As medidas do modelo** (plano, seção 4: a familiaridade, a confiança por atividade e a afinidade, só registradas):
+  - `Bancada.modelo_dos_outros(vida)`: o modelo no fim da vida, por pet, como o cérebro o serializa (um cérebro sem ele falha alto);
+  - em cada pet do `medir_grupo`, `modelo_outros_por_dia`: o modelo no fim de cada dia vivido, pelo replay de medição.
+- **Gates** (`tests/test_bancada_dois_pets.py`, 67):
+  - o cérebro do grupo com as três chaves nos dois pets; o modelo de um pet sozinho não conhece ninguém;
+  - **o modelo conta as idas e os acertos que o motor registra** (as idas a `onde_comeu` que chegaram, por outro), nos três braços com
+    dois pets, em três sementes, inclusive no P0 do B + Aing;
+  - o repasse explícito em toda fonte, e o cérebro sem o gancho;
+  - **o modelo não muda a vida do grupo** (o registro e cada pet iguais sem ele, fora o modelo no estado interno);
+  - o modelo por dia nas medidas, e o do último dia é o do fim;
+  - a run do plano pede a montagem completa e falha alto com os canais; sem o nó, valida;
+  - os gates de antes (o pet sozinho é a vida de hoje, as vezes, as quedas, a troca, o orçamento, as sociais).
