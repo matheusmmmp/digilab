@@ -44,6 +44,19 @@ O banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 3 e BN-6; sub-chave `banheiro`, qu
   - o `conforto` (BN-6): o carinho o sobe (+45000, com o medo da mao, como a solidao e o estresse) e ele cai com meia-vida 60. O receptor
     le a concentracao; o cerebro le a falta de conforto (S - leitura), entao o carinho da sinal mesmo com a solidao baixa.
 
+O metabolismo energetico (docs/TAREFA_V2_METABOLISMO.md, secao 3; ME-1 a ME-7 pela recomendacao; sub-chave `metabolismo`, que exige a
+digestao): dois quimicos sem receptor (ME-2), guardados como concentracao, o `combustivel` (C/2 ao nascer) e a `reserva` (C/4):
+  - a conversao: a digestao poe no combustivel conversao_num/conversao_den do que digeriu, com o resto guardado (como a vontade); o que
+    passa do teto e descartado (e contado);
+  - o gasto basal: 375 por tick acordado e 187 dormindo (fase 1); as atividades (o brincar do pet e o do dono, o explorar e o andar) tiram
+    do combustivel o mesmo numero que somam ao cansaco, que nao muda;
+  - o armazenamento (acima de 3C/4, ate 375 por tick, combustivel -> reserva) e a mobilizacao (abaixo de C/2, ate 375, reserva ->
+    combustivel): transferencias 1 por 1 com limiar, depois da fase 1 e antes da fase 2;
+  - a falta: abaixo de C/4 o cansaco sobe 500 por tick (fase 2, o gatilho `abaixo`). E a unica ponte entre o combustivel e o pet (ME-1):
+    com o combustivel acima de C/4, todo quimico de antes e o de sem o metabolismo, tick a tick.
+A fome nao le o combustivel (ME-5) e o excedente do estomago com a fome em 0 segue descartado (ME-4). `contas_metabolismo` guarda, em
+totais, o que entrou e saiu do combustivel e da reserva (a contabilidade fecha a cada tick).
+
 O grafo (secao 18): `grafo_do_corpo` monta a tabela unica dos quimicos, reacoes, emissores, receptores, meias-vidas e tetos
 (digilab/corpo_grafo.py), e o `Corpo` a usa (a lista dos quimicos, os receptores, as meias-vidas, os emissores do tick por fase e as
 quantidades dos estimulos novos) e a confere na carga (`corpo_grafo.checar`, que falha alto).
@@ -74,6 +87,8 @@ ESTAGIOS = ("bebe", "crianca", "adolescente", "adulto")           # os de treino
 NOVOS = ("tedio", "curiosidade", "solidao", "estresse")           # etapa 6, drives_novos (a curiosidade so com o mundo fisico)
 GESTOS = ("dor", "susto")                                         # etapa 6, gestos
 BANHEIRO = ("vontade", "conforto")                                # o banheiro (TAREFA_V2_BANHEIRO, secao 3 e BN-6)
+METABOLISMO = ("combustivel", "reserva")                          # o metabolismo (TAREFA_V2_METABOLISMO, secao 3); sem receptor (ME-2)
+CONTAS_METABOLISMO = ("convertido", "descartado_teto", "mobilizado", "gasto_basal", "gasto_atividade", "armazenado")
 DRIVES_DO_ESTRESSE = ("fome", "desconforto", "cansaco", "tedio", "curiosidade", "solidao", "dor")   # secao 7, os que o estresse le
 ATIVIDADES = ("bola", "brincar", "explorar", "dono_brinca")       # DS-4: as atividades que reduzem o tedio e entram na janela
 VALOR_TAPA = "tapa"                                               # AcaoUsuario.TAPA (o enum e do A, etapa 6): o corpo o le pelo valor
@@ -84,7 +99,7 @@ def quimicos_de(cc: ConfigCorpo, com_mundo: bool = False) -> tuple[str, ...]:
     mundo fisico)."""
     novos = tuple(n for n in NOVOS if n != "curiosidade" or com_mundo) if cc.drives_novos else ()
     return (QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ()) + novos
-            + (GESTOS if cc.gestos else ()) + (BANHEIRO if cc.banheiro else ()))
+            + (GESTOS if cc.gestos else ()) + (BANHEIRO if cc.banheiro else ()) + (METABOLISMO if cc.metabolismo else ()))
 
 
 TOLERANCIA_GRADE = 1e-6                                           # quanto um numero de hoje x C pode fugir de um inteiro (so erro de float)
@@ -139,6 +154,19 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "necessidade_max_regiao": ("PROPOSTO", "secao 3: ate 3 necessidades, sem fonte"),
     "conforto_carinho": ("PROPOSTO", "BN-6: o menor da grade 6.1 do plano (45000) que passa o G-CAR; a calibracao do plano escolhe"),
     "k_meia_vida_conforto": ("PROPOSTO", "BN-6: meia-vida 60 (a menor da grade 6.1 do plano); k pela regra da secao 3"),
+    "metabolismo": ("DECIDIDO", "ME-1 a ME-7 pela recomendacao (TAREFA_V2_METABOLISMO, secao 9; Matheus, 2026-10-11)"),
+    "combustivel_inicial": ("PROPOSTO", "TAREFA_V2_METABOLISMO, secao 3: C/2, sem fonte"),
+    "reserva_inicial": ("PROPOSTO", "secao 3: C/4, sem fonte"),
+    "conversao_num": ("PROPOSTO", "secao 3: 1/1, sem fonte; com o gasto basal igual a subida da fome, comer o que a fome pede o mantem"),
+    "conversao_den": ("PROPOSTO", "secao 3: 1/1, sem fonte"),
+    "gasto_basal_acordado": ("PROPOSTO", "secao 3: 375 = a subida da fome, sem fonte; o passo 0 da calibracao escala (ME-7)"),
+    "gasto_basal_dormindo": ("PROPOSTO", "secao 3: 187, a metade, sem fonte; o passo 0 da calibracao escala (ME-7)"),
+    "armazenar_limiar": ("PROPOSTO", "secao 3: 3C/4, sem fonte"),
+    "armazenar_taxa": ("PROPOSTO", "secao 3: 375 por tick, sem fonte"),
+    "mobilizar_limiar": ("PROPOSTO", "secao 3: C/2, sem fonte"),
+    "mobilizar_taxa": ("PROPOSTO", "secao 3: 375 por tick, sem fonte"),
+    "falta_limiar": ("PROPOSTO", "secao 3: C/4, sem fonte"),
+    "falta_cansaco": ("PROPOSTO", "secao 3: +500 por tick, o cansaco de um tick acordado de dia, sem fonte (ME-1)"),
 }
 
 
@@ -223,6 +251,10 @@ def taxas_de(cfg: Config, cc: ConfigCorpo) -> TaxasCorpo:
     }
     if cc.banheiro:
         pet[AcaoPet.ALIVIAR] = {}               # o aliviar e o estimulo `estimulo_aliviar` (a vontade a zero), do motor com o banheiro
+    if cc.metabolismo:
+        # ME-3: as atividades tiram do combustivel o mesmo numero que somam ao cansaco (o cansaco de hoje nao muda)
+        for efeitos in (pet[AcaoPet.BRINCAR], pet[AcaoPet.EXPLORAR], dono[AcaoUsuario.BRINCAR]):
+            efeitos["combustivel"] = -efeitos["cansaco"]
     esperadas = set(ACOES_PET_HOJE) | (set(ACOES_PET_BANHEIRO) if cc.banheiro else set())
     if set(pet) != esperadas:
         raise ValueError(f"acoes do pet sem efeito no corpo: {sorted(a.value for a in esperadas - set(pet))}")
@@ -262,9 +294,17 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         h = MEIAS_VIDAS.get(n)
         quimicos.append(Quimico(n, C, True, receptor, leitura, None if h is None else h[1],
                                 None if h is None else getattr(cc, h[0])))
-    # a digestao tira o alimento e a fome; com o banheiro, poe na vontade uma fracao do que digeriu
-    reacoes = ((Reacao("digestao", ("alimento", "fome"), ("vontade",) if cc.banheiro else (), cc.taxa_digestao),)
+    # a digestao tira o alimento e a fome; com o banheiro, poe na vontade uma fracao do que digeriu; com o metabolismo, no combustivel
+    fracoes = ((("vontade", cc.vontade_digestao_num, cc.vontade_digestao_den),) if cc.banheiro else ()) + (
+        (("combustivel", cc.conversao_num, cc.conversao_den),) if cc.metabolismo else ())
+    reacoes = ((Reacao("digestao", ("alimento", "fome"), tuple(q for q, _, _ in fracoes), cc.taxa_digestao, fracoes),)
                if cc.digestao else ())
+    if cc.metabolismo:
+        # as transferencias com limiar: o excedente vai a reserva, e a reserva volta quando o combustivel cai
+        reacoes += (Reacao("armazenamento", ("combustivel",), ("reserva",), cc.armazenar_taxa, le="combustivel", lado="acima",
+                           limiar=cc.armazenar_limiar),
+                    Reacao("mobilizacao", ("reserva",), ("combustivel",), cc.mobilizar_taxa, le="combustivel", lado="abaixo",
+                           limiar=cc.mobilizar_limiar))
 
     def comida(efeitos: dict) -> tuple:
         if cc.digestao and efeitos.get("fome", 0) < 0:
@@ -287,6 +327,9 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
     if cc.banheiro:
         em += [Emissor("vontade_sobe", "acordado", 1, (("vontade", cc.vontade_sobe),)),
                Emissor("necessidade_regiao", "necessidades", 1, (("desconforto", cc.necessidade_regiao),))]
+    if cc.metabolismo:
+        em += [Emissor("gasto_basal_acordado", "acordado", 1, (("combustivel", -cc.gasto_basal_acordado),)),
+               Emissor("gasto_basal_dormindo", "dormindo", 1, (("combustivel", -cc.gasto_basal_dormindo),))]
     degrau = tuple(Leitura(n, 1, 1) for n in QUIMICOS_DA_PRIVACAO)     # um degrau: conta como ganho 1 se entrar num laco
     em += [Emissor("dano_privacao", "privacao", 2, (("dano", t.dano_privacao),), degrau),
            Emissor("dano_cura", "sem_privacao", 2, (("dano", t.dano_cura),))]
@@ -297,6 +340,10 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         # a vontade acima de 0,75 sobe o desconforto (o que faz o pet querer aliviar); um degrau, como o dano pela privacao
         em.append(Emissor("vontade_desconforto", "acima", 2, (("desconforto", cc.vontade_desconforto),), (Leitura("vontade", 1, 1),),
                           cc.vontade_limiar))
+    if cc.metabolismo:
+        # a falta de combustivel sobe o cansaco (ME-1, a unica ponte); um degrau, como o dano pela privacao
+        em.append(Emissor("falta_combustivel", "abaixo", 2, (("cansaco", cc.falta_cansaco),), (Leitura("combustivel", 1, 1, -1),),
+                          cc.falta_limiar))
     # os estimulos (fase 0): os de hoje pelas taxas, os do mundo e os da etapa 6
     for acao, efeitos in t.dono.items():
         em.append(Emissor(f"dono:{acao.value}", "estimulo", 0, comida(efeitos) if acao is AcaoUsuario.ALIMENTAR else tuple(efeitos.items())))
@@ -306,7 +353,7 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
     em += [Emissor("bola", "estimulo", 0, (("tristeza", -1),), variavel=True),
            Emissor("fruta", "estimulo", 0, comida({"fome": -1, "tristeza": -1}), variavel=True),
            Emissor("fruta_ruim", "estimulo", 0, (("tristeza", 1),), variavel=True),
-           Emissor("andar", "estimulo", 0, (("cansaco", 1),), variavel=True),
+           Emissor("andar", "estimulo", 0, (("cansaco", 1),) + ((("combustivel", -1),) if cc.metabolismo else ()), variavel=True),
            Emissor("comida_podre", "estimulo", 0, (("tristeza", 1),), variavel=True)]
     if cc.drives_novos:
         bases = {"bola": cc.tedio_bola, "brincar": cc.tedio_brincar, "explorar": cc.tedio_explorar, "dono_brinca": cc.tedio_dono}
@@ -383,6 +430,12 @@ class Corpo:
         self.descartado_total = 0
         # banheiro: o resto da divisao da fracao do digerido que vai para a vontade (em [0, vontade_digestao_den))
         self.resto_vontade = 0
+        # metabolismo: o resto da conversao (em [0, conversao_den)), as transferencias com limiar e a contabilidade do combustivel e da
+        # reserva, em totais (CONTAS_METABOLISMO)
+        self.resto_combustivel = 0
+        self._fracoes = next((r.fracoes for r in self.grafo.reacoes if r.nome == "digestao"), ())
+        self._transferencias = tuple(r for r in self.grafo.reacoes if r.le is not None)
+        self.contas_metabolismo = {k: 0 for k in CONTAS_METABOLISMO} if self.cc.metabolismo else None
         # orgao 2: os limiares dos receptores de estagio sobre a Vida
         self.limiares_estagio = limiares_estagio(self.cc, self.cfg_evo) if self.cc.vida else ()
 
@@ -398,15 +451,26 @@ class Corpo:
             q["alimento"] = 0                    # o Estado de hoje nao tem estomago: comeca vazio
         if cc.vida:
             q["vida"] = max(0, C - cc.vida_decaimento * estado.tick)
+        if cc.metabolismo:
+            q["combustivel"] = cc.combustivel_inicial
+            q["reserva"] = cc.reserva_inicial
         for nome in quimicos_de(cc, com_mundo):
             q.setdefault(nome, 0)                          # os drives novos e os gestos: zero no nascimento
         return cls(q, cfg, cc, cfg_evo, com_mundo)
 
     # ---------------------------------------------------------- estimulos
 
-    def _somar(self, deltas: dict[str, int]) -> None:
+    def _somar(self, deltas: dict[str, int], rubrica: str = "gasto_atividade") -> None:
+        """Soma os deltas, cortados em [0, C]. Com o metabolismo, o que sai do combustivel por aqui e gasto (`rubrica`: o basal no tick,
+        as atividades nos estimulos) e entra na contabilidade pelo que de fato saiu; combustivel subindo por aqui falha alto (a conversao
+        e a mobilizacao tem caminho proprio)."""
+        antes = self.q["combustivel"] if "combustivel" in deltas else None
         for nome, d in deltas.items():
             self.q[nome] = min(self.C, max(0, self.q[nome] + d))
+        if antes is not None:
+            if deltas["combustivel"] > 0:
+                raise RuntimeError(f"combustivel subindo fora da conversao e da mobilizacao: {deltas['combustivel']}")
+            self.contas_metabolismo[rubrica] += antes - self.q["combustivel"]
 
     def _efeito(self, deltas: dict[str, int], comida: bool) -> None:
         """Os deltas de uma acao; com a digestao, o que a comida tira da fome vai para o estomago."""
@@ -520,7 +584,8 @@ class Corpo:
             raise ValueError(f"deslocamento precisa ser inteiro >= 0: {deslocamento!r}")
         k = na_grade(custo_por_subunidade, self.C, "custo_energia_por_subunidade")
         if deslocamento:
-            self._somar({"cansaco": k * deslocamento})
+            # com o metabolismo, a tabela tira do combustivel o mesmo que soma ao cansaco (ME-3)
+            self._somar({q: d * k * deslocamento for q, d in self.grafo.emissor("andar").efeitos})
 
     def estimulo_consumo_mundo(self, tipo: str, situacao: str, cfg_mundo: ConfigMundo, efeito_fruta: float = 0.0) -> None:
         """Comer uma comida do mapa (mundo.MotorMundo._comer_mundo), pelo `comer` ou pelo "achou e comeu" do explorar:
@@ -559,11 +624,17 @@ class Corpo:
             self.q["fome"] -= t
             self.digerido_tick += t
             self.digerido_total += t
-            if self.cc.banheiro:
-                # a vontade sobe com o que se digeriu: num/den, com o resto guardado (a soma ao longo da vida e exata)
-                self.resto_vontade += t * self.cc.vontade_digestao_num
-                v, self.resto_vontade = divmod(self.resto_vontade, self.cc.vontade_digestao_den)
-                self.q["vontade"] = min(self.C, self.q["vontade"] + v)
+            # o que a digestao produz, pela tabela: a vontade (banheiro) e o combustivel (metabolismo) sobem com o que se digeriu,
+            # num/den, com o resto guardado (a soma ao longo da vida e exata)
+            for nome, num, den in self._fracoes:
+                resto = getattr(self, f"resto_{nome}") + t * num
+                v, resto = divmod(resto, den)
+                setattr(self, f"resto_{nome}", resto)
+                novo = self.q[nome] + v
+                self.q[nome] = min(self.C, novo)
+                if nome == "combustivel":
+                    self.contas_metabolismo["convertido"] += v
+                    self.contas_metabolismo["descartado_teto"] += novo - self.q[nome]
         if self.q["fome"] == 0 and self.q["alimento"] > 0:
             self.descartado_total += self.q["alimento"]
             self.q["alimento"] = 0
@@ -594,7 +665,9 @@ class Corpo:
         noite ou dia), a Vida e as subidas dos drives novos, somados por quimico e cortados uma vez; 2) a fase 2, sobre os valores depois da
         fase 1: o dano pelo receptor de privacao e o estresse pelos drives acima do limiar; 3) as meias-vidas. O motor sorteia a sujeira
         (fora daqui). Com o banheiro, `necessidades` e quantas necessidades estao na regiao do pet neste tick (o motor conta; ate
-        necessidade_max_regiao), e a vontade acima do limiar sobe o desconforto (fase 2). Sem o banheiro, `necessidades` tem de ser 0."""
+        necessidade_max_regiao), e a vontade acima do limiar sobe o desconforto (fase 2). Sem o banheiro, `necessidades` tem de ser 0.
+        Com o metabolismo: a conversao vai na digestao, o gasto basal na fase 1, as transferencias com limiar (o armazenamento e a
+        mobilizacao) entre a fase 1 e a 2, e a falta de combustivel na fase 2."""
         if type(necessidades) is not int or necessidades < 0:
             raise ValueError(f"necessidades na regiao precisa ser inteiro >= 0: {necessidades!r}")
         if necessidades and not self.cc.banheiro:
@@ -613,7 +686,11 @@ class Corpo:
                     n = 1
                 for q, d in e.efeitos:
                     deltas[q] = deltas.get(q, 0) + d * n
-        self._somar(deltas)
+        self._somar(deltas, "gasto_basal")
+        # metabolismo: as transferencias com limiar, sobre os valores depois da fase 1 (antes da fase 2: a falta ve o que a reserva
+        # devolveu neste tick)
+        for r in self._transferencias:
+            self._transferir(r)
         privacao = self.em_privacao()
         deltas = {}
         for e in self.grafo.da_fase(2):
@@ -626,6 +703,8 @@ class Corpo:
                 v = 1 if privacao == (e.gatilho == "privacao") else 0
             elif e.gatilho == "acima":
                 v = 1 if self.q[e.le[0].quimico] > e.limiar else 0
+            elif e.gatilho == "abaixo":
+                v = 1 if self.q[e.le[0].quimico] < e.limiar else 0
             else:                                                     # pragma: no cover - checado na tabela
                 raise ValueError(f"gatilho {e.gatilho!r} fora da fase 2")
             if v:
@@ -639,6 +718,17 @@ class Corpo:
         if self.cc.digestao:
             self.digerido_no_tick = self.digerido_tick          # o tick fechou: a taxa volta inteira no proximo
             self.digerido_tick = 0
+
+    def _transferir(self, r: Reacao) -> None:
+        """Uma transferencia com limiar (o metabolismo): com o quimico lido do lado certo do limiar, passa 1 por 1 do consumido ao
+        produzido ate min(taxa, a distancia ao limiar, o que ha, o que cabe): nada se perde e nada passa do teto."""
+        de, para = r.consome[0], r.produz[0]
+        distancia = self.q[r.le] - r.limiar if r.lado == "acima" else r.limiar - self.q[r.le]
+        t = min(r.taxa, distancia, self.q[de], self.grafo.quimico(para).teto - self.q[para])
+        if t > 0:
+            self.q[de] -= t
+            self.q[para] += t
+            self.contas_metabolismo["armazenado" if para == "reserva" else "mobilizado"] += t
 
     # ---------------------------------------------------------- leituras
 
@@ -678,4 +768,6 @@ class Corpo:
             d["janela_tedio"] = list(self.janela_tedio)
         if self.cc.banheiro:
             d["resto_vontade"] = self.resto_vontade
+        if self.cc.metabolismo:
+            d["metabolismo"] = {"resto_combustivel": self.resto_combustivel, "contas": dict(self.contas_metabolismo)}
         return d

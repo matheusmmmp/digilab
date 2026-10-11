@@ -3585,3 +3585,53 @@ sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás das chaves), a 
     familiaridade é refeita da percepção.
 - **Fica para depois:** a bancada do grupo (etapa 5, D), que tem de repassar o `consequencia_mundo` ao cérebro para o modelo contar as
   idas; a audição e o cheiro como entradas (etapa 8); o modelo decidindo (degrau 3).
+
+## V2, METABOLISMO, etapas 0 e 1 — o combustível e a reserva por baixo do cansaço (2026-10-11, `docs/TAREFA_V2_METABOLISMO.md`) — GATES PASSAM
+
+As ME-1 a ME-7 pela recomendação (decisão do Matheus, 2026-10-11). Infraestrutura, sem run; só as sementes dos testes. Mudaram
+`digilab/corpo.py`, `digilab/corpo_grafo.py`, a `ConfigCorpo` (a sub-chave e os números no fim), uma linha de `digilab/motor_corpo.py`, o
+exportador e o gabarito da paridade do corpo e o espelho dos números em `web/app/motor/constantes.ts`. `engine.py`, o `AcaoPet`, o mundo, os
+cérebros (sem receptor novo, ME-2) e a bancada não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Etapa 0, num commit próprio, antes de mudar o código:** `tests/gabarito_metabolismo.py` → `tests/gabaritos/metabolismo_vidas_de_hoje.json`,
+  176 vidas: o bloco do corpo pela bancada (P0-q, P1-q, P0-c, P1-c, P1-c-tapa e P1-cw nos mundos `padrao`, `bola` e `iguais_frutas`), o
+  `fisico` (o P1-quimica e o 2 × 2 do banheiro) e as vidas diretas da etapa 6 do gabarito do banheiro.
+- **A sub-chave:** `ConfigCorpo.metabolismo` (exige a `digestao`; `CONFIG_CORPO_METABOLISMO` = a etapa 6 com ela). Desligada, a vida de hoje.
+- **Os químicos** `combustivel` (C/2 ao nascer) e `reserva` (C/4), concentrações com teto C, **sem receptor**:
+  - **a conversão:** a reação `digestao` produz combustível, `conversao_num/conversao_den` (1/1) do que digeriu, com o resto guardado como
+    a vontade; o que passa do teto é descartado e contado;
+  - **o gasto basal:** 375 por tick acordado e 187 dormindo (fase 1);
+  - **as atividades:** o brincar do pet e o do dono, o explorar e o andar tiram do combustível o mesmo número que somam ao cansaço (ME-3);
+    o cansaço de hoje não muda;
+  - **o armazenamento** (acima de 3C/4) **e a mobilização** (abaixo de C/2), até 375 por tick: transferências 1 por 1, depois da fase 1 e
+    antes da fase 2;
+  - **a falta:** abaixo de C/4 o cansaço sobe 500 por tick (fase 2). É a única ponte para o pet (ME-1).
+  - A fome não lê o combustível (ME-5); o excedente do estômago segue descartado (ME-4).
+  - `Corpo.contas_metabolismo` guarda o que entrou e saiu, em totais.
+- **O grafo:** a `Reacao` ganhou `fracoes` (a produção com fração e resto, a vontade e o combustível), e a reação com limiar (`le`, `lado`,
+  `limiar`: uma transferência 1 por 1). O gatilho novo `abaixo` é o espelho do `acima`. Duas checagens a mais, que só mordem nas
+  transferências:
+  - **2b:** todo químico que elas tocam chega a um sumidouro de verdade (nem o teto nem outra transferência);
+  - **3b:** o que elas consomem tem fonte, e o teto não desculpa.
+  - As transferências entram no laço de ganho com o sentido do lado; as duas retroalimentações do metabolismo são negativas e não
+    viram aresta.
+- **O motor:** uma linha. A conferência do estímulo do dono passou a ignorar o combustível, que não é drive.
+- **A web:** só o espelho dos números na `ConfigCorpo` de `constantes.ts`. O `configCorpo` do TS falha alto com `metabolismo`: a química em
+  TS é a etapa 4 (do A). O gabarito da paridade ganhou a seção `metabolismo` (as reações inteiras, uma grade com os limiares, a conversão 2/3 e
+  uma sequência longa); as seções de antes saem idênticas.
+- **Gates** (`tests/test_metabolismo.py`, 45):
+  - **G2:** as 176 vidas da etapa 0 byte a byte;
+  - **G-GRAFO:** as checagens em 7 combinações × com e sem o mundo, sem laço novo; o combustível sem gasto e a reserva sem armazenamento
+    falham alto;
+  - **G-MEC-M:** as contas exatas: a conversão com o resto e o teto, o basal, cada atividade igual ao cansaço dela, as transferências nos
+    limiares, a falta só abaixo de C/4;
+  - **G-HOJE-M:** com o corpo cheio, em vidas de 2 dias (o combustível acima de C/4, conferido), todo químico de antes é o de sem o
+    metabolismo, tick a tick, nos três mundos e no físico, com o instinto e o P1; com os números PROPOSTOS a falta dispara, e até o tick
+    dela tudo é igual, e nele só o cansaço sobe 500;
+  - **G-CONS-M:** a contabilidade fecha a cada tick, nas vidas e numa sequência longa com a conversão 2/3 e o teto;
+  - **G-RECEPTOR-M:** pela AST, nenhum cérebro, a rede de si, os instintos e o motor leem os químicos novos; o espião vê a mesma
+    `PercepcaoCorpo`; o `n_pesos` é o de sem ele (998 com o banheiro); só a falta é emissor novo do cansaço;
+  - **G1:** o replay refaz o combustível, a reserva e as contas.
+- **Achado (descritivo, sementes dos testes):** com os números PROPOSTOS, em vidas de 3 dias, a falta fica ligada em 18% a 58% dos ticks.
+  As atividades gastam ~240 por tick, e a conversão não as cobre. É o que o passo 0 da calibração (ME-7) escala.
+- **Para o D (etapa 2):** o metabolismo nos regimes do bloco do corpo (ME-6). O `SUBCHAVES_CORPO` da bancada ainda não tem a `metabolismo`:
+  hoje a chave `"corpo"` da config a ligaria em todo braço com corpo, o G-HOJE do plano inclusive.

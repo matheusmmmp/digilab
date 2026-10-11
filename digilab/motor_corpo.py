@@ -354,7 +354,8 @@ class MotorCorpo:
         self._conferir_sincronia(f"antes de {acao.value}")
         super()._aplicar_acao_usuario(acao)
         deltas = self.corpo.t.dono.get(acao, {})
-        self._conferir_estimulo(acao.value, {DRIVE_DO_QUIMICO[q] for q in deltas})
+        # os drives que a acao de hoje muda (o combustivel do metabolismo nao e drive: so o corpo o tem)
+        self._conferir_estimulo(acao.value, {DRIVE_DO_QUIMICO[q] for q in deltas if q in DRIVE_DO_QUIMICO})
         if deltas:
             self.corpo.acao_dono(acao)
         self._sincronizar()
