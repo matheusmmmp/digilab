@@ -10,7 +10,11 @@ a mais:
   `aliviar` entra como candidato novo, no fim, com peso `w_vontade x vontade`, na mesma chamada de `rng.choices`;
 - **o alvo herdado** (`escolher_alvo`, o gancho do MotorMundo): no `aliviar`, `banheiro` com peso `w_banheiro_0 / S` e `aqui` com
   `w_aqui_0 / S` (S/4 e S: o pet nasce preferindo `aqui` 4 a 1), sorteados com o u do motor (inteiro em [0, 2^16), u / 2^16), a conta de
-  `random.choices` passo a passo. Na regra urgente, `aqui`. Nas outras acoes, None (o padrao do motor).
+  `random.choices` passo a passo. Na regra urgente, `aqui`. Nas outras acoes, None (o padrao do motor);
+- **a continuacao** (decisao do Matheus, 2026-10-11): com a ida ao banheiro pendente (`percepcao.alvo_pendente` "banheiro": o pet escolheu
+  o banheiro, nao chegou e segurou a vontade), o alvo e `banheiro` de novo, sem sorteio, como o instinto do mundo segue o `continuar` no
+  explorar. A regra urgente continua aliviando `aqui`. Se o pet escolher o `aliviar` de novo e uma decisao do cerebro (o tempo livre de
+  sempre); o instinto nao ganhou regra nova (os lobos rodam esta sonda e nao tem peso livre para outra regra).
 Dormindo (as regras de sono), nao alivia.
 
 O motor com o banheiro (o mapa, a necessidade, o limpador, o candidato `banheiro`) e a etapa 3, do A. O contrato do alvo: no `aliviar`, o
@@ -124,6 +128,8 @@ class PoliticaInstintoBanheiro(PoliticaInstintoMundo):
         tipos = tipos_do_alivio(candidatos)
         if self._ultima_regra == REGRA_ALIVIO_URGENTE:
             return candidatos[tipos.index("aqui")]
+        if percepcao is not None and percepcao.alvo_pendente == "banheiro":
+            return candidatos[tipos.index("banheiro")]                 # a continuacao: segue para o banheiro, sem sorteio
         herdado = {"banheiro": self.cb.w_banheiro_0, "aqui": self.cb.w_aqui_0}
         return candidatos[sortear_alvo([herdado[t] / self.S for t in tipos], u)]
 

@@ -50,7 +50,9 @@ corpo). Desligado, nada muda (nenhuma rng, nenhum registro, nenhuma chave em est
 - o banheiro e um retangulo de celulas da casa (`ConfigBanheiro.celulas_x`, `celulas_y`), sem parede;
 - `aliviar` (AcaoPet.ALIVIAR) e uma acao com alvo: o motor sorteia o u da rng `alvo` e oferece dois candidatos, `banheiro` (o ponto do
   banheiro mais perto do pet) e `aqui` (onde o pet esta); sem o gancho do cerebro, `aqui`. O pet anda ate o alvo, com o custo de energia
-  da distancia, e alivia onde parou (o banheiro alem do alcance de uma decisao: chegou tarde, alivia no caminho). Com a vontade acima de
+  da distancia. Com `aqui`, alivia onde esta. Com `banheiro`, alivia ao chegar; o banheiro alem do alcance de uma decisao NAO e mais
+  alivio no caminho (a continuacao, decisao do Matheus de 2026-10-11): o pet segura a vontade e o alvo fica pendente, como o `continuar`,
+  ate chegar, ate o cerebro trocar de acao ou de alvo, ou ate a urgencia (registro `idas_banheiro`). Com a vontade acima de
   `limiar_urgente` (a regra urgente do instinto), o alvo tem de ser `aqui` (falha alto);
 - a necessidade e um objeto do `Mundo` (fora da percepcao `vistos`: o pet a sente pelo corpo), deixada onde o pet aliviou. O limpador
   (`ConfigBanheiro.limpador`) a recolhe na hora quando o alivio termina dentro do banheiro; fora dele, nada. O corpo recebe o
@@ -676,6 +678,7 @@ class MotorMundo(MotorFrutas):
             self.alivios: list[dict] = []              # o contrato da bancada: tick, dentro, urgente, alvo, distancia, recolhido
             self.recolhas: list[dict] = []             # o limpar do dono: tick, zona, ids recolhidos
             self.alivios_dentro = 0
+            self.idas_banheiro: list[dict] = []        # a continuacao: cada aliviar com o alvo `banheiro` que segurou a vontade
 
         # dois pets, etapa 3: o grupo e o id do pet nele (o Grupo poe na entrada); fora do grupo, nada disto e usado e a vida e a de hoje
         self._grupo = None
@@ -831,7 +834,8 @@ class MotorMundo(MotorFrutas):
         elif acao is AcaoPet.BRINCAR:
             cands += [Alvo("bola", p.x + dx, p.y + dy, i) for i, tipo, dx, dy, _ in p.vistos if tipo == "bola"]
         elif acao is AcaoPet.ALIVIAR and self.cbh.ligada:
-            # o banheiro (secao 4): o ponto do banheiro mais perto e onde o pet esta; sem `continuar` (o pet alivia onde parou)
+            # o banheiro (secao 4): o ponto do banheiro mais perto e onde o pet esta. Sem candidato `continuar`: a ida pendente ao banheiro
+            # (a continuacao) aparece na percepcao (`alvo_pendente`); o ponto e recalculado da posicao nova, na direcao da ida
             return [Alvo("banheiro", *ponto_do_banheiro(p.x, p.y, self.cbh, cm)), Alvo("aqui", p.x, p.y)]
         else:
             raise ValueError(f"acao sem alvo: {acao}")
@@ -957,6 +961,9 @@ class MotorMundo(MotorFrutas):
                         "chegou": chegou, "comeu": comeu, "brincou_com_bola": bola}
         elif acao is AcaoPet.ALIVIAR:
             alvo, ocorrido = self._aliviar(tick, x0, y0)
+            if self._grupo is not None:                      # como os outros ramos: o alvo do aliviar nunca e comida (sem disputa)
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
+                                     "social": None, "comeu": None}
         else:
             self._pendente = None
             if self._grupo is not None:
@@ -967,8 +974,13 @@ class MotorMundo(MotorFrutas):
 
     def _aliviar(self, tick: int, x0: int, y0: int) -> tuple[Alvo, dict]:
         """O `aliviar` (secoes 3 e 4): o alvo (`banheiro` ou `aqui`, pelo gancho do cerebro com o u da rng `alvo`; sem gancho, `aqui`),
-        o andar ate ele com o custo de energia, e o alivio onde o pet parou. Dentro do banheiro com o limpador, a necessidade e recolhida na
-        hora; senao ela fica no chao (um objeto do Mundo). A vontade e o cheiro sao estimulos do corpo (o MotorCorpo, pelo `ocorrido`)."""
+        o andar ate ele com o custo de energia, e o alivio. Dentro do banheiro com o limpador, a necessidade e recolhida na hora; senao ela
+        fica no chao (um objeto do Mundo). A vontade e o cheiro sao estimulos do corpo (o MotorCorpo, pelo `ocorrido`).
+
+        A continuacao (decisao do Matheus, 2026-10-11): com o alvo `banheiro`, o pet que nao chega ao banheiro nesta decisao NAO alivia:
+        segura a vontade, e o alvo fica pendente, como o `continuar` das outras acoes (a percepcao mostra `alvo_pendente` "banheiro" na
+        decisao seguinte; outra acao desfaz). Nada vai ao corpo alem do andar; a ida fica em `idas_banheiro`. Com o alvo `aqui`, alivia
+        onde esta. A regra urgente continua aliviando `aqui` (o acidente), com ou sem a ida pendente."""
         cbh, cm = self.cbh, self.cmf
         if not cbh.ligada:
             raise BanheiroSemMundo("aliviar sem o banheiro (ConfigBanheiro.ligada)")
@@ -996,10 +1008,22 @@ class MotorMundo(MotorFrutas):
         energia_antes = e.energia
         if desloc:
             self._estado = replace(e, energia=max(0.0, e.energia - cm.custo_energia_por_subunidade * desloc))
-        self._pendente = None
         dentro = no_banheiro(x1, y1, cbh, cm)
-        recolhido = dentro and cbh.limpador
         tm = self._tm(tick)
+        if alvo.tipo == "banheiro" and not dentro:
+            # a continuacao: segura a vontade; o alvo do banheiro fica pendente para a proxima decisao
+            continuacao = self._pendente is not None and self._pendente["acao"] is AcaoPet.ALIVIAR
+            self._pendente = {"acao": AcaoPet.ALIVIAR, "alvo": alvo}
+            restante = distancia(bx - x1, by - y1)
+            self.idas_banheiro.append({"tick": tm, "de": (x0, y0), "para": (x1, y1), "distancia": dist_banheiro, "restante": restante,
+                                       "continuacao": continuacao})
+            ocorrido = {"acao": AcaoPet.ALIVIAR.value, "u": u, "alvo": alvo.para_dict(), "de": (x0, y0), "para": (x1, y1),
+                        "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia, "chegou": False,
+                        "comeu": None, "brincou_com_bola": False, "alivio": None,
+                        "segurou": {"distancia": dist_banheiro, "restante": restante, "continuacao": continuacao}}
+            return alvo, ocorrido
+        self._pendente = None
+        recolhido = dentro and cbh.limpador
         necessidade = None if recolhido else self.mundo.deixar_necessidade(x1, y1, tm)["id"]
         self.alivios.append({"tick": tm, "dentro": dentro, "urgente": urgente, "alvo": alvo.tipo, "distancia": dist_banheiro,
                              "recolhido": recolhido})
@@ -1142,7 +1166,8 @@ class MotorMundo(MotorFrutas):
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
                 **({} if not self.cbh.ligada else {
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
-                    "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas})}
+                    "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
+                    "idas_banheiro": self.idas_banheiro})}
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos

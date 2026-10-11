@@ -3585,3 +3585,44 @@ sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás das chaves), a 
     familiaridade é refeita da percepção.
 - **Fica para depois:** a bancada do grupo (etapa 5, D), que tem de repassar o `consequencia_mundo` ao cérebro para o modelo contar as
   idas; a audição e o cheiro como entradas (etapa 8); o modelo decidindo (degrau 3).
+
+## V2, BANHEIRO-CONTINUAR — a ida ao banheiro continua, e o `_tick_social` do aliviar no grupo (2026-10-11, decisão do Matheus) — GATES PASSAM
+
+Pedido do Gerente depois do #265. Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram `digilab/mundo.py`,
+`digilab/instinto_banheiro.py`, o G-MEC antigo de `tests/test_banheiro_mundo.py` e os testes novos. `engine.py`, os lobos, o corpo, a
+bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A continuação** (atrás da chave do banheiro):
+  - com o alvo `banheiro` fora do alcance, o pet anda o alcance e segura a vontade: nada vai ao corpo além do andar, e não há necessidade
+    nem registro em `alivios`;
+  - o alvo fica pendente, como o `continuar`, e a percepção mostra `alvo_pendente` "banheiro" na decisão seguinte;
+  - a ida segue se o cérebro escolher `aliviar` de novo; outra ação a desfaz, e com `aqui` o pet alivia onde está;
+  - a regra urgente segue aliviando `aqui`, com ou sem a ida pendente;
+  - o registro novo é `idas_banheiro`, no resumo do mundo físico. O `estado()` e o contrato dos `alivios` não mudam.
+- **O instinto** escolhe `banheiro` sem sorteio com a ida pendente, fora da urgência. Não ganhou regra nova (os lobos rodam a sonda dele e
+  não têm peso para outra tabela). **Os lobos não leem a ida:** sorteiam o alvo pelos pesos de sempre.
+- **O `_tick_social` do aliviar no grupo:** o ramo do ALIVIAR passa a preenchê-lo como os outros ramos (o alvo do aliviar, sem `social` e
+  sem `comeu`). Antes, a disputa e o toque do fim do tick liam o de uma decisão velha.
+- **Gates** (`tests/test_banheiro_continuar.py`):
+  - **G2:** a chave desligada é a vida de hoje (os gabaritos de sempre, na suíte). Com o banheiro ligado, as 34 vidas de
+    `tests/gabaritos/banheiro_ligado_antes.json`, gravado com o código de antes (`tests/gabarito_banheiro_ligado.py`):
+    - sem alívio no caminho, a vida inteira sai igual;
+    - com um, tudo sai igual até a primeira decisão que aliviava no caminho, e nela o pet está no mesmo ponto, com o mesmo alvo, segurando;
+    - no grupo, o corte é o primeiro desses ticks entre os dois pets;
+  - **G-MEC:**
+    - a ida de três decisões (60, 60, 17) alivia dentro só na chegada;
+    - a vontade sobe enquanto o pet segura e zera ao aliviar;
+    - `aqui` no meio alivia onde está; outra ação desfaz a ida;
+    - a urgência alivia `aqui`;
+    - ao alcance, nada muda;
+  - **o instinto** segue a ida, e a urgência vence;
+  - **G1:** o replay com a ida que continua (o instinto) e com os lobos aprendendo;
+  - **o grupo:** todo pet que decidiu tem o `_tick_social` do tick, com o alvo do aliviar.
+- **Fumaça descritiva** (a do #265, sementes 101…505, 7 dias, atencioso no comedouro, com o carinho):
+
+  | braço | alívios dentro, antes → depois | idas que seguraram | continuações | como as idas acabaram |
+  |---|---|---|---|---|
+  | P0 (instinto) | 1 → 0 | 6 | 1 | 5 trocaram de ação (4 comeram, 1 ficou ociosa) |
+  | P1 (lobos, T3) | 0 → 0 | 2 | 0 | 1 trocou de ação, 1 aliviou `aqui` |
+
+  A continuação sozinha não leva o pet ao banheiro: no meio da ida ele quase sempre come a fruta à vista. O P1 também passou a escolher o
+  banheiro menos (12 alívios com esse alvo antes, 2 idas agora).

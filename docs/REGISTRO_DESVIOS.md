@@ -4321,3 +4321,37 @@ e na tarefa. Nenhuma run, nenhum código.
 - **A afinidade** usa o intervalo entre duas decisões do pet: "dividida" quando o pet comeu na decisão anterior e viu o outro comer nesse
   intervalo, sem toque de disputa novo; "perdida" é cada toque novo de `disputa_perdeu`. A `disputa_ganhou` não entra no saldo.
 - **O relógio dos eventos** é o da hora do dia, como o do N6, porque a percepção social só dá a idade.
+
+## 2026-10-11 — BANHEIRO-CONTINUAR (worker A): a ida ao banheiro continua, e o `_tick_social` do aliviar no grupo
+
+- **A continuação é do motor, e a escolha continua do cérebro.** Com o alvo `banheiro` fora do alcance de uma decisão, o pet anda o alcance
+  e segura a vontade: nada vai ao corpo além do andar, nenhuma necessidade, nenhum registro em `alivios`. O alvo fica pendente (o
+  `_pendente` de sempre). O motor não força a próxima ação: a ida só segue se o cérebro escolher `aliviar` de novo, como o `continuar` só
+  existe se a ação se repete. Outra ação desfaz a ida, e a vontade continua no corpo.
+- **Sem candidato `continuar` no aliviar.** Os candidatos seguem `banheiro` e `aqui`. A ida pendente chega ao cérebro pela percepção
+  (`alvo_pendente` "banheiro"), e o ponto do banheiro é recalculado da posição nova, na direção da ida. Um terceiro candidato quebraria o
+  contrato dos lobos (`tipos_do_alivio`: exatamente os dois), que não mudam.
+- **O instinto segue a ida.** Com a ida pendente e fora da urgência, o alvo é `banheiro` sem sorteio, como o instinto segue o `continuar`
+  no explorar. O instinto não ganhou regra nova para repetir o `aliviar`: os lobos rodam a sonda dele, e uma regra nova pediria uma tabela,
+  que não cabe no teto de mil pesos (998 com o banheiro).
+- **Os lobos não leem a ida pendente.** No `aliviar` eles sorteiam o alvo pelos pesos aprendidos (no prior, S/4 contra S). Com a ida
+  pendente, o P0 com lobos e o P0 com o instinto deixam de escolher o mesmo alvo. Sem a ida pendente, a identidade do prior continua
+  (o teste do #265 não muda). Um peso a mais (999) caberia, se o Matheus quiser os lobos lendo a ida.
+- **A urgência alivia `aqui`,** com ou sem a ida pendente (a regra urgente do instinto e dos lobos, sem mudança). O cérebro que pedir o
+  banheiro na urgência continua falhando alto.
+- **O registro novo:** `idas_banheiro`, uma entrada por decisão que segurou (de, para, distância antes, restante, se continuava uma ida),
+  no resumo do mundo físico (o G1 compara). O `estado()` e o contrato dos `alivios` da bancada não mudam.
+- **O gabarito do banheiro ligado mudou, e o antes foi gravado** (`tests/gabaritos/banheiro_ligado_antes.json`, 32 casos, 34 vidas, com o
+  código da main b09793a). Nas vidas sem alívio no caminho, tudo sai igual byte a byte. Nas outras, tudo é igual até a primeira decisão que
+  aliviava no caminho, e nela o pet está no mesmo ponto, com o mesmo alvo, segurando. No grupo o corte é o primeiro desses ticks entre os
+  dois pets, porque o mundo é de todos e a ida de um muda a vida do outro.
+  - A primeira versão do gabarito cortava por pet e falhou no grupo: o pet B, sem ida nenhuma, mudou depois da ida do A.
+  - Foi regravada com o código antigo, numa worktree temporária no commit do gabarito (0df3631).
+- **O `_tick_social` do aliviar no grupo:** o ramo do ALIVIAR não o preenchia. A disputa e o toque do fim do tick liam o de uma decisão
+  velha (o `_no_tick` dava None) e caíam no `_pendente` e na posição depois do passo. Agora o ramo preenche como os outros, com o alvo do
+  aliviar, sem `social` e sem `comeu`. Uma comida pendente do começo da decisão (`pendente_antes`) passa a valer para a disputa, como nas
+  decisões sem alvo. O grupo com o banheiro já rodava (com o corpo, no G1 do #265), então foi correção, não falha alta.
+- **A fumaça descritiva (a do #265, sementes dos testes): os alívios dentro caem de 1 para 0 no P0.** As idas quase sempre se desfazem
+  porque o pet troca de ação no meio: em 5 das 5 idas do P0, ele come a fruta à vista (4) ou fica ocioso (1). Com os números de hoje, a
+  continuação sozinha não leva o pet ao banheiro. O P1 escolhe o banheiro menos (12 alívios com esse alvo antes; 2 idas agora). A leitura
+  provável é que o banheiro deixou de dar alívio na decisão que o escolhe e ficou só com o custo do andar.
