@@ -1231,6 +1231,11 @@ class ConfigLobos:
     modelo_outros: bool = False              # PROPOSTO: a chave do modelo dos outros (so registrado)
     janela_social_ticks: int = 240           # PROPOSTO, SEM FONTE propria: o "recente" do viu comer e do toque (a janela da informacao)
     fator_familiaridade: int = 16            # PROPOSTO, SEM FONTE: S/64 por decisao, a media movel do tempo a vista (~16 h)
+    # --- a rota do canal do humor no mundo fisico (CANAIS-REFORCO; decisao do Matheus, 2026-10-11) ---
+    # A decisao de comer le a fruta madura a vista (um peso por fruta, prior 0, a FRUTA-NO-CENARIO parte B no mundo fisico), em toda
+    # regra em que comer e candidato. Sao os pesos que leem a identidade da fruta: com os canais, o canal do humor (a E2) vai a eles.
+    # Desligada: a vida de hoje (e, com os canais, comer a fruta que mexe no humor falha alto, como antes)
+    presenca_fruta_mundo: bool = False       # PROPOSTO: a chave
 
     @property
     def escala(self) -> int:

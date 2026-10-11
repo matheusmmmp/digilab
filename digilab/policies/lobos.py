@@ -162,6 +162,7 @@ PARAMETROS_LOBOS_DOIS_PETS: dict[str, tuple[str, str]] = {
     "modelo_outros": ("PROPOSTO", "dois_pets.md, secao 8: o modelo dos outros, so registrado ate o degrau 3"),
     "janela_social_ticks": ("PROPOSTO", "o 'recente' do viu comer e do toque: 240, a janela da informacao do N5, SEM FONTE propria"),
     "fator_familiaridade": ("PROPOSTO", "dois_pets.md, secao 8: a familiaridade com decaimento, S/64 por decisao, SEM FONTE"),
+    "presenca_fruta_mundo": ("PROPOSTO", "a rota do canal do humor no mundo fisico (CANAIS-REFORCO), decisao do Matheus 2026-10-11"),
 }
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
                     **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS}
@@ -575,6 +576,15 @@ def entradas_sociais(social, janela: int) -> list[float]:
     return x
 
 
+def presenca_no_mundo(pm) -> tuple[float, ...]:
+    """A presenca de cada fruta no mundo fisico, na ordem de FRUTAS: 1.0 com uma fruta madura do tipo a vista (nos `vistos` da percepcao
+    do mundo; a podre nao conta), 0.0 sem. O mesmo papel do Observacao.frutas_cenario no mundo das frutas."""
+    if pm is None:
+        raise RuntimeError("presenca da fruta no mundo fisico sem Observacao.mundo")
+    tipos = {tipo for _, tipo, *_ in pm.vistos}
+    return tuple(1.0 if f in tipos else 0.0 for f in FRUTAS)
+
+
 class ModeloOutros:
     """Dois pets, etapa 4 (docs/futuro/dois_pets.md, secao 8; cognicao_social.md, secao 3): o modelo dos outros, SO REGISTRADO. Nada daqui
     entra na decisao (degrau 3, por adendo). Por pet conhecido, tres variaveis separadas, sem rotulo e sem soma entre elas:
@@ -705,6 +715,7 @@ class Aprendiz:
         self._prior_comer_fruta = dict(prior_comer_fruta or {})
         self._pesos_comer_fruta = dict(self._prior_comer_fruta)
         self._presenca_na_decisao: tuple = ()         # Observacao.frutas_cenario da ultima decisao (na ordem de FRUTAS)
+        self._presenca_mundo = False                  # o mesmo termo no mundo fisico, pela fruta madura a vista (presenca_fruta_mundo)
         # N6: a memoria de episodios (None = desligada) e o relogio dela; N7: o peso compartilhado do pedido (None = desligado)
         self._memoria: MemoriaEpisodios | None = None
         self._tick_na_decisao = 0
@@ -851,7 +862,7 @@ class Aprendiz:
             "decisao": {a: ativacao([w - w0 for w, w0 in zip(pesos[a], prior[a])], x, self._escala) for a in candidatos},
             "memoria_emocao": self.memoria.contribuicao(candidatos),
         }
-        if grupo == REGRAS_MUNDO[1] and self._pesos_comer_fruta and AcaoPet.COMER in candidatos:
+        if (grupo == REGRAS_MUNDO[1] or self._presenca_mundo) and self._pesos_comer_fruta and AcaoPet.COMER in candidatos:
             # FRUTA-NO-CENARIO: comer na regra das frutas soma (w_f / S) x presenca_f das frutas no cenario; no prior (w_f = 0) o termo
             # e 0.0 exato e o peso efetivo e o do instinto, byte a byte
             termo = 0.0
@@ -1687,6 +1698,19 @@ class PoliticaLobos(Aprendiz):
                 raise ValueError(f"{self.n_pesos()} pesos com as entradas sociais, teto {cl.maximo_pesos}")
         if cl.modelo_outros:
             self._modelo = ModeloOutros(cl.escala, cl.fator_familiaridade)
+        # a rota do canal do humor no mundo fisico (CANAIS-REFORCO; Matheus, 2026-10-11): a decisao de comer le a fruta madura a vista,
+        # um peso por fruta, prior 0, em toda regra em que comer e candidato (a FRUTA-NO-CENARIO parte B no mundo fisico). Sao os pesos
+        # que leem a identidade da fruta: o canal do humor vai a eles (ROTA_CANAIS), e o escalar tambem, como no mundo das frutas
+        if type(cl.presenca_fruta_mundo) is not bool:
+            raise TypeError(f"ConfigLobos.presenca_fruta_mundo precisa ser bool: {cl.presenca_fruta_mundo!r}")
+        if cl.presenca_fruta_mundo:
+            if not fisico:
+                raise ValueError("ConfigLobos.presenca_fruta_mundo sem o mundo fisico (cfg_mundo ligada)")
+            self._presenca_mundo = True
+            self._prior_comer_fruta = {f: 0 for f in FRUTAS}
+            self._pesos_comer_fruta = dict(self._prior_comer_fruta)
+            if self.n_pesos() >= cl.maximo_pesos:
+                raise ValueError(f"{self.n_pesos()} pesos com a presenca da fruta, teto {cl.maximo_pesos}")
 
     @property
     def tem_corpo(self) -> bool:
@@ -1872,7 +1896,7 @@ class PoliticaLobos(Aprendiz):
             self._modelo.decisao(obs.social, obs.vetor_estado[7])
         x = self.percepcao(obs)
         regra, candidatos = impulsos(self._instinto, obs)
-        self._presenca_na_decisao = obs.frutas_cenario
+        self._presenca_na_decisao = presenca_no_mundo(obs.mundo) if self._presenca_mundo else obs.frutas_cenario
         if self._peso_pedido is not None:
             # N7: o pedido vigente (campo do mundo, chat A); sem o campo na Observacao, nenhum pedido
             self._pedido_na_decisao = tuple(getattr(obs, "pedido_frutas", ()) or ())
@@ -1925,9 +1949,10 @@ class PoliticaLobos(Aprendiz):
                                               "pedido_decidiu": alt is not acao}
                 if self._aprende:
                     self._registro_decisao["pedido"] = {"Pd": arred(p * self._escala)}
-        if (self._aprende and self._pesos_comer_fruta and regra == REGRAS_MUNDO[1] and AcaoPet.COMER in candidatos):
+        if (self._aprende and self._pesos_comer_fruta and (regra == REGRAS_MUNDO[1] or self._presenca_mundo)
+                and AcaoPet.COMER in candidatos):
             # FRUTA-NO-CENARIO: a entrada de cada fruta (presenca x S) para o credito da decisao de comer (so pela consequencia)
-            self._registro_decisao["presenca"] = {f: arred(p * self._escala) for f, p in zip(FRUTAS, obs.frutas_cenario)}
+            self._registro_decisao["presenca"] = {f: arred(p * self._escala) for f, p in zip(FRUTAS, self._presenca_na_decisao)}
         return acao
 
     def _pesos_das_frutas(self, presentes: list[str], incentivos: dict, memoria: dict | None,

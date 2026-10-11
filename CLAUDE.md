@@ -3613,3 +3613,28 @@ sementes dos testes. Mudaram `experiments/bancada_v2.py`, o teste do grupo e o d
   - o modelo por dia nas medidas, e o do último dia é o do fim;
   - a run do plano pede a montagem completa e falha alto com os canais; sem o nó, valida;
   - os gates de antes (o pet sozinho é a vida de hoje, as vezes, as quedas, a troca, o orçamento, as sociais).
+
+## V2, CANAL-FRUTA-MUNDO — a rota do canal do humor no mundo físico (2026-10-11, decisão do Matheus) — GATES PASSAM
+
+A falha que o D guardou no nó `canais_fruta_mundo` (o A só, semente 505): com os canais, comer a fruta que mexe no humor falhava alto no
+cérebro do mundo físico, porque o canal do humor (a E2) vai aos pesos que leem a identidade da fruta e o cérebro do mundo não tinha nenhum.
+Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás da chave) e a `ConfigLobos`. `engine.py`, o
+mundo, o grupo, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave:** `ConfigLobos.presenca_fruta_mundo` (desligada, PROPOSTA; só no mundo físico, fora dele falha alto).
+- **A rota:** a decisão de comer lê a fruta madura à vista (`lobos.presenca_no_mundo`, pelos `vistos` da percepção do mundo; a podre não
+  conta), um peso por fruta, **prior 0**, em toda regra em que comer é candidato. É a FRUTA-NO-CENARIO parte B no mundo físico, com os
+  mesmos pesos (`pesos_comer_fruta`) e a mesma regra de aprendizado (`atualizar_comer_fruta`, só pela consequência). Pela `ROTA_CANAIS`, o
+  canal do humor vai a eles; no escalar, o sinal inteiro, como no mundo das frutas.
+- **Os pesos:** +3; o degrau 1 dos dois pets (o alvo aprendido e as entradas sociais) fica em **990**, abaixo de mil.
+- **Um conserto no caminho:** o registro da decisão lia a presença de `obs.frutas_cenario` e passou a ler a mesma presença do peso efetivo
+  (no mundo das frutas são o mesmo valor; nada muda lá).
+- **Gates** (`tests/test_canal_fruta_mundo.py`, 10):
+  - **G2:** a chave desligada é a vida de hoje (os gabaritos, na suíte); **com a chave e os canais no mundo `iguais`** (o humor da fruta é
+    zero), **o P0 e o P1 da montagem completa saem byte a byte** iguais aos de sem a chave, com os pesos novos em zero e o pet comendo fruta;
+  - **a conta exata:** a presença pela percepção; o termo no peso efetivo na `fruta_no_cenario` e na `fome_moderada`; um passo pelo canal do
+    humor só na fruta presente, e o canal do corpo não mexe na presença;
+  - **a falha real do D:** sem a chave, o A só da semente 505 falha alto (CANAIS-REFORCO); com ela roda (o G1 do grupo, conferido pela
+    bancada), o peso do tipo ruim desce e os outros ficam em zero;
+  - a contagem dos pesos e as falhas altas da chave.
+- **Para o D:** destravar o nó `canais_fruta_mundo` é ligar a chave nos braços do mundo físico com os canais (a montagem completa), pela
+  chave `"lobos"` da config ou na bancada do grupo.

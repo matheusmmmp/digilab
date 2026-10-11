@@ -4365,3 +4365,17 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
   vivido, como os pesos do alvo. O do último dia é o do fim da vida (teste).
 - **O ME-6 fica para depois.** Quando o metabolismo do B entrar, o nó dos canais vai para o bloco do corpo, como o Gerente indicou; nada
   disso entrou aqui.
+
+## 2026-10-11 — CANAL-FRUTA-MUNDO (worker B): a rota do canal do humor no mundo físico
+
+- **A rota escolhida:** a presença da fruta na decisão de comer, os pesos da FRUTA-NO-CENARIO parte B. Era o único peso que lê a
+  identidade da fruta e cabe no mundo físico, onde o motor (e não o cérebro) escolhe qual comida comer. Um peso por fruta, compartilhado
+  entre as regras (três pesos e não nove), porque o degrau 1 dos dois pets já estava em 987.
+- **Em toda regra em que comer é candidato**, e não só na `fruta_no_cenario` como no mundo das frutas: no mundo físico o pet come também
+  pela fome moderada e pela fome urgente (o `instinto_mundo`). Na urgente o comer é o único candidato e nada aprende (o fator é zero).
+- **A presença é a fruta madura nos `vistos`** da decisão. A fruta comida pelo cheiro, fora da visão, chega com a presença em zero: o canal
+  do humor dessa decisão vai aos pesos com entrada zero e não muda nada, como a presença do mundo das frutas sem fruta no cenário.
+- **No escalar a presença aprende com o sinal inteiro**, como no mundo das frutas. A chave não exige os canais.
+- **O conserto do registro:** o registro lia `obs.frutas_cenario`, que no mundo físico é zero, e a presença nunca aprendia. Passou a ler o
+  valor do peso efetivo da decisão; no mundo das frutas é o mesmo `obs.frutas_cenario`.
+- **A bancada não mudou:** o nó `canais_fruta_mundo` continua; destravá-lo (ligar a chave com a montagem completa no mundo físico) é do D.
