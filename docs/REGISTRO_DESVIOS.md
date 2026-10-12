@@ -4556,3 +4556,38 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
 - **O que a fumaça mostrou** (descritivo, 2 dias, só encanamento): a fração com falta foi 0,000 no ¼, 0,000 no ½ e 0,389 no 1. A escolha
   saiu "não fechou" no ½. Em 2 dias o combustível parte de C/2, e a vida de 14 dias pode ser outra. Fica como aviso: a grade pode
   saltar de 0 para acima do teto da faixa sem nenhum ponto dentro dela.
+
+## 2026-10-12 — MUNDO-CALIBRACAO (worker A): a calibração do mundo físico
+
+Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na A1.9); autorizada pelo Matheus em 2026-10-12. Interpretações:
+- **O piloto é o da A1.4 (decidida), não o do pedido.** O Gerente escreveu "P1 e P1ac, 24 vidas por unidade", que é o texto da seção 6
+  antes da PMF-2r. O P1ac saiu com o adendo 1. Rodou P1, P0^ac e P1^ac (36 vidas por unidade), com o N sobre P0 − P1 em malha fechada.
+- **O adendo dos números** entrou como **A1.9**, dentro do adendo 1. A seção 6 diz "adendo 1", e o adendo 1 já existia (a PMF-2r).
+- **As chaves que o plano não pede ficam desligadas,** conferidas em código para o P0, o P0z e o P1 (`conferir_desligadas`, gravado no
+  `meta.json`):
+  - o banheiro, o corpo e o metabolismo, os gestos e o grupo;
+  - o alvo aprendido, as entradas sociais, o modelo dos outros e a `presenca_fruta_mundo`;
+  - os pesos pela janela, a rede de si, o julgamento da fruta, o calendário, a informação e o pedido.
+  - **Por que a `presenca_fruta_mundo` fica fora:** no mundo "iguais", o humor da fruta é zero, e os canais rodam sem ela (#269).
+- **O "o P1 ganha" do G-MF1r é o limite inferior do IC95 > 0.** O poder simulado usa o teste t unilateral a 0,025, a mesma conta
+  (`poder_simulado`) do adendo 2 da V1, com a semente 4242 do bootstrap.
+- **O poder dos secundários (só relato):**
+  - é dado a α = 0,01 (o primeiro passo do Holm com cinco gates) e a α = 0,05 (o último);
+  - **o Δ do G-MF3r na privação** é ½ × (P0z − P0) em privação no `m` escolhido. O plano não o dá; é leitura minha, e não decide nada;
+  - o G-PERM, o G-OPORT e o G-DIST não foram calculados: o plano não dá o Δ das inclinações, e o layout afastado não roda no piloto.
+- **O custo do bloco do afastado na validação** foi estimado pelo P0 e pelo P1 do layout padrão.
+- **A sonda da deriva** (só descritiva) é a da validação única do experimento maior (64 estados × 200 amostras, semente 9001). O plano
+  não a fixa.
+- **A run usou 8 processos.** Cada vida é independente e determinista, e o replay do disco foi conferido em todas. O P0z do piloto é
+  refeito só como origem dos acoplados: o log dele tem de ser o da grade, byte a byte (falha alto), e não é gravado de novo.
+- **Corrigido na bancada, a dominância no mundo físico (achado da fumaça).** O `MotorMundo` avisa `fruta_comida` em todo consumo de
+  fruta, inclusive no "achou e comeu" do explorar. O cérebro só usa a E2 (o humor no sinal) no comer (`lobos.consequencia_mundo`; no
+  corpo, `_creditar_corpo`).
+  - **O defeito:** a medida da dominância punha o humor também nesse explorar. Com os canais, a conferência falhava alto.
+  - **A correção:** `comeu_fruta_e2` (a fruta comida e a ação COMER), nas duas contas, a do vetor e a do corpo. O `_Registro` passa a
+    anotar a ação de cada passo.
+  - **O que muda:** só o descritivo da dominância nos explorar que comeram fruta, no mundo físico. Fora dele só o comer come fruta, e
+    nada muda.
+  - **O teste:** `tests/test_calibracao_mundo.py`, com a vida da fumaça que falhava. Ele falha com a regra antiga.
+- **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
+  `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).

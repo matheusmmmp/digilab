@@ -445,3 +445,51 @@ segue o cheiro e não forrageia (definições, seção 5).
 - o R-6: o G-MF3r usa a privação, agora em malha fechada.
 
 Isso vale se a PMF-2r for aceita.
+
+### A1.9 A calibração do mundo e o N (2026-10-12, antes de qualquer validação)
+
+Run autorizada pelo Matheus em 2026-10-12, pela seção 6 e pela A1.4. Uma vez, nas bases 31101…31505 (K = 4, prefixo `mundo`, 20
+unidades), com o código em `1a748cd` (árvore limpa). Números de `artifacts_v2_mundo/calibracao/` (`resultado.json`, `medidas.json`,
+`meta.json`); relatório em `docs/RESULTADO_V2_CALIBRACAO_MUNDO.md`. **Fica congelado aqui; a validação (32101…32505) não rodou e precisa de
+outro sim do Matheus.**
+
+**O mundo: `m` = 1** (o `mult_queda` da `ConfigMundo`). A premissa (P0z − P0 em `D_FE`, por unidade, média das 12 células, bootstrap de
+10.000 com a semente 4242):
+
+| `m` | média | IC95 | passa |
+|---|---|---|---|
+| ½ | −0,00006 | [−0,0085; +0,0087] | não |
+| **1** | **+0,0154** | **[+0,0093; +0,0209]** | **sim** |
+| 2 | +0,0196 | [+0,0127; +0,0264] | sim |
+
+Pela regra (o menor `m` que passa), **`m` = 1**: o `p_queda` da tarefa, sem mudança.
+
+**O Δ: `Δ_MF` = 0,007675785900293976** (½ × 0,015352 em `D_FE`).
+
+**O N: K = 8 por base, N = 40.** O poder simulado no G-MF1r: o bootstrap das diferenças P0 − P1 do piloto, centradas e deslocadas para
+`Δ_MF`, com 2.000 réplicas por K e o teste t unilateral a 0,025 (o limite inferior do IC95 > 0), semente 4242:
+
+| K | 4 | 5 | 6 | 7 | **8** | 9 | 10 |
+|---|---|---|---|---|---|---|---|
+| poder | 0,495 | 0,577 | 0,668 | 0,747 | **0,802** | 0,850 | 0,889 |
+
+**O poder dos secundários no N = 40, só relato:**
+- **G-MF2r** (P0^ac − P1^ac em `D_FE`, com `Δ_MF`): 0,915 a α = 0,01 (o primeiro passo do Holm com cinco) e 0,987 a α = 0,05.
+- **G-MF3r** (P0 − P1 em privação): **subpotenciado**, 0,027 a α = 0,01 e 0,114 a α = 0,05.
+  - O plano não dá o Δ na escala da privação. O relato usa ½ × (P0z − P0) em privação no `m` escolhido, 0,0044, por analogia com o
+    `Δ_MF`; é leitura registrada.
+- **G-PERM, G-OPORT e G-DIST:** não calculados. O plano não dá o Δ das inclinações, e o layout afastado não roda no piloto.
+
+**O custo** (CPU por vida, com a gravação, o replay do disco e a medição; Python 3.13.0, Windows):
+
+| braço | P0 | P0z | P1 | P0^ac | P1^ac |
+|---|---|---|---|---|---|
+| s por vida | 6,63 | 3,86 | 7,93 | 6,29 | 7,87 |
+
+- **Esta calibração:** 2.160 vidas, 2,17 h de CPU, 30 min de parede com 8 processos.
+- **A validação com K = 8:** 2.400 vidas e 4,3 h de CPU. Com o bloco do layout afastado (A1.8), 3.360 vidas e 6,3 h de CPU (o afastado
+  pelo custo do P0 e do P1 no layout padrão), ~0,8 h de parede com 8 processos.
+- **O bloco do afastado fica.** A A1.8 o tira só se o custo passar do teto de tempo do Matheus; com 8 processos fica abaixo de 1 h.
+  Se o teto valer em CPU sequencial (~6 h), ele é o primeiro a sair, como a A1.8 já decidiu.
+
+**O piloto não é evidência sobre o P1** (seção 6). Os números dele ficam no relatório, marcados como piloto.

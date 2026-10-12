@@ -3830,3 +3830,29 @@ da calibração; só a fumaça nas sementes dos testes. Mudaram `experiments/ban
 - **A fumaça** (`experiments/configs/v2_corpo/fumaca_passo0.json`, NÃO canônica: sementes 101 e 202, 2 dias, 48 vidas em ~19 s; sem artefato).
 - **Testes:** `tests/test_bancada_metabolismo.py` (a grade, o m_gasto no corpo da vida, a regra na grade nova, o passo 0 inteiro numa
   fumaça pequena); o `NOS_PENDENTES` vazio em `tests/test_bancada_liga_gestos.py`.
+
+## V2, MUNDO-CALIBRACAO — a calibração do mundo físico (2026-10-12, `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6, A1.4 e A1.9) — m = 1, N = 40
+
+Autorizada pelo Matheus em 2026-10-12. Uma run nas bases 31101…31505 (K = 4, prefixo `mundo`, 20 unidades), 30 min com 8 processos.
+Números de `artifacts_v2_mundo/calibracao/` (as vidas ficam fora do git); relatório `docs/RESULTADO_V2_CALIBRACAO_MUNDO.md`.
+Interpretações em `docs/REGISTRO_DESVIOS.md`. **A validação (32101…32505) não rodou: precisa de outro sim.**
+- **Código:**
+  - `experiments/run_v2_calibracao_mundo.py`: a grade (P0 e P0z em `m` ∈ {½, 1, 2}), a regra do menor `m`, o piloto (P1, P0^ac e
+    P1^ac), o `Δ_MF`, o K pelo poder simulado e o custo. Toda vida tem o replay do disco conferido. O `meta.json` traz os sha256. A run
+    recusa uma pasta existente e as sementes da validação;
+  - as configs `experiments/configs/v2_mundo/calibracao.json` e `fumaca_calibracao.json` (a mesma, nas sementes dos testes);
+  - na bancada, a dominância só põe o humor (E2) na decisão de comer (`comeu_fruta_e2`). No mundo físico o motor avisa `fruta_comida`
+    também no explorar, e a conferência com os canais falhava alto (achado da fumaça);
+  - testes: `tests/test_calibracao_mundo.py` (10).
+- **O mundo: `m` = 1.** A premissa P0z − P0 em `D_FE`:
+  - em ½, −0,00006 [−0,0085; +0,0087]: não passa;
+  - em 1, **+0,0154 [+0,0093; +0,0209]**;
+  - em 2, +0,0196 [+0,0127; +0,0264].
+- **`Δ_MF` = 0,00768. K = 8 por base (N = 40),** com poder de 0,802 no G-MF1r. No relato:
+  - o G-MF2r tem poder de 0,92 a 0,99;
+  - o G-MF3r, na privação, fica subpotenciado (0,03 a 0,11).
+- **Custo:** 3,9 a 7,9 s de CPU por vida.
+  - A validação com K = 8: 4,3 h de CPU, ou 6,3 h com o layout afastado;
+  - com 8 processos, ~0,8 h de parede.
+- **O piloto não é evidência sobre o P1.** P0 − P1 em `D_FE` deu −0,012 [−0,020; −0,005].
+- **Achado:** o desempate do cheiro do #232 não está no motor. A calibração rodou com a ordem fixa.
