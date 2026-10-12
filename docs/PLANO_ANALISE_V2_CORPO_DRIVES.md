@@ -671,6 +671,28 @@ novo ao cérebro (ME-2), não muda a fome (ME-5) nem o descarte do estômago (ME
   escolhido fixo.
 - **O passo 0 entra no adendo 1 da 6.5,** junto do ponto da grade.
 
+**A3.2b, a grade revista (2026-10-12, PROPOSTA; decisão PCD-9 na A3.5):**
+- **Por que rever:**
+  - **a montagem escalou só o basal:** a A3.2 diz "o gasto (basal e das atividades sobre o combustível)", mas a montagem do passo 0
+    (#273, `pontos_passo0`) escala só o basal. A `ConfigCorpo` não tinha o fator das atividades, e a falta dele é o nó `gasto_atividades`;
+  - **as atividades pesam tanto quanto o basal:** o B mediu (#271, descritivo, sementes dos testes, vidas de 3 dias, sem artefato no
+    repositório) que elas gastam ~240 por tick contra os 375 do basal, e que, com os números PROPOSTOS, a falta fica ligada em **18% a 58%
+    dos ticks**. Escalar só o basal deixa de fora quase 40% do gasto;
+  - **a fumaça do D bate com isso** (#273, semente 202, 2 dias): a fração do tempo acordado com falta foi de 0,30 a 0,39.
+- **A proposta:**
+  - **um multiplicador `m_gasto`**, o mesmo nos dois gastos sobre o combustível: o basal (375 acordado, 187 dormindo) e o de cada atividade
+    (o fator novo, o `gasto_atividades` da `ConfigCorpo`, do B);
+  - **a grade:** `m_gasto` ∈ **{¼, ½, 1}**. São 3 pontos e 480 vidas, como antes. O ponto 2 sai e o ¼ entra, porque em 1 a falta já
+    passa do teto da faixa nas medidas descritivas, e o 2 só aumenta a falta;
+  - **o arredondamento:** os gastos escalados são arredondados por `div_arred`, e o resto é guardado onde a conta não fecha (como a
+    vontade). O ½ do basal fica como o D montou (188 e 94); o ¼ fica 94 e 47;
+  - **o cansaço não muda:** as atividades continuam somando ao cansaço o número de hoje. O multiplicador mexe só no combustível (ME-1,
+    ME-3).
+- **A regra não muda:** a faixa [0,05; 0,30], o ponto mais perto de 1 pela |log₂|, o empate pelo menor gasto e o "não fechou" pelo centro
+  da faixa.
+- **O uso das medidas descritivas para escolher a grade** não lê o primário nem as sementes da calibração. Elas só mostram onde a grade
+  tem de estar.
+
 ### A3.3 O que sai a mais (descritivo)
 
 Por braço e célula:
@@ -687,4 +709,8 @@ O passo 0 soma 480 vidas às 1.440 da grade. O piloto e a validação não mudam
 
 ### A3.5 Decisões
 
-São as ME-1 a ME-7 da tarefa. Este adendo não abre decisão nova.
+São as ME-1 a ME-7 da tarefa, mais a PCD-9 (2026-10-12), aberta:
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PCD-9 | A grade do passo 0 (A3.2b) | **o mesmo `m_gasto` no basal e nas atividades, em {¼, ½, 1}**, com a regra da A3.2 sem mudança. As outras opções: **(b)** {½, 1, 2}, o exemplo do coordenador; **(c)** {¼, ½, 1, 2}, com 4 pontos e 640 vidas; **(d)** duas grades, uma por gasto, com 9 pontos e 1.440 vidas | **(b):** se o ½ ainda passar de 0,30, o passo 0 sai "não fechou" e o pet vive boa parte do tempo em falta. O ponto 2 quase certamente não serve. **(c):** custa 160 vidas a mais por um ponto que as medidas já descartam. **(d):** o triplo do custo, para separar duas fontes que a pergunta do plano não separa. **Só o basal, como está montado:** com ~240 de atividades fora da grade, o ponto escolhido não controla a falta |

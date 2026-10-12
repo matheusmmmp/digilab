@@ -4499,3 +4499,18 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
 - **O `tests/test_faixas_r17.py` (W-FAIXAS-R17) proibia as faixas do corpo em qualquer config.** A do passo 0 é a primeira config do
   plano do corpo. Agora a faixa de calibração (33101…33505, e a do mundo, 31101…31505) só pode aparecer nas configs do próprio plano (o
   campo `plano`); as de validação seguem proibidas em todas.
+
+## 2026-10-12 — W-PASSO0-GASTO (worker C): a grade do passo 0 com os dois gastos; a nota dos poucos carinhos no banheiro
+
+- **O motivo da revisão:** a A3.2 do plano do corpo dizia "o gasto (basal e das atividades)", mas o passo 0 montado (#273) escala só o
+  basal, e a `ConfigCorpo` não tinha o fator das atividades (o nó `gasto_atividades`).
+- **A A3.2b nova** propõe um multiplicador só, `m_gasto`, nos dois gastos sobre o combustível, em **{¼, ½, 1}**, no lugar de {½, 1, 2}.
+  - **Por quê:** o B mediu a falta em 18% a 58% dos ticks com os números PROPOSTOS (#271), e o D mediu 0,30 a 0,39 do tempo acordado
+    (#273). As duas medidas são descritivas, com as sementes dos testes, sem artefato no repositório. Em 1 a falta já passa do teto da
+    faixa.
+  - **O que não muda:** a regra e a faixa.
+  - **A decisão é a PCD-9, aberta.** A ME-7 decidida fica com o texto dela, com uma nota na tarefa do metabolismo apontando a revisão
+    proposta.
+- **A nota no plano do banheiro (seção 7):** 1 a 2 carinhos por vida em 7 dias e ~1 alívio por dia na fumaça do #272, e o que isso
+  implica para a 6.2, a duração, a `Δ_B` e o K. É **só registro:** as saídas ficam listadas para o Matheus, sem decisão e sem mudar
+  nenhuma regra do plano.
