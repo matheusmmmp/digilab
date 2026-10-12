@@ -2,8 +2,8 @@
 
 Gates: G2 (a chave desligada e a vida de hoje: os gabaritos de sempre rodam na suite; aqui, a chave explicita desligada), G-MEC (a
 vontade sobe e cai; o limpador recolhe so no banheiro; o objeto da o desconforto da zona; o limpar recolhe; o urgente alivia aqui; o
-alvo banheiro leva o pet ate la ou segura a vontade; a continuacao em tests/test_banheiro_continuar.py), G-CRED (o carinho do DonoCarinhoBanheiro e creditado a decisao de aliviar), G-CONS
-(com limpador, o sinal do aliviar no banheiro e maior que fora; sem limpador, igual), G1 (replay bit a bit, com e sem o limpador, com o
+alvo banheiro leva o pet ate la ou segura a vontade; a continuacao em tests/test_banheiro_continuar.py), G-CRED (o carinho do
+DonoCarinhoBanheiro e creditado a decisao de aliviar), G-CONS (com limpador, o sinal do aliviar no banheiro e maior que fora; sem limpador, igual), G1 (replay bit a bit, com e sem o limpador, com o
 carinho, com o instinto e os lobos aprendendo, e no grupo) e o contrato da bancada (`motor.alivios`). So as sementes dos testes.
 """
 
