@@ -3729,3 +3729,31 @@ cérebros (sem receptor novo, ME-2) e a bancada não. Interpretações em `docs/
   As atividades gastam ~240 por tick, e a conversão não as cobre. É o que o passo 0 da calibração (ME-7) escala.
 - **Para o D (etapa 2):** o metabolismo nos regimes do bloco do corpo (ME-6). O `SUBCHAVES_CORPO` da bancada ainda não tem a `metabolismo`:
   hoje a chave `"corpo"` da config a ligaria em todo braço com corpo, o G-HOJE do plano inclusive.
+
+## V2, BN-8 — o banheiro perto de onde o pet passa o dia (2026-10-11, decisão do Matheus) — GATES PASSAM
+
+Pedido do Gerente depois da fumaça do #270 (0 alívios dentro). Infraestrutura, sem run de pesquisa; só as sementes dos testes. Mudaram o
+padrão da área na `ConfigBanheiro`, o registro `PARAMETROS_BANHEIRO`, a `docs/TAREFA_V2_BANHEIRO.md` (seções 3 e 10) e os testes. O motor,
+o instinto, os cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A área (PROPOSTA, SEM FONTE):** células x 8 a 12, y 18 a 20, dentro da casa.
+  - O ponto do banheiro mais perto do comedouro (10, 15), onde o pet passa o dia, fica a 40 subunidades: ao alcance de uma decisão (60).
+  - A área não cobre o comedouro nem o ninho.
+  - A de antes (#265) era x 0 a 3, y 0 a 5, no canto da casa.
+  - A ida que continua (#270) fica; o contrato de decisão e o teto de pesos não mudam.
+- **Os testes e gabaritos de antes** usam a área de antes, dada explicitamente: `CB_CANTO`, e `canto()` para a bancada. São eles os
+  testes de mecanismo do #265 e do #270 e os gabaritos do banheiro ligado e do metabolismo.
+- **Gates** (`tests/test_banheiro_perto.py`):
+  - **G2:** a chave desligada é a vida de hoje (os gabaritos de sempre, na suíte). Com o banheiro ligado, as vidas de
+    `tests/gabaritos/banheiro_perto_antes.json` (32 casos, gravados antes com a main 8cdb70f, `tests/gabarito_banheiro_perto.py`) saem
+    iguais byte a byte com a área de antes dada explicitamente: só a área mudou;
+  - **a geometria:** a área dentro da casa, a 40 do comedouro (alcance 60), fora do comedouro e do ninho (a zona deles não é a do
+    banheiro);
+  - **o motor:** o pet no comedouro que escolhe o banheiro chega e alivia dentro na mesma decisão, sem ida pendente.
+- **Fumaça descritiva** (P0 e P1, sementes 101…505, 7 dias, atencioso no comedouro, com o carinho; antes = main, depois = o branch):
+
+  | braço | alívios | dentro, antes → depois | carinhos | recolhidos pelo limpador | distância mediana ao banheiro |
+  |---|---|---|---|---|---|
+  | P0 (instinto) | 37 → 35 | 0 → 5 | 0 → 5 | 0 → 5 | 185 → 40–45 |
+  | P1 (lobos, T3) | 36 → 39 | 0 → 8 | 0 → 8 | 0 → 8 | 308 → 130 |
+
+  Há um carinho por alívio dentro, e o limpador recolhe todos.

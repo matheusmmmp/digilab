@@ -46,8 +46,8 @@ PARAMETROS_BANHEIRO: dict[str, tuple[str, str]] = {
     "limiar_moderada": ("PROPOSTO", "secao 4: 0,50, sem fonte"),
     "w_banheiro_0": ("PROPOSTO", "secao 4: S/4, o pet nasce preferindo `aqui` 4 a 1, sem fonte"),
     "w_aqui_0": ("PROPOSTO", "secao 4: S, sem fonte"),
-    "celulas_x": ("PROPOSTO", "secao 3: o banheiro nas colunas 0 a 3 da casa, sem fonte (etapa 3, A)"),
-    "celulas_y": ("PROPOSTO", "secao 3: o banheiro nas linhas 0 a 5, longe do ninho e do comedouro, sem fonte (etapa 3, A)"),
+    "celulas_x": ("PROPOSTO", "BN-8 (2026-10-11): as colunas 8 a 12 da casa, ao alcance de uma decisao do comedouro, sem fonte"),
+    "celulas_y": ("PROPOSTO", "BN-8: as linhas 18 a 20, a 40 subunidades do comedouro, fora dele e do ninho, sem fonte"),
 }
 
 

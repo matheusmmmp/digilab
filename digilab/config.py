@@ -1748,8 +1748,9 @@ class ConfigBanheiro:
     limiar_moderada    vontade acima disto: `aliviar` entra no tempo livre
     w_banheiro_0       o peso herdado do alvo `banheiro`, inteiro na escala S (S/4: o pet nasce preferindo `aqui` 4 a 1)
     w_aqui_0           o peso herdado do alvo `aqui` (S)
-    celulas_x          o banheiro no mapa (secao 3): as colunas de celulas, inclusivas, dentro da casa (0 a 3)
-    celulas_y          as linhas de celulas, inclusivas (0 a 5): longe do ninho (4, 15) e do comedouro (10, 15)"""
+    celulas_x          o banheiro no mapa (secao 3; BN-8, 2026-10-11): as colunas de celulas, inclusivas, dentro da casa (8 a 12)
+    celulas_y          as linhas de celulas, inclusivas (18 a 20): ao alcance de uma decisao (40 subunidades) do comedouro (10, 15),
+                       onde o pet passa o dia, sem cobrir o comedouro nem o ninho (4, 15). Antes (#265): x 0 a 3, y 0 a 5, no canto"""
 
     ligada: bool = False
     limpador: bool = False
@@ -1758,8 +1759,8 @@ class ConfigBanheiro:
     limiar_moderada: float = 0.50
     w_banheiro_0: int = 256
     w_aqui_0: int = 1024
-    celulas_x: tuple = (0, 3)
-    celulas_y: tuple = (0, 5)
+    celulas_x: tuple = (8, 12)
+    celulas_y: tuple = (18, 20)
 
     def __post_init__(self) -> None:
         if self.w_vontade < 0.0:

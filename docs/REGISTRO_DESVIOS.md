@@ -4439,3 +4439,29 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
   relapso (303), em que ela vale nos quatro mundos.
 - **O gabarito da paridade** ganhou a seção `metabolismo` sem subir a versão (como o banheiro). A `config` ganhou os campos novos, e o
   espelho do TS também. O `configCorpo` do TS falha alto com o metabolismo ligado até a etapa 4.
+
+## 2026-10-11 — BN-8, o banheiro perto de onde o pet passa o dia (worker A)
+
+- **A decisão (BN-8, do Matheus, depois da fumaça do #270):** o banheiro vai para o alcance de uma decisão (60) a partir de onde o pet passa
+  o dia, sem mudar o contrato de decisão nem o teto de pesos. A ida que continua (BN-7, #270) fica.
+- **A área proposta (PROPOSTA, SEM FONTE):** células x 8 a 12, y 18 a 20 (`ConfigBanheiro.celulas_x`, `celulas_y`).
+  - "Onde o pet passa o dia" foi lido como o comedouro (10, 15). Nas vidas da fumaça do #270, 33 das 81 decisões de aliviar saem da célula
+    do comedouro, e a maior parte do resto fica a poucas células dele.
+  - Do centro do comedouro (168, 248), o ponto do banheiro mais perto é (168, 288): 40 subunidades. Sobram 20 para o pet que estiver um
+    pouco longe do comedouro.
+  - A área não cobre o comedouro nem o ninho (o ninho fica a 68). Assim a necessidade deixada no banheiro não incomoda o pet onde ele come
+    e dorme: o banheiro é uma zona própria (#265).
+  - Ficou abaixo do comedouro, e não acima, só por escolha: as duas distâncias seriam iguais.
+- **Só o padrão mudou.** O código do motor, do instinto e dos cérebros é o mesmo, e a área segue na `ConfigBanheiro` (não no `LayoutMundo`:
+  o G-PAR do mundo e o mundo de hoje não mudam).
+- **Os gabaritos do banheiro ligado mudariam, então o antes foi gravado** (`tests/gabaritos/banheiro_perto_antes.json`, 32 casos, num
+  commit próprio, com a main 8cdb70f). Com a área de antes dada explicitamente (`CB_CANTO`; `canto()` para a bancada), essas vidas saem
+  iguais byte a byte com o código novo. É o G2: só a área mudou.
+- **Os testes e gabaritos de antes usam a área de antes, explícita:**
+  - os testes de mecanismo do #265 e do #270 (`test_banheiro_mundo.CB`): a geometria deles (`DENTRO`, `FORA_PERTO`, a ida de 137);
+  - o gabarito do banheiro ligado do #270 (`gabarito_banheiro_ligado.py`) e o do metabolismo (`gabarito_metabolismo.gerar`, o 2 × 2 do
+    banheiro), que foram gravados com ela.
+  - Os arquivos JSON não mudaram.
+- **A fumaça descritiva** (P0 e P1, sementes 101…505, 7 dias, atencioso no comedouro, com o carinho; antes = main 8cdb70f, depois = o
+  branch): os alívios dentro passam de 0 para 5 no P0 (de 35) e de 0 para 8 no P1 (de 39). Há um carinho por alívio dentro, e o limpador
+  recolhe todos eles. Dois dos 5 alívios dentro do P0 tinham o alvo `aqui`: o pet já estava no banheiro.

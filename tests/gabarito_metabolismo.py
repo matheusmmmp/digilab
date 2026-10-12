@@ -59,7 +59,10 @@ def vida_de_hoje(tipo: str, arg) -> dict:
 
 
 def gerar() -> dict:
-    return {chave: vida_de_hoje(*caso) for chave, caso in casos()}
+    # o 2 x 2 do banheiro com a area de antes da BN-8 (gravado com ela; tests/gabarito_banheiro_perto.py confere que so a area mudou)
+    from gabarito_banheiro_perto import canto
+    with canto():
+        return {chave: vida_de_hoje(*caso) for chave, caso in casos()}
 
 
 if __name__ == "__main__":
