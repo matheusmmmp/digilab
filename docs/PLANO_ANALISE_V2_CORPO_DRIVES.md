@@ -660,8 +660,9 @@ novo ao cérebro (ME-2), não muda a fome (ME-5) nem o descarte do estômago (ME
 ### A3.2 O passo 0 da calibração (ME-7), antes da grade da 6.1
 
 - **O que roda:** só o P0-q, com o metabolismo, nas 20 unidades da calibração (bases 33101…33505, K = 4), nas 8 células.
-- **A grade:** o gasto (basal e das atividades sobre o combustível) × {½, 1, 2}, partindo dos PROPOSTOS da tarefa (375 por tick acordado,
-  187 dormindo). Uma run por ponto: 3 × 8 × 20 = **480 vidas**.
+- **A grade:** o gasto (basal e das atividades sobre o combustível) × {½, 1, 2}, partindo dos PROPOSTOS da tarefa (375 por tick
+  acordado, 187 dormindo). Uma run por ponto: 3 × 8 × 20 = **480 vidas**. **Substituída pela A3.2b (PCD-9): {¼, ½, 1}, com as mesmas
+  480 vidas.**
 - **A regra (escrita agora):**
   - fica o ponto mais perto de 1 (pela |log₂|) em que a fração do tempo acordado com a falta de combustível (abaixo de C/4) cai em
     **[0,05; 0,30]**, nas 8 células juntas;
@@ -671,7 +672,8 @@ novo ao cérebro (ME-2), não muda a fome (ME-5) nem o descarte do estômago (ME
   escolhido fixo.
 - **O passo 0 entra no adendo 1 da 6.5,** junto do ponto da grade.
 
-**A3.2b, a grade revista (2026-10-12, PROPOSTA; decisão PCD-9 na A3.5):**
+**A3.2b, a grade revista (PCD-9, DECIDIDA pelo Matheus em 2026-10-12, pela recomendação: o mesmo `m_gasto` em {¼, ½, 1}). Ela substitui a
+grade {½, 1, 2} da A3.2:**
 - **Por que rever:**
   - **a montagem escalou só o basal:** a A3.2 diz "o gasto (basal e das atividades sobre o combustível)", mas a montagem do passo 0
     (#273, `pontos_passo0`) escala só o basal. A `ConfigCorpo` não tinha o fator das atividades, e a falta dele é o nó `gasto_atividades`;
@@ -709,8 +711,8 @@ O passo 0 soma 480 vidas às 1.440 da grade. O piloto e a validação não mudam
 
 ### A3.5 Decisões
 
-São as ME-1 a ME-7 da tarefa, mais a PCD-9 (2026-10-12), aberta:
+São as ME-1 a ME-7 da tarefa, mais a PCD-9, **DECIDIDA em 2026-10-12, como recomendado:**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
-| PCD-9 | A grade do passo 0 (A3.2b) | **o mesmo `m_gasto` no basal e nas atividades, em {¼, ½, 1}**, com a regra da A3.2 sem mudança. As outras opções: **(b)** {½, 1, 2}, o exemplo do coordenador; **(c)** {¼, ½, 1, 2}, com 4 pontos e 640 vidas; **(d)** duas grades, uma por gasto, com 9 pontos e 1.440 vidas | **(b):** se o ½ ainda passar de 0,30, o passo 0 sai "não fechou" e o pet vive boa parte do tempo em falta. O ponto 2 quase certamente não serve. **(c):** custa 160 vidas a mais por um ponto que as medidas já descartam. **(d):** o triplo do custo, para separar duas fontes que a pergunta do plano não separa. **Só o basal, como está montado:** com ~240 de atividades fora da grade, o ponto escolhido não controla a falta |
+| PCD-9 | A grade do passo 0 (A3.2b) | **DECIDIDA em 2026-10-12: o mesmo `m_gasto` no basal e nas atividades, em {¼, ½, 1}**, com a regra da A3.2 sem mudança. As outras opções: **(b)** {½, 1, 2}, o exemplo do coordenador; **(c)** {¼, ½, 1, 2}, com 4 pontos e 640 vidas; **(d)** duas grades, uma por gasto, com 9 pontos e 1.440 vidas | **(b):** se o ½ ainda passar de 0,30, o passo 0 sai "não fechou" e o pet vive boa parte do tempo em falta. O ponto 2 quase certamente não serve. **(c):** custa 160 vidas a mais por um ponto que as medidas já descartam. **(d):** o triplo do custo, para separar duas fontes que a pergunta do plano não separa. **Só o basal, como está montado:** com ~240 de atividades fora da grade, o ponto escolhido não controla a falta |
