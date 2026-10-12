@@ -30,8 +30,9 @@ PLANOS = (("experimento-maior", bv.BASES_EXPERIMENTO_MAIOR), ("n6", bv.BASES_N6)
 K = 40
 
 
-def _numeros_das_configs() -> set[int]:
-    """Todo inteiro sob uma chave de semente ou de bases nas configs de experiments/configs/ (as listas inteiras entram)."""
+def _numeros_das_configs(fora_do_plano: str | None = None) -> set[int]:
+    """Todo inteiro sob uma chave de semente ou de bases nas configs de experiments/configs/ (as listas inteiras entram); com
+    `fora_do_plano`, sem as configs desse plano (o campo `plano`)."""
     achados: set[int] = set()
 
     def andar(o, chave=""):
@@ -46,7 +47,9 @@ def _numeros_das_configs() -> set[int]:
             achados.add(o)
 
     for p in (RAIZ / "experiments" / "configs").rglob("*.json"):
-        andar(json.loads(p.read_text(encoding="utf-8")))
+        cfg = json.loads(p.read_text(encoding="utf-8"))
+        if fora_do_plano is None or cfg.get("plano") != fora_do_plano:
+            andar(cfg)
     return achados
 
 
@@ -69,11 +72,17 @@ def test_faixas_disjuntas_e_fora_das_queimadas():
         assert not any(q_lo <= hi and lo <= q_hi for q_lo, q_hi, _ in bv.FAIXAS_QUEIMADAS)
 
 
+# a faixa de calibracao de cada plano pode estar nas configs do proprio plano (a do passo 0 do corpo, W-BANCADA-METABOLISMO); as de
+# validacao, em nenhuma
+PLANO_DA_CALIBRACAO = {(31101, 31505): "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md", (33101, 33505): "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md"}
+
+
 def test_faixas_novas_fora_das_configs():
     numeros = _numeros_das_configs()
     assert numeros                                                               # a varredura acha alguma coisa
     for lo, hi in NOVAS:
-        assert not [n for n in numeros if lo <= n <= hi], (lo, hi)
+        alheios = _numeros_das_configs(PLANO_DA_CALIBRACAO[(lo, hi)]) if (lo, hi) in PLANO_DA_CALIBRACAO else numeros
+        assert not [n for n in alheios if lo <= n <= hi], (lo, hi)
 
 
 def test_prefixos_novos_seguem_a_regra():

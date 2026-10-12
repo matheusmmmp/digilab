@@ -1551,3 +1551,54 @@ def vez_no_grupo(ordens: Sequence[Mapping], ident: str, janela: tuple[int, int] 
             raise ValueError(f"ordem que nao e uma permutacao de quem decide: {o}")
     primeiro = sum(1 for o in sel if o["ordem"][0] == ident)
     return {"juntos": len(sel), "primeiro": primeiro, "fracao_primeiro": primeiro / len(sel) if sel else None}
+
+
+# ================================================================== metabolismo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.3)
+def metabolismo_da_vida(sonda: Sequence[tuple[int, bool, int, int]], falta_limiar: int, ticks_por_dia: int) -> dict:
+    """A medida descritiva do metabolismo numa vida, so relato. `sonda` = (tick, dormindo, combustivel, reserva) de cada tick, em ordem e
+    sem buraco (tick 0, 1, ...), com o combustivel e a reserva no fim do tick; a vida tem dias inteiros. A falta e o combustivel abaixo de
+    `falta_limiar` (estritamente, como o gatilho `abaixo` do grafo). Sai:
+      - `acordado`, `acordado_com_falta` e a `fracao` (None sem tick acordado);
+      - `disparos`: as vezes que a falta comecou (o tick com falta cujo anterior nao tinha; o primeiro tick conta se ja tem falta);
+      - `por_dia`: o combustivel e a reserva no ultimo tick de cada dia.
+    Tick fora de ordem ou vida sem dias inteiros falha alto."""
+    if ticks_por_dia <= 0 or not sonda or len(sonda) % ticks_por_dia:
+        raise ValueError(f"metabolismo: a vida tem de ter dias inteiros ({len(sonda)} ticks, {ticks_por_dia} por dia)")
+    acordado = com_falta = disparos = 0
+    antes = False
+    por_dia = []
+    for i, (t, dormindo, comb, reserva) in enumerate(sonda):
+        if t != i:
+            raise ValueError(f"metabolismo: tick {t} na posicao {i}")
+        falta = comb < falta_limiar
+        if not dormindo:
+            acordado += 1
+            com_falta += falta
+        disparos += falta and not antes
+        antes = falta
+        if (t + 1) % ticks_por_dia == 0:
+            por_dia.append({"dia": (t + 1) // ticks_por_dia, "combustivel": comb, "reserva": reserva})
+    return {"acordado": acordado, "acordado_com_falta": com_falta, "fracao": com_falta / acordado if acordado else None,
+            "disparos": disparos, "ticks_com_falta": sum(1 for _, _, c, _ in sonda if c < falta_limiar), "por_dia": por_dia}
+
+
+def tempo_comer_brincar(decisoes: Sequence[tuple[int, str]]) -> dict:
+    """O tempo entre comer e brincar (A3.3, no P1-c), so relato: para cada decisao `brincar` depois de algum `comer`, os ticks desde o
+    ultimo `comer`. Sai quantas, a media e a mediana (None sem nenhuma). `decisoes` = (tick, acao) em ordem; fora de ordem falha alto."""
+    ultimo = None
+    gaps = []
+    anterior = None
+    for t, a in decisoes:
+        if anterior is not None and t < anterior:
+            raise ValueError(f"tempo_comer_brincar: decisoes fora de ordem ({t} depois de {anterior})")
+        anterior = t
+        if a == "comer":
+            ultimo = t
+        elif a == "brincar" and ultimo is not None:
+            gaps.append(t - ultimo)
+    if not gaps:
+        return {"n": 0, "media": None, "mediana": None}
+    ordenados = sorted(gaps)
+    meio = len(ordenados) // 2
+    mediana = ordenados[meio] if len(ordenados) % 2 else (ordenados[meio - 1] + ordenados[meio]) / 2
+    return {"n": len(gaps), "media": sum(gaps) / len(gaps), "mediana": mediana}

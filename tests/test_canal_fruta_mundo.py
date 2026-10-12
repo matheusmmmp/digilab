@@ -129,7 +129,9 @@ def _bancada_grupo(lobos: dict):
 
 
 def test_sem_a_chave_a_fruta_que_mexe_no_humor_falha_alto(monkeypatch):
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "canais_fruta_mundo"})
+    # desde a W-BANCADA-METABOLISMO a bancada do grupo liga a chave; aqui o cerebro do grupo de antes, sem ela
+    monkeypatch.setattr(bv.Bancada, "bancada_grupo", lambda self: replace(self, cfg_lobos=replace(
+        self.cfg_lobos, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True)))
     with pytest.raises(RuntimeError, match="CANAIS-REFORCO"):
         _bancada_grupo({}).grupo(bv.EspecGrupo("A-so", 505, 0))
 

@@ -4439,3 +4439,37 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
   relapso (303), em que ela vale nos quatro mundos.
 - **O gabarito da paridade** ganhou a seção `metabolismo` sem subir a versão (como o banheiro). A `config` ganhou os campos novos, e o
   espelho do TS também. O `configCorpo` do TS falha alto com o metabolismo ligado até a etapa 4.
+
+## 2026-10-11 — W-BANCADA-METABOLISMO (worker D): a rota do humor no grupo, o metabolismo no bloco do corpo e o passo 0
+
+- **A rota do humor fica ligada em todo cérebro do grupo**, não só com a montagem completa. `Bancada.bancada_grupo` liga
+  `presenca_fruta_mundo` junto com o alvo aprendido, as entradas sociais e o modelo dos outros. Ela é o cérebro da seção 2 do plano dos
+  dois pets, e sem ela os canais falham alto. Na montagem simples (sem canais) a presença aprende pelo escalar, como no mundo das frutas.
+  Por isso o `tests/test_canal_fruta_mundo.py` (do B) mostra a falha antiga com o cérebro do grupo de antes, montado no próprio teste.
+- **O A só da semente 505** com a montagem completa roda (G1 do grupo conferido). O pet come o tipo ruim, e o canal do humor desce o
+  peso dele (`pesos_comer_fruta` negativo no ruim; `por_alvo["fruta"]` negativo).
+- **O metabolismo é um campo do braço** (`Braco.metabolismo`), nos nove braços da A3.1. Nenhum acoplado tem campo próprio: o P1-q^ac e o
+  P1-c^ac herdam pelo braço de destino. A chave `corpo` da config não liga o metabolismo (`SUBCHAVES_CORPO`), e a `cfg_corpo` da bancada
+  não pode trazê-lo.
+- **`Bancada(metabolismo=False)`** tira o metabolismo dos braços, fora da config. Serve só para refazer as vidas de antes do adendo 3. Os
+  gabaritos que passam pela bancada com braços do corpo a usam: o `gabarito_metabolismo.py` (o G2 do B) e o `gabarito_rede_de_si.py`.
+  Os arquivos gravados não mudaram.
+- **A medida descritiva (A3.3) sai de uma sonda no replay de medição.** A sonda embrulha o `passo` do corpo e anota, a cada tick,
+  (tick, dormindo, combustível, reserva). Ela só lê, e o replay continua conferido bit a bit contra a vida. A sonda que não cobre a vida
+  tick a tick falha alto.
+  - A falta é o combustível estritamente abaixo de `falta_limiar`, como o gatilho `abaixo` do grafo.
+  - Um disparo é um tick com falta cujo anterior não tinha. O primeiro tick conta se já começa em falta.
+- **O tempo entre comer e brincar** sai em toda vida com o metabolismo, não só no P1-c. São os ticks desde o último `comer` em cada
+  `brincar`.
+- **O passo 0 (A3.2) fica montado e não roda.** A grade escala "o gasto (basal e das atividades sobre o combustível)". O basal tem
+  campo, mas as atividades tiram do combustível o mesmo número que somam ao cansaço (ME-3), sem fator na `ConfigCorpo`, que é do B. O nó
+  é `NOS_PENDENTES["gasto_atividades"]`; sem ele, uma segunda trava espera a fiação do fator.
+- **O ½ da grade é arredondado para cima:** 375/2 → 188 e 187/2 → 94. Os pontos são 188/94, 375/187 e 750/374.
+- **O empate da regra de escolha** fica com o menor gasto. Pela |log2|, o ½ e o 2 empatam quando os dois passam e o 1 não; o critério é
+  o mesmo "menor m_sobe" da 6.2. Sem nenhum ponto na faixa, fica o de fração mais perto do centro (0,175), marcado "não fechou".
+- **A fração do passo 0 junta as 8 células** pela soma dos ticks, não pela média das frações. Ela usa só as vidas do P0-q sem acoplado.
+- **A config do passo 0** (`experiments/configs/v2_corpo/calibracao_passo0.json`) usa o ponto T3, a montagem completa, o ganho 4 e os
+  canais, como as do plano. O bootstrap é o da dominância (10.000 reamostragens, semente 4242).
+- **O `tests/test_faixas_r17.py` (W-FAIXAS-R17) proibia as faixas do corpo em qualquer config.** A do passo 0 é a primeira config do
+  plano do corpo. Agora a faixa de calibração (33101…33505, e a do mundo, 31101…31505) só pode aparecer nas configs do próprio plano (o
+  campo `plano`); as de validação seguem proibidas em todas.

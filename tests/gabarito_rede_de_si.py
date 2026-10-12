@@ -30,9 +30,10 @@ BRACOS = (("bola", "P1-c"), ("bola", "P0-c"), ("bola", "P1-c-tapa"), ("iguais_fr
 
 
 def bancadas(classe=bv.Bancada) -> dict:
-    """as duas montagens; `classe` deixa o teste do G-OBS trocar a bancada pela que embrulha a politica com a rede"""
-    return {"simples": classe(DIAS, 16 * DIAS),
-            "completa": classe(DIAS, 16 * DIAS, montagem="completa", cfg_lobos=bv.cfg_lobos_do_ponto("T3"))}
+    """as duas montagens; `classe` deixa o teste do G-OBS trocar a bancada pela que embrulha a politica com a rede. Sem o metabolismo
+    do adendo 3 do plano do corpo (A3.1): as vidas de antes dele"""
+    return {"simples": classe(DIAS, 16 * DIAS, metabolismo=False),
+            "completa": classe(DIAS, 16 * DIAS, montagem="completa", cfg_lobos=bv.cfg_lobos_do_ponto("T3"), metabolismo=False)}
 
 
 def casos():
