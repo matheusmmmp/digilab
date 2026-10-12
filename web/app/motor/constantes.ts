@@ -405,6 +405,7 @@ export interface ConfigCorpo {
   metabolismo: boolean; combustivel_inicial: number; reserva_inicial: number; conversao_num: number; conversao_den: number;
   gasto_basal_acordado: number; gasto_basal_dormindo: number; armazenar_limiar: number; armazenar_taxa: number;
   mobilizar_limiar: number; mobilizar_taxa: number; falta_limiar: number; falta_cansaco: number;
+  gasto_atividades_num: number; gasto_atividades_den: number;
 }
 export const CCO: ConfigCorpo = {
   ligada: false, digestao: false, vida: false, drives_novos: false, gestos: false, banheiro: false,
@@ -423,6 +424,7 @@ export const CCO: ConfigCorpo = {
   metabolismo: false, combustivel_inicial: 225000, reserva_inicial: 112500, conversao_num: 1, conversao_den: 1,
   gasto_basal_acordado: 375, gasto_basal_dormindo: 187, armazenar_limiar: 337500, armazenar_taxa: 375,
   mobilizar_limiar: 225000, mobilizar_taxa: 375, falta_limiar: 112500, falta_cansaco: 500,
+  gasto_atividades_num: 1, gasto_atividades_den: 1,
 };
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */

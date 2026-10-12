@@ -4514,3 +4514,15 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
 - **A nota no plano do banheiro (seção 7):** 1 a 2 carinhos por vida em 7 dias e ~1 alívio por dia na fumaça do #272, e o que isso
   implica para a 6.2, a duração, a `Δ_B` e o K. É **só registro:** as saídas ficam listadas para o Matheus, sem decisão e sem mudar
   nenhuma regra do plano.
+
+## 2026-10-12 — GASTO-ATIVIDADES (worker B): o fator do gasto das atividades sobre o combustível
+
+- **Uma fração (num/den) e não um campo por atividade:** o passo 0 escala tudo junto por {½, 1, 2} (A3.2), como o `_escalar` da bancada faz
+  no basal. O fator 1/2 sobre o explorar (6750) dá 3375, exato; sobre o andar, que não é inteiro por subunidade (75 × ½), o arredondamento
+  é um só, sobre o andar inteiro da decisão.
+- **O arredondamento é o `div_arred`** (metade longe do zero), o de todo o corpo. Para números positivos é o mesmo "metade para cima" do
+  `_escalar` da bancada.
+- **Um gasto que arredonda a zero falha alto:** a atividade deixaria de custar combustível, e com ela some o emissor do grafo. Não
+  acontece em {½, 1, 2}.
+- **O G2 do metabolismo ligado** precisou de um gabarito novo, gravado antes do fator. O da etapa 0 do metabolismo é com ele desligado.
+- **O fator não mexe no cansaço nem no grafo:** os mesmos emissores, com efeitos de outro tamanho. As checagens dão o mesmo relato do padrão.

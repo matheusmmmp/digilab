@@ -3789,3 +3789,27 @@ web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - `tests/test_bancada_liga_gestos.py`: o `NOS_PENDENTES` e, com a bancada de sempre, o G-P0C e os acoplados P1-q^ac e P1-c^ac com o
     metabolismo.
   - `tests/test_faixas_r17.py`: a faixa de calibração do corpo pode estar nas configs do próprio plano.
+
+## V2, GASTO-ATIVIDADES — o fator do gasto das atividades sobre o combustível (2026-10-12, `docs/TAREFA_V2_METABOLISMO.md`, ME-3 e ME-7) — GATES PASSAM
+
+Destrava o nó `gasto_atividades` do #273: o passo 0 da calibração do corpo escala o gasto basal **e o das atividades** (A3.2). Infraestrutura,
+sem run; só as sementes dos testes. Mudaram `digilab/corpo.py`, a `ConfigCorpo`, o exportador e o gabarito da paridade do corpo e o espelho
+em `web/app/motor/constantes.ts`. `engine.py`, o motor, os cérebros e a bancada não (a fiação é do D). Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **O fator:** `ConfigCorpo.gasto_atividades_num/gasto_atividades_den` (PROPOSTOS; padrão 1/1, o mesmo número do cansaço, ME-3). O
+  brincar do pet e o do dono, o explorar e o andar tiram do combustível `div_arred(o que somam ao cansaço × num, den)`
+  (`corpo.gasto_da_atividade`). O cansaço nunca muda. O andar arredonda uma vez por decisão, sobre o andar inteiro. Um fator que zera o
+  gasto falha alto.
+- **Etapa 0, num commit próprio, antes do fator:** `tests/gabarito_metabolismo_ligado.py` → `tests/gabaritos/metabolismo_ligado_vidas_de_hoje.json`,
+  104 vidas com o metabolismo ligado: o bloco do corpo pela bancada (P0-q, P1-q, P0-c, P1-c, P1-c-tapa e P1-cw nos mundos `padrao`, `bola`
+  e `iguais_frutas`) e, direto, a etapa 6 com o metabolismo nos quatro mundos (o físico tem o andar), com o corpo inteiro (q, resto e
+  contas).
+- **Gates** (`tests/test_gasto_atividades.py`, 36):
+  - **G2:** com o fator no padrão, as 104 vidas saem byte a byte; desligado, o gabarito da etapa 0 do metabolismo (no teste dele);
+  - **a conta exata:** cada atividade × {½, 1, 2}, o arredondamento do andar (37 × 75 × ½ = 1388) e as falhas altas;
+  - **o grafo:** as quatro checagens (e a 2b e a 3b) passam com ½ e 2, com o mesmo relato do padrão, em 3 combinações × com e sem o mundo;
+  - **G-HOJE-M com o fator:** até a falta, só o combustível muda; a contabilidade fecha;
+  - **G1:** o replay refaz o corpo com o fator, no padrão e no físico.
+- **A web:** só o espelho dos dois números. O gabarito da paridade ganhou a seção `metabolismo_gasto` (as taxas e a grade com ½ e 2); as
+  outras saem idênticas.
+- **Para o D:** a fiação no `pontos_passo0` é pôr o fator na chave `"corpo"` junto do basal (os mesmos num/den), e tirar o nó.

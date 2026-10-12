@@ -40,6 +40,8 @@ O conteudo (versao 5):
   atividades e o andar), o estado, o resto e as contas depois; a mesma grade com a conversao 2/3 (o resto mordendo, so para a
   paridade); e uma sequencia longa de operacoes sorteadas num corpo so, com o sha256 de q, da janela, do resto e das contas. As secoes
   da versao 5 nao mudaram; a `config` ganhou os campos do metabolismo.
+- `metabolismo_gasto` (o no `gasto_atividades`): a grade do metabolismo com o fator do gasto das atividades x 1/2 e x 2, e as taxas das
+  atividades em cada um. A `config` ganhou os dois campos do fator; as outras secoes nao mudaram.
 """
 from __future__ import annotations
 
@@ -553,6 +555,24 @@ def metabolismo() -> dict:
                           "resto_final": c.resto_combustivel, "contas_final": dict(c.contas_metabolismo)}}
 
 
+# o fator do gasto das atividades (o no `gasto_atividades`): os pontos do passo 0 que nao sao o padrao, so para a paridade
+GASTOS_M = {"metade": (1, 2), "dobro": (2, 1)}
+
+
+def metabolismo_gasto() -> dict:
+    """a mesma grade do metabolismo com o gasto das atividades x 1/2 e x 2, e as taxas das atividades em cada um (rng propria: a secao
+    `metabolismo` nao muda)"""
+    rng = random.Random(SEMENTE_CASOS + 9)
+    out = {}
+    for nome, (num, den) in GASTOS_M.items():
+        cc = replace(CC_M, gasto_atividades_num=num, gasto_atividades_den=den)
+        t = taxas_de(CONFIG_PADRAO, cc)
+        out[nome] = {"gasto_atividades_num": num, "gasto_atividades_den": den,
+                     "pet": {a.value: d for a, d in t.pet.items()}, "dono_brincar": t.dono[AcaoUsuario.BRINCAR],
+                     "casos": _casos_m(cc, rng)}
+    return out
+
+
 def gabarito() -> dict:
     t = taxas_de(CONFIG_PADRAO, CC)
     taxas = {k: v for k, v in vars(t).items() if k not in ("dono", "pet")}
@@ -589,6 +609,7 @@ def gabarito() -> dict:
         "etapa6_mundo": etapa6_mundo(),
         "banheiro": banheiro(),
         "metabolismo": metabolismo(),
+        "metabolismo_gasto": metabolismo_gasto(),
     }
 
 

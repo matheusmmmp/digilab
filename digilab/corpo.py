@@ -167,6 +167,8 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "mobilizar_taxa": ("PROPOSTO", "secao 3: 375 por tick, sem fonte"),
     "falta_limiar": ("PROPOSTO", "secao 3: C/4, sem fonte"),
     "falta_cansaco": ("PROPOSTO", "secao 3: +500 por tick, o cansaco de um tick acordado de dia, sem fonte (ME-1)"),
+    "gasto_atividades_num": ("PROPOSTO", "ME-3 e ME-7: 1/1, o mesmo numero do cansaco; o passo 0 da calibracao escala (no gasto_atividades)"),
+    "gasto_atividades_den": ("PROPOSTO", "ME-3 e ME-7: 1/1, o mesmo numero do cansaco; o passo 0 da calibracao escala (no gasto_atividades)"),
 }
 
 
@@ -228,6 +230,18 @@ class TaxasCorpo:
     pet: dict                                # AcaoPet -> {quimico: delta}
 
 
+def gasto_da_atividade(cc: ConfigCorpo, cansaco: int) -> int:
+    """O que uma atividade tira do combustivel: div_arred(o que ela soma ao cansaco x gasto_atividades_num, gasto_atividades_den). Com o
+    fator 1/1, o mesmo numero (ME-3). Um gasto que arredonda a zero falha alto: a atividade deixaria de custar combustivel."""
+    if cansaco <= 0:
+        raise ValueError(f"atividade sem cansaco: {cansaco}")
+    g = div_arred(cansaco * cc.gasto_atividades_num, cc.gasto_atividades_den)
+    if g <= 0:
+        raise ValueError(f"o fator do gasto das atividades zera o gasto de {cansaco}: "
+                         f"{cc.gasto_atividades_num}/{cc.gasto_atividades_den}")
+    return g
+
+
 def taxas_de(cfg: Config, cc: ConfigCorpo) -> TaxasCorpo:
     C = cc.escala
     g = lambda x, nome: na_grade(x, C, nome)  # noqa: E731
@@ -252,9 +266,10 @@ def taxas_de(cfg: Config, cc: ConfigCorpo) -> TaxasCorpo:
     if cc.banheiro:
         pet[AcaoPet.ALIVIAR] = {}               # o aliviar e o estimulo `estimulo_aliviar` (a vontade a zero), do motor com o banheiro
     if cc.metabolismo:
-        # ME-3: as atividades tiram do combustivel o mesmo numero que somam ao cansaco (o cansaco de hoje nao muda)
+        # ME-3: as atividades tiram do combustivel o que somam ao cansaco vezes o fator do gasto (1/1: o mesmo numero); o cansaco de hoje
+        # nao muda
         for efeitos in (pet[AcaoPet.BRINCAR], pet[AcaoPet.EXPLORAR], dono[AcaoUsuario.BRINCAR]):
-            efeitos["combustivel"] = -efeitos["cansaco"]
+            efeitos["combustivel"] = -gasto_da_atividade(cc, efeitos["cansaco"])
     esperadas = set(ACOES_PET_HOJE) | (set(ACOES_PET_BANHEIRO) if cc.banheiro else set())
     if set(pet) != esperadas:
         raise ValueError(f"acoes do pet sem efeito no corpo: {sorted(a.value for a in esperadas - set(pet))}")
@@ -584,8 +599,11 @@ class Corpo:
             raise ValueError(f"deslocamento precisa ser inteiro >= 0: {deslocamento!r}")
         k = na_grade(custo_por_subunidade, self.C, "custo_energia_por_subunidade")
         if deslocamento:
-            # com o metabolismo, a tabela tira do combustivel o mesmo que soma ao cansaco (ME-3)
-            self._somar({q: d * k * deslocamento for q, d in self.grafo.emissor("andar").efeitos})
+            # com o metabolismo, a tabela tira do combustivel o que soma ao cansaco vezes o fator do gasto (ME-3), sobre o andar inteiro
+            # desta decisao (o arredondamento e um so)
+            cansaco = k * deslocamento
+            self._somar({q: d * (cansaco if q == "cansaco" else gasto_da_atividade(self.cc, cansaco))
+                         for q, d in self.grafo.emissor("andar").efeitos})
 
     def estimulo_consumo_mundo(self, tipo: str, situacao: str, cfg_mundo: ConfigMundo, efeito_fruta: float = 0.0) -> None:
         """Comer uma comida do mapa (mundo.MotorMundo._comer_mundo), pelo `comer` ou pelo "achou e comeu" do explorar:
