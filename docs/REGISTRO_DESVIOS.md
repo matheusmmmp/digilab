@@ -4591,3 +4591,17 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
   - **O teste:** `tests/test_calibracao_mundo.py`, com a vida da fumaça que falhava. Ele falha com a regra antiga.
 - **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
   `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).
+
+## 2026-10-12 — W-PET-QUE-PENSA (worker C): o desenho do J5 no papel
+
+- **`docs/futuro/pet_que_pensa.md`:** o desenho do J5 no papel, com as decisões PQ-1 a PQ-7 abertas. Não escrevi plano de artigo, porque o
+  Matheus o dispensou.
+- **A medida não foi reaberta.** É a da DS-1, já decidida (`docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 1). O desenho só especifica como
+  fazer o teste 1 no mundo físico (PQ-4): o dono dá a fruta revalorizada na mão, fora do mapa. A DS-1 dizia "antes de o pet comê-la de
+  novo" sem dizer como o efeito novo chega ao pet. É uma especificação, não uma mudança.
+- **Duas referências novas, conferidas no Crossref (2026-10-12):**
+  - **Adams e Dickinson (1981):** resumo lido no OpenAlex;
+  - **Sutton (1990, Dyna):** só o título. Era "não verificado" na revisão F.
+- **Uma terceira, só pelo título:** Schrittwieser et al. (2020), para a não novidade.
+- **As outras referências** são as da revisão F, com o mesmo nível de leitura.
+- **Os números novos** são todos PROPOSTOS ou SEM FONTE: os 5 tipos de comida e a contagem do mapa.
