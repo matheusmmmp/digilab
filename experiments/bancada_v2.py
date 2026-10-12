@@ -1443,7 +1443,7 @@ class Bancada:
         indice_do_canal = {c: i for i, c in CANAL_DO_DRIVE.items()}
         decisoes, por_canal = [], {}
         for p in reg.passos_sinal:
-            ds = fruta_drives if p["fruta"] is not None else acao_drives
+            ds = fruta_drives if comeu_fruta_e2(p) else acao_drives
             pesos = None
             if janela:                  # P1-cw (A2.4): os pesos que o cerebro usou nesta decisao, o mesmo no antes e no depois
                 anotados = cerebro.motivos[p["k"]].get("pesos_janela")
@@ -1489,7 +1489,7 @@ class Bancada:
             if antes is None or depois is None:
                 raise RuntimeError(f"{vida.nome}: decisao {p['k']} sem os receptores de antes ou de depois (o gancho do corpo)")
             drives = tuple(RECEPTOR_DO_INDICE[i] for i in cc.drives)
-            if p["fruta"] is not None and cc.humor_na_fruta and "humor" not in drives:
+            if comeu_fruta_e2(p) and cc.humor_na_fruta and "humor" not in drives:
                 drives = drives + ("humor",)
             drives = drives + tuple(r for r in RECEPTORES_NOVOS if r in DRIVES_NOVOS_SINAL and getattr(antes, r) is not None)
             pesos = None
@@ -2423,6 +2423,13 @@ def sondar_metabolismo(corpo, destino: list) -> None:
     corpo.passo = passo
 
 
+def comeu_fruta_e2(passo: dict) -> bool:
+    """A decisao tem o sinal da E2 (o humor nos drives): a fruta comida e a acao foi COMER, a regra do cerebro (lobos.consequencia_mundo
+    e o _creditar_corpo). No mundo fisico o motor avisa `fruta_comida` tambem no "achou e comeu" do explorar, e o cerebro credita esse
+    explorar com o sinal do N3, sem o humor (MUNDO-CALIBRACAO, 2026-10-12); fora do mundo fisico, so o comer come fruta."""
+    return passo["fruta"] is not None and passo["acao"] == AcaoPet.COMER.value
+
+
 class _Registro:
     """Embrulha a politica do braco no replay de medicao: anota cada decisao (tick, estado como o dono o julga, acao), a
     amostra de estado (em privacao, saude), os sinais do dono que chegaram ao aprendiz ate ali e os que o dono deu. So le;
@@ -2470,7 +2477,8 @@ class _Registro:
 
     def observar(self, transicao) -> None:
         tick, regra = self._decisao
-        self.passos_sinal.append({"tick": tick, "regra": regra, "k": len(self.decisoes) - 1, "antes": transicao.observacao.vetor_estado,
+        self.passos_sinal.append({"tick": tick, "regra": regra, "k": len(self.decisoes) - 1, "acao": transicao.acao.value,
+                                  "antes": transicao.observacao.vetor_estado,
                                   "depois": transicao.observacao_seguinte.vetor_estado, "fruta": None,
                                   "antes_corpo": transicao.observacao.corpo, "depois_corpo": None})
         self.interna.observar(transicao)

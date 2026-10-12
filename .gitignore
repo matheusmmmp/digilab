@@ -97,3 +97,6 @@ artifacts_v2_comparacao_cerebros/**/vidas/
 artifacts_v2_validacao_unica/**/vidas/
 # V2, MUNDO-CEREBROS: a revisao dos empates do cheiro (so geometria e as vidas do P0 nas sementes dos testes)
 !artifacts_v2_mundo_cerebros/
+# V2, MUNDO-CALIBRACAO: as vidas da calibracao do mundo fisico sao regeneraveis da config e do codigo (meta, medidas e resultado ficam)
+!artifacts_v2_mundo/
+artifacts_v2_mundo/**/vidas/
