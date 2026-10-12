@@ -177,6 +177,8 @@ O B decide se isso vira um campo da `Reacao` ou um tipo novo, e declara no PR.
 ## 9. Decisões do Matheus
 
 **DECIDIDAS em 2026-10-11: ME-1 a ME-7, todas como recomendado.** O adendo 3 do plano do corpo segue as sete (conferido no mesmo dia).
+**Revisão proposta da grade da ME-7 (2026-10-12, PCD-9, aberta):** o mesmo multiplicador no basal e no gasto das atividades, em {¼, ½, 1}.
+Está em `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, A3.2b. O texto da ME-7 abaixo fica como foi decidido.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

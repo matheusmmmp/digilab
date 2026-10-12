@@ -163,6 +163,34 @@ Se nenhuma passa, ficam 28 dias e o poder sai declarado.
 
 **O adendo 1:** os pontos (6.1 e 6.2), a duração, a `Δ_B`, o K, o poder e o custo entram num commit antes da validação.
 
+**Nota de 2026-10-12 (registro, sem decisão): poucos carinhos no 2 × 2.**
+
+**Os números da fumaça.** Vêm da fumaça descritiva do #272: o banheiro perto, P0 e P1, sementes dos testes 101…505, 7 dias, o atencioso
+no comedouro, antes de qualquer calibração. Estão no relato do PR, sem artefato no repositório.
+- **Alívios dentro:** 5 em 35 no P0 (14%) e 8 em 39 no P1 (21%).
+- **Carinhos:** um por alívio dentro, o que dá **1 a 2 por vida em 7 dias**.
+- **Ritmo:** cerca de **1 alívio por dia**: 35 e 39 alívios em 5 vidas de 7 dias.
+
+**O que isso implica para a duração, a margem e o K**, na ordem em que o plano os escolhe:
+- **A calibração da 6.2 deve se mover:**
+  - a faixa pede de 2 a 5 alívios por dia acordado, e a fumaça está perto de 1;
+  - com os números de hoje, o ponto escolhido tende a subir a vontade (`m_v`, `m_w`);
+  - se nenhum ponto chegar a 2 por dia, a 6.2 sai "não fechou", e o critério de 0,80 fica medido sobre poucos alívios por dia (R-5).
+- **O critério da BN-4 fica longe:** sair de ~0,2 dentro para 0,80 por 3 dias seguidos pede muito aprendizado em poucos carinhos. É de
+  esperar muita censura no P1-B0C.
+- **A duração tende a 28 dias** com o poder declarado: a regra da duração pede no máximo 25% de censura no P1-B0C.
+- **A margem `Δ_B` pode ficar ≤ 1 dia,** e então a validação não roda e o plano volta ao Matheus. A regra não muda por esta nota.
+- **O K pode não bastar:** o teto do K é 10 por base (até 50 unidades). Com a censura alta, o poder do G-CARINHO pode não chegar a 0,8 nem
+  com K = 10, e aí sai declarado subpotenciado. O G-LIMPADOR, com menos sinal, quase certamente fica subpotenciado.
+
+**As saídas, se o piloto confirmar isso** (todas para o Matheus decidir; nenhuma está decidida aqui):
+- uma vida mais longa que 28 dias;
+- um K acima de 10;
+- um critério menos estrito que o da BN-4, que já está decidida e só muda por decisão nova;
+- a fração diária de alívios dentro (a inclinação ao longo da vida) como medida primária no lugar do dia até o critério.
+
+Escolher qualquer uma antes do piloto seria ajustar o desenho a uma fumaça de 5 vidas.
+
 ## 8. As medidas secundárias (fora do Holm, todas com IC)
 
 | medida | definição |
