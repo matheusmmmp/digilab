@@ -4591,3 +4591,11 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
   - **O teste:** `tests/test_calibracao_mundo.py`, com a vida da fumaça que falhava. Ele falha com a regra antiga.
 - **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
   `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).
+
+## 2026-10-12 — W-ROADMAP-R28 (worker C): a seção 8 do roadmap com o estado real
+
+- **A tabela J1 a J10 do `docs/ROADMAP_V2.md`** foi atualizada com o que está na `main` `930037b`, cada estado com o PR (e o artefato,
+  quando há número). Ganhou também uma tabela das ideias registradas: o nariz e o ouvido, o degrau 1b, o segundo dono, o cheiro de estado,
+  a fisiologia por espécie e os sistemas novos do corpo.
+- **O J1 e o J2 dizem "em curso, segundo o coordenador; sem resultado na `main`"** para a validação do mundo e a calibração do corpo. O
+  #278 diz "validação não rodada", e a mensagem do coordenador (2026-10-12) diz que ela está rodando. Nenhum número dessas runs entrou.
