@@ -1,5 +1,5 @@
 {
-  "descricao": "Passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2; TAREFA_V2_METABOLISMO, ME-7): so o P0-q, com o metabolismo, nas 20 unidades da calibracao (bases 33101...33505, K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao). O gasto (basal e das atividades sobre o combustivel) x {1/2, 1, 2} sai de experiments/bancada_v2.pontos_passo0; a regra de escolha e escolha_passo0 (fracao do tempo acordado com a falta em [0,05; 0,30], o ponto mais perto de 1). MONTADA, NAO RODADA: espera o fator do gasto das atividades na ConfigCorpo (no gasto_atividades).",
+  "descricao": "Passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2 e A3.2b; TAREFA_V2_METABOLISMO, ME-7; PCD-9): so o P0-q, com o metabolismo, nas 20 unidades da calibracao (bases 33101...33505, K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao). Um m_gasto em {1/4, 1/2, 1}, o mesmo no basal e no gasto das atividades sobre o combustivel (3 pontos, 480 vidas), montado por experiments/bancada_v2.pontos_passo0; a regra e escolha_passo0 (fracao do tempo acordado com a falta em [0,05; 0,30], o ponto mais perto de 1). Rodar: python experiments/bancada_v2.py --passo0 --config <esta> --saida <pasta>.",
   "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
   "bracos": [
     "P0-q"

@@ -1,0 +1,38 @@
+{
+  "descricao": "Fumaca do passo 0 da calibracao do corpo (A3.2b, PCD-9), NAO canonica: a mesma config do passo 0 com duas sementes dos testes no lugar das unidades da calibracao, 2 dias, sem plano; confere o encanamento (os tres pontos, a medida e a escolha), nunca como resultado.",
+  "bracos": [
+    "P0-q"
+  ],
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "mundos": [
+    "bola",
+    "padrao"
+  ],
+  "dias": 2,
+  "orcamento": 32,
+  "ponto": "T3",
+  "montagem": "completa",
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 200,
+    "semente": 101,
+    "nivel": 0.95
+  },
+  "sementes": [
+    101,
+    202
+  ]
+}

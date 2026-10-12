@@ -4537,3 +4537,22 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
 - **As saídas do 2 × 2 do banheiro** (vida acima de 28 dias, K acima de 10, critério menos estrito, a fração diária como primária) seguem
   **sem decisão**, como o Matheus confirmou, até haver dado além da fumaça. Isso está anotado na nota da seção 7 do
   `docs/PLANO_ANALISE_V2_BANHEIRO.md`.
+
+## 2026-10-12 — W-BANCADA-PASSO0 (worker D): o fator das atividades no passo 0 e a grade da PCD-9
+
+- **O m_gasto chega ao corpo pela chave `corpo` de cada ponto.** São quatro campos da `ConfigCorpo`: o basal (`gasto_basal_acordado`,
+  `gasto_basal_dormindo`), escalado pelo `_escalar` da bancada, e o fator das atividades (`gasto_atividades_num/den`) = o próprio
+  (num, den), que o corpo arredonda por `div_arred` (#275). Para números positivos as duas contas dão o mesmo: o ¼ fica 94 e 47, o ½ 188
+  e 94.
+- **A config não pode fixar os quatro campos** (falha alto): é o passo 0 que os escala. Uma config que os trouxesse escalaria por cima de
+  um valor que não é o PROPOSTO.
+- **O empate de |log2|** não acontece na grade {¼, ½, 1}. A regra continua escrita como na A3.2 (o menor gasto) e é testada numa grade
+  simétrica. Sem nenhum ponto na faixa, o empate pela distância ao centro vai para o ponto mais perto de 1, e depois para o menor gasto.
+- **O orquestrador é o `rodar` de sempre por ponto** (`bancada_v2.py --passo0`, `rodar_passo0`). Cada ponto vai para `<saída>/gasto_<num>_<den>/`
+  (vidas gravadas e rejogadas do disco, medidas, tabelas, meta). A escolha fica em `<saída>/passo0.json`. Todas as configs de ponto são
+  validadas antes da primeira vida.
+- **A fumaça** (`experiments/configs/v2_corpo/fumaca_passo0.json`, NÃO canônica) é a config do passo 0 com as sementes 101 e 202 no lugar
+  das unidades, 2 dias e sem plano. Usa duas sementes porque a tabela do bootstrap da `rodar` pede pelo menos duas.
+- **O que a fumaça mostrou** (descritivo, 2 dias, só encanamento): a fração com falta foi 0,000 no ¼, 0,000 no ½ e 0,389 no 1. A escolha
+  saiu "não fechou" no ½. Em 2 dias o combustível parte de C/2, e a vida de 14 dias pode ser outra. Fica como aviso: a grade pode
+  saltar de 0 para acima do teto da faixa sem nenhum ponto dentro dela.

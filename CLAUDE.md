@@ -3813,3 +3813,20 @@ em `web/app/motor/constantes.ts`. `engine.py`, o motor, os cérebros e a bancada
 - **A web:** só o espelho dos dois números. O gabarito da paridade ganhou a seção `metabolismo_gasto` (as taxas e a grade com ½ e 2); as
   outras saem idênticas.
 - **Para o D:** a fiação no `pontos_passo0` é pôr o fator na chave `"corpo"` junto do basal (os mesmos num/den), e tirar o nó.
+
+## V2, W-BANCADA-PASSO0 — o fator das atividades no passo 0 e a grade da PCD-9 (2026-10-12, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, A3.2b) — PRONTO, NÃO RODADO
+
+Com o #274 (a grade da PCD-9, do C) e o #275 (o fator do gasto das atividades na `ConfigCorpo`, do B) na `main`. Infraestrutura, sem run
+da calibração; só a fumaça nas sementes dos testes. Mudaram `experiments/bancada_v2.py`, a config do passo 0, a fumaça nova e dois testes.
+`engine.py`, o corpo, os cérebros e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O nó `gasto_atividades` e a segunda trava saíram:** o `NOS_PENDENTES` ficou vazio.
+- **A grade (PCD-9):** um `m_gasto` em {¼, ½, 1}, o mesmo no basal (94/47, 188/94, 375/187) e no fator das atividades
+  (`gasto_atividades_num/den`). O cansaço não muda. `pontos_passo0` dá as três configs pela chave `corpo` e falha alto se a config já
+  trouxer um dos quatro campos.
+- **O orquestrador:** `python experiments/bancada_v2.py --passo0 --config experiments/configs/v2_corpo/calibracao_passo0.json --saida <pasta>`
+  (`rodar_passo0`). Ele roda cada ponto pela `rodar` de sempre em `<pasta>/gasto_<num>_<den>/`, junta a fração das 8 células e aplica
+  a regra; o resultado vai para `<pasta>/passo0.json`. A calibração tem 20 unidades × 8 células × 3 pontos = 480 vidas e é disparada
+  pelo coordenador depois do merge.
+- **A fumaça** (`experiments/configs/v2_corpo/fumaca_passo0.json`, NÃO canônica: sementes 101 e 202, 2 dias, 48 vidas em ~19 s; sem artefato).
+- **Testes:** `tests/test_bancada_metabolismo.py` (a grade, o m_gasto no corpo da vida, a regra na grade nova, o passo 0 inteiro numa
+  fumaça pequena); o `NOS_PENDENTES` vazio em `tests/test_bancada_liga_gestos.py`.

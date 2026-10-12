@@ -9,11 +9,12 @@ O que se confere:
 - A3.3: o bloco `metabolismo` das medidas, conferido contra uma recontagem por fora (a sonda propria no passo do corpo, o fim da vida e a
   conta do corpo); so nas vidas com o metabolismo;
 - as medidas novas de metrics.py em dados com a resposta conhecida;
-- A3.2, o passo 0: os tres pontos (o basal x 1/2, 1 e 2: 188/94, 375/187 e 750/374) antes de falhar alto com o no `gasto_atividades`; a
-  trava e so a tabela (sem ela, a segunda trava); a fracao das 8 celulas juntas; a regra de escolha (a faixa, o empate, o "nao fechou");
-  a config do passo 0 valida e e a do plano.
+- A3.2 e A3.2b, o passo 0 (W-BANCADA-PASSO0, com o fator do gasto das atividades do #275 e a grade da PCD-9): os tres pontos, um m_gasto
+  em {1/4, 1/2, 1} no basal (94/47, 188/94, 375/187) e no fator das atividades, chegam ao corpo da vida; a config nao pode fixar os
+  campos escalados; a fracao das 8 celulas juntas; a regra de escolha (a faixa, o empate, o "nao fechou"); a config do passo 0 e a do
+  plano e valida em todo ponto (480 vidas); a fumaca do passo 0 inteiro (rodar_passo0) nas sementes dos testes.
 O G-P0C com o metabolismo (o P0-c decide igual ao P0-q) e os acoplados P1-q^ac e P1-c^ac ficam em tests/test_bancada_liga_gestos.py, que
-roda os bracos com a bancada de sempre (agora com o metabolismo). So as sementes dos testes; nenhuma run do passo 0.
+roda os bracos com a bancada de sempre (agora com o metabolismo). So as sementes dos testes; a calibracao do passo 0 nao roda aqui.
 """
 from __future__ import annotations
 
@@ -195,7 +196,7 @@ def test_tempo_comer_brincar_em_dados_conhecidos():
         tempo_comer_brincar([(30, "comer"), (15, "brincar")])
 
 
-# ------------------------------------------------------------------ 4. A3.2: o passo 0, montado e sem rodar
+# ------------------------------------------------------------------ 4. A3.2 e A3.2b: o passo 0, montado (a calibracao nao roda aqui)
 
 
 def _cfg_passo0() -> dict:
@@ -208,39 +209,51 @@ def test_a_config_do_passo_0_e_a_do_plano():
     assert cfg["bracos"] == [bv.PASSO0_BRACO] and cfg["plano"] == "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md"
     assert cfg["unidades"] == {"bases": [33101, 33202, 33303, 33404, 33505], "k": 4, "prefixo": "corpo"}
     assert len(cfg["donos"]) * len(cfg["mundos"]) == 8 and set(cfg["mundos"]) == {"bola", "padrao"}
-    assert len(bv.unidades_derivadas(cfg["unidades"]["bases"], cfg["unidades"]["k"], "corpo")) == 20
+    unidades = bv.unidades_derivadas(cfg["unidades"]["bases"], cfg["unidades"]["k"], "corpo")
+    assert len(unidades) == 20 and len(unidades) * 8 * len(bv.PASSO0_MULTIPLICADORES) == 480          # PCD-9: 480 vidas
     b = bv.bancada_da_config(cfg)
     assert b.montagem == "completa" and b.metabolismo and b.cfg_lobos == bv.cfg_lobos_do_ponto("T3")
     assert bv.BRACOS[bv.PASSO0_BRACO].metabolismo
-
-
-def test_os_pontos_do_passo_0_e_a_trava(monkeypatch):
-    cfg = _cfg_passo0()
-    base = ConfigCorpo()
-    assert (base.gasto_basal_acordado, base.gasto_basal_dormindo) == (375, 187)
-    capturados = []
-    original = bv._escalar
-    monkeypatch.setattr(bv, "_escalar", lambda v, n, d: capturados.append((v, n, d, original(v, n, d))) or original(v, n, d))
-    with pytest.raises(NotImplementedError, match="gasto_atividades"):
-        bv.pontos_passo0(cfg)
-    assert [c[3] for c in capturados] == [188, 94, 375, 187, 750, 374]          # o 1/2 arredondado para cima (registro)
-    # a trava e so a tabela: sem a entrada, a segunda trava (a fiacao do fator entra com o campo do B)
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {})
-    with pytest.raises(NotImplementedError, match="fiacao do fator"):
-        bv.pontos_passo0(cfg)
-    with pytest.raises(ValueError, match="so o P0-q"):
-        bv.pontos_passo0({**cfg, "bracos": ["P0-q", "P1-q"]})
-
-
-def test_cada_ponto_do_passo_0_valida_e_monta_o_basal():
-    """Os tres pontos, montados pela mesma conta do `pontos_passo0`, sao configs validas e a bancada deles tem o basal escalado."""
-    cfg = _cfg_passo0()
-    for num, den in bv.PASSO0_MULTIPLICADORES:
-        acordado, dormindo = bv._escalar(375, num, den), bv._escalar(187, num, den)
-        ponto = {**cfg, "corpo": {"gasto_basal_acordado": acordado, "gasto_basal_dormindo": dormindo}}
+    for nome, ponto in bv.pontos_passo0(cfg):                                     # cada ponto valida (com o plano)
         bv.validar_config(ponto)
-        cc = bv.bancada_da_config(ponto).cfg_corpo
-        assert (cc.gasto_basal_acordado, cc.gasto_basal_dormindo) == (acordado, dormindo) and not cc.metabolismo
+        with pytest.raises(bv.SementeSemPlano):
+            bv.validar_config({k: v for k, v in ponto.items() if k != "plano"})
+
+
+def test_os_pontos_do_passo_0_sao_a_grade_da_pcd_9():
+    assert "gasto_atividades" not in bv.NOS_PENDENTES and bv.PASSO0_MULTIPLICADORES == ((1, 4), (1, 2), (1, 1))
+    base = ConfigCorpo()
+    assert (base.gasto_basal_acordado, base.gasto_basal_dormindo, base.gasto_atividades_num, base.gasto_atividades_den) == (375, 187, 1, 1)
+    pontos = bv.pontos_passo0(_cfg_passo0())
+    assert [n for n, _ in pontos] == ["gasto_1_4", "gasto_1_2", "gasto_1_1"]
+    assert [[c["corpo"][k] for k in bv.PASSO0_CAMPOS] for _, c in pontos] == [[94, 47, 1, 4], [188, 94, 1, 2], [375, 187, 1, 1]]
+    for _, c in pontos:                                                           # o resto da config nao muda
+        assert {k: v for k, v in c.items() if k != "corpo"} == {k: v for k, v in _cfg_passo0().items() if k != "corpo"}
+    with pytest.raises(ValueError, match="so o P0-q"):
+        bv.pontos_passo0({**_cfg_passo0(), "bracos": ["P0-q", "P1-q"]})
+    for campo in bv.PASSO0_CAMPOS:                                                # a config nao fixa o que o passo 0 escala
+        with pytest.raises(ValueError, match="nao pode fixa"):
+            bv.pontos_passo0({**_cfg_passo0(), "corpo": {campo: 1}})
+
+
+@pytest.mark.parametrize("indice", (0, 1, 2))
+def test_o_m_gasto_chega_ao_corpo_da_vida(indice):
+    """O ponto vira a ConfigCorpo da bancada e o corpo do P0-q: o basal e o fator das atividades escalados, o cansaco de cada atividade
+    igual (ME-1, ME-3); a vida passa o G1 (Bancada.vida) e gasta pelos dois caminhos. A conta exata do fator e do #275
+    (tests/test_gasto_atividades.py)."""
+    nome, ponto = bv.pontos_passo0(_cfg_passo0())[indice]
+    num, den = bv.PASSO0_MULTIPLICADORES[indice]
+    b = bv.bancada_da_config({**{k: v for k, v in ponto.items() if k not in ("unidades", "plano")}, "sementes": [101], "dias": 2,
+                              "orcamento": 32})
+    cc = b.cfg_corpo
+    assert (cc.gasto_basal_acordado, cc.gasto_basal_dormindo, cc.gasto_atividades_num, cc.gasto_atividades_den) == \
+        (bv._escalar(375, num, den), bv._escalar(187, num, den), num, den)
+    v = b.vida(bv.EspecVida("atencioso", "P0-q", 101, None, "bola"))
+    mc = v.motor.cc
+    assert mc.metabolismo and (mc.gasto_atividades_num, mc.gasto_atividades_den, mc.gasto_basal_acordado) == \
+        (num, den, cc.gasto_basal_acordado)
+    contas = v.motor.corpo.contas_metabolismo
+    assert contas["gasto_basal"] > 0 and contas["gasto_atividade"] > 0
 
 
 def test_a_fracao_do_passo_0_junta_as_8_celulas():
@@ -257,12 +270,12 @@ def test_a_fracao_do_passo_0_junta_as_8_celulas():
 
 
 @pytest.mark.parametrize("fracoes,ponto,fechou", (
-    ({(1, 2): 0.40, (1, 1): 0.20, (2, 1): 0.10}, [1, 1], True),                 # o central passa: fica ele
-    ({(1, 2): 0.20, (1, 1): 0.40, (2, 1): 0.10}, [1, 2], True),                 # empate de |log2| (1/2 e 2): o menor gasto
-    ({(1, 2): 0.40, (1, 1): 0.35, (2, 1): 0.25}, [2, 1], True),                 # so o 2 passa
-    ({(1, 2): 0.05, (1, 1): 0.31, (2, 1): 0.60}, [1, 2], True),                 # a borda da faixa passa
-    ({(1, 2): 0.50, (1, 1): 0.33, (2, 1): 0.01}, [1, 1], False),                # nenhum: o mais perto do centro (0,175)
-    ({(1, 2): 0.03, (1, 1): 0.02, (2, 1): 0.01}, [1, 2], False),
+    ({(1, 4): 0.01, (1, 2): 0.10, (1, 1): 0.20}, [1, 1], True),                 # o 1 passa: fica ele
+    ({(1, 4): 0.10, (1, 2): 0.20, (1, 1): 0.40}, [1, 2], True),                 # o 1 passa da faixa: o 1/2, mais perto de 1 que o 1/4
+    ({(1, 4): 0.10, (1, 2): 0.35, (1, 1): 0.45}, [1, 4], True),                 # so o 1/4 passa
+    ({(1, 4): 0.01, (1, 2): 0.30, (1, 1): 0.60}, [1, 2], True),                 # a borda da faixa passa
+    ({(1, 4): 0.00, (1, 2): 0.00, (1, 1): 0.39}, [1, 2], False),                # nenhum: o mais perto do centro (0,175); empate, o perto de 1
+    ({(1, 4): 0.02, (1, 2): 0.03, (1, 1): 0.40}, [1, 2], False),
 ))
 def test_a_regra_de_escolha_do_passo_0(fracoes, ponto, fechou):
     r = bv.escolha_passo0(fracoes)
@@ -270,6 +283,38 @@ def test_a_regra_de_escolha_do_passo_0(fracoes, ponto, fechou):
     assert (r.get("registro") == "nao fechou") is (not fechou)
 
 
+def test_o_empate_de_log2_fica_com_o_menor_gasto(monkeypatch):
+    """Na grade da PCD-9 nao ha empate de |log2|; a regra (A3.2) segue escrita para uma grade simetrica: o menor gasto."""
+    monkeypatch.setattr(bv, "PASSO0_MULTIPLICADORES", ((1, 2), (1, 1), (2, 1)))
+    assert bv.escolha_passo0({(1, 2): 0.20, (1, 1): 0.40, (2, 1): 0.10})["ponto"] == [1, 2]
+
+
 def test_a_regra_do_passo_0_pede_os_tres_pontos():
     with pytest.raises(ValueError, match="tres pontos"):
-        bv.escolha_passo0({(1, 1): 0.2, (2, 1): 0.1})
+        bv.escolha_passo0({(1, 1): 0.2, (1, 2): 0.1})
+
+
+def test_a_fumaca_do_passo_0_inteiro(tmp_path):
+    """rodar_passo0 nas sementes dos testes (a fumaca de experiments/configs/v2_corpo/fumaca_passo0.json, menor): os tres pontos rodados
+    pela `rodar` de sempre (vidas gravadas e rejogadas do disco), a fracao de cada um recontada das medidas gravadas e a escolha pela
+    regra; o `passo0.json` com o corpo de cada ponto."""
+    fumaca = json.loads((CFG_PASSO0.parent / "fumaca_passo0.json").read_text(encoding="utf-8"))
+    bv.validar_config(fumaca)
+    assert set(fumaca["sementes"]) <= bv.SEMENTES_TESTE and "plano" not in fumaca
+    assert {k: v for k, v in fumaca.items() if k not in ("descricao", "sementes", "dias", "orcamento", "bootstrap")} == \
+        {k: v for k, v in _cfg_passo0().items() if k not in ("descricao", "unidades", "plano", "dias", "orcamento", "bootstrap")}
+    pequeno = {**fumaca, "donos": ["atencioso"], "mundos": ["bola"], "dias": 1, "orcamento": 16}
+    caminho = tmp_path / "c.json"
+    caminho.write_text(json.dumps(pequeno), encoding="utf-8")
+    assert bv.main(["--passo0", "--config", str(caminho), "--saida", str(tmp_path / "saida")]) == 0
+    saida = json.loads((tmp_path / "saida" / "passo0.json").read_text(encoding="utf-8"))
+    fracoes = {}
+    for (nome, ponto), mult in zip(bv.pontos_passo0(pequeno), bv.PASSO0_MULTIPLICADORES):
+        medidas = json.loads((tmp_path / "saida" / nome / "medidas.json").read_text(encoding="utf-8"))
+        assert len(medidas) == 2 and len(list((tmp_path / "saida" / nome / "vidas").glob("*.jsonl"))) == 2
+        mets = [m["corpo"]["metabolismo"] for m in medidas.values()]
+        fracoes[mult] = sum(x["acordado_com_falta"] for x in mets) / sum(x["acordado"] for x in mets)
+        assert saida["pontos"][nome]["fracao"] == fracoes[mult] and saida["pontos"][nome]["m_gasto"] == list(mult)
+        assert saida["pontos"][nome]["corpo"] == {k: ponto["corpo"][k] for k in bv.PASSO0_CAMPOS}
+    e = bv.escolha_passo0(fracoes)
+    assert {k: saida["escolha"][k] for k in e} == e and saida["escolha"]["nome"] == f"gasto_{e['ponto'][0]}_{e['ponto'][1]}"
