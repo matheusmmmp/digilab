@@ -163,7 +163,8 @@ Se nenhuma passa, ficam 28 dias e o poder sai declarado.
 
 **O adendo 1:** os pontos (6.1 e 6.2), a duração, a `Δ_B`, o K, o poder e o custo entram num commit antes da validação.
 
-**Nota de 2026-10-12 (registro, sem decisão): poucos carinhos no 2 × 2.**
+**Nota de 2026-10-12 (registro, sem decisão): poucos carinhos no 2 × 2.** O Matheus confirmou em 2026-10-12 que as saídas abaixo seguem **sem
+decisão** até haver dado além da fumaça.
 
 **Os números da fumaça.** Vêm da fumaça descritiva do #272: o banheiro perto, P0 e P1, sementes dos testes 101…505, 7 dias, o atencioso
 no comedouro, antes de qualquer calibração. Estão no relato do PR, sem artefato no repositório.

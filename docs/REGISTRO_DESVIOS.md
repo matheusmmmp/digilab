@@ -4526,3 +4526,14 @@ O Matheus (2026-10-11, pelo Gerente) mandou seguir a recomendação em todas as 
   acontece em {½, 1, 2}.
 - **O G2 do metabolismo ligado** precisou de um gabarito novo, gravado antes do fator. O da etapa 0 do metabolismo é com ele desligado.
 - **O fator não mexe no cansaço nem no grafo:** os mesmos emissores, com efeitos de outro tamanho. As checagens dão o mesmo relato do padrão.
+
+## 2026-10-12 — W-PCD9-DECIDIDA (worker C): a PCD-9 decidida
+
+- **A PCD-9** foi marcada como DECIDIDA pelo Matheus em 2026-10-12, pela recomendação: o mesmo `m_gasto` no basal e nas atividades, em
+  {¼, ½, 1}.
+  - **Onde:** a A3.2b e a A3.5 do `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, com uma nota na grade antiga da A3.2, e a seção 9 da
+    `docs/TAREFA_V2_METABOLISMO.md`.
+  - **A seção de 2026-10-12 acima,** que a dava como aberta, fica como estava: é o registro daquele dia.
+- **As saídas do 2 × 2 do banheiro** (vida acima de 28 dias, K acima de 10, critério menos estrito, a fração diária como primária) seguem
+  **sem decisão**, como o Matheus confirmou, até haver dado além da fumaça. Isso está anotado na nota da seção 7 do
+  `docs/PLANO_ANALISE_V2_BANHEIRO.md`.
