@@ -2799,7 +2799,8 @@ def meta(cfg: dict) -> dict:
             "python": platform.python_version(), "plataforma": platform.platform(),
             "engine_sha256": sha256_engine(), "lobos_sha256": _sha(RAIZ / "digilab" / "policies" / "lobos.py"),
             "config_sha256": _sha(RAIZ / "digilab" / "config.py"), "bancada_sha256": _sha(Path(__file__)),
-            "metrics_sha256": _sha(RAIZ / "digilab" / "metrics.py"), "mundo_sha256": _sha(RAIZ / "digilab" / "mundo.py")}
+            "metrics_sha256": _sha(RAIZ / "digilab" / "metrics.py"), "mundo_sha256": _sha(RAIZ / "digilab" / "mundo.py"),
+            "corpo_sha256": _sha(RAIZ / "digilab" / "corpo.py"), "motor_corpo_sha256": _sha(RAIZ / "digilab" / "motor_corpo.py")}
 
 
 # ================================================================== dois pets: a bancada do grupo (TAREFA_V2_DOIS_PETS, etapa 5)
@@ -3067,7 +3068,10 @@ def escolha_passo0(fracoes: dict) -> dict:
 def rodar_passo0(cfg: dict, pasta: Path) -> dict:
     """O passo 0 inteiro (A3.2 e A3.2b): cada ponto de `pontos_passo0` pela `rodar` de sempre, em `pasta/<ponto>/` (vidas gravadas e
     rejogadas do disco, medidas, meta), a fracao das 8 celulas juntas por ponto e a escolha pela regra; grava `pasta/passo0.json`. Toda
-    config de ponto e validada antes da primeira vida (as sementes fora das dos testes pedem o plano)."""
+    config de ponto e validada antes da primeira vida (as sementes fora das dos testes pedem o plano). Recusa uma pasta que ja existe
+    (PLANO_ANALISE_V2_CORPO_DRIVES, secao 11)."""
+    if pasta.exists():
+        raise FileExistsError(f"{pasta}: a pasta de saida do passo 0 ja existe")
     pontos = pontos_passo0(cfg)
     for _, c in pontos:
         validar_config(c)
