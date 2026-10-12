@@ -591,12 +591,8 @@ NOS_PENDENTES: dict = {
     # "cerebro_social" com o #266 (as entradas sociais e o modelo dos outros no cerebro A, ligados nos bracos do grupo)
     # o "canais_fruta_mundo" (W-BANCADA-DOIS-PETS) saiu na W-BANCADA-METABOLISMO: a rota do canal do humor no mundo fisico entrou (#269,
     # ConfigLobos.presenca_fruta_mundo), ligada no cerebro do grupo
-    # metabolismo (TAREFA_V2_METABOLISMO, ME-7; PLANO_ANALISE_V2_CORPO_DRIVES, A3.2): o passo 0 da calibracao do corpo escala "o gasto
-    # (basal e das atividades sobre o combustivel)". O basal tem campo na ConfigCorpo; as atividades tiram do combustivel o mesmo numero
-    # que somam ao cansaco (ME-3), sem fator. Trava o passo 0 (`pontos_passo0`)
-    "gasto_atividades": "o fator do gasto das atividades sobre o combustivel na ConfigCorpo (ME-7 e A3.2: o passo 0 escala o basal e as "
-                        "atividades; o corpo de hoje tira das atividades o mesmo numero que somam ao cansaco, ME-3, sem fator; do B, "
-                        "digilab/corpo.py)",
+    # o "gasto_atividades" (W-BANCADA-METABOLISMO) saiu na W-BANCADA-PASSO0: o fator do gasto das atividades sobre o combustivel entrou
+    # na ConfigCorpo (#275, `gasto_atividades_num/den`), e o passo 0 o escala junto com o basal (PCD-9)
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -2989,35 +2985,39 @@ def _resumo_grupo(g: Grupo) -> tuple:
     return (g.registro.para_jsonl(), g.resumo(), {i: getattr(m, "troca", None) for i, m in g.motores.items()})
 
 
-# o passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2; ME-7): so o P0-q, com o metabolismo, nas 20 unidades da
-# calibracao (bases 33101...33505, K = 4) e nas 8 celulas; o gasto (basal e das atividades sobre o combustivel) x {1/2, 1, 2}, partindo dos
-# PROPOSTOS (375 acordado, 187 dormindo); fica o ponto mais perto de 1 (|log2|) com a fracao do tempo acordado com a falta em [0,05; 0,30],
-# nas 8 celulas juntas; sem nenhum, o de fracao mais perto do centro da faixa, "nao fechou". A faixa e PROPOSTA, SEM FONTE.
-PASSO0_MULTIPLICADORES = ((1, 2), (1, 1), (2, 1))           # (num, den): 1/2, 1, 2
+# o passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2 e A3.2b; ME-7; PCD-9): so o P0-q, com o metabolismo, nas
+# 20 unidades da calibracao (bases 33101...33505, K = 4) e nas 8 celulas; um m_gasto, o mesmo no basal (375 acordado, 187 dormindo) e no
+# gasto de cada atividade sobre o combustivel (o fator `gasto_atividades_num/den` do #275), em {1/4, 1/2, 1}: 3 pontos, 480 vidas. O
+# cansaco nao muda (ME-1, ME-3). Fica o ponto mais perto de 1 (|log2|) com a fracao do tempo acordado com a falta em [0,05; 0,30], nas 8
+# celulas juntas; sem nenhum, o de fracao mais perto do centro da faixa, "nao fechou". A faixa e PROPOSTA, SEM FONTE.
+PASSO0_MULTIPLICADORES = ((1, 4), (1, 2), (1, 1))           # (num, den): 1/4, 1/2, 1 (PCD-9; o 2 da A3.2 saiu)
 PASSO0_FAIXA = (0.05, 0.30)
 PASSO0_BRACO = "P0-q"
+PASSO0_CAMPOS = ("gasto_basal_acordado", "gasto_basal_dormindo", "gasto_atividades_num", "gasto_atividades_den")
 
 
 def _escalar(v: int, num: int, den: int) -> int:
-    """v x num/den, arredondado (metade para cima): 375/2 = 188 e 187/2 = 94 (o 1/2 da grade nao e inteiro; registro)"""
+    """v x num/den, arredondado (metade para cima, o div_arred para positivos): 375/2 = 188, 187/2 = 94, 375/4 = 94 e 187/4 = 47 (A3.2b)"""
     return (v * num + den // 2) // den
 
 
 def pontos_passo0(cfg: dict) -> list[tuple[str, dict]]:
-    """As tres configs do passo 0 a partir da `cfg` (a da calibracao do corpo com o P0-q): o basal (`gasto_basal_acordado`,
-    `gasto_basal_dormindo`) x num/den pela chave "corpo". O gasto das atividades sobre o combustivel nao tem fator na ConfigCorpo: falha
-    alto com o no `gasto_atividades` (e, sem a entrada, na segunda trava: a fiacao do fator entra com o campo do B)."""
+    """As tres configs do passo 0 a partir da `cfg` (a da calibracao do corpo com o P0-q), pela chave "corpo": o basal
+    (`gasto_basal_acordado`, `gasto_basal_dormindo`) x num/den, arredondado, e o fator das atividades (`gasto_atividades_num/den`) = num/den
+    (o corpo arredonda cada gasto por div_arred). A `cfg` nao pode trazer esses campos: o passo 0 e quem os escala."""
     if cfg.get("bracos") != [PASSO0_BRACO]:
         raise ValueError(f"o passo 0 roda so o {PASSO0_BRACO}: {cfg.get('bracos')}")
+    escalados = set(cfg.get("corpo", {})) & set(PASSO0_CAMPOS)
+    if escalados:
+        raise ValueError(f"o passo 0 escala {PASSO0_CAMPOS}; a config nao pode fixa-los: {sorted(escalados)}")
     base = ConfigCorpo()
     pontos = []
     for num, den in PASSO0_MULTIPLICADORES:
         corpo = {**cfg.get("corpo", {}), "gasto_basal_acordado": _escalar(base.gasto_basal_acordado, num, den),
-                 "gasto_basal_dormindo": _escalar(base.gasto_basal_dormindo, num, den)}
+                 "gasto_basal_dormindo": _escalar(base.gasto_basal_dormindo, num, den),
+                 "gasto_atividades_num": num, "gasto_atividades_den": den}
         pontos.append((f"gasto_{num}_{den}", {**cfg, "corpo": corpo}))
-    if "gasto_atividades" in NOS_PENDENTES:
-        raise NotImplementedError(f"o passo 0 da calibracao do corpo (no gasto_atividades): {NOS_PENDENTES['gasto_atividades']}")
-    raise NotImplementedError("o passo 0: a fiacao do fator do gasto das atividades entra com o campo da ConfigCorpo (do B)")
+    return pontos
 
 
 def fracao_falta_passo0(medidas: dict) -> dict:
@@ -3040,7 +3040,8 @@ def fracao_falta_passo0(medidas: dict) -> dict:
 
 def escolha_passo0(fracoes: dict) -> dict:
     """A regra do passo 0 (A3.2, escrita antes): `fracoes` = {(num, den): fracao do tempo acordado com a falta}. Fica o ponto mais perto de
-    1 pela |log2(num/den)| com a fracao em PASSO0_FAIXA; no empate (1/2 e 2), o menor gasto (como o "menor m_sobe" da 6.2). Sem nenhum, o
+    1 pela |log2(num/den)| com a fracao em PASSO0_FAIXA; num empate de |log2| (nao ha na grade da PCD-9), o menor gasto (como o "menor
+    m_sobe" da 6.2). Sem nenhum, o
     de fracao mais perto do centro da faixa, com "nao fechou". Ponto fora da grade falha alto."""
     if set(fracoes) != set(PASSO0_MULTIPLICADORES):
         raise ValueError(f"o passo 0 pede os tres pontos {PASSO0_MULTIPLICADORES}: {sorted(fracoes)}")
@@ -3053,6 +3054,27 @@ def escolha_passo0(fracoes: dict) -> dict:
     centro = (lo + hi) / 2
     p = min(PASSO0_MULTIPLICADORES, key=lambda q: (abs(fracoes[q] - centro), distancia(q), q[0] / q[1]))
     return {"ponto": list(p), "fechou": False, "fracao": fracoes[p], "passam": [], "registro": "nao fechou"}
+
+
+def rodar_passo0(cfg: dict, pasta: Path) -> dict:
+    """O passo 0 inteiro (A3.2 e A3.2b): cada ponto de `pontos_passo0` pela `rodar` de sempre, em `pasta/<ponto>/` (vidas gravadas e
+    rejogadas do disco, medidas, meta), a fracao das 8 celulas juntas por ponto e a escolha pela regra; grava `pasta/passo0.json`. Toda
+    config de ponto e validada antes da primeira vida (as sementes fora das dos testes pedem o plano)."""
+    pontos = pontos_passo0(cfg)
+    for _, c in pontos:
+        validar_config(c)
+    fracoes, por_ponto = {}, {}
+    for (nome, c), mult in zip(pontos, PASSO0_MULTIPLICADORES):
+        r = rodar(c, pasta / nome)
+        f = fracao_falta_passo0(r["medidas"])
+        fracoes[mult] = f["fracao"]
+        por_ponto[nome] = {"m_gasto": list(mult), "corpo": {k: c["corpo"][k] for k in PASSO0_CAMPOS}, **f}
+    escolha = escolha_passo0(fracoes)
+    nome = f"gasto_{escolha['ponto'][0]}_{escolha['ponto'][1]}"
+    saida = {"plano": cfg.get("plano"), "faixa": list(PASSO0_FAIXA), "pontos": por_ponto,
+             "escolha": {**escolha, "nome": nome, "corpo": por_ponto[nome]["corpo"]}}
+    _gravar(pasta / "passo0.json", _dump(saida))
+    return saida
 
 
 CHAVES_CONFIG_GRUPO = {"descricao", "plano", "tipo", "bracos", "sementes", "unidades", "k_dias", "dias", "orcamento_por_dia", "dono",
@@ -3132,8 +3154,14 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="bancada da V2: bracos P0-P3 sobre o mesmo aprendiz (docs/TAREFA_V2_BANCADA.md)")
     ap.add_argument("--config", required=True)
     ap.add_argument("--saida", required=True, help="pasta de saida (vidas/, medidas.json, tabelas.json, meta.json)")
+    ap.add_argument("--passo0", action="store_true", help="o passo 0 da calibracao do corpo (A3.2b): os tres pontos e a escolha")
     a = ap.parse_args(argv)
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8"))
+    if a.passo0:
+        r = rodar_passo0(cfg, Path(a.saida))
+        e = r["escolha"]
+        print(f"passo 0: {e['nome']} ({'fechou' if e['fechou'] else 'nao fechou'}, fracao {e['fracao']:.4f}); em {a.saida}/passo0.json")
+        return 0
     if cfg.get("tipo") == "grupo":                # dois pets (TAREFA_V2_DOIS_PETS, etapa 5)
         r = rodar_grupo(cfg, Path(a.saida))
         print(f"{len(r['grupos'])} grupos rejogados do disco bit a bit; medidas em {a.saida}")
