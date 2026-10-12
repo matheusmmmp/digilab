@@ -159,7 +159,9 @@ def _motores(tipo, arg):
         return {None: (v.motor, v.interacoes)}
     if tipo == "bancada":
         braco, cerebro, s = arg
-        v = bv.Bancada(gbl.DIAS, 16 * gbl.DIAS).vida(bv.EspecVida("atencioso", braco, s, None, "fisico", cerebro, lugar="comedouro"))
+        with gbl.canto():                               # a area de antes (BN-8): a do gabarito
+            v = bv.Bancada(gbl.DIAS, 16 * gbl.DIAS).vida(bv.EspecVida("atencioso", braco, s, None, "fisico", cerebro,
+                                                                      lugar="comedouro"))
         return {None: (v.motor, v.interacoes)}
     g = gbl.vida_grupo(arg)
     return {i: (g.motores[i], None) for i in ("A", "B")}

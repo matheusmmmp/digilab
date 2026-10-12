@@ -1,7 +1,8 @@
 # Tarefa — V2: o banheiro, a necessidade no lugar certo e o limpador (W-TAREFA-BANHEIRO)
 
 Status: **BN-1 a BN-6 DECIDIDAS pelo Matheus em 2026-10-07, todas pela recomendação** (seção 10). **BN-7 DECIDIDA em 2026-10-11**
-(o alvo `banheiro` continua até chegar; seção 4). Os números seguem PROPOSTOS. Escrito
+(o alvo `banheiro` continua até chegar; seção 4). **BN-8 DECIDIDA em 2026-10-11** (o banheiro perto de onde o pet passa o dia;
+seção 3). Os números seguem PROPOSTOS. Escrito
 pelo coordenador em 2026-10-07 a pedido do Matheus. **Só papel.** O código vem em etapas depois do mundo
 físico e do corpo (seção 9). Os números são **PROPOSTOS, sem fonte**.
 
@@ -51,8 +52,10 @@ pelo corpo (CD-4).
 
 ## 3. O banheiro, a vontade e a necessidade
 
-**O banheiro.** Um retângulo dentro da casa, em `ConfigMundo.layout` (PROPOSTO: células x 0 a 3, y 0 a 5, longe do ninho e do comedouro).
-É uma área, sem parede.
+**O banheiro.** Um retângulo dentro da casa, em `ConfigBanheiro.celulas_x` e `celulas_y` (PROPOSTO, SEM FONTE). É uma área, sem parede.
+- **BN-8 (2026-10-11):** células x 8 a 12, y 18 a 20. O ponto do banheiro mais perto do comedouro (10, 15), onde o pet passa o dia, fica a 40
+  subunidades: ao alcance de uma decisão (60). Não cobre o comedouro nem o ninho (4, 15), que fica a 68.
+- **Antes (#265):** células x 0 a 3, y 0 a 5, no canto da casa, a 185–260 subunidades de onde o pet aliviava.
 
 **A vontade** (químico novo, em C = 450000, na escala da `TAREFA_V2_CORPO_DRIVES.md`):
 - **sobe** +150 por tick acordado (PROPOSTO: cheia em ~50 h sem comer);
@@ -218,7 +221,8 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 
 ## 10. Decisões do Matheus
 
-**DECIDIDAS em 2026-10-07: BN-1 a BN-6, todas como recomendado. DECIDIDA em 2026-10-11: BN-7, a do alvo que continua.** Pela BN-6, o carinho ganha o componente de **conforto**: um químico
+**DECIDIDAS em 2026-10-07: BN-1 a BN-6, todas como recomendado. DECIDIDAS em 2026-10-11: BN-7, a do alvo que continua, e BN-8, a do banheiro
+perto.** Pela BN-6, o carinho ganha o componente de **conforto**: um químico
 novo que cai devagar e sobe com o carinho, com receptor (PROPOSTO). O B o põe no `corpo.py` junto com a vontade, na etapa 2.
 
 | # | decisão | recomendação | custo de errar |
@@ -230,3 +234,4 @@ novo que cai devagar e sobe com o carinho, com receptor (PROPOSTO). O B o põe n
 | BN-6 | Como manter o carinho mais forte que o limpador com a solidão baixa (seção 5b) | **(a)**: um componente de conforto no carinho, que não depende da solidão | (b) ou (c): o carinho frequente empata com o limpador, contra o que o Matheus pediu |
 | BN-5 | O limpador no produto como compra na loja, quando a loja existir | **sim**, registrado como IDEIA para o produto | — |
 | BN-7 | O alvo `banheiro` continua por mais de uma decisão (como o `continuar`), segurando a vontade até chegar, salvo a regra urgente | **DECIDIDA em 2026-10-11** (o Matheus seguiu a recomendação do coordenador; pedida pelo achado do #265). Os donos: o A no motor (o alvo pendente do `aliviar` e o alívio só na chegada ou na urgência) e o B no instinto e nos cérebros (o candidato que continua o alvo `banheiro`) | sem ela: o pet alivia no caminho quase sempre, e o carinho e o limpador do 2 × 2 quase não aparecem. As outras saídas do #265 (o banheiro mais perto do pet, um alcance próprio do aliviar) mudariam o mapa ou o custo do andar |
+| BN-8 | O banheiro mais perto de onde o pet passa o dia: ao alcance de uma decisão (60) a partir do comedouro, sem mudar o contrato de decisão nem o teto de pesos; a ida que continua (BN-7) fica | **DECIDIDA em 2026-10-11** (o Matheus, depois da fumaça do #270: 0 alívios dentro). Área PROPOSTA pelo A: células x 8 a 12, y 18 a 20 (a 40 subunidades do comedouro, fora dele e do ninho) | sem ela: as idas se desfazem no meio (o pet troca de ação) e o 2 × 2 fica sem carinho nem limpador para medir. Um banheiro que cobrisse o comedouro poria a necessidade onde o pet come |

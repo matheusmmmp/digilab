@@ -175,7 +175,8 @@ def test_a_montagem_dos_bracos_do_banheiro():
 @pytest.fixture
 def banheiro_grande(monkeypatch):
     """So para exercitar o carinho e o limpador nas vidas curtas dos testes: o banheiro cobrindo a casa e o jardim (o PROPOSTO, nas celulas
-    0 a 3 e 0 a 5, quase nao recebe alivio dentro: o achado do #265)."""
+    0 a 3 e 0 a 5, quase nao recebia alivio dentro: o achado do #265; com a BN-8, perto do comedouro, as vidas curtas dos testes ainda
+    variam muito)."""
     monkeypatch.setattr(bv, "CONFIG_BANHEIRO_LIGADA", bv.replace(bv.CONFIG_BANHEIRO_LIGADA, celulas_x=(0, 15), celulas_y=(0, 15)))
 
 

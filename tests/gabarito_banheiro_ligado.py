@@ -24,6 +24,7 @@ sys.path.insert(0, str(RAIZ / "tests"))
 import bancada_v2 as bv  # noqa: E402
 import gabarito_mundo as gm  # noqa: E402
 import test_banheiro_mundo as tb  # noqa: E402
+from gabarito_banheiro_perto import canto  # noqa: E402
 from digilab.config import CONFIG_GRUPO_LIGADA  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.grupo import PetDoGrupo, sementes_do_grupo, simular_grupo  # noqa: E402
@@ -100,7 +101,8 @@ def vida_de_hoje(tipo: str, arg) -> dict:
         return registro(v.motor, v.interacoes)
     if tipo == "bancada":
         braco, cerebro, s = arg
-        v = bv.Bancada(DIAS, 16 * DIAS).vida(bv.EspecVida("atencioso", braco, s, None, "fisico", cerebro, lugar="comedouro"))
+        with canto():                                   # a area de antes (BN-8 moveu o padrao): o gabarito e dela
+            v = bv.Bancada(DIAS, 16 * DIAS).vida(bv.EspecVida("atencioso", braco, s, None, "fisico", cerebro, lugar="comedouro"))
         return registro(v.motor, v.interacoes)
     g = vida_grupo(arg)
     ts = [t for t in (t_estrela(g.motores[i]) for i in ("A", "B")) if t is not None]

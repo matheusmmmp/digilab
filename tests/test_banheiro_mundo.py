@@ -38,7 +38,9 @@ from digilab.policies.lobos import PoliticaLobos  # noqa: E402
 
 CM = CONFIG_MUNDO_LIGADA
 CC = CONFIG_CORPO_BANHEIRO
-CB = CONFIG_BANHEIRO_LIGADA
+# o banheiro do #265, no canto da casa (x 0 a 3, y 0 a 5), dado explicitamente: os testes de mecanismo usam a geometria dele (a BN-8
+# moveu o padrao para perto do comedouro; tests/test_banheiro_perto.py confere o padrao novo)
+CB = replace(CONFIG_BANHEIRO_LIGADA, celulas_x=(0, 3), celulas_y=(0, 5))
 CBL = replace(CB, limpador=True)
 # um banheiro em volta do comedouro (10, 15), so para os testes: o pet passa muito tempo nele e o carinho acontece
 CB_PERTO = replace(CB, celulas_x=(8, 12), celulas_y=(12, 18))
@@ -132,7 +134,7 @@ def motor_roteiro(acoes, alvo="aqui", cbh=CB, pet=None, vontade=None, semente=10
     return m, pol
 
 
-DENTRO = (32, 48)                             # dentro do banheiro padrao (celulas 0 a 3, 0 a 5: x 0 a 63, y 0 a 95)
+DENTRO = (32, 48)                             # dentro do banheiro de antes (celulas 0 a 3, 0 a 5: x 0 a 63, y 0 a 95)
 FORA_PERTO = (104, 48)                        # 41 subunidades a leste do banheiro: ao alcance de uma decisao (60)
 FORA_LONGE = (200, 64)                        # na casa (celula 12), longe do banheiro
 
