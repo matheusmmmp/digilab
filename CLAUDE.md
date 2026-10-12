@@ -3757,3 +3757,35 @@ o instinto, os cérebros, a bancada e a web não. Interpretações em `docs/REGI
   | P1 (lobos, T3) | 36 → 39 | 0 → 8 | 0 → 8 | 0 → 8 | 308 → 130 |
 
   Há um carinho por alívio dentro, e o limpador recolhe todos.
+
+## V2, W-BANCADA-METABOLISMO — a rota do humor no grupo, o metabolismo no bloco do corpo e o passo 0 montado (2026-10-11, `docs/TAREFA_V2_METABOLISMO.md`, etapa 2) — GATES PASSAM
+
+Com o #269 (a rota do canal do humor no mundo físico, do B) e o #271 (o metabolismo no corpo, do B) na `main`. Infraestrutura, sem run;
+só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, `digilab/metrics.py` (duas medidas no fim), a config nova
+`experiments/configs/v2_corpo/calibracao_passo0.json` e alguns testes antigos (abaixo). `engine.py`, `corpo.py`, `lobos.py`, o mundo e a
+web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O nó `canais_fruta_mundo` saiu.** O cérebro do grupo (`Bancada.bancada_grupo`) liga `ConfigLobos.presenca_fruta_mundo` em todo
+  braço, ao lado do alvo aprendido, das entradas sociais e do modelo dos outros. A run do plano dos dois pets valida com a montagem
+  completa (sem ela, segue falhando alto), e o A só da semente 505, que falhava alto, passa.
+- **O metabolismo no bloco do corpo (A3.1, ME-6):**
+  - `Braco.metabolismo` está ligado no P0-q, P1-q, P0-c, P1-c, P0-c-tapa, P1-c-tapa, P1-c-tapaX, P1-c-frutas e P1-cw; os acoplados
+    herdam pelo braço de destino;
+  - o G-HOJE e o banheiro ficam sem ele; fora do regime "química" ou "corpo", falha alto;
+  - a chave `corpo` da config e a `cfg_corpo` da bancada não o ligam (`SUBCHAVES_CORPO`);
+  - `Bancada(metabolismo=False)`, fora da config, refaz as vidas de antes (os gabaritos do G2 do metabolismo e da rede de si).
+- **A medida (A3.3, bloco `corpo.metabolismo` do `medidas.json`):** uma sonda só de leitura no `passo` do corpo, no replay de medição
+  (`sondar_metabolismo`), e `metrics.metabolismo_da_vida`: a fração do tempo acordado com a falta, os disparos, e o combustível e a
+  reserva no fim de cada dia. Saem também `metrics.tempo_comer_brincar` e as contas do corpo.
+- **O passo 0 (A3.2, ME-7), montado sem rodar:**
+  - a config: o P0-q, as 20 unidades (bases 33101…33505, K = 4, prefixo `corpo`) e as 8 células (4 donos × `bola` e `padrao`);
+  - `pontos_passo0` monta os três pontos do basal (188/94, 375/187, 750/374);
+  - `fracao_falta_passo0` junta as 8 células, e `escolha_passo0` aplica a regra (a faixa [0,05; 0,30], o mais perto de 1, o empate no
+    menor gasto, "não fechou");
+  - **trava no nó `gasto_atividades`**: a `ConfigCorpo` não tem o fator do gasto das atividades sobre o combustível (é do B).
+- **Testes:**
+  - `tests/test_bancada_metabolismo.py` (35);
+  - `tests/test_bancada_dois_pets.py`: os canais rodam no grupo, e o A só 505 passa;
+  - `tests/test_canal_fruta_mundo.py`: a falha antiga com o cérebro do grupo de antes;
+  - `tests/test_bancada_liga_gestos.py`: o `NOS_PENDENTES` e, com a bancada de sempre, o G-P0C e os acoplados P1-q^ac e P1-c^ac com o
+    metabolismo.
+  - `tests/test_faixas_r17.py`: a faixa de calibração do corpo pode estar nas configs do próprio plano.

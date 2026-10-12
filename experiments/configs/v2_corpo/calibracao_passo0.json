@@ -1,0 +1,46 @@
+{
+  "descricao": "Passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2; TAREFA_V2_METABOLISMO, ME-7): so o P0-q, com o metabolismo, nas 20 unidades da calibracao (bases 33101...33505, K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao). O gasto (basal e das atividades sobre o combustivel) x {1/2, 1, 2} sai de experiments/bancada_v2.pontos_passo0; a regra de escolha e escolha_passo0 (fracao do tempo acordado com a falta em [0,05; 0,30], o ponto mais perto de 1). MONTADA, NAO RODADA: espera o fator do gasto das atividades na ConfigCorpo (no gasto_atividades).",
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "bracos": [
+    "P0-q"
+  ],
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "unidades": {
+    "bases": [
+      33101,
+      33202,
+      33303,
+      33404,
+      33505
+    ],
+    "k": 4,
+    "prefixo": "corpo"
+  },
+  "mundos": [
+    "bola",
+    "padrao"
+  ],
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  }
+}

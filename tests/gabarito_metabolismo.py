@@ -28,7 +28,7 @@ DIAS = gb.DIAS
 ORC = gb.ORC
 SEMENTES = gb.SEMENTES                                  # so as dos testes
 DONOS = gb.DONOS
-BANCADA = bv.Bancada(DIAS, ORC)
+BANCADA = bv.Bancada(DIAS, ORC, metabolismo=False)     # os bracos do corpo sem o metabolismo do adendo 3 (A3.1): a vida de antes
 BRACOS_CORPO = ("P0-q", "P1-q", "P0-c", "P1-c", "P1-c-tapa", "P1-cw")
 MUNDOS_CORPO = ("padrao", "bola", "iguais_frutas")
 FISICO = ("P1-quimica", "P0-B00", "P1-B0C", "P0-BL0", "P1-BLC")

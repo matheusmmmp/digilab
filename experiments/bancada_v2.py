@@ -144,6 +144,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import platform
 import random
 import sys
@@ -185,7 +186,7 @@ from digilab.metrics import (cuidado_preservado, deficit_fome_energia, inclinaca
 from digilab.metrics import contribuicao_drives, dominancia_decisoes, leitura_dominancia  # noqa: E402
 from digilab.metrics import drives_novos as medir_drives_novos, tempo_livre_be  # noqa: E402
 from digilab.metrics import alivios_ate_criterio, alivios_por_dia, curva_sobrevivencia, dia_do_criterio  # noqa: E402
-from digilab.metrics import vez_no_grupo  # noqa: E402
+from digilab.metrics import metabolismo_da_vida, tempo_comer_brincar, vez_no_grupo  # noqa: E402
 from digilab.mundo import DonoCarinhoBanheiro  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
@@ -313,7 +314,7 @@ CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades"
 # numeros, nunca as sub-chaves
 CONFIG_CORPO_QUIMICA = ConfigCorpo(ligada=True, digestao=True, vida=True)
 REGIMES_CORPO = ("hoje", "quimica", "corpo")
-SUBCHAVES_CORPO = ("ligada", "digestao", "vida", "drives_novos", "gestos")
+SUBCHAVES_CORPO = ("ligada", "digestao", "vida", "drives_novos", "gestos", "metabolismo")
 GESTOS_DONO = ("sem_tapa", "tapa", "tapa_fruta")
 # K4 fora do orcamento (decisao do Matheus, 2026-10-05): a chave liga o motor e a regra do mundo; o julgamento usa elogiar/repreender
 CONFIG_JULGAMENTO_FORA = ConfigJulgamentoFruta(ligada=True, no_orcamento=False)
@@ -517,6 +518,7 @@ class Braco:
     regime: str | None = None        # corpo: None = "hoje" (sem corpo), "quimica" ou "corpo" (PLANO_ANALISE_V2_CORPO_DRIVES, secao 1)
     gestos: str | None = None        # corpo: o DonoComGestos (etapa 6 do A): "sem_tapa", "tapa" ou "tapa_fruta" (o tapa na fruta X, A1.1)
     banheiro: str | None = None      # banheiro: o braco do 2 x 2 (limpador x carinho depois do banheiro): "B00", "B0C", "BL0" ou "BLC"
+    metabolismo: bool = False        # corpo, adendo 3 (A3.1, ME-6): o combustivel e a reserva no bloco do corpo, do tapa e nos acoplados
 
 
 BRACOS = {
@@ -551,19 +553,20 @@ BRACOS = {
     "P0-quimica": Braco("P0-quimica", "nenhuma", "corpo-3.1", regime="quimica"),
     "P1-quimica": Braco("P1-quimica", "consequencia", "corpo-3.1", regime="quimica"),
     "P3-quimica": Braco("P3-quimica", "dono", "corpo-3.1", regime="quimica"),
-    # o bloco do corpo (3.2), com o DonoComGestos sem tapa; os acoplados P1-q^ac e P1-c^ac saem do registro do P0-q (a config os pede)
-    "P0-q": Braco("P0-q", "nenhuma", "corpo-3.2", regime="quimica", gestos="sem_tapa"),
-    "P1-q": Braco("P1-q", "consequencia", "corpo-3.2", regime="quimica", gestos="sem_tapa"),
-    "P0-c": Braco("P0-c", "nenhuma", "corpo-3.2", regime="corpo", gestos="sem_tapa"),
-    "P1-c": Braco("P1-c", "consequencia", "corpo-3.2", regime="corpo", gestos="sem_tapa"),
+    # o bloco do corpo (3.2), com o DonoComGestos sem tapa; os acoplados P1-q^ac e P1-c^ac saem do registro do P0-q (a config os pede).
+    # Desde o adendo 3 (A3.1, ME-6), o bloco do corpo, o do tapa e o G ganham o metabolismo em todos os bracos; o G-HOJE (3.1) fica sem
+    "P0-q": Braco("P0-q", "nenhuma", "corpo-3.2", regime="quimica", gestos="sem_tapa", metabolismo=True),
+    "P1-q": Braco("P1-q", "consequencia", "corpo-3.2", regime="quimica", gestos="sem_tapa", metabolismo=True),
+    "P0-c": Braco("P0-c", "nenhuma", "corpo-3.2", regime="corpo", gestos="sem_tapa", metabolismo=True),
+    "P1-c": Braco("P1-c", "consequencia", "corpo-3.2", regime="corpo", gestos="sem_tapa", metabolismo=True),
     # o bloco do tapa (3.3, so no mundo bola)
-    "P0-c-tapa": Braco("P0-c-tapa", "nenhuma", "corpo-3.3", regime="corpo", gestos="tapa"),
-    "P1-c-tapa": Braco("P1-c-tapa", "consequencia", "corpo-3.3", regime="corpo", gestos="tapa"),
+    "P0-c-tapa": Braco("P0-c-tapa", "nenhuma", "corpo-3.3", regime="corpo", gestos="tapa", metabolismo=True),
+    "P1-c-tapa": Braco("P1-c-tapa", "consequencia", "corpo-3.3", regime="corpo", gestos="tapa", metabolismo=True),
     # o bloco G, a generalizacao do tapa (adendo 1, A1.1, no iguais_frutas)
-    "P1-c-tapaX": Braco("P1-c-tapaX", "consequencia", "corpo-A1.1", regime="corpo", gestos="tapa_fruta"),
-    "P1-c-frutas": Braco("P1-c-frutas", "consequencia", "corpo-A1.1", regime="corpo", gestos="sem_tapa"),
+    "P1-c-tapaX": Braco("P1-c-tapaX", "consequencia", "corpo-A1.1", regime="corpo", gestos="tapa_fruta", metabolismo=True),
+    "P1-c-frutas": Braco("P1-c-frutas", "consequencia", "corpo-A1.1", regime="corpo", gestos="sem_tapa", metabolismo=True),
     # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1-c com o peso de cada drive pela janela recente
-    "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True, regime="corpo", gestos="sem_tapa"),
+    "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True, regime="corpo", gestos="sem_tapa", metabolismo=True),
     # banheiro (PLANO_ANALISE_V2_BANHEIRO, secoes 1 a 3): os quatro bracos do 2 x 2 (limpador x carinho depois do banheiro), com o cerebro A
     # no P1 (o aprendiz, fonte consequencia) e no P0 (o instinto, a referencia), no corpo com os gestos e o banheiro; o mundo fisico
     **{f"{c}-{b}": Braco(f"{c}-{b}", fonte, "banheiro", regime="corpo", banheiro=b)
@@ -586,12 +589,14 @@ NOS_PENDENTES: dict = {
     # a necessidade, o limpador, o limpar, o aliviar com alvo e o DonoCarinhoBanheiro)
     # dois pets (TAREFA_V2_DOIS_PETS, etapa 5, do D): o "sentidos_grupo" saiu com o #263 (a visao, o toque e a disputa) e o
     # "cerebro_social" com o #266 (as entradas sociais e o modelo dos outros no cerebro A, ligados nos bracos do grupo)
-    # dois pets: com os canais (a montagem completa do P1, o ponto da K2), comer a fruta que mexe no humor falha alto no cerebro do mundo
-    # fisico (CANAIS-REFORCO: o canal do humor vai a fruta, e o cerebro do mundo fisico nao tem peso que leia a fruta; MUNDO-CEREBROS, a
-    # "rota de adendo"). No mundo fisico de hoje (iguais) o humor da fruta e 0 e nada falha; no dos dois pets um tipo faz mal
-    "canais_fruta_mundo": "a rota do canal do humor (a fruta) no cerebro A do mundo fisico: com os canais ligados, comer a fruta que "
-                          "mexe no humor falha alto (CANAIS-REFORCO, MUNDO-CEREBROS: rota de adendo, do B); ou a decisao de rodar o "
-                          "plano dos dois pets com os canais desligados (do coordenador)",
+    # o "canais_fruta_mundo" (W-BANCADA-DOIS-PETS) saiu na W-BANCADA-METABOLISMO: a rota do canal do humor no mundo fisico entrou (#269,
+    # ConfigLobos.presenca_fruta_mundo), ligada no cerebro do grupo
+    # metabolismo (TAREFA_V2_METABOLISMO, ME-7; PLANO_ANALISE_V2_CORPO_DRIVES, A3.2): o passo 0 da calibracao do corpo escala "o gasto
+    # (basal e das atividades sobre o combustivel)". O basal tem campo na ConfigCorpo; as atividades tiram do combustivel o mesmo numero
+    # que somam ao cansaco (ME-3), sem fator. Trava o passo 0 (`pontos_passo0`)
+    "gasto_atividades": "o fator do gasto das atividades sobre o combustivel na ConfigCorpo (ME-7 e A3.2: o passo 0 escala o basal e as "
+                        "atividades; o corpo de hoje tira das atividades o mesmo numero que somam ao cansaco, ME-3, sem fator; do B, "
+                        "digilab/corpo.py)",
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -619,6 +624,8 @@ def braco_de(rotulo: str) -> Braco:
                                    or b.fonte not in ("nenhuma", "consequencia")):
         raise ValueError(f"braco {b.rotulo}: banheiro {b.banheiro!r} (so {sorted(BRACOS_BANHEIRO)}, no corpo, sem os gestos de dono e "
                          "so no P0 ou no P1)")
+    if b.metabolismo and b.regime not in ("quimica", "corpo"):
+        raise ValueError(f"braco {b.rotulo}: o metabolismo so existe com o corpo (regime quimica ou corpo), nao {b.regime!r}")
     if b.gestos in ("tapa", "tapa_fruta") and b.regime != "corpo":
         raise ValueError(f"braco {b.rotulo}: o tapa so existe com `gestos` no corpo (regime \"corpo\"), nao {b.regime!r}")
     for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None),
@@ -918,6 +925,8 @@ class Bancada:
     montagem: str = MONTAGEM_PADRAO                      # BANCADA-MONTAGEM: "simples" (a de antes) ou "completa" (o cerebro A da secao 1)
     cfg_mundo: ConfigMundo = CONFIG_MUNDO_LIGADA         # W-BANCADA-MUNDO: o mundo fisico (o layout afastado vem do mundo)
     cfg_corpo: ConfigCorpo = CONFIG_CORPO_QUIMICA        # W-BANCADA-CORPO: o corpo do regime "quimica" (o "corpo" liga por cima)
+    metabolismo: bool = True                             # adendo 3 (A3.1): False tira o metabolismo dos bracos do corpo, so para
+                                                         # refazer as vidas de antes dele (os gabaritos do G2); fora da config
 
     def __post_init__(self) -> None:
         if self.dias <= 0 or self.orcamento <= 0:
@@ -929,8 +938,9 @@ class Bancada:
         if not self.cfg_frutas.ligada:
             raise ValueError("cfg_frutas e a dos mundos das frutas: ligada")
         if not (self.cfg_corpo.ligada and self.cfg_corpo.digestao and self.cfg_corpo.vida) or self.cfg_corpo.drives_novos \
-                or self.cfg_corpo.gestos:
-            raise ValueError("cfg_corpo e a da quimica (ligada, digestao e Vida, sem drives novos nem gestos); o regime do braco liga o resto")
+                or self.cfg_corpo.gestos or self.cfg_corpo.metabolismo:
+            raise ValueError("cfg_corpo e a da quimica (ligada, digestao e Vida, sem drives novos, gestos nem metabolismo); o regime e o "
+                             "braco ligam o resto")
         if not self.cfg_informacao.ligada:
             raise ValueError("cfg_informacao e a dos mundos das frutas: ligada (sem informante, nada muda na vida)")
         if not self.cfg_pedido.ligada:
@@ -1026,9 +1036,14 @@ class Bancada:
         if regime in (None, "hoje"):
             return None
         if regime == "quimica":
-            return replace(self.cfg_corpo, drives_novos=False, gestos=False)
+            return replace(self.cfg_corpo, drives_novos=False, gestos=False, metabolismo=self.metabolismo_de(espec))
         # banheiro: o corpo com os gestos e a sub-chave banheiro (a vontade e o conforto, TAREFA_V2_BANHEIRO, secao 3 e BN-6)
-        return replace(self.cfg_corpo, drives_novos=True, gestos=True, banheiro=braco_de(espec.braco).banheiro is not None)
+        return replace(self.cfg_corpo, drives_novos=True, gestos=True, banheiro=braco_de(espec.braco).banheiro is not None,
+                       metabolismo=self.metabolismo_de(espec))
+
+    def metabolismo_de(self, espec: EspecVida) -> bool:
+        """o metabolismo da vida: o do braco (A3.1), salvo na bancada com `metabolismo=False` (as vidas de antes, so para o G2)"""
+        return self.metabolismo and braco_de(espec.braco).metabolismo
 
     def cfg_banheiro_de(self, espec: EspecVida) -> ConfigBanheiro | None:
         """A ConfigBanheiro da vida: None fora dos bracos do banheiro; nos quatro do 2 x 2, a ligada, com o limpador do braco (BL0 e BLC).
@@ -1295,11 +1310,22 @@ class Bancada:
 
         fisico = mundo_de(vida.espec.mundo).fisico is not None
         repro = reproduzir_mundo if fisico else reproduzir_com_feedback     # o mundo fisico tem eventos proprios no log
-        m = repro(LogDeEventos.de_jsonl(vida.motor.log.para_jsonl()), fab, semente=vida.espec.semente,
-                  fabrica_motor=self.fabrica_motor(vida.espec))
+        fm_base = self.fabrica_motor(vida.espec)
+        sonda_metab: list = []
+
+        def fm(*a, **kw):
+            """o motor de sempre; com o metabolismo, uma sonda so de leitura no passo do corpo (a medida descritiva, A3.3)"""
+            motor = fm_base(*a, **kw)
+            corpo = getattr(motor, "corpo", None)
+            if corpo is not None and corpo.cc.metabolismo:
+                sondar_metabolismo(corpo, sonda_metab)
+            return motor
+
+        m = repro(LogDeEventos.de_jsonl(vida.motor.log.para_jsonl()), fab, semente=vida.espec.semente, fabrica_motor=fm)
         if resumo_motor(m) != resumo_motor(vida.motor) or _interno(m) != _interno(vida.motor):
             raise ReplayDivergiu(f"{vida.nome}: o replay de medicao mudou a vida")
         reg = regs[0]
+        reg.metabolismo = sonda_metab
         bola = None
         if isinstance(m, MotorAmbiente) and not fisico:
             tick = CONFIG_PADRAO.intervalo_decisao_ticks
@@ -1326,6 +1352,8 @@ class Bancada:
                        if fisico else {})
         dominancia = self.medidas_dominancia(vida, reg)
         corpo = self.medidas_corpo(vida, m, reg)
+        if corpo is not None and m.cc.metabolismo:
+            corpo["metabolismo"] = self.medidas_metabolismo(vida, m, reg)
         banheiro = self.medidas_banheiro(vida, m, reg) if braco_de(vida.espec.braco).banheiro is not None else None
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
@@ -1379,6 +1407,21 @@ class Bancada:
                 "be": tempo_livre_be(decs, janela), "be_vida": tempo_livre_be(decs, (0, fim)),
                 "cuidado": cuidado_preservado(cuidado, janela), "drives_novos": drives,
                 "corpo_final": motor.corpo.para_dict()}
+
+    def medidas_metabolismo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict:
+        """A medida descritiva do metabolismo (PLANO_ANALISE_V2_CORPO_DRIVES, A3.3; TAREFA_V2_METABOLISMO, secao 6), por vida, so relato:
+          - a fracao do tempo acordado com a falta de combustivel (abaixo de `falta_limiar`, C/4) e as vezes que a falta disparou, tick a
+            tick, pela sonda do passo do corpo no replay de medicao (`sondar_metabolismo`);
+          - o combustivel e a reserva no fim de cada dia;
+          - o tempo entre comer e brincar (as decisoes do replay; o plano o pede no P1-c, e sai em toda vida com o metabolismo).
+        A conta do corpo no fim (`contas_metabolismo`) sai ao lado; a sonda tem de ter um tick por tick vivido (falha alto)."""
+        sonda = getattr(reg, "metabolismo", None)
+        fim = self.dias * TICKS_POR_DIA
+        if not sonda or len(sonda) != motor._estado.tick or [t for t, *_ in sonda] != list(range(motor._estado.tick)):
+            raise RuntimeError(f"{vida.nome}: a sonda do metabolismo nao cobre a vida tick a tick")
+        decs = [(t, a) for t, _, a in reg.decisoes]
+        return {**metabolismo_da_vida(sonda, motor.cc.falta_limiar, TICKS_POR_DIA), "tempo_comer_brincar": tempo_comer_brincar(decs),
+                "contas": dict(motor.corpo.contas_metabolismo), "fim": fim}
 
     def medidas_dominancia(self, vida: VidaBancada, reg: "_Registro") -> dict:
         """Adendo 2 do plano do corpo (A2.2), numa vida: por decisao observada, c_d = falta_d,antes^2 - falta_d,depois^2 por drive do
@@ -1663,9 +1706,11 @@ class Bancada:
     def bancada_grupo(self) -> "Bancada":
         """O cerebro A do plano (secao 2): o do ponto e da montagem da bancada, com o que a etapa 4 acrescenta: o alvo aprendido (#255; o
         P0 com o aprendizado desligado fica no alvo padrao do motor), as entradas sociais (prior 0) e o modelo dos outros (so registrado;
-        #266). No prior, o P0 e o instinto do mundo byte a byte, tambem com o outro a vista (o gate do #266)."""
-        return replace(self, cfg_lobos=replace(self.cfg_lobos, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True))
-
+        #266). No prior, o P0 e o instinto do mundo byte a byte, tambem com o outro a vista (o gate do #266). E a rota do canal do humor no
+        mundo fisico (#269, `presenca_fruta_mundo`: a decisao de comer le a fruta madura a vista, prior 0), sem a qual os canais da montagem
+        completa falham alto ao comer a fruta que mexe no humor."""
+        return replace(self, cfg_lobos=replace(self.cfg_lobos, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True,
+                                               presenca_fruta_mundo=True))
 
     def canais_no_pet(self, espec: EspecVida) -> bool:
         """Os canais da consequencia chegam ao cerebro deste pet? So nas fontes que aprendem pela consequencia, com os canais do braco
@@ -1730,8 +1775,6 @@ class Bancada:
         pets = []
         for ident, braco, entrada in _entradas(eg):
             espec = self.espec_do_pet(eg, ident)
-            if self.canais_no_pet(espec) and "canais_fruta_mundo" in NOS_PENDENTES:
-                raise NotImplementedError(f"{eg.nome}, pet {ident} ({braco}) com os canais: {NOS_PENDENTES['canais_fruta_mundo']}")
 
             def fp(cfg=None, e=espec, i=ident):
                 p = bg_.politica(e, cfg)
@@ -2368,6 +2411,18 @@ def simular_vida_fisico(dono, politica, semente: int, dias: int, orcamento: int,
     return motor, canal.retirados
 
 
+def sondar_metabolismo(corpo, destino: list) -> None:
+    """A sonda do metabolismo no replay de medicao, so de leitura: embrulha o `passo` do corpo e anota, a cada tick, (tick do pet no
+    comeco do tick, dormindo, combustivel e reserva no fim do tick). Nao muda nada do corpo (o replay de medicao e conferido bit a bit)."""
+    original = corpo.passo
+
+    def passo(antes, *a, **kw):
+        r = original(antes, *a, **kw)
+        destino.append((antes.tick, bool(antes.dormindo), corpo.q["combustivel"], corpo.q["reserva"]))
+        return r
+    corpo.passo = passo
+
+
 class _Registro:
     """Embrulha a politica do braco no replay de medicao: anota cada decisao (tick, estado como o dono o julga, acao), a
     amostra de estado (em privacao, saude), os sinais do dono que chegaram ao aprendiz ate ali e os que o dono deu. So le;
@@ -2747,8 +2802,8 @@ def meta(cfg: dict) -> dict:
 # PLANO_ANALISE_V2_DOIS_PETS, secoes 2 a 4: o grupo como celula, com um dono (o atencioso, so com o cuidado, PMF-3) e o orcamento por pet
 # (DP-7, a validacao inicial), pelo `simular_grupo` do #257. O cerebro e o A do ponto e da montagem da bancada, com o alvo aprendido (#255).
 # A visao, o toque e a disputa entre os pets (etapa 3, do A, #263) e as entradas sociais e o modelo dos outros no cerebro (etapa 4, a
-# segunda metade, do B, #266) estao na main: o cerebro do grupo os liga, e as medidas sociais e as do modelo saem dos registros. Os canais
-# da montagem completa esperam a rota do humor do B (o no `canais_fruta_mundo`).
+# segunda metade, do B, #266) estao na main: o cerebro do grupo os liga, e as medidas sociais e as do modelo saem dos registros. Com os
+# canais da montagem completa, a rota do humor no mundo fisico (#269, `presenca_fruta_mundo`) tambem fica ligada.
 
 ROTULO_RUIM = "dois-pets-ruim"               # o tipo que faz mal na unidade (plano, secao 2)
 ROTULO_EMBARALHA = "dois-pets-embaralha"     # o desarranjo do A embaralhado (plano, secao 3)
@@ -2934,14 +2989,79 @@ def _resumo_grupo(g: Grupo) -> tuple:
     return (g.registro.para_jsonl(), g.resumo(), {i: getattr(m, "troca", None) for i, m in g.motores.items()})
 
 
+# o passo 0 da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 3, A3.2; ME-7): so o P0-q, com o metabolismo, nas 20 unidades da
+# calibracao (bases 33101...33505, K = 4) e nas 8 celulas; o gasto (basal e das atividades sobre o combustivel) x {1/2, 1, 2}, partindo dos
+# PROPOSTOS (375 acordado, 187 dormindo); fica o ponto mais perto de 1 (|log2|) com a fracao do tempo acordado com a falta em [0,05; 0,30],
+# nas 8 celulas juntas; sem nenhum, o de fracao mais perto do centro da faixa, "nao fechou". A faixa e PROPOSTA, SEM FONTE.
+PASSO0_MULTIPLICADORES = ((1, 2), (1, 1), (2, 1))           # (num, den): 1/2, 1, 2
+PASSO0_FAIXA = (0.05, 0.30)
+PASSO0_BRACO = "P0-q"
+
+
+def _escalar(v: int, num: int, den: int) -> int:
+    """v x num/den, arredondado (metade para cima): 375/2 = 188 e 187/2 = 94 (o 1/2 da grade nao e inteiro; registro)"""
+    return (v * num + den // 2) // den
+
+
+def pontos_passo0(cfg: dict) -> list[tuple[str, dict]]:
+    """As tres configs do passo 0 a partir da `cfg` (a da calibracao do corpo com o P0-q): o basal (`gasto_basal_acordado`,
+    `gasto_basal_dormindo`) x num/den pela chave "corpo". O gasto das atividades sobre o combustivel nao tem fator na ConfigCorpo: falha
+    alto com o no `gasto_atividades` (e, sem a entrada, na segunda trava: a fiacao do fator entra com o campo do B)."""
+    if cfg.get("bracos") != [PASSO0_BRACO]:
+        raise ValueError(f"o passo 0 roda so o {PASSO0_BRACO}: {cfg.get('bracos')}")
+    base = ConfigCorpo()
+    pontos = []
+    for num, den in PASSO0_MULTIPLICADORES:
+        corpo = {**cfg.get("corpo", {}), "gasto_basal_acordado": _escalar(base.gasto_basal_acordado, num, den),
+                 "gasto_basal_dormindo": _escalar(base.gasto_basal_dormindo, num, den)}
+        pontos.append((f"gasto_{num}_{den}", {**cfg, "corpo": corpo}))
+    if "gasto_atividades" in NOS_PENDENTES:
+        raise NotImplementedError(f"o passo 0 da calibracao do corpo (no gasto_atividades): {NOS_PENDENTES['gasto_atividades']}")
+    raise NotImplementedError("o passo 0: a fiacao do fator do gasto das atividades entra com o campo da ConfigCorpo (do B)")
+
+
+def fracao_falta_passo0(medidas: dict) -> dict:
+    """A fracao do tempo acordado com a falta nas 8 celulas juntas (A3.2): a soma dos ticks acordados com falta sobre a soma dos ticks
+    acordados, nas vidas do P0-q (sem acoplados) com o metabolismo. Uma vida sem a medida falha alto."""
+    falta = acordado = vidas = 0
+    for m in medidas.values():
+        if m.get("origem") is not None or m["braco"] != PASSO0_BRACO:
+            continue
+        met = (m.get("corpo") or {}).get("metabolismo")
+        if met is None:
+            raise ValueError(f"{m['vida']}: sem a medida do metabolismo")
+        falta += met["acordado_com_falta"]
+        acordado += met["acordado"]
+        vidas += 1
+    if not acordado:
+        raise ValueError("o passo 0 sem tick acordado")
+    return {"vidas": vidas, "acordado": acordado, "acordado_com_falta": falta, "fracao": falta / acordado}
+
+
+def escolha_passo0(fracoes: dict) -> dict:
+    """A regra do passo 0 (A3.2, escrita antes): `fracoes` = {(num, den): fracao do tempo acordado com a falta}. Fica o ponto mais perto de
+    1 pela |log2(num/den)| com a fracao em PASSO0_FAIXA; no empate (1/2 e 2), o menor gasto (como o "menor m_sobe" da 6.2). Sem nenhum, o
+    de fracao mais perto do centro da faixa, com "nao fechou". Ponto fora da grade falha alto."""
+    if set(fracoes) != set(PASSO0_MULTIPLICADORES):
+        raise ValueError(f"o passo 0 pede os tres pontos {PASSO0_MULTIPLICADORES}: {sorted(fracoes)}")
+    lo, hi = PASSO0_FAIXA
+    distancia = lambda p: abs(math.log2(p[0] / p[1]))  # noqa: E731
+    passam = [p for p in PASSO0_MULTIPLICADORES if lo <= fracoes[p] <= hi]
+    if passam:
+        p = min(passam, key=lambda q: (distancia(q), q[0] / q[1]))
+        return {"ponto": list(p), "fechou": True, "fracao": fracoes[p], "passam": [list(q) for q in passam]}
+    centro = (lo + hi) / 2
+    p = min(PASSO0_MULTIPLICADORES, key=lambda q: (abs(fracoes[q] - centro), distancia(q), q[0] / q[1]))
+    return {"ponto": list(p), "fechou": False, "fracao": fracoes[p], "passam": [], "registro": "nao fechou"}
+
+
 CHAVES_CONFIG_GRUPO = {"descricao", "plano", "tipo", "bracos", "sementes", "unidades", "k_dias", "dias", "orcamento_por_dia", "dono",
                        "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo"}
 
 
 def validar_config_grupo(cfg: dict) -> dict:
     """A config da bancada do grupo (`"tipo": "grupo"`). As unidades usam o prefixo `dois_pets`. Fora das sementes dos testes, a run e do
-    plano: pede o `plano` e a montagem completa (o cerebro do plano, secao 2), que liga os canais e por isso falha alto com o no
-    `canais_fruta_mundo` ate a rota do humor do B."""
+    plano: pede o `plano` e a montagem completa (o cerebro do plano, secao 2, com os canais e a rota do humor do #269)."""
     faltam = {"tipo", "bracos", "k_dias", "dias", "orcamento_por_dia"} - set(cfg)
     sobram = set(cfg) - CHAVES_CONFIG_GRUPO
     if faltam or sobram:
@@ -2963,9 +3083,6 @@ def validar_config_grupo(cfg: dict) -> dict:
         _validar_espec_grupo(EspecGrupo(b, 101, 0 if not BRACOS_GRUPO[b].b else int(cfg["k_dias"]), cfg.get("dono", "atencioso"),
                                         cfg.get("lugar", "comedouro")))
     criar_dono(cfg.get("dono", "atencioso"))
-    canais = cfg.get("montagem") == "completa" or cfg.get("consequencia", {}).get("canais_ligados", False)
-    if canais and "canais_fruta_mundo" in NOS_PENDENTES:
-        raise NotImplementedError(f"config do grupo com os canais (a montagem completa ou canais_ligados): {NOS_PENDENTES['canais_fruta_mundo']}")
     if "unidades" in cfg:
         u = cfg["unidades"]
         if set(u) != {"bases", "k", "prefixo"} or u["prefixo"] != "dois_pets":

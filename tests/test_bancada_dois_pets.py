@@ -15,8 +15,8 @@ O que se confere:
   conferidas contra os registros do grupo e dos motores;
 - o cerebro do plano com as entradas sociais e o modelo dos outros (#266): o repasse do consequencia_mundo pela PoliticaDoBraco, em toda
   fonte; o modelo conta as idas e os acertos que o motor registra; o modelo nao muda a vida; o modelo por dia nas medidas;
-- a run do plano pede a montagem completa, e os canais no mundo dos dois pets falham alto com o no `canais_fruta_mundo` (a rota do humor
-  do B); a trava e so a tabela.
+- a run do plano pede a montagem completa; com a rota do humor do B (#269, `presenca_fruta_mundo`, ligada no cerebro do grupo desde a
+  W-BANCADA-METABOLISMO) os canais rodam no mundo dos dois pets, e o A so da semente 505, que falhava alto, passa.
 So as sementes dos testes.
 """
 from __future__ import annotations
@@ -454,7 +454,7 @@ def test_o_cerebro_do_grupo_tem_as_entradas_sociais_e_o_modelo():
     v = _grupo("B+Aing")
     for i, m in v.grupo.motores.items():
         cl = m.politica.cerebro.cl if hasattr(m.politica, "cerebro") else m.politica._pm.cerebro.cl
-        assert cl.alvo_aprendido and cl.entradas_sociais and cl.modelo_outros
+        assert cl.alvo_aprendido and cl.entradas_sociais and cl.modelo_outros and cl.presenca_fruta_mundo
         interno = m.politica.estado_interno()
         assert "modelo_outros" in interno and set(interno["modelo_outros"]["outros"]) <= {"A", "B"} - {i}
     # no grupo de um pet, o modelo nao conhece ninguem
@@ -521,46 +521,39 @@ def _cfg_plano(**troca) -> dict:
             "plano": "docs/PLANO_ANALISE_V2_DOIS_PETS.md", **{k: v for k, v in troca.items()}}
 
 
-def test_a_run_do_plano_pede_a_montagem_completa_e_falha_alto_com_os_canais():
+def test_a_run_do_plano_pede_a_montagem_completa_e_valida_com_ela():
+    assert "canais_fruta_mundo" not in bv.NOS_PENDENTES
     cfg = {k: v for k, v in _cfg_plano().items() if k != "sementes"}
     with pytest.raises(ValueError, match="montagem completa"):
         bv.validar_config_grupo(cfg)
-    with pytest.raises(NotImplementedError, match="canal do humor"):
-        bv.validar_config_grupo({**cfg, "montagem": "completa"})
+    bv.validar_config_grupo({**cfg, "montagem": "completa"})
     sem_plano = {k: v for k, v in cfg.items() if k != "plano"}
     with pytest.raises(bv.SementeSemPlano):
         bv.validar_config_grupo(sem_plano)
     bv.validar_config_grupo({**CFG, "sementes": [101, 202]})                    # as sementes dos testes rodam
 
 
-def test_sem_o_no_dos_canais_a_run_do_plano_valida(monkeypatch):
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "canais_fruta_mundo"})
-    cfg = {k: v for k, v in _cfg_plano().items() if k != "sementes"}
-    bv.validar_config_grupo({**cfg, "montagem": "completa"})
-
-
 @pytest.mark.parametrize("troca", [{"montagem": "completa"}, {"consequencia": {"ganho": 4, "canais_ligados": True}}])
-def test_os_canais_falham_alto_com_o_no(troca):
-    with pytest.raises(NotImplementedError, match="canal do humor"):
-        bv.validar_config_grupo({**CFG, **troca})
+def test_os_canais_rodam_no_grupo_com_a_rota_do_humor(troca):
+    """Com os canais (pela montagem completa ou pela config), o grupo roda: o G1 de todo grupo e conferido no `grupo`."""
+    bv.validar_config_grupo({**CFG, **troca})
     bc = _bancada(**troca)
-    with pytest.raises(NotImplementedError, match="canal do humor"):
-        bc.grupo(bv.EspecGrupo("B+Aing", 101, 1))
+    v = bc.grupo(bv.EspecGrupo("B+Aing", 101, 1))
+    assert set(v.grupo.motores) == {"A", "B"}
     # o P0 nao aprende: sem canais nele (o A ingenuo); no B, P1, com
     eg = bv.EspecGrupo("B+Aing", 101, 1)
     assert not bc.canais_no_pet(bc.espec_do_pet(eg, "A")) and bc.canais_no_pet(bc.espec_do_pet(eg, "B"))
 
 
-def test_a_trava_dos_canais_e_so_a_tabela_e_guarda_uma_falha_real(monkeypatch):
-    """Sem a entrada `canais_fruta_mundo`, o grupo com a montagem completa monta, e o cerebro do mundo fisico falha alto quando o pet come
-    a fruta que mexe no humor (CANAIS-REFORCO): o no guarda uma falha real, do B, e nao so uma escolha da bancada. Com um pet so (o A so,
-    semente 505), sem nada social no caminho: a falha e do canal do humor, nao do grupo."""
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {k: v for k, v in bv.NOS_PENDENTES.items() if k != "canais_fruta_mundo"})
+def test_o_a_so_da_semente_505_passa_com_a_montagem_completa():
+    """A falha real que o no `canais_fruta_mundo` guardava (o A so, semente 505: o cerebro do mundo fisico falhava alto ao comer a fruta
+    que mexe no humor, CANAIS-REFORCO) roda com a rota do humor (#269): o pet come o tipo ruim, e o canal do humor desce o peso dele."""
     bv.validar_config_grupo({**CFG, "montagem": "completa"})
     bc = _bancada(montagem="completa")
-    assert len(bc.pets_do_grupo(bv.EspecGrupo("B+Aing", 101, 1))) == 2
-    with pytest.raises(RuntimeError, match="CANAIS-REFORCO"):
-        bc.grupo(bv.EspecGrupo("A-so", 505, 0))
+    v = bc.grupo(bv.EspecGrupo("A-so", 505, 0))                                  # o G1 do grupo e conferido aqui
+    e = v.grupo.motores["A"].politica._pm.estado_interno()
+    ruim = bv.tipo_ruim(505)
+    assert e["pesos_comer_fruta"][ruim] < 0 and e["canais"]["por_alvo"]["fruta"] < 0
 
 
 # ------------------------------------------------------------------ 6. a config e o rodar

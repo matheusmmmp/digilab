@@ -65,9 +65,9 @@ PLANO = (("P0-q", "bola"), ("P1-q", "bola"), ("P0-c", "bola"), ("P1-c", "bola"),
 
 
 def test_os_nos_do_corpo_sairam():
-    # desde a W-BANCADA-DOIS-PETS a tabela tem o no dos canais no mundo dos dois pets (a rota do humor do B); o do banheiro saiu com o
-    # #265, o do cerebro social com o #266, e os do corpo continuam fora
-    assert set(bv.NOS_PENDENTES) == {"canais_fruta_mundo"} and bv.FILTROS_PENDENTES == {}
+    # desde a W-BANCADA-METABOLISMO a tabela tem so o no do passo 0 da calibracao do corpo (o fator do gasto das atividades, do B); o
+    # dos canais no mundo dos dois pets saiu com o #269, o do banheiro com o #265, o do cerebro social com o #266, e os do corpo seguem fora
+    assert set(bv.NOS_PENDENTES) == {"gasto_atividades"} and bv.FILTROS_PENDENTES == {}
     for braco, _ in PLANO:
         assert bv.braco_de(braco) is bv.BRACOS[braco]
 
