@@ -1572,6 +1572,11 @@ class ConfigCorpo:
     mobilizar_taxa: int = 375                # ...ate isto por tick
     falta_limiar: int = 112500               # C/4: abaixo disto, a falta de combustivel...
     falta_cansaco: int = 500                 # ...sobe o cansaco isto por tick (o de um tick acordado de dia); a unica ponte (ME-1)
+    # o gasto das atividades sobre o combustivel (ME-3 e ME-7; o no `gasto_atividades` do #273): o brincar, o explorar, o andar e o
+    # brincar do dono tiram do combustivel div_arred(o que somam ao cansaco x num, den). 1/1 = o mesmo numero (a vida de hoje); o passo 0
+    # da calibracao do corpo escala por {1/2, 1, 2}. O cansaco nunca muda
+    gasto_atividades_num: int = 1
+    gasto_atividades_den: int = 1
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
@@ -1603,7 +1608,8 @@ class ConfigCorpo:
         if self.metabolismo and not self.digestao:
             raise ValueError("ConfigCorpo.metabolismo exige ConfigCorpo.digestao (E-9: a comida digerida e o que vira combustivel)")
         for nome in ("conversao_num", "conversao_den", "gasto_basal_acordado", "gasto_basal_dormindo", "armazenar_limiar",
-                     "armazenar_taxa", "mobilizar_limiar", "mobilizar_taxa", "falta_limiar", "falta_cansaco"):
+                     "armazenar_taxa", "mobilizar_limiar", "mobilizar_taxa", "falta_limiar", "falta_cansaco", "gasto_atividades_num",
+                     "gasto_atividades_den"):
             v = getattr(self, nome)
             if type(v) is not int or v <= 0:
                 raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro positivo: {v!r}")
