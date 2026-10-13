@@ -4223,3 +4223,24 @@ cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md
 - **O custo em pesos** (`experiments/custo_orgaos.py` → `artifacts_v2_dois_pets/custo_orgaos.json`): 21 pesos por receptor no cérebro A
   (24 com o banheiro); com os 12 receptores da DP-13/DP-14, o degrau 1 dos dois pets vai de 990 a 1242 (pede teto do plano). A rede de si lê
   todos os receptores sozinha e passa do teto dela em quase todo conjunto. O cérebro A ainda não lê os órgãos.
+
+## V2, PET-QUE-PENSA-CALIBRACAO — a calibração do `g_plano` e o piloto (2026-10-13, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 5 e 6, adendo 1) — g_plano = S, FECHOU; O T1 SEM MARGEM: O PLANO VOLTA AO MATHEUS
+
+Autorizada pelo Matheus em 2026-10-13. Uma calibração e um piloto, nas bases 45101…45505 (K_u = 4, 20 unidades). Números de
+`artifacts_v2_pet_que_pensa/calibracao/` (as vidas fora do git), congelados no adendo 1 do plano; relatório
+`docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`. **A validação (46101…46505) não roda.**
+- **Código:** `experiments/run_v2_calibracao_pet_que_pensa.py --piloto` roda os 4 braços × T1 e T2 no `g_plano` escolhido. Ele grava em
+  `piloto/piloto.json`:
+  - as premissas (G-APRENDEU, G-OPORTUNIDADE, G-EXPOSICAO);
+  - as margens `Δ_T1` e `Δ_T2`;
+  - o K_u pelo poder simulado nos dois primários, com o N efetivo descontado das unidades sem oportunidade;
+  - o poder dos secundários e o custo.
+  - Testes em `tests/test_calibracao_pet_que_pensa.py`.
+- **O `g_plano` = S (1024), fechou:** a fração da sonda nos dias 4 a 6 foi 0,052 (S/4), 0,041 (S/2) e 0,1001 (S).
+- **O piloto:**
+  - **T1:** nenhum braço escolhe a x antes da mudança (`f_antes` = 0 em toda unidade com oportunidade): `Δ_T1` = 0, sem espaço;
+  - **T2:** `Δ_T2` = 0,214, mas nenhuma unidade teve busca depois da mudança, então não há diferença para medir;
+  - **as premissas** falham em todos os braços (G-APRENDEU, G-OPORTUNIDADE, G-EXPOSICAO);
+  - o plano decide ~8% das decisões com alvo, e o custo é 0,62 s de CPU por vida.
+- **Por quê** (descritivo, 4 unidades): o pet come a ração do comedouro (72 a 82 por vida) e quase nunca a x (0 a 2).
+- **Pela seção 6, o plano volta ao Matheus;** o N não foi calculado.
