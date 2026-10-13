@@ -1152,6 +1152,11 @@ CONFIG_HERANCA = ConfigHeranca()
 CONFIG_EQUILIBRIO = ConfigEquilibrio()
 
 
+# O teto de pesos por plano (docs/DECISAO_V2_TETO_PESOS.md, TP-1 e TP-2, decididas pelo Matheus em 2026-10-12 pela recomendacao): o
+# padrao do cerebro A fica 1000 (ConfigLobos.maximo_pesos); um plano que precise de mais declara o seu teto na config da bancada, ate
+# este limite. Passar dele pede decisao nova. DECIDIDO (TP-2), SEM FONTE: cabe o maior cerebro contado em 2026-10-12 (1277) com folga
+LIMITE_TETO_PESOS_PLANO = 2000
+
 # =====================================================================
 # V2, L0 (docs/TAREFA_V2_L0_LOBOS.md, 2026-10-01): politica com lobos nomeados, aprendizado desligado.
 # Nao entra em nenhum hash de protocolo da v1. Todo campo e PROPOSTO, sem fonte e nao referendado; o status de
@@ -1170,7 +1175,8 @@ class ConfigLobos:
                                           MESMOS floats que o instinto escreve (igualdade byte a byte, gate G2).
     escala_ticks_desde_cuidado  PROPOSTO  entrada da percepcao: min(1, ticks sem cuidado / escala); o mesmo valor
                                           da ConfigBandit. Coeficiente zero no prior.
-    maximo_pesos                PROPOSTO  teto do plano da V2 (fase 1b: "abaixo de mil pesos, para o replay").
+    maximo_pesos                PROPOSTO  teto do plano da V2 (fase 1b: "abaixo de mil pesos, para o replay"). O padrao fica 1000; um
+                                          plano declara o seu ate LIMITE_TETO_PESOS_PLANO (TP-1, TP-2). Acima, falha alto.
     """
 
     aprendizado_ligado: bool = False
@@ -1236,6 +1242,11 @@ class ConfigLobos:
     # regra em que comer e candidato. Sao os pesos que leem a identidade da fruta: com os canais, o canal do humor (a E2) vai a eles.
     # Desligada: a vida de hoje (e, com os canais, comer a fruta que mexe no humor falha alto, como antes)
     presenca_fruta_mundo: bool = False       # PROPOSTO: a chave
+
+    def __post_init__(self) -> None:
+        if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
+            raise ValueError(f"maximo_pesos {self.maximo_pesos!r}: inteiro de 1 a {LIMITE_TETO_PESOS_PLANO} (o limite do teto por plano, "
+                             f"TP-2; acima pede decisao nova)")
 
     @property
     def escala(self) -> int:

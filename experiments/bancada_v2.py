@@ -160,7 +160,7 @@ from digilab.ambiente import (DonoComBola, MotorAmbiente, PoliticaInstintoBola, 
 from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA, CONFIG_DONOS, CONFIG_FRUTAS_LIGADA,  # noqa: E402
                             CONFIG_INFORMACAO_LIGADA, CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO,
                             CONFIG_PEDIDO_LIGADA, LAYOUT_MUNDO_AFASTADO, TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigFrutas,
-                            ConfigInformacao, ConfigJulgamentoFruta, ConfigLobos, ConfigMundo, ConfigPedido)
+                            ConfigInformacao, ConfigJulgamentoFruta, ConfigLobos, ConfigMundo, ConfigPedido, LIMITE_TETO_PESOS_PLANO)
 from digilab.config import ConfigCorpo  # noqa: E402
 from digilab.config import CONFIG_GRUPO_LIGADA, ConfigGrupo  # noqa: E402
 from digilab.grupo import Grupo, PetDoGrupo, RegistroGrupo, reproduzir_grupo, sementes_do_grupo, simular_grupo  # noqa: E402
@@ -308,7 +308,7 @@ def mundo_de(nome: str) -> Mundo:
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
                  "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta", "montagem",
-                 "lugares", "mundo", "corpo"}
+                 "lugares", "mundo", "corpo", "teto_pesos"}
 # corpo (W-BANCADA-CORPO): a quimica da pergunta do plano (secao 1: "a quimica de hoje", CD-3): o corpo com a digestao na taxa C e a
 # Vida, sem os drives novos. O regime "corpo" liga por cima os drives novos e os gestos (etapa 6). A chave "corpo" da config troca os
 # numeros, nunca as sub-chaves
@@ -2564,6 +2564,7 @@ def validar_config(cfg: dict) -> dict:
         raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
     if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
         raise ValueError(f"montagem {cfg['montagem']!r}: so {MONTAGENS}")
+    validar_teto_pesos(cfg)
     for b in cfg["bracos"]:
         braco_de(b)
     for m in cfg.get("mundos", ["padrao"]):
@@ -2629,14 +2630,60 @@ def cfg_lobos_do_ponto(ponto: str = PONTO_PADRAO, troca: dict | None = None) -> 
     return replace(base, **troca) if troca else base
 
 
+def validar_teto_pesos(cfg: dict) -> int | None:
+    """O teto de pesos declarado pelo plano (TP-1 e TP-2, docs/DECISAO_V2_TETO_PESOS.md). Sem a chave "teto_pesos", None: o padrao da
+    ConfigLobos (1000) e a bancada de hoje, byte a byte. Com ela, {"maximo": N, "pesos": n}:
+      - N inteiro acima do padrao e ate LIMITE_TETO_PESOS_PLANO (2000);
+      - n os pesos do maior cerebro A dos bracos da config, de N - 1 para baixo e do padrao para cima (um cerebro que cabe no padrao nao
+        precisa de teto proprio). A run confere n contra o cerebro montado (`conferir_teto_pesos`);
+      - o `plano` da config, um arquivo do repositorio: e o texto que diz por que.
+    O teto so entra por aqui: "maximo_pesos" na chave "lobos" falha alto."""
+    if "maximo_pesos" in (cfg.get("lobos") or {}):
+        raise ValueError("o teto de pesos so entra pela chave 'teto_pesos' (o plano declara o teto e os pesos), nao por 'lobos'")
+    t = cfg.get("teto_pesos")
+    if t is None:
+        return None
+    if not isinstance(t, dict) or set(t) != {"maximo", "pesos"}:
+        raise ValueError(f"teto_pesos: {{'maximo': N, 'pesos': n}}, nao {t!r}")
+    padrao = ConfigLobos().maximo_pesos
+    maximo, pesos = t["maximo"], t["pesos"]
+    if type(maximo) is not int or not padrao < maximo <= LIMITE_TETO_PESOS_PLANO:
+        raise ValueError(f"teto_pesos.maximo {maximo!r}: inteiro acima do padrao ({padrao}) e ate o limite ({LIMITE_TETO_PESOS_PLANO}, "
+                         "TP-2; acima pede decisao nova)")
+    if type(pesos) is not int or not padrao <= pesos < maximo:
+        raise ValueError(f"teto_pesos.pesos {pesos!r}: inteiro de {padrao} (abaixo, o cerebro cabe no padrao) a {maximo - 1}")
+    plano = cfg.get("plano")
+    if not plano or not (RAIZ / plano).is_file():
+        raise SementeSemPlano("teto_pesos: o teto proprio e de um plano (TP-1): precisa do campo 'plano' com o arquivo que diz por que")
+    return maximo
+
+
+def conferir_teto_pesos(cfg: dict, cerebros) -> dict | None:
+    """Com o teto declarado, os pesos do maior cerebro A dos bracos (`cerebros`: nome -> cerebro montado pela bancada) tem de ser os
+    declarados em teto_pesos.pesos: falha alto se nao forem. Sem teto declarado, None (nada e conferido: a bancada de hoje)."""
+    if validar_teto_pesos(cfg) is None:
+        return None
+    pesos = {nome: c.n_pesos() for nome, c in cerebros.items() if hasattr(c, "n_pesos")}
+    if not pesos:
+        raise RuntimeError("teto_pesos declarado sem nenhum cerebro A nos bracos da config")
+    maior = max(pesos.values())
+    if maior != cfg["teto_pesos"]["pesos"]:
+        raise RuntimeError(f"teto_pesos.pesos {cfg['teto_pesos']['pesos']}: o maior cerebro dos bracos tem {maior} ({pesos})")
+    return {"maximo": cfg["teto_pesos"]["maximo"], "pesos": maior, "por_cerebro": pesos}
+
+
 def bancada_da_config(cfg: dict) -> Bancada:
     """A Bancada da config: os padroes, e o que as chaves "consequencia", "ponto" e "lobos" (o ponto nomeado, e por cima dele os campos
     da chave "lobos"; sem "ponto", o L1 = CONFIG_LOBOS_APRENDIZ) e "frutas" (sobre o CONFIG_FRUTAS_LIGADA; listas do JSON viram tuplas)
     trocam. Sem essas chaves, a bancada de sempre (REVISAO-APRENDIZ)."""
     cc = CONFIG_CONSEQUENCIA if "consequencia" not in cfg else replace(CONFIG_CONSEQUENCIA, **cfg["consequencia"])
     kw = {"cfg_consequencia": cc}
-    if "lobos" in cfg or "ponto" in cfg:
-        kw["cfg_lobos"] = cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos"))
+    teto = validar_teto_pesos(cfg)
+    if "lobos" in cfg or "ponto" in cfg or teto is not None:
+        troca = dict(cfg.get("lobos") or {})
+        if teto is not None:                      # o teto declarado pelo plano (TP-1); sem ele, o padrao da ConfigLobos
+            troca["maximo_pesos"] = teto
+        kw["cfg_lobos"] = cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), troca or None)
     if cfg.get("julgamento_fruta"):
         kw["julgamento_fruta"] = True
     if "montagem" in cfg:
@@ -2673,6 +2720,13 @@ def rodar(cfg: dict, pasta: Path) -> dict:
         unidades = []
         pares = [(g, int(s)) for g in cfg.get("genomas", [None]) for s in cfg["sementes"]]
     da_unidade = {(u["genoma"], u["semente"]): {"base": u["base"], "k": u["k"]} for u in unidades}
+    teto = None
+    if validar_teto_pesos(cfg) is not None:      # o teto do plano: os pesos declarados sao os do maior cerebro dos bracos
+        g0, s0 = pares[0]
+        teto = conferir_teto_pesos(cfg, {
+            f"{braco}/{mundo}": do_braco(bancada.politica(EspecVida(
+                cfg["donos"][0], braco, s0, g0, mundo, lugar=cfg["lugares"][0] if mundo_de(mundo).fisico is not None else None))).cerebro
+            for mundo in cfg.get("mundos", ["padrao"]) for braco in cfg["bracos"]})
     for (g, s), mundo, dono, braco in product(pares, cfg.get("mundos", ["padrao"]), cfg["donos"], cfg["bracos"]):
         for lugar in (cfg["lugares"] if mundo_de(mundo).fisico is not None else [None]):   # mundo fisico: a celula e dono x lugar
             guardar(bancada.vida(EspecVida(dono, braco, s, g, mundo, lugar=lugar)))
@@ -2700,7 +2754,7 @@ def rodar(cfg: dict, pasta: Path) -> dict:
     _gravar(pasta / "dominancia.json", _dump(tabela_dominancia(medidas)))
     if any(m.get("banheiro") is not None for m in medidas.values()):
         _gravar(pasta / "banheiro.json", _dump(tabela_banheiro(medidas)))
-    _gravar(pasta / "meta.json", _dump(meta(cfg)))
+    _gravar(pasta / "meta.json", _dump(meta(cfg) if teto is None else {**meta(cfg), "teto_pesos": teto}))
     return {"vidas": vidas, "medidas": medidas, "tabelas": tabelas}
 
 
@@ -3086,7 +3140,7 @@ def rodar_passo0(cfg: dict, pasta: Path) -> dict:
 
 
 CHAVES_CONFIG_GRUPO = {"descricao", "plano", "tipo", "bracos", "sementes", "unidades", "k_dias", "dias", "orcamento_por_dia", "dono",
-                       "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo"}
+                       "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo", "teto_pesos"}
 
 
 def validar_config_grupo(cfg: dict) -> dict:
@@ -3109,6 +3163,7 @@ def validar_config_grupo(cfg: dict) -> dict:
         raise ValueError(f"montagem {cfg['montagem']!r}: so {MONTAGENS}")
     if "mundo" in cfg:
         replace(CONFIG_MUNDO_LIGADA, **cfg["mundo"])
+    validar_teto_pesos(cfg)
     for b in bracos:                             # o K, o dono e o lugar de cada braco
         _validar_espec_grupo(EspecGrupo(b, 101, 0 if not BRACOS_GRUPO[b].b else int(cfg["k_dias"]), cfg.get("dono", "atencioso"),
                                         cfg.get("lugar", "comedouro")))
@@ -3144,6 +3199,16 @@ def rodar_grupo(cfg: dict, pasta: Path) -> dict:
         sementes = [(u["semente"], {"base": u["base"], "k": u["k"]}) for u in unidades]
     else:
         sementes = [(int(s), None) for s in cfg["sementes"]]
+    teto = None
+    if validar_teto_pesos(cfg) is not None:      # o teto do plano: os pesos declarados sao os do maior cerebro dos pets dos bracos
+        bg_ = bancada.bancada_grupo()
+        cerebros = {}
+        for braco in cfg["bracos"]:
+            eg = EspecGrupo(braco, sementes[0][0], int(cfg["k_dias"]) if BRACOS_GRUPO[braco].b else 0, cfg.get("dono", "atencioso"),
+                            cfg.get("lugar", "comedouro"))
+            for ident, _, _ in _entradas(eg):
+                cerebros[f"{braco}/{ident}"] = do_braco(bg_.politica(bancada.espec_do_pet(eg, ident))).cerebro
+        teto = conferir_teto_pesos(cfg, cerebros)
     grupos, medidas = {}, {}
     for (s, unidade), braco in product(sementes, cfg["bracos"]):
         k = int(cfg["k_dias"]) if BRACOS_GRUPO[braco].b else 0
@@ -3154,7 +3219,8 @@ def rodar_grupo(cfg: dict, pasta: Path) -> dict:
         grupos[v.nome] = v
         medidas[v.nome] = {**bancada.medir_grupo(v), "unidade": unidade}
     _gravar(pasta / "medidas.json", _dump(medidas))
-    _gravar(pasta / "meta.json", _dump({**meta(cfg), "grupo_sha256": _sha(RAIZ / "digilab" / "grupo.py")}))
+    _gravar(pasta / "meta.json", _dump({**meta(cfg), "grupo_sha256": _sha(RAIZ / "digilab" / "grupo.py"),
+                                        **({} if teto is None else {"teto_pesos": teto})}))
     return {"grupos": grupos, "medidas": medidas}
 
 

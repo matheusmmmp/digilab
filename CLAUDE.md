@@ -3856,3 +3856,32 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`. **A validação (32101…32505) 
   - com 8 processos, ~0,8 h de parede.
 - **O piloto não é evidência sobre o P1.** P0 − P1 em `D_FE` deu −0,012 [−0,020; −0,005].
 - **Achado:** o desempate do cheiro do #232 não está no motor. A calibração rodou com a ordem fixa.
+
+## V2, TETO-POR-PLANO — o teto de pesos do cérebro A por plano (2026-10-13, `docs/DECISAO_V2_TETO_PESOS.md`, TP-1 e TP-2) — GATES PASSAM
+
+TP-1 e TP-2 foram decididas pelo Matheus em 2026-10-12, pela recomendação. Infraestrutura, sem run; só as sementes dos testes. Mudaram a
+`ConfigLobos` (a checagem) e o `LIMITE_TETO_PESOS_PLANO` no `config.py`, o registro do `maximo_pesos` em `lobos.py`, a bancada, a receita e o
+status da decisão. `engine.py`, a conta dos pesos, os cérebros B e C, a rede de si e a web não mudaram. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **O padrão fica 1000** (`ConfigLobos.maximo_pesos`). A `ConfigLobos` recusa um teto que não seja inteiro de 1 a
+  `LIMITE_TETO_PESOS_PLANO` (2000, DECIDIDO pela TP-2, SEM FONTE). A contagem e a falha alta do cérebro (n ≥ teto) não mudaram.
+- **O plano declara** na config da bancada (a de vidas e a do grupo):
+  - a forma é `"teto_pesos": {"maximo": N, "pesos": n}`, com N acima de 1000 e até 2000, e n de 1000 a N − 1 (um cérebro que cabe no
+    padrão não precisa de teto próprio);
+  - a config precisa do campo `plano`, com o arquivo que diz por quê;
+  - **o teto só entra por aí:** `"lobos": {"maximo_pesos": ...}` falha alto (`validar_teto_pesos`, chamada pelas duas validações e pelo
+    `bancada_da_config`).
+- **A run confere os pesos declarados** antes de qualquer vida (`conferir_teto_pesos`): n tem de ser o maior cérebro A dos braços da
+  config, montado pela bancada (no grupo, os pets de cada braço). Se não for, a run falha alto. O teto conferido vai ao `meta.json`
+  (`teto_pesos`).
+- **G2:** sem nada declarado, a bancada é a de hoje. Isso vale para a `ConfigLobos` de toda config de `experiments/configs/`, para o
+  `meta.json` sem a chave nova e para os gabaritos de sempre, na suíte.
+- **O que falta para o primeiro plano acima de 1000:** a medida do custo do replay com o cérebro maior (a TP-2 pede no PR que o fizer).
+  Os cérebros B e C seguem com 1000.
+- **Testes** (`tests/test_teto_por_plano.py`, 9):
+  - o limite;
+  - os cérebros de 1116 e 1277, que falham no padrão e nascem com o teto do plano;
+  - o teto não muda nada abaixo de 1000;
+  - o G2;
+  - as recusas;
+  - a conferência dos pesos, também na run de vidas e na do grupo.

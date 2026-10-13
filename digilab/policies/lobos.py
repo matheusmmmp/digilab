@@ -125,7 +125,8 @@ PARAMETROS_LOBOS_L0: dict[str, tuple[str, str]] = {
     "aprendizado_ligado": ("PROPOSTO", "L0 desligado (TAREFA_V2_L0_LOBOS, secao 3); o L1 liga"),
     "bits_ponto_fixo": ("PROPOSTO", "sem fonte; potencia de dois para a divisao exata (secao 3, restricao de desenho)"),
     "escala_ticks_desde_cuidado": ("PROPOSTO", "mesmo valor de ConfigBandit.escala_ticks_desde_cuidado"),
-    "maximo_pesos": ("PROPOSTO", "PLANO_V2_PESQUISA, fase 1b: abaixo de mil pesos, para o replay"),
+    "maximo_pesos": ("PROPOSTO", "PLANO_V2_PESQUISA, fase 1b: abaixo de mil pesos, para o replay; um plano declara o seu ate "
+                                 "config.LIMITE_TETO_PESOS_PLANO (TP-1, TP-2, DECISAO_V2_TETO_PESOS)"),
 }
 PARAMETROS_LOBOS_L1: dict[str, tuple[str, str]] = {
     "passo": ("PROPOSTO", "sem fonte; calibrado nas sementes 3101...3505 (PLANO_ANALISE_V2_L1, secao 5)"),
