@@ -1,0 +1,285 @@
+# Plano de análise — V2: o pet que pensa (J5), o planejador de um alvo passa nos dois testes da DS-1?
+
+Status (2026-10-13): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 5 de `docs/TAREFA_V2_PET_QUE_PENSA.md`. O desenho é
+`docs/futuro/pet_que_pensa.md`, com **PQ-1 a PQ-7 DECIDIDAS** (2026-10-13). As decisões que sobram são **PP-1 a PP-9** (seção 12),
+cada uma com a recomendação e o custo de errar.
+
+**Regras deste plano:**
+- Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.
+- O que não está aqui é descritivo pós hoc.
+- Nada se ajusta olhando a validação, que roda uma vez só.
+- **Nenhuma alegação de novidade.** Planejar com um modelo aprendido já existe: a linha do Dyna (Sutton 1990) e o MuZero (Schrittwieser
+  et al. 2020), as duas lidas só pelo título. Os testes vêm da psicologia animal (Adams e Dickinson 1981) e da comparação entre SR e
+  modelo (Momennejad et al. 2017). O que este plano testa é se **este** pet, com **este** planejador, passa neles.
+
+## 1. A pergunta e as predições
+
+**A pergunta (DS-1):** o pet com o planejador muda a escolha depois de uma mudança no mundo que ele não reexperimentou, e o A de hoje não?
+
+O par de testes separa as peças:
+- **o teste 1, a revalorização (T1):** o efeito de uma fruta muda, e o pet fica sabendo **fora do mapa**, comendo-a na mão do dono;
+- **o teste 2, a mudança de transição (T2):** a fruta passa a cair em outras árvores, e o pet vê isso **sem comer**.
+
+**As predições** (sentido fixado agora; seção 3 para os braços):
+
+| braço | T1 | T2 | por quê |
+|---|---|---|---|
+| P1 | não passa | não passa | o hábito só muda pela consequência no mapa, e o teste vem antes dela |
+| P1-plan | passa | passa | o modelo do desfecho aprende pela mão, e o mapa pelo que o pet vê |
+| P1-plan-desfecho | passa | não passa | o desfecho aprende, mas o mapa fica congelado na mudança |
+| P1-plan-cong | não passa | não passa | os dois modelos congelados na mudança: o planejador decide pelo que já sabia |
+
+O padrão "passa no T1, falha no T2" é o da SR em Momennejad et al. (2017, resumo): flexível à recompensa, insensível à transição. O
+P1-plan-desfecho é o braço que imita esse padrão por construção.
+
+**Por que não a tarefa de dois passos:** Akam, Costa e Dayan (2015, resumo) mostram que estratégias sem modelo produzem nela a assinatura
+atribuída ao controle com modelo. O par T1 + T2, com os dois braços de controle, é o que o desenho põe no lugar (R-1).
+
+## 2. O mundo, o pet e o dono
+
+| item | valor | fonte |
+|---|---|---|
+| mundo | o físico, layout padrão, com os números da calibração do mundo (`m` = 1) | `docs/RESULTADO_V2_CALIBRACAO_MUNDO.md`; PMF-6 |
+| as árvores | as 9 do `LAYOUT_MUNDO_PADRAO`, 3 de cada tipo: `a` (J1, M1, M4), `b` (J2, M2, M5), `c` (J3, M3, M6) | `digilab/config.py` |
+| **a fruta x** | sorteada por unidade, `derivar_semente("pet-que-pensa-x", s)`, uniforme entre `a`, `b` e `c` | PROPOSTO |
+| **a fruta y** (só no T2) | sorteada entre as outras duas, `derivar_semente("pet-que-pensa-y", s)` | PROPOSTO |
+| os efeitos antes da mudança | **a x faz bem** (o humor sobe `efeito_humor_ruim`, o "bem" do casado); as outras duas são neutras | PROPOSTO |
+| o corpo | o regime "química" (PP-3) | `docs/TAREFA_V2_CORPO_DRIVES.md` |
+| o cérebro | o A no P1 (a consequência com a E2), no ponto da K2, com a montagem completa, o alvo aprendido (#255), a presença da fruta no mundo (#269) e as classes por árvore (etapa 2b, PP-2). Sem recalibrar (M10) | tarefa, seção 3 |
+| o dono | o atencioso, com orçamento de 16 interações por dia, só com o cuidado (PMF-3), com o `DonoComLugar` no comedouro | PMF-3 e PMF-4 do mundo |
+| o genoma | sem genoma (temperamento neutro) | como os dois pets |
+| morte | desligada | — |
+
+**A vida** tem `D_a` dias de aprendizado e a janela do teste: `D_a` = 7 e a janela de 3 dias, 10 dias no total (PP-4).
+
+## 3. Os braços e os protocolos
+
+**Os braços.** Todos têm o mesmo cérebro A, com o mesmo hábito (o alvo aprendido com as classes por árvore). Muda só o planejador:
+
+| braço | `g_plano` | o modelo do desfecho | o mapa |
+|---|---|---|---|
+| **P1** | 0 | observa (sem efeito) | observa (sem efeito) |
+| **P1-plan** | o da calibração | aprende sempre | aprende sempre |
+| **P1-plan-desfecho** | o da calibração | aprende sempre | **congelado no tick da mudança** |
+| **P1-plan-cong** | o da calibração | **congelado no tick da mudança** | **congelado no tick da mudança** |
+
+**Uma correção ao desenho.** A tabela da seção 5 de `docs/futuro/pet_que_pensa.md` diz "o mapa congelado no nascimento" para o
+P1-plan-desfecho. Com o mapa no prior 0 o planejador não liga árvore a fruta, então o braço também falharia no T1. Com isso ele deixaria de
+separar as duas peças. Este plano congela o mapa **no tick da mudança**, como no P1-plan-cong, que é o que a coluna da predição pede. Fica
+registrado em `docs/REGISTRO_DESVIOS.md` e como PP-8.
+
+**Os dois protocolos** são vidas separadas da mesma unidade. Antes do tick da mudança, as duas vidas são a mesma (o mesmo mundo e os
+mesmos efeitos).
+
+**O tick da mudança** é `T_m` = o primeiro passo do dono depois das 8 h do dia `D_a` em que o pet está acordado (PP-5).
+
+**T1, a revalorização (PQ-4):**
+1. **Os dias 0 a `D_a` − 1:** a x faz bem, e o pet aprende no mapa onde ela cai.
+2. **Em `T_m`:** o efeito da x passa a **fazer mal** (`efeito_humor_ruim`), pela troca do efeito gravada no registro (a do mutável e do
+   `MotorMundoTroca`). No mesmo passo, o dono dá a x **na mão** `n_mao` = 2 vezes, fora do orçamento (PP-5). Pela G-SEM-CREDITO, isso
+   chega só ao modelo do desfecho.
+3. **O teste:** as oportunidades depois da última fruta na mão (seção 4).
+
+**T2, a mudança de transição:**
+1. **Os dias 0 a `D_a` − 1:** os mesmos do T1.
+2. **Em `T_m`:** as árvores da x passam a dar y, e as da y passam a dar x, pela troca de tipo por árvore da etapa 3. Os efeitos não
+   mudam. O pet não recebe nada na mão.
+3. **O teste:** as buscas da x de memória, depois que o pet **viu** a x perto de uma árvore nova (seção 4).
+
+## 4. As medidas
+
+**As oportunidades.** São tiradas só da percepção e do que o motor registra, iguais em todos os braços. Nunca leem os modelos.
+- **Uma oportunidade do T1** é uma decisão do pet depois da última fruta na mão, com a fome (o receptor) ≤ S/2, em que há um alvo de x
+  disponível (a x à vista, ou uma árvore do tipo x entre os troncos que o pet já viu) e ao menos um alvo que não é de x. O pet **escolhe
+  x** quando a ação tem alvo e o alvo é a x ou uma árvore do tipo x. Comer outra coisa, explorar outro alvo ou ficar ocioso conta como
+  não escolher x.
+- **Uma busca do T2** é uma decisão com a fome ≤ S/2 e **sem a x à vista**, em que o alvo escolhido é uma árvore do tipo x de antes (as
+  velhas) ou do tipo x de depois (as novas). A busca **vai às novas** quando o alvo é uma árvore nova.
+- **A exposição do T2:** o primeiro tick depois de `T_m` em que uma x madura aparece nos `vistos` do pet a até `raio_ancora` de uma árvore
+  nova. Só contam as buscas depois dela.
+- **O corte da reexperiência:** em cada teste, contam só as oportunidades até o primeiro consumo de x no mapa depois de `T_m`. A
+  oportunidade que leva a esse consumo conta, e as seguintes não.
+- **Antes:** a mesma definição nas últimas 3 oportunidades (ou buscas) antes de `T_m`. No T2, "antes" as árvores novas ainda são as da y.
+
+**As primárias, por unidade e braço** (PP-7: a mudança dentro da unidade, não o nível depois):
+- **T1:** `q` = `f_antes` − `f_depois`, a queda na fração de oportunidades em que o pet escolhe x. São as 3 últimas antes e as 3
+  primeiras depois.
+- **T2:** `m` = `n_depois` − `n_antes`, a subida na fração de buscas que vão às árvores novas. São as 3 últimas antes e as 3 primeiras
+  depois da exposição.
+- Com menos de 3 oportunidades, usa as que houver. A unidade sem nenhuma, antes ou depois, sai contada como **sem oportunidade** (R-2) e
+  fica fora do contraste daquele teste.
+
+**Os descritivos (sem gate):**
+
+| medida | definição |
+|---|---|
+| quanto o plano decide | a fração das decisões com alvo em que a sonda "quem decidiu" muda a escolha, por dia |
+| os modelos | o Δ̂ de cada tipo contra o efeito real, e o mapa de cada árvore contra o tipo real, por dia |
+| o desempenho | o `D_FE` e a privação (as medidas do plano do mundo), na fase 1 e na janela do teste |
+| a deriva | a JSD ao prior herdado no fim de cada dia, como a da bancada |
+| o custo | µs por decisão e bytes de log por dia, por braço |
+| a legibilidade | a fração das decisões com o fator do plano no motivo, e os textos dele |
+| as oportunidades | quantas por unidade, a latência até a primeira e as unidades sem oportunidade, por braço e teste |
+| o nível | `f_depois` e `n_depois` sozinhos |
+| a forma pelo estado (R-4) | não roda neste plano. Entra num adendo, só descritiva |
+
+## 5. A calibração (só o `g_plano`, sem o primário)
+
+**Só o `g_plano` se calibra** (PP-6). Os números dos modelos ficam PROPOSTOS e iguais em todos os braços.
+
+- **A grade:** `g_plano` ∈ {S/4, S/2, S}.
+- **O que roda:** o P1-plan só na fase 1 (os dias 0 a `D_a` − 1), nas 20 unidades de calibração (seção 8). A fase 1 é a mesma nos dois
+  protocolos, então uma vida por unidade e ponto serve aos dois. Nenhuma calibração vê a mudança, então não tem como ler o primário.
+- **A medida da regra:** a fração das decisões com alvo em que o termo do plano muda a escolha (a sonda), nos dias 4 a 6.
+- **A regra:** o **menor** `g_plano` com a média dessa fração em [0,10; 0,40] (R-3: o planejador soma, não domina). Se nenhum ponto cai
+  na faixa, fica o mais perto dela, com o desvio declarado.
+- **A regra não lê** a escolha de x (`f_antes`), nem um contraste entre braços.
+
+## 6. O piloto, a margem e o N
+
+**O piloto:** no `g_plano` escolhido, os 4 braços × os 2 protocolos, nas mesmas 20 unidades. Serve para a premissa, a margem, o N e o
+custo. Os números dele não entram como evidência.
+
+**As margens, na escala de cada medida** (a convenção de "metade" da regra 6.3 do experimento maior):
+- `Δ_T1` = ½ × a média de `f_antes` do P1-plan no piloto. É a metade da queda máxima, de `f_antes` a 0.
+- `Δ_T2` = ½ × a média de (1 − `n_antes`) do P1-plan no piloto. É a metade da subida máxima, de `n_antes` a 1.
+- Se uma margem for ≤ 0,05 (PROPOSTO), aquele teste não tem espaço para mostrar mudança, e a validação não roda: o plano volta ao Matheus.
+
+**O N:** o menor K_u (unidades por base) de 4 a 10 com poder simulado ≥ 0,8 nos **dois** primários, a α/2 cada (o Holm de dois).
+- **O método:** um bootstrap das diferenças por unidade do piloto, deslocadas para a margem, com 2.000 réplicas por K_u, descontadas as
+  unidades sem oportunidade na taxa do piloto.
+- **Os secundários:** o poder de cada um sai só como relato; abaixo de 0,5, o gate é lido como subpotenciado.
+- **Se nem K_u = 10 chega a 0,8,** a validação roda com 10, e o poder sai declarado.
+
+**O custo esperado,** antes do piloto: a calibração do mundo mediu de 3,86 a 7,93 s de CPU por vida de 14 dias, sem o planejador
+(`docs/RESULTADO_V2_CALIBRACAO_MUNDO.md`, seção 5). Com vidas de 10 dias, 8 vidas por unidade e N = 50, seriam 400 vidas, menos de 1 h de
+CPU. O custo real do planejador sai do piloto.
+
+**O adendo 1:** o `g_plano`, as margens, o K_u, o poder e o custo entram num commit antes da validação.
+
+## 7. Gates e regra de decisão
+
+**O bootstrap:** sobre as unidades, com 10.000 reamostragens, semente 4242 e IC95; o IC90 só na equivalência. O replay de toda vida é
+conferido bit a bit (G1).
+
+**Os gates de mecanismo,** conferidos em toda vida da validação; um que falha para a run (falhar alto):
+- **G-SEM-CREDITO:** no T1, os pesos de decisão e de alvo do A são os mesmos imediatamente antes e depois de cada fruta na mão;
+- **o congelamento:** os modelos congelados não mudam depois de `T_m`, no P1-plan-desfecho (o mapa) e no P1-plan-cong (os dois);
+- **o G2:** no P1, com `g_plano` 0, o termo do plano é zero em toda decisão.
+
+**As premissas:**
+
+| premissa | regra | se falha |
+|---|---|---|
+| **G-APRENDEU** | em cada braço, `f_antes` com o limite inferior do IC95 acima de 1/3 (a fração de x entre os 3 tipos). Vale para os dois testes, porque a fase 1 é a mesma | o primário daquele braço é **inconclusivo por premissa**: o pet não aprendeu a x, e não há o que revalorizar nem buscar |
+| **G-OPORTUNIDADE** | no máximo 25% das unidades sem oportunidade, por braço e teste | o teste daquele braço é **inconclusivo por premissa** |
+| **G-EXPOSICAO** (T2) | no máximo 25% das unidades sem exposição até o fim da janela | o T2 é **inconclusivo por premissa**: o pet não viu a x cair no lugar novo |
+
+**Os contrastes:**
+
+| gate | contraste (por unidade) | regra | papel |
+|---|---|---|---|
+| **G-T1** | `q`(P1-plan) − `q`(P1) | as categorias abaixo, com Holm de 2 | **primário** |
+| **G-T2** | `m`(P1-plan) − `m`(P1-plan-desfecho) | as categorias abaixo, com Holm de 2 | **primário** |
+| G-T1-DESF | `q`(P1-plan-desfecho) − `q`(P1) | limite inferior do IC95 > 0, Holm de 4 | secundário: o desfecho sozinho passa no T1 |
+| G-T1-CONG | `q`(P1-plan) − `q`(P1-plan-cong) | limite inferior do IC95 > 0, Holm de 4 | secundário: no T1, quem muda a escolha é o modelo que aprendeu, não o planejador |
+| G-T2-HAB | `m`(P1-plan) − `m`(P1) | limite inferior do IC95 > 0, Holm de 4 | secundário: o hábito não passa no T2 |
+| G-T2-CONG | `m`(P1-plan) − `m`(P1-plan-cong) | limite inferior do IC95 > 0, Holm de 4 | secundário: no T2, quem muda a escolha é o mapa que aprendeu |
+
+**O G-T2 é contra o P1-plan-desfecho, não contra o P1.** É o contraste que isola o mapa: os dois braços têm o mesmo planejador e o mesmo
+desfecho, e só o mapa difere depois da mudança.
+
+**As categorias dos primários** são exclusivas e lidas nesta ordem (a ordem do PR #196), com a margem do teste (`Δ_T1` ou `Δ_T2`):
+1. **passa:** o limite inferior do IC95, ajustado pelo Holm, > 0. Se o limite superior do IC90 < a margem, leva o rótulo **"abaixo de Δ"**;
+2. **oposto:** o limite superior do IC95 < 0;
+3. **equivalente:** o IC90 dentro de ± a margem;
+4. **inconclusivo:** o resto.
+
+**A leitura:**
+- **G-T1 e G-T2 passam:** o pet com o planejador planeja no sentido da DS-1. Só então a tela pode dizer "pensou", e só com o fator do plano
+  no motivo (R-7). Os secundários dizem se cada peça faz o que o desenho diz.
+- **Só o G-T1 passa:** o modelo do desfecho funciona e o mapa não. Os descritivos dizem se o mapa não aprendeu (o mapa contra o tipo
+  real) ou se aprendeu e não decidiu (a sonda).
+- **Só o G-T2 passa:** o mapa funciona e a revalorização pela mão não chega à escolha. Os descritivos dizem se o Δ̂ da x mudou depois da
+  mão.
+- **Nenhum passa:** o planejador, como está, não muda a escolha do pet nestes testes. Fica registrado como resultado negativo do J5,
+  com a sonda e os modelos como diagnóstico. Nada se recalibra olhando a validação.
+- **Um primário oposto:** registrado. O planejador muda a escolha no sentido contrário ao modelo; o motivo e a sonda dizem por quê.
+- **O P1 passa num teste** (G-T1-DESF ou G-T2-HAB com o sinal trocado): o hábito sozinho mostra a assinatura, que é o R-1. O primário
+  daquele teste fica com o aviso "a assinatura não separa".
+
+## 8. Sementes
+
+| uso | faixa | bases |
+|---|---|---|
+| calibração do `g_plano` e piloto | **45101…45505** | 45101, 45202, 45303, 45404, 45505 (K_u = 4) |
+| validação | **46101…46505** | 46101, 46202, 46303, 46404, 46505 (K_u do adendo) |
+
+- **O prefixo de unidades:** `"pet_que_pensa"`, para a semente e o genoma (o padrão da bancada).
+- **Conferências em 2026-10-13,** no `origin/main` (`d1bca65`) e nos branches remotos:
+  - as duas faixas estão fora de `FAIXAS_RESERVADAS` (a última é 44101…44505, da rede de si) e da `FAIXAS_QUEIMADAS`;
+  - elas também ficam fora das faixas propostas e ainda não registradas: 23101…27505 (`docs/LEITURA_PARCIAL_V2_FASE1.md`) e 35101…36505
+    (`docs/PLANO_ANALISE_V2_TRANSFERENCIA_REJEICAO.md`);
+  - `git grep -w` das bases em `.py`, `.md` e nas configs não acha uso, na `main` nem nos branches remotos.
+- **O D registra** as faixas e o prefixo, com a fonte deste plano (tarefa, etapa 4).
+
+## 9. Riscos
+
+| # | risco | o que o plano faz |
+|---|---|---|
+| R-1 | **A assinatura falsa:** um hábito sofisticado passa num teste | os dois braços de controle prevêem resultados diferentes, e o secundário do P1 diz se o hábito sozinho mostra a assinatura (seção 7) |
+| R-2 | **A oportunidade não chega,** ou chega sem fome | a janela de 3 dias e a fome ≤ S/2 estão fixadas; as unidades sem oportunidade saem contadas, e a G-OPORTUNIDADE decide |
+| R-3 | **O planejador domina** | o `g_plano` se calibra pela sonda, na faixa [0,10; 0,40], sem ler o primário |
+| R-4 | **A forma pelo estado** confunde a revalorização com a saciedade específica | não roda aqui; a primária é a da mão |
+| R-5 | **O mapa aprende do que vê**, e o hábito também muda pelo que vê | o T2 conta só as buscas **sem a x à vista** |
+| R-6 | **O efeito ruim na mão mexe no humor** de todos os braços | é igual em todos, porque a mão vem no mesmo passo. O humor na janela sai como descritivo |
+| R-7 | **O rótulo "pensa"** | só com os dois primários e o fator do plano no motivo |
+| R-8 | **O custo** do planejador em toda decisão com alvo | medido no piloto; vai no adendo, com o teto de tempo do Matheus |
+| R-9 | **A troca do T2 muda o que cai perto de onde o pet está** | é o mundo. A distância às árvores novas e às velhas, na exposição, sai como descritivo |
+| R-10 | **O "antes" do T2 é baixo por construção** (a y é neutra e a x faz bem), e a subida fica grande | a margem `Δ_T2` vem do próprio `n_antes` do piloto, e o contraste é entre braços com o mesmo "antes" |
+
+## 10. O lugar dos adendos
+
+- **Adendo 1:** o `g_plano`, as margens, o N e o custo (seção 6). É obrigatório antes da validação.
+- **Adendo 2, a forma pelo estado do T1 (R-4):** só descritiva, com a saciedade específica no lugar da mão. Fica depois da validação, se o
+  Matheus quiser.
+- **Nenhum adendo muda os primários deste plano.**
+
+## 11. Artefatos e reprodução
+
+- **As pastas:**
+  - `artifacts_v2_pet_que_pensa/calibracao/`, com `g_plano.json` e o `piloto/`;
+  - `artifacts_v2_pet_que_pensa/validacao/`.
+
+  Cada uma traz `meta.json` (o sha256 de `mundo.py`, `modelo_mundo.py`, `lobos.py`, `config.py` e `engine.py`) e os registros das vidas.
+- **As configs:** `experiments/configs/v2_pet_que_pensa/{calibracao,validacao}.json`, com o campo `"plano"`.
+- **A recusa:** a run se recusa a rodar se a pasta de saída já existe, e a calibração recusa as sementes da validação.
+
+## 12. Decisões do Matheus
+
+**Abertas: PP-1 a PP-9.** As PQ-1 a PQ-7 do desenho e a TP-1 e a TP-2 já estão decididas.
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PP-1 | Os candidatos de árvore lembrada no motor | **sim:** no explorar, o motor oferece `arvore:<id>` de cada tronco que o pet já viu, depois dos candidatos de hoje. O padrão do motor e o instinto nunca os escolhem | sem eles: o pet só vai a uma árvore que está vendo, e o T2 (a busca de memória) não tem como acontecer |
+| PP-2 | As classes de alvo por árvore no hábito | **sim:** uma classe por árvore nas regras em que o explorar é candidato (3 × 9 = 27 pesos), com o teto do plano em 1000 (o padrão da TP-1). Só sobe, até 2000, por adendo, se a contagem da etapa 2b passar de 1000 | sem elas: o hábito não sabe "ir ao J2", e o T1 compara o planejador com um hábito que não sabe ir a lugar nenhum. É um positivo falso |
+| PP-3 | O regime do corpo | **o regime "química", com o metabolismo no ponto do passo 0 do corpo** (A3.2b), depois que a calibração do corpo rodar. É o que a seção 7 do desenho pede para o valor do desfecho ter escala | sem o metabolismo: o custo de andar fica sem a escala do combustível, e o J5 não é comparável com o J2. Com os drives novos: o tédio e a solidão mexem nas oportunidades, e a fome deixa de ser a única razão para buscar |
+| PP-4 | A vida e a janela | **`D_a` = 7 dias de aprendizado, janela de 3 dias, as 3 primeiras oportunidades** | `D_a` menor: a G-APRENDEU falha, e o teste não tem o que medir. Janela maior: mais reexperiência e mais custo, sem mudar a primeira oportunidade |
+| PP-5 | A fruta na mão | **`n_mao` = 2, no mesmo passo do dono da mudança (`T_m`)**, no primeiro passo depois das 8 h do dia `D_a` com o pet acordado | uma só: com um passo do desfecho de S/4, o Δ̂ anda só um quarto, e o planejador pode não virar. Mais: o humor de todos os braços cai mais, e o teste fica longe do desenho de Adams e Dickinson |
+| PP-6 | O que se calibra | **só o `g_plano`**, na grade {S/4, S/2, S}, pela sonda. Os números dos modelos ficam PROPOSTOS: `passo_desfecho` S/4, `passo_mapa` S/8, `raio_ancora` 2 células, `teto_plano` 2S e `teto_modelo` 200 inteiros. Pela conta do desenho, no regime química são 76: 5 tipos × 5 receptores mais 1 do andar, e 10 lugares × 5 tipos. A etapa 1 confere a conta | calibrar tudo: muitos pontos e o risco de ajustar a favor do primário |
+| PP-7 | A forma da primária | **a mudança dentro da unidade** (`q` e `m`), não o nível depois | o nível só: um planejador que nunca aprendeu a x "passa" no T1 por nunca ter ido a ela |
+| PP-8 | O P1-plan-desfecho | **o mapa congelado no tick da mudança** (a correção da seção 3) | congelado no nascimento: o mapa vazio não liga árvore a fruta, o braço falha nos dois testes, e o G-T2 deixa de isolar o mapa |
+| PP-9 | As faixas de sementes | **45101…45505** (calibração e piloto) e **46101…46505** (validação), com o prefixo `pet_que_pensa` | uma colisão tira o "novo" das unidades |
+
+## 13. Referências
+
+Todas da seção 10 de `docs/futuro/pet_que_pensa.md`, com o mesmo status de leitura. Nenhuma referência nova.
+
+| referência | DOI | quanto foi lido | o que sustenta aqui |
+|---|---|---|---|
+| Adams e Dickinson (1981). Instrumental Responding following Reinforcer Devaluation. Q. J. Exp. Psychol. B | `10.1080/14640748108400816` | resumo (OpenAlex) | o T1: a aversão à comida, feita fora do contexto da resposta, reduz a resposta em extinção |
+| Akam, Costa e Dayan (2015). Simple Plans or Sophisticated Habits? PLoS Comput Biol | `10.1371/journal.pcbi.1004648` | resumo | não usar a tarefa de dois passos sozinha |
+| Momennejad et al. (2017). Nat Hum Behav | `10.1038/s41562-017-0180-8` | resumo | o padrão do P1-plan-desfecho: flexível à recompensa, insensível à transição |
+| Dolan e Dayan (2013). Goals and Habits in the Brain. Neuron | `10.1016/j.neuron.2013.09.007` | resumo | metas e hábitos como espectro: o termo soma, não substitui |
+| Sutton (1990). ML Proceedings 1990 | `10.1016/b978-1-55860-141-3.50030-4` | só o título | que a linha existe; nenhuma afirmação de conteúdo |
+| Schrittwieser et al. (2020). Nature 588 | `10.1038/s41586-020-03051-4` | só o título | que planejar com um modelo aprendido já existe; nenhuma afirmação de conteúdo |
