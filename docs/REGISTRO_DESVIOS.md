@@ -4626,3 +4626,28 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
 - **Uma terceira, só pelo título:** Schrittwieser et al. (2020), para a não novidade.
 - **As outras referências** são as da revisão F, com o mesmo nível de leitura.
 - **Os números novos** são todos PROPOSTOS ou SEM FONTE: os 5 tipos de comida e a contagem do mapa.
+
+## 2026-10-13 — W-PET-QUE-PENSA-TAREFA (worker C): a tarefa e o plano de análise do J5
+
+- **As decisões marcadas como DECIDIDAS (2026-10-13), pela recomendação:**
+  - a TP-1 e a TP-2 em `docs/DECISAO_V2_TETO_PESOS.md`;
+  - a PQ-1 a PQ-7 em `docs/futuro/pet_que_pensa.md`;
+  - a linha do J5 no `docs/ROADMAP_V2.md`.
+- **`docs/TAREFA_V2_PET_QUE_PENSA.md`:** as etapas 0 a 6, os donos (B, A, D, C), os gates e o G2 de cada etapa.
+- **`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`:** as predições, os braços, os dois protocolos, as medidas, as margens, as sementes e as
+  decisões que sobram (PP-1 a PP-9). Registrado antes de qualquer run.
+- **Uma correção ao desenho decidido (PP-8).** A tabela da seção 5 de `docs/futuro/pet_que_pensa.md` diz "o mapa congelado no nascimento"
+  para o P1-plan-desfecho. Com o mapa no prior 0 o planejador não liga árvore a fruta, e o braço falharia no T1 também, contra a coluna da
+  predição da mesma tabela. O plano congela o mapa no tick da mudança. **Não editei a tabela do desenho**, que é um documento decidido: a
+  correção fica no plano e vai ao Matheus como PP-8.
+- **A primária é a mudança dentro da unidade** (PP-7), não o nível depois da mudança, que o desenho sugeria ("a probabilidade de escolher
+  o alvo ..., antes e depois"). Com o nível só, um planejador que nunca aprendeu a x passaria no T1 sem ter revalorizado nada. É uma
+  especificação, não uma mudança da medida da DS-1.
+- **O G-T2 é contra o P1-plan-desfecho, não contra o P1.** O desenho não fixava o contraste. Este é o que isola o mapa.
+- **As faixas 45101…45505 e 46101…46505** foram conferidas no `origin/main` (`d1bca65`) e nos branches remotos: fora das reservadas, das
+  queimadas e das propostas ainda não registradas (23101…27505 e 35101…36505), e sem uso em `.py`, `.md` ou nas configs.
+- **Os números novos** são todos PROPOSTOS e SEM FONTE: `D_a`, a janela, as 3 oportunidades, a fome ≤ S/2, `n_mao`, a grade e a faixa
+  do `g_plano`, os números dos modelos, os limiares das premissas e o piso de 0,05 das margens. O custo esperado cita o artefato da
+  calibração do mundo (`docs/RESULTADO_V2_CALIBRACAO_MUNDO.md`, seção 5).
+- **Nenhuma referência nova.** As do plano são as da seção 10 do desenho, com o mesmo nível de leitura. Sutton (1990) e Schrittwieser et al.
+  (2020) seguem só pelo título, sem afirmação de conteúdo.

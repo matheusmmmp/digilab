@@ -1,7 +1,7 @@
 # O pet que pensa (J5): planejar com um modelo do mundo aprendido — desenho no papel
 
-Status (2026-10-12): **IDEIA, desenho PROPOSTO.** Pedido do Gerente ao worker C, só papel. As decisões PQ-1 a PQ-7 (seção 9) são do
-Matheus. Nenhum código e nenhuma run antes de uma tarefa e de um plano de análise registrados.
+Status (2026-10-12): **IDEIA, desenho PROPOSTO.** Pedido do Gerente ao worker C, só papel. **PQ-1 a PQ-7 DECIDIDAS pelo Matheus em
+2026-10-13, todas pela recomendação** (seção 9). A tarefa é `docs/TAREFA_V2_PET_QUE_PENSA.md`, e o plano é `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`. Nenhum código e nenhuma run antes de uma tarefa e de um plano de análise registrados.
 
 **O que já está decidido:**
 - **o objetivo (2026-10-07):** o Matheus quer o pet que **pensa**, isto é, que prevê as consequências ("se eu fizer X, acontece Y") e
@@ -155,6 +155,8 @@ mão" (o A). O que o pet vê já está na percepção (`vistos`).
 | R-8 | **O custo:** o planejador avalia todo candidato em toda decisão com alvo | os candidatos são poucos (os do motor). O custo por decisão sai medido no piloto |
 
 ## 9. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-13: PQ-1 a PQ-7, todas como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

@@ -1,6 +1,7 @@
 # Decisão — V2: o teto de pesos do cérebro A (2026-10-12)
 
-Status: **ABERTA.** As decisões TP-1 e TP-2 (seção 5) são do Matheus. Pedido do Gerente ao worker C, só papel.
+Status: **TP-1 e TP-2 DECIDIDAS pelo Matheus em 2026-10-13, pela recomendação** (seção 5): o teto por plano, com o padrão em 1000 e o limite
+de 2000. Pedido do Gerente ao worker C, só papel.
 
 ## 1. O problema
 
@@ -66,6 +67,8 @@ números com teste citam o teste; os outros saem do comando da seção 6, sem ar
 - **Os cérebros B e C** seguem com 1000. Eles só voltam numa comparação nova, que traria o contrato de capacidade dela.
 
 ## 5. Decisões do Matheus
+
+**DECIDIDAS em 2026-10-13: TP-1 e TP-2, como recomendado.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
