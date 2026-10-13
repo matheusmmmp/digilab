@@ -4861,3 +4861,26 @@ Na suíte que rodou junto com a validação do mundo (#285), o `test_g2_um_pet_n
   consertar no repositório.
 - **Recomendação:** atualizar o `.venv` para a última 3.13.x, que traz consertos de chamadas especializadas de descritores (por exemplo o
   gh-131998). Se voltar, guardar o `PYTHONHASHSEED` e o log inteiro da rodada.
+
+## 2026-10-13 — W-BANCADA-PQP (worker D): a bancada do pet que pensa, etapa 4
+
+- **A troca do efeito do T1 fica presa à primeira fruta na mão.** O plano diz que o efeito da x muda em `T_m` "pela troca gravada no
+  registro (a do mutável e do `MotorMundoTroca`)". Mas `T_m` depende da vida (o primeiro passo com o pet acordado), e o motor não o sabe
+  ao nascer. Por isso o `MotorMundoMudanca` troca o efeito na primeira `dar_fruta_x` do log, antes de o pet comê-la. É o mesmo passo do
+  dono e o mesmo tick; o replay refaz pelo log.
+- **"Depois das 8 h"** foi lido como "a partir das 8 h": o passo do dono das 8 h em ponto conta, se o pet estiver acordado.
+- **O congelamento (PP-8) está na bancada**, no embrulho dos modelos (`PoliticaComModeloPQP`), restaurando as partes congeladas depois de
+  cada passo. O mapa congela junto com os lugares vistos, e o desfecho junto com o custo de andar. Os contadores seguem andando. Quando o
+  planejador da etapa 2 chegar, ele tem de ler estes mesmos modelos (ou expor o próprio congelamento); senão o P1-plan-desfecho e o
+  P1-plan-cong não congelam nada. Por isso a `BancadaPQP.politica` recusa os braços com o planejador mesmo sem o nó.
+- **A mão no modelo do desfecho** é a diferença dos receptores logo depois e logo antes de comer, a mesma conta do `comer` no mapa, sem o
+  andar. O `PoliticaComModelo` do #289 não tinha o gancho `fruta_na_mao`; o embrulho da bancada o tem.
+- **"Ao menos um alvo que não é de x"** (seção 4) foi lido pela percepção: outra comida madura à vista, ou um tronco já visto que dá outro
+  tipo. O vagar e a casa do explorar não contam, porque sempre existem e esvaziariam a condição.
+- **"Escolher x"** conta a comida x madura e a árvore que dá x no momento da decisão (com a troca do T2). A comida x podre não conta.
+- **O alvo da decisão** sai do gancho do cérebro e, quando ele devolve None, do alvo padrão do motor pela mesma função pura
+  (`mundo.alvo_padrao_de`). O registro do motor só guarda o tipo do alvo, sem o id da comida.
+- **A exposição do T2** é vista nas percepções das decisões (os `vistos` da decisão), não na percepção depois de andar.
+- **O G2 do plano** (com `g_plano` 0 o termo do plano é zero) não tem o que conferir sem o planejador; fica para a etapa 2.
+- **Dois testes antigos mudaram:** a tabela dos prefixos em `tests/test_bancada_dois_pets.py` ganhou o `pet_que_pensa`, e
+  `tests/test_bancada_liga_gestos.py` aceita o nó do planejador.
