@@ -3938,3 +3938,23 @@ Autorizada pelo Matheus em 2026-10-12. Sementes 33101…33505 (K = 4, prefixo `c
 - **Margens (A4.2):** `Δ_BE` 0,2235, `Δ_priv` 0,0295, `Δ_saude` 0,0334, `Δ_TED` 0,1633. **N = 20 (K = 4)**, todo gate com poder ≥ 0,968.
   A validação: 2.400 vidas, 3,6 h de CPU, ~0,6 h com 6 processos (com 12 o pool caiu).
 - **O piloto não é evidência:** P1-c − P1-q em `BE`, `bola`, +0,67, com o cuidado igual; o G-P0C vale nas 160 células.
+
+## V2, MUNDO-VALIDACAO — a validação do mundo físico (2026-10-13, `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seções 7 e 8, A1.2–A1.9) — G-MUNDO PASSA; O P1 PERDE (resultado negativo registrado)
+
+Autorizada pelo Matheus em 2026-10-12. Uma run nas bases 32101…32505 (K = 8, N = 40, prefixo `mundo`), `m` = 1 e `Δ_MF` da A1.9, o
+mundo da calibração; 3.360 vidas rejogadas do disco, 50 min com 8 processos (6,5 h de CPU). Números de `artifacts_v2_mundo/validacao/`
+(as vidas fora do git); relatório `docs/RESULTADO_V2_VALIDACAO_MUNDO.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Código:** `experiments/run_v2_validacao_mundo.py`, com:
+  - por unidade, as 84 vidas: P0, P0z e P1; os acoplados P0^ac e P1^ac ao P0z; e o P0 e o P1 no layout afastado;
+  - os gates G-MUNDO e G-MF1r (as categorias da seção 8);
+  - o Holm dos cinco secundários, com o p do bootstrap orientado;
+  - a leitura da A1.5 e os descritivos;
+  - a recusa de rodar de novo e a config presa à calibração.
+  - Configs `experiments/configs/v2_mundo/{validacao,fumaca_validacao}.json`; testes `tests/test_validacao_mundo.py` (17).
+- **G-MUNDO passa:** P0z − P0 em `D_FE` +0,0105 [+0,0048; +0,0159].
+- **G-MF1r: o P1 perde.** P0 − P1 em `D_FE` −0,0097 [−0,0149; −0,0046]: o P1 sustenta fome e energia pior que o instinto.
+- **G-MF2r não passa** (−0,0088 [−0,0123; −0,0051]): a perda aparece com o cuidado fixo, então é do pet. G-MF3r e G-OPORT não passam.
+- **G-PERM e G-DIST passam no Holm** (sem Δ nem poder): o P1 fica mais nas manchas (352 contra 191 min), mais com o custo de viagem e
+  mais no layout afastado, mas ficar não paga.
+- **Leitura (A1.5, terceira linha):** a consequência imediata não aprende a procurar neste mundo. Por dono, a perda vem do atencioso e do
+  incoerente; com o relapso o P1 ganha um pouco (descritivo).

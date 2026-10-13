@@ -1,0 +1,85 @@
+{
+  "descricao": "Validacao do mundo fisico, uma vez (PLANO_ANALISE_V2_MUNDO_FISICO, secoes 7 e 8, adendo 1: A1.2, A1.3, A1.5, A1.8 e A1.9 congelada; autorizada pelo Matheus em 2026-10-12): m = 1, Delta_MF = 0,007675785900293976 e K = 8 por base (N = 40) da calibracao (artifacts_v2_mundo/calibracao/resultado.json). Os 5 bracos (P0, P0z, P1, P0^ac e P1^ac, acoplados ao P0z da mesma celula) nas 12 celulas, mais o bloco do layout afastado (P0 e P1): 84 vidas por unidade. O mundo e o da calibracao, sem mudanca (o desempate do cheiro do #232 nao entra).",
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+  "unidades": {
+    "bases": [
+      32101,
+      32202,
+      32303,
+      32404,
+      32505
+    ],
+    "k": 8,
+    "prefixo": "mundo"
+  },
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "lugares": [
+    "comedouro",
+    "perto",
+    "longe"
+  ],
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 64,
+    "amostras": 200,
+    "semente": 9001
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "chaves_desligadas": {
+    "banheiro": "ConfigBanheiro desligada: nenhum braco do plano tem o banheiro (secao 3)",
+    "corpo": "sem regime: o corpo (W-TAREFA-CORPO) e outra frente; o plano usa o Estado de hoje (secao 2, R-7)",
+    "metabolismo": "desligado: so existe com o corpo",
+    "gestos": "desligados: os donos so cuidam (PMF-3)",
+    "grupo": "desligado: um pet por mundo",
+    "alvo_aprendido": "desligado: o P1 usa os alvos padrao do motor (secao 3)",
+    "entradas_sociais": "desligadas: sem grupo",
+    "modelo_outros": "desligado: sem grupo",
+    "presenca_fruta_mundo": "desligada: o plano nao a pede; no mundo iguais o humor da fruta e zero e os canais rodam sem ela (#269)",
+    "pesos_janela": "desligada: e o P1-cw do corpo",
+    "rede_de_si": "desligada: so observa e nao e do plano",
+    "julgamento_fruta": "desligado (secao 2)",
+    "calendario_informacao_pedido": "desligados (secao 2)"
+  },
+  "mundo": "fisico",
+  "mundo_afastado": "fisico_afastado",
+  "m": 1.0,
+  "delta_mf": 0.007675785900293976,
+  "acoplados": [
+    {
+      "origem": "P0z",
+      "destino": "P0",
+      "filtro": "nenhum"
+    },
+    {
+      "origem": "P0z",
+      "destino": "P1",
+      "filtro": "nenhum"
+    }
+  ],
+  "bracos_afastado": [
+    "P0",
+    "P1"
+  ],
+  "holm": {
+    "alfa": 0.05
+  }
+}

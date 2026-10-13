@@ -72,9 +72,11 @@ def test_faixas_disjuntas_e_fora_das_queimadas():
         assert not any(q_lo <= hi and lo <= q_hi for q_lo, q_hi, _ in bv.FAIXAS_QUEIMADAS)
 
 
-# a faixa de calibracao de cada plano pode estar nas configs do proprio plano (a do passo 0 do corpo, W-BANCADA-METABOLISMO); as de
-# validacao, em nenhuma
-PLANO_DA_CALIBRACAO = {(31101, 31505): "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md", (33101, 33505): "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md"}
+# a faixa de calibracao de cada plano pode estar nas configs do proprio plano (a do passo 0 do corpo, W-BANCADA-METABOLISMO); a de
+# validacao, so depois de autorizada, e so nas configs do proprio plano (a do mundo fisico, MUNDO-VALIDACAO, 2026-10-12); as outras, em
+# nenhuma
+PLANO_DA_CALIBRACAO = {(31101, 31505): "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md", (33101, 33505): "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+                       (32101, 32505): "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md"}
 
 
 def test_faixas_novas_fora_das_configs():
