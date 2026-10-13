@@ -862,3 +862,15 @@ O passo 0 fino tem 640 vidas; a grade, 4.320; o piloto e as sensibilidades, 2.88
 ### A5.5 O que fica igual
 
 As sementes, as faixas, as regras das margens e do N, os gates da seção 8 e as PCD-1 a PCD-9.
+
+### A5.6 O passo 0 fino rodou (2026-10-13, registrado antes da grade)
+
+Pela regra da A5.1, sobre os sete pontos juntos (`artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json`; os três da A3.2c lidos do
+passo0.json de antes, com as mesmas sementes):
+
+| `m_gasto` | ¼ | ½ | 3/5 | 7/10 | 4/5 | 9/10 | 1 |
+|---|---|---|---|---|---|---|---|
+| fração acordado com a falta | 0,000 | 0,0004 | 0,0023 | 0,0064 | **0,2018** | 0,3678 | 0,4903 |
+
+Só o 4/5 fica em [0,05; 0,30]: **`m_gasto` = 4/5, fechou** (basal 300/150; atividades 4/5). O gasto muda o ponto, então a A5.2 e a A5.3
+rodam com ele fixo (`experiments/configs/v2_corpo/calibracao_adendo5.json`).

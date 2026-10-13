@@ -1,0 +1,102 @@
+{
+  "descricao": "Calibracao do corpo com a grade mais fina (PLANO_ANALISE_V2_CORPO_DRIVES, adendo 5, A5.2 e A5.3; decisao do Matheus, 2026-10-13): a grade so do P0-c, (m_sobe, m_reduz) em {1/2, 1, 2}^2 x m_sol em {1, 2, 4} (27 pontos), nas 20 unidades das bases 33101...33505 (K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao), 4.320 vidas; a regra da 6.2 com o terceiro eixo (o mais perto de (1, 1, 1); empate no menor m_sobe, depois m_sol, depois m_reduz) e o w_novos; no ponto, o piloto da 6.3 (120 por unidade), as sensibilidades da 6.4 e da A1.2 (24 por unidade), as margens e o N da secao 7. O gasto do metabolismo fixo no do passo 0 fino (A5.1: m_gasto = 4/5, fechou). Rodar: python experiments/run_v2_calibracao_corpo.py --config <esta> --saida artifacts_v2_corpo/calibracao/adendo5/grade_piloto --processos 6.",
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio",
+    "incoerente"
+  ],
+  "unidades": {
+    "bases": [
+      33101,
+      33202,
+      33303,
+      33404,
+      33505
+    ],
+    "k": 4,
+    "prefixo": "corpo"
+  },
+  "mundos": [
+    "bola",
+    "padrao"
+  ],
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "grade": {
+    "m_sobe": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "m_reduz": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "m_solidao": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "w_novos": [
+      1,
+      2,
+      4
+    ]
+  },
+  "faixas": {
+    "tedio_solidao": [
+      0.1,
+      0.5
+    ],
+    "estresse_max": 0.2,
+    "parcela_novos": [
+      0.25,
+      0.75
+    ]
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8
+  },
+  "sensibilidade": {
+    "recompensa_tapa": [
+      -0.5,
+      -2.0
+    ],
+    "janela_tedio": [
+      4,
+      16
+    ]
+  }
+}
