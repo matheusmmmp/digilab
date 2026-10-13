@@ -4244,3 +4244,55 @@ Autorizada pelo Matheus em 2026-10-13. Uma calibração e um piloto, nas bases 4
   - o plano decide ~8% das decisões com alvo, e o custo é 0,62 s de CPU por vida.
 - **Por quê** (descritivo, 4 unidades): o pet come a ração do comedouro (72 a 82 por vida) e quase nunca a x (0 a 2).
 - **Pela seção 6, o plano volta ao Matheus;** o N não foi calculado.
+
+## V2, W-BANCADA-REDE — a etapa 3 da rede de si na bancada (2026-10-13, `docs/TAREFA_V2_REDE_DE_SI.md`, etapa 3; `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`, seções 3 e 4) — GATES PASSAM; SEM RUN
+
+Infraestrutura, sem run; só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, `digilab/metrics.py` (as medidas no fim), as
+fumaças `experiments/configs/v2_rede_de_si/{fumaca,fumaca_autoria}.json` e três testes antigos. `engine.py`, `rede_de_si.py`, os cérebros,
+o corpo e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave `rede_de_si`** da config: a `ConfigRedeDeSi` ligada, com campos por cima (`{}` = os padrões; desligar falha alto).
+  - Ela vale em todo braço da config, e a rede lê os receptores do corpo: um braço sem corpo (regime fora de "química" e "corpo") falha
+    alto na validação.
+  - `Bancada.cfg_rede`. O `meta.json` ganha `cfg_rede` e o sha256 de `rede_de_si.py`, só com a chave.
+- **O embrulho:** `Bancada.politica` devolve o `PoliticaDoBraco` dentro do `PoliticaComRede` (o cérebro de antes é o `politica_do_braco`).
+  - O `do_braco` desembrulha, e `rede_de` acha a rede dentro dos embrulhos dos motores.
+  - A sonda da deriva usa o prior sem a rede.
+- **G1-REDE:** o `conferir_replay` compara o estado da rede bit a bit. No replay de medição, a sonda dos químicos não pode mudar a rede.
+- **A rede refeita só dos registros** (`rede_offline`, as contas `_saida` e `_lms` da própria rede, na mesma ordem):
+  - **gate da reprodução:** as previsões das duas cabeças e os pesos no fim saem iguais aos da rede, senão falha alto;
+  - **a congelada:** de uma decisão em diante, nada aprende (o G-ADAPTA);
+  - **o oráculo:** o mesmo LMS com os químicos do corpo a mais na entrada (`sondar_quimicos`: o retrato dos químicos em cada decisão,
+    na escala S do teto de cada um, que a rede nunca vê). Existe só na bancada.
+- **As medidas** (`Bancada.medidas_rede`, bloco `rede_de_si` do `medidas.json`; funções puras novas em `metrics.py`: `media_historica`,
+  `previsao_persistencia`, `mae_previsao`, `brier_skill`, `brier_skill_multiclasse`):
+  - **por horizonte (1, 4, 16):** o MAE da rede, da persistência, da média histórica e do oráculo, nos últimos sete dias (os dias 8 a 14
+    numa vida de 14), sem o susto na média; `D_SI` e `D_MEDIA`, também por receptor;
+  - **a curva:** o MAE da rede e da persistência a 4 decisões, por dia;
+  - **a adaptação** (com o tick da troca): a rede e a congelada só na fome, nos últimos quatro dias, `D_ADAPTA`, a curva da fome por dia;
+  - **a autoria:**
+    - `BSS_PED` (pela sonda N7 do motivo; sem a sonda, o pedido não pesou), também por zona;
+    - `BSS_NASC` (a sonda "ao nascer" do A: o sorteio pelo prior com o mesmo u).
+    - O Brier skill vai contra a frequência na mesma vida, com a previsão normalizada sobre os candidatos. Com menos de 20 decisões, a
+      vida fica de fora e é contada.
+  - **os descritivos:** os pesos das duas cabeças no fim de cada dia (quantos no teto, o desvio médio) e a surpresa por hora, com as
+    horas com tapa contra as horas sem nada.
+- **Os braços novos** (nó `rede-de-si`):
+  - **P1+ped-c** (o P1+ped com o corpo inteiro, como o P1-c) monta e roda no `iguais_frutas`;
+  - **P1-c-lenta** (o P1-c com `digestao_lenta`) falha alto com `NOS_PENDENTES["digestao_lenta"]` até a troca da digestão no motor (a
+    etapa 2b, do A). A digestão lenta só existe no regime "corpo". A troca é no `tick_troca` da bancada (o fim do dia 7 numa vida de 14).
+- **Sem os órgãos do #299:** com o Olfato e a Audição ligados, a rede passa do teto. O embrulho da bancada
+  (`PoliticaComRedeSemOrgaos`) falha alto na primeira decisão que traz um receptor de narina ou ouvido, antes de a rede a ver.
+- **As faixas** 43101…43505 e 44101…44505 e o prefixo `rede_de_si` já estavam na bancada (W-BANCADA-DOIS-PETS).
+- **Testes:** `tests/test_bancada_rede_de_si.py`, 31, ~10 s.
+  - a chave;
+  - G-OBS pela bancada em quatro braços;
+  - G1-REDE com a rede mexida;
+  - a reprodução: congelada no tick 0 = a persistência; o oráculo com entradas nulas = a rede;
+  - as linhas de base e o Brier com a resposta conhecida;
+  - a autoria contra os motivos;
+  - os braços, a adaptação numa troca forçada e o `rodar`.
+  - Mudaram também a tabela de braços (`test_bancada_v2`), o `NOS_PENDENTES` (`test_bancada_liga_gestos`) e os braços com metabolismo
+    (`test_bancada_metabolismo`).
+- **Fumaças** (NÃO canônicas, sem artefato): `fumaca.json` (P1-c, P0-c e P1-c-tapa na `bola`) e `fumaca_autoria.json` (P1+ped-c e P1-c no
+  `iguais_frutas`), 3 dias, ~8 s cada.
+- **Fora:** o orquestrador da calibração do `passo`, o piloto e a validação. A rodada de saúde do código pode modularizar a bancada agora.

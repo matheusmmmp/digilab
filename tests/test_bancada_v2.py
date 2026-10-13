@@ -79,7 +79,9 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
         "P1-c-tapaX": ("consequencia", "corpo-A1.1"), "P1-c-frutas": ("consequencia", "corpo-A1.1"),
         "P1-cw": ("consequencia", "corpo-A2.4"),
         # W-BANCADA-BANHEIRO: o 2 x 2 do banheiro no P0 e no P1, pendente da etapa 3 do banheiro (tests/test_bancada_banheiro.py)
-        **{f"{c}-{x}": (f, "banheiro") for c, f in (("P0", "nenhuma"), ("P1", "consequencia")) for x in ("B00", "B0C", "BL0", "BLC")}}
+        **{f"{c}-{x}": (f, "banheiro") for c, f in (("P0", "nenhuma"), ("P1", "consequencia")) for x in ("B00", "B0C", "BL0", "BLC")},
+        # W-BANCADA-REDE: os dois bracos novos da rede de si (tests/test_bancada_rede_de_si.py); o P1-c-lenta espera a troca da digestao
+        "P1-c-lenta": ("consequencia", "rede-de-si"), "P1+ped-c": ("consequencia", "rede-de-si")}
     assert (bv.BRACOS["P2"].informacao, bv.BRACOS["P2e"].informacao, bv.BRACOS["P2a"].informacao) == ("certa", "errada", "acoplada")
 
 

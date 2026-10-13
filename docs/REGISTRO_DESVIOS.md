@@ -5136,3 +5136,44 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
   - o T2 fica sem busca depois da mudança.
   - Pela seção 6, a validação não roda e o plano volta ao Matheus.
   - O porquê (o pet come a ração do comedouro e quase nunca a x) é descritivo, de 4 unidades rejogadas, e está no relatório.
+
+## 2026-10-13 — W-BANCADA-REDE (worker D): a etapa 3 da rede de si na bancada
+
+- **O oráculo** (plano, seção 4: "o mesmo LMS em inteiros, com os químicos do corpo como entrada"):
+  - a entrada é a da rede **mais** os químicos: os receptores, todos os químicos do corpo (cada um em `div_arred(q × S, teto)`, na ordem
+    de `corpo.quimicos`), a ação, o contexto e o viés;
+  - o prior continua a persistência, e o passo e o teto são os da rede.
+  - Os receptores ficam na entrada para o oráculo ser um teto (um superconjunto do que a rede vê) e ter o mesmo prior. Com químicos no
+    lugar dos receptores, o prior não seria a persistência.
+- **A rede congelada e o oráculo saem de um replay offline** dos registros da rede (leituras, ação, contexto, faixa), com as contas
+  `_saida` e `_lms` da própria `RedeDeSi`, na mesma ordem.
+  - Antes de medir, essa mesma conta refaz a rede viva: as previsões das duas cabeças e os pesos no fim têm de sair iguais, senão falha alto.
+  - "Congelada no tick da troca": as atualizações que chegam a partir da primeira decisão no tick da troca são puladas.
+- **As janelas:**
+  - a primária é a dos últimos sete dias da vida (os dias 8 a 14 numa vida de 14), como as medidas do mundo físico na bancada;
+  - a do `D_ADAPTA` são os últimos quatro (11 a 14);
+  - numa vida mais curta (as fumaças), a janela é a vida inteira.
+- **O Brier skill:**
+  - **a previsão** da rede (os pesos da autoria por ação) é normalizada sobre os candidatos da decisão; sem massa, uniforme;
+  - **a base** é a frequência da classe nas mesmas decisões da mesma vida, também normalizada sobre os candidatos de cada decisão;
+  - **"menos de 20 eventos"** (R-5) foi lido como menos de 20 decisões na conta;
+  - **sem variância na base** (o evento sempre igual), o skill não existe e a vida fica de fora, com o motivo.
+- **O evento do `BSS_PED`:** o cérebro só grava a sonda N7 quando o pedido pesa (p ≠ 0: toda fruta do cenário com pedido). Sem a sonda,
+  o termo do pedido é zero e a ação sem o pedido é a própria ação.
+  - A conta inclui as decisões com pedido vigente no contexto da rede, numa regra do `REGRAS_PEDIDO` e com `comer` candidato.
+- **A sonda "ao nascer"** é a da comparação dos cérebros (`legibilidade_a`): o sorteio pelos pesos do lobo de impulsos com o mesmo u. Sem
+  escolha, é a própria ação.
+- **Os braços novos com metabolismo:** o P1-c-lenta e o P1+ped-c são o P1-c (o corpo inteiro, metabolismo incluído) com a digestão lenta
+  ou com o pedido. O metabolismo não tem receptor, então a rede não muda por ele.
+- **O P1-c-lenta** está declarado e falha alto com o nó `digestao_lenta`, porque a troca da `taxa_digestao` no motor é a etapa 2b, do A, e
+  ainda não está na main.
+  - O tick da troca é o `tick_troca` da bancada: o fim do dia `dias // 2`, o 7 numa vida de 14 (RS-3).
+  - A adaptação já é medida com qualquer tick dado, e o teste usa uma troca forçada.
+- **A surpresa por hora** (descritivo): no horizonte 1, a média com sinal sobre os receptores e as 4 decisões da hora. A "hora com tapa" é a
+  da primeira decisão no tick do tapa ou depois.
+- **Duas fumaças:** a bancada cruza braços × mundos, e o P1+ped-c só existe nos mundos das frutas. Por isso a cabeça do corpo (`bola`) e a
+  autoria (`iguais_frutas`) ficaram em configs separadas.
+- **As tabelas braço × condição** não ganharam as medidas da rede; elas ficam no `medidas.json` (bloco `rede_de_si`), para o orquestrador.
+- **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
+  (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
+  falharia, mas só depois de montada; a recusa explícita diz por quê.
