@@ -4,6 +4,9 @@ Status (2026-10-08): **PROPOSTO**, registrado **antes de qualquer run**. **PDP-1
 recomendação** (seção 12). É a etapa 6 de `docs/TAREFA_V2_DOIS_PETS.md`. O desenho é
 `docs/futuro/dois_pets.md`, com DP-1 a DP-12 decididas.
 
+**O degrau 1 fica INCONCLUSIVO POR PREMISSA (decisão do Matheus, 2026-10-13; adendo 1.3):** o A não aprendeu no mundo físico
+(G-K, adendo 1.2, #287), e o degrau 1 só volta quando um pet aprender de verdade lá.
+
 **Regras deste plano:**
 - Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.
 - O que não está aqui é descritivo pós hoc.
@@ -274,3 +277,18 @@ Os números saem de `artifacts_v2_dois_pets/calibracao/` (`k.json`, `resultado.j
 
 - Na vida toda, a R_A é 0,343 em 300 consumos, perto de 1/3, a fração de um tipo entre três.
 - Cada A come em média 15 frutas maduras e 83 rações em 10 dias.
+
+### 1.3 A decisão do Matheus (2026-10-13): o degrau 1 fica inconclusivo por premissa
+
+- **O degrau 1 é lido como "inconclusivo por premissa"** (a leitura do G-K da seção 7): sem um A que aprenda, não há o que o B possa
+  aprender dele. Isso não diz nada sobre a pergunta social, só que ela não foi testada.
+- **O mundo não muda** para fazer o A aprender: nem o `m`, nem as quedas, nem o efeito da fruta. Mudar o mundo olhando o G-K seria ajustar a
+  premissa até ela passar.
+- **O degrau 1 volta quando um pet aprender de verdade no mundo físico,** por um de dois caminhos, cada um com plano próprio:
+  - o alvo aprendido (`docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`), se o G-ALVO sair "o alvo ajuda";
+  - o pet que pensa (J5, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`), se os dois testes da DS-1 passarem.
+- **Ao voltar, o plano ganha um adendo antes de qualquer run nova:** o cérebro do A (e do B) passa a ser o que aprendeu, e a calibração do K
+  roda de novo, com as regras da seção 5 e do adendo 1.1 (PROPOSTO). A faixa dessa calibração fica para o adendo. A 39101…39505 já foi usada
+  nesta; a 40101…40505 (validação) não rodou e continua reservada.
+- **O código fica:** o `Grupo`, os sentidos, as entradas sociais, a bancada do grupo e o orquestrador da calibração continuam na `main`,
+  com as chaves desligadas por padrão.

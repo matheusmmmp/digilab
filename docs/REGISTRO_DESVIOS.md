@@ -4861,3 +4861,28 @@ Na suíte que rodou junto com a validação do mundo (#285), o `test_g2_um_pet_n
   consertar no repositório.
 - **Recomendação:** atualizar o `.venv` para a última 3.13.x, que traz consertos de chamadas especializadas de descritores (por exemplo o
   gh-131998). Se voltar, guardar o `PYTHONHASHSEED` e o log inteiro da rodada.
+
+## 2026-10-13 — W-SAUDE-TAREFA: as decisões do Matheus e a rodada de saúde, só papel (worker C)
+
+Pedido do Gerente depois do #288. Só documentos: nenhum código, configuração, teste ou artefato mudou.
+- **As decisões registradas (Matheus, 2026-10-13):**
+  - PMA-1 a PMA-9 ficam DECIDIDAS pela recomendação (`docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`, status e seção 13). A coluna "recomendação"
+    passa a ser o que vale; o texto das decisões não mudou;
+  - o degrau 1 dos dois pets fica inconclusivo por premissa, sem mudar o mundo (`docs/PLANO_ANALISE_V2_DOIS_PETS.md`, adendo 1.3, e o J7
+    do roadmap). A faixa nova da recalibração do K fica para o adendo, como PROPOSTO. Não ficou fixada aqui;
+  - a calibração do corpo fecha só com o passo 0 (`m_gasto` 4/5), e o resto vai para a calibração final: está **só no J2 do roadmap**,
+    sem números. O adendo 5 do plano do corpo (A5.6, A5.7) é escrito por outro worker no PR da calibração fina, ainda fora da `main`.
+    Mexer no plano do corpo daqui daria conflito com ele.
+- **A tarefa de saúde (`docs/TAREFA_V2_SAUDE.md`):**
+  - as fontes são as páginas da documentação do Claude Code (best-practices, large-codebases, memory, hooks-guide), lidas em 2026-10-13.
+    Não é literatura de pesquisa;
+  - os números da seção 1 (linhas, bytes, seções, conflitos) foram medidos na `main` `3f69e80`, com o comando citado na própria seção. A
+    contagem dos conflitos nos 200 últimos merges é aproximada (pelo texto das mensagens de merge);
+  - **os nomes das cópias do backup não seguem a letra** "cópias integrais de CLAUDE.md...". A cópia se chama `CLAUDE_pre_saude.md`,
+    porque um `CLAUDE.md` em subdiretório é carregado sob demanda e voltaria a ser instrução. A da bancada é `.py.txt`, para nada a
+    importar ou coletar. Fica como SA-1, para o Matheus confirmar;
+  - **o H2 não roda a suíte inteira no fim do turno,** que leva ~36 min. Roda um conjunto rápido, e a suíte fica no PR (SA-7);
+  - **o H3 não bloqueia** o merge da `origin/main` num branch de worker, só `gh pr merge` e o push na `main`, e pergunta em vez de negar
+    (SA-6);
+  - os donos das etapas são PROPOSTOS; quem decide é o coordenador.
+- **O painel (`docs/PAINEL_V2.md`):** só junta o que já está nos resultados e no roadmap, sem número novo.
