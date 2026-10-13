@@ -1,0 +1,489 @@
+{
+  "bancada": {
+    "bancada_sha256": "957f8a355d66971354d22b212062ef6147be737a09935a9ab38bf7a30ea79e10",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 0,
+      "w0_pedido": 0
+    },
+    "config": {
+      "acoplados": [
+        {
+          "destino": "P0",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        },
+        {
+          "destino": "P1",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        }
+      ],
+      "bootstrap": {
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "semente": 4242
+      },
+      "bracos": [
+        "P0",
+        "P0z",
+        "P1"
+      ],
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4
+      },
+      "dias": 14,
+      "donos": [
+        "atencioso",
+        "relapso",
+        "aleatorio",
+        "incoerente"
+      ],
+      "lobos": {
+        "memoria_ganho": 512
+      },
+      "lugares": [
+        "comedouro",
+        "perto",
+        "longe"
+      ],
+      "montagem": "completa",
+      "mundo": {
+        "mult_queda": 1.0
+      },
+      "mundos": [
+        "fisico",
+        "fisico_afastado"
+      ],
+      "orcamento": 224,
+      "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+      "ponto": "T3",
+      "sonda": {
+        "amostras": 200,
+        "estados": 64,
+        "semente": 9001
+      },
+      "unidades": {
+        "bases": [
+          32101,
+          32202,
+          32303,
+          32404,
+          32505
+        ],
+        "k": 8,
+        "prefixo": "mundo"
+      }
+    },
+    "config_sha256": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+    "metrics_sha256": "42df894783f9034943d3219bc429602886ea5d1051f6dc3c2ef7fd225943a465",
+    "mundo_sha256": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "python": "3.13.0"
+  },
+  "calibracao_sha256": "6146034ea788efc3e899dc44b3f26b6c6fbf525691c87b6c76ef9990fc5fdfc0",
+  "chaves_desligadas_conferidas": {
+    "P0": {
+      "alvo_aprendido": false,
+      "banheiro": null,
+      "corpo": null,
+      "entradas_sociais": false,
+      "modelo_outros": false,
+      "presenca_fruta_mundo": false
+    },
+    "P0z": {
+      "alvo_aprendido": false,
+      "banheiro": null,
+      "corpo": null,
+      "entradas_sociais": false,
+      "modelo_outros": false,
+      "presenca_fruta_mundo": false
+    },
+    "P1": {
+      "alvo_aprendido": false,
+      "banheiro": null,
+      "corpo": null,
+      "entradas_sociais": false,
+      "modelo_outros": false,
+      "presenca_fruta_mundo": false
+    }
+  },
+  "config": {
+    "acoplados": [
+      {
+        "destino": "P0",
+        "filtro": "nenhum",
+        "origem": "P0z"
+      },
+      {
+        "destino": "P1",
+        "filtro": "nenhum",
+        "origem": "P0z"
+      }
+    ],
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "bracos_afastado": [
+      "P0",
+      "P1"
+    ],
+    "chaves_desligadas": {
+      "alvo_aprendido": "desligado: o P1 usa os alvos padrao do motor (secao 3)",
+      "banheiro": "ConfigBanheiro desligada: nenhum braco do plano tem o banheiro (secao 3)",
+      "calendario_informacao_pedido": "desligados (secao 2)",
+      "corpo": "sem regime: o corpo (W-TAREFA-CORPO) e outra frente; o plano usa o Estado de hoje (secao 2, R-7)",
+      "entradas_sociais": "desligadas: sem grupo",
+      "gestos": "desligados: os donos so cuidam (PMF-3)",
+      "grupo": "desligado: um pet por mundo",
+      "julgamento_fruta": "desligado (secao 2)",
+      "metabolismo": "desligado: so existe com o corpo",
+      "modelo_outros": "desligado: sem grupo",
+      "pesos_janela": "desligada: e o P1-cw do corpo",
+      "presenca_fruta_mundo": "desligada: o plano nao a pede; no mundo iguais o humor da fruta e zero e os canais rodam sem ela (#269)",
+      "rede_de_si": "desligada: so observa e nao e do plano"
+    },
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "delta_mf": 0.007675785900293976,
+    "descricao": "Validacao do mundo fisico, uma vez (PLANO_ANALISE_V2_MUNDO_FISICO, secoes 7 e 8, adendo 1: A1.2, A1.3, A1.5, A1.8 e A1.9 congelada; autorizada pelo Matheus em 2026-10-12): m = 1, Delta_MF = 0,007675785900293976 e K = 8 por base (N = 40) da calibracao (artifacts_v2_mundo/calibracao/resultado.json). Os 5 bracos (P0, P0z, P1, P0^ac e P1^ac, acoplados ao P0z da mesma celula) nas 12 celulas, mais o bloco do layout afastado (P0 e P1): 84 vidas por unidade. O mundo e o da calibracao, sem mudanca (o desempate do cheiro do #232 nao entra).",
+    "dias": 14,
+    "donos": [
+      "atencioso",
+      "relapso",
+      "aleatorio",
+      "incoerente"
+    ],
+    "holm": {
+      "alfa": 0.05
+    },
+    "lobos": {
+      "memoria_ganho": 512
+    },
+    "lugares": [
+      "comedouro",
+      "perto",
+      "longe"
+    ],
+    "m": 1.0,
+    "montagem": "completa",
+    "mundo": "fisico",
+    "mundo_afastado": "fisico_afastado",
+    "orcamento": 224,
+    "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+    "ponto": "T3",
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    },
+    "unidades": {
+      "bases": [
+        32101,
+        32202,
+        32303,
+        32404,
+        32505
+      ],
+      "k": 8,
+      "prefixo": "mundo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_mundo/validacao.json",
+  "config_sha256": "a1e60ac16886c56423e8b9f6fe0edb3fea84c132e9e4b0e68142d1d3d4e3d456",
+  "duracao_s": 2995.580465078354,
+  "fim": "2026-10-13T01:23:17",
+  "git_head": "bfc1fa2019a3acbeb6131a917b53cbe0c3d3de16",
+  "git_limpo": true,
+  "inicio": "2026-10-13T00:33:21",
+  "modo": "validacao",
+  "orquestrador_sha256": "76a078297bfddb6f212ae855a5e7b3a85ee4287ce6000b1d25f9dc93eee62ac2",
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+  "plano_sha256": "cfaa7e2b863bad249b235bea78bd2a87a4fcd63203d7148ec0732ae651516c76",
+  "processos": 8,
+  "python": "3.13.0",
+  "sha256": {
+    "config": "a1e60ac16886c56423e8b9f6fe0edb3fea84c132e9e4b0e68142d1d3d4e3d456",
+    "config.py": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos.py": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+    "mundo.py": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+    "plano": "cfaa7e2b863bad249b235bea78bd2a87a4fcd63203d7148ec0732ae651516c76"
+  },
+  "unidades": [
+    {
+      "base": 32101,
+      "genoma": 3759321445891109583,
+      "k": 0,
+      "semente": 16836368166638013601
+    },
+    {
+      "base": 32101,
+      "genoma": 10400771150611289176,
+      "k": 1,
+      "semente": 5083855606749623935
+    },
+    {
+      "base": 32101,
+      "genoma": 16848381830155278361,
+      "k": 2,
+      "semente": 13697492013478227288
+    },
+    {
+      "base": 32101,
+      "genoma": 13567130384009354453,
+      "k": 3,
+      "semente": 16268715840926580835
+    },
+    {
+      "base": 32101,
+      "genoma": 1111544991577874255,
+      "k": 4,
+      "semente": 12456727941034425979
+    },
+    {
+      "base": 32101,
+      "genoma": 7831919087092456881,
+      "k": 5,
+      "semente": 16484642914382261715
+    },
+    {
+      "base": 32101,
+      "genoma": 2435142853679128842,
+      "k": 6,
+      "semente": 2466059045268014876
+    },
+    {
+      "base": 32101,
+      "genoma": 2141601329542671016,
+      "k": 7,
+      "semente": 3436613793004447961
+    },
+    {
+      "base": 32202,
+      "genoma": 14778348097362391948,
+      "k": 0,
+      "semente": 4892027795318113651
+    },
+    {
+      "base": 32202,
+      "genoma": 18189131101901175361,
+      "k": 1,
+      "semente": 18279874818660968754
+    },
+    {
+      "base": 32202,
+      "genoma": 8663613190348457853,
+      "k": 2,
+      "semente": 10748532539920430602
+    },
+    {
+      "base": 32202,
+      "genoma": 17040897785518286469,
+      "k": 3,
+      "semente": 6965356226341960934
+    },
+    {
+      "base": 32202,
+      "genoma": 5594181568971675178,
+      "k": 4,
+      "semente": 10403178607010169494
+    },
+    {
+      "base": 32202,
+      "genoma": 15924618962288535574,
+      "k": 5,
+      "semente": 7265327473124139523
+    },
+    {
+      "base": 32202,
+      "genoma": 13980045149727828880,
+      "k": 6,
+      "semente": 329407986245243005
+    },
+    {
+      "base": 32202,
+      "genoma": 12485009562029676983,
+      "k": 7,
+      "semente": 376174294573909897
+    },
+    {
+      "base": 32303,
+      "genoma": 11550197593854996226,
+      "k": 0,
+      "semente": 6243607315764680846
+    },
+    {
+      "base": 32303,
+      "genoma": 2889361239644071525,
+      "k": 1,
+      "semente": 4162742705403802979
+    },
+    {
+      "base": 32303,
+      "genoma": 1368690937567024162,
+      "k": 2,
+      "semente": 14331420722497084571
+    },
+    {
+      "base": 32303,
+      "genoma": 10307018835865425938,
+      "k": 3,
+      "semente": 5798283121303646003
+    },
+    {
+      "base": 32303,
+      "genoma": 3629458678920915978,
+      "k": 4,
+      "semente": 5210315450435949578
+    },
+    {
+      "base": 32303,
+      "genoma": 15939251571759184780,
+      "k": 5,
+      "semente": 12064553797623322451
+    },
+    {
+      "base": 32303,
+      "genoma": 14596044308836307151,
+      "k": 6,
+      "semente": 1725893646184911498
+    },
+    {
+      "base": 32303,
+      "genoma": 17776721316783412263,
+      "k": 7,
+      "semente": 806573300122422433
+    },
+    {
+      "base": 32404,
+      "genoma": 10752255859423771143,
+      "k": 0,
+      "semente": 16012187713725206160
+    },
+    {
+      "base": 32404,
+      "genoma": 17216766646750089099,
+      "k": 1,
+      "semente": 14156945635686712404
+    },
+    {
+      "base": 32404,
+      "genoma": 15477970310945139477,
+      "k": 2,
+      "semente": 13103243709911412389
+    },
+    {
+      "base": 32404,
+      "genoma": 1521180735414490042,
+      "k": 3,
+      "semente": 18442000893851241893
+    },
+    {
+      "base": 32404,
+      "genoma": 668474930402304063,
+      "k": 4,
+      "semente": 3648744105073779703
+    },
+    {
+      "base": 32404,
+      "genoma": 9724607441126834306,
+      "k": 5,
+      "semente": 4054379859060574300
+    },
+    {
+      "base": 32404,
+      "genoma": 9916311640974881020,
+      "k": 6,
+      "semente": 5913073719197711985
+    },
+    {
+      "base": 32404,
+      "genoma": 13601980003050640264,
+      "k": 7,
+      "semente": 3321141468545652796
+    },
+    {
+      "base": 32505,
+      "genoma": 2999754240495445656,
+      "k": 0,
+      "semente": 10413099652345556646
+    },
+    {
+      "base": 32505,
+      "genoma": 6868278807643386616,
+      "k": 1,
+      "semente": 5690491838533809566
+    },
+    {
+      "base": 32505,
+      "genoma": 17892344487814310414,
+      "k": 2,
+      "semente": 155578377486356664
+    },
+    {
+      "base": 32505,
+      "genoma": 8392991906895391109,
+      "k": 3,
+      "semente": 9445092650290073065
+    },
+    {
+      "base": 32505,
+      "genoma": 1641238557854455719,
+      "k": 4,
+      "semente": 1685693035297418564
+    },
+    {
+      "base": 32505,
+      "genoma": 11726211638604566619,
+      "k": 5,
+      "semente": 12269708581139725746
+    },
+    {
+      "base": 32505,
+      "genoma": 10965179033619194721,
+      "k": 6,
+      "semente": 11251391835010945244
+    },
+    {
+      "base": 32505,
+      "genoma": 9483923124383153868,
+      "k": 7,
+      "semente": 7724254336984706620
+    }
+  ],
+  "vidas_parede_s": 2992.3187579000078
+}

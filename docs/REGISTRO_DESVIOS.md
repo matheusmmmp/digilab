@@ -4591,3 +4591,35 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
   - **O teste:** `tests/test_calibracao_mundo.py`, com a vida da fumaça que falhava. Ele falha com a regra antiga.
 - **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
   `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).
+
+## 2026-10-13 — MUNDO-VALIDACAO (worker A): a validação do mundo físico
+
+Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seções 7 e 8 e adendo 1 (A1.2, A1.3, A1.5, A1.8; os números congelados na A1.9);
+autorizada pelo Matheus em 2026-10-12. Uma run nas bases 32101…32505 (K = 8, N = 40), código em `bfc1fa2` (base `930037b`, árvore
+limpa). Interpretações:
+- **O Holm e os "descritivos declarados".** O pedido diz "G-MF3r e os sem Δ como descritivos declarados"; o plano (A1.8) põe os cinco
+  gates no Holm. Rodou o plano: o Holm (α = 0,05) cobre {G-MF2r, G-MF3r, G-PERM, G-OPORT, G-DIST}, e cada um sai também com o rótulo
+  declarado (o G-MF3r subpotenciado; o G-PERM, o G-OPORT e o G-DIST sem Δ nem poder, A1.9). O rótulo não muda o resultado do Holm.
+- **O p de cada gate no Holm** é o p unilateral do bootstrap (a fração das 10.000 médias reamostradas ≤ 0), orientado para a direção
+  predita. No G-OPORT (predito: P1 − P0 < 0) o contraste é invertido antes do bootstrap, e o IC sai de volta na escala P1 − P0.
+- **Um gate secundário passa** quando a regra do IC dele (limite inferior do IC95 > 0, ou o superior < 0 no G-OPORT) vale **e** o Holm
+  rejeita.
+- **As inclinações (G-PERM, G-OPORT) e a permanência média (G-DIST)** são por unidade, com as visitas das 12 células do braço juntas,
+  como dizem os docstrings de `metrics.inclinacao_permanencia` e `metrics.contraste_distancia`. Uma unidade sem valor num dos braços
+  fica fora do contraste e é contada (`sem_valor`).
+- **A medida 2** (a taxa no abandono contra a média) junta as razões das 12 células por unidade e braço; só descritiva, fora do Holm.
+- **O bloco do layout afastado** (P0 e P1 em `fisico_afastado`) leva o rótulo de análise `P0@afastado` e `P1@afastado`, para não colidir
+  com os do layout padrão. O piso do acerto (só descritivo) de cada layout é o do P0 daquele layout.
+- **O G-MF1r usa o IC90 só para a equivalência e para o rótulo "abaixo de Δ"**, nas categorias da seção 8, nessa ordem.
+- **A config da validação é conferida contra a calibração:** o `m`, o `Δ_MF` e o K saem de `artifacts_v2_mundo/calibracao/resultado.json`,
+  e o ponto, a montagem, os lobos, a consequência e a sonda são os de `calibracao.json`. As bases da calibração e qualquer outra faixa
+  são recusadas.
+- **O mundo é o da calibração:** o desempate do cheiro do #232 não entrou (o sha256 do `mundo.py` está no `meta.json`).
+- **A fumaça** (`fumaca_validacao.json`, as sementes dos testes, K = 1) rodou antes, fora do repositório, sem artefato.
+- **O disco D: encheu** no meio do trabalho (0 bytes, 2026-10-12). Nada foi apagado por mim; o Matheus liberou espaço e a run saiu no
+  lugar pedido.
+- **O teste das faixas** (`tests/test_faixas_r17.py`) proibia as bases de validação do mundo em qualquer config. Agora a faixa
+  32101…32505 pode aparecer nas configs do próprio plano (a `validacao.json`), como já valia para as faixas de calibração; a do corpo
+  segue proibida.
+- **Uma falha do `test_grupo`** (um `TypeError` no `replace` do `Estado`) apareceu na suíte que rodou junto com a validação e não se
+  repetiu com o teste sozinho; a suíte foi rodada de novo depois da run.

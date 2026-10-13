@@ -1,0 +1,628 @@
+{
+  "G-MF1r": {
+    "categoria": "perde",
+    "contraste": "P0 - P1 em D_FE",
+    "delta_mf": 0.007675785900293976,
+    "ic90": {
+      "ic_inferior": -0.01405510266823666,
+      "ic_superior": -0.005446507626486548,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": -0.014916133432539145,
+      "ic_superior": -0.004635786623676657,
+      "nivel": 0.95
+    },
+    "media": -0.009739402230075255,
+    "motivo": null,
+    "n": 40,
+    "n_grupos": 40,
+    "p_unilateral": 0.9998,
+    "t_pareado": {
+      "gl": 39,
+      "p_unilateral": 0.9996604263001346,
+      "t": -3.6921336245731866
+    }
+  },
+  "G-MUNDO": {
+    "contraste": "P0z - P0 em D_FE",
+    "ic90": {
+      "ic_inferior": 0.005735141524046911,
+      "ic_superior": 0.015096631892766521,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": 0.004845228794633226,
+      "ic_superior": 0.015940700179803285,
+      "nivel": 0.95
+    },
+    "media": 0.010511810205843913,
+    "motivo": null,
+    "n": 40,
+    "n_grupos": 40,
+    "p_unilateral": 0.0002,
+    "passa": true,
+    "t_pareado": {
+      "gl": 39,
+      "p_unilateral": 0.00036962126168993496,
+      "t": 3.6629277949637453
+    }
+  },
+  "custo": {
+    "cpu_s_total": 23406.8125,
+    "parede_s_total_somado": 23807.690701499625,
+    "por_braco": {
+      "P0": {
+        "cpu_s": 3213.9375,
+        "cpu_s_por_vida": 6.695703125,
+        "parede_s": 3290.027244799887,
+        "parede_s_por_vida": 6.854223426666431,
+        "vidas": 480
+      },
+      "P0<P0z:nenhum": {
+        "cpu_s": 3193.203125,
+        "cpu_s_por_vida": 6.652506510416667,
+        "parede_s": 3218.1661157000053,
+        "parede_s_por_vida": 6.704512741041678,
+        "vidas": 480
+      },
+      "P0@afastado": {
+        "cpu_s": 3198.84375,
+        "cpu_s_por_vida": 6.6642578125,
+        "parede_s": 3237.4784679000295,
+        "parede_s_por_vida": 6.744746808125061,
+        "vidas": 480
+      },
+      "P0z": {
+        "cpu_s": 1815.015625,
+        "cpu_s_por_vida": 3.7812825520833333,
+        "parede_s": 1911.7618301998446,
+        "parede_s_por_vida": 3.9828371462496763,
+        "vidas": 480
+      },
+      "P1": {
+        "cpu_s": 4008.125,
+        "cpu_s_por_vida": 8.350260416666666,
+        "parede_s": 4069.2931777998747,
+        "parede_s_por_vida": 8.477694120416405,
+        "vidas": 480
+      },
+      "P1<P0z:nenhum": {
+        "cpu_s": 3982.25,
+        "cpu_s_por_vida": 8.296354166666667,
+        "parede_s": 4043.9299508999975,
+        "parede_s_por_vida": 8.424854064374994,
+        "vidas": 480
+      },
+      "P1@afastado": {
+        "cpu_s": 3995.4375,
+        "cpu_s_por_vida": 8.323828125,
+        "parede_s": 4037.0339141999866,
+        "parede_s_por_vida": 8.410487321249972,
+        "vidas": 480
+      }
+    }
+  },
+  "descritivos": {
+    "lugar_como_cuidado_P0": {
+      "longe - comedouro": {
+        "ic95": {
+          "ic_inferior": 0.009143412078372905,
+          "ic_superior": 0.03992887292286722,
+          "nivel": 0.95
+        },
+        "media": 0.024850094556053633
+      },
+      "perto - comedouro": {
+        "ic95": {
+          "ic_inferior": -0.08448631262401364,
+          "ic_superior": -0.05973897104415189,
+          "nivel": 0.95
+        },
+        "media": -0.07160812019469792
+      }
+    },
+    "niveis": {
+      "P0": {
+        "consumos": 101.13125,
+        "d_fe": 0.39066717148226593,
+        "d_fe_vida": 0.3806534036303059,
+        "horas_acordado": 231.32604166666667,
+        "permanencia_media": 191.34784534999673,
+        "privacao_janela": 0.17553633432539684,
+        "vidas": 480,
+        "visitas": 26.189583333333335
+      },
+      "P0<P0z:nenhum": {
+        "consumos": 98.7375,
+        "d_fe": 0.4021313768497436,
+        "d_fe_vida": 0.3902982308200802,
+        "horas_acordado": 231.71614583333334,
+        "permanencia_media": 186.90000693820926,
+        "privacao_janela": 0.18567088293650794,
+        "vidas": 480,
+        "visitas": 23.14375
+      },
+      "P0z": {
+        "consumos": 83.95208333333333,
+        "d_fe": 0.40117898168810984,
+        "d_fe_vida": 0.39061559864828144,
+        "horas_acordado": 238.90833333333333,
+        "permanencia_media": 519.9475721443315,
+        "privacao_janela": 0.17723834325396826,
+        "vidas": 480,
+        "visitas": 10.8125
+      },
+      "P1": {
+        "consumos": 103.02291666666666,
+        "d_fe": 0.4004065737123412,
+        "d_fe_vida": 0.38319880655275923,
+        "horas_acordado": 235.36041666666668,
+        "permanencia_media": 351.8749792851552,
+        "privacao_janela": 0.18994605654761904,
+        "vidas": 480,
+        "visitas": 19.329166666666666
+      },
+      "P1<P0z:nenhum": {
+        "consumos": 101.65416666666667,
+        "d_fe": 0.41091484400830375,
+        "d_fe_vida": 0.39243588582999805,
+        "horas_acordado": 237.25052083333333,
+        "permanencia_media": 267.914180708734,
+        "privacao_janela": 0.18584139384920637,
+        "vidas": 480,
+        "visitas": 18.835416666666667
+      }
+    },
+    "por_lugar_e_dono": {
+      "P0 - P1": {
+        "dono": {
+          "aleatorio": {
+            "ic95": {
+              "ic_inferior": -0.00515148189483943,
+              "ic_superior": 0.006147605613429283,
+              "nivel": 0.95
+            },
+            "media": 0.0004754867311535715
+          },
+          "atencioso": {
+            "ic95": {
+              "ic_inferior": -0.03645915488591628,
+              "ic_superior": -0.015743160962304166,
+              "nivel": 0.95
+            },
+            "media": -0.026597379298942785
+          },
+          "incoerente": {
+            "ic95": {
+              "ic_inferior": -0.03144329013723786,
+              "ic_superior": -0.008104258639222994,
+              "nivel": 0.95
+            },
+            "media": -0.01975668609457879
+          },
+          "relapso": {
+            "ic95": {
+              "ic_inferior": 0.0016847697586001881,
+              "ic_superior": 0.012314063533403275,
+              "nivel": 0.95
+            },
+            "media": 0.006920969742066985
+          }
+        },
+        "lugar": {
+          "comedouro": {
+            "ic95": {
+              "ic_inferior": -0.02213164682539772,
+              "ic_superior": 0.006137136501737707,
+              "nivel": 0.95
+            },
+            "media": -0.008307652064731434
+          },
+          "longe": {
+            "ic95": {
+              "ic_inferior": -0.013663777281744258,
+              "ic_superior": 0.0037128270709344434,
+              "nivel": 0.95
+            },
+            "media": -0.0052540349082322345
+          },
+          "perto": {
+            "ic95": {
+              "ic_inferior": -0.019716989087302184,
+              "ic_superior": -0.011842153397817044,
+              "nivel": 0.95
+            },
+            "media": -0.015656519717262094
+          }
+        }
+      },
+      "P0^ac - P1^ac": {
+        "dono": {
+          "aleatorio": {
+            "ic95": {
+              "ic_inferior": -0.0008472139550240246,
+              "ic_superior": 0.01213538979827951,
+              "nivel": 0.95
+            },
+            "media": 0.0057089885085993535
+          },
+          "atencioso": {
+            "ic95": {
+              "ic_inferior": -0.035571080315803576,
+              "ic_superior": -0.0201613312251893,
+              "nivel": 0.95
+            },
+            "media": -0.027966567460311724
+          },
+          "incoerente": {
+            "ic95": {
+              "ic_inferior": -0.03124122747188393,
+              "ic_superior": -0.017482545882927525,
+              "nivel": 0.95
+            },
+            "media": -0.024551431258258934
+          },
+          "relapso": {
+            "ic95": {
+              "ic_inferior": 0.005990755208335264,
+              "ic_superior": 0.017629993386249446,
+              "nivel": 0.95
+            },
+            "media": 0.011675141575730758
+          }
+        },
+        "lugar": {
+          "comedouro": {
+            "ic95": {
+              "ic_inferior": -0.029934536210314933,
+              "ic_superior": -0.012630586557535822,
+              "nivel": 0.95
+            },
+            "media": -0.021327163163438672
+          },
+          "longe": {
+            "ic95": {
+              "ic_inferior": -0.000446038721472556,
+              "ic_superior": 0.0069413504464325955,
+              "nivel": 0.95
+            },
+            "media": 0.0032632091703917185
+          },
+          "perto": {
+            "ic95": {
+              "ic_inferior": -0.014999094742060088,
+              "ic_superior": -0.0010748992435456195,
+              "nivel": 0.95
+            },
+            "media": -0.008286447482633456
+          }
+        }
+      },
+      "P0z - P0": {
+        "dono": {
+          "aleatorio": {
+            "ic95": {
+              "ic_inferior": 0.02466065641534195,
+              "ic_superior": 0.038561515170297496,
+              "nivel": 0.95
+            },
+            "media": 0.031354917948075225
+          },
+          "atencioso": {
+            "ic95": {
+              "ic_inferior": -0.012318722098232256,
+              "ic_superior": 0.014301570767181143,
+              "nivel": 0.95
+            },
+            "media": 0.0015285962301435042
+          },
+          "incoerente": {
+            "ic95": {
+              "ic_inferior": -0.01949619812336286,
+              "ic_superior": 0.007021838831002382,
+              "nivel": 0.95
+            },
+            "media": -0.006025031001999508
+          },
+          "relapso": {
+            "ic95": {
+              "ic_inferior": 0.01044030567956378,
+              "ic_superior": 0.02009326223545089,
+              "nivel": 0.95
+            },
+            "media": 0.015188757647156432
+          }
+        },
+        "lugar": {
+          "comedouro": {
+            "ic95": {
+              "ic_inferior": -0.038844848245301114,
+              "ic_superior": -0.01284325009301683,
+              "nivel": 0.95
+            },
+            "media": -0.025038726128484824
+          },
+          "longe": {
+            "ic95": {
+              "ic_inferior": 0.03073742869543274,
+              "ic_superior": 0.04851320374503456,
+              "nivel": 0.95
+            },
+            "media": 0.03957022336929136
+          },
+          "perto": {
+            "ic95": {
+              "ic_inferior": 0.01350045572915537,
+              "ic_superior": 0.020776756262391248,
+              "nivel": 0.95
+            },
+            "media": 0.017003933376725195
+          }
+        }
+      }
+    }
+  },
+  "holm_alfa": 0.05,
+  "leitura": "G-MF1r perde: a consequencia imediata nao aprende a procurar neste mundo (A1.5, terceira linha; secao 8). Resultado negativo, registrado.",
+  "medida_2_razao_abandono": {
+    "P0": 1.3830441874213881,
+    "P1": 1.3886661296340725,
+    "p1_menos_p0": {
+      "ic90": {
+        "ic_inferior": -0.053750751753794165,
+        "ic_superior": 0.06519705116660808,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.06422784995160462,
+        "ic_superior": 0.07606589558553868,
+        "nivel": 0.95
+      },
+      "media": 0.005621942212684125,
+      "motivo": null,
+      "n": 40,
+      "n_grupos": 40,
+      "p_unilateral": 0.4427,
+      "t_pareado": {
+        "gl": 39,
+        "p_unilateral": 0.4398223287262035,
+        "t": 0.15241598118377975
+      }
+    },
+    "sem_valor": 0
+  },
+  "modo": "validacao",
+  "nao_medidos": [
+    "ganho liquido por hora de busca",
+    "latencia ate achar",
+    "frutas das arvores comidas",
+    "deslocamento por regiao",
+    "tempo livre por acao",
+    "fome urgente",
+    "o teto do P1",
+    "tempo de desistencia (secao 9)"
+  ],
+  "p1_lido": true,
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_FISICO.md",
+  "secundarios": {
+    "G-DIST": {
+      "contraste": "[P1(afastado) - P1(padrao)] - [P0(afastado) - P0(padrao)] na permanencia media",
+      "declarado": "sem Delta nem poder (A1.9)",
+      "holm": {
+        "limiar": 0.0125,
+        "ordem": 2,
+        "p": 0.001,
+        "p_ajustado": 0.004,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": 15.513158120673046,
+        "ic_superior": 45.740606284703716,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 12.53716809081063,
+        "ic_superior": 49.0244936326213,
+        "nivel": 0.95
+      },
+      "media": 30.53878657602873,
+      "motivo": null,
+      "n": 40,
+      "n_grupos": 40,
+      "p_unilateral": 0.001,
+      "passa": true,
+      "passa_ic": true,
+      "permanencia_media": {
+        "P0": 175.19494113590005,
+        "P0@afastado": 192.15051047254343,
+        "P1": 260.00614377545423,
+        "P1@afastado": 307.5004996881263
+      },
+      "regra": "limite inferior do IC95 > 0",
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 39,
+        "p_unilateral": 0.0011021465025758833,
+        "t": 3.277753428830698
+      }
+    },
+    "G-MF2r": {
+      "contraste": "P0^ac - P1^ac em D_FE",
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 5,
+        "p": 1.0,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.011769843594985303,
+        "ic_superior": -0.005661993375905729,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.012324353091926815,
+        "ic_superior": -0.005059051545960603,
+        "nivel": 0.95
+      },
+      "media": -0.008783467158560137,
+      "motivo": null,
+      "n": 40,
+      "n_grupos": 40,
+      "p_unilateral": 1.0,
+      "passa": false,
+      "passa_ic": false,
+      "regra": "limite inferior do IC95 > 0",
+      "t_pareado": {
+        "gl": 39,
+        "p_unilateral": 0.9999819372122829,
+        "t": -4.662303150582912
+      }
+    },
+    "G-MF3r": {
+      "contraste": "P0 - P1 em privacao",
+      "declarado": "subpotenciado (A1.9: poder 0,03 a 0,11 no N = 40)",
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 4,
+        "p": 0.9642,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.02763516865079365,
+        "ic_superior": -0.001345486111111107,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.03019903273809524,
+        "ic_superior": 0.0013113839285714309,
+        "nivel": 0.95
+      },
+      "media": -0.014409722222222221,
+      "motivo": null,
+      "n": 40,
+      "n_grupos": 40,
+      "p_unilateral": 0.9642,
+      "passa": false,
+      "passa_ic": false,
+      "regra": "limite inferior do IC95 > 0",
+      "t_pareado": {
+        "gl": 39,
+        "p_unilateral": 0.95732338965009,
+        "t": -1.7652383506826903
+      }
+    },
+    "G-OPORT": {
+      "contraste": "inclinacao da permanencia sobre a taxa recente, P1 - P0",
+      "declarado": "sem Delta nem poder (A1.9)",
+      "holm": {
+        "limiar": 0.016666666666666666,
+        "ordem": 3,
+        "p": 0.8276,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "inclinacao_media": {
+        "P0": 30.713013431673204,
+        "P1": 56.31352201260305
+      },
+      "n": 40,
+      "orientado": {
+        "ic90": {
+          "ic_inferior": -69.70760818088327,
+          "ic_superior": 17.582111728999156,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -77.48812656629272,
+          "ic_superior": 24.787639264886252,
+          "nivel": 0.95
+        },
+        "media": -25.600508580929848,
+        "motivo": null,
+        "n": 40,
+        "n_grupos": 40,
+        "p_unilateral": 0.8276,
+        "t_pareado": {
+          "gl": 39,
+          "p_unilateral": 0.8292177015640729,
+          "t": -0.9628309620698763
+        }
+      },
+      "p1_menos_p0": {
+        "ic90": {
+          "ic_inferior": -17.582111728999156,
+          "ic_superior": 69.70760818088327,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -24.787639264886252,
+          "ic_superior": 77.48812656629272,
+          "nivel": 0.95
+        },
+        "media": 25.600508580929848
+      },
+      "passa": false,
+      "passa_ic": false,
+      "regra": "limite superior do IC95 < 0",
+      "sem_valor": 0
+    },
+    "G-PERM": {
+      "contraste": "inclinacao da permanencia sobre o custo de viagem, P1 - P0",
+      "declarado": "sem Delta nem poder (A1.9)",
+      "holm": {
+        "limiar": 0.01,
+        "ordem": 1,
+        "p": 0.0,
+        "p_ajustado": 0.0,
+        "rejeita": true
+      },
+      "inclinacao_media": {
+        "P0": 10.658996249378271,
+        "P1": 35.80590006284683
+      },
+      "n": 40,
+      "orientado": {
+        "ic90": {
+          "ic_inferior": 18.427028017816752,
+          "ic_superior": 32.17290631946012,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 17.175568264142225,
+          "ic_superior": 33.6504249602512,
+          "nivel": 0.95
+        },
+        "media": 25.146903813468562,
+        "motivo": null,
+        "n": 40,
+        "n_grupos": 40,
+        "p_unilateral": 0.0,
+        "t_pareado": {
+          "gl": 39,
+          "p_unilateral": 3.2793816884496935e-07,
+          "t": 5.92615766109929
+        }
+      },
+      "p1_menos_p0": {
+        "ic90": {
+          "ic_inferior": 18.427028017816752,
+          "ic_superior": 32.17290631946012,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": 17.175568264142225,
+          "ic_superior": 33.6504249602512,
+          "nivel": 0.95
+        },
+        "media": 25.146903813468562
+      },
+      "passa": true,
+      "passa_ic": true,
+      "regra": "limite inferior do IC95 > 0",
+      "sem_valor": 0
+    }
+  }
+}
