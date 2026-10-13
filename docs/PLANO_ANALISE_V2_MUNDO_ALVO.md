@@ -289,3 +289,38 @@ recebe o sinal inteiro da decisão (todos os canais), e o grupo da fruta fica se
 
 **O que não muda:** o P1 e o P1-alvo continuam diferindo só na chave do alvo (PMA-1); as classes da seção 1, a margem, o N, os gates e a
 leitura ficam como estão. O desvio é do cérebro e foi registrado antes do piloto; nada foi ajustado olhando resultado.
+
+
+## Adendo 1 (2026-10-13, antes da validação): o K, o poder, o G-USO do piloto e o custo
+
+Piloto da seção 6, uma vez, nas bases 47101…47505 (K = 4, prefixo `mundo`, 20 unidades), com o código em `5b6e9b2` (árvore limpa) e o
+desvio D1. Números de `artifacts_v2_mundo_alvo/piloto/` (`resultado.json`, `medidas.json`, `meta.json`; as vidas ficam fora do
+git). **Fica congelado aqui; a validação (48101…48505) roda com este K.**
+
+**O N: K = 4 por base, N = 20.** O poder simulado no G-ALVO (o bootstrap das diferenças P1 − P1-alvo por unidade do piloto, centradas e deslocadas para o `Δ_MF` = 0,007675785900293976, 2.000 réplicas por K, o
+teste t unilateral a 0,025, semente 4242):
+
+| K | **4** | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|
+| poder | **0,920** | 0,973 | 0,992 | 0,997 | 0,998 | 1,000 | 1,000 |
+
+**O poder dos secundários no N = 20, só relato** (com o `Δ_MF`; a 0,025 e a 0,0125, o primeiro passo do Holm com quatro):
+- **G-ALVO-AC** (P1^ac − P1-alvo^ac): 0,963 a 0,025 e 0,931 a 0,0125;
+- **G-INSTINTO** (P0 − P1-alvo): 0,406 a 0,025 e 0,306 a 0,0125: **subpotenciado** (abaixo de 0,5, seção 7);
+- **G-PERM-A e G-DIST-A:** sem Δ nem poder (seção 7).
+
+**O G-USO no piloto:** 0,0885 [+0,0806; +0,0970] (limiar 0,05; 94,9 decisões com alvo por vida nos
+últimos sete dias, 0 células sem decisão). É do piloto: a premissa da validação é medida de novo lá.
+
+**O custo** (CPU por vida, com a gravação, o replay do disco, a medição e, no P1-alvo, as medidas do alvo; Python 3.13.0, Windows):
+
+| braço | P0 | P0z | P1 | P1-alvo | P1^ac | P1-alvo^ac |
+|---|---|---|---|---|---|---|
+| s por vida | 6,83 | 3,89 | 8,55 | 9,09 | 8,52 | 8,53 |
+
+- **Este piloto:** 1440 vidas, 3,03 h de CPU, 19 min de parede com 10 processos.
+- **A validação com K = 4:** 1920 vidas (96 por unidade, com o bloco afastado pelo custo do P1 e do P1-alvo no padrão), 4,2 h de CPU, ~0,4 h de parede com 10 processos. **O bloco afastado fica** (PMA-6): o custo cabe no teto.
+
+**O piloto não é evidência** (seção 6). Só como relato, por unidade, a média das 12 células em `D_FE`:
+- P1 − P1-alvo (G-ALVO): −0,0024 [−0,0068; +0,0023];
+- G-MUNDO no piloto (P0z − P0): +0,0137 [+0,0063; +0,0206].
