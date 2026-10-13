@@ -186,7 +186,7 @@ from digilab.metrics import (cuidado_preservado, deficit_fome_energia, inclinaca
 from digilab.metrics import contribuicao_drives, dominancia_decisoes, leitura_dominancia  # noqa: E402
 from digilab.metrics import drives_novos as medir_drives_novos, tempo_livre_be  # noqa: E402
 from digilab.metrics import alivios_ate_criterio, alivios_por_dia, curva_sobrevivencia, dia_do_criterio  # noqa: E402
-from digilab.metrics import metabolismo_da_vida, tempo_comer_brincar, vez_no_grupo  # noqa: E402
+from digilab.metrics import REGRAS_TEMPO_LIVRE, efeitos_do_tapa, metabolismo_da_vida, tempo_comer_brincar, vez_no_grupo  # noqa: E402
 from digilab.mundo import DonoCarinhoBanheiro  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
@@ -603,6 +603,8 @@ CONFIG_LOBOS_PADRAO = ConfigLobos()
 # os drives do sinal pelos nomes do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, A2.2), pelos indices de Estado.vetor (os canais de
 # lobos.CANAL_DO_DRIVE: fome, higiene, energia, humor)
 NOMES_DRIVES = {0: "fome", 1: "desconforto", 2: "cansaco", INDICE_HUMOR: "tristeza"}
+# os drives novos do sinal pelo corpo (a etapa 6, tarefa do corpo secao 9), os que o w_novos da 6.2 do plano do corpo pesa
+NOVOS_W = ("tedio", "curiosidade", "solidao", "estresse", "dor")
 APRENDE_PELA_CONSEQUENCIA = ("consequencia", "informacao")   # o P2 e o P1 com a informacao na percepcao (plano do N5, secao 3)
 
 
@@ -1350,6 +1352,9 @@ class Bancada:
         corpo = self.medidas_corpo(vida, m, reg)
         if corpo is not None and m.cc.metabolismo:
             corpo["metabolismo"] = self.medidas_metabolismo(vida, m, reg)
+        if corpo is not None and m.cc.gestos:
+            corpo["tapa"] = self.medidas_tapa(vida, m, reg)
+        comportamento = self.medidas_comportamento(reg)
         banheiro = self.medidas_banheiro(vida, m, reg) if braco_de(vida.espec.braco).banheiro is not None else None
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
@@ -1372,6 +1377,7 @@ class Bancada:
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
                 "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, "corpo": corpo, "banheiro": banheiro,
+                "comportamento": comportamento,
                 **extra_mundo}
 
     def medidas_corpo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
@@ -1403,6 +1409,32 @@ class Bancada:
                 "be": tempo_livre_be(decs, janela), "be_vida": tempo_livre_be(decs, (0, fim)),
                 "cuidado": cuidado_preservado(cuidado, janela), "drives_novos": drives,
                 "corpo_final": motor.corpo.para_dict()}
+
+    def medidas_comportamento(self, reg: "_Registro") -> dict:
+        """A `BE` e o cuidado preservado (PLANO_ANALISE_V2_CORPO_DRIVES, 5.1 e 5.2) em TODA vida, com ou sem o corpo, pelas mesmas contas do
+        bloco do corpo: o G-HOJE (b) compara a quimica com o "hoje", que nao tem o bloco. Janela: os ultimos sete dias."""
+        janela = janela_dias(max(1, self.dias - 6), self.dias)
+        ticks = [t for t, _, _ in reg.decisoes]
+        decs = [(t, regra, a) for (t, _, a), (_, regra, _) in zip(reg.decisoes, reg.bola)]
+        cuidado = [(t, p, sau, v[1]) for t, (p, sau), v in zip(ticks, reg.amostras, reg.vetores)]
+        return {"janela": list(janela), "be": tempo_livre_be(decs, janela), "cuidado": cuidado_preservado(cuidado, janela)}
+
+    def medidas_tapa(self, vida: VidaBancada, motor, reg: "_Registro") -> dict:
+        """Os efeitos do tapa (PLANO_ANALISE_V2_CORPO_DRIVES, secao 5.4; so descritivos), nas vidas com os gestos, pela
+        `metrics.efeitos_do_tapa`: os tapas do registro, os carinhos do replay de medicao (a reducao da solidao lida pelo receptor e o sinal
+        pelo corpo, a conta do cerebro, como no banheiro), as acoes e o estresse de cada decisao. Janela: os ultimos sete dias."""
+        S = self.cfg_lobos.escala
+        cc = getattr(reg.interna, "cfg_consequencia", self.cfg_consequencia)
+        pd = dict(cc.pesos_drives_corpo)
+        drives = lambda r: tuple(RECEPTOR_DO_INDICE[i] for i in cc.drives) + tuple(  # noqa: E731
+            x for x in RECEPTORES_NOVOS if x in DRIVES_NOVOS_SINAL and getattr(r, x) is not None)
+        tapas = [e.tick for e in motor.log if e.tipo == "acao_usuario" and str(e.valor) == AcaoUsuario.TAPA.value]
+        carinhos = [(t, (antes.solidao - depois.solidao) / S, sinal_corpo(antes, depois, drives(antes), cc.ganho, S, pd))
+                    for t, antes, depois in reg.carinhos]
+        decs = [(t, a) for t, _, a in reg.decisoes]
+        estresse = [(t, pc.estresse / S) for (t, _, _), pc in zip(reg.decisoes, reg.corpo)]
+        janela = janela_dias(max(1, self.dias - 6), self.dias)
+        return efeitos_do_tapa(tapas, carinhos, decs, estresse, janela, ticks_por_dia=TICKS_POR_DIA)
 
     def medidas_metabolismo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict:
         """A medida descritiva do metabolismo (PLANO_ANALISE_V2_CORPO_DRIVES, A3.3; TAREFA_V2_METABOLISMO, secao 6), por vida, so relato:
@@ -1511,10 +1543,18 @@ class Bancada:
                 raise RuntimeError(f"{vida.nome}: o sinal por drive da medida e o dos canais do cerebro divergem")
             conferido = True
         janela = janela_dias(max(1, self.dias - 6), self.dias)
+        # o passo 3 da 6.2 (o w_novos): por decisao de tempo livre com sinal na janela, a soma |c_d| dos drives novos (NOVOS_W) e a dos
+        # outros, com os pesos desta vida; o orquestrador da calibracao escala os novos por w e tira a mediana da parcela
+        novos_livres = []
+        for t, regra, c in decisoes:
+            if janela[0] <= t < janela[1] and regra in REGRAS_TEMPO_LIVRE and sum(c.values()) != 0:
+                a = sum(abs(v) for d, v in c.items() if d in NOVOS_W)
+                novos_livres.append([a, sum(abs(v) for v in c.values()) - a])
         return {"origem": "sinal" if b.fonte in APRENDE_PELA_CONSEQUENCIA else "sonda", "conferido_com_canais": conferido,
                 "conferido_com_motivo": bool(aprende), "pelo_corpo": True, "janela": list(janela),
                 "na_janela": dominancia_decisoes(decisoes, janela),
-                "vida_toda": dominancia_decisoes(decisoes, (0, self.dias * TICKS_POR_DIA))}
+                "vida_toda": dominancia_decisoes(decisoes, (0, self.dias * TICKS_POR_DIA)),
+                "novos_livres": novos_livres}
 
     def medidas_banheiro(self, vida: VidaBancada, motor, reg: "_Registro") -> dict:
         """As medidas do PLANO_ANALISE_V2_BANHEIRO (secoes 4 e 8) numa vida do 2 x 2, pela `medidas_banheiro_de`. Le:

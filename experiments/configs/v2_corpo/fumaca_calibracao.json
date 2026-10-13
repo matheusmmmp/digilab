@@ -1,0 +1,90 @@
+{
+  "descricao": "Fumaca da calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 6 e adendos 1 a 3), NAO canonica: a mesma run com duas sementes dos testes (bases 101 e 202, K = 1), um dono, 2 dias e um bootstrap de poder pequeno; confere o encanamento (a grade do P0-c, a regra, o w_novos, o piloto com os blocos e as sensibilidades, as margens e o N), nunca como resultado.",
+  "donos": [
+    "atencioso"
+  ],
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "corpo"
+  },
+  "mundos": [
+    "bola",
+    "padrao"
+  ],
+  "dias": 2,
+  "orcamento": 32,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 200,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "corpo": {
+    "gasto_atividades_den": 2,
+    "gasto_atividades_num": 1,
+    "gasto_basal_acordado": 188,
+    "gasto_basal_dormindo": 94
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+  "grade": {
+    "m_sobe": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "m_reduz": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "w_novos": [
+      1,
+      2,
+      4
+    ]
+  },
+  "faixas": {
+    "tedio_solidao": [
+      0.1,
+      0.5
+    ],
+    "estresse_max": 0.2,
+    "parcela_novos": [
+      0.25,
+      0.75
+    ]
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 5,
+    "replicas": 50,
+    "alvo": 0.8
+  },
+  "sensibilidade": {
+    "recompensa_tapa": [
+      -0.5,
+      -2.0
+    ],
+    "janela_tedio": [
+      4,
+      16
+    ]
+  }
+}

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import math
 import random
+from bisect import bisect_left
 from dataclasses import dataclass
 from typing import Iterable, Mapping, Sequence
 
@@ -1602,3 +1603,45 @@ def tempo_comer_brincar(decisoes: Sequence[tuple[int, str]]) -> dict:
     meio = len(ordenados) // 2
     mediana = ordenados[meio] if len(ordenados) % 2 else (ordenados[meio - 1] + ordenados[meio]) / 2
     return {"n": len(gaps), "media": sum(gaps) / len(gaps), "mediana": mediana}
+
+
+def efeitos_do_tapa(tapas: Sequence[int], carinhos: Sequence[tuple[int, float, int]], decisoes: Sequence[tuple[int, str]],
+                    estresse: Sequence[tuple[int, float]], janela: tuple[int, int] = JANELA_8_14, horas_depois: int = 6 * 60,
+                    ticks_por_dia: int = 1440, limiar: float = 0.75) -> dict:
+    """Os efeitos do tapa (PLANO_ANALISE_V2_CORPO_DRIVES, secao 5.4), so descritivos, nas decisoes e carinhos da janela. O motor fornece:
+    `tapas` (os ticks dos tapas da vida), `carinhos` = (tick, reducao da solidao na escala 0-1, sinal pelo corpo) por carinho,
+    `decisoes` = (tick, acao) e `estresse` = (tick, falta do estresse na escala 0-1) por decisao. "Depois de um tapa" = algum tapa em
+    [t - horas_depois, t), estritamente antes (o tapa e o carinho do mesmo passo nao se ordenam); o resto e o "sem tapa" (a comparacao
+    com as horas anteriores sem tapa). Sai: o medo da mao (a reducao media da solidao por carinho, depois e sem), a fracao de
+    chamar_atencao nas decisoes depois de um tapa e nas outras, o sinal medio do carinho depois e sem (o R-3), o estresse da ultima
+    decisao de cada dia e a fracao das decisoes com o estresse >= limiar. Medias de grupo vazio sao None. O vinculo nao esta disponivel
+    (S-4). Fora de ordem falha alto."""
+    ini, fim = _checar_janela(janela)
+    ts = sorted(tapas)
+    for seq, nome in ((carinhos, "carinhos"), (decisoes, "decisoes"), (estresse, "estresse")):
+        ticks = [x[0] for x in seq]
+        if ticks != sorted(ticks):
+            raise ValueError(f"efeitos_do_tapa: {nome} fora de ordem")
+
+    def depois(t: int) -> bool:
+        i = bisect_left(ts, t)                    # o primeiro tapa >= t; o anterior a ele e o ultimo estritamente antes
+        return i > 0 and t - ts[i - 1] <= horas_depois
+
+    def media(xs):
+        return sum(xs) / len(xs) if xs else None
+    car = [(depois(t), r, s) for t, r, s in carinhos if ini <= t < fim]
+    dec = [(depois(t), a) for t, a in decisoes if ini <= t < fim]
+    chamar = {g: [a == "chamar_atencao" for d, a in dec if d is g] for g in (True, False)}
+    est = [(t, e) for t, e in estresse if ini <= t < fim]
+    fim_dia: dict[int, float] = {}
+    for t, e in est:
+        fim_dia[t // ticks_por_dia + 1] = e     # o ultimo da janela em cada dia
+    return {"tapas": sum(1 for t in ts if ini <= t < fim), "tapas_vida": len(ts), "horas_depois": horas_depois,
+            "medo_da_mao": {"depois_tapa": {"n": sum(1 for d, _, _ in car if d), "reducao_solidao": media([r for d, r, _ in car if d])},
+                            "sem_tapa": {"n": sum(1 for d, _, _ in car if not d), "reducao_solidao": media([r for d, r, _ in car if not d])}},
+            "chamar_atencao": {"depois_tapa": {"n": len(chamar[True]), "fracao": media(chamar[True])},
+                               "sem_tapa": {"n": len(chamar[False]), "fracao": media(chamar[False])}},
+            "carinho_sinal": {"depois_tapa": media([s for d, _, s in car if d]), "sem_tapa": media([s for d, _, s in car if not d])},
+            "estresse_fim_do_dia": [{"dia": d, "estresse": e} for d, e in sorted(fim_dia.items())],
+            "estresse_acima": {"n": len(est), "fracao": media([e >= limiar for _, e in est])},
+            "vinculo": "nao disponivel (a base nova do vinculo, S-4)"}

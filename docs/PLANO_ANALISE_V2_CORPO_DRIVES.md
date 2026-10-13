@@ -702,7 +702,7 @@ grade {½, 1, 2} da A3.2:**
   `artifacts_v2_corpo/calibracao/passo0/passo0.json` (e o `meta.json` de cada ponto, com os sha256).
 - **A fração do tempo acordado com a falta de combustível, nas 8 células juntas:**
 
-  | `m_gasto` | basal (acordado/dormindo) | atividades | decisões acordado | com falta | fração |
+  | `m_gasto` | basal (acordado/dormindo) | atividades | ticks acordado | com falta | fração |
   |---|---|---|---|---|---|
   | ¼ | 94 / 47 | ¼ | 2.187.300 | 0 | 0,0000 |
   | ½ | 188 / 94 | ½ | 2.187.090 | 832 | 0,0004 |
