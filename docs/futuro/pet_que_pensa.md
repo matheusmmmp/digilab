@@ -97,7 +97,7 @@ efetivo dos candidatos de alvo e da decisão de comer ou explorar. Arbitrar por 
 |---|---|---|
 | **P1** | o A de hoje: instinto e reforço (hábito) | nenhum teste passa |
 | **P1-plan** | o A com o planejador e os dois modelos | os dois passam |
-| **P1-plan-desfecho** | o A com o planejador e só o modelo do desfecho (o mapa congelado no nascimento) | só o teste 1 passa |
+| **P1-plan-desfecho** | o A com o planejador e só o modelo do desfecho (o mapa congelado **no tick da mudança**; a PP-8 do plano, DECIDIDA em 2026-10-13, corrigiu o "no nascimento" desta tabela) | só o teste 1 passa |
 | **P1-plan-cong** (controle) | o planejador com os dois modelos congelados antes da mudança | nenhum passa: separa "o modelo aprendeu" de "o planejador decide diferente" |
 
 **A medida primária é a da DS-1,** na primeira oportunidade depois da mudança, por unidade:

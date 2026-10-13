@@ -9,7 +9,7 @@
 Worktree e branch de cada etapa: `v2-pet-que-pensa-<etapa>`.
 
 **Status: ABERTA.** O desenho é `docs/futuro/pet_que_pensa.md`, com **PQ-1 a PQ-7 DECIDIDAS** pelo Matheus (2026-10-13). O plano é
-`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, commitado antes de qualquer run. As decisões que sobram (PP-1 a PP-9) estão no plano.
+`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, commitado antes de qualquer run. As **PP-1 a PP-9** do plano também estão **DECIDIDAS** (2026-10-13), pela recomendação.
 
 **O que já está decidido:**
 - **DS-1 (2026-10-07), a medida:** o pet planeja quando muda a escolha depois de uma mudança no mundo, sem ter reexperimentado a

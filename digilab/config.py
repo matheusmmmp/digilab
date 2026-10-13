@@ -1242,6 +1242,10 @@ class ConfigLobos:
     # regra em que comer e candidato. Sao os pesos que leem a identidade da fruta: com os canais, o canal do humor (a E2) vai a eles.
     # Desligada: a vida de hoje (e, com os canais, comer a fruta que mexe no humor falha alto, como antes)
     presenca_fruta_mundo: bool = False       # PROPOSTO: a chave
+    # --- o pet que pensa, etapa 2b (docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.4; PP-2) ---
+    # As classes de alvo por arvore no alvo aprendido: `arvore:<id>` (as 9 do layout), nas regras em que o explorar e candidato, com os
+    # candidatos de arvore lembrada do motor (PP-1, ConfigPetQuePensaMundo). Exige o alvo aprendido. Desligada: a vida de hoje
+    alvo_por_arvore: bool = False            # PROPOSTO: a chave
 
     def __post_init__(self) -> None:
         if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
@@ -1876,3 +1880,59 @@ class ConfigRedeDeSi:
 
 CONFIG_REDE_DE_SI = ConfigRedeDeSi()
 CONFIG_REDE_DE_SI_LIGADA = ConfigRedeDeSi(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigModeloMundo:
+    """Os modelos do mundo do pet que pensa (J5, docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.1; digilab/modelo_mundo.py): o modelo do desfecho
+    (por tipo de comida e receptor, a mudanca esperada da leitura ao comer, e o custo de andar previsto) e o mapa da comida (por arvore e
+    pelo comedouro, a frequencia do tipo visto la). Na etapa 1 so observam (o embrulho `PoliticaComModelo`); o planejador e a etapa 2.
+    Registro de status: modelo_mundo.PARAMETROS_MODELO_MUNDO. Todos PROPOSTOS, sem fonte (PP-6), nenhum referendado.
+
+    ligada               a chave: os modelos so existem com ela
+    escala               S, a dos receptores do corpo e do cerebro A
+    passo_desfecho       o passo do modelo do desfecho e do custo de andar: d += div_arred((obs - d) x passo, S) (S/4)
+    passo_mapa           o passo do mapa: m += div_arred((1[tipo] x S - m) x passo, S) (S/8)
+    raio_ancora_celulas  a comida vista a ate este raio de um tronco ja visto conta para a arvore (2 celulas)
+    teto_modelo          os modelos somam menos inteiros que isto (no regime quimica: 5 tipos x 5 receptores + 1 + 10 lugares x 5 = 76)"""
+
+    ligada: bool = False
+    escala: int = 1024
+    passo_desfecho: int = 256
+    passo_mapa: int = 128
+    raio_ancora_celulas: int = 2
+    teto_modelo: int = 200
+
+    def __post_init__(self) -> None:
+        for nome in ("escala", "raio_ancora_celulas", "teto_modelo"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigModeloMundo.{nome} tem de ser inteiro positivo: {v!r}")
+        for nome in ("passo_desfecho", "passo_mapa"):
+            v = getattr(self, nome)
+            if type(v) is not int or not 0 <= v <= self.escala:
+                raise ValueError(f"ConfigModeloMundo.{nome} tem de ser inteiro em [0, S]: {v!r}")
+
+
+CONFIG_MODELO_MUNDO = ConfigModeloMundo()
+CONFIG_MODELO_MUNDO_LIGADA = ConfigModeloMundo(ligada=True)
+
+
+# =====================================================================
+# V2, o pet que pensa (J5), o mundo (docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.3, etapa 3; PP-1 e PP-5 do
+# docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md). Desligada por padrao: a vida de hoje byte a byte. Exige o mundo fisico (ConfigMundo.ligada);
+# quem usa confere e falha alto. Ligada, o MotorMundo:
+# - guarda os troncos que o pet ja viu (a ate o raio da visao, na decisao e depois de andar) e os poe na percepcao (`troncos`);
+# - oferece no explorar um candidato `arvore:<id>` por tronco ja visto, no pe da arvore, depois dos candidatos de hoje (PP-1). O padrao
+#   do motor e o instinto nunca os escolhem;
+# - aceita a fruta na mao (`dar_fruta_<f>`) e a troca de tipo entre duas classes de arvore (`trocar_arvores_<x>_<y>`), eventos do registro
+#   fora do orcamento. Nao ha numero novo: o raio dos troncos e o da visao.
+
+
+@dataclass(frozen=True)
+class ConfigPetQuePensaMundo:
+    ligada: bool = False                     # PROPOSTO: a chave (os troncos vistos, os candidatos de arvore, a mao e a troca)
+
+
+CONFIG_PQP_MUNDO = ConfigPetQuePensaMundo()
+CONFIG_PQP_MUNDO_LIGADA = ConfigPetQuePensaMundo(ligada=True)

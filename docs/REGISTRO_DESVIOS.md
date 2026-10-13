@@ -4745,6 +4745,123 @@ limpa). Interpretações:
 - **Uma falha do `test_grupo`** (um `TypeError` no `replace` do `Estado`) apareceu na suíte que rodou junto com a validação e não se
   repetiu com o teste sozinho; a suíte foi rodada de novo depois da run.
 
+## 2026-10-13 — W-MUNDO-ALVO-PLANO (worker C): o plano do mundo com o alvo aprendido, o roadmap e as PP do J5
+
+- **As PP-1 a PP-9 do J5 marcadas como DECIDIDAS (2026-10-13),** pela recomendação, no plano e na tarefa do pet que pensa. Com a PP-8
+  decidida, corrigi a tabela da seção 5 de `docs/futuro/pet_que_pensa.md` ("o mapa congelado no tick da mudança"), com a nota da correção na
+  própria linha. No PR anterior eu tinha deixado essa tabela como estava, à espera da decisão.
+- **`docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`:** o plano novo, depois do resultado negativo da validação do mundo (#285). Registrado antes de
+  qualquer run; PMA-1 a PMA-9 abertas.
+- **O primário é P1 − P1-alvo, não P0 − P1-alvo** (PMA-1): o pedido dizia "aprender para onde ir ajuda a procurar?", e é o contraste que
+  isola a chave. O P0 − P1-alvo fica secundário.
+- **O `Δ_MF` foi reaproveitado** (PMA-2), com a justificativa na seção 7: a mesma escala, o mesmo mundo e fixado antes de qualquer vida com o
+  alvo. O N sai de um piloto novo, porque o `Δ_MF` não diz nada da variância de P1 − P1-alvo.
+- **Uma premissa nova, o G-USO** (PMA-5). Com o `w0_alvo` em S/16 o P1-alvo já sorteia fora do padrão no prior, então "escolheu outra
+  classe" não mede o aprendido. A sonda usa a tabela do prior com o mesmo `u`. **O `u` do alvo não está no motivo hoje** (o motivo guarda as
+  classes, a do padrão, a escolhida e os pesos): é trabalho do B, atrás da chave. O braço P1-alvo na bancada de vidas e a medida são do D.
+- **O G-MF3r (a privação) passou a descritivo** neste plano, porque saiu subpotenciado no mundo (A1.9). O G-OPORT também, porque não passou e
+  não tem Δ.
+- **O crédito entre decisões** (R-1 do plano do mundo) ficou como alternativa futura, na seção 11 do plano. Lá estão as três formas
+  conhecidas: o traço de elegibilidade, o crédito por ida e o planejador do J5. O traço hoje é recusado pelos canais (CANAIS-REFORCO).
+- **O custo esperado** usa a CPU por vida da validação do mundo; o P1-alvo entra pelo custo do P1, sem medida própria (declarado).
+- **As faixas 47101…47505 e 48101…48505** foram conferidas no `origin/main` (`067e19b`) e nos branches remotos. Estão fora das reservadas,
+  das queimadas e das planejadas (23101…27505, 35101…36505 e as 45101…46505 do J5), e não têm uso em `.py`, `.md` nem nas configs.
+- **O roadmap, seção 8:**
+  - o J1 está validado, com resultado negativo (#285);
+  - o J2 foi calibrado com duas faixas que não fecharam (#286), e a grade fina está "em curso, segundo o coordenador; sem resultado na
+    `main`";
+  - o J5 tem as PP decididas.
+  - O estado passou a 2026-10-13 (`067e19b`).
+- **Nenhuma referência nova.** Este plano não cita literatura além da que o plano do mundo já cita.
+
+## 2026-10-13 — DOIS-PETS-CALIBRACAO, a run (worker B): o K não fecha
+
+- **O adendo 1.1 entrou antes da run,** num commit próprio (`24f0b6d`): as janelas de dois dias (PDC-1, decisão do Matheus) e, onde o
+  plano não dizia, os valores recomendados no #283 (PDC-2 a PDC-5). A config e a fumaça passaram a `"janelas": "dois_dias"`, com o
+  ponteiro `adendo_janelas`.
+- **Nada foi ajustado depois da run.** A regra parou no G-K, como a seção 5 manda, e o piloto não rodou.
+- **O descritivo dia a dia** (a R_A por dia, somada nas unidades) é pós hoc e fica fora da regra. Serve só para o Matheus ler o "não
+  aprende".
+
+## 2026-10-13 — PET-QUE-PENSA, etapas 0 e 1 (worker B): os modelos do mundo, só observando
+
+- **A etapa 0 ficou maior que a letra.** A tabela pede as vidas do mundo físico com o corpo químico (P0, P1, P3, os dois layouts, o alvo
+  aprendido). O gabarito tem isso pela bancada, nas montagens simples e completa, com a presença da fruta no mundo (#269), que é o cérebro
+  do plano. Também tem vidas diretas com o metabolismo, porque a PP-3 pede o regime química com ele e a bancada não o liga no mundo
+  físico. O P0 do instinto da bancada não tem corpo: no G-OBS-MM ele só confere que os modelos falham alto, e um teste confere a vida dele
+  contra o gabarito.
+- **Os troncos não estão nos `vistos`.** A tarefa diz que a posição das árvores "é a dos troncos que o pet já viu (os `vistos`)". A
+  percepção do mundo não traz troncos. O modelo usa a posição do layout (o centro da célula), mas só depois que o tronco ficou a até o
+  raio da visão do pet, pela mesma conta dos `vistos`. Nunca lê a fruta de cada árvore no layout (teste). O comedouro é tratado igual. Os
+  candidatos de árvore lembrada da etapa 3 (A) deveriam usar o mesmo critério de "visto".
+- **O mapa conta cada aparição.** Pela letra ("cada vez que uma comida madura aparece nos `vistos`"), a mesma comida conta de novo em cada
+  decisão em que aparece. A alternativa, contar cada comida uma vez por lugar, ficou fora. A comida vista conta para o lugar já visto mais
+  perto dela, a até 2 células; no empate, vai ao primeiro na ordem dos lugares. A podre e a bola não contam, então a coluna da podre no
+  mapa só esquece.
+- **O desfecho só aprende com o `comer`.** No "achou e comeu" do explorar, o efeito do próprio explorar no corpo não se separa do da
+  comida, então esse consumo só é contado (`consumos_nao_usados`). A fruta na mão (etapa 3) entra pelo mesmo `consumo`.
+- **O custo de andar** aprende nas decisões de `comer` com deslocamento (comer não mexe na energia). A amostra é a mudança da leitura da
+  energia por subunidade, vezes S, e a distância é a percebida, da posição da decisão à de depois, com a raiz inteira. A distância que o
+  motor anota no `ocorrido` não é lida (teste). No consumo, o componente da energia é corrigido pelo andar previsto, já atualizado com
+  a amostra da mesma decisão. Pelo arredondamento dos receptores, a estimativa fica perto e não igual ao custo do motor: numa vida de
+  teste, −196 e −170 contra −175.
+- **O teto conta como o dos outros módulos:** os modelos têm de ficar abaixo de `teto_modelo` (76 < 200). O layout dos receptores é fixado
+  na primeira decisão, como na rede de si.
+- **O embrulho tem sempre o `consequencia_mundo`**, porque os modelos precisam dele. Ele só repassa ao cérebro quando o cérebro tem o
+  gancho, então a vida não muda (G-OBS-MM). Os modelos veem a decisão antes de o cérebro escolher, sem tocar na rng, para o planejador da
+  etapa 2 já ler o mapa da decisão.
+
+## 2026-10-13 — PET-QUE-PENSA, etapa 3 (o mundo) e etapa 2b (as classes por árvore) (worker A)
+
+Tarefa `docs/TAREFA_V2_PET_QUE_PENSA.md`, seções 2.3 e 2.4; plano `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, PP-1, PP-2 e PP-5. Pedido do
+Gerente de 2026-10-13. Interpretações:
+- **A etapa 2b veio junto.** A tarefa dá a 2b (as classes por árvore no alvo aprendido) ao B; o pedido do Gerente a deu ao A, junto com
+  a etapa 3 ("as árvores lembradas como candidatas no explorar, PP-1, e as classes por árvore, PP-2"). As duas entraram neste PR, cada
+  uma atrás da própria chave. A etapa 3 inteira (a troca de tipo e a fruta na mão também) entrou porque a tarefa a dá ao A.
+- **"O tronco que o pet já viu".** A percepção de hoje (`vistos`) só tem comidas e a bola. Um tronco conta como visto quando está a até o
+  raio da visão do pet, na posição da decisão ou na posição depois de andar. O registro é `troncos_vistos` (id → o primeiro tick do
+  mundo), e a percepção ganha o campo `troncos` (os troncos à vista agora), com padrão vazio: sem a chave, a percepção é a de hoje.
+- **O candidato `arvore:<id>`** fica no tronco (o "pé da árvore" da tarefa), na ordem do layout, depois dos candidatos de hoje e dos
+  sociais. O tipo do `Alvo` é a própria classe (`arvore:J2`), para o alvo aprendido ler a classe como lê as outras; o `continuar` de uma
+  ida à árvore leva ao mesmo ponto, como o dos candidatos sociais.
+- **Os eventos** entram no fim do enum como ações do dono: `dar_fruta_<f>` e `trocar_arvores_<x>_<y>` (os três pares, em ordem). Ficam
+  fora do orçamento pelo canal do mundo (o `observar` do motor, como os carinhos do banheiro); o tick da mudança (`T_m`, PP-5) é decidido
+  por quem dirige a vida (a bancada, etapa 4), e o evento o grava no registro.
+- **A fruta na mão:** a conta é a da fruta madura do `_comer_mundo` (a nutrição e o efeito vigente no humor), sem sujeira; com o corpo,
+  o estímulo é o `estimulo_consumo_mundo` da fruta madura. Entra em `consumos_mundo` com `como` = "mao" e `id` None. Não é contato. Com o
+  pet dormindo, falha alto (o plano dá a mão com o pet acordado). O mundo anda até o tick antes, para a percepção de antes e de depois.
+- **G-SEM-CREDITO:** o cérebro recebe a mão só pelo gancho opcional `fruta_na_mao(tipo, obs_antes, obs_depois)` (para o modelo do
+  desfecho do B). O A de hoje não tem o gancho, e nenhum outro caminho (o `receber_acao_dono`, o `fruta_comida`, o `consequencia_mundo`,
+  o `mudanca_no_corpo`, o `consequencia_corpo`) é chamado; o estado interno inteiro do A sai igual (teste).
+- **A troca de tipo** é do `Mundo`: as quedas até o tick do evento usam o tipo velho, e as frutas que já estão no chão ficam como caíram.
+  O registro é `Mundo.trocas_tipo`.
+- **Só com um pet.** A chave do J5 recusa o grupo (a mão e a troca no mundo de dois pets ficam fora, como o "mapa aprendendo do que o
+  outro pet comeu" da seção 7 da tarefa).
+- **As classes por árvore** são uma por árvore do layout (`arvore:J1` … `arvore:M6`, na ordem do layout), só nas tabelas do explorar das
+  regras em que ele é candidato: 27 pesos a mais (795 → 822 no P1 do plano), abaixo do teto de 1000 (TP-1). A chave exige o alvo
+  aprendido. Sem ela, um candidato de árvore no alvo aprendido falha alto: a chave do mundo e a do cérebro vão juntas no P1 do plano.
+- **Um teste antigo mudou:** `tests/test_corpo_gestos.py` exigia o tapa como o último do enum; agora confere a posição dele (29).
+- **O G2** é contra um gabarito próprio (`tests/gabaritos/pqp_mundo_vidas_de_hoje.json`, 48 vidas, gravado num commit antes da
+  mudança): o da etapa 0 do B ainda não está na `main`.
+
+## 2026-10-13 — o TypeError intermitente do `test_grupo` (worker A)
+
+Na suíte que rodou junto com a validação do mundo (#285), o `test_g2_um_pet_no_grupo_e_o_gabarito_da_etapa_0` falhou uma vez com
+`TypeError: expected 2 arguments, got 3`, no `__init__` gerado do `Estado` (dataclass congelado), na linha do quinto
+`object.__setattr__(self, 'humor', humor)`: as quatro chamadas iguais antes dela passaram. A mensagem é a do `wrap_setattr` do CPython
+(um `__setattr__` chamado com o `self` a mais). Nada do nosso código toca `__setattr__` nem `__init__` (procurado no repositório).
+- **Não se reproduziu**, em quatro tentativas (2026-10-13):
+  - o `test_grupo` sozinho, 1 vez;
+  - o `test_grupo` sozinho 6 vezes seguidas, com 12 processos queimando CPU;
+  - todos os arquivos da suíte até o `test_grupo`, na ordem dela, com 8 processos de carga: 1800 passed;
+  - o `test_grupo` e o `test_grupo_social` com 16 sementes de hash fixas (`PYTHONHASHSEED` 1 a 16): passam em todas.
+  - A suíte inteira rodada de novo depois da validação também passou (2481 passed).
+- **Nenhuma thread viva** antes do `test_grupo`: os testes que sobem servidor vêm depois dele na ordem.
+- **Leitura:** a falha é do interpretador (o Python 3.13.0 do `.venv`) ou da máquina sob carga, e não do código do grupo. Não há o que
+  consertar no repositório.
+- **Recomendação:** atualizar o `.venv` para a última 3.13.x, que traz consertos de chamadas especializadas de descritores (por exemplo o
+  gh-131998). Se voltar, guardar o `PYTHONHASHSEED` e o log inteiro da rodada.
+
 ## 2026-10-13 — CORPO-CALIBRACAO-FINA (worker D): o adendo 5, só o passo 0 fino
 
 - **O adendo 5 foi registrado antes de qualquer vida** (commit `b51da5c`). O código veio depois, num commit próprio (`69004a5`).

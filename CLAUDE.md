@@ -3959,6 +3959,88 @@ mundo da calibração; 3.360 vidas rejogadas do disco, 50 min com 8 processos (6
 - **Leitura (A1.5, terceira linha):** a consequência imediata não aprende a procurar neste mundo. Por dono, a perda vem do atencioso e do
   incoerente; com o relapso o P1 ganha um pouco (descritivo).
 
+## V2, DOIS-PETS-CALIBRACAO, a run — o K não fecha (2026-10-13, `docs/PLANO_ANALISE_V2_DOIS_PETS.md`, seção 5 e adendo 1) — O PLANO VOLTA AO MATHEUS
+
+Decisão do Matheus (2026-10-13): a PDC-1 pela recomendação. O adendo 1.1 (as janelas de dois dias da regra do K) foi commitado antes da
+run (`24f0b6d`), e a calibração rodou uma vez. Números de `artifacts_v2_dois_pets/calibracao/` (`k.json`, `resultado.json`,
+`k/medidas.json`, `meta.json`; os registros dos grupos ficam fora do git, regeneráveis). Eles estão congelados no adendo 1.2 do plano.
+- **A run:**
+  - 20 grupos A-so (o A informativo sozinho, P1, 10 dias), nas bases 39101…39505 (K_u = 4), cada um gravado e rejogado do disco bit a
+    bit;
+  - 9 s de parede com 8 processos.
+- **G-K:** a R_A dos dias 1 e 2 é 0,485 (33 consumos). Nos dias K − 1 e K, a R_A é 0,358 (K = 3), 0,338 (K = 5) e 0,366 (K = 7). O limite
+  superior do IC95 fica entre 0,52 e 0,57, contra o limiar de 0,242. **Nenhum K passa, e não é por exposição:** toda janela tem 53 a 77
+  consumos.
+- **O plano para (seção 5):** sem piloto, sem `Δ_S`, sem N; a validação não roda. O plano volta ao Matheus.
+- **Descritivo:** a R_A da vida toda é 0,343 em 300 consumos, perto de 1/3, a fração de um tipo entre três. Cada A come em média 15
+  frutas maduras e 83 rações em 10 dias.
+
+## V2, PET-QUE-PENSA, etapas 0 e 1 — os modelos do mundo, só observando (2026-10-13, `docs/TAREFA_V2_PET_QUE_PENSA.md`) — GATES PASSAM
+
+J5, com PP-1 a PP-9 decididas pela recomendação. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/modelo_mundo.py`
+(novo) e a `ConfigModeloMundo` no fim de `config.py`. `engine.py`, os cérebros, o corpo, o mundo, a bancada e a web não mudaram.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Etapa 0, num commit próprio, antes do módulo:** `tests/gabarito_pet_que_pensa.py` → `tests/gabaritos/pet_que_pensa_vidas_de_hoje.json`,
+  136 vidas:
+  - pela bancada, P0, P1 e P3 no regime química e o P0 do instinto do mundo, nos dois layouts, nas montagens simples e completa, com o
+    alvo aprendido e a presença da fruta;
+  - direto, vidas com o metabolismo (PP-3).
+- **`ModeloMundo`** (só inteiros, sem rng; importa só `config` e `events`):
+  - **o desfecho:** por tipo (`racao`, `a`, `b`, `c`, `podre`) e receptor, a mudança esperada da leitura ao comer. Aprende nos consumos
+    do `comer`, com a energia corrigida pelo andar previsto; o "achou e comeu" só é contado;
+  - **o custo de andar:** a mudança da energia por subunidade, vezes S, aprendida nos `comer` com deslocamento percebido;
+  - **o mapa:** por árvore do layout e pelo comedouro, a frequência do tipo maduro visto a até 2 células. Um lugar só entra depois de o
+    pet vê-lo (o raio da visão), e a fruta de cada árvore no layout nunca é lida;
+  - os números são PROPOSTOS (PP-6): `passo_desfecho` S/4, `passo_mapa` S/8, `raio_ancora_celulas` 2, `teto_modelo` 200; registro
+    `modelo_mundo.PARAMETROS_MODELO_MUNDO`;
+  - **76 inteiros** no regime química (5 tipos × 5 receptores + 1 + 10 lugares × 5 tipos); 101 com os drives novos.
+- **`PoliticaComModelo`:** o embrulho somente leitura. Entrega aos modelos a observação de cada decisão e a consequência do mundo, e
+  repassa o resto ao cérebro. O estado interno é o do cérebro; os modelos ficam em `modelo` (`para_dict`).
+- **Gates** (`tests/test_modelo_mundo.py`, 196, ~1 min):
+  - **G-INT** (AST) e o módulo só importa `config` e `events`; as contas inteiras são as de sempre (`isqrt`, `div_arred`);
+  - **G-TETO-MODELO:** 76, e o teto falha alto;
+  - **G-RECEPTOR-MM:** o Estado, o relógio do cuidado, a informação do dono, o resto do `ocorrido` e a fruta do layout não mudam os
+    modelos; um químico sem receptor não muda a percepção;
+  - **a conta exata** de um passo do mapa (e da âncora), do andar e do desfecho, a podre, o "achou e comeu" e o `comer` sem comida;
+  - **G-OBS-MM:** as 104 vidas com corpo da etapa 0 saem byte a byte com os modelos observando; sem o corpo (as 32 do P0 do instinto da bancada), falha alto, e essas saem iguais ao gabarito;
+  - **G1:** o replay da bancada refaz os modelos bit a bit.
+- **Fica para depois:** o planejador e o lobo `planejamento` (etapa 2), as classes por árvore (2b), a troca de tipo e a fruta na mão
+  (etapa 3, A), a bancada (etapa 4, D).
+
+## V2, PET-QUE-PENSA, etapas 3 e 2b — o mundo do J5 e as classes por árvore (2026-10-13, `docs/TAREFA_V2_PET_QUE_PENSA.md`) — GATES PASSAM
+
+A etapa 3 (o mundo, do A) e a 2b (as classes por árvore no alvo aprendido, dada ao A pelo Gerente), com PP-1, PP-2 e PP-5 do
+`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/events.py` (o fim do enum),
+`digilab/mundo.py`, `digilab/motor_corpo.py` (o estímulo da mão), `digilab/policies/lobos.py` (atrás da chave), a `ConfigLobos` e a
+`ConfigPetQuePensaMundo` no fim de `config.py`. `engine.py`, o `AcaoPet`, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave do mundo:** `MotorMundo(..., cfg_pqp=ConfigPetQuePensaMundo(ligada=True))`, só com o mundo físico e um pet (fora do grupo).
+  Desligada, nada muda. Ligada:
+  - **os troncos vistos** (`troncos_vistos`: id → o primeiro tick do mundo), a até o raio da visão, na decisão e depois de andar; a
+    percepção ganha `troncos` (id, dx, dy, d), com padrão vazio;
+  - **os candidatos de árvore lembrada (PP-1):** no explorar, `arvore:<id>` de cada tronco já visto, no tronco, na ordem do layout,
+    depois dos de hoje. O padrão do motor e o instinto nunca os escolhem;
+  - **a fruta na mão** (`dar_fruta_<f>`, fora do orçamento): o pet come na hora, onde está, com o efeito vigente (a conta da fruta
+    madura; com o corpo, o `estimulo_consumo_mundo`), entra em `consumos_mundo` com `como` "mao" e não é contato. O cérebro a recebe só
+    pelo gancho opcional `fruta_na_mao(tipo, obs_antes, obs_depois)` (G-SEM-CREDITO). Com o pet dormindo, falha alto;
+  - **a troca de tipo** (`trocar_arvores_<x>_<y>`, fora do orçamento): no tick do evento as árvores do x passam a dar y e as do y a dar
+    x; as quedas até o tick usam o tipo velho e o chão fica como estava (`Mundo.trocas_tipo`; o replay refaz pelo log).
+- **As classes por árvore (PP-2):** `ConfigLobos.alvo_por_arvore` (exige o alvo aprendido): `arvore:J1` … `arvore:M6` nas tabelas do
+  explorar, 27 pesos a mais (822 no P1 do plano), w0 = `w0_alvo`, aprendidas só pela consequência. Sem a chave, um candidato de árvore no
+  alvo aprendido falha alto.
+- **Gates** (`tests/test_pet_que_pensa_mundo.py`, 24):
+  - **G2:** as 48 vidas de `tests/gabaritos/pqp_mundo_vidas_de_hoje.json` (`tests/gabarito_pqp_mundo.py`, gravado antes num commit
+    próprio), byte a byte;
+  - os eventos no fim do enum e as recusas (os motores de hoje, sem a chave, sem o mundo, no grupo, dormindo);
+  - os troncos vistos refeitos por fora, a percepção deles e os candidatos de árvore na ordem;
+  - o instinto nunca vai à árvore, e o P0 com as classes por árvore é o instinto do mundo byte a byte;
+  - **G-SEM-CREDITO e a conta exata da mão**, sem e com o corpo (o estado interno do A inteiro igual, nenhum gancho de crédito, o gancho
+    da mão com o corpo, não é contato, o orçamento fecha);
+  - a troca no tick, com as quedas antes no tipo velho e depois no novo;
+  - as classes por árvore: a contagem, as falhas altas e a conta exata pela consequência (o dono não mexe);
+  - **G1** com tudo ligado (o P1, a mão e a troca), sem e com o corpo.
+- **Para o D (etapa 4):** a fábrica dos braços do J5 passa `cfg_pqp` ao `MotorMundo` e `alvo_por_arvore` ao cérebro A; os eventos da mão e
+  da troca entram pelo `observar` do motor no `T_m` do plano, fora do orçamento. O gancho `fruta_na_mao` é do modelo do desfecho do B.
+
 ## V2, CORPO-CALIBRACAO-FINA — o adendo 5: só o passo 0 fino (2026-10-13, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, A5.1 a A5.7) — m_gasto = 4/5, FECHOU; A GRADE DA SOLIDÃO NÃO RODOU
 
 Decisão do Matheus (2026-10-13): uma grade mais fina antes da validação, pelo adendo 5, registrado num commit antes de qualquer vida. Depois,

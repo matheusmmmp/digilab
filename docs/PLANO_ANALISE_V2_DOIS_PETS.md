@@ -211,3 +211,66 @@ conferido bit a bit (G1-GRUPO).
 | PDP-5 | A margem | **metade da distância entre o B só e o A informativo** | uma margem fixa sem dado: larga demais (tudo equivalente) ou estreita demais (N acima do teto) |
 | PDP-6 | As faixas de sementes | **39101…39505** e **40101…40505**, mais 41101…41505 e 42101…42505 previstas para os adendos | uma colisão tira o "novo" das unidades |
 | PDP-7 | Os canais no mundo dos dois pets (o nó `canais_fruta_mundo`, #264) | **DECIDIDA em 2026-10-11: o B cria a rota do canal do humor no cérebro do mundo físico, e a montagem completa fica no plano, com os canais.** Hoje, no mundo dos dois pets, comer a fruta que mexe no humor com os canais ligados falha alto no cérebro do mundo físico (a "rota de adendo" do MUNDO-CEREBROS). Até a rota existir, o nó segue pendente e nenhuma run do plano roda | rodar sem os canais: o P1 dos dois pets deixaria de ser o cérebro A da K2 (a montagem completa), e o resultado não seria comparável com o resto da V2 |
+
+## Adendo 1 (2026-10-13)
+
+### 1.1 Antes da run da calibração: as janelas da regra do K e a agregação
+
+Decisão do Matheus (2026-10-13), PDC-1 pela recomendação do #283. Este trecho foi commitado **antes de qualquer run** nas sementes 39101…39505.
+
+**O problema (fumaça nas sementes dos testes, só contagens):**
+- o A sozinho come de 0 a 9 frutas maduras por dia; o resto da comida é a ração do dono no comedouro;
+- no dia 1, as 5 unidades da fumaça somaram 1 fruta madura;
+- na letra da seção 5 (o dia K contra o dia 1), a R_A do dia 1 sairia de uns 4 consumos nas 20 unidades, e a regra pararia por falta de
+  dado.
+
+**A regra G-K passa a ler janelas de dois dias** (`"janelas": "dois_dias"` em `experiments/configs/v2_dois_pets/calibracao.json`):
+- **o início:** os dias 1 e 2;
+- **o K:** os dias K − 1 e K. No K = 3, as janelas se sobrepõem no dia 2, o que torna a regra mais difícil de passar, não mais fácil;
+- **a regra:** o menor K de {3, 5, 7} com o limite superior do IC95 de R_A nos dias K − 1 e K abaixo de metade da R_A dos dias 1 e 2. O
+  resto da seção 5 não muda.
+- **A validação** (o G-K da seção 7) usa as mesmas janelas.
+
+**O que o plano não dizia, nos valores recomendados no #283** (PDC-2 a PDC-5):
+- **a R entre unidades:** a razão das somas (`taxa.modo`). Cada consumo pesa igual, e a unidade sem consumo não pesa (ela não tem taxa;
+  não é zero). Vale na G-K e na `Δ_S`;
+- **a exposição mínima:** 20 consumos somados em cada janela da regra (`taxa.n_minimo`, PROPOSTO, SEM FONTE). Abaixo disso a regra lê
+  "exposição baixa" e não passa;
+- **a unidade sem consumo do B** nos 7 primeiros dias, num dos dois braços de um contraste, sai do contraste por unidade e é contada;
+- **o poder:** o G-SOCIAL no t unilateral a 0,025 (o "limite inferior do IC95 > 0"); os secundários no relato, a 0,025 e a 0,05;
+- **o mundo:** o `m` = 1 da calibração do mundo (`docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, que já validou: #285).
+
+### 1.2 Depois da calibração: os números
+
+**A calibração rodou uma vez** em 2026-10-13, no commit `24f0b6d` (com a árvore limpa), pela config
+`experiments/configs/v2_dois_pets/calibracao.json`:
+- 20 grupos A-so (bases 39101…39505, K_u = 4), 10 dias cada;
+- todo grupo foi gravado e rejogado do disco bit a bit;
+- 26 s de CPU, 9 s de parede com 8 processos.
+
+Os números saem de `artifacts_v2_dois_pets/calibracao/` (`k.json`, `resultado.json`, `k/medidas.json`, `meta.json`).
+
+**G-K, as janelas do 1.1:** a R_A dos dias 1 e 2 é 0,485, com 33 consumos em 10 unidades. O limiar é 0,242.
+
+| K | dias | R_A | consumos (unidades com valor) | IC95 | leitura |
+|---|---|---|---|---|---|
+| 3 | 2 e 3 | 0,358 | 53 | [0,162; 0,552] | não aprendeu |
+| 5 | 4 e 5 | 0,338 | 77 | [0,164; 0,518] | não aprendeu |
+| 7 | 6 e 7 | 0,366 | 71 | [0,160; 0,567] | não aprendeu |
+
+**Nenhum K passa, e não é por exposição:** toda janela tem 20 consumos ou mais.
+
+**Pela seção 5, o plano para aqui:**
+- o A não aprende no mundo físico em 7 dias, e não há o que transmitir;
+- não roda piloto, `Δ_S` nem N, e a validação (40101…40505) não roda;
+- o plano volta ao Matheus.
+
+**Descritivo, fora da regra:** a R_A por dia, somada nas 20 unidades.
+
+| dia | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R_A | 0,80 | 0,35 | 0,37 | 0,29 | 0,39 | 0,50 | 0,21 | 0,41 | 0,22 | 0,25 |
+| consumos | 10 | 23 | 30 | 38 | 39 | 38 | 33 | 17 | 32 | 40 |
+
+- Na vida toda, a R_A é 0,343 em 300 consumos, perto de 1/3, a fração de um tipo entre três.
+- Cada A come em média 15 frutas maduras e 83 rações em 10 dias.

@@ -1,5 +1,5 @@
 {
-  "descricao": "Calibracao do K e piloto dos dois pets (PLANO_ANALISE_V2_DOIS_PETS, secoes 5, 6 e 8; aprovados pelo Matheus em 2026-10-12, para rodar DEPOIS da validacao do mundo fisico). Etapa K: o A informativo sozinho (A-so, P1), 10 dias, nas 20 unidades das bases 39101...39505 (K_u = 4, prefixo dois_pets); o menor K de {3, 5, 7} com o limite superior do IC95 de R_A no dia K abaixo de metade da R_A do dia 1 (G-K). Piloto no K escolhido: os quatro bracos, o B com 14 dias; Delta_S = 1/2 x [R_B(B so) - R_A(Ainf, dias K-6 a K)], o K_u de 4 a 10 pelo poder simulado no G-SOCIAL, o custo. O cerebro A do ponto da K2 com a montagem completa e o que a etapa 4 acrescenta (o alvo aprendido, as entradas sociais, o modelo dos outros) e a rota do humor (PDP-7); o mundo com o m da calibracao do mundo (1,0). A agregacao da R entre unidades (taxa.modo) e o consumo minimo das janelas da regra (taxa.n_minimo) sao decisao do Matheus antes da run (PR).",
+  "descricao": "Calibracao do K e piloto dos dois pets (PLANO_ANALISE_V2_DOIS_PETS, secoes 5, 6 e 8; aprovados pelo Matheus em 2026-10-12, para rodar DEPOIS da validacao do mundo fisico). Etapa K: o A informativo sozinho (A-so, P1), 10 dias, nas 20 unidades das bases 39101...39505 (K_u = 4, prefixo dois_pets); o menor K de {3, 5, 7} com o limite superior do IC95 de R_A no dia K abaixo de metade da R_A do dia 1 (G-K; com o adendo 1.1, os dias K-1 e K contra os dias 1 e 2). Piloto no K escolhido: os quatro bracos, o B com 14 dias; Delta_S = 1/2 x [R_B(B so) - R_A(Ainf, dias K-6 a K)], o K_u de 4 a 10 pelo poder simulado no G-SOCIAL, o custo. O cerebro A do ponto da K2 com a montagem completa e o que a etapa 4 acrescenta (o alvo aprendido, as entradas sociais, o modelo dos outros) e a rota do humor (PDP-7); o mundo com o m da calibracao do mundo (1,0). A agregacao da R entre unidades (taxa.modo) e o consumo minimo das janelas da regra (taxa.n_minimo) sao decisao do Matheus antes da run (PR).",
   "plano": "docs/PLANO_ANALISE_V2_DOIS_PETS.md",
   "unidades": {
     "bases": [
@@ -36,7 +36,7 @@
       7
     ],
     "dias_a": 10,
-    "janelas": "letra"
+    "janelas": "dois_dias"
   },
   "piloto": {
     "bracos": [
@@ -69,5 +69,6 @@
     "reamostragens": 10000,
     "semente": 4242,
     "nivel": 0.95
-  }
+  },
+  "adendo_janelas": "docs/PLANO_ANALISE_V2_DOIS_PETS.md, adendo 1.1 (PDC-1, decisão do Matheus em 2026-10-13)"
 }

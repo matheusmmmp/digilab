@@ -1,8 +1,8 @@
 # Plano de análise — V2: o pet que pensa (J5), o planejador de um alvo passa nos dois testes da DS-1?
 
 Status (2026-10-13): **PROPOSTO**, registrado **antes de qualquer run**. É a etapa 5 de `docs/TAREFA_V2_PET_QUE_PENSA.md`. O desenho é
-`docs/futuro/pet_que_pensa.md`, com **PQ-1 a PQ-7 DECIDIDAS** (2026-10-13). As decisões que sobram são **PP-1 a PP-9** (seção 12),
-cada uma com a recomendação e o custo de errar.
+`docs/futuro/pet_que_pensa.md`, com **PQ-1 a PQ-7 DECIDIDAS** (2026-10-13). **PP-1 a PP-9 DECIDIDAS pelo Matheus
+em 2026-10-13, todas pela recomendação** (seção 12).
 
 **Regras deste plano:**
 - Os números novos são PROPOSTOS, SEM FONTE, salvo onde citam um artefato.
@@ -257,7 +257,8 @@ desfecho, e só o mapa difere depois da mudança.
 
 ## 12. Decisões do Matheus
 
-**Abertas: PP-1 a PP-9.** As PQ-1 a PQ-7 do desenho e a TP-1 e a TP-2 já estão decididas.
+**DECIDIDAS em 2026-10-13: PP-1 a PP-9, todas como recomendado** (a coluna "recomendação" é o que vale). As PQ-1 a PQ-7 do desenho e
+a TP-1 e a TP-2 também estão decididas.
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
