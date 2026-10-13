@@ -1,0 +1,17 @@
+{
+  "descricao": "Fumaca da bancada do pet que pensa (J5; TAREFA_V2_PET_QUE_PENSA, etapa 4), NAO canonica: o P1 (os modelos do mundo so observando) nos protocolos T1, T2 e a fase 1, nas sementes dos testes, com 2 dias de aprendizado e 1 de janela; confere o encanamento (a mudanca no tick, a fruta na mao, a troca de tipo, o congelamento, as oportunidades e o replay do disco), nunca como resultado. Os bracos com o planejador esperam a etapa 2 do B.",
+  "tipo": "pet_que_pensa",
+  "bracos": ["P1"],
+  "protocolos": ["T1", "T2", "fase1"],
+  "sementes": [101, 202],
+  "d_a": 2,
+  "janela": 1,
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {"memoria_ganho": 512, "w0_pedido": 256, "w0_info": 256},
+  "consequencia": {"ganho": 4, "canais_ligados": true}
+}

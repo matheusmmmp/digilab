@@ -4118,3 +4118,52 @@ PQ-1 a PQ-7 e PP-1 a PP-9 decididas. Infraestrutura, sem run; só as sementes do
   de peso, contra 6 do impulso da fruta: a regra da calibração (PP-6, [0,10; 0,40]) pode não fechar na grade {S/4, S/2, S}.
 - **Fica para depois:** a bancada (etapa 4, D) liga o `g_plano` nos braços do plano, passa a `cfg_consequencia` e congela os modelos no
   `T_m` (`do_braco(...).cerebro.modelo_mundo.congelar(...)`).
+
+## V2, W-BANCADA-PQP — a bancada do pet que pensa, etapa 4 (2026-10-13, `docs/TAREFA_V2_PET_QUE_PENSA.md`, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`) — GATES PASSAM; O PLANEJADOR ESPERA A ETAPA 2
+
+O que dá para rodar com as etapas 1 (os modelos, #289), 2b e 3 (as classes por árvore e o mundo do J5, #291) na `main`. Infraestrutura, sem
+run de pesquisa; só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, `digilab/metrics.py` (quatro medidas no fim), a fumaça
+`experiments/configs/v2_pet_que_pensa/fumaca.json`, dois testes antigos e o teste novo. `engine.py`, o mundo, o corpo, os cérebros, os
+modelos e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **As faixas (PP-9):** 45101…45505 (calibração do `g_plano` e piloto) e 46101…46505 (validação), com a fonte, em `FAIXAS_RESERVADAS`;
+  o prefixo `pet_que_pensa` em `PREFIXOS_UNIDADES`; `BASES_PET_QUE_PENSA`.
+- **A unidade (seção 2):**
+  - a fruta x e a y saem das rngs próprias, `pet-que-pensa-x` e `pet-que-pensa-y`;
+  - antes da mudança a x faz bem e as outras duas são neutras;
+  - o mundo é o físico, no layout padrão, com o J5 ligado (`ConfigPetQuePensaMundo`);
+  - o corpo é o regime química com o metabolismo (PP-3), com o gasto da chave `corpo`;
+  - o dono é o atencioso, só com o cuidado, no comedouro;
+  - o cérebro A é o do P1 com o alvo aprendido, a presença da fruta no mundo e as classes por árvore.
+- **Os braços** (`BRACOS_PQP`): P1, P1-plan, P1-plan-desfecho (o mapa congela na mudança, PP-8) e P1-plan-cong (os dois congelam).
+  - **Os três com o planejador falham alto** com `NOS_PENDENTES["planejador"]` (a etapa 2 do B).
+  - Sem o nó, a `BancadaPQP.politica` ainda recusa: o `g_plano` entra nela com o planejador, e um braço com o planejador nunca vira, em
+    silêncio, o P1 com os modelos congelados.
+- **Os protocolos (seção 3):**
+  - **o tick da mudança:** `T_m` é o primeiro passo do dono a partir das 8 h do dia `D_a`, com o pet acordado (`RegraMudancaPQP`, fora do
+    orçamento, pelo `simular_vida_fisico(..., mudanca=)`);
+  - **o T1:** dá a x na mão `n_mao` vezes;
+  - **o T2:** troca o tipo das árvores da x e da y;
+  - **a fase 1:** os `D_a` dias, sem mudança (a calibração do `g_plano`);
+  - **o motor** (`MotorMundoMudanca`) avisa o cérebro (`mudanca_no_mundo`). No T1, a primeira mão troca antes o efeito da x para "faz mal";
+    o replay refaz tudo pelo log.
+- **Os modelos** (`PoliticaComModeloPQP`, em todo braço):
+  - a mão chega ao modelo do desfecho (os receptores depois menos os de antes) e nunca ao crédito do cérebro;
+  - o congelamento da PP-8 restaura as partes congeladas depois de cada passo dos modelos;
+  - o estado interno ganha `modelo_mundo`, e o G1 o confere.
+- **As medidas** (seção 4; `metrics.oportunidade_revalorizacao`, `busca_transicao`, `exposto_transicao`, `mudanca_de_escolha`), do replay de
+  medição conferido contra a vida:
+  - a oportunidade do T1, a busca e a exposição do T2, o corte da reexperiência, q e m;
+  - os descritivos: os modelos por dia contra o real, o `D_FE` na fase 1 e na janela, o humor da janela e o custo.
+  - **Não medidos até o planejador:** quanto o plano decide e a legibilidade. A deriva também fica para o orquestrador.
+- **Gates** (`tests/test_bancada_pet_que_pensa.py`, 28, ~25 s):
+  - as faixas e o prefixo; a x e a y uniformes, sem tocar o `random` global;
+  - os braços e as falhas altas;
+  - a regra da mudança e o motor (o efeito troca na primeira mão; a troca de tipo; a fase 1 sem nada; o orçamento sem a mudança);
+  - o G1 pelo texto do log;
+  - **o G-SEM-CREDITO** (o cérebro inteiro igual antes e depois de cada mão) e a mão no desfecho;
+  - **o congelamento:** a vida é a mesma com e sem ele; as partes congeladas ficam como no tick da mudança; o gate falha alto se mudarem;
+  - as medidas em dados com a resposta conhecida;
+  - as recusas da config;
+  - a fumaça inteira pelo `rodar_pqp` e pelo `main`.
+- **Fumaça descritiva** (P1, sementes 101, 202 e 303, 7 + 3 dias): com o atencioso a fome quase nunca chega a S/2 antes da mudança, e só a
+  semente 303 teve 3 oportunidades antes no T1. A G-OPORTUNIDADE do plano decide isso na calibração.

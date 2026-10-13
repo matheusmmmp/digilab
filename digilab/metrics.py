@@ -1727,3 +1727,92 @@ def classes_por_dia(decisoes: Sequence[tuple[int, str, str]], ticks_por_dia: int
         c[classe] = c.get(classe, 0) + 1
     return {a: {str(d): {"n": sum(cs.values()), "fracao": {c: v / sum(cs.values()) for c, v in sorted(cs.items())}}
                 for d, cs in sorted(por.items())} for a, por in sorted(cont.items())}
+
+
+# --- o pet que pensa, J5 (docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md, secao 4)
+# Funcoes puras sobre o que a bancada tira da percepcao do pet e do registro do motor, por decisao. Nenhuma le os modelos do mundo.
+#   fome      o receptor da fome na decisao (inteiro em [0, S]); a oportunidade pede fome <= fome_max (S/2)
+#   maduros   os tipos das comidas maduras a vista ("racao", "a", "b", "c"); a podre nao entra
+#   troncos   {id: o tipo que a arvore da agora} dos troncos que o pet ja viu
+#   alvo      None (acao sem alvo) ou {"tipo", "fruta" (o tipo da comida alvo, ou None), "arvore" (o id da arvore alvo, ou None)}
+
+
+def oportunidade_revalorizacao(fome: int, maduros: Sequence[str], troncos: Mapping[str, str], alvo: Mapping | None, x: str,
+                               fome_max: int) -> tuple[bool, bool]:
+    """O T1 (secao 4): (e oportunidade, o pet escolheu x). Oportunidade: fome <= fome_max, um alvo de x disponivel (a x a vista, ou uma
+    arvore do tipo x entre os troncos ja vistos) e ao menos um alvo que nao e de x (outra comida madura a vista, ou um tronco ja visto de
+    outro tipo). Escolher x: a acao tem alvo e ele e uma comida x ou uma arvore que da x agora. Fora da oportunidade, nao escolheu."""
+    disponivel = x in maduros or x in troncos.values()
+    alternativa = any(t != x for t in maduros) or any(t != x for t in troncos.values())
+    if not (fome <= fome_max and disponivel and alternativa):
+        return False, False
+    if alvo is None:
+        return True, False
+    return True, alvo.get("fruta") == x or (alvo.get("arvore") is not None and troncos.get(alvo["arvore"]) == x)
+
+
+def busca_transicao(fome: int, maduros: Sequence[str], alvo: Mapping | None, x: str, velhas: set, novas: set,
+                    fome_max: int) -> tuple[bool, bool]:
+    """O T2 (secao 4): (e busca, vai as novas). Busca: fome <= fome_max, sem a x a vista, e o alvo e uma arvore do tipo x de antes da troca
+    (as velhas) ou de depois (as novas: as da y no layout). Antes da mudanca a definicao e a mesma, com as novas ainda dando y."""
+    if velhas & novas:
+        raise ValueError(f"velhas e novas se cruzam: {sorted(velhas & novas)}")
+    arv = None if alvo is None else alvo.get("arvore")
+    if fome > fome_max or x in maduros or arv is None or arv not in velhas | novas:
+        return False, False
+    return True, arv in novas
+
+
+def exposto_transicao(px: int, py: int, vistos: Sequence[tuple], novas: Sequence[tuple[int, int]], x: str, raio: int) -> bool:
+    """A exposicao do T2 (secao 4): uma x madura nos `vistos` (id, tipo, dx, dy, d) do pet em (px, py) a ate `raio` (subunidades) de uma
+    arvore nova (as posicoes em subunidades)."""
+    for _i, tipo, dx, dy, *_ in vistos:
+        if tipo != x:
+            continue
+        cx, cy = px + dx, py + dy
+        if any((cx - ax) ** 2 + (cy - ay) ** 2 <= raio * raio for ax, ay in novas):
+            return True
+    return False
+
+
+def mudanca_de_escolha(linhas: Sequence[Mapping], n: int, tick_mudanca: int | None) -> dict:
+    """A primaria da secao 4 (PP-7, a mudanca dentro da unidade), por unidade e braco. `linhas`, uma por decisao, em ordem: {"tick",
+    "depois" (veio depois da mudanca), "conta" (e oportunidade, ou busca ja contavel), "sucesso" (escolheu x, ou foi as novas),
+    "reexperiencia" (consumiu x no mapa)}.
+      - antes: as `n` ultimas que contam antes da mudanca;
+      - depois: as `n` primeiras que contam depois dela, ate o primeiro consumo de x no mapa (o corte da reexperiencia: a decisao que leva
+        a ele conta, as seguintes nao);
+      - f = a fracao de sucesso; com menos de `n`, as que houver; sem nenhuma antes ou depois, a unidade sai "sem oportunidade" (R-2).
+    Sai a queda (f_antes - f_depois, o q do T1) e a subida (f_depois - f_antes, o m do T2), o nivel (f_depois), as oportunidades depois ate
+    o corte e a latencia (ticks da mudanca ate a primeira oportunidade depois)."""
+    if n < 1:
+        raise ValueError(f"n {n!r}: pelo menos 1")
+    depois_visto = False
+    ultimo = None
+    for ln in linhas:
+        if ultimo is not None and ln["tick"] < ultimo:
+            raise ValueError("as linhas nao estao em ordem de tick")
+        ultimo = ln["tick"]
+        if ln["depois"]:
+            depois_visto = True
+        elif depois_visto:
+            raise ValueError("uma linha de antes depois de uma de depois")
+    antes = [ln for ln in linhas if not ln["depois"] and ln["conta"]][-n:]
+    depois_ate_corte, corte = [], None
+    for ln in linhas:
+        if not ln["depois"]:
+            continue
+        if ln["conta"]:
+            depois_ate_corte.append(ln)
+        if ln["reexperiencia"]:
+            corte = ln["tick"]
+            break
+    depois = depois_ate_corte[:n]
+    frac = lambda ls: None if not ls else sum(1 for ln in ls if ln["sucesso"]) / len(ls)  # noqa: E731
+    f_antes, f_depois = frac(antes), frac(depois)
+    sem = f_antes is None or f_depois is None
+    return {"n_antes": len(antes), "n_depois": len(depois), "oportunidades_depois_ate_corte": len(depois_ate_corte),
+            "f_antes": f_antes, "f_depois": f_depois, "nivel": f_depois,
+            "queda": None if sem else f_antes - f_depois, "subida": None if sem else f_depois - f_antes,
+            "sem_oportunidade": sem, "corte_reexperiencia": corte,
+            "latencia": None if not depois_ate_corte or tick_mudanca is None else depois_ate_corte[0]["tick"] - tick_mudanca}
