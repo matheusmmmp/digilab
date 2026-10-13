@@ -1,6 +1,7 @@
 # Decisão — V2: o teto de pesos do cérebro A (2026-10-12)
 
-Status: **ABERTA.** As decisões TP-1 e TP-2 (seção 5) são do Matheus. Pedido do Gerente ao worker C, só papel.
+Status: **DECIDIDA** pelo Matheus em 2026-10-12, TP-1 e TP-2 pela recomendação (seção 5): o teto por plano, com o limite de 2000. Pedido do
+Gerente ao worker C, só papel; a implementação é a seção "V2, TETO-POR-PLANO" do `CLAUDE.md`.
 
 ## 1. O problema
 
@@ -81,7 +82,7 @@ from dataclasses import replace
 from digilab.config import (CONFIG_PADRAO, CONFIG_LOBOS, CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA as CM,
                             CONFIG_CORPO_BANHEIRO, CONFIG_CORPO_DRIVES, CONFIG_BANHEIRO_LIGADA as CB)
 from digilab.policies.lobos import PoliticaLobos
-n = lambda cl, **kw: PoliticaLobos(CONFIG_PADRAO, replace(cl, maximo_pesos=10**6), **kw).n_pesos()
+n = lambda cl, **kw: PoliticaLobos(CONFIG_PADRAO, replace(cl, maximo_pesos=2000), **kw).n_pesos()   # 2000: o limite (TP-2)
 d1 = replace(CONFIG_LOBOS_APRENDIZ, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True, presenca_fruta_mundo=True)
 n(CONFIG_LOBOS, cfg_mundo=CM)                                                          # 756
 n(CONFIG_LOBOS, cfg_mundo=CM, cfg_corpo=CONFIG_CORPO_DRIVES)                           # 882

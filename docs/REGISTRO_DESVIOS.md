@@ -4626,3 +4626,13 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
 - **Uma terceira, só pelo título:** Schrittwieser et al. (2020), para a não novidade.
 - **As outras referências** são as da revisão F, com o mesmo nível de leitura.
 - **Os números novos** são todos PROPOSTOS ou SEM FONTE: os 5 tipos de comida e a contagem do mapa.
+
+## 2026-10-13 — TETO-POR-PLANO (worker B): o teto de pesos do cérebro A por plano
+
+- **O limite fica na `ConfigLobos`,** e não só na bancada: nenhum caminho monta um cérebro A com teto acima de 2000. A receita de contagem
+  da `DECISAO_V2_TETO_PESOS.md` (seção 6), que abria o teto a 10⁶ só para contar, passou a usar 2000. Ela cabe o maior caso contado (1277).
+- **A declaração é uma chave própria** (`teto_pesos`, com o teto e os pesos), e não o campo `maximo_pesos` dentro de `lobos`. Assim o
+  plano diz o número de pesos ao lado do teto (a recomendação 4 da decisão), e a run confere esse número contra o cérebro montado.
+- **Os pesos declarados ficam de 1000 para cima:** um cérebro que cabe no padrão não precisa de teto próprio, e a declaração falha alto.
+- **O `plano` é exigido mesmo nas sementes dos testes:** o teto próprio é de um plano (TP-1). A fumaça de um plano assim leva o mesmo campo.
+- **A medida do custo do replay** (TP-2) não entra aqui: é do PR do primeiro plano que passar de 1000.
