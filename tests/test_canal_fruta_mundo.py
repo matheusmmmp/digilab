@@ -128,12 +128,20 @@ def _bancada_grupo(lobos: dict):
     return bv.bancada_da_config({**cfg, "orcamento": cfg["orcamento_por_dia"] * cfg["dias"]})
 
 
-def test_sem_a_chave_a_fruta_que_mexe_no_humor_falha_alto(monkeypatch):
-    # desde a W-BANCADA-METABOLISMO a bancada do grupo liga a chave; aqui o cerebro do grupo de antes, sem ela
+def test_sem_a_chave_e_sem_o_alvo_a_fruta_que_mexe_no_humor_falha_alto(monkeypatch):
+    # desde a W-BANCADA-METABOLISMO a bancada do grupo liga a chave; aqui o cerebro do grupo de antes, sem ela e sem o alvo aprendido
     monkeypatch.setattr(bv.Bancada, "bancada_grupo", lambda self: replace(self, cfg_lobos=replace(
-        self.cfg_lobos, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True)))
+        self.cfg_lobos, entradas_sociais=True, modelo_outros=True)))
     with pytest.raises(RuntimeError, match="CANAIS-REFORCO"):
         _bancada_grupo({}).grupo(bv.EspecGrupo("A-so", 505, 0))
+
+
+def test_com_o_alvo_aprendido_sem_a_chave_o_a_so_roda(monkeypatch):
+    # MUNDO-ALVO, saida 1 (decisao do Matheus, 2026-10-13): o alvo aprendido conta como leitor da comida; o cerebro do grupo de antes
+    # (com o alvo, sem a chave), que falhava alto aqui, roda (o G1 do grupo e conferido)
+    monkeypatch.setattr(bv.Bancada, "bancada_grupo", lambda self: replace(self, cfg_lobos=replace(
+        self.cfg_lobos, alvo_aprendido=True, entradas_sociais=True, modelo_outros=True)))
+    _bancada_grupo({}).grupo(bv.EspecGrupo("A-so", 505, 0))
 
 
 def test_com_a_chave_o_a_so_roda_e_o_tipo_ruim_desce(monkeypatch):

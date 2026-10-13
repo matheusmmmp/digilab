@@ -4041,21 +4041,27 @@ A etapa 3 (o mundo, do A) e a 2b (as classes por árvore no alvo aprendido, dada
 - **Para o D (etapa 4):** a fábrica dos braços do J5 passa `cfg_pqp` ao `MotorMundo` e `alvo_por_arvore` ao cérebro A; os eventos da mão e
   da troca entram pelo `observar` do motor no `T_m` do plano, fora do orçamento. O gancho `fruta_na_mao` é do modelo do desfecho do B.
 
-## V2, MUNDO-ALVO — o mundo com o alvo aprendido: código pronto, piloto bloqueado (2026-10-13, `docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`) — NÃO RODADO
+## V2, MUNDO-ALVO — a validação do mundo com o alvo aprendido (2026-10-13, `docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`) — PREMISSAS PASSAM; O ALVO ATRAPALHA (resultado negativo registrado)
 
-PMA-1 a PMA-9 pela recomendação, autorizado pelo Matheus em 2026-10-13. Mudaram `experiments/bancada_v2.py` (o braço `P1-alvo` e as
-faixas), `digilab/metrics.py` (`uso_do_alvo`, `classes_por_dia`), `experiments/run_v2_mundo_alvo.py` (novo), as configs
-`experiments/configs/v2_mundo_alvo/` e os testes. `engine.py`, `lobos.py`, `mundo.py` e a web não. Interpretações em
-`docs/REGISTRO_DESVIOS.md`.
-- **O braço `P1-alvo`** (`Braco.alvo`): o P1 com `ConfigLobos.alvo_aprendido` e o `w0_alvo` padrão (S/16), só no mundo físico; 792 pesos
-  (o P1, 756). Os outros braços não mudam.
-- **As faixas** 47101…47505 (piloto) e 48101…48505 (validação), prefixo `mundo`, em `FAIXAS_RESERVADAS`.
-- **O orquestrador** (`--config .../piloto.json` ou `.../validacao.json`):
-  - **o piloto:** 72 vidas por unidade; o K pelo poder simulado no G-ALVO com o `Δ_MF`, o G-USO e o custo;
-  - **a validação:** 96 vidas por unidade, com o bloco afastado; G-MUNDO, G-USO, G-ALVO e o Holm de G-ALVO-AC, G-INSTINTO, G-PERM-A e
-    G-DIST-A; a leitura da seção 9;
-  - recusa as bases do plano do mundo, a pasta que existe e a validação sem o piloto e o adendo 1.
-- **O G-USO** sai do motivo do cérebro (o `u` já está lá): a escolha contra o sorteio do prior com o mesmo `u`.
-- **Bloqueio:** com os canais do J1, o P1-alvo que come comida podre (a classe `comida_podre`) falha alto no CANAIS-REFORCO: o canal do
-  humor fica sem peso que leia a fruta. O piloto parou, e a validação não rodou. As saídas, com a recomendação, estão no registro de
-  desvios; a decisão é do Matheus. O caso está em `tests/test_mundo_alvo.py`.
+PMA-1 a PMA-9 pela recomendação, autorizado pelo Matheus em 2026-10-13, com o desvio D1 (antes do piloto) e o adendo 1 (antes da validação).
+Números de `artifacts_v2_mundo_alvo/{piloto,validacao}/` (as vidas fora do git); relatório `docs/RESULTADO_V2_VALIDACAO_MUNDO_ALVO.md`.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Código:**
+  - `experiments/bancada_v2.py`: o braço `P1-alvo` (`Braco.alvo`: o P1 com `ConfigLobos.alvo_aprendido` e o `w0_alvo` padrão, S/16, só no
+    mundo físico; 792 pesos contra 756 do P1) e as faixas 47101…47505 (piloto) e 48101…48505 (validação);
+  - `digilab/metrics.py`: `uso_do_alvo` (G-USO) e `classes_por_dia`;
+  - `experiments/run_v2_mundo_alvo.py`: o piloto (o K pelo poder simulado com o `Δ_MF`, o G-USO e o custo) e a validação (G-MUNDO, G-USO,
+    G-ALVO e o Holm de G-ALVO-AC, G-INSTINTO, G-PERM-A e G-DIST-A, a leitura da seção 9, os descritivos); o G-USO sai do `u` que o motivo
+    já guarda;
+  - **desvio D1** (decisão do Matheus, saída 1 do #292): no `_creditar_canais`, o alvo aprendido conta como leitor da comida. Sem ele, o
+    P1-alvo que comia comida podre falhava alto (CANAIS-REFORCO). A linha só tira a falha; nenhuma vida de antes muda;
+  - configs `experiments/configs/v2_mundo_alvo/`; testes `tests/test_mundo_alvo.py`.
+- **Piloto** (47101…47505, K = 4, 1.440 vidas, 19 min): **K = 4, N = 20**, poder 0,920 no G-ALVO; G-INSTINTO subpotenciado (0,41).
+- **Validação** (48101…48505, uma vez, 1.920 vidas, 25 min com 10 processos):
+  - **G-MUNDO passa:** P0z − P0 em `D_FE` +0,0143 [+0,0065; +0,0216];
+  - **G-USO passa:** 0,0877 [0,0798; 0,0954] das decisões com alvo saem diferentes do prior com o mesmo `u`;
+  - **G-ALVO: o alvo atrapalha.** P1 − P1-alvo em `D_FE` −0,0063 [−0,0105; −0,0022];
+  - **com o cuidado fixo, nada:** G-ALVO-AC −0,0003 [−0,0047; +0,0042]; a perda é só em malha fechada;
+  - G-INSTINTO (P0 − P1-alvo) −0,0137 [−0,0208; −0,0063], não passa; G-PERM-A não passa; **G-DIST-A passa no Holm** (+27 min).
+- **Para onde o alvo levou o pet** (descritivo): no comer, o alvo aprendeu a fugir do `cheiro` e da `comida_podre`; o explorar com alvo cai
+  de 2.476 decisões no dia 1 para 227 no dia 14. A perda se concentra no dono atencioso e no lugar longe.

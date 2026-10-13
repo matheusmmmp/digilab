@@ -1,0 +1,1673 @@
+{
+  "G-ALVO": {
+    "categoria": "o alvo atrapalha",
+    "contraste": "P1 - P1-alvo em D_FE",
+    "delta_mf": 0.007675785900293976,
+    "ic90": {
+      "ic_inferior": -0.009883836082176602,
+      "ic_superior": -0.002845402405755198,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": -0.010535055493552927,
+      "ic_superior": -0.0022096328331685975,
+      "nivel": 0.95
+    },
+    "media": -0.006320517629795458,
+    "motivo": null,
+    "n": 20,
+    "n_grupos": 20,
+    "p_unilateral": 0.9982,
+    "t_pareado": {
+      "gl": 19,
+      "p_unilateral": 0.9952596480931447,
+      "t": -2.8852576223267454
+    }
+  },
+  "G-MUNDO": {
+    "contraste": "P0z - P0 em D_FE",
+    "ic90": {
+      "ic_inferior": 0.007826882337126275,
+      "ic_superior": 0.020533896536037252,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": 0.006472053261400641,
+      "ic_superior": 0.021625156560012737,
+      "nivel": 0.95
+    },
+    "media": 0.014291661499660888,
+    "motivo": null,
+    "n": 20,
+    "n_grupos": 20,
+    "p_unilateral": 0.0002,
+    "passa": true,
+    "t_pareado": {
+      "gl": 19,
+      "p_unilateral": 0.0008144361107927243,
+      "t": 3.6695711465733076
+    }
+  },
+  "G-USO": {
+    "celulas_sem_decisao": 0,
+    "decisoes_por_vida": 93.9,
+    "ic90": {
+      "ic_inferior": 0.08109391800262378,
+      "ic_superior": 0.09416106260120223,
+      "nivel": 0.9
+    },
+    "ic95": {
+      "ic_inferior": 0.0798054883777724,
+      "ic_superior": 0.09538778283950734,
+      "nivel": 0.95
+    },
+    "limiar": 0.05,
+    "media": 0.08767407051539663,
+    "medida": "fracao das decisoes com alvo, nos ultimos 7 dias do P1-alvo, em que o alvo difere do prior com o mesmo u",
+    "motivo": null,
+    "n": 20,
+    "n_grupos": 20,
+    "p_unilateral": 0.0,
+    "passa": true,
+    "t_pareado": {
+      "gl": 19,
+      "p_unilateral": 4.42164190468797e-15,
+      "t": 21.456116098208078
+    }
+  },
+  "custo": {
+    "cpu_s_total": 14825.390625,
+    "por_braco": {
+      "P0": {
+        "cpu_s": 1619.140625,
+        "cpu_s_por_vida": 6.746419270833333,
+        "parede_s": 1628.563163100218,
+        "parede_s_por_vida": 6.7856798462509085,
+        "vidas": 240
+      },
+      "P0z": {
+        "cpu_s": 908.578125,
+        "cpu_s_por_vida": 3.7857421875,
+        "parede_s": 915.6725357998803,
+        "parede_s_por_vida": 3.815302232499501,
+        "vidas": 240
+      },
+      "P1": {
+        "cpu_s": 2027.125,
+        "cpu_s_por_vida": 8.446354166666667,
+        "parede_s": 2039.5347589001467,
+        "parede_s_por_vida": 8.498061495417279,
+        "vidas": 240
+      },
+      "P1-alvo": {
+        "cpu_s": 2154.640625,
+        "cpu_s_por_vida": 8.977669270833333,
+        "parede_s": 2167.7159305998357,
+        "parede_s_por_vida": 9.032149710832648,
+        "vidas": 240
+      },
+      "P1-alvo<P0z:nenhum": {
+        "cpu_s": 2038.453125,
+        "cpu_s_por_vida": 8.4935546875,
+        "parede_s": 2051.3360161998135,
+        "parede_s_por_vida": 8.547233400832557,
+        "vidas": 240
+      },
+      "P1-alvo@afastado": {
+        "cpu_s": 2028.09375,
+        "cpu_s_por_vida": 8.450390625,
+        "parede_s": 2040.6785568997439,
+        "parede_s_por_vida": 8.5028273204156,
+        "vidas": 240
+      },
+      "P1<P0z:nenhum": {
+        "cpu_s": 2021.125,
+        "cpu_s_por_vida": 8.421354166666667,
+        "parede_s": 2033.744761300215,
+        "parede_s_por_vida": 8.473936505417562,
+        "vidas": 240
+      },
+      "P1@afastado": {
+        "cpu_s": 2028.234375,
+        "cpu_s_por_vida": 8.4509765625,
+        "parede_s": 2041.2466131003166,
+        "parede_s_por_vida": 8.505194221251319,
+        "vidas": 240
+      }
+    }
+  },
+  "descritivos": {
+    "alvo": {
+      "classes_escolhidas": {
+        "brincar": {
+          "1": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 7
+          },
+          "10": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 13
+          },
+          "11": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 6
+          },
+          "12": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 10
+          },
+          "13": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 1
+          },
+          "14": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 3
+          },
+          "2": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 14
+          },
+          "3": {
+            "fracao": {
+              "bola": 0.9166666666666666,
+              "continuar": 0.08333333333333333
+            },
+            "n": 12
+          },
+          "4": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 18
+          },
+          "5": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 20
+          },
+          "6": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 28
+          },
+          "7": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 25
+          },
+          "8": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 12
+          },
+          "9": {
+            "fracao": {
+              "bola": 1.0
+            },
+            "n": 22
+          }
+        },
+        "comer": {
+          "1": {
+            "fracao": {
+              "cheiro": 0.29104859335038363,
+              "comida": 0.6956521739130435,
+              "comida_podre": 0.0005115089514066496,
+              "continuar": 0.01278772378516624
+            },
+            "n": 1955
+          },
+          "10": {
+            "fracao": {
+              "cheiro": 0.2173084254670225,
+              "comida": 0.7777354174609226,
+              "comida_podre": 0.0003812428516965307,
+              "continuar": 0.004574914220358368
+            },
+            "n": 2623
+          },
+          "11": {
+            "fracao": {
+              "cheiro": 0.24160060400151,
+              "comida": 0.7500943752359381,
+              "comida_podre": 0.0022650056625141564,
+              "continuar": 0.00604001510003775
+            },
+            "n": 2649
+          },
+          "12": {
+            "fracao": {
+              "cheiro": 0.2751540041067762,
+              "comida": 0.7166324435318275,
+              "comida_podre": 0.0008213552361396304,
+              "continuar": 0.007392197125256674
+            },
+            "n": 2435
+          },
+          "13": {
+            "fracao": {
+              "cheiro": 0.29910191331511127,
+              "comida": 0.6950409996095275,
+              "comida_podre": 0.0003904724716907458,
+              "continuar": 0.005466614603670442
+            },
+            "n": 2561
+          },
+          "14": {
+            "fracao": {
+              "cheiro": 0.3314037626628075,
+              "comida": 0.6573806078147613,
+              "comida_podre": 0.001085383502170767,
+              "continuar": 0.010130246020260492
+            },
+            "n": 2764
+          },
+          "2": {
+            "fracao": {
+              "cheiro": 0.2596421471172962,
+              "comida": 0.7248508946322068,
+              "comida_podre": 0.005168986083499006,
+              "continuar": 0.010337972166998012
+            },
+            "n": 2515
+          },
+          "3": {
+            "fracao": {
+              "cheiro": 0.25771971496437057,
+              "comida": 0.729612034837688,
+              "comida_podre": 0.001979414093428345,
+              "continuar": 0.010688836104513063
+            },
+            "n": 2526
+          },
+          "4": {
+            "fracao": {
+              "cheiro": 0.25428245146555006,
+              "comida": 0.7350590026646364,
+              "comida_podre": 0.0034259611724400457,
+              "continuar": 0.00723258469737343
+            },
+            "n": 2627
+          },
+          "5": {
+            "fracao": {
+              "cheiro": 0.25821596244131456,
+              "comida": 0.7394366197183099,
+              "comida_podre": 0.000782472613458529,
+              "continuar": 0.001564945226917058
+            },
+            "n": 2556
+          },
+          "6": {
+            "fracao": {
+              "cheiro": 0.21548195013025678,
+              "comida": 0.7759583178265724,
+              "comida_podre": 0.00148864905098623,
+              "continuar": 0.0070710829921845925
+            },
+            "n": 2687
+          },
+          "7": {
+            "fracao": {
+              "cheiro": 0.17149478563151796,
+              "comida": 0.8234839706450366,
+              "comida_podre": 0.001544998068752414,
+              "continuar": 0.0034762456546929316
+            },
+            "n": 2589
+          },
+          "8": {
+            "fracao": {
+              "cheiro": 0.22798322531452536,
+              "comida": 0.7621044605413648,
+              "comida_podre": 0.0015249714067861228,
+              "continuar": 0.008387342737323675
+            },
+            "n": 2623
+          },
+          "9": {
+            "fracao": {
+              "cheiro": 0.22278481012658227,
+              "comida": 0.7717902350813743,
+              "continuar": 0.0054249547920434
+            },
+            "n": 2765
+          }
+        },
+        "explorar": {
+          "1": {
+            "fracao": {
+              "casa": 0.06744749596122779,
+              "cheiro": 0.2754442649434572,
+              "continuar": 0.1421647819063005,
+              "vagar": 0.5149434571890146
+            },
+            "n": 2476
+          },
+          "10": {
+            "fracao": {
+              "casa": 0.1289308176100629,
+              "cheiro": 0.5157232704402516,
+              "continuar": 0.05817610062893082,
+              "vagar": 0.2971698113207547
+            },
+            "n": 636
+          },
+          "11": {
+            "fracao": {
+              "casa": 0.11617312072892938,
+              "cheiro": 0.5330296127562643,
+              "continuar": 0.08200455580865604,
+              "vagar": 0.26879271070615035
+            },
+            "n": 439
+          },
+          "12": {
+            "fracao": {
+              "casa": 0.14392059553349876,
+              "cheiro": 0.456575682382134,
+              "continuar": 0.08436724565756824,
+              "vagar": 0.315136476426799
+            },
+            "n": 403
+          },
+          "13": {
+            "fracao": {
+              "casa": 0.17941176470588235,
+              "cheiro": 0.4470588235294118,
+              "continuar": 0.03529411764705882,
+              "vagar": 0.3382352941176471
+            },
+            "n": 340
+          },
+          "14": {
+            "fracao": {
+              "casa": 0.11894273127753303,
+              "cheiro": 0.5947136563876652,
+              "continuar": 0.04405286343612335,
+              "vagar": 0.2422907488986784
+            },
+            "n": 227
+          },
+          "2": {
+            "fracao": {
+              "casa": 0.13588850174216027,
+              "cheiro": 0.445993031358885,
+              "continuar": 0.10569105691056911,
+              "vagar": 0.3124274099883856
+            },
+            "n": 1722
+          },
+          "3": {
+            "fracao": {
+              "casa": 0.11330049261083744,
+              "cheiro": 0.4267241379310345,
+              "continuar": 0.10591133004926108,
+              "vagar": 0.354064039408867
+            },
+            "n": 1624
+          },
+          "4": {
+            "fracao": {
+              "casa": 0.13742875237492083,
+              "cheiro": 0.37048765041165294,
+              "continuar": 0.103863204559848,
+              "vagar": 0.3882203926535782
+            },
+            "n": 1579
+          },
+          "5": {
+            "fracao": {
+              "casa": 0.12548764629388817,
+              "cheiro": 0.43237971391417424,
+              "continuar": 0.09492847854356307,
+              "vagar": 0.3472041612483745
+            },
+            "n": 1538
+          },
+          "6": {
+            "fracao": {
+              "casa": 0.13279132791327913,
+              "cheiro": 0.4464769647696477,
+              "continuar": 0.09620596205962059,
+              "vagar": 0.3245257452574526
+            },
+            "n": 1476
+          },
+          "7": {
+            "fracao": {
+              "casa": 0.11782945736434108,
+              "cheiro": 0.48372093023255813,
+              "continuar": 0.07286821705426356,
+              "vagar": 0.32558139534883723
+            },
+            "n": 1290
+          },
+          "8": {
+            "fracao": {
+              "casa": 0.14516129032258066,
+              "cheiro": 0.4650537634408602,
+              "continuar": 0.07616487455197132,
+              "vagar": 0.31362007168458783
+            },
+            "n": 1116
+          },
+          "9": {
+            "fracao": {
+              "casa": 0.15202702702702703,
+              "cheiro": 0.4954954954954955,
+              "continuar": 0.05855855855855856,
+              "vagar": 0.2939189189189189
+            },
+            "n": 888
+          }
+        }
+      },
+      "fora_do_padrao_na_vida": {
+        "decisoes": 51820,
+        "fora": 3428,
+        "fracao": 0.06615206483983019
+      },
+      "pesos_fim_do_dia_media": {
+        "1": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.975,
+            "continuar": 64.40416666666667
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 64.0,
+            "cheiro": 64.0,
+            "continuar": 64.0,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 64.0
+          },
+          "fome_moderada:comer": {
+            "cheiro": -274.09583333333336,
+            "comida": 94.06666666666666,
+            "comida_podre": 49.09583333333333,
+            "continuar": -77.92083333333333
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -82.85416666666667,
+            "comida": 73.55416666666666,
+            "comida_podre": 59.25416666666667,
+            "continuar": 51.225
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 84.20833333333333,
+            "cheiro": 59.1125,
+            "continuar": 63.833333333333336,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 59.233333333333334
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -142.20416666666668,
+            "comida": 81.12083333333334,
+            "comida_podre": 48.9625,
+            "continuar": -3.466666666666667
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 140.67916666666667,
+            "cheiro": 66.37083333333334,
+            "continuar": 63.395833333333336,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 45.55416666666667
+          }
+        },
+        "10": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.94166666666667,
+            "continuar": 64.9125
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 68.02916666666667,
+            "cheiro": 65.38333333333334,
+            "continuar": 64.07083333333334,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 63.604166666666664
+          },
+          "fome_moderada:comer": {
+            "cheiro": -463.2125,
+            "comida": 133.89583333333334,
+            "comida_podre": -222.5375,
+            "continuar": -209.275
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.96666666666667,
+            "continuar": 64.50833333333334
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 90.72083333333333,
+            "comida_podre": -173.1,
+            "continuar": 76.47916666666667
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 216.95,
+            "cheiro": 31.6875,
+            "continuar": 60.9375,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 61.30416666666667
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -372.19166666666666,
+            "comida": 120.39583333333333,
+            "comida_podre": -208.3625,
+            "continuar": -92.2125
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 126.48333333333333,
+            "cheiro": 48.82083333333333,
+            "continuar": 63.875,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 70.67916666666666
+          }
+        },
+        "11": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.92916666666667,
+            "continuar": 65.12916666666666
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 68.02916666666667,
+            "cheiro": 65.38333333333334,
+            "continuar": 64.07083333333334,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 63.604166666666664
+          },
+          "fome_moderada:comer": {
+            "cheiro": -462.8208333333333,
+            "comida": 135.12916666666666,
+            "comida_podre": -250.7625,
+            "continuar": -209.225
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.96666666666667,
+            "continuar": 64.50833333333334
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 88.92916666666666,
+            "comida_podre": -176.65416666666667,
+            "continuar": 110.78333333333333
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 218.5125,
+            "cheiro": 28.770833333333332,
+            "continuar": 61.391666666666666,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 60.05
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -382.6166666666667,
+            "comida": 123.42083333333333,
+            "comida_podre": -230.58333333333334,
+            "continuar": -104.34166666666667
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 128.6,
+            "cheiro": 50.15416666666667,
+            "continuar": 63.7,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 69.74166666666666
+          }
+        },
+        "12": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.92916666666667,
+            "continuar": 65.12916666666666
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 65.62083333333334,
+            "cheiro": 65.50833333333334,
+            "continuar": 64.19583333333334,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 63.729166666666664
+          },
+          "fome_moderada:comer": {
+            "cheiro": -462.79583333333335,
+            "comida": 135.29166666666666,
+            "comida_podre": -253.1625,
+            "continuar": -209.23333333333332
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.95,
+            "continuar": 64.83333333333333
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 89.4,
+            "comida_podre": -180.59166666666667,
+            "continuar": 108.32916666666667
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 222.01666666666668,
+            "cheiro": 27.679166666666667,
+            "continuar": 61.46666666666667,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 58.85
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -396.325,
+            "comida": 126.075,
+            "comida_podre": -246.20416666666668,
+            "continuar": -116.03333333333333
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 131.30833333333334,
+            "cheiro": 50.99166666666667,
+            "continuar": 63.525,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 69.31666666666666
+          }
+        },
+        "13": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.92916666666667,
+            "continuar": 65.12916666666666
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 65.91666666666667,
+            "cheiro": 65.74583333333334,
+            "continuar": 64.19583333333334,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 61.8625
+          },
+          "fome_moderada:comer": {
+            "cheiro": -465.02916666666664,
+            "comida": 138.0375,
+            "comida_podre": -255.27916666666667,
+            "continuar": -211.2375
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.95,
+            "continuar": 64.83333333333333
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 90.02916666666667,
+            "comida_podre": -182.72916666666666,
+            "continuar": 105.14166666666667
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 225.46666666666667,
+            "cheiro": 26.333333333333332,
+            "continuar": 61.38333333333333,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 57.7125
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -419.1375,
+            "comida": 130.04583333333332,
+            "comida_podre": -262.475,
+            "continuar": -138.75416666666666
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 127.30416666666666,
+            "cheiro": 53.82083333333333,
+            "continuar": 63.65,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 66.925
+          }
+        },
+        "14": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.92916666666667,
+            "continuar": 65.12916666666666
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 64.96666666666667,
+            "cheiro": 65.8,
+            "continuar": 64.19583333333334,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 62.15
+          },
+          "fome_moderada:comer": {
+            "cheiro": -465.0083333333333,
+            "comida": 138.675,
+            "comida_podre": -261.60833333333335,
+            "continuar": -200.05833333333334
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.95,
+            "continuar": 64.83333333333333
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 90.09583333333333,
+            "comida_podre": -185.84583333333333,
+            "continuar": 103.525
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 226.325,
+            "cheiro": 25.120833333333334,
+            "continuar": 61.3125,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 57.07083333333333
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -462.26666666666665,
+            "comida": 136.55833333333334,
+            "comida_podre": -299.4916666666667,
+            "continuar": -160.27083333333334
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 127.87083333333334,
+            "cheiro": 51.19166666666667,
+            "continuar": 63.5625,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 63.3625
+          }
+        },
+        "2": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.93333333333333,
+            "continuar": 65.12916666666666
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 64.5,
+            "cheiro": 64.07916666666667,
+            "continuar": 63.979166666666664,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 64.5
+          },
+          "fome_moderada:comer": {
+            "cheiro": -361.45,
+            "comida": 105.59583333333333,
+            "comida_podre": -10.3625,
+            "continuar": -119.69166666666666
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -148.64583333333334,
+            "comida": 80.99583333333334,
+            "comida_podre": 0.49166666666666664,
+            "continuar": 42.46666666666667
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 93.5125,
+            "cheiro": 51.354166666666664,
+            "continuar": 64.025,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 72.1875
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -245.57916666666668,
+            "comida": 87.56666666666666,
+            "comida_podre": 16.554166666666667,
+            "continuar": 28.016666666666666
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 103.10833333333333,
+            "cheiro": 67.55833333333334,
+            "continuar": 64.06666666666666,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 43.46666666666667
+          }
+        },
+        "3": {
+          "bola_no_cenario:brincar": {
+            "bola": 64.1625,
+            "continuar": 61.229166666666664
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 65.17916666666666,
+            "cheiro": 64.1125,
+            "continuar": 63.958333333333336,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 65.17916666666666
+          },
+          "fome_moderada:comer": {
+            "cheiro": -399.3666666666667,
+            "comida": 114.20416666666667,
+            "comida_podre": -57.75416666666667,
+            "continuar": -166.45416666666668
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -164.06666666666666,
+            "comida": 82.78333333333333,
+            "comida_podre": -44.09166666666667,
+            "continuar": 71.40416666666667
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 114.09583333333333,
+            "cheiro": 52.520833333333336,
+            "continuar": 63.3375,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 73.8625
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -306.0375,
+            "comida": 97.25416666666666,
+            "comida_podre": -21.541666666666668,
+            "continuar": -4.05
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 114.20833333333333,
+            "cheiro": 56.079166666666666,
+            "continuar": 62.9125,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 56.604166666666664
+          }
+        },
+        "4": {
+          "bola_no_cenario:brincar": {
+            "bola": 64.125,
+            "continuar": 61.86666666666667
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 65.3,
+            "cheiro": 64.23333333333333,
+            "continuar": 63.9375,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 65.3
+          },
+          "fome_moderada:comer": {
+            "cheiro": -421.12083333333334,
+            "comida": 117.4125,
+            "comida_podre": -91.975,
+            "continuar": -169.525
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -166.60833333333332,
+            "comida": 85.96666666666667,
+            "comida_podre": -84.0875,
+            "continuar": 56.670833333333334
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 124.8,
+            "cheiro": 45.05416666666667,
+            "continuar": 61.94166666666667,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 87.55416666666666
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -330.175,
+            "comida": 106.8625,
+            "comida_podre": -94.4125,
+            "continuar": -33.85
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 114.3375,
+            "cheiro": 54.479166666666664,
+            "continuar": 61.75833333333333,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 61.170833333333334
+          }
+        },
+        "5": {
+          "bola_no_cenario:brincar": {
+            "bola": 64.12083333333334,
+            "continuar": 61.954166666666666
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 64.26666666666667,
+            "cheiro": 64.60416666666667,
+            "continuar": 64.02916666666667,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 66.43333333333334
+          },
+          "fome_moderada:comer": {
+            "cheiro": -435.9625,
+            "comida": 122.275,
+            "comida_podre": -131.99583333333334,
+            "continuar": -187.65416666666667
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.99166666666667,
+            "continuar": 64.14583333333333
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -170.75833333333333,
+            "comida": 87.4625,
+            "comida_podre": -97.18333333333334,
+            "continuar": 44.65833333333333
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 143.92083333333332,
+            "cheiro": 35.59166666666667,
+            "continuar": 62.375,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 76.98333333333333
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -338.85,
+            "comida": 109.97916666666667,
+            "comida_podre": -121.3375,
+            "continuar": -50.420833333333334
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 113.75833333333334,
+            "cheiro": 48.96666666666667,
+            "continuar": 63.4625,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 64.6625
+          }
+        },
+        "6": {
+          "bola_no_cenario:brincar": {
+            "bola": 64.06666666666666,
+            "continuar": 62.90833333333333
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 64.83333333333333,
+            "cheiro": 64.99166666666666,
+            "continuar": 63.979166666666664,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 66.75833333333334
+          },
+          "fome_moderada:comer": {
+            "cheiro": -443.03333333333336,
+            "comida": 125.50833333333334,
+            "comida_podre": -160.05,
+            "continuar": -197.58333333333334
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.983333333333334,
+            "continuar": 64.29583333333333
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -172.7375,
+            "comida": 88.92083333333333,
+            "comida_podre": -116.17916666666666,
+            "continuar": 39.5125
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 154.15833333333333,
+            "cheiro": 33.75416666666667,
+            "continuar": 62.3625,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 70.64166666666667
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -346.7416666666667,
+            "comida": 112.43333333333334,
+            "comida_podre": -143.40416666666667,
+            "continuar": -63.21666666666667
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 113.39583333333333,
+            "cheiro": 45.53333333333333,
+            "continuar": 63.7375,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 67.74583333333334
+          }
+        },
+        "7": {
+          "bola_no_cenario:brincar": {
+            "bola": 64.025,
+            "continuar": 63.65
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 65.425,
+            "cheiro": 65.1125,
+            "continuar": 63.979166666666664,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 64.53333333333333
+          },
+          "fome_moderada:comer": {
+            "cheiro": -445.21666666666664,
+            "comida": 128.05416666666667,
+            "comida_podre": -176.21666666666667,
+            "continuar": -204.10833333333332
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.975,
+            "continuar": 64.39166666666667
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 89.45833333333333,
+            "comida_podre": -133.475,
+            "continuar": 52.36666666666667
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 187.32083333333333,
+            "cheiro": 34.925,
+            "continuar": 62.6625,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 60.675
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -346.7291666666667,
+            "comida": 114.43333333333334,
+            "comida_podre": -170.1875,
+            "continuar": -69.1
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 120.55416666666666,
+            "cheiro": 47.045833333333334,
+            "continuar": 63.13333333333333,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 63.916666666666664
+          }
+        },
+        "8": {
+          "bola_no_cenario:brincar": {
+            "bola": 64.025,
+            "continuar": 63.65
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 65.75416666666666,
+            "cheiro": 65.35,
+            "continuar": 63.9375,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 64.8625
+          },
+          "fome_moderada:comer": {
+            "cheiro": -454.04583333333335,
+            "comida": 130.80416666666667,
+            "comida_podre": -203.09166666666667,
+            "continuar": -207.90416666666667
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.975,
+            "continuar": 64.39166666666667
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 91.59166666666667,
+            "comida_podre": -164.91666666666666,
+            "continuar": 43.825
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 188.0125,
+            "cheiro": 34.875,
+            "continuar": 62.62083333333333,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 55.69166666666667
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -346.68333333333334,
+            "comida": 115.57083333333334,
+            "comida_podre": -193.09166666666667,
+            "continuar": -75.175
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 118.89166666666667,
+            "cheiro": 51.8375,
+            "continuar": 63.65,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 61.8875
+          }
+        },
+        "9": {
+          "bola_no_cenario:brincar": {
+            "bola": 63.958333333333336,
+            "continuar": 64.625
+          },
+          "bola_no_cenario:explorar": {
+            "casa": 66.7875,
+            "cheiro": 65.3125,
+            "continuar": 63.916666666666664,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 65.89583333333333
+          },
+          "fome_moderada:comer": {
+            "cheiro": -461.0,
+            "comida": 132.51666666666668,
+            "comida_podre": -210.45833333333334,
+            "continuar": -209.26666666666668
+          },
+          "fruta_no_cenario:brincar": {
+            "bola": 63.96666666666667,
+            "continuar": 64.50833333333334
+          },
+          "fruta_no_cenario:comer": {
+            "cheiro": -174.3125,
+            "comida": 91.20416666666667,
+            "comida_podre": -168.1375,
+            "continuar": 66.08333333333333
+          },
+          "fruta_no_cenario:explorar": {
+            "casa": 194.63333333333333,
+            "cheiro": 33.90416666666667,
+            "continuar": 62.7125,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 52.770833333333336
+          },
+          "pedido_necessidade:comer": {
+            "cheiro": -368.7916666666667,
+            "comida": 118.03333333333333,
+            "comida_podre": -199.08333333333334,
+            "continuar": -90.175
+          },
+          "tempo_livre:brincar": {
+            "bola": 64.0,
+            "continuar": 64.0
+          },
+          "tempo_livre:explorar": {
+            "casa": 121.32916666666667,
+            "cheiro": 48.395833333333336,
+            "continuar": 64.09583333333333,
+            "onde_comeu": 64.0,
+            "seguir": 64.0,
+            "vagar": 68.17916666666666
+          }
+        }
+      },
+      "vidas_com_tabela": 240
+    },
+    "g_oport": {
+      "P1-alvo - P1": {
+        "ic90": {
+          "ic_inferior": -92.33185395587495,
+          "ic_superior": 59.813012523437905,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -108.46265649937934,
+          "ic_superior": 73.5813252663061,
+          "nivel": 0.95
+        },
+        "media": -15.567817539173877
+      },
+      "contraste": "inclinacao da permanencia sobre a taxa recente, P1-alvo - P1",
+      "inclinacao_media": {
+        "P1": 69.922733539572,
+        "P1-alvo": 54.35491600039812
+      },
+      "n": 20,
+      "orientado": {
+        "ic90": {
+          "ic_inferior": -92.33185395587495,
+          "ic_superior": 59.813012523437905,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -108.46265649937934,
+          "ic_superior": 73.5813252663061,
+          "nivel": 0.95
+        },
+        "media": -15.567817539173877,
+        "motivo": null,
+        "n": 20,
+        "n_grupos": 20,
+        "p_unilateral": 0.6291,
+        "t_pareado": {
+          "gl": 19,
+          "p_unilateral": 0.6266844910475724,
+          "t": -0.3278220933483357
+        }
+      },
+      "sem_valor": 0,
+      "so_descritivo": true
+    },
+    "niveis": {
+      "P0": {
+        "consumos": 100.75416666666666,
+        "d_fe": 0.3806557632688058,
+        "d_fe_vida": 0.37705297283190053,
+        "horas_acordado": 231.37083333333334,
+        "permanencia_media": 183.00942008646746,
+        "privacao_janela": 0.15165550595238095,
+        "vidas": 240,
+        "visitas": 26.133333333333333
+      },
+      "P0z": {
+        "consumos": 83.55416666666666,
+        "d_fe": 0.39494742476846667,
+        "d_fe_vida": 0.38754043459611487,
+        "horas_acordado": 238.74375,
+        "permanencia_media": 484.9572492285872,
+        "privacao_janela": 0.15751488095238095,
+        "vidas": 240,
+        "visitas": 10.416666666666666
+      },
+      "P1": {
+        "consumos": 102.5625,
+        "d_fe": 0.3880005378843794,
+        "d_fe_vida": 0.37803054832173094,
+        "horas_acordado": 235.45729166666666,
+        "permanencia_media": 321.39273068019014,
+        "privacao_janela": 0.1555369543650794,
+        "vidas": 240,
+        "visitas": 18.483333333333334
+      },
+      "P1-alvo": {
+        "consumos": 98.09583333333333,
+        "d_fe": 0.39432105551417485,
+        "d_fe_vida": 0.38239049582503803,
+        "horas_acordado": 235.42291666666668,
+        "permanencia_media": 311.0182954386988,
+        "privacao_janela": 0.16400669642857144,
+        "vidas": 240,
+        "visitas": 17.408333333333335
+      },
+      "P1-alvo<P0z:nenhum": {
+        "consumos": 99.2125,
+        "d_fe": 0.4058593853339483,
+        "d_fe_vida": 0.3924490345465154,
+        "horas_acordado": 237.51875,
+        "permanencia_media": 258.373801035916,
+        "privacao_janela": 0.1636904761904762,
+        "vidas": 240,
+        "visitas": 17.879166666666666
+      },
+      "P1-alvo@afastado": {
+        "consumos": 92.22083333333333,
+        "d_fe": 0.40286261677409313,
+        "d_fe_vida": 0.3905256505249375,
+        "horas_acordado": 235.63541666666666,
+        "permanencia_media": 449.3510574586598,
+        "privacao_janela": 0.18208085317460315,
+        "vidas": 240,
+        "visitas": 13.1375
+      },
+      "P1<P0z:nenhum": {
+        "consumos": 99.96666666666667,
+        "d_fe": 0.405538295717545,
+        "d_fe_vida": 0.3905406244832708,
+        "horas_acordado": 237.44479166666667,
+        "permanencia_media": 258.54956828363805,
+        "privacao_janela": 0.17032490079365079,
+        "vidas": 240,
+        "visitas": 18.541666666666668
+      },
+      "P1@afastado": {
+        "consumos": 94.71666666666667,
+        "d_fe": 0.4063089213375851,
+        "d_fe_vida": 0.3912287416811046,
+        "horas_acordado": 235.46041666666667,
+        "permanencia_media": 389.272096864807,
+        "privacao_janela": 0.19932415674603174,
+        "vidas": 240,
+        "visitas": 13.908333333333333
+      }
+    },
+    "p1_menos_p1alvo_por_dono_e_lugar": {
+      "dono": {
+        "aleatorio": {
+          "ic95": {
+            "ic_inferior": -0.014031332671958791,
+            "ic_superior": 0.001850917658731106,
+            "nivel": 0.95
+          },
+          "media": -0.005847131283068802
+        },
+        "atencioso": {
+          "ic95": {
+            "ic_inferior": -0.024595295965608287,
+            "ic_superior": -0.00474655671296329,
+            "nivel": 0.95
+          },
+          "media": -0.014378029927248256
+        },
+        "incoerente": {
+          "ic95": {
+            "ic_inferior": -0.010565259176588791,
+            "ic_superior": 0.006122891865077235,
+            "nivel": 0.95
+          },
+          "media": -0.002051128472223277
+        },
+        "relapso": {
+          "ic95": {
+            "ic_inferior": -0.009775126074737043,
+            "ic_superior": 0.0036378782242024615,
+            "nivel": 0.95
+          },
+          "media": -0.0030057808366414918
+        }
+      },
+      "lugar": {
+        "comedouro": {
+          "ic95": {
+            "ic_inferior": -0.010693351624506488,
+            "ic_superior": 0.010353683035712286,
+            "nivel": 0.95
+          },
+          "media": -0.0005744652157761508
+        },
+        "longe": {
+          "ic95": {
+            "ic_inferior": -0.02705082775297519,
+            "ic_superior": -0.008350699094739625,
+            "nivel": 0.95
+          },
+          "media": -0.017355499751983097
+        },
+        "perto": {
+          "ic95": {
+            "ic_inferior": -0.006342911396330799,
+            "ic_superior": 0.003970128038195365,
+            "nivel": 0.95
+          },
+          "media": -0.0010315879216271245
+        }
+      }
+    },
+    "taxa_no_abandono": {
+      "P1": 1.4554363306017375,
+      "P1-alvo": 1.4444289963023158,
+      "p1alvo_menos_p1": {
+        "ic90": {
+          "ic_inferior": -0.14091153215380092,
+          "ic_superior": 0.11630309644566998,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.16601825328313438,
+          "ic_superior": 0.13603430395230048,
+          "nivel": 0.95
+        },
+        "media": -0.011007334299421901,
+        "motivo": null,
+        "n": 20,
+        "n_grupos": 20,
+        "p_unilateral": 0.548,
+        "t_pareado": {
+          "gl": 19,
+          "p_unilateral": 0.5536242732902991,
+          "t": -0.1366417526095034
+        }
+      },
+      "sem_valor": 0
+    }
+  },
+  "desempate_cheiro": "a ordem fixa do motor da validacao do J1 (PMA-8; o desempate do #232 nao entra)",
+  "fase": "validacao",
+  "holm_alfa": 0.05,
+  "holm_familia": [
+    "G-ALVO-AC",
+    "G-INSTINTO",
+    "G-PERM-A",
+    "G-DIST-A"
+  ],
+  "leitura": "o alvo atrapalha: registrado. Os descritivos das classes dizem para onde o alvo levou o pet.",
+  "modo": "validacao",
+  "nao_rodados": [],
+  "p1_lido": true,
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_ALVO.md",
+  "secundarios": {
+    "G-ALVO-AC": {
+      "contraste": "P1^ac - P1-alvo^ac em D_FE",
+      "holm": {
+        "limiar": 0.025,
+        "ordem": 3,
+        "p": 0.5669,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.004005086908896965,
+        "ic_superior": 0.0034407531415353216,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.004704405381946204,
+        "ic_superior": 0.0041952060598530305,
+        "nivel": 0.95
+      },
+      "media": -0.00032108961640325357,
+      "motivo": null,
+      "n": 20,
+      "n_grupos": 20,
+      "p_unilateral": 0.5669,
+      "passa": false,
+      "passa_ic": false,
+      "regra": "limite inferior do IC95 > 0",
+      "t_pareado": {
+        "gl": 19,
+        "p_unilateral": 0.5536087002362777,
+        "t": -0.1366018096821602
+      }
+    },
+    "G-DIST-A": {
+      "contraste": "[P1-alvo(afastado) - P1-alvo(padrao)] - [P1(afastado) - P1(padrao)] na permanencia media",
+      "declarado": "sem Delta nem poder (secao 7)",
+      "holm": {
+        "limiar": 0.0125,
+        "ordem": 1,
+        "p": 0.0058,
+        "p_ajustado": 0.0232,
+        "rejeita": true
+      },
+      "ic90": {
+        "ic_inferior": 8.63228521215201,
+        "ic_superior": 45.6108295651352,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": 5.447403636380353,
+        "ic_superior": 49.34435033611652,
+        "nivel": 0.95
+      },
+      "media": 27.019345937806484,
+      "motivo": null,
+      "n": 20,
+      "n_grupos": 20,
+      "p_unilateral": 0.0058,
+      "passa": true,
+      "passa_ic": true,
+      "permanencia_media": {
+        "P1": 260.85308522439453,
+        "P1-alvo": 244.3327869631949,
+        "P1-alvo@afastado": 313.72373280875246,
+        "P1@afastado": 303.2246851321456
+      },
+      "regra": "limite inferior do IC95 > 0",
+      "sem_valor": 0,
+      "t_pareado": {
+        "gl": 19,
+        "p_unilateral": 0.01536420696993654,
+        "t": 2.334011684594505
+      }
+    },
+    "G-INSTINTO": {
+      "contraste": "P0 - P1-alvo em D_FE",
+      "holm": {
+        "limiar": 0.05,
+        "ordem": 4,
+        "p": 0.9997,
+        "p_ajustado": 1.0,
+        "rejeita": false
+      },
+      "ic90": {
+        "ic_inferior": -0.019696806278934425,
+        "ic_superior": -0.007587568204362455,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.020756287719080505,
+        "ic_superior": -0.0062611942997669425,
+        "nivel": 0.95
+      },
+      "media": -0.013665292245369012,
+      "motivo": null,
+      "n": 20,
+      "n_grupos": 20,
+      "p_unilateral": 0.9997,
+      "passa": false,
+      "passa_ic": false,
+      "regra": "limite inferior do IC95 > 0",
+      "t_pareado": {
+        "gl": 19,
+        "p_unilateral": 0.9991193227208269,
+        "t": -3.635239394902699
+      }
+    },
+    "G-PERM-A": {
+      "P1-alvo - P1": {
+        "ic90": {
+          "ic_inferior": -4.433461385691653,
+          "ic_superior": 16.995352567779868,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -6.253305965171198,
+          "ic_superior": 19.29007652207154,
+          "nivel": 0.95
+        },
+        "media": 6.143764848746545
+      },
+      "contraste": "inclinacao da permanencia sobre o custo de viagem, P1-alvo - P1",
+      "declarado": "sem Delta nem poder (secao 7)",
+      "holm": {
+        "limiar": 0.016666666666666666,
+        "ordem": 2,
+        "p": 0.178,
+        "p_ajustado": 0.534,
+        "rejeita": false
+      },
+      "inclinacao_media": {
+        "P1": 27.44179468726147,
+        "P1-alvo": 33.58555953600802
+      },
+      "n": 20,
+      "orientado": {
+        "ic90": {
+          "ic_inferior": -4.433461385691653,
+          "ic_superior": 16.995352567779868,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -6.253305965171198,
+          "ic_superior": 19.29007652207154,
+          "nivel": 0.95
+        },
+        "media": 6.143764848746545,
+        "motivo": null,
+        "n": 20,
+        "n_grupos": 20,
+        "p_unilateral": 0.178,
+        "t_pareado": {
+          "gl": 19,
+          "p_unilateral": 0.18504102607909795,
+          "t": 0.9180859602662979
+        }
+      },
+      "passa": false,
+      "passa_ic": false,
+      "regra": "limite inferior do IC95 > 0",
+      "sem_valor": 0
+    }
+  }
+}
