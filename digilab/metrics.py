@@ -1699,3 +1699,31 @@ def efeitos_do_tapa(tapas: Sequence[int], carinhos: Sequence[tuple[int, float, i
             "estresse_fim_do_dia": [{"dia": d, "estresse": e} for d, e in sorted(fim_dia.items())],
             "estresse_acima": {"n": len(est), "fracao": media([e >= limiar for _, e in est])},
             "vinculo": "nao disponivel (a base nova do vinculo, S-4)"}
+
+
+# --- o mundo com o alvo aprendido (docs/PLANO_ANALISE_V2_MUNDO_ALVO.md, secao 5)
+
+
+def uso_do_alvo(decisoes: Sequence[tuple[int, str, str]], janela: tuple[int, int] = JANELA_8_14) -> dict:
+    """G-USO (secao 5): a fracao das decisoes com alvo, na janela, em que o alvo escolhido difere do que a tabela do prior daria com o
+    mesmo u. Entrada: (tick, a classe escolhida, a classe do prior com o mesmo u), uma por decisao com alvo (quem chama faz o sorteio do
+    prior: todas as classes em w0_alvo, mais 1 na do padrao). Sem decisao na janela, a fracao e None. Fora de ordem falha alto."""
+    ini, fim = _checar_janela(janela)
+    ticks = [d[0] for d in decisoes]
+    if ticks != sorted(ticks):
+        raise ValueError("uso_do_alvo: decisoes fora de ordem")
+    dentro = [(e, p) for t, e, p in decisoes if ini <= t < fim]
+    difere = sum(1 for e, p in dentro if e != p)
+    return {"decisoes": len(dentro), "difere": difere, "fracao": difere / len(dentro) if dentro else None}
+
+
+def classes_por_dia(decisoes: Sequence[tuple[int, str, str]], ticks_por_dia: int = TICKS_POR_DIA) -> dict:
+    """Descritivo da secao 5: por acao e por dia (1 = o do nascimento), a contagem e a fracao de cada classe escolhida. Entrada: (tick,
+    a acao, a classe), uma por decisao com alvo."""
+    cont: dict = {}
+    for t, acao, classe in decisoes:
+        dia = t // ticks_por_dia + 1
+        c = cont.setdefault(acao, {}).setdefault(dia, {})
+        c[classe] = c.get(classe, 0) + 1
+    return {a: {str(d): {"n": sum(cs.values()), "fracao": {c: v / sum(cs.values()) for c, v in sorted(cs.items())}}
+                for d, cs in sorted(por.items())} for a, por in sorted(cont.items())}

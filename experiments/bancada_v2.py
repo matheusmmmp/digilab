@@ -460,6 +460,8 @@ FAIXAS_RESERVADAS = (
     (42101, 42505, "dois pets, adendo dos dois donos, prevista (PLANO_ANALISE_V2_DOIS_PETS, secoes 8 e 10, PDP-6)"),
     (43101, 43505, "rede de si, calibracao e piloto (PLANO_ANALISE_V2_REDE_DE_SI, secao 8, RS-6)"),
     (44101, 44505, "rede de si, validacao (PLANO_ANALISE_V2_REDE_DE_SI, secao 8, RS-6)"),
+    (47101, 47505, "mundo com o alvo aprendido, piloto do N (PLANO_ANALISE_V2_MUNDO_ALVO, secao 12, PMA-7)"),
+    (48101, 48505, "mundo com o alvo aprendido, validacao (PLANO_ANALISE_V2_MUNDO_ALVO, secao 12, PMA-7)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
@@ -519,6 +521,7 @@ class Braco:
     gestos: str | None = None        # corpo: o DonoComGestos (etapa 6 do A): "sem_tapa", "tapa" ou "tapa_fruta" (o tapa na fruta X, A1.1)
     banheiro: str | None = None      # banheiro: o braco do 2 x 2 (limpador x carinho depois do banheiro): "B00", "B0C", "BL0" ou "BLC"
     metabolismo: bool = False        # corpo, adendo 3 (A3.1, ME-6): o combustivel e a reserva no bloco do corpo, do tapa e nos acoplados
+    alvo: bool = False               # mundo com o alvo aprendido (PLANO_ANALISE_V2_MUNDO_ALVO, secao 3): o P1 com ConfigLobos.alvo_aprendido
 
 
 BRACOS = {
@@ -546,6 +549,9 @@ BRACOS = {
     "P3i": Braco("P3i", "dono", "adendo-3", julgamento="informacao"),  # o julgamento do K4 como informacao
     # mundo fisico (PLANO_ANALISE_V2_MUNDO_FISICO, secao 3 e adendo 1): o controle da premissa e a fonte dos acoplados P0^ac e P1^ac
     "P0z": Braco("P0z", "nenhuma", "mundo-fisico", instinto_mundo="sem_explorar"),
+    # o mundo com o alvo aprendido (PLANO_ANALISE_V2_MUNDO_ALVO, secao 3): o mesmo P1, com a chave do alvo aprendido (#255) e o w0_alvo
+    # padrao; so no mundo fisico. Os acoplados P1-alvo^ac saem do registro do P0z (a config os pede)
+    "P1-alvo": Braco("P1-alvo", "consequencia", "mundo-alvo", alvo=True),
     # corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 3): o bloco G-HOJE (a quimica contra hoje, malha fechada, os donos de sempre)
     "P0-hoje": Braco("P0-hoje", "nenhuma", "corpo-3.1", regime="hoje"),
     "P1-hoje": Braco("P1-hoje", "consequencia", "corpo-3.1", regime="hoje"),
@@ -1013,6 +1019,10 @@ class Bancada:
         b = self.braco(espec)       # a montagem (BANCADA-MONTAGEM); na simples, o proprio braco
         cl = self.cfg_lobos if b.fonte != "nenhuma" else replace(self.cfg_lobos, aprendizado_ligado=False)
         cl = cfg_lobos_do_braco(cl, b, espec.semente, self.montagem)
+        if b.alvo:                          # P1-alvo (PLANO_ANALISE_V2_MUNDO_ALVO, secao 3): o alvo aprendido, so no mundo fisico
+            if mundo.fisico is None:
+                raise ValueError(f"braco {b.rotulo}: o alvo aprendido e do mundo fisico, nao {espec.mundo!r}")
+            cl = replace(cl, alvo_aprendido=True)
         # LOBOS-MUNDO (#141): os lobos veem o mundo em que vivem; no padrao, nenhuma chave (as formas de antes). No mundo fisico, a
         # chave dele (MUNDO-CEREBROS, #232), com os pesos da bancada nas chaves de hoje desligadas
         cb = self.cfg_bola if mundo.bola is not None else None
