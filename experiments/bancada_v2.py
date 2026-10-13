@@ -204,6 +204,12 @@ from digilab.policies.lobos import (DRIVES_NOVOS_SINAL, RECEPTOR_DO_INDICE, RECE
                                     sinal_corpo, sinal_corpo_canais)
 from digilab.policies.lobos import CANAL_DO_DRIVE, INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
 from digilab.policies.lobos import LOBO_PLANEJAMENTO  # noqa: E402
+from digilab.config import CONFIG_REDE_DE_SI_LIGADA, ConfigRedeDeSi  # noqa: E402
+from digilab.rede_de_si import ACOES as ACOES_REDE, CONTEXTO as CONTEXTO_REDE, PoliticaComRede, RedeDeSi  # noqa: E402
+from digilab.rede_de_si import div_arred  # noqa: E402
+from digilab.policies.lobos import REGRAS_PEDIDO, sortear  # noqa: E402
+from digilab.metrics import (brier_skill, brier_skill_multiclasse, mae_previsao, media_historica,  # noqa: E402
+                             previsao_persistencia)
 from digilab.motivo import Motivo, fator_do_plano, nome_base  # noqa: E402
 from digilab.expressao import expressar  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
@@ -317,7 +323,7 @@ def mundo_de(nome: str) -> Mundo:
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
                  "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta", "montagem",
-                 "lugares", "mundo", "corpo", "teto_pesos"}
+                 "lugares", "mundo", "corpo", "teto_pesos", "rede_de_si"}
 # corpo (W-BANCADA-CORPO): a quimica da pergunta do plano (secao 1: "a quimica de hoje", CD-3): o corpo com a digestao na taxa C e a
 # Vida, sem os drives novos. O regime "corpo" liga por cima os drives novos e os gestos (etapa 6). A chave "corpo" da config troca os
 # numeros, nunca as sub-chaves
@@ -534,6 +540,7 @@ class Braco:
     banheiro: str | None = None      # banheiro: o braco do 2 x 2 (limpador x carinho depois do banheiro): "B00", "B0C", "BL0" ou "BLC"
     metabolismo: bool = False        # corpo, adendo 3 (A3.1, ME-6): o combustivel e a reserva no bloco do corpo, do tapa e nos acoplados
     alvo: bool = False               # mundo com o alvo aprendido (PLANO_ANALISE_V2_MUNDO_ALVO, secao 3): o P1 com ConfigLobos.alvo_aprendido
+    digestao_lenta: bool = False     # rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 3, RS-3): a taxa_digestao trocada no fim do dia 7
 
 
 BRACOS = {
@@ -585,6 +592,11 @@ BRACOS = {
     "P1-c-frutas": Braco("P1-c-frutas", "consequencia", "corpo-A1.1", regime="corpo", gestos="sem_tapa", metabolismo=True),
     # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1-c com o peso de cada drive pela janela recente
     "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True, regime="corpo", gestos="sem_tapa", metabolismo=True),
+    # rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 3): o P1-c com a digestao lenta a partir do fim do dia 7 (G-ADAPTA; a troca e da
+    # etapa 2b, do A: espera o no) e o P1+ped com o corpo, no iguais_frutas (a autoria do pedido)
+    "P1-c-lenta": Braco("P1-c-lenta", "consequencia", "rede-de-si", regime="corpo", gestos="sem_tapa", metabolismo=True,
+                        digestao_lenta=True),
+    "P1+ped-c": Braco("P1+ped-c", "consequencia", "rede-de-si", pedido=True, regime="corpo", gestos="sem_tapa", metabolismo=True),
     # banheiro (PLANO_ANALISE_V2_BANHEIRO, secoes 1 a 3): os quatro bracos do 2 x 2 (limpador x carinho depois do banheiro), com o cerebro A
     # no P1 (o aprendiz, fonte consequencia) e no P0 (o instinto, a referencia), no corpo com os gestos e o banheiro; o mundo fisico
     **{f"{c}-{b}": Braco(f"{c}-{b}", fonte, "banheiro", regime="corpo", banheiro=b)
@@ -613,6 +625,8 @@ NOS_PENDENTES: dict = {
     # na ConfigCorpo (#275, `gasto_atividades_num/den`), e o passo 0 o escala junto com o basal (PCD-9)
     # o "planejador" (W-BANCADA-PQP) saiu na W-BANCADA-PQP-PLANO: o planejador de um alvo e o lobo `planejamento` estao na main (#294,
     # ConfigLobos.g_plano), ligados nos bracos P1-plan, P1-plan-desfecho e P1-plan-cong
+    # rede de si (W-BANCADA-REDE): o P1-c-lenta espera a troca da digestao no motor (a etapa 2b da tarefa, do A)
+    "digestao_lenta": "TAREFA_V2_REDE_DE_SI, etapa 2b (o A): a taxa_digestao trocada num tick e gravada no registro (RS-3)",
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -642,6 +656,8 @@ def braco_de(rotulo: str) -> Braco:
                                    or b.fonte not in ("nenhuma", "consequencia")):
         raise ValueError(f"braco {b.rotulo}: banheiro {b.banheiro!r} (so {sorted(BRACOS_BANHEIRO)}, no corpo, sem os gestos de dono e "
                          "so no P0 ou no P1)")
+    if b.digestao_lenta and b.regime != "corpo":
+        raise ValueError(f"braco {b.rotulo}: a digestao lenta e do corpo (regime \"corpo\"), nao {b.regime!r}")
     if b.metabolismo and b.regime not in ("quimica", "corpo"):
         raise ValueError(f"braco {b.rotulo}: o metabolismo so existe com o corpo (regime quimica ou corpo), nao {b.regime!r}")
     if b.gestos in ("tapa", "tapa_fruta") and b.regime != "corpo":
@@ -649,7 +665,7 @@ def braco_de(rotulo: str) -> Braco:
     for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None),
                            ("pesos_janela", b.pesos_janela), ("corpo", b.regime == "corpo"),
                            ("dono_gestos", b.gestos is not None), ("tapa", b.gestos in ("tapa", "tapa_fruta")),
-                           ("banheiro", b.banheiro is not None)):
+                           ("banheiro", b.banheiro is not None), ("digestao_lenta", b.digestao_lenta)):
         if presente and peca in NOS_PENDENTES:
             raise NotImplementedError(f"braco {b.rotulo}: {NOS_PENDENTES[peca]}")
     return b
@@ -943,6 +959,7 @@ class Bancada:
     montagem: str = MONTAGEM_PADRAO                      # BANCADA-MONTAGEM: "simples" (a de antes) ou "completa" (o cerebro A da secao 1)
     cfg_mundo: ConfigMundo = CONFIG_MUNDO_LIGADA         # W-BANCADA-MUNDO: o mundo fisico (o layout afastado vem do mundo)
     cfg_corpo: ConfigCorpo = CONFIG_CORPO_QUIMICA        # W-BANCADA-CORPO: o corpo do regime "quimica" (o "corpo" liga por cima)
+    cfg_rede: ConfigRedeDeSi | None = None               # W-BANCADA-REDE: a rede de si observando toda vida (None: sem a rede)
     metabolismo: bool = True                             # adendo 3 (A3.1): False tira o metabolismo dos bracos do corpo, so para
                                                          # refazer as vidas de antes dele (os gabaritos do G2); fora da config
 
@@ -1000,7 +1017,13 @@ class Bancada:
 
     # ------------------------------------------------------------- fabricas
 
-    def politica(self, espec: EspecVida, cfg=None) -> PoliticaDoBraco:
+    def politica(self, espec: EspecVida, cfg=None):
+        """O cerebro do braco (a `PoliticaDoBraco`); com a chave `rede_de_si`, embrulhado pela rede de si, que so observa (RS-5,
+        `PoliticaComRede`: a vida e a de sem a rede, G-OBS). A rede le os receptores do corpo: braco sem corpo falha alto."""
+        p = self.politica_do_braco(espec, cfg)
+        return p if self.cfg_rede is None else PoliticaComRede(p, self.cfg_rede)
+
+    def politica_do_braco(self, espec: EspecVida, cfg=None) -> PoliticaDoBraco:
         if espec.cerebro not in CEREBROS:
             raise KeyError(f"cerebro {espec.cerebro!r}: so {CEREBROS} (outros cerebros sao a comparacao do N11)")
         b = braco_de(espec.braco)
@@ -1317,6 +1340,8 @@ class Bancada:
             raise ReplayDivergiu(f"{vida.nome}: log, estado, acoes ou rngs divergem no replay")
         if _interno(r) != _interno(vida.motor):
             raise ReplayDivergiu(f"{vida.nome}: estado interno da politica diverge no replay")
+        if self.cfg_rede is not None and _estado_rede(r) != _estado_rede(vida.motor):
+            raise ReplayDivergiu(f"{vida.nome}: o estado da rede de si diverge no replay (G1-REDE)")
 
     # ------------------------------------------------------------- medidas
 
@@ -1325,9 +1350,14 @@ class Bancada:
         celula (o prior herdado); sem ele, o da propria vida. O replay de medicao e conferido bit a bit contra a vida."""
         regs = []
 
+        motores: list = []
+        quimicos: list = []       # rede de si: os quimicos do corpo em cada decisao, so para o oraculo (nunca entregues a rede)
+
         def fab(cfg=None):
             reg = _Registro(self.politica(vida.espec, cfg))
             regs.append(reg)
+            if self.cfg_rede is not None:
+                sondar_quimicos(rede_de(reg).rede, motores, quimicos)
             return reg
 
         fisico = mundo_de(vida.espec.mundo).fisico is not None
@@ -1338,6 +1368,7 @@ class Bancada:
         def fm(*a, **kw):
             """o motor de sempre; com o metabolismo, uma sonda so de leitura no passo do corpo (a medida descritiva, A3.3)"""
             motor = fm_base(*a, **kw)
+            motores.append(motor)
             corpo = getattr(motor, "corpo", None)
             if corpo is not None and corpo.cc.metabolismo:
                 sondar_metabolismo(corpo, sonda_metab)
@@ -1346,6 +1377,8 @@ class Bancada:
         m = repro(LogDeEventos.de_jsonl(vida.motor.log.para_jsonl()), fab, semente=vida.espec.semente, fabrica_motor=fm)
         if resumo_motor(m) != resumo_motor(vida.motor) or _interno(m) != _interno(vida.motor):
             raise ReplayDivergiu(f"{vida.nome}: o replay de medicao mudou a vida")
+        if self.cfg_rede is not None and _estado_rede(m) != _estado_rede(vida.motor):
+            raise ReplayDivergiu(f"{vida.nome}: a sonda dos quimicos mudou a rede de si (G1-REDE)")
         reg = regs[0]
         reg.metabolismo = sonda_metab
         bola = None
@@ -1380,6 +1413,10 @@ class Bancada:
             corpo["tapa"] = self.medidas_tapa(vida, m, reg)
         comportamento = self.medidas_comportamento(reg)
         banheiro = self.medidas_banheiro(vida, m, reg) if braco_de(vida.espec.braco).banheiro is not None else None
+        rede = None
+        if self.cfg_rede is not None:
+            tick_troca = self.tick_troca_digestao if braco_de(vida.espec.braco).digestao_lenta else None
+            rede = self.medidas_rede(rede_de(reg).rede, quimicos, do_braco(reg.interna).cerebro.motivos, m.log, tick_troca)
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
@@ -1401,8 +1438,133 @@ class Bancada:
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
                 "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, "corpo": corpo, "banheiro": banheiro,
-                "comportamento": comportamento,
+                "comportamento": comportamento, "rede_de_si": rede,
                 **extra_mundo}
+
+    # ------------------------------------------------------------- rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 4; W-BANCADA-REDE)
+    @property
+    def tick_troca_digestao(self) -> int:
+        """O tick da troca da digestao do P1-c-lenta: o fim do dia 7 (RS-3), o mesmo corte do mutavel (`tick_troca`)."""
+        return self.tick_troca
+
+    def medidas_rede(self, rede: RedeDeSi, quimicos: list, motivos: list, log, tick_troca: int | None = None) -> dict:
+        """As medidas da secao 4 de uma vida com a rede observando, do replay de medicao: a rede, as linhas de base (persistencia e media
+        historica) e o oraculo (o mesmo LMS com os quimicos do corpo como entrada, so aqui), por horizonte, na janela dos ultimos sete
+        dias (os dias 8 a 14 numa vida de 14); D_SI e D_MEDIA; a adaptacao (com `tick_troca`: a mesma rede congelada no tick, so na fome,
+        nos ultimos quatro dias); a autoria do pedido e ao nascer (o Brier skill contra as sondas do cerebro, lidas do motivo e nunca
+        entregues a rede); os descritivos (por receptor, a curva por dia, os pesos no fim de cada dia, a surpresa por hora).
+
+        Gate da reproducao: a rede refeita aqui, so das leituras, das acoes e do contexto que ela registrou, tem de dar as mesmas previsoes
+        (as duas cabecas) e os mesmos pesos no fim; senao falha alto (o oraculo e a congelada sao essa mesma conta)."""
+        regs = rede.registros
+        if not regs:
+            raise RuntimeError("rede de si sem registros: a vida nao teve decisao")
+        if len(quimicos) != len(regs) or len(motivos) != len(regs):
+            raise RuntimeError(f"rede de si: {len(regs)} decisoes na rede, {len(quimicos)} retratos dos quimicos, {len(motivos)} motivos")
+        receptores = list(rede.receptores)
+        hz = rede.horizontes
+        intervalo = CONFIG_PADRAO.intervalo_decisao_ticks
+        por_dia = TICKS_POR_DIA // intervalo
+        leituras = [r["leituras"] for r in regs]
+        K = len(regs)
+        dias = -(-K // por_dia)
+
+        refeita = rede_offline(rede.cfg, regs, receptores)
+        for n in hz:
+            if refeita["corpo"][str(n)] != [r["corpo"][str(n)] for r in regs]:
+                raise ReplayDivergiu(f"rede de si refeita das leituras: as previsoes de n = {n} divergem da rede")
+        if refeita["autoria"] != [r["autoria"] for r in regs] or refeita["pesos_corpo"] != rede.pesos_corpo \
+                or refeita["pesos_autoria"] != rede.pesos_autoria:
+            raise ReplayDivergiu("rede de si refeita das leituras: a autoria ou os pesos divergem da rede")
+        oraculo = rede_offline(rede.cfg, regs, receptores, extra=quimicos, autoria=False)
+
+        janela = range(max(0, K - 7 * por_dia), K)          # os ultimos sete dias (8 a 14 numa vida de 14)
+        pers, media = previsao_persistencia(leituras), media_historica(leituras)
+        previsores = {"rede": refeita["corpo"], "oraculo": oraculo["corpo"]}
+        maes = {}
+        for n in hz:
+            linha = {"rede": mae_previsao(leituras, previsores["rede"][str(n)], n, janela, receptores),
+                     "persistencia": mae_previsao(leituras, pers, n, janela, receptores),
+                     "media": mae_previsao(leituras, media, n, janela, receptores),
+                     "oraculo": mae_previsao(leituras, previsores["oraculo"][str(n)], n, janela, receptores)}
+            mr, mp, mm = linha["rede"]["mae"], linha["persistencia"]["mae"], linha["media"]["mae"]
+            linha["d_si"] = None if mr is None else mp - mr
+            linha["d_media"] = None if mr is None else mm - mr
+            linha["rede_menos_persistencia_por_receptor"] = {
+                r: (None if linha["rede"]["por_receptor"][r] is None else
+                    linha["rede"]["por_receptor"][r] - linha["persistencia"]["por_receptor"][r]) for r in receptores}
+            maes[str(n)] = linha
+        n_pri = 4 if 4 in hz else hz[len(hz) // 2]
+        curva = []
+        for d in range(dias):
+            ks = range(d * por_dia, min(K, (d + 1) * por_dia))
+            curva.append({"dia": d + 1, "rede": mae_previsao(leituras, previsores["rede"][str(n_pri)], n_pri, ks, receptores)["mae"],
+                          "persistencia": mae_previsao(leituras, pers, n_pri, ks, receptores)["mae"]})
+
+        adapta = None
+        if tick_troca is not None:
+            k_troca = -(-tick_troca // intervalo)               # a primeira decisao no tick da troca ou depois
+            cong = rede_offline(rede.cfg, regs, receptores, congelar_k=k_troca, autoria=False)
+            fim4 = range(max(0, K - 4 * por_dia), K)            # os ultimos quatro dias (11 a 14 numa vida de 14)
+            mr = mae_previsao(leituras, refeita["corpo"][str(n_pri)], n_pri, fim4, receptores, so=("fome",))
+            mc = mae_previsao(leituras, cong["corpo"][str(n_pri)], n_pri, fim4, receptores, so=("fome",))
+            mo = mae_previsao(leituras, oraculo["corpo"][str(n_pri)], n_pri, fim4, receptores, so=("fome",))
+            adapta = {"tick_troca": tick_troca, "k_troca": k_troca, "rede": mr["mae"], "congelada": mc["mae"], "oraculo": mo["mae"],
+                      "n": mr["n"], "d_adapta": None if mr["mae"] is None else mc["mae"] - mr["mae"],
+                      "curva_fome": [{"dia": d + 1, **{nome: mae_previsao(leituras, prev["corpo"][str(n_pri)], n_pri,
+                                                                          range(d * por_dia, min(K, (d + 1) * por_dia)),
+                                                                          receptores, so=("fome",))["mae"]
+                                                       for nome, prev in (("rede", refeita), ("congelada", cong))}}
+                                     for d in range(dias)]}
+
+        # a autoria: as sondas do cerebro (lidas do motivo, nunca entregues a rede)
+        S = rede.S
+        ped, ped_zona = [], {z: [] for z in REGRAS_PEDIDO}
+        nasc = []
+        for k in janela:
+            r, m = regs[k], motivos[k]
+            if r["acao"] != m["acao"]:
+                raise RuntimeError(f"decisao {k}: a rede viu {r['acao']!r}, o cerebro decidiu {m['acao']!r}")
+            cands = m["candidatos"]
+            pesos_nasc = {a.value: q for a, q in zip(ACOES_REDE, r["autoria_ao_nascer"])}
+            nasc.append((cands, pesos_nasc, sonda_ao_nascer(m)))
+            if r["contexto"][CONTEXTO_REDE.index("pedido")] == S and m["regra"] in REGRAS_PEDIDO and "comer" in cands:
+                sem = m["pedido"]["acao_sem_pedido"] if "pedido" in m else m["acao"]    # sem a sonda, o pedido nao pesou: a propria
+                pesos_sem = {a.value: q for a, q in zip(ACOES_REDE, r["autoria_sem_pedido"])}
+                linha = (_normalizar_cands(pesos_sem, cands)["comer"], int(sem == "comer"))
+                ped.append(linha)
+                ped_zona[m["regra"]].append(linha)
+        bss_ped = brier_skill([p for p, _ in ped], [e for _, e in ped])
+        autoria = {"bss_ped": bss_ped,
+                   "bss_ped_por_zona": {z: {**brier_skill([p for p, _ in v], [e for _, e in v]),
+                                            "frequencia_evento": (sum(e for _, e in v) / len(v)) if v else None}
+                                        for z, v in ped_zona.items()},
+                   "bss_nasc": brier_skill_multiclasse(nasc)}
+
+        # os descritivos: os pesos no fim de cada dia e a surpresa por hora (em torno da troca e de cada tapa)
+        horas = -(-K // 4)
+        surpresa_hora = []
+        for h in range(horas):
+            vals = [v for r in regs[4 * h:4 * h + 4] for v in r["surpresa"].get(str(hz[0]), [])]
+            surpresa_hora.append(sum(vals) / len(vals) if vals else None)
+        ticks_tapa = sorted(int(e["tick"]) for e in (json.loads(x) for x in log.para_jsonl().splitlines())
+                            if e.get("valor") == AcaoUsuario.TAPA.value)
+        hora_de = lambda t: (-(-t // intervalo)) // 4      # noqa: E731  a hora da primeira decisao no tick ou depois
+        horas_tapa = {hora_de(t) for t in ticks_tapa}
+        hora_troca = None if tick_troca is None else hora_de(tick_troca)
+        marcadas = horas_tapa | ({hora_troca} if hora_troca is not None else set())
+        com = [surpresa_hora[h] for h in sorted(horas_tapa) if h < horas and surpresa_hora[h] is not None]
+        sem = [v for h, v in enumerate(surpresa_hora) if h not in marcadas and v is not None]
+        surpresa = {"horizonte": hz[0], "por_hora": surpresa_hora, "tapas": len(ticks_tapa),
+                    "media_horas_com_tapa": (sum(com) / len(com)) if com else None,
+                    "media_horas_sem_nada": (sum(sem) / len(sem)) if sem else None,
+                    "hora_da_troca": hora_troca,
+                    "troca": None if hora_troca is None or hora_troca >= horas else surpresa_hora[hora_troca]}
+        return {"receptores": receptores, "horizontes": list(hz), "decisoes": K, "janela_k": [janela.start, janela.stop],
+                "horizonte_primario": n_pri, "mae": maes, "d_si": maes[str(n_pri)]["d_si"], "d_media": maes[str(n_pri)]["d_media"],
+                "curva": curva, "adaptacao": adapta, "autoria": autoria, "pesos_por_dia": refeita["pesos_por_dia"],
+                "surpresa": surpresa, "cortes": rede.cortes, "n_pesos": rede.n_pesos(),
+                "quimicos_do_oraculo": len(quimicos[0])}
 
     def medidas_corpo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
         """As medidas do PLANO_ANALISE_V2_CORPO_DRIVES (secao 5), todas de metrics.py, nas vidas com o corpo ligado (None nas outras). A
@@ -1743,7 +1905,7 @@ class Bancada:
             rng = random.Random(derivar_semente("sonda-corpo", sonda["semente"]))
             com_mundo = mundo_de(vida.espec.mundo).fisico is not None
             estados = [replace(o, corpo=percepcao_da_sonda(o, corpo, rng, com_mundo)) for o in estados]
-        prior = self.politica(replace(vida.espec, braco=p0), CONFIG_PADRAO)
+        prior = self.politica_do_braco(replace(vida.espec, braco=p0), CONFIG_PADRAO)   # sem a rede: a sonda nao a alimenta
         d_prior = distribuicoes_de_acao(prior, estados, sonda["amostras"], sonda["semente"])
         fab, fm = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec)
         log = vida.motor.log
@@ -2153,9 +2315,119 @@ def do_braco(politica) -> PoliticaDoBraco:
             p = p._pb
         elif isinstance(p, _PoliticaObservada):
             p = p._p
+        elif isinstance(p, PoliticaComRede):
+            p = p._interna
         else:
             raise TypeError(f"politica sem PoliticaDoBraco dentro: {type(p).__name__}")
     return p
+
+
+def sondar_quimicos(rede: RedeDeSi, motores: list, saida: list) -> None:
+    """Uma sonda so de leitura: antes de cada `observar` da rede, o retrato dos quimicos do corpo do motor (cada um na escala S do teto
+    dele, `div_arred(q x S, teto)`, na ordem de `corpo.quimicos`), para o oraculo da bancada. A rede nao ve o retrato (G-RECEPTOR)."""
+    observar = rede.observar
+
+    def observar_com_retrato(obs, acao):
+        corpo = motores[-1].corpo
+        S = rede.S
+        saida.append([div_arred(corpo.q[n] * S, corpo.grafo.quimico(n).teto) for n in corpo.quimicos])
+        return observar(obs, acao)
+    rede.observar = observar_com_retrato
+
+
+def sonda_ao_nascer(m: dict) -> str:
+    """A acao da sonda "ao nascer" do cerebro A (BSS_NASC, R-6): a escolha com os pesos do prior (o lobo de impulsos) e o mesmo u; com um
+    candidato so, ele (o legibilidade_a da comparacao dos cerebros)."""
+    cands = m["candidatos"]
+    if m["u"] is None:
+        return cands[0]
+    return cands[sortear([m["contribuicoes"]["impulsos"][a] for a in cands], m["u"])]
+
+
+def _normalizar_cands(pesos: dict, cands: list) -> dict:
+    tot = sum(pesos[a] for a in cands)
+    return {a: (pesos[a] / tot if tot > 0 else 1.0 / len(cands)) for a in cands}
+
+
+def rede_offline(cfg: ConfigRedeDeSi, registros: list, receptores: list, extra: list | None = None, congelar_k: int | None = None,
+                 autoria: bool = True) -> dict:
+    """A rede de si refeita so dos registros dela (as leituras, a acao, o contexto e a faixa de cada decisao), com as mesmas contas
+    (`RedeDeSi._saida` e `_lms`) na mesma ordem: em cada decisao k, as previsoes de k - n aprendem com a leitura de k, e a cabeca preve
+    k + n. `extra[k]`: entradas a mais em cada decisao, logo depois das leituras (o oraculo: os quimicos na escala S); o prior continua a
+    persistencia. `congelar_k`: de k em diante, nada aprende (a rede congelada do G-ADAPTA). So a bancada usa: nunca existe no pet."""
+    contas = RedeDeSi(cfg)
+    S, hz = contas.S, contas.horizontes
+    R = len(registros[0]["leituras"])
+    E = len(extra[0]) if extra else 0
+    jc = R + E + len(ACOES_REDE) + len(CONTEXTO_REDE) + 1
+    prior = {str(n): [[S if j == i else 0 for j in range(jc)] for i in range(R)] for n in hz}
+    pesos = {n: [list(w) for w in t] for n, t in prior.items()}
+    F = len(cfg.faixas_idade) + 1
+    vies = div_arred(S, len(ACOES_REDE))
+    prior_a = {a.value: [0] * (R + len(CONTEXTO_REDE) + F) + [vies] for a in ACOES_REDE}
+    pesos_a = {a: list(w) for a, w in prior_a.items()}
+    pend: dict = {str(n): [] for n in hz}
+    prev: dict = {str(n): [] for n in hz}
+    q_out, por_dia = [], []
+    passo_dia = TICKS_POR_DIA // CONFIG_PADRAO.intervalo_decisao_ticks
+    for k, reg in enumerate(registros):
+        ls, ctx = reg["leituras"], reg["contexto"]
+        aprende = congelar_k is None or k < congelar_k
+        for n in hz:
+            if k - n >= 0:
+                x, p = pend[str(n)][k - n]
+                if aprende:
+                    for i in range(R):
+                        contas._lms(pesos[str(n)][i], prior[str(n)][i], x, ls[i] - p[i])
+        if autoria:
+            y = ls + ctx + [S if f == reg["faixa"] else 0 for f in range(F)] + [S]
+            q = [contas._saida(pesos_a[a.value], y) for a in ACOES_REDE]
+            q_out.append(q)
+            if aprende:
+                for a, qa in zip(ACOES_REDE, q):
+                    contas._lms(pesos_a[a.value], prior_a[a.value], y, (S if a.value == reg["acao"] else 0) - qa)
+        x = ls + (list(extra[k]) if extra else []) + [S if a.value == reg["acao"] else 0 for a in ACOES_REDE] + ctx + [S]
+        for n in hz:
+            p = [contas._saida(pesos[str(n)][i], x) for i in range(R)]
+            pend[str(n)].append((x, p))
+            prev[str(n)].append(p)
+        if (k + 1) % passo_dia == 0 or k == len(registros) - 1:
+            por_dia.append({"k": k, "corpo": _resumo_pesos([w for t in pesos.values() for w in t],
+                                                           [w for t in prior.values() for w in t], cfg.teto),
+                            "autoria": _resumo_pesos(list(pesos_a.values()), list(prior_a.values()), cfg.teto) if autoria else None})
+    return {"corpo": prev, "autoria": q_out if autoria else None,
+            "pesos_corpo": {n: dict(zip(receptores, t)) for n, t in pesos.items()} if not E else None,
+            "pesos_autoria": pesos_a if autoria else None, "pesos_por_dia": por_dia}
+
+
+
+def _resumo_pesos(pesos: list, prior: list, teto: int) -> dict:
+    """Os pesos de uma cabeca num momento: quantos no teto (|w - w0| = teto) e o desvio medio |w - w0|."""
+    desv = [abs(w - w0) for linha, linha0 in zip(pesos, prior) for w, w0 in zip(linha, linha0)]
+    return {"no_teto": sum(1 for d in desv if d >= teto), "desvio_medio": sum(desv) / len(desv), "pesos": len(desv)}
+
+
+def rede_de(politica) -> PoliticaComRede:
+    """O embrulho da rede de si dentro dos embrulhos dos motores e do registro de medicao (falha alto sem ela)."""
+    p = politica
+    while not isinstance(p, PoliticaComRede):
+        if isinstance(p, (_Espiao, _Registro)):
+            p = p.interna
+        elif isinstance(p, _PoliticaComMundo):
+            p = p._pm
+        elif isinstance(p, _PoliticaComFrutas):
+            p = p._pf
+        elif isinstance(p, _PoliticaComBola):
+            p = p._pb
+        elif isinstance(p, _PoliticaObservada):
+            p = p._p
+        else:
+            raise TypeError(f"politica sem a rede de si dentro: {type(p).__name__}")
+    return p
+
+
+def _estado_rede(motor) -> str:
+    return json.dumps(rede_de(motor.politica).rede.estado(), sort_keys=True)
 
 
 # ------------------------------------------------------------------ o tapa na fruta X (corpo, adendo 1, A1.1)
@@ -2638,6 +2910,12 @@ def validar_config(cfg: dict) -> dict:
         braco_de(b)
     for m in cfg.get("mundos", ["padrao"]):
         mundo_de(m)
+    if "rede_de_si" in cfg:
+        cfg_rede_da_config(cfg)
+        sem_corpo = sorted({b for b in cfg["bracos"] if braco_de(b).regime not in ("quimica", "corpo")}
+                           | {a["braco"] for a in cfg.get("acoplados", []) if braco_de(a["braco"]).regime not in ("quimica", "corpo")})
+        if sem_corpo:
+            raise ValueError(f"a rede de si le os receptores do corpo: os bracos {sem_corpo} nao tem corpo (regime quimica ou corpo)")
     fisicos = [m for m in cfg.get("mundos", ["padrao"]) if mundo_de(m).fisico is not None]
     com_corpo_ = [b for b in cfg["bracos"] if BRACOS[b].regime in ("quimica", "corpo")]     # os bracos ja passaram pelo braco_de
     com_gestos = [b for b in cfg["bracos"] if BRACOS[b].gestos is not None]
@@ -2741,6 +3019,15 @@ def conferir_teto_pesos(cfg: dict, cerebros) -> dict | None:
     return {"maximo": cfg["teto_pesos"]["maximo"], "pesos": maior, "por_cerebro": pesos}
 
 
+def cfg_rede_da_config(cfg: dict) -> ConfigRedeDeSi:
+    """A chave `rede_de_si` da config: campos da ConfigRedeDeSi por cima da ligada (`{}` = os padroes). Desligar por ela falha alto."""
+    troca = cfg["rede_de_si"]
+    if not isinstance(troca, dict) or troca.get("ligada", True) is not True:
+        raise ValueError(f"rede_de_si: um dict com campos da ConfigRedeDeSi, sempre ligada (sem a chave, sem a rede), nao {troca!r}")
+    tupla = lambda v: tuple(v) if isinstance(v, list) else v  # noqa: E731
+    return replace(CONFIG_REDE_DE_SI_LIGADA, **{k: tupla(v) for k, v in troca.items()})
+
+
 def bancada_da_config(cfg: dict) -> Bancada:
     """A Bancada da config: os padroes, e o que as chaves "consequencia", "ponto" e "lobos" (o ponto nomeado, e por cima dele os campos
     da chave "lobos"; sem "ponto", o L1 = CONFIG_LOBOS_APRENDIZ) e "frutas" (sobre o CONFIG_FRUTAS_LIGADA; listas do JSON viram tuplas)
@@ -2764,6 +3051,8 @@ def bancada_da_config(cfg: dict) -> Bancada:
         kw["cfg_mundo"] = replace(CONFIG_MUNDO_LIGADA, **{k: tupla(v) for k, v in cfg["mundo"].items()})
     if "corpo" in cfg:
         kw["cfg_corpo"] = replace(CONFIG_CORPO_QUIMICA, **{k: tupla(v) for k, v in cfg["corpo"].items()})
+    if "rede_de_si" in cfg:
+        kw["cfg_rede"] = cfg_rede_da_config(cfg)
     return Bancada(int(cfg["dias"]), int(cfg["orcamento"]), **kw)
 
 
@@ -2917,7 +3206,9 @@ MEDIDAS_MUNDO = {
 def meta(cfg: dict) -> dict:
     if sha256_engine() != ENGINE_SHA256_V0:
         raise RuntimeError("engine.py mudou")
-    return {"config": cfg, "ponto": cfg.get("ponto", PONTO_PADRAO),
+    rede = {} if "rede_de_si" not in cfg else {"cfg_rede": cfg_rede_da_config(cfg).__dict__,
+                                                "rede_de_si_sha256": _sha(RAIZ / "digilab" / "rede_de_si.py")}
+    return {"config": cfg, "ponto": cfg.get("ponto", PONTO_PADRAO), **rede,
             "cfg_lobos": cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos")).__dict__,
             "python": platform.python_version(), "plataforma": platform.platform(),
             "engine_sha256": sha256_engine(), "lobos_sha256": _sha(RAIZ / "digilab" / "policies" / "lobos.py"),
