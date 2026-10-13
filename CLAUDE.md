@@ -4040,3 +4040,38 @@ A etapa 3 (o mundo, do A) e a 2b (as classes por árvore no alvo aprendido, dada
   - **G1** com tudo ligado (o P1, a mão e a troca), sem e com o corpo.
 - **Para o D (etapa 4):** a fábrica dos braços do J5 passa `cfg_pqp` ao `MotorMundo` e `alvo_por_arvore` ao cérebro A; os eventos da mão e
   da troca entram pelo `observar` do motor no `T_m` do plano, fora do orçamento. O gancho `fruta_na_mao` é do modelo do desfecho do B.
+
+## V2, PET-QUE-PENSA, etapa 2 — o planejador de um alvo e o lobo `planejamento` (2026-10-13, `docs/TAREFA_V2_PET_QUE_PENSA.md`) — GATES PASSAM
+
+PQ-1 a PQ-7 e PP-1 a PP-9 decididas. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/policies/lobos.py` (atrás de
+`ConfigLobos.g_plano`), `digilab/modelo_mundo.py`, `digilab/motivo.py`, `digilab/expressao.py` e a `ConfigLobos` (`g_plano`, `teto_plano`).
+`engine.py`, o mundo, o corpo, a bancada e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O gabarito antes do código** (commit próprio): `tests/gabarito_pet_que_pensa_plano.py` → `tests/gabaritos/pet_que_pensa_plano_vidas_de_hoje.json`,
+  36 vidas com o mundo do J5 ligado (a mão e a troca no dia 2), o corpo químico com e sem metabolismo, o instinto, o P0 e o P1 do plano, e
+  o P1 no `PoliticaComMotivo` (os motivos e as falas).
+- **O lobo `planejamento`** (com `g_plano` > 0; exige o mundo físico, o corpo, o alvo aprendido e o aprendizado):
+  - **os modelos:** o cérebro guarda os próprios modelos do mundo (`modelo_mundo`), que aprendem na decisão, na consequência e na mão;
+  - **V(k):** `Σ_tipo div_arred(p̂(tipo|k) · valor_tipo, S) + valor(andar até k)`. O valor é o `sinal_corpo` da leitura de agora para a
+    prevista (agora + Δ̂, cortada em [0, S]), com o ganho e os drives da consequência; o custo de andar é a mesma conta, na energia;
+  - **o termo:** `div_arred(g_plano · V, S)`, cortado em ±`teto_plano` (2 S). No alvo, ele vai em cima do alvo aprendido (o
+    representante de cada classe é o de maior V); na decisão de comer ou explorar, com o maior V dos alvos que o pet vê ou lembra;
+  - **a sonda "quem decidiu":** o mesmo u sem o termo, na decisão e no alvo (`plano` e `alvo_plano` no motivo);
+  - **o fator:** só quando a sonda muda a escolha e há o que nomear: `plano_arvore(J2,b)`, `plano_comida(b)` e `plano_evita(a)`, com
+    textos de marcador único;
+  - **G-PESOS-A:** 0 pesos a mais (822 no P1 do plano, com e sem o planejador).
+- **Os modelos** (`modelo_mundo.py`): os troncos da percepção conferidos contra a conta do raio, o tronco visto depois de andar, a fruta na
+  mão (`na_mao`, `consumos_mao`), `congelar("mapa")` e `congelar("desfecho", "mapa")` (PP-8), e as consultas do planejador.
+- **`PoliticaComMotivo`** refaz o motivo no `escolher_alvo` com a sonda do alvo, e repassa a `fruta_na_mao`.
+- **Gates** (`tests/test_planejador.py`, 50, ~1 min):
+  - **G2:** as 36 vidas do gabarito, com os motivos e as falas, byte a byte com `g_plano` 0; os gabaritos de sempre, na suíte;
+  - **G-PESOS-A**;
+  - **a conta exata** de V(k), do valor de cada tipo, do andar e do termo (com o corte), o termo no peso efetivo da decisão (em toda
+    decisão de uma vida) e do alvo;
+  - **a sonda** reproduz a escolha sem o termo;
+  - **o fator e os textos;**
+  - **G1:** o replay refaz o planejador e os motivos bit a bit;
+  - os troncos iguais aos `troncos_vistos` do motor, a G-SEM-CREDITO da mão e o congelamento.
+- **Descritivo, só nas sementes dos testes:** com `g_plano` S, o plano muda o alvo em 8,6% das decisões com alvo. O |termo| mediano é 0,06
+  de peso, contra 6 do impulso da fruta: a regra da calibração (PP-6, [0,10; 0,40]) pode não fechar na grade {S/4, S/2, S}.
+- **Fica para depois:** a bancada (etapa 4, D) liga o `g_plano` nos braços do plano, passa a `cfg_consequencia` e congela os modelos no
+  `T_m` (`do_braco(...).cerebro.modelo_mundo.congelar(...)`).

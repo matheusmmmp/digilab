@@ -4861,3 +4861,53 @@ Na suíte que rodou junto com a validação do mundo (#285), o `test_g2_um_pet_n
   consertar no repositório.
 - **Recomendação:** atualizar o `.venv` para a última 3.13.x, que traz consertos de chamadas especializadas de descritores (por exemplo o
   gh-131998). Se voltar, guardar o `PYTHONHASHSEED` e o log inteiro da rodada.
+
+## 2026-10-13 — PET-QUE-PENSA, etapa 2 (worker B): o planejador de um alvo e o lobo `planejamento`
+
+- **O custo de andar na escala do valor.** A tarefa escreve `V(k) = Σ p̂ · valor(Δ̂) − custo(distância)`, com o custo como "a distância
+  vezes o gasto de andar previsto". Esse produto fica na escala da leitura, e o valor fica na do sinal. Usei a mesma conta do valor para o
+  andar: o `sinal_corpo` da energia de agora para a energia prevista depois de andar até o alvo. O custo é esse valor (negativo), somado ao
+  dos tipos, e os dois ficam na mesma escala.
+- **O valor de cada tipo é separado do andar** e somado: `Σ_tipo div_arred(p̂ · valor(Δ̂_tipo), S) + valor(andar)`. A conta conjunta
+  (comer e andar juntos) não é aditiva, e a tarefa escreve a soma.
+- **O que o plano prevê de cada candidato:**
+  - **a comida vista** é certa: p̂ = S no tipo dela, e a podre conta como `podre`;
+  - **a árvore lembrada** usa a linha do mapa dela;
+  - **o resto** (cheiro, vagar, casa, continuar, ponto, seguir, onde comeu) usa a linha do lugar já visto mais perto do alvo, até a
+    âncora, ou nada.
+  - A linha do mapa **não é normalizada**: um lugar pouco visto prevê pouco.
+- **O termo na decisão.** Os candidatos de verdade só existem depois da decisão, porque o motor os monta com o u do alvo. A decisão de
+  comer usa o maior V entre as comidas vistas, e a de explorar o maior V entre as árvores já vistas (no tronco, como o candidato de árvore
+  lembrada do motor). Sem alvo, o termo é 0.
+- **O alvo:**
+  - o representante de cada classe passa a ser o candidato de maior V (no empate, o primeiro na ordem do motor), em vez do primeiro;
+  - o termo dele vai ao peso da classe, com o piso;
+  - a sonda é o alvo de hoje (o primeiro de cada classe, sem o termo) com o mesmo u;
+  - o plano decidiu quando o candidato escolhido muda, mesmo dentro da classe.
+- **O planejador exige o aprendizado ligado.** Um termo negativo pode baixar o peso efetivo abaixo de zero, e só o aprendiz tem o piso.
+  Exige também o mundo físico, o corpo e o alvo aprendido. Sem algum deles, falha alto.
+- **A ConfigConsequencia do plano.** O valor usa o ganho, os drives e os pesos dos drives da `ConfigConsequencia` dada ao cérebro
+  (`cfg_consequencia`, padrão a de sempre). No crédito, o cérebro confere que a da bancada tem os mesmos números (diverge, falha alto). Os
+  canais e a janela dos pesos (A2.4) não entram no plano.
+- **O fator só nomeia o que os modelos têm:**
+  - **quando o escolhido ganhou pelo termo dele, com valor positivo:** sai o tipo que mais pesou nele, `plano_comida(b)` na comida vista
+    ou `plano_arvore(J2,b)` no lugar;
+  - **quando o que seria escolhido perdeu por um termo negativo:** sai `plano_evita(a)`;
+  - **quando o plano decidiu só pela distância** (nenhum tipo a nomear), não há fator. O plano decidiu, mas o motivo fica com os fatores de
+    sempre.
+  - O fator do plano vai na frente dos outros. O da decisão vale antes do do alvo, e o do alvo entra depois do agir, porque o
+    `PoliticaComMotivo` refaz o motivo no `escolher_alvo`.
+- **Os modelos dentro do cérebro.** Com `g_plano` > 0, o cérebro guarda os próprios modelos (`modelo_mundo`), e o estado interno ganha
+  `plano`. O embrulho `PoliticaComModelo` da etapa 1 continua para os braços sem o planejador.
+- **Os modelos (o `modelo_mundo.py` da etapa 1):**
+  - **os troncos:** a árvore vista também conta de onde o pet parou depois de andar, como no motor (#290). Os `troncos` da percepção são
+    conferidos contra a conta do raio;
+  - **a fruta na mão** entra no desfecho e fica contada à parte (`consumos_mao`);
+  - **`congelar`** (PP-8): o mapa congelado também não aprende lugar novo.
+- **O `PoliticaComMotivo` repassa a `fruta_na_mao`** quando o cérebro tem o gancho, como os outros ganchos (a lição do N5-ACOPLADO). O
+  `PoliticaLobos` agora sempre tem a `fruta_na_mao`, que sem o planejador não faz nada. Por isso o gancho chega ao cérebro também nas vidas
+  sem o plano, sem mudar nada nelas (G2).
+- **Medida descritiva, só nas sementes dos testes** (8 vidas do P1 do plano, 4 dias, sem a faixa da calibração). Com `g_plano` S/4, S/2 e
+  S, o plano muda o alvo em 0,040, 0,087 e 0,086 das decisões com alvo, e a decisão em 0,001 a 0,003. O |termo| mediano fica em 0,015 a
+  0,059 de peso, contra 6 do `w_fruta` do impulso. A regra da calibração (PP-6, a fração em [0,10; 0,40]) pode não fechar na grade
+  {S/4, S/2, S}.

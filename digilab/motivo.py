@@ -36,7 +36,7 @@ from .events import AcaoPet, AcaoUsuario, LogDeEventos
 from .memoria import FATORES_MEMORIA
 from .memoria_espacos import FATORES_ESPACOS
 from .policy import Observacao, Politica, PoliticaInstinto, Transicao
-from .policies.lobos import ENTRADAS as ENTRADAS_LOBOS, ENTRADAS_MUNDO, REGRAS_MUNDO, sortear as sortear_lobos
+from .policies.lobos import ENTRADAS as ENTRADAS_LOBOS, ENTRADAS_MUNDO, FATORES_PLANO, REGRAS_MUNDO, sortear as sortear_lobos
 
 ORIGENS = ("vida", "combate")
 
@@ -47,7 +47,8 @@ FATOR_DA_FEATURE = (
 )
 # V2, N5-ACOPLADO: as regras do mundo (bola, fruta) e a sub-decisao da fruta (o incentivo ou o aprendido decidiu qual)
 FATORES_MUNDO = ("bola", "fruta", "incentivo_fruta", "escolha_aprendida_fruta")
-FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS + FATORES_MUNDO
+# o pet que pensa, etapa 2: o plano decidiu (a sonda "quem decidiu" mudou a escolha); o fator leva o lugar e o tipo como parametros
+FATORES_VIDA = tuple(dict.fromkeys(FATOR_DA_FEATURE)) + FATORES_MEMORIA + FATORES_ESPACOS + FATORES_MUNDO + FATORES_PLANO
 # nome do fator por entrada da percepcao da PoliticaLobos (policies/lobos.ENTRADAS): os mesmos nomes do bandit
 FATOR_DA_ENTRADA_LOBOS = ("habito", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora",
                           "tempo_sem_cuidado")
@@ -248,11 +249,35 @@ def _motivo_regra_mundo(registro: dict, acao: AcaoPet, tick: int) -> Motivo:
     return Motivo("vida", acao.value, fatores, (), min(1.0, max(0.0, prior[registro["acao"]] / total)), False, tick=tick)
 
 
+def fator_do_plano(registro: dict) -> str | None:
+    """O pet que pensa, etapa 2: o fator do plano quando a sonda "quem decidiu" mudou a escolha (a da decisao primeiro, depois a do
+    alvo) e o cerebro achou o que nomear (`lobos._fator_do_plano`): `plano_arvore(J2,b)`, `plano_comida(b)` ou `plano_evita(a)`."""
+    for chave in ("plano", "alvo_plano"):
+        p = registro.get(chave)
+        if p and p.get("plano_decidiu") and p.get("fator"):
+            nome, *params = p["fator"]
+            if nome not in FATORES_PLANO:
+                raise ValueError(f"fator do plano desconhecido: {nome!r}")
+            return f"{nome}({','.join(params)})"
+    return None
+
+
+def _com_plano(registro: dict, m: Motivo, diag: dict) -> tuple[Motivo, dict]:
+    """o fator do plano na frente (no maximo 2 fatores); sem ele, o motivo de sempre"""
+    fp = fator_do_plano(registro)
+    if fp is None:
+        return m, diag
+    fatores = ((fp,) + m.fatores)[:2]
+    refs = m.evento_ref if "tempo_sem_cuidado" in fatores else ()
+    return (Motivo("vida", m.acao, fatores, refs, m.intensidade, m.exploracao, tick=m.tick),
+            {**diag, "plano": fp, "lobo": "planejamento"})
+
+
 def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
                  cfg: ConfigExpressao = CONFIG_EXPRESSAO, incentivos: dict | None = None) -> tuple[Motivo, dict]:
     m, diag = _motivo_lobos_decisao(registro, tick, ref_ultimo_cuidado, cfg)
     if "fruta" not in registro:
-        return m, diag
+        return _com_plano(registro, m, diag)
     # a sub-decisao da fruta (so com os lobos vendo as frutas): o fator dela entra no lugar do segundo fator da decisao de comer
     if incentivos is None:
         raise ValueError("registro com a sub-decisao da fruta sem os incentivos (o PoliticaComMotivo os recebe do motor)")
@@ -260,7 +285,7 @@ def motivo_lobos(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
     fatores = (m.fatores[:1] + (fator,)) if fator else m.fatores
     refs = m.evento_ref if "tempo_sem_cuidado" in fatores else ()
     diag = {**diag, "fruta": {"lobo": lobo, "fator": fator, "escolhida": registro["fruta"]["escolhida"]}}
-    return Motivo("vida", m.acao, fatores, refs, m.intensidade, m.exploracao, tick=m.tick), diag
+    return _com_plano(registro, Motivo("vida", m.acao, fatores, refs, m.intensidade, m.exploracao, tick=m.tick), diag)
 
 
 def _motivo_lobos_decisao(registro: dict, tick: int, ref_ultimo_cuidado: int | None,
@@ -351,7 +376,9 @@ class PoliticaComMotivo:
             self.fruta_comida = interna.fruta_comida
         # ganchos do MotorMundo (MUNDO-CEREBROS): o mesmo regime, so se a politica embrulhada os tem (sem eles, o padrao do motor)
         if hasattr(interna, "escolher_alvo"):
-            self.escolher_alvo = interna.escolher_alvo
+            self.escolher_alvo = self._escolher_alvo
+        if hasattr(interna, "fruta_na_mao"):           # o mundo do J5: a fruta na mao (os modelos do planejador a leem)
+            self.fruta_na_mao = interna.fruta_na_mao
         if hasattr(interna, "consequencia_mundo"):
             self.consequencia_mundo = interna.consequencia_mundo
         # ganchos do MotorCorpo (CORPO, docs/TAREFA_V2_CORPO_DRIVES.md, secao 11): o mesmo regime. A licao do N5-ACOPLADO: um gancho nao
@@ -423,6 +450,19 @@ class PoliticaComMotivo:
         self.motivos[-1] = m
         self.diagnosticos[-1] = diag
         return escolhida
+
+    def _escolher_alvo(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
+        """Repassa o alvo e, com o planejador (o pet que pensa), refaz o motivo da decisao com a sonda do alvo (ela so existe depois do
+        agir). Sem o planejador o registro nao tem `alvo_plano` e o motivo fica o de sempre."""
+        alvo = self.interna.escolher_alvo(acao, candidatos, percepcao, u)
+        reg = getattr(self.interna, "ultimo_motivo", None)
+        if reg is not None and reg.get("alvo_plano") is not None:
+            if not self.motivos or reg["acao"] != acao.value:
+                raise RuntimeError("alvo do plano sem a decisao registrada")
+            m, diag = motivo_lobos(reg, self.motivos[-1].tick, self._ref_na_decisao, self.cfg)
+            self.motivos[-1] = m
+            self.diagnosticos[-1] = diag
+        return alvo
 
     def _mudanca_no_corpo(self, obs_antes: Observacao, obs_depois: Observacao) -> None:
         """O carinho com `gestos` (secao 8) nao passa por `receber_acao_dono`, mas e uma acao do dono no log: o relogio do cuidado e o
