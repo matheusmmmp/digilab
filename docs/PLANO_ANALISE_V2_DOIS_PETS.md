@@ -242,4 +242,35 @@ Decisão do Matheus (2026-10-13), PDC-1 pela recomendação do #283. Este trecho
 
 ### 1.2 Depois da calibração: os números
 
-(Preenchido com os números de `artifacts_v2_dois_pets/calibracao/`, num commit antes da validação.)
+**A calibração rodou uma vez** em 2026-10-13, no commit `24f0b6d` (com a árvore limpa), pela config
+`experiments/configs/v2_dois_pets/calibracao.json`:
+- 20 grupos A-so (bases 39101…39505, K_u = 4), 10 dias cada;
+- todo grupo foi gravado e rejogado do disco bit a bit;
+- 26 s de CPU, 9 s de parede com 8 processos.
+
+Os números saem de `artifacts_v2_dois_pets/calibracao/` (`k.json`, `resultado.json`, `k/medidas.json`, `meta.json`).
+
+**G-K, as janelas do 1.1:** a R_A dos dias 1 e 2 é 0,485, com 33 consumos em 10 unidades. O limiar é 0,242.
+
+| K | dias | R_A | consumos (unidades com valor) | IC95 | leitura |
+|---|---|---|---|---|---|
+| 3 | 2 e 3 | 0,358 | 53 | [0,162; 0,552] | não aprendeu |
+| 5 | 4 e 5 | 0,338 | 77 | [0,164; 0,518] | não aprendeu |
+| 7 | 6 e 7 | 0,366 | 71 | [0,160; 0,567] | não aprendeu |
+
+**Nenhum K passa, e não é por exposição:** toda janela tem 20 consumos ou mais.
+
+**Pela seção 5, o plano para aqui:**
+- o A não aprende no mundo físico em 7 dias, e não há o que transmitir;
+- não roda piloto, `Δ_S` nem N, e a validação (40101…40505) não roda;
+- o plano volta ao Matheus.
+
+**Descritivo, fora da regra:** a R_A por dia, somada nas 20 unidades.
+
+| dia | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R_A | 0,80 | 0,35 | 0,37 | 0,29 | 0,39 | 0,50 | 0,21 | 0,41 | 0,22 | 0,25 |
+| consumos | 10 | 23 | 30 | 38 | 39 | 38 | 33 | 17 | 32 | 40 |
+
+- Na vida toda, a R_A é 0,343 em 300 consumos, perto de 1/3, a fração de um tipo entre três.
+- Cada A come em média 15 frutas maduras e 83 rações em 10 dias.

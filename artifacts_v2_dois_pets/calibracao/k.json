@@ -1,0 +1,100 @@
+{
+  "dias_inicio": [
+    "dia_1",
+    "dia_2"
+  ],
+  "fechou": false,
+  "janelas": "dois_dias",
+  "k": null,
+  "por_k": {
+    "3": {
+      "dias": [
+        "dia_2",
+        "dia_3"
+      ],
+      "leitura": "nao aprendeu",
+      "limiar": 0.24242424242424243,
+      "passa": false,
+      "r_a_dia_k": {
+        "ic": {
+          "ic_inferior": 0.16216216216216217,
+          "ic_superior": 0.5517241379310345,
+          "nivel": 0.95
+        },
+        "modo": "razao_das_somas",
+        "motivo": null,
+        "n": 53,
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "reamostras_sem_valor": 0,
+        "taxa": 0.3584905660377358,
+        "unidades": 20,
+        "unidades_com_valor": 18
+      }
+    },
+    "5": {
+      "dias": [
+        "dia_4",
+        "dia_5"
+      ],
+      "leitura": "nao aprendeu",
+      "limiar": 0.24242424242424243,
+      "passa": false,
+      "r_a_dia_k": {
+        "ic": {
+          "ic_inferior": 0.1643835616438356,
+          "ic_superior": 0.5180722891566265,
+          "nivel": 0.95
+        },
+        "modo": "razao_das_somas",
+        "motivo": null,
+        "n": 77,
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "reamostras_sem_valor": 0,
+        "taxa": 0.33766233766233766,
+        "unidades": 20,
+        "unidades_com_valor": 19
+      }
+    },
+    "7": {
+      "dias": [
+        "dia_6",
+        "dia_7"
+      ],
+      "leitura": "nao aprendeu",
+      "limiar": 0.24242424242424243,
+      "passa": false,
+      "r_a_dia_k": {
+        "ic": {
+          "ic_inferior": 0.16049382716049382,
+          "ic_superior": 0.5666666666666667,
+          "nivel": 0.95
+        },
+        "modo": "razao_das_somas",
+        "motivo": null,
+        "n": 71,
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "reamostras_sem_valor": 0,
+        "taxa": 0.36619718309859156,
+        "unidades": 20,
+        "unidades_com_valor": 18
+      }
+    }
+  },
+  "r_a_dia_1": {
+    "modo": "razao_das_somas",
+    "n": 33,
+    "taxa": 0.48484848484848486,
+    "unidades": 20,
+    "unidades_com_valor": 10
+  },
+  "regra": "o menor K de {3, 5, 7} com o limite superior do IC95 de R_A no dia K abaixo de metade da R_A do dia 1 (secao 5)",
+  "so_exposicao_baixa": false,
+  "taxa": {
+    "modo": "razao_das_somas",
+    "n_minimo": 20
+  },
+  "unidades": 20
+}

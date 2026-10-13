@@ -3958,3 +3958,19 @@ mundo da calibração; 3.360 vidas rejogadas do disco, 50 min com 8 processos (6
   mais no layout afastado, mas ficar não paga.
 - **Leitura (A1.5, terceira linha):** a consequência imediata não aprende a procurar neste mundo. Por dono, a perda vem do atencioso e do
   incoerente; com o relapso o P1 ganha um pouco (descritivo).
+
+## V2, DOIS-PETS-CALIBRACAO, a run — o K não fecha (2026-10-13, `docs/PLANO_ANALISE_V2_DOIS_PETS.md`, seção 5 e adendo 1) — O PLANO VOLTA AO MATHEUS
+
+Decisão do Matheus (2026-10-13): a PDC-1 pela recomendação. O adendo 1.1 (as janelas de dois dias da regra do K) foi commitado antes da
+run (`24f0b6d`), e a calibração rodou uma vez. Números de `artifacts_v2_dois_pets/calibracao/` (`k.json`, `resultado.json`,
+`k/medidas.json`, `meta.json`; os registros dos grupos ficam fora do git, regeneráveis). Eles estão congelados no adendo 1.2 do plano.
+- **A run:**
+  - 20 grupos A-so (o A informativo sozinho, P1, 10 dias), nas bases 39101…39505 (K_u = 4), cada um gravado e rejogado do disco bit a
+    bit;
+  - 9 s de parede com 8 processos.
+- **G-K:** a R_A dos dias 1 e 2 é 0,485 (33 consumos). Nos dias K − 1 e K, a R_A é 0,358 (K = 3), 0,338 (K = 5) e 0,366 (K = 7). O limite
+  superior do IC95 fica entre 0,52 e 0,57, contra o limiar de 0,242. **Nenhum K passa, e não é por exposição:** toda janela tem 53 a 77
+  consumos.
+- **O plano para (seção 5):** sem piloto, sem `Δ_S`, sem N; a validação não roda. O plano volta ao Matheus.
+- **Descritivo:** a R_A da vida toda é 0,343 em 300 consumos, perto de 1/3, a fração de um tipo entre três. Cada A come em média 15
+  frutas maduras e 83 rações em 10 dias.

@@ -1,0 +1,405 @@
+{
+  "bancada": {
+    "bancada_sha256": "be3e359e568365d4ea26bb8ab7fd017096ca4dffc85635eb1b093d985f993377",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 256,
+      "w0_pedido": 256
+    },
+    "config": {
+      "bracos": [
+        "A-so"
+      ],
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4
+      },
+      "dias": 10,
+      "dono": "atencioso",
+      "k_dias": 0,
+      "lobos": {
+        "memoria_ganho": 512,
+        "w0_info": 256,
+        "w0_pedido": 256
+      },
+      "lugar": "comedouro",
+      "montagem": "completa",
+      "mundo": {
+        "mult_queda": 1.0
+      },
+      "orcamento_por_dia": 16,
+      "plano": "docs/PLANO_ANALISE_V2_DOIS_PETS.md",
+      "ponto": "T3",
+      "tipo": "grupo",
+      "unidades": {
+        "bases": [
+          39101,
+          39202,
+          39303,
+          39404,
+          39505
+        ],
+        "k": 4,
+        "prefixo": "dois_pets"
+      }
+    },
+    "config_sha256": "86aa57cb04eeb02b1c3638e04efa3f1b012522caf96620ba6fb6ddcd2448fedd",
+    "corpo_sha256": "5bc401ffc146fcef37b4959963c00fe7d8e20d1237360957667823ed59a32f26",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "86364eb2e5d1116d50926ddd0654c6568049bf32b29afb30f20497e3dfa6e18b",
+    "metrics_sha256": "2b16b72ed6eee256fe147a6419abe2835310e02e66c2a41510596e4fb5a4d09c",
+    "motor_corpo_sha256": "75daab70783af5041f335c106021a8b8290b512b910f09c263326cb3d3c1e99e",
+    "mundo_sha256": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "python": "3.13.0"
+  },
+  "config": {
+    "adendo_janelas": "docs/PLANO_ANALISE_V2_DOIS_PETS.md, adendo 1.1 (PDC-1, decisão do Matheus em 2026-10-13)",
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "calibracao_k": {
+      "dias_a": 10,
+      "grade_k": [
+        3,
+        5,
+        7
+      ],
+      "janelas": "dois_dias"
+    },
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "descricao": "Calibracao do K e piloto dos dois pets (PLANO_ANALISE_V2_DOIS_PETS, secoes 5, 6 e 8; aprovados pelo Matheus em 2026-10-12, para rodar DEPOIS da validacao do mundo fisico). Etapa K: o A informativo sozinho (A-so, P1), 10 dias, nas 20 unidades das bases 39101...39505 (K_u = 4, prefixo dois_pets); o menor K de {3, 5, 7} com o limite superior do IC95 de R_A no dia K abaixo de metade da R_A do dia 1 (G-K; com o adendo 1.1, os dias K-1 e K contra os dias 1 e 2). Piloto no K escolhido: os quatro bracos, o B com 14 dias; Delta_S = 1/2 x [R_B(B so) - R_A(Ainf, dias K-6 a K)], o K_u de 4 a 10 pelo poder simulado no G-SOCIAL, o custo. O cerebro A do ponto da K2 com a montagem completa e o que a etapa 4 acrescenta (o alvo aprendido, as entradas sociais, o modelo dos outros) e a rota do humor (PDP-7); o mundo com o m da calibracao do mundo (1,0). A agregacao da R entre unidades (taxa.modo) e o consumo minimo das janelas da regra (taxa.n_minimo) sao decisao do Matheus antes da run (PR).",
+    "dono": "atencioso",
+    "lobos": {
+      "memoria_ganho": 512,
+      "w0_info": 256,
+      "w0_pedido": 256
+    },
+    "lugar": "comedouro",
+    "margem": {
+      "distancia_minima": 0.05
+    },
+    "montagem": "completa",
+    "mundo": {
+      "mult_queda": 1.0
+    },
+    "orcamento_por_dia": 16,
+    "piloto": {
+      "bracos": [
+        "B-so",
+        "B+Ainf",
+        "B+Aemb",
+        "B+Aing"
+      ],
+      "dias_b": 14
+    },
+    "plano": "docs/PLANO_ANALISE_V2_DOIS_PETS.md",
+    "poder": {
+      "alfa": 0.025,
+      "alfas_relato": [
+        0.025,
+        0.05
+      ],
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "replicas": 2000
+    },
+    "ponto": "T3",
+    "taxa": {
+      "modo": "razao_das_somas",
+      "n_minimo": 20
+    },
+    "unidades": {
+      "bases": [
+        39101,
+        39202,
+        39303,
+        39404,
+        39505
+      ],
+      "k": 4,
+      "prefixo": "dois_pets"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_dois_pets/calibracao.json",
+  "config_sha256": "be35f84c88281223087cc9986671f5f14a6babf68e41d6d78c87ce64f85d7cc4",
+  "duracao_s": 9.01866626739502,
+  "fim": "2026-10-13T08:24:20",
+  "git_head": "24f0b6d767caf98b59a7318d87ba41e3a985f744",
+  "git_limpo": true,
+  "inicio": "2026-10-13T08:24:11",
+  "k_parede_s": 8.462972000008449,
+  "modo": "calibracao",
+  "orquestrador_sha256": "884bea4d6e8c0b2714f8a15361808f2bf171af104596dc35502d246d1857d83d",
+  "plano": "docs/PLANO_ANALISE_V2_DOIS_PETS.md",
+  "plano_sha256": "c1aff5fb4cbbccf333feeb990c7b3756daf43df8cc0d45332db74b2b62675e5f",
+  "processos": 8,
+  "python": "3.13.0",
+  "sha256": {
+    "config.py": "86aa57cb04eeb02b1c3638e04efa3f1b012522caf96620ba6fb6ddcd2448fedd",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "grupo.py": "fbba08aa233dd6de036b7fa0b218c952572653b3bee05b431f48e9350c502652",
+    "lobos.py": "86364eb2e5d1116d50926ddd0654c6568049bf32b29afb30f20497e3dfa6e18b",
+    "mundo.py": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262"
+  },
+  "teto_dos_pesos": {
+    "A-so/A": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B+Aemb/A": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B+Aemb/B": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B+Ainf/A": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B+Ainf/B": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B+Aing/A": {
+      "alvo_aprendido": true,
+      "aprende": false,
+      "braco_pet": "P0",
+      "cabe": true,
+      "canais": false,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B+Aing/B": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    },
+    "B-so/B": {
+      "alvo_aprendido": true,
+      "aprende": true,
+      "braco_pet": "P1",
+      "cabe": true,
+      "canais": true,
+      "entradas_sociais": true,
+      "memoria": false,
+      "modelo_outros": true,
+      "pesos": 990,
+      "presenca_fruta_mundo": true,
+      "teto": 1000
+    }
+  },
+  "unidades": [
+    {
+      "base": 39101,
+      "genoma": 10164184777365023253,
+      "k": 0,
+      "semente": 12892300731104976519
+    },
+    {
+      "base": 39101,
+      "genoma": 11758226517963965333,
+      "k": 1,
+      "semente": 14155031953867819530
+    },
+    {
+      "base": 39101,
+      "genoma": 17854507248375326445,
+      "k": 2,
+      "semente": 16479226585459653121
+    },
+    {
+      "base": 39101,
+      "genoma": 930032498166708088,
+      "k": 3,
+      "semente": 10027690829547739998
+    },
+    {
+      "base": 39202,
+      "genoma": 8740930590027328976,
+      "k": 0,
+      "semente": 17919179786692917294
+    },
+    {
+      "base": 39202,
+      "genoma": 1279634496093231524,
+      "k": 1,
+      "semente": 14997684672133544473
+    },
+    {
+      "base": 39202,
+      "genoma": 15954466394993560840,
+      "k": 2,
+      "semente": 16973033166586349734
+    },
+    {
+      "base": 39202,
+      "genoma": 2307268085617488226,
+      "k": 3,
+      "semente": 11867938448288062297
+    },
+    {
+      "base": 39303,
+      "genoma": 2665136697166162461,
+      "k": 0,
+      "semente": 13657952984819626636
+    },
+    {
+      "base": 39303,
+      "genoma": 6773579859560475183,
+      "k": 1,
+      "semente": 36191355476284560
+    },
+    {
+      "base": 39303,
+      "genoma": 5292675785719578886,
+      "k": 2,
+      "semente": 5884540170757906486
+    },
+    {
+      "base": 39303,
+      "genoma": 2205606556892591030,
+      "k": 3,
+      "semente": 501486133077810687
+    },
+    {
+      "base": 39404,
+      "genoma": 6634142127431619133,
+      "k": 0,
+      "semente": 1130420919360638494
+    },
+    {
+      "base": 39404,
+      "genoma": 15050521629729480304,
+      "k": 1,
+      "semente": 17319446917692595947
+    },
+    {
+      "base": 39404,
+      "genoma": 15800802044706284774,
+      "k": 2,
+      "semente": 17888810843160387534
+    },
+    {
+      "base": 39404,
+      "genoma": 1454165731159800376,
+      "k": 3,
+      "semente": 11275892473480310520
+    },
+    {
+      "base": 39505,
+      "genoma": 12166678187078000115,
+      "k": 0,
+      "semente": 9382592658307124520
+    },
+    {
+      "base": 39505,
+      "genoma": 6434704759557805457,
+      "k": 1,
+      "semente": 14127964438733005111
+    },
+    {
+      "base": 39505,
+      "genoma": 14996459129755897504,
+      "k": 2,
+      "semente": 7649967307809497321
+    },
+    {
+      "base": 39505,
+      "genoma": 818946016874216720,
+      "k": 3,
+      "semente": 17972683084072724448
+    }
+  ]
+}

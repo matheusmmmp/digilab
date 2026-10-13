@@ -4744,3 +4744,12 @@ limpa). Interpretações:
   segue proibida.
 - **Uma falha do `test_grupo`** (um `TypeError` no `replace` do `Estado`) apareceu na suíte que rodou junto com a validação e não se
   repetiu com o teste sozinho; a suíte foi rodada de novo depois da run.
+
+## 2026-10-13 — DOIS-PETS-CALIBRACAO, a run (worker B): o K não fecha
+
+- **O adendo 1.1 entrou antes da run,** num commit próprio (`24f0b6d`): as janelas de dois dias (PDC-1, decisão do Matheus) e, onde o
+  plano não dizia, os valores recomendados no #283 (PDC-2 a PDC-5). A config e a fumaça passaram a `"janelas": "dois_dias"`, com o
+  ponteiro `adendo_janelas`.
+- **Nada foi ajustado depois da run.** A regra parou no G-K, como a seção 5 manda, e o piloto não rodou.
+- **O descritivo dia a dia** (a R_A por dia, somada nas unidades) é pós hoc e fica fora da regra. Serve só para o Matheus ler o "não
+  aprende".
