@@ -5116,3 +5116,23 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **O cérebro A não lê os órgãos** nesta etapa (a tarefa pede o custo). A rede de si lê todos os receptores presentes e, com os órgãos,
   passa do teto dela na maioria dos conjuntos: falha alto, por desenho.
 - **A paridade em TS (G-PAR)** fica para quando o mundo e o corpo forem à web.
+
+## 2026-10-13 — PET-QUE-PENSA-CALIBRACAO (worker D): a calibração do `g_plano` e o piloto
+
+- **O piloto não estava no orquestrador.** A seção 6 o pede antes do adendo 1, e o Gerente pediu "piloto/N se o plano mandar". Ele entrou
+  como `--piloto` do mesmo script, num commit antes de rodar (`0b1e226`), com os números fixos do plano:
+  - 2.000 réplicas, alvo 0,8 e α/2 = 0,025;
+  - os alfas do relato dos secundários, 0,0125 e 0,05 (o Holm de 4).
+- **O "n_antes" do plano no T2** foi lido como a fração de buscas que vão às novas antes da mudança (o `f_antes` do T2). O `n_antes` da
+  `metrics.mudanca_de_escolha` é a contagem, outra coisa.
+- **O N efetivo de cada primário** desconta as unidades sem oportunidade pela taxa do piloto, arredondando para baixo:
+  `floor(N × com valor / total)`. Não chegou a ser usado, porque o N não foi calculado.
+- **Cada braço roda numa run própria da bancada**, em paralelo. O P1 roda sem a chave `g_plano`, que a bancada recusa quando não há braço
+  com o planejador.
+- **G-APRENDEU no piloto** usa o `f_antes` do T1, porque a fase 1 é a mesma nos dois testes.
+- **O resultado:**
+  - o `g_plano` = S fechou, por 0,0001;
+  - o T1 fica sem margem (`f_antes` = 0);
+  - o T2 fica sem busca depois da mudança.
+  - Pela seção 6, a validação não roda e o plano volta ao Matheus.
+  - O porquê (o pet come a ração do comedouro e quase nunca a x) é descritivo, de 4 unidades rejogadas, e está no relatório.

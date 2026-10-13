@@ -284,3 +284,25 @@ Todas da seção 10 de `docs/futuro/pet_que_pensa.md`, com o mesmo status de lei
 | Dolan e Dayan (2013). Goals and Habits in the Brain. Neuron | `10.1016/j.neuron.2013.09.007` | resumo | metas e hábitos como espectro: o termo soma, não substitui |
 | Sutton (1990). ML Proceedings 1990 | `10.1016/b978-1-55860-141-3.50030-4` | só o título | que a linha existe; nenhuma afirmação de conteúdo |
 | Schrittwieser et al. (2020). Nature 588 | `10.1038/s41586-020-03051-4` | só o título | que planejar com um modelo aprendido já existe; nenhuma afirmação de conteúdo |
+
+## Adendo 1 — o `g_plano`, as margens, o N e o custo (2026-10-13, números da calibração e do piloto, congelados)
+
+Seção 10 do plano. A calibração e o piloto rodaram uma vez cada, nas bases 45101…45505 (K_u = 4, 20 unidades), com a config
+`experiments/configs/v2_pet_que_pensa/calibracao.json` sem mudança. O código é o dos commits `61d0be4` (a calibração) e `0b1e226` (o
+piloto). Os números vêm de `artifacts_v2_pet_que_pensa/calibracao/g_plano.json` e `piloto/piloto.json`, e o relatório está em
+`docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA.md`. Nada deste adendo foi escolhido olhando o primário.
+
+- **A1.1, o `g_plano` = S (1024), fechou.** A média da fração da sonda nos dias 4 a 6 foi 0,0518 (S/4), 0,0410 (S/2) e **0,1001** (S). O
+  menor ponto em [0,10; 0,40] é S, a 0,0001 da borda.
+- **A1.2, as margens:**
+  - **`Δ_T1` = 0,000:** a média de `f_antes` do P1-plan no T1 é 0 (12 unidades com oportunidade antes, nenhuma escolha de x);
+  - **`Δ_T2` = 0,214:** ½ × a média de 1 − `f_antes` do P1-plan no T2 (7 unidades com busca antes).
+  - **O T1 fica sem espaço (`Δ_T1` ≤ 0,05):** pela seção 6, **a validação não roda, e o plano volta ao Matheus.**
+- **A1.3, o N: não calculado.** A regra pede o poder nos dois primários, e o G-T1 não tem margem. No T2, nenhuma unidade de nenhum braço
+  teve busca depois da mudança, então o G-T2 também não tem diferença por unidade para simular.
+- **A1.4, as premissas no piloto (só relato):**
+  - **G-APRENDEU falha nos quatro braços:** `f_antes` 0 [0; 0];
+  - **G-OPORTUNIDADE falha em todos os braços e testes:** de 30% a 45% das unidades ficam sem oportunidade no T1, e 100% no T2;
+  - **G-EXPOSICAO falha:** de 35% a 45% das unidades ficam sem exposição.
+- **A1.5, o custo:** 0,62 s de CPU por vida de 10 dias (P1 0,55; com o planejador, 0,63 a 0,64). Com 8 vidas por unidade, N = 50 daria
+  400 vidas, cerca de 4 min de CPU.
