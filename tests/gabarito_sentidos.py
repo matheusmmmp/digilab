@@ -4,7 +4,8 @@ ANTES dos sentidos do degrau 1b. Com a chave dos sentidos desligada, estes grupo
 
 Duas fontes de grupo:
 - **o `simular_grupo` direto**: os dois pets com o instinto do mundo ou com os lobos aprendendo, sem e com o corpo inteiro da etapa 6, o B
-  entrando no dia 0 ou no dia 1, os dois layouts, os donos atencioso e aleatorio (o aleatorio faz o pet chamar e emburrar), 2 sementes;
+  entrando no dia 0 ou no dia 1 (no tick 0 ou 1440 do mundo), os dois layouts, os donos atencioso e aleatorio (o aleatorio faz o pet
+  chamar e emburrar), 2 sementes;
 - **a bancada do grupo** (`experiments/bancada_v2.py`): os braços B-so, B+Ainf, B+Aemb, B+Aing e A-so com K = 1, 2 dias, o cerebro do
   grupo (o alvo aprendido, as entradas sociais, o modelo dos outros e a presenca da fruta), nas montagens simples e completa, 2 sementes.
 
@@ -28,7 +29,7 @@ sys.path.insert(0, str(RAIZ / "tests"))
 import bancada_v2 as bv  # noqa: E402
 import gabarito_dois_pets as gdp  # noqa: E402
 
-from digilab.config import CONFIG_GRUPO_LIGADA, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO  # noqa: E402
+from digilab.config import CONFIG_GRUPO_LIGADA, CONFIG_LOBOS_APRENDIZ, CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.grupo import PetDoGrupo, sementes_do_grupo, simular_grupo  # noqa: E402
 from digilab.mundo import DonoComLugar, MotorMundo  # noqa: E402
@@ -75,7 +76,7 @@ def fabricas(cerebro: str, corpo: str, layout: str):
 def grupo_direto(cerebro: str, corpo: str, entrada_b: int, layout: str, dono: str, s: int):
     sementes = sementes_do_grupo(s, CONFIG_GRUPO_LIGADA.ids)
     pets = []
-    for ident, entrada in (("A", 0), ("B", entrada_b)):
+    for ident, entrada in (("A", 0), ("B", entrada_b * TICKS_POR_DIA)):
         fp, fm = fabricas(cerebro, corpo, layout)
         d = DonoComLugar(criar_dono(dono), "perto", sementes[ident], dono, gdp.LAYOUTS[layout])
         pets.append(PetDoGrupo(ident, entrada, fp, fm, d, dono, cerebro))
