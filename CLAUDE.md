@@ -3974,3 +3974,35 @@ run (`24f0b6d`), e a calibração rodou uma vez. Números de `artifacts_v2_dois_
 - **O plano para (seção 5):** sem piloto, sem `Δ_S`, sem N; a validação não roda. O plano volta ao Matheus.
 - **Descritivo:** a R_A da vida toda é 0,343 em 300 consumos, perto de 1/3, a fração de um tipo entre três. Cada A come em média 15
   frutas maduras e 83 rações em 10 dias.
+
+## V2, PET-QUE-PENSA, etapas 0 e 1 — os modelos do mundo, só observando (2026-10-13, `docs/TAREFA_V2_PET_QUE_PENSA.md`) — GATES PASSAM
+
+J5, com PP-1 a PP-9 decididas pela recomendação. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/modelo_mundo.py`
+(novo) e a `ConfigModeloMundo` no fim de `config.py`. `engine.py`, os cérebros, o corpo, o mundo, a bancada e a web não mudaram.
+Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Etapa 0, num commit próprio, antes do módulo:** `tests/gabarito_pet_que_pensa.py` → `tests/gabaritos/pet_que_pensa_vidas_de_hoje.json`,
+  136 vidas:
+  - pela bancada, P0, P1 e P3 no regime química e o P0 do instinto do mundo, nos dois layouts, nas montagens simples e completa, com o
+    alvo aprendido e a presença da fruta;
+  - direto, vidas com o metabolismo (PP-3).
+- **`ModeloMundo`** (só inteiros, sem rng; importa só `config` e `events`):
+  - **o desfecho:** por tipo (`racao`, `a`, `b`, `c`, `podre`) e receptor, a mudança esperada da leitura ao comer. Aprende nos consumos
+    do `comer`, com a energia corrigida pelo andar previsto; o "achou e comeu" só é contado;
+  - **o custo de andar:** a mudança da energia por subunidade, vezes S, aprendida nos `comer` com deslocamento percebido;
+  - **o mapa:** por árvore do layout e pelo comedouro, a frequência do tipo maduro visto a até 2 células. Um lugar só entra depois de o
+    pet vê-lo (o raio da visão), e a fruta de cada árvore no layout nunca é lida;
+  - os números são PROPOSTOS (PP-6): `passo_desfecho` S/4, `passo_mapa` S/8, `raio_ancora_celulas` 2, `teto_modelo` 200; registro
+    `modelo_mundo.PARAMETROS_MODELO_MUNDO`;
+  - **76 inteiros** no regime química (5 tipos × 5 receptores + 1 + 10 lugares × 5 tipos); 101 com os drives novos.
+- **`PoliticaComModelo`:** o embrulho somente leitura. Entrega aos modelos a observação de cada decisão e a consequência do mundo, e
+  repassa o resto ao cérebro. O estado interno é o do cérebro; os modelos ficam em `modelo` (`para_dict`).
+- **Gates** (`tests/test_modelo_mundo.py`, 196, ~1 min):
+  - **G-INT** (AST) e o módulo só importa `config` e `events`; as contas inteiras são as de sempre (`isqrt`, `div_arred`);
+  - **G-TETO-MODELO:** 76, e o teto falha alto;
+  - **G-RECEPTOR-MM:** o Estado, o relógio do cuidado, a informação do dono, o resto do `ocorrido` e a fruta do layout não mudam os
+    modelos; um químico sem receptor não muda a percepção;
+  - **a conta exata** de um passo do mapa (e da âncora), do andar e do desfecho, a podre, o "achou e comeu" e o `comer` sem comida;
+  - **G-OBS-MM:** as 104 vidas com corpo da etapa 0 saem byte a byte com os modelos observando; sem o corpo (as 32 do P0 do instinto da bancada), falha alto, e essas saem iguais ao gabarito;
+  - **G1:** o replay da bancada refaz os modelos bit a bit.
+- **Fica para depois:** o planejador e o lobo `planejamento` (etapa 2), as classes por árvore (2b), a troca de tipo e a fruta na mão
+  (etapa 3, A), a bancada (etapa 4, D).

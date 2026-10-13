@@ -4782,3 +4782,31 @@ limpa). Interpretações:
 - **Nada foi ajustado depois da run.** A regra parou no G-K, como a seção 5 manda, e o piloto não rodou.
 - **O descritivo dia a dia** (a R_A por dia, somada nas unidades) é pós hoc e fica fora da regra. Serve só para o Matheus ler o "não
   aprende".
+
+## 2026-10-13 — PET-QUE-PENSA, etapas 0 e 1 (worker B): os modelos do mundo, só observando
+
+- **A etapa 0 ficou maior que a letra.** A tabela pede as vidas do mundo físico com o corpo químico (P0, P1, P3, os dois layouts, o alvo
+  aprendido). O gabarito tem isso pela bancada, nas montagens simples e completa, com a presença da fruta no mundo (#269), que é o cérebro
+  do plano. Também tem vidas diretas com o metabolismo, porque a PP-3 pede o regime química com ele e a bancada não o liga no mundo
+  físico. O P0 do instinto da bancada não tem corpo: no G-OBS-MM ele só confere que os modelos falham alto, e um teste confere a vida dele
+  contra o gabarito.
+- **Os troncos não estão nos `vistos`.** A tarefa diz que a posição das árvores "é a dos troncos que o pet já viu (os `vistos`)". A
+  percepção do mundo não traz troncos. O modelo usa a posição do layout (o centro da célula), mas só depois que o tronco ficou a até o
+  raio da visão do pet, pela mesma conta dos `vistos`. Nunca lê a fruta de cada árvore no layout (teste). O comedouro é tratado igual. Os
+  candidatos de árvore lembrada da etapa 3 (A) deveriam usar o mesmo critério de "visto".
+- **O mapa conta cada aparição.** Pela letra ("cada vez que uma comida madura aparece nos `vistos`"), a mesma comida conta de novo em cada
+  decisão em que aparece. A alternativa, contar cada comida uma vez por lugar, ficou fora. A comida vista conta para o lugar já visto mais
+  perto dela, a até 2 células; no empate, vai ao primeiro na ordem dos lugares. A podre e a bola não contam, então a coluna da podre no
+  mapa só esquece.
+- **O desfecho só aprende com o `comer`.** No "achou e comeu" do explorar, o efeito do próprio explorar no corpo não se separa do da
+  comida, então esse consumo só é contado (`consumos_nao_usados`). A fruta na mão (etapa 3) entra pelo mesmo `consumo`.
+- **O custo de andar** aprende nas decisões de `comer` com deslocamento (comer não mexe na energia). A amostra é a mudança da leitura da
+  energia por subunidade, vezes S, e a distância é a percebida, da posição da decisão à de depois, com a raiz inteira. A distância que o
+  motor anota no `ocorrido` não é lida (teste). No consumo, o componente da energia é corrigido pelo andar previsto, já atualizado com
+  a amostra da mesma decisão. Pelo arredondamento dos receptores, a estimativa fica perto e não igual ao custo do motor: numa vida de
+  teste, −196 e −170 contra −175.
+- **O teto conta como o dos outros módulos:** os modelos têm de ficar abaixo de `teto_modelo` (76 < 200). O layout dos receptores é fixado
+  na primeira decisão, como na rede de si.
+- **O embrulho tem sempre o `consequencia_mundo`**, porque os modelos precisam dele. Ele só repassa ao cérebro quando o cérebro tem o
+  gancho, então a vida não muda (G-OBS-MM). Os modelos veem a decisão antes de o cérebro escolher, sem tocar na rng, para o planejador da
+  etapa 2 já ler o mapa da decisão.
