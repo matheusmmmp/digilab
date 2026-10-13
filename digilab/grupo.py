@@ -38,6 +38,15 @@ disputa e a comida que um comeu e o outro tinha como alvo (neste tick, ou o alvo
 come, o segundo nao acha (MF-2). Os registros (`contatos`, `disputas` e, em cada motor, os consumos vistos, as idas a `onde_comeu` e o
 tempo a vista) sao derivados: nada disso entra no registro do grupo, o replay refaz. O toque nao mexe no corpo (degrau 3).
 
+O cheiro proprio, o rastro e o som (etapa 8; desenho, secoes 5.3, 5.4 e 5.6; DP-11, degrau 1b), atras da ConfigSentidos (desligada: o
+grupo de hoje, byte a byte), e so com dois pets presentes (sozinho, nada e guardado). O rastro mora no Mundo: cada pet deixa uma marca por
+decisao, na posicao da decisao. O som e um evento do grupo: quando um pet come, brinca com a bola, chama ou emburra, cada outro presente a
+menos de R_som o ouve (a linha reta, OA-3) e guarda na caixa dele, com a direcao e a distancia e a intensidade no centro e no ponto de cada
+ouvido (pela direcao do ultimo passo de quem ouve); a caixa vai para a percepcao da decisao seguinte e se esvazia. A percepcao de cada pet
+(`PercepcaoSentidos` em `obs.social.sentidos`) tem o cheiro de cada outro (o cheiro dele e o rastro dele, a conta inteira do cheiro da
+comida num canal separado, OA-1), a direcao pronta do mundo (OA-2) e a intensidade no ponto de cada narina, para o orgao do corpo (DP-13). Os
+sons emitidos (`sons`) sao derivados; a ConfigSentidos vai no cabecalho do registro (so ligada), e o replay a confere.
+
 So biblioteca padrao.
 """
 
@@ -45,16 +54,17 @@ from __future__ import annotations
 
 import json
 import random
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Callable
 
-from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo, ConfigMundo
+from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo
+from .config import ConfigMundo, ConfigSentidos
 from .donos import Visao
 from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
-from .mundo import (CANDIDATOS_SOCIAIS, CanalMundo, MotorMundo, Mundo, PercepcaoSocial, celula_de, direcao_vizinha, distancia,
-                    em_contato, perceber_social, tipos_do_contato)
+from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
+                    cheiro_do_pet, direcao_vizinha, distancia, em_contato, fontes_do_pet, perceber_social, som_ouvido, tipos_do_contato)
 from .protocol import derivar_semente
 
 ROTULO_ORDEM = "mundo-ordem"                 # o fluxo da vez no tick (DP-2)
@@ -161,11 +171,13 @@ class RegistroGrupo:
 class Grupo:
     """N motores sobre um `Mundo`, no mesmo relogio. Nao decide nada: so chama cada motor na vez sorteada e grava o registro."""
 
-    def __init__(self, cfg_mundo: ConfigMundo, semente: int, cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None) -> None:
+    def __init__(self, cfg_mundo: ConfigMundo, semente: int, cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None,
+                 cfg_sentidos: ConfigSentidos | None = None) -> None:
         self.cg = cfg_grupo or CONFIG_GRUPO_LIGADA
         if not self.cg.ligada:
             raise GrupoSemChave("o grupo so existe com ConfigGrupo.ligada (sem ela, o MotorMundo de um pet e dono do proprio Mundo)")
         self.cfg = cfg or CONFIG_PADRAO
+        self.cs = cfg_sentidos or CONFIG_SENTIDOS        # o degrau 1b (etapa 8): desligada, o grupo de hoje
         self.semente = semente
         self.mundo = Mundo(cfg_mundo, semente)
         self.sementes = sementes_do_grupo(semente, self.cg.ids)
@@ -178,6 +190,10 @@ class Grupo:
         self.disputas: list[dict] = []           # a comida que um comeu e o outro tinha como alvo: quem ganhou, a vez, as distancias
         self.registro = RegistroGrupo({"versao": VERSAO_REGISTRO, "semente": semente, "ids": list(self.cg.ids),
                                        "layout": cfg_mundo.layout.nome, "pets": {}})
+        if self.cs.ligada:
+            self.mundo.ligar_marcas()
+            self.sons: list[dict] = []               # os sons emitidos (derivados): tick, quem, o som, onde, quem ouviu
+            self.registro.cabecalho["sentidos"] = asdict(self.cs)
 
     # ------------------------------------------------------------ a entrada
     def entrar(self, ident: str, politica, fabrica_motor: Callable, cerebro: str, dono: str) -> MotorMundo:
@@ -200,6 +216,8 @@ class Grupo:
         if motor._estado.tick != 0 or len(motor.log):
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
         motor._grupo, motor.ident = self, ident
+        if self.cs.ligada:
+            motor._passo = self.cs.passo_inicial     # a direcao do ultimo passo antes do primeiro passo
         self.motores[ident] = motor
         self.registro.cabecalho["pets"][ident] = {"semente": self.sementes[ident], "entrada": self.tick, "cerebro": cerebro, "dono": dono}
         self.registro.anexar(EventoGrupo(self.tick, "entrada", ident, DESTINO_GRUPO, ident))
@@ -262,7 +280,45 @@ class Grupo:
             return None
         m = self.motores[ident]
         fisico = [(i, *self.motores[i].pet, self.motores[i]._acao_atual.value) for i in outros]
-        return perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao)
+        sentidos = self.perceber_sentidos(ident, outros) if self.cs.ligada else None
+        return perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao, sentidos)
+
+    # ------------------------------------------------------------ o cheiro proprio, o rastro e o som (etapa 8; degrau 1b)
+    def sentidos_ativos(self) -> bool:
+        """o degrau 1b guarda e emite so com a chave e com dois pets presentes (desenho, secao 5: sozinho, nada e guardado)"""
+        return self.cs.ligada and len(self.motores) >= 2
+
+    def perceber_sentidos(self, ident: str, outros: list[str]) -> PercepcaoSentidos:
+        """o que o pet `ident` sente dos `outros` agora (secoes 5.3, 5.4 e 5.6), so do que e fisico: o canal de cada outro (o cheiro na
+        posicao dele e o rastro que ele deixou no mundo) e a caixa dos sons que o proprio pet ouviu desde a decisao anterior"""
+        m, sub = self.motores[ident], self.mundo.cmf.sub
+        cheiro = []
+        for i in outros:
+            fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs)
+            cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs, sub)))
+        sons = tuple((*s[:7], self.tick - s[7]) for s in m._sons_ouvidos)
+        return PercepcaoSentidos(m._passo, tuple(cheiro), sons)
+
+    def emitir_som(self, quem: str, som: str) -> None:
+        """secao 5.4: o pet `quem` fez o som agora, onde esta. Cada outro presente a menos de R_som o ouve, em linha reta, e guarda na caixa
+        (quem, o som, a direcao, a distancia, a intensidade no centro e nos dois ouvidos, o tick). Sem os sentidos ativos, nada."""
+        if not self.sentidos_ativos():
+            return
+        if som not in SONS:
+            raise ValueError(f"som desconhecido: {som!r}")
+        sx, sy = self.motores[quem].pet
+        ouvintes, onde = [], {}
+        for i in self.ids_presentes():
+            if i == quem:
+                continue
+            m = self.motores[i]
+            onde[i] = [*m.pet, m._passo]               # onde estava e para onde olhava cada outro (a auditoria e as medidas)
+            ouvido = som_ouvido(*m.pet, m._passo, sx, sy, self.cs, self.mundo.cmf.sub)
+            if ouvido is None:
+                continue
+            m._sons_ouvidos.append((quem, som, *ouvido, self.tick))
+            ouvintes.append(i)
+        self.sons.append({"tick": self.tick, "emissor": quem, "som": som, "x": sx, "y": sy, "ouvintes": ouvintes, "outros": onde})
 
     def viu_comer(self, quem: str, x: int, y: int) -> None:
         """o pet `quem` comeu a comida de (x, y) agora: cada outro que o tem a vista (dentro do raio, neste momento) guarda o ponto"""
@@ -356,10 +412,14 @@ class Grupo:
     # ------------------------------------------------------------ leitura
     def resumo(self) -> dict:
         """o mundo, as vezes sorteadas e o que cada pet guarda (o G1 do grupo compara isto bit a bit)"""
-        return {"tick": self.tick, "mundo": self.mundo.resumo(), "ordens": self.ordens,
-                "rng_ordem": None if self._rng_ordem is None else self._rng_ordem.getstate(),
-                "contatos": self.contatos, "disputas": self.disputas,
-                "pets": {i: _resumo_do_pet(m) for i, m in self.motores.items()}}
+        r = {"tick": self.tick, "mundo": self.mundo.resumo(), "ordens": self.ordens,
+             "rng_ordem": None if self._rng_ordem is None else self._rng_ordem.getstate(),
+             "contatos": self.contatos, "disputas": self.disputas,
+             "pets": {i: _resumo_do_pet(m) for i, m in self.motores.items()}}
+        if self.cs.ligada:
+            r["sentidos"] = {"sons": self.sons, "pets": {i: {"passo": m._passo, "sons_ouvidos": [list(s) for s in m._sons_ouvidos]}
+                                                         for i, m in self.motores.items()}}
+        return r
 
 
 def _resumo_do_pet(m: MotorMundo) -> dict:
@@ -397,7 +457,7 @@ class PetNoGrupo:
 
 # ================================================================== o replay
 def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable, Callable]], cfg_mundo: ConfigMundo,
-                     cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None) -> Grupo:
+                     cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None, cfg_sentidos: ConfigSentidos | None = None) -> Grupo:
     """Refaz o grupo do cabecalho e rejoga os eventos no mesmo relogio. `fabricas[id] = (fabrica da politica, fabrica do motor)`. O
     registro refeito tem de ser o lido (falha alto); evento desconhecido, fora do tick ou de pet que nao entrou tambem."""
     cab = registro.cabecalho
@@ -406,10 +466,13 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
         raise ValueError(f"versao do registro do grupo desconhecida: {cab.get('versao')!r}")
     if list(cab["ids"]) != list(cg.ids) or cab["layout"] != cfg_mundo.layout.nome:
         raise ValueError("o cabecalho do registro nao e o desta ConfigGrupo/ConfigMundo")
+    cs = cfg_sentidos or CONFIG_SENTIDOS
+    if cab.get("sentidos") != (asdict(cs) if cs.ligada else None):
+        raise ValueError(f"o cabecalho do registro nao e o desta ConfigSentidos: {cab.get('sentidos')!r}")
     if set(fabricas) != set(cab["pets"]):
         raise ValueError(f"fabricas {sorted(fabricas)} para os pets {sorted(cab['pets'])}")
     cfg = cfg or CONFIG_PADRAO
-    g = Grupo(cfg_mundo, cab["semente"], cg, cfg)
+    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs)
     for e in registro.eventos:
         if e.tick != g.tick:
             raise ValueError(f"evento no tick {e.tick} com o grupo no tick {g.tick}: {e}")
@@ -447,7 +510,8 @@ class PetDoGrupo:
 
 
 def simular_grupo(cfg_mundo: ConfigMundo, semente: int, pets: list[PetDoGrupo], dias: int, cfg_grupo: ConfigGrupo | None = None,
-                  cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, canal_classe: type | None = None) -> Grupo:
+                  cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, canal_classe: type | None = None,
+                  cfg_sentidos: ConfigSentidos | None = None) -> Grupo:
     """O `simular_vida_mundo` do grupo (DP-7, a validacao inicial): a cada passo do dono o grupo anda o passo e, para cada pet presente
     (na ordem dos ids), o dono decide o cuidado dele pelo que ve dele, com o orcamento dele (`orcamento_por_dia` por dia vivido) e a rng
     `dono` dele (`derivar_semente("dono", semente do pet, rotulo do dono)`). Um pet so, entrando no tick 0, e o `simular_vida_mundo` de
@@ -464,7 +528,10 @@ def simular_grupo(cfg_mundo: ConfigMundo, semente: int, pets: list[PetDoGrupo], 
     for p in pets:
         if not 0 <= p.entrada < total:
             raise ValueError(f"o pet {p.ident} entra fora da vida do grupo: {p.entrada}")
-    g = Grupo(cfg_mundo, semente, cg, cfg)
+        if type(p.entrada) is not int or p.entrada % TICKS_POR_DIA:
+            # sem isto o pet nunca entrava, em silencio (o laco so o poe num passo do dono): a entrada e um tick do mundo, num inicio de dia
+            raise ValueError(f"o pet {p.ident} entra num inicio de dia do mundo (multiplo de {TICKS_POR_DIA}): {p.entrada!r}")
+    g = Grupo(cfg_mundo, semente, cg, cfg, cfg_sentidos)
     por_id = sorted(pets, key=lambda p: p.ident)           # G-ORDEM: a ordem da lista nao importa
     canais: dict[str, CanalMundo] = {}
     rngs: dict[str, random.Random] = {}

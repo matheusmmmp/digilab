@@ -1942,3 +1942,51 @@ class ConfigPetQuePensaMundo:
 
 CONFIG_PQP_MUNDO = ConfigPetQuePensaMundo()
 CONFIG_PQP_MUNDO_LIGADA = ConfigPetQuePensaMundo(ligada=True)
+
+
+# =====================================================================
+# V2, dois pets, etapa 8 (degrau 1b), o lado do mundo (docs/TAREFA_V2_DOIS_PETS.md, etapa 8; docs/futuro/dois_pets.md, secoes 5.3, 5.4 e
+# 5.6; DP-11, DP-13 e DP-14 decididas; OA-1 a OA-3 da revisao docs/referencias/H_REVISAO_OLFATO_AUDICAO.md, secao 6). Desligada por
+# padrao: o grupo de hoje byte a byte (G2). So no grupo, e so com dois pets presentes: sozinho, nada e guardado (nem rastro, nem som).
+# Ligada, o mundo:
+# - guarda o rastro de cada pet (uma marca por decisao, na posicao da decisao; ate `max_marcas`, as mais antigas saem; a marca vale
+#   `cheiro_marca` x (T - idade) // T e some na idade T) e soma, por outro pet, o cheiro proprio (na posicao atual, `cheiro_pet`) e as
+#   marcas dele, pela mesma conta inteira do cheiro da comida (A x (R - d) // R com d < R), num canal separado do da comida (OA-1: o campo
+#   calculado);
+# - emite os sons das acoes (`comendo`, `bola`, `chamado`, `emburrado`) na posicao do pet, em linha reta (OA-3), ouvidos a d < R_som com a
+#   intensidade `intensidade_som` x (R_som - d) // R_som;
+# - da a direcao em 8 pronta (OA-2: pre-processamento do mundo) e, para o orgao do B (DP-13 e DP-14), a intensidade em duas posicoes de
+#   amostra, a +-`afastamento_narinas` e +-`afastamento_ouvidos` subunidades de lado, pela direcao do ultimo passo do pet.
+# Todos os numeros sao PROPOSTOS, SEM FONTE (o plano do degrau 1b os fixa); o R_som de 16 celulas e o da secao 5.4 do desenho.
+
+
+@dataclass(frozen=True)
+class ConfigSentidos:
+    ligada: bool = False                     # PROPOSTO: a chave (o cheiro proprio, o rastro e o som no grupo)
+    cheiro_pet: int = 32                     # A_pet: o cheiro do pet na posicao atual (o da fruta e 32)
+    cheiro_marca: int = 16                   # A_marca: uma marca recem-deixada
+    raio_cheiro_pet_celulas: int = 12        # R do cheiro do pet e do rastro (o da comida e 24)
+    vida_marca_ticks: int = 720              # T: a marca some na idade T (12 h)
+    max_marcas: int = 48                     # por pet: T / o intervalo da decisao (15), o rastro inteiro de uma vida de marca
+    raio_som_celulas: int = 16               # R_som (desenho, secao 5.4: alem das 6 da visao)
+    intensidade_som: int = 64                # A do som, o mesmo para os quatro sons
+    afastamento_narinas: int = 8             # subunidades de cada lado (meia celula: as duas narinas a 1 celula uma da outra)
+    afastamento_ouvidos: int = 8             # idem, os ouvidos
+    passo_inicial: int = 0                   # a direcao do ultimo passo antes do primeiro passo (0 = leste, na tabela DIR16)
+
+    def __post_init__(self) -> None:
+        for nome in ("cheiro_pet", "cheiro_marca", "raio_cheiro_pet_celulas", "vida_marca_ticks", "max_marcas", "raio_som_celulas",
+                     "intensidade_som"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigSentidos.{nome} tem de ser inteiro positivo: {v!r}")
+        for nome in ("afastamento_narinas", "afastamento_ouvidos"):
+            v = getattr(self, nome)
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigSentidos.{nome} tem de ser inteiro nao negativo: {v!r}")
+        if type(self.passo_inicial) is not int or not 0 <= self.passo_inicial < 16:
+            raise ValueError(f"ConfigSentidos.passo_inicial tem de ser uma direcao da tabela DIR16 (0 a 15): {self.passo_inicial!r}")
+
+
+CONFIG_SENTIDOS = ConfigSentidos()
+CONFIG_SENTIDOS_LIGADA = ConfigSentidos(ligada=True)
