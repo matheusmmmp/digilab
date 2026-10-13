@@ -71,6 +71,14 @@ FATORES: dict[str, dict[str, str]] = {
     "escolha_aprendida_fruta": {"marcador": "aprendi a escolher", "bebe": "", "crianca": "[:aprendi a escolher:]",
                                 "adolescente": "aprendi a escolher...", "adulto": "porque aprendi a escolher essa"},
     # memoria (Parte B)
+    # o pet que pensa, etapa 2 (TAREFA_V2_PET_QUE_PENSA, secao 2.2): o plano decidiu. So nomeia o que os modelos tem: o lugar e o tipo
+    # que mais pesou (p0, p1), a comida que o pet via (p0) ou o tipo que pesou contra a outra escolha (p0)
+    "plano_arvore": {"marcador": "lá cai", "bebe": "", "crianca": "[:lá cai:]", "adolescente": "lá cai...",
+                     "adulto": "porque no {p0} lá cai {p1}, que me faz bem"},
+    "plano_comida": {"marcador": "vi ali", "bebe": "", "crianca": "[:vi ali:]", "adolescente": "vi ali...",
+                     "adulto": "porque vi ali {p0}, que me faz bem"},
+    "plano_evita": {"marcador": "me faz mal", "bebe": "", "crianca": "[:me faz mal:]", "adolescente": "me faz mal...",
+                    "adulto": "porque {p0} me faz mal"},
     "latencia_fome": {"marcador": "demorou com a comida", "bebe": "", "crianca": "[:demorou com a comida:]",
                       "adolescente": "demorou com a comida...",
                       "adulto": "porque você demorou com a comida da última vez"},

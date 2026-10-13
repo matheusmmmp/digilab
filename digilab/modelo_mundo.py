@@ -1,7 +1,8 @@
 """Os modelos do mundo do pet que pensa (J5; docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.1, etapa 1; desenho docs/futuro/pet_que_pensa.md).
 
-Na etapa 1 os modelos so observam: o embrulho `PoliticaComModelo` os deixa aprender com a vida sem muda-la (G-OBS-MM). O planejador, que
-os le, e a etapa 2 (o lobo `planejamento` do cerebro A, atras do `g_plano`).
+Na etapa 1 os modelos so observam: o embrulho `PoliticaComModelo` os deixa aprender com a vida sem muda-la (G-OBS-MM). Na etapa 2 o
+cerebro A com `ConfigLobos.g_plano` > 0 guarda os proprios modelos e o lobo `planejamento` os le (`lugar_de`, `previsao`, `desfecho_de`,
+`arvores_vistas`, `posicao`); o embrulho continua para os bracos sem o planejador.
 
 **O que os modelos veem (sem acesso privilegiado).** So a percepcao do pet:
 - os receptores do corpo (`Observacao.corpo`, a `PercepcaoCorpo`, na escala S), todos os que existirem, na ordem dos campos;
@@ -9,15 +10,18 @@ os le, e a etapa 2 (o lobo `planejamento` do cerebro A, atras do `g_plano`).
 - o tipo do que o proprio pet comeu (o `comeu` da consequencia: so `tipo` e `situacao`).
 Ficam de fora: o quimico, o `Estado`, o registro do mundo, o `efeito_frutas` do motor, a fruta de cada arvore no layout, a distancia
 que o motor registra e o resto da consequencia. Os troncos nao estao nos `vistos`: a posicao de uma arvore vem do layout, mas so entra
-no mapa depois que o pet a viu (o tronco a ate o raio da visao do mundo, a mesma conta dos `vistos`). O modulo so importa `config` e
-`events`.
+no mapa depois que o pet a viu (o tronco a ate o raio da visao do mundo, a mesma conta dos `vistos`), na decisao e de onde o pet parou
+depois de andar, como o motor. Com o mundo do J5 ligado (#290), a percepcao traz os `troncos` a vista, e eles sao conferidos contra essa
+conta (diverge, falha alto). O modulo so importa `config` e `events`.
 
 **O modelo do desfecho**, por tipo de comida (`racao`, `a`, `b`, `c` e `podre`, a comida podre de qualquer tipo) e por receptor: a
 mudanca esperada da leitura ao comer, d_tr. Em cada consumo do `comer` que o pet percebe, `d_tr += div_arred((obs_r - d_tr) x
 passo_desfecho, S)`, com obs = os receptores logo depois de comer menos os da decisao. O prior e 0 (o pet nao sabe nada).
 - A energia do `comer` inclui o andar ate a comida: o componente da energia e corrigido pelo andar previsto, `div_arred(a x d, S)`.
 - O "achou e comeu" do explorar nao atualiza o desfecho: o efeito do proprio explorar no corpo nao e separavel do da comida. Ele fica
-  contado em `consumos_nao_usados`. A fruta na mao (etapa 3, do A) entra pelo mesmo `consumo`.
+  contado em `consumos_nao_usados`.
+- A fruta na mao (o gancho `fruta_na_mao` do mundo do J5): o mesmo passo, com os receptores de depois menos os de antes (sem andar),
+  contada em `consumos_mao`.
 
 **O custo de andar previsto** (um inteiro): a mudanca esperada da leitura da energia por subunidade andada, x S. Aprende nas decisoes
 de `comer` com deslocamento d > 0 (comer nao mexe na energia; o andar sim), com a amostra `div_arred((energia depois - energia antes) x
@@ -28,6 +32,9 @@ escala S. Em cada decisao, cada comida madura dos `vistos` conta para o lugar ja
 (empate: o primeiro na ordem dos lugares), com `m_t += div_arred((1[t = tipo] x S - m_t) x passo_mapa, S)` nos cinco tipos. A podre nao
 conta como vista (a coluna dela so esquece). O prior e 0: o pet nao sabe o que cai onde. A mesma comida conta de novo em cada decisao em
 que aparece (a letra da tarefa: "cada vez que uma comida madura aparece nos vistos").
+
+**O congelamento (PP-8):** `congelar("mapa")` (o P1-plan-desfecho) e `congelar("desfecho", "mapa")` (o P1-plan-cong): daqui em diante
+a parte nao aprende (o desfecho com o custo de andar; o mapa com os lugares vistos), e o que deixou de aprender fica em `ignoradas`.
 
 **Os numeros.** So inteiros, nenhuma funcao transcendental e nenhuma rng (G-INT). Os modelos somam menos de `teto_modelo` inteiros
 (G-TETO-MODELO): com R receptores e L lugares, `5 x R + 1 + L x 5`. No regime quimica (R = 5, L = 10): 25 + 1 + 50 = 76.
@@ -125,6 +132,9 @@ class ModeloMundo:
         self.amostras_andar = 0
         self.vistas_ancoradas = 0                     # as comidas vistas que contaram para um lugar
         self.vistas_soltas = 0                        # as comidas vistas longe de todo lugar ja visto
+        self.consumos_mao = {t: 0 for t in TIPOS}     # a fruta na mao (etapa 3, do A), um consumo do desfecho como o do comer
+        self.congelados: tuple = ()                   # PP-8: as partes congeladas ("desfecho", com o andar; "mapa", com os lugares)
+        self.ignoradas = {"desfecho": 0, "mapa": 0}   # as atualizacoes que o congelamento deixou de fazer
 
     # ---------------------------------------------------------- o layout e as leituras
     def _montar(self, pc) -> None:
@@ -158,6 +168,37 @@ class ModeloMundo:
     def _passo(self, valor: int, alvo: int, passo: int) -> int:
         return valor + div_arred((alvo - valor) * passo, self.S)
 
+    def _ver_lugares(self, pm, k: int) -> None:
+        """Os lugares a ate o raio da visao de onde o pet esta (a conta dos `vistos`). Com o mundo do J5 ligado, a percepcao traz os
+        `troncos` a vista (#290): eles tem de ser exatamente as arvores que esta conta ve, na mesma posicao (diverge, falha alto). Sem
+        eles (o mundo sem a chave do J5), so a conta. O mapa congelado nao aprende lugar novo (PP-8)."""
+        x, y = pm.x, pm.y
+        troncos = getattr(pm, "troncos", ())
+        if troncos:
+            arvores = {nome: (lx, ly) for nome, lx, ly in self.lugares if nome != COMEDOURO}
+            por_conta = {nome for nome, (lx, ly) in arvores.items() if dentro(lx - x, ly - y, self.raio_visao)}
+            na_percepcao = set()
+            for ident, dx, dy, _d in troncos:
+                if ident not in arvores or arvores[ident] != (x + dx, y + dy):
+                    raise RuntimeError(f"modelos do mundo: tronco {ident!r} em ({x + dx}, {y + dy}) fora do layout dos modelos")
+                na_percepcao.add(ident)
+            if na_percepcao != por_conta:
+                raise RuntimeError(f"modelos do mundo: troncos a vista {sorted(na_percepcao)} e a conta do raio {sorted(por_conta)}")
+        for nome, lx, ly in self.lugares:
+            if nome not in self.lugares_vistos and dentro(lx - x, ly - y, self.raio_visao):
+                if "mapa" in self.congelados:
+                    self.ignoradas["mapa"] += 1
+                else:
+                    self.lugares_vistos[nome] = k
+
+    def congelar(self, *partes: str) -> None:
+        """PP-8: daqui em diante a parte nao aprende mais (o desfecho com o custo de andar; o mapa com os lugares vistos). As
+        atualizacoes que deixam de acontecer ficam contadas em `ignoradas`."""
+        for parte in partes:
+            if parte not in ("desfecho", "mapa"):
+                raise ValueError(f"modelos do mundo: parte {parte!r}; so 'desfecho' e 'mapa'")
+        self.congelados = tuple(sorted(set(self.congelados) | set(partes)))
+
     # ---------------------------------------------------------- a decisao: o mapa
     def decisao(self, obs) -> None:
         """Uma decisao: os lugares que o pet passa a ver e as comidas maduras vistas, cada uma no lugar ja visto mais perto dela."""
@@ -166,9 +207,7 @@ class ModeloMundo:
             self._montar(pc)
         ls = self.leituras(pc)
         x, y = pm.x, pm.y
-        for nome, lx, ly in self.lugares:
-            if nome not in self.lugares_vistos and dentro(lx - x, ly - y, self.raio_visao):
-                self.lugares_vistos[nome] = self.k
+        self._ver_lugares(pm, self.k)
         for _ident, tipo, dx, dy, _d in pm.vistos:
             if tipo not in TIPOS_MADUROS:
                 continue
@@ -182,6 +221,9 @@ class ModeloMundo:
                     melhor, d2_melhor = nome, d2
             if melhor is None:
                 self.vistas_soltas += 1
+                continue
+            if "mapa" in self.congelados:
+                self.ignoradas["mapa"] += 1
                 continue
             m = self.mapa[melhor]
             for i, t in enumerate(TIPOS):
@@ -197,8 +239,9 @@ class ModeloMundo:
         if self._decisao is None or self._decisao[0] != self.k - 1:
             raise RuntimeError("modelos do mundo: consequencia sem a decisao dela (a ordem decisao -> consequencia quebrou)")
         pc, pm = self._percepcoes(obs_depois)
-        _, l0, x0, y0 = self._decisao
+        k, l0, x0, y0 = self._decisao
         l1 = self.leituras(pc)
+        self._ver_lugares(pm, k)                          # o que se ve de onde o pet parou (o motor ve os troncos ai tambem)
         comeu = ocorrido.get("comeu")
         tipo = None
         if comeu is not None:
@@ -215,9 +258,12 @@ class ModeloMundo:
         d = raiz_inteira((pm.x - x0) * (pm.x - x0) + (pm.y - y0) * (pm.y - y0))
         ie = self.receptores.index("energia") if "energia" in self.receptores else None
         if d > 0 and ie is not None:
-            amostra = div_arred((l1[ie] - l0[ie]) * self.S, d)
-            self.andar = self._passo(self.andar, amostra, self.cfg.passo_desfecho)
-            self.amostras_andar += 1
+            if "desfecho" in self.congelados:
+                self.ignoradas["desfecho"] += 1
+            else:
+                amostra = div_arred((l1[ie] - l0[ie]) * self.S, d)
+                self.andar = self._passo(self.andar, amostra, self.cfg.passo_desfecho)
+                self.amostras_andar += 1
         if tipo is not None:
             delta = [b - a for a, b in zip(l0, l1)]
             if ie is not None:
@@ -230,10 +276,63 @@ class ModeloMundo:
             raise ValueError(f"modelos do mundo: tipo {tipo!r}")
         if len(delta) != len(self.receptores) or any(type(v) is not int for v in delta):
             raise ValueError(f"modelos do mundo: delta {delta!r} fora do layout {self.receptores}")
+        if "desfecho" in self.congelados:
+            self.ignoradas["desfecho"] += 1
+            return
         dt = self.desfecho[tipo]
         for i, v in enumerate(delta):
             dt[i] = self._passo(dt[i], v, self.cfg.passo_desfecho)
         self.consumos[tipo] += 1
+
+    def na_mao(self, tipo: str, obs_antes, obs_depois) -> None:
+        """A fruta na mao (o gancho `fruta_na_mao` do mundo do J5): o pet come onde esta, sem decisao e sem andar. O desfecho anda em
+        direcao aos receptores de depois menos os de antes, inteiros (nada de energia a corrigir). Nao e uma decisao: o relogio dos
+        modelos (k) e a decisao em curso nao mudam."""
+        if tipo not in TIPOS_MADUROS:
+            raise ValueError(f"modelos do mundo: fruta na mao {tipo!r}")
+        pc0, _ = self._percepcoes(obs_antes)
+        pc1, _ = self._percepcoes(obs_depois)
+        if self.receptores is None:
+            self._montar(pc0)
+        l0, l1 = self.leituras(pc0), self.leituras(pc1)
+        congelado = "desfecho" in self.congelados
+        self.consumo(tipo, [b - a for a, b in zip(l0, l1)])
+        if not congelado:
+            self.consumos[tipo] -= 1                      # o consumo do comer e o da mao contam em separado
+            self.consumos_mao[tipo] += 1
+
+    # ---------------------------------------------------------- as consultas do planejador (etapa 2)
+    def lugar_de(self, x: int, y: int) -> str | None:
+        """O lugar ja visto mais perto de (x, y), a ate `raio_ancora_celulas` (empate: o primeiro na ordem dos lugares), ou None: a
+        mesma ancora das comidas vistas."""
+        melhor, d2_melhor = None, None
+        for nome, lx, ly in self.lugares:
+            if nome not in self.lugares_vistos or not dentro(lx - x, ly - y, self.raio_ancora):
+                continue
+            d2 = (lx - x) * (lx - x) + (ly - y) * (ly - y)
+            if d2_melhor is None or d2 < d2_melhor:
+                melhor, d2_melhor = nome, d2
+        return melhor
+
+    def posicao(self, lugar: str) -> tuple[int, int]:
+        for nome, lx, ly in self.lugares:
+            if nome == lugar:
+                return lx, ly
+        raise KeyError(f"modelos do mundo: lugar {lugar!r}")
+
+    def arvores_vistas(self) -> list[str]:
+        """as arvores ja vistas, na ordem do layout (o comedouro fora)"""
+        return [nome for nome, _x, _y in self.lugares if nome != COMEDOURO and nome in self.lugares_vistos]
+
+    def previsao(self, lugar: str | None) -> dict[str, int]:
+        """p(tipo | lugar) na escala S: a linha do mapa, sem normalizar (um lugar pouco visto preve pouco). Sem lugar, nada."""
+        if lugar is None:
+            return {}
+        return {t: m for t, m in zip(TIPOS, self.mapa[lugar]) if m != 0}
+
+    def desfecho_de(self, tipo: str) -> dict[str, int]:
+        """o desfecho previsto do tipo, por receptor"""
+        return dict(zip(self.receptores, self.desfecho[tipo]))
 
     # ---------------------------------------------------------- leituras
     def n_valores(self) -> int:
@@ -248,7 +347,8 @@ class ModeloMundo:
                 "decisao": None if self._decisao is None else list(self._decisao[:1]) + [list(self._decisao[1])]
                 + list(self._decisao[2:]),
                 "consumos": self.consumos, "consumos_nao_usados": self.consumos_nao_usados, "amostras_andar": self.amostras_andar,
-                "vistas_ancoradas": self.vistas_ancoradas, "vistas_soltas": self.vistas_soltas}
+                "vistas_ancoradas": self.vistas_ancoradas, "vistas_soltas": self.vistas_soltas, "consumos_mao": self.consumos_mao,
+                "congelados": list(self.congelados), "ignoradas": self.ignoradas}
 
 
 class PoliticaComModelo:
@@ -269,6 +369,13 @@ class PoliticaComModelo:
         gancho = getattr(self._interna, "consequencia_mundo", None)
         if gancho is not None:
             gancho(acao, ocorrido, obs_depois)
+
+    def fruta_na_mao(self, tipo: str, obs_antes, obs_depois) -> None:
+        """a fruta na mao (o mundo do J5): o desfecho aprende; o cerebro so a recebe se tem o gancho (a G-SEM-CREDITO e dele)"""
+        self.modelo.na_mao(tipo, obs_antes, obs_depois)
+        gancho = getattr(self._interna, "fruta_na_mao", None)
+        if gancho is not None:
+            gancho(tipo, obs_antes, obs_depois)
 
     def estado_interno(self) -> dict:
         return self._interna.estado_interno()

@@ -100,11 +100,18 @@ from itertools import accumulate
 from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LOBOS, CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO,
                       TICKS_POR_DIA, Config, ConfigBanheiro, ConfigBola, ConfigConsequencia, ConfigCorpo, ConfigFrutas, ConfigLobos,
                       ConfigMundo)
+from ..config import CONFIG_MODELO_MUNDO_LIGADA, ConfigModeloMundo
 from ..events import ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario
+from ..modelo_mundo import TIPOS as TIPOS_COMIDA_MODELO, ModeloMundo, raiz_inteira
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
 ACOES = ACOES_PET_HOJE                   # as sete de sempre; o ALIVIAR (banheiro) so nas tabelas do cerebro com a chave
 LOBOS = ("percepcao", "memoria_emocao", "impulsos", "decisao")
+# o pet que pensa, etapa 2 (PQ-3): o lobo `planejamento`, entre a memoria e a decisao; so existe com ConfigLobos.g_plano > 0
+LOBO_PLANEJAMENTO = "planejamento"
+LOBOS_TODOS = LOBOS + (LOBO_PLANEJAMENTO,)
+ACOES_DO_PLANO = (AcaoPet.COMER, AcaoPet.EXPLORAR)    # o termo do plano so vai a estas duas (a tarefa, secao 2.2)
+FATORES_PLANO = ("plano_arvore", "plano_comida", "plano_evita")   # os fatores do motivo quando o plano decide (motivo.py, expressao.py)
 # as regras do instinto, na ordem em que ele as testa (policy.py: ultima_regra)
 REGRAS = ("sono_exaustao", "sono_continuar", "sono_noite", "pedido_necessidade", "abandono",
           "fome_moderada", "tempo_livre")
@@ -167,6 +174,8 @@ PARAMETROS_LOBOS_DOIS_PETS: dict[str, tuple[str, str]] = {
 }
 PARAMETROS_LOBOS_PET_QUE_PENSA: dict[str, tuple[str, str]] = {
     "alvo_por_arvore": ("PROPOSTO", "TAREFA_V2_PET_QUE_PENSA, etapa 2b (PP-2): as classes arvore:<id> no alvo aprendido"),
+    "g_plano": ("PROPOSTO", "TAREFA_V2_PET_QUE_PENSA, secao 2.2 (PQ-3): o ganho do lobo planejamento; a calibracao escolhe (PP-6)"),
+    "teto_plano": ("PROPOSTO", "PLANO_ANALISE_V2_PET_QUE_PENSA, PP-6: 2 S, o corte do termo do plano, SEM FONTE"),
 }
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
                     **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS, **PARAMETROS_LOBOS_PET_QUE_PENSA}
@@ -760,6 +769,10 @@ class Aprendiz:
         self._x_social: list[float] = []
         self._modelo: ModeloOutros | None = None
         self._social_na_decisao = None
+        # o pet que pensa, etapa 2: os modelos do mundo e o plano da decisao (None sem g_plano: nada muda)
+        self._modelo_mundo: ModeloMundo | None = None
+        self._plano_na_decisao: dict | None = None
+        self._pc_na_decisao = None
         n = self.n_pesos()
         if n >= self.cl.maximo_pesos:
             raise ValueError(f"{n} pesos, teto {self.cl.maximo_pesos}")
@@ -859,7 +872,7 @@ class Aprendiz:
         return -1.0 if presentes and all(ped[i] < 0.0 for i in presentes) else 0.0
 
     def _pesos_efetivos(self, grupo: str, candidatos: tuple[AcaoPet, ...], x: list[float],
-                        sem_pedido: bool = False) -> tuple[dict, dict]:
+                        sem_pedido: bool = False, sem_plano: bool = False) -> tuple[dict, dict]:
         """(contribuicoes por termo, peso efetivo por candidato). Termos: impulsos (prior), decisao (pesos menos
         prior), memoria_emocao (zero), piso (so com o aprendizado ligado)."""
         prior, pesos = self._prior[grupo], self._pesos[grupo]
@@ -907,6 +920,12 @@ class Aprendiz:
                 c["decisao"][AcaoPet.COMER] = c["decisao"][AcaoPet.COMER] + (self._peso_pedido / self._escala) * p
                 com_pedido = True
         soma = {a: c["impulsos"][a] + c["decisao"][a] + c["memoria_emocao"][a] for a in candidatos}
+        if self._plano_na_decisao is not None:
+            # o pet que pensa (PQ-3): o lobo planejamento, termo / S, so em comer e explorar; `sem_plano` e a sonda "quem decidiu"
+            S = self._escala
+            c[LOBO_PLANEJAMENTO] = {a: (0.0 if sem_plano or a not in self._plano_na_decisao
+                                        else self._plano_na_decisao[a]["termo"] / S) for a in candidatos}
+            soma = {a: soma[a] + c[LOBO_PLANEJAMENTO][a] for a in candidatos}
         if self._aprende:
             c["piso"] = {a: (self._piso - soma[a] if soma[a] < self._piso else 0.0) for a in candidatos}
         else:
@@ -914,6 +933,8 @@ class Aprendiz:
             if com_pedido and soma[AcaoPet.COMER] < self._piso:
                 c["piso"][AcaoPet.COMER] = self._piso - soma[AcaoPet.COMER]   # o pedido pode levar comer abaixo de zero
         efetivos = {a: c["impulsos"][a] + c["decisao"][a] + c["memoria_emocao"][a] + c["piso"][a] for a in candidatos}
+        if LOBO_PLANEJAMENTO in c:
+            efetivos = {a: efetivos[a] + c[LOBO_PLANEJAMENTO][a] for a in candidatos}
         return c, efetivos
 
     def _registrar(self, grupo: str, candidatos: tuple[AcaoPet, ...], acao: AcaoPet, x: list[float], pesos: dict,
@@ -935,7 +956,8 @@ class Aprendiz:
                 "W": {a: max(1, arred(pesos[a] * S)) for a in candidatos},
             }
         self._registro_decisao = registro
-        maior = max(LOBOS[1:], key=lambda lobo: (contrib[lobo][acao], -LOBOS.index(lobo)))
+        presentes = LOBOS[1:] + ((LOBO_PLANEJAMENTO,) if LOBO_PLANEJAMENTO in contrib else ())
+        maior = max(presentes, key=lambda lobo: (contrib[lobo][acao], -LOBOS_TODOS.index(lobo)))
         self.motivos.append({
             "n": len(self.motivos), "regra": grupo, "candidatos": [a.value for a in candidatos],
             "percepcao": dict(zip(self.entradas, x)),
@@ -1170,6 +1192,8 @@ class Aprendiz:
         Nas outras fontes (dono, nenhuma) nao ha pendente e nada e creditado."""
         if not self._ve_mundo_fisico:
             return
+        if self._modelo_mundo is not None:        # o pet que pensa: o desfecho e o custo de andar aprendem com o que aconteceu
+            self._modelo_mundo.consequencia(acao, ocorrido, obs_depois)
         if self.motivos:
             alvo = ocorrido["alvo"]
             comeu = ocorrido["comeu"]
@@ -1267,6 +1291,7 @@ class Aprendiz:
         S = self._escala
         if f_S != sinal_homeostatico(transicao, S, cc):
             raise RuntimeError("corpo: o f_S recebido nao e o sinal_homeostatico da transicao")
+        self._conferir_cc_do_plano(cc)
         self._cc_corpo = cc
         pesos = None
         if cc.pesos_janela:
@@ -1520,6 +1545,9 @@ class Aprendiz:
             d["pesos_social"] = {g: {a.value: list(v) for a, v in acoes.items()} for g, acoes in self._pesos_social.items()}
         if self._modelo is not None:              # dois pets, etapa 4, so com a chave do modelo dos outros (so registrado)
             d["modelo_outros"] = self._modelo.para_dict()
+        if self._modelo_mundo is not None:        # o pet que pensa, etapa 2, so com g_plano > 0: o plano e os modelos do mundo
+            d["plano"] = {"g_plano": self.cl.g_plano, "teto_plano": self.cl.teto_plano,
+                          "modelo_mundo": self._modelo_mundo.para_dict()}
         if self._canais is not None:              # CANAIS-REFORCO, so depois do 1o credito por canal
             d["canais"] = {"creditos": self._canais["creditos"], "por_canal": dict(self._canais["por_canal"]),
                            "por_alvo": dict(self._canais["por_alvo"])}
@@ -1539,7 +1567,8 @@ class PoliticaLobos(Aprendiz):
     def __init__(self, cfg: Config | None = None, cfg_lobos: ConfigLobos | None = None,
                  cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None,
                  cfg_mundo: ConfigMundo | None = None, cfg_corpo: ConfigCorpo | None = None,
-                 cfg_banheiro: ConfigBanheiro | None = None) -> None:
+                 cfg_banheiro: ConfigBanheiro | None = None, cfg_modelo: ConfigModeloMundo | None = None,
+                 cfg_consequencia: ConfigConsequencia | None = None) -> None:
         cl = cfg_lobos or CONFIG_LOBOS
         # o banheiro (TAREFA_V2_BANHEIRO, secoes 2 e 4): exige o mundo fisico e o corpo com a sub-chave banheiro; o corpo com a vontade
         # exige a chave do banheiro no cerebro (sem ela o pet teria a vontade e nenhuma acao para alivia-la)
@@ -1728,6 +1757,27 @@ class PoliticaLobos(Aprendiz):
             self._pesos_comer_fruta = dict(self._prior_comer_fruta)
             if self.n_pesos() >= cl.maximo_pesos:
                 raise ValueError(f"{self.n_pesos()} pesos com a presenca da fruta, teto {cl.maximo_pesos}")
+        # o pet que pensa, etapa 2 (PQ-1, PQ-3, PQ-6): o lobo planejamento e os modelos do mundo, que o cerebro guarda (um modulo proprio,
+        # com teto proprio; nenhum peso a mais no A). Exige o mundo fisico, o corpo (o valor sai dos receptores), o alvo aprendido (o termo
+        # vai em cima dele) e o aprendizado ligado (o piso segura o peso efetivo que o termo negativo baixa)
+        if type(cl.g_plano) is not int or cl.g_plano < 0:
+            raise ValueError(f"ConfigLobos.g_plano precisa ser inteiro >= 0: {cl.g_plano!r}")
+        if type(cl.teto_plano) is not int or cl.teto_plano <= 0:
+            raise ValueError(f"ConfigLobos.teto_plano precisa ser inteiro positivo: {cl.teto_plano!r}")
+        if cl.g_plano == 0:
+            if cfg_modelo is not None or cfg_consequencia is not None:
+                raise ValueError("cfg_modelo e cfg_consequencia sao do planejador: so com ConfigLobos.g_plano > 0")
+        else:
+            if not fisico or self._corpo is None or not cl.alvo_aprendido or not self._aprende:
+                raise ValueError("o planejador (g_plano > 0) exige o mundo fisico, o corpo, o alvo aprendido e o aprendizado ligado")
+            n_sem_plano = self.n_pesos()
+            self._modelo_mundo = ModeloMundo(cfg_modelo or CONFIG_MODELO_MUNDO_LIGADA, cfg_mundo)
+            if self._modelo_mundo.S != self._escala:
+                raise ValueError("a escala dos modelos do mundo e a do cerebro A precisam ser a mesma S")
+            self._cc_plano = cfg_consequencia or CONFIG_CONSEQUENCIA
+            self._drives_plano = self._drives_corpo(self._cc_plano, True)
+            if self.n_pesos() != n_sem_plano:
+                raise RuntimeError("o planejador mudou o n_pesos do A (PQ-6: o A ganha 0 pesos)")
 
     @property
     def tem_corpo(self) -> bool:
@@ -1829,20 +1879,37 @@ class PoliticaLobos(Aprendiz):
                 self.motivos[-1]["alvo_aprendido"] = {"classes": [], "padrao": None, "alvo": None}
             return None
         podres = {i for i, tipo, *_ in percepcao.vistos if tipo.endswith("_podre")}
+        classe_de = lambda a: (("comida_podre" if a.id in podres else "comida") if a.tipo == "comida" else a.tipo)  # noqa: E731
         classes, reps = [], []
         for a in candidatos:
-            c = ("comida_podre" if a.id in podres else "comida") if a.tipo == "comida" else a.tipo
+            c = classe_de(a)
             if c not in self._classes_alvo(acao):
                 raise ValueError(f"alvo aprendido: classe {c!r} fora das de {acao.value} {self._classes_alvo(acao)}")
             if c not in classes:
                 classes.append(c)
                 reps.append(a)
-        c_padrao = classes[reps.index(padrao)] if padrao in reps else None
-        if c_padrao is None:
-            raise RuntimeError(f"alvo aprendido: o padrao {padrao} nao e o representante da classe dele")
         S = self._escala
         tabela = self._pesos_alvo_mundo[chave]
-        pesos = [max(0, tabela[c]) / S + (1.0 if c == c_padrao else 0.0) for c in classes]
+        plano = None
+        if self._plano_na_decisao is not None and acao in ACOES_DO_PLANO:
+            # o pet que pensa: V(k) de todo candidato; o representante de cada classe e o de maior V (empate, o primeiro na ordem do
+            # motor), e o termo dele vai ao peso da classe, com o piso. A sonda "quem decidiu" e o alvo de hoje (o primeiro de cada
+            # classe, sem o termo) com o mesmo u
+            plano = self._plano_dos_alvos(candidatos, percepcao)
+            sem_reps, sem_classes = reps, classes
+            for i, c in enumerate(classes):
+                membros = [j for j, a in enumerate(candidatos) if classe_de(a) == c]
+                melhor = max(membros, key=lambda j: (plano["V"][j], -j))
+                reps = reps[:i] + [candidatos[melhor]] + reps[i + 1:]
+            c_padrao = classe_de(padrao)
+            pesos_sem = [max(0, tabela[c]) / S + (1.0 if c == c_padrao else 0.0) for c in sem_classes]
+            termos = [plano["termo"][candidatos.index(r)] for r in reps]
+            pesos = [max(self._piso, p + t / S) for p, t in zip(pesos_sem, termos)]
+        else:
+            c_padrao = classes[reps.index(padrao)] if padrao in reps else None
+            if c_padrao is None:
+                raise RuntimeError(f"alvo aprendido: o padrao {padrao} nao e o representante da classe dele")
+            pesos = [max(0, tabela[c]) / S + (1.0 if c == c_padrao else 0.0) for c in classes]
         k = sortear(pesos, u / ESCALA_U_ALVO)
         total = 0.0
         for p in pesos:
@@ -1854,6 +1921,17 @@ class PoliticaLobos(Aprendiz):
         if self.motivos:
             self.motivos[-1]["alvo_aprendido"] = {"classes": list(classes), "padrao": c_padrao, "alvo": classes[k],
                                                   "pesos": dict(zip(classes, pesos))}
+        if plano is not None:
+            k_sem = sortear(pesos_sem, u / ESCALA_U_ALVO)
+            escolhido, sem_plano = reps[k], sem_reps[k_sem]
+            i_esc, i_sem = candidatos.index(escolhido), candidatos.index(sem_plano)
+            decidiu = escolhido != sem_plano
+            if self.motivos:
+                self.motivos[-1]["alvo_plano"] = {
+                    "V": {c: plano["V"][candidatos.index(r)] for c, r in zip(classes, reps)},
+                    "termos": {c: plano["termo"][candidatos.index(r)] for c, r in zip(classes, reps)},
+                    "alvo": classes[k], "alvo_sem_plano": sem_classes[k_sem], "plano_decidiu": decidiu,
+                    "fator": self._fator_do_plano(plano, i_esc, i_sem) if decidiu else None}
         return reps[k]
 
     def _alvo_do_alivio(self, candidatos: list, u: int):
@@ -1887,6 +1965,153 @@ class PoliticaLobos(Aprendiz):
                 "W": {t: max(1, arred(p * S)) for t, p in zip(tipos, pesos)}}
         return candidatos[k]
 
+    # ------------------------------------------------------------- o pet que pensa, etapa 2: o lobo planejamento
+
+    def fruta_na_mao(self, tipo: str, obs_antes: Observacao, obs_depois: Observacao) -> None:
+        """Gancho do mundo do J5 (a fruta na mao, PQ-4): so os modelos do mundo aprendem (o desfecho). Nenhum peso de decisao nem de alvo
+        muda (G-SEM-CREDITO). Sem o planejador, nada."""
+        if self._modelo_mundo is not None:
+            self._modelo_mundo.na_mao(tipo, obs_antes, obs_depois)
+
+    @property
+    def modelo_mundo(self) -> ModeloMundo | None:
+        """os modelos do mundo do planejador (None sem g_plano); a bancada os congela pelo `congelar` deles (PP-8)"""
+        return self._modelo_mundo
+
+    def _conferir_cc_do_plano(self, cc: ConfigConsequencia) -> None:
+        """O valor do plano usa a conta do sinal pelo corpo com a ConfigConsequencia dada ao cerebro; a que chega com o credito tem de ter
+        o mesmo ganho, os mesmos drives e os mesmos pesos dos drives (diverge, falha alto). A janela dos pesos (A2.4) nao entra no plano."""
+        if self._modelo_mundo is None:
+            return
+        p = self._cc_plano
+        if (cc.ganho, tuple(cc.drives), cc.humor_na_fruta, dict(cc.pesos_drives_corpo)) != \
+                (p.ganho, tuple(p.drives), p.humor_na_fruta, dict(p.pesos_drives_corpo)):
+            raise RuntimeError("o planejador: a ConfigConsequencia do credito nao e a do plano (ganho, drives ou pesos)")
+
+    def _valores_do_plano(self, pc) -> dict[str, int]:
+        """valor(tipo) = a conta do `sinal_corpo` dos receptores de agora para os de agora mais o desfecho previsto do tipo, cortados em
+        [0, S], com o ganho da consequencia (a tarefa, secao 2.2). Inteiros."""
+        m, S, cc = self._modelo_mundo, self._escala, self._cc_plano
+        return {t: valor_previsto(pc, m.desfecho_de(t), self._drives_plano, cc.ganho, S, dict(cc.pesos_drives_corpo))
+                for t in TIPOS_COMIDA_MODELO}
+
+    def _valor_do_andar(self, pc, d: int) -> int:
+        """o custo de andar d subunidades, na mesma conta: a energia prevista menos o andar previsto x d / S (<= 0 quando andar gasta)"""
+        m = self._modelo_mundo
+        if d == 0 or "energia" not in m.receptores:
+            return 0
+        cc = self._cc_plano
+        return valor_previsto(pc, {"energia": div_arred(m.andar * d, self._escala)}, self._drives_plano, cc.ganho, self._escala,
+                              dict(cc.pesos_drives_corpo))
+
+    def _previsao_do_alvo(self, tipo: str, x: int, y: int, ident, de, vistos: dict) -> tuple[dict, tuple]:
+        """p(tipo | alvo) na escala S e o rotulo do que o plano sabe dele: a comida vista e certa (S do tipo dela; a podre e `podre`);
+        a arvore lembrada e a linha do mapa dela; o resto (cheiro, vagar, casa, continuar, ponto...) e a linha do lugar ja visto mais perto
+        do alvo, a ate a ancora, ou nada."""
+        if ident is not None and (tipo == "comida" or de == "comida") and ident in vistos:
+            t = vistos[ident]
+            t = "podre" if t.endswith("_podre") else t
+            return {t: self._escala}, ("comida", t)
+        m = self._modelo_mundo
+        lugar = tipo.split(":", 1)[1] if tipo.startswith("arvore:") else m.lugar_de(x, y)
+        return m.previsao(lugar), ("lugar", lugar)
+
+    def _valor_do_alvo(self, prev: dict, x: int, y: int, pm, pc, valores: dict) -> int:
+        """V(k) = soma_tipo div_arred(p(tipo | k) x valor(tipo), S) + o valor do andar ate k (a tarefa, secao 2.2; o custo na mesma
+        conta do valor). Inteiro."""
+        S = self._escala
+        v = 0
+        for t, p in prev.items():
+            v += div_arred(p * valores[t], S)
+        return v + self._valor_do_andar(pc, raiz_inteira((x - pm.x) * (x - pm.x) + (y - pm.y) * (y - pm.y)))
+
+    def _termo_do_plano(self, v: int) -> int:
+        cl = self.cl
+        t = div_arred(cl.g_plano * v, self._escala)
+        return max(-cl.teto_plano, min(cl.teto_plano, t))
+
+    def _plano_da_decisao(self, pc, pm) -> dict:
+        """O plano da decisao de comer ou explorar (a tarefa, secao 2.2): o maior V entre os alvos de cada uma que o pet pode ver ou
+        lembrar agora. Comer: as comidas vistas (boas e podres). Explorar: as arvores ja vistas (no tronco, como o candidato de arvore
+        lembrada do motor). Sem alvo, termo 0. Os candidatos de verdade so existem depois da decisao (o motor os monta com o u do alvo)."""
+        if pc is None or pm is None:
+            raise RuntimeError("o planejador: Observacao sem o corpo ou sem o mundo")
+        valores = self._valores_do_plano(pc)
+        vistos = {i: t for i, t, *_ in pm.vistos if t != "bola"}
+        alvos = {AcaoPet.COMER: [("comida", pm.x + dx, pm.y + dy, i, None) for i, t, dx, dy, _d in pm.vistos if t != "bola"],
+                 AcaoPet.EXPLORAR: [(f"arvore:{n}",) + self._modelo_mundo.posicao(n) + (None, None)
+                                    for n in self._modelo_mundo.arvores_vistas()]}
+        plano = {}
+        for acao, lista in alvos.items():
+            melhor = None
+            for tipo, x, y, ident, de in lista:
+                prev, rotulo = self._previsao_do_alvo(tipo, x, y, ident, de, vistos)
+                v = self._valor_do_alvo(prev, x, y, pm, pc, valores)
+                if melhor is None or v > melhor["V"]:
+                    melhor = {"V": v, "prev": prev, "rotulo": rotulo, "alvo": tipo}
+            if melhor is None:
+                plano[acao] = {"V": None, "termo": 0, "prev": {}, "rotulo": None, "alvo": None}
+            else:
+                plano[acao] = {**melhor, "termo": self._termo_do_plano(melhor["V"])}
+        plano["_valores"] = valores
+        return plano
+
+    def _plano_dos_alvos(self, candidatos: list, percepcao) -> dict:
+        """V e termo de cada candidato do alvo (na ordem do motor), pela previsao do alvo e pelos valores da decisao"""
+        pc, valores = self._pc_na_decisao, self._plano_na_decisao["_valores"]
+        vistos = {i: t for i, t, *_ in percepcao.vistos if t != "bola"}
+        V, termo, prev, rotulo = [], [], [], []
+        for a in candidatos:
+            p, r = self._previsao_do_alvo(a.tipo, a.x, a.y, a.id, a.de, vistos)
+            v = self._valor_do_alvo(p, a.x, a.y, percepcao, pc, valores)
+            V.append(v)
+            termo.append(self._termo_do_plano(v))
+            prev.append(p)
+            rotulo.append(r)
+        return {"V": V, "termo": termo, "prev": prev, "rotulo": rotulo, "valores": valores}
+
+    def _fator_do_plano(self, plano: dict, i_esc: int, i_sem: int) -> list | None:
+        """O fator honesto quando o plano decidiu (so nomeia o que os modelos tem): se o escolhido ganhou pelo termo dele e o valor
+        previsto dele e positivo, o tipo que mais pesa nele (`plano_comida(tipo)` na comida vista, `plano_arvore(lugar, tipo)` no lugar);
+        senao, se o que seria escolhido sem o plano perdeu por um termo negativo, o tipo que mais pesa contra ele (`plano_evita(tipo)`).
+        Fora disso, nenhum."""
+        S, valores = self._escala, plano["valores"]
+        te, ts = plano["termo"][i_esc], plano["termo"][i_sem]
+        if te > ts and te > 0:
+            contrib = {t: div_arred(p * valores[t], S) for t, p in plano["prev"][i_esc].items()}
+            positivos = [(c, t) for t, c in contrib.items() if c > 0]
+            if positivos:
+                t = max(positivos, key=lambda ct: (ct[0], -TIPOS_COMIDA_MODELO.index(ct[1])))[1]
+                tipo_r, lugar = plano["rotulo"][i_esc]
+                if tipo_r == "comida":
+                    return ["plano_comida", t]
+                if lugar is not None:
+                    return ["plano_arvore", lugar, t]
+        if ts < te and ts < 0:
+            contrib = {t: div_arred(p * valores[t], S) for t, p in plano["prev"][i_sem].items()}
+            negativos = [(c, t) for t, c in contrib.items() if c < 0]
+            if negativos:
+                return ["plano_evita", min(negativos, key=lambda ct: (ct[0], TIPOS_COMIDA_MODELO.index(ct[1])))[1]]
+        return None
+
+    def _sonda_da_decisao(self, regra: str, candidatos: tuple, x: list, acao: AcaoPet, u: float | None) -> dict:
+        """A sonda "quem decidiu" da decisao (a tarefa, secao 2.2): a mesma decisao, com o mesmo u e sem o termo do plano; so le."""
+        p = self._plano_na_decisao
+        termos = {a.value: (p[a]["termo"] if a in p else 0) for a in candidatos}
+        alt = acao
+        if u is not None and any(termos.values()):
+            _, sem = self._pesos_efetivos(regra, candidatos, x, sem_plano=True)
+            alt = candidatos[sortear([sem[a] for a in candidatos], u)]
+        fator = None
+        if alt is not acao:
+            prev = [p[a]["prev"] if a in p else {} for a in (acao, alt)]
+            plano = {"termo": [termos[acao.value], termos[alt.value]], "prev": prev,
+                      "rotulo": [p[a]["rotulo"] if a in p else None for a in (acao, alt)], "valores": p["_valores"]}
+            fator = self._fator_do_plano(plano, 0, 1)
+        return {"termos": termos, "V": {a.value: p[a]["V"] for a in ACOES_DO_PLANO},
+                "alvos": {a.value: p[a]["alvo"] for a in ACOES_DO_PLANO}, "acao_sem_plano": alt.value,
+                "plano_decidiu": alt is not acao, "fator": fator}
+
     def percepcao(self, obs: Observacao) -> list[float]:
         x = super().percepcao(obs)
         if self._ve_mundo_fisico:
@@ -1917,6 +2142,11 @@ class PoliticaLobos(Aprendiz):
             # o modelo dos outros: so le o obs e so registra (nao consome rng, nao entra em peso nenhum)
             self._social_na_decisao = obs.social
             self._modelo.decisao(obs.social, obs.vetor_estado[7])
+        if self._modelo_mundo is not None:
+            # o pet que pensa: os modelos veem a decisao (o mapa) e o plano dela sai deles; nao consome rng
+            self._modelo_mundo.decisao(obs)
+            self._pc_na_decisao = obs.corpo
+            self._plano_na_decisao = self._plano_da_decisao(obs.corpo, obs.mundo)
         x = self.percepcao(obs)
         regra, candidatos = impulsos(self._instinto, obs)
         self._presenca_na_decisao = presenca_no_mundo(obs.mundo) if self._presenca_mundo else obs.frutas_cenario
@@ -1972,6 +2202,8 @@ class PoliticaLobos(Aprendiz):
                                               "pedido_decidiu": alt is not acao}
                 if self._aprende:
                     self._registro_decisao["pedido"] = {"Pd": arred(p * self._escala)}
+        if self._plano_na_decisao is not None:
+            self.motivos[-1]["plano"] = self._sonda_da_decisao(regra, candidatos, x, acao, u)
         if (self._aprende and self._pesos_comer_fruta and (regra == REGRAS_MUNDO[1] or self._presenca_mundo)
                 and AcaoPet.COMER in candidatos):
             # FRUTA-NO-CENARIO: a entrada de cada fruta (presenca x S) para o credito da decisao de comer (so pela consequencia)
@@ -2369,6 +2601,18 @@ def contribuicoes_corpo(antes, depois, drives: tuple, S: int, pesos_drives: dict
             raise ValueError(f"w_d do drive {d!r} precisa ser inteiro >= 0: {wd!r}")
         c[d] = wd * delta
     return c
+
+
+def valor_previsto(pc, delta: dict, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None) -> int:
+    """O pet que pensa (a tarefa, secao 2.2): o `sinal_corpo` dos receptores de agora (`pc`) para os previstos, a leitura de agora mais
+    `delta` (receptor -> mudanca, na escala S), cortada em [0, S]. Os receptores sem mudanca ficam como estao. Inteiro."""
+    novos = {}
+    for r, v in delta.items():
+        if v != 0:
+            novos[r] = max(0, min(S, leitura_receptor(pc, r, S) + v))
+    if not novos:
+        return 0
+    return sinal_corpo(pc, replace(pc, **novos), drives, ganho, S, pesos_drives)
 
 
 def sinal_corpo(antes, depois, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None,

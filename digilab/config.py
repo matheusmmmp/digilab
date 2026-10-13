@@ -1246,6 +1246,12 @@ class ConfigLobos:
     # As classes de alvo por arvore no alvo aprendido: `arvore:<id>` (as 9 do layout), nas regras em que o explorar e candidato, com os
     # candidatos de arvore lembrada do motor (PP-1, ConfigPetQuePensaMundo). Exige o alvo aprendido. Desligada: a vida de hoje
     alvo_por_arvore: bool = False            # PROPOSTO: a chave
+    # --- o pet que pensa, etapa 2 (docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.2; PQ-3, PQ-6, PP-6) ---
+    # O lobo `planejamento`: o valor previsto V(k) de cada alvo pelos modelos do mundo (modelo_mundo.ModeloMundo, que o cerebro guarda)
+    # vira o termo div_arred(g_plano x V, S), cortado em +-teto_plano, no peso efetivo do alvo e da decisao de comer ou explorar. Com
+    # g_plano 0, nada existe (o cerebro de hoje). O planejador nao tem pesos (PQ-6): o n_pesos do A nao muda
+    g_plano: int = 0                         # PROPOSTO: o ganho do plano; a calibracao (PP-6) escolhe na grade {S/4, S/2, S}
+    teto_plano: int = 2048                   # PROPOSTO, SEM FONTE (PP-6): 2 S, o maior termo do plano, para cima ou para baixo
 
     def __post_init__(self) -> None:
         if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
