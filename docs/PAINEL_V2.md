@@ -1,6 +1,6 @@
 # PAINEL V2: onde a pesquisa está, em uma página
 
-**Atualizado em 2026-10-13** (`main` `8ae3ff7`).
+**Atualizado em 2026-10-13** (`main` `ec09483`).
 - Quem atualiza: o coordenador, no fim de cada rodada.
 - Regra (`docs/TAREFA_V2_SAUDE.md`, etapa 5): cada linha cita o documento de onde veio, e aqui não entra número novo.
 - O detalhe de cada marco está na seção 8 do `docs/ROADMAP_V2.md`.
@@ -46,7 +46,8 @@
 
 ## 3. Decisões abertas do Matheus
 
-- **SA-1 a SA-8:** a rodada de saúde (`docs/TAREFA_V2_SAUDE.md`, seção 6). A etapa 0 (o backup) está em revisão; a 1 só começa com o ok do Matheus.
+- **SA-3 a SA-8:** a rodada de saúde (`docs/TAREFA_V2_SAUDE.md`, seção 6). SA-1 e SA-2 decididas em 2026-10-13. A etapa 0 (o backup) está
+  na `main` (#297); a 1 (o CLAUDE.md enxuto) espera o checklist do Matheus; a 2 só começa com o ok dele.
 - **FE-3:** o perfil de cada brasão (`docs/futuro/fisiologia_especies.md`).
 - **As saídas do banheiro:** sem decisão até haver dado (`docs/PLANO_ANALISE_V2_BANHEIRO.md`, seção 7).
 - **A validação do corpo:** espera a calibração final e um sim.
@@ -62,5 +63,5 @@
 | O teto de pesos | o degrau 1 tem 990 de 1000, e o banheiro 998. O teto por plano existe (TP-1, TP-2); falta medir o custo do replay com um cérebro maior | `docs/DECISAO_V2_TETO_PESOS.md` |
 | O desempate do cheiro fora do motor | a calibração e a validação do mundo rodaram com a ordem fixa | `docs/RESULTADO_V2_CALIBRACAO_MUNDO.md` |
 | O rótulo "pensa" | o J5 mede previsão e planejamento; não pode virar alegação de pensamento | `docs/futuro/pet_que_pensa.md` |
-| A saúde do repositório | o CLAUDE.md tem 4.169 linhas na `8ae3ff7` (o alvo é menos de 200); o registro e o CLAUDE.md causam os conflitos de merge; a bancada tem 4.038 linhas num arquivo | `docs/TAREFA_V2_SAUDE.md`, seção 1 |
+| A saúde do repositório | o CLAUDE.md passa de 4.169 a 114 linhas na etapa 1 (PR em revisão); o registro e o CLAUDE.md causam os conflitos de merge; a bancada tem 4.038 linhas num arquivo | `docs/TAREFA_V2_SAUDE.md`, seção 1 |
 | O custo | a suíte inteira leva ~36 min | `docs/RESULTADO_V2_VALIDACAO_MUNDO.md`, seção 8 |

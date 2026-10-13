@@ -5070,3 +5070,37 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **Achado, para o Gerente:** a #295 (a bancada do J5) foi escrita em paralelo com a #294 (o planejador). Na `main`, os três braços com o
   planejador ainda falham alto com `NOS_PENDENTES["planejador"]`, e a `BancadaPQP.politica` não passa o `g_plano`. Falta uma tarefa curta
   para ligar o planejador na bancada antes da calibração do `g_plano`.
+
+## 2026-10-13 — SAUDE-ETAPA-1: o CLAUDE.md enxuto (worker C)
+
+Etapa 1 de `docs/TAREFA_V2_SAUDE.md`, na `main` `ec09483`, com as respostas do Matheus ao checklist da etapa 0, trazidas pelo Gerente:
+SA-1 aprovada, SA-2 = um `CLAUDE.md` por pasta, G-PROVA com as 8 perguntas sem troca, e ok para a etapa 1. **A troca dos arquivos
+`CLAUDE.md`** (a raiz e os dois novos) **foi confirmada pelo Matheus direto nesta sessão**, antes de qualquer edição neles: são instruções
+para o Claude, e o pedido de outra sessão não bastava.
+- **O CLAUDE.md da raiz:** 4.169 → 114 linhas, escrito de novo pelo critério "se tirar, o Claude erra?". Entraram regras que o arquivo antigo
+  só mostrava pelo costume das seções:
+  - a chave desligada com o gabarito antes;
+  - as faixas de sementes e o pedido ao coordenador;
+  - a validação que roda uma vez;
+  - as referências verificadas;
+  - o `git stash` sem nome.
+- **Para onde foram as 135 seções:** inteiras, para `docs/MAPA_REPOSITORIO.md` (o mapa e os comandos) e oito arquivos em
+  `docs/historico/claude/`. A tabela está no `docs/historico/LEIA.md`, e o mapa seção a seção em `docs/historico/mapa_claude.json`.
+- **Desvio da tarefa (seção 3):**
+  - **o que a tarefa dizia:** uma seção de resultado ia para o `RESULTADO_*` ou o `TAREFA_*` da frente, e só a que não tinha documento próprio
+    ia para `docs/historico/claude/`;
+  - **o que foi feito:** todas foram para `docs/historico/claude/`, agrupadas por frente;
+  - **por quê:** espalhar 135 seções em dezenas de documentos vivos daria conflito com os PRs abertos e tornaria a conferência frágil. Assim
+    cada seção é copiada inteira, e o G-NADA-PERDIDO confere por substring. Os documentos das frentes não mudaram.
+- **G-NADA-PERDIDO passa:** `python tools/conferir_saude.py`: as 135 seções da cópia `CLAUDE_pre_saude.md` estão inteiras no destino do mapa,
+  e a raiz tem menos de 200 linhas. Testes em `tests/test_conferir_saude.py` (7, a falha com seção que some, alterada ou sem destino).
+- **G-PROVA passa** (`docs/historico/prova_etapa1.md`). A referência com o arquivo antigo pode ter sido contaminada: a sessão nova carrega
+  sozinha o `CLAUDE.md` da pasta, que já era o novo. A sessão avisou disso.
+- **SA-2:** `web/app/CLAUDE.md` (37 linhas: o motor sem DOM, a versão de pet por mecânica, a paridade, os nomes Digimon, o layout, os
+  sprites, os comandos npm) e `servidor/CLAUDE.md` (27 linhas: a fala fora do registro, a chave, o teto de gasto, o acesso remoto).
+- **Onde o worker escreve daqui em diante:** o resumo da etapa vai no corpo do PR e numa seção no fim do documento da frente; o `CLAUDE.md`
+  só muda com o ok do Matheus. A regra foi para o `CLAUDE.md` novo, o `docs/modelos/TAREFA_V2_MODELO.md` e o
+  `docs/V2_TRABALHO_PARALELO.md`.
+- **Os PRs abertos que acrescentam seção ao `CLAUDE.md` (#298, #299, #201) vão dar conflito.** Na resolução, a seção deles vai para o fim do
+  documento da frente (ou do `docs/historico/claude/v2_mundo_corpo.md`), e o `CLAUDE.md` fica o novo. O `mapa_claude.json` não muda: ele
+  cobre só a cópia de antes.

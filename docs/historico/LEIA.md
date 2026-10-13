@@ -42,3 +42,21 @@ Este mapa cresce a cada etapa: a etapa que mover um trecho escreve aqui de onde 
 | etapa | o que saiu de onde | para onde |
 |---|---|---|
 | 0 (backup) | nada saiu | — |
+| 1 (CLAUDE.md enxuto) | as 135 seções do `CLAUDE.md`, inteiras e na ordem de antes dentro de cada destino | a tabela abaixo; seção a seção em `docs/historico/mapa_claude.json` |
+
+**Etapa 1: os destinos das seções do CLAUDE.md.** A conferência é `python tools/conferir_saude.py` (G-NADA-PERDIDO): cada seção da cópia
+`CLAUDE_pre_saude.md` está inteira no destino que o mapa dá a ela.
+
+| destino | seções | o que tem |
+|---|---|---|
+| `docs/historico/claude/fundacao.md` | 5 | o preâmbulo, "O que é", as regras, o trabalho em paralelo e a arquitetura, como eram |
+| `docs/MAPA_REPOSITORIO.md` | 2 | o mapa do repositório arquivo a arquivo e a lista de comandos |
+| `docs/historico/claude/v1_pesquisa.md` | 14 | a arena v1, a ablação, a reprodutibilidade, o poder, a confirmatória, a linhagem, a pergunta do dono e a personalidade |
+| `docs/historico/claude/combate.md` | 10 | o combate V2 e V2.1, a campanha, as correções, o reequilíbrio, o equilíbrio geral, o M1, o treino e a escala |
+| `docs/historico/claude/jogo_web.md` | 10 | a evolução canônica, as medalhas, as arenas, os itens, a Fronteira, a escala v6, a versão web e os assets |
+| `docs/historico/claude/fala.md` | 2 | a fala por LLM e a fala livre |
+| `docs/historico/claude/pendencias.md` | 1 | as pendências e ideias registradas até 2026-10-13 |
+| `docs/historico/claude/v2_aprendiz.md` | 39 | a V2 da L0 ao descritivo do platô (2026-10-01 a 2026-10-07) |
+| `docs/historico/claude/v2_mundo_corpo.md` | 52 | a V2 da prancha do mapa à bancada do pet que pensa (2026-10-07 a 2026-10-13) |
+
+O `CLAUDE.md` novo da raiz e os de `web/app/` e `servidor/` são texto novo, escrito pelo critério "se tirar, o Claude erra?".

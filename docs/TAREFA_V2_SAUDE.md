@@ -6,8 +6,10 @@
 
 Worktree e branch de cada etapa: `v2-saude-<etapa>`.
 
-**Status: EM CURSO desde 2026-10-13.** A **etapa 0 (o backup)** está feita, com a tag `pre-saude` na `main` `8ae3ff7` e as cópias em
-`docs/historico/` (`docs/historico/LEIA.md`); o PR dela espera o checklist do Matheus (seção 5). A etapa 1 só começa com o ok dele.
+**Status: EM CURSO desde 2026-10-13.** A **etapa 0 (o backup)** está feita e mergeada (#297), com a tag `pre-saude` na
+`main` `8ae3ff7` e as cópias em `docs/historico/` (`docs/historico/LEIA.md`). Respostas do Matheus (2026-10-13): SA-1 aprovada, SA-2 = um
+`CLAUDE.md` por pasta, G-PROVA com as 8 perguntas sem troca, e ok para a etapa 1. A **etapa 1 (o CLAUDE.md enxuto)** está no PR dela,
+esperando o checklist (seção 5); a etapa 2 só começa com o ok dele.
 Cada etapa é um PR próprio, e o merge é do Matheus. As decisões que sobram (SA-1 a SA-8) estão na seção 6.
 
 ## 1. Por que agora
@@ -231,7 +233,8 @@ O Matheus responde antes da etapa seguinte começar. Uma resposta "não" para a 
 
 ## 6. Decisões do Matheus
 
-**Abertas: SA-1 a SA-8.**
+**Decididas pelo Matheus em 2026-10-13:** SA-1 (os nomes das cópias, como recomendado) e SA-2 (um `CLAUDE.md` por pasta). **Abertas: SA-3
+a SA-8.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
