@@ -3958,3 +3958,21 @@ mundo da calibração; 3.360 vidas rejogadas do disco, 50 min com 8 processos (6
   mais no layout afastado, mas ficar não paga.
 - **Leitura (A1.5, terceira linha):** a consequência imediata não aprende a procurar neste mundo. Por dono, a perda vem do atencioso e do
   incoerente; com o relapso o P1 ganha um pouco (descritivo).
+
+## V2, CORPO-CALIBRACAO-FINA — o adendo 5: só o passo 0 fino (2026-10-13, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, A5.1 a A5.7) — m_gasto = 4/5, FECHOU; A GRADE DA SOLIDÃO NÃO RODOU
+
+Decisão do Matheus (2026-10-13): uma grade mais fina antes da validação, pelo adendo 5, registrado num commit antes de qualquer vida. Depois,
+outra decisão: faixa que não fecha não bloqueia, e do adendo 5 roda só o passo 0. Relatório em `docs/RESULTADO_V2_CALIBRACAO_CORPO.md`
+(seção do adendo 5); interpretações em `docs/REGISTRO_DESVIOS.md`. **A validação (34101…34505) não rodou.**
+- **Código:**
+  - `bancada_v2`: a grade do passo 0 vem da config (`multiplicadores`, `grade_passo0`) ou da PCD-9;
+  - com `passo0_anterior`, a regra lê também os pontos de um passo0.json de antes. Um ponto repetido ou uma config diferente fora do gasto
+    falham alto;
+  - `--processos` roda os pontos em paralelo;
+  - `run_v2_calibracao_corpo`: o eixo `m_sol` (A5.2, chave `m_solidao` da grade). Ele multiplica só a subida da solidão, e a regra fica com
+    três eixos (o mais perto de (1, 1, 1); no empate, `m_sobe`, depois `m_sol`, depois `m_reduz`). Sem a chave, a calibração de antes;
+  - testes em `tests/test_bancada_metabolismo.py` e `tests/test_calibracao_corpo.py`.
+- **O passo 0 fino** (P0-q em {3/5, 7/10, 4/5, 9/10}, 640 vidas, com os três pontos da A3.2c): **`m_gasto` = 4/5, fechou**, com a falta em
+  0,202 do tempo acordado (7/10: 0,006; 9/10: 0,368). Números em `artifacts_v2_corpo/calibracao/adendo5/passo0/`.
+- **Não rodaram (A5.7):** a grade com o `m_sol`, o piloto, as margens, o N e o custo. A config `calibracao_adendo5.json` está pronta e sem
+  saída. Os números do adendo 4 seguem registrados, mas foram medidos com o gasto em ½. A calibração final será com a estrutura completa.

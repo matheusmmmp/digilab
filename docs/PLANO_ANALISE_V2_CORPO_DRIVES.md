@@ -874,3 +874,10 @@ passo0.json de antes, com as mesmas sementes):
 
 Só o 4/5 fica em [0,05; 0,30]: **`m_gasto` = 4/5, fechou** (basal 300/150; atividades 4/5). O gasto muda o ponto, então a A5.2 e a A5.3
 rodam com ele fixo (`experiments/configs/v2_corpo/calibracao_adendo5.json`).
+
+### A5.7 A grade da solidão não roda (decisão do Matheus, 2026-10-13)
+
+Faixa de calibração que não fecha não bloqueia: a calibração final será feita com a estrutura completa. Do adendo 5 rodou **só o passo 0
+fino** (A5.6). **Não rodaram:** a grade com o `m_sol` (A5.2), o piloto, as sensibilidades, as margens, o N e o custo (A5.3). A config deles
+(`calibracao_adendo5.json`) fica pronta e sem saída. Até a calibração final, o ponto do corpo e os números da seção 7 são os do adendo 4,
+que foram medidos com o gasto em ½ e não com o 4/5.
