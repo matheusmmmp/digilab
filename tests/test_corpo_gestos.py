@@ -175,8 +175,9 @@ def _acoes_log(m):
 # ================================================================== o enum e o tapa sem a chave
 def test_tapa_no_fim_do_enum_e_as_de_antes_nao_andaram():
     todos = list(AcaoUsuario)
-    assert todos[-1] is AcaoUsuario.TAPA and AcaoUsuario.TAPA.value == "tapa" and ACOES_CORPO == (AcaoUsuario.TAPA,)
-    assert todos[26:29] == list(ACOES_PEDIDO) and len(todos) == 30
+    # o tapa foi o ultimo ate o J5, que pos a fruta na mao e a troca de tipo depois dele (docs/TAREFA_V2_PET_QUE_PENSA.md, etapa 3)
+    assert todos[29] is AcaoUsuario.TAPA and AcaoUsuario.TAPA.value == "tapa" and ACOES_CORPO == (AcaoUsuario.TAPA,)
+    assert todos[26:29] == list(ACOES_PEDIDO) and len(todos) >= 30
 
 
 def test_tapa_nos_motores_de_hoje_e_no_reproduzir_de_hoje_falha_alto():

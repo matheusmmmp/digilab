@@ -4744,3 +4744,43 @@ limpa). Interpretações:
   segue proibida.
 - **Uma falha do `test_grupo`** (um `TypeError` no `replace` do `Estado`) apareceu na suíte que rodou junto com a validação e não se
   repetiu com o teste sozinho; a suíte foi rodada de novo depois da run.
+
+## 2026-10-13 — PET-QUE-PENSA, etapa 3 (o mundo) e etapa 2b (as classes por árvore) (worker A)
+
+Tarefa `docs/TAREFA_V2_PET_QUE_PENSA.md`, seções 2.3 e 2.4; plano `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, PP-1, PP-2 e PP-5. Pedido do
+Gerente de 2026-10-13. Interpretações:
+- **A etapa 2b veio junto.** A tarefa dá a 2b (as classes por árvore no alvo aprendido) ao B; o pedido do Gerente a deu ao A, junto com
+  a etapa 3 ("as árvores lembradas como candidatas no explorar, PP-1, e as classes por árvore, PP-2"). As duas entraram neste PR, cada
+  uma atrás da própria chave. A etapa 3 inteira (a troca de tipo e a fruta na mão também) entrou porque a tarefa a dá ao A.
+- **"O tronco que o pet já viu".** A percepção de hoje (`vistos`) só tem comidas e a bola. Um tronco conta como visto quando está a até o
+  raio da visão do pet, na posição da decisão ou na posição depois de andar. O registro é `troncos_vistos` (id → o primeiro tick do
+  mundo), e a percepção ganha o campo `troncos` (os troncos à vista agora), com padrão vazio: sem a chave, a percepção é a de hoje.
+- **O candidato `arvore:<id>`** fica no tronco (o "pé da árvore" da tarefa), na ordem do layout, depois dos candidatos de hoje e dos
+  sociais. O tipo do `Alvo` é a própria classe (`arvore:J2`), para o alvo aprendido ler a classe como lê as outras; o `continuar` de uma
+  ida à árvore leva ao mesmo ponto, como o dos candidatos sociais.
+- **Os eventos** entram no fim do enum como ações do dono: `dar_fruta_<f>` e `trocar_arvores_<x>_<y>` (os três pares, em ordem). Ficam
+  fora do orçamento pelo canal do mundo (o `observar` do motor, como os carinhos do banheiro); o tick da mudança (`T_m`, PP-5) é decidido
+  por quem dirige a vida (a bancada, etapa 4), e o evento o grava no registro.
+- **A fruta na mão:** a conta é a da fruta madura do `_comer_mundo` (a nutrição e o efeito vigente no humor), sem sujeira; com o corpo,
+  o estímulo é o `estimulo_consumo_mundo` da fruta madura. Entra em `consumos_mundo` com `como` = "mao" e `id` None. Não é contato. Com o
+  pet dormindo, falha alto (o plano dá a mão com o pet acordado). O mundo anda até o tick antes, para a percepção de antes e de depois.
+- **G-SEM-CREDITO:** o cérebro recebe a mão só pelo gancho opcional `fruta_na_mao(tipo, obs_antes, obs_depois)` (para o modelo do
+  desfecho do B). O A de hoje não tem o gancho, e nenhum outro caminho (o `receber_acao_dono`, o `fruta_comida`, o `consequencia_mundo`,
+  o `mudanca_no_corpo`, o `consequencia_corpo`) é chamado; o estado interno inteiro do A sai igual (teste).
+- **A troca de tipo** é do `Mundo`: as quedas até o tick do evento usam o tipo velho, e as frutas que já estão no chão ficam como caíram.
+  O registro é `Mundo.trocas_tipo`.
+- **Só com um pet.** A chave do J5 recusa o grupo (a mão e a troca no mundo de dois pets ficam fora, como o "mapa aprendendo do que o
+  outro pet comeu" da seção 7 da tarefa).
+- **As classes por árvore** são uma por árvore do layout (`arvore:J1` … `arvore:M6`, na ordem do layout), só nas tabelas do explorar das
+  regras em que ele é candidato: 27 pesos a mais (795 → 822 no P1 do plano), abaixo do teto de 1000 (TP-1). A chave exige o alvo
+  aprendido. Sem ela, um candidato de árvore no alvo aprendido falha alto: a chave do mundo e a do cérebro vão juntas no P1 do plano.
+- **Um teste antigo mudou:** `tests/test_corpo_gestos.py` exigia o tapa como o último do enum; agora confere a posição dele (29).
+- **O G2** é contra um gabarito próprio (`tests/gabaritos/pqp_mundo_vidas_de_hoje.json`, 48 vidas, gravado num commit antes da
+  mudança): o da etapa 0 do B ainda não está na `main`.
+
+## 2026-10-13 — o TypeError intermitente do `test_grupo` (worker A)
+
+Na suíte que rodou junto com a validação do mundo (#285), o `test_g2_um_pet_no_grupo_e_o_gabarito_da_etapa_0` falhou uma vez com
+`TypeError: expected 2 arguments, got 3`, no `__init__` gerado do `Estado` (dataclass congelado), na linha do quinto
+`object.__setattr__(self, 'humor', humor)`: as quatro chamadas iguais antes dela passaram. A mensagem é a do `wrap_setattr` do CPython
+(um `__setattr__` chamado com o `self` a mais). Nada do nosso código toca `__setattr__` nem `__init__` (procurado no repositório).

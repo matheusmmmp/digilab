@@ -62,6 +62,20 @@ corpo). Desligado, nada muda (nenhuma rng, nenhum registro, nenhuma chave em est
 - o registro `alivios` (um dict por aliviar: tick do mundo, dentro, urgente, alvo, distancia ao banheiro na decisao, recolhido; o contrato
   da bancada, experiments/bancada_v2.py) e as `recolhas` do limpar. O `DonoCarinhoBanheiro` acaricia no primeiro passo do dono depois
   de cada alivio dentro do banheiro, fora do orcamento (`simular_vida_mundo(..., carinho=)`).
+
+O pet que pensa (J5; docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.3, etapa 3; PP-1 e PP-5 do plano): `cfg_pqp` (ConfigPetQuePensaMundo)
+liga, so com o mundo e so com um pet (fora do grupo). Desligado, nada muda. Ligado:
+- os troncos que o pet ja viu: um tronco a ate o raio da visao do pet, na percepcao da decisao ou na posicao depois de andar, entra em
+  `troncos_vistos` (id -> o primeiro tick do mundo); a percepcao ganha `troncos` (os troncos a vista agora: id, dx, dy, d);
+- no explorar, depois dos candidatos de hoje, um candidato `arvore:<id>` por tronco ja visto, no pe da arvore, na ordem do layout (PP-1).
+  O padrao do motor e o instinto nunca os escolhem; o `continuar` de uma ida a arvore leva ao mesmo ponto;
+- a fruta na mao (`dar_fruta_<f>`, fora do orcamento): o pet a come na hora, onde esta, com o efeito vigente, sem decisao e sem andar
+  (acordado; dormindo falha alto). Entra em `consumos_mundo` com `como` = "mao" e chega ao cerebro so pelo gancho opcional
+  `fruta_na_mao(tipo, obs_antes, obs_depois)`: nao passa pelo `receber_acao_dono`, pelo `fruta_comida`, pelo `consequencia_mundo` nem
+  pelo `mudanca_no_corpo` (a G-SEM-CREDITO). Nao e contato;
+- a troca de tipo (`trocar_arvores_<x>_<y>`, fora do orcamento): no tick do evento as arvores do tipo x passam a dar y, e as do y a dar
+  x. As quedas ate o tick do evento usam o tipo antigo e as frutas que ja estao no chao ficam como cairam. O registro e do `Mundo`
+  (`trocas_tipo`), e o replay o refaz pelo log.
 """
 
 from __future__ import annotations
@@ -73,11 +87,11 @@ from typing import Callable
 
 from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
-from .config import CONFIG_BANHEIRO, ConfigBanheiro, ConfigDonos
+from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .donos import Visao
 from .engine import Motor
-from .events import (ACOES_BOLA, ACOES_FRUTAS, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario, LogDeEventos, ler_deixar_bola,
-                     ler_deixar_comida)
+from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
+                     LogDeEventos, fruta_dada, ler_deixar_bola, ler_deixar_comida, par_da_troca)
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
 from .frutas import MotorFrutas
@@ -103,6 +117,10 @@ class MundoSemChave(RuntimeError):
 
 class BanheiroSemMundo(ValueError):
     """O banheiro (ConfigBanheiro ligada) sem o mundo fisico ligado, ou sem o corpo com a sub-chave banheiro na frente."""
+
+
+class PetQuePensaSemChave(ValueError):
+    """a fruta na mao, a troca de tipo ou a ConfigPetQuePensaMundo sem o mundo, sem a chave ou no grupo"""
 
 
 class GestoForaDoMundo(ValueError):
@@ -217,7 +235,8 @@ def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: Co
 class PercepcaoMundo:
     """Secao 7. `vistos`: (id, tipo, dx, dy, d), em ordem de d, tipo e id, no maximo `max_vistos`; tipo = `racao`, `a`, `b`, `c`,
     o mesmo com `_podre`, ou `bola` (id 0). `cheiro` so das comidas boas; `direcao_cheiro` 0 a 8; `alvo_pendente` o tipo do alvo da
-    decisao anterior que ficou sem chegar, ou None."""
+    decisao anterior que ficou sem chegar, ou None. `troncos` (o J5, so com ConfigPetQuePensaMundo.ligada; senao vazio): (id, dx, dy, d)
+    dos troncos a ate o raio da visao, em ordem de d e id."""
 
     x: int
     y: int
@@ -226,6 +245,7 @@ class PercepcaoMundo:
     cheiro: int
     direcao_cheiro: int
     alvo_pendente: str | None
+    troncos: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -443,6 +463,42 @@ class Mundo:
         self.necessidades: dict[int, dict] | None = None
         self.prox_necessidade = 1
         self.recolhidas: list[dict] = []
+        # o J5 (o pet que pensa): as trocas de tipo por arvore, so depois de `ligar_trocas` (o motor com a ConfigPetQuePensaMundo); sem
+        # ela, None e nada muda (nem o resumo)
+        self.trocas_tipo: list[dict] | None = None
+
+    # ------------------------------------------------------------ o J5: a troca de tipo por arvore e os troncos
+    def ligar_trocas(self) -> None:
+        if self.trocas_tipo is None:
+            self.trocas_tipo = []
+
+    def trocar_tipos(self, x: str, y: str, tick: int) -> dict:
+        """No tick (o mundo ja atualizado ate ele), as arvores do tipo x passam a dar y e as do y a dar x. As frutas no chao nao mudam."""
+        if self.trocas_tipo is None:
+            raise PetQuePensaSemChave("troca de tipo num Mundo sem a ConfigPetQuePensaMundo")
+        if x == y or x not in FRUTAS or y not in FRUTAS:
+            raise ValueError(f"troca de tipo invalida: {x!r}, {y!r}")
+        if self.tick_atualizado != tick:
+            raise RuntimeError(f"troca de tipo no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        novas = {}
+        for arv in self.arvores:
+            if arv["fruta"] in (x, y):
+                arv["fruta"] = y if arv["fruta"] == x else x
+                novas[arv["id"]] = arv["fruta"]
+        reg = {"tick": tick, "x": x, "y": y, "arvores": novas}
+        self.trocas_tipo.append(reg)
+        return reg
+
+    def troncos_perto(self, x: int, y: int) -> list[tuple]:
+        """(id, dx, dy, d) dos troncos a ate o raio da visao de (x, y), em ordem de d e id"""
+        perto = []
+        for arv in self.arvores:
+            dx, dy = arv["x"] - x, arv["y"] - y
+            d = distancia(dx, dy)
+            if d <= self.raio_visao:
+                perto.append((arv["id"], dx, dy, d))
+        perto.sort(key=lambda t: (t[3], t[0]))
+        return perto
 
     # ------------------------------------------------------------ o banheiro
     def ligar_necessidades(self) -> None:
@@ -538,8 +594,9 @@ class Mundo:
         return [(c["x"], c["y"], cm.cheiro_racao if c["tipo"] == "racao" else cm.cheiro_fruta)
                 for c in self.comidas.values() if self.situacao(c, tick) == "madura"]
 
-    def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None) -> PercepcaoMundo:
-        """Pura (nao sorteia nem muda nada): o que um pet em (x, y) percebe agora (MF-3); `alvo_pendente` e o do pet."""
+    def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None, troncos: bool = False) -> PercepcaoMundo:
+        """Pura (nao sorteia nem muda nada): o que um pet em (x, y) percebe agora (MF-3); `alvo_pendente` e o do pet. `troncos` (o J5):
+        os troncos a vista entram na percepcao."""
         vistos = []
         for c in self.comidas.values():
             sit = self.situacao(c, tick)
@@ -555,7 +612,8 @@ class Mundo:
             vistos.append((ID_BOLA, "bola", bx - x, by - y, d))
         vistos.sort(key=lambda v: (v[4], v[1], v[0]))
         cheiro, direcao = direcao_do_cheiro(x, y, self.fontes_de_cheiro(tick), self.cmf)
-        return PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), cheiro, direcao, alvo_pendente)
+        p = PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), cheiro, direcao, alvo_pendente)
+        return replace(p, troncos=tuple(self.troncos_perto(x, y))) if troncos else p
 
     def maduras_perto(self, x: int, y: int, tick: int, raio: int) -> list[tuple[int, str, int]]:
         """as comidas maduras a ate `raio` de (x, y), em (distancia, tipo, id), da mais perto (o "achou e comeu" do explorar, MF-1)"""
@@ -604,7 +662,8 @@ class Mundo:
                 "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
                 **({} if self.necessidades is None else {
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
-                    "recolhidas": self.recolhidas})}
+                    "recolhidas": self.recolhidas}),
+                **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo})}
 
 
 # ================================================================== o motor
@@ -616,15 +675,19 @@ class MotorMundo(MotorFrutas):
     deixadas pelo dono)."""
 
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
-                 entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, **kw) -> None:
+                 entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
+                 **kw) -> None:
         super().__init__(*a, **kw)
         self.cmf = cfg_mundo or CONFIG_MUNDO
         self.cbh = cfg_banheiro or CONFIG_BANHEIRO
+        self.cpq = cfg_pqp or CONFIG_PQP_MUNDO
         if not self.cmf.ligada:
             if efeito_frutas is not None or mundo is not None or entrada_mundo:
                 raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
             if self.cbh.ligada:
                 raise BanheiroSemMundo("o banheiro exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cpq.ligada:
+                raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -681,6 +744,13 @@ class MotorMundo(MotorFrutas):
             self.idas_banheiro: list[dict] = []        # a continuacao: cada aliviar com o alvo `banheiro` que segurou a vontade
 
         # dois pets, etapa 3: o grupo e o id do pet nele (o Grupo poe na entrada); fora do grupo, nada disto e usado e a vida e a de hoje
+        if self.cpq.ligada:
+            # o J5 (TAREFA_V2_PET_QUE_PENSA, secao 2.3): so com um pet (o grupo nao tem a mao nem a troca)
+            if mundo is not None:
+                raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) roda com um pet, fora do grupo")
+            self.troncos_vistos: dict[str, int] = {}     # id -> o primeiro tick do mundo em que o pet viu o tronco
+            self.mundo.ligar_trocas()
+
         self._grupo = None
         self.ident: str | None = None
         self._social: PercepcaoSocial | None = None     # a percepcao social da decisao (None sozinho)
@@ -772,7 +842,7 @@ class MotorMundo(MotorFrutas):
         """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
         x, y = self.pet
         pend = self._pendente["alvo"].tipo if self._pendente is not None else None
-        return self.mundo.perceber(x, y, self._tm(tick), pend)
+        return self.mundo.perceber(x, y, self._tm(tick), pend, troncos=self.cpq.ligada)
 
     def _observacao_depois_mundo(self) -> Observacao:
         """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
@@ -788,6 +858,8 @@ class MotorMundo(MotorFrutas):
         self.mundo.atualizar(self._tm(t))
         self._percepcao = self._perceber(t)
         self._fome_antes = self._estado.fome
+        if self.cpq.ligada:
+            self._ver_troncos(self._percepcao.troncos, self._tm(t))
         if self._grupo is not None:
             self._social = self.percepcao_social()
             self._pendente_antes = self._pendente
@@ -797,6 +869,11 @@ class MotorMundo(MotorFrutas):
                 for ident, *_ in self._social.outros:
                     self.a_vista[ident] = self.a_vista.get(ident, 0) + 1
         return self._percepcao
+
+    def _ver_troncos(self, troncos, tick_mundo: int) -> None:
+        """o J5: os troncos a vista entram em `troncos_vistos` (o primeiro tick em que o pet os viu)"""
+        for ident, *_ in troncos:
+            self.troncos_vistos.setdefault(ident, tick_mundo)
 
     # ------------------------------------------------------------ os alvos
     def _alvo_cheiro(self, p: PercepcaoMundo) -> Alvo:
@@ -844,6 +921,9 @@ class MotorMundo(MotorFrutas):
             cands.append(cont)
         if acao is AcaoPet.EXPLORAR and self._social is not None:
             cands += self._candidatos_sociais(p)
+        if acao is AcaoPet.EXPLORAR and self.cpq.ligada:
+            # PP-1: um candidato por tronco ja visto, no pe da arvore, na ordem do layout, depois dos de hoje
+            cands += [Alvo(f"arvore:{a['id']}", a["x"], a["y"]) for a in self.mundo.arvores if a["id"] in self.troncos_vistos]
         return cands
 
     def _candidatos_sociais(self, p: PercepcaoMundo) -> list[Alvo]:
@@ -1072,6 +1152,8 @@ class MotorMundo(MotorFrutas):
         tick = self._tm(tick)                               # os registros do mundo fisico: o relogio do mundo
         x1, y1 = self.pet
         regiao = regiao_de(x1, self.cmf)
+        if self.cpq.ligada:
+            self._ver_troncos(self.mundo.troncos_perto(x1, y1), tick)
         for v in self._manchas_abertas.values():               # as decisoes tomadas de dentro da mancha
             v["decisoes"] += 1
         dentro = {a["id"] for a in self.mundo.arvores if distancia(a["x"] - x1, a["y"] - y1) <= self._raio_mancha}
@@ -1096,6 +1178,14 @@ class MotorMundo(MotorFrutas):
 
     # ------------------------------------------------------------ o dono
     def _aplicar_acao_usuario(self, acao: AcaoUsuario) -> None:
+        if acao in ACOES_MAO or acao in ACOES_TROCA_ARVORES:
+            if not (self.cmf.ligada and self.cpq.ligada):
+                raise PetQuePensaSemChave(f"{acao.value} sem o mundo e a ConfigPetQuePensaMundo ligados")
+            if acao in ACOES_MAO:
+                self._dar_fruta(fruta_dada(acao))
+            else:
+                self._trocar_arvores(*par_da_troca(acao))
+            return
         if self.cmf.ligada and acao in GESTOS_PROIBIDOS:
             raise GestoForaDoMundo(f"{acao.value} numa vida com o mundo: use deixar_comida/deixar_bola")
         super()._aplicar_acao_usuario(acao)
@@ -1107,6 +1197,39 @@ class MotorMundo(MotorFrutas):
             tm = self._tm(self._estado.tick)
             self.mundo.recolher_necessidades(ids, tm, "limpar")
             self.recolhas.append({"tick": tm, "zona": z, "ids": ids})
+
+    # ------------------------------------------------------------ o J5: a fruta na mao e a troca de tipo
+    def _dar_fruta(self, f: str) -> None:
+        """A fruta na mao (PQ-4, PP-5): o pet come na hora, onde esta, com o efeito vigente (a conta da fruta madura do `_comer_mundo`),
+        sem decisao e sem andar. Nao e contato. Chega ao cerebro so pelo gancho opcional `fruta_na_mao(tipo, obs_antes, obs_depois)`."""
+        tick = self._estado.tick
+        if self._estado.dormindo:
+            raise RuntimeError(f"fruta na mao com o pet dormindo (tick {tick}): o dono da a fruta com o pet acordado")
+        tm = self._tm(tick)
+        self.mundo.atualizar(tm)                           # a percepcao de antes e de depois e a do mundo no tick
+        antes = self._observacao_depois_mundo()
+        e = self._estado
+        fome = min(1.0, e.fome + self.cmf.nutricao_fruta)
+        humor = min(1.0, max(0.0, e.humor + self.efeito_frutas[f]))
+        self._estado = replace(e, fome=fome, humor=humor)
+        self.consumos_mundo.append({"tick": tm, "id": None, "tipo": f, "origem": "dono", "tick_posta": tm, "situacao": "madura",
+                                    "como": "mao", "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome,
+                                    "humor_depois": humor})
+        self._n_eventos += 1                                # e um evento do log, mas NAO e contato
+        self._estimulo_mao(f)
+        gancho = getattr(self._pm_cerebro(), "fruta_na_mao", None)
+        if gancho is not None:
+            gancho(f, antes, self._observacao_depois_mundo())
+
+    def _estimulo_mao(self, f: str) -> None:
+        """o lugar do corpo (o MotorCorpo o troca pelo estimulo da fruta madura); sem o corpo, nada"""
+
+    def _trocar_arvores(self, x: str, y: str) -> None:
+        """A troca de tipo por arvore (o teste 2): o mundo anda ate o tick e as arvores dos tipos x e y trocam. Nao e contato."""
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        self.mundo.trocar_tipos(x, y, tm)
+        self._n_eventos += 1
 
     def deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
@@ -1167,7 +1290,8 @@ class MotorMundo(MotorFrutas):
                 **({} if not self.cbh.ligada else {
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
-                    "idas_banheiro": self.idas_banheiro})}
+                    "idas_banheiro": self.idas_banheiro}),
+                **({} if not self.cpq.ligada else {"troncos_vistos": dict(self.troncos_vistos), "trocas_tipo": m.trocas_tipo})}
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos

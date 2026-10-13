@@ -70,6 +70,15 @@ class AcaoUsuario(str, Enum):
     # V2, corpo, etapa 6 (docs/TAREFA_V2_CORPO_DRIVES.md, secao 8): o tapa, a desaprovacao com corpo (dor, susto, estresse) e o sinal da
     # bronca. So o MotorCorpo com ConfigCorpo.gestos aceita; nos motores de hoje (e no reproduzir de hoje) levanta erro. No fim do enum.
     TAPA = "tapa"
+    # V2, o pet que pensa (J5; docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.3, etapa 3): o dono da a fruta NA MAO (o teste 1, a revalorizacao;
+    # PQ-4) e a troca de tipo entre duas classes de arvore (o teste 2). Os dois ficam fora do orcamento, pelo canal do mundo, e so o
+    # MotorMundo com ConfigPetQuePensaMundo.ligada aceita; nos motores de hoje levantam erro. No fim do enum.
+    DAR_FRUTA_A = "dar_fruta_a"
+    DAR_FRUTA_B = "dar_fruta_b"
+    DAR_FRUTA_C = "dar_fruta_c"
+    TROCAR_ARVORES_A_B = "trocar_arvores_a_b"
+    TROCAR_ARVORES_A_C = "trocar_arvores_a_c"
+    TROCAR_ARVORES_B_C = "trocar_arvores_b_c"
 
 
 # as 6 acoes da v1, na ordem original: donos sorteiam daqui (list(AcaoUsuario) mudaria a
@@ -122,6 +131,39 @@ def pedir_deixar(fruta: str) -> AcaoUsuario:
     if fruta not in FRUTAS:
         raise ValueError(f"fruta desconhecida: {fruta!r}")
     return AcaoUsuario(f"pedir_deixar_fruta_{fruta}")
+
+
+ACOES_MAO = tuple(AcaoUsuario(f"dar_fruta_{f}") for f in FRUTAS)
+PARES_TROCA = (("a", "b"), ("a", "c"), ("b", "c"))
+ACOES_TROCA_ARVORES = tuple(AcaoUsuario(f"trocar_arvores_{x}_{y}") for x, y in PARES_TROCA)
+
+
+def fruta_dada(acao: AcaoUsuario) -> str:
+    """a fruta que o dono da na mao (J5)"""
+    if acao not in ACOES_MAO:
+        raise ValueError(f"acao nao e fruta na mao: {acao}")
+    return acao.value[len("dar_fruta_"):]
+
+
+def dar_fruta(fruta: str) -> AcaoUsuario:
+    if fruta not in FRUTAS:
+        raise ValueError(f"fruta desconhecida: {fruta!r}")
+    return AcaoUsuario(f"dar_fruta_{fruta}")
+
+
+def par_da_troca(acao: AcaoUsuario) -> tuple[str, str]:
+    """(x, y) da troca de tipo por arvore (J5), em ordem"""
+    if acao not in ACOES_TROCA_ARVORES:
+        raise ValueError(f"acao nao e troca de tipo: {acao}")
+    _, _, x, y = acao.value.split("_")
+    return x, y
+
+
+def trocar_arvores(x: str, y: str) -> AcaoUsuario:
+    par = tuple(sorted((x, y)))
+    if par not in PARES_TROCA:
+        raise ValueError(f"troca invalida: {x!r}, {y!r}")
+    return AcaoUsuario(f"trocar_arvores_{par[0]}_{par[1]}")
 
 
 def oferta_de(fruta: str) -> AcaoUsuario:

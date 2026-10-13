@@ -56,7 +56,7 @@ from .config import CONFIG_CORPO, ConfigCorpo
 from .corpo import DRIVE_DO_QUIMICO, Corpo
 from .educacao import MotorEducacao
 from .engine import Motor
-from .events import ACOES_CORPO, ACOES_TREINO, AcaoPet, AcaoUsuario
+from .events import ACOES_CORPO, ACOES_MAO, ACOES_TREINO, ACOES_TROCA_ARVORES, AcaoPet, AcaoUsuario
 from .obediencia import MotorPersonalidade
 from .policy import Observacao, Transicao, efeito_da_acao_do_pet
 from .state import avancar_um_tick
@@ -344,6 +344,13 @@ class MotorCorpo:
     def _aplicar_acao_usuario(self, acao: AcaoUsuario) -> None:
         if not self._ligado():
             return super()._aplicar_acao_usuario(acao)
+        if acao in ACOES_MAO or acao in ACOES_TROCA_ARVORES:
+            # o J5 (TAREFA_V2_PET_QUE_PENSA, secao 2.3): a fruta na mao vira o estimulo da fruta madura (`_estimulo_mao`), e a troca de
+            # tipo nao toca o corpo. Os dois sao do MotorMundo, que confere a chave
+            self._conferir_sincronia(f"antes de {acao.value}")
+            super()._aplicar_acao_usuario(acao)
+            self._conferir_sincronia(f"depois de {acao.value}")
+            return
         if acao in ACOES_TREINO:
             raise ValueError(f"{acao.value} com o corpo: o treino nao tem estimulo no corpo (secao 2)")
         if acao in ACOES_CORPO and not self.cc.gestos:
@@ -358,6 +365,15 @@ class MotorCorpo:
         self._conferir_estimulo(acao.value, {DRIVE_DO_QUIMICO[q] for q in deltas if q in DRIVE_DO_QUIMICO})
         if deltas:
             self.corpo.acao_dono(acao)
+        self._sincronizar()
+
+    def _estimulo_mao(self, f: str) -> None:
+        """O J5: a fruta na mao escreve fome e humor em float (a conta da fruta madura do mundo): vira o estimulo da fruta madura do mapa,
+        antes de o motor montar a observacao de depois para o gancho `fruta_na_mao`."""
+        if not self._ligado():
+            return super()._estimulo_mao(f)
+        self._conferir_estimulo("fruta na mao", {"fome", "humor"})
+        self.corpo.estimulo_consumo_mundo(f, "madura", self.cmf, self.efeito_frutas[f])
         self._sincronizar()
 
     # ------------------------------------------------------------ etapa 6: os gestos (secao 8)

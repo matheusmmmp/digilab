@@ -165,8 +165,11 @@ PARAMETROS_LOBOS_DOIS_PETS: dict[str, tuple[str, str]] = {
     "fator_familiaridade": ("PROPOSTO", "dois_pets.md, secao 8: a familiaridade com decaimento, S/64 por decisao, SEM FONTE"),
     "presenca_fruta_mundo": ("PROPOSTO", "a rota do canal do humor no mundo fisico (CANAIS-REFORCO), decisao do Matheus 2026-10-11"),
 }
+PARAMETROS_LOBOS_PET_QUE_PENSA: dict[str, tuple[str, str]] = {
+    "alvo_por_arvore": ("PROPOSTO", "TAREFA_V2_PET_QUE_PENSA, etapa 2b (PP-2): as classes arvore:<id> no alvo aprendido"),
+}
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
-                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS}
+                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS, **PARAMETROS_LOBOS_PET_QUE_PENSA}
 MODOS_MEMORIA = ("relevante", "recencia", "embaralhada")
 REGRAS_PEDIDO = ("fome_moderada", "fruta_no_cenario")   # N7-2 e N7-3: so onde comer e candidato e a necessidade nao e urgente
 # V2, N3: o sinal da consequencia (ConfigConsequencia, config.py). Todos PROPOSTOS, nenhum referendado.
@@ -746,6 +749,8 @@ class Aprendiz:
         self._cfg_mundo: ConfigMundo | None = None
         self._prior_alvo_mundo: dict = {}
         self._pesos_alvo_mundo: dict = {}
+        # o pet que pensa, etapa 2b (PP-2): as classes `arvore:<id>` do explorar, na ordem do layout; vazias sem a chave: nada muda
+        self._arvores_alvo: tuple = ()
         self._prior_alvo: dict = {}
         self._pesos_alvo: dict = {}
         # dois pets, etapa 4, segunda metade: as entradas sociais (regra -> acao -> um peso por entrada social, prior 0; vazia sem a chave:
@@ -1666,11 +1671,19 @@ class PoliticaLobos(Aprendiz):
             raise TypeError(f"ConfigLobos.alvo_aprendido precisa ser bool: {cl.alvo_aprendido!r}")
         if type(cl.w0_alvo) is not int or cl.w0_alvo < 0:
             raise ValueError(f"ConfigLobos.w0_alvo precisa ser inteiro >= 0: {cl.w0_alvo!r}")
+        if type(cl.alvo_por_arvore) is not bool:
+            raise TypeError(f"ConfigLobos.alvo_por_arvore precisa ser bool: {cl.alvo_por_arvore!r}")
+        if cl.alvo_por_arvore and not cl.alvo_aprendido:
+            raise ValueError("ConfigLobos.alvo_por_arvore sem o alvo aprendido (as classes por arvore sao do alvo aprendido)")
         if cl.alvo_aprendido:
             if not fisico:
                 raise ValueError("ConfigLobos.alvo_aprendido sem o mundo fisico (cfg_mundo ligada)")
             self._cfg_mundo = cfg_mundo
-            self._prior_alvo_mundo = {f"{r}:{a.value}": {c: cl.w0_alvo for c in CLASSES_ALVO[a]}
+            if cl.alvo_por_arvore:
+                # PP-2: uma classe por arvore do layout, nas regras em que o explorar e candidato (o motor as oferece com a
+                # ConfigPetQuePensaMundo, PP-1). Comecam em w0_alvo, como as outras classes
+                self._arvores_alvo = tuple(f"arvore:{a[0]}" for a in cfg_mundo.layout.arvores)
+            self._prior_alvo_mundo = {f"{r}:{a.value}": {c: cl.w0_alvo for c in self._classes_alvo(a)}
                                       for r, acoes in REGRAS_ALVO.items() if r in self._prior for a in acoes}
             self._pesos_alvo_mundo = {k: dict(t) for k, t in self._prior_alvo_mundo.items()}
             if self.n_pesos() >= cl.maximo_pesos:
@@ -1786,6 +1799,12 @@ class PoliticaLobos(Aprendiz):
             return self._alvo_aprendido(acao, candidatos, percepcao, u)
         return None
 
+    def _classes_alvo(self, acao: AcaoPet) -> tuple:
+        """as classes do alvo aprendido de uma acao: as de CLASSES_ALVO e, no explorar com `alvo_por_arvore`, uma por arvore (PP-2)"""
+        if acao is AcaoPet.EXPLORAR and self._arvores_alvo:
+            return CLASSES_ALVO[acao] + self._arvores_alvo
+        return CLASSES_ALVO[acao]
+
     def _alvo_aprendido(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
         """Dois pets, etapa 4 (docs/futuro/dois_pets.md, secao 8, DP-8): a classe do alvo, aprendida. Cada classe presente tem um
         representante (o primeiro candidato dela, na ordem do motor: a comida boa mais proxima, o primeiro cheiro...). O peso efetivo
@@ -1810,8 +1829,8 @@ class PoliticaLobos(Aprendiz):
         classes, reps = [], []
         for a in candidatos:
             c = ("comida_podre" if a.id in podres else "comida") if a.tipo == "comida" else a.tipo
-            if c not in CLASSES_ALVO[acao]:
-                raise ValueError(f"alvo aprendido: classe {c!r} fora das de {acao.value} {CLASSES_ALVO[acao]}")
+            if c not in self._classes_alvo(acao):
+                raise ValueError(f"alvo aprendido: classe {c!r} fora das de {acao.value} {self._classes_alvo(acao)}")
             if c not in classes:
                 classes.append(c)
                 reps.append(a)

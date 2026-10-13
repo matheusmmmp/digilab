@@ -3958,3 +3958,37 @@ mundo da calibração; 3.360 vidas rejogadas do disco, 50 min com 8 processos (6
   mais no layout afastado, mas ficar não paga.
 - **Leitura (A1.5, terceira linha):** a consequência imediata não aprende a procurar neste mundo. Por dono, a perda vem do atencioso e do
   incoerente; com o relapso o P1 ganha um pouco (descritivo).
+
+## V2, PET-QUE-PENSA, etapas 3 e 2b — o mundo do J5 e as classes por árvore (2026-10-13, `docs/TAREFA_V2_PET_QUE_PENSA.md`) — GATES PASSAM
+
+A etapa 3 (o mundo, do A) e a 2b (as classes por árvore no alvo aprendido, dada ao A pelo Gerente), com PP-1, PP-2 e PP-5 do
+`docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`. Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/events.py` (o fim do enum),
+`digilab/mundo.py`, `digilab/motor_corpo.py` (o estímulo da mão), `digilab/policies/lobos.py` (atrás da chave), a `ConfigLobos` e a
+`ConfigPetQuePensaMundo` no fim de `config.py`. `engine.py`, o `AcaoPet`, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave do mundo:** `MotorMundo(..., cfg_pqp=ConfigPetQuePensaMundo(ligada=True))`, só com o mundo físico e um pet (fora do grupo).
+  Desligada, nada muda. Ligada:
+  - **os troncos vistos** (`troncos_vistos`: id → o primeiro tick do mundo), a até o raio da visão, na decisão e depois de andar; a
+    percepção ganha `troncos` (id, dx, dy, d), com padrão vazio;
+  - **os candidatos de árvore lembrada (PP-1):** no explorar, `arvore:<id>` de cada tronco já visto, no tronco, na ordem do layout,
+    depois dos de hoje. O padrão do motor e o instinto nunca os escolhem;
+  - **a fruta na mão** (`dar_fruta_<f>`, fora do orçamento): o pet come na hora, onde está, com o efeito vigente (a conta da fruta
+    madura; com o corpo, o `estimulo_consumo_mundo`), entra em `consumos_mundo` com `como` "mao" e não é contato. O cérebro a recebe só
+    pelo gancho opcional `fruta_na_mao(tipo, obs_antes, obs_depois)` (G-SEM-CREDITO). Com o pet dormindo, falha alto;
+  - **a troca de tipo** (`trocar_arvores_<x>_<y>`, fora do orçamento): no tick do evento as árvores do x passam a dar y e as do y a dar
+    x; as quedas até o tick usam o tipo velho e o chão fica como estava (`Mundo.trocas_tipo`; o replay refaz pelo log).
+- **As classes por árvore (PP-2):** `ConfigLobos.alvo_por_arvore` (exige o alvo aprendido): `arvore:J1` … `arvore:M6` nas tabelas do
+  explorar, 27 pesos a mais (822 no P1 do plano), w0 = `w0_alvo`, aprendidas só pela consequência. Sem a chave, um candidato de árvore no
+  alvo aprendido falha alto.
+- **Gates** (`tests/test_pet_que_pensa_mundo.py`, 24):
+  - **G2:** as 48 vidas de `tests/gabaritos/pqp_mundo_vidas_de_hoje.json` (`tests/gabarito_pqp_mundo.py`, gravado antes num commit
+    próprio), byte a byte;
+  - os eventos no fim do enum e as recusas (os motores de hoje, sem a chave, sem o mundo, no grupo, dormindo);
+  - os troncos vistos refeitos por fora, a percepção deles e os candidatos de árvore na ordem;
+  - o instinto nunca vai à árvore, e o P0 com as classes por árvore é o instinto do mundo byte a byte;
+  - **G-SEM-CREDITO e a conta exata da mão**, sem e com o corpo (o estado interno do A inteiro igual, nenhum gancho de crédito, o gancho
+    da mão com o corpo, não é contato, o orçamento fecha);
+  - a troca no tick, com as quedas antes no tipo velho e depois no novo;
+  - as classes por árvore: a contagem, as falhas altas e a conta exata pela consequência (o dono não mexe);
+  - **G1** com tudo ligado (o P1, a mão e a troca), sem e com o corpo.
+- **Para o D (etapa 4):** a fábrica dos braços do J5 passa `cfg_pqp` ao `MotorMundo` e `alvo_por_arvore` ao cérebro A; os eventos da mão e
+  da troca entram pelo `observar` do motor no `T_m` do plano, fora do orçamento. O gancho `fruta_na_mao` é do modelo do desfecho do B.
