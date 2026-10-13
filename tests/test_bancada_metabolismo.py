@@ -290,7 +290,7 @@ def test_o_empate_de_log2_fica_com_o_menor_gasto(monkeypatch):
 
 
 def test_a_regra_do_passo_0_pede_os_tres_pontos():
-    with pytest.raises(ValueError, match="tres pontos"):
+    with pytest.raises(ValueError, match="pontos"):
         bv.escolha_passo0({(1, 1): 0.2, (1, 2): 0.1})
 
 
@@ -318,3 +318,56 @@ def test_a_fumaca_do_passo_0_inteiro(tmp_path):
         assert saida["pontos"][nome]["corpo"] == {k: ponto["corpo"][k] for k in bv.PASSO0_CAMPOS}
     e = bv.escolha_passo0(fracoes)
     assert {k: saida["escolha"][k] for k in e} == e and saida["escolha"]["nome"] == f"gasto_{e['ponto'][0]}_{e['ponto'][1]}"
+
+
+
+# ------------------------------------------------------------------ o passo 0 fino (adendo 5, A5.1)
+
+
+def test_a_grade_fina_do_passo_0():
+    fina = json.loads((CFG_PASSO0.parent / "calibracao_passo0_fina.json").read_text(encoding="utf-8"))
+    assert bv.grade_passo0(fina) == ((3, 5), (7, 10), (4, 5), (9, 10)) and bv.grade_passo0(_cfg_passo0()) == bv.PASSO0_MULTIPLICADORES
+    pontos = bv.pontos_passo0(fina)
+    assert [n for n, _ in pontos] == ["gasto_3_5", "gasto_7_10", "gasto_4_5", "gasto_9_10"]
+    assert [(c["corpo"]["gasto_basal_acordado"], c["corpo"]["gasto_basal_dormindo"]) for _, c in pontos] == \
+        [(225, 112), (263, 131), (300, 150), (338, 168)]                     # o basal arredondado como na A3.2b (metade para cima)
+    assert all(not set(bv.PASSO0_CHAVES_EXTRAS) & set(c) for _, c in pontos)  # as chaves so do passo 0 nao vao ao ponto
+    bv.validar_config(pontos[0][1])
+    assert {k: v for k, v in fina.items() if k not in ("descricao",) + bv.PASSO0_CHAVES_EXTRAS} == \
+        {k: v for k, v in _cfg_passo0().items() if k != "descricao"}       # a mesma config da A3.2c fora da grade
+    for ruim in ([], [[1, 2], [1, 2]], [[3, 2]], [[0, 2]], [[1, 2, 3]]):
+        with pytest.raises(ValueError, match="multiplicadores"):
+            bv.grade_passo0({"multiplicadores": ruim})
+
+
+def test_a_regra_com_os_sete_pontos():
+    sete = ((1, 4), (1, 2), (1, 1), (3, 5), (7, 10), (4, 5), (9, 10))
+    f = {(1, 4): 0.0, (1, 2): 0.0004, (1, 1): 0.49, (3, 5): 0.01, (7, 10): 0.06, (4, 5): 0.2, (9, 10): 0.35}
+    r = bv.escolha_passo0(f, sete)
+    assert r["ponto"] == [4, 5] and r["fechou"] and r["passam"] == [[7, 10], [4, 5]]
+    r = bv.escolha_passo0({**f, (7, 10): 0.01, (4, 5): 0.02, (9, 10): 0.31}, sete)
+    assert r["ponto"] == [9, 10] and not r["fechou"]                          # o mais perto do centro (0,175): 0,31 contra 0,49 e 0,02
+    with pytest.raises(ValueError, match="pontos"):
+        bv.escolha_passo0(f)                                                  # a grade da PCD-9 nao tem os quatro novos
+
+
+def test_o_passo_0_fino_junta_o_anterior(tmp_path):
+    """Com `passo0_anterior`, a regra le os pontos ja medidos com os novos; o ponto repetido e a config diferente falham alto. Os pontos
+    novos em paralelo (`processos` 2) dao as mesmas medidas que um a um."""
+    fumaca = json.loads((CFG_PASSO0.parent / "fumaca_passo0.json").read_text(encoding="utf-8"))
+    pequeno = {**fumaca, "donos": ["atencioso"], "mundos": ["bola"], "dias": 1, "orcamento": 16}
+    ant = bv.rodar_passo0(pequeno, tmp_path / "ant")
+    fina = {**pequeno, "multiplicadores": [[3, 5], [4, 5]], "passo0_anterior": str(tmp_path / "ant" / "passo0.json")}
+    r = bv.rodar_passo0(fina, tmp_path / "fina", processos=2)
+    assert set(r["pontos"]) == {"gasto_1_4", "gasto_1_2", "gasto_1_1", "gasto_3_5", "gasto_4_5"}
+    assert all(r["pontos"][n]["anterior"] == fina["passo0_anterior"] and r["pontos"][n]["fracao"] == ant["pontos"][n]["fracao"]
+               for n in ant["pontos"])
+    fracoes = {tuple(p["m_gasto"]): p["fracao"] for p in r["pontos"].values()}
+    e = bv.escolha_passo0(fracoes, tuple(fracoes))
+    assert {k: r["escolha"][k] for k in e} == e
+    um = bv.rodar_passo0({**fina, "passo0_anterior": None}, tmp_path / "um")                    # um a um, sem o anterior
+    assert all(um["pontos"][n] == r["pontos"][n] for n in ("gasto_3_5", "gasto_4_5"))
+    with pytest.raises(ValueError, match="ja foi medido"):
+        bv.rodar_passo0({**fina, "multiplicadores": [[1, 2], [4, 5]]}, tmp_path / "rep")
+    with pytest.raises(ValueError, match="mesma config"):
+        bv.rodar_passo0({**fina, "orcamento": 15}, tmp_path / "outra")

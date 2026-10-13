@@ -1,0 +1,145 @@
+{
+  "escolha": {
+    "corpo": {
+      "gasto_atividades_den": 5,
+      "gasto_atividades_num": 4,
+      "gasto_basal_acordado": 300,
+      "gasto_basal_dormindo": 150
+    },
+    "fechou": true,
+    "fracao": 0.20176095253532958,
+    "nome": "gasto_4_5",
+    "passam": [
+      [
+        4,
+        5
+      ]
+    ],
+    "ponto": [
+      4,
+      5
+    ]
+  },
+  "faixa": [
+    0.05,
+    0.3
+  ],
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "pontos": {
+    "gasto_1_1": {
+      "acordado": 1846605,
+      "acordado_com_falta": 905331,
+      "anterior": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+      "corpo": {
+        "gasto_atividades_den": 1,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 375,
+        "gasto_basal_dormindo": 187
+      },
+      "fracao": 0.4902678158025133,
+      "m_gasto": [
+        1,
+        1
+      ],
+      "vidas": 160
+    },
+    "gasto_1_2": {
+      "acordado": 2187090,
+      "acordado_com_falta": 832,
+      "anterior": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+      "corpo": {
+        "gasto_atividades_den": 2,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 188,
+        "gasto_basal_dormindo": 94
+      },
+      "fracao": 0.000380414157624972,
+      "m_gasto": [
+        1,
+        2
+      ],
+      "vidas": 160
+    },
+    "gasto_1_4": {
+      "acordado": 2187300,
+      "acordado_com_falta": 0,
+      "anterior": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+      "corpo": {
+        "gasto_atividades_den": 4,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 94,
+        "gasto_basal_dormindo": 47
+      },
+      "fracao": 0.0,
+      "m_gasto": [
+        1,
+        4
+      ],
+      "vidas": 160
+    },
+    "gasto_3_5": {
+      "acordado": 2185710,
+      "acordado_com_falta": 5000,
+      "corpo": {
+        "gasto_atividades_den": 5,
+        "gasto_atividades_num": 3,
+        "gasto_basal_acordado": 225,
+        "gasto_basal_dormindo": 112
+      },
+      "fracao": 0.0022875861848095126,
+      "m_gasto": [
+        3,
+        5
+      ],
+      "vidas": 160
+    },
+    "gasto_4_5": {
+      "acordado": 2035830,
+      "acordado_com_falta": 410751,
+      "corpo": {
+        "gasto_atividades_den": 5,
+        "gasto_atividades_num": 4,
+        "gasto_basal_acordado": 300,
+        "gasto_basal_dormindo": 150
+      },
+      "fracao": 0.20176095253532958,
+      "m_gasto": [
+        4,
+        5
+      ],
+      "vidas": 160
+    },
+    "gasto_7_10": {
+      "acordado": 2182440,
+      "acordado_com_falta": 14064,
+      "corpo": {
+        "gasto_atividades_den": 10,
+        "gasto_atividades_num": 7,
+        "gasto_basal_acordado": 263,
+        "gasto_basal_dormindo": 131
+      },
+      "fracao": 0.006444163413427173,
+      "m_gasto": [
+        7,
+        10
+      ],
+      "vidas": 160
+    },
+    "gasto_9_10": {
+      "acordado": 1922115,
+      "acordado_com_falta": 706920,
+      "corpo": {
+        "gasto_atividades_den": 10,
+        "gasto_atividades_num": 9,
+        "gasto_basal_acordado": 338,
+        "gasto_basal_dormindo": 168
+      },
+      "fracao": 0.36778236473884235,
+      "m_gasto": [
+        9,
+        10
+      ],
+      "vidas": 160
+    }
+  }
+}

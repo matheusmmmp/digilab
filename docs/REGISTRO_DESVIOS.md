@@ -4958,3 +4958,25 @@ Pedido do Gerente depois do #292, com a saída 1 decidida pelo Matheus. Relatór
 - **O explorar com alvo some ao longo da vida** (2.476 decisões no dia 1, 227 no dia 14, somando as vidas). A contagem é do P1-alvo; o P1
   não tem o motivo do alvo, então não há o número dele para comparar.
 - **Os artefatos:** o `.gitignore` ganhou `artifacts_v2_mundo_alvo/` com as vidas fora, como o do mundo.
+
+## 2026-10-13 — CORPO-CALIBRACAO-FINA (worker D): o adendo 5, só o passo 0 fino
+
+- **O adendo 5 foi registrado antes de qualquer vida** (commit `b51da5c`). O código veio depois, num commit próprio (`69004a5`).
+- **A grade do passo 0 fino** é a proposta do Gerente: {0,6; 0,7; 0,8; 0,9}.
+  - O basal arredonda como na A3.2b: 225/112, 263/131, 300/150, 338/168.
+  - O fator das atividades é a própria fração.
+- **A regra leu os sete pontos juntos:** os três da A3.2c não rodaram de novo, e o passo0.json de antes entra pela chave
+  `passo0_anterior`.
+  - Mesmo P0-q (que não aprende) e mesmas sementes.
+  - A config de cada ponto anterior foi conferida contra o `meta.json` dela, fora o gasto. Uma diferença falharia alto.
+- **Os pontos rodaram em paralelo** (4 processos, um por ponto). Cada vida é determinista, e um teste confere que as medidas saem iguais
+  às do caminho um a um.
+- **O `m_sol` (A5.2) é um eixo novo**, escolhido olhando as medidas do P0-c da grade do adendo 4 (a solidão abaixo de 0,03 em 8 de 9
+  pontos), como a A3.2b fez com o metabolismo. Nenhum braço que aprende foi lido.
+- **O custo passou de 1,5 h:** grade, piloto e sensibilidades dão 7.200 vidas, ~2,2 h com 6 processos.
+  - Pelo pedido do Gerente, a run parou antes da grade e esperou.
+  - O Matheus decidiu fechar só com o passo 0 (A5.7): a grade, o piloto, as margens e o N ficam como não rodados.
+- **O gasto mudou** (½ → 4/5). O ponto do corpo e os números da seção 7 do adendo 4 foram medidos com o gasto antigo e não foram
+  refeitos. Ficam registrados como estão até a calibração final.
+- **Duas mensagens ao Gerente** (o custo e o resultado do passo 0) saíram como "não entregues" pela sessão dele. A decisão veio depois, por
+  ele.

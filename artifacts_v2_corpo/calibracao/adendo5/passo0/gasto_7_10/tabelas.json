@@ -1,0 +1,550 @@
+{
+  "aleatorio": {
+    "acerto_total": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.6728050595238095,
+            "ic_superior": 0.7017113095238094,
+            "media": 0.6874255952380952,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.6728050595238095,
+            "ic_superior": 0.7017113095238094,
+            "media": 0.6874255952380952,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "deriva_final": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "fracao_fora_de_privacao": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.6441964285714286,
+            "ic_superior": 0.7268229166666667,
+            "media": 0.6861235119047618,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.6441964285714286,
+            "ic_superior": 0.7268229166666667,
+            "media": 0.6861235119047618,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "humor_medio": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.7558361235119048,
+            "ic_superior": 0.7958885788690476,
+            "media": 0.7763280319940475,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.7558361235119048,
+            "ic_superior": 0.7958885788690476,
+            "media": 0.7763280319940475,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "saude_media": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.5733611917162698,
+            "ic_superior": 0.7123063554067461,
+            "media": 0.6425326140873014,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.5733611917162698,
+            "ic_superior": 0.7123063554067461,
+            "media": 0.6425326140873014,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    }
+  },
+  "atencioso": {
+    "acerto_total": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.5433035714285714,
+            "ic_superior": 0.5564732142857143,
+            "media": 0.5502232142857142,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.5365327380952382,
+            "ic_superior": 0.5507440476190476,
+            "media": 0.5441220238095238,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "deriva_final": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "fracao_fora_de_privacao": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "humor_medio": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.928516369047619,
+            "ic_superior": 0.9368497023809523,
+            "media": 0.9328407738095239,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.9280154389880952,
+            "ic_superior": 0.9347364211309523,
+            "media": 0.9317334449404762,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "saude_media": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    }
+  },
+  "incoerente": {
+    "acerto_total": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.5472470238095238,
+            "ic_superior": 0.557328869047619,
+            "media": 0.5523809523809524,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.5396949404761904,
+            "ic_superior": 0.5519717261904762,
+            "media": 0.5459077380952382,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "deriva_final": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "fracao_fora_de_privacao": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "humor_medio": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.9368581659226191,
+            "ic_superior": 0.9423079427083334,
+            "media": 0.9396143973214286,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.9370843563988094,
+            "ic_superior": 0.9420473400297619,
+            "media": 0.9396194196428571,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "saude_media": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 1.0,
+            "ic_superior": 1.0,
+            "media": 1.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    }
+  },
+  "relapso": {
+    "acerto_total": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.503608630952381,
+            "ic_superior": 0.5265997023809523,
+            "media": 0.5147321428571429,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.5047247023809524,
+            "ic_superior": 0.5255580357142857,
+            "media": 0.5146205357142858,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "deriva_final": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.0,
+            "ic_superior": 0.0,
+            "media": 0.0,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "fracao_fora_de_privacao": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.9009672619047618,
+            "ic_superior": 0.9259300595238095,
+            "media": 0.9134672619047619,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.9037946428571428,
+            "ic_superior": 0.925297619047619,
+            "media": 0.9143229166666667,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "humor_medio": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.7499691220238095,
+            "ic_superior": 0.7769342447916666,
+            "media": 0.7635722656249999,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.7521633184523809,
+            "ic_superior": 0.7783997395833333,
+            "media": 0.7653097098214285,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    },
+    "saude_media": {
+      "bracos": [
+        "P0-q"
+      ],
+      "celulas": {
+        "P0-q": {
+          "casado/bola": {
+            "ic_inferior": 0.9719636594742063,
+            "ic_superior": 0.9823843253968251,
+            "media": 0.9773006820436507,
+            "n": 20,
+            "nivel": 0.95
+          },
+          "casado/padrao": {
+            "ic_inferior": 0.9728259114583333,
+            "ic_superior": 0.9824980840773809,
+            "media": 0.9777459759424602,
+            "n": 20,
+            "nivel": 0.95
+          }
+        }
+      },
+      "condicoes": [
+        "casado/bola",
+        "casado/padrao"
+      ]
+    }
+  }
+}

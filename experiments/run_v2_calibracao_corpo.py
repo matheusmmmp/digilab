@@ -59,6 +59,7 @@ DIAS_PLANO = 14
 ORCAMENTO_PLANO = 224
 GRADE_M = (0.5, 1.0, 2.0)                                 # 6.1: m_sobe e m_reduz
 GRADE_W = (1, 2, 4)                                       # 6.1: w_novos
+GRADE_SOL = (1.0, 2.0, 4.0)                               # A5.2: m_sol, so a subida da solidao (sem a chave na config: so o 1)
 FAIXA_TEDIO_SOLIDAO = (0.10, 0.50)                        # 6.2, passo 1
 TETO_ESTRESSE = 0.20
 FAIXA_PARCELA = (0.25, 0.75)                              # 6.2, passo 3
@@ -94,8 +95,19 @@ def rotulo(m) -> str:
     return f"{m:g}"
 
 
-def nome_ponto(ms: float, mr: float) -> str:
-    return f"sobe_{rotulo(ms)}_reduz_{rotulo(mr)}"
+def nome_ponto(ms: float, mr: float, msol: float = 1.0) -> str:
+    """O nome do ponto; com m_sol != 1 (A5.2), o sufixo "_sol_<m>" (o m_sol = 1 tem o nome de antes)."""
+    return f"sobe_{rotulo(ms)}_reduz_{rotulo(mr)}" + ("" if msol == 1.0 else f"_sol_{rotulo(msol)}")
+
+
+def grade_sol(cfg: dict) -> tuple:
+    """Os m_sol da config (A5.2, a chave "m_solidao" da grade) ou so o 1 (a grade da 6.1)."""
+    return tuple(float(m) for m in cfg["grade"].get("m_solidao", [1.0]))
+
+
+def pontos_da_grade(cfg: dict) -> list[tuple]:
+    """Os pontos (m_sobe, m_reduz, m_sol) da grade, na ordem m_sobe, m_reduz, m_sol."""
+    return [(ms, mr, msol) for ms in cfg["grade"]["m_sobe"] for mr in cfg["grade"]["m_reduz"] for msol in grade_sol(cfg)]
 
 
 def _arred(x: float) -> int:
@@ -103,13 +115,14 @@ def _arred(x: float) -> int:
     return int(math.floor(x + 0.5))
 
 
-def corpo_do_ponto(cfg: dict, ms: float, mr: float) -> dict:
-    """Os numeros da ConfigCorpo no ponto (m_sobe, m_reduz), sobre os PROPOSTOS da tarefa e o gasto do passo 0 (fixo): as subidas x
-    m_sobe (o divisor do estresse / m_sobe) e as reducoes x m_reduz (6.1, com as bases do tedio da regra nova, A1.2)."""
+def corpo_do_ponto(cfg: dict, ms: float, mr: float, msol: float = 1.0) -> dict:
+    """Os numeros da ConfigCorpo no ponto (m_sobe, m_reduz, m_sol), sobre os PROPOSTOS da tarefa e o gasto do passo 0 (fixo): as subidas
+    x m_sobe (o divisor do estresse / m_sobe), a da solidao x m_sobe x m_sol (A5.2) e as reducoes x m_reduz (6.1, com as bases do tedio
+    da regra nova, A1.2)."""
     base = ConfigCorpo()
     out = dict(cfg["corpo"])
     for c in CAMPOS_SOBE:
-        out[c] = _arred(getattr(base, c) * ms)
+        out[c] = _arred(getattr(base, c) * ms * (msol if c == "solidao_sobe" else 1.0))
     out["estresse_divisor"] = _arred(base.estresse_divisor / ms)
     for c in CAMPOS_REDUZ:
         out[c] = _arred(getattr(base, c) * mr)
@@ -146,7 +159,8 @@ def modo_da_config(cfg: dict) -> str:
     if cfg["dias"] != DIAS_PLANO or cfg["orcamento"] != ORCAMENTO_PLANO:
         erros.append("dias ou orcamento")
     if (tuple(cfg["grade"]["m_sobe"]) != GRADE_M or tuple(cfg["grade"]["m_reduz"]) != GRADE_M
-            or tuple(cfg["grade"]["w_novos"]) != GRADE_W):
+            or tuple(cfg["grade"]["w_novos"]) != GRADE_W
+            or ("m_solidao" in cfg["grade"] and grade_sol(cfg) != GRADE_SOL)):
         erros.append("grade")
     if (tuple(cfg["faixas"]["tedio_solidao"]) != FAIXA_TEDIO_SOLIDAO or cfg["faixas"]["estresse_max"] != TETO_ESTRESSE
             or tuple(cfg["faixas"]["parcela_novos"]) != FAIXA_PARCELA):
@@ -261,14 +275,14 @@ def _registrar(b, v, cv, pv, sonda, piso, unidade, rp, completas, compactas):
     return med
 
 
-def tarefa_grade(cfg: dict, ms: float, mr: float, unidade: dict, pasta: str) -> tuple[dict, dict]:
-    """As 8 celulas de uma unidade num ponto (m_sobe, m_reduz): so o P0-c (6.2, PCD-4)."""
-    b = bancada(cfg, corpo_do_ponto(cfg, ms, mr))
+def tarefa_grade(cfg: dict, ms: float, mr: float, msol: float, unidade: dict, pasta: str) -> tuple[dict, dict]:
+    """As 8 celulas de uma unidade num ponto (m_sobe, m_reduz, m_sol): so o P0-c (6.2, PCD-4)."""
+    b = bancada(cfg, corpo_do_ponto(cfg, ms, mr, msol))
     completas, compactas = {}, {}
     for mundo in cfg["mundos"]:
         for dono in cfg["donos"]:
             v, cv, pv = _vida(b, bv.EspecVida(dono, "P0-c", unidade["semente"], unidade["genoma"], mundo), Path(pasta) / "vidas")
-            _registrar(b, v, cv, pv, cfg["sonda"], None, unidade, nome_ponto(ms, mr), completas, compactas)
+            _registrar(b, v, cv, pv, cfg["sonda"], None, unidade, nome_ponto(ms, mr, msol), completas, compactas)
     return completas, compactas
 
 
@@ -336,15 +350,19 @@ def faixa_da_grade(registros: list[dict]) -> dict:
 def escolha_da_grade(faixas: dict) -> dict:
     """6.2, passo 2: dos pontos que passam, o mais perto de (1, 1) pela soma de |log2|; empate, o menor m_sobe (e depois o menor
     m_reduz, registro). Sem nenhum: a menor distancia das fracoes ao centro das faixas (|f - 0,30| no tedio e na solidao, |f - 0,10| no
-    estresse, somadas), "nao fechou". `faixas` = {(m_sobe, m_reduz): faixa_da_grade}."""
-    dist = lambda p: abs(math.log2(p[0])) + abs(math.log2(p[1]))  # noqa: E731
+    estresse, somadas), "nao fechou". `faixas` = {(m_sobe, m_reduz): faixa_da_grade} ou, com o m_sol (A5.2), {(m_sobe, m_reduz, m_sol):
+    ...}: o mais perto de (1, 1, 1), e no empate o menor m_sobe, depois o menor m_sol, depois o menor m_reduz."""
+    if len({len(p) for p in faixas}) != 1 or len(next(iter(faixas))) not in (2, 3):
+        raise ValueError(f"pontos da grade: todos (m_sobe, m_reduz) ou todos (m_sobe, m_reduz, m_sol): {sorted(faixas)}")
+    dist = lambda p: sum(abs(math.log2(m)) for m in p)  # noqa: E731
+    desempate = lambda q: (q[0], q[2], q[1]) if len(q) == 3 else (q[0], q[1])  # noqa: E731
     passam = [p for p, f in faixas.items() if f["passa"]]
     if passam:
-        p = min(passam, key=lambda q: (dist(q), q[0], q[1]))
+        p = min(passam, key=lambda q: (dist(q), *desempate(q)))
         return {"ponto": list(p), "fechou": True, "passam": [list(q) for q in sorted(passam)]}
     centro = (FAIXA_TEDIO_SOLIDAO[0] + FAIXA_TEDIO_SOLIDAO[1]) / 2
     afast = lambda q: abs(faixas[q]["tedio"] - centro) + abs(faixas[q]["solidao"] - centro) + abs(faixas[q]["estresse"] - TETO_ESTRESSE / 2)  # noqa: E731,E501
-    p = min(faixas, key=lambda q: (afast(q), dist(q), q[0], q[1]))
+    p = min(faixas, key=lambda q: (afast(q), dist(q), *desempate(q)))
     return {"ponto": list(p), "fechou": False, "passam": [], "registro": "nao fechou", "distancia_ao_centro": afast(p)}
 
 
@@ -625,9 +643,9 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     if pasta.exists():
         raise FileExistsError(f"{pasta} ja existe: a run se recusa a gravar por cima (secao 11)")
     unidades = bv.unidades_derivadas(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]), PREFIXO)
-    pontos = [(ms, mr) for ms in cfg["grade"]["m_sobe"] for mr in cfg["grade"]["m_reduz"]]
-    for ms, mr in pontos:                                   # toda config de ponto valida antes da primeira vida
-        config_bancada(cfg, corpo_do_ponto(cfg, ms, mr), ["P0-c"], list(cfg["mundos"]))
+    pontos = pontos_da_grade(cfg)
+    for p in pontos:                                        # toda config de ponto valida antes da primeira vida
+        config_bancada(cfg, corpo_do_ponto(cfg, *p), ["P0-c"], list(cfg["mundos"]))
     pasta.mkdir(parents=True)
     inicio = time.time()
     meta = {"modo": modo, "plano": PLANO, "plano_sha256": _sha_arquivo(RAIZ / PLANO), "config": cfg,
@@ -636,8 +654,9 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
             "orquestrador_sha256": _sha_arquivo(Path(__file__)), "git_head": _git("rev-parse", "HEAD"),
             "git_limpo": _git("status", "--porcelain") == "", "processos": processos, "unidades": unidades,
             "passo0": cfg["passo0"], "passo0_sha256": _sha_arquivo(RAIZ / cfg["passo0"]) if (RAIZ / cfg["passo0"]).exists() else None,
-            "corpo_dos_pontos": {nome_ponto(ms, mr): corpo_do_ponto(cfg, ms, mr) for ms, mr in pontos},
+            "corpo_dos_pontos": {nome_ponto(*p): corpo_do_ponto(cfg, *p) for p in pontos},
             "bancada": bv.meta(config_bancada(cfg, corpo_do_ponto(cfg, 1.0, 1.0), ["P0-c"], list(cfg["mundos"]))),
+            "saida": _relativo(pasta),
             "inicio": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(inicio))}
     meta["sha256"] = {"corpo.py": meta["bancada"]["corpo_sha256"], "config.py": meta["bancada"]["config_sha256"],
                       "lobos.py": meta["bancada"]["lobos_sha256"], "engine.py": meta["bancada"]["engine_sha256"],
@@ -645,26 +664,30 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     bv._gravar(pasta / "meta.json", bv._dump(meta))
 
     # ---- a grade (6.1), so o P0-c
-    tarefas = [(tarefa_grade, (cfg, ms, mr, u, str(pasta / "grade" / nome_ponto(ms, mr)))) for ms, mr in pontos for u in unidades]
+    tarefas = [(tarefa_grade, (cfg, *p, u, str(pasta / "grade" / nome_ponto(*p)))) for p in pontos for u in unidades]
     t0 = time.perf_counter()
     saidas = _executar(tarefas, processos)
     meta["grade_parede_s"] = time.perf_counter() - t0
-    grade = {nome_ponto(ms, mr): {} for ms, mr in pontos}
-    completas = {nome_ponto(ms, mr): {} for ms, mr in pontos}
-    for (_, (_, ms, mr, _, _)), (comp, compa) in zip(tarefas, saidas):
-        completas[nome_ponto(ms, mr)].update(comp)
-        grade[nome_ponto(ms, mr)].update(compa)
+    grade = {nome_ponto(*p): {} for p in pontos}
+    completas = {nome_ponto(*p): {} for p in pontos}
+    for (_, (_, ms, mr, msol, _, _)), (comp, compa) in zip(tarefas, saidas):
+        completas[nome_ponto(ms, mr, msol)].update(comp)
+        grade[nome_ponto(ms, mr, msol)].update(compa)
     for nome, comp in completas.items():
         bv._gravar(pasta / "grade" / nome / "medidas.json", bv._dump(dict(sorted(comp.items()))))
-    faixas = {(ms, mr): faixa_da_grade(list(grade[nome_ponto(ms, mr)].values())) for ms, mr in pontos}
+    com_sol = "m_solidao" in cfg["grade"]                   # A5.2: os pontos com o terceiro eixo
+    chave = (lambda p: p) if com_sol else (lambda p: p[:2])  # noqa: E731
+    faixas = {chave(p): faixa_da_grade(list(grade[nome_ponto(*p)].values())) for p in pontos}
     esc = escolha_da_grade(faixas)
-    ms, mr = esc["ponto"]
-    w = escolha_w(list(grade[nome_ponto(ms, mr)].values()))
-    corpo = corpo_do_ponto(cfg, ms, mr)
+    p = tuple(esc["ponto"]) + (() if com_sol else (1.0,))
+    w = escolha_w(list(grade[nome_ponto(*p)].values()))
+    corpo = corpo_do_ponto(cfg, *p)
     resultado = {"modo": modo, "plano": PLANO,
-                 "faixas": {nome_ponto(*p): f for p, f in faixas.items()},
-                 "regra_passo2": "dos que passam, o mais perto de (1, 1) pela soma de |log2|; empate, o menor m_sobe (6.2)",
-                 "escolha": {**esc, "nome": nome_ponto(ms, mr), "corpo": corpo}, "w_novos": w}
+                 "faixas": {nome_ponto(*q): f for q, f in faixas.items()},
+                 "regra_passo2": ("dos que passam, o mais perto de (1, 1, 1) pela soma de |log2|; empate, o menor m_sobe, depois o menor "
+                                  "m_sol, depois o menor m_reduz (A5.2)") if com_sol else
+                                 "dos que passam, o mais perto de (1, 1) pela soma de |log2|; empate, o menor m_sobe (6.2)",
+                 "escolha": {**esc, "nome": nome_ponto(*p), "corpo": corpo}, "w_novos": w}
 
     # ---- o piloto (6.3) e as sensibilidades (6.4, A1.2), no ponto
     tarefas = [(tarefa_piloto, (cfg, corpo, w["w_novos"], u, str(pasta / "piloto"))) for u in unidades]

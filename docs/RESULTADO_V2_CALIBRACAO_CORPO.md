@@ -58,3 +58,24 @@ Médias por braço, nas 8 células e nos dias 8 a 14 (o `bola` e o `padrao` junt
 1. **A validação do corpo** (34101…34505, K = 4, 2.400 vidas, ~0,6 h com 6 processos): precisa de outro sim.
 2. **As duas faixas que não fecharam:** seguir com os pontos da regra (½ no gasto; (2, 1) no corpo) ou uma grade mais fina antes da validação.
    Uma grade nova seria uma calibração de novo, nas mesmas sementes, e pede um adendo antes.
+
+## Adendo 5 (2026-10-13): só o passo 0 fino rodou
+
+Decisão do Matheus (2026-10-13): uma grade mais fina antes da validação, pelo adendo 5 do plano, nas mesmas sementes. Depois, outra
+decisão: faixa que não fecha não bloqueia, e do adendo 5 fica **só o passo 0**.
+
+**O passo 0 fino (A5.1, A5.6)** rodou o P0-q em `m_gasto` ∈ {3/5, 7/10, 4/5, 9/10}, nas 20 unidades e nas 8 células (640 vidas, 24 min
+com 4 processos). A regra lê os sete pontos juntos (os três da A3.2c vêm do passo0.json de antes). Os números estão em
+`artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json`:
+
+| `m_gasto` | ¼ | ½ | 3/5 | 7/10 | **4/5** | 9/10 | 1 |
+|---|---|---|---|---|---|---|---|
+| fração acordado com a falta | 0,000 | 0,0004 | 0,0023 | 0,0064 | **0,2018** | 0,3678 | 0,4903 |
+
+- **`m_gasto` = 4/5, fechou** (basal 300/150; atividades 4/5). Só ele fica em [0,05; 0,30].
+- A falta salta de 0,6% em 7/10 para 20% em 4/5: entre os dois, o gasto passa a exceder o que a digestão repõe.
+
+**O que não rodou (A5.7):** a grade da solidão (27 pontos com o `m_sol`), o piloto, as sensibilidades, as margens, o N e o custo.
+- A config está em `experiments/configs/v2_corpo/calibracao_adendo5.json`. Ela valida, mas não tem saída.
+- O ponto (2, 1) e os números do adendo 4 seguem registrados, mas foram medidos com o gasto em ½.
+- Como o gasto mudou, eles não valem como estão para o corpo com 4/5. A calibração final será com a estrutura completa.

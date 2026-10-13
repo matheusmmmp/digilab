@@ -811,3 +811,73 @@ Pelo bootstrap das diferenças por unidade do piloto, 2.000 réplicas por K (se�
   0,15, contra 0,22 a 0,24). O vínculo: não disponível. O valor fica o da bronca (PCD-6).
 - **A janela do tédio** (o P0-c, 160 vidas por valor): a fração com o tédio ≥ 0,75 fica em 0,215, 0,213 e 0,212 com a janela em 4, 8 e
   16. Para o instinto, a janela quase não muda o tédio, como a A1.2 previa; ela fica em 8.
+
+## Adendo 5 (2026-10-13, antes de qualquer run nova): a grade mais fina do gasto e da solidão
+
+**A decisão do Matheus (2026-10-13):** as duas faixas que o adendo 4 não fechou (A3.2c e A4.1) ganham uma grade mais fina **antes da
+validação**, nas mesmas sementes de calibração (33101…33505, K = 4, prefixo `corpo`), com as regras de sempre. Este adendo é registrado num
+commit antes de qualquer vida nova. Nada é escolhido por medida do P1 nem por contraste entre braços (PCD-4); a validação não roda.
+
+### A5.1 O passo 0 fino: o `m_gasto` entre ½ e 1
+
+- **A grade nova:** `m_gasto` ∈ **{0,6; 0,7; 0,8; 0,9}** (as frações 3/5, 7/10, 4/5 e 9/10), no basal e no fator das atividades, como na
+  A3.2b. O basal arredonda como antes (metade para cima): 225/112, 263/131, 300/150 e 338/168 (acordado/dormindo). O fator das
+  atividades é a própria fração (`gasto_atividades_num/den`), arredondada pelo corpo.
+- **O que roda:** o P0-q, nas 20 unidades e nas 8 células: 4 × 8 × 20 = **640 vidas**.
+- **A regra (a da A3.2, sem mudança), sobre os sete pontos juntos:** os quatro novos e os três já medidos na A3.2c (¼, ½ e 1, com as
+  mesmas sementes e o mesmo P0-q, que não aprende). Fica o mais perto de 1 pela |log₂| com a fração do tempo acordado com a falta em
+  [0,05; 0,30]; no empate, o menor gasto; sem nenhum, o de fração mais perto do centro (0,175), "não fechou".
+
+### A5.2 A subida da solidão: um multiplicador próprio, `m_sol`
+
+- **Por quê:** na A4.1 a solidão ficou abaixo de 0,03 em 8 dos 9 pontos, e só o (2, ½) passou de 0,10, com o tédio e o estresse cheios. O
+  `m_sobe` escala o tédio, a solidão e o estresse juntos, e o `m_reduz` escala o carinho junto com o tédio: nenhum dos dois mexe na solidão
+  sozinha. Isso é leitura das medidas do P0-c da grade, como a A3.2b fez com as do metabolismo.
+- **O parâmetro novo:** `m_sol`, que multiplica só a subida da solidão: `solidao_sobe` = arred(225 × `m_sobe` × `m_sol`).
+- **A grade:** (`m_sobe`, `m_reduz`) ∈ {½, 1, 2}², como na 6.1, × `m_sol` ∈ **{1, 2, 4}**: 27 pontos × 8 células × 20 unidades = **4.320
+  vidas**, só o P0-c, com o gasto da A5.1 fixo. O `m_sol` = 1 repete os pontos da 6.1, com o gasto novo.
+  - O {1, 2, 4} vai do ponto de hoje até quatro vezes a subida. Com `m_sobe` = 2 e `m_sol` = 4, a solidão sobe 1.800 por tick, cheia em
+    ~4 h de abandono.
+- **A regra (a da 6.2, com o terceiro eixo):**
+  - **passo 1, a faixa:** a mesma (o tédio e a solidão em [0,10; 0,50]; o estresse ≤ 0,20), no P0-c, com os dois mundos juntos;
+  - **passo 2:** dos que passam, o mais perto de (1, 1, 1) pela soma de |log₂| dos três; no empate, o menor `m_sobe`, depois o menor `m_sol`,
+    depois o menor `m_reduz`. Sem nenhum, a menor distância das frações ao centro das faixas (0,30, 0,30 e 0,10, como na A4.1), "não fechou";
+  - **passo 3, o `w_novos`:** o mesmo, no ponto escolhido.
+
+### A5.3 O que se refaz
+
+O gasto e o ponto do corpo mudam a vida de todo braço, então se refaz **tudo o que depende deles**, na mesma run e pelas mesmas regras:
+- o piloto (6.3, 120 vidas por unidade), as sensibilidades (6.4 e A1.2, 24 por unidade);
+- as margens e o N (seção 7);
+- o custo.
+
+Os números do adendo 4 ficam como registro e são substituídos pelos deste adendo. As saídas novas vão para
+`artifacts_v2_corpo/calibracao/adendo5/` (o passo 0 em `passo0/`, a grade e o piloto em `grade_piloto/`), e as do adendo 4 não mudam.
+
+### A5.4 O custo
+
+O passo 0 fino tem 640 vidas; a grade, 4.320; o piloto e as sensibilidades, 2.880. São 7.840 vidas, ~12 h de CPU pela medida do adendo 4
+(5,45 s por vida) e ~2 h de parede com 6 processos.
+
+### A5.5 O que fica igual
+
+As sementes, as faixas, as regras das margens e do N, os gates da seção 8 e as PCD-1 a PCD-9.
+
+### A5.6 O passo 0 fino rodou (2026-10-13, registrado antes da grade)
+
+Pela regra da A5.1, sobre os sete pontos juntos (`artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json`; os três da A3.2c lidos do
+passo0.json de antes, com as mesmas sementes):
+
+| `m_gasto` | ¼ | ½ | 3/5 | 7/10 | 4/5 | 9/10 | 1 |
+|---|---|---|---|---|---|---|---|
+| fração acordado com a falta | 0,000 | 0,0004 | 0,0023 | 0,0064 | **0,2018** | 0,3678 | 0,4903 |
+
+Só o 4/5 fica em [0,05; 0,30]: **`m_gasto` = 4/5, fechou** (basal 300/150; atividades 4/5). O gasto muda o ponto, então a A5.2 e a A5.3
+rodam com ele fixo (`experiments/configs/v2_corpo/calibracao_adendo5.json`).
+
+### A5.7 A grade da solidão não roda (decisão do Matheus, 2026-10-13)
+
+Faixa de calibração que não fecha não bloqueia: a calibração final será feita com a estrutura completa. Do adendo 5 rodou **só o passo 0
+fino** (A5.6). **Não rodaram:** a grade com o `m_sol` (A5.2), o piloto, as sensibilidades, as margens, o N e o custo (A5.3). A config deles
+(`calibracao_adendo5.json`) fica pronta e sem saída. Até a calibração final, o ponto do corpo e os números da seção 7 são os do adendo 4,
+que foram medidos com o gasto em ½ e não com o 4/5.
