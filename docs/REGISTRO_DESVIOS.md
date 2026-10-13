@@ -4592,6 +4592,41 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
 - **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
   `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).
 
+## 2026-10-12 — W-ROADMAP-R28 (worker C): a seção 8 do roadmap com o estado real
+
+- **A tabela J1 a J10 do `docs/ROADMAP_V2.md`** foi atualizada com o que está na `main` `930037b`, cada estado com o PR (e o artefato,
+  quando há número). Ganhou também uma tabela das ideias registradas: o nariz e o ouvido, o degrau 1b, o segundo dono, o cheiro de estado,
+  a fisiologia por espécie e os sistemas novos do corpo.
+- **O J1 e o J2 dizem "em curso, segundo o coordenador; sem resultado na `main`"** para a validação do mundo e a calibração do corpo. O
+  #278 diz "validação não rodada", e a mensagem do coordenador (2026-10-12) diz que ela está rodando. Nenhum número dessas runs entrou.
+
+## 2026-10-12 — W-TETO-PESOS (worker C): a decisão do teto de pesos
+
+- **`docs/DECISAO_V2_TETO_PESOS.md`:** as opções para o teto de 1000 pesos do cérebro A e a recomendação. TP-1 e TP-2 seguem abertas.
+- **As contas dos pesos** saem do código da `main` `930037b`, com o teto aberto só para contar. O comando está na seção 6 do documento,
+  sem artefato. Três números citam um teste:
+  - 998, em `tests/test_banheiro_cerebros.py`, linha 198;
+  - 990, em `tests/test_canal_fruta_mundo.py`, linha 61;
+  - 763, no cérebro da K2.
+- **"Para o replay" não tem número.** A fonte declarada do teto (`lobos.py`, linha 128) dá o motivo e não dá medida, e nenhum artefato
+  mede o custo do replay pelo número de pesos. O documento registra isso como SEM FONTE e pede a medida no primeiro plano acima de 1000.
+- **O teto não toca a vida, mas toca o `meta.json`.** Ele não muda nenhuma vida, mas é gravado na `ConfigLobos` dos `meta.json` (os
+  blocos da validação única). Isso pesa contra subir o padrão.
+
+## 2026-10-12 — W-PET-QUE-PENSA (worker C): o desenho do J5 no papel
+
+- **`docs/futuro/pet_que_pensa.md`:** o desenho do J5 no papel, com as decisões PQ-1 a PQ-7 abertas. Não escrevi plano de artigo, porque o
+  Matheus o dispensou.
+- **A medida não foi reaberta.** É a da DS-1, já decidida (`docs/DEFINICOES_V2_SEIS_PERGUNTAS.md`, seção 1). O desenho só especifica como
+  fazer o teste 1 no mundo físico (PQ-4): o dono dá a fruta revalorizada na mão, fora do mapa. A DS-1 dizia "antes de o pet comê-la de
+  novo" sem dizer como o efeito novo chega ao pet. É uma especificação, não uma mudança.
+- **Duas referências novas, conferidas no Crossref (2026-10-12):**
+  - **Adams e Dickinson (1981):** resumo lido no OpenAlex;
+  - **Sutton (1990, Dyna):** só o título. Era "não verificado" na revisão F.
+- **Uma terceira, só pelo título:** Schrittwieser et al. (2020), para a não novidade.
+- **As outras referências** são as da revisão F, com o mesmo nível de leitura.
+- **Os números novos** são todos PROPOSTOS ou SEM FONTE: os 5 tipos de comida e a contagem do mapa.
+
 ## 2026-10-12 — DOIS-PETS-CALIBRACAO (worker B): a config e o orquestrador da calibração do K e do piloto
 
 - **Feito pelo B, embora a config seja da bancada do D** (pedido do Gerente). Nada da bancada mudou; o orquestrador só monta as configs do
