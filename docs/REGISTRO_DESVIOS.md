@@ -4744,3 +4744,32 @@ limpa). Interpretações:
   segue proibida.
 - **Uma falha do `test_grupo`** (um `TypeError` no `replace` do `Estado`) apareceu na suíte que rodou junto com a validação e não se
   repetiu com o teste sozinho; a suíte foi rodada de novo depois da run.
+
+## 2026-10-13 — W-MUNDO-ALVO-PLANO (worker C): o plano do mundo com o alvo aprendido, o roadmap e as PP do J5
+
+- **As PP-1 a PP-9 do J5 marcadas como DECIDIDAS (2026-10-13),** pela recomendação, no plano e na tarefa do pet que pensa. Com a PP-8
+  decidida, corrigi a tabela da seção 5 de `docs/futuro/pet_que_pensa.md` ("o mapa congelado no tick da mudança"), com a nota da correção na
+  própria linha. No PR anterior eu tinha deixado essa tabela como estava, à espera da decisão.
+- **`docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`:** o plano novo, depois do resultado negativo da validação do mundo (#285). Registrado antes de
+  qualquer run; PMA-1 a PMA-9 abertas.
+- **O primário é P1 − P1-alvo, não P0 − P1-alvo** (PMA-1): o pedido dizia "aprender para onde ir ajuda a procurar?", e é o contraste que
+  isola a chave. O P0 − P1-alvo fica secundário.
+- **O `Δ_MF` foi reaproveitado** (PMA-2), com a justificativa na seção 7: a mesma escala, o mesmo mundo e fixado antes de qualquer vida com o
+  alvo. O N sai de um piloto novo, porque o `Δ_MF` não diz nada da variância de P1 − P1-alvo.
+- **Uma premissa nova, o G-USO** (PMA-5). Com o `w0_alvo` em S/16 o P1-alvo já sorteia fora do padrão no prior, então "escolheu outra
+  classe" não mede o aprendido. A sonda usa a tabela do prior com o mesmo `u`. **O `u` do alvo não está no motivo hoje** (o motivo guarda as
+  classes, a do padrão, a escolhida e os pesos): é trabalho do B, atrás da chave. O braço P1-alvo na bancada de vidas e a medida são do D.
+- **O G-MF3r (a privação) passou a descritivo** neste plano, porque saiu subpotenciado no mundo (A1.9). O G-OPORT também, porque não passou e
+  não tem Δ.
+- **O crédito entre decisões** (R-1 do plano do mundo) ficou como alternativa futura, na seção 11 do plano. Lá estão as três formas
+  conhecidas: o traço de elegibilidade, o crédito por ida e o planejador do J5. O traço hoje é recusado pelos canais (CANAIS-REFORCO).
+- **O custo esperado** usa a CPU por vida da validação do mundo; o P1-alvo entra pelo custo do P1, sem medida própria (declarado).
+- **As faixas 47101…47505 e 48101…48505** foram conferidas no `origin/main` (`067e19b`) e nos branches remotos. Estão fora das reservadas,
+  das queimadas e das planejadas (23101…27505, 35101…36505 e as 45101…46505 do J5), e não têm uso em `.py`, `.md` nem nas configs.
+- **O roadmap, seção 8:**
+  - o J1 está validado, com resultado negativo (#285);
+  - o J2 foi calibrado com duas faixas que não fecharam (#286), e a grade fina está "em curso, segundo o coordenador; sem resultado na
+    `main`";
+  - o J5 tem as PP decididas.
+  - O estado passou a 2026-10-13 (`067e19b`).
+- **Nenhuma referência nova.** Este plano não cita literatura além da que o plano do mundo já cita.
