@@ -4939,3 +4939,22 @@ D1) antes do piloto.
     canal do humor fica negativo e o peso da `comida_podre` desce); um teste novo confere que a guarda segue falhando alto sem leitor;
   - `tests/test_canal_fruta_mundo.py`: o "sem a chave falha alto" passou a ser sem a chave **e sem o alvo**; o cérebro do grupo de antes
     com o alvo agora roda (teste novo).
+
+## 2026-10-13 — MUNDO-ALVO: o piloto, o adendo 1 e a validação (worker A)
+
+Pedido do Gerente depois do #292, com a saída 1 decidida pelo Matheus. Relatório em `docs/RESULTADO_V2_VALIDACAO_MUNDO_ALVO.md`.
+- **A ordem:** o desvio D1 no código, no plano e aqui, num commit (`5b6e9b2`); a fumaça do piloto nas sementes dos testes (passou); o
+  piloto uma vez (47101…47505); o adendo 1 e a config da validação num commit (`7ba886a`); a validação uma vez (48101…48505). Nada foi
+  ajustado olhando resultado.
+- **A máquina:** o estrangulamento do #292 tinha passado (cada processo a ~1 núcleo). O piloto levou 19 min e a validação 25 min, com 10
+  processos; a suíte inteira rodou ao mesmo tempo que a fumaça e o piloto.
+- **O K = 4** saiu do poder simulado (0,920, acima de 0,8 já no menor K da grade): o dp das diferenças P1 − P1-alvo do piloto era pequeno.
+  O G-INSTINTO ficou subpotenciado (0,41), declarado no adendo.
+- **A categoria "o alvo atrapalha"** é a segunda da seção 9; a leitura é a da tabela ("registrado; os descritivos dizem para onde o alvo
+  levou o pet"). O G-ALVO-AC nulo vai ao lado, sem trocar a categoria (o plano só prevê esse registro ao lado na linha "ajuda").
+- **Leituras minhas, sem teste:**
+  - a fuga do `cheiro` no comer segue o R-1 do plano (o crédito imediato paga o andar na decisão que anda);
+  - a perda concentrada no dono atencioso e no lugar longe também é só descritiva.
+- **O explorar com alvo some ao longo da vida** (2.476 decisões no dia 1, 227 no dia 14, somando as vidas). A contagem é do P1-alvo; o P1
+  não tem o motivo do alvo, então não há o número dele para comparar.
+- **Os artefatos:** o `.gitignore` ganhou `artifacts_v2_mundo_alvo/` com as vidas fora, como o do mundo.

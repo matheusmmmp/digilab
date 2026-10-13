@@ -1,0 +1,399 @@
+{
+  "bancada": {
+    "bancada_sha256": "ff75a4c3116def1a6a68c498d88683ff9f6e1c491edbf0ecabdca5a2122202fe",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "alvo_por_arvore": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 0,
+      "w0_pedido": 0
+    },
+    "config": {
+      "acoplados": [
+        {
+          "destino": "P1",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        },
+        {
+          "destino": "P1-alvo",
+          "filtro": "nenhum",
+          "origem": "P0z"
+        }
+      ],
+      "bootstrap": {
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "semente": 4242
+      },
+      "bracos": [
+        "P0",
+        "P0z",
+        "P1",
+        "P1-alvo"
+      ],
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4
+      },
+      "dias": 14,
+      "donos": [
+        "atencioso",
+        "relapso",
+        "aleatorio",
+        "incoerente"
+      ],
+      "lobos": {
+        "memoria_ganho": 512
+      },
+      "lugares": [
+        "comedouro",
+        "perto",
+        "longe"
+      ],
+      "montagem": "completa",
+      "mundo": {
+        "mult_queda": 1.0
+      },
+      "mundos": [
+        "fisico",
+        "fisico_afastado"
+      ],
+      "orcamento": 224,
+      "plano": "docs/PLANO_ANALISE_V2_MUNDO_ALVO.md",
+      "ponto": "T3",
+      "sonda": {
+        "amostras": 200,
+        "estados": 64,
+        "semente": 9001
+      },
+      "unidades": {
+        "bases": [
+          48101,
+          48202,
+          48303,
+          48404,
+          48505
+        ],
+        "k": 4,
+        "prefixo": "mundo"
+      }
+    },
+    "config_sha256": "3d0726247c8141400ae55f9e599fc08f84323fbe24b3a46383c07baa3a6721ea",
+    "corpo_sha256": "5bc401ffc146fcef37b4959963c00fe7d8e20d1237360957667823ed59a32f26",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "786bbadf5d65f98b4ea702a46f2e58ac0a0d99e84939deda0fe3aebce6d45f75",
+    "metrics_sha256": "e73ad15d0d794f442a4f3ae81bfec8bd86dd7ae8a1d2550b1aa5a2cccee63212",
+    "motor_corpo_sha256": "d14eee3e0e019c74bc6a3bb9319fd8254af8bbb5ccc94ae1a375db6a00c9e04b",
+    "mundo_sha256": "f9cb2e108487a68b72873d1bd8bb81cc58bd91df2fa99089662f897fa82367fc",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "python": "3.13.0"
+  },
+  "calibracao_mundo_sha256": "6146034ea788efc3e899dc44b3f26b6c6fbf525691c87b6c76ef9990fc5fdfc0",
+  "cerebros_conferidos": {
+    "P0": {
+      "alvo_aprendido": false,
+      "banheiro": null,
+      "corpo": null,
+      "entradas_sociais": false,
+      "modelo_outros": false,
+      "presenca_fruta_mundo": false
+    },
+    "P0z": {
+      "alvo_aprendido": false,
+      "banheiro": null,
+      "corpo": null,
+      "entradas_sociais": false,
+      "modelo_outros": false,
+      "presenca_fruta_mundo": false
+    },
+    "P1": {
+      "alvo_aprendido": false,
+      "banheiro": null,
+      "corpo": null,
+      "entradas_sociais": false,
+      "modelo_outros": false,
+      "pesos": 756,
+      "presenca_fruta_mundo": false
+    },
+    "P1-alvo": {
+      "alvo_aprendido": true,
+      "pesos": 792,
+      "teto_pesos": 1000,
+      "w0_alvo": 64
+    }
+  },
+  "config": {
+    "acoplados": [
+      {
+        "destino": "P1",
+        "filtro": "nenhum",
+        "origem": "P0z"
+      },
+      {
+        "destino": "P1-alvo",
+        "filtro": "nenhum",
+        "origem": "P0z"
+      }
+    ],
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "bracos_afastado": [
+      "P1",
+      "P1-alvo"
+    ],
+    "chaves_desligadas": {
+      "alvo_aprendido": "ligado SO no P1-alvo e no P1-alvo^ac (PMA-1, PMA-3: o w0_alvo padrao S/16); desligado no P0, no P0z e no P1, como no J1",
+      "banheiro": "ConfigBanheiro desligada: nenhum braco do plano tem o banheiro (secao 3)",
+      "calendario_informacao_pedido": "desligados (secao 2)",
+      "corpo": "sem regime: o corpo fica desligado, como no J1 (PMA-4)",
+      "entradas_sociais": "desligadas: sem grupo",
+      "gestos": "desligados: os donos so cuidam (PMF-3)",
+      "grupo": "desligado: um pet por mundo",
+      "julgamento_fruta": "desligado (secao 2)",
+      "metabolismo": "desligado: so existe com o corpo",
+      "modelo_outros": "desligado: sem grupo",
+      "pesos_janela": "desligada: e o P1-cw do corpo",
+      "presenca_fruta_mundo": "desligada: o plano nao a pede; no mundo iguais o humor da fruta e zero e os canais rodam sem ela (#269)",
+      "rede_de_si": "desligada: so observa e nao e do plano"
+    },
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "delta_mf": 0.007675785900293976,
+    "descricao": "Validacao do mundo com o alvo aprendido, uma vez (PLANO_ANALISE_V2_MUNDO_ALVO, secoes 8 e 9, desvio D1 e adendo 1; autorizada pelo Matheus em 2026-10-13): K = 4 por base (N = 20) do piloto, nas bases 48101...48505. Os 6 bracos (P0, P0z, P1, P1-alvo, P1^ac e P1-alvo^ac, acoplados ao P0z da mesma celula) nas 12 celulas, mais o P1 e o P1-alvo no layout afastado: 96 vidas por unidade. O mundo, o cerebro, o m e o Delta_MF sao os do J1; nada calibrado.",
+    "dias": 14,
+    "donos": [
+      "atencioso",
+      "relapso",
+      "aleatorio",
+      "incoerente"
+    ],
+    "fase": "validacao",
+    "g_uso": {
+      "limiar": 0.05
+    },
+    "holm": {
+      "alfa": 0.05
+    },
+    "lobos": {
+      "memoria_ganho": 512
+    },
+    "lugares": [
+      "comedouro",
+      "perto",
+      "longe"
+    ],
+    "m": 1.0,
+    "montagem": "completa",
+    "mundo": "fisico",
+    "mundo_afastado": "fisico_afastado",
+    "orcamento": 224,
+    "plano": "docs/PLANO_ANALISE_V2_MUNDO_ALVO.md",
+    "poder": {
+      "alfa": 0.025,
+      "alfas_relato": [
+        0.025,
+        0.0125
+      ],
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "replicas": 2000,
+      "semente": 4242
+    },
+    "ponto": "T3",
+    "sonda": {
+      "amostras": 200,
+      "estados": 64,
+      "semente": 9001
+    },
+    "unidades": {
+      "bases": [
+        48101,
+        48202,
+        48303,
+        48404,
+        48505
+      ],
+      "k": 4,
+      "prefixo": "mundo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_mundo_alvo/validacao.json",
+  "config_sha256": "8ad2c32a426effc8f6da23c0c6e2e79b62f0d8e738e7c66a4c6b80e72f3f549a",
+  "desempate_cheiro": "a ordem fixa do motor da validacao do J1 (PMA-8; o desempate do #232 nao entra)",
+  "duracao_s": 1503.5774681568146,
+  "fase": "validacao",
+  "fim": "2026-10-13T16:21:37",
+  "git_head": "7ba886acdfe0f43c2f9c7113f2075ea6ee17f876",
+  "git_limpo": true,
+  "inicio": "2026-10-13T15:56:33",
+  "modo": "validacao",
+  "orquestrador_sha256": "e9a0c4eb434e5a0523497eb02c9f64a514adf6916ae2029dd8a3f6ea46b87f6c",
+  "piloto_resultado_sha256": "61fbd6cacac6c4eefd114a4820b614507dea49992a9624f82cddc7cf1ba8fed3",
+  "plano": "docs/PLANO_ANALISE_V2_MUNDO_ALVO.md",
+  "plano_sha256": "cfa32d3f84e965b9f976f095939b1cfa7481f38f3f1b9db4a8fa025af6fd4b1b",
+  "processos": 10,
+  "python": "3.13.0",
+  "sha256": {
+    "config": "8ad2c32a426effc8f6da23c0c6e2e79b62f0d8e738e7c66a4c6b80e72f3f549a",
+    "config.py": "3d0726247c8141400ae55f9e599fc08f84323fbe24b3a46383c07baa3a6721ea",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos.py": "786bbadf5d65f98b4ea702a46f2e58ac0a0d99e84939deda0fe3aebce6d45f75",
+    "mundo.py": "f9cb2e108487a68b72873d1bd8bb81cc58bd91df2fa99089662f897fa82367fc",
+    "plano": "cfa32d3f84e965b9f976f095939b1cfa7481f38f3f1b9db4a8fa025af6fd4b1b"
+  },
+  "unidades": [
+    {
+      "base": 48101,
+      "genoma": 8163221073338428102,
+      "k": 0,
+      "semente": 3460579446083378474
+    },
+    {
+      "base": 48101,
+      "genoma": 1195356137929750909,
+      "k": 1,
+      "semente": 15074445383314217237
+    },
+    {
+      "base": 48101,
+      "genoma": 2867239411172582354,
+      "k": 2,
+      "semente": 18335390949433594291
+    },
+    {
+      "base": 48101,
+      "genoma": 17885120649317558439,
+      "k": 3,
+      "semente": 14461058681233264749
+    },
+    {
+      "base": 48202,
+      "genoma": 8545169309535635272,
+      "k": 0,
+      "semente": 15639056881496859613
+    },
+    {
+      "base": 48202,
+      "genoma": 8441416763841303107,
+      "k": 1,
+      "semente": 14413746444187082658
+    },
+    {
+      "base": 48202,
+      "genoma": 12154578323833682134,
+      "k": 2,
+      "semente": 15712619682123413110
+    },
+    {
+      "base": 48202,
+      "genoma": 4643320232686137077,
+      "k": 3,
+      "semente": 11507943559135616944
+    },
+    {
+      "base": 48303,
+      "genoma": 6866104548546152478,
+      "k": 0,
+      "semente": 6559912028301808619
+    },
+    {
+      "base": 48303,
+      "genoma": 4941916964892225140,
+      "k": 1,
+      "semente": 3590562674766565139
+    },
+    {
+      "base": 48303,
+      "genoma": 18356689288262422283,
+      "k": 2,
+      "semente": 10335709481995282755
+    },
+    {
+      "base": 48303,
+      "genoma": 15227462666334235049,
+      "k": 3,
+      "semente": 595730548358972030
+    },
+    {
+      "base": 48404,
+      "genoma": 16006086553696712213,
+      "k": 0,
+      "semente": 6065778020250330904
+    },
+    {
+      "base": 48404,
+      "genoma": 1547847347043097189,
+      "k": 1,
+      "semente": 14006589170515246410
+    },
+    {
+      "base": 48404,
+      "genoma": 14623454251008078582,
+      "k": 2,
+      "semente": 15691470622618374071
+    },
+    {
+      "base": 48404,
+      "genoma": 16151624527271328788,
+      "k": 3,
+      "semente": 4538114670117830567
+    },
+    {
+      "base": 48505,
+      "genoma": 7870881509282063541,
+      "k": 0,
+      "semente": 3780685637135253824
+    },
+    {
+      "base": 48505,
+      "genoma": 8119573134327918553,
+      "k": 1,
+      "semente": 18415168882503425860
+    },
+    {
+      "base": 48505,
+      "genoma": 8192919586022491995,
+      "k": 2,
+      "semente": 8689297832879928198
+    },
+    {
+      "base": 48505,
+      "genoma": 12384023766384530248,
+      "k": 3,
+      "semente": 5700802437612806073
+    }
+  ],
+  "vidas_parede_s": 1502.5413696999894
+}
