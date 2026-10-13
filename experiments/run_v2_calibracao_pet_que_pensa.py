@@ -16,12 +16,25 @@ Saida: `<pasta>/g_plano_<g>/` (a bancada: vidas/, medidas.json, meta.json) por p
 
     python experiments/run_v2_calibracao_pet_que_pensa.py --config experiments/configs/v2_pet_que_pensa/calibracao.json \\
         --saida artifacts_v2_pet_que_pensa/calibracao --processos 3
+
+**O piloto (secao 6),** com `--piloto`, depois da calibracao e na mesma pasta: no `g_plano` escolhido (o `g_plano.json`), os 4 bracos x os 2
+protocolos (T1, T2), nas mesmas unidades, em `<pasta>/piloto/<braco>/` (a bancada) e `<pasta>/piloto/piloto.json`. Serve para as premissas
+(G-APRENDEU, G-OPORTUNIDADE, G-EXPOSICAO), as margens (`Delta_T1` = 1/2 x a media de `f_antes` do P1-plan no T1; `Delta_T2` = 1/2 x a media de
+1 - `f_antes` do P1-plan no T2; <= 0,05 e o teste sem espaco, e a validacao nao roda), o N (o menor K_u de 4 a 10 com poder simulado >= 0,8
+nos dois primarios, a alfa/2 cada, com o bootstrap das diferencas por unidade deslocadas para a margem, 2.000 replicas, e o N efetivo de
+cada primario descontado pela taxa de unidades sem oportunidade no piloto; sem chegar, K_u = 10 com o poder declarado), o poder dos
+secundarios (so relato) e o custo. Os numeros do piloto nao entram como evidencia: os contrastes saem so como descritivo. Recusa a pasta
+`piloto/` que ja existe.
+
+    python experiments/run_v2_calibracao_pet_que_pensa.py --config experiments/configs/v2_pet_que_pensa/calibracao.json \\
+        --saida artifacts_v2_pet_que_pensa/calibracao --piloto --processos 4
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 import time
 from concurrent.futures import ProcessPoolExecutor
@@ -32,6 +45,8 @@ if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
 from experiments import bancada_v2 as bv  # noqa: E402
+from experiments import run_v2_experimento_maior as em  # noqa: E402
+from digilab.metrics import bootstrap_ic, contraste_pareado  # noqa: E402
 
 CHAVE = "calibracao_g_plano"
 BRACO_CALIBRACAO = "P1-plan"
@@ -144,13 +159,190 @@ def rodar(cfg: dict, pasta: Path, processos: int = 1) -> dict:
     return out
 
 
+# ================================================================== o piloto (secao 6 do plano)
+PROTOCOLOS_PILOTO = ("T1", "T2")
+PRIMARIOS = {"G-T1": ("t1", "q", "P1-plan", "P1"), "G-T2": ("t2", "m", "P1-plan", "P1-plan-desfecho")}
+SECUNDARIOS = {"G-T1-DESF": ("t1", "q", "P1-plan-desfecho", "P1"), "G-T1-CONG": ("t1", "q", "P1-plan", "P1-plan-cong"),
+               "G-T2-HAB": ("t2", "m", "P1-plan", "P1"), "G-T2-CONG": ("t2", "m", "P1-plan", "P1-plan-cong")}
+PODER_PILOTO = {"k_min": 4, "k_max": 10, "replicas": 2000, "alvo": 0.8, "alfa": 0.025, "alfas_relato": [0.0125, 0.05]}
+BOOTSTRAP_PILOTO = {"reamostragens": 10000, "semente": 4242, "nivel": 0.95}
+MARGEM_MINIMA = 0.05                      # secao 6: uma margem <= 0,05 e o teste sem espaco (PROPOSTO)
+LIMIAR_SEM = 0.25                         # G-OPORTUNIDADE e G-EXPOSICAO: no maximo 25% das unidades
+VIDAS_POR_UNIDADE = len(bv.BRACOS_PQP) * len(PROTOCOLOS_PILOTO)
+
+
+def config_do_piloto(cfg: dict, g: int) -> dict:
+    return {**config_do_ponto(cfg, g), "bracos": list(bv.BRACOS_PQP), "protocolos": list(PROTOCOLOS_PILOTO)}
+
+
+def config_do_braco(cfg_p: dict, braco: str) -> dict:
+    """um braco por run da bancada (os bracos em paralelo); o P1 sem o g_plano (a bancada o recusa sem braco com o planejador)"""
+    c = {**cfg_p, "bracos": [braco]}
+    if not bv.BRACOS_PQP[braco].planejador:
+        del c["g_plano"]
+    return c
+
+
+def _rodar_braco(cfg_braco: dict, pasta: str) -> dict:
+    return _rodar_ponto(cfg_braco, pasta)
+
+
+def _por_unidade(medidas: dict) -> dict:
+    """{(braco, protocolo): {semente: medida}}"""
+    out: dict = {}
+    for m in medidas.values():
+        out.setdefault((m["braco"], m["protocolo"]), {})[m["semente"]] = m
+    return out
+
+
+def _difs(por: dict, teste: str, campo: str, a: str, b: str) -> dict:
+    """{semente: (base, valor(a) - valor(b))} nas unidades em que os dois tem valor (com oportunidade)"""
+    prot = "T1" if teste == "t1" else "T2"
+    ma, mb = por[(a, prot)], por[(b, prot)]
+    if set(ma) != set(mb):
+        raise RuntimeError(f"{a} e {b} no {prot} com unidades diferentes")
+    out = {}
+    for s in sorted(ma):
+        va, vb = ma[s][teste][campo], mb[s][teste][campo]
+        if va is not None and vb is not None:
+            out[s] = (ma[s]["unidade"]["base"] if ma[s].get("unidade") else s, va - vb)
+    return out
+
+
+def _agrupado(difs: dict) -> dict:
+    grupos: dict = {}
+    for base, v in difs.values():
+        grupos.setdefault(base, []).append(v)
+    return grupos
+
+
+def premissas(por: dict, boot: dict) -> dict:
+    """G-APRENDEU (f_antes do T1 com o IC95 inferior > 1/3, por braco), G-OPORTUNIDADE (<= 25% sem oportunidade, por braco e teste) e
+    G-EXPOSICAO (<= 25% sem exposicao no T2, por braco). No piloto, descritivas."""
+    out: dict = {"G-APRENDEU": {}, "G-OPORTUNIDADE": {}, "G-EXPOSICAO": {}}
+    for braco in bv.BRACOS_PQP:
+        fa = [m["t1"]["f_antes"] for m in por[(braco, "T1")].values() if m["t1"]["f_antes"] is not None]
+        ic = bootstrap_ic(fa, boot["reamostragens"], boot["semente"], boot["nivel"]) if len(fa) >= 2 else None
+        out["G-APRENDEU"][braco] = {"n": len(fa), "ic": ic, "passa": ic is not None and ic["ic_inferior"] > 1 / 3}
+        for prot, teste in (("T1", "t1"), ("T2", "t2")):
+            ms = list(por[(braco, prot)].values())
+            sem = sum(1 for m in ms if m[teste]["sem_oportunidade"])
+            out["G-OPORTUNIDADE"][f"{braco}/{prot}"] = {"sem": sem, "n": len(ms), "fracao": sem / len(ms),
+                                                         "passa": sem / len(ms) <= LIMIAR_SEM}
+        ms = list(por[(braco, "T2")].values())
+        sem = sum(1 for m in ms if m["t2"]["sem_exposicao"])
+        out["G-EXPOSICAO"][braco] = {"sem": sem, "n": len(ms), "fracao": sem / len(ms), "passa": sem / len(ms) <= LIMIAR_SEM}
+    return out
+
+
+def margens(por: dict) -> dict:
+    """Delta_T1 = 1/2 x media de f_antes do P1-plan no T1; Delta_T2 = 1/2 x media de (1 - f_antes) do P1-plan no T2 (o "n_antes" do plano
+    e a fracao de buscas que vao as novas antes da mudanca, o f_antes do T2)."""
+    f1 = [m["t1"]["f_antes"] for m in por[("P1-plan", "T1")].values() if m["t1"]["f_antes"] is not None]
+    f2 = [m["t2"]["f_antes"] for m in por[("P1-plan", "T2")].values() if m["t2"]["f_antes"] is not None]
+    d1 = None if not f1 else 0.5 * sum(f1) / len(f1)
+    d2 = None if not f2 else 0.5 * sum(1 - f for f in f2) / len(f2)
+    return {"delta_t1": d1, "n_t1": len(f1), "delta_t2": d2, "n_t2": len(f2), "minima": MARGEM_MINIMA,
+            "com_espaco": {"T1": d1 is not None and d1 > MARGEM_MINIMA, "T2": d2 is not None and d2 > MARGEM_MINIMA}}
+
+
+def n_efetivo(n: int, com_valor: int, total: int) -> int:
+    """o N do primario descontado pela taxa de unidades sem oportunidade no piloto (o chao: a conta conservadora)"""
+    return math.floor(n * com_valor / total)
+
+
+def escolher_k_dois(difs_por: dict, deltas: dict, total: int, n_bases: int, poder: dict, semente: int) -> dict:
+    """O menor K_u de k_min a k_max com poder simulado >= alvo nos DOIS primarios, a alfa cada (o Holm de 2); sem chegar, k_max."""
+    tabela = []
+    for k in range(poder["k_min"], poder["k_max"] + 1):
+        n = n_bases * k
+        linha = {"k": k, "n": n}
+        for nome, difs in difs_por.items():
+            ne = n_efetivo(n, len(difs), total)
+            linha[nome] = {"n_efetivo": ne, "poder": em.poder_simulado([v for _b, v in difs.values()], deltas[nome], ne, poder["alfa"],
+                                                                      poder["replicas"], semente)}
+        tabela.append(linha)
+    ok = lambda ln: all(ln[nm]["poder"] is not None and ln[nm]["poder"] >= poder["alvo"] for nm in difs_por)  # noqa: E731
+    chega = [ln for ln in tabela if ok(ln)]
+    e = chega[0] if chega else tabela[-1]
+    return {"k": e["k"], "n": e["n"], "chega_ao_alvo": bool(chega), "escolhido": e, "tabela": tabela, **poder, "semente": semente}
+
+
+def rodar_piloto(cfg: dict, pasta: Path, processos: int = 1) -> dict:
+    validar(cfg)
+    escolha_g = json.loads((pasta / "g_plano.json").read_text(encoding="utf-8"))["escolha"]
+    saida = pasta / "piloto"
+    if saida.exists():
+        raise FileExistsError(f"{saida}: a pasta do piloto do J5 ja existe")
+    g = escolha_g["g_plano"]
+    cfg_p = config_do_piloto(cfg, g)
+    bv.validar_config_pqp(cfg_p)
+    saida.mkdir(parents=True)
+    t0 = time.time()
+    tarefas = [(config_do_braco(cfg_p, b), str(saida / b)) for b in bv.BRACOS_PQP]
+    if processos > 1:
+        with ProcessPoolExecutor(max_workers=min(processos, len(tarefas))) as ex:
+            res = list(ex.map(_rodar_braco, *zip(*tarefas)))
+    else:
+        res = [_rodar_braco(*t) for t in tarefas]
+    parede = time.time() - t0
+    medidas = {nome: m for r in res for nome, m in r["medidas"].items()}
+    if any(m["g_plano"] != (g if bv.BRACOS_PQP[m["braco"]].planejador else 0) for m in medidas.values()):
+        raise RuntimeError("o piloto tem vida com o g_plano errado")
+    por = _por_unidade(medidas)
+    total = len(por[("P1", "T1")])
+    n_bases = len(cfg["unidades"]["bases"]) if "unidades" in cfg else len(cfg["sementes"])
+    boot, poder = BOOTSTRAP_PILOTO, PODER_PILOTO
+    mg = margens(por)
+    deltas = {"G-T1": mg["delta_t1"], "G-T2": mg["delta_t2"]}
+    difs_p = {nm: _difs(por, *c) for nm, c in PRIMARIOS.items()}
+    difs_s = {nm: _difs(por, *c) for nm, c in SECUNDARIOS.items()}
+    if all(deltas[nm] is not None and deltas[nm] > 0 for nm in PRIMARIOS):
+        n = escolher_k_dois(difs_p, deltas, total, n_bases, poder, boot["semente"])
+        relato = {}
+        for nm, difs in difs_s.items():
+            d = mg["delta_t1"] if SECUNDARIOS[nm][0] == "t1" else mg["delta_t2"]
+            ne = n_efetivo(n["n"], len(difs), total)
+            relato[nm] = {"delta": d, "n_efetivo": ne, "poder": {str(a): em.poder_simulado([v for _b, v in difs.values()], d, ne, a,
+                                                                                          poder["replicas"], boot["semente"])
+                                                                 for a in poder["alfas_relato"]}}
+            relato[nm]["subpotenciado"] = {a: (p is None or p < 0.5) for a, p in relato[nm]["poder"].items()}
+    else:
+        n, relato = None, None
+    descritivo = {nm: {"unidades_com_valor": len(d), **contraste_pareado(_agrupado(d), boot["reamostragens"], boot["semente"])}
+                  for nm, d in {**difs_p, **difs_s}.items()}
+    cpu = {b: [m["custo"]["cpu_s"] for m in medidas.values() if m["braco"] == b] for b in bv.BRACOS_PQP}
+    cpu_vida = sum(sum(v) for v in cpu.values()) / len(medidas)
+    custo = {"cpu_s_por_vida": {b: sum(v) / len(v) for b, v in cpu.items()}, "cpu_s_por_vida_media": cpu_vida, "parede_s_piloto": parede,
+             "processos": processos, "vidas_por_unidade": VIDAS_POR_UNIDADE}
+    if n is not None:
+        custo["validacao"] = {"n": n["n"], "vidas": n["n"] * VIDAS_POR_UNIDADE, "cpu_h": n["n"] * VIDAS_POR_UNIDADE * cpu_vida / 3600}
+    out = {"g_plano": g, "escolha_g_plano": escolha_g, "unidades": total, "premissas": premissas(por, boot), "margens": mg, "n": n,
+           "poder_secundarios": relato, "descritivo_nao_e_evidencia": descritivo, "custo": custo,
+           "valida_validacao": all(mg["com_espaco"].values()),
+           "regras": {"poder": poder, "bootstrap": boot, "margem_minima": MARGEM_MINIMA, "limiar_sem": LIMIAR_SEM,
+                      "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, secoes 6 e 7"}}
+    bv._gravar(saida / "piloto.json", bv._dump(out))
+    bv._gravar(saida / "meta.json", bv._dump({**bv.meta(cfg_p), "plano": bv.PLANO_PQP, "g_plano": g,
+                                              "modelo_mundo_sha256": bv._sha(RAIZ / "digilab" / "modelo_mundo.py"),
+                                              "orquestrador_sha256": bv._sha(Path(__file__)), "processos": processos}))
+    return out
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="calibracao do g_plano do pet que pensa (PLANO_ANALISE_V2_PET_QUE_PENSA, secao 5)")
     ap.add_argument("--config", required=True)
     ap.add_argument("--saida", required=True)
-    ap.add_argument("--processos", type=int, default=1, help="os pontos da grade em paralelo")
+    ap.add_argument("--processos", type=int, default=1, help="os pontos da grade (ou os bracos do piloto) em paralelo")
+    ap.add_argument("--piloto", action="store_true", help="o piloto da secao 6, no g_plano escolhido (depois da calibracao, na mesma pasta)")
     a = ap.parse_args(argv)
     cfg = json.loads(Path(a.config).read_text(encoding="utf-8"))
+    if a.piloto:
+        r = rodar_piloto(cfg, Path(a.saida), a.processos)
+        mg, n = r["margens"], r["n"]
+        print(f"piloto no g_plano {r['g_plano']}: Delta_T1 {mg['delta_t1']}, Delta_T2 {mg['delta_t2']}, "
+              f"K_u {None if n is None else n['k']} (chega ao alvo: {None if n is None else n['chega_ao_alvo']}); em {a.saida}/piloto")
+        return 0
     r = rodar(cfg, Path(a.saida), a.processos)
     e = r["escolha"]
     for p in r["pontos"]:

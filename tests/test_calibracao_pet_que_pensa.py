@@ -121,3 +121,60 @@ def test_a_fumaca_inteira(tmp_path):
         cp.rodar(f, tmp_path / "cal")
     assert cp.main(["--config", str(CONFIGS / "fumaca_calibracao.json"), "--saida", str(tmp_path / "main"), "--processos", "2"]) == 0
     assert (tmp_path / "main" / "g_plano.json").is_file()
+
+
+# ------------------------------------------------------------------ o piloto (secao 6), em dados com a resposta conhecida
+
+
+def _m(braco, prot, s, base, f_antes=None, valor=None, sem_exp=False):
+    t = {"f_antes": f_antes, "sem_oportunidade": valor is None, "q": valor, "m": valor, "sem_exposicao": sem_exp}
+    return {"braco": braco, "protocolo": prot, "semente": s, "unidade": {"base": base, "k": 0}, "t1" if prot == "T1" else "t2": t}
+
+
+def _por(valores):
+    """valores[(braco, prot)] = [(f_antes, valor), ...] por unidade (sementes 1..n, bases alternadas)"""
+    med = {}
+    for (b, p), vs in valores.items():
+        for i, (fa, v) in enumerate(vs, 1):
+            med[f"{b}~{p}@{i}"] = _m(b, p, i, 10 + i % 2, fa, v)
+    return cp._por_unidade(med)
+
+
+def test_as_margens_e_os_contrastes_do_piloto():
+    um = [(0.5, 0.5), (1.0, 0.25), (None, None), (0.5, 0.0)]
+    vals = {(b, p): um for b in bv.BRACOS_PQP for p in ("T1", "T2")}
+    vals[("P1", "T1")] = [(0.5, 0.0), (1.0, 0.0), (0.5, 0.25), (0.5, 0.0)]
+    por = _por(vals)
+    mg = cp.margens(por)
+    assert mg["delta_t1"] == 0.5 * (0.5 + 1.0 + 0.5) / 3 and mg["n_t1"] == 3
+    assert mg["delta_t2"] == 0.5 * ((1 - 0.5) + 0 + (1 - 0.5)) / 3 and mg["com_espaco"] == {"T1": True, "T2": True}
+    d = cp._difs(por, "t1", "q", "P1-plan", "P1")
+    assert {s: v for s, (_b, v) in d.items()} == {1: 0.5, 2: 0.25, 4: 0.0}          # a unidade 3 sem oportunidade sai
+    assert cp._agrupado(d) == {11: [0.5], 10: [0.25, 0.0]}
+    pr = cp.premissas(por, cp.BOOTSTRAP_PILOTO)
+    assert pr["G-OPORTUNIDADE"]["P1-plan/T1"] == {"sem": 1, "n": 4, "fracao": 0.25, "passa": True}
+    assert pr["G-APRENDEU"]["P1-plan"]["n"] == 3 and pr["G-APRENDEU"]["P1-plan"]["passa"] is True    # todos >= 0,5 > 1/3
+
+
+def test_o_n_efetivo_e_o_k_dos_dois_primarios():
+    assert cp.n_efetivo(20, 15, 20) == 15 and cp.n_efetivo(25, 3, 4) == 18 and cp.n_efetivo(5, 0, 4) == 0
+    forte = {s: (s % 5, 0.4 + 0.01 * (s % 3)) for s in range(20)}            # efeito grande e pouca variancia: chega no K_u minimo
+    fraco = {s: (s % 5, (-1) ** s * 0.6) for s in range(20)}                 # media 0 e muita variancia
+    poder = {**cp.PODER_PILOTO, "replicas": 200}
+    r = cp.escolher_k_dois({"G-T1": forte, "G-T2": forte}, {"G-T1": 0.4, "G-T2": 0.4}, 20, 5, poder, 4242)
+    assert r["chega_ao_alvo"] and r["k"] == 4 and r["n"] == 20 and r["escolhido"]["G-T1"]["n_efetivo"] == 20
+    r = cp.escolher_k_dois({"G-T1": forte, "G-T2": fraco}, {"G-T1": 0.4, "G-T2": 0.05}, 20, 5, poder, 4242)
+    assert not r["chega_ao_alvo"] and r["k"] == 10 and len(r["tabela"]) == 7    # sem chegar, K_u = 10 com o poder declarado
+
+
+def test_o_piloto_recusa_a_pasta_que_existe(tmp_path):
+    f = {**_cfg("fumaca_calibracao"), "sementes": [101]}
+    cp.rodar(f, tmp_path / "cal", processos=1)
+    r = cp.rodar_piloto(f, tmp_path / "cal", processos=1)
+    assert r["g_plano"] == json.loads((tmp_path / "cal" / "g_plano.json").read_text(encoding="utf-8"))["escolha"]["g_plano"]
+    assert set((tmp_path / "cal" / "piloto").iterdir()) >= {tmp_path / "cal" / "piloto" / b for b in bv.BRACOS_PQP}
+    med = json.loads((tmp_path / "cal" / "piloto" / "P1" / "medidas.json").read_text(encoding="utf-8"))
+    assert {m["g_plano"] for m in med.values()} == {0} and {m["protocolo"] for m in med.values()} == {"T1", "T2"}
+    assert r["custo"]["vidas_por_unidade"] == 8 and (tmp_path / "cal" / "piloto" / "piloto.json").is_file()
+    with pytest.raises(FileExistsError):
+        cp.rodar_piloto(f, tmp_path / "cal")
