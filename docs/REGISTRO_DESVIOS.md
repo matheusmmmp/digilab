@@ -5053,3 +5053,22 @@ Pedido do Gerente depois do #292, com a saída 1 decidida pelo Matheus. Relatór
 - **O G2 do plano** (com `g_plano` 0 o termo do plano é zero) não tem o que conferir sem o planejador; fica para a etapa 2.
 - **Dois testes antigos mudaram:** a tabela dos prefixos em `tests/test_bancada_dois_pets.py` ganhou o `pet_que_pensa`, e
   `tests/test_bancada_liga_gestos.py` aceita o nó do planejador.
+
+## 2026-10-13 — DOIS PETS, etapa 8b (worker B): os órgãos do Olfato e da Audição
+
+- **A adaptação na escala 2^16 com passo mínimo 1.** O desenho escreve `div_arred((I − a) · k_adapt, S)`. Usei a escala da meia-vida do
+  corpo (2^16) e o passo mínimo de 1: com I = 0 o passo é exatamente o `passo_meia_vida` do grafo, e com um cheiro constante a adaptação
+  chega a I (o receptor cai a 0), sem ficar presa abaixo.
+- **O estímulo é cortado no teto da intensidade** (4096), o teto do químico da adaptação; o resto é descartado, como nos químicos.
+- **Os dois sentidos têm a mesma conta no corpo.** O I de cada tick é do mundo (A). Para o som, a proposta é a intensidade dos sons
+  ouvidos desde a decisão anterior do pet, mantida até a próxima: assim a adaptação habitua ao som que se repete e decai entre eles.
+- **O `sentir` é obrigatório a cada tick** com o órgão ligado (um estímulo velho seria percepção errada): o motor o chama antes de cada tick
+  e de cada percepção, pelo gancho `_intensidades_do_orgao()` do lado do mundo.
+- **Um canal `outro`** no Olfato social: o grupo tem no máximo dois pets.
+- **Os números do mundo** (afastamento das narinas e dos ouvidos, rastro, alcance do som) ficam na `ConfigOlfato`/`ConfigOuvido`, para a
+  config ser uma só; são do A.
+- **O relato do grafo** ganha `orgaos` e `externos` só quando existem: com as chaves desligadas, o relato e o gabarito da paridade web não
+  mudam.
+- **O cérebro A não lê os órgãos** nesta etapa (a tarefa pede o custo). A rede de si lê todos os receptores presentes e, com os órgãos,
+  passa do teto dela na maioria dos conjuntos: falha alto, por desenho.
+- **A paridade em TS (G-PAR)** fica para quando o mundo e o corpo forem à web.

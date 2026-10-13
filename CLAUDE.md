@@ -4167,3 +4167,26 @@ modelos e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - a fumaça inteira pelo `rodar_pqp` e pelo `main`.
 - **Fumaça descritiva** (P1, sementes 101, 202 e 303, 7 + 3 dias): com o atencioso a fome quase nunca chega a S/2 antes da mudança, e só a
   semente 303 teve 3 oportunidades antes no T1. A G-OPORTUNIDADE do plano decide isso na calibração.
+
+## V2, DOIS-PETS, etapa 8b — os órgãos do Olfato e da Audição no corpo (2026-10-13, `docs/TAREFA_V2_DOIS_PETS.md`; DP-13 e DP-14) — GATES DO CORPO PASSAM; O LADO DO MUNDO É DO A
+
+A parte do B: os órgãos no grafo do corpo, atrás de chaves desligadas. Sem run; só as sementes dos testes. Mudaram `digilab/corpo.py`,
+`digilab/corpo_grafo.py`, `digilab/motor_corpo.py` e a `ConfigOlfato`/`ConfigOuvido` no fim de `config.py`. `engine.py`, o mundo, os
+cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O gabarito antes do código** (commit próprio): `tests/gabarito_orgaos.py` → `tests/gabaritos/orgaos_vidas_de_hoje.json` (vidas de um
+  pet no mundo físico com as leituras da `PercepcaoCorpo`, grupos de dois pets com o corpo e o corpo sozinho).
+- **As chaves:** `ConfigOlfato` (`narinas` 2, sub-chaves `comida` e `outro_pet`) e `ConfigOuvido` (`ouvidos` 2); números PROPOSTOS, SEM
+  FONTE (registro `corpo.PARAMETROS_OLFATO`/`PARAMETROS_OUVIDO`). Só com o corpo e o mundo físico.
+- **O órgão** (`corpo_grafo.Orgao`): um receptor por canal e lado (`olfato_comida_esq`…, `ouvido_<som>_esq`…). O químico
+  `adaptacao_<receptor>` anda para o estímulo a cada tick (`passo_adaptacao`, escala 2^16, passo mínimo 1; com I = 0 é a meia-vida do
+  grafo); e = max(0, I − a − limiar), r = div_arred(S e, e + K), em [0, S).
+- **Os emissores externos** (`Emissor.destino` "mundo"): `cheiro_proprio` (na posição) e `rastro` (por decisão), intensidade constante,
+  sem leitura de químico (o degrau 3 falha alto).
+- **A interface com o A:** o motor chama `Corpo.sentir({receptor: I})` antes de cada tick e de cada percepção, com o gancho
+  `_intensidades_do_orgao()` do lado do mundo (sem ele, falha alto na construção); `Corpo.emissoes_externas()` dá o que o pet emite.
+- **Gates** (`tests/test_orgaos.py`, 66): G2; G-ORGAO-MEC (passo, limiar, saturação, um cheiro constante cai à metade na meia-vida
+  declarada e a 0, habituação do som); G-SEM-DIRECAO do lado do corpo (AST e mesmas intensidades = mesma percepção); as checagens do grafo
+  com os órgãos e as tabelas feitas para falhar; G1 pelo replay do mundo com um lado do mundo de teste.
+- **O custo em pesos** (`experiments/custo_orgaos.py` → `artifacts_v2_dois_pets/custo_orgaos.json`): 21 pesos por receptor no cérebro A
+  (24 com o banheiro); com os 12 receptores da DP-13/DP-14, o degrau 1 dos dois pets vai de 990 a 1242 (pede teto do plano). A rede de si lê
+  todos os receptores sozinha e passa do teto dela em quase todo conjunto. O cérebro A ainda não lê os órgãos.
