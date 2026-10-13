@@ -345,3 +345,24 @@ def test_as_fumacas_validam():
         cfg = json.loads((RAIZ / "experiments" / "configs" / "v2_rede_de_si" / nome).read_text(encoding="utf-8"))
         bv.validar_config(cfg)
         assert cfg["rede_de_si"] == {} and "P1-c-lenta" not in cfg["bracos"]
+
+
+def test_com_os_orgaos_ligados_a_rede_falha_alto():
+    # #299: com o Olfato e a Audicao, a rede le um receptor por narina e ouvido e passa do teto; a bancada do Digicorpo roda sem eles
+    from digilab.corpo import todos_receptores_orgaos
+    banc = _bancada()
+    v = _vida(banc)
+    assert not any(r.startswith(("olfato", "ouvido")) for r in bv.rede_de(v.motor.politica).rede.receptores)
+    pol = banc.politica(bv.EspecVida(dono="atencioso", braco="P1-c", semente=101, mundo="bola"))
+    assert isinstance(pol, bv.PoliticaComRedeSemOrgaos)
+
+    class Corpo:
+        pass
+    pc = Corpo()
+    for r in todos_receptores_orgaos():
+        setattr(pc, r, None)
+    pc.olfato_comida_esq = 10
+    falsa = type("O", (), {"corpo": pc})()
+    with pytest.raises(RuntimeError, match="orgaos ligados"):
+        pol.agir(falsa, None)
+    assert pol.rede.k == 0                                            # a rede nao viu a observacao

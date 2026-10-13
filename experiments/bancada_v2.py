@@ -207,6 +207,7 @@ from digilab.policies.lobos import LOBO_PLANEJAMENTO  # noqa: E402
 from digilab.config import CONFIG_REDE_DE_SI_LIGADA, ConfigRedeDeSi  # noqa: E402
 from digilab.rede_de_si import ACOES as ACOES_REDE, CONTEXTO as CONTEXTO_REDE, PoliticaComRede, RedeDeSi  # noqa: E402
 from digilab.rede_de_si import div_arred  # noqa: E402
+from digilab.corpo import todos_receptores_orgaos  # noqa: E402
 from digilab.policies.lobos import REGRAS_PEDIDO, sortear  # noqa: E402
 from digilab.metrics import (brier_skill, brier_skill_multiclasse, mae_previsao, media_historica,  # noqa: E402
                              previsao_persistencia)
@@ -1021,7 +1022,7 @@ class Bancada:
         """O cerebro do braco (a `PoliticaDoBraco`); com a chave `rede_de_si`, embrulhado pela rede de si, que so observa (RS-5,
         `PoliticaComRede`: a vida e a de sem a rede, G-OBS). A rede le os receptores do corpo: braco sem corpo falha alto."""
         p = self.politica_do_braco(espec, cfg)
-        return p if self.cfg_rede is None else PoliticaComRede(p, self.cfg_rede)
+        return p if self.cfg_rede is None else PoliticaComRedeSemOrgaos(p, self.cfg_rede)
 
     def politica_do_braco(self, espec: EspecVida, cfg=None) -> PoliticaDoBraco:
         if espec.cerebro not in CEREBROS:
@@ -2320,6 +2321,19 @@ def do_braco(politica) -> PoliticaDoBraco:
         else:
             raise TypeError(f"politica sem PoliticaDoBraco dentro: {type(p).__name__}")
     return p
+
+
+class PoliticaComRedeSemOrgaos(PoliticaComRede):
+    """A rede da bancada do Digicorpo: a `PoliticaComRede`, que recusa os orgaos do Olfato e da Audicao (#299). Com eles ligados, a rede
+    le os receptores de cada narina e ouvido e passa do teto dela (`experiments/custo_orgaos.py`); a bancada do Digicorpo roda sem eles e
+    falha alto na primeira decisao que os traz, antes de a rede ver a observacao."""
+
+    def agir(self, obs, rng):
+        pc = getattr(obs, "corpo", None)
+        ligados = [] if pc is None else [r for r in todos_receptores_orgaos() if getattr(pc, r, None) is not None]
+        if ligados:
+            raise RuntimeError(f"rede de si com os orgaos ligados ({ligados}): a rede passa do teto; a bancada do Digicorpo roda sem eles")
+        return super().agir(obs, rng)
 
 
 def sondar_quimicos(rede: RedeDeSi, motores: list, saida: list) -> None:

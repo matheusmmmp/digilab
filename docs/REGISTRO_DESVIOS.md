@@ -5154,3 +5154,6 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **Duas fumaças:** a bancada cruza braços × mundos, e o P1+ped-c só existe nos mundos das frutas. Por isso a cabeça do corpo (`bola`) e a
   autoria (`iguais_frutas`) ficaram em configs separadas.
 - **As tabelas braço × condição** não ganharam as medidas da rede; elas ficam no `medidas.json` (bloco `rede_de_si`), para o orquestrador.
+- **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
+  (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
+  falharia, mas só depois de montada; a recusa explícita diz por quê.

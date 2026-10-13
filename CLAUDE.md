@@ -4259,6 +4259,8 @@ o corpo e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **P1+ped-c** (o P1+ped com o corpo inteiro, como o P1-c) monta e roda no `iguais_frutas`;
   - **P1-c-lenta** (o P1-c com `digestao_lenta`) falha alto com `NOS_PENDENTES["digestao_lenta"]` até a troca da digestão no motor (a
     etapa 2b, do A). A digestão lenta só existe no regime "corpo". A troca é no `tick_troca` da bancada (o fim do dia 7 numa vida de 14).
+- **Sem os órgãos do #299:** com o Olfato e a Audição ligados, a rede passa do teto. O embrulho da bancada
+  (`PoliticaComRedeSemOrgaos`) falha alto na primeira decisão que traz um receptor de narina ou ouvido, antes de a rede a ver.
 - **As faixas** 43101…43505 e 44101…44505 e o prefixo `rede_de_si` já estavam na bancada (W-BANCADA-DOIS-PETS).
 - **Testes:** `tests/test_bancada_rede_de_si.py`, 31, ~10 s.
   - a chave;
