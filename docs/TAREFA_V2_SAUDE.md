@@ -6,8 +6,9 @@
 
 Worktree e branch de cada etapa: `v2-saude-<etapa>`.
 
-**Status: ABERTA, só no papel.** A rodada começa **depois da rodada atual**. Este documento não muda código, configuração nem o CLAUDE.md:
-cada etapa é um PR próprio, e o merge é do Matheus. As decisões que sobram (SA-1 a SA-8) estão na seção 6.
+**Status: EM CURSO desde 2026-10-13.** A **etapa 0 (o backup)** está feita, com a tag `pre-saude` na `main` `8ae3ff7` e as cópias em
+`docs/historico/` (`docs/historico/LEIA.md`); o PR dela espera o checklist do Matheus (seção 5). A etapa 1 só começa com o ok dele.
+Cada etapa é um PR próprio, e o merge é do Matheus. As decisões que sobram (SA-1 a SA-8) estão na seção 6.
 
 ## 1. Por que agora
 

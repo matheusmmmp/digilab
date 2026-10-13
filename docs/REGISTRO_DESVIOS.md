@@ -5053,3 +5053,20 @@ Pedido do Gerente depois do #292, com a saída 1 decidida pelo Matheus. Relatór
 - **O G2 do plano** (com `g_plano` 0 o termo do plano é zero) não tem o que conferir sem o planejador; fica para a etapa 2.
 - **Dois testes antigos mudaram:** a tabela dos prefixos em `tests/test_bancada_dois_pets.py` ganhou o `pet_que_pensa`, e
   `tests/test_bancada_liga_gestos.py` aceita o nó do planejador.
+
+## 2026-10-13 — SAUDE-ETAPA-0: o backup (worker C)
+
+Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. Nenhum código, configuração ou teste mudou.
+- **A tag `pre-saude`:** anotada, no commit `8ae3ff77c020474e39da2658a19c6a0da79f9e7e`, enviada ao GitHub. O Gerente informou que o envio da
+  tag foi autorizado pelo Matheus (pedido de 2026-10-13); a autorização não veio dele direto nesta sessão.
+- **As cópias** em `docs/historico/` saíram do blob do commit da tag (`git show 8ae3ff7:<arquivo>`), byte a byte. O sha256 de cada uma é o
+  do original e o do `git show pre-saude:<arquivo>` (G-BACKUP, conferido). Os números estão no `docs/historico/LEIA.md`.
+- **Os nomes** seguem a SA-1 (recomendação, ainda não decidida): `CLAUDE_pre_saude.md` e `bancada_v2_pre_saude.py.txt`. Se o Matheus
+  preferir outros nomes, renomear as cópias não muda o sha256.
+- **Nenhum teste lê `docs/`:** os testes que varrem o repositório olham só `experiments/configs/` e `digilab/`. As cópias não entram em
+  nenhuma conferência.
+- **O painel e o roadmap** ganharam os resultados novos: o alvo aprendido atrapalha (#296), o passo 0 fino com `m_gasto` 4/5 (#293) e o J5
+  com as etapas 0 a 4 na `main` (#294, #295).
+- **Achado, para o Gerente:** a #295 (a bancada do J5) foi escrita em paralelo com a #294 (o planejador). Na `main`, os três braços com o
+  planejador ainda falham alto com `NOS_PENDENTES["planejador"]`, e a `BancadaPQP.politica` não passa o `g_plano`. Falta uma tarefa curta
+  para ligar o planejador na bancada antes da calibração do `g_plano`.
