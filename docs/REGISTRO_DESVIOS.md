@@ -4784,3 +4784,14 @@ Na suíte que rodou junto com a validação do mundo (#285), o `test_g2_um_pet_n
 `TypeError: expected 2 arguments, got 3`, no `__init__` gerado do `Estado` (dataclass congelado), na linha do quinto
 `object.__setattr__(self, 'humor', humor)`: as quatro chamadas iguais antes dela passaram. A mensagem é a do `wrap_setattr` do CPython
 (um `__setattr__` chamado com o `self` a mais). Nada do nosso código toca `__setattr__` nem `__init__` (procurado no repositório).
+- **Não se reproduziu**, em quatro tentativas (2026-10-13):
+  - o `test_grupo` sozinho, 1 vez;
+  - o `test_grupo` sozinho 6 vezes seguidas, com 12 processos queimando CPU;
+  - todos os arquivos da suíte até o `test_grupo`, na ordem dela, com 8 processos de carga: 1800 passed;
+  - o `test_grupo` e o `test_grupo_social` com 16 sementes de hash fixas (`PYTHONHASHSEED` 1 a 16): passam em todas.
+  - A suíte inteira rodada de novo depois da validação também passou (2481 passed).
+- **Nenhuma thread viva** antes do `test_grupo`: os testes que sobem servidor vêm depois dele na ordem.
+- **Leitura:** a falha é do interpretador (o Python 3.13.0 do `.venv`) ou da máquina sob carga, e não do código do grupo. Não há o que
+  consertar no repositório.
+- **Recomendação:** atualizar o `.venv` para a última 3.13.x, que traz consertos de chamadas especializadas de descritores (por exemplo o
+  gh-131998). Se voltar, guardar o `PYTHONHASHSEED` e o log inteiro da rodada.
