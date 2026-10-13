@@ -4591,3 +4591,32 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
   - **O teste:** `tests/test_calibracao_mundo.py`, com a vida da fumaça que falhava. Ele falha com a regra antiga.
 - **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
   `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).
+
+## 2026-10-13 — CORPO-CALIBRACAO (worker D): o passo 0, a grade, o piloto e os números congelados
+
+- **O disco cheio.** A primeira run do passo 0 caiu com o D: sem espaço (`OSError 28`). O Matheus liberou espaço; a pasta parcial foi
+  apagada e o passo 0 rodou de novo do zero, no mesmo commit (`d68f64b`).
+- **O passo 0 "não fechou"** e a regra (o mais perto do centro da faixa) escolheu o ½ por 0,0004 de distância contra o ¼. Os dois deixam a
+  falta em ~0; a escolha entre eles quase não muda o pet. Ficou registrado no adendo 3 (A3.2c), num commit antes da grade.
+- **A grade "não fechou"** pela solidão. A regra do "não fechou" soma as distâncias das três frações ao centro das faixas (0,30 no tédio e
+  na solidão; 0,10, a metade do teto, no estresse): o plano diz "o ponto de menor distância das frações ao centro das faixas" sem dizer o
+  centro do estresse, cuja faixa é só o teto 0,20. O empate pela distância a (1, 1) e pelo menor `m_sobe` não foi preciso.
+- **A fração da faixa conta decisões acordado** (uma a cada 15 ticks, a `metrics.drives_novos`), não ticks: o plano diz "a fração do tempo
+  acordado". No passo 0, a fração é por tick (a sonda do metabolismo).
+- **Os arredondamentos da grade:** as subidas e reduções escaladas arredondam para cima na metade (225 × ½ = 113); o divisor do estresse
+  vira 256 / `m_sobe` (512, 256, 128), a subida dele vezes `m_sobe`.
+- **O `w_novos` pesa os cinco drives novos do sinal** (tédio, curiosidade, solidão, estresse e dor; a curiosidade não existe fora do mundo
+  físico), pela `pesos_drives_corpo`. A parcela usa o valor absoluto das contribuições por drive (como o adendo 2) e a mediana sobre as
+  decisões de tempo livre com sinal juntas, de todas as vidas do P0-c no ponto.
+- **As margens no mundo `bola`.** A seção 7 não diz o mundo da privação, da saúde e do tédio do P0; usei o `bola`, o do G-CUIDADO e do G-TED.
+- **O poder:** os efeitos pela conta do adendo 2 da V1 (`poder_simulado`, t unilateral a 2,5%, as diferenças deslocadas à margem); a não
+  inferioridade (PR-2) e a equivalência (G-HOJE (b)) com os contrastes juntos, as unidades reamostradas juntas, centradas em 0, pelo
+  t unilateral (2,5% e dois de 5%). O Holm dos secundários não entra na simulação (o poder já é 1,000).
+- **As sensibilidades no piloto saíam com o mesmo nome das vidas do piloto** e sobrescreviam o registro; a fumaça pegou isso (o G-P0C
+  falhou por isso). Elas foram para pastas e chaves próprias antes da run.
+- **O pool de 12 processos caiu** nos primeiros 3 min (um processo terminou sem traceback). A run foi apagada e refeita com 6, com a
+  memória medida a cada minuto (~1,3 GB de Python, 13 GB livres): a causa não foi achada.
+- **O `meta.json` da grade marca `git_limpo` falso:** o `grade_piloto.log`, gravado pela própria run, estava fora do git no começo. O
+  código era o do commit `02b6cac`.
+- **Os efeitos do tapa (5.4):** "depois de um tapa" é um tapa nas 6 h anteriores, estritamente antes (o tapa e o carinho do mesmo passo não
+  se ordenam); o "sem tapa" é o resto, não só as 6 h antes. O vínculo sai "não disponível".

@@ -736,3 +736,78 @@ São as ME-1 a ME-7 da tarefa, mais a PCD-9, **DECIDIDA em 2026-10-12, como reco
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | PCD-9 | A grade do passo 0 (A3.2b) | **DECIDIDA em 2026-10-12: o mesmo `m_gasto` no basal e nas atividades, em {¼, ½, 1}**, com a regra da A3.2 sem mudança. As outras opções: **(b)** {½, 1, 2}, o exemplo do coordenador; **(c)** {¼, ½, 1, 2}, com 4 pontos e 640 vidas; **(d)** duas grades, uma por gasto, com 9 pontos e 1.440 vidas | **(b):** se o ½ ainda passar de 0,30, o passo 0 sai "não fechou" e o pet vive boa parte do tempo em falta. O ponto 2 quase certamente não serve. **(c):** custa 160 vidas a mais por um ponto que as medidas já descartam. **(d):** o triplo do custo, para separar duas fontes que a pergunta do plano não separa. **Só o basal, como está montado:** com ~240 de atividades fora da grade, o ponto escolhido não controla a falta |
+
+## Adendo 4 (2026-10-13, depois da calibração e antes da validação): os números congelados (6.5)
+
+A seção 6.5 pede que o ponto, as margens, o N, o poder e o custo entrem num adendo, num commit **antes** da validação. São estes. Nada foi
+reajustado olhando a grade ou o piloto, e **a validação (34101…34505) não rodou: precisa de outro sim do Matheus.**
+- **A run:** `python experiments/run_v2_calibracao_corpo.py --config experiments/configs/v2_corpo/calibracao.json --processos 6`, no
+  commit `02b6cac`; 20 unidades (bases 33101…33505, K = 4, prefixo `corpo`), 14 dias, 4.320 vidas (a grade, o piloto e as
+  sensibilidades), todas gravadas e rejogadas do disco bit a bit; 80 min de parede (a grade 26 min, o piloto 54 min). Os números saem de
+  `artifacts_v2_corpo/calibracao/grade_piloto/resultado.json` (e o `meta.json`, com os sha256).
+- **O passo 0 (A3.2c):** `m_gasto` = ½, "não fechou". Fica fixo na validação.
+
+### A4.1 O ponto do corpo (6.2): `m_sobe` = 2, `m_reduz` = 1, "não fechou"; `w_novos` = 2
+
+**Passo 1, a faixa** (a fração das decisões acordado com a falta ≥ 0,75 no P0-c, os dois mundos juntos):
+
+| `m_sobe` \ `m_reduz` | ½ | 1 | 2 |
+|---|---|---|---|
+| ½ | tédio 0,023 · solidão 0,000 · estresse 0,003 | 0,004 · 0,000 · 0,000 | 0,000 · 0,000 · 0,000 |
+| 1 | 0,208 · 0,000 · 0,109 | 0,059 · 0,000 · 0,033 | 0,028 · 0,000 · 0,010 |
+| 2 | 0,819 · 0,204 · 0,762 | **0,213 · 0,028 · 0,137** | 0,118 · 0,023 · 0,072 |
+
+- **Nenhum ponto passa.** A solidão só chega a 0,10 no (2, ½), e ali o tédio (0,82) e o estresse (0,76) passam do teto. Nos outros, a
+  solidão fica abaixo de 0,03: os donos acariciam o bastante para ela quase nunca encher.
+- **A regra de "não fechou"** (6.2: a menor distância das frações ao centro das faixas, 0,30 no tédio e na solidão e 0,10 no estresse,
+  somadas): o **(2, 1)**, com distância 0,396.
+- **Os números da `ConfigCorpo` no ponto:** `tedio_sobe` 900, `solidao_sobe` 450, `estresse_divisor` 128 (as subidas × 2); as reduções no
+  valor da tarefa (`tedio_bola` 135000, `tedio_brincar` 45000, `tedio_explorar` 90000, `tedio_dono` 90000, `carinho_solidao` 180000,
+  `carinho_estresse` 90000); o gasto do passo 0 (188, 94, ½).
+
+**Passo 3, o `w_novos`** (a mediana da parcela dos drives novos nas 29.784 decisões de tempo livre com sinal do P0-c, no ponto): 0,245
+com w = 1, **0,394 com w = 2** e 0,565 com w = 4. Fica o **2**, o menor na faixa [0,25; 0,75]: fechou. Os drives novos são tédio,
+curiosidade, solidão, estresse e dor (`pesos_drives_corpo`); os de hoje ficam em 1.
+
+### A4.2 As margens (seção 7, pela regra registrada; mundo `bola`, piloto)
+
+| margem | regra | valor |
+|---|---|---|
+| `Δ_BE` | ½ \|BE(P0-q) − BE(P1-q)\| | **0,2235** |
+| `Δ_priv` | ¼ da privação média do P0-q (0,1182) | **0,0295** |
+| `Δ_saude` | ¼ de (1 − saúde média do P0-q, 0,8664) | **0,0334** |
+| `Δ_TED` | ½ do tédio médio do P0-c (0,3265) | **0,1633** |
+| G-HOJE (b) | a metade das três primeiras | BE 0,1117 · privação 0,0148 · saúde 0,0167 |
+
+### A4.3 O N: **K = 4 por base, N = 20**
+
+Pelo bootstrap das diferenças por unidade do piloto, 2.000 réplicas por K (seção 7). Todo gate chega a 0,8 já em K = 4:
+
+| gate | como | poder em K = 4 |
+|---|---|---|
+| G-PARADO (PR-1) | P1-c − P1-q em `BE`, `bola`, deslocado a `Δ_BE`; t unilateral a 2,5% | 1,000 |
+| G-SEP (PR-3) | P1-c^ac − P1-q^ac, idem | 1,000 |
+| G-PADRAO (PR-4) | P1-c − P1-q em `BE`, `padrao`, idem | 1,000 |
+| G-TED (PR-5) | P0-c − P1-c no tédio, `bola`, deslocado a `Δ_TED` | 1,000 |
+| G-CUIDADO (PR-2) | privação e saúde juntas, centradas em 0, limite superior do IC95 < a margem | 1,000 |
+| G-HOJE (b) | as nove diferenças química − hoje juntas, centradas em 0, IC90 dentro de ± a margem | 0,968 |
+
+- **Nenhum gate subpotenciado.** O Holm dos secundários não entra na simulação (os três usam o α de 2,5% do limite inferior do IC95);
+  com o poder em 1,000, isso não muda o K.
+- **O G-P0C no piloto:** o P0-c decide como o P0-q nas 160 células (as ações do tempo livre iguais; o log, nos testes da bancada).
+
+### A4.4 O custo
+
+- 5,45 s de CPU por vida no piloto (com a gravação, o replay do disco e a medição).
+- **A validação com K = 4:** 20 unidades × 120 vidas = **2.400 vidas, 3,6 h de CPU, ~0,6 h com 6 processos.**
+- Com 12 processos a run caiu no começo (um processo do pool terminou sem traceback; a memória medida com 6 ficou em ~1,3 GB). A
+  validação deve rodar com 6.
+
+### A4.5 As sensibilidades (6.4 e A1.2, só relato)
+
+- **O `recompensa_tapa`** (o P1-c-tapa, `bola`, 80 vidas por valor): com −0,5, −1,0 e −2,0, a `BE` fica em 0,82, 0,79 e 0,80, e as vidas
+  com peso no teto em 0, 1 e 2. Depois de um tapa, o carinho reduz a solidão um pouco **mais** (0,17 contra 0,16 sem tapa) e credita um
+  sinal maior (~1.300 contra ~1.200): o R-3, o caminho indireto, aparece; o medo da mão não o anula. O chamar cai depois do tapa (0,14 a
+  0,15, contra 0,22 a 0,24). O vínculo: não disponível. O valor fica o da bronca (PCD-6).
+- **A janela do tédio** (o P0-c, 160 vidas por valor): a fração com o tédio ≥ 0,75 fica em 0,215, 0,213 e 0,212 com a janela em 4, 8 e
+  16. Para o instinto, a janela quase não muda o tédio, como a A1.2 previa; ela fica em 8.
