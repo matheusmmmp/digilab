@@ -1327,7 +1327,10 @@ class Aprendiz:
             alvos[ROTA_CANAIS[canal] if canal in ROTA_CANAIS else ROTA_CANAIS_CORPO[canal]] += f
         if total != f_S:
             raise RuntimeError(f"CANAIS-REFORCO: soma dos canais {total} != escalar {f_S} (contrato K-6)")
-        if alvos["fruta"] != 0 and not ("fruta" in registro or "presenca" in registro or "pedido" in registro):
+        # o alvo aprendido do mundo fisico conta como leitor da comida (decisao do Matheus, 2026-10-13, MUNDO-ALVO, saida 1): ele ja
+        # recebe o sinal inteiro da decisao; o grupo da fruta fica sem peso a mexer, como em toda decisao do J1
+        if alvos["fruta"] != 0 and not ("fruta" in registro or "presenca" in registro or "pedido" in registro
+                                        or "alvo_mundo" in registro):
             raise RuntimeError("CANAIS-REFORCO: canal da fruta sem peso que leia a fruta nesta decisao")
         if self._canais is None:
             self._canais = {"creditos": 0, "por_canal": {c: 0 for c in tuple(ROTA_CANAIS) + self._canais_novos},

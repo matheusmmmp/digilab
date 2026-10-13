@@ -276,3 +276,16 @@ linha da leitura).
 - **B:** o `u` do alvo no motivo, para a sonda do G-USO (atrás da chave, com o G2);
 - **D:** o braço P1-alvo na bancada de vidas (hoje o alvo aprendido só é ligado na bancada do grupo), a sonda e a medida do G-USO, as
   configs e o orquestrador.
+
+## Desvio D1 (2026-10-13, antes de qualquer run): o canal do humor da comida podre no P1-alvo
+
+**O que apareceu.** Na fumaça do piloto (sementes dos testes), o P1-alvo escolheu a classe `comida_podre` e comeu uma fruta podre (humor
+−0,1). Com os canais do J1 ligados e a `presenca_fruta_mundo` desligada, o canal do humor não tinha peso que lesse a fruta naquela decisão,
+e o cérebro falhava alto (CANAIS-REFORCO). O P1 do J1 nunca chega a isso, porque o alvo padrão do motor não vai à comida podre.
+
+**A decisão do Matheus (2026-10-13, a saída 1 do PR #292).** O alvo aprendido conta como leitor da comida no `_creditar_canais`: ele já
+recebe o sinal inteiro da decisão (todos os canais), e o grupo da fruta fica sem peso a mexer, como em toda decisão do J1. É uma linha no
+`lobos.py`, que só tira uma falha alta: nenhum crédito muda, e nenhuma vida que já rodava muda (os gabaritos, na suíte).
+
+**O que não muda:** o P1 e o P1-alvo continuam diferindo só na chave do alvo (PMA-1); as classes da seção 1, a margem, o N, os gates e a
+leitura ficam como estão. O desvio é do cérebro e foi registrado antes do piloto; nada foi ajustado olhando resultado.

@@ -4923,3 +4923,19 @@ foi gerado.**
   pelo celular.
 - **As pastas:** o piloto interrompido (230 vidas, sem resultado) foi movido para fora do repositório, para a run de verdade gravar numa
   pasta nova; nenhum número dele é usado.
+
+## 2026-10-13 — MUNDO-ALVO, desvio D1 do cérebro: o alvo aprendido conta como leitor da comida (worker A)
+
+Decisão do Matheus (2026-10-13), pela saída 1 do bloqueio do PR #292. Registrada no plano (`docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`, desvio
+D1) antes do piloto.
+- **A mudança:** no `PoliticaLobos._creditar_canais`, a guarda "canal da fruta sem peso que leia a fruta" passa a aceitar também o registro
+  com `alvo_mundo`. O alvo aprendido já recebe o sinal inteiro da decisão; o grupo da fruta fica sem peso a mexer.
+- **Por que nenhuma vida que já rodava muda:** a linha só tira uma falha alta; nenhum crédito, sorteio ou registro muda. As vidas que
+  rodavam passavam pela guarda sem cair nela e seguem iguais (os gabaritos de sempre, na suíte inteira). Só mudam as vidas que antes
+  falhavam alto: as do P1-alvo que comem comida podre e as do cérebro do grupo de antes (com o alvo e sem a presença) no A só da semente
+  505.
+- **Os testes que mudaram:**
+  - `tests/test_mundo_alvo.py`: o caso do bloqueio virou "passa" (`test_p1_alvo_com_canais_come_podre_e_roda`: a vida roda com o G1, o
+    canal do humor fica negativo e o peso da `comida_podre` desce); um teste novo confere que a guarda segue falhando alto sem leitor;
+  - `tests/test_canal_fruta_mundo.py`: o "sem a chave falha alto" passou a ser sem a chave **e sem o alvo**; o cérebro do grupo de antes
+    com o alvo agora roda (teste novo).

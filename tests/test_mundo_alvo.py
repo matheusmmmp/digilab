@@ -218,17 +218,32 @@ def test_fumaca_do_piloto(tmp_path):
     assert res["custo"]["validacao_estimada"]["vidas"] == res["n"]["n"] * 1 * 8
 
 
-# ------------------------------------------------------------------ o bloqueio: o canal do humor da comida podre no P1-alvo
-def test_p1_alvo_com_canais_falha_alto_ao_comer_podre():
+# ------------------------------------------------------------------ o canal do humor da comida podre no P1-alvo (saida 1)
+def test_p1_alvo_com_canais_come_podre_e_roda():
     """O caso achado na fumaca do piloto (base 101, relapso, perto; o acoplado P1-alvo^ac ao P0z): o P1-alvo escolhe a classe
-    comida_podre, come a fruta podre (humor -0,1) e o canal do humor nao tem peso que leia a fruta (presenca_fruta_mundo desligada,
-    como no J1): o cerebro falha alto (CANAIS-REFORCO). O P1 do J1 nunca vai a podre (o alvo padrao). A correcao e decisao do Matheus
-    (docs/REGISTRO_DESVIOS.md, MUNDO-ALVO); este teste muda junto com ela."""
+    comida_podre e come a fruta podre (humor -0,1), com os canais do J1 e a presenca_fruta_mundo desligada. Antes o cerebro falhava alto
+    (CANAIS-REFORCO); pela saida 1 (decisao do Matheus, 2026-10-13) o alvo aprendido conta como leitor da comida, e a vida roda (o G1 e
+    conferido no acoplar). O canal do humor fica negativo, e o alvo recebe o sinal inteiro da decisao: o peso da comida_podre desce."""
     cfg = json.loads(json.dumps(CFG_PILOTO))
     cfg.update({"donos": ["relapso"], "lugares": ["perto"]})
     b = bv.bancada_da_config(ra.config_bancada(cfg))
     u = bv.unidades_derivadas([101], 1, ra.PREFIXO)[0]
     z = b.vida(bv.EspecVida("relapso", "P0z", u["semente"], u["genoma"], "fisico", lugar="perto"))
+    v = b.acoplar(z, "P1-alvo", "nenhum")
+    cer = bv.do_braco(v.motor.politica).cerebro
+    podres = [m for m in cer.motivos if (m.get("alvo_aprendido") or {}).get("alvo") == "comida_podre"
+              and m.get("mundo", {}).get("comeu") is not None]
+    assert podres
+    ei = cer.estado_interno()
+    assert ei["canais"]["por_canal"]["humor"] < 0
+    assert any(t["comida_podre"] < cer.cl.w0_alvo for t in ei["pesos_alvo_mundo"].values() if "comida_podre" in t)
+    b.acoplar(z, "P1", "nenhum")                                   # o P1 do J1, no mesmo registro, roda como antes
+
+
+def test_sem_leitor_da_comida_o_canal_do_humor_segue_falhando_alto():
+    """A guarda do CANAIS-REFORCO fica: o P1 com canais, sem o alvo e sem a presenca, comendo a fruta que mexe no humor, falha alto."""
+    import digilab.policies.lobos as lb
+    lob = object.__new__(lb.PoliticaLobos)                      # so o que a guarda le: a escala e os canais novos (nenhum)
+    lob._escala, lob._canais_novos = 1024, ()
     with pytest.raises(RuntimeError, match="canal da fruta sem peso que leia a fruta"):
-        b.acoplar(z, "P1-alvo", "nenhum")
-    b.acoplar(z, "P1", "nenhum")                                   # o P1 do J1, no mesmo registro, roda
+        lob._creditar_canais({"acao": None}, {"humor": -113}, -113)
