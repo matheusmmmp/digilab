@@ -1905,7 +1905,7 @@ class Bancada:
             rng = random.Random(derivar_semente("sonda-corpo", sonda["semente"]))
             com_mundo = mundo_de(vida.espec.mundo).fisico is not None
             estados = [replace(o, corpo=percepcao_da_sonda(o, corpo, rng, com_mundo)) for o in estados]
-        prior = self.politica_do_braco(replace(vida.espec, braco=p0), CONFIG_PADRAO)   # sem a rede: a sonda nao a alimenta
+        prior = do_braco(self.politica(replace(vida.espec, braco=p0), CONFIG_PADRAO))   # sem a rede: a sonda nao a alimenta
         d_prior = distribuicoes_de_acao(prior, estados, sonda["amostras"], sonda["semente"])
         fab, fm = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec)
         log = vida.motor.log
