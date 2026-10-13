@@ -108,3 +108,6 @@ artifacts_v2_corpo/**/vidas/
 # V2, MUNDO-ALVO: o piloto e a validacao do mundo com o alvo aprendido; meta, medidas e resultado no git, as vidas fora (regeneraveis)
 !artifacts_v2_mundo_alvo/
 artifacts_v2_mundo_alvo/**/vidas/
+!artifacts_v2_pet_que_pensa/
+# V2, J5: a calibracao do g_plano e o piloto; meta, medidas e resultado no git, as vidas fora (regeneraveis)
+artifacts_v2_pet_que_pensa/**/vidas/
