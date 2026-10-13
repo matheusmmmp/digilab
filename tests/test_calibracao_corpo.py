@@ -210,3 +210,66 @@ def test_a_fumaca_inteira(tmp_path):
     assert meta["sha256"]["corpo.py"] and meta["modo"] == "fumaca" and math.isfinite(meta["duracao_s"])
     with pytest.raises(FileExistsError):
         cc.rodar(_fumaca(), saida, 1, FUMACA)
+
+
+
+# ------------------------------------------------------------------ 5. o adendo 5 (A5.2): o m_sol, so a subida da solidao
+
+
+def test_o_m_sol_so_mexe_na_subida_da_solidao():
+    cfg = _fumaca()
+    um = cc.corpo_do_ponto(cfg, 1.0, 1.0)
+    assert cc.corpo_do_ponto(cfg, 1.0, 1.0, 1.0) == um and cc.nome_ponto(1.0, 1.0, 1.0) == cc.nome_ponto(1.0, 1.0)
+    for ms, mr, msol, solidao in ((1.0, 1.0, 2.0, 450), (1.0, 1.0, 4.0, 900), (2.0, 0.5, 4.0, 1800), (0.5, 2.0, 2.0, 225)):
+        p, sem = cc.corpo_do_ponto(cfg, ms, mr, msol), cc.corpo_do_ponto(cfg, ms, mr)
+        assert p["solidao_sobe"] == solidao                                    # arred(225 x m_sobe x m_sol)
+        assert {k: v for k, v in p.items() if k != "solidao_sobe"} == {k: v for k, v in sem.items() if k != "solidao_sobe"}
+        cc.config_bancada(cfg, p, ["P0-c"], ["bola", "padrao"])
+    assert cc.nome_ponto(2.0, 0.5, 4.0) == "sobe_2_reduz_0.5_sol_4"
+    assert cc.grade_sol(cfg) == (1.0,) and len(cc.pontos_da_grade(cfg)) == 9
+    com = {**cfg, "grade": {**cfg["grade"], "m_solidao": [1, 2, 4]}}
+    assert cc.grade_sol(com) == cc.GRADE_SOL and len(cc.pontos_da_grade(com)) == 27
+
+
+def test_a_escolha_com_o_m_sol():
+    todos = {(a, b, s): _f(0.9, 0.01, 0.9, False) for a in cc.GRADE_M for b in cc.GRADE_M for s in cc.GRADE_SOL}
+    assert cc.escolha_da_grade({**todos, (1.0, 1.0, 1.0): _f(0.3, 0.3, 0.0, True),
+                                (1.0, 1.0, 2.0): _f(0.3, 0.3, 0.0, True)})["ponto"] == [1.0, 1.0, 1.0]
+    # empate de distancia: o menor m_sobe, depois o menor m_sol, depois o menor m_reduz
+    e = cc.escolha_da_grade({**todos, (1.0, 2.0, 1.0): _f(0.3, 0.3, 0.0, True), (1.0, 1.0, 2.0): _f(0.3, 0.3, 0.0, True),
+                             (2.0, 1.0, 1.0): _f(0.3, 0.3, 0.0, True)})
+    assert e["ponto"] == [1.0, 2.0, 1.0] and e["fechou"]
+    e = cc.escolha_da_grade({**todos, (1.0, 1.0, 2.0): _f(0.3, 0.3, 0.0, True), (1.0, 0.5, 2.0): _f(0.3, 0.3, 0.0, True),
+                             (2.0, 1.0, 2.0): _f(0.3, 0.3, 0.0, True)})
+    assert e["ponto"] == [1.0, 1.0, 2.0]                                       # distancia 1 contra 2 e 2
+    # nenhum passa: o mais perto do centro, com o terceiro eixo
+    e = cc.escolha_da_grade({**todos, (2.0, 1.0, 4.0): _f(0.31, 0.28, 0.1, False)})
+    assert e["ponto"] == [2.0, 1.0, 4.0] and not e["fechou"] and e["registro"] == "nao fechou"
+    with pytest.raises(ValueError, match="todos"):
+        cc.escolha_da_grade({(1.0, 1.0): _f(0.3, 0.3, 0.0, True), (1.0, 1.0, 2.0): _f(0.3, 0.3, 0.0, True)})
+
+
+def test_a_config_com_o_m_sol(tmp_path):
+    cfg = _fumaca()
+    passo0 = tmp_path / "passo0.json"
+    passo0.write_text(json.dumps({"escolha": {"corpo": cfg["corpo"]}}), encoding="utf-8")
+    cal = {**cfg, "plano": cc.PLANO, "donos": list(cc.DONOS_V1), "unidades": {"bases": list(cc.BASES_CALIBRACAO), "k": 4, "prefixo": "corpo"},
+           "dias": 14, "orcamento": 224, "bootstrap": {"reamostragens": 10000, "semente": 4242, "nivel": 0.95},
+           "poder": {"k_min": 4, "k_max": 10, "replicas": 2000, "alvo": 0.8}, "passo0": str(passo0)}
+    assert cc.modo_da_config({**cal, "grade": {**cal["grade"], "m_solidao": [1, 2, 4]}}) == "calibracao"
+    with pytest.raises(ValueError, match="grade"):
+        cc.modo_da_config({**cal, "grade": {**cal["grade"], "m_solidao": [1, 2]}})
+
+
+def test_a_fumaca_com_o_m_sol(tmp_path):
+    """A run com o terceiro eixo (A5.2) numa grade pequena (um m_sobe, um m_reduz, m_sol 1 e 2): os pontos com o sufixo, a solidao do
+    ponto escolhido no piloto e o replay do disco de toda vida."""
+    cfg = _fumaca()
+    cfg["grade"] = {"m_sobe": [1.0], "m_reduz": [1.0], "m_solidao": [1, 2], "w_novos": [1, 2, 4]}
+    r = cc.rodar(cfg, tmp_path / "cal", 1)
+    res = r["resultado"]
+    assert set(res["faixas"]) == {"sobe_1_reduz_1", "sobe_1_reduz_1_sol_2"} and len(res["escolha"]["ponto"]) == 3
+    assert res["escolha"]["corpo"]["solidao_sobe"] == 225 * int(res["escolha"]["ponto"][2])
+    assert "(1, 1, 1)" in res["regra_passo2"] and res["g_p0c"]["passa"]
+    meta = json.loads((tmp_path / "cal" / "meta.json").read_text(encoding="utf-8"))
+    assert meta["corpo_dos_pontos"]["sobe_1_reduz_1_sol_2"]["solidao_sobe"] == 450
