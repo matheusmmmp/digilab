@@ -100,3 +100,6 @@ artifacts_v2_validacao_unica/**/vidas/
 # V2, MUNDO-CALIBRACAO: as vidas da calibracao do mundo fisico sao regeneraveis da config e do codigo (meta, medidas e resultado ficam)
 !artifacts_v2_mundo/
 artifacts_v2_mundo/**/vidas/
+# a calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 11): as medidas, o meta e o resultado no git; as vidas fora (regeneraveis)
+!artifacts_v2_corpo/
+artifacts_v2_corpo/**/vidas/

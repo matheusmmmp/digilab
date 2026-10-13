@@ -695,6 +695,26 @@ grade {½, 1, 2} da A3.2:**
 - **O uso das medidas descritivas para escolher a grade** não lê o primário nem as sementes da calibração. Elas só mostram onde a grade
   tem de estar.
 
+**A3.2c, o passo 0 rodado (2026-10-12/13, autorizado pelo Matheus; antes da grade da 6.1): `m_gasto` = ½, "não fechou".**
+- **A run:** `python experiments/bancada_v2.py --passo0 --config experiments/configs/v2_corpo/calibracao_passo0.json --saida
+  artifacts_v2_corpo/calibracao/passo0`, no commit `d68f64b`: o P0-q, as 20 unidades (bases 33101…33505, K = 4, prefixo `corpo`), as 8
+  células, 14 dias; 480 vidas, todas gravadas e rejogadas do disco bit a bit; 57 min num processo. Os números saem de
+  `artifacts_v2_corpo/calibracao/passo0/passo0.json` (e o `meta.json` de cada ponto, com os sha256).
+- **A fração do tempo acordado com a falta de combustível, nas 8 células juntas:**
+
+  | `m_gasto` | basal (acordado/dormindo) | atividades | decisões acordado | com falta | fração |
+  |---|---|---|---|---|---|
+  | ¼ | 94 / 47 | ¼ | 2.187.300 | 0 | 0,0000 |
+  | ½ | 188 / 94 | ½ | 2.187.090 | 832 | 0,0004 |
+  | 1 | 375 / 187 | 1 | 1.846.605 | 905.331 | 0,4903 |
+
+- **A regra (A3.2, sem mudança):** nenhum ponto cai em [0,05; 0,30]. Fica o de fração mais perto do centro da faixa (0,175): o ½
+  (distância 0,1746, contra 0,1750 do ¼ e 0,3153 do 1), com o registro **"não fechou"**.
+- **O gasto fixo da grade da 6.1 em diante:** `gasto_basal_acordado` 188, `gasto_basal_dormindo` 94, `gasto_atividades_num/den` 1/2.
+- **O que isso quer dizer, só como leitura:** com o gasto pela metade, a falta quase não acontece (0,04% do tempo acordado); com o gasto
+  inteiro, ela fica ligada em metade do tempo. A grade salta por cima da faixa, e o metabolismo, no ponto escolhido, quase não pesa no
+  cansaço. Nada foi reajustado olhando o resultado; uma grade mais fina entre ½ e 1 seria decisão do Matheus.
+
 ### A3.3 O que sai a mais (descritivo)
 
 Por braço e célula:
