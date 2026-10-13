@@ -1,0 +1,64 @@
+{
+  "descricao": "Calibracao do g_plano do pet que pensa (PLANO_ANALISE_V2_PET_QUE_PENSA, secoes 5 e 8; PP-6). So o P1-plan, so na fase 1 (os dias 0 a D_a - 1 = 6, sem mudanca), nas 20 unidades das bases 45101...45505 (K_u = 4, prefixo pet_que_pensa), na grade g_plano em {S/4, S/2, S}. A medida: a fracao das decisoes com alvo em que a sonda do plano muda a escolha (acao ou alvo), nos dias 4 a 6; a regra: o menor g_plano com a media em [0,10; 0,40], senao o mais perto (o desvio declarado). O cerebro A do ponto da K2 com a montagem completa e o habito do plano (o alvo aprendido, a presenca da fruta no mundo, as classes por arvore); o mundo com o m da calibracao do mundo (1,0); o corpo do regime quimica com o metabolismo no gasto do passo 0 fino (adendo 5, m_gasto 4/5). NAO rodada: dispara o Gerente.",
+  "plano": "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md",
+  "tipo": "pet_que_pensa",
+  "bracos": [
+    "P1-plan"
+  ],
+  "protocolos": [
+    "fase1"
+  ],
+  "d_a": 7,
+  "janela": 3,
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "unidades": {
+    "bases": [
+      45101,
+      45202,
+      45303,
+      45404,
+      45505
+    ],
+    "k": 4,
+    "prefixo": "pet_que_pensa"
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "calibracao_g_plano": {
+    "grade": [
+      256,
+      512,
+      1024
+    ],
+    "dias": [
+      4,
+      6
+    ],
+    "faixa": [
+      0.1,
+      0.4
+    ]
+  }
+}
