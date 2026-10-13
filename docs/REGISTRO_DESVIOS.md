@@ -4599,3 +4599,16 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
   a fisiologia por espécie e os sistemas novos do corpo.
 - **O J1 e o J2 dizem "em curso, segundo o coordenador; sem resultado na `main`"** para a validação do mundo e a calibração do corpo. O
   #278 diz "validação não rodada", e a mensagem do coordenador (2026-10-12) diz que ela está rodando. Nenhum número dessas runs entrou.
+
+## 2026-10-12 — W-TETO-PESOS (worker C): a decisão do teto de pesos
+
+- **`docs/DECISAO_V2_TETO_PESOS.md`:** as opções para o teto de 1000 pesos do cérebro A e a recomendação. TP-1 e TP-2 seguem abertas.
+- **As contas dos pesos** saem do código da `main` `930037b`, com o teto aberto só para contar. O comando está na seção 6 do documento,
+  sem artefato. Três números citam um teste:
+  - 998, em `tests/test_banheiro_cerebros.py`, linha 198;
+  - 990, em `tests/test_canal_fruta_mundo.py`, linha 61;
+  - 763, no cérebro da K2.
+- **"Para o replay" não tem número.** A fonte declarada do teto (`lobos.py`, linha 128) dá o motivo e não dá medida, e nenhum artefato
+  mede o custo do replay pelo número de pesos. O documento registra isso como SEM FONTE e pede a medida no primeiro plano acima de 1000.
+- **O teto não toca a vida, mas toca o `meta.json`.** Ele não muda nenhuma vida, mas é gravado na `ConfigLobos` dos `meta.json` (os
+  blocos da validação única). Isso pesa contra subir o padrão.
