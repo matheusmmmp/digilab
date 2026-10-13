@@ -4040,3 +4040,22 @@ A etapa 3 (o mundo, do A) e a 2b (as classes por árvore no alvo aprendido, dada
   - **G1** com tudo ligado (o P1, a mão e a troca), sem e com o corpo.
 - **Para o D (etapa 4):** a fábrica dos braços do J5 passa `cfg_pqp` ao `MotorMundo` e `alvo_por_arvore` ao cérebro A; os eventos da mão e
   da troca entram pelo `observar` do motor no `T_m` do plano, fora do orçamento. O gancho `fruta_na_mao` é do modelo do desfecho do B.
+
+## V2, MUNDO-ALVO — o mundo com o alvo aprendido: código pronto, piloto bloqueado (2026-10-13, `docs/PLANO_ANALISE_V2_MUNDO_ALVO.md`) — NÃO RODADO
+
+PMA-1 a PMA-9 pela recomendação, autorizado pelo Matheus em 2026-10-13. Mudaram `experiments/bancada_v2.py` (o braço `P1-alvo` e as
+faixas), `digilab/metrics.py` (`uso_do_alvo`, `classes_por_dia`), `experiments/run_v2_mundo_alvo.py` (novo), as configs
+`experiments/configs/v2_mundo_alvo/` e os testes. `engine.py`, `lobos.py`, `mundo.py` e a web não. Interpretações em
+`docs/REGISTRO_DESVIOS.md`.
+- **O braço `P1-alvo`** (`Braco.alvo`): o P1 com `ConfigLobos.alvo_aprendido` e o `w0_alvo` padrão (S/16), só no mundo físico; 792 pesos
+  (o P1, 756). Os outros braços não mudam.
+- **As faixas** 47101…47505 (piloto) e 48101…48505 (validação), prefixo `mundo`, em `FAIXAS_RESERVADAS`.
+- **O orquestrador** (`--config .../piloto.json` ou `.../validacao.json`):
+  - **o piloto:** 72 vidas por unidade; o K pelo poder simulado no G-ALVO com o `Δ_MF`, o G-USO e o custo;
+  - **a validação:** 96 vidas por unidade, com o bloco afastado; G-MUNDO, G-USO, G-ALVO e o Holm de G-ALVO-AC, G-INSTINTO, G-PERM-A e
+    G-DIST-A; a leitura da seção 9;
+  - recusa as bases do plano do mundo, a pasta que existe e a validação sem o piloto e o adendo 1.
+- **O G-USO** sai do motivo do cérebro (o `u` já está lá): a escolha contra o sorteio do prior com o mesmo `u`.
+- **Bloqueio:** com os canais do J1, o P1-alvo que come comida podre (a classe `comida_podre`) falha alto no CANAIS-REFORCO: o canal do
+  humor fica sem peso que leia a fruta. O piloto parou, e a validação não rodou. As saídas, com a recomendação, estão no registro de
+  desvios; a decisão é do Matheus. O caso está em `tests/test_mundo_alvo.py`.

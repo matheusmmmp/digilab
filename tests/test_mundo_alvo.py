@@ -216,3 +216,19 @@ def test_fumaca_do_piloto(tmp_path):
     assert res["n"]["n"] == 3 * res["n"]["k"]
     assert set(res["poder_secundarios"]) == {"PA-2 (G-ALVO-AC)", "PA-3 (G-INSTINTO)"}
     assert res["custo"]["validacao_estimada"]["vidas"] == res["n"]["n"] * 1 * 8
+
+
+# ------------------------------------------------------------------ o bloqueio: o canal do humor da comida podre no P1-alvo
+def test_p1_alvo_com_canais_falha_alto_ao_comer_podre():
+    """O caso achado na fumaca do piloto (base 101, relapso, perto; o acoplado P1-alvo^ac ao P0z): o P1-alvo escolhe a classe
+    comida_podre, come a fruta podre (humor -0,1) e o canal do humor nao tem peso que leia a fruta (presenca_fruta_mundo desligada,
+    como no J1): o cerebro falha alto (CANAIS-REFORCO). O P1 do J1 nunca vai a podre (o alvo padrao). A correcao e decisao do Matheus
+    (docs/REGISTRO_DESVIOS.md, MUNDO-ALVO); este teste muda junto com ela."""
+    cfg = json.loads(json.dumps(CFG_PILOTO))
+    cfg.update({"donos": ["relapso"], "lugares": ["perto"]})
+    b = bv.bancada_da_config(ra.config_bancada(cfg))
+    u = bv.unidades_derivadas([101], 1, ra.PREFIXO)[0]
+    z = b.vida(bv.EspecVida("relapso", "P0z", u["semente"], u["genoma"], "fisico", lugar="perto"))
+    with pytest.raises(RuntimeError, match="canal da fruta sem peso que leia a fruta"):
+        b.acoplar(z, "P1-alvo", "nenhum")
+    b.acoplar(z, "P1", "nenhum")                                   # o P1 do J1, no mesmo registro, roda
