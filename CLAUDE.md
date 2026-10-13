@@ -4167,3 +4167,36 @@ modelos e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - a fumaça inteira pelo `rodar_pqp` e pelo `main`.
 - **Fumaça descritiva** (P1, sementes 101, 202 e 303, 7 + 3 dias): com o atencioso a fome quase nunca chega a S/2 antes da mudança, e só a
   semente 303 teve 3 oportunidades antes no T1. A G-OPORTUNIDADE do plano decide isso na calibração.
+
+## V2, W-BANCADA-PQP-PLANO — o planejador nos braços do J5 e a config da calibração do `g_plano` (2026-10-13, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 3 a 5, 7, 8 e 11) — GATES PASSAM; A CALIBRAÇÃO NÃO RODOU
+
+Com o planejador do #294 e a bancada do J5 do #295 na `main`. Infraestrutura, sem run; só as sementes dos testes. Mudaram
+`experiments/bancada_v2.py`, o orquestrador novo `experiments/run_v2_calibracao_pet_que_pensa.py`, as configs
+`experiments/configs/v2_pet_que_pensa/{calibracao,fumaca_calibracao}.json` e os testes. `engine.py`, `lobos.py`, `modelo_mundo.py`, o
+mundo, o corpo e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Sem o nó `planejador`:** o `NOS_PENDENTES` ficou vazio.
+- **Os braços com o planejador** (P1-plan, P1-plan-desfecho, P1-plan-cong):
+  - o cérebro A é o do P1 com o `g_plano` da chave `"g_plano"` da config (só com esses braços; na `"lobos"` é recusado, porque iria ao
+    P1), os modelos da `cfg_modelo` e a `ConfigConsequencia` do crédito;
+  - os modelos são os do próprio cérebro: o embrulho `PoliticaComModeloPQP` só os lê e os congela no tick da mudança pelo `congelar`
+    (PP-8). No P1 (g_plano 0) o embrulho guarda modelos que só observam.
+- **As medidas novas** (`plano_da_vida`, do motivo de cada decisão):
+  - **quanto o plano decide, por dia:** entre as decisões com alvo, as em que a sonda "quem decidiu" muda a ação ou o alvo; as partes
+    saem em separado;
+  - **a legibilidade:** a fração das decisões com o fator do plano, a contagem por fator e o texto do adulto de cada um;
+  - **o G2:** no P1, nenhum termo do plano em decisão nenhuma (falha alto).
+  - A G-SEM-CREDITO compara o cérebro sem os modelos.
+- **A calibração do `g_plano`** (seção 5), pronta e NÃO rodada:
+  - `python experiments/run_v2_calibracao_pet_que_pensa.py --config experiments/configs/v2_pet_que_pensa/calibracao.json --saida artifacts_v2_pet_que_pensa/calibracao --processos 3`;
+  - o P1-plan na fase 1 (7 dias), nas bases 45101…45505 (K_u = 4), com `g_plano` em {S/4, S/2, S};
+  - a medida é a fração da sonda nos dias 4 a 6 (`fracao_plano_dias`), com média sobre as unidades. A regra pega o menor ponto em
+    [0,10; 0,40]; senão, o mais perto (empate no menor), com o desvio;
+  - o cérebro é o do ponto da K2, o mundo usa `m` = 1 e o corpo vem do passo 0 fino (adendo 5);
+  - grava `g_plano.json` e `meta.json`, e recusa a pasta que existe e as bases da validação.
+- **Testes:**
+  - `tests/test_bancada_pqp_plano.py` (21): o cérebro, o G1 dos três braços, a mesma vida antes da mudança, o congelamento pelos modelos
+    do cérebro, a G-SEM-CREDITO, o plano e a legibilidade contra os motivos, `plano_da_vida` e `fracao_plano_dias` em dados com a resposta
+    conhecida, o G2;
+  - `tests/test_calibracao_pet_que_pensa.py` (5): a config contra os artefatos, as recusas, a regra e a fumaça inteira;
+  - `tests/test_bancada_pet_que_pensa.py` e `tests/test_bancada_liga_gestos.py` ajustados.
+- **Fumaça descritiva** (sementes dos testes, não é resultado): a fração da regra ficou em 0,04 a 0,07 nos três pontos.

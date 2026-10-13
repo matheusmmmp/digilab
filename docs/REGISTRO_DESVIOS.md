@@ -5053,3 +5053,30 @@ Pedido do Gerente depois do #292, com a saída 1 decidida pelo Matheus. Relatór
 - **O G2 do plano** (com `g_plano` 0 o termo do plano é zero) não tem o que conferir sem o planejador; fica para a etapa 2.
 - **Dois testes antigos mudaram:** a tabela dos prefixos em `tests/test_bancada_dois_pets.py` ganhou o `pet_que_pensa`, e
   `tests/test_bancada_liga_gestos.py` aceita o nó do planejador.
+
+## 2026-10-13 — W-BANCADA-PQP-PLANO (worker D): o planejador nos braços do J5 e a config da calibração do `g_plano`
+
+- **O congelamento passou para o `congelar` dos modelos** (#294), no lugar do retrato restaurado do W-BANCADA-PQP. Nos três braços com o
+  planejador, os modelos congelados são os do próprio cérebro (`PoliticaLobos.modelo_mundo`), que os lê no lobo `planejamento`. O embrulho
+  `PoliticaComModeloPQP` só os lê e os congela no `mudanca_no_mundo`, antes de a ação da mudança ser aplicada: no P1-plan-cong a fruta na
+  mão do T1 já não chega ao desfecho. No P1 (g_plano 0) o embrulho segue com modelos que só observam. Assim os modelos não existem em
+  dobro, e o planejador decide com os modelos que congelam.
+- **A fruta na mão no P1 passa pelo `ModeloMundo.na_mao`** (#294): conta em `consumos_mao`, não em `consumos`. O estado interno das vidas
+  do P1 muda nesse contador em relação ao #295; a vida (log, ações, rngs) não. Não havia gabarito dessas vidas.
+- **O `g_plano` é uma chave própria da config do J5** (`"g_plano"`), só com braço com o planejador, e entra só nesses braços. Na chave
+  `"lobos"` ele iria também ao P1, então lá ele é recusado, e a `BancadaPQP` também recusa uma bancada com `g_plano` nos lobos.
+- **"Quanto o plano decide"** (seção 4) e a medida da regra (seção 5) foram lidos assim:
+  - **o denominador** são as decisões com alvo: o motor pediu o alvo e havia para onde ir;
+  - **o numerador** são as decisões em que a sonda "quem decidiu" muda a escolha, a da ação (`plano`) ou a do alvo (`alvo_plano`);
+  - as duas partes saem também em separado, e a da ação também sobre todas as decisões;
+  - na regra, a fração de cada unidade é a soma dos dias 4 a 6, e a média é sobre as unidades com alguma decisão com alvo nessa janela.
+- **A legibilidade** é a fração das decisões com o fator do plano no motivo (`motivo.fator_do_plano`). Os textos são os do adulto
+  (`expressao.expressar`), um por fator diferente.
+- **O G2** confere, em toda vida do P1, que nenhum motivo tem a contribuição do lobo `planejamento` nem as sondas `plano` e `alvo_plano`.
+  Ele falha alto se tiver. Nos braços com o planejador sai a contagem das decisões com termo diferente de zero.
+- **A G-SEM-CREDITO** compara o estado interno sem os modelos: os do embrulho e os do planejador (`plano.modelo_mundo`).
+- **O corpo da calibração** é o do passo 0 fino do adendo 5 (`m_gasto` = 4/5, o que fechou): `artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json`.
+  O resto do cérebro é o ponto da K2, e o mundo usa o `m` da calibração do mundo (1,0), como nos dois pets.
+- **Medida descritiva, só nas sementes dos testes** (a fumaça da calibração: 2 vidas por ponto, 3 dias, a regra nos dias 1 e 2). A fração
+  ficou em 0,067 (S/4), 0,041 (S/2) e 0,065 (S), toda abaixo de 0,10. Se repetir na faixa da calibração, a regra cai no "mais perto" com o
+  desvio declarado, como o B já previa (PP-6). Não é resultado.
