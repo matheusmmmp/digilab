@@ -24,6 +24,15 @@ Desde o metabolismo (docs/TAREFA_V2_METABOLISMO.md, secao 3), duas checagens a m
 O relato (sem recusar): os pares acoplados com meias-vidas na mesma ordem (a maior < 10 vezes a menor), o risco de oscilacao; e os
 quimicos cujo unico sumidouro e o teto.
 
+Desde os orgaos do Olfato e da Audicao (docs/futuro/dois_pets.md, secoes 5.3 e 5.6; DP-13 e DP-14), duas pecas a mais, que so existem
+com a ConfigOlfato ou a ConfigOuvido ligadas:
+  - o ORGAO (`Orgao`): um receptor com limiar, adaptacao e saturacao. O estimulo vem do mundo (a intensidade no ponto da narina ou do
+    ouvido), e o quimico da adaptacao e do orgao: so ele o move (para o estimulo, a cada tick), com a meia-vida declarada. O orgao e a
+    fonte do quimico; ele nao le outro quimico nem emite nada, entao nao entra no laco de ganho;
+  - o EMISSOR EXTERNO (`Emissor` com `destino` "mundo"): o cheiro proprio e o rastro, com intensidade constante, que vai ao mundo e nao
+    produz quimico em corpo nenhum. No degrau 1b ele nao le quimico (o cheiro nao carrega nada do estado); um emissor externo com leitura
+    e do degrau 3 e falha alto aqui.
+
 O criterio "fechado e automantido" e desenho nosso; a literatura citada para ele ainda nao foi lida (D-1). So biblioteca padrao; nao
 importa o corpo nem o cerebro.
 """
@@ -38,6 +47,10 @@ GATILHOS_TICK = ("tick", "acordado", "dormindo", "noite_acordado", "dia_acordado
 LADOS_REACAO = ("acima", "abaixo")           # o lado do limiar de uma reacao com limiar (a transferencia do metabolismo)
 GATILHOS = GATILHOS_TICK + ("estimulo",)
 LEITURAS_RECEPTOR = ("drive", "falta")       # drive: S - div_arred(q S, C) (os drives de hoje); falta: div_arred(q S, C)
+DESTINOS = ("corpo", "mundo")                # o destino do que o emissor emite: um quimico do corpo, ou o mundo (o emissor externo)
+GATILHOS_EXTERNOS = ("posicao", "decisao")   # o externo: sempre na posicao do pet (o cheiro proprio); uma marca por decisao (o rastro)
+CANAIS_EXTERNOS = ("cheiro_proprio", "rastro")
+SENTIDOS = ("olfato", "ouvido")
 ORDEM_MEIA_VIDA = 10                         # "na mesma ordem": a maior meia-vida do par e menor que 10 vezes a menor
 
 
@@ -93,6 +106,26 @@ class Emissor:
     limiar: int = 0                          # so no gatilho "limiar": soma de max(0, q - limiar) dos quimicos lidos
     divisor: int = 1                         # so no gatilho "limiar": div_arred(soma, divisor)
     variavel: bool = False                   # a quantidade vem de fora (a bola, a fruta, o andar): o delta guarda so o sinal
+    destino: str = "corpo"                   # DESTINOS; "mundo": o emissor externo (o cheiro proprio, o rastro), efeitos (canal, intensidade)
+
+    @property
+    def externo(self) -> bool:
+        return self.destino == "mundo"
+
+
+@dataclass(frozen=True)
+class Orgao:
+    """Um receptor do Olfato ou da Audicao (secao 5.6): le o estimulo `I` que o mundo entrega (a intensidade no ponto da narina ou do
+    ouvido, sem direcao) e o quimico da adaptacao `a`; e = max(0, I - a - limiar), r = div_arred(S e, e + meia_saturacao). O quimico da
+    adaptacao anda para I a cada tick, com a constante da meia-vida dele (o `k_meia_vida` do quimico)."""
+
+    receptor: str                            # o nome do receptor para o cerebro (o campo da PercepcaoCorpo)
+    adaptacao: str                           # o quimico da adaptacao (so este orgao o move)
+    sentido: str                             # SENTIDOS
+    canal: str                               # "comida", "outro" (olfato); o tipo de som (ouvido)
+    lado: str | None                         # "esq", "dir" ou None (uma narina, um ouvido)
+    limiar: int
+    meia_saturacao: int
 
 
 @dataclass(frozen=True)
@@ -100,6 +133,7 @@ class Grafo:
     quimicos: tuple[Quimico, ...]
     reacoes: tuple[Reacao, ...]
     emissores: tuple[Emissor, ...]
+    orgaos: tuple[Orgao, ...] = ()
 
     @property
     def nomes(self) -> tuple[str, ...]:
@@ -121,10 +155,16 @@ class Grafo:
         return any(e.nome == nome for e in self.emissores)
 
     def da_fase(self, fase: int) -> tuple[Emissor, ...]:
-        return tuple(e for e in self.emissores if e.fase == fase and e.gatilho != "estimulo")
+        return tuple(e for e in self.emissores if e.fase == fase and e.gatilho != "estimulo" and not e.externo)
 
     def receptores(self) -> tuple[Quimico, ...]:
         return tuple(q for q in self.quimicos if q.receptor is not None)
+
+    def externos(self) -> tuple[Emissor, ...]:
+        return tuple(e for e in self.emissores if e.externo)
+
+    def internos(self) -> tuple[Emissor, ...]:
+        return tuple(e for e in self.emissores if not e.externo)
 
 
 # ------------------------------------------------------------------ as checagens
@@ -134,7 +174,7 @@ def _forma(g: Grafo) -> None:
     nomes = g.nomes
     if len(set(nomes)) != len(nomes):
         raise GrafoInvalido(f"quimico repetido: {nomes}")
-    receptores = [q.receptor for q in g.quimicos if q.receptor is not None]
+    receptores = [q.receptor for q in g.quimicos if q.receptor is not None] + [o.receptor for o in g.orgaos]
     if len(set(receptores)) != len(receptores):
         raise GrafoInvalido(f"receptor repetido: {receptores}")
     for q in g.quimicos:
@@ -149,7 +189,11 @@ def _forma(g: Grafo) -> None:
     for nome in [e.nome for e in g.emissores] + [r.nome for r in g.reacoes]:
         if [e.nome for e in g.emissores].count(nome) + [r.nome for r in g.reacoes].count(nome) != 1:
             raise GrafoInvalido(f"emissor ou reacao repetido: {nome!r}")
-    for e in g.emissores:
+    for e in g.externos():
+        _forma_externo(e)
+    for e in g.internos():
+        if e.destino != "corpo":
+            raise GrafoInvalido(f"{e.nome}: destino {e.destino!r} (so {DESTINOS})")
         if e.gatilho not in GATILHOS:
             raise GrafoInvalido(f"{e.nome}: gatilho {e.gatilho!r}")
         if (e.gatilho == "estimulo") != (e.fase == 0) or e.fase not in (0, 1, 2):
@@ -183,6 +227,46 @@ def _forma(g: Grafo) -> None:
                                     f"{LADOS_REACAO} e limiar inteiro: {r!r}")
         elif r.limiar != 0:
             raise GrafoInvalido(f"{r.nome}: limiar sem o quimico lido")
+    _forma_orgaos(g)
+
+
+def _forma_externo(e: Emissor) -> None:
+    """O emissor externo do degrau 1b: um gatilho externo, fase 0, efeitos (canal, intensidade > 0) nos canais externos, sem leitura de
+    quimico (intensidade constante) e sem quantidade de fora."""
+    if e.gatilho not in GATILHOS_EXTERNOS or e.fase != 0:
+        raise GrafoInvalido(f"{e.nome}: o emissor externo tem gatilho em {GATILHOS_EXTERNOS} e fase 0: {e.gatilho!r}, {e.fase}")
+    if not e.efeitos or any(c not in CANAIS_EXTERNOS or type(a) is not int or a <= 0 for c, a in e.efeitos):
+        raise GrafoInvalido(f"{e.nome}: efeitos do emissor externo (canal em {CANAIS_EXTERNOS}, intensidade inteira > 0): {e.efeitos!r}")
+    if e.le:
+        raise GrafoInvalido(f"{e.nome}: o emissor externo que le quimico e o cheiro de estado do degrau 3 (secao 5.3), fora daqui")
+    if e.variavel or e.limiar != 0 or e.divisor != 1:
+        raise GrafoInvalido(f"{e.nome}: o emissor externo tem intensidade constante (sem variavel, limiar ou divisor)")
+
+
+def _forma_orgaos(g: Grafo) -> None:
+    """O orgao: o quimico da adaptacao existe, tem a meia-vida e a k, nao tem receptor, e so este orgao o move (nenhuma reacao, emissor
+    ou leitura o toca); limiar >= 0 e meia saturacao > 0, inteiros."""
+    tocados = set()
+    for r in g.reacoes:
+        tocados |= set(r.consome + r.produz) | ({r.le} if r.le is not None else set())
+    for e in g.internos():
+        tocados |= {q for q, _ in e.efeitos} | {le.quimico for le in e.le}
+    vistos = set()
+    for o in g.orgaos:
+        if o.sentido not in SENTIDOS or o.lado not in ("esq", "dir", None):
+            raise GrafoInvalido(f"orgao {o.receptor}: sentido {o.sentido!r}, lado {o.lado!r}")
+        if type(o.limiar) is not int or o.limiar < 0 or type(o.meia_saturacao) is not int or o.meia_saturacao <= 0:
+            raise GrafoInvalido(f"orgao {o.receptor}: limiar {o.limiar!r}, meia saturacao {o.meia_saturacao!r}")
+        if o.adaptacao in vistos:
+            raise GrafoInvalido(f"orgao {o.receptor}: a adaptacao {o.adaptacao!r} ja e de outro orgao")
+        vistos.add(o.adaptacao)
+        if o.adaptacao not in g.nomes:
+            continue                                   # o fechado acusa
+        q = g.quimico(o.adaptacao)
+        if q.receptor is not None or q.k_meia_vida is None or q.teto <= 0:
+            raise GrafoInvalido(f"orgao {o.receptor}: o quimico da adaptacao {q.nome!r} tem meia-vida, teto e nenhum receptor")
+        if o.adaptacao in tocados:
+            raise GrafoInvalido(f"orgao {o.receptor}: so o orgao move a adaptacao {o.adaptacao!r}")
 
 
 def _fechado(g: Grafo) -> None:
@@ -190,8 +274,11 @@ def _fechado(g: Grafo) -> None:
     citados = []
     for r in g.reacoes:
         citados += [(r.nome, q) for q in r.consome + r.produz + ((r.le,) if r.le is not None else ())]
-    for e in g.emissores:
+    for e in g.internos():
         citados += [(e.nome, q) for q, _ in e.efeitos] + [(e.nome, le.quimico) for le in e.le]
+    for e in g.externos():
+        citados += [(e.nome, le.quimico) for le in e.le]
+    citados += [(f"orgao:{o.receptor}", o.adaptacao) for o in g.orgaos]
     fora = sorted({(onde, q) for onde, q in citados if q not in conhecidos})
     if fora:
         raise GrafoInvalido(f"grafo nao fechado: quimicos fora da tabela {fora}")
@@ -206,9 +293,11 @@ def _caminhos(g: Grafo) -> tuple[dict, dict]:
             sumidouros[q].append(f"reacao:{r.nome}")
         for q in r.produz:
             fontes[q].append(f"reacao:{r.nome}")
-    for e in g.emissores:
+    for e in g.internos():
         for q, d in e.efeitos:
             (sumidouros if d < 0 else fontes)[q].append(f"emissor:{e.nome}")
+    for o in g.orgaos:
+        fontes[o.adaptacao].append(f"orgao:{o.receptor}")      # o estimulo do mundo; o sumidouro e a meia-vida
     for q in g.quimicos:
         if q.k_meia_vida is not None:
             sumidouros[q.nome].append("meia_vida")
@@ -220,7 +309,7 @@ def _caminhos(g: Grafo) -> tuple[dict, dict]:
 def _arestas(g: Grafo) -> dict[tuple[str, str], tuple[int, int]]:
     """As arestas de influencia positiva receptor -> emissor -> quimico, com o maior ganho (num, den) entre os emissores."""
     arestas: dict[tuple[str, str], tuple[int, int]] = {}
-    for e in g.emissores:
+    for e in g.internos():
         for le in e.le:
             for alvo, d in e.efeitos:
                 if (d > 0) == (le.sinal > 0):          # mais do lido, mais do alvo
@@ -280,9 +369,14 @@ def checar(g: Grafo) -> dict:
         lacos.append({"ciclo": list(c), "ganho": [num, den]})
         if num >= den:
             raise GrafoInvalido(f"laco receptor -> emissor com ganho >= 1: {c} ({num}/{den})")
-    return {"pares_meia_vida_mesma_ordem": pares_mesma_ordem(g, arestas), "so_pelo_teto": sorted(
+    relato = {"pares_meia_vida_mesma_ordem": pares_mesma_ordem(g, arestas), "so_pelo_teto": sorted(
         q for q, s in sumidouros.items() if s == ["teto"]), "lacos": lacos,
         "sumidouros": {q: list(s) for q, s in sumidouros.items()}, "fontes": {q: list(s) for q, s in fontes.items()}}
+    if g.orgaos:
+        relato["orgaos"] = [o.receptor for o in g.orgaos]
+    if g.externos():
+        relato["externos"] = {e.nome: [list(x) for x in e.efeitos] for e in g.externos()}
+    return relato
 
 
 def _transferencias(g: Grafo, sumidouros: dict, fontes: dict) -> None:
@@ -321,7 +415,7 @@ def pares_mesma_ordem(g: Grafo, arestas: dict | None = None) -> list[list[str]]:
     mesma ordem. So relato."""
     arestas = _arestas(g) if arestas is None else arestas
     acoplados = {frozenset(par) for par in arestas if par[0] != par[1]}
-    for e in g.emissores:
+    for e in g.internos():
         alvos = [q for q, _ in e.efeitos] + [le.quimico for le in e.le]
         acoplados |= {frozenset((a, b)) for a in alvos for b in alvos if a != b}
     for r in g.reacoes:
