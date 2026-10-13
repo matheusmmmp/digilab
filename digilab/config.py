@@ -1242,6 +1242,10 @@ class ConfigLobos:
     # regra em que comer e candidato. Sao os pesos que leem a identidade da fruta: com os canais, o canal do humor (a E2) vai a eles.
     # Desligada: a vida de hoje (e, com os canais, comer a fruta que mexe no humor falha alto, como antes)
     presenca_fruta_mundo: bool = False       # PROPOSTO: a chave
+    # --- o pet que pensa, etapa 2b (docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.4; PP-2) ---
+    # As classes de alvo por arvore no alvo aprendido: `arvore:<id>` (as 9 do layout), nas regras em que o explorar e candidato, com os
+    # candidatos de arvore lembrada do motor (PP-1, ConfigPetQuePensaMundo). Exige o alvo aprendido. Desligada: a vida de hoje
+    alvo_por_arvore: bool = False            # PROPOSTO: a chave
 
     def __post_init__(self) -> None:
         if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
@@ -1912,3 +1916,23 @@ class ConfigModeloMundo:
 
 CONFIG_MODELO_MUNDO = ConfigModeloMundo()
 CONFIG_MODELO_MUNDO_LIGADA = ConfigModeloMundo(ligada=True)
+
+
+# =====================================================================
+# V2, o pet que pensa (J5), o mundo (docs/TAREFA_V2_PET_QUE_PENSA.md, secao 2.3, etapa 3; PP-1 e PP-5 do
+# docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md). Desligada por padrao: a vida de hoje byte a byte. Exige o mundo fisico (ConfigMundo.ligada);
+# quem usa confere e falha alto. Ligada, o MotorMundo:
+# - guarda os troncos que o pet ja viu (a ate o raio da visao, na decisao e depois de andar) e os poe na percepcao (`troncos`);
+# - oferece no explorar um candidato `arvore:<id>` por tronco ja visto, no pe da arvore, depois dos candidatos de hoje (PP-1). O padrao
+#   do motor e o instinto nunca os escolhem;
+# - aceita a fruta na mao (`dar_fruta_<f>`) e a troca de tipo entre duas classes de arvore (`trocar_arvores_<x>_<y>`), eventos do registro
+#   fora do orcamento. Nao ha numero novo: o raio dos troncos e o da visao.
+
+
+@dataclass(frozen=True)
+class ConfigPetQuePensaMundo:
+    ligada: bool = False                     # PROPOSTO: a chave (os troncos vistos, os candidatos de arvore, a mao e a troca)
+
+
+CONFIG_PQP_MUNDO = ConfigPetQuePensaMundo()
+CONFIG_PQP_MUNDO_LIGADA = ConfigPetQuePensaMundo(ligada=True)
