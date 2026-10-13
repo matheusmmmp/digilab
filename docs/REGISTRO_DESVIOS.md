@@ -4591,3 +4591,25 @@ Plano `docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, seção 6 e A1.4 (os números na 
   - **O teste:** `tests/test_calibracao_mundo.py`, com a vida da fumaça que falhava. Ele falha com a regra antiga.
 - **O desempate do cheiro do #232 não entrou no motor.** A recomendação era trocar no motor antes desta calibração. A run usa o
   `mundo.py` de `2849712`, com a ordem fixa no empate (sha256 no `meta.json`).
+
+## 2026-10-12 — DOIS-PETS-CALIBRACAO (worker B): a config e o orquestrador da calibração do K e do piloto
+
+- **Feito pelo B, embora a config seja da bancada do D** (pedido do Gerente). Nada da bancada mudou; o orquestrador só monta as configs do
+  grupo e as confere pelo `validar_config_grupo`.
+- **A R entre unidades (fora do plano, a decidir):** o plano pede "o IC95 de R_A no dia K (bootstrap sobre as unidades)" e não diz como
+  juntar unidades sem consumo na janela. A config vem com a razão das somas, em que cada consumo pesa igual e a unidade sem consumo não
+  pesa. A média das unidades fica como alternativa (`taxa.modo`).
+- **O consumo mínimo (PROPOSTO, SEM FONTE):** `taxa.n_minimo` = 20 consumos somados em cada janela da regra. Abaixo disso, a regra lê
+  "exposição baixa" e não passa, para não decidir o K com 4 frutas no dia 1.
+- **As janelas:** a config vem na letra (`"letra"`: o dia K contra o dia 1). A alternativa `"dois_dias"` (os dias K − 1 e K contra os
+  dias 1 e 2) só roda com o campo `adendo_janelas`, que aponta o adendo do plano.
+- **R_A(Ainf, dias K − 6 a K):** com K < 7 a janela é cortada no dia 1.
+- **O contraste por unidade:** a unidade sem consumo do B nos 7 primeiros dias, num dos dois braços, sai do contraste e é contada
+  (`sem_consumo`). A taxa sem consumo não existe.
+- **O poder:** o G-SOCIAL usa o teste t unilateral a 0,025, que é o "limite inferior do IC95 > 0", como no A1.4 do mundo. Os secundários
+  saem a 0,025 e a 0,05, os dois passos do Holm de dois.
+- **O A do piloto:** até o dia K, o A do B + Ainf tem de ser o A-so (decisões, consumos e log), e a run confere isso (seção 5). O A-so é
+  refeito no piloto só como conferência, contra o registro gravado.
+- **A faixa de calibração nas configs:** `tests/test_bancada_banheiro.py` passa a aceitar a 39101…39505 nas configs do próprio plano,
+  como o `test_faixas_r17` já faz com o mundo e o corpo. A validação e os adendos continuam fora de toda config.
+- **Os grupos ficam fora do git** (`artifacts_v2_dois_pets/**/grupos/`), regeneráveis pela run, como as vidas do mundo.

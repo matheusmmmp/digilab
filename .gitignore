@@ -100,3 +100,5 @@ artifacts_v2_validacao_unica/**/vidas/
 # V2, MUNDO-CALIBRACAO: as vidas da calibracao do mundo fisico sao regeneraveis da config e do codigo (meta, medidas e resultado ficam)
 !artifacts_v2_mundo/
 artifacts_v2_mundo/**/vidas/
+!artifacts_v2_dois_pets/
+artifacts_v2_dois_pets/**/grupos/

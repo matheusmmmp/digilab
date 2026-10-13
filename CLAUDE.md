@@ -3856,3 +3856,35 @@ Interpretações em `docs/REGISTRO_DESVIOS.md`. **A validação (32101…32505) 
   - com 8 processos, ~0,8 h de parede.
 - **O piloto não é evidência sobre o P1.** P0 − P1 em `D_FE` deu −0,012 [−0,020; −0,005].
 - **Achado:** o desempate do cheiro do #232 não está no motor. A calibração rodou com a ordem fixa.
+
+## V2, DOIS-PETS-CALIBRACAO — a config e o orquestrador da calibração do K e do piloto (2026-10-12, `docs/PLANO_ANALISE_V2_DOIS_PETS.md`, seções 5, 6, 8 e 11) — PRONTO, NÃO RODADO
+
+Aprovado pelo Matheus em 2026-10-12, para rodar **depois** que a validação do mundo físico passar; quem dispara é o Gerente. Só fumaça nas
+sementes dos testes. Mudaram `experiments/run_v2_calibracao_dois_pets.py` (novo), as configs `experiments/configs/v2_dois_pets/calibracao.json`
+e `fumaca_calibracao.json`, duas funções no fim de `digilab/metrics.py`, o `.gitignore` e a exceção da faixa de calibração em
+`tests/test_bancada_banheiro.py`. `engine.py`, a bancada, o grupo, o mundo, os cérebros e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A run** (`python experiments/run_v2_calibracao_dois_pets.py --config experiments/configs/v2_dois_pets/calibracao.json --processos 6`
+  → `artifacts_v2_dois_pets/calibracao/`; recusa a pasta que existe, as bases da validação 40101…40505 e qualquer faixa fora do plano):
+  - **K:** o A-so (o A informativo sozinho, P1), 10 dias, nas 20 unidades (bases 39101…39505, K_u = 4, prefixo `dois_pets`). A regra
+    G-K pega o menor K de {3, 5, 7} com o limite superior do IC95 de R_A no dia K abaixo de metade da R_A do dia 1 → `k.json`. Se nenhum
+    K passa, a run para sem piloto;
+  - **piloto:** os quatro braços no K escolhido, com o B vivendo 14 dias. A run confere que o A do B + Ainf até o dia K é o A-so da mesma
+    unidade, e falha alto se não for → `piloto/`;
+  - **margem e N:** `Δ_S`; a validação não roda se a distância ficar ≤ 0,05. O K_u de 4 a 10 sai pelo poder simulado no G-SOCIAL (a
+    conta do A1.4 do mundo); o poder do G-COMPANHIA e do G-INGENUO sai só como relato; o custo → `resultado.json`.
+- **A config:**
+  - o cérebro A no ponto da K2 (T3, `g` S/2, `w0_pedido` S/4, `w0_info` S/4, ganho 4, canais), com a montagem completa;
+  - o que a bancada do grupo liga (o alvo aprendido, as entradas sociais, o modelo dos outros e a rota do humor);
+  - o `m` da calibração do mundo (1,0);
+  - um teste confere a config contra os dois artefatos.
+  - **Fora do plano, a decidir:** `taxa.modo` (a agregação da R entre unidades), `taxa.n_minimo` (o consumo mínimo nas janelas da regra)
+    e `calibracao_k.janelas` (a letra, ou `dois_dias` só com o adendo).
+- **`metrics.taxa_agregada` e `bootstrap_taxa_agregada`:** a R de um grupo de unidades por razão das somas ou média das unidades; a unidade
+  sem consumo não tem taxa. O IC reamostra as unidades; com reamostra sem consumo, o IC sai None com a contagem.
+- **O teto:** o degrau 1 tem 990 pesos em todo pet de todo braço (teto 1000). Os canais estão só nos P1, e a memória não existe no mundo
+  físico.
+- **Achado da fumaça (só a contagem, sementes dos testes):** o A sozinho come de 0 a 9 frutas maduras por dia (no dia 1, 1 em 5
+  unidades). Na letra da seção 5, a regra para por "exposição baixa".
+- **Testes:** `tests/test_calibracao_dois_pets.py`, 16, ~25 s: a config, as recusas, o teto, a taxa agregada, a regra, a margem e o
+  contraste em dados com a resposta conhecida, a fumaça inteira e o piloto num K da grade (a rota do humor credita a fruta ruim no A com
+  os canais).
