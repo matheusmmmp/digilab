@@ -1,0 +1,1027 @@
+{
+  "custo": {
+    "cpu_s_total": 25543.625,
+    "por_ponto_e_braco": {
+      "janela_16|P0-c": {
+        "cpu_s": 995.625,
+        "cpu_s_por_vida": 6.22265625,
+        "parede_s": 1001.7122874998167,
+        "vidas": 160
+      },
+      "janela_4|P0-c": {
+        "cpu_s": 995.5625,
+        "cpu_s_por_vida": 6.222265625,
+        "parede_s": 1000.8866589000099,
+        "vidas": 160
+      },
+      "piloto|P0-c": {
+        "cpu_s": 1000.953125,
+        "cpu_s_por_vida": 6.25595703125,
+        "parede_s": 1006.1104590998439,
+        "vidas": 160
+      },
+      "piloto|P0-c-tapa": {
+        "cpu_s": 534.625,
+        "cpu_s_por_vida": 6.6828125,
+        "parede_s": 537.1388637000637,
+        "vidas": 80
+      },
+      "piloto|P0-hoje": {
+        "cpu_s": 289.265625,
+        "cpu_s_por_vida": 1.80791015625,
+        "parede_s": 292.1300251999928,
+        "vidas": 160
+      },
+      "piloto|P0-q": {
+        "cpu_s": 854.453125,
+        "cpu_s_por_vida": 5.34033203125,
+        "parede_s": 859.0682512999774,
+        "vidas": 160
+      },
+      "piloto|P0-quimica": {
+        "cpu_s": 741.453125,
+        "cpu_s_por_vida": 4.63408203125,
+        "parede_s": 745.473615500101,
+        "vidas": 160
+      },
+      "piloto|P1-c": {
+        "cpu_s": 1164.84375,
+        "cpu_s_por_vida": 7.2802734375,
+        "parede_s": 1171.0366750999528,
+        "vidas": 160
+      },
+      "piloto|P1-c-frutas": {
+        "cpu_s": 623.609375,
+        "cpu_s_por_vida": 7.7951171875,
+        "parede_s": 626.8136100997217,
+        "vidas": 80
+      },
+      "piloto|P1-c-tapa": {
+        "cpu_s": 617.3125,
+        "cpu_s_por_vida": 7.71640625,
+        "parede_s": 620.6128386999044,
+        "vidas": 80
+      },
+      "piloto|P1-c-tapaX": {
+        "cpu_s": 628.75,
+        "cpu_s_por_vida": 7.859375,
+        "parede_s": 631.5126784000313,
+        "vidas": 80
+      },
+      "piloto|P1-c<P0-q:nenhum": {
+        "cpu_s": 1158.484375,
+        "cpu_s_por_vida": 7.24052734375,
+        "parede_s": 1165.0704600999015,
+        "vidas": 160
+      },
+      "piloto|P1-cw": {
+        "cpu_s": 1215.03125,
+        "cpu_s_por_vida": 7.5939453125,
+        "parede_s": 1221.9796089999436,
+        "vidas": 160
+      },
+      "piloto|P1-hoje": {
+        "cpu_s": 355.203125,
+        "cpu_s_por_vida": 2.22001953125,
+        "parede_s": 358.3343667998997,
+        "vidas": 160
+      },
+      "piloto|P1-q": {
+        "cpu_s": 961.921875,
+        "cpu_s_por_vida": 6.01201171875,
+        "parede_s": 967.1594214998913,
+        "vidas": 160
+      },
+      "piloto|P1-q<P0-q:nenhum": {
+        "cpu_s": 960.75,
+        "cpu_s_por_vida": 6.0046875,
+        "parede_s": 965.5874012000277,
+        "vidas": 160
+      },
+      "piloto|P1-quimica": {
+        "cpu_s": 847.65625,
+        "cpu_s_por_vida": 5.2978515625,
+        "parede_s": 852.9779021998693,
+        "vidas": 160
+      },
+      "piloto|P3-hoje": {
+        "cpu_s": 332.359375,
+        "cpu_s_por_vida": 2.07724609375,
+        "parede_s": 335.58541810000315,
+        "vidas": 160
+      },
+      "piloto|P3-quimica": {
+        "cpu_s": 795.03125,
+        "cpu_s_por_vida": 4.9689453125,
+        "parede_s": 799.7328893000667,
+        "vidas": 160
+      },
+      "sobe_0.5_reduz_0.5|P0-c": {
+        "cpu_s": 1028.640625,
+        "cpu_s_por_vida": 6.42900390625,
+        "parede_s": 1032.8664360000694,
+        "vidas": 160
+      },
+      "sobe_0.5_reduz_1|P0-c": {
+        "cpu_s": 1026.8125,
+        "cpu_s_por_vida": 6.417578125,
+        "parede_s": 1031.2664387001278,
+        "vidas": 160
+      },
+      "sobe_0.5_reduz_2|P0-c": {
+        "cpu_s": 1026.453125,
+        "cpu_s_por_vida": 6.41533203125,
+        "parede_s": 1031.002159899901,
+        "vidas": 160
+      },
+      "sobe_1_reduz_0.5|P0-c": {
+        "cpu_s": 1031.703125,
+        "cpu_s_por_vida": 6.44814453125,
+        "parede_s": 1036.2369389999803,
+        "vidas": 160
+      },
+      "sobe_1_reduz_1|P0-c": {
+        "cpu_s": 1038.484375,
+        "cpu_s_por_vida": 6.49052734375,
+        "parede_s": 1042.8253016000526,
+        "vidas": 160
+      },
+      "sobe_1_reduz_2|P0-c": {
+        "cpu_s": 1028.640625,
+        "cpu_s_por_vida": 6.42900390625,
+        "parede_s": 1033.6043158001266,
+        "vidas": 160
+      },
+      "sobe_2_reduz_0.5|P0-c": {
+        "cpu_s": 1039.671875,
+        "cpu_s_por_vida": 6.49794921875,
+        "parede_s": 1044.86288970006,
+        "vidas": 160
+      },
+      "sobe_2_reduz_1|P0-c": {
+        "cpu_s": 1010.765625,
+        "cpu_s_por_vida": 6.31728515625,
+        "parede_s": 1015.2800305999408,
+        "vidas": 160
+      },
+      "sobe_2_reduz_2|P0-c": {
+        "cpu_s": 1003.53125,
+        "cpu_s_por_vida": 6.2720703125,
+        "parede_s": 1008.4160612000414,
+        "vidas": 160
+      },
+      "tapa_-0.5|P1-c-tapa": {
+        "cpu_s": 619.75,
+        "cpu_s_por_vida": 7.746875,
+        "parede_s": 622.9559677998768,
+        "vidas": 80
+      },
+      "tapa_-2|P1-c-tapa": {
+        "cpu_s": 616.28125,
+        "cpu_s_por_vida": 7.703515625,
+        "parede_s": 618.836959400127,
+        "vidas": 80
+      }
+    },
+    "validacao_estimada": {
+      "cpu_h": 3.633806423611111,
+      "cpu_s_por_vida": 5.450709635416667,
+      "k": 4,
+      "n": 20,
+      "parede_h_em_processos": {
+        "h": 0.6056344039351852,
+        "processos": 6
+      },
+      "vidas": 2400
+    }
+  },
+  "escolha": {
+    "corpo": {
+      "carinho_estresse": 90000,
+      "carinho_solidao": 180000,
+      "estresse_divisor": 128,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 450,
+      "tedio_bola": 135000,
+      "tedio_brincar": 45000,
+      "tedio_dono": 90000,
+      "tedio_explorar": 90000,
+      "tedio_sobe": 900
+    },
+    "distancia_ao_centro": 0.39604203630408086,
+    "fechou": false,
+    "nome": "sobe_2_reduz_1",
+    "passam": [],
+    "ponto": [
+      2.0,
+      1.0
+    ],
+    "registro": "nao fechou"
+  },
+  "faixas": {
+    "sobe_0.5_reduz_0.5": {
+      "estresse": 0.0031117783540330285,
+      "estresse_media": 0.032901037307012646,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.0,
+      "solidao_media": 0.04826556614467076,
+      "tedio": 0.023119967244438377,
+      "tedio_media": 0.09674287523542133,
+      "vidas": 160
+    },
+    "sobe_0.5_reduz_1": {
+      "estresse": 0.0,
+      "estresse_media": 0.017546581086658297,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.0,
+      "solidao_media": 0.04789946419852121,
+      "tedio": 0.0039033710932168692,
+      "tedio_media": 0.06054345993768602,
+      "vidas": 160
+    },
+    "sobe_0.5_reduz_2": {
+      "estresse": 0.0,
+      "estresse_media": 0.01518427530924479,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.0,
+      "solidao_media": 0.04789946419852121,
+      "tedio": 5.4592602702333836e-05,
+      "tedio_media": 0.048385638282412574,
+      "vidas": 160
+    },
+    "sobe_1_reduz_0.5": {
+      "estresse": 0.10857103862426641,
+      "estresse_media": 0.17021469842819942,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 2.7296301351166918e-05,
+      "solidao_media": 0.10679163251604354,
+      "tedio": 0.20801146444656748,
+      "tedio_media": 0.3259997776576451,
+      "vidas": 160
+    },
+    "sobe_1_reduz_1": {
+      "estresse": 0.03271461716937355,
+      "estresse_media": 0.06909766424269903,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.0,
+      "solidao_media": 0.09602759225027901,
+      "tedio": 0.05943769619216596,
+      "tedio_media": 0.153278078351702,
+      "vidas": 160
+    },
+    "sobe_1_reduz_2": {
+      "estresse": 0.009922205541149174,
+      "estresse_media": 0.03989400409516834,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.0,
+      "solidao_media": 0.0953099114554269,
+      "tedio": 0.028470042309267096,
+      "tedio_media": 0.1128101076398577,
+      "vidas": 160
+    },
+    "sobe_2_reduz_0.5": {
+      "estresse": 0.7620035485191756,
+      "estresse_media": 0.7916482380458286,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.20447659342159138,
+      "solidao_media": 0.45804585956391836,
+      "tedio": 0.8186024293708203,
+      "tedio_media": 0.8683859234764462,
+      "vidas": 160
+    },
+    "sobe_2_reduz_1": {
+      "estresse": 0.1368090623720486,
+      "estresse_media": 0.18072368985130674,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.02762385696738092,
+      "solidao_media": 0.21031202588762557,
+      "tedio": 0.21314316910058687,
+      "tedio_media": 0.3343403316679455,
+      "vidas": 160
+    },
+    "sobe_2_reduz_2": {
+      "estresse": 0.07228060597788999,
+      "estresse_media": 0.10405693962460472,
+      "n_acordado": 73270,
+      "passa": false,
+      "solidao": 0.022792411628224377,
+      "solidao_media": 0.190950802394322,
+      "tedio": 0.1183977071106865,
+      "tedio_media": 0.220426150730678,
+      "vidas": 160
+    }
+  },
+  "g_p0c": {
+    "celulas": 160,
+    "iguais": 160,
+    "nota": "a decisao a decisao (o log) e conferida nos testes da bancada (G-P0C); aqui, as acoes da BE por celula",
+    "passa": true
+  },
+  "margens": {
+    "delta_be": 0.223473399471881,
+    "delta_priv": 0.02954799107142857,
+    "delta_saude": 0.03340285063244047,
+    "delta_ted": 0.1632519585745675,
+    "g_hoje": {
+      "be": 0.1117366997359405,
+      "privacao": 0.014773995535714285,
+      "saude": 0.016701425316220236
+    },
+    "referencias": {
+      "privacao_p0q": 0.11819196428571428,
+      "saude_p0q": 0.8663885974702381,
+      "tedio_p0c": 0.326503917149135
+    }
+  },
+  "modo": "calibracao",
+  "n": {
+    "alfas": {
+      "efeito": 0.025,
+      "equivalencia": 0.05,
+      "nao_inferior": 0.025
+    },
+    "gates": {
+      "G-CUIDADO (PR-2)": {
+        "chega_ao_alvo": true,
+        "k": 4,
+        "margens": [
+          0.02954799107142857,
+          0.03340285063244047
+        ],
+        "media_piloto": [
+          -0.0017485119047619055,
+          -0.0022358320932539632
+        ],
+        "n": 20,
+        "poder": 1.0,
+        "tabela": [
+          {
+            "k": 4,
+            "n": 20,
+            "poder": 1.0
+          },
+          {
+            "k": 5,
+            "n": 25,
+            "poder": 1.0
+          },
+          {
+            "k": 6,
+            "n": 30,
+            "poder": 1.0
+          },
+          {
+            "k": 7,
+            "n": 35,
+            "poder": 1.0
+          },
+          {
+            "k": 8,
+            "n": 40,
+            "poder": 1.0
+          },
+          {
+            "k": 9,
+            "n": 45,
+            "poder": 1.0
+          },
+          {
+            "k": 10,
+            "n": 50,
+            "poder": 1.0
+          }
+        ]
+      },
+      "G-HOJE (b)": {
+        "chega_ao_alvo": true,
+        "contrastes": [
+          "P0-quimica - P0-hoje em be",
+          "P0-quimica - P0-hoje em privacao",
+          "P0-quimica - P0-hoje em saude",
+          "P1-quimica - P1-hoje em be",
+          "P1-quimica - P1-hoje em privacao",
+          "P1-quimica - P1-hoje em saude",
+          "P3-quimica - P3-hoje em be",
+          "P3-quimica - P3-hoje em privacao",
+          "P3-quimica - P3-hoje em saude"
+        ],
+        "k": 4,
+        "margens": [
+          0.1117366997359405,
+          0.014773995535714285,
+          0.016701425316220236,
+          0.1117366997359405,
+          0.014773995535714285,
+          0.016701425316220236,
+          0.1117366997359405,
+          0.014773995535714285,
+          0.016701425316220236
+        ],
+        "media_piloto": [
+          0.0009102346309548196,
+          -0.0038225446428571423,
+          0.0056045247395798085,
+          0.0018618115219961842,
+          -0.0011718749999999963,
+          -0.0013018244667691188,
+          -0.020323060055141527,
+          -0.0005487351190476208,
+          -0.004572819010420824
+        ],
+        "n": 20,
+        "poder": 0.9675,
+        "tabela": [
+          {
+            "k": 4,
+            "n": 20,
+            "poder": 0.9675
+          },
+          {
+            "k": 5,
+            "n": 25,
+            "poder": 0.992
+          },
+          {
+            "k": 6,
+            "n": 30,
+            "poder": 0.998
+          },
+          {
+            "k": 7,
+            "n": 35,
+            "poder": 1.0
+          },
+          {
+            "k": 8,
+            "n": 40,
+            "poder": 1.0
+          },
+          {
+            "k": 9,
+            "n": 45,
+            "poder": 1.0
+          },
+          {
+            "k": 10,
+            "n": 50,
+            "poder": 1.0
+          }
+        ]
+      },
+      "G-PADRAO (PR-4)": {
+        "chega_ao_alvo": true,
+        "dp_piloto": 0.06791159037414997,
+        "k": 4,
+        "margem": 0.223473399471881,
+        "media_piloto": 0.7518777363926035,
+        "n": 20,
+        "poder": 1.0,
+        "tabela": [
+          {
+            "k": 4,
+            "n": 20,
+            "poder": 1.0
+          },
+          {
+            "k": 5,
+            "n": 25,
+            "poder": 1.0
+          },
+          {
+            "k": 6,
+            "n": 30,
+            "poder": 1.0
+          },
+          {
+            "k": 7,
+            "n": 35,
+            "poder": 1.0
+          },
+          {
+            "k": 8,
+            "n": 40,
+            "poder": 1.0
+          },
+          {
+            "k": 9,
+            "n": 45,
+            "poder": 1.0
+          },
+          {
+            "k": 10,
+            "n": 50,
+            "poder": 1.0
+          }
+        ]
+      },
+      "G-PARADO (PR-1)": {
+        "chega_ao_alvo": true,
+        "dp_piloto": 0.06632444635295627,
+        "k": 4,
+        "margem": 0.223473399471881,
+        "media_piloto": 0.6684735115042878,
+        "n": 20,
+        "poder": 1.0,
+        "tabela": [
+          {
+            "k": 4,
+            "n": 20,
+            "poder": 1.0
+          },
+          {
+            "k": 5,
+            "n": 25,
+            "poder": 1.0
+          },
+          {
+            "k": 6,
+            "n": 30,
+            "poder": 1.0
+          },
+          {
+            "k": 7,
+            "n": 35,
+            "poder": 1.0
+          },
+          {
+            "k": 8,
+            "n": 40,
+            "poder": 1.0
+          },
+          {
+            "k": 9,
+            "n": 45,
+            "poder": 1.0
+          },
+          {
+            "k": 10,
+            "n": 50,
+            "poder": 1.0
+          }
+        ]
+      },
+      "G-SEP (PR-3)": {
+        "chega_ao_alvo": true,
+        "dp_piloto": 0.0856292961363088,
+        "k": 4,
+        "margem": 0.223473399471881,
+        "media_piloto": 0.6597146475237394,
+        "n": 20,
+        "poder": 1.0,
+        "tabela": [
+          {
+            "k": 4,
+            "n": 20,
+            "poder": 1.0
+          },
+          {
+            "k": 5,
+            "n": 25,
+            "poder": 1.0
+          },
+          {
+            "k": 6,
+            "n": 30,
+            "poder": 1.0
+          },
+          {
+            "k": 7,
+            "n": 35,
+            "poder": 1.0
+          },
+          {
+            "k": 8,
+            "n": 40,
+            "poder": 1.0
+          },
+          {
+            "k": 9,
+            "n": 45,
+            "poder": 1.0
+          },
+          {
+            "k": 10,
+            "n": 50,
+            "poder": 1.0
+          }
+        ]
+      },
+      "G-TED (PR-5)": {
+        "chega_ao_alvo": true,
+        "dp_piloto": 0.07659518887591533,
+        "k": 4,
+        "margem": 0.1632519585745675,
+        "media_piloto": 0.016887755621047242,
+        "n": 20,
+        "poder": 1.0,
+        "tabela": [
+          {
+            "k": 4,
+            "n": 20,
+            "poder": 1.0
+          },
+          {
+            "k": 5,
+            "n": 25,
+            "poder": 1.0
+          },
+          {
+            "k": 6,
+            "n": 30,
+            "poder": 1.0
+          },
+          {
+            "k": 7,
+            "n": 35,
+            "poder": 1.0
+          },
+          {
+            "k": 8,
+            "n": 40,
+            "poder": 1.0
+          },
+          {
+            "k": 9,
+            "n": 45,
+            "poder": 1.0
+          },
+          {
+            "k": 10,
+            "n": 50,
+            "poder": 1.0
+          }
+        ]
+      }
+    },
+    "k": 4,
+    "n": 20,
+    "regra": "o maior K entre os gates (secao 7); um gate que nem em K = 10 chega a 0,8 sai subpotenciado, com o poder",
+    "subpotenciados": []
+  },
+  "piloto_descritivo": {
+    "P0-c - P1-c no tedio (bola)": {
+      "dp_unidades": 0.07659518887591533,
+      "ic95": {
+        "ic_inferior": -0.016610027494884678,
+        "ic_superior": 0.04827677408854166,
+        "nivel": 0.95
+      },
+      "media": 0.016887755621047242,
+      "n": 20
+    },
+    "P1-c - P1-q em BE (bola)": {
+      "dp_unidades": 0.06632444635295627,
+      "ic95": {
+        "ic_inferior": 0.63868487682908,
+        "ic_superior": 0.6961352184865433,
+        "nivel": 0.95
+      },
+      "media": 0.6684735115042878,
+      "n": 20
+    },
+    "P1-c - P1-q em BE (padrao)": {
+      "dp_unidades": 0.06791159037414997,
+      "ic95": {
+        "ic_inferior": 0.7211335678434266,
+        "ic_superior": 0.7803299008037652,
+        "nivel": 0.95
+      },
+      "media": 0.7518777363926035,
+      "n": 20
+    },
+    "P1-c - P1-q em privacao (bola)": {
+      "dp_unidades": 0.007548460609603816,
+      "ic95": {
+        "ic_inferior": -0.005059523809523811,
+        "ic_superior": 0.0014508928571428557,
+        "nivel": 0.95
+      },
+      "media": -0.0017485119047619055,
+      "n": 20
+    },
+    "P1-c^ac - P1-q^ac em BE (bola)": {
+      "dp_unidades": 0.0856292961363088,
+      "ic95": {
+        "ic_inferior": 0.6213831344170436,
+        "ic_superior": 0.6945212949745164,
+        "nivel": 0.95
+      },
+      "media": 0.6597146475237394,
+      "n": 20
+    },
+    "P1-cw - P1-c em BE (bola)": {
+      "dp_unidades": 0.07585653275622449,
+      "ic95": {
+        "ic_inferior": -0.016575363559776263,
+        "ic_superior": 0.04816018332396919,
+        "nivel": 0.95
+      },
+      "media": 0.014851894753359338,
+      "n": 20
+    },
+    "P1-q - P1-c em saude (bola)": {
+      "dp_unidades": 0.020985239575419787,
+      "ic95": {
+        "ic_inferior": -0.011592559523809522,
+        "ic_superior": 0.006544298735119049,
+        "nivel": 0.95
+      },
+      "media": -0.0022358320932539632,
+      "n": 20
+    },
+    "por_braco": {
+      "P0-c": {
+        "be": 0.6382366399915477,
+        "falta_combustivel": 0.00037431952209423033,
+        "fome": 0.6210632905505953,
+        "pesos_no_teto": null,
+        "privacao": 0.1181733630952381,
+        "saude": 0.86641162109375,
+        "tedio": 0.3343403316679455,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P0-c-tapa": {
+        "be": 0.643221309231125,
+        "falta_combustivel": 0.00011805484209412088,
+        "fome": 0.6204554966517858,
+        "pesos_no_teto": null,
+        "privacao": 0.11828497023809523,
+        "saude": 0.8669732204861111,
+        "tedio": 0.3176242465064639,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P0-hoje": {
+        "be": 0.6313800048820136,
+        "falta_combustivel": null,
+        "fome": 0.6283494931174046,
+        "pesos_no_teto": null,
+        "privacao": 0.11881510416666667,
+        "saude": 0.8640653490823448,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P0-q": {
+        "be": 0.6382366399915477,
+        "falta_combustivel": 0.00037431952209423033,
+        "fome": 0.6210632905505953,
+        "pesos_no_teto": null,
+        "privacao": 0.1181733630952381,
+        "saude": 0.86641162109375,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P0-quimica": {
+        "be": 0.6322902395129685,
+        "falta_combustivel": null,
+        "fome": 0.6217343284970238,
+        "pesos_no_teto": null,
+        "privacao": 0.11499255952380953,
+        "saude": 0.8696698738219245,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-c": {
+        "be": 0.8784780481074443,
+        "falta_combustivel": 0.0003552827380952381,
+        "fome": 0.6316097005208333,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10599888392857142,
+        "saude": 0.8811550843253968,
+        "tedio": 0.33005970546177454,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-c-frutas": {
+        "be": 0.9047955775427076,
+        "falta_combustivel": 0.0,
+        "fome": 0.6966629464285714,
+        "pesos_no_teto": 0.0125,
+        "privacao": 0.10102306547619047,
+        "saude": 0.8917376271081349,
+        "tedio": 0.29735354468936015,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 1
+      },
+      "P1-c-tapa": {
+        "be": 0.7897266791834,
+        "falta_combustivel": 3.2443455691509084e-05,
+        "fome": 0.6271614583333334,
+        "pesos_no_teto": 0.05,
+        "privacao": 0.11207217261904763,
+        "saude": 0.8729310081845238,
+        "tedio": 0.3615454537527902,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 1
+      },
+      "P1-c-tapaX": {
+        "be": 0.890706231857506,
+        "falta_combustivel": 0.0,
+        "fome": 0.652397228422619,
+        "pesos_no_teto": 0.025,
+        "privacao": 0.11326264880952382,
+        "saude": 0.8818424882192459,
+        "tedio": 0.3091423579624721,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 2
+      },
+      "P1-c<P0-q:nenhum": {
+        "be": 0.8478100458462221,
+        "falta_combustivel": 0.0003552827380952381,
+        "fome": 0.6317735072544644,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10792410714285713,
+        "saude": 0.8810029916914683,
+        "tedio": 0.3325326465425037,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-cw": {
+        "be": 0.8926064311698301,
+        "falta_combustivel": 0.00035280638920679363,
+        "fome": 0.6286874534970238,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10930059523809524,
+        "saude": 0.87700009765625,
+        "tedio": 0.2865648360479446,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-hoje": {
+        "be": 0.15025727789728066,
+        "falta_combustivel": null,
+        "fome": 0.6406919642855584,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10658482142857142,
+        "saude": 0.8847405955481182,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-q": {
+        "be": 0.16830242415899876,
+        "falta_combustivel": 0.00034149819668344994,
+        "fome": 0.6298692103794643,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10819382440476191,
+        "saude": 0.8788037481398809,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-q<P0-q:nenhum": {
+        "be": 0.15781495778944893,
+        "falta_combustivel": 0.00034149819668344994,
+        "fome": 0.6320169503348214,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10901227678571428,
+        "saude": 0.878795808531746,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P1-quimica": {
+        "be": 0.15211908941927682,
+        "falta_combustivel": null,
+        "fome": 0.6336660621279762,
+        "pesos_no_teto": 0.0,
+        "privacao": 0.10541294642857142,
+        "saude": 0.8834387710813492,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 0
+      },
+      "P3-hoje": {
+        "be": 0.598674594170213,
+        "falta_combustivel": null,
+        "fome": 0.6115866815474653,
+        "pesos_no_teto": 0.19375,
+        "privacao": 0.13776971726190476,
+        "saude": 0.8422009362599248,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 9
+      },
+      "P3-quimica": {
+        "be": 0.5783515341150715,
+        "falta_combustivel": null,
+        "fome": 0.6024544270833333,
+        "pesos_no_teto": 0.2625,
+        "privacao": 0.13722098214285713,
+        "saude": 0.8376281172495039,
+        "tedio": null,
+        "vidas": 160,
+        "vidas_com_peso_no_teto": 11
+      }
+    }
+  },
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "regra_passo2": "dos que passam, o mais perto de (1, 1) pela soma de |log2|; empate, o menor m_sobe (6.2)",
+  "sensibilidades": {
+    "janela_tedio": {
+      "16": {
+        "tedio_acima": 0.21228333560802512,
+        "tedio_medio": 0.3317528860909598,
+        "vidas": 160
+      },
+      "4": {
+        "tedio_acima": 0.21461716937354988,
+        "tedio_medio": 0.3432702200753348,
+        "vidas": 160
+      },
+      "8": {
+        "tedio_acima": 0.21314316910058687,
+        "tedio_medio": 0.3343403316679455,
+        "vidas": 160
+      }
+    },
+    "nota": "so relato (6.4, A1.2): nada e escolhido por elas; o recompensa_tapa fica no valor da bronca (PCD-6)",
+    "recompensa_tapa": {
+      "-0.5": {
+        "be": 0.8191491663714462,
+        "carinho_sinal": {
+          "depois_tapa": 1280.46338251016,
+          "sem_tapa": 1183.643143816017
+        },
+        "chamar_atencao": {
+          "depois_tapa": 0.13941907590880698,
+          "sem_tapa": 0.2228738653250543
+        },
+        "estresse_acima": 0.15133928571428573,
+        "pesos_no_teto_medio": 0.0,
+        "reducao_solidao": {
+          "depois_tapa": 0.17352265372024123,
+          "sem_tapa": 0.15613560620006825
+        },
+        "tapas_janela_medio": 20.1,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 0
+      },
+      "-1": {
+        "be": 0.7897266791834,
+        "carinho_sinal": {
+          "depois_tapa": 1370.3911164180938,
+          "sem_tapa": 1276.2662779874086
+        },
+        "chamar_atencao": {
+          "depois_tapa": 0.1477789366427405,
+          "sem_tapa": 0.23876059889066323
+        },
+        "estresse_acima": 0.17570684523809524,
+        "pesos_no_teto_medio": 0.05,
+        "reducao_solidao": {
+          "depois_tapa": 0.17348943183959917,
+          "sem_tapa": 0.15780658154471544
+        },
+        "tapas_janela_medio": 20.025,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 1
+      },
+      "-2": {
+        "be": 0.8003956747958713,
+        "carinho_sinal": {
+          "depois_tapa": 1286.6671946774618,
+          "sem_tapa": 1216.76660343048
+        },
+        "chamar_atencao": {
+          "depois_tapa": 0.1451343692469483,
+          "sem_tapa": 0.2414705783673034
+        },
+        "estresse_acima": 0.15286458333333333,
+        "pesos_no_teto_medio": 0.05,
+        "reducao_solidao": {
+          "depois_tapa": 0.1717290789630492,
+          "sem_tapa": 0.15564675796294933
+        },
+        "tapas_janela_medio": 20.0625,
+        "vidas": 80,
+        "vidas_com_peso_no_teto": 2
+      }
+    }
+  },
+  "w_novos": {
+    "decisoes": 29784,
+    "fechou": true,
+    "medianas": {
+      "1": 0.2450380726501061,
+      "2": 0.3936234208943252,
+      "4": 0.5648920863309352
+    },
+    "w_novos": 2
+  }
+}

@@ -1,0 +1,489 @@
+{
+  "bancada": {
+    "bancada_sha256": "a7b93d148f184bb19903058384d74c22cba802071948df7fb8acdb2eb8583d94",
+    "cfg_lobos": {
+      "alvo_aprendido": false,
+      "aprendizado_ligado": true,
+      "bits_ponto_fixo": 10,
+      "entradas_sociais": false,
+      "escala_ticks_desde_cuidado": 480.0,
+      "fator_familiaridade": 16,
+      "janela_latencia_ticks": 120,
+      "janela_social_ticks": 240,
+      "maximo_pesos": 1000,
+      "memoria_ganho": 512,
+      "memoria_janela_recencia_ticks": 240,
+      "memoria_ligada": false,
+      "memoria_modo": "relevante",
+      "memoria_permutacao": [],
+      "modelo_outros": false,
+      "passo": 512,
+      "piso_peso": 64,
+      "presenca_fruta_mundo": false,
+      "recompensa_elogio": 1.0,
+      "recompensa_pedido_ignorado": -0.5,
+      "recompensa_repreensao": -1.0,
+      "recompensa_tapa": -1.0,
+      "teto": 16384,
+      "traco_decisoes": 0,
+      "traco_fator": 0,
+      "w0_alvo": 64,
+      "w0_info": 0,
+      "w0_pedido": 0
+    },
+    "config": {
+      "bootstrap": {
+        "nivel": 0.95,
+        "reamostragens": 10000,
+        "semente": 4242
+      },
+      "bracos": [
+        "P0-c"
+      ],
+      "consequencia": {
+        "canais_ligados": true,
+        "ganho": 4
+      },
+      "corpo": {
+        "carinho_estresse": 90000,
+        "carinho_solidao": 180000,
+        "estresse_divisor": 256,
+        "gasto_atividades_den": 2,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 188,
+        "gasto_basal_dormindo": 94,
+        "solidao_sobe": 225,
+        "tedio_bola": 135000,
+        "tedio_brincar": 45000,
+        "tedio_dono": 90000,
+        "tedio_explorar": 90000,
+        "tedio_sobe": 450
+      },
+      "dias": 14,
+      "donos": [
+        "atencioso",
+        "relapso",
+        "aleatorio",
+        "incoerente"
+      ],
+      "lobos": {
+        "memoria_ganho": 512
+      },
+      "montagem": "completa",
+      "mundos": [
+        "bola",
+        "padrao"
+      ],
+      "orcamento": 224,
+      "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+      "ponto": "T3",
+      "sonda": {
+        "amostras": 10,
+        "estados": 10,
+        "semente": 101
+      },
+      "unidades": {
+        "bases": [
+          33101,
+          33202,
+          33303,
+          33404,
+          33505
+        ],
+        "k": 4,
+        "prefixo": "corpo"
+      }
+    },
+    "config_sha256": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+    "corpo_sha256": "5bc401ffc146fcef37b4959963c00fe7d8e20d1237360957667823ed59a32f26",
+    "engine_sha256": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos_sha256": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+    "metrics_sha256": "d86046d27591a859bbd83a025e4f25f5574dfc22ac5b776b768c846a94b91044",
+    "motor_corpo_sha256": "75daab70783af5041f335c106021a8b8290b512b910f09c263326cb3d3c1e99e",
+    "mundo_sha256": "b694dc295d4f4ced10d9f43b239442830de7048e82420814564185cd90834262",
+    "plataforma": "Windows-11-10.0.26200-SP0",
+    "ponto": "T3",
+    "python": "3.13.0"
+  },
+  "config": {
+    "bootstrap": {
+      "nivel": 0.95,
+      "reamostragens": 10000,
+      "semente": 4242
+    },
+    "consequencia": {
+      "canais_ligados": true,
+      "ganho": 4
+    },
+    "corpo": {
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94
+    },
+    "descricao": "Calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 6, secao 7 e adendos 1 a 3; autorizada pelo Matheus em 2026-10-12): a grade so do P0-c, (m_sobe, m_reduz) em {1/2, 1, 2}^2, nas 20 unidades das bases 33101...33505 (K = 4, prefixo corpo) e nas 8 celulas (4 donos x bola e padrao), 1.440 vidas; a regra da 6.2 (a faixa dos drives, o mais perto de (1, 1), o w_novos); no ponto, o piloto da 6.3 (G-HOJE, corpo com os acoplados, tapa, G e P1-cw: 120 por unidade) e as sensibilidades da 6.4 e da A1.2 (24 por unidade); as margens e o N da secao 7. O gasto do metabolismo fixo no do passo 0 (A3.2c: m_gasto = 1/2, nao fechou).",
+    "dias": 14,
+    "donos": [
+      "atencioso",
+      "relapso",
+      "aleatorio",
+      "incoerente"
+    ],
+    "faixas": {
+      "estresse_max": 0.2,
+      "parcela_novos": [
+        0.25,
+        0.75
+      ],
+      "tedio_solidao": [
+        0.1,
+        0.5
+      ]
+    },
+    "grade": {
+      "m_reduz": [
+        0.5,
+        1.0,
+        2.0
+      ],
+      "m_sobe": [
+        0.5,
+        1.0,
+        2.0
+      ],
+      "w_novos": [
+        1,
+        2,
+        4
+      ]
+    },
+    "lobos": {
+      "memoria_ganho": 512
+    },
+    "montagem": "completa",
+    "mundos": [
+      "bola",
+      "padrao"
+    ],
+    "orcamento": 224,
+    "passo0": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+    "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+    "poder": {
+      "alvo": 0.8,
+      "k_max": 10,
+      "k_min": 4,
+      "replicas": 2000
+    },
+    "ponto": "T3",
+    "sensibilidade": {
+      "janela_tedio": [
+        4,
+        16
+      ],
+      "recompensa_tapa": [
+        -0.5,
+        -2.0
+      ]
+    },
+    "sonda": {
+      "amostras": 10,
+      "estados": 10,
+      "semente": 101
+    },
+    "unidades": {
+      "bases": [
+        33101,
+        33202,
+        33303,
+        33404,
+        33505
+      ],
+      "k": 4,
+      "prefixo": "corpo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v2_corpo/calibracao.json",
+  "config_sha256": "7821f73c69ffecad7318deac058676dd398867a8f0673874783d07084034b0b3",
+  "corpo_dos_pontos": {
+    "sobe_0.5_reduz_0.5": {
+      "carinho_estresse": 45000,
+      "carinho_solidao": 90000,
+      "estresse_divisor": 512,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 113,
+      "tedio_bola": 67500,
+      "tedio_brincar": 22500,
+      "tedio_dono": 45000,
+      "tedio_explorar": 45000,
+      "tedio_sobe": 225
+    },
+    "sobe_0.5_reduz_1": {
+      "carinho_estresse": 90000,
+      "carinho_solidao": 180000,
+      "estresse_divisor": 512,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 113,
+      "tedio_bola": 135000,
+      "tedio_brincar": 45000,
+      "tedio_dono": 90000,
+      "tedio_explorar": 90000,
+      "tedio_sobe": 225
+    },
+    "sobe_0.5_reduz_2": {
+      "carinho_estresse": 180000,
+      "carinho_solidao": 360000,
+      "estresse_divisor": 512,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 113,
+      "tedio_bola": 270000,
+      "tedio_brincar": 90000,
+      "tedio_dono": 180000,
+      "tedio_explorar": 180000,
+      "tedio_sobe": 225
+    },
+    "sobe_1_reduz_0.5": {
+      "carinho_estresse": 45000,
+      "carinho_solidao": 90000,
+      "estresse_divisor": 256,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 225,
+      "tedio_bola": 67500,
+      "tedio_brincar": 22500,
+      "tedio_dono": 45000,
+      "tedio_explorar": 45000,
+      "tedio_sobe": 450
+    },
+    "sobe_1_reduz_1": {
+      "carinho_estresse": 90000,
+      "carinho_solidao": 180000,
+      "estresse_divisor": 256,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 225,
+      "tedio_bola": 135000,
+      "tedio_brincar": 45000,
+      "tedio_dono": 90000,
+      "tedio_explorar": 90000,
+      "tedio_sobe": 450
+    },
+    "sobe_1_reduz_2": {
+      "carinho_estresse": 180000,
+      "carinho_solidao": 360000,
+      "estresse_divisor": 256,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 225,
+      "tedio_bola": 270000,
+      "tedio_brincar": 90000,
+      "tedio_dono": 180000,
+      "tedio_explorar": 180000,
+      "tedio_sobe": 450
+    },
+    "sobe_2_reduz_0.5": {
+      "carinho_estresse": 45000,
+      "carinho_solidao": 90000,
+      "estresse_divisor": 128,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 450,
+      "tedio_bola": 67500,
+      "tedio_brincar": 22500,
+      "tedio_dono": 45000,
+      "tedio_explorar": 45000,
+      "tedio_sobe": 900
+    },
+    "sobe_2_reduz_1": {
+      "carinho_estresse": 90000,
+      "carinho_solidao": 180000,
+      "estresse_divisor": 128,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 450,
+      "tedio_bola": 135000,
+      "tedio_brincar": 45000,
+      "tedio_dono": 90000,
+      "tedio_explorar": 90000,
+      "tedio_sobe": 900
+    },
+    "sobe_2_reduz_2": {
+      "carinho_estresse": 180000,
+      "carinho_solidao": 360000,
+      "estresse_divisor": 128,
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "solidao_sobe": 450,
+      "tedio_bola": 270000,
+      "tedio_brincar": 90000,
+      "tedio_dono": 180000,
+      "tedio_explorar": 180000,
+      "tedio_sobe": 900
+    }
+  },
+  "duracao_s": 4802.598958015442,
+  "fim": "2026-10-13T03:01:19",
+  "git_head": "02b6cac5db37962f09e2c985319fac4bcd90a107",
+  "git_limpo": false,
+  "grade_parede_s": 1552.2965915999957,
+  "inicio": "2026-10-13T01:41:16",
+  "modo": "calibracao",
+  "orquestrador_sha256": "a53673cf1820cbf03bdc895de3599838cb3d82046d6c9c1ead3f3db7d5c850fb",
+  "passo0": "artifacts_v2_corpo/calibracao/passo0/passo0.json",
+  "passo0_sha256": "c275eb506cdfa72e3894480e3c3259398104d627e4f27790c6e89d7a16bb963d",
+  "piloto_parede_s": 3247.194675199993,
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "plano_sha256": "078e1d75f3b3cb0339f3033ccc73cf824a82a97f037d70b5e674c33c84cfb540",
+  "processos": 6,
+  "python": "3.13.0",
+  "sha256": {
+    "config": "7821f73c69ffecad7318deac058676dd398867a8f0673874783d07084034b0b3",
+    "config.py": "1e26143f2f3a463a021928a9882f9c200cc63a0c05bb88b8aef0419a8d8eac3d",
+    "corpo.py": "5bc401ffc146fcef37b4959963c00fe7d8e20d1237360957667823ed59a32f26",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "lobos.py": "383feb2488558fa21b52d3f09c3840cce939acd7614dda10289a41b5eabc13c6",
+    "plano": "078e1d75f3b3cb0339f3033ccc73cf824a82a97f037d70b5e674c33c84cfb540"
+  },
+  "unidades": [
+    {
+      "base": 33101,
+      "genoma": 14837092985176583282,
+      "k": 0,
+      "semente": 8158691037020678352
+    },
+    {
+      "base": 33101,
+      "genoma": 13278549388814703100,
+      "k": 1,
+      "semente": 8008513120737969557
+    },
+    {
+      "base": 33101,
+      "genoma": 483912253601933033,
+      "k": 2,
+      "semente": 6592571756750488862
+    },
+    {
+      "base": 33101,
+      "genoma": 646151963952491181,
+      "k": 3,
+      "semente": 5132740035596767411
+    },
+    {
+      "base": 33202,
+      "genoma": 5503108615379586530,
+      "k": 0,
+      "semente": 6556898515092594876
+    },
+    {
+      "base": 33202,
+      "genoma": 7485356956061356656,
+      "k": 1,
+      "semente": 4214109798015701714
+    },
+    {
+      "base": 33202,
+      "genoma": 15279579225649712343,
+      "k": 2,
+      "semente": 18294720144582359080
+    },
+    {
+      "base": 33202,
+      "genoma": 17832726274509134703,
+      "k": 3,
+      "semente": 7934950338363040425
+    },
+    {
+      "base": 33303,
+      "genoma": 14085691941960094910,
+      "k": 0,
+      "semente": 2297653917729460994
+    },
+    {
+      "base": 33303,
+      "genoma": 18205749417153903854,
+      "k": 1,
+      "semente": 8750030163666222730
+    },
+    {
+      "base": 33303,
+      "genoma": 4941511314673435571,
+      "k": 2,
+      "semente": 10660114622883025620
+    },
+    {
+      "base": 33303,
+      "genoma": 8409262385704813270,
+      "k": 3,
+      "semente": 1884297627948664404
+    },
+    {
+      "base": 33404,
+      "genoma": 16908996582919499544,
+      "k": 0,
+      "semente": 15048750417853982039
+    },
+    {
+      "base": 33404,
+      "genoma": 15567767366262347764,
+      "k": 1,
+      "semente": 1368288618811146631
+    },
+    {
+      "base": 33404,
+      "genoma": 8745546406238945500,
+      "k": 2,
+      "semente": 15374397460984922953
+    },
+    {
+      "base": 33404,
+      "genoma": 6831548075971932103,
+      "k": 3,
+      "semente": 1954834458350931046
+    },
+    {
+      "base": 33505,
+      "genoma": 10540770272604865123,
+      "k": 0,
+      "semente": 113814261047396178
+    },
+    {
+      "base": 33505,
+      "genoma": 15136965018569779625,
+      "k": 1,
+      "semente": 9599066035439354858
+    },
+    {
+      "base": 33505,
+      "genoma": 8558362510155056197,
+      "k": 2,
+      "semente": 4580551726098066103
+    },
+    {
+      "base": 33505,
+      "genoma": 17204331005328895837,
+      "k": 3,
+      "semente": 15958585513123157940
+    }
+  ]
+}

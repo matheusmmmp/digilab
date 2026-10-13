@@ -1,0 +1,63 @@
+{
+  "escolha": {
+    "ponto": [
+      2.0,
+      1.0
+    ],
+    "fechou": false,
+    "passam": [],
+    "registro": "nao fechou",
+    "distancia_ao_centro": 0.39604203630408086,
+    "nome": "sobe_2_reduz_1",
+    "corpo": {
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94,
+      "tedio_sobe": 900,
+      "solidao_sobe": 450,
+      "estresse_divisor": 128,
+      "tedio_bola": 135000,
+      "tedio_brincar": 45000,
+      "tedio_explorar": 90000,
+      "tedio_dono": 90000,
+      "carinho_solidao": 180000,
+      "carinho_estresse": 90000
+    }
+  },
+  "w_novos": {
+    "w_novos": 2,
+    "fechou": true,
+    "medianas": {
+      "1": 0.2450380726501061,
+      "2": 0.3936234208943252,
+      "4": 0.5648920863309352
+    },
+    "decisoes": 29784
+  },
+  "margens": {
+    "delta_be": 0.223473399471881,
+    "delta_priv": 0.02954799107142857,
+    "delta_saude": 0.03340285063244047,
+    "delta_ted": 0.1632519585745675,
+    "g_hoje": {
+      "be": 0.1117366997359405,
+      "privacao": 0.014773995535714285,
+      "saude": 0.016701425316220236
+    },
+    "referencias": {
+      "privacao_p0q": 0.11819196428571428,
+      "saude_p0q": 0.8663885974702381,
+      "tedio_p0c": 0.326503917149135
+    }
+  },
+  "n": {
+    "k": 4,
+    "n": 20,
+    "subpotenciados": []
+  }
+}
+
+real	80m3.711s
+user	0m0.093s
+sys	0m0.015s

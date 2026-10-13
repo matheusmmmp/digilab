@@ -3917,3 +3917,24 @@ e `fumaca_calibracao.json`, duas funções no fim de `digilab/metrics.py`, o `.g
 - **Testes:** `tests/test_calibracao_dois_pets.py`, 16, ~25 s: a config, as recusas, o teto, a taxa agregada, a regra, a margem e o
   contraste em dados com a resposta conhecida, a fumaça inteira e o piloto num K da grade (a rota do humor credita a fruta ruim no A com
   os canais).
+
+## V2, CORPO-CALIBRACAO — a calibração do corpo (2026-10-12/13, `docs/PLANO_ANALISE_V2_CORPO_DRIVES.md`, seções 6 e 7, adendos 3 e 4) — PONTO E N CONGELADOS; DUAS FAIXAS NÃO FECHARAM
+
+Autorizada pelo Matheus em 2026-10-12. Sementes 33101…33505 (K = 4, prefixo `corpo`, 20 unidades). Números de
+`artifacts_v2_corpo/calibracao/` (as vidas ficam fora do git); relatório `docs/RESULTADO_V2_CALIBRACAO_CORPO.md`. Interpretações em
+`docs/REGISTRO_DESVIOS.md`. **A validação (34101…34505) não rodou: precisa de outro sim.**
+- **Código:**
+  - `experiments/run_v2_calibracao_corpo.py`: a grade da 6.1 (só o P0-c), a regra da 6.2 (a faixa, o mais perto de (1, 1), o `w_novos`),
+    o piloto da 6.3 (os blocos G-HOJE, corpo com os acoplados, tapa, G e P1-cw: 120 por unidade), as sensibilidades da 6.4 e da A1.2, as
+    margens e o N da seção 7 (os efeitos pelo `poder_simulado`; a não inferioridade e a equivalência com os contrastes juntos) e o custo.
+    Recusa a pasta existente e as sementes da validação; o corpo da config tem de ser o do passo 0;
+  - na bancada: o bloco `comportamento` em toda vida (a `BE` e o cuidado, também no "hoje"), as parcelas dos drives novos por decisão de
+    tempo livre (`novos_livres`, para o `w_novos`) e os efeitos do tapa da 5.4 (`metrics.efeitos_do_tapa`, bloco `corpo.tapa`); o
+    `meta.json` ganhou o sha256 do `corpo.py` e do `motor_corpo.py`, e o passo 0 recusa a pasta existente;
+  - configs `experiments/configs/v2_corpo/calibracao.json` e `fumaca_calibracao.json`; testes `tests/test_calibracao_corpo.py` (9).
+- **O passo 0 (A3.2c):** `m_gasto` = ½, **"não fechou"**: a falta de combustível em 0,000 (¼), 0,0004 (½) e 0,49 (1) do tempo acordado.
+- **O corpo (A4.1):** (`m_sobe`, `m_reduz`) = (2, 1), **"não fechou"**: a solidão não chega a 0,10 sem o tédio e o estresse passarem do
+  teto. `w_novos` = 2 (fechou: mediana da parcela 0,394).
+- **Margens (A4.2):** `Δ_BE` 0,2235, `Δ_priv` 0,0295, `Δ_saude` 0,0334, `Δ_TED` 0,1633. **N = 20 (K = 4)**, todo gate com poder ≥ 0,968.
+  A validação: 2.400 vidas, 3,6 h de CPU, ~0,6 h com 6 processos (com 12 o pool caiu).
+- **O piloto não é evidência:** P1-c − P1-q em `BE`, `bola`, +0,67, com o cuidado igual; o G-P0C vale nas 160 células.

@@ -102,3 +102,6 @@ artifacts_v2_validacao_unica/**/vidas/
 artifacts_v2_mundo/**/vidas/
 !artifacts_v2_dois_pets/
 artifacts_v2_dois_pets/**/grupos/
+# a calibracao do corpo (PLANO_ANALISE_V2_CORPO_DRIVES, secao 11): as medidas, o meta e o resultado no git; as vidas fora (regeneraveis)
+!artifacts_v2_corpo/
+artifacts_v2_corpo/**/vidas/

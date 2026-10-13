@@ -1,0 +1,74 @@
+{
+  "escolha": {
+    "corpo": {
+      "gasto_atividades_den": 2,
+      "gasto_atividades_num": 1,
+      "gasto_basal_acordado": 188,
+      "gasto_basal_dormindo": 94
+    },
+    "fechou": false,
+    "fracao": 0.000380414157624972,
+    "nome": "gasto_1_2",
+    "passam": [],
+    "ponto": [
+      1,
+      2
+    ],
+    "registro": "nao fechou"
+  },
+  "faixa": [
+    0.05,
+    0.3
+  ],
+  "plano": "docs/PLANO_ANALISE_V2_CORPO_DRIVES.md",
+  "pontos": {
+    "gasto_1_1": {
+      "acordado": 1846605,
+      "acordado_com_falta": 905331,
+      "corpo": {
+        "gasto_atividades_den": 1,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 375,
+        "gasto_basal_dormindo": 187
+      },
+      "fracao": 0.4902678158025133,
+      "m_gasto": [
+        1,
+        1
+      ],
+      "vidas": 160
+    },
+    "gasto_1_2": {
+      "acordado": 2187090,
+      "acordado_com_falta": 832,
+      "corpo": {
+        "gasto_atividades_den": 2,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 188,
+        "gasto_basal_dormindo": 94
+      },
+      "fracao": 0.000380414157624972,
+      "m_gasto": [
+        1,
+        2
+      ],
+      "vidas": 160
+    },
+    "gasto_1_4": {
+      "acordado": 2187300,
+      "acordado_com_falta": 0,
+      "corpo": {
+        "gasto_atividades_den": 4,
+        "gasto_atividades_num": 1,
+        "gasto_basal_acordado": 94,
+        "gasto_basal_dormindo": 47
+      },
+      "fracao": 0.0,
+      "m_gasto": [
+        1,
+        4
+      ],
+      "vidas": 160
+    }
+  }
+}
