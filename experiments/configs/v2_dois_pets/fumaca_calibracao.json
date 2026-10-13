@@ -35,7 +35,7 @@
       7
     ],
     "dias_a": 10,
-    "janelas": "letra"
+    "janelas": "dois_dias"
   },
   "piloto": {
     "bracos": [
@@ -68,5 +68,6 @@
     "reamostragens": 10000,
     "semente": 4242,
     "nivel": 0.95
-  }
+  },
+  "adendo_janelas": "docs/PLANO_ANALISE_V2_DOIS_PETS.md, adendo 1.1 (PDC-1, decisão do Matheus em 2026-10-13)"
 }

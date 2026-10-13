@@ -211,3 +211,35 @@ conferido bit a bit (G1-GRUPO).
 | PDP-5 | A margem | **metade da distância entre o B só e o A informativo** | uma margem fixa sem dado: larga demais (tudo equivalente) ou estreita demais (N acima do teto) |
 | PDP-6 | As faixas de sementes | **39101…39505** e **40101…40505**, mais 41101…41505 e 42101…42505 previstas para os adendos | uma colisão tira o "novo" das unidades |
 | PDP-7 | Os canais no mundo dos dois pets (o nó `canais_fruta_mundo`, #264) | **DECIDIDA em 2026-10-11: o B cria a rota do canal do humor no cérebro do mundo físico, e a montagem completa fica no plano, com os canais.** Hoje, no mundo dos dois pets, comer a fruta que mexe no humor com os canais ligados falha alto no cérebro do mundo físico (a "rota de adendo" do MUNDO-CEREBROS). Até a rota existir, o nó segue pendente e nenhuma run do plano roda | rodar sem os canais: o P1 dos dois pets deixaria de ser o cérebro A da K2 (a montagem completa), e o resultado não seria comparável com o resto da V2 |
+
+## Adendo 1 (2026-10-13)
+
+### 1.1 Antes da run da calibração: as janelas da regra do K e a agregação
+
+Decisão do Matheus (2026-10-13), PDC-1 pela recomendação do #283. Este trecho foi commitado **antes de qualquer run** nas sementes 39101…39505.
+
+**O problema (fumaça nas sementes dos testes, só contagens):**
+- o A sozinho come de 0 a 9 frutas maduras por dia; o resto da comida é a ração do dono no comedouro;
+- no dia 1, as 5 unidades da fumaça somaram 1 fruta madura;
+- na letra da seção 5 (o dia K contra o dia 1), a R_A do dia 1 sairia de uns 4 consumos nas 20 unidades, e a regra pararia por falta de
+  dado.
+
+**A regra G-K passa a ler janelas de dois dias** (`"janelas": "dois_dias"` em `experiments/configs/v2_dois_pets/calibracao.json`):
+- **o início:** os dias 1 e 2;
+- **o K:** os dias K − 1 e K. No K = 3, as janelas se sobrepõem no dia 2, o que torna a regra mais difícil de passar, não mais fácil;
+- **a regra:** o menor K de {3, 5, 7} com o limite superior do IC95 de R_A nos dias K − 1 e K abaixo de metade da R_A dos dias 1 e 2. O
+  resto da seção 5 não muda.
+- **A validação** (o G-K da seção 7) usa as mesmas janelas.
+
+**O que o plano não dizia, nos valores recomendados no #283** (PDC-2 a PDC-5):
+- **a R entre unidades:** a razão das somas (`taxa.modo`). Cada consumo pesa igual, e a unidade sem consumo não pesa (ela não tem taxa;
+  não é zero). Vale na G-K e na `Δ_S`;
+- **a exposição mínima:** 20 consumos somados em cada janela da regra (`taxa.n_minimo`, PROPOSTO, SEM FONTE). Abaixo disso a regra lê
+  "exposição baixa" e não passa;
+- **a unidade sem consumo do B** nos 7 primeiros dias, num dos dois braços de um contraste, sai do contraste por unidade e é contada;
+- **o poder:** o G-SOCIAL no t unilateral a 0,025 (o "limite inferior do IC95 > 0"); os secundários no relato, a 0,025 e a 0,05;
+- **o mundo:** o `m` = 1 da calibração do mundo (`docs/PLANO_ANALISE_V2_MUNDO_FISICO.md`, que já validou: #285).
+
+### 1.2 Depois da calibração: os números
+
+(Preenchido com os números de `artifacts_v2_dois_pets/calibracao/`, num commit antes da validação.)

@@ -39,7 +39,8 @@ def test_a_config_da_calibracao_e_a_do_plano():
     assert c["plano"] == cd.PLANO and (RAIZ / c["plano"]).is_file()
     assert c["unidades"] == {"bases": [39101, 39202, 39303, 39404, 39505], "k": 4, "prefixo": "dois_pets"}
     assert (c["dono"], c["lugar"], c["orcamento_por_dia"]) == ("atencioso", "comedouro", 16)
-    assert c["calibracao_k"] == {"grade_k": [3, 5, 7], "dias_a": 10, "janelas": "letra"}
+    assert c["calibracao_k"] == {"grade_k": [3, 5, 7], "dias_a": 10, "janelas": "dois_dias"}     # adendo 1.1 (PDC-1)
+    assert "adendo 1.1" in c["adendo_janelas"] and "### 1.1" in (RAIZ / c["plano"]).read_text(encoding="utf-8")
     assert c["piloto"] == {"bracos": ["B-so", "B+Ainf", "B+Aemb", "B+Aing"], "dias_b": 14}
     assert c["montagem"] == "completa" and c["ponto"] == "T3"
     assert len(bv.unidades_derivadas(c["unidades"]["bases"], c["unidades"]["k"], "dois_pets")) == 20
@@ -72,7 +73,7 @@ def test_as_recusas():
             cd.modo_da_config({**c, "unidades": {**c["unidades"], "bases": bases}})
     for troca in ({"plano": None}, {"unidades": {**c["unidades"], "k": 3}}, {"montagem": "simples"},
                   {"margem": {"distancia_minima": 0.1}}, {"calibracao_k": {**c["calibracao_k"], "grade_k": [3, 5]}},
-                  {"calibracao_k": {**c["calibracao_k"], "janelas": "dois_dias"}}, {"bootstrap": {**c["bootstrap"], "semente": 1}}):
+                  {"adendo_janelas": None}, {"bootstrap": {**c["bootstrap"], "semente": 1}}):
         with pytest.raises(ValueError, match="a letra"):
             cd.modo_da_config({**c, **troca})
     cd.modo_da_config({**c, "calibracao_k": {**c["calibracao_k"], "janelas": "dois_dias"}, "adendo_janelas": "adendo 1"})
