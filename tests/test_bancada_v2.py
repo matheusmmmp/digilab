@@ -69,6 +69,8 @@ def test_engine_intocado_e_bracos_com_fonte_e_no():
         "P2d": ("informacao", "adendo-3"), "P3i": ("dono", "adendo-3"),
         # W-BANCADA-MUNDO: o P0 sem explorar do mundo fisico, pendente do instinto do mundo (tests/test_bancada_mundo_fisico.py)
         "P0z": ("nenhuma", "mundo-fisico"),
+        # MUNDO-ALVO: o P1 com o alvo aprendido (PLANO_ANALISE_V2_MUNDO_ALVO, secao 3; tests/test_mundo_alvo.py)
+        "P1-alvo": ("consequencia", "mundo-alvo"),
         # W-BANCADA-CORPO: os bracos do plano do corpo (tests/test_bancada_corpo.py); o P1-cw e o P1-c com a pesos_janela
         "P0-hoje": ("nenhuma", "corpo-3.1"), "P1-hoje": ("consequencia", "corpo-3.1"), "P3-hoje": ("dono", "corpo-3.1"),
         "P0-quimica": ("nenhuma", "corpo-3.1"), "P1-quimica": ("consequencia", "corpo-3.1"), "P3-quimica": ("dono", "corpo-3.1"),

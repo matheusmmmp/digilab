@@ -4886,3 +4886,40 @@ Pedido do Gerente depois do #288. Só documentos: nenhum código, configuração
     (SA-6);
   - os donos das etapas são PROPOSTOS; quem decide é o coordenador.
 - **O painel (`docs/PAINEL_V2.md`):** só junta o que já está nos resultados e no roadmap, sem número novo.
+
+## 2026-10-13 — MUNDO-ALVO: o código pronto; o piloto parou num bloqueio do cérebro (worker A)
+
+Pedido do Gerente: a validação do mundo com o alvo aprendido, pelo `docs/PLANO_ANALISE_V2_MUNDO_ALVO.md` (PMA-1 a PMA-9 pela recomendação,
+autorizada pelo Matheus em 2026-10-13). **O código está pronto e testado. O piloto não terminou, a validação não rodou e nenhum número
+foi gerado.**
+- **O bloqueio.** Na fumaça do piloto (sementes dos testes), o acoplado P1-alvo^ac da base 101, dono relapso, lugar perto, falhou alto
+  no tick 4560:
+  - o P1-alvo escolheu a classe `comida_podre` (peso 0,0625 contra 1,0 do `cheiro`, o padrão) e comeu uma fruta `a` podre;
+  - o humor caiu 0,1, e o canal do humor deu −113;
+  - com os canais ligados (o cérebro do J1) e a `presenca_fruta_mundo` desligada (também a do J1), esse canal não tem peso que leia a
+    fruta, e o cérebro falha alto (CANAIS-REFORCO, `_creditar_canais`).
+  - O P1 do J1 nunca chega a isso: o alvo padrão do motor não vai à comida podre. No mesmo registro, o P1 roda (teste).
+- **Por que não consertei:** é uma decisão sobre o cérebro (a mesma família do `canais_fruta_mundo`, resolvida pelo Matheus no #269), não
+  uma calibração. As saídas que vejo:
+  1. **(recomendada)** aceitar o registro com `alvo_mundo` como leitor da comida: o alvo já recebe o sinal inteiro da decisão (todos os
+     canais), e o grupo da fruta fica sem peso a mexer, como em toda decisão do J1 (no mundo `iguais` o canal do humor da fruta madura é
+     zero). Uma linha no `lobos.py`; nenhuma vida que roda hoje muda (só as que hoje falham alto);
+  2. ligar a `presenca_fruta_mundo` no P1 e no P1-alvo: os dois deixam de ser o P1 do J1;
+  3. tirar a classe `comida_podre` do comer do P1-alvo: muda a lista de classes da seção 1 do plano.
+- **O que entrou:** o braço P1-alvo na bancada (`Braco.alvo`); as faixas 47101…47505 e 48101…48505 em `FAIXAS_RESERVADAS`;
+  `metrics.uso_do_alvo` e `classes_por_dia`; `experiments/run_v2_mundo_alvo.py` (o piloto e a validação); as configs; os testes.
+- **O G-USO sai do motivo, sem mudar o cérebro:** o `escolher_alvo` já anota o `u` (`motivos[-1]["mundo"]["u"]`), e o
+  `alvo_aprendido` do motivo traz as classes e o padrão. O prior com o mesmo `u` é o sorteio de `lobos.sortear` com todas as classes em
+  `w0_alvo` / S e mais 1 na do padrão. Nas decisões em que os pesos efetivos ainda são os do prior, a escolha sai igual (teste).
+- **A janela das medidas do alvo:** os últimos sete dias (os dias 8 a 14), como as do mundo na bancada.
+- **A tabela do alvo no fim de cada dia:** um replay da vida que guarda a tabela antes da primeira decisão de cada dia, conferido contra
+  a vida. Confere com o `reproduzir_mundo(..., ate_tick)` no fim de cada dia (teste).
+- **A fumaça da validação foi parada à mão** (195 de 480 vidas): a máquina estava estrangulada, e as fumaças pequenas dos testes já
+  cobriam as duas fases, com o bloco afastado.
+- **A máquina estrangulada:** durante a fumaça, todo processo python ocupado recebia ~0,3 de núcleo, ~3,7 núcleos no total dos 20, com
+  3 pytest de outras sessões rodando. No ritmo de 2026-10-13, o piloto levaria ~1 h e a validação ~3 h; na validação do J1 os processos
+  rodavam a ~1 núcleo. Não mexi em configuração do sistema.
+- **O aviso ao Gerente** foi por mensagem entre sessões, que expirou sem entrega; o relato vai no corpo do PR, e o Matheus foi avisado
+  pelo celular.
+- **As pastas:** o piloto interrompido (230 vidas, sem resultado) foi movido para fora do repositório, para a run de verdade gravar numa
+  pasta nova; nenhum número dele é usado.
