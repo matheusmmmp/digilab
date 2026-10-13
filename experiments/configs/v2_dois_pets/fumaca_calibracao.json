@@ -1,0 +1,72 @@
+{
+  "descricao": "Fumaca da calibracao dos dois pets, NAO canonica: a mesma config de experiments/configs/v2_dois_pets/calibracao.json, nas sementes dos testes (bases 101...505, K_u = 1, prefixo dois_pets). Confere o encanamento e mede o custo por grupo antes da run; nenhum numero dela e resultado.",
+  "unidades": {
+    "bases": [
+      101,
+      202,
+      303,
+      404,
+      505
+    ],
+    "k": 1,
+    "prefixo": "dois_pets"
+  },
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "orcamento_por_dia": 16,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "calibracao_k": {
+    "grade_k": [
+      3,
+      5,
+      7
+    ],
+    "dias_a": 10,
+    "janelas": "letra"
+  },
+  "piloto": {
+    "bracos": [
+      "B-so",
+      "B+Ainf",
+      "B+Aemb",
+      "B+Aing"
+    ],
+    "dias_b": 14
+  },
+  "taxa": {
+    "modo": "razao_das_somas",
+    "n_minimo": 20
+  },
+  "margem": {
+    "distancia_minima": 0.05
+  },
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8,
+    "alfa": 0.025,
+    "alfas_relato": [
+      0.025,
+      0.05
+    ]
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  }
+}

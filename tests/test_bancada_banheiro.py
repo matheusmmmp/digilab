@@ -50,7 +50,8 @@ NOVAS = {(39101, 39505): "calibracao", (40101, 40505): "validacao", (41101, 4150
 K = 40
 
 
-def _numeros_das_configs() -> set[int]:
+def _numeros_das_configs(fora_do_plano: str | None = None) -> set[int]:
+    """Os inteiros sob uma chave de semente ou de bases nas configs; com `fora_do_plano`, sem as configs desse plano (o campo `plano`)."""
     achados: set[int] = set()
 
     def andar(o, chave=""):
@@ -65,8 +66,15 @@ def _numeros_das_configs() -> set[int]:
             achados.add(o)
 
     for p in (RAIZ / "experiments" / "configs").rglob("*.json"):
-        andar(json.loads(p.read_text(encoding="utf-8")))
+        cfg = json.loads(p.read_text(encoding="utf-8"))
+        if fora_do_plano is None or cfg.get("plano") != fora_do_plano:
+            andar(cfg)
     return achados
+
+
+# a faixa de calibracao dos dois pets pode estar nas configs do proprio plano (a calibracao do K e o piloto, DOIS-PETS-CALIBRACAO); a de
+# validacao e as dos adendos, em nenhuma (como no test_faixas_r17)
+PLANO_DA_CALIBRACAO = {(39101, 39505): "docs/PLANO_ANALISE_V2_DOIS_PETS.md"}
 
 
 def test_faixas_dos_dois_pets_reservadas_com_fonte():
@@ -85,7 +93,8 @@ def test_faixas_disjuntas_fora_das_queimadas_e_das_configs():
     assert numeros
     for lo, hi in NOVAS:
         assert not any(q_lo <= hi and lo <= q_hi for q_lo, q_hi, _ in bv.FAIXAS_QUEIMADAS)
-        assert not [n for n in numeros if lo <= n <= hi], (lo, hi)
+        alheios = _numeros_das_configs(PLANO_DA_CALIBRACAO[(lo, hi)]) if (lo, hi) in PLANO_DA_CALIBRACAO else numeros
+        assert not [n for n in alheios if lo <= n <= hi], (lo, hi)
 
 
 def test_o_prefixo_dos_dois_pets_segue_a_regra():

@@ -1602,3 +1602,57 @@ def tempo_comer_brincar(decisoes: Sequence[tuple[int, str]]) -> dict:
     meio = len(ordenados) // 2
     mediana = ordenados[meio] if len(ordenados) % 2 else (ordenados[meio - 1] + ordenados[meio]) / 2
     return {"n": len(gaps), "media": sum(gaps) / len(gaps), "mediana": mediana}
+
+
+# ================================================================== dois pets: a taxa agregada sobre as unidades (PLANO_ANALISE_V2_DOIS_PETS)
+MODOS_TAXA_AGREGADA = ("razao_das_somas", "media_das_unidades")
+
+
+def taxa_agregada(contagens: Sequence[tuple[int, int]], modo: str) -> dict:
+    """A taxa de fruta ruim de um grupo de unidades numa janela, com `contagens` = (n consumos, quantos ruins) por unidade (uma unidade
+    sem consumo na janela entra com n = 0: o pet nao comeu fruta ali, nao e taxa zero).
+      - `razao_das_somas`: soma dos ruins / soma dos n (cada consumo pesa igual; a unidade sem consumo nao pesa);
+      - `media_das_unidades`: a media das taxas das unidades com n > 0 (cada unidade pesa igual).
+    Sai a taxa (None sem nenhum consumo), o n somado e quantas unidades tem valor."""
+    if modo not in MODOS_TAXA_AGREGADA:
+        raise ValueError(f"modo da taxa agregada {modo!r}: so {MODOS_TAXA_AGREGADA}")
+    for n, r in contagens:
+        if type(n) is not int or type(r) is not int or n < 0 or not 0 <= r <= n:
+            raise ValueError(f"contagem invalida (n, ruins) = ({n!r}, {r!r})")
+    com = [(n, r) for n, r in contagens if n]
+    n_total = sum(n for n, _ in com)
+    if not com:
+        taxa = None
+    elif modo == "razao_das_somas":
+        taxa = sum(r for _, r in com) / n_total
+    else:
+        taxa = sum(r / n for n, r in com) / len(com)
+    return {"taxa": taxa, "n": n_total, "unidades": len(contagens), "unidades_com_valor": len(com), "modo": modo}
+
+
+def bootstrap_taxa_agregada(contagens: Sequence[tuple[int, int]], modo: str, reamostragens: int, semente: int,
+                            nivel: float = 0.95) -> dict:
+    """O IC percentil da `taxa_agregada` reamostrando as UNIDADES com reposicao (a unidade inteira, com o n e os ruins dela; secao 7 do
+    plano dos dois pets: bootstrap sobre as unidades). Uma reamostra sem nenhum consumo nao tem taxa: com alguma assim, o IC fica None,
+    com o motivo e a contagem (nao se descarta reamostra em silencio)."""
+    ponto = taxa_agregada(contagens, modo)
+    out = {**ponto, "ic": None, "nivel": nivel, "reamostragens": reamostragens, "reamostras_sem_valor": 0, "motivo": None}
+    k = len(contagens)
+    if k < 2 or ponto["taxa"] is None:
+        out["motivo"] = "menos de 2 unidades ou nenhum consumo"
+        return out
+    rng = random.Random(derivar_semente("bootstrap-taxa-agregada", semente))
+    taxas, sem = [], 0
+    for _ in range(reamostragens):
+        t = taxa_agregada([contagens[rng.randrange(k)] for _ in range(k)], modo)["taxa"]
+        if t is None:
+            sem += 1
+        else:
+            taxas.append(t)
+    out["reamostras_sem_valor"] = sem
+    if sem:
+        out["motivo"] = f"{sem} reamostras sem nenhum consumo na janela"
+        return out
+    lo, hi = _percentis(sorted(taxas), nivel)
+    out["ic"] = {"ic_inferior": lo, "ic_superior": hi, "nivel": nivel}
+    return out
