@@ -2052,3 +2052,21 @@ class ConfigOuvido:
 
 CONFIG_OLFATO = ConfigOlfato()
 CONFIG_OUVIDO = ConfigOuvido()
+
+
+# =====================================================================
+# V2, rede de si, etapa 2b (docs/TAREFA_V2_REDE_DE_SI.md; docs/PLANO_ANALISE_V2_REDE_DE_SI.md, secao 3, RS-3): a troca da digestao num
+# tick, gravada no registro como a troca do mutavel. O tick vem de quem monta a vida (a bancada: o fim do dia 7 numa vida de 14); a taxa
+# lenta, daqui. Sem a troca pedida, nada muda (a vida de hoje).
+
+
+@dataclass(frozen=True)
+class ConfigTrocaDigestao:
+    taxa_lenta: int = 56250                  # PROPOSTO, SEM FONTE: C // 8 (plano, secao 3); o adendo 1 escolhe da grade {C//2, C//4, C//8}
+
+    def __post_init__(self) -> None:
+        if type(self.taxa_lenta) is not int or self.taxa_lenta <= 0:
+            raise ValueError(f"ConfigTrocaDigestao.taxa_lenta tem de ser inteiro positivo: {self.taxa_lenta!r}")
+
+
+CONFIG_TROCA_DIGESTAO = ConfigTrocaDigestao()

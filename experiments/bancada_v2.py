@@ -163,6 +163,7 @@ from digilab.config import (CONFIG_BOLA, CONFIG_BOLA_LIGADA, CONFIG_CONSEQUENCIA
                             CONFIG_PEDIDO_LIGADA, LAYOUT_MUNDO_AFASTADO, TICKS_POR_DIA, ConfigBola, ConfigConsequencia, ConfigFrutas,
                             ConfigInformacao, ConfigJulgamentoFruta, ConfigLobos, ConfigMundo, ConfigPedido, LIMITE_TETO_PESOS_PLANO)
 from digilab.config import ConfigCorpo  # noqa: E402
+from digilab.config import CONFIG_TROCA_DIGESTAO, ConfigTrocaDigestao  # noqa: E402
 from digilab.config import CONFIG_GRUPO_LIGADA, ConfigGrupo  # noqa: E402
 from digilab.grupo import Grupo, PetDoGrupo, RegistroGrupo, reproduzir_grupo, sementes_do_grupo, simular_grupo  # noqa: E402
 from digilab.corpo import Corpo, div_arred as div_arred_corpo  # noqa: E402
@@ -324,7 +325,7 @@ def mundo_de(nome: str) -> Mundo:
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
                  "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta", "montagem",
-                 "lugares", "mundo", "corpo", "teto_pesos", "rede_de_si"}
+                 "lugares", "mundo", "corpo", "teto_pesos", "rede_de_si", "digestao_lenta"}
 # corpo (W-BANCADA-CORPO): a quimica da pergunta do plano (secao 1: "a quimica de hoje", CD-3): o corpo com a digestao na taxa C e a
 # Vida, sem os drives novos. O regime "corpo" liga por cima os drives novos e os gestos (etapa 6). A chave "corpo" da config troca os
 # numeros, nunca as sub-chaves
@@ -626,8 +627,8 @@ NOS_PENDENTES: dict = {
     # na ConfigCorpo (#275, `gasto_atividades_num/den`), e o passo 0 o escala junto com o basal (PCD-9)
     # o "planejador" (W-BANCADA-PQP) saiu na W-BANCADA-PQP-PLANO: o planejador de um alvo e o lobo `planejamento` estao na main (#294,
     # ConfigLobos.g_plano), ligados nos bracos P1-plan, P1-plan-desfecho e P1-plan-cong
-    # rede de si (W-BANCADA-REDE): o P1-c-lenta espera a troca da digestao no motor (a etapa 2b da tarefa, do A)
-    "digestao_lenta": "TAREFA_V2_REDE_DE_SI, etapa 2b (o A): a taxa_digestao trocada num tick e gravada no registro (RS-3)",
+    # a "digestao_lenta" (W-BANCADA-REDE) saiu com a etapa 2b da rede de si (do A): a troca da digestao no MotorCorpo
+    # (`troca_digestao`), com o tick da bancada e a taxa lenta da ConfigTrocaDigestao (chave "digestao_lenta" da config)
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -961,6 +962,7 @@ class Bancada:
     cfg_mundo: ConfigMundo = CONFIG_MUNDO_LIGADA         # W-BANCADA-MUNDO: o mundo fisico (o layout afastado vem do mundo)
     cfg_corpo: ConfigCorpo = CONFIG_CORPO_QUIMICA        # W-BANCADA-CORPO: o corpo do regime "quimica" (o "corpo" liga por cima)
     cfg_rede: ConfigRedeDeSi | None = None               # W-BANCADA-REDE: a rede de si observando toda vida (None: sem a rede)
+    cfg_troca_digestao: ConfigTrocaDigestao = CONFIG_TROCA_DIGESTAO   # rede de si, 2b: a taxa lenta do P1-c-lenta (RS-3)
     metabolismo: bool = True                             # adendo 3 (A3.1): False tira o metabolismo dos bracos do corpo, so para
                                                          # refazer as vidas de antes dele (os gabaritos do G2); fora da config
 
@@ -1115,6 +1117,9 @@ class Bancada:
         corpo = self.cfg_corpo_de(espec)
         classe = (lambda base: base) if corpo is None else com_corpo  # noqa: E731
         kc = {} if corpo is None else {"cfg_corpo": corpo}
+        if braco_de(espec.braco).digestao_lenta:
+            # rede de si, etapa 2b (RS-3): a taxa_digestao passa a lenta no fim do dia 7 (o tick da troca do mutavel), no MotorCorpo
+            kc["troca_digestao"] = (self.tick_troca_digestao, self.cfg_troca_digestao.taxa_lenta)
         banheiro = self.cfg_banheiro_de(espec)       # o banheiro (#265): a chave no MotorMundo, com o corpo com a sub-chave na frente
         if banheiro is not None:
             kc["cfg_banheiro"] = banheiro
@@ -1417,6 +1422,7 @@ class Bancada:
         rede = None
         if self.cfg_rede is not None:
             tick_troca = self.tick_troca_digestao if braco_de(vida.espec.braco).digestao_lenta else None
+            self.conferir_troca_digestao(vida, m, tick_troca)
             rede = self.medidas_rede(rede_de(reg).rede, quimicos, do_braco(reg.interna).cerebro.motivos, m.log, tick_troca)
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
@@ -1443,6 +1449,18 @@ class Bancada:
                 **extra_mundo}
 
     # ------------------------------------------------------------- rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 4; W-BANCADA-REDE)
+    def conferir_troca_digestao(self, vida, m, tick_troca: int | None) -> None:
+        """A troca da digestao da vida (etapa 2b) foi a pedida: no P1-c-lenta, no tick da bancada e para a taxa lenta; nos outros, nenhuma.
+        Uma troca fora disso falha alto."""
+        feita = getattr(m, "troca_digestao", None)
+        if tick_troca is None:
+            if feita is not None:
+                raise RuntimeError(f"{vida.nome}: troca da digestao num braco sem a digestao lenta: {feita}")
+            return
+        if feita is None or feita["tick"] != tick_troca or feita["para"] != self.cfg_troca_digestao.taxa_lenta:
+            raise RuntimeError(f"{vida.nome}: a troca da digestao nao foi a pedida (tick {tick_troca}, taxa "
+                               f"{self.cfg_troca_digestao.taxa_lenta}): {feita}")
+
     @property
     def tick_troca_digestao(self) -> int:
         """O tick da troca da digestao do P1-c-lenta: o fim do dia 7 (RS-3), o mesmo corte do mutavel (`tick_troca`)."""
@@ -3067,6 +3085,8 @@ def bancada_da_config(cfg: dict) -> Bancada:
         kw["cfg_corpo"] = replace(CONFIG_CORPO_QUIMICA, **{k: tupla(v) for k, v in cfg["corpo"].items()})
     if "rede_de_si" in cfg:
         kw["cfg_rede"] = cfg_rede_da_config(cfg)
+    if "digestao_lenta" in cfg:
+        kw["cfg_troca_digestao"] = replace(CONFIG_TROCA_DIGESTAO, **cfg["digestao_lenta"])
     return Bancada(int(cfg["dias"]), int(cfg["orcamento"]), **kw)
 
 

@@ -5177,3 +5177,13 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
   (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
   falharia, mas só depois de montada; a recusa explícita diz por quê.
+
+## 2026-10-13 — Rede de si, etapa 2b (A): a troca da digestão num tick
+
+- **O tick da troca é o começo do tick**, antes da decisão e do passo: a comida comida naquele tick já digere na taxa nova. O registro
+  guarda o tick em que a troca aconteceu e o pedido (na bancada são o mesmo, o fim do dia 7).
+- **O grafo do corpo é refeito na troca** (a reação da digestão carrega a taxa) e passa de novo pelas quatro checagens, para a tabela
+  continuar sendo a fonte. Os químicos não mudam (conferido).
+- **A taxa lenta ficou numa config própria** (`ConfigTrocaDigestao`), e não na `ConfigCorpo`: um campo novo na `ConfigCorpo` mudaria o
+  gabarito da paridade do corpo, que confere a config campo a campo. O valor é o PROPOSTO do plano, C // 8.
+- **Uma troca para a mesma taxa falha alto** (não seria troca), e a troca só existe com a digestão ligada.

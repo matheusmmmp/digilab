@@ -269,13 +269,16 @@ def test_o_p1_ped_c_monta_o_corpo_e_o_pedido_juntos():
     banc.conferir_replay(v)
 
 
-def test_o_p1_c_lenta_espera_a_troca_da_digestao():
+def test_o_p1_c_lenta_roda_com_a_troca_da_digestao():
+    # a etapa 2b (o A) tirou o no: a troca da digestao no MotorCorpo (tests/test_troca_digestao.py confere o mecanismo)
     b = bv.BRACOS["P1-c-lenta"]
-    assert b.digestao_lenta and b.regime == "corpo" and "digestao_lenta" in bv.NOS_PENDENTES
-    with pytest.raises(NotImplementedError, match="2b"):
-        bv.braco_de("P1-c-lenta")
-    with pytest.raises(NotImplementedError):
-        bv.validar_config(_cfg(bracos=["P1-c-lenta"]))
+    assert b.digestao_lenta and b.regime == "corpo" and "digestao_lenta" not in bv.NOS_PENDENTES
+    assert bv.braco_de("P1-c-lenta") is b
+    bv.validar_config(_cfg(bracos=["P1-c-lenta"]))
+    banc, v, med = _vida_medida("P1-c-lenta", "bola")
+    assert v.motor.troca_digestao["tick"] == banc.tick_troca_digestao
+    a = med["adaptacao"]
+    assert a is not None and a["k_troca"] == banc.tick_troca_digestao // 15
 
 
 def test_a_digestao_lenta_so_no_corpo(monkeypatch):
