@@ -180,6 +180,16 @@ class MotorCorpo:
     def _orgaos_ligados(self) -> bool:
         return self.co.ligada or self.cv.ligada
 
+    # o que o MotorMundo pergunta para tirar a direcao pronta da percepcao (dois pets, secao 5.6; G-SEM-DIRECAO)
+    def _olfato_comida(self) -> bool:
+        return self.co.ligada and self.co.comida
+
+    def _olfato_outro(self) -> bool:
+        return self.co.ligada and self.co.outro_pet
+
+    def _audicao(self) -> bool:
+        return self.cv.ligada
+
     def _sentir(self) -> None:
         """O estimulo de cada receptor de orgao, do lado do mundo, entregue ao corpo (antes de cada tick e de cada percepcao)."""
         if self.cc.ligada and self._orgaos_ligados():

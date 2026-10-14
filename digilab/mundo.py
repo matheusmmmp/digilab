@@ -89,6 +89,7 @@ from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
+from .corpo import leitura_orgao
 from .donos import Visao
 from .engine import Motor
 from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
@@ -246,7 +247,8 @@ def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: Co
 @dataclass(frozen=True)
 class PercepcaoMundo:
     """Secao 7. `vistos`: (id, tipo, dx, dy, d), em ordem de d, tipo e id, no maximo `max_vistos`; tipo = `racao`, `a`, `b`, `c`,
-    o mesmo com `_podre`, ou `bola` (id 0). `cheiro` so das comidas boas; `direcao_cheiro` 0 a 8; `alvo_pendente` o tipo do alvo da
+    o mesmo com `_podre`, ou `bola` (id 0). `cheiro` so das comidas boas; `direcao_cheiro` 0 a 8 (com o orgao do Olfato da comida, os
+    dois ficam 0: o cheiro chega pelos receptores do corpo, dois pets, secao 5.6); `alvo_pendente` o tipo do alvo da
     decisao anterior que ficou sem chegar, ou None. `troncos` (o J5, so com ConfigPetQuePensaMundo.ligada; senao vazio): (id, dx, dy, d)
     dos troncos a ate o raio da visao, em ordem de d e id."""
 
@@ -285,23 +287,88 @@ class Alvo:
         return {"tipo": self.tipo, "x": self.x, "y": self.y, "id": self.id, "de": self.de}
 
 
+# ================================================================== o Olfato da comida pelo orgao (dois pets, secao 5.6; DP-13)
+# Com o orgao do Olfato da comida ligado, o pet nao recebe a direcao do cheiro: a percepcao do mundo fica sem `cheiro` e sem
+# `direcao_cheiro`, e o candidato `cheiro` da lugar a dois candidatos que so usam o que o pet sente (G-SEM-DIRECAO): a leitura dos
+# receptores das narinas (`PercepcaoCorpo.olfato_comida`, ou `_esq` e `_dir`), a direcao do ultimo passo (a propriocepcao) e o u do alvo.
+# As funcoes abaixo so recebem isso; nenhuma le o mundo (conferido por AST no teste).
+CANDIDATOS_CHEIRO_ORGAO = ("cheiro_seguir", "cheiro_virar")
+
+
+def leitura_do_olfato(corpo, narinas: int) -> tuple[int, ...]:
+    """A leitura dos receptores do Olfato da comida na `PercepcaoCorpo`: (r,) com uma narina, (r_esq, r_dir) com duas. Sem o receptor
+    (o orgao desligado, ou outro numero de narinas), falha alto."""
+    if narinas == 1:
+        leitura = (corpo.olfato_comida,)
+    elif narinas == 2:
+        leitura = (corpo.olfato_comida_esq, corpo.olfato_comida_dir)
+    else:
+        raise ValueError(f"narinas: 1 ou 2, nao {narinas!r}")
+    if any(type(r) is not int for r in leitura):
+        raise ValueError(f"o Olfato da comida sem o receptor na percepcao do corpo: {leitura!r} ({narinas} narina(s))")
+    return leitura
+
+
+def olfato_forte(leitura: tuple[int, ...], limiar: int) -> bool:
+    """o cheiro forte do explorar: alguma narina le acima do `limiar` (na escala S do receptor)"""
+    return max(leitura) > limiar
+
+
+def alvos_do_olfato(x: int, y: int, passo: int, leitura: tuple[int, ...], anterior: tuple[int, ...] | None, u: int,
+                    cm: ConfigMundo) -> list[Alvo]:
+    """Os candidatos do cheiro pelo orgao (secao 5.6), em (x, y), com a direcao do ultimo passo `passo` (0 a 15 na DIR16): nenhum sem
+    cheiro (todas as narinas em 0); senao dois, a `passo_cheiro_celulas` celulas, com o preferido pela regra da opcao na frente.
+    - `cheiro_seguir`: um passo na direcao do ultimo passo;
+    - `cheiro_virar`: com duas narinas, 45 graus (dois indices da DIR16) para o lado da narina mais forte, a esquerda no sentido
+      anti-horario; empatadas, o lado sai do bit 8 do u. Com uma narina, uma das outras 15 direcoes, sorteada pelos bits altos do u
+      (`(u >> 8) % 15`; o u e o da rng `alvo`: "a direcao sorteada no fluxo alvo").
+    - o preferido: com duas narinas, seguir se elas empatam, virar se nao; com uma, virar se a leitura caiu desde a decisao anterior
+      (`anterior`), seguir se subiu ou ficou (e na primeira decisao)."""
+    if type(passo) is not int or not 0 <= passo < 16:
+        raise ValueError(f"passo fora da DIR16: {passo!r}")
+    if type(u) is not int or not 0 <= u < (1 << 16):
+        raise ValueError(f"u do alvo fora de [0, 2^16): {u!r}")
+    if max(leitura) == 0:
+        return []
+    dist = cm.passo_cheiro_celulas * cm.sub
+    if len(leitura) == 2:
+        esq, dir_ = leitura
+        lado = 2 if esq > dir_ else (-2 if dir_ > esq else (2 if (u >> 8) & 1 == 0 else -2))
+        virar = (passo + lado) % 16
+        prefere_virar = esq != dir_
+    elif len(leitura) == 1:
+        virar = (passo + 1 + (u >> 8) % 15) % 16
+        prefere_virar = anterior is not None and leitura[0] < anterior[0]
+    else:
+        raise ValueError(f"leitura do olfato com {len(leitura)} narinas")
+    seguir = Alvo("cheiro_seguir", *deslocar(x, y, passo, dist, cm))
+    vira = Alvo("cheiro_virar", *deslocar(x, y, virar, dist, cm))
+    return [vira, seguir] if prefere_virar else [seguir, vira]
+
+
 def alvo_padrao_de(acao: AcaoPet, cands: list[Alvo], p: PercepcaoMundo, cmf: ConfigMundo) -> Alvo | None:
     """O alvo padrao do motor (secao 5), em funcao pura da percepcao da decisao: o que o instinto usa e nunca a comida podre.
     - comer: a comida boa vista mais proxima (os vistos ja vem em ordem de d, tipo e id), senao o cheiro;
     - explorar: o continuar, senao o cheiro forte (acima de `limiar_cheiro_explorar`), senao o vagar;
-    - brincar: a bola vista."""
+    - brincar: a bola vista.
+    Com o orgao do Olfato da comida (dois pets, secao 5.6), o "cheiro" e o primeiro dos candidatos do orgao (`cheiro_seguir`,
+    `cheiro_virar`): o motor os poe com o preferido pela regra da opcao na frente (`alvos_do_olfato`), e no explorar so os oferece com o
+    cheiro forte (`olfato_forte`). A percepcao do mundo nao tem cheiro nem direcao, entao o ramo de hoje nao dispara (G-SEM-DIRECAO)."""
     if acao is AcaoPet.COMER:
         podres = {i for i, tipo, *_ in p.vistos if tipo.endswith("_podre")}
         for a in cands:
             if a.tipo == "comida" and a.id not in podres:
                 return a
-        return next((a for a in cands if a.tipo == "cheiro"), None)
+        return next((a for a in cands if a.tipo == "cheiro" or a.tipo in CANDIDATOS_CHEIRO_ORGAO), None)
     if acao is AcaoPet.EXPLORAR:
         cont = next((a for a in cands if a.tipo == "continuar"), None)
         if cont is not None:
             return cont
         if p.direcao_cheiro and p.cheiro > cmf.limiar_cheiro_explorar:
             return next(a for a in cands if a.tipo == "cheiro")
+        olfato = next((a for a in cands if a.tipo in CANDIDATOS_CHEIRO_ORGAO), None)
+        if olfato is not None:
+            return olfato
         return next(a for a in cands if a.tipo == "vagar")
     return next((a for a in cands if a.tipo == "bola"), None)
 
@@ -353,7 +420,9 @@ class PercepcaoSentidos:
       ponto de cada narina;
     - `sons`: (id, som, direcao, distancia, intensidade, esq, dir, idade) dos sons ouvidos desde a decisao anterior, na ordem em que
       soaram: quem emitiu, o som (SONS), a direcao 1 a 8 e a distancia em linha reta ate onde soou, a intensidade no centro e no ponto de
-      cada ouvido (tudo no momento do som) e a idade em ticks. Os sons do proprio pet nao entram."""
+      cada ouvido (tudo no momento do som) e a idade em ticks. Os sons do proprio pet nao entram.
+    Com o orgao do Olfato social, `cheiro` fica vazio; com o da Audicao, `sons` fica vazio: o que o pet sente do outro chega so
+    pelos receptores do corpo, sem direcao nem distancia do mundo (secao 5.6; G-SEM-DIRECAO)."""
 
     passo: int
     cheiro: tuple
@@ -740,9 +809,11 @@ class Mundo:
         return [(c["x"], c["y"], cm.cheiro_racao if c["tipo"] == "racao" else cm.cheiro_fruta)
                 for c in self.comidas.values() if self.situacao(c, tick) == "madura"]
 
-    def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None, troncos: bool = False) -> PercepcaoMundo:
+    def perceber(self, x: int, y: int, tick: int, alvo_pendente: str | None = None, troncos: bool = False,
+                 cheiro: bool = True) -> PercepcaoMundo:
         """Pura (nao sorteia nem muda nada): o que um pet em (x, y) percebe agora (MF-3); `alvo_pendente` e o do pet. `troncos` (o J5):
-        os troncos a vista entram na percepcao."""
+        os troncos a vista entram na percepcao. `cheiro` False (o orgao do Olfato da comida, dois pets, secao 5.6; G-SEM-DIRECAO): o
+        cheiro e a direcao do cheiro nem sao calculados e ficam 0; o pet so sente o cheiro pelos receptores do corpo."""
         vistos = []
         for c in self.comidas.values():
             sit = self.situacao(c, tick)
@@ -757,8 +828,8 @@ class Mundo:
         if d <= self.raio_visao:
             vistos.append((ID_BOLA, "bola", bx - x, by - y, d))
         vistos.sort(key=lambda v: (v[4], v[1], v[0]))
-        cheiro, direcao = direcao_do_cheiro(x, y, self.fontes_de_cheiro(tick), self.cmf)
-        p = PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), cheiro, direcao, alvo_pendente)
+        intensidade, direcao = direcao_do_cheiro(x, y, self.fontes_de_cheiro(tick), self.cmf) if cheiro else (0, 0)
+        p = PercepcaoMundo(x, y, regiao_de(x, self.cmf), tuple(vistos[:self.cmf.max_vistos]), intensidade, direcao, alvo_pendente)
         return replace(p, troncos=tuple(self.troncos_perto(x, y))) if troncos else p
 
     def maduras_perto(self, x: int, y: int, tick: int, raio: int) -> list[tuple[int, str, int]]:
@@ -910,6 +981,7 @@ class MotorMundo(MotorFrutas):
         # ou com o orgao do Olfato ou da Audicao no corpo (que a pede na primeira leitura); a caixa dos sons ouvidos desde a decisao
         # anterior (esvaziada a cada decisao) e o estimulo dos ouvidos do orgao, por tick (o tick do mundo em que o som entra no passo)
         self._passo: int | None = None
+        self._olfato_anterior: tuple[int, ...] | None = None      # o orgao do Olfato da comida: a leitura da decisao anterior
         self._sons_ouvidos: list[tuple] = []
         self._sons_orgao: list[tuple] = []
         # os registros sociais do pet (as medidas; derivados, o replay refaz)
@@ -995,7 +1067,7 @@ class MotorMundo(MotorFrutas):
         """Pura (nao sorteia nem muda nada): o que o pet percebe agora."""
         x, y = self.pet
         pend = self._pendente["alvo"].tipo if self._pendente is not None else None
-        return self.mundo.perceber(x, y, self._tm(tick), pend, troncos=self.cpq.ligada)
+        return self.mundo.perceber(x, y, self._tm(tick), pend, troncos=self.cpq.ligada, cheiro=not self._olfato_comida())
 
     def _observacao_depois_mundo(self) -> Observacao:
         """A observacao seguinte da decisao, com a consequencia do mundo aplicada (o MotorCorpo poe o `obs.corpo` por cima)."""
@@ -1071,6 +1143,38 @@ class MotorMundo(MotorFrutas):
             self.troncos_vistos.setdefault(ident, tick_mundo)
 
     # ------------------------------------------------------------ os alvos
+    # ------------------------------------------------------------ os orgaos do corpo (o MotorCorpo os liga; aqui, sem corpo, nenhum)
+    def _olfato_comida(self) -> bool:
+        """o orgao do Olfato da comida (dois pets, secao 5.6): so existe com o corpo na frente (o MotorCorpo responde)"""
+        return False
+
+    def _olfato_outro(self) -> bool:
+        """o orgao do Olfato social (o cheiro do outro e o rastro): so com o corpo na frente"""
+        return False
+
+    def _audicao(self) -> bool:
+        """o orgao da Audicao: so com o corpo na frente"""
+        return False
+
+    def _leitura_olfato_decisao(self) -> tuple[int, ...]:
+        """a leitura das narinas na observacao da decisao (o que o pet sente; G-SEM-DIRECAO)"""
+        if self._obs_decisao is None or self._obs_decisao.corpo is None:
+            raise RuntimeError("o Olfato da comida sem a percepcao do corpo na observacao da decisao")
+        return leitura_do_olfato(self._obs_decisao.corpo, self.co.narinas)
+
+    def _limiar_olfato_explorar(self) -> int:
+        """o `limiar_cheiro_explorar` de hoje lido pelo receptor: a leitura que o orgao sem adaptacao da a essa intensidade"""
+        return leitura_orgao(self.cmf.limiar_cheiro_explorar, 0, self.co.limiar, self.co.meia_saturacao, self.cc.escala_receptor)
+
+    def _alvos_olfato(self, p: PercepcaoMundo, u: int, explorar: bool) -> list[Alvo]:
+        """os candidatos do cheiro pelo orgao na decisao (no explorar, so com o cheiro forte)"""
+        if self._passo is None:
+            raise RuntimeError("o Olfato da comida sem a direcao do ultimo passo (o orgao a pede na primeira leitura)")
+        leitura = self._leitura_olfato_decisao()
+        if explorar and not olfato_forte(leitura, self._limiar_olfato_explorar()):
+            return []
+        return alvos_do_olfato(p.x, p.y, self._passo, leitura, self._olfato_anterior, u, self.cmf)
+
     def _alvo_cheiro(self, p: PercepcaoMundo) -> Alvo:
         x, y = deslocar(p.x, p.y, 2 * (p.direcao_cheiro - 1), self.cmf.passo_cheiro_celulas * self.cmf.sub, self.cmf)
         return Alvo("cheiro", x, y)
@@ -1094,10 +1198,14 @@ class MotorMundo(MotorFrutas):
         cands: list[Alvo] = []
         if acao is AcaoPet.COMER:
             cands += [Alvo("comida", p.x + dx, p.y + dy, i) for i, tipo, dx, dy, _ in p.vistos if tipo != "bola"]
-            if p.direcao_cheiro:
+            if self._olfato_comida():
+                cands += self._alvos_olfato(p, u, explorar=False)
+            elif p.direcao_cheiro:
                 cands.append(self._alvo_cheiro(p))
         elif acao is AcaoPet.EXPLORAR:
-            if p.direcao_cheiro:
+            if self._olfato_comida():
+                cands += self._alvos_olfato(p, u, explorar=True)
+            elif p.direcao_cheiro:
                 cands.append(self._alvo_cheiro(p))
             faixa = cm.vagar_max_celulas - cm.vagar_min_celulas + 1
             vx, vy = deslocar(p.x, p.y, u % 16, (cm.vagar_min_celulas + (u // 16) % faixa) * cm.sub, cm)
@@ -1253,6 +1361,8 @@ class MotorMundo(MotorFrutas):
                     self._grupo.emitir_som(self.ident, SOM_DA_ACAO[acao])
         if self._passo is not None and self.pet != (x0, y0):
             self._passo = direcao_em_16(self.pet[0] - x0, self.pet[1] - y0)     # a propriocepcao (5.6): a direcao do ultimo passo
+        if self._olfato_comida():
+            self._olfato_anterior = self._leitura_olfato_decisao()   # a leitura desta decisao, para a seguinte (uma narina: subiu ou caiu)
         self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
         return ocorrido
 

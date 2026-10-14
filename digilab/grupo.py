@@ -316,11 +316,15 @@ class Grupo:
         """o que o pet `ident` sente dos `outros` agora (secoes 5.3, 5.4 e 5.6), so do que e fisico: o canal de cada outro (o cheiro na
         posicao dele e o rastro que ele deixou no mundo) e a caixa dos sons que o proprio pet ouviu desde a decisao anterior"""
         m, sub = self.motores[ident], self.mundo.cmf.sub
+        # com o orgao (secao 5.6; G-SEM-DIRECAO), o canal pronto da lugar aos receptores do corpo: o Olfato social tira o `cheiro` (a
+        # intensidade, a direcao e as narinas do outro chegam so por `olfato_outro`) e a Audicao tira os `sons` (o tipo e a intensidade
+        # chegam so por `ouvido_<som>`); sem direcao e sem distancia do mundo
         cheiro = []
-        for i in outros:
-            fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs.olfato)
-            cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs.olfato, sub)))
-        sons = tuple((*s[:7], self.tick - s[7]) for s in m._sons_ouvidos)
+        if not m._olfato_outro():
+            for i in outros:
+                fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs.olfato)
+                cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs.olfato, sub)))
+        sons = () if m._audicao() else tuple((*s[:7], self.tick - s[7]) for s in m._sons_ouvidos)
         return PercepcaoSentidos(m._passo, tuple(cheiro), sons)
 
     def emitir_som(self, quem: str, som: str) -> None:

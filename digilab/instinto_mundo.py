@@ -13,7 +13,7 @@ instinto da tarefa soma `w_fruta x 1` e `w_bola x 1`: com elas, o prior do cereb
 
 O instinto do mundo (`PoliticaInstintoMundo`), igual ao de hoje fora de tres pontos:
 - **a fome urgente** (regra `pedido_necessidade`): com a fome abaixo de 0,25 e para onde ir comer (comida boa vista, ou cheiro com
-  direcao), o pet escolhe `comer`; o padrao do motor o leva a comida vista mais proxima ou segue o cheiro. Sem para onde ir, chama, como
+  direcao; com o orgao do Olfato da comida, cheiro sentido nas narinas), o pet escolhe `comer`; o padrao do motor o leva a comida vista mais proxima ou segue o cheiro. Sem para onde ir, chama, como
   hoje. A higiene abaixo de 0,25 continua chamando; com as duas baixas e comida, come (a fome o pet resolve sozinho; a higiene, nao);
 - **o tempo livre:** `comer` ganha `w_fruta x fruta` (um candidato novo, no fim, como no N4) e `brincar` ganha `w_bola x bola`, com as
   entradas da regra acima, os mesmos `w` calibrados do N4 e da A1 e a mesma chamada de `rng.choices`. As regras se chamam como no N4 e
@@ -47,11 +47,27 @@ def bola_vista(p) -> bool:
     return any(tipo == "bola" for _, tipo, *_ in p.vistos)
 
 
-def para_onde_comer(p) -> bool:
+def sente_cheiro_comida(corpo) -> bool | None:
+    """Com o orgao do Olfato da comida (dois pets, secao 5.6): alguma narina le acima de 0, so pelos receptores do corpo (G-SEM-DIRECAO).
+    Sem o orgao (os receptores None, ou sem a percepcao do corpo), None."""
+    if corpo is None:
+        return None
+    leitura = [r for r in (corpo.olfato_comida, corpo.olfato_comida_esq, corpo.olfato_comida_dir) if r is not None]
+    return any(r > 0 for r in leitura) if leitura else None
+
+
+def para_onde_comer(p, corpo=None) -> bool:
     """O motor tem um alvo padrao de `comer` (mundo.MotorMundo.alvo_padrao): a comida boa vista mais proxima, ou o cheiro com direcao.
     E a "comida boa vista ou cheiro" da tarefa, lida como "para onde ir": com cheiro mas sem direcao (`direcao_cheiro` 0, um plato do
-    cheiro inteiro) e nada visto, o padrao nao tem alvo, e o pet ficaria parado sem comer e sem chamar (REGISTRO_DESVIOS)."""
-    return comida_boa_vista(p) or (p.cheiro > 0 and p.direcao_cheiro != 0)
+    cheiro inteiro) e nada visto, o padrao nao tem alvo, e o pet ficaria parado sem comer e sem chamar (REGISTRO_DESVIOS).
+    Com o orgao do Olfato da comida, o cheiro e o que as narinas leem (`sente_cheiro_comida`): o motor oferece `cheiro_seguir` e
+    `cheiro_virar` sempre que alguma le acima de 0, e a percepcao do mundo nao tem direcao."""
+    if comida_boa_vista(p):
+        return True
+    sente = sente_cheiro_comida(corpo)
+    if sente is not None:
+        return sente
+    return p.cheiro > 0 and p.direcao_cheiro != 0
 
 
 def entradas_mundo(p) -> tuple[float, float]:
@@ -85,7 +101,7 @@ class PoliticaInstintoMundo(PoliticaInstinto):
         acao = super().agir(obs, rng)
         # a fome urgente: o ramo `pedido_necessidade` do instinto nao usa a rng, entao trocar a acao depois nao muda nenhum sorteio
         if (self._ultima_regra == REGRA_FOME_URGENTE and obs.mundo is not None
-                and obs.vetor_estado[0] < LIMIAR_FOME_URGENTE and para_onde_comer(obs.mundo)):
+                and obs.vetor_estado[0] < LIMIAR_FOME_URGENTE and para_onde_comer(obs.mundo, obs.corpo)):
             return AcaoPet.COMER
         return acao
 
