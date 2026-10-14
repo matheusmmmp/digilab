@@ -109,7 +109,7 @@ def rodar(raiz: Path, saida: Path, so: list[str], processos: int = 1) -> dict:
 
 # as chaves de tempo: o que muda de uma rodada para outra no mesmo código (tempo de parede e de CPU, e as contas que saem dele, como as
 # horas estimadas da validação e se elas cabem no teto). Um arquivo que difere só nelas conta como igual.
-TEMPO = re.compile(r"(^|/)(segundos[a-z_]*|us_por_decisao(/[a-z0-9_]+)*|cpu_s[a-z_]*|parede_s[a-z_]*|tempo/[a-z_]+|[a-z_]*_(cpu|parede)|"
+TEMPO = re.compile(r"(^|/)(segundos[a-z_]*|us_por_decisao(/[a-z0-9_]+)*|[a-z_]*cpu_s[a-z_]*|[a-z_]*parede_s[a-z_]*|tempo/[a-z_]+|[a-z_]*_(cpu|parede)|"
                    r"horas_[a-z_]*|cabe_no_teto[A-Za-z0-9_]*|cpu_h[a-z_]*|parede_h_em_processos/[a-z_]+)$")
 
 
