@@ -1252,6 +1252,11 @@ class ConfigLobos:
     # g_plano 0, nada existe (o cerebro de hoje). O planejador nao tem pesos (PQ-6): o n_pesos do A nao muda
     g_plano: int = 0                         # PROPOSTO: o ganho do plano; a calibracao (PP-6) escolhe na grade {S/4, S/2, S}
     teto_plano: int = 2048                   # PROPOSTO, SEM FONTE (PP-6): 2 S, o maior termo do plano, para cima ou para baixo
+    # O Paladar (docs/futuro/paladar.md, secao 3.4; PL-1, PL-5 e PL-6 pela recomendacao): o canal `gosto` no sinal (a leitura dos
+    # receptores do paladar depois de comer, pesada pelos h_q do genoma do pet, nao homeostatico, sem ler a fome) e as classes do alvo
+    # de comer por tipo (`comida:racao`, `comida:a`, `comida:b`, `comida:c` no lugar de `comida`, prior w0_alvo: o querer aprendido, sem
+    # atracao inata). Exige o mundo fisico, o corpo com o paladar, o alvo aprendido e os h_q do pet. Desligada, nada existe
+    paladar: bool = False                    # DECIDIDO (PL-1 a PL-9): a chave
 
     def __post_init__(self) -> None:
         if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
@@ -1385,6 +1390,10 @@ class ConfigConsequencia:
     # corpo, etapa 5: w_d do sinal pelo corpo, por receptor (os de hoje e os drives novos da secao 9; o susto fica fora do sinal)
     pesos_drives_corpo: tuple = (("fome", 1), ("higiene", 1), ("energia", 1), ("humor", 1), ("tedio", 1), ("curiosidade", 1),
                                  ("solidao", 1), ("estresse", 1), ("dor", 1), ("vontade", 1), ("conforto", 1))
+    # o Paladar (docs/futuro/paladar.md, secao 3.4): f_gosto = div_arred(ganho_gosto x soma_q div_arred(h_q x leitura de paladar_q
+    # depois, S), S), so nas decisoes em que o pet comeu comida madura e so com ConfigLobos.paladar. O unico numero do paladar que o
+    # plano do J5 calibra (PL-8, PJ-3); S = 1 vez a soma
+    ganho_gosto: int = 1024
 
     def __post_init__(self) -> None:
         if type(self.janela_pesos) is not int or self.janela_pesos <= 0:
@@ -1395,6 +1404,8 @@ class ConfigConsequencia:
         for nome, w in self.pesos_drives_corpo:
             if type(nome) is not str or type(w) is not int or w < 0:
                 raise ValueError(f"ConfigConsequencia.pesos_drives_corpo: (nome, inteiro >= 0), veio {(nome, w)!r}")
+        if type(self.ganho_gosto) is not int or self.ganho_gosto < 0:
+            raise ValueError(f"ConfigConsequencia.ganho_gosto precisa ser inteiro >= 0: {self.ganho_gosto!r}")
 
 
 CONFIG_CONSEQUENCIA = ConfigConsequencia()
