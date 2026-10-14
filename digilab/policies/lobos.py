@@ -178,7 +178,7 @@ PARAMETROS_LOBOS_PET_QUE_PENSA: dict[str, tuple[str, str]] = {
     "teto_plano": ("PROPOSTO", "PLANO_ANALISE_V2_PET_QUE_PENSA, PP-6: 2 S, o corte do termo do plano, SEM FONTE"),
 }
 PARAMETROS_LOBOS_PALADAR: dict[str, tuple[str, str]] = {
-    "paladar": ("DECIDIDO", "docs/futuro/paladar.md, secao 3.4 (PL-1, PL-5, PL-6; Matheus, 2026-10-13): o canal gosto e as classes por tipo"),
+    "paladar": ("PROPOSTO", "a chave; docs/futuro/paladar.md, secao 3.4 (PL-1, PL-5, PL-6 decididas, 2026-10-13): o canal gosto e as classes"),
 }
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
                     **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS, **PARAMETROS_LOBOS_PET_QUE_PENSA,

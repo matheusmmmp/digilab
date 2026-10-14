@@ -1256,7 +1256,7 @@ class ConfigLobos:
     # receptores do paladar depois de comer, pesada pelos h_q do genoma do pet, nao homeostatico, sem ler a fome) e as classes do alvo
     # de comer por tipo (`comida:racao`, `comida:a`, `comida:b`, `comida:c` no lugar de `comida`, prior w0_alvo: o querer aprendido, sem
     # atracao inata). Exige o mundo fisico, o corpo com o paladar, o alvo aprendido e os h_q do pet. Desligada, nada existe
-    paladar: bool = False                    # DECIDIDO (PL-1 a PL-9): a chave
+    paladar: bool = False                    # PROPOSTO: a chave (o desenho, PL-1 a PL-9, decidido)
 
     def __post_init__(self) -> None:
         if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
