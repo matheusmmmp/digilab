@@ -5177,3 +5177,24 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
   (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
   falharia, mas só depois de montada; a recusa explícita diz por quê.
+
+## 2026-10-13 — REDE-DE-SI-CALIBRACAO (worker D): a calibração do `passo` e o piloto, preparados
+
+- **O corpo da calibração:** o regime "corpo" com o gasto do passo 0 fino (adendo 5 do corpo, `m_gasto` 4/5, conferido contra o
+  `passo0.json`) e os drives novos nos números PROPOSTOS.
+  - Fica fora o ponto do adendo 4 do corpo (`m_sobe` 2, `m_reduz` 1, `w_novos` 2): foi medido com o gasto em ½, e o plano do corpo diz
+    que a calibração final virá com a estrutura completa.
+  - O plano da rede diz que o corpo não se calibra aqui (seção 5). Usar outro ponto é trocar a chave `corpo` da config, antes da run.
+- **A grade roda três vidas por unidade,** uma por `passo`, em vez de uma vida e a rede refeita por fora. O G-OBS é conferido nas 20
+  unidades: o log e o motor são iguais nos três pontos, e uma diferença falha alto. O log do primeiro ponto é gravado e rejogado do disco.
+- **"Prende pesos no teto"** quer dizer: algum peso com |w − w0| = teto no fim da vida, em qualquer das duas cabeças.
+- **O MAE_rede(1) da regra** não leva o susto, como o MAE da seção 4.
+- **O P1-c-lenta e a taxa lenta** ficam atrás do nó `digestao_lenta`. O `Δ_ADAPTA` e o poder do G-ADAPTA saem None, com o motivo.
+- **O N:**
+  - o K_u vem do `escolher_k` da calibração do mundo: as diferenças por unidade centradas e deslocadas para a margem, 2.000 réplicas, o t
+    unilateral a 0,025;
+  - os secundários saem a 0,0125 (o passo mais exigente do Holm de 4) e a 0,05;
+  - no Brier, o N efetivo é N × a fração das unidades com valor no piloto, arredondada para baixo.
+- **O custo da validação** conta os cinco braços por unidade, com o P1-c-lenta estimado pelo custo do P1-c.
+- **Achado da fumaça:** nas sementes dos testes, o oráculo com o `passo` 64 prevê pior que a persistência a 4 decisões. A distância da
+  margem fica negativa. O que a decisão do Matheus precisa saber está no fim de `docs/TAREFA_V2_REDE_DE_SI.md`. Nada foi mudado na regra.

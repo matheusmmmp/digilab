@@ -111,3 +111,6 @@ artifacts_v2_mundo_alvo/**/vidas/
 !artifacts_v2_pet_que_pensa/
 # V2, J5: a calibracao do g_plano e o piloto; meta, medidas e resultado no git, as vidas fora (regeneraveis)
 artifacts_v2_pet_que_pensa/**/vidas/
+# a rede de si (REDE-DE-SI-CALIBRACAO): os resultados, sem os logs das vidas (regeneraveis da config e do codigo)
+!artifacts_v2_rede_de_si/
+artifacts_v2_rede_de_si/**/vidas/
