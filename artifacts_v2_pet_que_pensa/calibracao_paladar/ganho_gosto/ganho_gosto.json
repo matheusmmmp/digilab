@@ -1,0 +1,779 @@
+{
+  "escolha": {
+    "desvio": 0.047598174228995926,
+    "fechou": false,
+    "ganho_gosto": 512,
+    "lado": "abaixo",
+    "media": 0.20240182577100407
+  },
+  "parede_s": 35.532946825027466,
+  "pontos": [
+    {
+      "cpu_s_por_vida": 0.41640625,
+      "ganho_gosto": 512,
+      "media": 0.20240182577100407,
+      "n_unidades": 20,
+      "parede_s": 34.586620569229126,
+      "por_unidade": [
+        {
+          "consumos": 31,
+          "fracao": 0.41935483870967744,
+          "frutas": 13,
+          "semente": 1047149085993756058,
+          "unidade": {
+            "base": 49101,
+            "k": 0
+          },
+          "vida": "P1~fase1@1047149085993756058",
+          "x": "c"
+        },
+        {
+          "consumos": 25,
+          "fracao": 0.12,
+          "frutas": 3,
+          "semente": 12134498648781927561,
+          "unidade": {
+            "base": 49505,
+            "k": 3
+          },
+          "vida": "P1~fase1@12134498648781927561",
+          "x": "a"
+        },
+        {
+          "consumos": 30,
+          "fracao": 0.2,
+          "frutas": 6,
+          "semente": 12312363044171157364,
+          "unidade": {
+            "base": 49101,
+            "k": 3
+          },
+          "vida": "P1~fase1@12312363044171157364",
+          "x": "a"
+        },
+        {
+          "consumos": 24,
+          "fracao": 0.20833333333333334,
+          "frutas": 5,
+          "semente": 12672596517416738679,
+          "unidade": {
+            "base": 49404,
+            "k": 1
+          },
+          "vida": "P1~fase1@12672596517416738679",
+          "x": "b"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.07407407407407407,
+          "frutas": 2,
+          "semente": 12762141220961228589,
+          "unidade": {
+            "base": 49303,
+            "k": 2
+          },
+          "vida": "P1~fase1@12762141220961228589",
+          "x": "a"
+        },
+        {
+          "consumos": 33,
+          "fracao": 0.3333333333333333,
+          "frutas": 11,
+          "semente": 1431882899902232122,
+          "unidade": {
+            "base": 49101,
+            "k": 1
+          },
+          "vida": "P1~fase1@1431882899902232122",
+          "x": "b"
+        },
+        {
+          "consumos": 23,
+          "fracao": 0.2608695652173913,
+          "frutas": 6,
+          "semente": 15643314928035146507,
+          "unidade": {
+            "base": 49303,
+            "k": 1
+          },
+          "vida": "P1~fase1@15643314928035146507",
+          "x": "c"
+        },
+        {
+          "consumos": 32,
+          "fracao": 0.1875,
+          "frutas": 6,
+          "semente": 15902673151359557822,
+          "unidade": {
+            "base": 49101,
+            "k": 2
+          },
+          "vida": "P1~fase1@15902673151359557822",
+          "x": "c"
+        },
+        {
+          "consumos": 29,
+          "fracao": 0.20689655172413793,
+          "frutas": 6,
+          "semente": 16933846431706313690,
+          "unidade": {
+            "base": 49404,
+            "k": 0
+          },
+          "vida": "P1~fase1@16933846431706313690",
+          "x": "a"
+        },
+        {
+          "consumos": 23,
+          "fracao": 0.17391304347826086,
+          "frutas": 4,
+          "semente": 17526301384336782145,
+          "unidade": {
+            "base": 49202,
+            "k": 1
+          },
+          "vida": "P1~fase1@17526301384336782145",
+          "x": "b"
+        },
+        {
+          "consumos": 25,
+          "fracao": 0.16,
+          "frutas": 4,
+          "semente": 17956467753391548864,
+          "unidade": {
+            "base": 49404,
+            "k": 2
+          },
+          "vida": "P1~fase1@17956467753391548864",
+          "x": "b"
+        },
+        {
+          "consumos": 31,
+          "fracao": 0.2903225806451613,
+          "frutas": 9,
+          "semente": 18438281797531832026,
+          "unidade": {
+            "base": 49202,
+            "k": 2
+          },
+          "vida": "P1~fase1@18438281797531832026",
+          "x": "b"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.18518518518518517,
+          "frutas": 5,
+          "semente": 3062838520703593601,
+          "unidade": {
+            "base": 49505,
+            "k": 1
+          },
+          "vida": "P1~fase1@3062838520703593601",
+          "x": "b"
+        },
+        {
+          "consumos": 33,
+          "fracao": 0.09090909090909091,
+          "frutas": 3,
+          "semente": 3707460293088002948,
+          "unidade": {
+            "base": 49505,
+            "k": 2
+          },
+          "vida": "P1~fase1@3707460293088002948",
+          "x": "c"
+        },
+        {
+          "consumos": 29,
+          "fracao": 0.2413793103448276,
+          "frutas": 7,
+          "semente": 4352338562264537519,
+          "unidade": {
+            "base": 49404,
+            "k": 3
+          },
+          "vida": "P1~fase1@4352338562264537519",
+          "x": "a"
+        },
+        {
+          "consumos": 26,
+          "fracao": 0.0,
+          "frutas": 0,
+          "semente": 5168481706938228291,
+          "unidade": {
+            "base": 49303,
+            "k": 3
+          },
+          "vida": "P1~fase1@5168481706938228291",
+          "x": "a"
+        },
+        {
+          "consumos": 32,
+          "fracao": 0.1875,
+          "frutas": 6,
+          "semente": 5294362214878943491,
+          "unidade": {
+            "base": 49505,
+            "k": 0
+          },
+          "vida": "P1~fase1@5294362214878943491",
+          "x": "a"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.037037037037037035,
+          "frutas": 1,
+          "semente": 5604431573502442819,
+          "unidade": {
+            "base": 49202,
+            "k": 0
+          },
+          "vida": "P1~fase1@5604431573502442819",
+          "x": "c"
+        },
+        {
+          "consumos": 28,
+          "fracao": 0.32142857142857145,
+          "frutas": 9,
+          "semente": 7929452959552342399,
+          "unidade": {
+            "base": 49303,
+            "k": 0
+          },
+          "vida": "P1~fase1@7929452959552342399",
+          "x": "a"
+        },
+        {
+          "consumos": 40,
+          "fracao": 0.35,
+          "frutas": 14,
+          "semente": 9693600204647473419,
+          "unidade": {
+            "base": 49202,
+            "k": 3
+          },
+          "vida": "P1~fase1@9693600204647473419",
+          "x": "a"
+        }
+      ],
+      "sem_consumo": 0
+    },
+    {
+      "cpu_s_por_vida": 0.41953125,
+      "ganho_gosto": 1024,
+      "media": 0.19595021286777828,
+      "n_unidades": 20,
+      "parede_s": 34.72343921661377,
+      "por_unidade": [
+        {
+          "consumos": 31,
+          "fracao": 0.2903225806451613,
+          "frutas": 9,
+          "semente": 1047149085993756058,
+          "unidade": {
+            "base": 49101,
+            "k": 0
+          },
+          "vida": "P1~fase1@1047149085993756058",
+          "x": "c"
+        },
+        {
+          "consumos": 25,
+          "fracao": 0.12,
+          "frutas": 3,
+          "semente": 12134498648781927561,
+          "unidade": {
+            "base": 49505,
+            "k": 3
+          },
+          "vida": "P1~fase1@12134498648781927561",
+          "x": "a"
+        },
+        {
+          "consumos": 30,
+          "fracao": 0.2,
+          "frutas": 6,
+          "semente": 12312363044171157364,
+          "unidade": {
+            "base": 49101,
+            "k": 3
+          },
+          "vida": "P1~fase1@12312363044171157364",
+          "x": "a"
+        },
+        {
+          "consumos": 24,
+          "fracao": 0.20833333333333334,
+          "frutas": 5,
+          "semente": 12672596517416738679,
+          "unidade": {
+            "base": 49404,
+            "k": 1
+          },
+          "vida": "P1~fase1@12672596517416738679",
+          "x": "b"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.07407407407407407,
+          "frutas": 2,
+          "semente": 12762141220961228589,
+          "unidade": {
+            "base": 49303,
+            "k": 2
+          },
+          "vida": "P1~fase1@12762141220961228589",
+          "x": "a"
+        },
+        {
+          "consumos": 33,
+          "fracao": 0.3333333333333333,
+          "frutas": 11,
+          "semente": 1431882899902232122,
+          "unidade": {
+            "base": 49101,
+            "k": 1
+          },
+          "vida": "P1~fase1@1431882899902232122",
+          "x": "b"
+        },
+        {
+          "consumos": 23,
+          "fracao": 0.2608695652173913,
+          "frutas": 6,
+          "semente": 15643314928035146507,
+          "unidade": {
+            "base": 49303,
+            "k": 1
+          },
+          "vida": "P1~fase1@15643314928035146507",
+          "x": "c"
+        },
+        {
+          "consumos": 32,
+          "fracao": 0.1875,
+          "frutas": 6,
+          "semente": 15902673151359557822,
+          "unidade": {
+            "base": 49101,
+            "k": 2
+          },
+          "vida": "P1~fase1@15902673151359557822",
+          "x": "c"
+        },
+        {
+          "consumos": 29,
+          "fracao": 0.20689655172413793,
+          "frutas": 6,
+          "semente": 16933846431706313690,
+          "unidade": {
+            "base": 49404,
+            "k": 0
+          },
+          "vida": "P1~fase1@16933846431706313690",
+          "x": "a"
+        },
+        {
+          "consumos": 23,
+          "fracao": 0.17391304347826086,
+          "frutas": 4,
+          "semente": 17526301384336782145,
+          "unidade": {
+            "base": 49202,
+            "k": 1
+          },
+          "vida": "P1~fase1@17526301384336782145",
+          "x": "b"
+        },
+        {
+          "consumos": 25,
+          "fracao": 0.16,
+          "frutas": 4,
+          "semente": 17956467753391548864,
+          "unidade": {
+            "base": 49404,
+            "k": 2
+          },
+          "vida": "P1~fase1@17956467753391548864",
+          "x": "b"
+        },
+        {
+          "consumos": 31,
+          "fracao": 0.2903225806451613,
+          "frutas": 9,
+          "semente": 18438281797531832026,
+          "unidade": {
+            "base": 49202,
+            "k": 2
+          },
+          "vida": "P1~fase1@18438281797531832026",
+          "x": "b"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.18518518518518517,
+          "frutas": 5,
+          "semente": 3062838520703593601,
+          "unidade": {
+            "base": 49505,
+            "k": 1
+          },
+          "vida": "P1~fase1@3062838520703593601",
+          "x": "b"
+        },
+        {
+          "consumos": 33,
+          "fracao": 0.09090909090909091,
+          "frutas": 3,
+          "semente": 3707460293088002948,
+          "unidade": {
+            "base": 49505,
+            "k": 2
+          },
+          "vida": "P1~fase1@3707460293088002948",
+          "x": "c"
+        },
+        {
+          "consumos": 29,
+          "fracao": 0.2413793103448276,
+          "frutas": 7,
+          "semente": 4352338562264537519,
+          "unidade": {
+            "base": 49404,
+            "k": 3
+          },
+          "vida": "P1~fase1@4352338562264537519",
+          "x": "a"
+        },
+        {
+          "consumos": 26,
+          "fracao": 0.0,
+          "frutas": 0,
+          "semente": 5168481706938228291,
+          "unidade": {
+            "base": 49303,
+            "k": 3
+          },
+          "vida": "P1~fase1@5168481706938228291",
+          "x": "a"
+        },
+        {
+          "consumos": 32,
+          "fracao": 0.1875,
+          "frutas": 6,
+          "semente": 5294362214878943491,
+          "unidade": {
+            "base": 49505,
+            "k": 0
+          },
+          "vida": "P1~fase1@5294362214878943491",
+          "x": "a"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.037037037037037035,
+          "frutas": 1,
+          "semente": 5604431573502442819,
+          "unidade": {
+            "base": 49202,
+            "k": 0
+          },
+          "vida": "P1~fase1@5604431573502442819",
+          "x": "c"
+        },
+        {
+          "consumos": 28,
+          "fracao": 0.32142857142857145,
+          "frutas": 9,
+          "semente": 7929452959552342399,
+          "unidade": {
+            "base": 49303,
+            "k": 0
+          },
+          "vida": "P1~fase1@7929452959552342399",
+          "x": "a"
+        },
+        {
+          "consumos": 40,
+          "fracao": 0.35,
+          "frutas": 14,
+          "semente": 9693600204647473419,
+          "unidade": {
+            "base": 49202,
+            "k": 3
+          },
+          "vida": "P1~fase1@9693600204647473419",
+          "x": "a"
+        }
+      ],
+      "sem_consumo": 0
+    },
+    {
+      "cpu_s_por_vida": 0.4171875,
+      "ganho_gosto": 2048,
+      "media": 0.19595021286777828,
+      "n_unidades": 20,
+      "parede_s": 34.50835394859314,
+      "por_unidade": [
+        {
+          "consumos": 31,
+          "fracao": 0.2903225806451613,
+          "frutas": 9,
+          "semente": 1047149085993756058,
+          "unidade": {
+            "base": 49101,
+            "k": 0
+          },
+          "vida": "P1~fase1@1047149085993756058",
+          "x": "c"
+        },
+        {
+          "consumos": 25,
+          "fracao": 0.12,
+          "frutas": 3,
+          "semente": 12134498648781927561,
+          "unidade": {
+            "base": 49505,
+            "k": 3
+          },
+          "vida": "P1~fase1@12134498648781927561",
+          "x": "a"
+        },
+        {
+          "consumos": 30,
+          "fracao": 0.2,
+          "frutas": 6,
+          "semente": 12312363044171157364,
+          "unidade": {
+            "base": 49101,
+            "k": 3
+          },
+          "vida": "P1~fase1@12312363044171157364",
+          "x": "a"
+        },
+        {
+          "consumos": 24,
+          "fracao": 0.20833333333333334,
+          "frutas": 5,
+          "semente": 12672596517416738679,
+          "unidade": {
+            "base": 49404,
+            "k": 1
+          },
+          "vida": "P1~fase1@12672596517416738679",
+          "x": "b"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.07407407407407407,
+          "frutas": 2,
+          "semente": 12762141220961228589,
+          "unidade": {
+            "base": 49303,
+            "k": 2
+          },
+          "vida": "P1~fase1@12762141220961228589",
+          "x": "a"
+        },
+        {
+          "consumos": 33,
+          "fracao": 0.3333333333333333,
+          "frutas": 11,
+          "semente": 1431882899902232122,
+          "unidade": {
+            "base": 49101,
+            "k": 1
+          },
+          "vida": "P1~fase1@1431882899902232122",
+          "x": "b"
+        },
+        {
+          "consumos": 23,
+          "fracao": 0.2608695652173913,
+          "frutas": 6,
+          "semente": 15643314928035146507,
+          "unidade": {
+            "base": 49303,
+            "k": 1
+          },
+          "vida": "P1~fase1@15643314928035146507",
+          "x": "c"
+        },
+        {
+          "consumos": 32,
+          "fracao": 0.1875,
+          "frutas": 6,
+          "semente": 15902673151359557822,
+          "unidade": {
+            "base": 49101,
+            "k": 2
+          },
+          "vida": "P1~fase1@15902673151359557822",
+          "x": "c"
+        },
+        {
+          "consumos": 29,
+          "fracao": 0.20689655172413793,
+          "frutas": 6,
+          "semente": 16933846431706313690,
+          "unidade": {
+            "base": 49404,
+            "k": 0
+          },
+          "vida": "P1~fase1@16933846431706313690",
+          "x": "a"
+        },
+        {
+          "consumos": 23,
+          "fracao": 0.17391304347826086,
+          "frutas": 4,
+          "semente": 17526301384336782145,
+          "unidade": {
+            "base": 49202,
+            "k": 1
+          },
+          "vida": "P1~fase1@17526301384336782145",
+          "x": "b"
+        },
+        {
+          "consumos": 25,
+          "fracao": 0.16,
+          "frutas": 4,
+          "semente": 17956467753391548864,
+          "unidade": {
+            "base": 49404,
+            "k": 2
+          },
+          "vida": "P1~fase1@17956467753391548864",
+          "x": "b"
+        },
+        {
+          "consumos": 31,
+          "fracao": 0.2903225806451613,
+          "frutas": 9,
+          "semente": 18438281797531832026,
+          "unidade": {
+            "base": 49202,
+            "k": 2
+          },
+          "vida": "P1~fase1@18438281797531832026",
+          "x": "b"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.18518518518518517,
+          "frutas": 5,
+          "semente": 3062838520703593601,
+          "unidade": {
+            "base": 49505,
+            "k": 1
+          },
+          "vida": "P1~fase1@3062838520703593601",
+          "x": "b"
+        },
+        {
+          "consumos": 33,
+          "fracao": 0.09090909090909091,
+          "frutas": 3,
+          "semente": 3707460293088002948,
+          "unidade": {
+            "base": 49505,
+            "k": 2
+          },
+          "vida": "P1~fase1@3707460293088002948",
+          "x": "c"
+        },
+        {
+          "consumos": 29,
+          "fracao": 0.2413793103448276,
+          "frutas": 7,
+          "semente": 4352338562264537519,
+          "unidade": {
+            "base": 49404,
+            "k": 3
+          },
+          "vida": "P1~fase1@4352338562264537519",
+          "x": "a"
+        },
+        {
+          "consumos": 26,
+          "fracao": 0.0,
+          "frutas": 0,
+          "semente": 5168481706938228291,
+          "unidade": {
+            "base": 49303,
+            "k": 3
+          },
+          "vida": "P1~fase1@5168481706938228291",
+          "x": "a"
+        },
+        {
+          "consumos": 32,
+          "fracao": 0.1875,
+          "frutas": 6,
+          "semente": 5294362214878943491,
+          "unidade": {
+            "base": 49505,
+            "k": 0
+          },
+          "vida": "P1~fase1@5294362214878943491",
+          "x": "a"
+        },
+        {
+          "consumos": 27,
+          "fracao": 0.037037037037037035,
+          "frutas": 1,
+          "semente": 5604431573502442819,
+          "unidade": {
+            "base": 49202,
+            "k": 0
+          },
+          "vida": "P1~fase1@5604431573502442819",
+          "x": "c"
+        },
+        {
+          "consumos": 28,
+          "fracao": 0.32142857142857145,
+          "frutas": 9,
+          "semente": 7929452959552342399,
+          "unidade": {
+            "base": 49303,
+            "k": 0
+          },
+          "vida": "P1~fase1@7929452959552342399",
+          "x": "a"
+        },
+        {
+          "consumos": 40,
+          "fracao": 0.35,
+          "frutas": 14,
+          "semente": 9693600204647473419,
+          "unidade": {
+            "base": 49202,
+            "k": 3
+          },
+          "vida": "P1~fase1@9693600204647473419",
+          "x": "a"
+        }
+      ],
+      "sem_consumo": 0
+    }
+  ],
+  "regra": {
+    "dias": [
+      4,
+      6
+    ],
+    "faixa": [
+      0.25,
+      0.6
+    ],
+    "fonte": "PLANO_ANALISE_V2_PET_QUE_PENSA, adendo 3, A3.3 (PL-8, PJ-3)",
+    "grade": [
+      512,
+      1024,
+      2048
+    ],
+    "medida": "fracao de fruta madura (os tres tipos) entre os consumos no mapa, media sobre as unidades"
+  }
+}
