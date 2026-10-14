@@ -2,7 +2,11 @@
 
 - G-AST: cada nó de topo do bancada_v2.py de antes (o commit de base do mapa) está, na mesma ordem, no módulo do mapa, com a AST igual,
   salvo a troca declarada; a fachada tem a docstring, as importações e o `if __name__` de antes.
-- G-NOMES: a fachada tem exatamente os nomes do módulo de antes (os do mapa).
+- G-NOMES: a fachada tem exatamente os nomes do módulo de antes (os do mapa) no commit da divisão; depois dele, os PRs da bancada só
+  acrescentam nomes (nenhum nome de antes some da fachada).
+
+A prova é presa ao commit da divisão (`DIVISAO`, a main do #312): o G-AST lê o pacote e a fachada daquele commit pelo git, para continuar
+valendo depois que a bancada muda (paladar, etapa 4, o primeiro PR no pacote).
 - A fachada propaga a atribuição aos módulos (o monkeypatch dos testes de antes), e o pacote importa sem ciclo, módulo a módulo.
 """
 import json
@@ -20,21 +24,23 @@ import bancada_v2 as bv  # noqa: E402
 import dividir_bancada as db  # noqa: E402
 
 MAPA = json.loads((RAIZ / db.PROVA).read_text(encoding="utf-8"))
+DIVISAO = "9dd2149aa749997cfde40aef2638e01ba08d3aa2"     # a main com o #312: o pacote e a fachada da divisão
 
 
 def _git_tem(commit: str) -> bool:
     return subprocess.run(["git", "-C", str(RAIZ), "cat-file", "-e", f"{commit}^{{commit}}"], capture_output=True).returncode == 0
 
 
-@pytest.mark.skipif(not _git_tem(MAPA["base"]["commit"]), reason="o commit de base não está neste clone")
+@pytest.mark.skipif(not (_git_tem(MAPA["base"]["commit"]) and _git_tem(DIVISAO)), reason="o commit de base ou o da divisão não está neste clone")
 def test_g_ast_contra_o_commit_de_base():
     p = db.Particao(db.ler_fonte(MAPA["base"]["commit"]))
-    mapa = db.conferir(p, MAPA["base"]["commit"])
+    mapa = db.conferir(p, MAPA["base"]["commit"], DIVISAO)
     assert mapa == MAPA
 
 
 def test_g_nomes():
-    assert db.nomes_da_fachada() == set(MAPA["nomes"])
+    """nenhum nome de antes some da fachada (no commit da divisão eram exatamente os do mapa; o G-AST confere o pacote daquele commit)"""
+    assert set(MAPA["nomes"]) <= db.nomes_da_fachada()
 
 
 def test_modulos_do_pacote_e_do_mapa():

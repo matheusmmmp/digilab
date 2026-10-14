@@ -332,12 +332,26 @@ def nos_do_modulo(texto: str) -> list[ast.stmt]:
     return [n for n in corpo if not isinstance(n, (ast.Import, ast.ImportFrom))]
 
 
-def conferir(p: Particao, base: str) -> dict:
+def ler_do_pacote(rel: str, pacote: str | None) -> str:
+    """um arquivo do pacote ou da fachada: o do disco, ou o do commit `pacote` (a prova presa ao commit da divisao)"""
+    if pacote is None:
+        return (RAIZ / rel).read_bytes().decode("utf-8")
+    saida = subprocess.run(["git", "-C", str(RAIZ), "show", f"{pacote}:{rel}"], capture_output=True)
+    if saida.returncode != 0:
+        raise RuntimeError(saida.stderr.decode("utf-8", "replace"))
+    return saida.stdout.decode("utf-8")
+
+
+def conferir(p: Particao, base: str, pacote: str | None = None) -> dict:
     """G-AST: cada nó de antes está, na mesma ordem, no módulo do mapa, com a AST igual (salvo as TROCAS, declaradas); a fachada tem a
-    docstring, as importações e o `if __name__` de antes. Devolve o mapa (gravado em docs/historico/bancada_mapa.json)."""
+    docstring, as importações e o `if __name__` de antes. Devolve o mapa (gravado em docs/historico/bancada_mapa.json).
+
+    Com `pacote` (um commit), o pacote e a fachada são os daquele commit, lidos pelo git: a prova da divisão continua valendo depois que
+    os PRs seguintes mexem na bancada (paladar, etapa 4). O G-NOMES importa a fachada de verdade, então só roda sem `pacote` (o disco);
+    com ele, o teste confere o G-NOMES de hoje (nenhum nome de antes some)."""
     falhas, nos = [], []
     for mod in MODULOS:
-        novos = nos_do_modulo((RAIZ / PACOTE / f"{mod}.py").read_bytes().decode("utf-8"))
+        novos = nos_do_modulo(ler_do_pacote(f"{PACOTE}/{mod}.py", pacote))
         antigos = [(n, t) for m, n, t in p.nos if m == mod]
         if len(novos) != len(antigos):
             falhas.append(f"{mod}: {len(antigos)} nós antes, {len(novos)} depois")
@@ -350,13 +364,14 @@ def conferir(p: Particao, base: str) -> dict:
                 falhas.append(f"{mod}: o nó {nome} (linha {velho.lineno} antes) mudou")
             nos.append({"nome": nome, "modulo": mod, "linhas_antes": f"{velho.lineno}-{velho.end_lineno}",
                         "igual": igual, **({"troca": TROCAS[troca][1]} if troca and not igual else {})})
-    texto_fachada = (RAIZ / FONTE).read_bytes().decode("utf-8")
+    texto_fachada = ler_do_pacote(FONTE, pacote)
     nova = ast.parse(texto_fachada).body
     velhos = [n for n in p.cabecalho] + [p.principal]
     achados = [n for n in nova if any(ast.dump(n) == ast.dump(v) for v in velhos)]
     if len(achados) != len(velhos):
         falhas.append(f"a fachada não tem o cabeçalho e o `if __name__` de antes ({len(achados)} de {len(velhos)} nós)")
-    antes, depois = nomes_do_modulo_antes(p.fonte), nomes_da_fachada()
+    antes = nomes_do_modulo_antes(p.fonte)
+    depois = nomes_da_fachada() if pacote is None else antes
     if antes != depois:
         falhas.append(f"G-NOMES: só antes {sorted(antes - depois)[:10]}; só depois {sorted(depois - antes)[:10]}")
     if falhas:

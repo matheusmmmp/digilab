@@ -74,7 +74,7 @@ BASES = {
     "dois_pets": {"calibracao": (39101, 39202, 39303, 39404, 39505), "validacao": (40101, 40202, 40303, 40404, 40505),
                   "degrau_1b": (41101, 41202, 41303, 41404, 41505), "dois_donos": (42101, 42202, 42303, 42404, 42505)},
     "rede_de_si": {"calibracao": (43101, 43202, 43303, 43404, 43505), "validacao": (44101, 44202, 44303, 44404, 44505)},
-    "pet_que_pensa": bv.BASES_PET_QUE_PENSA,     # W-BANCADA-PQP: o J5 (tests/test_bancada_pet_que_pensa.py)
+    "pet_que_pensa": {**bv.BASES_PET_QUE_PENSA, "calibracao_paladar": bv.BASES_PQP_PALADAR},   # o J5, com o paladar (adendo 3)
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40

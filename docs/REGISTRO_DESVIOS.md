@@ -246,4 +246,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-13 — REDE-DE-SI-CALIBRACAO (worker D): a calibração do `passo` e o piloto, preparados](registro/2026-10.md)
 - [2026-10-14 — REDE-DE-SI-CALIBRACAO, a run (worker D): a calibração do `passo`, a taxa lenta e o piloto](registro/2026-10.md)
 - [2026-10-14 — ORGAO-SEM-DIRECAO (worker A): os candidatos `cheiro_seguir` e `cheiro_virar` e o G-SEM-DIRECAO](registro/2026-10.md)
+- [2026-10-14 — PALADAR, etapa 4 (worker D): o paladar nos braços do J5, as medidas e a calibração montada](registro/2026-10.md)
 - [2026-10-14 — SAUDE-ETAPA-4: os hooks, desligados (worker C)](registro/2026-10.md)

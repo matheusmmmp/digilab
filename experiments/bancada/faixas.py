@@ -68,6 +68,8 @@ FAIXAS_RESERVADAS = (
     (46101, 46505, "pet que pensa (J5), validacao (PLANO_ANALISE_V2_PET_QUE_PENSA, secao 8, PP-9)"),
     (47101, 47505, "mundo com o alvo aprendido, piloto do N (PLANO_ANALISE_V2_MUNDO_ALVO, secao 12, PMA-7)"),
     (48101, 48505, "mundo com o alvo aprendido, validacao (PLANO_ANALISE_V2_MUNDO_ALVO, secao 12, PMA-7)"),
+    (49101, 49505, "pet que pensa (J5) com o paladar, calibracao do ganho_gosto e do g_plano e piloto (PLANO_ANALISE_V2_PET_QUE_PENSA, "
+                   "adendo 3, A3.5, PJ-5)"),
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
