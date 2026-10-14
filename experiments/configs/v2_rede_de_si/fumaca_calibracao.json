@@ -1,5 +1,5 @@
 {
-  "descricao": "Fumaca da calibracao da rede de si (a mesma config, nas sementes dos testes, 3 dias, K = 1). NAO canonica: so confere o encanamento da grade, da regra, do piloto, da margem e do N, nunca como resultado.",
+  "descricao": "Fumaca da calibracao da rede de si (a mesma config, nas sementes dos testes, 10 dias, K = 1). NAO canonica: so confere o encanamento da grade, da regra, do piloto, da margem e do N, nunca como resultado.",
   "unidades": {
     "bases": [
       101,
@@ -9,8 +9,8 @@
     "k": 1,
     "prefixo": "rede_de_si"
   },
-  "dias": 3,
-  "orcamento": 48,
+  "dias": 10,
+  "orcamento": 160,
   "ponto": "T3",
   "montagem": "completa",
   "lobos": {
@@ -54,5 +54,10 @@
       0.0125,
       0.05
     ]
-  }
+  },
+  "grade_taxa_lenta": [
+    225000,
+    112500,
+    56250
+  ]
 }
