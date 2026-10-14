@@ -375,10 +375,10 @@ def politica(cerebro: str, cc=DRIVES_P):
             else PoliticaLobos(CONFIG_PADRAO, CONFIG_LOBOS_APRENDIZ, cfg_mundo=CM, cfg_corpo=replace(cc, paladar=False)))
 
 
-def vida(cerebro: str = "instinto", semente: int = 101, dias: int = 2):
-    esp = Espiao(politica(cerebro))
+def vida(cerebro: str = "instinto", semente: int = 101, dias: int = 2, cc: ConfigCorpo = DRIVES_P):
+    esp = Espiao(politica(cerebro, cc))
     dono = gdp.DonoComBolaPerto(DonoComLugar(criar_dono("atencioso"), "perto", semente, "atencioso", CM))
-    return simular_vida_mundo("atencioso", dono, esp, semente, dias, 16 * dias, fabrica(), rotulo_dono="atencioso"), esp
+    return simular_vida_mundo("atencioso", dono, esp, semente, dias, 16 * dias, fabrica(cc), rotulo_dono="atencioso"), esp
 
 
 def test_o_motor_falha_alto_sem_o_que_o_paladar_exige():
@@ -404,8 +404,9 @@ def test_o_motor_falha_alto_sem_o_que_o_paladar_exige():
 
 
 @pytest.mark.parametrize("cerebro", ["instinto", "lobos"])
-def test_o_motor_leva_o_perfil_e_a_percepcao_le_o_paladar(cerebro):
-    v, esp = vida(cerebro)
+@pytest.mark.parametrize("cc", [DRIVES_P, QUIMICA_P], ids=["etapa6", "quimica"])
+def test_o_motor_leva_o_perfil_e_a_percepcao_le_o_paladar(cerebro, cc):
+    v, esp = vida(cerebro, cc=cc)
     m = v.motor
     assert all(all(getattr(pc, f"paladar_{q}") is not None for q in QUALIDADES) for pc in esp.leituras)
     madura = [c for c in m.consumos_mundo if c["situacao"] == "madura"]

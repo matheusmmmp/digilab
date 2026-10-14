@@ -158,7 +158,7 @@ class MotorCorpo:
         if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
                                          cfg_ouvido=self.cv)
-        elif self.cc.drives_novos:                    # etapa 6: a curiosidade so existe com o mundo fisico (CD-8)
+        elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado())
         else:
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo)
