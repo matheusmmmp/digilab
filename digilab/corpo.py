@@ -76,6 +76,17 @@ DP-14, duas narinas e dois ouvidos; `ConfigOlfato` e `ConfigOuvido`, desligadas:
 Os receptores dos orgaos vao a `PercepcaoCorpo` (motor_corpo.py); o cerebro A ainda nao os le (o custo em pesos de cada um como entrada fica
 registrado em experiments/custo_orgaos.py).
 
+O Paladar (docs/futuro/paladar.md, secoes 3.2 e 4; PL-1 a PL-9 pela recomendacao; sub-chave `paladar`, so com o mundo fisico): por
+qualidade q em QUALIDADES (doce, azedo, amargo, salgado), dois quimicos:
+  - `sabor_q` (concentracao, receptor `paladar_q`, meia-vida `meia_vida_sabor`): ao comer, recebe e_q = max(0, perfil_q - saciedade_q), a
+    parte do estimulo que a saciedade ainda deixa passar; acaba antes da decisao seguinte;
+  - `saciedade_q` (concentracao, sem receptor, meia-vida `meia_vida_saciedade`, 12 h): sobe div_arred(perfil_q x saciedade_num,
+    saciedade_den) a cada consumo. E a saciedade sensorio-especifica por qualidade: a racao comida muitas vezes satura o `salgado` e nao
+    mexe no `doce` de uma fruta.
+O perfil do tipo comido vem do mundo (`estimulo_gosto`, chamado pelo `estimulo_consumo_mundo` com o perfil; a podre nao tem perfil). O
+gosto nao le a fome (PL-6) e nao ha quimico de prazer (PL-1): o quanto o pet gosta de cada qualidade e do genoma (digilab/genoma_paladar.py)
+e entra no sinal do cerebro, nunca no corpo.
+
 Componente puro: nao e motor, nao sorteia (nenhuma rng), nao le o cerebro. A sujeira e o sono continuam estados do `Estado` (o motor
 sorteia a sujeira como hoje); o corpo so os le. Quem liga o corpo ao motor e o A (etapa 2, `MotorCorpo`).
 
@@ -104,6 +115,8 @@ NOVOS = ("tedio", "curiosidade", "solidao", "estresse")           # etapa 6, dri
 GESTOS = ("dor", "susto")                                         # etapa 6, gestos
 BANHEIRO = ("vontade", "conforto")                                # o banheiro (TAREFA_V2_BANHEIRO, secao 3 e BN-6)
 METABOLISMO = ("combustivel", "reserva")                          # o metabolismo (TAREFA_V2_METABOLISMO, secao 3); sem receptor (ME-2)
+QUALIDADES = ("doce", "azedo", "amargo", "salgado")               # o Paladar (docs/futuro/paladar.md, PL-3): nomes do estimulo
+PALADAR = tuple(f"sabor_{q}" for q in QUALIDADES) + tuple(f"saciedade_{q}" for q in QUALIDADES)   # o Paladar; so o sabor tem receptor
 CONTAS_METABOLISMO = ("convertido", "descartado_teto", "mobilizado", "gasto_basal", "gasto_atividade", "armazenado")
 DRIVES_DO_ESTRESSE = ("fome", "desconforto", "cansaco", "tedio", "curiosidade", "solidao", "dor")   # secao 7, os que o estresse le
 ATIVIDADES = ("bola", "brincar", "explorar", "dono_brinca")       # DS-4: as atividades que reduzem o tedio e entram na janela
@@ -151,6 +164,7 @@ def quimicos_de(cc: ConfigCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfa
     novos = tuple(n for n in NOVOS if n != "curiosidade" or com_mundo) if cc.drives_novos else ()
     return (QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ()) + novos
             + (GESTOS if cc.gestos else ()) + (BANHEIRO if cc.banheiro else ()) + (METABOLISMO if cc.metabolismo else ())
+            + (PALADAR if cc.paladar else ())
             + tuple(o.adaptacao for o in orgaos_de(cfg_olfato, cfg_ouvido)))
 
 
@@ -221,6 +235,16 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "falta_cansaco": ("PROPOSTO", "secao 3: +500 por tick, o cansaco de um tick acordado de dia, sem fonte (ME-1)"),
     "gasto_atividades_num": ("PROPOSTO", "ME-3 e ME-7: 1/1, o mesmo numero do cansaco; o passo 0 da calibracao escala (no gasto_atividades)"),
     "gasto_atividades_den": ("PROPOSTO", "ME-3 e ME-7: 1/1, o mesmo numero do cansaco; o passo 0 da calibracao escala (no gasto_atividades)"),
+    "paladar": ("DECIDIDO", "PL-1 a PL-9 pela recomendacao (docs/futuro/paladar.md, secao 9; Matheus, 2026-10-13)"),
+    "meia_vida_sabor": ("PROPOSTO", "paladar, secao 3.2: 4 ticks (o sinal acaba antes da decisao seguinte), sem fonte"),
+    "k_meia_vida_sabor": ("PROPOSTO", "= k_meia_vida(meia_vida_sabor), a regra da secao 3"),
+    "meia_vida_saciedade": ("PROPOSTO", "paladar, secao 3.2 e PL-4: 720 ticks (12 h), sem fonte"),
+    "k_meia_vida_saciedade": ("PROPOSTO", "= k_meia_vida(meia_vida_saciedade), a regra da secao 3"),
+    "saciedade_num": ("PROPOSTO", "paladar, secao 3.2: k_sac = 1/2, sem fonte"),
+    "saciedade_den": ("PROPOSTO", "paladar, secao 3.2: k_sac = 1/2, sem fonte"),
+    "paladar_h_min": ("PROPOSTO", "paladar, secao 3.3: -S/2, sem fonte"),
+    "paladar_h_max": ("PROPOSTO", "paladar, secao 3.3: S, sem fonte"),
+    "paladar_h_salgado": ("PROPOSTO", "paladar, secao 3.3: S/4, o gosto basico da racao, igual para todos, sem fonte"),
 }
 
 # Status dos campos da ConfigOlfato e da ConfigOuvido (conferido por teste). As chaves sao DECIDIDAS (DP-13 e DP-14, 2026-10-11); os
@@ -397,7 +421,8 @@ def taxas_de(cfg: Config, cc: ConfigCorpo) -> TaxasCorpo:
 
 MEIAS_VIDAS = {"estresse": ("k_meia_vida_estresse", 1440), "dor": ("k_meia_vida_dor", 60), "susto": ("k_meia_vida_susto", 30),
                "conforto": ("k_meia_vida_conforto", 60)}
-RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS + BANHEIRO}}     # o nome do receptor (o campo da PercepcaoCorpo)
+RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS + BANHEIRO},     # o nome do receptor (o campo da PercepcaoCorpo)
+               **{f"sabor_{q}": f"paladar_{q}" for q in QUALIDADES}}               # o Paladar: le a concentracao do sabor
 
 
 def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
@@ -420,6 +445,9 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         receptor = RECEPTOR_DE.get(n)
         leitura = None if receptor is None else ("drive" if n in QUIMICOS else "falta")
         h = MEIAS_VIDAS.get(n)
+        if n in PALADAR:                                   # o Paladar: as meias-vidas sao da ConfigCorpo (o sabor curto, a saciedade 12 h)
+            h = (("k_meia_vida_sabor", cc.meia_vida_sabor) if n.startswith("sabor_")
+                 else ("k_meia_vida_saciedade", cc.meia_vida_saciedade))
         quimicos.append(Quimico(n, C, True, receptor, leitura, None if h is None else h[1],
                                 None if h is None else getattr(cc, h[0])))
     # a digestao tira o alimento e a fome; com o banheiro, poe na vontade uma fracao do que digeriu; com o metabolismo, no combustivel
@@ -499,6 +527,11 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         em += [Emissor("carinho_conforto", "estimulo", 0, (("conforto", cc.conforto_carinho),), medo),
                Emissor("aliviar", "estimulo", 0, (("vontade", -1),), variavel=True),           # a vontade a zero
                Emissor("necessidade", "estimulo", 0, (("desconforto", cc.necessidade_desconforto),))]
+    if cc.paladar:
+        # o Paladar (secao 3.2): ao comer, o perfil do tipo (de fora, variavel) poe no sabor o que a saciedade ainda deixa passar (le a
+        # saciedade com sinal -1: mais saciedade, menos sabor) e sobe a saciedade. Nenhum laco: a leitura e negativa
+        em += [Emissor(f"paladar:{q}", "estimulo", 0, ((f"sabor_{q}", 1), (f"saciedade_{q}", 1)),
+                       (Leitura(f"saciedade_{q}", 1, 1, -1),), variavel=True) for q in QUALIDADES]
     if cfg_olfato is not None and cfg_olfato.ligada and cfg_olfato.outro_pet:
         # os emissores externos do Olfato social (secao 5.3): intensidade constante, destino mundo, sem leitura de quimico
         em += [Emissor("cheiro_proprio", "posicao", 0, (("cheiro_proprio", cfg_olfato.cheiro_pet),), destino="mundo"),
@@ -545,6 +578,8 @@ class Corpo:
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
         self._conferir_orgaos()
+        if self.cc.paladar and not com_mundo:
+            raise ValueError("ConfigCorpo.paladar sem o mundo fisico: o perfil de gosto vem da comida do mapa (paladar, secao 3.1)")
         # secao 18: a tabela unica, conferida na carga (falha alto); a lista e a ordem dos quimicos saem dela
         self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv)
         self.relato_grafo = checar(self.grafo)
@@ -747,14 +782,20 @@ class Corpo:
             self._somar({q: d * (cansaco if q == "cansaco" else gasto_da_atividade(self.cc, cansaco))
                          for q, d in self.grafo.emissor("andar").efeitos})
 
-    def estimulo_consumo_mundo(self, tipo: str, situacao: str, cfg_mundo: ConfigMundo, efeito_fruta: float = 0.0) -> None:
+    def estimulo_consumo_mundo(self, tipo: str, situacao: str, cfg_mundo: ConfigMundo, efeito_fruta: float = 0.0,
+                               perfil: dict[str, int] | None = None) -> None:
         """Comer uma comida do mapa (mundo.MotorMundo._comer_mundo), pelo `comer` ou pelo "achou e comeu" do explorar:
         - racao madura: fome + ganho_alimentar (a mesma racao do alimentar de hoje; comida, com a digestao);
         - fruta madura: fome + nutricao_fruta e humor + o efeito da fruta (`efeito_fruta`, o do mundo; 0 nas frutas iguais);
         - podre (racao ou fruta): humor + efeito_podre, sem fome.
-        Tipo ou situacao fora disso falha alto."""
+        Com o Paladar, a comida madura leva o `perfil` do tipo (de fora) ao `estimulo_gosto`, depois da nutricao; a podre nao tem perfil.
+        Tipo ou situacao fora disso falha alto; perfil sem o Paladar, ou faltando com ele, tambem."""
         if tipo not in TIPOS_COMIDA_MUNDO:
             raise ValueError(f"comida do mundo desconhecida: {tipo!r}")
+        if perfil is not None and not self.cc.paladar:
+            raise ValueError("perfil de gosto sem a sub-chave paladar")
+        if self.cc.paladar and (perfil is None) != (situacao == "podre"):
+            raise ValueError(f"com o paladar, a comida madura leva o perfil e a podre nao: {tipo}, {situacao}, perfil {perfil!r}")
         if situacao == "podre":
             self._somar({"tristeza": -na_grade(cfg_mundo.efeito_podre, self.C, "efeito_podre")})
         elif situacao != "madura":
@@ -765,6 +806,27 @@ class Corpo:
             self.estimulo_fruta(cfg_mundo.nutricao_fruta, efeito_fruta)
         else:                                                      # pragma: no cover - TIPOS_COMIDA_MUNDO = racao + FRUTAS
             raise ValueError(f"comida sem estimulo: {tipo!r}")
+        if perfil is not None:
+            self.estimulo_gosto(perfil)
+
+    # ---------------------------------------------------------- o Paladar (docs/futuro/paladar.md, secao 3.2)
+
+    def estimulo_gosto(self, perfil: dict[str, int]) -> None:
+        """O gosto do que o pet comeu: por qualidade, o sabor recebe max(0, perfil_q - saciedade_q) (a saciedade de antes deste consumo)
+        e a saciedade sobe div_arred(perfil_q x saciedade_num, saciedade_den); os dois cortados em C. O perfil e um inteiro em [0, C] por
+        qualidade, exatamente QUALIDADES. Nao le a fome (PL-6). Sem o Paladar, falha alto."""
+        if not self.cc.paladar:
+            raise ValueError("estimulo do gosto sem a sub-chave paladar (ConfigCorpo.paladar)")
+        if set(perfil) != set(QUALIDADES):
+            raise ValueError(f"o perfil de gosto tem as qualidades {QUALIDADES}, veio {sorted(perfil)}")
+        for q, v in perfil.items():
+            if type(v) is not int or not 0 <= v <= self.C:
+                raise ValueError(f"perfil de gosto de {q} fora de inteiros em [0, C]: {v!r}")
+        deltas = {}
+        for q in QUALIDADES:
+            deltas[f"sabor_{q}"] = max(0, perfil[q] - self.q[f"saciedade_{q}"])
+            deltas[f"saciedade_{q}"] = div_arred(perfil[q] * self.cc.saciedade_num, self.cc.saciedade_den)
+        self._somar(deltas)
 
     # ---------------------------------------------------------- orgao 1: a digestao
 

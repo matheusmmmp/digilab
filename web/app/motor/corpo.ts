@@ -64,6 +64,8 @@ export function configCorpo(mudancas: Partial<ConfigCorpo> = {}): ConfigCorpo {
   if (cc.medo_da_mao !== 0 && cc.medo_da_mao !== 1) throw new Error(`ConfigCorpo.medo_da_mao e 0 (sem medo) ou 1: ${cc.medo_da_mao}`);
   // o metabolismo (docs/TAREFA_V2_METABOLISMO.md) ainda nao tem quimica em TS (a etapa 4 da tarefa): ligado, falha alto
   if (cc.metabolismo) throw new Error("ConfigCorpo.metabolismo ainda nao existe no TS (TAREFA_V2_METABOLISMO, etapa 4)");
+  // o Paladar (docs/futuro/paladar.md) ainda nao tem orgao em TS (a etapa 5 do paladar): ligado, falha alto
+  if (cc.paladar) throw new Error("ConfigCorpo.paladar ainda nao existe no TS (paladar, etapa 5)");
   return cc;
 }
 /** CONFIG_CORPO_LIGADA e CONFIG_CORPO_DRIVES do Python */

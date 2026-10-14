@@ -55,6 +55,10 @@ A troca da digestao (rede de si, etapa 2b; RS-3): com `troca_digestao=(tick, tax
 (antes da decisao e do passo daquele tick) a `taxa_digestao` do corpo passa a `taxa`; o grafo do corpo e refeito com ela e conferido de
 novo (as quatro checagens). A troca fica em `troca_digestao` (registro derivado, como a troca do mutavel: o tick, o pedido, a taxa antes e
 depois) e no `estado()`; o replay a refaz pela mesma fabrica. Sem ela pedida, nada muda.
+O Paladar (docs/futuro/paladar.md, secao 3.2; ConfigCorpo.paladar, so com o mundo fisico): cada comida madura comida no mapa (o comer, o
+"achou e comeu") e a fruta na mao levam ao corpo o perfil do tipo (um inteiro em [0, C] por qualidade), do lado do mundo (o A, etapa 1):
+no mapa, o `ocorrido["comeu"]["perfil"]`; na mao, a `ConfigPaladar` do MotorMundo (`cpal.perfis`). O corpo com o paladar exige o mundo com
+o paladar (`cpal.ligada`; falha alto na construcao). A podre nao tem perfil. Os receptores `paladar_<q>` vao a `PercepcaoCorpo`.
 """
 
 from __future__ import annotations
@@ -122,6 +126,11 @@ class PercepcaoCorpo:
     ouvido_emburrado: int | None = None
     ouvido_emburrado_esq: int | None = None
     ouvido_emburrado_dir: int | None = None
+    # o Paladar (docs/futuro/paladar.md, secao 3.2): o sabor de cada qualidade (a concentracao, div_arred(q S, C)). Desligado, None
+    paladar_doce: int | None = None
+    paladar_azedo: int | None = None
+    paladar_amargo: int | None = None
+    paladar_salgado: int | None = None
 
 
 class MotorCorpo:
@@ -149,7 +158,7 @@ class MotorCorpo:
         if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
                                          cfg_ouvido=self.cv)
-        elif self.cc.drives_novos:                    # etapa 6: a curiosidade so existe com o mundo fisico (CD-8)
+        elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado())
         else:
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo)
@@ -173,8 +182,28 @@ class MotorCorpo:
         if estranhos:
             raise TypeError(f"classes que mexem no avanco e que o laco do corpo nao refaz: {estranhos}")
 
+    def _conferir_paladar(self) -> None:
+        """O Paladar so com o mundo fisico e com o paladar do mundo ligado (a ConfigPaladar do MotorMundo, `cpal`, do A)."""
+        if not (self.cc.ligada and self.cc.paladar):
+            return
+        if not self._mundo_ligado():
+            raise ValueError("o Paladar le o perfil da comida do mapa: exige o mundo fisico (paladar, secao 3.1)")
+        cpal = getattr(self, "cpal", None)
+        if cpal is None or not cpal.ligada:
+            raise ValueError("o corpo com o paladar exige o mundo com o paladar (ConfigPaladar.ligada no MotorMundo; paladar, secao 4)")
+
+    def _perfil(self, comeu: dict) -> dict[str, int] | None:
+        """O perfil do que o pet comeu no mapa: o `perfil` do `ocorrido["comeu"]` (o mundo o poe so com a ConfigPaladar ligada; None na
+        podre). Com o corpo sem o paladar, nada (o corpo recusa um perfil sem a sub-chave)."""
+        if not self.cc.paladar:
+            return None
+        if "perfil" not in comeu:
+            raise RuntimeError(f"o corpo com o paladar e o consumo sem perfil do mundo: {comeu!r}")
+        return comeu["perfil"]
+
     def _conferir_orgaos(self) -> None:
         """Os orgaos (secao 5.6 dos dois pets) so com o corpo e o mundo fisico, e com o gancho do lado do mundo que entrega o estimulo."""
+        self._conferir_paladar()
         if not self._orgaos_ligados():
             return
         if not self.cc.ligada:
@@ -361,7 +390,8 @@ class MotorCorpo:
         self._estimulos.append(("andar", ocorrido["deslocamento"]))
         if comeu is not None:
             tipo = comeu["tipo"]
-            self.corpo.estimulo_consumo_mundo(tipo, comeu["situacao"], cmf, self.efeito_frutas.get(tipo, 0.0))
+            self.corpo.estimulo_consumo_mundo(tipo, comeu["situacao"], cmf, self.efeito_frutas.get(tipo, 0.0),
+                                              perfil=self._perfil(comeu))
             self._estimulos.append(("comida", tipo, comeu["situacao"]))
         if bola:
             self.corpo.estimulo_bola(cmf.ganho_humor_bola)
@@ -473,7 +503,8 @@ class MotorCorpo:
         if not self._ligado():
             return super()._estimulo_mao(f)
         self._conferir_estimulo("fruta na mao", {"fome", "humor"})
-        self.corpo.estimulo_consumo_mundo(f, "madura", self.cmf, self.efeito_frutas[f])
+        perfil = dict(self.cpal.perfis[f]) if self.cc.paladar else None      # a mao: o perfil do tipo, da ConfigPaladar do mundo
+        self.corpo.estimulo_consumo_mundo(f, "madura", self.cmf, self.efeito_frutas[f], perfil=perfil)
         self._sincronizar()
 
     # ------------------------------------------------------------ etapa 6: os gestos (secao 8)

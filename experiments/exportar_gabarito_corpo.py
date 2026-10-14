@@ -40,6 +40,11 @@ O conteudo (versao 5):
   atividades e o andar), o estado, o resto e as contas depois; a mesma grade com a conversao 2/3 (o resto mordendo, so para a
   paridade); e uma sequencia longa de operacoes sorteadas num corpo so, com o sha256 de q, da janela, do resto e das contas. As secoes
   da versao 5 nao mudaram; a `config` ganhou os campos do metabolismo.
+- `paladar` (versao 5, como o metabolismo; docs/futuro/paladar.md, secao 3.2, etapa 2): o sabor e a saciedade por qualidade, com a
+  quimica e com a etapa 6, no mundo fisico: o grafo (a tabela, com as leituras dos emissores, e o relato); uma grade de estados com o
+  estimulo do gosto (os perfis PROPOSTOS do desenho, um perfil cheio e um vazio), o consumo do mapa com o perfil e o passo, com os quimicos
+  e os receptores do paladar depois; e uma sequencia longa de operacoes sorteadas num corpo so, com o sha256 de q depois de cada uma. As
+  outras secoes nao mudaram; a `config` ganhou os campos do paladar.
 - `metabolismo_gasto` (o no `gasto_atividades`): a grade do metabolismo com o fator do gasto das atividades x 1/2 e x 2, e as taxas das
   atividades em cada um. A `config` ganhou os dois campos do fator; as outras secoes nao mudaram.
 """
@@ -59,8 +64,8 @@ from dataclasses import replace  # noqa: E402
 
 from digilab.config import (CONFIG_CORPO_BANHEIRO, CONFIG_CORPO_DRIVES, CONFIG_CORPO_METABOLISMO, CONFIG_DURACOES,  # noqa: E402
                             CONFIG_EVOLUCAO_PESQUISA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, ConfigCorpo)
-from digilab.corpo import (ATIVIDADES, Corpo, div_arred, grafo_do_corpo, limiares_estagio, passo_meia_vida, quimicos_de,  # noqa: E402
-                           taxas_de, ticks_de_estagio)
+from digilab.corpo import (ATIVIDADES, QUALIDADES, Corpo, div_arred, grafo_do_corpo, limiares_estagio, passo_meia_vida,  # noqa: E402
+                           quimicos_de, taxas_de, ticks_de_estagio)
 from digilab.corpo_grafo import Grafo, checar  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario  # noqa: E402
@@ -573,6 +578,90 @@ def metabolismo_gasto() -> dict:
     return out
 
 
+# ------------------------------------------------------------------ o Paladar (versao 5, como o metabolismo)
+
+CC_P = replace(ConfigCorpo(ligada=True, digestao=True, vida=True), paladar=True)
+CC_P6 = replace(CONFIG_CORPO_DRIVES, paladar=True)
+CAMPOS_P = ("paladar", "meia_vida_sabor", "k_meia_vida_sabor", "meia_vida_saciedade", "k_meia_vida_saciedade", "saciedade_num",
+            "saciedade_den", "paladar_h_min", "paladar_h_max", "paladar_h_salgado")
+RECEPTORES_P = tuple(f"paladar_{q}" for q in QUALIDADES)
+
+
+def _perfis_p(C: int) -> dict[str, dict[str, int]]:
+    """os perfis PROPOSTOS do desenho (secao 3.1; os do mundo sao do A, a ConfigPaladar), mais um cheio e um vazio, so para a paridade"""
+    perfis = {"a": (3 * C // 4, C // 4, 0, 0), "b": (0, 3 * C // 4, C // 4, 0), "c": (C // 4, 0, 3 * C // 4, 0),
+              "racao": (0, 0, 0, C // 4), "cheio": (C, C, C, C), "vazio": (0, 0, 0, 0)}
+    return {k: dict(zip(QUALIDADES, v)) for k, v in perfis.items()}
+
+
+def _aplicar_p(c: Corpo, op: list) -> None:
+    if op[0] == "gosto":
+        c.estimulo_gosto(dict(op[1]))
+    elif op[0] == "consumo_p":
+        c.estimulo_consumo_mundo(op[1], op[2], CONFIG_MUNDO_LIGADA, op[3], perfil=None if op[4] is None else dict(op[4]))
+    else:
+        _aplicar_e6(c, op)
+
+
+def _ops_p(C: int) -> list[list]:
+    perfis = _perfis_p(C)
+    ops = [["passo", dormindo, 0, tick] for dormindo in (0, 1) for tick in (600, 1400)]
+    ops += [["gosto", perfis[k]] for k in perfis]
+    ops += [["consumo_p", "racao", "madura", 0.0, perfis["racao"]], ["consumo_p", "a", "madura", -0.1, perfis["a"]],
+            ["consumo_p", "c", "podre", 0.0, None]]
+    return ops
+
+
+def _estados_p(rng: random.Random, cc: ConfigCorpo) -> list[list[int]]:
+    C = cc.escala
+    nomes = quimicos_de(cc, True)
+    n = len(nomes)
+    estados = [[0] * n, [C] * n, [C // 2] * 5 + [0] * (n - 5)]
+    for _ in range(14):
+        estados.append([rng.randrange(C + 1) for _ in range(n)])
+    return estados
+
+
+def _casos_p(cc: ConfigCorpo, rng: random.Random) -> list[dict]:
+    out = []
+    for q in _estados_p(rng, cc):
+        for op in _ops_p(cc.escala):
+            c = Corpo(dict(zip(quimicos_de(cc, True), q)), CONFIG_PADRAO, cc, com_mundo=True)
+            _aplicar_p(c, op)
+            rec = c.receptores()
+            out.append({"q": q, "op": op, "q_depois": _q(c), "receptores": [rec[r] for r in RECEPTORES_P]})
+    return out
+
+
+def paladar() -> dict:
+    rng = random.Random(SEMENTE_CASOS + 10)
+    grafos_p = []
+    for nome, cc in (("quimica", CC_P), ("etapa6", CC_P6)):
+        g = grafo_do_corpo(CONFIG_PADRAO, cc, taxas_de(CONFIG_PADRAO, cc), True)
+        t = _tabela_m(g)
+        t["emissores"] = [{**e, "le": [[le.quimico, le.num, le.den, le.sinal] for le in em.le]}
+                          for e, em in zip(t["emissores"], g.emissores)]
+        grafos_p.append({"chaves": nome, "com_mundo": True, "tabela": t, "relato": checar(g)})
+    casos_p = _casos_p(CC_P, rng)
+    c = Corpo.de_estado(Estado(), CONFIG_PADRAO, CC_P, com_mundo=True)
+    ops, h, tick = [], hashlib.sha256(), 0
+    escolhas = _ops_p(CC_P.escala)[4:]
+    for _ in range(3000):
+        if rng.random() < 0.85:
+            op = ["passo", int(rng.random() < 0.3), rng.randrange(3), tick]
+            tick += 1
+        else:
+            op = rng.choice(escolhas)
+        _aplicar_p(c, op)
+        ops.append(op)
+        h.update(json.dumps(_q(c), separators=(",", ":")).encode())
+    return {"quimicos": list(quimicos_de(CC_P, True)), "quimicos_etapa6": list(quimicos_de(CC_P6, True)),
+            "config": {k: getattr(CC_P, k) for k in CAMPOS_P}, "receptores": list(RECEPTORES_P), "perfis": _perfis_p(CC_P.escala),
+            "grafo": grafos_p, "casos": casos_p,
+            "sequencia": {"ops": ops, "sha256": h.hexdigest(), "q_final": _q(c),
+                          "receptores_final": [c.receptores()[r] for r in RECEPTORES_P]}}
+
+
 def gabarito() -> dict:
     t = taxas_de(CONFIG_PADRAO, CC)
     taxas = {k: v for k, v in vars(t).items() if k not in ("dono", "pet")}
@@ -610,6 +699,7 @@ def gabarito() -> dict:
         "banheiro": banheiro(),
         "metabolismo": metabolismo(),
         "metabolismo_gasto": metabolismo_gasto(),
+        "paladar": paladar(),
     }
 
 
