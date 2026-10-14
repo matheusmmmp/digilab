@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -78,7 +79,9 @@ def main() -> None:
         estado(evento).unlink(missing_ok=True)
         return
     resumo = r.stdout.decode("utf-8", "replace").strip().splitlines()[-15:]
-    assinatura = hashlib.sha256(("\n".join(testes) + "\n" + "\n".join(resumo[-3:])).encode("utf-8")).hexdigest()
+    # a assinatura do motivo: os testes rodados e as linhas de falha do pytest, sem o tempo ("1 failed in 0.11s" muda a cada rodada)
+    falhas = [re.sub(r" in [0-9.]+s", "", linha) for linha in resumo if linha.startswith(("FAILED", "ERROR")) or " failed" in linha]
+    assinatura = hashlib.sha256(("\n".join(testes) + "\n" + "\n".join(falhas)).encode("utf-8")).hexdigest()
     arquivo = estado(evento)
     anterior = json.loads(arquivo.read_text(encoding="utf-8")) if arquivo.exists() else {}
     if anterior.get("assinatura") == assinatura:
