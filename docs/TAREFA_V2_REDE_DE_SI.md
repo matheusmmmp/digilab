@@ -143,3 +143,56 @@ testes. `engine.py`, `corpo.py`, os cérebros, a rede e a web não. Interpretaç
   grafo refeito; antes do tick, a vida é a do P1-c (o log e as ações); depois, a digestão por tick não passa da lenta e a lenta morde; G1
   pelo `conferir_replay`; as falhas altas; o P1-c-lenta na bancada e a chave da config. O teste do braço em `test_bancada_rede_de_si.py`
   passou de "espera o nó" a "roda e mede a adaptação".
+
+## 9. Estado das etapas
+
+### Etapa 3, a bancada (W-BANCADA-REDE, #302, 2026-10-13) — mergeada
+
+O resumo da etapa está na seção "V2, W-BANCADA-REDE" do `CLAUDE.md`.
+
+### A calibração e o piloto, preparados (REDE-DE-SI-CALIBRACAO, 2026-10-13) — PRONTOS, NÃO RODADOS
+
+O plano é `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`, seções 5, 6, 8 e 11, com PRS-1 a PRS-5 decididas. Só a fumaça rodou, nas sementes dos
+testes. **A run nas bases 43101…43505 precisa do sim do Matheus.** As interpretações estão em `docs/REGISTRO_DESVIOS.md`.
+- **O orquestrador** (`experiments/run_v2_calibracao_rede_de_si.py`), numa run só:
+  - **a grade:** o P1-c no mundo da bola, com o atencioso e os gestos, 14 dias, nas 20 unidades (K_u = 4, prefixo `rede_de_si`), com o
+    `passo` em {S/64, S/16, S/4}. As três vidas de uma unidade são a mesma vida byte a byte, porque a rede só observa (G-OBS, falha alto);
+  - **a regra:** fica o menor MAE_rede(1) nos dias 1 a 7, sem o susto. Sai da grade o `passo` com peso no teto em mais da metade das vidas;
+    sem nenhum que fique, vale o menor. A regra não lê a persistência, a média nem contraste nenhum;
+  - **a taxa lenta e o P1-c-lenta:** ficam atrás do nó `digestao_lenta` (a etapa 2b, do A), declarados no resultado;
+  - **o piloto:** no `passo` escolhido, roda P1-c, P0-c e P1-c-tapa na `bola` e P1+ped-c no `iguais_frutas`, gravados e rejogados do
+    disco, e medidos;
+  - **a margem:** `Δ_SI` = ½ × [MAE_pers(4) − MAE_oráculo(4)] no P1-c. Com a distância ≤ S/128, a validação não roda e o plano volta ao
+    Matheus;
+  - **o N:** o menor K_u de 4 a 10 com poder simulado ≥ 0,8 no G-SI. O poder do G-MEDIA, G-AUT-PED e G-AUT-NASC sai no N escolhido, só
+    como relato; o do Brier usa o N efetivo;
+  - **o custo** da validação.
+  - Grava `escolha.json`, `grade/grade.json`, `piloto/medidas.json`, `resultado.json` e `meta.json` (com os sha256 de `rede_de_si.py`,
+    `lobos.py`, `corpo.py`, `config.py` e `engine.py`). Recusa a pasta que já existe e as bases da validação.
+- **A config** (`experiments/configs/v2_rede_de_si/calibracao.json`):
+  - o cérebro A no ponto da K2, com a montagem completa;
+  - o corpo do regime "corpo" com o gasto do passo 0 fino (adendo 5 do corpo, `m_gasto` 4/5) e os drives novos nos números PROPOSTOS.
+  - A fumaça (`fumaca_calibracao.json`) é a mesma config, nas sementes dos testes, com 3 dias.
+- **Comando** (depois do sim):
+  `python experiments/run_v2_calibracao_rede_de_si.py --config experiments/configs/v2_rede_de_si/calibracao.json --processos 6`.
+  - A grade tem 60 vidas e o piloto 80.
+- **Achado nas sementes dos testes** (não é resultado; vidas de 14 dias, sementes 101 e 202, dias 8 a 14, n = 4):
+
+  | | MAE | a distância persistência − oráculo |
+  |---|---|---|
+  | a persistência | 48 | |
+  | a rede no `passo` 16 (S/64) | 41 a 43 | |
+  | o oráculo no `passo` 16 (S/64) | 43 a 45 | positiva |
+  | o oráculo no `passo` 64 (S/16) | 69 a 74 | negativa |
+
+  - O oráculo tem 14 químicos a mais na entrada e o mesmo `passo` da rede. Com o `passo` 64 ele deixa de ser um teto, e a distância
+    fica negativa.
+  - Se a regra escolher o 64, a validação não roda pela seção 6 por causa do passo do oráculo, não porque a persistência seja o teto.
+  - A decisão é do Matheus, antes da run: manter a letra, ou dar ao oráculo o próprio passo (o menor MAE numa grade dele).
+- **Testes:** `tests/test_calibracao_rede_de_si.py`, 17:
+  - a config contra o plano, a K2 e o passo 0, e as recusas;
+  - a regra, a margem, o N efetivo e o poder em dados com a resposta conhecida;
+  - a medida da grade numa vida real: com o `passo` 0, a rede é a persistência;
+  - a fumaça inteira.
+  - O teste das faixas da rede de si (`tests/test_bancada_dois_pets.py`) passou a aceitar a faixa de calibração nas configs do próprio
+    plano.

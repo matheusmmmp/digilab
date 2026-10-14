@@ -240,3 +240,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-13 — Rede de si, etapa 2b (A): a troca da digestão num tick](registro/2026-10.md)
 - [2026-10-13 — Dois pets, etapa 8, o lado do mundo (A): o cheiro próprio, o rastro, o som e o gancho do órgão](registro/2026-10.md)
 - [2026-10-14 — PALADAR, etapa 1 (worker A): o lado do mundo](registro/2026-10.md)
+- [2026-10-13 — REDE-DE-SI-CALIBRACAO (worker D): a calibração do `passo` e o piloto, preparados](registro/2026-10.md)
+- [2026-10-14 — REDE-DE-SI-CALIBRACAO, a run (worker D): a calibração do `passo`, a taxa lenta e o piloto](registro/2026-10.md)
