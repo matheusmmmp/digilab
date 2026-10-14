@@ -42,6 +42,7 @@ FUMACAS = {
     "experiments/configs/v2_dois_pets/fumaca_calibracao.json": ("experiments/run_v2_calibracao_dois_pets.py", []),
     "experiments/configs/v2_rede_de_si/fumaca.json": ("experiments/bancada_v2.py", []),
     "experiments/configs/v2_rede_de_si/fumaca_autoria.json": ("experiments/bancada_v2.py", []),
+    "experiments/configs/v2_rede_de_si/fumaca_calibracao.json": ("experiments/run_v2_calibracao_rede_de_si.py", []),   # o #303
     "experiments/configs/v2_pet_que_pensa/fumaca.json": ("experiments/bancada_v2.py", []),
     "experiments/configs/v2_pet_que_pensa/fumaca_calibracao.json": ("experiments/run_v2_calibracao_pet_que_pensa.py", []),
     "experiments/configs/v2_experimento_maior/fumaca.json": ("experiments/run_v2_experimento_maior.py", []),
@@ -65,6 +66,10 @@ def rodar(raiz: Path, saida: Path, so: list[str]) -> dict:
     relato = {}
     for config, (script, extra) in FUMACAS.items():
         if so and nome_de(config) not in so:
+            continue
+        if not (raiz / config).exists():          # uma fumaça de um PR que ainda não está nesta árvore
+            relato[config] = {"rc": None, "segundos": 0.0, "ausente": True}
+            print(f"{nome_de(config)}: ausente nesta árvore", flush=True)
             continue
         destino = saida / nome_de(config)
         if extra == ["SAIDA_NA_CONFIG"]:
@@ -94,7 +99,7 @@ def comparar(antes: Path, depois: Path) -> int:
     ra = {c: r for c, r in json.loads((antes / "relato.json").read_text(encoding="utf-8")).items() if c not in FORA}
     rd = {c: r for c, r in json.loads((depois / "relato.json").read_text(encoding="utf-8")).items() if c not in FORA}
     falhas = [f"rc diferente: {c} ({ra[c]['rc']} x {rd.get(c, {}).get('rc')})" for c in ra if ra[c]["rc"] != rd.get(c, {}).get("rc")]
-    falhas += [f"rc não zero: {c}" for c in rd if rd[c]["rc"] != 0]
+    falhas += [f"rc não zero: {c}" for c in rd if rd[c]["rc"] not in (0, None)]
     so_a, so_d = sorted(set(a) - set(d)), sorted(set(d) - set(a))
     falhas += [f"só antes: {x}" for x in so_a] + [f"só depois: {x}" for x in so_d]
     metas = [x for x in a if x in d and Path(x).name.startswith("meta")]

@@ -44,6 +44,7 @@ Este mapa cresce a cada etapa: a etapa que mover um trecho escreve aqui de onde 
 | 0 (backup) | nada saiu | — |
 | 1 (CLAUDE.md enxuto) | as 135 seções do `CLAUDE.md`, inteiras e na ordem de antes dentro de cada destino | a tabela abaixo; seção a seção em `docs/historico/mapa_claude.json` |
 | 2 (o registro por mês) | as 219 seções do `docs/REGISTRO_DESVIOS.md` da `main` `086296f`, inteiras e na ordem | `docs/registro/2026-09.md` (o título e as 53 de setembro) e `docs/registro/2026-10.md` (as 166 de outubro); o `REGISTRO_DESVIOS.md` virou o índice; a base e os lotes em `docs/historico/registro_lotes.json` |
+| 3 (a bancada em módulos) | os 188 nós de topo do `experiments/bancada_v2.py` da `main` `1341c5b`, com o texto de antes | os 12 módulos de `experiments/bancada/`; o `bancada_v2.py` virou a fachada; nó a nó em `docs/historico/bancada_mapa.json` |
 
 **Etapa 1: os destinos das seções do CLAUDE.md.** A conferência é `python tools/conferir_saude.py` (G-NADA-PERDIDO): cada seção da cópia
 `CLAUDE_pre_saude.md` está inteira no destino que o mapa dá a ela.
