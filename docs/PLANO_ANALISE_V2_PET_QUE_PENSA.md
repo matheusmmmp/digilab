@@ -414,3 +414,26 @@ Matheus para a run.
 | PJ-4 | O `g_plano` | **recalibrar** pela regra da seção 5, depois do `ganho_gosto` | reaproveitar o S do adendo 1: com o gosto a sonda muda, e o planejador pode dominar ou sumir |
 | PJ-5 | As sementes | **49101…49505 para a calibração e o piloto; a validação continua em 46101…46505** | reusar 45101…45505: as unidades já foram vistas sem o paladar. Uma faixa de validação nova não é preciso, porque a 46101 nunca rodou |
 | PJ-6 | A G-REVAL-POSSIVEL | **sim, antes do piloto, como premissa mecânica** | sem ela, um T1 que não passa pode ser só o gosto vencendo a consequência, e o resultado negativo seria lido como falha do planejador |
+
+## Adendo 4 — o `ganho_gosto`, o `g_plano`, a G-REVAL-POSSIVEL e o piloto com o paladar (2026-10-14, números congelados)
+
+O adendo 3 (A3.3) pede este adendo. A calibração e o piloto rodaram uma vez, nas bases 49101…49505 (K_u = 4, 20 unidades), com a config
+`experiments/configs/v2_pet_que_pensa/calibracao_paladar.json` sem mudança e o código da `main` `9b1f5c6`. Os números vêm de
+`artifacts_v2_pet_que_pensa/calibracao_paladar/` (o commit `98342da`), e o relatório está em
+`docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA_PALADAR.md`. Nada foi escolhido olhando o primário.
+
+- **A4.1, o `ganho_gosto` = S/2 (512), "não fechou".** A média da fração de fruta nos dias 4 a 6 foi 0,2024 (S/2), 0,1960 (S) e 0,1960
+  (2S). Nenhum ponto cai em [0,25; 0,60], e fica o mais perto, a 0,048 abaixo da faixa (a faixa que não fecha não bloqueia).
+- **A4.2, o `g_plano` = S (1024), fechou.** A média da sonda foi 0,0447 (S/4), 0,0801 (S/2) e **0,1155** (S).
+- **A4.3, a G-REVAL-POSSIVEL passa:** 0 de 20 unidades falham. A x depois da mudança vale menos que a ração em todas.
+- **A4.4, as margens:**
+  - **`Δ_T1` = 0,000:** `f_antes` do P1-plan no T1 é 0 nas 15 unidades com oportunidade antes;
+  - **`Δ_T2` = 0,300:** 10 unidades com busca antes.
+  - **O T1 fica sem espaço (`Δ_T1` ≤ 0,05):** pela seção 6, **a validação não roda, e o plano volta ao Matheus.**
+- **A4.5, o N: não calculado.** O G-T1 não tem margem, e o G-T2 não tem nenhuma unidade com busca depois da mudança.
+- **A4.6, as premissas no piloto (só relato):**
+  - **G-APRENDEU falha nos quatro braços:** `f_antes` 0 [0; 0];
+  - **G-OPORTUNIDADE falha em todos os braços e testes:** de 6 a 7 das 20 unidades sem oportunidade no T1, e 20 de 20 no T2;
+  - **G-EXPOSICAO falha:** de 10 a 12 das 20 unidades sem exposição.
+- **A4.7, o custo:** 0,71 s de CPU por vida de 10 dias (P1 0,61; com o planejador, 0,74). A run inteira levou cerca de 5 min com 3 e 4
+  processos.
