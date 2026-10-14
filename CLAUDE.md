@@ -54,8 +54,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 - **Cada frente trabalha numa worktree própria,** `D:\Trab\digilab\v2-<frente>`, no branch `v2-<frente>`, criada de `origin/main`.
 - **A tarefa de cada frente** fica em `docs/TAREFA_V2_<FRENTE>.md`; o modelo está em `docs/modelos/TAREFA_V2_MODELO.md`.
 - **Um PR por tarefa ou etapa,** com o relato no corpo do PR. O worker entrega e para. **O merge é só do Matheus.**
-- **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/REGISTRO_DESVIOS.md`, com data, nome e
-  worker.
+- **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/registro/AAAA-MM.md` (o mês da data),
+  com data, nome e worker, e com uma linha no fim do índice `docs/REGISTRO_DESVIOS.md`.
 - **O resumo da etapa não vai no CLAUDE.md.** Vai no corpo do PR e numa seção no fim do documento da frente: o `RESULTADO_V2_*.md` da
   run, ou o `TAREFA_V2_*.md` da etapa de código. O coordenador põe uma linha no `docs/PAINEL_V2.md`. Este arquivo só muda com o ok do
   Matheus.
@@ -82,7 +82,7 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 | estado da V2 em uma página (marcos, runs, decisões abertas, riscos) | `docs/PAINEL_V2.md` |
 | marcos J1–J10 e o plano da V2 | `docs/ROADMAP_V2.md` (seção 8), `docs/PLANO_V2_PESQUISA.md` |
 | tarefa, plano e resultado de cada frente | `docs/TAREFA_V2_*.md`, `docs/PLANO_ANALISE_V2_*.md`, `docs/RESULTADO_V2_*.md` |
-| desvios e interpretações | `docs/REGISTRO_DESVIOS.md` |
+| desvios e interpretações | o índice `docs/REGISTRO_DESVIOS.md`; as seções em `docs/registro/AAAA-MM.md` |
 | ideias e desenhos ainda sem tarefa | `docs/futuro/` |
 | mapa do repositório arquivo a arquivo e todos os comandos | `docs/MAPA_REPOSITORIO.md` |
 | o que cada etapa construiu (o resumo antigo do CLAUDE.md, seção a seção) | `docs/historico/claude/` (índice em `docs/historico/LEIA.md`) |

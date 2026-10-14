@@ -100,3 +100,139 @@ def test_secao_sem_destino_falha(tmp_path, git_do_repositorio):
 def test_copia_sem_secao_levanta():
     with pytest.raises(ValueError):
         conferir_saude.secoes("sem cabeçalho nenhum\n")
+
+
+# ---------------------------------------------------------------- etapa 2: o registro por mês (G-CONCAT)
+import registro_por_mes as rpm  # noqa: E402
+
+BASE = json.loads((RAIZ / rpm.LOTES).read_text(encoding="utf-8"))["base"]["commit"]
+
+
+def _registro_minimo(tmp: Path) -> None:
+    """O índice, os arquivos do mês, os lotes e a cópia da etapa 0 num diretório à parte."""
+    for rel in [rpm.REGISTRO, rpm.LOTES, rpm.COPIA, *[p.relative_to(RAIZ).as_posix() for p in (RAIZ / rpm.PASTA).iterdir()]]:
+        (tmp / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(RAIZ / rel, tmp / rel)
+
+
+@pytest.fixture
+def git_registro(monkeypatch):
+    """O registro antigo de cada commit vem do git do repositório de verdade; `extras` simula commits que não existem."""
+    extras: dict[str, str] = {}
+    original = rpm.git_show
+
+    def falso(raiz, commit, caminho):
+        return extras[commit] if commit in extras else original(RAIZ, commit, caminho)
+    monkeypatch.setattr(rpm, "git_show", falso)
+    monkeypatch.setattr(conferir_saude, "registro_do_commit", lambda raiz, commit: falso(raiz, commit, rpm.REGISTRO))
+    return extras
+
+
+def test_registro_repositorio_passa():
+    falhas, n = conferir_saude.conferir_registro(RAIZ)
+    assert falhas == [] and n >= 219
+
+
+def test_registro_concatenacao_e_a_base_byte_a_byte():
+    antigo = rpm.git_show(RAIZ, BASE, rpm.REGISTRO)
+    concat = b"".join(p.read_bytes() for p in sorted((RAIZ / rpm.PASTA).iterdir())).decode("utf-8")
+    assert concat.startswith(antigo)
+    assert concat.startswith((RAIZ / rpm.COPIA).read_bytes().decode("utf-8"))
+
+
+def test_registro_partir_devolve_o_texto():
+    texto = rpm.git_show(RAIZ, BASE, rpm.REGISTRO)
+    preambulo, secoes = rpm.partir(texto)
+    assert preambulo + "".join(t for _, t in secoes) == texto
+    with pytest.raises(ValueError):
+        rpm.partir("# x\n\n## sem data\n\ntexto\n")
+
+
+def test_registro_byte_mudado_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.PASTA / "2026-09.md"
+    alvo.write_bytes(alvo.read_bytes().replace("REPROVADA".encode(), "REPROVADO".encode(), 1))
+    falhas, _ = conferir_saude.conferir_registro(tmp_path)
+    assert any("G-CONCAT" in f for f in falhas)
+
+
+def test_registro_secao_que_some_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.PASTA / "2026-09.md"
+    preambulo, secoes = rpm.partir(rpm.ler(alvo))
+    rpm.escrever(alvo, preambulo + "".join(t for _, t in secoes[:3] + secoes[4:]))
+    falhas, _ = conferir_saude.conferir_registro(tmp_path)
+    assert any("índice" in f for f in falhas) and any("G-CONCAT" in f for f in falhas)
+
+
+def test_registro_secao_no_indice_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.REGISTRO
+    rpm.escrever(alvo, rpm.ler(alvo) + "\n## 2026-10-14 — escrita no lugar errado\n\ntexto\n")
+    falhas, _ = conferir_saude.conferir_registro(tmp_path)
+    assert any("seção datada no índice" in f for f in falhas)
+
+
+def test_registro_secao_nova_sem_linha_no_indice_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.PASTA / "2026-10.md"
+    rpm.escrever(alvo, rpm.ler(alvo) + "\n## 2026-10-14 — NOVA (worker X): sem índice\n\ntexto\n")
+    falhas, _ = conferir_saude.conferir_registro(tmp_path)
+    assert any("índice" in f for f in falhas)
+    rpm.escrever(tmp_path / rpm.REGISTRO, rpm.ler(tmp_path / rpm.REGISTRO) + rpm.linha_indice("2026-10-14 — NOVA (worker X): sem índice"))
+    assert conferir_saude.conferir_registro(tmp_path)[0] == []
+
+
+def test_registro_secao_no_mes_errado_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    alvo = tmp_path / rpm.PASTA / "2026-10.md"
+    titulo = "2026-11-01 — NOVA (worker X): no mês errado"
+    rpm.escrever(alvo, rpm.ler(alvo) + f"\n## {titulo}\n\ntexto\n")
+    rpm.escrever(tmp_path / rpm.REGISTRO, rpm.ler(tmp_path / rpm.REGISTRO) + f"- [{titulo}](registro/2026-10.md)\n")
+    falhas, _ = conferir_saude.conferir_registro(tmp_path)
+    assert any("outro mês" in f for f in falhas)
+
+
+def test_registro_absorver_lote_e_conferir(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    antigo = rpm.git_show(RAIZ, BASE, rpm.REGISTRO)
+    titulo = "2026-10-14 — LOTE (worker X): escrita no formato antigo"
+    git_registro["pr-velho"] = antigo + f"\n## {titulo}\n\n- uma linha\n"
+    antes = conferir_saude.conferir_registro(tmp_path)[1]
+    assert rpm.absorver(tmp_path, "pr-velho") == [titulo]
+    falhas, n = conferir_saude.conferir_registro(tmp_path)
+    assert falhas == [] and n == antes + 1
+    assert rpm.ler(tmp_path / rpm.PASTA / "2026-10.md").endswith(f"\n\n## {titulo}\n\n- uma linha\n")
+    with pytest.raises(ValueError):                       # de novo: nada novo
+        rpm.absorver(tmp_path, "pr-velho")
+    alvo = tmp_path / rpm.PASTA / "2026-10.md"            # o texto do lote mudado depois falha
+    rpm.escrever(alvo, rpm.ler(alvo).replace("- uma linha", "- outra linha"))
+    assert any("lote pr-velho" in f for f in conferir_saude.conferir_registro(tmp_path)[0])
+
+
+def test_registro_absorver_secao_mudada_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    antigo = rpm.git_show(RAIZ, BASE, rpm.REGISTRO)
+    git_registro["pr-que-reescreve"] = antigo.replace("Estado em disco no início", "Estado no início", 1) + "\n## 2026-10-14 — X\n\ntexto\n"
+    with pytest.raises(ValueError, match="outro texto"):
+        rpm.absorver(tmp_path, "pr-que-reescreve")
+    git_registro["pr-que-renomeia"] = antigo.replace("REPROVADA", "REPROVADO", 1) + "\n## 2026-10-14 — X\n\ntexto\n"
+    with pytest.raises(ValueError, match="no meio"):
+        rpm.absorver(tmp_path, "pr-que-renomeia")
+
+
+def test_registro_absorver_mes_novo(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    antigo = rpm.git_show(RAIZ, BASE, rpm.REGISTRO)
+    git_registro["pr-novembro"] = antigo + "\n## 2026-11-02 — NOVEMBRO (worker X): o primeiro do mês\n\ntexto\n"
+    rpm.absorver(tmp_path, "pr-novembro")
+    assert rpm.ler(tmp_path / rpm.PASTA / "2026-11.md") == "## 2026-11-02 — NOVEMBRO (worker X): o primeiro do mês\n\ntexto\n"
+    assert conferir_saude.conferir_registro(tmp_path)[0] == []
+
+
+def test_registro_arquivo_estranho_na_pasta_falha(tmp_path, git_registro):
+    _registro_minimo(tmp_path)
+    (tmp_path / rpm.PASTA / "notas.md").write_text("x\n", encoding="utf-8")
+    assert conferir_saude.conferir_registro(tmp_path)[0]
+
+
