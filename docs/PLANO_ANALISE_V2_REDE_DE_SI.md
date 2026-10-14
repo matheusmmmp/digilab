@@ -254,3 +254,57 @@ Nenhum limiar de "surpresa demais" é fixado aqui: é da etapa 4, com plano pró
 | PRS-3 | Os secundários do Holm | **média histórica, adaptação, autoria do pedido e autoria ao nascer** | sem a média: a rede pode bater o presente só aprendendo o nível. Sem a autoria: metade da rede de si fica sem medida |
 | PRS-4 | A margem | **metade da distância entre a persistência e o oráculo** | uma margem fixa sem dado pode ser larga ou estreita demais. Sem o oráculo, não há teto para a "metade" |
 | PRS-5 | O dono | **só o atencioso, com os gestos** | os quatro donos: a vida custa 4 vezes, e a pergunta é sobre a rede |
+
+## Adendo 1 — os números da calibração e do piloto (2026-10-14)
+
+A calibração foi autorizada pelo Matheus em 2026-10-13 e rodou uma vez nas bases 43101…43505 (K_u = 4, 20 unidades), pelo commit `8294d74`
+com a árvore limpa. Os números vêm de `artifacts_v2_rede_de_si/calibracao/` (`escolha.json`, `resultado.json`, `grade/grade.json`,
+`piloto/medidas.json`, `meta.json`; as vidas ficam fora do git). O relatório é `docs/RESULTADO_V2_CALIBRACAO_REDE_DE_SI.md`. Nada foi
+ajustado olhando o piloto.
+
+### A1.1 O `passo`: S/16 (64)
+
+| `passo` | MAE_rede(1), dias 1 a 7 | vidas com peso no teto |
+|---|---|---|
+| S/64 (16) | 18,17 | 0 de 20 |
+| **S/16 (64)** | **10,42** | 0 de 20 |
+| S/4 (256) | 13,89 | 6 de 20 |
+
+Nenhum ponto saiu pelo teto, e a regra fechou no 64.
+
+### A1.2 A taxa lenta: C // 8 (56250), "não fechou"
+
+O receptor da fome do P1-c nos dias 8 a 10 tem média 738,1. Pelo P1-c-lenta:
+
+| taxa | média da fome | diferença do P1-c |
+|---|---|---|
+| C // 2 (225000) | 738,1 | 0,0 |
+| C // 4 (112500) | 731,8 | 6,3 |
+| C // 8 (56250) | 727,9 | 10,2 |
+
+Nenhuma taxa passa o limiar S/16 (64). Pela reserva registrada antes da run, fica a menor taxa (C // 8, a que mais muda o corpo), com o
+"não fechou".
+
+### A1.3 A margem: negativa. A validação não roda
+
+- **A distância** MAE_pers(4) − MAE_oráculo(4) no P1-c, dias 8 a 14, tem média **−24,5**, negativa nas 20 unidades: o oráculo prevê pior
+  que a persistência. `Δ_SI` = −12,3.
+- **A distância do G-ADAPTA** (congelada − oráculo, fome, dias 11 a 14, P1-c-lenta) tem média −18,5; `Δ_ADAPTA` = −9,3.
+- **Pela seção 6** (distância ≤ S/128), **a validação não roda e o plano volta ao Matheus.** O N e o poder não foram calculados.
+- **A causa não é a da leitura da seção 6** ("a persistência já é quase o teto"): o oráculo, com os químicos a mais na entrada e o mesmo
+  `passo` da rede, deixa de ser um teto. É o risco descrito no fim de `docs/TAREFA_V2_REDE_DE_SI.md` antes da run.
+
+### A1.4 O custo
+
+- A grade custa 5,1 s de CPU por vida.
+- O piloto custa por vida, em CPU, com o replay e a medição:
+
+  | braço | CPU por vida |
+  |---|---|
+  | P0-c | 18,2 s |
+  | P1-c | 19,7 s |
+  | P1-c-lenta | 20,4 s |
+  | P1-c-tapa | 21,3 s |
+  | P1+ped-c | 33,4 s |
+
+- A run inteira levou 7,6 min com 8 processos.

@@ -181,9 +181,9 @@ testes. **A run nas bases 43101…43505 precisa do sim do Matheus.** As interpre
   | | MAE | a distância persistência − oráculo |
   |---|---|---|
   | a persistência | 48 | |
-  | a rede no `passo` S/16 | 41 a 43 | |
-  | o oráculo no `passo` S/16 | 43 a 45 | positiva |
-  | o oráculo no `passo` 64 | 69 a 74 | negativa |
+  | a rede no `passo` 16 (S/64) | 41 a 43 | |
+  | o oráculo no `passo` 16 (S/64) | 43 a 45 | positiva |
+  | o oráculo no `passo` 64 (S/16) | 69 a 74 | negativa |
 
   - O oráculo tem 14 químicos a mais na entrada e o mesmo `passo` da rede. Com o `passo` 64 ele deixa de ser um teto, e a distância
     fica negativa.

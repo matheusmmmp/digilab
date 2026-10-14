@@ -5303,3 +5303,23 @@ Só documentos: `docs/futuro/paladar.md` (novo) e o adendo 3 de `docs/PLANO_ANAL
 - **O custo da validação** conta os cinco braços por unidade, com o P1-c-lenta estimado pelo custo do P1-c.
 - **Achado da fumaça:** nas sementes dos testes, o oráculo com o `passo` 64 prevê pior que a persistência a 4 decisões. A distância da
   margem fica negativa. O que a decisão do Matheus precisa saber está no fim de `docs/TAREFA_V2_REDE_DE_SI.md`. Nada foi mudado na regra.
+
+## 2026-10-14 — REDE-DE-SI-CALIBRACAO, a run (worker D): a calibração do `passo`, a taxa lenta e o piloto
+
+- **Com a etapa 2b na main (#306):**
+  - o P1-c-lenta entrou na calibração: a grade da taxa lenta {C//2, C//4, C//8}, na grade do `passo` (no primeiro ponto), com a troca
+    conferida no motor;
+  - o piloto tem os cinco braços, com o P1-c-lenta na taxa escolhida;
+  - o `Δ_ADAPTA` e o poder do G-ADAPTA entraram.
+- **O merge, não o rebase:** o Gerente pediu rebase do #303 na main. O branch já estava publicado, então juntei a main com merge (a regra
+  de sempre). O resultado é o mesmo, sem forçar o push. O conflito no `docs/TAREFA_V2_REDE_DE_SI.md` e no `docs/REGISTRO_DESVIOS.md` foi
+  resolvido por concatenação.
+- **A fumaça passou a 10 dias:** a regra da taxa lenta lê os dias 8 a 10.
+- **A reserva da taxa lenta:** o plano não diz o que fazer se nenhuma taxa passar. Fica a menor (C // 8, a que mais muda o corpo), com o
+  "não fechou", registrado no código antes da run. Foi o que aconteceu (a maior diferença foi 10,2, contra o limiar 64).
+- **A diferença da fome** é |média sobre as unidades do P1-c-lenta − média do P1-c|, nos dias 8 a 10.
+- **O texto automático do `resultado.json`** ("a persistência já é quase o teto") é o da seção 6. O que aconteceu é que o oráculo prevê pior
+  que a persistência (a distância é negativa nas 20 unidades). O relatório diz a causa; o artefato não foi mexido.
+- **Uma correção de rótulo:** no fim de `docs/TAREFA_V2_REDE_DE_SI.md` (seção 9), a tabela da fumaça chamava o `passo` 16 de "S/16". Ele é
+  S/64, e o 64 é S/16. Os números não mudam.
+- **A run:** commit `8294d74`, numa worktree própria (`v2-rede-de-si-run`). Os artefatos estão num commit próprio (`d0b352b`).
