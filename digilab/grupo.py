@@ -63,7 +63,7 @@ from .donos import Visao
 from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
-from .mundo import (CANDIDATOS_SOCIAIS, PASSO_INICIAL, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
+from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
                     cheiro_do_pet, direcao_vizinha, distancia, em_contato, fontes_do_pet, perceber_social, som_ouvido, tipos_do_contato)
 from .protocol import derivar_semente
 
@@ -217,8 +217,8 @@ class Grupo:
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
         self._conferir_orgaos(motor)
         motor._grupo, motor.ident = self, ident
-        if self.cs.ligada and motor._passo is None:
-            motor._passo = PASSO_INICIAL             # a direcao do ultimo passo antes do primeiro passo
+        if self.cs.ligada:
+            motor._ligar_propriocepcao()             # a direcao do ultimo passo antes do primeiro passo
         self.motores[ident] = motor
         self.registro.cabecalho["pets"][ident] = {"semente": self.sementes[ident], "entrada": self.tick, "cerebro": cerebro, "dono": dono}
         self.registro.anexar(EventoGrupo(self.tick, "entrada", ident, DESTINO_GRUPO, ident))

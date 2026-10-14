@@ -1083,8 +1083,8 @@ class MotorMundo(MotorFrutas):
         self.mundo.atualizar(self._tm(t))
         self._percepcao = self._perceber(t)
         self._fome_antes = self._estado.fome
-        if self._passo is None and self._olfato_comida():
-            self._passo = PASSO_INICIAL                     # o Olfato da comida usa a direcao do ultimo passo (5.6), mesmo sem o gancho
+        if self._olfato_comida() or self._olfato_outro() or self._audicao():
+            self._ligar_propriocepcao()                     # os orgaos usam a direcao do ultimo passo (5.6), venha de onde vier o estimulo
         if self.cpq.ligada:
             self._ver_troncos(self._percepcao.troncos, self._tm(t))
         if self._grupo is not None:
@@ -1108,8 +1108,7 @@ class MotorMundo(MotorFrutas):
           e o outro presente; fora disso, 0;
         - `ouvido_<som>`: a soma dos sons daquele tipo que entram no passo deste tick (a intensidade no ponto do ouvido, de onde o pet estava
           quando o som soou); entre os sons, 0."""
-        if self._passo is None:
-            self._passo = PASSO_INICIAL
+        self._ligar_propriocepcao()
         agora = self._tm(self._estado.tick)
         self.mundo.atualizar(agora)                      # idempotente por tick: as quedas sao as mesmas atualizando em todo tick
         x, y = self.pet
@@ -1138,6 +1137,13 @@ class MotorMundo(MotorFrutas):
             else:
                 raise ValueError(f"orgao desconhecido: {o.sentido!r}")
         return out
+
+    def _ligar_propriocepcao(self) -> None:
+        """A direcao do ultimo passo (a propriocepcao, secao 5.6) e do motor: ela comeca em PASSO_INICIAL na primeira vez que alguem a
+        pede (os orgaos na decisao, o lado do mundo do orgao antes de cada tick, os sentidos do grupo na entrada) e dai anda com o pet. Nao
+        depende de quem entrega o estimulo dos orgaos: um lado do mundo trocado (um motor de teste) nao a deixa desligada."""
+        if self._passo is None:
+            self._passo = PASSO_INICIAL
 
     def _ver_troncos(self, troncos, tick_mundo: int) -> None:
         """o J5: os troncos a vista entram em `troncos_vistos` (o primeiro tick em que o pet os viu)"""

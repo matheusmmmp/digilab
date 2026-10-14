@@ -441,3 +441,39 @@ def test_g1_o_replay_refaz_o_grupo_com_os_orgaos():
     assert _texto(r.resumo()) == _texto(g.resumo())
     assert {i: m.corpo.para_dict() for i, m in r.motores.items()} == {i: m.corpo.para_dict() for i, m in g.motores.items()}
     assert {i: m._olfato_anterior for i, m in r.motores.items()} == {i: m._olfato_anterior for i, m in g.motores.items()}
+
+
+# ================================================================== a propriocepcao e do motor
+def test_a_propriocepcao_nao_depende_do_lado_do_mundo():
+    """um lado do mundo trocado (como o motor de teste de tests/test_orgaos.py, que nao chama o de verdade) nao deixa a direcao do ultimo
+    passo desligada: o motor a liga sozinho com qualquer orgao, e os candidatos do orgao saem como no motor de verdade"""
+
+    class MundoTrocado(MotorMundoCorpo):
+        def _intensidades_do_orgao(self):
+            x, y = self.pet
+            fontes = self._fontes_de_cheiro(self._estado.tick)
+            d = {o.receptor: 0 for o in self.corpo.orgaos}
+            d["olfato_comida_esq"] = mundo.cheiro_em(x - 8, y, fontes, CM)
+            d["olfato_comida_dir"] = mundo.cheiro_em(x + 8, y, fontes, CM)
+            return d
+
+    fp = cerebro("instinto")
+    fm = lambda p, cfg, s, **kw: MundoTrocado(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM,  # noqa: E731
+                                              cfg_corpo=CONFIG_CORPO_DRIVES, cfg_olfato=OLFATO[2], **kw)
+    original = fm
+    fm = lambda p, cfg, s, **kw: _apresentar(original(p, cfg, s, **kw), p)  # noqa: E731
+    dl = DonoComLugar(criar_dono("aleatorio"), "longe", 101, "aleatorio", CM)
+    v = simular_vida_mundo("aleatorio", dl, fp(CONFIG_PADRAO), 101, 2, 32, fm, rotulo_dono="aleatorio")
+    esp = _esp(v.motor)
+    assert v.motor._passo is not None and all(r["passo"] is not None for r in esp.alvos)
+    assert any(a.tipo in CANDIDATOS_CHEIRO_ORGAO for r in esp.alvos for a in r["cands"])
+    for (sem,) in ((0,),):
+        m = MotorMundo(PoliticaInstintoMundo(CONFIG_PADRAO), CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM)
+        m._ligar_propriocepcao()
+        assert m._passo == mundo.PASSO_INICIAL == sem
+
+
+def _apresentar(m, p):
+    if isinstance(p, Espiao):
+        p.motor = m
+    return m
