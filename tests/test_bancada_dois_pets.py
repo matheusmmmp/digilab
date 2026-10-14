@@ -80,7 +80,8 @@ NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40
 
 
-def _numeros_das_configs() -> set[int]:
+def _numeros_das_configs(fora_do_plano: str | None = None) -> set[int]:
+    """Os inteiros sob uma chave de semente ou de bases nas configs; com `fora_do_plano`, sem as configs desse plano (o campo `plano`)."""
     achados: set[int] = set()
 
     def andar(o, chave=""):
@@ -95,8 +96,14 @@ def _numeros_das_configs() -> set[int]:
             achados.add(o)
 
     for p in (RAIZ / "experiments" / "configs").rglob("*.json"):
-        andar(json.loads(p.read_text(encoding="utf-8")))
+        cfg = json.loads(p.read_text(encoding="utf-8"))
+        if fora_do_plano is None or cfg.get("plano") != fora_do_plano:
+            andar(cfg)
     return achados
+
+
+# a faixa de calibracao da rede de si pode estar nas configs do proprio plano (REDE-DE-SI-CALIBRACAO); a de validacao, em nenhuma
+PLANO_DA_CALIBRACAO = {(43101, 43505): "docs/PLANO_ANALISE_V2_REDE_DE_SI.md"}
 
 
 def test_faixas_da_rede_de_si_reservadas_com_fonte():
@@ -115,7 +122,8 @@ def test_faixas_disjuntas_fora_das_queimadas_e_das_configs():
     assert numeros
     for lo, hi in NOVAS:
         assert not any(q_lo <= hi and lo <= q_hi for q_lo, q_hi, _ in bv.FAIXAS_QUEIMADAS)
-        assert not [n for n in numeros if lo <= n <= hi], (lo, hi)
+        alheios = _numeros_das_configs(PLANO_DA_CALIBRACAO[(lo, hi)]) if (lo, hi) in PLANO_DA_CALIBRACAO else numeros
+        assert not [n for n in alheios if lo <= n <= hi], (lo, hi)
 
 
 def test_o_prefixo_da_rede_de_si_segue_a_regra():

@@ -14,4 +14,5 @@ artifacts_v1_personalidade/** -text
 
 # Saude, etapa 2 (Matheus, 2026-10-14): o registro por mes so cresce no fim; o git junta as duas pontas sem conflito
 docs/registro/*.md merge=union
-docs/REGISTRO_DESVIOS.md merge=union
+
+# Saude (Gerente, 2026-10-14, recomendacao aceita pelo Matheus): o indice sai do merge=union; um PR antigo colou o registro inteiro nele sem conflito

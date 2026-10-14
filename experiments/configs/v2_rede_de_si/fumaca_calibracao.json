@@ -1,0 +1,63 @@
+{
+  "descricao": "Fumaca da calibracao da rede de si (a mesma config, nas sementes dos testes, 10 dias, K = 1). NAO canonica: so confere o encanamento da grade, da regra, do piloto, da margem e do N, nunca como resultado.",
+  "unidades": {
+    "bases": [
+      101,
+      202,
+      303
+    ],
+    "k": 1,
+    "prefixo": "rede_de_si"
+  },
+  "dias": 10,
+  "orcamento": 160,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 200,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "grade_passo": [
+    16,
+    64,
+    256
+  ],
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 200,
+    "alvo": 0.8,
+    "alfa": 0.025,
+    "alfas_relato": [
+      0.0125,
+      0.05
+    ]
+  },
+  "grade_taxa_lenta": [
+    225000,
+    112500,
+    56250
+  ]
+}

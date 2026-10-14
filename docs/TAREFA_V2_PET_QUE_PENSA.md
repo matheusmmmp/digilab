@@ -142,3 +142,36 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 - **O mapa aprendendo do que o outro pet comeu** (os dois pets).
 - **O Digicorpo na decisão** (a etapa 3 do ego).
 - **A web.**
+
+## Paladar, etapa 1, o mundo (A, 2026-10-14; `docs/futuro/paladar.md`, seções 3.1, 4 e 6) — GATES PASSAM
+
+PL-1 a PL-9 e PJ-1 a PJ-5 decididas pelo Matheus, pela recomendação. Infraestrutura, sem run; só as sementes dos testes. Mudaram a
+`ConfigPaladar` no fim de `config.py`, `digilab/mundo.py` e uma conferência em `digilab/grupo.py`. `engine.py`, o corpo, o
+`motor_corpo.py` (é do B, na etapa 2), os cérebros, a bancada e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O gabarito antes do código** (commit próprio): `tests/gabarito_paladar_mundo.py` → `tests/gabaritos/paladar_mundo_vidas_de_hoje.json`,
+  84 vidas. Reusa os casos do gabarito do mundo do J5 (os dois layouts, sem o corpo e com o corpo químico, o instinto, o P0 e o P1 com o
+  alvo aprendido) e os do planejador (o mundo do J5 com a fruta na mão e a troca de tipo no dia 2, o corpo químico com e sem o
+  metabolismo), mais o corpo inteiro.
+- **`ConfigPaladar`** (desligada; `CONFIG_PALADAR_LIGADA`; registro `mundo.PARAMETROS_PALADAR_MUNDO`, PROPOSTOS, SEM FONTE):
+  - `perfis`: por tipo (`racao`, `a`, `b`, `c`), um inteiro em [0, C] por qualidade (`QUALIDADES_PALADAR`: doce, azedo, amargo e
+    salgado);
+  - as frutas são a mesma forma girada (3C/4 e C/4 nas três primeiras qualidades), e a ração tem C/4 de salgado e nada mais;
+  - só com o mundo físico. A config confere os tipos, as qualidades e a faixa.
+- **No motor** (`MotorMundo(..., cfg_paladar=)`, guardada em `self.cpal`):
+  - o registro de cada consumo (`consumos_mundo`) ganha `perfil`: uma cópia do perfil do tipo na comida madura, None na podre;
+  - o `ocorrido["comeu"]` do `comer` e do "achou e comeu" é esse mesmo registro;
+  - a fruta na mão (sempre madura) também entra com o perfil;
+  - `perfil_de(tipo)` dá a cópia e falha alto sem a chave;
+  - o mundo não usa o perfil para mais nada: a nutrição, o humor, o cheiro, a percepção, os candidatos e as rngs não mudam.
+- **No grupo:** os pets têm de ter o mesmo Paladar (os perfis são das comidas do mundo); senão, falha alto.
+- **O contrato com o B** (etapa 2, combinado por mensagem): o `MotorCorpo` passa `perfil=comeu["perfil"]` ao `estimulo_consumo_mundo`
+  com a sub-chave `paladar` do corpo, e na mão lê `self.cpal.perfis[f]`. O `motor_corpo.py` fica só com ele.
+- **Gates** (`tests/test_paladar_mundo.py`, 11):
+  - **G2:** as 84 vidas byte a byte, sem a chave e com a chave explícita desligada;
+  - **ligado, a vida é a mesma:** em todas as 84 vidas, o log, o estado, as ações, as rngs e o registro do mundo físico saem iguais; só os
+    consumos ganham o `perfil`. O perfil é o do tipo na madura e None na podre, nos três caminhos (o comer, o achou e comeu e a mão). O
+    `ocorrido["comeu"]` é o próprio registro;
+  - outros perfis mudam só o registro; o perfil é uma cópia;
+  - a config: os perfis do desenho, a forma girada, o registro de status e as falhas altas;
+  - **G1:** o replay refaz os registros com o perfil (instinto e P1, sem e com o corpo);
+  - o grupo: o mesmo Paladar nos dois pets.
