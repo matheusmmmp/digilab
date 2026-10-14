@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import sys
 import time
@@ -57,21 +58,35 @@ def nome_de(config: str) -> str:
     return config.removeprefix("experiments/configs/").removesuffix(".json").replace("/", "__")
 
 
-def rodar(raiz: Path, saida: Path, so: list[str]) -> dict:
+# os orquestradores que aceitam --processos (o resultado não depende do número de processos: cada vida é determinística)
+PARALELOS = {"experiments/run_v2_calibracao_corpo.py", "experiments/run_v2_calibracao_mundo.py", "experiments/run_v2_validacao_mundo.py",
+             "experiments/run_v2_mundo_alvo.py", "experiments/run_v2_calibracao_dois_pets.py",
+             "experiments/run_v2_calibracao_pet_que_pensa.py", "experiments/run_v2_calibracao_rede_de_si.py"}
+
+
+def rodar(raiz: Path, saida: Path, so: list[str], processos: int = 1) -> dict:
+    """Retomável: o relato é gravado depois de cada fumaça, e uma fumaça que já está no relato não roda de novo (a pasta de uma que
+    caiu no meio é apagada e refeita)."""
     achadas = sorted(p.relative_to(raiz).as_posix() for p in (raiz / "experiments/configs").rglob("*fumaca*.json"))
     faltam = sorted(set(achadas) - set(FUMACAS) - FORA)
     if faltam:
         raise SystemExit(f"fumaças sem orquestrador na tabela: {faltam}")
-    saida.mkdir(parents=True, exist_ok=False)
-    relato = {}
+    saida.mkdir(parents=True, exist_ok=True)
+    caminho_relato = saida / "relato.json"
+    relato = json.loads(caminho_relato.read_text(encoding="utf-8")) if caminho_relato.exists() else {}
     for config, (script, extra) in FUMACAS.items():
         if so and nome_de(config) not in so:
+            continue
+        if config in relato:
             continue
         if not (raiz / config).exists():          # uma fumaça de um PR que ainda não está nesta árvore
             relato[config] = {"rc": None, "segundos": 0.0, "ausente": True}
             print(f"{nome_de(config)}: ausente nesta árvore", flush=True)
             continue
         destino = saida / nome_de(config)
+        if destino.exists():                       # caiu no meio de uma rodada anterior
+            import shutil
+            shutil.rmtree(destino)
         if extra == ["SAIDA_NA_CONFIG"]:
             cfg = json.loads((raiz / config).read_text(encoding="utf-8"))
             cfg["saida"] = str(destino.resolve())
@@ -80,13 +95,46 @@ def rodar(raiz: Path, saida: Path, so: list[str]) -> dict:
             cmd = [sys.executable, script, "--config", str(copia.resolve())]
         else:
             cmd = [sys.executable, script, "--config", config, "--saida", str(destino.resolve()), *extra]
+        if script in PARALELOS and processos > 1:
+            cmd += ["--processos", str(processos)]
         t0 = time.time()
         r = subprocess.run(cmd, cwd=raiz, capture_output=True)
         relato[config] = {"rc": r.returncode, "segundos": round(time.time() - t0, 1)}
         (saida / f"{nome_de(config)}.log").write_bytes(r.stdout + b"\n--- stderr ---\n" + r.stderr)
         print(f"{nome_de(config)}: rc {r.returncode}, {relato[config]['segundos']} s", flush=True)
-    (saida / "relato.json").write_text(json.dumps(relato, indent=2), encoding="utf-8")
+        caminho_relato.write_text(json.dumps(relato, indent=2), encoding="utf-8")
+    caminho_relato.write_text(json.dumps(relato, indent=2), encoding="utf-8")
     return relato
+
+
+# as chaves de tempo: o que muda de uma rodada para outra no mesmo código (tempo de parede e de CPU, e as contas que saem dele, como as
+# horas estimadas da validação e se elas cabem no teto). Um arquivo que difere só nelas conta como igual.
+TEMPO = re.compile(r"(^|/)(segundos[a-z_]*|us_por_decisao(/[a-z0-9_]+)*|cpu_s[a-z_]*|parede_s[a-z_]*|tempo/[a-z_]+|[a-z_]*_(cpu|parede)|"
+                   r"horas_[a-z_]*|cabe_no_teto[A-Za-z0-9_]*|cpu_h[a-z_]*|parede_h_em_processos/[a-z_]+)$")
+
+
+def e_tempo(caminho: str) -> bool:
+    return TEMPO.search(re.sub(r"\[\d+\]", "", caminho)) is not None
+
+
+def folhas_diferentes(a: Path, d: Path) -> list[str]:
+    """Os caminhos das folhas que diferem entre dois JSON (um arquivo que não é JSON difere inteiro)."""
+    try:
+        va, vd = json.loads(a.read_text(encoding="utf-8")), json.loads(d.read_text(encoding="utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        return ["<arquivo inteiro>"]
+
+    def folhas(x, p=""):
+        if isinstance(x, dict):
+            for k, v in x.items():
+                yield from folhas(v, f"{p}/{k}")
+        elif isinstance(x, list):
+            for i, v in enumerate(x):
+                yield from folhas(v, f"{p}[{i}]")
+        else:
+            yield p, x
+    fa, fd = dict(folhas(va)), dict(folhas(vd))
+    return [k for k in sorted(set(fa) | set(fd)) if fa.get(k, "<sem>") != fd.get(k, "<sem>")]
 
 
 def hashes(pasta: Path) -> dict[str, str]:
@@ -105,10 +153,20 @@ def comparar(antes: Path, depois: Path) -> int:
     metas = [x for x in a if x in d and Path(x).name.startswith("meta")]
     iguais = [x for x in a if x in d and a[x] == d[x] and x not in metas]
     difs = [x for x in a if x in d and a[x] != d[x] and x not in metas]
-    falhas += [f"diferente: {x}" for x in difs]
+    so_tempo, folhas_tempo = [], 0
+    for x in difs:
+        diferentes = folhas_diferentes(antes / x, depois / x)
+        fora_do_tempo = [k for k in diferentes if not e_tempo(k)]
+        if diferentes and not fora_do_tempo:
+            so_tempo.append(x)
+            folhas_tempo += len(diferentes)
+        else:
+            falhas.append(f"diferente: {x} ({len(fora_do_tempo)} folhas fora do tempo, a primeira: {(fora_do_tempo or ['?'])[0][:120]})")
     medidas = [x for x in iguais if Path(x).name == "medidas.json"]
     print(f"{len(iguais)} arquivos iguais (sha256), {len(medidas)} deles medidas.json; {len(metas)} meta*.json à parte; "
           f"{len(ra)} fumaças")
+    print(f"{len(so_tempo)} arquivos diferentes só no tempo ({folhas_tempo} folhas, todas de tempo de parede ou de CPU, ou contas feitas "
+          f"a partir dele; TEMPO): {', '.join(so_tempo)}")
     for f in falhas:
         print("  FALHA", f)
     print("G-FUMACAS", "passa" if not falhas else f"FALHA ({len(falhas)})")
@@ -122,11 +180,12 @@ if __name__ == "__main__":
     r.add_argument("--raiz", default=".")
     r.add_argument("--saida", required=True)
     r.add_argument("--so", nargs="*", default=[])
+    r.add_argument("--processos", type=int, default=1)
     c = sub.add_parser("comparar")
     c.add_argument("antes")
     c.add_argument("depois")
     args = ap.parse_args()
     if args.comando == "rodar":
-        rodar(Path(args.raiz).resolve(), Path(args.saida).resolve(), args.so)
+        rodar(Path(args.raiz).resolve(), Path(args.saida).resolve(), args.so, args.processos)
     else:
         raise SystemExit(comparar(Path(args.antes), Path(args.depois)))
