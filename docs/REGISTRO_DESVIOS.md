@@ -5177,3 +5177,24 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
   (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
   falharia, mas só depois de montada; a recusa explícita diz por quê.
+
+## 2026-10-13 — PALADAR: o desenho do gosto e o adendo 3 do J5 (worker do paladar, pedido do Gerente)
+
+Só documentos: `docs/futuro/paladar.md` (novo) e o adendo 3 de `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`. Nenhum código, nenhuma run.
+
+- **O número do adendo:** a seção 10 do plano do J5 reserva o "adendo 2" para a forma pelo estado (R-4), que ainda não existe. O do
+  paladar ficou como **adendo 3**, para não tomar o número reservado; os números da calibração dele vão num adendo 4.
+- **O diagnóstico do #301 foi refeito do código, sem run:** a nutrição (0,45 × 0,15), o cheiro (64 × 32), o comedouro e a classe `comida`
+  do alvo, que não distingue ração de fruta. A conta do sinal com a fome em 0,4 e o ganho 4 (ração ~1380, fruta ~645 mais ~123 do humor)
+  foi feita à mão, sobre a fórmula do `sinal_homeostatico`; é ilustração, não resultado.
+- **"Pets diferentes" foi lido como indivíduos**, não espécies (PL-2): a preferência individual já existe desde a F5. O FE-4 (variação
+  individual só na fase 3) fala da fisiologia; a tensão fica declarada na PL-2 para o Matheus.
+- **"Atrai"** foi lido como o querer aprendido depois de provar (PL-5), não como atração inata pela fruta vista: é o que a restrição 2.1
+  das frutas pede (o gostar só chega à escolha por uma atualização declarada).
+- **A saciedade sensório-específica** foi escolhida como o mecanismo da "comida diferente ao lado da ração" (Rolls, Rolls e Rowe 1983). O
+  pedido do Matheus não a nomeia.
+- **"Sementes novas":** o adendo pede uma faixa nova só para a calibração e o piloto (49101…49505) e mantém a validação em 46101…46505,
+  que nunca rodou (PJ-5). A faixa 49101…49505 ainda tem de entrar na `FAIXAS_RESERVADAS` (o D, pelo coordenador).
+- **A forma girada dos perfis** das frutas foi escolhida para a x continuar uniforme entre os tipos quando ela passa a ser a favorita do
+  pet (PJ-1). SEM FONTE.
+- **Nada de químico de prazer** (PL-1), pela F2 e para o gosto não virar drive.
