@@ -24,7 +24,8 @@ Coordenador: <chat>. Worker: <chat>. Worktree e branch: `v2-<frente>`. Status: <
 ## 5. Entrega
 
 - Testes: `python -m pytest tests/ -q`; em `web/app`: `npm test`, `npm run tipos`, `npm run e2e` (se a frente toca a web).
-- Registro: seção própria no fim do `CLAUDE.md` e do `docs/REGISTRO_DESVIOS.md`.
+- Registro: seção própria no fim do `docs/REGISTRO_DESVIOS.md`. O resumo da etapa vai no corpo do PR e numa seção no fim do documento da
+  frente (o `RESULTADO_V2_*.md` da run ou o `TAREFA_V2_*.md` da etapa), nunca no `CLAUDE.md` (rodada de saúde, etapa 1).
 - PR contra a `main` com resumo e números (cada um com o artefato). Aviso ao coordenador. Merge só pelo Matheus.
 
 ## 6. Fora desta tarefa
