@@ -1083,6 +1083,8 @@ class MotorMundo(MotorFrutas):
         self.mundo.atualizar(self._tm(t))
         self._percepcao = self._perceber(t)
         self._fome_antes = self._estado.fome
+        if self._passo is None and self._olfato_comida():
+            self._passo = PASSO_INICIAL                     # o Olfato da comida usa a direcao do ultimo passo (5.6), mesmo sem o gancho
         if self.cpq.ligada:
             self._ver_troncos(self._percepcao.troncos, self._tm(t))
         if self._grupo is not None:
