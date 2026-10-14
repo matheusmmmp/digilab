@@ -2102,3 +2102,46 @@ class ConfigSentidos:
 
 CONFIG_SENTIDOS = ConfigSentidos()
 CONFIG_SENTIDOS_LIGADA = ConfigSentidos(ligada=True)
+
+
+# =====================================================================
+# V2, o Paladar, o lado do mundo (docs/futuro/paladar.md, secoes 3.1, 4 e 6, etapa 1; PL-1 a PL-9 pela recomendacao, 2026-10-13).
+# Desligado por padrao: a vida de hoje byte a byte (G2). Ligado (so com o mundo fisico), cada tipo de comida do mapa tem um perfil de gosto,
+# um inteiro em [0, C] por qualidade (PL-3: doce, azedo, amargo, salgado; nomes do estimulo, nao da sensacao). O mundo nao interpreta o
+# perfil: ele so vai, com o consumo, ao registro do consumo e ao `ocorrido["comeu"]` (o `comer` e o "achou e comeu"), e o corpo (o orgao do
+# Paladar, etapa 2, do B) o le de la e, na fruta na mao, dos `perfis`. O gosto nao se ve nem se cheira; a podre nao tem perfil. A nutricao,
+# o cheiro, as arvores e o efeito de cada fruta no humor nao mudam. As tres frutas sao a mesma forma girada (nenhuma e a melhor no mundo)
+# e a racao tem o gosto basico, numa qualidade so dela, fraca. Os numeros sao PROPOSTOS, SEM FONTE.
+QUALIDADES_PALADAR = ("doce", "azedo", "amargo", "salgado")
+
+
+def _perfis_paladar() -> dict:
+    c = CONFIG_CORPO.escala
+    q1, q3 = c // 4, 3 * c // 4
+    return {"a": {"doce": q3, "azedo": q1, "amargo": 0, "salgado": 0},
+            "b": {"doce": 0, "azedo": q3, "amargo": q1, "salgado": 0},
+            "c": {"doce": q1, "azedo": 0, "amargo": q3, "salgado": 0},
+            "racao": {"doce": 0, "azedo": 0, "amargo": 0, "salgado": q1}}
+
+
+@dataclass(frozen=True)
+class ConfigPaladar:
+    ligada: bool = False                     # PROPOSTO: a chave (os perfis no consumo)
+    perfis: dict = field(default_factory=_perfis_paladar)   # PROPOSTO, SEM FONTE: {tipo: {qualidade: inteiro em [0, C]}}
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigPaladar.ligada e bool: {self.ligada!r}")
+        if not isinstance(self.perfis, dict) or set(self.perfis) != {"racao", "a", "b", "c"}:
+            raise ValueError(f"ConfigPaladar.perfis tem um perfil por tipo de comida (racao, a, b, c): {self.perfis!r}")
+        c = CONFIG_CORPO.escala
+        for tipo, perfil in self.perfis.items():
+            if not isinstance(perfil, dict) or set(perfil) != set(QUALIDADES_PALADAR):
+                raise ValueError(f"ConfigPaladar.perfis[{tipo!r}] tem as qualidades {QUALIDADES_PALADAR}: {perfil!r}")
+            for q, v in perfil.items():
+                if type(v) is not int or not 0 <= v <= c:
+                    raise ValueError(f"ConfigPaladar.perfis[{tipo!r}][{q!r}] fora de inteiros em [0, C = {c}]: {v!r}")
+
+
+CONFIG_PALADAR = ConfigPaladar()
+CONFIG_PALADAR_LIGADA = ConfigPaladar(ligada=True)
