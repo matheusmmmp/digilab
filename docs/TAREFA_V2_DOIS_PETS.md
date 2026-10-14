@@ -93,3 +93,40 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 - **A visita do pet de outro jogador.**
 - **A tela.**
 - **O ego social.**
+
+## Etapa 8, o lado do mundo (A, 2026-10-13) — GATES PASSAM
+
+O cheiro próprio, o rastro e o som no mundo (seções 5.3 e 5.4 do desenho; DP-11; OA-1 a OA-3) e o lado do mundo dos órgãos do B (seção
+5.6; DP-13 e DP-14). Infraestrutura, sem run; só as sementes dos testes. Mudaram `digilab/mundo.py`, `digilab/grupo.py`, a
+`ConfigSentidos` no fim de `config.py` e um teste do B (`tests/test_orgaos.py`). `engine.py`, `corpo.py`, `motor_corpo.py`, os cérebros, a
+bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave:** `ConfigSentidos.ligada` (desligada; G2). Os números do mundo são os da `ConfigOlfato` e da `ConfigOuvido` do B (uma config
+  só): a `ConfigSentidos` as carrega, e o `ligada` delas é o do órgão, independente. Só no grupo e com dois pets presentes; sozinho, o mundo
+  não guarda rastro nem som.
+- **O rastro e o cheiro do outro:** cada pet deixa uma marca por decisão, no ponto da decisão (até `max_marcas`; a marca vale
+  `cheiro_marca` × (T − idade) // T e some na idade T). O canal de cada outro é o cheiro dele na posição atual mais o rastro, pela conta
+  inteira do cheiro da comida (`campo_em`, que agora o `cheiro_em` usa, com a mesma conta), num canal separado.
+- **O som:** `comendo` (comer e o achou e comeu), `bola`, `chamado` e `emburrado`, na posição do pet depois da ação. Cada outro a d < R_som
+  o ouve em linha reta e guarda na caixa; a caixa vai para a percepção da decisão seguinte. `Grupo.sons` registra quem emitiu, onde e onde
+  estava cada outro.
+- **A percepção:** `obs.social.sentidos` (`PercepcaoSentidos`): a direção do último passo (0 a 15 na DIR16, leste antes do primeiro), o
+  cheiro de cada outro (intensidade, direção pronta em 8, as duas narinas) e os sons (quem, som, direção, distância, intensidade no centro e
+  nos dois ouvidos, idade).
+- **O lado do mundo do órgão** (`MotorMundo._intensidades_do_orgao`, o gancho que o `MotorCorpo` do #299 pede antes de cada tick e de cada
+  percepção): por receptor, a intensidade no ponto da narina (ou do ouvido), sem direção. As narinas e os ouvidos ficam de lado pela direção
+  do último passo; com um só, no centro.
+  - `olfato_comida`: o cheiro da comida;
+  - `olfato_outro`: o canal do outro (exige a `ConfigSentidos` no grupo);
+  - `ouvido_<som>`: a soma dos sons daquele tipo que entram no passo do tick (cada som entra em um tick só).
+  - O grupo confere que os números do mundo do órgão de cada pet são os do grupo.
+- **Um conserto:** o `simular_grupo` falha alto com uma entrada fora do início de dia. Antes o pet nunca entrava, em silêncio.
+- **Gates** (`tests/test_sentidos_mundo.py`, 61):
+  - **G2:** os 84 grupos de `tests/gabaritos/sentidos_vidas_de_hoje.json`, gravados antes (`tests/gabarito_sentidos.py`), byte a byte. Com a
+    chave e um pet só, nada guardado; com a chave e dois pets, os cérebros de hoje vivem a mesma vida (instinto, lobos, o cérebro do grupo da
+    bancada, com e sem o corpo), só com os registros a mais;
+  - **G-SENTIDOS:** a conta do cheiro da comida igual em 2000 casos; o rastro pelas decisões; o cheiro de cada outro e as narinas refeitos
+    na hora de cada decisão; um som por evento; quem ouve e o que ouve, refeitos; a caixa inteira na decisão seguinte;
+  - **o órgão:** a comida e o outro nas narinas refeitos a cada entrega; cada som no ouvido uma vez só; as falhas altas;
+  - **G-RECEPTOR-SOCIAL** e **G1-GRUPO** (com o órgão no corpo).
+- **Fica para depois:** os candidatos `cheiro_seguir` e `cheiro_virar` no lugar do `cheiro` e o G-SEM-DIRECAO (com o órgão ligado, a
+  direção pronta do mundo ainda chega à percepção e ao alvo padrão); as entradas no cérebro; a bancada (o D).

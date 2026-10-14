@@ -5177,3 +5177,26 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
 - **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
   (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
   falharia, mas só depois de montada; a recusa explícita diz por quê.
+
+## 2026-10-13 — Dois pets, etapa 8, o lado do mundo (A): o cheiro próprio, o rastro, o som e o gancho do órgão
+
+- **Os números do mundo ficaram na `ConfigOlfato` e na `ConfigOuvido` do B (#299),** que já os trazia "para a config ser uma só". O meu
+  rascunho tinha outros (R 12, T 720, 48 marcas); ficaram os do B (R 24, T 240, 16 marcas, som 64, R_som 16, afastamento 8). A
+  `ConfigSentidos` virou só a chave do mundo, com as duas dentro; o `ligada` delas continua sendo o do órgão.
+- **A marca vai no ponto da decisão** (a posição antes de andar): com o cheiro na posição atual, o rastro diz de onde o pet veio.
+- **"A cada decisão"** foi lido como toda decisão, também o dormir e o ocioso (as marcas no mesmo ponto se somam como fontes).
+- **Sozinho, nada:** o desenho diz que com um pet só o mundo não guarda nada. Por isso o rastro do A experiente só começa quando o B entra.
+- **A direção do último passo antes do primeiro passo** é leste (0 na DIR16), uma convenção (`PASSO_INICIAL`), sem fonte.
+- **O som `comendo`** vale para o comer e para o achou e comeu; o `bola`, só quando o pet chegou e brincou com a bola. A posição é a do pet
+  depois da ação.
+- **O som no ouvido do órgão entra num tick só:** o do tick do mundo em que o ouvinte está quando o som soa (o mesmo tick, se ele ainda não
+  andou; o seguinte, se já andou). A percepção e o passo do mesmo tick veem o mesmo valor. Dois sons do mesmo tipo no tick se somam.
+- **O `MotorMundo` atualiza o mundo a cada entrega ao órgão** (idempotente por tick: as quedas são as mesmas).
+- **O Olfato social e a Audição no grupo exigem a `ConfigSentidos`,** e os números do órgão têm de ser os do grupo (falha alto). Fora do
+  grupo, o outro e o ouvido são 0.
+- **O teste do B** que esperava `NotImplementedError` no motor de verdade (o lado do mundo faltando) passou a conferir que o gancho existe.
+- **O furo do gabarito:** a primeira gravação punha o B na entrada 1 (tick 1, não dia 1), e o `simular_grupo` o ignorava em silêncio. O
+  gerador foi corrigido e o gabarito regravado com o código de antes (commit `06730c6`, numa worktree à parte); o `simular_grupo` passou a
+  falhar alto.
+- **A direção pronta empata pelo arredondamento** com gradiente fraco (A 32 a 24 células); o teste da narina usa uma fonte forte. É o
+  mesmo empate do cheiro da comida (#232).
