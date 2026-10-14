@@ -30,6 +30,18 @@ RAIZ = Path(__file__).resolve().parents[2]
 if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
+
+def sha256_do_pacote() -> str:
+    """O sha256 do código da bancada, para o meta das runs: a fachada (`experiments/bancada_v2.py`) e todo `.py` deste pacote, em ordem
+    de nome, cada um com o caminho relativo antes do conteúdo (mudar, tirar ou pôr um arquivo muda o sha256)."""
+    import hashlib
+    arquivos = [RAIZ / "experiments" / "bancada_v2.py", *sorted(Path(__file__).resolve().parent.glob("*.py"))]
+    h = hashlib.sha256()
+    for caminho in arquivos:
+        h.update(caminho.relative_to(RAIZ).as_posix().encode("utf-8") + b"\0" + caminho.read_bytes() + b"\0")
+    return h.hexdigest()
+
+
 MODULOS = ("faixas", "mundos", "bracos", "vida", "regras_mundo", "medidas", "nucleo", "config", "rodar", "grupo", "passo0",
            "pet_que_pensa")
 
@@ -46,7 +58,7 @@ def instalar_fachada(fachada) -> None:
     nada = object()
     for m in modulos:
         for nome, valor in vars(m).items():
-            if nome.startswith("__") or nome == "RAIZ":
+            if nome.startswith("__") or nome in ("RAIZ", "sha256_do_pacote"):   # os nomes do __init__, não da bancada
                 continue
             atual = fachada.__dict__.get(nome, nada)
             if atual is not nada and atual is not valor:

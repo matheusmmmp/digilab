@@ -17,7 +17,7 @@ from pathlib import Path
 
 from digilab.protocol import ENGINE_SHA256_V0, sha256_engine
 
-from . import RAIZ
+from . import RAIZ, sha256_do_pacote
 
 
 # ------------------------------------------------------------------ orquestrador
@@ -105,7 +105,7 @@ def meta(cfg: dict) -> dict:
             "cfg_lobos": cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos")).__dict__,
             "python": platform.python_version(), "plataforma": platform.platform(),
             "engine_sha256": sha256_engine(), "lobos_sha256": _sha(RAIZ / "digilab" / "policies" / "lobos.py"),
-            "config_sha256": _sha(RAIZ / "digilab" / "config.py"), "bancada_sha256": _sha(RAIZ / "experiments" / "bancada_v2.py"),
+            "config_sha256": _sha(RAIZ / "digilab" / "config.py"), "bancada_sha256": sha256_do_pacote(),
             "metrics_sha256": _sha(RAIZ / "digilab" / "metrics.py"), "mundo_sha256": _sha(RAIZ / "digilab" / "mundo.py"),
             "corpo_sha256": _sha(RAIZ / "digilab" / "corpo.py"), "motor_corpo_sha256": _sha(RAIZ / "digilab" / "motor_corpo.py")}
 

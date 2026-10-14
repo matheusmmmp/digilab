@@ -234,9 +234,12 @@ COMENTARIO_FACHADA = (
     "else:\n"
     "    import bancada as _pacote  # noqa: E402\n"
     "_pacote.instalar_fachada(sys.modules[__name__])\n")
-# as únicas linhas que mudam, porque o arquivo mudou de lugar: o sha256 "da bancada" no meta (antes Path(__file__), que agora seria o
-# rodar.py; passa a ser a fachada, o mesmo arquivo de antes). O RAIZ fica na fachada como era, e o pacote tem o dele (parents[2]).
-TROCAS = {"meta": ('"bancada_sha256": _sha(Path(__file__))', '"bancada_sha256": _sha(RAIZ / "experiments" / "bancada_v2.py")')}
+# as únicas linhas que mudam, porque o arquivo mudou de lugar: o sha256 "da bancada" no meta. Antes era Path(__file__), o arquivo de um
+# só, que tinha todo o código; agora seria o rodar.py. Passa a ser o do pacote inteiro (a fachada e os módulos, `sha256_do_pacote` no
+# __init__), para o meta continuar dizendo qual código rodou. O RAIZ fica na fachada como era, e o pacote tem o dele (parents[2]).
+TROCAS = {"meta": ('"bancada_sha256": _sha(Path(__file__))', '"bancada_sha256": sha256_do_pacote()')}
+# os nomes que os módulos importam do __init__ do pacote
+NOMES_DO_INIT = ("RAIZ", "sha256_do_pacote")
 
 
 def _linha_import(n: ast.stmt, nomes: list[ast.alias], largura: int = LARGURA) -> str:
@@ -286,15 +289,16 @@ def gerar(p: Particao) -> dict[str, str]:
                 biblioteca += _linha_import(imp, nomes)
         bloco = biblioteca + ("\n" if biblioteca and digilab else "") + digilab
         topo = dep[mod]["definicao"]
-        pacote = ("from . import RAIZ\n" if "RAIZ" in usados_mod else "")
-        pacote += "".join(_import_do_pacote(o, topo[o], fim=False) for o in MODULOS if o in topo)
-        texto = CABECA_MODULO.format(mod=mod, tema_maiusculo=tema[0].upper() + tema[1:]) + "\n" + bloco + ("\n" + pacote if pacote else "")
         corpo = "".join(t for _, t in nos).lstrip("\n")
         for nome, (antes, depois) in TROCAS.items():
             if any(nome in definidos(n) for n, _ in nos):
                 if corpo.count(antes) != 1:
                     raise ValueError(f"a troca de {nome} não acha o texto de antes uma vez só")
                 corpo = corpo.replace(antes, depois)
+        do_init = [x for x in NOMES_DO_INIT if x in usados([ast.parse(corpo)])]
+        pacote = (f"from . import {', '.join(do_init)}\n" if do_init else "")
+        pacote += "".join(_import_do_pacote(o, topo[o], fim=False) for o in MODULOS if o in topo)
+        texto = CABECA_MODULO.format(mod=mod, tema_maiusculo=tema[0].upper() + tema[1:]) + "\n" + bloco + ("\n" + pacote if pacote else "")
         texto += "\n\n" + corpo
         chamada = {o: ns - topo.get(o, set()) for o, ns in dep[mod]["chamada"].items()}
         fim = [o for o in MODULOS if chamada.get(o)]

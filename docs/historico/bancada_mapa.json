@@ -733,7 +733,7 @@
    "modulo": "rodar",
    "linhas_antes": "3240-3251",
    "igual": false,
-   "troca": "\"bancada_sha256\": _sha(RAIZ / \"experiments\" / \"bancada_v2.py\")"
+   "troca": "\"bancada_sha256\": sha256_do_pacote()"
   },
   {
    "nome": "main",
@@ -1153,7 +1153,7 @@
  "trocas": {
   "meta": {
    "antes": "\"bancada_sha256\": _sha(Path(__file__))",
-   "depois": "\"bancada_sha256\": _sha(RAIZ / \"experiments\" / \"bancada_v2.py\")"
+   "depois": "\"bancada_sha256\": sha256_do_pacote()"
   }
  },
  "nomes": [

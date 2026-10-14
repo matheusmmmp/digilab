@@ -83,3 +83,27 @@ def test_cada_modulo_importa_primeiro_sem_ciclo(modulo):
 def test_linha_de_comando_da_fachada():
     r = subprocess.run([sys.executable, str(RAIZ / "experiments" / "bancada_v2.py"), "--help"], capture_output=True, cwd=RAIZ)
     assert r.returncode == 0 and b"--config" in r.stdout
+
+
+def test_sha256_do_pacote_cobre_a_fachada_e_os_modulos(tmp_path, monkeypatch):
+    """O meta grava o sha256 do pacote inteiro: muda se um módulo, a fachada ou a lista de arquivos muda."""
+    import shutil
+    raiz = tmp_path / "raiz"
+    shutil.copytree(RAIZ / "experiments" / "bancada", raiz / "experiments" / "bancada", ignore=shutil.ignore_patterns("__pycache__"))
+    shutil.copyfile(RAIZ / "experiments" / "bancada_v2.py", raiz / "experiments" / "bancada_v2.py")
+    monkeypatch.setattr(bancada, "RAIZ", raiz)
+    monkeypatch.setattr(bancada, "__file__", str(raiz / "experiments" / "bancada" / "__init__.py"))
+    base = bancada.sha256_do_pacote()
+    assert base == bancada.sha256_do_pacote()
+    for rel in ("experiments/bancada/vida.py", "experiments/bancada_v2.py"):
+        alvo = raiz / rel
+        texto = alvo.read_bytes()
+        alvo.write_bytes(texto + b"\n")
+        assert bancada.sha256_do_pacote() != base
+        alvo.write_bytes(texto)
+    (raiz / "experiments" / "bancada" / "novo.py").write_text("x = 1\n", encoding="utf-8")
+    assert bancada.sha256_do_pacote() != base
+
+
+def test_meta_grava_o_sha256_do_pacote():
+    assert bv.meta({})["bancada_sha256"] == bancada.sha256_do_pacote()
