@@ -308,3 +308,8 @@ Nenhuma taxa passa o limiar S/16 (64). Pela reserva registrada antes da run, fic
   | P1+ped-c | 33,4 s |
 
 - A run inteira levou 7,6 min com 8 processos.
+
+### A1.5 A decisão do Matheus (2026-10-14)
+
+**Registrar como negativo** e rever na calibração final, com a estrutura completa. Sem o `passo` próprio do oráculo e sem o horizonte
+n = 1 agora. A validação não roda.

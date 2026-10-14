@@ -89,3 +89,10 @@ A regra pega o menor erro entre os pontos que não prendem pesos no teto em mais
     margem.
 - **A taxa lenta não fechou:** para o G-ADAPTA medir alguma coisa, a mudança do corpo precisaria ser maior que a da grade.
 - **Nada foi recalibrado olhando o piloto.**
+
+## 6. Decisão do Matheus (2026-10-14)
+
+**Registrado como resultado negativo.** A calibração da rede de si volta na calibração final, com a estrutura completa.
+- **Nada muda agora:** nem o `passo` próprio do oráculo, nem o horizonte n = 1.
+- **A validação (44101…44505) não roda.**
+- O adendo 1 do plano fica como está, com os números desta run.
