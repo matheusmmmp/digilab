@@ -213,6 +213,8 @@ class Grupo:
         for outro in self.motores.values():      # o efeito de cada fruta e do mundo: o mesmo para todos
             if outro.efeito_frutas != motor.efeito_frutas:
                 raise ValueError(f"efeito_frutas diferente entre os pets: {outro.efeito_frutas} x {motor.efeito_frutas}")
+            if outro.cpal != motor.cpal:
+                raise ValueError(f"o Paladar diferente entre os pets (os perfis sao das comidas do mundo): {outro.cpal} x {motor.cpal}")
         if motor._estado.tick != 0 or len(motor.log):
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
         self._conferir_orgaos(motor)

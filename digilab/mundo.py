@@ -76,6 +76,12 @@ liga, so com o mundo e so com um pet (fora do grupo). Desligado, nada muda. Liga
 - a troca de tipo (`trocar_arvores_<x>_<y>`, fora do orcamento): no tick do evento as arvores do tipo x passam a dar y, e as do y a dar
   x. As quedas ate o tick do evento usam o tipo antigo e as frutas que ja estao no chao ficam como cairam. O registro e do `Mundo`
   (`trocas_tipo`), e o replay o refaz pelo log.
+
+O Paladar, o lado do mundo (docs/futuro/paladar.md, secao 3.1, etapa 1): `cfg_paladar` (ConfigPaladar) liga, so com o mundo. Desligado,
+nada muda. Ligado, cada consumo leva o perfil de gosto do tipo comido (um dict {qualidade: inteiro em [0, C]}, uma copia do da config):
+o registro do consumo (`consumos_mundo`, e com ele o `ocorrido["comeu"]` do `comer` e do "achou e comeu") ganha `perfil`, o dict na comida
+madura e None na podre; a fruta na mao (sempre madura) tambem. O mundo nao usa o perfil para nada: nao muda a nutricao, o humor, o cheiro,
+a percepcao, os candidatos nem nenhuma rng. O corpo (o orgao do Paladar, do B) o le daqui.
 """
 
 from __future__ import annotations
@@ -88,6 +94,7 @@ from typing import Callable
 from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
+from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
 from .donos import Visao
@@ -241,6 +248,15 @@ def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: Co
     """(cheiro no centro, direcao): a direcao 1 a 8 em que o cheiro medido a 1 celula passa do centro, a maior vence e o empate fica
     com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
     return direcao_do_campo(x, y, fontes, cm.raio_cheiro_celulas * cm.sub, cm.sub)
+
+
+# ================================================================== o Paladar, o lado do mundo (docs/futuro/paladar.md, secao 3.1)
+# o registro de status dos campos da ConfigPaladar (conferido por teste contra os campos da dataclass)
+PARAMETROS_PALADAR_MUNDO = {
+    "ligada": ("PROPOSTO", "docs/futuro/paladar.md, secao 4: a chave do mundo, desligada por padrao"),
+    "perfis": ("PROPOSTO", "SEM FONTE; docs/futuro/paladar.md, secao 3.1 (PL-3): quatro qualidades, as frutas como a mesma forma girada "
+                           "(3C/4 e C/4), a racao com C/4 de salgado"),
+}
 
 
 # ================================================================== percepcao e alvos
@@ -894,11 +910,14 @@ class MotorMundo(MotorFrutas):
 
     def __init__(self, *a, cfg_mundo: ConfigMundo | None = None, efeito_frutas: dict | None = None, mundo: "Mundo | None" = None,
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
-                 **kw) -> None:
+                 cfg_paladar: ConfigPaladar | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cmf = cfg_mundo or CONFIG_MUNDO
         self.cbh = cfg_banheiro or CONFIG_BANHEIRO
         self.cpq = cfg_pqp or CONFIG_PQP_MUNDO
+        self.cpal = cfg_paladar or CONFIG_PALADAR
+        if not isinstance(self.cpal, ConfigPaladar):
+            raise TypeError(f"cfg_paladar e uma ConfigPaladar: {self.cpal!r}")
         if not self.cmf.ligada:
             if efeito_frutas is not None or mundo is not None or entrada_mundo:
                 raise ValueError("efeito_frutas, mundo e entrada_mundo so existem com o mundo ligado")
@@ -906,6 +925,8 @@ class MotorMundo(MotorFrutas):
                 raise BanheiroSemMundo("o banheiro exige o mundo fisico (ConfigMundo.ligada)")
             if self.cpq.ligada:
                 raise PetQuePensaSemChave("o J5 (ConfigPetQuePensaMundo) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cpal.ligada:
+                raise ValueError("o Paladar (ConfigPaladar) exige o mundo fisico (ConfigMundo.ligada): os perfis sao das comidas do mapa")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1287,12 +1308,20 @@ class MotorMundo(MotorFrutas):
         reg = {"tick": tick, "id": c["id"], "tipo": c["tipo"], "origem": c["origem"], "tick_posta": c["tick_posta"],
                "situacao": sit, "como": como, "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome,
                "humor_depois": humor}
+        if self.cpal.ligada:
+            reg["perfil"] = self.perfil_de(c["tipo"]) if sit == "madura" else None     # o Paladar: a podre nao tem perfil
         self.consumos_mundo.append(reg)
         if self._grupo is not None:                          # dois pets: o consumo e visto pelos outros e lido pela disputa
             self._tick_social["comeu"] = {"id": c["id"], "tipo": c["tipo"], "x": c["x"], "y": c["y"], "situacao": sit}
             self._grupo.viu_comer(self.ident, c["x"], c["y"])
             self._grupo.emitir_som(self.ident, "comendo")
         return reg
+
+    def perfil_de(self, tipo: str) -> dict:
+        """O Paladar (secao 3.1): uma copia do perfil de gosto do tipo, {qualidade: inteiro em [0, C]}. Sem a chave, falha alto."""
+        if not self.cpal.ligada:
+            raise ValueError("perfil de gosto sem o Paladar (ConfigPaladar.ligada)")
+        return dict(self.cpal.perfis[tipo])
 
     def _rolar_bola(self, tick: int) -> None:
         self.mundo.rolar_bola(self._tm(tick))
@@ -1534,9 +1563,11 @@ class MotorMundo(MotorFrutas):
         fome = min(1.0, e.fome + self.cmf.nutricao_fruta)
         humor = min(1.0, max(0.0, e.humor + self.efeito_frutas[f]))
         self._estado = replace(e, fome=fome, humor=humor)
-        self.consumos_mundo.append({"tick": tm, "id": None, "tipo": f, "origem": "dono", "tick_posta": tm, "situacao": "madura",
-                                    "como": "mao", "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome,
-                                    "humor_depois": humor})
+        reg = {"tick": tm, "id": None, "tipo": f, "origem": "dono", "tick_posta": tm, "situacao": "madura", "como": "mao",
+               "fome_antes": e.fome, "humor_antes": e.humor, "fome_depois": fome, "humor_depois": humor}
+        if self.cpal.ligada:
+            reg["perfil"] = self.perfil_de(f)                  # o Paladar: a fruta na mao e sempre madura
+        self.consumos_mundo.append(reg)
         self._n_eventos += 1                                # e um evento do log, mas NAO e contato
         self._estimulo_mao(f)
         gancho = getattr(self._pm_cerebro(), "fruta_na_mao", None)

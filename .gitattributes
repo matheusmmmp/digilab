@@ -11,3 +11,7 @@ artifacts_fala/** -text
 artifacts_v1_memoria/** -text
 artifacts_v1_memoria_espacos/** -text
 artifacts_v1_personalidade/** -text
+
+# Saude, etapa 2 (Matheus, 2026-10-14): o registro por mes so cresce no fim; o git junta as duas pontas sem conflito
+docs/registro/*.md merge=union
+docs/REGISTRO_DESVIOS.md merge=union
