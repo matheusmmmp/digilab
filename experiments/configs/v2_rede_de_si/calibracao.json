@@ -1,0 +1,66 @@
+{
+  "descricao": "Calibracao do passo da rede de si e piloto (PLANO_ANALISE_V2_REDE_DE_SI, secoes 5, 6 e 8; PRS-1 a PRS-5). Grade: o P1-c no mundo da bola, o atencioso com os gestos, 14 dias, o passo em {S/64, S/16, S/4}; a regra: o menor MAE_rede(1) nos dias 1 a 7, sem o passo que prende pesos no teto em mais da metade das vidas. Piloto no passo escolhido: P1-c, P0-c, P1-c-lenta e P1-c-tapa (bola) e P1+ped-c (iguais_frutas); a taxa lenta do P1-c-lenta na grade {C//2, C//4, C//8} (secao 5), a maior que muda a fome dos dias 8 a 10 por mais de S/16; o P1-c-lenta no piloto com ela. As 20 unidades das bases 43101...43505 (K_u = 4, prefixo rede_de_si). O cerebro A do ponto da K2 com a montagem completa; o corpo do regime corpo com o gasto do passo 0 fino (adendo 5 do corpo, m_gasto 4/5) e os drives novos nos numeros PROPOSTOS (o corpo nao se calibra aqui, secao 5). NAO rodada: precisa do sim do Matheus.",
+  "plano": "docs/PLANO_ANALISE_V2_REDE_DE_SI.md",
+  "unidades": {
+    "bases": [
+      43101,
+      43202,
+      43303,
+      43404,
+      43505
+    ],
+    "k": 4,
+    "prefixo": "rede_de_si"
+  },
+  "dias": 14,
+  "orcamento": 224,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "corpo": {
+    "gasto_atividades_den": 5,
+    "gasto_atividades_num": 4,
+    "gasto_basal_acordado": 300,
+    "gasto_basal_dormindo": 150
+  },
+  "passo0": "artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json",
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 10000,
+    "semente": 4242,
+    "nivel": 0.95
+  },
+  "grade_passo": [
+    16,
+    64,
+    256
+  ],
+  "poder": {
+    "k_min": 4,
+    "k_max": 10,
+    "replicas": 2000,
+    "alvo": 0.8,
+    "alfa": 0.025,
+    "alfas_relato": [
+      0.0125,
+      0.05
+    ]
+  },
+  "grade_taxa_lenta": [
+    225000,
+    112500,
+    56250
+  ]
+}

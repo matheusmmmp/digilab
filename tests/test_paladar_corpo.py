@@ -7,7 +7,8 @@
 - G-GRAFO: as checagens com o orgao, sem laco novo, e tabelas feitas para falhar;
 - G-INT: o genoma e o orgao so com inteiros;
 - o genoma: a rng propria, a faixa, a favorita uniforme entre os pets;
-- o motor (com um lado do mundo DE TESTE: o `cpal` e o perfil no `ocorrido`, como o A combinou): as falhas altas, a percepcao e o G1.
+- o motor, com o lado do mundo de verdade (o #309 do A: a ConfigPaladar e o perfil no `ocorrido["comeu"]`): as falhas altas (inclusive
+  um mundo que quebrasse o contrato e entregasse o consumo sem o perfil), a percepcao, a fruta na mao e o G1.
 """
 from __future__ import annotations
 
@@ -28,7 +29,8 @@ import gabarito_dois_pets as gdp  # noqa: E402
 import gabarito_paladar as gpa  # noqa: E402
 
 from digilab.config import (CONFIG_CORPO, CONFIG_CORPO_BANHEIRO, CONFIG_CORPO_DRIVES, CONFIG_CORPO_METABOLISMO,  # noqa: E402
-                            CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, ConfigCorpo, ConfigOlfato)
+                            CONFIG_LOBOS_APRENDIZ, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONFIG_PALADAR, CONFIG_PALADAR_LIGADA,
+                            QUALIDADES_PALADAR, ConfigCorpo, ConfigOlfato)
 from digilab.corpo import (PALADAR, QUALIDADES, Corpo, div_arred, grafo_do_corpo, k_meia_vida, passo_meia_vida,  # noqa: E402
                            quimicos_de, taxas_de)
 from digilab.corpo_grafo import Emissor, Grafo, GrafoInvalido, Leitura, checar  # noqa: E402
@@ -326,35 +328,26 @@ def test_o_valor_inato_conta_exata():
         GenomaPaladar({"doce": 1.0, "azedo": 0, "amargo": 0, "salgado": 0})
 
 
-# ================================================================== o motor, com um lado do mundo DE TESTE
-class CpalTeste:
-    """a ConfigPaladar do A, de teste: ligada e os perfis do desenho"""
-    ligada = True
-    perfis = PERFIS
+# ================================================================== o motor, com o lado do mundo de verdade (o #309 do A)
+MotorPaladar = com_corpo(MotorMundo)
 
 
-class MundoComPerfil(MotorMundo):
-    """O lado do mundo DE TESTE (o de verdade e do A, etapa 1): `cpal` no motor e o perfil no `ocorrido["comeu"]` (None na podre)."""
-
-    sem_perfil = False
-
-    def __init__(self, *a, **kw) -> None:
-        super().__init__(*a, **kw)
-        self.cpal = CpalTeste()
+class MundoSemPerfil(MotorMundo):
+    """Um mundo que QUEBRA o contrato (so para provar a guarda do corpo): com o paladar ligado, tira o `perfil` do `ocorrido["comeu"]`
+    de toda comida madura antes de o MotorCorpo le-lo."""
 
     def _consequencia(self, acao):
         ocorrido = super()._consequencia(acao)
         comeu = None if ocorrido is None else ocorrido["comeu"]
-        if comeu is not None and not self.sem_perfil:
-            comeu["perfil"] = dict(self.cpal.perfis[comeu["tipo"]]) if comeu["situacao"] == "madura" else None
+        if comeu is not None and comeu["situacao"] == "madura":
+            del comeu["perfil"]
+            self.tirados = getattr(self, "tirados", 0) + 1
         return ocorrido
 
 
-MotorPaladar = com_corpo(MundoComPerfil)
-
-
-def fabrica(cc=DRIVES_P, motor=MotorPaladar):
-    return lambda p, cfg, s, **kw: motor(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc, **kw)  # noqa: E731
+def fabrica(cc=DRIVES_P, motor=MotorPaladar, cpal=CONFIG_PALADAR_LIGADA):
+    return lambda p, cfg, s, **kw: motor(p, cfg, s, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc,  # noqa: E731
+                                         cfg_paladar=cpal, **kw)
 
 
 class Espiao:
@@ -375,32 +368,32 @@ def politica(cerebro: str, cc=DRIVES_P):
             else PoliticaLobos(CONFIG_PADRAO, CONFIG_LOBOS_APRENDIZ, cfg_mundo=CM, cfg_corpo=replace(cc, paladar=False)))
 
 
-def vida(cerebro: str = "instinto", semente: int = 101, dias: int = 2, cc: ConfigCorpo = DRIVES_P):
+def vida(cerebro: str = "instinto", semente: int = 101, dias: int = 2, cc: ConfigCorpo = DRIVES_P, motor=MotorPaladar):
     esp = Espiao(politica(cerebro, cc))
     dono = gdp.DonoComBolaPerto(DonoComLugar(criar_dono("atencioso"), "perto", semente, "atencioso", CM))
-    return simular_vida_mundo("atencioso", dono, esp, semente, dias, 16 * dias, fabrica(cc), rotulo_dono="atencioso"), esp
+    return simular_vida_mundo("atencioso", dono, esp, semente, dias, 16 * dias, fabrica(cc, motor), rotulo_dono="atencioso"), esp
+
+
+def test_as_qualidades_do_corpo_sao_as_do_mundo():
+    """o corpo (corpo.QUALIDADES) e o mundo do A (config.QUALIDADES_PALADAR) tem as mesmas qualidades, na mesma ordem; os perfis do mundo
+    sao os do desenho (secao 3.1)"""
+    assert QUALIDADES == QUALIDADES_PALADAR
+    assert CONFIG_PALADAR_LIGADA.perfis == PERFIS
 
 
 def test_o_motor_falha_alto_sem_o_que_o_paladar_exige():
     p = PoliticaInstintoMundo(CONFIG_PADRAO)
-    with pytest.raises(ValueError, match="mundo com o paladar"):
-        com_corpo(MotorMundo)(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=DRIVES_P)
-
-    class Desligado(MundoComPerfil):
-        def __init__(self, *a, **kw) -> None:
-            super().__init__(*a, **kw)
-            self.cpal = type("C", (), {"ligada": False, "perfis": PERFIS})()
-    with pytest.raises(ValueError, match="mundo com o paladar"):
-        com_corpo(Desligado)(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=DRIVES_P)
+    for cpal in ({}, {"cfg_paladar": CONFIG_PALADAR}):          # o mundo sem a chave do paladar (o padrao e a desligada explicita)
+        with pytest.raises(ValueError, match="mundo com o paladar"):
+            MotorPaladar(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=DRIVES_P, **cpal)
     with pytest.raises(ValueError, match="mundo fisico"):
-        MotorPaladar(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_corpo=DRIVES_P)
-    # o consumo sem o perfil do mundo
-    MundoComPerfil.sem_perfil = True
-    try:
-        with pytest.raises(RuntimeError, match="sem perfil do mundo"):
-            vida()
-    finally:
-        MundoComPerfil.sem_perfil = False
+        MotorPaladar(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_corpo=DRIVES_P, cfg_paladar=CONFIG_PALADAR_LIGADA)
+    # o mundo com o paladar e o corpo sem a sub-chave: o perfil fica no registro do mundo e nao chega ao corpo (nada falha)
+    m = vida(cc=replace(DRIVES_P, paladar=False))[0].motor
+    assert any(c.get("perfil") for c in m.consumos_mundo) and not set(PALADAR) & set(m.corpo.q)
+    # a guarda: um mundo que entregasse o consumo maduro sem o perfil faz o corpo falhar alto no primeiro consumo
+    with pytest.raises(RuntimeError, match="sem perfil do mundo"):
+        vida(motor=com_corpo(MundoSemPerfil))
 
 
 @pytest.mark.parametrize("cerebro", ["instinto", "lobos"])
@@ -417,12 +410,14 @@ def test_o_motor_leva_o_perfil_e_a_percepcao_le_o_paladar(cerebro, cc):
     for q in QUALIDADES:
         if all(PERFIS[t][q] == 0 for t in tipos):
             assert m.corpo.q[f"saciedade_{q}"] == 0
+    # o perfil que o corpo recebeu e o do registro do consumo do mundo (o contrato)
+    assert all(c["perfil"] == (PERFIS[c["tipo"]] if c["situacao"] == "madura" else None) for c in m.consumos_mundo)
 
 
 def test_a_fruta_na_mao_leva_o_perfil():
     from digilab.config import CONFIG_PQP_MUNDO_LIGADA
     p = PoliticaInstintoMundo(CONFIG_PADRAO)
-    m = MotorPaladar(p, CONFIG_PADRAO, 7, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=DRIVES_P, cfg_pqp=CONFIG_PQP_MUNDO_LIGADA)
+    m = fabrica()(p, CONFIG_PADRAO, 7, cfg_pqp=CONFIG_PQP_MUNDO_LIGADA)
     m.avancar(30)
     antes = dict(m.corpo.q)
     m.observar(AcaoUsuario.DAR_FRUTA_B)

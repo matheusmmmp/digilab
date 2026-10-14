@@ -130,3 +130,47 @@ bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **G-RECEPTOR-SOCIAL** e **G1-GRUPO** (com o órgão no corpo).
 - **Fica para depois:** os candidatos `cheiro_seguir` e `cheiro_virar` no lugar do `cheiro` e o G-SEM-DIRECAO (com o órgão ligado, a
   direção pronta do mundo ainda chega à percepção e ao alvo padrão); as entradas no cérebro; a bancada (o D).
+
+## Etapa 8b, o lado do mundo do órgão: `cheiro_seguir`, `cheiro_virar` e o G-SEM-DIRECAO (A, 2026-10-14) — GATES PASSAM
+
+Pedido do Matheus. A seção 5.6 do desenho: com o órgão ligado, a direção pronta do mundo não chega mais ao pet. Infraestrutura, sem run; só
+as sementes dos testes. Mudaram `digilab/mundo.py`, `digilab/motor_corpo.py` (três perguntas do motor), `digilab/grupo.py` (a percepção dos
+sentidos), `digilab/instinto_mundo.py` (a fome urgente) e `digilab/policies/lobos.py` (a classe dos candidatos novos). `engine.py`,
+`corpo.py`, as configs, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Com o Olfato da comida** (`ConfigOlfato.ligada` e `comida`):
+  - a `PercepcaoMundo` sai com `cheiro` e `direcao_cheiro` 0, e a direção do cheiro nem é calculada (`Mundo.perceber(..., cheiro=False)`);
+  - o candidato `cheiro` dá lugar a `cheiro_seguir` (um passo na direção do último passo) e `cheiro_virar`, só quando alguma narina lê
+    acima de 0. Com duas narinas, o virar é 45° (dois índices da DIR16) para a narina mais forte; empatadas, o lado sai do bit 8 do u.
+    Com uma narina, é uma das outras 15 direções, por `(u >> 8) % 15`. O u é o da rng `alvo`, que já era sorteado;
+  - **a regra da opção** põe o preferido na frente: com duas narinas, seguir se elas empatam, virar se não; com uma, virar se a leitura
+    caiu desde a decisão anterior, seguir se subiu ou ficou. O alvo padrão do motor pega o primeiro;
+  - **no explorar**, os candidatos só existem com o cheiro forte: alguma narina acima do `limiar_cheiro_explorar` de hoje lido pelo
+    receptor sem adaptação (16 → 279 na escala S). Nenhum número novo;
+  - **o instinto do mundo** na fome urgente: comida vista ou alguma narina sentindo (`sente_cheiro_comida`);
+  - **o cérebro A** lê os dois candidatos como a classe `cheiro` (`lobos.CLASSE_DO_CANDIDATO`): a tabela do alvo aprendido é a mesma nos
+    dois braços ("órgão × leitura pronta"), e o representante da classe é o preferido pela regra.
+- **Com o Olfato social e a Audição:** a `PercepcaoSentidos` sai sem o `cheiro` do outro e sem os `sons` (só o próprio passo). O que o pet
+  sente do outro chega só pelos receptores `olfato_outro` e `ouvido_<som>`.
+- **A propriocepção é do motor** (`MotorMundo._ligar_propriocepcao`): a direção do último passo começa em `PASSO_INICIAL` na primeira
+  vez que alguém a pede (os órgãos na decisão, o lado do mundo antes de cada tick, os sentidos na entrada do grupo). Antes ela só ligava
+  dentro do lado do mundo do órgão, e um lado do mundo trocado (o motor de teste de `tests/test_orgaos.py`) a deixava desligada: eram as 4
+  falhas da primeira suíte do PR. O teste do B não mudou.
+- **Gates** (`tests/test_cheiro_orgao.py`, 37):
+  - **G2:** sem o órgão, os gabaritos de sempre, na suíte; os 16 grupos com o Olfato social e a Audição (sem o da comida) de
+    `tests/gabaritos/orgao_sem_direcao_vidas_de_hoje.json`, gravado antes (`tests/gabarito_orgao_sem_direcao.py`, commit próprio), byte a
+    byte;
+  - **a mecânica exata:** as duas narinas (os dois lados, o empate pelo u), a esquerda anti-horária, uma narina (subiu, ficou, caiu; as 15
+    direções), sem cheiro nenhum candidato, as falhas altas, a leitura, o limiar 279 e o alvo padrão;
+  - **G-SEM-DIRECAO por AST:** as funções do caminho do órgão não leem o cheiro, a direção, as comidas nem a percepção do mundo, e o
+    `Mundo.perceber` só calcula a direção no ramo sem o órgão;
+  - **G-SEM-DIRECAO por espião:** em vidas com o órgão (instinto e lobos, uma e duas narinas), a percepção nunca tem cheiro nem direção, o
+    candidato `cheiro` nunca aparece, os candidatos do órgão são refeitos só do que o pet sente (as narinas, o passo, a leitura anterior e o
+    u) e o alvo do motor é o da regra. Com a função da direção trocada por uma que falha, a vida com o órgão roda e a sem ele falha. No
+    grupo, com os três órgãos, os sentidos nunca trazem cheiro nem sons, e a direção do cheiro não é calculada;
+  - **o cérebro A:** o P1 com o alvo aprendido escolhe a classe `cheiro`; o P0 com o alvo aprendido é o instinto do mundo byte a byte;
+  - **G1:** o replay refaz a vida (instinto e P1, uma e duas narinas) e o grupo com os órgãos;
+  - **a propriocepção:** com um lado do mundo trocado, a direção do último passo liga e os candidatos do órgão saem.
+- **Achado (fumaça descritiva, sementes 101…505, 3 dias, aleatório longe, instinto):** com os números PROPOSTOS do órgão, o pet sente
+  cheiro em 78 de 1.440 decisões, e a maior leitura no explorar é 31 (o limiar do explorar é 279). Os consumos caem de 62 (leitura
+  pronta) para 18 (duas narinas) e 13 (uma). O explorar nunca segue cheiro com o órgão. O órgão como está quase cega o pet: é calibração
+  (o limiar, a meia-saturação e a adaptação do B), fora desta etapa.

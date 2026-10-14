@@ -229,6 +229,10 @@ ALVOS_ALIVIO = ("banheiro", "aqui")
 CLASSES_ALVO = {AcaoPet.COMER: ("comida", "comida_podre", "cheiro", "continuar"),
                 AcaoPet.EXPLORAR: ("cheiro", "vagar", "casa", "continuar", "seguir", "onde_comeu"),
                 AcaoPet.BRINCAR: ("bola", "continuar")}
+# o orgao do Olfato da comida (dois pets, secao 5.6): os candidatos `cheiro_seguir` e `cheiro_virar` do motor (mundo.CANDIDATOS_CHEIRO_ORGAO,
+# conferido por teste) sao a classe `cheiro`, a mesma da leitura pronta: o peso da classe e um so nos dois bracos ("orgao x leitura pronta").
+# O representante e o primeiro na ordem do motor, que poe na frente o preferido pela regra da opcao (o alvo padrao)
+CLASSE_DO_CANDIDATO = {"cheiro_seguir": "cheiro", "cheiro_virar": "cheiro"}
 # as regras em que cada acao com alvo e candidata no cerebro do mundo fisico (o prior do instinto do mundo): um peso por (regra, acao,
 # classe)
 REGRAS_ALVO = {"pedido_necessidade": (AcaoPet.COMER,), "fome_moderada": (AcaoPet.COMER,),
@@ -1929,9 +1933,10 @@ class PoliticaLobos(Aprendiz):
         if self._paladar is not None:
             # o paladar (PL-5): a comida boa pela classe do tipo dela (o tipo da comida vista ja vem na percepcao de hoje; o gosto, nao)
             classe_de = lambda a: ((("comida_podre" if a.id in podres else f"comida:{tipos[a.id]}") if a.tipo == "comida"  # noqa: E731
-                                    else a.tipo))
+                                    else CLASSE_DO_CANDIDATO.get(a.tipo, a.tipo)))
         else:
-            classe_de = lambda a: (("comida_podre" if a.id in podres else "comida") if a.tipo == "comida" else a.tipo)  # noqa: E731
+            classe_de = lambda a: (("comida_podre" if a.id in podres else "comida") if a.tipo == "comida"  # noqa: E731
+                                   else CLASSE_DO_CANDIDATO.get(a.tipo, a.tipo))
         classes, reps = [], []
         for a in candidatos:
             c = classe_de(a)

@@ -276,7 +276,7 @@ aqui. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   qualidade das frutas (doce, azedo, amargo). O `h_salgado` é fixo. Ele dá o `valor_inato` e a `favorita` (o PJ-1).
 - **O motor do corpo:**
   - no mapa, o perfil vem do `ocorrido["comeu"]["perfil"]` do mundo; na fruta na mão, do `cpal.perfis`. É o contrato combinado com o A
-    (o lado do mundo dele, `ConfigPaladar` e `MotorMundo.cpal`, está no branch `v2-paladar-mundo`);
+    (o lado do mundo dele, `ConfigPaladar` e `MotorMundo.cpal`, entrou na `main` pelo #309);
   - o corpo com o paladar exige o `cpal.ligada`; os receptores vão à `PercepcaoCorpo`.
 - **A paridade:** o gabarito do corpo ganhou a seção `paladar`, e as outras saíram idênticas. A `config` ganhou os campos novos, com o
   espelho em `web/app/motor/constantes.ts`. O `configCorpo` do TS falha alto com o paladar ligado: o órgão em TS é a etapa 5, do A.
