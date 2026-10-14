@@ -141,6 +141,9 @@ por regra nossa.
 
 ### Fase 3 — genoma, criação × seleção (H3)
 
+**O desenho do genoma** está em `docs/futuro/ecossistema_genetico.md`, com EG-1 a EG-8 DECIDIDAS pelo Matheus (2026-10-14, pela
+recomendação), e os passos G0 a G5 da seção 6 dele.
+
 Primeiro um genoma com variância herdável, com plano e gate próprios (no E1 o genoma explicou 4,9%, e ajustar o genoma só para
 passar o gate viciaria o teste). Depois, o desenho fatorial dono (criação) × escolha de qual pet cruzar (seleção). O dono é medido
 pela **distribuição de formas** que produz, não pela força na arena. Gate: variância atribuível a criação e a seleção separadas,

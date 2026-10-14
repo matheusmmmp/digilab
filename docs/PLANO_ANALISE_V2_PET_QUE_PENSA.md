@@ -437,3 +437,141 @@ O adendo 3 (A3.3) pede este adendo. A calibração e o piloto rodaram uma vez, n
   - **G-EXPOSICAO falha:** de 10 a 12 das 20 unidades sem exposição.
 - **A4.7, o custo:** 0,71 s de CPU por vida de 10 dias (P1 0,61; com o planejador, 0,74). A run inteira levou cerca de 5 min com 3 e 4
   processos.
+
+## Adendo 5 — a fruta ao lado da ração (2026-10-14, PROPOSTO, antes de qualquer run com ela)
+
+Status: **PROPOSTO**, registrado antes de qualquer vida com a fruta ao lado da ração. Depende das decisões PJ5-1 a PJ5-6 abaixo, todas
+do Matheus.
+
+**Por que existe:**
+- **O adendo 4 voltou ao Matheus,** com o T1 sem margem: nenhum braço escolhe a x antes da mudança, mesmo com o paladar.
+- **O descritivo** (`docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA_PALADAR.md`, seção 4):
+  - a ração é o tipo mais comido nas 20 unidades;
+  - o querer aprendido (`comida:<tipo>`) vai à ração, e não à favorita;
+  - a oportunidade do T1 pede a fome ≤ S/2, justamente onde a nutrição da ração domina.
+- **A decisão do Matheus (2026-10-14):** o J5 segue pelo RP-2 do desenho do paladar (`docs/futuro/paladar.md`, seção 8). **O dono põe
+  a fruta ao lado da ração.** É a imagem original dele: um animal atraído por uma comida diferente posta ao lado da sua ração.
+
+**O que não muda:**
+- a pergunta (DS-1), os quatro braços e o que os separa;
+- os dois protocolos, `D_a` = 7, a janela de 3 dias, `n_mao` = 2 e `T_m`;
+- o paladar do adendo 3 (os perfis, o órgão, o canal `gosto`, as classes `comida:<tipo>`, a x como a favorita);
+- o T2 inteiro (a busca, a exposição, `m`);
+- as categorias, o bootstrap, o Holm e os gates de mecanismo.
+
+### A5.1 A fruta ao lado da ração
+
+A proposta é do A, que implementa o lado do mundo e do dono, com uma troca de posição (abaixo).
+
+| item | regra | status |
+|---|---|---|
+| quando | **toda vez que o dono deixa a ração no comedouro** (o `deixar_comida("racao", …)` do `DonoComLugar`, no estilo `comedouro`), no mesmo passo, logo depois dela | PROPOSTO |
+| quais e quantas | **as três frutas, uma de cada, maduras.** No máximo uma de cada tipo "ao lado" no chão ao mesmo tempo: o dono só repõe a que foi comida, apodreceu ou sumiu. O chão não enche, e a ração e as três frutas ficam lado a lado | PROPOSTO (o A) |
+| onde | **as três na coluna de células do lado de fora do comedouro,** longe do ninho: o comedouro é a célula (10, 15) e o ninho a (4, 15), então as frutas ficam nos centros das células (11, 14), (11, 15) e (11, 16). **Qual tipo vai em qual célula é sorteado uma vez por unidade** pela rng própria `fruta-ao-lado`, `derivar_semente("fruta-ao-lado", s)` (uma permutação de `a`, `b`, `c`), e fica fixo na vida. Vindo do ninho, a ração fica mais perto, e o alvo padrão do motor (a comida boa mais perto) tende à ração: escolher uma fruta pede preferência (A5.6) | PROPOSTO (troca sobre a proposta do A, que punha cada tipo numa direção fixa) |
+| a fruta | madura ao ser posta (a regra de hoje do `Mundo.situacao`: madura até `maduro_fruta_min`, depois podre), com o efeito daquele tick (a x faz bem antes de `T_m` e faz mal depois, no T1) | DECIDIDO pelo motor de hoje |
+| o orçamento e o contato | **fora do orçamento e sem contato** (o B2 das ofertas do N4): a fruta é parte do mesmo gesto da ração, e o J5 muda o mundo, não o cuidado. Não passa por `receber_acao_dono` | PROPOSTO |
+| os braços | a mesma regra em todos os braços e nos dois protocolos, antes e depois de `T_m`: o mundo é o mesmo, e só o cérebro muda | PROPOSTO (PJ5-4) |
+
+### A5.2 A interface com o A (o lado do mundo e do dono)
+
+O A implementa em paralelo, com estes nomes (os dele, combinados com o C em 2026-10-14):
+- **A chave:** `ConfigFrutaAoLado.ligada`, só no mundo físico. Desligada, a vida é a de hoje, byte a byte, com o gabarito num commit antes.
+  Os braços do J5 a ligam na bancada (o D).
+- **O gatilho:** o passo do dono em que o `DonoComLugar` deixa a ração no comedouro. As frutas que faltam entram no mesmo passo, logo
+  depois da ração, fora do orçamento.
+- **O registro:**
+  - um evento novo no log, `deixar_fruta` (tipo, x, y), que o replay refaz;
+  - a comida com a origem `dono_ao_lado`;
+  - o depósito registrado (tick, tipo, x, y, a ração de referência);
+  - o consumo com o tipo e a origem, para separar "comeu a fruta ao lado" de "achou na árvore".
+- **A rng `fruta-ao-lado`:** uma permutação por vida (o tipo de cada célula), consumida na construção. Ela não toca a rng de ambiente, de
+  política, do dono, do alvo nem do mundo.
+- **O estilo do dono:** a regra exige o `DonoComLugar` no estilo `comedouro`, e falha alto com `perto` ou `longe`, em que a ração não fica no
+  comedouro e "ao lado" não teria sentido.
+- **A ração de referência:** o motor exige uma ração deixada no mesmo tick e grava o id dela. Uma fruta ao lado sem ração no tick falha
+  alto.
+- **A percepção:** nada novo. As frutas aparecem nos `vistos` como qualquer comida.
+- **Os gates do A:**
+  - o G2 (desligada = hoje) e o G1 com a regra;
+  - a mecânica: no máximo uma de cada tipo ao lado, a reposição, as células, a permutação, fora do orçamento, sem contato.
+
+### A5.3 A oportunidade do T1, agora lado a lado
+
+A oportunidade do T1 da seção 4 é trocada por esta, e só no T1:
+- **Uma oportunidade do T1** é uma decisão de **comer**, depois da última fruta na mão, em que **a x madura posta por esta regra e a ração
+  madura estão as duas à vista** (as outras frutas ao lado, quando estão, também). A fome não entra na definição (PJ5-2).
+- **O pet escolhe x** quando o alvo do comer é essa x. Comer a ração ou outra fruta conta como não escolher x.
+- **O corte da reexperiência, `q`, as 3 primeiras e as 3 últimas** ficam como na seção 4.
+- **O "antes"** usa a mesma definição, nas últimas 3 oportunidades antes de `T_m`.
+
+**Por que só o comer:** a pergunta do T1 é "depois de saber que a x faz mal, o pet deixa de escolhê-la quando ela está ao lado da
+ração?". Um pet ocioso não escolheu nada. Pela seção 4, o ocioso contava como "não escolheu x", e isso dilui a escolha.
+
+### A5.4 As premissas
+
+| premissa | regra nova | se falha |
+|---|---|---|
+| **G-APRENDEU** | em cada braço, `f_antes` com o limite inferior do IC95 **acima de 1/4** (PJ5-3): lado a lado com a ração e as outras duas frutas, o pet escolhe a x mais que o acaso entre os quatro alvos | o T1 daquele braço é inconclusivo por premissa |
+| **G-OPORTUNIDADE** | igual (no máximo 25% das unidades sem oportunidade), com a oportunidade nova | igual |
+| **G-EXPOSICAO** | igual (só o T2) | igual |
+| **G-REVAL-POSSIVEL** | igual à do adendo 3, refeita com o `ganho_gosto` deste adendo | igual |
+
+### A5.5 A calibração (dois números, nas sementes novas)
+
+Nenhuma regra lê `f_antes`, `q`, `m` nem um contraste entre braços.
+
+1. **O `ganho_gosto`:**
+   - **a grade:** {S/2, S, 2S, 4S} (PROPOSTO). O adendo 4 mostrou que S e 2S quase não mudam a vida, e com a fruta ao lado o gosto passa
+     a ter onde agir; o 4S cobre o caso de a grade ainda ser pequena;
+   - **o que roda:** o P1, só na fase 1, nas 20 unidades;
+   - **a medida:** nas decisões de comer com as frutas da regra e a ração à vista, a fração em que o pet come uma fruta (qualquer uma,
+     não só a x), nos dias 4 a 6;
+   - **a regra:** o **menor** ponto com a média em [0,25; 0,75] (PROPOSTO). Sem ponto na faixa, fica o mais perto, com o desvio
+     declarado, e a calibração segue.
+2. **O `g_plano`:** a regra da seção 5, sem mudança, com o `ganho_gosto` do passo 1.
+
+Depois: a G-REVAL-POSSIVEL (A3.2) e o piloto da seção 6 (as margens, o ≤ 0,05, o N, o custo), nas mesmas unidades. Os números vão num
+**adendo 6**, num commit antes da validação.
+
+### A5.6 Os descritivos novos (sem gate)
+
+- quantas frutas a regra pôs, por tipo e por dia, e quantas o pet comeu, pela origem `dono_ao_lado`;
+- nas oportunidades do T1, a fração em que o **alvo padrão** do motor (a comida boa mais perto) seria a x. Assim se separa a escolha
+  pela geometria da escolha pela preferência;
+- os pesos `comida:racao` e `comida:<x>` por dia, como no adendo 4;
+- a fração de fruta entre os consumos, toda a vida e a da regra;
+- o T2 com a fruta ao lado: as buscas da x às árvores, sabendo que a x às vezes está no comedouro (R-16).
+
+### A5.7 Os riscos novos
+
+| # | risco | o que o adendo faz |
+|---|---|---|
+| R-15 | **A geometria decide, não a preferência:** o alvo padrão escolhe a comida mais perto | as frutas ficam do lado de fora, longe do ninho, e a geometria puxa para a ração; o tipo de cada célula é sorteado por unidade, então nenhum tipo fica sempre mais perto. O descritivo do alvo padrão (A5.6) mostra o quanto |
+| R-16 | **O T2 perde buscas:** com a x às vezes no comedouro, o pet não precisa buscá-la nas árvores | a G-OPORTUNIDADE do T2 decide; a alternativa é parar a regra no T2 depois de `T_m` (PJ5-4) |
+| R-17 | **O pet come fruta demais e passa fome** | a fruta não tira a ração; a faixa do `ganho_gosto` tem teto em 0,75; o `D_FE` e a privação já são descritivos |
+| R-18 | **Quatro alvos lado a lado:** a escolha entre as frutas mistura o gosto e a saciedade por qualidade (comer muito a x baixa a resposta a ela) | é o paladar funcionando; o `q` compara o mesmo pet antes e depois, e a saciedade age nos dois lados. A leitura do receptor no consumo sai como descritivo (adendo 3, A3.6) |
+
+### A5.8 Sementes
+
+| uso | faixa | bases |
+|---|---|---|
+| calibração do `ganho_gosto` e do `g_plano`, e o piloto, com a fruta ao lado | **51101…51505** (nova; registrada na `FAIXAS_RESERVADAS` neste PR, sem colisão) | 51101, 51202, 51303, 51404, 51505 (K_u = 4) |
+| validação | **46101…46505** (a da seção 8; nunca rodada) | as da seção 8 |
+
+As faixas 45101…45505 (o desenho sem o paladar) e 49101…49505 (o paladar sem a fruta ao lado) não voltam: as unidades delas já foram
+vistas.
+
+### A5.9 Quando roda
+
+Só com a regra do A na `main` (os gates dele passando), a faixa na `FAIXAS_RESERVADAS` e o sim do Matheus para a run.
+
+### A5.10 Decisões do Matheus (este adendo)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PJ5-1 | Quais frutas vão ao lado da ração | **as três de uma vez, uma de cada, com reposição** (a proposta do A), na coluna do lado de fora, com o tipo de cada célula sorteado por unidade | uma por vez, em rodízio: a x só está lá em 1/3 do tempo, e o pet nunca vê duas frutas lado a lado. Só a x: o pet aprende o lugar, não o gosto. Posições fixas por tipo: um tipo fica sempre mais perto do ninho |
+| PJ5-2 | A fome na oportunidade do T1 | **sai:** a oportunidade é a decisão de comer com a x e a ração à vista | manter a fome ≤ S/2: o T1 olha de novo onde a nutrição domina, que é a razão de o adendo 4 ter voltado |
+| PJ5-3 | O limiar da G-APRENDEU | **1/4:** o acaso entre os quatro alvos (a ração e as três frutas), a mesma lógica do 1/3 de antes | 1/2: pede que a x ganhe de tudo junto, inclusive da ração com fome; a premissa pode falhar por nutrição, de novo |
+| PJ5-4 | A regra no T2 depois de `T_m` | **continua, igual nos dois protocolos:** um mundo só | parar no T2: a G-OPORTUNIDADE do T2 melhora, mas o mundo do T1 e o do T2 deixam de ser o mesmo depois da mudança |
+| PJ5-5 | A grade do `ganho_gosto` | **{S/2, S, 2S, 4S}**, pela fração de fruta nas decisões lado a lado, em [0,25; 0,75] | a grade do adendo 3: o adendo 4 mostrou que ela quase não muda a vida |
+| PJ5-6 | As sementes | **51101…51505 nova para a calibração e o piloto; a validação continua em 46101…46505** | reusar 49101…49505: as unidades já foram vistas com o paladar sem a fruta ao lado |
