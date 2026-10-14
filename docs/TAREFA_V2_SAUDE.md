@@ -298,3 +298,20 @@ Não é literatura de pesquisa: nada disto entra num artigo.
 - **G-SUITE** e **G-FUMACAS:** os números estão no PR e no `docs/registro/2026-10.md`.
 - **Testes:** `tests/test_bancada_modulos.py`, 19. Nenhum teste de antes mudou.
 - **O CLAUDE.md:** duas linhas trocadas com o ok do Matheus (2026-10-14), a da faixa reservada e a da bancada.
+
+## 10. Etapa 4: o que foi feito (2026-10-14, worker C)
+
+- **Os scripts** em `.claude/hooks/`, só com a biblioteca padrão:
+  - `h1_engine.py` (H1, `PreToolUse`, `Edit|Write|MultiEdit|NotebookEdit`): nega a edição de `digilab/engine.py` com o código 2;
+  - `h1b_engine_sha.py` (H1b, `Stop`): confere o sha256 do `engine.py` contra o `ENGINE_SHA256_V0`;
+  - `h2_testes.py` (H2, `Stop`): com mudança em `digilab/`, `experiments/` ou `tests/`, roda os testes dos arquivos mudados e dos
+    gabaritos tocados, e não bloqueia duas vezes pelo mesmo motivo;
+  - `h3_main.py` (H3, `PreToolUse`, `Bash|PowerShell`): devolve "ask" no `gh pr merge` e no `git push` para a `main`, e não no merge da
+    `origin/main` num branch de worker;
+  - `_comum.py`: a leitura do evento, o diretório do projeto, o git e as saídas.
+- **Desligados:** a configuração proposta está em `docs/propostas/hooks_settings.json`. O projeto não tem `.claude/settings.json`, e só
+  o Matheus liga (SA-5).
+- **G-HOOKS:** `tests/test_hooks.py`, 32 testes. Cada script recebe no stdin o JSON do evento, num repositório git de teste, e o teste
+  confere o código de saída e o texto.
+- **Como ligar um hook:** copiar o bloco dele de `docs/propostas/hooks_settings.json` para a chave `hooks` de `.claude/settings.json` (o
+  arquivo do projeto, no git: vale para todo worker). Depois, a conferência ao vivo do checklist.
