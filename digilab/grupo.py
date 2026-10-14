@@ -63,7 +63,7 @@ from .donos import Visao
 from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
-from .mundo import (CANDIDATOS_SOCIAIS, PASSO_INICIAL, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
+from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
                     cheiro_do_pet, direcao_vizinha, distancia, em_contato, fontes_do_pet, perceber_social, som_ouvido, tipos_do_contato)
 from .protocol import derivar_semente
 
@@ -219,8 +219,8 @@ class Grupo:
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
         self._conferir_orgaos(motor)
         motor._grupo, motor.ident = self, ident
-        if self.cs.ligada and motor._passo is None:
-            motor._passo = PASSO_INICIAL             # a direcao do ultimo passo antes do primeiro passo
+        if self.cs.ligada:
+            motor._ligar_propriocepcao()             # a direcao do ultimo passo antes do primeiro passo
         self.motores[ident] = motor
         self.registro.cabecalho["pets"][ident] = {"semente": self.sementes[ident], "entrada": self.tick, "cerebro": cerebro, "dono": dono}
         self.registro.anexar(EventoGrupo(self.tick, "entrada", ident, DESTINO_GRUPO, ident))
@@ -318,11 +318,15 @@ class Grupo:
         """o que o pet `ident` sente dos `outros` agora (secoes 5.3, 5.4 e 5.6), so do que e fisico: o canal de cada outro (o cheiro na
         posicao dele e o rastro que ele deixou no mundo) e a caixa dos sons que o proprio pet ouviu desde a decisao anterior"""
         m, sub = self.motores[ident], self.mundo.cmf.sub
+        # com o orgao (secao 5.6; G-SEM-DIRECAO), o canal pronto da lugar aos receptores do corpo: o Olfato social tira o `cheiro` (a
+        # intensidade, a direcao e as narinas do outro chegam so por `olfato_outro`) e a Audicao tira os `sons` (o tipo e a intensidade
+        # chegam so por `ouvido_<som>`); sem direcao e sem distancia do mundo
         cheiro = []
-        for i in outros:
-            fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs.olfato)
-            cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs.olfato, sub)))
-        sons = tuple((*s[:7], self.tick - s[7]) for s in m._sons_ouvidos)
+        if not m._olfato_outro():
+            for i in outros:
+                fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs.olfato)
+                cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs.olfato, sub)))
+        sons = () if m._audicao() else tuple((*s[:7], self.tick - s[7]) for s in m._sons_ouvidos)
         return PercepcaoSentidos(m._passo, tuple(cheiro), sons)
 
     def emitir_som(self, quem: str, som: str) -> None:
