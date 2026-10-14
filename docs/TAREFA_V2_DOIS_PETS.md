@@ -151,7 +151,11 @@ sentidos), `digilab/instinto_mundo.py` (a fome urgente) e `digilab/policies/lobo
     dois braços ("órgão × leitura pronta"), e o representante da classe é o preferido pela regra.
 - **Com o Olfato social e a Audição:** a `PercepcaoSentidos` sai sem o `cheiro` do outro e sem os `sons` (só o próprio passo). O que o pet
   sente do outro chega só pelos receptores `olfato_outro` e `ouvido_<som>`.
-- **Gates** (`tests/test_cheiro_orgao.py`, 36):
+- **A propriocepção é do motor** (`MotorMundo._ligar_propriocepcao`): a direção do último passo começa em `PASSO_INICIAL` na primeira
+  vez que alguém a pede (os órgãos na decisão, o lado do mundo antes de cada tick, os sentidos na entrada do grupo). Antes ela só ligava
+  dentro do lado do mundo do órgão, e um lado do mundo trocado (o motor de teste de `tests/test_orgaos.py`) a deixava desligada: eram as 4
+  falhas da primeira suíte do PR. O teste do B não mudou.
+- **Gates** (`tests/test_cheiro_orgao.py`, 37):
   - **G2:** sem o órgão, os gabaritos de sempre, na suíte; os 16 grupos com o Olfato social e a Audição (sem o da comida) de
     `tests/gabaritos/orgao_sem_direcao_vidas_de_hoje.json`, gravado antes (`tests/gabarito_orgao_sem_direcao.py`, commit próprio), byte a
     byte;
@@ -164,7 +168,8 @@ sentidos), `digilab/instinto_mundo.py` (a fome urgente) e `digilab/policies/lobo
     u) e o alvo do motor é o da regra. Com a função da direção trocada por uma que falha, a vida com o órgão roda e a sem ele falha. No
     grupo, com os três órgãos, os sentidos nunca trazem cheiro nem sons, e a direção do cheiro não é calculada;
   - **o cérebro A:** o P1 com o alvo aprendido escolhe a classe `cheiro`; o P0 com o alvo aprendido é o instinto do mundo byte a byte;
-  - **G1:** o replay refaz a vida (instinto e P1, uma e duas narinas) e o grupo com os órgãos.
+  - **G1:** o replay refaz a vida (instinto e P1, uma e duas narinas) e o grupo com os órgãos;
+  - **a propriocepção:** com um lado do mundo trocado, a direção do último passo liga e os candidatos do órgão saem.
 - **Achado (fumaça descritiva, sementes 101…505, 3 dias, aleatório longe, instinto):** com os números PROPOSTOS do órgão, o pet sente
   cheiro em 78 de 1.440 decisões, e a maior leitura no explorar é 31 (o limiar do explorar é 279). Os consumos caem de 62 (leitura
   pronta) para 18 (duas narinas) e 13 (uma). O explorar nunca segue cheiro com o órgão. O órgão como está quase cega o pet: é calibração
