@@ -121,7 +121,8 @@ def test_config_ouvido_falha_alto():
 
 def test_os_nomes_sao_os_campos_da_percepcao():
     campos = [f.name for f in fields(PercepcaoCorpo)]
-    assert campos[campos.index("conforto") + 1:] == list(todos_receptores_orgaos())
+    i = campos.index("conforto") + 1                                               # depois dos orgaos, o Paladar (paladar, secao 3.2)
+    assert campos[i:i + len(todos_receptores_orgaos())] == list(todos_receptores_orgaos())
     assert len(todos_receptores_orgaos()) == 2 * 3 + len(SONS) * 3
     assert [o.receptor for o in orgaos_de(*ORGAOS["tudo_2"])] == [
         "olfato_comida_esq", "olfato_comida_dir", "olfato_outro_esq", "olfato_outro_dir"] + [

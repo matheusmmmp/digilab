@@ -1252,6 +1252,11 @@ class ConfigLobos:
     # g_plano 0, nada existe (o cerebro de hoje). O planejador nao tem pesos (PQ-6): o n_pesos do A nao muda
     g_plano: int = 0                         # PROPOSTO: o ganho do plano; a calibracao (PP-6) escolhe na grade {S/4, S/2, S}
     teto_plano: int = 2048                   # PROPOSTO, SEM FONTE (PP-6): 2 S, o maior termo do plano, para cima ou para baixo
+    # O Paladar (docs/futuro/paladar.md, secao 3.4; PL-1, PL-5 e PL-6 pela recomendacao): o canal `gosto` no sinal (a leitura dos
+    # receptores do paladar depois de comer, pesada pelos h_q do genoma do pet, nao homeostatico, sem ler a fome) e as classes do alvo
+    # de comer por tipo (`comida:racao`, `comida:a`, `comida:b`, `comida:c` no lugar de `comida`, prior w0_alvo: o querer aprendido, sem
+    # atracao inata). Exige o mundo fisico, o corpo com o paladar, o alvo aprendido e os h_q do pet. Desligada, nada existe
+    paladar: bool = False                    # PROPOSTO: a chave (o desenho, PL-1 a PL-9, decidido)
 
     def __post_init__(self) -> None:
         if type(self.maximo_pesos) is not int or not 1 <= self.maximo_pesos <= LIMITE_TETO_PESOS_PLANO:
@@ -1385,6 +1390,10 @@ class ConfigConsequencia:
     # corpo, etapa 5: w_d do sinal pelo corpo, por receptor (os de hoje e os drives novos da secao 9; o susto fica fora do sinal)
     pesos_drives_corpo: tuple = (("fome", 1), ("higiene", 1), ("energia", 1), ("humor", 1), ("tedio", 1), ("curiosidade", 1),
                                  ("solidao", 1), ("estresse", 1), ("dor", 1), ("vontade", 1), ("conforto", 1))
+    # o Paladar (docs/futuro/paladar.md, secao 3.4): f_gosto = div_arred(ganho_gosto x soma_q div_arred(h_q x leitura de paladar_q
+    # depois, S), S), so nas decisoes em que o pet comeu comida madura e so com ConfigLobos.paladar. O unico numero do paladar que o
+    # plano do J5 calibra (PL-8, PJ-3); S = 1 vez a soma
+    ganho_gosto: int = 1024
 
     def __post_init__(self) -> None:
         if type(self.janela_pesos) is not int or self.janela_pesos <= 0:
@@ -1395,6 +1404,8 @@ class ConfigConsequencia:
         for nome, w in self.pesos_drives_corpo:
             if type(nome) is not str or type(w) is not int or w < 0:
                 raise ValueError(f"ConfigConsequencia.pesos_drives_corpo: (nome, inteiro >= 0), veio {(nome, w)!r}")
+        if type(self.ganho_gosto) is not int or self.ganho_gosto < 0:
+            raise ValueError(f"ConfigConsequencia.ganho_gosto precisa ser inteiro >= 0: {self.ganho_gosto!r}")
 
 
 CONFIG_CONSEQUENCIA = ConfigConsequencia()
@@ -1598,6 +1609,22 @@ class ConfigCorpo:
     # da calibracao do corpo escala por {1/2, 1, 2}. O cansaco nunca muda
     gasto_atividades_num: int = 1
     gasto_atividades_den: int = 1
+    # o Paladar (docs/futuro/paladar.md, secoes 3.2 e 3.3; PL-1 a PL-9 pela recomendacao, 2026-10-13): o orgao do gosto, por qualidade
+    # (doce, azedo, amargo, salgado). Ao comer, `sabor_q` recebe max(0, perfil_q - saciedade_q) e `saciedade_q` sobe
+    # div_arred(perfil_q x saciedade_num, saciedade_den); o receptor `paladar_q` le o `sabor_q`. Sem quimico de prazer (PL-1). Exige
+    # `ligada` e o mundo fisico (o perfil vem do mundo, a ConfigPaladar do A). Os numeros sao PROPOSTOS, SEM FONTE
+    paladar: bool = False
+    meia_vida_sabor: int = 4                 # o sinal na boca acaba antes da decisao seguinte
+    k_meia_vida_sabor: int = 10427           # = k_meia_vida(4)
+    meia_vida_saciedade: int = 720           # 12 h (PL-4)
+    k_meia_vida_saciedade: int = 63          # = k_meia_vida(720)
+    saciedade_num: int = 1                   # k_sac = 1/2
+    saciedade_den: int = 2
+    # o genoma do paladar (secao 3.3, PL-2; digilab/genoma_paladar.py, rng `paladar-ovo`): h_q das frutas uniformes e independentes em
+    # [paladar_h_min, paladar_h_max] (na escala S do cerebro), h_salgado o mesmo para todos
+    paladar_h_min: int = -512                # -S/2
+    paladar_h_max: int = 1024                # S
+    paladar_h_salgado: int = 256             # S/4: o gosto basico da racao
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
@@ -1641,6 +1668,21 @@ class ConfigCorpo:
         if self.metabolismo and not self.falta_limiar < self.mobilizar_limiar < self.armazenar_limiar < self.escala:
             raise ValueError("o metabolismo pede falta_limiar < mobilizar_limiar < armazenar_limiar < C: "
                              f"{self.falta_limiar}, {self.mobilizar_limiar}, {self.armazenar_limiar}")
+        if type(self.paladar) is not bool:
+            raise TypeError(f"ConfigCorpo.paladar e bool: {self.paladar!r}")
+        if self.paladar and not self.ligada:
+            raise ValueError("ConfigCorpo.paladar exige ConfigCorpo.ligada (o orgao e do corpo)")
+        for nome in ("meia_vida_sabor", "k_meia_vida_sabor", "meia_vida_saciedade", "k_meia_vida_saciedade", "saciedade_num",
+                     "saciedade_den"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro positivo: {v!r}")
+        for nome in ("paladar_h_min", "paladar_h_max", "paladar_h_salgado"):
+            v = getattr(self, nome)
+            if type(v) is not int or not -self.escala_receptor <= v <= self.escala_receptor:
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro em [-S, S]: {v!r}")
+        if self.paladar_h_min > self.paladar_h_max:
+            raise ValueError(f"ConfigCorpo.paladar_h_min > paladar_h_max: {self.paladar_h_min}, {self.paladar_h_max}")
 
 
 CONFIG_CORPO = ConfigCorpo()
