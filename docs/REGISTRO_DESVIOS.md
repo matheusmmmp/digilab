@@ -5282,3 +5282,20 @@ Só documentos: `docs/futuro/paladar.md` (novo) e o adendo 3 de `docs/PLANO_ANAL
   falhar alto.
 - **A direção pronta empata pelo arredondamento** com gradiente fraco (A 32 a 24 células); o teste da narina usa uma fonte forte. É o
   mesmo empate do cheiro da comida (#232).
+
+## 2026-10-14 — PALADAR, etapas 0 e 2 (worker B): o órgão do Paladar no corpo
+
+- **O estímulo do gosto no grafo** é um emissor de estímulo por qualidade (`paladar:q`, fase 0, quantidade de fora), e não um emissor
+  externo. No grafo, o "emissor externo" é o de destino mundo (#299), e este estímulo vai ao corpo. Ele lê a saciedade com sinal −1 (mais
+  saciedade, menos sabor), então não cria laço.
+- **A saciedade usa a saciedade de antes do consumo.** O sabor de um consumo é max(0, perfil_q − saciedade_q) com a saciedade antes dele; só
+  depois ela sobe. Os dois são cortados em C, como todo químico.
+- **O receptor lê a concentração do sabor** (`div_arred(q S, C)`, a leitura "falta" do grafo, a mesma da dor).
+- **O genoma em módulo próprio** (`digilab/genoma_paladar.py`): o `corpo.py` não sorteia (o teste do isolamento confere). A ordem da rng é
+  doce, azedo, amargo, um `randint` em [h_min, h_max] cada.
+- **O contrato do perfil com o A:** no mapa, o `ocorrido["comeu"]["perfil"]`; na mão, o `cpal.perfis`. O `motor_corpo.py` fica só com o B. O
+  mundo com o paladar e o corpo sem a sub-chave não falha: o perfil fica no registro e não chega ao corpo.
+- **Achado nos números PROPOSTOS:** com o perfil da ração em C/4 e o `k_sac` ½, a ração deixa de responder da 4ª seguida em diante. Com 8
+  rações, só volta a responder perto de 24 h depois. É o que a seção 3.2 pede (a ração repetida perde a resposta); a força fica para a
+  calibração (PL-8 calibra só o `ganho_gosto`).
+- **A rede de si** passa do teto dela com o paladar e a etapa 6, como com os órgãos do #299.

@@ -252,3 +252,50 @@ Só as verificadas em `docs/referencias/*.csv`. A verificação foi sobre metada
 
 **SEM FONTE:** as quatro qualidades, os perfis, a forma girada das frutas, os `h_q` e a distribuição deles, o `k_sac`, as meias-vidas, o
 `ganho_gosto`, o gosto como canal não homeostático e qualquer precedente de preferência alimentar em vida artificial (nenhum verificado).
+
+## 12. Etapas 0 e 2 feitas: o corpo (2026-10-14, worker B) — GATES PASSAM
+
+PL-1 a PL-9 pela recomendação (Matheus, 2026-10-13). Sem run; só as sementes dos testes. Não há `TAREFA_V2_PALADAR.md`; o resumo fica
+aqui. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+
+- **O gabarito antes do código** (commit próprio): `tests/gabarito_paladar.py` → `tests/gabaritos/paladar_vidas_de_hoje.json`, gravado com
+  a `main` d0755c8. Contém o mundo físico com e sem o corpo (as vidas, os grupos e o corpo sozinho do gabarito dos órgãos) e os braços do
+  J5 (P1 e P1-plan, T1 e T2, sementes 101 e 202).
+- **A sub-chave `ConfigCorpo.paladar`** (desligada; exige `ligada` e o mundo físico). Os números são PROPOSTOS e estão no registro
+  `PARAMETROS_CORPO`:
+  - as meias-vidas: `meia_vida_sabor` 4 e `meia_vida_saciedade` 720, com as k da regra da seção 3;
+  - o `k_sac`: `saciedade_num`/`saciedade_den` = ½;
+  - o genoma: `paladar_h_min` −S/2, `paladar_h_max` S e `paladar_h_salgado` S/4.
+- **O órgão (seção 3.2):**
+  - os químicos: por qualidade, `sabor_q` (receptor `paladar_q`, a concentração) e `saciedade_q` (sem receptor);
+  - no grafo: um emissor de estímulo `paladar:q` por qualidade, que lê a saciedade com sinal −1 (nenhum laço);
+  - ao comer (`Corpo.estimulo_gosto`): o sabor recebe max(0, perfil_q − saciedade_q), e a saciedade sobe div_arred(perfil_q · num, den);
+  - `estimulo_consumo_mundo(..., perfil=)` leva o perfil da comida madura; a podre não tem perfil. Um perfil sem a sub-chave falha alto, e
+    a madura sem perfil também.
+- **O genoma** (`digilab/genoma_paladar.py`): `GenomaPaladar` e `genoma_paladar(semente)`, com a rng `paladar-ovo` e um `randint` por
+  qualidade das frutas (doce, azedo, amargo). O `h_salgado` é fixo. Ele dá o `valor_inato` e a `favorita` (o PJ-1).
+- **O motor do corpo:**
+  - no mapa, o perfil vem do `ocorrido["comeu"]["perfil"]` do mundo; na fruta na mão, do `cpal.perfis`. É o contrato combinado com o A
+    (o lado do mundo dele, `ConfigPaladar` e `MotorMundo.cpal`, está no branch `v2-paladar-mundo`);
+  - o corpo com o paladar exige o `cpal.ligada`; os receptores vão à `PercepcaoCorpo`.
+- **A paridade:** o gabarito do corpo ganhou a seção `paladar`, e as outras saíram idênticas. A `config` ganhou os campos novos, com o
+  espelho em `web/app/motor/constantes.ts`. O `configCorpo` do TS falha alto com o paladar ligado: o órgão em TS é a etapa 5, do A.
+- **Gates** (`tests/test_paladar_corpo.py`, 30):
+  - **G2;**
+  - **a conta exata** de um consumo e das meias-vidas;
+  - **G-SSS;**
+  - **a generalização** pelas qualidades compartilhadas;
+  - **G-FOME;**
+  - **G-GRAFO,** com as tabelas feitas para falhar;
+  - **G-INT;**
+  - **o genoma:** a rng própria, a faixa e a favorita uniforme em 900 pets;
+  - **as falhas altas do motor;**
+  - **a fruta na mão;**
+  - **G1,** com um lado do mundo de teste.
+- **Achado (só nos números PROPOSTOS):** com o perfil C/4 e o `k_sac` ½, a ração satura rápido.
+  - Da 4ª ração seguida (uma por decisão) em diante, o `salgado` quase não responde.
+  - Com 8 rações, a saciedade passa de 3C/4, e a ração só volta a responder perto de duas meias-vidas depois (~24 h).
+- **As contagens:**
+  - **a rede de si** lê os 4 receptores a mais: com a química vai de 359 a 703 pesos, com a etapa 6 de 911 a 1399 e com o banheiro de
+    1143 a 1679. Nos dois últimos casos passa do teto dela;
+  - **o cérebro A** ainda não lê o paladar (a etapa 3).

@@ -406,6 +406,9 @@ export interface ConfigCorpo {
   gasto_basal_acordado: number; gasto_basal_dormindo: number; armazenar_limiar: number; armazenar_taxa: number;
   mobilizar_limiar: number; mobilizar_taxa: number; falta_limiar: number; falta_cansaco: number;
   gasto_atividades_num: number; gasto_atividades_den: number;
+  /* o Paladar (docs/futuro/paladar.md, secao 3.2): so o espelho dos numeros; o orgao em TS e a etapa 5 do paladar (o A) */
+  paladar: boolean; meia_vida_sabor: number; k_meia_vida_sabor: number; meia_vida_saciedade: number; k_meia_vida_saciedade: number;
+  saciedade_num: number; saciedade_den: number; paladar_h_min: number; paladar_h_max: number; paladar_h_salgado: number;
 }
 export const CCO: ConfigCorpo = {
   ligada: false, digestao: false, vida: false, drives_novos: false, gestos: false, banheiro: false,
@@ -425,6 +428,8 @@ export const CCO: ConfigCorpo = {
   gasto_basal_acordado: 375, gasto_basal_dormindo: 187, armazenar_limiar: 337500, armazenar_taxa: 375,
   mobilizar_limiar: 225000, mobilizar_taxa: 375, falta_limiar: 112500, falta_cansaco: 500,
   gasto_atividades_num: 1, gasto_atividades_den: 1,
+  paladar: false, meia_vida_sabor: 4, k_meia_vida_sabor: 10427, meia_vida_saciedade: 720, k_meia_vida_saciedade: 63,
+  saciedade_num: 1, saciedade_den: 2, paladar_h_min: -512, paladar_h_max: 1024, paladar_h_salgado: 256,
 };
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */

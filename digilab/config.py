@@ -1598,6 +1598,22 @@ class ConfigCorpo:
     # da calibracao do corpo escala por {1/2, 1, 2}. O cansaco nunca muda
     gasto_atividades_num: int = 1
     gasto_atividades_den: int = 1
+    # o Paladar (docs/futuro/paladar.md, secoes 3.2 e 3.3; PL-1 a PL-9 pela recomendacao, 2026-10-13): o orgao do gosto, por qualidade
+    # (doce, azedo, amargo, salgado). Ao comer, `sabor_q` recebe max(0, perfil_q - saciedade_q) e `saciedade_q` sobe
+    # div_arred(perfil_q x saciedade_num, saciedade_den); o receptor `paladar_q` le o `sabor_q`. Sem quimico de prazer (PL-1). Exige
+    # `ligada` e o mundo fisico (o perfil vem do mundo, a ConfigPaladar do A). Os numeros sao PROPOSTOS, SEM FONTE
+    paladar: bool = False
+    meia_vida_sabor: int = 4                 # o sinal na boca acaba antes da decisao seguinte
+    k_meia_vida_sabor: int = 10427           # = k_meia_vida(4)
+    meia_vida_saciedade: int = 720           # 12 h (PL-4)
+    k_meia_vida_saciedade: int = 63          # = k_meia_vida(720)
+    saciedade_num: int = 1                   # k_sac = 1/2
+    saciedade_den: int = 2
+    # o genoma do paladar (secao 3.3, PL-2; digilab/genoma_paladar.py, rng `paladar-ovo`): h_q das frutas uniformes e independentes em
+    # [paladar_h_min, paladar_h_max] (na escala S do cerebro), h_salgado o mesmo para todos
+    paladar_h_min: int = -512                # -S/2
+    paladar_h_max: int = 1024                # S
+    paladar_h_salgado: int = 256             # S/4: o gosto basico da racao
 
     def __post_init__(self) -> None:
         ordem = (("ligada", self.ligada), ("digestao", self.digestao), ("vida", self.vida),
@@ -1641,6 +1657,21 @@ class ConfigCorpo:
         if self.metabolismo and not self.falta_limiar < self.mobilizar_limiar < self.armazenar_limiar < self.escala:
             raise ValueError("o metabolismo pede falta_limiar < mobilizar_limiar < armazenar_limiar < C: "
                              f"{self.falta_limiar}, {self.mobilizar_limiar}, {self.armazenar_limiar}")
+        if type(self.paladar) is not bool:
+            raise TypeError(f"ConfigCorpo.paladar e bool: {self.paladar!r}")
+        if self.paladar and not self.ligada:
+            raise ValueError("ConfigCorpo.paladar exige ConfigCorpo.ligada (o orgao e do corpo)")
+        for nome in ("meia_vida_sabor", "k_meia_vida_sabor", "meia_vida_saciedade", "k_meia_vida_saciedade", "saciedade_num",
+                     "saciedade_den"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro positivo: {v!r}")
+        for nome in ("paladar_h_min", "paladar_h_max", "paladar_h_salgado"):
+            v = getattr(self, nome)
+            if type(v) is not int or not -self.escala_receptor <= v <= self.escala_receptor:
+                raise ValueError(f"ConfigCorpo.{nome} tem de ser inteiro em [-S, S]: {v!r}")
+        if self.paladar_h_min > self.paladar_h_max:
+            raise ValueError(f"ConfigCorpo.paladar_h_min > paladar_h_max: {self.paladar_h_min}, {self.paladar_h_max}")
 
 
 CONFIG_CORPO = ConfigCorpo()
