@@ -125,3 +125,21 @@ Um PR por etapa, com o relato no corpo. **O merge é do Matheus.**
 | RS-5 | Como a rede observa | **um embrulho somente leitura da política**, sem mudar o motor | ganchos no motor: tocam o `MotorCorpo` e o `MotorMundo`, com mais risco no G-OBS |
 | RS-6 | As faixas de sementes | **43101…43505** e **44101…44505** | uma colisão tira o "novo" das unidades |
 | RS-7 | A redação da E-6 | registrar no `CLAUDE.md`, na seção da etapa 2, quando o código entrar: "a Decisão aprende por reforço, a rede de si por erro de previsão, nenhuma outra peça aprende" | sem registro, a regra antiga ("só a Decisão aprende") fica escrita e contradita pelo código |
+
+## Etapa 2b, a troca da digestão (A, 2026-10-13) — GATES PASSAM
+
+RS-3 do plano (seção 3): a digestão lenta do P1-c-lenta a partir do fim do dia 7, gravada no registro como a troca do mutável. Sem run; só
+as sementes dos testes. Mudaram `digilab/motor_corpo.py`, a `ConfigTrocaDigestao` no fim de `config.py`, a bancada (o nó saiu) e três
+testes. `engine.py`, `corpo.py`, os cérebros, a rede e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **No motor:** `MotorCorpo(..., troca_digestao=(tick, taxa))`, só com o corpo e a digestão. No começo do primeiro tick em ou depois do
+  pedido (antes da decisão e do passo daquele tick), a `taxa_digestao` do motor e do corpo passa à nova; o grafo do corpo é refeito com
+  ela e conferido de novo. A troca fica em `troca_digestao` (o tick, o pedido, a taxa antes e depois) e no `estado()`; o replay a refaz
+  pela mesma fábrica. Sem o pedido, nada muda.
+- **A taxa lenta:** `ConfigTrocaDigestao.taxa_lenta` = C // 8 (PROPOSTA, a do plano; o adendo 1 escolhe da grade). Na config da bancada, a
+  chave `"digestao_lenta": {"taxa_lenta": ...}`.
+- **Na bancada:** o `NOS_PENDENTES` ficou vazio. O P1-c-lenta recebe a troca no `tick_troca_digestao` (o fim do dia `dias // 2`), e a
+  medida da rede confere que a troca foi a pedida (e que nenhum outro braço trocou), falhando alto se não.
+- **Gates** (`tests/test_troca_digestao.py`): sem a troca, nenhuma chave nova (e os gabaritos do corpo, na suíte); a troca no tick, com o
+  grafo refeito; antes do tick, a vida é a do P1-c (o log e as ações); depois, a digestão por tick não passa da lenta e a lenta morde; G1
+  pelo `conferir_replay`; as falhas altas; o P1-c-lenta na bancada e a chave da config. O teste do braço em `test_bancada_rede_de_si.py`
+  passou de "espera o nó" a "roda e mede a adaptação".
