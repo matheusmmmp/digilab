@@ -1,0 +1,49 @@
+{
+  "descricao": "Fumaca da calibracao do g_plano (J5), NAO canonica: a mesma config, nas sementes dos testes, com 3 dias de fase 1 e a janela da regra nos dias 1 e 2; confere o encanamento (os tres pontos, a medida da sonda, a regra, o replay do disco), nunca como resultado.",
+  "tipo": "pet_que_pensa",
+  "bracos": [
+    "P1-plan"
+  ],
+  "protocolos": [
+    "fase1"
+  ],
+  "d_a": 3,
+  "janela": 1,
+  "n_mao": 2,
+  "orcamento_por_dia": 16,
+  "dono": "atencioso",
+  "lugar": "comedouro",
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_pedido": 256,
+    "w0_info": 256
+  },
+  "consequencia": {
+    "ganho": 4,
+    "canais_ligados": true
+  },
+  "mundo": {
+    "mult_queda": 1.0
+  },
+  "sementes": [
+    101,
+    202
+  ],
+  "calibracao_g_plano": {
+    "grade": [
+      256,
+      512,
+      1024
+    ],
+    "dias": [
+      1,
+      2
+    ],
+    "faixa": [
+      0.1,
+      0.4
+    ]
+  }
+}

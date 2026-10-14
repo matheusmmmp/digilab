@@ -4167,3 +4167,132 @@ modelos e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - a fumaça inteira pelo `rodar_pqp` e pelo `main`.
 - **Fumaça descritiva** (P1, sementes 101, 202 e 303, 7 + 3 dias): com o atencioso a fome quase nunca chega a S/2 antes da mudança, e só a
   semente 303 teve 3 oportunidades antes no T1. A G-OPORTUNIDADE do plano decide isso na calibração.
+
+## V2, W-BANCADA-PQP-PLANO — o planejador nos braços do J5 e a config da calibração do `g_plano` (2026-10-13, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 3 a 5, 7, 8 e 11) — GATES PASSAM; A CALIBRAÇÃO NÃO RODOU
+
+Com o planejador do #294 e a bancada do J5 do #295 na `main`. Infraestrutura, sem run; só as sementes dos testes. Mudaram
+`experiments/bancada_v2.py`, o orquestrador novo `experiments/run_v2_calibracao_pet_que_pensa.py`, as configs
+`experiments/configs/v2_pet_que_pensa/{calibracao,fumaca_calibracao}.json` e os testes. `engine.py`, `lobos.py`, `modelo_mundo.py`, o
+mundo, o corpo e a web não mudaram. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **Sem o nó `planejador`:** o `NOS_PENDENTES` ficou vazio.
+- **Os braços com o planejador** (P1-plan, P1-plan-desfecho, P1-plan-cong):
+  - o cérebro A é o do P1 com o `g_plano` da chave `"g_plano"` da config (só com esses braços; na `"lobos"` é recusado, porque iria ao
+    P1), os modelos da `cfg_modelo` e a `ConfigConsequencia` do crédito;
+  - os modelos são os do próprio cérebro: o embrulho `PoliticaComModeloPQP` só os lê e os congela no tick da mudança pelo `congelar`
+    (PP-8). No P1 (g_plano 0) o embrulho guarda modelos que só observam.
+- **As medidas novas** (`plano_da_vida`, do motivo de cada decisão):
+  - **quanto o plano decide, por dia:** entre as decisões com alvo, as em que a sonda "quem decidiu" muda a ação ou o alvo; as partes
+    saem em separado;
+  - **a legibilidade:** a fração das decisões com o fator do plano, a contagem por fator e o texto do adulto de cada um;
+  - **o G2:** no P1, nenhum termo do plano em decisão nenhuma (falha alto).
+  - A G-SEM-CREDITO compara o cérebro sem os modelos.
+- **A calibração do `g_plano`** (seção 5), pronta e NÃO rodada:
+  - `python experiments/run_v2_calibracao_pet_que_pensa.py --config experiments/configs/v2_pet_que_pensa/calibracao.json --saida artifacts_v2_pet_que_pensa/calibracao --processos 3`;
+  - o P1-plan na fase 1 (7 dias), nas bases 45101…45505 (K_u = 4), com `g_plano` em {S/4, S/2, S};
+  - a medida é a fração da sonda nos dias 4 a 6 (`fracao_plano_dias`), com média sobre as unidades. A regra pega o menor ponto em
+    [0,10; 0,40]; senão, o mais perto (empate no menor), com o desvio;
+  - o cérebro é o do ponto da K2, o mundo usa `m` = 1 e o corpo vem do passo 0 fino (adendo 5);
+  - grava `g_plano.json` e `meta.json`, e recusa a pasta que existe e as bases da validação.
+- **Testes:**
+  - `tests/test_bancada_pqp_plano.py` (21): o cérebro, o G1 dos três braços, a mesma vida antes da mudança, o congelamento pelos modelos
+    do cérebro, a G-SEM-CREDITO, o plano e a legibilidade contra os motivos, `plano_da_vida` e `fracao_plano_dias` em dados com a resposta
+    conhecida, o G2;
+  - `tests/test_calibracao_pet_que_pensa.py` (5): a config contra os artefatos, as recusas, a regra e a fumaça inteira;
+  - `tests/test_bancada_pet_que_pensa.py` e `tests/test_bancada_liga_gestos.py` ajustados.
+- **Fumaça descritiva** (sementes dos testes, não é resultado): a fração da regra ficou em 0,04 a 0,07 nos três pontos.
+
+## V2, DOIS-PETS, etapa 8b — os órgãos do Olfato e da Audição no corpo (2026-10-13, `docs/TAREFA_V2_DOIS_PETS.md`; DP-13 e DP-14) — GATES DO CORPO PASSAM; O LADO DO MUNDO É DO A
+
+A parte do B: os órgãos no grafo do corpo, atrás de chaves desligadas. Sem run; só as sementes dos testes. Mudaram `digilab/corpo.py`,
+`digilab/corpo_grafo.py`, `digilab/motor_corpo.py` e a `ConfigOlfato`/`ConfigOuvido` no fim de `config.py`. `engine.py`, o mundo, os
+cérebros, a bancada e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **O gabarito antes do código** (commit próprio): `tests/gabarito_orgaos.py` → `tests/gabaritos/orgaos_vidas_de_hoje.json` (vidas de um
+  pet no mundo físico com as leituras da `PercepcaoCorpo`, grupos de dois pets com o corpo e o corpo sozinho).
+- **As chaves:** `ConfigOlfato` (`narinas` 2, sub-chaves `comida` e `outro_pet`) e `ConfigOuvido` (`ouvidos` 2); números PROPOSTOS, SEM
+  FONTE (registro `corpo.PARAMETROS_OLFATO`/`PARAMETROS_OUVIDO`). Só com o corpo e o mundo físico.
+- **O órgão** (`corpo_grafo.Orgao`): um receptor por canal e lado (`olfato_comida_esq`…, `ouvido_<som>_esq`…). O químico
+  `adaptacao_<receptor>` anda para o estímulo a cada tick (`passo_adaptacao`, escala 2^16, passo mínimo 1; com I = 0 é a meia-vida do
+  grafo); e = max(0, I − a − limiar), r = div_arred(S e, e + K), em [0, S).
+- **Os emissores externos** (`Emissor.destino` "mundo"): `cheiro_proprio` (na posição) e `rastro` (por decisão), intensidade constante,
+  sem leitura de químico (o degrau 3 falha alto).
+- **A interface com o A:** o motor chama `Corpo.sentir({receptor: I})` antes de cada tick e de cada percepção, com o gancho
+  `_intensidades_do_orgao()` do lado do mundo (sem ele, falha alto na construção); `Corpo.emissoes_externas()` dá o que o pet emite.
+- **Gates** (`tests/test_orgaos.py`, 66): G2; G-ORGAO-MEC (passo, limiar, saturação, um cheiro constante cai à metade na meia-vida
+  declarada e a 0, habituação do som); G-SEM-DIRECAO do lado do corpo (AST e mesmas intensidades = mesma percepção); as checagens do grafo
+  com os órgãos e as tabelas feitas para falhar; G1 pelo replay do mundo com um lado do mundo de teste.
+- **O custo em pesos** (`experiments/custo_orgaos.py` → `artifacts_v2_dois_pets/custo_orgaos.json`): 21 pesos por receptor no cérebro A
+  (24 com o banheiro); com os 12 receptores da DP-13/DP-14, o degrau 1 dos dois pets vai de 990 a 1242 (pede teto do plano). A rede de si lê
+  todos os receptores sozinha e passa do teto dela em quase todo conjunto. O cérebro A ainda não lê os órgãos.
+
+## V2, PET-QUE-PENSA-CALIBRACAO — a calibração do `g_plano` e o piloto (2026-10-13, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 5 e 6, adendo 1) — g_plano = S, FECHOU; O T1 SEM MARGEM: O PLANO VOLTA AO MATHEUS
+
+Autorizada pelo Matheus em 2026-10-13. Uma calibração e um piloto, nas bases 45101…45505 (K_u = 4, 20 unidades). Números de
+`artifacts_v2_pet_que_pensa/calibracao/` (as vidas fora do git), congelados no adendo 1 do plano; relatório
+`docs/RESULTADO_V2_CALIBRACAO_PET_QUE_PENSA.md`. Interpretações em `docs/REGISTRO_DESVIOS.md`. **A validação (46101…46505) não roda.**
+- **Código:** `experiments/run_v2_calibracao_pet_que_pensa.py --piloto` roda os 4 braços × T1 e T2 no `g_plano` escolhido. Ele grava em
+  `piloto/piloto.json`:
+  - as premissas (G-APRENDEU, G-OPORTUNIDADE, G-EXPOSICAO);
+  - as margens `Δ_T1` e `Δ_T2`;
+  - o K_u pelo poder simulado nos dois primários, com o N efetivo descontado das unidades sem oportunidade;
+  - o poder dos secundários e o custo.
+  - Testes em `tests/test_calibracao_pet_que_pensa.py`.
+- **O `g_plano` = S (1024), fechou:** a fração da sonda nos dias 4 a 6 foi 0,052 (S/4), 0,041 (S/2) e 0,1001 (S).
+- **O piloto:**
+  - **T1:** nenhum braço escolhe a x antes da mudança (`f_antes` = 0 em toda unidade com oportunidade): `Δ_T1` = 0, sem espaço;
+  - **T2:** `Δ_T2` = 0,214, mas nenhuma unidade teve busca depois da mudança, então não há diferença para medir;
+  - **as premissas** falham em todos os braços (G-APRENDEU, G-OPORTUNIDADE, G-EXPOSICAO);
+  - o plano decide ~8% das decisões com alvo, e o custo é 0,62 s de CPU por vida.
+- **Por quê** (descritivo, 4 unidades): o pet come a ração do comedouro (72 a 82 por vida) e quase nunca a x (0 a 2).
+- **Pela seção 6, o plano volta ao Matheus;** o N não foi calculado.
+
+## V2, W-BANCADA-REDE — a etapa 3 da rede de si na bancada (2026-10-13, `docs/TAREFA_V2_REDE_DE_SI.md`, etapa 3; `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`, seções 3 e 4) — GATES PASSAM; SEM RUN
+
+Infraestrutura, sem run; só as sementes dos testes. Mudaram `experiments/bancada_v2.py`, `digilab/metrics.py` (as medidas no fim), as
+fumaças `experiments/configs/v2_rede_de_si/{fumaca,fumaca_autoria}.json` e três testes antigos. `engine.py`, `rede_de_si.py`, os cérebros,
+o corpo e a web não. Interpretações em `docs/REGISTRO_DESVIOS.md`.
+- **A chave `rede_de_si`** da config: a `ConfigRedeDeSi` ligada, com campos por cima (`{}` = os padrões; desligar falha alto).
+  - Ela vale em todo braço da config, e a rede lê os receptores do corpo: um braço sem corpo (regime fora de "química" e "corpo") falha
+    alto na validação.
+  - `Bancada.cfg_rede`. O `meta.json` ganha `cfg_rede` e o sha256 de `rede_de_si.py`, só com a chave.
+- **O embrulho:** `Bancada.politica` devolve o `PoliticaDoBraco` dentro do `PoliticaComRede` (o cérebro de antes é o `politica_do_braco`).
+  - O `do_braco` desembrulha, e `rede_de` acha a rede dentro dos embrulhos dos motores.
+  - A sonda da deriva usa o prior sem a rede.
+- **G1-REDE:** o `conferir_replay` compara o estado da rede bit a bit. No replay de medição, a sonda dos químicos não pode mudar a rede.
+- **A rede refeita só dos registros** (`rede_offline`, as contas `_saida` e `_lms` da própria rede, na mesma ordem):
+  - **gate da reprodução:** as previsões das duas cabeças e os pesos no fim saem iguais aos da rede, senão falha alto;
+  - **a congelada:** de uma decisão em diante, nada aprende (o G-ADAPTA);
+  - **o oráculo:** o mesmo LMS com os químicos do corpo a mais na entrada (`sondar_quimicos`: o retrato dos químicos em cada decisão,
+    na escala S do teto de cada um, que a rede nunca vê). Existe só na bancada.
+- **As medidas** (`Bancada.medidas_rede`, bloco `rede_de_si` do `medidas.json`; funções puras novas em `metrics.py`: `media_historica`,
+  `previsao_persistencia`, `mae_previsao`, `brier_skill`, `brier_skill_multiclasse`):
+  - **por horizonte (1, 4, 16):** o MAE da rede, da persistência, da média histórica e do oráculo, nos últimos sete dias (os dias 8 a 14
+    numa vida de 14), sem o susto na média; `D_SI` e `D_MEDIA`, também por receptor;
+  - **a curva:** o MAE da rede e da persistência a 4 decisões, por dia;
+  - **a adaptação** (com o tick da troca): a rede e a congelada só na fome, nos últimos quatro dias, `D_ADAPTA`, a curva da fome por dia;
+  - **a autoria:**
+    - `BSS_PED` (pela sonda N7 do motivo; sem a sonda, o pedido não pesou), também por zona;
+    - `BSS_NASC` (a sonda "ao nascer" do A: o sorteio pelo prior com o mesmo u).
+    - O Brier skill vai contra a frequência na mesma vida, com a previsão normalizada sobre os candidatos. Com menos de 20 decisões, a
+      vida fica de fora e é contada.
+  - **os descritivos:** os pesos das duas cabeças no fim de cada dia (quantos no teto, o desvio médio) e a surpresa por hora, com as
+    horas com tapa contra as horas sem nada.
+- **Os braços novos** (nó `rede-de-si`):
+  - **P1+ped-c** (o P1+ped com o corpo inteiro, como o P1-c) monta e roda no `iguais_frutas`;
+  - **P1-c-lenta** (o P1-c com `digestao_lenta`) falha alto com `NOS_PENDENTES["digestao_lenta"]` até a troca da digestão no motor (a
+    etapa 2b, do A). A digestão lenta só existe no regime "corpo". A troca é no `tick_troca` da bancada (o fim do dia 7 numa vida de 14).
+- **Sem os órgãos do #299:** com o Olfato e a Audição ligados, a rede passa do teto. O embrulho da bancada
+  (`PoliticaComRedeSemOrgaos`) falha alto na primeira decisão que traz um receptor de narina ou ouvido, antes de a rede a ver.
+- **As faixas** 43101…43505 e 44101…44505 e o prefixo `rede_de_si` já estavam na bancada (W-BANCADA-DOIS-PETS).
+- **Testes:** `tests/test_bancada_rede_de_si.py`, 31, ~10 s.
+  - a chave;
+  - G-OBS pela bancada em quatro braços;
+  - G1-REDE com a rede mexida;
+  - a reprodução: congelada no tick 0 = a persistência; o oráculo com entradas nulas = a rede;
+  - as linhas de base e o Brier com a resposta conhecida;
+  - a autoria contra os motivos;
+  - os braços, a adaptação numa troca forçada e o `rodar`.
+  - Mudaram também a tabela de braços (`test_bancada_v2`), o `NOS_PENDENTES` (`test_bancada_liga_gestos`) e os braços com metabolismo
+    (`test_bancada_metabolismo`).
+- **Fumaças** (NÃO canônicas, sem artefato): `fumaca.json` (P1-c, P0-c e P1-c-tapa na `bola`) e `fumaca_autoria.json` (P1+ped-c e P1-c no
+  `iguais_frutas`), 3 dias, ~8 s cada.
+- **Fora:** o orquestrador da calibração do `passo`, o piloto e a validação. A rodada de saúde do código pode modularizar a bancada agora.

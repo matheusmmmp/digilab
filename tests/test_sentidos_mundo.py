@@ -34,13 +34,14 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 
 import bancada_v2 as bv  # noqa: E402
 import gabarito_sentidos as gs  # noqa: E402
-from digilab.config import (CONFIG_GRUPO_LIGADA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, CONFIG_SENTIDOS_LIGADA,  # noqa: E402
+from digilab.config import (CONFIG_CORPO_DRIVES, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_GRUPO_LIGADA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, CONFIG_SENTIDOS_LIGADA,  # noqa: E402
                             TICKS_POR_DIA, ConfigSentidos)
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoPet  # noqa: E402
 from digilab.grupo import Grupo, PetDoGrupo, RegistroGrupo, reproduzir_grupo, sementes_do_grupo, simular_grupo  # noqa: E402
 from digilab.instinto_mundo import PoliticaInstintoMundo  # noqa: E402
-from digilab.mundo import (DIR16, ESCALA_DIR, PARAMETROS_SENTIDOS, SONS, DonoComLugar, Mundo, PercepcaoSentidos,  # noqa: E402
+from digilab.motor_corpo import com_corpo  # noqa: E402
+from digilab.mundo import (DIR16, ESCALA_DIR, PARAMETROS_SENTIDOS, PASSO_INICIAL, SONS, DonoComLugar, MotorMundo, Mundo, PercepcaoSentidos,  # noqa: E402
                            PercepcaoSocial, campo_em, cheiro_em, direcao_do_campo, direcao_do_cheiro, direcao_em_16, direcao_em_8,
                            div_arred, fontes_do_pet, pontos_laterais, som_ouvido)
 
@@ -90,19 +91,19 @@ def ref_laterais(x, y, passo, af):
 
 
 def ref_fontes(x, y, marcas, tick, cs):
-    fontes = [(x, y, cs.cheiro_pet)]
+    fontes = [(x, y, cs.olfato.cheiro_pet)]
     for mx, my, t in marcas:
         idade = tick - t
-        a = cs.cheiro_marca * (cs.vida_marca_ticks - idade) // cs.vida_marca_ticks if idade < cs.vida_marca_ticks else 0
+        a = cs.olfato.cheiro_marca * (cs.olfato.idade_marca - idade) // cs.olfato.idade_marca if idade < cs.olfato.idade_marca else 0
         if a > 0:
             fontes.append((mx, my, a))
     return fontes
 
 
 def ref_cheiro(x, y, passo, fontes, cs, sub):
-    raio = cs.raio_cheiro_pet_celulas * sub
+    raio = cs.olfato.raio_celulas * sub
     centro, direcao = ref_direcao(x, y, fontes, raio, sub)
-    esq, dir_ = ref_laterais(x, y, passo, cs.afastamento_narinas)
+    esq, dir_ = ref_laterais(x, y, passo, cs.olfato.afastamento_narinas)
     return centro, direcao, ref_campo(*esq, fontes, raio), ref_campo(*dir_, fontes, raio)
 
 
@@ -114,12 +115,12 @@ def ref_direcao_8(dx, dy):
 
 
 def ref_som(lx, ly, passo, sx, sy, cs, sub):
-    raio = cs.raio_som_celulas * sub
+    raio = cs.ouvido.raio_som_celulas * sub
     d = math.isqrt((sx - lx) ** 2 + (sy - ly) ** 2)
     if d >= raio:
         return None
-    a = cs.intensidade_som
-    esq, dir_ = ref_laterais(lx, ly, passo, cs.afastamento_ouvidos)
+    a = cs.ouvido.som
+    esq, dir_ = ref_laterais(lx, ly, passo, cs.ouvido.afastamento_ouvidos)
     no = lambda px, py: ref_campo(px, py, [(sx, sy, a)], raio)  # noqa: E731
     return ref_direcao_8(sx - lx, sy - ly), d, no(lx, ly), no(*esq), no(*dir_)
 
@@ -140,6 +141,8 @@ class Espiao(PoliticaInstintoMundo):
         if self.barulho and a is AcaoPet.OCIOSO:
             a = AcaoPet.EMBURRAR
         m = self.motor
+        if m is None:                                   # o motor que nao se apresenta (os testes do orgao conferem no motor)
+            return a
         g = m._grupo
         ref = None
         if obs.social is not None and g.cs.ligada:
@@ -201,15 +204,16 @@ def _registro_sem_sentidos(g: Grupo) -> str:
 
 # ================================================================== a config
 def test_a_config_dos_sentidos_e_o_registro():
+    """a chave do mundo; os numeros do mundo sao os da ConfigOlfato e da ConfigOuvido (uma config so), com o `ligada` delas independente"""
     assert CONFIG_SENTIDOS.ligada is False and CS.ligada is True
-    assert set(PARAMETROS_SENTIDOS) == {f.name for f in fields(ConfigSentidos)}
-    assert all(s in ("DECIDIDO", "PROPOSTO") for s, _ in PARAMETROS_SENTIDOS.values())
-    assert CS.raio_som_celulas == 16                         # o R_som do desenho (secao 5.4)
-    assert CS.max_marcas * CONFIG_PADRAO.intervalo_decisao_ticks == CS.vida_marca_ticks
-    for campo, ruim in (("cheiro_pet", 0), ("max_marcas", -1), ("vida_marca_ticks", 1.5), ("afastamento_narinas", -1),
-                        ("passo_inicial", 16), ("raio_som_celulas", 0)):
-        with pytest.raises(ValueError):
-            ConfigSentidos(**{campo: ruim})
+    assert CS.olfato == CONFIG_OLFATO and CS.ouvido == CONFIG_OUVIDO and not CS.olfato.ligada and not CS.ouvido.ligada
+    assert set(PARAMETROS_SENTIDOS) == {"ligada"}
+    assert CS.ouvido.raio_som_celulas == 16                         # o R_som do desenho (secao 5.4)
+    assert CS.olfato.max_marcas * CONFIG_PADRAO.intervalo_decisao_ticks == CS.olfato.idade_marca
+    with pytest.raises(TypeError):
+        ConfigSentidos(ligada=1)
+    with pytest.raises(TypeError):
+        ConfigSentidos(olfato=CONFIG_OUVIDO)
     assert SONS == ("comendo", "bola", "chamado", "emburrado")
 
 
@@ -288,21 +292,21 @@ def test_a_conta_do_cheiro_da_comida_nao_mudou():
 def test_as_fontes_do_pet_e_a_marca_que_some():
     cs = CS
     t = 10_000
-    marcas = [(100, 100, t - cs.vida_marca_ticks), (110, 100, t - cs.vida_marca_ticks + 1), (120, 100, t - 360), (130, 100, t)]
-    f = fontes_do_pet(50, 60, marcas, t, cs)
-    assert f == [(50, 60, cs.cheiro_pet), (120, 100, cs.cheiro_marca * 360 // 720), (130, 100, cs.cheiro_marca)]
-    # a marca de idade T - 1 vale 16 x 1 // 720 = 0 e nao conta; a de idade T some
+    marcas = [(100, 100, t - cs.olfato.idade_marca), (110, 100, t - cs.olfato.idade_marca + 1), (120, 100, t - cs.olfato.idade_marca // 2), (130, 100, t)]
+    f = fontes_do_pet(50, 60, marcas, t, cs.olfato)
+    assert f == [(50, 60, cs.olfato.cheiro_pet), (120, 100, cs.olfato.cheiro_marca * (cs.olfato.idade_marca - cs.olfato.idade_marca // 2) // cs.olfato.idade_marca), (130, 100, cs.olfato.cheiro_marca)]
+    # a marca de idade T - 1 vale A_marca x 1 // T = 0 e nao conta; a de idade T some
     assert f == ref_fontes(50, 60, marcas, t, cs)
     with pytest.raises(ValueError):
-        fontes_do_pet(0, 0, [(0, 0, t + 1)], t, cs)
+        fontes_do_pet(0, 0, [(0, 0, t + 1)], t, cs.olfato)
 
 
 def test_o_rastro_no_mundo_uma_marca_por_decisao_ate_o_maximo():
     m = Mundo(CONFIG_MUNDO_LIGADA, 101)
     with pytest.raises(ValueError):
-        m.deixar_marca("A", 0, 0, 0, CS)
+        m.deixar_marca("A", 0, 0, 0, CS.olfato)
     m.ligar_marcas()
-    cs = replace(CS, max_marcas=3, vida_marca_ticks=60)
+    cs = replace(CS.olfato, max_marcas=3, idade_marca=60)
     for k in range(6):
         m.deixar_marca("A", k, 0, 15 * k, cs)
     assert m.marcas_de("A") == [(3, 0, 45), (4, 0, 60), (5, 0, 75)]
@@ -323,9 +327,9 @@ def test_o_rastro_e_a_posicao_de_cada_decisao_com_os_dois_presentes(entrada_b):
         for i, m in g.motores.items():
             todas = [(d["antes"][0], d["antes"][1], d["tick"]) for d in m.decisoes_mundo if d["tick"] >= inicio]
             ultima = todas[-1][2]
-            esperado = [e for e in todas if ultima - e[2] < CS.vida_marca_ticks][-CS.max_marcas:]
+            esperado = [e for e in todas if ultima - e[2] < CS.olfato.idade_marca][-CS.olfato.max_marcas:]
             guardado = g.mundo.marcas_de(i)
-            assert guardado == esperado and len(guardado) == CS.max_marcas
+            assert guardado == esperado and len(guardado) == CS.olfato.max_marcas
             assert all(t >= inicio for *_, t in guardado)
 
 
@@ -352,14 +356,14 @@ def test_o_cheiro_de_cada_outro_na_hora_de_cada_decisao(barulho, layout):
 
 def test_a_narina_do_lado_do_outro_sente_mais():
     """com o outro parado a esquerda (a norte de quem olha para leste), a narina esquerda sente mais; a direcao pronta aponta para ele"""
-    raio = CS.raio_cheiro_pet_celulas * SUB
-    fontes = [(500, 200 - 5 * SUB, CS.cheiro_pet)]
+    raio = CS.olfato.raio_celulas * SUB
+    fontes = [(500, 200 - 5 * SUB, 1024)]                  # forte, sem empate de arredondamento na direcao
     centro, direcao = direcao_do_campo(500, 200, fontes, raio, SUB)
-    esq, dir_ = pontos_laterais(500, 200, 0, CS.afastamento_narinas)
+    esq, dir_ = pontos_laterais(500, 200, 0, CS.olfato.afastamento_narinas)
     assert direcao == 3                                     # N
     assert campo_em(*esq, fontes, raio) > campo_em(*dir_, fontes, raio)
     # olhando para oeste (passo 8), o outro fica a direita
-    esq, dir_ = pontos_laterais(500, 200, 8, CS.afastamento_narinas)
+    esq, dir_ = pontos_laterais(500, 200, 8, CS.olfato.afastamento_narinas)
     assert campo_em(*esq, fontes, raio) < campo_em(*dir_, fontes, raio)
 
 
@@ -403,7 +407,7 @@ def test_o_som_ouvido_a_conta_e_o_alcance(layout):
             for i, (lx, ly, passo) in e["outros"].items():
                 r = ref_som(lx, ly, passo, e["x"], e["y"], CS, SUB)
                 assert (r is not None) == (i in e["ouvintes"])
-                assert som_ouvido(lx, ly, passo, e["x"], e["y"], CS, SUB) == r
+                assert som_ouvido(lx, ly, passo, e["x"], e["y"], CS.ouvido, SUB) == r
                 ouvidos += r is not None
                 fora += r is None
     assert ouvidos > 100 and fora > 10
@@ -433,11 +437,11 @@ def test_a_caixa_dos_sons_chega_inteira_a_decisao_seguinte(entrada_b):
 
 
 def test_o_ouvido_do_lado_do_som_ouve_mais():
-    r = som_ouvido(500, 200, 0, 500, 200 - 4 * SUB, CS, SUB)       # o som ao norte de quem olha para leste: a esquerda
+    r = som_ouvido(500, 200, 0, 500, 200 - 4 * SUB, CS.ouvido, SUB)       # o som ao norte de quem olha para leste: a esquerda
     direcao, d, centro, esq, dir_ = r
-    assert direcao == 3 and d == 4 * SUB and esq > dir_ and centro == CS.intensidade_som * (16 * SUB - d) // (16 * SUB)
-    assert som_ouvido(0, 0, 0, 16 * SUB, 0, CS, SUB) is None          # d = R_som: fora
-    assert som_ouvido(0, 0, 0, 16 * SUB - 1, 0, CS, SUB) is not None
+    assert direcao == 3 and d == 4 * SUB and esq > dir_ and centro == CS.ouvido.som * (16 * SUB - d) // (16 * SUB)
+    assert som_ouvido(0, 0, 0, 16 * SUB, 0, CS.ouvido, SUB) is None          # d = R_som: fora
+    assert som_ouvido(0, 0, 0, 16 * SUB - 1, 0, CS.ouvido, SUB) is not None
 
 
 def test_o_som_desconhecido_falha_alto():
@@ -468,7 +472,7 @@ def test_o_passo_e_a_direcao_do_ultimo_deslocamento():
     for s in (101, 202):
         g = _grupo(s, "espiao")
         for i, m in g.motores.items():
-            passo = CS.passo_inicial
+            passo = PASSO_INICIAL
             decs = iter(m.decisoes_mundo)
             for d in _cerebro(g, i).decisoes:
                 assert d["passo"] == passo
@@ -529,4 +533,135 @@ def test_g1_o_replay_refaz_os_sentidos(cerebro, entrada_b, corpo, layout):
     with pytest.raises(ValueError):
         reproduzir_grupo(RegistroGrupo.de_jsonl(texto), fabricas, gs.gdp.LAYOUTS[layout])                       # sem a chave
     with pytest.raises(ValueError):
-        reproduzir_grupo(RegistroGrupo.de_jsonl(texto), fabricas, gs.gdp.LAYOUTS[layout], cfg_sentidos=replace(CS, raio_som_celulas=8))
+        reproduzir_grupo(RegistroGrupo.de_jsonl(texto), fabricas, gs.gdp.LAYOUTS[layout], cfg_sentidos=replace(CS, ouvido=replace(CS.ouvido, raio_som_celulas=8)))
+
+
+# ================================================================== o lado do mundo do orgao do corpo (etapa 8b: `_intensidades_do_orgao`)
+OLFATO_ON = replace(CONFIG_OLFATO, ligada=True, comida=True, outro_pet=True)
+OUVIDO_ON = replace(CONFIG_OUVIDO, ligada=True)
+
+
+class MotorQueAnota(com_corpo(MotorMundo)):
+    """o MotorMundo com o corpo e os orgaos, de verdade; so anota cada entrega do lado do mundo (o tick do mundo, a posicao, o passo, o
+    que entregou)"""
+
+    def _intensidades_do_orgao(self):
+        out = super()._intensidades_do_orgao()
+        self.__dict__.setdefault("entregas", []).append((self._tm(self._estado.tick), self.pet, self._passo, dict(out)))
+        return out
+
+
+def _fm_orgao(co=OLFATO_ON, cv=OUVIDO_ON, layout="padrao"):
+    cm = gs.gdp.LAYOUTS[layout]
+    return lambda p, cfg, s, **kw: MotorQueAnota(p, cfg, s, obediencia_desligada=True, cfg_mundo=cm,  # noqa: E731
+                                                 cfg_corpo=CONFIG_CORPO_DRIVES, cfg_olfato=co, cfg_ouvido=cv, **kw)
+
+
+def _pets_orgao(s, entrada_b=0, dono="aleatorio", co=OLFATO_ON, cv=OUVIDO_ON, ids=("A", "B")):
+    sementes = sementes_do_grupo(s, CONFIG_GRUPO_LIGADA.ids)
+    out = []
+    for ident in ids:
+        fp = lambda cfg=None: Espiao(cfg, True)  # noqa: E731
+        fm0 = _fm_orgao(co, cv)
+
+        def fm(p, cfg, s_, fm0=fm0, **kw):
+            m = fm0(p, cfg, s_, **kw)
+            p.motor = m
+            return m
+        d = DonoComLugar(criar_dono(dono), "perto", sementes[ident], dono, CM)
+        out.append(PetDoGrupo(ident, 0 if ident == "A" else entrada_b * TICKS_POR_DIA, fp, fm, d, dono, "espiao"))
+    return out
+
+
+def test_o_orgao_le_o_mundo_nos_pontos_das_narinas_um_pet():
+    """sozinho no mundo: o olfato da comida e a conta do cheiro da comida no ponto de cada narina (pela direcao do ultimo passo); o do outro
+    e o ouvido, 0"""
+    g = simular_grupo(CM, 101, _pets_orgao(101, ids=("A",)), 2, cfg_sentidos=CS)
+    m = g.motores["A"]
+    assert len(m.entregas) > 2 * TICKS_POR_DIA                       # antes de cada tick e de cada percepcao
+    raio = CM.raio_cheiro_celulas * SUB
+    com_cheiro = 0
+    for agora, (x, y), passo, out in m.entregas:
+        fontes = m.mundo.fontes_de_cheiro(agora) if agora == g.tick else None
+        assert set(out) == {o.receptor for o in m.corpo.orgaos}
+        assert out["olfato_outro_esq"] == out["olfato_outro_dir"] == 0
+        assert all(v == 0 for k, v in out.items() if k.startswith("ouvido_"))
+        com_cheiro += out["olfato_comida_esq"] > 0
+        if fontes is not None:
+            esq, dir_ = ref_laterais(x, y, passo, OLFATO_ON.afastamento_narinas)
+            assert out["olfato_comida_esq"] == ref_campo(*esq, fontes, raio)
+            assert out["olfato_comida_dir"] == ref_campo(*dir_, fontes, raio)
+    assert com_cheiro > 100
+
+
+def test_o_orgao_le_o_mundo_na_hora_de_cada_entrega():
+    """a conta refeita na hora: o olfato da comida e do outro, decisao a decisao (o Espiao confere o estado do grupo no momento)"""
+
+    class MotorConfere(MotorQueAnota):
+        def _intensidades_do_orgao(self):
+            out = super()._intensidades_do_orgao()
+            g, agora = self._grupo, self._tm(self._estado.tick)
+            x, y = self.pet
+            raio_c, raio_o = CM.raio_cheiro_celulas * SUB, OLFATO_ON.raio_celulas * SUB
+            pts = ref_laterais(x, y, self._passo, OLFATO_ON.afastamento_narinas)
+            for lado, pt in zip(("esq", "dir"), pts):
+                assert out[f"olfato_comida_{lado}"] == ref_campo(*pt, self.mundo.fontes_de_cheiro(agora), raio_c)
+                v = 0
+                for i in [j for j in g.ids_presentes() if j != self.ident]:
+                    o = g.motores[i]
+                    v += ref_campo(*pt, ref_fontes(*o.pet, g.mundo.marcas.get(i, []), agora, CS), raio_o)
+                assert out[f"olfato_outro_{lado}"] == v
+            self.__dict__.setdefault("conferidas", 0)
+            self.conferidas += 1
+            return out
+
+    pets = []
+    for p in _pets_orgao(202):
+        fm = lambda pol, cfg, s, **kw: MotorConfere(pol, cfg, s, obediencia_desligada=True, cfg_mundo=CM,  # noqa: E731
+                                                    cfg_corpo=CONFIG_CORPO_DRIVES, cfg_olfato=OLFATO_ON, cfg_ouvido=OUVIDO_ON, **kw)
+        pets.append(replace(p, fabrica_motor=fm))
+    g = simular_grupo(CM, 202, pets, 2, cfg_sentidos=CS)
+    assert all(m.conferidas > 2 * TICKS_POR_DIA for m in g.motores.values())
+    assert any(e[3]["olfato_outro_esq"] > 0 for m in g.motores.values() for e in m.entregas)
+
+
+@pytest.mark.parametrize("entrada_b", [0, 1])
+def test_cada_som_entra_no_ouvido_em_um_tick_so(entrada_b):
+    """o estimulo do ouvido de cada tick e a soma dos sons daquele tipo que entram nele; somando um valor por tick, cada som ouvido conta
+    exatamente uma vez, com a intensidade de cada ouvido de onde o pet estava quando o som soou"""
+    for s in (101, 202):
+        g = simular_grupo(CM, s, _pets_orgao(s, entrada_b), DIAS, cfg_sentidos=CS)
+        assert g.sons
+        for i, m in g.motores.items():
+            por_tick = {}
+            for agora, _, _, out in m.entregas:
+                por_tick[agora] = out                                 # o ultimo do tick (a percepcao e o passo dao o mesmo)
+            for som in SONS:
+                for lado, k in (("esq", 3), ("dir", 4)):
+                    total = sum(out[f"ouvido_{som}_{lado}"] for out in por_tick.values())
+                    esperado = sum(ref_som(*e["outros"][i], e["x"], e["y"], CS, SUB)[k]
+                                   for e in g.sons if i in e["ouvintes"] and e["som"] == som)
+                    pendente = sum(x[k] for x in m._sons_orgao if x[1] == som and x[0] > max(por_tick))
+                    assert total + pendente == esperado, (i, som, lado)
+
+
+def test_o_orgao_no_grupo_falha_alto_sem_o_mundo_dos_sentidos():
+    with pytest.raises(ValueError, match="ConfigSentidos"):
+        simular_grupo(CM, 101, _pets_orgao(101), 1)
+    with pytest.raises(ValueError, match="ConfigSentidos"):
+        simular_grupo(CM, 101, _pets_orgao(101, co=replace(OLFATO_ON, outro_pet=False)), 1)
+    with pytest.raises(ValueError, match="numeros do mundo"):
+        simular_grupo(CM, 101, _pets_orgao(101, co=replace(OLFATO_ON, raio_celulas=12)), 1, cfg_sentidos=CS)
+    with pytest.raises(ValueError, match="numeros do mundo"):
+        simular_grupo(CM, 101, _pets_orgao(101, cv=replace(OUVIDO_ON, som=8)), 1, cfg_sentidos=CS)
+    # so o olfato da comida: o grupo sem os sentidos basta
+    simular_grupo(CM, 101, _pets_orgao(101, co=replace(OLFATO_ON, outro_pet=False), cv=CONFIG_OUVIDO), 1)
+
+
+def test_g1_o_replay_refaz_o_orgao_no_grupo():
+    s = 303
+    g = simular_grupo(CM, s, _pets_orgao(s, 1), DIAS, cfg_sentidos=CS)
+    fabricas = {p.ident: (p.politica_fabrica, p.fabrica_motor) for p in _pets_orgao(s, 1)}
+    r = reproduzir_grupo(RegistroGrupo.de_jsonl(g.registro.para_jsonl()), fabricas, CM, cfg_sentidos=CS)
+    assert _texto(r.resumo()) == _texto(g.resumo())
+    assert {i: m.corpo.para_dict() for i, m in r.motores.items()} == {i: m.corpo.para_dict() for i, m in g.motores.items()}

@@ -5053,3 +5053,127 @@ Pedido do Gerente depois do #292, com a saída 1 decidida pelo Matheus. Relatór
 - **O G2 do plano** (com `g_plano` 0 o termo do plano é zero) não tem o que conferir sem o planejador; fica para a etapa 2.
 - **Dois testes antigos mudaram:** a tabela dos prefixos em `tests/test_bancada_dois_pets.py` ganhou o `pet_que_pensa`, e
   `tests/test_bancada_liga_gestos.py` aceita o nó do planejador.
+
+## 2026-10-13 — SAUDE-ETAPA-0: o backup (worker C)
+
+Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. Nenhum código, configuração ou teste mudou.
+- **A tag `pre-saude`:** anotada, no commit `8ae3ff77c020474e39da2658a19c6a0da79f9e7e`, enviada ao GitHub. O Gerente informou que o envio da
+  tag foi autorizado pelo Matheus (pedido de 2026-10-13); a autorização não veio dele direto nesta sessão.
+- **As cópias** em `docs/historico/` saíram do blob do commit da tag (`git show 8ae3ff7:<arquivo>`), byte a byte. O sha256 de cada uma é o
+  do original e o do `git show pre-saude:<arquivo>` (G-BACKUP, conferido). Os números estão no `docs/historico/LEIA.md`.
+- **Os nomes** seguem a SA-1 (recomendação, ainda não decidida): `CLAUDE_pre_saude.md` e `bancada_v2_pre_saude.py.txt`. Se o Matheus
+  preferir outros nomes, renomear as cópias não muda o sha256.
+- **Nenhum teste lê `docs/`:** os testes que varrem o repositório olham só `experiments/configs/` e `digilab/`. As cópias não entram em
+  nenhuma conferência.
+- **O painel e o roadmap** ganharam os resultados novos: o alvo aprendido atrapalha (#296), o passo 0 fino com `m_gasto` 4/5 (#293) e o J5
+  com as etapas 0 a 4 na `main` (#294, #295).
+- **Achado, para o Gerente:** a #295 (a bancada do J5) foi escrita em paralelo com a #294 (o planejador). Na `main`, os três braços com o
+  planejador ainda falham alto com `NOS_PENDENTES["planejador"]`, e a `BancadaPQP.politica` não passa o `g_plano`. Falta uma tarefa curta
+  para ligar o planejador na bancada antes da calibração do `g_plano`.
+
+## 2026-10-13 — W-BANCADA-PQP-PLANO (worker D): o planejador nos braços do J5 e a config da calibração do `g_plano`
+
+- **O congelamento passou para o `congelar` dos modelos** (#294), no lugar do retrato restaurado do W-BANCADA-PQP. Nos três braços com o
+  planejador, os modelos congelados são os do próprio cérebro (`PoliticaLobos.modelo_mundo`), que os lê no lobo `planejamento`. O embrulho
+  `PoliticaComModeloPQP` só os lê e os congela no `mudanca_no_mundo`, antes de a ação da mudança ser aplicada: no P1-plan-cong a fruta na
+  mão do T1 já não chega ao desfecho. No P1 (g_plano 0) o embrulho segue com modelos que só observam. Assim os modelos não existem em
+  dobro, e o planejador decide com os modelos que congelam.
+- **A fruta na mão no P1 passa pelo `ModeloMundo.na_mao`** (#294): conta em `consumos_mao`, não em `consumos`. O estado interno das vidas
+  do P1 muda nesse contador em relação ao #295; a vida (log, ações, rngs) não. Não havia gabarito dessas vidas.
+- **O `g_plano` é uma chave própria da config do J5** (`"g_plano"`), só com braço com o planejador, e entra só nesses braços. Na chave
+  `"lobos"` ele iria também ao P1, então lá ele é recusado, e a `BancadaPQP` também recusa uma bancada com `g_plano` nos lobos.
+- **"Quanto o plano decide"** (seção 4) e a medida da regra (seção 5) foram lidos assim:
+  - **o denominador** são as decisões com alvo: o motor pediu o alvo e havia para onde ir;
+  - **o numerador** são as decisões em que a sonda "quem decidiu" muda a escolha, a da ação (`plano`) ou a do alvo (`alvo_plano`);
+  - as duas partes saem também em separado, e a da ação também sobre todas as decisões;
+  - na regra, a fração de cada unidade é a soma dos dias 4 a 6, e a média é sobre as unidades com alguma decisão com alvo nessa janela.
+- **A legibilidade** é a fração das decisões com o fator do plano no motivo (`motivo.fator_do_plano`). Os textos são os do adulto
+  (`expressao.expressar`), um por fator diferente.
+- **O G2** confere, em toda vida do P1, que nenhum motivo tem a contribuição do lobo `planejamento` nem as sondas `plano` e `alvo_plano`.
+  Ele falha alto se tiver. Nos braços com o planejador sai a contagem das decisões com termo diferente de zero.
+- **A G-SEM-CREDITO** compara o estado interno sem os modelos: os do embrulho e os do planejador (`plano.modelo_mundo`).
+- **O corpo da calibração** é o do passo 0 fino do adendo 5 (`m_gasto` = 4/5, o que fechou): `artifacts_v2_corpo/calibracao/adendo5/passo0/passo0.json`.
+  O resto do cérebro é o ponto da K2, e o mundo usa o `m` da calibração do mundo (1,0), como nos dois pets.
+- **Medida descritiva, só nas sementes dos testes** (a fumaça da calibração: 2 vidas por ponto, 3 dias, a regra nos dias 1 e 2). A fração
+  ficou em 0,067 (S/4), 0,041 (S/2) e 0,065 (S), toda abaixo de 0,10. Se repetir na faixa da calibração, a regra cai no "mais perto" com o
+  desvio declarado, como o B já previa (PP-6). Não é resultado.
+
+## 2026-10-13 — DOIS PETS, etapa 8b (worker B): os órgãos do Olfato e da Audição
+
+- **A adaptação na escala 2^16 com passo mínimo 1.** O desenho escreve `div_arred((I − a) · k_adapt, S)`. Usei a escala da meia-vida do
+  corpo (2^16) e o passo mínimo de 1: com I = 0 o passo é exatamente o `passo_meia_vida` do grafo, e com um cheiro constante a adaptação
+  chega a I (o receptor cai a 0), sem ficar presa abaixo.
+- **O estímulo é cortado no teto da intensidade** (4096), o teto do químico da adaptação; o resto é descartado, como nos químicos.
+- **Os dois sentidos têm a mesma conta no corpo.** O I de cada tick é do mundo (A). Para o som, a proposta é a intensidade dos sons
+  ouvidos desde a decisão anterior do pet, mantida até a próxima: assim a adaptação habitua ao som que se repete e decai entre eles.
+- **O `sentir` é obrigatório a cada tick** com o órgão ligado (um estímulo velho seria percepção errada): o motor o chama antes de cada tick
+  e de cada percepção, pelo gancho `_intensidades_do_orgao()` do lado do mundo.
+- **Um canal `outro`** no Olfato social: o grupo tem no máximo dois pets.
+- **Os números do mundo** (afastamento das narinas e dos ouvidos, rastro, alcance do som) ficam na `ConfigOlfato`/`ConfigOuvido`, para a
+  config ser uma só; são do A.
+- **O relato do grafo** ganha `orgaos` e `externos` só quando existem: com as chaves desligadas, o relato e o gabarito da paridade web não
+  mudam.
+- **O cérebro A não lê os órgãos** nesta etapa (a tarefa pede o custo). A rede de si lê todos os receptores presentes e, com os órgãos,
+  passa do teto dela na maioria dos conjuntos: falha alto, por desenho.
+- **A paridade em TS (G-PAR)** fica para quando o mundo e o corpo forem à web.
+
+## 2026-10-13 — PET-QUE-PENSA-CALIBRACAO (worker D): a calibração do `g_plano` e o piloto
+
+- **O piloto não estava no orquestrador.** A seção 6 o pede antes do adendo 1, e o Gerente pediu "piloto/N se o plano mandar". Ele entrou
+  como `--piloto` do mesmo script, num commit antes de rodar (`0b1e226`), com os números fixos do plano:
+  - 2.000 réplicas, alvo 0,8 e α/2 = 0,025;
+  - os alfas do relato dos secundários, 0,0125 e 0,05 (o Holm de 4).
+- **O "n_antes" do plano no T2** foi lido como a fração de buscas que vão às novas antes da mudança (o `f_antes` do T2). O `n_antes` da
+  `metrics.mudanca_de_escolha` é a contagem, outra coisa.
+- **O N efetivo de cada primário** desconta as unidades sem oportunidade pela taxa do piloto, arredondando para baixo:
+  `floor(N × com valor / total)`. Não chegou a ser usado, porque o N não foi calculado.
+- **Cada braço roda numa run própria da bancada**, em paralelo. O P1 roda sem a chave `g_plano`, que a bancada recusa quando não há braço
+  com o planejador.
+- **G-APRENDEU no piloto** usa o `f_antes` do T1, porque a fase 1 é a mesma nos dois testes.
+- **O resultado:**
+  - o `g_plano` = S fechou, por 0,0001;
+  - o T1 fica sem margem (`f_antes` = 0);
+  - o T2 fica sem busca depois da mudança.
+  - Pela seção 6, a validação não roda e o plano volta ao Matheus.
+  - O porquê (o pet come a ração do comedouro e quase nunca a x) é descritivo, de 4 unidades rejogadas, e está no relatório.
+
+## 2026-10-13 — W-BANCADA-REDE (worker D): a etapa 3 da rede de si na bancada
+
+- **O oráculo** (plano, seção 4: "o mesmo LMS em inteiros, com os químicos do corpo como entrada"):
+  - a entrada é a da rede **mais** os químicos: os receptores, todos os químicos do corpo (cada um em `div_arred(q × S, teto)`, na ordem
+    de `corpo.quimicos`), a ação, o contexto e o viés;
+  - o prior continua a persistência, e o passo e o teto são os da rede.
+  - Os receptores ficam na entrada para o oráculo ser um teto (um superconjunto do que a rede vê) e ter o mesmo prior. Com químicos no
+    lugar dos receptores, o prior não seria a persistência.
+- **A rede congelada e o oráculo saem de um replay offline** dos registros da rede (leituras, ação, contexto, faixa), com as contas
+  `_saida` e `_lms` da própria `RedeDeSi`, na mesma ordem.
+  - Antes de medir, essa mesma conta refaz a rede viva: as previsões das duas cabeças e os pesos no fim têm de sair iguais, senão falha alto.
+  - "Congelada no tick da troca": as atualizações que chegam a partir da primeira decisão no tick da troca são puladas.
+- **As janelas:**
+  - a primária é a dos últimos sete dias da vida (os dias 8 a 14 numa vida de 14), como as medidas do mundo físico na bancada;
+  - a do `D_ADAPTA` são os últimos quatro (11 a 14);
+  - numa vida mais curta (as fumaças), a janela é a vida inteira.
+- **O Brier skill:**
+  - **a previsão** da rede (os pesos da autoria por ação) é normalizada sobre os candidatos da decisão; sem massa, uniforme;
+  - **a base** é a frequência da classe nas mesmas decisões da mesma vida, também normalizada sobre os candidatos de cada decisão;
+  - **"menos de 20 eventos"** (R-5) foi lido como menos de 20 decisões na conta;
+  - **sem variância na base** (o evento sempre igual), o skill não existe e a vida fica de fora, com o motivo.
+- **O evento do `BSS_PED`:** o cérebro só grava a sonda N7 quando o pedido pesa (p ≠ 0: toda fruta do cenário com pedido). Sem a sonda,
+  o termo do pedido é zero e a ação sem o pedido é a própria ação.
+  - A conta inclui as decisões com pedido vigente no contexto da rede, numa regra do `REGRAS_PEDIDO` e com `comer` candidato.
+- **A sonda "ao nascer"** é a da comparação dos cérebros (`legibilidade_a`): o sorteio pelos pesos do lobo de impulsos com o mesmo u. Sem
+  escolha, é a própria ação.
+- **Os braços novos com metabolismo:** o P1-c-lenta e o P1+ped-c são o P1-c (o corpo inteiro, metabolismo incluído) com a digestão lenta
+  ou com o pedido. O metabolismo não tem receptor, então a rede não muda por ele.
+- **O P1-c-lenta** está declarado e falha alto com o nó `digestao_lenta`, porque a troca da `taxa_digestao` no motor é a etapa 2b, do A, e
+  ainda não está na main.
+  - O tick da troca é o `tick_troca` da bancada: o fim do dia `dias // 2`, o 7 numa vida de 14 (RS-3).
+  - A adaptação já é medida com qualquer tick dado, e o teste usa uma troca forçada.
+- **A surpresa por hora** (descritivo): no horizonte 1, a média com sinal sobre os receptores e as 4 decisões da hora. A "hora com tapa" é a
+  da primeira decisão no tick do tapa ou depois.
+- **Duas fumaças:** a bancada cruza braços × mundos, e o P1+ped-c só existe nos mundos das frutas. Por isso a cabeça do corpo (`bola`) e a
+  autoria (`iguais_frutas`) ficaram em configs separadas.
+- **As tabelas braço × condição** não ganharam as medidas da rede; elas ficam no `medidas.json` (bloco `rede_de_si`), para o orquestrador.
+- **Os órgãos do #299 ficam fora** (pedido do Gerente): a bancada não liga o Olfato nem a Audição, e o embrulho da rede na bancada
+  (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
+  falharia, mas só depois de montada; a recusa explícita diz por quê.

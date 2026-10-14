@@ -1945,47 +1945,142 @@ CONFIG_PQP_MUNDO_LIGADA = ConfigPetQuePensaMundo(ligada=True)
 
 
 # =====================================================================
+# V2, os orgaos do Olfato e da Audicao (docs/TAREFA_V2_DOIS_PETS.md, etapa 8b; docs/futuro/dois_pets.md, secoes 5.3, 5.4 e 5.6; DP-13 e
+# DP-14 DECIDIDAS em 2026-10-11: duas narinas e dois ouvidos). Desligadas por padrao: a vida de hoje byte a byte (G2). Ligadas, o corpo
+# (digilab/corpo.py) tem um receptor por canal e por narina (ou ouvido), com limiar, adaptacao e saturacao, que le so a intensidade no
+# ponto da narina (do ouvido), sem direcao (G-SEM-DIRECAO); a adaptacao e um quimico do orgao no grafo do corpo, com a meia-vida. Por
+# receptor, em inteiros, com I a intensidade que o mundo entrega e `a` o quimico da adaptacao:
+#     a <- a + passo(I - a)            a cada tick: div_arred((I - a) x k_adaptacao, 2**bits_meia_vida), com |passo| >= 1 enquanto a != I
+#     e = max(0, I - a - limiar)       o limiar
+#     r = div_arred(S x e, e + meia_saturacao)   a saturacao, em [0, S): o que o cerebro le
+# Com I = 0, o passo da adaptacao e o da meia-vida do grafo (corpo.passo_meia_vida). Os numeros sao PROPOSTOS, SEM FONTE; o plano (por
+# adendo) os fixa. Os do mundo (o afastamento das narinas e dos ouvidos, o rastro, o alcance do som) sao do lado do mundo (A): ficam aqui
+# para a config ser uma so. Registros de status: corpo.PARAMETROS_OLFATO e corpo.PARAMETROS_OUVIDO.
+
+
+def _conferir_orgao(nome: str, c) -> None:
+    for campo in ("limiar", "meia_saturacao", "meia_vida_adaptacao", "k_adaptacao", "teto_intensidade"):
+        v = getattr(c, campo)
+        if type(v) is not int or v < 0 or (v == 0 and campo != "limiar"):
+            raise ValueError(f"{nome}.{campo} tem de ser inteiro positivo (o limiar, >= 0): {v!r}")
+
+
+@dataclass(frozen=True)
+class ConfigOlfato:
+    """O orgao do Olfato (DP-13). `ligada` sem sub-chave falha alto: as sub-chaves sao separadas (ligar uma nao muda a outra).
+
+    narinas               1 ou 2 (DP-13: 2); com 2, `olfato_<canal>_esq` e `_dir`, a +-afastamento_narinas do lado da direcao do ultimo passo
+    comida                o Olfato alimentar: o canal `comida` (o cheiro das comidas boas, a mesma `mundo.cheiro_em`, so no ponto)
+    outro_pet             o Olfato social (degrau 1b): o canal `outro` (o cheiro proprio e o rastro do outro pet) e os emissores externos
+                          do cheiro proprio e do rastro no grafo de cada corpo
+    limiar                e = max(0, I - a - limiar)
+    meia_saturacao        K: r = div_arred(S e, e + K)
+    meia_vida_adaptacao   h da adaptacao, em ticks (um cheiro constante cai a metade em h ticks)
+    k_adaptacao           = corpo.k_meia_vida(h), na escala 2**bits_meia_vida (conferido por teste)
+    teto_intensidade      o corte de cima do estimulo I e do quimico da adaptacao (a soma das fontes pode passar; o resto e descartado)
+    afastamento_narinas   (mundo) subunidades de cada narina ao centro do pet, de lado
+    cheiro_pet            (o emissor externo do cheiro proprio) a intensidade A_pet, constante, na posicao do pet
+    cheiro_marca          (o emissor externo do rastro) a intensidade A_marca de cada marca, constante, uma por decisao
+    raio_celulas          (mundo) R do cheiro do outro pet, como o da comida
+    idade_marca           (mundo) T: a marca perde A_marca x (T - idade) // T e some com a idade T
+    max_marcas            (mundo) as marcas por pet; as mais antigas saem"""
+
+    ligada: bool = False
+    narinas: int = 2
+    comida: bool = False
+    outro_pet: bool = False
+    limiar: int = 4
+    meia_saturacao: int = 32
+    meia_vida_adaptacao: int = 60
+    k_adaptacao: int = 753
+    teto_intensidade: int = 4096
+    afastamento_narinas: int = 8
+    cheiro_pet: int = 32
+    cheiro_marca: int = 16
+    raio_celulas: int = 24
+    idade_marca: int = 240
+    max_marcas: int = 16
+
+    def __post_init__(self) -> None:
+        for campo in ("ligada", "comida", "outro_pet"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigOlfato.{campo} e bool: {getattr(self, campo)!r}")
+        if self.ligada and not (self.comida or self.outro_pet):
+            raise ValueError("ConfigOlfato.ligada sem sub-chave: ligue `comida` (o Olfato alimentar) e/ou `outro_pet` (o Olfato social)")
+        if self.narinas not in (1, 2) or type(self.narinas) is not int:
+            raise ValueError(f"ConfigOlfato.narinas e 1 ou 2: {self.narinas!r}")
+        _conferir_orgao("ConfigOlfato", self)
+        for campo in ("afastamento_narinas", "cheiro_pet", "cheiro_marca", "raio_celulas", "idade_marca", "max_marcas"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigOlfato.{campo} tem de ser inteiro positivo: {v!r}")
+
+
+@dataclass(frozen=True)
+class ConfigOuvido:
+    """O orgao da Audicao (DP-14): o mesmo desenho do Olfato, um canal por tipo de som (`comendo`, `bola`, `chamado`, `emburrado`; o som
+    nao e mensagem, e o barulho de uma acao do outro pet). A adaptacao e a habituacao a um som que se repete; entre os sons, ela decai.
+
+    ouvidos               1 ou 2 (DP-14: 2); com 2, `ouvido_<som>_esq` e `_dir`
+    limiar, meia_saturacao, meia_vida_adaptacao, k_adaptacao, teto_intensidade   como no Olfato
+    afastamento_ouvidos   (mundo) subunidades de cada ouvido ao centro do pet, de lado
+    som                   (mundo) a intensidade A de cada som, na posicao do pet que agiu
+    raio_som_celulas      (mundo) R_som, alem das 6 da visao (secao 5.4)"""
+
+    ligada: bool = False
+    ouvidos: int = 2
+    limiar: int = 4
+    meia_saturacao: int = 32
+    meia_vida_adaptacao: int = 60
+    k_adaptacao: int = 753
+    teto_intensidade: int = 4096
+    afastamento_ouvidos: int = 8
+    som: int = 64
+    raio_som_celulas: int = 16
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigOuvido.ligada e bool: {self.ligada!r}")
+        if self.ouvidos not in (1, 2) or type(self.ouvidos) is not int:
+            raise ValueError(f"ConfigOuvido.ouvidos e 1 ou 2: {self.ouvidos!r}")
+        _conferir_orgao("ConfigOuvido", self)
+        for campo in ("afastamento_ouvidos", "som", "raio_som_celulas"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigOuvido.{campo} tem de ser inteiro positivo: {v!r}")
+
+
+CONFIG_OLFATO = ConfigOlfato()
+CONFIG_OUVIDO = ConfigOuvido()
+
+
+# =====================================================================
 # V2, dois pets, etapa 8 (degrau 1b), o lado do mundo (docs/TAREFA_V2_DOIS_PETS.md, etapa 8; docs/futuro/dois_pets.md, secoes 5.3, 5.4 e
 # 5.6; DP-11, DP-13 e DP-14 decididas; OA-1 a OA-3 da revisao docs/referencias/H_REVISAO_OLFATO_AUDICAO.md, secao 6). Desligada por
 # padrao: o grupo de hoje byte a byte (G2). So no grupo, e so com dois pets presentes: sozinho, nada e guardado (nem rastro, nem som).
-# Ligada, o mundo:
-# - guarda o rastro de cada pet (uma marca por decisao, na posicao da decisao; ate `max_marcas`, as mais antigas saem; a marca vale
-#   `cheiro_marca` x (T - idade) // T e some na idade T) e soma, por outro pet, o cheiro proprio (na posicao atual, `cheiro_pet`) e as
-#   marcas dele, pela mesma conta inteira do cheiro da comida (A x (R - d) // R com d < R), num canal separado do da comida (OA-1: o campo
-#   calculado);
-# - emite os sons das acoes (`comendo`, `bola`, `chamado`, `emburrado`) na posicao do pet, em linha reta (OA-3), ouvidos a d < R_som com a
-#   intensidade `intensidade_som` x (R_som - d) // R_som;
-# - da a direcao em 8 pronta (OA-2: pre-processamento do mundo) e, para o orgao do B (DP-13 e DP-14), a intensidade em duas posicoes de
-#   amostra, a +-`afastamento_narinas` e +-`afastamento_ouvidos` subunidades de lado, pela direcao do ultimo passo do pet.
-# Todos os numeros sao PROPOSTOS, SEM FONTE (o plano do degrau 1b os fixa); o R_som de 16 celulas e o da secao 5.4 do desenho.
+# Os numeros do mundo sao os da ConfigOlfato e da ConfigOuvido (acima, "para a config ser uma so"): a ConfigSentidos as carrega, e o
+# `ligada` delas e o do orgao do corpo, independente desta chave. Ligada, o mundo:
+# - guarda o rastro de cada pet (uma marca por decisao, na posicao da decisao; ate `olfato.max_marcas`, as mais antigas saem; a marca vale
+#   `olfato.cheiro_marca` x (T - idade) // T e some na idade T = `olfato.idade_marca`) e soma, por outro pet, o cheiro proprio (na posicao
+#   atual, `olfato.cheiro_pet`) e as marcas dele, pela mesma conta inteira do cheiro da comida (A x (R - d) // R com d < R, R =
+#   `olfato.raio_celulas`), num canal separado do da comida (OA-1: o campo calculado);
+# - emite os sons das acoes (`comendo`, `bola`, `chamado`, `emburrado`) na posicao do pet, em linha reta (OA-3), ouvidos a d < R_som =
+#   `ouvido.raio_som_celulas` com a intensidade `ouvido.som` x (R_som - d) // R_som;
+# - da a direcao em 8 pronta (OA-2: pre-processamento do mundo) e a intensidade nas duas posicoes de amostra (as narinas e os ouvidos, a
+#   +-afastamento de lado pela direcao do ultimo passo), que o orgao do corpo le (DP-13 e DP-14).
 
 
 @dataclass(frozen=True)
 class ConfigSentidos:
     ligada: bool = False                     # PROPOSTO: a chave (o cheiro proprio, o rastro e o som no grupo)
-    cheiro_pet: int = 32                     # A_pet: o cheiro do pet na posicao atual (o da fruta e 32)
-    cheiro_marca: int = 16                   # A_marca: uma marca recem-deixada
-    raio_cheiro_pet_celulas: int = 12        # R do cheiro do pet e do rastro (o da comida e 24)
-    vida_marca_ticks: int = 720              # T: a marca some na idade T (12 h)
-    max_marcas: int = 48                     # por pet: T / o intervalo da decisao (15), o rastro inteiro de uma vida de marca
-    raio_som_celulas: int = 16               # R_som (desenho, secao 5.4: alem das 6 da visao)
-    intensidade_som: int = 64                # A do som, o mesmo para os quatro sons
-    afastamento_narinas: int = 8             # subunidades de cada lado (meia celula: as duas narinas a 1 celula uma da outra)
-    afastamento_ouvidos: int = 8             # idem, os ouvidos
-    passo_inicial: int = 0                   # a direcao do ultimo passo antes do primeiro passo (0 = leste, na tabela DIR16)
+    olfato: ConfigOlfato = CONFIG_OLFATO     # os numeros do mundo do cheiro do outro e do rastro (o `ligada` dela e o do orgao)
+    ouvido: ConfigOuvido = CONFIG_OUVIDO     # os numeros do mundo do som (idem)
 
     def __post_init__(self) -> None:
-        for nome in ("cheiro_pet", "cheiro_marca", "raio_cheiro_pet_celulas", "vida_marca_ticks", "max_marcas", "raio_som_celulas",
-                     "intensidade_som"):
-            v = getattr(self, nome)
-            if type(v) is not int or v <= 0:
-                raise ValueError(f"ConfigSentidos.{nome} tem de ser inteiro positivo: {v!r}")
-        for nome in ("afastamento_narinas", "afastamento_ouvidos"):
-            v = getattr(self, nome)
-            if type(v) is not int or v < 0:
-                raise ValueError(f"ConfigSentidos.{nome} tem de ser inteiro nao negativo: {v!r}")
-        if type(self.passo_inicial) is not int or not 0 <= self.passo_inicial < 16:
-            raise ValueError(f"ConfigSentidos.passo_inicial tem de ser uma direcao da tabela DIR16 (0 a 15): {self.passo_inicial!r}")
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigSentidos.ligada e bool: {self.ligada!r}")
+        if not isinstance(self.olfato, ConfigOlfato) or not isinstance(self.ouvido, ConfigOuvido):
+            raise TypeError("ConfigSentidos.olfato e .ouvido sao a ConfigOlfato e a ConfigOuvido")
 
 
 CONFIG_SENTIDOS = ConfigSentidos()

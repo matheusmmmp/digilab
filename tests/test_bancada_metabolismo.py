@@ -36,6 +36,8 @@ from digilab.metrics import metabolismo_da_vida, tempo_comer_brincar  # noqa: E4
 from digilab.treino import reproduzir_com_feedback  # noqa: E402
 
 COM_METABOLISMO = {"P0-q", "P1-q", "P0-c", "P1-c", "P0-c-tapa", "P1-c-tapa", "P1-c-tapaX", "P1-c-frutas", "P1-cw"}
+# W-BANCADA-REDE: os dois bracos da rede de si sao o P1-c (com o corpo inteiro, o metabolismo incluido) com a digestao lenta ou o pedido
+COM_METABOLISMO |= {"P1-c-lenta", "P1+ped-c"}
 G_HOJE = ("P0-hoje", "P1-hoje", "P3-hoje", "P0-quimica", "P1-quimica", "P3-quimica")
 SONDA = {"estados": 5, "amostras": 5, "semente": 101}
 CFG_PASSO0 = RAIZ / "experiments" / "configs" / "v2_corpo" / "calibracao_passo0.json"

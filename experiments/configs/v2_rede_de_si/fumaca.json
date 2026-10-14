@@ -1,0 +1,45 @@
+{
+  "descricao": "Fumaca da rede de si na bancada (W-BANCADA-REDE, docs/TAREFA_V2_REDE_DE_SI.md, etapa 3; docs/PLANO_ANALISE_V2_REDE_DE_SI.md). NAO canonica: unidades derivadas das sementes dos testes com o prefixo do plano, sem plano de analise; confere o encanamento (o mundo da bola, a cabeca do corpo: P1-c, P0-c e P1-c-tapa; a autoria esta em fumaca_autoria.json. A chave rede_de_si: a rede observando cada vida dos bracos do plano que ja rodam, o G1-REDE no replay, as medidas da secao 4 com as linhas de base, o oraculo e a autoria contra as sondas do cerebro), nunca como resultado. O P1-c-lenta espera a troca da digestao (a etapa 2b, do A) e fica fora.",
+  "bracos": [
+    "P1-c",
+    "P0-c",
+    "P1-c-tapa"
+  ],
+  "donos": [
+    "atencioso"
+  ],
+  "unidades": {
+    "bases": [
+      101,
+      202
+    ],
+    "k": 1,
+    "prefixo": "rede_de_si"
+  },
+  "mundos": [
+    "bola"
+  ],
+  "dias": 3,
+  "orcamento": 48,
+  "ponto": "T3",
+  "montagem": "completa",
+  "lobos": {
+    "memoria_ganho": 512,
+    "w0_info": 256,
+    "w0_pedido": 256
+  },
+  "consequencia": {
+    "canais_ligados": true
+  },
+  "rede_de_si": {},
+  "sonda": {
+    "estados": 10,
+    "amostras": 10,
+    "semente": 101
+  },
+  "bootstrap": {
+    "reamostragens": 200,
+    "semente": 101,
+    "nivel": 0.95
+  }
+}

@@ -61,6 +61,21 @@ O grafo (secao 18): `grafo_do_corpo` monta a tabela unica dos quimicos, reacoes,
 (digilab/corpo_grafo.py), e o `Corpo` a usa (a lista dos quimicos, os receptores, as meias-vidas, os emissores do tick por fase e as
 quantidades dos estimulos novos) e a confere na carga (`corpo_grafo.checar`, que falha alto).
 
+Os orgaos do Olfato e da Audicao (docs/TAREFA_V2_DOIS_PETS.md, etapa 8b; docs/futuro/dois_pets.md, secoes 5.3, 5.4 e 5.6; DP-13 e
+DP-14, duas narinas e dois ouvidos; `ConfigOlfato` e `ConfigOuvido`, desligadas: a vida de hoje). Ligados (so com o mundo fisico):
+  - um receptor por canal e por narina (ou ouvido): `olfato_<canal>[_esq|_dir]`, com os canais `comida` (sub-chave `comida`) e `outro`
+    (sub-chave `outro_pet`), e `ouvido_<som>[_esq|_dir]`, um por tipo de som (SONS). Cada um tem o quimico da adaptacao
+    `adaptacao_<receptor>` (uma concentracao em [0, teto_intensidade], com a meia-vida do orgao), e o grafo o declara como `Orgao`;
+  - o estimulo: a intensidade I no ponto da narina (do ouvido), um inteiro por receptor, que o mundo entrega por `sentir` (o lado do mundo
+    e do A: a mesma `cheiro_em` so no ponto, o rastro e o som). O corpo nunca recebe direcao (G-SEM-DIRECAO): so os numeros por nome;
+  - a cada tick, depois das meias-vidas, a adaptacao anda para I (`passo_adaptacao`); com I = 0 e o passo da meia-vida. O tick exige um
+    `sentir` desde o tick anterior (falha alto: um estimulo velho seria uma percepcao errada);
+  - a leitura (`receptores`): e = max(0, I - a - limiar), r = div_arred(S e, e + meia_saturacao), em [0, S);
+  - com o Olfato social, os emissores externos do cheiro proprio (na posicao, A_pet) e do rastro (uma marca por decisao, A_marca), com
+    intensidade constante e destino mundo (`emissoes_externas`): o mundo le deles o que o pet emite, e nada do estado vai junto.
+Os receptores dos orgaos vao a `PercepcaoCorpo` (motor_corpo.py); o cerebro A ainda nao os le (o custo em pesos de cada um como entrada fica
+registrado em experiments/custo_orgaos.py).
+
 Componente puro: nao e motor, nao sorteia (nenhuma rng), nao le o cerebro. A sujeira e o sono continuam estados do `Estado` (o motor
 sorteia a sujeira como hoje); o corpo so os le. Quem liga o corpo ao motor e o A (etapa 2, `MotorCorpo`).
 
@@ -73,8 +88,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import CONFIG_EVOLUCAO_PESQUISA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo, ConfigEvolucaoPesquisa, ConfigMundo
-from .corpo_grafo import Emissor, Grafo, Leitura, Quimico, Reacao, checar
+from .config import (CONFIG_EVOLUCAO_PESQUISA, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigCorpo,
+                     ConfigEvolucaoPesquisa, ConfigMundo, ConfigOlfato, ConfigOuvido)
+from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
 
@@ -92,14 +108,50 @@ CONTAS_METABOLISMO = ("convertido", "descartado_teto", "mobilizado", "gasto_basa
 DRIVES_DO_ESTRESSE = ("fome", "desconforto", "cansaco", "tedio", "curiosidade", "solidao", "dor")   # secao 7, os que o estresse le
 ATIVIDADES = ("bola", "brincar", "explorar", "dono_brinca")       # DS-4: as atividades que reduzem o tedio e entram na janela
 VALOR_TAPA = "tapa"                                               # AcaoUsuario.TAPA (o enum e do A, etapa 6): o corpo o le pelo valor
+# os orgaos do Olfato e da Audicao (secao 5.6 dos dois pets)
+CANAIS_OLFATO = ("comida", "outro")                               # sub-chaves `comida` e `outro_pet` (o outro pet; com dois pets, um so)
+SONS = ("comendo", "bola", "chamado", "emburrado")                # secao 5.4: o barulho de uma acao do outro pet
+LADOS = ("esq", "dir")
+PREFIXO_ADAPTACAO = "adaptacao_"
 
 
-def quimicos_de(cc: ConfigCorpo, com_mundo: bool = False) -> tuple[str, ...]:
+def _nomes_por_lado(base: str, n: int) -> tuple[tuple[str, str | None], ...]:
+    return ((base, None),) if n == 1 else tuple((f"{base}_{lado}", lado) for lado in LADOS)
+
+
+def todos_receptores_orgaos() -> tuple[str, ...]:
+    """Todos os nomes de receptor de orgao que podem existir (uma ou duas narinas, um ou dois ouvidos): os campos da PercepcaoCorpo."""
+    nomes = []
+    for canal in CANAIS_OLFATO:
+        nomes += [n for k in (1, 2) for n, _ in _nomes_por_lado(f"olfato_{canal}", k)]
+    for som in SONS:
+        nomes += [n for k in (1, 2) for n, _ in _nomes_por_lado(f"ouvido_{som}", k)]
+    return tuple(nomes)
+
+
+def orgaos_de(co: ConfigOlfato | None, cv: ConfigOuvido | None) -> tuple[Orgao, ...]:
+    """Os orgaos ligados, na ordem: o Olfato (comida, outro; esq, dir), depois a Audicao (SONS; esq, dir)."""
+    orgaos = []
+    if co is not None and co.ligada:
+        for canal, ligado in (("comida", co.comida), ("outro", co.outro_pet)):
+            if ligado:
+                orgaos += [Orgao(n, PREFIXO_ADAPTACAO + n, "olfato", canal, lado, co.limiar, co.meia_saturacao)
+                           for n, lado in _nomes_por_lado(f"olfato_{canal}", co.narinas)]
+    if cv is not None and cv.ligada:
+        for som in SONS:
+            orgaos += [Orgao(n, PREFIXO_ADAPTACAO + n, "ouvido", som, lado, cv.limiar, cv.meia_saturacao)
+                       for n, lado in _nomes_por_lado(f"ouvido_{som}", cv.ouvidos)]
+    return tuple(orgaos)
+
+
+def quimicos_de(cc: ConfigCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
+                cfg_ouvido: ConfigOuvido | None = None) -> tuple[str, ...]:
     """Os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
-    mundo fisico)."""
+    mundo fisico); por ultimo, a adaptacao de cada orgao do Olfato e da Audicao ligado."""
     novos = tuple(n for n in NOVOS if n != "curiosidade" or com_mundo) if cc.drives_novos else ()
     return (QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ()) + novos
-            + (GESTOS if cc.gestos else ()) + (BANHEIRO if cc.banheiro else ()) + (METABOLISMO if cc.metabolismo else ()))
+            + (GESTOS if cc.gestos else ()) + (BANHEIRO if cc.banheiro else ()) + (METABOLISMO if cc.metabolismo else ())
+            + tuple(o.adaptacao for o in orgaos_de(cfg_olfato, cfg_ouvido)))
 
 
 TOLERANCIA_GRADE = 1e-6                                           # quanto um numero de hoje x C pode fugir de um inteiro (so erro de float)
@@ -171,6 +223,39 @@ PARAMETROS_CORPO: dict[str, tuple[str, str]] = {
     "gasto_atividades_den": ("PROPOSTO", "ME-3 e ME-7: 1/1, o mesmo numero do cansaco; o passo 0 da calibracao escala (no gasto_atividades)"),
 }
 
+# Status dos campos da ConfigOlfato e da ConfigOuvido (conferido por teste). As chaves sao DECIDIDAS (DP-13 e DP-14, 2026-10-11); os
+# numeros, PROPOSTOS, SEM FONTE (o plano os fixa por adendo, antes de qualquer run).
+_FONTE_ORGAO = "docs/futuro/dois_pets.md, secao 5.6: desenho nosso, sem fonte; o plano fixa por adendo"
+PARAMETROS_OLFATO: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "DP-13 (2026-10-11): o orgao do Olfato atras de chave desligada"),
+    "narinas": ("DECIDIDO", "DP-13 (2026-10-11): a opcao (b), duas narinas"),
+    "comida": ("DECIDIDO", "DP-13: a sub-chave do Olfato alimentar, separada da social"),
+    "outro_pet": ("DECIDIDO", "DP-13: a sub-chave do Olfato social (degrau 1b), separada da alimentar"),
+    "limiar": ("PROPOSTO", _FONTE_ORGAO),
+    "meia_saturacao": ("PROPOSTO", _FONTE_ORGAO),
+    "meia_vida_adaptacao": ("PROPOSTO", _FONTE_ORGAO),
+    "k_adaptacao": ("PROPOSTO", "= k_meia_vida(meia_vida_adaptacao), a regra da secao 3 do corpo"),
+    "teto_intensidade": ("PROPOSTO", _FONTE_ORGAO),
+    "afastamento_narinas": ("PROPOSTO", "lado do mundo (A): " + _FONTE_ORGAO),
+    "cheiro_pet": ("PROPOSTO", "secao 5.3 (A_pet): " + _FONTE_ORGAO),
+    "cheiro_marca": ("PROPOSTO", "secao 5.3 (A_marca): " + _FONTE_ORGAO),
+    "raio_celulas": ("PROPOSTO", "secao 5.3 (R), lado do mundo (A): " + _FONTE_ORGAO),
+    "idade_marca": ("PROPOSTO", "secao 5.3 (T), lado do mundo (A): " + _FONTE_ORGAO),
+    "max_marcas": ("PROPOSTO", "secao 5.3 (max_marcas), lado do mundo (A): " + _FONTE_ORGAO),
+}
+PARAMETROS_OUVIDO: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "DP-14 (2026-10-11): o orgao da Audicao atras de chave desligada"),
+    "ouvidos": ("DECIDIDO", "DP-14 (2026-10-11): a opcao (b), dois ouvidos"),
+    "limiar": ("PROPOSTO", _FONTE_ORGAO),
+    "meia_saturacao": ("PROPOSTO", _FONTE_ORGAO),
+    "meia_vida_adaptacao": ("PROPOSTO", _FONTE_ORGAO),
+    "k_adaptacao": ("PROPOSTO", "= k_meia_vida(meia_vida_adaptacao), a regra da secao 3 do corpo"),
+    "teto_intensidade": ("PROPOSTO", _FONTE_ORGAO),
+    "afastamento_ouvidos": ("PROPOSTO", "lado do mundo (A): " + _FONTE_ORGAO),
+    "som": ("PROPOSTO", "secao 5.4 (A do som), lado do mundo (A): " + _FONTE_ORGAO),
+    "raio_som_celulas": ("PROPOSTO", "secao 5.4 (R_som = 16 celulas), lado do mundo (A): " + _FONTE_ORGAO),
+}
+
 
 # ------------------------------------------------------------------ inteiros
 
@@ -200,6 +285,25 @@ def k_meia_vida(h: int, bits: int = 16) -> int:
     if h <= 0:
         raise ValueError(f"meia-vida nao positiva: {h}")
     return int((2 ** bits) * (1.0 - 2.0 ** (-1.0 / h)) + 0.5)
+
+
+def passo_adaptacao(a: int, estimulo: int, k: int, bits: int = 16) -> int:
+    """Um tick da adaptacao de um orgao (secao 5.6 dos dois pets): a anda para o estimulo, a + div_arred((I - a) k, 2**bits), com passo
+    de pelo menos 1 enquanto a != I (o mesmo minimo da meia-vida: chega ao estimulo e nao fica presa). Nunca passa do estimulo. Com I = 0
+    e o `passo_meia_vida`."""
+    d = estimulo - a
+    if d == 0:
+        return a
+    s = div_arred(d * k, 2 ** bits)
+    if s == 0:
+        s = 1 if d > 0 else -1
+    return a + s
+
+
+def leitura_orgao(estimulo: int, a: int, limiar: int, meia_saturacao: int, S: int) -> int:
+    """O receptor de um orgao: e = max(0, I - a - limiar) e r = div_arred(S e, e + K), em [0, S)."""
+    e = max(0, estimulo - a - limiar)
+    return div_arred(S * e, e + meia_saturacao) if e else 0
 
 
 def passo_meia_vida(q: int, k: int, bits: int = 16) -> int:
@@ -296,14 +400,23 @@ MEIAS_VIDAS = {"estresse": ("k_meia_vida_estresse", 1440), "dor": ("k_meia_vida_
 RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS + BANHEIRO}}     # o nome do receptor (o campo da PercepcaoCorpo)
 
 
-def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False) -> Grafo:
+def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
+                   cfg_ouvido: ConfigOuvido | None = None) -> Grafo:
     """A tabela unica do corpo com estas chaves (secao 18). Os numeros de hoje vem das taxas (`t`) e os da etapa 6 da ConfigCorpo; os
     estimulos que vem de fora com quantidade variavel (a bola, a fruta, o andar, a comida podre) guardam so o sinal. Com a digestao, a
-    comida (a racao, o comer, a fruta) entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome."""
+    comida (a racao, o comer, a fruta) entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome. Com os orgaos do
+    Olfato e da Audicao, o quimico da adaptacao de cada receptor (com a meia-vida do orgao) e o `Orgao`; com o Olfato social, os emissores
+    externos do cheiro proprio e do rastro."""
     C = cc.escala
-    nomes = quimicos_de(cc, com_mundo)
+    orgaos = orgaos_de(cfg_olfato, cfg_ouvido)
+    adaptacoes = {o.adaptacao: (cfg_olfato if o.sentido == "olfato" else cfg_ouvido) for o in orgaos}
+    nomes = quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido)
     quimicos = []
     for n in nomes:
+        if n in adaptacoes:
+            co = adaptacoes[n]
+            quimicos.append(Quimico(n, co.teto_intensidade, True, None, None, co.meia_vida_adaptacao, co.k_adaptacao))
+            continue
         receptor = RECEPTOR_DE.get(n)
         leitura = None if receptor is None else ("drive" if n in QUIMICOS else "falta")
         h = MEIAS_VIDAS.get(n)
@@ -386,7 +499,11 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         em += [Emissor("carinho_conforto", "estimulo", 0, (("conforto", cc.conforto_carinho),), medo),
                Emissor("aliviar", "estimulo", 0, (("vontade", -1),), variavel=True),           # a vontade a zero
                Emissor("necessidade", "estimulo", 0, (("desconforto", cc.necessidade_desconforto),))]
-    return Grafo(tuple(quimicos), reacoes, tuple(em))
+    if cfg_olfato is not None and cfg_olfato.ligada and cfg_olfato.outro_pet:
+        # os emissores externos do Olfato social (secao 5.3): intensidade constante, destino mundo, sem leitura de quimico
+        em += [Emissor("cheiro_proprio", "posicao", 0, (("cheiro_proprio", cfg_olfato.cheiro_pet),), destino="mundo"),
+               Emissor("rastro", "decisao", 0, (("rastro", cfg_olfato.cheiro_marca),), destino="mundo")]
+    return Grafo(tuple(quimicos), reacoes, tuple(em), orgaos)
 
 
 # ------------------------------------------------------------------ orgao 2: os limiares da Vida
@@ -414,21 +531,25 @@ class Corpo:
     e o sono vem do Estado."""
 
     def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
-                 cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False) -> None:
+                 cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
+                 cfg_ouvido: ConfigOuvido | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
         if not self.cc.ligada:
             raise ValueError("Corpo com ConfigCorpo desligada: com a chave desligada o corpo nao existe")
         self.com_mundo = com_mundo
+        self.co = cfg_olfato or CONFIG_OLFATO
+        self.cv = cfg_ouvido or CONFIG_OUVIDO
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
+        self._conferir_orgaos()
         # secao 18: a tabela unica, conferida na carga (falha alto); a lista e a ordem dos quimicos saem dela
-        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo)
+        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv)
         self.relato_grafo = checar(self.grafo)
         self.quimicos = self.grafo.nomes
-        if self.quimicos != quimicos_de(self.cc, com_mundo):            # pragma: no cover - o grafo e montado de quimicos_de
+        if self.quimicos != quimicos_de(self.cc, com_mundo, self.co, self.cv):   # pragma: no cover - o grafo e montado de quimicos_de
             raise RuntimeError("o grafo e a lista de quimicos divergem")
         if set(q) != set(self.quimicos):
             raise ValueError(f"quimicos do corpo: esperava {self.quimicos}, veio {sorted(q)}")
@@ -453,10 +574,31 @@ class Corpo:
         self.contas_metabolismo = {k: 0 for k in CONTAS_METABOLISMO} if self.cc.metabolismo else None
         # orgao 2: os limiares dos receptores de estagio sobre a Vida
         self.limiares_estagio = limiares_estagio(self.cc, self.cfg_evo) if self.cc.vida else ()
+        # os orgaos do Olfato e da Audicao: o estimulo de cada receptor (o ultimo que o mundo entregou) e se ele foi entregue neste tick
+        self.orgaos = self.grafo.orgaos
+        self._orgao_de = {o.receptor: o for o in self.orgaos}
+        self._adaptacoes = frozenset(o.adaptacao for o in self.orgaos)
+        self.estimulo: dict[str, int] = {o.receptor: 0 for o in self.orgaos}
+        self._sentido = False
+
+    def _conferir_orgaos(self) -> None:
+        """Os orgaos so existem com o mundo fisico (o estimulo e a intensidade num ponto do mapa); a k da adaptacao e a da meia-vida
+        declarada (a regra da secao 3); a saturacao fica abaixo de S no teto da intensidade."""
+        for nome, c in (("ConfigOlfato", self.co), ("ConfigOuvido", self.cv)):
+            if not c.ligada:
+                continue
+            if not self.com_mundo:
+                raise ValueError(f"{nome}.ligada sem o mundo fisico: o orgao le a intensidade num ponto do mapa (secao 5.6)")
+            k = k_meia_vida(c.meia_vida_adaptacao, self.cc.bits_meia_vida)
+            if c.k_adaptacao != k:
+                raise ValueError(f"{nome}.k_adaptacao {c.k_adaptacao} nao e a da meia-vida {c.meia_vida_adaptacao}: {k}")
+            if leitura_orgao(c.teto_intensidade, 0, c.limiar, c.meia_saturacao, self.S) >= self.S:
+                raise ValueError(f"{nome}: a saturacao chega a S no teto da intensidade ({c.teto_intensidade}); o receptor e em [0, S)")
 
     @classmethod
     def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
-                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False) -> Corpo:
+                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
+                  cfg_ouvido: ConfigOuvido | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -469,9 +611,9 @@ class Corpo:
         if cc.metabolismo:
             q["combustivel"] = cc.combustivel_inicial
             q["reserva"] = cc.reserva_inicial
-        for nome in quimicos_de(cc, com_mundo):
-            q.setdefault(nome, 0)                          # os drives novos e os gestos: zero no nascimento
-        return cls(q, cfg, cc, cfg_evo, com_mundo)
+        for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido):
+            q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
+        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido)
 
     # ---------------------------------------------------------- estimulos
 
@@ -657,6 +799,43 @@ class Corpo:
             self.descartado_total += self.q["alimento"]
             self.q["alimento"] = 0
 
+    # ---------------------------------------------------------- os orgaos do Olfato e da Audicao (secao 5.6 dos dois pets)
+
+    def sentir(self, intensidades: dict[str, int]) -> None:
+        """O estimulo de cada receptor de orgao, entregue pelo mundo: a intensidade no ponto da narina (do ouvido), um inteiro >= 0 por
+        nome, exatamente os receptores ligados, sem direcao. O que passa do teto da intensidade e cortado (o resto descartado). Nao mexe
+        na adaptacao: ela anda no tick. Sem orgao ligado, falha alto."""
+        if not self.orgaos:
+            raise ValueError("sentir sem orgao ligado (ConfigOlfato e ConfigOuvido desligadas)")
+        if set(intensidades) != set(self.estimulo):
+            raise ValueError(f"os receptores dos orgaos sao {sorted(self.estimulo)}, veio {sorted(intensidades)}")
+        for nome, v in intensidades.items():
+            if type(v) is not int or v < 0:
+                raise ValueError(f"a intensidade de {nome} precisa ser inteiro >= 0 (so a intensidade, sem direcao): {v!r}")
+            o = self._orgao_de[nome]
+            self.estimulo[nome] = min(v, self.grafo.quimico(o.adaptacao).teto)
+        self._sentido = True
+
+    def _adaptar(self) -> None:
+        """A adaptacao de cada orgao anda para o estimulo do tick, com a k da meia-vida dele (o quimico da adaptacao)."""
+        if not self._sentido:
+            raise RuntimeError("tick com orgao sem `sentir` desde o tick anterior: o estimulo estaria velho (o mundo entrega a cada tick)")
+        bits = self.cc.bits_meia_vida
+        for o in self.orgaos:
+            qm = self.grafo.quimico(o.adaptacao)
+            self.q[o.adaptacao] = passo_adaptacao(self.q[o.adaptacao], self.estimulo[o.receptor], qm.k_meia_vida, bits)
+        self._sentido = False
+
+    def leituras_orgaos(self) -> dict[str, int]:
+        """Os receptores dos orgaos, na escala S, pelo nome (secao 5.6): o estimulo menos a adaptacao e o limiar, saturado."""
+        return {o.receptor: leitura_orgao(self.estimulo[o.receptor], self.q[o.adaptacao], o.limiar, o.meia_saturacao, self.S)
+                for o in self.orgaos}
+
+    def emissoes_externas(self) -> dict[str, tuple[str, int]]:
+        """O que o corpo emite para o mundo (secao 5.3), dos emissores externos da tabela: canal -> (gatilho, intensidade). Com o Olfato
+        social, o cheiro proprio ("posicao") e o rastro ("decisao"); sem ele, nada. Intensidade constante: nada do estado vai junto."""
+        return {c: (e.gatilho, a) for e in self.grafo.externos() for c, a in e.efeitos}
+
     # ---------------------------------------------------------- o tick
 
     def em_privacao(self) -> bool:
@@ -731,8 +910,10 @@ class Corpo:
         self._somar(deltas)
         bits = self.cc.bits_meia_vida
         for qm in self.grafo.quimicos:
-            if qm.k_meia_vida is not None:
+            if qm.k_meia_vida is not None and qm.nome not in self._adaptacoes:
                 self.q[qm.nome] = passo_meia_vida(self.q[qm.nome], qm.k_meia_vida, bits)
+        if self.orgaos:
+            self._adaptar()                                      # os orgaos: a adaptacao anda para o estimulo do tick
         if self.cc.digestao:
             self.digerido_no_tick = self.digerido_tick          # o tick fechou: a taxa volta inteira no proximo
             self.digerido_tick = 0
@@ -765,8 +946,11 @@ class Corpo:
     def receptores(self) -> dict[str, int]:
         """O que o pet sente, na escala S, pelos receptores da tabela (secao 10): os drives de hoje leem o drive, S - falta; os drives
         novos leem a falta, e a dor e o susto a concentracao (a mesma conta, div_arred(q S, C)). Pelo nome do receptor."""
-        return {qm.receptor: (self.S - self.falta(qm.nome) if qm.leitura == "drive" else self.falta(qm.nome))
-                for qm in self.grafo.receptores()}
+        r = {qm.receptor: (self.S - self.falta(qm.nome) if qm.leitura == "drive" else self.falta(qm.nome))
+             for qm in self.grafo.receptores()}
+        if self.orgaos:
+            r.update(self.leituras_orgaos())
+        return r
 
     def estagio(self) -> str:
         """Os receptores de estagio sobre a Vida (so com o orgao 2): o estagio e o numero de limiares que a Vida ja cruzou. Com a Vida
@@ -788,4 +972,6 @@ class Corpo:
             d["resto_vontade"] = self.resto_vontade
         if self.cc.metabolismo:
             d["metabolismo"] = {"resto_combustivel": self.resto_combustivel, "contas": dict(self.contas_metabolismo)}
+        if self.orgaos:
+            d["orgaos"] = {"estimulo": dict(self.estimulo), "sentido": self._sentido}
         return d

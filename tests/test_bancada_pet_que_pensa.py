@@ -4,7 +4,8 @@ a 4, 7 e 8), so com as sementes dos testes.
 O que se confere:
 - as faixas 45101...45505 e 46101...46505 com a fonte, o prefixo `pet_que_pensa` e as bases das duas fases;
 - a fruta x e a y da unidade pelas rngs proprias (uniformes, sem tocar o `random` global) e os efeitos (a x faz bem; no T1, depois, mal);
-- os bracos: o P1 roda; os tres com o planejador falham alto com o no (NOS_PENDENTES["planejador"]) e, sem o no, com a fiacao do g_plano;
+- os bracos: o P1 roda; os tres com o planejador pedem o g_plano da config (os testes deles, com o planejador do #294, ficam em
+  tests/test_bancada_pqp_plano.py);
 - a regra da mudanca (o primeiro passo do dono a partir das 8 h do dia D_a com o pet acordado) e o motor da mudanca: no T1 a primeira fruta
   na mao troca o efeito da x e as duas maos entram no log fora do orcamento; no T2 a troca de tipo; na fase 1, nada;
 - o G1 de toda vida pelo texto do log; um log mexido falha alto;
@@ -13,7 +14,7 @@ O que se confere:
   decidem com g_plano 0), e o gate falha alto se o modelo congelado mudar;
 - as medidas da secao 4 (a oportunidade do T1, a busca e a exposicao do T2, o corte da reexperiencia, q e m) em dados com a resposta
   conhecida;
-- a config: as recusas (o plano, as bases, a montagem, o corpo do passo 0, os bracos com o planejador) e a fumaca inteira pelo rodar_pqp.
+- a config: as recusas (o plano, as bases, a montagem, o corpo do passo 0, o g_plano) e a fumaca inteira pelo rodar_pqp.
 """
 from __future__ import annotations
 
@@ -118,18 +119,16 @@ def test_os_bracos_do_plano():
 
 
 @pytest.mark.parametrize("braco", ["P1-plan", "P1-plan-desfecho", "P1-plan-cong"])
-def test_os_bracos_com_o_planejador_falham_alto(braco, monkeypatch):
-    assert "planejador" in bv.NOS_PENDENTES
-    with pytest.raises(NotImplementedError, match="etapa 2"):
-        bv.braco_pqp(braco)
-    with pytest.raises(NotImplementedError, match="etapa 2"):
-        _bp().vida(bv.EspecPQP(braco, "T1", 101))
-    with pytest.raises(NotImplementedError, match="etapa 2"):
+def test_os_bracos_com_o_planejador_pedem_o_g_plano(braco):
+    assert "planejador" not in bv.NOS_PENDENTES and bv.braco_pqp(braco).planejador
+    # sem o g_plano, o braco nunca vira o P1 em silencio: falha alto na config, na vida e no cerebro
+    with pytest.raises(ValueError, match="g_plano"):
         bv.validar_config_pqp(_cfg(bracos=["P1", braco]))
-    # sem o no, o braco ainda nao vira o P1 em silencio: o g_plano entra com o planejador
-    monkeypatch.setattr(bv, "NOS_PENDENTES", {})
-    with pytest.raises(NotImplementedError, match="g_plano"):
+    with pytest.raises(ValueError, match="g_plano"):
+        _bp().vida(bv.EspecPQP(braco, "T1", 101))
+    with pytest.raises(ValueError, match="g_plano"):
         _bp().politica(bv.EspecPQP(braco, "T1", 101))
+    bv.validar_config_pqp(_cfg(bracos=["P1", braco], g_plano=256))
 
 
 def test_o_cerebro_do_p1():
@@ -240,6 +239,10 @@ def test_g_sem_credito_e_a_mao_no_desfecho():
     assert ultimo["desfecho"][v.x][ih] < 0                                   # o modelo aprendeu o mal da x pela mao
 
 
+def modelo_ign(v):
+    return v.motor.politica._pm.cerebro.modelo.ignoradas
+
+
 def _congelado(congela):
     return {**bv.BRACOS_PQP, "P1-teste": bv.BracoPQP("P1-teste", False, congela)}
 
@@ -255,7 +258,9 @@ def test_o_congelamento_pp8(congela, monkeypatch):
     sem = lambda m: {k: x for k, x in json.loads(bv._interno(m)).items() if k != "modelo_mundo"}  # noqa: E731
     assert sem(v.motor) == sem(base.motor)
     med = bp.medir(v)
-    assert med["congelamento"] == {"tick": v.tick_mudanca, "partes": list(congela), "conferido": True}
+    assert {k: med["congelamento"][k] for k in ("tick", "partes", "conferido")} == {"tick": v.tick_mudanca, "partes": sorted(congela),
+                                                                                    "conferido": True}
+    assert modelo_ign(v)["mapa"] > 0 and (modelo_ign(v)["desfecho"] > 0) == ("desfecho" in congela)
     assert med["maos_no_modelo"] == (0 if "desfecho" in congela else 2)
     modelo = v.motor.politica._pm.cerebro
     retrato = {k: json.loads(x) for k, x in modelo.retrato_congelamento.items()}
@@ -349,7 +354,11 @@ def test_as_medidas_de_uma_vida():
     assert t2["m"] == t2["subida"] and (t2["exposicao"] is None) == t2["sem_exposicao"]
     assert med["desempenho"]["d_fe_janela"] is not None and med["custo"]["bytes_log_por_dia"] > 0
     assert [r["dia"] for r in med["modelos_por_dia"]] == [1, 2, 3]
-    assert "planejador" in med["nao_medidos"]["quanto_o_plano_decide"]
+    # o P1 (g_plano 0): o plano nunca decide, nenhum fator do plano, e o G2 conferido (o termo zero em toda decisao)
+    assert med["g_plano"] == 0 and med["g2"] == {"planejador": False, "decisoes_com_termo": 0, "conferido": True}
+    assert med["plano"]["decidiu"] == 0 and med["plano"]["com_alvo"] > 0 and len(med["plano"]["por_dia"]) == 3
+    assert med["legibilidade"]["com_fator"] == 0 and med["legibilidade"]["textos"] == {}
+    assert set(med["nao_medidos"]) == {"deriva"}
     med1 = _bp().medir(_vida("P1", "T1"))
     assert med1["t1"]["q"] == med1["t1"]["queda"] and "t2" not in med1
 
@@ -381,8 +390,15 @@ def test_a_config_recusa():
         bv.validar_config_pqp({**cal, "montagem": "simples", "passo0": p0, "corpo": corpo})
     with pytest.raises(ValueError, match="protocolos"):
         bv.validar_config_pqp(_cfg(protocolos=["T3"]))
-    with pytest.raises(ValueError, match="sobram"):
+    with pytest.raises(ValueError, match="sem braco com o planejador"):
         bv.validar_config_pqp(_cfg(g_plano=256))
+    for g in (0, -1, 256.0, "256"):
+        with pytest.raises(ValueError, match="g_plano"):
+            bv.validar_config_pqp(_cfg(bracos=["P1-plan"], g_plano=g))
+    with pytest.raises(ValueError, match="lobos"):                           # o P1 o teria: so a chave propria
+        bv.validar_config_pqp(_cfg(bracos=["P1-plan"], g_plano=256, lobos={"g_plano": 256}))
+    with pytest.raises(ValueError, match="lobos"):
+        bv.BancadaPQP(replace(_bp().bancada, cfg_lobos=replace(_bp().bancada.cfg_lobos, g_plano=256)), **CURTA)
 
 
 def test_a_fumaca_inteira(tmp_path):

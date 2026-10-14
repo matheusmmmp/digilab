@@ -63,7 +63,7 @@ from .donos import Visao
 from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
-from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
+from .mundo import (CANDIDATOS_SOCIAIS, PASSO_INICIAL, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
                     cheiro_do_pet, direcao_vizinha, distancia, em_contato, fontes_do_pet, perceber_social, som_ouvido, tipos_do_contato)
 from .protocol import derivar_semente
 
@@ -215,9 +215,10 @@ class Grupo:
                 raise ValueError(f"efeito_frutas diferente entre os pets: {outro.efeito_frutas} x {motor.efeito_frutas}")
         if motor._estado.tick != 0 or len(motor.log):
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
+        self._conferir_orgaos(motor)
         motor._grupo, motor.ident = self, ident
-        if self.cs.ligada:
-            motor._passo = self.cs.passo_inicial     # a direcao do ultimo passo antes do primeiro passo
+        if self.cs.ligada and motor._passo is None:
+            motor._passo = PASSO_INICIAL             # a direcao do ultimo passo antes do primeiro passo
         self.motores[ident] = motor
         self.registro.cabecalho["pets"][ident] = {"semente": self.sementes[ident], "entrada": self.tick, "cerebro": cerebro, "dono": dono}
         self.registro.anexar(EventoGrupo(self.tick, "entrada", ident, DESTINO_GRUPO, ident))
@@ -284,6 +285,29 @@ class Grupo:
         return perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao, sentidos)
 
     # ------------------------------------------------------------ o cheiro proprio, o rastro e o som (etapa 8; degrau 1b)
+    MUNDO_OLFATO = ("afastamento_narinas", "cheiro_pet", "cheiro_marca", "raio_celulas", "idade_marca", "max_marcas")
+    MUNDO_OUVIDO = ("afastamento_ouvidos", "som", "raio_som_celulas")
+
+    def _conferir_orgaos(self, motor: MotorMundo) -> None:
+        """O orgao do corpo de um pet do grupo le o mundo do grupo: o Olfato social e a Audicao exigem a ConfigSentidos ligada, e os
+        numeros do mundo do orgao (o afastamento, o rastro, o raio, o som) tem de ser os do grupo (uma config so; falha alto)."""
+        co, cv = getattr(motor, "co", None), getattr(motor, "cv", None)
+        corpo = getattr(motor, "cc", None)
+        if corpo is None or not corpo.ligada:
+            return
+        if co is not None and co.ligada:
+            if co.outro_pet and not self.cs.ligada:
+                raise ValueError("o Olfato social (ConfigOlfato.outro_pet) no grupo exige a ConfigSentidos ligada (o rastro e do mundo)")
+            difs = [c for c in self.MUNDO_OLFATO if getattr(co, c) != getattr(self.cs.olfato, c)]
+            if difs:
+                raise ValueError(f"os numeros do mundo do olfato do pet nao sao os do grupo: {difs}")
+        if cv is not None and cv.ligada:
+            if not self.cs.ligada:
+                raise ValueError("a Audicao (ConfigOuvido) no grupo exige a ConfigSentidos ligada (o som e do mundo)")
+            difs = [c for c in self.MUNDO_OUVIDO if getattr(cv, c) != getattr(self.cs.ouvido, c)]
+            if difs:
+                raise ValueError(f"os numeros do mundo do ouvido do pet nao sao os do grupo: {difs}")
+
     def sentidos_ativos(self) -> bool:
         """o degrau 1b guarda e emite so com a chave e com dois pets presentes (desenho, secao 5: sozinho, nada e guardado)"""
         return self.cs.ligada and len(self.motores) >= 2
@@ -294,8 +318,8 @@ class Grupo:
         m, sub = self.motores[ident], self.mundo.cmf.sub
         cheiro = []
         for i in outros:
-            fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs)
-            cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs, sub)))
+            fontes = fontes_do_pet(*self.motores[i].pet, self.mundo.marcas_de(i), self.tick, self.cs.olfato)
+            cheiro.append((i, *cheiro_do_pet(*m.pet, m._passo, fontes, self.cs.olfato, sub)))
         sons = tuple((*s[:7], self.tick - s[7]) for s in m._sons_ouvidos)
         return PercepcaoSentidos(m._passo, tuple(cheiro), sons)
 
@@ -313,10 +337,14 @@ class Grupo:
                 continue
             m = self.motores[i]
             onde[i] = [*m.pet, m._passo]               # onde estava e para onde olhava cada outro (a auditoria e as medidas)
-            ouvido = som_ouvido(*m.pet, m._passo, sx, sy, self.cs, self.mundo.cmf.sub)
+            ouvido = som_ouvido(*m.pet, m._passo, sx, sy, self.cs.ouvido, self.mundo.cmf.sub)
             if ouvido is None:
                 continue
             m._sons_ouvidos.append((quem, som, *ouvido, self.tick))
+            # o orgao do ouvido (DP-14): o som entra no passo do tick do mundo em que o ouvinte esta (o deste tick, se ele ainda nao andou
+            # o tick; o seguinte, se ja andou)
+            if getattr(m, "cv", None) is not None and m.cv.ligada and m.cc.ligada:
+                m._sons_orgao.append((m._tm(m._estado.tick), som, *ouvido[2:]))
             ouvintes.append(i)
         self.sons.append({"tick": self.tick, "emissor": quem, "som": som, "x": sx, "y": sy, "ouvintes": ouvintes, "outros": onde})
 
@@ -417,7 +445,8 @@ class Grupo:
              "contatos": self.contatos, "disputas": self.disputas,
              "pets": {i: _resumo_do_pet(m) for i, m in self.motores.items()}}
         if self.cs.ligada:
-            r["sentidos"] = {"sons": self.sons, "pets": {i: {"passo": m._passo, "sons_ouvidos": [list(s) for s in m._sons_ouvidos]}
+            r["sentidos"] = {"sons": self.sons, "pets": {i: {"passo": m._passo, "sons_ouvidos": [list(s) for s in m._sons_ouvidos],
+                                                             "sons_orgao": [list(s) for s in m._sons_orgao]}
                                                          for i, m in self.motores.items()}}
         return r
 

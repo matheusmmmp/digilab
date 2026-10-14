@@ -1816,3 +1816,128 @@ def mudanca_de_escolha(linhas: Sequence[Mapping], n: int, tick_mudanca: int | No
             "queda": None if sem else f_antes - f_depois, "subida": None if sem else f_depois - f_antes,
             "sem_oportunidade": sem, "corte_reexperiencia": corte,
             "latencia": None if not depois_ate_corte or tick_mudanca is None else depois_ate_corte[0]["tick"] - tick_mudanca}
+
+
+# ---------------------------------------------------------------- rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 4; W-BANCADA-REDE)
+# A rede preve, em cada decisao k, as leituras dos receptores em k + n (n em decisoes). As medidas comparam a rede com as linhas de base
+# obrigatorias (D-7): a persistencia (o depois e como agora) e a media historica (o depois e a media do que ja viu, so o passado). Tudo na
+# escala S dos receptores. A bancada da as series (as leituras e as previsoes da rede, do oraculo e da rede congelada, todas por replay).
+
+RECEPTORES_FORA_DA_MEDIA = ("susto",)       # zero quase sempre: a persistencia acerta por construcao (secao 4); sai a parte
+MINIMO_DECISOES_BRIER = 20                  # R-5: com menos decisoes na conta, a vida sai do Brier e e contada
+
+
+def _div_arred(n: int, d: int) -> int:
+    """n / d em inteiros, arredondado ao mais proximo, meio longe do zero (a conta da rede de si e do corpo). d > 0."""
+    if d <= 0:
+        raise ValueError(f"divisor nao positivo: {d}")
+    q, r = divmod(abs(n), d)
+    if 2 * r >= d:
+        q += 1
+    return q if n >= 0 else -q
+
+
+def media_historica(leituras: Sequence[Sequence[int]]) -> list[list[int]]:
+    """A linha de base da media historica: em cada decisao k e receptor, `div_arred(soma_{j <= k} l_j, k + 1)`, em inteiros, so com o
+    passado (a mesma informacao que a rede ja viu). `leituras[k]` = os receptores na decisao k, na ordem do layout."""
+    if not leituras:
+        return []
+    R = len(leituras[0])
+    soma, out = [0] * R, []
+    for k, ls in enumerate(leituras):
+        if len(ls) != R:
+            raise ValueError(f"decisao {k}: {len(ls)} receptores, o layout tem {R}")
+        for i, v in enumerate(ls):
+            soma[i] += v
+        out.append([_div_arred(s, k + 1) for s in soma])
+    return out
+
+
+def mae_previsao(leituras: Sequence[Sequence[int]], previsoes: Sequence[Sequence[int]], n: int, ks: Iterable[int],
+                 receptores: Sequence[str], fora: Sequence[str] = RECEPTORES_FORA_DA_MEDIA,
+                 so: Sequence[str] | None = None) -> dict:
+    """O erro absoluto medio de um previsor no horizonte n: `|previsoes[k][r] - leituras[k + n][r]|`, nas decisoes k de `ks` com k + n
+    dentro da vida (as outras saem da conta). `mae` = a media sobre os receptores (sem os de `fora`; com `so`, so esses) e as decisoes;
+    `por_receptor` traz todos, os de fora inclusive. Sem decisao na conta: `mae` None (contado em `n`)."""
+    if n <= 0:
+        raise ValueError(f"horizonte n tem de ser positivo: {n}")
+    if len(previsoes) != len(leituras):
+        raise ValueError(f"{len(previsoes)} previsoes para {len(leituras)} decisoes")
+    usados = [i for i, r in enumerate(receptores) if (r not in fora if so is None else r in so)]
+    if so is not None and len(usados) != len(set(so)):
+        raise ValueError(f"receptores pedidos {list(so)} fora do layout {list(receptores)}")
+    soma_r = [0] * len(receptores)
+    conta = 0
+    for k in ks:
+        if k < 0 or k + n >= len(leituras):
+            continue
+        p, real = previsoes[k], leituras[k + n]
+        for i in range(len(receptores)):
+            soma_r[i] += abs(p[i] - real[i])
+        conta += 1
+    por = {r: (soma_r[i] / conta if conta else None) for i, r in enumerate(receptores)}
+    mae = sum(soma_r[i] for i in usados) / (conta * len(usados)) if conta and usados else None
+    return {"mae": mae, "n": conta, "por_receptor": por}
+
+
+def previsao_persistencia(leituras: Sequence[Sequence[int]]) -> list[list[int]]:
+    """A linha de base da persistencia: a previsao de k + n, feita em k, e a leitura de k."""
+    return [list(ls) for ls in leituras]
+
+
+def brier_skill(probabilidades: Sequence[float], eventos: Sequence[int], minimo: int = MINIMO_DECISOES_BRIER) -> dict:
+    """O Brier skill de uma previsao binaria contra a taxa-base do evento nas mesmas decisoes (secao 4): `1 - Brier / Brier_base`, com
+    Brier = media de (p - e)^2 e Brier_base = media de (f - e)^2, f = a frequencia do evento. Com menos de `minimo` decisoes (R-5) ou
+    com a base sem variancia (o evento sempre igual), o skill nao existe: `bss` None e `fora` com o motivo."""
+    if len(probabilidades) != len(eventos):
+        raise ValueError(f"{len(probabilidades)} probabilidades para {len(eventos)} eventos")
+    if any(e not in (0, 1) for e in eventos):
+        raise ValueError("eventos tem de ser 0 ou 1")
+    if any(not 0.0 <= p <= 1.0 for p in probabilidades):
+        raise ValueError("probabilidades fora de [0, 1]")
+    n = len(eventos)
+    base = {"n": n, "eventos": sum(eventos), "bss": None, "brier": None, "brier_base": None, "fora": None}
+    if n < minimo:
+        return {**base, "fora": f"menos de {minimo} decisoes"}
+    f = sum(eventos) / n
+    brier = sum((p - e) ** 2 for p, e in zip(probabilidades, eventos)) / n
+    brier_base = sum((f - e) ** 2 for e in eventos) / n
+    if brier_base == 0:
+        return {**base, "brier": brier, "brier_base": 0.0, "fora": "a base nao tem variancia (o evento e sempre igual)"}
+    return {**base, "brier": brier, "brier_base": brier_base, "bss": 1.0 - brier / brier_base}
+
+
+def _normalizar(pesos: Mapping[str, float], candidatos: Sequence[str]) -> dict:
+    """A distribuicao sobre os candidatos (soma 1); sem massa, uniforme."""
+    tot = sum(pesos.get(a, 0.0) for a in candidatos)
+    if tot <= 0:
+        return {a: 1.0 / len(candidatos) for a in candidatos}
+    return {a: pesos.get(a, 0.0) / tot for a in candidatos}
+
+
+def brier_skill_multiclasse(decisoes: Sequence[tuple[Sequence[str], Mapping[str, float], str]],
+                            minimo: int = MINIMO_DECISOES_BRIER) -> dict:
+    """O Brier skill de varias classes (secao 4, BSS_NASC). Cada decisao e (candidatos, pesos da previsao por acao, a classe observada).
+    A previsao e os pesos normalizados sobre os candidatos; a base e a frequencia de cada classe nas mesmas decisoes, tambem
+    normalizada sobre os candidatos da decisao. Brier = media da soma, sobre os candidatos, de (p_a - 1[a = c])^2. Com menos de `minimo`
+    decisoes ou sem variancia na base, `bss` None e `fora` com o motivo."""
+    n = len(decisoes)
+    base = {"n": n, "bss": None, "brier": None, "brier_base": None, "fora": None, "frequencias": None}
+    if n < minimo:
+        return {**base, "fora": f"menos de {minimo} decisoes"}
+    freq: dict = {}
+    for cands, _p, c in decisoes:
+        if c not in cands:
+            raise ValueError(f"classe {c!r} fora dos candidatos {list(cands)}")
+        freq[c] = freq.get(c, 0) + 1
+    frequencias = {a: v / n for a, v in sorted(freq.items())}
+    brier = brier_base = 0.0
+    for cands, pesos, c in decisoes:
+        p, f = _normalizar(pesos, cands), _normalizar(frequencias, cands)
+        brier += sum((p[a] - (1.0 if a == c else 0.0)) ** 2 for a in cands)
+        brier_base += sum((f[a] - (1.0 if a == c else 0.0)) ** 2 for a in cands)
+    brier, brier_base = brier / n, brier_base / n
+    if brier_base == 0:
+        return {**base, "brier": brier, "brier_base": 0.0, "frequencias": frequencias,
+                "fora": "a base nao tem variancia (a classe e sempre a mesma, ou um candidato so)"}
+    return {**base, "brier": brier, "brier_base": brier_base, "frequencias": frequencias, "bss": 1.0 - brier / brier_base}
