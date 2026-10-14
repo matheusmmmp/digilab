@@ -51,6 +51,10 @@ Os orgaos do Olfato e da Audicao (docs/TAREFA_V2_DOIS_PETS.md, etapa 8b; docs/fu
 estimulo de cada receptor (`Corpo.sentir`) antes de cada tick e antes de cada percepcao. O estimulo vem do gancho do lado do mundo
 `_intensidades_do_orgao()` (do A: a intensidade no ponto de cada narina e de cada ouvido, um inteiro por nome de receptor, sem direcao);
 o motor sem o gancho falha alto na construcao. Os receptores vao a `PercepcaoCorpo` pelos nomes de `corpo.todos_receptores_orgaos`.
+A troca da digestao (rede de si, etapa 2b; RS-3): com `troca_digestao=(tick, taxa)`, no comeco do primeiro tick em ou depois de `tick`
+(antes da decisao e do passo daquele tick) a `taxa_digestao` do corpo passa a `taxa`; o grafo do corpo e refeito com ela e conferido de
+novo (as quatro checagens). A troca fica em `troca_digestao` (registro derivado, como a troca do mutavel: o tick, o pedido, a taxa antes e
+depois) e no `estado()`; o replay a refaz pela mesma fabrica. Sem ela pedida, nada muda.
 """
 
 from __future__ import annotations
@@ -58,7 +62,8 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .config import CONFIG_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigOlfato, ConfigOuvido
-from .corpo import DRIVE_DO_QUIMICO, Corpo
+from .corpo import DRIVE_DO_QUIMICO, Corpo, grafo_do_corpo, taxas_de
+from .corpo_grafo import checar
 from .educacao import MotorEducacao
 from .engine import Motor
 from .events import ACOES_CORPO, ACOES_MAO, ACOES_TREINO, ACOES_TROCA_ARVORES, AcaoPet, AcaoUsuario
@@ -123,11 +128,14 @@ class MotorCorpo:
     """Mixin: vai na frente de um motor de hoje (use `com_corpo`). `cfg_corpo` liga o corpo."""
 
     def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, cfg_olfato: ConfigOlfato | None = None,
-                 cfg_ouvido: ConfigOuvido | None = None, **kw) -> None:
+                 cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
+        # rede de si, etapa 2b: a troca da digestao pedida (tick, taxa) e a feita (o registro derivado; None ate o tick)
+        self._troca_pedida = self._conferir_troca(troca_digestao)
+        self.troca_digestao: dict | None = None
         self._conferir_orgaos()
         banheiro = self._banheiro_ligado()
         if banheiro != (self.cc.ligada and self.cc.banheiro):
@@ -176,6 +184,32 @@ class MotorCorpo:
         if not callable(getattr(self, "_intensidades_do_orgao", None)):
             raise NotImplementedError("o motor nao tem `_intensidades_do_orgao`: o lado do mundo do orgao (a intensidade no ponto de "
                                       "cada narina e de cada ouvido) e do A, etapa 8b")
+
+    def _conferir_troca(self, troca) -> tuple[int, int] | None:
+        """A troca da digestao so com o corpo e a digestao ligados, um tick positivo e uma taxa inteira positiva diferente da de hoje."""
+        if troca is None:
+            return None
+        tick, taxa = troca
+        if not (self.cc.ligada and self.cc.digestao):
+            raise ValueError("a troca da digestao exige o corpo com a digestao (ConfigCorpo.digestao)")
+        if type(tick) is not int or tick <= 0 or type(taxa) is not int or taxa <= 0:
+            raise ValueError(f"troca da digestao: tick e taxa inteiros positivos, veio {troca!r}")
+        if taxa == self.cc.taxa_digestao:
+            raise ValueError(f"troca da digestao para a mesma taxa ({taxa}): nao e troca")
+        return tick, taxa
+
+    def _trocar_digestao(self) -> None:
+        """A troca no tick (RS-3): a ConfigCorpo do motor e do corpo com a taxa nova, o grafo refeito com ela e conferido de novo."""
+        tick_pedido, nova = self._troca_pedida
+        antiga = self.cc.taxa_digestao
+        cc = replace(self.cc, taxa_digestao=nova)
+        corpo = self.corpo
+        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv)
+        if grafo.nomes != corpo.quimicos:             # pragma: no cover - a taxa nao muda os quimicos
+            raise RuntimeError("a troca da digestao mudou os quimicos do corpo")
+        corpo.cc, corpo.t, corpo.grafo, corpo.relato_grafo = cc, taxas_de(corpo.cfg, cc), grafo, checar(grafo)
+        self.cc = cc
+        self.troca_digestao = {"tick": self._estado.tick, "tick_pedido": tick_pedido, "de": antiga, "para": nova}
 
     def _orgaos_ligados(self) -> bool:
         return self.co.ligada or self.cv.ligada
@@ -249,6 +283,8 @@ class MotorCorpo:
         intervalo = self.cfg.intervalo_decisao_ticks
         for _ in range(ticks):
             self._conferir_sincronia("tick")
+            if self._troca_pedida is not None and self.troca_digestao is None and self._estado.tick >= self._troca_pedida[0]:
+                self._trocar_digestao()               # rede de si, etapa 2b: antes da decisao e do passo do tick
             if self._estado.tick >= self._proxima_decisao:
                 self._decidir(intervalo, produzidas)
             antes = self._estado
@@ -467,6 +503,8 @@ class MotorCorpo:
         d = super().estado()
         if self._ligado():
             d["corpo"] = self.corpo.para_dict()       # so com a chave: desligado, o estado() de baixo
+        if self._troca_pedida is not None:
+            d["troca_digestao"] = None if self.troca_digestao is None else dict(self.troca_digestao)
         return d
 
 

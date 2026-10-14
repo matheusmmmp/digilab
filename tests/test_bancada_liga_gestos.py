@@ -67,8 +67,8 @@ PLANO = (("P0-q", "bola"), ("P1-q", "bola"), ("P0-c", "bola"), ("P1-c", "bola"),
 def test_os_nos_do_corpo_sairam():
     # desde a W-BANCADA-PASSO0 a tabela esta vazia: o no do passo 0 (o fator do gasto das atividades) saiu com o #275; o dos canais no
     # mundo dos dois pets saiu com o #269, o do banheiro com o #265, o do cerebro social com o #266, e os do corpo seguem fora
-    # o planejador do J5 entrou na W-BANCADA-PQP-PLANO; fica so a troca da digestao do P1-c-lenta (W-BANCADA-REDE, a etapa 2b do A)
-    assert set(bv.NOS_PENDENTES) == {"digestao_lenta"} and bv.FILTROS_PENDENTES == {}
+    # o planejador do J5 entrou na W-BANCADA-PQP-PLANO, e a troca da digestao do P1-c-lenta com a etapa 2b da rede de si (o A)
+    assert bv.NOS_PENDENTES == {} and bv.FILTROS_PENDENTES == {}
     for braco, _ in PLANO:
         assert bv.braco_de(braco) is bv.BRACOS[braco]
 

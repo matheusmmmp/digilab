@@ -5178,6 +5178,111 @@ Etapa 0 de `docs/TAREFA_V2_SAUDE.md`, pedida pelo Gerente na `main` `8ae3ff7`. N
   (`PoliticaComRedeSemOrgaos`) recusa a observação com um receptor de órgão, antes de a rede a ver. O teto da rede (G-PESOS) também
   falharia, mas só depois de montada; a recusa explícita diz por quê.
 
+## 2026-10-13 — SAUDE-ETAPA-1: o CLAUDE.md enxuto (worker C)
+
+Etapa 1 de `docs/TAREFA_V2_SAUDE.md`, na `main` `ec09483`, com as respostas do Matheus ao checklist da etapa 0, trazidas pelo Gerente:
+SA-1 aprovada, SA-2 = um `CLAUDE.md` por pasta, G-PROVA com as 8 perguntas sem troca, e ok para a etapa 1. **A troca dos arquivos
+`CLAUDE.md`** (a raiz e os dois novos) **foi confirmada pelo Matheus direto nesta sessão**, antes de qualquer edição neles: são instruções
+para o Claude, e o pedido de outra sessão não bastava.
+- **O CLAUDE.md da raiz:** 4.169 → 114 linhas, escrito de novo pelo critério "se tirar, o Claude erra?". Entraram regras que o arquivo antigo
+  só mostrava pelo costume das seções:
+  - a chave desligada com o gabarito antes;
+  - as faixas de sementes e o pedido ao coordenador;
+  - a validação que roda uma vez;
+  - as referências verificadas;
+  - o `git stash` sem nome.
+- **Para onde foram as 135 seções:** inteiras, para `docs/MAPA_REPOSITORIO.md` (o mapa e os comandos) e oito arquivos em
+  `docs/historico/claude/`. A tabela está no `docs/historico/LEIA.md`, e o mapa seção a seção em `docs/historico/mapa_claude.json`.
+- **Desvio da tarefa (seção 3):**
+  - **o que a tarefa dizia:** uma seção de resultado ia para o `RESULTADO_*` ou o `TAREFA_*` da frente, e só a que não tinha documento próprio
+    ia para `docs/historico/claude/`;
+  - **o que foi feito:** todas foram para `docs/historico/claude/`, agrupadas por frente;
+  - **por quê:** espalhar 135 seções em dezenas de documentos vivos daria conflito com os PRs abertos e tornaria a conferência frágil. Assim
+    cada seção é copiada inteira, e o G-NADA-PERDIDO confere por substring. Os documentos das frentes não mudaram.
+- **G-NADA-PERDIDO passa:** `python tools/conferir_saude.py`: as 135 seções da cópia `CLAUDE_pre_saude.md` estão inteiras no destino do mapa,
+  e a raiz tem menos de 200 linhas. Testes em `tests/test_conferir_saude.py` (7, a falha com seção que some, alterada ou sem destino).
+- **G-PROVA passa** (`docs/historico/prova_etapa1.md`). A referência com o arquivo antigo pode ter sido contaminada: a sessão nova carrega
+  sozinha o `CLAUDE.md` da pasta, que já era o novo. A sessão avisou disso.
+- **SA-2:** `web/app/CLAUDE.md` (37 linhas: o motor sem DOM, a versão de pet por mecânica, a paridade, os nomes Digimon, o layout, os
+  sprites, os comandos npm) e `servidor/CLAUDE.md` (27 linhas: a fala fora do registro, a chave, o teto de gasto, o acesso remoto).
+- **Onde o worker escreve daqui em diante:** o resumo da etapa vai no corpo do PR e numa seção no fim do documento da frente; o `CLAUDE.md`
+  só muda com o ok do Matheus. A regra foi para o `CLAUDE.md` novo, o `docs/modelos/TAREFA_V2_MODELO.md` e o
+  `docs/V2_TRABALHO_PARALELO.md`.
+- **Os PRs abertos que acrescentam seção ao `CLAUDE.md` (#298, #299, #201) vão dar conflito.** Na resolução, a seção deles vai para o fim do
+  documento da frente (ou do `docs/historico/claude/v2_mundo_corpo.md`), e o `CLAUDE.md` fica o novo. O `mapa_claude.json` não muda: ele
+  cobre só a cópia de antes.
+- **Revisão do PR, depois do checklist (2026-10-13):** o Matheus aprovou o `CLAUDE.md` e pediu que saísse toda a parte dos assets da
+  Bandai. A remoção foi confirmada por ele direto nesta sessão, porque tira uma regra de proteção de um arquivo de instruções.
+  - Saíram a seção "Assets da Bandai" da raiz (114 → 105 linhas) e as linhas de sprites e do atlas do `web/app/CLAUDE.md` (37 → 34).
+  - O texto antigo segue inteiro em `docs/historico/claude/jogo_web.md`, e o G-NADA-PERDIDO continua passando.
+  - A pergunta 7 da G-PROVA foi trocada por "posso salvar o estado do pet num arquivo para retomar a vida depois?". Só ela rodou de novo,
+    nas duas sessões, e as duas acertam (`docs/historico/prova_etapa1.md`).
+  - **A SA-3 foi decidida: o registro se divide por mês.** A tarefa da etapa 2 passou a dizer isso. A etapa 2 começa depois do merge
+    deste PR.
+- **O merge da `main` `f23ba37` (2026-10-13, pedido do Gerente):**
+  - **O conflito:** o #298, o #299, o #301 e o #302 entraram com uma seção cada no CLAUDE.md antigo.
+  - **O que foi feito:** o `CLAUDE.md` ficou o novo, e as quatro seções foram, inteiras, para o fim do `docs/historico/claude/v2_mundo_corpo.md`.
+    O Gerente falava em duas seções; eram quatro.
+  - **A conferência cobre as seções de depois da cópia:** o mapa delas fica em `docs/historico/mapa_claude_posteriores.json`, por lote (o
+    commit e as seções), e o `tools/conferir_saude.py` lê o CLAUDE.md do commit pelo git. Ele confere que o commit só tem as seções da
+    cópia, iguais (nenhuma mudou), e as do lote, cada uma inteira no destino.
+  - **Testes** (`tests/test_conferir_saude.py`, 10): a seção de lote que some e o commit que não existe falham.
+  - **O conflito do registro:** as duas metades ficaram, primeiro a da `main` (que fica inteira como prefixo) e depois a deste PR.
+
+## 2026-10-13 — PALADAR: o desenho do gosto e o adendo 3 do J5 (worker do paladar, pedido do Gerente)
+
+Só documentos: `docs/futuro/paladar.md` (novo) e o adendo 3 de `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`. Nenhum código, nenhuma run.
+
+- **O número do adendo:** a seção 10 do plano do J5 reserva o "adendo 2" para a forma pelo estado (R-4), que ainda não existe. O do
+  paladar ficou como **adendo 3**, para não tomar o número reservado; os números da calibração dele vão num adendo 4.
+- **O diagnóstico do #301 foi refeito do código, sem run:** a nutrição (0,45 × 0,15), o cheiro (64 × 32), o comedouro e a classe `comida`
+  do alvo, que não distingue ração de fruta. A conta do sinal com a fome em 0,4 e o ganho 4 (ração ~1380, fruta ~645 mais ~123 do humor)
+  foi feita à mão, sobre a fórmula do `sinal_homeostatico`; é ilustração, não resultado.
+- **"Pets diferentes" foi lido como indivíduos**, não espécies (PL-2): a preferência individual já existe desde a F5. O FE-4 (variação
+  individual só na fase 3) fala da fisiologia; a tensão fica declarada na PL-2 para o Matheus.
+- **"Atrai"** foi lido como o querer aprendido depois de provar (PL-5), não como atração inata pela fruta vista: é o que a restrição 2.1
+  das frutas pede (o gostar só chega à escolha por uma atualização declarada).
+- **A saciedade sensório-específica** foi escolhida como o mecanismo da "comida diferente ao lado da ração" (Rolls, Rolls e Rowe 1983). O
+  pedido do Matheus não a nomeia.
+- **"Sementes novas":** o adendo pede uma faixa nova só para a calibração e o piloto (49101…49505) e mantém a validação em 46101…46505,
+  que nunca rodou (PJ-5). A faixa 49101…49505 ainda tem de entrar na `FAIXAS_RESERVADAS` (o D, pelo coordenador).
+- **A forma girada dos perfis** das frutas foi escolhida para a x continuar uniforme entre os tipos quando ela passa a ser a favorita do
+  pet (PJ-1). SEM FONTE.
+- **Nada de químico de prazer** (PL-1), pela F2 e para o gosto não virar drive.
+
+## 2026-10-13 — Rede de si, etapa 2b (A): a troca da digestão num tick
+
+- **O tick da troca é o começo do tick**, antes da decisão e do passo: a comida comida naquele tick já digere na taxa nova. O registro
+  guarda o tick em que a troca aconteceu e o pedido (na bancada são o mesmo, o fim do dia 7).
+- **O grafo do corpo é refeito na troca** (a reação da digestão carrega a taxa) e passa de novo pelas quatro checagens, para a tabela
+  continuar sendo a fonte. Os químicos não mudam (conferido).
+- **A taxa lenta ficou numa config própria** (`ConfigTrocaDigestao`), e não na `ConfigCorpo`: um campo novo na `ConfigCorpo` mudaria o
+  gabarito da paridade do corpo, que confere a config campo a campo. O valor é o PROPOSTO do plano, C // 8.
+- **Uma troca para a mesma taxa falha alto** (não seria troca), e a troca só existe com a digestão ligada.
+
+## 2026-10-13 — Dois pets, etapa 8, o lado do mundo (A): o cheiro próprio, o rastro, o som e o gancho do órgão
+
+- **Os números do mundo ficaram na `ConfigOlfato` e na `ConfigOuvido` do B (#299),** que já os trazia "para a config ser uma só". O meu
+  rascunho tinha outros (R 12, T 720, 48 marcas); ficaram os do B (R 24, T 240, 16 marcas, som 64, R_som 16, afastamento 8). A
+  `ConfigSentidos` virou só a chave do mundo, com as duas dentro; o `ligada` delas continua sendo o do órgão.
+- **A marca vai no ponto da decisão** (a posição antes de andar): com o cheiro na posição atual, o rastro diz de onde o pet veio.
+- **"A cada decisão"** foi lido como toda decisão, também o dormir e o ocioso (as marcas no mesmo ponto se somam como fontes).
+- **Sozinho, nada:** o desenho diz que com um pet só o mundo não guarda nada. Por isso o rastro do A experiente só começa quando o B entra.
+- **A direção do último passo antes do primeiro passo** é leste (0 na DIR16), uma convenção (`PASSO_INICIAL`), sem fonte.
+- **O som `comendo`** vale para o comer e para o achou e comeu; o `bola`, só quando o pet chegou e brincou com a bola. A posição é a do pet
+  depois da ação.
+- **O som no ouvido do órgão entra num tick só:** o do tick do mundo em que o ouvinte está quando o som soa (o mesmo tick, se ele ainda não
+  andou; o seguinte, se já andou). A percepção e o passo do mesmo tick veem o mesmo valor. Dois sons do mesmo tipo no tick se somam.
+- **O `MotorMundo` atualiza o mundo a cada entrega ao órgão** (idempotente por tick: as quedas são as mesmas).
+- **O Olfato social e a Audição no grupo exigem a `ConfigSentidos`,** e os números do órgão têm de ser os do grupo (falha alto). Fora do
+  grupo, o outro e o ouvido são 0.
+- **O teste do B** que esperava `NotImplementedError` no motor de verdade (o lado do mundo faltando) passou a conferir que o gancho existe.
+- **O furo do gabarito:** a primeira gravação punha o B na entrada 1 (tick 1, não dia 1), e o `simular_grupo` o ignorava em silêncio. O
+  gerador foi corrigido e o gabarito regravado com o código de antes (commit `06730c6`, numa worktree à parte); o `simular_grupo` passou a
+  falhar alto.
+- **A direção pronta empata pelo arredondamento** com gradiente fraco (A 32 a 24 células); o teste da narina usa uma fonte forte. É o
+  mesmo empate do cheiro da comida (#232).
+
 ## 2026-10-13 — REDE-DE-SI-CALIBRACAO (worker D): a calibração do `passo` e o piloto, preparados
 
 - **O corpo da calibração:** o regime "corpo" com o gasto do passo 0 fino (adendo 5 do corpo, `m_gasto` 4/5, conferido contra o

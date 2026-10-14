@@ -1,0 +1,14 @@
+{
+ "lotes": [
+  {
+   "commit": "f23ba37",
+   "nota": "as seções do #298, #299, #301 e #302, que entraram no CLAUDE.md antigo depois da cópia pre_saude",
+   "secoes": {
+    "## V2, W-BANCADA-PQP-PLANO — o planejador nos braços do J5 e a config da calibração do `g_plano` (2026-10-13, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 3 a 5, 7, 8 e 11) — GATES PASSAM; A CALIBRAÇÃO NÃO RODOU": "docs/historico/claude/v2_mundo_corpo.md",
+    "## V2, DOIS-PETS, etapa 8b — os órgãos do Olfato e da Audição no corpo (2026-10-13, `docs/TAREFA_V2_DOIS_PETS.md`; DP-13 e DP-14) — GATES DO CORPO PASSAM; O LADO DO MUNDO É DO A": "docs/historico/claude/v2_mundo_corpo.md",
+    "## V2, PET-QUE-PENSA-CALIBRACAO — a calibração do `g_plano` e o piloto (2026-10-13, `docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md`, seções 5 e 6, adendo 1) — g_plano = S, FECHOU; O T1 SEM MARGEM: O PLANO VOLTA AO MATHEUS": "docs/historico/claude/v2_mundo_corpo.md",
+    "## V2, W-BANCADA-REDE — a etapa 3 da rede de si na bancada (2026-10-13, `docs/TAREFA_V2_REDE_DE_SI.md`, etapa 3; `docs/PLANO_ANALISE_V2_REDE_DE_SI.md`, seções 3 e 4) — GATES PASSAM; SEM RUN": "docs/historico/claude/v2_mundo_corpo.md"
+   }
+  }
+ ]
+}

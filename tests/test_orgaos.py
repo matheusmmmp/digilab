@@ -440,8 +440,9 @@ def vida(cerebro: str = "lobos", semente: int = 101, dias: int = 2, **kw):
 def test_o_motor_falha_alto_sem_o_que_o_orgao_exige():
     p = PoliticaInstintoMundo(CONFIG_PADRAO)
     MotorMundoCorpo = com_corpo(MotorMundo)
-    with pytest.raises(NotImplementedError, match="lado do mundo"):
-        MotorMundoCorpo(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=QUIMICA, cfg_olfato=OLFATO_2)
+    # o lado do mundo (o gancho `_intensidades_do_orgao`) agora existe no MotorMundo (etapa 8, do A): o motor de verdade nasce com o orgao
+    m = MotorMundoCorpo(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=QUIMICA, cfg_olfato=OLFATO_2)
+    assert callable(m._intensidades_do_orgao)
     with pytest.raises(ValueError, match="ConfigCorpo.ligada"):
         MotorComNariz(p, CONFIG_PADRAO, 1, obediencia_desligada=True, cfg_mundo=CM, cfg_olfato=OLFATO_2)
     with pytest.raises(ValueError, match="mundo fisico"):
