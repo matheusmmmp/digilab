@@ -175,12 +175,15 @@ def test_h3_push_sem_refspec_depende_do_branch(projeto):
     assert decisao(rodar("h3_main.py", pre_tool("Bash", {"command": "git push"}, projeto), projeto)) is None
 
 
-def test_proposta_desligada_e_valida():
-    """A configuração proposta existe, aponta os scripts que existem, e o projeto não tem hook ligado."""
+def test_proposta_e_os_hooks_ligados():
+    """A configuração proposta existe e aponta os scripts que existem. Ligados no projeto, só os que o Matheus escolheu (2026-10-14):
+    o H1, o H1b e o H3; o H2 fica desligado."""
     proposta = json.loads((RAIZ / "docs" / "propostas" / "hooks_settings.json").read_text(encoding="utf-8"))
     comandos = [h["command"] for evento in proposta["hooks"].values() for grupo in evento for h in grupo["hooks"]]
     assert sorted(Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in comandos) == \
         ["h1_engine.py", "h1b_engine_sha.py", "h2_testes.py", "h3_main.py"]
     assert all((HOOKS / Path(c.split("/.claude/hooks/")[1].rstrip('"')).name).exists() for c in comandos)
-    ativo = RAIZ / ".claude" / "settings.json"
-    assert not ativo.exists() or "hooks" not in json.loads(ativo.read_text(encoding="utf-8"))
+    ativo = json.loads((RAIZ / ".claude" / "settings.json").read_text(encoding="utf-8"))
+    ligados = [h["command"] for evento in ativo["hooks"].values() for grupo in evento for h in grupo["hooks"]]
+    assert sorted(Path(c.split("/.claude/hooks/")[1].rstrip('"')).name for c in ligados) ==         ["h1_engine.py", "h1b_engine_sha.py", "h3_main.py"]
+    assert set(ligados) <= set(comandos)
