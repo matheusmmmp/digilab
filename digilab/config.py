@@ -2187,3 +2187,38 @@ class ConfigPaladar:
 
 CONFIG_PALADAR = ConfigPaladar()
 CONFIG_PALADAR_LIGADA = ConfigPaladar(ligada=True)
+
+
+# =====================================================================
+# V2, a fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md, decidido pelo Matheus em 2026-10-14; os numeros combinados com o
+# adendo 5 do plano do J5, do C). Desligada por padrao: a vida de hoje byte a byte (G2). Ligada (so com o mundo fisico e um pet), o dono
+# que deixa a racao no comedouro poe, no mesmo passo e logo depois dela, as frutas maduras ao lado, uma de cada tipo, numa coluna de
+# celulas fixa ao lado do comedouro; o tipo de cada celula sai de uma permutacao sorteada uma vez por vida (rng `fruta-ao-lado`), para a
+# distancia ao ninho nao se misturar com o gosto. No maximo `teto_por_tipo` de cada tipo ao lado (maduras) no chao: o dono so repoe a que
+# foi comida, apodreceu ou sumiu. Fora do orcamento e sem contato: o gesto e o mesmo da racao, entao o cuidado nao muda; so o mundo
+# ganha as frutas. Os numeros sao PROPOSTOS, SEM FONTE.
+@dataclass(frozen=True)
+class ConfigFrutaAoLado:
+    ligada: bool = False                     # PROPOSTO: a chave
+    tipos: tuple = ("a", "b", "c")           # PROPOSTO: as frutas postas ao lado (as tres)
+    coluna: int = 1                          # PROPOSTO: a coluna de celulas, relativa ao comedouro (a de fora da casa, longe do ninho)
+    linhas: tuple = (-1, 0, 1)               # PROPOSTO: as linhas, relativas ao comedouro, uma por tipo da permutacao
+    teto_por_tipo: int = 1                   # PROPOSTO: as maduras ao lado de cada tipo no chao, no maximo
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigFrutaAoLado.ligada e bool: {self.ligada!r}")
+        if not isinstance(self.tipos, tuple) or not self.tipos or len(set(self.tipos)) != len(self.tipos) \
+                or not set(self.tipos) <= {"a", "b", "c"}:
+            raise ValueError(f"ConfigFrutaAoLado.tipos: frutas distintas entre a, b e c: {self.tipos!r}")
+        if not isinstance(self.linhas, tuple) or len(self.linhas) != len(self.tipos) or len(set(self.linhas)) != len(self.linhas) \
+                or any(type(v) is not int for v in self.linhas):
+            raise ValueError(f"ConfigFrutaAoLado.linhas: uma linha inteira distinta por tipo: {self.linhas!r}")
+        if type(self.coluna) is not int:
+            raise ValueError(f"ConfigFrutaAoLado.coluna e inteira: {self.coluna!r}")
+        if type(self.teto_por_tipo) is not int or self.teto_por_tipo < 1:
+            raise ValueError(f"ConfigFrutaAoLado.teto_por_tipo e inteiro >= 1: {self.teto_por_tipo!r}")
+
+
+CONFIG_FRUTA_AO_LADO = ConfigFrutaAoLado()
+CONFIG_FRUTA_AO_LADO_LIGADA = ConfigFrutaAoLado(ligada=True)

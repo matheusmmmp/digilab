@@ -175,3 +175,39 @@ PL-1 a PL-9 e PJ-1 a PJ-5 decididas pelo Matheus, pela recomendação. Infraestr
   - a config: os perfis do desenho, a forma girada, o registro de status e as falhas altas;
   - **G1:** o replay refaz os registros com o perfil (instinto e P1, sem e com o corpo);
   - o grupo: o mesmo Paladar nos dois pets.
+
+## A fruta ao lado da ração, o lado do mundo e do dono (A, 2026-10-14; o RP-2 de `docs/futuro/paladar.md`) — GATES PASSAM
+
+Decisão do Matheus depois do #316 (o pet come ~20% de fruta, mas o querer vai à ração, porque as duas nunca ficam lado a lado). Os números
+foram combinados com o C, que escreve o adendo 5 do plano. Infraestrutura, sem run; só as sementes dos testes. Mudaram a
+`ConfigFrutaAoLado` no fim de `config.py`, o evento `deixar_fruta` em `digilab/events.py` e `digilab/mundo.py`. `engine.py`, o corpo, os
+cérebros, a bancada e a web não mudaram. Interpretações em `docs/registro/2026-10.md`.
+- **O gabarito antes do código** (commit próprio): `tests/gabarito_fruta_ao_lado.py` → `tests/gabaritos/fruta_ao_lado_vidas_de_hoje.json`,
+  92 vidas. São os 84 casos do mundo com o paladar e 8 vidas da bancada do J5 com o paladar (P1 e P1-plan, T1 e T2, duas sementes).
+- **`ConfigFrutaAoLado`** (desligada; PROPOSTOS, SEM FONTE):
+  - `tipos` (a, b, c), `coluna` (+1) e `linhas` (−1, 0, +1), relativas ao comedouro;
+  - `teto_por_tipo` (1 madura de cada tipo ao lado no chão).
+- **No motor:**
+  - o evento `deixar_fruta(tipo, x, y)` só vale logo depois de uma ração deixada pelo dono no mesmo tick, e grava o id dela;
+  - a fruta nasce madura, com a origem `dono_ao_lado`;
+  - os registros `frutas_ao_lado` (tick, id, tipo, x, y, ração) e o consumo com o tipo e a origem;
+  - o `estado()` ganha `fruta_ao_lado` (as maduras ao lado no chão, por tipo);
+  - **fora do orçamento e sem contato;** só com um pet. O replay refaz tudo.
+- **O dono** (`DonoFrutaAoLado`, pelo `simular_vida_mundo(..., ao_lado=)`):
+  - depois de cada ração do `DonoComLugar` no comedouro, põe os tipos abaixo do teto;
+  - as células seguem a permutação de (a, b, c) sorteada uma vez por vida pela rng `fruta-ao-lado`;
+  - com o estilo `perto` ou `longe`, falha alto.
+- **Gates** (`tests/test_fruta_ao_lado.py`, 13):
+  - **G2:** as 92 vidas byte a byte, sem a chave e com a chave explícita desligada; sem a chave, nada novo no `estado()` nem no resumo;
+  - **a mecânica**, numa vida com o atencioso e com o relapso, três sementes cada:
+    - toda fruta vai logo depois de uma ração, no mesmo tick, na célula do tipo;
+    - em cada passo com ração, o dono põe exatamente os tipos abaixo do teto, e nunca passa dele;
+    - o orçamento fecha igual, e as frutas não contam como gesto do dono;
+    - os consumos ao lado levam o tipo e a origem;
+  - **sem contato:** o relógio do cuidado e o cérebro não veem a fruta;
+  - **a permutação:** a do `shuffle` da rng própria, uniforme entre as 6 em 600 sementes, com o `random` global intocado;
+  - **com o corpo e o paladar:** a fruta ao lado é comida com o perfil do tipo;
+  - **G1:** o replay refaz as frutas ao lado e a vida, sem e com o corpo;
+  - **as recusas:** o estilo, a chave, a fruta sem ração e o grupo.
+- **Fumaça descritiva** (só o encanamento, instinto, atencioso, 5 dias, sementes 101 a 303): o pet comeu de 2 a 16 frutas ao lado por vida.
+- **Para o D:** a bancada liga a regra nos braços do J5 (o `simular_vida_fisico` com o `ao_lado` e a `cfg_fruta_ao_lado` no motor).
