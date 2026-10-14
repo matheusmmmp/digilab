@@ -88,6 +88,7 @@ from typing import Callable
 from .ambiente import PoliticaInstintoBola
 from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, Config, ConfigMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
+from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .donos import Visao
 from .engine import Motor
 from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario,
@@ -206,9 +207,9 @@ def zona_da_necessidade(x: int, y: int, cbh: ConfigBanheiro, cm: ConfigMundo) ->
     return ZONA_BANHEIRO if no_banheiro(x, y, cbh, cm) else regiao_de(x, cm)
 
 
-def cheiro_em(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> int:
-    """secao 7: a soma de A x (R - d) // R sobre as comidas boas com d < R; `fontes` = (x, y, A)"""
-    raio = cm.raio_cheiro_celulas * cm.sub
+def campo_em(x: int, y: int, fontes: list[tuple[int, int, int]], raio: int) -> int:
+    """A conta inteira do cheiro (secao 7), com o raio dado em subunidades: a soma de A x (R - d) // R sobre as fontes com d < R; `fontes`
+    = (x, y, A). O cheiro da comida (`cheiro_em`), o cheiro de cada pet e o rastro (dois pets, secao 5.3) e o som (5.4) usam esta conta."""
     total = 0
     for fx, fy, a in fontes:
         d = distancia(fx - x, fy - y)
@@ -217,17 +218,28 @@ def cheiro_em(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMund
     return total
 
 
-def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> tuple[int, int]:
-    """(cheiro no centro, direcao): a direcao 1 a 8 em que o cheiro medido a 1 celula passa do centro, a maior vence e o empate fica
-    com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
-    centro = cheiro_em(x, y, fontes, cm)
+def direcao_do_campo(x: int, y: int, fontes: list[tuple[int, int, int]], raio: int, sub: int) -> tuple[int, int]:
+    """(campo no centro, direcao): a direcao 1 a 8 em que o campo medido a 1 celula (`sub` subunidades) passa do centro, a maior vence e o
+    empate fica com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
+    centro = campo_em(x, y, fontes, raio)
     melhor, direcao = centro, 0
     for k in range(8):
         cx, cy = DIR16[2 * k]
-        c = cheiro_em(x + div_arred(cx * cm.sub, ESCALA_DIR), y + div_arred(cy * cm.sub, ESCALA_DIR), fontes, cm)
+        c = campo_em(x + div_arred(cx * sub, ESCALA_DIR), y + div_arred(cy * sub, ESCALA_DIR), fontes, raio)
         if c > melhor:
             melhor, direcao = c, k + 1
     return centro, direcao
+
+
+def cheiro_em(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> int:
+    """secao 7: a soma de A x (R - d) // R sobre as comidas boas com d < R; `fontes` = (x, y, A)"""
+    return campo_em(x, y, fontes, cm.raio_cheiro_celulas * cm.sub)
+
+
+def direcao_do_cheiro(x: int, y: int, fontes: list[tuple[int, int, int]], cm: ConfigMundo) -> tuple[int, int]:
+    """(cheiro no centro, direcao): a direcao 1 a 8 em que o cheiro medido a 1 celula passa do centro, a maior vence e o empate fica
+    com a ordem fixa; 0 sem gradiente. O ponto da medida nao e cortado ao mapa (so conta)."""
+    return direcao_do_campo(x, y, fontes, cm.raio_cheiro_celulas * cm.sub, cm.sub)
 
 
 # ================================================================== percepcao e alvos
@@ -309,11 +321,117 @@ class PercepcaoSocial:
     - `onde_comeu`: (id, x, y, idade) do ultimo ponto em que este pet VIU cada outro comer (dentro do raio, no momento do consumo), com a
       idade em ticks; em ordem de id; nada de quem nunca foi visto comendo;
     - `toque`: (id, tipo, direcao, idade) do ultimo contato com cada outro (tipo em TIPOS_TOQUE; direcao 1 a 8 na tabela do cheiro, 0 na
-      mesma celula); em ordem de id."""
+      mesma celula); em ordem de id;
+    - `sentidos` (o degrau 1b, so com a ConfigSentidos ligada; senao None): o cheiro de cada outro, o rastro dele e os sons ouvidos
+      (`PercepcaoSentidos`)."""
 
     outros: tuple
     onde_comeu: tuple
     toque: tuple
+    sentidos: "PercepcaoSentidos | None" = None
+
+
+# ------------------------------------------------------------------ o degrau 1b: o cheiro proprio, o rastro e o som (dois pets, etapa 8)
+# docs/futuro/dois_pets.md, secoes 5.3, 5.4 e 5.6; OA-1 (o campo calculado), OA-2 (a direcao pelo mundo, como pre-processamento) e OA-3
+# (o som em linha reta). Tudo aqui so le o que e fisico: a posicao do outro, o rastro que ele deixou no mundo e o som da acao dele.
+SONS = ("comendo", "bola", "chamado", "emburrado")
+SOM_DA_ACAO = {AcaoPet.CHAMAR_ATENCAO: "chamado", AcaoPet.EMBURRAR: "emburrado"}     # os sons das acoes sem alvo
+
+# os numeros do mundo sao os da ConfigOlfato e da ConfigOuvido (status em corpo.PARAMETROS_OLFATO e corpo.PARAMETROS_OUVIDO)
+PARAMETROS_SENTIDOS: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "DP-11 (o degrau 1b), DP-13 e DP-14: desligada por padrao, o grupo de hoje (G2)"),
+}
+PASSO_INICIAL = 0            # a direcao do ultimo passo antes do primeiro passo: leste (0 na DIR16), uma convencao (secao 5.6)
+
+
+@dataclass(frozen=True)
+class PercepcaoSentidos:
+    """O degrau 1b (secoes 5.3, 5.4 e 5.6). Sem campo de estado interno do outro (G-RECEPTOR-SOCIAL).
+    - `passo`: a direcao do ultimo passo do proprio pet (0 a 15 na tabela DIR16; a propriocepcao que poe as narinas e os ouvidos);
+    - `cheiro`: (id, intensidade, direcao, esq, dir) de cada outro presente, em ordem de id: a intensidade no centro do pet e a direcao 1 a 8
+      (0 sem gradiente; a conta e o desempate do cheiro da comida) do canal do outro (o cheiro dele e o rastro dele), e a intensidade no
+      ponto de cada narina;
+    - `sons`: (id, som, direcao, distancia, intensidade, esq, dir, idade) dos sons ouvidos desde a decisao anterior, na ordem em que
+      soaram: quem emitiu, o som (SONS), a direcao 1 a 8 e a distancia em linha reta ate onde soou, a intensidade no centro e no ponto de
+      cada ouvido (tudo no momento do som) e a idade em ticks. Os sons do proprio pet nao entram."""
+
+    passo: int
+    cheiro: tuple
+    sons: tuple
+
+
+def direcao_em_8(dx: int, dy: int) -> int:
+    """a direcao 1 a 8 (L, NE, N, NO, O, SO, S, SE; a tabela do cheiro) mais perto do vetor (dx, dy): o maior produto escalar com DIR16,
+    o empate fica com a ordem fixa; 0 no vetor nulo"""
+    if dx == 0 and dy == 0:
+        return 0
+    melhor, direcao = None, 0
+    for k in range(8):
+        cx, cy = DIR16[2 * k]
+        p = cx * dx + cy * dy
+        if melhor is None or p > melhor:
+            melhor, direcao = p, k + 1
+    return direcao
+
+
+def direcao_em_16(dx: int, dy: int) -> int | None:
+    """o indice 0 a 15 da tabela DIR16 mais perto do vetor (dx, dy) (o maior produto escalar; o empate fica com a ordem fixa); None no
+    vetor nulo"""
+    if dx == 0 and dy == 0:
+        return None
+    melhor, direcao = None, 0
+    for j, (cx, cy) in enumerate(DIR16):
+        p = cx * dx + cy * dy
+        if melhor is None or p > melhor:
+            melhor, direcao = p, j
+    return direcao
+
+
+def pontos_laterais(x: int, y: int, passo: int, afastamento: int) -> tuple[tuple[int, int], tuple[int, int]]:
+    """(esquerda, direita): os pontos a `afastamento` subunidades de lado em relacao a direcao `passo` (0 a 15 na DIR16; a esquerda e 90
+    graus no sentido anti-horario, quatro indices adiante). Nao cortados ao mapa (so contam)."""
+    pontos = []
+    for lado in ((passo + 4) % 16, (passo + 12) % 16):
+        cx, cy = DIR16[lado]
+        pontos.append((x + div_arred(cx * afastamento, ESCALA_DIR), y + div_arred(cy * afastamento, ESCALA_DIR)))
+    return pontos[0], pontos[1]
+
+
+def fontes_do_pet(x: int, y: int, marcas: list[tuple[int, int, int]], tick: int, co: ConfigOlfato) -> list[tuple[int, int, int]]:
+    """secao 5.3: as fontes do canal de um pet: o cheiro dele na posicao atual (`cheiro_pet`) e cada marca do rastro (x, y, tick em que foi
+    deixada), com `cheiro_marca` x (T - idade) // T, T = `idade_marca`; a marca na idade T, ou com intensidade 0, nao conta"""
+    fontes = [(x, y, co.cheiro_pet)]
+    for mx, my, t in marcas:
+        idade = tick - t
+        if idade < 0:
+            raise ValueError(f"marca do futuro: tick {t} no tick {tick}")
+        if idade < co.idade_marca:
+            a = co.cheiro_marca * (co.idade_marca - idade) // co.idade_marca
+            if a > 0:
+                fontes.append((mx, my, a))
+    return fontes
+
+
+def cheiro_do_pet(x: int, y: int, passo: int, fontes: list[tuple[int, int, int]], co: ConfigOlfato, sub: int) -> tuple:
+    """(intensidade, direcao, esq, dir) do canal de um pet para quem esta em (x, y) com o ultimo passo `passo`: a conta inteira e a direcao
+    do cheiro da comida (`direcao_do_campo`) com o raio do pet, e a intensidade no ponto de cada narina"""
+    raio = co.raio_celulas * sub
+    centro, direcao = direcao_do_campo(x, y, fontes, raio, sub)
+    esq, dir_ = pontos_laterais(x, y, passo, co.afastamento_narinas)
+    return centro, direcao, campo_em(*esq, fontes, raio), campo_em(*dir_, fontes, raio)
+
+
+def som_ouvido(lx: int, ly: int, passo: int, sx: int, sy: int, cv: ConfigOuvido, sub: int) -> tuple | None:
+    """(direcao, distancia, intensidade, esq, dir) do som que soou em (sx, sy) para quem esta em (lx, ly) com o ultimo passo `passo`, ou
+    None fora do alcance (d >= R_som): a linha reta (OA-3), a intensidade A x (R - d) // R no centro e no ponto de cada ouvido"""
+    raio = cv.raio_som_celulas * sub
+    dx, dy = sx - lx, sy - ly
+    d = distancia(dx, dy)
+    if d >= raio:
+        return None
+    fonte = [(sx, sy, cv.som)]
+    esq, dir_ = pontos_laterais(lx, ly, passo, cv.afastamento_ouvidos)
+    return direcao_em_8(dx, dy), d, campo_em(lx, ly, fonte, raio), campo_em(*esq, fonte, raio), campo_em(*dir_, fonte, raio)
 
 
 def celula_de(x: int, y: int, cm: ConfigMundo) -> tuple[int, int]:
@@ -339,9 +457,11 @@ def em_contato(a: tuple[int, int], b: tuple[int, int], cm: ConfigMundo, raio_cel
     return max(abs(ax - bx), abs(ay - by)) <= raio_celulas
 
 
-def perceber_social(x: int, y: int, tick: int, outros: list[tuple], viu_comer: dict, toques: dict, raio_visao: int) -> PercepcaoSocial:
+def perceber_social(x: int, y: int, tick: int, outros: list[tuple], viu_comer: dict, toques: dict, raio_visao: int,
+                    sentidos: PercepcaoSentidos | None = None) -> PercepcaoSocial:
     """Pura: o que um pet em (x, y) percebe dos outros agora. `outros` = (id, x, y, acao_visivel), so o fisico; `viu_comer` = {id: (x, y,
-    tick)} e `toques` = {id: (tipo, direcao, tick)}, a memoria do proprio pet; `tick` e o do mundo."""
+    tick)} e `toques` = {id: (tipo, direcao, tick)}, a memoria do proprio pet; `tick` e o do mundo. `sentidos`: o degrau 1b, ja montado
+    pelo grupo (so com a ConfigSentidos ligada)."""
     vistos = []
     for ident, ox, oy, acao in outros:
         dx, dy = ox - x, oy - y
@@ -351,7 +471,7 @@ def perceber_social(x: int, y: int, tick: int, outros: list[tuple], viu_comer: d
     vistos.sort(key=lambda v: (v[3], v[0]))
     comeu = tuple((i, cx, cy, tick - t) for i, (cx, cy, t) in sorted(viu_comer.items()))
     toque = tuple((i, tipo, direcao, tick - t) for i, (tipo, direcao, t) in sorted(toques.items()))
-    return PercepcaoSocial(tuple(vistos), comeu, toque)
+    return PercepcaoSocial(tuple(vistos), comeu, toque, sentidos)
 
 
 def tipos_do_contato(a: str, b: str, disputa: dict | None, seguiu: dict) -> dict[str, str]:
@@ -466,6 +586,32 @@ class Mundo:
         # o J5 (o pet que pensa): as trocas de tipo por arvore, so depois de `ligar_trocas` (o motor com a ConfigPetQuePensaMundo); sem
         # ela, None e nada muda (nem o resumo)
         self.trocas_tipo: list[dict] | None = None
+        # dois pets, etapa 8 (o degrau 1b): o rastro de cada pet, {id: [(x, y, tick), ...]} em ordem de tick, so depois de `ligar_marcas`
+        # (o grupo com a ConfigSentidos ligada); sem ele, None e nada muda (nem o resumo)
+        self.marcas: dict[str, list[tuple[int, int, int]]] | None = None
+
+    # ------------------------------------------------------------ dois pets, etapa 8: o rastro (secao 5.3)
+    def ligar_marcas(self) -> None:
+        if self.marcas is None:
+            self.marcas = {}
+
+    def deixar_marca(self, ident: str, x: int, y: int, tick: int, co: ConfigOlfato) -> None:
+        """uma marca do pet `ident` em (x, y) no tick (do mundo): as que chegaram a idade T saem, e acima de `max_marcas` as mais antigas"""
+        if self.marcas is None:
+            raise ValueError("marca num Mundo sem o rastro (ligar_marcas: o grupo com a ConfigSentidos ligada)")
+        lista = self.marcas.setdefault(ident, [])
+        if lista and lista[-1][2] > tick:
+            raise ValueError(f"marca fora de ordem: tick {tick} depois de {lista[-1][2]}")
+        while lista and tick - lista[0][2] >= co.idade_marca:
+            lista.pop(0)
+        lista.append((x, y, tick))
+        while len(lista) > co.max_marcas:
+            lista.pop(0)
+
+    def marcas_de(self, ident: str) -> list[tuple[int, int, int]]:
+        if self.marcas is None:
+            raise ValueError("rastro num Mundo sem o rastro (ligar_marcas)")
+        return list(self.marcas.get(ident, []))
 
     # ------------------------------------------------------------ o J5: a troca de tipo por arvore e os troncos
     def ligar_trocas(self) -> None:
@@ -663,7 +809,8 @@ class Mundo:
                 **({} if self.necessidades is None else {
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
                     "recolhidas": self.recolhidas}),
-                **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo})}
+                **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo}),
+                **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}})}
 
 
 # ================================================================== o motor
@@ -759,6 +906,12 @@ class MotorMundo(MotorFrutas):
         self._tick_social: dict | None = None           # o que o grupo le no fim do tick (partida, alvo, quem seguiu, o que comeu)
         self._viu_comer: dict[str, tuple] = {}          # a memoria da visao: {id: (x, y, tick)} do ultimo consumo visto de cada outro
         self._toques: dict[str, tuple] = {}             # a memoria do toque: {id: (tipo, direcao, tick)} do ultimo contato com cada outro
+        # dois pets, etapa 8 (o degrau 1b): a direcao do ultimo passo (0 a 15 na DIR16), acompanhada so com a ConfigSentidos ligada no grupo
+        # ou com o orgao do Olfato ou da Audicao no corpo (que a pede na primeira leitura); a caixa dos sons ouvidos desde a decisao
+        # anterior (esvaziada a cada decisao) e o estimulo dos ouvidos do orgao, por tick (o tick do mundo em que o som entra no passo)
+        self._passo: int | None = None
+        self._sons_ouvidos: list[tuple] = []
+        self._sons_orgao: list[tuple] = []
         # os registros sociais do pet (as medidas; derivados, o replay refaz)
         self.vistos_comer: list[dict] = []
         self.idas_onde_comeu: list[dict] = []
@@ -862,6 +1015,8 @@ class MotorMundo(MotorFrutas):
             self._ver_troncos(self._percepcao.troncos, self._tm(t))
         if self._grupo is not None:
             self._social = self.percepcao_social()
+            if self._grupo.cs.ligada:
+                self._sons_ouvidos = []                     # os sons desde a decisao anterior ja estao na percepcao desta
             self._pendente_antes = self._pendente
             self._cands_sociais = {}
             if self._social is not None:
@@ -869,6 +1024,46 @@ class MotorMundo(MotorFrutas):
                 for ident, *_ in self._social.outros:
                     self.a_vista[ident] = self.a_vista.get(ident, 0) + 1
         return self._percepcao
+
+    def _intensidades_do_orgao(self) -> dict[str, int]:
+        """O lado do mundo dos orgaos do Olfato e da Audicao (dois pets, secao 5.6; DP-13 e DP-14), pedido pelo MotorCorpo antes de cada tick
+        e de cada percepcao: por receptor de orgao do corpo, a intensidade no ponto da narina (do ouvido), um inteiro, sem direcao. Com
+        duas narinas, os pontos sao os de `pontos_laterais` pela direcao do ultimo passo; com uma, o centro do pet.
+        - `olfato_comida`: o cheiro das comidas boas (`campo_em` com as fontes e o raio do cheiro da comida);
+        - `olfato_outro`: o canal de cada outro pet do grupo (o cheiro proprio e o rastro, `fontes_do_pet`), so com a ConfigSentidos ligada
+          e o outro presente; fora disso, 0;
+        - `ouvido_<som>`: a soma dos sons daquele tipo que entram no passo deste tick (a intensidade no ponto do ouvido, de onde o pet estava
+          quando o som soou); entre os sons, 0."""
+        if self._passo is None:
+            self._passo = PASSO_INICIAL
+        agora = self._tm(self._estado.tick)
+        self.mundo.atualizar(agora)                      # idempotente por tick: as quedas sao as mesmas atualizando em todo tick
+        x, y = self.pet
+        sub = self.cmf.sub
+        g = self._grupo
+        outros = [] if g is None or not g.cs.ligada else [i for i in g.ids_presentes() if i != self.ident]
+        self._sons_orgao = [s for s in self._sons_orgao if s[0] >= agora]
+        out = {}
+        for o in self.corpo.orgaos:
+            if o.sentido == "olfato":
+                af = self.co.afastamento_narinas
+                ponto = (x, y) if o.lado is None else pontos_laterais(x, y, self._passo, af)[0 if o.lado == "esq" else 1]
+                if o.canal == "comida":
+                    out[o.receptor] = campo_em(*ponto, self.mundo.fontes_de_cheiro(agora), self.cmf.raio_cheiro_celulas * sub)
+                elif o.canal == "outro":
+                    v = 0
+                    for i in outros:
+                        fontes = fontes_do_pet(*g.motores[i].pet, self.mundo.marcas_de(i), agora, g.cs.olfato)
+                        v += campo_em(*ponto, fontes, g.cs.olfato.raio_celulas * sub)
+                    out[o.receptor] = v
+                else:
+                    raise ValueError(f"canal do olfato desconhecido: {o.canal!r}")
+            elif o.sentido == "ouvido":
+                k = 2 if o.lado is None else (3 if o.lado == "esq" else 4)
+                out[o.receptor] = sum(s[k] for s in self._sons_orgao if s[0] == agora and s[1] == o.canal)
+            else:
+                raise ValueError(f"orgao desconhecido: {o.sentido!r}")
+        return out
 
     def _ver_troncos(self, troncos, tick_mundo: int) -> None:
         """o J5: os troncos a vista entram em `troncos_vistos` (o primeiro tick em que o pet os viu)"""
@@ -980,6 +1175,7 @@ class MotorMundo(MotorFrutas):
         if self._grupo is not None:                          # dois pets: o consumo e visto pelos outros e lido pela disputa
             self._tick_social["comeu"] = {"id": c["id"], "tipo": c["tipo"], "x": c["x"], "y": c["y"], "situacao": sit}
             self._grupo.viu_comer(self.ident, c["x"], c["y"])
+            self._grupo.emitir_som(self.ident, "comendo")
         return reg
 
     def _rolar_bola(self, tick: int) -> None:
@@ -992,6 +1188,8 @@ class MotorMundo(MotorFrutas):
         regiao_antes = regiao_de(x0, self.cmf)
         alvo = None
         ocorrido = None
+        if self._grupo is not None and self._grupo.sentidos_ativos():
+            self.mundo.deixar_marca(self.ident, x0, y0, self._tm(tick), self._grupo.cs.olfato)     # o rastro (5.3)
         if acao in ACOES_COM_ALVO:
             u = self._rng_alvo.randrange(1 << 16)               # sempre nas tres acoes: numeros comuns
             cands = self.candidatos(acao, u)
@@ -1027,6 +1225,8 @@ class MotorMundo(MotorFrutas):
                 self._estado = replace(self._estado, humor=min(1.0, self._estado.humor + self.cmf.ganho_humor_bola))
                 self._rolar_bola(tick)
                 bola = True
+                if self._grupo is not None:
+                    self._grupo.emitir_som(self.ident, "bola")
             if self._grupo is not None and self._id_social(alvo) is not None:
                 self._registrar_social(alvo, chegou, comeu, x1, y1, tick)
             if alvo is not None and not chegou:
@@ -1049,6 +1249,10 @@ class MotorMundo(MotorFrutas):
             if self._grupo is not None:
                 self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": None, "pendente_antes": self._pendente_antes,
                                      "social": None, "comeu": None}
+                if acao in SOM_DA_ACAO:
+                    self._grupo.emitir_som(self.ident, SOM_DA_ACAO[acao])
+        if self._passo is not None and self.pet != (x0, y0):
+            self._passo = direcao_em_16(self.pet[0] - x0, self.pet[1] - y0)     # a propriocepcao (5.6): a direcao do ultimo passo
         self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
         return ocorrido
 

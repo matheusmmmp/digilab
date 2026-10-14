@@ -2070,3 +2070,35 @@ class ConfigTrocaDigestao:
 
 
 CONFIG_TROCA_DIGESTAO = ConfigTrocaDigestao()
+
+
+# V2, dois pets, etapa 8 (degrau 1b), o lado do mundo (docs/TAREFA_V2_DOIS_PETS.md, etapa 8; docs/futuro/dois_pets.md, secoes 5.3, 5.4 e
+# 5.6; DP-11, DP-13 e DP-14 decididas; OA-1 a OA-3 da revisao docs/referencias/H_REVISAO_OLFATO_AUDICAO.md, secao 6). Desligada por
+# padrao: o grupo de hoje byte a byte (G2). So no grupo, e so com dois pets presentes: sozinho, nada e guardado (nem rastro, nem som).
+# Os numeros do mundo sao os da ConfigOlfato e da ConfigOuvido (acima, "para a config ser uma so"): a ConfigSentidos as carrega, e o
+# `ligada` delas e o do orgao do corpo, independente desta chave. Ligada, o mundo:
+# - guarda o rastro de cada pet (uma marca por decisao, na posicao da decisao; ate `olfato.max_marcas`, as mais antigas saem; a marca vale
+#   `olfato.cheiro_marca` x (T - idade) // T e some na idade T = `olfato.idade_marca`) e soma, por outro pet, o cheiro proprio (na posicao
+#   atual, `olfato.cheiro_pet`) e as marcas dele, pela mesma conta inteira do cheiro da comida (A x (R - d) // R com d < R, R =
+#   `olfato.raio_celulas`), num canal separado do da comida (OA-1: o campo calculado);
+# - emite os sons das acoes (`comendo`, `bola`, `chamado`, `emburrado`) na posicao do pet, em linha reta (OA-3), ouvidos a d < R_som =
+#   `ouvido.raio_som_celulas` com a intensidade `ouvido.som` x (R_som - d) // R_som;
+# - da a direcao em 8 pronta (OA-2: pre-processamento do mundo) e a intensidade nas duas posicoes de amostra (as narinas e os ouvidos, a
+#   +-afastamento de lado pela direcao do ultimo passo), que o orgao do corpo le (DP-13 e DP-14).
+
+
+@dataclass(frozen=True)
+class ConfigSentidos:
+    ligada: bool = False                     # PROPOSTO: a chave (o cheiro proprio, o rastro e o som no grupo)
+    olfato: ConfigOlfato = CONFIG_OLFATO     # os numeros do mundo do cheiro do outro e do rastro (o `ligada` dela e o do orgao)
+    ouvido: ConfigOuvido = CONFIG_OUVIDO     # os numeros do mundo do som (idem)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigSentidos.ligada e bool: {self.ligada!r}")
+        if not isinstance(self.olfato, ConfigOlfato) or not isinstance(self.ouvido, ConfigOuvido):
+            raise TypeError("ConfigSentidos.olfato e .ouvido sao a ConfigOlfato e a ConfigOuvido")
+
+
+CONFIG_SENTIDOS = ConfigSentidos()
+CONFIG_SENTIDOS_LIGADA = ConfigSentidos(ligada=True)
