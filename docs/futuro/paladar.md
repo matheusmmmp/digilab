@@ -299,3 +299,45 @@ aqui. Interpretações em `docs/REGISTRO_DESVIOS.md`.
   - **a rede de si** lê os 4 receptores a mais: com a química vai de 359 a 703 pesos, com a etapa 6 de 911 a 1399 e com o banheiro de
     1143 a 1679. Nos dois últimos casos passa do teto dela;
   - **o cérebro A** ainda não lê o paladar (a etapa 3).
+
+## 13. Etapa 3 feita: o cérebro A (2026-10-14, worker B) — GATES PASSAM
+
+Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.md`.
+
+- **A chave do cérebro:** `ConfigLobos.paladar`, desligada. Exige:
+  - o mundo físico;
+  - o corpo com o paladar;
+  - o alvo aprendido;
+  - os `h_q` do pet, pelo kwarg novo `PoliticaLobos(..., h_paladar=)`: o `genoma_paladar(semente).h`, que a bancada passa (etapa 4, D). O
+    cérebro não importa o corpo nem o genoma.
+- **O `ganho_gosto`:** `ConfigConsequencia.ganho_gosto`, PROPOSTO S (uma vez a soma); o J5 calibra (PL-8, PJ-3).
+- **O canal `gosto`** (`lobos.sinal_gosto`):
+  - **a conta:** f_gosto = div_arred(ganho_gosto × Σ_q div_arred(h_q × leitura de `paladar_q` depois, S), S);
+  - **quando:** só nas decisões em que o pet comeu comida madura (o comer, o "achou e comeu"), no crédito pelo corpo do mundo físico;
+  - **no sinal:** soma ao escalar. Nos canais, é um canal a mais, com a rota `fruta` (a presença e as classes do alvo), e a soma dos canais
+    segue sendo o escalar (K-6). Nunca vai à tabela do corpo;
+  - **não lê a fome** (PL-6).
+- **O querer** (PL-5): as classes do alvo de comer viram `comida:racao`, `comida:a`, `comida:b` e `comida:c` no lugar de `comida`, com prior
+  `w0_alvo` e sem atração inata. A classe sai do tipo da comida vista na percepção. Elas aprendem pela consequência com o sinal inteiro da
+  decisão: os drives e o gosto.
+- **Os pesos:** +9 (3 classes × 3 regras). No P1 do J5, de 822 a 831.
+- **O planejador:**
+  - os 4 receptores do paladar entram sozinhos no modelo do desfecho, que lê todo receptor presente;
+  - o valor de cada tipo bom soma o termo do gosto (`gosto_previsto`), com a leitura prevista e os mesmos `h_q` e `ganho_gosto`. A podre
+    não tem gosto;
+  - o `ganho_gosto` entra na conferência da `ConfigConsequencia` do plano.
+- **O motivo:** nenhum texto novo. As classes por tipo ficam no motivo da decisão (`alvo_aprendido`), e os fatores são os de sempre.
+- **Gates** (`tests/test_paladar_cerebro.py`, 13):
+  - **os registros,** e as qualidades do cérebro iguais às do corpo;
+  - **as falhas altas;**
+  - **a contagem dos pesos;**
+  - **a conta exata do canal e G-FOME;**
+  - **o crédito de cada comida madura numa vida, conta exata:** o gosto sobre os receptores de depois, o passo nas classes pela regra da
+    sub-decisão com o sinal inteiro, e o canal `gosto` acumulando exatamente o gosto. Vale com os canais e no escalar;
+  - **as classes por tipo** aparecem e aprendem;
+  - **G-RECEPTOR-PALADAR:** pelo AST, o cérebro não importa o corpo; e o perfil de um tipo não comido não muda o cérebro;
+  - **G-SEM-CREDITO** da fruta na mão;
+  - **o termo do gosto no planejador,** exato;
+  - **G1;**
+  - **o motivo.**
+- **G2:** o gabarito da etapa 0 passa com o cérebro desta etapa (`tests/test_paladar_corpo.py`).

@@ -177,8 +177,12 @@ PARAMETROS_LOBOS_PET_QUE_PENSA: dict[str, tuple[str, str]] = {
     "g_plano": ("PROPOSTO", "TAREFA_V2_PET_QUE_PENSA, secao 2.2 (PQ-3): o ganho do lobo planejamento; a calibracao escolhe (PP-6)"),
     "teto_plano": ("PROPOSTO", "PLANO_ANALISE_V2_PET_QUE_PENSA, PP-6: 2 S, o corte do termo do plano, SEM FONTE"),
 }
+PARAMETROS_LOBOS_PALADAR: dict[str, tuple[str, str]] = {
+    "paladar": ("PROPOSTO", "a chave; docs/futuro/paladar.md, secao 3.4 (PL-1, PL-5, PL-6 decididas): o canal gosto e as classes"),
+}
 PARAMETROS_LOBOS = {**PARAMETROS_LOBOS_L0, **PARAMETROS_LOBOS_L1, **PARAMETROS_LOBOS_N5, **PARAMETROS_LOBOS_REVISAO,
-                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS, **PARAMETROS_LOBOS_PET_QUE_PENSA}
+                    **PARAMETROS_LOBOS_N6_N7, **PARAMETROS_LOBOS_CORPO, **PARAMETROS_LOBOS_DOIS_PETS, **PARAMETROS_LOBOS_PET_QUE_PENSA,
+                    **PARAMETROS_LOBOS_PALADAR}
 MODOS_MEMORIA = ("relevante", "recencia", "embaralhada")
 REGRAS_PEDIDO = ("fome_moderada", "fruta_no_cenario")   # N7-2 e N7-3: so onde comer e candidato e a necessidade nao e urgente
 # V2, N3: o sinal da consequencia (ConfigConsequencia, config.py). Todos PROPOSTOS, nenhum referendado.
@@ -190,6 +194,7 @@ PARAMETROS_CONSEQUENCIA_N3: dict[str, tuple[str, str]] = {
     "pesos_janela": ("PROPOSTO", "PLANO_ANALISE_V2_CORPO_DRIVES, adendo 2, A2.4 (o braco P1-cw; PCD-8): o peso pela falta recente"),
     "janela_pesos": ("PROPOSTO", "A2.4: J = 32 decisoes (8 h), sem fonte"),
     "pesos_drives_corpo": ("PROPOSTO", "TAREFA_V2_CORPO_DRIVES, secao 9: w_d inteiros, todos 1, sem fonte; o plano do corpo calibra"),
+    "ganho_gosto": ("PROPOSTO", "docs/futuro/paladar.md, secao 3.4: S (uma vez a soma), sem fonte; o plano do J5 calibra (PL-8, PJ-3)"),
 }
 # CANAIS-REFORCO (H-R2): o nome de cada canal pelo indice do drive em Estado.vetor, e o grupo de pesos que cada canal credita.
 #   corpo: a tabela do lobo de decisao (a regra; as entradas sao o estado do corpo)
@@ -234,6 +239,14 @@ REGRAS_ALVO = {"pedido_necessidade": (AcaoPet.COMER,), "fome_moderada": (AcaoPet
                "tempo_livre": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR), "bola_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR),
                "fruta_no_cenario": (AcaoPet.EXPLORAR, AcaoPet.BRINCAR, AcaoPet.COMER)}
 ESCALA_U_ALVO = 1 << 16                # o u do alvo do MotorMundo: inteiro em [0, 2^16)
+# o Paladar (docs/futuro/paladar.md, secao 3.4): as qualidades (as de corpo.QUALIDADES, conferidas por teste; o cerebro nao importa o
+# corpo), o canal `gosto` e a rota dele (os pesos que leem a identidade da comida: a presenca da fruta e as classes do alvo; nunca a
+# tabela do corpo) e as classes do alvo de comer por tipo, no lugar de `comida` (PL-5)
+QUALIDADES_GOSTO = ("doce", "azedo", "amargo", "salgado")
+CANAL_GOSTO = "gosto"
+ROTA_CANAL_GOSTO = {CANAL_GOSTO: "fruta"}
+TIPOS_COMIDA_CLASSE = ("racao", "a", "b", "c")
+CLASSES_COMER_PALADAR = tuple(f"comida:{t}" for t in TIPOS_COMIDA_CLASSE) + ("comida_podre", "cheiro", "continuar")
 # dois pets, etapa 4, segunda metade (DP-8): as entradas sociais, lidas de Observacao.social (mundo.PercepcaoSocial; o cerebro nao importa
 # o mundo: os tipos do toque sao conferidos contra mundo.TIPOS_TOQUE na carga). Todas 0 ou 1:
 #   outro_a_vista   algum outro no raio da visao
@@ -733,6 +746,7 @@ class Aprendiz:
         self._pesos_comer_fruta = dict(self._prior_comer_fruta)
         self._presenca_na_decisao: tuple = ()         # Observacao.frutas_cenario da ultima decisao (na ordem de FRUTAS)
         self._presenca_mundo = False                  # o mesmo termo no mundo fisico, pela fruta madura a vista (presenca_fruta_mundo)
+        self._paladar: dict | None = None             # o Paladar: os h_q do genoma do pet (o canal gosto); None sem a chave
         # N6: a memoria de episodios (None = desligada) e o relogio dela; N7: o peso compartilhado do pedido (None = desligado)
         self._memoria: MemoriaEpisodios | None = None
         self._tick_na_decisao = 0
@@ -1218,7 +1232,7 @@ class Aprendiz:
             self._mundo_creditou = acao
             comeu = ocorrido["comeu"]
             fruta = comeu["tipo"] if acao is AcaoPet.COMER and comeu is not None and comeu["tipo"] in FRUTAS else None
-            self._creditar_corpo(fruta, obs_depois)
+            self._creditar_corpo(fruta, obs_depois, comeu is not None and comeu["situacao"] == "madura")
             return
         pendente, self._consequencia_mundo_pendente = self._consequencia_mundo_pendente, None
         if pendente is None:
@@ -1308,9 +1322,11 @@ class Aprendiz:
         self._corpo_pendente = {"registro": registro, "transicao": transicao, "cc": cc, "anteriores": anteriores, "pesos": pesos,
                                 "fruta": None}
 
-    def _creditar_corpo(self, fruta: str | None, obs_depois: Observacao) -> None:
+    def _creditar_corpo(self, fruta: str | None, obs_depois: Observacao, comeu_madura: bool = False) -> None:
         """O credito da decisao pendente pelo corpo: antes = a percepcao da decisao, depois = `obs_depois.corpo`; a E2 (o humor) so com a
-        fruta comida. Escalar ou canais, como sempre; a conta fica no motivo da decisao (`sinal_corpo`). Sem pendente (o P0, o P3), nada."""
+        fruta comida. Escalar ou canais, como sempre; a conta fica no motivo da decisao (`sinal_corpo`). Sem pendente (o P0, o P3), nada.
+        Com o paladar e a comida madura comida (`comeu_madura`), o canal `gosto` (`sinal_gosto` sobre os receptores de depois) soma ao
+        escalar e vai, nos canais, aos pesos que leem a comida."""
         p, self._corpo_pendente = self._corpo_pendente, None
         if p is None:
             return
@@ -1325,10 +1341,19 @@ class Aprendiz:
         f = sinal_corpo(antes, depois, drives, cc.ganho, S, pd, pesos)
         if fruta is not None:
             self._n_recompensas["consequencia_fruta"] = self._n_recompensas.get("consequencia_fruta", 0) + 1
+        gosto = sinal_gosto(depois, self._paladar, cc.ganho_gosto, S) if self._paladar is not None and comeu_madura else None
         if self.motivos:
             self.motivos[-1]["sinal_corpo"] = {"f": f, "drives": dict(contrib)}
+            if gosto is not None:
+                self.motivos[-1]["sinal_corpo"]["gosto"] = gosto
+        if gosto is not None:
+            self._n_recompensas["gosto"] = self._n_recompensas.get("gosto", 0) + 1
+            f += gosto
         if cc.canais_ligados:
-            self._creditar_canais(registro, sinal_corpo_canais(antes, depois, drives, cc.ganho, S, pd, pesos), f)
+            canais = sinal_corpo_canais(antes, depois, drives, cc.ganho, S, pd, pesos)
+            if gosto is not None:
+                canais[CANAL_GOSTO] = gosto
+            self._creditar_canais(registro, canais, f)
         elif f != 0:
             self._creditar(registro, f, anteriores, consequencia=True)
 
@@ -1338,7 +1363,7 @@ class Aprendiz:
         """Ponto de entrada da H-R4 (o genoma modulando a sensibilidade a cada canal), SEM USO: devolve S (sensibilidade 1) para
         todo canal. Uma sensibilidade diferente de S mudaria o total de sinal e quebraria o contrato K-6; entra so com o desenho da
         H-R4 (docs/research/digibrain/mechanisms/reinforcement.md)."""
-        if canal not in ROTA_CANAIS and canal not in self._canais_novos:
+        if canal not in ROTA_CANAIS and canal not in self._canais_novos and not (canal == CANAL_GOSTO and self._paladar is not None):
             raise KeyError(f"canal desconhecido: {canal!r}")
         return self._escala
 
@@ -1353,7 +1378,8 @@ class Aprendiz:
             if sens != S:                                 # pragma: no cover - a H-R4 ainda nao existe
                 raise NotImplementedError("H-R4: sensibilidade por canal")
             total += f
-            alvos[ROTA_CANAIS[canal] if canal in ROTA_CANAIS else ROTA_CANAIS_CORPO[canal]] += f
+            alvos[ROTA_CANAIS[canal] if canal in ROTA_CANAIS else ROTA_CANAL_GOSTO[canal] if canal == CANAL_GOSTO
+                  else ROTA_CANAIS_CORPO[canal]] += f
         if total != f_S:
             raise RuntimeError(f"CANAIS-REFORCO: soma dos canais {total} != escalar {f_S} (contrato K-6)")
         # o alvo aprendido do mundo fisico conta como leitor da comida (decisao do Matheus, 2026-10-13, MUNDO-ALVO, saida 1): ele ja
@@ -1362,7 +1388,8 @@ class Aprendiz:
                                         or "alvo_mundo" in registro):
             raise RuntimeError("CANAIS-REFORCO: canal da fruta sem peso que leia a fruta nesta decisao")
         if self._canais is None:
-            self._canais = {"creditos": 0, "por_canal": {c: 0 for c in tuple(ROTA_CANAIS) + self._canais_novos},
+            gosto = (CANAL_GOSTO,) if self._paladar is not None else ()
+            self._canais = {"creditos": 0, "por_canal": {c: 0 for c in tuple(ROTA_CANAIS) + self._canais_novos + gosto},
                             "por_alvo": {a: 0 for a in ALVOS_CANAIS}}
         self._canais["creditos"] += 1
         for canal, f in canais.items():
@@ -1572,7 +1599,7 @@ class PoliticaLobos(Aprendiz):
                  cfg_bola: ConfigBola | None = None, cfg_frutas: ConfigFrutas | None = None,
                  cfg_mundo: ConfigMundo | None = None, cfg_corpo: ConfigCorpo | None = None,
                  cfg_banheiro: ConfigBanheiro | None = None, cfg_modelo: ConfigModeloMundo | None = None,
-                 cfg_consequencia: ConfigConsequencia | None = None) -> None:
+                 cfg_consequencia: ConfigConsequencia | None = None, h_paladar: dict | None = None) -> None:
         cl = cfg_lobos or CONFIG_LOBOS
         # o banheiro (TAREFA_V2_BANHEIRO, secoes 2 e 4): exige o mundo fisico e o corpo com a sub-chave banheiro; o corpo com a vontade
         # exige a chave do banheiro no cerebro (sem ela o pet teria a vontade e nenhuma acao para alivia-la)
@@ -1702,6 +1729,22 @@ class PoliticaLobos(Aprendiz):
                 self._pesos_corpo = {r: {a: list(v) for a, v in acoes.items()} for r, acoes in self._prior_corpo.items()}
                 if self.n_pesos() >= cl.maximo_pesos:
                     raise ValueError(f"{self.n_pesos()} pesos, teto {cl.maximo_pesos}")
+        # o Paladar (docs/futuro/paladar.md, secao 3.4): o canal gosto pesado pelos h_q do genoma do pet (parametros do sinal, nao pesos
+        # aprendidos) e as classes do alvo de comer por tipo (montadas logo abaixo, com o alvo aprendido)
+        if type(cl.paladar) is not bool:
+            raise TypeError(f"ConfigLobos.paladar precisa ser bool: {cl.paladar!r}")
+        self._paladar = None
+        if cl.paladar:
+            if not fisico or self._corpo is None or not cfg_corpo.paladar or not cl.alvo_aprendido:
+                raise ValueError("ConfigLobos.paladar exige o mundo fisico, o corpo com o paladar (ConfigCorpo.paladar) e o alvo aprendido")
+            if h_paladar is None or set(h_paladar) != set(QUALIDADES_GOSTO):
+                raise ValueError(f"ConfigLobos.paladar pede os h_q do genoma do pet (genoma_paladar), {QUALIDADES_GOSTO}: {h_paladar!r}")
+            for q, v in h_paladar.items():
+                if type(v) is not int or not -cl.escala <= v <= cl.escala:
+                    raise ValueError(f"h_{q} do paladar fora de inteiros em [-S, S]: {v!r}")
+            self._paladar = {q: h_paladar[q] for q in QUALIDADES_GOSTO}
+        elif h_paladar is not None:
+            raise ValueError("h_paladar sem ConfigLobos.paladar")
         # dois pets, etapa 4 (DP-8): o alvo aprendido por classe, so no mundo fisico; um peso por (regra, acao, classe), todos em w0_alvo
         if type(cl.alvo_aprendido) is not bool:
             raise TypeError(f"ConfigLobos.alvo_aprendido precisa ser bool: {cl.alvo_aprendido!r}")
@@ -1857,9 +1900,12 @@ class PoliticaLobos(Aprendiz):
         return None
 
     def _classes_alvo(self, acao: AcaoPet) -> tuple:
-        """as classes do alvo aprendido de uma acao: as de CLASSES_ALVO e, no explorar com `alvo_por_arvore`, uma por arvore (PP-2)"""
+        """as classes do alvo aprendido de uma acao: as de CLASSES_ALVO e, no explorar com `alvo_por_arvore`, uma por arvore (PP-2); no
+        comer com o paladar, a comida boa por tipo (PL-5)"""
         if acao is AcaoPet.EXPLORAR and self._arvores_alvo:
             return CLASSES_ALVO[acao] + self._arvores_alvo
+        if acao is AcaoPet.COMER and self._paladar is not None:
+            return CLASSES_COMER_PALADAR
         return CLASSES_ALVO[acao]
 
     def _alvo_aprendido(self, acao: AcaoPet, candidatos: list, percepcao, u: int):
@@ -1882,9 +1928,15 @@ class PoliticaLobos(Aprendiz):
             if self.motivos:
                 self.motivos[-1]["alvo_aprendido"] = {"classes": [], "padrao": None, "alvo": None}
             return None
-        podres = {i for i, tipo, *_ in percepcao.vistos if tipo.endswith("_podre")}
-        classe_de = lambda a: (("comida_podre" if a.id in podres else "comida") if a.tipo == "comida"  # noqa: E731
-                               else CLASSE_DO_CANDIDATO.get(a.tipo, a.tipo))
+        tipos = {i: tipo for i, tipo, *_ in percepcao.vistos}
+        podres = {i for i, tipo in tipos.items() if tipo.endswith("_podre")}
+        if self._paladar is not None:
+            # o paladar (PL-5): a comida boa pela classe do tipo dela (o tipo da comida vista ja vem na percepcao de hoje; o gosto, nao)
+            classe_de = lambda a: ((("comida_podre" if a.id in podres else f"comida:{tipos[a.id]}") if a.tipo == "comida"  # noqa: E731
+                                    else CLASSE_DO_CANDIDATO.get(a.tipo, a.tipo)))
+        else:
+            classe_de = lambda a: (("comida_podre" if a.id in podres else "comida") if a.tipo == "comida"  # noqa: E731
+                                   else CLASSE_DO_CANDIDATO.get(a.tipo, a.tipo))
         classes, reps = [], []
         for a in candidatos:
             c = classe_de(a)
@@ -1989,16 +2041,23 @@ class PoliticaLobos(Aprendiz):
         if self._modelo_mundo is None:
             return
         p = self._cc_plano
-        if (cc.ganho, tuple(cc.drives), cc.humor_na_fruta, dict(cc.pesos_drives_corpo)) != \
-                (p.ganho, tuple(p.drives), p.humor_na_fruta, dict(p.pesos_drives_corpo)):
+        if (cc.ganho, tuple(cc.drives), cc.humor_na_fruta, dict(cc.pesos_drives_corpo), cc.ganho_gosto) != \
+                (p.ganho, tuple(p.drives), p.humor_na_fruta, dict(p.pesos_drives_corpo), p.ganho_gosto):
             raise RuntimeError("o planejador: a ConfigConsequencia do credito nao e a do plano (ganho, drives ou pesos)")
 
     def _valores_do_plano(self, pc) -> dict[str, int]:
         """valor(tipo) = a conta do `sinal_corpo` dos receptores de agora para os de agora mais o desfecho previsto do tipo, cortados em
         [0, S], com o ganho da consequencia (a tarefa, secao 2.2). Inteiros."""
         m, S, cc = self._modelo_mundo, self._escala, self._cc_plano
-        return {t: valor_previsto(pc, m.desfecho_de(t), self._drives_plano, cc.ganho, S, dict(cc.pesos_drives_corpo))
-                for t in TIPOS_COMIDA_MODELO}
+        valores = {t: valor_previsto(pc, m.desfecho_de(t), self._drives_plano, cc.ganho, S, dict(cc.pesos_drives_corpo))
+                   for t in TIPOS_COMIDA_MODELO}
+        if self._paladar is not None:
+            # o paladar (secao 3.5): o termo do gosto com os mesmos h_q e o mesmo ganho_gosto, sobre a leitura prevista de cada
+            # paladar_q (a de agora mais o desfecho do tipo, cortada em [0, S]); a podre nao tem gosto (o credito tambem nao o da)
+            for t in TIPOS_COMIDA_MODELO:
+                if t != "podre":
+                    valores[t] += gosto_previsto(pc, m.desfecho_de(t), self._paladar, cc.ganho_gosto, S)
+        return valores
 
     def _valor_do_andar(self, pc, d: int) -> int:
         """o custo de andar d subunidades, na mesma conta: a energia prevista menos o andar previsto x d / S (<= 0 quando andar gasta)"""
@@ -2606,6 +2665,29 @@ def contribuicoes_corpo(antes, depois, drives: tuple, S: int, pesos_drives: dict
             raise ValueError(f"w_d do drive {d!r} precisa ser inteiro >= 0: {wd!r}")
         c[d] = wd * delta
     return c
+
+
+def sinal_gosto(depois, h: dict, ganho_gosto: int, S: int) -> int:
+    """O canal do gosto (docs/futuro/paladar.md, secao 3.4): div_arred(ganho_gosto x soma_q div_arred(h_q x leitura de paladar_q, S), S),
+    sobre os receptores de depois de comer. Nao e a reducao de uma falta (fora da forma de Keramati e Gutkin, SEM FONTE) e nao le a fome
+    (PL-6). Inteiro."""
+    if type(ganho_gosto) is not int or ganho_gosto < 0:
+        raise ValueError(f"ganho_gosto precisa ser inteiro >= 0: {ganho_gosto!r}")
+    soma = 0
+    for q in QUALIDADES_GOSTO:
+        soma += div_arred(h[q] * leitura_receptor(depois, f"paladar_{q}", S), S)
+    return div_arred(ganho_gosto * soma, S)
+
+
+def gosto_previsto(pc, delta: dict, h: dict, ganho_gosto: int, S: int) -> int:
+    """O termo do gosto do planejador: o `sinal_gosto` da leitura prevista de cada paladar_q (a de agora mais `delta`, cortada em
+    [0, S])."""
+    soma = 0
+    for q in QUALIDADES_GOSTO:
+        r = f"paladar_{q}"
+        prevista = max(0, min(S, leitura_receptor(pc, r, S) + delta.get(r, 0)))
+        soma += div_arred(h[q] * prevista, S)
+    return div_arred(ganho_gosto * soma, S)
 
 
 def valor_previsto(pc, delta: dict, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None) -> int:
