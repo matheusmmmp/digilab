@@ -341,3 +341,46 @@ Sem run; só as sementes dos testes. Interpretações em `docs/registro/2026-10.
   - **G1;**
   - **o motivo.**
 - **G2:** o gabarito da etapa 0 passa com o cérebro desta etapa (`tests/test_paladar_corpo.py`).
+
+## 14. Etapa 4 feita: a bancada (2026-10-14, worker D) — SEM RUN
+
+O paladar nos braços do J5, as medidas da seção 7 e a calibração do adendo 3 montada. Sem run; só as sementes dos testes. Interpretações
+em `docs/registro/2026-10.md`.
+
+- **A chave do J5:** `"paladar": true` na config da bancada do J5 (`BancadaPQP.paladar`).
+  - Liga as três chaves em todos os braços: o mundo com a `CONFIG_PALADAR_LIGADA`, o corpo com a `ConfigCorpo.paladar` e o cérebro com a
+    `ConfigLobos.paladar`.
+  - Os `h_q` vão ao cérebro pelo `h_paladar`, do genoma da unidade (`genoma_paladar(semente)`).
+  - Desligada, a vida e as medidas são as de antes (G2: o mesmo log e as mesmas medidas, e os testes do J5 passam sem mudança).
+- **A x é a favorita** (PJ-1): a fruta de maior valor inato, com o empate pela rng `pet-que-pensa-x`. Sobre 600 pets ela continua
+  uniforme entre os tipos. A y é a de sempre, entre as outras duas.
+- **A faixa nova:** 49101…49505 na `FAIXAS_RESERVADAS`, com a fonte (A3.5, PJ-5), e `BASES_PQP_PALADAR`.
+  - Com o paladar, a run usa estas bases ou as da validação (46101…).
+  - As 45101… não voltam com o paladar, e as 49101… não servem sem ele.
+- **As medidas descritivas** (seção 7 e A3.6), na chave `paladar` das medidas de cada vida:
+  - os consumos no mapa por tipo e por dia, e a fração de fruta;
+  - a leitura do paladar e o f_gosto em cada consumo;
+  - a saciedade da ração contra as rações das últimas 12 h;
+  - os pesos das classes `comida:<tipo>` por dia;
+  - o valor inato contra o que o pet mais come, o lugar da x e as x comidas antes de T_m;
+  - o desfecho do gosto no modelo do mundo contra o perfil real;
+  - a conta da G-REVAL-POSSIVEL da unidade.
+- **A calibração montada, SEM rodar** (precisa do sim do Matheus): `experiments/run_v2_calibracao_pet_que_pensa_paladar.py` com
+  `experiments/configs/v2_pet_que_pensa/calibracao_paladar.json` (e a fumaça `fumaca_calibracao_paladar.json`). São quatro passos:
+  1. **`ganho_gosto`** (PJ-3): a grade {S/2, S, 2S}, o P1 na fase 1, a fração de fruta nos dias 4 a 6 e o menor ponto em [0,25; 0,60];
+  2. **`g_plano`** (PJ-4): a regra da seção 5, com o `ganho_gosto` escolhido;
+  3. **`reval`** (PJ-6): a G-REVAL-POSSIVEL por unidade, sem vida, com no máximo 25% das unidades falhando;
+  4. **`piloto`**: só com a premissa passando.
+- **Testes** (`tests/test_bancada_pqp_paladar.py`, 12):
+  - a faixa e as unidades;
+  - a x e a y;
+  - as recusas da config;
+  - o G2;
+  - duas vidas com o paladar (P1/T1 e P1-plan/T2), com o G1 e as medidas recontadas;
+  - a G-REVAL-POSSIVEL refeita à mão;
+  - as recusas do orquestrador e a regra do `ganho_gosto`;
+  - a fumaça dos quatro passos.
+- **As provas da divisão da bancada** (G-AST e G-NOMES do #312) ficaram presas ao commit da divisão, para o pacote poder mudar. A
+  fumaça nova entrou em `tools/conferir_fumacas.py`. Os dois estão em `docs/registro/2026-10.md`.
+- **Na fumaça** (sementes dos testes, não é resultado): a G-REVAL-POSSIVEL passa nas cinco sementes de teste com S/2 e S, e falha em 3 de
+  5 com 2S. Se a calibração parar no 2S, a premissa pode falhar (R-11).

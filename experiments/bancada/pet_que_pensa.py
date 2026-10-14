@@ -8,6 +8,7 @@ O `experiments/bancada_v2.py` continua sendo a porta de entrada: ele reexporta t
 """
 from __future__ import annotations
 
+import copy
 import json
 import random
 import time
@@ -34,6 +35,12 @@ from digilab.motivo import Motivo, fator_do_plano, nome_base
 from digilab.expressao import expressar
 from digilab.protocol import derivar_semente
 from digilab.temperamento import NEUTRO
+from digilab.config import CONFIG_PALADAR_LIGADA
+from digilab.corpo import QUALIDADES, Corpo, div_arred as div_arred_corpo
+from digilab.genoma_paladar import GenomaPaladar, genoma_paladar
+from digilab.motor_corpo import PercepcaoCorpo
+from digilab.policies.lobos import sinal_corpo, sinal_gosto
+from digilab.state import Estado
 
 from . import RAIZ
 
@@ -61,6 +68,9 @@ from . import RAIZ
 PLANO_PQP = "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md"
 PREFIXO_PQP = "pet_que_pensa"
 BASES_PET_QUE_PENSA = {"calibracao": (45101, 45202, 45303, 45404, 45505), "validacao": (46101, 46202, 46303, 46404, 46505)}
+# o adendo 3 do plano (A3.5, PJ-5): a calibracao do ganho_gosto e do g_plano e o piloto, com o paladar, numa faixa nova; a validacao com o
+# paladar continua nas bases da validacao de cima (nunca rodada). As de calibracao de cima (45101...) nao voltam com o paladar
+BASES_PQP_PALADAR = (49101, 49202, 49303, 49404, 49505)
 ROTULO_X_PQP = "pet-que-pensa-x"            # a fruta x da unidade (plano, secao 2)
 ROTULO_Y_PQP = "pet-que-pensa-y"            # a fruta y do T2, entre as outras duas
 D_A_PQP = 7                                 # PP-4: os dias de aprendizado
@@ -100,10 +110,23 @@ def fruta_x_pqp(semente: int) -> str:
     return FRUTAS[random.Random(derivar_semente(ROTULO_X_PQP, semente)).randrange(len(FRUTAS))]
 
 
-def fruta_y_pqp(semente: int) -> str:
-    """A fruta y do T2: uniforme entre as outras duas, pela rng propria (plano, secao 2)."""
-    outras = [f for f in FRUTAS if f != fruta_x_pqp(semente)]
+def fruta_y_pqp(semente: int, x: str | None = None) -> str:
+    """A fruta y do T2: uniforme entre as outras duas, pela rng propria (plano, secao 2). Sem `x`, a x sorteada; com o paladar, a x e a
+    favorita (`fruta_x_paladar_pqp`) e vem de fora."""
+    x = fruta_x_pqp(semente) if x is None else x
+    if x not in FRUTAS:
+        raise ValueError(f"fruta x {x!r}: so {FRUTAS}")
+    outras = [f for f in FRUTAS if f != x]
     return outras[random.Random(derivar_semente(ROTULO_Y_PQP, semente)).randrange(len(outras))]
+
+
+def fruta_x_paladar_pqp(semente: int, genoma: GenomaPaladar, perfis: dict, escala: int) -> str:
+    """A fruta x com o paladar (adendo 3, A3.1, PJ-1): a fruta de maior valor inato para o pet (Sum_q h_q x perfil_q / C, pelo genoma do
+    paladar da unidade); no empate, sorteada entre as empatadas pela mesma rng da x sem o paladar (`pet-que-pensa-x`)."""
+    empatadas = genoma.favorita(perfis, escala)
+    if len(empatadas) == 1:
+        return empatadas[0]
+    return empatadas[random.Random(derivar_semente(ROTULO_X_PQP, semente)).randrange(len(empatadas))]
 
 
 def efeitos_pqp(x: str, cf: ConfigFrutas, faz_mal: bool = False) -> dict:
@@ -310,8 +333,11 @@ class BancadaPQP:
     lugar: str = "comedouro"
     cfg_modelo: ConfigModeloMundo = CONFIG_MODELO_MUNDO_LIGADA
     g_plano: int = 0                 # o ganho do plano dos bracos com o planejador (a calibracao, PP-6); o P1 tem sempre 0
+    paladar: bool = False            # o adendo 3 (A3.1): as tres chaves do paladar em todos os bracos, o genoma e a x como a favorita
 
     def __post_init__(self) -> None:
+        if type(self.paladar) is not bool:
+            raise TypeError(f"paladar do J5 e bool: {self.paladar!r}")
         if self.d_a < 1 or self.janela < 1 or self.n_mao < 1:
             raise ValueError("d_a, janela e n_mao precisam ser positivos")
         if type(self.g_plano) is not int or self.g_plano < 0:
@@ -327,9 +353,27 @@ class BancadaPQP:
     def dias_da_vida(self, protocolo: str) -> int:
         return self.d_a if protocolo == "fase1" else self.d_a + self.janela
 
+    # ------------------------------------------------------------- o paladar (docs/futuro/paladar.md, etapa 4; adendo 3 do plano)
+    def genoma_paladar(self, semente: int) -> GenomaPaladar:
+        """O genoma do paladar da unidade (A3.1): da semente da unidade, pela rng propria `paladar-ovo`. So com o paladar."""
+        if not self.paladar:
+            raise ValueError("genoma do paladar sem o paladar do J5")
+        return genoma_paladar(semente, self.cfg_corpo())
+
+    def fruta_x(self, semente: int) -> str:
+        """A x da unidade: sem o paladar, a sorteada (secao 2); com ele, a favorita do pet (PJ-1)."""
+        if not self.paladar:
+            return fruta_x_pqp(semente)
+        return fruta_x_paladar_pqp(semente, self.genoma_paladar(semente), CONFIG_PALADAR_LIGADA.perfis, self.cfg_corpo().escala)
+
+    def fruta_y(self, semente: int) -> str:
+        """A y do T2: entre as outras duas, pela rng de sempre (A3.1: igual)."""
+        return fruta_y_pqp(semente, self.fruta_x(semente))
+
     def cfg_corpo(self) -> ConfigCorpo:
         """PP-3: o regime quimica com o metabolismo (os numeros do passo 0 vem da chave "corpo" da config)."""
-        return replace(self.bancada.cfg_corpo, drives_novos=False, gestos=False, metabolismo=True)
+        cc = replace(self.bancada.cfg_corpo, drives_novos=False, gestos=False, metabolismo=True)
+        return replace(cc, paladar=True) if self.paladar else cc
 
     def cfg_lobos(self, espec: EspecPQP) -> ConfigLobos:
         """O cerebro A do P1 (secao 2) com o habito do plano: o alvo aprendido, a presenca da fruta no mundo e as classes por arvore. Nos
@@ -339,6 +383,8 @@ class BancadaPQP:
             raise ValueError(f"braco {espec.braco}: o planejador precisa do g_plano (a chave 'g_plano' da config)")
         cl = replace(self.bancada.cfg_lobos, alvo_aprendido=True, presenca_fruta_mundo=True, alvo_por_arvore=True,
                      g_plano=self.g_plano if b.planejador else 0)
+        if self.paladar:
+            cl = replace(cl, paladar=True)
         return cfg_lobos_do_braco(cl, self.braco_montado(), espec.semente, self.bancada.montagem)
 
     def braco_montado(self) -> Braco:
@@ -353,6 +399,8 @@ class BancadaPQP:
         cb, cf = bc.pesos_do_mundo()
         cc = bc.cfg_consequencia if b.canais is None else replace(bc.cfg_consequencia, canais_ligados=b.canais)
         plano = {"cfg_modelo": self.cfg_modelo, "cfg_consequencia": cc} if bp.planejador else {}
+        if self.paladar:
+            plano["h_paladar"] = dict(self.genoma_paladar(espec.semente).h)
         cerebro = PoliticaLobos(cfg, self.cfg_lobos(espec), cfg_bola=cb, cfg_frutas=cf, cfg_mundo=bc.cfg_mundo, cfg_corpo=self.cfg_corpo(),
                                 **plano)
         if bp.planejador and cerebro.modelo_mundo is None:
@@ -360,9 +408,11 @@ class BancadaPQP:
         return PoliticaDoBraco(PoliticaComModeloPQP(cerebro, bc.cfg_mundo, self.cfg_modelo, bp.congela), b, cc)
 
     def fabrica_motor(self, espec: EspecPQP):
-        x = fruta_x_pqp(espec.semente)
+        x = self.fruta_x(espec.semente)
         cf = self.bancada.cfg_frutas
         kw = {"revaloriza": x, "efeito_depois": efeitos_pqp(x, cf, faz_mal=True)} if espec.protocolo == "T1" else {}
+        if self.paladar:
+            kw["cfg_paladar"] = CONFIG_PALADAR_LIGADA
         cm, corpo, efeito = self.bancada.cfg_mundo, self.cfg_corpo(), efeitos_pqp(x, cf)
         return lambda politica, cfg, semente: com_corpo(MotorMundoMudanca)(
             politica, cfg, semente, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=cm, efeito_frutas=efeito,
@@ -373,8 +423,8 @@ class BancadaPQP:
             raise ValueError(f"protocolo {espec.protocolo!r}: so {PROTOCOLOS_PQP}")
         dias = self.dias_da_vida(espec.protocolo)
         orcamento = self.bancada.orcamento_por_dia() * dias
-        x = fruta_x_pqp(espec.semente)
-        y = fruta_y_pqp(espec.semente) if espec.protocolo == "T2" else None
+        x = self.fruta_x(espec.semente)
+        y = self.fruta_y(espec.semente) if espec.protocolo == "T2" else None
         regra = RegraMudancaPQP(espec.protocolo, x, y, self.d_a, self.n_mao)
         dono = DonoComLugar(criar_dono(self.dono), self.lugar, espec.semente, self.dono, self.bancada.cfg_mundo)
         cpu = time.process_time()
@@ -428,7 +478,7 @@ class BancadaPQP:
         regs: list = []
 
         def fp(cfg=None):
-            r = _RegistroPQP(self.politica(espec, cfg), cm, self.cfg_modelo)
+            r = _RegistroPQP(self.politica(espec, cfg), cm, self.cfg_modelo, self.paladar)
             regs.append(r)
             return r
         motor = self.rejogar(vida.motor.log, espec, fp, lambda m: setattr(regs[-1], "motor", m))
@@ -485,7 +535,76 @@ class BancadaPQP:
         out["custo"] = {"cpu_s": vida.cpu_s, "us_por_decisao": 1e6 * vida.cpu_s / max(1, len(reg.decisoes)),
                         "bytes_log_por_dia": len(vida.motor.log.para_jsonl().encode("utf-8")) / self.dias_da_vida(espec.protocolo)}
         out["nao_medidos"] = {"deriva": "nao medida nesta etapa (a JSD ao prior do A com o embrulho dos modelos fica para o orquestrador)"}
+        if self.paladar:
+            out["paladar"] = self.medir_paladar(vida, reg)
         return out
+
+    def medir_paladar(self, vida: VidaPQP, reg: _RegistroPQP) -> dict:
+        """Os descritivos do paladar (docs/futuro/paladar.md, secao 7; adendo 3, A3.6), sem gate, so do registro de medicao e do genoma:
+        - os consumos no mapa por tipo e por dia e a fracao de fruta madura entre eles (a medida da calibracao do ganho_gosto, A3.3);
+        - em cada consumo maduro, a leitura de cada paladar_q (o gostar) e o f_gosto do cerebro; na racao, a saciedade do salgado contra as
+          racoes das ultimas 12 h (o G-SSS numa vida);
+        - os pesos das classes `comida:<tipo>` no fim de cada dia (o querer);
+        - o valor inato de cada tipo (do genoma) contra o que o pet mais come, o lugar da x na ordem e as x comidas antes de T_m;
+        - o desfecho do gosto de cada tipo no modelo do mundo contra o perfil real, por dia;
+        - o sinal da G-REVAL-POSSIVEL da unidade (A3.2)."""
+        espec, S = vida.espec, self.cfg_modelo.escala
+        cc = self.cfg_corpo()
+        perfis = CONFIG_PALADAR_LIGADA.perfis
+        g = self.genoma_paladar(espec.semente)
+        dias = self.dias_da_vida(espec.protocolo)
+        fase1_fim = self.d_a * TICKS_POR_DIA
+        consumos = reg.consumos
+        inato = {t: g.valor_inato(perfis[t], cc.escala) for t in ("racao",) + FRUTAS}
+        ordem = sorted(FRUTAS, key=lambda f: (-inato[f], FRUTAS.index(f)))
+        maduros = [c for c in consumos if c["situacao"] == "madura"]
+        contagem = {t: sum(1 for c in maduros if c["tipo"] == t) for t in ("racao",) + FRUTAS}
+        mais = max(contagem.values())
+        antes = [c for c in maduros if c["tipo"] == vida.x and (vida.tick_mudanca is None or c["tick"] < vida.tick_mudanca)]
+        return {"genoma": dict(g.h), "valor_inato": inato, "ordem_inata": ordem, "lugar_da_x": ordem.index(vida.x) + 1,
+                "x_comida_antes_da_mudanca": len(antes), "contagem": contagem,
+                "mais_comido": [t for t in ("racao",) + FRUTAS if contagem[t] == mais] if mais else [],
+                "por_dia": consumos_por_dia(consumos, dias), "fracao_fruta_fase1": fracao_fruta(consumos, 0, fase1_fim),
+                "fracao_fruta_janela": None if dias == self.d_a else fracao_fruta(consumos, fase1_fim, dias * TICKS_POR_DIA),
+                "consumos": consumos, "classes_por_dia": reg.classes_por_dia,
+                "gosto_do_modelo": gosto_do_modelo(reg.modelos_por_dia, perfis, cc.escala, S),
+                "g_reval": self.g_reval_possivel(espec.semente)}
+
+    def g_reval_possivel(self, semente: int) -> dict:
+        """A conta da premissa G-REVAL-POSSIVEL de uma unidade (adendo 3, A3.2), sem simular: o sinal do proprio cerebro (o do P1, na
+        ConfigConsequencia da bancada: os drives com o ganho, a E2 no comer da fruta e o canal do gosto com o `ganho_gosto`) para comer
+        cada tipo maduro num estado de referencia fixo: a fome, o humor e a energia em S/2 e a saciedade do paladar em zero (o corpo do
+        nascimento com esses drives). O depois e o corpo logo depois do estimulo do consumo, sem o tempo andar; a x come com o efeito de
+        depois da mudanca (o T1). A unidade passa se o sinal da x for menor que o da racao ou que o de outra fruta."""
+        if not self.paladar:
+            raise ValueError("G-REVAL-POSSIVEL sem o paladar do J5")
+        pol = self.politica(EspecPQP("P1", "T1", semente), CONFIG_PADRAO)
+        cerebro, cq = pol.cerebro._interna, pol.cfg_consequencia
+        S = cerebro._escala
+        x = self.fruta_x(semente)
+        cc, cm = self.cfg_corpo(), self.bancada.cfg_mundo
+        efeito = efeitos_pqp(x, self.bancada.cfg_frutas, faz_mal=True)
+        h = self.genoma_paladar(semente).h
+        ref = Corpo.de_estado(Estado(fome=0.5, energia=0.5, humor=0.5), CONFIG_PADRAO, cc, com_mundo=True)
+        if any(ref.q[f"saciedade_{q}"] for q in QUALIDADES):
+            raise RuntimeError("G-REVAL-POSSIVEL: o corpo de referencia com saciedade")
+        antes = PercepcaoCorpo(**ref.receptores())
+        if (antes.fome, antes.humor, antes.energia) != (S // 2, S // 2, S // 2):
+            raise RuntimeError(f"G-REVAL-POSSIVEL: o estado de referencia nao esta em S/2: {antes.fome}, {antes.humor}, {antes.energia}")
+        sinais = {}
+        for t in ("racao",) + FRUTAS:
+            c = copy.deepcopy(ref)
+            c.estimulo_consumo_mundo(t, "madura", cm, efeito_fruta=efeito[t] if t in FRUTAS else 0.0,
+                                     perfil=dict(CONFIG_PALADAR_LIGADA.perfis[t]))
+            depois = PercepcaoCorpo(**c.receptores())
+            drives = cerebro._drives_corpo(cq, t in FRUTAS)
+            corpo_s = sinal_corpo(antes, depois, drives, cq.ganho, S, dict(cq.pesos_drives_corpo))
+            gosto = sinal_gosto(depois, h, cq.ganho_gosto, S)
+            sinais[t] = {"corpo": corpo_s, "gosto": gosto, "total": corpo_s + gosto}
+        tx = sinais[x]["total"]
+        abaixo = [t for t in ("racao",) + FRUTAS if t != x and tx < sinais[t]["total"]]
+        return {"x": x, "ganho_gosto": cq.ganho_gosto, "efeito_x_depois": efeito[x], "sinais": sinais, "abaixo_de": abaixo,
+                "passa": bool(abaixo)}
 
 
 def _media(xs: list) -> float | None:
@@ -498,8 +617,11 @@ class _RegistroPQP:
     alvo escolhido (o do cerebro, ou o padrao do motor pela mesma funcao pura), se veio depois da mudanca e o que comeu. Confere o
     G-SEM-CREDITO em cada fruta na mao e retrata os modelos no fim de cada dia."""
 
-    def __init__(self, interna: PoliticaDoBraco, cm: ConfigMundo, cfg_modelo: ConfigModeloMundo) -> None:
+    def __init__(self, interna: PoliticaDoBraco, cm: ConfigMundo, cfg_modelo: ConfigModeloMundo, paladar: bool = False) -> None:
         self.interna, self.cm, self.cfg_modelo = interna, cm, cfg_modelo
+        self.paladar = paladar
+        self.consumos: list[dict] = []           # com o paladar: cada consumo no mapa (a leitura do paladar, o f_gosto, a saciedade)
+        self.classes_por_dia: list[dict] = []    # com o paladar: os pesos das classes comida:<tipo> no fim de cada dia
         self.nome = interna.nome
         self.motor = None
         self.decisoes: list[dict] = []
@@ -528,6 +650,11 @@ class _RegistroPQP:
             self.modelos_por_dia.append({"dia": self._dia, "desfecho": json.loads(json.dumps(m.desfecho)), "andar": m.andar,
                                          "mapa": json.loads(json.dumps(m.mapa)), "receptores": None if m.receptores is None
                                          else list(m.receptores)})
+            if self.paladar:
+                pesos = self.cerebro_a()._pesos_alvo_mundo
+                self.classes_por_dia.append({"dia": self._dia, "classes": {k: {c: w for c, w in t.items() if c.startswith("comida:")}
+                                                                           for k, t in sorted(pesos.items())
+                                                                           if any(c.startswith("comida:") for c in t)}})
 
     def agir(self, obs, rng):
         tick = self.motor._estado.tick
@@ -561,6 +688,26 @@ class _RegistroPQP:
         if c is not None and c["situacao"] == "madura":
             self.decisoes[-1]["comeu"] = c["tipo"]
         self.interna.consequencia_mundo(acao, ocorrido, obs_depois)
+        if self.paladar and c is not None:
+            self._anotar_consumo(c, obs_depois)
+
+    def _anotar_consumo(self, c: dict, obs_depois) -> None:
+        """um consumo no mapa (o comer ou o "achou e comeu"), com o paladar: a leitura de cada paladar_q depois (o que o cerebro le), o
+        f_gosto do motivo da decisao (so na madura) e, na racao, a saciedade do salgado no corpo e as racoes das ultimas 12 h, esta
+        inclusa (o experimentador le o corpo; o cerebro nunca)"""
+        tick = self.motor._estado.tick
+        d = self.decisoes[-1]
+        um = {"tick": d["tick"], "tick_motor": tick, "tipo": c["tipo"], "situacao": c["situacao"], "como": c.get("como"),
+              "depois": self.depois}
+        if c["situacao"] == "madura":
+            um["paladar"] = {q: getattr(obs_depois.corpo, f"paladar_{q}") for q in QUALIDADES}
+            sc = self.cerebro_a().motivos[d["n_motivo"]].get("sinal_corpo")
+            um["f_gosto"] = None if sc is None else sc.get("gosto")
+            if c["tipo"] == "racao":
+                um["saciedade_salgado"] = self.motor.corpo.q["saciedade_salgado"]
+                um["racoes_12h"] = 1 + sum(1 for o in self.consumos if o["tipo"] == "racao" and o["situacao"] == "madura"
+                                           and tick - o["tick_motor"] < 12 * 60)
+        self.consumos.append(um)
 
     def mudanca_no_mundo(self, tick: int) -> None:
         self.depois = True
@@ -586,6 +733,53 @@ class _RegistroPQP:
         if interna is None:
             raise AttributeError(nome)
         return getattr(interna, nome)
+
+
+def consumos_por_dia(consumos: list, dias: int) -> list:
+    """os consumos no mapa por dia (pelo tick da decisao): as maduras por tipo, as podres juntas e a fracao de fruta madura entre todos"""
+    out = []
+    for dia in range(dias):
+        cs = [c for c in consumos if c["tick"] // TICKS_POR_DIA == dia]
+        tipos = {t: sum(1 for c in cs if c["situacao"] == "madura" and c["tipo"] == t) for t in ("racao",) + FRUTAS}
+        out.append({"dia": dia, "maduras": tipos, "podres": sum(1 for c in cs if c["situacao"] != "madura"), "total": len(cs),
+                    "fracao_fruta": None if not cs else sum(tipos[f] for f in FRUTAS) / len(cs)})
+    return out
+
+
+def fracao_fruta(consumos: list, ini: int, fim: int) -> dict:
+    """A medida da calibracao do ganho_gosto (adendo 3, A3.3): entre os consumos no mapa nos ticks [ini, fim) (pelo tick da decisao), a
+    fracao de fruta madura (os tres tipos juntos). O denominador e todo consumo no mapa: a racao, as frutas maduras e as podres. Sem
+    consumo, None."""
+    cs = [c for c in consumos if ini <= c["tick"] < fim]
+    frutas = sum(1 for c in cs if c["situacao"] == "madura" and c["tipo"] in FRUTAS)
+    return {"consumos": len(cs), "frutas": frutas, "fracao": None if not cs else frutas / len(cs)}
+
+
+def fracao_fruta_dias(medida: dict, dias: tuple) -> dict:
+    """a fracao de fruta de uma vida nos dias `dias` (inclusive, contados de 0), pela soma dos dias (a regra do ganho_gosto, A3.3)"""
+    ini, fim = dias
+    linhas = [r for r in medida["paladar"]["por_dia"] if ini <= r["dia"] <= fim]
+    if len(linhas) != fim - ini + 1:
+        raise ValueError(f"a vida nao tem os dias {ini} a {fim} (tem {len(medida['paladar']['por_dia'])})")
+    total = sum(r["total"] for r in linhas)
+    frutas = sum(r["maduras"][f] for r in linhas for f in FRUTAS)
+    return {"consumos": total, "frutas": frutas, "fracao": None if not total else frutas / total}
+
+
+def gosto_do_modelo(retratos: list, perfis: dict, C: int, S: int) -> list:
+    """O desfecho do gosto de cada tipo no modelo do mundo contra o perfil real (A3.6), por dia: a mudanca prevista de cada paladar_q ao
+    comer o tipo, e o perfil na escala S (div_arred(perfil_q x S, C), a leitura logo depois de comer com a saciedade em zero)."""
+    out = []
+    for r in retratos:
+        rec = r["receptores"]
+        if rec is None or any(f"paladar_{q}" not in rec for q in QUALIDADES):
+            out.append({"dia": r["dia"], "tipos": None})
+            continue
+        tipos = {t: {q: {"previsto": r["desfecho"][t][rec.index(f"paladar_{q}")], "perfil_s": div_arred_corpo(perfil[q] * S, C)}
+                     for q in QUALIDADES}
+                 for t, perfil in perfis.items() if t in r["desfecho"]}
+        out.append({"dia": r["dia"], "tipos": tipos})
+    return out
 
 
 def _sem_modelos(ei: dict) -> dict:
@@ -696,7 +890,7 @@ def modelos_contra_o_real(retratos: list, motor: MotorMundo, x: str, S: int) -> 
 
 CHAVES_CONFIG_PQP = {"descricao", "plano", "tipo", "bracos", "protocolos", "sementes", "unidades", "d_a", "janela", "n_mao",
                      "orcamento_por_dia", "dono", "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo", "corpo", "passo0",
-                     "g_plano"}
+                     "g_plano", "paladar"}
 
 
 def validar_config_pqp(cfg: dict) -> dict:
@@ -724,6 +918,13 @@ def validar_config_pqp(cfg: dict) -> dict:
         raise ValueError("'g_plano' sem braco com o planejador")
     if set(cfg.get("lobos", {})) & {"g_plano", "teto_plano"}:
         raise ValueError("o g_plano do J5 vem da chave 'g_plano' (so nos bracos com o planejador), nunca da 'lobos'")
+    paladar = cfg.get("paladar", False)
+    if type(paladar) is not bool:
+        raise ValueError(f"'paladar' do J5 e bool: {paladar!r}")
+    if set(cfg.get("lobos", {})) & {"paladar"} or set(cfg.get("corpo", {})) & {"paladar"}:
+        raise ValueError("o paladar do J5 vem da chave 'paladar' (as tres chaves juntas, A3.1), nunca da 'lobos' nem da 'corpo'")
+    if "ganho_gosto" in cfg.get("consequencia", {}) and not paladar:
+        raise ValueError("'ganho_gosto' na consequencia sem o paladar do J5")
     if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
         raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
     if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
@@ -750,10 +951,12 @@ def validar_config_pqp(cfg: dict) -> dict:
     if fora:
         if cfg.get("plano") != PLANO_PQP or not (RAIZ / PLANO_PQP).is_file():
             raise SementeSemPlano(f"sementes/bases {fora} fora das dos testes: precisa do plano do J5 ({PLANO_PQP}, campo 'plano')")
-        faixa = set(BASES_PET_QUE_PENSA["calibracao"]) | set(BASES_PET_QUE_PENSA["validacao"])
-        if "unidades" not in cfg or not usadas <= faixa or not (usadas <= set(BASES_PET_QUE_PENSA["calibracao"])
-                                                               or usadas <= set(BASES_PET_QUE_PENSA["validacao"])):
-            raise SementeSemPlano(f"as bases do plano do J5 sao as de uma fase so: {BASES_PET_QUE_PENSA} (secao 8), em 'unidades'")
+        # as fases: sem o paladar, a calibracao (secao 8) ou a validacao; com ele (adendo 3, A3.5), a calibracao nova ou a validacao
+        fases = ((BASES_PET_QUE_PENSA["calibracao"], BASES_PET_QUE_PENSA["validacao"]) if not paladar
+                 else (BASES_PQP_PALADAR, BASES_PET_QUE_PENSA["validacao"]))
+        if "unidades" not in cfg or not any(usadas <= set(f) for f in fases):
+            raise SementeSemPlano(f"as bases do plano do J5 sao as de uma fase so, em 'unidades': {fases} (secao 8"
+                                  f"{'; com o paladar, A3.5: as 45101... nao voltam' if paladar else '; as 49101... sao do paladar'})")
         if cfg.get("montagem") != "completa":
             raise ValueError("a run do plano do J5 usa o cerebro do plano (secao 2): a montagem completa")
         if "passo0" not in cfg or "corpo" not in cfg:
@@ -770,7 +973,7 @@ def bancada_pqp_da_config(cfg: dict) -> BancadaPQP:
     chaves = {k: v for k, v in cfg.items() if k in ("consequencia", "lobos", "ponto", "montagem", "mundo", "corpo", "teto_pesos", "plano")}
     bancada = bancada_da_config({**chaves, "dias": d_a + janela, "orcamento": int(cfg["orcamento_por_dia"]) * (d_a + janela)})
     return BancadaPQP(bancada, d_a, janela, int(cfg.get("n_mao", N_MAO_PQP)), cfg.get("dono", "atencioso"), cfg.get("lugar", "comedouro"),
-                      g_plano=int(cfg.get("g_plano", 0)))
+                      g_plano=int(cfg.get("g_plano", 0)), paladar=cfg.get("paladar", False))
 
 
 def rodar_pqp(cfg: dict, pasta: Path) -> dict:
@@ -796,7 +999,10 @@ def rodar_pqp(cfg: dict, pasta: Path) -> dict:
     _gravar(pasta / "meta.json", _dump({**meta({**cfg, "dias": bp.bancada.dias}), "plano": PLANO_PQP,
                                         "modelo_mundo_sha256": _sha(RAIZ / "digilab" / "modelo_mundo.py"),
                                         "d_a": bp.d_a, "janela": bp.janela, "n_mao": bp.n_mao, "g_plano": bp.g_plano,
-                                        "cfg_corpo": bp.cfg_corpo().__dict__, "cfg_modelo": bp.cfg_modelo.__dict__}))
+                                        "cfg_corpo": bp.cfg_corpo().__dict__, "cfg_modelo": bp.cfg_modelo.__dict__,
+                                        **({"paladar": True, "cfg_paladar": CONFIG_PALADAR_LIGADA.__dict__,
+                                            "ganho_gosto": bp.bancada.cfg_consequencia.ganho_gosto,
+                                            "genoma_paladar_sha256": _sha(RAIZ / "digilab" / "genoma_paladar.py")} if bp.paladar else {})}))
     return {"vidas": vidas, "medidas": medidas}
 
 
