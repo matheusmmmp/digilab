@@ -46,13 +46,18 @@ sub-chave `banheiro` (e vice-versa: a vontade sem o banheiro no mapa nao teria c
 andar; a cada tick, `Corpo.passo(..., necessidades=n)` com as necessidades na zona do pet (`MotorMundo.necessidades_na_zona`).
 Com educacao, lesoes, obediencia ou uma acao de treino, falha alto (secao 2): lesao como dano de orgao e da etapa 1b. O corpo nao sorteia
 nada e o cerebro nao recebe o objeto do corpo: so os receptores (G-RECEPTOR).
+Os orgaos do Olfato e da Audicao (docs/TAREFA_V2_DOIS_PETS.md, etapa 8b; docs/futuro/dois_pets.md, secao 5.6): com a `cfg_olfato` ou a
+`cfg_ouvido` ligada (so com o corpo e o mundo fisico; falha alto sem eles), o corpo nasce com os orgaos e o motor entrega a ele o
+estimulo de cada receptor (`Corpo.sentir`) antes de cada tick e antes de cada percepcao. O estimulo vem do gancho do lado do mundo
+`_intensidades_do_orgao()` (do A: a intensidade no ponto de cada narina e de cada ouvido, um inteiro por nome de receptor, sem direcao);
+o motor sem o gancho falha alto na construcao. Os receptores vao a `PercepcaoCorpo` pelos nomes de `corpo.todos_receptores_orgaos`.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import CONFIG_CORPO, ConfigCorpo
+from .config import CONFIG_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigOlfato, ConfigOuvido
 from .corpo import DRIVE_DO_QUIMICO, Corpo
 from .educacao import MotorEducacao
 from .engine import Motor
@@ -92,14 +97,38 @@ class PercepcaoCorpo:
     susto: int | None = None
     vontade: int | None = None            # o banheiro (TAREFA_V2_BANHEIRO, secao 3): a concentracao
     conforto: int | None = None           # BN-6: a concentracao (o cerebro le a falta de conforto, S - leitura)
+    # os orgaos do Olfato e da Audicao (dois pets, secao 5.6): r = div_arred(S e, e + K), e = max(0, I - a - limiar); uma narina (um
+    # ouvido) usa o nome sem lado, duas usam _esq e _dir (corpo.todos_receptores_orgaos, conferido por teste). Desligados, None
+    olfato_comida: int | None = None
+    olfato_comida_esq: int | None = None
+    olfato_comida_dir: int | None = None
+    olfato_outro: int | None = None
+    olfato_outro_esq: int | None = None
+    olfato_outro_dir: int | None = None
+    ouvido_comendo: int | None = None
+    ouvido_comendo_esq: int | None = None
+    ouvido_comendo_dir: int | None = None
+    ouvido_bola: int | None = None
+    ouvido_bola_esq: int | None = None
+    ouvido_bola_dir: int | None = None
+    ouvido_chamado: int | None = None
+    ouvido_chamado_esq: int | None = None
+    ouvido_chamado_dir: int | None = None
+    ouvido_emburrado: int | None = None
+    ouvido_emburrado_esq: int | None = None
+    ouvido_emburrado_dir: int | None = None
 
 
 class MotorCorpo:
     """Mixin: vai na frente de um motor de hoje (use `com_corpo`). `cfg_corpo` liga o corpo."""
 
-    def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, **kw) -> None:
+    def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, cfg_olfato: ConfigOlfato | None = None,
+                 cfg_ouvido: ConfigOuvido | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
+        self.co = cfg_olfato or CONFIG_OLFATO
+        self.cv = cfg_ouvido or CONFIG_OUVIDO
+        self._conferir_orgaos()
         banheiro = self._banheiro_ligado()
         if banheiro != (self.cc.ligada and self.cc.banheiro):
             raise ValueError("o banheiro no mapa (ConfigBanheiro.ligada) e a vontade no corpo (ConfigCorpo.banheiro) vao juntos "
@@ -109,7 +138,10 @@ class MotorCorpo:
         self._recusar_o_que_o_corpo_nao_cobre()
         treino = getattr(self, "treino", None)
         self._cfg_evo = treino.cfg_evo if treino is not None else None
-        if self.cc.drives_novos:                      # etapa 6: a curiosidade so existe com o mundo fisico (CD-8)
+        if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
+                                         cfg_ouvido=self.cv)
+        elif self.cc.drives_novos:                    # etapa 6: a curiosidade so existe com o mundo fisico (CD-8)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado())
         else:
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo)
@@ -133,6 +165,26 @@ class MotorCorpo:
         if estranhos:
             raise TypeError(f"classes que mexem no avanco e que o laco do corpo nao refaz: {estranhos}")
 
+    def _conferir_orgaos(self) -> None:
+        """Os orgaos (secao 5.6 dos dois pets) so com o corpo e o mundo fisico, e com o gancho do lado do mundo que entrega o estimulo."""
+        if not self._orgaos_ligados():
+            return
+        if not self.cc.ligada:
+            raise ValueError("os orgaos do Olfato e da Audicao sao do corpo: ConfigCorpo.ligada desligada")
+        if not self._mundo_ligado():
+            raise ValueError("os orgaos do Olfato e da Audicao leem a intensidade num ponto do mapa: exigem o mundo fisico")
+        if not callable(getattr(self, "_intensidades_do_orgao", None)):
+            raise NotImplementedError("o motor nao tem `_intensidades_do_orgao`: o lado do mundo do orgao (a intensidade no ponto de "
+                                      "cada narina e de cada ouvido) e do A, etapa 8b")
+
+    def _orgaos_ligados(self) -> bool:
+        return self.co.ligada or self.cv.ligada
+
+    def _sentir(self) -> None:
+        """O estimulo de cada receptor de orgao, do lado do mundo, entregue ao corpo (antes de cada tick e de cada percepcao)."""
+        if self.cc.ligada and self._orgaos_ligados():
+            self.corpo.sentir(self._intensidades_do_orgao())
+
     # ------------------------------------------------------------ leituras
     def _ligado(self) -> bool:
         return self.cc.ligada
@@ -146,6 +198,7 @@ class MotorCorpo:
         return self._mundo_ligado() and cbh is not None and cbh.ligada
 
     def percepcao_corpo(self) -> PercepcaoCorpo:
+        self._sentir()                                # os orgaos: o estimulo de agora, no lugar de agora
         return PercepcaoCorpo(**self.corpo.receptores())
 
     def _observacao(self) -> Observacao:
@@ -199,6 +252,7 @@ class MotorCorpo:
             if self._estado.tick >= self._proxima_decisao:
                 self._decidir(intervalo, produzidas)
             antes = self._estado
+            self._sentir()                            # os orgaos: o estimulo deste tick (a adaptacao anda para ele no passo)
             if self.cc.banheiro:
                 self.corpo.passo(antes, necessidades=self.necessidades_na_zona())   # o banheiro: as necessidades na zona do pet
             else:

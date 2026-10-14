@@ -6,16 +6,23 @@ que o mapa (docs/historico/mapa_claude.json) dá a ela. Nenhuma seção pode fic
 sem destino, e o mapa não pode ter seção que a cópia não tem. O CLAUDE.md da
 raiz tem de ter menos de 200 linhas.
 
+As seções que entraram no CLAUDE.md antigo depois da cópia (PRs que já estavam
+abertos) ficam em lotes (docs/historico/mapa_claude_posteriores.json): para cada
+lote, o CLAUDE.md do commit dele (`git show <commit>:CLAUDE.md`) só pode ter as
+seções da cópia, iguais, e as seções do lote, cada uma inteira no destino.
+
 Uso: python tools/conferir_saude.py [--raiz .]
 Sai com 0 se tudo confere; com 1, e a lista do que falhou, se não.
 """
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
 COPIA = "docs/historico/CLAUDE_pre_saude.md"
 MAPA = "docs/historico/mapa_claude.json"
+POSTERIORES = "docs/historico/mapa_claude_posteriores.json"
 LIMITE_RAIZ = 200
 
 
@@ -41,6 +48,14 @@ def secoes(texto: str) -> list[tuple[str, str]]:
     return saida
 
 
+def claude_do_commit(raiz: Path, commit: str) -> str:
+    """O CLAUDE.md de um commit, pelo git. Falha alto se o git não achar."""
+    saida = subprocess.run(["git", "-C", str(raiz), "show", f"{commit}:CLAUDE.md"], capture_output=True)
+    if saida.returncode != 0:
+        raise RuntimeError(f"não consegui ler o CLAUDE.md do commit {commit}: {saida.stderr.decode('utf-8', 'replace').strip()}")
+    return saida.stdout.decode("utf-8")
+
+
 def conferir(raiz: Path) -> list[str]:
     falhas = []
     copia = (raiz / COPIA).read_text(encoding="utf-8")
@@ -64,6 +79,32 @@ def conferir(raiz: Path) -> list[str]:
             cache[destino] = caminho.read_text(encoding="utf-8")
         if corpo not in cache[destino]:
             falhas.append(f"seção não está inteira em {destino}: {nome[:80]}")
+    antigas = dict(partes)
+    caminho_post = raiz / POSTERIORES
+    if caminho_post.exists():
+        lotes = json.loads(caminho_post.read_text(encoding="utf-8"))["lotes"]
+        for lote in lotes:
+            commit, mapa_lote = lote["commit"], lote["secoes"]
+            try:
+                do_commit = secoes(claude_do_commit(raiz, commit))
+            except RuntimeError as erro:
+                falhas.append(str(erro))
+                continue
+            nomes_commit = {n for n, _ in do_commit}
+            for extra in sorted(set(mapa_lote) - nomes_commit):
+                falhas.append(f"lote {commit}: o mapa tem uma seção que o commit não tem: {extra[:80]}")
+            for nome, corpo in do_commit:
+                if nome in antigas:
+                    if antigas[nome] != corpo:
+                        falhas.append(f"lote {commit}: seção da cópia mudou no commit: {nome[:80]}")
+                    continue
+                destino = mapa_lote.get(nome)
+                if destino is None:
+                    falhas.append(f"lote {commit}: seção nova sem destino: {nome[:80]}")
+                    continue
+                texto = (raiz / destino).read_text(encoding="utf-8") if (raiz / destino).exists() else ""
+                if corpo not in texto:
+                    falhas.append(f"lote {commit}: seção não está inteira em {destino}: {nome[:80]}")
     n_raiz = len((raiz / "CLAUDE.md").read_text(encoding="utf-8").splitlines())
     if n_raiz >= LIMITE_RAIZ:
         falhas.append(f"o CLAUDE.md da raiz tem {n_raiz} linhas (o limite é menos de {LIMITE_RAIZ})")
@@ -77,12 +118,15 @@ def main() -> int:
     raiz = Path(args.raiz)
     falhas = conferir(raiz)
     n = len(secoes((raiz / COPIA).read_text(encoding="utf-8")))
+    caminho_post = raiz / POSTERIORES
+    if caminho_post.exists():
+        n += sum(len(l["secoes"]) for l in json.loads(caminho_post.read_text(encoding="utf-8"))["lotes"])
     if falhas:
         print(f"G-NADA-PERDIDO FALHA ({len(falhas)}):")
         for f in falhas:
             print("  -", f)
         return 1
-    print(f"G-NADA-PERDIDO passa: {n} seções da cópia, todas inteiras no destino do mapa.")
+    print(f"G-NADA-PERDIDO passa: {n} seções (a cópia e os lotes posteriores), todas inteiras no destino do mapa.")
     return 0
 
 

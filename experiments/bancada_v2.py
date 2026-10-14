@@ -203,6 +203,16 @@ from digilab.policies.lobos import sinal_homeostatico  # noqa: E402
 from digilab.policies.lobos import (DRIVES_NOVOS_SINAL, RECEPTOR_DO_INDICE, RECEPTORES_NOVOS, contribuicoes_corpo,  # noqa: E402
                                     sinal_corpo, sinal_corpo_canais)
 from digilab.policies.lobos import CANAL_DO_DRIVE, INDICE_HUMOR, arred, sinal_por_canal  # noqa: E402
+from digilab.policies.lobos import LOBO_PLANEJAMENTO  # noqa: E402
+from digilab.config import CONFIG_REDE_DE_SI_LIGADA, ConfigRedeDeSi  # noqa: E402
+from digilab.rede_de_si import ACOES as ACOES_REDE, CONTEXTO as CONTEXTO_REDE, PoliticaComRede, RedeDeSi  # noqa: E402
+from digilab.rede_de_si import div_arred  # noqa: E402
+from digilab.corpo import todos_receptores_orgaos  # noqa: E402
+from digilab.policies.lobos import REGRAS_PEDIDO, sortear  # noqa: E402
+from digilab.metrics import (brier_skill, brier_skill_multiclasse, mae_previsao, media_historica,  # noqa: E402
+                             previsao_persistencia)
+from digilab.motivo import Motivo, fator_do_plano, nome_base  # noqa: E402
+from digilab.expressao import expressar  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, derivar_semente, sha256_engine  # noqa: E402
 from digilab.state import Estado  # noqa: E402
@@ -314,7 +324,7 @@ def mundo_de(nome: str) -> Mundo:
 MEDIDAS_TABELA = ("fracao_fora_de_privacao", "saude_media", "humor_medio", "acerto_total", "deriva_final")
 CHAVES_CONFIG = {"descricao", "plano", "bracos", "donos", "sementes", "unidades", "genomas", "mundos", "dias", "orcamento",
                  "sonda", "bootstrap", "acoplados", "consequencia", "lobos", "frutas", "ponto", "julgamento_fruta", "montagem",
-                 "lugares", "mundo", "corpo", "teto_pesos"}
+                 "lugares", "mundo", "corpo", "teto_pesos", "rede_de_si"}
 # corpo (W-BANCADA-CORPO): a quimica da pergunta do plano (secao 1: "a quimica de hoje", CD-3): o corpo com a digestao na taxa C e a
 # Vida, sem os drives novos. O regime "corpo" liga por cima os drives novos e os gestos (etapa 6). A chave "corpo" da config troca os
 # numeros, nunca as sub-chaves
@@ -531,6 +541,7 @@ class Braco:
     banheiro: str | None = None      # banheiro: o braco do 2 x 2 (limpador x carinho depois do banheiro): "B00", "B0C", "BL0" ou "BLC"
     metabolismo: bool = False        # corpo, adendo 3 (A3.1, ME-6): o combustivel e a reserva no bloco do corpo, do tapa e nos acoplados
     alvo: bool = False               # mundo com o alvo aprendido (PLANO_ANALISE_V2_MUNDO_ALVO, secao 3): o P1 com ConfigLobos.alvo_aprendido
+    digestao_lenta: bool = False     # rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 3, RS-3): a taxa_digestao trocada no fim do dia 7
 
 
 BRACOS = {
@@ -582,6 +593,11 @@ BRACOS = {
     "P1-c-frutas": Braco("P1-c-frutas", "consequencia", "corpo-A1.1", regime="corpo", gestos="sem_tapa", metabolismo=True),
     # corpo, adendo 2 (PLANO_ANALISE_V2_CORPO_DRIVES, A2.4 e A2.5): o P1-c com o peso de cada drive pela janela recente
     "P1-cw": Braco("P1-cw", "consequencia", "corpo-A2.4", pesos_janela=True, regime="corpo", gestos="sem_tapa", metabolismo=True),
+    # rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 3): o P1-c com a digestao lenta a partir do fim do dia 7 (G-ADAPTA; a troca e da
+    # etapa 2b, do A: espera o no) e o P1+ped com o corpo, no iguais_frutas (a autoria do pedido)
+    "P1-c-lenta": Braco("P1-c-lenta", "consequencia", "rede-de-si", regime="corpo", gestos="sem_tapa", metabolismo=True,
+                        digestao_lenta=True),
+    "P1+ped-c": Braco("P1+ped-c", "consequencia", "rede-de-si", pedido=True, regime="corpo", gestos="sem_tapa", metabolismo=True),
     # banheiro (PLANO_ANALISE_V2_BANHEIRO, secoes 1 a 3): os quatro bracos do 2 x 2 (limpador x carinho depois do banheiro), com o cerebro A
     # no P1 (o aprendiz, fonte consequencia) e no P0 (o instinto, a referencia), no corpo com os gestos e o banheiro; o mundo fisico
     **{f"{c}-{b}": Braco(f"{c}-{b}", fonte, "banheiro", regime="corpo", banheiro=b)
@@ -608,9 +624,10 @@ NOS_PENDENTES: dict = {
     # ConfigLobos.presenca_fruta_mundo), ligada no cerebro do grupo
     # o "gasto_atividades" (W-BANCADA-METABOLISMO) saiu na W-BANCADA-PASSO0: o fator do gasto das atividades sobre o combustivel entrou
     # na ConfigCorpo (#275, `gasto_atividades_num/den`), e o passo 0 o escala junto com o basal (PCD-9)
-    # o pet que pensa (J5, W-BANCADA-PQP): os bracos com o planejador (P1-plan, P1-plan-desfecho, P1-plan-cong) esperam a etapa 2 do B
-    "planejador": "TAREFA_V2_PET_QUE_PENSA, etapa 2 (o B): o planejador de um alvo e o lobo `planejamento` (ConfigLobos.g_plano) no "
-                  "cerebro A",
+    # o "planejador" (W-BANCADA-PQP) saiu na W-BANCADA-PQP-PLANO: o planejador de um alvo e o lobo `planejamento` estao na main (#294,
+    # ConfigLobos.g_plano), ligados nos bracos P1-plan, P1-plan-desfecho e P1-plan-cong
+    # rede de si (W-BANCADA-REDE): o P1-c-lenta espera a troca da digestao no motor (a etapa 2b da tarefa, do A)
+    "digestao_lenta": "TAREFA_V2_REDE_DE_SI, etapa 2b (o A): a taxa_digestao trocada num tick e gravada no registro (RS-3)",
 }
 # filtros do acoplado que dependem de eventos que ainda nao existem: o no do NOS_PENDENTES de cada um. O "sem_gestos" saiu na
 # W-LIGA-GESTOS (o tapa na main)
@@ -640,6 +657,8 @@ def braco_de(rotulo: str) -> Braco:
                                    or b.fonte not in ("nenhuma", "consequencia")):
         raise ValueError(f"braco {b.rotulo}: banheiro {b.banheiro!r} (so {sorted(BRACOS_BANHEIRO)}, no corpo, sem os gestos de dono e "
                          "so no P0 ou no P1)")
+    if b.digestao_lenta and b.regime != "corpo":
+        raise ValueError(f"braco {b.rotulo}: a digestao lenta e do corpo (regime \"corpo\"), nao {b.regime!r}")
     if b.metabolismo and b.regime not in ("quimica", "corpo"):
         raise ValueError(f"braco {b.rotulo}: o metabolismo so existe com o corpo (regime quimica ou corpo), nao {b.regime!r}")
     if b.gestos in ("tapa", "tapa_fruta") and b.regime != "corpo":
@@ -647,7 +666,7 @@ def braco_de(rotulo: str) -> Braco:
     for peca, presente in (("memoria", b.memoria is not None), ("pedido", b.pedido), ("instinto_mundo", b.instinto_mundo is not None),
                            ("pesos_janela", b.pesos_janela), ("corpo", b.regime == "corpo"),
                            ("dono_gestos", b.gestos is not None), ("tapa", b.gestos in ("tapa", "tapa_fruta")),
-                           ("banheiro", b.banheiro is not None)):
+                           ("banheiro", b.banheiro is not None), ("digestao_lenta", b.digestao_lenta)):
         if presente and peca in NOS_PENDENTES:
             raise NotImplementedError(f"braco {b.rotulo}: {NOS_PENDENTES[peca]}")
     return b
@@ -941,6 +960,7 @@ class Bancada:
     montagem: str = MONTAGEM_PADRAO                      # BANCADA-MONTAGEM: "simples" (a de antes) ou "completa" (o cerebro A da secao 1)
     cfg_mundo: ConfigMundo = CONFIG_MUNDO_LIGADA         # W-BANCADA-MUNDO: o mundo fisico (o layout afastado vem do mundo)
     cfg_corpo: ConfigCorpo = CONFIG_CORPO_QUIMICA        # W-BANCADA-CORPO: o corpo do regime "quimica" (o "corpo" liga por cima)
+    cfg_rede: ConfigRedeDeSi | None = None               # W-BANCADA-REDE: a rede de si observando toda vida (None: sem a rede)
     metabolismo: bool = True                             # adendo 3 (A3.1): False tira o metabolismo dos bracos do corpo, so para
                                                          # refazer as vidas de antes dele (os gabaritos do G2); fora da config
 
@@ -998,7 +1018,13 @@ class Bancada:
 
     # ------------------------------------------------------------- fabricas
 
-    def politica(self, espec: EspecVida, cfg=None) -> PoliticaDoBraco:
+    def politica(self, espec: EspecVida, cfg=None):
+        """O cerebro do braco (a `PoliticaDoBraco`); com a chave `rede_de_si`, embrulhado pela rede de si, que so observa (RS-5,
+        `PoliticaComRede`: a vida e a de sem a rede, G-OBS). A rede le os receptores do corpo: braco sem corpo falha alto."""
+        p = self.politica_do_braco(espec, cfg)
+        return p if self.cfg_rede is None else PoliticaComRedeSemOrgaos(p, self.cfg_rede)
+
+    def politica_do_braco(self, espec: EspecVida, cfg=None) -> PoliticaDoBraco:
         if espec.cerebro not in CEREBROS:
             raise KeyError(f"cerebro {espec.cerebro!r}: so {CEREBROS} (outros cerebros sao a comparacao do N11)")
         b = braco_de(espec.braco)
@@ -1315,6 +1341,8 @@ class Bancada:
             raise ReplayDivergiu(f"{vida.nome}: log, estado, acoes ou rngs divergem no replay")
         if _interno(r) != _interno(vida.motor):
             raise ReplayDivergiu(f"{vida.nome}: estado interno da politica diverge no replay")
+        if self.cfg_rede is not None and _estado_rede(r) != _estado_rede(vida.motor):
+            raise ReplayDivergiu(f"{vida.nome}: o estado da rede de si diverge no replay (G1-REDE)")
 
     # ------------------------------------------------------------- medidas
 
@@ -1323,9 +1351,14 @@ class Bancada:
         celula (o prior herdado); sem ele, o da propria vida. O replay de medicao e conferido bit a bit contra a vida."""
         regs = []
 
+        motores: list = []
+        quimicos: list = []       # rede de si: os quimicos do corpo em cada decisao, so para o oraculo (nunca entregues a rede)
+
         def fab(cfg=None):
             reg = _Registro(self.politica(vida.espec, cfg))
             regs.append(reg)
+            if self.cfg_rede is not None:
+                sondar_quimicos(rede_de(reg).rede, motores, quimicos)
             return reg
 
         fisico = mundo_de(vida.espec.mundo).fisico is not None
@@ -1336,6 +1369,7 @@ class Bancada:
         def fm(*a, **kw):
             """o motor de sempre; com o metabolismo, uma sonda so de leitura no passo do corpo (a medida descritiva, A3.3)"""
             motor = fm_base(*a, **kw)
+            motores.append(motor)
             corpo = getattr(motor, "corpo", None)
             if corpo is not None and corpo.cc.metabolismo:
                 sondar_metabolismo(corpo, sonda_metab)
@@ -1344,6 +1378,8 @@ class Bancada:
         m = repro(LogDeEventos.de_jsonl(vida.motor.log.para_jsonl()), fab, semente=vida.espec.semente, fabrica_motor=fm)
         if resumo_motor(m) != resumo_motor(vida.motor) or _interno(m) != _interno(vida.motor):
             raise ReplayDivergiu(f"{vida.nome}: o replay de medicao mudou a vida")
+        if self.cfg_rede is not None and _estado_rede(m) != _estado_rede(vida.motor):
+            raise ReplayDivergiu(f"{vida.nome}: a sonda dos quimicos mudou a rede de si (G1-REDE)")
         reg = regs[0]
         reg.metabolismo = sonda_metab
         bola = None
@@ -1378,6 +1414,10 @@ class Bancada:
             corpo["tapa"] = self.medidas_tapa(vida, m, reg)
         comportamento = self.medidas_comportamento(reg)
         banheiro = self.medidas_banheiro(vida, m, reg) if braco_de(vida.espec.braco).banheiro is not None else None
+        rede = None
+        if self.cfg_rede is not None:
+            tick_troca = self.tick_troca_digestao if braco_de(vida.espec.braco).digestao_lenta else None
+            rede = self.medidas_rede(rede_de(reg).rede, quimicos, do_braco(reg.interna).cerebro.motivos, m.log, tick_troca)
         desempenho = desempenho_no_ambiente(reg.amostras)
         humor = privacao_nas_decisoes(reg.vetores, CONFIG_PADRAO.limiar_privacao)["humor_medio"]
         tarefa = acerto_na_tarefa(reg.decisoes, _julgar, ACOES, TICKS_POR_DIA)
@@ -1399,8 +1439,133 @@ class Bancada:
                 "teto_total": tarefa["teto_total"], "sinais_total": reg.sinais, "sinais_do_dono": reg.sinais_do_dono,
                 "sinais_acumulados": sinais,
                 "deriva_final": custo["deriva_final"], "custo_da_plasticidade": custo, "dominancia": dominancia, "corpo": corpo, "banheiro": banheiro,
-                "comportamento": comportamento,
+                "comportamento": comportamento, "rede_de_si": rede,
                 **extra_mundo}
+
+    # ------------------------------------------------------------- rede de si (PLANO_ANALISE_V2_REDE_DE_SI, secao 4; W-BANCADA-REDE)
+    @property
+    def tick_troca_digestao(self) -> int:
+        """O tick da troca da digestao do P1-c-lenta: o fim do dia 7 (RS-3), o mesmo corte do mutavel (`tick_troca`)."""
+        return self.tick_troca
+
+    def medidas_rede(self, rede: RedeDeSi, quimicos: list, motivos: list, log, tick_troca: int | None = None) -> dict:
+        """As medidas da secao 4 de uma vida com a rede observando, do replay de medicao: a rede, as linhas de base (persistencia e media
+        historica) e o oraculo (o mesmo LMS com os quimicos do corpo como entrada, so aqui), por horizonte, na janela dos ultimos sete
+        dias (os dias 8 a 14 numa vida de 14); D_SI e D_MEDIA; a adaptacao (com `tick_troca`: a mesma rede congelada no tick, so na fome,
+        nos ultimos quatro dias); a autoria do pedido e ao nascer (o Brier skill contra as sondas do cerebro, lidas do motivo e nunca
+        entregues a rede); os descritivos (por receptor, a curva por dia, os pesos no fim de cada dia, a surpresa por hora).
+
+        Gate da reproducao: a rede refeita aqui, so das leituras, das acoes e do contexto que ela registrou, tem de dar as mesmas previsoes
+        (as duas cabecas) e os mesmos pesos no fim; senao falha alto (o oraculo e a congelada sao essa mesma conta)."""
+        regs = rede.registros
+        if not regs:
+            raise RuntimeError("rede de si sem registros: a vida nao teve decisao")
+        if len(quimicos) != len(regs) or len(motivos) != len(regs):
+            raise RuntimeError(f"rede de si: {len(regs)} decisoes na rede, {len(quimicos)} retratos dos quimicos, {len(motivos)} motivos")
+        receptores = list(rede.receptores)
+        hz = rede.horizontes
+        intervalo = CONFIG_PADRAO.intervalo_decisao_ticks
+        por_dia = TICKS_POR_DIA // intervalo
+        leituras = [r["leituras"] for r in regs]
+        K = len(regs)
+        dias = -(-K // por_dia)
+
+        refeita = rede_offline(rede.cfg, regs, receptores)
+        for n in hz:
+            if refeita["corpo"][str(n)] != [r["corpo"][str(n)] for r in regs]:
+                raise ReplayDivergiu(f"rede de si refeita das leituras: as previsoes de n = {n} divergem da rede")
+        if refeita["autoria"] != [r["autoria"] for r in regs] or refeita["pesos_corpo"] != rede.pesos_corpo \
+                or refeita["pesos_autoria"] != rede.pesos_autoria:
+            raise ReplayDivergiu("rede de si refeita das leituras: a autoria ou os pesos divergem da rede")
+        oraculo = rede_offline(rede.cfg, regs, receptores, extra=quimicos, autoria=False)
+
+        janela = range(max(0, K - 7 * por_dia), K)          # os ultimos sete dias (8 a 14 numa vida de 14)
+        pers, media = previsao_persistencia(leituras), media_historica(leituras)
+        previsores = {"rede": refeita["corpo"], "oraculo": oraculo["corpo"]}
+        maes = {}
+        for n in hz:
+            linha = {"rede": mae_previsao(leituras, previsores["rede"][str(n)], n, janela, receptores),
+                     "persistencia": mae_previsao(leituras, pers, n, janela, receptores),
+                     "media": mae_previsao(leituras, media, n, janela, receptores),
+                     "oraculo": mae_previsao(leituras, previsores["oraculo"][str(n)], n, janela, receptores)}
+            mr, mp, mm = linha["rede"]["mae"], linha["persistencia"]["mae"], linha["media"]["mae"]
+            linha["d_si"] = None if mr is None else mp - mr
+            linha["d_media"] = None if mr is None else mm - mr
+            linha["rede_menos_persistencia_por_receptor"] = {
+                r: (None if linha["rede"]["por_receptor"][r] is None else
+                    linha["rede"]["por_receptor"][r] - linha["persistencia"]["por_receptor"][r]) for r in receptores}
+            maes[str(n)] = linha
+        n_pri = 4 if 4 in hz else hz[len(hz) // 2]
+        curva = []
+        for d in range(dias):
+            ks = range(d * por_dia, min(K, (d + 1) * por_dia))
+            curva.append({"dia": d + 1, "rede": mae_previsao(leituras, previsores["rede"][str(n_pri)], n_pri, ks, receptores)["mae"],
+                          "persistencia": mae_previsao(leituras, pers, n_pri, ks, receptores)["mae"]})
+
+        adapta = None
+        if tick_troca is not None:
+            k_troca = -(-tick_troca // intervalo)               # a primeira decisao no tick da troca ou depois
+            cong = rede_offline(rede.cfg, regs, receptores, congelar_k=k_troca, autoria=False)
+            fim4 = range(max(0, K - 4 * por_dia), K)            # os ultimos quatro dias (11 a 14 numa vida de 14)
+            mr = mae_previsao(leituras, refeita["corpo"][str(n_pri)], n_pri, fim4, receptores, so=("fome",))
+            mc = mae_previsao(leituras, cong["corpo"][str(n_pri)], n_pri, fim4, receptores, so=("fome",))
+            mo = mae_previsao(leituras, oraculo["corpo"][str(n_pri)], n_pri, fim4, receptores, so=("fome",))
+            adapta = {"tick_troca": tick_troca, "k_troca": k_troca, "rede": mr["mae"], "congelada": mc["mae"], "oraculo": mo["mae"],
+                      "n": mr["n"], "d_adapta": None if mr["mae"] is None else mc["mae"] - mr["mae"],
+                      "curva_fome": [{"dia": d + 1, **{nome: mae_previsao(leituras, prev["corpo"][str(n_pri)], n_pri,
+                                                                          range(d * por_dia, min(K, (d + 1) * por_dia)),
+                                                                          receptores, so=("fome",))["mae"]
+                                                       for nome, prev in (("rede", refeita), ("congelada", cong))}}
+                                     for d in range(dias)]}
+
+        # a autoria: as sondas do cerebro (lidas do motivo, nunca entregues a rede)
+        S = rede.S
+        ped, ped_zona = [], {z: [] for z in REGRAS_PEDIDO}
+        nasc = []
+        for k in janela:
+            r, m = regs[k], motivos[k]
+            if r["acao"] != m["acao"]:
+                raise RuntimeError(f"decisao {k}: a rede viu {r['acao']!r}, o cerebro decidiu {m['acao']!r}")
+            cands = m["candidatos"]
+            pesos_nasc = {a.value: q for a, q in zip(ACOES_REDE, r["autoria_ao_nascer"])}
+            nasc.append((cands, pesos_nasc, sonda_ao_nascer(m)))
+            if r["contexto"][CONTEXTO_REDE.index("pedido")] == S and m["regra"] in REGRAS_PEDIDO and "comer" in cands:
+                sem = m["pedido"]["acao_sem_pedido"] if "pedido" in m else m["acao"]    # sem a sonda, o pedido nao pesou: a propria
+                pesos_sem = {a.value: q for a, q in zip(ACOES_REDE, r["autoria_sem_pedido"])}
+                linha = (_normalizar_cands(pesos_sem, cands)["comer"], int(sem == "comer"))
+                ped.append(linha)
+                ped_zona[m["regra"]].append(linha)
+        bss_ped = brier_skill([p for p, _ in ped], [e for _, e in ped])
+        autoria = {"bss_ped": bss_ped,
+                   "bss_ped_por_zona": {z: {**brier_skill([p for p, _ in v], [e for _, e in v]),
+                                            "frequencia_evento": (sum(e for _, e in v) / len(v)) if v else None}
+                                        for z, v in ped_zona.items()},
+                   "bss_nasc": brier_skill_multiclasse(nasc)}
+
+        # os descritivos: os pesos no fim de cada dia e a surpresa por hora (em torno da troca e de cada tapa)
+        horas = -(-K // 4)
+        surpresa_hora = []
+        for h in range(horas):
+            vals = [v for r in regs[4 * h:4 * h + 4] for v in r["surpresa"].get(str(hz[0]), [])]
+            surpresa_hora.append(sum(vals) / len(vals) if vals else None)
+        ticks_tapa = sorted(int(e["tick"]) for e in (json.loads(x) for x in log.para_jsonl().splitlines())
+                            if e.get("valor") == AcaoUsuario.TAPA.value)
+        hora_de = lambda t: (-(-t // intervalo)) // 4      # noqa: E731  a hora da primeira decisao no tick ou depois
+        horas_tapa = {hora_de(t) for t in ticks_tapa}
+        hora_troca = None if tick_troca is None else hora_de(tick_troca)
+        marcadas = horas_tapa | ({hora_troca} if hora_troca is not None else set())
+        com = [surpresa_hora[h] for h in sorted(horas_tapa) if h < horas and surpresa_hora[h] is not None]
+        sem = [v for h, v in enumerate(surpresa_hora) if h not in marcadas and v is not None]
+        surpresa = {"horizonte": hz[0], "por_hora": surpresa_hora, "tapas": len(ticks_tapa),
+                    "media_horas_com_tapa": (sum(com) / len(com)) if com else None,
+                    "media_horas_sem_nada": (sum(sem) / len(sem)) if sem else None,
+                    "hora_da_troca": hora_troca,
+                    "troca": None if hora_troca is None or hora_troca >= horas else surpresa_hora[hora_troca]}
+        return {"receptores": receptores, "horizontes": list(hz), "decisoes": K, "janela_k": [janela.start, janela.stop],
+                "horizonte_primario": n_pri, "mae": maes, "d_si": maes[str(n_pri)]["d_si"], "d_media": maes[str(n_pri)]["d_media"],
+                "curva": curva, "adaptacao": adapta, "autoria": autoria, "pesos_por_dia": refeita["pesos_por_dia"],
+                "surpresa": surpresa, "cortes": rede.cortes, "n_pesos": rede.n_pesos(),
+                "quimicos_do_oraculo": len(quimicos[0])}
 
     def medidas_corpo(self, vida: VidaBancada, motor, reg: "_Registro") -> dict | None:
         """As medidas do PLANO_ANALISE_V2_CORPO_DRIVES (secao 5), todas de metrics.py, nas vidas com o corpo ligado (None nas outras). A
@@ -1741,7 +1906,7 @@ class Bancada:
             rng = random.Random(derivar_semente("sonda-corpo", sonda["semente"]))
             com_mundo = mundo_de(vida.espec.mundo).fisico is not None
             estados = [replace(o, corpo=percepcao_da_sonda(o, corpo, rng, com_mundo)) for o in estados]
-        prior = self.politica(replace(vida.espec, braco=p0), CONFIG_PADRAO)
+        prior = do_braco(self.politica(replace(vida.espec, braco=p0), CONFIG_PADRAO))   # sem a rede: a sonda nao a alimenta
         d_prior = distribuicoes_de_acao(prior, estados, sonda["amostras"], sonda["semente"])
         fab, fm = self.fabrica_politica(vida.espec), self.fabrica_motor(vida.espec)
         log = vida.motor.log
@@ -2151,9 +2316,132 @@ def do_braco(politica) -> PoliticaDoBraco:
             p = p._pb
         elif isinstance(p, _PoliticaObservada):
             p = p._p
+        elif isinstance(p, PoliticaComRede):
+            p = p._interna
         else:
             raise TypeError(f"politica sem PoliticaDoBraco dentro: {type(p).__name__}")
     return p
+
+
+class PoliticaComRedeSemOrgaos(PoliticaComRede):
+    """A rede da bancada do Digicorpo: a `PoliticaComRede`, que recusa os orgaos do Olfato e da Audicao (#299). Com eles ligados, a rede
+    le os receptores de cada narina e ouvido e passa do teto dela (`experiments/custo_orgaos.py`); a bancada do Digicorpo roda sem eles e
+    falha alto na primeira decisao que os traz, antes de a rede ver a observacao."""
+
+    def agir(self, obs, rng):
+        pc = getattr(obs, "corpo", None)
+        ligados = [] if pc is None else [r for r in todos_receptores_orgaos() if getattr(pc, r, None) is not None]
+        if ligados:
+            raise RuntimeError(f"rede de si com os orgaos ligados ({ligados}): a rede passa do teto; a bancada do Digicorpo roda sem eles")
+        return super().agir(obs, rng)
+
+
+def sondar_quimicos(rede: RedeDeSi, motores: list, saida: list) -> None:
+    """Uma sonda so de leitura: antes de cada `observar` da rede, o retrato dos quimicos do corpo do motor (cada um na escala S do teto
+    dele, `div_arred(q x S, teto)`, na ordem de `corpo.quimicos`), para o oraculo da bancada. A rede nao ve o retrato (G-RECEPTOR)."""
+    observar = rede.observar
+
+    def observar_com_retrato(obs, acao):
+        corpo = motores[-1].corpo
+        S = rede.S
+        saida.append([div_arred(corpo.q[n] * S, corpo.grafo.quimico(n).teto) for n in corpo.quimicos])
+        return observar(obs, acao)
+    rede.observar = observar_com_retrato
+
+
+def sonda_ao_nascer(m: dict) -> str:
+    """A acao da sonda "ao nascer" do cerebro A (BSS_NASC, R-6): a escolha com os pesos do prior (o lobo de impulsos) e o mesmo u; com um
+    candidato so, ele (o legibilidade_a da comparacao dos cerebros)."""
+    cands = m["candidatos"]
+    if m["u"] is None:
+        return cands[0]
+    return cands[sortear([m["contribuicoes"]["impulsos"][a] for a in cands], m["u"])]
+
+
+def _normalizar_cands(pesos: dict, cands: list) -> dict:
+    tot = sum(pesos[a] for a in cands)
+    return {a: (pesos[a] / tot if tot > 0 else 1.0 / len(cands)) for a in cands}
+
+
+def rede_offline(cfg: ConfigRedeDeSi, registros: list, receptores: list, extra: list | None = None, congelar_k: int | None = None,
+                 autoria: bool = True) -> dict:
+    """A rede de si refeita so dos registros dela (as leituras, a acao, o contexto e a faixa de cada decisao), com as mesmas contas
+    (`RedeDeSi._saida` e `_lms`) na mesma ordem: em cada decisao k, as previsoes de k - n aprendem com a leitura de k, e a cabeca preve
+    k + n. `extra[k]`: entradas a mais em cada decisao, logo depois das leituras (o oraculo: os quimicos na escala S); o prior continua a
+    persistencia. `congelar_k`: de k em diante, nada aprende (a rede congelada do G-ADAPTA). So a bancada usa: nunca existe no pet."""
+    contas = RedeDeSi(cfg)
+    S, hz = contas.S, contas.horizontes
+    R = len(registros[0]["leituras"])
+    E = len(extra[0]) if extra else 0
+    jc = R + E + len(ACOES_REDE) + len(CONTEXTO_REDE) + 1
+    prior = {str(n): [[S if j == i else 0 for j in range(jc)] for i in range(R)] for n in hz}
+    pesos = {n: [list(w) for w in t] for n, t in prior.items()}
+    F = len(cfg.faixas_idade) + 1
+    vies = div_arred(S, len(ACOES_REDE))
+    prior_a = {a.value: [0] * (R + len(CONTEXTO_REDE) + F) + [vies] for a in ACOES_REDE}
+    pesos_a = {a: list(w) for a, w in prior_a.items()}
+    pend: dict = {str(n): [] for n in hz}
+    prev: dict = {str(n): [] for n in hz}
+    q_out, por_dia = [], []
+    passo_dia = TICKS_POR_DIA // CONFIG_PADRAO.intervalo_decisao_ticks
+    for k, reg in enumerate(registros):
+        ls, ctx = reg["leituras"], reg["contexto"]
+        aprende = congelar_k is None or k < congelar_k
+        for n in hz:
+            if k - n >= 0:
+                x, p = pend[str(n)][k - n]
+                if aprende:
+                    for i in range(R):
+                        contas._lms(pesos[str(n)][i], prior[str(n)][i], x, ls[i] - p[i])
+        if autoria:
+            y = ls + ctx + [S if f == reg["faixa"] else 0 for f in range(F)] + [S]
+            q = [contas._saida(pesos_a[a.value], y) for a in ACOES_REDE]
+            q_out.append(q)
+            if aprende:
+                for a, qa in zip(ACOES_REDE, q):
+                    contas._lms(pesos_a[a.value], prior_a[a.value], y, (S if a.value == reg["acao"] else 0) - qa)
+        x = ls + (list(extra[k]) if extra else []) + [S if a.value == reg["acao"] else 0 for a in ACOES_REDE] + ctx + [S]
+        for n in hz:
+            p = [contas._saida(pesos[str(n)][i], x) for i in range(R)]
+            pend[str(n)].append((x, p))
+            prev[str(n)].append(p)
+        if (k + 1) % passo_dia == 0 or k == len(registros) - 1:
+            por_dia.append({"k": k, "corpo": _resumo_pesos([w for t in pesos.values() for w in t],
+                                                           [w for t in prior.values() for w in t], cfg.teto),
+                            "autoria": _resumo_pesos(list(pesos_a.values()), list(prior_a.values()), cfg.teto) if autoria else None})
+    return {"corpo": prev, "autoria": q_out if autoria else None,
+            "pesos_corpo": {n: dict(zip(receptores, t)) for n, t in pesos.items()} if not E else None,
+            "pesos_autoria": pesos_a if autoria else None, "pesos_por_dia": por_dia}
+
+
+
+def _resumo_pesos(pesos: list, prior: list, teto: int) -> dict:
+    """Os pesos de uma cabeca num momento: quantos no teto (|w - w0| = teto) e o desvio medio |w - w0|."""
+    desv = [abs(w - w0) for linha, linha0 in zip(pesos, prior) for w, w0 in zip(linha, linha0)]
+    return {"no_teto": sum(1 for d in desv if d >= teto), "desvio_medio": sum(desv) / len(desv), "pesos": len(desv)}
+
+
+def rede_de(politica) -> PoliticaComRede:
+    """O embrulho da rede de si dentro dos embrulhos dos motores e do registro de medicao (falha alto sem ela)."""
+    p = politica
+    while not isinstance(p, PoliticaComRede):
+        if isinstance(p, (_Espiao, _Registro)):
+            p = p.interna
+        elif isinstance(p, _PoliticaComMundo):
+            p = p._pm
+        elif isinstance(p, _PoliticaComFrutas):
+            p = p._pf
+        elif isinstance(p, _PoliticaComBola):
+            p = p._pb
+        elif isinstance(p, _PoliticaObservada):
+            p = p._p
+        else:
+            raise TypeError(f"politica sem a rede de si dentro: {type(p).__name__}")
+    return p
+
+
+def _estado_rede(motor) -> str:
+    return json.dumps(rede_de(motor.politica).rede.estado(), sort_keys=True)
 
 
 # ------------------------------------------------------------------ o tapa na fruta X (corpo, adendo 1, A1.1)
@@ -2636,6 +2924,12 @@ def validar_config(cfg: dict) -> dict:
         braco_de(b)
     for m in cfg.get("mundos", ["padrao"]):
         mundo_de(m)
+    if "rede_de_si" in cfg:
+        cfg_rede_da_config(cfg)
+        sem_corpo = sorted({b for b in cfg["bracos"] if braco_de(b).regime not in ("quimica", "corpo")}
+                           | {a["braco"] for a in cfg.get("acoplados", []) if braco_de(a["braco"]).regime not in ("quimica", "corpo")})
+        if sem_corpo:
+            raise ValueError(f"a rede de si le os receptores do corpo: os bracos {sem_corpo} nao tem corpo (regime quimica ou corpo)")
     fisicos = [m for m in cfg.get("mundos", ["padrao"]) if mundo_de(m).fisico is not None]
     com_corpo_ = [b for b in cfg["bracos"] if BRACOS[b].regime in ("quimica", "corpo")]     # os bracos ja passaram pelo braco_de
     com_gestos = [b for b in cfg["bracos"] if BRACOS[b].gestos is not None]
@@ -2739,6 +3033,15 @@ def conferir_teto_pesos(cfg: dict, cerebros) -> dict | None:
     return {"maximo": cfg["teto_pesos"]["maximo"], "pesos": maior, "por_cerebro": pesos}
 
 
+def cfg_rede_da_config(cfg: dict) -> ConfigRedeDeSi:
+    """A chave `rede_de_si` da config: campos da ConfigRedeDeSi por cima da ligada (`{}` = os padroes). Desligar por ela falha alto."""
+    troca = cfg["rede_de_si"]
+    if not isinstance(troca, dict) or troca.get("ligada", True) is not True:
+        raise ValueError(f"rede_de_si: um dict com campos da ConfigRedeDeSi, sempre ligada (sem a chave, sem a rede), nao {troca!r}")
+    tupla = lambda v: tuple(v) if isinstance(v, list) else v  # noqa: E731
+    return replace(CONFIG_REDE_DE_SI_LIGADA, **{k: tupla(v) for k, v in troca.items()})
+
+
 def bancada_da_config(cfg: dict) -> Bancada:
     """A Bancada da config: os padroes, e o que as chaves "consequencia", "ponto" e "lobos" (o ponto nomeado, e por cima dele os campos
     da chave "lobos"; sem "ponto", o L1 = CONFIG_LOBOS_APRENDIZ) e "frutas" (sobre o CONFIG_FRUTAS_LIGADA; listas do JSON viram tuplas)
@@ -2762,6 +3065,8 @@ def bancada_da_config(cfg: dict) -> Bancada:
         kw["cfg_mundo"] = replace(CONFIG_MUNDO_LIGADA, **{k: tupla(v) for k, v in cfg["mundo"].items()})
     if "corpo" in cfg:
         kw["cfg_corpo"] = replace(CONFIG_CORPO_QUIMICA, **{k: tupla(v) for k, v in cfg["corpo"].items()})
+    if "rede_de_si" in cfg:
+        kw["cfg_rede"] = cfg_rede_da_config(cfg)
     return Bancada(int(cfg["dias"]), int(cfg["orcamento"]), **kw)
 
 
@@ -2915,7 +3220,9 @@ MEDIDAS_MUNDO = {
 def meta(cfg: dict) -> dict:
     if sha256_engine() != ENGINE_SHA256_V0:
         raise RuntimeError("engine.py mudou")
-    return {"config": cfg, "ponto": cfg.get("ponto", PONTO_PADRAO),
+    rede = {} if "rede_de_si" not in cfg else {"cfg_rede": cfg_rede_da_config(cfg).__dict__,
+                                                "rede_de_si_sha256": _sha(RAIZ / "digilab" / "rede_de_si.py")}
+    return {"config": cfg, "ponto": cfg.get("ponto", PONTO_PADRAO), **rede,
             "cfg_lobos": cfg_lobos_do_ponto(cfg.get("ponto", PONTO_PADRAO), cfg.get("lobos")).__dict__,
             "python": platform.python_version(), "plataforma": platform.platform(),
             "engine_sha256": sha256_engine(), "lobos_sha256": _sha(RAIZ / "digilab" / "policies" / "lobos.py"),
@@ -3348,8 +3655,9 @@ def rodar_grupo(cfg: dict, pasta: Path) -> dict:
 # bem, as outras duas neutras), o corpo do regime quimica com o metabolismo (PP-3), o dono atencioso so com o cuidado no comedouro (PMF-3,
 # PMF-4) e o cerebro A do P1 (a consequencia com a E2, no ponto e na montagem da config) com o alvo aprendido (#255), a presenca da fruta
 # no mundo (#269) e as classes por arvore (#291, PP-2). O mundo do J5 (#291: os troncos vistos, os candidatos de arvore, a fruta na mao e a
-# troca de tipo) liga em toda vida. Os modelos do mundo (#289) ficam em todo braco, pelo embrulho `PoliticaComModeloPQP`, que os congela
-# no tick da mudanca (PP-8). Os tres bracos com o planejador esperam a etapa 2 do B (NOS_PENDENTES["planejador"]).
+# troca de tipo) liga em toda vida. Os modelos do mundo ficam em todo braco, pelo embrulho `PoliticaComModeloPQP`, que os congela no tick
+# da mudanca (PP-8) pelo `congelar` deles: no P1 (g_plano 0) sao modelos que so observam (#289); nos tres bracos com o planejador (#294,
+# o `g_plano` da config) sao os do proprio cerebro, que os le no lobo `planejamento`.
 #
 # Os protocolos (secao 3): a fase 1 sao os `D_a` dias de aprendizado, iguais nos dois testes; no tick da mudanca (T_m, o primeiro passo do
 # dono a partir das 8 h do dia D_a com o pet acordado, PP-5), o T1 troca o efeito da x para "faz mal" e da a x na mao `n_mao` vezes; o T2
@@ -3359,7 +3667,8 @@ def rodar_grupo(cfg: dict, pasta: Path) -> dict:
 #
 # As medidas (secao 4) saem do replay de medicao (conferido bit a bit contra a vida), so da percepcao do pet e do que o motor registra,
 # pelas funcoes de digilab/metrics.py: as oportunidades do T1, as buscas e a exposicao do T2, o corte da reexperiencia e as primarias q e
-# m. Os modelos nunca sao lidos pela medida das oportunidades.
+# m. Os modelos nunca sao lidos pela medida das oportunidades. Do motivo do cerebro saem quanto o plano decide (a sonda "quem decidiu",
+# por dia), a legibilidade (o fator do plano e os textos dele) e o G2 do plano (no P1, o termo do plano e zero em toda decisao).
 
 PLANO_PQP = "docs/PLANO_ANALISE_V2_PET_QUE_PENSA.md"
 PREFIXO_PQP = "pet_que_pensa"
@@ -3380,7 +3689,7 @@ class BracoPQP:
     """Um braco do plano do J5 (secao 3): o mesmo cerebro A e o mesmo habito; muda o planejador e o que congela no tick da mudanca."""
 
     rotulo: str
-    planejador: bool                 # o g_plano da calibracao (com False, g_plano 0: os modelos so observam)
+    planejador: bool                 # o g_plano da config (o da calibracao); com False, g_plano 0: os modelos so observam
     congela: tuple = ()              # o que para de aprender no tick da mudanca: "mapa", "desfecho"
 
 
@@ -3395,10 +3704,7 @@ BRACOS_PQP = {
 def braco_pqp(rotulo: str) -> BracoPQP:
     if rotulo not in BRACOS_PQP:
         raise KeyError(f"braco do J5 {rotulo!r}: so {sorted(BRACOS_PQP)}")
-    b = BRACOS_PQP[rotulo]
-    if b.planejador and "planejador" in NOS_PENDENTES:
-        raise NotImplementedError(f"braco {rotulo}: {NOS_PENDENTES['planejador']}")
-    return b
+    return BRACOS_PQP[rotulo]
 
 
 def fruta_x_pqp(semente: int) -> str:
@@ -3458,91 +3764,90 @@ class MotorMundoMudanca(MotorMundo):
 
 
 class PoliticaComModeloPQP(PoliticaComModelo):
-    """Os modelos do mundo (#289) em todo braco do J5, com o congelamento da PP-8: no tick da mudanca (o gancho `mudanca_no_mundo` do
-    MotorMundoMudanca) as partes de `congela` param de aprender ("mapa": o mapa e os lugares vistos; "desfecho": o desfecho e o custo de
-    andar). A parte congelada e restaurada depois de cada passo dos modelos, entao os contadores andam e os valores nao. A fruta na mao
-    chega ao modelo do desfecho (os receptores depois menos os de antes) e nunca ao credito do cerebro (G-SEM-CREDITO: o gancho so vai ao
-    cerebro se ele o tiver, e o A nao o tem). O estado interno ganha os modelos (`modelo_mundo`), para o G1 os conferir."""
+    """Os modelos do mundo em todo braco do J5, com o congelamento da PP-8 pelo `congelar` dos proprios modelos (#294).
+
+    Sem o planejador (o P1, g_plano 0), o embrulho guarda modelos que so observam (#289): a decisao, a consequencia e a fruta na mao chegam
+    a eles, e a vida nao muda. Com o planejador, os modelos sao os do cerebro (`PoliticaLobos.modelo_mundo`), que os alimenta sozinho (na
+    decisao, na consequencia e na mao) e os le no lobo `planejamento`; o embrulho so os le e os congela, sem passo a mais.
+
+    No tick da mudanca (o gancho `mudanca_no_mundo` do MotorMundoMudanca, antes de a acao da mudanca ser aplicada), as partes de `congela`
+    param de aprender ("mapa": o mapa e os lugares vistos; "desfecho": o desfecho e o custo de andar) e o retrato delas fica para o gate
+    (`congelamento_conferido`). A fruta na mao nunca chega ao credito (G-SEM-CREDITO: o A so a passa aos modelos). O estado interno ganha
+    os modelos (`modelo_mundo`), para o G1 os conferir."""
 
     def __init__(self, interna, cfg_mundo: ConfigMundo, cfg=None, congela: tuple = ()) -> None:
-        super().__init__(interna, cfg_mundo, cfg)
         if set(congela) - set(CONGELA_PQP) or len(set(congela)) != len(congela):
             raise ValueError(f"congela {congela!r}: so {CONGELA_PQP}, sem repetir")
+        proprio = getattr(interna, "modelo_mundo", None)
+        if proprio is None:
+            super().__init__(interna, cfg_mundo, cfg)
+        else:
+            if cfg is not None and proprio.cfg != cfg:
+                raise ValueError("os modelos do cerebro com o planejador nao tem a ConfigModeloMundo da bancada")
+            self._interna = interna
+            self.modelo = proprio
+        self.do_cerebro = proprio is not None
         self.congela = tuple(congela)
-        self.congelado: tuple = ()
         self.tick_congelamento: int | None = None
         self.retrato_congelamento: dict | None = None
         self.maos = 0
         self.maos_ignoradas = 0
+
+    @property
+    def congelado(self) -> tuple:
+        return tuple(self.modelo.congelados)
 
     def _partes(self) -> dict:
         m = self.modelo
         return {"mapa": json.dumps({"mapa": m.mapa, "lugares_vistos": m.lugares_vistos}, sort_keys=True),
                 "desfecho": json.dumps({"desfecho": m.desfecho, "andar": m.andar}, sort_keys=True)}
 
-    def _restaurar(self, retrato: dict) -> None:
-        m = self.modelo
-        if "mapa" in self.congelado:
-            v = json.loads(retrato["mapa"])
-            m.mapa, m.lugares_vistos = v["mapa"], v["lugares_vistos"]
-        if "desfecho" in self.congelado:
-            v = json.loads(retrato["desfecho"])
-            m.desfecho, m.andar = v["desfecho"], v["andar"]
-
     def mudanca_no_mundo(self, tick: int) -> None:
         if self.tick_congelamento is None:
             self.tick_congelamento = tick
-            self.congelado = self.congela
+            if self.congela:
+                self.modelo.congelar(*self.congela)
             self.retrato_congelamento = self._partes()
         gancho = getattr(self._interna, "mudanca_no_mundo", None)
         if gancho is not None:
             gancho(tick)
 
     def agir(self, obs, rng):
-        if not self.congelado:
-            return super().agir(obs, rng)
-        retrato = self._partes()
-        self.modelo.decisao(obs)
-        self._restaurar(retrato)
-        return self._interna.agir(obs, rng)
+        if self.do_cerebro:
+            return self._interna.agir(obs, rng)       # o cerebro passa a decisao aos modelos dele
+        return super().agir(obs, rng)
 
     def consequencia_mundo(self, acao, ocorrido: dict, obs_depois) -> None:
-        if not self.congelado:
-            return super().consequencia_mundo(acao, ocorrido, obs_depois)
-        retrato = self._partes()
-        self.modelo.consequencia(acao, ocorrido, obs_depois)
-        self._restaurar(retrato)
-        gancho = getattr(self._interna, "consequencia_mundo", None)
-        if gancho is not None:
-            gancho(acao, ocorrido, obs_depois)
+        if self.do_cerebro:
+            self._interna.consequencia_mundo(acao, ocorrido, obs_depois)
+            return
+        super().consequencia_mundo(acao, ocorrido, obs_depois)
 
     def fruta_na_mao(self, tipo: str, obs_antes, obs_depois) -> None:
         self.maos += 1
-        if "desfecho" in self.congelado:
+        if "desfecho" in self.modelo.congelados:
             self.maos_ignoradas += 1
-        else:
-            m = self.modelo
-            if m.receptores is None:
-                raise RuntimeError("fruta na mao antes de qualquer decisao: os modelos ainda nao tem o layout dos receptores")
-            antes, depois = m.leituras(m._percepcoes(obs_antes)[0]), m.leituras(m._percepcoes(obs_depois)[0])
-            m.consumo(tipo, [b - a for a, b in zip(antes, depois)])
-        gancho = getattr(self._interna, "fruta_na_mao", None)
-        if gancho is not None:
-            gancho(tipo, obs_antes, obs_depois)
+        if self.do_cerebro:
+            self._interna.fruta_na_mao(tipo, obs_antes, obs_depois)
+            return
+        super().fruta_na_mao(tipo, obs_antes, obs_depois)
 
     def congelamento_conferido(self) -> dict:
         """O gate de mecanismo (secao 7): as partes congeladas sao, no fim da vida, as do tick da mudanca. Falha alto se nao forem."""
         if self.tick_congelamento is None:
             return {"tick": None, "partes": [], "conferido": not self.congela}
+        if self.congelado != tuple(sorted(self.congela)):
+            raise RuntimeError(f"congelamento: os modelos tem {self.congelado}, o braco congela {self.congela} (PP-8)")
         agora = self._partes()
         mudaram = [p for p in self.congelado if agora[p] != self.retrato_congelamento[p]]
         if mudaram:
             raise RuntimeError(f"congelamento: {mudaram} mudaram depois da mudanca (tick {self.tick_congelamento}; PP-8)")
-        return {"tick": self.tick_congelamento, "partes": list(self.congelado), "conferido": True}
+        return {"tick": self.tick_congelamento, "partes": list(self.congelado), "conferido": True,
+                "ignoradas": dict(self.modelo.ignoradas)}
 
     def estado_interno(self) -> dict:
         return {**self._interna.estado_interno(),
-                "modelo_mundo": {**self.modelo.para_dict(), "congela": list(self.congela), "congelado": list(self.congelado),
+                "modelo_mundo": {**self.modelo.para_dict(), "do_cerebro": self.do_cerebro, "congela": list(self.congela),
                                  "tick_congelamento": self.tick_congelamento, "maos": self.maos, "maos_ignoradas": self.maos_ignoradas}}
 
 
@@ -3616,10 +3921,15 @@ class BancadaPQP:
     dono: str = "atencioso"
     lugar: str = "comedouro"
     cfg_modelo: ConfigModeloMundo = CONFIG_MODELO_MUNDO_LIGADA
+    g_plano: int = 0                 # o ganho do plano dos bracos com o planejador (a calibracao, PP-6); o P1 tem sempre 0
 
     def __post_init__(self) -> None:
         if self.d_a < 1 or self.janela < 1 or self.n_mao < 1:
             raise ValueError("d_a, janela e n_mao precisam ser positivos")
+        if type(self.g_plano) is not int or self.g_plano < 0:
+            raise ValueError(f"g_plano do J5 precisa ser inteiro >= 0: {self.g_plano!r}")
+        if self.bancada.cfg_lobos.g_plano != 0:
+            raise ValueError("o g_plano do J5 e da BancadaPQP (so nos bracos com o planejador), nunca da chave 'lobos' (o P1 o teria)")
         if self.bancada.dias != self.d_a + self.janela:
             raise ValueError(f"a Bancada vive {self.bancada.dias} dias; o J5 vive d_a + janela = {self.d_a + self.janela}")
         if self.lugar not in ESTILOS_LUGAR:
@@ -3634,26 +3944,32 @@ class BancadaPQP:
         return replace(self.bancada.cfg_corpo, drives_novos=False, gestos=False, metabolismo=True)
 
     def cfg_lobos(self, espec: EspecPQP) -> ConfigLobos:
-        """O cerebro A do P1 (secao 2) com o habito do plano: o alvo aprendido, a presenca da fruta no mundo e as classes por arvore. O
-        planejador (g_plano) entra com a etapa 2 do B."""
-        braco_pqp(espec.braco)
-        cl = replace(self.bancada.cfg_lobos, alvo_aprendido=True, presenca_fruta_mundo=True, alvo_por_arvore=True)
+        """O cerebro A do P1 (secao 2) com o habito do plano: o alvo aprendido, a presenca da fruta no mundo e as classes por arvore. Nos
+        bracos com o planejador, o `g_plano` da bancada (sem ele, falha alto); no P1, 0."""
+        b = braco_pqp(espec.braco)
+        if b.planejador and self.g_plano == 0:
+            raise ValueError(f"braco {espec.braco}: o planejador precisa do g_plano (a chave 'g_plano' da config)")
+        cl = replace(self.bancada.cfg_lobos, alvo_aprendido=True, presenca_fruta_mundo=True, alvo_por_arvore=True,
+                     g_plano=self.g_plano if b.planejador else 0)
         return cfg_lobos_do_braco(cl, self.braco_montado(), espec.semente, self.bancada.montagem)
 
     def braco_montado(self) -> Braco:
         return braco_montado(braco_de("P1"), self.bancada.montagem, False)
 
     def politica(self, espec: EspecPQP, cfg=None) -> PoliticaDoBraco:
-        if braco_pqp(espec.braco).planejador:
-            # tirar o no "planejador" nao basta: o g_plano da config entra aqui, no cerebro, junto com o planejador da etapa 2 do B. Ate
-            # la, um braco com o planejador nunca vira, em silencio, o P1 com os modelos congelados
-            raise NotImplementedError(f"braco {espec.braco}: o g_plano entra na BancadaPQP.politica com a etapa 2 do B")
+        """O cerebro A do braco na fonte consequencia. Com o planejador, o lobo `planejamento` (#294) com o `g_plano` da bancada, os
+        modelos da `cfg_modelo` e a ConfigConsequencia do credito (a mesma: o cerebro a confere em toda decisao)."""
+        bp = braco_pqp(espec.braco)
         b = self.braco_montado()
         bc = self.bancada
         cb, cf = bc.pesos_do_mundo()
         cc = bc.cfg_consequencia if b.canais is None else replace(bc.cfg_consequencia, canais_ligados=b.canais)
-        cerebro = PoliticaLobos(cfg, self.cfg_lobos(espec), cfg_bola=cb, cfg_frutas=cf, cfg_mundo=bc.cfg_mundo, cfg_corpo=self.cfg_corpo())
-        return PoliticaDoBraco(PoliticaComModeloPQP(cerebro, bc.cfg_mundo, self.cfg_modelo, braco_pqp(espec.braco).congela), b, cc)
+        plano = {"cfg_modelo": self.cfg_modelo, "cfg_consequencia": cc} if bp.planejador else {}
+        cerebro = PoliticaLobos(cfg, self.cfg_lobos(espec), cfg_bola=cb, cfg_frutas=cf, cfg_mundo=bc.cfg_mundo, cfg_corpo=self.cfg_corpo(),
+                                **plano)
+        if bp.planejador and cerebro.modelo_mundo is None:
+            raise RuntimeError(f"braco {espec.braco}: o cerebro nao tem o planejador")
+        return PoliticaDoBraco(PoliticaComModeloPQP(cerebro, bc.cfg_mundo, self.cfg_modelo, bp.congela), b, cc)
 
     def fabrica_motor(self, espec: EspecPQP):
         x = fruta_x_pqp(espec.semente)
@@ -3739,10 +4055,12 @@ class BancadaPQP:
         x, y = vida.x, vida.y
         arvores = _arvores_do_layout(cm)
         S, fome_max = self.cfg_modelo.escala, self.cfg_modelo.escala // 2
+        planejador = braco_pqp(espec.braco).planejador
         out = {"braco": espec.braco, "protocolo": espec.protocolo, "semente": espec.semente, "x": x, "y": y,
-               "tick_mudanca": vida.tick_mudanca, "eventos_mudanca": vida.eventos_mudanca, "decisoes": len(reg.decisoes),
-               "congelamento": congelamento, "g_sem_credito": {"maos": reg.maos, "violacoes": 0},
+               "g_plano": reg.cerebro_a().cl.g_plano, "tick_mudanca": vida.tick_mudanca, "eventos_mudanca": vida.eventos_mudanca,
+               "decisoes": len(reg.decisoes), "congelamento": congelamento, "g_sem_credito": {"maos": reg.maos, "violacoes": 0},
                "maos_no_modelo": modelo.maos - modelo.maos_ignoradas}
+        out.update(plano_da_vida(reg.decisoes, reg.cerebro_a().motivos, planejador, self.dias_da_vida(espec.protocolo)))
         if espec.protocolo == "T1":
             linhas = []
             for d in reg.decisoes:
@@ -3778,9 +4096,7 @@ class BancadaPQP:
         out["modelos_contra_o_real"] = modelos_contra_o_real(reg.modelos_por_dia, vida.motor, x, S)
         out["custo"] = {"cpu_s": vida.cpu_s, "us_por_decisao": 1e6 * vida.cpu_s / max(1, len(reg.decisoes)),
                         "bytes_log_por_dia": len(vida.motor.log.para_jsonl().encode("utf-8")) / self.dias_da_vida(espec.protocolo)}
-        out["nao_medidos"] = {"quanto_o_plano_decide": NOS_PENDENTES.get("planejador", "sem o planejador neste braco"),
-                              "legibilidade": NOS_PENDENTES.get("planejador", "sem o planejador neste braco"),
-                              "deriva": "nao medida nesta etapa (a JSD ao prior do A com o embrulho dos modelos fica para o orquestrador)"}
+        out["nao_medidos"] = {"deriva": "nao medida nesta etapa (a JSD ao prior do A com o embrulho dos modelos fica para o orquestrador)"}
         return out
 
 
@@ -3811,6 +4127,12 @@ class _RegistroPQP:
             raise TypeError("o cerebro do J5 e o PoliticaComModeloPQP")
         return m
 
+    def cerebro_a(self) -> PoliticaLobos:
+        c = self.modelo_pqp()._interna
+        if not isinstance(c, PoliticaLobos):
+            raise TypeError("o cerebro do J5 e o A (PoliticaLobos)")
+        return c
+
     def _retratar_dias(self, tick: int) -> None:
         while tick >= (self._dia + 1) * TICKS_POR_DIA:
             self._dia += 1
@@ -3832,6 +4154,7 @@ class _RegistroPQP:
                               "comeu": None})
         a = self.interna.agir(obs, rng)
         self.decisoes[-1]["acao"] = a.value
+        self.decisoes[-1]["n_motivo"] = len(self.cerebro_a().motivos) - 1     # o motivo desta decisao (o plano, a sonda, o fator)
         return a
 
     def escolher_alvo(self, acao, candidatos, percepcao, u):
@@ -3859,11 +4182,11 @@ class _RegistroPQP:
 
     def fruta_na_mao(self, tipo: str, obs_antes, obs_depois) -> None:
         self.maos += 1
-        antes = json.dumps({k: v for k, v in self.interna.estado_interno().items() if k != "modelo_mundo"}, sort_keys=True)
+        antes = json.dumps(_sem_modelos(self.interna.estado_interno()), sort_keys=True)
         gancho = getattr(self.interna, "fruta_na_mao", None)
         if gancho is not None:
             gancho(tipo, obs_antes, obs_depois)
-        depois = json.dumps({k: v for k, v in self.interna.estado_interno().items() if k != "modelo_mundo"}, sort_keys=True)
+        depois = json.dumps(_sem_modelos(self.interna.estado_interno()), sort_keys=True)
         if antes != depois:
             self.violacoes_sem_credito.append(self.motor._estado.tick)
 
@@ -3875,6 +4198,79 @@ class _RegistroPQP:
         if interna is None:
             raise AttributeError(nome)
         return getattr(interna, nome)
+
+
+def _sem_modelos(ei: dict) -> dict:
+    """O estado interno do cerebro sem os modelos do mundo (os do embrulho e os do planejador), para a G-SEM-CREDITO: a fruta na mao so
+    pode mudar os modelos."""
+    out = {k: v for k, v in ei.items() if k != "modelo_mundo"}
+    if "plano" in out:
+        out["plano"] = {k: v for k, v in out["plano"].items() if k != "modelo_mundo"}
+    return out
+
+
+def plano_da_vida(decisoes: list, motivos: list, planejador: bool, dias: int) -> dict:
+    """As medidas do plano numa vida do J5, do motivo de cada decisao (secao 4 e o G2 da secao 7). So le.
+
+    - **Quanto o plano decide**, por dia: entre as decisoes com alvo (o motor pediu o alvo e havia para onde ir), as em que a sonda "quem
+      decidiu" muda a escolha: a da decisao (`plano`: a acao com o mesmo u e sem o termo) ou a do alvo (`alvo_plano`: o alvo com o mesmo u
+      e sem o termo). As duas partes saem tambem em separado, e a da acao sobre todas as decisoes.
+    - **A legibilidade:** a fracao das decisoes com o fator do plano no motivo (`motivo.fator_do_plano`), a contagem por fator e o texto do
+      adulto de cada fator diferente (`expressao.expressar`).
+    - **O G2** (gate de mecanismo): sem o planejador (o P1, g_plano 0), o termo do plano e zero em toda decisao e nenhum motivo tem a sonda;
+      falha alto se nao for. Com o planejador, sai a contagem das decisoes com termo diferente de zero."""
+    if len(motivos) != len(decisoes):
+        raise RuntimeError(f"plano: {len(motivos)} motivos para {len(decisoes)} decisoes")
+    por_dia = [{"dia": d, "decisoes": 0, "com_alvo": 0, "decidiu": 0, "decidiu_acao": 0, "decidiu_alvo": 0, "decidiu_acao_todas": 0,
+                "com_termo": 0, "com_fator": 0} for d in range(dias)]
+    fatores: dict = {}
+    textos: dict = {}
+    for d, m in zip(decisoes, motivos):
+        if m["n"] != d["n_motivo"]:
+            raise RuntimeError(f"plano: a decisao do tick {d['tick']} aponta o motivo {d['n_motivo']}, nao o {m['n']}")
+        r = por_dia[d["tick"] // TICKS_POR_DIA]
+        p, ap = m.get("plano"), m.get("alvo_plano")
+        termo = (any(v != 0 for v in m["contribuicoes"].get(LOBO_PLANEJAMENTO, {}).values())
+                 or (ap is not None and any(v != 0 for v in ap["termos"].values())))
+        if not planejador and (termo or p is not None or ap is not None or LOBO_PLANEJAMENTO in m["contribuicoes"]):
+            raise RuntimeError(f"G2: o P1 (g_plano 0) com o termo do plano na decisao do tick {d['tick']}")
+        dec_acao, dec_alvo = bool(p and p["plano_decidiu"]), bool(ap and ap["plano_decidiu"])
+        r["decisoes"] += 1
+        r["com_termo"] += termo
+        r["decidiu_acao_todas"] += dec_acao
+        if d["alvo"] is not None:
+            r["com_alvo"] += 1
+            r["decidiu_acao"] += dec_acao
+            r["decidiu_alvo"] += dec_alvo
+            r["decidiu"] += dec_acao or dec_alvo
+        fp = fator_do_plano(m)
+        if fp is not None:
+            r["com_fator"] += 1
+            fatores[nome_base(fp)] = fatores.get(nome_base(fp), 0) + 1
+            if fp not in textos:
+                textos[fp] = expressar(Motivo("vida", m["acao"], (fp,), (), 1.0, False, tick=d["tick"]), "adulto").conteudo
+    for r in por_dia:
+        r["fracao"] = None if not r["com_alvo"] else r["decidiu"] / r["com_alvo"]
+        r["fracao_acao_todas"] = None if not r["decisoes"] else r["decidiu_acao_todas"] / r["decisoes"]
+    n = len(decisoes)
+    com_fator = sum(r["com_fator"] for r in por_dia)
+    com_termo = sum(r["com_termo"] for r in por_dia)
+    return {"plano": {"planejador": planejador, "por_dia": por_dia, "com_alvo": sum(r["com_alvo"] for r in por_dia),
+                      "decidiu": sum(r["decidiu"] for r in por_dia), "com_termo": com_termo},
+            "legibilidade": {"decisoes": n, "com_fator": com_fator, "fracao": None if not n else com_fator / n,
+                             "fatores": dict(sorted(fatores.items())), "textos": dict(sorted(textos.items()))},
+            "g2": {"planejador": planejador, "decisoes_com_termo": com_termo, "conferido": not planejador}}
+
+
+def fracao_plano_dias(medida: dict, dias: tuple) -> dict:
+    """A medida da regra da calibracao do g_plano (secao 5), numa vida: a fracao das decisoes com alvo em que o plano muda a escolha, nos
+    dias `dias` (inclusive, contados de 0), pela soma dos dias. Sem decisao com alvo na janela, None."""
+    ini, fim = dias
+    linhas = [r for r in medida["plano"]["por_dia"] if ini <= r["dia"] <= fim]
+    if len(linhas) != fim - ini + 1:
+        raise ValueError(f"a vida nao tem os dias {ini} a {fim} (tem {len(medida['plano']['por_dia'])})")
+    com_alvo, decidiu = sum(r["com_alvo"] for r in linhas), sum(r["decidiu"] for r in linhas)
+    return {"com_alvo": com_alvo, "decidiu": decidiu, "fracao": None if not com_alvo else decidiu / com_alvo}
 
 
 def modelos_contra_o_real(retratos: list, motor: MotorMundo, x: str, S: int) -> list:
@@ -3911,7 +4307,8 @@ def modelos_contra_o_real(retratos: list, motor: MotorMundo, x: str, S: int) -> 
 
 
 CHAVES_CONFIG_PQP = {"descricao", "plano", "tipo", "bracos", "protocolos", "sementes", "unidades", "d_a", "janela", "n_mao",
-                     "orcamento_por_dia", "dono", "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo", "corpo", "passo0"}
+                     "orcamento_por_dia", "dono", "lugar", "ponto", "lobos", "montagem", "consequencia", "mundo", "corpo", "passo0",
+                     "g_plano"}
 
 
 def validar_config_pqp(cfg: dict) -> dict:
@@ -3931,8 +4328,14 @@ def validar_config_pqp(cfg: dict) -> dict:
         raise ValueError(f"bracos do J5 {bracos}: so {sorted(BRACOS_PQP)}, sem repetir")
     if not protocolos or len(set(protocolos)) != len(protocolos) or any(p not in PROTOCOLOS_PQP for p in protocolos):
         raise ValueError(f"protocolos do J5 {protocolos}: so {PROTOCOLOS_PQP}, sem repetir")
-    for b in bracos:
-        braco_pqp(b)                             # o planejador falha alto com o no
+    com_plano = any(braco_pqp(b).planejador for b in bracos)
+    g = cfg.get("g_plano")
+    if com_plano and (type(g) is not int or g <= 0):
+        raise ValueError(f"bracos com o planejador pedem 'g_plano' inteiro > 0 (a calibracao, PP-6): {g!r}")
+    if not com_plano and g is not None:
+        raise ValueError("'g_plano' sem braco com o planejador")
+    if set(cfg.get("lobos", {})) & {"g_plano", "teto_plano"}:
+        raise ValueError("o g_plano do J5 vem da chave 'g_plano' (so nos bracos com o planejador), nunca da 'lobos'")
     if "ponto" in cfg and cfg["ponto"] not in PONTOS_APRENDIZ:
         raise ValueError(f"ponto do aprendiz {cfg['ponto']!r}: so {sorted(PONTOS_APRENDIZ)}")
     if "montagem" in cfg and cfg["montagem"] not in MONTAGENS:
@@ -3978,7 +4381,8 @@ def bancada_pqp_da_config(cfg: dict) -> BancadaPQP:
     d_a, janela = int(cfg.get("d_a", D_A_PQP)), int(cfg.get("janela", JANELA_PQP))
     chaves = {k: v for k, v in cfg.items() if k in ("consequencia", "lobos", "ponto", "montagem", "mundo", "corpo", "teto_pesos", "plano")}
     bancada = bancada_da_config({**chaves, "dias": d_a + janela, "orcamento": int(cfg["orcamento_por_dia"]) * (d_a + janela)})
-    return BancadaPQP(bancada, d_a, janela, int(cfg.get("n_mao", N_MAO_PQP)), cfg.get("dono", "atencioso"), cfg.get("lugar", "comedouro"))
+    return BancadaPQP(bancada, d_a, janela, int(cfg.get("n_mao", N_MAO_PQP)), cfg.get("dono", "atencioso"), cfg.get("lugar", "comedouro"),
+                      g_plano=int(cfg.get("g_plano", 0)))
 
 
 def rodar_pqp(cfg: dict, pasta: Path) -> dict:
@@ -4003,7 +4407,7 @@ def rodar_pqp(cfg: dict, pasta: Path) -> dict:
     _gravar(pasta / "medidas.json", _dump(medidas))
     _gravar(pasta / "meta.json", _dump({**meta({**cfg, "dias": bp.bancada.dias}), "plano": PLANO_PQP,
                                         "modelo_mundo_sha256": _sha(RAIZ / "digilab" / "modelo_mundo.py"),
-                                        "d_a": bp.d_a, "janela": bp.janela, "n_mao": bp.n_mao,
+                                        "d_a": bp.d_a, "janela": bp.janela, "n_mao": bp.n_mao, "g_plano": bp.g_plano,
                                         "cfg_corpo": bp.cfg_corpo().__dict__, "cfg_modelo": bp.cfg_modelo.__dict__}))
     return {"vidas": vidas, "medidas": medidas}
 

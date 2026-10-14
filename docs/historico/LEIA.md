@@ -57,6 +57,11 @@ Este mapa cresce a cada etapa: a etapa que mover um trecho escreve aqui de onde 
 | `docs/historico/claude/fala.md` | 2 | a fala por LLM e a fala livre |
 | `docs/historico/claude/pendencias.md` | 1 | as pendências e ideias registradas até 2026-10-13 |
 | `docs/historico/claude/v2_aprendiz.md` | 39 | a V2 da L0 ao descritivo do platô (2026-10-01 a 2026-10-07) |
-| `docs/historico/claude/v2_mundo_corpo.md` | 52 | a V2 da prancha do mapa à bancada do pet que pensa (2026-10-07 a 2026-10-13) |
+| `docs/historico/claude/v2_mundo_corpo.md` | 52 + 4 | a V2 da prancha do mapa à rede de si na bancada (2026-10-07 a 2026-10-13); as 4 a mais vieram depois da cópia |
+
+**As seções que entraram no CLAUDE.md antigo depois da cópia** (#298, #299, #301 e #302, na `main` `f23ba37`) foram movidas no merge para
+o fim do `v2_mundo_corpo.md`. O mapa delas fica em `docs/historico/mapa_claude_posteriores.json`, por lote (o commit e as seções). A
+conferência lê o CLAUDE.md do commit pelo git: ele só pode ter as seções da cópia, iguais, e as do lote, cada uma inteira no destino.
+Um PR aberto que ainda traga seção para o CLAUDE.md ganha um lote novo no merge.
 
 O `CLAUDE.md` novo da raiz e os de `web/app/` e `servidor/` são texto novo, escrito pelo critério "se tirar, o Claude erra?".
