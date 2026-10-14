@@ -8,8 +8,8 @@ Worktree e branch de cada etapa: `v2-saude-<etapa>`.
 
 **Status: EM CURSO desde 2026-10-13.** A **etapa 0 (o backup)** está feita e mergeada (#297), com a tag `pre-saude` na
 `main` `8ae3ff7` e as cópias em `docs/historico/` (`docs/historico/LEIA.md`). Respostas do Matheus (2026-10-13): SA-1 aprovada, SA-2 = um
-`CLAUDE.md` por pasta, G-PROVA com as 8 perguntas sem troca, e ok para a etapa 1. A **etapa 1 (o CLAUDE.md enxuto)** está no PR dela,
-esperando o checklist (seção 5); a etapa 2 só começa com o ok dele.
+`CLAUDE.md` por pasta, G-PROVA com as 8 perguntas sem troca, e ok para a etapa 1. A **etapa 1 (o CLAUDE.md enxuto)** está mergeada (#300,
+`main` `086296f`). A **etapa 2 (o registro por mês)** está no PR dela, esperando o checklist (seção 5); o resumo está na seção 8.
 Cada etapa é um PR próprio, e o merge é do Matheus. As decisões que sobram (SA-1 a SA-8) estão na seção 6.
 
 ## 1. Por que agora
@@ -260,3 +260,22 @@ As páginas da documentação do Claude Code, lidas em 2026-10-13:
   "ask" e o exemplo de arquivo protegido.
 
 Não é literatura de pesquisa: nada disto entra num artigo.
+
+## 8. Etapa 2: o que foi feito (2026-10-13, worker C)
+
+- **A divisão:** as 219 seções do `docs/REGISTRO_DESVIOS.md` da `main` `086296f` foram, inteiras e na ordem, para
+  `docs/registro/2026-09.md` (o título do arquivo e as 53 seções de setembro) e `docs/registro/2026-10.md` (as 166 de outubro). Nenhum
+  byte mudou: a concatenação dos dois é o arquivo antigo, sha256 `25bd1ca4fd32813b2447ff5cf862815e73e55115f6b866c9657721693583c7a4`.
+- **O índice:** o `docs/REGISTRO_DESVIOS.md` continua no mesmo caminho (os textos de código que o citam seguem certos). Ele traz a regra
+  de onde escrever e uma linha por seção, `- [<título>](registro/AAAA-MM.md)`, na ordem.
+- **A ferramenta:** `tools/registro_por_mes.py`, com `dividir --base <commit>` (rodou uma vez) e `absorver <commit>`, que traz para o
+  arquivo do mês as seções que um PR ainda escreveu no formato antigo e registra o lote. Ensaiado nos 5 PRs abertos (#201, #303, #304,
+  #305, #306): os 5 absorvem sem erro e a conferência passa.
+- **G-CONCAT** (`python tools/conferir_saude.py`, ao lado do G-NADA-PERDIDO):
+  - a concatenação dos meses começa pelo registro do commit de base, byte a byte, e pela cópia da etapa 0;
+  - o índice lista as seções dos arquivos do mês, na ordem, e não tem seção datada;
+  - cada seção está no arquivo do mês da data dela, e a pasta só tem arquivos `AAAA-MM.md`;
+  - as seções dos lotes são iguais às do registro do commit do lote.
+- **A regra nova** está no índice, no `docs/modelos/TAREFA_V2_MODELO.md` e no `docs/V2_TRABALHO_PARALELO.md`; a linha do `CLAUDE.md` só
+  muda com o ok do Matheus.
+- **Testes:** `tests/test_conferir_saude.py`, 22 (12 novos).

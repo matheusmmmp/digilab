@@ -44,8 +44,10 @@ git -C D:/Trab/digilab/v2 worktree add D:/Trab/digilab/v2-<frente> -b v2-<frente
 - **GPU (uma RTX 2060):** uma frente com Ollama por vez. O coordenador mantém a fila.
 - **Sementes:** cada frente recebe do coordenador uma faixa própria, anotada na tarefa; calibração e validação continuam separadas
   (3101…3505 e 4101…4505 para os gates da fase 1, conforme o plano de análise de cada frente).
-- **Arquivos que todos editam** (`docs/REGISTRO_DESVIOS.md`): cada worker acrescenta a própria seção no fim e não reescreve a dos outros.
-  No conflito de merge, mantêm-se todas as seções. Desde a etapa 1 da rodada de saúde (2026-10-13), o `CLAUDE.md` não recebe seção de
+- **Arquivos que todos editam** (o registro de desvios): cada worker acrescenta a própria seção no fim e não reescreve a dos outros.
+  No conflito de merge, mantêm-se todas as seções. Desde a etapa 2 da rodada de saúde (2026-10-13), o registro é dividido por mês: a
+  seção vai no fim de `docs/registro/AAAA-MM.md` (o mês da data dela), e uma linha no fim do índice `docs/REGISTRO_DESVIOS.md`. Um PR
+  que ainda escreveu no formato antigo é absorvido por `python tools/registro_por_mes.py absorver <commit>`. Desde a etapa 1 da rodada de saúde (2026-10-13), o `CLAUDE.md` não recebe seção de
   etapa: o resumo vai no documento da frente, e o `CLAUDE.md` só muda com o ok do Matheus. As pendências estão no `docs/PAINEL_V2.md`,
   que é do coordenador.
 - **Versão de pet:** só o coordenador reserva o número da próxima `VERSAO_PET`, para duas frentes não pegarem o mesmo.
