@@ -306,3 +306,111 @@ piloto). Os números vêm de `artifacts_v2_pet_que_pensa/calibracao/g_plano.json
   - **G-EXPOSICAO falha:** de 35% a 45% das unidades ficam sem exposição.
 - **A1.5, o custo:** 0,62 s de CPU por vida de 10 dias (P1 0,55; com o planejador, 0,63 a 0,64). Com 8 vidas por unidade, N = 50 daria
   400 vidas, cerca de 4 min de CPU.
+
+## Adendo 3 — o paladar: a premissa dos testes pelo gosto (2026-10-13, PROPOSTO, antes de qualquer run com ele)
+
+Status: **PROPOSTO**, registrado antes de qualquer vida com o paladar. Depende das decisões PL-1 a PL-9 de `docs/futuro/paladar.md` e das
+PJ-1 a PJ-6 abaixo, todas do Matheus. O adendo 2 da seção 10 (a forma pelo estado, R-4) continua reservado e ainda não existe; este é o 3.
+
+**Por que existe.** O piloto (adendo 1) mostrou que o mundo não dá ao pet razão para escolher a x: nenhum braço a escolhe antes da mudança,
+e o T1 fica sem margem. A causa está no mundo, não no planejador (`docs/futuro/paladar.md`, seção 1): a ração nutre 3 vezes mais, cheira 2
+vezes mais, está sempre perto, e o hábito não distingue ração de fruta. O Matheus mudou o desenho (2026-10-13): **as frutas têm gostos
+diferentes, que atraem pets diferentes, e a ração tem um gosto básico e serve mais para a nutrição.** Este adendo põe o paladar no J5 sem
+mudar a pergunta, as primárias, os contrastes, as categorias nem o Holm.
+
+**O que não muda:**
+- a pergunta (DS-1), os quatro braços e o que os separa (o planejador e o congelamento), os dois protocolos;
+- `D_a` = 7, a janela de 3 dias, `n_mao` = 2 e `T_m`;
+- as oportunidades (com a fome ≤ S/2), as buscas, a exposição e o corte da reexperiência;
+- `q` e `m`, o G-T1 e o G-T2, os secundários, as categorias e o bootstrap;
+- os gates de mecanismo (G-SEM-CREDITO, o congelamento, o G2) e as premissas G-APRENDEU, G-OPORTUNIDADE e G-EXPOSICAO.
+
+### A3.1 O que muda no mundo, no corpo e no cérebro
+
+| item | antes (seção 2) | com o paladar |
+|---|---|---|
+| o paladar | não existe | as três chaves ligadas em **todos os braços**: os perfis do mundo, o órgão do corpo e o canal `gosto` com as classes `comida:<tipo>` no cérebro (`docs/futuro/paladar.md`, seção 3) |
+| o genoma | sem genoma | **o genoma do paladar**, sorteado da semente da unidade (rng `paladar-ovo`); o temperamento continua neutro |
+| **a fruta x** | sorteada (`pet-que-pensa-x`), uniforme entre `a`, `b` e `c` | **a fruta de maior valor inato para o pet** (Σ_q h_q × perfil_q / C); em empate, sorteada entre as empatadas pela mesma rng `pet-que-pensa-x`. Pela forma girada dos perfis, a x continua uniforme entre os tipos sobre as unidades |
+| a fruta y (T2) | sorteada entre as outras duas (`pet-que-pensa-y`) | igual |
+| os efeitos antes da mudança | a x faz bem no humor, as outras são neutras | igual (PJ-2) |
+| o T1 | o efeito da x no humor passa a fazer mal, e o dono dá a x na mão 2 vezes | igual. **O gosto da x não muda:** a revalorização é pela consequência (o humor), e o desfecho aprende o humor e o gosto juntos |
+| o corpo | o regime química com o metabolismo (PP-3) | o mesmo, mais o órgão do Paladar |
+| o `g_plano` | S (adendo 1) | **recalibrado** pela regra da seção 5 (A3.3, PJ-4) |
+
+### A3.2 Uma premissa nova, mecânica: G-REVAL-POSSIVEL
+
+O T1 só pode passar se, depois da mudança, comer a x valer menos do que a melhor alternativa. Com o gosto, isso deixa de ser certo: a x
+continua a fruta de que o pet mais gosta.
+
+- **A conta,** por unidade, só com os números da config e o genoma da unidade, sem simular. É o sinal do próprio cérebro (os drives com o
+  ganho da consequência, a E2 e o canal do gosto com o `ganho_gosto` escolhido) para comer cada tipo maduro, num estado de referência
+  fixo: fome, humor e energia em S/2 e a saciedade do paladar em zero. A x usa o efeito **depois** da mudança.
+- **A regra:** a unidade passa se o sinal da x depois da mudança for menor que o da ração **ou** que o de outra fruta. A premissa passa
+  com no máximo 25% das unidades falhando (a mesma tolerância da G-OPORTUNIDADE).
+- **Quando roda:** depois da calibração do `ganho_gosto` (A3.3) e antes do piloto. Não lê nenhuma vida.
+- **Se falha:** o T1 é **inconclusivo por desenho**; o piloto não roda e o plano volta ao Matheus. Nada se ajusta para ela passar.
+
+### A3.3 A calibração, agora em dois passos
+
+Só dois números se calibram, um depois do outro, nas sementes novas (A3.5). Nenhuma regra lê a escolha da x, `f_antes`, `q`, `m` nem um
+contraste entre braços.
+
+1. **O `ganho_gosto`** (PL-8):
+   - **a grade:** {S/2, S, 2S} (PROPOSTO). Com os perfis e os `h_q` do desenho, o termo do gosto da fruta favorita fica entre 200 e 800,
+     na escala da diferença entre o sinal da ração e o da fruta com a fome em 0,4 (cerca de 735);
+   - **o que roda:** o **P1** (sem o planejador), só na fase 1, nas 20 unidades;
+   - **a medida:** a fração de fruta madura (os três tipos juntos) entre os consumos no mapa, nos dias 4 a 6;
+   - **a regra:** o **menor** ponto com a média dessa fração em [0,25; 0,60] (PROPOSTO). Sem ponto na faixa, fica o mais perto dela, com
+     o desvio declarado, e a calibração segue (a faixa que não fecha não bloqueia).
+2. **O `g_plano`:** a regra da seção 5 sem mudança (a grade {S/4, S/2, S}, a sonda nos dias 4 a 6, a faixa [0,10; 0,40]), com o
+   `ganho_gosto` do passo 1.
+
+Os dois números, a G-REVAL-POSSIVEL, as margens, o N e o custo vão num **adendo 4**, num commit antes da validação.
+
+### A3.4 O piloto
+
+Igual à seção 6, no `ganho_gosto` e no `g_plano` escolhidos e nas mesmas 20 unidades: as margens `Δ_T1` e `Δ_T2`, a regra do ≤ 0,05, o N
+pelo poder simulado e o custo. As premissas saem relatadas, como no adendo 1.
+
+### A3.5 Sementes
+
+| uso | faixa | bases |
+|---|---|---|
+| calibração do `ganho_gosto` e do `g_plano`, e o piloto, com o paladar | **49101…49505** (nova; pedida ao coordenador) | 49101, 49202, 49303, 49404, 49505 (K_u = 4) |
+| validação | **46101…46505** (a da seção 8; nunca rodada) | as da seção 8 |
+
+A faixa 45101…45505 já foi usada pelo desenho sem o paladar e não volta, porque as unidades dela já foram vistas.
+
+### A3.6 Os descritivos novos (sem gate)
+
+- os consumos por tipo e por dia, e a fração de fruta, na fase 1 e na janela;
+- o lugar da x na ordem do valor inato (1 por construção) e quantas vezes o pet comeu a x antes de `T_m`;
+- a leitura dos receptores do paladar em cada consumo, a saciedade da ração e os pesos das classes `comida:<tipo>`, por dia;
+- o Δ̂ do gosto de cada tipo no modelo do desfecho contra o perfil real, por dia;
+- o sinal da G-REVAL-POSSIVEL por unidade.
+
+### A3.7 Os riscos novos
+
+| # | risco | o que o adendo faz |
+|---|---|---|
+| R-11 | **O gosto prende o pet na x mesmo depois da mudança** | a G-REVAL-POSSIVEL, antes do piloto |
+| R-12 | **A fruta vira a comida principal e o pet passa fome** | a faixa do `ganho_gosto` tem teto em 0,60; o `D_FE` e a privação já são descritivos (seção 4) |
+| R-13 | **O hábito (P1) aprende a x pelo gosto e passa no T2 sozinho** | é o R-1; o G-T2-HAB e o aviso "a assinatura não separa" da seção 7 continuam |
+| R-14 | **A oportunidade continua não chegando** (a fome ≤ S/2 é rara com o atencioso) | a definição não muda agora; a G-OPORTUNIDADE decide no piloto, e o que fazer depois é outra decisão |
+
+### A3.8 Quando roda
+
+Só com o paladar inteiro na `main` (as etapas 1 a 4 de `docs/futuro/paladar.md`, seção 6), a faixa nova na `FAIXAS_RESERVADAS` e o sim do
+Matheus para a run.
+
+### A3.9 Decisões do Matheus (este adendo)
+
+| # | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| PJ-1 | Quem é a x | **a fruta de maior valor inato para o pet**, com o empate pela rng de antes | a x sorteada sem olhar o genoma: em cerca de 2/3 das unidades o pet prefere outra fruta, e a G-APRENDEU volta a falhar pelo mesmo motivo do adendo 1 |
+| PJ-2 | O efeito da x antes da mudança | **manter "faz bem"** (a seção 2) | neutro: o teste fica só no gosto, mas o pet aprende menos a x e a premissa fica mais fraca. A mudança do T1 continua no humor dos dois jeitos |
+| PJ-3 | Como calibrar o `ganho_gosto` | **pela fração de fruta entre os consumos, em [0,25; 0,60], com o P1** | pela escolha da x: a calibração lê a premissa a favor de si mesma. Sem calibrar: um número escrito à mão decide se o pet come fruta |
+| PJ-4 | O `g_plano` | **recalibrar** pela regra da seção 5, depois do `ganho_gosto` | reaproveitar o S do adendo 1: com o gosto a sonda muda, e o planejador pode dominar ou sumir |
+| PJ-5 | As sementes | **49101…49505 para a calibração e o piloto; a validação continua em 46101…46505** | reusar 45101…45505: as unidades já foram vistas sem o paladar. Uma faixa de validação nova não é preciso, porque a 46101 nunca rodou |
+| PJ-6 | A G-REVAL-POSSIVEL | **sim, antes do piloto, como premissa mecânica** | sem ela, um T1 que não passa pode ser só o gosto vencendo a consequência, e o resultado negativo seria lido como falha do planejador |
