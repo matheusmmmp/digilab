@@ -36,7 +36,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 - **Nenhuma run sem plano de análise registrado antes** (`docs/PLANO_ANALISE_V2_*.md`, commitado antes da primeira vida).
 - **Sementes:**
   - os testes usam 101…505 e as sementes pequenas dos próprios testes;
-  - toda run de pesquisa usa uma faixa reservada em `experiments/bancada_v2.py` (`FAIXAS_RESERVADAS`), com a fonte;
+  - toda run de pesquisa usa uma faixa reservada em `experiments/bancada/faixas.py` (`FAIXAS_RESERVADAS`, reexportada pelo
+    `experiments/bancada_v2.py`), com a fonte;
   - uma faixa nova é pedida ao coordenador e entra na tabela antes da run;
   - as faixas em `FAIXAS_QUEIMADAS` não voltam.
 - **Calibração e validação:** a calibração usa só as sementes dela. A validação roda **uma vez**, e nada se ajusta olhando para ela.
@@ -70,8 +71,9 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   - `grupo.Grupo` (dois pets no mesmo `Mundo`).
 - **A política** fica sob o `Protocol` `Politica` (`agir`, `observar`, `estado_interno`). A da V2 é a `PoliticaLobos`; ganchos como
   `receber_acao_dono`, `consequencia_mundo` e `consequencia_corpo` ligam o motor ao aprendizado.
-- **A bancada** (`experiments/bancada_v2.py`) monta toda vida de pesquisa: (genoma, mundo, dono, braço, semente), o modo acoplado e as
-  medidas. Os orquestradores das runs ficam em `experiments/run_v2_*.py`, com as configs em `experiments/configs/`.
+- **A bancada** (o pacote `experiments/bancada/`, um módulo por assunto, com o `experiments/bancada_v2.py` como porta de entrada) monta
+  toda vida de pesquisa: (genoma, mundo, dono, braço, semente), o modo acoplado e as medidas. Os orquestradores das runs ficam em
+  `experiments/run_v2_*.py`, com as configs em `experiments/configs/`.
 - **O jogo web** (`web/app/`) espelha o motor em TypeScript, com testes de paridade contra gabaritos do Python. As regras dele estão em
   `web/app/CLAUDE.md`; as do servidor local e da fala por LLM, em `servidor/CLAUDE.md`.
 

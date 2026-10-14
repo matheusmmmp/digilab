@@ -239,6 +239,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-13 — PALADAR: o desenho do gosto e o adendo 3 do J5 (worker do paladar, pedido do Gerente)](registro/2026-10.md)
 - [2026-10-13 — Rede de si, etapa 2b (A): a troca da digestão num tick](registro/2026-10.md)
 - [2026-10-13 — Dois pets, etapa 8, o lado do mundo (A): o cheiro próprio, o rastro, o som e o gancho do órgão](registro/2026-10.md)
+- [2026-10-14 — SAUDE-ETAPA-3: a bancada em módulos (worker C)](registro/2026-10.md)
 - [2026-10-14 — PALADAR, etapas 0 e 2 (worker B): o órgão do Paladar no corpo](registro/2026-10.md)
 - [2026-10-14 — PALADAR, etapa 3 (worker B): o canal gosto e as classes por tipo no cérebro A](registro/2026-10.md)
 - [2026-10-14 — PALADAR, etapa 1 (worker A): o lado do mundo](registro/2026-10.md)

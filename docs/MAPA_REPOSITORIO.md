@@ -81,3 +81,10 @@ python run_demo.py                                                            # 
 
 Ambiente do usuário: Windows, pasta `D:\Trab\digilab\v2` (referência da `main`; o trabalho é nas worktrees `D:\Trab\digilab\v2-<frente>`,
 `docs/V2_TRABALHO_PARALELO.md`; a `v1` é só leitura). Python 3.10+.
+
+## A bancada em módulos (2026-10-14, rodada de saúde, etapa 3)
+
+A tabela acima é a de antes da rodada e fica como está. Desde a etapa 3, o código da bancada está no pacote `experiments/bancada/`, um
+módulo por assunto (a tabela dos módulos está em `experiments/bancada/__init__.py`). O `experiments/bancada_v2.py` ficou como a porta de
+entrada: reexporta todo nome do pacote, e a linha de comando é a mesma. As faixas reservadas ficam em `experiments/bancada/faixas.py`.
+O mapa nó a nó, de onde saiu e para onde foi, está em `docs/historico/bancada_mapa.json`, e a ferramenta é `tools/dividir_bancada.py`.

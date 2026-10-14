@@ -9,7 +9,9 @@ Worktree e branch de cada etapa: `v2-saude-<etapa>`.
 **Status: EM CURSO desde 2026-10-13.** A **etapa 0 (o backup)** está feita e mergeada (#297), com a tag `pre-saude` na
 `main` `8ae3ff7` e as cópias em `docs/historico/` (`docs/historico/LEIA.md`). Respostas do Matheus (2026-10-13): SA-1 aprovada, SA-2 = um
 `CLAUDE.md` por pasta, G-PROVA com as 8 perguntas sem troca, e ok para a etapa 1. A **etapa 1 (o CLAUDE.md enxuto)** está mergeada (#300,
-`main` `086296f`). A **etapa 2 (o registro por mês)** está no PR dela, esperando o checklist (seção 5); o resumo está na seção 8.
+`main` `086296f`). A **etapa 2 (o registro por mês)** está mergeada (#307,
+`main` `7f28e59`), com o `merge=union` ligado. A **etapa 3 (a bancada em módulos)** está no PR dela, esperando o checklist; o resumo
+está na seção 9.
 Cada etapa é um PR próprio, e o merge é do Matheus. As decisões que sobram (SA-1 a SA-8) estão na seção 6.
 
 ## 1. Por que agora
@@ -280,3 +282,19 @@ Não é literatura de pesquisa: nada disto entra num artigo.
   `CLAUDE.md` (a regra do desvio e a tabela "Onde está o quê"), trocadas com o ok do Matheus (2026-10-13). O `CLAUDE.md` segue com 105
   linhas.
 - **Testes:** `tests/test_conferir_saude.py`, 22 (12 novos).
+
+## 9. Etapa 3: o que foi feito (2026-10-14, worker C)
+
+- **O pacote** `experiments/bancada/`, com 12 módulos na ordem de importação: `faixas`, `mundos`, `bracos`, `vida`, `regras_mundo`,
+  `medidas`, `nucleo` (a classe `Bancada`, inteira, SA-4), `config`, `rodar`, `grupo`, `passo0` e `pet_que_pensa`.
+- **A fachada:** o `experiments/bancada_v2.py` ficou com a docstring e as importações de antes, iguais, e com o `if __name__`. Todo nome
+  de topo do pacote é posto nela. A atribuição na fachada (o monkeypatch dos testes) troca o nome também nos módulos.
+- **A ferramenta:** `tools/dividir_bancada.py`, com três comandos:
+  - `analisar`, as dependências entre os módulos;
+  - `dividir`, que gera o pacote do arquivo de um só;
+  - `conferir --base <commit>`, a prova.
+- **G-AST:** 188 nós de topo, 187 com a AST igual à de antes e 1 com a troca declarada (o sha256 da bancada no `meta`).
+- **G-NOMES:** os 385 nomes do módulo de antes, importado de verdade, são os da fachada.
+- **G-SUITE** e **G-FUMACAS:** os números estão no PR e no `docs/registro/2026-10.md`.
+- **Testes:** `tests/test_bancada_modulos.py`, 19. Nenhum teste de antes mudou.
+- **O CLAUDE.md:** duas linhas trocadas com o ok do Matheus (2026-10-14), a da faixa reservada e a da bancada.
