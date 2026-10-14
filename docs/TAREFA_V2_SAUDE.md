@@ -276,6 +276,7 @@ Não é literatura de pesquisa: nada disto entra num artigo.
   - o índice lista as seções dos arquivos do mês, na ordem, e não tem seção datada;
   - cada seção está no arquivo do mês da data dela, e a pasta só tem arquivos `AAAA-MM.md`;
   - as seções dos lotes são iguais às do registro do commit do lote.
-- **A regra nova** está no índice, no `docs/modelos/TAREFA_V2_MODELO.md` e no `docs/V2_TRABALHO_PARALELO.md`; a linha do `CLAUDE.md` só
-  muda com o ok do Matheus.
+- **A regra nova** está no índice, no `docs/modelos/TAREFA_V2_MODELO.md`, no `docs/V2_TRABALHO_PARALELO.md` e em duas linhas do
+  `CLAUDE.md` (a regra do desvio e a tabela "Onde está o quê"), trocadas com o ok do Matheus (2026-10-13). O `CLAUDE.md` segue com 105
+  linhas.
 - **Testes:** `tests/test_conferir_saude.py`, 22 (12 novos).
