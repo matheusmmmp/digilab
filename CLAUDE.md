@@ -103,12 +103,3 @@ python tools/conferir_saude.py                 # o G-NADA-PERDIDO da rodada de s
 Os outros comandos, inclusive os das runs e do jogo web, estão em `docs/MAPA_REPOSITORIO.md` e em `web/app/CLAUDE.md`.
 
 Ambiente: Windows, Python 3.10 ou mais novo.
-
-## Assets da Bandai
-
-A pasta `D:\Trab\digilab\Assets` (fora do repositório) tem sprites da Bandai, **sem licença**.
-- **Permitido:** usá-los no jogo web, para uso pessoal e local.
-- **Proibido:** usá-los em `digilab/`, `experiments/`, `artifacts*/`, figuras ou textos de publicação, ou em qualquer build distribuído.
-  Não publicar a versão com sprites (artifact, site ou repositório público). O repositório `matheusmmmp/digilab` tem de continuar
-  **privado**.
-- Detalhes, inclusive o acesso remoto, em `web/app/CLAUDE.md` e em `docs/historico/claude/jogo_web.md`.

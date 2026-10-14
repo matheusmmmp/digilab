@@ -5104,3 +5104,11 @@ para o Claude, e o pedido de outra sessão não bastava.
 - **Os PRs abertos que acrescentam seção ao `CLAUDE.md` (#298, #299, #201) vão dar conflito.** Na resolução, a seção deles vai para o fim do
   documento da frente (ou do `docs/historico/claude/v2_mundo_corpo.md`), e o `CLAUDE.md` fica o novo. O `mapa_claude.json` não muda: ele
   cobre só a cópia de antes.
+- **Revisão do PR, depois do checklist (2026-10-13):** o Matheus aprovou o `CLAUDE.md` e pediu que saísse toda a parte dos assets da
+  Bandai. A remoção foi confirmada por ele direto nesta sessão, porque tira uma regra de proteção de um arquivo de instruções.
+  - Saíram a seção "Assets da Bandai" da raiz (114 → 105 linhas) e as linhas de sprites e do atlas do `web/app/CLAUDE.md` (37 → 34).
+  - O texto antigo segue inteiro em `docs/historico/claude/jogo_web.md`, e o G-NADA-PERDIDO continua passando.
+  - A pergunta 7 da G-PROVA foi trocada por "posso salvar o estado do pet num arquivo para retomar a vida depois?". Só ela rodou de novo,
+    nas duas sessões, e as duas acertam (`docs/historico/prova_etapa1.md`).
+  - **A SA-3 foi decidida: o registro se divide por mês.** A tarefa da etapa 2 passou a dizer isso. A etapa 2 começa depois do merge
+    deste PR.

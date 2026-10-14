@@ -1,4 +1,4 @@
-# TAREFA V2 — RODADA DE SAÚDE: o backup, o CLAUDE.md enxuto, o registro por rodada, a bancada em módulos, os hooks e o painel (2026-10-13)
+# TAREFA V2 — RODADA DE SAÚDE: o backup, o CLAUDE.md enxuto, o registro por mês, a bancada em módulos, os hooks e o painel (2026-10-13)
 
 **Equipe:**
 - **coordenador:** Gerente;
@@ -48,7 +48,7 @@ Os números são de hoje, na `main` `3f69e80`:
 |---|---|---|---|
 | **0. backup** | coordenador | a tag e as cópias integrais | **G-BACKUP** |
 | **1. o CLAUDE.md enxuto** | C | o CLAUDE.md da raiz com menos de 200 linhas, o resto movido | **G-NADA-PERDIDO**, **G-PROVA** |
-| **2. o registro por rodada** | C | o `REGISTRO_DESVIOS.md` dividido, com o índice | **G-CONCAT** |
+| **2. o registro por mês** | C | o `REGISTRO_DESVIOS.md` dividido, com o índice | **G-CONCAT** |
 | **3. a bancada em módulos** | D | o pacote `experiments/bancada/`, com o `bancada_v2.py` como fachada | **G-SUITE**, **G-FUMACAS**, **G-NOMES** |
 | **4. os hooks** | A | a proposta dos hooks, com os scripts e os testes, desligada até o sim do Matheus | **G-HOOKS** |
 | **5. o painel** | coordenador | o `docs/PAINEL_V2.md` atualizado no fim de cada rodada | — |
@@ -115,20 +115,21 @@ para outro lugar.
   - como nomeio a worktree?
   - quem faz o merge?
   - um teste de replay quebrou: o que faço?
-  - posso usar o sprite da Bandai num artefato?
+  - posso salvar o estado do pet num arquivo para retomar a vida depois? (a pergunta 7, trocada em 2026-10-13: a original, sobre o
+    sprite da Bandai, saiu junto com a parte dos assets do CLAUDE.md, pedido do Matheus)
   - onde escrevo o desvio desta etapa?
 - a mesma sessão com o CLAUDE.md antigo dá a referência;
 - passa se o novo acerta tudo o que o antigo acerta.
 
-### Etapa 2: o registro por rodada
+### Etapa 2: o registro por mês
 
 - **A divisão:**
-  - cada seção `## AAAA-MM-DD — ...` vai, inteira e na ordem, para `docs/registro/<rodada>.md`;
-  - `<rodada>` é a rodada do `docs/V2_RODADA_N.md` quando a seção a cita, ou senão a semana da data (`2026-W41`) (SA-3);
-  - o que vem antes da V2 vai para `docs/registro/v1.md`.
+  - cada seção `## AAAA-MM-DD — ...` vai, inteira e na ordem, para `docs/registro/AAAA-MM.md`, pelo mês da data (SA-3, decidida em
+    2026-10-13: por mês);
+  - o que vier antes da primeira seção datada fica no começo do arquivo do mês dessa seção.
 - **O `docs/REGISTRO_DESVIOS.md` continua existindo, como índice:** uma linha por seção, com o título e o arquivo. Os 9 textos de código e
   os artefatos que citam o `docs/REGISTRO_DESVIOS.md` (por exemplo `experiments/run_bateria_v21.py`) continuam achando o caminho.
-- **A regra nova para os workers:** cada um acrescenta a própria seção no fim do **arquivo da rodada corrente**, e uma linha no índice. O
+- **A regra nova para os workers:** cada um acrescenta a própria seção no fim do **arquivo do mês corrente**, e uma linha no índice. O
   CLAUDE.md e o modelo de tarefa passam a dizer isso.
 - **G-CONCAT:** a concatenação das partes, na ordem do índice, dá o arquivo `pre_saude` byte a byte, sem o cabeçalho do índice. O sha256 vai
   no PR.
@@ -213,7 +214,7 @@ O Matheus responde antes da etapa seguinte começar. Uma resposta "não" para a 
 **Depois da etapa 2 (o registro):**
 1. O índice acha o desvio de uma run que você lembra?
 2. Está claro em que arquivo o próximo worker escreve?
-3. A divisão por rodada (ou por semana, quando a seção não cita rodada) serve para você?
+3. A divisão por mês serve para você?
 
 **Depois da etapa 3 (a bancada):**
 1. A suíte passou com a mesma contagem e as fumaças com o mesmo sha256?
@@ -233,14 +234,14 @@ O Matheus responde antes da etapa seguinte começar. Uma resposta "não" para a 
 
 ## 6. Decisões do Matheus
 
-**Decididas pelo Matheus em 2026-10-13:** SA-1 (os nomes das cópias, como recomendado) e SA-2 (um `CLAUDE.md` por pasta). **Abertas: SA-3
-a SA-8.**
+**Decididas pelo Matheus em 2026-10-13:** SA-1 (os nomes das cópias, como recomendado), SA-2 (um `CLAUDE.md` por pasta) e SA-3 (o registro **por mês**, não pela
+recomendação). **Abertas: SA-4 a SA-8.**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|
 | SA-1 | Os nomes das cópias do backup | **`CLAUDE_pre_saude.md`, `REGISTRO_DESVIOS_pre_saude.md` e `bancada_v2_pre_saude.py.txt`** | uma cópia chamada `CLAUDE.md` num subdiretório volta a ser instrução; um `.py` pode ser importado ou coletado |
 | SA-2 | Onde vão as regras de uma parte do repositório | **`CLAUDE.md` por diretório** (`web/app/`, `servidor/`), que fica junto do código | `.claude/rules/` com `paths:` junta tudo num lugar, mas afasta a regra do código que ela rege; vale se as regras forem espalhadas |
-| SA-3 | Como dividir o registro | **por rodada, ou pela semana quando a seção não cita rodada** | por mês: arquivos grandes de novo; por seção: mais de 200 arquivos |
+| SA-3 | Como dividir o registro (**decidida em 2026-10-13: por mês**) | **por rodada, ou pela semana quando a seção não cita rodada** | por mês: arquivos grandes de novo; por seção: mais de 200 arquivos |
 | SA-4 | Partir a classe `Bancada` | **não na primeira passada:** só mover o resto; os mixins depois, se o Matheus quiser | partir já: o PR mistura mover com reorganizar, e a prova de "só mover" fica mais difícil |
 | SA-5 | Quem liga os hooks | **o Matheus, depois do G-HOOKS;** o PR traz a proposta desligada | ligar no PR: muda a configuração de todos os workers sem o sim dele |
 | SA-6 | O H3 no merge | **"ask"** (o Matheus aprova na hora) | "deny" sempre: o próprio Matheus, numa sessão, teria de mexer na config para fazer um merge |

@@ -20,10 +20,7 @@ Vale junto com o `CLAUDE.md` da raiz. O que o jogo já tem, seção a seção, e
   - em tela larga, seguir as pranchas `*Desktop` de `docs/estilo_up/pranchas/`; em tela estreita, as de 390 px;
   - o botão **Conversar** fica no cabeçalho do Pet no celular e no pé da barra lateral no desktop;
   - tokens `--dl-*` e componentes `dl-*` (`docs/UI_GUIDELINES.md`).
-- **Sprites da Bandai:** só aqui, só para uso pessoal e local. O atlas fica fora do repositório (`D:\Trab\digilab\Assets`). Nunca publicar
-  a versão com sprites.
-- **Semear um save em teste:** por uma página da mesma origem que não seja o app (por exemplo `/Assets/digilab_atlas_up.json`), senão o app
-  grava o pet dele por cima ao fechar.
+- **Semear um save em teste:** por uma página da mesma origem que não seja o app, senão o app grava o pet dele por cima ao fechar.
 
 ## Comandos
 
