@@ -10,7 +10,7 @@ planejador.
 - G-SEM-CREDITO: a fruta na mao nao mexe nos pesos;
 - o planejador: o termo do gosto no valor de cada tipo, exato;
 - G1 e o motivo.
-O lado do mundo e o de teste de tests/test_paladar_corpo.py (o `cpal` e o perfil no `ocorrido`, como o A combinou).
+O lado do mundo e o de verdade (o #309 do A), montado pela `fabrica` de tests/test_paladar_corpo.py.
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ import gabarito_dois_pets as gdp  # noqa: E402
 import test_paladar_corpo as tpc  # noqa: E402
 
 from digilab.config import (CONFIG_CONSEQUENCIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONFIG_PQP_MUNDO_LIGADA,  # noqa: E402
-                            ConfigLobos)
+                            ConfigLobos, ConfigPaladar)
 from digilab.corpo import QUALIDADES, div_arred  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoUsuario, LogDeEventos  # noqa: E402
@@ -197,19 +197,10 @@ def test_g_receptor_paladar_o_perfil_de_um_tipo_nao_comido_nao_muda_o_cerebro():
     nao_comido = next(t for t in ("c", "b", "a") if t not in comidos)
     outro = {**tpc.PERFIS, nao_comido: dict.fromkeys(QUALIDADES, 7)}
 
-    class Cpal:
-        ligada = True
-        perfis = outro
-
-    class Mundo2(tpc.MundoComPerfil):
-        def __init__(self, *a, **kw) -> None:
-            super().__init__(*a, **kw)
-            self.cpal = Cpal()
-    from digilab.motor_corpo import com_corpo
-    v2, c2 = vida(fabrica=tpc.fabrica(CC, com_corpo(Mundo2)))
+    v2, c2 = vida(fabrica=tpc.fabrica(CC, cpal=ConfigPaladar(ligada=True, perfis=outro)))
     assert c2.estado_interno() == c.estado_interno()
-    sem_classe = lambda d: {k: x for k, x in d.items() if k != "motor"}  # noqa: E731
-    assert sem_classe(gdp.impressao(v2.motor)) == sem_classe(gdp.impressao(v.motor))
+    assert gdp.impressao(v2.motor) == gdp.impressao(v.motor)
+    assert v2.motor.cpal.perfis[nao_comido] != v.motor.cpal.perfis[nao_comido]       # o mundo mudou de verdade
 
 
 def test_g_sem_credito_a_fruta_na_mao():
