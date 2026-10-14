@@ -1,0 +1,1546 @@
+{
+ "base": {
+  "commit": "1341c5bfa4448416760435eac4cd3d987b86e68e",
+  "arquivo": "experiments/bancada_v2.py",
+  "sha256": "a77e18872e954532ded1eada5372e88743c1e3c2f633f506d85328b113d4edf0",
+  "linhas": 4462
+ },
+ "modulos": {
+  "faixas": "as sementes dos testes, as bases, as faixas reservadas e queimadas, os prefixos e as unidades derivadas",
+  "mundos": "as condições, os mundos, os eventos do mundo, o corpo por regime, os efeitos das frutas e o calendário",
+  "bracos": "os sinais e filtros, os pontos do aprendiz, os braços, os nós pendentes, a montagem e a PoliticaDoBraco",
+  "vida": "a especificação e o resultado de uma vida, o filtro do log, as contagens e o resumo do motor",
+  "regras_mundo": "o tapa na fruta X, as regras e os informantes do mundo, as vidas pelo mundo e o registro da medição",
+  "medidas": "as medidas que não são métodos da Bancada: o banheiro, a rede de si, as sondas e as tabelas",
+  "nucleo": "a classe Bancada, inteira (SA-4: partir em mixins é outra passada)",
+  "config": "a validação da config, o teto de pesos, a rede da config e a bancada da config",
+  "rodar": "gravar, o sha256, o meta, rodar e a linha de comando (main)",
+  "grupo": "dois pets: a bancada do grupo",
+  "passo0": "o passo 0 do corpo",
+  "pet_que_pensa": "o pet que pensa (J5): a bancada"
+ },
+ "nos": [
+  {
+   "nome": "SEMENTES_TESTE",
+   "modulo": "faixas",
+   "linhas_antes": "227-227",
+   "igual": true
+  },
+  {
+   "nome": "BASES_EXPERIMENTO_MAIOR",
+   "modulo": "faixas",
+   "linhas_antes": "433-434",
+   "igual": true
+  },
+  {
+   "nome": "BASES_N6",
+   "modulo": "faixas",
+   "linhas_antes": "435-435",
+   "igual": true
+  },
+  {
+   "nome": "BASES_N7",
+   "modulo": "faixas",
+   "linhas_antes": "436-436",
+   "igual": true
+  },
+  {
+   "nome": "BASES_COMPARACAO",
+   "modulo": "faixas",
+   "linhas_antes": "437-437",
+   "igual": true
+  },
+  {
+   "nome": "PREFIXOS_UNIDADES",
+   "modulo": "faixas",
+   "linhas_antes": "443-444",
+   "igual": true
+  },
+  {
+   "nome": "FAIXAS_QUEIMADAS",
+   "modulo": "faixas",
+   "linhas_antes": "446-446",
+   "igual": true
+  },
+  {
+   "nome": "FAIXAS_RESERVADAS",
+   "modulo": "faixas",
+   "linhas_antes": "448-488",
+   "igual": true
+  },
+  {
+   "nome": "unidades_derivadas",
+   "modulo": "faixas",
+   "linhas_antes": "491-507",
+   "igual": true
+  },
+  {
+   "nome": "na_faixa_reservada",
+   "modulo": "faixas",
+   "linhas_antes": "510-514",
+   "igual": true
+  },
+  {
+   "nome": "SementeSemPlano",
+   "modulo": "faixas",
+   "linhas_antes": "521-522",
+   "igual": true
+  },
+  {
+   "nome": "EVENTOS_DO_MUNDO",
+   "modulo": "mundos",
+   "linhas_antes": "254-254",
+   "igual": true
+  },
+  {
+   "nome": "Condicao",
+   "modulo": "mundos",
+   "linhas_antes": "262-269",
+   "igual": true
+  },
+  {
+   "nome": "CONDICOES",
+   "modulo": "mundos",
+   "linhas_antes": "272-283",
+   "igual": true
+  },
+  {
+   "nome": "Mundo",
+   "modulo": "mundos",
+   "linhas_antes": "287-297",
+   "igual": true
+  },
+  {
+   "nome": "MUNDOS",
+   "modulo": "mundos",
+   "linhas_antes": "300-311",
+   "igual": true
+  },
+  {
+   "nome": "LAYOUTS_FISICO",
+   "modulo": "mundos",
+   "linhas_antes": "312-312",
+   "igual": true
+  },
+  {
+   "nome": "mundo_de",
+   "modulo": "mundos",
+   "linhas_antes": "315-324",
+   "igual": true
+  },
+  {
+   "nome": "CONFIG_CORPO_QUIMICA",
+   "modulo": "mundos",
+   "linhas_antes": "332-332",
+   "igual": true
+  },
+  {
+   "nome": "REGIMES_CORPO",
+   "modulo": "mundos",
+   "linhas_antes": "333-333",
+   "igual": true
+  },
+  {
+   "nome": "SUBCHAVES_CORPO",
+   "modulo": "mundos",
+   "linhas_antes": "334-334",
+   "igual": true
+  },
+  {
+   "nome": "CONFIG_JULGAMENTO_FORA",
+   "modulo": "mundos",
+   "linhas_antes": "337-337",
+   "igual": true
+  },
+  {
+   "nome": "JULGAMENTOS",
+   "modulo": "mundos",
+   "linhas_antes": "338-338",
+   "igual": true
+  },
+  {
+   "nome": "efeitos_da_condicao",
+   "modulo": "mundos",
+   "linhas_antes": "344-364",
+   "igual": true
+  },
+  {
+   "nome": "MotorFrutasMundo",
+   "modulo": "mundos",
+   "linhas_antes": "367-408",
+   "igual": true
+  },
+  {
+   "nome": "CalendarioFrutas",
+   "modulo": "mundos",
+   "linhas_antes": "411-428",
+   "igual": true
+  },
+  {
+   "nome": "ACOES",
+   "modulo": "bracos",
+   "linhas_antes": "225-225",
+   "igual": true
+  },
+  {
+   "nome": "SINAIS",
+   "modulo": "bracos",
+   "linhas_antes": "226-226",
+   "igual": true
+  },
+  {
+   "nome": "PONTOS_APRENDIZ",
+   "modulo": "bracos",
+   "linhas_antes": "230-233",
+   "igual": true
+  },
+  {
+   "nome": "PONTO_PADRAO",
+   "modulo": "bracos",
+   "linhas_antes": "234-234",
+   "igual": true
+  },
+  {
+   "nome": "PONTO_N5_EXPERIMENTO",
+   "modulo": "bracos",
+   "linhas_antes": "235-235",
+   "igual": true
+  },
+  {
+   "nome": "CEREBROS",
+   "modulo": "bracos",
+   "linhas_antes": "236-236",
+   "igual": true
+  },
+  {
+   "nome": "INFORMACOES",
+   "modulo": "bracos",
+   "linhas_antes": "237-237",
+   "igual": true
+  },
+  {
+   "nome": "PEDIDOS",
+   "modulo": "bracos",
+   "linhas_antes": "238-238",
+   "igual": true
+  },
+  {
+   "nome": "GESTOS",
+   "modulo": "bracos",
+   "linhas_antes": "240-240",
+   "igual": true
+  },
+  {
+   "nome": "SINAIS_DO_DONO",
+   "modulo": "bracos",
+   "linhas_antes": "241-241",
+   "igual": true
+  },
+  {
+   "nome": "FILTROS",
+   "modulo": "bracos",
+   "linhas_antes": "242-251",
+   "igual": true
+  },
+  {
+   "nome": "FORA_DO_ORCAMENTO",
+   "modulo": "bracos",
+   "linhas_antes": "257-257",
+   "igual": true
+  },
+  {
+   "nome": "Assert",
+   "modulo": "bracos",
+   "linhas_antes": "258-258",
+   "igual": true
+  },
+  {
+   "nome": "GESTOS_DONO",
+   "modulo": "bracos",
+   "linhas_antes": "335-335",
+   "igual": true
+  },
+  {
+   "nome": "Braco",
+   "modulo": "bracos",
+   "linhas_antes": "529-545",
+   "igual": true
+  },
+  {
+   "nome": "BRACOS",
+   "modulo": "bracos",
+   "linhas_antes": "548-606",
+   "igual": true
+  },
+  {
+   "nome": "BRACOS_BANHEIRO",
+   "modulo": "bracos",
+   "linhas_antes": "608-608",
+   "igual": true
+  },
+  {
+   "nome": "FONTES_IMPLEMENTADAS",
+   "modulo": "bracos",
+   "linhas_antes": "609-609",
+   "igual": true
+  },
+  {
+   "nome": "NOS_PENDENTES",
+   "modulo": "bracos",
+   "linhas_antes": "614-632",
+   "igual": true
+  },
+  {
+   "nome": "FILTROS_PENDENTES",
+   "modulo": "bracos",
+   "linhas_antes": "635-635",
+   "igual": true
+  },
+  {
+   "nome": "MODO_MEMORIA",
+   "modulo": "bracos",
+   "linhas_antes": "637-637",
+   "igual": true
+  },
+  {
+   "nome": "CONFIG_LOBOS_PADRAO",
+   "modulo": "bracos",
+   "linhas_antes": "638-638",
+   "igual": true
+  },
+  {
+   "nome": "NOMES_DRIVES",
+   "modulo": "bracos",
+   "linhas_antes": "641-641",
+   "igual": true
+  },
+  {
+   "nome": "NOVOS_W",
+   "modulo": "bracos",
+   "linhas_antes": "643-643",
+   "igual": true
+  },
+  {
+   "nome": "APRENDE_PELA_CONSEQUENCIA",
+   "modulo": "bracos",
+   "linhas_antes": "644-644",
+   "igual": true
+  },
+  {
+   "nome": "braco_de",
+   "modulo": "bracos",
+   "linhas_antes": "647-673",
+   "igual": true
+  },
+  {
+   "nome": "filtro_de",
+   "modulo": "bracos",
+   "linhas_antes": "676-682",
+   "igual": true
+  },
+  {
+   "nome": "desarranjo_n6",
+   "modulo": "bracos",
+   "linhas_antes": "685-695",
+   "igual": true
+  },
+  {
+   "nome": "MONTAGENS",
+   "modulo": "bracos",
+   "linhas_antes": "700-700",
+   "igual": true
+  },
+  {
+   "nome": "MONTAGEM_PADRAO",
+   "modulo": "bracos",
+   "linhas_antes": "701-701",
+   "igual": true
+  },
+  {
+   "nome": "MONTAGEM_COMPLETA",
+   "modulo": "bracos",
+   "linhas_antes": "702-707",
+   "igual": true
+  },
+  {
+   "nome": "recebe_informacao",
+   "modulo": "bracos",
+   "linhas_antes": "710-713",
+   "igual": true
+  },
+  {
+   "nome": "braco_montado",
+   "modulo": "bracos",
+   "linhas_antes": "716-727",
+   "igual": true
+  },
+  {
+   "nome": "cfg_lobos_do_braco",
+   "modulo": "bracos",
+   "linhas_antes": "730-747",
+   "igual": true
+  },
+  {
+   "nome": "PoliticaDoBraco",
+   "modulo": "bracos",
+   "linhas_antes": "750-814",
+   "igual": true
+  },
+  {
+   "nome": "ReplayDivergiu",
+   "modulo": "vida",
+   "linhas_antes": "517-518",
+   "igual": true
+  },
+  {
+   "nome": "EspecVida",
+   "modulo": "vida",
+   "linhas_antes": "821-846",
+   "igual": true
+  },
+  {
+   "nome": "VidaBancada",
+   "modulo": "vida",
+   "linhas_antes": "850-889",
+   "igual": true
+  },
+  {
+   "nome": "filtrar_log",
+   "modulo": "vida",
+   "linhas_antes": "892-897",
+   "igual": true
+  },
+  {
+   "nome": "contar_acoes",
+   "modulo": "vida",
+   "linhas_antes": "900-910",
+   "igual": true
+  },
+  {
+   "nome": "contar_gestos_mundo",
+   "modulo": "vida",
+   "linhas_antes": "913-915",
+   "igual": true
+  },
+  {
+   "nome": "contar_pedidos",
+   "modulo": "vida",
+   "linhas_antes": "918-919",
+   "igual": true
+  },
+  {
+   "nome": "contar_informacoes",
+   "modulo": "vida",
+   "linhas_antes": "922-923",
+   "igual": true
+  },
+  {
+   "nome": "resumo_motor",
+   "modulo": "vida",
+   "linhas_antes": "926-943",
+   "igual": true
+  },
+  {
+   "nome": "_interno",
+   "modulo": "vida",
+   "linhas_antes": "946-947",
+   "igual": true
+  },
+  {
+   "nome": "fruta_tapa",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2468-2472",
+   "igual": true
+  },
+  {
+   "nome": "DonoTapaFruta",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2475-2510",
+   "igual": true
+  },
+  {
+   "nome": "RegraBola",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2516-2544",
+   "igual": true
+  },
+  {
+   "nome": "InformanteDoMundo",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2547-2566",
+   "igual": true
+  },
+  {
+   "nome": "InformanteAcoplado",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2569-2604",
+   "igual": true
+  },
+  {
+   "nome": "RegraFrutasComJulgador",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2607-2625",
+   "igual": true
+  },
+  {
+   "nome": "RegraFrutasComInformante",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2628-2639",
+   "igual": true
+  },
+  {
+   "nome": "RegraFrutasComPedinte",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2642-2656",
+   "igual": true
+  },
+  {
+   "nome": "_Espiao",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2659-2685",
+   "igual": true
+  },
+  {
+   "nome": "simular_vida_mundo",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2688-2715",
+   "igual": true
+  },
+  {
+   "nome": "CanalSemEnsino",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2718-2748",
+   "igual": true
+  },
+  {
+   "nome": "simular_vida_fisico",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2751-2780",
+   "igual": true
+  },
+  {
+   "nome": "sondar_metabolismo",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2783-2792",
+   "igual": true
+  },
+  {
+   "nome": "comeu_fruta_e2",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2795-2799",
+   "igual": true
+  },
+  {
+   "nome": "_Registro",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2802-2896",
+   "igual": true
+  },
+  {
+   "nome": "_julgar",
+   "modulo": "regras_mundo",
+   "linhas_antes": "2899-2900",
+   "igual": true
+  },
+  {
+   "nome": "MEDIDAS_TABELA",
+   "modulo": "medidas",
+   "linhas_antes": "325-325",
+   "igual": true
+  },
+  {
+   "nome": "receptores_novos_de",
+   "modulo": "medidas",
+   "linhas_antes": "2235-2239",
+   "igual": true
+  },
+  {
+   "nome": "medidas_banheiro_de",
+   "modulo": "medidas",
+   "linhas_antes": "2242-2289",
+   "igual": true
+  },
+  {
+   "nome": "tabela_banheiro",
+   "modulo": "medidas",
+   "linhas_antes": "2292-2300",
+   "igual": true
+  },
+  {
+   "nome": "percepcao_da_sonda",
+   "modulo": "medidas",
+   "linhas_antes": "2303-2320",
+   "igual": true
+  },
+  {
+   "nome": "do_braco",
+   "modulo": "medidas",
+   "linhas_antes": "2323-2341",
+   "igual": true
+  },
+  {
+   "nome": "PoliticaComRedeSemOrgaos",
+   "modulo": "medidas",
+   "linhas_antes": "2344-2354",
+   "igual": true
+  },
+  {
+   "nome": "sondar_quimicos",
+   "modulo": "medidas",
+   "linhas_antes": "2357-2367",
+   "igual": true
+  },
+  {
+   "nome": "sonda_ao_nascer",
+   "modulo": "medidas",
+   "linhas_antes": "2370-2376",
+   "igual": true
+  },
+  {
+   "nome": "_normalizar_cands",
+   "modulo": "medidas",
+   "linhas_antes": "2379-2381",
+   "igual": true
+  },
+  {
+   "nome": "rede_offline",
+   "modulo": "medidas",
+   "linhas_antes": "2384-2432",
+   "igual": true
+  },
+  {
+   "nome": "_resumo_pesos",
+   "modulo": "medidas",
+   "linhas_antes": "2436-2439",
+   "igual": true
+  },
+  {
+   "nome": "rede_de",
+   "modulo": "medidas",
+   "linhas_antes": "2442-2458",
+   "igual": true
+  },
+  {
+   "nome": "_estado_rede",
+   "modulo": "medidas",
+   "linhas_antes": "2461-2462",
+   "igual": true
+  },
+  {
+   "nome": "tabelas_braco_condicao",
+   "modulo": "medidas",
+   "linhas_antes": "3153-3183",
+   "igual": true
+  },
+  {
+   "nome": "tabela_dominancia",
+   "modulo": "medidas",
+   "linhas_antes": "3186-3219",
+   "igual": true
+  },
+  {
+   "nome": "_coluna",
+   "modulo": "medidas",
+   "linhas_antes": "3222-3225",
+   "igual": true
+  },
+  {
+   "nome": "MEDIDAS_FRUTAS",
+   "modulo": "medidas",
+   "linhas_antes": "3228-3232",
+   "igual": true
+  },
+  {
+   "nome": "MEDIDAS_MUNDO",
+   "modulo": "medidas",
+   "linhas_antes": "3233-3237",
+   "igual": true
+  },
+  {
+   "nome": "Bancada",
+   "modulo": "nucleo",
+   "linhas_antes": "951-2232",
+   "igual": true
+  },
+  {
+   "nome": "CHAVES_CONFIG",
+   "modulo": "config",
+   "linhas_antes": "326-328",
+   "igual": true
+  },
+  {
+   "nome": "validar_config",
+   "modulo": "config",
+   "linhas_antes": "2919-3001",
+   "igual": true
+  },
+  {
+   "nome": "cfg_lobos_do_ponto",
+   "modulo": "config",
+   "linhas_antes": "3004-3009",
+   "igual": true
+  },
+  {
+   "nome": "validar_teto_pesos",
+   "modulo": "config",
+   "linhas_antes": "3012-3037",
+   "igual": true
+  },
+  {
+   "nome": "conferir_teto_pesos",
+   "modulo": "config",
+   "linhas_antes": "3040-3051",
+   "igual": true
+  },
+  {
+   "nome": "cfg_rede_da_config",
+   "modulo": "config",
+   "linhas_antes": "3054-3060",
+   "igual": true
+  },
+  {
+   "nome": "bancada_da_config",
+   "modulo": "config",
+   "linhas_antes": "3063-3090",
+   "igual": true
+  },
+  {
+   "nome": "_gravar",
+   "modulo": "rodar",
+   "linhas_antes": "2906-2908",
+   "igual": true
+  },
+  {
+   "nome": "_dump",
+   "modulo": "rodar",
+   "linhas_antes": "2911-2912",
+   "igual": true
+  },
+  {
+   "nome": "_sha",
+   "modulo": "rodar",
+   "linhas_antes": "2915-2916",
+   "igual": true
+  },
+  {
+   "nome": "rodar",
+   "modulo": "rodar",
+   "linhas_antes": "3093-3150",
+   "igual": true
+  },
+  {
+   "nome": "meta",
+   "modulo": "rodar",
+   "linhas_antes": "3240-3251",
+   "igual": false,
+   "troca": "\"bancada_sha256\": _sha(RAIZ / \"experiments\" / \"bancada_v2.py\")"
+  },
+  {
+   "nome": "main",
+   "modulo": "rodar",
+   "linhas_antes": "4435-4458",
+   "igual": true
+  },
+  {
+   "nome": "ROTULO_RUIM",
+   "modulo": "grupo",
+   "linhas_antes": "3261-3261",
+   "igual": true
+  },
+  {
+   "nome": "ROTULO_EMBARALHA",
+   "modulo": "grupo",
+   "linhas_antes": "3262-3262",
+   "igual": true
+  },
+  {
+   "nome": "DECISOES_POR_DIA",
+   "modulo": "grupo",
+   "linhas_antes": "3263-3263",
+   "igual": true
+  },
+  {
+   "nome": "If",
+   "modulo": "grupo",
+   "linhas_antes": "3264-3265",
+   "igual": true
+  },
+  {
+   "nome": "BRACO_DO_B",
+   "modulo": "grupo",
+   "linhas_antes": "3266-3266",
+   "igual": true
+  },
+  {
+   "nome": "JANELA_PRIMARIA_DIAS",
+   "modulo": "grupo",
+   "linhas_antes": "3267-3267",
+   "igual": true
+  },
+  {
+   "nome": "tipo_ruim",
+   "modulo": "grupo",
+   "linhas_antes": "3270-3273",
+   "igual": true
+  },
+  {
+   "nome": "desarranjo_dois_pets",
+   "modulo": "grupo",
+   "linhas_antes": "3276-3282",
+   "igual": true
+  },
+  {
+   "nome": "efeito_dois_pets",
+   "modulo": "grupo",
+   "linhas_antes": "3285-3290",
+   "igual": true
+  },
+  {
+   "nome": "MotorMundoTroca",
+   "modulo": "grupo",
+   "linhas_antes": "3293-3323",
+   "igual": true
+  },
+  {
+   "nome": "BracoGrupo",
+   "modulo": "grupo",
+   "linhas_antes": "3327-3336",
+   "igual": true
+  },
+  {
+   "nome": "BRACOS_GRUPO",
+   "modulo": "grupo",
+   "linhas_antes": "3339-3345",
+   "igual": true
+  },
+  {
+   "nome": "EspecGrupo",
+   "modulo": "grupo",
+   "linhas_antes": "3349-3363",
+   "igual": true
+  },
+  {
+   "nome": "VidaGrupo",
+   "modulo": "grupo",
+   "linhas_antes": "3367-3375",
+   "igual": true
+  },
+  {
+   "nome": "_RegistroGrupo",
+   "modulo": "grupo",
+   "linhas_antes": "3378-3405",
+   "igual": true
+  },
+  {
+   "nome": "_validar_espec_grupo",
+   "modulo": "grupo",
+   "linhas_antes": "3408-3422",
+   "igual": true
+  },
+  {
+   "nome": "_entradas",
+   "modulo": "grupo",
+   "linhas_antes": "3425-3434",
+   "igual": true
+  },
+  {
+   "nome": "_resumo_grupo",
+   "modulo": "grupo",
+   "linhas_antes": "3437-3442",
+   "igual": true
+  },
+  {
+   "nome": "CHAVES_CONFIG_GRUPO",
+   "modulo": "grupo",
+   "linhas_antes": "3588-3589",
+   "igual": true
+  },
+  {
+   "nome": "validar_config_grupo",
+   "modulo": "grupo",
+   "linhas_antes": "3592-3636",
+   "igual": true
+  },
+  {
+   "nome": "rodar_grupo",
+   "modulo": "grupo",
+   "linhas_antes": "3639-3670",
+   "igual": true
+  },
+  {
+   "nome": "PASSO0_MULTIPLICADORES",
+   "modulo": "passo0",
+   "linhas_antes": "3450-3450",
+   "igual": true
+  },
+  {
+   "nome": "PASSO0_FAIXA",
+   "modulo": "passo0",
+   "linhas_antes": "3451-3451",
+   "igual": true
+  },
+  {
+   "nome": "PASSO0_BRACO",
+   "modulo": "passo0",
+   "linhas_antes": "3452-3452",
+   "igual": true
+  },
+  {
+   "nome": "PASSO0_CAMPOS",
+   "modulo": "passo0",
+   "linhas_antes": "3453-3453",
+   "igual": true
+  },
+  {
+   "nome": "_escalar",
+   "modulo": "passo0",
+   "linhas_antes": "3456-3458",
+   "igual": true
+  },
+  {
+   "nome": "PASSO0_CHAVES_EXTRAS",
+   "modulo": "passo0",
+   "linhas_antes": "3461-3461",
+   "igual": true
+  },
+  {
+   "nome": "grade_passo0",
+   "modulo": "passo0",
+   "linhas_antes": "3464-3470",
+   "igual": true
+  },
+  {
+   "nome": "pontos_passo0",
+   "modulo": "passo0",
+   "linhas_antes": "3473-3491",
+   "igual": true
+  },
+  {
+   "nome": "fracao_falta_passo0",
+   "modulo": "passo0",
+   "linhas_antes": "3494-3509",
+   "igual": true
+  },
+  {
+   "nome": "escolha_passo0",
+   "modulo": "passo0",
+   "linhas_antes": "3512-3529",
+   "igual": true
+  },
+  {
+   "nome": "_rodar_ponto_passo0",
+   "modulo": "passo0",
+   "linhas_antes": "3532-3534",
+   "igual": true
+  },
+  {
+   "nome": "rodar_passo0",
+   "modulo": "passo0",
+   "linhas_antes": "3537-3585",
+   "igual": true
+  },
+  {
+   "nome": "PLANO_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3693-3693",
+   "igual": true
+  },
+  {
+   "nome": "PREFIXO_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3694-3694",
+   "igual": true
+  },
+  {
+   "nome": "BASES_PET_QUE_PENSA",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3695-3695",
+   "igual": true
+  },
+  {
+   "nome": "ROTULO_X_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3696-3696",
+   "igual": true
+  },
+  {
+   "nome": "ROTULO_Y_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3697-3697",
+   "igual": true
+  },
+  {
+   "nome": "D_A_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3698-3698",
+   "igual": true
+  },
+  {
+   "nome": "JANELA_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3699-3699",
+   "igual": true
+  },
+  {
+   "nome": "N_MAO_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3700-3700",
+   "igual": true
+  },
+  {
+   "nome": "HORA_MUDANCA_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3701-3701",
+   "igual": true
+  },
+  {
+   "nome": "N_OPORTUNIDADES_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3702-3702",
+   "igual": true
+  },
+  {
+   "nome": "PROTOCOLOS_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3703-3703",
+   "igual": true
+  },
+  {
+   "nome": "CONGELA_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3704-3704",
+   "igual": true
+  },
+  {
+   "nome": "BracoPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3708-3713",
+   "igual": true
+  },
+  {
+   "nome": "BRACOS_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3716-3721",
+   "igual": true
+  },
+  {
+   "nome": "braco_pqp",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3724-3727",
+   "igual": true
+  },
+  {
+   "nome": "fruta_x_pqp",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3730-3732",
+   "igual": true
+  },
+  {
+   "nome": "fruta_y_pqp",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3735-3738",
+   "igual": true
+  },
+  {
+   "nome": "efeitos_pqp",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3741-3744",
+   "igual": true
+  },
+  {
+   "nome": "MotorMundoMudanca",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3747-3783",
+   "igual": true
+  },
+  {
+   "nome": "PoliticaComModeloPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3786-3871",
+   "igual": true
+  },
+  {
+   "nome": "RegraMudancaPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3874-3896",
+   "igual": true
+  },
+  {
+   "nome": "EspecPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3900-3907",
+   "igual": true
+  },
+  {
+   "nome": "VidaPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3911-3924",
+   "igual": true
+  },
+  {
+   "nome": "_arvores_do_layout",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3927-3929",
+   "igual": true
+  },
+  {
+   "nome": "BancadaPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "3933-4120",
+   "igual": true
+  },
+  {
+   "nome": "_media",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4123-4124",
+   "igual": true
+  },
+  {
+   "nome": "_RegistroPQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4127-4220",
+   "igual": true
+  },
+  {
+   "nome": "_sem_modelos",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4223-4229",
+   "igual": true
+  },
+  {
+   "nome": "plano_da_vida",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4232-4282",
+   "igual": true
+  },
+  {
+   "nome": "fracao_plano_dias",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4285-4293",
+   "igual": true
+  },
+  {
+   "nome": "modelos_contra_o_real",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4296-4326",
+   "igual": true
+  },
+  {
+   "nome": "CHAVES_CONFIG_PQP",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4329-4331",
+   "igual": true
+  },
+  {
+   "nome": "validar_config_pqp",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4334-4396",
+   "igual": true
+  },
+  {
+   "nome": "bancada_pqp_da_config",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4399-4405",
+   "igual": true
+  },
+  {
+   "nome": "rodar_pqp",
+   "modulo": "pet_que_pensa",
+   "linhas_antes": "4408-4432",
+   "igual": true
+  }
+ ],
+ "trocas": {
+  "meta": {
+   "antes": "\"bancada_sha256\": _sha(Path(__file__))",
+   "depois": "\"bancada_sha256\": _sha(RAIZ / \"experiments\" / \"bancada_v2.py\")"
+  }
+ },
+ "nomes": [
+  "ACOES",
+  "ACOES_BOLA",
+  "ACOES_FRUTAS",
+  "ACOES_INFORMACAO",
+  "ACOES_MAO",
+  "ACOES_PEDIDO",
+  "ACOES_PET_HOJE",
+  "ACOES_REDE",
+  "ACOES_TROCA_ARVORES",
+  "APRENDE_PELA_CONSEQUENCIA",
+  "AcaoPet",
+  "AcaoUsuario",
+  "BASES_COMPARACAO",
+  "BASES_EXPERIMENTO_MAIOR",
+  "BASES_N6",
+  "BASES_N7",
+  "BASES_PET_QUE_PENSA",
+  "BRACOS",
+  "BRACOS_BANHEIRO",
+  "BRACOS_GRUPO",
+  "BRACOS_PQP",
+  "BRACO_DO_B",
+  "Bancada",
+  "BancadaPQP",
+  "Braco",
+  "BracoGrupo",
+  "BracoPQP",
+  "CANAL_DO_DRIVE",
+  "CEREBROS",
+  "CHAVES_CONFIG",
+  "CHAVES_CONFIG_GRUPO",
+  "CHAVES_CONFIG_PQP",
+  "CONDICOES",
+  "CONFIG_BANHEIRO_LIGADA",
+  "CONFIG_BOLA",
+  "CONFIG_BOLA_LIGADA",
+  "CONFIG_CONSEQUENCIA",
+  "CONFIG_CORPO_QUIMICA",
+  "CONFIG_DONOS",
+  "CONFIG_FRUTAS_LIGADA",
+  "CONFIG_GRUPO_LIGADA",
+  "CONFIG_INFORMACAO_LIGADA",
+  "CONFIG_JULGAMENTO_FORA",
+  "CONFIG_LOBOS_APRENDIZ",
+  "CONFIG_LOBOS_PADRAO",
+  "CONFIG_MODELO_MUNDO_LIGADA",
+  "CONFIG_MUNDO_LIGADA",
+  "CONFIG_PADRAO",
+  "CONFIG_PEDIDO_LIGADA",
+  "CONFIG_PQP_MUNDO_LIGADA",
+  "CONFIG_REDE_DE_SI_LIGADA",
+  "CONFIG_TROCA_DIGESTAO",
+  "CONGELA_PQP",
+  "CONTEXTO_REDE",
+  "CalendarioFrutas",
+  "CanalComGestos",
+  "CanalDeInteracao",
+  "CanalMundo",
+  "CanalSemEnsino",
+  "Condicao",
+  "ConfigBanheiro",
+  "ConfigBola",
+  "ConfigConsequencia",
+  "ConfigCorpo",
+  "ConfigFrutas",
+  "ConfigGrupo",
+  "ConfigInformacao",
+  "ConfigJulgamentoFruta",
+  "ConfigLobos",
+  "ConfigModeloMundo",
+  "ConfigMundo",
+  "ConfigPedido",
+  "ConfigRedeDeSi",
+  "ConfigTrocaDigestao",
+  "Corpo",
+  "DECISOES_POR_DIA",
+  "DRIVES_NOVOS_SINAL",
+  "D_A_PQP",
+  "DeixarBola",
+  "DeixarComida",
+  "DonoCarinhoBanheiro",
+  "DonoComBola",
+  "DonoComGestos",
+  "DonoComLugar",
+  "DonoInformante",
+  "DonoPedinte",
+  "DonoTapaFruta",
+  "ENGINE_SHA256_V0",
+  "ESTILOS_LUGAR",
+  "EVENTOS_DO_MUNDO",
+  "EspecGrupo",
+  "EspecPQP",
+  "EspecVida",
+  "Estado",
+  "FAIXAS_QUEIMADAS",
+  "FAIXAS_RESERVADAS",
+  "FILTROS",
+  "FILTROS_PENDENTES",
+  "FONTES_IMPLEMENTADAS",
+  "FORA_DO_ORCAMENTO",
+  "FRUTAS",
+  "GESTOS",
+  "GESTOS_DONO",
+  "Grupo",
+  "HORA_MUDANCA_PQP",
+  "INDICE_HUMOR",
+  "INFORMACOES",
+  "InformanteAcoplado",
+  "InformanteDoMundo",
+  "JANELA_PQP",
+  "JANELA_PRIMARIA_DIAS",
+  "JULGAMENTOS",
+  "JulgadorFruta",
+  "LAYOUTS_FISICO",
+  "LAYOUT_MUNDO_AFASTADO",
+  "LIMITE_TETO_PESOS_PLANO",
+  "LOBO_PLANEJAMENTO",
+  "LogDeEventos",
+  "MEDIDAS_FRUTAS",
+  "MEDIDAS_MUNDO",
+  "MEDIDAS_TABELA",
+  "MODELO_TIPOS",
+  "MODO_MEMORIA",
+  "MONTAGEM_COMPLETA",
+  "MONTAGEM_PADRAO",
+  "MONTAGENS",
+  "MUNDOS",
+  "Motivo",
+  "MotorAmbiente",
+  "MotorComFeedback",
+  "MotorFrutas",
+  "MotorFrutasMundo",
+  "MotorMundo",
+  "MotorMundoMudanca",
+  "MotorMundoTroca",
+  "MotorPersonalidade",
+  "Mundo",
+  "NEUTRO",
+  "NOMES_DRIVES",
+  "NOS_PENDENTES",
+  "NOVOS_W",
+  "N_MAO_PQP",
+  "N_OPORTUNIDADES_PQP",
+  "OrcamentoExcedido",
+  "OrcamentoNaoConsumido",
+  "PASSO0_BRACO",
+  "PASSO0_CAMPOS",
+  "PASSO0_CHAVES_EXTRAS",
+  "PASSO0_FAIXA",
+  "PASSO0_MULTIPLICADORES",
+  "PEDIDOS",
+  "PLANO_PQP",
+  "PONTOS_APRENDIZ",
+  "PONTO_N5_EXPERIMENTO",
+  "PONTO_PADRAO",
+  "PREFIXOS_UNIDADES",
+  "PREFIXO_PQP",
+  "PROTOCOLOS_PQP",
+  "Path",
+  "PercepcaoCorpo",
+  "PetDoGrupo",
+  "PoliticaComModelo",
+  "PoliticaComModeloPQP",
+  "PoliticaComRede",
+  "PoliticaComRedeSemOrgaos",
+  "PoliticaDoBraco",
+  "PoliticaInstinto",
+  "PoliticaInstintoBanheiro",
+  "PoliticaInstintoBola",
+  "PoliticaInstintoFrutas",
+  "PoliticaInstintoMundo",
+  "PoliticaLobos",
+  "RAIZ",
+  "RECEPTORES_NOVOS",
+  "RECEPTOR_DO_INDICE",
+  "REGIMES_CORPO",
+  "REGRAS_PEDIDO",
+  "REGRAS_TEMPO_LIVRE",
+  "ROTULO_EMBARALHA",
+  "ROTULO_RUIM",
+  "ROTULO_X_PQP",
+  "ROTULO_Y_PQP",
+  "RedeDeSi",
+  "RegistroGrupo",
+  "RegraBola",
+  "RegraFrutasComInformante",
+  "RegraFrutasComJulgador",
+  "RegraFrutasComPedinte",
+  "RegraMudancaPQP",
+  "ReplayDivergiu",
+  "SEMENTES_TESTE",
+  "SINAIS",
+  "SINAIS_DO_DONO",
+  "SUBCHAVES_CORPO",
+  "SementeSemPlano",
+  "TICKS_POR_DIA",
+  "VidaBancada",
+  "VidaGrupo",
+  "VidaPQP",
+  "Visao",
+  "ZONAS_CONFLITO",
+  "_Espiao",
+  "_PoliticaComBola",
+  "_PoliticaComFrutas",
+  "_PoliticaComMundo",
+  "_PoliticaObservada",
+  "_Registro",
+  "_RegistroGrupo",
+  "_RegistroPQP",
+  "_arvores_do_layout",
+  "_coluna",
+  "_dump",
+  "_entradas",
+  "_escalar",
+  "_estado_rede",
+  "_gravar",
+  "_interno",
+  "_julgar",
+  "_media",
+  "_normalizar_cands",
+  "_resumo_grupo",
+  "_resumo_pesos",
+  "_rodar_ponto_passo0",
+  "_sem_modelos",
+  "_sha",
+  "_validar_espec_grupo",
+  "acerto_na_tarefa",
+  "alivios_ate_criterio",
+  "alivios_por_dia",
+  "alvo_padrao_de",
+  "annotations",
+  "argparse",
+  "arred",
+  "bancada_da_config",
+  "bancada_pqp_da_config",
+  "braco_de",
+  "braco_montado",
+  "braco_pqp",
+  "brier_skill",
+  "brier_skill_multiclasse",
+  "busca_transicao",
+  "centro_da_celula",
+  "cfg_lobos_do_braco",
+  "cfg_lobos_do_ponto",
+  "cfg_rede_da_config",
+  "com_corpo",
+  "comeu_fruta_e2",
+  "conferir_teto_pesos",
+  "consumos_ate_metade",
+  "contar_acoes",
+  "contar_gestos_mundo",
+  "contar_informacoes",
+  "contar_pedidos",
+  "contribuicao_drives",
+  "contribuicoes_corpo",
+  "criar_dono",
+  "cuidado_preservado",
+  "cuidados_necessarios",
+  "curva_sobrevivencia",
+  "custo_da_plasticidade",
+  "dar_fruta",
+  "dataclass",
+  "deferencia_ao_pedido",
+  "deficit_fome_energia",
+  "derivar_semente",
+  "desarranjo_dois_pets",
+  "desarranjo_dos_lobos",
+  "desarranjo_n6",
+  "desempenho_no_ambiente",
+  "dia_cruza_zero",
+  "dia_do_criterio",
+  "distribuicoes_de_acao",
+  "div_arred",
+  "div_arred_corpo",
+  "do_braco",
+  "dominancia_decisoes",
+  "efeito_dois_pets",
+  "efeitos_da_condicao",
+  "efeitos_do_tapa",
+  "efeitos_pqp",
+  "escolha_passo0",
+  "estados_sonda",
+  "exposto_transicao",
+  "expressar",
+  "fator_do_plano",
+  "filtrar_log",
+  "filtro_de",
+  "fracao_da_fruta",
+  "fracao_falta_passo0",
+  "fracao_plano_dias",
+  "fruta_dada",
+  "fruta_de",
+  "fruta_tapa",
+  "fruta_x_pqp",
+  "fruta_y_pqp",
+  "genoma_frutas",
+  "grade_passo0",
+  "hashlib",
+  "inclinacao_permanencia",
+  "informar",
+  "janela_dias",
+  "jsd_media",
+  "json",
+  "julgar_acao",
+  "leitura_dominancia",
+  "mae_previsao",
+  "main",
+  "math",
+  "media_historica",
+  "medidas_banheiro_de",
+  "medir_drives_novos",
+  "memoria_nas_subdecisoes",
+  "meta",
+  "metabolismo_da_vida",
+  "modelos_contra_o_real",
+  "mudanca_de_escolha",
+  "multiconjunto_informacoes",
+  "mundo_de",
+  "na_faixa_reservada",
+  "nome_base",
+  "ocupacao_espacos_frutas",
+  "oferta_de",
+  "oportunidade_revalorizacao",
+  "percepcao_da_sonda",
+  "permanencia_media",
+  "plano_da_vida",
+  "platform",
+  "politica_no_tick",
+  "pontos_passo0",
+  "previsao_persistencia",
+  "privacao_nas_decisoes",
+  "product",
+  "random",
+  "recebe_informacao",
+  "receptores_novos_de",
+  "rede_de",
+  "rede_offline",
+  "replace",
+  "reproduzir_ambiente",
+  "reproduzir_com_feedback",
+  "reproduzir_grupo",
+  "reproduzir_mundo",
+  "resposta_a_bola",
+  "resumo_motor",
+  "rodar",
+  "rodar_grupo",
+  "rodar_passo0",
+  "rodar_pqp",
+  "sementes_do_grupo",
+  "sha256_engine",
+  "simular_grupo",
+  "simular_vida",
+  "simular_vida_fisico",
+  "simular_vida_gestos",
+  "simular_vida_mundo",
+  "sinal_corpo",
+  "sinal_corpo_canais",
+  "sinal_homeostatico",
+  "sinal_por_canal",
+  "sonda_ao_nascer",
+  "sondar_metabolismo",
+  "sondar_quimicos",
+  "sortear",
+  "sortear_temperamento",
+  "sys",
+  "tabela_banheiro",
+  "tabela_braco_condicao",
+  "tabela_braco_condicao_parcial",
+  "tabela_dominancia",
+  "tabelas_braco_condicao",
+  "taxa_fruta_ruim",
+  "taxa_no_abandono",
+  "tempo_comer_brincar",
+  "tempo_livre_be",
+  "time",
+  "tipo_ruim",
+  "todos_receptores_orgaos",
+  "trocar_arvores",
+  "unidades_derivadas",
+  "validar_config",
+  "validar_config_grupo",
+  "validar_config_pqp",
+  "validar_teto_pesos",
+  "vez_no_grupo",
+  "visitas_manchas"
+ ]
+}
