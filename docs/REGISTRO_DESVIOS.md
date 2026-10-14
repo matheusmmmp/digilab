@@ -5282,3 +5282,22 @@ Só documentos: `docs/futuro/paladar.md` (novo) e o adendo 3 de `docs/PLANO_ANAL
   falhar alto.
 - **A direção pronta empata pelo arredondamento** com gradiente fraco (A 32 a 24 células); o teste da narina usa uma fonte forte. É o
   mesmo empate do cheiro da comida (#232).
+
+## 2026-10-14 — ORGAO-SEM-DIRECAO (worker A): os candidatos `cheiro_seguir` e `cheiro_virar` e o G-SEM-DIRECAO
+
+- **O que a seção 5.6 deixava aberto, e o que escolhi** (PROPOSTO, SEM FONTE):
+  - o virar com duas narinas empatadas: o lado sai do bit 8 do u da rng `alvo`, não da ordem fixa. A ordem fixa puxaria sempre para o
+    mesmo lado (o viés do empate do cheiro, #232);
+  - a "direção sorteada no fluxo alvo" de uma narina: uma das outras 15 direções, pelos bits altos do u já sorteado (`(u >> 8) % 15`, a
+    direção 0 sai em 18 de 256 valores e as outras em 17). Não há sorteio a mais, então os números comuns entre os braços ficam;
+  - "subiu ou caiu" com uma narina: a leitura desta decisão contra a da decisão anterior, qualquer que tenha sido a ação; igual conta como
+    subiu (seguir), e a primeira decisão também;
+  - o cheiro forte do explorar: o `limiar_cheiro_explorar` de hoje (16) lido pelo receptor sem adaptação, 279 na escala S. Nenhum número
+    novo. No explorar, os candidatos do órgão só existem acima dele; no comer, com qualquer leitura acima de 0;
+  - a classe do alvo aprendido: os dois candidatos são a classe `cheiro`, com o preferido na frente. A tabela de pesos é a mesma nos dois
+    braços e nenhum gabarito muda. O cérebro não aprende a escolher entre seguir e virar; aprende só quanto segue o cheiro;
+  - a Audição tira os `sons` inteiros da percepção dos sentidos, e não só a direção e a distância: o tipo e a intensidade chegam pelos
+    receptores `ouvido_<som>`, e o id do emissor é trivial com um outro pet.
+- **Achado:** com os números PROPOSTOS do órgão (limiar 4, meia-saturação 32, adaptação de 60 ticks), a leitura das narinas quase nunca
+  passa de 31 (de 1024), e o pet sente cheiro em ~5% das decisões. A comida pelo cheiro cai muito (consumos 62 → 18 e 13 na fumaça). O
+  braço "órgão × leitura pronta" vai medir sobretudo isso enquanto os números do órgão não forem calibrados.
