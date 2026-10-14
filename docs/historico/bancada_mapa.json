@@ -1,6 +1,6 @@
 {
  "base": {
-  "commit": "1341c5bfa4448416760435eac4cd3d987b86e68e",
+  "commit": "1df1afed0ddce3acaa4d0384f5b66ed9715353a2",
   "arquivo": "experiments/bancada_v2.py",
   "sha256": "a77e18872e954532ded1eada5372e88743c1e3c2f633f506d85328b113d4edf0",
   "linhas": 4462
