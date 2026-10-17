@@ -113,3 +113,27 @@ Cada etapa é um PR, com o relato no corpo. O merge é só do Matheus.
 - Qualquer aumento de escala do cérebro (mais pesos, mais neurônios). O teto de pesos tem desenho próprio
   (`docs/DECISAO_V2_TETO_PESOS.md`).
 - Mudar os pets v1 a v10, as assinaturas ou os gabaritos que existem.
+
+## 9. Etapa 1, entregue (2026-10-17)
+
+- **O ponto (PW-2):** é o da calibração do corpo, sem número novo (`docs/registro/2026-10.md`, 2026-10-17). Nada foi validado.
+- **O gabarito:** `python experiments/exportar_gabarito_lobos.py` grava `web/app/test/gabaritos/lobos_python.json` (2 MB).
+  - Duas vidas L0, sem aprender e sem corpo, e quatro vidas v11, uma por dono, com 3 dias e 288 decisões cada.
+  - Cada vida traz o log, os motivos de cada decisão, os pesos, os pesos do corpo, o aprendizado e o sha256 do estado interno.
+  - O arquivo sai igual em duas execuções.
+  - `tests/test_gabarito_lobos_web.py` confere que ele está em dia e que é o v11: sem elogio nem bronca, com carinho, tapa e consequência, e o cérebro aprendendo.
+- **O risco S-3** (`python experiments/medir_v11_parado.py`, artefato `artifacts_v2_w_porte/medida_parado.json`):
+  - 20 pares (4 donos × as 5 sementes dos testes), com 14 dias e orçamento 224;
+  - compara o v11 (P1-c-tapa) com o instinto no mesmo corpo (P0-c-tapa);
+  - a medida é a fração de cada ação no tempo livre.
+
+  | ação | instinto | v11 | diferença média [mín; máx] | pares com o v11 abaixo |
+  |---|---|---|---|---|
+  | ocioso | 0,266 | 0,169 | −0,097 [−0,241; +0,211] | 13/20 |
+  | explorar | 0,290 | 0,416 | +0,126 [−0,038; +0,349] | 2/20 |
+  | brincar | 0,348 | 0,352 | +0,004 [−0,299; +0,353] | 11/20 |
+  | chamar | 0,096 | 0,062 | −0,034 [−0,130; +0,380] | 16/20 |
+
+  - **Leitura descritiva:** na média, o v11 **não** fica mais parado. O ocioso cai, o explorar sobe e o brincar fica igual. O último terço da vida vai no mesmo sentido.
+  - **A dispersão entre pets é grande:** em alguns pares, o brincar cai 0,3; em outros, sobe 0,35.
+  - **Pela regra da seção 6, a PW-1 não volta ao Matheus.** A dispersão fica registrada para a PW-4 (o caráter) e para o painel ("o que aprendeu").
