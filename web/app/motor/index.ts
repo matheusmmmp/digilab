@@ -30,3 +30,4 @@ export * from "./historia.ts";
 export * from "./mentira.ts";
 export * from "./mundo.ts";
 export * from "./corpo.ts";
+export * from "./lobos.ts";

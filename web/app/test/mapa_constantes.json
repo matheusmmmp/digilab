@@ -313,6 +313,21 @@
    "py": "ConfigVinculoSituacao.limiar_energia"
   },
   {
+   "web": "CLB.bits",
+   "fonte": "python",
+   "py": "ConfigLobos.bits_ponto_fixo"
+  },
+  {
+   "web": "CLB.escalaTdc",
+   "fonte": "python",
+   "py": "ConfigLobos.escala_ticks_desde_cuidado"
+  },
+  {
+   "web": "CLB.maxPesos",
+   "fonte": "python",
+   "py": "ConfigLobos.maximo_pesos"
+  },
+  {
    "web": "COB.b0",
    "fonte": "python",
    "py": "ConfigObediencia.b0"
