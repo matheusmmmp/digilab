@@ -251,3 +251,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-10-14 — ECOSSISTEMA-GENETICO (worker C): o desenho do genoma da V2 e das três formas de gerar o genoma de outro](registro/2026-10.md)
 
 - [2026-10-14 — PET-QUE-PENSA-PALADAR, a run (worker D): a calibração do `ganho_gosto` e do `g_plano`, a G-REVAL-POSSIVEL e o piloto](registro/2026-10.md)
+- [2026-10-17 — CONNECTOME-CEREBRO-A (worker de uma sessão lateral): o cérebro A desenhado como grafo dos pesos](registro/2026-10.md)
