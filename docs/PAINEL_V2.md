@@ -52,7 +52,7 @@
 - **As saídas do banheiro:** sem decisão até haver dado (`docs/PLANO_ANALISE_V2_BANHEIRO.md`, seção 7).
 - **A validação do corpo:** espera a calibração final e um sim.
 - **O J5:** a calibração do `g_plano` e a validação esperam o planejador ligado na bancada.
-- **O porte do cérebro A para a web (v11, #201):** pausado até o J5.
+- **O porte do cérebro A para a web (v11):** saiu da pausa em 2026-10-17, com o painel DigiBrain. PW-1 a PW-8 (`docs/TAREFA_V2_W_PORTE_CEREBRO_A.md`, seção 7); o #201 é substituído (PW-8).
 
 ## 4. Riscos
 
